@@ -1,0 +1,75 @@
+/**
+ * Application-wide constants and configuration values
+ */
+
+// Plugin Information
+export const PLUGIN_VERSION = '0.0.1';
+export const PLUGIN_NAME = 'Intelligence Assistant';
+
+// Plugin Paths
+export const PLUGIN_BASE_FOLDER = '.obsidian/plugins/intelligence-assistant';
+export const USER_CONFIG_FOLDER = `${PLUGIN_BASE_FOLDER}/config/user`;
+export const USER_CONFIG_PATH = `${USER_CONFIG_FOLDER}/settings.json`;
+export const DATA_FOLDER = `${PLUGIN_BASE_FOLDER}/data`;
+export const CONVERSATIONS_DATA_FOLDER = `${DATA_FOLDER}/conversations`;
+export const PROMPTS_DATA_FOLDER = `${DATA_FOLDER}/prompts`;
+export const AGENTS_DATA_FOLDER = `${DATA_FOLDER}/agents`;
+export const WORKFLOW_DATA_FOLDER = `${DATA_FOLDER}/workflow`;
+export const VECTOR_STORE_FOLDER = `${DATA_FOLDER}/vector_store`;
+export const VECTOR_STORE_NOTES_PATH = `${VECTOR_STORE_FOLDER}/notes.json`;
+export const CACHE_DATA_FOLDER = `${DATA_FOLDER}/cache`;
+export const LLM_MODEL_CACHE_PATH = `${CACHE_DATA_FOLDER}/llm_models.json`;
+export const LLM_PROVIDERS_PATH = `${DATA_FOLDER}/llm-providers.json`;
+export const MCP_SERVERS_PATH = `${DATA_FOLDER}/mcp-servers.json`;
+export const MCP_TOOLS_CACHE_FOLDER = `${CACHE_DATA_FOLDER}/mcp-tools`;
+
+// Default Agent
+export const DEFAULT_AGENT_ID = 'builtin-generalist-agent';
+
+
+
+// View Types
+export const VIEW_TYPES = {
+	CHAT: 'chat-view',
+	WORKFLOW_EDITOR: 'workflow-editor-view',
+} as const;
+
+// File Extensions
+export const FILE_EXTENSIONS = {
+	WORKFLOW: 'workflow',
+} as const;
+
+// Default Model Configuration
+export const DEFAULT_MODEL_CONFIG = {
+	FALLBACK_MODEL: 'gpt-4o',
+	TEMPERATURE: 0.7,
+	MAX_TOKENS: 2000,
+	CONTEXT_WINDOW: 20,
+} as const;
+
+// Memory Configuration
+export const DEFAULT_MEMORY_CONFIG = {
+	SUMMARY_INTERVAL: 10,
+	MAX_MEMORIES: 50,
+} as const;
+
+// ReAct Configuration
+export const DEFAULT_REACT_CONFIG = {
+	MAX_STEPS: 10,
+	AUTO_CONTINUE: true,
+} as const;
+
+// UI Constants
+export const UI_CONSTANTS = {
+	TABLE_HEADER_CLASS: 'ia-table-header',
+	TABLE_ROW_CLASS: 'ia-table-row',
+	TABLE_CELL_CLASS: 'ia-table-cell',
+	STATUS_CLASS_PREFIX: 'is-',
+} as const;
+
+// Status Types
+export type StatusType = 'success' | 'warning' | 'error' | 'info';
+
+// Export type helpers
+export type ViewType = typeof VIEW_TYPES[keyof typeof VIEW_TYPES];
+export type FileExtension = typeof FILE_EXTENSIONS[keyof typeof FILE_EXTENSIONS];

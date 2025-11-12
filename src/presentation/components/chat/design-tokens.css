@@ -1,0 +1,288 @@
+/**
+ * Modern Design Tokens
+ * Based on n8n's design system and visual language
+ */
+
+:root {
+	/* ========================================
+	 * Color Palette - Primary Colors
+	 * ======================================== */
+
+	/* Primary Brand Color */
+	--n8n-color-primary: hsl(348, 100%, 67%);  /* #FF6D5A - n8n's signature coral */
+	--n8n-color-primary-hover: hsl(348, 100%, 62%);
+	--n8n-color-primary-light: hsl(348, 100%, 95%);
+	--n8n-color-primary-tint-1: hsl(348, 100%, 72%);
+	--n8n-color-primary-tint-2: hsl(348, 100%, 85%);
+	--n8n-color-primary-shade: hsl(348, 100%, 57%);
+
+	/* Secondary/Accent Colors */
+	--n8n-color-secondary: hsl(261, 60%, 56%);  /* #7E4DD2 - Purple accent */
+	--n8n-color-success: hsl(161, 64%, 42%);    /* #27A87E - Success green */
+	--n8n-color-warning: hsl(38, 100%, 55%);    /* #FFB300 - Warning orange */
+	--n8n-color-danger: hsl(6, 78%, 57%);       /* #E53935 - Danger red */
+	--n8n-color-info: hsl(207, 90%, 54%);       /* #2196F3 - Info blue */
+
+	/* ========================================
+	 * Neutral Colors (Gray Scale)
+	 * ======================================== */
+
+	--n8n-color-background: hsl(220, 13%, 97%);      /* #F7F7F7 - Main bg */
+	--n8n-color-background-light: hsl(0, 0%, 100%);  /* #FFFFFF */
+	--n8n-color-background-dark: hsl(220, 13%, 18%); /* #1E1E1E - Dark mode */
+	--n8n-color-background-base: hsl(220, 13%, 95%); /* #F2F2F2 */
+
+	--n8n-color-foreground-dark: hsl(220, 13%, 18%);  /* #2E2E2E - Text */
+	--n8n-color-foreground-base: hsl(220, 9%, 46%);   /* #676767 */
+	--n8n-color-foreground-light: hsl(220, 9%, 66%);  /* #999999 */
+	--n8n-color-foreground-xlight: hsl(220, 9%, 86%); /* #CCCCCC */
+
+	/* Canvas Colors */
+	--n8n-color-canvas-background: hsl(220, 13%, 97%);
+	--n8n-color-canvas-dot: hsla(220, 13%, 18%, 0.1);
+	--n8n-color-canvas-line: hsla(220, 13%, 18%, 0.12);
+
+	/* Border Colors */
+	--n8n-color-border-base: hsl(220, 13%, 90%);   /* #E0E0E0 */
+	--n8n-color-border-light: hsl(220, 13%, 93%);
+	--n8n-color-border-strong: hsl(220, 13%, 70%);
+
+	/* ========================================
+	 * Node Type Colors
+	 * ======================================== */
+
+	/* Core Node Types */
+	--n8n-node-color-trigger: hsl(261, 60%, 56%);     /* Purple */
+	--n8n-node-color-action: hsl(207, 90%, 54%);      /* Blue */
+	--n8n-node-color-logic: hsl(38, 100%, 55%);       /* Orange */
+	--n8n-node-color-data: hsl(161, 64%, 42%);        /* Green */
+	--n8n-node-color-ai: hsl(291, 64%, 62%);          /* Magenta */
+	--n8n-node-color-integration: hsl(201, 79%, 46%); /* Teal */
+	--n8n-node-color-utility: hsl(220, 13%, 60%);     /* Gray */
+
+	/* Node State Colors */
+	--n8n-node-color-success: hsl(161, 64%, 42%);
+	--n8n-node-color-error: hsl(6, 78%, 57%);
+	--n8n-node-color-running: hsl(207, 90%, 54%);
+	--n8n-node-color-disabled: hsl(220, 9%, 66%);
+
+	/* ========================================
+	 * Connection Colors
+	 * ======================================== */
+
+	--n8n-connection-main: hsl(220, 13%, 70%);
+	--n8n-connection-main-active: hsl(207, 90%, 54%);
+	--n8n-connection-error: hsl(6, 78%, 57%);
+	--n8n-connection-ai: hsl(291, 64%, 62%);
+	--n8n-connection-hover: hsl(348, 100%, 67%);
+
+	/* ========================================
+	 * Typography
+	 * ======================================== */
+
+	/* Font Families */
+	--n8n-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	--n8n-font-family-monospace: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Droid Sans Mono', 'Source Code Pro', monospace;
+
+	/* Font Sizes */
+	--n8n-font-size-3xs: 0.625rem;   /* 10px */
+	--n8n-font-size-2xs: 0.6875rem;  /* 11px */
+	--n8n-font-size-xs: 0.75rem;     /* 12px */
+	--n8n-font-size-s: 0.8125rem;    /* 13px */
+	--n8n-font-size-m: 0.875rem;     /* 14px */
+	--n8n-font-size-l: 1rem;         /* 16px */
+	--n8n-font-size-xl: 1.125rem;    /* 18px */
+	--n8n-font-size-2xl: 1.25rem;    /* 20px */
+	--n8n-font-size-3xl: 1.5rem;     /* 24px */
+	--n8n-font-size-4xl: 2rem;       /* 32px */
+
+	/* Font Weights */
+	--n8n-font-weight-light: 300;
+	--n8n-font-weight-regular: 400;
+	--n8n-font-weight-medium: 500;
+	--n8n-font-weight-semibold: 600;
+	--n8n-font-weight-bold: 700;
+
+	/* Line Heights */
+	--n8n-line-height-compact: 1.2;
+	--n8n-line-height-regular: 1.5;
+	--n8n-line-height-loose: 1.7;
+
+	/* ========================================
+	 * Spacing Scale (8pt grid system)
+	 * ======================================== */
+
+	--n8n-spacing-5xs: 0.125rem;  /* 2px */
+	--n8n-spacing-4xs: 0.25rem;   /* 4px */
+	--n8n-spacing-3xs: 0.375rem;  /* 6px */
+	--n8n-spacing-2xs: 0.5rem;    /* 8px */
+	--n8n-spacing-xs: 0.75rem;    /* 12px */
+	--n8n-spacing-s: 1rem;        /* 16px */
+	--n8n-spacing-m: 1.5rem;      /* 24px */
+	--n8n-spacing-l: 2rem;        /* 32px */
+	--n8n-spacing-xl: 2.5rem;     /* 40px */
+	--n8n-spacing-2xl: 3rem;      /* 48px */
+	--n8n-spacing-3xl: 4rem;      /* 64px */
+	--n8n-spacing-4xl: 5rem;      /* 80px */
+
+	/* ========================================
+	 * Border Radius
+	 * ======================================== */
+
+	--n8n-border-radius-none: 0;
+	--n8n-border-radius-xs: 2px;
+	--n8n-border-radius-s: 4px;
+	--n8n-border-radius-base: 6px;
+	--n8n-border-radius-m: 8px;
+	--n8n-border-radius-l: 12px;
+	--n8n-border-radius-xl: 16px;
+	--n8n-border-radius-full: 9999px;
+
+	/* ========================================
+	 * Shadows
+	 * ======================================== */
+
+	--n8n-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+	--n8n-shadow-s: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+	--n8n-shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	--n8n-shadow-m: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+	--n8n-shadow-l: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+	--n8n-shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+	/* Node Shadows */
+	--n8n-shadow-node: 0 2px 4px rgba(0, 0, 0, 0.08);
+	--n8n-shadow-node-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+	--n8n-shadow-node-active: 0 6px 16px rgba(0, 0, 0, 0.2);
+
+	/* ========================================
+	 * Z-Index Scale
+	 * ======================================== */
+
+	--n8n-z-index-dropdown: 1000;
+	--n8n-z-index-sticky: 1020;
+	--n8n-z-index-fixed: 1030;
+	--n8n-z-index-modal-backdrop: 1040;
+	--n8n-z-index-modal: 1050;
+	--n8n-z-index-popover: 1060;
+	--n8n-z-index-tooltip: 1070;
+
+	/* ========================================
+	 * Transitions
+	 * ======================================== */
+
+	--n8n-transition-duration-fast: 150ms;
+	--n8n-transition-duration-base: 200ms;
+	--n8n-transition-duration-slow: 300ms;
+	--n8n-transition-duration-slower: 500ms;
+
+	--n8n-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+	--n8n-transition-timing-in: cubic-bezier(0.4, 0, 1, 1);
+	--n8n-transition-timing-out: cubic-bezier(0, 0, 0.2, 1);
+
+	/* ========================================
+	 * Component Specific
+	 * ======================================== */
+
+	/* Node Dimensions */
+	--n8n-node-width: 100px;
+	--n8n-node-height: 100px;
+	--n8n-node-icon-size: 40px;
+	--n8n-node-padding: var(--n8n-spacing-s);
+
+	/* Connection Styles */
+	--n8n-connection-stroke: 2px;
+	--n8n-connection-stroke-active: 3px;
+
+	/* Canvas */
+	--n8n-canvas-dot-size: 1px;
+	--n8n-canvas-dot-spacing: 20px;
+
+	/* Input/Button Heights */
+	--n8n-input-height-s: 28px;
+	--n8n-input-height-m: 32px;
+	--n8n-input-height-l: 40px;
+
+	/* ========================================
+	 * Overlay & Backdrop
+	 * ======================================== */
+
+	--n8n-overlay-background: rgba(0, 0, 0, 0.5);
+	--n8n-overlay-background-light: rgba(0, 0, 0, 0.3);
+	--n8n-overlay-background-dark: rgba(0, 0, 0, 0.7);
+}
+
+/* ========================================
+ * Dark Theme Overrides
+ * ======================================== */
+
+[data-theme='dark'], .theme-dark {
+	/* Background Colors */
+	--n8n-color-background: hsl(220, 13%, 18%);
+	--n8n-color-background-light: hsl(220, 13%, 22%);
+	--n8n-color-background-dark: hsl(220, 13%, 14%);
+	--n8n-color-background-base: hsl(220, 13%, 20%);
+
+	/* Foreground Colors */
+	--n8n-color-foreground-dark: hsl(0, 0%, 95%);
+	--n8n-color-foreground-base: hsl(220, 9%, 70%);
+	--n8n-color-foreground-light: hsl(220, 9%, 60%);
+	--n8n-color-foreground-xlight: hsl(220, 9%, 40%);
+
+	/* Canvas Colors */
+	--n8n-color-canvas-background: hsl(220, 13%, 16%);
+	--n8n-color-canvas-dot: hsla(0, 0%, 100%, 0.1);
+	--n8n-color-canvas-line: hsla(0, 0%, 100%, 0.12);
+
+	/* Border Colors */
+	--n8n-color-border-base: hsl(220, 13%, 30%);
+	--n8n-color-border-light: hsl(220, 13%, 25%);
+	--n8n-color-border-strong: hsl(220, 13%, 40%);
+
+	/* Shadows */
+	--n8n-shadow-node: 0 2px 4px rgba(0, 0, 0, 0.3);
+	--n8n-shadow-node-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+	--n8n-shadow-node-active: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* ========================================
+ * Utility Classes
+ * ======================================== */
+
+.n8n-text-primary { color: var(--n8n-color-primary); }
+.n8n-text-secondary { color: var(--n8n-color-secondary); }
+.n8n-text-success { color: var(--n8n-color-success); }
+.n8n-text-warning { color: var(--n8n-color-warning); }
+.n8n-text-danger { color: var(--n8n-color-danger); }
+.n8n-text-info { color: var(--n8n-color-info); }
+
+.n8n-bg-primary { background-color: var(--n8n-color-primary); }
+.n8n-bg-secondary { background-color: var(--n8n-color-secondary); }
+.n8n-bg-success { background-color: var(--n8n-color-success); }
+.n8n-bg-warning { background-color: var(--n8n-color-warning); }
+.n8n-bg-danger { background-color: var(--n8n-color-danger); }
+.n8n-bg-info { background-color: var(--n8n-color-info); }
+
+/* Spacing Utilities */
+.n8n-p-xs { padding: var(--n8n-spacing-xs); }
+.n8n-p-s { padding: var(--n8n-spacing-s); }
+.n8n-p-m { padding: var(--n8n-spacing-m); }
+.n8n-p-l { padding: var(--n8n-spacing-l); }
+
+.n8n-m-xs { margin: var(--n8n-spacing-xs); }
+.n8n-m-s { margin: var(--n8n-spacing-s); }
+.n8n-m-m { margin: var(--n8n-spacing-m); }
+.n8n-m-l { margin: var(--n8n-spacing-l); }
+
+/* Border Radius Utilities */
+.n8n-rounded-s { border-radius: var(--n8n-border-radius-s); }
+.n8n-rounded { border-radius: var(--n8n-border-radius-base); }
+.n8n-rounded-m { border-radius: var(--n8n-border-radius-m); }
+.n8n-rounded-l { border-radius: var(--n8n-border-radius-l); }
+.n8n-rounded-full { border-radius: var(--n8n-border-radius-full); }
+
+/* Shadow Utilities */
+.n8n-shadow-xs { box-shadow: var(--n8n-shadow-xs); }
+.n8n-shadow-s { box-shadow: var(--n8n-shadow-s); }
+.n8n-shadow { box-shadow: var(--n8n-shadow-base); }
+.n8n-shadow-m { box-shadow: var(--n8n-shadow-m); }
+.n8n-shadow-l { box-shadow: var(--n8n-shadow-l); }
