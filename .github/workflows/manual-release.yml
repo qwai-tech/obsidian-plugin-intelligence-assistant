@@ -1,0 +1,128 @@
+name: Manual Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: 'Version tag for release (e.g., v0.0.1)'
+        required: true
+        type: string
+      release_title:
+        description: 'Release title'
+        required: true
+        type: string
+      is_prerelease:
+        description: 'Is this a pre-release?'
+        required: false
+        type: boolean
+        default: false
+      release_notes:
+        description: 'Release notes (optional)'
+        required: false
+        type: string
+
+env:
+  PLUGIN_NAME: intelligence-assistant
+  MAIN_FILE: main.js
+  STYLE_FILE: styles.css
+  MANIFEST_FILE: manifest.json
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build plugin
+      run: npm run build
+
+    - name: Verify plugin files exist
+      run: |
+        if [ ! -f ${{ env.MAIN_FILE }} ]; then
+          echo "Plugin main file not found!"
+          ls -la
+          exit 1
+        fi
+        
+        if [ ! -f ${{ env.STYLE_FILE }} ]; then
+          echo "Plugin style file not found!"
+          exit 1
+        fi
+        
+        if [ ! -f ${{ env.MANIFEST_FILE }} ]; then
+          echo "Plugin manifest file not found!"
+          exit 1
+        fi
+
+    - name: Create release directory
+      run: |
+        mkdir -p release
+        cp ${{ env.MAIN_FILE }} ${{ env.STYLE_FILE }} ${{ env.MANIFEST_FILE }} release/
+
+    - name: Package plugin as .zip
+      working-directory: ./release
+      run: |
+        zip -r ../${{ env.PLUGIN_NAME }}.zip ./*
+        
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ inputs.version_tag }}
+        release_name: ${{ inputs.release_title }}
+        body: ${{ inputs.release_notes }}
+        draft: false
+        prerelease: ${{ inputs.is_prerelease }}
+
+    - name: Upload Release Asset - ZIP
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./${{ env.PLUGIN_NAME }}.zip
+        asset_name: ${{ env.PLUGIN_NAME }}.zip
+        asset_content_type: application/zip
+
+    - name: Upload Release Asset - Main.js
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release/${{ env.MAIN_FILE }}
+        asset_name: ${{ env.MAIN_FILE }}
+        asset_content_type: application/javascript
+
+    - name: Upload Release Asset - Styles.css
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release/${{ env.STYLE_FILE }}
+        asset_name: ${{ env.STYLE_FILE }}
+        asset_content_type: text/css
+
+    - name: Upload Release Asset - Manifest.json
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release/${{ env.MANIFEST_FILE }}
+        asset_name: ${{ env.MANIFEST_FILE }}
+        asset_content_type: application/json

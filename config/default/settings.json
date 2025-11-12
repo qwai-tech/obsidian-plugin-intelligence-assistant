@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "providers": {
+    "defaultModel": "",
+    "titleSummaryModel": "",
+    "list": []
+  },
+  "conversations": {
+    "title": {
+      "mode": "first-message",
+      "prompt": "Generate a short, descriptive title (max 6 words) for this conversation:\n\n{conversation}\n\nTitle:"
+    },
+    "icon": {
+      "enabled": true
+    },
+    "defaultMode": "chat",
+    "activeId": null
+  },
+  "mcp": {
+    "servers": [],
+    "registries": [
+      {
+        "name": "Official MCP Registry",
+        "url": "https://registry.modelcontextprotocol.io/v0/servers",
+        "enabled": true
+      }
+    ]
+  },
+  "tools": {
+    "builtIn": [
+      {
+        "type": "read_file",
+        "enabled": true
+      },
+      {
+        "type": "write_file",
+        "enabled": true
+      },
+      {
+        "type": "list_files",
+        "enabled": true
+      },
+      {
+        "type": "search_files",
+        "enabled": true
+      },
+      {
+        "type": "create_note",
+        "enabled": true
+      },
+      {
+        "type": "append_to_note",
+        "enabled": true
+      }
+    ]
+  },
+  "rag": {
+    "enabled": true,
+    "retrieval": {
+      "chunkSize": 5000,
+      "chunkOverlap": 200,
+      "topK": 5,
+      "similarityThreshold": 0.3,
+      "relevanceScoreWeight": 0.7,
+      "searchType": "similarity",
+      "chunkingStrategy": "sentence",
+      "contextWindowLimit": 2000,
+      "filterByTag": [],
+      "excludeByTag": [
+        "exclude-from-rag",
+        "draft"
+      ]
+    },
+    "embedding": {
+      "model": "",
+      "vectorStore": "memory",
+      "embedChangedFiles": true,
+      "maxTokensPerChunk": 2048,
+      "minChunkSize": 50,
+      "batchSize": 10,
+      "indexingMode": "automatic",
+      "includeFileTypes": [
+        ".md"
+      ],
+      "excludeFileTypes": [
+        ".git/",
+        "node_modules/",
+        ".obsidian/"
+      ],
+      "excludeFolders": []
+    },
+    "caching": {
+      "enabled": false,
+      "cacheSize": 50
+    },
+    "grader": {
+      "enabled": true,
+      "modelSource": "chat",
+      "model": "",
+      "promptTemplate": "",
+      "parallelProcessing": 5,
+      "thresholds": {
+        "relevance": 5,
+        "accuracy": 7,
+        "supportQuality": 6
+      }
+    },
+    "enableCompression": false,
+    "reranking": {
+      "enabled": false,
+      "model": "cross-encoder"
+    }
+  },
+  "search": {
+    "web": {
+      "enabled": false,
+      "provider": "duckduckgo",
+      "maxResults": 5,
+      "autoTrigger": true,
+      "searchLanguage": "en",
+      "searchCountry": "US",
+      "timeRange": "any"
+    }
+  },
+  "prompts": {
+    "system": [
+      {
+        "id": "default",
+        "name": "Default Assistant",
+        "content": "You are a helpful AI assistant.",
+        "enabled": true,
+        "createdAt": 0,
+        "updatedAt": 0
+      }
+    ],
+    "activeId": null
+  },
+  "agents": {
+    "list": [],
+    "activeId": null,
+    "memories": []
+  }
+}
