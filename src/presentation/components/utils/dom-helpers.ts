@@ -23,11 +23,11 @@ export function addClickHandler(el: HTMLElement, handler: (e: MouseEvent) => voi
 }
 
 export function showElement(el: HTMLElement): void {
-  el.style.display = '';
+  el.setCssProps({ 'display': '' });
 }
 
 export function hideElement(el: HTMLElement): void {
-  el.style.display = 'none';
+  el.addClass('ia-hidden');
 }
 
 export interface ButtonOptions {

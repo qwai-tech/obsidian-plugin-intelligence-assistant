@@ -74,26 +74,6 @@ interface Viewport {
 }
 
 // ============================================================================
-// HASH UTILITY
-// ============================================================================
-
-/**
- * Simple hash function for caching purposes
- */
-function hashObject(obj: any): string {
-	if (obj === null || obj === undefined) return 'null';
-	if (typeof obj === 'string') return obj;
-	if (typeof obj === 'number') return obj.toString();
-	if (typeof obj === 'boolean') return obj.toString();
-	
-	try {
-		return JSON.stringify(obj);
-	} catch {
-		return String(obj);
-	}
-}
-
-// ============================================================================
 // CANVAS RENDERER
 // ============================================================================
 
@@ -227,8 +207,8 @@ export class WorkflowCanvas {
 
 			this.canvas.width = rect.width * dpr;
 			this.canvas.height = rect.height * dpr;
-			this.canvas.style.width = `${rect.width}px`;
-			this.canvas.style.height = `${rect.height}px`;
+			this.canvas.setCssProps({ 'width': `${rect.width}px` });
+			this.canvas.setCssProps({ 'height': `${rect.height}px` });
 
 			// Reset context transform after resize
 			this.ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -417,7 +397,7 @@ export class WorkflowCanvas {
 	/**
 	 * Optimized grid drawing with caching
 	 */
-	private drawGridOptimized(width: number, height: number): void {
+	private drawGridOptimized(_width: number, _height: number): void {
 		const cacheKey = `${this.state.offset.x},${this.state.offset.y},${this.state.scale}`;
 		
 		// Check if we have a cached grid pattern
@@ -452,7 +432,7 @@ export class WorkflowCanvas {
 	/**
 	 * Draw grid with viewport culling
 	 */
-	private drawGrid(width: number, height: number): void {
+	private drawGrid(_width: number, _height: number): void {
 		this.ctx.strokeStyle = '#1a1a1a';
 		this.ctx.lineWidth = 1 / this.state.scale;
 		
@@ -580,14 +560,8 @@ export class WorkflowCanvas {
 			this.ctx.shadowOffsetY = 2;
 		}
 		
-		// Background
-		const gradient = this.ctx.createLinearGradient(
-			node.x, node.y,
-			node.x, node.y + NODE_HEIGHT
-		);
-		// Gradient stops would be added here
-		
-		this.ctx.fillStyle = '#333'; // Simplified for this example
+		// Background (placeholder solid fill; gradient hookup TBD)
+		this.ctx.fillStyle = '#333';
 		this.ctx.beginPath();
 		this.drawRoundRect(node.x, node.y, NODE_WIDTH, NODE_HEIGHT, NODE_RADIUS);
 		this.ctx.fill();
@@ -985,7 +959,7 @@ export class WorkflowCanvas {
 	/**
 	 * Draw overlay
 	 */
-	private drawOverlay(width: number, height: number): void {
+	private drawOverlay(_width: number, _height: number): void {
 		// Zoom indicator
 		this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
 		this.ctx.fillRect(10, 10, 80, 30);
@@ -1090,12 +1064,12 @@ export class WorkflowCanvas {
 		const node = this.getNodeAt(pos.x, pos.y);
 		if (node) {
 			if (this.isOverOutputHandle(node, pos.x, pos.y)) {
-				this.canvas.style.cursor = 'crosshair';
+				this.canvas.setCssProps({ 'cursor': 'crosshair' });
 			} else {
-				this.canvas.style.cursor = 'move';
+				this.canvas.setCssProps({ 'cursor': 'move' });
 			}
 		} else {
-			this.canvas.style.cursor = 'default';
+			this.canvas.setCssProps({ 'cursor': 'default' });
 		}
 	}
 	
@@ -1213,8 +1187,8 @@ export class WorkflowCanvas {
 	private showNodeMenu(node: WorkflowNode, x: number, y: number): void {
 		// Create menu
 		const menu = document.body.createDiv('workflow-v2-context-menu');
-		menu.style.left = `${x}px`;
-		menu.style.top = `${y}px`;
+		menu.setCssProps({ 'left': `${x}px` });
+		menu.setCssProps({ 'top': `${y}px` });
 
 		// Delete option
 		const deleteItem = menu.createDiv('context-menu-item');
@@ -1258,8 +1232,8 @@ export class WorkflowCanvas {
 	private showConnectionMenu(connection: Connection, x: number, y: number): void {
 		// Create menu
 		const menu = document.body.createDiv('workflow-v2-context-menu');
-		menu.style.left = `${x}px`;
-		menu.style.top = `${y}px`;
+		menu.setCssProps({ 'left': `${x}px` });
+		menu.setCssProps({ 'top': `${y}px` });
 
 		// Delete option
 		const deleteItem = menu.createDiv('context-menu-item');

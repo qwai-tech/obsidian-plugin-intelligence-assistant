@@ -5,7 +5,7 @@
 
 import { ChatViewState } from '../chat-view-state';
 import { Message, Attachment } from '@/types';
-import { TFile, TFolder } from 'obsidian';
+import {} from 'obsidian';
 
 describe('ChatViewState', () => {
 	let state: ChatViewState;

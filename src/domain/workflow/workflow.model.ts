@@ -253,7 +253,7 @@ export class WorkflowModel {
 	 */
 	static create(name: string, description?: string): WorkflowModel {
 		const workflow: Workflow = {
-			id: `wf_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+			id: `wf_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
 			name,
 			description,
 			nodes: [],

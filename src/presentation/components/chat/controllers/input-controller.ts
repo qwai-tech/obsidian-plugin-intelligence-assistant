@@ -5,7 +5,7 @@
 
 import { Notice, Menu, TFile, TFolder } from 'obsidian';
 import { BaseController } from './base-controller';
-import type { Attachment, FileReference } from '@/types';
+import type {Attachment} from '@/types';
 
 export class InputController extends BaseController {
 	private inputElement: HTMLTextAreaElement | null = null;
@@ -92,8 +92,8 @@ export class InputController extends BaseController {
 	private autoResizeInput(): void {
 		if (!this.inputElement) return;
 
-		this.inputElement.style.height = 'auto';
-		this.inputElement.style.height = `${Math.min(this.inputElement.scrollHeight, 200)}px`;
+		this.inputElement.setCssProps({ 'height': 'auto' });
+		this.inputElement.setCssProps({ 'height': `${Math.min(this.inputElement.scrollHeight, 200)}px` });
 	}
 
 	/**
@@ -197,32 +197,32 @@ export class InputController extends BaseController {
 
 		const attachments = this.state.currentAttachments;
 		if (attachments.length === 0) {
-			this.attachmentPreviewElement.style.display = 'none';
+			this.attachmentPreviewElement.addClass('ia-hidden');
 			return;
 		}
 
-		this.attachmentPreviewElement.style.display = 'flex';
-		this.attachmentPreviewElement.style.gap = '8px';
-		this.attachmentPreviewElement.style.padding = '8px';
-		this.attachmentPreviewElement.style.background = 'var(--background-secondary)';
+		this.attachmentPreviewElement.removeClass('ia-hidden');
+		this.attachmentPreviewElement.setCssProps({ 'gap': '8px' });
+		this.attachmentPreviewElement.setCssProps({ 'padding': '8px' });
+		this.attachmentPreviewElement.setCssProps({ 'background': 'var(--background-secondary)' });
 
 		attachments.forEach((attachment, index) => {
 			const item = this.attachmentPreviewElement!.createDiv();
-			item.style.display = 'flex';
-			item.style.alignItems = 'center';
-			item.style.gap = '4px';
-			item.style.padding = '4px 8px';
-			item.style.background = 'var(--background-primary)';
-			item.style.borderRadius = '4px';
+			item.removeClass('ia-hidden');
+			item.setCssProps({ 'align-items': 'center' });
+			item.setCssProps({ 'gap': '4px' });
+			item.setCssProps({ 'padding': '4px 8px' });
+			item.setCssProps({ 'background': 'var(--background-primary)' });
+			item.setCssProps({ 'border-radius': '4px' });
 
-			const icon = item.createSpan({ text: attachment.type === 'image' ? '🖼️' : '📎' });
+			const _icon = item.createSpan({ text: attachment.type === 'image' ? '🖼️' : '📎' });
 			const name = item.createSpan({ text: attachment.name });
-			name.style.fontSize = '0.9em';
+			name.setCssProps({ 'font-size': '0.9em' });
 
 			const removeBtn = item.createEl('button', { text: '×' });
-			removeBtn.style.border = 'none';
-			removeBtn.style.background = 'transparent';
-			removeBtn.style.cursor = 'pointer';
+			removeBtn.setCssProps({ 'border': 'none' });
+			removeBtn.setCssProps({ 'background': 'transparent' });
+			removeBtn.addClass('ia-clickable');
 			removeBtn.addEventListener('click', () => this.removeAttachment(index));
 		});
 	}

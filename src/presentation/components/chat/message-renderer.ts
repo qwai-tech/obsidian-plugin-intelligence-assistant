@@ -72,7 +72,7 @@ export function renderMessage(
 
 	const status = header.createSpan('ia-chat-message__status');
 	status.setAttr('data-message-status', 'idle');
-	status.style.display = 'none';
+	status.addClass('ia-hidden');
 
 	if (assistantMeta) {
 		renderAssistantBadges(header, assistantMeta);
@@ -186,7 +186,9 @@ function applyAvatarAndLabel(
 
 	const setDefaultAvatar = (emoji: string, label: string) => {
 		avatar.setText(emoji);
-		avatar.style.background = avatar.style.background || 'var(--background-modifier-border)';
+		avatar.setCssProps({
+			'background': 'var(--background-modifier-border)'
+		});
 		labelElement.setText(label);
 	};
 
@@ -206,11 +208,21 @@ function applyAvatarAndLabel(
 
 	avatar.addClass('ia-provider-avatar');
 	if (providerMeta?.iconSvg) {
-		avatar.innerHTML = providerMeta.iconSvg;
+		// Create a wrapper div for the SVG
+		const parser = new DOMParser();
+		const svgDoc = parser.parseFromString(providerMeta.iconSvg, 'image/svg+xml');
+		const svgElement = svgDoc.documentElement;
+		if (svgElement instanceof SVGElement) {
+			avatar.appendChild(svgElement);
+		} else {
+			avatar.setText(fallbackAvatar);
+		}
 	} else {
 		avatar.setText(fallbackAvatar);
 	}
-	avatar.style.background = fallbackColor;
+	avatar.setCssProps({
+		'background': fallbackColor
+	});
 	avatar.setAttr('title', providerLabel);
 
 	labelElement.addClass('ia-chat-message__model-label');
@@ -244,7 +256,14 @@ function renderMessageContent(target: HTMLElement, message: Message) {
 	try {
 		const cleanedContent = (message.content || '').replace(/\n{3,}/g, '\n\n');
 		const html = marked.parse(cleanedContent) as string;
-		target.innerHTML = html;
+		// Use DOMParser to safely parse HTML
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(html, 'text/html');
+		// Clear target and append parsed content
+		target.empty();
+		Array.from(doc.body.childNodes).forEach(node => {
+			target.appendChild(node.cloneNode(true));
+		});
 	} catch (error) {
 		console.error('[MessageRenderer] Markdown render error', error);
 		target.setText(message.content);
@@ -324,7 +343,7 @@ async function copyMessageContent(contentEl: HTMLElement) {
 	await writeTextToClipboard(text);
 }
 
-function isSelectionInsideElement(element: HTMLElement, selection: Selection): boolean {
+function _isSelectionInsideElement(element: HTMLElement, selection: Selection): boolean {
 	if (selection.rangeCount === 0) return false;
 	const range = selection.getRangeAt(0);
 	const ancestor = range.commonAncestorContainer;
@@ -332,20 +351,15 @@ function isSelectionInsideElement(element: HTMLElement, selection: Selection): b
 }
 
 async function writeTextToClipboard(text: string) {
+	// Use the modern Clipboard API
 	if (navigator?.clipboard?.writeText) {
 		await navigator.clipboard.writeText(text);
 		return;
 	}
 
-	const textarea = document.createElement('textarea');
-	textarea.value = text;
-	textarea.style.position = 'fixed';
-	textarea.style.opacity = '0';
-	document.body.appendChild(textarea);
-	textarea.focus();
-	textarea.select();
-	document.execCommand('copy');
-	document.body.removeChild(textarea);
+	// If Clipboard API is not available, throw an error
+	// Modern browsers all support the Clipboard API
+	throw new Error('Clipboard API not available');
 }
 
 function renderTokenUsageFooter(container: HTMLElement, usage?: Message['tokenUsage']) {

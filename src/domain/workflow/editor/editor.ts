@@ -272,7 +272,7 @@ export class WorkflowEditor {
 				});
 
 				// Hover effect
-				nodeItem.style.borderLeft = `3px solid ${nodeDef.color}`;
+				nodeItem.setCssProps({ 'border-left': `3px solid ${nodeDef.color}` });
 			}
 		}
 	}
@@ -348,7 +348,7 @@ export class WorkflowEditor {
 	 */
 	private createConfigPanel(parent: HTMLElement): void {
 		const panelContainer = parent.createDiv('workflow-v2-config-panel');
-		panelContainer.style.display = 'none';
+		panelContainer.addClass('ia-hidden');
 
 		this.configPanel = new ConfigPanel(
 			panelContainer,
@@ -380,7 +380,7 @@ export class WorkflowEditor {
 	 */
 	private createHistoryPanel(parent: HTMLElement): void {
 		this.historyPanel = parent.createDiv('workflow-v2-history-panel');
-		this.historyPanel.style.display = 'none';
+		this.historyPanel.addClass('ia-hidden');
 
 		// Header
 		const header = this.historyPanel.createDiv('history-panel-header');
@@ -391,7 +391,7 @@ export class WorkflowEditor {
 			cls: 'history-panel-close',
 		});
 		closeBtn.addEventListener('click', () => {
-			this.historyPanel!.style.display = 'none';
+			this.historyPanel!.addClass('ia-hidden');
 		});
 
 		// Content
@@ -454,7 +454,7 @@ export class WorkflowEditor {
 
 				// Create item details (collapsed by default)
 				const itemDetails = historyItem.createDiv('history-item-details');
-				itemDetails.style.display = 'none';
+				itemDetails.addClass('ia-hidden');
 
 				// Metadata
 				if (execution.metadata) {
@@ -484,10 +484,10 @@ export class WorkflowEditor {
 				}
 
 				// Click to expand/collapse
-				itemHeader.style.cursor = 'pointer';
+				itemHeader.addClass('ia-clickable');
 				itemHeader.addEventListener('click', () => {
 					const isVisible = itemDetails.style.display !== 'none';
-					itemDetails.style.display = isVisible ? 'none' : 'block';
+					itemDetails.setCssProps({ 'display': isVisible ? 'none' : 'block' });
 				});
 
 				// Double-click to load execution results on canvas
@@ -557,7 +557,7 @@ export class WorkflowEditor {
 	private async showExecutionHistory(): Promise<void> {
 		if (!this.historyPanel) return;
 
-		this.historyPanel.style.display = 'block';
+		this.historyPanel.removeClass('ia-hidden');
 		this.configPanel?.hide();
 		await this.updateHistoryPanel();
 	}
@@ -713,7 +713,7 @@ export class WorkflowEditor {
 			this.markClean();
 			// Emit event but no notification for auto-save
 			this.events.emit('workflow:saved', { workflow: this.workflow.toJSON() });
-			console.log('Workflow auto-saved');
+			console.debug('Workflow auto-saved');
 		} catch (error: any) {
 			console.error('Auto-save failed:', error);
 			// Don't show error notification for auto-save failures
@@ -812,7 +812,7 @@ export class WorkflowEditor {
 			}
 
 			// Show execution log
-			console.log('Execution result:', result);
+			console.debug('Execution result:', result);
 
 			// Save execution history
 			await this.saveExecutionHistory(result);
@@ -865,7 +865,7 @@ export class WorkflowEditor {
 	private async saveExecutionHistory(result: any): Promise<void> {
 		// Check if history storage is available
 		if (!this.executionHistoryStorage || !this.indexManager) {
-			console.log('Execution history storage not available, skipping save');
+			console.debug('Execution history storage not available, skipping save');
 			return;
 		}
 
@@ -899,7 +899,7 @@ export class WorkflowEditor {
 				filePath
 			);
 
-			console.log('Execution history saved:', executionId);
+			console.debug('Execution history saved:', executionId);
 		} catch (error) {
 			console.error('Failed to save execution history:', error);
 			// Don't show error to user, just log it
@@ -969,12 +969,12 @@ export class WorkflowEditor {
 
 		// Handle config updates
 		modal.on('update', ({ nodeId, config }) => {
-			console.log('[Editor] Received config update for node:', nodeId, config);
+			console.debug('[Editor] Received config update for node:', nodeId, config);
 			this.workflow.updateNode(nodeId, { config });
 
 			// Verify the update was applied
 			const updatedNode = this.workflow.getNode(nodeId);
-			console.log('[Editor] Node after update:', updatedNode?.config);
+			console.debug('[Editor] Node after update:', updatedNode?.config);
 
 			this.canvas?.render();
 			this.markDirty();

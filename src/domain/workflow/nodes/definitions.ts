@@ -5,6 +5,7 @@
  * Includes essential nodes for triggers, AI, data processing, and logic.
  */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NodeDef, NodeData, ExecutionContext } from '../core/types';
 import { nodeRegistry } from './registry';
 import { ErrorHandler, SecurityError, ServiceError, ExecutionError } from '../services/error-handler';
@@ -989,7 +990,7 @@ const readNoteNode: NodeDef = {
 			}
 
 			// Extract tags from content
-			const tagMatches = content.matchAll(/#[\w\-\/]+/g);
+			const tagMatches = content.matchAll(/#[\w/-]+/g);
 			const tags = Array.from(tagMatches).map((m: RegExpMatchArray) => m[0]);
 
 			return [{
@@ -1205,7 +1206,7 @@ const searchNotesNode: NodeDef = {
 
 					if (searchIn === 'tags' || searchIn === 'all') {
 						// Check tags
-						const tagMatches = content.matchAll(/#[\w\-\/]+/g);
+						const tagMatches = content.matchAll(/#[\w/-]+/g);
 						const tags = Array.from(tagMatches).map((m: RegExpMatchArray) => m[0]);
 						if (tags.some(tag => tag.toLowerCase().includes(finalQuery))) {
 							score += 8;
@@ -1964,7 +1965,7 @@ const manageTagsNode: NodeDef = {
 				.map(t => t.startsWith('#') ? t : `#${t}`);
 
 			// Extract existing tags
-			const tagMatches = content.matchAll(/#[\w\-\/]+/g);
+			const tagMatches = content.matchAll(/#[\w/-]+/g);
 			const existingTags = Array.from(tagMatches).map((m: RegExpMatchArray) => m[0]);
 
 			let resultTags: string[] = [];
@@ -1986,7 +1987,7 @@ const manageTagsNode: NodeDef = {
 					const regex = new RegExp(`\\s*${tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*`, 'g');
 					content = content.replace(regex, ' ');
 				}
-				const updatedMatches = content.matchAll(/#[\w\-\/]+/g);
+				const updatedMatches = content.matchAll(/#[\w/-]+/g);
 				resultTags = Array.from(updatedMatches).map((m: RegExpMatchArray) => m[0]);
 				modified = existingTags.length !== resultTags.length;
 			} else if (operation === 'replace') {

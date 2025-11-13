@@ -1,19 +1,18 @@
 import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, Modal, Setting } from 'obsidian';
+import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { DEFAULT_AGENT_ID } from '@/constants';
-import type { Message, Attachment, FileReference, Conversation, ConversationConfig, ModelInfo, Agent, RAGConfig, LLMConfig } from '@/types';
+import type {Message, FileReference, Conversation, ConversationConfig, ModelInfo, Agent, LLMConfig} from '@/types';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
 import { marked } from 'marked';
 import { ToolManager } from '@/application/services/tool-manager';
-import type { ToolCall } from '@/application/services/types';
 import { RAGManager } from '@/infrastructure/rag-manager';
 import { WebSearchService } from '@/application/services/web-search-service';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import { renderMessage, MessageRendererCallbacks } from '@/presentation/components/chat/message-renderer';
 import { handleStreamingChat } from '@/presentation/components/chat/handlers/streaming-handler';
-import { processToolCalls as processToolCallsHandler, updateExecutionTrace as updateExecutionTraceHandler, createAgentExecutionTraceContainer as createAgentExecutionTraceContainerHandler } from '@/presentation/components/chat/handlers/tool-call-handler';
 import {
 	MessageController,
 	AgentController,
@@ -21,7 +20,7 @@ import {
 	ChatController
 } from '@/presentation/components/chat/controllers';
 import { resolveMessageProviderId } from '@/presentation/components/chat/utils';
-import { createButton } from '@/presentation/components/utils/dom-helpers';
+import { } from '@/presentation/components/utils/dom-helpers';
 
 export const CHAT_VIEW_TYPE = 'intelligence-assistant-chat';
 
@@ -168,7 +167,7 @@ export class ChatView extends ItemView {
 
 		// Floating conversation list sidebar (hidden by default)
 		this.conversationListContainer = mainLayout.createDiv('conversation-list-floating');
-		this.conversationListContainer.style.display = 'none';
+		this.conversationListContainer.addClass('ia-hidden');
 
 		// Action row (history/new/settings)
 		this.createActionRow(this.mainChatContainer);
@@ -202,9 +201,9 @@ export class ChatView extends ItemView {
 
 		// Reference area with @ mentions
 		this.referenceContainer = inputHeader.createDiv('input-reference-area');
-		this.referenceContainer.style.display = 'none';
+		this.referenceContainer.addClass('ia-hidden');
 
-		const referenceList = this.referenceContainer.createDiv('reference-list');
+		const _referenceList = this.referenceContainer.createDiv('reference-list');
 
 		// Header quick actions (references, RAG, Web, image)
 		this.setupHeaderActions(inputHeader);
@@ -221,8 +220,8 @@ export class ChatView extends ItemView {
 
 		// Auto-resize textarea
 		textarea.addEventListener('input', () => {
-			textarea.style.height = 'auto';
-			textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+			textarea.setCssProps({ 'height': 'auto' });
+			textarea.setCssProps({ 'height': Math.min(textarea.scrollHeight, 120) + 'px' });
 		});
 
 		// Input footer (attachments + actions)
@@ -233,25 +232,26 @@ export class ChatView extends ItemView {
 		// Attachment preview area
 		const middleControls = bottomControls.createDiv('bottom-middle-controls');
 		this.attachmentContainer = middleControls.createDiv('attachment-preview');
-		this.attachmentContainer.style.display = 'none';
+		this.attachmentContainer.addClass('ia-hidden');
 
 		// Right section - Send info and stop button
 		const rightControls = bottomControls.createDiv('bottom-right-controls');
 
 		// Send hint
 		this.sendHint = rightControls.createEl('span');
-		this.sendHint.style.fontSize = '11px';
-		this.sendHint.style.color = 'var(--text-muted)';
-		this.sendHint.innerHTML = 'Press <kbd>Enter</kbd> to send';
+		this.sendHint.addClass('ia-send-hint');
+		this.sendHint.setText('Press ');
+		this.sendHint.createEl('kbd', { text: 'Enter' });
+		this.sendHint.appendText(' to send');
 
 		// Stop generation button (hidden by default)
 		this.stopBtn = rightControls.createEl('button', { cls: 'stop-generation-btn' });
-		this.stopBtn.innerHTML = '⏹️ Stop';
-		this.stopBtn.style.display = 'none';
+		this.stopBtn.setText('⏹️ Stop');
+		this.stopBtn.addClass('ia-hidden');
 		this.stopBtn.addEventListener('click', () => {
 			this.state.stopStreamingRequested = true;
-			if (this.stopBtn) this.stopBtn.style.display = 'none';
-			if (this.sendHint) this.sendHint.style.display = 'block';
+			if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
+			if (this.sendHint) this.sendHint.removeClass('ia-hidden');
 			new Notice('Stopping generation...');
 		});
 
@@ -260,7 +260,7 @@ export class ChatView extends ItemView {
 			if (!text && this.state.currentAttachments.length === 0 && this.state.referencedFiles.length === 0) return;
 
 			textarea.value = '';
-			textarea.style.height = 'auto';
+			textarea.setCssProps({ 'height': 'auto' });
 			await this.sendMessage(text);
 			// Clear attachments and references after sending
 			this.state.currentAttachments = [];
@@ -292,7 +292,7 @@ export class ChatView extends ItemView {
 				// Check if click is outside conversation list
 				if (!this.conversationListContainer.contains(target)) {
 					this.state.conversationListVisible = false;
-					this.conversationListContainer.style.display = 'none';
+					this.conversationListContainer.addClass('ia-hidden');
 				}
 			}
 		});
@@ -438,7 +438,7 @@ export class ChatView extends ItemView {
 				});
 				option.value = model.id;
 				if (isDefault) {
-					option.style.fontWeight = '600';
+					option.setCssProps({ 'font-weight': '600' });
 				}
 			});
 		});
@@ -470,7 +470,7 @@ export class ChatView extends ItemView {
 	}
 
 	private async sendMessage(text: string) {
-		console.log('[Chat] sendMessage called with text:', text.substring(0, 100) + '...');
+		console.debug('[Chat] sendMessage called with text:', text.substring(0, 100) + '...');
 
 		if (this.plugin.settings.llmConfigs.length === 0) {
 			console.error('[Chat] No LLM configs found');
@@ -479,7 +479,7 @@ export class ChatView extends ItemView {
 		}
 
 		const selectedModel = this.modelSelect.value;
-		console.log('[Chat] Selected model:', selectedModel);
+		console.debug('[Chat] Selected model:', selectedModel);
 
 		if (!selectedModel) {
 			console.error('[Chat] No model selected');
@@ -488,7 +488,7 @@ export class ChatView extends ItemView {
 		}
 
 		const config = ModelManager.findConfigForModelByProvider(selectedModel, this.plugin.settings.llmConfigs);
-		console.log('[Chat] Found config:', config ? config.provider : 'none');
+		console.debug('[Chat] Found config:', config ? config.provider : 'none');
 
 		if (!config) {
 			console.error('[Chat] No config found for model:', selectedModel);
@@ -634,12 +634,12 @@ After calling a tool, you will receive the result and can continue the conversat
 		}
 
 		let ragSources: import('@/types').RAGSource[] | undefined;
-		console.log('[RAG Debug] enableRAG:', this.state.enableRAG, 'ragConfig.enabled:', this.plugin.settings.ragConfig.enabled);
+		console.debug('[RAG Debug] enableRAG:', this.state.enableRAG, 'ragConfig.enabled:', this.plugin.settings.ragConfig.enabled);
 		if (this.state.enableRAG && this.plugin.settings.ragConfig.enabled) {
 			try {
-				console.log('[RAG Debug] Querying RAG with text:', text);
+				console.debug('[RAG Debug] Querying RAG with text:', text);
 				const searchResults = await this.ragManager.query(text);
-				console.log('[RAG Debug] Search results:', searchResults?.length || 0, 'results');
+				console.debug('[RAG Debug] Search results:', searchResults?.length || 0, 'results');
 				if (searchResults && searchResults.length > 0) {
 					ragSources = searchResults.map(result => ({
 						path: result.chunk.metadata.path,
@@ -652,20 +652,20 @@ After calling a tool, you will receive the result and can continue the conversat
 						.map(result => `Document: ${result.chunk.metadata.path}\nContent: ${result.chunk.content}`)
 						.join('\n\n');
 
-					console.log('[RAG Debug] RAG context length:', ragContext.length);
+					console.debug('[RAG Debug] RAG context length:', ragContext.length);
 					systemMessages.push({
 						role: 'system' as const,
 						content: `RAG Context (retrieved from your vault):\n\n${ragContext}`
 					});
 				} else {
-					console.log('[RAG Debug] No search results found');
+					console.debug('[RAG Debug] No search results found');
 				}
 			} catch (error) {
 				console.error('[RAG Debug] Error retrieving RAG context:', error);
 				new Notice(`RAG error: ${error.message}`);
 			}
 		} else {
-			console.log('[RAG Debug] RAG is disabled');
+			console.debug('[RAG Debug] RAG is disabled');
 		}
 
 		let shouldPerformWebSearch = this.state.enableWebSearch;
@@ -679,7 +679,7 @@ After calling a tool, you will receive the result and can continue the conversat
 				if (this.state.enableWebSearch) {
 					new Notice('🔍 Searching the web...');
 				} else {
-					console.log('[WebSearch] Auto-triggered search for query:', text);
+					console.debug('[WebSearch] Auto-triggered search for query:', text);
 				}
 
 				const results = await this.webSearchService.search(text);
@@ -694,7 +694,7 @@ After calling a tool, you will receive the result and can continue the conversat
 					if (this.state.enableWebSearch) {
 						new Notice(`✅ Found ${results.length} web results`);
 					} else {
-						console.log(`[WebSearch] Auto-triggered: Found ${results.length} web results`);
+						console.debug(`[WebSearch] Auto-triggered: Found ${results.length} web results`);
 					}
 				} else if (this.state.enableWebSearch) {
 					new Notice('No web results found for your query');
@@ -747,8 +747,8 @@ After calling a tool, you will receive the result and can continue the conversat
 			return { role: msg.role, content: formattedContent, model: msg.model };
 		});
 
-		const finalMessages = [...systemMessages, ...llmMessages];
-		console.log('[Chat] Final messages count:', finalMessages.length);
+		const _finalMessages = [...systemMessages, ...llmMessages];
+		console.debug('[Chat] Final messages count:', finalMessages.length);
 
 		let assistantMessageEl: HTMLElement | null = null;
 
@@ -989,20 +989,20 @@ After calling a tool, you will receive the result and can continue the conversat
 	}
 
 	private styleActionButton(btn: HTMLButtonElement) {
-		btn.style.padding = '2px 6px';
-		btn.style.border = 'none';
-		btn.style.background = 'transparent';
-		btn.style.cursor = 'pointer';
-		btn.style.borderRadius = '4px';
-		btn.style.opacity = '0.6';
-		btn.style.fontSize = '14px';
+		btn.setCssProps({ 'padding': '2px 6px' });
+		btn.setCssProps({ 'border': 'none' });
+		btn.setCssProps({ 'background': 'transparent' });
+		btn.addClass('ia-clickable');
+		btn.setCssProps({ 'border-radius': '4px' });
+		btn.setCssProps({ 'opacity': '0.6' });
+		btn.setCssProps({ 'font-size': '14px' });
 		btn.addEventListener('mouseenter', () => {
-			btn.style.opacity = '1';
-			btn.style.background = 'var(--background-modifier-hover)';
+			btn.setCssProps({ 'opacity': '1' });
+			btn.setCssProps({ 'background': 'var(--background-modifier-hover)' });
 		});
 		btn.addEventListener('mouseleave', () => {
-			btn.style.opacity = '0.6';
-			btn.style.background = 'transparent';
+			btn.setCssProps({ 'opacity': '0.6' });
+			btn.setCssProps({ 'background': 'transparent' });
 		});
 	}
 
@@ -1023,24 +1023,27 @@ After calling a tool, you will receive the result and can continue the conversat
 	private updateReferenceDisplay() {
 		if (!this.referenceContainer) return;
 
-		const referenceList = this.referenceContainer.querySelector('.reference-list') as HTMLElement;
+		const _referenceList = this.referenceContainer.querySelector('.reference-list') as HTMLElement;
 		if (!referenceList) return;
 
 		referenceList.empty();
 
 		if (this.state.referencedFiles.length === 0) {
-			this.referenceContainer.style.display = 'none';
+			this.referenceContainer.addClass('ia-hidden');
 			return;
 		}
 
-		this.referenceContainer.style.display = 'flex';
+		this.referenceContainer.removeClass('ia-hidden');
 
 		this.state.referencedFiles.forEach((item, index) => {
 			const refItem = referenceList.createDiv('reference-item');
-			refItem.innerHTML = `<span class="reference-icon">${item instanceof TFolder ? '📁' : '📄'}</span> <span class="reference-path">${item.path}</span>`;
+			const icon = refItem.createSpan('reference-icon');
+			icon.setText(item instanceof TFolder ? '📁' : '📄');
+			const pathSpan = refItem.createSpan('reference-path');
+			pathSpan.setText(item.path);
 
 			// Make it clickable to open the file/folder
-			refItem.style.cursor = 'pointer';
+			refItem.addClass('ia-clickable');
 			refItem.addEventListener('click', () => {
 				if (item instanceof TFile) {
 					this.app.workspace.getLeaf().openFile(item);
@@ -1238,7 +1241,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		// Header
 		const header = ragSourcesContainer.createDiv('rag-sources-header');
-		header.innerHTML = `📚 Retrieved from ${ragSources.length} document${ragSources.length > 1 ? 's' : ''}`;
+		header.setText(`📚 Retrieved from ${ragSources.length} document${ragSources.length > 1 ? 's' : ''}`);
 
 		// Source cards
 		const sourcesGrid = ragSourcesContainer.createDiv('rag-sources-grid');
@@ -1253,9 +1256,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			const similarityEl = sourceHeader.createDiv('rag-source-similarity');
 			const similarityPercent = Math.round(source.similarity * 100);
 			similarityEl.setText(`${similarityPercent}%`);
-			similarityEl.style.color = similarityPercent > 80 ? 'var(--text-success)' :
+			similarityEl.setCssProps({ 'color': similarityPercent > 80 ? 'var(--text-success)' :
 										similarityPercent > 60 ? 'var(--text-accent)' :
-										'var(--text-muted)';
+										'var(--text-muted)' });
 
 			// Path
 			const pathEl = sourceCard.createDiv('rag-source-path');
@@ -1269,7 +1272,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			contentEl.setText(preview);
 
 			// Click to open
-			sourceCard.style.cursor = 'pointer';
+			sourceCard.addClass('ia-clickable');
 			sourceCard.addEventListener('click', async () => {
 				const file = this.app.vault.getAbstractFileByPath(source.path);
 				if (file instanceof TFile) {
@@ -1281,10 +1284,10 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 			// Hover effect
 			sourceCard.addEventListener('mouseenter', () => {
-				sourceCard.style.borderColor = 'var(--interactive-accent)';
+				sourceCard.setCssProps({ 'border-color': 'var(--interactive-accent)' });
 			});
 			sourceCard.addEventListener('mouseleave', () => {
-				sourceCard.style.borderColor = 'var(--background-modifier-border)';
+				sourceCard.setCssProps({ 'border-color': 'var(--background-modifier-border)' });
 			});
 		});
 	}
@@ -1297,8 +1300,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		const labelEl = checkboxContainer.createEl('label');
 		labelEl.setText(label);
-		labelEl.style.marginLeft = '4px';
-		labelEl.style.cursor = 'pointer';
+		labelEl.setCssProps({ 'margin-left': '4px' });
+		labelEl.addClass('ia-clickable');
 		labelEl.addEventListener('click', () => {
 			checkbox.checked = !checkbox.checked;
 			onChange(checkbox.checked);
@@ -1319,8 +1322,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (options.disabled) {
 			toggleBtn.addClass('disabled');
 			toggleBtn.disabled = true;
-			toggleBtn.style.opacity = '0.5';
-			toggleBtn.style.cursor = 'not-allowed';
+			toggleBtn.setCssProps({ 'opacity': '0.5' });
+			toggleBtn.setCssProps({ 'cursor': 'not-allowed' });
 			if (options.disabledMessage) {
 				toggleBtn.title = options.disabledMessage;
 			}
@@ -1336,9 +1339,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (options.statusText) {
 			const statusSpan = toggleBtn.createEl('span', { cls: 'toggle-status' });
 			statusSpan.setText(` (${options.statusText})`);
-			statusSpan.style.opacity = '0.7';
-			statusSpan.style.fontSize = '0.8em';
-			statusSpan.style.marginLeft = '4px';
+			statusSpan.setCssProps({ 'opacity': '0.7' });
+			statusSpan.setCssProps({ 'font-size': '0.8em' });
+			statusSpan.setCssProps({ 'margin-left': '4px' });
 		}
 
 		toggleBtn.addEventListener('click', (e) => {
@@ -1373,7 +1376,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			ragToggle.setAttr('title', 'Enable RAG in Settings → Chat Features → RAG.');
 			if (statusSpan) {
 				statusSpan.textContent = 'Disabled';
-				statusSpan.style.cursor = 'not-allowed';
+				statusSpan.setCssProps({ 'cursor': 'not-allowed' });
 				statusSpan.onclick = null;
 			}
 			return;
@@ -1391,7 +1394,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				} else {
 					statusSpan.textContent = 'Off';
 				}
-				statusSpan.style.cursor = stats ? 'help' : 'default';
+				statusSpan.setCssProps({ 'cursor': stats ? 'help' : 'default' });
 				statusSpan.onclick = stats ? (event) => {
 					event.stopPropagation();
 					void this.openRagStatsModal();
@@ -1407,7 +1410,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			ragToggle.addClass('is-disabled');
 			if (statusSpan) {
 				statusSpan.textContent = 'Unavailable';
-				statusSpan.style.cursor = 'not-allowed';
+				statusSpan.setCssProps({ 'cursor': 'not-allowed' });
 				statusSpan.onclick = null;
 			}
 			console.error('Error updating RAG status:', error);
@@ -1463,24 +1466,22 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		// Summary stats
 		const summaryDiv = content.createDiv('rag-stats-summary');
-		summaryDiv.innerHTML = `
-			<div class="stat-row">
-				<span class="stat-label">📊 Total Chunks:</span>
-				<span class="stat-value">${stats.chunkCount}</span>
-			</div>
-			<div class="stat-row">
-				<span class="stat-label">📁 Files Indexed:</span>
-				<span class="stat-value">${stats.fileCount}</span>
-			</div>
-			<div class="stat-row">
-				<span class="stat-label">💾 Total Size:</span>
-				<span class="stat-value">${(stats.totalSize / 1024).toFixed(1)} KB</span>
-			</div>
-			<div class="stat-row">
-				<span class="stat-label">📈 Avg Chunks/File:</span>
-				<span class="stat-value">${stats.fileCount > 0 ? (stats.chunkCount / stats.fileCount).toFixed(1) : '0'}</span>
-			</div>
-		`;
+
+		const row1 = summaryDiv.createDiv('stat-row');
+		row1.createSpan({ cls: 'stat-label', text: '📊 Total Chunks:' });
+		row1.createSpan({ cls: 'stat-value', text: `${stats.chunkCount}` });
+
+		const row2 = summaryDiv.createDiv('stat-row');
+		row2.createSpan({ cls: 'stat-label', text: '📁 Files Indexed:' });
+		row2.createSpan({ cls: 'stat-value', text: `${stats.fileCount}` });
+
+		const row3 = summaryDiv.createDiv('stat-row');
+		row3.createSpan({ cls: 'stat-label', text: '💾 Total Size:' });
+		row3.createSpan({ cls: 'stat-value', text: `${(stats.totalSize / 1024).toFixed(1)} KB` });
+
+		const row4 = summaryDiv.createDiv('stat-row');
+		row4.createSpan({ cls: 'stat-label', text: '📈 Avg Chunks/File:' });
+		row4.createSpan({ cls: 'stat-value', text: `${stats.fileCount > 0 ? (stats.chunkCount / stats.fileCount).toFixed(1) : '0'}` });
 
 		// File list
 		if (stats.indexedFiles && stats.indexedFiles.length > 0) {
@@ -1507,22 +1508,19 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 					}
 				});
 
-				const filePathSpan = fileItem.createEl('span', {
+				const _filePathSpan = fileItem.createEl('span', {
 					text: filePath,
 					cls: 'rag-file-path'
 				});
 			});
 		} else {
 			const noFiles = content.createDiv('rag-no-files');
-			noFiles.innerHTML = `
-				<p>⚠️ No files have been indexed yet.</p>
-				<p>To build the RAG index:</p>
-				<ol>
-					<li>Go to Settings → RAG</li>
-					<li>Enable RAG</li>
-					<li>Click "Index Vault"</li>
-				</ol>
-			`;
+			noFiles.createEl('p', { text: '⚠️ No files have been indexed yet.' });
+			noFiles.createEl('p', { text: 'To build the RAG index:' });
+			const ol = noFiles.createEl('ol');
+			ol.createEl('li', { text: 'Go to Settings → RAG' });
+			ol.createEl('li', { text: 'Enable RAG' });
+			ol.createEl('li', { text: 'Click "Index Vault"' });
 		}
 
 		// Close button
@@ -1622,7 +1620,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private async updateOptionsDisplay() {
 		if (this.headerActionsContainer) {
-			this.headerActionsContainer.style.display = this.state.mode === 'agent' ? 'none' : '';
+			this.headerActionsContainer.setCssProps({ 'display': this.state.mode === 'agent' ? 'none' : '' });
 		}
 
 		this.updatePromptSelectorVisibility();
@@ -1634,13 +1632,13 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	private updatePromptSelectorVisibility() {
 		if (!this.promptSelector) return;
 		if (this.state.mode === 'agent') {
-			this.promptSelector.style.display = 'none';
+			this.promptSelector.addClass('ia-hidden');
 			this.promptSelector.disabled = true;
-			if (this.promptSelectorGroup) this.promptSelectorGroup.style.display = 'none';
+			if (this.promptSelectorGroup) this.promptSelectorGroup.addClass('ia-hidden');
 		} else {
-			this.promptSelector.style.display = '';
+			this.promptSelector.setCssProps({ 'display': '' });
 			this.promptSelector.disabled = false;
-			if (this.promptSelectorGroup) this.promptSelectorGroup.style.display = '';
+			if (this.promptSelectorGroup) this.promptSelectorGroup.setCssProps({ 'display': '' });
 		}
 	}
 
@@ -1648,16 +1646,16 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (!this.agentSelector) return;
 		if (this.state.mode === 'agent') {
 			const wasDisabled = this.agentSelector.disabled;
-			this.agentSelector.style.display = '';
+			this.agentSelector.setCssProps({ 'display': '' });
 			this.agentSelector.disabled = false;
-			if (this.agentSelectorGroup) this.agentSelectorGroup.style.display = '';
+			if (this.agentSelectorGroup) this.agentSelectorGroup.setCssProps({ 'display': '' });
 			if (wasDisabled) {
 				this.refreshAgentSelect();
 			}
 		} else {
-			this.agentSelector.style.display = 'none';
+			this.agentSelector.addClass('ia-hidden');
 			this.agentSelector.disabled = true;
-			if (this.agentSelectorGroup) this.agentSelectorGroup.style.display = 'none';
+			if (this.agentSelectorGroup) this.agentSelectorGroup.addClass('ia-hidden');
 		}
 	}
 
@@ -1674,7 +1672,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const showControls = !isAgentMode || !activeAgent || usesChatViewModel;
 
 		if (this.modelControlsContainer) {
-			this.modelControlsContainer.style.display = showControls ? '' : 'none';
+			this.modelControlsContainer.setCssProps({ 'display': showControls ? '' : 'none' });
 		}
 		if (this.modelSelect) {
 			this.modelSelect.disabled = !showControls;
@@ -1688,7 +1686,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		const shouldShowSummary = isAgentMode && !!activeAgent && !usesChatViewModel;
 			if (this.agentConfigSummaryEl) {
-				this.agentConfigSummaryEl.style.display = shouldShowSummary ? 'flex' : 'none';
+				this.agentConfigSummaryEl.setCssProps({ 'display': shouldShowSummary ? 'flex' : 'none' });
 			}
 		if (shouldShowSummary && activeAgent) {
 			this.renderAgentSummary(activeAgent);
@@ -1801,10 +1799,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		modeGroup.addClass('chat-select-group');
 		modeGroup.createSpan({ text: 'Mode', cls: 'chat-label' });
 		this.modeSelector = modeGroup.createEl('select', { cls: 'mode-selector' }) as HTMLSelectElement;
-		this.modeSelector.innerHTML = `
-			<option value="chat">Chat</option>
-			<option value="agent">Agent</option>
-		`;
+		this.modeSelector.createEl('option', { value: 'chat', text: 'Chat' });
+		this.modeSelector.createEl('option', { value: 'agent', text: 'Agent' });
 		this.modeSelector.value = this.state.mode;
 		this.modeSelector.addEventListener('change', async () => {
 			const value = (this.modeSelector?.value ?? 'chat') as 'chat' | 'agent';
@@ -1837,10 +1833,14 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	private populatePromptSelectorOptions() {
 		if (!this.promptSelector) return;
 		const enabledPrompts = this.plugin.settings.systemPrompts.filter(p => p.enabled);
-		this.promptSelector.innerHTML = '<option value="">No System Prompt</option>' +
-			enabledPrompts.map(p =>
-				`<option value="${p.id}" ${this.plugin.settings.activeSystemPromptId === p.id ? 'selected' : ''}>${p.name}</option>`
-			).join('');
+		this.promptSelector.empty();
+		this.promptSelector.createEl('option', { value: '', text: 'No System Prompt' });
+		enabledPrompts.forEach(p => {
+			const option = this.promptSelector!.createEl('option', { value: p.id, text: p.name });
+			if (this.plugin.settings.activeSystemPromptId === p.id) {
+				option.selected = true;
+			}
+		});
 	}
 
 	private async handleModeChange(mode: 'chat' | 'agent') {
@@ -1906,7 +1906,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		if (!this.conversationListContainer) return;
 		const isVisible = this.conversationListContainer.style.display !== 'none';
-		this.conversationListContainer.style.display = isVisible ? 'none' : 'flex';
+		this.conversationListContainer.setCssProps({ 'display': isVisible ? 'none' : 'flex' });
 	}
 
 	private updateConversationTitle(title: string) {
@@ -2193,7 +2193,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		this.agentConfigSummaryEl = row.createDiv('chat-agent-summary');
 		this.agentConfigSummaryEl.addClass('chat-agent-summary');
-		this.agentConfigSummaryEl.style.display = 'none';
+		this.agentConfigSummaryEl.addClass('ia-hidden');
 		this.agentSummaryTitleEl = this.agentConfigSummaryEl.createSpan({
 			cls: 'chat-agent-summary-title',
 			text: 'Agent configuration'
@@ -2361,7 +2361,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const selectEl = this.agentSelector;
 		const agents = this.plugin.settings.agents;
 
-		selectEl.innerHTML = '';
+		selectEl.empty();
 
 		if (!agents || agents.length === 0) {
 			const placeholder = document.createElement('option');
@@ -2516,16 +2516,12 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const workflowMsgEl = this.chatContainer.createDiv('chat-message');
 		workflowMsgEl.addClass('message-workflow');
 		const workflowIcon = '⚙️'; // Default workflow icon
-		workflowMsgEl.innerHTML = `
-			<div class="workflow-execution">
-				<div class="workflow-header">
-					<span class="workflow-icon">${workflowIcon}</span>
-					<span class="workflow-name">Workflow: ${workflowData.name}</span>
-				</div>
-				<div class="workflow-status">Initializing...</div>
-				<div class="workflow-log"></div>
-			</div>
-		`;
+		const workflowExecution = workflowMsgEl.createDiv('workflow-execution');
+		const workflowHeader = workflowExecution.createDiv('workflow-header');
+		workflowHeader.createSpan({ cls: 'workflow-icon', text: workflowIcon });
+		workflowHeader.createSpan({ cls: 'workflow-name', text: `Workflow: ${workflowData.name}` });
+		workflowExecution.createDiv({ cls: 'workflow-status', text: 'Initializing...' });
+		workflowExecution.createDiv('workflow-log');
 
 		const statusEl = workflowMsgEl.querySelector('.workflow-status') as HTMLElement;
 		const logEl = workflowMsgEl.querySelector('.workflow-log') as HTMLElement;
@@ -2536,7 +2532,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 			// Get input from last user message or prompt
 			const lastUserMessage = this.state.messages.filter(m => m.role === 'user').pop();
-			const initialInput = lastUserMessage?.content || 'Start workflow';
+			const _initialInput = lastUserMessage?.content || 'Start workflow';
 
 			statusEl.setText('Running...');
 
@@ -2562,16 +2558,20 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			// Display results
 			const status = result.success ? 'completed' : 'failed';
 			statusEl.setText(`Status: ${status}`);
-			statusEl.style.color = result.success ? 'var(--text-success)' : 'var(--text-error)';
+			statusEl.setCssProps({ 'color': result.success ? 'var(--text-success)' : 'var(--text-error)' });
 
 			// Display execution log
 			logEl.empty();
 			const logTitle = logEl.createEl('h4', { text: 'Execution Log:' });
-			logTitle.style.margin = '8px 0 4px 0';
+			logTitle.setCssProps({ 'margin': '8px 0 4px 0' });
 
 			for (const entry of result.log || []) {
 				const entryDiv = logEl.createDiv('log-entry');
-				entryDiv.style.cssText = 'font-size: 11px; padding: 4px 0; border-bottom: 1px solid var(--background-modifier-border);';
+				entryDiv.setCssProps({
+					'font-size': '11px',
+					'padding': '4px 0',
+					'border-bottom': '1px solid var(--background-modifier-border)'
+				});
 
 				const timestamp = new Date(entry.timestamp).toLocaleTimeString();
 				const actionText = `[${timestamp}] ${entry.nodeId}`;
@@ -2580,7 +2580,10 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 				if (entry.error) {
 					const errorDiv = entryDiv.createEl('div', { cls: 'log-error' });
-					errorDiv.style.cssText = 'color: var(--text-error); margin-left: 16px;';
+					errorDiv.setCssProps({
+						'color': 'var(--text-error)',
+						'margin-left': '16px'
+					});
 					errorDiv.setText(`Error: ${entry.error}`);
 				}
 			}
@@ -2598,7 +2601,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		} catch (error: any) {
 			statusEl.setText(`Error: ${error.message}`);
-			statusEl.style.color = 'var(--text-error)';
+			statusEl.setCssProps({ 'color': 'var(--text-error)' });
 			new Notice(`Workflow failed: ${error.message}`);
 		}
 
@@ -2620,7 +2623,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			this.toolManager,
 			activeAgent, // Pass agent to check tool permissions
 			traceContainer,
-			() => this.continueAgentConversation(traceContainer, contentEl)
+			() => this.continueAgentConversation(traceContainer, _contentEl)
 		);
 	}
 
@@ -2659,12 +2662,17 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			}
 
 			if (finalAnswer) {
-				contentEl.innerHTML = '';
+				contentEl.empty();
 				const finalAnswerEl = contentEl.createDiv('agent-final-answer');
-				finalAnswerEl.innerHTML = '<h4>Final Answer</h4>';
+				finalAnswerEl.createEl('h4', { text: 'Final Answer' });
 				try {
 					const html = marked.parse(finalAnswer) as string;
-					finalAnswerEl.innerHTML += html;
+					// Use DOMParser to safely parse HTML
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(html, 'text/html');
+					Array.from(doc.body.childNodes).forEach(node => {
+						finalAnswerEl.appendChild(node.cloneNode(true));
+					});
 				} catch (error) {
 					finalAnswerEl.createDiv().setText(finalAnswer);
 				}
@@ -2696,7 +2704,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	 * Continue the agent conversation after tool execution
 	 */
 	private async continueAgentConversation(traceContainer?: HTMLElement, contentEl?: HTMLElement) {
-		console.log('[Agent] Continuing agent conversation after tool execution...');
+		console.debug('[Agent] Continuing agent conversation after tool execution...');
 
 		// Get the current config and model to make another call
 		const selectedModel = this.modelSelect.value;
@@ -2726,7 +2734,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			};
 
 			// Add system prompts and context if needed
-			const finalMessages = [...chatRequest.messages];
+			const _finalMessages = [...chatRequest.messages];
 
 			// Add system prompt if configured (use the same method as the original)
 			const systemMessages = [];
@@ -2867,7 +2875,7 @@ After calling a tool, you will receive the result and can continue the conversat
 	}
 
 	private async clearChat() {
-		if (!confirm('Clear all messages in this conversation?')) return;
+		if (!await showConfirm(this.app, 'Clear all messages in this conversation?')) return;
 
 		this.state.messages = [];
 		this.chatContainer.empty();
@@ -2942,36 +2950,36 @@ After calling a tool, you will receive the result and can continue the conversat
 		this.attachmentContainer.empty();
 
 		if (this.state.currentAttachments.length === 0) {
-			this.attachmentContainer.style.display = 'none';
+			this.attachmentContainer.addClass('ia-hidden');
 			return;
 		}
 
-		this.attachmentContainer.style.display = 'flex';
-		this.attachmentContainer.style.gap = '8px';
-		this.attachmentContainer.style.padding = '8px';
-		this.attachmentContainer.style.background = 'var(--background-secondary)';
-		this.attachmentContainer.style.borderRadius = '4px';
-		this.attachmentContainer.style.flexWrap = 'wrap';
-		this.attachmentContainer.style.marginBottom = '8px';
+		this.attachmentContainer.removeClass('ia-hidden');
+		this.attachmentContainer.setCssProps({ 'gap': '8px' });
+		this.attachmentContainer.setCssProps({ 'padding': '8px' });
+		this.attachmentContainer.setCssProps({ 'background': 'var(--background-secondary)' });
+		this.attachmentContainer.setCssProps({ 'border-radius': '4px' });
+		this.attachmentContainer.setCssProps({ 'flex-wrap': 'wrap' });
+		this.attachmentContainer.setCssProps({ 'margin-bottom': '8px' });
 
 		this.state.currentAttachments.forEach((att, index) => {
 			const attPreview = this.attachmentContainer!.createDiv('attachment-preview-item');
-			attPreview.style.position = 'relative';
-			attPreview.style.padding = '8px';
-			attPreview.style.background = 'var(--background-primary)';
-			attPreview.style.borderRadius = '4px';
-			attPreview.style.display = 'flex';
-			attPreview.style.alignItems = 'center';
-			attPreview.style.gap = '8px';
+			attPreview.setCssProps({ 'position': 'relative' });
+			attPreview.setCssProps({ 'padding': '8px' });
+			attPreview.setCssProps({ 'background': 'var(--background-primary)' });
+			attPreview.setCssProps({ 'border-radius': '4px' });
+			attPreview.removeClass('ia-hidden');
+			attPreview.setCssProps({ 'align-items': 'center' });
+			attPreview.setCssProps({ 'gap': '8px' });
 
 			if (att.type === 'image' && att.content) {
 				const img = attPreview.createEl('img');
 				img.src = att.content;
 				img.alt = att.name;
-				img.style.width = '40px';
-				img.style.height = '40px';
-				img.style.objectFit = 'cover';
-				img.style.borderRadius = '4px';
+				img.setCssProps({ 'width': '40px' });
+				img.setCssProps({ 'height': '40px' });
+				img.setCssProps({ 'object-fit': 'cover' });
+				img.setCssProps({ 'border-radius': '4px' });
 			} else {
 				attPreview.createSpan({ text: att.type === 'image' ? '🖼️' : '📎' });
 			}
@@ -2980,13 +2988,13 @@ After calling a tool, you will receive the result and can continue the conversat
 
 			// Remove button
 			const removeBtn = attPreview.createEl('button', { text: '×' });
-			removeBtn.style.marginLeft = 'auto';
-			removeBtn.style.padding = '0 6px';
-			removeBtn.style.border = 'none';
-			removeBtn.style.background = 'transparent';
-			removeBtn.style.cursor = 'pointer';
-			removeBtn.style.fontSize = '20px';
-			removeBtn.style.color = 'var(--text-error)';
+			removeBtn.setCssProps({ 'margin-left': 'auto' });
+			removeBtn.setCssProps({ 'padding': '0 6px' });
+			removeBtn.setCssProps({ 'border': 'none' });
+			removeBtn.setCssProps({ 'background': 'transparent' });
+			removeBtn.addClass('ia-clickable');
+			removeBtn.setCssProps({ 'font-size': '20px' });
+			removeBtn.setCssProps({ 'color': 'var(--text-error)' });
 			removeBtn.addEventListener('click', () => {
 				this.state.currentAttachments.splice(index, 1);
 				this.updateAttachmentPreview();
@@ -4314,16 +4322,16 @@ class SearchableReferenceModal extends Modal {
 			type: 'text',
 			placeholder: 'Search files and folders...'
 		});
-		this.searchInput.style.width = '100%';
-		this.searchInput.style.padding = '8px';
-		this.searchInput.style.marginBottom = '10px';
-		this.searchInput.style.border = '1px solid var(--background-modifier-border)';
-		this.searchInput.style.borderRadius = '4px';
+		this.searchInput.setCssProps({ 'width': '100%' });
+		this.searchInput.setCssProps({ 'padding': '8px' });
+		this.searchInput.setCssProps({ 'margin-bottom': '10px' });
+		this.searchInput.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
+		this.searchInput.setCssProps({ 'border-radius': '4px' });
 
 		// Results container
 		this.resultsContainer = contentEl.createDiv();
-		this.resultsContainer.style.maxHeight = '400px';
-		this.resultsContainer.style.overflowY = 'auto';
+		this.resultsContainer.setCssProps({ 'max-height': '400px' });
+		this.resultsContainer.setCssProps({ 'overflow-y': 'auto' });
 
 		// Initial display of all items
 		this.displayItems(this.allItems);
@@ -4347,9 +4355,9 @@ class SearchableReferenceModal extends Modal {
 
 		// Add button container with actions
 		const buttonContainer = contentEl.createDiv();
-		buttonContainer.style.display = 'flex';
-		buttonContainer.style.justifyContent = 'space-between';
-		buttonContainer.style.marginTop = '10px';
+		buttonContainer.removeClass('ia-hidden');
+		buttonContainer.setCssProps({ 'justify-content': 'space-between' });
+		buttonContainer.setCssProps({ 'margin-top': '10px' });
 		
 		const selectAllButton = buttonContainer.createEl('button', { text: 'Select All' });
 		selectAllButton.addEventListener('click', () => {
@@ -4381,24 +4389,24 @@ class SearchableReferenceModal extends Modal {
 
 		items.forEach(item => {
 			const itemEl = this.resultsContainer.createDiv('reference-item');
-			itemEl.style.display = 'flex';
-			itemEl.style.alignItems = 'center';
-			itemEl.style.padding = '6px';
-			itemEl.style.borderBottom = '1px solid var(--background-modifier-border)';
-			itemEl.style.cursor = 'pointer';
+			itemEl.removeClass('ia-hidden');
+			itemEl.setCssProps({ 'align-items': 'center' });
+			itemEl.setCssProps({ 'padding': '6px' });
+			itemEl.setCssProps({ 'border-bottom': '1px solid var(--background-modifier-border)' });
+			itemEl.addClass('ia-clickable');
 			
 			if (this.selectedItems.some(selected => selected.path === item.path)) {
-				itemEl.style.backgroundColor = 'var(--background-modifier-active)';
+				itemEl.setCssProps({ 'background-color': 'var(--background-modifier-active)' });
 			}
 			
 			// Add icon
 			const iconEl = itemEl.createDiv();
-			iconEl.style.marginRight = '8px';
+			iconEl.setCssProps({ 'margin-right': '8px' });
 			iconEl.setText(item instanceof TFolder ? '📁' : '📄');
 			
 			// Add path text
 			const textEl = itemEl.createDiv();
-			textEl.style.flex = '1';
+			textEl.setCssProps({ 'flex': '1' });
 			textEl.setText(item.path);
 			
 			// Add click event to toggle selection
@@ -4463,16 +4471,16 @@ class SearchableImageModal extends Modal {
 			type: 'text',
 			placeholder: 'Search images...'
 		});
-		this.searchInput.style.width = '100%';
-		this.searchInput.style.padding = '8px';
-		this.searchInput.style.marginBottom = '10px';
-		this.searchInput.style.border = '1px solid var(--background-modifier-border)';
-		this.searchInput.style.borderRadius = '4px';
+		this.searchInput.setCssProps({ 'width': '100%' });
+		this.searchInput.setCssProps({ 'padding': '8px' });
+		this.searchInput.setCssProps({ 'margin-bottom': '10px' });
+		this.searchInput.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
+		this.searchInput.setCssProps({ 'border-radius': '4px' });
 
 		// Results container
 		this.resultsContainer = contentEl.createDiv();
-		this.resultsContainer.style.maxHeight = '400px';
-		this.resultsContainer.style.overflowY = 'auto';
+		this.resultsContainer.setCssProps({ 'max-height': '400px' });
+		this.resultsContainer.setCssProps({ 'overflow-y': 'auto' });
 
 		// Initial display of all images
 		this.displayImages(this.allImageFiles);
@@ -4496,9 +4504,9 @@ class SearchableImageModal extends Modal {
 
 		// Add button container with actions
 		const buttonContainer = contentEl.createDiv();
-		buttonContainer.style.display = 'flex';
-		buttonContainer.style.justifyContent = 'space-between';
-		buttonContainer.style.marginTop = '10px';
+		buttonContainer.removeClass('ia-hidden');
+		buttonContainer.setCssProps({ 'justify-content': 'space-between' });
+		buttonContainer.setCssProps({ 'margin-top': '10px' });
 		
 		const selectAllButton = buttonContainer.createEl('button', { text: 'Select All' });
 		selectAllButton.addEventListener('click', () => {
@@ -4530,24 +4538,24 @@ class SearchableImageModal extends Modal {
 
 		files.forEach(file => {
 			const itemEl = this.resultsContainer.createDiv('image-item');
-			itemEl.style.display = 'flex';
-			itemEl.style.alignItems = 'center';
-			itemEl.style.padding = '6px';
-			itemEl.style.borderBottom = '1px solid var(--background-modifier-border)';
-			itemEl.style.cursor = 'pointer';
+			itemEl.removeClass('ia-hidden');
+			itemEl.setCssProps({ 'align-items': 'center' });
+			itemEl.setCssProps({ 'padding': '6px' });
+			itemEl.setCssProps({ 'border-bottom': '1px solid var(--background-modifier-border)' });
+			itemEl.addClass('ia-clickable');
 			
 			if (this.selectedFiles.some(selected => selected.path === file.path)) {
-				itemEl.style.backgroundColor = 'var(--background-modifier-active)';
+				itemEl.setCssProps({ 'background-color': 'var(--background-modifier-active)' });
 			}
 			
 			// Add icon
 			const iconEl = itemEl.createDiv();
-			iconEl.style.marginRight = '8px';
+			iconEl.setCssProps({ 'margin-right': '8px' });
 			iconEl.setText('🖼️');
 			
 			// Add path text
 			const textEl = itemEl.createDiv();
-			textEl.style.flex = '1';
+			textEl.setCssProps({ 'flex': '1' });
 			textEl.setText(file.path);
 			
 			// Add click event to toggle selection
@@ -4610,16 +4618,16 @@ class SingleFileSelectionModal extends Modal {
 			type: "text",
 			placeholder: "Search notes..."
 		});
-		this.searchInput.style.width = "100%";
-		this.searchInput.style.padding = "8px";
-		this.searchInput.style.marginBottom = "10px";
-		this.searchInput.style.border = "1px solid var(--background-modifier-border)";
-		this.searchInput.style.borderRadius = "4px";
+		this.searchInput.setCssProps({ 'width': "100%" });
+		this.searchInput.setCssProps({ 'padding': "8px" });
+		this.searchInput.setCssProps({ 'margin-bottom': "10px" });
+		this.searchInput.setCssProps({ 'border': "1px solid var(--background-modifier-border)" });
+		this.searchInput.setCssProps({ 'border-radius': "4px" });
 
 		// Results container
 		this.resultsContainer = contentEl.createDiv();
-		this.resultsContainer.style.maxHeight = "400px";
-		this.resultsContainer.style.overflowY = "auto";
+		this.resultsContainer.setCssProps({ 'max-height': "400px" });
+		this.resultsContainer.setCssProps({ 'overflow-y': "auto" });
 
 		// Initial display of all items
 		this.displayFiles(this.allFiles);
@@ -4643,9 +4651,9 @@ class SingleFileSelectionModal extends Modal {
 
 		// Add button container with actions
 		const buttonContainer = contentEl.createDiv();
-		buttonContainer.style.display = "flex";
-		buttonContainer.style.justifyContent = "flex-end";
-		buttonContainer.style.marginTop = "10px";
+		buttonContainer.removeClass('ia-hidden');
+		buttonContainer.setCssProps({ 'justify-content': "flex-end" });
+		buttonContainer.setCssProps({ 'margin-top': "10px" });
 		
 		const insertButton = buttonContainer.createEl("button", { text: "Insert to Selected Note" });
 		insertButton.addClass("mod-cta");
@@ -4656,7 +4664,7 @@ class SingleFileSelectionModal extends Modal {
 		
 		// Add "Create New Note" button
 		const newNoteButton = buttonContainer.createEl("button", { text: "Create New Note" });
-		newNoteButton.style.marginRight = "10px";
+		newNoteButton.setCssProps({ 'margin-right': "10px" });
 		newNoteButton.addEventListener("click", () => {
 			this.close();
 			this.onChooseFile(null); // Signal to create a new note
@@ -4673,24 +4681,24 @@ class SingleFileSelectionModal extends Modal {
 
 		files.forEach(file => {
 			const fileEl = this.resultsContainer.createDiv("file-item");
-			fileEl.style.display = "flex";
-			fileEl.style.alignItems = "center";
-			fileEl.style.padding = "6px";
-			fileEl.style.borderBottom = "1px solid var(--background-modifier-border)";
-			fileEl.style.cursor = "pointer";
+			fileEl.removeClass('ia-hidden');
+			fileEl.setCssProps({ 'align-items': "center" });
+			fileEl.setCssProps({ 'padding': "6px" });
+			fileEl.setCssProps({ 'border-bottom': "1px solid var(--background-modifier-border)" });
+			fileEl.addClass('ia-clickable');
 			
 			if (this.selectedFile && this.selectedFile.path === file.path) {
-				fileEl.style.backgroundColor = "var(--background-modifier-active)";
+				fileEl.setCssProps({ 'background-color': "var(--background-modifier-active)" });
 			}
 			
 			// Add icon
 			const iconEl = fileEl.createDiv();
-			iconEl.style.marginRight = "8px";
+			iconEl.setCssProps({ 'margin-right': "8px" });
 			iconEl.setText("📄");
 			
 			// Add path text
 			const textEl = fileEl.createDiv();
-			textEl.style.flex = "1";
+			textEl.setCssProps({ 'flex': "1" });
 			textEl.setText(file.path);
 			
 			// Add click event to select the file

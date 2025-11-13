@@ -8,6 +8,7 @@
 import { WorkflowNode, NodeParameter, WorkflowServices } from '../core/types';
 import { NodeRegistry } from '../nodes/registry';
 import { EventEmitter } from './event-emitter';
+import { showConfirm } from '../../../presentation/components/modals/confirm-modal';
 
 /**
  * Panel events
@@ -39,7 +40,7 @@ export class ConfigPanel {
 	 */
 	show(node: WorkflowNode): void {
 		this.currentNode = node;
-		this.container.style.display = 'block';
+		this.container.removeClass('ia-hidden');
 		this.render();
 	}
 
@@ -47,7 +48,7 @@ export class ConfigPanel {
 	 * Hide panel
 	 */
 	hide(): void {
-		this.container.style.display = 'none';
+		this.container.addClass('ia-hidden');
 		this.currentNode = null;
 		this.events.emit('close', undefined);
 	}
@@ -100,9 +101,14 @@ export class ConfigPanel {
 			text: 'Delete Node',
 			cls: 'config-panel-btn config-panel-btn-danger',
 		});
-		deleteBtn.addEventListener('click', () => {
-			if (confirm(`Are you sure you want to delete node "${this.currentNode!.name}"?`)) {
-				this.events.emit('delete', { nodeId: this.currentNode!.id });
+		deleteBtn.addEventListener('click', async () => {
+			if (!this.services?.app || !this.currentNode) return;
+			const confirmed = await showConfirm(
+				this.services.app,
+				`Are you sure you want to delete node "${this.currentNode.name}"?`
+			);
+			if (confirmed) {
+				this.events.emit('delete', { nodeId: this.currentNode.id });
 			}
 		});
 	}
@@ -306,8 +312,8 @@ export class ConfigPanel {
 		}
 
 		textarea.rows = 8;
-		textarea.style.fontFamily = 'monospace';
-		textarea.style.fontSize = '12px';
+		textarea.setCssProps({ 'font-family': 'monospace' });
+		textarea.setCssProps({ 'font-size': '12px' });
 
 		textarea.addEventListener('input', () => {
 			this.updateConfig(param.name, textarea.value);
@@ -331,8 +337,8 @@ export class ConfigPanel {
 		}
 
 		textarea.rows = 8;
-		textarea.style.fontFamily = 'monospace';
-		textarea.style.fontSize = '12px';
+		textarea.setCssProps({ 'font-family': 'monospace' });
+		textarea.setCssProps({ 'font-size': '12px' });
 
 		// Validate JSON on input
 		let validationTimeout: NodeJS.Timeout;
@@ -341,10 +347,10 @@ export class ConfigPanel {
 			validationTimeout = setTimeout(() => {
 				try {
 					const parsed = JSON.parse(textarea.value);
-					textarea.style.borderColor = '';
+					textarea.setCssProps({ 'border-color': '' });
 					this.updateConfig(param.name, parsed);
 				} catch (error) {
-					textarea.style.borderColor = '#ef4444';
+					textarea.setCssProps({ 'border-color': '#ef4444' });
 				}
 			}, 500);
 		});

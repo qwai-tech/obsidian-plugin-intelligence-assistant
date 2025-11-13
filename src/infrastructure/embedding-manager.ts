@@ -199,7 +199,7 @@ export class EmbeddingManager {
         this.worker.onerror = (error) => {
           console.error('Embedding worker error:', error);
           // Reject all pending requests
-          for (const [id, request] of this.pendingRequests) {
+          for (const [_id, request] of this.pendingRequests) {
             request.reject(error);
           }
           this.pendingRequests.clear();
@@ -238,7 +238,7 @@ export class EmbeddingManager {
   
   private static async generateEmbeddingWithWorker(text: string, dimensions: number): Promise<number[]> {
     return new Promise<number[]>((resolve, reject) => {
-      const requestId = `embedding-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const requestId = `embedding-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
       
       // Store the promise callbacks
       this.pendingRequests.set(requestId, { resolve, reject });

@@ -38,22 +38,22 @@ class SearchableImageModal extends Modal {
 			type: 'text',
 			placeholder: 'Search images...'
 		});
-		this.searchInput.style.width = '100%';
-		this.searchInput.style.marginBottom = '12px';
-		this.searchInput.style.padding = '8px';
+		this.searchInput.setCssProps({ 'width': '100%' });
+		this.searchInput.setCssProps({ 'margin-bottom': '12px' });
+		this.searchInput.setCssProps({ 'padding': '8px' });
 		this.searchInput.addEventListener('input', () => this.renderResults());
 
 		// Results container
 		this.resultsContainer = contentEl.createDiv('image-results');
-		this.resultsContainer.style.maxHeight = '400px';
-		this.resultsContainer.style.overflowY = 'auto';
-		this.resultsContainer.style.marginBottom = '12px';
+		this.resultsContainer.setCssProps({ 'max-height': '400px' });
+		this.resultsContainer.setCssProps({ 'overflow-y': 'auto' });
+		this.resultsContainer.setCssProps({ 'margin-bottom': '12px' });
 
 		// Buttons
 		const buttonContainer = contentEl.createDiv();
-		buttonContainer.style.display = 'flex';
-		buttonContainer.style.gap = '8px';
-		buttonContainer.style.justifyContent = 'flex-end';
+		buttonContainer.removeClass('ia-hidden');
+		buttonContainer.setCssProps({ 'gap': '8px' });
+		buttonContainer.setCssProps({ 'justify-content': 'flex-end' });
 
 		const selectBtn = buttonContainer.createEl('button', { text: 'Select' });
 		selectBtn.addEventListener('click', () => {
@@ -82,16 +82,16 @@ class SearchableImageModal extends Modal {
 
 		filtered.slice(0, 50).forEach(file => {
 			const item = this.resultsContainer.createDiv('image-item');
-			item.style.padding = '8px';
-			item.style.cursor = 'pointer';
-			item.style.borderRadius = '4px';
-			item.style.marginBottom = '4px';
+			item.setCssProps({ 'padding': '8px' });
+			item.addClass('ia-clickable');
+			item.setCssProps({ 'border-radius': '4px' });
+			item.setCssProps({ 'margin-bottom': '4px' });
 
 			if (this.selectedFiles.includes(file)) {
-				item.style.background = 'var(--interactive-accent)';
-				item.style.color = 'var(--text-on-accent)';
+				item.setCssProps({ 'background': 'var(--interactive-accent)' });
+				item.setCssProps({ 'color': 'var(--text-on-accent)' });
 			} else {
-				item.style.background = 'var(--background-secondary)';
+				item.setCssProps({ 'background': 'var(--background-secondary)' });
 			}
 
 			item.setText(`🖼️ ${file.path}`);
@@ -108,13 +108,13 @@ class SearchableImageModal extends Modal {
 
 			item.addEventListener('mouseenter', () => {
 				if (!this.selectedFiles.includes(file)) {
-					item.style.background = 'var(--background-modifier-hover)';
+					item.setCssProps({ 'background': 'var(--background-modifier-hover)' });
 				}
 			});
 
 			item.addEventListener('mouseleave', () => {
 				if (!this.selectedFiles.includes(file)) {
-					item.style.background = 'var(--background-secondary)';
+					item.setCssProps({ 'background': 'var(--background-secondary)' });
 				}
 			});
 		});
@@ -142,7 +142,7 @@ export class AttachmentHandler {
 	 */
 	initializeContainer(container: HTMLElement): void {
 		this.attachmentContainer = container.createDiv('attachment-preview');
-		this.attachmentContainer.style.display = 'none';
+		this.attachmentContainer.addClass('ia-hidden');
 
 		// Listen to state changes to update preview
 		this.state.on('state-change', (event: StateChangeEvent) => {
@@ -222,36 +222,36 @@ export class AttachmentHandler {
 		this.attachmentContainer.empty();
 
 		if (this.state.currentAttachments.length === 0) {
-			this.attachmentContainer.style.display = 'none';
+			this.attachmentContainer.addClass('ia-hidden');
 			return;
 		}
 
-		this.attachmentContainer.style.display = 'flex';
-		this.attachmentContainer.style.gap = '8px';
-		this.attachmentContainer.style.padding = '8px';
-		this.attachmentContainer.style.background = 'var(--background-secondary)';
-		this.attachmentContainer.style.borderRadius = '4px';
-		this.attachmentContainer.style.flexWrap = 'wrap';
-		this.attachmentContainer.style.marginBottom = '8px';
+		this.attachmentContainer.removeClass('ia-hidden');
+		this.attachmentContainer.setCssProps({ 'gap': '8px' });
+		this.attachmentContainer.setCssProps({ 'padding': '8px' });
+		this.attachmentContainer.setCssProps({ 'background': 'var(--background-secondary)' });
+		this.attachmentContainer.setCssProps({ 'border-radius': '4px' });
+		this.attachmentContainer.setCssProps({ 'flex-wrap': 'wrap' });
+		this.attachmentContainer.setCssProps({ 'margin-bottom': '8px' });
 
 		this.state.currentAttachments.forEach((att, index) => {
 			const attPreview = this.attachmentContainer!.createDiv('attachment-preview-item');
-			attPreview.style.position = 'relative';
-			attPreview.style.padding = '8px';
-			attPreview.style.background = 'var(--background-primary)';
-			attPreview.style.borderRadius = '4px';
-			attPreview.style.display = 'flex';
-			attPreview.style.alignItems = 'center';
-			attPreview.style.gap = '8px';
+			attPreview.setCssProps({ 'position': 'relative' });
+			attPreview.setCssProps({ 'padding': '8px' });
+			attPreview.setCssProps({ 'background': 'var(--background-primary)' });
+			attPreview.setCssProps({ 'border-radius': '4px' });
+			attPreview.removeClass('ia-hidden');
+			attPreview.setCssProps({ 'align-items': 'center' });
+			attPreview.setCssProps({ 'gap': '8px' });
 
 			if (att.type === 'image' && att.content) {
 				const img = attPreview.createEl('img');
 				img.src = att.content;
 				img.alt = att.name;
-				img.style.width = '40px';
-				img.style.height = '40px';
-				img.style.objectFit = 'cover';
-				img.style.borderRadius = '4px';
+				img.setCssProps({ 'width': '40px' });
+				img.setCssProps({ 'height': '40px' });
+				img.setCssProps({ 'object-fit': 'cover' });
+				img.setCssProps({ 'border-radius': '4px' });
 			} else {
 				attPreview.createSpan({ text: att.type === 'image' ? '🖼️' : '📎' });
 			}
@@ -260,13 +260,13 @@ export class AttachmentHandler {
 
 			// Remove button
 			const removeBtn = attPreview.createEl('button', { text: '×' });
-			removeBtn.style.marginLeft = 'auto';
-			removeBtn.style.padding = '0 6px';
-			removeBtn.style.border = 'none';
-			removeBtn.style.background = 'transparent';
-			removeBtn.style.cursor = 'pointer';
-			removeBtn.style.fontSize = '20px';
-			removeBtn.style.color = 'var(--text-error)';
+			removeBtn.setCssProps({ 'margin-left': 'auto' });
+			removeBtn.setCssProps({ 'padding': '0 6px' });
+			removeBtn.setCssProps({ 'border': 'none' });
+			removeBtn.setCssProps({ 'background': 'transparent' });
+			removeBtn.addClass('ia-clickable');
+			removeBtn.setCssProps({ 'font-size': '20px' });
+			removeBtn.setCssProps({ 'color': 'var(--text-error)' });
 			removeBtn.addEventListener('click', () => {
 				this.state.removeAttachment(index);
 			});

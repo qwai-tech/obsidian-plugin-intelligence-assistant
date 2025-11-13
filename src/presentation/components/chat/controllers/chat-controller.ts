@@ -8,10 +8,6 @@ import { BaseController } from './base-controller';
 import { MessageController } from './message-controller';
 import { AgentController } from './agent-controller';
 import type { Message, Agent, LLMConfig, ModelInfo } from '@/types';
-import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
-import { ModelManager } from '@/infrastructure/llm/model-manager';
-import { handleStreamingChat } from '../handlers/streaming-handler';
-import { processToolCalls as processToolCallsHandler } from '../handlers/tool-call-handler';
 
 export interface ChatControllerOptions {
 	messagesContainer: HTMLElement;

@@ -129,7 +129,12 @@ export function displayModelsTab(
 		const modelHeader = modelStack.createDiv('ia-provider-header');
 		if (providerMeta.iconSvg) {
 			const iconContainer = modelHeader.createDiv('ia-provider-icon');
-			iconContainer.innerHTML = providerMeta.iconSvg;
+			const parser = new DOMParser();
+			const svgDoc = parser.parseFromString(providerMeta.iconSvg, 'image/svg+xml');
+			const svgElement = svgDoc.documentElement;
+			if (svgElement instanceof SVGElement) {
+				iconContainer.appendChild(svgElement);
+			}
 		}
 		const modelNameEl = modelHeader.createDiv('ia-provider-name');
 		modelNameEl.setText(model.name);
@@ -167,7 +172,7 @@ export function displayModelsTab(
 		(model.capabilities ?? []).forEach(cap => {
 			const badge = capsDiv.createEl('span', { text: cap });
 			badge.addClass('ia-tag');
-			badge.style.background = capabilityColors[cap] || 'var(--background-modifier-border)';
+			badge.setCssProps({ 'background': capabilityColors[cap] || 'var(--background-modifier-border)' });
 		});
 
 		const statusCell = row.insertCell();

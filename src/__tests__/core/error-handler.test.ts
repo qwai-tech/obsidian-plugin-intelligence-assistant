@@ -3,8 +3,8 @@
  */
 
 import { ErrorHandler } from '../../core/error-handler';
-import { AppError, LLMProviderError, ValidationError, ConfigurationError } from '../../core/errors';
-import { EventBus, PluginEvent } from '../../core/event-bus';
+import { LLMProviderError, ValidationError, ConfigurationError } from '../../core/errors';
+import { EventBus } from '../../core/event-bus';
 
 describe('ErrorHandler', () => {
 	let errorHandler: ErrorHandler;

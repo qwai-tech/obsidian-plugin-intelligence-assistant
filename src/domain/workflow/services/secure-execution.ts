@@ -13,7 +13,7 @@ import { WorkflowServices } from '../core/types';
 // Predefined safe globals that can be accessed in the sandbox
 const SAFE_GLOBALS = {
   console: {
-    log: (...args: any[]) => console.log('[SANDBOX]', ...args),
+    log: (...args: any[]) => console.debug('[SANDBOX]', ...args),
     warn: (...args: any[]) => console.warn('[SANDBOX]', ...args),
     error: (...args: any[]) => console.error('[SANDBOX]', ...args),
     info: (...args: any[]) => console.info('[SANDBOX]', ...args),
@@ -210,7 +210,7 @@ export class SecureCodeExecutionService {
       services: {
         // Only expose safe service methods
         log: services.vault ? (message: string) => {
-          console.log(`[Workflow Service] ${message}`);
+          console.debug(`[Workflow Service] ${message}`);
         } : undefined,
       },
       

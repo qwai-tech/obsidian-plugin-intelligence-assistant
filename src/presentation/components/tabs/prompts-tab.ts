@@ -3,9 +3,10 @@
  * Displays system prompt management
  */
 
-import { Notice, App } from 'obsidian';
+import {App} from 'obsidian';
+import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { SystemPrompt } from '@/types';
+
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
 import { SystemPromptEditModal } from '../modals';
 
@@ -131,7 +132,7 @@ export function displayPromptsTab(
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
 		deleteBtn.addEventListener('click', async () => {
-			if (confirm(`Delete prompt "${prompt.name}"?`)) {
+			if (await showConfirm(this.app, `Delete prompt "${prompt.name}"?`)) {
 				plugin.settings.systemPrompts.splice(index, 1);
 				await plugin.saveSettings();
 				refreshDisplay();

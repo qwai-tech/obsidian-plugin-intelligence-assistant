@@ -1,4 +1,4 @@
-import { App, TFile, requestUrl } from 'obsidian';
+import {App, TFile} from 'obsidian';
 import type { RAGConfig } from '@/types';
 import { VECTOR_STORE_FOLDER, VECTOR_STORE_NOTES_PATH } from '@/constants';
 import { ensureFolderExists } from '@/utils/file-system';
@@ -22,13 +22,13 @@ export interface SearchResult {
 }
 
 export interface VectorStoreData {
-  chunks: DocumentChunk[];
+  _chunks: DocumentChunk[];
   createdAt: number;
   updatedAt: number;
 }
 
 export class VectorStore {
-	private chunks: DocumentChunk[] = [];
+	private _chunks: DocumentChunk[] = [];
 	private app: App;
 	private dataPath = VECTOR_STORE_NOTES_PATH;
 
@@ -41,11 +41,11 @@ export class VectorStore {
 		try {
 			const data = await this.app.vault.adapter.read(this.dataPath);
 			const parsed: VectorStoreData = JSON.parse(data);
-			this.chunks = parsed.chunks;
-			console.log(`Loaded ${this.chunks.length} chunks from persistent storage`);
+			this._chunks = parsed._chunks;
+			console.debug(`Loaded ${this._chunks.length} _chunks from persistent storage`);
 		} catch (error) {
-			console.log('No existing vector store data found, starting fresh');
-			this.chunks = [];
+			console.debug('No existing vector store data found, starting fresh');
+			this._chunks = [];
 		}
 	}
 
@@ -53,12 +53,12 @@ export class VectorStore {
 		await this.ensureDataFolder();
 		try {
 			const data: VectorStoreData = {
-				chunks: this.chunks,
-				createdAt: this.chunks.length > 0 ? Math.min(...this.chunks.map(c => c.metadata.timestamp)) : Date.now(),
+				_chunks: this._chunks,
+				createdAt: this._chunks.length > 0 ? Math.min(...this._chunks.map(c => c.metadata.timestamp)) : Date.now(),
 				updatedAt: Date.now()
 			};
 			await this.app.vault.adapter.write(this.dataPath, JSON.stringify(data, null, 2));
-			console.log(`Saved ${this.chunks.length} chunks to persistent storage`);
+			console.debug(`Saved ${this._chunks.length} _chunks to persistent storage`);
 		} catch (error) {
 			console.error('Error saving vector store:', error);
 		}
@@ -72,19 +72,19 @@ export class VectorStore {
     // Read file content
     const content = await this.app.vault.read(file);
     
-    // Split content into chunks
-    const chunks = this.chunkContent(content, config);
+    // Split content into _chunks
+    const _chunks = this.chunkContent(content, config);
     
-    // Remove existing chunks for this file
-    this.chunks = this.chunks.filter(chunk => !chunk.id.startsWith(`${file.path}-`));
+    // Remove existing _chunks for this file
+    this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(`${file.path}-`));
     
-    // Process chunks in batches to avoid blocking the UI
+    // Process _chunks in batches to avoid blocking the UI
     return new Promise(async (resolve, reject) => {
-      const batchSize = 10; // Process 10 chunks at a time
+      const batchSize = 10; // Process 10 _chunks at a time
       let currentIndex = 0;
       
       const processChunkBatch = async () => {
-        const batchEnd = Math.min(currentIndex + batchSize, chunks.length);
+        const batchEnd = Math.min(currentIndex + batchSize, _chunks.length);
         
         for (let i = currentIndex; i < batchEnd; i++) {
           const chunkId = `${file.path}-${i}`;
@@ -94,7 +94,7 @@ export class VectorStore {
           let embedding: number[] | undefined;
           if (embeddingModel) {
             try {
-              embedding = await this.generateEmbedding(chunks[i], embeddingModel);
+              embedding = await this.generateEmbedding(_chunks[i], embeddingModel);
             } catch (error) {
               console.error(`Failed to generate embedding for chunk ${chunkId}:`, error);
             }
@@ -103,7 +103,7 @@ export class VectorStore {
           // Create combined text for embedding that includes path info if we don't have an embedding yet
           if (!embedding && config.embeddingModel) {
             try {
-              const combinedText = `${file.path} ${file.basename} ${chunks[i]}`;
+              const combinedText = `${file.path} ${file.basename} ${_chunks[i]}`;
               embedding = await this.generateEmbedding(combinedText, config.embeddingModel);
             } catch (error) {
               console.error(`Failed to generate combined embedding for chunk ${chunkId}:`, error);
@@ -112,7 +112,7 @@ export class VectorStore {
           
           const chunk: DocumentChunk = {
             id: chunkId,
-            content: chunks[i],
+            content: _chunks[i],
             embedding: embedding,
             metadata: {
               source: 'file',
@@ -122,15 +122,15 @@ export class VectorStore {
             }
           };
           
-          this.chunks.push(chunk);
+          this._chunks.push(chunk);
           currentIndex++;
         }
         
-        if (currentIndex < chunks.length) {
+        if (currentIndex < _chunks.length) {
           // Schedule next batch after a short delay to allow UI to update
           setTimeout(processChunkBatch, 1); // 1ms delay allows UI to remain responsive
         } else {
-          // All chunks processed, save to persistent storage
+          // All _chunks processed, save to persistent storage
           await this.save();
           resolve();
         }
@@ -142,21 +142,21 @@ export class VectorStore {
   }
 
   async addContent(content: string, metadata: any, config: RAGConfig): Promise<void> {
-    // Split content into chunks
-    const chunks = this.chunkContent(content, config);
+    // Split content into _chunks
+    const _chunks = this.chunkContent(content, config);
     
-    // Remove existing chunks for this content if ID is provided
+    // Remove existing _chunks for this content if ID is provided
     if (metadata.id) {
-      this.chunks = this.chunks.filter(chunk => !chunk.id.startsWith(`${metadata.id}-`));
+      this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(`${metadata.id}-`));
     }
     
-    // Process chunks in batches to avoid blocking the UI
+    // Process _chunks in batches to avoid blocking the UI
     return new Promise(async (resolve, reject) => {
-      const batchSize = 10; // Process 10 chunks at a time
+      const batchSize = 10; // Process 10 _chunks at a time
       let currentIndex = 0;
       
       const processChunkBatch = async () => {
-        const batchEnd = Math.min(currentIndex + batchSize, chunks.length);
+        const batchEnd = Math.min(currentIndex + batchSize, _chunks.length);
         
         for (let i = currentIndex; i < batchEnd; i++) {
           const chunkId = `${metadata.id || 'content'}-${i}`;
@@ -166,7 +166,7 @@ export class VectorStore {
           let embedding: number[] | undefined;
           if (embeddingModel) {
             try {
-              embedding = await this.generateEmbedding(chunks[i], embeddingModel);
+              embedding = await this.generateEmbedding(_chunks[i], embeddingModel);
             } catch (error) {
               console.error(`Failed to generate embedding for chunk ${chunkId}:`, error);
             }
@@ -175,7 +175,7 @@ export class VectorStore {
           // Create combined text for embedding that includes path/filename info if we don't have an embedding yet
           if (!embedding && config.embeddingModel && metadata.path) {
             try {
-              const combinedText = `${metadata.path} ${metadata.title || ''} ${chunks[i]}`;
+              const combinedText = `${metadata.path} ${metadata.title || ''} ${_chunks[i]}`;
               embedding = await this.generateEmbedding(combinedText, config.embeddingModel);
             } catch (error) {
               console.error(`Failed to generate combined embedding for chunk ${chunkId}:`, error);
@@ -184,7 +184,7 @@ export class VectorStore {
           
           const chunk: DocumentChunk = {
             id: chunkId,
-            content: chunks[i],
+            content: _chunks[i],
             embedding: embedding,
             metadata: {
               ...metadata,
@@ -192,15 +192,15 @@ export class VectorStore {
             }
           };
           
-          this.chunks.push(chunk);
+          this._chunks.push(chunk);
           currentIndex++;
         }
         
-        if (currentIndex < chunks.length) {
+        if (currentIndex < _chunks.length) {
           // Schedule next batch after a short delay to allow UI to update
           setTimeout(processChunkBatch, 1); // 1ms delay allows UI to remain responsive
         } else {
-          // All chunks processed, save to persistent storage
+          // All _chunks processed, save to persistent storage
           await this.save();
           resolve();
         }
@@ -212,22 +212,22 @@ export class VectorStore {
   }
 
   async search(query: string, config: RAGConfig, embeddingModel?: string): Promise<SearchResult[]> {
-    console.log('[VectorStore] Search called with query:', query);
-    console.log('[VectorStore] Total chunks available:', this.chunks.length);
-    console.log('[VectorStore] Embedding model:', embeddingModel);
+    console.debug('[VectorStore] Search called with query:', query);
+    console.debug('[VectorStore] Total _chunks available:', this._chunks.length);
+    console.debug('[VectorStore] Embedding model:', embeddingModel);
 
     // Generate embedding for the query
     const queryEmbedding = await this.generateEmbedding(query, embeddingModel);
-    console.log('[VectorStore] Query embedding generated:', queryEmbedding ? 'Yes' : 'No');
+    console.debug('[VectorStore] Query embedding generated:', queryEmbedding ? 'Yes' : 'No');
 
     if (!queryEmbedding) {
       // Fallback to simple similarity search if embeddings are not available
-      console.log('[VectorStore] Falling back to simple search');
+      console.debug('[VectorStore] Falling back to simple search');
       return this.simpleSearch(query, config);
     }
 
-    // Calculate similarity with all chunks
-    let similarities: SearchResult[] = this.chunks.map(chunk => {
+    // Calculate similarity with all _chunks
+    let similarities: SearchResult[] = this._chunks.map(chunk => {
       const chunkEmbedding = chunk.embedding;
 
       if (!chunkEmbedding) {
@@ -261,13 +261,13 @@ export class VectorStore {
       return { chunk, similarity: finalSimilarity };
     });
 
-    console.log('[VectorStore] Calculated similarities for', similarities.length, 'chunks');
-    console.log('[VectorStore] Similarity threshold:', config.similarityThreshold);
+    console.debug('[VectorStore] Calculated similarities for', similarities.length, '_chunks');
+    console.debug('[VectorStore] Similarity threshold:', config.similarityThreshold);
 
     // Apply similarity threshold filter if configured
     if (config.similarityThreshold !== undefined && config.similarityThreshold > 0) {
       similarities = similarities.filter(result => result.similarity >= config.similarityThreshold!);
-      console.log('[VectorStore] After threshold filter:', similarities.length, 'chunks');
+      console.debug('[VectorStore] After threshold filter:', similarities.length, '_chunks');
     }
 
     // Sort by similarity descending
@@ -291,7 +291,7 @@ export class VectorStore {
     // 2. Apply the re-ranking model to get new scores
     // 3. Sort by the new scores
     
-    console.log(`Re-ranking ${results.length} results using ${config.reRankingModel || 'default model'}`);
+    console.debug(`Re-ranking ${results.length} results using ${config.reRankingModel || 'default model'}`);
     
     // In a real implementation, we would call a re-ranking model here
     // For now, just return the results as-is but this is where re-ranking would happen
@@ -311,7 +311,7 @@ export class VectorStore {
       return [];
     }
     
-    const chunks: string[] = [];
+    const _chunks: string[] = [];
     
     // Use the configured chunking strategy
     switch (config.chunkingStrategy || 'sentence') {
@@ -328,11 +328,11 @@ export class VectorStore {
   }
   
   private chunkBySentence(content: string, config: RAGConfig): string[] {
-    let chunks: string[] = [];
+    let _chunks: string[] = [];
     
     // Protect against empty or invalid content
     if (!content || content.trim().length === 0) {
-      return chunks;
+      return _chunks;
     }
     
     const sentences = content.split(/(?<=[.!?])\s+/g);
@@ -356,11 +356,11 @@ export class VectorStore {
         if (currentChunk.trim().length > 0) {
           // Only add chunk if it meets the minimum size requirement
           if (currentChunk.trim().length >= (config.minChunkSize || 50)) {
-            // Protect against pushing too many chunks
-            if (chunks.length < 10000) {
-              chunks.push(currentChunk.trim());
+            // Protect against pushing too many _chunks
+            if (_chunks.length < 10000) {
+              _chunks.push(currentChunk.trim());
             } else {
-              console.warn('Too many chunks in chunkBySentence, stopping to prevent memory issues');
+              console.warn('Too many _chunks in chunkBySentence, stopping to prevent memory issues');
               break;
             }
           }
@@ -370,15 +370,15 @@ export class VectorStore {
         if (sentence.length > config.chunkSize) {
           const subChunks = this.splitLongText(sentence, config);
           
-          // Protect against spreading too many sub-chunks
-          if (chunks.length + subChunks.length < 10000) {
-            chunks.push(...subChunks);
+          // Protect against spreading too many sub-_chunks
+          if (_chunks.length + subChunks.length < 10000) {
+            _chunks.push(...subChunks);
             currentChunk = subChunks[subChunks.length - 1] || '';
           } else {
-            console.warn('Too many sub-chunks in chunkBySentence, limiting to prevent memory issues');
-            const allowedToAdd = 10000 - chunks.length;
+            console.warn('Too many sub-_chunks in chunkBySentence, limiting to prevent memory issues');
+            const allowedToAdd = 10000 - _chunks.length;
             if (allowedToAdd > 0) {
-              chunks.push(...subChunks.slice(0, allowedToAdd));
+              _chunks.push(...subChunks.slice(0, allowedToAdd));
             }
             break;
           }
@@ -391,32 +391,32 @@ export class VectorStore {
     if (currentChunk.trim().length > 0) {
       // Only add final chunk if it meets the minimum size requirement
       if (currentChunk.trim().length >= (config.minChunkSize || 50)) {
-        // Protect against pushing too many chunks
-        if (chunks.length < 10000) {
-          chunks.push(currentChunk.trim());
+        // Protect against pushing too many _chunks
+        if (_chunks.length < 10000) {
+          _chunks.push(currentChunk.trim());
         } else {
-          console.warn('Too many chunks in final addition, skipping to prevent memory issues');
+          console.warn('Too many _chunks in final addition, skipping to prevent memory issues');
         }
       }
     }
     
     // Apply overlap with safety check
     try {
-      chunks = this.applyOverlap(chunks, config.chunkOverlap || 0);
+      _chunks = this.applyOverlap(_chunks, config.chunkOverlap || 0);
     } catch (error) {
-      console.error('Error applying overlap, returning chunks without overlap:', error);
-      // Return chunks without overlap if there's an error
+      console.error('Error applying overlap, returning _chunks without overlap:', error);
+      // Return _chunks without overlap if there's an error
     }
     
-    return chunks;
+    return _chunks;
   }
   
   private chunkByParagraph(content: string, config: RAGConfig): string[] {
-    let chunks: string[] = [];
+    let _chunks: string[] = [];
     
     // Protect against empty or invalid content
     if (!content || content.trim().length === 0) {
-      return chunks;
+      return _chunks;
     }
     
     const paragraphs = content.split(/\n\s*\n/);
@@ -440,11 +440,11 @@ export class VectorStore {
         if (currentChunk.trim().length > 0) {
           // Only add chunk if it meets the minimum size requirement
           if (currentChunk.trim().length >= (config.minChunkSize || 50)) {
-            // Protect against pushing too many chunks
-            if (chunks.length < 10000) {
-              chunks.push(currentChunk.trim());
+            // Protect against pushing too many _chunks
+            if (_chunks.length < 10000) {
+              _chunks.push(currentChunk.trim());
             } else {
-              console.warn('Too many chunks in chunkByParagraph, stopping to prevent memory issues');
+              console.warn('Too many _chunks in chunkByParagraph, stopping to prevent memory issues');
               break;
             }
           }
@@ -454,15 +454,15 @@ export class VectorStore {
         if (paragraph.length > config.chunkSize) {
           const sentenceChunks = this.chunkBySentence(paragraph, config);
           
-          // Protect against spreading too many sentence chunks
-          if (chunks.length + sentenceChunks.length < 10000) {
-            chunks.push(...sentenceChunks);
+          // Protect against spreading too many sentence _chunks
+          if (_chunks.length + sentenceChunks.length < 10000) {
+            _chunks.push(...sentenceChunks);
             currentChunk = sentenceChunks[sentenceChunks.length - 1] || '';
           } else {
-            console.warn('Too many sentence chunks in chunkByParagraph, limiting to prevent memory issues');
-            const allowedToAdd = 10000 - chunks.length;
+            console.warn('Too many sentence _chunks in chunkByParagraph, limiting to prevent memory issues');
+            const allowedToAdd = 10000 - _chunks.length;
             if (allowedToAdd > 0) {
-              chunks.push(...sentenceChunks.slice(0, allowedToAdd));
+              _chunks.push(...sentenceChunks.slice(0, allowedToAdd));
             }
             break;
           }
@@ -475,32 +475,32 @@ export class VectorStore {
     if (currentChunk.trim().length > 0) {
       // Only add final chunk if it meets the minimum size requirement
       if (currentChunk.trim().length >= (config.minChunkSize || 50)) {
-        // Protect against pushing too many chunks
-        if (chunks.length < 10000) {
-          chunks.push(currentChunk.trim());
+        // Protect against pushing too many _chunks
+        if (_chunks.length < 10000) {
+          _chunks.push(currentChunk.trim());
         } else {
-          console.warn('Too many chunks in final paragraph addition, skipping to prevent memory issues');
+          console.warn('Too many _chunks in final paragraph addition, skipping to prevent memory issues');
         }
       }
     }
     
     // Apply overlap with safety check
     try {
-      chunks = this.applyOverlap(chunks, config.chunkOverlap || 0);
+      _chunks = this.applyOverlap(_chunks, config.chunkOverlap || 0);
     } catch (error) {
-      console.error('Error applying overlap in paragraph chunking, returning chunks without overlap:', error);
-      // Return chunks without overlap if there's an error
+      console.error('Error applying overlap in paragraph chunking, returning _chunks without overlap:', error);
+      // Return _chunks without overlap if there's an error
     }
     
-    return chunks;
+    return _chunks;
   }
   
   private chunkByFixedLength(content: string, config: RAGConfig): string[] {
-    let chunks: string[] = [];
+    let _chunks: string[] = [];
     
     // Protect against empty or invalid content
     if (!content || content.trim().length === 0) {
-      return chunks;
+      return _chunks;
     }
     
     let start = 0;
@@ -518,8 +518,8 @@ export class VectorStore {
       const chunk = content.substring(start, end);
       
       // Only add chunk if it meets the minimum size requirement and we haven't exceeded limits
-      if (chunk && chunk.trim().length >= (config.minChunkSize || 50) && chunks.length < 10000) {
-        chunks.push(chunk);
+      if (chunk && chunk.trim().length >= (config.minChunkSize || 50) && _chunks.length < 10000) {
+        _chunks.push(chunk);
       }
       
       // Calculate next start position with proper bounds checking
@@ -546,10 +546,10 @@ export class VectorStore {
     
     // Apply overlap with safety check
     try {
-      return this.applyOverlap(chunks, config.chunkOverlap || 0);
+      return this.applyOverlap(_chunks, config.chunkOverlap || 0);
     } catch (error) {
-      console.error('Error applying overlap in fixed-length chunking, returning chunks without overlap:', error);
-      return chunks;
+      console.error('Error applying overlap in fixed-length chunking, returning _chunks without overlap:', error);
+      return _chunks;
     }
   }
   
@@ -562,21 +562,21 @@ export class VectorStore {
     return this.chunkBySentence(content, config);
   }
   
-  private applyOverlap(chunks: string[], overlap: number): string[] {
+  private applyOverlap(_chunks: string[], overlap: number): string[] {
     // Validate inputs
-    if (!chunks || chunks.length === 0) {
+    if (!_chunks || _chunks.length === 0) {
       return [];
     }
     
-    if (overlap <= 0 || chunks.length <= 1) {
-      return [...chunks]; // Return a copy
+    if (overlap <= 0 || _chunks.length <= 1) {
+      return [..._chunks]; // Return a copy
     }
     
     // Protect against extremely large overlap values that could cause issues
     const maxOverlap = Math.min(overlap, 1000); // Cap overlap at reasonable size
     
     // Create a copy of the array to avoid modifying the original
-    const result = [...chunks];
+    const result = [..._chunks];
     
     for (let i = 1; i < result.length; i++) {
       const prevChunk = result[i - 1];
@@ -592,7 +592,7 @@ export class VectorStore {
       
       // If overlap is significant portion of the current chunk, merge them
       if (overlapText.length > maxOverlap / 2) {
-        // Protect against creating extremely large chunks
+        // Protect against creating extremely large _chunks
         const currentChunk = result[i] || '';
         const combinedChunk = overlapText + ' ' + currentChunk;
         
@@ -617,7 +617,7 @@ export class VectorStore {
       console.warn('Invalid chunkOverlap configuration, setting to 0 to prevent issues');
     }
     
-    const chunks: string[] = [];
+    const _chunks: string[] = [];
     let start = 0;
     let iterations = 0;
     const MAX_ITERATIONS = Math.ceil(text.length / Math.max(1, chunkSize - chunkOverlap)) * 2; // Safety limit
@@ -635,10 +635,10 @@ export class VectorStore {
       // Only add chunk if it meets the minimum size requirement
       if (chunk && chunk.length >= minChunkSize) {
         // Check that we're not trying to push an invalid chunk
-        if (chunks.length < 10000) { // Reasonable limit to prevent memory issues
-          chunks.push(chunk);
+        if (_chunks.length < 10000) { // Reasonable limit to prevent memory issues
+          _chunks.push(chunk);
         } else {
-          console.warn('Too many chunks created, stopping to prevent memory issues');
+          console.warn('Too many _chunks created, stopping to prevent memory issues');
           break;
         }
       }
@@ -665,7 +665,7 @@ export class VectorStore {
       console.warn('splitLongText hit iteration limit, returning partial results');
     }
     
-    return chunks;
+    return _chunks;
   }
 
   private cosineSimilarity(vecA: number[], vecB: number[]): number {
@@ -692,7 +692,7 @@ export class VectorStore {
 
   private async simpleSearch(query: string, config: RAGConfig): Promise<SearchResult[]> {
     // Simple keyword-based search as fallback - enhanced to include path and filename
-    let results: SearchResult[] = this.chunks.map(chunk => {
+    let results: SearchResult[] = this._chunks.map(chunk => {
       // Calculate a basic similarity score based on keyword matches in content, path, and title
       const lowerContent = chunk.content.toLowerCase();
       const lowerPath = chunk.metadata.path.toLowerCase();
@@ -777,16 +777,16 @@ export class VectorStore {
   }
 
   clear(): void {
-    this.chunks = [];
+    this._chunks = [];
     this.save().catch(error => console.error('Failed to persist cleared vector store', error));
   }
 
   getChunkCount(): number {
-    return this.chunks.length;
+    return this._chunks.length;
   }
 
   getStoredChunks(): DocumentChunk[] {
-    return [...this.chunks]; // Return a copy to prevent external modification
+    return [...this._chunks]; // Return a copy to prevent external modification
   }
 
   async getDetailedStats(): Promise<{
@@ -795,12 +795,12 @@ export class VectorStore {
     totalSize: number;
     indexedFiles: string[];
   }> {
-    const chunks = this.getStoredChunks();
-    const indexedFiles = [...new Set(chunks.map(chunk => chunk.metadata.path))];
-    const totalSize = chunks.reduce((sum, chunk) => sum + chunk.content.length, 0);
+    const _chunks = this.getStoredChunks();
+    const indexedFiles = [...new Set(_chunks.map(chunk => chunk.metadata.path))];
+    const totalSize = _chunks.reduce((sum, chunk) => sum + chunk.content.length, 0);
 
     return {
-      chunkCount: chunks.length,
+      chunkCount: _chunks.length,
       fileCount: indexedFiles.length,
       totalSize,
       indexedFiles,

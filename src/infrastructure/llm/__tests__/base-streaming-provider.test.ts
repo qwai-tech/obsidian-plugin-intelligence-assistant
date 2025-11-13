@@ -19,7 +19,7 @@ class TestStreamingProvider extends BaseStreamingProvider {
 	public mockParseResult: ParsedStreamChunk | null = { content: 'test', done: false };
 	public mockStreamUrl: string = 'https://test.api.com/stream';
 	public mockStreamBody: any = { test: true };
-	private mockParseChunkImplementation?: (data: any) => ParsedStreamChunk | null;
+	private mockParseChunkImplementation?: (_data: any) => ParsedStreamChunk | null;
 
 	get name(): string {
 		return 'TestProvider';
@@ -30,7 +30,7 @@ class TestStreamingProvider extends BaseStreamingProvider {
 	}
 
 	// Make parseStreamChunk public for testing and allow override
-	public parseStreamChunk(data: any): ParsedStreamChunk | null {
+	public parseStreamChunk(_data: any): ParsedStreamChunk | null {
 		this.parseStreamChunkCalls.push(data);
 		if (this.mockParseChunkImplementation) {
 			return this.mockParseChunkImplementation(data);
@@ -39,7 +39,7 @@ class TestStreamingProvider extends BaseStreamingProvider {
 	}
 
 	// Allow tests to override parseStreamChunk behavior
-	public setParseChunkImplementation(impl: (data: any) => ParsedStreamChunk | null): void {
+	public setParseChunkImplementation(impl: (_data: any) => ParsedStreamChunk | null): void {
 		this.mockParseChunkImplementation = impl;
 	}
 
@@ -48,7 +48,7 @@ class TestStreamingProvider extends BaseStreamingProvider {
 		return { url: this.mockStreamUrl, body: this.mockStreamBody };
 	}
 
-	async chat(request: ChatRequest): Promise<ChatResponse> {
+	async chat(_request: ChatRequest): Promise<ChatResponse> {
 		return {
 			content: 'Test response',
 			usage: {
@@ -280,7 +280,7 @@ describe('BaseStreamingProvider', () => {
 			});
 
 			let callCount = 0;
-			provider.setParseChunkImplementation((data: any): ParsedStreamChunk | null => {
+			provider.setParseChunkImplementation((_data: any): ParsedStreamChunk | null => {
 				callCount++;
 				if (callCount === 1) return { content: 'Hello', done: false };
 				if (callCount === 2) return { content: ' world', done: false };
@@ -313,7 +313,7 @@ describe('BaseStreamingProvider', () => {
 			});
 
 			let callCount = 0;
-			provider.setParseChunkImplementation((data: any): ParsedStreamChunk | null => {
+			provider.setParseChunkImplementation((_data: any): ParsedStreamChunk | null => {
 				callCount++;
 				if (callCount === 1) return null; // Skip ping
 				if (callCount === 2) return { content: 'content', done: false };
@@ -526,7 +526,7 @@ describe('BaseStreamingProvider', () => {
 				]),
 			});
 
-			provider.setParseChunkImplementation((data: any): ParsedStreamChunk | null => {
+			provider.setParseChunkImplementation((_data: any): ParsedStreamChunk | null => {
 				// Simulate empty delta (no content)
 				return { content: '', done: false };
 			});

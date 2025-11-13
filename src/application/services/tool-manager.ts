@@ -63,12 +63,12 @@ export class ToolManager {
 	 */
 	async registerMCPServer(config: MCPServerConfig): Promise<MCPTool[]> {
 		if (!config.enabled) {
-			console.log(`[MCP] Server ${config.name} is disabled, skipping`);
+			console.debug(`[MCP] Server ${config.name} is disabled, skipping`);
 			return [];
 		}
 
 		if (this.mcpClients.has(config.name)) {
-			console.log(`[MCP] Server ${config.name} already registered, skipping duplicate connect`);
+			console.debug(`[MCP] Server ${config.name} already registered, skipping duplicate connect`);
 			return [];
 		}
 
@@ -78,7 +78,7 @@ export class ToolManager {
 
 			// Load tools from the MCP server
 			const mcpTools = await client.listTools();
-			console.log(`[MCP] Loaded ${mcpTools.length} tools from ${config.name}`);
+			console.debug(`[MCP] Loaded ${mcpTools.length} tools from ${config.name}`);
 
 			// Wrap and register each tool
 			for (const mcpTool of mcpTools) {
@@ -122,7 +122,7 @@ export class ToolManager {
 		await client.disconnect();
 		this.mcpClients.delete(serverName);
 
-		console.log(`[MCP] Unregistered server ${serverName} and removed ${toolsToRemove.length} tools`);
+		console.debug(`[MCP] Unregistered server ${serverName} and removed ${toolsToRemove.length} tools`);
 	}
 
 	/**
@@ -247,6 +247,6 @@ export class ToolManager {
 		);
 		await Promise.all(disconnectPromises);
 		this.mcpClients.clear();
-		console.log('[MCP] All MCP clients disconnected');
+		console.debug('[MCP] All MCP clients disconnected');
 	}
 }

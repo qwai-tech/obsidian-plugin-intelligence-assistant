@@ -108,14 +108,14 @@ export class WorkflowEditorView extends FileView {
 	/**
 	 * Called when a file is loaded (FileView integration)
 	 */
-	async onLoadFile(file: TFile): Promise<void> {
+	async onLoadFile(_file: TFile): Promise<void> {
 		await this.loadWorkflowFromFile();
 	}
 
 	/**
 	 * Called when a file is unloaded (FileView integration)
 	 */
-	async onUnloadFile(file: TFile): Promise<void> {
+	async onUnloadFile(_file: TFile): Promise<void> {
 		if (this.editor) {
 			this.editor.destroy();
 			this.editor = null;
@@ -135,7 +135,7 @@ export class WorkflowEditorView extends FileView {
 	/**
 	 * Set view data (FileView requirement)
 	 */
-	setViewData(data: string, clear: boolean): void {
+	setViewData(_data: string, _clear: boolean): void {
 		// Data is loaded in onLoadFile instead
 	}
 
@@ -170,7 +170,7 @@ export class WorkflowEditorView extends FileView {
 			// Create editor
 			await this.createEditor();
 
-			console.log('Workflow loaded successfully:', this.file.path);
+			console.debug('Workflow loaded successfully:', this.file.path);
 		} catch (error) {
 			console.error('Failed to load workflow:', error);
 			new Notice(`Failed to load workflow: ${error.message}`);
@@ -277,7 +277,7 @@ export class WorkflowEditorView extends FileView {
 
 					// Create the provider for this configuration
 					const { ProviderFactory } = await import('@/infrastructure/llm/provider-factory');
-					const provider = ProviderFactory.createProvider(llmConfig);
+					const _provider = ProviderFactory.createProvider(llmConfig);
 
 					// Prepare chat request
 					const chatRequest = {
@@ -292,7 +292,7 @@ export class WorkflowEditorView extends FileView {
 					const result = await provider.chat(chatRequest);
 					return result.content;
 				},
-				embed: async (text: string) => {
+				embed: async (_text: string) => {
 					// Find the first available embedding model
 					const settings = this.plugin.settings;
 					let embeddingConfig = null;
@@ -311,7 +311,7 @@ export class WorkflowEditorView extends FileView {
 
 					// Create the provider for embedding
 					const { ProviderFactory } = await import('@/infrastructure/llm/provider-factory');
-					const provider = ProviderFactory.createProvider(embeddingConfig);
+					const _provider = ProviderFactory.createProvider(embeddingConfig);
 
 					// For now, we'll throw an error since embedding isn't fully implemented
 					// in the current providers as per the interface above
@@ -329,7 +329,7 @@ export class WorkflowEditorView extends FileView {
 
 		// Listen to save events
 		this.editor.on('workflow:saved', async ({ workflow }) => {
-			console.log('Workflow saved:', workflow.name);
+			console.debug('Workflow saved:', workflow.name);
 
 			// Update file if it exists
 			if (this.file) {
@@ -346,11 +346,11 @@ export class WorkflowEditorView extends FileView {
 
 		// Listen to execution events
 		this.editor.on('execution:started', () => {
-			console.log('Workflow execution started');
+			console.debug('Workflow execution started');
 		});
 
 		this.editor.on('execution:completed', ({ result }) => {
-			console.log('Workflow execution completed:', result);
+			console.debug('Workflow execution completed:', result);
 
 			if (result.success) {
 				new Notice('✅ Workflow executed successfully!');
@@ -361,11 +361,11 @@ export class WorkflowEditorView extends FileView {
 
 		// Listen to node events
 		this.editor.on('node:added', ({ node }) => {
-			console.log('Node added:', node.type);
+			console.debug('Node added:', node.type);
 		});
 
 		this.editor.on('node:selected', ({ nodeId }) => {
-			console.log('Node selected:', nodeId);
+			console.debug('Node selected:', nodeId);
 		});
 
 		this.editor.on('node:edit', ({ nodeId }) => {
@@ -391,7 +391,7 @@ export class WorkflowEditorView extends FileView {
 		});
 
 		this.editor.on('node:updated', ({ node }) => {
-			console.log('Node updated:', node.id);
+			console.debug('Node updated:', node.id);
 		});
 	}
 

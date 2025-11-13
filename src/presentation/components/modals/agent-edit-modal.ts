@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Modal, Notice, Setting, ToggleComponent } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { Agent, SystemPrompt, BuiltInToolConfig, MCPServerConfig } from '@/types';
+import type {Agent, BuiltInToolConfig, MCPServerConfig} from '@/types';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
 
 export class AgentEditModal extends Modal {
@@ -201,7 +201,7 @@ export class AgentEditModal extends Modal {
 			});
 
 		this.customPromptSection = contentEl.createDiv();
-		this.customPromptSection.style.marginTop = '12px';
+		this.customPromptSection.setCssProps({ 'margin-top': '12px' });
 		this.toggleCustomPromptSection(this.selectedSystemPromptId === '__custom__');
 
 		new Setting(this.customPromptSection)
@@ -222,9 +222,9 @@ export class AgentEditModal extends Modal {
 				customContentInput = text.inputEl;
 				text.setValue(this.customPromptContent);
 				text.inputEl.rows = 10;
-				text.inputEl.style.width = '100%';
-				text.inputEl.style.fontFamily = 'var(--font-monospace)';
-				text.inputEl.style.fontSize = '12px';
+				text.inputEl.setCssProps({ 'width': '100%' });
+				text.inputEl.setCssProps({ 'font-family': 'var(--font-monospace)' });
+				text.inputEl.setCssProps({ 'font-size': '12px' });
 				text.onChange(value => {
 					this.customPromptContent = value;
 				});
@@ -334,10 +334,10 @@ export class AgentEditModal extends Modal {
 
 		// Buttons
 		const buttonContainer = contentEl.createDiv();
-		buttonContainer.style.display = 'flex';
-		buttonContainer.style.justifyContent = 'flex-end';
-		buttonContainer.style.gap = '8px';
-		buttonContainer.style.marginTop = '16px';
+		buttonContainer.removeClass('ia-hidden');
+		buttonContainer.setCssProps({ 'justify-content': 'flex-end' });
+		buttonContainer.setCssProps({ 'gap': '8px' });
+		buttonContainer.setCssProps({ 'margin-top': '16px' });
 
 		new ButtonComponent(buttonContainer)
 			.setButtonText('Cancel')
@@ -572,7 +572,7 @@ export class AgentEditModal extends Modal {
 
 	private toggleCustomPromptSection(show: boolean) {
 		if (this.customPromptSection) {
-			this.customPromptSection.style.display = show ? 'block' : 'none';
+			this.customPromptSection.setCssProps({ 'display': show ? 'block' : 'none' });
 		}
 	}
 

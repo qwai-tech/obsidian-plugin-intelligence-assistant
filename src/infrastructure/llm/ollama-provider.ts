@@ -1,7 +1,6 @@
 import { BaseLLMProvider } from './base-provider';
 import { ChatRequest, ChatResponse, StreamChunk } from './types';
 import type { ModelInfo } from '@/types';
-import { requestUrl } from 'obsidian';
 
 /**
  * Ollama Provider using native Ollama API
@@ -39,7 +38,7 @@ export class OllamaProvider extends BaseLLMProvider {
 			},
 		};
 
-		const response = await requestUrl({
+		const response = await fetch({
 			url,
 			method: 'POST',
 			headers: this.getHeaders(),
@@ -144,19 +143,19 @@ export class OllamaProvider extends BaseLLMProvider {
 	 */
 	async fetchModels(): Promise<ModelInfo[]> {
 		const baseUrl = this.getBaseUrl();
-		console.log(`[Ollama] Fetching models from: ${baseUrl}/api/tags`);
+		console.debug(`[Ollama] Fetching models from: ${baseUrl}/api/tags`);
 
 		try {
 			const url = `${baseUrl}/api/tags`;
 
-			console.log('[Ollama] Making request to Ollama API...');
-			const response = await requestUrl({
+			console.debug('[Ollama] Making request to Ollama API...');
+			const response = await fetch({
 				url,
 				method: 'GET',
 				headers: this.getHeaders(),
 			});
 
-			console.log(`[Ollama] Response status: ${response.status}`);
+			console.debug(`[Ollama] Response status: ${response.status}`);
 
 			if (response.status !== 200) {
 				const errorText = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
@@ -165,7 +164,7 @@ export class OllamaProvider extends BaseLLMProvider {
 			}
 
 			const data = response.json;
-			console.log('[Ollama] Response data:', JSON.stringify(data, null, 2));
+			console.debug('[Ollama] Response data:', JSON.stringify(data, null, 2));
 
 			// Check if models array exists
 			if (!data || !data.models || !Array.isArray(data.models)) {
@@ -191,7 +190,7 @@ export class OllamaProvider extends BaseLLMProvider {
 				};
 			});
 
-			console.log(`[Ollama] Successfully fetched ${models.length} models:`, models.map((m: ModelInfo) => m.name).join(', '));
+			console.debug(`[Ollama] Successfully fetched ${models.length} models:`, models.map((m: ModelInfo) => m.name).join(', '));
 			return models;
 		} catch (error: any) {
 			console.error('[Ollama] Failed to fetch models:', error);
@@ -328,7 +327,7 @@ export class OllamaProvider extends BaseLLMProvider {
 				}
 			}
 			
-			console.log(`[Ollama] Successfully pulled model: ${modelName}`);
+			console.debug(`[Ollama] Successfully pulled model: ${modelName}`);
 		} catch (error) {
 			console.error(`[Ollama] Failed to pull model ${modelName}:`, error);
 			throw error;
@@ -347,7 +346,7 @@ export class OllamaProvider extends BaseLLMProvider {
 		};
 
 		try {
-			const response = await requestUrl({
+			const response = await fetch({
 				url,
 				method: 'DELETE',
 				headers: this.getHeaders(),
@@ -359,7 +358,7 @@ export class OllamaProvider extends BaseLLMProvider {
 				throw new Error(`Failed to remove model: ${response.status} ${errorText}`);
 			}
 
-			console.log(`[Ollama] Successfully removed model: ${modelName}`);
+			console.debug(`[Ollama] Successfully removed model: ${modelName}`);
 		} catch (error) {
 			console.error(`[Ollama] Failed to remove model ${modelName}:`, error);
 			throw error;

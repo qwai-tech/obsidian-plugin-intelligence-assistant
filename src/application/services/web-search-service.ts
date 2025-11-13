@@ -214,20 +214,20 @@ export class WebSearchService {
 			const processedQuery = this.preprocessQuery(userInput);
 			
 			if (!processedQuery) {
-				console.log('[WebSearch] Query was filtered out or is too short');
+				console.debug('[WebSearch] Query was filtered out or is too short');
 				return []; // Return empty results if query is not valid
 			}
 
 			// Determine if this query would benefit from web search
 			if (!this.shouldSearch(processedQuery)) {
-				console.log('[WebSearch] Query does not seem to require web search, skipping');
+				console.debug('[WebSearch] Query does not seem to require web search, skipping');
 				return []; // Return empty results if search is not appropriate
 			}
 
 			// Optimize the query for better search results
 			const optimizedQuery = this.optimizeQuery(processedQuery);
 
-			console.log(`[WebSearch] Searching for: "${optimizedQuery}" using provider: ${this.config.provider}`);
+			console.debug(`[WebSearch] Searching for: "${optimizedQuery}" using provider: ${this.config.provider}`);
 
 			const maxResults = this.config.maxResults || 5;
 			
@@ -303,7 +303,7 @@ export class WebSearchService {
 				}
 			}
 
-			console.log(`[WebSearch] Google found ${results.length} results`);
+			console.debug(`[WebSearch] Google found ${results.length} results`);
 			return results;
 		} catch (error) {
 			console.error('[WebSearch] Google search error:', error);
@@ -348,7 +348,7 @@ export class WebSearchService {
 				}
 			}
 
-			console.log(`[WebSearch] Bing found ${results.length} results`);
+			console.debug(`[WebSearch] Bing found ${results.length} results`);
 			return results;
 		} catch (error) {
 			console.error('[WebSearch] Bing search error:', error);
@@ -379,7 +379,7 @@ export class WebSearchService {
 			const html = response.text;
 			const results = this.parseDuckDuckGoHTML(html, maxResults);
 
-			console.log(`[WebSearch] DuckDuckGo found ${results.length} results`);
+			console.debug(`[WebSearch] DuckDuckGo found ${results.length} results`);
 			return results;
 		} catch (error) {
 			console.error('[WebSearch] DuckDuckGo search error:', error);
@@ -478,7 +478,7 @@ export class WebSearchService {
 				}
 			}
 
-			console.log(`[WebSearch] SerpAPI found ${results.length} results`);
+			console.debug(`[WebSearch] SerpAPI found ${results.length} results`);
 			return results;
 		} catch (error) {
 			console.error('[WebSearch] SerpAPI search error:', error);
@@ -533,7 +533,7 @@ export class WebSearchService {
 				}
 			}
 
-			console.log(`[WebSearch] Tavily found ${results.length} results`);
+			console.debug(`[WebSearch] Tavily found ${results.length} results`);
 			return results;
 		} catch (error) {
 			console.error('[WebSearch] Tavily search error:', error);
@@ -592,7 +592,7 @@ export class WebSearchService {
 				}
 			}
 
-			console.log(`[WebSearch] SearXNG found ${results.length} results`);
+			console.debug(`[WebSearch] SearXNG found ${results.length} results`);
 			return results;
 		} catch (error) {
 			console.error('[WebSearch] SearXNG search error:', error);
@@ -665,7 +665,7 @@ export class WebSearchService {
 				}
 			}
 
-			console.log(`[WebSearch] Brave found ${results.length} results`);
+			console.debug(`[WebSearch] Brave found ${results.length} results`);
 			return results;
 		} catch (error) {
 			console.error('[WebSearch] Brave search error:', error);
@@ -697,7 +697,7 @@ export class WebSearchService {
 			const html = response.text;
 			const results = this.parseYahooHTML(html, maxResults);
 
-			console.log(`[WebSearch] Yahoo found ${results.length} results`);
+			console.debug(`[WebSearch] Yahoo found ${results.length} results`);
 			return results;
 		} catch (error) {
 			console.error('[WebSearch] Yahoo search error:', error);
@@ -769,7 +769,7 @@ export class WebSearchService {
 			const html = response.text;
 			const results = this.parseYandexHTML(html, maxResults);
 
-			console.log(`[WebSearch] Yandex found ${results.length} results`);
+			console.debug(`[WebSearch] Yandex found ${results.length} results`);
 			return results;
 		} catch (error) {
 			console.error('[WebSearch] Yandex search error:', error);
@@ -873,7 +873,7 @@ export class WebSearchService {
 				}
 			}
 
-			console.log(`[WebSearch] Qwant found ${results.length} results`);
+			console.debug(`[WebSearch] Qwant found ${results.length} results`);
 			return results;
 		} catch (error) {
 			console.error('[WebSearch] Qwant search error:', error);
@@ -940,7 +940,7 @@ export class WebSearchService {
 				}
 			}
 
-			console.log(`[WebSearch] Mojeek found ${results.length} results`);
+			console.debug(`[WebSearch] Mojeek found ${results.length} results`);
 			return results;
 		} catch (error) {
 			console.error('[WebSearch] Mojeek search error:', error);

@@ -1,4 +1,4 @@
-import { App, Modal, Notice, Setting } from 'obsidian';
+import {App, Modal, Setting} from 'obsidian';
 import type { LLMConfig } from '@/types';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
 
@@ -65,21 +65,21 @@ export class ProviderConfigModal extends Modal {
 		this.renderProviderSpecific();
 
 		const buttonBar = contentEl.createDiv();
-		buttonBar.style.display = 'flex';
-		buttonBar.style.justifyContent = 'flex-end';
-		buttonBar.style.gap = '8px';
-		buttonBar.style.marginTop = '16px';
+		buttonBar.removeClass('ia-hidden');
+		buttonBar.setCssProps({ 'justify-content': 'flex-end' });
+		buttonBar.setCssProps({ 'gap': '8px' });
+		buttonBar.setCssProps({ 'margin-top': '16px' });
 
 		const cancelBtn = buttonBar.createEl('button', { text: 'Cancel' });
-		cancelBtn.style.padding = '6px 16px';
+		cancelBtn.setCssProps({ 'padding': '6px 16px' });
 		cancelBtn.addEventListener('click', () => this.close());
 
 		const saveBtn = buttonBar.createEl('button', { text: 'Save' });
-		saveBtn.style.padding = '6px 16px';
-		saveBtn.style.background = 'var(--interactive-accent)';
-		saveBtn.style.color = 'white';
-		saveBtn.style.border = 'none';
-		saveBtn.style.borderRadius = '4px';
+		saveBtn.setCssProps({ 'padding': '6px 16px' });
+		saveBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
+		saveBtn.setCssProps({ 'color': 'white' });
+		saveBtn.setCssProps({ 'border': 'none' });
+		saveBtn.setCssProps({ 'border-radius': '4px' });
 		saveBtn.addEventListener('click', async () => {
 			await this.onSaveCallback(JSON.parse(JSON.stringify(this.draft)));
 			this.close();
@@ -105,7 +105,7 @@ export class ProviderConfigModal extends Modal {
 					text.setValue(value || '');
 					text.setPlaceholder('{"clientid": "..."}');
 					text.inputEl.rows = 8;
-					text.inputEl.style.fontFamily = 'var(--font-monospace)';
+					text.inputEl.setCssProps({ 'font-family': 'var(--font-monospace)' });
 					text.onChange((newValue) => {
 						try {
 							if (!newValue.trim()) {
@@ -114,9 +114,9 @@ export class ProviderConfigModal extends Modal {
 								JSON.parse(newValue);
 								this.draft.serviceKey = newValue;
 							}
-							text.inputEl.style.borderColor = 'var(--background-modifier-border)';
+							text.inputEl.setCssProps({ 'border-color': 'var(--background-modifier-border)' });
 						} catch (error) {
-							text.inputEl.style.borderColor = 'var(--text-error)';
+							text.inputEl.setCssProps({ 'border-color': 'var(--text-error)' });
 						}
 					});
 				});

@@ -1,4 +1,4 @@
-import { App, TFile, TFolder } from 'obsidian';
+import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
 
 export class ReadFileTool implements Tool {

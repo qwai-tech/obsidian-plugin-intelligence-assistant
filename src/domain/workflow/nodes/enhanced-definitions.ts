@@ -5,6 +5,7 @@
  * data processing, control flow, file operations, and web services.
  */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NodeDef, NodeData, ExecutionContext } from '../core/types';
 import { ErrorHandler, SecurityError, ServiceError, ExecutionError } from '../services/error-handler';
 

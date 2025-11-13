@@ -47,23 +47,31 @@ export async function handleStreamingChat(
 
 	// Add thinking indicator
 	const thinkingIndicator = contentEl.createDiv('thinking-indicator');
-	thinkingIndicator.style.display = 'flex';
-	thinkingIndicator.style.alignItems = 'center';
-	thinkingIndicator.style.gap = '8px';
-	thinkingIndicator.style.color = 'var(--text-muted)';
-	thinkingIndicator.style.fontStyle = 'italic';
-	thinkingIndicator.innerHTML = `
-		<div class="typing-dots">
-			<span style="animation: typing 1.4s infinite; animation-delay: 0s;">●</span>
-			<span style="animation: typing 1.4s infinite; animation-delay: 0.2s;">●</span>
-			<span style="animation: typing 1.4s infinite; animation-delay: 0.4s;">●</span>
-		</div>
-		<span>Thinking...</span>
-	`;
+	thinkingIndicator.addClass('ia-thinking-indicator');
+	thinkingIndicator.setCssProps({
+		'display': 'flex',
+		'align-items': 'center',
+		'gap': '8px',
+		'color': 'var(--text-muted)',
+		'font-style': 'italic'
+	});
+
+	const typingDots = thinkingIndicator.createDiv('typing-dots');
+	const dot1 = typingDots.createSpan();
+	dot1.setText('●');
+	dot1.setCssProps({ 'animation': 'typing 1.4s infinite', 'animation-delay': '0s' });
+	const dot2 = typingDots.createSpan();
+	dot2.setText('●');
+	dot2.setCssProps({ 'animation': 'typing 1.4s infinite', 'animation-delay': '0.2s' });
+	const dot3 = typingDots.createSpan();
+	dot3.setText('●');
+	dot3.setCssProps({ 'animation': 'typing 1.4s infinite', 'animation-delay': '0.4s' });
+
+	thinkingIndicator.createSpan({ text: 'Thinking...' });
 
 	// Show stop button, hide send hint
-	if (options.stopBtn) options.stopBtn.style.display = 'flex';
-	if (options.sendHint) options.sendHint.style.display = 'none';
+	if (options.stopBtn) options.stopBtn.removeClass('ia-hidden');
+	if (options.sendHint) options.sendHint.addClass('ia-hidden');
 
 	messageEl.classList.add('ia-chat-message--streaming');
 	setStreamingStatus(statusEl, 'streaming');
@@ -73,7 +81,7 @@ export async function handleStreamingChat(
 	let tokenCount = 0;
 	const startTime = Date.now();
 
-	console.log('[Chat] Starting stream chat...');
+	console.debug('[Chat] Starting stream chat...');
 
 	// Create reasoning container (hidden initially)
 	let reasoningContainer: HTMLElement | null = null;
@@ -104,20 +112,22 @@ export async function handleStreamingChat(
 							reasoningContainer = messageEl.querySelector('.message-body')?.createDiv('reasoning-container') || null;
 							if (reasoningContainer) {
 								const reasoningHeader = reasoningContainer.createDiv('reasoning-header');
-								reasoningHeader.innerHTML = '💭 Reasoning Process';
-								reasoningHeader.style.cursor = 'pointer';
+								reasoningHeader.setText('💭 Reasoning Process');
+								reasoningHeader.addClass('ia-clickable');
 
 								const reasoningContent = reasoningContainer.createDiv('reasoning-content');
-								reasoningContent.style.display = 'block'; // Show by default
+								// Show by default - no ia-hidden class
 
 								// Toggle on click
+								let isExpanded = true;
 								reasoningHeader.addEventListener('click', () => {
-									if (reasoningContent.style.display === 'none') {
-										reasoningContent.style.display = 'block';
-										reasoningHeader.innerHTML = '💭 Reasoning Process';
+									isExpanded = !isExpanded;
+									if (isExpanded) {
+										reasoningContent.removeClass('ia-hidden');
+										reasoningHeader.setText('💭 Reasoning Process');
 									} else {
-										reasoningContent.style.display = 'none';
-										reasoningHeader.innerHTML = '💭 Reasoning Process (click to expand)';
+										reasoningContent.addClass('ia-hidden');
+										reasoningHeader.setText('💭 Reasoning Process (click to expand)');
 									}
 								});
 							}
@@ -131,8 +141,8 @@ export async function handleStreamingChat(
 
 								// Add streaming cursor to reasoning
 								const cursor = reasoningContent.createEl('span', { cls: 'streaming-cursor' });
-								cursor.style.animation = 'blink 1s infinite';
-								cursor.innerHTML = '▊';
+								cursor.addClass('ia-blink-animation');
+								cursor.setText('▊');
 							}
 						}
 					}
@@ -147,12 +157,18 @@ export async function handleStreamingChat(
 							// Clean up excessive newlines before rendering
 							const cleanedContent = fullContent.replace(/\n{3,}/g, '\n\n');
 							const html = marked.parse(cleanedContent) as string;
-							contentEl.innerHTML = html;
+							// Use DOMParser to safely parse HTML
+							const parser = new DOMParser();
+							const doc = parser.parseFromString(html, 'text/html');
+							contentEl.empty();
+							Array.from(doc.body.childNodes).forEach(node => {
+								contentEl.appendChild(node.cloneNode(true));
+							});
 
 							// Add streaming cursor to content
 							const cursor = contentEl.createEl('span', { cls: 'streaming-cursor' });
-							cursor.style.animation = 'blink 1s infinite';
-							cursor.innerHTML = '▊';
+							cursor.addClass('ia-blink-animation');
+							cursor.setText('▊');
 						} catch (error) {
 							contentEl.setText(fullContent);
 						}
@@ -179,8 +195,8 @@ export async function handleStreamingChat(
 		throw error;
 	} finally {
 		// Hide stop button, show send hint
-		if (options.stopBtn) options.stopBtn.style.display = 'none';
-		if (options.sendHint) options.sendHint.style.display = 'block';
+		if (options.stopBtn) options.stopBtn.addClass('ia-hidden');
+		if (options.sendHint) options.sendHint.removeClass('ia-hidden');
 
 		messageEl.classList.remove('ia-chat-message--streaming');
 
@@ -198,7 +214,7 @@ export async function handleStreamingChat(
 		);
 
 		const tokensPerSecond = tokenCount / duration;
-		console.log(`[Chat] Streaming complete: ${tokenCount} tokens in ${duration.toFixed(2)}s (${tokensPerSecond.toFixed(1)} tokens/s)`);
+		console.debug(`[Chat] Streaming complete: ${tokenCount} tokens in ${duration.toFixed(2)}s (${tokensPerSecond.toFixed(1)} tokens/s)`);
 	}
 
 	// Estimate token usage
@@ -239,7 +255,7 @@ function getRequiredElement(root: HTMLElement, selectors: string[], description:
 
 function setStreamingStatus(el: HTMLElement | null, state: StreamingStatusState, details?: string) {
 	if (!el) return;
-	el.style.display = 'inline-flex';
+	el.setCssProps({ 'display': 'inline-flex' });
 	el.classList.add('is-visible');
 	el.setAttr('data-state', state);
 	if (state === 'error') {

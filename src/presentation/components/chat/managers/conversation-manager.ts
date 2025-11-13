@@ -3,7 +3,8 @@
  * Handles conversation lifecycle, UI rendering, and persistence
  */
 
-import { App, Menu, Notice } from 'obsidian';
+import {App, Menu} from 'obsidian';
+import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import { Events } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Conversation, Message } from '@/types';
@@ -71,8 +72,8 @@ export class ConversationManager extends Events {
 		// Try to load active conversation
 		if (this.plugin.settings.activeConversationId) {
 			const conv = await storage.loadConversation(this.plugin.settings.activeConversationId);
-			if (conv) {
-				this.loadConversation(conv);
+			if (_conv) {
+				this.loadConversation(_conv);
 				return;
 			}
 		}
@@ -100,7 +101,7 @@ export class ConversationManager extends Events {
 		await this.ensureStorageReady();
 		const storage = this.storageService!;
 		const newConv: Conversation = {
-			id: `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+			id: `conv_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
 			title: 'New Conversation',
 			messages: [],
 			createdAt: Date.now(),
@@ -121,7 +122,7 @@ export class ConversationManager extends Events {
 		// Close conversation list after creating new conversation (only if not pinned)
 		if (!this.state.conversationListPinned) {
 			this.state.conversationListVisible = false;
-			this.conversationListContainer.style.display = 'none';
+			this.conversationListContainer.addClass('ia-hidden');
 		}
 
 		this.trigger('conversation-created', newConv);
@@ -162,7 +163,7 @@ export class ConversationManager extends Events {
 		// Update the model selector to reflect the model used in the conversation
 		// Find the most recently used model in the conversation (from assistant messages)
 		const configuredModel = conv.config?.modelId;
-		const lastModelUsed = this.getLastUsedModel(conv);
+		const lastModelUsed = this.getLastUsedModel(_conv);
 		const targetModel = configuredModel || lastModelUsed;
 		if (targetModel && this.modelSelect.querySelector(`option[value="${targetModel}"]`)) {
 			this.modelSelect.value = targetModel;
@@ -187,13 +188,13 @@ export class ConversationManager extends Events {
 
 		const storage = this.storageService!;
 		const conv = await storage.loadConversation(convId);
-		if (conv) {
-			this.loadConversation(conv);
+		if (_conv) {
+			this.loadConversation(_conv);
 			await this.plugin.saveSettings();
 			// Close conversation list after switching (only if not pinned)
 			if (!this.state.conversationListPinned) {
 				this.state.conversationListVisible = false;
-				this.conversationListContainer.style.display = 'none';
+				this.conversationListContainer.addClass('ia-hidden');
 			}
 		}
 	}
@@ -229,9 +230,9 @@ export class ConversationManager extends Events {
 		conv.config = this.buildCurrentConversationConfig();
 
 		// Auto-generate/update title based on settings (only once for new conversations)
-		const shouldUpdateTitle = this.shouldUpdateConversationTitle(conv);
+		const shouldUpdateTitle = this.shouldUpdateConversationTitle(_conv);
 		if (shouldUpdateTitle) {
-			const newTitle = await this.generateConversationTitle(conv);
+			const newTitle = await this.generateConversationTitle(_conv);
 			if (newTitle) {
 				conv.title = newTitle;
 				if (this.plugin.settings.conversationIconEnabled && !conv.icon) {
@@ -244,7 +245,7 @@ export class ConversationManager extends Events {
 		}
 
 		// Save the updated conversation to storage
-		await storage.updateConversation(conv);
+		await storage.updateConversation(_conv);
 
 		// Only re-render if not skipped (e.g., when switching conversations)
 		if (!skipRender) {
@@ -295,7 +296,7 @@ export class ConversationManager extends Events {
 		const conv = await storage.getConversationMetadata(convId);
 		if (!conv) return;
 
-		if (!confirm(`Delete conversation "${conv.title}"?`)) return;
+		if (!await showConfirm(this.app, `Delete conversation "${conv.title}"?`)) return;
 
 		// Delete from storage service
 		const deleted = await storage.deleteConversation(convId);
@@ -364,9 +365,9 @@ export class ConversationManager extends Events {
 	async toggleConversationList(): Promise<void> {
 		this.state.conversationListVisible = !this.state.conversationListVisible;
 		if (this.state.conversationListVisible) {
-			this.conversationListContainer.style.display = 'flex';
+			this.conversationListContainer.removeClass('ia-hidden');
 		} else {
-			this.conversationListContainer.style.display = 'none';
+			this.conversationListContainer.addClass('ia-hidden');
 		}
 		await this.renderConversationList();
 		this.trigger('list-toggled', this.state.conversationListVisible);
@@ -387,14 +388,14 @@ export class ConversationManager extends Events {
 	private updateConversationListStyle(): void {
 		if (this.state.conversationListPinned) {
 			// Pinned mode: fixed sidebar
-			this.conversationListContainer.style.position = 'relative';
-			this.conversationListContainer.style.boxShadow = 'none';
+			this.conversationListContainer.setCssProps({ 'position': 'relative' });
+			this.conversationListContainer.setCssProps({ 'box-shadow': 'none' });
 			this.state.conversationListVisible = true;
-			this.conversationListContainer.style.display = 'flex';
+			this.conversationListContainer.removeClass('ia-hidden');
 		} else {
 			// Floating mode: overlay
-			this.conversationListContainer.style.position = 'absolute';
-			this.conversationListContainer.style.boxShadow = '2px 0 8px rgba(0, 0, 0, 0.1)';
+			this.conversationListContainer.setCssProps({ 'position': 'absolute' });
+			this.conversationListContainer.setCssProps({ 'box-shadow': '2px 0 8px rgba(0, 0, 0, 0.1)' });
 		}
 	}
 
@@ -411,8 +412,8 @@ export class ConversationManager extends Events {
 		listHeader.createEl('h3', { text: 'Conversations' });
 
 		const headerButtons = listHeader.createDiv('conversation-header-buttons');
-		headerButtons.style.display = 'flex';
-		headerButtons.style.gap = '4px';
+		headerButtons.removeClass('ia-hidden');
+		headerButtons.setCssProps({ 'gap': '4px' });
 
 		// Pin/Unpin button
 		const pinBtn = headerButtons.createEl('button', { text: this.state.conversationListPinned ? '📌' : '📍' });
@@ -441,24 +442,24 @@ export class ConversationManager extends Events {
 
 		sortedConversations.forEach(conv => {
 			const convItem = listContent.createDiv('conversation-item');
-			convItem.style.display = 'flex';
-			convItem.style.alignItems = 'center';
-			convItem.style.justifyContent = 'space-between';
-			convItem.style.gap = '8px';
-			convItem.style.padding = '8px 12px';
-			convItem.style.cursor = 'pointer';
-			convItem.style.borderRadius = '4px';
+			convItem.removeClass('ia-hidden');
+			convItem.setCssProps({ 'align-items': 'center' });
+			convItem.setCssProps({ 'justify-content': 'space-between' });
+			convItem.setCssProps({ 'gap': '8px' });
+			convItem.setCssProps({ 'padding': '8px 12px' });
+			convItem.addClass('ia-clickable');
+			convItem.setCssProps({ 'border-radius': '4px' });
 
 			if (conv.id === this.state.currentConversationId) {
 				convItem.addClass('active');
-				convItem.style.background = 'var(--background-modifier-hover)';
+				convItem.setCssProps({ 'background': 'var(--background-modifier-hover)' });
 			}
 
 			const convTitle = convItem.createDiv('conversation-title');
-			convTitle.style.flex = '1';
-			convTitle.style.overflow = 'hidden';
-			convTitle.style.textOverflow = 'ellipsis';
-			convTitle.style.whiteSpace = 'nowrap';
+			convTitle.setCssProps({ 'flex': '1' });
+			convTitle.setCssProps({ 'overflow': 'hidden' });
+			convTitle.setCssProps({ 'text-overflow': 'ellipsis' });
+			convTitle.setCssProps({ 'white-space': 'nowrap' });
 
 			// Add icon if enabled and available
 			if (this.plugin.settings.conversationIconEnabled && conv.icon) {
@@ -471,29 +472,29 @@ export class ConversationManager extends Events {
 
 			// Actions container
 			const actions = convItem.createDiv('conversation-actions');
-			actions.style.display = 'flex';
-			actions.style.gap = '4px';
-			actions.style.opacity = '0';
-			actions.style.transition = 'opacity 0.2s';
+			actions.removeClass('ia-hidden');
+			actions.setCssProps({ 'gap': '4px' });
+			actions.setCssProps({ 'opacity': '0' });
+			actions.setCssProps({ 'transition': 'opacity 0.2s' });
 
 			// Show actions on hover
 			convItem.addEventListener('mouseenter', () => {
-				actions.style.opacity = '1';
+				actions.setCssProps({ 'opacity': '1' });
 			});
 			convItem.addEventListener('mouseleave', () => {
-				actions.style.opacity = '0';
+				actions.setCssProps({ 'opacity': '0' });
 			});
 
 			// Delete button
 			const deleteBtn = actions.createEl('button', { text: '🗑️' });
 			deleteBtn.title = 'Delete';
-			deleteBtn.style.padding = '4px 6px';
-			deleteBtn.style.fontSize = '12px';
-			deleteBtn.style.border = 'none';
-			deleteBtn.style.background = 'transparent';
-			deleteBtn.style.cursor = 'pointer';
-			deleteBtn.style.borderRadius = '3px';
-			deleteBtn.style.color = 'var(--text-error)';
+			deleteBtn.setCssProps({ 'padding': '4px 6px' });
+			deleteBtn.setCssProps({ 'font-size': '12px' });
+			deleteBtn.setCssProps({ 'border': 'none' });
+			deleteBtn.setCssProps({ 'background': 'transparent' });
+			deleteBtn.addClass('ia-clickable');
+			deleteBtn.setCssProps({ 'border-radius': '3px' });
+			deleteBtn.setCssProps({ 'color': 'var(--text-error)' });
 			deleteBtn.addEventListener('click', (e) => {
 				e.stopPropagation();
 				this.deleteConversation(conv.id);

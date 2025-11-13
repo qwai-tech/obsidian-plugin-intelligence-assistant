@@ -258,7 +258,7 @@ export class ConversationModel {
 	 */
 	static create(title: string, icon?: string): ConversationModel {
 		const conversation: Conversation = {
-			id: `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+			id: `conv_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
 			title,
 			messages: [],
 			createdAt: Date.now(),

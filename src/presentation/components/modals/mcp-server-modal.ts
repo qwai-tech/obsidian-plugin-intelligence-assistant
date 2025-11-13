@@ -96,7 +96,7 @@ export class MCPServerModal extends Modal {
 				text.onChange(value => {
 					this.envText = value;
 					if (this.envInputEl) {
-						this.envInputEl.style.borderColor = '';
+						this.envInputEl.setCssProps({ 'border-color': '' });
 					}
 				});
 				this.envInputEl = text.inputEl;
@@ -114,21 +114,21 @@ export class MCPServerModal extends Modal {
 			);
 
 		const buttonBar = contentEl.createDiv();
-		buttonBar.style.display = 'flex';
-		buttonBar.style.justifyContent = 'flex-end';
-		buttonBar.style.gap = '8px';
-		buttonBar.style.marginTop = '16px';
+		buttonBar.removeClass('ia-hidden');
+		buttonBar.setCssProps({ 'justify-content': 'flex-end' });
+		buttonBar.setCssProps({ 'gap': '8px' });
+		buttonBar.setCssProps({ 'margin-top': '16px' });
 
 		const cancelBtn = buttonBar.createEl('button', { text: 'Cancel' });
-		cancelBtn.style.padding = '6px 16px';
+		cancelBtn.setCssProps({ 'padding': '6px 16px' });
 		cancelBtn.addEventListener('click', () => this.close());
 
 		const saveBtn = buttonBar.createEl('button', { text: this.mode === 'edit' ? 'Save Changes' : 'Add Server' });
-		saveBtn.style.padding = '6px 16px';
-		saveBtn.style.background = 'var(--interactive-accent)';
-		saveBtn.style.color = 'white';
-		saveBtn.style.border = 'none';
-		saveBtn.style.borderRadius = '4px';
+		saveBtn.setCssProps({ 'padding': '6px 16px' });
+		saveBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
+		saveBtn.setCssProps({ 'color': 'white' });
+		saveBtn.setCssProps({ 'border': 'none' });
+		saveBtn.setCssProps({ 'border-radius': '4px' });
 		saveBtn.addEventListener('click', async () => {
 			const name = (this.draft.name ?? '').trim();
 			if (!name) {
@@ -148,11 +148,11 @@ export class MCPServerModal extends Modal {
 			try {
 				parsedEnv = this.parseEnv(this.envText);
 				if (this.envInputEl) {
-					this.envInputEl.style.borderColor = '';
+					this.envInputEl.setCssProps({ 'border-color': '' });
 				}
 			} catch (error) {
 				if (this.envInputEl) {
-					this.envInputEl.style.borderColor = 'var(--text-error)';
+					this.envInputEl.setCssProps({ 'border-color': 'var(--text-error)' });
 				}
 				const message = error instanceof Error ? error.message : 'Invalid environment variable entry';
 				new Notice(message);

@@ -420,7 +420,7 @@ describe('AttachmentHandler', () => {
 		});
 
 		it('should not throw when updatePreview called before initialization', () => {
-			const newHandler = new AttachmentHandler(mockApp, state);
+			const _newHandler = new AttachmentHandler(mockApp, state);
 
 			// Trigger state change without initializing container
 			state.addAttachment({

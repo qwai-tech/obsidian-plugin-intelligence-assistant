@@ -100,7 +100,7 @@ export class ConfigSchema {
 
 				// Validate environment variables format
 				if (server.env) {
-					Object.entries(server.env).forEach(([key, value]) => {
+					Object.entries(server.env).forEach(([key, _value]) => {
 						if (!key || key.trim() === '') {
 							warnings.push({
 								path: `mcpServers[${index}].env`,

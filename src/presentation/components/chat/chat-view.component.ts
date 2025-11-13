@@ -70,7 +70,7 @@ export class ChatViewComponent {
       // Use the plugin's chat service to send message
       // This would be injected based on the architecture
       // For now, we'll add a simple message as an example
-      console.log('Sending message:', content);
+      console.debug('Sending message:', content);
     } finally {
       this.chatState.setIsLoading(false);
     }

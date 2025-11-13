@@ -38,7 +38,7 @@ export class Logger {
 	 */
 	info(message: string, ...args: any[]): void {
 		if (this.minLevel <= LogLevel.INFO) {
-			console.log(`[${this.context}] ${message}`, ...args);
+			console.debug(`[${this.context}] ${message}`, ...args);
 		}
 	}
 

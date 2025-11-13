@@ -118,8 +118,8 @@ export class MemoryService extends BaseService {
 	 */
 	async searchMemories(
 		agentId: string,
-		query: string,
-		options?: MemorySearchOptions
+		_query: string,
+		_options?: MemorySearchOptions
 	): Promise<MemoryEmbedding[]> {
 		if (!this.memoryManager) {
 			throw new Error('Memory service not initialized');

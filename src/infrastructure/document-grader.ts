@@ -228,7 +228,7 @@ Respond with a JSON object in this exact format:
 
   private async resolveGraderModel(): Promise<string | null> {
     const source = this.config.graderModelSource || 'default';
-    console.log('[DocumentGrader] Resolving grader model with source:', source);
+    console.debug('[DocumentGrader] Resolving grader model with source:', source);
 
     switch (source) {
       case 'chat':
@@ -236,7 +236,7 @@ Respond with a JSON object in this exact format:
         if (this.getChatModelFn) {
           const chatModel = this.getChatModelFn();
           if (chatModel?.trim()) {
-            console.log('[DocumentGrader] Using chat model from active view:', chatModel);
+            console.debug('[DocumentGrader] Using chat model from active view:', chatModel);
             return chatModel.trim();
           } else {
             console.warn('[DocumentGrader] Chat model not available from active view');
@@ -249,7 +249,7 @@ Respond with a JSON object in this exact format:
         console.warn('[DocumentGrader] Falling back to default model for chat source');
         const currentDefaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
         if (currentDefaultModel?.trim()) {
-          console.log('[DocumentGrader] Using default model as fallback:', currentDefaultModel);
+          console.debug('[DocumentGrader] Using default model as fallback:', currentDefaultModel);
           return currentDefaultModel.trim();
         }
         // If no default model, fall back to first available reasoning model
@@ -259,7 +259,7 @@ Respond with a JSON object in this exact format:
         // Use the Settings -> General -> Default Model only
         const defaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
         if (defaultModel?.trim()) {
-          console.log('[DocumentGrader] Using default model from settings:', defaultModel);
+          console.debug('[DocumentGrader] Using default model from settings:', defaultModel);
           return defaultModel.trim();
         } else {
           console.warn('[DocumentGrader] No default model configured in settings');
@@ -274,7 +274,7 @@ Respond with a JSON object in this exact format:
             const availableModels = await ModelManager.getAllAvailableModels(this.llmConfigs);
             const configuredGraderModel = availableModels.find(m => m.id === this.config.graderModel?.trim());
             if (configuredGraderModel) {
-              console.log('[DocumentGrader] Using configured grader model:', configuredGraderModel.id);
+              console.debug('[DocumentGrader] Using configured grader model:', configuredGraderModel.id);
               return configuredGraderModel.id;
             } else {
               console.warn('[DocumentGrader] Configured grader model not found:', this.config.graderModel);
@@ -282,7 +282,7 @@ Respond with a JSON object in this exact format:
               console.warn('[DocumentGrader] Falling back to default model for specific source');
               const fallbackDefaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
               if (fallbackDefaultModel?.trim()) {
-                console.log('[DocumentGrader] Using default model as fallback:', fallbackDefaultModel);
+                console.debug('[DocumentGrader] Using default model as fallback:', fallbackDefaultModel);
                 return fallbackDefaultModel.trim();
               }
               // If no default model, fall back to first available reasoning model
@@ -293,7 +293,7 @@ Respond with a JSON object in this exact format:
             // Fall back to default model
             const fallbackDefaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
             if (fallbackDefaultModel?.trim()) {
-              console.log('[DocumentGrader] Using default model as fallback after error:', fallbackDefaultModel);
+              console.debug('[DocumentGrader] Using default model as fallback after error:', fallbackDefaultModel);
               return fallbackDefaultModel.trim();
             }
             return await this.getFirstAvailableReasoningModel();
@@ -303,7 +303,7 @@ Respond with a JSON object in this exact format:
           // Fall back to default model
           const fallbackDefaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
           if (fallbackDefaultModel?.trim()) {
-            console.log('[DocumentGrader] Using default model as fallback:', fallbackDefaultModel);
+            console.debug('[DocumentGrader] Using default model as fallback:', fallbackDefaultModel);
             return fallbackDefaultModel.trim();
           }
           return await this.getFirstAvailableReasoningModel();
@@ -314,7 +314,7 @@ Respond with a JSON object in this exact format:
         // For any unknown values, use default model
         const unknownDefaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
         if (unknownDefaultModel?.trim()) {
-          console.log('[DocumentGrader] Using default model for unknown source:', unknownDefaultModel);
+          console.debug('[DocumentGrader] Using default model for unknown source:', unknownDefaultModel);
           return unknownDefaultModel.trim();
         }
         return await this.getFirstAvailableReasoningModel();
@@ -329,21 +329,21 @@ Respond with a JSON object in this exact format:
       // Look for reasoning-capable models first
       const reasoningGraderModel = allModels.find(m => m.capabilities?.includes('reasoning') && m.enabled !== false);
       if (reasoningGraderModel) {
-        console.log('[DocumentGrader] Using first available reasoning model:', reasoningGraderModel.id);
+        console.debug('[DocumentGrader] Using first available reasoning model:', reasoningGraderModel.id);
         return reasoningGraderModel.id;
       }
       
       // Fallback to chat models
       const chatModel = allModels.find(m => m.capabilities?.includes('chat') && m.enabled !== false);
       if (chatModel) {
-        console.log('[DocumentGrader] Using first available chat model:', chatModel.id);
+        console.debug('[DocumentGrader] Using first available chat model:', chatModel.id);
         return chatModel.id;
       }
       
       // Last resort: use any available model
       const anyModel = allModels.find(m => m.enabled !== false);
       if (anyModel) {
-        console.log('[DocumentGrader] Using first available model:', anyModel.id);
+        console.debug('[DocumentGrader] Using first available model:', anyModel.id);
         return anyModel.id;
       }
     } catch (error) {

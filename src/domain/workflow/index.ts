@@ -77,8 +77,8 @@ export function initializeWorkflowSystem(registerEnhanced = false): void {
 		}
 	}
 	
-	console.log(`Workflow System V2 initialized (${VERSION})`);
-	console.log(`Registered nodes: ${registry.getAll().length}`);
+	console.debug(`Workflow System V2 initialized (${VERSION})`);
+	console.debug(`Registered nodes: ${registry.getAll().length}`);
 }
 
 /**
@@ -95,17 +95,7 @@ export async function createWorkflowEditor(
 	const { WorkflowEditor: Editor } = require('./editor/editor');
 	const { nodeRegistry: registry } = require('./nodes/registry');
 
-	// Import styles
-	if (typeof document !== 'undefined') {
-		const styleId = 'workflow-v2-styles';
-		if (!document.getElementById(styleId)) {
-			const link = document.createElement('link');
-			link.id = styleId;
-			link.rel = 'stylesheet';
-			link.href = 'path/to/workflow-v2/editor/styles.css';
-			document.head.appendChild(link);
-		}
-	}
+	// Note: Styles are loaded via styles.css file automatically by Obsidian
 
 	// Create storage
 	const storage = new Storage(services.vault);

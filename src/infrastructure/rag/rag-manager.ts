@@ -48,7 +48,7 @@ export class RAGManager {
     this.ready = true;
   }
 
-  async query(query: string): Promise<any[]> {
+  async _query(_query: string): Promise<any[]> {
     if (!this.ready) {
       throw new Error('RAGManager not initialized');
     }
@@ -57,7 +57,7 @@ export class RAGManager {
     return [];
   }
 
-  async indexContent(content: string, metadata?: any): Promise<void> {
+  async indexContent(_content: string, _metadata?: any): Promise<void> {
     if (!this.ready) {
       throw new Error('RAGManager not initialized');
     }

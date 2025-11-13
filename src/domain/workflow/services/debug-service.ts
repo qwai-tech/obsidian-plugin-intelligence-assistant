@@ -53,7 +53,7 @@ export class DebugService {
   async startSession(
     workflow: WorkflowGraph, 
     services: WorkflowServices, 
-    options: DebugOptions = {}
+    _options: DebugOptions = {}
   ): Promise<string> {
     const sessionId = `debug_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
     
@@ -138,7 +138,7 @@ export class DebugService {
         outputs: session.nodeOutputs, // Use debug session's output map
         signal: undefined, // No abort signal in debug mode
         log: (message: string) => {
-          console.log(`[DEBUG: ${node.name}] ${message}`);
+          console.debug(`[DEBUG: ${node.name}] ${message}`);
         },
         services,
       };

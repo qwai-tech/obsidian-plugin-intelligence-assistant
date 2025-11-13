@@ -16,8 +16,6 @@ import {
 } from './types';
 import { WorkflowGraph } from './workflow';
 import { NodeRegistry } from '../nodes/registry';
-import { ExecutionHistoryService } from '../services/execution-history';
-import { ErrorHandler, WorkflowError, WorkflowErrorType } from '../services/error-handler';
 
 /**
  * Workflow executor - executes workflows
@@ -140,7 +138,7 @@ export class WorkflowExecutor {
 				outputs: this.outputs,
 				signal: this.abortController?.signal,
 				log: (message: string) => {
-					console.log(`[${node.name}] ${message}`);
+					console.debug(`[${node.name}] ${message}`);
 				},
 				services,
 			};

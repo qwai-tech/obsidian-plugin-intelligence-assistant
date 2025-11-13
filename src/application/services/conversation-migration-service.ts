@@ -14,11 +14,11 @@ export class ConversationMigrationService {
    */
   async migrateFromOldFormat(oldConversations: Conversation[]): Promise<boolean> {
     if (!oldConversations || !Array.isArray(oldConversations)) {
-      console.log('No old conversations to migrate');
+      console.debug('No old conversations to migrate');
       return true;
     }
 
-    console.log(`Starting migration of ${oldConversations.length} conversations`);
+    console.debug(`Starting migration of ${oldConversations.length} conversations`);
     
     // Process each conversation
     for (const conv of oldConversations) {
@@ -28,14 +28,14 @@ export class ConversationMigrationService {
         
         // Create the conversation file
         await this.storageService.createConversation(normalizedConv);
-        console.log(`Migrated conversation: ${conv.id} - ${conv.title}`);
+        console.debug(`Migrated conversation: ${conv.id} - ${conv.title}`);
       } catch (error) {
         console.error(`Error migrating conversation ${conv.id}:`, error);
         return false;
       }
     }
 
-    console.log(`Successfully migrated ${oldConversations.length} conversations`);
+    console.debug(`Successfully migrated ${oldConversations.length} conversations`);
     return true;
   }
 
@@ -45,7 +45,7 @@ export class ConversationMigrationService {
   private normalizeConversation(conv: Conversation): Conversation {
     // Ensure all required fields are present
     const normalized: Conversation = {
-      id: conv.id || `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: conv.id || `conv_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
       title: conv.title || 'Untitled Conversation',
       messages: conv.messages || [],
       createdAt: conv.createdAt || Date.now(),

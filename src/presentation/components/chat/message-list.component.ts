@@ -11,8 +11,8 @@ export class MessageListComponent {
 
   render(messages: Message[]): void {
     this.messages = messages;
-    this.container.innerHTML = '';
-    
+    this.container.empty();
+
     messages.forEach(message => {
       const messageEl = this.createMessageElement(message);
       this.container.appendChild(messageEl);

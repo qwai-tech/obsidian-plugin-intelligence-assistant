@@ -58,7 +58,7 @@ export async function ensureAutoConnectedMcpServers(
 			}
 
 			connected.add(server.name);
-			console.log(`[MCP] Successfully initialized server: ${server.name} (${tools.length} tools)`);
+			console.debug(`[MCP] Successfully initialized server: ${server.name} (${tools.length} tools)`);
 		} catch (error) {
 			console.error(`[MCP] Auto-connect failed for ${server.name}:`, error);
 		}

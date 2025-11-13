@@ -5,7 +5,7 @@
  * and historical execution data for debugging and analysis.
  */
 
-import { ExecutionResult, Workflow, WorkflowNode, NodeData, ExecutionLogEntry } from '../core/types';
+import {ExecutionResult, Workflow, NodeData, ExecutionLogEntry} from '../core/types';
 
 export interface ExecutionHistoryEntry {
   id: string;

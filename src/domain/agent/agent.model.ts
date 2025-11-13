@@ -3,7 +3,7 @@
  * Encapsulates agent business logic and rules
  */
 
-import type { Agent, SystemPrompt, ModelInfo } from '@/types';
+import type { Agent } from '@/types';
 
 export class AgentModel {
 	constructor(private data: Agent) {}

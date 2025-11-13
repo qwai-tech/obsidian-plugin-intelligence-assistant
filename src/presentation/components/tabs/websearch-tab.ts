@@ -16,8 +16,8 @@ export function displayWebSearchTab(
 	const desc = containerEl.createEl('p', {
 		text: 'Configure web search functionality to enhance AI responses with up-to-date information from the internet.'
 	});
-	desc.style.color = 'var(--text-muted)';
-	desc.style.marginBottom = '20px';
+	desc.setCssProps({ 'color': 'var(--text-muted)' });
+	desc.setCssProps({ 'margin-bottom': '20px' });
 
 	const config = plugin.settings.webSearchConfig;
 

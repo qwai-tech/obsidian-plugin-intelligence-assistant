@@ -10,7 +10,6 @@ import { WorkflowNode, NodeParameter, WorkflowServices } from '../core/types';
 import { NodeRegistry } from '../nodes/registry';
 import { EventEmitter } from './event-emitter';
 import { WorkflowGraph } from '../core/workflow';
-import { extractVariables } from '../core/variable-resolver';
 
 /**
  * Modal events
@@ -52,17 +51,17 @@ export class NodeConfigModal extends Modal {
     this.originalConfig = { ...node.config };
   }
 
-  async onOpen() {
-    const { contentEl, modalEl } = this;
+	async onOpen() {
+		const { contentEl } = this;
 
-    console.log('[NodeConfigModal] onOpen - node type:', this.node.type, 'name:', this.node.name);
-    console.log('[NodeConfigModal] Services available:', !!this.services);
-    console.log('[NodeConfigModal] Settings available:', !!this.services?.settings);
+    console.debug('[NodeConfigModal] onOpen - node type:', this.node.type, 'name:', this.node.name);
+    console.debug('[NodeConfigModal] Services available:', !!this.services);
+    console.debug('[NodeConfigModal] Settings available:', !!this.services?.settings);
 
     const nodeDef = this.nodeRegistry.get(this.node.type);
     if (!nodeDef) return;
 
-    console.log('[NodeConfigModal] NodeDef found:', nodeDef.name, 'parameters:', nodeDef.parameters.length);
+    console.debug('[NodeConfigModal] NodeDef found:', nodeDef.name, 'parameters:', nodeDef.parameters.length);
 
     // Set modal title using Obsidian's API (this uses the existing modal-title element)
     this.setTitle(`${nodeDef.icon} ${this.node.name}`);
@@ -84,7 +83,7 @@ export class NodeConfigModal extends Modal {
     const { contentEl } = this;
     contentEl.empty();
 
-    console.log('[NodeConfigModal] render() called');
+    console.debug('[NodeConfigModal] render() called');
 
     const nodeDef = this.nodeRegistry.get(this.node.type);
     if (!nodeDef) return;
@@ -351,13 +350,13 @@ export class NodeConfigModal extends Modal {
       varItem.createSpan({ text: ` - ${variable.desc}`, cls: 'modal-variable-desc' });
 
       // Make it copyable
-      varCode.style.cursor = 'pointer';
+      varCode.addClass('ia-clickable');
       varCode.title = 'Click to copy';
       varCode.addEventListener('click', () => {
         navigator.clipboard.writeText(`{{${variable.name}}}`);
-        varCode.style.backgroundColor = '#10b981';
+        varCode.setCssProps({ 'background-color': '#10b981' });
         setTimeout(() => {
-          varCode.style.backgroundColor = '';
+          varCode.setCssProps({ 'background-color': '' });
         }, 200);
       });
     }
@@ -390,13 +389,13 @@ export class NodeConfigModal extends Modal {
         });
 
         // Make it copyable
-        varCode.style.cursor = 'pointer';
+        varCode.addClass('ia-clickable');
         varCode.title = 'Click to copy';
         varCode.addEventListener('click', () => {
           navigator.clipboard.writeText(`{{${field.name}}}`);
-          varCode.style.backgroundColor = '#10b981';
+          varCode.setCssProps({ 'background-color': '#10b981' });
           setTimeout(() => {
-            varCode.style.backgroundColor = '';
+            varCode.setCssProps({ 'background-color': '' });
           }, 200);
         });
       }
@@ -419,7 +418,7 @@ export class NodeConfigModal extends Modal {
   }
 
   private async renderParameter(container: HTMLElement, param: NodeParameter): Promise<void> {
-    console.log('[NodeConfigModal] renderParameter for:', param.name, 'type:', param.type);
+    console.debug('[NodeConfigModal] renderParameter for:', param.name, 'type:', param.type);
 
     const field = container.createDiv('modal-config-field');
 
@@ -446,7 +445,7 @@ export class NodeConfigModal extends Modal {
     }
     const value = this.formConfig[param.name];
 
-    console.log('[NodeConfigModal] Rendering param type:', param.type, 'for', param.name);
+    console.debug('[NodeConfigModal] Rendering param type:', param.type, 'for', param.name);
 
     switch (param.type) {
       case 'string':
@@ -526,7 +525,7 @@ export class NodeConfigModal extends Modal {
   }
 
   private async renderSelectInput(container: HTMLElement, param: NodeParameter, value: any): Promise<void> {
-    console.log('[NodeConfigModal] renderSelectInput called for param:', param.name, param);
+    console.debug('[NodeConfigModal] renderSelectInput called for param:', param.name, param);
 
     const select = container.createEl('select', {
       cls: 'modal-select',
@@ -534,7 +533,7 @@ export class NodeConfigModal extends Modal {
 
     // Get options - prefer getOptions() if available, otherwise use param.options
     let options = param.options || [];
-    console.log('[NodeConfigModal] Initial options for', param.name, ':', options);
+    console.debug('[NodeConfigModal] Initial options for', param.name, ':', options);
 
     // If param has getOptions method, use it (for dynamic options like model list)
     if (param.getOptions && typeof param.getOptions === 'function') {
@@ -571,10 +570,10 @@ export class NodeConfigModal extends Modal {
     }
     // Fallback: use dynamic agents from settings if param.name is 'agentId' and no options
     else if (param.name === 'agentId' && options.length === 0) {
-      console.log('[NodeConfigModal] Loading agents from settings...');
-      console.log('[NodeConfigModal] Services:', !!this.services);
-      console.log('[NodeConfigModal] Settings:', !!this.services?.settings);
-      console.log('[NodeConfigModal] Agents:', this.services?.settings?.agents);
+      console.debug('[NodeConfigModal] Loading agents from settings...');
+      console.debug('[NodeConfigModal] Services:', !!this.services);
+      console.debug('[NodeConfigModal] Settings:', !!this.services?.settings);
+      console.debug('[NodeConfigModal] Agents:', this.services?.settings?.agents);
 
       if (this.services?.settings?.agents && this.services.settings.agents.length > 0) {
         // Build options from agents in settings
@@ -582,7 +581,7 @@ export class NodeConfigModal extends Modal {
           label: `${agent.icon || '🤖'} ${agent.name}`,
           value: agent.id
         }));
-        console.log('[NodeConfigModal] Loaded agents:', options);
+        console.debug('[NodeConfigModal] Loaded agents:', options);
       } else {
         // No agents available - show helpful message
         options = [{
@@ -652,8 +651,8 @@ export class NodeConfigModal extends Modal {
     }
 
     textarea.rows = 8;
-    textarea.style.fontFamily = 'monospace';
-    textarea.style.fontSize = '12px';
+    textarea.setCssProps({ 'font-family': 'monospace' });
+    textarea.setCssProps({ 'font-size': '12px' });
 
     textarea.addEventListener('input', () => {
       this.updateFormConfig(param.name, textarea.value);
@@ -674,8 +673,8 @@ export class NodeConfigModal extends Modal {
     }
 
     textarea.rows = 8;
-    textarea.style.fontFamily = 'monospace';
-    textarea.style.fontSize = '12px';
+    textarea.setCssProps({ 'font-family': 'monospace' });
+    textarea.setCssProps({ 'font-size': '12px' });
 
     // Validate JSON on input
     let validationTimeout: NodeJS.Timeout;
@@ -684,10 +683,10 @@ export class NodeConfigModal extends Modal {
       validationTimeout = setTimeout(() => {
         try {
           const parsed = JSON.parse(textarea.value);
-          textarea.style.borderColor = '';
+          textarea.setCssProps({ 'border-color': '' });
           this.updateFormConfig(param.name, parsed);
         } catch (error) {
-          textarea.style.borderColor = '#ef4444';
+          textarea.setCssProps({ 'border-color': '#ef4444' });
         }
       }, 500);
     });

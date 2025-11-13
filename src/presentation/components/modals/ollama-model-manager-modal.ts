@@ -76,11 +76,11 @@ export class OllamaModelManagerModal extends Modal {
 				});
 			} else {
 				statusEl.setText('❌ Server offline');
-				statusEl.style.color = 'var(--text-error)';
+				statusEl.setCssProps({ 'color': 'var(--text-error)' });
 			}
 		} catch (error) {
 			statusEl.setText('❌ Connection error');
-			statusEl.style.color = 'var(--text-error)';
+			statusEl.setCssProps({ 'color': 'var(--text-error)' });
 		}
 	}
 
@@ -88,7 +88,7 @@ export class OllamaModelManagerModal extends Modal {
 		const section = containerEl.createDiv('ia-modal-section');
 		section.createEl('h3', { text: 'Pull New Model' });
 
-		const desc = section.createEl('p', {
+		const _desc = section.createEl('p', {
 			text: 'Enter a model name to download from Ollama library (e.g., llama2, mistral, codellama)',
 			attr: { style: 'color: var(--text-muted); font-size: 0.9em;' }
 		});
@@ -101,7 +101,7 @@ export class OllamaModelManagerModal extends Modal {
 			.addText(text => {
 				modelNameInput = text.inputEl;
 				text.setPlaceholder('llama2')
-					.inputEl.style.width = '100%';
+					.inputEl.setCssProps({ 'width': '100%' });
 			})
 			.addButton(button => button
 				.setButtonText('Pull Model')
@@ -119,10 +119,10 @@ export class OllamaModelManagerModal extends Modal {
 	private renderInstalledModels(containerEl: HTMLElement) {
 		const section = containerEl.createDiv('ia-modal-section');
 		const header = section.createDiv();
-		header.style.display = 'flex';
-		header.style.justifyContent = 'space-between';
-		header.style.alignItems = 'center';
-		header.style.marginBottom = '12px';
+		header.removeClass('ia-hidden');
+		header.setCssProps({ 'justify-content': 'space-between' });
+		header.setCssProps({ 'align-items': 'center' });
+		header.setCssProps({ 'margin-bottom': '12px' });
 
 		header.createEl('h3', { text: 'Installed Models' });
 
@@ -134,8 +134,8 @@ export class OllamaModelManagerModal extends Modal {
 		});
 
 		const modelList = section.createDiv('ia-model-list');
-		modelList.style.maxHeight = '400px';
-		modelList.style.overflowY = 'auto';
+		modelList.setCssProps({ 'max-height': '400px' });
+		modelList.setCssProps({ 'overflow-y': 'auto' });
 
 		if (this.models.length === 0) {
 			modelList.createEl('p', {
@@ -147,11 +147,11 @@ export class OllamaModelManagerModal extends Modal {
 
 		this.models.forEach(model => {
 			const modelRow = modelList.createDiv('ia-model-row');
-			modelRow.style.display = 'flex';
-			modelRow.style.justifyContent = 'space-between';
-			modelRow.style.alignItems = 'center';
-			modelRow.style.padding = '12px';
-			modelRow.style.borderBottom = '1px solid var(--background-modifier-border)';
+			modelRow.removeClass('ia-hidden');
+			modelRow.setCssProps({ 'justify-content': 'space-between' });
+			modelRow.setCssProps({ 'align-items': 'center' });
+			modelRow.setCssProps({ 'padding': '12px' });
+			modelRow.setCssProps({ 'border-bottom': '1px solid var(--background-modifier-border)' });
 
 			const modelInfo = modelRow.createDiv();
 			modelInfo.createEl('div', {
@@ -168,7 +168,7 @@ export class OllamaModelManagerModal extends Modal {
 			const deleteBtn = modelRow.createEl('button', { text: 'Delete' });
 			deleteBtn.addClass('ia-button');
 			deleteBtn.addClass('ia-button--danger');
-			deleteBtn.style.marginLeft = '8px';
+			deleteBtn.setCssProps({ 'margin-left': '8px' });
 			deleteBtn.addEventListener('click', async () => {
 				await this.deleteModel(model.id, deleteBtn);
 			});
@@ -176,7 +176,7 @@ export class OllamaModelManagerModal extends Modal {
 	}
 
 	private async pullModel(modelName: string, buttonEl: HTMLElement) {
-		const originalText = buttonEl.textContent;
+		const _originalText = buttonEl.textContent;
 		buttonEl.textContent = 'Pulling...';
 		(buttonEl as HTMLButtonElement).disabled = true;
 
@@ -196,7 +196,7 @@ export class OllamaModelManagerModal extends Modal {
 				// Read the streaming response
 				const reader = response.body?.getReader();
 				const decoder = new TextDecoder();
-				let lastStatus = '';
+				let _lastStatus = '';
 
 				if (reader) {
 					while (true) {
@@ -210,7 +210,7 @@ export class OllamaModelManagerModal extends Modal {
 							try {
 								const data = JSON.parse(line);
 								if (data.status) {
-									lastStatus = data.status;
+									_lastStatus = data.status;
 									// Update button text with progress
 									if (data.status.includes('pulling')) {
 										buttonEl.textContent = `Pulling... ${data.completed || ''}`;
@@ -235,7 +235,7 @@ export class OllamaModelManagerModal extends Modal {
 			new Notice(`❌ Failed to pull model: ${error instanceof Error ? error.message : 'Unknown error'}`);
 		} finally {
 			(buttonEl as HTMLButtonElement).disabled = false;
-			buttonEl.textContent = originalText;
+			buttonEl.textContent = _originalText;
 		}
 	}
 
@@ -244,7 +244,7 @@ export class OllamaModelManagerModal extends Modal {
 			return;
 		}
 
-		const originalText = buttonEl.textContent;
+		const _originalText = buttonEl.textContent;
 		buttonEl.textContent = 'Deleting...';
 		(buttonEl as HTMLButtonElement).disabled = true;
 
@@ -271,13 +271,13 @@ export class OllamaModelManagerModal extends Modal {
 			new Notice(`❌ Failed to delete model: ${error instanceof Error ? error.message : 'Unknown error'}`);
 		} finally {
 			(buttonEl as HTMLButtonElement).disabled = false;
-			buttonEl.textContent = originalText;
+			buttonEl.textContent = _originalText;
 		}
 	}
 
 	private async refreshModelList(buttonEl?: HTMLElement) {
 		if (buttonEl) {
-			const originalText = buttonEl.textContent;
+			const _originalText = buttonEl.textContent;
 			buttonEl.textContent = 'Refreshing...';
 			(buttonEl as HTMLButtonElement).disabled = true;
 		}

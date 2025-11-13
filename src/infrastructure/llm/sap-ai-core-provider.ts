@@ -119,7 +119,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		}
 
 		try {
-			console.log('Requesting OAuth2 token from SAP AI Core...');
+			console.debug('Requesting OAuth2 token from SAP AI Core...');
 			const response = await requestUrl({
 				url: tokenUrl,
 				method: 'POST',
@@ -149,7 +149,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			// Cache token with 5-minute safety margin to avoid expiration during requests
 			this.tokenExpiry = Date.now() + ((tokenData.expires_in - 300) * 1000);
 
-			console.log('OAuth2 token obtained successfully, expires in:', tokenData.expires_in, 'seconds');
+			console.debug('OAuth2 token obtained successfully, expires in:', tokenData.expires_in, 'seconds');
 			return this.accessToken;
 		} catch (error) {
 			console.error('SAP AI Core OAuth2 authentication failed:', error);
@@ -209,7 +209,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		// Check cache first
 		const cached = this.deploymentCache.get(cacheKey);
 		if (cached && now < cached.expiry) {
-			console.log(`Using cached deployment ID for ${cacheKey}: ${cached.deployment.id}`);
+			console.debug(`Using cached deployment ID for ${cacheKey}: ${cached.deployment.id}`);
 			return cached.deployment.id;
 		}
 
@@ -222,7 +222,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			expiry: now + (5 * 60 * 1000) // 5 minutes in milliseconds
 		});
 
-		console.log(`Fetched and cached deployment info for ${cacheKey}: ${JSON.stringify(deploymentInfo)}`);
+		console.debug(`Fetched and cached deployment info for ${cacheKey}: ${JSON.stringify(deploymentInfo)}`);
 		return deploymentInfo.id;
 	}
 
@@ -238,7 +238,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 		// Query SAP AI Core for deployments matching the model criteria
 		// Using the /v2/lm/deployments endpoint with query parameters
-		const resourceGroup = this.config.resourceGroup || 'default';
+		const _resourceGroup = this.config.resourceGroup || 'default';
 		const url = `${baseUrl}/v2/lm/deployments?$filter=status eq 'RUNNING'`;
 
 		const response = await requestUrl({
@@ -326,10 +326,10 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			deploymentId = modelInfo.deploymentId;
 			executableId = modelInfo.executableId;
 			modelName = modelInfo.name || unprefixedModelName;
-			console.log(`Using cached model info for ${modelId}, deployment: ${deploymentId}`);
+			console.debug(`Using cached model info for ${modelId}, deployment: ${deploymentId}`);
 		} else {
 			// Not in cache or no deployment ID - try to resolve dynamically using unprefixed name
-			console.log(`Model ${modelId} not found in cache, attempting dynamic resolution`);
+			console.debug(`Model ${modelId} not found in cache, attempting dynamic resolution`);
 			deploymentId = await this.resolveDeploymentId(unprefixedModelName);
 			modelName = unprefixedModelName;
 		}
@@ -351,11 +351,11 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		};
 
 		// Log deployment ID and other details for debugging
-		console.log(`SAP AI Core endpoint: ${url}`);
-		console.log(`Resource Group being used: ${this.config.resourceGroup || 'default'}`);
+		console.debug(`SAP AI Core endpoint: ${url}`);
+		console.debug(`Resource Group being used: ${this.config.resourceGroup || 'default'}`);
 
 		// Log the request for debugging
-		console.log(`SAP AI Core request to: ${url}, deployment: ${deploymentId}, model: ${request.model}, messages: ${request.messages.length}`);
+		console.debug(`SAP AI Core request to: ${url}, deployment: ${deploymentId}, model: ${request.model}, messages: ${request.messages.length}`);
 
 		let response;
 		try {
@@ -384,7 +384,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		const content = data.choices?.[0]?.message?.content || '';
 		const usage = data.usage || {};
 
-		console.log(`SAP AI Core response: ${content.substring(0, 50)}... (truncated)`);
+		console.debug(`SAP AI Core response: ${content.substring(0, 50)}... (truncated)`);
 
 		return {
 			content,
@@ -425,10 +425,10 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			deploymentId = modelInfo.deploymentId;
 			executableId = modelInfo.executableId;
 			modelName = modelInfo.name || unprefixedModelName;
-			console.log(`Using cached model info for ${modelId}, deployment: ${deploymentId}`);
+			console.debug(`Using cached model info for ${modelId}, deployment: ${deploymentId}`);
 		} else {
 			// Not in cache or no deployment ID - try to resolve dynamically using unprefixed name
-			console.log(`Model ${modelId} not found in cache, attempting dynamic resolution`);
+			console.debug(`Model ${modelId} not found in cache, attempting dynamic resolution`);
 			deploymentId = await this.resolveDeploymentId(unprefixedModelName);
 			modelName = unprefixedModelName;
 		}
@@ -451,10 +451,10 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		};
 
 		// Log deployment ID and other details for debugging
-		console.log(`SAP AI Core streaming endpoint: ${url}`);
-		console.log(`Resource Group being used: ${this.config.resourceGroup || 'default'}`);
+		console.debug(`SAP AI Core streaming endpoint: ${url}`);
+		console.debug(`Resource Group being used: ${this.config.resourceGroup || 'default'}`);
 
-		console.log(`SAP AI Core streaming started for deployment: ${deploymentId}, model: ${request.model}`);
+		console.debug(`SAP AI Core streaming started for deployment: ${deploymentId}, model: ${request.model}`);
 
 		let response;
 		try {
@@ -487,7 +487,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				const data = line.slice(6).trim();
 
 				if (data === '[DONE]') {
-					console.log('SAP AI Core streaming completed');
+					console.debug('SAP AI Core streaming completed');
 					onChunk({ content: '', done: true });
 					return;
 				}
@@ -504,7 +504,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 					}
 
 					if (finishReason) {
-						console.log(`SAP AI Core streaming finished with reason: ${finishReason}`);
+						console.debug(`SAP AI Core streaming finished with reason: ${finishReason}`);
 						onChunk({ content: '', done: true });
 						return;
 					}
@@ -514,7 +514,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			}
 		}
 
-		console.log('SAP AI Core streaming ended');
+		console.debug('SAP AI Core streaming ended');
 		onChunk({ content: '', done: true });
 	}
 
@@ -531,7 +531,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 						   this.config.baseUrl ||
 						   'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
 
-			const resourceGroup = this.config.resourceGroup || 'default';
+			const _resourceGroup = this.config.resourceGroup || 'default';
 
 			// Fetch both deployments and configurations
 			const deploymentsUrl = `${baseUrl}/v2/lm/deployments?$filter=status eq 'RUNNING'`;
@@ -636,7 +636,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 						executableId,   // Save the executable ID (e.g., 'azure-openai', 'aws-bedrock')
 					});
 
-					console.log(`SAP AI Core: Found deployment ${deployment.id} -> ${modelName}${modelVersion ? ` (v${modelVersion})` : ''} [${executableId || 'unknown'}]`);
+					console.debug(`SAP AI Core: Found deployment ${deployment.id} -> ${modelName}${modelVersion ? ` (v${modelVersion})` : ''} [${executableId || 'unknown'}]`);
 				}
 			}
 
@@ -646,7 +646,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				return this.getDefaultModels();
 			}
 
-			console.log(`Found ${models.length} running SAP AI Core deployments`);
+			console.debug(`Found ${models.length} running SAP AI Core deployments`);
 			return models;
 		} catch (error) {
 			console.error('Failed to fetch SAP AI Core models:', error);

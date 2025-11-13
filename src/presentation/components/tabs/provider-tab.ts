@@ -4,6 +4,7 @@
  */
 
 import { App, Notice } from 'obsidian';
+import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { LLMConfig } from '@/types';
 import { createTable } from '@/presentation/utils/ui-helpers';
@@ -92,7 +93,12 @@ export function displayProviderTab(
 		const providerHeader = providerStack.createDiv('ia-provider-header');
 		if (providerMeta.iconSvg) {
 			const iconContainer = providerHeader.createDiv('ia-provider-icon');
-			iconContainer.innerHTML = providerMeta.iconSvg;
+			const parser = new DOMParser();
+			const svgDoc = parser.parseFromString(providerMeta.iconSvg, 'image/svg+xml');
+			const svgElement = svgDoc.documentElement;
+			if (svgElement instanceof SVGElement) {
+				iconContainer.appendChild(svgElement);
+			}
 		}
 		const providerName = providerHeader.createDiv('ia-provider-name');
 		providerName.setText(providerMeta.label);
@@ -102,7 +108,7 @@ export function displayProviderTab(
 		if (config.provider === 'ollama') {
 			versionEl = providerStack.createDiv('ia-table-subtext');
 			versionEl.setText('Checking version...');
-			versionEl.style.fontStyle = 'italic';
+			versionEl.setCssProps({ 'font-style': 'italic' });
 		}
 
 		if (config.baseUrl) {
@@ -169,20 +175,20 @@ export function displayProviderTab(
 		if (config.provider === 'ollama' && config.baseUrl) {
 			const serverStatusLine = statusStack.createDiv('ia-table-subtext');
 			serverStatusLine.setText('Checking server...');
-			serverStatusLine.style.fontStyle = 'italic';
+			serverStatusLine.setCssProps({ 'font-style': 'italic' });
 
 			// Check Ollama server status
 			checkOllamaStatus(config.baseUrl).then((status) => {
 				if (status.online) {
 					serverStatusLine.setText(`Server: Online`);
-					serverStatusLine.style.color = 'var(--text-success)';
-					serverStatusLine.style.fontStyle = 'normal';
+					serverStatusLine.setCssProps({ 'color': 'var(--text-success)' });
+					serverStatusLine.setCssProps({ 'font-style': 'normal' });
 
 					// Update version in provider cell
 					if (versionEl && status.version) {
 						versionEl.setText(`Version: ${status.version}`);
-						versionEl.style.fontStyle = 'normal';
-						versionEl.style.color = 'var(--text-muted)';
+						versionEl.setCssProps({ 'font-style': 'normal' });
+						versionEl.setCssProps({ 'color': 'var(--text-muted)' });
 					}
 
 					// Update status badge if server is online
@@ -197,14 +203,14 @@ export function displayProviderTab(
 					}
 				} else {
 					serverStatusLine.setText(`Server: Offline or unreachable`);
-					serverStatusLine.style.color = 'var(--text-error)';
-					serverStatusLine.style.fontStyle = 'normal';
+					serverStatusLine.setCssProps({ 'color': 'var(--text-error)' });
+					serverStatusLine.setCssProps({ 'font-style': 'normal' });
 
 					// Update version display
 					if (versionEl) {
 						versionEl.setText('Server offline');
-						versionEl.style.color = 'var(--text-error)';
-						versionEl.style.fontStyle = 'normal';
+						versionEl.setCssProps({ 'color': 'var(--text-error)' });
+						versionEl.setCssProps({ 'font-style': 'normal' });
 					}
 
 					// Update status to show server is offline
@@ -215,12 +221,12 @@ export function displayProviderTab(
 				}
 			}).catch(() => {
 				serverStatusLine.setText('Server: Connection error');
-				serverStatusLine.style.color = 'var(--text-error)';
+				serverStatusLine.setCssProps({ 'color': 'var(--text-error)' });
 
 				if (versionEl) {
 					versionEl.setText('Connection error');
-					versionEl.style.color = 'var(--text-error)';
-					versionEl.style.fontStyle = 'normal';
+					versionEl.setCssProps({ 'color': 'var(--text-error)' });
+					versionEl.setCssProps({ 'font-style': 'normal' });
 				}
 			});
 		}
@@ -305,7 +311,7 @@ export function displayProviderTab(
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
 		deleteBtn.addEventListener('click', async () => {
-			if (confirm(`Remove provider ${config.provider}?`)) {
+			if (await showConfirm(this.app, `Remove provider ${config.provider}?`)) {
 				plugin.settings.llmConfigs.splice(index, 1);
 				await plugin.saveSettings();
 				refreshDisplay();

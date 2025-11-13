@@ -5,7 +5,7 @@
 
 import { App } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import { createButton, createControlContainer, createLabel, createBadge } from '../utils/dom-helpers';
+import {createButton} from '../utils/dom-helpers';
 
 export interface ChatHeaderElements {
 	modelSelect: HTMLSelectElement;
@@ -29,12 +29,12 @@ export function createChatHeader(
 	options: ChatHeaderOptions
 ): ChatHeaderElements {
 	const header = parent.createDiv('chat-header');
-	header.style.display = 'flex';
-	header.style.gap = '12px';
-	header.style.padding = '12px';
-	header.style.borderBottom = '1px solid var(--background-modifier-border)';
-	header.style.background = 'var(--background-secondary)';
-	header.style.alignItems = 'center';
+	header.removeClass('ia-hidden');
+	header.setCssProps({ 'gap': '12px' });
+	header.setCssProps({ 'padding': '12px' });
+	header.setCssProps({ 'border-bottom': '1px solid var(--background-modifier-border)' });
+	header.setCssProps({ 'background': 'var(--background-secondary)' });
+	header.setCssProps({ 'align-items': 'center' });
 
 	// Toggle conversation list button
 	createButton(header, {
@@ -49,50 +49,50 @@ export function createChatHeader(
 
 	// Model selector container
 	const modelContainer = header.createDiv('model-selector');
-	modelContainer.style.display = 'flex';
-	modelContainer.style.alignItems = 'center';
-	modelContainer.style.gap = '8px';
-	modelContainer.style.flex = '1';
+	modelContainer.removeClass('ia-hidden');
+	modelContainer.setCssProps({ 'align-items': 'center' });
+	modelContainer.setCssProps({ 'gap': '8px' });
+	modelContainer.setCssProps({ 'flex': '1' });
 
 	// Model label
 	const modelLabel = modelContainer.createSpan({ text: '🤖 Model:' });
-	modelLabel.style.fontWeight = '500';
-	modelLabel.style.fontSize = '13px';
+	modelLabel.setCssProps({ 'font-weight': '500' });
+	modelLabel.setCssProps({ 'font-size': '13px' });
 
 	// Model select dropdown
 	const modelSelect = modelContainer.createEl('select');
-	modelSelect.style.flex = '1';
-	modelSelect.style.padding = '6px 10px';
-	modelSelect.style.borderRadius = '4px';
-	modelSelect.style.border = '1px solid var(--background-modifier-border)';
-	modelSelect.style.background = 'var(--background-primary)';
-	modelSelect.style.color = 'var(--text-normal)';
-	modelSelect.style.fontSize = '13px';
-	modelSelect.style.cursor = 'pointer';
+	modelSelect.setCssProps({ 'flex': '1' });
+	modelSelect.setCssProps({ 'padding': '6px 10px' });
+	modelSelect.setCssProps({ 'border-radius': '4px' });
+	modelSelect.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
+	modelSelect.setCssProps({ 'background': 'var(--background-primary)' });
+	modelSelect.setCssProps({ 'color': 'var(--text-normal)' });
+	modelSelect.setCssProps({ 'font-size': '13px' });
+	modelSelect.addClass('ia-clickable');
 	modelSelect.addEventListener('change', () => options.onModelChange());
 
 	// Actions container
 	const modelActions = header.createDiv();
-	modelActions.style.display = 'flex';
-	modelActions.style.gap = '6px';
+	modelActions.removeClass('ia-hidden');
+	modelActions.setCssProps({ 'gap': '6px' });
 
 	// Model count info badge
 	const modelCountEl = header.createSpan();
-	modelCountEl.style.fontSize = '11px';
-	modelCountEl.style.color = 'var(--text-muted)';
-	modelCountEl.style.padding = '4px 8px';
-	modelCountEl.style.background = 'var(--background-primary)';
-	modelCountEl.style.borderRadius = '4px';
+	modelCountEl.setCssProps({ 'font-size': '11px' });
+	modelCountEl.setCssProps({ 'color': 'var(--text-muted)' });
+	modelCountEl.setCssProps({ 'padding': '4px 8px' });
+	modelCountEl.setCssProps({ 'background': 'var(--background-primary)' });
+	modelCountEl.setCssProps({ 'border-radius': '4px' });
 	modelCountEl.setText('Loading...');
 
 	// Token usage summary badge
 	const tokenSummaryEl = header.createSpan();
-	tokenSummaryEl.style.fontSize = '11px';
-	tokenSummaryEl.style.color = 'var(--text-muted)';
-	tokenSummaryEl.style.padding = '4px 8px';
-	tokenSummaryEl.style.background = 'var(--background-primary)';
-	tokenSummaryEl.style.borderRadius = '4px';
-	tokenSummaryEl.style.marginLeft = '8px';
+	tokenSummaryEl.setCssProps({ 'font-size': '11px' });
+	tokenSummaryEl.setCssProps({ 'color': 'var(--text-muted)' });
+	tokenSummaryEl.setCssProps({ 'padding': '4px 8px' });
+	tokenSummaryEl.setCssProps({ 'background': 'var(--background-primary)' });
+	tokenSummaryEl.setCssProps({ 'border-radius': '4px' });
+	tokenSummaryEl.setCssProps({ 'margin-left': '8px' });
 	tokenSummaryEl.setText('Tokens: 0');
 	tokenSummaryEl.title = 'Total tokens used in this conversation';
 

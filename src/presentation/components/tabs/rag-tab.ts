@@ -21,11 +21,11 @@ export function displayRAGTab(
 
 	// Create sub-tab navigation
 	const tabNavContainer = containerEl.createDiv('ia-rag-tab-nav');
-	tabNavContainer.style.display = 'flex';
-	tabNavContainer.style.gap = '8px';
-	tabNavContainer.style.marginBottom = '20px';
-	tabNavContainer.style.borderBottom = '1px solid var(--background-modifier-border)';
-	tabNavContainer.style.paddingBottom = '8px';
+	tabNavContainer.removeClass('ia-hidden');
+	tabNavContainer.setCssProps({ 'gap': '8px' });
+	tabNavContainer.setCssProps({ 'margin-bottom': '20px' });
+	tabNavContainer.setCssProps({ 'border-bottom': '1px solid var(--background-modifier-border)' });
+	tabNavContainer.setCssProps({ 'padding-bottom': '8px' });
 
 	// Create content container for sub-tabs
 	const tabContentContainer = containerEl.createDiv('ia-rag-tab-content');
@@ -69,21 +69,23 @@ export function displayRAGTab(
 			cls: 'ia-rag-subtab-btn'
 		});
 
-		tabBtn.style.padding = '8px 16px';
-		tabBtn.style.border = 'none';
-		tabBtn.style.background = activeTab === tab.id ? 'var(--interactive-accent)' : 'transparent';
-		tabBtn.style.color = activeTab === tab.id ? 'var(--text-on-accent)' : 'var(--text-normal)';
-		tabBtn.style.cursor = 'pointer';
-		tabBtn.style.borderRadius = '4px';
-		tabBtn.style.transition = 'all 0.2s';
+		tabBtn.setCssProps({ 'padding': '8px 16px' });
+		tabBtn.setCssProps({ 'border': 'none' });
+		tabBtn.setCssProps({ 'background': activeTab === tab.id ? 'var(--interactive-accent)' : 'transparent' });
+		tabBtn.setCssProps({ 'color': activeTab === tab.id ? 'var(--text-on-accent)' : 'var(--text-normal)' });
+		tabBtn.addClass('ia-clickable');
+		tabBtn.setCssProps({ 'border-radius': '4px' });
+		tabBtn.setCssProps({ 'transition': 'all 0.2s' });
 
 		tabBtn.addEventListener('click', () => {
 			activeTab = tab.id;
 			// Update all buttons
 			tabNavContainer.querySelectorAll('.ia-rag-subtab-btn').forEach((btn, index) => {
 				const isActive = subTabs[index].id === activeTab;
-				(btn as HTMLElement).style.background = isActive ? 'var(--interactive-accent)' : 'transparent';
-				(btn as HTMLElement).style.color = isActive ? 'var(--text-on-accent)' : 'var(--text-normal)';
+				(btn as HTMLElement).setCssProps({
+					'background': isActive ? 'var(--interactive-accent)' : 'transparent',
+					'color': isActive ? 'var(--text-on-accent)' : 'var(--text-normal)'
+				});
 			});
 			renderActiveTab();
 		});
@@ -91,12 +93,12 @@ export function displayRAGTab(
 		// Hover effect
 		tabBtn.addEventListener('mouseenter', () => {
 			if (activeTab !== tab.id) {
-				tabBtn.style.background = 'var(--background-modifier-hover)';
+				tabBtn.setCssProps({ 'background': 'var(--background-modifier-hover)' });
 			}
 		});
 		tabBtn.addEventListener('mouseleave', () => {
 			if (activeTab !== tab.id) {
-				tabBtn.style.background = 'transparent';
+				tabBtn.setCssProps({ 'background': 'transparent' });
 			}
 		});
 	});
@@ -189,10 +191,10 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 
 	// Create a stats container that will be updated
 	const statsContainer = section.createDiv('ia-rag-stats');
-	statsContainer.style.marginBottom = '16px';
-	statsContainer.style.padding = '12px';
-	statsContainer.style.backgroundColor = 'var(--background-secondary)';
-	statsContainer.style.borderRadius = '4px';
+	statsContainer.setCssProps({ 'margin-bottom': '16px' });
+	statsContainer.setCssProps({ 'padding': '12px' });
+	statsContainer.setCssProps({ 'background-color': 'var(--background-secondary)' });
+	statsContainer.setCssProps({ 'border-radius': '4px' });
 
 	// Function to update stats display
 	const updateStats = async () => {
@@ -214,14 +216,14 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 			});
 
 			const statsGrid = statsContainer.createDiv();
-			statsGrid.style.display = 'grid';
-			statsGrid.style.gridTemplateColumns = '1fr 1fr';
-			statsGrid.style.gap = '8px';
+			statsGrid.removeClass('ia-hidden');
+			statsGrid.setCssProps({ 'grid-template-columns': '1fr 1fr' });
+			statsGrid.setCssProps({ 'gap': '8px' });
 
 			const addStat = (label: string, value: string | number | undefined) => {
 				const statItem = statsGrid.createDiv();
-				statItem.style.display = 'flex';
-				statItem.style.flexDirection = 'column';
+				statItem.removeClass('ia-hidden');
+				statItem.setCssProps({ 'flex-direction': 'column' });
 				statItem.createEl('span', {
 					text: label,
 					attr: { style: 'font-size: 0.9em; color: var(--text-muted);' }

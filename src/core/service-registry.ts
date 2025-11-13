@@ -16,7 +16,7 @@ export class ServiceRegistry {
     for (const [name, service] of this.services) {
       try {
         await service.initialize(config);
-        console.log(`Service ${name} initialized successfully`);
+        console.debug(`Service ${name} initialized successfully`);
       } catch (error) {
         console.error(`Failed to initialize service ${name}:`, error);
       }
@@ -27,7 +27,7 @@ export class ServiceRegistry {
     for (const [name, service] of this.services) {
       try {
         await service.cleanup();
-        console.log(`Service ${name} cleaned up successfully`);
+        console.debug(`Service ${name} cleaned up successfully`);
       } catch (error) {
         console.error(`Failed to cleanup service ${name}:`, error);
       }

@@ -31,7 +31,7 @@ export class WorkflowStorage {
 			}
 		} catch (error) {
 			// Folder might already exist
-			console.log('Workflow storage folder initialized');
+			console.debug('Workflow storage folder initialized');
 		}
 	}
 

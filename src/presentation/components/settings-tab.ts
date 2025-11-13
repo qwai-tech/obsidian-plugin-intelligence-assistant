@@ -1,19 +1,15 @@
-import { App, ButtonComponent, Notice, PluginSettingTab, Setting, ToggleComponent, requestUrl } from 'obsidian';
+import {App, Notice, PluginSettingTab} from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { snapshotMcpTools } from '@plugin';
-import type { LLMConfig, SystemPrompt, Agent, ModelInfo, MCPServerConfig, ModelCapability, RAGConfig, CachedMCPTool } from './types';
-import type { Tool } from '@/application/services/types';
+import type { } from './types';
+import type {  } from '@/application/services/types';
 import {
-	MCPInspectorModal,
-	MCPServerModal,
-	ProviderConfigModal,
-	SystemPromptEditModal,
-	AgentEditModal
+					AgentEditModal
 } from './modals';
-import { RAGManager } from '@/infrastructure/rag-manager';
-import { CHAT_VIEW_TYPE } from '../views/chat-view';
-import { DEFAULT_AGENT_ID } from '@/constants';
-import { createTable, createStatusIndicator } from '../utils/ui-helpers';
+
+import { } from '../views/chat-view';
+import { } from '@/constants';
+import { } from '../utils/ui-helpers';
 import { displayGeneralTab } from './tabs/general-tab';
 import { displayWebSearchTab } from './tabs/websearch-tab';
 import { displayPromptsTab } from './tabs/prompts-tab';
@@ -23,7 +19,7 @@ import { displayMCPTab } from './tabs/mcp-tab';
 import { displayProviderTab } from './tabs/provider-tab';
 import { displayRAGTab } from './tabs/rag-tab';
 import { displayModelsTab, type ModelFilters } from './tabs/models-tab';
-import { getProviderMeta } from './components/provider-meta';
+
 
 export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 	plugin: IntelligenceAssistantPlugin;
@@ -236,7 +232,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 					error: undefined
 				});
 
-				console.log(`[MCP] ${server.name} connection test: ${tools.length} tools available`);
+				console.debug(`[MCP] ${server.name} connection test: ${tools.length} tools available`);
 			} catch (error: any) {
 				console.error(`[MCP] ${server.name} connection test failed:`, error);
 				results.push({
@@ -261,9 +257,9 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			new Notice(`⚠️ ${successful} connected, ${failed} failed`);
 
 			// Show detailed results in console
-			console.log('[MCP] Connection test results:');
+			console.debug('[MCP] Connection test results:');
 			for (const result of results) {
-				console.log(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'Connected'}`);
+				console.debug(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'Connected'}`);
 			}
 		}
 

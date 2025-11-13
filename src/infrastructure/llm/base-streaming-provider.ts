@@ -71,7 +71,7 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 
 		try {
 			// Use native fetch for true streaming support
-			const response = await fetch(url, {
+			const response = await requestUrl(url, {
 				method: 'POST',
 				headers: this.getHeaders(),
 				body: JSON.stringify(body),

@@ -1,8 +1,8 @@
-import { App, TFile, Vault, Notice } from 'obsidian';
+import {App, TFile, Notice} from 'obsidian';
 import type { RAGConfig, LLMConfig } from '@/types';
 import { VectorStore, SearchResult } from './vector-store';
 import { EmbeddingManager } from './embedding-manager';
-import { DocumentGrader, DocumentGrade } from './document-grader';
+import { DocumentGrader } from './document-grader';
 
 export class RAGManager {
   private vectorStore: VectorStore;
@@ -67,7 +67,7 @@ export class RAGManager {
       return;
     }
     
-    console.log(`Indexing ${files.length} files for RAG...`);
+    console.debug(`Indexing ${files.length} files for RAG...`);
     new Notice(`🔄 Starting RAG indexing for ${files.length} documents...`);
     
     // Process files in batches to avoid blocking the UI
@@ -103,7 +103,7 @@ export class RAGManager {
           setTimeout(processBatch, 10); // 10ms delay allows UI to remain responsive
         } else {
           // All files processed
-          console.log(`RAG indexing completed. Indexed ${this.vectorStore.getChunkCount()} chunks.`);
+          console.debug(`RAG indexing completed. Indexed ${this.vectorStore.getChunkCount()} chunks.`);
           new Notice(`✅ RAG indexing completed! ${successCount} files indexed, ${failureCount} failed.`);
           resolve();
         }
@@ -131,32 +131,32 @@ export class RAGManager {
   }
 
   async query(query: string): Promise<SearchResult[]> {
-    console.log('[RAG Manager] Query called with:', query);
-    console.log('[RAG Manager] Config enabled:', this.config.enabled);
+    console.debug('[RAG Manager] Query called with:', query);
+    console.debug('[RAG Manager] Config enabled:', this.config.enabled);
     if (!this.config.enabled) {
-      console.log('[RAG Manager] RAG config is disabled, returning empty array');
+      console.debug('[RAG Manager] RAG config is disabled, returning empty array');
       return [];
     }
 
     // Get embedding model from config or use default
     const embeddingModel = this.config.embeddingModel || EmbeddingManager.getDefaultEmbeddingModel().id;
-    console.log('[RAG Manager] Using embedding model:', embeddingModel);
+    console.debug('[RAG Manager] Using embedding model:', embeddingModel);
 
     let results = await this.vectorStore.search(query, this.config, embeddingModel);
-    console.log('[RAG Manager] Search returned:', results.length, 'results');
+    console.debug('[RAG Manager] Search returned:', results.length, 'results');
     
     // Check if we have any indexed documents, if not suggest embedding
     if (results.length === 0) {
       const stats = await this.vectorStore.getDetailedStats();
       if (stats.chunkCount === 0) {
-        console.log('[RAG Manager] No indexed documents found, suggesting user to embed documents');
+        console.debug('[RAG Manager] No indexed documents found, suggesting user to embed documents');
         new Notice('ℹ️ No indexed documents found. Use "Embed All Documents" command to index your vault for RAG.');
       }
     }
     
     // Apply document grading if enabled
     if (this.config.enableGradingThreshold && results.length > 0) {
-      console.log('[RAG Manager] Applying document grading...');
+      console.debug('[RAG Manager] Applying document grading...');
       
       try {
         // Create grade requests for each result
@@ -172,7 +172,7 @@ export class RAGManager {
         
         // Grade all documents
         const grades = await this.documentGrader.gradeDocuments(gradeRequests);
-        console.log('[RAG Manager] Graded', grades.length, 'documents');
+        console.debug('[RAG Manager] Graded', grades.length, 'documents');
         
         // Filter results based on grades
         const filteredResults = results.filter(result => {
@@ -180,7 +180,7 @@ export class RAGManager {
           return grade ? grade.shouldUse : true; // Include if no grade found
         });
         
-        console.log('[RAG Manager] Filtered results from', results.length, 'to', filteredResults.length);
+        console.debug('[RAG Manager] Filtered results from', results.length, 'to', filteredResults.length);
         results = filteredResults;
       } catch (error) {
         console.error('[RAG Manager] Error during document grading:', error);
@@ -269,10 +269,10 @@ export class RAGManager {
     // Create new listener
     this.fileChangeListener = async (file: TFile) => {
       if (this.config.enabled && this.config.embedChangedFiles && file.extension === 'md') {
-        console.log(`File changed: ${file.path}, re-indexing for RAG...`);
+        console.debug(`File changed: ${file.path}, re-indexing for RAG...`);
         try {
           await this.indexFile(file);
-          console.log(`Successfully re-indexed ${file.path}`);
+          console.debug(`Successfully re-indexed ${file.path}`);
           // Send notification for successful indexing
           if (this.config.indexingMode !== 'manual') { // Only show for automatic indexing
             new Notice(`🔄 RAG: Indexed ${file.basename}`);

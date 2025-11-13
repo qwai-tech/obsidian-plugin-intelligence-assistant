@@ -412,14 +412,14 @@ export class ModelManager {
 		const cacheKey = `${config.provider}:${config.apiKey}:${config.baseUrl}`;
 
 		if (!forceRefresh && this.modelCache.has(cacheKey)) {
-			console.log(`Using cached models for ${config.provider}`);
+			console.debug(`Using cached models for ${config.provider}`);
 			return this.filterModels(await this.modelCache.get(cacheKey)!, config.modelFilter);
 		}
 
 		const fetchPromise = (async () => {
 			// Use stored models if available (persistent storage, no expiration)
 			if (!forceRefresh && config.cachedModels && config.cachedModels.length > 0) {
-				console.log(`Using stored models for ${config.provider} (${config.cachedModels.length} models)`);
+				console.debug(`Using stored models for ${config.provider} (${config.cachedModels.length} models)`);
 				return config.cachedModels;
 			}
 
@@ -428,12 +428,12 @@ export class ModelManager {
 
 			// Special handling for providers that don't require API keys
 			if (config.provider === 'ollama') {
-				console.log('[ModelManager] Fetching Ollama models (no API key required)...');
+				console.debug('[ModelManager] Fetching Ollama models (no API key required)...');
 				const { OllamaProvider } = await import('./ollama-provider');
 				const ollamaProvider = new OllamaProvider(config);
 				models = await ollamaProvider.fetchModels();
 			} else if (config.provider === 'sap-ai-core') {
-				console.log('[ModelManager] Fetching SAP AI Core models...');
+				console.debug('[ModelManager] Fetching SAP AI Core models...');
 				// Try to fetch from SAP AI Core provider
 				try {
 					const { SAPAICoreProvider } = await import('./sap-ai-core-provider');
@@ -444,7 +444,7 @@ export class ModelManager {
 					models = this.DEFAULT_MODELS['sap-ai-core'];
 				}
 			} else if (!config.apiKey) {
-				console.log(`[ModelManager] No API key for ${config.provider}, using default models`);
+				console.debug(`[ModelManager] No API key for ${config.provider}, using default models`);
 				models = this.getDefaultModels(config.provider);
 			} else {
 				switch (config.provider) {
@@ -557,12 +557,12 @@ export class ModelManager {
 		// Check if modelId has provider prefix (provider:model-name format)
 		if (modelId.includes(':')) {
 			const [providerPrefix, ...rest] = modelId.split(':');
-			const modelName = rest.join(':'); // Handle case where model name might contain ':'
+			const _modelName = rest.join(':'); // Handle case where model name might contain ':'
 
 			// Find config matching the provider prefix
 			const config = configs.find(c => c.provider === providerPrefix);
 			if (config) {
-				console.log(`Found config for provider-prefixed model: ${modelId} -> ${providerPrefix}`);
+				console.debug(`Found config for provider-prefixed model: ${modelId} -> ${providerPrefix}`);
 				return config;
 			}
 		}

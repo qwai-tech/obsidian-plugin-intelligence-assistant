@@ -1,5 +1,5 @@
 // UI Helper Utilities
-import { Setting, Notice } from 'obsidian';
+import {Notice} from 'obsidian';
 
 export function createTable(container: HTMLElement): HTMLTableElement {
   return container.createEl('table', {

@@ -4,6 +4,7 @@
  */
 
 import { App, Notice } from 'obsidian';
+import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { snapshotMcpTools } from '@plugin';
 import type { MCPServerConfig } from '@/types';
@@ -61,7 +62,7 @@ export function displayMCPTab(
 				server.cachedTools = snapshotMcpTools(tools);
 				server.cacheTimestamp = Date.now();
 				results.push({ server: server.name, tools: tools.length, success: true });
-				console.log(`[MCP] Refreshed tools for ${server.name}: ${tools.length} tools`);
+				console.debug(`[MCP] Refreshed tools for ${server.name}: ${tools.length} tools`);
 			} catch (error) {
 				console.error(`[MCP] Failed to refresh tools for ${server.name}:`, error);
 				results.push({ server: server.name, tools: 0, success: false, error: error.message });
@@ -351,7 +352,7 @@ export function displayMCPTab(
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
 		deleteBtn.addEventListener('click', async () => {
-			if (confirm(`Delete MCP server "${server.name}"?`)) {
+			if (await showConfirm(this.app, `Delete MCP server "${server.name}"?`)) {
 				plugin.settings.mcpServers.splice(index, 1);
 				await plugin.saveSettings();
 				refreshDisplay();

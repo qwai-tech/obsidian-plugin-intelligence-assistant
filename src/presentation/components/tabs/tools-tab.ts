@@ -135,7 +135,7 @@ function renderBuiltInTools(content: HTMLElement, plugin: IntelligenceAssistantP
 function renderMcpTools(
 	content: HTMLElement,
 	plugin: IntelligenceAssistantPlugin,
-	refreshDisplay: () => void
+	_refreshDisplay: () => void
 ): void {
 	const toolManager = plugin.getToolManager();
 	const toolsByProvider = toolManager.getToolsByProvider();

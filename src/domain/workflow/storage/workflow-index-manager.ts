@@ -386,7 +386,7 @@ export class WorkflowIndexManager {
 	async rebuildIndex(): Promise<void> {
 		// This would scan the data/workflow folder and rebuild the index
 		// Implementation depends on your specific needs
-		console.log('Index rebuild not yet implemented');
+		console.debug('Index rebuild not yet implemented');
 	}
 
 	/**

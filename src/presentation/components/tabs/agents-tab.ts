@@ -4,6 +4,7 @@
  */
 
 import { App } from 'obsidian';
+import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Agent, ModelInfo } from '@/types';
 import { createTable } from '@/presentation/utils/ui-helpers';
@@ -130,7 +131,7 @@ export function displayAgentsTab(
 		const iconSpan = titleEl.createSpan();
 		iconSpan.addClass('ia-agent-icon');
 		iconSpan.setText(agent.icon || '🤖');
-		iconSpan.style.marginRight = '6px';
+		iconSpan.setCssProps({ 'margin-right': '6px' });
 		titleEl.appendChild(document.createTextNode(agent.name));
 
 		if (agent.id === DEFAULT_AGENT_ID) {
@@ -244,7 +245,7 @@ export function displayAgentsTab(
 			deleteBtn.setAttr('disabled', 'true');
 		} else {
 			deleteBtn.addEventListener('click', async () => {
-				if (confirm(`Delete agent "${agent.name}"?`)) {
+				if (await showConfirm(this.app, `Delete agent "${agent.name}"?`)) {
 					const agentIndex = plugin.settings.agents.findIndex(a => a.id === agent.id);
 					if (agentIndex !== -1) {
 						plugin.settings.agents.splice(agentIndex, 1);

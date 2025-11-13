@@ -131,7 +131,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 export function createAgentFromTemplate(template: typeof AGENT_TEMPLATES[number]): Agent {
 	return {
 		...template,
-		id: `agent-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+		id: `agent-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
 		createdAt: Date.now(),
 		updatedAt: Date.now()
 	};

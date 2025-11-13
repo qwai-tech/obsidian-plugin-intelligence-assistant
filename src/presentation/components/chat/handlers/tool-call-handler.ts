@@ -3,7 +3,6 @@
  * Manages agent tool call parsing, execution, and trace rendering
  */
 
-import { Notice } from 'obsidian';
 import type { Message } from '@/types';
 import type { ToolCall } from '@/application/services/types';
 import type { ToolManager } from '@/application/services/tool-manager';
@@ -55,7 +54,7 @@ export async function processToolCalls(
 			// Handle both formats: { "name": "tool_name", "arguments": {...} } and { "tool": "tool_name", "arguments": {...} }
 			const toolName = json.name || json.tool;
 			if (!toolName || typeof toolName !== 'string') {
-				console.log('Skipping non-tool call JSON block:', json);
+				console.debug('Skipping non-tool call JSON block:', json);
 				continue;
 			}
 
@@ -178,11 +177,11 @@ export function updateExecutionTrace(container: HTMLElement, steps: AgentExecuti
 		// Step indicator
 		const indicator = stepEl.createDiv('agent-step-indicator');
 		if (step.type === 'thought') {
-			indicator.innerHTML = '🧠';
+			indicator.setText('🧠');
 		} else if (step.type === 'action') {
-			indicator.innerHTML = '⚡';
+			indicator.setText('⚡');
 		} else {
-			indicator.innerHTML = '👁️';
+			indicator.setText('👁️');
 		}
 
 		// Step content
@@ -210,7 +209,8 @@ export function updateExecutionTrace(container: HTMLElement, steps: AgentExecuti
 			if (match) {
 				const toolName = match[1];
 				const args = match[2];
-				body.innerHTML = `<strong>${toolName}</strong><pre>${args}</pre>`;
+				body.createEl('strong', { text: toolName });
+				body.createEl('pre', { text: args });
 			} else {
 				body.setText(step.content);
 			}
@@ -264,7 +264,7 @@ function getTraceStatus(steps: AgentExecutionStep[]): { state: string; label: st
  */
 export function createAgentExecutionTraceContainer(messageBody: HTMLElement, stepCount: number): HTMLElement {
 	const traceContainer = messageBody.createDiv('agent-execution-trace-container');
-	traceContainer.style.marginTop = '12px';
+	traceContainer.addClass('ia-agent-trace-container');
 
 	// Collapsible header
 	const header = traceContainer.createDiv('agent-execution-trace-header');
@@ -277,29 +277,38 @@ export function createAgentExecutionTraceContainer(messageBody: HTMLElement, ste
 	status.setText('Idle');
 	const count = header.createSpan('agent-trace-count');
 	count.setText(`${stepCount} steps`);
-	header.style.cursor = 'pointer';
-	header.style.padding = '8px 12px';
-	header.style.background = 'var(--background-secondary)';
-	header.style.borderRadius = '6px';
-	header.style.display = 'flex';
-	header.style.alignItems = 'center';
-	header.style.gap = '8px';
-	header.style.fontWeight = '500';
+	header.addClass('ia-agent-trace-header');
+	header.setCssProps({
+		'display': 'flex',
+		'align-items': 'center',
+		'gap': '8px',
+		'font-weight': '500',
+		'cursor': 'pointer',
+		'padding': '8px 12px',
+		'background': 'var(--background-secondary)',
+		'border-radius': '6px'
+	});
 
 	// Trace content (collapsed by default)
 	const content = traceContainer.createDiv('agent-execution-trace-content');
-	content.style.display = 'none';
-	content.style.marginTop = '8px';
-	content.style.padding = '12px';
-	content.style.background = 'var(--background-primary)';
-	content.style.borderRadius = '6px';
-	content.style.border = '1px solid var(--background-modifier-border)';
+	content.addClass('ia-hidden');
+	content.setCssProps({
+		'margin-top': '8px',
+		'padding': '12px',
+		'background': 'var(--background-primary)',
+		'border-radius': '6px',
+		'border': '1px solid var(--background-modifier-border)'
+	});
 
 	// Toggle on click
 	let isExpanded = false;
 	header.addEventListener('click', () => {
 		isExpanded = !isExpanded;
-		content.style.display = isExpanded ? 'block' : 'none';
+		if (isExpanded) {
+			content.removeClass('ia-hidden');
+		} else {
+			content.addClass('ia-hidden');
+		}
 		icon.setText(isExpanded ? '▼' : '▶');
 	});
 

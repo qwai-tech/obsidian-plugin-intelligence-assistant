@@ -20,12 +20,12 @@ export class ChatService implements IService {
     private readonly eventBus: EventBus
   ) {}
 
-  async initialize(config?: any): Promise<void> {
-    console.log('ChatService initialized');
+  async initialize(_config?: any): Promise<void> {
+    console.debug('ChatService initialized');
   }
 
   async cleanup(): Promise<void> {
-    console.log('ChatService cleaned up');
+    console.debug('ChatService cleaned up');
   }
 
   async sendMessage(conversationId: string, content: string): Promise<Message> {

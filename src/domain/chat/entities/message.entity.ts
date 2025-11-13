@@ -15,7 +15,7 @@ export class Message {
     }
 
     return new Message(
-      `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      `msg_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
       content,
       role as 'user' | 'assistant' | 'system',
       new Date(),

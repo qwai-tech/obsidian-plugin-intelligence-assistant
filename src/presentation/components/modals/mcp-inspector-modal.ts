@@ -15,14 +15,15 @@ export class MCPInspectorModal extends Modal {
 		contentEl.empty();
 
 		contentEl.createEl('h2', { text: 'MCP Inspector' });
-		contentEl.createEl('p', {
+		const descEl = contentEl.createEl('p', {
 			text: 'Inspect and debug Model Context Protocol (MCP) server connections and tools.'
-		}).style.color = 'var(--text-muted)';
+		});
+		descEl.setCssProps({ 'color': 'var(--text-muted)' });
 
 		// Create tabs for different views
 		const tabContainer = contentEl.createDiv();
-		tabContainer.style.display = 'flex';
-		tabContainer.style.marginBottom = '16px';
+		tabContainer.removeClass('ia-hidden');
+		tabContainer.setCssProps({ 'margin-bottom': '16px' });
 
 		const connectionsTab = tabContainer.createEl('button', { text: 'Connections' });
 		const toolsTab = tabContainer.createEl('button', { text: 'Tools' });
@@ -31,43 +32,43 @@ export class MCPInspectorModal extends Modal {
 		// Style tabs
 		const tabs = [connectionsTab, toolsTab, logsTab];
 		tabs.forEach((tab, index) => {
-			tab.style.flex = '1';
-			tab.style.padding = '8px';
-			tab.style.cursor = 'pointer';
-			tab.style.border = '1px solid var(--background-modifier-border)';
-			tab.style.background = 'var(--background-primary)';
-			tab.style.color = 'var(--text-normal)';
+			tab.setCssProps({ 'flex': '1' });
+			tab.setCssProps({ 'padding': '8px' });
+			tab.addClass('ia-clickable');
+			tab.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
+			tab.setCssProps({ 'background': 'var(--background-primary)' });
+			tab.setCssProps({ 'color': 'var(--text-normal)' });
 
 			if (index === 0) {
-				tab.style.background = 'var(--interactive-accent)';
-				tab.style.color = 'white';
+				tab.setCssProps({ 'background': 'var(--interactive-accent)' });
+				tab.setCssProps({ 'color': 'white' });
 			}
 
 			// Remove border on selected side
 			if (index > 0) {
-				tab.style.borderLeft = 'none';
+				tab.setCssProps({ 'border-left': 'none' });
 			}
 
 			if (index === tabs.length - 1) {
-				tab.style.borderRadius = '0 4px 4px 0';
+				tab.setCssProps({ 'border-radius': '0 4px 4px 0' });
 			} else if (index === 0) {
-				tab.style.borderRadius = '4px 0 0 4px';
+				tab.setCssProps({ 'border-radius': '4px 0 0 4px' });
 			}
 		});
 
 		// Content area
 		const contentContainer = contentEl.createDiv();
-		contentContainer.style.minHeight = '300px';
-		contentContainer.style.border = '1px solid var(--background-modifier-border)';
-		contentContainer.style.borderRadius = '0 4px 4px 4px';
-		contentContainer.style.padding = '16px';
+		contentContainer.setCssProps({ 'min-height': '300px' });
+		contentContainer.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
+		contentContainer.setCssProps({ 'border-radius': '0 4px 4px 4px' });
+		contentContainer.setCssProps({ 'padding': '16px' });
 
 		// Create content for each tab
 		const connectionsContent = contentContainer.createDiv();
 		const toolsContent = contentContainer.createDiv();
-		toolsContent.style.display = 'none';
+		toolsContent.addClass('ia-hidden');
 		const logsContent = contentContainer.createDiv();
-		logsContent.style.display = 'none';
+		logsContent.addClass('ia-hidden');
 
 		// Populate initial content
 		this.renderConnectionsTab(connectionsContent);
@@ -76,65 +77,65 @@ export class MCPInspectorModal extends Modal {
 
 		// Tab switching logic
 		connectionsTab.addEventListener('click', () => {
-			connectionsContent.style.display = 'block';
-			toolsContent.style.display = 'none';
-			logsContent.style.display = 'none';
+			connectionsContent.removeClass('ia-hidden');
+			toolsContent.addClass('ia-hidden');
+			logsContent.addClass('ia-hidden');
 
 			// Update active tab styles
 			tabs.forEach((tab, index) => {
 				if (index === 0) {
-					tab.style.background = 'var(--interactive-accent)';
-					tab.style.color = 'white';
+					tab.setCssProps({ 'background': 'var(--interactive-accent)' });
+					tab.setCssProps({ 'color': 'white' });
 				} else {
-					tab.style.background = 'var(--background-primary)';
-					tab.style.color = 'var(--text-normal)';
+					tab.setCssProps({ 'background': 'var(--background-primary)' });
+					tab.setCssProps({ 'color': 'var(--text-normal)' });
 				}
 			});
 		});
 
 		toolsTab.addEventListener('click', () => {
-			connectionsContent.style.display = 'none';
-			toolsContent.style.display = 'block';
-			logsContent.style.display = 'none';
+			connectionsContent.addClass('ia-hidden');
+			toolsContent.removeClass('ia-hidden');
+			logsContent.addClass('ia-hidden');
 
 			// Update active tab styles
 			tabs.forEach((tab, index) => {
 				if (index === 1) {
-					tab.style.background = 'var(--interactive-accent)';
-					tab.style.color = 'white';
+					tab.setCssProps({ 'background': 'var(--interactive-accent)' });
+					tab.setCssProps({ 'color': 'white' });
 				} else {
-					tab.style.background = 'var(--background-primary)';
-					tab.style.color = 'var(--text-normal)';
+					tab.setCssProps({ 'background': 'var(--background-primary)' });
+					tab.setCssProps({ 'color': 'var(--text-normal)' });
 				}
 			});
 		});
 
 		logsTab.addEventListener('click', () => {
-			connectionsContent.style.display = 'none';
-			toolsContent.style.display = 'none';
-			logsContent.style.display = 'block';
+			connectionsContent.addClass('ia-hidden');
+			toolsContent.addClass('ia-hidden');
+			logsContent.removeClass('ia-hidden');
 
 			// Update active tab styles
 			tabs.forEach((tab, index) => {
 				if (index === 2) {
-					tab.style.background = 'var(--interactive-accent)';
-					tab.style.color = 'white';
+					tab.setCssProps({ 'background': 'var(--interactive-accent)' });
+					tab.setCssProps({ 'color': 'white' });
 				} else {
-					tab.style.background = 'var(--background-primary)';
-					tab.style.color = 'var(--text-normal)';
+					tab.setCssProps({ 'background': 'var(--background-primary)' });
+					tab.setCssProps({ 'color': 'var(--text-normal)' });
 				}
 			});
 		});
 
 		// Refresh button
 		const refreshBtn = contentEl.createEl('button', { text: '🔄 Refresh' });
-		refreshBtn.style.marginTop = '16px';
-		refreshBtn.style.padding = '6px 12px';
-		refreshBtn.style.background = 'var(--interactive-accent)';
-		refreshBtn.style.color = 'white';
-		refreshBtn.style.border = 'none';
-		refreshBtn.style.borderRadius = '4px';
-		refreshBtn.style.cursor = 'pointer';
+		refreshBtn.setCssProps({ 'margin-top': '16px' });
+		refreshBtn.setCssProps({ 'padding': '6px 12px' });
+		refreshBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
+		refreshBtn.setCssProps({ 'color': 'white' });
+		refreshBtn.setCssProps({ 'border': 'none' });
+		refreshBtn.setCssProps({ 'border-radius': '4px' });
+		refreshBtn.addClass('ia-clickable');
 
 		refreshBtn.addEventListener('click', () => {
 			// Refresh all tabs
@@ -164,8 +165,8 @@ export class MCPInspectorModal extends Modal {
 		}
 
 		const table = container.createEl('table');
-		table.style.width = '100%';
-		table.style.borderCollapse = 'collapse';
+		table.setCssProps({ 'width': '100%' });
+		table.setCssProps({ 'border-collapse': 'collapse' });
 
 		const headerRow = table.createEl('tr');
 		headerRow.createEl('th', { text: 'Server Name' });
@@ -186,13 +187,13 @@ export class MCPInspectorModal extends Modal {
 
 			if (!isEnabled) {
 				statusCell.setText('Disabled');
-				statusCell.style.color = 'var(--text-muted)';
+				statusCell.setCssProps({ 'color': 'var(--text-muted)' });
 			} else if (isConnected) {
 				statusCell.setText('● Connected');
-				statusCell.style.color = 'var(--text-success)';
+				statusCell.setCssProps({ 'color': 'var(--text-success)' });
 			} else {
 				statusCell.setText('○ Disconnected');
-				statusCell.style.color = 'var(--text-error)';
+				statusCell.setCssProps({ 'color': 'var(--text-error)' });
 			}
 
 			// Tools count
@@ -211,16 +212,16 @@ export class MCPInspectorModal extends Modal {
 			// Actions
 			const actionsCell = row.createEl('td');
 			const actionBtn = actionsCell.createEl('button', { text: isConnected ? 'Disconnect' : 'Connect' });
-			actionBtn.style.padding = '4px 8px';
-			actionBtn.style.fontSize = '12px';
-			actionBtn.style.cursor = 'pointer';
+			actionBtn.setCssProps({ 'padding': '4px 8px' });
+			actionBtn.setCssProps({ 'font-size': '12px' });
+			actionBtn.addClass('ia-clickable');
 
 			if (isConnected) {
-				actionBtn.style.background = 'var(--background-modifier-error)';
-				actionBtn.style.color = 'white';
+				actionBtn.setCssProps({ 'background': 'var(--background-modifier-error)' });
+				actionBtn.setCssProps({ 'color': 'white' });
 			} else {
-				actionBtn.style.background = 'var(--interactive-accent)';
-				actionBtn.style.color = 'white';
+				actionBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
+				actionBtn.setCssProps({ 'color': 'white' });
 			}
 
 			actionBtn.disabled = !isEnabled;
@@ -291,8 +292,8 @@ export class MCPInspectorModal extends Modal {
 			}
 
 			const toolsTable = serverSection.createEl('table');
-			toolsTable.style.width = '100%';
-			toolsTable.style.borderCollapse = 'collapse';
+			toolsTable.setCssProps({ 'width': '100%' });
+			toolsTable.setCssProps({ 'border-collapse': 'collapse' });
 
 			const headerRow = toolsTable.createEl('tr');
 			headerRow.createEl('th', { text: 'Tool Name' });
@@ -308,8 +309,8 @@ export class MCPInspectorModal extends Modal {
 				const paramsCell = row.createEl('td');
 				if (tool.definition.parameters && tool.definition.parameters.length > 0) {
 					const paramsList = paramsCell.createEl('ul');
-					paramsList.style.margin = '0';
-					paramsList.style.paddingLeft = '16px';
+					paramsList.setCssProps({ 'margin': '0' });
+					paramsList.setCssProps({ 'padding-left': '16px' });
 					for (const param of tool.definition.parameters) {
 						const paramItem = paramsList.createEl('li');
 						paramItem.setText(`${param.name} (${param.type}): ${param.description || ''}`);
@@ -327,14 +328,14 @@ export class MCPInspectorModal extends Modal {
 
 		// Display any stored logs or debugging information
 		const logContainer = container.createDiv();
-		logContainer.style.border = '1px solid var(--background-modifier-border)';
-		logContainer.style.borderRadius = '4px';
-		logContainer.style.padding = '8px';
-		logContainer.style.height = '200px';
-		logContainer.style.overflowY = 'auto';
-		logContainer.style.background = 'var(--background-primary)';
-		logContainer.style.fontFamily = 'monospace';
-		logContainer.style.fontSize = '12px';
+		logContainer.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
+		logContainer.setCssProps({ 'border-radius': '4px' });
+		logContainer.setCssProps({ 'padding': '8px' });
+		logContainer.setCssProps({ 'height': '200px' });
+		logContainer.setCssProps({ 'overflow-y': 'auto' });
+		logContainer.setCssProps({ 'background': 'var(--background-primary)' });
+		logContainer.setCssProps({ 'font-family': 'monospace' });
+		logContainer.setCssProps({ 'font-size': '12px' });
 
 		logContainer.createEl('p', {
 			text: 'MCP connection logs will appear here. Currently showing placeholder information.'
@@ -358,18 +359,18 @@ export class MCPInspectorModal extends Modal {
 
 		// Add a test tool execution section
 		const testSection = container.createDiv();
-		testSection.style.marginTop = '16px';
+		testSection.setCssProps({ 'margin-top': '16px' });
 
 		testSection.createEl('h4', { text: 'Test Tool Execution' });
 
 		const selectionRow = testSection.createDiv();
-		selectionRow.style.display = 'flex';
-		selectionRow.style.gap = '8px';
-		selectionRow.style.marginBottom = '12px';
-		selectionRow.style.alignItems = 'center';
+		selectionRow.removeClass('ia-hidden');
+		selectionRow.setCssProps({ 'gap': '8px' });
+		selectionRow.setCssProps({ 'margin-bottom': '12px' });
+		selectionRow.setCssProps({ 'align-items': 'center' });
 
 		const serverSelect = selectionRow.createEl('select');
-		serverSelect.style.flex = '1';
+		serverSelect.setCssProps({ 'flex': '1' });
 		const inspectorToolManager = this.plugin.getToolManager();
 		const connectedServers = inspectorToolManager.getMCPServers();
 
@@ -379,24 +380,24 @@ export class MCPInspectorModal extends Modal {
 		}
 
 		const toolSelect = selectionRow.createEl('select');
-		toolSelect.style.flex = '1';
+		toolSelect.setCssProps({ 'flex': '1' });
 		toolSelect.disabled = true;
 		toolSelect.createEl('option', { text: 'Select a tool...', value: '' });
 
 		// Container for dynamic parameter inputs
 		const paramsContainer = testSection.createDiv();
-		paramsContainer.style.display = 'none';
-		paramsContainer.style.marginBottom = '12px';
-		paramsContainer.style.padding = '12px';
-		paramsContainer.style.border = '1px solid var(--background-modifier-border)';
-		paramsContainer.style.borderRadius = '4px';
-		paramsContainer.style.background = 'var(--background-secondary)';
+		paramsContainer.addClass('ia-hidden');
+		paramsContainer.setCssProps({ 'margin-bottom': '12px' });
+		paramsContainer.setCssProps({ 'padding': '12px' });
+		paramsContainer.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
+		paramsContainer.setCssProps({ 'border-radius': '4px' });
+		paramsContainer.setCssProps({ 'background': 'var(--background-secondary)' });
 
 		// Update tools when server is selected
 		serverSelect.addEventListener('change', () => {
 			toolSelect.empty();
 			toolSelect.disabled = !serverSelect.value;
-			paramsContainer.style.display = 'none';
+			paramsContainer.addClass('ia-hidden');
 			paramsContainer.empty();
 
 			if (serverSelect.value) {
@@ -416,7 +417,7 @@ export class MCPInspectorModal extends Modal {
 		// Update parameters when tool is selected
 		toolSelect.addEventListener('change', () => {
 			paramsContainer.empty();
-			paramsContainer.style.display = 'none';
+			paramsContainer.addClass('ia-hidden');
 
 			if (!toolSelect.value) return;
 
@@ -426,24 +427,24 @@ export class MCPInspectorModal extends Modal {
 			}
 
 			// Show parameters section
-			paramsContainer.style.display = 'block';
+			paramsContainer.removeClass('ia-hidden');
 			paramsContainer.createEl('h5', { text: 'Parameters' });
 
 			for (const param of tool.definition.parameters) {
 				const paramRow = paramsContainer.createDiv();
-				paramRow.style.marginBottom = '8px';
+				paramRow.setCssProps({ 'margin-bottom': '8px' });
 
 				const label = paramRow.createEl('label');
-				label.style.display = 'block';
-				label.style.marginBottom = '4px';
-				label.style.fontWeight = '600';
+				label.removeClass('ia-hidden');
+				label.setCssProps({ 'margin-bottom': '4px' });
+				label.setCssProps({ 'font-weight': '600' });
 				label.setText(`${param.name}${param.required ? ' *' : ''}`);
 
 				if (param.description) {
 					const desc = paramRow.createEl('div');
-					desc.style.fontSize = '0.9em';
-					desc.style.color = 'var(--text-muted)';
-					desc.style.marginBottom = '4px';
+					desc.setCssProps({ 'font-size': '0.9em' });
+					desc.setCssProps({ 'color': 'var(--text-muted)' });
+					desc.setCssProps({ 'margin-bottom': '4px' });
 					desc.setText(param.description);
 				}
 
@@ -473,7 +474,7 @@ export class MCPInspectorModal extends Modal {
 					input = paramRow.createEl('input', { type: 'text' });
 				}
 
-				input.style.width = '100%';
+				input.setCssProps({ 'width': '100%' });
 				input.dataset.paramName = param.name;
 				input.dataset.paramType = param.type;
 				input.dataset.required = param.required ? 'true' : 'false';
@@ -482,9 +483,9 @@ export class MCPInspectorModal extends Modal {
 
 		// Buttons row
 		const buttonsRow = testSection.createDiv();
-		buttonsRow.style.display = 'flex';
-		buttonsRow.style.gap = '8px';
-		buttonsRow.style.marginBottom = '12px';
+		buttonsRow.removeClass('ia-hidden');
+		buttonsRow.setCssProps({ 'gap': '8px' });
+		buttonsRow.setCssProps({ 'margin-bottom': '12px' });
 
 		// Test execution button
 		const testBtn = buttonsRow.createEl('button', { text: 'Execute Tool' });
@@ -503,16 +504,16 @@ export class MCPInspectorModal extends Modal {
 
 		// Result display area
 		const resultContainer = testSection.createDiv();
-		resultContainer.style.display = 'none';
-		resultContainer.style.marginTop = '12px';
-		resultContainer.style.padding = '12px';
-		resultContainer.style.border = '1px solid var(--background-modifier-border)';
-		resultContainer.style.borderRadius = '4px';
-		resultContainer.style.background = 'var(--background-primary)';
-		resultContainer.style.fontFamily = 'monospace';
-		resultContainer.style.fontSize = '12px';
-		resultContainer.style.maxHeight = '300px';
-		resultContainer.style.overflowY = 'auto';
+		resultContainer.addClass('ia-hidden');
+		resultContainer.setCssProps({ 'margin-top': '12px' });
+		resultContainer.setCssProps({ 'padding': '12px' });
+		resultContainer.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
+		resultContainer.setCssProps({ 'border-radius': '4px' });
+		resultContainer.setCssProps({ 'background': 'var(--background-primary)' });
+		resultContainer.setCssProps({ 'font-family': 'monospace' });
+		resultContainer.setCssProps({ 'font-size': '12px' });
+		resultContainer.setCssProps({ 'max-height': '300px' });
+		resultContainer.setCssProps({ 'overflow-y': 'auto' });
 
 		testBtn.addEventListener('click', async () => {
 			if (!toolSelect.value) return;
@@ -573,7 +574,7 @@ export class MCPInspectorModal extends Modal {
 			// Execute tool
 			testBtn.disabled = true;
 			testBtn.textContent = 'Executing...';
-			resultContainer.style.display = 'none';
+			resultContainer.addClass('ia-hidden');
 
 			try {
 				const result = await inspectorToolManager.executeTool({
@@ -583,32 +584,32 @@ export class MCPInspectorModal extends Modal {
 
 				// Display result
 				resultContainer.empty();
-				resultContainer.style.display = 'block';
+				resultContainer.removeClass('ia-hidden');
 
 				const header = resultContainer.createEl('div');
-				header.style.marginBottom = '8px';
-				header.style.fontWeight = '600';
+				header.setCssProps({ 'margin-bottom': '8px' });
+				header.setCssProps({ 'font-weight': '600' });
 
 				if (result.success) {
-					header.style.color = 'var(--text-success)';
+					header.setCssProps({ 'color': 'var(--text-success)' });
 					header.setText('✅ Execution Successful');
 				} else {
-					header.style.color = 'var(--text-error)';
+					header.setCssProps({ 'color': 'var(--text-error)' });
 					header.setText('❌ Execution Failed');
 				}
 
 				if (result.error) {
 					const errorDiv = resultContainer.createEl('div');
-					errorDiv.style.color = 'var(--text-error)';
-					errorDiv.style.marginBottom = '8px';
+					errorDiv.setCssProps({ 'color': 'var(--text-error)' });
+					errorDiv.setCssProps({ 'margin-bottom': '8px' });
 					errorDiv.setText(`Error: ${result.error}`);
 				}
 
 				if (result.result !== undefined) {
 					const resultDiv = resultContainer.createEl('pre');
-					resultDiv.style.whiteSpace = 'pre-wrap';
-					resultDiv.style.wordBreak = 'break-word';
-					resultDiv.style.margin = '0';
+					resultDiv.setCssProps({ 'white-space': 'pre-wrap' });
+					resultDiv.setCssProps({ 'word-break': 'break-word' });
+					resultDiv.setCssProps({ 'margin': '0' });
 					resultDiv.setText(typeof result.result === 'string'
 						? result.result
 						: JSON.stringify(result.result, null, 2));
@@ -617,12 +618,12 @@ export class MCPInspectorModal extends Modal {
 				new Notice(result.success ? 'Tool executed successfully' : 'Tool execution failed');
 			} catch (error: any) {
 				resultContainer.empty();
-				resultContainer.style.display = 'block';
+				resultContainer.removeClass('ia-hidden');
 
 				const header = resultContainer.createEl('div');
-				header.style.color = 'var(--text-error)';
-				header.style.fontWeight = '600';
-				header.style.marginBottom = '8px';
+				header.setCssProps({ 'color': 'var(--text-error)' });
+				header.setCssProps({ 'font-weight': '600' });
+				header.setCssProps({ 'margin-bottom': '8px' });
 				header.setText('❌ Execution Error');
 
 				const errorDiv = resultContainer.createEl('div');
@@ -637,7 +638,7 @@ export class MCPInspectorModal extends Modal {
 
 		clearBtn.addEventListener('click', () => {
 			resultContainer.empty();
-			resultContainer.style.display = 'none';
+			resultContainer.addClass('ia-hidden');
 		});
 	}
 
@@ -679,7 +680,7 @@ export class MCPInspectorModal extends Modal {
 					error: undefined
 				});
 
-				console.log(`[MCP] ${server.name} connection test: ${tools.length} tools available`);
+				console.debug(`[MCP] ${server.name} connection test: ${tools.length} tools available`);
 			} catch (error: any) {
 				console.error(`[MCP] ${server.name} connection test failed:`, error);
 				results.push({
@@ -704,9 +705,9 @@ export class MCPInspectorModal extends Modal {
 			new Notice(`⚠️ ${successful} connected, ${failed} failed`);
 
 			// Show detailed results in console
-			console.log('[MCP] Connection test results:');
+			console.debug('[MCP] Connection test results:');
 			for (const result of results) {
-				console.log(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'Connected'}`);
+				console.debug(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'Connected'}`);
 			}
 		}
 	}

@@ -15,8 +15,8 @@ export function displayGeneralTab(
 	const desc = containerEl.createEl('p', {
 		text: 'Configure general settings for the Intelligence Assistant plugin.'
 	});
-	desc.style.color = 'var(--text-muted)';
-	desc.style.marginBottom = '20px';
+	desc.setCssProps({ 'color': 'var(--text-muted)' });
+	desc.setCssProps({ 'margin-bottom': '20px' });
 
 	// Plugin Version
 	new Setting(containerEl)

@@ -5,7 +5,7 @@
  * and import them back into the system.
  */
 
-import { Workflow, WorkflowNode, Connection } from '../core/types';
+import { Workflow } from '../core/types';
 import { WorkflowGraph } from '../core/workflow';
 
 export interface ExportOptions {
@@ -63,7 +63,7 @@ export class CodeImportExportService {
   /**
    * Export as TypeScript code
    */
-  private exportAsTypescript(workflow: Workflow, options: ExportOptions): string {
+	private exportAsTypescript(workflow: Workflow, _options: ExportOptions): string {
     const codeLines = [
       '/**',
       ` * Workflow: ${workflow.name}`,
@@ -96,7 +96,7 @@ export class CodeImportExportService {
   /**
    * Export as YAML format
    */
-  private exportAsYaml(workflow: Workflow, options: ExportOptions): string {
+	private exportAsYaml(workflow: Workflow, _options: ExportOptions): string {
     let yaml = `# Workflow: ${workflow.name}\n`;
     yaml += `# Generated: ${new Date().toISOString()}\n`;
     yaml += `# ID: ${workflow.id}\n\n`;

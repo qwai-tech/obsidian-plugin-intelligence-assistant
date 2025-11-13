@@ -6,7 +6,7 @@ import { ConversationManager } from '../conversation-manager';
 import { ChatViewState } from '../../state/chat-view-state';
 import { App } from 'obsidian';
 import IntelligenceAssistantPlugin from '../../../../../main';
-import { Conversation, Message } from '../../../../../main';
+import {Conversation} from '../../../../../main';
 import { ConversationStorageService } from '../../../../services/conversation-storage-service';
 
 // Mock dependencies
