@@ -15,7 +15,7 @@ export interface ValidationResult {
 export interface ConfigValidationError {
 	path: string;
 	message: string;
-	value?: any;
+	value?: unknown;
 }
 
 export interface ConfigValidationWarning {
@@ -29,7 +29,7 @@ export class ConfigSchema {
 		return value === undefined ? value : JSON.parse(JSON.stringify(value));
 	}
 
-	private static resolve(path: string, source: any): any {
+	private static resolve(path: string, source: unknown): unknown {
 		return path
 			.replace(/\[(\d+)\]/g, '.$1')
 			.split('.')
@@ -237,7 +237,7 @@ export class ConfigSchema {
 		value: PluginSettings[K]
 	): ValidationResult {
 		const settings = this.clone(DEFAULT_SETTINGS);
-		(settings as PluginSettings)[section] = this.clone(value);
+		(settings)[section] = this.clone(value);
 
 		const result = this.validate(settings);
 		const prefix = String(section);
@@ -280,8 +280,8 @@ export class ConfigSchema {
 	/**
 	 * Get field constraints
 	 */
-	static getConstraints(path: string): Record<string, any> {
-		const constraints: Record<string, Record<string, any>> = {
+	static getConstraints(path: string): Record<string, unknown> {
+		const constraints: Record<string, Record<string, unknown>> = {
 			'temperature': { min: 0, max: 2, type: 'number' },
 			'maxTokens': { min: 1, type: 'number' },
 			'chunkSize': { min: 1, type: 'number' },

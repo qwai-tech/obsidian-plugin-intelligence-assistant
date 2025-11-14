@@ -15,7 +15,7 @@ import { WorkflowGraph } from '../core/workflow';
  * Modal events
  */
 interface ModalEvents {
-  'update': { nodeId: string; config: Record<string, any> };
+  'update': { nodeId: string; config: Record<string, unknown> };
   'close': void;
 }
 
@@ -30,8 +30,8 @@ export class NodeConfigModal extends Modal {
   private events = new EventEmitter<ModalEvents>();
 
   // Form state
-  private formConfig: Record<string, any> = {};
-  private originalConfig: Record<string, any> = {};
+  private formConfig: Record<string, unknown> = {};
+  private originalConfig: Record<string, unknown> = {};
 
   constructor(
     app: App,
@@ -157,7 +157,7 @@ export class NodeConfigModal extends Modal {
     // Header
     const header = variablesSection.createDiv('modal-variables-header');
     header.createSpan({ text: '💡 ', cls: 'modal-variables-icon' });
-    header.createSpan({ text: 'Available Variables', cls: 'modal-variables-title' });
+    header.createSpan({ text: 'available variables', cls: 'modal-variables-title' });
 
     // Description
     const desc = variablesSection.createDiv('modal-variables-desc');
@@ -177,7 +177,7 @@ export class NodeConfigModal extends Modal {
 
     // Check if we have execution context from the workflow services
     // This would give us real field names from actual execution
-    const executionContext = (this.services as any)?.executionContext;
+    const executionContext = (this.services as unknown)?.executionContext;
     const actualFields: string[] = [];
 
     // Try to get actual output fields from previous nodes if execution data exists
@@ -472,7 +472,7 @@ export class NodeConfigModal extends Modal {
     }
   }
 
-  private renderStringInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderStringInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
     const input = container.createEl('input', {
       type: 'text',
       cls: 'modal-input',
@@ -488,7 +488,7 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private renderNumberInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderNumberInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
     const input = container.createEl('input', {
       type: 'number',
       cls: 'modal-input',
@@ -504,7 +504,7 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private renderBooleanInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderBooleanInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
     const wrapper = container.createDiv('modal-checkbox-wrapper');
 
     const input = wrapper.createEl('input', {
@@ -524,7 +524,7 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private async renderSelectInput(container: HTMLElement, param: NodeParameter, value: any): Promise<void> {
+  private async renderSelectInput(container: HTMLElement, param: NodeParameter, value: unknown): Promise<void> {
     console.debug('[NodeConfigModal] renderSelectInput called for param:', param.name, param);
 
     const select = container.createEl('select', {
@@ -552,12 +552,12 @@ export class NodeConfigModal extends Modal {
       for (const config of this.services.settings.llmConfigs) {
         if (config.cachedModels) {
           // Filter out disabled models
-          const enabledModels = config.cachedModels.filter((model: any) => model.enabled !== false);
+          const enabledModels = config.cachedModels.filter((model: unknown) => model.enabled !== false);
           for (const model of enabledModels) {
             // Build value with provider prefix
             const modelValue = model.id.includes(':') ? model.id : `${config.provider}:${model.id}`;
             // Avoid duplicates by checking if model is already added
-            const existingOption = options.find((opt: any) => opt.value === modelValue);
+            const existingOption = options.find((opt: unknown) => opt.value === modelValue);
             if (!existingOption) {
               options.push({
                 label: model.name || model.id,
@@ -577,7 +577,7 @@ export class NodeConfigModal extends Modal {
 
       if (this.services?.settings?.agents && this.services.settings.agents.length > 0) {
         // Build options from agents in settings
-        options = this.services.settings.agents.map((agent: any) => ({
+        options = this.services.settings.agents.map((agent: unknown) => ({
           label: `${agent.icon || '🤖'} ${agent.name}`,
           value: agent.id
         }));
@@ -619,7 +619,7 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private renderTextareaInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderTextareaInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
     const textarea = container.createEl('textarea', {
       cls: 'modal-textarea',
     });
@@ -638,7 +638,7 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private renderCodeInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderCodeInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
     const textarea = container.createEl('textarea', {
       cls: 'modal-textarea modal-code',
     });
@@ -659,7 +659,7 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private renderJsonInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderJsonInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
     const textarea = container.createEl('textarea', {
       cls: 'modal-textarea modal-code',
     });
@@ -692,7 +692,7 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private updateFormConfig(key: string, value: any): void {
+  private updateFormConfig(key: string, value: unknown): void {
     this.formConfig[key] = value;
   }
 

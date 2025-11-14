@@ -16,7 +16,7 @@ export function displayPromptsTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'System Prompts' });
+	containerEl.createEl('h3', { text: 'System prompts' });
 
 	const desc = containerEl.createEl('p', {
 		text: 'Manage system prompts that define the behavior and personality of your AI assistant.'
@@ -29,7 +29,7 @@ export function displayPromptsTab(
 	actionRow.addClass('ia-section-actions--wrap');
 
 	// Add new prompt button
-	const addBtn = actionRow.createEl('button', { text: '+ Add System Prompt' });
+	const addBtn = actionRow.createEl('button', { text: '+ Add system prompt' });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -48,7 +48,7 @@ export function displayPromptsTab(
 	// Display existing prompts in a table if they exist
 	if (plugin.settings.systemPrompts.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No system prompts configured. Click "Add System Prompt" to get started.');
+		emptyDiv.setText('No system prompts configured. Select Add system prompt to get started.');
 		return;
 	}
 

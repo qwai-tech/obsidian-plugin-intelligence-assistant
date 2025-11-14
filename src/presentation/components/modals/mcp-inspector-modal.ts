@@ -14,7 +14,7 @@ export class MCPInspectorModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: 'MCP Inspector' });
+		contentEl.createEl('h2', { text: 'Mcp inspector' });
 		const descEl = contentEl.createEl('p', {
 			text: 'Inspect and debug Model Context Protocol (MCP) server connections and tools.'
 		});
@@ -25,9 +25,9 @@ export class MCPInspectorModal extends Modal {
 		tabContainer.removeClass('ia-hidden');
 		tabContainer.setCssProps({ 'margin-bottom': '16px' });
 
-		const connectionsTab = tabContainer.createEl('button', { text: 'Connections' });
-		const toolsTab = tabContainer.createEl('button', { text: 'Tools' });
-		const logsTab = tabContainer.createEl('button', { text: 'Logs' });
+		const connectionsTab = tabContainer.createEl('button', { text: 'connections' });
+		const toolsTab = tabContainer.createEl('button', { text: 'tools' });
+		const logsTab = tabContainer.createEl('button', { text: 'logs' });
 
 		// Style tabs
 		const tabs = [connectionsTab, toolsTab, logsTab];
@@ -128,7 +128,7 @@ export class MCPInspectorModal extends Modal {
 		});
 
 		// Refresh button
-		const refreshBtn = contentEl.createEl('button', { text: '🔄 Refresh' });
+		const refreshBtn = contentEl.createEl('button', { text: '🔄 refresh' });
 		refreshBtn.setCssProps({ 'margin-top': '16px' });
 		refreshBtn.setCssProps({ 'padding': '6px 12px' });
 		refreshBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
@@ -151,7 +151,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderConnectionsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: 'MCP Server Connections' });
+		container.createEl('h3', { text: 'Mcp server connections' });
 
 		// Check for active connections
 		const toolManager = this.plugin.getToolManager();
@@ -169,10 +169,10 @@ export class MCPInspectorModal extends Modal {
 		table.setCssProps({ 'border-collapse': 'collapse' });
 
 		const headerRow = table.createEl('tr');
-		headerRow.createEl('th', { text: 'Server Name' });
-		headerRow.createEl('th', { text: 'Status' });
-		headerRow.createEl('th', { text: 'Tools Available' });
-		headerRow.createEl('th', { text: 'Actions' });
+		headerRow.createEl('th', { text: 'Server name' });
+		headerRow.createEl('th', { text: 'status' });
+		headerRow.createEl('th', { text: 'Tools available' });
+		headerRow.createEl('th', { text: 'actions' });
 
 		for (const server of this.plugin.settings.mcpServers) {
 			const row = table.createEl('tr');
@@ -211,7 +211,7 @@ export class MCPInspectorModal extends Modal {
 
 			// Actions
 			const actionsCell = row.createEl('td');
-			const actionBtn = actionsCell.createEl('button', { text: isConnected ? 'Disconnect' : 'Connect' });
+			const actionBtn = actionsCell.createEl('button', { text: isConnected ? 'disconnect' : 'connect' });
 			actionBtn.setCssProps({ 'padding': '4px 8px' });
 			actionBtn.setCssProps({ 'font-size': '12px' });
 			actionBtn.addClass('ia-clickable');
@@ -260,7 +260,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderToolsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: 'Available MCP Tools' });
+		container.createEl('h3', { text: 'available MCP tools' });
 
 		// Check for active connections
 		const toolManager = this.plugin.getToolManager();
@@ -272,7 +272,7 @@ export class MCPInspectorModal extends Modal {
 			.reduce((acc, [provider, tools]) => {
 				acc[provider] = tools;
 				return acc;
-			}, {} as Record<string, any[]>);
+			}, {} as Record<string, unknown[]>);
 
 		if (Object.keys(mcpTools).length === 0) {
 			container.createEl('p', { text: 'No MCP tools available. Check server connections.' });
@@ -296,7 +296,7 @@ export class MCPInspectorModal extends Modal {
 			toolsTable.setCssProps({ 'border-collapse': 'collapse' });
 
 			const headerRow = toolsTable.createEl('tr');
-			headerRow.createEl('th', { text: 'Tool Name' });
+			headerRow.createEl('th', { text: 'Tool name' });
 			headerRow.createEl('th', { text: 'Description' });
 			headerRow.createEl('th', { text: 'Parameters' });
 
@@ -324,7 +324,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderLogsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: 'MCP Connection Logs' });
+		container.createEl('h3', { text: 'MCP connection logs' });
 
 		// Display any stored logs or debugging information
 		const logContainer = container.createDiv();
@@ -361,7 +361,7 @@ export class MCPInspectorModal extends Modal {
 		const testSection = container.createDiv();
 		testSection.setCssProps({ 'margin-top': '16px' });
 
-		testSection.createEl('h4', { text: 'Test Tool Execution' });
+		testSection.createEl('h4', { text: 'Test tool execution' });
 
 		const selectionRow = testSection.createDiv();
 		selectionRow.removeClass('ia-hidden');
@@ -374,7 +374,7 @@ export class MCPInspectorModal extends Modal {
 		const inspectorToolManager = this.plugin.getToolManager();
 		const connectedServers = inspectorToolManager.getMCPServers();
 
-		serverSelect.createEl('option', { text: 'Select a server...', value: '' });
+		serverSelect.createEl('option', { text: 'select a server...', value: '' });
 		for (const serverName of connectedServers) {
 			serverSelect.createEl('option', { text: serverName, value: serverName });
 		}
@@ -382,7 +382,7 @@ export class MCPInspectorModal extends Modal {
 		const toolSelect = selectionRow.createEl('select');
 		toolSelect.setCssProps({ 'flex': '1' });
 		toolSelect.disabled = true;
-		toolSelect.createEl('option', { text: 'Select a tool...', value: '' });
+		toolSelect.createEl('option', { text: 'select a tool...', value: '' });
 
 		// Container for dynamic parameter inputs
 		const paramsContainer = testSection.createDiv();
@@ -404,7 +404,7 @@ export class MCPInspectorModal extends Modal {
 				const toolsByProvider = inspectorToolManager.getToolsByProvider();
 				const serverTools = toolsByProvider.get(`mcp:${serverSelect.value}`) || [];
 
-				toolSelect.createEl('option', { text: 'Select a tool...', value: '' });
+				toolSelect.createEl('option', { text: 'select a tool...', value: '' });
 				for (const tool of serverTools) {
 					toolSelect.createEl('option', {
 						text: tool.definition.name,
@@ -467,7 +467,7 @@ export class MCPInspectorModal extends Modal {
 				} else if (param.type === 'object' || param.type === 'array') {
 					// Object/Array: use textarea for JSON input
 					input = paramRow.createEl('textarea');
-					(input as HTMLTextAreaElement).rows = 3;
+					(input).rows = 3;
 					input.placeholder = param.type === 'array' ? '["item1", "item2"]' : '{"key": "value"}';
 				} else {
 					// String: use text input
@@ -488,7 +488,7 @@ export class MCPInspectorModal extends Modal {
 		buttonsRow.setCssProps({ 'margin-bottom': '12px' });
 
 		// Test execution button
-		const testBtn = buttonsRow.createEl('button', { text: 'Execute Tool' });
+		const testBtn = buttonsRow.createEl('button', { text: 'Perform tool' });
 		testBtn.addClass('ia-button');
 		testBtn.addClass('ia-button--primary');
 		testBtn.disabled = true;
@@ -498,7 +498,7 @@ export class MCPInspectorModal extends Modal {
 		});
 
 		// Clear button
-		const clearBtn = buttonsRow.createEl('button', { text: 'Clear Results' });
+		const clearBtn = buttonsRow.createEl('button', { text: 'Clear results' });
 		clearBtn.addClass('ia-button');
 		clearBtn.addClass('ia-button--ghost');
 
@@ -519,7 +519,7 @@ export class MCPInspectorModal extends Modal {
 			if (!toolSelect.value) return;
 
 			// Collect parameter values
-			const args: Record<string, any> = {};
+			const args: Record<string, unknown> = {};
 			const paramInputs = paramsContainer.querySelectorAll('input, select, textarea');
 
 			let validationError = false;
@@ -530,7 +530,7 @@ export class MCPInspectorModal extends Modal {
 
 				if (!paramName) continue;
 
-				let value: any;
+				let value: unknown;
 				if (input instanceof HTMLInputElement && input.type === 'checkbox') {
 					value = input.checked;
 				} else if (input instanceof HTMLTextAreaElement || input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
@@ -616,7 +616,7 @@ export class MCPInspectorModal extends Modal {
 				}
 
 				new Notice(result.success ? 'Tool executed successfully' : 'Tool execution failed');
-			} catch (error: any) {
+			} catch (error: unknown) {
 				resultContainer.empty();
 				resultContainer.removeClass('ia-hidden');
 
@@ -632,7 +632,7 @@ export class MCPInspectorModal extends Modal {
 				new Notice(`Execution error: ${error.message}`);
 			} finally {
 				testBtn.disabled = false;
-				testBtn.textContent = 'Execute Tool';
+				testBtn.textContent = 'Perform Tool';
 			}
 		});
 
@@ -681,7 +681,7 @@ export class MCPInspectorModal extends Modal {
 				});
 
 				console.debug(`[MCP] ${server.name} connection test: ${tools.length} tools available`);
-			} catch (error: any) {
+			} catch (error: unknown) {
 				console.error(`[MCP] ${server.name} connection test failed:`, error);
 				results.push({
 					name: server.name,
@@ -707,7 +707,7 @@ export class MCPInspectorModal extends Modal {
 			// Show detailed results in console
 			console.debug('[MCP] Connection test results:');
 			for (const result of results) {
-				console.debug(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'Connected'}`);
+				console.debug(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'connected'}`);
 			}
 		}
 	}

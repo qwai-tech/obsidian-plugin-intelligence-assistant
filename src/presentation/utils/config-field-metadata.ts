@@ -61,7 +61,7 @@ function normalizeArrayPath(path: string): string {
 	return path;
 }
 
-function formatConstraints(constraints: Record<string, any> | undefined): string | null {
+function formatConstraints(constraints: Record<string, unknown> | undefined): string | null {
 	if (!constraints || Object.keys(constraints).length === 0) {
 		return null;
 	}

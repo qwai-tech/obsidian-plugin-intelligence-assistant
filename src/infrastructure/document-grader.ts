@@ -17,7 +17,7 @@ export interface GradeRequest {
   document: {
     content: string;
     path: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   };
   chunkId: string;
 }
@@ -87,12 +87,13 @@ export class DocumentGrader {
       return grade;
     } catch (error) {
       console.error('[DocumentGrader] Error grading document:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
       return {
         relevance: 5,
         accuracy: 5,
         supportQuality: 5,
         shouldUse: true,
-        explanation: `Error during grading: ${error.message}`,
+        explanation: `Error during grading: ${errorMessage}`,
         chunkId: request.chunkId,
         documentPath: request.document.path
       };
@@ -122,7 +123,7 @@ export class DocumentGrader {
     return grades;
   }
 
-  filterDocumentsByGrade(documents: any[], grades: DocumentGrade[]): any[] {
+  filterDocumentsByGrade(documents: Array<{ id: string; [key: string]: unknown }>, grades: DocumentGrade[]): Array<{ id: string; [key: string]: unknown }> {
     if (!this.config.enableGradingThreshold) {
       return documents;
     }
@@ -156,7 +157,7 @@ export class DocumentGrader {
       .replace('{path}', request.document.path || 'unknown');
   }
 
-  private parseResponse(content: string): any {
+  private parseResponse(content: string): unknown {
     try {
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       return JSON.parse(jsonMatch ? jsonMatch[0] : content);
@@ -166,7 +167,7 @@ export class DocumentGrader {
     }
   }
 
-  private createGrade(gradeResult: any, request: GradeRequest): DocumentGrade {
+  private createGrade(gradeResult: unknown, request: GradeRequest): DocumentGrade {
     return {
       relevance: this.normalizeScore(gradeResult.relevance),
       accuracy: this.normalizeScore(gradeResult.accuracy),
@@ -211,7 +212,7 @@ Respond with a JSON object in this exact format:
 }`;
   }
 
-  private normalizeScore(score: any): number {
+  private normalizeScore(score: unknown): number {
     if (typeof score === 'number') {
       return Math.max(0, Math.min(10, Math.round(score * 10) / 10));
     }

@@ -130,7 +130,7 @@ export class CodeImportExportService {
    */
   import(code: string, format?: 'json' | 'yaml' | 'typescript'): ImportResult {
     try {
-      let workflowData: any;
+      let workflowData: unknown;
 
       if (format === 'yaml' || this.isYaml(code)) {
         workflowData = this.parseYaml(code);
@@ -165,7 +165,7 @@ export class CodeImportExportService {
         errors: [],
         warnings: [],
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
         errors: [error.message],
@@ -177,7 +177,7 @@ export class CodeImportExportService {
   /**
    * Parse JSON format
    */
-  private parseJson(json: string): any {
+  private parseJson(json: string): unknown {
     try {
       return JSON.parse(json);
     } catch (error) {
@@ -188,7 +188,7 @@ export class CodeImportExportService {
   /**
    * Parse YAML format (simplified - would need a proper YAML parser in real implementation)
    */
-  private parseYaml(yaml: string): any {
+  private parseYaml(yaml: string): unknown {
     // This is a simplified YAML parser - a real implementation would use a proper library
     // For now, we'll convert simple YAML to JSON by extracting the workflow section
     
@@ -201,7 +201,7 @@ export class CodeImportExportService {
     const workflowSection = workflowSectionMatch[1];
     
     // Extract individual fields
-    const workflowData: any = {
+    const workflowData: unknown = {
       nodes: [],
       connections: []
     };
@@ -219,7 +219,7 @@ export class CodeImportExportService {
     const nodeMatches = workflowSection.match(/(\s+-\s*id:\s*(\S+)[\s\S]*?)(?=\n\s*-\s*id:|\n\s*connections:|$)/g);
     if (nodeMatches) {
       for (const match of nodeMatches) {
-        const node: any = {};
+        const node: unknown = {};
         const id = match.match(/id:\s*(\S+)/)?.[1];
         const type = match.match(/type:\s*(\S+)/)?.[1];
         const name = match.match(/name:\s*(.+)/)?.[1]?.trim();
@@ -267,7 +267,7 @@ export class CodeImportExportService {
   /**
    * Parse TypeScript format (extracts JSON object from TS file)
    */
-  private parseTypescript(ts: string): any {
+  private parseTypescript(ts: string): unknown {
     // Look for the workflow data object in the TypeScript code
     const workflowMatch = ts.match(/workflowData\s*=\s*(\{[\s\S]*?\});/);
     if (!workflowMatch) {
@@ -301,7 +301,7 @@ export class CodeImportExportService {
   /**
    * Validate workflow data structure
    */
-  private validateWorkflowData(data: any): string[] {
+  private validateWorkflowData(data: unknown): string[] {
     const errors: string[] = [];
 
     if (!data.id) errors.push('Workflow must have an ID');
@@ -330,7 +330,7 @@ export class CodeImportExportService {
   /**
    * Extract metadata from workflow
    */
-  private getMetadata(workflow: Workflow): any {
+  private getMetadata(workflow: Workflow): unknown {
     return {
       id: workflow.id,
       name: workflow.name,

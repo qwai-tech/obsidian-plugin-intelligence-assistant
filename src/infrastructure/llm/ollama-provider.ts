@@ -1,6 +1,17 @@
 import { BaseLLMProvider } from './base-provider';
 import { ChatRequest, ChatResponse, StreamChunk } from './types';
-import type { ModelInfo } from '@/types';
+import type { ModelCapability, ModelInfo } from '@/types';
+import { requestUrl } from 'obsidian';
+
+interface OllamaChatApiResponse {
+	message?: { content?: string };
+	prompt_eval_count?: number;
+	eval_count?: number;
+}
+
+interface OllamaModelsResponse {
+	models?: Array<{ name: string; [key: string]: unknown }>;
+}
 
 /**
  * Ollama Provider using native Ollama API
@@ -38,26 +49,26 @@ export class OllamaProvider extends BaseLLMProvider {
 			},
 		};
 
-		const response = await fetch({
-			url,
+		const response = await requestUrl({
+			url: url,
 			method: 'POST',
 			headers: this.getHeaders(),
 			body: JSON.stringify(body),
 		});
 
-		if (response.status !== 200) {
-			const error = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
+		if (response.status < 200 || response.status >= 300) {
+			const error = await response.text();
 			throw new Error(`Ollama API request failed: ${response.status} ${error}`);
 		}
 
-		const data = response.json;
+		const data = (await response.json()) as OllamaChatApiResponse;
 
 		return {
-			content: data.message?.content || '',
+			content: data.message?.content ?? '',
 			usage: {
-				promptTokens: data.prompt_eval_count || 0,
-				completionTokens: data.eval_count || 0,
-				totalTokens: (data.prompt_eval_count || 0) + (data.eval_count || 0),
+				promptTokens: data.prompt_eval_count ?? 0,
+				completionTokens: data.eval_count ?? 0,
+				totalTokens: (data.prompt_eval_count ?? 0) + (data.eval_count ?? 0),
 			},
 		};
 	}
@@ -79,14 +90,14 @@ export class OllamaProvider extends BaseLLMProvider {
 		};
 
 		try {
-			// Use native fetch for true streaming support
-			const response = await fetch(url, {
+			const response = await requestUrl({
+				url: url,
 				method: 'POST',
 				headers: this.getHeaders(),
 				body: JSON.stringify(body),
 			});
 
-			if (!response.ok) {
+			if (response.status < 200 || response.status >= 300) {
 				const error = await response.text();
 				throw new Error(`Ollama API request failed: ${response.status} ${error}`);
 			}
@@ -149,21 +160,21 @@ export class OllamaProvider extends BaseLLMProvider {
 			const url = `${baseUrl}/api/tags`;
 
 			console.debug('[Ollama] Making request to Ollama API...');
-			const response = await fetch({
-				url,
+			const response = await requestUrl({
+				url: url,
 				method: 'GET',
 				headers: this.getHeaders(),
 			});
 
 			console.debug(`[Ollama] Response status: ${response.status}`);
 
-			if (response.status !== 200) {
-				const errorText = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
+			if (response.status < 200 || response.status >= 300) {
+				const errorText = response.text;
 				console.error('[Ollama] API error response:', response.status, errorText);
 				throw new Error(`Failed to fetch Ollama models: ${response.status} - ${errorText}`);
 			}
 
-			const data = response.json;
+			const data = JSON.parse(response.text) as OllamaModelsResponse;
 			console.debug('[Ollama] Response data:', JSON.stringify(data, null, 2));
 
 			// Check if models array exists
@@ -178,7 +189,7 @@ export class OllamaProvider extends BaseLLMProvider {
 			}
 
 			// Map Ollama models to ModelInfo format
-			const models = data.models.map((model: any) => {
+			const models = data.models.map((model: { name: string; [key: string]: unknown }) => {
 				const capabilities = this.inferCapabilities(model.name);
 
 				return {
@@ -192,16 +203,20 @@ export class OllamaProvider extends BaseLLMProvider {
 
 			console.debug(`[Ollama] Successfully fetched ${models.length} models:`, models.map((m: ModelInfo) => m.name).join(', '));
 			return models;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error('[Ollama] Failed to fetch models:', error);
+
+			// Type guard for error with message property
+			const errorMessage = error instanceof Error ? error.message : String(error);
+
 			console.error('[Ollama] Error details:', {
-				message: error.message,
+				message: errorMessage,
 				baseUrl: baseUrl,
 				suggestion: 'Make sure Ollama is running. Run: ollama serve'
 			});
 
 			// Check if it's a connection error
-			if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError') || error.message.includes('ECONNREFUSED')) {
+			if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError') || errorMessage.includes('ECONNREFUSED')) {
 				console.error('[Ollama] Connection refused. Is Ollama running on', baseUrl, '?');
 				console.error('[Ollama] Try running: ollama serve');
 			}
@@ -214,8 +229,8 @@ export class OllamaProvider extends BaseLLMProvider {
 	/**
 	 * Infer model capabilities from model name
 	 */
-	private inferCapabilities(modelName: string): string[] {
-		const capabilities: string[] = ['chat', 'streaming'];
+	private inferCapabilities(modelName: string): ModelCapability[] {
+		const capabilities: ModelCapability[] = ['chat', 'streaming'];
 
 		// Check for vision models (common vision model patterns)
 		if (modelName.includes('vision') || 
@@ -255,13 +270,14 @@ export class OllamaProvider extends BaseLLMProvider {
 		};
 
 		try {
-			const response = await fetch(url, {
+			const response = await requestUrl({
+				url: url,
 				method: 'POST',
 				headers: this.getHeaders(),
 				body: JSON.stringify(body),
 			});
 
-			if (!response.ok) {
+			if (response.status < 200 || response.status >= 300) {
 				const errorText = await response.text();
 				throw new Error(`Failed to pull model: ${response.status} ${errorText}`);
 			}
@@ -346,15 +362,15 @@ export class OllamaProvider extends BaseLLMProvider {
 		};
 
 		try {
-			const response = await fetch({
-				url,
+			const response = await requestUrl({
+				url: url,
 				method: 'DELETE',
 				headers: this.getHeaders(),
 				body: JSON.stringify(body),
 			});
 
-			if (response.status !== 200) {
-				const errorText = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
+			if (response.status < 200 || response.status >= 300) {
+				const errorText = await response.text();
 				throw new Error(`Failed to remove model: ${response.status} ${errorText}`);
 			}
 

@@ -31,7 +31,7 @@ class SearchableImageModal extends Modal {
 		contentEl.empty();
 		contentEl.addClass('image-picker-modal');
 
-		contentEl.createEl('h2', { text: 'Select Images' });
+		contentEl.createEl('h2', { text: 'Select images' });
 
 		// Search input
 		this.searchInput = contentEl.createEl('input', {

@@ -29,8 +29,8 @@ export class RAGService extends BaseService {
 	private embeddingManager: EmbeddingManager | null = null;
 
 	constructor(
-		private app: App,
-		private config: RAGConfig
+		private _app: App,
+		private _config: RAGConfig
 	) {
 		super();
 	}
@@ -45,8 +45,8 @@ export class RAGService extends BaseService {
 			// EmbeddingManager doesn't require construction, uses static methods
 			// RAGManager needs app, config, and llmConfigs (empty array as fallback)
 			this.ragManager = new RAGManager(
-				this.app,
-				this.config,
+				this._app,
+				this._config,
 				[] // LLMConfigs would need to be passed from plugin settings
 			);
 
@@ -79,8 +79,8 @@ export class RAGService extends BaseService {
 
 		// Convert SearchResult to RAGSource and filter by similarity threshold
 		let filtered: RAGSource[] = results
-			.filter((r: any) => r.score >= threshold)
-			.map((r: any) => ({
+			.filter((r: unknown) => r.score >= threshold)
+			.map((r: unknown) => ({
 				path: r.file || r.metadata?.file || 'unknown',
 				content: r.content,
 				similarity: r.score,
@@ -163,14 +163,14 @@ export class RAGService extends BaseService {
 	 * Update configuration
 	 */
 	updateConfig(config: RAGConfig): void {
-		this.config = config;
+		this._config = config;
 	}
 
 	/**
 	 * Check if RAG is enabled
 	 */
 	isEnabled(): boolean {
-		return this.config.enabled && this.ready;
+		return this._config.enabled && this.ready;
 	}
 
 	/**

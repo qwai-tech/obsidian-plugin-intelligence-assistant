@@ -9,8 +9,8 @@ import { Events } from 'obsidian';
 
 export interface StateChangeEvent {
 	field: string;
-	oldValue: any;
-	newValue: any;
+	oldValue: unknown;
+	newValue: unknown;
 }
 
 export interface AgentExecutionStep {
@@ -216,7 +216,7 @@ export class ChatViewState extends Events {
 	}
 
 	// Current references (for compatibility)
-	get currentReferences(): any[] {
+	get currentReferences(): unknown[] {
 		return this._referencedFiles.map(file => ({
 			type: 'path' in file ? 'file' : 'folder',
 			path: file.path,
@@ -337,7 +337,7 @@ export class ChatViewState extends Events {
 	/**
 	 * Get a snapshot of current state for debugging
 	 */
-	getSnapshot(): Record<string, any> {
+	getSnapshot(): Record<string, unknown> {
 		return {
 			messagesCount: this._messages.length,
 			currentConversationId: this._currentConversationId,

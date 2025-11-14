@@ -172,7 +172,7 @@ export class DebugService {
       session.stepNumber++;
       
       return { success: true, output: result };
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Update node state to error
       const endTime = Date.now();
       session.nodeStates.set(nodeId, {
@@ -285,7 +285,7 @@ export class DebugService {
       session.status = 'completed';
       session.endTime = Date.now();
       return { success: true, log: session.log };
-    } catch (error: any) {
+    } catch (error: unknown) {
       session.status = 'error';
       session.endTime = Date.now();
       return { success: false, error: error.message, log: session.log };
@@ -404,7 +404,7 @@ export class DebugService {
     node: WorkflowNode, 
     workflow: WorkflowGraph, 
     services: WorkflowServices,
-    contextData?: any
+    contextData?: unknown
   ): Promise<{ success: boolean; output?: NodeData[]; error?: string }> {
     // Create a temporary debug session for single node execution
     const sessionId = await this.startSession(workflow, services);

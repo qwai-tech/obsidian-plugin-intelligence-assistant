@@ -10,7 +10,7 @@
  */
 export interface NodeData {
 	/** JSON data payload */
-	json: Record<string, any>;
+	json: Record<string, unknown>;
 	/** Binary data (files, images, etc.) using Map for better performance */
 	binary?: Map<string, Blob>;
 }
@@ -30,7 +30,7 @@ export interface WorkflowNode {
 	/** Y coordinate on canvas */
 	y: number;
 	/** Node configuration parameters */
-	config: Record<string, any>;
+	config: Record<string, unknown>;
 }
 
 /**
@@ -98,9 +98,9 @@ export interface ExecutionLogEntry {
 	/** Error message (for error status) */
 	error?: string;
 	/** Input data snapshot */
-	input?: any;
+	input?: unknown;
 	/** Output data snapshot */
-	output?: any;
+	output?: unknown;
 }
 
 /**
@@ -133,8 +133,8 @@ export interface NodeDef {
 	/** Input and output specifications */
 	io?: NodeIO;
 	/** Execute function - processes input data and returns output */
-	execute: (input: NodeData[], config: Record<string, any>, context: ExecutionContext) => Promise<NodeData[]>;
-	[key: string]: any;
+	execute: (input: NodeData[], config: Record<string, unknown>, context: ExecutionContext) => Promise<NodeData[]>;
+	[key: string]: unknown;
 }
 
 /**
@@ -165,7 +165,7 @@ export interface DataSpecification {
   /** Whether the data is optional */
   optional?: boolean;
   /** Example value for documentation */
-  example?: any;
+  example?: unknown;
 }
 
 export interface NodeParameter {
@@ -176,7 +176,7 @@ export interface NodeParameter {
 	/** Parameter type */
 	type: 'string' | 'number' | 'boolean' | 'select' | 'textarea' | 'code' | 'json';
 	/** Default value */
-	default: any;
+	default: unknown;
 	/** Whether required */
 	required?: boolean;
 	/** Placeholder text */
@@ -184,11 +184,11 @@ export interface NodeParameter {
 	/** Help text */
 	description?: string;
 	/** Options (for select type) */
-	options?: Array<{ label: string; value: any }>;
+	options?: Array<{ label: string; value: unknown }>;
 	/** Optional async option loader */
-	getOptions?: () => Promise<Array<{ label: string; value: any }>>;
+	getOptions?: () => Promise<Array<{ label: string; value: unknown }>>;
 	/** Validation function */
-	validate?: (value: any) => boolean | string;
+	validate?: (value: unknown) => boolean | string;
 }
 
 /**
@@ -217,20 +217,20 @@ export interface ExecutionContext {
  */
 export interface WorkflowServices {
 	/** Obsidian app instance (for creating modals, etc.) */
-	app?: any;
+	app?: unknown;
 	/** Obsidian vault access */
-	vault: any; // Will be typed as Vault when integrated
+	vault: unknown; // Will be typed as Vault when integrated
 	/** AI service */
 	ai?: {
-		chat: (messages: any[], options?: any) => Promise<string>;
+		chat: (messages: unknown[], options?: unknown) => Promise<string>;
 		embed: (text: string) => Promise<number[]>;
 	};
 	/** HTTP client */
 	http?: {
-		request: (url: string, options?: any) => Promise<any>;
+		request: (url: string, options?: unknown) => Promise<unknown>;
 	};
 	/** Plugin settings (for accessing configured models, etc.) */
-	settings?: any;
+	settings?: unknown;
 }
 
 /**
@@ -308,13 +308,13 @@ export interface WorkflowEvents {
 	/** Execution error */
 	'execution:error': { error: string };
 	/** Execution view full data requested */
-	'execution:view-full': { nodeId: string; log: { input?: any; output?: any } };
+	'execution:view-full': { nodeId: string; log: { input?: unknown; output?: unknown } };
 }
 
 /**
  * Simple event emitter interface
  */
-export interface EventEmitter<T extends Record<string, any>> {
+export interface EventEmitter<T extends Record<string, unknown>> {
 	on<K extends keyof T>(event: K, handler: (data: T[K]) => void): void;
 	off<K extends keyof T>(event: K, handler: (data: T[K]) => void): void;
 	emit<K extends keyof T>(event: K, data: T[K]): void;

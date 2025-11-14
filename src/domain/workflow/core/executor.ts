@@ -81,7 +81,7 @@ export class WorkflowExecutor {
 				log: this.log,
 			};
 
-		} catch (error: any) {
+		} catch (error: unknown) {
 			// Error
 			return {
 				success: false,
@@ -170,7 +170,7 @@ export class WorkflowExecutor {
 				output: result.length > 0 ? result[0].json : undefined,
 			});
 
-		} catch (error: any) {
+		} catch (error: unknown) {
 			// Update state to error
 			const endTime = Date.now();
 			const errorState: NodeExecutionState = {

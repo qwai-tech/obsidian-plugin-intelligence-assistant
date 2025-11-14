@@ -13,7 +13,7 @@ export class ExpressionParser {
 	 * Parse a single expression
 	 * Example: "{{input.name}}" with context {input: {name: "John"}} => "John"
 	 */
-	static parse(expr: string, context: Record<string, any>): any {
+	static parse(expr: string, context: Record<string, unknown>): unknown {
 		// Remove {{ }} wrapper
 		const code = expr.replace(/^\{\{|\}\}$/g, '').trim();
 
@@ -34,7 +34,7 @@ export class ExpressionParser {
 	 * Replace all expressions in a string
 	 * Example: "Hello {{input.name}}!" with context {input: {name: "John"}} => "Hello John!"
 	 */
-	static replace(text: string, context: Record<string, any>): string {
+	static replace(text: string, context: Record<string, unknown>): string {
 		if (typeof text !== 'string') {
 			return text;
 		}
@@ -53,7 +53,7 @@ export class ExpressionParser {
 	/**
 	 * Replace expressions in an object recursively
 	 */
-	static replaceInObject(obj: any, context: Record<string, any>): any {
+	static replaceInObject(obj: unknown, context: Record<string, unknown>): unknown {
 		if (typeof obj === 'string') {
 			return this.replace(obj, context);
 		}
@@ -63,7 +63,7 @@ export class ExpressionParser {
 		}
 
 		if (obj && typeof obj === 'object') {
-			const result: any = {};
+			const result: unknown = {};
 			for (const [key, value] of Object.entries(obj)) {
 				result[key] = this.replaceInObject(value, context);
 			}
@@ -101,7 +101,7 @@ export class ExpressionParser {
 			// Try to create function to check syntax
 			new Function(`return ${code}`);
 			return { valid: true };
-		} catch (error: any) {
+		} catch (error: unknown) {
 			return {
 				valid: false,
 				error: error.message,

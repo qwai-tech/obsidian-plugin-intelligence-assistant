@@ -6,13 +6,13 @@ export interface ILLMProvider {
   readonly models: ModelConfig[];
   readonly isInitialized: boolean;
 
-  initialize(config: LLMProviderConfig): Promise<void>;
-  chatCompletion(messages: LLMMessage[], options: LLMRequestOptions): Promise<LLMResponse>;
-  chatCompletionStream(messages: LLMMessage[], options: LLMRequestOptions, onChunk: (chunk: LLMStreamChunk) => void): Promise<LLMResponse>;
-  generateEmbedding(text: string | string[], model?: string): Promise<EmbeddingResponse>;
-  countTokens(text: string, model?: string): Promise<TokenCount>;
-  validateConfig(config: LLMProviderConfig): ValidationResult;
-  testConnection(config?: LLMProviderConfig): Promise<ConnectionTest>;
+  initialize(_config: LLMProviderConfig): Promise<void>;
+  chatCompletion(_messages: LLMMessage[], _options: LLMRequestOptions): Promise<LLMResponse>;
+  chatCompletionStream(_messages: LLMMessage[], _options: LLMRequestOptions, _onChunk: (_chunk: LLMStreamChunk) => void): Promise<LLMResponse>;
+  generateEmbedding(_text: string | string[], _model?: string): Promise<EmbeddingResponse>;
+  countTokens(_text: string, _model?: string): Promise<TokenCount>;
+  validateConfig(_config: LLMProviderConfig): ValidationResult;
+  testConnection(_config?: LLMProviderConfig): Promise<ConnectionTest>;
   cleanup(): Promise<void>;
 }
 
@@ -41,7 +41,7 @@ export interface LLMProviderConfig {
   baseUrl?: string;
   defaultModel?: string;
   timeout?: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Message types
@@ -58,14 +58,14 @@ export interface LLMRequestOptions {
   topP?: number;
   frequencyPenalty?: number;
   presencePenalty?: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Response types
 export interface LLMResponse {
   content: {
     text: string;
-    toolCalls?: any[];
+    toolCalls?: unknown[];
   };
   usage: {
     promptTokens: number;

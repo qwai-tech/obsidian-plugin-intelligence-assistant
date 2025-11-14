@@ -25,7 +25,7 @@ interface EmbeddingResponse {
 export class EmbeddingManager {
   private static readonly DEFAULT_EMBEDDING_MODEL = 'all-MiniLM-L6-v2';
   private static worker: Worker | null = null;
-  private static pendingRequests: Map<string, { resolve: (value: number[]) => void, reject: (reason: any) => void }> = new Map();
+  private static pendingRequests: Map<string, { resolve: (value: number[]) => void, reject: (reason: unknown) => void }> = new Map();
   
   // Available embedding models - in practice, this could be extended to support various providers
   private static readonly EMBEDDING_MODELS: EmbeddingModel[] = [
@@ -66,15 +66,15 @@ export class EmbeddingManager {
     // Try to dynamically load LLM models with embedding capability
     try {
       // Access the plugin settings to get all configured models
-      if (typeof window !== 'undefined' && (window as any).app) {
-        const app = (window as any).app;
+      if (typeof window !== 'undefined' && (window as unknown).app) {
+        const app = (window as unknown).app;
         const plugin = app.plugins?.plugins?.['intelligence-assistant'];
 
         if (plugin?.settings?.llmConfigs) {
           // Iterate through all LLM configs and their cached models
-          plugin.settings.llmConfigs.forEach((config: any) => {
+          plugin.settings.llmConfigs.forEach((config: unknown) => {
             if (config.cachedModels) {
-              config.cachedModels.forEach((model: any) => {
+              config.cachedModels.forEach((model: unknown) => {
                 // Check if model has embedding capability
                 if (model.capabilities?.includes('embedding') && model.enabled !== false) {
                   // Add to list if not already present

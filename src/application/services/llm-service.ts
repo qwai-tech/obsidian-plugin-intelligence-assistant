@@ -27,15 +27,15 @@ export class LLMService extends BaseService {
 	private providers: Map<string, ILLMProvider> = new Map();
 
 	constructor(
-		private app: App,
-		private configs: LLMConfig[]
+		private _app: App,
+		private _configs: LLMConfig[]
 	) {
 		super();
 	}
 
 	async initialize(): Promise<void> {
 		// Initialize providers for each config
-		for (const config of this.configs) {
+		for (const config of this._configs) {
 			try {
 				const provider = ProviderFactory.createProvider(config);
 				this.providers.set(config.provider, provider);
@@ -73,7 +73,7 @@ export class LLMService extends BaseService {
 	 * Get model by ID
 	 */
 	getModel(modelId: string): ModelInfo | null {
-		for (const config of this.configs) {
+		for (const config of this._configs) {
 			const model = config.cachedModels?.find(m => m.id === modelId);
 			if (model) return model;
 		}
@@ -85,7 +85,7 @@ export class LLMService extends BaseService {
 	 */
 	getAllModels(): ModelInfo[] {
 		const models: ModelInfo[] = [];
-		for (const config of this.configs) {
+		for (const config of this._configs) {
 			if (config.cachedModels) {
 				models.push(...config.cachedModels);
 			}
@@ -97,7 +97,7 @@ export class LLMService extends BaseService {
 	 * Get models by provider
 	 */
 	getModelsByProvider(providerName: string): ModelInfo[] {
-		const config = this.configs.find(c => c.provider === providerName);
+		const config = this._configs.find(c => c.provider === providerName);
 		return config?.cachedModels || [];
 	}
 
@@ -131,7 +131,7 @@ export class LLMService extends BaseService {
 	async streamChat(
 		modelId: string,
 		messages: Message[],
-		onChunk: (chunk: StreamChunk) => void,
+		onChunk: (_chunk: StreamChunk) => void,
 		options?: LLMServiceOptions
 	): Promise<void> {
 		const provider = this.getProviderForModel(modelId);
@@ -154,7 +154,7 @@ export class LLMService extends BaseService {
 	 * Refresh models for a provider
 	 */
 	async refreshModels(providerName: string): Promise<ModelInfo[]> {
-		const config = this.configs.find(c => c.provider === providerName);
+		const config = this._configs.find(c => c.provider === providerName);
 		if (!config) {
 			throw new Error(`Config not found for provider: ${providerName}`);
 		}
@@ -170,7 +170,7 @@ export class LLMService extends BaseService {
 	 * Update configs
 	 */
 	updateConfigs(configs: LLMConfig[]): void {
-		this.configs = configs;
+		this._configs = configs;
 	}
 
 	/**

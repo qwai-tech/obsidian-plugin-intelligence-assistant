@@ -1,8 +1,8 @@
 // Dependency injection container
 export class DIContainer {
-  private services = new Map<string, any>();
-  private factories = new Map<string, () => any>();
-  private singletonFactories = new Map<string, () => any>();
+  private services = new Map<string, unknown>();
+  private factories = new Map<string, () => unknown>();
+  private singletonFactories = new Map<string, () => unknown>();
 
   register<T>(key: string, factory: () => T, singleton: boolean = true): void {
     if (singleton) {
@@ -60,8 +60,8 @@ export class DIContainer {
       throw new Error('Async factories must be resolved with getAsync');
     });
     // Store separately for async resolution
-    (this as any).asyncFactories = (this as any).asyncFactories || new Map();
-    (this as any).asyncFactories.set(key, factory);
+    (this as unknown).asyncFactories = (this as unknown).asyncFactories || new Map();
+    (this as unknown).asyncFactories.set(key, factory);
   }
 }
 

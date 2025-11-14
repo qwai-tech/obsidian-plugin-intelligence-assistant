@@ -195,7 +195,7 @@ export class ToolManager {
 	}
 
 	// Convert tool definitions to OpenAI function calling format
-	toOpenAIFunctions(): any[] {
+	toOpenAIFunctions(): unknown[] {
 		return this.getAllTools().map(tool => ({
 			name: tool.definition.name,
 			description: tool.definition.description,
@@ -208,7 +208,7 @@ export class ToolManager {
 						...(param.enum ? { enum: param.enum } : {})
 					};
 					return acc;
-				}, {} as Record<string, any>),
+				}, {} as Record<string, unknown>),
 				required: tool.definition.parameters
 					.filter(p => p.required)
 					.map(p => p.name)
@@ -217,7 +217,7 @@ export class ToolManager {
 	}
 
 	// Convert tool definitions to Anthropic tools format
-	toAnthropicTools(): any[] {
+	toAnthropicTools(): unknown[] {
 		return this.getAllTools().map(tool => ({
 			name: tool.definition.name,
 			description: tool.definition.description,
@@ -230,7 +230,7 @@ export class ToolManager {
 						...(param.enum ? { enum: param.enum } : {})
 					};
 					return acc;
-				}, {} as Record<string, any>),
+				}, {} as Record<string, unknown>),
 				required: tool.definition.parameters
 					.filter(p => p.required)
 					.map(p => p.name)

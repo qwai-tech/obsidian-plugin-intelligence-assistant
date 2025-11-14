@@ -132,13 +132,13 @@ export const errorHandler = new ErrorHandler();
  */
 export function HandleErrors(context?: string, options?: ErrorHandlerOptions) {
 	return function (
-		target: any,
+		target: object,
 		propertyKey: string,
 		descriptor: PropertyDescriptor
 	) {
 		const originalMethod = descriptor.value;
 
-		descriptor.value = async function (...args: any[]) {
+		descriptor.value = async function (...args: unknown[]) {
 			try {
 				return await originalMethod.apply(this, args);
 			} catch (error) {

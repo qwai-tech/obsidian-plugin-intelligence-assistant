@@ -99,7 +99,7 @@ export class WorkflowCanvas {
 	private executionStates = new Map<string, NodeExecutionState>();
 
 	// Execution logs with input/output data
-	private executionLogs = new Map<string, { input?: any; output?: any }>();
+	private executionLogs = new Map<string, { input?: unknown; output?: unknown }>();
 
 	// Rendering
 	private renderCache: RenderCache = {
@@ -408,15 +408,15 @@ export class WorkflowCanvas {
 				this.ctx.fillRect(
 					-this.state.offset.x / this.state.scale,
 					-this.state.offset.y / this.state.scale,
-					width / this.state.scale,
-					height / this.state.scale
+					_width / this.state.scale,
+					_height / this.state.scale
 				);
 				return;
 			}
 		}
 		
 		// Create new grid pattern
-		this.drawGrid(width, height);
+		this.drawGrid(_width, _height);
 		
 		// Cache for future use
 		this.renderCache.grid = {
@@ -843,7 +843,7 @@ export class WorkflowCanvas {
 			this.ctx.fillStyle = '#ef4444';
 			this.ctx.textAlign = 'right';
 			this.ctx.textBaseline = 'top';
-			this.ctx.fillText('Error', badgeX - 4, badgeY + 4);
+			this.ctx.fillText('error', badgeX - 4, badgeY + 4);
 		} else if (state.status === 'pending') {
 			// Draw pending badge (yellow clock)
 			this.ctx.fillStyle = '#fbbf24';
@@ -871,12 +871,12 @@ export class WorkflowCanvas {
 	/**
 	 * Draw node input/output info below the node
 	 */
-	private drawNodeIOInfo(node: WorkflowNode, log: { input?: any; output?: any }): void {
+	private drawNodeIOInfo(node: WorkflowNode, log: { input?: unknown; output?: unknown }): void {
 		const infoY = node.y + NODE_HEIGHT + 10;
 		const maxWidth = NODE_WIDTH;
 
 		// Format data for display
-		const formatData = (data: any): string => {
+		const formatData = (data: unknown): string => {
 			if (data === null || data === undefined) return 'null';
 			if (typeof data === 'string') return data.length > 30 ? data.substring(0, 30) + '...' : data;
 			if (typeof data === 'object') {
@@ -1192,7 +1192,7 @@ export class WorkflowCanvas {
 
 		// Delete option
 		const deleteItem = menu.createDiv('context-menu-item');
-		deleteItem.setText('🗑️ Delete');
+		deleteItem.setText('🗑️ delete');
 		deleteItem.addEventListener('click', () => {
 			this.workflow.removeNode(node.id);
 			this.events.emit('node:removed', { nodeId: node.id });
@@ -1202,7 +1202,7 @@ export class WorkflowCanvas {
 
 		// Duplicate option
 		const duplicateItem = menu.createDiv('context-menu-item');
-		duplicateItem.setText('📋 Duplicate');
+		duplicateItem.setText('📋 duplicate');
 		duplicateItem.addEventListener('click', () => {
 			const newNode: WorkflowNode = {
 				...node,
@@ -1237,7 +1237,7 @@ export class WorkflowCanvas {
 
 		// Delete option
 		const deleteItem = menu.createDiv('context-menu-item');
-		deleteItem.setText('🗑️ Delete Connection');
+		deleteItem.setText('🗑️ delete connection');
 		deleteItem.addEventListener('click', () => {
 			this.workflow.removeConnection(connection);
 			this.selectedConnectionId = null;
@@ -1492,7 +1492,7 @@ export class WorkflowCanvas {
 	/**
 	 * Update node execution logs with input/output data
 	 */
-	updateExecutionLogs(logs: Array<{ nodeId: string; input?: any; output?: any }>): void {
+	updateExecutionLogs(logs: Array<{ nodeId: string; input?: unknown; output?: unknown }>): void {
 		this.executionLogs.clear();
 		for (const log of logs) {
 			this.executionLogs.set(log.nodeId, {
@@ -1506,7 +1506,7 @@ export class WorkflowCanvas {
 	/**
 	 * Get execution log for a specific node
 	 */
-	getExecutionLog(nodeId: string): { input?: any; output?: any } | undefined {
+	getExecutionLog(nodeId: string): { input?: unknown; output?: unknown } | undefined {
 		return this.executionLogs.get(nodeId);
 	}
 

@@ -76,20 +76,20 @@ export async function ensureDefaultAgent(
 		settingsDirty = true;
 	}
 
-	const ensuredAgent = defaultAgent!;
+	const ensuredAgent = defaultAgent;
 	ensuredAgent.enabledMcpServers = ensuredAgent.enabledMcpServers ?? [];
 	ensuredAgent.enabledMcpTools = ensuredAgent.enabledMcpTools ?? [];
 
 	// Migrate old agents that still have modelId to use new modelStrategy
-	if ('modelId' in ensuredAgent && typeof (ensuredAgent as any).modelId === 'string') {
-		const modelId = (ensuredAgent as any).modelId;
+	if ('modelId' in ensuredAgent && typeof (ensuredAgent as Record<string, unknown>).modelId === 'string') {
+		const modelId = (ensuredAgent as Record<string, unknown>).modelId as string;
 		// Convert the old modelId to the new modelStrategy format
 		ensuredAgent.modelStrategy = {
 			strategy: 'fixed',
 			modelId: modelId
 		};
 		// Remove the old field
-		delete (ensuredAgent as any).modelId;
+		delete (ensuredAgent as Record<string, unknown>).modelId;
 		settingsDirty = true;
 	}
 

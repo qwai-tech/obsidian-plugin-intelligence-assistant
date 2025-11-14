@@ -5,10 +5,10 @@ export class Message {
     public readonly content: string,
     public readonly role: 'user' | 'assistant' | 'system',
     public readonly timestamp: Date,
-    public readonly metadata?: Record<string, any>
+    public readonly metadata?: Record<string, unknown>
   ) {}
 
-  static create(content: string, role: string, metadata?: Record<string, any>): Message {
+  static create(content: string, role: string, metadata?: Record<string, unknown>): Message {
     // Validate role
     if (!['user', 'assistant', 'system'].includes(role)) {
       throw new Error(`Invalid role: ${role}`);

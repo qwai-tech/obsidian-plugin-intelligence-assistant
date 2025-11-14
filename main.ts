@@ -138,15 +138,15 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		// Add command to open chat in right sidebar
 		this.addCommand({
 			id: 'open-chat-sidebar',
-			name: 'Open AI Chat in Sidebar',
-			callback: () => {
-				this.openChatViewInRightSidebar();
+			name: 'Open AI chat in sidebar',
+			callback: async () => {
+				await this.openChatViewInRightSidebar();
 			}
 		});
 
 		// Add ribbon icon for quick chat access
-		this.chatRibbonIconEl = this.addRibbonIcon('message-circle', 'Open AI Chat', () => {
-			this.openChatViewInRightSidebar();
+		this.chatRibbonIconEl = this.addRibbonIcon('message-circle', 'Open AI Chat', async () => {
+			await this.openChatViewInRightSidebar();
 		});
 		this.chatRibbonIconEl?.addClass('ia-ribbon-chat-icon');
 
@@ -160,10 +160,8 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	onunload() {
 		// Cleanup architecture components
 		this.cleanupArchitecture();
-		
-		// Close and clean up any open chat views
-		this.app.workspace.detachLeavesOfType(CHAT_VIEW_TYPE);
-		this.app.workspace.detachLeavesOfType(WORKFLOW_EDITOR_VIEW_TYPE);
+
+		// Clean up tool manager (don't detach leaves to preserve user layout)
 		if (this.sharedToolManager) {
 			this.sharedToolManager.cleanup().catch(error => console.error('[MCP] Cleanup failed', error));
 			this.sharedToolManager = null;
@@ -495,7 +493,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		}
 
 		menu.addItem((item) => {
-			item.setTitle('Create Intelligence Workflow')
+			item.setTitle('Create intelligence workflow')
 				.setIcon('git-branch-plus')
 				.onClick(async () => {
 					await createWorkflowFile(this.app, targetFolder);

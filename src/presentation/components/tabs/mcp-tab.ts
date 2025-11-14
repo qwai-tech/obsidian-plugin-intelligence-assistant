@@ -18,7 +18,7 @@ export function displayMCPTab(
 	testAllMCPConnections: () => Promise<void>,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'MCP Server Management' });
+	containerEl.createEl('h3', { text: 'MCP server management' });
 
 	const desc = containerEl.createEl('p', {
 		text: 'Configure Model Context Protocol (MCP) servers to extend agent capabilities with external tools and data sources.'
@@ -83,7 +83,7 @@ export function displayMCPTab(
 	});
 
 	// Add new MCP server button
-	const addBtn = toolbar.createEl('button', { text: '+ Add MCP Server' });
+	const addBtn = toolbar.createEl('button', { text: '+ Add MCP server' });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -107,7 +107,7 @@ export function displayMCPTab(
 	// Display existing MCP servers in a table if they exist
 	if (plugin.settings.mcpServers.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No MCP servers configured. Click "Add MCP Server" to get started.');
+		emptyDiv.setText('No MCP servers configured. Select Add MCP server to get started.');
 		return;
 	}
 
@@ -171,10 +171,10 @@ export function displayMCPTab(
 			statusLabel = 'Disabled';
 		} else if (isConnected) {
 			statusKind = 'success';
-			statusLabel = 'Connected';
+			statusLabel = 'connected';
 		} else {
 			statusKind = 'warning';
-			statusLabel = 'Disconnected';
+			statusLabel = 'disconnected';
 		}
 
 		createStatusIndicator(statusStack, statusKind, statusLabel);
@@ -263,7 +263,7 @@ export function displayMCPTab(
 			}
 		});
 
-		const connectBtn = actionsCell.createEl('button', { text: isConnected ? 'Disconnect' : 'Connect' });
+		const connectBtn = actionsCell.createEl('button', { text: isConnected ? 'disconnect' : 'connect' });
 		connectBtn.addClass('ia-button');
 		connectBtn.addClass(isConnected ? 'ia-button--danger' : 'ia-button--ghost');
 		connectBtn.disabled = !server.enabled;

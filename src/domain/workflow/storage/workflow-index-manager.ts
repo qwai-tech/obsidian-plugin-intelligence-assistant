@@ -26,7 +26,7 @@ export interface WorkflowIndexEntry {
 		tags?: string[];
 		author?: string;
 		version?: string;
-		[key: string]: any;
+		[key: string]: unknown;
 	};
 }
 

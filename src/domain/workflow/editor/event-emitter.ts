@@ -4,7 +4,7 @@
  * Simple event emitter for the editor system.
  */
 
-export class EventEmitter<Events extends Record<string, any>> {
+export class EventEmitter<Events extends Record<string, unknown>> {
 	private listeners = new Map<keyof Events, Set<Function>>();
 
 	/**

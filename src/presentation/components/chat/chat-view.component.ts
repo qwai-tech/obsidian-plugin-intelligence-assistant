@@ -1,7 +1,7 @@
 // Chat view component
 import { WorkspaceLeaf } from 'obsidian';
-import { MessageListComponent } from '../components/chat/message-list.component';
-import { ChatState } from '../state/chat.state';
+import { MessageListComponent } from './message-list.component';
+import { ChatState, type ChatStateSnapshot } from '../../state/chat.state';
 import type IntelligenceAssistantPlugin from '@plugin';
 
 export class ChatViewComponent {
@@ -49,7 +49,7 @@ export class ChatViewComponent {
     });
   }
 
-  private updateView(state: any): void {
+  private updateView(state: ChatStateSnapshot): void {
     // Update message list
     if (state.currentConversation) {
       this.messageList.render(state.currentConversation.getMessages());

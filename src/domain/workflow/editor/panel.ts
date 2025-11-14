@@ -14,7 +14,7 @@ import { showConfirm } from '../../../presentation/components/modals/confirm-mod
  * Panel events
  */
 interface PanelEvents {
-	'update': { nodeId: string; config: Record<string, any> };
+	'update': { nodeId: string; config: Record<string, unknown> };
 	'delete': { nodeId: string };
 	'close': void;
 }
@@ -98,7 +98,7 @@ export class ConfigPanel {
 		const actions = this.container.createDiv('config-panel-actions');
 
 		const deleteBtn = actions.createEl('button', {
-			text: 'Delete Node',
+			text: 'Delete node',
 			cls: 'config-panel-btn config-panel-btn-danger',
 		});
 		deleteBtn.addEventListener('click', async () => {
@@ -169,7 +169,7 @@ export class ConfigPanel {
 	/**
 	 * Render string input
 	 */
-	private renderStringInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderStringInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const input = container.createEl('input', {
 			type: 'text',
 			cls: 'config-panel-input',
@@ -188,7 +188,7 @@ export class ConfigPanel {
 	/**
 	 * Render number input
 	 */
-	private renderNumberInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderNumberInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const input = container.createEl('input', {
 			type: 'number',
 			cls: 'config-panel-input',
@@ -207,7 +207,7 @@ export class ConfigPanel {
 	/**
 	 * Render boolean input
 	 */
-	private renderBooleanInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderBooleanInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const wrapper = container.createDiv('config-panel-checkbox-wrapper');
 
 		const input = wrapper.createEl('input', {
@@ -230,7 +230,7 @@ export class ConfigPanel {
 	/**
 	 * Render select input
 	 */
-	private renderSelectInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderSelectInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const select = container.createEl('select', {
 			cls: 'config-panel-select',
 		});
@@ -243,7 +243,7 @@ export class ConfigPanel {
 			for (const config of this.services.settings.llmConfigs) {
 				if (config.cachedModels) {
 					// Filter out disabled models
-					const enabledModels = config.cachedModels.filter((model: any) => model.enabled !== false);
+					const enabledModels = config.cachedModels.filter((model: unknown) => model.enabled !== false);
 					for (const model of enabledModels) {
 						// Avoid duplicates by checking if model is already added
 						const existingOption = options.find(opt => opt.value === model.id);
@@ -277,7 +277,7 @@ export class ConfigPanel {
 	/**
 	 * Render textarea input
 	 */
-	private renderTextareaInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderTextareaInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const textarea = container.createEl('textarea', {
 			cls: 'config-panel-textarea',
 		});
@@ -299,7 +299,7 @@ export class ConfigPanel {
 	/**
 	 * Render code input
 	 */
-	private renderCodeInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderCodeInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const textarea = container.createEl('textarea', {
 			cls: 'config-panel-textarea config-panel-code',
 		});
@@ -323,7 +323,7 @@ export class ConfigPanel {
 	/**
 	 * Render JSON input
 	 */
-	private renderJsonInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderJsonInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const textarea = container.createEl('textarea', {
 			cls: 'config-panel-textarea config-panel-code',
 		});
@@ -359,7 +359,7 @@ export class ConfigPanel {
 	/**
 	 * Update config
 	 */
-	private updateConfig(key: string, value: any): void {
+	private updateConfig(key: string, value: unknown): void {
 		if (!this.currentNode) return;
 
 		this.currentNode.config[key] = value;

@@ -15,7 +15,7 @@ export class SystemPromptEditModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: 'Edit System Prompt' });
+		contentEl.createEl('h2', { text: 'Edit system prompt' });
 
 		// Name field
 		new Setting(contentEl)

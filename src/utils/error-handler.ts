@@ -13,7 +13,7 @@ const errorLogger = createLogger('ErrorHandler');
 export class PluginError extends Error {
 	constructor(
 		message: string,
-		public readonly context?: Record<string, any>,
+		public readonly context?: Record<string, unknown>,
 		public readonly userMessage?: string,
 		public readonly originalError?: Error
 	) {
@@ -40,7 +40,7 @@ export interface ErrorHandlerOptions {
 	/** Custom logger to use */
 	logger?: Logger;
 	/** Fallback value to return on error */
-	fallback?: any;
+	fallback?: unknown;
 	/** Whether to rethrow the error after handling */
 	rethrow?: boolean;
 }
@@ -144,7 +144,7 @@ export function handleSyncError<T>(
 /**
  * Wraps an async function with error handling
  */
-export function withErrorHandler<TArgs extends any[], TReturn>(
+export function withErrorHandler<TArgs extends unknown[], TReturn>(
 	fn: (...args: TArgs) => Promise<TReturn>,
 	context: string,
 	options: ErrorHandlerOptions = {}
@@ -173,7 +173,7 @@ export function getErrorMessage(error: unknown): string {
 /**
  * Checks if error is a specific type
  */
-export function isErrorType(error: unknown, errorType: new (...args: any[]) => Error): boolean {
+export function isErrorType(error: unknown, errorType: new (...args: unknown[]) => Error): boolean {
 	return error instanceof errorType;
 }
 

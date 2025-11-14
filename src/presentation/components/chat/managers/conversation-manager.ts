@@ -5,6 +5,7 @@
 
 import {App, Menu} from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
+import { showPrompt } from '@/presentation/components/modals/prompt-modal';
 import { Events } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Conversation, Message } from '@/types';
@@ -72,8 +73,8 @@ export class ConversationManager extends Events {
 		// Try to load active conversation
 		if (this.plugin.settings.activeConversationId) {
 			const conv = await storage.loadConversation(this.plugin.settings.activeConversationId);
-			if (_conv) {
-				this.loadConversation(_conv);
+			if (conv) {
+				this.loadConversation(conv);
 				return;
 			}
 		}
@@ -163,7 +164,7 @@ export class ConversationManager extends Events {
 		// Update the model selector to reflect the model used in the conversation
 		// Find the most recently used model in the conversation (from assistant messages)
 		const configuredModel = conv.config?.modelId;
-		const lastModelUsed = this.getLastUsedModel(_conv);
+		const lastModelUsed = this.getLastUsedModel(conv);
 		const targetModel = configuredModel || lastModelUsed;
 		if (targetModel && this.modelSelect.querySelector(`option[value="${targetModel}"]`)) {
 			this.modelSelect.value = targetModel;
@@ -188,8 +189,8 @@ export class ConversationManager extends Events {
 
 		const storage = this.storageService!;
 		const conv = await storage.loadConversation(convId);
-		if (_conv) {
-			this.loadConversation(_conv);
+		if (conv) {
+			this.loadConversation(conv);
 			await this.plugin.saveSettings();
 			// Close conversation list after switching (only if not pinned)
 			if (!this.state.conversationListPinned) {
@@ -230,9 +231,9 @@ export class ConversationManager extends Events {
 		conv.config = this.buildCurrentConversationConfig();
 
 		// Auto-generate/update title based on settings (only once for new conversations)
-		const shouldUpdateTitle = this.shouldUpdateConversationTitle(_conv);
+		const shouldUpdateTitle = this.shouldUpdateConversationTitle(conv);
 		if (shouldUpdateTitle) {
-			const newTitle = await this.generateConversationTitle(_conv);
+			const newTitle = await this.generateConversationTitle(conv);
 			if (newTitle) {
 				conv.title = newTitle;
 				if (this.plugin.settings.conversationIconEnabled && !conv.icon) {
@@ -245,7 +246,7 @@ export class ConversationManager extends Events {
 		}
 
 		// Save the updated conversation to storage
-		await storage.updateConversation(_conv);
+		await storage.updateConversation(conv);
 
 		// Only re-render if not skipped (e.g., when switching conversations)
 		if (!skipRender) {
@@ -330,7 +331,7 @@ export class ConversationManager extends Events {
 		const conv = await storage.getConversationMetadata(convId);
 		if (!conv) return;
 
-		const newTitle = prompt('Enter new title:', conv.title);
+		const newTitle = await showPrompt(this.app, 'Enter new title:', conv.title);
 		if (newTitle && newTitle.trim()) {
 			const success = await storage.renameConversation(convId, newTitle.trim());
 			if (success) {
@@ -423,7 +424,7 @@ export class ConversationManager extends Events {
 
 		const newConvBtn = headerButtons.createEl('button', { text: '+' });
 		newConvBtn.addClass('new-conversation-btn');
-		newConvBtn.title = 'New Conversation';
+		newConvBtn.title = 'New conversation';
 		newConvBtn.addEventListener('click', () => this.createNewConversation());
 
 		// Conversation list
@@ -532,7 +533,7 @@ export class ConversationManager extends Events {
 	/**
 	 * Generate a title for a conversation using LLM or first message
 	 */
-	private async generateConversationTitle(conv: Conversation): Promise<string | null> {
+	private async generateConversationTitle(_conv: Conversation): Promise<string | null> {
 		const mode = this.plugin.settings.conversationTitleMode;
 
 		if (mode === 'first-message') {

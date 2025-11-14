@@ -29,7 +29,7 @@ export class SearchFilesTool implements Tool {
 		]
 	};
 
-	async execute(args: Record<string, any>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const query = (args.query as string).toLowerCase();
 			const searchContent = args.search_content as boolean || false;
@@ -110,7 +110,7 @@ export class CreateNoteTool implements Tool {
 		]
 	};
 
-	async execute(args: Record<string, any>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const title = args.title as string;
 			const content = args.content as string;
@@ -165,7 +165,7 @@ export class AppendToNoteTool implements Tool {
 		]
 	};
 
-	async execute(args: Record<string, any>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const path = args.path as string;
 			const content = args.content as string;

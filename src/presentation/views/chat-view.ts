@@ -1,4 +1,4 @@
-import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, Modal, Setting } from 'obsidian';
+import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, Modal, Setting, requestUrl } from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { DEFAULT_AGENT_ID } from '@/constants';
@@ -13,6 +13,7 @@ import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import { renderMessage, MessageRendererCallbacks } from '@/presentation/components/chat/message-renderer';
 import { handleStreamingChat } from '@/presentation/components/chat/handlers/streaming-handler';
+import { processToolCalls, updateExecutionTrace, createAgentExecutionTraceContainer } from '@/presentation/components/chat/handlers/tool-call-handler';
 import {
 	MessageController,
 	AgentController,
@@ -132,7 +133,7 @@ export class ChatView extends ItemView {
 	}
 
 	getDisplayText(): string {
-		return 'AI Chat';
+		return 'AI chat';
 	}
 
 	getIcon(): string {
@@ -246,7 +247,7 @@ export class ChatView extends ItemView {
 
 		// Stop generation button (hidden by default)
 		this.stopBtn = rightControls.createEl('button', { cls: 'stop-generation-btn' });
-		this.stopBtn.setText('⏹️ Stop');
+		this.stopBtn.setText('⏹️ stop');
 		this.stopBtn.addClass('ia-hidden');
 		this.stopBtn.addEventListener('click', () => {
 			this.state.stopStreamingRequested = true;
@@ -276,8 +277,8 @@ export class ChatView extends ItemView {
 			}
 		});
 
-		// Add styles
-		this.addStyles();
+		// Styles are loaded from styles.css
+		// this.addStyles();
 
 		// Initialize MCP servers
 		await this.initializeMCPServers();
@@ -474,7 +475,7 @@ export class ChatView extends ItemView {
 
 		if (this.plugin.settings.llmConfigs.length === 0) {
 			console.error('[Chat] No LLM configs found');
-			new Notice('Please configure an LLM provider in settings first');
+			new Notice('please configure an LLM provider in settings first');
 			return;
 		}
 
@@ -592,7 +593,7 @@ export class ChatView extends ItemView {
 		};
 
 		const provider = ProviderFactory.createProvider(modelConfig);
-		const systemMessages: any[] = [];
+		const systemMessages: unknown[] = [];
 
 		if (this.plugin.settings.activeSystemPromptId) {
 			const activePrompt = this.plugin.settings.systemPrompts.find(
@@ -677,7 +678,7 @@ After calling a tool, you will receive the result and can continue the conversat
 		if (shouldPerformWebSearch) {
 			try {
 				if (this.state.enableWebSearch) {
-					new Notice('🔍 Searching the web...');
+					new Notice('🔍 searching the web...');
 				} else {
 					console.debug('[WebSearch] Auto-triggered search for query:', text);
 				}
@@ -748,7 +749,7 @@ After calling a tool, you will receive the result and can continue the conversat
 		});
 
 		const _finalMessages = [...systemMessages, ...llmMessages];
-		console.debug('[Chat] Final messages count:', finalMessages.length);
+		console.debug('[Chat] Final messages count:', _finalMessages.length);
 
 		let assistantMessageEl: HTMLElement | null = null;
 
@@ -758,7 +759,7 @@ After calling a tool, you will receive the result and can continue the conversat
 				content: '',
 				model: selectedModel
 			};
-			(placeholderAssistant as any).provider = config.provider ?? null;
+			(placeholderAssistant as unknown).provider = config.provider ?? null;
 			assistantMessageEl = this.addMessageToUI(placeholderAssistant);
 			this.state.isStreaming = true;
 			this.state.stopStreamingRequested = false;
@@ -768,7 +769,7 @@ After calling a tool, you will receive the result and can continue the conversat
 				assistantMessageEl,
 				provider,
 				{
-					messages: finalMessages,
+					messages: _finalMessages,
 					model: selectedModel,
 					temperature: this.state.temperature,
 					maxTokens: this.state.maxTokens
@@ -1024,9 +1025,9 @@ After calling a tool, you will receive the result and can continue the conversat
 		if (!this.referenceContainer) return;
 
 		const _referenceList = this.referenceContainer.querySelector('.reference-list') as HTMLElement;
-		if (!referenceList) return;
+		if (!_referenceList) return;
 
-		referenceList.empty();
+		_referenceList.empty();
 
 		if (this.state.referencedFiles.length === 0) {
 			this.referenceContainer.addClass('ia-hidden');
@@ -1036,7 +1037,7 @@ After calling a tool, you will receive the result and can continue the conversat
 		this.referenceContainer.removeClass('ia-hidden');
 
 		this.state.referencedFiles.forEach((item, index) => {
-			const refItem = referenceList.createDiv('reference-item');
+			const refItem = _referenceList.createDiv('reference-item');
 			const icon = refItem.createSpan('reference-icon');
 			icon.setText(item instanceof TFolder ? '📁' : '📄');
 			const pathSpan = refItem.createSpan('reference-path');
@@ -1053,7 +1054,7 @@ After calling a tool, you will receive the result and can continue the conversat
 			// Remove button
 			const removeBtn = refItem.createEl('button', { text: '×' });
 			removeBtn.addClass('reference-remove-btn');
-			removeBtn.addEventListener('click', (e) => {
+			removeBtn.addEventListener('click', (e: MouseEvent) => {
 				e.stopPropagation();
 				this.state.referencedFiles.splice(index, 1);
 				this.updateReferenceDisplay();
@@ -1165,7 +1166,7 @@ After calling a tool, you will receive the result and can continue the conversat
 					if (message.role === 'user') {
 						content += `## 💬 User Message\n\n`;
 					} else {
-						const modelName = (message as any).model || 'Assistant';
+						const modelName = (message as unknown).model || 'Assistant';
 						content += `## 🤖 ${modelName}\n\n`;
 					}
 
@@ -1203,7 +1204,7 @@ After calling a tool, you will receive the result and can continue the conversat
 					if (message.role === 'user') {
 						content += `## 💬 User Message (${new Date().toLocaleString()})\n\n`;
 					} else {
-						const modelName = (message as any).model || 'Assistant';
+						const modelName = (message as unknown).model || 'Assistant';
 						content += `## 🤖 ${modelName} (${new Date().toLocaleString()})\n\n`;
 					}
 
@@ -1245,7 +1246,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		// Source cards
 		const sourcesGrid = ragSourcesContainer.createDiv('rag-sources-grid');
-		ragSources.forEach((source, index) => {
+		ragSources.forEach((source, _index) => {
 			const sourceCard = sourcesGrid.createDiv('rag-source-card');
 
 			// Title and similarity
@@ -1368,7 +1369,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const ragToggle = target ?? this.ragActionItem;
 		if (!ragToggle) return;
 
-		const statusSpan = ragToggle.querySelector('.header-action-status') as HTMLElement | null;
+		const statusSpan = ragToggle.querySelector('.header-action-status');
 		const ragEnabledInSettings = this.plugin.settings.ragConfig.enabled;
 
 		if (!ragEnabledInSettings) {
@@ -1424,7 +1425,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		tooltipText += `💾 Total Size: ${(stats.totalSize / 1024).toFixed(1)} KB\n`;
 
 		if (stats.indexedFiles && stats.indexedFiles.length > 0) {
-			tooltipText += `\n📄 Indexed Files:\n`;
+			tooltipText += `\n📄 indexed Files:\n`;
 			const filesToShow = stats.indexedFiles.slice(0, 10);
 			filesToShow.forEach(file => {
 				const fileName = file.split('/').pop() || file;
@@ -1435,7 +1436,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				tooltipText += `  ... and ${stats.indexedFiles.length - 10} more\n`;
 			}
 		} else {
-			tooltipText += `\n⚠️ No files indexed yet.\n`;
+			tooltipText += `\n⚠️ no files indexed yet.\n`;
 			tooltipText += `Go to Settings → RAG to build the index.`;
 		}
 
@@ -1452,13 +1453,13 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			this.showRagStatsModal(stats);
 		} catch (error) {
 			console.error('Error loading RAG stats modal:', error);
-			new Notice('Unable to load RAG index statistics.');
+			new Notice('unable to load RAG statistics.');
 		}
 	}
 
 	private showRagStatsModal(stats: RagIndexStats) {
 		const modal = new Modal(this.app);
-		modal.titleEl.setText('📚 RAG Index Statistics');
+		modal.titleEl.setText('RAG statistics');
 
 		const content = modal.contentEl;
 		content.empty();
@@ -1486,7 +1487,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		// File list
 		if (stats.indexedFiles && stats.indexedFiles.length > 0) {
 			const filesDiv = content.createDiv('rag-stats-files');
-			filesDiv.createEl('h4', { text: '📄 Indexed Files' });
+			filesDiv.createEl('h4', { text: '📄 indexed files' });
 
 			const fileList = filesDiv.createDiv('rag-file-list');
 			stats.indexedFiles.forEach(filePath => {
@@ -1515,12 +1516,12 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			});
 		} else {
 			const noFiles = content.createDiv('rag-no-files');
-			noFiles.createEl('p', { text: '⚠️ No files have been indexed yet.' });
-			noFiles.createEl('p', { text: 'To build the RAG index:' });
+			noFiles.createEl('p', { text: '⚠️ no files have been indexed yet.' });
+			noFiles.createEl('p', { text: 'to build the RAG index:' });
 			const ol = noFiles.createEl('ol');
-			ol.createEl('li', { text: 'Go to Settings → RAG' });
-			ol.createEl('li', { text: 'Enable RAG' });
-			ol.createEl('li', { text: 'Click "Index Vault"' });
+			ol.createEl('li', { text: 'go to settings → RAG' });
+			ol.createEl('li', { text: 'enable RAG' });
+			ol.createEl('li', { text: 'select index vault' });
 		}
 
 		// Close button
@@ -1798,7 +1799,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const modeGroup = topControls.createDiv('chat-select-group');
 		modeGroup.addClass('chat-select-group');
 		modeGroup.createSpan({ text: 'Mode', cls: 'chat-label' });
-		this.modeSelector = modeGroup.createEl('select', { cls: 'mode-selector' }) as HTMLSelectElement;
+		this.modeSelector = modeGroup.createEl('select', { cls: 'mode-selector' });
 		this.modeSelector.createEl('option', { value: 'chat', text: 'Chat' });
 		this.modeSelector.createEl('option', { value: 'agent', text: 'Agent' });
 		this.modeSelector.value = this.state.mode;
@@ -1810,7 +1811,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		this.promptSelectorGroup = topControls.createDiv('chat-select-group');
 		this.promptSelectorGroup.addClass('chat-select-group');
 		this.promptSelectorGroup.createSpan({ text: 'Prompt', cls: 'chat-label' });
-		this.promptSelector = this.promptSelectorGroup.createEl('select', { cls: 'prompt-selector' }) as HTMLSelectElement;
+		this.promptSelector = this.promptSelectorGroup.createEl('select', { cls: 'prompt-selector' });
 		this.populatePromptSelectorOptions();
 		this.promptSelector.addEventListener('change', async () => {
 			this.plugin.settings.activeSystemPromptId = this.promptSelector?.value || null;
@@ -1820,7 +1821,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		this.agentSelectorGroup = topControls.createDiv('chat-select-group');
 		this.agentSelectorGroup.addClass('chat-select-group');
 		this.agentSelectorGroup.createSpan({ text: 'Agent', cls: 'chat-label' });
-		this.agentSelector = this.agentSelectorGroup.createEl('select', { cls: 'agent-selector' }) as HTMLSelectElement;
+		this.agentSelector = this.agentSelectorGroup.createEl('select', { cls: 'agent-selector' });
 		this.agentSelector.addEventListener('change', async () => {
 			await this.handleAgentSelection(this.agentSelector?.value ?? '');
 		});
@@ -1834,7 +1835,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (!this.promptSelector) return;
 		const enabledPrompts = this.plugin.settings.systemPrompts.filter(p => p.enabled);
 		this.promptSelector.empty();
-		this.promptSelector.createEl('option', { value: '', text: 'No System Prompt' });
+		this.promptSelector.createEl('option', { value: '', text: 'No system prompt' });
 		enabledPrompts.forEach(p => {
 			const option = this.promptSelector!.createEl('option', { value: p.id, text: p.name });
 			if (this.plugin.settings.activeSystemPromptId === p.id) {
@@ -2104,7 +2105,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			}
 		});
 		breadcrumb.createSpan({ text: '/', cls: 'chat-breadcrumb-sep' });
-		this.conversationTitleEl = breadcrumb.createSpan({ text: 'Current Conversation', cls: 'chat-breadcrumb-current' });
+		this.conversationTitleEl = breadcrumb.createSpan({ text: 'Current conversation', cls: 'chat-breadcrumb-current' });
 
 		const actions = row.createDiv('chat-action-buttons');
 		actions.addClass('chat-action-buttons');
@@ -2156,7 +2157,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const modelGroup = this.modelControlsContainer.createDiv('chat-model-select');
 		modelGroup.addClass('chat-model-select');
 		modelGroup.createSpan({ text: '🤖 Model', cls: 'chat-label' });
-		this.modelSelect = modelGroup.createEl('select', { cls: 'model-select' }) as HTMLSelectElement;
+		this.modelSelect = modelGroup.createEl('select', { cls: 'model-select' });
 		this.modelSelect.addEventListener('change', () => {
 			void this.onModelChange();
 		});
@@ -2303,7 +2304,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		container: HTMLElement,
 		config: { icon: string; label: string; tooltip?: string; showStatus?: boolean; onClick: () => void }
 	): HTMLButtonElement {
-		const button = container.createEl('button', { cls: 'header-action-btn' }) as HTMLButtonElement;
+		const button = container.createEl('button', { cls: 'header-action-btn' });
 		button.type = 'button';
 		if (config.tooltip) {
 			button.setAttr('title', config.tooltip);
@@ -2323,7 +2324,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private async handleQuickActionRag() {
 		if (!this.plugin.settings.ragConfig.enabled) {
-			new Notice('RAG is disabled in settings. Enable it under Settings → Chat Features → RAG.');
+			new Notice('RAG is disabled in settings. Enable it under settings → Chat features → RAG.');
 			return;
 		}
 		this.state.enableRAG = !this.state.enableRAG;
@@ -2333,7 +2334,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private async handleQuickActionWeb() {
 		if (!this.plugin.settings.webSearchConfig.enabled) {
-			new Notice('Web Search is disabled in settings. Enable it under Settings → Chat Features → Web Search.');
+			new Notice('web search is disabled in settings. Enable it under settings → Chat features → Web search.');
 			return;
 		}
 		this.state.enableWebSearch = !this.state.enableWebSearch;
@@ -2461,7 +2462,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		// Update tool manager with agent's enabled tools
 		const toolConfigs = agent.enabledBuiltInTools.map(toolType => ({
-			type: toolType as any,
+			type: toolType as unknown,
 			enabled: true
 		}));
 		this.toolManager.setToolConfigs(toolConfigs);
@@ -2540,9 +2541,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			const services = {
 				vault: this.app.vault,
 				http: {
-					request: async (url: string | URL, options?: any) => {
+					request: async (url: string | URL, options?: unknown) => {
 						try {
-							const response = await fetch(url, options);
+							const response = await requestUrl({ url: String(url), ...options });
 							return response;
 						} catch (error) {
 							console.error('HTTP request error:', error);
@@ -2562,7 +2563,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 			// Display execution log
 			logEl.empty();
-			const logTitle = logEl.createEl('h4', { text: 'Execution Log:' });
+			const logTitle = logEl.createEl('h4', { text: 'Execution log:' });
 			logTitle.setCssProps({ 'margin': '8px 0 4px 0' });
 
 			for (const entry of result.log || []) {
@@ -2599,7 +2600,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 			new Notice(`Workflow ${status}`);
 
-		} catch (error: any) {
+		} catch (error: unknown) {
 			statusEl.setText(`Error: ${error.message}`);
 			statusEl.setCssProps({ 'color': 'var(--text-error)' });
 			new Notice(`Workflow failed: ${error.message}`);
@@ -2610,13 +2611,13 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private agentExecutionTraceEl: HTMLElement | null = null;
 
-	private async processToolCalls(content: string, traceContainer?: HTMLElement, contentEl?: HTMLElement) {
+	private async processToolCalls(content: string, traceContainer?: HTMLElement, _contentEl?: HTMLElement) {
 		// Get the active agent if in agent mode
 		const activeAgent = this.plugin.settings.activeAgentId
 			? this.plugin.settings.agents.find(a => a.id === this.plugin.settings.activeAgentId)
 			: undefined;
 			
-		return await processToolCallsHandler(
+		return await processToolCalls(
 			content,
 			this.state.messages,
 			this.state.agentExecutionSteps,
@@ -2628,11 +2629,11 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	}
 
 	private updateExecutionTrace(container: HTMLElement) {
-		updateExecutionTraceHandler(container, this.state.agentExecutionSteps);
+		updateExecutionTrace(container, this.state.agentExecutionSteps);
 	}
 
 	private createAgentExecutionTraceContainer(messageBody: HTMLElement): HTMLElement {
-		return createAgentExecutionTraceContainerHandler(messageBody, this.state.agentExecutionSteps.length);
+		return createAgentExecutionTraceContainer(messageBody, this.state.agentExecutionSteps.length);
 	}
 
 	private displayAgentFinalAnswer(contentEl?: HTMLElement) {
@@ -2664,7 +2665,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			if (finalAnswer) {
 				contentEl.empty();
 				const finalAnswerEl = contentEl.createDiv('agent-final-answer');
-				finalAnswerEl.createEl('h4', { text: 'Final Answer' });
+				finalAnswerEl.createEl('h4', { text: 'Final answer' });
 				try {
 					const html = marked.parse(finalAnswer) as string;
 					// Use DOMParser to safely parse HTML
@@ -2677,7 +2678,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 					finalAnswerEl.createDiv().setText(finalAnswer);
 				}
 
-				(lastMessage as any).agentExecutionSteps = [...this.state.agentExecutionSteps];
+				(lastMessage as unknown).agentExecutionSteps = [...this.state.agentExecutionSteps];
 			}
 		}
 	}
@@ -2692,7 +2693,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private queryMessageElement(messageEl: HTMLElement, selectors: string[]): HTMLElement | null {
 		for (const selector of selectors) {
-			const el = messageEl.querySelector(selector) as HTMLElement | null;
+			const el = messageEl.querySelector(selector);
 			if (el) {
 				return el;
 			}
@@ -2703,7 +2704,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	/**
 	 * Continue the agent conversation after tool execution
 	 */
-	private async continueAgentConversation(traceContainer?: HTMLElement, contentEl?: HTMLElement) {
+	private async continueAgentConversation(traceContainer?: HTMLElement, _contentEl?: HTMLElement) {
 		console.debug('[Agent] Continuing agent conversation after tool execution...');
 
 		// Get the current config and model to make another call
@@ -2841,7 +2842,7 @@ After calling a tool, you will receive the result and can continue the conversat
 			await provider.streamChat({
 				...chatRequest,
 				messages: allMessages
-			}, async (chunk: any) => {
+			}, async (chunk: unknown) => {
 				if (chunk.content) {
 					fullContent += chunk.content;
 				}
@@ -3002,1211 +3003,1211 @@ After calling a tool, you will receive the result and can continue the conversat
 		});
 	}
 
-	private addStyles() {
-		const styleEl = document.createElement('style');
-		styleEl.textContent = `
-			.intelligence-assistant-chat-container {
-				display: flex;
-				flex-direction: column;
-				height: 100%;
-				padding: 0;
-			}
-
-			.chat-main-layout {
-				display: flex;
-				height: 100%;
-				gap: 0;
-				position: relative;
-			}
-
-			.conversation-list-floating {
-				position: absolute;
-				left: 0;
-				top: 0;
-				bottom: 0;
-				width: 280px;
-				background: var(--background-secondary);
-				border-right: 1px solid var(--background-modifier-border);
-				box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-				z-index: 100;
-				display: flex;
-				flex-direction: column;
-			}
-
-			.conversation-list-header {
-				padding: 10px;
-				border-bottom: 1px solid var(--background-modifier-border);
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-			}
-
-			.conversation-list-header h3 {
-				margin: 0;
-				font-size: 14px;
-				font-weight: 600;
-			}
-
-			.conversation-header-buttons {
-				display: flex;
-				gap: 4px;
-			}
-
-			.pin-conversation-btn,
-			.new-conversation-btn {
-				width: 24px;
-				height: 24px;
-				padding: 0;
-				border-radius: 4px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				color: var(--text-normal);
-				cursor: pointer;
-				font-size: 14px;
-				line-height: 1;
-			}
-
-			.pin-conversation-btn:hover,
-			.new-conversation-btn:hover {
-				background: var(--background-modifier-hover);
-			}
-
-			.conversation-list-content {
-				flex: 1;
-				overflow-y: auto;
-			}
-
-			.conversation-item {
-				padding: 10px;
-				border-bottom: 1px solid var(--background-modifier-border);
-				cursor: pointer;
-				transition: background-color 0.1s;
-			}
-
-			.conversation-item:hover {
-				background: var(--background-modifier-hover);
-			}
-
-			.conversation-item.active {
-				background: var(--background-modifier-active-hover);
-			}
-
-			.conversation-title {
-				font-size: 13px;
-				color: var(--text-normal);
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
-
-			.empty-state {
-				padding: 20px;
-				text-align: center;
-				color: var(--text-muted);
-				font-size: 12px;
-			}
-
-			.main-chat-area {
-				flex: 1;
-				width: 100%;
-				display: flex;
-				flex-direction: column;
-				padding: 10px;
-			}
-
-			.chat-header {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				padding: 10px 0;
-				border-bottom: 1px solid var(--background-modifier-border);
-				margin-bottom: 10px;
-				flex-wrap: wrap;
-			}
-
-			.model-selector {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				flex: 1;
-			}
-
-			.model-selector select {
-				flex: 1;
-				min-width: 150px;
-				padding: 6px 10px;
-				border-radius: 4px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				color: var(--text-normal);
-				font-weight: 500;
-			}
-
-			.provider-selector {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.provider-selector span {
-				font-size: 12px;
-				color: var(--text-muted);
-			}
-
-			.provider-selector select {
-				padding: 4px 8px;
-				border-radius: 4px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				color: var(--text-normal);
-				font-size: 12px;
-			}
-
-			.params-row {
-				display: flex;
-				gap: 20px;
-				padding: 10px 0;
-				border-bottom: 1px solid var(--background-modifier-border);
-				margin-bottom: 10px;
-			}
-
-			.param-control {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.param-label {
-				font-size: 12px;
-				color: var(--text-muted);
-				white-space: nowrap;
-			}
-
-			.param-value {
-				font-size: 12px;
-				color: var(--text-normal);
-				min-width: 30px;
-				text-align: center;
-			}
-
-			.param-control input[type="range"] {
-				width: 120px;
-			}
-
-			.param-control input[type="number"] {
-				width: 100px;
-				padding: 4px 8px;
-				border-radius: 4px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				color: var(--text-normal);
-				font-size: 12px;
-			}
-
-			.chat-messages {
-				flex: 1;
-				overflow-y: auto;
-				padding: 12px 16px;
-				display: flex;
-				flex-direction: column;
-				gap: 12px;
-			}
-
-			.chat-message {
-				display: flex;
-				width: 100%;
-			}
-
-			.message-user .message-row {
-				flex-direction: row-reverse;
-			}
-
-			.message-row {
-				display: flex;
-				gap: 10px;
-				width: 100%;
-				max-width: 100%;
-			}
-
-			.message-avatar {
-				flex-shrink: 0;
-				width: 28px;
-				height: 28px;
-				border-radius: 50%;
-				background: var(--background-modifier-border);
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				color: var(--text-muted);
-			}
-
-			.message-avatar svg {
-				width: 16px;
-				height: 16px;
-			}
-
-			.message-user .message-avatar {
-				background: var(--interactive-accent);
-				color: white;
-			}
-
-			.message-assistant .message-avatar {
-				background: var(--background-secondary);
-				border: 1px solid var(--background-modifier-border);
-			}
-
-			/* Tool execution messages */
-			.message-tool {
-				padding: 12px;
-				margin: 12px 0;
-				background: var(--background-primary);
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 6px;
-			}
-
-			.tool-execution {
-				display: flex;
-				flex-direction: column;
-				gap: 8px;
-			}
-
-			.tool-icon {
-				font-size: 20px;
-			}
-
-			.tool-name {
-				font-weight: 600;
-				color: var(--text-accent);
-				font-size: 13px;
-			}
-
-			.tool-args {
-				font-family: var(--font-monospace);
-				font-size: 11px;
-				color: var(--text-muted);
-				white-space: pre;
-				background: var(--background-secondary);
-				padding: 8px;
-				border-radius: 4px;
-			}
-
-			.tool-result {
-				margin-top: 8px;
-				padding: 8px;
-				border-radius: 4px;
-			}
-
-			.tool-success {
-				background: rgba(0, 255, 0, 0.1);
-				border-left: 3px solid var(--text-success);
-			}
-
-			.tool-error {
-				background: rgba(255, 0, 0, 0.1);
-				border-left: 3px solid var(--text-error);
-			}
-
-			.tool-result pre {
-				font-family: var(--font-monospace);
-				font-size: 11px;
-				margin: 4px 0 0 0;
-				white-space: pre-wrap;
-			}
-
-			.message-body {
-				flex: 1;
-				min-width: 0;
-			}
-
-			.message-body,
-			.ia-chat-message__body,
-			.message-content,
-			.ia-chat-message__content {
-				user-select: text;
-			}
-
-			.message-actions,
-			.message-actions *,
-			.ia-chat-message__actions,
-			.ia-chat-message__actions * {
-				user-select: none;
-			}
-
-			.message-meta {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				flex-wrap: wrap;
-				margin-bottom: 4px;
-			}
-
-			.message-name {
-				font-weight: 600;
-				font-size: 12px;
-				color: var(--text-normal);
-			}
-
-			.ia-chat-message__badges {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 4px;
-			}
-
-			.ia-chat-message__badge {
-				display: inline-flex;
-				align-items: center;
-				gap: 4px;
-				padding: 2px 8px;
-				border-radius: 999px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				font-size: 10px;
-				color: var(--text-muted);
-			}
-
-			.ia-chat-message__badge-label {
-				font-weight: 600;
-				text-transform: uppercase;
-				letter-spacing: 0.02em;
-			}
-
-			.ia-chat-message__badge-value {
-				color: var(--text-normal);
-			}
-
-			.message-timestamp {
-				font-size: 10px;
-				color: var(--text-faint);
-			}
-
-			.message-actions {
-				display: flex;
-				gap: 2px;
-				margin-top: 4px;
-				opacity: 0;
-				transition: opacity 0.15s;
-			}
-
-			.message-body:hover .message-actions {
-				opacity: 1;
-			}
-
-			.msg-action-btn {
-				padding: 3px 6px;
-				border: none;
-				background: transparent;
-				color: var(--text-muted);
-				cursor: pointer;
-				border-radius: 3px;
-				display: flex;
-				align-items: center;
-				gap: 2px;
-				font-size: 11px;
-				transition: all 0.15s;
-			}
-
-			.msg-action-btn:hover {
-				background: var(--background-modifier-hover);
-				color: var(--text-normal);
-			}
-
-			.msg-action-btn svg {
-				width: 14px;
-				height: 14px;
-			}
-
-			.message-content {
-				line-height: 1.5;
-				word-wrap: break-word;
-				font-size: 13px;
-				white-space: normal;
-			}
-
-			.message-content p {
-				margin: 0.2em 0;
-			}
-
-			.message-content p:first-child {
-				margin-top: 0;
-			}
-
-			.message-content p:last-child {
-				margin-bottom: 0;
-			}
-
-			.message-content p:empty {
-				display: none;
-			}
-
-			.message-content code {
-				background: var(--background-primary);
-				padding: 2px 6px;
-				border-radius: 4px;
-				font-family: var(--font-monospace);
-				font-size: 0.9em;
-			}
-
-			.message-content pre {
-				background: var(--background-primary);
-				padding: 12px;
-				border-radius: 6px;
-				overflow-x: auto;
-				margin: 8px 0;
-			}
-
-			.message-content pre code {
-				background: none;
-				padding: 0;
-			}
-
-			.message-content ul, .message-content ol {
-				margin: 0.5em 0;
-				padding-left: 1.5em;
-			}
-
-			.message-content blockquote {
-				border-left: 3px solid var(--background-modifier-border);
-				padding-left: 12px;
-				margin: 8px 0;
-				opacity: 0.8;
-			}
-
-			.message-attachments {
-				margin-top: 6px;
-				display: flex;
-				flex-direction: column;
-				gap: 4px;
-			}
-
-			.attachment-item {
-				padding: 6px;
-				background: var(--background-modifier-border);
-				border-radius: 4px;
-				font-size: 0.85em;
-			}
-
-			.chat-input-container {
-				margin-top: 12px;
-				padding: 12px;
-				background: var(--background-secondary);
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 10px;
-				display: flex;
-				flex-direction: column;
-				gap: 10px;
-			}
-
-			.chat-input-header {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				flex-wrap: wrap;
-			}
-
-			.chat-top-controls,
-			.chat-action-row,
-			.chat-model-row,
-			.chat-token-row {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				flex-wrap: wrap;
-				margin-bottom: 8px;
-			}
-
-			.chat-action-row {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				gap: 12px;
-				margin: 6px 0 12px 0;
-			}
-
-			.chat-breadcrumb {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				font-size: 12px;
-				color: var(--text-muted);
-			}
-
-			.chat-breadcrumb-link {
-				color: var(--text-accent);
-				font-weight: 600;
-				cursor: pointer;
-				background: transparent;
-				border: none;
-				padding: 0;
-			}
-
-			.chat-breadcrumb-link:hover {
-				text-decoration: underline;
-			}
-
-			.chat-breadcrumb-current {
-				font-weight: 600;
-				color: var(--text-normal);
-			}
-
-			.chat-action-buttons {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.chat-action-link {
-				color: var(--text-dark);
-				font-weight: 600;
-				cursor: pointer;
-			}
-
-			.chat-action-link:hover {
-				color: var(--text-accent);
-				text-decoration: underline;
-			}
-
-			.chat-action-sep {
-				color: var(--text-muted);
-				font-size: 12px;
-			}
-
-			.chat-model-row {
-				display: flex;
-				flex-direction: column;
-				gap: 8px;
-				padding: 10px;
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 10px;
-				background: var(--background-secondary);
-			}
-
-			.chat-model-controls {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 12px;
-				align-items: center;
-			}
-
-			.chat-model-select {
-				display: flex;
-				flex: 1;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.chat-model-select .chat-label {
-				font-weight: 600;
-			}
-
-			.model-select {
-				flex: 1;
-				min-width: 160px;
-				padding: 6px 10px;
-				border-radius: 8px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-			}
-
-			.chat-param-group {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.chat-agent-summary {
-				display: none;
-				flex-direction: column;
-				gap: 6px;
-				padding-top: 6px;
-				border-top: 1px solid var(--background-modifier-border);
-			}
-
-			.chat-agent-summary-title {
-				font-size: 12px;
-				font-weight: 600;
-				color: var(--text-muted);
-			}
-
-			.chat-agent-summary-details {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 6px;
-				align-items: center;
-			}
-
-			.chat-agent-summary-text {
-				font-size: 12px;
-				color: var(--text-muted);
-			}
-
-			.chat-agent-chip {
-				display: inline-flex;
-				align-items: center;
-				gap: 4px;
-				padding: 4px 10px;
-				border-radius: 999px;
-				border: 1px dashed var(--background-modifier-border);
-				background: var(--background-primary);
-				font-size: 12px;
-				color: var(--text-muted);
-			}
-
-			.chat-agent-chip-label {
-				font-weight: 600;
-				color: var(--text-muted);
-			}
-
-			.chat-agent-chip-value {
-				color: var(--text-normal);
-			}
-
-			.chat-label {
-				font-size: 12px;
-				color: var(--text-muted);
-				font-weight: 600;
-			}
-
-			.chat-slider {
-				width: 120px;
-			}
-
-			.chat-param-value {
-				font-weight: 600;
-				color: var(--text-accent);
-			}
-
-			.chat-number-input {
-				width: 90px;
-				padding: 4px 8px;
-				border-radius: 6px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-			}
-
-			.chat-token-row {
-				justify-content: space-between;
-			}
-
-			.chat-token-chip {
-				font-size: 11px;
-				color: var(--text-muted);
-				padding: 4px 10px;
-				border-radius: 999px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-			}
-
-			.chat-select-group {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-			}
-
-			.chat-header-actions {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				flex-wrap: wrap;
-				margin-left: auto;
-			}
-
-			.header-action-btn {
-				display: inline-flex;
-				align-items: center;
-				gap: 4px;
-				padding: 4px 10px;
-				border: 1px solid transparent;
-				border-radius: 999px;
-				background: var(--background-primary);
-				font-size: 12px;
-				color: var(--text-muted);
-				cursor: pointer;
-				transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
-			}
-
-			.header-action-btn:hover:not(.is-disabled) {
-				background: var(--background-modifier-hover);
-				color: var(--text-normal);
-			}
-
-			.header-action-btn.is-active {
-				border-color: var(--text-accent);
-				color: var(--text-normal);
-			}
-
-			.header-action-btn.is-disabled {
-				opacity: 0.5;
-				cursor: not-allowed;
-			}
-
-			.header-action-btn.is-link {
-				border-style: dashed;
-				background: transparent;
-				color: var(--text-normal);
-			}
-
-			.header-action-icon {
-				font-size: 12px;
-				line-height: 1;
-			}
-
-			.header-action-status {
-				font-size: 11px;
-				color: var(--text-muted);
-			}
-
-			.chat-input-editor {
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 8px;
-				background: var(--background-primary);
-				padding: 4px;
-			}
-
-			.chat-input-footer {
-				padding-top: 4px;
-			}
-
-			/* Bottom controls - 3 sections layout */
-			.input-bottom-controls {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				gap: 10px;
-				flex-wrap: wrap;
-			}
-
-			.bottom-left-controls {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				flex: 1;
-				flex-wrap: wrap;
-			}
-
-			.bottom-middle-controls {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				flex: 1;
-				flex-wrap: wrap;
-			}
-
-			.attachment-preview {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 6px;
-				align-items: center;
-			}
-
-			.bottom-right-controls {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				margin-left: auto;
-			}
-
-			.mode-selector,
-			.prompt-selector,
-			.agent-selector {
-				padding: 5px 10px;
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 999px;
-				background: var(--background-primary);
-				color: var(--text-normal);
-				font-size: 11px;
-				cursor: pointer;
-				min-width: 100px;
-				transition: border-color 0.2s ease;
-			}
-
-			.mode-selector:focus,
-			.prompt-selector:focus,
-			.agent-selector:focus {
-				outline: none;
-				border-color: var(--interactive-accent);
-				box-shadow: 0 0 0 2px rgba(47, 194, 153, 0.15);
-			}
-
-
-
-			.checkbox-container {
-				display: flex;
-				align-items: center;
-				gap: 4px;
-			}
-
-			.checkbox-container input[type="checkbox"] {
-				cursor: pointer;
-				margin: 0;
-			}
-
-			.checkbox-container label {
-				font-size: 11px;
-				color: var(--text-muted);
-				user-select: none;
-				cursor: pointer;
-			}
-
-			/* Toggle Button Styles */
-			.toggle-btn {
-				display: flex;
-				align-items: center;
-				gap: 4px;
-				padding: 4px 10px;
-				border-radius: 12px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				color: var(--text-muted);
-				cursor: pointer;
-				font-size: 11px;
-				transition: all 0.2s ease;
-				outline: none;
-			}
-
-			.toggle-btn:hover {
-				background: var(--background-modifier-hover);
-				border-color: var(--interactive-accent);
-			}
-
-			.toggle-btn.active {
-				background: var(--interactive-accent);
-				color: white;
-				border-color: var(--interactive-accent);
-				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-			}
-
-			.toggle-btn .toggle-icon {
-				font-size: 14px;
-				line-height: 1;
-			}
-
-			.toggle-btn.active .toggle-icon {
-				filter: brightness(1.1);
-			}
-
-			.toggle-btn .toggle-label {
-				font-weight: 500;
-			}
-
-			.tools-label {
-				font-size: 11px;
-				color: var(--text-muted);
-			}
-
-			/* Workflow Execution Styles */
-			.message-workflow {
-				padding: 12px;
-				background: var(--background-secondary);
-				border-left: 4px solid var(--interactive-accent);
-				border-radius: 4px;
-				margin-bottom: 12px;
-			}
-
-			.workflow-execution {
-				font-size: 13px;
-			}
-
-			.workflow-header {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				margin-bottom: 12px;
-				font-weight: 600;
-			}
-
-			.workflow-icon {
-				font-size: 20px;
-			}
-
-			.workflow-status {
-				padding: 6px 12px;
-				background: var(--background-primary);
-				border-radius: 4px;
-				font-size: 12px;
-				margin-bottom: 12px;
-			}
-
-			.workflow-log {
-				max-height: 400px;
-				overflow-y: auto;
-			}
-
-			.log-entry {
-				font-size: 11px;
-				padding: 4px 0;
-				border-bottom: 1px solid var(--background-modifier-border);
-			}
-
-			.log-action {
-				color: var(--text-normal);
-			}
-
-			.log-output {
-				color: var(--text-muted);
-				margin-left: 16px;
-				font-family: monospace;
-				font-size: 10px;
-			}
-
-			.log-error {
-				color: var(--text-error);
-				margin-left: 16px;
-			}
-
-			/* Part 1: Reference area */
-			.input-reference-area {
-				flex: 1;
-				display: flex;
-				flex-wrap: wrap;
-				gap: 4px;
-				min-height: 28px;
-				padding: 4px 6px;
-				background: var(--background-primary);
-				border: 1px dashed var(--background-modifier-border);
-				border-radius: 8px;
-				transition: border-color 0.2s ease;
-			}
-
-			.input-reference-area:empty {
-				border-style: dashed;
-			}
-
-			.reference-list {
-				display: flex;
-				flex-direction: column;
-				gap: 4px;
-			}
-
-			.reference-item {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				padding: 4px 8px;
-				background: var(--background-secondary);
-				border-radius: 4px;
-				font-size: 12px;
-			}
-
-			.reference-icon {
-				flex-shrink: 0;
-			}
-
-			.reference-path {
-				flex: 1;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
-
-			.reference-remove-btn {
-				padding: 0 4px;
-				border: none;
-				background: transparent;
-				color: var(--text-error);
-				cursor: pointer;
-				font-size: 16px;
-				line-height: 1;
-			}
-
-			.reference-remove-btn:hover {
-				background: var(--background-modifier-hover);
-				border-radius: 2px;
-			}
-
-
-			/* Message references (displayed in sent messages) */
-			.message-references {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 6px;
-				margin-top: 8px;
-			}
-
-			.reference-badge {
-				display: inline-flex;
-				align-items: center;
-				gap: 4px;
-				padding: 3px 8px;
-				background: var(--background-primary);
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 12px;
-				font-size: 11px;
-				color: var(--text-muted);
-				transition: all 0.2s;
-			}
-
-			.reference-badge:hover {
-				background: var(--background-modifier-hover);
-				color: var(--text-normal);
-				border-color: var(--interactive-accent);
-			}
-
-			/* Part 2: Text input */
-			.chat-input {
-				width: 100%;
-				min-height: 72px;
-				max-height: 160px;
-				padding: 14px 16px;
-				border: 1px solid transparent;
-				border-radius: 12px;
-				background: var(--background-primary);
-				color: var(--text-normal);
-				resize: none;
-				font-family: inherit;
-				font-size: 13px;
-				line-height: 1.6;
-				outline: none;
-				transition: border-color 0.2s, box-shadow 0.2s;
-			}
-
-			.chat-input:focus {
-				border-color: var(--interactive-accent);
-				box-shadow: 0 0 0 3px rgba(47, 194, 153, 0.15);
-			}
-
-			.chat-input::placeholder {
-				color: var(--text-muted);
-			}
-
-
-
-			@media (max-width: 720px) {
-				.chat-input-container {
-					padding: 12px;
-				}
-				.chat-input-footer {
-					padding-top: 8px;
-				}
-				.input-bottom-controls {
-					flex-direction: column;
-					align-items: stretch;
-				}
-				.bottom-right-controls {
-					margin-left: 0;
-					justify-content: flex-start;
-				}
-			}
-
-			.attachment-preview {
-				flex: 1;
-				display: flex;
-				gap: 6px;
-				flex-wrap: wrap;
-			}
-
-			.attachment-preview-item {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				padding: 4px 8px;
-				background: var(--background-secondary);
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 4px;
-				font-size: 11px;
-			}
-
-			.send-info {
-				font-size: 11px;
-				color: var(--text-muted);
-			}
-
-			.send-info kbd {
-				padding: 2px 6px;
-				background: var(--background-primary);
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 3px;
-				font-family: var(--font-monospace);
-				font-size: 10px;
-
-	/* RAG Sources Display */
-	.rag-sources-container {
-		margin-top: 12px;
-		padding: 12px;
-		background: var(--background-primary);
-		border: 1px solid var(--background-modifier-border);
-		border-radius: 6px;
-	}
-
-	.rag-sources-header {
-		font-weight: 600;
-		color: var(--text-accent);
-		margin-bottom: 8px;
-		font-size: 12px;
-		display: flex;
-		align-items: center;
-		gap: 6px;
-	}
-
-	.rag-sources-grid {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-	}
-
-	.rag-source-card {
-		padding: 10px;
-		border: 1px solid var(--background-modifier-border);
-		border-radius: 6px;
-		background: var(--background-secondary);
-		transition: all 0.2s ease;
-		cursor: pointer;
-	}
-
-	.rag-source-card:hover {
-		border-color: var(--interactive-accent);
-		background: var(--background-modifier-hover);
-		transform: translateY(-1px);
-		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-	}
-
-	.rag-source-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		margin-bottom: 6px;
-	}
-
-	.rag-source-title {
-		font-weight: 600;
-		font-size: 13px;
-		color: var(--text-normal);
-		flex: 1;
-	}
-
-	.rag-source-similarity {
-		font-size: 11px;
-		font-weight: 600;
-		background: var(--background-primary);
-		padding: 2px 6px;
-		border-radius: 10px;
-		min-width: 40px;
-		text-align: center;
-	}
-
-	.rag-source-path {
-		font-size: 11px;
-		color: var(--text-muted);
-		margin-bottom: 6px;
-		word-break: break-all;
-	}
-
-	.rag-source-content {
-		font-size: 12px;
-		color: var(--text-muted);
-		line-height: 1.4;
-		background: var(--background-primary);
-		padding: 8px;
-		border-radius: 4px;
-		border-left: 2px solid var(--interactive-accent);
-	}
-
-	.rag-source-content:hover {
-		background: var(--background-secondary);
-	}
-			}
-		`;
-		document.head.appendChild(styleEl);
-	}
+// 	private addStyles() {
+// 		const styleEl = document.createElement('style');
+// 		styleEl.textContent = `
+// 			.intelligence-assistant-chat-container {
+// 				display: flex;
+// 				flex-direction: column;
+// 				height: 100%;
+// 				padding: 0;
+// 			}
+// 
+// 			.chat-main-layout {
+// 				display: flex;
+// 				height: 100%;
+// 				gap: 0;
+// 				position: relative;
+// 			}
+// 
+// 			.conversation-list-floating {
+// 				position: absolute;
+// 				left: 0;
+// 				top: 0;
+// 				bottom: 0;
+// 				width: 280px;
+// 				background: var(--background-secondary);
+// 				border-right: 1px solid var(--background-modifier-border);
+// 				box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+// 				z-index: 100;
+// 				display: flex;
+// 				flex-direction: column;
+// 			}
+// 
+// 			.conversation-list-header {
+// 				padding: 10px;
+// 				border-bottom: 1px solid var(--background-modifier-border);
+// 				display: flex;
+// 				justify-content: space-between;
+// 				align-items: center;
+// 			}
+// 
+// 			.conversation-list-header h3 {
+// 				margin: 0;
+// 				font-size: 14px;
+// 				font-weight: 600;
+// 			}
+// 
+// 			.conversation-header-buttons {
+// 				display: flex;
+// 				gap: 4px;
+// 			}
+// 
+// 			.pin-conversation-btn,
+// 			.new-conversation-btn {
+// 				width: 24px;
+// 				height: 24px;
+// 				padding: 0;
+// 				border-radius: 4px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				cursor: pointer;
+// 				font-size: 14px;
+// 				line-height: 1;
+// 			}
+// 
+// 			.pin-conversation-btn:hover,
+// 			.new-conversation-btn:hover {
+// 				background: var(--background-modifier-hover);
+// 			}
+// 
+// 			.conversation-list-content {
+// 				flex: 1;
+// 				overflow-y: auto;
+// 			}
+// 
+// 			.conversation-item {
+// 				padding: 10px;
+// 				border-bottom: 1px solid var(--background-modifier-border);
+// 				cursor: pointer;
+// 				transition: background-color 0.1s;
+// 			}
+// 
+// 			.conversation-item:hover {
+// 				background: var(--background-modifier-hover);
+// 			}
+// 
+// 			.conversation-item.active {
+// 				background: var(--background-modifier-active-hover);
+// 			}
+// 
+// 			.conversation-title {
+// 				font-size: 13px;
+// 				color: var(--text-normal);
+// 				overflow: hidden;
+// 				text-overflow: ellipsis;
+// 				white-space: nowrap;
+// 			}
+// 
+// 			.empty-state {
+// 				padding: 20px;
+// 				text-align: center;
+// 				color: var(--text-muted);
+// 				font-size: 12px;
+// 			}
+// 
+// 			.main-chat-area {
+// 				flex: 1;
+// 				width: 100%;
+// 				display: flex;
+// 				flex-direction: column;
+// 				padding: 10px;
+// 			}
+// 
+// 			.chat-header {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 10px;
+// 				padding: 10px 0;
+// 				border-bottom: 1px solid var(--background-modifier-border);
+// 				margin-bottom: 10px;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.model-selector {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 				flex: 1;
+// 			}
+// 
+// 			.model-selector select {
+// 				flex: 1;
+// 				min-width: 150px;
+// 				padding: 6px 10px;
+// 				border-radius: 4px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				font-weight: 500;
+// 			}
+// 
+// 			.provider-selector {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 			}
+// 
+// 			.provider-selector span {
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.provider-selector select {
+// 				padding: 4px 8px;
+// 				border-radius: 4px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				font-size: 12px;
+// 			}
+// 
+// 			.params-row {
+// 				display: flex;
+// 				gap: 20px;
+// 				padding: 10px 0;
+// 				border-bottom: 1px solid var(--background-modifier-border);
+// 				margin-bottom: 10px;
+// 			}
+// 
+// 			.param-control {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 			}
+// 
+// 			.param-label {
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 				white-space: nowrap;
+// 			}
+// 
+// 			.param-value {
+// 				font-size: 12px;
+// 				color: var(--text-normal);
+// 				min-width: 30px;
+// 				text-align: center;
+// 			}
+// 
+// 			.param-control input[type="range"] {
+// 				width: 120px;
+// 			}
+// 
+// 			.param-control input[type="number"] {
+// 				width: 100px;
+// 				padding: 4px 8px;
+// 				border-radius: 4px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				font-size: 12px;
+// 			}
+// 
+// 			.chat-messages {
+// 				flex: 1;
+// 				overflow-y: auto;
+// 				padding: 12px 16px;
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 12px;
+// 			}
+// 
+// 			.chat-message {
+// 				display: flex;
+// 				width: 100%;
+// 			}
+// 
+// 			.message-user .message-row {
+// 				flex-direction: row-reverse;
+// 			}
+// 
+// 			.message-row {
+// 				display: flex;
+// 				gap: 10px;
+// 				width: 100%;
+// 				max-width: 100%;
+// 			}
+// 
+// 			.message-avatar {
+// 				flex-shrink: 0;
+// 				width: 28px;
+// 				height: 28px;
+// 				border-radius: 50%;
+// 				background: var(--background-modifier-border);
+// 				display: flex;
+// 				align-items: center;
+// 				justify-content: center;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.message-avatar svg {
+// 				width: 16px;
+// 				height: 16px;
+// 			}
+// 
+// 			.message-user .message-avatar {
+// 				background: var(--interactive-accent);
+// 				color: white;
+// 			}
+// 
+// 			.message-assistant .message-avatar {
+// 				background: var(--background-secondary);
+// 				border: 1px solid var(--background-modifier-border);
+// 			}
+// 
+// 			/* Tool execution messages */
+// 			.message-tool {
+// 				padding: 12px;
+// 				margin: 12px 0;
+// 				background: var(--background-primary);
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 6px;
+// 			}
+// 
+// 			.tool-execution {
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 8px;
+// 			}
+// 
+// 			.tool-icon {
+// 				font-size: 20px;
+// 			}
+// 
+// 			.tool-name {
+// 				font-weight: 600;
+// 				color: var(--text-accent);
+// 				font-size: 13px;
+// 			}
+// 
+// 			.tool-args {
+// 				font-family: var(--font-monospace);
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 				white-space: pre;
+// 				background: var(--background-secondary);
+// 				padding: 8px;
+// 				border-radius: 4px;
+// 			}
+// 
+// 			.tool-result {
+// 				margin-top: 8px;
+// 				padding: 8px;
+// 				border-radius: 4px;
+// 			}
+// 
+// 			.tool-success {
+// 				background: rgba(0, 255, 0, 0.1);
+// 				border-left: 3px solid var(--text-success);
+// 			}
+// 
+// 			.tool-error {
+// 				background: rgba(255, 0, 0, 0.1);
+// 				border-left: 3px solid var(--text-error);
+// 			}
+// 
+// 			.tool-result pre {
+// 				font-family: var(--font-monospace);
+// 				font-size: 11px;
+// 				margin: 4px 0 0 0;
+// 				white-space: pre-wrap;
+// 			}
+// 
+// 			.message-body {
+// 				flex: 1;
+// 				min-width: 0;
+// 			}
+// 
+// 			.message-body,
+// 			.ia-chat-message__body,
+// 			.message-content,
+// 			.ia-chat-message__content {
+// 				user-select: text;
+// 			}
+// 
+// 			.message-actions,
+// 			.message-actions *,
+// 			.ia-chat-message__actions,
+// 			.ia-chat-message__actions * {
+// 				user-select: none;
+// 			}
+// 
+// 			.message-meta {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				flex-wrap: wrap;
+// 				margin-bottom: 4px;
+// 			}
+// 
+// 			.message-name {
+// 				font-weight: 600;
+// 				font-size: 12px;
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.ia-chat-message__badges {
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 4px;
+// 			}
+// 
+// 			.ia-chat-message__badge {
+// 				display: inline-flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 				padding: 2px 8px;
+// 				border-radius: 999px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				font-size: 10px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.ia-chat-message__badge-label {
+// 				font-weight: 600;
+// 				text-transform: uppercase;
+// 				letter-spacing: 0.02em;
+// 			}
+// 
+// 			.ia-chat-message__badge-value {
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.message-timestamp {
+// 				font-size: 10px;
+// 				color: var(--text-faint);
+// 			}
+// 
+// 			.message-actions {
+// 				display: flex;
+// 				gap: 2px;
+// 				margin-top: 4px;
+// 				opacity: 0;
+// 				transition: opacity 0.15s;
+// 			}
+// 
+// 			.message-body:hover .message-actions {
+// 				opacity: 1;
+// 			}
+// 
+// 			.msg-action-btn {
+// 				padding: 3px 6px;
+// 				border: none;
+// 				background: transparent;
+// 				color: var(--text-muted);
+// 				cursor: pointer;
+// 				border-radius: 3px;
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 2px;
+// 				font-size: 11px;
+// 				transition: all 0.15s;
+// 			}
+// 
+// 			.msg-action-btn:hover {
+// 				background: var(--background-modifier-hover);
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.msg-action-btn svg {
+// 				width: 14px;
+// 				height: 14px;
+// 			}
+// 
+// 			.message-content {
+// 				line-height: 1.5;
+// 				word-wrap: break-word;
+// 				font-size: 13px;
+// 				white-space: normal;
+// 			}
+// 
+// 			.message-content p {
+// 				margin: 0.2em 0;
+// 			}
+// 
+// 			.message-content p:first-child {
+// 				margin-top: 0;
+// 			}
+// 
+// 			.message-content p:last-child {
+// 				margin-bottom: 0;
+// 			}
+// 
+// 			.message-content p:empty {
+// 				display: none;
+// 			}
+// 
+// 			.message-content code {
+// 				background: var(--background-primary);
+// 				padding: 2px 6px;
+// 				border-radius: 4px;
+// 				font-family: var(--font-monospace);
+// 				font-size: 0.9em;
+// 			}
+// 
+// 			.message-content pre {
+// 				background: var(--background-primary);
+// 				padding: 12px;
+// 				border-radius: 6px;
+// 				overflow-x: auto;
+// 				margin: 8px 0;
+// 			}
+// 
+// 			.message-content pre code {
+// 				background: none;
+// 				padding: 0;
+// 			}
+// 
+// 			.message-content ul, .message-content ol {
+// 				margin: 0.5em 0;
+// 				padding-left: 1.5em;
+// 			}
+// 
+// 			.message-content blockquote {
+// 				border-left: 3px solid var(--background-modifier-border);
+// 				padding-left: 12px;
+// 				margin: 8px 0;
+// 				opacity: 0.8;
+// 			}
+// 
+// 			.message-attachments {
+// 				margin-top: 6px;
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 4px;
+// 			}
+// 
+// 			.attachment-item {
+// 				padding: 6px;
+// 				background: var(--background-modifier-border);
+// 				border-radius: 4px;
+// 				font-size: 0.85em;
+// 			}
+// 
+// 			.chat-input-container {
+// 				margin-top: 12px;
+// 				padding: 12px;
+// 				background: var(--background-secondary);
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 10px;
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 10px;
+// 			}
+// 
+// 			.chat-input-header {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 10px;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.chat-top-controls,
+// 			.chat-action-row,
+// 			.chat-model-row,
+// 			.chat-token-row {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 10px;
+// 				flex-wrap: wrap;
+// 				margin-bottom: 8px;
+// 			}
+// 
+// 			.chat-action-row {
+// 				display: flex;
+// 				justify-content: space-between;
+// 				align-items: center;
+// 				gap: 12px;
+// 				margin: 6px 0 12px 0;
+// 			}
+// 
+// 			.chat-breadcrumb {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-breadcrumb-link {
+// 				color: var(--text-accent);
+// 				font-weight: 600;
+// 				cursor: pointer;
+// 				background: transparent;
+// 				border: none;
+// 				padding: 0;
+// 			}
+// 
+// 			.chat-breadcrumb-link:hover {
+// 				text-decoration: underline;
+// 			}
+// 
+// 			.chat-breadcrumb-current {
+// 				font-weight: 600;
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.chat-action-buttons {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 			}
+// 
+// 			.chat-action-link {
+// 				color: var(--text-dark);
+// 				font-weight: 600;
+// 				cursor: pointer;
+// 			}
+// 
+// 			.chat-action-link:hover {
+// 				color: var(--text-accent);
+// 				text-decoration: underline;
+// 			}
+// 
+// 			.chat-action-sep {
+// 				color: var(--text-muted);
+// 				font-size: 12px;
+// 			}
+// 
+// 			.chat-model-row {
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 8px;
+// 				padding: 10px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 10px;
+// 				background: var(--background-secondary);
+// 			}
+// 
+// 			.chat-model-controls {
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 12px;
+// 				align-items: center;
+// 			}
+// 
+// 			.chat-model-select {
+// 				display: flex;
+// 				flex: 1;
+// 				align-items: center;
+// 				gap: 8px;
+// 			}
+// 
+// 			.chat-model-select .chat-label {
+// 				font-weight: 600;
+// 			}
+// 
+// 			.model-select {
+// 				flex: 1;
+// 				min-width: 160px;
+// 				padding: 6px 10px;
+// 				border-radius: 8px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 			}
+// 
+// 			.chat-param-group {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 			}
+// 
+// 			.chat-agent-summary {
+// 				display: none;
+// 				flex-direction: column;
+// 				gap: 6px;
+// 				padding-top: 6px;
+// 				border-top: 1px solid var(--background-modifier-border);
+// 			}
+// 
+// 			.chat-agent-summary-title {
+// 				font-size: 12px;
+// 				font-weight: 600;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-agent-summary-details {
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 6px;
+// 				align-items: center;
+// 			}
+// 
+// 			.chat-agent-summary-text {
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-agent-chip {
+// 				display: inline-flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 				padding: 4px 10px;
+// 				border-radius: 999px;
+// 				border: 1px dashed var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-agent-chip-label {
+// 				font-weight: 600;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-agent-chip-value {
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.chat-label {
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 				font-weight: 600;
+// 			}
+// 
+// 			.chat-slider {
+// 				width: 120px;
+// 			}
+// 
+// 			.chat-param-value {
+// 				font-weight: 600;
+// 				color: var(--text-accent);
+// 			}
+// 
+// 			.chat-number-input {
+// 				width: 90px;
+// 				padding: 4px 8px;
+// 				border-radius: 6px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 			}
+// 
+// 			.chat-token-row {
+// 				justify-content: space-between;
+// 			}
+// 
+// 			.chat-token-chip {
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 				padding: 4px 10px;
+// 				border-radius: 999px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 			}
+// 
+// 			.chat-select-group {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 			}
+// 
+// 			.chat-header-actions {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				flex-wrap: wrap;
+// 				margin-left: auto;
+// 			}
+// 
+// 			.header-action-btn {
+// 				display: inline-flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 				padding: 4px 10px;
+// 				border: 1px solid transparent;
+// 				border-radius: 999px;
+// 				background: var(--background-primary);
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 				cursor: pointer;
+// 				transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
+// 			}
+// 
+// 			.header-action-btn:hover:not(.is-disabled) {
+// 				background: var(--background-modifier-hover);
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.header-action-btn.is-active {
+// 				border-color: var(--text-accent);
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.header-action-btn.is-disabled {
+// 				opacity: 0.5;
+// 				cursor: not-allowed;
+// 			}
+// 
+// 			.header-action-btn.is-link {
+// 				border-style: dashed;
+// 				background: transparent;
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.header-action-icon {
+// 				font-size: 12px;
+// 				line-height: 1;
+// 			}
+// 
+// 			.header-action-status {
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-input-editor {
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 8px;
+// 				background: var(--background-primary);
+// 				padding: 4px;
+// 			}
+// 
+// 			.chat-input-footer {
+// 				padding-top: 4px;
+// 			}
+// 
+// 			/* Bottom controls - 3 sections layout */
+// 			.input-bottom-controls {
+// 				display: flex;
+// 				align-items: center;
+// 				justify-content: space-between;
+// 				gap: 10px;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.bottom-left-controls {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				flex: 1;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.bottom-middle-controls {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 				flex: 1;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.attachment-preview {
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 6px;
+// 				align-items: center;
+// 			}
+// 
+// 			.bottom-right-controls {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 				margin-left: auto;
+// 			}
+// 
+// 			.mode-selector,
+// 			.prompt-selector,
+// 			.agent-selector {
+// 				padding: 5px 10px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 999px;
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				font-size: 11px;
+// 				cursor: pointer;
+// 				min-width: 100px;
+// 				transition: border-color 0.2s ease;
+// 			}
+// 
+// 			.mode-selector:focus,
+// 			.prompt-selector:focus,
+// 			.agent-selector:focus {
+// 				outline: none;
+// 				border-color: var(--interactive-accent);
+// 				box-shadow: 0 0 0 2px rgba(47, 194, 153, 0.15);
+// 			}
+// 
+// 
+// 
+// 			.checkbox-container {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 			}
+// 
+// 			.checkbox-container input[type="checkbox"] {
+// 				cursor: pointer;
+// 				margin: 0;
+// 			}
+// 
+// 			.checkbox-container label {
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 				user-select: none;
+// 				cursor: pointer;
+// 			}
+// 
+// 			/* Toggle Button Styles */
+// 			.toggle-btn {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 				padding: 4px 10px;
+// 				border-radius: 12px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				color: var(--text-muted);
+// 				cursor: pointer;
+// 				font-size: 11px;
+// 				transition: all 0.2s ease;
+// 				outline: none;
+// 			}
+// 
+// 			.toggle-btn:hover {
+// 				background: var(--background-modifier-hover);
+// 				border-color: var(--interactive-accent);
+// 			}
+// 
+// 			.toggle-btn.active {
+// 				background: var(--interactive-accent);
+// 				color: white;
+// 				border-color: var(--interactive-accent);
+// 				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+// 			}
+// 
+// 			.toggle-btn .toggle-icon {
+// 				font-size: 14px;
+// 				line-height: 1;
+// 			}
+// 
+// 			.toggle-btn.active .toggle-icon {
+// 				filter: brightness(1.1);
+// 			}
+// 
+// 			.toggle-btn .toggle-label {
+// 				font-weight: 500;
+// 			}
+// 
+// 			.tools-label {
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			/* Workflow Execution Styles */
+// 			.message-workflow {
+// 				padding: 12px;
+// 				background: var(--background-secondary);
+// 				border-left: 4px solid var(--interactive-accent);
+// 				border-radius: 4px;
+// 				margin-bottom: 12px;
+// 			}
+// 
+// 			.workflow-execution {
+// 				font-size: 13px;
+// 			}
+// 
+// 			.workflow-header {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 				margin-bottom: 12px;
+// 				font-weight: 600;
+// 			}
+// 
+// 			.workflow-icon {
+// 				font-size: 20px;
+// 			}
+// 
+// 			.workflow-status {
+// 				padding: 6px 12px;
+// 				background: var(--background-primary);
+// 				border-radius: 4px;
+// 				font-size: 12px;
+// 				margin-bottom: 12px;
+// 			}
+// 
+// 			.workflow-log {
+// 				max-height: 400px;
+// 				overflow-y: auto;
+// 			}
+// 
+// 			.log-entry {
+// 				font-size: 11px;
+// 				padding: 4px 0;
+// 				border-bottom: 1px solid var(--background-modifier-border);
+// 			}
+// 
+// 			.log-action {
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.log-output {
+// 				color: var(--text-muted);
+// 				margin-left: 16px;
+// 				font-family: monospace;
+// 				font-size: 10px;
+// 			}
+// 
+// 			.log-error {
+// 				color: var(--text-error);
+// 				margin-left: 16px;
+// 			}
+// 
+// 			/* Part 1: Reference area */
+// 			.input-reference-area {
+// 				flex: 1;
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 4px;
+// 				min-height: 28px;
+// 				padding: 4px 6px;
+// 				background: var(--background-primary);
+// 				border: 1px dashed var(--background-modifier-border);
+// 				border-radius: 8px;
+// 				transition: border-color 0.2s ease;
+// 			}
+// 
+// 			.input-reference-area:empty {
+// 				border-style: dashed;
+// 			}
+// 
+// 			.reference-list {
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 4px;
+// 			}
+// 
+// 			.reference-item {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				padding: 4px 8px;
+// 				background: var(--background-secondary);
+// 				border-radius: 4px;
+// 				font-size: 12px;
+// 			}
+// 
+// 			.reference-icon {
+// 				flex-shrink: 0;
+// 			}
+// 
+// 			.reference-path {
+// 				flex: 1;
+// 				overflow: hidden;
+// 				text-overflow: ellipsis;
+// 				white-space: nowrap;
+// 			}
+// 
+// 			.reference-remove-btn {
+// 				padding: 0 4px;
+// 				border: none;
+// 				background: transparent;
+// 				color: var(--text-error);
+// 				cursor: pointer;
+// 				font-size: 16px;
+// 				line-height: 1;
+// 			}
+// 
+// 			.reference-remove-btn:hover {
+// 				background: var(--background-modifier-hover);
+// 				border-radius: 2px;
+// 			}
+// 
+// 
+// 			/* Message references (displayed in sent messages) */
+// 			.message-references {
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 6px;
+// 				margin-top: 8px;
+// 			}
+// 
+// 			.reference-badge {
+// 				display: inline-flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 				padding: 3px 8px;
+// 				background: var(--background-primary);
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 12px;
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 				transition: all 0.2s;
+// 			}
+// 
+// 			.reference-badge:hover {
+// 				background: var(--background-modifier-hover);
+// 				color: var(--text-normal);
+// 				border-color: var(--interactive-accent);
+// 			}
+// 
+// 			/* Part 2: Text input */
+// 			.chat-input {
+// 				width: 100%;
+// 				min-height: 72px;
+// 				max-height: 160px;
+// 				padding: 14px 16px;
+// 				border: 1px solid transparent;
+// 				border-radius: 12px;
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				resize: none;
+// 				font-family: inherit;
+// 				font-size: 13px;
+// 				line-height: 1.6;
+// 				outline: none;
+// 				transition: border-color 0.2s, box-shadow 0.2s;
+// 			}
+// 
+// 			.chat-input:focus {
+// 				border-color: var(--interactive-accent);
+// 				box-shadow: 0 0 0 3px rgba(47, 194, 153, 0.15);
+// 			}
+// 
+// 			.chat-input::placeholder {
+// 				color: var(--text-muted);
+// 			}
+// 
+// 
+// 
+// 			@media (max-width: 720px) {
+// 				.chat-input-container {
+// 					padding: 12px;
+// 				}
+// 				.chat-input-footer {
+// 					padding-top: 8px;
+// 				}
+// 				.input-bottom-controls {
+// 					flex-direction: column;
+// 					align-items: stretch;
+// 				}
+// 				.bottom-right-controls {
+// 					margin-left: 0;
+// 					justify-content: flex-start;
+// 				}
+// 			}
+// 
+// 			.attachment-preview {
+// 				flex: 1;
+// 				display: flex;
+// 				gap: 6px;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.attachment-preview-item {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				padding: 4px 8px;
+// 				background: var(--background-secondary);
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 4px;
+// 				font-size: 11px;
+// 			}
+// 
+// 			.send-info {
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.send-info kbd {
+// 				padding: 2px 6px;
+// 				background: var(--background-primary);
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 3px;
+// 				font-family: var(--font-monospace);
+// 				font-size: 10px;
+// 
+// 	/* RAG Sources Display */
+// 	.rag-sources-container {
+// 		margin-top: 12px;
+// 		padding: 12px;
+// 		background: var(--background-primary);
+// 		border: 1px solid var(--background-modifier-border);
+// 		border-radius: 6px;
+// 	}
+// 
+// 	.rag-sources-header {
+// 		font-weight: 600;
+// 		color: var(--text-accent);
+// 		margin-bottom: 8px;
+// 		font-size: 12px;
+// 		display: flex;
+// 		align-items: center;
+// 		gap: 6px;
+// 	}
+// 
+// 	.rag-sources-grid {
+// 		display: flex;
+// 		flex-direction: column;
+// 		gap: 8px;
+// 	}
+// 
+// 	.rag-source-card {
+// 		padding: 10px;
+// 		border: 1px solid var(--background-modifier-border);
+// 		border-radius: 6px;
+// 		background: var(--background-secondary);
+// 		transition: all 0.2s ease;
+// 		cursor: pointer;
+// 	}
+// 
+// 	.rag-source-card:hover {
+// 		border-color: var(--interactive-accent);
+// 		background: var(--background-modifier-hover);
+// 		transform: translateY(-1px);
+// 		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+// 	}
+// 
+// 	.rag-source-header {
+// 		display: flex;
+// 		justify-content: space-between;
+// 		align-items: flex-start;
+// 		margin-bottom: 6px;
+// 	}
+// 
+// 	.rag-source-title {
+// 		font-weight: 600;
+// 		font-size: 13px;
+// 		color: var(--text-normal);
+// 		flex: 1;
+// 	}
+// 
+// 	.rag-source-similarity {
+// 		font-size: 11px;
+// 		font-weight: 600;
+// 		background: var(--background-primary);
+// 		padding: 2px 6px;
+// 		border-radius: 10px;
+// 		min-width: 40px;
+// 		text-align: center;
+// 	}
+// 
+// 	.rag-source-path {
+// 		font-size: 11px;
+// 		color: var(--text-muted);
+// 		margin-bottom: 6px;
+// 		word-break: break-all;
+// 	}
+// 
+// 	.rag-source-content {
+// 		font-size: 12px;
+// 		color: var(--text-muted);
+// 		line-height: 1.4;
+// 		background: var(--background-primary);
+// 		padding: 8px;
+// 		border-radius: 4px;
+// 		border-left: 2px solid var(--interactive-accent);
+// 	}
+// 
+// 	.rag-source-content:hover {
+// 		background: var(--background-secondary);
+// 	}
+// 			}
+// 		`;
+// 		document.head.appendChild(styleEl);
+// 	}
 
 	async initializeMCPServers() {
 		const { initializeMCPServers } = await import('@/application/services/mcp-service');
@@ -4241,7 +4242,7 @@ class TextInputModal extends Modal {
 	defaultValue: string;
 	title: string;
 
-	constructor(app: any, title: string, placeholder: string, defaultValue: string, onSubmit: (result: string) => void) {
+	constructor(app: unknown, title: string, placeholder: string, defaultValue: string, onSubmit: (result: string) => void) {
 		super(app);
 		this.title = title;
 		this.placeholder = placeholder;
@@ -4308,14 +4309,14 @@ class SearchableReferenceModal extends Modal {
 		
 		// Get all files and folders
 		const allFiles = app.vault.getAllLoadedFiles();
-		this.allItems = allFiles.filter(f => f instanceof TFile || f instanceof TFolder) as (TFile | TFolder)[];
+		this.allItems = allFiles.filter(f => f instanceof TFile || f instanceof TFolder);
 	}
 
 	onOpen() {
 		const { contentEl } = this;
 		contentEl.addClass('searchable-reference-modal');
 
-		contentEl.createEl('h2', { text: 'Add References' });
+		contentEl.createEl('h2', { text: 'Add references' });
 
 		// Search input
 		this.searchInput = contentEl.createEl('input', {
@@ -4359,19 +4360,19 @@ class SearchableReferenceModal extends Modal {
 		buttonContainer.setCssProps({ 'justify-content': 'space-between' });
 		buttonContainer.setCssProps({ 'margin-top': '10px' });
 		
-		const selectAllButton = buttonContainer.createEl('button', { text: 'Select All' });
+		const selectAllButton = buttonContainer.createEl('button', { text: 'select all' });
 		selectAllButton.addEventListener('click', () => {
 			this.selectedItems = [...this.allItems];
 			this.updateDisplay();
 		});
 		
-		const selectNoneButton = buttonContainer.createEl('button', { text: 'Select None' });
+		const selectNoneButton = buttonContainer.createEl('button', { text: 'select none' });
 		selectNoneButton.addEventListener('click', () => {
 			this.selectedItems = [];
 			this.updateDisplay();
 		});
 		
-		const addButton = buttonContainer.createEl('button', { text: 'Add Selected' });
+		const addButton = buttonContainer.createEl('button', { text: 'Add selected' });
 		addButton.addClass('mod-cta');
 		addButton.addEventListener('click', () => {
 			this.close();
@@ -4457,14 +4458,14 @@ class SearchableImageModal extends Modal {
 		this.allImageFiles = files.filter(f =>
 			f.extension === 'png' || f.extension === 'jpg' ||
 			f.extension === 'jpeg' || f.extension === 'gif' || f.extension === 'webp'
-		) as TFile[];
+		);
 	}
 
 	onOpen() {
 		const { contentEl } = this;
 		contentEl.addClass('searchable-image-modal');
 
-		contentEl.createEl('h2', { text: 'Attach Images' });
+		contentEl.createEl('h2', { text: 'Attach images' });
 
 		// Search input
 		this.searchInput = contentEl.createEl('input', {
@@ -4508,19 +4509,19 @@ class SearchableImageModal extends Modal {
 		buttonContainer.setCssProps({ 'justify-content': 'space-between' });
 		buttonContainer.setCssProps({ 'margin-top': '10px' });
 		
-		const selectAllButton = buttonContainer.createEl('button', { text: 'Select All' });
+		const selectAllButton = buttonContainer.createEl('button', { text: 'select all' });
 		selectAllButton.addEventListener('click', () => {
 			this.selectedFiles = [...this.allImageFiles];
 			this.updateDisplay();
 		});
 		
-		const selectNoneButton = buttonContainer.createEl('button', { text: 'Select None' });
+		const selectNoneButton = buttonContainer.createEl('button', { text: 'select none' });
 		selectNoneButton.addEventListener('click', () => {
 			this.selectedFiles = [];
 			this.updateDisplay();
 		});
 		
-		const addButton = buttonContainer.createEl('button', { text: 'Add Selected' });
+		const addButton = buttonContainer.createEl('button', { text: 'Add selected' });
 		addButton.addClass('mod-cta');
 		addButton.addEventListener('click', () => {
 			this.close();
@@ -4604,14 +4605,14 @@ class SingleFileSelectionModal extends Modal {
 		
 		// Get all markdown files
 		const files = app.vault.getFiles();
-		this.allFiles = files.filter(f => f.extension === "md") as TFile[];
+		this.allFiles = files.filter(f => f.extension === "md");
 	}
 
 	onOpen() {
 		const { contentEl } = this;
 		contentEl.addClass("single-file-selection-modal");
 
-		contentEl.createEl("h2", { text: "Insert to Note" });
+		contentEl.createEl("h2", { text: "Insert to note" });
 
 		// Search input
 		this.searchInput = contentEl.createEl("input", {
@@ -4655,7 +4656,7 @@ class SingleFileSelectionModal extends Modal {
 		buttonContainer.setCssProps({ 'justify-content': "flex-end" });
 		buttonContainer.setCssProps({ 'margin-top': "10px" });
 		
-		const insertButton = buttonContainer.createEl("button", { text: "Insert to Selected Note" });
+		const insertButton = buttonContainer.createEl("button", { text: "Insert to selected note" });
 		insertButton.addClass("mod-cta");
 		insertButton.addEventListener("click", () => {
 			this.close();
@@ -4663,7 +4664,7 @@ class SingleFileSelectionModal extends Modal {
 		});
 		
 		// Add "Create New Note" button
-		const newNoteButton = buttonContainer.createEl("button", { text: "Create New Note" });
+		const newNoteButton = buttonContainer.createEl("button", { text: "Create new note" });
 		newNoteButton.setCssProps({ 'margin-right': "10px" });
 		newNoteButton.addEventListener("click", () => {
 			this.close();

@@ -27,7 +27,7 @@ export class Logger {
 	/**
 	 * Log debug message (development/troubleshooting)
 	 */
-	debug(message: string, ...args: any[]): void {
+	debug(message: string, ...args: unknown[]): void {
 		if (this.minLevel <= LogLevel.DEBUG) {
 			console.debug(`[${this.context}] ${message}`, ...args);
 		}
@@ -36,7 +36,7 @@ export class Logger {
 	/**
 	 * Log info message (normal operations)
 	 */
-	info(message: string, ...args: any[]): void {
+	info(message: string, ...args: unknown[]): void {
 		if (this.minLevel <= LogLevel.INFO) {
 			console.debug(`[${this.context}] ${message}`, ...args);
 		}
@@ -45,7 +45,7 @@ export class Logger {
 	/**
 	 * Log warning message (potential issues)
 	 */
-	warn(message: string, ...args: any[]): void {
+	warn(message: string, ...args: unknown[]): void {
 		if (this.minLevel <= LogLevel.WARN) {
 			console.warn(`[${this.context}] ${message}`, ...args);
 		}
@@ -54,7 +54,7 @@ export class Logger {
 	/**
 	 * Log error message (failures)
 	 */
-	error(message: string, error?: Error | unknown, ...args: any[]): void {
+	error(message: string, error?: Error | unknown, ...args: unknown[]): void {
 		if (this.minLevel <= LogLevel.ERROR) {
 			if (error instanceof Error) {
 				console.error(`[${this.context}] ${message}`, error.message, error.stack, ...args);

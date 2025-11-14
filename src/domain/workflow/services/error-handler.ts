@@ -53,7 +53,7 @@ export interface WorkflowErrorDetails {
   /** Error code (if applicable) */
   code?: string | number;
   /** Additional context data */
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   /** Related node information */
   node?: {
     id: string;
@@ -71,7 +71,7 @@ export interface WorkflowErrorDetails {
  */
 export class WorkflowError extends Error {
   public readonly type: WorkflowErrorType;
-  public readonly context?: Record<string, any>;
+  public readonly context?: Record<string, unknown>;
   public node?: { id: string; type: string; name: string };
   public readonly recoverable: boolean;
   public readonly code?: string | number;
@@ -109,7 +109,7 @@ export class WorkflowError extends Error {
   /**
    * Convert error to JSON-serializable object
    */
-  toJSON(): any {
+  toJSON(): unknown {
     return {
       name: this.name,
       type: this.type,
@@ -126,7 +126,7 @@ export class WorkflowError extends Error {
   /**
    * Create error from JSON
    */
-  static fromJSON(obj: any): WorkflowError {
+  static fromJSON(obj: unknown): WorkflowError {
     return new WorkflowError({
       type: obj.type,
       message: obj.message,
@@ -148,7 +148,7 @@ export class WorkflowError extends Error {
  * Configuration-related errors
  */
 export class ConfigurationError extends WorkflowError {
-  constructor(message: string, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.CONFIGURATION_ERROR,
       message,
@@ -164,7 +164,7 @@ export class ConfigurationError extends WorkflowError {
  * Validation-related errors
  */
 export class ValidationError extends WorkflowError {
-  constructor(message: string, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.VALIDATION_ERROR,
       message,
@@ -180,7 +180,7 @@ export class ValidationError extends WorkflowError {
  * Execution-related errors
  */
 export class ExecutionError extends WorkflowError {
-  constructor(message: string, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.EXECUTION_ERROR,
       message,
@@ -196,7 +196,7 @@ export class ExecutionError extends WorkflowError {
  * Timeout-related errors
  */
 export class TimeoutError extends WorkflowError {
-  constructor(message: string, timeout: number, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, timeout: number, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.TIMEOUT_ERROR,
       message,
@@ -212,7 +212,7 @@ export class TimeoutError extends WorkflowError {
  * Security-related errors
  */
 export class SecurityError extends WorkflowError {
-  constructor(message: string, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.SECURITY_VIOLATION,
       message,
@@ -228,7 +228,7 @@ export class SecurityError extends WorkflowError {
  * Service-related errors
  */
 export class ServiceError extends WorkflowError {
-  constructor(message: string, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.SERVICE_ERROR,
       message,
@@ -257,7 +257,7 @@ export class ErrorHandler {
   ): Promise<T | null> {
     try {
       return await operation();
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (onError) {
         onError(error);
       } else {
@@ -374,7 +374,7 @@ export class ErrorHandler {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         return await operation();
-      } catch (error: any) {
+      } catch (error: unknown) {
         lastError = error;
         
         // Don't retry on security or configuration errors

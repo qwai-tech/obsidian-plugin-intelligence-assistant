@@ -5,6 +5,7 @@
 
 import { BaseLLMProvider } from './base-provider';
 import { ChatRequest, StreamChunk } from './types';
+import { requestUrl } from 'obsidian';
 
 /**
  * Result of parsing a streaming chunk
@@ -30,26 +31,26 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 	 *
 	 * @example OpenAI
 	 * ```ts
-	 * protected parseStreamChunk(data: any): ParsedStreamChunk | null {
-	 *   if (data === '[DONE]') return { content: null, done: true };
-	 *   const content = data.choices[0]?.delta?.content;
+	 * protected parseStreamChunk(_data: unknown): ParsedStreamChunk | null {
+	 *   if (_data === '[DONE]') return { content: null, done: true };
+	 *   const content = _data.choices[0]?.delta?.content;
 	 *   return content ? { content, done: false } : null;
 	 * }
 	 * ```
 	 *
 	 * @example Anthropic
 	 * ```ts
-	 * protected parseStreamChunk(data: any): ParsedStreamChunk | null {
-	 *   if (data.type === 'message_stop') return { content: null, done: true };
-	 *   if (data.type === 'content_block_delta') {
-	 *     const content = data.delta?.text;
+	 * protected parseStreamChunk(_data: unknown): ParsedStreamChunk | null {
+	 *   if (_data.type === 'message_stop') return { content: null, done: true };
+	 *   if (_data.type === 'content_block_delta') {
+	 *     const content = _data.delta?.text;
 	 *     return content ? { content, done: false } : null;
 	 *   }
 	 *   return null;
 	 * }
 	 * ```
 	 */
-	protected abstract parseStreamChunk(data: any): ParsedStreamChunk | null;
+	protected abstract parseStreamChunk(_data: unknown): ParsedStreamChunk | null;
 
 	/**
 	 * Get the provider name for logging
@@ -70,24 +71,29 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 		const { url, body } = this.prepareStreamRequest(request);
 
 		try {
-			// Use native fetch for true streaming support
-			const response = await requestUrl(url, {
+			const response = await requestUrl({
+				url: url,
 				method: 'POST',
 				headers: this.getHeaders(),
 				body: JSON.stringify(body),
 			});
 
-			if (!response.ok) {
-				const error = await response.text();
-				throw new Error(`API request failed: ${response.status} ${error}`);
+			if (response.status < 200 || response.status >= 300) {
+				throw new Error(`API request failed: ${response.status} ${response.text || 'Unknown error'}`);
 			}
 
 			if (!response.body) {
 				throw new Error('Response body is null');
 			}
 
+			// Type guard for response body
+			const body = response.body;
+			if (!(body instanceof ReadableStream)) {
+				throw new Error('Response body is not a ReadableStream');
+			}
+
 			// Process the stream
-			await this.processStream(response.body, onChunk);
+			await this.processStream(body, onChunk);
 
 		} catch (error) {
 			console.error(`[${this.getProviderName()}] Stream error:`, error);
@@ -99,7 +105,7 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 	 * Prepare the streaming request (URL and body)
 	 * Subclasses must implement to provide provider-specific request format
 	 */
-	protected abstract prepareStreamRequest(request: ChatRequest): { url: string; body: any };
+	protected abstract prepareStreamRequest(_request: ChatRequest): { url: string; body: unknown };
 
 	/**
 	 * Process the ReadableStream from the response
@@ -107,7 +113,7 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 	 */
 	private async processStream(
 		body: ReadableStream<Uint8Array>,
-		onChunk: (chunk: StreamChunk) => void
+		onChunk: (_chunk: StreamChunk) => void
 	): Promise<void> {
 		const reader = body.getReader();
 		const decoder = new TextDecoder();

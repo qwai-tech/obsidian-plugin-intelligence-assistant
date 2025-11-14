@@ -15,7 +15,7 @@ export function displayToolsTab(
 	setToolsSubTab: (tab: 'built-in' | 'mcp') => void,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Tool Configuration' });
+	containerEl.createEl('h3', { text: 'Tool configuration' });
 
 	const desc = containerEl.createEl('p', {
 		text: 'Review built-in tools and explore MCP tools loaded from connected servers. Enable the actions your agents should be able to perform.'
@@ -159,7 +159,7 @@ function renderMcpTools(
 		}
 		const requiredSet = new Set(schema.required ?? []);
 		return Object.entries(schema.properties)
-			.map(([key, value]: [string, any]) => {
+			.map(([key, value]: [string, unknown]) => {
 				const type = value?.type ?? 'unknown';
 				return `${key}${requiredSet.has(key) ? '*' : ''}: ${type}`;
 			})
@@ -224,7 +224,7 @@ function renderMcpTools(
 			serverStack.createDiv('ia-table-title').setText(row.serverName);
 			const statusHost = serverStack.createDiv();
 			const isConnected = connectedServers.has(row.serverName);
-			createStatusIndicator(statusHost, isConnected ? 'success' : 'warning', isConnected ? 'Connected' : 'Disconnected');
+			createStatusIndicator(statusHost, isConnected ? 'success' : 'warning', isConnected ? 'connected' : 'disconnected');
 			currentServer = row.serverName;
 		} else {
 			serverCell.setText('');

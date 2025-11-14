@@ -6,8 +6,8 @@ import { ConfigSchema, type ValidationResult } from './config-schema';
 
 type ChangeRecord = {
   path: string;
-  previous: any;
-  next: any;
+  previous: unknown;
+  next: unknown;
   timestamp: number;
 };
 
@@ -70,7 +70,7 @@ export class ConfigManager {
   }
 
   getPath<T = unknown>(path: string): T {
-    const value = normalizePath(path).reduce((acc: any, segment) => (acc ? acc[segment] : undefined), this.config);
+    const value = normalizePath(path).reduce((acc: unknown, segment) => (acc ? acc[segment] : undefined), this.config);
     return clone(value);
   }
 
@@ -79,7 +79,7 @@ export class ConfigManager {
     const last = segments.pop();
     if (!last) return;
 
-    let target: any = this.config;
+    let target: unknown = this.config;
     for (const segment of segments) {
       if (!(segment in target)) {
         target[segment] = {};
@@ -119,7 +119,7 @@ export class ConfigManager {
     return ConfigSchema.isRequired(path);
   }
 
-  getConstraints(path: string): Record<string, any> {
+  getConstraints(path: string): Record<string, unknown> {
     return ConfigSchema.getConstraints(path);
   }
 

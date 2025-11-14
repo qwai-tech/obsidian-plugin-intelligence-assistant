@@ -17,7 +17,7 @@ export function displayAgentsTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Agent Management' });
+	containerEl.createEl('h3', { text: 'Agent management' });
 
 	const desc = containerEl.createEl('p', {
 		text: 'Create and manage AI agents with specific capabilities, tools, and behaviors.'
@@ -29,7 +29,7 @@ export function displayAgentsTab(
 	const agentSummary = actionsRow.createDiv('ia-section-summary');
 	agentSummary.createSpan({ text: `${plugin.settings.agents.length} agent${plugin.settings.agents.length === 1 ? '' : 's'} configured` });
 
-	const addBtn = actionsRow.createEl('button', { text: '+ Add Agent' });
+	const addBtn = actionsRow.createEl('button', { text: '+ add agent' });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -73,7 +73,7 @@ export function displayAgentsTab(
 	// Display existing agents in a table if they exist
 	if (plugin.settings.agents.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No agents configured. Click "Add Agent" to get started.');
+		emptyDiv.setText('No agents configured. Select add agent to get started.');
 		return;
 	}
 
@@ -136,7 +136,7 @@ export function displayAgentsTab(
 
 		if (agent.id === DEFAULT_AGENT_ID) {
 			const badges = agentStack.createDiv('ia-table-badges');
-			const tag = badges.createEl('span', { text: 'Default' });
+			const tag = badges.createEl('span', { text: 'default' });
 			tag.addClass('ia-tag');
 		}
 
@@ -223,7 +223,7 @@ export function displayAgentsTab(
 		actionsCell.addClass('ia-table-cell');
 		actionsCell.addClass('ia-table-actions');
 
-		const editBtn = actionsCell.createEl('button', { text: 'Edit' });
+		const editBtn = actionsCell.createEl('button', { text: 'edit' });
 		editBtn.addClass('ia-button');
 		editBtn.addClass('ia-button--ghost');
 		editBtn.addEventListener('click', () => {
@@ -238,7 +238,7 @@ export function displayAgentsTab(
 		});
 
 		const canDelete = agent.id !== DEFAULT_AGENT_ID && plugin.settings.agents.length > 1;
-		const deleteBtn = actionsCell.createEl('button', { text: canDelete ? 'Delete' : 'Protected' });
+		const deleteBtn = actionsCell.createEl('button', { text: canDelete ? 'delete' : 'protected' });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
 		if (!canDelete) {

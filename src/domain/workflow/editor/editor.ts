@@ -59,7 +59,7 @@ export class WorkflowEditor {
 	// State
 	private isDirty = false;
 	private isExecuting = false;
-	private lastExecutionResult: any = null;
+	private lastExecutionResult: unknown = null;
 	private autoSaveTimer: NodeJS.Timeout | null = null;
 	private autoSaveDelay = 2000; // Auto-save after 2 seconds of inactivity
 
@@ -118,7 +118,7 @@ export class WorkflowEditor {
 			cls: 'workflow-name-input',
 			value: this.workflow.getData().name,
 		});
-		nameInput.placeholder = 'Workflow Name';
+		nameInput.placeholder = 'Workflow name';
 		nameInput.addEventListener('input', () => {
 			const data = this.workflow.getData();
 			data.name = nameInput.value;
@@ -130,28 +130,28 @@ export class WorkflowEditor {
 
 		// Execute button
 		const executeBtn = this.toolbar.createEl('button', {
-			text: '▶️ Execute',
+			text: '▶️ execute',
 			cls: 'toolbar-btn toolbar-btn-primary',
 		});
 		executeBtn.addEventListener('click', () => this.execute());
 
 		// Save button
 		const saveBtn = this.toolbar.createEl('button', {
-			text: '💾 Save',
+			text: '💾 save',
 			cls: 'toolbar-btn',
 		});
 		saveBtn.addEventListener('click', () => this.save());
 
 		// History button
 		const historyBtn = this.toolbar.createEl('button', {
-			text: '📜 History',
+			text: '📜 history',
 			cls: 'toolbar-btn',
 		});
 		historyBtn.addEventListener('click', () => this.showExecutionHistory());
 
 		// Export button
 		const exportBtn = this.toolbar.createEl('button', {
-			text: '📤 Export',
+			text: '📤 export',
 			cls: 'toolbar-btn',
 		});
 		exportBtn.addEventListener('click', () => this.export());
@@ -384,7 +384,7 @@ export class WorkflowEditor {
 
 		// Header
 		const header = this.historyPanel.createDiv('history-panel-header');
-		header.createSpan({ text: 'Execution History', cls: 'history-panel-title' });
+		header.createSpan({ text: 'Execution history', cls: 'history-panel-title' });
 
 		const closeBtn = header.createEl('button', {
 			text: '✕',
@@ -519,7 +519,7 @@ export class WorkflowEditor {
 				// Map 'completed' status to 'success' for canvas display
 				const status = logEntry.status === 'completed' ? 'success' : logEntry.status;
 				const state = {
-					status: status as 'pending' | 'running' | 'success' | 'error',
+					status: status,
 					startTime: logEntry.startTime,
 					endTime: logEntry.endTime,
 				};
@@ -528,8 +528,8 @@ export class WorkflowEditor {
 
 			// Update execution logs with input/output
 			const logsForCanvas = execution.log
-				.filter((entry: any) => entry.status === 'completed')
-				.map((entry: any) => ({
+				.filter((entry: unknown) => entry.status === 'completed')
+				.map((entry: unknown) => ({
 					nodeId: entry.nodeId,
 					input: entry.input,
 					output: entry.output,
@@ -565,8 +565,8 @@ export class WorkflowEditor {
 	/**
 	 * Show execution data modal
 	 */
-	private showExecutionDataModal(nodeId: string, log: { input?: any; output?: any }): void {
-		const app = (this.services as any)?.app || (window as any).app;
+	private showExecutionDataModal(nodeId: string, log: { input?: unknown; output?: unknown }): void {
+		const app = (this.services as unknown)?.app || (window as unknown).app;
 		if (!app) {
 			console.error('App instance not available for modal');
 			return;
@@ -583,7 +583,7 @@ export class WorkflowEditor {
 		const { Modal } = require('obsidian');
 
 		class ExecutionDataModal extends Modal {
-			constructor(app: any, private nodeData: { node: WorkflowNode; nodeDef: any; log: { input?: any; output?: any } }) {
+			constructor(app: unknown, private nodeData: { node: WorkflowNode; nodeDef: unknown; log: { input?: unknown; output?: unknown } }) {
 				super(app);
 			}
 
@@ -600,7 +600,7 @@ export class WorkflowEditor {
 
 				// Node info section
 				const infoSection = content.createDiv('execution-modal-section');
-				infoSection.createDiv('execution-modal-section-title').setText('Node Information');
+				infoSection.createDiv('execution-modal-section-title').setText('Node information');
 
 				const infoGrid = infoSection.createDiv('execution-modal-info-grid');
 
@@ -616,10 +616,10 @@ export class WorkflowEditor {
 				if (this.nodeData.log.input) {
 					const inputSection = content.createDiv('execution-modal-section');
 					const inputHeader = inputSection.createDiv('execution-modal-section-header');
-					inputHeader.createDiv('execution-modal-section-title').setText('Input Data');
+					inputHeader.createDiv('execution-modal-section-title').setText('Input data');
 
 					const copyInputBtn = inputHeader.createEl('button', {
-						text: '📋 Copy',
+						text: '📋 copy',
 						cls: 'execution-modal-btn',
 					});
 					copyInputBtn.addEventListener('click', () => {
@@ -637,10 +637,10 @@ export class WorkflowEditor {
 				if (this.nodeData.log.output) {
 					const outputSection = content.createDiv('execution-modal-section');
 					const outputHeader = outputSection.createDiv('execution-modal-section-header');
-					outputHeader.createDiv('execution-modal-section-title').setText('Output Data');
+					outputHeader.createDiv('execution-modal-section-title').setText('Output data');
 
 					const copyOutputBtn = outputHeader.createEl('button', {
-						text: '📋 Copy',
+						text: '📋 copy',
 						cls: 'execution-modal-btn',
 					});
 					copyOutputBtn.addEventListener('click', () => {
@@ -714,7 +714,7 @@ export class WorkflowEditor {
 			// Emit event but no notification for auto-save
 			this.events.emit('workflow:saved', { workflow: this.workflow.toJSON() });
 			console.debug('Workflow auto-saved');
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error('Auto-save failed:', error);
 			// Don't show error notification for auto-save failures
 		}
@@ -748,7 +748,7 @@ export class WorkflowEditor {
 			this.markClean();
 			this.showNotification('✅ Saved', 'success');
 			this.events.emit('workflow:saved', { workflow: this.workflow.toJSON() });
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.showNotification(`❌ Save failed: ${error.message}`, 'error');
 		}
 	}
@@ -794,8 +794,8 @@ export class WorkflowEditor {
 			// Update canvas with input/output data from execution log
 			if (result.log && result.log.length > 0) {
 				const logsForCanvas = result.log
-					.filter((entry: any) => entry.status === 'completed')
-					.map((entry: any) => ({
+					.filter((entry: unknown) => entry.status === 'completed')
+					.map((entry: unknown) => ({
 						nodeId: entry.nodeId,
 						input: entry.input,
 						output: entry.output
@@ -817,7 +817,7 @@ export class WorkflowEditor {
 			// Save execution history
 			await this.saveExecutionHistory(result);
 
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.showNotification(`❌ Execution failed: ${error.message}`, 'error');
 			this.events.emit('execution:error', { error: error.message });
 
@@ -854,7 +854,7 @@ export class WorkflowEditor {
 			URL.revokeObjectURL(url);
 
 			this.showNotification('✅ Exported', 'success');
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.showNotification(`❌ Export failed: ${error.message}`, 'error');
 		}
 	}
@@ -862,7 +862,7 @@ export class WorkflowEditor {
 	/**
 	 * Save execution history
 	 */
-	private async saveExecutionHistory(result: any): Promise<void> {
+	private async saveExecutionHistory(result: unknown): Promise<void> {
 		// Check if history storage is available
 		if (!this.executionHistoryStorage || !this.indexManager) {
 			console.debug('Execution history storage not available, skipping save');
@@ -951,7 +951,7 @@ export class WorkflowEditor {
 	 */
 	private openNodeConfigModal(node: WorkflowNode): void {
 		// We need app instance to create modal - get it from services or container
-		const app = (this.services as any)?.app || (window as any).app;
+		const app = (this.services as unknown)?.app || (window as unknown).app;
 
 		if (!app) {
 			console.error('App instance not available for modal');

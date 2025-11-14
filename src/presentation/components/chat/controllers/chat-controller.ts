@@ -88,10 +88,10 @@ export class ChatController extends BaseController {
 			// The actual chat implementation is currently in chat-view.ts
 			// This controller needs to be properly integrated
 
-			new Notice('Response generation not yet implemented in MVC controller');
+			new Notice('Response generation not yet implemented in mvc controller');
 			this.isGenerating = false;
 
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.isGenerating = false;
 			new Notice(`Failed to generate response: ${error.message}`);
 			console.error('Chat error:', error);

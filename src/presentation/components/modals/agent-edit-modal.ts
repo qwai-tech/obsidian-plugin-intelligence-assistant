@@ -29,7 +29,7 @@ export class AgentEditModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: 'Edit Agent' });
+		contentEl.createEl('h2', { text: 'Edit agent' });
 
 		// Icon field
 		new Setting(contentEl)
@@ -70,13 +70,13 @@ export class AgentEditModal extends Modal {
 		
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].modelStrategy.strategy',
-			label: 'Model Strategy',
+			label: 'Model strategy',
 			description: 'Choose how the agent will select its model'
 		}).addDropdown(dropdown => {
 				dropdown
-					.addOption('default', 'Use Default Model (from Settings)')
-					.addOption('chat-view', 'Use Chat View Model')
-					.addOption('fixed', 'Fixed Model');
+					.addOption('default', 'Use default model (from settings)')
+					.addOption('chat-view', 'Use chat view model')
+					.addOption('fixed', 'Fixed model');
 				
 				// Set the initial value based on the current strategy
 				dropdown.setValue(this.agent.modelStrategy.strategy);
@@ -94,7 +94,7 @@ export class AgentEditModal extends Modal {
 		// Fixed Model Selection (only shown when strategy is 'fixed')
 		this.fixedModelSetting = applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].modelStrategy.modelId',
-			label: 'Fixed Model',
+			label: 'Fixed model',
 			description: hasCachedModels
 				? 'Select a specific model for this agent.'
 				: 'No cached models available. Refresh models in the Models tab.'
@@ -140,7 +140,7 @@ export class AgentEditModal extends Modal {
 		// Max Tokens field
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].maxTokens',
-			label: 'Max Tokens',
+			label: 'Max tokens',
 			description: 'Maximum number of tokens to generate'
 		}).addText(text => text
 				.setValue(String(this.agent.maxTokens))
@@ -154,7 +154,7 @@ export class AgentEditModal extends Modal {
 		// Context Window field
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].contextWindow',
-			label: 'Context Window',
+			label: 'Context window',
 			description: 'Number of previous messages to include in context'
 		}).addText(text => text
 				.setValue(String(this.agent.contextWindow))
@@ -177,13 +177,13 @@ export class AgentEditModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].systemPromptId',
-			label: 'System Prompt',
+			label: 'System prompt',
 			description: 'Choose from existing prompts or define a new one for this agent.'
 		}).addDropdown(dropdown => {
 				prompts.forEach(prompt => {
 					dropdown.addOption(prompt.id, prompt.name);
 				});
-				dropdown.addOption('__custom__', '➕ Create new prompt…');
+				dropdown.addOption('__custom__', '➕ create new prompt…');
 				dropdown.setValue(this.selectedSystemPromptId);
 				dropdown.onChange(value => {
 					this.selectedSystemPromptId = value;
@@ -205,7 +205,7 @@ export class AgentEditModal extends Modal {
 		this.toggleCustomPromptSection(this.selectedSystemPromptId === '__custom__');
 
 		new Setting(this.customPromptSection)
-			.setName('Prompt Name')
+			.setName('Prompt name')
 			.setDesc('Display name for the new system prompt')
 			.addText(text => {
 				customNameInput = text.inputEl;
@@ -216,7 +216,7 @@ export class AgentEditModal extends Modal {
 			});
 
 		new Setting(this.customPromptSection)
-			.setName('Prompt Content')
+			.setName('Prompt content')
 			.setDesc('Content for the new system prompt')
 			.addTextArea(text => {
 				customContentInput = text.inputEl;
@@ -245,7 +245,7 @@ export class AgentEditModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].webSearchEnabled',
-			label: 'Web Search',
+			label: 'Web search',
 			description: 'Enable web search capabilities'
 		}).addToggle(toggle => toggle
 				.setValue(this.agent.webSearchEnabled)
@@ -298,7 +298,7 @@ export class AgentEditModal extends Modal {
 
 		// Built-in tools
 		new Setting(contentEl)
-			.setName('Built-in Tools')
+			.setName('Built-in tools')
 			.setDesc('Select which built-in tools this agent can use');
 
 		this.plugin.settings.builtInTools.forEach((tool: BuiltInToolConfig) => {
@@ -321,7 +321,7 @@ export class AgentEditModal extends Modal {
 		});
 
 		// MCP Servers
-		contentEl.createEl('h3', { text: 'MCP Access' });
+		contentEl.createEl('h3', { text: 'MCP access' });
 		if (this.plugin.settings.mcpServers.length === 0) {
 			const empty = contentEl.createDiv('ia-table-subtext');
 			empty.setText('No MCP servers configured. Add servers under Settings → MCP to unlock these options.');

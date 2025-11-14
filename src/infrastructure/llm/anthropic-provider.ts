@@ -22,7 +22,7 @@ export class AnthropicProvider extends BaseStreamingProvider {
 		};
 	}
 
-	private convertMessages(messages: Message[]): { system?: string; messages: any[] } {
+	private convertMessages(messages: Message[]): { system?: string; messages: unknown[] } {
 		const systemMessage = messages.find(m => m.role === 'system');
 		const nonSystemMessages = messages.filter(m => m.role !== 'system');
 
@@ -41,7 +41,7 @@ export class AnthropicProvider extends BaseStreamingProvider {
 		const { system, messages } = this.convertMessages(request.messages);
 		const modelName = this.extractModelName(request.model);
 
-		const body: any = {
+		const body: Record<string, unknown> = {
 			model: modelName,
 			messages,
 			max_tokens: request.maxTokens ?? 4096,
@@ -53,7 +53,10 @@ export class AnthropicProvider extends BaseStreamingProvider {
 			body.system = system;
 		}
 
-		const response = await this.makeRequest(url, body);
+		const response = await this.makeRequest(url, body) as { json: {
+			content: Array<{ text: string }>;
+			usage: { input_tokens: number; output_tokens: number };
+		}};
 		const data = response.json;
 
 		return {
@@ -66,13 +69,13 @@ export class AnthropicProvider extends BaseStreamingProvider {
 		};
 	}
 
-	protected prepareStreamRequest(request: ChatRequest): { url: string; body: any } {
+	protected prepareStreamRequest(request: ChatRequest): { url: string; body: unknown } {
 		const url = this.getBaseUrl('https://api.anthropic.com/v1') + '/messages';
 
 		const { system, messages } = this.convertMessages(request.messages);
 		const modelName = this.extractModelName(request.model);
 
-		const body: any = {
+		const body: Record<string, unknown> = {
 			model: modelName,
 			messages,
 			max_tokens: request.maxTokens ?? 4096,
@@ -87,7 +90,16 @@ export class AnthropicProvider extends BaseStreamingProvider {
 		return { url, body };
 	}
 
-	protected parseStreamChunk(data: any): ParsedStreamChunk | null {
+	protected parseStreamChunk(data: unknown): ParsedStreamChunk | null {
+		// Type guard for data structure
+		const hasType = (obj: unknown): obj is { type: string } => {
+			return typeof obj === 'object' && obj !== null && 'type' in obj;
+		};
+
+		if (!hasType(data)) {
+			return null;
+		}
+
 		// Check if stream is complete
 		if (data.type === 'message_stop') {
 			return { content: null, done: true };
@@ -95,7 +107,8 @@ export class AnthropicProvider extends BaseStreamingProvider {
 
 		// Extract content from Anthropic's structure
 		if (data.type === 'content_block_delta') {
-			const content = data.delta?.text;
+			const delta = (data as { delta?: { text?: string } }).delta;
+			const content = delta?.text;
 			if (content) {
 				return { content, done: false };
 			}

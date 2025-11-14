@@ -63,7 +63,7 @@ export class RAGManager {
     const files = this.app.vault.getMarkdownFiles();
     
     if (files.length === 0) {
-      new Notice('ℹ️ No markdown files found to index for RAG');
+      new Notice('ℹ️ no markdown files found to index for RAG');
       return;
     }
     
@@ -122,7 +122,7 @@ export class RAGManager {
     await this.vectorStore.addFile(file, this.config);
   }
 
-  async indexContent(content: string, metadata: any): Promise<void> {
+  async indexContent(content: string, metadata: unknown): Promise<void> {
     if (!this.config.enabled) {
       return;
     }
@@ -150,7 +150,7 @@ export class RAGManager {
       const stats = await this.vectorStore.getDetailedStats();
       if (stats.chunkCount === 0) {
         console.debug('[RAG Manager] No indexed documents found, suggesting user to embed documents');
-        new Notice('ℹ️ No indexed documents found. Use "Embed All Documents" command to index your vault for RAG.');
+        new Notice('ℹ️ no indexed documents found. Use "Embed all documents" command to index your vault for RAG.');
       }
     }
     
@@ -226,7 +226,7 @@ export class RAGManager {
   }
 
   async refreshIndex(): Promise<void> {
-    new Notice('🔄 Clearing RAG index...');
+    new Notice('🔄 clearing RAG index...');
     this.vectorStore.clear();
     if (this.config.enabled) {
       await this.indexVault();
@@ -236,7 +236,7 @@ export class RAGManager {
   }
 
   async clearIndex(): Promise<void> {
-    new Notice('🔄 Clearing RAG index...');
+    new Notice('🔄 clearing RAG index...');
     this.vectorStore.clear();
     await this.vectorStore.save();
     new Notice('✅ RAG index cleared');
@@ -258,7 +258,7 @@ export class RAGManager {
     return this.vectorStore.getDetailedStats();
   }
 
-  private async getStoredChunks(): Promise<any[]> {
+  private async getStoredChunks(): Promise<unknown[]> {
     return this.vectorStore.getStoredChunks();
   }
 

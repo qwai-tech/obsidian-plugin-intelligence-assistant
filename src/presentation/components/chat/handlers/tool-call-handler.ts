@@ -94,7 +94,7 @@ export async function processToolCalls(
 						toolAllowed = hasSpecificToolEnabled || hasServerEnabled;
 					} else {
 						// For built-in tools, check if it's in enabledBuiltInTools
-						toolAllowed = agent.enabledBuiltInTools.includes(toolCall.name as any);
+						toolAllowed = agent.enabledBuiltInTools.includes(toolCall.name as unknown);
 					}
 				} else {
 					// Tool not found, so not allowed
@@ -197,7 +197,7 @@ export function updateExecutionTrace(container: HTMLElement, steps: AgentExecuti
 
 		if (step.status) {
 			const statusPill = header.createSpan('agent-step-status');
-			statusPill.setText(step.status === 'pending' ? 'Pending' : step.status === 'success' ? 'Success' : 'Error');
+			statusPill.setText(step.status === 'pending' ? 'Pending' : step.status === 'success' ? 'success' : 'error');
 			statusPill.addClass(`agent-step-status--${step.status}`);
 		}
 
@@ -229,7 +229,7 @@ export function updateExecutionTrace(container: HTMLElement, steps: AgentExecuti
 		if (countEl) {
 			countEl.textContent = `${steps.length} steps`;
 		}
-		const statusEl = traceRoot.querySelector('[data-trace-status]') as HTMLElement | null;
+		const statusEl = traceRoot.querySelector('[data-trace-status]');
 		if (statusEl) {
 			const status = getTraceStatus(steps);
 			statusEl.setAttr('data-trace-status', status.state);
@@ -245,7 +245,7 @@ function getTraceStatus(steps: AgentExecutionStep[]): { state: string; label: st
 
 	const last = steps[steps.length - 1];
 	if (last.status === 'error') {
-		return { state: 'error', label: 'Error' };
+		return { state: 'error', label: 'error' };
 	}
 	if (last.type === 'action' && last.status === 'pending') {
 		return { state: 'running', label: 'Running tool' };
@@ -271,7 +271,7 @@ export function createAgentExecutionTraceContainer(messageBody: HTMLElement, ste
 	const icon = header.createSpan('agent-trace-icon');
 	icon.setText('▶');
 	const title = header.createSpan('agent-trace-title');
-	title.setText('Execution Trace');
+	title.setText('Execution trace');
 	const status = header.createSpan('agent-trace-status');
 	status.setAttr('data-trace-status', 'idle');
 	status.setText('Idle');

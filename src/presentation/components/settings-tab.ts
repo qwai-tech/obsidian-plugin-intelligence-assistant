@@ -3,9 +3,6 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import { snapshotMcpTools } from '@plugin';
 import type { } from './types';
 import type {  } from '@/application/services/types';
-import {
-					AgentEditModal
-} from './modals';
 
 import { } from '../views/chat-view';
 import { } from '@/constants';
@@ -44,7 +41,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		const {containerEl} = this;
 
 		containerEl.empty();
-		containerEl.createEl('h2', { text: 'Intelligence Assistant Settings' });
+		;
 
 		const tabNav = containerEl.createDiv('settings-tabs');
 		const tabDefs: Array<{ slug: string; label: string }> = [
@@ -54,7 +51,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			{ slug: 'mcp', label: 'MCP' },
 			{ slug: 'tools', label: 'Tools' },
 			{ slug: 'rag', label: 'RAG' },
-			{ slug: 'websearch', label: 'Web Search' },
+			{ slug: 'websearch', label: 'Web search' },
 			{ slug: 'prompts', label: 'Prompts' },
 			{ slug: 'agents', label: 'Agents' }
 		];
@@ -198,11 +195,11 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		const mcpServers = this.plugin.settings.mcpServers;
 
 		if (mcpServers.length === 0) {
-			new Notice('⚠️ No MCP servers configured');
+			new Notice('⚠️ no mcp servers configured');
 			return;
 		}
 
-		new Notice(`🧪 Testing ${mcpServers.length} MCP server connections...`);
+		new Notice(`🧪 testing ${mcpServers.length} mcp server connections...`);
 
 		const results: {name: string, success: boolean, error?: string}[] = [];
 		let settingsDirty = false;
@@ -233,7 +230,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 				});
 
 				console.debug(`[MCP] ${server.name} connection test: ${tools.length} tools available`);
-			} catch (error: any) {
+			} catch (error: unknown) {
 				console.error(`[MCP] ${server.name} connection test failed:`, error);
 				results.push({
 					name: server.name,
@@ -259,7 +256,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			// Show detailed results in console
 			console.debug('[MCP] Connection test results:');
 			for (const result of results) {
-				console.debug(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'Connected'}`);
+				console.debug(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'connected'}`);
 			}
 		}
 

@@ -12,7 +12,7 @@ export class TestUtils {
         remove: async () => Promise.resolve(),
         list: async () => ({ files: [], folders: [] }),
         getName: () => 'mock-adapter',
-      } as any
+      } as unknown
     } as Vault;
   }
 
@@ -52,7 +52,7 @@ export class TestUtils {
       }),
       countTokens: async () => ({ count: 10, model: 'mock-model' }),
       validateConfig: () => ({ success: true, errors: [] }),
-      testConnection: async () => ({ success: true, message: 'Connected' }),
+      testConnection: async () => ({ success: true, message: 'connected' }),
       cleanup: async () => Promise.resolve()
     } as ILLMProvider;
   }

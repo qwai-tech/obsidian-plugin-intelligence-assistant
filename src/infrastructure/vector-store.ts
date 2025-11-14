@@ -141,7 +141,7 @@ export class VectorStore {
     });
   }
 
-  async addContent(content: string, metadata: any, config: RAGConfig): Promise<void> {
+  async addContent(content: string, metadata: unknown, config: RAGConfig): Promise<void> {
     // Split content into _chunks
     const _chunks = this.chunkContent(content, config);
     
@@ -266,7 +266,7 @@ export class VectorStore {
 
     // Apply similarity threshold filter if configured
     if (config.similarityThreshold !== undefined && config.similarityThreshold > 0) {
-      similarities = similarities.filter(result => result.similarity >= config.similarityThreshold!);
+      similarities = similarities.filter(result => result.similarity >= config.similarityThreshold);
       console.debug('[VectorStore] After threshold filter:', similarities.length, '_chunks');
     }
 
@@ -739,7 +739,7 @@ export class VectorStore {
     
     // Apply similarity threshold filter if configured
     if (config.similarityThreshold !== undefined && config.similarityThreshold > 0) {
-      results = results.filter(result => result.similarity >= config.similarityThreshold!);
+      results = results.filter(result => result.similarity >= config.similarityThreshold);
     }
     
     // Apply top K limit

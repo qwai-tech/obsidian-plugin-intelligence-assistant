@@ -56,7 +56,7 @@ export function displayProviderTab(
 	const summary = actionsRow.createDiv('ia-section-summary');
 	summary.createSpan({ text: `${plugin.settings.llmConfigs.length} provider${plugin.settings.llmConfigs.length === 1 ? '' : 's'} configured` });
 
-	const addBtn = actionsRow.createEl('button', { text: '+ Add Provider' });
+	const addBtn = actionsRow.createEl('button', { text: '+ Add provider' });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -75,7 +75,7 @@ export function displayProviderTab(
 
 	if (plugin.settings.llmConfigs.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No providers configured. Click "Add Provider" to get started.');
+		emptyDiv.setText('No providers configured. Select Add provider to get started.');
 		return;
 	}
 
@@ -283,7 +283,7 @@ export function displayProviderTab(
 				}).open();
 			});
 		} else {
-			const refreshBtn = actionsCell.createEl('button', { text: 'Refresh Models' });
+			const refreshBtn = actionsCell.createEl('button', { text: 'Refresh models' });
 			refreshBtn.addClass('ia-button');
 			refreshBtn.addClass('ia-button--ghost');
 			refreshBtn.addEventListener('click', async () => {
@@ -302,7 +302,7 @@ export function displayProviderTab(
 					new Notice('Failed to refresh models');
 				} finally {
 					refreshBtn.disabled = false;
-					refreshBtn.textContent = 'Refresh Models';
+					refreshBtn.textContent = 'Refresh models';
 				}
 			});
 		}

@@ -5,7 +5,7 @@
  * data processing, control flow, file operations, and web services.
  */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import { NodeDef, NodeData, ExecutionContext } from '../core/types';
 import { ErrorHandler, SecurityError, ServiceError, ExecutionError } from '../services/error-handler';
 
@@ -127,7 +127,7 @@ export const parseCSVNode: NodeDef = {
       });
 
       let headers: string[] = [];
-      let records: any[] = [];
+      let records: unknown[] = [];
 
       if (parsedLines.length === 0) {
         return [{ json: { records: [], headers: [] } }];
@@ -138,7 +138,7 @@ export const parseCSVNode: NodeDef = {
         // Process data rows
         for (let i = 1; i < parsedLines.length; i++) {
           const row = parsedLines[i];
-          const record: Record<string, any> = {};
+          const record: Record<string, unknown> = {};
           
           for (let j = 0; j < headers.length; j++) {
             record[headers[j]] = row[j] || '';
@@ -149,7 +149,7 @@ export const parseCSVNode: NodeDef = {
       } else {
         // No headers - use indices as keys
         for (const row of parsedLines) {
-          const record: Record<string, any> = {};
+          const record: Record<string, unknown> = {};
           row.forEach((value: string, index: number) => {
             record[`col_${index}`] = value;
           });
@@ -249,7 +249,7 @@ export const formatJSONNode: NodeDef = {
         throw new Error('No JSON input provided');
       }
 
-      let jsonObj: any;
+      let jsonObj: unknown;
       
       // Parse JSON
       if (typeof inputJSON === 'string') {
@@ -586,7 +586,7 @@ export const readFileNode: NodeDef = {
       }
       
       // Parse as JSON if requested
-      let parsedContent: any = content;
+      let parsedContent: unknown = content;
       if (parseJSON && typeof content === 'string') {
         try {
           parsedContent = JSON.parse(content);
@@ -762,11 +762,11 @@ export const rssFeedReaderNode: NodeDef = {
   /**
    * Simple RSS/Atom feed parser
    */
-  parseFeed(feedContent: string, feedUrl: string): { items: any[]; channel: any } {
+  parseFeed(feedContent: string, feedUrl: string): { items: unknown[]; channel: unknown } {
     try {
       // Very simplified parser - in real implementation, you'd use a proper XML parser
-      const items: any[] = [];
-      const channel: any = {
+      const items: unknown[] = [];
+      const channel: unknown = {
         title: '',
         description: '',
         link: feedUrl,
@@ -790,7 +790,7 @@ export const rssFeedReaderNode: NodeDef = {
       
       while ((itemMatch = itemRegex.exec(feedContent)) !== null && items.length < 50) {
         const itemContent = itemMatch[1];
-        const item: any = {};
+        const item: unknown = {};
         
         // Extract title
         const itemTitleMatch = itemContent.match(/<title>([^<]+)<\/title>/i);
@@ -826,7 +826,7 @@ export const rssFeedReaderNode: NodeDef = {
         
         while ((entryMatch = entryRegex.exec(feedContent)) !== null && items.length < 50) {
           const entryContent = entryMatch[1];
-          const item: any = {};
+          const item: unknown = {};
           
           // Extract title
           const entryTitleMatch = entryContent.match(/<title[^>]*>([^<]+)<\/title>/i);

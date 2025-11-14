@@ -78,7 +78,7 @@ export function renderMessage(
 		renderAssistantBadges(header, assistantMeta);
 	}
 
-	const timestampValue = (message as any).timestamp ?? Date.now();
+	const timestampValue = (message as unknown).timestamp ?? Date.now();
 	const timestamp = header.createDiv('ia-chat-message__timestamp');
 	timestamp.addClass('message-timestamp');
 	timestamp.setText(new Date(timestampValue).toLocaleTimeString());
@@ -106,7 +106,7 @@ export function renderMessage(
 
 	if (message.webSearchResults?.length) {
 		const section = body.createDiv('ia-chat-message__section');
-		section.createEl('h5', { text: 'Web Results' });
+		section.createEl('h5', { text: 'Web results' });
 		const list = section.createEl('ul');
 		message.webSearchResults.forEach(result => {
 			const item = list.createEl('li');
@@ -298,7 +298,7 @@ function renderReasoning(container: HTMLElement, message: Message) {
 function renderExecutionTrace(container: HTMLElement, steps: Message['agentExecutionSteps']) {
 	if (!steps || steps.length === 0) return;
 	const section = container.createDiv('ia-chat-message__section');
-	section.createEl('h5', { text: 'Tool Trace' });
+	section.createEl('h5', { text: 'Tool trace' });
 	const timeline = section.createDiv('ia-chat-message__timeline');
 	steps.forEach(step => {
 		const item = timeline.createDiv('ia-chat-message__timeline-item');

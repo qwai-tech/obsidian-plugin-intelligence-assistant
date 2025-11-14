@@ -34,14 +34,14 @@ export class MCPServerModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: this.mode === 'edit' ? 'Edit MCP Server' : 'Add MCP Server' });
+		contentEl.createEl('h2', { text: this.mode === 'edit' ? 'Edit MCP server' : 'Add MCP server' });
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].name',
-			label: 'Server Name',
+			label: 'Server name',
 			description: 'Friendly name shown throughout the plugin'
 		}).addText(text => {
-				text.setPlaceholder('Acme MCP Server');
+				text.setPlaceholder('Acme MCP server');
 				text.setValue(this.draft.name ?? '');
 				text.onChange(value => {
 					this.draft.name = value;
@@ -50,7 +50,7 @@ export class MCPServerModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].connectionMode',
-			label: 'Connection Mode',
+			label: 'Connection mode',
 			description: 'Choose whether to connect automatically or only when triggered manually'
 		}).addDropdown(dropdown => dropdown
 				.addOption('auto', 'Auto-connect when chat opens')
@@ -87,7 +87,7 @@ export class MCPServerModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].env',
-			label: 'Environment Variables',
+			label: 'Environment variables',
 			description: 'Optional KEY=VALUE pairs, one per line'
 		}).addTextArea(text => {
 				text.setPlaceholder('API_KEY=xyz' + '\n' + 'NODE_ENV=production');
@@ -119,11 +119,11 @@ export class MCPServerModal extends Modal {
 		buttonBar.setCssProps({ 'gap': '8px' });
 		buttonBar.setCssProps({ 'margin-top': '16px' });
 
-		const cancelBtn = buttonBar.createEl('button', { text: 'Cancel' });
+		const cancelBtn = buttonBar.createEl('button', { text: 'cancel' });
 		cancelBtn.setCssProps({ 'padding': '6px 16px' });
 		cancelBtn.addEventListener('click', () => this.close());
 
-		const saveBtn = buttonBar.createEl('button', { text: this.mode === 'edit' ? 'Save Changes' : 'Add Server' });
+		const saveBtn = buttonBar.createEl('button', { text: this.mode === 'edit' ? 'Save changes' : 'Add server' });
 		saveBtn.setCssProps({ 'padding': '6px 16px' });
 		saveBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
 		saveBtn.setCssProps({ 'color': 'white' });

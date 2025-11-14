@@ -5,7 +5,7 @@
  * Provides a complete visual workflow editor with drag-drop, execution, and history.
  */
 
-import { FileView, WorkspaceLeaf, TFile, Notice } from 'obsidian';
+import { FileView, WorkspaceLeaf, TFile, Notice, requestUrl } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import {
 	WorkflowEditor,
@@ -83,8 +83,8 @@ export class WorkflowEditorView extends FileView {
 		container.empty();
 		container.addClass('workflow-editor-v2-container');
 
-		// Add styles
-		this.addStyles();
+		// Styles are loaded from styles.css
+		// this.addStyles();
 
 		// If file is set, load it
 		if (this.file) {
@@ -227,9 +227,9 @@ export class WorkflowEditorView extends FileView {
 			app: this.app, // Add app instance for modal creation
 			vault: this.app.vault,
 			http: {
-				request: async (url: string | URL, options?: any) => {
+				request: async (url: string | URL, options?: unknown) => {
 					try {
-						const response = await fetch(url, options);
+						const response = await requestUrl({ url: String(url), ...options });
 						return response;
 					} catch (error) {
 						console.error('HTTP request error:', error);
@@ -239,7 +239,7 @@ export class WorkflowEditorView extends FileView {
 			},
 			settings: this.plugin.settings,
 			ai: {
-				chat: async (messages: any[], options?: any) => {
+				chat: async (messages: unknown[], options?: unknown) => {
 					if (!options?.model) {
 						throw new Error('Model not specified for AI chat');
 					}
@@ -251,7 +251,7 @@ export class WorkflowEditorView extends FileView {
 					
 					// First, try to find exact match in cached models
 					for (const config of settings.llmConfigs) {
-						if (config.cachedModels && config.cachedModels.some((m: any) => m.id === modelId)) {
+						if (config.cachedModels && config.cachedModels.some((m: unknown) => m.id === modelId)) {
 							llmConfig = config;
 							break;
 						}
@@ -289,7 +289,7 @@ export class WorkflowEditorView extends FileView {
 					};
 
 					// Execute the chat request
-					const result = await provider.chat(chatRequest);
+					const result = await _provider.chat(chatRequest);
 					return result.content;
 				},
 				embed: async (_text: string) => {
@@ -297,7 +297,7 @@ export class WorkflowEditorView extends FileView {
 					const settings = this.plugin.settings;
 					let embeddingConfig = null;
 					for (const config of settings.llmConfigs) {
-						if (config.cachedModels && config.cachedModels.some((m: any) => 
+						if (config.cachedModels && config.cachedModels.some((m: unknown) => 
 							m.capabilities?.includes('embedding') || m.id.includes('embed')
 						)) {
 							embeddingConfig = config;
@@ -398,21 +398,22 @@ export class WorkflowEditorView extends FileView {
 	/**
 	 * Add required styles
 	 */
-	private addStyles() {
-		const styleId = 'workflow-editor-styles';
-		if (document.getElementById(styleId)) {
-			return; // Already added
-		}
+	// Styles should be in styles.css instead of dynamically created
+	// private addStyles() {
+	// 	const styleId = 'workflow-editor-styles';
+	// 	if (document.getElementById(styleId)) {
+	// 		return; // Already added
+	// 	}
 
-		const style = document.createElement('style');
-		style.id = styleId;
-		style.textContent = `
-			.workflow-editor-v2-container {
-				width: 100%;
-				height: 100%;
-				overflow: hidden;
-			}
-		`;
-		document.head.appendChild(style);
-	}
+	// 	const style = document.createElement('style');
+	// 	style.id = styleId;
+	// 	style.textContent = `
+	// 		.workflow-editor-v2-container {
+	// 			width: 100%;
+	// 			height: 100%;
+	// 			overflow: hidden;
+	// 		}
+	// 	`;
+	// 	document.head.appendChild(style);
+	// }
 }

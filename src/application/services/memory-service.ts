@@ -28,13 +28,13 @@ export class MemoryService extends BaseService {
 	private memories: Map<string, AgentMemory> = new Map();
 
 	constructor(
-		private app: App
+		private _app: App
 	) {
 		super();
 	}
 
 	async initialize(): Promise<void> {
-		this.memoryManager = new AgentMemoryManager(this.app.vault);
+		this.memoryManager = new AgentMemoryManager(this._app.vault);
 		await this.memoryManager.initialize();
 		this.ready = true;
 	}

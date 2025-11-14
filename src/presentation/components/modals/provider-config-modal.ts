@@ -16,7 +16,7 @@ export class ProviderConfigModal extends Modal {
 		onOpen() {
 		const { contentEl } = this;
 		contentEl.empty();
-		contentEl.createEl('h2', { text: 'Provider Settings' });
+		contentEl.createEl('h2', { text: 'Provider settings' });
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'llmConfigs[].provider',
@@ -25,12 +25,12 @@ export class ProviderConfigModal extends Modal {
 		}).addDropdown(dropdown => dropdown
 				.addOption('openai', 'OpenAI')
 				.addOption('anthropic', 'Anthropic')
-				.addOption('google', 'Google (Gemini)')
-				.addOption('deepseek', 'DeepSeek')
-				.addOption('ollama', 'Ollama (Local)')
+				.addOption('google', 'Google (gemini)')
+				.addOption('deepseek', 'Deepseek')
+				.addOption('ollama', 'Ollama (local)')
 				.addOption('openrouter', 'OpenRouter')
-				.addOption('sap-ai-core', 'SAP AI Core')
-				.addOption('custom', 'Custom (OpenAI Compatible)')
+				.addOption('sap-ai-core', 'SAP AI core')
+				.addOption('custom', 'Custom (openai compatible)')
 				.setValue(this.draft.provider)
 				.onChange(value => {
 					this.draft.provider = value;
@@ -39,7 +39,7 @@ export class ProviderConfigModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'llmConfigs[].modelFilter',
-			label: 'Model Filter',
+			label: 'Model filter',
 			description: 'Optional regex pattern to limit available models'
 		}).addText(text => text
 				.setPlaceholder('gpt-4|claude-')
@@ -51,7 +51,7 @@ export class ProviderConfigModal extends Modal {
 		if (this.draft.provider === 'sap-ai-core') {
 			applyConfigFieldMetadata(new Setting(contentEl), {
 				path: 'llmConfigs[].resourceGroup',
-				label: 'Resource Group',
+				label: 'Resource group',
 				description: 'Optional SAP AI Core resource group'
 			}).addText(text => text
 					.setPlaceholder('default')
@@ -70,11 +70,11 @@ export class ProviderConfigModal extends Modal {
 		buttonBar.setCssProps({ 'gap': '8px' });
 		buttonBar.setCssProps({ 'margin-top': '16px' });
 
-		const cancelBtn = buttonBar.createEl('button', { text: 'Cancel' });
+		const cancelBtn = buttonBar.createEl('button', { text: 'cancel' });
 		cancelBtn.setCssProps({ 'padding': '6px 16px' });
 		cancelBtn.addEventListener('click', () => this.close());
 
-		const saveBtn = buttonBar.createEl('button', { text: 'Save' });
+		const saveBtn = buttonBar.createEl('button', { text: 'save' });
 		saveBtn.setCssProps({ 'padding': '6px 16px' });
 		saveBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
 		saveBtn.setCssProps({ 'color': 'white' });
@@ -96,7 +96,7 @@ export class ProviderConfigModal extends Modal {
 		if (this.draft.provider === 'sap-ai-core') {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].serviceKey',
-				label: 'Service Key',
+				label: 'Service key',
 				description: 'SAP AI Core service key (JSON string)'
 			}).addTextArea(text => {
 					const value = typeof this.draft.serviceKey === 'string'

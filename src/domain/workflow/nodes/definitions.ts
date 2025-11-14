@@ -5,7 +5,7 @@
  * Includes essential nodes for triggers, AI, data processing, and logic.
  */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import { NodeDef, NodeData, ExecutionContext } from '../core/types';
 import { nodeRegistry } from './registry';
 import { ErrorHandler, SecurityError, ServiceError, ExecutionError } from '../services/error-handler';
@@ -477,7 +477,7 @@ const aggregateNode: NodeDef = {
 		const { operation, fieldName } = config;
 
 		try {
-			let result: any;
+			let result: unknown;
 
 			switch (operation) {
 				case 'count':
@@ -563,7 +563,7 @@ const setVariablesNode: NodeDef = {
 			const varsObj = typeof variables === 'string' ? JSON.parse(variables) : variables;
 
 			// Resolve all variable values
-			const resolvedVars: Record<string, any> = {};
+			const resolvedVars: Record<string, unknown> = {};
 			for (const [key, value] of Object.entries(varsObj)) {
 				if (typeof value === 'string') {
 					resolvedVars[key] = resolveVariables(value, inputs);
@@ -780,7 +780,7 @@ const switchNode: NodeDef = {
 			const caseArray = typeof cases === 'string' ? JSON.parse(cases) : cases;
 
 			// Find matching case
-			const matchedCase = caseArray.find((c: any) => c.value === fieldValue);
+			const matchedCase = caseArray.find((c: unknown) => c.value === fieldValue);
 			const outputRoute = matchedCase ? matchedCase.output : defaultOutput;
 
 			return [{
@@ -937,7 +937,7 @@ const readNoteNode: NodeDef = {
 
 			// Get the file
 			const file = vault.getAbstractFileByPath(finalPath);
-			if (!file || !(file as any).extension) {
+			if (!file || !(file as unknown).extension) {
 				throw new Error(`Note not found: ${finalPath}`);
 			}
 
@@ -945,7 +945,7 @@ const readNoteNode: NodeDef = {
 			const content = await vault.read(file);
 
 			// Parse frontmatter if requested
-			let frontmatter: Record<string, any> = {};
+			let frontmatter: Record<string, unknown> = {};
 			let bodyContent = content;
 
 			if (includeFrontmatter) {
@@ -961,7 +961,7 @@ const readNoteNode: NodeDef = {
 							const colonIndex = line.indexOf(':');
 							if (colonIndex > 0) {
 								const key = line.substring(0, colonIndex).trim();
-								let value: any = line.substring(colonIndex + 1).trim();
+								let value: unknown = line.substring(colonIndex + 1).trim();
 
 								// Remove quotes
 								if ((value.startsWith('"') && value.endsWith('"')) ||
@@ -999,8 +999,8 @@ const readNoteNode: NodeDef = {
 					fullContent: content,
 					frontmatter,
 					path: finalPath,
-					name: (file as any).name,
-					basename: (file as any).basename,
+					name: (file as unknown).name,
+					basename: (file as unknown).basename,
 					tags,
 				}
 			}];
@@ -1072,7 +1072,7 @@ const updateNoteNode: NodeDef = {
 
 			// Get the file
 			const file = vault.getAbstractFileByPath(finalPath);
-			if (!file || !(file as any).extension) {
+			if (!file || !(file as unknown).extension) {
 				throw new Error(`Note not found: ${finalPath}`);
 			}
 
@@ -1407,7 +1407,7 @@ const httpRequestNode: NodeDef = {
 		}
 
 		try {
-			const options: any = { method };
+			const options: unknown = { method };
 
 			if (method === 'POST' || method === 'PUT') {
 				options.body = typeof body === 'string' ? body : JSON.stringify(body);
@@ -1604,7 +1604,7 @@ const stringNode: NodeDef = {
 		try {
 			const input = inputs[0]?.json || {};
 			let text = String(input[field] || '');
-			let result: any;
+			let result: unknown;
 
 			switch (operation) {
 				case 'uppercase':
@@ -1711,7 +1711,7 @@ const dateTimeNode: NodeDef = {
 
 		try {
 			const input = inputs[0]?.json || {};
-			let result: any;
+			let result: unknown;
 
 			if (operation === 'now') {
 				const now = new Date();
@@ -1949,7 +1949,7 @@ const manageTagsNode: NodeDef = {
 
 			// Get the file
 			const file = vault.getAbstractFileByPath(finalPath);
-			if (!file || !(file as any).extension) {
+			if (!file || !(file as unknown).extension) {
 				throw new Error(`Note not found: ${finalPath}`);
 			}
 
@@ -2080,15 +2080,15 @@ const manageLinksNode: NodeDef = {
 
 		try {
 			const vault = context.services.vault;
-			const app = (context.services as any).app;
+			const app = (context.services as unknown).app;
 			const finalPath = resolveVariables(path, inputs);
 
 			const file = vault.getAbstractFileByPath(finalPath);
-			if (!file || !(file as any).extension) {
+			if (!file || !(file as unknown).extension) {
 				throw new Error(`Note not found: ${finalPath}`);
 			}
 
-			let result: any = {};
+			let result: unknown = {};
 
 			if (operation === 'getBacklinks') {
 				// Get backlinks using Obsidian API
@@ -2132,7 +2132,7 @@ const manageLinksNode: NodeDef = {
 					throw new Error(`Target note not found: ${finalTargetPath}`);
 				}
 
-				const targetBasename = (targetFile as any).basename;
+				const targetBasename = (targetFile as unknown).basename;
 				const linkDisplay = linkText ? `${linkText}|${targetBasename}` : targetBasename;
 				const link = `[[${linkDisplay}]]`;
 
@@ -2228,7 +2228,7 @@ const regexNode: NodeDef = {
 			const text = String(input[field] || '');
 			const regex = new RegExp(pattern, flags || '');
 
-			let result: any;
+			let result: unknown;
 
 			switch (operation) {
 				case 'match': {
@@ -2370,7 +2370,7 @@ const arrayOpsNode: NodeDef = {
 				throw new Error(`Field "${field}" is not an array`);
 			}
 
-			let result: any;
+			let result: unknown;
 
 			switch (operation) {
 				case 'length':
@@ -2482,7 +2482,7 @@ const objectOpsNode: NodeDef = {
 
 		try {
 			const input = inputs[0]?.json || {};
-			let result: any;
+			let result: unknown;
 
 			const fieldsList = fields ? fields.split(',').map((f: string) => f.trim()) : [];
 
@@ -2497,7 +2497,7 @@ const objectOpsNode: NodeDef = {
 					result = Object.entries(input).map(([key, value]) => ({ key, value }));
 					break;
 				case 'pick': {
-					const picked: Record<string, any> = {};
+					const picked: Record<string, unknown> = {};
 					for (const field of fieldsList) {
 						if (field in input) {
 							picked[field] = input[field];
@@ -2533,7 +2533,7 @@ const objectOpsNode: NodeDef = {
 				}
 				case 'getNested': {
 					const parts = path.split('.');
-					let current: any = input;
+					let current: unknown = input;
 					for (const part of parts) {
 						if (current && typeof current === 'object') {
 							current = current[part];
@@ -2722,9 +2722,9 @@ const getMetadataNode: NodeDef = {
 					created: stat.ctime,
 					modified: stat.mtime,
 					frontmatter: metadata?.frontmatter || {},
-					tags: metadata?.tags?.map((t: any) => t.tag) || [],
-					links: metadata?.links?.map((l: any) => l.link) || [],
-					headings: metadata?.headings?.map((h: any) => ({ level: h.level, heading: h.heading })) || [],
+					tags: metadata?.tags?.map((t: unknown) => t.tag) || [],
+					links: metadata?.links?.map((l: unknown) => l.link) || [],
+					headings: metadata?.headings?.map((h: unknown) => ({ level: h.level, heading: h.heading })) || [],
 				}
 			}];
 		} catch (error) {
@@ -2775,7 +2775,7 @@ const listFilesNode: NodeDef = {
 			const finalFolder = resolveVariables(folder, inputs);
 			const allFiles = vault.getFiles();
 
-			let filteredFiles = allFiles.filter((file: any) => {
+			let filteredFiles = allFiles.filter((file: unknown) => {
 				// Extension filter
 				if (extension && !file.path.endsWith(`.${extension}`)) {
 					return false;
@@ -2793,7 +2793,7 @@ const listFilesNode: NodeDef = {
 				return true;
 			});
 
-			const fileList = filteredFiles.map((file: any) => ({
+			const fileList = filteredFiles.map((file: unknown) => ({
 				path: file.path,
 				name: file.basename,
 				extension: file.extension,
@@ -3099,7 +3099,7 @@ const csvParserNode: NodeDef = {
 
 			const headers = hasHeader
 				? lines[0].split(delimiter).map((h: string) => h.trim())
-				: lines[0].split(delimiter).map((_: any, i: number) => `col${i + 1}`);
+				: lines[0].split(delimiter).map((_: unknown, i: number) => `col${i + 1}`);
 
 			const startIndex = hasHeader ? 1 : 0;
 			const rows = lines.slice(startIndex).map((line: string) => {
@@ -3174,7 +3174,7 @@ const csvBuilderNode: NodeDef = {
 				lines.push(headers.join(delimiter));
 			}
 
-			array.forEach((obj: any) => {
+			array.forEach((obj: unknown) => {
 				const values = headers.map(h => String(obj[h] || ''));
 				lines.push(values.join(delimiter));
 			});
@@ -3296,7 +3296,7 @@ const templateNode: NodeDef = {
 				const trimmedKey = key.trim();
 				if (trimmedKey.includes('.')) {
 					// Handle nested paths
-					const value = trimmedKey.split('.').reduce((obj: any, k: string) => obj?.[k], inputData);
+					const value = trimmedKey.split('.').reduce((obj: unknown, k: string) => obj?.[k], inputData);
 					return value !== undefined ? String(value) : match;
 				}
 				return inputData[trimmedKey] !== undefined ? String(inputData[trimmedKey]) : match;
@@ -3476,7 +3476,7 @@ const summarizeNode: NodeDef = {
 			return [{
 				json: {
 					summary,
-					originalLength: finalText!.length,
+					originalLength: finalText.length,
 					model,
 				}
 			}];
@@ -3701,7 +3701,7 @@ const cacheNode: NodeDef = {
 
 			// Note: Would require cache service implementation
 			// For now, use simple in-memory cache
-			const cache = (context as any)._cache || ((context as any)._cache = new Map());
+			const cache = (context as unknown)._cache || ((context as unknown)._cache = new Map());
 
 			switch (operation) {
 				case 'get': {
@@ -3817,7 +3817,7 @@ const keyValueStoreNode: NodeDef = {
 
 		try {
 			const finalKey = resolveVariables(key, inputs);
-			const store = (context as any)._kvStore || ((context as any)._kvStore = new Map());
+			const store = (context as unknown)._kvStore || ((context as unknown)._kvStore = new Map());
 
 			switch (operation) {
 				case 'get':
@@ -4107,7 +4107,7 @@ const agentNode: NodeDef = {
 				throw new Error('No agent selected. Please select an agent from the dropdown.');
 			}
 
-			const agent = settings.agents?.find((a: any) => a.id === agentId);
+			const agent = settings.agents?.find((a: unknown) => a.id === agentId);
 
 			if (!agent) {
 				throw new Error(`Agent not found: ${agentId}. Please check if the agent still exists in settings.`);
@@ -4118,7 +4118,7 @@ const agentNode: NodeDef = {
 			if (systemPromptOverride) {
 				systemPrompt = resolveVariables(systemPromptOverride, inputs);
 			} else if (agent.systemPromptId) {
-				const prompt = settings.systemPrompts?.find((p: any) => p.id === agent.systemPromptId);
+				const prompt = settings.systemPrompts?.find((p: unknown) => p.id === agent.systemPromptId);
 				if (prompt) {
 					systemPrompt = prompt.content;
 				}
@@ -4143,7 +4143,7 @@ const agentNode: NodeDef = {
 			}
 
 			// Prepare messages array
-			const messages: any[] = [];
+			const messages: unknown[] = [];
 
 			// Add system prompt if available
 			if (systemPrompt) {

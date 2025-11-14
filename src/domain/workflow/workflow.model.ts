@@ -11,7 +11,7 @@ export class WorkflowModel {
 	/**
 	 * Add a node to the workflow
 	 */
-	addNode(node: any): void {
+	addNode(node: unknown): void {
 		this.data.nodes.push(node);
 		this.data.updatedAt = Date.now();
 	}
@@ -31,14 +31,14 @@ export class WorkflowModel {
 	/**
 	 * Get node by ID
 	 */
-	getNode(nodeId: string): any | undefined {
+	getNode(nodeId: string): unknown | undefined {
 		return this.data.nodes.find(n => n.id === nodeId);
 	}
 
 	/**
 	 * Update a node
 	 */
-	updateNode(nodeId: string, updates: any): boolean {
+	updateNode(nodeId: string, updates: unknown): boolean {
 		const node = this.getNode(nodeId);
 		if (!node) return false;
 
@@ -50,7 +50,7 @@ export class WorkflowModel {
 	/**
 	 * Add an edge to the workflow
 	 */
-	addEdge(edge: any): void {
+	addEdge(edge: unknown): void {
 		this.data.edges.push(edge);
 		this.data.updatedAt = Date.now();
 	}
@@ -70,21 +70,21 @@ export class WorkflowModel {
 	/**
 	 * Get edge by ID
 	 */
-	getEdge(edgeId: string): any | undefined {
+	getEdge(edgeId: string): unknown | undefined {
 		return this.data.edges.find(e => e.id === edgeId);
 	}
 
 	/**
 	 * Get all nodes
 	 */
-	getNodes(): any[] {
+	getNodes(): unknown[] {
 		return [...this.data.nodes];
 	}
 
 	/**
 	 * Get all edges
 	 */
-	getEdges(): any[] {
+	getEdges(): unknown[] {
 		return [...this.data.edges];
 	}
 
@@ -112,14 +112,14 @@ export class WorkflowModel {
 	/**
 	 * Get incoming edges for a node
 	 */
-	getIncomingEdges(nodeId: string): any[] {
+	getIncomingEdges(nodeId: string): unknown[] {
 		return this.data.edges.filter(e => e.target === nodeId);
 	}
 
 	/**
 	 * Get outgoing edges for a node
 	 */
-	getOutgoingEdges(nodeId: string): any[] {
+	getOutgoingEdges(nodeId: string): unknown[] {
 		return this.data.edges.filter(e => e.source === nodeId);
 	}
 
@@ -127,8 +127,8 @@ export class WorkflowModel {
 	 * Get connected nodes for a node
 	 */
 	getConnectedNodes(nodeId: string): {
-		incoming: any[];
-		outgoing: any[];
+		incoming: unknown[];
+		outgoing: unknown[];
 	} {
 		const incomingEdges = this.getIncomingEdges(nodeId);
 		const outgoingEdges = this.getOutgoingEdges(nodeId);

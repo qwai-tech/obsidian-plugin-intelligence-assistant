@@ -2,7 +2,7 @@
 import { ConversationModel } from '@/domain/chat/entities/conversation.model';
 import type { Message } from '@/types';
 
-type ChatStateSnapshot = {
+export type ChatStateSnapshot = {
   currentConversation: ConversationModel | null;
   isLoading: boolean;
   messages: Message[];

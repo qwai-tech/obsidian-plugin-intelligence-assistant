@@ -86,9 +86,9 @@ export function initializeWorkflowSystem(registerEnhanced = false): void {
  */
 export async function createWorkflowEditor(
 	container: HTMLElement,
-	services: any,
+	services: unknown,
 	workflowId?: string
-): Promise<any> {
+): Promise<unknown> {
 	// Import dependencies dynamically
 	const { WorkflowStorage: Storage } = require('./storage/storage');
 	const { WorkflowGraph: Graph } = require('./core/workflow');
@@ -101,7 +101,7 @@ export async function createWorkflowEditor(
 	const storage = new Storage(services.vault);
 
 	// Load or create workflow
-	let workflow: any;
+	let workflow: unknown;
 	if (workflowId) {
 		const loaded = await storage.load(workflowId);
 		if (loaded) {
@@ -130,8 +130,8 @@ export async function createWorkflowEditor(
  */
 export function createSimpleWorkflow(
 	name: string,
-	nodes: Array<{ type: string; config: Record<string, any> }>
-): any {
+	nodes: Array<{ type: string; config: Record<string, unknown> }>
+): unknown {
 	// Import dependencies dynamically
 	const { WorkflowGraph: Graph } = require('./core/workflow');
 	const { nodeRegistry: registry } = require('./nodes/registry');

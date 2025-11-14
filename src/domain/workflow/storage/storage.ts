@@ -58,7 +58,7 @@ export class WorkflowStorage {
 				const adapter = this.vault.adapter;
 				await adapter.write(filePath, content);
 			}
-		} catch (error: any) {
+		} catch (error: unknown) {
 			throw new Error(`Failed to save workflow: ${error.message}`);
 		}
 	}
@@ -79,7 +79,7 @@ export class WorkflowStorage {
 			}
 
 			return null;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error(`Failed to load workflow ${id}:`, error);
 			return null;
 		}
@@ -98,7 +98,7 @@ export class WorkflowStorage {
 			}
 
 			return null;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error(`Failed to load workflow from ${path}:`, error);
 			return null;
 		}
@@ -145,7 +145,7 @@ export class WorkflowStorage {
 			if (file instanceof TFile) {
 				await this.vault.delete(file);
 			}
-		} catch (error: any) {
+		} catch (error: unknown) {
 			throw new Error(`Failed to delete workflow: ${error.message}`);
 		}
 	}
@@ -228,7 +228,7 @@ export class WorkflowStorage {
 			await this.save(workflow);
 
 			return workflow;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			throw new Error(`Failed to import workflow: ${error.message}`);
 		}
 	}

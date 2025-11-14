@@ -23,11 +23,11 @@ export class OllamaModelManagerModal extends Modal {
 		contentEl.empty();
 		contentEl.addClass('ia-ollama-manager-modal');
 
-		contentEl.createEl('h2', { text: 'Manage Ollama Models' });
+		contentEl.createEl('h2', { text: 'Manage Ollama models' });
 
 		// Server info section
 		const serverInfo = contentEl.createDiv('ia-modal-section');
-		serverInfo.createEl('h3', { text: 'Server Information' });
+		serverInfo.createEl('h3', { text: 'Server information' });
 
 		const serverStatus = serverInfo.createDiv('ia-server-status');
 		serverStatus.setText('Checking server...');
@@ -43,7 +43,7 @@ export class OllamaModelManagerModal extends Modal {
 		// Close button
 		new Setting(contentEl)
 			.addButton(button => button
-				.setButtonText('Close')
+				.setButtonText('close')
 				.onClick(() => this.close()));
 	}
 
@@ -63,7 +63,7 @@ export class OllamaModelManagerModal extends Modal {
 				const data = await response.json();
 				statusEl.empty();
 				statusEl.createEl('span', {
-					text: `✅ Server Online`,
+					text: `✅ server online`,
 					attr: { style: 'color: var(--text-success); font-weight: 600;' }
 				});
 				statusEl.createEl('span', {
@@ -75,18 +75,18 @@ export class OllamaModelManagerModal extends Modal {
 					attr: { style: 'color: var(--text-muted); margin-left: 8px; font-size: 0.9em;' }
 				});
 			} else {
-				statusEl.setText('❌ Server offline');
+				statusEl.setText('❌ server offline');
 				statusEl.setCssProps({ 'color': 'var(--text-error)' });
 			}
 		} catch (error) {
-			statusEl.setText('❌ Connection error');
+			statusEl.setText('❌ connection error');
 			statusEl.setCssProps({ 'color': 'var(--text-error)' });
 		}
 	}
 
 	private renderPullSection(containerEl: HTMLElement) {
 		const section = containerEl.createDiv('ia-modal-section');
-		section.createEl('h3', { text: 'Pull New Model' });
+		section.createEl('h3', { text: 'Pull new model' });
 
 		const _desc = section.createEl('p', {
 			text: 'Enter a model name to download from Ollama library (e.g., llama2, mistral, codellama)',
@@ -96,7 +96,7 @@ export class OllamaModelManagerModal extends Modal {
 		let modelNameInput: HTMLInputElement;
 
 		new Setting(section)
-			.setName('Model Name')
+			.setName('Model name')
 			.setDesc('Example: llama2, mistral, codellama:7b')
 			.addText(text => {
 				modelNameInput = text.inputEl;
@@ -104,7 +104,7 @@ export class OllamaModelManagerModal extends Modal {
 					.inputEl.setCssProps({ 'width': '100%' });
 			})
 			.addButton(button => button
-				.setButtonText('Pull Model')
+				.setButtonText('pull model')
 				.setCta()
 				.onClick(async () => {
 					const modelName = modelNameInput.value.trim();
@@ -124,9 +124,9 @@ export class OllamaModelManagerModal extends Modal {
 		header.setCssProps({ 'align-items': 'center' });
 		header.setCssProps({ 'margin-bottom': '12px' });
 
-		header.createEl('h3', { text: 'Installed Models' });
+		header.createEl('h3', { text: 'Installed models' });
 
-		const refreshBtn = header.createEl('button', { text: '🔄 Refresh List' });
+		const refreshBtn = header.createEl('button', { text: '🔄 refresh list' });
 		refreshBtn.addClass('ia-button');
 		refreshBtn.addClass('ia-button--ghost');
 		refreshBtn.addEventListener('click', async () => {
@@ -165,7 +165,7 @@ export class OllamaModelManagerModal extends Modal {
 				attr: { style: 'color: var(--text-muted); font-size: 0.9em;' }
 			});
 
-			const deleteBtn = modelRow.createEl('button', { text: 'Delete' });
+			const deleteBtn = modelRow.createEl('button', { text: 'delete' });
 			deleteBtn.addClass('ia-button');
 			deleteBtn.addClass('ia-button--danger');
 			deleteBtn.setCssProps({ 'margin-left': '8px' });
@@ -299,7 +299,7 @@ export class OllamaModelManagerModal extends Modal {
 			new Notice('✅ Model list refreshed');
 		} catch (error) {
 			console.error('Failed to refresh models:', error);
-			new Notice('❌ Failed to refresh model list');
+			new Notice('❌ failed to refresh model list');
 		} finally {
 			if (buttonEl) {
 				(buttonEl as HTMLButtonElement).disabled = false;

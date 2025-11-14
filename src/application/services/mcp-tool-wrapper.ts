@@ -26,7 +26,7 @@ export class MCPToolWrapper implements Tool {
 			const required = new Set(mcpTool.inputSchema.required || []);
 
 			for (const [name, schema] of Object.entries(mcpTool.inputSchema.properties)) {
-				const paramSchema = schema as any;
+				const paramSchema = schema;
 
 				parameters.push({
 					name,
@@ -69,7 +69,7 @@ export class MCPToolWrapper implements Tool {
 	/**
 	 * Execute the MCP tool
 	 */
-	async execute(args: Record<string, any>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			if (!this.mcpClient.isConnected()) {
 				return {
@@ -84,7 +84,7 @@ export class MCPToolWrapper implements Tool {
 				success: true,
 				result,
 			};
-		} catch (error: any) {
+		} catch (error: unknown) {
 			return {
 				success: false,
 				error: error.message || 'Unknown error calling MCP tool',
