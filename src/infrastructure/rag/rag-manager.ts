@@ -44,11 +44,12 @@ export class RAGManager {
     this.config = config;
   }
 
-  async initialize(): Promise<void> {
+  initialize(): Promise<void> {
     this.ready = true;
+    return Promise.resolve();
   }
 
-  async _query(_query: string): Promise<any[]> {
+  _query(_query: string): Promise<unknown[]> {
     if (!this.ready) {
       throw new Error('RAGManager not initialized');
     }
@@ -57,12 +58,13 @@ export class RAGManager {
     return [];
   }
 
-  async indexContent(_content: string, _metadata?: any): Promise<void> {
+  indexContent(_content: string, _metadata?: unknown): Promise<void> {
     if (!this.ready) {
       throw new Error('RAGManager not initialized');
     }
     
     // Placeholder implementation
+    return Promise.resolve();
   }
 
   async clearIndex(): Promise<void> {

@@ -50,11 +50,11 @@ export class DebugService {
   /**
    * Start a new debug session
    */
-  async startSession(
+  startSession(
     workflow: WorkflowGraph, 
     services: WorkflowServices, 
     _options: DebugOptions = {}
-  ): Promise<string> {
+  ): string {
     const sessionId = `debug_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
     
     const session: DebugSession = {
@@ -172,14 +172,15 @@ export class DebugService {
       session.stepNumber++;
       
       return { success: true, output: result };
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Update node state to error
       const endTime = Date.now();
+      const errorMessage = error instanceof Error ? error.message : String(error);
       session.nodeStates.set(nodeId, {
         status: 'error',
         startTime,
         endTime,
-        error: error.message
+        error: errorMessage
       });
 
       // Log error
@@ -189,11 +190,11 @@ export class DebugService {
         timestamp: endTime,
         status: 'error',
         duration: endTime - startTime,
-        error: error.message,
+        error: errorMessage,
       };
       session.log.push(errorLog);
 
-      return { success: false, error: error.message };
+      return { success: false, error: errorMessage };
     }
   }
 
@@ -285,10 +286,11 @@ export class DebugService {
       session.status = 'completed';
       session.endTime = Date.now();
       return { success: true, log: session.log };
-    } catch (error: any) {
+    } catch (error: unknown) {
       session.status = 'error';
       session.endTime = Date.now();
-      return { success: false, error: error.message, log: session.log };
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      return { success: false, error: errorMessage, log: session.log };
     }
   }
 
@@ -310,7 +312,7 @@ export class DebugService {
   /**
    * Resume execution from pause
    */
-  async resume(sessionId: string): Promise<void> {
+  resume(sessionId: string): void {
     const session = this.sessions.get(sessionId);
     if (!session || session.status !== 'paused') {
       throw new Error('Session is not paused');
@@ -322,7 +324,7 @@ export class DebugService {
   /**
    * Abort current execution
    */
-  async abort(sessionId: string): Promise<void> {
+  abort(sessionId: string): void {
     const session = this.sessions.get(sessionId);
     if (!session) return;
 
@@ -404,10 +406,10 @@ export class DebugService {
     node: WorkflowNode, 
     workflow: WorkflowGraph, 
     services: WorkflowServices,
-    contextData?: any
+    contextData?: unknown
   ): Promise<{ success: boolean; output?: NodeData[]; error?: string }> {
     // Create a temporary debug session for single node execution
-    const sessionId = await this.startSession(workflow, services);
+    const sessionId = this.startSession(workflow, services);
     
     // Create a context with provided input data
     if (contextData) {

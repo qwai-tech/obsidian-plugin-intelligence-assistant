@@ -17,7 +17,8 @@ export class AgentEditModal extends Modal {
 	constructor(app: App, plugin: IntelligenceAssistantPlugin, agent: Agent, onSave: (agent: Agent) => void | Promise<void>) {
 		super(app);
 		this.plugin = plugin;
-		this.agent = JSON.parse(JSON.stringify(agent)); // Deep copy
+		const clonedAgent = JSON.parse(JSON.stringify(agent)) as unknown as Agent; // Deep copy with explicit typing
+		this.agent = clonedAgent;
 		this.onSaveCallback = onSave;
 		this.selectedSystemPromptId = agent.systemPromptId;
 		this.agent.enabledBuiltInTools = this.agent.enabledBuiltInTools ?? [];
@@ -29,7 +30,7 @@ export class AgentEditModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: 'Edit Agent' });
+		contentEl.createEl('h2', { text: 'Edit agent' });
 
 		// Icon field
 		new Setting(contentEl)
@@ -70,13 +71,13 @@ export class AgentEditModal extends Modal {
 		
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].modelStrategy.strategy',
-			label: 'Model Strategy',
+			label: 'Model strategy',
 			description: 'Choose how the agent will select its model'
 		}).addDropdown(dropdown => {
 				dropdown
-					.addOption('default', 'Use Default Model (from Settings)')
-					.addOption('chat-view', 'Use Chat View Model')
-					.addOption('fixed', 'Fixed Model');
+					.addOption('Default', 'Use default model (from settings)')
+					.addOption('Chat-view', 'Use chat view model')
+					.addOption('Fixed', 'Fixed model');
 				
 				// Set the initial value based on the current strategy
 				dropdown.setValue(this.agent.modelStrategy.strategy);
@@ -94,7 +95,7 @@ export class AgentEditModal extends Modal {
 		// Fixed Model Selection (only shown when strategy is 'fixed')
 		this.fixedModelSetting = applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].modelStrategy.modelId',
-			label: 'Fixed Model',
+			label: 'Fixed model',
 			description: hasCachedModels
 				? 'Select a specific model for this agent.'
 				: 'No cached models available. Refresh models in the Models tab.'
@@ -106,7 +107,9 @@ export class AgentEditModal extends Modal {
 					return;
 				}
 
-				modelOptions.forEach(option => dropdown.addOption(option.id, option.label));
+				for (const option of modelOptions) {
+				dropdown.addOption(option.id, option.label);
+			}
 				
 				// Set the initial value based on the current modelId
 				const initialModelId = this.getInitialModelSelectionForStrategy(modelOptions);
@@ -140,7 +143,7 @@ export class AgentEditModal extends Modal {
 		// Max Tokens field
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].maxTokens',
-			label: 'Max Tokens',
+			label: 'Max tokens',
 			description: 'Maximum number of tokens to generate'
 		}).addText(text => text
 				.setValue(String(this.agent.maxTokens))
@@ -154,7 +157,7 @@ export class AgentEditModal extends Modal {
 		// Context Window field
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].contextWindow',
-			label: 'Context Window',
+			label: 'Context window',
 			description: 'Number of previous messages to include in context'
 		}).addText(text => text
 				.setValue(String(this.agent.contextWindow))
@@ -177,13 +180,13 @@ export class AgentEditModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].systemPromptId',
-			label: 'System Prompt',
+			label: 'System prompt',
 			description: 'Choose from existing prompts or define a new one for this agent.'
 		}).addDropdown(dropdown => {
 				prompts.forEach(prompt => {
 					dropdown.addOption(prompt.id, prompt.name);
 				});
-				dropdown.addOption('__custom__', '➕ Create new prompt…');
+				dropdown.addOption('__custom__', '➕ create new prompt…');
 				dropdown.setValue(this.selectedSystemPromptId);
 				dropdown.onChange(value => {
 					this.selectedSystemPromptId = value;
@@ -205,7 +208,7 @@ export class AgentEditModal extends Modal {
 		this.toggleCustomPromptSection(this.selectedSystemPromptId === '__custom__');
 
 		new Setting(this.customPromptSection)
-			.setName('Prompt Name')
+			.setName('Prompt name')
 			.setDesc('Display name for the new system prompt')
 			.addText(text => {
 				customNameInput = text.inputEl;
@@ -216,7 +219,7 @@ export class AgentEditModal extends Modal {
 			});
 
 		new Setting(this.customPromptSection)
-			.setName('Prompt Content')
+			.setName('Prompt content')
 			.setDesc('Content for the new system prompt')
 			.addTextArea(text => {
 				customContentInput = text.inputEl;
@@ -245,7 +248,7 @@ export class AgentEditModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].webSearchEnabled',
-			label: 'Web Search',
+			label: 'Web search',
 			description: 'Enable web search capabilities'
 		}).addToggle(toggle => toggle
 				.setValue(this.agent.webSearchEnabled)
@@ -298,7 +301,7 @@ export class AgentEditModal extends Modal {
 
 		// Built-in tools
 		new Setting(contentEl)
-			.setName('Built-in Tools')
+			.setName('Built-in tools')
 			.setDesc('Select which built-in tools this agent can use');
 
 		this.plugin.settings.builtInTools.forEach((tool: BuiltInToolConfig) => {
@@ -321,10 +324,10 @@ export class AgentEditModal extends Modal {
 		});
 
 		// MCP Servers
-		contentEl.createEl('h3', { text: 'MCP Access' });
+		contentEl.createEl('h3', { text: 'Mcp access' });
 		if (this.plugin.settings.mcpServers.length === 0) {
 			const empty = contentEl.createDiv('ia-table-subtext');
-			empty.setText('No MCP servers configured. Add servers under Settings → MCP to unlock these options.');
+			empty.setText('No mcp servers configured. Add servers under settings → mcp to unlock these options.');
 		} else {
 			const mcpContainer = contentEl.createDiv('ia-mcp-control');
 			this.plugin.settings.mcpServers.forEach(server => {
@@ -348,35 +351,37 @@ export class AgentEditModal extends Modal {
 		new ButtonComponent(buttonContainer)
 			.setButtonText('Save')
 			.setCta()
-			.onClick(async () => {
-				if (this.selectedSystemPromptId === '__custom__') {
-					const name = this.customPromptName?.trim();
-					const content = this.customPromptContent?.trim();
-					if (!name || !content) {
-						new Notice('Please provide a name and content for the new system prompt.');
-						return;
+			.onClick(() => {
+				void (async () => {
+					if (this.selectedSystemPromptId === '__custom__') {
+						const name = this.customPromptName?.trim();
+						const content = this.customPromptContent?.trim();
+						if (!name || !content) {
+							new Notice('Please provide a name and content for the new system prompt.');
+							return;
+						}
+
+						const timestamp = Date.now();
+						const newPromptId = this.generateUniquePromptId(name);
+
+						this.plugin.settings.systemPrompts.push({
+							id: newPromptId,
+							name,
+							content,
+							enabled: true,
+							createdAt: timestamp,
+							updatedAt: timestamp
+						});
+						this.agent.systemPromptId = newPromptId;
+						this.selectedSystemPromptId = newPromptId;
+					} else {
+						this.agent.systemPromptId = this.selectedSystemPromptId;
 					}
 
-					const timestamp = Date.now();
-					const newPromptId = this.generateUniquePromptId(name);
-
-					this.plugin.settings.systemPrompts.push({
-						id: newPromptId,
-						name,
-						content,
-						enabled: true,
-						createdAt: timestamp,
-						updatedAt: timestamp
-					});
-					this.agent.systemPromptId = newPromptId;
-					this.selectedSystemPromptId = newPromptId;
-				} else {
-					this.agent.systemPromptId = this.selectedSystemPromptId;
-				}
-
-				this.agent.updatedAt = Date.now();
-				await this.onSaveCallback(this.agent);
-				this.close();
+					this.agent.updatedAt = Date.now();
+					await this.onSaveCallback(this.agent);
+					this.close();
+				})();
 			});
 	}
 

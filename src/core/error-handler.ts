@@ -46,7 +46,7 @@ export class ErrorHandler {
 		const message = `${prefix} ${error.message}`;
 
 		if (logToConsole) {
-			console.error(`[${error.code}]`, message, error.context, error.stack);
+			console.error(`[${error._code}]`, message, error._context ?? {}, error.stack);
 		}
 
 		if (showNotice) {
@@ -130,26 +130,42 @@ export const errorHandler = new ErrorHandler();
 /**
  * Decorator for error handling
  */
-export function HandleErrors(context?: string, options?: ErrorHandlerOptions) {
-	return function (
-		target: any,
-		propertyKey: string,
-		descriptor: PropertyDescriptor
-	) {
-		const originalMethod = descriptor.value;
+type AsyncMethod = (..._args: unknown[]) => Promise<unknown>;
 
-		descriptor.value = async function (...args: any[]) {
+export function HandleErrors(context?: string, options?: ErrorHandlerOptions) {
+	return function <T extends AsyncMethod>(
+		target: object,
+		propertyKey: string,
+		descriptor: TypedPropertyDescriptor<T>
+	): TypedPropertyDescriptor<T> {
+		const originalMethod = descriptor.value;
+		if (!originalMethod) {
+			return descriptor;
+		}
+
+		const wrappedMethod = async function (
+			this: ThisParameterType<T>,
+			...args: Parameters<T>
+		): Promise<Awaited<ReturnType<T>>> {
 			try {
-				return await originalMethod.apply(this, args);
-			} catch (error) {
-				errorHandler.handle(error as Error, {
+				const result: unknown = await originalMethod.apply(this, args);
+				return result as Awaited<ReturnType<T>>;
+			} catch (error: unknown) {
+				const targetConstructor = target as { constructor: { name: string } };
+				const errorInstance = error instanceof Error ? error : new Error(String(error));
+				errorHandler.handle(errorInstance, {
 					...options,
-					context: context || `${target.constructor.name}.${propertyKey}`
+					context: context || `${targetConstructor.constructor.name}.${propertyKey}`
 				});
 				throw error;
 			}
 		};
 
-		return descriptor;
+		// Type-safe assignment using proper descriptor modification
+		const newDescriptor: TypedPropertyDescriptor<T> = {
+			...descriptor,
+			value: wrappedMethod as T
+		};
+		return newDescriptor;
 	};
 }

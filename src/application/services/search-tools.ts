@@ -2,7 +2,7 @@ import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
 
 export class SearchFilesTool implements Tool {
-	constructor(private app: App) {}
+	constructor(private _app: App) {}
 
 	definition: ToolDefinition = {
 		name: 'search_files',
@@ -29,13 +29,13 @@ export class SearchFilesTool implements Tool {
 		]
 	};
 
-	async execute(args: Record<string, any>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const query = (args.query as string).toLowerCase();
 			const searchContent = args.search_content as boolean || false;
 			const limit = args.limit as number || 10;
 
-			const files = this.app.vault.getMarkdownFiles();
+			const files = this._app.vault.getMarkdownFiles();
 			const results: Array<{ path: string; name: string; matches?: string[] }> = [];
 
 			for (const file of files) {
@@ -50,7 +50,7 @@ export class SearchFilesTool implements Tool {
 
 				// Search by content if enabled
 				if (searchContent) {
-					const content = await this.app.vault.read(file);
+					const content = await this._app.vault.read(file);
 					if (content.toLowerCase().includes(query)) {
 						// Extract matching lines
 						const lines = content.split('\n');
@@ -73,17 +73,17 @@ export class SearchFilesTool implements Tool {
 				success: true,
 				result: results
 			};
-		} catch (error) {
+		} catch (error: unknown) {
 			return {
 				success: false,
-				error: error.message
+				error: error instanceof Error ? error.message : 'Unknown error'
 			};
 		}
 	}
 }
 
 export class CreateNoteTool implements Tool {
-	constructor(private app: App) {}
+	constructor(private _app: App) {}
 
 	definition: ToolDefinition = {
 		name: 'create_note',
@@ -110,7 +110,7 @@ export class CreateNoteTool implements Tool {
 		]
 	};
 
-	async execute(args: Record<string, any>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const title = args.title as string;
 			const content = args.content as string;
@@ -121,7 +121,7 @@ export class CreateNoteTool implements Tool {
 			const path = folder ? `${folder}/${sanitized}.md` : `${sanitized}.md`;
 
 			// Check if file already exists
-			const existing = this.app.vault.getAbstractFileByPath(path);
+			const existing = this._app.vault.getAbstractFileByPath(path);
 			if (existing) {
 				return {
 					success: false,
@@ -129,22 +129,22 @@ export class CreateNoteTool implements Tool {
 				};
 			}
 
-			await this.app.vault.create(path, content);
+			await this._app.vault.create(path, content);
 			return {
 				success: true,
 				result: `Note created: ${path}`
 			};
-		} catch (error) {
+		} catch (error: unknown) {
 			return {
 				success: false,
-				error: error.message
+				error: error instanceof Error ? error.message : 'Unknown error'
 			};
 		}
 	}
 }
 
 export class AppendToNoteTool implements Tool {
-	constructor(private app: App) {}
+	constructor(private _app: App) {}
 
 	definition: ToolDefinition = {
 		name: 'append_to_note',
@@ -165,11 +165,11 @@ export class AppendToNoteTool implements Tool {
 		]
 	};
 
-	async execute(args: Record<string, any>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const path = args.path as string;
 			const content = args.content as string;
-			const file = this.app.vault.getAbstractFileByPath(path);
+			const file = this._app.vault.getAbstractFileByPath(path);
 
 			if (!file || !(file instanceof TFile)) {
 				return {
@@ -178,17 +178,17 @@ export class AppendToNoteTool implements Tool {
 				};
 			}
 
-			const existing = await this.app.vault.read(file);
-			await this.app.vault.modify(file, existing + '\n\n' + content);
+			const existing = await this._app.vault.read(file);
+			await this._app.vault.modify(file, existing + '\n\n' + content);
 
 			return {
 				success: true,
 				result: `Content appended to: ${path}`
 			};
-		} catch (error) {
+		} catch (error: unknown) {
 			return {
 				success: false,
-				error: error.message
+				error: error instanceof Error ? error.message : 'Unknown error'
 			};
 		}
 	}

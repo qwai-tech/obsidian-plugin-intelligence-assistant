@@ -3,7 +3,7 @@
  * Manages Ollama models (pull, delete, refresh)
  */
 
-import { App, Modal, Notice, Setting } from 'obsidian';
+import { App, Modal, Notice, Setting, requestUrl } from 'obsidian';
 import type { LLMConfig, ModelInfo } from '@/types';
 
 export class OllamaModelManagerModal extends Modal {
@@ -18,21 +18,21 @@ export class OllamaModelManagerModal extends Modal {
 		this.models = config.cachedModels || [];
 	}
 
-	async onOpen() {
+	onOpen() {
 		const { contentEl } = this;
 		contentEl.empty();
 		contentEl.addClass('ia-ollama-manager-modal');
 
-		contentEl.createEl('h2', { text: 'Manage Ollama Models' });
+		contentEl.createEl('h2', { text: 'Manage Ollama models' });
 
 		// Server info section
 		const serverInfo = contentEl.createDiv('ia-modal-section');
-		serverInfo.createEl('h3', { text: 'Server Information' });
+		serverInfo.createEl('h3', { text: 'Server information' });
 
 		const serverStatus = serverInfo.createDiv('ia-server-status');
 		serverStatus.setText('Checking server...');
 
-		this.checkServerStatus(serverStatus);
+		void this.checkServerStatus(serverStatus);
 
 		// Pull new model section
 		this.renderPullSection(contentEl);
@@ -51,19 +51,17 @@ export class OllamaModelManagerModal extends Modal {
 		try {
 			const baseUrl = this.config.baseUrl || 'http://localhost:11434';
 			const url = baseUrl.endsWith('/') ? `${baseUrl}api/version` : `${baseUrl}/api/version`;
-			const controller = new AbortController();
-			const timeout = setTimeout(() => controller.abort(), 5000);
-			const response = await fetch(url, {
+			const response = await requestUrl({
+				url,
 				method: 'GET',
-				signal: controller.signal,
+				throw: false,
 			});
-			clearTimeout(timeout);
 
-			if (response.ok) {
-				const data = await response.json();
+			if (response.status === 200) {
+				const data = response.json as { version?: string };
 				statusEl.empty();
 				statusEl.createEl('span', {
-					text: `✅ Server Online`,
+					text: `✅ Server online`,
 					attr: { style: 'color: var(--text-success); font-weight: 600;' }
 				});
 				statusEl.createEl('span', {
@@ -78,7 +76,7 @@ export class OllamaModelManagerModal extends Modal {
 				statusEl.setText('❌ Server offline');
 				statusEl.setCssProps({ 'color': 'var(--text-error)' });
 			}
-		} catch (error) {
+		} catch (_error) {
 			statusEl.setText('❌ Connection error');
 			statusEl.setCssProps({ 'color': 'var(--text-error)' });
 		}
@@ -86,7 +84,7 @@ export class OllamaModelManagerModal extends Modal {
 
 	private renderPullSection(containerEl: HTMLElement) {
 		const section = containerEl.createDiv('ia-modal-section');
-		section.createEl('h3', { text: 'Pull New Model' });
+		section.createEl('h3', { text: 'Pull new model' });
 
 		const _desc = section.createEl('p', {
 			text: 'Enter a model name to download from Ollama library (e.g., llama2, mistral, codellama)',
@@ -96,7 +94,7 @@ export class OllamaModelManagerModal extends Modal {
 		let modelNameInput: HTMLInputElement;
 
 		new Setting(section)
-			.setName('Model Name')
+			.setName('Model name')
 			.setDesc('Example: llama2, mistral, codellama:7b')
 			.addText(text => {
 				modelNameInput = text.inputEl;
@@ -104,7 +102,7 @@ export class OllamaModelManagerModal extends Modal {
 					.inputEl.setCssProps({ 'width': '100%' });
 			})
 			.addButton(button => button
-				.setButtonText('Pull Model')
+				.setButtonText('Pull model')
 				.setCta()
 				.onClick(async () => {
 					const modelName = modelNameInput.value.trim();
@@ -124,13 +122,15 @@ export class OllamaModelManagerModal extends Modal {
 		header.setCssProps({ 'align-items': 'center' });
 		header.setCssProps({ 'margin-bottom': '12px' });
 
-		header.createEl('h3', { text: 'Installed Models' });
+		header.createEl('h3', { text: 'Installed models' });
 
-		const refreshBtn = header.createEl('button', { text: '🔄 Refresh List' });
+		const refreshBtn = header.createEl('button', { text: '🔄 Refresh list' });
 		refreshBtn.addClass('ia-button');
 		refreshBtn.addClass('ia-button--ghost');
-		refreshBtn.addEventListener('click', async () => {
-			await this.refreshModelList(refreshBtn);
+		refreshBtn.addEventListener('click', () => {
+			void (async () => {
+				await this.refreshModelList(refreshBtn);
+			})();
 		});
 
 		const modelList = section.createDiv('ia-model-list');
@@ -167,11 +167,13 @@ export class OllamaModelManagerModal extends Modal {
 
 			const deleteBtn = modelRow.createEl('button', { text: 'Delete' });
 			deleteBtn.addClass('ia-button');
-			deleteBtn.addClass('ia-button--danger');
-			deleteBtn.setCssProps({ 'margin-left': '8px' });
-			deleteBtn.addEventListener('click', async () => {
+		deleteBtn.addClass('ia-button--danger');
+		deleteBtn.setCssProps({ 'margin-left': '8px' });
+		deleteBtn.addEventListener('click', () => {
+			void (async () => {
 				await this.deleteModel(model.id, deleteBtn);
-			});
+			})();
+		});
 		});
 	}
 
@@ -186,61 +188,67 @@ export class OllamaModelManagerModal extends Modal {
 
 			new Notice(`Pulling ${modelName}... This may take a while.`);
 
-			const response = await fetch(url, {
+			const response = await requestUrl({
+				url,
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name: modelName }),
+				body: JSON.stringify({ name: modelName } ),
+				throw: false,
 			});
 
-			if (response.ok) {
-				// Read the streaming response
-				const reader = response.body?.getReader();
-				const decoder = new TextDecoder();
-				let _lastStatus = '';
-
-				if (reader) {
-					while (true) {
-						const { done, value } = await reader.read();
-						if (done) break;
-
-						const chunk = decoder.decode(value);
-						const lines = chunk.split('\n').filter(line => line.trim());
-
-						for (const line of lines) {
-							try {
-								const data = JSON.parse(line);
-								if (data.status) {
-									_lastStatus = data.status;
-									// Update button text with progress
-									if (data.status.includes('pulling')) {
-										buttonEl.textContent = `Pulling... ${data.completed || ''}`;
-									}
-								}
-							} catch (e) {
-								// Ignore JSON parse errors
-							}
-						}
-					}
-				}
-
+			if (response.status >= 200 && response.status < 300) {
 				new Notice(`✅ Successfully pulled ${modelName}`);
 				await this.refreshModelList();
 			} else {
-				const error = await response.text();
-				console.error('Pull model error:', error);
-				new Notice(`❌ Failed to pull model: ${error}`);
+				const errorText = response.text;
+				console.error('Pull model error:', errorText);
+				new Notice(`❌ Failed to pull model: ${errorText}`);
 			}
-		} catch (error) {
-			console.error('Failed to pull model:', error);
-			new Notice(`❌ Failed to pull model: ${error instanceof Error ? error.message : 'Unknown error'}`);
+		} catch (_error) {
+			console.error('Failed to pull model:', _error);
+			new Notice(`❌ Failed to pull model: ${_error instanceof Error ? _error.message : 'Unknown error'}`);
 		} finally {
 			(buttonEl as HTMLButtonElement).disabled = false;
 			buttonEl.textContent = _originalText;
 		}
 	}
-
+	
+	private async confirmDelete(message: string): Promise<boolean> {
+		return new Promise<boolean>((resolve) => {
+			const modal = new Modal(this.app);
+			modal.titleEl.setText('Confirm deletion');
+			const { contentEl } = modal;
+			contentEl.empty();
+			contentEl.createEl('p', { text: message });
+			
+			const buttonBar = contentEl.createDiv();
+			buttonBar.removeClass('ia-hidden');
+			buttonBar.setCssProps({ 'display': 'flex' });
+			buttonBar.setCssProps({ 'justify-content': 'flex-end' });
+			buttonBar.setCssProps({ 'gap': '8px' });
+			buttonBar.setCssProps({ 'margin-top': '12px' });
+			
+			const cancelBtn = buttonBar.createEl('button', { text: 'Cancel' });
+			cancelBtn.addEventListener('click', () => {
+				modal.close();
+				resolve(false);
+			});
+			
+			const confirmBtn = buttonBar.createEl('button', { text: 'Delete' });
+			confirmBtn.addClass('ia-button');
+			confirmBtn.addClass('ia-button--danger');
+			confirmBtn.addEventListener('click', () => {
+				modal.close();
+				resolve(true);
+			});
+			
+			modal.open();
+		});
+	}
+	
 	private async deleteModel(modelName: string, buttonEl: HTMLElement) {
-		if (!confirm(`Are you sure you want to delete the model "${modelName}"?`)) {
+		const confirmed = await this.confirmDelete(`Are you sure you want to delete the model "${modelName}"?`);
+		if (!confirmed) {
 			return;
 		}
 
@@ -252,23 +260,25 @@ export class OllamaModelManagerModal extends Modal {
 			const baseUrl = this.config.baseUrl || 'http://localhost:11434';
 			const url = baseUrl.endsWith('/') ? `${baseUrl}api/delete` : `${baseUrl}/api/delete`;
 
-			const response = await fetch(url, {
+			const response = await requestUrl({
+				url,
 				method: 'DELETE',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name: modelName }),
+				body: JSON.stringify({ name: modelName } ),
+				throw: false,
 			});
 
-			if (response.ok) {
+			if (response.status >= 200 && response.status < 300) {
 				new Notice(`✅ Deleted ${modelName}`);
 				await this.refreshModelList();
 			} else {
-				const error = await response.text();
-				console.error('Delete model error:', error);
-				new Notice(`❌ Failed to delete model: ${error}`);
+				const errorText = response.text;
+				console.error('Delete model error:', errorText);
+				new Notice(`❌ Failed to delete model: ${errorText}`);
 			}
-		} catch (error) {
-			console.error('Failed to delete model:', error);
-			new Notice(`❌ Failed to delete model: ${error instanceof Error ? error.message : 'Unknown error'}`);
+		} catch (_error) {
+			console.error('Failed to delete model:', _error);
+			new Notice(`❌ Failed to delete model: ${_error instanceof Error ? _error.message : 'Unknown error'}`);
 		} finally {
 			(buttonEl as HTMLButtonElement).disabled = false;
 			buttonEl.textContent = _originalText;
@@ -291,14 +301,14 @@ export class OllamaModelManagerModal extends Modal {
 
 			// Re-render the modal
 			this.contentEl.empty();
-			await this.onOpen();
+			this.onOpen();
 
 			// Notify parent to save and refresh
 			this.onUpdate();
 
 			new Notice('✅ Model list refreshed');
-		} catch (error) {
-			console.error('Failed to refresh models:', error);
+		} catch (_error) {
+			console.error('Failed to refresh models:', _error);
 			new Notice('❌ Failed to refresh model list');
 		} finally {
 			if (buttonEl) {

@@ -55,7 +55,7 @@ export function createChatHeader(
 	modelContainer.setCssProps({ 'flex': '1' });
 
 	// Model label
-	const modelLabel = modelContainer.createSpan({ text: '🤖 Model:' });
+	const modelLabel = modelContainer.createSpan({ text: '🤖 model:' });
 	modelLabel.setCssProps({ 'font-weight': '500' });
 	modelLabel.setCssProps({ 'font-size': '13px' });
 
@@ -98,7 +98,7 @@ export function createChatHeader(
 
 	// New chat button
 	createButton(modelActions, {
-		text: '➕ New',
+		text: '➕ new',
 		title: 'New Chat',
 		styles: { size: 'md', variant: 'ghost' },
 		onClick: () => options.onNewChat()
@@ -110,11 +110,14 @@ export function createChatHeader(
 		title: 'Open Settings',
 		styles: { size: 'md', variant: 'ghost' },
 		onClick: () => {
-			// Open plugin settings
-			// @ts-ignore - app.setting is available
-			app.setting.open();
-			// @ts-ignore - app.setting is available
-			app.setting.openTabById('intelligence-assistant');
+			// Open plugin settings with proper type checking
+			const appWithSetting = app as unknown as { setting?: { open?: () => void; openTabById?: (id: string) => void } };
+			if (appWithSetting.setting && typeof appWithSetting.setting.open === 'function') {
+				appWithSetting.setting.open();
+				if (typeof appWithSetting.setting.openTabById === 'function') {
+					appWithSetting.setting.openTabById('intelligence-assistant');
+				}
+			}
 		}
 	});
 

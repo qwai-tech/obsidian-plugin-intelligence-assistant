@@ -37,7 +37,7 @@ export class WorkflowExecutor {
 	async execute(
 		workflow: WorkflowGraph,
 		services: WorkflowServices,
-		onProgress?: (nodeId: string, state: NodeExecutionState) => void
+		onProgress?: (_nodeId: string, _state: NodeExecutionState) => void
 	): Promise<ExecutionResult> {
 		const startTime = Date.now();
 
@@ -81,13 +81,14 @@ export class WorkflowExecutor {
 				log: this.log,
 			};
 
-		} catch (error: any) {
+		} catch (error: unknown) {
 			// Error
+			const errorMessage = error instanceof Error ? error.message : String(error);
 			return {
 				success: false,
 				duration: Date.now() - startTime,
 				outputs: this.outputs,
-				error: error.message,
+				error: errorMessage,
 				log: this.log,
 			};
 		} finally {
@@ -102,7 +103,7 @@ export class WorkflowExecutor {
 		node: WorkflowNode,
 		workflow: WorkflowGraph,
 		services: WorkflowServices,
-		onProgress?: (nodeId: string, state: NodeExecutionState) => void
+		onProgress?: (_nodeId: string, _state: NodeExecutionState) => void
 	): Promise<void> {
 		const startTime = Date.now();
 
@@ -170,14 +171,15 @@ export class WorkflowExecutor {
 				output: result.length > 0 ? result[0].json : undefined,
 			});
 
-		} catch (error: any) {
+		} catch (error: unknown) {
 			// Update state to error
 			const endTime = Date.now();
+			const errorMessage = error instanceof Error ? error.message : String(error);
 			const errorState: NodeExecutionState = {
 				status: 'error',
 				startTime,
 				endTime,
-				error: error.message,
+				error: errorMessage,
 			};
 			this.executionState.set(node.id, errorState);
 			onProgress?.(node.id, errorState);
@@ -189,7 +191,7 @@ export class WorkflowExecutor {
 				timestamp: endTime,
 				status: 'error',
 				duration: endTime - startTime,
-				error: error.message,
+				error: errorMessage,
 			});
 
 			// Re-throw to stop execution

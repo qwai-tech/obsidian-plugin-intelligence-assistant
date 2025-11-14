@@ -16,7 +16,7 @@ export class GoogleProvider extends BaseStreamingProvider {
 		};
 	}
 
-	private transformMessages(messages: Message[]): any {
+	private transformMessages(messages: Message[]): unknown {
 		// Gemini uses a "contents" array with role "user" or "model"
 		return messages.map(msg => ({
 			role: msg.role === 'assistant' ? 'model' : 'user',
@@ -27,7 +27,7 @@ export class GoogleProvider extends BaseStreamingProvider {
 	async chat(request: ChatRequest): Promise<ChatResponse> {
 		const baseUrl = this.getBaseUrl('https://generativelanguage.googleapis.com/v1beta');
 		const model = this.extractModelName(request.model);
-		const url = `${baseUrl}/models/${model}:generateContent?key=${this.config.apiKey}`;
+		const url = `${baseUrl ?? ''}/models/${model ?? ''}:generateContent?key=${this.config.apiKey ?? ''}`;
 
 		const body = {
 			contents: this.transformMessages(request.messages),
@@ -37,7 +37,12 @@ export class GoogleProvider extends BaseStreamingProvider {
 			}
 		};
 
-		const response = await this.makeRequest(url, body);
+		const response = await this.makeRequest(url, body) as {
+			json: {
+				candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+				usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number; totalTokenCount?: number };
+			}
+		};
 		const data = response.json;
 
 		const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
@@ -52,10 +57,10 @@ export class GoogleProvider extends BaseStreamingProvider {
 		};
 	}
 
-	protected prepareStreamRequest(request: ChatRequest): { url: string; body: any } {
+	protected prepareStreamRequest(request: ChatRequest): { url: string; body: unknown } {
 		const baseUrl = this.getBaseUrl('https://generativelanguage.googleapis.com/v1beta');
 		const model = this.extractModelName(request.model);
-		const url = `${baseUrl}/models/${model}:streamGenerateContent?key=${this.config.apiKey}&alt=sse`;
+		const url = `${baseUrl ?? ''}/models/${model ?? ''}:streamGenerateContent?key=${this.config.apiKey ?? ''}&alt=sse`;
 
 		const body = {
 			contents: this.transformMessages(request.messages),
@@ -68,7 +73,18 @@ export class GoogleProvider extends BaseStreamingProvider {
 		return { url, body };
 	}
 
-	protected parseStreamChunk(data: any): ParsedStreamChunk | null {
+	protected parseStreamChunk(data: unknown): ParsedStreamChunk | null {
+		// Type guard for Google's data structure
+		const hasCandidates = (obj: unknown): obj is {
+			candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+		} => {
+			return typeof obj === 'object' && obj !== null && 'candidates' in obj;
+		};
+
+		if (!hasCandidates(data)) {
+			return null;
+		}
+
 		// Extract content from Google's structure
 		const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
 		if (content) {

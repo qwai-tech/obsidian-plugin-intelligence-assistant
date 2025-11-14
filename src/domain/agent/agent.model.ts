@@ -6,15 +6,15 @@
 import type { Agent } from '@/types';
 
 export class AgentModel {
-	constructor(private data: Agent) {}
+	constructor(private readonly _data: Agent) {}
 
 	/**
 	 * Check if agent can use tooling
 	 */
 	canUseTooling(): boolean {
 		return (
-			this.data.enabledBuiltInTools.length > 0 ||
-			this.data.enabledMcpServers.length > 0
+			this._data.enabledBuiltInTools.length > 0 ||
+			this._data.enabledMcpServers.length > 0
 		);
 	}
 
@@ -22,21 +22,21 @@ export class AgentModel {
 	 * Check if RAG is enabled and configured
 	 */
 	isRAGEnabled(): boolean {
-		return this.data.ragEnabled;
+		return this._data.ragEnabled;
 	}
 
 	/**
 	 * Check if web search is enabled
 	 */
 	isWebSearchEnabled(): boolean {
-		return this.data.webSearchEnabled;
+		return this._data.webSearchEnabled;
 	}
 
 	/**
 	 * Check if ReAct mode is enabled
 	 */
 	isReActEnabled(): boolean {
-		return this.data.reactEnabled;
+		return this._data.reactEnabled;
 	}
 
 	/**
@@ -64,28 +64,28 @@ export class AgentModel {
 	 * Get enabled tools count
 	 */
 	getToolsCount(): number {
-		return this.data.enabledBuiltInTools.length + this.data.enabledMcpServers.length;
+		return this._data.enabledBuiltInTools.length + this._data.enabledMcpServers.length;
 	}
 
 	/**
 	 * Check if agent uses short-term memory
 	 */
 	usesShortTermMemory(): boolean {
-		return this.data.memoryType === 'short-term';
+		return this._data.memoryType === 'short-term';
 	}
 
 	/**
 	 * Check if agent uses long-term memory
 	 */
 	usesLongTermMemory(): boolean {
-		return this.data.memoryType === 'long-term';
+		return this._data.memoryType === 'long-term';
 	}
 
 	/**
 	 * Check if memory is enabled
 	 */
 	hasMemory(): boolean {
-		return this.data.memoryType !== 'none';
+		return this._data.memoryType !== 'none';
 	}
 
 	/**
@@ -93,9 +93,9 @@ export class AgentModel {
 	 */
 	getMemoryConfig() {
 		return {
-			type: this.data.memoryType,
-			summaryInterval: this.data.memoryConfig.summaryInterval,
-			maxMemories: this.data.memoryConfig.maxMemories
+			type: this._data.memoryType,
+			summaryInterval: this._data.memoryConfig.summaryInterval,
+			maxMemories: this._data.memoryConfig.maxMemories
 		};
 	}
 
@@ -105,29 +105,29 @@ export class AgentModel {
 	validate(): { valid: boolean; errors: string[] } {
 		const errors: string[] = [];
 
-		if (!this.data.name || this.data.name.trim() === '') {
+		if (!this._data.name || this._data.name.trim() === '') {
 			errors.push('Agent name is required');
 		}
 
-		if (!this.data.modelStrategy || !this.data.modelStrategy.strategy) {
+		if (!this._data.modelStrategy || !this._data.modelStrategy.strategy) {
 			errors.push('Model strategy is required');
-		} else if (this.data.modelStrategy.strategy === 'fixed' && (!this.data.modelStrategy.modelId || this.data.modelStrategy.modelId.trim() === '')) {
+		} else if (this._data.modelStrategy.strategy === 'fixed' && (!this._data.modelStrategy.modelId || this._data.modelStrategy.modelId.trim() === '')) {
 			errors.push('Fixed model ID is required when using fixed model strategy');
 		}
 
-		if (!this.data.systemPromptId || this.data.systemPromptId.trim() === '') {
+		if (!this._data.systemPromptId || this._data.systemPromptId.trim() === '') {
 			errors.push('System prompt is required');
 		}
 
-		if (this.data.temperature < 0 || this.data.temperature > 2) {
+		if (this._data.temperature < 0 || this._data.temperature > 2) {
 			errors.push('Temperature must be between 0 and 2');
 		}
 
-		if (this.data.maxTokens <= 0) {
+		if (this._data.maxTokens <= 0) {
 			errors.push('Max tokens must be positive');
 		}
 
-		if (this.data.contextWindow <= 0) {
+		if (this._data.contextWindow <= 0) {
 			errors.push('Context window must be positive');
 		}
 
@@ -149,19 +149,19 @@ export class AgentModel {
 	} {
 		// Determine the model display name based on strategy
 		let modelDisplay: string;
-		if (this.data.modelStrategy.strategy === 'fixed' && this.data.modelStrategy.modelId) {
-			modelDisplay = this.data.modelStrategy.modelId;
-		} else if (this.data.modelStrategy.strategy === 'chat-view') {
+		if (this._data.modelStrategy.strategy === 'fixed' && this._data.modelStrategy.modelId) {
+			modelDisplay = this._data.modelStrategy.modelId;
+		} else if (this._data.modelStrategy.strategy === 'chat-view') {
 			modelDisplay = 'Use Chat View Model';
-		} else if (this.data.modelStrategy.strategy === 'default') {
+		} else if (this._data.modelStrategy.strategy === 'default') {
 			modelDisplay = 'Use Default Model';
 		} else {
 			modelDisplay = 'Unknown Model';
 		}
 
 		return {
-			name: this.data.name,
-			icon: this.data.icon,
+			name: this._data.name,
+			icon: this._data.icon,
 			model: modelDisplay,
 			capabilities: this.getCapabilities(),
 			toolsCount: this.getToolsCount()
@@ -172,29 +172,29 @@ export class AgentModel {
 	 * Clone agent data
 	 */
 	clone(): AgentModel {
-		return new AgentModel(JSON.parse(JSON.stringify(this.data)));
+		return new AgentModel(JSON.parse(JSON.stringify(this._data)) as Agent);
 	}
 
 	/**
 	 * Update agent data
 	 */
 	update(updates: Partial<Agent>): void {
-		Object.assign(this.data, updates);
-		this.data.updatedAt = Date.now();
+		Object.assign(this._data, updates);
+		this._data.updatedAt = Date.now();
 	}
 
 	/**
 	 * Export to plain object
 	 */
 	toJSON(): Agent {
-		return { ...this.data };
+		return { ...this._data };
 	}
 
 	/**
 	 * Get raw data
 	 */
 	getData(): Agent {
-		return this.data;
+		return this._data;
 	}
 
 	/**

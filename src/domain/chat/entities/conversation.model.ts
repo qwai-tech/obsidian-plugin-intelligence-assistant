@@ -6,23 +6,23 @@
 import type { Conversation, Message } from '@/types/core/conversation';
 
 export class ConversationModel {
-	constructor(private data: Conversation) {}
+	constructor(private readonly _data: Conversation) {}
 
 	/**
 	 * Add a message to the conversation
 	 */
 	addMessage(message: Message): void {
-		this.data.messages.push(message);
-		this.data.updatedAt = Date.now();
+		this._data.messages.push(message);
+		this._data.updatedAt = Date.now();
 	}
 
 	/**
 	 * Remove last message
 	 */
 	removeLastMessage(): Message | undefined {
-		const message = this.data.messages.pop();
+		const message = this._data.messages.pop();
 		if (message) {
-			this.data.updatedAt = Date.now();
+			this._data.updatedAt = Date.now();
 		}
 		return message;
 	}
@@ -31,35 +31,35 @@ export class ConversationModel {
 	 * Get message at index
 	 */
 	getMessage(index: number): Message | undefined {
-		return this.data.messages[index];
+		return this._data.messages[index];
 	}
 
 	/**
 	 * Get all messages
 	 */
 	getMessages(): Message[] {
-		return [...this.data.messages];
+		return [...this._data.messages];
 	}
 
 	/**
 	 * Get user messages
 	 */
 	getUserMessages(): Message[] {
-		return this.data.messages.filter(m => m.role === 'user');
+		return this._data.messages.filter(m => m.role === 'user');
 	}
 
 	/**
 	 * Get assistant messages
 	 */
 	getAssistantMessages(): Message[] {
-		return this.data.messages.filter(m => m.role === 'assistant');
+		return this._data.messages.filter(m => m.role === 'assistant');
 	}
 
 	/**
 	 * Get last message
 	 */
 	getLastMessage(): Message | undefined {
-		return this.data.messages[this.data.messages.length - 1];
+		return this._data.messages[this._data.messages.length - 1];
 	}
 
 	/**
@@ -82,21 +82,21 @@ export class ConversationModel {
 	 * Count messages
 	 */
 	getMessageCount(): number {
-		return this.data.messages.length;
+		return this._data.messages.length;
 	}
 
 	/**
 	 * Check if conversation is empty
 	 */
 	isEmpty(): boolean {
-		return this.data.messages.length === 0;
+		return this._data.messages.length === 0;
 	}
 
 	/**
 	 * Get total token usage
 	 */
 	getTotalTokens(): number {
-		return this.data.messages.reduce((total, message) => {
+		return this._data.messages.reduce((total, message) => {
 			const usage = message.tokenUsage;
 			if (!usage) return total;
 			return total + (usage.totalTokens || 0);
@@ -107,7 +107,7 @@ export class ConversationModel {
 	 * Get prompt tokens
 	 */
 	getPromptTokens(): number {
-		return this.data.messages.reduce((total, message) => {
+		return this._data.messages.reduce((total, message) => {
 			const usage = message.tokenUsage;
 			if (!usage) return total;
 			return total + (usage.promptTokens || 0);
@@ -118,7 +118,7 @@ export class ConversationModel {
 	 * Get completion tokens
 	 */
 	getCompletionTokens(): number {
-		return this.data.messages.reduce((total, message) => {
+		return this._data.messages.reduce((total, message) => {
 			const usage = message.tokenUsage;
 			if (!usage) return total;
 			return total + (usage.completionTokens || 0);
@@ -143,38 +143,38 @@ export class ConversationModel {
 	 * Set conversation title
 	 */
 	setTitle(title: string): void {
-		this.data.title = title;
-		this.data.updatedAt = Date.now();
+		this._data.title = title;
+		this._data.updatedAt = Date.now();
 	}
 
 	/**
 	 * Set conversation icon
 	 */
 	setIcon(icon: string): void {
-		this.data.icon = icon;
-		this.data.updatedAt = Date.now();
+		this._data.icon = icon;
+		this._data.updatedAt = Date.now();
 	}
 
 	/**
 	 * Clear all messages
 	 */
 	clear(): void {
-		this.data.messages = [];
-		this.data.updatedAt = Date.now();
+		this._data.messages = [];
+		this._data.updatedAt = Date.now();
 	}
 
 	/**
 	 * Get conversation age in milliseconds
 	 */
 	getAge(): number {
-		return Date.now() - this.data.createdAt;
+		return Date.now() - this._data.createdAt;
 	}
 
 	/**
 	 * Get time since last update in milliseconds
 	 */
 	getTimeSinceLastUpdate(): number {
-		return Date.now() - this.data.updatedAt;
+		return Date.now() - this._data.updatedAt;
 	}
 
 	/**
@@ -199,23 +199,23 @@ export class ConversationModel {
 	validate(): { valid: boolean; errors: string[] } {
 		const errors: string[] = [];
 
-		if (!this.data.id || this.data.id.trim() === '') {
+		if (!this._data.id || this._data.id.trim() === '') {
 			errors.push('Conversation ID is required');
 		}
 
-		if (!this.data.title || this.data.title.trim() === '') {
+		if (!this._data.title || this._data.title.trim() === '') {
 			errors.push('Conversation title is required');
 		}
 
-		if (!this.data.createdAt || this.data.createdAt <= 0) {
+		if (!this._data.createdAt || this._data.createdAt <= 0) {
 			errors.push('Invalid creation timestamp');
 		}
 
-		if (!this.data.updatedAt || this.data.updatedAt <= 0) {
+		if (!this._data.updatedAt || this._data.updatedAt <= 0) {
 			errors.push('Invalid update timestamp');
 		}
 
-		if (this.data.updatedAt < this.data.createdAt) {
+		if (this._data.updatedAt < this._data.createdAt) {
 			errors.push('Update timestamp cannot be before creation timestamp');
 		}
 
@@ -229,21 +229,21 @@ export class ConversationModel {
 	 * Clone conversation
 	 */
 	clone(): ConversationModel {
-		return new ConversationModel(JSON.parse(JSON.stringify(this.data)));
+		return new ConversationModel(JSON.parse(JSON.stringify(this._data)) as Conversation);
 	}
 
 	/**
 	 * Export to plain object
 	 */
 	toJSON(): Conversation {
-		return { ...this.data };
+		return { ...this._data };
 	}
 
 	/**
 	 * Get raw data
 	 */
 	getData(): Conversation {
-		return this.data;
+		return this._data;
 	}
 
 	/**

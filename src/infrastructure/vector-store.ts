@@ -40,11 +40,12 @@ export class VectorStore {
 		await this.ensureDataFolder();
 		try {
 			const data = await this.app.vault.adapter.read(this.dataPath);
-			const parsed: VectorStoreData = JSON.parse(data);
+			const parsed = JSON.parse(data) as VectorStoreData;
 			this._chunks = parsed._chunks;
 			console.debug(`Loaded ${this._chunks.length} _chunks from persistent storage`);
 		} catch (error) {
-			console.debug('No existing vector store data found, starting fresh');
+			const err = error instanceof Error ? error : new Error(String(error));
+			console.debug('No existing vector store data found, starting fresh', err.message);
 			this._chunks = [];
 		}
 	}
@@ -76,19 +77,19 @@ export class VectorStore {
     const _chunks = this.chunkContent(content, config);
     
     // Remove existing _chunks for this file
-    this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(`${file.path}-`));
-    
+    this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(`${file.path ?? 'unknown'}-`));
+
     // Process _chunks in batches to avoid blocking the UI
-    return new Promise(async (resolve, reject) => {
+    const processBatches = async (): Promise<void> => {
       const batchSize = 10; // Process 10 _chunks at a time
       let currentIndex = 0;
-      
+
       const processChunkBatch = async () => {
         const batchEnd = Math.min(currentIndex + batchSize, _chunks.length);
-        
+
         for (let i = currentIndex; i < batchEnd; i++) {
-          const chunkId = `${file.path}-${i}`;
-          
+          const chunkId = `${file.path}-${String(i)}`;
+
           // Generate embedding for the chunk content
           const embeddingModel = config.embeddingModel;
           let embedding: number[] | undefined;
@@ -99,11 +100,11 @@ export class VectorStore {
               console.error(`Failed to generate embedding for chunk ${chunkId}:`, error);
             }
           }
-          
+
           // Create combined text for embedding that includes path info if we don't have an embedding yet
           if (!embedding && config.embeddingModel) {
             try {
-              const combinedText = `${file.path} ${file.basename} ${_chunks[i]}`;
+              const combinedText = `${file.path ?? 'unknown'} ${file.basename ?? ''} ${_chunks[i] ?? ''}`;
               embedding = await this.generateEmbedding(combinedText, config.embeddingModel);
             } catch (error) {
               console.error(`Failed to generate combined embedding for chunk ${chunkId}:`, error);
@@ -121,46 +122,47 @@ export class VectorStore {
               timestamp: file.stat.mtime
             }
           };
-          
+
           this._chunks.push(chunk);
           currentIndex++;
         }
-        
+
         if (currentIndex < _chunks.length) {
           // Schedule next batch after a short delay to allow UI to update
-          setTimeout(processChunkBatch, 1); // 1ms delay allows UI to remain responsive
+          setTimeout(() => void processChunkBatch(), 1); // 1ms delay allows UI to remain responsive
         } else {
           // All _chunks processed, save to persistent storage
           await this.save();
-          resolve();
         }
       };
-      
+
       // Start the first batch
-      processChunkBatch().catch(reject);
-    });
+      await processChunkBatch();
+    };
+
+    return processBatches();
   }
 
-  async addContent(content: string, metadata: any, config: RAGConfig): Promise<void> {
+  async addContent(content: string, metadata: unknown, config: RAGConfig): Promise<void> {
     // Split content into _chunks
     const _chunks = this.chunkContent(content, config);
-    
+
     // Remove existing _chunks for this content if ID is provided
-    if (metadata.id) {
-      this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(`${metadata.id}-`));
+    if ((metadata as { id?: string }).id) {
+      this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(`${(metadata as { id?: string }).id ?? ''}-`));
     }
-    
+
     // Process _chunks in batches to avoid blocking the UI
-    return new Promise(async (resolve, reject) => {
+    const processBatches = async (): Promise<void> => {
       const batchSize = 10; // Process 10 _chunks at a time
       let currentIndex = 0;
-      
+
       const processChunkBatch = async () => {
         const batchEnd = Math.min(currentIndex + batchSize, _chunks.length);
-        
+
         for (let i = currentIndex; i < batchEnd; i++) {
-          const chunkId = `${metadata.id || 'content'}-${i}`;
-          
+          const chunkId = `${(metadata as { id?: string }).id ?? 'content'}-${String(i)}`;
+
           // Generate embedding for the chunk content
           const embeddingModel = config.embeddingModel;
           let embedding: number[] | undefined;
@@ -171,44 +173,45 @@ export class VectorStore {
               console.error(`Failed to generate embedding for chunk ${chunkId}:`, error);
             }
           }
-          
+
           // Create combined text for embedding that includes path/filename info if we don't have an embedding yet
-          if (!embedding && config.embeddingModel && metadata.path) {
+          if (!embedding && config.embeddingModel && (metadata as { path?: string }).path) {
             try {
-              const combinedText = `${metadata.path} ${metadata.title || ''} ${_chunks[i]}`;
+              const combinedText = `${(metadata as { path?: string }).path ?? ''} ${(metadata as { title?: string }).title ?? ''} ${_chunks[i] ?? ''}`;
               embedding = await this.generateEmbedding(combinedText, config.embeddingModel);
             } catch (error) {
               console.error(`Failed to generate combined embedding for chunk ${chunkId}:`, error);
             }
           }
-          
+
           const chunk: DocumentChunk = {
             id: chunkId,
             content: _chunks[i],
             embedding: embedding,
             metadata: {
-              ...metadata,
+              ...(metadata as Record<string, unknown>),
               timestamp: Date.now()
-            }
+            } as DocumentChunk['metadata']
           };
-          
+
           this._chunks.push(chunk);
           currentIndex++;
         }
-        
+
         if (currentIndex < _chunks.length) {
           // Schedule next batch after a short delay to allow UI to update
-          setTimeout(processChunkBatch, 1); // 1ms delay allows UI to remain responsive
+          setTimeout(() => void processChunkBatch(), 1); // 1ms delay allows UI to remain responsive
         } else {
           // All _chunks processed, save to persistent storage
           await this.save();
-          resolve();
         }
       };
-      
+
       // Start the first batch
-      processChunkBatch().catch(reject);
-    });
+      await processChunkBatch();
+    };
+
+    return processBatches();
   }
 
   async search(query: string, config: RAGConfig, embeddingModel?: string): Promise<SearchResult[]> {
@@ -266,7 +269,7 @@ export class VectorStore {
 
     // Apply similarity threshold filter if configured
     if (config.similarityThreshold !== undefined && config.similarityThreshold > 0) {
-      similarities = similarities.filter(result => result.similarity >= config.similarityThreshold!);
+      similarities = similarities.filter(result => result.similarity >= config.similarityThreshold);
       console.debug('[VectorStore] After threshold filter:', similarities.length, '_chunks');
     }
 
@@ -291,11 +294,11 @@ export class VectorStore {
     // 2. Apply the re-ranking model to get new scores
     // 3. Sort by the new scores
     
-    console.debug(`Re-ranking ${results.length} results using ${config.reRankingModel || 'default model'}`);
+    console.debug(`Re-ranking ${results.length} results using ${config.reRankingModel ?? 'default model'}`);
     
     // In a real implementation, we would call a re-ranking model here
     // For now, just return the results as-is but this is where re-ranking would happen
-    return results;
+    return Promise.resolve(results);
   }
 
   private chunkContent(content: string, config: RAGConfig): string[] {
@@ -310,8 +313,6 @@ export class VectorStore {
     if (!content) {
       return [];
     }
-    
-    const _chunks: string[] = [];
     
     // Use the configured chunking strategy
     switch (config.chunkingStrategy || 'sentence') {
@@ -739,13 +740,13 @@ export class VectorStore {
     
     // Apply similarity threshold filter if configured
     if (config.similarityThreshold !== undefined && config.similarityThreshold > 0) {
-      results = results.filter(result => result.similarity >= config.similarityThreshold!);
+      results = results.filter(result => result.similarity >= config.similarityThreshold);
     }
     
     // Apply top K limit
     results = results.slice(0, config.topK);
     
-    return results;
+    return Promise.resolve(results);
   }
 
   private async generateEmbedding(text: string, embeddingModel?: string): Promise<number[] | undefined> {
@@ -789,12 +790,12 @@ export class VectorStore {
     return [...this._chunks]; // Return a copy to prevent external modification
   }
 
-  async getDetailedStats(): Promise<{
+  getDetailedStats(): {
     chunkCount: number;
     fileCount: number;
     totalSize: number;
     indexedFiles: string[];
-  }> {
+  } {
     const _chunks = this.getStoredChunks();
     const indexedFiles = [...new Set(_chunks.map(chunk => chunk.metadata.path))];
     const totalSize = _chunks.reduce((sum, chunk) => sum + chunk.content.length, 0);

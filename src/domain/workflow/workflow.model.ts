@@ -6,129 +6,129 @@
 import type { Workflow } from '@/types';
 
 export class WorkflowModel {
-	constructor(private data: Workflow) {}
+	constructor(private readonly _data: Workflow) {}
 
 	/**
 	 * Add a node to the workflow
 	 */
-	addNode(node: any): void {
-		this.data.nodes.push(node);
-		this.data.updatedAt = Date.now();
+	addNode(node: Record<string, unknown> & { id: string }): void {
+		this._data.nodes.push(node);
+		this._data.updatedAt = Date.now();
 	}
 
 	/**
 	 * Remove a node from the workflow
 	 */
 	removeNode(nodeId: string): boolean {
-		const index = this.data.nodes.findIndex(n => n.id === nodeId);
+		const index = this._data.nodes.findIndex(n => n.id === nodeId);
 		if (index === -1) return false;
 
-		this.data.nodes.splice(index, 1);
-		this.data.updatedAt = Date.now();
+		this._data.nodes.splice(index, 1);
+		this._data.updatedAt = Date.now();
 		return true;
 	}
 
 	/**
 	 * Get node by ID
 	 */
-	getNode(nodeId: string): any | undefined {
-		return this.data.nodes.find(n => n.id === nodeId);
+	getNode(nodeId: string): (Record<string, unknown> & { id: string }) | undefined {
+		return this._data.nodes.find(n => n.id === nodeId);
 	}
 
 	/**
 	 * Update a node
 	 */
-	updateNode(nodeId: string, updates: any): boolean {
+	updateNode(nodeId: string, updates: Record<string, unknown>): boolean {
 		const node = this.getNode(nodeId);
 		if (!node) return false;
 
 		Object.assign(node, updates);
-		this.data.updatedAt = Date.now();
+		this._data.updatedAt = Date.now();
 		return true;
 	}
 
 	/**
 	 * Add an edge to the workflow
 	 */
-	addEdge(edge: any): void {
-		this.data.edges.push(edge);
-		this.data.updatedAt = Date.now();
+	addEdge(edge: Record<string, unknown> & { id: string; source: string; target: string }): void {
+		this._data.edges.push(edge);
+		this._data.updatedAt = Date.now();
 	}
 
 	/**
 	 * Remove an edge from the workflow
 	 */
 	removeEdge(edgeId: string): boolean {
-		const index = this.data.edges.findIndex(e => e.id === edgeId);
+		const index = this._data.edges.findIndex(e => e.id === edgeId);
 		if (index === -1) return false;
 
-		this.data.edges.splice(index, 1);
-		this.data.updatedAt = Date.now();
+		this._data.edges.splice(index, 1);
+		this._data.updatedAt = Date.now();
 		return true;
 	}
 
 	/**
 	 * Get edge by ID
 	 */
-	getEdge(edgeId: string): any | undefined {
-		return this.data.edges.find(e => e.id === edgeId);
+	getEdge(edgeId: string): (Record<string, unknown> & { id: string; source: string; target: string }) | undefined {
+		return this._data.edges.find(e => e.id === edgeId);
 	}
 
 	/**
 	 * Get all nodes
 	 */
-	getNodes(): any[] {
-		return [...this.data.nodes];
+	getNodes(): (Record<string, unknown> & { id: string })[] {
+		return [...this._data.nodes];
 	}
 
 	/**
 	 * Get all edges
 	 */
-	getEdges(): any[] {
-		return [...this.data.edges];
+	getEdges(): (Record<string, unknown> & { id: string; source: string; target: string })[] {
+		return [...this._data.edges];
 	}
 
 	/**
 	 * Get node count
 	 */
 	getNodeCount(): number {
-		return this.data.nodes.length;
+		return this._data.nodes.length;
 	}
 
 	/**
 	 * Get edge count
 	 */
 	getEdgeCount(): number {
-		return this.data.edges.length;
+		return this._data.edges.length;
 	}
 
 	/**
 	 * Check if workflow is empty
 	 */
 	isEmpty(): boolean {
-		return this.data.nodes.length === 0;
+		return this._data.nodes.length === 0;
 	}
 
 	/**
 	 * Get incoming edges for a node
 	 */
-	getIncomingEdges(nodeId: string): any[] {
-		return this.data.edges.filter(e => e.target === nodeId);
+	getIncomingEdges(nodeId: string): (Record<string, unknown> & { id: string; source: string; target: string })[] {
+		return this._data.edges.filter(e => e.target === nodeId);
 	}
 
 	/**
 	 * Get outgoing edges for a node
 	 */
-	getOutgoingEdges(nodeId: string): any[] {
-		return this.data.edges.filter(e => e.source === nodeId);
+	getOutgoingEdges(nodeId: string): (Record<string, unknown> & { id: string; source: string; target: string })[] {
+		return this._data.edges.filter(e => e.source === nodeId);
 	}
 
 	/**
 	 * Get connected nodes for a node
 	 */
 	getConnectedNodes(nodeId: string): {
-		incoming: any[];
-		outgoing: any[];
+		incoming: (Record<string, unknown> & { id: string })[];
+		outgoing: (Record<string, unknown> & { id: string })[];
 	} {
 		const incomingEdges = this.getIncomingEdges(nodeId);
 		const outgoingEdges = this.getOutgoingEdges(nodeId);
@@ -136,10 +136,10 @@ export class WorkflowModel {
 		return {
 			incoming: incomingEdges
 				.map(e => this.getNode(e.source))
-				.filter(Boolean),
+				.filter((node): node is Record<string, unknown> & { id: string } => node !== undefined),
 			outgoing: outgoingEdges
 				.map(e => this.getNode(e.target))
-				.filter(Boolean)
+				.filter((node): node is Record<string, unknown> & { id: string } => node !== undefined)
 		};
 	}
 
@@ -147,39 +147,39 @@ export class WorkflowModel {
 	 * Set workflow name
 	 */
 	setName(name: string): void {
-		this.data.name = name;
-		this.data.updatedAt = Date.now();
+		this._data.name = name;
+		this._data.updatedAt = Date.now();
 	}
 
 	/**
 	 * Set workflow description
 	 */
 	setDescription(description: string): void {
-		this.data.description = description;
-		this.data.updatedAt = Date.now();
+		this._data.description = description;
+		this._data.updatedAt = Date.now();
 	}
 
 	/**
 	 * Clear all nodes and edges
 	 */
 	clear(): void {
-		this.data.nodes = [];
-		this.data.edges = [];
-		this.data.updatedAt = Date.now();
+		this._data.nodes = [];
+		this._data.edges = [];
+		this._data.updatedAt = Date.now();
 	}
 
 	/**
 	 * Get workflow age in milliseconds
 	 */
 	getAge(): number {
-		return Date.now() - this.data.createdAt;
+		return Date.now() - this._data.createdAt;
 	}
 
 	/**
 	 * Get time since last update in milliseconds
 	 */
 	getTimeSinceLastUpdate(): number {
-		return Date.now() - this.data.updatedAt;
+		return Date.now() - this._data.updatedAt;
 	}
 
 	/**
@@ -188,29 +188,33 @@ export class WorkflowModel {
 	validate(): { valid: boolean; errors: string[] } {
 		const errors: string[] = [];
 
-		if (!this.data.id || this.data.id.trim() === '') {
+		if (!this._data.id || this._data.id.trim() === '') {
 			errors.push('Workflow ID is required');
 		}
 
-		if (!this.data.name || this.data.name.trim() === '') {
+		if (!this._data.name || this._data.name.trim() === '') {
 			errors.push('Workflow name is required');
 		}
 
-		if (!this.data.createdAt || this.data.createdAt <= 0) {
+		if (!this._data.createdAt || this._data.createdAt <= 0) {
 			errors.push('Invalid creation timestamp');
 		}
 
-		if (!this.data.updatedAt || this.data.updatedAt <= 0) {
+		if (!this._data.updatedAt || this._data.updatedAt <= 0) {
 			errors.push('Invalid update timestamp');
 		}
 
 		// Validate edges point to valid nodes
-		for (const edge of this.data.edges) {
-			if (!this.getNode(edge.source)) {
-				errors.push(`Edge ${edge.id} references invalid source node: ${edge.source}`);
+		for (const edge of this._data.edges) {
+			const edgeId = String(edge.id ?? 'unknown');
+			const edgeSource = String(edge.source ?? 'unknown');
+			const edgeTarget = String(edge.target ?? 'unknown');
+
+			if (!this.getNode(edgeSource)) {
+				errors.push(`Edge ${edgeId} references invalid source node: ${edgeSource}`);
 			}
-			if (!this.getNode(edge.target)) {
-				errors.push(`Edge ${edge.id} references invalid target node: ${edge.target}`);
+			if (!this.getNode(edgeTarget)) {
+				errors.push(`Edge ${edgeId} references invalid target node: ${edgeTarget}`);
 			}
 		}
 
@@ -224,21 +228,21 @@ export class WorkflowModel {
 	 * Clone workflow
 	 */
 	clone(): WorkflowModel {
-		return new WorkflowModel(JSON.parse(JSON.stringify(this.data)));
+		return new WorkflowModel(JSON.parse(JSON.stringify(this._data)) as Workflow);
 	}
 
 	/**
 	 * Export to plain object
 	 */
 	toJSON(): Workflow {
-		return { ...this.data };
+		return { ...this._data };
 	}
 
 	/**
 	 * Get raw data
 	 */
 	getData(): Workflow {
-		return this.data;
+		return this._data;
 	}
 
 	/**

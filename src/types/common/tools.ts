@@ -19,18 +19,18 @@ export interface ToolDefinition {
 
 export interface ToolCall {
 	name: string;
-	arguments: Record<string, any>;
+	arguments: Record<string, unknown>;
 }
 
 export interface ToolResult {
 	success: boolean;
-	result?: any;
+	result?: unknown;
 	error?: string;
 }
 
 export interface Tool {
 	definition: ToolDefinition;
-	execute(args: Record<string, any>): Promise<ToolResult>;
+	execute(_args: Record<string, unknown>): Promise<ToolResult>;
 	provider?: string;
 }
 

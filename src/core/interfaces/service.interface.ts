@@ -2,6 +2,6 @@
 export interface IService {
   name: string;
   version: string;
-  initialize(config?: any): Promise<void>;
+  initialize(_config?: unknown): Promise<void>;
   cleanup(): Promise<void>;
 }

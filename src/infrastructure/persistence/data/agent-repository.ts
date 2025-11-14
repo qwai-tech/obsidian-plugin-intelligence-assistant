@@ -25,12 +25,12 @@ export class AgentRepository {
 	private readonly indexPath = `${this.baseFolder}/index.json`;
 	private initialized = false;
 
-	constructor(private readonly app: App) {}
+	constructor(private readonly _app: App) {}
 
 	async initialize(): Promise<void> {
 		if (this.initialized) return;
-		await ensureFolderExists(this.app.vault.adapter, this.baseFolder);
-		if (!(await this.app.vault.adapter.exists(this.indexPath))) {
+		await ensureFolderExists(this._app.vault.adapter, this.baseFolder);
+		if (!(await this._app.vault.adapter.exists(this.indexPath))) {
 			await this.writeIndex({
 				version: INDEX_VERSION,
 				updatedAt: Date.now(),
@@ -66,7 +66,7 @@ export class AgentRepository {
 
 	async saveAll(agents: Agent[], activeId: string | null): Promise<void> {
 		await this.initialize();
-		const adapter = this.app.vault.adapter;
+		const adapter = this._app.vault.adapter;
 		const keepFiles = new Set<string>();
 
 		for (const agent of agents) {
@@ -95,7 +95,7 @@ export class AgentRepository {
 
 	private async readAgent(filePath: string): Promise<Agent | null> {
 		try {
-			const content = await this.app.vault.adapter.read(filePath);
+			const content = await this._app.vault.adapter.read(filePath);
 			return JSON.parse(content) as Agent;
 		} catch (error) {
 			console.warn(`[Agents] Failed to read agent file ${filePath}:`, error);
@@ -104,7 +104,7 @@ export class AgentRepository {
 	}
 
 	private async loadAgentsFromFolder(): Promise<Agent[]> {
-		const adapter = this.app.vault.adapter;
+		const adapter = this._app.vault.adapter;
 		const agents: Agent[] = [];
 		const listing = await adapter.list(this.baseFolder);
 
@@ -122,7 +122,7 @@ export class AgentRepository {
 	}
 
 	private async removeOrphanedAgentFiles(keep: Set<string>): Promise<void> {
-		const adapter = this.app.vault.adapter;
+		const adapter = this._app.vault.adapter;
 		const listing = await adapter.list(this.baseFolder);
 
 		for (const file of listing.files) {
@@ -142,7 +142,7 @@ export class AgentRepository {
 
 	private async readIndex(): Promise<AgentIndexFile> {
 		try {
-			const content = await this.app.vault.adapter.read(this.indexPath);
+			const content = await this._app.vault.adapter.read(this.indexPath);
 			return JSON.parse(content) as AgentIndexFile;
 		} catch {
 			return {
@@ -155,6 +155,6 @@ export class AgentRepository {
 	}
 
 	private async writeIndex(index: AgentIndexFile): Promise<void> {
-		await this.app.vault.adapter.write(this.indexPath, JSON.stringify(index, null, 2));
+		await this._app.vault.adapter.write(this.indexPath, JSON.stringify(index, null, 2));
 	}
 }

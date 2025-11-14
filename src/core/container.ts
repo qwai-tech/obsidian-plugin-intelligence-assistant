@@ -1,8 +1,8 @@
 // Dependency injection container
 export class DIContainer {
-  private services = new Map<string, any>();
-  private factories = new Map<string, () => any>();
-  private singletonFactories = new Map<string, () => any>();
+  private services = new Map<string, unknown>();
+  private factories = new Map<string, () => unknown>();
+  private singletonFactories = new Map<string, () => unknown>();
 
   register<T>(key: string, factory: () => T, singleton: boolean = true): void {
     if (singleton) {
@@ -15,7 +15,7 @@ export class DIContainer {
   get<T>(key: string): T {
     // Check if it's already instantiated as a singleton
     if (this.services.has(key)) {
-      return this.services.get(key);
+      return this.services.get(key) as T;
     }
 
     // Check if it's a singleton factory
@@ -23,13 +23,13 @@ export class DIContainer {
     if (singletonFactory) {
       const instance = singletonFactory();
       this.services.set(key, instance);
-      return instance;
+      return instance as T;
     }
 
     // Check if it's a transient factory
     const factory = this.factories.get(key);
     if (factory) {
-      return factory();
+      return factory() as T;
     }
 
     throw new Error(`Service ${key} not registered`);
@@ -60,8 +60,9 @@ export class DIContainer {
       throw new Error('Async factories must be resolved with getAsync');
     });
     // Store separately for async resolution
-    (this as any).asyncFactories = (this as any).asyncFactories || new Map();
-    (this as any).asyncFactories.set(key, factory);
+    const container = this as unknown as { asyncFactories?: Map<string, () => Promise<T>> };
+    container.asyncFactories = container.asyncFactories || new Map();
+    container.asyncFactories.set(key, factory);
   }
 }
 

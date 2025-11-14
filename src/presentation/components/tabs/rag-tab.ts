@@ -12,10 +12,10 @@ export function displayRAGTab(
 	containerEl: HTMLElement,
 	plugin: IntelligenceAssistantPlugin
 ): void {
-	containerEl.createEl('h3', { text: 'RAG Configuration' });
+	containerEl.createEl('h3', { text: 'Rag configuration' });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Configure Retrieval-Augmented Generation to enhance AI responses with your vault content.'
+		text: 'Configure retrieval-augmented generation to enhance AI responses with your vault content.'
 	});
 	desc.addClass('ia-section-description');
 
@@ -125,7 +125,7 @@ function renderAdvancedTab(containerEl: HTMLElement, plugin: IntelligenceAssista
 
 function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: 'General Settings' });
+	section.createEl('h4', { text: 'General settings' });
 
 	const createSetting = (options: ConfigFieldMetadataOptions) =>
 		applyConfigFieldMetadata(new Setting(section), options);
@@ -143,7 +143,7 @@ function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 
 	createSetting({
 		path: 'ragConfig.vectorStore',
-		label: 'Vector Store',
+		label: 'Vector store',
 		description: 'Vector database for storing embeddings'
 	}).addDropdown(dropdown => dropdown
 			.addOptions({
@@ -158,10 +158,10 @@ function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 
 	createSetting({
 		path: 'ragConfig.embeddingModel',
-		label: 'Embedding Model',
-		description: 'Model to use for generating embeddings'
+		label: 'Embedding model',
+		description: 'model to use for generating embeddings'
 	}).addText(text => text
-			.setPlaceholder('text-embedding-ada-002')
+			.setPlaceholder('Text-embedding-ada-002')
 			.setValue(plugin.settings.ragConfig.embeddingModel)
 			.onChange(async (value) => {
 				plugin.settings.ragConfig.embeddingModel = value;
@@ -170,7 +170,7 @@ function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 
 	createSetting({
 		path: 'ragConfig.embedChangedFiles',
-		label: 'Embed Changed Files Automatically',
+		label: 'Embed changed files automatically',
 		description: 'Automatically re-embed files when they are modified'
 	}).addToggle(toggle => toggle
 			.setValue(plugin.settings.ragConfig.embedChangedFiles)
@@ -182,10 +182,10 @@ function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 
 function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: 'Index Management' });
+	section.createEl('h4', { text: 'Index management' });
 
 	const indexDesc = section.createEl('p', {
-		text: 'Manage your RAG index and view statistics about indexed content.'
+		text: 'Manage your rag index and view statistics about indexed content.'
 	});
 	indexDesc.addClass('setting-item-description');
 
@@ -211,7 +211,7 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 			const stats = await ragManager.getDetailedStats();
 
 			statsContainer.createEl('div', {
-				text: `📊 Index Statistics`,
+				text: `Index statistics`,
 				attr: { style: 'font-weight: bold; margin-bottom: 8px;' }
 			});
 
@@ -250,13 +250,13 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 			// Show empty index message if no data
 			if (chunkCount === 0) {
 				statsContainer.createEl('div', {
-					text: 'ℹ️ Index is empty. Click "Rebuild Index" to start indexing.',
+					text: 'Index is empty. Select rebuild index to start indexing.',
 					attr: { style: 'margin-top: 8px; font-size: 0.9em; color: var(--text-muted); font-style: italic;' }
 				});
 			}
 		} catch (error) {
 			statsContainer.createEl('div', {
-				text: '⚠️ Unable to load index statistics',
+				text: '⚠️ unable to load index statistics',
 				attr: { style: 'color: var(--text-error);' }
 			});
 			console.error('Failed to load RAG stats:', error);
@@ -264,11 +264,11 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 	};
 
 	// Initial stats load
-	updateStats();
+	void updateStats();
 
 	// Rebuild Index button
 	new Setting(section)
-		.setName('Rebuild Index')
+		.setName('Rebuild index')
 		.setDesc('Re-index all files in your vault. This may take a while.')
 		.addButton(button => button
 			.setButtonText('Rebuild')
@@ -287,10 +287,10 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 					await ragManager.clearIndex();
 					await ragManager.indexVault();
 					await updateStats();
-					new Notice('✅ Index rebuilt successfully');
+					new Notice('Index rebuilt successfully');
 				} catch (error) {
 					console.error('Failed to rebuild index:', error);
-					new Notice('❌ Failed to rebuild index');
+					new Notice('Failed to rebuild index');
 				} finally {
 					button.setDisabled(false);
 					button.setButtonText('Rebuild');
@@ -299,7 +299,7 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 
 	// Refresh Index button
 	new Setting(section)
-		.setName('Refresh Index')
+		.setName('Refresh index')
 		.setDesc('Update the index with any changed files since last indexing.')
 		.addButton(button => button
 			.setButtonText('Refresh')
@@ -316,10 +316,10 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 					await ragManager.initialize();
 					await ragManager.refreshIndex();
 					await updateStats();
-					new Notice('✅ Index refreshed successfully');
+					new Notice('Index refreshed successfully');
 				} catch (error) {
 					console.error('Failed to refresh index:', error);
-					new Notice('❌ Failed to refresh index');
+					new Notice('Failed to refresh index');
 				} finally {
 					button.setDisabled(false);
 					button.setButtonText('Refresh');
@@ -328,7 +328,7 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 
 	// Clear Index button
 	new Setting(section)
-		.setName('Clear Index')
+		.setName('Clear index')
 		.setDesc('Remove all indexed data. You will need to rebuild the index.')
 		.addButton(button => button
 			.setButtonText('Clear')
@@ -346,10 +346,10 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 					await ragManager.initialize();
 					await ragManager.clearIndex();
 					await updateStats();
-					new Notice('✅ Index cleared successfully');
+					new Notice('Index cleared successfully');
 				} catch (error) {
 					console.error('Failed to clear index:', error);
-					new Notice('❌ Failed to clear index');
+					new Notice('Failed to clear index');
 				} finally {
 					button.setDisabled(false);
 					button.setButtonText('Clear');
@@ -359,14 +359,14 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 
 function renderChunkingSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: 'Chunking Settings' });
+	section.createEl('h4', { text: 'Chunking settings' });
 
 	const createSetting = (options: ConfigFieldMetadataOptions) =>
 		applyConfigFieldMetadata(new Setting(section), options);
 
 	createSetting({
 		path: 'ragConfig.chunkingStrategy',
-		label: 'Chunking Strategy',
+		label: 'Chunking strategy',
 		description: 'Strategy for splitting documents into chunks'
 	}).addDropdown(dropdown => dropdown
 			.addOptions({
@@ -383,7 +383,7 @@ function renderChunkingSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 	createSetting({
 		path: 'ragConfig.chunkSize',
-		label: 'Chunk Size',
+		label: 'Chunk size',
 		description: 'Number of characters per chunk (500-2000 recommended)'
 	}).addText(text => text
 			.setPlaceholder('1000')
@@ -398,7 +398,7 @@ function renderChunkingSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 	createSetting({
 		path: 'ragConfig.chunkOverlap',
-		label: 'Chunk Overlap',
+		label: 'Chunk overlap',
 		description: 'Number of overlapping characters between chunks'
 	}).addText(text => text
 			.setPlaceholder('200')
@@ -413,7 +413,7 @@ function renderChunkingSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 	createSetting({
 		path: 'ragConfig.minChunkSize',
-		label: 'Min Chunk Size',
+		label: 'Min chunk size',
 		description: 'Minimum chunk size to create'
 	}).addText(text => text
 			.setPlaceholder('100')
@@ -428,7 +428,7 @@ function renderChunkingSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 	createSetting({
 		path: 'ragConfig.maxTokensPerChunk',
-		label: 'Max Tokens Per Chunk',
+		label: 'Max tokens per chunk',
 		description: 'Maximum tokens allowed per chunk'
 	}).addText(text => text
 			.setPlaceholder('512')
@@ -444,14 +444,14 @@ function renderChunkingSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: 'Search Settings' });
+	section.createEl('h4', { text: 'Search settings' });
 
 	const createSetting = (options: ConfigFieldMetadataOptions) =>
 		applyConfigFieldMetadata(new Setting(section), options);
 
 	createSetting({
 		path: 'ragConfig.searchType',
-		label: 'Search Type',
+		label: 'Search type',
 		description: 'Type of similarity search to perform'
 	}).addDropdown(dropdown => dropdown
 			.addOptions({
@@ -467,7 +467,7 @@ function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssi
 
 	createSetting({
 		path: 'ragConfig.topK',
-		label: 'Top K Results',
+		label: 'Top K results',
 		description: 'Number of most relevant chunks to retrieve (1-20)'
 	}).addText(text => text
 			.setPlaceholder('5')
@@ -482,7 +482,7 @@ function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssi
 
 	createSetting({
 		path: 'ragConfig.similarityThreshold',
-		label: 'Similarity Threshold',
+		label: 'Similarity threshold',
 		description: 'Minimum similarity score to include results (0.0-1.0)'
 	}).addText(text => text
 			.setPlaceholder('0.7')
@@ -497,7 +497,7 @@ function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssi
 
 	createSetting({
 		path: 'ragConfig.relevanceScoreWeight',
-		label: 'Relevance Score Weight',
+		label: 'Relevance score weight',
 		description: 'Weight for relevance scoring (0.0-1.0)'
 	}).addText(text => text
 			.setPlaceholder('0.5')
@@ -512,7 +512,7 @@ function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssi
 
 	createSetting({
 		path: 'ragConfig.contextWindowLimit',
-		label: 'Context Window Limit',
+		label: 'Context window limit',
 		description: 'Maximum tokens for retrieved context'
 	}).addText(text => text
 			.setPlaceholder('4000')
@@ -528,18 +528,18 @@ function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssi
 
 function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: 'File Filters' });
+	section.createEl('h4', { text: 'File filters' });
 
 	const createSetting = (options: ConfigFieldMetadataOptions) =>
 		applyConfigFieldMetadata(new Setting(section), options);
 
 	createSetting({
 		path: 'ragConfig.excludeFolders',
-		label: 'Exclude Folders',
-		description: 'Folders to exclude from indexing (comma-separated)',
+		label: 'Exclude folders',
+		description: 'folders to exclude from indexing (comma-separated)',
 		includeDefaultForArrays: true
 	}).addTextArea(text => text
-			.setPlaceholder('.obsidian, .trash')
+			.setPlaceholder(`${plugin.app.vault.configDir}, .trash`)
 			.setValue(plugin.settings.ragConfig.excludeFolders.join(', '))
 			.onChange(async (value) => {
 				plugin.settings.ragConfig.excludeFolders = value.split(',').map(s => s.trim()).filter(s => s);
@@ -548,11 +548,11 @@ function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssista
 
 	createSetting({
 		path: 'ragConfig.includeFileTypes',
-		label: 'Include File Types',
+		label: 'Include file types',
 		description: 'File types to include (empty = all types)',
 		includeDefaultForArrays: true
 	}).addTextArea(text => text
-			.setPlaceholder('md, txt')
+			.setPlaceholder('Md, txt')
 			.setValue(plugin.settings.ragConfig.includeFileTypes.join(', '))
 			.onChange(async (value) => {
 				plugin.settings.ragConfig.includeFileTypes = value.split(',').map(s => s.trim()).filter(s => s);
@@ -561,7 +561,7 @@ function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssista
 
 	createSetting({
 		path: 'ragConfig.excludeFileTypes',
-		label: 'Exclude File Types',
+		label: 'Exclude file types',
 		description: 'File types to exclude from indexing',
 		includeDefaultForArrays: true
 	}).addTextArea(text => text
@@ -574,10 +574,10 @@ function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssista
 
 	createSetting({
 		path: 'ragConfig.filterByTag',
-		label: 'Filter by Tag',
+		label: 'Filter by tag',
 		description: 'Only index files with these tags (empty = all files)'
 	}).addTextArea(text => text
-			.setPlaceholder('important, reference')
+			.setPlaceholder('Important, reference')
 			.setValue(plugin.settings.ragConfig.filterByTag.join(', '))
 			.onChange(async (value) => {
 				plugin.settings.ragConfig.filterByTag = value.split(',').map(s => s.trim()).filter(s => s);
@@ -586,10 +586,10 @@ function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssista
 
 	createSetting({
 		path: 'ragConfig.excludeByTag',
-		label: 'Exclude by Tag',
+		label: 'Exclude by tag',
 		description: 'Exclude files with these tags from indexing'
 	}).addTextArea(text => text
-			.setPlaceholder('draft, private')
+			.setPlaceholder('Draft, private')
 			.setValue(plugin.settings.ragConfig.excludeByTag.join(', '))
 			.onChange(async (value) => {
 				plugin.settings.ragConfig.excludeByTag = value.split(',').map(s => s.trim()).filter(s => s);
@@ -599,14 +599,14 @@ function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssista
 
 function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: 'Advanced Settings' });
+	section.createEl('h4', { text: 'Advanced settings' });
 
 	const createSetting = (options: ConfigFieldMetadataOptions) =>
 		applyConfigFieldMetadata(new Setting(section), options);
 
 	createSetting({
 		path: 'ragConfig.enableCompression',
-		label: 'Enable Compression',
+		label: 'Enable compression',
 		description: 'Compress embeddings to reduce storage size'
 	}).addToggle(toggle => toggle
 			.setValue(plugin.settings.ragConfig.enableCompression)
@@ -617,7 +617,7 @@ function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 	createSetting({
 		path: 'ragConfig.embeddingBatchSize',
-		label: 'Embedding Batch Size',
+		label: 'Embedding batch size',
 		description: 'Number of chunks to embed in parallel'
 	}).addText(text => text
 			.setPlaceholder('10')
@@ -632,7 +632,7 @@ function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 	createSetting({
 		path: 'ragConfig.enableSemanticCaching',
-		label: 'Enable Semantic Caching',
+		label: 'Enable semantic caching',
 		description: 'Cache search results for faster retrieval'
 	}).addToggle(toggle => toggle
 			.setValue(plugin.settings.ragConfig.enableSemanticCaching)
@@ -643,7 +643,7 @@ function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 	createSetting({
 		path: 'ragConfig.cacheSize',
-		label: 'Cache Size',
+		label: 'Cache size',
 		description: 'Number of cached search results to maintain'
 	}).addText(text => text
 			.setPlaceholder('100')
@@ -658,7 +658,7 @@ function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 	createSetting({
 		path: 'ragConfig.reRankingEnabled',
-		label: 'Enable Re-Ranking',
+		label: 'Enable re-ranking',
 		description: 'Re-rank search results using a secondary model'
 	}).addToggle(toggle => toggle
 			.setValue(plugin.settings.ragConfig.reRankingEnabled)
@@ -673,7 +673,7 @@ function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 			label: 'Re-Ranking Model',
 			description: 'Model to use for re-ranking results'
 		}).addText(text => text
-				.setPlaceholder('cross-encoder/ms-marco-MiniLM-L-6-v2')
+				.setPlaceholder('Cross-encoder/ms-marco-MiniLM-L-6-v2')
 				.setValue(plugin.settings.ragConfig.reRankingModel)
 				.onChange(async (value) => {
 					plugin.settings.ragConfig.reRankingModel = value;
@@ -684,10 +684,10 @@ function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: 'Grading Settings' });
+	section.createEl('h4', { text: 'Grading settings' });
 
 	const graderDesc = section.createEl('p', {
-		text: 'Grade retrieved chunks for relevance before sending to the LLM. This helps filter out low-quality results.'
+		text: 'Grade retrieved chunks for relevance before sending to the llm. This helps filter out low-quality results.'
 	});
 	graderDesc.addClass('setting-item-description');
 
@@ -696,7 +696,7 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 
 	createSetting({
 		path: 'ragConfig.enableGradingThreshold',
-		label: 'Enable Grading Threshold',
+		label: 'Enable grading threshold',
 		description: 'Filter chunks below quality thresholds'
 	}).addToggle(toggle => toggle
 			.setValue(plugin.settings.ragConfig.enableGradingThreshold)
@@ -708,7 +708,7 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 	if (plugin.settings.ragConfig.enableGradingThreshold) {
 		createSetting({
 			path: 'ragConfig.graderModelSource',
-			label: 'Grader Model Source',
+			label: 'Grader model source',
 			description: 'Where to get the grader model from'
 		}).addDropdown(dropdown => dropdown
 				.addOptions({
@@ -724,10 +724,10 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 		if (plugin.settings.ragConfig.graderModelSource === 'custom' && plugin.settings.ragConfig.graderModel) {
 			createSetting({
 				path: 'ragConfig.graderModel',
-				label: 'Grader Model',
-				description: 'Specific model to use for grading'
+				label: 'Grader model',
+				description: 'specific model to use for grading'
 			}).addText(text => text
-					.setPlaceholder('gpt-4')
+					.setPlaceholder('Gpt-4')
 					.setValue(plugin.settings.ragConfig.graderModel || '')
 					.onChange(async (value) => {
 						plugin.settings.ragConfig.graderModel = value;
@@ -737,7 +737,7 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 
 		createSetting({
 			path: 'ragConfig.graderParallelProcessing',
-			label: 'Parallel Processing',
+			label: 'Parallel processing',
 			description: 'Number of chunks to grade in parallel'
 		}).addText(text => text
 				.setPlaceholder('3')
@@ -753,7 +753,7 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 		if (plugin.settings.ragConfig.minRelevanceScore !== undefined) {
 			createSetting({
 				path: 'ragConfig.minRelevanceScore',
-				label: 'Min Relevance Score',
+				label: 'Min relevance score',
 				description: 'Minimum relevance score (0.0-1.0)'
 			}).addText(text => text
 					.setPlaceholder('0.5')
@@ -770,7 +770,7 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 		if (plugin.settings.ragConfig.minAccuracyScore !== undefined) {
 			createSetting({
 				path: 'ragConfig.minAccuracyScore',
-				label: 'Min Accuracy Score',
+				label: 'Min accuracy score',
 				description: 'Minimum accuracy score (0.0-1.0)'
 			}).addText(text => text
 					.setPlaceholder('0.5')
@@ -787,7 +787,7 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 		if (plugin.settings.ragConfig.minSupportQualityScore !== undefined) {
 			createSetting({
 				path: 'ragConfig.minSupportQualityScore',
-				label: 'Min Support Quality Score',
+				label: 'Min support quality score',
 				description: 'Minimum support quality score (0.0-1.0)'
 			}).addText(text => text
 					.setPlaceholder('0.5')

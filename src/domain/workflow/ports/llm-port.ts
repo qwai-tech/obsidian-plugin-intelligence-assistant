@@ -9,12 +9,12 @@ export interface ILLMPort {
 	/**
 	 * Send a chat request
 	 */
-	chat(messages: Message[], modelId: string): Promise<ChatResponse>;
+	chat(_messages: Message[], _modelId: string): Promise<ChatResponse>;
 
 	/**
 	 * Check if model is available
 	 */
-	isModelAvailable(modelId: string): Promise<boolean>;
+	isModelAvailable(_modelId: string): Promise<boolean>;
 
 	/**
 	 * Get available models

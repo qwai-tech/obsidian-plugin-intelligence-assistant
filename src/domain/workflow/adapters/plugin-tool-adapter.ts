@@ -8,18 +8,18 @@ import type { ToolCall, ToolResult } from '@/types';
 import { ToolManager } from '@/application/services/tool-manager';
 
 export class PluginToolAdapter implements IToolPort {
-	constructor(private toolManager: ToolManager) {}
+	constructor(private readonly _toolManager: ToolManager) {}
 
 	async executeTool(call: ToolCall): Promise<ToolResult> {
-		return await this.toolManager.executeTool(call);
+		return await this._toolManager.executeTool(call);
 	}
 
-	async getAvailableTools(): Promise<string[]> {
-		const tools = this.toolManager.getAllTools();
-		return tools.map(t => t.definition.name);
+	getAvailableTools(): Promise<string[]> {
+		const tools = this._toolManager.getAllTools();
+		return Promise.resolve(tools.map(t => t.definition.name));
 	}
 
-	async isToolAvailable(toolName: string): Promise<boolean> {
-		return this.toolManager.isToolEnabled(toolName);
+	isToolAvailable(toolName: string): Promise<boolean> {
+		return Promise.resolve(this._toolManager.isToolEnabled(toolName));
 	}
 }

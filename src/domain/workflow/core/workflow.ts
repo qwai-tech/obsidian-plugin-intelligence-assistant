@@ -269,7 +269,7 @@ export class WorkflowGraph {
 	 * Clone workflow
 	 */
 	clone(): WorkflowGraph {
-		return new WorkflowGraph(JSON.parse(JSON.stringify(this.data)));
+		return new WorkflowGraph(JSON.parse(JSON.stringify(this.data)) as Workflow);
 	}
 
 	/**

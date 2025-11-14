@@ -6,7 +6,7 @@ export function resolveMessageProviderId(
 	message: Message,
 	plugin: IntelligenceAssistantPlugin
 ): string | null {
-	const metadata = message as Record<string, any>;
+	const metadata = message as Record<string, unknown>;
 	const explicitProvider = typeof metadata.provider === 'string'
 		? metadata.provider
 		: (typeof metadata.modelProvider === 'string' ? metadata.modelProvider : null);

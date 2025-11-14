@@ -7,6 +7,7 @@ import { Notice } from 'obsidian';
 import { BaseController } from './base-controller';
 import { MessageController } from './message-controller';
 import { AgentController } from './agent-controller';
+import { safeGetMessage } from '@/utils/type-guards';
 import type { Message, Agent, LLMConfig, ModelInfo } from '@/types';
 
 export interface ChatControllerOptions {
@@ -20,6 +21,15 @@ export class ChatController extends BaseController {
 	private messageController!: MessageController;
 	private agentController!: AgentController;
 	private isGenerating: boolean = false;
+
+	// Getters for protected properties
+	protected get plugin() {
+		return this._plugin;
+	}
+
+	protected get app() {
+		return this._app;
+	}
 
 	async initialize(): Promise<void> {
 		// Initialize chat controller
@@ -56,7 +66,7 @@ export class ChatController extends BaseController {
 			role: 'user',
 			content: content.trim(),
 			attachments: this.state.currentAttachments,
-			references: this.state.currentReferences
+			references: this.state.currentReferences // TODO: Fix type definition
 		};
 
 		// Add to conversation
@@ -74,7 +84,7 @@ export class ChatController extends BaseController {
 	 * Generate AI response
 	 * TODO: Complete MVC refactoring - this is a placeholder
 	 */
-	async generateResponse(): Promise<void> {
+	generateResponse(): Promise<void> {
 		const agent = this.agentController.getCurrentAgent();
 		if (!agent) {
 			new Notice('No agent selected');
@@ -91,9 +101,9 @@ export class ChatController extends BaseController {
 			new Notice('Response generation not yet implemented in MVC controller');
 			this.isGenerating = false;
 
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.isGenerating = false;
-			new Notice(`Failed to generate response: ${error.message}`);
+			new Notice(`Failed to generate response: ${safeGetMessage(error)}`);
 			console.error('Chat error:', error);
 		}
 	}

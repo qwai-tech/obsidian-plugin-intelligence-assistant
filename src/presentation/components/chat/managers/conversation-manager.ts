@@ -5,6 +5,7 @@
 
 import {App, Menu} from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
+import { showPrompt } from '@/presentation/components/modals/prompt-modal';
 import { Events } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Conversation, Message } from '@/types';
@@ -17,11 +18,11 @@ import { ConversationStorageService } from '@/application/services/conversation-
  * Events emitted by ConversationManager
  */
 export interface ConversationManagerEvents {
-	'conversation-loaded': (conversation: Conversation) => void;
-	'conversation-created': (conversation: Conversation) => void;
-	'conversation-updated': (conversation: Conversation) => void;
-	'conversation-deleted': (conversationId: string) => void;
-	'list-toggled': (visible: boolean) => void;
+	'conversation-loaded': (_conversation: Conversation) => void;
+	'conversation-created': (_conversation: Conversation) => void;
+	'conversation-updated': (_conversation: Conversation) => void;
+	'conversation-deleted': (_conversationId: string) => void;
+	'list-toggled': (_visible: boolean) => void;
 }
 
 export class ConversationManager extends Events {
@@ -35,7 +36,7 @@ export class ConversationManager extends Events {
 		private state: ChatViewState,
 		private chatContainer: HTMLElement,
 		private modelSelect: HTMLSelectElement,
-		private addMessageToUI: (message: Message) => HTMLElement,
+		private addMessageToUI: (_message: Message) => HTMLElement,
 		private updateTokenSummary: () => void
 	) {
 		super();
@@ -72,8 +73,8 @@ export class ConversationManager extends Events {
 		// Try to load active conversation
 		if (this.plugin.settings.activeConversationId) {
 			const conv = await storage.loadConversation(this.plugin.settings.activeConversationId);
-			if (_conv) {
-				this.loadConversation(_conv);
+			if (conv) {
+				this.loadConversation(conv);
 				return;
 			}
 		}
@@ -117,7 +118,7 @@ export class ConversationManager extends Events {
 		await this.plugin.saveSettings();
 
 		this.loadConversation(newConv);
-		this.renderConversationList();
+		void this.renderConversationList();
 
 		// Close conversation list after creating new conversation (only if not pinned)
 		if (!this.state.conversationListPinned) {
@@ -163,13 +164,13 @@ export class ConversationManager extends Events {
 		// Update the model selector to reflect the model used in the conversation
 		// Find the most recently used model in the conversation (from assistant messages)
 		const configuredModel = conv.config?.modelId;
-		const lastModelUsed = this.getLastUsedModel(_conv);
+		const lastModelUsed = this.getLastUsedModel(conv);
 		const targetModel = configuredModel || lastModelUsed;
 		if (targetModel && this.modelSelect.querySelector(`option[value="${targetModel}"]`)) {
 			this.modelSelect.value = targetModel;
 		}
 
-		this.renderConversationList();
+		void this.renderConversationList();
 		this.trigger('conversation-loaded', conv);
 	}
 
@@ -188,8 +189,8 @@ export class ConversationManager extends Events {
 
 		const storage = this.storageService!;
 		const conv = await storage.loadConversation(convId);
-		if (_conv) {
-			this.loadConversation(_conv);
+		if (conv) {
+			this.loadConversation(conv);
 			await this.plugin.saveSettings();
 			// Close conversation list after switching (only if not pinned)
 			if (!this.state.conversationListPinned) {
@@ -230,9 +231,9 @@ export class ConversationManager extends Events {
 		conv.config = this.buildCurrentConversationConfig();
 
 		// Auto-generate/update title based on settings (only once for new conversations)
-		const shouldUpdateTitle = this.shouldUpdateConversationTitle(_conv);
+		const shouldUpdateTitle = this.shouldUpdateConversationTitle(conv);
 		if (shouldUpdateTitle) {
-			const newTitle = await this.generateConversationTitle(_conv);
+			const newTitle = await this.generateConversationTitle(conv);
 			if (newTitle) {
 				conv.title = newTitle;
 				if (this.plugin.settings.conversationIconEnabled && !conv.icon) {
@@ -245,11 +246,11 @@ export class ConversationManager extends Events {
 		}
 
 		// Save the updated conversation to storage
-		await storage.updateConversation(_conv);
+		await storage.updateConversation(conv);
 
 		// Only re-render if not skipped (e.g., when switching conversations)
 		if (!skipRender) {
-			this.renderConversationList();
+			void this.renderConversationList();
 		}
 
 		this.trigger('conversation-updated', conv);
@@ -317,7 +318,7 @@ export class ConversationManager extends Events {
 			}
 		}
 
-		this.renderConversationList();
+		void this.renderConversationList();
 		this.trigger('conversation-deleted', convId);
 	}
 
@@ -330,7 +331,7 @@ export class ConversationManager extends Events {
 		const conv = await storage.getConversationMetadata(convId);
 		if (!conv) return;
 
-		const newTitle = prompt('Enter new title:', conv.title);
+		const newTitle = await showPrompt(this.app, 'Enter new title:', conv.title);
 		if (newTitle && newTitle.trim()) {
 			const success = await storage.renameConversation(convId, newTitle.trim());
 			if (success) {
@@ -344,7 +345,7 @@ export class ConversationManager extends Events {
 						this.state.messages = updatedConv.messages;
 					}
 				}
-				this.renderConversationList();
+				void this.renderConversationList();
 				
 				// Trigger update event with the updated metadata
 				const updatedMetadata = await storage.getConversationMetadata(convId);
@@ -419,12 +420,16 @@ export class ConversationManager extends Events {
 		const pinBtn = headerButtons.createEl('button', { text: this.state.conversationListPinned ? '📌' : '📍' });
 		pinBtn.addClass('pin-conversation-btn');
 		pinBtn.title = this.state.conversationListPinned ? 'Unpin' : 'Pin to sidebar';
-		pinBtn.addEventListener('click', () => this.togglePinConversationList());
+		pinBtn.addEventListener('click', () => {
+			void this.togglePinConversationList();
+		});
 
 		const newConvBtn = headerButtons.createEl('button', { text: '+' });
 		newConvBtn.addClass('new-conversation-btn');
-		newConvBtn.title = 'New Conversation';
-		newConvBtn.addEventListener('click', () => this.createNewConversation());
+		newConvBtn.title = 'New conversation';
+		newConvBtn.addEventListener('click', () => {
+			void this.createNewConversation();
+		});
 
 		// Conversation list
 		const listContent = this.conversationListContainer.createDiv('conversation-list-content');
@@ -468,7 +473,9 @@ export class ConversationManager extends Events {
 			}
 
 			convTitle.createSpan().setText(conv.title);
-			convTitle.addEventListener('click', () => this.switchConversation(conv.id));
+			convTitle.addEventListener('click', () => {
+				void this.switchConversation(conv.id);
+			});
 
 			// Actions container
 			const actions = convItem.createDiv('conversation-actions');
@@ -497,7 +504,7 @@ export class ConversationManager extends Events {
 			deleteBtn.setCssProps({ 'color': 'var(--text-error)' });
 			deleteBtn.addEventListener('click', (e) => {
 				e.stopPropagation();
-				this.deleteConversation(conv.id);
+				void this.deleteConversation(conv.id);
 			});
 
 			// Context menu for additional options
@@ -508,7 +515,9 @@ export class ConversationManager extends Events {
 				menu.addItem((item) => {
 					item.setTitle('Delete')
 						.setIcon('trash')
-						.onClick(() => this.deleteConversation(conv.id));
+						.onClick(() => {
+							void this.deleteConversation(conv.id);
+						});
 				});
 
 				menu.showAtMouseEvent(e);
@@ -532,7 +541,7 @@ export class ConversationManager extends Events {
 	/**
 	 * Generate a title for a conversation using LLM or first message
 	 */
-	private async generateConversationTitle(conv: Conversation): Promise<string | null> {
+	private async generateConversationTitle(_conv: Conversation): Promise<string | null> {
 		const mode = this.plugin.settings.conversationTitleMode;
 
 		if (mode === 'first-message') {

@@ -28,21 +28,22 @@ export class MemoryService extends BaseService {
 	private memories: Map<string, AgentMemory> = new Map();
 
 	constructor(
-		private app: App
+		private _app: App
 	) {
 		super();
 	}
 
 	async initialize(): Promise<void> {
-		this.memoryManager = new AgentMemoryManager(this.app.vault);
+		this.memoryManager = new AgentMemoryManager(this._app.vault);
 		await this.memoryManager.initialize();
 		this.ready = true;
 	}
 
-	async cleanup(): Promise<void> {
+	cleanup(): Promise<void> {
 		this.memoryManager = null;
 		this.memories.clear();
 		this.ready = false;
+	  return Promise.resolve();
 	}
 
 	/**
@@ -62,7 +63,7 @@ export class MemoryService extends BaseService {
 	/**
 	 * Record a conversation
 	 */
-	async recordConversation(
+	recordConversation(
 		agent: Agent,
 		conversation: Conversation
 	): Promise<void> {
@@ -86,6 +87,7 @@ export class MemoryService extends BaseService {
 		if (memory) {
 			this.setMemory(agent.id, memory);
 		}
+	  return Promise.resolve();
 	}
 
 	/**
@@ -116,7 +118,7 @@ export class MemoryService extends BaseService {
 	/**
 	 * Search memories by semantic similarity
 	 */
-	async searchMemories(
+	searchMemories(
 		agentId: string,
 		_query: string,
 		_options?: MemorySearchOptions
@@ -126,11 +128,11 @@ export class MemoryService extends BaseService {
 		}
 
 		const memory = this.getMemory(agentId);
-		if (!memory) return [];
+		if (!memory) return Promise.resolve([]);
 
 		// TODO: Implement semantic search using embeddings
 		// For now, return empty array
-		return [];
+		return Promise.resolve([]);
 	}
 
 	/**
@@ -185,11 +187,12 @@ export class MemoryService extends BaseService {
 	/**
 	 * Load memories from storage
 	 */
-	async loadMemories(memories: AgentMemory[]): Promise<void> {
+	loadMemories(memories: AgentMemory[]): Promise<void> {
 		this.memories.clear();
 		for (const memory of memories) {
 			this.memories.set(memory.agentId, memory);
 		}
+	  return Promise.resolve();
 	}
 
 	/**

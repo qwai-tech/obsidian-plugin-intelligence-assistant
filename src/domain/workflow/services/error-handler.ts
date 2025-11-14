@@ -11,41 +11,43 @@ import { ExecutionLogEntry } from '../core/types';
 // ERROR CLASSES
 // ============================================================================
 
-export enum WorkflowErrorType {
+export const WorkflowErrorType = {
   // Configuration errors
-  CONFIGURATION_ERROR = 'CONFIGURATION_ERROR',
-  VALIDATION_ERROR = 'VALIDATION_ERROR',
-  NODE_NOT_FOUND = 'NODE_NOT_FOUND',
-  CONNECTION_ERROR = 'CONNECTION_ERROR',
+  CONFIGURATION_ERROR: 'CONFIGURATION_ERROR',
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  NODE_NOT_FOUND: 'NODE_NOT_FOUND',
+  CONNECTION_ERROR: 'CONNECTION_ERROR',
   
   // Execution errors
-  EXECUTION_ERROR = 'EXECUTION_ERROR',
-  TIMEOUT_ERROR = 'TIMEOUT_ERROR',
-  MEMORY_ERROR = 'MEMORY_ERROR',
-  RESOURCE_ERROR = 'RESOURCE_ERROR',
+  EXECUTION_ERROR: 'EXECUTION_ERROR',
+  TIMEOUT_ERROR: 'TIMEOUT_ERROR',
+  MEMORY_ERROR: 'MEMORY_ERROR',
+  RESOURCE_ERROR: 'RESOURCE_ERROR',
   
   // Service errors
-  SERVICE_UNAVAILABLE = 'SERVICE_UNAVAILABLE',
-  SERVICE_ERROR = 'SERVICE_ERROR',
-  AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR',
+  SERVICE_UNAVAILABLE: 'SERVICE_UNAVAILABLE',
+  SERVICE_ERROR: 'SERVICE_ERROR',
+  AUTHENTICATION_ERROR: 'AUTHENTICATION_ERROR',
   
   // Security errors
-  SECURITY_VIOLATION = 'SECURITY_VIOLATION',
-  PERMISSION_DENIED = 'PERMISSION_DENIED',
-  SANDBOX_VIOLATION = 'SANDBOX_VIOLATION',
+  SECURITY_VIOLATION: 'SECURITY_VIOLATION',
+  PERMISSION_DENIED: 'PERMISSION_DENIED',
+  SANDBOX_VIOLATION: 'SANDBOX_VIOLATION',
   
   // Network errors
-  NETWORK_ERROR = 'NETWORK_ERROR',
-  HTTP_ERROR = 'HTTP_ERROR',
+  NETWORK_ERROR: 'NETWORK_ERROR',
+  HTTP_ERROR: 'HTTP_ERROR',
   
   // System errors
-  SYSTEM_ERROR = 'SYSTEM_ERROR',
-  INTERNAL_ERROR = 'INTERNAL_ERROR',
-}
+  SYSTEM_ERROR: 'SYSTEM_ERROR',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+} as const;
+
+export type WorkflowErrorTypeValue = typeof WorkflowErrorType[keyof typeof WorkflowErrorType];
 
 export interface WorkflowErrorDetails {
-  /** Error type classification */
-  type: WorkflowErrorType;
+	/** Error type classification */
+	type: WorkflowErrorTypeValue;
   /** Error message */
   message: string;
   /** Stack trace if available */
@@ -53,7 +55,7 @@ export interface WorkflowErrorDetails {
   /** Error code (if applicable) */
   code?: string | number;
   /** Additional context data */
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   /** Related node information */
   node?: {
     id: string;
@@ -70,8 +72,8 @@ export interface WorkflowErrorDetails {
  * Base workflow error class
  */
 export class WorkflowError extends Error {
-  public readonly type: WorkflowErrorType;
-  public readonly context?: Record<string, any>;
+	public readonly type: WorkflowErrorTypeValue;
+  public readonly context?: Record<string, unknown>;
   public node?: { id: string; type: string; name: string };
   public readonly recoverable: boolean;
   public readonly code?: string | number;
@@ -109,7 +111,7 @@ export class WorkflowError extends Error {
   /**
    * Convert error to JSON-serializable object
    */
-  toJSON(): any {
+  toJSON(): unknown {
     return {
       name: this.name,
       type: this.type,
@@ -126,16 +128,16 @@ export class WorkflowError extends Error {
   /**
    * Create error from JSON
    */
-  static fromJSON(obj: any): WorkflowError {
-    return new WorkflowError({
-      type: obj.type,
-      message: obj.message,
-      stack: obj.stack,
-      code: obj.code,
-      context: obj.context,
-      node: obj.node,
-      recoverable: obj.recoverable,
-      timestamp: obj.timestamp,
+	static fromJSON(obj: Record<string, unknown>): WorkflowError {
+		return new WorkflowError({
+			type: obj.type as WorkflowErrorTypeValue,
+      message: obj.message as string,
+      stack: obj.stack as string | undefined,
+      code: obj.code as string | number | undefined,
+      context: obj.context as Record<string, unknown> | undefined,
+      node: obj.node as { id: string; type: string; name: string } | undefined,
+      recoverable: obj.recoverable as boolean | undefined,
+      timestamp: obj.timestamp as number,
     });
   }
 }
@@ -148,7 +150,7 @@ export class WorkflowError extends Error {
  * Configuration-related errors
  */
 export class ConfigurationError extends WorkflowError {
-  constructor(message: string, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.CONFIGURATION_ERROR,
       message,
@@ -164,7 +166,7 @@ export class ConfigurationError extends WorkflowError {
  * Validation-related errors
  */
 export class ValidationError extends WorkflowError {
-  constructor(message: string, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.VALIDATION_ERROR,
       message,
@@ -180,7 +182,7 @@ export class ValidationError extends WorkflowError {
  * Execution-related errors
  */
 export class ExecutionError extends WorkflowError {
-  constructor(message: string, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.EXECUTION_ERROR,
       message,
@@ -196,7 +198,7 @@ export class ExecutionError extends WorkflowError {
  * Timeout-related errors
  */
 export class TimeoutError extends WorkflowError {
-  constructor(message: string, timeout: number, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, timeout: number, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.TIMEOUT_ERROR,
       message,
@@ -212,7 +214,7 @@ export class TimeoutError extends WorkflowError {
  * Security-related errors
  */
 export class SecurityError extends WorkflowError {
-  constructor(message: string, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.SECURITY_VIOLATION,
       message,
@@ -228,7 +230,7 @@ export class SecurityError extends WorkflowError {
  * Service-related errors
  */
 export class ServiceError extends WorkflowError {
-  constructor(message: string, context?: Record<string, any>, node?: { id: string; type: string; name: string }) {
+  constructor(message: string, context?: Record<string, unknown>, node?: { id: string; type: string; name: string }) {
     super({
       type: WorkflowErrorType.SERVICE_ERROR,
       message,
@@ -253,13 +255,14 @@ export class ErrorHandler {
    */
   static async wrapAsync<T>(
     operation: () => Promise<T>,
-    onError?: (error: Error) => void
+    onError?: (_error: Error) => void
   ): Promise<T | null> {
     try {
       return await operation();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error instanceof Error ? error : new Error(String(error));
       if (onError) {
-        onError(error);
+        onError(err);
       } else {
         console.error('Unhandled error:', error);
       }
@@ -270,7 +273,7 @@ export class ErrorHandler {
   /**
    * Create a workflow error from a generic error
    */
-  static fromError(error: Error, type: WorkflowErrorType = WorkflowErrorType.INTERNAL_ERROR): WorkflowError {
+	static fromError(error: Error, type: WorkflowErrorTypeValue = WorkflowErrorType.INTERNAL_ERROR): WorkflowError {
     if (error instanceof WorkflowError) {
       return error;
     }
@@ -291,7 +294,7 @@ export class ErrorHandler {
     nodeId: string,
     nodeType: string,
     nodeName: string,
-    type: WorkflowErrorType = WorkflowErrorType.EXECUTION_ERROR
+    type: WorkflowErrorTypeValue = WorkflowErrorType.EXECUTION_ERROR
   ): WorkflowError {
     const workflowError = this.fromError(error, type);
     
@@ -327,21 +330,21 @@ export class ErrorHandler {
   /**
    * Log error with appropriate level
    */
-  static logError(error: WorkflowError, logger?: (message: string, level: 'error' | 'warn' | 'info') => void): void {
-    const log = logger || console.error;
+  static logError(error: WorkflowError, logger?: (_message: string, _level: 'error' | 'warn' | 'info') => void): void {
+    const log = logger || ((_message: string, _level: 'error' | 'warn' | 'info') => console.error(_message));
     const formattedMessage = this.formatForUser(error);
-    
+
     // Map error types to log levels
-    const logLevel: 'error' | 'warn' | 'info' = 
+    const logLevel: 'error' | 'warn' | 'info' =
       error.type === WorkflowErrorType.SECURITY_VIOLATION ? 'error' :
       error.type === WorkflowErrorType.SYSTEM_ERROR ? 'error' :
       error.type === WorkflowErrorType.INTERNAL_ERROR ? 'error' :
       error.type === WorkflowErrorType.VALIDATION_ERROR ? 'warn' :
       error.type === WorkflowErrorType.TIMEOUT_ERROR ? 'warn' :
       'error';
-    
+
     log(`[Workflow Error] ${formattedMessage}`, logLevel);
-    
+
     // Log stack trace for severe errors
     if (logLevel === 'error' && error.stack) {
       log(`Stack trace:\n${error.stack}`, 'error');
@@ -374,8 +377,8 @@ export class ErrorHandler {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         return await operation();
-      } catch (error: any) {
-        lastError = error;
+      } catch (error: unknown) {
+        lastError = error instanceof Error ? error : new Error(String(error));
         
         // Don't retry on security or configuration errors
         if (error instanceof SecurityError || error instanceof ConfigurationError) {

@@ -3,7 +3,7 @@
  * Displays LLM provider management and configuration
  */
 
-import { App, Notice } from 'obsidian';
+import { App, Notice, requestUrl } from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { LLMConfig } from '@/types';
@@ -17,24 +17,21 @@ import { getProviderMeta } from '../components/provider-meta';
 async function checkOllamaStatus(baseUrl: string): Promise<{ online: boolean; version?: string }> {
 	try {
 		const url = baseUrl.endsWith('/') ? `${baseUrl}api/version` : `${baseUrl}/api/version`;
-		const controller = new AbortController();
-		const timeout = setTimeout(() => controller.abort(), 5000);
-		const response = await fetch(url, {
+		const response = await requestUrl({
+			url,
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			signal: controller.signal,
+			throw: false,
 		});
-		clearTimeout(timeout);
 
-		if (response.ok) {
-			const data = await response.json();
+		if (response.status === 200) {
+			const data = response.json as { version?: string };
 			return { online: true, version: data.version };
 		}
 		return { online: false };
-	} catch (error) {
-		console.error('Ollama status check failed:', error);
+	} catch (_error) {
 		return { online: false };
 	}
 }
@@ -45,7 +42,7 @@ export function displayProviderTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Provider Configuration' });
+	containerEl.createEl('h3', { text: 'Provider configuration' });
 
 	const desc = containerEl.createEl('p', {
 		text: 'Manage LLM providers and API credentials. Use the actions column to edit configuration details or refresh cached models.'
@@ -56,7 +53,7 @@ export function displayProviderTab(
 	const summary = actionsRow.createDiv('ia-section-summary');
 	summary.createSpan({ text: `${plugin.settings.llmConfigs.length} provider${plugin.settings.llmConfigs.length === 1 ? '' : 's'} configured` });
 
-	const addBtn = actionsRow.createEl('button', { text: '+ Add Provider' });
+	const addBtn = actionsRow.createEl('button', { text: '+ Add provider' });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -75,7 +72,7 @@ export function displayProviderTab(
 
 	if (plugin.settings.llmConfigs.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No providers configured. Click "Add Provider" to get started.');
+		emptyDiv.setText('No providers configured. Select "Add provider" to get started.');
 		return;
 	}
 
@@ -180,7 +177,7 @@ export function displayProviderTab(
 			// Check Ollama server status
 			checkOllamaStatus(config.baseUrl).then((status) => {
 				if (status.online) {
-					serverStatusLine.setText(`Server: Online`);
+					serverStatusLine.setText(`Server: online`);
 					serverStatusLine.setCssProps({ 'color': 'var(--text-success)' });
 					serverStatusLine.setCssProps({ 'font-style': 'normal' });
 
@@ -199,10 +196,10 @@ export function displayProviderTab(
 					} else {
 						statusBadge.removeClass('is-danger');
 						statusBadge.addClass('is-warning');
-						statusBadge.setText('Server Online');
+						statusBadge.setText('Server online');
 					}
 				} else {
-					serverStatusLine.setText(`Server: Offline or unreachable`);
+					serverStatusLine.setText(`Server: offline or unreachable`);
 					serverStatusLine.setCssProps({ 'color': 'var(--text-error)' });
 					serverStatusLine.setCssProps({ 'font-style': 'normal' });
 
@@ -217,10 +214,10 @@ export function displayProviderTab(
 					statusBadge.removeClass('is-success');
 					statusBadge.removeClass('is-warning');
 					statusBadge.addClass('is-danger');
-					statusBadge.setText('Server Offline');
+					statusBadge.setText('Server offline');
 				}
 			}).catch(() => {
-				serverStatusLine.setText('Server: Connection error');
+				serverStatusLine.setText('Server: connection error');
 				serverStatusLine.setCssProps({ 'color': 'var(--text-error)' });
 
 				if (versionEl) {
@@ -273,20 +270,23 @@ export function displayProviderTab(
 
 		// For Ollama, add "Manage Models" button instead of just "Refresh Models"
 		if (config.provider === 'ollama') {
-			const manageBtn = actionsCell.createEl('button', { text: 'Manage Models' });
+			const manageBtn = actionsCell.createEl('button', { text: 'Manage models' });
 			manageBtn.addClass('ia-button');
 			manageBtn.addClass('ia-button--ghost');
 			manageBtn.addEventListener('click', () => {
-				new OllamaModelManagerModal(app, config, async () => {
-					await plugin.saveSettings();
-					refreshDisplay();
+				new OllamaModelManagerModal(app, config, () => {
+					void (async () => {
+						await plugin.saveSettings();
+						refreshDisplay();
+					})();
 				}).open();
 			});
 		} else {
-			const refreshBtn = actionsCell.createEl('button', { text: 'Refresh Models' });
-			refreshBtn.addClass('ia-button');
-			refreshBtn.addClass('ia-button--ghost');
-			refreshBtn.addEventListener('click', async () => {
+		const refreshBtn = actionsCell.createEl('button', { text: 'Refresh models' });
+		refreshBtn.addClass('ia-button');
+		refreshBtn.addClass('ia-button--ghost');
+		refreshBtn.addEventListener('click', () => {
+			void (async () => {
 				refreshBtn.textContent = 'Refreshing...';
 				refreshBtn.disabled = true;
 				try {
@@ -297,25 +297,28 @@ export function displayProviderTab(
 					await plugin.saveSettings();
 					new Notice(`Models refreshed for ${config.provider}.`);
 					refreshDisplay();
-				} catch (error) {
-					console.error('Failed to refresh models', error);
+				} catch (_error) {
+					console.error('Failed to refresh models', _error);
 					new Notice('Failed to refresh models');
 				} finally {
 					refreshBtn.disabled = false;
-					refreshBtn.textContent = 'Refresh Models';
+					refreshBtn.textContent = 'Refresh models';
 				}
-			});
+			})();
+		});
 		}
 
 		const deleteBtn = actionsCell.createEl('button', { text: 'Delete' });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
-		deleteBtn.addEventListener('click', async () => {
-			if (await showConfirm(this.app, `Remove provider ${config.provider}?`)) {
-				plugin.settings.llmConfigs.splice(index, 1);
-				await plugin.saveSettings();
-				refreshDisplay();
-			}
+		deleteBtn.addEventListener('click', () => {
+			void (async () => {
+				if (await showConfirm(app, `Remove provider ${config.provider}?`)) {
+					plugin.settings.llmConfigs.splice(index, 1);
+					await plugin.saveSettings();
+					refreshDisplay();
+				}
+			})();
 		});
 	});
 }

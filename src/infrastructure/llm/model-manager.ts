@@ -122,12 +122,12 @@ export class ModelManager {
 				throw new Error(`Failed to fetch models: ${response.status}`);
 			}
 
-			const data = response.json; // Note: response.json is a property, not a method in Obsidian's requestUrl
+			const data = response.json as { data: Array<{ id: string; [key: string]: unknown }> };
 
 			// Filter and map to ModelInfo
 			return data.data
-				.filter((model: any) => model.id.startsWith('gpt') || model.id.startsWith('o1') || model.id.startsWith('o3') || model.id.includes('embedding'))
-				.map((model: any) => {
+				.filter((model: { id: string }) => model.id.startsWith('gpt') || model.id.startsWith('o1') || model.id.startsWith('o3') || model.id.includes('embedding'))
+				.map((model: { id: string }) => {
 					// Try to find capabilities from default models first
 					const prefixedId = `openai:${model.id}`;
 					const defaultModel = this.DEFAULT_MODELS.openai.find(m => m.id === prefixedId);
@@ -144,7 +144,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch OpenAI models:', error);
-			new Notice('Failed to fetch OpenAI models, using default list');
+			new Notice('Failed to fetch openai models, using default list');
 			return this.DEFAULT_MODELS.openai;
 		}
 	}
@@ -204,12 +204,18 @@ export class ModelManager {
 				throw new Error(`Failed to fetch models: ${response.status}`);
 			}
 
-			const data = response.json;
+			const data = response.json as {
+				models: Array<{
+					name: string;
+					displayName?: string;
+					supportedGenerationMethods?: string[];
+				}>;
+			};
 
 			// Filter and map to ModelInfo
 			return data.models
-				.filter((model: any) => model.supportedGenerationMethods?.includes('generateContent'))
-				.map((model: any) => {
+				.filter((model: { supportedGenerationMethods?: string[] }) => model.supportedGenerationMethods?.includes('generateContent'))
+				.map((model: { name: string; displayName?: string }) => {
 					const modelId = model.name.replace('models/', '');
 					const prefixedId = `google:${modelId}`;
 					const defaultModel = this.DEFAULT_MODELS.google.find(m => m.id === prefixedId);
@@ -226,7 +232,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch Google models:', error);
-			new Notice('Failed to fetch Google models, using default list');
+			new Notice('Failed to fetch google models, using default list');
 			return this.DEFAULT_MODELS.google;
 		}
 	}
@@ -272,11 +278,11 @@ export class ModelManager {
 				throw new Error(`Failed to fetch models: ${response.status}`);
 			}
 
-			const data = response.json; // Note: response.json is a property, not a method in Obsidian's requestUrl
+			const data = response.json as { data: Array<{ id: string; [key: string]: unknown }> };
 
 			// Filter and map to ModelInfo
 			return data.data
-				.map((model: any) => {
+				.map((model: { id: string }) => {
 					const prefixedId = `deepseek:${model.id}`;
 					const defaultModel = this.DEFAULT_MODELS.deepseek.find(m => m.id === prefixedId);
 					const capabilities = defaultModel?.capabilities || this.inferDeepSeekCapabilities(model.id);
@@ -292,7 +298,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch DeepSeek models:', error);
-			new Notice('Failed to fetch DeepSeek models, using default list');
+			new Notice('Failed to fetch deepseek models, using default list');
 			return this.DEFAULT_MODELS.deepseek;
 		}
 	}
@@ -320,11 +326,29 @@ export class ModelManager {
 				throw new Error(`Failed to fetch models: ${response.status}`);
 			}
 
-			const data = response.json; // Note: response.json is a property, not a method in Obsidian's requestUrl
+			const data = response.json as {
+				data: Array<{
+					id: string;
+					name?: string;
+					architecture?: {
+						input_modalities?: string[];
+						modality?: string;
+					};
+					supported_parameters?: string[];
+				}>;
+			};
 
 			// Filter and map to ModelInfo
 			return data.data
-				.map((model: any) => {
+				.map((model: {
+					id: string;
+					name?: string;
+					architecture?: {
+						input_modalities?: string[];
+						modality?: string;
+					};
+					supported_parameters?: string[];
+				}) => {
 					// Infer capabilities from OpenRouter's model metadata
 					const capabilities: ModelCapability[] = ['chat']; // All models support chat
 
@@ -382,7 +406,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch OpenRouter models:', error);
-			new Notice('Failed to fetch OpenRouter models, using default list');
+			new Notice('Failed to fetch openrouter models, using default list');
 			return this.DEFAULT_MODELS.openrouter;
 		}
 	}
@@ -409,7 +433,7 @@ export class ModelManager {
 	 * Get models for a specific config
 	 */
 	static async getModelsForConfig(config: LLMConfig, forceRefresh: boolean = false): Promise<ModelInfo[]> {
-		const cacheKey = `${config.provider}:${config.apiKey}:${config.baseUrl}`;
+		const cacheKey = `${config.provider ?? ''}:${config.apiKey ?? ''}:${config.baseUrl ?? ''}`;
 
 		if (!forceRefresh && this.modelCache.has(cacheKey)) {
 			console.debug(`Using cached models for ${config.provider}`);
@@ -556,8 +580,7 @@ export class ModelManager {
 	static findConfigForModelByProvider(modelId: string, configs: LLMConfig[]): LLMConfig | null {
 		// Check if modelId has provider prefix (provider:model-name format)
 		if (modelId.includes(':')) {
-			const [providerPrefix, ...rest] = modelId.split(':');
-			const _modelName = rest.join(':'); // Handle case where model name might contain ':'
+			const [providerPrefix] = modelId.split(':');
 
 			// Find config matching the provider prefix
 			const config = configs.find(c => c.provider === providerPrefix);
@@ -587,7 +610,7 @@ export class ModelManager {
 				if (defaultModels.some(model => model.id === modelId)) {
 					return config;
 				}
-			} catch (error) {
+			} catch {
 				// Continue to next config if there's an error getting models
 				continue;
 			}

@@ -9,14 +9,15 @@ export class ProviderConfigModal extends Modal {
 
 	constructor(app: App, initial: LLMConfig, onSave: (config: LLMConfig) => void | Promise<void>) {
 		super(app);
-		this.draft = JSON.parse(JSON.stringify(initial));
+		const clonedDraft = JSON.parse(JSON.stringify(initial)) as unknown as LLMConfig;
+		this.draft = clonedDraft;
 		this.onSaveCallback = onSave;
 	}
 
 		onOpen() {
 		const { contentEl } = this;
 		contentEl.empty();
-		contentEl.createEl('h2', { text: 'Provider Settings' });
+		contentEl.createEl('h2', { text: 'Provider settings' });
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'llmConfigs[].provider',
@@ -25,24 +26,24 @@ export class ProviderConfigModal extends Modal {
 		}).addDropdown(dropdown => dropdown
 				.addOption('openai', 'OpenAI')
 				.addOption('anthropic', 'Anthropic')
-				.addOption('google', 'Google (Gemini)')
-				.addOption('deepseek', 'DeepSeek')
-				.addOption('ollama', 'Ollama (Local)')
+				.addOption('google', 'Google (gemini)')
+				.addOption('deepseek', 'Deepseek')
+				.addOption('ollama', 'Ollama (local)')
 				.addOption('openrouter', 'OpenRouter')
 				.addOption('sap-ai-core', 'SAP AI Core')
-				.addOption('custom', 'Custom (OpenAI Compatible)')
+				.addOption('custom', 'Custom (openai compatible)')
 				.setValue(this.draft.provider)
 				.onChange(value => {
 					this.draft.provider = value;
-					this.renderProviderSpecific();
+					void this.renderProviderSpecific();
 				}));
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'llmConfigs[].modelFilter',
-			label: 'Model Filter',
+			label: 'Model filter',
 			description: 'Optional regex pattern to limit available models'
 		}).addText(text => text
-				.setPlaceholder('gpt-4|claude-')
+				.setPlaceholder('Gpt-4|claude-')
 				.setValue(this.draft.modelFilter || '')
 				.onChange(value => {
 					this.draft.modelFilter = value.trim() || undefined;
@@ -51,10 +52,10 @@ export class ProviderConfigModal extends Modal {
 		if (this.draft.provider === 'sap-ai-core') {
 			applyConfigFieldMetadata(new Setting(contentEl), {
 				path: 'llmConfigs[].resourceGroup',
-				label: 'Resource Group',
+				label: 'Resource group',
 				description: 'Optional SAP AI Core resource group'
 			}).addText(text => text
-					.setPlaceholder('default')
+					.setPlaceholder('Default')
 					.setValue(this.draft.resourceGroup || '')
 					.onChange(value => {
 						this.draft.resourceGroup = value.trim() || undefined;
@@ -80,9 +81,11 @@ export class ProviderConfigModal extends Modal {
 		saveBtn.setCssProps({ 'color': 'white' });
 		saveBtn.setCssProps({ 'border': 'none' });
 		saveBtn.setCssProps({ 'border-radius': '4px' });
-		saveBtn.addEventListener('click', async () => {
-			await this.onSaveCallback(JSON.parse(JSON.stringify(this.draft)));
-			this.close();
+		saveBtn.addEventListener('click', () => {
+			void (async () => {
+				await this.onSaveCallback(JSON.parse(JSON.stringify(this.draft)) as LLMConfig);
+				this.close();
+			})();
 		});
 	}
 
@@ -96,7 +99,7 @@ export class ProviderConfigModal extends Modal {
 		if (this.draft.provider === 'sap-ai-core') {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].serviceKey',
-				label: 'Service Key',
+				label: 'Service key',
 				description: 'SAP AI Core service key (JSON string)'
 			}).addTextArea(text => {
 					const value = typeof this.draft.serviceKey === 'string'
@@ -115,7 +118,7 @@ export class ProviderConfigModal extends Modal {
 								this.draft.serviceKey = newValue;
 							}
 							text.inputEl.setCssProps({ 'border-color': 'var(--background-modifier-border)' });
-						} catch (error) {
+						} catch (_error) {
 							text.inputEl.setCssProps({ 'border-color': 'var(--text-error)' });
 						}
 					});
@@ -137,7 +140,7 @@ export class ProviderConfigModal extends Modal {
 				label: 'API Key',
 				description: 'Authentication key for the selected provider'
 			}).addText(text => {
-					text.setPlaceholder('sk-...');
+					text.setPlaceholder('Sk-...');
 					text.inputEl.type = 'password';
 					text.setValue(this.draft.apiKey || '');
 					text.onChange(value => {

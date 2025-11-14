@@ -3,9 +3,6 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import { snapshotMcpTools } from '@plugin';
 import type { } from './types';
 import type {  } from '@/application/services/types';
-import {
-					AgentEditModal
-} from './modals';
 
 import { } from '../views/chat-view';
 import { } from '@/constants';
@@ -44,7 +41,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		const {containerEl} = this;
 
 		containerEl.empty();
-		containerEl.createEl('h2', { text: 'Intelligence Assistant Settings' });
+		;
 
 		const tabNav = containerEl.createDiv('settings-tabs');
 		const tabDefs: Array<{ slug: string; label: string }> = [
@@ -54,7 +51,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			{ slug: 'mcp', label: 'MCP' },
 			{ slug: 'tools', label: 'Tools' },
 			{ slug: 'rag', label: 'RAG' },
-			{ slug: 'websearch', label: 'Web Search' },
+			{ slug: 'websearch', label: 'Web search' },
 			{ slug: 'prompts', label: 'Prompts' },
 			{ slug: 'agents', label: 'Agents' }
 		];
@@ -133,7 +130,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		);
 	}
 
-	private async displayModelsTab(containerEl: HTMLElement) {
+	private displayModelsTab(containerEl: HTMLElement) {
 		const filters: ModelFilters = {
 			providerFilter: this.modelProviderFilter,
 			capabilityFilter: this.modelCapabilityFilter,
@@ -233,12 +230,12 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 				});
 
 				console.debug(`[MCP] ${server.name} connection test: ${tools.length} tools available`);
-			} catch (error: any) {
+			} catch (error: unknown) {
 				console.error(`[MCP] ${server.name} connection test failed:`, error);
 				results.push({
 					name: server.name,
 					success: false,
-					error: error.message || 'Connection failed'
+					error: error instanceof Error ? error.message : 'Connection failed'
 				});
 			}
 		}
@@ -252,18 +249,18 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		const failed = results.filter(r => !r.success).length;
 
 		if (failed === 0) {
-			new Notice(`✅ All ${successful} MCP servers connected successfully!`);
+			new Notice(`✅ all ${successful} mcp servers connected successfully!`);
 		} else {
 			new Notice(`⚠️ ${successful} connected, ${failed} failed`);
 
 			// Show detailed results in console
 			console.debug('[MCP] Connection test results:');
 			for (const result of results) {
-				console.debug(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'Connected'}`);
+				console.debug(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'connected'}`);
 			}
 		}
 
-		this.display();
+		void this.display();
 	}
 
 }

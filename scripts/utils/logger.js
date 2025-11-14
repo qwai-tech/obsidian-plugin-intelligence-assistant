@@ -1,4 +1,4 @@
-const chalk = require('chalk');
+const chalk = require('chalk').default || require('chalk');
 const ora = require('ora');
 
 class Logger {

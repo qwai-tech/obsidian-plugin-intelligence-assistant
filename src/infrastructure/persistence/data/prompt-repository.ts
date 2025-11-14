@@ -25,12 +25,12 @@ export class PromptRepository {
 	private readonly indexPath = `${this.baseFolder}/index.json`;
 	private initialized = false;
 
-	constructor(private readonly app: App) {}
+	constructor(private readonly _app: App) {}
 
 	async initialize(): Promise<void> {
 		if (this.initialized) return;
-		await ensureFolderExists(this.app.vault.adapter, this.baseFolder);
-		if (!(await this.app.vault.adapter.exists(this.indexPath))) {
+		await ensureFolderExists(this._app.vault.adapter, this.baseFolder);
+		if (!(await this._app.vault.adapter.exists(this.indexPath))) {
 			await this.writeIndex({
 				version: INDEX_VERSION,
 				updatedAt: Date.now(),
@@ -66,7 +66,7 @@ export class PromptRepository {
 
 	async saveAll(prompts: SystemPrompt[], activeId: string | null): Promise<void> {
 		await this.initialize();
-		const adapter = this.app.vault.adapter;
+		const adapter = this._app.vault.adapter;
 		const keepFiles = new Set<string>();
 
 		for (const prompt of prompts) {
@@ -95,7 +95,7 @@ export class PromptRepository {
 
 	private async readPrompt(filePath: string): Promise<SystemPrompt | null> {
 		try {
-			const content = await this.app.vault.adapter.read(filePath);
+			const content = await this._app.vault.adapter.read(filePath);
 			return JSON.parse(content) as SystemPrompt;
 		} catch (error) {
 			console.warn(`[Prompts] Failed to read prompt file ${filePath}:`, error);
@@ -104,7 +104,7 @@ export class PromptRepository {
 	}
 
 	private async loadPromptsFromFolder(): Promise<SystemPrompt[]> {
-		const adapter = this.app.vault.adapter;
+		const adapter = this._app.vault.adapter;
 		const prompts: SystemPrompt[] = [];
 		const listing = await adapter.list(this.baseFolder);
 
@@ -122,7 +122,7 @@ export class PromptRepository {
 	}
 
 	private async removeOrphanedPromptFiles(keep: Set<string>): Promise<void> {
-		const adapter = this.app.vault.adapter;
+		const adapter = this._app.vault.adapter;
 		const listing = await adapter.list(this.baseFolder);
 
 		for (const file of listing.files) {
@@ -142,7 +142,7 @@ export class PromptRepository {
 
 	private async readIndex(): Promise<PromptIndexFile> {
 		try {
-			const content = await this.app.vault.adapter.read(this.indexPath);
+			const content = await this._app.vault.adapter.read(this.indexPath);
 			return JSON.parse(content) as PromptIndexFile;
 		} catch {
 			return {
@@ -155,6 +155,6 @@ export class PromptRepository {
 	}
 
 	private async writeIndex(index: PromptIndexFile): Promise<void> {
-		await this.app.vault.adapter.write(this.indexPath, JSON.stringify(index, null, 2));
+		await this._app.vault.adapter.write(this.indexPath, JSON.stringify(index, null, 2));
 	}
 }

@@ -4,13 +4,13 @@
  * Simple event emitter for the editor system.
  */
 
-export class EventEmitter<Events extends Record<string, any>> {
-	private listeners = new Map<keyof Events, Set<Function>>();
+export class EventEmitter<Events extends Record<string, unknown>> {
+	private listeners = new Map<keyof Events, Set<(_data: unknown) => void>>();
 
 	/**
 	 * Add event listener
 	 */
-	on<K extends keyof Events>(event: K, handler: (data: Events[K]) => void): void {
+	on<K extends keyof Events>(event: K, handler: (_data: Events[K]) => void): void {
 		if (!this.listeners.has(event)) {
 			this.listeners.set(event, new Set());
 		}
@@ -20,7 +20,7 @@ export class EventEmitter<Events extends Record<string, any>> {
 	/**
 	 * Remove event listener
 	 */
-	off<K extends keyof Events>(event: K, handler: (data: Events[K]) => void): void {
+	off<K extends keyof Events>(event: K, handler: (_data: Events[K]) => void): void {
 		const handlers = this.listeners.get(event);
 		if (handlers) {
 			handlers.delete(handler);
@@ -35,8 +35,8 @@ export class EventEmitter<Events extends Record<string, any>> {
 		if (handlers) {
 			handlers.forEach(handler => {
 				try {
-					handler(data);
-				} catch (error) {
+					handler(data as unknown);
+				} catch (error: unknown) {
 					console.error(`Error in event handler for ${String(event)}:`, error);
 				}
 			});
@@ -46,9 +46,9 @@ export class EventEmitter<Events extends Record<string, any>> {
 	/**
 	 * Add one-time event listener
 	 */
-	once<K extends keyof Events>(event: K, handler: (data: Events[K]) => void): void {
-		const onceHandler = (data: Events[K]) => {
-			handler(data);
+	once<K extends keyof Events>(event: K, handler: (_data: Events[K]) => void): void {
+		const onceHandler = (_data: Events[K]) => {
+			handler(_data);
 			this.off(event, onceHandler);
 		};
 		this.on(event, onceHandler);

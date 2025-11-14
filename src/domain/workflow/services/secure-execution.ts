@@ -13,10 +13,10 @@ import { WorkflowServices } from '../core/types';
 // Predefined safe globals that can be accessed in the sandbox
 const SAFE_GLOBALS = {
   console: {
-    log: (...args: any[]) => console.debug('[SANDBOX]', ...args),
-    warn: (...args: any[]) => console.warn('[SANDBOX]', ...args),
-    error: (...args: any[]) => console.error('[SANDBOX]', ...args),
-    info: (...args: any[]) => console.info('[SANDBOX]', ...args),
+    log: (...args: unknown[]) => console.debug('[SANDBOX]', ...args),
+    warn: (...args: unknown[]) => console.warn('[SANDBOX]', ...args),
+    error: (...args: unknown[]) => console.error('[SANDBOX]', ...args),
+    info: (...args: unknown[]) => console.debug('[SANDBOX]', ...args),
   },
   Math: Math,
   Date: Date,
@@ -53,16 +53,16 @@ export interface SecureExecutionOptions {
   /** Allowed built-in modules (default: []) */
   builtinModules?: string[];
   /** External modules that can be required (default: {}) */
-  externalModules?: Record<string, any>;
+  externalModules?: Record<string, unknown>;
   /** Whether to allow asynchronous operations (default: false) */
   allowAsync?: boolean;
   /** Custom context variables to inject */
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 export interface SecureExecutionResult {
   /** Execution result */
-  result: any;
+  result: unknown;
   /** Execution time in milliseconds */
   executionTime: number;
   /** Memory usage information */
@@ -94,8 +94,8 @@ export class SecureCodeExecutionService {
    */
   async executeCode(
     code: string,
-    args: Record<string, any>,
-    services: WorkflowServices,
+    args: Record<string, unknown>,
+    _services: WorkflowServices,
     options: SecureExecutionOptions = {}
   ): Promise<SecureExecutionResult> {
     const startTime = Date.now();
@@ -120,7 +120,7 @@ export class SecureCodeExecutionService {
       this.validateCodeSafety(code);
 
       // Create sandbox environment with restricted access
-      const sandbox = this.createSandboxEnvironment(args, services, opts);
+      const sandbox = this.createSandboxEnvironment(args, _services, opts);
 
       // Configure VM with strict security settings
       const vm = new NodeVM({
@@ -154,8 +154,8 @@ export class SecureCodeExecutionService {
         try {
           // Compile script for better performance on repeated executions
           const script = new VMScript(`module.exports = (function(${Object.keys(args).join(', ')})) { ${code} })`);
-          const compiledFunction = vm.run(script);
-          
+          const compiledFunction = vm.run(script) as (...args: unknown[]) => unknown;
+
           // Execute the function with provided arguments
           const result = await compiledFunction(...Object.values(args));
           
@@ -164,30 +164,32 @@ export class SecureCodeExecutionService {
             executionTime: Date.now() - startTime,
             memoryUsage: this.getMemoryUsage(),
           };
-        } catch (compileError) {
+        } catch (compileError: unknown) {
           // If compilation fails, try executing as an expression
-          if (compileError.message.includes('Unexpected token')) {
+          const err = compileError instanceof Error ? compileError : new Error(String(compileError));
+          if (err.message.includes('Unexpected token')) {
             try {
               const script = new VMScript(`module.exports = ${code}`);
-              const result = vm.run(script);
+              const result = (vm.run(script) as unknown);
               return {
                 result,
                 executionTime: Date.now() - startTime,
                 memoryUsage: this.getMemoryUsage(),
               };
-            } catch (exprError) {
-              throw new Error(`Code compilation failed: ${compileError.message}`);
+            } catch (_exprError: unknown) {
+              throw new Error(`Code compilation failed: ${err.message}`);
             }
           }
-          throw new Error(`Code execution failed: ${compileError.message}`);
+          throw new Error(`Code execution failed: ${err.message}`);
         }
       })();
 
       // Race execution against timeout
       const result = await Promise.race([executionPromise, timeoutPromise]);
       return result;
-    } catch (error: any) {
-      throw new Error(`Secure code execution failed: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Secure code execution failed: ${errorMessage}`);
     }
   }
 
@@ -195,22 +197,22 @@ export class SecureCodeExecutionService {
    * Create a secure sandbox environment with whitelisted globals
    */
   private createSandboxEnvironment(
-    args: Record<string, any>,
+    args: Record<string, unknown>,
     services: WorkflowServices,
     options: Required<SecureExecutionOptions>
-  ): Record<string, any> {
-    const sandbox: Record<string, any> = {
+  ): Record<string, unknown> {
+    const sandbox: Record<string, unknown> = {
       // Safe globals
       ...SAFE_GLOBALS,
-      
+
       // User-provided arguments
       ...args,
-      
+
       // Limited services access
       services: {
         // Only expose safe service methods
-        log: services.vault ? (message: string) => {
-          console.debug(`[Workflow Service] ${message}`);
+        log: services.vault ? (_message: string) => {
+          console.debug(`[Workflow Service] ${_message}`);
         } : undefined,
       },
       
@@ -218,7 +220,7 @@ export class SecureCodeExecutionService {
       ...options.context,
       
       // Utility functions
-      setTimeout: (fn: Function, delay: number) => {
+      setTimeout: (fn: (...args: unknown[]) => void, delay: number) => {
         if (delay > options.timeout) {
           throw new Error('setTimeout delay exceeds execution timeout');
         }
@@ -236,17 +238,18 @@ export class SecureCodeExecutionService {
   /**
    * Sanitize sandbox to remove potentially dangerous properties
    */
-  private sanitizeSandbox(sandbox: Record<string, any>): void {
+  private sanitizeSandbox(sandbox: Record<string, unknown>): void {
     // Remove or neutralize dangerous global properties
-    if (sandbox.global) {
-      if ('process' in sandbox.global) {
-        delete (sandbox.global as Record<string, unknown>).process;
+    if (sandbox.global && typeof sandbox.global === 'object' && sandbox.global !== null) {
+      const globalObj = sandbox.global as Record<string, unknown>;
+      if ('process' in globalObj) {
+        delete globalObj.process;
       }
-      if ('Buffer' in sandbox.global) {
-        delete (sandbox.global as Record<string, unknown>).Buffer;
+      if ('Buffer' in globalObj) {
+        delete globalObj.Buffer;
       }
-      if ('console' in sandbox.global) {
-        delete (sandbox.global as Record<string, unknown>).console;
+      if ('console' in globalObj) {
+        delete globalObj.console;
       }
     }
     
@@ -304,8 +307,8 @@ export class SecureCodeExecutionService {
    * Execute a function with additional safety checks
    */
   async executeFunction<T>(
-    func: (...args: any[]) => T,
-    args: any[],
+    func: (...args: unknown[]) => T,
+    args: unknown[],
     timeout: number = 5000
   ): Promise<T> {
     return new Promise<T>((resolve, reject) => {
@@ -317,9 +320,9 @@ export class SecureCodeExecutionService {
         const result = func(...args);
         clearTimeout(timer);
         resolve(result);
-      } catch (error) {
+      } catch (error: unknown) {
         clearTimeout(timer);
-        reject(error);
+        reject(error instanceof Error ? error : new Error(String(error)));
       }
     });
   }

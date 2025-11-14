@@ -7,8 +7,8 @@ export interface Workflow {
 	id: string;
 	name: string;
 	description?: string;
-	nodes: any[];
-	edges: any[];
+	nodes: unknown[];
+	edges: unknown[];
 	createdAt: number;
 	updatedAt: number;
 }
@@ -19,5 +19,5 @@ export interface WorkflowExecution {
 	status: string;
 	startTime: number;
 	endTime?: number;
-	results?: any;
+	results?: unknown;
 }

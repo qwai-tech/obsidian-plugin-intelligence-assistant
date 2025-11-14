@@ -5,7 +5,7 @@
  * Simple file-based storage with JSON format.
  */
 
-import { TFile, Vault } from 'obsidian';
+import { App, TFile, Vault } from 'obsidian';
 import { Workflow } from '../core/types';
 
 /**
@@ -14,10 +14,12 @@ import { Workflow } from '../core/types';
 export class WorkflowStorage {
 	private vault: Vault;
 	private folderPath: string;
+	private app?: App;
 
-	constructor(vault: Vault, folderPath = 'workflows') {
+	constructor(vault: Vault, folderPath = 'workflows', app?: App) {
 		this.vault = vault;
 		this.folderPath = folderPath;
+		this.app = app;
 	}
 
 	/**
@@ -29,7 +31,7 @@ export class WorkflowStorage {
 			if (!folder) {
 				await this.vault.createFolder(this.folderPath);
 			}
-		} catch (error) {
+		} catch (_error: unknown) {
 			// Folder might already exist
 			console.debug('Workflow storage folder initialized');
 		}
@@ -58,8 +60,9 @@ export class WorkflowStorage {
 				const adapter = this.vault.adapter;
 				await adapter.write(filePath, content);
 			}
-		} catch (error: any) {
-			throw new Error(`Failed to save workflow: ${error.message}`);
+		} catch (error: unknown) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			throw new Error(`Failed to save workflow: ${errorMessage}`);
 		}
 	}
 
@@ -79,7 +82,7 @@ export class WorkflowStorage {
 			}
 
 			return null;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error(`Failed to load workflow ${id}:`, error);
 			return null;
 		}
@@ -98,7 +101,7 @@ export class WorkflowStorage {
 			}
 
 			return null;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error(`Failed to load workflow from ${path}:`, error);
 			return null;
 		}
@@ -121,7 +124,7 @@ export class WorkflowStorage {
 				const content = await this.vault.read(file);
 				const workflow = JSON.parse(content) as Workflow;
 				workflows.push(workflow);
-			} catch (error) {
+			} catch (error: unknown) {
 				console.error(`Failed to load workflow from ${file.path}:`, error);
 			}
 		}
@@ -143,22 +146,27 @@ export class WorkflowStorage {
 			const file = this.vault.getAbstractFileByPath(filePath);
 
 			if (file instanceof TFile) {
-				await this.vault.delete(file);
+				const app = this.app ?? (this.vault as unknown as { app?: App }).app;
+				if (!app?.fileManager?.trashFile) {
+					throw new Error('File manager is not available');
+				}
+				await app.fileManager.trashFile(file);
 			}
-		} catch (error: any) {
-			throw new Error(`Failed to delete workflow: ${error.message}`);
+		} catch (error: unknown) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			throw new Error(`Failed to delete workflow: ${errorMessage}`);
 		}
 	}
 
 	/**
 	 * Check if a workflow exists
 	 */
-	async exists(id: string): Promise<boolean> {
+	exists(id: string): Promise<boolean> {
 		const fileName = this.getFileName(id);
 		const filePath = `${this.folderPath}/${fileName}`;
 		const file = this.vault.getAbstractFileByPath(filePath);
 
-		return file instanceof TFile;
+		return Promise.resolve(file instanceof TFile);
 	}
 
 	/**
@@ -228,8 +236,9 @@ export class WorkflowStorage {
 			await this.save(workflow);
 
 			return workflow;
-		} catch (error: any) {
-			throw new Error(`Failed to import workflow: ${error.message}`);
+		} catch (error: unknown) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			throw new Error(`Failed to import workflow: ${errorMessage}`);
 		}
 	}
 

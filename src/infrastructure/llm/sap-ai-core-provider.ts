@@ -52,7 +52,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	// Cache for deployment IDs keyed by model name, with 5-minute TTL (matching SAP AI SDK default)
 	private deploymentCache = new Map<string, { deployment: DeploymentInfo; expiry: number }>();
 
-	constructor(config: any) {
+	constructor(config: unknown) {
 		super(config);
 		this.parseServiceKey();
 	}
@@ -67,9 +67,23 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	private parseServiceKey() {
 		if (this.config.serviceKey) {
 			try {
-				this.serviceKey = typeof this.config.serviceKey === 'string'
-					? JSON.parse(this.config.serviceKey)
-					: this.config.serviceKey;
+				const parsedServiceKey = (typeof this.config.serviceKey === 'string'
+					? (JSON.parse(this.config.serviceKey) as { clientid?: string; clientsecret?: string; url?: string; serviceurls?: { AI_API_URL?: string } })
+					: (this.config.serviceKey as { clientid?: string; clientsecret?: string; url?: string; serviceurls?: { AI_API_URL?: string } }));
+
+				if (parsedServiceKey && typeof parsedServiceKey.clientid === 'string' && typeof parsedServiceKey.clientsecret === 'string' && typeof parsedServiceKey.url === 'string') {
+					this.serviceKey = {
+						clientid: parsedServiceKey.clientid,
+						clientsecret: parsedServiceKey.clientsecret,
+						url: parsedServiceKey.url,
+						serviceurls: (parsedServiceKey.serviceurls && typeof parsedServiceKey.serviceurls.AI_API_URL === 'string')
+							? { AI_API_URL: parsedServiceKey.serviceurls.AI_API_URL }
+							: undefined
+					};
+				} else {
+					console.error('Invalid SAP service key: missing required fields (clientid, clientsecret, url)');
+					this.serviceKey = null;
+				}
 
 				// Validate service key structure
 				if (this.serviceKey) {
@@ -139,7 +153,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				throw new Error(`OAuth2 authentication failed: ${response.status} - ${errorText}`);
 			}
 
-			const tokenData: TokenResponse = response.json;
+			const tokenData = JSON.parse(typeof response.text === 'string' ? response.text : String(response.text)) as TokenResponse;
 
 			if (!tokenData.access_token) {
 				throw new Error('Invalid token response: missing access_token');
@@ -153,8 +167,9 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			return this.accessToken;
 		} catch (error) {
 			console.error('SAP AI Core OAuth2 authentication failed:', error);
+			const errorMessage = error instanceof Error ? error.message : String(error);
 			throw new Error(
-				`SAP AI Core authentication failed: ${error.message}. ` +
+				`SAP AI Core authentication failed: ${errorMessage}. ` +
 				`Please verify your OAuth2 credentials (Client ID, Client Secret, Token URL).`
 			);
 		}
@@ -238,7 +253,6 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 		// Query SAP AI Core for deployments matching the model criteria
 		// Using the /v2/lm/deployments endpoint with query parameters
-		const _resourceGroup = this.config.resourceGroup || 'default';
 		const url = `${baseUrl}/v2/lm/deployments?$filter=status eq 'RUNNING'`;
 
 		const response = await requestUrl({
@@ -251,23 +265,45 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			throw new Error(`Failed to fetch deployments for model ${modelName}: ${response.status} - ${response.text || 'Unknown error'}`);
 		}
 
-		const data = response.json;
+		const data = response.json as {
+			resources?: unknown[];
+			value?: unknown[];
+		};
 		let deployments = Array.isArray(data.resources) ? data.resources :
 						Array.isArray(data.value) ? data.value :
 						Array.isArray(data) ? data : [];
 
 		// Filter deployments by model name (this would need to check the actual configuration)
-		deployments = deployments.filter((deployment: any) => {
+		deployments = deployments.filter((deployment: unknown) => {
+			// Type guard for deployment structure
+			const hasConfig = (obj: unknown): obj is {
+				configuration?: { parameters?: Record<string, unknown> };
+				parameters?: Record<string, unknown>;
+				name?: string;
+				configurationName?: string;
+			} => {
+				return typeof obj === 'object' && obj !== null;
+			};
+
+			if (!hasConfig(deployment)) {
+				return false;
+			}
+
 			// Check if deployment configuration matches the requested model
 			const config = deployment.configuration || {};
 			const parameters = config.parameters || deployment.parameters || {};
 
 			// For different model types, check their specific parameters
 			// This is a simplified check - in practice, the exact configuration structure may vary
-			const modelConfig = parameters.huggingface || parameters.azureOpenai || parameters.openai || {};
-			const deployedModelName = modelConfig.model || modelConfig.modelName || deployment.name || deployment.configurationName || '';
+			const modelConfig = (parameters).huggingface ||
+								(parameters).azureOpenai ||
+								(parameters).openai || {};
 
-			return deployedModelName.toLowerCase().includes(modelName.toLowerCase());
+			const modelConfigTyped = modelConfig as { model?: string; modelName?: string };
+			const deployedModelName = modelConfigTyped.model || modelConfigTyped.modelName ||
+									  deployment.name || deployment.configurationName || '';
+
+			return String(deployedModelName).toLowerCase().includes(modelName.toLowerCase());
 		});
 
 		if (deployments.length === 0) {
@@ -276,7 +312,12 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 		// If multiple deployments found with the same model name, use the first one
 		// (This matches SAP AI SDK behavior which uses the first deployment if multiple exist)
-		const deployment = deployments[0];
+		const deployment = deployments[0] as {
+			id: string;
+			configuration?: { scenarioId?: string };
+			scenarioId?: string;
+			scenario_id?: string;
+		};
 		const deploymentId = deployment.id;
 
 		// Extract scenario information to determine the correct endpoint path
@@ -367,7 +408,8 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			});
 		} catch (error) {
 			console.error(`SAP AI Core request failed to URL: ${url}`, error);
-			throw new Error(`SAP AI Core API request failed to connect: ${error.message}`);
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			throw new Error(`SAP AI Core API request failed to connect: ${errorMessage}`);
 		}
 
 		if (response.status === 404) {
@@ -378,13 +420,23 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			throw new Error(`SAP AI Core API request failed: ${response.status} - ${errorText}`);
 		}
 
-		const data = response.json;
+		const data = response.json as {
+			choices?: Array<{ message?: { content?: string } }>;
+			usage?: {
+				prompt_tokens?: number;
+				promptTokens?: number;
+				completion_tokens?: number;
+				completionTokens?: number;
+				total_tokens?: number;
+				totalTokens?: number;
+			};
+		};
 
 		// Extract response from SAP AI Core (should follow OpenAI-compatible format)
 		const content = data.choices?.[0]?.message?.content || '';
 		const usage = data.usage || {};
 
-		console.debug(`SAP AI Core response: ${content.substring(0, 50)}... (truncated)`);
+		console.debug(`SAP AI Core response: ${String(content).substring(0, 50)}... (truncated)`);
 
 		return {
 			content,
@@ -401,7 +453,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	 * 
 	 * Supports both deployment IDs and model names (with automatic resolution).
 	 */
-	async streamChat(request: ChatRequest, onChunk: (chunk: StreamChunk) => void): Promise<void> {
+	async streamChat(request: ChatRequest, onChunk: (_chunk: StreamChunk) => void): Promise<void> {
 		const headers = await this.getAuthHeaders();
 
 		// Use SAP AI Core Inference Service endpoint
@@ -466,7 +518,8 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			});
 		} catch (error) {
 			console.error(`SAP AI Core streaming request failed to URL: ${url}`, error);
-			throw new Error(`SAP AI Core streaming API request failed to connect: ${error.message}`);
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			throw new Error(`SAP AI Core streaming API request failed to connect: ${errorMessage}`);
 		}
 
 		if (response.status === 404) {
@@ -493,7 +546,12 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				}
 
 				try {
-					const parsed = JSON.parse(data);
+					const parsed = JSON.parse(data) as {
+						choices?: Array<{
+							delta?: { content?: string };
+							finish_reason?: string;
+						}>;
+					};
 
 					// Handle OpenAI-compatible SSE response format from SAP AI Core
 					const content = parsed.choices?.[0]?.delta?.content;
@@ -531,8 +589,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 						   this.config.baseUrl ||
 						   'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
 
-			const _resourceGroup = this.config.resourceGroup || 'default';
-
+	
 			// Fetch both deployments and configurations
 			const deploymentsUrl = `${baseUrl}/v2/lm/deployments?$filter=status eq 'RUNNING'`;
 			const configurationsUrl = `${baseUrl}/v2/lm/configurations`;
@@ -547,23 +604,30 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				return this.getDefaultModels();
 			}
 
-			const deploymentsData = deploymentsResponse.json;
-			const configurationsData = configurationsResponse.status === 200 ? configurationsResponse.json : null;
+			const deploymentsData = deploymentsResponse.json as {
+				resources?: unknown[];
+				value?: unknown[];
+			};
+			const configurationsData = configurationsResponse.status === 200 ? configurationsResponse.json as {
+				resources?: unknown[];
+				value?: unknown[];
+			} : null;
 
 			// Build a map of configurationId -> configuration for quick lookup
-			const configMap = new Map();
+			const configMap = new Map<string, { id: string; executableId?: string; parameterBindings?: Array<{ key: string; value: string }> }>();
 			if (configurationsData) {
-				const configs = configurationsData.resources || configurationsData.value || configurationsData || [];
+				const configs = configurationsData.resources || configurationsData.value || [];
 				for (const config of configs) {
 					if (Array.isArray(config)) continue;
-					configMap.set(config.id, config);
+					const typedConfig = config as { id: string; executableId?: string; parameterBindings?: Array<{ key: string; value: string }> };
+					configMap.set(typedConfig.id, typedConfig);
 				}
 			}
 
 			const models: ModelInfo[] = [];
 
 			// Handle different possible response formats
-			let deployments = [];
+			let deployments: unknown[] = [];
 			if (deploymentsData.resources) {
 				deployments = deploymentsData.resources;
 			} else if (Array.isArray(deploymentsData)) {
@@ -573,23 +637,60 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			}
 
 			for (const deployment of deployments) {
+				// Type guard for deployment structure
+				const typedDeployment: {
+					status?: string;
+					deploymentStatus?: string;
+					state?: string;
+					id: string;
+					configurationId?: string;
+					configuration?: { id?: string };
+					details?: {
+						resources?: {
+							backendDetails?: { model?: { name?: string; version?: string } };
+							backend_details?: { model?: { name?: string; version?: string } };
+						};
+					};
+					configurationName?: string;
+					name?: string;
+					scenarioId?: string;
+					scenario_id?: string;
+				} = deployment as {
+					status?: string;
+					deploymentStatus?: string;
+					state?: string;
+					id: string;
+					configurationId?: string;
+					configuration?: { id?: string };
+					details?: {
+						resources?: {
+							backendDetails?: { model?: { name?: string; version?: string } };
+							backend_details?: { model?: { name?: string; version?: string } };
+						};
+					};
+					configurationName?: string;
+					name?: string;
+					scenarioId?: string;
+					scenario_id?: string;
+				};
+
 				// Check if deployment is running
-				const isRunning = deployment.status === 'RUNNING' ||
-							   deployment.deploymentStatus === 'RUNNING' ||
-							   deployment.state === 'RUNNING';
+				const isRunning = typedDeployment.status === 'RUNNING' ||
+							   typedDeployment.deploymentStatus === 'RUNNING' ||
+							   typedDeployment.state === 'RUNNING';
 
 				if (isRunning) {
 					// Get the actual model name from multiple sources (priority order):
-					let modelName = null;
-					let modelVersion = null;
-					let executableId = null;
+					let modelName: string | null = null;
+					let modelVersion: string | null = null;
+					let executableId: string | null = null;
 
 					// 1. Try to get from configuration's parameterBindings (most accurate)
-					const configId = deployment.configurationId || deployment.configuration?.id;
+					const configId = typedDeployment.configurationId || typedDeployment.configuration?.id;
 					if (configId && configMap.has(configId)) {
-						const config = configMap.get(configId);
+						const config: { id: string; executableId?: string; parameterBindings?: Array<{ key: string; value: string }> } = configMap.get(configId)!;
 						// Extract executableId from configuration
-						executableId = config.executableId;
+						executableId = config.executableId || null;
 
 						if (config.parameterBindings && Array.isArray(config.parameterBindings)) {
 							for (const binding of config.parameterBindings) {
@@ -603,24 +704,24 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 					}
 
 					// 2. Try from deployment's details.resources.backendDetails.model.name
-					if (!modelName && deployment.details?.resources?.backendDetails?.model?.name) {
-						modelName = deployment.details.resources.backendDetails.model.name;
-						modelVersion = deployment.details.resources.backendDetails.model.version;
+					if (!modelName && typedDeployment.details?.resources?.backendDetails?.model?.name) {
+						modelName = typedDeployment.details.resources.backendDetails.model.name;
+						modelVersion = typedDeployment.details.resources.backendDetails.model.version || null;
 					}
 
 					// 3. Fallback to deployment.details.resources.backend_details (alternative format)
-					if (!modelName && deployment.details?.resources?.backend_details?.model?.name) {
-						modelName = deployment.details.resources.backend_details.model.name;
-						modelVersion = deployment.details.resources.backend_details.model.version;
+					if (!modelName && typedDeployment.details?.resources?.backend_details?.model?.name) {
+						modelName = typedDeployment.details.resources.backend_details.model.name;
+						modelVersion = typedDeployment.details.resources.backend_details.model.version || null;
 					}
 
 					// 4. Fallback to configurationName
 					if (!modelName) {
-						modelName = deployment.configurationName || deployment.name || `Deployment ${deployment.id}`;
+						modelName = typedDeployment.configurationName || typedDeployment.name || `Deployment ${typedDeployment.id}`;
 					}
 
 					// Extract scenario to determine capabilities
-					const scenarioId = deployment.scenarioId || deployment.scenario_id || '';
+					const scenarioId = typedDeployment.scenarioId || typedDeployment.scenario_id || '';
 
 					const capabilities = this.inferCapabilities(scenarioId, modelName);
 
@@ -631,12 +732,12 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 						provider: 'sap-ai-core',
 						capabilities,
 						enabled: true,
-						deploymentId: deployment.id,  // Store deployment ID separately
+						deploymentId: typedDeployment.id,  // Store deployment ID separately
 						scenarioId,     // Save the scenario ID
-						executableId,   // Save the executable ID (e.g., 'azure-openai', 'aws-bedrock')
+						executableId: executableId || undefined,   // Save the executable ID (e.g., 'azure-openai', 'aws-bedrock')
 					});
 
-					console.debug(`SAP AI Core: Found deployment ${deployment.id} -> ${modelName}${modelVersion ? ` (v${modelVersion})` : ''} [${executableId || 'unknown'}]`);
+					console.debug(`SAP AI Core: Found deployment ${typedDeployment.id} -> ${modelName}${modelVersion ? ` (v${modelVersion})` : ''} [${executableId || 'unknown'}]`);
 				}
 			}
 

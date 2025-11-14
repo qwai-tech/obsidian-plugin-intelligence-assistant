@@ -13,7 +13,7 @@ export class OpenAIProvider extends BaseStreamingProvider {
 	protected getHeaders(): Record<string, string> {
 		return {
 			...super.getHeaders(),
-			'Authorization': `Bearer ${this.config.apiKey}`,
+			'Authorization': `Bearer ${this.config.apiKey ?? ''}`,
 		};
 	}
 
@@ -22,7 +22,7 @@ export class OpenAIProvider extends BaseStreamingProvider {
 
 		const maxTokensValue = request.maxTokens ?? 2000;
 		const modelName = this.extractModelName(request.model);
-		const body: any = {
+		const body: Record<string, unknown> = {
 			model: modelName,
 			messages: request.messages,
 			temperature: request.temperature ?? 0.7,
@@ -37,7 +37,12 @@ export class OpenAIProvider extends BaseStreamingProvider {
 			body.max_tokens = maxTokensValue;
 		}
 
-		const response = await this.makeRequest(url, body);
+		const response = await this.makeRequest(url, body) as {
+			json: {
+				choices: Array<{ message: { content: string } }>;
+				usage: { prompt_tokens: number; completion_tokens: number; total_tokens: number };
+			}
+		};
 		const data = response.json;
 
 		return {
@@ -50,12 +55,12 @@ export class OpenAIProvider extends BaseStreamingProvider {
 		};
 	}
 
-	protected prepareStreamRequest(request: ChatRequest): { url: string; body: any } {
+	protected prepareStreamRequest(request: ChatRequest): { url: string; body: unknown } {
 		const url = this.getBaseUrl('https://api.openai.com/v1') + '/chat/completions';
 
 		const maxTokensValue = request.maxTokens ?? 2000;
 		const modelName = this.extractModelName(request.model);
-		const body: any = {
+		const body: Record<string, unknown> = {
 			model: modelName,
 			messages: request.messages,
 			temperature: request.temperature ?? 0.7,
@@ -72,11 +77,22 @@ export class OpenAIProvider extends BaseStreamingProvider {
 		return { url, body };
 	}
 
-	protected parseStreamChunk(data: any): ParsedStreamChunk | null {
+	protected parseStreamChunk(data: unknown): ParsedStreamChunk | null {
 		// Handle string "[DONE]" marker (already handled by base class)
 		// This is here for documentation
 		if (data === '[DONE]') {
 			return { content: null, done: true };
+		}
+
+		// Type guard for OpenAI's data structure
+		const hasChoices = (obj: unknown): obj is {
+			choices?: Array<{ delta?: { content?: string } }>;
+		} => {
+			return typeof obj === 'object' && obj !== null && 'choices' in obj;
+		};
+
+		if (!hasChoices(data)) {
+			return null;
 		}
 
 		// Extract content from OpenAI's structure

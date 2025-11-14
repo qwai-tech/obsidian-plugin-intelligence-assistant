@@ -1,7 +1,7 @@
 // Chat view component
 import { WorkspaceLeaf } from 'obsidian';
-import { MessageListComponent } from '../components/chat/message-list.component';
-import { ChatState } from '../state/chat.state';
+import { MessageListComponent } from './message-list.component';
+import { ChatState, type ChatStateSnapshot } from '../../state/chat.state';
 import type IntelligenceAssistantPlugin from '@plugin';
 
 export class ChatViewComponent {
@@ -12,13 +12,13 @@ export class ChatViewComponent {
 
   constructor(
     private leaf: WorkspaceLeaf,
-    private plugin: IntelligenceAssistantPlugin
+    private _plugin: IntelligenceAssistantPlugin
   ) {
     this.chatState = new ChatState();
     this.container = leaf.view.containerEl;
   }
 
-  async onload(): Promise<void> {
+  onload(): Promise<void> {
     this.container.empty();
     
     // Create chat interface
@@ -39,7 +39,7 @@ export class ChatViewComponent {
     // Setup event listeners
     this.inputElement.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
-        this.handleSendMessage();
+        void this.handleSendMessage();
       }
     });
     
@@ -47,16 +47,17 @@ export class ChatViewComponent {
     this.chatState.subscribe((state) => {
       this.updateView(state);
     });
+    return Promise.resolve();
   }
 
-  private updateView(state: any): void {
+  private updateView(state: ChatStateSnapshot): void {
     // Update message list
     if (state.currentConversation) {
       this.messageList.render(state.currentConversation.getMessages());
     }
   }
 
-  private async handleSendMessage(): Promise<void> {
+  private handleSendMessage(): Promise<void> {
     const content = this.inputElement.value.trim();
     if (!content) return;
 

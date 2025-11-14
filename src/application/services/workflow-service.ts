@@ -23,7 +23,7 @@ export async function createWorkflowFile(
 
 	try {
 		const createdFile = await app.vault.create(fullPath, content);
-		new Notice(`Created workflow "${displayName}"`);
+		new Notice(`✅ Workflow created: "${displayName}"`);
 
 		const leaf = app.workspace.getLeaf(false);
 		await leaf.openFile(createdFile);

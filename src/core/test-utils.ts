@@ -6,13 +6,13 @@ export class TestUtils {
   static createMockVault(): Vault {
     return {
       adapter: {
-        read: async () => '{}',
-        write: async () => Promise.resolve(),
-        exists: async () => true,
-        remove: async () => Promise.resolve(),
-        list: async () => ({ files: [], folders: [] }),
+        read: () => Promise.resolve('{}'),
+        write: () => Promise.resolve(),
+        exists: () => Promise.resolve(true),
+        remove: () => Promise.resolve(),
+        list: () => Promise.resolve({ files: [], folders: [] }),
         getName: () => 'mock-adapter',
-      } as any
+      } as unknown
     } as Vault;
   }
 
@@ -29,31 +29,31 @@ export class TestUtils {
       },
       models: [],
       isInitialized: true,
-      initialize: async () => Promise.resolve(),
-      chatCompletion: async () => ({
+      initialize: () => Promise.resolve(),
+      chatCompletion: () => Promise.resolve({
         content: { text: 'Mock response' },
         usage: { promptTokens: 10, completionTokens: 20, totalTokens: 30 },
         model: 'mock-model',
         createdAt: new Date()
       }),
-      chatCompletionStream: async (messages, options, onChunk) => {
+      chatCompletionStream: (messages, options, onChunk) => {
         onChunk({ content: 'Mock stream chunk', index: 0, isFinished: true });
-        return {
+        return Promise.resolve({
           content: { text: 'Mock stream response' },
           usage: { promptTokens: 10, completionTokens: 20, totalTokens: 30 },
           model: 'mock-model',
           createdAt: new Date()
-        };
+        });
       },
-      generateEmbedding: async () => ({
+      generateEmbedding: () => Promise.resolve({
         embeddings: [[0.1, 0.2, 0.3]],
         model: 'mock-embedding-model',
         usage: { promptTokens: 10, totalTokens: 10 }
       }),
-      countTokens: async () => ({ count: 10, model: 'mock-model' }),
+      countTokens: () => Promise.resolve({ count: 10, model: 'mock-model' }),
       validateConfig: () => ({ success: true, errors: [] }),
-      testConnection: async () => ({ success: true, message: 'Connected' }),
-      cleanup: async () => Promise.resolve()
+      testConnection: () => Promise.resolve({ success: true, message: 'connected' }),
+      cleanup: () => Promise.resolve()
     } as ILLMProvider;
   }
 }

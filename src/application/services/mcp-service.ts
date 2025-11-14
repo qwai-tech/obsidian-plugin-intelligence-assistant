@@ -23,15 +23,15 @@ export function snapshotMcpTools(tools: MCPTool[]): CachedMCPTool[] {
  * Returns true if any connections were made, false otherwise
  */
 export async function ensureAutoConnectedMcpServers(
-	servers: MCPServerConfig[],
+	_servers: MCPServerConfig[],
 	toolManager: ToolManager,
-	onSettingsUpdate: (servers: MCPServerConfig[]) => Promise<void>
+	onSettingsUpdate: (_servers: MCPServerConfig[]) => Promise<void>
 ): Promise<boolean> {
 	const connected = new Set(toolManager.getMCPServers());
 	let settingsDirty = false;
 	let connectionsChanged = false;
 
-	for (const server of servers) {
+	for (const server of _servers) {
 		// Skip disabled servers
 		if (!server.enabled) {
 			continue;
@@ -66,7 +66,7 @@ export async function ensureAutoConnectedMcpServers(
 
 	// Save updated cache if needed
 	if (settingsDirty) {
-		await onSettingsUpdate(servers);
+		await onSettingsUpdate(_servers);
 	}
 
 	return connectionsChanged;
@@ -77,11 +77,11 @@ export async function ensureAutoConnectedMcpServers(
  * Similar to ensureAutoConnectedMcpServers but with simpler interface
  */
 export async function initializeMCPServers(
-	servers: MCPServerConfig[],
+	_servers: MCPServerConfig[],
 	toolManager: ToolManager,
-	onSettingsUpdate: (servers: MCPServerConfig[]) => Promise<void>
+	onSettingsUpdate: (_servers: MCPServerConfig[]) => Promise<void>
 ): Promise<void> {
-	await ensureAutoConnectedMcpServers(servers, toolManager, onSettingsUpdate);
+	await ensureAutoConnectedMcpServers(_servers, toolManager, onSettingsUpdate);
 }
 
 /**

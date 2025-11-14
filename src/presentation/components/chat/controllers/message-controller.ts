@@ -41,8 +41,8 @@ export class MessageController extends BaseController {
 			this.messagesContainer,
 			message,
 			{
-				app: this.app,
-				plugin: this.plugin,
+				app: this._app,
+				plugin: this._plugin,
 				mode: this.state.mode,
 				messages: this.state.messages
 			},

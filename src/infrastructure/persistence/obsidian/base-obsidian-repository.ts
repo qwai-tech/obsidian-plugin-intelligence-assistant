@@ -5,10 +5,14 @@ import type { EntitySerializer } from './types';
 
 export abstract class BaseObsidianRepository<T> implements IRepository<T> {
   constructor(
-    protected readonly vault: Vault,
-    protected readonly basePath: string,
-    protected readonly serializer: EntitySerializer<T>
+    protected readonly _vault: Vault,
+    protected readonly _basePath: string,
+    protected readonly _serializer: EntitySerializer<T>
   ) {}
+
+  protected get vault(): Vault { return this._vault; }
+  protected get basePath(): string { return this._basePath; }
+  protected get serializer(): EntitySerializer<T> { return this._serializer; }
 
   async save(entity: T): Promise<T> {
     const filePath = this.getFilePath(this.getEntityId(entity));
@@ -66,5 +70,5 @@ export abstract class BaseObsidianRepository<T> implements IRepository<T> {
     return `${this.basePath}/${id}.json`;
   }
 
-  protected abstract getEntityId(entity: T): string;
+  protected abstract getEntityId(_entity: T): string;
 }

@@ -5,20 +5,105 @@
  * Includes essential nodes for triggers, AI, data processing, and logic.
  */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { NodeDef, NodeData, ExecutionContext } from '../core/types';
-import { nodeRegistry } from './registry';
-import { ErrorHandler, SecurityError, ServiceError, ExecutionError } from '../services/error-handler';
-import { resolveVariables } from '../core/variable-resolver';
+import { Notice, TFile } from 'obsidian';
+import type { MetadataCache, RequestUrlParam, Vault } from 'obsidian';
 
-// ============================================================================
-// HELPER FUNCTIONS
-// ============================================================================
+import { ExecutionContext, NodeData, NodeDef, WorkflowAIService } from '../core/types';
+import { resolveVariables } from '../core/variable-resolver';
+import { getErrorMessage, isRecord } from '@/types/type-utils';
+import { nodeRegistry } from './registry';
+
+
+function toStringSafe(value: unknown, fallback = ''): string {
+	if (value === null || value === undefined) return fallback;
+	if (typeof value === 'string') return value;
+	if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint') {
+		return String(value);
+	}
+	if (typeof value === 'object') {
+		try {
+			return JSON.stringify(value);
+		} catch {
+			return fallback;
+		}
+	}
+	return fallback;
+}
+
+const EMPTY_OBJECT: Record<string, unknown> = {};
+type CacheEntry = { value: unknown; timestamp: number; ttl: number };
+
+function toNumberSafe(value: unknown, fallback = 0): number {
+	if (typeof value === 'number' && Number.isFinite(value)) {
+		return value;
+	}
+	const parsed = Number(value);
+	return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function toBooleanSafe(value: unknown, fallback = false): boolean {
+	if (typeof value === 'boolean') return value;
+	if (value === 'true') return true;
+	if (value === 'false') return false;
+	return fallback;
+}
+
+function toRecord(value: unknown): Record<string, unknown> {
+	return isRecord(value) ? value : { ...EMPTY_OBJECT };
+}
+
+function parseJsonValue<T>(value: unknown, fallback: T): T {
+	if (typeof value === 'string') {
+		try {
+			return JSON.parse(value) as T;
+		} catch (error) {
+			console.warn('Failed to parse JSON value', getErrorMessage(error));
+		}
+	}
+	return (value as T) ?? fallback;
+}
+
+function getInputJson(inputs: NodeData[], index = 0): Record<string, unknown> {
+	return inputs[index]?.json ?? { ...EMPTY_OBJECT };
+}
+
+function getValueByPath(data: Record<string, unknown>, path: string): unknown {
+	return path.split('.').reduce<unknown>((current, key) => {
+		if (isRecord(current)) {
+			return current[key];
+		}
+		return undefined;
+	}, data);
+}
+
+function requireVault(context: ExecutionContext): Vault {
+	const { vault } = context.services;
+	if (!vault) {
+		throw new Error('Vault service is not available');
+	}
+	return vault;
+}
+
+function requireMetadataCache(context: ExecutionContext): MetadataCache {
+	const metadataCache = context.services.metadataCache ?? context.services.app?.metadataCache;
+	if (!metadataCache) {
+		throw new Error('Metadata cache is not available');
+	}
+	return metadataCache;
+}
+
+function requireAIService(context: ExecutionContext): WorkflowAIService {
+	const aiService = context.services.ai;
+	if (!aiService) {
+		throw new Error('AI service is not available');
+	}
+	return aiService;
+}
 
 /**
  * Get all available models with provider information
  */
-async function getAvailableModelsWithProvider(): Promise<{ label: string; value: string }[]> {
+function getAvailableModelsWithProvider(): Promise<{ label: string; value: string }[]> {
 	try {
 		// For now, return a comprehensive list with provider info
 		const defaultModels = [
@@ -101,16 +186,16 @@ const startNode: NodeDef = {
 			description: 'Initial input data for workflow (JSON format)',
 		},
 	],
-	async execute(inputs, config, context) {
+	execute(inputs, config, _context: ExecutionContext) {
 		try {
 			// Parse input JSON
-			const data = typeof config.input === 'string'
+			const data: unknown = typeof config.input === 'string'
 				? JSON.parse(config.input || '{}')
 				: config.input || {};
 
-			return [{ json: data }];
+			return [{ json: toRecord(data) }];
 		} catch (error) {
-			throw new Error(`Failed to parse input data: ${error.message}`);
+			throw new Error(`Failed to parse input data: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -167,12 +252,12 @@ const llmChatNode: NodeDef = {
 			description: 'Control output randomness (0-2, higher = more random)',
 		},
 	],
-	async execute(inputs, config, context) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const { model, prompt, systemPrompt, temperature } = config;
 
 		// Resolve variables in prompt and system prompt
-		const finalPrompt = resolveVariables(prompt, inputs);
-		const finalSystemPrompt = resolveVariables(systemPrompt, inputs);
+		const finalPrompt = resolveVariables(typeof prompt === 'string' ? prompt : '', inputs);
+		const finalSystemPrompt = resolveVariables(typeof systemPrompt === 'string' ? systemPrompt : '', inputs);
 
 		// Call AI service
 		if (!context.services.ai) {
@@ -180,21 +265,26 @@ const llmChatNode: NodeDef = {
 		}
 
 		try {
+			const modelId = typeof model === 'string' ? model : toStringSafe(model, '');
+			const tempNum = typeof temperature === 'number'
+				? temperature
+				: (typeof temperature === 'string' ? Number(temperature) : undefined);
+
 			const response = await context.services.ai.chat([
 				{ role: 'system', content: finalSystemPrompt },
 				{ role: 'user', content: finalPrompt },
-			], { model, temperature });
+			], { model: modelId, temperature: tempNum });
 
 			return [{
 				json: {
 					response,
-					model,
+					model: modelId,
 					prompt: finalPrompt,
 					systemPrompt: finalSystemPrompt,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`AI call failed: ${error.message}`);
+			throw new Error(`AI call failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -223,7 +313,7 @@ const transformNode: NodeDef = {
 			description: 'Transform function, use input to access input data, return transformed data',
 		},
 	],
-	async execute(inputs, config, context) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const { code } = config;
 
 		try {
@@ -245,12 +335,12 @@ const transformNode: NodeDef = {
 					}
 				);
 				
-				results.push({ json: executionResult.result });
+				results.push({ json: toRecord(executionResult.result) });
 			}
 
 			return results;
 		} catch (error) {
-			throw new Error(`Secure code execution failed: ${error.message}`);
+			throw new Error(`Secure code execution failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -275,7 +365,7 @@ const filterNode: NodeDef = {
 			description: 'Filter function, return true to keep, false to discard',
 		},
 	],
-	async execute(inputs, config, context) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const { condition } = config;
 
 		try {
@@ -283,7 +373,7 @@ const filterNode: NodeDef = {
 			const { SecureCodeExecutionService } = await import('../services/secure-execution');
 			const secureExecutor = SecureCodeExecutionService.getInstance();
 
-			const results = [];
+			const results: NodeData[] = [];
 			for (let i = 0; i < inputs.length; i++) {
 				try {
 					const executionResult = await secureExecutor.executeCode(
@@ -297,17 +387,17 @@ const filterNode: NodeDef = {
 						}
 					);
 					
-					if (Boolean(executionResult.result)) {
+					if (executionResult.result) {
 						results.push(inputs[i]);
 					}
 				} catch (error) {
-					context.log(`Filter condition execution failed: ${error.message}`);
+					context.log(`Filter condition execution failed: ${getErrorMessage(error)}`);
 				}
 			}
 
 			return results;
 		} catch (error) {
-			throw new Error(`Secure filter failed: ${error.message}`);
+			throw new Error(`Secure filter failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -336,7 +426,7 @@ const mergeNode: NodeDef = {
 			description: 'How to merge multiple inputs',
 		},
 	],
-	async execute(inputs, config, context) {
+	execute(inputs, config, _context: ExecutionContext) {
 		const { mode } = config;
 
 		switch (mode) {
@@ -392,48 +482,54 @@ const splitNode: NodeDef = {
 			description: 'Delimiter to split text by',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { splitMode, fieldName, delimiter } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const splitMode = typeof config.splitMode === 'string' ? config.splitMode : 'array';
+		const fieldName = typeof config.fieldName === 'string' ? config.fieldName : '';
+		const delimiter = typeof config.delimiter === 'string' ? config.delimiter : ',';
+
+		if (!fieldName) {
+			throw new Error('Field name is required');
+		}
+
+		if (!inputs?.length) {
+			return [{ json: {} }];
+		}
 
 		try {
-			const input = inputs[0]?.json || {};
+			const inputRecord = inputs[0]?.json ?? {};
+			const targetValue = isRecord(inputRecord) ? inputRecord[fieldName] : undefined;
 			const results: NodeData[] = [];
 
 			if (splitMode === 'array') {
-				// Split array field
-				const array = input[fieldName];
-				if (!Array.isArray(array)) {
-					throw new Error(`Field "${fieldName}" is not an array`);
+				if (!Array.isArray(targetValue)) {
+					throw new Error(`Field "${String(fieldName)}" is not an array`);
 				}
-
-				for (let i = 0; i < array.length; i++) {
+				for (let i = 0; i < targetValue.length; i++) {
 					results.push({
 						json: {
-							item: array[i],
+							item: targetValue[i],
 							index: i,
-							total: array.length,
-						}
+							total: targetValue.length,
+						},
 					});
 				}
 			} else {
-				// Split text by delimiter
-				const text = String(input[fieldName] || '');
-				const parts = text.split(delimiter).map(p => p.trim()).filter(p => p);
-
+				const text = toStringSafe(targetValue);
+				const parts = text.split(delimiter).map(part => part.trim()).filter(Boolean);
 				for (let i = 0; i < parts.length; i++) {
 					results.push({
 						json: {
 							text: parts[i],
 							index: i,
 							total: parts.length,
-						}
+						},
 					});
 				}
 			}
 
 			return results.length > 0 ? results : [{ json: {} }];
 		} catch (error) {
-			throw new Error(`Split execution failed: ${error.message}`);
+			throw new Error(`Split execution failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -473,11 +569,12 @@ const aggregateNode: NodeDef = {
 			description: 'Field to aggregate (not needed for count)',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { operation, fieldName } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const operation = typeof config.operation === 'string' ? config.operation : 'count';
+		const fieldName = typeof config.fieldName === 'string' ? config.fieldName : 'value';
 
 		try {
-			let result: any;
+			let result: unknown;
 
 			switch (operation) {
 				case 'count':
@@ -485,26 +582,26 @@ const aggregateNode: NodeDef = {
 					break;
 
 				case 'sum': {
-					const values = inputs.map(i => Number(i.json[fieldName]) || 0);
+					const values = inputs.map(i => toNumberSafe(i.json[fieldName], 0));
 					result = values.reduce((a, b) => a + b, 0);
 					break;
 				}
 
 				case 'avg': {
-					const values = inputs.map(i => Number(i.json[fieldName]) || 0);
+					const values = inputs.map(i => toNumberSafe(i.json[fieldName], 0));
 					const sum = values.reduce((a, b) => a + b, 0);
 					result = values.length > 0 ? sum / values.length : 0;
 					break;
 				}
 
 				case 'min': {
-					const values = inputs.map(i => Number(i.json[fieldName]) || 0);
+					const values = inputs.map(i => toNumberSafe(i.json[fieldName], 0));
 					result = values.length > 0 ? Math.min(...values) : 0;
 					break;
 				}
 
 				case 'max': {
-					const values = inputs.map(i => Number(i.json[fieldName]) || 0);
+					const values = inputs.map(i => toNumberSafe(i.json[fieldName], 0));
 					result = values.length > 0 ? Math.max(...values) : 0;
 					break;
 				}
@@ -527,7 +624,7 @@ const aggregateNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Aggregate execution failed: ${error.message}`);
+			throw new Error(`Aggregate execution failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -555,16 +652,15 @@ const setVariablesNode: NodeDef = {
 			description: 'Key-value pairs of variables to set. Use {{fieldName}} for dynamic values',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { variables } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const varsConfig = typeof config.variables === 'string'
+			? parseJsonValue<Record<string, unknown>>(config.variables, {})
+			: toRecord(config.variables);
 
 		try {
-			// Parse variables
-			const varsObj = typeof variables === 'string' ? JSON.parse(variables) : variables;
-
 			// Resolve all variable values
-			const resolvedVars: Record<string, any> = {};
-			for (const [key, value] of Object.entries(varsObj)) {
+			const resolvedVars: Record<string, unknown> = {};
+			for (const [key, value] of Object.entries(varsConfig)) {
 				if (typeof value === 'string') {
 					resolvedVars[key] = resolveVariables(value, inputs);
 				} else {
@@ -580,7 +676,7 @@ const setVariablesNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Set variables failed: ${error.message}`);
+			throw new Error(`Set variables failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -609,7 +705,7 @@ const conditionNode: NodeDef = {
 			description: 'Condition function, return true or false',
 		},
 	],
-	async execute(inputs, config, context) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const { condition } = config;
 
 		try {
@@ -632,12 +728,12 @@ const conditionNode: NodeDef = {
 
 			return [{
 				json: {
-					...input,
+					...toRecord(input),
 					conditionResult: Boolean(executionResult.result),
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Secure condition evaluation failed: ${error.message}`);
+			throw new Error(`Secure condition evaluation failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -680,7 +776,7 @@ const loopNode: NodeDef = {
 			description: 'Number of times to loop',
 		},
 	],
-	async execute(inputs, config, context) {
+	execute(inputs, config, _context: ExecutionContext) {
 		const { loopMode, itemsField, loopCount } = config;
 
 		try {
@@ -689,11 +785,11 @@ const loopNode: NodeDef = {
 			if (loopMode === 'items') {
 				// Loop over items in specified field
 				const input = inputs[0]?.json || {};
-				const fieldName = resolveVariables(itemsField, inputs);
-				const items = input[fieldName];
+				const fieldName = resolveVariables(typeof itemsField === 'string' ? itemsField : '', inputs);
+				const items = isRecord(input) ? input[fieldName] : undefined;
 
 				if (!Array.isArray(items)) {
-					throw new Error(`Field "${fieldName}" is not an array or does not exist`);
+					throw new Error(`Field "${fieldName ?? 'unknown'}" is not an array or does not exist`);
 				}
 
 				// Output each item as separate data
@@ -725,7 +821,7 @@ const loopNode: NodeDef = {
 
 			return results;
 		} catch (error) {
-			throw new Error(`Loop execution failed: ${error.message}`);
+			throw new Error(`Loop execution failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -769,19 +865,29 @@ const switchNode: NodeDef = {
 			description: 'Output when no case matches',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { field, cases, defaultOutput } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const fieldName = typeof config.field === 'string' ? config.field : '';
+		const defaultOutput = typeof config.defaultOutput === 'string' ? config.defaultOutput : 'default';
+		const rawCases = typeof config.cases === 'string'
+			? parseJsonValue<unknown[]>(config.cases, [])
+			: Array.isArray(config.cases) ? config.cases : [];
+		const caseArray = rawCases
+			.map(caseItem => {
+				if (!isRecord(caseItem)) {
+					return null;
+				}
+				const output = typeof caseItem.output === 'string' ? caseItem.output : '';
+				return output ? { value: caseItem.value, output } : null;
+			})
+			.filter((item): item is { value: unknown; output: string } => item !== null);
 
 		try {
-			const input = inputs[0]?.json || {};
-			const fieldValue = input[field];
-
-			// Parse cases
-			const caseArray = typeof cases === 'string' ? JSON.parse(cases) : cases;
+			const input = getInputJson(inputs);
+			const fieldValue = fieldName ? input[fieldName] : undefined;
 
 			// Find matching case
-			const matchedCase = caseArray.find((c: any) => c.value === fieldValue);
-			const outputRoute = matchedCase ? matchedCase.output : defaultOutput;
+			const matchedCase = caseArray.find(c => c.value === fieldValue);
+			const outputRoute = matchedCase?.output ?? defaultOutput;
 
 			return [{
 				json: {
@@ -792,7 +898,7 @@ const switchNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Switch execution failed: ${error.message}`);
+			throw new Error(`Switch execution failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -817,11 +923,11 @@ const delayNode: NodeDef = {
 			description: 'How many seconds to wait',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { delayTime } = config;
+	async execute(inputs, config, _context: ExecutionContext) {
+		const delayTime = toNumberSafe(config.delayTime, 1);
 
 		try {
-			const delayMs = (Number(delayTime) || 1) * 1000;
+			const delayMs = Math.max(delayTime, 0) * 1000;
 
 			// Wait for specified time
 			await new Promise(resolve => setTimeout(resolve, delayMs));
@@ -834,7 +940,7 @@ const delayNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Delay execution failed: ${error.message}`);
+			throw new Error(`Delay execution failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -873,16 +979,16 @@ const createNoteNode: NodeDef = {
 			description: 'Note content. Use {{data}} for full input, {{fieldName}} for specific fields (e.g., {{text}}, {{response}})',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { path, content } = config;
+	async execute(inputs, config, context: ExecutionContext) {
+		const pathTemplate = typeof config.path === 'string' ? config.path : 'Untitled.md';
+		const contentTemplate = typeof config.content === 'string' ? config.content : '';
 
 		// Resolve variables in path and content
-		const finalPath = resolveVariables(path, inputs);
-		const finalContent = resolveVariables(content, inputs);
+		const finalPath = String(resolveVariables(pathTemplate, inputs));
+		const finalContent = String(resolveVariables(contentTemplate, inputs));
 
 		try {
-			// Create note using Obsidian API
-			const vault = context.services.vault;
+			const vault = requireVault(context);
 			const file = await vault.create(finalPath, finalContent);
 
 			return [{
@@ -893,7 +999,7 @@ const createNoteNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Note creation failed: ${error.message}`);
+			throw new Error(`Note creation failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -926,18 +1032,18 @@ const readNoteNode: NodeDef = {
 			description: 'Parse and include YAML frontmatter as separate field',
 		},
 	],
-	async execute(inputs, config, context) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const { path, includeFrontmatter } = config;
 
 		// Resolve variables in path
-		const finalPath = resolveVariables(path, inputs);
+		const finalPath = String(resolveVariables(typeof path === 'string' ? path : '', inputs));
 
 		try {
-			const vault = context.services.vault;
+			const vault = requireVault(context);
 
 			// Get the file
 			const file = vault.getAbstractFileByPath(finalPath);
-			if (!file || !(file as any).extension) {
+			if (!(file instanceof TFile)) {
 				throw new Error(`Note not found: ${finalPath}`);
 			}
 
@@ -945,14 +1051,14 @@ const readNoteNode: NodeDef = {
 			const content = await vault.read(file);
 
 			// Parse frontmatter if requested
-			let frontmatter: Record<string, any> = {};
+			let frontmatter: Record<string, unknown> = {};
 			let bodyContent = content;
 
 			if (includeFrontmatter) {
 				const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
 				const match = content.match(frontmatterRegex);
 
-				if (match) {
+				if (match && match[1] && match[2]) {
 					try {
 						// Simple YAML parsing for common cases
 						const yamlText = match[1];
@@ -961,22 +1067,21 @@ const readNoteNode: NodeDef = {
 							const colonIndex = line.indexOf(':');
 							if (colonIndex > 0) {
 								const key = line.substring(0, colonIndex).trim();
-								let value: any = line.substring(colonIndex + 1).trim();
+								let valueStr = line.substring(colonIndex + 1).trim();
+								let value: unknown = valueStr;
 
 								// Remove quotes
-								if ((value.startsWith('"') && value.endsWith('"')) ||
-								    (value.startsWith("'") && value.endsWith("'"))) {
-									value = value.slice(1, -1);
+								if ((valueStr.startsWith('"') && valueStr.endsWith('"')) ||
+								    (valueStr.startsWith("'") && valueStr.endsWith("'"))) {
+									value = valueStr.slice(1, -1);
 								}
-
 								// Parse arrays
-								if (value.startsWith('[') && value.endsWith(']')) {
-									value = value.slice(1, -1).split(',').map((v: string) => v.trim());
+								else if (valueStr.startsWith('[') && valueStr.endsWith(']')) {
+									value = valueStr.slice(1, -1).split(',').map((v: string) => v.trim());
 								}
-
 								// Parse numbers
-								if (!isNaN(Number(value)) && value !== '') {
-									value = Number(value);
+								else if (!isNaN(Number(valueStr)) && valueStr !== '') {
+									value = Number(valueStr);
 								}
 
 								frontmatter[key] = value;
@@ -984,7 +1089,7 @@ const readNoteNode: NodeDef = {
 						}
 						bodyContent = match[2];
 					} catch (error) {
-						context.log(`Failed to parse frontmatter: ${error.message}`);
+						context.log(`Failed to parse frontmatter: ${getErrorMessage(error)}`);
 					}
 				}
 			}
@@ -999,13 +1104,13 @@ const readNoteNode: NodeDef = {
 					fullContent: content,
 					frontmatter,
 					path: finalPath,
-					name: (file as any).name,
-					basename: (file as any).basename,
+					name: file.name,
+					basename: file.basename,
 					tags,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Failed to read note: ${error.message}`);
+			throw new Error(`Failed to read note: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -1059,20 +1164,20 @@ const updateNoteNode: NodeDef = {
 			description: 'Separator between existing and new content (for append/prepend)',
 		},
 	],
-	async execute(inputs, config, context) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const { path, mode, content, separator } = config;
 
 		// Resolve variables
-		const finalPath = resolveVariables(path, inputs);
-		const finalContent = resolveVariables(content, inputs);
-		const finalSeparator = resolveVariables(separator, inputs);
+		const finalPath = String(resolveVariables(typeof path === 'string' ? path : '', inputs));
+		const finalContent = String(resolveVariables(typeof content === 'string' ? content : '', inputs));
+		const finalSeparator = String(resolveVariables(typeof separator === 'string' ? separator : '\n\n', inputs));
 
 		try {
-			const vault = context.services.vault;
+			const vault = requireVault(context);
 
 			// Get the file
 			const file = vault.getAbstractFileByPath(finalPath);
-			if (!file || !(file as any).extension) {
+			if (!(file instanceof TFile)) {
 				throw new Error(`Note not found: ${finalPath}`);
 			}
 
@@ -1109,7 +1214,7 @@ const updateNoteNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Failed to update note: ${error.message}`);
+			throw new Error(`Failed to update note: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -1163,15 +1268,18 @@ const searchNotesNode: NodeDef = {
 			description: 'Maximum number of results to return',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { query, searchIn, folder, limit } = config;
+	async execute(inputs, config, context: ExecutionContext) {
+		const queryTemplate = typeof config.query === 'string' ? config.query : '';
+		const searchInValue = typeof config.searchIn === 'string' ? config.searchIn : 'all';
+		const folderTemplate = typeof config.folder === 'string' ? config.folder : '';
+		const limitValue = Math.max(1, toNumberSafe(config.limit, 10));
 
 		// Resolve variables
-		const finalQuery = resolveVariables(query, inputs).toLowerCase();
-		const finalFolder = resolveVariables(folder, inputs);
+		const finalQuery = String(resolveVariables(queryTemplate, inputs)).toLowerCase();
+		const finalFolder = String(resolveVariables(folderTemplate, inputs));
 
 		try {
-			const vault = context.services.vault;
+			const vault = requireVault(context);
 
 			// Get all markdown files
 			const files = vault.getMarkdownFiles();
@@ -1194,17 +1302,17 @@ const searchNotesNode: NodeDef = {
 				let matchedContent = '';
 
 				// Search in filename
-				if (searchIn === 'all' || searchIn === 'filename') {
+				if (searchInValue === 'all' || searchInValue === 'filename') {
 					if (file.basename.toLowerCase().includes(finalQuery)) {
 						score += 10;
 					}
 				}
 
 				// Search in content or tags
-				if (searchIn === 'all' || searchIn === 'content' || searchIn === 'tags') {
+				if (searchInValue === 'all' || searchInValue === 'content' || searchInValue === 'tags') {
 					const content = await vault.read(file);
 
-					if (searchIn === 'tags' || searchIn === 'all') {
+					if (searchInValue === 'tags' || searchInValue === 'all') {
 						// Check tags
 						const tagMatches = content.matchAll(/#[\w/-]+/g);
 						const tags = Array.from(tagMatches).map((m: RegExpMatchArray) => m[0]);
@@ -1213,7 +1321,7 @@ const searchNotesNode: NodeDef = {
 						}
 					}
 
-					if (searchIn === 'content' || searchIn === 'all') {
+					if (searchInValue === 'content' || searchInValue === 'all') {
 						// Check content
 						const contentLower = content.toLowerCase();
 						if (contentLower.includes(finalQuery)) {
@@ -1242,7 +1350,7 @@ const searchNotesNode: NodeDef = {
 
 			// Sort by score (highest first) and limit results
 			results.sort((a, b) => b.score - a.score);
-			const limitedResults = results.slice(0, limit);
+			const limitedResults = results.slice(0, limitValue);
 
 			return [{
 				json: {
@@ -1253,7 +1361,7 @@ const searchNotesNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Failed to search notes: ${error.message}`);
+			throw new Error(`Failed to search notes: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -1301,28 +1409,31 @@ const dailyNoteNode: NodeDef = {
 			description: 'Template to use when creating new daily note. Use {{date}} for the date',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { dateOffset, folder, format, template } = config;
+	async execute(inputs, config, context: ExecutionContext) {
+		const dateOffsetValue = toNumberSafe(config.dateOffset, 0);
+		const folderValue = typeof config.folder === 'string' ? config.folder : '';
+		const formatValue = typeof config.format === 'string' ? config.format : 'YYYY-MM-DD';
+		const templateValue = typeof config.template === 'string' ? config.template : '# {{date}}\n\n';
 
 		try {
-			const vault = context.services.vault;
+			const vault = requireVault(context);
 
 			// Calculate target date
 			const targetDate = new Date();
-			targetDate.setDate(targetDate.getDate() + (dateOffset || 0));
+			targetDate.setDate(targetDate.getDate() + dateOffsetValue);
 
 			// Format date for filename
 			const year = targetDate.getFullYear();
 			const month = String(targetDate.getMonth() + 1).padStart(2, '0');
 			const day = String(targetDate.getDate()).padStart(2, '0');
 
-			let dateStr = format || 'YYYY-MM-DD';
+			let dateStr = formatValue || 'YYYY-MM-DD';
 			dateStr = dateStr.replace('YYYY', String(year));
 			dateStr = dateStr.replace('MM', month);
 			dateStr = dateStr.replace('DD', day);
 
 			// Construct path
-			const folderPath = folder ? folder.replace(/\/$/, '') + '/' : '';
+			const folderPath = folderValue ? folderValue.replace(/\/$/, '') + '/' : '';
 			const notePath = `${folderPath}${dateStr}.md`;
 
 			// Check if daily note exists
@@ -1333,13 +1444,15 @@ const dailyNoteNode: NodeDef = {
 			if (!file) {
 				// Create new daily note
 				isNew = true;
-				const templateContent = template || '# {{date}}\n\n';
+				const templateContent = templateValue || '# {{date}}\n\n';
 				content = templateContent.replace(/\{\{date\}\}/g, dateStr);
 
 				file = await vault.create(notePath, content);
-			} else {
+			} else if (file instanceof TFile) {
 				// Read existing content
 				content = await vault.read(file);
+			} else {
+				throw new Error(`Daily note path exists but is not a file: ${notePath}`);
 			}
 
 			return [{
@@ -1353,7 +1466,7 @@ const dailyNoteNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Failed to get/create daily note: ${error.message}`);
+			throw new Error(`Failed to get/create daily note: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -1399,33 +1512,45 @@ const httpRequestNode: NodeDef = {
 			description: 'Request body for POST/PUT (JSON format)',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { url, method, body } = config;
+	async execute(inputs, config, context: ExecutionContext) {
+		const urlTemplate = typeof config.url === 'string' ? config.url : '';
+		const methodValue = typeof config.method === 'string' ? config.method.toUpperCase() : 'GET';
+		const bodyValue = config.body ?? {};
 
-		if (!context.services.http) {
+		const httpService = context.services.http;
+		if (!httpService) {
 			throw new Error('HTTP service is not available');
 		}
 
 		try {
-			const options: any = { method };
+			const resolvedUrl = String(resolveVariables(urlTemplate, inputs));
+			const options: RequestUrlParam = { url: resolvedUrl, method: methodValue as RequestUrlParam['method'] };
 
-			if (method === 'POST' || method === 'PUT') {
-				options.body = typeof body === 'string' ? body : JSON.stringify(body);
+			if (methodValue === 'POST' || methodValue === 'PUT' || methodValue === 'PATCH') {
+				const payload = typeof bodyValue === 'string' ? bodyValue : JSON.stringify(bodyValue);
+				options.body = payload;
 				options.headers = { 'Content-Type': 'application/json' };
 			}
 
-			const response = await context.services.http.request(url, options);
+			const response = await httpService.request(resolvedUrl, options);
+
+			let data: unknown;
+			try {
+				data = JSON.parse(response.text);
+			} catch {
+				data = response.text;
+			}
 
 			return [{
 				json: {
 					status: response.status,
-					data: response.data,
-					url,
-					method,
+					data,
+					url: resolvedUrl,
+					method: methodValue,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`HTTP request failed: ${error.message}`);
+			throw new Error(`HTTP request failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -1450,28 +1575,28 @@ const jsonParseNode: NodeDef = {
 			description: 'Field containing JSON string',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { field } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const fieldName = typeof config.field === 'string' ? config.field : 'json';
 
 		try {
-			const input = inputs[0]?.json || {};
-			const jsonString = input[field];
+			const input = getInputJson(inputs);
+			const jsonString = input[fieldName];
 
 			if (typeof jsonString !== 'string') {
-				throw new Error(`Field "${field}" is not a string`);
+				throw new Error(`Field "${fieldName ?? 'unknown'}" is not a string`);
 			}
 
-			const parsed = JSON.parse(jsonString);
+			const parsed = JSON.parse(jsonString) as unknown;
 
 			return [{
 				json: {
 					...input,
-					[field + '_parsed']: parsed,
-					_originalField: field,
+					[`${fieldName ?? 'unknown'}_parsed`]: parsed,
+					_originalField: fieldName,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`JSON parse failed: ${error.message}`);
+			throw new Error(`JSON parse failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -1503,14 +1628,15 @@ const jsonStringifyNode: NodeDef = {
 			description: 'Format with indentation',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { field, pretty } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const fieldName = typeof config.field === 'string' ? config.field : '';
+		const prettyPrint = toBooleanSafe(config.pretty, false);
 
 		try {
-			const input = inputs[0]?.json || {};
-			const dataToStringify = field ? input[field] : input;
+			const input = getInputJson(inputs);
+			const dataToStringify = fieldName ? input[fieldName] : input;
 
-			const jsonString = pretty
+			const jsonString = prettyPrint
 				? JSON.stringify(dataToStringify, null, 2)
 				: JSON.stringify(dataToStringify);
 
@@ -1518,11 +1644,11 @@ const jsonStringifyNode: NodeDef = {
 				json: {
 					jsonString,
 					length: jsonString.length,
-					_originalField: field || 'entire input',
+					_originalField: fieldName || 'entire input',
 				}
 			}];
 		} catch (error) {
-			throw new Error(`JSON stringify failed: ${error.message}`);
+			throw new Error(`JSON stringify failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -1598,15 +1724,22 @@ const stringNode: NodeDef = {
 			description: 'Value to concatenate (concat operation)',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { operation, field, searchValue, replaceValue, start, length, concatValue } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const operationValue = typeof config.operation === 'string' ? config.operation : 'uppercase';
+		const fieldName = typeof config.field === 'string' ? config.field : 'text';
+		const searchValueText = typeof config.searchValue === 'string' ? config.searchValue : '';
+		const replaceValueText = typeof config.replaceValue === 'string' ? config.replaceValue : '';
+		const startIndex = Math.max(0, toNumberSafe(config.start, 0));
+		const lengthValue = Math.max(0, toNumberSafe(config.length, 10));
+		const concatValueText = typeof config.concatValue === 'string' ? config.concatValue : '';
 
 		try {
-			const input = inputs[0]?.json || {};
-			let text = String(input[field] || '');
-			let result: any;
+			const input = getInputJson(inputs);
+			const sourceValue = input[fieldName];
+			const text = typeof sourceValue === 'string' ? sourceValue : toStringSafe(sourceValue, '');
+			let result: unknown;
 
-			switch (operation) {
+			switch (operationValue) {
 				case 'uppercase':
 					result = text.toUpperCase();
 					break;
@@ -1617,16 +1750,16 @@ const stringNode: NodeDef = {
 					result = text.trim();
 					break;
 				case 'replace':
-					result = text.replace(new RegExp(searchValue, 'g'), replaceValue);
+					result = text.replace(new RegExp(searchValueText, 'g'), replaceValueText);
 					break;
 				case 'substring':
-					result = text.substring(start, start + length);
+					result = text.substring(startIndex, startIndex + lengthValue);
 					break;
 				case 'length':
 					result = text.length;
 					break;
 				case 'concat':
-					result = text + concatValue;
+					result = text + concatValueText;
 					break;
 				default:
 					result = text;
@@ -1635,13 +1768,13 @@ const stringNode: NodeDef = {
 			return [{
 				json: {
 					result,
-					operation,
+					operation: operationValue,
 					originalLength: text.length,
-					_field: field,
+					_field: fieldName,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`String operation failed: ${error.message}`);
+			throw new Error(`String operation failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -1706,35 +1839,39 @@ const dateTimeNode: NodeDef = {
 			description: 'Time unit',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { operation, dateField, format, amount, unit } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const operationValue = typeof config.operation === 'string' ? config.operation : 'now';
+		const dateFieldName = typeof config.dateField === 'string' ? config.dateField : 'date';
+		const formatValue = typeof config.format === 'string' ? config.format : 'YYYY-MM-DD';
+		const amountValue = toNumberSafe(config.amount, 0);
+		const unitValue = typeof config.unit === 'string' ? config.unit : 'days';
 
 		try {
-			const input = inputs[0]?.json || {};
-			let result: any;
+			const input = getInputJson(inputs);
+			let result: unknown;
 
-			if (operation === 'now') {
+			if (operationValue === 'now') {
 				const now = new Date();
 				result = {
 					timestamp: now.getTime(),
 					iso: now.toISOString(),
-					formatted: formatDate(now, format),
+					formatted: formatDate(now, formatValue),
 				};
-			} else if (operation === 'format') {
-				const dateValue = input[dateField];
-				const date = new Date(dateValue);
-				result = formatDate(date, format);
-			} else if (operation === 'parse') {
-				const dateString = input[dateField];
-				const date = new Date(dateString);
+			} else if (operationValue === 'format') {
+				const dateValue = input[dateFieldName];
+				const date = new Date(dateValue as string);
+				result = formatDate(date, formatValue);
+			} else if (operationValue === 'parse') {
+				const dateString = input[dateFieldName];
+				const date = new Date(dateString as string);
 				result = {
 					timestamp: date.getTime(),
 					iso: date.toISOString(),
 					valid: !isNaN(date.getTime()),
 				};
-			} else if (operation === 'math') {
-				const dateValue = input[dateField] || new Date();
-				const date = new Date(dateValue);
+			} else if (operationValue === 'math') {
+				const dateValue = input[dateFieldName] || new Date();
+				const date = new Date(dateValue as unknown as string);
 
 				const multipliers: Record<string, number> = {
 					seconds: 1000,
@@ -1743,25 +1880,25 @@ const dateTimeNode: NodeDef = {
 					days: 24 * 60 * 60 * 1000,
 				};
 
-				const offset = amount * (multipliers[unit] || multipliers.days);
+				const offset = amountValue * (multipliers[unitValue] || multipliers.days);
 				const newDate = new Date(date.getTime() + offset);
 
 				result = {
 					timestamp: newDate.getTime(),
 					iso: newDate.toISOString(),
-					formatted: formatDate(newDate, format),
+					formatted: formatDate(newDate, formatValue),
 				};
 			}
 
 			return [{
 				json: {
 					result,
-					operation,
-					_originalDate: input[dateField],
+					operation: operationValue,
+					_originalDate: input[dateFieldName],
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Date/time operation failed: ${error.message}`);
+			throw new Error(`Date/time operation failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -1787,6 +1924,7 @@ function formatDate(date: Date, format: string): string {
 /**
  * Math Operations Node - Mathematical calculations
  */
+
 const mathNode: NodeDef = {
 	type: 'math',
 	name: 'Math Operations',
@@ -1832,13 +1970,13 @@ const mathNode: NodeDef = {
 			description: 'Second operand (field name or number, not used for unary operations)',
 		},
 	],
-	async execute(inputs, config, context) {
+	execute(inputs, config, _context: ExecutionContext) {
 		const { operation, field1, field2 } = config;
 
 		try {
 			// Resolve variable values
-			const value1Str = resolveVariables(field1, inputs);
-			const value2Str = resolveVariables(field2, inputs);
+			const value1Str = resolveVariables(typeof field1 === 'string' ? field1 : '', inputs);
+			const value2Str = resolveVariables(typeof field2 === 'string' ? field2 : '', inputs);
 
 			const value1 = Number(value1Str) || 0;
 			const value2 = Number(value2Str) || 0;
@@ -1893,7 +2031,7 @@ const mathNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Math operation failed: ${error.message}`);
+			throw new Error(`Math operation failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -1940,16 +2078,16 @@ const manageTagsNode: NodeDef = {
 			description: 'Tags to add/remove (comma or space separated). Use {{fieldName}} for dynamic tags',
 		},
 	],
-	async execute(inputs, config, context) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const { path, operation, tags } = config;
 
 		try {
-			const vault = context.services.vault;
-			const finalPath = resolveVariables(path, inputs);
+			const vault = requireVault(context);
+			const finalPath = String(resolveVariables(typeof path === 'string' ? path : '', inputs));
 
 			// Get the file
 			const file = vault.getAbstractFileByPath(finalPath);
-			if (!file || !(file as any).extension) {
+			if (!(file instanceof TFile)) {
 				throw new Error(`Note not found: ${finalPath}`);
 			}
 
@@ -1957,7 +2095,7 @@ const manageTagsNode: NodeDef = {
 			let content = await vault.read(file);
 
 			// Parse tags input
-			const tagsStr = resolveVariables(tags, inputs);
+			const tagsStr = String(resolveVariables(typeof tags === 'string' ? tags : '', inputs));
 			const newTags = tagsStr
 				.split(/[,\s]+/)
 				.map(t => t.trim())
@@ -2021,7 +2159,7 @@ const manageTagsNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Manage tags failed: ${error.message}`);
+			throw new Error(`Manage tags failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -2075,32 +2213,33 @@ const manageLinksNode: NodeDef = {
 			description: 'Display text for the link',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { operation, path, targetPath, linkText } = config;
+	async execute(inputs, config, context: ExecutionContext) {
+		const operationValue = typeof config.operation === 'string' ? config.operation : 'getBacklinks';
+		const pathTemplate = typeof config.path === 'string' ? config.path : '';
+		const targetPathTemplate = typeof config.targetPath === 'string' ? config.targetPath : '';
+		const linkTextTemplate = typeof config.linkText === 'string' ? config.linkText : '';
 
 		try {
-			const vault = context.services.vault;
-			const app = (context.services as any).app;
-			const finalPath = resolveVariables(path, inputs);
+			const vault = requireVault(context);
+			const metadataCache = requireMetadataCache(context);
+			const finalPath = String(resolveVariables(pathTemplate, inputs));
 
 			const file = vault.getAbstractFileByPath(finalPath);
-			if (!file || !(file as any).extension) {
-				throw new Error(`Note not found: ${finalPath}`);
+			if (!(file instanceof TFile)) {
+				throw new Error(`Note not found: ${finalPath ?? 'unknown'}`);
 			}
 
-			let result: any = {};
+			let result: unknown = {};
 
-			if (operation === 'getBacklinks') {
+			if (operationValue === 'getBacklinks') {
 				// Get backlinks using Obsidian API
 				const backlinks: string[] = [];
 
-				if (app?.metadataCache) {
-					const cache = app.metadataCache.getBacklinksForFile?.(file);
-					if (cache) {
-						const backlinkFiles = cache.data;
-						for (const [sourcePath] of Object.entries(backlinkFiles || {})) {
-							backlinks.push(sourcePath);
-						}
+			const backlinksGetter = (metadataCache as { getBacklinksForFile?: (_file: TFile) => { data?: Record<string, unknown> } }).getBacklinksForFile;
+			const cache = backlinksGetter ? backlinksGetter(file) : undefined;
+				if (cache?.data) {
+					for (const sourcePath of Object.keys(cache.data)) {
+						backlinks.push(sourcePath);
 					}
 				}
 
@@ -2108,7 +2247,7 @@ const manageLinksNode: NodeDef = {
 					backlinks,
 					count: backlinks.length,
 				};
-			} else if (operation === 'getOutgoing') {
+			} else if (operationValue === 'getOutgoing') {
 				// Get outgoing links from content
 				const content = await vault.read(file);
 				const linkRegex = /\[\[([^\]]+)\]\]/g;
@@ -2123,17 +2262,18 @@ const manageLinksNode: NodeDef = {
 					outgoingLinks: links,
 					count: links.length,
 				};
-			} else if (operation === 'createLink') {
+			} else if (operationValue === 'createLink') {
 				// Create a link to target note
-				const finalTargetPath = resolveVariables(targetPath, inputs);
+				const finalTargetPath = String(resolveVariables(targetPathTemplate, inputs));
 				const targetFile = vault.getAbstractFileByPath(finalTargetPath);
 
-				if (!targetFile) {
-					throw new Error(`Target note not found: ${finalTargetPath}`);
+				if (!(targetFile instanceof TFile)) {
+					throw new Error(`Target note not found: ${finalTargetPath ?? 'unknown'}`);
 				}
 
-				const targetBasename = (targetFile as any).basename;
-				const linkDisplay = linkText ? `${linkText}|${targetBasename}` : targetBasename;
+				const targetBasename = targetFile.basename;
+				const resolvedLinkText = toStringSafe(resolveVariables(linkTextTemplate, inputs), '');
+				const linkDisplay = resolvedLinkText ? `${resolvedLinkText ?? 'unknown'}|${targetBasename}` : targetBasename;
 				const link = `[[${linkDisplay}]]`;
 
 				// Append link to source note
@@ -2152,12 +2292,12 @@ const manageLinksNode: NodeDef = {
 			return [{
 				json: {
 					path: finalPath,
-					operation,
-					...result,
+					operation: operationValue,
+					...toRecord(result),
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Manage links failed: ${error.message}`);
+			throw new Error(`Manage links failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -2220,17 +2360,22 @@ const regexNode: NodeDef = {
 			description: 'Replacement string',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { operation, field, pattern, flags, replacement } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const operationValue = typeof config.operation === 'string' ? config.operation : 'match';
+		const fieldName = typeof config.field === 'string' ? config.field : 'text';
+		const patternValue = typeof config.pattern === 'string' ? config.pattern : '';
+		const flagsValue = typeof config.flags === 'string' ? config.flags : 'g';
+		const replacementValue = typeof config.replacement === 'string' ? config.replacement : '';
 
 		try {
-			const input = inputs[0]?.json || {};
-			const text = String(input[field] || '');
-			const regex = new RegExp(pattern, flags || '');
+			const input = getInputJson(inputs);
+			const sourceValue = input[fieldName];
+			const text = typeof sourceValue === 'string' ? sourceValue : toStringSafe(sourceValue, '');
+			const regex = new RegExp(patternValue, flagsValue);
 
-			let result: any;
+			let result: unknown;
 
-			switch (operation) {
+			switch (operationValue) {
 				case 'match': {
 					const match = text.match(regex);
 					result = {
@@ -2253,7 +2398,7 @@ const regexNode: NodeDef = {
 					break;
 				}
 				case 'replace': {
-					const replaced = text.replace(regex, replacement);
+					const replaced = text.replace(regex, replacementValue);
 					result = {
 						result: replaced,
 						original: text,
@@ -2264,7 +2409,7 @@ const regexNode: NodeDef = {
 				case 'test': {
 					result = {
 						matched: regex.test(text),
-						pattern,
+						pattern: patternValue,
 					};
 					break;
 				}
@@ -2280,13 +2425,13 @@ const regexNode: NodeDef = {
 
 			return [{
 				json: {
-					operation,
-					pattern,
-					...result,
+					operation: operationValue,
+					pattern: patternValue,
+					...toRecord(result),
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Regex operation failed: ${error.message}`);
+			throw new Error(`Regex operation failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -2359,37 +2504,50 @@ const arrayOpsNode: NodeDef = {
 			description: 'Field to sort by (for array of objects)',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { operation, field, separator, start, end, sortBy } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const operationValue = typeof config.operation === 'string' ? config.operation : 'length';
+		const fieldName = typeof config.field === 'string' ? config.field : 'items';
+		const separatorValue = typeof config.separator === 'string' ? config.separator : ', ';
+		const startIndex = Math.max(0, toNumberSafe(config.start, 0));
+		const endIndexRaw = config.end;
+		const endIndex = typeof endIndexRaw === 'number' && Number.isFinite(endIndexRaw)
+			? endIndexRaw
+			: toNumberSafe(endIndexRaw, startIndex + 5);
+		const sortByField = typeof config.sortBy === 'string' ? config.sortBy : '';
 
 		try {
-			const input = inputs[0]?.json || {};
-			const array = input[field];
+			const input = getInputJson(inputs);
+			const arrayValue = input[fieldName];
 
-			if (!Array.isArray(array)) {
-				throw new Error(`Field "${field}" is not an array`);
+			if (!Array.isArray(arrayValue)) {
+				throw new Error(`Field "${fieldName ?? 'unknown'}" is not an array`);
 			}
 
-			let result: any;
+			const array = arrayValue as unknown[];
+			let result: unknown;
 
-			switch (operation) {
+			switch (operationValue) {
 				case 'length':
 					result = array.length;
 					break;
 				case 'join':
-					result = array.join(separator);
+					result = array.join(separatorValue);
 					break;
 				case 'reverse':
 					result = [...array].reverse();
 					break;
 				case 'sort':
-					if (sortBy && array.length > 0 && typeof array[0] === 'object') {
-						result = [...array].sort((a, b) => {
-							const aVal = a[sortBy];
-							const bVal = b[sortBy];
-							if (aVal < bVal) return -1;
-							if (aVal > bVal) return 1;
-							return 0;
+					if (sortByField && array.every(item => isRecord(item))) {
+						const sorted = [...array] as Record<string, unknown>[];
+						result = sorted.sort((a, b) => {
+							const aVal = a[sortByField];
+							const bVal = b[sortByField];
+							if (typeof aVal === 'number' && typeof bVal === 'number') {
+								return aVal - bVal;
+							}
+							const aStr = toStringSafe(aVal, '');
+							const bStr = toStringSafe(bVal, '');
+							return aStr.localeCompare(bStr);
 						});
 					} else {
 						result = [...array].sort();
@@ -2405,14 +2563,13 @@ const arrayOpsNode: NodeDef = {
 					result = array[array.length - 1];
 					break;
 				case 'slice':
-					result = array.slice(start, end);
+					result = array.slice(startIndex, endIndex);
 					break;
 				case 'concat':
-					// Concat with another field or array
 					result = array;
 					break;
 				case 'flatten':
-					result = array.flat();
+					result = (array as unknown as unknown[][]).flat();
 					break;
 				default:
 					result = array;
@@ -2421,13 +2578,13 @@ const arrayOpsNode: NodeDef = {
 			return [{
 				json: {
 					result,
-					operation,
+					operation: operationValue,
 					originalLength: array.length,
-					_field: field,
+					_field: fieldName,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Array operation failed: ${error.message}`);
+			throw new Error(`Array operation failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -2477,16 +2634,20 @@ const objectOpsNode: NodeDef = {
 			description: 'Dot-notation path to nested value',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { operation, fields, path } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const operationValue = typeof config.operation === 'string' ? config.operation : 'keys';
+		const fieldsValue = typeof config.fields === 'string' ? config.fields : '';
+		const nestedPath = typeof config.path === 'string' ? config.path : '';
 
 		try {
-			const input = inputs[0]?.json || {};
-			let result: any;
+			const input = getInputJson(inputs);
+			let result: unknown;
 
-			const fieldsList = fields ? fields.split(',').map((f: string) => f.trim()) : [];
+			const fieldsList = fieldsValue
+				? fieldsValue.split(',').map(field => field.trim()).filter(Boolean)
+				: [];
 
-			switch (operation) {
+			switch (operationValue) {
 				case 'keys':
 					result = Object.keys(input);
 					break;
@@ -2497,7 +2658,7 @@ const objectOpsNode: NodeDef = {
 					result = Object.entries(input).map(([key, value]) => ({ key, value }));
 					break;
 				case 'pick': {
-					const picked: Record<string, any> = {};
+					const picked: Record<string, unknown> = {};
 					for (const field of fieldsList) {
 						if (field in input) {
 							picked[field] = input[field];
@@ -2516,7 +2677,7 @@ const objectOpsNode: NodeDef = {
 				}
 				case 'merge': {
 					// Merge all inputs
-					const merged = {};
+					const merged: Record<string, unknown> = {};
 					for (const inp of inputs) {
 						Object.assign(merged, inp.json);
 					}
@@ -2532,10 +2693,10 @@ const objectOpsNode: NodeDef = {
 					break;
 				}
 				case 'getNested': {
-					const parts = path.split('.');
-					let current: any = input;
+					const parts = nestedPath.split('.').filter(Boolean);
+					let current: unknown = input;
 					for (const part of parts) {
-						if (current && typeof current === 'object') {
+						if (isRecord(current)) {
 							current = current[part];
 						} else {
 							current = undefined;
@@ -2552,12 +2713,12 @@ const objectOpsNode: NodeDef = {
 			return [{
 				json: {
 					result,
-					operation,
+					operation: operationValue,
 					_fields: fieldsList,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Object operation failed: ${error.message}`);
+			throw new Error(`Object operation failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -2582,7 +2743,7 @@ const codeNode: NodeDef = {
 			description: 'JavaScript code to execute. Available: input (current item), inputs (all items), context',
 		},
 	],
-	async execute(inputs, config, context) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const { code } = config;
 
 		try {
@@ -2602,12 +2763,12 @@ const codeNode: NodeDef = {
 					}
 				);
 
-				results.push({ json: executionResult.result || {} });
+				results.push({ json: toRecord(executionResult.result || {}) });
 			}
 
 			return results;
 		} catch (error) {
-			throw new Error(`Code execution failed: ${error.message}`);
+			throw new Error(`Code execution failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -2648,27 +2809,29 @@ const notificationNode: NodeDef = {
 			description: 'How long to show notification (milliseconds)',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { message, title, duration } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const messageTemplate = typeof config.message === 'string' ? config.message : '';
+		const titleTemplate = typeof config.title === 'string' ? config.title : 'Workflow Notification';
+		const durationValue = Math.max(0, toNumberSafe(config.duration, 5000));
 
 		try {
-			const finalMessage = resolveVariables(message, inputs);
-			const finalTitle = resolveVariables(title, inputs);
+			const finalMessage = resolveVariables(messageTemplate, inputs);
+			const finalTitle = resolveVariables(titleTemplate, inputs);
 
 			// Use Obsidian Notice API
-			const { Notice } = require('obsidian');
-			new Notice(`${finalTitle}\n${finalMessage}`, duration);
+			new Notice(`${finalTitle}\n${finalMessage}`);
 
-			return [{
+			return Promise.resolve([{
 				json: {
 					message: finalMessage,
 					title: finalTitle,
 					shown: true,
 					timestamp: Date.now(),
+					durationMs: durationValue
 				}
-			}];
+			}]);
 		} catch (error) {
-			throw new Error(`Notification failed: ${error.message}`);
+			throw new Error(`Notification failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -2694,24 +2857,30 @@ const getMetadataNode: NodeDef = {
 			label: 'Note Path',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'Path to the note (e.g., "folder/note.md")',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { path } = config;
-		const { vault } = context.services;
+	execute(inputs, config, context: ExecutionContext) {
+		const pathTemplate = typeof config.path === 'string' ? config.path : '';
+		const vault = requireVault(context);
+		const metadataCache = requireMetadataCache(context);
 
 		try {
-			const finalPath = resolveVariables(path, inputs);
+			const finalPath = String(resolveVariables(pathTemplate, inputs));
 			const file = vault.getAbstractFileByPath(finalPath);
 
-			if (!file || !(file instanceof require('obsidian').TFile)) {
-				throw new Error(`File not found: ${finalPath}`);
+			if (!(file instanceof TFile)) {
+				throw new Error(`File not found: ${finalPath ?? 'unknown'}`);
 			}
 
-			const metadata = vault.getFileCache(file);
+			const metadata = metadataCache.getFileCache(file);
 			const stat = file.stat;
+			const tags = Array.isArray(metadata?.tags) ? metadata.tags.map(tag => tag.tag) : [];
+			const links = Array.isArray(metadata?.links) ? metadata.links.map(link => link.link) : [];
+			const headings = Array.isArray(metadata?.headings)
+				? metadata.headings.map(heading => ({ level: heading.level, heading: heading.heading }))
+				: [];
 
 			return [{
 				json: {
@@ -2722,13 +2891,13 @@ const getMetadataNode: NodeDef = {
 					created: stat.ctime,
 					modified: stat.mtime,
 					frontmatter: metadata?.frontmatter || {},
-					tags: metadata?.tags?.map((t: any) => t.tag) || [],
-					links: metadata?.links?.map((l: any) => l.link) || [],
-					headings: metadata?.headings?.map((h: any) => ({ level: h.level, heading: h.heading })) || [],
+					tags,
+					links,
+					headings,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Get metadata failed: ${error.message}`);
+			throw new Error(`Get metadata failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -2767,33 +2936,39 @@ const listFilesNode: NodeDef = {
 			description: 'Filter by extension (e.g., "md", "pdf")',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { folder, recursive, extension } = config;
-		const { vault } = context.services;
+	execute(inputs, config, context: ExecutionContext) {
+		const folderTemplate = typeof config.folder === 'string' ? config.folder : '';
+		const recursiveValue = toBooleanSafe(config.recursive, false);
+		const extensionFilter = typeof config.extension === 'string' ? config.extension : '';
+		const vault = requireVault(context);
 
 		try {
-			const finalFolder = resolveVariables(folder, inputs);
+			const finalFolder = String(resolveVariables(folderTemplate, inputs));
+			const normalizedFolder = finalFolder.trim();
+			const targetFolder = normalizedFolder.endsWith('/')
+				? normalizedFolder.slice(0, -1)
+				: normalizedFolder;
+			const normalizedExtension = extensionFilter.replace(/^\./, '').toLowerCase();
 			const allFiles = vault.getFiles();
 
-			let filteredFiles = allFiles.filter((file: any) => {
+			const filteredFiles = allFiles.filter(file => {
 				// Extension filter
-				if (extension && !file.path.endsWith(`.${extension}`)) {
+				if (normalizedExtension && !file.path.toLowerCase().endsWith(`.${normalizedExtension}`)) {
 					return false;
 				}
 
 				// Folder filter
-				if (finalFolder) {
-					if (recursive) {
-						return file.path.startsWith(finalFolder);
-					} else {
-						return file.parent?.path === finalFolder;
+				if (targetFolder) {
+					if (recursiveValue) {
+						return file.path.startsWith(`${targetFolder}/`);
 					}
+					return file.parent?.path === targetFolder;
 				}
 
 				return true;
 			});
 
-			const fileList = filteredFiles.map((file: any) => ({
+			const fileList = filteredFiles.map(file => ({
 				path: file.path,
 				name: file.basename,
 				extension: file.extension,
@@ -2809,7 +2984,7 @@ const listFilesNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`List files failed: ${error.message}`);
+			throw new Error(`List files failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -2830,7 +3005,7 @@ const moveRenameNoteNode: NodeDef = {
 			label: 'Source Path',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'Current path of the note',
 		},
 		{
@@ -2838,21 +3013,22 @@ const moveRenameNoteNode: NodeDef = {
 			label: 'Target Path',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'New path for the note',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { sourcePath, targetPath } = config;
-		const { vault } = context.services;
+	async execute(inputs, config, context: ExecutionContext) {
+		const sourceTemplate = typeof config.sourcePath === 'string' ? config.sourcePath : '';
+		const targetTemplate = typeof config.targetPath === 'string' ? config.targetPath : '';
+		const vault = requireVault(context);
 
 		try {
-			const finalSourcePath = resolveVariables(sourcePath, inputs);
-			const finalTargetPath = resolveVariables(targetPath, inputs);
+			const finalSourcePath = String(resolveVariables(sourceTemplate, inputs));
+			const finalTargetPath = String(resolveVariables(targetTemplate, inputs));
 
 			const file = vault.getAbstractFileByPath(finalSourcePath);
 			if (!file) {
-				throw new Error(`File not found: ${finalSourcePath}`);
+				throw new Error(`File not found: ${finalSourcePath ?? 'unknown'}`);
 			}
 
 			await vault.rename(file, finalTargetPath);
@@ -2865,7 +3041,7 @@ const moveRenameNoteNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Move/rename failed: ${error.message}`);
+			throw new Error(`Move/rename failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -2886,7 +3062,7 @@ const deleteNoteNode: NodeDef = {
 			label: 'Note Path',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'Path to the note to delete',
 		},
 		{
@@ -2897,23 +3073,28 @@ const deleteNoteNode: NodeDef = {
 			description: 'Must be true to delete',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { path, confirm } = config;
-		const { vault } = context.services;
+	async execute(inputs, config, context: ExecutionContext) {
+		const pathTemplate = typeof config.path === 'string' ? config.path : '';
+		const confirmDeletion = toBooleanSafe(config.confirm, false);
+		const vault = requireVault(context);
 
-		if (!confirm) {
+		if (!confirmDeletion) {
 			throw new Error('Deletion not confirmed. Set "confirm" to true.');
 		}
 
 		try {
-			const finalPath = resolveVariables(path, inputs);
+			const finalPath = String(resolveVariables(pathTemplate, inputs));
 			const file = vault.getAbstractFileByPath(finalPath);
 
-			if (!file) {
-				throw new Error(`File not found: ${finalPath}`);
+			if (!(file instanceof TFile)) {
+				throw new Error(`File not found: ${finalPath ?? 'unknown'}`);
 			}
 
-			await vault.delete(file);
+			const app = context.services.app;
+			if (!app?.fileManager?.trashFile) {
+				throw new Error('Obsidian file manager is not available');
+			}
+			await app.fileManager.trashFile(file);
 
 			return [{
 				json: {
@@ -2923,7 +3104,7 @@ const deleteNoteNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Delete failed: ${error.message}`);
+			throw new Error(`Delete failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -2958,16 +3139,18 @@ const scheduleNode: NodeDef = {
 			default: true,
 		},
 	],
-	async execute(inputs, config, context) {
+	execute(_inputs, config, _context: ExecutionContext) {
 		// Note: Actual scheduling would require integration with plugin's scheduler
-		return [{
+		const cronExpression = typeof config.cron === 'string' ? config.cron : '';
+		const enabled = toBooleanSafe(config.enabled, true);
+		return Promise.resolve([{
 			json: {
 				message: 'Schedule trigger configured',
-				cron: config.cron,
-				enabled: config.enabled,
+				cron: cronExpression,
+				enabled,
 				timestamp: Date.now(),
 			}
-		}];
+		}]);
 	},
 };
 
@@ -2997,16 +3180,18 @@ const fileWatcherNode: NodeDef = {
 			default: 'modify',
 		},
 	],
-	async execute(inputs, config, context) {
+	execute(_inputs, config, _context: ExecutionContext) {
 		// Note: Actual file watching would require plugin integration
-		return [{
+		const folderPath = typeof config.folder === 'string' ? config.folder : '';
+		const eventType = typeof config.eventType === 'string' ? config.eventType : 'modify';
+		return Promise.resolve([{
 			json: {
 				message: 'File watcher configured',
-				folder: config.folder,
-				eventType: config.eventType,
+				folder: folderPath,
+				eventType,
 				timestamp: Date.now(),
 			}
-		}];
+		}]);
 	},
 };
 
@@ -3036,16 +3221,18 @@ const webhookNode: NodeDef = {
 			default: 'POST',
 		},
 	],
-	async execute(inputs, config, context) {
+	execute(_inputs, config, _context: ExecutionContext) {
 		// Note: Actual webhook would require HTTP server integration
-		return [{
+		const webhookPath = typeof config.path === 'string' ? config.path : '/webhook';
+		const method = typeof config.method === 'string' ? config.method : 'POST';
+		return Promise.resolve([{
 			json: {
 				message: 'Webhook configured',
-				path: config.path,
-				method: config.method,
+				path: webhookPath,
+				method,
 				timestamp: Date.now(),
 			}
-		}];
+		}]);
 	},
 };
 
@@ -3069,7 +3256,7 @@ const csvParserNode: NodeDef = {
 			label: 'CSV Data',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'CSV text to parse',
 		},
 		{
@@ -3086,27 +3273,31 @@ const csvParserNode: NodeDef = {
 			default: true,
 		},
 	],
-	async execute(inputs, config, context) {
-		const { csvData, delimiter, hasHeader } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const csvTemplate = typeof config.csvData === 'string' ? config.csvData : '';
+		const delimiterValue = typeof config.delimiter === 'string' && config.delimiter.trim() !== ''
+			? config.delimiter
+			: ',';
+		const hasHeaderValue = toBooleanSafe(config.hasHeader, true);
 
 		try {
-			const data = resolveVariables(csvData, inputs);
-			const lines = data.split('\n').filter((line: string) => line.trim());
+			const data = toStringSafe(resolveVariables(csvTemplate, inputs), '');
+			const lines = data.split('\n').filter(line => line.trim().length > 0);
 
 			if (lines.length === 0) {
 				return [{ json: { rows: [], count: 0 } }];
 			}
 
-			const headers = hasHeader
-				? lines[0].split(delimiter).map((h: string) => h.trim())
-				: lines[0].split(delimiter).map((_: any, i: number) => `col${i + 1}`);
+			const headers = hasHeaderValue
+				? lines[0].split(delimiterValue).map(header => header.trim())
+				: lines[0].split(delimiterValue).map((_, index) => `col${index + 1}`);
 
-			const startIndex = hasHeader ? 1 : 0;
-			const rows = lines.slice(startIndex).map((line: string) => {
-				const values = line.split(delimiter).map((v: string) => v.trim());
+			const startIndex = hasHeaderValue ? 1 : 0;
+			const rows = lines.slice(startIndex).map(line => {
+				const values = line.split(delimiterValue).map(value => value.trim());
 				const obj: Record<string, string> = {};
-				headers.forEach((header: string, i: number) => {
-					obj[header] = values[i] || '';
+				headers.forEach((header, index) => {
+					obj[header] = values[index] ?? '';
 				});
 				return obj;
 			});
@@ -3119,7 +3310,7 @@ const csvParserNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`CSV parse failed: ${error.message}`);
+			throw new Error(`CSV parse failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3140,7 +3331,7 @@ const csvBuilderNode: NodeDef = {
 			label: 'Data Array',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'Array of objects to convert (use {{arrayField}})',
 		},
 		{
@@ -3156,38 +3347,62 @@ const csvBuilderNode: NodeDef = {
 			default: true,
 		},
 	],
-	async execute(inputs, config, context) {
-		const { dataArray, delimiter, includeHeader } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const dataTemplate = typeof config.dataArray === 'string' ? config.dataArray : '';
+		const delimiterValue = typeof config.delimiter === 'string' && config.delimiter !== '' ? config.delimiter : ',';
+		const includeHeaderValue = toBooleanSafe(config.includeHeader, true);
 
 		try {
-			const data = resolveVariables(dataArray, inputs);
-			const array = typeof data === 'string' ? JSON.parse(data) : data;
+			const data = resolveVariables(dataTemplate, inputs);
+			const parsed = (typeof data === 'string' ? JSON.parse(data) : data) as unknown;
 
-			if (!Array.isArray(array) || array.length === 0) {
+			if (!Array.isArray(parsed) || parsed.length === 0) {
 				return [{ json: { csv: '', rows: 0 } }];
 			}
 
-			const headers = Object.keys(array[0]);
-			const lines: string[] = [];
+			const rowsArray = parsed as unknown[];
+			const headers = Array.from(
+				rowsArray.reduce<Set<string>>((set, item) => {
+					if (isRecord(item)) {
+						for (const key of Object.keys(item)) {
+							set.add(key);
+						}
+					}
+					return set;
+				}, new Set<string>())
+			);
 
-			if (includeHeader) {
-				lines.push(headers.join(delimiter));
+			if (headers.length === 0) {
+				return [{ json: { csv: '', rows: 0 } }];
 			}
 
-			array.forEach((obj: any) => {
-				const values = headers.map(h => String(obj[h] || ''));
-				lines.push(values.join(delimiter));
+			const lines: string[] = [];
+
+			if (includeHeaderValue) {
+				lines.push(headers.join(delimiterValue));
+			}
+
+			rowsArray.forEach(item => {
+				const record = isRecord(item) ? item : {};
+				const values = headers.map(header => {
+					const value = record[header];
+					const textValue = typeof value === 'string' ? value : toStringSafe(value, '');
+					return textValue.includes(delimiterValue)
+						? `"${textValue.replace(/"/g, '""')}"`
+						: textValue;
+				});
+				lines.push(values.join(delimiterValue));
 			});
 
 			return [{
 				json: {
 					csv: lines.join('\n'),
-					rows: array.length,
+					rows: rowsArray.length,
 					columns: headers.length,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`CSV build failed: ${error.message}`);
+			throw new Error(`CSV build failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3208,18 +3423,18 @@ const markdownParserNode: NodeDef = {
 			label: 'Markdown Text',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'Markdown to parse',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { markdown } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const markdownTemplate = typeof config.markdown === 'string' ? config.markdown : '';
 
 		try {
-			const text = resolveVariables(markdown, inputs);
+			const text = toStringSafe(resolveVariables(markdownTemplate, inputs), '');
 
 			// Extract headings
-			const headings = [];
+			const headings: Array<{ level: number; text: string }> = [];
 			const headingRegex = /^(#{1,6})\s+(.+)$/gm;
 			let match;
 			while ((match = headingRegex.exec(text)) !== null) {
@@ -3230,7 +3445,7 @@ const markdownParserNode: NodeDef = {
 			}
 
 			// Extract links
-			const links = [];
+			const links: Array<{ text: string; url: string }> = [];
 			const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
 			while ((match = linkRegex.exec(text)) !== null) {
 				links.push({
@@ -3240,7 +3455,7 @@ const markdownParserNode: NodeDef = {
 			}
 
 			// Extract code blocks
-			const codeBlocks = [];
+			const codeBlocks: Array<{ language: string; code: string }> = [];
 			const codeRegex = /```(\w*)\n([\s\S]*?)```/g;
 			while ((match = codeRegex.exec(text)) !== null) {
 				codeBlocks.push({
@@ -3258,7 +3473,7 @@ const markdownParserNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Markdown parse failed: ${error.message}`);
+			throw new Error(`Markdown parse failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3279,37 +3494,38 @@ const templateNode: NodeDef = {
 			label: 'Template',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'Template string with {{placeholders}}',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { template } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const templateValue = typeof config.template === 'string' ? config.template : '';
 
 		try {
-			const inputData = inputs[0]?.json || {};
-			let result = template;
+			const inputData = getInputJson(inputs);
+			let result = templateValue;
 
 			// Simple template replacement
 			const placeholderRegex = /\{\{([^}]+)\}\}/g;
-			result = result.replace(placeholderRegex, (match: string, key: string) => {
+			result = result.replace(placeholderRegex, (placeholderMatch: string, key: string) => {
 				const trimmedKey = key.trim();
-				if (trimmedKey.includes('.')) {
-					// Handle nested paths
-					const value = trimmedKey.split('.').reduce((obj: any, k: string) => obj?.[k], inputData);
-					return value !== undefined ? String(value) : match;
+				const value = trimmedKey.includes('.')
+					? getValueByPath(inputData, trimmedKey)
+					: inputData[trimmedKey];
+				if (value === undefined) {
+					return placeholderMatch;
 				}
-				return inputData[trimmedKey] !== undefined ? String(inputData[trimmedKey]) : match;
+				return typeof value === 'string' ? value : toStringSafe(value, placeholderMatch);
 			});
 
 			return [{
 				json: {
 					result,
-					template,
+					template: templateValue,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Template render failed: ${error.message}`);
+			throw new Error(`Template render failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3334,7 +3550,7 @@ const embeddingNode: NodeDef = {
 			label: 'Text',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'Text to generate embeddings for',
 		},
 		{
@@ -3345,14 +3561,15 @@ const embeddingNode: NodeDef = {
 			description: 'Embedding model to use',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { text, model } = config;
+	async execute(inputs, config, context: ExecutionContext) {
+		const textTemplate = typeof config.text === 'string' ? config.text : '';
+		const modelValue = typeof config.model === 'string' ? config.model : 'text-embedding-ada-002';
 
 		try {
-			const finalText = resolveVariables(text, inputs);
+			const finalText = toStringSafe(resolveVariables(textTemplate, inputs), '');
 
-			// Call AI embed service
-			const embedding = await context.services.ai!.embed(finalText);
+			const aiService = requireAIService(context);
+			const embedding = await aiService.embed?.(finalText);
 			if (!embedding || !Array.isArray(embedding)) {
 				throw new Error('Embedding service returned undefined or invalid result');
 			}
@@ -3361,12 +3578,12 @@ const embeddingNode: NodeDef = {
 				json: {
 					text: finalText,
 					embedding,
-					model,
+					model: modelValue,
 					dimensions: embedding.length,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Embedding failed: ${error.message}`);
+			throw new Error(`Embedding failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3387,7 +3604,7 @@ const vectorSearchNode: NodeDef = {
 			label: 'Query Text',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'Search query',
 		},
 		{
@@ -3398,24 +3615,26 @@ const vectorSearchNode: NodeDef = {
 			description: 'Maximum number of results',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { query, limit } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const queryTemplate = typeof config.query === 'string' ? config.query : '';
+		const limitValue = Math.max(1, toNumberSafe(config.limit, 10));
 
 		try {
-			const finalQuery = resolveVariables(query, inputs);
+			const finalQuery = resolveVariables(queryTemplate, inputs);
 
 			// Note: This would require RAG service integration
 			// For now, return placeholder
-			return [{
+			return Promise.resolve([{
 				json: {
 					query: finalQuery,
 					results: [],
 					count: 0,
 					message: 'Vector search requires RAG service setup',
+					limit: limitValue,
 				}
-			}];
+			}]);
 		} catch (error) {
-			throw new Error(`Vector search failed: ${error.message}`);
+			throw new Error(`Vector search failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3436,7 +3655,7 @@ const summarizeNode: NodeDef = {
 			label: 'Text to Summarize',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'Text to summarize',
 		},
 		{
@@ -3444,7 +3663,7 @@ const summarizeNode: NodeDef = {
 			label: 'Model',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'AI model to use for summarization',
 		},
 		{
@@ -3455,33 +3674,39 @@ const summarizeNode: NodeDef = {
 			description: 'Maximum summary length in words',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { text, model, maxLength } = config;
+	async execute(inputs, config, context: ExecutionContext) {
+		const textTemplate = typeof config.text === 'string' ? config.text : '';
+		const modelValue = typeof config.model === 'string' ? config.model : '';
+		const maxLengthValue = Math.max(1, toNumberSafe(config.maxLength, 200));
 
 		try {
-			const finalText = resolveVariables(text, inputs);
+			const finalText = toStringSafe(resolveVariables(textTemplate, inputs), '');
 
 			const messages = [
 				{
 					role: 'user',
-					content: `Summarize the following text in no more than ${maxLength} words:\n\n${finalText}`,
+					content: `Summarize the following text in no more than ${maxLengthValue} words:\n\n${finalText}`,
 				},
 			];
 
-			const summary = await context.services.ai!.chat(messages, { model });
-			if (!summary || typeof summary !== 'string') {
+			const aiService = requireAIService(context);
+			const summaryResponse = await aiService.chat(messages, { model: modelValue });
+			const summaryText = typeof summaryResponse === 'string'
+				? summaryResponse
+				: toStringSafe((summaryResponse as Record<string, unknown>).content ?? summaryResponse, '');
+			if (!summaryText) {
 				throw new Error('Chat service returned undefined or invalid result');
 			}
 
 			return [{
 				json: {
-					summary,
-					originalLength: finalText!.length,
-					model,
+					summary: summaryText,
+					originalLength: finalText.length,
+					model: modelValue,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Summarize failed: ${error.message}`);
+			throw new Error(`Summarize failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3516,23 +3741,30 @@ const errorHandlerNode: NodeDef = {
 			description: 'Default value to return on error (JSON)',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { continueOnError, defaultValue } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const continueOnErrorValue = toBooleanSafe(config.continueOnError, true);
+		const defaultValueTemplate = typeof config.defaultValue === 'string' ? config.defaultValue : '{}';
 
 		try {
-			// Pass through input if no error
-			return inputs.length > 0 ? inputs : [{ json: JSON.parse(defaultValue) }];
+			const fallback = JSON.parse(defaultValueTemplate) as Record<string, unknown>;
+			return inputs.length > 0 ? inputs : [{ json: fallback }];
 		} catch (error) {
-			if (continueOnError) {
+			if (continueOnErrorValue) {
+				let fallback: Record<string, unknown> = {};
+				try {
+					fallback = JSON.parse(defaultValueTemplate) as Record<string, unknown>;
+				} catch {
+					fallback = {};
+				}
 				return [{
 					json: {
-						error: error.message,
-						defaultValue: JSON.parse(defaultValue),
+						error: getErrorMessage(error),
+						defaultValue: fallback,
 						handled: true,
 					}
 				}];
 			}
-			throw error;
+			throw new Error(`Error handler failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3563,16 +3795,16 @@ const retryNode: NodeDef = {
 			description: 'Delay between retries in milliseconds',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { maxRetries, retryDelay } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const maxRetriesValue = Math.max(0, toNumberSafe(config.maxRetries, 3));
+		const retryDelayValue = Math.max(0, toNumberSafe(config.retryDelay, 1000));
 
-		// Note: Actual retry logic would need to be handled at executor level
 		return [{
 			json: {
 				message: 'Retry configured',
-				maxRetries,
-				retryDelay,
-				input: inputs[0]?.json || {},
+				maxRetries: maxRetriesValue,
+				retryDelay: retryDelayValue,
+				input: getInputJson(inputs),
 			}
 		}];
 	},
@@ -3597,11 +3829,10 @@ const debounceNode: NodeDef = {
 			description: 'Debounce delay in milliseconds',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { delay } = config;
+	async execute(inputs, config, _context: ExecutionContext) {
+		const delayMs = Math.max(0, toNumberSafe(config.delay, 1000));
 
-		// Simple delay implementation
-		await new Promise(resolve => setTimeout(resolve, delay));
+		await new Promise(resolve => setTimeout(resolve, delayMs));
 
 		return inputs;
 	},
@@ -3633,16 +3864,16 @@ const throttleNode: NodeDef = {
 			description: 'Time interval in milliseconds',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { limit, interval } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const limitValue = Math.max(1, toNumberSafe(config.limit, 10));
+		const intervalValue = Math.max(0, toNumberSafe(config.interval, 1000));
 
-		// Note: Actual throttling would require state management
 		return [{
 			json: {
 				message: 'Throttle configured',
-				limit,
-				interval,
-				input: inputs[0]?.json || {},
+				limit: limitValue,
+				interval: intervalValue,
+				input: getInputJson(inputs),
 			}
 		}];
 	},
@@ -3668,7 +3899,7 @@ const cacheNode: NodeDef = {
 			label: 'Cache Key',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'Key to store/retrieve cache',
 		},
 		{
@@ -3693,56 +3924,57 @@ const cacheNode: NodeDef = {
 			description: 'Time to live in seconds',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { key, operation, value, ttl } = config;
+	execute(inputs, config, context: ExecutionContext) {
+		const keyTemplate = typeof config.key === 'string' ? config.key : '';
+		const operationValue = typeof config.operation === 'string' ? config.operation : 'get';
+		const valueTemplate = typeof config.value === 'string' ? config.value : '';
+		const ttlSeconds = Math.max(0, toNumberSafe(config.ttl, 3600));
 
 		try {
-			const finalKey = resolveVariables(key, inputs);
+			const finalKey = String(resolveVariables(keyTemplate, inputs));
+			const runtimeContext = context as ExecutionContext & { _cache?: Map<string, CacheEntry> };
+			const cache = runtimeContext._cache ?? (runtimeContext._cache = new Map<string, CacheEntry>());
 
-			// Note: Would require cache service implementation
-			// For now, use simple in-memory cache
-			const cache = (context as any)._cache || ((context as any)._cache = new Map());
-
-			switch (operation) {
+			switch (operationValue) {
 				case 'get': {
 					const cached = cache.get(finalKey);
 					return [{
 						json: {
 							key: finalKey,
-							value: cached?.value || null,
+							value: cached?.value ?? null,
 							hit: !!cached,
 						}
 					}];
 				}
 				case 'set': {
-					const finalValue = resolveVariables(value, inputs);
+					const finalValue = resolveVariables(valueTemplate, inputs);
 					cache.set(finalKey, {
 						value: finalValue,
 						timestamp: Date.now(),
-						ttl: ttl * 1000,
+						ttl: ttlSeconds * 1000,
 					});
 					return [{
 						json: {
 							key: finalKey,
 							cached: true,
-							ttl,
+							ttl: ttlSeconds,
 						}
 					}];
 				}
 				case 'delete': {
-				cache.delete(finalKey);
-				return [{
-					json: {
-						key: finalKey,
-						deleted: true,
-					}
-				}];
+					cache.delete(finalKey);
+					return [{
+						json: {
+							key: finalKey,
+							deleted: true,
+						}
+					}];
+				}
+				default:
+					return [{ json: { error: 'Unknown operation' } }];
 			}
-			default:
-				return [{ json: { error: 'Unknown operation' } }];
-		}
-	} catch (error) {
-			throw new Error(`Cache operation failed: ${error.message}`);
+		} catch (error) {
+			throw new Error(`Cache operation failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3763,18 +3995,17 @@ const databaseQueryNode: NodeDef = {
 			label: 'SQL Query',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 			description: 'SQL query to execute',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { query } = config;
+	execute(_inputs, config, _context: ExecutionContext) {
+		const queryTemplate = typeof config.query === 'string' ? config.query : '';
 
-		// Note: Would require database integration
 		return [{
 			json: {
 				message: 'Database query not yet implemented',
-				query,
+				query: queryTemplate,
 			}
 		}];
 	},
@@ -3796,7 +4027,7 @@ const keyValueStoreNode: NodeDef = {
 			label: 'Key',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 		},
 		{
 			name: 'operation',
@@ -3812,14 +4043,17 @@ const keyValueStoreNode: NodeDef = {
 			default: '',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { key, operation, value } = config;
+	execute(inputs, config, context: ExecutionContext) {
+		const keyTemplate = typeof config.key === 'string' ? config.key : '';
+		const operationValue = typeof config.operation === 'string' ? config.operation : 'get';
+		const valueTemplate = typeof config.value === 'string' ? config.value : '';
 
 		try {
-			const finalKey = resolveVariables(key, inputs);
-			const store = (context as any)._kvStore || ((context as any)._kvStore = new Map());
+			const finalKey = String(resolveVariables(keyTemplate, inputs));
+			const runtimeContext = context as ExecutionContext & { _kvStore?: Map<string, unknown> };
+			const store = runtimeContext._kvStore ?? (runtimeContext._kvStore = new Map<string, unknown>());
 
-			switch (operation) {
+			switch (operationValue) {
 				case 'get':
 					return [{
 						json: {
@@ -3828,7 +4062,7 @@ const keyValueStoreNode: NodeDef = {
 						}
 					}];
 				case 'set': {
-					const finalValue = resolveVariables(value, inputs);
+					const finalValue = resolveVariables(valueTemplate, inputs);
 					store.set(finalKey, finalValue);
 					return [{
 						json: {
@@ -3847,17 +4081,17 @@ const keyValueStoreNode: NodeDef = {
 						}
 					}];
 				case 'list':
-				return [{
-					json: {
-						keys: Array.from(store.keys()),
-						count: store.size,
-					}
-				}];
-			default:
-				return [{ json: { error: 'Unknown operation' } }];
-		}
-	} catch (error) {
-			throw new Error(`Key-value store failed: ${error.message}`);
+					return [{
+						json: {
+							keys: Array.from(store.keys()),
+							count: store.size,
+						}
+					}];
+				default:
+					return [{ json: { error: 'Unknown operation' } }];
+			}
+		} catch (error) {
+			throw new Error(`Key-value store failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3881,8 +4115,8 @@ const textSplitterNode: NodeDef = {
 			name: 'text',
 			label: 'Text',
 			type: 'string',
-			required: true,
-		default: '',
+	required: true,
+			default: '',
 		},
 		{
 			name: 'mode',
@@ -3899,14 +4133,16 @@ const textSplitterNode: NodeDef = {
 			description: 'Characters per chunk (for fixed mode)',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { text, mode, chunkSize } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const textTemplate = typeof config.text === 'string' ? config.text : '';
+		const modeValue = typeof config.mode === 'string' ? config.mode : 'paragraph';
+		const chunkSizeValue = Math.max(1, toNumberSafe(config.chunkSize, 1000));
 
 		try {
-			const finalText = resolveVariables(text, inputs);
+			const finalText = toStringSafe(resolveVariables(textTemplate, inputs), '');
 			let chunks: string[] = [];
 
-			switch (mode) {
+			switch (modeValue) {
 				case 'paragraph':
 					chunks = finalText.split(/\n\n+/).map((s: string) => s.trim()).filter(Boolean);
 					break;
@@ -3914,8 +4150,8 @@ const textSplitterNode: NodeDef = {
 					chunks = finalText.split(/[.!?]+/).map((s: string) => s.trim()).filter(Boolean);
 					break;
 				case 'fixed': {
-					for (let i = 0; i < finalText.length; i += chunkSize) {
-						chunks.push(finalText.substring(i, i + chunkSize));
+					for (let i = 0; i < finalText.length; i += chunkSizeValue) {
+						chunks.push(finalText.substring(i, i + chunkSizeValue));
 					}
 					break;
 				}
@@ -3925,11 +4161,11 @@ const textSplitterNode: NodeDef = {
 				json: {
 					chunks,
 					count: chunks.length,
-					mode,
+					mode: modeValue,
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Text split failed: ${error.message}`);
+			throw new Error(`Text split failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3950,14 +4186,14 @@ const wordCountNode: NodeDef = {
 			label: 'Text',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { text } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const textTemplate = typeof config.text === 'string' ? config.text : '';
 
 		try {
-			const finalText = resolveVariables(text, inputs);
+			const finalText = toStringSafe(resolveVariables(textTemplate, inputs), '');
 
 			const words = finalText.split(/\s+/).filter(Boolean).length;
 			const characters = finalText.length;
@@ -3975,7 +4211,7 @@ const wordCountNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Word count failed: ${error.message}`);
+			throw new Error(`Word count failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -3996,14 +4232,14 @@ const languageDetectNode: NodeDef = {
 			label: 'Text',
 			type: 'string',
 			required: true,
-		default: '',
+			default: '',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { text } = config;
+	execute(inputs, config, _context: ExecutionContext) {
+		const textTemplate = typeof config.text === 'string' ? config.text : '';
 
 		try {
-			const finalText = resolveVariables(text, inputs);
+			const finalText = toStringSafe(resolveVariables(textTemplate, inputs), '');
 
 			// Simple heuristic detection (very basic)
 			// In production, would use a proper language detection library
@@ -4030,7 +4266,7 @@ const languageDetectNode: NodeDef = {
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Language detect failed: ${error.message}`);
+			throw new Error(`Language detect failed: ${getErrorMessage(error)}`);
 		}
 	},
 };
@@ -4061,7 +4297,7 @@ const agentNode: NodeDef = {
 			getOptions: async () => {
 				// This will be called by the modal to get available agents
 				// The modal should have access to plugin settings
-				return [];
+				return Promise.resolve([] as Array<{ label: string; value: unknown }>);
 			},
 		},
 		{
@@ -4087,40 +4323,47 @@ const agentNode: NodeDef = {
 			description: 'Optional system prompt override',
 		},
 	],
-	async execute(inputs, config, context) {
-		const { agentId, message, conversationId, systemPromptOverride } = config;
+	async execute(inputs, config, context: ExecutionContext) {
+		const agentIdValue = typeof config.agentId === 'string' ? config.agentId : '';
+		const messageTemplate = typeof config.message === 'string' ? config.message : '';
+		const conversationIdTemplate = typeof config.conversationId === 'string' ? config.conversationId : '';
+		const systemPromptOverrideTemplate = typeof config.systemPromptOverride === 'string' ? config.systemPromptOverride : '';
 
 		try {
-			const finalMessage = resolveVariables(message, inputs);
-			const finalConversationId = conversationId ? resolveVariables(conversationId, inputs) : undefined;
+			const finalMessage = resolveVariables(messageTemplate, inputs);
+			const finalConversationId = conversationIdTemplate
+				? resolveVariables(conversationIdTemplate, inputs)
+				: undefined;
 
 			// Get agent configuration from settings
 			const settings = context.services.settings;
+			if (!settings) {
+				throw new Error('Plugin settings are unavailable');
+			}
 
 			// Check if agents array exists and has items
 			if (!settings.agents || settings.agents.length === 0) {
 				throw new Error('No agents configured. Please create an agent in plugin settings first.');
 			}
 
-			// Check if agentId is provided
-			if (!agentId) {
+			if (!agentIdValue) {
 				throw new Error('No agent selected. Please select an agent from the dropdown.');
 			}
 
-			const agent = settings.agents?.find((a: any) => a.id === agentId);
+			const agent = settings.agents?.find(agentItem => agentItem.id === agentIdValue);
 
 			if (!agent) {
-				throw new Error(`Agent not found: ${agentId}. Please check if the agent still exists in settings.`);
+				throw new Error(`Agent not found: ${String(agentIdValue)}. Please check if the agent still exists in settings.`);
 			}
 
 			// Get system prompt
 			let systemPrompt = '';
-			if (systemPromptOverride) {
-				systemPrompt = resolveVariables(systemPromptOverride, inputs);
+			if (systemPromptOverrideTemplate) {
+				systemPrompt = resolveVariables(systemPromptOverrideTemplate, inputs);
 			} else if (agent.systemPromptId) {
-				const prompt = settings.systemPrompts?.find((p: any) => p.id === agent.systemPromptId);
+				const prompt = settings.systemPrompts?.find((p: unknown) => (p as { id?: string }).id === agent.systemPromptId);
 				if (prompt) {
-					systemPrompt = prompt.content;
+					systemPrompt = (prompt as { content?: string }).content ?? '';
 				}
 			}
 
@@ -4143,7 +4386,7 @@ const agentNode: NodeDef = {
 			}
 
 			// Prepare messages array
-			const messages: any[] = [];
+			const messages: Array<{ role: string; content: string }> = [];
 
 			// Add system prompt if available
 			if (systemPrompt) {
@@ -4159,31 +4402,34 @@ const agentNode: NodeDef = {
 				content: finalMessage,
 			});
 
-			// Call AI chat service
-			const response = await context.services.ai!.chat(messages, {
+			const aiService = requireAIService(context);
+			const response = await aiService.chat(messages, {
 				model: modelId,
 				temperature: agent.temperature,
 				maxTokens: agent.maxTokens,
 			});
 
-			if (!response || typeof response !== 'string') {
+			const responseText = typeof response === 'string'
+				? response
+				: toStringSafe((response as Record<string, unknown>).content ?? response, '');
+			if (!responseText) {
 				throw new Error('Agent chat service returned undefined or invalid result');
 			}
 
 			return [{
 				json: {
-					response,
-					agentId,
+					response: responseText,
+					agentId: agentIdValue,
 					agentName: agent.name,
 					model: modelId,
 					conversationId: finalConversationId,
 					messageLength: finalMessage.length,
-					responseLength: response.length,
+					responseLength: responseText.length,
 					timestamp: Date.now(),
 				}
 			}];
 		} catch (error) {
-			throw new Error(`Agent execution failed: ${error.message}`);
+			throw new Error(`Agent execution failed: ${getErrorMessage(error)}`);
 		}
 	},
 };

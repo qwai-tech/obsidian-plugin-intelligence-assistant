@@ -34,14 +34,14 @@ export class MCPServerModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: this.mode === 'edit' ? 'Edit MCP Server' : 'Add MCP Server' });
+		contentEl.createEl('h2', { text: this.mode === 'edit' ? 'Edit MCP server' : 'Add MCP server' });
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].name',
-			label: 'Server Name',
+			label: 'Server name',
 			description: 'Friendly name shown throughout the plugin'
 		}).addText(text => {
-				text.setPlaceholder('Acme MCP Server');
+				text.setPlaceholder('Acme mcp server');
 				text.setValue(this.draft.name ?? '');
 				text.onChange(value => {
 					this.draft.name = value;
@@ -50,11 +50,11 @@ export class MCPServerModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].connectionMode',
-			label: 'Connection Mode',
+			label: 'Connection mode',
 			description: 'Choose whether to connect automatically or only when triggered manually'
 		}).addDropdown(dropdown => dropdown
-				.addOption('auto', 'Auto-connect when chat opens')
-				.addOption('manual', 'Manual connect')
+				.addOption('Auto', 'Auto-connect when chat opens')
+				.addOption('Manual', 'Manual connect')
 				.setValue(this.draft.connectionMode ?? 'auto')
 				.onChange(value => {
 					this.draft.connectionMode = value as 'auto' | 'manual';
@@ -65,7 +65,7 @@ export class MCPServerModal extends Modal {
 			label: 'Command',
 			description: 'Executable or script that starts the MCP server'
 		}).addText(text => {
-				text.setPlaceholder('npx @acme/mcp-server');
+				text.setPlaceholder('Npx @acme/mcp-server');
 				text.setValue(this.draft.command ?? '');
 				text.onChange(value => {
 					this.draft.command = value;
@@ -87,10 +87,10 @@ export class MCPServerModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].env',
-			label: 'Environment Variables',
+			label: 'Environment variables',
 			description: 'Optional KEY=VALUE pairs, one per line'
 		}).addTextArea(text => {
-				text.setPlaceholder('API_KEY=xyz' + '\n' + 'NODE_ENV=production');
+				text.setPlaceholder('Api_key=xyz' + '\n' + 'node_env=production');
 				text.setValue(this.envText);
 				text.inputEl.rows = 4;
 				text.onChange(value => {
@@ -123,55 +123,57 @@ export class MCPServerModal extends Modal {
 		cancelBtn.setCssProps({ 'padding': '6px 16px' });
 		cancelBtn.addEventListener('click', () => this.close());
 
-		const saveBtn = buttonBar.createEl('button', { text: this.mode === 'edit' ? 'Save Changes' : 'Add Server' });
+		const saveBtn = buttonBar.createEl('button', { text: this.mode === 'edit' ? 'Save changes' : 'Add server' });
 		saveBtn.setCssProps({ 'padding': '6px 16px' });
 		saveBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
 		saveBtn.setCssProps({ 'color': 'white' });
 		saveBtn.setCssProps({ 'border': 'none' });
 		saveBtn.setCssProps({ 'border-radius': '4px' });
-		saveBtn.addEventListener('click', async () => {
-			const name = (this.draft.name ?? '').trim();
-			if (!name) {
-				new Notice('Server name is required');
-				return;
-			}
-
-			const command = (this.draft.command ?? '').trim();
-			if (!command) {
-				new Notice('Command is required');
-				return;
-			}
-
-			this.draft.args = this.normalizeArgs(this.argsText);
-
-			let parsedEnv: Record<string, string> | undefined;
-			try {
-				parsedEnv = this.parseEnv(this.envText);
-				if (this.envInputEl) {
-					this.envInputEl.setCssProps({ 'border-color': '' });
+		saveBtn.addEventListener('click', () => {
+			void (async () => {
+				const name = (this.draft.name ?? '').trim();
+				if (!name) {
+					new Notice('Server name is required');
+					return;
 				}
-			} catch (error) {
-				if (this.envInputEl) {
-					this.envInputEl.setCssProps({ 'border-color': 'var(--text-error)' });
+
+				const command = (this.draft.command ?? '').trim();
+				if (!command) {
+					new Notice('Command is required');
+					return;
 				}
-				const message = error instanceof Error ? error.message : 'Invalid environment variable entry';
-				new Notice(message);
-				return;
-			}
 
-			const payload: MCPServerConfig = {
-				name,
-				command,
-				args: this.draft.args ?? [],
-				env: parsedEnv ?? {},
-				enabled: this.draft.enabled ?? true,
-				connectionMode: this.draft.connectionMode ?? 'auto',
-				cachedTools: this.draft.cachedTools ?? [],
-				cacheTimestamp: this.draft.cacheTimestamp
-			};
+				this.draft.args = this.normalizeArgs(this.argsText);
 
-			await this.onSaveCallback(JSON.parse(JSON.stringify(payload)) as MCPServerConfig);
-			this.close();
+				let parsedEnv: Record<string, string> | undefined;
+				try {
+					parsedEnv = this.parseEnv(this.envText);
+					if (this.envInputEl) {
+						this.envInputEl.setCssProps({ 'border-color': '' });
+					}
+				} catch (error) {
+					if (this.envInputEl) {
+						this.envInputEl.setCssProps({ 'border-color': 'var(--text-error)' });
+					}
+					const message = error instanceof Error ? error.message : 'Invalid environment variable entry';
+					new Notice(message);
+					return;
+				}
+
+				const payload: MCPServerConfig = {
+					name,
+					command,
+					args: this.draft.args ?? [],
+					env: parsedEnv ?? {},
+					enabled: this.draft.enabled ?? true,
+					connectionMode: this.draft.connectionMode ?? 'auto',
+					cachedTools: this.draft.cachedTools ?? [],
+					cacheTimestamp: this.draft.cacheTimestamp
+				};
+
+				await this.onSaveCallback(JSON.parse(JSON.stringify(payload)) as MCPServerConfig);
+				this.close();
+			})();
 		});
 	}
 

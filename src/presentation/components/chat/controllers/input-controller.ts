@@ -11,6 +11,15 @@ export class InputController extends BaseController {
 	private inputElement: HTMLTextAreaElement | null = null;
 	private attachmentPreviewElement: HTMLElement | null = null;
 
+	// Getters for protected properties
+	protected get plugin() {
+		return this._plugin;
+	}
+
+	protected get app() {
+		return this._app;
+	}
+
 	async initialize(): Promise<void> {
 		// Initialize input controller
 	}
@@ -215,7 +224,7 @@ export class InputController extends BaseController {
 			item.setCssProps({ 'background': 'var(--background-primary)' });
 			item.setCssProps({ 'border-radius': '4px' });
 
-			const _icon = item.createSpan({ text: attachment.type === 'image' ? '🖼️' : '📎' });
+			item.createSpan({ text: attachment.type === 'image' ? '🖼️' : '📎' });
 			const name = item.createSpan({ text: attachment.name });
 			name.setCssProps({ 'font-size': '0.9em' });
 

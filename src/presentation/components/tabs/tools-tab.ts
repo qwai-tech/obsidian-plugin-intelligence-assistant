@@ -15,17 +15,17 @@ export function displayToolsTab(
 	setToolsSubTab: (tab: 'built-in' | 'mcp') => void,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Tool Configuration' });
+	containerEl.createEl('h3', { text: 'Tool configuration' });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Review built-in tools and explore MCP tools loaded from connected servers. Enable the actions your agents should be able to perform.'
+		text: 'Review built-in tools and explore mcp tools loaded from connected servers. Enable the actions your agents should be able to perform.'
 	});
 	desc.addClass('ia-section-description');
 
 	const tabBar = containerEl.createDiv('settings-tabs');
 	const tabDefs: Array<{ slug: 'built-in' | 'mcp'; label: string }> = [
-		{ slug: 'built-in', label: 'Built-In Tools' },
-		{ slug: 'mcp', label: 'MCP Tools' }
+		{ slug: 'built-in', label: 'Built-in Tools' },
+		{ slug: 'mcp', label: 'MCP tools' }
 	];
 
 	tabDefs.forEach(def => {
@@ -112,19 +112,21 @@ function renderBuiltInTools(content: HTMLElement, plugin: IntelligenceAssistantP
 
 		const toggle = enabledCell.createEl('input', { type: 'checkbox' });
 		toggle.checked = tool.enabled;
-		toggle.addEventListener('change', async () => {
-			tool.enabled = toggle.checked;
-			await plugin.saveSettings();
-			plugin.syncToolManagerConfig();
+		toggle.addEventListener('change', () => {
+			void (async () => {
+				tool.enabled = toggle.checked;
+				await plugin.saveSettings();
+				plugin.syncToolManagerConfig();
+			})();
 		});
 	});
 
 	const infoBox = content.createDiv('info-callout');
-	const infoTitle = infoBox.createEl('h5', { text: '💡 About Tools' });
+	const infoTitle = infoBox.createEl('h5', { text: '💡 about tools' });
 	infoTitle.addClass('info-callout-title');
 
 	const infoText = infoBox.createEl('p', {
-		text: 'Built-in tools are configured per plugin settings. MCP tools are managed independently—use the MCP tab to connect servers and refresh tool availability.'
+		text: 'Built-in tools are configured per plugin settings. Mcp tools are managed independently—use the mcp tab to connect servers and refresh tool availability.'
 	});
 	infoText.addClass('table-subtext');
 }
@@ -159,8 +161,9 @@ function renderMcpTools(
 		}
 		const requiredSet = new Set(schema.required ?? []);
 		return Object.entries(schema.properties)
-			.map(([key, value]: [string, any]) => {
-				const type = value?.type ?? 'unknown';
+			.map(([key, value]: [string, unknown]) => {
+				const propValue = value as { type?: string };
+				const type = propValue?.type ?? 'unknown';
 				return `${key}${requiredSet.has(key) ? '*' : ''}: ${type}`;
 			})
 			.join(', ');
@@ -203,7 +206,7 @@ function renderMcpTools(
 	if (!hasRows) {
 		const note = content.createEl('p');
 		note.addClass('ia-table-subtext');
-		note.setText('No MCP tools available. Connect a server or refresh cached tools to populate this list.');
+		note.setText('No mcp tools available. Connect a server or refresh cached tools to populate this list.');
 		return;
 	}
 
@@ -224,7 +227,7 @@ function renderMcpTools(
 			serverStack.createDiv('ia-table-title').setText(row.serverName);
 			const statusHost = serverStack.createDiv();
 			const isConnected = connectedServers.has(row.serverName);
-			createStatusIndicator(statusHost, isConnected ? 'success' : 'warning', isConnected ? 'Connected' : 'Disconnected');
+			createStatusIndicator(statusHost, isConnected ? 'success' : 'warning', isConnected ? 'connected' : 'disconnected');
 			currentServer = row.serverName;
 		} else {
 			serverCell.setText('');

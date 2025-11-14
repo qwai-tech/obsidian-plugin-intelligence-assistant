@@ -1,8 +1,8 @@
 // Repository interface
 export interface IRepository<T> {
-  save(entity: T): Promise<T>;
-  findById(id: string): Promise<T | null>;
+  save(_entity: T): Promise<T>;
+  findById(_id: string): Promise<T | null>;
   findAll(): Promise<T[]>;
-  update(id: string, updates: Partial<T>): Promise<T>;
-  delete(id: string): Promise<boolean>;
+  update(_id: string, _updates: Partial<T>): Promise<T>;
+  delete(_id: string): Promise<boolean>;
 }

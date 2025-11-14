@@ -10,8 +10,8 @@ export abstract class BaseLLMProvider implements ILLMProvider {
 	}
 
 	abstract get name(): string;
-	abstract chat(request: ChatRequest): Promise<ChatResponse>;
-	abstract streamChat(request: ChatRequest, onChunk: (chunk: StreamChunk) => void): Promise<void>;
+	abstract chat(_request: ChatRequest): Promise<ChatResponse>;
+	abstract streamChat(_request: ChatRequest, _onChunk: (_chunk: StreamChunk) => void): Promise<void>;
 
 	protected getHeaders(): Record<string, string> {
 		return {
@@ -19,7 +19,7 @@ export abstract class BaseLLMProvider implements ILLMProvider {
 		};
 	}
 
-	protected async makeRequest(url: string, body: any): Promise<any> {
+	protected async makeRequest(url: string, body: unknown): Promise<unknown> {
 		const response = await requestUrl({
 			url,
 			method: 'POST',

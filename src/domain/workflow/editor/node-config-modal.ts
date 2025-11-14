@@ -10,13 +10,14 @@ import { WorkflowNode, NodeParameter, WorkflowServices } from '../core/types';
 import { NodeRegistry } from '../nodes/registry';
 import { EventEmitter } from './event-emitter';
 import { WorkflowGraph } from '../core/workflow';
+import { isRecord } from '@/types/type-utils';
 
 /**
  * Modal events
  */
-interface ModalEvents {
-  'update': { nodeId: string; config: Record<string, any> };
-  'close': void;
+interface ModalEvents extends Record<string, unknown> {
+	'update': { nodeId: string; config: Record<string, unknown> };
+	'close': void;
 }
 
 /**
@@ -30,8 +31,8 @@ export class NodeConfigModal extends Modal {
   private events = new EventEmitter<ModalEvents>();
 
   // Form state
-  private formConfig: Record<string, any> = {};
-  private originalConfig: Record<string, any> = {};
+  private formConfig: Record<string, unknown> = {};
+  private originalConfig: Record<string, unknown> = {};
 
   constructor(
     app: App,
@@ -64,7 +65,7 @@ export class NodeConfigModal extends Modal {
     console.debug('[NodeConfigModal] NodeDef found:', nodeDef.name, 'parameters:', nodeDef.parameters.length);
 
     // Set modal title using Obsidian's API (this uses the existing modal-title element)
-    this.setTitle(`${nodeDef.icon} ${this.node.name}`);
+    this.setTitle(`${nodeDef.icon ?? ''} ${this.node.name}`);
 
     // Add our custom class to contentEl only
     contentEl.addClass('node-config-modal-content');
@@ -157,11 +158,11 @@ export class NodeConfigModal extends Modal {
     // Header
     const header = variablesSection.createDiv('modal-variables-header');
     header.createSpan({ text: '💡 ', cls: 'modal-variables-icon' });
-    header.createSpan({ text: 'Available Variables', cls: 'modal-variables-title' });
+    header.createSpan({ text: 'Available variables', cls: 'modal-variables-title' });
 
     // Description
     const desc = variablesSection.createDiv('modal-variables-desc');
-    desc.setText('You can use these variables in your configuration using {{variableName}} syntax:');
+    desc.setText('You can use these variables in your configuration using {{variablename}} syntax:');
 
     // Variables list
     const list = variablesSection.createDiv('modal-variables-list');
@@ -172,166 +173,145 @@ export class NodeConfigModal extends Modal {
       { name: 'input', desc: 'Alias for {{data}}' },
     ];
 
-    // Get actual fields from execution context if available
     const exampleFields: Array<{ name: string; source: string }> = [];
 
-    // Check if we have execution context from the workflow services
-    // This would give us real field names from actual execution
-    const executionContext = (this.services as any)?.executionContext;
-    const actualFields: string[] = [];
+    for (const prevNode of previousNodes) {
+      const prevNodeDef = this.nodeRegistry.get(prevNode.type);
 
-    // Try to get actual output fields from previous nodes if execution data exists
-    if (executionContext?.outputs) {
-      for (const prevNode of previousNodes) {
-        const outputs = executionContext.outputs.get(prevNode.id);
-        if (outputs && outputs.length > 0 && outputs[0].json) {
-          const fields = Object.keys(outputs[0].json);
-          for (const field of fields) {
-            if (!actualFields.includes(field)) {
-              actualFields.push(field);
-              exampleFields.push({ name: field, source: prevNode.name });
-            }
+      if (prevNodeDef?.type === 'llm') {
+        // AI Chat node outputs: response, model, prompt, systemPrompt
+        exampleFields.push(
+          { name: 'response', source: prevNode.name },
+          { name: 'model', source: prevNode.name },
+          { name: 'prompt', source: prevNode.name },
+          { name: 'systemPrompt', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'agent') {
+        // Agent node outputs: response, agentId, agentName, model, conversationId
+        exampleFields.push(
+          { name: 'response', source: prevNode.name },
+          { name: 'agentId', source: prevNode.name },
+          { name: 'agentName', source: prevNode.name },
+          { name: 'model', source: prevNode.name },
+          { name: 'conversationId', source: prevNode.name },
+          { name: 'messageLength', source: prevNode.name },
+          { name: 'responseLength', source: prevNode.name },
+          { name: 'timestamp', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'start') {
+        // Check if Start node has parsed output fields from its JSON config
+        const parsedFields = prevNode.config._parsedOutputFields;
+        if (parsedFields && Array.isArray(parsedFields) && parsedFields.length > 0) {
+          // Show actual parsed fields from the Start node's JSON input
+          for (const fieldName of parsedFields) {
+            const safeName = typeof fieldName === 'string' ? fieldName : String(fieldName ?? '');
+            const sourceName = typeof prevNode.name === 'string' ? prevNode.name : String(prevNode.name ?? '');
+            exampleFields.push({ name: safeName, source: sourceName });
           }
+        } else {
+          // Start node: outputs depend on user input, show note
+          exampleFields.push({ name: '(depends on input - configure Start node first)', source: prevNode.name });
         }
-      }
-    }
-
-    // If no execution data, provide accurate examples based on node type
-    if (actualFields.length === 0) {
-      for (const prevNode of previousNodes) {
-        const prevNodeDef = this.nodeRegistry.get(prevNode.type);
-
-        if (prevNodeDef?.type === 'llm') {
-          // AI Chat node outputs: response, model, prompt, systemPrompt
-          exampleFields.push(
-            { name: 'response', source: prevNode.name },
-            { name: 'model', source: prevNode.name },
-            { name: 'prompt', source: prevNode.name },
-            { name: 'systemPrompt', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'agent') {
-          // Agent node outputs: response, agentId, agentName, model, conversationId
-          exampleFields.push(
-            { name: 'response', source: prevNode.name },
-            { name: 'agentId', source: prevNode.name },
-            { name: 'agentName', source: prevNode.name },
-            { name: 'model', source: prevNode.name },
-            { name: 'conversationId', source: prevNode.name },
-            { name: 'messageLength', source: prevNode.name },
-            { name: 'responseLength', source: prevNode.name },
-            { name: 'timestamp', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'start') {
-          // Check if Start node has parsed output fields from its JSON config
-          const parsedFields = prevNode.config._parsedOutputFields;
-          if (parsedFields && Array.isArray(parsedFields) && parsedFields.length > 0) {
-            // Show actual parsed fields from the Start node's JSON input
-            for (const fieldName of parsedFields) {
-              exampleFields.push({ name: fieldName, source: prevNode.name });
-            }
-          } else {
-            // Start node: outputs depend on user input, show note
-            exampleFields.push({ name: '(depends on input - configure Start node first)', source: prevNode.name });
+      } else if (prevNodeDef?.type === 'transform') {
+        // Check if Transform node has parsed output fields
+        const parsedFields = prevNode.config._parsedOutputFields;
+        if (parsedFields && Array.isArray(parsedFields) && parsedFields.length > 0) {
+          // Show parsed fields from the Transform node's return statement
+          for (const fieldName of parsedFields) {
+            const safeName = typeof fieldName === 'string' ? fieldName : String(fieldName ?? '');
+            const sourceName = typeof prevNode.name === 'string' ? prevNode.name : String(prevNode.name ?? '');
+            exampleFields.push({ name: safeName, source: sourceName });
           }
-        } else if (prevNodeDef?.type === 'transform') {
-          // Check if Transform node has parsed output fields
-          const parsedFields = prevNode.config._parsedOutputFields;
-          if (parsedFields && Array.isArray(parsedFields) && parsedFields.length > 0) {
-            // Show parsed fields from the Transform node's return statement
-            for (const fieldName of parsedFields) {
-              exampleFields.push({ name: fieldName, source: prevNode.name });
-            }
-          } else {
-            // Transform node: outputs depend on code
-            exampleFields.push({ name: '(depends on transform code)', source: prevNode.name });
-          }
-        } else if (prevNodeDef?.type === 'httpRequest') {
-          exampleFields.push(
-            { name: 'status', source: prevNode.name },
-            { name: 'data', source: prevNode.name },
-            { name: 'url', source: prevNode.name },
-            { name: 'method', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'createNote') {
-          exampleFields.push(
-            { name: 'path', source: prevNode.name },
-            { name: 'created', source: prevNode.name },
-            { name: 'timestamp', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'readNote') {
-          exampleFields.push(
-            { name: 'content', source: prevNode.name },
-            { name: 'fullContent', source: prevNode.name },
-            { name: 'frontmatter', source: prevNode.name },
-            { name: 'path', source: prevNode.name },
-            { name: 'name', source: prevNode.name },
-            { name: 'basename', source: prevNode.name },
-            { name: 'tags', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'updateNote') {
-          exampleFields.push(
-            { name: 'path', source: prevNode.name },
-            { name: 'updated', source: prevNode.name },
-            { name: 'mode', source: prevNode.name },
-            { name: 'timestamp', source: prevNode.name },
-            { name: 'previousLength', source: prevNode.name },
-            { name: 'newLength', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'searchNotes') {
-          exampleFields.push(
-            { name: 'results', source: prevNode.name },
-            { name: 'count', source: prevNode.name },
-            { name: 'totalMatches', source: prevNode.name },
-            { name: 'query', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'dailyNote') {
-          exampleFields.push(
-            { name: 'path', source: prevNode.name },
-            { name: 'date', source: prevNode.name },
-            { name: 'fullDate', source: prevNode.name },
-            { name: 'content', source: prevNode.name },
-            { name: 'isNew', source: prevNode.name },
-            { name: 'timestamp', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'loop') {
-          exampleFields.push(
-            { name: 'item', source: prevNode.name },
-            { name: 'index', source: prevNode.name },
-            { name: 'total', source: prevNode.name },
-            { name: 'isFirst', source: prevNode.name },
-            { name: 'isLast', source: prevNode.name },
-            { name: 'iteration', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'switch') {
-          exampleFields.push(
-            { name: '_route', source: prevNode.name },
-            { name: '_matched', source: prevNode.name },
-            { name: '_fieldValue', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'split') {
-          exampleFields.push(
-            { name: 'item', source: prevNode.name },
-            { name: 'text', source: prevNode.name },
-            { name: 'index', source: prevNode.name },
-            { name: 'total', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'aggregate') {
-          exampleFields.push(
-            { name: 'result', source: prevNode.name },
-            { name: 'operation', source: prevNode.name },
-            { name: 'count', source: prevNode.name },
-            { name: 'fieldName', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'setVariables') {
-          exampleFields.push(
-            { name: '(depends on configured variables)', source: prevNode.name }
-          );
-        } else if (prevNodeDef?.type === 'delay') {
-          exampleFields.push(
-            { name: 'delayedMs', source: prevNode.name },
-            { name: 'delayedAt', source: prevNode.name }
-          );
+        } else {
+          // Transform node: outputs depend on code
+          exampleFields.push({ name: '(depends on transform code)', source: prevNode.name });
         }
+      } else if (prevNodeDef?.type === 'httpRequest') {
+        exampleFields.push(
+          { name: 'status', source: prevNode.name },
+          { name: 'data', source: prevNode.name },
+          { name: 'url', source: prevNode.name },
+          { name: 'method', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'createNote') {
+        exampleFields.push(
+          { name: 'path', source: prevNode.name },
+          { name: 'created', source: prevNode.name },
+          { name: 'timestamp', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'readNote') {
+        exampleFields.push(
+          { name: 'content', source: prevNode.name },
+          { name: 'fullContent', source: prevNode.name },
+          { name: 'frontmatter', source: prevNode.name },
+          { name: 'path', source: prevNode.name },
+          { name: 'name', source: prevNode.name },
+          { name: 'basename', source: prevNode.name },
+          { name: 'tags', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'updateNote') {
+        exampleFields.push(
+          { name: 'path', source: prevNode.name },
+          { name: 'updated', source: prevNode.name },
+          { name: 'mode', source: prevNode.name },
+          { name: 'timestamp', source: prevNode.name },
+          { name: 'previousLength', source: prevNode.name },
+          { name: 'newLength', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'searchNotes') {
+        exampleFields.push(
+          { name: 'results', source: prevNode.name },
+          { name: 'count', source: prevNode.name },
+          { name: 'totalMatches', source: prevNode.name },
+          { name: 'query', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'dailyNote') {
+        exampleFields.push(
+          { name: 'path', source: prevNode.name },
+          { name: 'date', source: prevNode.name },
+          { name: 'fullDate', source: prevNode.name },
+          { name: 'content', source: prevNode.name },
+          { name: 'isNew', source: prevNode.name },
+          { name: 'timestamp', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'loop') {
+        exampleFields.push(
+          { name: 'item', source: prevNode.name },
+          { name: 'index', source: prevNode.name },
+          { name: 'total', source: prevNode.name },
+          { name: 'isFirst', source: prevNode.name },
+          { name: 'isLast', source: prevNode.name },
+          { name: 'iteration', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'switch') {
+        exampleFields.push(
+          { name: '_route', source: prevNode.name },
+          { name: '_matched', source: prevNode.name },
+          { name: '_fieldValue', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'split') {
+        exampleFields.push(
+          { name: 'item', source: prevNode.name },
+          { name: 'text', source: prevNode.name },
+          { name: 'index', source: prevNode.name },
+          { name: 'total', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'aggregate') {
+        exampleFields.push(
+          { name: 'result', source: prevNode.name },
+          { name: 'operation', source: prevNode.name },
+          { name: 'count', source: prevNode.name },
+          { name: 'fieldName', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'setVariables') {
+        exampleFields.push(
+          { name: '(depends on configured variables)', source: prevNode.name }
+        );
+      } else if (prevNodeDef?.type === 'delay') {
+        exampleFields.push(
+          { name: 'delayedMs', source: prevNode.name },
+          { name: 'delayedAt', source: prevNode.name }
+        );
       }
     }
 
@@ -353,7 +333,9 @@ export class NodeConfigModal extends Modal {
       varCode.addClass('ia-clickable');
       varCode.title = 'Click to copy';
       varCode.addEventListener('click', () => {
-        navigator.clipboard.writeText(`{{${variable.name}}}`);
+        void navigator.clipboard
+          .writeText(`{{${variable.name}}}`)
+          .catch(error => console.error('Failed to copy variable', error));
         varCode.setCssProps({ 'background-color': '#10b981' });
         setTimeout(() => {
           varCode.setCssProps({ 'background-color': '' });
@@ -392,7 +374,9 @@ export class NodeConfigModal extends Modal {
         varCode.addClass('ia-clickable');
         varCode.title = 'Click to copy';
         varCode.addEventListener('click', () => {
-          navigator.clipboard.writeText(`{{${field.name}}}`);
+          void navigator.clipboard
+            .writeText(`{{${field.name}}}`)
+            .catch(error => console.error('Failed to copy variable', error));
           varCode.setCssProps({ 'background-color': '#10b981' });
           setTimeout(() => {
             varCode.setCssProps({ 'background-color': '' });
@@ -472,11 +456,11 @@ export class NodeConfigModal extends Modal {
     }
   }
 
-  private renderStringInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderStringInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
     const input = container.createEl('input', {
       type: 'text',
       cls: 'modal-input',
-      value: String(value || ''),
+      value: this.toInputString(value),
     });
 
     if (param.placeholder) {
@@ -488,11 +472,14 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private renderNumberInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderNumberInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
+    const numericValue = typeof value === 'number' && Number.isFinite(value)
+      ? value
+      : Number(value ?? 0);
     const input = container.createEl('input', {
       type: 'number',
       cls: 'modal-input',
-      value: String(value || 0),
+      value: Number.isFinite(numericValue) ? String(numericValue) : '0',
     });
 
     if (param.placeholder) {
@@ -504,7 +491,7 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private renderBooleanInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderBooleanInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
     const wrapper = container.createDiv('modal-checkbox-wrapper');
 
     const input = wrapper.createEl('input', {
@@ -524,7 +511,7 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private async renderSelectInput(container: HTMLElement, param: NodeParameter, value: any): Promise<void> {
+  private async renderSelectInput(container: HTMLElement, param: NodeParameter, value: unknown): Promise<void> {
     console.debug('[NodeConfigModal] renderSelectInput called for param:', param.name, param);
 
     const select = container.createEl('select', {
@@ -532,17 +519,49 @@ export class NodeConfigModal extends Modal {
     });
 
     // Get options - prefer getOptions() if available, otherwise use param.options
-    let options = param.options || [];
+    let options: Array<{ label: string; value: string }> =
+      Array.isArray(param.options)
+        ? param.options.map((opt: unknown) => {
+            if (isRecord(opt)) {
+              const label = typeof opt.label === 'string' ? opt.label : this.toInputString(opt.label);
+              const value = typeof opt.value === 'string' ? opt.value : this.toInputString(opt.value);
+              return { label, value };
+            }
+            const str = this.toInputString(opt);
+            return { label: str, value: str };
+          })
+        : [];
     console.debug('[NodeConfigModal] Initial options for', param.name, ':', options);
 
     // If param has getOptions method, use it (for dynamic options like model list)
     if (param.getOptions && typeof param.getOptions === 'function') {
       try {
-        options = await param.getOptions();
+        const dynamicOptions = await param.getOptions();
+        options = Array.isArray(dynamicOptions)
+          ? dynamicOptions.map((opt: unknown) => {
+              if (isRecord(opt)) {
+                const label = typeof opt.label === 'string' ? opt.label : this.toInputString(opt.label);
+                const value = typeof opt.value === 'string' ? opt.value : this.toInputString(opt.value);
+                return { label, value };
+              }
+              const str = this.toInputString(opt);
+              return { label: str, value: str };
+            })
+          : options;
       } catch (error) {
         console.error('[NodeConfigModal] Failed to get dynamic options:', error);
         // Fall back to static options
-        options = param.options || [];
+        options = Array.isArray(param.options)
+          ? param.options.map((opt: unknown) => {
+              if (isRecord(opt)) {
+                const label = typeof opt.label === 'string' ? opt.label : this.toInputString(opt.label);
+                const value = typeof opt.value === 'string' ? opt.value : this.toInputString(opt.value);
+                return { label, value };
+              }
+              const str = this.toInputString(opt);
+              return { label: str, value: str };
+            })
+          : [];
       }
     }
     // Fallback: use dynamic models from settings if param.name is 'model' and no options
@@ -552,15 +571,22 @@ export class NodeConfigModal extends Modal {
       for (const config of this.services.settings.llmConfigs) {
         if (config.cachedModels) {
           // Filter out disabled models
-          const enabledModels = config.cachedModels.filter((model: any) => model.enabled !== false);
+          const enabledModels = config.cachedModels.filter((model: unknown) => {
+            return isRecord(model) && model.enabled !== false;
+          });
           for (const model of enabledModels) {
+            if (!isRecord(model)) continue;
             // Build value with provider prefix
-            const modelValue = model.id.includes(':') ? model.id : `${config.provider}:${model.id}`;
+            const modelId = typeof model.id === 'string' ? model.id : String(model.id);
+            const modelValue = modelId.includes(':') ? modelId : `${config.provider ?? ''}:${modelId}`;
             // Avoid duplicates by checking if model is already added
-            const existingOption = options.find((opt: any) => opt.value === modelValue);
+            const existingOption = options.find((opt: unknown) => {
+              return isRecord(opt) && opt.value === modelValue;
+            });
             if (!existingOption) {
+              const modelName = typeof model.name === 'string' ? model.name : modelId;
               options.push({
-                label: model.name || model.id,
+                label: modelName,
                 value: modelValue
               });
             }
@@ -577,10 +603,18 @@ export class NodeConfigModal extends Modal {
 
       if (this.services?.settings?.agents && this.services.settings.agents.length > 0) {
         // Build options from agents in settings
-        options = this.services.settings.agents.map((agent: any) => ({
-          label: `${agent.icon || '🤖'} ${agent.name}`,
-          value: agent.id
-        }));
+        options = this.services.settings.agents.map((agent: unknown) => {
+          if (!isRecord(agent)) {
+            return { label: 'Invalid agent', value: '' };
+          }
+          const agentIcon = typeof agent.icon === 'string' ? agent.icon : '🤖';
+          const agentName = typeof agent.name === 'string' ? agent.name : 'Unknown';
+          const agentId = typeof agent.id === 'string' ? agent.id : '';
+          return {
+            label: `${agentIcon} ${agentName}`,
+            value: agentId
+          };
+        });
         console.debug('[NodeConfigModal] Loaded agents:', options);
       } else {
         // No agents available - show helpful message
@@ -592,24 +626,26 @@ export class NodeConfigModal extends Modal {
       }
     }
 
+    const currentValue = this.toInputString(value);
     let valueFound = false;
     for (const option of options) {
+      const optionValue = this.toInputString(option.value);
       const optionEl = select.createEl('option', {
-        value: option.value,
-        text: option.label,
+        value: optionValue,
+        text: typeof option.label === 'string' ? option.label : this.toInputString(option.label),
       });
 
-      if (option.value === value) {
+      if (optionValue === currentValue) {
         optionEl.selected = true;
         valueFound = true;
       }
     }
 
     // If value not found in options but value exists, add it as an option
-    if (!valueFound && value) {
+    if (!valueFound && currentValue) {
       const customOptionEl = select.createEl('option', {
-        value: value,
-        text: `${value} (custom)`,
+        value: currentValue,
+        text: `${currentValue} (custom)`,
       });
       customOptionEl.selected = true;
     }
@@ -619,13 +655,13 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private renderTextareaInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderTextareaInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
     const textarea = container.createEl('textarea', {
       cls: 'modal-textarea',
     });
 
     // Set value after creation (Obsidian's createEl doesn't handle value in options for textarea)
-    textarea.value = String(value || '');
+    textarea.value = this.toInputString(value);
 
     if (param.placeholder) {
       textarea.placeholder = param.placeholder;
@@ -638,13 +674,13 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private renderCodeInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderCodeInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
     const textarea = container.createEl('textarea', {
       cls: 'modal-textarea modal-code',
     });
 
     // Set value after creation (Obsidian's createEl doesn't handle value in options for textarea)
-    textarea.value = String(value || '');
+    textarea.value = this.toInputString(value);
 
     if (param.placeholder) {
       textarea.placeholder = param.placeholder;
@@ -659,7 +695,7 @@ export class NodeConfigModal extends Modal {
     });
   }
 
-  private renderJsonInput(container: HTMLElement, param: NodeParameter, value: any): void {
+  private renderJsonInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
     const textarea = container.createEl('textarea', {
       cls: 'modal-textarea modal-code',
     });
@@ -669,7 +705,8 @@ export class NodeConfigModal extends Modal {
       const jsonValue = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
       textarea.value = jsonValue;
     } catch (error) {
-      textarea.value = String(value || '{}');
+      void error;
+      textarea.value = this.toInputString(value, '{}');
     }
 
     textarea.rows = 8;
@@ -682,17 +719,18 @@ export class NodeConfigModal extends Modal {
       clearTimeout(validationTimeout);
       validationTimeout = setTimeout(() => {
         try {
-          const parsed = JSON.parse(textarea.value);
+          const parsed = JSON.parse(textarea.value) as unknown;
           textarea.setCssProps({ 'border-color': '' });
           this.updateFormConfig(param.name, parsed);
         } catch (error) {
+          void error;
           textarea.setCssProps({ 'border-color': '#ef4444' });
         }
       }, 500);
     });
   }
 
-  private updateFormConfig(key: string, value: any): void {
+  private updateFormConfig(key: string, value: unknown): void {
     this.formConfig[key] = value;
   }
 
@@ -704,25 +742,21 @@ export class NodeConfigModal extends Modal {
     const nodeDef = this.nodeRegistry.get(this.node.type);
     if (nodeDef?.type === 'start' && updatedConfig.input) {
       try {
-        const inputData = typeof updatedConfig.input === 'string'
-          ? JSON.parse(updatedConfig.input)
-          : updatedConfig.input;
-
-        // Extract field names from the parsed JSON
-        const fieldNames = Object.keys(inputData);
-
-        // Store the parsed fields in a metadata field
+        const rawInput = updatedConfig.input;
+        const inputData = typeof rawInput === 'string' ? (JSON.parse(rawInput) as unknown) : rawInput;
+        const fieldNames = isRecord(inputData) ? Object.keys(inputData) : [];
         updatedConfig._parsedOutputFields = fieldNames;
       } catch (error) {
+        void error;
         // If JSON parsing fails, clear the metadata
         updatedConfig._parsedOutputFields = [];
       }
     }
 
     // For Transform node, try to extract return statement fields
-    if (nodeDef?.type === 'transform' && updatedConfig.code) {
+    if (nodeDef?.type === 'transform' && typeof updatedConfig.code === 'string') {
       try {
-        const code = updatedConfig.code;
+        const code = String(updatedConfig.code);
         // Try to extract field names from return statements like: return { field1, field2, ... }
         const returnMatch = code.match(/return\s*\{([^}]+)\}/);
         if (returnMatch) {
@@ -730,14 +764,16 @@ export class NodeConfigModal extends Modal {
           const fields = fieldStr.split(',').map((f: string) => {
             // Handle both "key: value" and "key" shorthand
             const match = f.trim().match(/^(\w+)\s*:/);
-            return match ? match[1] : f.trim().split(/\s+/)[0];
+            return match ? match[1] ?? '' : f.trim().split(/\s+/)[0] ?? '';
           }).filter((f: string) => f && !f.includes('(') && !f.includes('.')); // Filter out function calls
 
           if (fields.length > 0) {
             updatedConfig._parsedOutputFields = fields;
           }
         }
-      } catch (error) {
+      } catch (error: unknown) {
+        // Ignore errors in code parsing
+        console.debug('Error parsing transform code:', error);
         // Ignore errors in code parsing
       }
     }
@@ -752,7 +788,26 @@ export class NodeConfigModal extends Modal {
     this.close();
   }
 
-  on<K extends keyof ModalEvents>(event: K, handler: (data: ModalEvents[K]) => void): void {
+  on<K extends keyof ModalEvents>(event: K, handler: (_data: ModalEvents[K]) => void): void {
     this.events.on(event, handler);
+  }
+
+  private toInputString(value: unknown, fallback = ''): string {
+    if (value === null || value === undefined) return fallback;
+    if (typeof value === 'string') return value;
+    if (typeof value === 'number' || typeof value === 'boolean') {
+      return String(value);
+    }
+    if (typeof value === 'bigint') {
+      return value.toString();
+    }
+    if (typeof value === 'object') {
+      try {
+        return JSON.stringify(value);
+      } catch {
+        return fallback;
+      }
+    }
+    return fallback;
   }
 }

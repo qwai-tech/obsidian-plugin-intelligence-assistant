@@ -15,7 +15,7 @@ import * as defaultUserConfigJson from '../../config/default/settings.json';
 
 const DEFAULT_USER_CONFIG: UserConfig = defaultUserConfigJson as UserConfig;
 const DEFAULT_TITLE_PROMPT = 'Generate a short, descriptive title (max 6 words) for this conversation:\n\n{conversation}\n\nTitle:';
-const deepClone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
+const deepClone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
 export interface UserConfig {
 	version: number;

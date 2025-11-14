@@ -2,11 +2,13 @@
 export class BaseService {
   protected ready: boolean = false;
 
-  async initialize(): Promise<void> {
+  initialize(): Promise<void> {
     this.ready = true;
+    return Promise.resolve();
   }
 
-  async cleanup(): Promise<void> {
+  cleanup(): Promise<void> {
     this.ready = false;
+    return Promise.resolve();
   }
 }

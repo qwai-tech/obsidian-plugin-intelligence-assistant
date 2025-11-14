@@ -30,6 +30,6 @@ export interface StreamChunk {
 
 export interface ILLMProvider {
 	name: string;
-	chat(request: ChatRequest): Promise<ChatResponse>;
-	streamChat(request: ChatRequest, onChunk: (chunk: StreamChunk) => void): Promise<void>;
+	chat(_request: ChatRequest): Promise<ChatResponse>;
+	streamChat(_request: ChatRequest, _onChunk: (_chunk: StreamChunk) => void): Promise<void>;
 }

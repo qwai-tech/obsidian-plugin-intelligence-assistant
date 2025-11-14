@@ -26,7 +26,7 @@ export interface WorkflowIndexEntry {
 		tags?: string[];
 		author?: string;
 		version?: string;
-		[key: string]: any;
+		[key: string]: unknown;
 	};
 }
 
@@ -106,7 +106,7 @@ export class WorkflowIndexManager {
 
 			this.index = loadedIndex;
 			return this.index;
-		} catch (error) {
+		} catch (error: unknown) {
 			console.error('Failed to load workflow index:', error);
 			// Create new index on error
 			this.index = this.createEmptyIndex();
@@ -129,7 +129,7 @@ export class WorkflowIndexManager {
 			const content = JSON.stringify(this.index, null, 2);
 			const adapter = this.vault.adapter;
 			await adapter.write(this.indexPath, content);
-		} catch (error) {
+		} catch (error: unknown) {
 			console.error('Failed to save workflow index:', error);
 			throw error;
 		}
@@ -374,7 +374,7 @@ export class WorkflowIndexManager {
 			const importedIndex = JSON.parse(indexJson) as WorkflowIndex;
 			this.index = importedIndex;
 			await this.saveIndex();
-		} catch (error) {
+		} catch (error: unknown) {
 			console.error('Failed to import workflow index:', error);
 			throw error;
 		}
@@ -383,10 +383,11 @@ export class WorkflowIndexManager {
 	/**
 	 * Rebuild index from files (recovery tool)
 	 */
-	async rebuildIndex(): Promise<void> {
+	rebuildIndex(): Promise<void> {
 		// This would scan the data/workflow folder and rebuild the index
 		// Implementation depends on your specific needs
 		console.debug('Index rebuild not yet implemented');
+	  return Promise.resolve();
 	}
 
 	/**
@@ -413,7 +414,7 @@ export class WorkflowIndexManager {
 			if (!exists) {
 				await adapter.mkdir(basePath);
 			}
-		} catch (error) {
+		} catch (_error: unknown) {
 			// Folder might already exist, ignore error
 		}
 	}

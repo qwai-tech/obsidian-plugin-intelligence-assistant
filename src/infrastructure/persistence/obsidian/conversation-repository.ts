@@ -14,7 +14,11 @@ class ConversationSerializer {
   }
 
   deserialize(content: string): ConversationModel {
-    const data = JSON.parse(content);
+    const data = JSON.parse(content) as {
+      createdAt: string | number | Date;
+      updatedAt: string | number | Date;
+      [key: string]: unknown;
+    };
     data.createdAt = new Date(data.createdAt).getTime();
     data.updatedAt = new Date(data.updatedAt).getTime();
     return ConversationModel.fromJSON(data);

@@ -2,7 +2,7 @@ import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
 
 export class ReadFileTool implements Tool {
-	constructor(private app: App) {}
+	constructor(private _app: App) {}
 
 	definition: ToolDefinition = {
 		name: 'read_file',
@@ -17,10 +17,10 @@ export class ReadFileTool implements Tool {
 		]
 	};
 
-	async execute(args: Record<string, any>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const path = args.path as string;
-			const file = this.app.vault.getAbstractFileByPath(path);
+			const file = this._app.vault.getAbstractFileByPath(path);
 
 			if (!file || !(file instanceof TFile)) {
 				return {
@@ -29,7 +29,7 @@ export class ReadFileTool implements Tool {
 				};
 			}
 
-			const content = await this.app.vault.read(file);
+			const content = await this._app.vault.read(file);
 			return {
 				success: true,
 				result: content
@@ -37,14 +37,14 @@ export class ReadFileTool implements Tool {
 		} catch (error) {
 			return {
 				success: false,
-				error: error.message
+				error: error instanceof Error ? error.message : String(error)
 			};
 		}
 	}
 }
 
 export class WriteFileTool implements Tool {
-	constructor(private app: App) {}
+	constructor(private _app: App) {}
 
 	definition: ToolDefinition = {
 		name: 'write_file',
@@ -65,22 +65,22 @@ export class WriteFileTool implements Tool {
 		]
 	};
 
-	async execute(args: Record<string, any>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const path = args.path as string;
 			const content = args.content as string;
-			const file = this.app.vault.getAbstractFileByPath(path);
+			const file = this._app.vault.getAbstractFileByPath(path);
 
 			if (file && file instanceof TFile) {
 				// File exists, update it
-				await this.app.vault.modify(file, content);
+				await this._app.vault.modify(file, content);
 				return {
 					success: true,
 					result: `File updated: ${path}`
 				};
 			} else {
 				// Create new file
-				await this.app.vault.create(path, content);
+				await this._app.vault.create(path, content);
 				return {
 					success: true,
 					result: `File created: ${path}`
@@ -89,14 +89,14 @@ export class WriteFileTool implements Tool {
 		} catch (error) {
 			return {
 				success: false,
-				error: error.message
+				error: error instanceof Error ? error.message : String(error)
 			};
 		}
 	}
 }
 
 export class ListFilesTool implements Tool {
-	constructor(private app: App) {}
+	constructor(private _app: App) {}
 
 	definition: ToolDefinition = {
 		name: 'list_files',
@@ -117,12 +117,12 @@ export class ListFilesTool implements Tool {
 		]
 	};
 
-	async execute(args: Record<string, any>): Promise<ToolResult> {
+  execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const folderPath = args.folder as string || '';
 			const extension = args.extension as string;
 
-			let files = this.app.vault.getFiles();
+			let files = this._app.vault.getFiles();
 
 			// Filter by folder
 			if (folderPath) {
@@ -140,15 +140,15 @@ export class ListFilesTool implements Tool {
 				extension: f.extension
 			}));
 
-			return {
+			return Promise.resolve({
 				success: true,
 				result: fileList
-			};
+			});
 		} catch (error) {
-			return {
+			return Promise.resolve({
 				success: false,
-				error: error.message
-			};
+				error: error instanceof Error ? error.message : String(error)
+			});
 		}
 	}
 }

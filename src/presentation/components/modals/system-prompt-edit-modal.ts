@@ -7,7 +7,7 @@ export class SystemPromptEditModal extends Modal {
 
 	constructor(app: App, prompt: SystemPrompt, onSave: (prompt: SystemPrompt) => void | Promise<void>) {
 		super(app);
-		this.prompt = JSON.parse(JSON.stringify(prompt)); // Deep copy
+		this.prompt = JSON.parse(JSON.stringify(prompt)) as SystemPrompt; // Deep copy
 		this.onSaveCallback = onSave;
 	}
 
@@ -15,7 +15,7 @@ export class SystemPromptEditModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: 'Edit System Prompt' });
+		contentEl.createEl('h2', { text: 'Edit system prompt' });
 
 		// Name field
 		new Setting(contentEl)

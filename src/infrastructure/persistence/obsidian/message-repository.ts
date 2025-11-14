@@ -15,7 +15,13 @@ class MessageSerializer {
   }
 
   deserialize(content: string): Message {
-    const data = JSON.parse(content);
+    const data = JSON.parse(content) as {
+      id: string;
+      content: string;
+      role: 'user' | 'assistant' | 'system';
+      timestamp: string | number | Date;
+      metadata?: Record<string, unknown>;
+    };
     return new Message(
       data.id,
       data.content,

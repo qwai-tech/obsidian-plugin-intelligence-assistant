@@ -5,6 +5,15 @@
  * This is the only file that should be imported by external code.
  */
 
+import type { Vault } from 'obsidian';
+import type { WorkflowServices } from './core/types';
+import { WorkflowGraph } from './core/workflow';
+import { WorkflowStorage } from './storage/storage';
+import { WorkflowEditor } from './editor/editor';
+import { nodeRegistry } from './nodes/registry';
+import { registerCoreNodes } from './nodes/definitions';
+import { registerEnhancedNodes } from './nodes/enhanced-definitions';
+
 // Core types
 export type {
 	NodeData,
@@ -61,24 +70,19 @@ export const VERSION = '2.0.0';
  * Call this once when your plugin loads
  */
 export function initializeWorkflowSystem(registerEnhanced = false): void {
-	// Import dependencies dynamically to ensure they're loaded
-	const { nodeRegistry: registry } = require('./nodes/registry');
-	const { registerCoreNodes: register } = require('./nodes/definitions');
-	const { registerEnhancedNodes: registerEnhancedFn } = require('./nodes/enhanced-definitions');
+	// Use static imports already defined at top of file
+	registerCoreNodes();
 
-	// Ensure core nodes are registered
-	register();
-	
 	// Optionally register enhanced nodes
 	if (registerEnhanced) {
-		const enhancedNodes = registerEnhancedFn();
+		const enhancedNodes = registerEnhancedNodes();
 		for (const node of enhancedNodes) {
-			registry.register(node);
+			nodeRegistry.register(node);
 		}
 	}
-	
+
 	console.debug(`Workflow System V2 initialized (${VERSION})`);
-	console.debug(`Registered nodes: ${registry.getAll().length}`);
+	console.debug(`Registered nodes: ${nodeRegistry.getAll().length}`);
 }
 
 /**
@@ -86,41 +90,32 @@ export function initializeWorkflowSystem(registerEnhanced = false): void {
  */
 export async function createWorkflowEditor(
 	container: HTMLElement,
-	services: any,
+	services: WorkflowServices,
 	workflowId?: string
-): Promise<any> {
-	// Import dependencies dynamically
-	const { WorkflowStorage: Storage } = require('./storage/storage');
-	const { WorkflowGraph: Graph } = require('./core/workflow');
-	const { WorkflowEditor: Editor } = require('./editor/editor');
-	const { nodeRegistry: registry } = require('./nodes/registry');
-
+): Promise<WorkflowEditor> {
+	// Use static imports already defined at top of file
 	// Note: Styles are loaded via styles.css file automatically by Obsidian
 
+	assertWorkflowVault(services);
+
 	// Create storage
-	const storage = new Storage(services.vault);
+	const storage = new WorkflowStorage(services.vault);
 
 	// Load or create workflow
-	let workflow: any;
+	let workflow: WorkflowGraph;
 	if (workflowId) {
 		const loaded = await storage.load(workflowId);
 		if (loaded) {
-			workflow = Graph.fromJSON(loaded);
+			workflow = WorkflowGraph.fromJSON(loaded);
 		} else {
 			throw new Error(`Workflow ${workflowId} not found`);
 		}
 	} else {
-		workflow = Graph.create('New Workflow');
+		workflow = WorkflowGraph.create('New Workflow');
 	}
 
 	// Create editor
-	const editor = new Editor(
-		container,
-		workflow,
-		storage,
-		registry,
-		services
-	);
+	const editor = new WorkflowEditor(container, workflow, storage, nodeRegistry, services);
 
 	return editor;
 }
@@ -130,13 +125,10 @@ export async function createWorkflowEditor(
  */
 export function createSimpleWorkflow(
 	name: string,
-	nodes: Array<{ type: string; config: Record<string, any> }>
-): any {
-	// Import dependencies dynamically
-	const { WorkflowGraph: Graph } = require('./core/workflow');
-	const { nodeRegistry: registry } = require('./nodes/registry');
-
-	const workflow = Graph.create(name);
+	nodes: Array<{ type: string; config: Record<string, unknown> }>
+): WorkflowGraph {
+	// Use static imports already defined at top of file
+	const workflow = WorkflowGraph.create(name);
 
 	// Add nodes with auto-layout
 	const startX = 100;
@@ -147,7 +139,7 @@ export function createSimpleWorkflow(
 
 	for (let i = 0; i < nodes.length; i++) {
 		const { type, config } = nodes[i];
-		const nodeDef = registry.get(type);
+		const nodeDef = nodeRegistry.get(type);
 
 		if (!nodeDef) {
 			throw new Error(`Unknown node type: ${type}`);
@@ -175,4 +167,10 @@ export function createSimpleWorkflow(
 	}
 
 	return workflow;
+}
+
+function assertWorkflowVault(services: WorkflowServices): asserts services is WorkflowServices & { vault: Vault } {
+	if (!services.vault) {
+		throw new Error('Workflow services must include a vault instance');
+	}
 }

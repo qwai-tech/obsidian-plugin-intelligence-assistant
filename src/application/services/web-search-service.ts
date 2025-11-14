@@ -10,6 +10,104 @@ export interface WebSearchResult {
 	date?: string; // For news results
 }
 
+// API Response Type Interfaces
+interface GoogleSearchItem {
+	title: string;
+	link: string;
+	snippet?: string;
+	displayLink?: string;
+}
+
+interface GoogleSearchResponse {
+	items?: GoogleSearchItem[];
+}
+
+interface BingWebPage {
+	name: string;
+	url: string;
+	snippet?: string;
+}
+
+interface BingSearchResponse {
+	webPages?: {
+		value?: BingWebPage[];
+	};
+}
+
+interface SerpApiOrganicResult {
+	title: string;
+	link: string;
+	snippet?: string;
+	description?: string;
+	source?: string;
+}
+
+interface SerpApiResponse {
+	organic_results?: SerpApiOrganicResult[];
+}
+
+interface BraveSearchResult {
+	title: string;
+	url: string;
+	content?: string;
+	snippet?: string;
+}
+
+interface BraveSearchResponse {
+	results?: BraveSearchResult[];
+}
+
+interface SearchApiResult {
+	url?: string;
+	title: string;
+	content?: string;
+	description?: string;
+	engine?: string;
+}
+
+interface SearchApiResponse {
+	results?: SearchApiResult[];
+}
+
+interface KagiWebResult {
+	title: string;
+	url: string;
+	description?: string;
+	snippet?: string;
+	domain?: string;
+}
+
+interface KagiSearchResponse {
+	web?: KagiWebResult[];
+}
+
+interface JinaSearchItem {
+	title: string;
+	url: string;
+	desc?: string;
+	domain?: string;
+}
+
+interface JinaSearchResponse {
+	data?: JinaSearchItem[] | JinaSearchItem;
+	results?: JinaSearchItem[];
+}
+
+interface QwantSearchItem {
+	title: string;
+	url: string;
+	desc?: string;
+	domain?: string;
+}
+
+interface QwantSearchResponse {
+	data?: {
+		result?: {
+			items?: QwantSearchItem[];
+		};
+	};
+}
+
 export class WebSearchService {
 	private config: WebSearchConfig;
 
@@ -289,7 +387,7 @@ export class WebSearchService {
 				throw new Error(`Google search failed: ${response.status}`);
 			}
 
-			const data = response.json;
+			const data = response.json as GoogleSearchResponse;
 			const results: WebSearchResult[] = [];
 
 			if (data.items && Array.isArray(data.items)) {
@@ -334,7 +432,7 @@ export class WebSearchService {
 				throw new Error(`Bing search failed: ${response.status}`);
 			}
 
-			const data = response.json;
+			const data = response.json as BingSearchResponse;
 			const results: WebSearchResult[] = [];
 
 			if (data.webPages && data.webPages.value && Array.isArray(data.webPages.value)) {
@@ -464,7 +562,7 @@ export class WebSearchService {
 				throw new Error(`SerpAPI search failed: ${response.status}`);
 			}
 
-			const data = response.json;
+			const data = response.json as SerpApiResponse;
 			const results: WebSearchResult[] = [];
 
 			if (data.organic_results && Array.isArray(data.organic_results)) {
@@ -519,7 +617,7 @@ export class WebSearchService {
 				throw new Error(`Tavily search failed: ${response.status}`);
 			}
 
-			const data = response.json;
+			const data = response.json as BraveSearchResponse;
 			const results: WebSearchResult[] = [];
 
 			if (data.results && Array.isArray(data.results)) {
@@ -575,7 +673,7 @@ export class WebSearchService {
 				throw new Error(`SearXNG search failed: ${response.status}`);
 			}
 
-			const data = response.json;
+			const data = response.json as SearchApiResponse;
 			const results: WebSearchResult[] = [];
 
 			if (data.results && Array.isArray(data.results)) {
@@ -651,11 +749,11 @@ export class WebSearchService {
 				throw new Error(`Brave search failed: ${response.status}`);
 			}
 
-			const data = response.json;
+			const data = response.json as KagiSearchResponse;
 			const results: WebSearchResult[] = [];
 
-			if (data.web && data.web.results && Array.isArray(data.web.results)) {
-				for (const item of data.web.results) {
+			if (data.web && Array.isArray(data.web)) {
+				for (const item of data.web) {
 					results.push({
 						title: item.title,
 						url: item.url,
@@ -853,7 +951,7 @@ export class WebSearchService {
 				throw new Error(`Qwant search failed: ${response.status}`);
 			}
 
-			const data = response.json;
+			const data = response.json as QwantSearchResponse;
 			if (!data || !data.data || !data.data.result) {
 				throw new Error('Invalid response from Qwant API');
 			}
@@ -925,7 +1023,7 @@ export class WebSearchService {
 				throw new Error(`Mojeek search failed: ${response.status}`);
 			}
 
-			const data = response.json;
+			const data = response.json as JinaSearchResponse;
 			const results: WebSearchResult[] = [];
 
 			if (data.results && Array.isArray(data.results)) {

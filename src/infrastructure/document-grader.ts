@@ -17,7 +17,7 @@ export interface GradeRequest {
   document: {
     content: string;
     path: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   };
   chunkId: string;
 }
@@ -34,7 +34,7 @@ export class DocumentGrader {
     getChatModelFn?: () => string | null,
     getDefaultModelFn?: () => string | undefined
   ) {
-    this.config = config;
+    this.config = config as Record<string, unknown>;
     this.llmConfigs = llmConfigs;
     this.getChatModelFn = getChatModelFn;
     this.getDefaultModelFn = getDefaultModelFn;
@@ -87,12 +87,13 @@ export class DocumentGrader {
       return grade;
     } catch (error) {
       console.error('[DocumentGrader] Error grading document:', error);
+      const err = error instanceof Error ? error : new Error(String(error));
       return {
         relevance: 5,
         accuracy: 5,
         supportQuality: 5,
         shouldUse: true,
-        explanation: `Error during grading: ${error.message}`,
+        explanation: `Error during grading: ${err.message}`,
         chunkId: request.chunkId,
         documentPath: request.document.path
       };
@@ -122,7 +123,7 @@ export class DocumentGrader {
     return grades;
   }
 
-  filterDocumentsByGrade(documents: any[], grades: DocumentGrade[]): any[] {
+  filterDocumentsByGrade(documents: Array<{ id: string; [key: string]: unknown }>, grades: DocumentGrade[]): Array<{ id: string; [key: string]: unknown }> {
     if (!this.config.enableGradingThreshold) {
       return documents;
     }
@@ -156,7 +157,7 @@ export class DocumentGrader {
       .replace('{path}', request.document.path || 'unknown');
   }
 
-  private parseResponse(content: string): any {
+  private parseResponse(content: string): unknown {
     try {
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       return JSON.parse(jsonMatch ? jsonMatch[0] : content);
@@ -166,13 +167,14 @@ export class DocumentGrader {
     }
   }
 
-  private createGrade(gradeResult: any, request: GradeRequest): DocumentGrade {
+  private createGrade(gradeResult: unknown, request: GradeRequest): DocumentGrade {
+    const result = gradeResult as Record<string, unknown>;
     return {
-      relevance: this.normalizeScore(gradeResult.relevance),
-      accuracy: this.normalizeScore(gradeResult.accuracy),
-      supportQuality: this.normalizeScore(gradeResult.supportQuality),
-      shouldUse: typeof gradeResult.shouldUse === 'boolean' ? gradeResult.shouldUse : true,
-      explanation: typeof gradeResult.explanation === 'string' ? gradeResult.explanation : 'No explanation provided',
+      relevance: this.normalizeScore(result.relevance),
+      accuracy: this.normalizeScore(result.accuracy),
+      supportQuality: this.normalizeScore(result.supportQuality),
+      shouldUse: typeof result.shouldUse === 'boolean' ? result.shouldUse : true,
+      explanation: typeof result.explanation === 'string' ? result.explanation : 'No explanation provided',
       chunkId: request.chunkId,
       documentPath: request.document.path
     };
@@ -211,7 +213,7 @@ Respond with a JSON object in this exact format:
 }`;
   }
 
-  private normalizeScore(score: any): number {
+  private normalizeScore(score: unknown): number {
     if (typeof score === 'number') {
       return Math.max(0, Math.min(10, Math.round(score * 10) / 10));
     }
@@ -231,7 +233,7 @@ Respond with a JSON object in this exact format:
     console.debug('[DocumentGrader] Resolving grader model with source:', source);
 
     switch (source) {
-      case 'chat':
+      case 'chat': {
         // Use the model selected in the Chat View Page
         if (this.getChatModelFn) {
           const chatModel = this.getChatModelFn();
@@ -254,8 +256,9 @@ Respond with a JSON object in this exact format:
         }
         // If no default model, fall back to first available reasoning model
         return await this.getFirstAvailableReasoningModel();
+      }
 
-      case 'default':
+      case 'default': {
         // Use the Settings -> General -> Default Model only
         const defaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
         if (defaultModel?.trim()) {
@@ -266,8 +269,9 @@ Respond with a JSON object in this exact format:
           // If no default model is set, fall back to first available reasoning model
           return await this.getFirstAvailableReasoningModel();
         }
+      }
 
-      case 'specific':
+      case 'specific': {
         // Use the manually specified model from the model list in settings
         if (this.config.graderModel?.trim()) {
           try {
@@ -308,8 +312,9 @@ Respond with a JSON object in this exact format:
           }
           return await this.getFirstAvailableReasoningModel();
         }
+      }
 
-      default:
+      default: {
         console.warn('[DocumentGrader] Unknown grader model source');
         // For any unknown values, use default model
         const unknownDefaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
@@ -318,6 +323,7 @@ Respond with a JSON object in this exact format:
           return unknownDefaultModel.trim();
         }
         return await this.getFirstAvailableReasoningModel();
+      }
     }
   }
 

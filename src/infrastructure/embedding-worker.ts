@@ -33,7 +33,7 @@ function createPlaceholderEmbedding(text: string, dimensions: number): number[] 
   }
 
   // Create embedding array
-  const embedding: number[] = new Array(dimensions);
+  const embedding: number[] = new Array(dimensions) as number[];
   for (let i = 0; i < dimensions; i++) {
     const value = Math.sin(hash + i) * Math.cos(hash + i * 2);
     embedding[i] = value;
@@ -42,7 +42,7 @@ function createPlaceholderEmbedding(text: string, dimensions: number): number[] 
   // Normalize the vector
   const magnitude = Math.sqrt(embedding.reduce((sum, val) => sum + val * val, 0));
   if (magnitude === 0) {
-    const normalized: number[] = new Array(dimensions).fill(0);
+    const normalized: number[] = new Array(dimensions).fill(0) as number[];
     if (dimensions > 0) normalized[0] = 1;
     return normalized;
   }

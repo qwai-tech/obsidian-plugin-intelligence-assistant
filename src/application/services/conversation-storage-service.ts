@@ -101,7 +101,7 @@ export class ConversationStorageService {
 
     try {
       const conversationFile = await this.vault.adapter.read(metadata.file);
-      const conversation = this.normalizeConversation(JSON.parse(conversationFile));
+      const conversation = this.normalizeConversation(JSON.parse(conversationFile) as Conversation);
 
       const refreshedMetadata = this.buildMetadata(conversation, metadata.file);
       const metadataChanged = this.hasMetadataChanged(metadata, refreshedMetadata);
@@ -236,8 +236,8 @@ export class ConversationStorageService {
   /**
    * Helper used by settings tab
    */
-  async isInitialized(): Promise<boolean> {
-    return this.initialized;
+  isInitialized(): Promise<boolean> {
+    return Promise.resolve(this.initialized);
   }
 
   // ------------------------------
@@ -421,7 +421,7 @@ export class ConversationStorageService {
         try {
           if (!(await adapter.exists(entry.file))) continue;
           const fileContent = await adapter.read(entry.file);
-          const conversation = this.normalizeConversation(JSON.parse(fileContent));
+          const conversation = this.normalizeConversation(JSON.parse(fileContent) as Conversation);
           const filePath = this.generateConversationFilePath(conversation, migratedIndex);
           await this.writeConversationFile(filePath, conversation);
           migratedIndex.conversations.push(this.buildMetadata(conversation, filePath));
@@ -453,7 +453,7 @@ export class ConversationStorageService {
       for (const entry of legacyIndex.conversations || []) {
         try {
           const fileContent = await adapter.read(entry.path);
-          const conversation = this.normalizeConversation(JSON.parse(fileContent));
+          const conversation = this.normalizeConversation(JSON.parse(fileContent) as Conversation);
           const filePath = this.generateConversationFilePath(conversation, migratedIndex);
           await this.writeConversationFile(filePath, conversation);
           migratedIndex.conversations.push(this.buildMetadata(conversation, filePath));

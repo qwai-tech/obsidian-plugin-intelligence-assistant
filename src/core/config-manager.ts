@@ -6,12 +6,12 @@ import { ConfigSchema, type ValidationResult } from './config-schema';
 
 type ChangeRecord = {
   path: string;
-  previous: any;
-  next: any;
+  previous: unknown;
+  next: unknown;
   timestamp: number;
 };
 
-const clone = <T>(value: T): T => (value === undefined ? value : JSON.parse(JSON.stringify(value)));
+const clone = <T>(value: T): T => (value === undefined ? value : JSON.parse(JSON.stringify(value)) as T);
 
 const normalizePath = (path: string): string[] =>
   path
@@ -34,7 +34,7 @@ export class ConfigManager {
   async load(): Promise<void> {
     try {
       const content = await this.vault.adapter.read(this.configPath);
-      this.config = JSON.parse(content);
+      this.config = JSON.parse(content) as PluginSettings;
       ConfigSchema.validate(this.config);
       this.dirty = false;
     } catch {
@@ -70,8 +70,13 @@ export class ConfigManager {
   }
 
   getPath<T = unknown>(path: string): T {
-    const value = normalizePath(path).reduce((acc: any, segment) => (acc ? acc[segment] : undefined), this.config);
-    return clone(value);
+    const value = normalizePath(path).reduce((acc: unknown, segment) => {
+      if (acc && typeof acc === 'object' && segment in acc) {
+        return (acc as Record<string, unknown>)[segment];
+      }
+      return undefined;
+    }, this.config as unknown);
+    return clone(value) as T;
   }
 
   async setPath(path: string, value: unknown, validate = true): Promise<void> {
@@ -79,12 +84,12 @@ export class ConfigManager {
     const last = segments.pop();
     if (!last) return;
 
-    let target: any = this.config;
+    let target: Record<string, unknown> = this.config as unknown as Record<string, unknown>;
     for (const segment of segments) {
       if (!(segment in target)) {
         target[segment] = {};
       }
-      target = target[segment];
+      target = target[segment] as Record<string, unknown>;
     }
 
     const previous = clone(target[last]);
@@ -119,7 +124,7 @@ export class ConfigManager {
     return ConfigSchema.isRequired(path);
   }
 
-  getConstraints(path: string): Record<string, any> {
+  getConstraints(path: string): Record<string, unknown> {
     return ConfigSchema.getConstraints(path);
   }
 

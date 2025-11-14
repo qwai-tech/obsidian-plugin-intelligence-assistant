@@ -36,14 +36,10 @@ export interface VariableResolverOptions {
  * @returns Resolved string with variables replaced
  */
 export function resolveVariables(
-	template: string | any,
+	template: string,
 	inputs: NodeData[],
 	options: VariableResolverOptions = {}
 ): string {
-	// If not a string, return as-is (or convert to string)
-	if (typeof template !== 'string') {
-		return String(template);
-	}
 
 	const {
 		allowNestedAccess = true,
@@ -61,7 +57,7 @@ export function resolveVariables(
 	const pattern = new RegExp(`${escapedPrefix}\\s*([\\w\\.]+)\\s*${escapedSuffix}`, 'g');
 
 	// Replace all variables
-	return template.replace(pattern, (match, variableName) => {
+	return template.replace(pattern, (match, variableName: string) => {
 		const trimmedVar = variableName.trim();
 
 		// Handle special variables
@@ -98,7 +94,7 @@ export function resolveVariables(
 /**
  * Get nested value from object using dot notation
  */
-function getNestedValue(obj: any, path: string): any {
+function getNestedValue(obj: unknown, path: string): unknown {
 	const parts = path.split('.');
 	let current = obj;
 
@@ -106,7 +102,7 @@ function getNestedValue(obj: any, path: string): any {
 		if (current == null || typeof current !== 'object') {
 			return undefined;
 		}
-		current = current[part];
+		current = (current as Record<string, unknown>)[part];
 	}
 
 	return current;
@@ -115,7 +111,7 @@ function getNestedValue(obj: any, path: string): any {
 /**
  * Format value for string interpolation
  */
-function formatValue(value: any): string {
+function formatValue(value: unknown): string {
 	if (value == null) {
 		return '';
 	}
@@ -140,12 +136,9 @@ function formatValue(value: any): string {
  * @returns Array of variable names found in template
  */
 export function extractVariables(
-	template: string | any,
+	template: string,
 	options: VariableResolverOptions = {}
 ): string[] {
-	if (typeof template !== 'string') {
-		return [];
-	}
 
 	const {
 		prefix = '{{',
@@ -173,7 +166,7 @@ export function extractVariables(
  * Check if a template string contains variables
  */
 export function hasVariables(
-	template: string | any,
+	template: string,
 	options: VariableResolverOptions = {}
 ): boolean {
 	return extractVariables(template, options).length > 0;
@@ -188,21 +181,21 @@ export function hasVariables(
  * @returns New config object with resolved variables
  */
 export function resolveConfigVariables(
-	config: Record<string, any>,
+	config: Record<string, unknown>,
 	inputs: NodeData[],
 	options: VariableResolverOptions = {}
-): Record<string, any> {
-	const resolved: Record<string, any> = {};
+): Record<string, unknown> {
+	const resolved: Record<string, unknown> = {};
 
 	for (const [key, value] of Object.entries(config)) {
 		if (typeof value === 'string') {
 			resolved[key] = resolveVariables(value, inputs, options);
 		} else if (Array.isArray(value)) {
-			resolved[key] = value.map(item =>
+			resolved[key] = value.map((item: unknown) =>
 				typeof item === 'string' ? resolveVariables(item, inputs, options) : item
 			);
 		} else if (value && typeof value === 'object') {
-			resolved[key] = resolveConfigVariables(value, inputs, options);
+			resolved[key] = resolveConfigVariables(value as Record<string, unknown>, inputs, options);
 		} else {
 			resolved[key] = value;
 		}

@@ -78,7 +78,9 @@ export function renderMessage(
 		renderAssistantBadges(header, assistantMeta);
 	}
 
-	const timestampValue = (message as any).timestamp ?? Date.now();
+	const timestampValue = typeof (message as unknown as { timestamp?: number }).timestamp === 'number' 
+		? (message as unknown as { timestamp: number }).timestamp 
+		: Date.now();
 	const timestamp = header.createDiv('ia-chat-message__timestamp');
 	timestamp.addClass('message-timestamp');
 	timestamp.setText(new Date(timestampValue).toLocaleTimeString());
@@ -106,7 +108,7 @@ export function renderMessage(
 
 	if (message.webSearchResults?.length) {
 		const section = body.createDiv('ia-chat-message__section');
-		section.createEl('h5', { text: 'Web Results' });
+		section.createEl('h5', { text: 'Web results' });
 		const list = section.createEl('ul');
 		message.webSearchResults.forEach(result => {
 			const item = list.createEl('li');
@@ -135,17 +137,19 @@ export function renderMessage(
 			if (!handler) return;
 			const btn = actions.createEl('button', { cls: 'msg-action-btn', text: actionLabel });
 			btn.addClass('ia-chat-message__action');
-			btn.addEventListener('click', async () => {
-				btn.disabled = true;
-				try {
-					if (key === 'regenerateMessage') {
-						await (handler as (message: Message, element: HTMLElement) => Promise<void>)(message, messageEl);
-					} else {
-						await (handler as (message: Message) => Promise<void>)(message);
+			btn.addEventListener('click', () => {
+				void (async () => {
+					btn.disabled = true;
+					try {
+						if (key === 'regenerateMessage') {
+							await (handler as (message: Message, element: HTMLElement) => Promise<void>)(message, messageEl);
+						} else {
+							await (handler as (message: Message) => Promise<void>)(message);
+						}
+					} finally {
+						btn.disabled = false;
 					}
-				} finally {
-					btn.disabled = false;
-				}
+				})();
 			});
 		});
 	}
@@ -298,7 +302,7 @@ function renderReasoning(container: HTMLElement, message: Message) {
 function renderExecutionTrace(container: HTMLElement, steps: Message['agentExecutionSteps']) {
 	if (!steps || steps.length === 0) return;
 	const section = container.createDiv('ia-chat-message__section');
-	section.createEl('h5', { text: 'Tool Trace' });
+	section.createEl('h5', { text: 'Tool trace' });
 	const timeline = section.createDiv('ia-chat-message__timeline');
 	steps.forEach(step => {
 		const item = timeline.createDiv('ia-chat-message__timeline-item');
@@ -323,15 +327,17 @@ function createCopyButtons(actions: HTMLElement, contentEl: HTMLElement | null) 
 	copyAllBtn.classList.add('ia-chat-copy-btn');
 	copyAllBtn.title = 'Copy entire message';
 	copyAllBtn.disabled = !contentEl;
-	copyAllBtn.addEventListener('click', async () => {
-		if (!contentEl) return;
-		try {
-			await copyMessageContent(contentEl);
-			new Notice('Message copied');
-		} catch (error) {
-			console.error('Copy failed:', error);
-			new Notice('Failed to copy message');
-		}
+	copyAllBtn.addEventListener('click', () => {
+		void (async () => {
+			if (!contentEl) return;
+			try {
+				await copyMessageContent(contentEl);
+				new Notice('Message copied');
+			} catch (error) {
+				console.error('Copy failed:', error);
+				new Notice('Failed to copy message');
+			}
+		})();
 	});
 }
 
@@ -373,5 +379,5 @@ function renderTokenUsageFooter(container: HTMLElement, usage?: Message['tokenUs
 	const footer = container.createDiv('ia-chat-message__footer');
 	footer.addClass('ia-chat-message__annotation');
 	footer.setAttr('data-exclude-from-copy', 'true');
-	footer.setText(`Token Usage · ${summary.join(' · ')}`);
+	footer.setText(`Token usage · ${summary.join(' · ')}`);
 }

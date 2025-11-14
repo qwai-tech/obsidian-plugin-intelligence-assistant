@@ -3,18 +3,18 @@
  */
 
 export enum LogLevel {
-	DEBUG = 0,
-	INFO = 1,
-	WARN = 2,
-	ERROR = 3,
+	_DEBUG = 0,
+	_INFO = 1,
+	_WARN = 2,
+	_ERROR = 3,
 }
 
 export class Logger {
-	private static globalLevel: LogLevel = LogLevel.INFO;
+	private static globalLevel: LogLevel = LogLevel._INFO;
 
 	constructor(
-		private context: string,
-		private minLevel: LogLevel = Logger.globalLevel
+		private _context: string,
+		private _minLevel: LogLevel = Logger.globalLevel
 	) {}
 
 	/**
@@ -27,39 +27,39 @@ export class Logger {
 	/**
 	 * Log debug message (development/troubleshooting)
 	 */
-	debug(message: string, ...args: any[]): void {
-		if (this.minLevel <= LogLevel.DEBUG) {
-			console.debug(`[${this.context}] ${message}`, ...args);
+	debug(message: string, ...args: unknown[]): void {
+		if (this._minLevel <= LogLevel._DEBUG) {
+			console.debug(`[${this._context}] ${message}`, ...args);
 		}
 	}
 
 	/**
 	 * Log info message (normal operations)
 	 */
-	info(message: string, ...args: any[]): void {
-		if (this.minLevel <= LogLevel.INFO) {
-			console.debug(`[${this.context}] ${message}`, ...args);
+	info(message: string, ...args: unknown[]): void {
+		if (this._minLevel <= LogLevel._INFO) {
+			console.debug(`[${this._context}] ${message}`, ...args);
 		}
 	}
 
 	/**
 	 * Log warning message (potential issues)
 	 */
-	warn(message: string, ...args: any[]): void {
-		if (this.minLevel <= LogLevel.WARN) {
-			console.warn(`[${this.context}] ${message}`, ...args);
+	warn(message: string, ...args: unknown[]): void {
+		if (this._minLevel <= LogLevel._WARN) {
+			console.warn(`[${this._context}] ${message}`, ...args);
 		}
 	}
 
 	/**
 	 * Log error message (failures)
 	 */
-	error(message: string, error?: Error | unknown, ...args: any[]): void {
-		if (this.minLevel <= LogLevel.ERROR) {
-			if (error instanceof Error) {
-				console.error(`[${this.context}] ${message}`, error.message, error.stack, ...args);
+	error(message: string, err?: Error, ...args: unknown[]): void {
+		if (this._minLevel <= LogLevel._ERROR) {
+			if (err instanceof Error) {
+				console.error(`[${this._context}] ${message}`, err.message, err.stack, ...args);
 			} else {
-				console.error(`[${this.context}] ${message}`, error, ...args);
+				console.error(`[${this._context}] ${message}`, err, ...args);
 			}
 		}
 	}
@@ -68,7 +68,7 @@ export class Logger {
 	 * Create a child logger with a sub-context
 	 */
 	child(subContext: string): Logger {
-		return new Logger(`${this.context}:${subContext}`, this.minLevel);
+		return new Logger(`${this._context}:${subContext}`, this._minLevel);
 	}
 
 	/**
@@ -84,7 +84,7 @@ export class Logger {
 			return result;
 		} catch (error) {
 			const duration = Date.now() - start;
-			this.error(`Failed ${label} after ${duration}ms`, error);
+			this.error(`Failed ${label} after ${duration}ms`, error instanceof Error ? error : undefined);
 			throw error;
 		}
 	}

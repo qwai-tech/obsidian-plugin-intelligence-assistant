@@ -22,12 +22,12 @@ const CACHE_VERSION = '1.0';
 export class ModelCacheRepository {
 	private initialized = false;
 
-	constructor(private readonly app: App) {}
+	constructor(private readonly _app: App) {}
 
 	async initialize(): Promise<void> {
 		if (this.initialized) return;
-		await ensureFolderExists(this.app.vault.adapter, CACHE_DATA_FOLDER);
-		if (!(await this.app.vault.adapter.exists(LLM_MODEL_CACHE_PATH))) {
+		await ensureFolderExists(this._app.vault.adapter, CACHE_DATA_FOLDER);
+		if (!(await this._app.vault.adapter.exists(LLM_MODEL_CACHE_PATH))) {
 			await this.writeCache({ version: CACHE_VERSION, updatedAt: Date.now(), entries: [] });
 		}
 		this.initialized = true;
@@ -73,7 +73,7 @@ export class ModelCacheRepository {
 
 	private async readCache(): Promise<ModelCacheFile> {
 		try {
-			const content = await this.app.vault.adapter.read(LLM_MODEL_CACHE_PATH);
+			const content = await this._app.vault.adapter.read(LLM_MODEL_CACHE_PATH);
 			return JSON.parse(content) as ModelCacheFile;
 		} catch {
 			return { version: CACHE_VERSION, updatedAt: Date.now(), entries: [] };
@@ -81,6 +81,6 @@ export class ModelCacheRepository {
 	}
 
 	private async writeCache(cache: ModelCacheFile): Promise<void> {
-		await this.app.vault.adapter.write(LLM_MODEL_CACHE_PATH, JSON.stringify(cache, null, 2));
+		await this._app.vault.adapter.write(LLM_MODEL_CACHE_PATH, JSON.stringify(cache, null, 2));
 	}
 }

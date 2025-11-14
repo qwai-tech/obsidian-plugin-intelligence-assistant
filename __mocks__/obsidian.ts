@@ -3,6 +3,8 @@
  * Provides minimal implementations of Obsidian classes needed for tests
  */
 
+import { jest } from '@jest/globals';
+
 // Add Obsidian HTMLElement extensions
 if (typeof HTMLElement !== 'undefined') {
 	HTMLElement.prototype.empty = function() {
@@ -128,6 +130,10 @@ export class App {
 		getLeaf: jest.fn(() => ({
 			openFile: jest.fn(),
 		})),
+	};
+
+	fileManager = {
+		trashFile: jest.fn(async (_file: any) => {}),
 	};
 }
 

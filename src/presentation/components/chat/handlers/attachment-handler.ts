@@ -11,13 +11,13 @@ import { ChatViewState, StateChangeEvent } from '@/presentation/state/chat-view-
  * Modal for selecting images from vault
  */
 class SearchableImageModal extends Modal {
-	private onChooseFiles: (files: TFile[]) => void;
+	private onChooseFiles: (_files: TFile[]) => void;
 	private searchInput: HTMLInputElement;
 	private resultsContainer: HTMLElement;
 	private allImageFiles: TFile[];
 	private selectedFiles: TFile[] = [];
 
-	constructor(app: App, onChooseFiles: (files: TFile[]) => void) {
+	constructor(app: App, onChooseFiles: (_files: TFile[]) => void) {
 		super(app);
 		this.onChooseFiles = onChooseFiles;
 		this.allImageFiles = this.app.vault.getFiles().filter(file => {
@@ -31,7 +31,7 @@ class SearchableImageModal extends Modal {
 		contentEl.empty();
 		contentEl.addClass('image-picker-modal');
 
-		contentEl.createEl('h2', { text: 'Select Images' });
+		contentEl.createEl('h2', { text: 'Select images' });
 
 		// Search input
 		this.searchInput = contentEl.createEl('input', {
@@ -155,7 +155,7 @@ export class AttachmentHandler {
 	/**
 	 * Show file attachment picker
 	 */
-	async attachFile(event?: MouseEvent): Promise<void> {
+	attachFile(event?: MouseEvent): Promise<void> {
 		// Get all markdown files in vault
 		const files = this.app.vault.getMarkdownFiles();
 
@@ -170,15 +170,17 @@ export class AttachmentHandler {
 			menu.addItem((item) => {
 				item.setTitle(file.path)
 					.setIcon('document')
-					.onClick(async () => {
-						const content = await this.app.vault.read(file);
-						this.state.addAttachment({
-							type: 'file',
-							name: file.name,
-							path: file.path,
-							content: content
-						});
-						new Notice(`Attached: ${file.name}`);
+					.onClick(() => {
+						void (async () => {
+							const content = await this.app.vault.read(file);
+							this.state.addAttachment({
+								type: 'file',
+								name: file.name,
+								path: file.path,
+								content: content
+							});
+							new Notice(`Attached: ${file.name}`);
+						})();
 					});
 			});
 		});
@@ -193,24 +195,27 @@ export class AttachmentHandler {
 	/**
 	 * Show image attachment picker
 	 */
-	async attachImage(): Promise<void> {
-		new SearchableImageModal(this.app, async (selectedFiles: TFile[]) => {
-			for (const file of selectedFiles) {
-				const arrayBuffer = await this.app.vault.readBinary(file);
-				const base64 = this.arrayBufferToBase64(arrayBuffer);
-				const dataUrl = `data:image/${file.extension};base64,${base64}`;
+	attachImage(): Promise<void> {
+		new SearchableImageModal(this.app, (selectedFiles: TFile[]) => {
+			void (async () => {
+				for (const file of selectedFiles) {
+					const arrayBuffer = await this.app.vault.readBinary(file);
+					const base64 = this.arrayBufferToBase64(arrayBuffer);
+					const dataUrl = `data:image/${file.extension};base64,${base64}`;
 
-				this.state.addAttachment({
-					type: 'image',
-					name: file.name,
-					path: file.path,
-					content: dataUrl
-				});
-			}
-			if (selectedFiles.length > 0) {
-				new Notice(`Attached ${selectedFiles.length} image(s)`);
-			}
+					this.state.addAttachment({
+						type: 'image',
+						name: file.name,
+						path: file.path,
+						content: dataUrl
+					});
+				}
+				if (selectedFiles.length > 0) {
+					new Notice(`Attached ${selectedFiles.length} image(s)`);
+				}
+			})();
 		}).open();
+	  return Promise.resolve();
 	}
 
 	/**

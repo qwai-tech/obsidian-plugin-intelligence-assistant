@@ -18,17 +18,17 @@ export function displayMCPTab(
 	testAllMCPConnections: () => Promise<void>,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'MCP Server Management' });
+	containerEl.createEl('h3', { text: 'Mcp server management' });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Configure Model Context Protocol (MCP) servers to extend agent capabilities with external tools and data sources.'
+		text: 'Configure model context protocol (mcp) servers to extend agent capabilities with external tools and data sources.'
 	});
 	desc.addClass('ia-section-description');
 
 	const toolbar = containerEl.createDiv('ia-toolbar');
 
 	// Add MCP Inspector button
-	const inspectorBtn = toolbar.createEl('button', { text: '🔍 Open MCP Inspector' });
+	const inspectorBtn = toolbar.createEl('button', { text: '🔍 open mcp inspector' });
 	inspectorBtn.addClass('ia-button');
 	inspectorBtn.addClass('ia-button--ghost');
 	inspectorBtn.addEventListener('click', () => {
@@ -36,54 +36,59 @@ export function displayMCPTab(
 	});
 
 	// Add Test All Connections button
-	const testAllBtn = toolbar.createEl('button', { text: '🧪 Test All Connections' });
+	const testAllBtn = toolbar.createEl('button', { text: '🧪 test all connections' });
 	testAllBtn.addClass('ia-button');
 	testAllBtn.addClass('ia-button--ghost');
-	testAllBtn.addEventListener('click', async () => {
-		await testAllMCPConnections();
+	testAllBtn.addEventListener('click', () => {
+		void (async () => {
+			await testAllMCPConnections();
+		})();
 	});
 
 	// Add Refresh All Tools button
-	const refreshAllBtn = toolbar.createEl('button', { text: '🔄 Refresh All Tools' });
+	const refreshAllBtn = toolbar.createEl('button', { text: '🔄 refresh all tools' });
 	refreshAllBtn.addClass('ia-button');
 	refreshAllBtn.addClass('ia-button--ghost');
-	refreshAllBtn.addEventListener('click', async () => {
-		const toolManager = plugin.getToolManager();
-		const results = [];
-		
-		for (const server of plugin.settings.mcpServers) {
-			if (!server.enabled) {
-				continue; // Skip disabled servers
+	refreshAllBtn.addEventListener('click', () => {
+		void (async () => {
+			const toolManager = plugin.getToolManager();
+			const results = [];
+			
+			for (const server of plugin.settings.mcpServers) {
+				if (!server.enabled) {
+					continue; // Skip disabled servers
+				}
+
+				try {
+					// Connect to the server and refresh its tools
+					const tools = await toolManager.registerMCPServer(server);
+					server.cachedTools = snapshotMcpTools(tools);
+					server.cacheTimestamp = Date.now();
+					results.push({ server: server.name, tools: tools.length, success: true });
+					console.debug(`[MCP] Refreshed tools for ${server.name}: ${tools.length} tools`);
+				} catch (error) {
+					console.error(`[MCP] Failed to refresh tools for ${server.name}:`, error);
+					const errorMsg = error instanceof Error ? error.message : String(error);
+					results.push({ server: server.name, tools: 0, success: false, error: errorMsg });
+				}
 			}
 
-			try {
-				// Connect to the server and refresh its tools
-				const tools = await toolManager.registerMCPServer(server);
-				server.cachedTools = snapshotMcpTools(tools);
-				server.cacheTimestamp = Date.now();
-				results.push({ server: server.name, tools: tools.length, success: true });
-				console.debug(`[MCP] Refreshed tools for ${server.name}: ${tools.length} tools`);
-			} catch (error) {
-				console.error(`[MCP] Failed to refresh tools for ${server.name}:`, error);
-				results.push({ server: server.name, tools: 0, success: false, error: error.message });
+			await plugin.saveSettings();
+			refreshDisplay();
+			
+			// Show summary of results
+			const successful = results.filter(r => r.success).length;
+			const failed = results.filter(r => !r.success).length;
+			if (failed === 0) {
+				new Notice(`✅ refreshed tools for ${successful} server${successful !== 1 ? 's' : ''}`);
+			} else {
+				new Notice(`✅ refreshed ${successful} server${successful !== 1 ? 's' : ''}, ❌ ${failed} failed`);
 			}
-		}
-
-		await plugin.saveSettings();
-		refreshDisplay();
-		
-		// Show summary of results
-		const successful = results.filter(r => r.success).length;
-		const failed = results.filter(r => !r.success).length;
-		if (failed === 0) {
-			new Notice(`✅ Refreshed tools for ${successful} server${successful !== 1 ? 's' : ''}`);
-		} else {
-			new Notice(`✅ Refreshed ${successful} server${successful !== 1 ? 's' : ''}, ❌ ${failed} failed`);
-		}
+		})();
 	});
 
 	// Add new MCP server button
-	const addBtn = toolbar.createEl('button', { text: '+ Add MCP Server' });
+	const addBtn = toolbar.createEl('button', { text: '+ add mcp server' });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -107,7 +112,7 @@ export function displayMCPTab(
 	// Display existing MCP servers in a table if they exist
 	if (plugin.settings.mcpServers.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No MCP servers configured. Click "Add MCP Server" to get started.');
+		emptyDiv.setText('No mcp servers configured. Select add mcp server to get started.');
 		return;
 	}
 
@@ -171,10 +176,10 @@ export function displayMCPTab(
 			statusLabel = 'Disabled';
 		} else if (isConnected) {
 			statusKind = 'success';
-			statusLabel = 'Connected';
+			statusLabel = 'connected';
 		} else {
 			statusKind = 'warning';
-			statusLabel = 'Disconnected';
+			statusLabel = 'disconnected';
 		}
 
 		createStatusIndicator(statusStack, statusKind, statusLabel);
@@ -239,124 +244,133 @@ export function displayMCPTab(
 		});
 		toggleBtn.addClass('ia-button');
 		toggleBtn.addClass(server.enabled ? 'ia-button--success' : 'ia-button--ghost');
-		toggleBtn.addEventListener('click', async () => {
-			const wasEnabled = server.enabled;
-			server.enabled = !server.enabled;
-			try {
-				if (!server.enabled && wasEnabled && isConnected) {
-					await toolManager.unregisterMCPServer(server.name);
-				}
-
-				if (server.enabled && connectionMode === 'auto') {
-					try {
-						const tools = await toolManager.registerMCPServer(server);
-						server.cachedTools = snapshotMcpTools(tools);
-						server.cacheTimestamp = Date.now();
-					} catch (error) {
-						console.error(`[MCP] Failed to auto-connect ${server.name}:`, error);
-						new Notice(`Failed to auto-connect ${server.name}`);
+		toggleBtn.addEventListener('click', () => {
+			void (async () => {
+				const wasEnabled = server.enabled;
+				server.enabled = !server.enabled;
+				try {
+					if (!server.enabled && wasEnabled && isConnected) {
+						await toolManager.unregisterMCPServer(server.name);
 					}
+
+					if (server.enabled && connectionMode === 'auto') {
+						try {
+							const tools = await toolManager.registerMCPServer(server);
+							server.cachedTools = snapshotMcpTools(tools);
+							server.cacheTimestamp = Date.now();
+						} catch (error) {
+							console.error(`[MCP] Failed to auto-connect ${server.name}:`, error);
+							new Notice(`Failed to auto-connect ${server.name}`);
+						}
+					}
+				} finally {
+					await plugin.saveSettings();
+					refreshDisplay();
 				}
-			} finally {
-				await plugin.saveSettings();
-				refreshDisplay();
-			}
+			})();
 		});
 
-		const connectBtn = actionsCell.createEl('button', { text: isConnected ? 'Disconnect' : 'Connect' });
+		const connectBtn = actionsCell.createEl('button', { text: isConnected ? 'disconnect' : 'connect' });
 		connectBtn.addClass('ia-button');
 		connectBtn.addClass(isConnected ? 'ia-button--danger' : 'ia-button--ghost');
 		connectBtn.disabled = !server.enabled;
-		connectBtn.addEventListener('click', async () => {
-			const currentlyConnected = toolManager.getMCPServers().includes(server.name);
-			const originalText = connectBtn.textContent ?? '';
-			connectBtn.disabled = true;
-			connectBtn.textContent = currentlyConnected ? 'Disconnecting...' : 'Connecting...';
+		connectBtn.addEventListener('click', () => {
+			void (async () => {
+				const currentlyConnected = toolManager.getMCPServers().includes(server.name);
+				const originalText = connectBtn.textContent ?? '';
+				connectBtn.disabled = true;
+				connectBtn.textContent = currentlyConnected ? 'Disconnecting...' : 'Connecting...';
 
-			try {
-				if (currentlyConnected) {
-					await toolManager.unregisterMCPServer(server.name);
-					new Notice(`Disconnected from ${server.name}`);
-				} else {
-					if (!server.enabled) {
-						new Notice('Enable the server before connecting');
-						return;
+				try {
+					if (currentlyConnected) {
+						await toolManager.unregisterMCPServer(server.name);
+						new Notice(`Disconnected from ${server.name}`);
+					} else {
+						if (!server.enabled) {
+							new Notice('Enable the server before connecting');
+							return;
+						}
+						const tools = await toolManager.registerMCPServer(server);
+						server.cachedTools = snapshotMcpTools(tools);
+						server.cacheTimestamp = Date.now();
+						await plugin.saveSettings();
+						new Notice(`Connected to ${server.name}`);
 					}
-					const tools = await toolManager.registerMCPServer(server);
-					server.cachedTools = snapshotMcpTools(tools);
-					server.cacheTimestamp = Date.now();
-					await plugin.saveSettings();
-					new Notice(`Connected to ${server.name}`);
+				} catch (error) {
+					console.error(`[MCP] Failed to ${currentlyConnected ? 'disconnect' : 'connect'} ${server.name}:`, error);
+					new Notice(`Failed to ${currentlyConnected ? 'disconnect from' : 'connect to'} ${server.name}`);
+				} finally {
+					connectBtn.disabled = !server.enabled;
+					connectBtn.textContent = originalText;
+					refreshDisplay();
 				}
-			} catch (error) {
-				console.error(`[MCP] Failed to ${currentlyConnected ? 'disconnect' : 'connect'} ${server.name}:`, error);
-				new Notice(`Failed to ${currentlyConnected ? 'disconnect from' : 'connect to'} ${server.name}`);
-			} finally {
-				connectBtn.disabled = !server.enabled;
-				connectBtn.textContent = originalText;
-				refreshDisplay();
-			}
+			})();
 		});
 
 		// Test button
 		const testBtn = actionsCell.createEl('button', { text: 'Test' });
 		testBtn.addClass('ia-button');
 		testBtn.addClass('ia-button--ghost');
-		testBtn.addEventListener('click', async () => {
-			// Validate command before testing
-			if (!server.command || server.command.trim() === '') {
-				new Notice('❌ Please enter a command before testing connection');
-				return;
-			}
-
-			testBtn.textContent = 'Testing...';
-			testBtn.disabled = true;
-
-			try {
-				// Import MCPClient for testing
-				const { MCPClient } = await import('@/application/services/mcp-client');
-				const testClient = new MCPClient(server);
-
-				await testClient.connect();
-				const tools = await testClient.listTools();
-				await testClient.disconnect();
-
-				server.cachedTools = snapshotMcpTools(tools);
-				server.cacheTimestamp = Date.now();
-				await plugin.saveSettings();
-
-				new Notice(`✅ Connected successfully! Found ${tools.length} tools.`);
-				refreshDisplay(); // Refresh the entire view to update status indicators
-			} catch (error) {
-				console.error('[MCP] Test connection failed:', error);
-
-				// Provide helpful error messages for common issues
-				let errorMessage = error.message;
-				if (errorMessage.includes('ENOENT') && server.command === 'npx') {
-					errorMessage = 'npx command not found. Try using the full path (e.g., /usr/local/bin/npx) or install the package globally first.';
-				} else if (errorMessage.includes('ENOENT') && server.command === 'uvx') {
-					errorMessage = 'uvx command not found. Please install uv first: "curl -LsSf https://astral.sh/uv/install.sh | sh" or try using the full path (e.g., ~/.local/bin/uvx or ~/.cargo/bin/uvx).';
-				} else if (errorMessage.includes('ENOENT')) {
-					errorMessage = `Command "${server.command}" not found. Please check the command path.`;
+		testBtn.addEventListener('click', () => {
+			void (async () => {
+				// Validate command before testing
+				if (!server.command || server.command.trim() === '') {
+					new Notice('❌ please enter a command before testing connection');
+					return;
 				}
 
-				new Notice(`❌ Connection failed: ${errorMessage}`);
-			} finally {
-				testBtn.disabled = false;
-				testBtn.textContent = 'Test';
-			}
+				testBtn.textContent = 'Testing...';
+				testBtn.disabled = true;
+
+				try {
+					// Import MCPClient for testing
+					const { MCPClient } = await import('@/application/services/mcp-client');
+					const testClient = new MCPClient(server);
+
+					await testClient.connect();
+					const tools = await testClient.listTools();
+					await testClient.disconnect();
+
+					server.cachedTools = snapshotMcpTools(tools);
+					server.cacheTimestamp = Date.now();
+					await plugin.saveSettings();
+
+					new Notice(`✅ connected successfully! Found ${tools.length} tools.`);
+					refreshDisplay(); // Refresh the entire view to update status indicators
+				} catch (error) {
+					console.error('[MCP] Test connection failed:', error);
+
+					// Provide helpful error messages for common issues
+					const errorMessage = error instanceof Error ? error.message : String(error);
+					let displayMessage = errorMessage;
+					if (errorMessage.includes('ENOENT') && server.command === 'npx') {
+						displayMessage = 'npx command not found. Try using the full path (e.g., /usr/local/bin/npx) or install the package globally first.';
+					} else if (errorMessage.includes('ENOENT') && server.command === 'uvx') {
+						displayMessage = 'uvx command not found. Please install uv first: "curl -LsSf https://astral.sh/uv/install.sh | sh" or try using the full path (e.g., ~/.local/bin/uvx or ~/.cargo/bin/uvx).';
+					} else if (errorMessage.includes('ENOENT')) {
+						displayMessage = `Command "${server.command}" not found. Please check the command path.`;
+					}
+
+					new Notice(`❌ Connection failed: ${displayMessage}`);
+				} finally {
+					testBtn.disabled = false;
+					testBtn.textContent = 'Test';
+				}
+			})();
 		});
 
 		// Delete button
 		const deleteBtn = actionsCell.createEl('button', { text: 'Delete' });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
-		deleteBtn.addEventListener('click', async () => {
-			if (await showConfirm(this.app, `Delete MCP server "${server.name}"?`)) {
-				plugin.settings.mcpServers.splice(index, 1);
-				await plugin.saveSettings();
-				refreshDisplay();
-			}
+		deleteBtn.addEventListener('click', () => {
+			void (async () => {
+				if (await showConfirm(app, `Delete MCP server "${server.name}"?`)) {
+					plugin.settings.mcpServers.splice(index, 1);
+					await plugin.saveSettings();
+					refreshDisplay();
+				}
+			})();
 		});
 	});
 }

@@ -61,7 +61,7 @@ function normalizeArrayPath(path: string): string {
 	return path;
 }
 
-function formatConstraints(constraints: Record<string, any> | undefined): string | null {
+function formatConstraints(constraints: Record<string, unknown> | undefined): string | null {
 	if (!constraints || Object.keys(constraints).length === 0) {
 		return null;
 	}
@@ -69,13 +69,17 @@ function formatConstraints(constraints: Record<string, any> | undefined): string
 	const { min, max, type } = constraints;
 	const parts: string[] = [];
 	if (min !== undefined && max !== undefined) {
-		parts.push(`Range: ${min}-${max}`);
+		const minStr = typeof min === 'number' ? String(min) : JSON.stringify(min);
+		const maxStr = typeof max === 'number' ? String(max) : JSON.stringify(max);
+		parts.push(`Range: ${minStr}-${maxStr}`);
 	} else {
 		if (min !== undefined) {
-			parts.push(`Min: ${min}`);
+			const minStr = typeof min === 'number' ? String(min) : JSON.stringify(min);
+			parts.push(`Min: ${minStr}`);
 		}
 		if (max !== undefined) {
-			parts.push(`Max: ${max}`);
+			const maxStr = typeof max === 'number' ? String(max) : JSON.stringify(max);
+			parts.push(`Max: ${maxStr}`);
 		}
 	}
 
@@ -96,7 +100,7 @@ function formatDefault(value: unknown, includeArrays = false): string | null {
 	}
 
 	if (typeof value === 'number' || typeof value === 'boolean') {
-		return `Default: ${value}`;
+		return `Default: ${String(value)}`;
 	}
 
 	if (Array.isArray(value)) {

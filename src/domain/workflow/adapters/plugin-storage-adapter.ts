@@ -8,10 +8,10 @@ import type { IStoragePort } from '../ports/storage-port';
 import type { Workflow } from '@/types';
 
 export class PluginStorageAdapter implements IStoragePort {
-	constructor(private plugin: IntelligenceAssistantPlugin) {}
+	constructor(private readonly _plugin: IntelligenceAssistantPlugin) {}
 
 	private async repo() {
-		return await this.plugin.getWorkflowDataRepository();
+		return await this._plugin.getWorkflowDataRepository();
 	}
 
 	async save(workflow: Workflow): Promise<void> {

@@ -117,7 +117,7 @@ describe('Provider Integration Tests', () => {
 			const chunk = {
 				type: 'content_block_delta',
 				delta: {
-					text: 'Hello from Claude',
+					text: 'Hello from claude',
 				},
 			};
 
@@ -198,7 +198,7 @@ describe('Provider Integration Tests', () => {
 						content: {
 							parts: [
 								{
-									text: 'Hello from Gemini',
+									text: 'Hello from gemini',
 								},
 							],
 						},

@@ -13,9 +13,9 @@ const errorLogger = createLogger('ErrorHandler');
 export class PluginError extends Error {
 	constructor(
 		message: string,
-		public readonly context?: Record<string, any>,
-		public readonly userMessage?: string,
-		public readonly originalError?: Error
+		public readonly _context?: Record<string, unknown>,
+		public readonly _userMessage?: string,
+		public readonly _originalError?: Error
 	) {
 		super(message);
 		this.name = 'PluginError';
@@ -40,7 +40,7 @@ export interface ErrorHandlerOptions {
 	/** Custom logger to use */
 	logger?: Logger;
 	/** Fallback value to return on error */
-	fallback?: any;
+	fallback?: unknown;
 	/** Whether to rethrow the error after handling */
 	rethrow?: boolean;
 }
@@ -68,11 +68,11 @@ export async function handleAsyncError<T>(
 
 	try {
 		return await operation();
-	} catch (error) {
+	} catch (error: unknown) {
 		// Log the error
 		if (logError) {
 			const message = `Error in ${context}`;
-			logger.error(message, error);
+			logger.error(message, error instanceof Error ? error : undefined);
 		}
 
 		// Show user notification
@@ -114,11 +114,11 @@ export function handleSyncError<T>(
 
 	try {
 		return operation();
-	} catch (error) {
+	} catch (error: unknown) {
 		// Log the error
 		if (logError) {
 			const message = `Error in ${context}`;
-			logger.error(message, error);
+			logger.error(message, error instanceof Error ? error : undefined);
 		}
 
 		// Show user notification
@@ -144,13 +144,13 @@ export function handleSyncError<T>(
 /**
  * Wraps an async function with error handling
  */
-export function withErrorHandler<TArgs extends any[], TReturn>(
-	fn: (...args: TArgs) => Promise<TReturn>,
+export function withErrorHandler<TArgs extends unknown[], TReturn>(
+	fn: (..._args: TArgs) => Promise<TReturn>,
 	context: string,
 	options: ErrorHandlerOptions = {}
-): (...args: TArgs) => Promise<TReturn | undefined> {
-	return async (...args: TArgs) => {
-		return handleAsyncError(() => fn(...args), context, options);
+): (..._args: TArgs) => Promise<TReturn | undefined> {
+	return async (..._args: TArgs) => {
+		return handleAsyncError(() => fn(..._args), context, options);
 	};
 }
 
@@ -173,7 +173,7 @@ export function getErrorMessage(error: unknown): string {
 /**
  * Checks if error is a specific type
  */
-export function isErrorType(error: unknown, errorType: new (...args: any[]) => Error): boolean {
+export function isErrorType(error: unknown, errorType: new (..._args: unknown[]) => Error): boolean {
 	return error instanceof errorType;
 }
 

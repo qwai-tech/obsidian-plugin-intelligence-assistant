@@ -37,7 +37,7 @@ export class CodeImportExportService {
       case 'yaml':
         return this.exportAsYaml(workflowData, options);
       default:
-        throw new Error(`Unsupported export format: ${options.format}`);
+        throw new Error(`Unsupported export format: ${String(options.format)}`);
     }
   }
 
@@ -64,9 +64,10 @@ export class CodeImportExportService {
    * Export as TypeScript code
    */
 	private exportAsTypescript(workflow: Workflow, _options: ExportOptions): string {
+    const workflowName = workflow.name ?? 'unnamed-workflow';
     const codeLines = [
       '/**',
-      ` * Workflow: ${workflow.name}`,
+      ` * Workflow: ${workflowName ?? 'unknown'}`,
       ` * Generated: ${new Date().toISOString()}`,
       ` * ID: ${workflow.id}`,
       ' */',
@@ -75,7 +76,7 @@ export class CodeImportExportService {
       '',
       `const workflowData = ${JSON.stringify({
         id: workflow.id,
-        name: workflow.name,
+        name: workflowName,
         description: workflow.description,
         nodes: workflow.nodes,
         connections: workflow.connections
@@ -86,7 +87,7 @@ export class CodeImportExportService {
       '};',
       '',
       `// Usage:`,
-      `// import { createWorkflow } from './workflows/${workflow.name.toLowerCase().replace(/\s+/g, '-')}'`,
+      `// import { createWorkflow } from './workflows/${workflowName.toLowerCase().replace(/\s+/g, '-')}'`,
       `// const workflow = createWorkflow();`,
     ];
 
@@ -97,20 +98,20 @@ export class CodeImportExportService {
    * Export as YAML format
    */
 	private exportAsYaml(workflow: Workflow, _options: ExportOptions): string {
-    let yaml = `# Workflow: ${workflow.name}\n`;
+    let yaml = `# Workflow: ${workflow.name ?? 'unknown'}\n`;
     yaml += `# Generated: ${new Date().toISOString()}\n`;
     yaml += `# ID: ${workflow.id}\n\n`;
     
     yaml += `workflow:\n`;
     yaml += `  id: ${workflow.id}\n`;
-    yaml += `  name: ${workflow.name}\n`;
+    yaml += `  name: ${workflow.name ?? 'unknown'}\n`;
     yaml += `  description: ${workflow.description || ''}\n`;
     yaml += `  nodes:\n`;
     
     for (const node of workflow.nodes) {
       yaml += `    - id: ${node.id}\n`;
       yaml += `      type: ${node.type}\n`;
-      yaml += `      name: ${node.name}\n`;
+      yaml += `      name: ${node.name ?? 'unknown'}\n`;
       yaml += `      x: ${node.x}\n`;
       yaml += `      y: ${node.y}\n`;
       yaml += `      config: ${JSON.stringify(node.config)}\n`;
@@ -130,7 +131,7 @@ export class CodeImportExportService {
    */
   import(code: string, format?: 'json' | 'yaml' | 'typescript'): ImportResult {
     try {
-      let workflowData: any;
+      let workflowData: unknown;
 
       if (format === 'yaml' || this.isYaml(code)) {
         workflowData = this.parseYaml(code);
@@ -142,8 +143,8 @@ export class CodeImportExportService {
       }
 
       // If the parsed data has a wrapper object, extract the workflow
-      if (workflowData.workflow) {
-        workflowData = workflowData.workflow;
+      if (workflowData && typeof workflowData === 'object' && 'workflow' in workflowData) {
+        workflowData = (workflowData as { workflow: unknown }).workflow;
       }
 
       // Validate the workflow data
@@ -157,7 +158,7 @@ export class CodeImportExportService {
       }
 
       // Create and return the workflow
-      const workflowGraph = WorkflowGraph.fromJSON(workflowData);
+      const workflowGraph = WorkflowGraph.fromJSON(workflowData as Workflow);
       
       return {
         success: true,
@@ -165,10 +166,11 @@ export class CodeImportExportService {
         errors: [],
         warnings: [],
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       return {
         success: false,
-        errors: [error.message],
+        errors: [errorMessage],
         warnings: [],
       };
     }
@@ -177,7 +179,7 @@ export class CodeImportExportService {
   /**
    * Parse JSON format
    */
-  private parseJson(json: string): any {
+  private parseJson(json: string): unknown {
     try {
       return JSON.parse(json);
     } catch (error) {
@@ -188,7 +190,7 @@ export class CodeImportExportService {
   /**
    * Parse YAML format (simplified - would need a proper YAML parser in real implementation)
    */
-  private parseYaml(yaml: string): any {
+  private parseYaml(yaml: string): unknown {
     // This is a simplified YAML parser - a real implementation would use a proper library
     // For now, we'll convert simple YAML to JSON by extracting the workflow section
     
@@ -201,7 +203,7 @@ export class CodeImportExportService {
     const workflowSection = workflowSectionMatch[1];
     
     // Extract individual fields
-    const workflowData: any = {
+    const workflowData: Record<string, unknown> = {
       nodes: [],
       connections: []
     };
@@ -219,7 +221,7 @@ export class CodeImportExportService {
     const nodeMatches = workflowSection.match(/(\s+-\s*id:\s*(\S+)[\s\S]*?)(?=\n\s*-\s*id:|\n\s*connections:|$)/g);
     if (nodeMatches) {
       for (const match of nodeMatches) {
-        const node: any = {};
+        const node: unknown = {};
         const id = match.match(/id:\s*(\S+)/)?.[1];
         const type = match.match(/type:\s*(\S+)/)?.[1];
         const name = match.match(/name:\s*(.+)/)?.[1]?.trim();
@@ -234,15 +236,15 @@ export class CodeImportExportService {
         if (y) node.y = parseInt(y);
         if (configMatch) {
           try {
-            node.config = JSON.parse(configMatch);
+            node.config = JSON.parse(configMatch) as Record<string, unknown>;
           } catch {
-            node.config = configMatch; // Keep as string if not valid JSON
+            node.config = configMatch as Record<string, unknown>; // Keep as string if not valid JSON
           }
         } else {
           node.config = {};
         }
 
-        if (node.id) workflowData.nodes.push(node);
+        if (node.id) (workflowData.nodes as unknown[]).push(node);
       }
     }
 
@@ -255,7 +257,7 @@ export class CodeImportExportService {
           const from = match.match(/from:\s*(\S+)/)?.[1];
           const to = match.match(/to:\s*(\S+)/)?.[1];
           if (from && to) {
-            workflowData.connections.push({ from, to });
+            (workflowData.connections as unknown[]).push({ from, to });
           }
         }
       }
@@ -267,7 +269,7 @@ export class CodeImportExportService {
   /**
    * Parse TypeScript format (extracts JSON object from TS file)
    */
-  private parseTypescript(ts: string): any {
+  private parseTypescript(ts: string): unknown {
     // Look for the workflow data object in the TypeScript code
     const workflowMatch = ts.match(/workflowData\s*=\s*(\{[\s\S]*?\});/);
     if (!workflowMatch) {
@@ -301,26 +303,40 @@ export class CodeImportExportService {
   /**
    * Validate workflow data structure
    */
-  private validateWorkflowData(data: any): string[] {
+  private validateWorkflowData(data: unknown): string[] {
     const errors: string[] = [];
 
-    if (!data.id) errors.push('Workflow must have an ID');
-    if (!data.name) errors.push('Workflow must have a name');
-    if (!Array.isArray(data.nodes)) errors.push('Workflow must have a nodes array');
-    if (!Array.isArray(data.connections)) errors.push('Workflow must have a connections array');
+    if (!data || typeof data !== 'object') {
+      errors.push('Workflow data must be an object');
+      return errors;
+    }
+
+    const workflowData = data as Record<string, unknown>;
+
+    if (!workflowData.id) errors.push('Workflow must have an ID');
+    if (!workflowData.name) errors.push('Workflow must have a name');
+    if (!Array.isArray(workflowData.nodes)) errors.push('Workflow must have a nodes array');
+    if (!Array.isArray(workflowData.connections)) errors.push('Workflow must have a connections array');
 
     // More detailed validation could be added here
-    if (data.nodes) {
-      for (const node of data.nodes) {
-        if (!node.id) errors.push('All nodes must have an ID');
-        if (!node.type) errors.push(`Node ${node.id || 'unknown'} must have a type`);
+    if (Array.isArray(workflowData.nodes)) {
+      for (const node of workflowData.nodes) {
+        if (!node || typeof node !== 'object') continue;
+        const nodeData = node as Record<string, unknown>;
+        if (!nodeData.id) errors.push('All nodes must have an ID');
+        if (!nodeData.type) {
+          const nodeId = typeof nodeData.id === 'string' ? nodeData.id : 'unknown';
+          errors.push(`Node ${nodeId} must have a type`);
+        }
       }
     }
 
-    if (data.connections) {
-      for (const conn of data.connections) {
-        if (!conn.from) errors.push('All connections must have a "from" field');
-        if (!conn.to) errors.push('All connections must have a "to" field');
+    if (Array.isArray(workflowData.connections)) {
+      for (const conn of workflowData.connections) {
+        if (!conn || typeof conn !== 'object') continue;
+        const connData = conn as Record<string, unknown>;
+        if (!connData.from) errors.push('All connections must have a "from" field');
+        if (!connData.to) errors.push('All connections must have a "to" field');
       }
     }
 
@@ -330,7 +346,7 @@ export class CodeImportExportService {
   /**
    * Extract metadata from workflow
    */
-  private getMetadata(workflow: Workflow): any {
+  private getMetadata(workflow: Workflow): unknown {
     return {
       id: workflow.id,
       name: workflow.name,
@@ -347,7 +363,7 @@ export class CodeImportExportService {
    */
   private extractComments(workflow: Workflow): string[] {
     // In a real implementation, this would extract comments from nodes, connections, etc.
-    return [`Workflow: ${workflow.name}`, `Nodes: ${workflow.nodes.length}`, `Connections: ${workflow.connections.length}`];
+    return [`Workflow: ${workflow.name ?? 'unknown'}`, `Nodes: ${workflow.nodes.length}`, `Connections: ${workflow.connections.length}`];
   }
 
   /**

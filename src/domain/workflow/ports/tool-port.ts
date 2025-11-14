@@ -9,7 +9,7 @@ export interface IToolPort {
 	/**
 	 * Execute a tool
 	 */
-	executeTool(call: ToolCall): Promise<ToolResult>;
+	executeTool(_call: ToolCall): Promise<ToolResult>;
 
 	/**
 	 * Get available tools
@@ -19,5 +19,5 @@ export interface IToolPort {
 	/**
 	 * Check if tool is available
 	 */
-	isToolAvailable(toolName: string): Promise<boolean>;
+	isToolAvailable(_toolName: string): Promise<boolean>;
 }

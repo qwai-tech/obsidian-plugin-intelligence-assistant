@@ -23,10 +23,10 @@ export function displayModelsTab(
 	onFilterChange: (filters: Partial<ModelFilters>) => void,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Model Configuration' });
+	containerEl.createEl('h3', { text: 'Model configuration' });
 
 	const desc = containerEl.createEl('p', {
-		text: 'View and manage models from all configured providers. Click "Refresh Models" to fetch the latest available models.'
+		text: 'View and manage models from all configured providers. Click "refresh models" to fetch the latest available models.'
 	});
 	desc.addClass('ia-section-description');
 
@@ -36,14 +36,15 @@ export function displayModelsTab(
 	summary.createSpan({ text: `${plugin.settings.llmConfigs.length} provider${plugin.settings.llmConfigs.length === 1 ? '' : 's'} configured` });
 
 	// Add refresh all button
-	const refreshAllBtn = controls.createEl('button', { text: '🔄 Refresh All Models' });
+	const refreshAllBtn = controls.createEl('button', { text: '🔄 refresh all models' });
 	refreshAllBtn.addClass('ia-button');
 	refreshAllBtn.addClass('ia-button--ghost');
-	refreshAllBtn.addEventListener('click', async () => {
-		refreshAllBtn.textContent = 'Refreshing...';
-		refreshAllBtn.disabled = true;
+	refreshAllBtn.addEventListener('click', () => {
+		void (async () => {
+			refreshAllBtn.textContent = 'Refreshing...';
+			refreshAllBtn.disabled = true;
 
-		try {
+			try {
 			const { ModelManager } = await import('@/infrastructure/llm/model-manager');
 
 			for (const config of plugin.settings.llmConfigs) {
@@ -68,14 +69,15 @@ export function displayModelsTab(
 			new Notice('Failed to refresh models');
 		} finally {
 			refreshAllBtn.disabled = false;
-			refreshAllBtn.textContent = '🔄 Refresh All Models';
-		}
+			refreshAllBtn.textContent = '🔄 refresh all models';
+			}
+		})();
 	});
 
 	// Show message if no providers configured
 	if (plugin.settings.llmConfigs.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No providers configured yet. Add providers in the Provider tab first.');
+		emptyDiv.setText('No providers configured yet. Add providers in the provider tab first.');
 		return;
 	}
 
@@ -104,7 +106,7 @@ export function displayModelsTab(
 
 	if (allModels.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No models available. Click "Refresh All Models" or refresh individual providers in the Provider tab.');
+		emptyDiv.setText('No models available. Click "refresh all models" or refresh individual providers in the provider tab.');
 		return;
 	}
 
@@ -203,10 +205,12 @@ export function displayModelsTab(
 		const toggleBtn = actionsCell.createEl('button', { text: model.enabled ? 'Disable' : 'Enable' });
 		toggleBtn.addClass('ia-button');
 		toggleBtn.addClass(model.enabled ? 'ia-button--ghost' : 'ia-button--primary');
-		toggleBtn.addEventListener('click', async () => {
-			model.enabled = !model.enabled;
-			await plugin.saveSettings();
-			refreshDisplay();
+		toggleBtn.addEventListener('click', () => {
+			void (async () => {
+				model.enabled = !model.enabled;
+				await plugin.saveSettings();
+				refreshDisplay();
+			})();
 		});
 
 		if ((model.capabilities ?? []).includes('chat')) {
@@ -216,11 +220,13 @@ export function displayModelsTab(
 			if (isDefaultChat) {
 				chatBtn.disabled = true;
 			} else {
-				chatBtn.addEventListener('click', async () => {
-					plugin.settings.defaultModel = model.id;
-					await plugin.saveSettings();
-					new Notice(`Default chat model set to ${model.name}`);
-					refreshDisplay();
+				chatBtn.addEventListener('click', () => {
+					void (async () => {
+						plugin.settings.defaultModel = model.id;
+						await plugin.saveSettings();
+						new Notice(`Default chat model set to ${model.name}`);
+						refreshDisplay();
+					})();
 				});
 			}
 		}
@@ -232,11 +238,13 @@ export function displayModelsTab(
 			if (isDefaultEmbedding) {
 				embeddingBtn.disabled = true;
 			} else {
-				embeddingBtn.addEventListener('click', async () => {
-					plugin.settings.ragConfig.embeddingModel = model.id;
-					await plugin.saveSettings();
-					new Notice(`Default embedding model set to ${model.name}`);
-					refreshDisplay();
+				embeddingBtn.addEventListener('click', () => {
+					void (async () => {
+						plugin.settings.ragConfig.embeddingModel = model.id;
+						await plugin.saveSettings();
+						new Notice(`Default embedding model set to ${model.name}`);
+						refreshDisplay();
+					})();
 				});
 			}
 		}
@@ -256,7 +264,7 @@ function renderModelFilters(
 	const providerSelect = filterBar.createEl('select');
 	providerSelect.addClass('ia-filter-control');
 	providerSelect.addClass('ia-filter-control--compact');
-	providerSelect.createEl('option', { value: 'all', text: 'All Providers' });
+	providerSelect.createEl('option', { value: 'all', text: 'All providers' });
 
 	const providerIds = Array.from(new Set(plugin.settings.llmConfigs.map(({ provider }) => provider)));
 	providerIds.sort((a, b) => getProviderMeta(a).label.localeCompare(getProviderMeta(b).label));
@@ -278,7 +286,7 @@ function renderModelFilters(
 	const capabilitySelect = filterBar.createEl('select');
 	capabilitySelect.addClass('ia-filter-control');
 	capabilitySelect.addClass('ia-filter-control--compact');
-	capabilitySelect.createEl('option', { value: 'all', text: 'All Capabilities' });
+	capabilitySelect.createEl('option', { value: 'all', text: 'All capabilities' });
 
 	const capabilityOptions = Array.from(new Set(capabilities)).sort((a, b) => a.localeCompare(b));
 	capabilityOptions.forEach(capability => {
@@ -298,7 +306,7 @@ function renderModelFilters(
 	const statusSelect = filterBar.createEl('select');
 	statusSelect.addClass('ia-filter-control');
 	statusSelect.addClass('ia-filter-control--compact');
-	statusSelect.createEl('option', { value: 'all', text: 'All States' });
+	statusSelect.createEl('option', { value: 'all', text: 'All states' });
 	statusSelect.createEl('option', { value: 'enabled', text: 'Enabled' });
 	statusSelect.createEl('option', { value: 'disabled', text: 'Disabled' });
 	statusSelect.value = filters.enabledFilter;

@@ -6,12 +6,12 @@
 // AppError class as specified in architecture
 export class AppError extends Error {
   constructor(
-    public code: string,
+    public _code: string,
     message: string,
-    public type: 'validation' | 'business' | 'infrastructure' | 'external',
-    public recoverable: boolean = true,
-    public context?: Record<string, any>,
-    public statusCode: number = 500
+    public _type: 'validation' | 'business' | 'infrastructure' | 'external',
+    public _recoverable: boolean = true,
+    public _context?: Record<string, unknown>,
+    public _statusCode: number = 500
   ) {
     super(message);
     this.name = 'AppError';
@@ -20,12 +20,12 @@ export class AppError extends Error {
   toJSON() {
     return {
       name: this.name,
-      code: this.code,
+      code: this._code,
       message: this.message,
-      type: this.type,
-      recoverable: this.recoverable,
-      context: this.context,
-      statusCode: this.statusCode
+      type: this._type,
+      recoverable: this._recoverable,
+      context: this._context,
+      statusCode: this._statusCode
     };
   }
 }
@@ -34,7 +34,7 @@ export class AppError extends Error {
  * LLM Provider Error
  */
 export class LLMProviderError extends AppError {
-  constructor(provider: string, message: string, context?: Record<string, any>) {
+  constructor(provider: string, message: string, context?: Record<string, unknown>) {
     super('LLM_PROVIDER_ERROR', `[${provider}] ${message}`, 'infrastructure', true, context, 502);
   }
 }
@@ -43,7 +43,7 @@ export class LLMProviderError extends AppError {
  * RAG Index Error
  */
 export class RAGIndexError extends AppError {
-  constructor(message: string, context?: Record<string, any>) {
+  constructor(message: string, context?: Record<string, unknown>) {
     super('RAG_INDEX_ERROR', message, 'infrastructure', true, context);
   }
 }
@@ -52,7 +52,7 @@ export class RAGIndexError extends AppError {
  * Tool Execution Error
  */
 export class ToolExecutionError extends AppError {
-  constructor(toolName: string, message: string, context?: Record<string, any>) {
+  constructor(toolName: string, message: string, context?: Record<string, unknown>) {
     super('TOOL_EXECUTION_ERROR', `Tool "${toolName}" failed: ${message}`, 'business', false, context, 400);
   }
 }
@@ -61,7 +61,7 @@ export class ToolExecutionError extends AppError {
  * MCP Connection Error
  */
 export class MCPConnectionError extends AppError {
-  constructor(serverName: string, message: string, context?: Record<string, any>) {
+  constructor(serverName: string, message: string, context?: Record<string, unknown>) {
     super('MCP_CONNECTION_ERROR', `MCP server "${serverName}": ${message}`, 'infrastructure', true, context, 502);
   }
 }
@@ -70,7 +70,7 @@ export class MCPConnectionError extends AppError {
  * Workflow Execution Error
  */
 export class WorkflowExecutionError extends AppError {
-  constructor(workflowId: string, message: string, context?: Record<string, any>) {
+  constructor(workflowId: string, message: string, context?: Record<string, unknown>) {
     super('WORKFLOW_EXECUTION_ERROR', `Workflow "${workflowId}": ${message}`, 'business', false, context, 400);
   }
 }
@@ -79,7 +79,7 @@ export class WorkflowExecutionError extends AppError {
  * Configuration Error
  */
 export class ConfigurationError extends AppError {
-  constructor(message: string, context?: Record<string, any>) {
+  constructor(message: string, context?: Record<string, unknown>) {
     super('CONFIGURATION_ERROR', message, 'validation', false, context, 400);
   }
 }
@@ -88,7 +88,7 @@ export class ConfigurationError extends AppError {
  * Validation Error
  */
 export class ValidationError extends AppError {
-  constructor(message: string, context?: Record<string, any>) {
+  constructor(message: string, context?: Record<string, unknown>) {
     super('VALIDATION_ERROR', message, 'validation', false, context, 400);
   }
 }
@@ -97,7 +97,7 @@ export class ValidationError extends AppError {
  * Not Found Error
  */
 export class NotFoundError extends AppError {
-  constructor(resource: string, id: string, context?: Record<string, any>) {
+  constructor(resource: string, id: string, context?: Record<string, unknown>) {
     super('NOT_FOUND_ERROR', `${resource} not found: ${id}`, 'business', false, context, 404);
   }
 }

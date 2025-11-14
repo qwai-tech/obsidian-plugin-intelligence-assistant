@@ -3,7 +3,7 @@ import type { ILLMProvider, LLMProviderConfig } from './base-provider.interface'
 
 export interface ILLMProviderFactory {
   readonly name: string;
-  create(config: LLMProviderConfig): ILLMProvider;
+  create(_config: LLMProviderConfig): ILLMProvider;
 }
 
 // Provider registry system

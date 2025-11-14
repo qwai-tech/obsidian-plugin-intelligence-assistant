@@ -37,14 +37,14 @@ export interface ExecutionRecord {
 		startTime?: number;
 		endTime?: number;
 		duration?: number;
-		input?: any;
-		output?: any;
+		input?: unknown;
+		output?: unknown;
 		error?: string;
 	}>;
 	metadata?: {
 		triggeredBy?: 'manual' | 'scheduled' | 'event';
 		userNote?: string;
-		[key: string]: any;
+		[key: string]: unknown;
 	};
 }
 
@@ -102,7 +102,7 @@ export class ExecutionHistoryStorage {
 			success: boolean;
 			duration: number;
 			error?: string;
-			log: any[];
+			log: unknown[];
 		},
 		metadata?: ExecutionRecord['metadata']
 	): Promise<string> {

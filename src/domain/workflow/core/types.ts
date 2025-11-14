@@ -5,12 +5,22 @@
  * Reduces complexity while maintaining essential functionality.
  */
 
+import type {
+	App,
+	MetadataCache,
+	RequestUrlParam,
+	RequestUrlResponse,
+	Vault
+} from 'obsidian';
+import type { PluginWithSettings } from '@/types/type-utils';
+import type { PluginSettings } from '@/types/settings';
+
 /**
  * Node execution data - data passed between nodes
  */
 export interface NodeData {
 	/** JSON data payload */
-	json: Record<string, any>;
+	json: Record<string, unknown>;
 	/** Binary data (files, images, etc.) using Map for better performance */
 	binary?: Map<string, Blob>;
 }
@@ -30,7 +40,7 @@ export interface WorkflowNode {
 	/** Y coordinate on canvas */
 	y: number;
 	/** Node configuration parameters */
-	config: Record<string, any>;
+	config: Record<string, unknown>;
 }
 
 /**
@@ -98,9 +108,9 @@ export interface ExecutionLogEntry {
 	/** Error message (for error status) */
 	error?: string;
 	/** Input data snapshot */
-	input?: any;
+	input?: unknown;
 	/** Output data snapshot */
-	output?: any;
+	output?: unknown;
 }
 
 /**
@@ -133,8 +143,8 @@ export interface NodeDef {
 	/** Input and output specifications */
 	io?: NodeIO;
 	/** Execute function - processes input data and returns output */
-	execute: (input: NodeData[], config: Record<string, any>, context: ExecutionContext) => Promise<NodeData[]>;
-	[key: string]: any;
+	execute: (_input: NodeData[], _config: Record<string, unknown>, _context: ExecutionContext) => Promise<NodeData[]>;
+	[key: string]: unknown;
 }
 
 /**
@@ -165,7 +175,7 @@ export interface DataSpecification {
   /** Whether the data is optional */
   optional?: boolean;
   /** Example value for documentation */
-  example?: any;
+  example?: unknown;
 }
 
 export interface NodeParameter {
@@ -176,7 +186,7 @@ export interface NodeParameter {
 	/** Parameter type */
 	type: 'string' | 'number' | 'boolean' | 'select' | 'textarea' | 'code' | 'json';
 	/** Default value */
-	default: any;
+	default: unknown;
 	/** Whether required */
 	required?: boolean;
 	/** Placeholder text */
@@ -184,11 +194,11 @@ export interface NodeParameter {
 	/** Help text */
 	description?: string;
 	/** Options (for select type) */
-	options?: Array<{ label: string; value: any }>;
+	options?: Array<{ label: string; value: unknown }>;
 	/** Optional async option loader */
-	getOptions?: () => Promise<Array<{ label: string; value: any }>>;
+	getOptions?: () => Promise<Array<{ label: string; value: unknown }>>;
 	/** Validation function */
-	validate?: (value: any) => boolean | string;
+	validate?: (_value: unknown) => boolean | string;
 }
 
 /**
@@ -207,7 +217,7 @@ export interface ExecutionContext {
 	/** Abort signal for cancellation */
 	signal?: AbortSignal;
 	/** Logger function */
-	log: (message: string) => void;
+	log: (_message: string) => void;
 	/** Access to app services (Obsidian, AI, etc.) */
 	services: WorkflowServices;
 }
@@ -215,22 +225,49 @@ export interface ExecutionContext {
 /**
  * Services available to workflow nodes
  */
+export interface WorkflowAIMessage {
+	role: string;
+	content: string | Record<string, unknown>;
+	[key: string]: unknown;
+}
+
+export interface WorkflowAIRequestOptions {
+	model: string;
+	temperature?: number;
+	maxTokens?: number;
+	stream?: boolean;
+	[key: string]: unknown;
+}
+
+export interface WorkflowAIResponse {
+	content: unknown;
+	[key: string]: unknown;
+}
+
+export interface WorkflowAIService {
+	chat: (_messages: WorkflowAIMessage[], _options: WorkflowAIRequestOptions) => Promise<WorkflowAIResponse>;
+	embed?: (_text: string) => Promise<unknown>;
+}
+
+export interface WorkflowHttpService {
+	request: (_url: string | URL, _options?: RequestUrlParam) => Promise<RequestUrlResponse>;
+}
+
 export interface WorkflowServices {
 	/** Obsidian app instance (for creating modals, etc.) */
-	app?: any;
+	app?: App;
 	/** Obsidian vault access */
-	vault: any; // Will be typed as Vault when integrated
-	/** AI service */
-	ai?: {
-		chat: (messages: any[], options?: any) => Promise<string>;
-		embed: (text: string) => Promise<number[]>;
-	};
-	/** HTTP client */
-	http?: {
-		request: (url: string, options?: any) => Promise<any>;
-	};
+	vault?: Vault;
+	/** Metadata cache for markdown files */
+	metadataCache?: MetadataCache;
+	/** Reference to the owning plugin */
+	plugin?: PluginWithSettings;
 	/** Plugin settings (for accessing configured models, etc.) */
-	settings?: any;
+	settings?: PluginSettings;
+	/** AI service */
+	ai?: WorkflowAIService;
+	/** HTTP client */
+	http?: WorkflowHttpService;
 }
 
 /**
@@ -284,7 +321,7 @@ export interface CanvasState {
 /**
  * Event types for the workflow system
  */
-export interface WorkflowEvents {
+export interface WorkflowEvents extends Record<string, unknown> {
 	/** Node added */
 	'node:added': { node: WorkflowNode };
 	/** Node removed */
@@ -308,14 +345,14 @@ export interface WorkflowEvents {
 	/** Execution error */
 	'execution:error': { error: string };
 	/** Execution view full data requested */
-	'execution:view-full': { nodeId: string; log: { input?: any; output?: any } };
+	'execution:view-full': { nodeId: string; log: { input?: unknown; output?: unknown } };
 }
 
 /**
  * Simple event emitter interface
  */
-export interface EventEmitter<T extends Record<string, any>> {
-	on<K extends keyof T>(event: K, handler: (data: T[K]) => void): void;
-	off<K extends keyof T>(event: K, handler: (data: T[K]) => void): void;
-	emit<K extends keyof T>(event: K, data: T[K]): void;
+export interface EventEmitter<T extends Record<string, unknown>> {
+	on<K extends keyof T>(_event: K, _handler: (_data: T[K]) => void): void;
+	off<K extends keyof T>(_event: K, _handler: (_data: T[K]) => void): void;
+	emit<K extends keyof T>(_event: K, _data: T[K]): void;
 }

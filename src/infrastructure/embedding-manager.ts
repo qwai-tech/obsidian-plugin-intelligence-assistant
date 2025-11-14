@@ -25,7 +25,7 @@ interface EmbeddingResponse {
 export class EmbeddingManager {
   private static readonly DEFAULT_EMBEDDING_MODEL = 'all-MiniLM-L6-v2';
   private static worker: Worker | null = null;
-  private static pendingRequests: Map<string, { resolve: (value: number[]) => void, reject: (reason: any) => void }> = new Map();
+  private static pendingRequests: Map<string, { resolve: (_value: number[]) => void, reject: (_reason: unknown) => void }> = new Map();
   
   // Available embedding models - in practice, this could be extended to support various providers
   private static readonly EMBEDDING_MODELS: EmbeddingModel[] = [
@@ -66,15 +66,51 @@ export class EmbeddingManager {
     // Try to dynamically load LLM models with embedding capability
     try {
       // Access the plugin settings to get all configured models
-      if (typeof window !== 'undefined' && (window as any).app) {
-        const app = (window as any).app;
-        const plugin = app.plugins?.plugins?.['intelligence-assistant'];
+      if (typeof window !== 'undefined') {
+        const windowWithApp = window as unknown as {
+          app?: {
+            plugins?: {
+              plugins?: {
+                'intelligence-assistant'?: {
+                  settings?: {
+                    llmConfigs?: Array<{
+                      cachedModels?: Array<{
+                        id: string;
+                        name: string;
+                        provider: string;
+                        capabilities?: string[];
+                        enabled?: boolean;
+                      }>;
+                    }>;
+                  };
+                };
+              };
+            };
+          };
+        };
+
+        const app = windowWithApp.app;
+        const plugin = app?.plugins?.plugins?.['intelligence-assistant'];
 
         if (plugin?.settings?.llmConfigs) {
           // Iterate through all LLM configs and their cached models
-          plugin.settings.llmConfigs.forEach((config: any) => {
+          plugin.settings.llmConfigs.forEach((config: {
+            cachedModels?: Array<{
+              id: string;
+              name: string;
+              provider: string;
+              capabilities?: string[];
+              enabled?: boolean;
+            }>;
+          }) => {
             if (config.cachedModels) {
-              config.cachedModels.forEach((model: any) => {
+              config.cachedModels.forEach((model: {
+                id: string;
+                name: string;
+                provider: string;
+                capabilities?: string[];
+                enabled?: boolean;
+              }) => {
                 // Check if model has embedding capability
                 if (model.capabilities?.includes('embedding') && model.enabled !== false) {
                   // Add to list if not already present
@@ -82,7 +118,7 @@ export class EmbeddingManager {
                   if (!exists) {
                     embeddingModels.push({
                       id: model.id,
-                      name: `${model.name} (${model.provider})`,
+                      name: `${model.name ?? 'unknown'} (${model.provider})`,
                       dimensions: 1536, // Default dimension, can be adjusted
                       provider: model.provider,
                       maxTokens: 8192 // Default max tokens
@@ -150,7 +186,7 @@ export class EmbeddingManager {
             }
 
             // Create embedding array
-            const embedding = new Array(dims);
+            const embedding: number[] = new Array(dims) as number[];
             for (let i = 0; i < dims; i++) {
               const value = Math.sin(hash + i) * Math.cos(hash + i * 2);
               embedding[i] = value;
@@ -164,11 +200,11 @@ export class EmbeddingManager {
             const magnitude = Math.sqrt(sum);
             
             if (magnitude === 0) {
-              const normalized = new Array(dims).fill(0);
+              const normalized: number[] = new Array(dims).fill(0) as number[];
               if (dims > 0) normalized[0] = 1;
               postMessage({ id, success: true, embedding: normalized });
             } else {
-              const result = new Array(dims);
+              const result: number[] = new Array(dims) as number[];
               for (let i = 0; i < dims; i++) {
                 result[i] = embedding[i] / magnitude || 0;
               }
@@ -199,7 +235,7 @@ export class EmbeddingManager {
         this.worker.onerror = (error) => {
           console.error('Embedding worker error:', error);
           // Reject all pending requests
-          for (const [_id, request] of this.pendingRequests) {
+          for (const request of this.pendingRequests.values()) {
             request.reject(error);
           }
           this.pendingRequests.clear();
@@ -219,7 +255,7 @@ export class EmbeddingManager {
       : this.getDefaultEmbeddingModel();
     
     if (!model) {
-      throw new Error(`Embedding model ${modelId} not found`);
+      throw new Error(`Embedding model ${modelId ?? ''} not found`);
     }
     
     // Initialize worker if not already done
@@ -274,7 +310,7 @@ export class EmbeddingManager {
     const bytes = encoder.encode(text);
     
     // Create a hash-based embedding
-    const embedding: number[] = new Array(dimensions);
+    const embedding: number[] = new Array(dimensions) as number[];
     
     let hash = 0;
     for (let i = 0; i < bytes.length; i++) {
@@ -293,7 +329,7 @@ export class EmbeddingManager {
     const magnitude = Math.sqrt(embedding.reduce((sum, val) => sum + val * val, 0));
     if (magnitude === 0) {
       // If magnitude is 0, return a normalized vector with 1 in first position
-      const normalized: number[] = new Array(dimensions).fill(0);
+      const normalized: number[] = new Array(dimensions).fill(0) as number[];
       if (dimensions > 0) normalized[0] = 1;
       return normalized;
     }

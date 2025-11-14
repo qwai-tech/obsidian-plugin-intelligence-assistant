@@ -1,4 +1,4 @@
-import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, Modal, Setting } from 'obsidian';
+import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, Modal, Setting, requestUrl } from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { DEFAULT_AGENT_ID } from '@/constants';
@@ -13,6 +13,7 @@ import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import { renderMessage, MessageRendererCallbacks } from '@/presentation/components/chat/message-renderer';
 import { handleStreamingChat } from '@/presentation/components/chat/handlers/streaming-handler';
+import { processToolCalls, updateExecutionTrace, createAgentExecutionTraceContainer } from '@/presentation/components/chat/handlers/tool-call-handler';
 import {
 	MessageController,
 	AgentController,
@@ -132,7 +133,7 @@ export class ChatView extends ItemView {
 	}
 
 	getDisplayText(): string {
-		return 'AI Chat';
+		return 'AI chat';
 	}
 
 	getIcon(): string {
@@ -203,7 +204,7 @@ export class ChatView extends ItemView {
 		this.referenceContainer = inputHeader.createDiv('input-reference-area');
 		this.referenceContainer.addClass('ia-hidden');
 
-		const _referenceList = this.referenceContainer.createDiv('reference-list');
+		this.referenceContainer.createDiv('reference-list');
 
 		// Header quick actions (references, RAG, Web, image)
 		this.setupHeaderActions(inputHeader);
@@ -246,7 +247,7 @@ export class ChatView extends ItemView {
 
 		// Stop generation button (hidden by default)
 		this.stopBtn = rightControls.createEl('button', { cls: 'stop-generation-btn' });
-		this.stopBtn.setText('⏹️ Stop');
+		this.stopBtn.setText('⏹️ stop');
 		this.stopBtn.addClass('ia-hidden');
 		this.stopBtn.addEventListener('click', () => {
 			this.state.stopStreamingRequested = true;
@@ -272,12 +273,12 @@ export class ChatView extends ItemView {
 		textarea.addEventListener('keydown', (e) => {
 			if (e.key === 'Enter' && !e.shiftKey) {
 				e.preventDefault();
-				sendMessage();
+				void sendMessage();
 			}
 		});
 
-		// Add styles
-		this.addStyles();
+		// Styles are loaded from styles.css
+		// this.addStyles();
 
 		// Initialize MCP servers
 		await this.initializeMCPServers();
@@ -300,14 +301,15 @@ export class ChatView extends ItemView {
 		// Always initialize RAG manager to load existing data from storage for status display
 		// This ensures the status shows correctly even when RAG is not enabled for search
 		try {
-			await this.ragManager.updateConfig(this.plugin.settings.ragConfig);
+			this.ragManager.updateConfig(this.plugin.settings.ragConfig);
 			await this.ragManager.initialize();
 			
 			// Update RAG status after initialization completes
 			await this.updateRagStatus();
-		} catch (error) {
-			console.error('Error initializing RAG:', error);
-			new Notice(`RAG initialization error: ${error.message}`);
+		} catch (_error) {
+			const err = _error instanceof Error ? _error : new Error(String(_error));
+			console.error('Error initializing RAG:', err);
+			new Notice(`Rag initialization error: ${err.message}`);
 		}
 
 		// Initialize RAG if enabled for actual search functionality
@@ -316,10 +318,10 @@ export class ChatView extends ItemView {
 		}
 
 		// Initialize controllers
-		await this.messageController.initialize();
-		await this.agentController.initialize();
-		await this.inputController.initialize();
-		await this.chatController.initialize();
+		void this.messageController.initialize();
+		void this.agentController.initialize();
+		void this.inputController.initialize();
+		void this.chatController.initialize();
 
 		// Configure controllers with UI elements
 		this.messageController.setContainer(this.chatContainer);
@@ -338,14 +340,15 @@ export class ChatView extends ItemView {
 			this.state,
 			this.chatContainer,
 			this.modelSelect,
-			this.addMessageToUI.bind(this),
-			this.updateTokenSummary.bind(this)
+			(message: Message) => this.addMessageToUI(message),
+			() => this.updateTokenSummary()
 		);
-		await this.conversationManager.initializeContainer(this.conversationListContainer);
+		void this.conversationManager.initializeContainer(this.conversationListContainer);
 		this.conversationManager.on('conversation-loaded', (conv: Conversation) => {
 			this.updateConversationTitle(conv.title);
 			void this.applyConversationConfig(conv);
 		});
+		// Ensure handler returns void, not a Promise
 		this.conversationManager.on('conversation-created', (conv: Conversation) => {
 			this.updateConversationTitle(conv.title);
 			void this.applyConversationConfig(conv);
@@ -354,6 +357,7 @@ export class ChatView extends ItemView {
 			if (conv.id === this.state.currentConversationId) {
 				this.updateConversationTitle(conv.title);
 			}
+			// Do not return a Promise from event handler
 		});
 
 		// Load or create initial conversation
@@ -373,10 +377,11 @@ export class ChatView extends ItemView {
 			if (showNotice) {
 				new Notice('Models refreshed');
 			}
-		} catch (error) {
-			console.error('Failed to refresh models:', error);
+		} catch (_error) {
+			const err = _error instanceof Error ? _error : new Error(String(_error));
+			console.error('Failed to refresh models:', err);
 			if (showNotice) {
-				new Notice('Failed to refresh models');
+				new Notice(`Failed to refresh models: ${err.message}`);
 			}
 		}
 	}
@@ -434,7 +439,7 @@ export class ChatView extends ItemView {
 			sortedModels.forEach(model => {
 				const isDefault = model.id === defaultModel;
 				const option = optgroup.createEl('option', {
-					text: isDefault ? `⭐ ${model.name} (Default)` : model.name,
+					text: isDefault ? `⭐ ${model.name ?? 'unknown'} (Default)` : model.name,
 				});
 				option.value = model.id;
 				if (isDefault) {
@@ -474,7 +479,7 @@ export class ChatView extends ItemView {
 
 		if (this.plugin.settings.llmConfigs.length === 0) {
 			console.error('[Chat] No LLM configs found');
-			new Notice('Please configure an LLM provider in settings first');
+			new Notice('Please configure an llm provider in settings first');
 			return;
 		}
 
@@ -516,10 +521,10 @@ export class ChatView extends ItemView {
 				llmContent,
 				targetMessage: userMessage
 			});
-		} catch (error) {
-			console.error('[Chat] Error during chat:', error);
-			const message = error instanceof Error ? error.message : String(error);
-			new Notice(`Chat Error: ${message}`);
+		} catch (_error) {
+			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			console.error('[Chat] Error during chat:', errMsg);
+			new Notice(`Chat error: ${errMsg}`);
 
 			this.state.messages.pop();
 			const lastMessage = this.chatContainer.lastElementChild;
@@ -553,24 +558,25 @@ export class ChatView extends ItemView {
 				if (file instanceof TFile) {
 					try {
 						const content = await this.app.vault.read(file);
-						llmContent += `\n### 📄 ${ref.path}\n`;
+						llmContent += `\n### 📄 ${ref.path ?? 'unknown'}\n`;
 						llmContent += '```\n';
 						llmContent += content;
 						llmContent += '\n```\n';
-					} catch (error) {
-						llmContent += `\n### 📄 ${ref.path}\n`;
-						llmContent += `*Error reading file: ${error.message}*\n`;
+					} catch (_error) {
+						const errMsg = _error instanceof Error ? _error.message : String(_error);
+						llmContent += `\n### 📄 ${ref.path ?? 'unknown'}\n`;
+						llmContent += `*Error reading file: ${errMsg}*\n`;
 					}
 				} else {
-					llmContent += `\n### 📄 ${ref.path}\n`;
+					llmContent += `\n### 📄 ${ref.path ?? 'unknown'}\n`;
 					llmContent += '*File not found*\n';
 				}
 			} else {
 				const filesInFolder = this.app.vault.getFiles().filter(f => f.path.startsWith(ref.path));
-				llmContent += `\n### 📁 ${ref.path}\n`;
+				llmContent += `\n### 📁 ${ref.path ?? 'unknown'}\n`;
 				llmContent += `Contains ${filesInFolder.length} file(s):\n`;
 				filesInFolder.slice(0, 10).forEach(f => {
-					llmContent += `- ${f.path}\n`;
+					llmContent += `- ${f.path ?? 'unknown'}\n`;
 				});
 				if (filesInFolder.length > 10) {
 					llmContent += `... and ${filesInFolder.length - 10} more files\n`;
@@ -592,7 +598,7 @@ export class ChatView extends ItemView {
 		};
 
 		const provider = ProviderFactory.createProvider(modelConfig);
-		const systemMessages: any[] = [];
+		const systemMessages: Message[] = [];
 
 		if (this.plugin.settings.activeSystemPromptId) {
 			const activePrompt = this.plugin.settings.systemPrompts.find(
@@ -660,9 +666,10 @@ After calling a tool, you will receive the result and can continue the conversat
 				} else {
 					console.debug('[RAG Debug] No search results found');
 				}
-			} catch (error) {
-				console.error('[RAG Debug] Error retrieving RAG context:', error);
-				new Notice(`RAG error: ${error.message}`);
+			} catch (_error) {
+				const errMsg = _error instanceof Error ? _error.message : String(_error);
+				console.error('[RAG Debug] Error retrieving RAG context:', errMsg);
+				new Notice(`Rag error: ${errMsg}`);
 			}
 		} else {
 			console.debug('[RAG Debug] RAG is disabled');
@@ -670,14 +677,14 @@ After calling a tool, you will receive the result and can continue the conversat
 
 		let shouldPerformWebSearch = this.state.enableWebSearch;
 		if (!shouldPerformWebSearch && this.plugin.settings.webSearchConfig.autoTrigger) {
-			shouldPerformWebSearch = await this.shouldAutoTriggerWebSearch(text);
+			shouldPerformWebSearch = this.shouldAutoTriggerWebSearch(text);
 		}
 
 		let webSearchResults: import('@/types').WebSearchResult[] | undefined;
 		if (shouldPerformWebSearch) {
 			try {
 				if (this.state.enableWebSearch) {
-					new Notice('🔍 Searching the web...');
+					new Notice('🔍 searching the web...');
 				} else {
 					console.debug('[WebSearch] Auto-triggered search for query:', text);
 				}
@@ -692,19 +699,20 @@ After calling a tool, you will receive the result and can continue the conversat
 					});
 
 					if (this.state.enableWebSearch) {
-						new Notice(`✅ Found ${results.length} web results`);
+						new Notice(`✅ found ${results.length} web results`);
 					} else {
 						console.debug(`[WebSearch] Auto-triggered: Found ${results.length} web results`);
 					}
 				} else if (this.state.enableWebSearch) {
 					new Notice('No web results found for your query');
 				}
-			} catch (error) {
-				console.error('Error performing web search:', error);
+			} catch (_error) {
+				const errMsg = _error instanceof Error ? _error.message : String(_error);
+				console.error('Error performing web search:', errMsg);
 				if (this.state.enableWebSearch) {
-					new Notice(`Web search error: ${error.message}`);
+					new Notice(`Web search error: ${errMsg}`);
 				} else {
-					console.error('[WebSearch] Auto-triggered search error:', error);
+					console.error('[WebSearch] Auto-triggered search error:', errMsg);
 				}
 			}
 		}
@@ -727,8 +735,8 @@ After calling a tool, you will receive the result and can continue the conversat
 			if (fileAttachments.length > 0) {
 				formattedContent += '\n\n---\n**Attached Files:**\n\n';
 				fileAttachments.forEach(att => {
-					formattedContent += `\n### File: ${att.name}\n`;
-					formattedContent += `Path: ${att.path}\n\n`;
+					formattedContent += `\n### File: ${att.name ?? 'unknown'}\n`;
+					formattedContent += `Path: ${att.path ?? 'unknown'}\n\n`;
 					formattedContent += '```\n';
 					formattedContent += att.content || '';
 					formattedContent += '\n```\n';
@@ -739,7 +747,7 @@ After calling a tool, you will receive the result and can continue the conversat
 			if (imageAttachments.length > 0) {
 				formattedContent += '\n\n---\n**Attached Images:**\n\n';
 				imageAttachments.forEach(att => {
-					formattedContent += `- Image: ${att.name} (Path: ${att.path})\n`;
+					formattedContent += `- Image: ${att.name ?? 'unknown'} (Path: ${att.path})\n`;
 				});
 				formattedContent += '\n*Note: Image content cannot be processed by text-only models. Please describe what you need help with regarding these images.*\n';
 			}
@@ -748,7 +756,7 @@ After calling a tool, you will receive the result and can continue the conversat
 		});
 
 		const _finalMessages = [...systemMessages, ...llmMessages];
-		console.debug('[Chat] Final messages count:', finalMessages.length);
+		console.debug('[Chat] Final messages count:', _finalMessages.length);
 
 		let assistantMessageEl: HTMLElement | null = null;
 
@@ -758,7 +766,7 @@ After calling a tool, you will receive the result and can continue the conversat
 				content: '',
 				model: selectedModel
 			};
-			(placeholderAssistant as any).provider = config.provider ?? null;
+			(placeholderAssistant as { provider?: string | null }).provider = config.provider ?? null;
 			assistantMessageEl = this.addMessageToUI(placeholderAssistant);
 			this.state.isStreaming = true;
 			this.state.stopStreamingRequested = false;
@@ -768,7 +776,7 @@ After calling a tool, you will receive the result and can continue the conversat
 				assistantMessageEl,
 				provider,
 				{
-					messages: finalMessages,
+					messages: _finalMessages,
 					model: selectedModel,
 					temperature: this.state.temperature,
 					maxTokens: this.state.maxTokens
@@ -778,7 +786,7 @@ After calling a tool, you will receive the result and can continue the conversat
 					stopBtn: this.stopBtn,
 					sendHint: this.sendHint,
 					onStopRequested: () => this.state.stopStreamingRequested,
-					estimateTokens: this.estimateTokens.bind(this)
+								estimateTokens: this.estimateTokens.bind(this) as (text: string) => number
 				}
 			);
 
@@ -828,11 +836,11 @@ After calling a tool, you will receive the result and can continue the conversat
 			}
 
 			await this.conversationManager.saveCurrentConversation();
-		} catch (error) {
+		} catch (_error) {
 			if (assistantMessageEl && assistantMessageEl.isConnected) {
 				assistantMessageEl.remove();
 			}
-			throw error;
+			throw (_error instanceof Error ? _error : new Error(String(_error)));
 		} finally {
 			this.state.isStreaming = false;
 			this.state.stopStreamingRequested = false;
@@ -843,7 +851,7 @@ After calling a tool, you will receive the result and can continue the conversat
 	/**
 	 * Determines if web search should be automatically triggered based on the user's query
 	 */
-	private async shouldAutoTriggerWebSearch(query: string): Promise<boolean> {
+	private shouldAutoTriggerWebSearch(query: string): boolean {
 		// Check if auto-trigger is enabled in settings
 		if (!this.plugin.settings.webSearchConfig.autoTrigger) {
 			return false;
@@ -878,7 +886,7 @@ After calling a tool, you will receive the result and can continue the conversat
 		}
 
 		// Check if the query would benefit from a web search
-		return await this.isQuerySuitableForWebSearch(cleanedQuery);
+		return this.isQuerySuitableForWebSearch(cleanedQuery);
 	}
 
 	/**
@@ -923,7 +931,7 @@ After calling a tool, you will receive the result and can continue the conversat
 	/**
 	 * Determine if a query is suitable for web search using enhanced logic
 	 */
-	private async isQuerySuitableForWebSearch(query: string): Promise<boolean> {
+	private isQuerySuitableForWebSearch(query: string): boolean {
 		// Check for common informational patterns that suggest search would be helpful
 		const infoPattern = /(?:what is|who is|how to|why is|when is|where is|define:|explain|tell me about|show me|find|information about|details on|facts about|latest news about|current status of|research on|study on|current (events|news|status)|recent (developments|updates|trends|happenings)|best (practices|ways|methods|options|deals|prices)|most (recent|popular|effective|trending)|need to know about|looking for information on|can you tell me|do you know|what are|what do you know about|what happened|what will happen|current|latest|new|today|now|recently|upcoming|tomorrow|yesterday|last week|last month|last year|next week|next month|next year|this week|this month|this year|202[0-9]|203[0-9]|prices? of|cost of|how much does|how many people|population of|distance between|weather in|temperature in|forecast for|election results|stock price|exchange rate|exchange rates|current exchange|current stock|crypto price|cryptocurrency price|currency rate|currency rates|covid|pandemic|coronavirus|virus|outbreak|inflation|interest rate|unemployment|gdp|economic|economy|jobs|employment|real estate|housing|market|financial|finance|investment|investing|bitcoin|ethereum|crypto|cryptocurrency|nft|web3|ai|artificial intelligence|machine learning|deep learning|climate change|global warming|renewable energy|solar|wind|electric car|tesla|spacex|elon musk|apple|google|amazon|microsoft|meta|facebook|netflix|tesla stock|crypto market|stock market|financial market|olympics|world cup|championship|tournament|league|nfl|nba|mlb|nhl|epl|uefa|fifa|super bowl|world series|stanley cup|wimbledon|us open|french open|australian open)\b/i;
 		
@@ -970,12 +978,12 @@ After calling a tool, you will receive the result and can continue the conversat
 
 	private addMessageToUI(message: Message): HTMLElement {
 		const callbacks: MessageRendererCallbacks = {
-			saveMessageToNewNote: this.saveMessageToNewNote.bind(this),
-			insertMessageToNote: this.insertMessageToNote.bind(this),
-			regenerateMessage: this.regenerateMessage.bind(this),
-			displayRagSources: this.displayRagSources.bind(this),
-			getProviderAvatar: this.getProviderAvatar.bind(this),
-			getProviderColor: this.getProviderColor.bind(this)
+					saveMessageToNewNote: this.saveMessageToNewNote.bind(this) as (message: Message) => Promise<void>,
+					insertMessageToNote: this.insertMessageToNote.bind(this) as (message: Message) => Promise<void>,
+					regenerateMessage: this.regenerateMessage.bind(this) as (messageId: string) => Promise<void>,
+					displayRagSources: this.displayRagSources.bind(this) as (sources: unknown[]) => void,
+					getProviderAvatar: this.getProviderAvatar.bind(this) as (provider: string) => string,
+					getProviderColor: this.getProviderColor.bind(this) as (provider: string) => string
 		};
 
 		const options = {
@@ -1024,9 +1032,9 @@ After calling a tool, you will receive the result and can continue the conversat
 		if (!this.referenceContainer) return;
 
 		const _referenceList = this.referenceContainer.querySelector('.reference-list') as HTMLElement;
-		if (!referenceList) return;
+		if (!_referenceList) return;
 
-		referenceList.empty();
+		_referenceList.empty();
 
 		if (this.state.referencedFiles.length === 0) {
 			this.referenceContainer.addClass('ia-hidden');
@@ -1036,7 +1044,7 @@ After calling a tool, you will receive the result and can continue the conversat
 		this.referenceContainer.removeClass('ia-hidden');
 
 		this.state.referencedFiles.forEach((item, index) => {
-			const refItem = referenceList.createDiv('reference-item');
+			const refItem = _referenceList.createDiv('reference-item');
 			const icon = refItem.createSpan('reference-icon');
 			icon.setText(item instanceof TFolder ? '📁' : '📄');
 			const pathSpan = refItem.createSpan('reference-path');
@@ -1046,14 +1054,14 @@ After calling a tool, you will receive the result and can continue the conversat
 			refItem.addClass('ia-clickable');
 			refItem.addEventListener('click', () => {
 				if (item instanceof TFile) {
-					this.app.workspace.getLeaf().openFile(item);
+					void this.app.workspace.getLeaf().openFile(item);
 				}
 			});
 
 			// Remove button
 			const removeBtn = refItem.createEl('button', { text: '×' });
 			removeBtn.addClass('reference-remove-btn');
-			removeBtn.addEventListener('click', (e) => {
+			removeBtn.addEventListener('click', (e: MouseEvent) => {
 				e.stopPropagation();
 				this.state.referencedFiles.splice(index, 1);
 				this.updateReferenceDisplay();
@@ -1121,10 +1129,10 @@ After calling a tool, you will receive the result and can continue the conversat
 				targetMessage: previousUser.message
 			});
 			new Notice('Regenerated response');
-		} catch (error) {
-			console.error('Regenerate error:', error);
-			const errMessage = error instanceof Error ? error.message : String(error);
-			new Notice(`Regenerate failed: ${errMessage}`);
+		} catch (_error) {
+			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			console.error('Regenerate error:', errMsg);
+			new Notice(`Regenerate failed: ${errMsg}`);
 			this.state.messages.push(originalAssistant);
 			this.addMessageToUI(originalAssistant);
 		}
@@ -1140,7 +1148,7 @@ After calling a tool, you will receive the result and can continue the conversat
 		return null;
 	}
 
-	private async saveMessageToNewNote(message: Message) {
+	private saveMessageToNewNote(message: Message) {
 		// Use modal for input
 		const defaultName = `Chat Message ${new Date().toLocaleDateString()}`;
 
@@ -1149,86 +1157,92 @@ After calling a tool, you will receive the result and can continue the conversat
 			'Create New Note',
 			'Enter note name',
 			defaultName,
-			async (noteName) => {
-				if (!noteName || !noteName.trim()) return;
+			(noteName) => {
+				void (async () => {
+					if (!noteName || !noteName.trim()) return;
 
-				try {
-					// Create note path (sanitize name)
-					const fileName = noteName.replace(/[\\/:*?"<>|]/g, '-') + '.md';
+					try {
+						// Create note path (sanitize name)
+						const fileName = noteName.replace(/[\\/:*?"<>|]/g, '-') + '.md';
 
-					// Format content with metadata
-					let content = `# ${noteName}\n\n`;
-					content += `Created from AI chat on ${new Date().toLocaleString()}\n\n`;
-					content += `---\n\n`;
+						// Format content with metadata
+						let content = `# ${noteName ?? 'unknown'}\n\n`;
+						content += `Created from AI chat on ${new Date().toLocaleString()}\n\n`;
+						content += `---\n\n`;
 
-					// Add role header
-					if (message.role === 'user') {
-						content += `## 💬 User Message\n\n`;
-					} else {
-						const modelName = (message as any).model || 'Assistant';
-						content += `## 🤖 ${modelName}\n\n`;
+						// Add role header
+						if (message.role === 'user') {
+							content += `## 💬 User Message\n\n`;
+						} else {
+							const modelName = (message as { model?: string }).model || 'Assistant';
+							content += `## 🤖 ${String(modelName)}\n\n`;
+						}
+
+						content += message.content + '\n';
+
+						// Create the file
+						await this.app.vault.create(fileName, content);
+						new Notice(`Note created: ${fileName ?? 'unknown'}`);
+
+						// Open the new note
+						const file = this.app.vault.getAbstractFileByPath(fileName);
+						if (file instanceof TFile) {
+							await this.app.workspace.getLeaf(false).openFile(file);
+						}
+					} catch (_error) {
+						const errMsg = _error instanceof Error ? _error.message : String(_error);
+						console.error('Error creating note:', errMsg);
+						new Notice('Failed to create note: ' + errMsg);
 					}
-
-					content += message.content + '\n';
-
-					// Create the file
-					await this.app.vault.create(fileName, content);
-					new Notice(`Note created: ${fileName}`);
-
-					// Open the new note
-					const file = this.app.vault.getAbstractFileByPath(fileName);
-					if (file instanceof TFile) {
-						await this.app.workspace.getLeaf(false).openFile(file);
-					}
-				} catch (error) {
-					console.error('Error creating note:', error);
-					new Notice('Failed to create note: ' + error.message);
-				}
+				})();
 			}
 		).open();
 	}
 
-	private async insertMessageToNote(message: Message) {
-		new SingleFileSelectionModal(this.app, async (selectedFile) => {
-			if (selectedFile) {
-				// Insert into selected file
-				try {
-					// Read current content
-					let content = await this.app.vault.read(selectedFile);
+	private insertMessageToNote(message: Message) {
+		new SingleFileSelectionModal(this.app, (selectedFile) => {
+			void (async () => {
+				if (selectedFile) {
+					// insert into selected file
+					try {
+						// read current content
+						let content = await this.app.vault.read(selectedFile);
 
-					// Add message content
-					content += `\n\n---\n\n`;
+						// add message content
+						content += `\n\n---\n\n`;
 
-					// Add role header
-					if (message.role === 'user') {
-						content += `## 💬 User Message (${new Date().toLocaleString()})\n\n`;
-					} else {
-						const modelName = (message as any).model || 'Assistant';
-						content += `## 🤖 ${modelName} (${new Date().toLocaleString()})\n\n`;
+						// add role header
+						if (message.role === 'user') {
+							content += `## 💬 User Message (${new Date().toLocaleString()})\n\n`;
+						} else {
+							const modelName = (message as { model?: string }).model || 'Assistant';
+							content += `## 🤖 ${String(modelName)} (${new Date().toLocaleString()})\n\n`;
+						}
+
+						content += message.content + '\n';
+
+						// Write back
+						await this.app.vault.modify(selectedFile, content);
+						new Notice(`Message inserted to: ${selectedFile.path ?? 'unknown'}`);
+
+						// Open the file
+						await this.app.workspace.getLeaf(false).openFile(selectedFile);
+					} catch (_error) {
+						const errMsg = _error instanceof Error ? _error.message : String(_error);
+						console.error('Error inserting to note:', errMsg);
+						new Notice('Failed to insert message: ' + errMsg);
 					}
-
-					content += message.content + '\n';
-
-					// Write back
-					await this.app.vault.modify(selectedFile, content);
-					new Notice(`Message inserted to: ${selectedFile.path}`);
-
-					// Open the file
-					await this.app.workspace.getLeaf(false).openFile(selectedFile);
-				} catch (error) {
-					console.error('Error inserting to note:', error);
-					new Notice('Failed to insert message: ' + error.message);
+				} else {
+					// create new note option was selected
+					void this.saveMessageToNewNote(message);
 				}
-			} else {
-				// Create new note option was selected
-				this.saveMessageToNewNote(message);
-			}
+			})();
 		}).open();
 	}
 
 
 	/**
-	 * Display RAG sources in a message body
+	 * display rag sources in a message body
 	 */
 private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types').RAGSource[]): void {
 		// Remove existing RAG sources container if any
@@ -1241,11 +1255,11 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		// Header
 		const header = ragSourcesContainer.createDiv('rag-sources-header');
-		header.setText(`📚 Retrieved from ${ragSources.length} document${ragSources.length > 1 ? 's' : ''}`);
+		header.setText(`📚 retrieved from ${ragSources.length} document${ragSources.length > 1 ? 's' : ''}`);
 
 		// Source cards
 		const sourcesGrid = ragSourcesContainer.createDiv('rag-sources-grid');
-		ragSources.forEach((source, index) => {
+		ragSources.forEach((source, _index) => {
 			const sourceCard = sourcesGrid.createDiv('rag-source-card');
 
 			// Title and similarity
@@ -1273,13 +1287,15 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 			// Click to open
 			sourceCard.addClass('ia-clickable');
-			sourceCard.addEventListener('click', async () => {
-				const file = this.app.vault.getAbstractFileByPath(source.path);
-				if (file instanceof TFile) {
-					await this.app.workspace.getLeaf().openFile(file);
-				} else {
-					new Notice(`File not found: ${source.path}`);
-				}
+			sourceCard.addEventListener('click', () => {
+				void (async () => {
+					const file = this.app.vault.getAbstractFileByPath(source.path);
+					if (file instanceof TFile) {
+						await this.app.workspace.getLeaf().openFile(file);
+					} else {
+						new Notice(`File not found: ${source.path ?? 'unknown'}`);
+					}
+				})();
 			});
 
 			// Hover effect
@@ -1338,7 +1354,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		// Add status text if provided
 		if (options.statusText) {
 			const statusSpan = toggleBtn.createEl('span', { cls: 'toggle-status' });
-			statusSpan.setText(` (${options.statusText})`);
+			statusSpan.setText(` (${options.statusText ?? ''})`);
 			statusSpan.setCssProps({ 'opacity': '0.7' });
 			statusSpan.setCssProps({ 'font-size': '0.8em' });
 			statusSpan.setCssProps({ 'margin-left': '4px' });
@@ -1368,7 +1384,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const ragToggle = target ?? this.ragActionItem;
 		if (!ragToggle) return;
 
-		const statusSpan = ragToggle.querySelector('.header-action-status') as HTMLElement | null;
+		const statusSpanEl = ragToggle.querySelector('.header-action-status');
+		const statusSpan = statusSpanEl instanceof HTMLElement ? statusSpanEl : null;
 		const ragEnabledInSettings = this.plugin.settings.ragConfig.enabled;
 
 		if (!ragEnabledInSettings) {
@@ -1384,6 +1401,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		try {
 			const stats = await this.ragManager.getDetailedStats();
+			// Mark potential async UI interactions as intentionally unawaited
 			ragToggle.removeClass('is-disabled');
 
 			const ragActive = this.state.enableRAG && this.state.mode === 'chat';
@@ -1395,7 +1413,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 					statusSpan.textContent = 'Off';
 				}
 				statusSpan.setCssProps({ 'cursor': stats ? 'help' : 'default' });
-				statusSpan.onclick = stats ? (event) => {
+				// Ensure onclick handler is synchronous; call async via void
+				statusSpan.onclick = stats ? (event: MouseEvent) => {
 					event.stopPropagation();
 					void this.openRagStatsModal();
 				} : null;
@@ -1406,14 +1425,15 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			} else {
 				ragToggle.removeAttribute('title');
 			}
-		} catch (error) {
+		} catch (_error) {
 			ragToggle.addClass('is-disabled');
 			if (statusSpan) {
 				statusSpan.textContent = 'Unavailable';
 				statusSpan.setCssProps({ 'cursor': 'not-allowed' });
 				statusSpan.onclick = null;
 			}
-			console.error('Error updating RAG status:', error);
+			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			console.error('Error updating RAG status:', errMsg);
 		}
 	}
 
@@ -1424,18 +1444,20 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		tooltipText += `💾 Total Size: ${(stats.totalSize / 1024).toFixed(1)} KB\n`;
 
 		if (stats.indexedFiles && stats.indexedFiles.length > 0) {
-			tooltipText += `\n📄 Indexed Files:\n`;
+			tooltipText += `\n📄 indexed Files:\n`;
 			const filesToShow = stats.indexedFiles.slice(0, 10);
 			filesToShow.forEach(file => {
 				const fileName = file.split('/').pop() || file;
-				tooltipText += `  • ${fileName}\n`;
+					const displayName = fileName || 'unknown';
+					tooltipText += `  • ${displayName}\n`;
 			});
 
 			if (stats.indexedFiles.length > 10) {
-				tooltipText += `  ... and ${stats.indexedFiles.length - 10} more\n`;
+				const remainingCount = stats.indexedFiles.length - 10;
+				tooltipText += `  ... and ${remainingCount} more\n`;
 			}
 		} else {
-			tooltipText += `\n⚠️ No files indexed yet.\n`;
+			tooltipText += `\n⚠️ no files indexed yet.\n`;
 			tooltipText += `Go to Settings → RAG to build the index.`;
 		}
 
@@ -1450,15 +1472,16 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		try {
 			const stats = await this.ragManager.getDetailedStats();
 			this.showRagStatsModal(stats);
-		} catch (error) {
-			console.error('Error loading RAG stats modal:', error);
-			new Notice('Unable to load RAG index statistics.');
+		} catch (_error) {
+			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			console.error('Error loading RAG stats modal:', errMsg);
+			new Notice('Unable to load rag statistics.');
 		}
 	}
 
 	private showRagStatsModal(stats: RagIndexStats) {
 		const modal = new Modal(this.app);
-		modal.titleEl.setText('📚 RAG Index Statistics');
+		modal.titleEl.setText('Rag statistics');
 
 		const content = modal.contentEl;
 		content.empty();
@@ -1468,15 +1491,15 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const summaryDiv = content.createDiv('rag-stats-summary');
 
 		const row1 = summaryDiv.createDiv('stat-row');
-		row1.createSpan({ cls: 'stat-label', text: '📊 Total Chunks:' });
+		row1.createSpan({ cls: 'stat-label', text: '📊 total chunks:' });
 		row1.createSpan({ cls: 'stat-value', text: `${stats.chunkCount}` });
 
 		const row2 = summaryDiv.createDiv('stat-row');
-		row2.createSpan({ cls: 'stat-label', text: '📁 Files Indexed:' });
+		row2.createSpan({ cls: 'stat-label', text: '📁 files indexed:' });
 		row2.createSpan({ cls: 'stat-value', text: `${stats.fileCount}` });
 
 		const row3 = summaryDiv.createDiv('stat-row');
-		row3.createSpan({ cls: 'stat-label', text: '💾 Total Size:' });
+		row3.createSpan({ cls: 'stat-label', text: '💾 total size:' });
 		row3.createSpan({ cls: 'stat-value', text: `${(stats.totalSize / 1024).toFixed(1)} KB` });
 
 		const row4 = summaryDiv.createDiv('stat-row');
@@ -1486,7 +1509,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		// File list
 		if (stats.indexedFiles && stats.indexedFiles.length > 0) {
 			const filesDiv = content.createDiv('rag-stats-files');
-			filesDiv.createEl('h4', { text: '📄 Indexed Files' });
+			filesDiv.createEl('h4', { text: '📄 indexed files' });
 
 			const fileList = filesDiv.createDiv('rag-file-list');
 			stats.indexedFiles.forEach(filePath => {
@@ -1497,15 +1520,17 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 					cls: 'rag-file-link'
 				});
 				fileLink.title = filePath;
-				fileLink.addEventListener('click', async (e) => {
+				fileLink.addEventListener('click', (e) => {
 					e.preventDefault();
-					const file = this.app.vault.getAbstractFileByPath(filePath);
-					if (file instanceof TFile) {
-						await this.app.workspace.getLeaf().openFile(file);
-						modal.close();
-					} else {
-						new Notice(`File not found: ${filePath}`);
-					}
+					void (async () => {
+						const file = this.app.vault.getAbstractFileByPath(filePath);
+						if (file instanceof TFile) {
+							await this.app.workspace.getLeaf().openFile(file);
+							modal.close();
+						} else {
+							new Notice(`File not found: ${filePath ?? 'unknown'}`);
+						}
+					})();
 				});
 
 				const _filePathSpan = fileItem.createEl('span', {
@@ -1515,12 +1540,12 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			});
 		} else {
 			const noFiles = content.createDiv('rag-no-files');
-			noFiles.createEl('p', { text: '⚠️ No files have been indexed yet.' });
-			noFiles.createEl('p', { text: 'To build the RAG index:' });
+			noFiles.createEl('p', { text: '⚠️ no files have been indexed yet.' });
+			noFiles.createEl('p', { text: 'To build the rag index:' });
 			const ol = noFiles.createEl('ol');
-			ol.createEl('li', { text: 'Go to Settings → RAG' });
-			ol.createEl('li', { text: 'Enable RAG' });
-			ol.createEl('li', { text: 'Click "Index Vault"' });
+			ol.createEl('li', { text: 'Go to settings → rag' });
+			ol.createEl('li', { text: 'Enable rag' });
+			ol.createEl('li', { text: 'Select index vault' });
 		}
 
 		// Close button
@@ -1696,7 +1721,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	private renderAgentSummary(agent: Agent) {
 		if (!this.agentSummaryDetailsEl) return;
 		if (this.agentSummaryTitleEl) {
-			this.agentSummaryTitleEl.setText(`${agent.icon || '🤖'} ${agent.name} configuration`);
+			this.agentSummaryTitleEl.setText(`${agent.icon || '🤖'} ${agent.name ?? 'unknown'} configuration`);
 		}
 
 		this.agentSummaryDetailsEl.empty();
@@ -1727,16 +1752,16 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (strategy === 'fixed') {
 			const fixedId = agent.modelStrategy.modelId || '';
 			const name = fixedId ? this.getModelDisplayName(fixedId) : 'Custom model';
-			return `${name} · Fixed`;
+			return `${name ?? 'unknown'} · Fixed`;
 		}
 		if (strategy === 'default') {
 			const defaultId = this.plugin.settings.defaultModel || '';
 			const name = defaultId ? this.getModelDisplayName(defaultId) : 'Not set';
-			return `${name} · Default`;
+			return `${name ?? 'unknown'} · Default`;
 		}
 		const currentId = this.modelSelect?.value || this.plugin.settings.defaultModel || '';
 		const name = currentId ? this.getModelDisplayName(currentId) : 'Chat view model';
-		return `${name} · Chat View`;
+		return `${name ?? 'unknown'} · Chat View`;
 	}
 
 	private getModelDisplayName(modelId: string | null | undefined): string {
@@ -1798,31 +1823,31 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const modeGroup = topControls.createDiv('chat-select-group');
 		modeGroup.addClass('chat-select-group');
 		modeGroup.createSpan({ text: 'Mode', cls: 'chat-label' });
-		this.modeSelector = modeGroup.createEl('select', { cls: 'mode-selector' }) as HTMLSelectElement;
+		this.modeSelector = modeGroup.createEl('select', { cls: 'mode-selector' });
 		this.modeSelector.createEl('option', { value: 'chat', text: 'Chat' });
 		this.modeSelector.createEl('option', { value: 'agent', text: 'Agent' });
 		this.modeSelector.value = this.state.mode;
-		this.modeSelector.addEventListener('change', async () => {
+		this.modeSelector.addEventListener('change', () => {
 			const value = (this.modeSelector?.value ?? 'chat') as 'chat' | 'agent';
-			await this.handleModeChange(value);
+			void this.handleModeChange(value);
 		});
 
 		this.promptSelectorGroup = topControls.createDiv('chat-select-group');
 		this.promptSelectorGroup.addClass('chat-select-group');
 		this.promptSelectorGroup.createSpan({ text: 'Prompt', cls: 'chat-label' });
-		this.promptSelector = this.promptSelectorGroup.createEl('select', { cls: 'prompt-selector' }) as HTMLSelectElement;
+		this.promptSelector = this.promptSelectorGroup.createEl('select', { cls: 'prompt-selector' });
 		this.populatePromptSelectorOptions();
-		this.promptSelector.addEventListener('change', async () => {
+		this.promptSelector.addEventListener('change', () => {
 			this.plugin.settings.activeSystemPromptId = this.promptSelector?.value || null;
-			await this.plugin.saveSettings();
+			void this.plugin.saveSettings();
 		});
 
 		this.agentSelectorGroup = topControls.createDiv('chat-select-group');
 		this.agentSelectorGroup.addClass('chat-select-group');
 		this.agentSelectorGroup.createSpan({ text: 'Agent', cls: 'chat-label' });
-		this.agentSelector = this.agentSelectorGroup.createEl('select', { cls: 'agent-selector' }) as HTMLSelectElement;
-		this.agentSelector.addEventListener('change', async () => {
-			await this.handleAgentSelection(this.agentSelector?.value ?? '');
+		this.agentSelector = this.agentSelectorGroup.createEl('select', { cls: 'agent-selector' });
+		this.agentSelector.addEventListener('change', () => {
+			void this.handleAgentSelection(this.agentSelector?.value ?? '');
 		});
 
 		this.refreshAgentSelect();
@@ -1834,7 +1859,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (!this.promptSelector) return;
 		const enabledPrompts = this.plugin.settings.systemPrompts.filter(p => p.enabled);
 		this.promptSelector.empty();
-		this.promptSelector.createEl('option', { value: '', text: 'No System Prompt' });
+		this.promptSelector.createEl('option', { value: '', text: 'No system prompt' });
 		enabledPrompts.forEach(p => {
 			const option = this.promptSelector!.createEl('option', { value: p.id, text: p.name });
 			if (this.plugin.settings.activeSystemPromptId === p.id) {
@@ -2089,7 +2114,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		const breadcrumb = row.createDiv('chat-breadcrumb');
 		breadcrumb.addClass('chat-breadcrumb');
-		const historyLink = breadcrumb.createSpan({ text: '☰ Conversation', cls: 'chat-breadcrumb-link chat-action-link' });
+		const historyLink = breadcrumb.createSpan({ text: '☰ conversation', cls: 'chat-breadcrumb-link chat-action-link' });
 		historyLink.setAttr('role', 'button');
 		historyLink.tabIndex = 0;
 		const activateHistory = async (event: Event) => {
@@ -2097,19 +2122,19 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			event.stopPropagation();
 			await this.toggleConversationListVisibility();
 		};
-		historyLink.addEventListener('click', activateHistory);
+		historyLink.addEventListener('click', (event: MouseEvent) => { void activateHistory(event); });
 		historyLink.addEventListener('keydown', (event: KeyboardEvent) => {
 			if (event.key === 'Enter' || event.key === ' ') {
 				void activateHistory(event);
 			}
 		});
 		breadcrumb.createSpan({ text: '/', cls: 'chat-breadcrumb-sep' });
-		this.conversationTitleEl = breadcrumb.createSpan({ text: 'Current Conversation', cls: 'chat-breadcrumb-current' });
+		this.conversationTitleEl = breadcrumb.createSpan({ text: 'Current conversation', cls: 'chat-breadcrumb-current' });
 
 		const actions = row.createDiv('chat-action-buttons');
 		actions.addClass('chat-action-buttons');
 
-			const newLink = actions.createSpan({ text: '+ New', cls: 'chat-action-link' });
+			const newLink = actions.createSpan({ text: '+ new', cls: 'chat-action-link' });
 			newLink.setAttr('role', 'button');
 			newLink.tabIndex = 0;
 			const activateNew = async (event: Event) => {
@@ -2118,7 +2143,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				await this.resetToDefaultChatConfiguration();
 				await this.conversationManager.createNewConversation();
 			};
-		newLink.addEventListener('click', activateNew);
+		newLink.addEventListener('click', (event: MouseEvent) => { void activateNew(event); });
 		newLink.addEventListener('keydown', (event: KeyboardEvent) => {
 			if (event.key === 'Enter' || event.key === ' ') {
 				void activateNew(event);
@@ -2127,16 +2152,19 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		actions.createSpan({ text: '|', cls: 'chat-action-sep' });
 
-		const settingsLink = actions.createSpan({ text: '⚙️ Settings', cls: 'chat-action-link' });
+		const settingsLink = actions.createSpan({ text: '⚙️ settings', cls: 'chat-action-link' });
 		settingsLink.setAttr('role', 'button');
 		settingsLink.tabIndex = 0;
 		const activateSettings = (event: Event) => {
 			event.preventDefault();
 			event.stopPropagation();
-			// @ts-ignore setting API available in Obsidian
-			this.app.setting.open();
-			// @ts-ignore open specific tab
-			this.app.setting.openTabById('intelligence-assistant');
+			const settingApi = (this.app as unknown as { setting?: { open: () => void; openTabById: (id: string) => void } }).setting;
+			if (settingApi) {
+				settingApi.open();
+				settingApi.openTabById('intelligence-assistant');
+			} else {
+				new Notice('Settings API unavailable');
+			}
 		};
 		settingsLink.addEventListener('click', activateSettings);
 		settingsLink.addEventListener('keydown', (event: KeyboardEvent) => {
@@ -2155,15 +2183,15 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		const modelGroup = this.modelControlsContainer.createDiv('chat-model-select');
 		modelGroup.addClass('chat-model-select');
-		modelGroup.createSpan({ text: '🤖 Model', cls: 'chat-label' });
-		this.modelSelect = modelGroup.createEl('select', { cls: 'model-select' }) as HTMLSelectElement;
+		modelGroup.createSpan({ text: '🤖 model', cls: 'chat-label' });
+		this.modelSelect = modelGroup.createEl('select', { cls: 'model-select' });
 		this.modelSelect.addEventListener('change', () => {
 			void this.onModelChange();
 		});
 
 		const tempGroup = this.modelControlsContainer.createDiv('chat-param-group');
 		tempGroup.addClass('chat-param-group');
-		tempGroup.createSpan({ text: '🌡️ Temperature', cls: 'chat-label' });
+		tempGroup.createSpan({ text: '🌡️ temperature', cls: 'chat-label' });
 		this.temperatureSlider = tempGroup.createEl('input', { type: 'range' });
 		this.temperatureSlider.min = '0';
 		this.temperatureSlider.max = '2';
@@ -2178,7 +2206,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		const tokensGroup = this.modelControlsContainer.createDiv('chat-param-group');
 		tokensGroup.addClass('chat-param-group');
-		tokensGroup.createSpan({ text: '📊 Max Tokens', cls: 'chat-label' });
+		tokensGroup.createSpan({ text: '📊 max tokens', cls: 'chat-label' });
 		this.maxTokensInput = tokensGroup.createEl('input', { type: 'number', cls: 'chat-number-input' });
 		this.maxTokensInput.min = '100';
 		this.maxTokensInput.max = '100000';
@@ -2273,7 +2301,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 					new Notice('Image attachment is unavailable for the current model.');
 					return;
 				}
-				this.attachImage();
+				void this.attachImage();
 			}
 		});
 
@@ -2282,7 +2310,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			label: 'RAG',
 			tooltip: 'Use indexed notes as context',
 			showStatus: true,
-			onClick: () => this.handleQuickActionRag()
+			onClick: () => { void this.handleQuickActionRag(); }
 		});
 		this.ragActionItem?.addClass('is-toggle');
 
@@ -2291,7 +2319,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			label: 'Web Search',
 			tooltip: 'Search the internet when needed',
 			showStatus: true,
-			onClick: () => this.handleQuickActionWeb()
+			onClick: () => { void this.handleQuickActionWeb(); }
 		});
 		this.webActionItem?.addClass('is-toggle');
 
@@ -2303,14 +2331,14 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		container: HTMLElement,
 		config: { icon: string; label: string; tooltip?: string; showStatus?: boolean; onClick: () => void }
 	): HTMLButtonElement {
-		const button = container.createEl('button', { cls: 'header-action-btn' }) as HTMLButtonElement;
+		const button = container.createEl('button', { cls: 'header-action-btn' });
 		button.type = 'button';
 		if (config.tooltip) {
 			button.setAttr('title', config.tooltip);
 		}
 		button.addEventListener('click', (event) => {
 			event.preventDefault();
-			config.onClick();
+			void config.onClick();
 		});
 
 		button.createSpan({ cls: 'header-action-icon', text: config.icon });
@@ -2323,7 +2351,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private async handleQuickActionRag() {
 		if (!this.plugin.settings.ragConfig.enabled) {
-			new Notice('RAG is disabled in settings. Enable it under Settings → Chat Features → RAG.');
+			new Notice('Rag is disabled in settings. Enable it under settings → chat features → rag.');
 			return;
 		}
 		this.state.enableRAG = !this.state.enableRAG;
@@ -2333,7 +2361,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private async handleQuickActionWeb() {
 		if (!this.plugin.settings.webSearchConfig.enabled) {
-			new Notice('Web Search is disabled in settings. Enable it under Settings → Chat Features → Web Search.');
+			new Notice('Web search is disabled in settings. Enable it under settings → chat features → web search.');
 			return;
 		}
 		this.state.enableWebSearch = !this.state.enableWebSearch;
@@ -2392,7 +2420,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			for (const agent of agents) {
 				const option = document.createElement('option');
 				option.value = agent.id;
-				option.textContent = `${agent.icon || '🤖'} ${agent.name}`;
+				option.textContent = `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}`;
 				selectEl.appendChild(option);
 			}
 
@@ -2460,8 +2488,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		this.state.enableWebSearch = agent.webSearchEnabled;
 
 		// Update tool manager with agent's enabled tools
-		const toolConfigs = agent.enabledBuiltInTools.map(toolType => ({
-			type: toolType as any,
+		const toolConfigs = agent.enabledBuiltInTools.map((toolType: string) => ({
+			type: toolType,
 			enabled: true
 		}));
 		this.toolManager.setToolConfigs(toolConfigs);
@@ -2473,8 +2501,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				// Connect the server if not already connected
 				const isConnected = this.toolManager.getMCPServers().includes(serverName);
 				if (!isConnected) {
-					this.toolManager.registerMCPServer(server).catch(error => {
-						console.error(`Failed to connect to MCP server ${serverName} for agent:`, error);
+					this.toolManager.registerMCPServer(server).catch((_error: unknown) => {
+						const errMsg = _error instanceof Error ? _error.message : String(_error);
+						console.error(`Failed to connect to MCP server ${serverName ?? 'unknown'} for agent:`, errMsg);
 					});
 				}
 			}
@@ -2482,26 +2511,27 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		// Update RAG manager with agent configuration
 		try {
-			await this.ragManager.updateConfig(this.plugin.settings.ragConfig);
+			this.ragManager.updateConfig(this.plugin.settings.ragConfig);
 			await this.ragManager.initialize();
 			
 			// Update RAG status
 				await this.updateRagStatus();
-		} catch (error) {
-			console.error('Error updating RAG with agent config:', error);
+		} catch (_error) {
+			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			console.error('Error updating RAG with agent config:', errMsg);
 		}
 
 		this.refreshAgentSelect(agentId);
 
 		if (!options?.silent) {
-			new Notice(`Applied configuration for agent: ${agent.icon || '🤖'} ${agent.name}`);
+			new Notice(`Applied configuration for agent: ${agent.icon || '🤖'} ${agent.name ?? 'unknown'}`);
 		}
 	}
 
 	private async executeWorkflow(workflowId: string) {
 		// Load workflow using new system
 		const { WorkflowStorage, WorkflowGraph, WorkflowExecutor, nodeRegistry } = await import('@/domain/workflow');
-		const workflowStorage = new WorkflowStorage(this.app.vault);
+		const workflowStorage = new WorkflowStorage(this.app.vault, 'workflows', this.app);
 
 		const workflowData = await workflowStorage.load(workflowId);
 		if (!workflowData) {
@@ -2510,7 +2540,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		}
 
 		const workflow = WorkflowGraph.fromJSON(workflowData);
-		new Notice(`Executing workflow: ${workflowData.name}`);
+		new Notice(`Executing workflow: ${workflowData.name ?? 'unknown'}`);
 
 		// Add workflow execution message
 		const workflowMsgEl = this.chatContainer.createDiv('chat-message');
@@ -2519,7 +2549,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const workflowExecution = workflowMsgEl.createDiv('workflow-execution');
 		const workflowHeader = workflowExecution.createDiv('workflow-header');
 		workflowHeader.createSpan({ cls: 'workflow-icon', text: workflowIcon });
-		workflowHeader.createSpan({ cls: 'workflow-name', text: `Workflow: ${workflowData.name}` });
+		workflowHeader.createSpan({ cls: 'workflow-name', text: `Workflow: ${workflowData.name ?? 'unknown'}` });
 		workflowExecution.createDiv({ cls: 'workflow-status', text: 'Initializing...' });
 		workflowExecution.createDiv('workflow-log');
 
@@ -2540,13 +2570,18 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			const services = {
 				vault: this.app.vault,
 				http: {
-					request: async (url: string | URL, options?: any) => {
+					request: async (url: string | URL, options?: unknown) => {
 						try {
-							const response = await fetch(url, options);
-							return response;
-						} catch (error) {
-							console.error('HTTP request error:', error);
-							throw error;
+							return await requestUrl({
+								url: String(url),
+								...(typeof options === 'object' && options !== null
+									? (options as Record<string, unknown>)
+									: {})
+							});
+						} catch (_error) {
+							const errMsg = _error instanceof Error ? _error.message : String(_error);
+							console.error('HTTP request error:', errMsg);
+							throw (_error instanceof Error ? _error : new Error(errMsg));
 						}
 					}
 				}
@@ -2562,7 +2597,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 			// Display execution log
 			logEl.empty();
-			const logTitle = logEl.createEl('h4', { text: 'Execution Log:' });
+			const logTitle = logEl.createEl('h4', { text: 'Execution log:' });
 			logTitle.setCssProps({ 'margin': '8px 0 4px 0' });
 
 			for (const entry of result.log || []) {
@@ -2574,7 +2609,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				});
 
 				const timestamp = new Date(entry.timestamp).toLocaleTimeString();
-				const actionText = `[${timestamp}] ${entry.nodeId}`;
+				const nodeId = (entry as { nodeId?: unknown }).nodeId;
+				const nodeIdStr = typeof nodeId === 'string' || typeof nodeId === 'number' ? String(nodeId) : 'unknown';
+				const actionText = `[${timestamp}] ${nodeIdStr}`;
 
 				entryDiv.createEl('div', { text: actionText, cls: 'log-action' });
 
@@ -2584,7 +2621,11 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 						'color': 'var(--text-error)',
 						'margin-left': '16px'
 					});
-					errorDiv.setText(`Error: ${entry.error}`);
+					const errorVal = (entry as { error?: unknown }).error;
+					const errText = errorVal && typeof errorVal === 'object' && errorVal !== null && 'message' in errorVal && typeof (errorVal as { message: unknown }).message === 'string'
+						? (errorVal as { message: string }).message
+						: String(errorVal);
+					errorDiv.setText(`Error: ${errText}`);
 				}
 			}
 
@@ -2599,10 +2640,12 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 			new Notice(`Workflow ${status}`);
 
-		} catch (error: any) {
-			statusEl.setText(`Error: ${error.message}`);
+		} catch (_error: unknown) {
+			const error = _error instanceof Error ? _error : new Error(String(_error));
+			const errMsg = error.message;
+			statusEl.setText(`Error: ${errMsg}`);
 			statusEl.setCssProps({ 'color': 'var(--text-error)' });
-			new Notice(`Workflow failed: ${error.message}`);
+			new Notice(`Workflow failed: ${errMsg}`);
 		}
 
 		this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
@@ -2610,29 +2653,29 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private agentExecutionTraceEl: HTMLElement | null = null;
 
-	private async processToolCalls(content: string, traceContainer?: HTMLElement, contentEl?: HTMLElement) {
+	private processToolCalls(content: string, traceContainer?: HTMLElement, _contentEl?: HTMLElement) {
 		// Get the active agent if in agent mode
 		const activeAgent = this.plugin.settings.activeAgentId
 			? this.plugin.settings.agents.find(a => a.id === this.plugin.settings.activeAgentId)
 			: undefined;
 			
-		return await processToolCallsHandler(
+		return processToolCalls(
 			content,
 			this.state.messages,
 			this.state.agentExecutionSteps,
 			this.toolManager,
 			activeAgent, // Pass agent to check tool permissions
 			traceContainer,
-			() => this.continueAgentConversation(traceContainer, _contentEl)
+			() => Promise.resolve(this.continueAgentConversation(traceContainer, _contentEl))
 		);
 	}
 
 	private updateExecutionTrace(container: HTMLElement) {
-		updateExecutionTraceHandler(container, this.state.agentExecutionSteps);
+		updateExecutionTrace(container, this.state.agentExecutionSteps);
 	}
 
 	private createAgentExecutionTraceContainer(messageBody: HTMLElement): HTMLElement {
-		return createAgentExecutionTraceContainerHandler(messageBody, this.state.agentExecutionSteps.length);
+		return createAgentExecutionTraceContainer(messageBody, this.state.agentExecutionSteps.length);
 	}
 
 	private displayAgentFinalAnswer(contentEl?: HTMLElement) {
@@ -2664,7 +2707,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			if (finalAnswer) {
 				contentEl.empty();
 				const finalAnswerEl = contentEl.createDiv('agent-final-answer');
-				finalAnswerEl.createEl('h4', { text: 'Final Answer' });
+				finalAnswerEl.createEl('h4', { text: 'Final answer' });
 				try {
 					const html = marked.parse(finalAnswer) as string;
 					// Use DOMParser to safely parse HTML
@@ -2673,11 +2716,11 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 					Array.from(doc.body.childNodes).forEach(node => {
 						finalAnswerEl.appendChild(node.cloneNode(true));
 					});
-				} catch (error) {
+				} catch (_error) {
 					finalAnswerEl.createDiv().setText(finalAnswer);
 				}
 
-				(lastMessage as any).agentExecutionSteps = [...this.state.agentExecutionSteps];
+							(lastMessage as { agentExecutionSteps?: unknown[] }).agentExecutionSteps = [...this.state.agentExecutionSteps];
 			}
 		}
 	}
@@ -2692,8 +2735,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private queryMessageElement(messageEl: HTMLElement, selectors: string[]): HTMLElement | null {
 		for (const selector of selectors) {
-			const el = messageEl.querySelector(selector) as HTMLElement | null;
-			if (el) {
+			const el = messageEl.querySelector(selector);
+			if (el instanceof HTMLElement) {
 				return el;
 			}
 		}
@@ -2703,7 +2746,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	/**
 	 * Continue the agent conversation after tool execution
 	 */
-	private async continueAgentConversation(traceContainer?: HTMLElement, contentEl?: HTMLElement) {
+	private continueAgentConversation(traceContainer?: HTMLElement, _contentEl?: HTMLElement): void {
 		console.debug('[Agent] Continuing agent conversation after tool execution...');
 
 		// Get the current config and model to make another call
@@ -2737,7 +2780,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			const _finalMessages = [...chatRequest.messages];
 
 			// Add system prompt if configured (use the same method as the original)
-			const systemMessages = [];
+			const systemMessages: Message[] = [];
 			const systemPromptContent = this.plugin.settings.systemPrompts.find(p => p.id === this.plugin.settings.activeSystemPromptId)?.content;
 			if (systemPromptContent) {
 				systemMessages.push({
@@ -2838,43 +2881,49 @@ After calling a tool, you will receive the result and can continue the conversat
 			const provider = ProviderFactory.createProvider(config);
 			
 			// Streaming implementation - collect content silently
-			await provider.streamChat({
-				...chatRequest,
-				messages: allMessages
-			}, async (chunk: any) => {
-				if (chunk.content) {
-					fullContent += chunk.content;
-				}
-
-				if (chunk.done) {
-					// Add the assistant's response to the messages
-					this.state.messages.push({
-						role: 'assistant',
-						content: fullContent,
-						model: selectedModel  // Use just the model ID, not provider:model
-					} as Message);
-
-					// In Agent mode, check if the agent wants to call more tools with the new context
-					if (this.state.mode === 'agent' && traceContainer) {
-						// Wait briefly for the UI to update
-						await new Promise(resolve => setTimeout(resolve, 50));
-						// Process any new tool calls that might have been generated
-						await this.processToolCalls(fullContent, traceContainer);
+			void provider.streamChat(
+				{
+					...chatRequest,
+					messages: allMessages
+				},
+				(chunk: unknown) => {
+					const c = chunk as { content?: string; done?: boolean };
+					if (c && typeof c.content === 'string') {
+						fullContent += c.content;
 					}
-
-					// Save conversation after successful message
-					await this.conversationManager.saveCurrentConversation();
-
-					// Agent memory is temporarily disabled
+ 
+					if (c && c.done) {
+						// Add the assistant's response to the messages
+						this.state.messages.push({
+							role: 'assistant',
+							content: fullContent,
+							model: selectedModel // Use just the model ID, not provider:model
+						} as Message);
+ 
+						// In Agent mode, check if the agent wants to call more tools with the new context
+						if (this.state.mode === 'agent' && traceContainer) {
+							// Wait briefly for the UI to update and then process any new tool calls
+							void (async () => {
+								await new Promise(resolve => setTimeout(resolve, 50));
+								await this.processToolCalls(fullContent, traceContainer);
+							})();
+						}
+ 
+						// Save conversation after successful message
+						void this.conversationManager.saveCurrentConversation();
+ 
+						// Agent memory is temporarily disabled
+					}
 				}
-			});
-		} catch (error) {
-			console.error('[Agent] Error continuing agent conversation:', error);
-			new Notice('Error continuing agent conversation: ' + error.message);
+			);
+		} catch (_error) {
+			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			console.error('[Agent] Error continuing agent conversation:', errMsg);
+			new Notice('Error continuing agent conversation: ' + errMsg);
 		}
 	}
 
-	private async clearChat() {
+	private async clearchat() {
 		if (!await showConfirm(this.app, 'Clear all messages in this conversation?')) return;
 
 		this.state.messages = [];
@@ -2882,7 +2931,7 @@ After calling a tool, you will receive the result and can continue the conversat
 		await this.conversationManager.saveCurrentConversation();
 	}
 
-	private async attachFile() {
+	private attachFile() {
 		// Get all markdown files in vault
 		const files = this.app.vault.getMarkdownFiles();
 
@@ -2897,41 +2946,45 @@ After calling a tool, you will receive the result and can continue the conversat
 			menu.addItem((item) => {
 				item.setTitle(file.path)
 					.setIcon('document')
-					.onClick(async () => {
-						const content = await this.app.vault.read(file);
-						this.state.currentAttachments.push({
-							type: 'file',
-							name: file.name,
-							path: file.path,
-							content: content
-						});
-						this.updateAttachmentPreview();
-						new Notice(`Attached: ${file.name}`);
+					.onClick(() => {
+						void (async () => {
+							const content = await this.app.vault.read(file);
+							this.state.currentAttachments.push({
+								type: 'file',
+								name: file.name,
+								path: file.path,
+								content: content
+							});
+							this.updateAttachmentPreview();
+							new Notice(`Attached: ${file.name ?? 'unknown'}`);
+						})();
 					});
 			});
 		});
 
-		menu.showAtMouseEvent(event as MouseEvent);
+		menu.showAtPosition({ x: 0, y: 0 });
 	}
 
-	private async attachImage() {
-		new SearchableImageModal(this.app, async (selectedFiles: TFile[]) => {
-			for (const file of selectedFiles) {
-				const arrayBuffer = await this.app.vault.readBinary(file);
-				const base64 = this.arrayBufferToBase64(arrayBuffer);
-				const dataUrl = `data:image/${file.extension};base64,${base64}`;
+	private attachImage() {
+		new SearchableImageModal(this.app, (selectedFiles: TFile[]) => {
+			void (async () => {
+				for (const file of selectedFiles) {
+					const arrayBuffer = await this.app.vault.readBinary(file);
+					const base64 = this.arrayBufferToBase64(arrayBuffer);
+					const dataUrl = `data:image/${file.extension};base64,${base64}`;
 
-				this.state.currentAttachments.push({
-					type: 'image',
-					name: file.name,
-					path: file.path,
-					content: dataUrl
-				});
-			}
-			this.updateAttachmentPreview();
-			if (selectedFiles.length > 0) {
-				new Notice(`Attached ${selectedFiles.length} image(s)`);
-			}
+					this.state.currentAttachments.push({
+						type: 'image',
+						name: file.name,
+						path: file.path,
+						content: dataUrl
+					});
+				}
+				this.updateAttachmentPreview();
+				if (selectedFiles.length > 0) {
+					new Notice(`Attached ${selectedFiles.length} image(s)`);
+				}
+			})();
 		}).open();
 	}
 
@@ -3002,1237 +3055,1240 @@ After calling a tool, you will receive the result and can continue the conversat
 		});
 	}
 
-	private addStyles() {
-		const styleEl = document.createElement('style');
-		styleEl.textContent = `
-			.intelligence-assistant-chat-container {
-				display: flex;
-				flex-direction: column;
-				height: 100%;
-				padding: 0;
-			}
-
-			.chat-main-layout {
-				display: flex;
-				height: 100%;
-				gap: 0;
-				position: relative;
-			}
-
-			.conversation-list-floating {
-				position: absolute;
-				left: 0;
-				top: 0;
-				bottom: 0;
-				width: 280px;
-				background: var(--background-secondary);
-				border-right: 1px solid var(--background-modifier-border);
-				box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-				z-index: 100;
-				display: flex;
-				flex-direction: column;
-			}
-
-			.conversation-list-header {
-				padding: 10px;
-				border-bottom: 1px solid var(--background-modifier-border);
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-			}
-
-			.conversation-list-header h3 {
-				margin: 0;
-				font-size: 14px;
-				font-weight: 600;
-			}
-
-			.conversation-header-buttons {
-				display: flex;
-				gap: 4px;
-			}
-
-			.pin-conversation-btn,
-			.new-conversation-btn {
-				width: 24px;
-				height: 24px;
-				padding: 0;
-				border-radius: 4px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				color: var(--text-normal);
-				cursor: pointer;
-				font-size: 14px;
-				line-height: 1;
-			}
-
-			.pin-conversation-btn:hover,
-			.new-conversation-btn:hover {
-				background: var(--background-modifier-hover);
-			}
-
-			.conversation-list-content {
-				flex: 1;
-				overflow-y: auto;
-			}
-
-			.conversation-item {
-				padding: 10px;
-				border-bottom: 1px solid var(--background-modifier-border);
-				cursor: pointer;
-				transition: background-color 0.1s;
-			}
-
-			.conversation-item:hover {
-				background: var(--background-modifier-hover);
-			}
-
-			.conversation-item.active {
-				background: var(--background-modifier-active-hover);
-			}
-
-			.conversation-title {
-				font-size: 13px;
-				color: var(--text-normal);
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
-
-			.empty-state {
-				padding: 20px;
-				text-align: center;
-				color: var(--text-muted);
-				font-size: 12px;
-			}
-
-			.main-chat-area {
-				flex: 1;
-				width: 100%;
-				display: flex;
-				flex-direction: column;
-				padding: 10px;
-			}
-
-			.chat-header {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				padding: 10px 0;
-				border-bottom: 1px solid var(--background-modifier-border);
-				margin-bottom: 10px;
-				flex-wrap: wrap;
-			}
-
-			.model-selector {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				flex: 1;
-			}
-
-			.model-selector select {
-				flex: 1;
-				min-width: 150px;
-				padding: 6px 10px;
-				border-radius: 4px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				color: var(--text-normal);
-				font-weight: 500;
-			}
-
-			.provider-selector {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.provider-selector span {
-				font-size: 12px;
-				color: var(--text-muted);
-			}
-
-			.provider-selector select {
-				padding: 4px 8px;
-				border-radius: 4px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				color: var(--text-normal);
-				font-size: 12px;
-			}
-
-			.params-row {
-				display: flex;
-				gap: 20px;
-				padding: 10px 0;
-				border-bottom: 1px solid var(--background-modifier-border);
-				margin-bottom: 10px;
-			}
-
-			.param-control {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.param-label {
-				font-size: 12px;
-				color: var(--text-muted);
-				white-space: nowrap;
-			}
-
-			.param-value {
-				font-size: 12px;
-				color: var(--text-normal);
-				min-width: 30px;
-				text-align: center;
-			}
-
-			.param-control input[type="range"] {
-				width: 120px;
-			}
-
-			.param-control input[type="number"] {
-				width: 100px;
-				padding: 4px 8px;
-				border-radius: 4px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				color: var(--text-normal);
-				font-size: 12px;
-			}
-
-			.chat-messages {
-				flex: 1;
-				overflow-y: auto;
-				padding: 12px 16px;
-				display: flex;
-				flex-direction: column;
-				gap: 12px;
-			}
-
-			.chat-message {
-				display: flex;
-				width: 100%;
-			}
-
-			.message-user .message-row {
-				flex-direction: row-reverse;
-			}
-
-			.message-row {
-				display: flex;
-				gap: 10px;
-				width: 100%;
-				max-width: 100%;
-			}
-
-			.message-avatar {
-				flex-shrink: 0;
-				width: 28px;
-				height: 28px;
-				border-radius: 50%;
-				background: var(--background-modifier-border);
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				color: var(--text-muted);
-			}
-
-			.message-avatar svg {
-				width: 16px;
-				height: 16px;
-			}
-
-			.message-user .message-avatar {
-				background: var(--interactive-accent);
-				color: white;
-			}
-
-			.message-assistant .message-avatar {
-				background: var(--background-secondary);
-				border: 1px solid var(--background-modifier-border);
-			}
-
-			/* Tool execution messages */
-			.message-tool {
-				padding: 12px;
-				margin: 12px 0;
-				background: var(--background-primary);
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 6px;
-			}
-
-			.tool-execution {
-				display: flex;
-				flex-direction: column;
-				gap: 8px;
-			}
-
-			.tool-icon {
-				font-size: 20px;
-			}
-
-			.tool-name {
-				font-weight: 600;
-				color: var(--text-accent);
-				font-size: 13px;
-			}
-
-			.tool-args {
-				font-family: var(--font-monospace);
-				font-size: 11px;
-				color: var(--text-muted);
-				white-space: pre;
-				background: var(--background-secondary);
-				padding: 8px;
-				border-radius: 4px;
-			}
-
-			.tool-result {
-				margin-top: 8px;
-				padding: 8px;
-				border-radius: 4px;
-			}
-
-			.tool-success {
-				background: rgba(0, 255, 0, 0.1);
-				border-left: 3px solid var(--text-success);
-			}
-
-			.tool-error {
-				background: rgba(255, 0, 0, 0.1);
-				border-left: 3px solid var(--text-error);
-			}
-
-			.tool-result pre {
-				font-family: var(--font-monospace);
-				font-size: 11px;
-				margin: 4px 0 0 0;
-				white-space: pre-wrap;
-			}
-
-			.message-body {
-				flex: 1;
-				min-width: 0;
-			}
-
-			.message-body,
-			.ia-chat-message__body,
-			.message-content,
-			.ia-chat-message__content {
-				user-select: text;
-			}
-
-			.message-actions,
-			.message-actions *,
-			.ia-chat-message__actions,
-			.ia-chat-message__actions * {
-				user-select: none;
-			}
-
-			.message-meta {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				flex-wrap: wrap;
-				margin-bottom: 4px;
-			}
-
-			.message-name {
-				font-weight: 600;
-				font-size: 12px;
-				color: var(--text-normal);
-			}
-
-			.ia-chat-message__badges {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 4px;
-			}
-
-			.ia-chat-message__badge {
-				display: inline-flex;
-				align-items: center;
-				gap: 4px;
-				padding: 2px 8px;
-				border-radius: 999px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				font-size: 10px;
-				color: var(--text-muted);
-			}
-
-			.ia-chat-message__badge-label {
-				font-weight: 600;
-				text-transform: uppercase;
-				letter-spacing: 0.02em;
-			}
-
-			.ia-chat-message__badge-value {
-				color: var(--text-normal);
-			}
-
-			.message-timestamp {
-				font-size: 10px;
-				color: var(--text-faint);
-			}
-
-			.message-actions {
-				display: flex;
-				gap: 2px;
-				margin-top: 4px;
-				opacity: 0;
-				transition: opacity 0.15s;
-			}
-
-			.message-body:hover .message-actions {
-				opacity: 1;
-			}
-
-			.msg-action-btn {
-				padding: 3px 6px;
-				border: none;
-				background: transparent;
-				color: var(--text-muted);
-				cursor: pointer;
-				border-radius: 3px;
-				display: flex;
-				align-items: center;
-				gap: 2px;
-				font-size: 11px;
-				transition: all 0.15s;
-			}
-
-			.msg-action-btn:hover {
-				background: var(--background-modifier-hover);
-				color: var(--text-normal);
-			}
-
-			.msg-action-btn svg {
-				width: 14px;
-				height: 14px;
-			}
-
-			.message-content {
-				line-height: 1.5;
-				word-wrap: break-word;
-				font-size: 13px;
-				white-space: normal;
-			}
-
-			.message-content p {
-				margin: 0.2em 0;
-			}
-
-			.message-content p:first-child {
-				margin-top: 0;
-			}
-
-			.message-content p:last-child {
-				margin-bottom: 0;
-			}
-
-			.message-content p:empty {
-				display: none;
-			}
-
-			.message-content code {
-				background: var(--background-primary);
-				padding: 2px 6px;
-				border-radius: 4px;
-				font-family: var(--font-monospace);
-				font-size: 0.9em;
-			}
-
-			.message-content pre {
-				background: var(--background-primary);
-				padding: 12px;
-				border-radius: 6px;
-				overflow-x: auto;
-				margin: 8px 0;
-			}
-
-			.message-content pre code {
-				background: none;
-				padding: 0;
-			}
-
-			.message-content ul, .message-content ol {
-				margin: 0.5em 0;
-				padding-left: 1.5em;
-			}
-
-			.message-content blockquote {
-				border-left: 3px solid var(--background-modifier-border);
-				padding-left: 12px;
-				margin: 8px 0;
-				opacity: 0.8;
-			}
-
-			.message-attachments {
-				margin-top: 6px;
-				display: flex;
-				flex-direction: column;
-				gap: 4px;
-			}
-
-			.attachment-item {
-				padding: 6px;
-				background: var(--background-modifier-border);
-				border-radius: 4px;
-				font-size: 0.85em;
-			}
-
-			.chat-input-container {
-				margin-top: 12px;
-				padding: 12px;
-				background: var(--background-secondary);
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 10px;
-				display: flex;
-				flex-direction: column;
-				gap: 10px;
-			}
-
-			.chat-input-header {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				flex-wrap: wrap;
-			}
-
-			.chat-top-controls,
-			.chat-action-row,
-			.chat-model-row,
-			.chat-token-row {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				flex-wrap: wrap;
-				margin-bottom: 8px;
-			}
-
-			.chat-action-row {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				gap: 12px;
-				margin: 6px 0 12px 0;
-			}
-
-			.chat-breadcrumb {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				font-size: 12px;
-				color: var(--text-muted);
-			}
-
-			.chat-breadcrumb-link {
-				color: var(--text-accent);
-				font-weight: 600;
-				cursor: pointer;
-				background: transparent;
-				border: none;
-				padding: 0;
-			}
-
-			.chat-breadcrumb-link:hover {
-				text-decoration: underline;
-			}
-
-			.chat-breadcrumb-current {
-				font-weight: 600;
-				color: var(--text-normal);
-			}
-
-			.chat-action-buttons {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.chat-action-link {
-				color: var(--text-dark);
-				font-weight: 600;
-				cursor: pointer;
-			}
-
-			.chat-action-link:hover {
-				color: var(--text-accent);
-				text-decoration: underline;
-			}
-
-			.chat-action-sep {
-				color: var(--text-muted);
-				font-size: 12px;
-			}
-
-			.chat-model-row {
-				display: flex;
-				flex-direction: column;
-				gap: 8px;
-				padding: 10px;
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 10px;
-				background: var(--background-secondary);
-			}
-
-			.chat-model-controls {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 12px;
-				align-items: center;
-			}
-
-			.chat-model-select {
-				display: flex;
-				flex: 1;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.chat-model-select .chat-label {
-				font-weight: 600;
-			}
-
-			.model-select {
-				flex: 1;
-				min-width: 160px;
-				padding: 6px 10px;
-				border-radius: 8px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-			}
-
-			.chat-param-group {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.chat-agent-summary {
-				display: none;
-				flex-direction: column;
-				gap: 6px;
-				padding-top: 6px;
-				border-top: 1px solid var(--background-modifier-border);
-			}
-
-			.chat-agent-summary-title {
-				font-size: 12px;
-				font-weight: 600;
-				color: var(--text-muted);
-			}
-
-			.chat-agent-summary-details {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 6px;
-				align-items: center;
-			}
-
-			.chat-agent-summary-text {
-				font-size: 12px;
-				color: var(--text-muted);
-			}
-
-			.chat-agent-chip {
-				display: inline-flex;
-				align-items: center;
-				gap: 4px;
-				padding: 4px 10px;
-				border-radius: 999px;
-				border: 1px dashed var(--background-modifier-border);
-				background: var(--background-primary);
-				font-size: 12px;
-				color: var(--text-muted);
-			}
-
-			.chat-agent-chip-label {
-				font-weight: 600;
-				color: var(--text-muted);
-			}
-
-			.chat-agent-chip-value {
-				color: var(--text-normal);
-			}
-
-			.chat-label {
-				font-size: 12px;
-				color: var(--text-muted);
-				font-weight: 600;
-			}
-
-			.chat-slider {
-				width: 120px;
-			}
-
-			.chat-param-value {
-				font-weight: 600;
-				color: var(--text-accent);
-			}
-
-			.chat-number-input {
-				width: 90px;
-				padding: 4px 8px;
-				border-radius: 6px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-			}
-
-			.chat-token-row {
-				justify-content: space-between;
-			}
-
-			.chat-token-chip {
-				font-size: 11px;
-				color: var(--text-muted);
-				padding: 4px 10px;
-				border-radius: 999px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-			}
-
-			.chat-select-group {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-			}
-
-			.chat-header-actions {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				flex-wrap: wrap;
-				margin-left: auto;
-			}
-
-			.header-action-btn {
-				display: inline-flex;
-				align-items: center;
-				gap: 4px;
-				padding: 4px 10px;
-				border: 1px solid transparent;
-				border-radius: 999px;
-				background: var(--background-primary);
-				font-size: 12px;
-				color: var(--text-muted);
-				cursor: pointer;
-				transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
-			}
-
-			.header-action-btn:hover:not(.is-disabled) {
-				background: var(--background-modifier-hover);
-				color: var(--text-normal);
-			}
-
-			.header-action-btn.is-active {
-				border-color: var(--text-accent);
-				color: var(--text-normal);
-			}
-
-			.header-action-btn.is-disabled {
-				opacity: 0.5;
-				cursor: not-allowed;
-			}
-
-			.header-action-btn.is-link {
-				border-style: dashed;
-				background: transparent;
-				color: var(--text-normal);
-			}
-
-			.header-action-icon {
-				font-size: 12px;
-				line-height: 1;
-			}
-
-			.header-action-status {
-				font-size: 11px;
-				color: var(--text-muted);
-			}
-
-			.chat-input-editor {
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 8px;
-				background: var(--background-primary);
-				padding: 4px;
-			}
-
-			.chat-input-footer {
-				padding-top: 4px;
-			}
-
-			/* Bottom controls - 3 sections layout */
-			.input-bottom-controls {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				gap: 10px;
-				flex-wrap: wrap;
-			}
-
-			.bottom-left-controls {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				flex: 1;
-				flex-wrap: wrap;
-			}
-
-			.bottom-middle-controls {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				flex: 1;
-				flex-wrap: wrap;
-			}
-
-			.attachment-preview {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 6px;
-				align-items: center;
-			}
-
-			.bottom-right-controls {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				margin-left: auto;
-			}
-
-			.mode-selector,
-			.prompt-selector,
-			.agent-selector {
-				padding: 5px 10px;
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 999px;
-				background: var(--background-primary);
-				color: var(--text-normal);
-				font-size: 11px;
-				cursor: pointer;
-				min-width: 100px;
-				transition: border-color 0.2s ease;
-			}
-
-			.mode-selector:focus,
-			.prompt-selector:focus,
-			.agent-selector:focus {
-				outline: none;
-				border-color: var(--interactive-accent);
-				box-shadow: 0 0 0 2px rgba(47, 194, 153, 0.15);
-			}
-
-
-
-			.checkbox-container {
-				display: flex;
-				align-items: center;
-				gap: 4px;
-			}
-
-			.checkbox-container input[type="checkbox"] {
-				cursor: pointer;
-				margin: 0;
-			}
-
-			.checkbox-container label {
-				font-size: 11px;
-				color: var(--text-muted);
-				user-select: none;
-				cursor: pointer;
-			}
-
-			/* Toggle Button Styles */
-			.toggle-btn {
-				display: flex;
-				align-items: center;
-				gap: 4px;
-				padding: 4px 10px;
-				border-radius: 12px;
-				border: 1px solid var(--background-modifier-border);
-				background: var(--background-primary);
-				color: var(--text-muted);
-				cursor: pointer;
-				font-size: 11px;
-				transition: all 0.2s ease;
-				outline: none;
-			}
-
-			.toggle-btn:hover {
-				background: var(--background-modifier-hover);
-				border-color: var(--interactive-accent);
-			}
-
-			.toggle-btn.active {
-				background: var(--interactive-accent);
-				color: white;
-				border-color: var(--interactive-accent);
-				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-			}
-
-			.toggle-btn .toggle-icon {
-				font-size: 14px;
-				line-height: 1;
-			}
-
-			.toggle-btn.active .toggle-icon {
-				filter: brightness(1.1);
-			}
-
-			.toggle-btn .toggle-label {
-				font-weight: 500;
-			}
-
-			.tools-label {
-				font-size: 11px;
-				color: var(--text-muted);
-			}
-
-			/* Workflow Execution Styles */
-			.message-workflow {
-				padding: 12px;
-				background: var(--background-secondary);
-				border-left: 4px solid var(--interactive-accent);
-				border-radius: 4px;
-				margin-bottom: 12px;
-			}
-
-			.workflow-execution {
-				font-size: 13px;
-			}
-
-			.workflow-header {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				margin-bottom: 12px;
-				font-weight: 600;
-			}
-
-			.workflow-icon {
-				font-size: 20px;
-			}
-
-			.workflow-status {
-				padding: 6px 12px;
-				background: var(--background-primary);
-				border-radius: 4px;
-				font-size: 12px;
-				margin-bottom: 12px;
-			}
-
-			.workflow-log {
-				max-height: 400px;
-				overflow-y: auto;
-			}
-
-			.log-entry {
-				font-size: 11px;
-				padding: 4px 0;
-				border-bottom: 1px solid var(--background-modifier-border);
-			}
-
-			.log-action {
-				color: var(--text-normal);
-			}
-
-			.log-output {
-				color: var(--text-muted);
-				margin-left: 16px;
-				font-family: monospace;
-				font-size: 10px;
-			}
-
-			.log-error {
-				color: var(--text-error);
-				margin-left: 16px;
-			}
-
-			/* Part 1: Reference area */
-			.input-reference-area {
-				flex: 1;
-				display: flex;
-				flex-wrap: wrap;
-				gap: 4px;
-				min-height: 28px;
-				padding: 4px 6px;
-				background: var(--background-primary);
-				border: 1px dashed var(--background-modifier-border);
-				border-radius: 8px;
-				transition: border-color 0.2s ease;
-			}
-
-			.input-reference-area:empty {
-				border-style: dashed;
-			}
-
-			.reference-list {
-				display: flex;
-				flex-direction: column;
-				gap: 4px;
-			}
-
-			.reference-item {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				padding: 4px 8px;
-				background: var(--background-secondary);
-				border-radius: 4px;
-				font-size: 12px;
-			}
-
-			.reference-icon {
-				flex-shrink: 0;
-			}
-
-			.reference-path {
-				flex: 1;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
-
-			.reference-remove-btn {
-				padding: 0 4px;
-				border: none;
-				background: transparent;
-				color: var(--text-error);
-				cursor: pointer;
-				font-size: 16px;
-				line-height: 1;
-			}
-
-			.reference-remove-btn:hover {
-				background: var(--background-modifier-hover);
-				border-radius: 2px;
-			}
-
-
-			/* Message references (displayed in sent messages) */
-			.message-references {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 6px;
-				margin-top: 8px;
-			}
-
-			.reference-badge {
-				display: inline-flex;
-				align-items: center;
-				gap: 4px;
-				padding: 3px 8px;
-				background: var(--background-primary);
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 12px;
-				font-size: 11px;
-				color: var(--text-muted);
-				transition: all 0.2s;
-			}
-
-			.reference-badge:hover {
-				background: var(--background-modifier-hover);
-				color: var(--text-normal);
-				border-color: var(--interactive-accent);
-			}
-
-			/* Part 2: Text input */
-			.chat-input {
-				width: 100%;
-				min-height: 72px;
-				max-height: 160px;
-				padding: 14px 16px;
-				border: 1px solid transparent;
-				border-radius: 12px;
-				background: var(--background-primary);
-				color: var(--text-normal);
-				resize: none;
-				font-family: inherit;
-				font-size: 13px;
-				line-height: 1.6;
-				outline: none;
-				transition: border-color 0.2s, box-shadow 0.2s;
-			}
-
-			.chat-input:focus {
-				border-color: var(--interactive-accent);
-				box-shadow: 0 0 0 3px rgba(47, 194, 153, 0.15);
-			}
-
-			.chat-input::placeholder {
-				color: var(--text-muted);
-			}
-
-
-
-			@media (max-width: 720px) {
-				.chat-input-container {
-					padding: 12px;
-				}
-				.chat-input-footer {
-					padding-top: 8px;
-				}
-				.input-bottom-controls {
-					flex-direction: column;
-					align-items: stretch;
-				}
-				.bottom-right-controls {
-					margin-left: 0;
-					justify-content: flex-start;
-				}
-			}
-
-			.attachment-preview {
-				flex: 1;
-				display: flex;
-				gap: 6px;
-				flex-wrap: wrap;
-			}
-
-			.attachment-preview-item {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				padding: 4px 8px;
-				background: var(--background-secondary);
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 4px;
-				font-size: 11px;
-			}
-
-			.send-info {
-				font-size: 11px;
-				color: var(--text-muted);
-			}
-
-			.send-info kbd {
-				padding: 2px 6px;
-				background: var(--background-primary);
-				border: 1px solid var(--background-modifier-border);
-				border-radius: 3px;
-				font-family: var(--font-monospace);
-				font-size: 10px;
-
-	/* RAG Sources Display */
-	.rag-sources-container {
-		margin-top: 12px;
-		padding: 12px;
-		background: var(--background-primary);
-		border: 1px solid var(--background-modifier-border);
-		border-radius: 6px;
-	}
-
-	.rag-sources-header {
-		font-weight: 600;
-		color: var(--text-accent);
-		margin-bottom: 8px;
-		font-size: 12px;
-		display: flex;
-		align-items: center;
-		gap: 6px;
-	}
-
-	.rag-sources-grid {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-	}
-
-	.rag-source-card {
-		padding: 10px;
-		border: 1px solid var(--background-modifier-border);
-		border-radius: 6px;
-		background: var(--background-secondary);
-		transition: all 0.2s ease;
-		cursor: pointer;
-	}
-
-	.rag-source-card:hover {
-		border-color: var(--interactive-accent);
-		background: var(--background-modifier-hover);
-		transform: translateY(-1px);
-		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-	}
-
-	.rag-source-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		margin-bottom: 6px;
-	}
-
-	.rag-source-title {
-		font-weight: 600;
-		font-size: 13px;
-		color: var(--text-normal);
-		flex: 1;
-	}
-
-	.rag-source-similarity {
-		font-size: 11px;
-		font-weight: 600;
-		background: var(--background-primary);
-		padding: 2px 6px;
-		border-radius: 10px;
-		min-width: 40px;
-		text-align: center;
-	}
-
-	.rag-source-path {
-		font-size: 11px;
-		color: var(--text-muted);
-		margin-bottom: 6px;
-		word-break: break-all;
-	}
-
-	.rag-source-content {
-		font-size: 12px;
-		color: var(--text-muted);
-		line-height: 1.4;
-		background: var(--background-primary);
-		padding: 8px;
-		border-radius: 4px;
-		border-left: 2px solid var(--interactive-accent);
-	}
-
-	.rag-source-content:hover {
-		background: var(--background-secondary);
-	}
-			}
-		`;
-		document.head.appendChild(styleEl);
-	}
+// 	private addStyles() {
+// 		const styleEl = document.createElement('style');
+// 		styleEl.textContent = `
+// 			.intelligence-assistant-chat-container {
+// 				display: flex;
+// 				flex-direction: column;
+// 				height: 100%;
+// 				padding: 0;
+// 			}
+// 
+// 			.chat-main-layout {
+// 				display: flex;
+// 				height: 100%;
+// 				gap: 0;
+// 				position: relative;
+// 			}
+// 
+// 			.conversation-list-floating {
+// 				position: absolute;
+// 				left: 0;
+// 				top: 0;
+// 				bottom: 0;
+// 				width: 280px;
+// 				background: var(--background-secondary);
+// 				border-right: 1px solid var(--background-modifier-border);
+// 				box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+// 				z-index: 100;
+// 				display: flex;
+// 				flex-direction: column;
+// 			}
+// 
+// 			.conversation-list-header {
+// 				padding: 10px;
+// 				border-bottom: 1px solid var(--background-modifier-border);
+// 				display: flex;
+// 				justify-content: space-between;
+// 				align-items: center;
+// 			}
+// 
+// 			.conversation-list-header h3 {
+// 				margin: 0;
+// 				font-size: 14px;
+// 				font-weight: 600;
+// 			}
+// 
+// 			.conversation-header-buttons {
+// 				display: flex;
+// 				gap: 4px;
+// 			}
+// 
+// 			.pin-conversation-btn,
+// 			.new-conversation-btn {
+// 				width: 24px;
+// 				height: 24px;
+// 				padding: 0;
+// 				border-radius: 4px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				cursor: pointer;
+// 				font-size: 14px;
+// 				line-height: 1;
+// 			}
+// 
+// 			.pin-conversation-btn:hover,
+// 			.new-conversation-btn:hover {
+// 				background: var(--background-modifier-hover);
+// 			}
+// 
+// 			.conversation-list-content {
+// 				flex: 1;
+// 				overflow-y: auto;
+// 			}
+// 
+// 			.conversation-item {
+// 				padding: 10px;
+// 				border-bottom: 1px solid var(--background-modifier-border);
+// 				cursor: pointer;
+// 				transition: background-color 0.1s;
+// 			}
+// 
+// 			.conversation-item:hover {
+// 				background: var(--background-modifier-hover);
+// 			}
+// 
+// 			.conversation-item.active {
+// 				background: var(--background-modifier-active-hover);
+// 			}
+// 
+// 			.conversation-title {
+// 				font-size: 13px;
+// 				color: var(--text-normal);
+// 				overflow: hidden;
+// 				text-overflow: ellipsis;
+// 				white-space: nowrap;
+// 			}
+// 
+// 			.empty-state {
+// 				padding: 20px;
+// 				text-align: center;
+// 				color: var(--text-muted);
+// 				font-size: 12px;
+// 			}
+// 
+// 			.main-chat-area {
+// 				flex: 1;
+// 				width: 100%;
+// 				display: flex;
+// 				flex-direction: column;
+// 				padding: 10px;
+// 			}
+// 
+// 			.chat-header {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 10px;
+// 				padding: 10px 0;
+// 				border-bottom: 1px solid var(--background-modifier-border);
+// 				margin-bottom: 10px;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.model-selector {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 				flex: 1;
+// 			}
+// 
+// 			.model-selector select {
+// 				flex: 1;
+// 				min-width: 150px;
+// 				padding: 6px 10px;
+// 				border-radius: 4px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				font-weight: 500;
+// 			}
+// 
+// 			.provider-selector {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 			}
+// 
+// 			.provider-selector span {
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.provider-selector select {
+// 				padding: 4px 8px;
+// 				border-radius: 4px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				font-size: 12px;
+// 			}
+// 
+// 			.params-row {
+// 				display: flex;
+// 				gap: 20px;
+// 				padding: 10px 0;
+// 				border-bottom: 1px solid var(--background-modifier-border);
+// 				margin-bottom: 10px;
+// 			}
+// 
+// 			.param-control {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 			}
+// 
+// 			.param-label {
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 				white-space: nowrap;
+// 			}
+// 
+// 			.param-value {
+// 				font-size: 12px;
+// 				color: var(--text-normal);
+// 				min-width: 30px;
+// 				text-align: center;
+// 			}
+// 
+// 			.param-control input[type="range"] {
+// 				width: 120px;
+// 			}
+// 
+// 			.param-control input[type="number"] {
+// 				width: 100px;
+// 				padding: 4px 8px;
+// 				border-radius: 4px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				font-size: 12px;
+// 			}
+// 
+// 			.chat-messages {
+// 				flex: 1;
+// 				overflow-y: auto;
+// 				padding: 12px 16px;
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 12px;
+// 			}
+// 
+// 			.chat-message {
+// 				display: flex;
+// 				width: 100%;
+// 			}
+// 
+// 			.message-user .message-row {
+// 				flex-direction: row-reverse;
+// 			}
+// 
+// 			.message-row {
+// 				display: flex;
+// 				gap: 10px;
+// 				width: 100%;
+// 				max-width: 100%;
+// 			}
+// 
+// 			.message-avatar {
+// 				flex-shrink: 0;
+// 				width: 28px;
+// 				height: 28px;
+// 				border-radius: 50%;
+// 				background: var(--background-modifier-border);
+// 				display: flex;
+// 				align-items: center;
+// 				justify-content: center;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.message-avatar svg {
+// 				width: 16px;
+// 				height: 16px;
+// 			}
+// 
+// 			.message-user .message-avatar {
+// 				background: var(--interactive-accent);
+// 				color: white;
+// 			}
+// 
+// 			.message-assistant .message-avatar {
+// 				background: var(--background-secondary);
+// 				border: 1px solid var(--background-modifier-border);
+// 			}
+// 
+// 			/* tool execution messages */
+// 			.message-tool {
+// 				padding: 12px;
+// 				margin: 12px 0;
+// 				background: var(--background-primary);
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 6px;
+// 			}
+// 
+// 			.tool-execution {
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 8px;
+// 			}
+// 
+// 			.tool-icon {
+// 				font-size: 20px;
+// 			}
+// 
+// 			.tool-name {
+// 				font-weight: 600;
+// 				color: var(--text-accent);
+// 				font-size: 13px;
+// 			}
+// 
+// 			.tool-args {
+// 				font-family: var(--font-monospace);
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 				white-space: pre;
+// 				background: var(--background-secondary);
+// 				padding: 8px;
+// 				border-radius: 4px;
+// 			}
+// 
+// 			.tool-result {
+// 				margin-top: 8px;
+// 				padding: 8px;
+// 				border-radius: 4px;
+// 			}
+// 
+// 			.tool-success {
+// 				background: rgba(0, 255, 0, 0.1);
+// 				border-left: 3px solid var(--text-success);
+// 			}
+// 
+// 			.tool-error {
+// 				background: rgba(255, 0, 0, 0.1);
+// 				border-left: 3px solid var(--text-error);
+// 			}
+// 
+// 			.tool-result pre {
+// 				font-family: var(--font-monospace);
+// 				font-size: 11px;
+// 				margin: 4px 0 0 0;
+// 				white-space: pre-wrap;
+// 			}
+// 
+// 			.message-body {
+// 				flex: 1;
+// 				min-width: 0;
+// 			}
+// 
+// 			.message-body,
+// 			.ia-chat-message__body,
+// 			.message-content,
+// 			.ia-chat-message__content {
+// 				user-select: text;
+// 			}
+// 
+// 			.message-actions,
+// 			.message-actions *,
+// 			.ia-chat-message__actions,
+// 			.ia-chat-message__actions * {
+// 				user-select: none;
+// 			}
+// 
+// 			.message-meta {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				flex-wrap: wrap;
+// 				margin-bottom: 4px;
+// 			}
+// 
+// 			.message-name {
+// 				font-weight: 600;
+// 				font-size: 12px;
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.ia-chat-message__badges {
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 4px;
+// 			}
+// 
+// 			.ia-chat-message__badge {
+// 				display: inline-flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 				padding: 2px 8px;
+// 				border-radius: 999px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				font-size: 10px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.ia-chat-message__badge-label {
+// 				font-weight: 600;
+// 				text-transform: uppercase;
+// 				letter-spacing: 0.02em;
+// 			}
+// 
+// 			.ia-chat-message__badge-value {
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.message-timestamp {
+// 				font-size: 10px;
+// 				color: var(--text-faint);
+// 			}
+// 
+// 			.message-actions {
+// 				display: flex;
+// 				gap: 2px;
+// 				margin-top: 4px;
+// 				opacity: 0;
+// 				transition: opacity 0.15s;
+// 			}
+// 
+// 			.message-body:hover .message-actions {
+// 				opacity: 1;
+// 			}
+// 
+// 			.msg-action-btn {
+// 				padding: 3px 6px;
+// 				border: none;
+// 				background: transparent;
+// 				color: var(--text-muted);
+// 				cursor: pointer;
+// 				border-radius: 3px;
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 2px;
+// 				font-size: 11px;
+// 				transition: all 0.15s;
+// 			}
+// 
+// 			.msg-action-btn:hover {
+// 				background: var(--background-modifier-hover);
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.msg-action-btn svg {
+// 				width: 14px;
+// 				height: 14px;
+// 			}
+// 
+// 			.message-content {
+// 				line-height: 1.5;
+// 				word-wrap: break-word;
+// 				font-size: 13px;
+// 				white-space: normal;
+// 			}
+// 
+// 			.message-content p {
+// 				margin: 0.2em 0;
+// 			}
+// 
+// 			.message-content p:first-child {
+// 				margin-top: 0;
+// 			}
+// 
+// 			.message-content p:last-child {
+// 				margin-bottom: 0;
+// 			}
+// 
+// 			.message-content p:empty {
+// 				display: none;
+// 			}
+// 
+// 			.message-content code {
+// 				background: var(--background-primary);
+// 				padding: 2px 6px;
+// 				border-radius: 4px;
+// 				font-family: var(--font-monospace);
+// 				font-size: 0.9em;
+// 			}
+// 
+// 			.message-content pre {
+// 				background: var(--background-primary);
+// 				padding: 12px;
+// 				border-radius: 6px;
+// 				overflow-x: auto;
+// 				margin: 8px 0;
+// 			}
+// 
+// 			.message-content pre code {
+// 				background: none;
+// 				padding: 0;
+// 			}
+// 
+// 			.message-content ul, .message-content ol {
+// 				margin: 0.5em 0;
+// 				padding-left: 1.5em;
+// 			}
+// 
+// 			.message-content blockquote {
+// 				border-left: 3px solid var(--background-modifier-border);
+// 				padding-left: 12px;
+// 				margin: 8px 0;
+// 				opacity: 0.8;
+// 			}
+// 
+// 			.message-attachments {
+// 				margin-top: 6px;
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 4px;
+// 			}
+// 
+// 			.attachment-item {
+// 				padding: 6px;
+// 				background: var(--background-modifier-border);
+// 				border-radius: 4px;
+// 				font-size: 0.85em;
+// 			}
+// 
+// 			.chat-input-container {
+// 				margin-top: 12px;
+// 				padding: 12px;
+// 				background: var(--background-secondary);
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 10px;
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 10px;
+// 			}
+// 
+// 			.chat-input-header {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 10px;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.chat-top-controls,
+// 			.chat-action-row,
+// 			.chat-model-row,
+// 			.chat-token-row {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 10px;
+// 				flex-wrap: wrap;
+// 				margin-bottom: 8px;
+// 			}
+// 
+// 			.chat-action-row {
+// 				display: flex;
+// 				justify-content: space-between;
+// 				align-items: center;
+// 				gap: 12px;
+// 				margin: 6px 0 12px 0;
+// 			}
+// 
+// 			.chat-breadcrumb {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-breadcrumb-link {
+// 				color: var(--text-accent);
+// 				font-weight: 600;
+// 				cursor: pointer;
+// 				background: transparent;
+// 				border: none;
+// 				padding: 0;
+// 			}
+// 
+// 			.chat-breadcrumb-link:hover {
+// 				text-decoration: underline;
+// 			}
+// 
+// 			.chat-breadcrumb-current {
+// 				font-weight: 600;
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.chat-action-buttons {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 			}
+// 
+// 			.chat-action-link {
+// 				color: var(--text-dark);
+// 				font-weight: 600;
+// 				cursor: pointer;
+// 			}
+// 
+// 			.chat-action-link:hover {
+// 				color: var(--text-accent);
+// 				text-decoration: underline;
+// 			}
+// 
+// 			.chat-action-sep {
+// 				color: var(--text-muted);
+// 				font-size: 12px;
+// 			}
+// 
+// 			.chat-model-row {
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 8px;
+// 				padding: 10px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 10px;
+// 				background: var(--background-secondary);
+// 			}
+// 
+// 			.chat-model-controls {
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 12px;
+// 				align-items: center;
+// 			}
+// 
+// 			.chat-model-select {
+// 				display: flex;
+// 				flex: 1;
+// 				align-items: center;
+// 				gap: 8px;
+// 			}
+// 
+// 			.chat-model-select .chat-label {
+// 				font-weight: 600;
+// 			}
+// 
+// 			.model-select {
+// 				flex: 1;
+// 				min-width: 160px;
+// 				padding: 6px 10px;
+// 				border-radius: 8px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 			}
+// 
+// 			.chat-param-group {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 			}
+// 
+// 			.chat-agent-summary {
+// 				display: none;
+// 				flex-direction: column;
+// 				gap: 6px;
+// 				padding-top: 6px;
+// 				border-top: 1px solid var(--background-modifier-border);
+// 			}
+// 
+// 			.chat-agent-summary-title {
+// 				font-size: 12px;
+// 				font-weight: 600;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-agent-summary-details {
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 6px;
+// 				align-items: center;
+// 			}
+// 
+// 			.chat-agent-summary-text {
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-agent-chip {
+// 				display: inline-flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 				padding: 4px 10px;
+// 				border-radius: 999px;
+// 				border: 1px dashed var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-agent-chip-label {
+// 				font-weight: 600;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-agent-chip-value {
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.chat-label {
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 				font-weight: 600;
+// 			}
+// 
+// 			.chat-slider {
+// 				width: 120px;
+// 			}
+// 
+// 			.chat-param-value {
+// 				font-weight: 600;
+// 				color: var(--text-accent);
+// 			}
+// 
+// 			.chat-number-input {
+// 				width: 90px;
+// 				padding: 4px 8px;
+// 				border-radius: 6px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 			}
+// 
+// 			.chat-token-row {
+// 				justify-content: space-between;
+// 			}
+// 
+// 			.chat-token-chip {
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 				padding: 4px 10px;
+// 				border-radius: 999px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 			}
+// 
+// 			.chat-select-group {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 			}
+// 
+// 			.chat-header-actions {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				flex-wrap: wrap;
+// 				margin-left: auto;
+// 			}
+// 
+// 			.header-action-btn {
+// 				display: inline-flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 				padding: 4px 10px;
+// 				border: 1px solid transparent;
+// 				border-radius: 999px;
+// 				background: var(--background-primary);
+// 				font-size: 12px;
+// 				color: var(--text-muted);
+// 				cursor: pointer;
+// 				transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
+// 			}
+// 
+// 			.header-action-btn:hover:not(.is-disabled) {
+// 				background: var(--background-modifier-hover);
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.header-action-btn.is-active {
+// 				border-color: var(--text-accent);
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.header-action-btn.is-disabled {
+// 				opacity: 0.5;
+// 				cursor: not-allowed;
+// 			}
+// 
+// 			.header-action-btn.is-link {
+// 				border-style: dashed;
+// 				background: transparent;
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.header-action-icon {
+// 				font-size: 12px;
+// 				line-height: 1;
+// 			}
+// 
+// 			.header-action-status {
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.chat-input-editor {
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 8px;
+// 				background: var(--background-primary);
+// 				padding: 4px;
+// 			}
+// 
+// 			.chat-input-footer {
+// 				padding-top: 4px;
+// 			}
+// 
+// 			/* bottom controls - 3 sections layout */
+// 			.input-bottom-controls {
+// 				display: flex;
+// 				align-items: center;
+// 				justify-content: space-between;
+// 				gap: 10px;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.bottom-left-controls {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				flex: 1;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.bottom-middle-controls {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 				flex: 1;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.attachment-preview {
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 6px;
+// 				align-items: center;
+// 			}
+// 
+// 			.bottom-right-controls {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 				margin-left: auto;
+// 			}
+// 
+// 			.mode-selector,
+// 			.prompt-selector,
+// 			.agent-selector {
+// 				padding: 5px 10px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 999px;
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				font-size: 11px;
+// 				cursor: pointer;
+// 				min-width: 100px;
+// 				transition: border-color 0.2s ease;
+// 			}
+// 
+// 			.mode-selector:focus,
+// 			.prompt-selector:focus,
+// 			.agent-selector:focus {
+// 				outline: none;
+// 				border-color: var(--interactive-accent);
+// 				box-shadow: 0 0 0 2px rgba(47, 194, 153, 0.15);
+// 			}
+// 
+// 
+// 
+// 			.checkbox-container {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 			}
+// 
+// 			.checkbox-container input[type="checkbox"] {
+// 				cursor: pointer;
+// 				margin: 0;
+// 			}
+// 
+// 			.checkbox-container label {
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 				user-select: none;
+// 				cursor: pointer;
+// 			}
+// 
+// 			/* toggle button styles */
+// 			.toggle-btn {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 				padding: 4px 10px;
+// 				border-radius: 12px;
+// 				border: 1px solid var(--background-modifier-border);
+// 				background: var(--background-primary);
+// 				color: var(--text-muted);
+// 				cursor: pointer;
+// 				font-size: 11px;
+// 				transition: all 0.2s ease;
+// 				outline: none;
+// 			}
+// 
+// 			.toggle-btn:hover {
+// 				background: var(--background-modifier-hover);
+// 				border-color: var(--interactive-accent);
+// 			}
+// 
+// 			.toggle-btn.active {
+// 				background: var(--interactive-accent);
+// 				color: white;
+// 				border-color: var(--interactive-accent);
+// 				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+// 			}
+// 
+// 			.toggle-btn .toggle-icon {
+// 				font-size: 14px;
+// 				line-height: 1;
+// 			}
+// 
+// 			.toggle-btn.active .toggle-icon {
+// 				filter: brightness(1.1);
+// 			}
+// 
+// 			.toggle-btn .toggle-label {
+// 				font-weight: 500;
+// 			}
+// 
+// 			.tools-label {
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			/* workflow execution styles */
+// 			.message-workflow {
+// 				padding: 12px;
+// 				background: var(--background-secondary);
+// 				border-left: 4px solid var(--interactive-accent);
+// 				border-radius: 4px;
+// 				margin-bottom: 12px;
+// 			}
+// 
+// 			.workflow-execution {
+// 				font-size: 13px;
+// 			}
+// 
+// 			.workflow-header {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 8px;
+// 				margin-bottom: 12px;
+// 				font-weight: 600;
+// 			}
+// 
+// 			.workflow-icon {
+// 				font-size: 20px;
+// 			}
+// 
+// 			.workflow-status {
+// 				padding: 6px 12px;
+// 				background: var(--background-primary);
+// 				border-radius: 4px;
+// 				font-size: 12px;
+// 				margin-bottom: 12px;
+// 			}
+// 
+// 			.workflow-log {
+// 				max-height: 400px;
+// 				overflow-y: auto;
+// 			}
+// 
+// 			.log-entry {
+// 				font-size: 11px;
+// 				padding: 4px 0;
+// 				border-bottom: 1px solid var(--background-modifier-border);
+// 			}
+// 
+// 			.log-action {
+// 				color: var(--text-normal);
+// 			}
+// 
+// 			.log-output {
+// 				color: var(--text-muted);
+// 				margin-left: 16px;
+// 				font-family: monospace;
+// 				font-size: 10px;
+// 			}
+// 
+// 			.log-error {
+// 				color: var(--text-error);
+// 				margin-left: 16px;
+// 			}
+// 
+// 			/* part 1: reference area */
+// 			.input-reference-area {
+// 				flex: 1;
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 4px;
+// 				min-height: 28px;
+// 				padding: 4px 6px;
+// 				background: var(--background-primary);
+// 				border: 1px dashed var(--background-modifier-border);
+// 				border-radius: 8px;
+// 				transition: border-color 0.2s ease;
+// 			}
+// 
+// 			.input-reference-area:empty {
+// 				border-style: dashed;
+// 			}
+// 
+// 			.reference-list {
+// 				display: flex;
+// 				flex-direction: column;
+// 				gap: 4px;
+// 			}
+// 
+// 			.reference-item {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				padding: 4px 8px;
+// 				background: var(--background-secondary);
+// 				border-radius: 4px;
+// 				font-size: 12px;
+// 			}
+// 
+// 			.reference-icon {
+// 				flex-shrink: 0;
+// 			}
+// 
+// 			.reference-path {
+// 				flex: 1;
+// 				overflow: hidden;
+// 				text-overflow: ellipsis;
+// 				white-space: nowrap;
+// 			}
+// 
+// 			.reference-remove-btn {
+// 				padding: 0 4px;
+// 				border: none;
+// 				background: transparent;
+// 				color: var(--text-error);
+// 				cursor: pointer;
+// 				font-size: 16px;
+// 				line-height: 1;
+// 			}
+// 
+// 			.reference-remove-btn:hover {
+// 				background: var(--background-modifier-hover);
+// 				border-radius: 2px;
+// 			}
+// 
+// 
+// 			/* message references (displayed in sent messages) */
+// 			.message-references {
+// 				display: flex;
+// 				flex-wrap: wrap;
+// 				gap: 6px;
+// 				margin-top: 8px;
+// 			}
+// 
+// 			.reference-badge {
+// 				display: inline-flex;
+// 				align-items: center;
+// 				gap: 4px;
+// 				padding: 3px 8px;
+// 				background: var(--background-primary);
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 12px;
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 				transition: all 0.2s;
+// 			}
+// 
+// 			.reference-badge:hover {
+// 				background: var(--background-modifier-hover);
+// 				color: var(--text-normal);
+// 				border-color: var(--interactive-accent);
+// 			}
+// 
+// 			/* part 2: text input */
+// 			.chat-input {
+// 				width: 100%;
+// 				min-height: 72px;
+// 				max-height: 160px;
+// 				padding: 14px 16px;
+// 				border: 1px solid transparent;
+// 				border-radius: 12px;
+// 				background: var(--background-primary);
+// 				color: var(--text-normal);
+// 				resize: none;
+// 				font-family: inherit;
+// 				font-size: 13px;
+// 				line-height: 1.6;
+// 				outline: none;
+// 				transition: border-color 0.2s, box-shadow 0.2s;
+// 			}
+// 
+// 			.chat-input:focus {
+// 				border-color: var(--interactive-accent);
+// 				box-shadow: 0 0 0 3px rgba(47, 194, 153, 0.15);
+// 			}
+// 
+// 			.chat-input::placeholder {
+// 				color: var(--text-muted);
+// 			}
+// 
+// 
+// 
+// 			@media (max-width: 720px) {
+// 				.chat-input-container {
+// 					padding: 12px;
+// 				}
+// 				.chat-input-footer {
+// 					padding-top: 8px;
+// 				}
+// 				.input-bottom-controls {
+// 					flex-direction: column;
+// 					align-items: stretch;
+// 				}
+// 				.bottom-right-controls {
+// 					margin-left: 0;
+// 					justify-content: flex-start;
+// 				}
+// 			}
+// 
+// 			.attachment-preview {
+// 				flex: 1;
+// 				display: flex;
+// 				gap: 6px;
+// 				flex-wrap: wrap;
+// 			}
+// 
+// 			.attachment-preview-item {
+// 				display: flex;
+// 				align-items: center;
+// 				gap: 6px;
+// 				padding: 4px 8px;
+// 				background: var(--background-secondary);
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 4px;
+// 				font-size: 11px;
+// 			}
+// 
+// 			.send-info {
+// 				font-size: 11px;
+// 				color: var(--text-muted);
+// 			}
+// 
+// 			.send-info kbd {
+// 				padding: 2px 6px;
+// 				background: var(--background-primary);
+// 				border: 1px solid var(--background-modifier-border);
+// 				border-radius: 3px;
+// 				font-family: var(--font-monospace);
+// 				font-size: 10px;
+// 
+// 	/* rag sources display */
+// 	.rag-sources-container {
+// 		margin-top: 12px;
+// 		padding: 12px;
+// 		background: var(--background-primary);
+// 		border: 1px solid var(--background-modifier-border);
+// 		border-radius: 6px;
+// 	}
+// 
+// 	.rag-sources-header {
+// 		font-weight: 600;
+// 		color: var(--text-accent);
+// 		margin-bottom: 8px;
+// 		font-size: 12px;
+// 		display: flex;
+// 		align-items: center;
+// 		gap: 6px;
+// 	}
+// 
+// 	.rag-sources-grid {
+// 		display: flex;
+// 		flex-direction: column;
+// 		gap: 8px;
+// 	}
+// 
+// 	.rag-source-card {
+// 		padding: 10px;
+// 		border: 1px solid var(--background-modifier-border);
+// 		border-radius: 6px;
+// 		background: var(--background-secondary);
+// 		transition: all 0.2s ease;
+// 		cursor: pointer;
+// 	}
+// 
+// 	.rag-source-card:hover {
+// 		border-color: var(--interactive-accent);
+// 		background: var(--background-modifier-hover);
+// 		transform: translatey(-1px);
+// 		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+// 	}
+// 
+// 	.rag-source-header {
+// 		display: flex;
+// 		justify-content: space-between;
+// 		align-items: flex-start;
+// 		margin-bottom: 6px;
+// 	}
+// 
+// 	.rag-source-title {
+// 		font-weight: 600;
+// 		font-size: 13px;
+// 		color: var(--text-normal);
+// 		flex: 1;
+// 	}
+// 
+// 	.rag-source-similarity {
+// 		font-size: 11px;
+// 		font-weight: 600;
+// 		background: var(--background-primary);
+// 		padding: 2px 6px;
+// 		border-radius: 10px;
+// 		min-width: 40px;
+// 		text-align: center;
+// 	}
+// 
+// 	.rag-source-path {
+// 		font-size: 11px;
+// 		color: var(--text-muted);
+// 		margin-bottom: 6px;
+// 		word-break: break-all;
+// 	}
+// 
+// 	.rag-source-content {
+// 		font-size: 12px;
+// 		color: var(--text-muted);
+// 		line-height: 1.4;
+// 		background: var(--background-primary);
+// 		padding: 8px;
+// 		border-radius: 4px;
+// 		border-left: 2px solid var(--interactive-accent);
+// 	}
+// 
+// 	.rag-source-content:hover {
+// 		background: var(--background-secondary);
+// 	}
+// 			}
+// 		`;
+// 		document.head.appendChild(styleEl);
+// 	}
 
 	async initializeMCPServers() {
 		const { initializeMCPServers } = await import('@/application/services/mcp-service');
-		await initializeMCPServers(
+		void initializeMCPServers(
 			this.plugin.settings.mcpServers,
 			this.toolManager,
-			async () => await this.plugin.saveSettings()
+			async () => { await this.plugin.saveSettings(); }
 		);
 	}
 
 	async onClose() {
 		// Cleanup controllers
-		this.messageController?.cleanup();
-		this.agentController?.cleanup();
-		this.inputController?.cleanup();
-		this.chatController?.cleanup();
+		void this.messageController?.cleanup();
+		void this.agentController?.cleanup();
+		void this.inputController?.cleanup();
+		void this.chatController?.cleanup();
+		// Explicitly ignore returned Promise from save to avoid floating promises on shutdown
 
 		// Cleanup RAG
 		if (this.ragManager) {
 			await this.ragManager.destroy();
 		}
+		// Persist any pending settings safely without awaiting here
+		void this.plugin.saveSettings();
 
 		// Shared tool manager stays active for background MCP access
+	}
 }
-}
-
+	
 // Modal for text input
 class TextInputModal extends Modal {
 	result: string;
@@ -4241,7 +4297,7 @@ class TextInputModal extends Modal {
 	defaultValue: string;
 	title: string;
 
-	constructor(app: any, title: string, placeholder: string, defaultValue: string, onSubmit: (result: string) => void) {
+	constructor(app: App, title: string, placeholder: string, defaultValue: string, onSubmit: (result: string) => void) {
 		super(app);
 		this.title = title;
 		this.placeholder = placeholder;
@@ -4308,14 +4364,14 @@ class SearchableReferenceModal extends Modal {
 		
 		// Get all files and folders
 		const allFiles = app.vault.getAllLoadedFiles();
-		this.allItems = allFiles.filter(f => f instanceof TFile || f instanceof TFolder) as (TFile | TFolder)[];
+		this.allItems = allFiles.filter(f => f instanceof TFile || f instanceof TFolder);
 	}
 
 	onOpen() {
 		const { contentEl } = this;
 		contentEl.addClass('searchable-reference-modal');
 
-		contentEl.createEl('h2', { text: 'Add References' });
+		contentEl.createEl('h2', { text: 'Add references' });
 
 		// Search input
 		this.searchInput = contentEl.createEl('input', {
@@ -4359,19 +4415,19 @@ class SearchableReferenceModal extends Modal {
 		buttonContainer.setCssProps({ 'justify-content': 'space-between' });
 		buttonContainer.setCssProps({ 'margin-top': '10px' });
 		
-		const selectAllButton = buttonContainer.createEl('button', { text: 'Select All' });
+		const selectAllButton = buttonContainer.createEl('button', { text: 'Select all' });
 		selectAllButton.addEventListener('click', () => {
 			this.selectedItems = [...this.allItems];
 			this.updateDisplay();
 		});
 		
-		const selectNoneButton = buttonContainer.createEl('button', { text: 'Select None' });
+		const selectNoneButton = buttonContainer.createEl('button', { text: 'Select none' });
 		selectNoneButton.addEventListener('click', () => {
 			this.selectedItems = [];
 			this.updateDisplay();
 		});
 		
-		const addButton = buttonContainer.createEl('button', { text: 'Add Selected' });
+		const addButton = buttonContainer.createEl('button', { text: 'Add selected' });
 		addButton.addClass('mod-cta');
 		addButton.addEventListener('click', () => {
 			this.close();
@@ -4457,14 +4513,14 @@ class SearchableImageModal extends Modal {
 		this.allImageFiles = files.filter(f =>
 			f.extension === 'png' || f.extension === 'jpg' ||
 			f.extension === 'jpeg' || f.extension === 'gif' || f.extension === 'webp'
-		) as TFile[];
+		);
 	}
 
 	onOpen() {
 		const { contentEl } = this;
 		contentEl.addClass('searchable-image-modal');
 
-		contentEl.createEl('h2', { text: 'Attach Images' });
+		contentEl.createEl('h2', { text: 'Attach images' });
 
 		// Search input
 		this.searchInput = contentEl.createEl('input', {
@@ -4508,19 +4564,19 @@ class SearchableImageModal extends Modal {
 		buttonContainer.setCssProps({ 'justify-content': 'space-between' });
 		buttonContainer.setCssProps({ 'margin-top': '10px' });
 		
-		const selectAllButton = buttonContainer.createEl('button', { text: 'Select All' });
+		const selectAllButton = buttonContainer.createEl('button', { text: 'Select all' });
 		selectAllButton.addEventListener('click', () => {
 			this.selectedFiles = [...this.allImageFiles];
 			this.updateDisplay();
 		});
 		
-		const selectNoneButton = buttonContainer.createEl('button', { text: 'Select None' });
+		const selectNoneButton = buttonContainer.createEl('button', { text: 'Select none' });
 		selectNoneButton.addEventListener('click', () => {
 			this.selectedFiles = [];
 			this.updateDisplay();
 		});
 		
-		const addButton = buttonContainer.createEl('button', { text: 'Add Selected' });
+		const addButton = buttonContainer.createEl('button', { text: 'Add selected' });
 		addButton.addClass('mod-cta');
 		addButton.addEventListener('click', () => {
 			this.close();
@@ -4604,14 +4660,14 @@ class SingleFileSelectionModal extends Modal {
 		
 		// Get all markdown files
 		const files = app.vault.getFiles();
-		this.allFiles = files.filter(f => f.extension === "md") as TFile[];
+		this.allFiles = files.filter(f => f.extension === "md");
 	}
 
 	onOpen() {
 		const { contentEl } = this;
 		contentEl.addClass("single-file-selection-modal");
 
-		contentEl.createEl("h2", { text: "Insert to Note" });
+		contentEl.createEl("h2", { text: "Insert to note" });
 
 		// Search input
 		this.searchInput = contentEl.createEl("input", {
@@ -4655,7 +4711,7 @@ class SingleFileSelectionModal extends Modal {
 		buttonContainer.setCssProps({ 'justify-content': "flex-end" });
 		buttonContainer.setCssProps({ 'margin-top': "10px" });
 		
-		const insertButton = buttonContainer.createEl("button", { text: "Insert to Selected Note" });
+		const insertButton = buttonContainer.createEl("button", { text: "Insert to selected note" });
 		insertButton.addClass("mod-cta");
 		insertButton.addEventListener("click", () => {
 			this.close();
@@ -4663,7 +4719,7 @@ class SingleFileSelectionModal extends Modal {
 		});
 		
 		// Add "Create New Note" button
-		const newNoteButton = buttonContainer.createEl("button", { text: "Create New Note" });
+		const newNoteButton = buttonContainer.createEl("button", { text: "Create new note" });
 		newNoteButton.setCssProps({ 'margin-right': "10px" });
 		newNoteButton.addEventListener("click", () => {
 			this.close();

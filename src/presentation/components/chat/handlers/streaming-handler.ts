@@ -112,7 +112,7 @@ export async function handleStreamingChat(
 							reasoningContainer = messageEl.querySelector('.message-body')?.createDiv('reasoning-container') || null;
 							if (reasoningContainer) {
 								const reasoningHeader = reasoningContainer.createDiv('reasoning-header');
-								reasoningHeader.setText('💭 Reasoning Process');
+								reasoningHeader.setText('💭 reasoning process');
 								reasoningHeader.addClass('ia-clickable');
 
 								const reasoningContent = reasoningContainer.createDiv('reasoning-content');
@@ -124,10 +124,10 @@ export async function handleStreamingChat(
 									isExpanded = !isExpanded;
 									if (isExpanded) {
 										reasoningContent.removeClass('ia-hidden');
-										reasoningHeader.setText('💭 Reasoning Process');
+										reasoningHeader.setText('💭 reasoning process');
 									} else {
 										reasoningContent.addClass('ia-hidden');
-										reasoningHeader.setText('💭 Reasoning Process (click to expand)');
+										reasoningHeader.setText('💭 reasoning process (click to expand)');
 									}
 								});
 							}
@@ -169,7 +169,7 @@ export async function handleStreamingChat(
 							const cursor = contentEl.createEl('span', { cls: 'streaming-cursor' });
 							cursor.addClass('ia-blink-animation');
 							cursor.setText('▊');
-						} catch (error) {
+						} catch (_error) {
 							contentEl.setText(fullContent);
 						}
 
@@ -190,9 +190,9 @@ export async function handleStreamingChat(
 				}
 			}
 		);
-	} catch (error) {
-		streamError = error as Error;
-		throw error;
+	} catch (_error) {
+		streamError = _error as Error;
+		throw _error;
 	} finally {
 		// Hide stop button, show send hint
 		if (options.stopBtn) options.stopBtn.addClass('ia-hidden');
@@ -237,7 +237,7 @@ type StreamingStatusState = 'streaming' | 'complete' | 'error';
 
 function getOptionalElement(root: HTMLElement, selectors: string[]): HTMLElement | null {
 	for (const selector of selectors) {
-		const el = root.querySelector(selector) as HTMLElement | null;
+		const el = root.querySelector(selector);
 		if (el) {
 			return el;
 		}
@@ -268,7 +268,7 @@ function setStreamingStatus(el: HTMLElement | null, state: StreamingStatusState,
 	if (state === 'complete') {
 		label = 'Completed';
 	} else if (state === 'error') {
-		label = 'Error';
+		label = 'error';
 	}
 
 	el.setText(details ? `${label} · ${details}` : label);

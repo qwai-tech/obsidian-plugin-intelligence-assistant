@@ -11,7 +11,16 @@ import { DEFAULT_AGENT_ID } from '@/constants';
 export class AgentController extends BaseController {
 	private currentAgentId: string | null = null;
 
-	async initialize(): Promise<void> {
+	// Getters for protected properties
+	protected get plugin() {
+		return this._plugin;
+	}
+
+	protected get app() {
+		return this._app;
+	}
+
+	initialize(): Promise<void> {
 		// Load saved agent selection
 		this.currentAgentId = this.plugin.settings.activeAgentId;
 
@@ -19,6 +28,7 @@ export class AgentController extends BaseController {
 		if (!this.currentAgentId || !this.getAgent(this.currentAgentId)) {
 			this.currentAgentId = this.ensureDefaultAgentSelection();
 		}
+	  return Promise.resolve();
 	}
 
 	cleanup(): void {

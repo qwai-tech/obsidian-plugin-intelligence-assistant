@@ -1,14 +1,26 @@
 // Message entity as defined in the architecture
 export class Message {
-  constructor(
-    public readonly id: string,
-    public readonly content: string,
-    public readonly role: 'user' | 'assistant' | 'system',
-    public readonly timestamp: Date,
-    public readonly metadata?: Record<string, any>
-  ) {}
+  public readonly id: string;
+  public readonly content: string;
+  public readonly role: 'user' | 'assistant' | 'system';
+  public readonly timestamp: Date;
+  public readonly metadata?: Record<string, unknown>;
 
-  static create(content: string, role: string, metadata?: Record<string, any>): Message {
+  constructor(
+    id: string,
+    content: string,
+    role: 'user' | 'assistant' | 'system',
+    timestamp: Date,
+    metadata?: Record<string, unknown>
+  ) {
+    this.id = id;
+    this.content = content;
+    this.role = role;
+    this.timestamp = timestamp;
+    this.metadata = metadata;
+  }
+
+  static create(content: string, role: string, metadata?: Record<string, unknown>): Message {
     // Validate role
     if (!['user', 'assistant', 'system'].includes(role)) {
       throw new Error(`Invalid role: ${role}`);

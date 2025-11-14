@@ -99,7 +99,7 @@ export class WorkflowCanvas {
 	private executionStates = new Map<string, NodeExecutionState>();
 
 	// Execution logs with input/output data
-	private executionLogs = new Map<string, { input?: any; output?: any }>();
+	private executionLogs = new Map<string, { input?: unknown; output?: unknown }>();
 
 	// Rendering
 	private renderCache: RenderCache = {
@@ -123,15 +123,15 @@ export class WorkflowCanvas {
 	private nodeOffset = { x: 0, y: 0 };
 
 	// Cached event handlers to properly remove them
-	private mouseDownHandler: (e: MouseEvent) => void;
-	private mouseMoveHandler: (e: MouseEvent) => void;
-	private mouseUpHandler: (e: MouseEvent) => void;
-	private wheelHandler: (e: WheelEvent) => void;
-	private doubleClickHandler: (e: MouseEvent) => void;
-	private contextMenuHandler: (e: MouseEvent) => void;
-	private dragOverHandler: (e: DragEvent) => void;
-	private dropHandler: (e: DragEvent) => void;
-	private keyDownHandler: (e: KeyboardEvent) => void;
+	private mouseDownHandler: (_event: MouseEvent) => void;
+	private mouseMoveHandler: (_event: MouseEvent) => void;
+	private mouseUpHandler: (_event: MouseEvent) => void;
+	private wheelHandler: (_event: WheelEvent) => void;
+	private doubleClickHandler: (_event: MouseEvent) => void;
+	private contextMenuHandler: (_event: MouseEvent) => void;
+	private dragOverHandler: (_event: DragEvent) => void;
+	private dropHandler: (_event: DragEvent) => void;
+	private keyDownHandler: (_event: KeyboardEvent) => void;
 	private resizeHandler: () => void;
 
 	// ResizeObserver to handle container size changes
@@ -184,15 +184,15 @@ export class WorkflowCanvas {
 	 * Initialize event handlers to maintain consistent function references
 	 */
 	private initializeEventHandlers(): void {
-		this.mouseDownHandler = this.onMouseDown.bind(this);
-		this.mouseMoveHandler = this.onMouseMove.bind(this);
-		this.mouseUpHandler = this.onMouseUp.bind(this);
-		this.wheelHandler = this.onWheel.bind(this);
-		this.doubleClickHandler = this.onDoubleClick.bind(this);
-		this.contextMenuHandler = this.onContextMenu.bind(this);
-		this.dragOverHandler = this.onDragOver.bind(this);
-		this.dropHandler = this.onDrop.bind(this);
-		this.keyDownHandler = this.onKeyDown.bind(this);
+		this.mouseDownHandler = this.onMouseDown.bind(this) as (_event: MouseEvent) => void;
+		this.mouseMoveHandler = this.onMouseMove.bind(this) as (_event: MouseEvent) => void;
+		this.mouseUpHandler = this.onMouseUp.bind(this) as (_event: MouseEvent) => void;
+		this.wheelHandler = this.onWheel.bind(this) as (_event: WheelEvent) => void;
+		this.doubleClickHandler = this.onDoubleClick.bind(this) as (_event: MouseEvent) => void;
+		this.contextMenuHandler = this.onContextMenu.bind(this) as (_event: MouseEvent) => void;
+		this.dragOverHandler = this.onDragOver.bind(this) as (_event: DragEvent) => void;
+		this.dropHandler = this.onDrop.bind(this) as (_event: DragEvent) => void;
+		this.keyDownHandler = this.onKeyDown.bind(this) as (_event: KeyboardEvent) => void;
 	}
 	
 	/**
@@ -205,10 +205,10 @@ export class WorkflowCanvas {
 			const rect = this.canvas.parentElement.getBoundingClientRect();
 			const dpr = window.devicePixelRatio || 1;
 
-			this.canvas.width = rect.width * dpr;
-			this.canvas.height = rect.height * dpr;
-			this.canvas.setCssProps({ 'width': `${rect.width}px` });
-			this.canvas.setCssProps({ 'height': `${rect.height}px` });
+		this.canvas.width = rect.width * dpr;
+		this.canvas.height = rect.height * dpr;
+		this.canvas.setCssProps({ width: `${rect.width}px` });
+		this.canvas.setCssProps({ height: `${rect.height}px` });
 
 			// Reset context transform after resize
 			this.ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -278,8 +278,9 @@ export class WorkflowCanvas {
 					this.render();
 					this.lastRenderTime = time;
 					this.needsFullRedraw = false;
-				} catch (error) {
-					ErrorHandler.logError(ErrorHandler.fromError(error));
+				} catch (error: unknown) {
+					const normalizedError = error instanceof Error ? error : new Error(String(error));
+					ErrorHandler.logError(ErrorHandler.fromError(normalizedError));
 				}
 			}
 			this.animationFrame = requestAnimationFrame(render);
@@ -408,15 +409,15 @@ export class WorkflowCanvas {
 				this.ctx.fillRect(
 					-this.state.offset.x / this.state.scale,
 					-this.state.offset.y / this.state.scale,
-					width / this.state.scale,
-					height / this.state.scale
+					_width / this.state.scale,
+					_height / this.state.scale
 				);
 				return;
 			}
 		}
 		
 		// Create new grid pattern
-		this.drawGrid(width, height);
+		this.drawGrid(_width, _height);
 		
 		// Cache for future use
 		this.renderCache.grid = {
@@ -465,7 +466,8 @@ export class WorkflowCanvas {
 		const nodeDef = this.nodeRegistry.get(node.type);
 		if (!nodeDef) return;
 		
-		const cacheKey = `${node.x},${node.y},${node.config},${this.state.selectedNodeId === node.id}`;
+		const configKey = this.stringifyValue(node.config);
+		const cacheKey = `${node.x},${node.y},${configKey},${String(this.state.selectedNodeId === node.id)}`;
 		const cachedNode = this.renderCache.nodes.get(node.id);
 		
 		// Check if we can reuse cached rendering
@@ -843,7 +845,7 @@ export class WorkflowCanvas {
 			this.ctx.fillStyle = '#ef4444';
 			this.ctx.textAlign = 'right';
 			this.ctx.textBaseline = 'top';
-			this.ctx.fillText('Error', badgeX - 4, badgeY + 4);
+			this.ctx.fillText('error', badgeX - 4, badgeY + 4);
 		} else if (state.status === 'pending') {
 			// Draw pending badge (yellow clock)
 			this.ctx.fillStyle = '#fbbf24';
@@ -871,19 +873,17 @@ export class WorkflowCanvas {
 	/**
 	 * Draw node input/output info below the node
 	 */
-	private drawNodeIOInfo(node: WorkflowNode, log: { input?: any; output?: any }): void {
+	private drawNodeIOInfo(node: WorkflowNode, log: { input?: unknown; output?: unknown }): void {
 		const infoY = node.y + NODE_HEIGHT + 10;
 		const maxWidth = NODE_WIDTH;
 
 		// Format data for display
-		const formatData = (data: any): string => {
-			if (data === null || data === undefined) return 'null';
-			if (typeof data === 'string') return data.length > 30 ? data.substring(0, 30) + '...' : data;
-			if (typeof data === 'object') {
-				const str = JSON.stringify(data);
-				return str.length > 40 ? str.substring(0, 40) + '...' : str;
-			}
-			return String(data);
+		const formatData = (data: unknown): string => {
+			const stringValue = this.stringifyValue(data);
+			const maxLength = typeof data === 'string' ? 30 : 40;
+			return stringValue.length > maxLength
+				? `${stringValue.substring(0, maxLength)}...`
+				: stringValue;
 		};
 
 		// Background box
@@ -954,6 +954,29 @@ export class WorkflowCanvas {
 		this.ctx.textAlign = 'center';
 		this.ctx.textBaseline = 'middle';
 		this.ctx.fillText('🔍 View Full', buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
+	}
+
+	private stringifyValue(value: unknown): string {
+		if (value === null) return 'null';
+		if (value === undefined) return 'undefined';
+		if (typeof value === 'string') return value;
+		if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint') {
+			return String(value);
+		}
+		if (typeof value === 'object') {
+			try {
+				return JSON.stringify(value);
+			} catch {
+				return '[unserializable]';
+			}
+		}
+		if (typeof value === 'symbol') {
+			return value.toString();
+		}
+		if (typeof value === 'function') {
+			return value.name ? `[Function ${value.name}]` : '[Function]';
+		}
+		return '[unsupported]';
 	}
 
 	/**
@@ -1064,12 +1087,12 @@ export class WorkflowCanvas {
 		const node = this.getNodeAt(pos.x, pos.y);
 		if (node) {
 			if (this.isOverOutputHandle(node, pos.x, pos.y)) {
-				this.canvas.setCssProps({ 'cursor': 'crosshair' });
+				this.canvas.setCssProps({ cursor: 'crosshair' });
 			} else {
-				this.canvas.setCssProps({ 'cursor': 'move' });
+				this.canvas.setCssProps({ cursor: 'move' });
 			}
 		} else {
-			this.canvas.setCssProps({ 'cursor': 'default' });
+			this.canvas.setCssProps({ cursor: 'default' });
 		}
 	}
 	
@@ -1187,12 +1210,12 @@ export class WorkflowCanvas {
 	private showNodeMenu(node: WorkflowNode, x: number, y: number): void {
 		// Create menu
 		const menu = document.body.createDiv('workflow-v2-context-menu');
-		menu.setCssProps({ 'left': `${x}px` });
-		menu.setCssProps({ 'top': `${y}px` });
+		menu.style.left = `${x}px`;
+		menu.style.top = `${y}px`;
 
 		// Delete option
 		const deleteItem = menu.createDiv('context-menu-item');
-		deleteItem.setText('🗑️ Delete');
+		deleteItem.setText('🗑️ delete');
 		deleteItem.addEventListener('click', () => {
 			this.workflow.removeNode(node.id);
 			this.events.emit('node:removed', { nodeId: node.id });
@@ -1202,7 +1225,7 @@ export class WorkflowCanvas {
 
 		// Duplicate option
 		const duplicateItem = menu.createDiv('context-menu-item');
-		duplicateItem.setText('📋 Duplicate');
+		duplicateItem.setText('📋 duplicate');
 		duplicateItem.addEventListener('click', () => {
 			const newNode: WorkflowNode = {
 				...node,
@@ -1232,12 +1255,12 @@ export class WorkflowCanvas {
 	private showConnectionMenu(connection: Connection, x: number, y: number): void {
 		// Create menu
 		const menu = document.body.createDiv('workflow-v2-context-menu');
-		menu.setCssProps({ 'left': `${x}px` });
-		menu.setCssProps({ 'top': `${y}px` });
+		menu.style.left = `${x}px`;
+		menu.style.top = `${y}px`;
 
 		// Delete option
 		const deleteItem = menu.createDiv('context-menu-item');
-		deleteItem.setText('🗑️ Delete Connection');
+		deleteItem.setText('🗑️ delete connection');
 		deleteItem.addEventListener('click', () => {
 			this.workflow.removeConnection(connection);
 			this.selectedConnectionId = null;
@@ -1492,7 +1515,7 @@ export class WorkflowCanvas {
 	/**
 	 * Update node execution logs with input/output data
 	 */
-	updateExecutionLogs(logs: Array<{ nodeId: string; input?: any; output?: any }>): void {
+	updateExecutionLogs(logs: Array<{ nodeId: string; input?: unknown; output?: unknown }>): void {
 		this.executionLogs.clear();
 		for (const log of logs) {
 			this.executionLogs.set(log.nodeId, {
@@ -1506,7 +1529,7 @@ export class WorkflowCanvas {
 	/**
 	 * Get execution log for a specific node
 	 */
-	getExecutionLog(nodeId: string): { input?: any; output?: any } | undefined {
+	getExecutionLog(nodeId: string): { input?: unknown; output?: unknown } | undefined {
 		return this.executionLogs.get(nodeId);
 	}
 
@@ -1528,14 +1551,14 @@ export class WorkflowCanvas {
 	/**
 	 * Add event listener
 	 */
-	on<K extends keyof WorkflowEvents>(event: K, handler: (data: WorkflowEvents[K]) => void): void {
+	on<K extends keyof WorkflowEvents>(event: K, handler: (_data: WorkflowEvents[K]) => void): void {
 		this.events.on(event, handler);
 	}
 	
 	/**
 	 * Remove event listener
 	 */
-	off<K extends keyof WorkflowEvents>(event: K, handler: (data: WorkflowEvents[K]) => void): void {
+	off<K extends keyof WorkflowEvents>(event: K, handler: (_data: WorkflowEvents[K]) => void): void {
 		this.events.off(event, handler);
 	}
 	

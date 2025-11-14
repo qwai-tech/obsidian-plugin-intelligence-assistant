@@ -11,7 +11,7 @@ export function displayWebSearchTab(
 	containerEl: HTMLElement,
 	plugin: IntelligenceAssistantPlugin
 ): void {
-	containerEl.createEl('h3', { text: 'Web Search Configuration' });
+	containerEl.createEl('h3', { text: 'Web search configuration' });
 
 	const desc = containerEl.createEl('p', {
 		text: 'Configure web search functionality to enhance AI responses with up-to-date information from the internet.'
@@ -27,7 +27,7 @@ export function displayWebSearchTab(
 	// Enable Web Search
 	createSetting({
 		path: 'webSearchConfig.enabled',
-		label: 'Enable Web Search',
+		label: 'Enable web search',
 		description: 'Allow AI to search the web for current information'
 	}).addToggle(toggle => toggle
 			.setValue(config.enabled)
@@ -39,7 +39,7 @@ export function displayWebSearchTab(
 	// Search Provider
 	createSetting({
 		path: 'webSearchConfig.provider',
-		label: 'Search Provider',
+		label: 'Search provider',
 		description: 'Web search engine to use'
 	}).addDropdown(dropdown => dropdown
 			.addOption('duckduckgo', 'DuckDuckGo')
@@ -54,7 +54,7 @@ export function displayWebSearchTab(
 	// Auto-trigger search
 	createSetting({
 		path: 'webSearchConfig.autoTrigger',
-		label: 'Auto-trigger Search',
+		label: 'Auto-trigger search',
 		description: 'Automatically trigger web search when the query requires current information (e.g., news, prices, recent events)'
 	}).addToggle(toggle => toggle
 			.setValue(config.autoTrigger ?? true)  // Default to true if not set
@@ -66,7 +66,7 @@ export function displayWebSearchTab(
 	// Max Results
 	createSetting({
 		path: 'webSearchConfig.maxResults',
-		label: 'Maximum Results',
+		label: 'Maximum results',
 		description: 'Maximum number of search results to return'
 	}).addText(text => text
 			.setPlaceholder('5')

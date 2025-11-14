@@ -2,11 +2,12 @@
 export class EmbeddingManager {
   private ready: boolean = false;
 
-  async initialize(): Promise<void> {
+  initialize(): Promise<void> {
     this.ready = true;
+    return Promise.resolve();
   }
 
-  async generateEmbedding(text: string | string[]): Promise<number[][]> {
+  generateEmbedding(text: string | string[]): Promise<number[][]> {
     if (!this.ready) {
       throw new Error('EmbeddingManager not initialized');
     }

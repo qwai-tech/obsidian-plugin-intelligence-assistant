@@ -12,7 +12,7 @@ export class ServiceRegistry {
     return this.services.get(name) as T;
   }
 
-  async initializeAll(config?: any): Promise<void> {
+  async initializeAll(config?: unknown): Promise<void> {
     for (const [name, service] of this.services) {
       try {
         await service.initialize(config);

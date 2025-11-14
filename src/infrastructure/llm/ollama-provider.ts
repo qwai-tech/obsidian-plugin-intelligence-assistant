@@ -1,6 +1,17 @@
 import { BaseLLMProvider } from './base-provider';
 import { ChatRequest, ChatResponse, StreamChunk } from './types';
-import type { ModelInfo } from '@/types';
+import type { ModelCapability, ModelInfo } from '@/types';
+import { requestUrl } from 'obsidian';
+
+interface OllamaChatApiResponse {
+	message?: { content?: string };
+	prompt_eval_count?: number;
+	eval_count?: number;
+}
+
+interface OllamaModelsResponse {
+	models?: Array<{ name: string; [key: string]: unknown }>;
+}
 
 /**
  * Ollama Provider using native Ollama API
@@ -38,37 +49,37 @@ export class OllamaProvider extends BaseLLMProvider {
 			},
 		};
 
-		const response = await fetch({
-			url,
+		const response = await requestUrl({
+			url: url,
 			method: 'POST',
 			headers: this.getHeaders(),
 			body: JSON.stringify(body),
 		});
 
-		if (response.status !== 200) {
-			const error = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
-			throw new Error(`Ollama API request failed: ${response.status} ${error}`);
+		if (response.status < 200 || response.status >= 300) {
+			const errorText = String(response.text);
+			throw new Error(`Ollama API request failed: ${String(response.status)} ${errorText}`);
 		}
 
-		const data = response.json;
+		const data = response.json as OllamaChatApiResponse;
 
 		return {
-			content: data.message?.content || '',
+			content: data.message?.content ?? '',
 			usage: {
-				promptTokens: data.prompt_eval_count || 0,
-				completionTokens: data.eval_count || 0,
-				totalTokens: (data.prompt_eval_count || 0) + (data.eval_count || 0),
+				promptTokens: data.prompt_eval_count ?? 0,
+				completionTokens: data.eval_count ?? 0,
+				totalTokens: (data.prompt_eval_count ?? 0) + (data.eval_count ?? 0),
 			},
 		};
 	}
 
-	async streamChat(request: ChatRequest, onChunk: (chunk: StreamChunk) => void): Promise<void> {
+	async streamChat(request: ChatRequest, onChunk: (_chunk: StreamChunk) => void): Promise<void> {
 		const url = `${this.getBaseUrl()}/api/chat`;
 
 		// Extract model name from provider-prefixed ID (ollama:model-name -> model-name)
 		const modelName = request.model.includes(':') ? request.model.split(':').slice(1).join(':') : request.model;
 
-		const body = {
+		const requestBody = {
 			model: modelName,
 			messages: request.messages,
 			stream: true,
@@ -79,38 +90,48 @@ export class OllamaProvider extends BaseLLMProvider {
 		};
 
 		try {
-			// Use native fetch for true streaming support
-			const response = await fetch(url, {
+			const response = await requestUrl({
+				url: url,
 				method: 'POST',
 				headers: this.getHeaders(),
-				body: JSON.stringify(body),
+				body: JSON.stringify(requestBody),
 			});
 
-			if (!response.ok) {
-				const error = await response.text();
-				throw new Error(`Ollama API request failed: ${response.status} ${error}`);
-			}
+		if (response.status < 200 || response.status >= 300) {
+			const errorText = response.text;
+			throw new Error(`Ollama API request failed: ${String(response.status)} ${String(errorText)}`);
+		}
 
-			if (!response.body) {
-				throw new Error('Response body is null');
-			}
+		// Type guard for response body (Obsidian RequestUrlResponse may not declare 'body')
+		const bodyUnknown: ReadableStream<Uint8Array> | undefined = (response as { body?: ReadableStream<Uint8Array> }).body;
+		if (!bodyUnknown) {
+			throw new Error('Response body is null');
+		}
+		if (!(bodyUnknown instanceof ReadableStream)) {
+			throw new Error('Response body is not a ReadableStream');
+		}
 
-			const reader = response.body.getReader();
-			const decoder = new TextDecoder();
-			let buffer = '';
+		const reader = bodyUnknown.getReader();
+		const decoder = new TextDecoder();
+		let buffer = '';
 
 			while (true) {
 				const { done, value } = await reader.read();
 				if (done) break;
 
-				buffer += decoder.decode(value, { stream: true });
+					if (value) {
+						buffer += decoder.decode(value, { stream: true });
+					}
 				const lines = buffer.split('\n');
 				buffer = lines.pop() || '';
 
 				for (const line of lines) {
 					if (line.trim()) {
 						try {
-							const parsed = JSON.parse(line);
+							const parsed = JSON.parse(line) as {
+								message?: { content?: string };
+								done?: boolean;
+							};
 
 							// Ollama sends content in message.content field
 							const content = parsed.message?.content;
@@ -143,27 +164,27 @@ export class OllamaProvider extends BaseLLMProvider {
 	 */
 	async fetchModels(): Promise<ModelInfo[]> {
 		const baseUrl = this.getBaseUrl();
-		console.debug(`[Ollama] Fetching models from: ${baseUrl}/api/tags`);
+		console.debug(`[Ollama] Fetching models from: ${baseUrl ?? 'unknown'}/api/tags`);
 
 		try {
-			const url = `${baseUrl}/api/tags`;
+			const url = `${baseUrl ?? 'unknown'}/api/tags`;
 
 			console.debug('[Ollama] Making request to Ollama API...');
-			const response = await fetch({
-				url,
+			const response = await requestUrl({
+				url: url,
 				method: 'GET',
 				headers: this.getHeaders(),
 			});
 
 			console.debug(`[Ollama] Response status: ${response.status}`);
 
-			if (response.status !== 200) {
-				const errorText = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
+			if (response.status < 200 || response.status >= 300) {
+				const errorText = response.text;
 				console.error('[Ollama] API error response:', response.status, errorText);
 				throw new Error(`Failed to fetch Ollama models: ${response.status} - ${errorText}`);
 			}
 
-			const data = response.json;
+			const data = JSON.parse(response.text) as OllamaModelsResponse;
 			console.debug('[Ollama] Response data:', JSON.stringify(data, null, 2));
 
 			// Check if models array exists
@@ -178,11 +199,11 @@ export class OllamaProvider extends BaseLLMProvider {
 			}
 
 			// Map Ollama models to ModelInfo format
-			const models = data.models.map((model: any) => {
+			const models = data.models.map((model: { name: string; [key: string]: unknown }) => {
 				const capabilities = this.inferCapabilities(model.name);
 
 				return {
-					id: `ollama:${model.name}`,
+					id: `ollama:${model.name ?? 'unknown'}`,
 					name: model.name,
 					provider: 'ollama',
 					capabilities: capabilities,
@@ -192,16 +213,20 @@ export class OllamaProvider extends BaseLLMProvider {
 
 			console.debug(`[Ollama] Successfully fetched ${models.length} models:`, models.map((m: ModelInfo) => m.name).join(', '));
 			return models;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			console.error('[Ollama] Failed to fetch models:', error);
+
+			// Type guard for error with message property
+			const errorMessage = error instanceof Error ? error.message : String(error);
+
 			console.error('[Ollama] Error details:', {
-				message: error.message,
+				message: errorMessage,
 				baseUrl: baseUrl,
 				suggestion: 'Make sure Ollama is running. Run: ollama serve'
 			});
 
 			// Check if it's a connection error
-			if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError') || error.message.includes('ECONNREFUSED')) {
+			if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError') || errorMessage.includes('ECONNREFUSED')) {
 				console.error('[Ollama] Connection refused. Is Ollama running on', baseUrl, '?');
 				console.error('[Ollama] Try running: ollama serve');
 			}
@@ -214,8 +239,8 @@ export class OllamaProvider extends BaseLLMProvider {
 	/**
 	 * Infer model capabilities from model name
 	 */
-	private inferCapabilities(modelName: string): string[] {
-		const capabilities: string[] = ['chat', 'streaming'];
+	private inferCapabilities(modelName: string): ModelCapability[] {
+		const capabilities: ModelCapability[] = ['chat', 'streaming'];
 
 		// Check for vision models (common vision model patterns)
 		if (modelName.includes('vision') || 
@@ -246,53 +271,65 @@ export class OllamaProvider extends BaseLLMProvider {
 	 * Pull a model from Ollama registry
 	 * API Documentation: https://github.com/ollama/ollama/blob/main/docs/api.md#pull-a-model
 	 */
-	async pullModel(modelName: string, onProgress?: (progress: { status: string; completed: number; total: number; percentage: number; }) => void): Promise<void> {
+	async pullModel(modelName: string, onProgress?: (_progress: { status: string; completed: number; total: number; percentage: number; }) => void): Promise<void> {
 		const url = `${this.getBaseUrl()}/api/pull`;
-		
-		const body = {
+
+		const requestBody = {
 			name: modelName,
 			stream: true // Enable streaming to get progress updates
 		};
 
 		try {
-			const response = await fetch(url, {
+			const response = await requestUrl({
+				url: url,
 				method: 'POST',
 				headers: this.getHeaders(),
-				body: JSON.stringify(body),
+				body: JSON.stringify(requestBody),
 			});
 
-			if (!response.ok) {
-				const errorText = await response.text();
-				throw new Error(`Failed to pull model: ${response.status} ${errorText}`);
-			}
+		if (response.status < 200 || response.status >= 300) {
+			const errorText = response.text;
+			throw new Error(`Failed to pull model: ${String(response.status)} ${String(errorText)}`);
+		}
 
-			if (!response.body) {
-				throw new Error('Response body is null');
-			}
+		// Type guard for response body (Obsidian RequestUrlResponse may not declare 'body')
+		const bodyUnknown: ReadableStream<Uint8Array> | undefined = (response as { body?: ReadableStream<Uint8Array> }).body;
+		if (!bodyUnknown) {
+			throw new Error('Response body is null');
+		}
+		if (!(bodyUnknown instanceof ReadableStream)) {
+			throw new Error('Response body is not a ReadableStream');
+		}
 
-			// Handle streaming response for progress updates
-			const reader = response.body.getReader();
-			const decoder = new TextDecoder();
-			let buffer = '';
+		// Handle streaming response for progress updates
+		const reader = bodyUnknown.getReader();
+		const decoder = new TextDecoder();
+		let buffer = '';
 
 			while (true) {
 				const { done, value } = await reader.read();
 				if (done) break;
 
-				buffer += decoder.decode(value, { stream: true });
+					if (value) {
+						buffer += decoder.decode(value, { stream: true });
+					}
 				const lines = buffer.split('\n');
 				buffer = lines.pop() || '';
 
 				for (const line of lines) {
 					if (line.trim()) {
 						try {
-							const parsed = JSON.parse(line);
-							
+							const parsed = JSON.parse(line) as {
+								status?: string;
+								completed?: number;
+								total?: number;
+							};
+
 							// Handle different response formats
 							if (parsed.status) {
 								let completed = 0;
 								let total = 100; // Default assumption
-								
+
 								// Calculate progress based on status message
 								if (parsed.completed && parsed.total) {
 									completed = parsed.completed;
@@ -309,9 +346,9 @@ export class OllamaProvider extends BaseLLMProvider {
 										completed = 100;
 									}
 								}
-								
+
 								const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-								
+
 								onProgress?.({
 									status: parsed.status,
 									completed,
@@ -327,9 +364,9 @@ export class OllamaProvider extends BaseLLMProvider {
 				}
 			}
 			
-			console.debug(`[Ollama] Successfully pulled model: ${modelName}`);
+			console.debug(`[Ollama] Successfully pulled model: ${modelName ?? 'unknown'}`);
 		} catch (error) {
-			console.error(`[Ollama] Failed to pull model ${modelName}:`, error);
+			console.error(`[Ollama] Failed to pull model ${modelName ?? 'unknown'}:`, error);
 			throw error;
 		}
 	}
@@ -346,21 +383,21 @@ export class OllamaProvider extends BaseLLMProvider {
 		};
 
 		try {
-			const response = await fetch({
-				url,
+			const response = await requestUrl({
+				url: url,
 				method: 'DELETE',
 				headers: this.getHeaders(),
 				body: JSON.stringify(body),
 			});
 
-			if (response.status !== 200) {
-				const errorText = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
-				throw new Error(`Failed to remove model: ${response.status} ${errorText}`);
+			if (response.status < 200 || response.status >= 300) {
+				const errorText = response.text;
+				throw new Error(`Failed to remove model: ${String(response.status)} ${String(errorText)}`);
 			}
 
-			console.debug(`[Ollama] Successfully removed model: ${modelName}`);
+			console.debug(`[Ollama] Successfully removed model: ${modelName ?? 'unknown'}`);
 		} catch (error) {
-			console.error(`[Ollama] Failed to remove model ${modelName}:`, error);
+			console.error(`[Ollama] Failed to remove model ${modelName ?? 'unknown'}:`, error);
 			throw error;
 		}
 	}
@@ -373,7 +410,7 @@ export class OllamaProvider extends BaseLLMProvider {
 			const models = await this.fetchModels();
 			return models.some(model => model.id === modelName);
 		} catch (error) {
-			console.error(`[Ollama] Failed to check if model exists ${modelName}:`, error);
+			console.error(`[Ollama] Failed to check if model exists ${modelName ?? 'unknown'}:`, error);
 			return false;
 		}
 	}

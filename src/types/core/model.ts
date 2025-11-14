@@ -34,7 +34,7 @@ export interface LLMConfig {
 	apiKey?: string;  // Optional for Ollama
 	baseUrl?: string;
 	modelFilter?: string;
-	serviceKey?: string | Record<string, any>;  // For SAP AI Core
+	serviceKey?: string | Record<string, unknown>;  // For SAP AI Core
 	resourceGroup?: string;  // For SAP AI Core
 	cachedModels?: ModelInfo[];
 	cacheTimestamp?: number;

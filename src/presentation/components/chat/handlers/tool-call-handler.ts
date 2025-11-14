@@ -49,10 +49,10 @@ export async function processToolCalls(
 
 	for (const match of matches) {
 		try {
-			const json = JSON.parse(match[1]);
+			const json = JSON.parse(match[1]) as { name?: unknown; tool?: unknown; arguments?: unknown };
 
 			// Handle both formats: { "name": "tool_name", "arguments": {...} } and { "tool": "tool_name", "arguments": {...} }
-			const toolName = json.name || json.tool;
+			const toolName = json.name ?? json.tool;
 			if (!toolName || typeof toolName !== 'string') {
 				console.debug('Skipping non-tool call JSON block:', json);
 				continue;
@@ -61,7 +61,7 @@ export async function processToolCalls(
 			// Ensure it has the right structure to be a ToolCall
 			const toolCall: ToolCall = {
 				name: toolName,
-				arguments: typeof json.arguments === 'object' && json.arguments !== null ? json.arguments : {}
+				arguments: typeof json.arguments === 'object' && json.arguments !== null ? (json.arguments as Record<string, unknown>) : {}
 			};
 
 			// Record action step
@@ -83,7 +83,7 @@ export async function processToolCalls(
 					if (tool.provider && tool.provider.startsWith('mcp:')) {
 						// This is an MCP tool - check agent's MCP tool permissions
 						const serverName = tool.provider.substring(4); // Remove 'mcp:' prefix
-						const fullToolKey = `${serverName}::${toolCall.name}`;
+						const fullToolKey = `${serverName ?? 'unknown'}::${toolCall.name ?? ''}`;
 						
 						// Check if this specific tool is enabled for the agent
 						const hasSpecificToolEnabled = agent.enabledMcpTools?.includes(fullToolKey) || false;
@@ -94,7 +94,7 @@ export async function processToolCalls(
 						toolAllowed = hasSpecificToolEnabled || hasServerEnabled;
 					} else {
 						// For built-in tools, check if it's in enabledBuiltInTools
-						toolAllowed = agent.enabledBuiltInTools.includes(toolCall.name as any);
+						toolAllowed = agent.enabledBuiltInTools.includes(toolCall.name);
 					}
 				} else {
 					// Tool not found, so not allowed
@@ -117,7 +117,7 @@ export async function processToolCalls(
 			// Record observation step
 			executionSteps.push({
 				type: 'observation',
-				content: result.success ? JSON.stringify(result.result, null, 2) : `Error: ${result.error}`,
+				content: result.success ? JSON.stringify(result.result, null, 2) : `Error: ${result.error ?? ''}`,
 				timestamp: Date.now(),
 				status: result.success ? 'success' : 'error'
 			});
@@ -127,7 +127,7 @@ export async function processToolCalls(
 			// Add tool result to messages for context
 			messages.push({
 				role: 'system',
-				content: `Tool ${toolCall.name} result: ${result.success ? JSON.stringify(result.result) : result.error}`
+				content: `Tool ${toolCall.name ?? ''} result: ${result.success ? JSON.stringify(result.result) : (result.error ?? 'Unknown error')}`
 			} as Message);
 
 			toolsExecuted = true;
@@ -136,7 +136,7 @@ export async function processToolCalls(
 			console.error('Tool call parsing error:', error);
 			executionSteps.push({
 				type: 'observation',
-				content: `Error: ${error instanceof Error ? error.message : String(error)}`,
+				content: `Error: ${error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error)}`,
 				timestamp: Date.now(),
 				status: 'error'
 			});
@@ -197,7 +197,7 @@ export function updateExecutionTrace(container: HTMLElement, steps: AgentExecuti
 
 		if (step.status) {
 			const statusPill = header.createSpan('agent-step-status');
-			statusPill.setText(step.status === 'pending' ? 'Pending' : step.status === 'success' ? 'Success' : 'Error');
+			statusPill.setText(step.status === 'pending' ? 'Pending' : step.status === 'success' ? 'success' : 'error');
 			statusPill.addClass(`agent-step-status--${step.status}`);
 		}
 
@@ -229,7 +229,7 @@ export function updateExecutionTrace(container: HTMLElement, steps: AgentExecuti
 		if (countEl) {
 			countEl.textContent = `${steps.length} steps`;
 		}
-		const statusEl = traceRoot.querySelector('[data-trace-status]') as HTMLElement | null;
+		const statusEl = traceRoot.querySelector('[data-trace-status]');
 		if (statusEl) {
 			const status = getTraceStatus(steps);
 			statusEl.setAttr('data-trace-status', status.state);
@@ -245,7 +245,7 @@ function getTraceStatus(steps: AgentExecutionStep[]): { state: string; label: st
 
 	const last = steps[steps.length - 1];
 	if (last.status === 'error') {
-		return { state: 'error', label: 'Error' };
+		return { state: 'error', label: 'error' };
 	}
 	if (last.type === 'action' && last.status === 'pending') {
 		return { state: 'running', label: 'Running tool' };
@@ -271,7 +271,7 @@ export function createAgentExecutionTraceContainer(messageBody: HTMLElement, ste
 	const icon = header.createSpan('agent-trace-icon');
 	icon.setText('▶');
 	const title = header.createSpan('agent-trace-title');
-	title.setText('Execution Trace');
+	title.setText('Execution trace');
 	const status = header.createSpan('agent-trace-status');
 	status.setAttr('data-trace-status', 'idle');
 	status.setText('Idle');

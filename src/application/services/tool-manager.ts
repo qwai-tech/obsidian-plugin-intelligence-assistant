@@ -12,27 +12,27 @@ export class ToolManager {
 	private enabledTools: Set<string> = new Set();
 	private mcpClients: Map<string, MCPClient> = new Map();
 
-	constructor(private app: App, private toolConfigs?: ToolConfig[]) {
+	constructor(private _app: App, private _toolConfigs?: ToolConfig[]) {
 		this.registerDefaultTools();
 		this.updateEnabledTools();
 	}
 
 	private registerDefaultTools() {
 		// File operation tools
-		this.registerTool(new ReadFileTool(this.app));
-		this.registerTool(new WriteFileTool(this.app));
-		this.registerTool(new ListFilesTool(this.app));
+		this.registerTool(new ReadFileTool(this._app));
+		this.registerTool(new WriteFileTool(this._app));
+		this.registerTool(new ListFilesTool(this._app));
 
 		// Search and note tools
-		this.registerTool(new SearchFilesTool(this.app));
-		this.registerTool(new CreateNoteTool(this.app));
-		this.registerTool(new AppendToNoteTool(this.app));
+		this.registerTool(new SearchFilesTool(this._app));
+		this.registerTool(new CreateNoteTool(this._app));
+		this.registerTool(new AppendToNoteTool(this._app));
 	}
 
 	private updateEnabledTools() {
 		this.enabledTools.clear();
-		if (this.toolConfigs) {
-			for (const config of this.toolConfigs) {
+		if (this._toolConfigs) {
+			for (const config of this._toolConfigs) {
 				if (config.enabled) {
 					this.enabledTools.add(config.type);
 				}
@@ -46,7 +46,7 @@ export class ToolManager {
 	}
 
 	setToolConfigs(configs: ToolConfig[]) {
-		this.toolConfigs = configs;
+		this._toolConfigs = configs;
 		this.updateEnabledTools();
 	}
 
@@ -186,16 +186,16 @@ export class ToolManager {
 
 		try {
 			return await tool.execute(call.arguments);
-		} catch (error) {
+		} catch (error: unknown) {
 			return {
 				success: false,
-				error: `Tool execution failed: ${error.message}`
+				error: `Tool execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`
 			};
 		}
 	}
 
 	// Convert tool definitions to OpenAI function calling format
-	toOpenAIFunctions(): any[] {
+	toOpenAIFunctions(): unknown[] {
 		return this.getAllTools().map(tool => ({
 			name: tool.definition.name,
 			description: tool.definition.description,
@@ -208,7 +208,7 @@ export class ToolManager {
 						...(param.enum ? { enum: param.enum } : {})
 					};
 					return acc;
-				}, {} as Record<string, any>),
+				}, {} as Record<string, unknown>),
 				required: tool.definition.parameters
 					.filter(p => p.required)
 					.map(p => p.name)
@@ -217,7 +217,7 @@ export class ToolManager {
 	}
 
 	// Convert tool definitions to Anthropic tools format
-	toAnthropicTools(): any[] {
+	toAnthropicTools(): unknown[] {
 		return this.getAllTools().map(tool => ({
 			name: tool.definition.name,
 			description: tool.definition.description,
@@ -230,7 +230,7 @@ export class ToolManager {
 						...(param.enum ? { enum: param.enum } : {})
 					};
 					return acc;
-				}, {} as Record<string, any>),
+				}, {} as Record<string, unknown>),
 				required: tool.definition.parameters
 					.filter(p => p.required)
 					.map(p => p.name)

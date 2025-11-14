@@ -63,7 +63,7 @@ export class RAGManager {
     const files = this.app.vault.getMarkdownFiles();
     
     if (files.length === 0) {
-      new Notice('ℹ️ No markdown files found to index for RAG');
+      new Notice('ℹ️ No Markdown files found to index for RAG');
       return;
     }
     
@@ -71,7 +71,7 @@ export class RAGManager {
     new Notice(`🔄 Starting RAG indexing for ${files.length} documents...`);
     
     // Process files in batches to avoid blocking the UI
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const batchSize = 5; // Process 5 files at a time
       let currentIndex = 0;
       let successCount = 0;
@@ -100,7 +100,9 @@ export class RAGManager {
         
         if (currentIndex < files.length) {
           // Schedule next batch after a short delay to allow UI to update
-          setTimeout(processBatch, 10); // 10ms delay allows UI to remain responsive
+          setTimeout(() => {
+            processBatch().catch(reject);
+          }, 10); // 10ms delay allows UI to remain responsive
         } else {
           // All files processed
           console.debug(`RAG indexing completed. Indexed ${this.vectorStore.getChunkCount()} chunks.`);
@@ -122,7 +124,7 @@ export class RAGManager {
     await this.vectorStore.addFile(file, this.config);
   }
 
-  async indexContent(content: string, metadata: any): Promise<void> {
+  async indexContent(content: string, metadata: unknown): Promise<void> {
     if (!this.config.enabled) {
       return;
     }
@@ -146,13 +148,13 @@ export class RAGManager {
     console.debug('[RAG Manager] Search returned:', results.length, 'results');
     
     // Check if we have any indexed documents, if not suggest embedding
-    if (results.length === 0) {
-      const stats = await this.vectorStore.getDetailedStats();
-      if (stats.chunkCount === 0) {
-        console.debug('[RAG Manager] No indexed documents found, suggesting user to embed documents');
-        new Notice('ℹ️ No indexed documents found. Use "Embed All Documents" command to index your vault for RAG.');
+      if (results.length === 0) {
+        const stats = this.vectorStore.getDetailedStats();
+        if (stats.chunkCount === 0) {
+          console.debug('[RAG Manager] No indexed documents found, suggesting user to embed documents');
+          new Notice('ℹ️ no indexed documents found. Use "embed all documents" command to index your vault for rag.');
+        }
       }
-    }
     
     // Apply document grading if enabled
     if (this.config.enableGradingThreshold && results.length > 0) {
@@ -184,7 +186,8 @@ export class RAGManager {
         results = filteredResults;
       } catch (error) {
         console.error('[RAG Manager] Error during document grading:', error);
-        new Notice(`⚠️ Document grading error: ${error.message}`);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        new Notice(`⚠️ Document grading error: ${errorMessage}`);
       }
     }
     
@@ -258,7 +261,7 @@ export class RAGManager {
     return this.vectorStore.getDetailedStats();
   }
 
-  private async getStoredChunks(): Promise<any[]> {
+  private getStoredChunks(): Promise<unknown[]> {
     return this.vectorStore.getStoredChunks();
   }
 
@@ -267,20 +270,24 @@ export class RAGManager {
     this.removeFileChangeListener();
     
     // Create new listener
-    this.fileChangeListener = async (file: TFile) => {
+    this.fileChangeListener = (file: TFile) => {
       if (this.config.enabled && this.config.embedChangedFiles && file.extension === 'md') {
         console.debug(`File changed: ${file.path}, re-indexing for RAG...`);
-        try {
-          await this.indexFile(file);
-          console.debug(`Successfully re-indexed ${file.path}`);
-          // Send notification for successful indexing
-          if (this.config.indexingMode !== 'manual') { // Only show for automatic indexing
-            new Notice(`🔄 RAG: Indexed ${file.basename}`);
+        // Use void to explicitly ignore the promise
+        void (async () => {
+          try {
+            await this.indexFile(file);
+            console.debug(`Successfully re-indexed ${file.path}`);
+            // Send notification for successful indexing
+            if (this.config.indexingMode !== 'manual') { // Only show for automatic indexing
+              new Notice(`🔄 RAG: Indexed ${file.basename}`);
+            }
+          } catch (error) {
+            console.error(`Failed to re-index file ${file.path}:`, error);
+            const errorMessage = error instanceof Error ? error.message : String(error);
+              new Notice(`❌ RAG: Failed to index ${file.basename} - ${errorMessage}`);
           }
-        } catch (error) {
-          console.error(`Failed to re-index file ${file.path}:`, error);
-          new Notice(`❌ RAG: Failed to index ${file.basename} - ${error.message}`);
-        }
+        })();
       }
     };
     
@@ -349,11 +356,12 @@ export class RAGManager {
     }
   }
 
-  async destroy(): Promise<void> {
+  destroy(): Promise<void> {
     // Clean up listeners when destroying the manager
     this.removeFileChangeListener();
     
     // Clean up the embedding worker
     EmbeddingManager.cleanup();
+    return Promise.resolve();
   }
 }

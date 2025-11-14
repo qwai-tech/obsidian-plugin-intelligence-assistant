@@ -14,27 +14,29 @@ export class ChatService implements IService {
   public version = '0.0.1';
 
   constructor(
-    private readonly messageRepo: IRepository<Message>,
-    private readonly conversationRepo: IRepository<Conversation>,
-    private readonly llmProvider: ILLMProvider,
-    private readonly eventBus: EventBus
+    private readonly _messageRepo: IRepository<Message>,
+    private readonly _conversationRepo: IRepository<Conversation>,
+    private readonly _llmProvider: ILLMProvider,
+    private readonly _eventBus: EventBus
   ) {}
 
-  async initialize(_config?: any): Promise<void> {
+  initialize(_config?: unknown): Promise<void> {
     console.debug('ChatService initialized');
+    return Promise.resolve();
   }
 
-  async cleanup(): Promise<void> {
+  cleanup(): Promise<void> {
     console.debug('ChatService cleaned up');
+    return Promise.resolve();
   }
 
   async sendMessage(conversationId: string, content: string): Promise<Message> {
     // Create user message
     const userMessage = Message.create(content, 'user');
-    await this.messageRepo.save(userMessage);
+    await this._messageRepo.save(userMessage);
 
     // Get conversation to send to LLM
-    const conversation = await this.conversationRepo.findById(conversationId);
+    const conversation = await this._conversationRepo.findById(conversationId);
     if (!conversation) {
       throw new Error(`Conversation with id ${conversationId} not found`);
     }
@@ -45,22 +47,22 @@ export class ChatService implements IService {
       content: m.content
     }));
 
-    const response = await this.llmProvider.chatCompletion(
+    const response = await this._llmProvider.chatCompletion(
       messagesForLLM,
       { model: 'gpt-4', temperature: 0.7 }
     );
 
     // Create assistant message
     const assistantMessage = Message.create(response.content?.text || 'No response', 'assistant');
-    await this.messageRepo.save(assistantMessage);
+    await this._messageRepo.save(assistantMessage);
 
     // Add messages to conversation
     conversation.addMessage(userMessage);
     conversation.addMessage(assistantMessage);
-    await this.conversationRepo.update(conversationId, conversation);
+    await this._conversationRepo.update(conversationId, conversation);
 
     // Emit event
-    this.eventBus.emit('message:sent', {
+    this._eventBus.emit('message:sent', {
       conversationId,
       userMessage,
       assistantMessage

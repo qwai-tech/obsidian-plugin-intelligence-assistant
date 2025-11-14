@@ -26,14 +26,18 @@ export class MCPToolWrapper implements Tool {
 			const required = new Set(mcpTool.inputSchema.required || []);
 
 			for (const [name, schema] of Object.entries(mcpTool.inputSchema.properties)) {
-				const paramSchema = schema as any;
+				const paramSchema = schema as { type?: unknown; description?: string; enum?: unknown[] };
+
+				const stringEnum = Array.isArray(paramSchema.enum)
+					? paramSchema.enum.filter((v): v is string => typeof v === 'string')
+					: undefined;
 
 				parameters.push({
 					name,
 					type: this.mapJsonSchemaType(paramSchema.type),
 					description: paramSchema.description || '',
 					required: required.has(name),
-					enum: paramSchema.enum,
+					enum: stringEnum,
 				});
 			}
 		}
@@ -48,7 +52,11 @@ export class MCPToolWrapper implements Tool {
 	/**
 	 * Map JSON Schema types to our internal types
 	 */
-	private mapJsonSchemaType(jsonSchemaType: string): 'string' | 'number' | 'boolean' | 'array' | 'object' {
+	private mapJsonSchemaType(jsonSchemaType: unknown): 'string' | 'number' | 'boolean' | 'array' | 'object' {
+		if (typeof jsonSchemaType !== 'string') {
+			return 'string';
+		}
+
 		switch (jsonSchemaType) {
 			case 'string':
 				return 'string';
@@ -69,7 +77,7 @@ export class MCPToolWrapper implements Tool {
 	/**
 	 * Execute the MCP tool
 	 */
-	async execute(args: Record<string, any>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			if (!this.mcpClient.isConnected()) {
 				return {
@@ -84,10 +92,10 @@ export class MCPToolWrapper implements Tool {
 				success: true,
 				result,
 			};
-		} catch (error: any) {
+		} catch (error: unknown) {
 			return {
 				success: false,
-				error: error.message || 'Unknown error calling MCP tool',
+				error: error instanceof Error ? error.message : 'Unknown error calling MCP tool',
 			};
 		}
 	}

@@ -9,12 +9,12 @@ export interface IStoragePort {
 	/**
 	 * Save a workflow
 	 */
-	save(workflow: Workflow): Promise<void>;
+	save(_workflow: Workflow): Promise<void>;
 
 	/**
 	 * Load a workflow by ID
 	 */
-	load(id: string): Promise<Workflow | null>;
+	load(_id: string): Promise<Workflow | null>;
 
 	/**
 	 * Load all workflows
@@ -24,10 +24,10 @@ export interface IStoragePort {
 	/**
 	 * Delete a workflow
 	 */
-	delete(id: string): Promise<void>;
+	delete(_id: string): Promise<void>;
 
 	/**
 	 * Check if workflow exists
 	 */
-	exists(id: string): Promise<boolean>;
+	exists(_id: string): Promise<boolean>;
 }

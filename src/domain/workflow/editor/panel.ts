@@ -13,8 +13,8 @@ import { showConfirm } from '../../../presentation/components/modals/confirm-mod
 /**
  * Panel events
  */
-interface PanelEvents {
-	'update': { nodeId: string; config: Record<string, any> };
+interface PanelEvents extends Record<string, unknown> {
+	'update': { nodeId: string; config: Record<string, unknown> };
 	'delete': { nodeId: string };
 	'close': void;
 }
@@ -98,18 +98,11 @@ export class ConfigPanel {
 		const actions = this.container.createDiv('config-panel-actions');
 
 		const deleteBtn = actions.createEl('button', {
-			text: 'Delete Node',
+			text: 'Delete node',
 			cls: 'config-panel-btn config-panel-btn-danger',
 		});
-		deleteBtn.addEventListener('click', async () => {
-			if (!this.services?.app || !this.currentNode) return;
-			const confirmed = await showConfirm(
-				this.services.app,
-				`Are you sure you want to delete node "${this.currentNode.name}"?`
-			);
-			if (confirmed) {
-				this.events.emit('delete', { nodeId: this.currentNode.id });
-			}
+		deleteBtn.addEventListener('click', () => {
+			void this.confirmDelete();
 		});
 	}
 
@@ -169,11 +162,11 @@ export class ConfigPanel {
 	/**
 	 * Render string input
 	 */
-	private renderStringInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderStringInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const input = container.createEl('input', {
 			type: 'text',
 			cls: 'config-panel-input',
-			value: String(value || ''),
+			value: this.toInputString(value),
 		});
 
 		if (param.placeholder) {
@@ -188,11 +181,14 @@ export class ConfigPanel {
 	/**
 	 * Render number input
 	 */
-	private renderNumberInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderNumberInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
+		const numericValue = typeof value === 'number' && Number.isFinite(value)
+			? value
+			: Number(value ?? 0);
 		const input = container.createEl('input', {
 			type: 'number',
 			cls: 'config-panel-input',
-			value: String(value || 0),
+			value: Number.isFinite(numericValue) ? String(numericValue) : '0',
 		});
 
 		if (param.placeholder) {
@@ -207,7 +203,7 @@ export class ConfigPanel {
 	/**
 	 * Render boolean input
 	 */
-	private renderBooleanInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderBooleanInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const wrapper = container.createDiv('config-panel-checkbox-wrapper');
 
 		const input = wrapper.createEl('input', {
@@ -230,7 +226,7 @@ export class ConfigPanel {
 	/**
 	 * Render select input
 	 */
-	private renderSelectInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderSelectInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const select = container.createEl('select', {
 			cls: 'config-panel-select',
 		});
@@ -243,14 +239,22 @@ export class ConfigPanel {
 			for (const config of this.services.settings.llmConfigs) {
 				if (config.cachedModels) {
 					// Filter out disabled models
-					const enabledModels = config.cachedModels.filter((model: any) => model.enabled !== false);
+					const enabledModels = config.cachedModels.filter((model: unknown) => {
+						if (typeof model !== 'object' || model === null) return false;
+						const modelRecord: Record<string, unknown> = model as unknown as Record<string, unknown>;
+						return modelRecord.enabled !== false;
+					});
 					for (const model of enabledModels) {
+						if (typeof model !== 'object' || model === null) continue;
+						const modelRecord: Record<string, unknown> = model as unknown as Record<string, unknown>;
+						const modelId = typeof modelRecord.id === 'string' ? modelRecord.id : String(modelRecord.id);
+						const modelName = typeof modelRecord.name === 'string' ? modelRecord.name : modelId;
 						// Avoid duplicates by checking if model is already added
-						const existingOption = options.find(opt => opt.value === model.id);
+						const existingOption = options.find(opt => opt.value === modelId);
 						if (!existingOption) {
 							options.push({
-								label: model.name || model.id,
-								value: model.id
+								label: modelName,
+								value: modelId
 							});
 						}
 					}
@@ -258,13 +262,15 @@ export class ConfigPanel {
 			}
 		}
 
+		const currentValue = this.toInputString(value);
 		for (const option of options) {
+			const optionValue = this.toInputString(option.value);
 			const optionEl = select.createEl('option', {
-				value: option.value,
+				value: optionValue,
 				text: option.label,
 			});
 
-			if (option.value === value) {
+			if (optionValue === currentValue) {
 				optionEl.selected = true;
 			}
 		}
@@ -277,13 +283,13 @@ export class ConfigPanel {
 	/**
 	 * Render textarea input
 	 */
-	private renderTextareaInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderTextareaInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const textarea = container.createEl('textarea', {
 			cls: 'config-panel-textarea',
 		});
 
 		// Set value after creation (Obsidian's createEl doesn't handle value in options for textarea)
-		textarea.value = String(value || '');
+		textarea.value = this.toInputString(value);
 
 		if (param.placeholder) {
 			textarea.placeholder = param.placeholder;
@@ -299,13 +305,13 @@ export class ConfigPanel {
 	/**
 	 * Render code input
 	 */
-	private renderCodeInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderCodeInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const textarea = container.createEl('textarea', {
 			cls: 'config-panel-textarea config-panel-code',
 		});
 
 		// Set value after creation (Obsidian's createEl doesn't handle value in options for textarea)
-		textarea.value = String(value || '');
+		textarea.value = this.toInputString(value);
 
 		if (param.placeholder) {
 			textarea.placeholder = param.placeholder;
@@ -323,7 +329,7 @@ export class ConfigPanel {
 	/**
 	 * Render JSON input
 	 */
-	private renderJsonInput(container: HTMLElement, param: NodeParameter, value: any): void {
+	private renderJsonInput(container: HTMLElement, param: NodeParameter, value: unknown): void {
 		const textarea = container.createEl('textarea', {
 			cls: 'config-panel-textarea config-panel-code',
 		});
@@ -333,7 +339,8 @@ export class ConfigPanel {
 			const jsonValue = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
 			textarea.value = jsonValue;
 		} catch (error) {
-			textarea.value = String(value || '{}');
+			void error;
+			textarea.value = this.toInputString(value, '{}');
 		}
 
 		textarea.rows = 8;
@@ -345,11 +352,12 @@ export class ConfigPanel {
 		textarea.addEventListener('input', () => {
 			clearTimeout(validationTimeout);
 			validationTimeout = setTimeout(() => {
-				try {
-					const parsed = JSON.parse(textarea.value);
-					textarea.setCssProps({ 'border-color': '' });
-					this.updateConfig(param.name, parsed);
+					try {
+						const parsed: unknown = JSON.parse(textarea.value);
+						textarea.setCssProps({ 'border-color': '' });
+						this.updateConfig(param.name, parsed);
 				} catch (error) {
+					void error;
 					textarea.setCssProps({ 'border-color': '#ef4444' });
 				}
 			}, 500);
@@ -359,7 +367,7 @@ export class ConfigPanel {
 	/**
 	 * Update config
 	 */
-	private updateConfig(key: string, value: any): void {
+	private updateConfig(key: string, value: unknown): void {
 		if (!this.currentNode) return;
 
 		this.currentNode.config[key] = value;
@@ -372,8 +380,38 @@ export class ConfigPanel {
 	/**
 	 * Event listeners
 	 */
-	on<K extends keyof PanelEvents>(event: K, handler: (data: PanelEvents[K]) => void): void {
+	on<K extends keyof PanelEvents>(event: K, handler: (_data: PanelEvents[K]) => void): void {
 		this.events.on(event, handler);
+	}
+
+	private async confirmDelete(): Promise<void> {
+		if (!this.services?.app || !this.currentNode) return;
+		const confirmed = await showConfirm(
+			this.services.app,
+			`Are you sure you want to delete node "${this.currentNode.name}"?`
+		);
+		if (confirmed) {
+			this.events.emit('delete', { nodeId: this.currentNode.id });
+		}
+	}
+
+	private toInputString(value: unknown, fallback = ''): string {
+		if (value === null || value === undefined) return fallback;
+		if (typeof value === 'string') return value;
+		if (typeof value === 'number' || typeof value === 'boolean') {
+			return String(value);
+		}
+		if (typeof value === 'bigint') {
+			return value.toString();
+		}
+		if (typeof value === 'object') {
+			try {
+				return JSON.stringify(value);
+			} catch {
+				return fallback;
+			}
+		}
+		return fallback;
 	}
 
 	/**

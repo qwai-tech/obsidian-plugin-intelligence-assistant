@@ -17,7 +17,7 @@ export function displayAgentsTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Agent Management' });
+	containerEl.createEl('h3', { text: 'Agent management' });
 
 	const desc = containerEl.createEl('p', {
 		text: 'Create and manage AI agents with specific capabilities, tools, and behaviors.'
@@ -29,7 +29,7 @@ export function displayAgentsTab(
 	const agentSummary = actionsRow.createDiv('ia-section-summary');
 	agentSummary.createSpan({ text: `${plugin.settings.agents.length} agent${plugin.settings.agents.length === 1 ? '' : 's'} configured` });
 
-	const addBtn = actionsRow.createEl('button', { text: '+ Add Agent' });
+	const addBtn = actionsRow.createEl('button', { text: '+ add agent' });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -66,14 +66,14 @@ export function displayAgentsTab(
 			updatedAt: Date.now()
 		};
 		plugin.settings.agents.push(newAgent);
-		plugin.saveSettings();
+		void plugin.saveSettings();
 		refreshDisplay();
 	});
 
 	// Display existing agents in a table if they exist
 	if (plugin.settings.agents.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No agents configured. Click "Add Agent" to get started.');
+		emptyDiv.setText('No agents configured. Select add agent to get started.');
 		return;
 	}
 
@@ -206,11 +206,11 @@ export function displayAgentsTab(
 		const serverCount = agent.enabledMcpServers.length;
 		const toolCount = agent.enabledMcpTools.length;
 		if (serverCount > 0) {
-			const mcpBadge = toolsBadges.createEl('span', { text: `${serverCount} MCP server${serverCount === 1 ? '' : 's'}` });
+			const mcpBadge = toolsBadges.createEl('span', { text: `${serverCount} mcp server${serverCount === 1 ? '' : 's'}` });
 			mcpBadge.addClass('ia-tag');
 		}
 		if (toolCount > 0) {
-			const toolBadge = toolsBadges.createEl('span', { text: `${toolCount} MCP tool${toolCount === 1 ? '' : 's'}` });
+			const toolBadge = toolsBadges.createEl('span', { text: `${toolCount} mcp tool${toolCount === 1 ? '' : 's'}` });
 			toolBadge.addClass('ia-tag');
 		}
 
@@ -238,21 +238,23 @@ export function displayAgentsTab(
 		});
 
 		const canDelete = agent.id !== DEFAULT_AGENT_ID && plugin.settings.agents.length > 1;
-		const deleteBtn = actionsCell.createEl('button', { text: canDelete ? 'Delete' : 'Protected' });
+		const deleteBtn = actionsCell.createEl('button', { text: canDelete ? 'delete' : 'protected' });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
 		if (!canDelete) {
 			deleteBtn.setAttr('disabled', 'true');
 		} else {
-			deleteBtn.addEventListener('click', async () => {
-				if (await showConfirm(this.app, `Delete agent "${agent.name}"?`)) {
+			deleteBtn.addEventListener('click', () => {
+				void (async () => {
+					if (await showConfirm(app, `Delete agent "${agent.name}"?`)) {
 					const agentIndex = plugin.settings.agents.findIndex(a => a.id === agent.id);
 					if (agentIndex !== -1) {
 						plugin.settings.agents.splice(agentIndex, 1);
 						await plugin.saveSettings();
 						refreshDisplay();
 					}
-				}
+					}
+				})();
 			});
 		}
 	});

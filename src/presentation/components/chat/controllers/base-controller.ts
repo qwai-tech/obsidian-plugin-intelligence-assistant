@@ -9,8 +9,8 @@ import type { ChatViewState } from '@/presentation/state/chat-view-state';
 
 export abstract class BaseController {
 	constructor(
-		protected app: App,
-		protected plugin: IntelligenceAssistantPlugin,
+		protected _app: App,
+		protected _plugin: IntelligenceAssistantPlugin,
 		protected state: ChatViewState
 	) {}
 

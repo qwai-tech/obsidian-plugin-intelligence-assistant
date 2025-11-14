@@ -13,7 +13,7 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 	protected getHeaders(): Record<string, string> {
 		return {
 			...super.getHeaders(),
-			'Authorization': `Bearer ${this.config.apiKey}`,
+			'Authorization': `Bearer ${this.config.apiKey ?? ''}`,
 		};
 	}
 
@@ -29,7 +29,12 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 			stream: false,
 		};
 
-		const response = await this.makeRequest(url, body);
+		const response = await this.makeRequest(url, body) as {
+			json: {
+				choices: Array<{ message: { content: string } }>;
+				usage: { prompt_tokens: number; completion_tokens: number; total_tokens: number };
+			}
+		};
 		const data = response.json;
 
 		return {
@@ -42,7 +47,7 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 		};
 	}
 
-	protected prepareStreamRequest(request: ChatRequest): { url: string; body: any } {
+	protected prepareStreamRequest(request: ChatRequest): { url: string; body: unknown } {
 		const url = this.getBaseUrl('https://api.deepseek.com/v1') + '/chat/completions';
 		const modelName = this.extractModelName(request.model);
 
@@ -57,9 +62,18 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 		return { url, body };
 	}
 
-	protected parseStreamChunk(data: any): ParsedStreamChunk | null {
+	protected parseStreamChunk(data: unknown): ParsedStreamChunk | null {
 		if (data === '[DONE]') {
 			return { content: null, done: true };
+		}
+
+		// Type guard for data structure
+		const hasChoices = (obj: unknown): obj is { choices: Array<{ delta?: { reasoning_content?: string; content?: string } }> } => {
+			return typeof obj === 'object' && obj !== null && 'choices' in obj;
+		};
+
+		if (!hasChoices(data)) {
+			return null;
 		}
 
 		const delta = data.choices?.[0]?.delta;

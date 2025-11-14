@@ -7,7 +7,7 @@ import { Conversation } from '@/types/core/conversation';
 import { ConversationStorageService } from './conversation-storage-service';
 
 export class ConversationMigrationService {
-  constructor(private storageService: ConversationStorageService) {}
+  constructor(private _storageService: ConversationStorageService) {}
 
   /**
    * Migrate conversations from old array format to new file-based format
@@ -27,7 +27,7 @@ export class ConversationMigrationService {
         const normalizedConv = this.normalizeConversation(conv);
         
         // Create the conversation file
-        await this.storageService.createConversation(normalizedConv);
+        await this._storageService.createConversation(normalizedConv);
         console.debug(`Migrated conversation: ${conv.id} - ${conv.title}`);
       } catch (error) {
         console.error(`Error migrating conversation ${conv.id}:`, error);
@@ -61,7 +61,7 @@ export class ConversationMigrationService {
    * Check if migration is needed
    */
   async isMigrationNeeded(): Promise<boolean> {
-    const count = await this.storageService.getConversationCount();
+    const count = await this._storageService.getConversationCount();
     return count === 0; // If no conversations in new format, migration is likely needed
   }
 }

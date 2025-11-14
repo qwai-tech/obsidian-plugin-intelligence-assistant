@@ -1,5 +1,5 @@
 // Event bus system
-export type EventListener = (data: any) => void;
+export type EventListener = (_data: unknown) => void;
 
 export class EventBus {
   private listeners = new Map<string, EventListener[]>();
@@ -21,7 +21,7 @@ export class EventBus {
     this.onceListeners.get(event)!.push(listener);
   }
 
-  emit(event: string, data: any): void {
+  emit(event: string, data: unknown): void {
     // Emit to regular listeners
     const eventListeners = this.listeners.get(event);
     if (eventListeners) {
@@ -36,7 +36,7 @@ export class EventBus {
     }
   }
 
-  emitSync(event: string, data: any): void {
+  emitSync(event: string, data: unknown): void {
     this.emit(event, data);
   }
 

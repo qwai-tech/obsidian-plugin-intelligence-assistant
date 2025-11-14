@@ -16,7 +16,7 @@ export function displayPromptsTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'System Prompts' });
+	containerEl.createEl('h3', { text: 'System prompts' });
 
 	const desc = containerEl.createEl('p', {
 		text: 'Manage system prompts that define the behavior and personality of your AI assistant.'
@@ -29,7 +29,7 @@ export function displayPromptsTab(
 	actionRow.addClass('ia-section-actions--wrap');
 
 	// Add new prompt button
-	const addBtn = actionRow.createEl('button', { text: '+ Add System Prompt' });
+	const addBtn = actionRow.createEl('button', { text: '+ add system prompt' });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -41,14 +41,14 @@ export function displayPromptsTab(
 			createdAt: Date.now(),
 			updatedAt: Date.now()
 		});
-		plugin.saveSettings();
+		void plugin.saveSettings();
 		refreshDisplay();
 	});
 
 	// Display existing prompts in a table if they exist
 	if (plugin.settings.systemPrompts.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No system prompts configured. Click "Add System Prompt" to get started.');
+		emptyDiv.setText('No system prompts configured. Select add system prompt to get started.');
 		return;
 	}
 
@@ -120,24 +120,27 @@ export function displayPromptsTab(
 		const toggleBtn = actionsCell.createEl('button', { text: prompt.enabled ? 'Disable' : 'Enable' });
 		toggleBtn.addClass('ia-button');
 		toggleBtn.addClass('ia-button--ghost');
-		toggleBtn.addEventListener('click', async () => {
-			prompt.enabled = !prompt.enabled;
-			prompt.updatedAt = Date.now();
-			await plugin.saveSettings();
-			refreshDisplay();
+		toggleBtn.addEventListener('click', () => {
+			void (async () => {
+				prompt.enabled = !prompt.enabled;
+				prompt.updatedAt = Date.now();
+				await plugin.saveSettings();
+				refreshDisplay();
+			})();
 		});
 
 		// Delete button
 		const deleteBtn = actionsCell.createEl('button', { text: 'Delete' });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
-		deleteBtn.addEventListener('click', async () => {
-			if (await showConfirm(this.app, `Delete prompt "${prompt.name}"?`)) {
-				plugin.settings.systemPrompts.splice(index, 1);
-				await plugin.saveSettings();
-				refreshDisplay();
-			}
+		deleteBtn.addEventListener('click', () => {
+			void (async () => {
+				if (await showConfirm(app, `Delete prompt "${prompt.name}"?`)) {
+					plugin.settings.systemPrompts.splice(index, 1);
+					await plugin.saveSettings();
+					refreshDisplay();
+				}
+			})();
 		});
 	});
 }
-

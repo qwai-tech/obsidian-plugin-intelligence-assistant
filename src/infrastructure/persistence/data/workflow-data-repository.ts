@@ -26,12 +26,12 @@ export class WorkflowDataRepository {
 	private readonly indexPath = `${this.baseFolder}/index.json`;
 	private initialized = false;
 
-	constructor(private readonly app: App) {}
+	constructor(private readonly _app: App) {}
 
 	async initialize(): Promise<void> {
 		if (this.initialized) return;
-		await ensureFolderExists(this.app.vault.adapter, this.baseFolder);
-		if (!(await this.app.vault.adapter.exists(this.indexPath))) {
+		await ensureFolderExists(this._app.vault.adapter, this.baseFolder);
+		if (!(await this._app.vault.adapter.exists(this.indexPath))) {
 			await this.writeIndex({
 				version: INDEX_VERSION,
 				updatedAt: Date.now(),
@@ -65,7 +65,7 @@ export class WorkflowDataRepository {
 
 	async saveWorkflow(workflow: Workflow): Promise<void> {
 		await this.initialize();
-		const adapter = this.app.vault.adapter;
+		const adapter = this._app.vault.adapter;
 		const folder = this.getWorkflowFolder(workflow.id);
 		await ensureFolderExists(adapter, folder);
 		const filePath = `${folder}/workflow.json`;
@@ -139,7 +139,7 @@ export class WorkflowDataRepository {
 
 	async saveExecution(execution: WorkflowExecution): Promise<void> {
 		await this.initialize();
-		const adapter = this.app.vault.adapter;
+		const adapter = this._app.vault.adapter;
 		const workflowFolder = this.getWorkflowFolder(execution.workflowId);
 		await ensureFolderExists(adapter, workflowFolder);
 		const execFolder = `${workflowFolder}/execution`;
@@ -150,7 +150,7 @@ export class WorkflowDataRepository {
 
 	async deleteExecution(workflowId: string, executionId: string): Promise<void> {
 		await this.initialize();
-		const adapter = this.app.vault.adapter;
+		const adapter = this._app.vault.adapter;
 		const index = await this.readIndex();
 		const entry = index.workflows.find(w => w.id === workflowId);
 		const execFolder = `${(entry?.folder ?? this.getWorkflowFolder(workflowId))}/execution`;
@@ -169,7 +169,7 @@ export class WorkflowDataRepository {
 
 	private async loadExecutionsFromFolder(folder: string): Promise<WorkflowExecution[]> {
 		const execFolder = `${folder}/execution`;
-		const adapter = this.app.vault.adapter;
+		const adapter = this._app.vault.adapter;
 		if (!(await adapter.exists(execFolder))) {
 			return [];
 		}
@@ -196,16 +196,16 @@ export class WorkflowDataRepository {
 	private async resolveWorkflowFilePath(workflowId: string): Promise<string | null> {
 		const index = await this.readIndex();
 		const entry = index.workflows.find(w => w.id === workflowId);
-		if (entry && await this.app.vault.adapter.exists(entry.file)) {
+		if (entry && await this._app.vault.adapter.exists(entry.file)) {
 			return entry.file;
 		}
 		const fallback = `${this.getWorkflowFolder(workflowId)}/workflow.json`;
-		return (await this.app.vault.adapter.exists(fallback)) ? fallback : null;
+		return (await this._app.vault.adapter.exists(fallback)) ? fallback : null;
 	}
 
 	private async readWorkflow(filePath: string): Promise<Workflow | null> {
 		try {
-			const content = await this.app.vault.adapter.read(filePath);
+			const content = await this._app.vault.adapter.read(filePath);
 			return JSON.parse(content) as Workflow;
 		} catch (error) {
 			console.warn(`[Workflows] Failed to read workflow ${filePath}:`, error);
@@ -215,7 +215,7 @@ export class WorkflowDataRepository {
 
 	private async readExecution(filePath: string): Promise<WorkflowExecution | null> {
 		try {
-			const content = await this.app.vault.adapter.read(filePath);
+			const content = await this._app.vault.adapter.read(filePath);
 			return JSON.parse(content) as WorkflowExecution;
 		} catch (error) {
 			console.warn(`[Workflows] Failed to read execution ${filePath}:`, error);
@@ -224,7 +224,7 @@ export class WorkflowDataRepository {
 	}
 
 	private async removeFolder(folder: string): Promise<void> {
-		const adapter = this.app.vault.adapter;
+		const adapter = this._app.vault.adapter;
 		if (!(await adapter.exists(folder))) {
 			return;
 		}
@@ -240,7 +240,7 @@ export class WorkflowDataRepository {
 
 	private async readIndex(): Promise<WorkflowIndexFile> {
 		try {
-			const content = await this.app.vault.adapter.read(this.indexPath);
+			const content = await this._app.vault.adapter.read(this.indexPath);
 			return JSON.parse(content) as WorkflowIndexFile;
 		} catch {
 			return {
@@ -252,6 +252,6 @@ export class WorkflowDataRepository {
 	}
 
 	private async writeIndex(index: WorkflowIndexFile): Promise<void> {
-		await this.app.vault.adapter.write(this.indexPath, JSON.stringify(index, null, 2));
+		await this._app.vault.adapter.write(this.indexPath, JSON.stringify(index, null, 2));
 	}
 }
