@@ -5357,8 +5357,9 @@
 }
 
 .header-action-btn.is-active {
-	border-color: var(--text-accent);
-	color: var(--text-normal);
+	border-color: var(--interactive-accent);
+	background: var(--interactive-accent);
+	color: var(--background-primary);
 }
 
 .header-action-btn.is-disabled {

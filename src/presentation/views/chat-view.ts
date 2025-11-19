@@ -1880,7 +1880,11 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				await this.plugin.saveSettings();
 			}
 		} else {
-			const ensuredAgentId = this.ensureDefaultAgentSelection();
+			let ensuredAgentId = this.ensureDefaultAgentSelection();
+			if (!ensuredAgentId) {
+				await this.plugin.ensureDefaultAgent();
+				ensuredAgentId = this.ensureDefaultAgentSelection();
+			}
 			if (ensuredAgentId) {
 				const needsSave = this.plugin.settings.activeAgentId !== ensuredAgentId;
 				this.plugin.settings.activeAgentId = ensuredAgentId;
@@ -1890,6 +1894,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				await this.applyAgentConfig(ensuredAgentId);
 				this.refreshAgentSelect(ensuredAgentId);
 			} else {
+				new Notice('No agents available. Configure agents in Settings → Agents.');
 				if (this.plugin.settings.activeAgentId) {
 					this.plugin.settings.activeAgentId = null;
 					await this.plugin.saveSettings();

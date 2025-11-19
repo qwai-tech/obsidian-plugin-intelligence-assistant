@@ -35,6 +35,16 @@ Transform any vault into an AI-native workspace. The Intelligence Assistant plug
 4. Assistant bubbles always show the provider + model used, and token usage is displayed in the footer as lightweight annotations (excluded when copying chat content).
 5. The `Insert to Notes` action lets you drop responses directly into the active file.
 
+## Web Search Providers
+
+Configure web search under **Settings → Intelligence Assistant → Web Search** to give the assistant access to current information. The tab now exposes:
+
+- A provider picker that spans DuckDuckGo, Google Custom Search, Bing, SerpAPI, Tavily, SearXNG, Brave Search, Yahoo, Yandex, Qwant, and Mojeek.
+- Locale controls (language + country/market), result freshness, and optional allow/deny lists to keep answers focused on trusted domains.
+- Provider-specific credentials including the shared API key, Google CSE ID, custom SerpAPI/SearXNG endpoints, and dedicated keys for Tavily, Brave, Qwant, or Mojeek.
+
+Fill only the fields required by your chosen provider—the UI describes what each option powers and settings persist per vault.
+
 ## Agents, Workflows, and Data Layout
 
 ```
@@ -62,6 +72,10 @@ npm run type-check   # tsc --noEmit
 npm run test         # Jest suite
 npm run build        # production bundle
 ```
+
+### Task Completion Rule
+
+After every task, run `npm run lint` and `npm run build`. Do not consider the work done until both commands succeed and any new issues are resolved.
 
 Additional helpers: `npm run dev:hot`, `npm run dev:watch`, and `npm run build:production` for advanced workflows.
 

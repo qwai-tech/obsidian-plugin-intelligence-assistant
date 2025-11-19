@@ -329,33 +329,47 @@ export class WebSearchService {
 
 			const maxResults = this.config.maxResults || 5;
 			
+			let results: WebSearchResult[];
 			switch (this.config.provider) {
 				case 'google':
-					return await this.searchGoogle(optimizedQuery, maxResults);
+					results = await this.searchGoogle(optimizedQuery, maxResults);
+					break;
 				case 'bing':
-					return await this.searchBing(optimizedQuery, maxResults);
+					results = await this.searchBing(optimizedQuery, maxResults);
+					break;
 				case 'duckduckgo':
-					return await this.searchDuckDuckGo(optimizedQuery, maxResults);
+					results = await this.searchDuckDuckGo(optimizedQuery, maxResults);
+					break;
 				case 'serpapi':
-					return await this.searchSerpAPI(optimizedQuery, maxResults);
+					results = await this.searchSerpAPI(optimizedQuery, maxResults);
+					break;
 				case 'tavily':
-					return await this.searchTavily(optimizedQuery, maxResults);
+					results = await this.searchTavily(optimizedQuery, maxResults);
+					break;
 				case 'searxng':
-					return await this.searchSearXNG(optimizedQuery, maxResults);
+					results = await this.searchSearXNG(optimizedQuery, maxResults);
+					break;
 				case 'brave':
-					return await this.searchBrave(optimizedQuery, maxResults);
+					results = await this.searchBrave(optimizedQuery, maxResults);
+					break;
 				case 'yahoo':
-					return await this.searchYahoo(optimizedQuery, maxResults);
+					results = await this.searchYahoo(optimizedQuery, maxResults);
+					break;
 				case 'yandex':
-					return await this.searchYandex(optimizedQuery, maxResults);
+					results = await this.searchYandex(optimizedQuery, maxResults);
+					break;
 				case 'qwant':
-					return await this.searchQwant(optimizedQuery, maxResults);
+					results = await this.searchQwant(optimizedQuery, maxResults);
+					break;
 				case 'mojeek':
-					return await this.searchMojeek(optimizedQuery, maxResults);
+					results = await this.searchMojeek(optimizedQuery, maxResults);
+					break;
 				default:
 					console.warn(`[WebSearch] Unknown provider: ${this.config.provider}, defaulting to DuckDuckGo`);
-					return await this.searchDuckDuckGo(optimizedQuery, maxResults);
+					results = await this.searchDuckDuckGo(optimizedQuery, maxResults);
 			}
+
+			return this.applyDomainFilters(results);
 		} catch (error) {
 			console.error('[WebSearch] Error:', error);
 			// Return mock results for demonstration when actual search fails
@@ -1085,6 +1099,60 @@ export class WebSearchService {
 				source: 'duckduckgo.com'
 			}
 		];
+	}
+
+	private applyDomainFilters(results: WebSearchResult[]): WebSearchResult[] {
+		if (!results || results.length === 0) {
+			return [];
+		}
+
+		const includeDomains = this.normalizeDomainList(this.config.includeDomains);
+		const excludeDomains = this.normalizeDomainList(this.config.excludeDomains);
+
+		return results.filter(result => {
+			const host = this.extractHostname(result.url);
+			if (!host) {
+				return includeDomains.length === 0;
+			}
+
+			if (excludeDomains.length > 0 && excludeDomains.some(domain => this.matchesDomain(host, domain))) {
+				return false;
+			}
+
+			if (includeDomains.length === 0) {
+				return true;
+			}
+
+			return includeDomains.some(domain => this.matchesDomain(host, domain));
+		});
+	}
+
+	private normalizeDomainList(domains?: string): string[] {
+		if (!domains) {
+			return [];
+		}
+
+		return domains
+			.split(',')
+			.map(domain => domain.trim().toLowerCase())
+			.filter(Boolean);
+	}
+
+	private extractHostname(url?: string): string | null {
+		if (!url) {
+			return null;
+		}
+
+		try {
+			return new URL(url).hostname.toLowerCase();
+		} catch (error) {
+			console.warn('[WebSearch] Failed to parse URL for filtering', url, error);
+			return null;
+		}
+	}
+
+	private matchesDomain(host: string, domain: string): boolean {
+		return host === domain || host.endsWith(`.${domain}`);
 	}
 
 	/**
