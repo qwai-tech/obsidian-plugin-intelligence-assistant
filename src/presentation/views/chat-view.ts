@@ -1671,9 +1671,13 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (!this.agentSelector) return;
 		if (this.state.mode === 'agent') {
 			const wasDisabled = this.agentSelector.disabled;
+			this.agentSelector.removeClass('ia-hidden');
 			this.agentSelector.setCssProps({ 'display': '' });
 			this.agentSelector.disabled = false;
-			if (this.agentSelectorGroup) this.agentSelectorGroup.setCssProps({ 'display': '' });
+			if (this.agentSelectorGroup) {
+				this.agentSelectorGroup.removeClass('ia-hidden');
+				this.agentSelectorGroup.setCssProps({ 'display': '' });
+			}
 			if (wasDisabled) {
 				this.refreshAgentSelect();
 			}
