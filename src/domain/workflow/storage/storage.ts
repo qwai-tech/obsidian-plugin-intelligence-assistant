@@ -31,9 +31,9 @@ export class WorkflowStorage {
 			if (!folder) {
 				await this.vault.createFolder(this.folderPath);
 			}
-		} catch (_error: unknown) {
+		} catch (error: unknown) {
 			// Folder might already exist
-			console.debug('Workflow storage folder initialized');
+			console.debug('Workflow storage folder initialization skipped:', error);
 		}
 	}
 

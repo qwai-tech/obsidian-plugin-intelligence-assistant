@@ -1533,7 +1533,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 					})();
 				});
 
-				const _filePathSpan = fileItem.createEl('span', {
+				fileItem.createEl('span', {
 					text: filePath,
 					cls: 'rag-file-path'
 				});
@@ -2561,9 +2561,6 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			// Create executor using new system
 			const executor = new WorkflowExecutor(nodeRegistry);
 
-			// Get input from last user message or prompt
-			const lastUserMessage = this.state.messages.filter(m => m.role === 'user').pop();
-			const _initialInput = lastUserMessage?.content || 'Start workflow';
 
 			statusEl.setText('Running...');
 
@@ -2717,7 +2714,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 					Array.from(doc.body.childNodes).forEach(node => {
 						finalAnswerEl.appendChild(node.cloneNode(true));
 					});
-				} catch (_error) {
+				} catch (error) {
+					console.debug('Failed to render agent final answer as markdown, falling back to text.', error);
 					finalAnswerEl.createDiv().setText(finalAnswer);
 				}
 
@@ -2778,8 +2776,6 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			};
 
 			// Add system prompts and context if needed
-			const _finalMessages = [...chatRequest.messages];
-
 			// Add system prompt if configured (use the same method as the original)
 			const systemMessages: Message[] = [];
 			const systemPromptContent = this.plugin.settings.systemPrompts.find(p => p.id === this.plugin.settings.activeSystemPromptId)?.content;

@@ -176,7 +176,7 @@ export class SecureCodeExecutionService {
                 executionTime: Date.now() - startTime,
                 memoryUsage: this.getMemoryUsage(),
               };
-            } catch (_exprError: unknown) {
+            } catch {
               throw new Error(`Code compilation failed: ${err.message}`);
             }
           }

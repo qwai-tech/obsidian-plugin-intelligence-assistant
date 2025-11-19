@@ -76,7 +76,8 @@ export class OllamaModelManagerModal extends Modal {
 				statusEl.setText('❌ Server offline');
 				statusEl.setCssProps({ 'color': 'var(--text-error)' });
 			}
-		} catch (_error) {
+		} catch (error) {
+			console.error('Failed to check Ollama server status:', error);
 			statusEl.setText('❌ Connection error');
 			statusEl.setCssProps({ 'color': 'var(--text-error)' });
 		}
@@ -86,7 +87,7 @@ export class OllamaModelManagerModal extends Modal {
 		const section = containerEl.createDiv('ia-modal-section');
 		section.createEl('h3', { text: 'Pull new model' });
 
-		const _desc = section.createEl('p', {
+		section.createEl('p', {
 			text: 'Enter a model name to download from Ollama library (e.g., llama2, mistral, codellama)',
 			attr: { style: 'color: var(--text-muted); font-size: 0.9em;' }
 		});
@@ -286,8 +287,9 @@ export class OllamaModelManagerModal extends Modal {
 	}
 
 	private async refreshModelList(buttonEl?: HTMLElement) {
+		let originalText: string | null = null;
 		if (buttonEl) {
-			const _originalText = buttonEl.textContent;
+			originalText = buttonEl.textContent;
 			buttonEl.textContent = 'Refreshing...';
 			(buttonEl as HTMLButtonElement).disabled = true;
 		}
@@ -313,6 +315,7 @@ export class OllamaModelManagerModal extends Modal {
 		} finally {
 			if (buttonEl) {
 				(buttonEl as HTMLButtonElement).disabled = false;
+				buttonEl.textContent = originalText ?? 'Refresh models';
 			}
 		}
 	}

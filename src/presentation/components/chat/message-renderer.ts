@@ -349,13 +349,6 @@ async function copyMessageContent(contentEl: HTMLElement) {
 	await writeTextToClipboard(text);
 }
 
-function _isSelectionInsideElement(element: HTMLElement, selection: Selection): boolean {
-	if (selection.rangeCount === 0) return false;
-	const range = selection.getRangeAt(0);
-	const ancestor = range.commonAncestorContainer;
-	return element.contains(ancestor instanceof Element ? ancestor : ancestor.parentElement);
-}
-
 async function writeTextToClipboard(text: string) {
 	// Use the modern Clipboard API
 	if (navigator?.clipboard?.writeText) {

@@ -567,7 +567,8 @@ export class MCPInspectorModal extends Modal {
 						value = JSON.parse(value);
 					}
 					args[paramName] = value;
-				} catch (_error) {
+				} catch (error) {
+					console.error(`Invalid JSON for parameter ${paramName}:`, error);
 					new Notice(`Invalid JSON for parameter: ${paramName}`);
 					validationError = true;
 					break;

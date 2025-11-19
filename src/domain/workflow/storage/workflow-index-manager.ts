@@ -414,8 +414,9 @@ export class WorkflowIndexManager {
 			if (!exists) {
 				await adapter.mkdir(basePath);
 			}
-		} catch (_error: unknown) {
+		} catch (error: unknown) {
 			// Folder might already exist, ignore error
+			console.debug('Workflow index base folder exists:', error);
 		}
 	}
 }

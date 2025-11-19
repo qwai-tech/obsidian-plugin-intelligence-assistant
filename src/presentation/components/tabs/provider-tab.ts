@@ -31,7 +31,8 @@ async function checkOllamaStatus(baseUrl: string): Promise<{ online: boolean; ve
 			return { online: true, version: data.version };
 		}
 		return { online: false };
-	} catch (_error) {
+	} catch (error) {
+		console.error('Failed to check Ollama status:', error);
 		return { online: false };
 	}
 }

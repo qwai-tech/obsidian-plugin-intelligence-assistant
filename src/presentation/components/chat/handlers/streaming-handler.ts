@@ -169,7 +169,8 @@ export async function handleStreamingChat(
 							const cursor = contentEl.createEl('span', { cls: 'streaming-cursor' });
 							cursor.addClass('ia-blink-animation');
 							cursor.setText('▊');
-						} catch (_error) {
+						} catch (error) {
+							console.debug('Streaming markdown render failed, falling back to plain text.', error);
 							contentEl.setText(fullContent);
 						}
 
