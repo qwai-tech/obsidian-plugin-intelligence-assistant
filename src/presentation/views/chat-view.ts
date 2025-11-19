@@ -1,4 +1,4 @@
-import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, Modal, Setting, requestUrl } from 'obsidian';
+import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, Modal, Setting, requestUrl, setIcon } from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { DEFAULT_AGENT_ID } from '@/constants';
@@ -479,7 +479,7 @@ export class ChatView extends ItemView {
 
 		if (this.plugin.settings.llmConfigs.length === 0) {
 			console.error('[Chat] No LLM configs found');
-			new Notice('Please configure an llm provider in settings first');
+			new Notice('Please configure an LLM provider in settings first');
 			return;
 		}
 
@@ -1475,13 +1475,13 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		} catch (_error) {
 			const errMsg = _error instanceof Error ? _error.message : String(_error);
 			console.error('Error loading RAG stats modal:', errMsg);
-			new Notice('Unable to load rag statistics.');
+			new Notice('Unable to load RAG statistics.');
 		}
 	}
 
 	private showRagStatsModal(stats: RagIndexStats) {
 		const modal = new Modal(this.app);
-		modal.titleEl.setText('Rag statistics');
+		modal.titleEl.setText('RAG statistics');
 
 		const content = modal.contentEl;
 		content.empty();
@@ -1541,10 +1541,10 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		} else {
 			const noFiles = content.createDiv('rag-no-files');
 			noFiles.createEl('p', { text: '⚠️ no files have been indexed yet.' });
-			noFiles.createEl('p', { text: 'To build the rag index:' });
+			noFiles.createEl('p', { text: 'To build the RAG index:' });
 			const ol = noFiles.createEl('ol');
-			ol.createEl('li', { text: 'Go to settings → rag' });
-			ol.createEl('li', { text: 'Enable rag' });
+			ol.createEl('li', { text: 'Go to Settings → RAG' });
+			ol.createEl('li', { text: 'Enable RAG' });
 			ol.createEl('li', { text: 'Select index vault' });
 		}
 
@@ -2110,11 +2110,11 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private createActionRow(parent: HTMLElement) {
 		const row = parent.createDiv('chat-action-row');
-		row.addClass('chat-action-row');
 
 		const breadcrumb = row.createDiv('chat-breadcrumb');
-		breadcrumb.addClass('chat-breadcrumb');
-		const historyLink = breadcrumb.createSpan({ text: '☰ conversation', cls: 'chat-breadcrumb-link chat-action-link' });
+		const historyLink = breadcrumb.createSpan({ cls: 'chat-breadcrumb-link chat-action-btn' });
+		setIcon(historyLink.createSpan({ cls: 'chat-action-icon' }), 'list');
+		historyLink.createSpan({ text: 'Conversations', cls: 'chat-action-text' });
 		historyLink.setAttr('role', 'button');
 		historyLink.tabIndex = 0;
 		const activateHistory = async (event: Event) => {
@@ -2132,17 +2132,18 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		this.conversationTitleEl = breadcrumb.createSpan({ text: 'Current conversation', cls: 'chat-breadcrumb-current' });
 
 		const actions = row.createDiv('chat-action-buttons');
-		actions.addClass('chat-action-buttons');
 
-			const newLink = actions.createSpan({ text: '+ new', cls: 'chat-action-link' });
-			newLink.setAttr('role', 'button');
-			newLink.tabIndex = 0;
-			const activateNew = async (event: Event) => {
-				event.preventDefault();
-				event.stopPropagation();
-				await this.resetToDefaultChatConfiguration();
-				await this.conversationManager.createNewConversation();
-			};
+		const newLink = actions.createSpan({ cls: 'chat-action-btn' });
+		setIcon(newLink.createSpan({ cls: 'chat-action-icon' }), 'plus');
+		newLink.createSpan({ text: 'New', cls: 'chat-action-text' });
+		newLink.setAttr('role', 'button');
+		newLink.tabIndex = 0;
+		const activateNew = async (event: Event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			await this.resetToDefaultChatConfiguration();
+			await this.conversationManager.createNewConversation();
+		};
 		newLink.addEventListener('click', (event: MouseEvent) => { void activateNew(event); });
 		newLink.addEventListener('keydown', (event: KeyboardEvent) => {
 			if (event.key === 'Enter' || event.key === ' ') {
@@ -2150,9 +2151,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			}
 		});
 
-		actions.createSpan({ text: '|', cls: 'chat-action-sep' });
-
-		const settingsLink = actions.createSpan({ text: '⚙️ settings', cls: 'chat-action-link' });
+		const settingsLink = actions.createSpan({ cls: 'chat-action-btn' });
+		setIcon(settingsLink.createSpan({ cls: 'chat-action-icon' }), 'settings');
+		settingsLink.createSpan({ text: 'Settings', cls: 'chat-action-text' });
 		settingsLink.setAttr('role', 'button');
 		settingsLink.tabIndex = 0;
 		const activateSettings = (event: Event) => {
@@ -2351,7 +2352,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private async handleQuickActionRag() {
 		if (!this.plugin.settings.ragConfig.enabled) {
-			new Notice('Rag is disabled in settings. Enable it under settings → chat features → rag.');
+			new Notice('RAG is disabled in settings. Enable it under settings → chat features → rag.');
 			return;
 		}
 		this.state.enableRAG = !this.state.enableRAG;

@@ -447,7 +447,7 @@ export class ConversationManager extends Events {
 
 		sortedConversations.forEach(conv => {
 			const convItem = listContent.createDiv('conversation-item');
-			convItem.removeClass('ia-hidden');
+			convItem.setCssProps({ 'display': 'flex' });
 			convItem.setCssProps({ 'align-items': 'center' });
 			convItem.setCssProps({ 'justify-content': 'space-between' });
 			convItem.setCssProps({ 'gap': '8px' });
@@ -460,11 +460,23 @@ export class ConversationManager extends Events {
 				convItem.setCssProps({ 'background': 'var(--background-modifier-hover)' });
 			}
 
-			const convTitle = convItem.createDiv('conversation-title');
-			convTitle.setCssProps({ 'flex': '1' });
+			// Single click on item to switch conversation
+			convItem.addEventListener('click', (e) => {
+				// Don't switch if clicking on action buttons
+				if ((e.target as HTMLElement).closest('.conversation-actions')) return;
+				void this.switchConversation(conv.id);
+			});
+
+			const convContent = convItem.createDiv('conversation-content');
+			convContent.setCssProps({ 'flex': '1' });
+			convContent.setCssProps({ 'overflow': 'hidden' });
+			convContent.setCssProps({ 'min-width': '0' });
+
+			const convTitle = convContent.createDiv('conversation-title');
 			convTitle.setCssProps({ 'overflow': 'hidden' });
 			convTitle.setCssProps({ 'text-overflow': 'ellipsis' });
 			convTitle.setCssProps({ 'white-space': 'nowrap' });
+			convTitle.setCssProps({ 'font-weight': '500' });
 
 			// Add icon if enabled and available
 			if (this.plugin.settings.conversationIconEnabled && conv.icon) {
@@ -473,9 +485,20 @@ export class ConversationManager extends Events {
 			}
 
 			convTitle.createSpan().setText(conv.title);
-			convTitle.addEventListener('click', () => {
-				void this.switchConversation(conv.id);
-			});
+
+			// Add timestamps below title
+			const convMeta = convContent.createDiv('conversation-meta');
+			convMeta.setCssProps({ 'font-size': '10px' });
+			convMeta.setCssProps({ 'color': 'var(--text-muted)' });
+			convMeta.setCssProps({ 'margin-top': '2px' });
+
+			const formatDate = (timestamp: number) => {
+				const date = new Date(timestamp);
+				return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
+					' ' + date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+			};
+
+			convMeta.setText(`${formatDate(conv.createdAt)} | ${formatDate(conv.updatedAt)}`);
 
 			// Actions container
 			const actions = convItem.createDiv('conversation-actions');

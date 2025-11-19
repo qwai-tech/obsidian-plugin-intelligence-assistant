@@ -12,7 +12,7 @@ export function displayRAGTab(
 	containerEl: HTMLElement,
 	plugin: IntelligenceAssistantPlugin
 ): void {
-	containerEl.createEl('h3', { text: 'Rag configuration' });
+	containerEl.createEl('h3', { text: 'RAG configuration' });
 
 	const desc = containerEl.createEl('p', {
 		text: 'Configure retrieval-augmented generation to enhance AI responses with your vault content.'
@@ -185,7 +185,7 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 	section.createEl('h4', { text: 'Index management' });
 
 	const indexDesc = section.createEl('p', {
-		text: 'Manage your rag index and view statistics about indexed content.'
+		text: 'Manage your RAG index and view statistics about indexed content.'
 	});
 	indexDesc.addClass('setting-item-description');
 

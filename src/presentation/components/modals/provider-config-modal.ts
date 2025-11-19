@@ -26,12 +26,12 @@ export class ProviderConfigModal extends Modal {
 		}).addDropdown(dropdown => dropdown
 				.addOption('openai', 'OpenAI')
 				.addOption('anthropic', 'Anthropic')
-				.addOption('google', 'Google (gemini)')
-				.addOption('deepseek', 'Deepseek')
+				.addOption('google', 'Google (Gemini)')
+				.addOption('deepseek', 'DeepSeek')
 				.addOption('ollama', 'Ollama (local)')
 				.addOption('openrouter', 'OpenRouter')
 				.addOption('sap-ai-core', 'SAP AI Core')
-				.addOption('custom', 'Custom (openai compatible)')
+				.addOption('custom', 'Custom (OpenAI compatible)')
 				.setValue(this.draft.provider)
 				.onChange(value => {
 					this.draft.provider = value;

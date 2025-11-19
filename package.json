@@ -58,11 +58,9 @@
         "typescript-eslint": "^8.46.4"
     },
     "dependencies": {
-        "@ant-design/icons": "^6.1.0",
         "@modelcontextprotocol/sdk": "^1.21.1",
         "@sap-ai-sdk/ai-api": "^2.1.0",
         "@sap-ai-sdk/orchestration": "^2.1.0",
-        "antd": "^5.28.1",
         "marked": "^17.0.0",
         "vm2": "^3.10.0"
     }

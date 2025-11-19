@@ -48,7 +48,12 @@ export default defineConfig([
       "eslint-comments": eslintComments
     },
     rules: {
-      "obsidianmd/ui/sentence-case": "warn",
+      // Allow brand names, acronyms, and technical identifiers in UI text
+      "obsidianmd/ui/sentence-case": ["warn", {
+        "acronyms": ["AI", "RAG", "MVC", "LLM", "API", "MCP", "URL", "JSON", "CSS", "HTML"],
+        "brands": ["Ollama", "OpenAI", "DuckDuckGo", "DeepSeek", "Gemini", "Anthropic", "Google", "OpenRouter", "SAP"],
+        "ignoreWords": ["Markdown", "llama2", "mistral", "codellama", "Cross-encoder"]
+      }],
       "obsidianmd/prefer-file-manager-trash-file": "error",
 
       "no-console": ["error", { allow: ["warn", "error", "debug"] }],

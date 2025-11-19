@@ -14,9 +14,9 @@ export class MCPInspectorModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: 'Mcp inspector' });
+		contentEl.createEl('h2', { text: 'MCP inspector' });
 		const descEl = contentEl.createEl('p', {
-			text: 'Inspect and debug model context protocol (mcp) server connections and tools.'
+			text: 'Inspect and debug Model Context Protocol (MCP) server connections and tools.'
 		});
 		descEl.setCssProps({ 'color': 'var(--text-muted)' });
 
@@ -160,7 +160,7 @@ export class MCPInspectorModal extends Modal {
 
 		// Display configured servers
 		if (this.plugin.settings.mcpServers.length === 0) {
-			container.createEl('p', { text: 'No mcp servers configured.' });
+			container.createEl('p', { text: 'No MCP servers configured.' });
 			return;
 		}
 
@@ -263,7 +263,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderToolsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: 'Available mcp tools' });
+		container.createEl('h3', { text: 'Available MCP tools' });
 
 		// Check for active connections
 		const toolManager = this.plugin.getToolManager();
@@ -278,7 +278,7 @@ export class MCPInspectorModal extends Modal {
 			}, {} as Record<string, unknown[]>);
 
 		if (Object.keys(mcpTools).length === 0) {
-			container.createEl('p', { text: 'No mcp tools available. Check server connections.' });
+			container.createEl('p', { text: 'No MCP tools available. Check server connections.' });
 			return;
 		}
 
@@ -328,7 +328,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderLogsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: 'Mcp connection logs' });
+		container.createEl('h3', { text: 'MCP connection logs' });
 
 		// Display any stored logs or debugging information
 		const logContainer = container.createDiv();
@@ -342,7 +342,7 @@ export class MCPInspectorModal extends Modal {
 		logContainer.setCssProps({ 'font-size': '12px' });
 
 		logContainer.createEl('p', {
-			text: 'Mcp connection logs will appear here. Currently showing placeholder information.'
+			text: 'MCP connection logs will appear here. Currently showing placeholder information.'
 		});
 
 		logContainer.createEl('p', {
@@ -652,7 +652,7 @@ export class MCPInspectorModal extends Modal {
 		const mcpServers = this.plugin.settings.mcpServers;
 
 		if (mcpServers.length === 0) {
-			new Notice('⚠️ no mcp servers configured');
+			new Notice('⚠️ No MCP servers configured');
 			return;
 		}
 

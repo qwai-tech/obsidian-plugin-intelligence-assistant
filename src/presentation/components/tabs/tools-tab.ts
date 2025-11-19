@@ -18,7 +18,7 @@ export function displayToolsTab(
 	containerEl.createEl('h3', { text: 'Tool configuration' });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Review built-in tools and explore mcp tools loaded from connected servers. Enable the actions your agents should be able to perform.'
+		text: 'Review built-in tools and explore MCP tools loaded from connected servers. Enable the actions your agents should be able to perform.'
 	});
 	desc.addClass('ia-section-description');
 
@@ -126,7 +126,7 @@ function renderBuiltInTools(content: HTMLElement, plugin: IntelligenceAssistantP
 	infoTitle.addClass('info-callout-title');
 
 	const infoText = infoBox.createEl('p', {
-		text: 'Built-in tools are configured per plugin settings. Mcp tools are managed independently—use the mcp tab to connect servers and refresh tool availability.'
+		text: 'Built-in tools are configured per plugin settings. MCP tools are managed independently—use the mcp tab to connect servers and refresh tool availability.'
 	});
 	infoText.addClass('table-subtext');
 }
@@ -206,7 +206,7 @@ function renderMcpTools(
 	if (!hasRows) {
 		const note = content.createEl('p');
 		note.addClass('ia-table-subtext');
-		note.setText('No mcp tools available. Connect a server or refresh cached tools to populate this list.');
+		note.setText('No MCP tools available. Connect a server or refresh cached tools to populate this list.');
 		return;
 	}
 

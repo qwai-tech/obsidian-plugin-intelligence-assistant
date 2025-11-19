@@ -4,7 +4,7 @@
  * Main editor class that orchestrates canvas, sidebar, and config panel.
  * Provides a clean and intuitive interface for workflow editing.
  *
- * Now using Ant Design styling for professional UI/UX
+ * Custom styling for a more polished workflow editor UI
  */
 
 import { WorkflowGraph } from '../core/workflow';
@@ -16,8 +16,8 @@ import { WorkflowCanvas } from './canvas';
 import { ConfigPanel } from './panel';
 import { EventEmitter } from './event-emitter';
 
-// Import Ant Design styles
-import './styles-antd.css';
+// Import editor styles
+import './styles-editor.css';
 
 /**
  * Editor events

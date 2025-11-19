@@ -324,10 +324,10 @@ export class AgentEditModal extends Modal {
 		});
 
 		// MCP Servers
-		contentEl.createEl('h3', { text: 'Mcp access' });
+		contentEl.createEl('h3', { text: 'MCP access' });
 		if (this.plugin.settings.mcpServers.length === 0) {
 			const empty = contentEl.createDiv('ia-table-subtext');
-			empty.setText('No mcp servers configured. Add servers under settings → mcp to unlock these options.');
+			empty.setText('No MCP servers configured. Add servers under Settings → MCP to unlock these options.');
 		} else {
 			const mcpContainer = contentEl.createDiv('ia-mcp-control');
 			this.plugin.settings.mcpServers.forEach(server => {

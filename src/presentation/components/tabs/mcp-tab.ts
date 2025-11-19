@@ -18,17 +18,17 @@ export function displayMCPTab(
 	testAllMCPConnections: () => Promise<void>,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Mcp server management' });
+	containerEl.createEl('h3', { text: 'MCP server management' });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Configure model context protocol (mcp) servers to extend agent capabilities with external tools and data sources.'
+		text: 'Configure Model Context Protocol (MCP) servers to extend agent capabilities with external tools and data sources.'
 	});
 	desc.addClass('ia-section-description');
 
 	const toolbar = containerEl.createDiv('ia-toolbar');
 
 	// Add MCP Inspector button
-	const inspectorBtn = toolbar.createEl('button', { text: '🔍 open mcp inspector' });
+	const inspectorBtn = toolbar.createEl('button', { text: '🔍 Open MCP inspector' });
 	inspectorBtn.addClass('ia-button');
 	inspectorBtn.addClass('ia-button--ghost');
 	inspectorBtn.addEventListener('click', () => {
@@ -88,7 +88,7 @@ export function displayMCPTab(
 	});
 
 	// Add new MCP server button
-	const addBtn = toolbar.createEl('button', { text: '+ add mcp server' });
+	const addBtn = toolbar.createEl('button', { text: '+ Add MCP server' });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -112,7 +112,7 @@ export function displayMCPTab(
 	// Display existing MCP servers in a table if they exist
 	if (plugin.settings.mcpServers.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No mcp servers configured. Select add mcp server to get started.');
+		emptyDiv.setText('No MCP servers configured. Select Add MCP server to get started.');
 		return;
 	}
 

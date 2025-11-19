@@ -1,42 +1,38 @@
 /**
- * Workflow System V2 - Ant Design Integration Styles
+ * Workflow System V2 - Editor Styles
  *
- * This file integrates Ant Design styling with the workflow editor.
- * Uses Ant Design design tokens and component styles.
+ * Defines design tokens and layout rules for the workflow editor UI.
  */
 
-/* Import Ant Design base styles */
-@import 'antd/dist/reset.css';
-
-/* Ant Design Design Tokens */
+/* Editor Design Tokens */
 :root {
 	/* Primary Colors */
-	--ant-primary-color: #1890ff;
-	--ant-primary-color-hover: #40a9ff;
-	--ant-primary-color-active: #096dd9;
+	--editor-primary-color: #1890ff;
+	--editor-primary-color-hover: #40a9ff;
+	--editor-primary-color-active: #096dd9;
 
-	/* Success/Error/Warning */
-	--ant-success-color: #52c41a;
-	--ant-error-color: #ff4d4f;
-	--ant-warning-color: #faad14;
-	--ant-info-color: #1890ff;
+	/* Semantic accents */
+	--editor-success-color: #52c41a;
+	--editor-error-color: #ff4d4f;
+	--editor-warning-color: #faad14;
+	--editor-info-color: #1890ff;
 
 	/* Neutral Colors */
-	--ant-text-color: rgba(0, 0, 0, 0.85);
-	--ant-text-color-secondary: rgba(0, 0, 0, 0.45);
-	--ant-heading-color: rgba(0, 0, 0, 0.85);
-	--ant-border-color-base: #d9d9d9;
-	--ant-background-color-base: #f0f0f0;
+	--editor-text-color: rgba(0, 0, 0, 0.85);
+	--editor-text-color-secondary: rgba(0, 0, 0, 0.45);
+	--editor-heading-color: rgba(0, 0, 0, 0.85);
+		--editor-border-color-base: #d9d9d9;
+		--editor-background-color-base: #f0f0f0;
 
 	/* Layout */
-	--ant-border-radius-base: 2px;
-	--ant-box-shadow-base: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
+		--editor-border-radius-base: 2px;
+		--editor-box-shadow-base: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
 							0 6px 16px 0 rgba(0, 0, 0, 0.08),
 							0 9px 28px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* ============================================================================
-   Editor Container with Ant Design Layout
+   Editor Container Layout
    ============================================================================ */
 
 .workflow-v2-editor {
@@ -49,7 +45,7 @@
 }
 
 /* ============================================================================
-   Toolbar with Ant Design Button Styles
+   Toolbar with Editor Button Styles
    ============================================================================ */
 
 .workflow-v2-toolbar {
@@ -58,7 +54,7 @@
 	gap: 8px;
 	padding: 12px 16px;
 	background: #fff;
-	border-bottom: 1px solid var(--ant-border-color-base);
+	border-bottom: 1px solid var(--editor-border-color-base);
 	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
 }
 
@@ -67,21 +63,21 @@
 	max-width: 300px;
 	height: 32px;
 	padding: 4px 11px;
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	font-size: 14px;
 	line-height: 1.5715;
 	background-color: #fff;
-	border: 1px solid var(--ant-border-color-base);
-	border-radius: var(--ant-border-radius-base);
+	border: 1px solid var(--editor-border-color-base);
+	border-radius: var(--editor-border-radius-base);
 	transition: all 0.3s;
 }
 
 .workflow-name-input:hover {
-	border-color: var(--ant-primary-color-hover);
+	border-color: var(--editor-primary-color-hover);
 }
 
 .workflow-name-input:focus {
-	border-color: var(--ant-primary-color);
+	border-color: var(--editor-primary-color);
 	box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
 	outline: 0;
 }
@@ -90,7 +86,7 @@
 	flex: 1;
 }
 
-/* Ant Design Button Styles */
+/* Editor Button Styles */
 .toolbar-btn {
 	display: inline-flex;
 	align-items: center;
@@ -99,10 +95,10 @@
 	padding: 4px 15px;
 	font-size: 14px;
 	line-height: 1.5715;
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	background: #fff;
-	border: 1px solid var(--ant-border-color-base);
-	border-radius: var(--ant-border-radius-base);
+	border: 1px solid var(--editor-border-color-base);
+	border-radius: var(--editor-border-radius-base);
 	cursor: pointer;
 	transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 	user-select: none;
@@ -110,31 +106,31 @@
 }
 
 .toolbar-btn:hover {
-	color: var(--ant-primary-color-hover);
-	border-color: var(--ant-primary-color-hover);
+	color: var(--editor-primary-color-hover);
+	border-color: var(--editor-primary-color-hover);
 }
 
 .toolbar-btn:active {
-	color: var(--ant-primary-color-active);
-	border-color: var(--ant-primary-color-active);
+	color: var(--editor-primary-color-active);
+	border-color: var(--editor-primary-color-active);
 }
 
 .toolbar-btn-primary {
 	color: #fff;
-	background: var(--ant-primary-color);
-	border-color: var(--ant-primary-color);
+	background: var(--editor-primary-color);
+	border-color: var(--editor-primary-color);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
 	box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
 }
 
 .toolbar-btn-primary:hover {
-	background: var(--ant-primary-color-hover);
-	border-color: var(--ant-primary-color-hover);
+	background: var(--editor-primary-color-hover);
+	border-color: var(--editor-primary-color-hover);
 }
 
 .toolbar-btn-primary:active {
-	background: var(--ant-primary-color-active);
-	border-color: var(--ant-primary-color-active);
+	background: var(--editor-primary-color-active);
+	border-color: var(--editor-primary-color-active);
 }
 
 .toolbar-btn-icon {
@@ -159,13 +155,13 @@
 }
 
 /* ============================================================================
-   Sidebar with Ant Design Menu Styles
+   Sidebar with Editor Menu Styles
    ============================================================================ */
 
 .workflow-v2-sidebar {
 	width: 280px;
 	background: #fff;
-	border-right: 1px solid var(--ant-border-color-base);
+	border-right: 1px solid var(--editor-border-color-base);
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -175,20 +171,20 @@
 	margin: 16px;
 	height: 32px;
 	padding: 4px 11px;
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	font-size: 14px;
 	background-color: #fff;
-	border: 1px solid var(--ant-border-color-base);
-	border-radius: var(--ant-border-radius-base);
+	border: 1px solid var(--editor-border-color-base);
+	border-radius: var(--editor-border-radius-base);
 	transition: all 0.3s;
 }
 
 .sidebar-search:hover {
-	border-color: var(--ant-primary-color-hover);
+	border-color: var(--editor-primary-color-hover);
 }
 
 .sidebar-search:focus {
-	border-color: var(--ant-primary-color);
+	border-color: var(--editor-primary-color);
 	box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
 	outline: 0;
 }
@@ -209,7 +205,7 @@
 	align-items: center;
 	margin-bottom: 8px;
 	padding: 4px 0;
-	color: var(--ant-heading-color);
+	color: var(--editor-heading-color);
 	font-size: 14px;
 	font-weight: 600;
 	line-height: 22px;
@@ -219,10 +215,10 @@
 	display: inline-block;
 	height: 20px;
 	padding: 0 8px;
-	color: var(--ant-text-color-secondary);
+	color: var(--editor-text-color-secondary);
 	font-size: 12px;
 	line-height: 20px;
-	background: var(--ant-background-color-base);
+	background: var(--editor-background-color-base);
 	border-radius: 10px;
 }
 
@@ -232,7 +228,7 @@
 	gap: 8px;
 }
 
-/* Ant Design Card-like Node Items */
+/* Editor Card-like Node Items */
 .node-item {
 	display: flex;
 	align-items: center;
@@ -250,7 +246,7 @@
 
 .node-item:hover {
 	background: rgba(255, 255, 255, 0.95);
-	border-color: var(--ant-primary-color);
+	border-color: var(--editor-primary-color);
 	box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15),
 				0 2px 6px rgba(0, 0, 0, 0.08);
 	transform: translateY(-1px);
@@ -273,7 +269,7 @@
 }
 
 .node-item-name {
-	color: var(--ant-heading-color);
+	color: var(--editor-heading-color);
 	font-size: 14px;
 	font-weight: 500;
 	margin-bottom: 4px;
@@ -283,7 +279,7 @@
 }
 
 .node-item-desc {
-	color: var(--ant-text-color-secondary);
+	color: var(--editor-text-color-secondary);
 	font-size: 12px;
 	white-space: nowrap;
 	overflow: hidden;
@@ -317,13 +313,13 @@
 }
 
 /* ============================================================================
-   Config Panel with Ant Design Form Styles
+   Config Panel with Editor Form Styles
    ============================================================================ */
 
 .workflow-v2-config-panel {
 	width: 320px;
 	background: #fff;
-	border-left: 1px solid var(--ant-border-color-base);
+	border-left: 1px solid var(--editor-border-color-base);
 	display: flex;
 	flex-direction: column;
 	height: 100%; /* Ensure full height */
@@ -336,7 +332,7 @@
 	align-items: center;
 	justify-content: space-between;
 	padding: 16px;
-	border-bottom: 1px solid var(--ant-border-color-base);
+	border-bottom: 1px solid var(--editor-border-color-base);
 	flex-shrink: 0; /* Prevent header from shrinking */
 }
 
@@ -352,7 +348,7 @@
 	display: flex;
 	align-items: center;
 	gap: 12px;
-	color: var(--ant-heading-color);
+	color: var(--editor-heading-color);
 	font-size: 16px;
 	font-weight: 600;
 }
@@ -368,23 +364,23 @@
 	width: 24px;
 	height: 24px;
 	padding: 0;
-	color: var(--ant-text-color-secondary);
+	color: var(--editor-text-color-secondary);
 	background: transparent;
 	border: none;
-	border-radius: var(--ant-border-radius-base);
+	border-radius: var(--editor-border-radius-base);
 	cursor: pointer;
 	transition: all 0.3s;
 }
 
 .config-panel-close:hover {
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	background: rgba(0, 0, 0, 0.04);
 }
 
 .config-panel-info {
 	padding: 16px;
-	background: var(--ant-background-color-base);
-	border-bottom: 1px solid var(--ant-border-color-base);
+	background: var(--editor-background-color-base);
+	border-bottom: 1px solid var(--editor-border-color-base);
 	display: grid;
 	grid-template-columns: 100px 1fr;
 	gap: 8px;
@@ -392,19 +388,19 @@
 }
 
 .config-panel-info-label {
-	color: var(--ant-text-color-secondary);
+	color: var(--editor-text-color-secondary);
 	font-weight: 500;
 }
 
 .config-panel-info-value {
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 }
 
 .config-panel-form {
 	padding: 16px;
 }
 
-/* Ant Design Form Item */
+/* Editor Form Item */
 .config-panel-field {
 	margin-bottom: 24px;
 }
@@ -412,49 +408,49 @@
 .config-panel-field-label {
 	display: inline-block;
 	margin-bottom: 8px;
-	color: var(--ant-heading-color);
+	color: var(--editor-heading-color);
 	font-size: 14px;
 	line-height: 1.5715;
 }
 
 .field-required {
 	margin-left: 4px;
-	color: var(--ant-error-color);
+	color: var(--editor-error-color);
 }
 
 .config-panel-field-desc {
 	margin-bottom: 8px;
-	color: var(--ant-text-color-secondary);
+	color: var(--editor-text-color-secondary);
 	font-size: 14px;
 	line-height: 1.5715;
 }
 
-/* Ant Design Input */
+/* Editor Input */
 .config-panel-input,
 .config-panel-select,
 .config-panel-textarea {
 	width: 100%;
 	min-height: 32px;
 	padding: 4px 11px;
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	font-size: 14px;
 	line-height: 1.5715;
 	background-color: #fff;
-	border: 1px solid var(--ant-border-color-base);
-	border-radius: var(--ant-border-radius-base);
+	border: 1px solid var(--editor-border-color-base);
+	border-radius: var(--editor-border-radius-base);
 	transition: all 0.3s;
 }
 
 .config-panel-input:hover,
 .config-panel-select:hover,
 .config-panel-textarea:hover {
-	border-color: var(--ant-primary-color-hover);
+	border-color: var(--editor-primary-color-hover);
 }
 
 .config-panel-input:focus,
 .config-panel-select:focus,
 .config-panel-textarea:focus {
-	border-color: var(--ant-primary-color);
+	border-color: var(--editor-primary-color);
 	box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
 	outline: 0;
 }
@@ -483,7 +479,7 @@
 }
 
 .config-panel-checkbox-label {
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	font-size: 14px;
 	cursor: pointer;
 	user-select: none;
@@ -491,7 +487,7 @@
 
 .config-panel-actions {
 	padding: 16px;
-	border-top: 1px solid var(--ant-border-color-base);
+	border-top: 1px solid var(--editor-border-color-base);
 	background: #fff;
 	flex-shrink: 0; /* Prevent actions from shrinking */
 }
@@ -501,32 +497,32 @@
 	height: 32px;
 	padding: 4px 15px;
 	font-size: 14px;
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	background: #fff;
-	border: 1px solid var(--ant-border-color-base);
-	border-radius: var(--ant-border-radius-base);
+	border: 1px solid var(--editor-border-color-base);
+	border-radius: var(--editor-border-radius-base);
 	cursor: pointer;
 	transition: all 0.3s;
 }
 
 .config-panel-btn:hover {
-	color: var(--ant-primary-color-hover);
-	border-color: var(--ant-primary-color-hover);
+	color: var(--editor-primary-color-hover);
+	border-color: var(--editor-primary-color-hover);
 }
 
 .config-panel-btn-danger {
-	color: var(--ant-error-color);
-	border-color: var(--ant-error-color);
+	color: var(--editor-error-color);
+	border-color: var(--editor-error-color);
 }
 
 .config-panel-btn-danger:hover {
 	color: #fff;
-	background: var(--ant-error-color);
-	border-color: var(--ant-error-color);
+	background: var(--editor-error-color);
+	border-color: var(--editor-error-color);
 }
 
 /* ============================================================================
-   Ant Design Message/Notification Styles
+   Editor Message/Notification Styles
    ============================================================================ */
 
 .workflow-v2-notification {
@@ -534,29 +530,29 @@
 	top: 24px;
 	right: 24px;
 	padding: 16px 24px;
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	background: #fff;
-	border-radius: var(--ant-border-radius-base);
-	box-shadow: var(--ant-box-shadow-base);
+	border-radius: var(--editor-border-radius-base);
+	box-shadow: var(--editor-box-shadow-base);
 	font-size: 14px;
 	z-index: 10000;
 	animation: antMoveRightIn 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
 }
 
 .notification-success {
-	border-left: 4px solid var(--ant-success-color);
+	border-left: 4px solid var(--editor-success-color);
 }
 
 .notification-error {
-	border-left: 4px solid var(--ant-error-color);
+	border-left: 4px solid var(--editor-error-color);
 }
 
 .notification-warning {
-	border-left: 4px solid var(--ant-warning-color);
+	border-left: 4px solid var(--editor-warning-color);
 }
 
 .notification-info {
-	border-left: 4px solid var(--ant-info-color);
+	border-left: 4px solid var(--editor-info-color);
 }
 
 .notification-fade {
@@ -582,7 +578,7 @@
 }
 
 /* ============================================================================
-   Ant Design Scrollbar
+   Editor Scrollbar
    ============================================================================ */
 
 .workflow-v2-sidebar::-webkit-scrollbar,
@@ -612,14 +608,14 @@
 }
 
 /* ============================================================================
-   Context Menu with Ant Design Dropdown Style
+   Context Menu with Editor Dropdown Style
    ============================================================================ */
 
 .workflow-v2-context-menu {
 	position: fixed;
 	background: #fff;
-	border-radius: var(--ant-border-radius-base);
-	box-shadow: var(--ant-box-shadow-base);
+	border-radius: var(--editor-border-radius-base);
+	box-shadow: var(--editor-box-shadow-base);
 	padding: 4px 0;
 	z-index: 10000;
 	min-width: 160px;
@@ -627,7 +623,7 @@
 
 .context-menu-item {
 	padding: 5px 12px;
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	font-size: 14px;
 	line-height: 22px;
 	cursor: pointer;
@@ -635,17 +631,17 @@
 }
 
 .context-menu-item:hover {
-	background: var(--ant-background-color-base);
+	background: var(--editor-background-color-base);
 }
 
 /* ============================================================================
-   History Panel with Ant Design Timeline Style
+   History Panel with Editor Timeline Style
    ============================================================================ */
 
 .workflow-v2-history-panel {
 	width: 360px;
 	background: #fff;
-	border-left: 1px solid var(--ant-border-color-base);
+	border-left: 1px solid var(--editor-border-color-base);
 	display: flex;
 	flex-direction: column;
 	height: 100%;
@@ -658,13 +654,13 @@
 	align-items: center;
 	justify-content: space-between;
 	padding: 16px;
-	border-bottom: 1px solid var(--ant-border-color-base);
+	border-bottom: 1px solid var(--editor-border-color-base);
 	flex-shrink: 0;
 	background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
 }
 
 .history-panel-title {
-	color: var(--ant-heading-color);
+	color: var(--editor-heading-color);
 	font-size: 16px;
 	font-weight: 600;
 	display: flex;
@@ -684,7 +680,7 @@
 	width: 28px;
 	height: 28px;
 	padding: 0;
-	color: var(--ant-text-color-secondary);
+	color: var(--editor-text-color-secondary);
 	background: transparent;
 	border: none;
 	border-radius: 50%;
@@ -694,7 +690,7 @@
 }
 
 .history-panel-close:hover {
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	background: rgba(0, 0, 0, 0.06);
 	transform: rotate(90deg);
 }
@@ -715,13 +711,13 @@
 	align-items: center;
 	justify-content: center;
 	padding: 48px 24px;
-	color: var(--ant-text-color-secondary);
+	color: var(--editor-text-color-secondary);
 	font-size: 14px;
 	text-align: center;
 }
 
 .history-error {
-	color: var(--ant-error-color);
+	color: var(--editor-error-color);
 }
 
 /* History List with Timeline Style */
@@ -738,7 +734,7 @@
 	bottom: 12px;
 	width: 2px;
 	background: linear-gradient(180deg,
-		var(--ant-primary-color) 0%,
+		var(--editor-primary-color) 0%,
 		rgba(24, 144, 255, 0.3) 100%);
 	border-radius: 1px;
 }
@@ -763,7 +759,7 @@
 	width: 12px;
 	height: 12px;
 	background: #fff;
-	border: 2px solid var(--ant-primary-color);
+	border: 2px solid var(--editor-primary-color);
 	border-radius: 50%;
 	box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
 	z-index: 2;
@@ -774,11 +770,11 @@
 	transform: translateX(4px);
 	box-shadow: 0 4px 16px rgba(24, 144, 255, 0.12),
 				0 2px 8px rgba(0, 0, 0, 0.08);
-	border-color: var(--ant-primary-color);
+	border-color: var(--editor-primary-color);
 }
 
 .history-item:hover::before {
-	background: var(--ant-primary-color);
+	background: var(--editor-primary-color);
 	box-shadow: 0 0 0 4px rgba(24, 144, 255, 0.2);
 	transform: scale(1.2);
 }
@@ -821,7 +817,7 @@
 
 .history-item-time {
 	flex: 1;
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	font-size: 13px;
 	font-weight: 500;
 	min-width: 0;
@@ -831,7 +827,7 @@
 }
 
 .history-item-duration {
-	color: var(--ant-text-color-secondary);
+	color: var(--editor-text-color-secondary);
 	font-size: 12px;
 	font-family: 'SF Mono', Monaco, monospace;
 	background: rgba(0, 0, 0, 0.04);
@@ -879,7 +875,7 @@
 	background: linear-gradient(135deg, #e6f7ff 0%, #f0f8ff 100%);
 	border: 1px solid rgba(24, 144, 255, 0.2);
 	border-radius: 12px;
-	color: var(--ant-primary-color);
+	color: var(--editor-primary-color);
 	font-size: 12px;
 	font-weight: 500;
 }
@@ -892,9 +888,9 @@
 .history-metadata-note {
 	padding: 8px 12px;
 	background: #fffbe6;
-	border-left: 3px solid var(--ant-warning-color);
+	border-left: 3px solid var(--editor-warning-color);
 	border-radius: 4px;
-	color: var(--ant-text-color);
+	color: var(--editor-text-color);
 	font-size: 13px;
 	line-height: 1.6;
 	margin-top: 8px;
@@ -906,7 +902,7 @@
 	background: linear-gradient(135deg, #f6ffed 0%, #fcffe6 100%);
 	border: 1px solid rgba(82, 196, 26, 0.2);
 	border-radius: 6px;
-	color: var(--ant-success-color);
+	color: var(--editor-success-color);
 	font-size: 12px;
 	font-weight: 500;
 	display: flex;
@@ -925,9 +921,9 @@
 	padding: 10px 12px;
 	background: linear-gradient(135deg, #fff2f0 0%, #fff1f0 100%);
 	border: 1px solid rgba(255, 77, 79, 0.2);
-	border-left: 3px solid var(--ant-error-color);
+	border-left: 3px solid var(--editor-error-color);
 	border-radius: 6px;
-	color: var(--ant-error-color);
+	color: var(--editor-error-color);
 	font-size: 12px;
 	font-family: 'SF Mono', Monaco, monospace;
 	line-height: 1.6;
@@ -947,7 +943,7 @@
 	right: 16px;
 	padding: 2px 8px;
 	background: rgba(24, 144, 255, 0.1);
-	color: var(--ant-primary-color);
+	color: var(--editor-primary-color);
 	font-size: 11px;
 	border-radius: 4px;
 	opacity: 0;
@@ -1001,11 +997,11 @@
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		--ant-text-color: rgba(255, 255, 255, 0.85);
-		--ant-text-color-secondary: rgba(255, 255, 255, 0.45);
-		--ant-heading-color: rgba(255, 255, 255, 0.85);
-		--ant-border-color-base: #434343;
-		--ant-background-color-base: #1f1f1f;
+		--editor-text-color: rgba(255, 255, 255, 0.85);
+		--editor-text-color-secondary: rgba(255, 255, 255, 0.45);
+		--editor-heading-color: rgba(255, 255, 255, 0.85);
+		--editor-border-color-base: #434343;
+		--editor-background-color-base: #1f1f1f;
 	}
 
 	.workflow-v2-editor,
@@ -1018,7 +1014,7 @@
 	.toolbar-btn,
 	.node-item {
 		background: #141414;
-		color: var(--ant-text-color);
+		color: var(--editor-text-color);
 	}
 
 	.workflow-v2-main {
@@ -1077,7 +1073,7 @@
 
 	.history-metadata-note {
 		background: #2c2416;
-		border-left-color: var(--ant-warning-color);
+		border-left-color: var(--editor-warning-color);
 	}
 
 	.history-log-summary {

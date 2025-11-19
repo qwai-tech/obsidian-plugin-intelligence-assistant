@@ -144,7 +144,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch OpenAI models:', error);
-			new Notice('Failed to fetch openai models, using default list');
+			new Notice('Failed to fetch OpenAI models, using default list');
 			return this.DEFAULT_MODELS.openai;
 		}
 	}
@@ -232,7 +232,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch Google models:', error);
-			new Notice('Failed to fetch google models, using default list');
+			new Notice('Failed to fetch Google models, using default list');
 			return this.DEFAULT_MODELS.google;
 		}
 	}
@@ -298,7 +298,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch DeepSeek models:', error);
-			new Notice('Failed to fetch deepseek models, using default list');
+			new Notice('Failed to fetch DeepSeek models, using default list');
 			return this.DEFAULT_MODELS.deepseek;
 		}
 	}
@@ -406,7 +406,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch OpenRouter models:', error);
-			new Notice('Failed to fetch openrouter models, using default list');
+			new Notice('Failed to fetch OpenRouter models, using default list');
 			return this.DEFAULT_MODELS.openrouter;
 		}
 	}
