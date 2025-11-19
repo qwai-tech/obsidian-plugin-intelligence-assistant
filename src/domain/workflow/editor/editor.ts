@@ -356,9 +356,6 @@ export class WorkflowEditor {
 		window.addEventListener('beforeunload', (e) => {
 			if (this.isDirty) {
 				e.preventDefault();
-				// Note: returnValue is deprecated but still required for cross-browser compatibility
-				// eslint-disable-next-line @typescript-eslint/no-deprecated -- Required for browser compatibility
-				e.returnValue = '';
 			}
 		});
 	}

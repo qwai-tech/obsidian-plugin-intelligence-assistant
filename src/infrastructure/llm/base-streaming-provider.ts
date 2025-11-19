@@ -5,7 +5,6 @@
 
 import { BaseLLMProvider } from './base-provider';
 import { ChatRequest, StreamChunk } from './types';
-import { requestUrl } from 'obsidian';
 
 /**
  * Result of parsing a streaming chunk
@@ -71,30 +70,25 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 		const { url, body: requestBody } = this.prepareStreamRequest(request);
 
 		try {
-			const response = await requestUrl({
-				url: url,
+			// eslint-disable-next-line no-restricted-globals -- Native fetch required for SSE streaming; Obsidian's requestUrl doesn't support streaming bodies
+			const response = await fetch(url, {
 				method: 'POST',
 				headers: this.getHeaders(),
 				body: JSON.stringify(requestBody),
 			});
 
-			if (response.status < 200 || response.status >= 300) {
-				throw new Error(`API request failed: ${response.status} ${response.text || 'Unknown error'}`);
+			if (!response.ok) {
+				const errorText = await response.text();
+				throw new Error(`API request failed: ${response.status} ${errorText || 'Unknown error'}`);
 			}
 
-			// Response body presence is validated via cast below (RequestUrlResponse may not declare 'body')
-
-			// Type guard for response body (Obsidian RequestUrlResponse may not declare 'body')
-			const bodyUnknown: ReadableStream<Uint8Array> | undefined = (response as { body?: ReadableStream<Uint8Array> }).body;
-			if (!bodyUnknown) {
+			// Validate response body exists and is a ReadableStream
+			if (!response.body) {
 				throw new Error('Response body is null');
-			}
-			if (!(bodyUnknown instanceof ReadableStream)) {
-				throw new Error('Response body is not a ReadableStream');
 			}
 
 			// Process the stream
-			await this.processStream(bodyUnknown, onChunk);
+			await this.processStream(response.body, onChunk);
 
 		} catch (error: unknown) {
 			let err: Error;

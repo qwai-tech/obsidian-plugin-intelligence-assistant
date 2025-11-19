@@ -137,7 +137,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		});
 
 		// Add ribbon icon for quick chat access
-		this.chatRibbonIconEl = this.addRibbonIcon('message-circle', 'Open AI Chat', async () => {
+		this.chatRibbonIconEl = this.addRibbonIcon('message-circle', 'Open AI chat', async () => {
 			await this.openChatViewInRightSidebar();
 		});
 		this.chatRibbonIconEl?.addClass('ia-ribbon-chat-icon');

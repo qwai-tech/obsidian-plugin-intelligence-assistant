@@ -186,29 +186,29 @@ export class EmbeddingManager {
             }
 
             // Create embedding array
-            const embedding: number[] = new Array(dims) as number[];
-            for (let i = 0; i < dims; i++) {
-              const value = Math.sin(hash + i) * Math.cos(hash + i * 2);
+            var embedding = new Array(dims);
+            for (var i = 0; i < dims; i++) {
+              var value = Math.sin(hash + i) * Math.cos(hash + i * 2);
               embedding[i] = value;
             }
 
             // Normalize the vector
-            let sum = 0;
-            for (let i = 0; i < dims; i++) {
-              sum += embedding[i] * embedding[i];
+            var sum = 0;
+            for (var j = 0; j < dims; j++) {
+              sum += embedding[j] * embedding[j];
             }
-            const magnitude = Math.sqrt(sum);
-            
+            var magnitude = Math.sqrt(sum);
+
             if (magnitude === 0) {
-              const normalized: number[] = new Array(dims).fill(0) as number[];
+              var normalized = new Array(dims).fill(0);
               if (dims > 0) normalized[0] = 1;
-              postMessage({ id, success: true, embedding: normalized });
+              postMessage({ id: id, success: true, embedding: normalized });
             } else {
-              const result: number[] = new Array(dims) as number[];
-              for (let i = 0; i < dims; i++) {
-                result[i] = embedding[i] / magnitude || 0;
+              var result = new Array(dims);
+              for (var k = 0; k < dims; k++) {
+                result[k] = embedding[k] / magnitude || 0;
               }
-              postMessage({ id, success: true, embedding: result });
+              postMessage({ id: id, success: true, embedding: result });
             }
           };
         `;
