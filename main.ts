@@ -1,4 +1,4 @@
-import { App, Menu, Plugin, TAbstractFile, WorkspaceLeaf } from 'obsidian';
+import { Menu, Plugin, TAbstractFile, WorkspaceLeaf } from 'obsidian';
 import './src/presentation/components/chat/settings.css';
 import type {
 	PluginSettings,
@@ -29,11 +29,6 @@ import { ToolManager } from './src/application/services/tool-manager';
 import { WorkflowEditorView, WORKFLOW_EDITOR_VIEW_TYPE } from './src/presentation/views/workflow-editor-view';
 import { IntelligenceAssistantSettingTab } from './src/presentation/components/settings-tab';
 import {
-	DEFAULT_AGENT_ID,
-	DEFAULT_MODEL_CONFIG,
-	DEFAULT_MEMORY_CONFIG,
-	DEFAULT_REACT_CONFIG,
-	PLUGIN_BASE_FOLDER,
 	USER_CONFIG_FOLDER,
 	USER_CONFIG_PATH
 } from './src/constants';
@@ -45,8 +40,6 @@ import { ConversationMigrationService } from './src/application/services/convers
 
 // Import architecture components
 import { container } from './src/core/container';
-import { serviceRegistry } from './src/core/service-registry';
-import { providerRegistry } from './src/infrastructure/llm/provider-registry';
 import { MessageRepository } from './src/infrastructure/persistence/obsidian/message-repository';
 import { ConversationRepository } from './src/infrastructure/persistence/obsidian/conversation-repository';
 import {
@@ -58,7 +51,6 @@ import {
 	McpServerRepository,
 	McpToolCacheRepository
 } from './src/infrastructure/persistence';
-import { ChatService } from './src/application/services/chat.service';
 
 // Re-export for backward compatibility
 export type {
@@ -173,15 +165,12 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		// Register services with the container
 		container.register('MessageRepository', () => new MessageRepository(this.app.vault));
 		container.register('ConversationRepository', () => new ConversationRepository(this.app.vault));
-		container.register('ChatService', () => {
-			const messageRepo = container.get<MessageRepository>('MessageRepository');
-			const conversationRepo = container.get<ConversationRepository>('ConversationRepository');
-			// For now, using a placeholder for LLM provider and event bus
-			return new ChatService(messageRepo, conversationRepo, {} as any, {} as any);
-		});
-		
-		// Register services with the registry
-		// serviceRegistry.register('ChatService', container.get('ChatService'));
+		// ChatService registration is commented out as it requires proper LLM provider and event bus setup
+		// container.register('ChatService', () => {
+		// 	const messageRepo = container.get<MessageRepository>('MessageRepository');
+		// 	const conversationRepo = container.get<ConversationRepository>('ConversationRepository');
+		// 	return new ChatService(messageRepo, conversationRepo, llmProvider, eventBus);
+		// });
 	}
 
 	private cleanupArchitecture(): void {
@@ -229,7 +218,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		if (leaf) {
 			await leaf.setViewState({ type: CHAT_VIEW_TYPE, active: true });
 			// Focus on the new view
-			this.app.workspace.revealLeaf(leaf);
+			await this.app.workspace.revealLeaf(leaf);
 		} else {
 			// Fallback: create in any available leaf
 			const newLeaf = this.app.workspace.getLeaf(true);
@@ -243,7 +232,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		const userConfig = userConfigExists ? await this.readUserConfigFile() : null;
 		let storedSettings: PluginSettings | null = null;
 		let legacyConversations: Conversation[] = [];
-		let legacyData: any = null;
+		let legacyData: unknown = null;
 
 		try {
 			legacyData = await this.loadData();
@@ -255,20 +244,28 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			storedSettings = userConfigToPluginSettings(userConfig);
 		}
 
-		if (!storedSettings && legacyData) {
+		if (!storedSettings && legacyData && typeof legacyData === 'object') {
 			storedSettings = legacyData as PluginSettings;
-			legacyConversations = ((legacyData as any).conversations as Conversation[]) ?? [];
+			const dataObj = legacyData as Record<string, unknown>;
+			if (Array.isArray(dataObj.conversations)) {
+				legacyConversations = dataObj.conversations as Conversation[];
+			}
 		}
 
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, storedSettings ?? {});
 		this.legacyConversations = legacyConversations;
 
+		// Hydrate providers first as other methods may depend on it
 		await this.hydrateProvidersFromRepository();
-		await this.hydratePromptsFromRepository();
-		await this.hydrateAgentsFromRepository();
-		await this.hydrateModelCaches();
-		await this.hydrateMcpServersFromRepository();
-		await this.migrateWorkflowData(legacyData);
+		
+		// Then hydrate other repositories in parallel
+		await Promise.all([
+			this.hydratePromptsFromRepository(),
+			this.hydrateAgentsFromRepository(),
+			this.hydrateModelCaches(),
+			this.hydrateMcpServersFromRepository(),
+			this.migrateWorkflowData(legacyData)
+		]);
 
 		if (!userConfig) {
 			await this.writeUserSettingsFile(this.settings);
@@ -276,15 +273,16 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		
 		// Migrate old agents that still have modelId to use new modelStrategy
 		for (const agent of this.settings.agents) {
-			if ('modelId' in agent && typeof (agent as any).modelId === 'string') {
-				const modelId = (agent as any).modelId;
+			const agentWithOldModel = agent as Agent & { modelId?: string };
+			if ('modelId' in agent && typeof agentWithOldModel.modelId === 'string') {
+				const modelId = agentWithOldModel.modelId;
 				// Convert the old modelId to the new modelStrategy format
 				agent.modelStrategy = {
 					strategy: 'fixed',
 					modelId: modelId
 				};
 				// Remove the old field
-				delete (agent as any).modelId;
+				delete agentWithOldModel.modelId;
 			}
 			
 			// Ensure modelStrategy exists for all agents
@@ -425,12 +423,21 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		}
 	}
 
-	private async migrateWorkflowData(legacyData: any): Promise<void> {
+	private async migrateWorkflowData(legacyData: unknown): Promise<void> {
 		if (!this.workflowRepository) return;
-		const legacyWorkflows: Workflow[] = Array.isArray(legacyData?.workflows) ? legacyData.workflows : [];
-		const legacyExecutions: WorkflowExecution[] = Array.isArray(legacyData?.workflowExecutions)
-			? legacyData.workflowExecutions
-			: [];
+		
+		let legacyWorkflows: Workflow[] = [];
+		let legacyExecutions: WorkflowExecution[] = [];
+		
+		if (legacyData && typeof legacyData === 'object') {
+			const dataObj = legacyData as Record<string, unknown>;
+			if (Array.isArray(dataObj.workflows)) {
+				legacyWorkflows = dataObj.workflows as Workflow[];
+			}
+			if (Array.isArray(dataObj.workflowExecutions)) {
+				legacyExecutions = dataObj.workflowExecutions as WorkflowExecution[];
+			}
+		}
 
 		if (legacyWorkflows.length > 0) {
 			const existing = await this.workflowRepository.loadAllWorkflows();
@@ -513,12 +520,12 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		const legacyConversations = this.legacyConversations ?? [];
 		
 		if (needsMigration && legacyConversations.length > 0) {
-			console.log('Starting conversation migration...');
+			console.debug('Starting conversation migration...');
 			
 			const success = await this.conversationMigrationService.migrateFromOldFormat(legacyConversations);
 			
 			if (success) {
-				console.log('Conversation migration completed successfully');
+				console.debug('Conversation migration completed successfully');
 				this.legacyConversations = [];
 				this.settings.conversations = [];
 				await this.saveSettings();

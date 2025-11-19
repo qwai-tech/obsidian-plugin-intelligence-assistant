@@ -12,15 +12,13 @@ export default defineConfig([
       "coverage/**",
       "**/__tests__/**",
       "**/*.test.ts",
-      "main.js",
-      "main.js.map"
     ]
   },
 
   ...obsidianmd.configs.recommended,
 
   {
-    files: ["**/*.ts", "*.ts"],
+    files: ["**/*.ts", "**/*.mts", "*.ts", "*.mts"],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
