@@ -15,7 +15,7 @@ import { WorkflowServices, WorkflowEvents } from '../core/types';
 import { WorkflowCanvas } from './canvas';
 import { ConfigPanel } from './panel';
 import { EventEmitter } from './event-emitter';
-import { ExecutionHistoryStorage } from '../storage/execution-history-storage';
+import { ExecutionHistoryStorage, ExecutionRecord } from '../storage/execution-history-storage';
 
 // Import editor styles
 import './styles-editor.css';
@@ -593,6 +593,14 @@ export class WorkflowEditor {
 		// Header
 		const header = this.historyPanel.createDiv('history-panel-header');
 		header.createDiv('history-panel-title').setText('Execution history');
+
+		// Clear states button
+		const clearBtn = header.createEl('button', { cls: 'history-panel-clear', text: '🗑 Clear' });
+		clearBtn.addEventListener('click', () => {
+			this.canvas?.clearExecutionStates();
+			this.showNotification('✅ Execution states cleared', 'info');
+		});
+
 		const closeBtn = header.createEl('button', { cls: 'history-panel-close', text: '×' });
 		closeBtn.addEventListener('click', () => {
 			this.historyPanel?.remove();
@@ -607,6 +615,30 @@ export class WorkflowEditor {
 
 		// Emit event
 		this.events.emit('history:show', undefined);
+	}
+
+	/**
+	 * Load execution state from history to canvas
+	 */
+	private loadExecutionStateToCanvas(execution: ExecutionRecord): void {
+		// Clear existing execution states
+		this.canvas?.clearExecutionStates();
+
+		// Load execution states for each node from log
+		for (const logEntry of execution.log) {
+			this.canvas?.updateNodeState(logEntry.nodeId, {
+				status: logEntry.status,
+				startTime: logEntry.startTime,
+				endTime: logEntry.endTime,
+				duration: logEntry.duration,
+			});
+		}
+
+		// Close history panel
+		this.historyPanel?.remove();
+		this.historyPanel = null;
+
+		this.showNotification('✅ Execution state loaded', 'success');
 	}
 
 	/**
@@ -666,6 +698,16 @@ export class WorkflowEditor {
 						if (execution.error) {
 							details.createDiv('history-item-error').setText(execution.error);
 						}
+
+						// Button to show execution on canvas
+						const showBtn = details.createEl('button', {
+							cls: 'history-show-btn',
+							text: '👁 Load to canvas'
+						});
+						showBtn.addEventListener('click', (e) => {
+							e.stopPropagation();
+							this.loadExecutionStateToCanvas(execution);
+						});
 
 						detailsShown = true;
 					} else {

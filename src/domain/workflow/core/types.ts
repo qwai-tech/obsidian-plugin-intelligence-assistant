@@ -289,11 +289,13 @@ export interface ExecutionState {
  */
 export interface NodeExecutionState {
 	/** Execution status */
-	status: 'pending' | 'running' | 'success' | 'error';
+	status: 'pending' | 'running' | 'success' | 'error' | 'completed';
 	/** Start time */
 	startTime?: number;
 	/** End time */
 	endTime?: number;
+	/** Duration in milliseconds */
+	duration?: number;
 	/** Error message */
 	error?: string;
 }

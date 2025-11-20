@@ -665,6 +665,100 @@ export class WorkflowCanvas {
 	}
 
 	/**
+	 * Draw execution status indicator
+	 */
+	private drawExecutionStatus(node: WorkflowNode, state: NodeExecutionState): void {
+		// Status badge on top-left corner
+		const badgeSize = 24;
+		const badgeX = node.x + 4;
+		const badgeY = node.y + 4;
+
+		// Badge background
+		const bgColors: Record<string, string> = {
+			pending: '#fbbf24',
+			running: '#3b82f6',
+			completed: '#10b981',
+			error: '#ef4444',
+		};
+		this.ctx.fillStyle = bgColors[state.status] || '#666';
+		this.ctx.beginPath();
+		this.ctx.arc(
+			badgeX + badgeSize / 2,
+			badgeY + badgeSize / 2,
+			badgeSize / 2,
+			0,
+			Math.PI * 2
+		);
+		this.ctx.fill();
+
+		// Status icon
+		this.ctx.font = `${12 / this.state.scale}px sans-serif`;
+		this.ctx.fillStyle = '#fff';
+		this.ctx.textAlign = 'center';
+		this.ctx.textBaseline = 'middle';
+		const icons: Record<string, string> = {
+			pending: '⏸',
+			running: '▶',
+			completed: '✓',
+			error: '✗',
+		};
+		this.ctx.fillText(
+			icons[state.status] || '?',
+			badgeX + badgeSize / 2,
+			badgeY + badgeSize / 2
+		);
+
+		// Duration text if available
+		if (state.duration !== undefined && typeof state.duration === 'number') {
+			this.ctx.font = `${9 / this.state.scale}px sans-serif`;
+			this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+			this.ctx.textAlign = 'left';
+			this.ctx.textBaseline = 'top';
+			this.ctx.fillText(
+				`${state.duration.toFixed(0)}ms`,
+				node.x + 4,
+				node.y + NODE_HEIGHT - 14
+			);
+		}
+	}
+
+	/**
+	 * Draw node input/output info
+	 */
+	private drawNodeIOInfo(
+		node: WorkflowNode,
+		_log: { input?: unknown; output?: unknown }
+	): void {
+		// Small info indicator on bottom-right
+		const indicatorSize = 20;
+		const indicatorX = node.x + NODE_WIDTH - indicatorSize - 4;
+		const indicatorY = node.y + NODE_HEIGHT - indicatorSize - 4;
+
+		// Background
+		this.ctx.fillStyle = 'rgba(59, 130, 246, 0.8)';
+		this.ctx.beginPath();
+		this.ctx.arc(
+			indicatorX + indicatorSize / 2,
+			indicatorY + indicatorSize / 2,
+			indicatorSize / 2,
+			0,
+			Math.PI * 2
+		);
+		this.ctx.fill();
+
+		// Info icon
+		this.ctx.font = `${10 / this.state.scale}px sans-serif`;
+		this.ctx.fillStyle = '#fff';
+		this.ctx.textAlign = 'center';
+		this.ctx.textBaseline = 'middle';
+		this.ctx.fillText(
+			'ℹ',
+			indicatorX + indicatorSize / 2,
+			indicatorY + indicatorSize / 2
+		);
+	}
+
+	/**
 	 * Draw variable indicator badge if node uses variables
 	 */
 	private drawVariableIndicator(node: WorkflowNode): void {
@@ -804,176 +898,8 @@ export class WorkflowCanvas {
 	}
 
 	/**
-	 * Draw execution status on node
+	 * Helper method to stringify values for display
 	 */
-	private drawExecutionStatus(node: WorkflowNode, state: { status: string; startTime?: number; endTime?: number; error?: string }): void {
-		const badgeSize = 24;
-		const badgeX = node.x + NODE_WIDTH - badgeSize - 8;
-		const badgeY = node.y + 8;
-
-		if (state.status === 'running') {
-			// Draw spinner for running state
-			this.drawSpinner(badgeX + badgeSize / 2, badgeY + badgeSize / 2, 8);
-		} else if (state.status === 'success') {
-			// Draw success badge (green checkmark)
-			this.ctx.fillStyle = '#10b981';
-			this.ctx.beginPath();
-			this.ctx.arc(badgeX + badgeSize / 2, badgeY + badgeSize / 2, badgeSize / 2, 0, Math.PI * 2);
-			this.ctx.fill();
-
-			// Draw checkmark
-			this.ctx.strokeStyle = '#fff';
-			this.ctx.lineWidth = 2 / this.state.scale;
-			this.ctx.beginPath();
-			this.ctx.moveTo(badgeX + 7, badgeY + 12);
-			this.ctx.lineTo(badgeX + 11, badgeY + 16);
-			this.ctx.lineTo(badgeX + 17, badgeY + 8);
-			this.ctx.stroke();
-
-			// Draw execution duration
-			if (state.startTime && state.endTime) {
-				const duration = state.endTime - state.startTime;
-				const durationText = duration < 1000 ? `${duration}ms` : `${(duration / 1000).toFixed(1)}s`;
-
-				this.ctx.font = `${10 / this.state.scale}px sans-serif`;
-				this.ctx.fillStyle = '#10b981';
-				this.ctx.textAlign = 'right';
-				this.ctx.textBaseline = 'top';
-				this.ctx.fillText(durationText, badgeX - 4, badgeY + 4);
-			}
-		} else if (state.status === 'error') {
-			// Draw error badge (red X)
-			this.ctx.fillStyle = '#ef4444';
-			this.ctx.beginPath();
-			this.ctx.arc(badgeX + badgeSize / 2, badgeY + badgeSize / 2, badgeSize / 2, 0, Math.PI * 2);
-			this.ctx.fill();
-
-			// Draw X
-			this.ctx.strokeStyle = '#fff';
-			this.ctx.lineWidth = 2 / this.state.scale;
-			this.ctx.beginPath();
-			this.ctx.moveTo(badgeX + 8, badgeY + 8);
-			this.ctx.lineTo(badgeX + 16, badgeY + 16);
-			this.ctx.moveTo(badgeX + 16, badgeY + 8);
-			this.ctx.lineTo(badgeX + 8, badgeY + 16);
-			this.ctx.stroke();
-
-			// Show error indicator
-			this.ctx.font = `${10 / this.state.scale}px sans-serif`;
-			this.ctx.fillStyle = '#ef4444';
-			this.ctx.textAlign = 'right';
-			this.ctx.textBaseline = 'top';
-			this.ctx.fillText('error', badgeX - 4, badgeY + 4);
-		} else if (state.status === 'pending') {
-			// Draw pending badge (yellow clock)
-			this.ctx.fillStyle = '#fbbf24';
-			this.ctx.beginPath();
-			this.ctx.arc(badgeX + badgeSize / 2, badgeY + badgeSize / 2, badgeSize / 2, 0, Math.PI * 2);
-			this.ctx.fill();
-
-			// Draw clock icon
-			this.ctx.strokeStyle = '#fff';
-			this.ctx.lineWidth = 1.5 / this.state.scale;
-			this.ctx.beginPath();
-			this.ctx.arc(badgeX + badgeSize / 2, badgeY + badgeSize / 2, 6, 0, Math.PI * 2);
-			this.ctx.stroke();
-
-			// Clock hands
-			this.ctx.beginPath();
-			this.ctx.moveTo(badgeX + badgeSize / 2, badgeY + badgeSize / 2);
-			this.ctx.lineTo(badgeX + badgeSize / 2, badgeY + badgeSize / 2 - 4);
-			this.ctx.moveTo(badgeX + badgeSize / 2, badgeY + badgeSize / 2);
-			this.ctx.lineTo(badgeX + badgeSize / 2 + 3, badgeY + badgeSize / 2);
-			this.ctx.stroke();
-		}
-	}
-	
-	/**
-	 * Draw node input/output info below the node
-	 */
-	private drawNodeIOInfo(node: WorkflowNode, log: { input?: unknown; output?: unknown }): void {
-		const infoY = node.y + NODE_HEIGHT + 10;
-		const maxWidth = NODE_WIDTH;
-
-		// Format data for display
-		const formatData = (data: unknown): string => {
-			const stringValue = this.stringifyValue(data);
-			const maxLength = typeof data === 'string' ? 30 : 40;
-			return stringValue.length > maxLength
-				? `${stringValue.substring(0, maxLength)}...`
-				: stringValue;
-		};
-
-		// Background box
-		const boxHeight = 50;
-		this.ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
-		this.ctx.beginPath();
-		this.drawRoundRect(node.x, infoY, maxWidth, boxHeight, 4);
-		this.ctx.fill();
-
-		// Border - make it interactive looking
-		this.ctx.strokeStyle = 'rgba(100, 100, 100, 0.8)';
-		this.ctx.lineWidth = 1 / this.state.scale;
-		this.ctx.beginPath();
-		this.drawRoundRect(node.x, infoY, maxWidth, boxHeight, 4);
-		this.ctx.stroke();
-
-		// Input label and data
-		if (log.input) {
-			this.ctx.fillStyle = '#60a5fa';
-			this.ctx.font = `${10 / this.state.scale}px sans-serif`;
-			this.ctx.textAlign = 'left';
-			this.ctx.textBaseline = 'top';
-			this.ctx.fillText('Input:', node.x + 8, infoY + 8);
-
-			this.ctx.fillStyle = '#e5e7eb';
-			this.ctx.font = `${9 / this.state.scale}px monospace`;
-			this.ctx.fillText(formatData(log.input), node.x + 8, infoY + 20);
-		}
-
-		// Output label and data (if both exist, show on second line)
-		if (log.output) {
-			const outputY = log.input ? infoY + 33 : infoY + 8;
-
-			this.ctx.fillStyle = '#34d399';
-			this.ctx.font = `${10 / this.state.scale}px sans-serif`;
-			this.ctx.textAlign = 'left';
-			this.ctx.textBaseline = 'top';
-			this.ctx.fillText('Output:', node.x + 8, outputY);
-
-			this.ctx.fillStyle = '#e5e7eb';
-			this.ctx.font = `${9 / this.state.scale}px monospace`;
-			const outputYText = log.input ? outputY + 12 : outputY + 12;
-			this.ctx.fillText(formatData(log.output), node.x + 8, outputYText);
-		}
-
-		// Draw "View Full Data" button on the right side
-		const buttonWidth = 90;
-		const buttonHeight = 24;
-		const buttonX = node.x + maxWidth - buttonWidth - 8;
-		const buttonY = infoY + (boxHeight - buttonHeight) / 2;
-
-		// Button background
-		this.ctx.fillStyle = 'rgba(59, 130, 246, 0.2)';
-		this.ctx.beginPath();
-		this.drawRoundRect(buttonX, buttonY, buttonWidth, buttonHeight, 3);
-		this.ctx.fill();
-
-		// Button border
-		this.ctx.strokeStyle = '#3b82f6';
-		this.ctx.lineWidth = 1 / this.state.scale;
-		this.ctx.beginPath();
-		this.drawRoundRect(buttonX, buttonY, buttonWidth, buttonHeight, 3);
-		this.ctx.stroke();
-
-		// Button text
-		this.ctx.fillStyle = '#60a5fa';
-		this.ctx.font = `${10 / this.state.scale}px sans-serif`;
-		this.ctx.textAlign = 'center';
-		this.ctx.textBaseline = 'middle';
-		this.ctx.fillText('🔍 View Full', buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
-	}
-
 	private stringifyValue(value: unknown): string {
 		if (value === null) return 'null';
 		if (value === undefined) return 'undefined';
