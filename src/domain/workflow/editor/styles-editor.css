@@ -35,6 +35,15 @@
    Editor Container Layout
    ============================================================================ */
 
+/* Obsidian view content container */
+.workflow-editor-v2-container {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
 .workflow-v2-editor {
 	display: flex;
 	flex-direction: column;

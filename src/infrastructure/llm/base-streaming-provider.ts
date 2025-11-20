@@ -70,7 +70,7 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 		const { url, body: requestBody } = this.prepareStreamRequest(request);
 
 		try {
-			// eslint-disable-next-line no-restricted-globals -- Native fetch required for SSE streaming; Obsidian's requestUrl doesn't support streaming bodies
+			// eslint-disable-next-line no-restricted-globals -- requestUrl cannot stream SSE responses
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: this.getHeaders(),

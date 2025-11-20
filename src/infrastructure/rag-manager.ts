@@ -63,7 +63,6 @@ export class RAGManager {
     const files = this.app.vault.getMarkdownFiles();
     
     if (files.length === 0) {
-      // eslint-disable-next-line obsidianmd/ui/sentence-case -- "Markdown" is a proper noun and "RAG" is an acronym
       new Notice('ℹ️ No Markdown files found to index for RAG');
       return;
     }
@@ -230,7 +229,6 @@ export class RAGManager {
   }
 
   async refreshIndex(): Promise<void> {
-    // eslint-disable-next-line obsidianmd/ui/sentence-case -- "RAG" is an acronym
     new Notice('🔄 Clearing RAG index...');
     this.vectorStore.clear();
     if (this.config.enabled) {
@@ -241,7 +239,6 @@ export class RAGManager {
   }
 
   async clearIndex(): Promise<void> {
-    // eslint-disable-next-line obsidianmd/ui/sentence-case -- "RAG" is an acronym
     new Notice('🔄 Clearing RAG index...');
     this.vectorStore.clear();
     await this.vectorStore.save();

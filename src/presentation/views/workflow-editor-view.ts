@@ -219,7 +219,8 @@ export class WorkflowEditorView extends FileView {
 			this.currentWorkflow,
 			this.storage,
 			nodeRegistry,
-			services
+			services,
+			this.executionHistoryStorage
 		);
 
 		// Listen to editor events
@@ -399,6 +400,30 @@ export class WorkflowEditorView extends FileView {
 				}
 				new Notice(`❌ workflow failed: ${errorMessage}`);
 			}
+
+			// Save execution history
+			void (async () => {
+				try {
+					if (this.currentWorkflow) {
+						const workflowData = this.currentWorkflow.getData();
+						await this.executionHistoryStorage.saveExecution(
+							workflowData.id,
+							workflowData.name || 'Untitled Workflow',
+							{
+								success: result.success,
+								duration: result.duration || 0,
+								error: typeof result.error === 'string' ? result.error : undefined,
+								log: result.log || []
+							},
+							{
+								triggeredBy: 'manual'
+							}
+						);
+					}
+				} catch (error) {
+					console.error('Failed to save execution history:', error);
+				}
+			})();
 		});
 
 		// Listen to node events
@@ -425,7 +450,8 @@ export class WorkflowEditorView extends FileView {
 
 				modal.on('update', ({ nodeId, config }) => {
 					this.editor?.getWorkflow().updateNode(nodeId, { config });
-					// Canvas will automatically update since node:updated event is emitted
+					// Manually trigger canvas render to update the node display
+					this.editor?.render();
 				});
 
 				modal.open();

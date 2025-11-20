@@ -12,6 +12,9 @@ import { EventEmitter } from './event-emitter';
 import { WorkflowGraph } from '../core/workflow';
 import { isRecord } from '@/types/type-utils';
 
+// Import modal styles
+import './modal-styles.css';
+
 /**
  * Modal events
  */

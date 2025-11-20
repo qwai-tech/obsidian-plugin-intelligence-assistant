@@ -237,8 +237,26 @@ export class WorkflowCanvas {
 			this.resizeObserver = new ResizeObserver(() => {
 				this.resizeHandler();
 			});
+			// Observe both the direct parent and higher level containers
 			this.resizeObserver.observe(this.canvas.parentElement);
+
+			// Also observe higher level containers for better resize detection
+			let parent = this.canvas.parentElement.parentElement;
+			while (parent && parent.classList) {
+				this.resizeObserver.observe(parent);
+				// Stop at workflow editor container
+				if (parent.classList.contains('workflow-v2-editor') ||
+				    parent.classList.contains('workflow-editor-v2-container')) {
+					break;
+				}
+				parent = parent.parentElement;
+			}
 		}
+
+		// Force an additional resize after a short delay to ensure proper initialization
+		setTimeout(() => {
+			this.resizeHandler();
+		}, 100);
 	}
 	
 	/**
