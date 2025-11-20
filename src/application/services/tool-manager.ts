@@ -30,6 +30,7 @@ export class ToolManager {
 	}
 
 	private updateEnabledTools() {
+		const preserved = this.getNonBuiltInToolNames();
 		this.enabledTools.clear();
 		if (this._toolConfigs) {
 			for (const config of this._toolConfigs) {
@@ -43,6 +44,15 @@ export class ToolManager {
 				this.enabledTools.add(tool.definition.name);
 			}
 		}
+		for (const name of preserved) {
+			this.enabledTools.add(name);
+		}
+	}
+
+	private getNonBuiltInToolNames(): string[] {
+		return Array.from(this.tools.values())
+			.filter(tool => tool.provider && tool.provider !== 'built-in')
+			.map(tool => tool.definition.name);
 	}
 
 	setToolConfigs(configs: ToolConfig[]) {
@@ -56,6 +66,14 @@ export class ToolManager {
 			tool.provider = 'built-in';
 		}
 		this.tools.set(tool.definition.name, tool);
+	}
+
+	enableTool(toolName: string) {
+		this.enabledTools.add(toolName);
+	}
+
+	disableTool(toolName: string) {
+		this.enabledTools.delete(toolName);
 	}
 
 	/**
@@ -86,7 +104,7 @@ export class ToolManager {
 				this.registerTool(wrapper);
 
 				// Auto-enable MCP tools
-				this.enabledTools.add(wrapper.definition.name);
+				this.enableTool(wrapper.definition.name);
 			}
 
 			// Store the client for later use
@@ -123,6 +141,18 @@ export class ToolManager {
 		this.mcpClients.delete(serverName);
 
 		console.debug(`[MCP] Unregistered server ${serverName} and removed ${toolsToRemove.length} tools`);
+	}
+
+	removeToolsByProvider(providerId: string): number {
+		let removed = 0;
+		for (const [name, tool] of Array.from(this.tools.entries())) {
+			if (tool.provider === providerId) {
+				this.tools.delete(name);
+				this.enabledTools.delete(name);
+				removed++;
+			}
+		}
+		return removed;
 	}
 
 	/**

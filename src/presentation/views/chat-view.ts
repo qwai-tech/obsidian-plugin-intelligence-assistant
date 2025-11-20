@@ -2361,7 +2361,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private async handleQuickActionRag() {
 		if (!this.plugin.settings.ragConfig.enabled) {
-			new Notice('RAG is disabled in settings. Enable it under settings → chat features → rag.');
+			new Notice('RAG is disabled in settings. Enable it under settings → chat features → RAG.');
 			return;
 		}
 		this.state.enableRAG = !this.state.enableRAG;
@@ -2673,7 +2673,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			this.toolManager,
 			activeAgent, // Pass agent to check tool permissions
 			traceContainer,
-			() => Promise.resolve(this.continueAgentConversation(traceContainer, _contentEl))
+			() => Promise.resolve(this.continueAgentConversation(traceContainer, _contentEl)),
+			{ allowOpenApiTools: this.plugin.hasEnabledOpenApiTools() }
 		);
 	}
 

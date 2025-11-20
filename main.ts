@@ -26,6 +26,7 @@ import type {
 import { DEFAULT_SETTINGS, pluginSettingsToUserConfig, userConfigToPluginSettings } from './src/types';
 import { ChatView, CHAT_VIEW_TYPE } from './src/presentation/views/chat-view';
 import { ToolManager } from './src/application/services/tool-manager';
+import { OpenApiToolLoader } from './src/application/services/openapi-tool-loader';
 import { WorkflowEditorView, WORKFLOW_EDITOR_VIEW_TYPE } from './src/presentation/views/workflow-editor-view';
 import { IntelligenceAssistantSettingTab } from './src/presentation/components/settings-tab';
 import {
@@ -84,6 +85,11 @@ export interface ToolConfig {
 	enabled: boolean;
 }
 
+interface OpenApiReloadOptions {
+	forceRefetch?: boolean;
+	persistCacheMetadata?: boolean;
+}
+
 export default class IntelligenceAssistantPlugin extends Plugin {
 	settings: PluginSettings;
 	
@@ -91,6 +97,8 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private conversationStorageService: ConversationStorageService | null = null;
 	private conversationMigrationService: ConversationMigrationService | null = null;
 	private sharedToolManager: ToolManager | null = null;
+	private openApiToolLoader: OpenApiToolLoader | null = null;
+	private pluginDataPath = '';
 	private chatRibbonIconEl: HTMLElement | null = null;
 	private legacyConversations: Conversation[] = [];
 	private promptRepository: PromptRepository | null = null;
@@ -105,6 +113,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		// Initialize architecture components using dependency injection
 		this.initializeArchitecture();
 		
+		this.pluginDataPath = `${this.app.vault.configDir}/plugins/${this.manifest.id}/data`;
+		await this.ensureFolderExists(this.pluginDataPath);
+		
 		// Initialize conversation storage system first
 		this.conversationStorageService = new ConversationStorageService(this.app);
 		await this.conversationStorageService.initialize();
@@ -113,6 +124,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		await this.migrateConversationsIfNeeded();
 		await this.ensureDefaultAgent();
 		await this.ensureAutoConnectedMcpServers();
+		await this.reloadOpenApiTools().catch(error => console.error('[OpenAPI] Failed to load tools', error));
 
 		// Register the chat view
 		this.registerView(
@@ -149,7 +161,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		this.registerFileMenuActions();
 	}
 
-	onunload() {
+		onunload() {
 		// Cleanup architecture components
 		this.cleanupArchitecture();
 
@@ -158,6 +170,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			this.sharedToolManager.cleanup().catch(error => console.error('[MCP] Cleanup failed', error));
 			this.sharedToolManager = null;
 		}
+		this.openApiToolLoader = null;
 		this.chatRibbonIconEl = null;
 	}
 
@@ -185,10 +198,40 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		return this.sharedToolManager;
 	}
 
+	private getOpenApiLoader(): OpenApiToolLoader {
+		if (!this.openApiToolLoader) {
+			this.openApiToolLoader = new OpenApiToolLoader(this.app, this.getToolManager(), this.pluginDataPath);
+		}
+		return this.openApiToolLoader;
+	}
+
 	public syncToolManagerConfig() {
 		if (this.sharedToolManager) {
 			this.sharedToolManager.setToolConfigs(this.settings.builtInTools);
 		}
+	}
+
+	public async reloadOpenApiTools(options?: OpenApiReloadOptions): Promise<Map<string, number>> {
+		const loader = this.getOpenApiLoader();
+		return await loader.reloadAll(this.settings.openApiTools ?? [], options);
+	}
+
+	public async reloadOpenApiConfig(configId: string, options?: OpenApiReloadOptions): Promise<number> {
+		const loader = this.getOpenApiLoader();
+		const config = this.settings.openApiTools?.find(tool => tool.id === configId);
+		if (!config) {
+			return 0;
+		}
+		return await loader.reloadConfig(config, options);
+	}
+
+	public async removeOpenApiConfig(configId: string): Promise<void> {
+		const loader = this.getOpenApiLoader();
+		await loader.removeConfig(configId);
+	}
+
+	public hasEnabledOpenApiTools(): boolean {
+		return (this.settings.openApiTools ?? []).some(config => config.enabled);
 	}
 
 	public async ensureAutoConnectedMcpServers(): Promise<boolean> {

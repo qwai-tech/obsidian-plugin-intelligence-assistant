@@ -687,7 +687,7 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 	section.createEl('h4', { text: 'Grading settings' });
 
 	const graderDesc = section.createEl('p', {
-		text: 'Grade retrieved chunks for relevance before sending to the llm. This helps filter out low-quality results.'
+		text: 'Grade retrieved chunks for relevance before sending to the LLM. This helps filter out low-quality results.'
 	});
 	graderDesc.addClass('setting-item-description');
 

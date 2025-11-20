@@ -151,7 +151,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderConnectionsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: 'Mcp server connections' });
+		container.createEl('h3', { text: 'MCP server connections' });
 
 		// Check for active connections
 		const toolManager = this.plugin.getToolManager();

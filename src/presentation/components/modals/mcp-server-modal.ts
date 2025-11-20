@@ -41,7 +41,7 @@ export class MCPServerModal extends Modal {
 			label: 'Server name',
 			description: 'Friendly name shown throughout the plugin'
 		}).addText(text => {
-				text.setPlaceholder('Acme mcp server');
+				text.setPlaceholder('Acme MCP server');
 				text.setValue(this.draft.name ?? '');
 				text.onChange(value => {
 					this.draft.name = value;
@@ -65,7 +65,7 @@ export class MCPServerModal extends Modal {
 			label: 'Command',
 			description: 'Executable or script that starts the MCP server'
 		}).addText(text => {
-				text.setPlaceholder('Npx @acme/mcp-server');
+				text.setPlaceholder('npx @acme/mcp-server');
 				text.setValue(this.draft.command ?? '');
 				text.onChange(value => {
 					this.draft.command = value;

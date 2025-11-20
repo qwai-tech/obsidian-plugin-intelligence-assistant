@@ -45,6 +45,16 @@ Configure web search under **Settings → Intelligence Assistant → Web Search*
 
 Fill only the fields required by your chosen provider—the UI describes what each option powers and settings persist per vault.
 
+## HTTP / OpenAPI Tools
+
+Configure multiple OpenAPI sources under **Settings → Tools → HTTP / OpenAPI**. Each entry can point to a local file or fetch a remote JSON spec (cached to `.obsidian/plugins/intelligence-assistant/data/openapi/<id>.json`). For each source you can:
+
+- Pick the file path or remote URL, and optionally override the base server URL defined inside the document.
+- Provide authentication headers or query parameters that will be injected automatically on every request.
+- Enable/disable the source, reload its tool definitions, or refetch the remote spec on demand.
+
+Every path/verb pair becomes an agent tool, so adding multiple specs lets you reuse different HTTP APIs without writing custom code.
+
 ## Agents, Workflows, and Data Layout
 
 ```

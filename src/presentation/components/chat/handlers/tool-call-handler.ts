@@ -12,6 +12,10 @@ import type { AgentExecutionStep } from '@/presentation/state/chat-view-state';
 /**
  * Processes tool calls from agent response content
  */
+interface ToolCallOptions {
+	allowOpenApiTools?: boolean;
+}
+
 export async function processToolCalls(
 	content: string,
 	messages: Message[],
@@ -19,7 +23,8 @@ export async function processToolCalls(
 	toolManager: ToolManager,
 	agent?: Agent, // Optional agent to check tool permissions against
 	traceContainer?: HTMLElement,
-	onContinue?: () => Promise<void>
+	onContinue?: () => Promise<void>,
+	options?: ToolCallOptions
 ): Promise<boolean> {
 	// Extract JSON tool calls from content
 	const jsonBlockRegex = /```json\s*\n([\s\S]*?)\n```/g;
@@ -92,6 +97,8 @@ export async function processToolCalls(
 						const hasServerEnabled = agent.enabledMcpServers.includes(serverName);
 						
 						toolAllowed = hasSpecificToolEnabled || hasServerEnabled;
+					} else if (tool.provider && tool.provider.startsWith('openapi:')) {
+						toolAllowed = options?.allowOpenApiTools ?? false;
 					} else {
 						// For built-in tools, check if it's in enabledBuiltInTools
 						toolAllowed = agent.enabledBuiltInTools.includes(toolCall.name);

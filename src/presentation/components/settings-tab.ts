@@ -27,7 +27,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 	private modelSearchTerm: string = '';
 	private mcpToolsServerFilter: string = 'all';
 	private mcpToolsSearchTerm: string = '';
-	private toolsSubTab: 'built-in' | 'mcp' = 'built-in';
+	private toolsSubTab: 'built-in' | 'mcp' | 'openapi' = 'built-in';
 	private ragSubTab: 'general' | 'vector' | 'grader' = 'general';
 	private ragIndexModePill?: HTMLElement;
 	private ragIndexModeMetric?: HTMLElement;

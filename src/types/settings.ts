@@ -9,6 +9,7 @@ import type { MCPServerConfig, MCPRegistry } from './features/mcp';
 import type { BuiltInToolConfig } from './common/tools';
 import type { RAGConfig } from './features/rag';
 import type { WebSearchConfig } from './features/web-search';
+import type { OpenApiToolConfig } from './features/openapi-tools';
 import type { SystemPrompt, Agent } from './core/agent';
 import type { AgentMemory } from './features/memory';
 import * as defaultUserConfigJson from '../../config/default/settings.json';
@@ -16,6 +17,36 @@ import * as defaultUserConfigJson from '../../config/default/settings.json';
 const DEFAULT_USER_CONFIG: UserConfig = defaultUserConfigJson as UserConfig;
 const DEFAULT_TITLE_PROMPT = 'Generate a short, descriptive title (max 6 words) for this conversation:\n\n{conversation}\n\nTitle:';
 const deepClone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+const generateId = (prefix = 'openapi'): string => `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
+
+const normalizeOpenApiConfigs = (value: unknown): OpenApiToolConfig[] => {
+	if (!value) {
+		return [];
+	}
+	const items = Array.isArray(value) ? value : [value];
+	return items
+		.filter(Boolean)
+		.map((raw, index) => {
+			const entry = raw as Partial<OpenApiToolConfig> & { specPath?: string; specUrl?: string; name?: string };
+			const id = (entry.id && entry.id.trim()) || generateId(`openapi${index}`);
+			const sourceType = entry.sourceType && (entry.sourceType === 'url' || entry.sourceType === 'file')
+				? entry.sourceType
+				: entry.specUrl?.trim() ? 'url' : 'file';
+			return {
+				id,
+				name: entry.name?.trim() || `OpenAPI ${index + 1}`,
+				enabled: Boolean(entry.enabled),
+				sourceType,
+				specPath: entry.specPath ?? '',
+				specUrl: entry.specUrl ?? '',
+				baseUrl: entry.baseUrl ?? '',
+				authType: entry.authType ?? 'none',
+				authKey: entry.authKey ?? '',
+				authValue: entry.authValue ?? '',
+				lastFetchedAt: entry.lastFetchedAt
+			};
+		});
+};
 
 export interface UserConfig {
 	version: number;
@@ -41,6 +72,7 @@ export interface UserConfig {
 	};
 	tools: {
 		builtIn: BuiltInToolConfig[];
+		openApi?: OpenApiToolConfig[];
 	};
 	rag: {
 		enabled: boolean;
@@ -117,6 +149,7 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 	const mcpServers = deepClone(source.mcp?.servers ?? DEFAULT_USER_CONFIG.mcp.servers);
 	const mcpRegistries = deepClone(source.mcp?.registries ?? DEFAULT_USER_CONFIG.mcp.registries);
 	const builtInTools = deepClone(source.tools?.builtIn ?? DEFAULT_USER_CONFIG.tools.builtIn);
+	const openApiTools = normalizeOpenApiConfigs(source.tools?.openApi ?? DEFAULT_USER_CONFIG.tools.openApi);
 	const webSearch = deepClone(source.search?.web ?? DEFAULT_USER_CONFIG.search.web);
 	const agents = deepClone(source.agents?.list ?? []);
 	const agentMemories = deepClone(source.agents?.memories ?? []);
@@ -142,6 +175,7 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 		mcpServers: mcpServers,
 		mcpRegistries: mcpRegistries,
 		builtInTools: builtInTools,
+		openApiTools: openApiTools,
 		ragConfig: {
 			enabled: rag.enabled,
 			chunkSize: retrieval.chunkSize,
@@ -211,7 +245,8 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 			registries: deepClone(settings.mcpRegistries ?? [])
 		},
 		tools: {
-			builtIn: deepClone(settings.builtInTools ?? [])
+			builtIn: deepClone(settings.builtInTools ?? []),
+			openApi: deepClone(settings.openApiTools ?? [])
 		},
 		rag: {
 			enabled: settings.ragConfig.enabled,
@@ -296,6 +331,7 @@ export interface PluginSettings {
 
 	// Tools Configuration
 	builtInTools: BuiltInToolConfig[];
+	openApiTools: OpenApiToolConfig[];
 
 	// RAG Configuration
 	ragConfig: RAGConfig;
