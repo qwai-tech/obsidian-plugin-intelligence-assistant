@@ -11,9 +11,11 @@ import { WorkflowGraph } from '../core/workflow';
 import { WorkflowStorage } from '../storage/storage';
 import { NodeRegistry } from '../nodes/registry';
 import { WorkflowExecutor } from '../core/executor';
-import { WorkflowServices, WorkflowEvents } from '../core/types';
+import { WorkflowServices, WorkflowEvents, NodeExecutionState } from '../core/types';
 import { WorkflowCanvas } from './canvas';
 import { ConfigPanel } from './panel';
+import { ExecutionDetailsPanel } from './execution-details-panel';
+import { ExecutionInfoModal } from './execution-info-modal';
 import { EventEmitter } from './event-emitter';
 import { ExecutionHistoryStorage, ExecutionRecord } from '../storage/execution-history-storage';
 
@@ -43,6 +45,8 @@ export class WorkflowEditor {
 	// UI components
 	private canvas: WorkflowCanvas | null = null;
 	private configPanel: ConfigPanel | null = null;
+	private executionDetailsPanel: ExecutionDetailsPanel | null = null;
+	private rightPanelContainer: HTMLElement | null = null;
 	private toolbar: HTMLElement | null = null;
 	private sidebar: HTMLElement | null = null;
 	private historyPanel: HTMLElement | null = null;
@@ -85,7 +89,12 @@ export class WorkflowEditor {
 		const mainArea = this.createMainArea();
 		this.createSidebar(mainArea);
 		this.createCanvas(mainArea);
-		this.createConfigPanel(mainArea);
+
+		// Create right panel container for config and execution details
+		this.rightPanelContainer = mainArea.createDiv('workflow-v2-right-panel-container');
+		this.rightPanelContainer.addClass('ia-hidden'); // Initially hidden
+		this.createConfigPanel(this.rightPanelContainer);
+		this.createExecutionDetailsPanel(this.rightPanelContainer);
 
 		// Set up event listeners
 		this.setupEventListeners();
@@ -302,10 +311,25 @@ export class WorkflowEditor {
 			if (nodeId) {
 				const node = this.workflow.getNode(nodeId);
 				if (node) {
+					// Show right panel container
+					this.rightPanelContainer?.removeClass('ia-hidden');
+
+					// Show config panel
 					this.configPanel?.show(node);
+
+					// Show execution details if available
+					const executionState = this.canvas?.getNodeExecutionState(nodeId);
+					if (executionState) {
+						this.executionDetailsPanel?.show(nodeId, node.name, executionState);
+					} else {
+						this.executionDetailsPanel?.hide();
+					}
 				}
 			} else {
+				// Hide right panel container when no node selected
+				this.rightPanelContainer?.addClass('ia-hidden');
 				this.configPanel?.hide();
+				this.executionDetailsPanel?.hide();
 			}
 		});
 
@@ -321,7 +345,9 @@ export class WorkflowEditor {
 
 		this.canvas.on('node:removed', (data) => {
 			this.markDirty();
+			this.rightPanelContainer?.addClass('ia-hidden');
 			this.configPanel?.hide();
+			this.executionDetailsPanel?.hide();
 			this.events.emit('node:removed', data);
 		});
 
@@ -338,6 +364,18 @@ export class WorkflowEditor {
 			this.markDirty();
 			this.events.emit('connection:removed', data);
 		});
+
+		this.canvas.on('execution:details-click', (data: { nodeId: string; nodeName: string; executionState: NodeExecutionState }) => {
+			// Show execution info modal
+			const { nodeId, nodeName, executionState } = data;
+			const modal = new ExecutionInfoModal(
+				this.services.app as never,
+				nodeId,
+				nodeName,
+				executionState
+			);
+			modal.open();
+		});
 	}
 
 	/**
@@ -345,7 +383,7 @@ export class WorkflowEditor {
 	 */
 	private createConfigPanel(parent: HTMLElement): void {
 		const panelContainer = parent.createDiv('workflow-v2-config-panel');
-		panelContainer.addClass('hidden');
+		panelContainer.addClass('ia-hidden');
 
 		this.configPanel = new ConfigPanel(
 			panelContainer,
@@ -369,6 +407,21 @@ export class WorkflowEditor {
 
 		this.configPanel.on('close', () => {
 			this.canvas?.deselectAll();
+		});
+	}
+
+	/**
+	 * Create execution details panel
+	 */
+	private createExecutionDetailsPanel(parent: HTMLElement): void {
+		const panelContainer = parent.createDiv('workflow-v2-execution-details-panel');
+		panelContainer.addClass('ia-hidden');
+
+		this.executionDetailsPanel = new ExecutionDetailsPanel(panelContainer);
+
+		// Handle panel close
+		this.executionDetailsPanel.on('close', () => {
+			// Keep panel state but hide it
 		});
 	}
 
@@ -469,6 +522,29 @@ export class WorkflowEditor {
 
 			// Show execution log
 			console.debug('Execution result:', result);
+
+			// Save execution history
+			if (this.historyStorage && result.log) {
+				try {
+					const workflowData = this.workflow.getData();
+					await this.historyStorage.saveExecution(
+						workflowData.id,
+						workflowData.name,
+						{
+							success: result.success,
+							duration: result.duration,
+							error: result.error,
+							log: result.log,
+						},
+						{
+							triggeredBy: 'manual',
+						}
+					);
+					console.debug('Execution history saved');
+				} catch (error) {
+					console.error('Failed to save execution history:', error);
+				}
+			}
 
 		} catch (error: unknown) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
@@ -631,6 +707,8 @@ export class WorkflowEditor {
 				startTime: logEntry.startTime,
 				endTime: logEntry.endTime,
 				duration: logEntry.duration,
+				input: logEntry.input,
+				output: logEntry.output,
 			});
 		}
 
@@ -730,6 +808,7 @@ export class WorkflowEditor {
 	destroy(): void {
 		this.canvas?.destroy();
 		this.configPanel?.destroy();
+		this.executionDetailsPanel?.destroy();
 		this.events.emit('editor:destroyed', undefined);
 		this.events.clear();
 		this.container.empty();

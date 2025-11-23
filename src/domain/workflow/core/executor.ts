@@ -152,10 +152,14 @@ export class WorkflowExecutor {
 
 			// Update state to success
 			const endTime = Date.now();
+			const duration = endTime - startTime;
 			const successState: NodeExecutionState = {
 				status: 'success',
 				startTime,
 				endTime,
+				duration,
+				input: inputs.length > 0 ? inputs[0].json : undefined,
+				output: result.length > 0 ? result[0].json : undefined,
 			};
 			this.executionState.set(node.id, successState);
 			onProgress?.(node.id, successState);
@@ -166,7 +170,7 @@ export class WorkflowExecutor {
 				nodeName: node.name,
 				timestamp: endTime,
 				status: 'completed',
-				duration: endTime - startTime,
+				duration,
 				input: inputs.length > 0 ? inputs[0].json : undefined,
 				output: result.length > 0 ? result[0].json : undefined,
 			});
@@ -174,12 +178,19 @@ export class WorkflowExecutor {
 		} catch (error: unknown) {
 			// Update state to error
 			const endTime = Date.now();
+			const duration = endTime - startTime;
 			const errorMessage = error instanceof Error ? error.message : String(error);
+
+			// Get input data for error logging
+			const inputs = this.getNodeInputs(node.id, workflow);
+
 			const errorState: NodeExecutionState = {
 				status: 'error',
 				startTime,
 				endTime,
+				duration,
 				error: errorMessage,
+				input: inputs.length > 0 ? inputs[0].json : undefined,
 			};
 			this.executionState.set(node.id, errorState);
 			onProgress?.(node.id, errorState);
@@ -190,8 +201,9 @@ export class WorkflowExecutor {
 				nodeName: node.name,
 				timestamp: endTime,
 				status: 'error',
-				duration: endTime - startTime,
+				duration,
 				error: errorMessage,
+				input: inputs.length > 0 ? inputs[0].json : undefined,
 			});
 
 			// Re-throw to stop execution

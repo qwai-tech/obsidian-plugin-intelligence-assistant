@@ -298,6 +298,10 @@ export interface NodeExecutionState {
 	duration?: number;
 	/** Error message */
 	error?: string;
+	/** Input data */
+	input?: unknown;
+	/** Output data */
+	output?: unknown;
 }
 
 /**
@@ -347,7 +351,20 @@ export interface WorkflowEvents extends Record<string, unknown> {
 	/** Execution error */
 	'execution:error': { error: string };
 	/** Execution view full data requested */
-	'execution:view-full': { nodeId: string; log: { input?: unknown; output?: unknown } };
+	'execution:view-full': {
+		nodeId: string;
+		data: {
+			input?: unknown;
+			output?: unknown;
+			metadata?: {
+				status?: NodeExecutionState['status'];
+				duration?: number;
+				startTime?: number;
+				endTime?: number;
+				error?: string;
+			};
+		};
+	};
 }
 
 /**

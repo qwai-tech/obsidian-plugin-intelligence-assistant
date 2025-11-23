@@ -98,8 +98,11 @@ export class WorkflowCanvas {
 	// Execution states
 	private executionStates = new Map<string, NodeExecutionState>();
 
-	// Execution logs with input/output data
-	private executionLogs = new Map<string, { input?: unknown; output?: unknown }>();
+	// Cached bounds for execution info panels near each node
+	private executionInfoAreas = new Map<string, { x: number; y: number; width: number; height: number }>();
+
+	// Cached bounds for "More details" buttons (clickable areas)
+	private moreDetailsButtons = new Map<string, { x: number; y: number; width: number; height: number }>();
 
 	// Rendering
 	private renderCache: RenderCache = {
@@ -634,10 +637,12 @@ export class WorkflowCanvas {
 			this.drawExecutionStatus(node, executionState);
 		}
 
-		// Draw input/output info if available
-		const executionLog = this.executionLogs.get(node.id);
-		if (executionLog && (executionLog.input || executionLog.output)) {
-			this.drawNodeIOInfo(node, executionLog);
+		// Draw simplified execution info with "More details" button
+		if (this.shouldRenderExecutionInfo(executionState) && executionState) {
+			this.drawNodeIOInfo(node, executionState);
+		} else {
+			this.executionInfoAreas.delete(node.id);
+			this.moreDetailsButtons.delete(node.id);
 		}
 
 		// Draw variable indicator if node config uses variables
@@ -723,38 +728,346 @@ export class WorkflowCanvas {
 	}
 
 	/**
-	 * Draw node input/output info
+	 * Determine whether execution info (input/output/metadata) should be rendered
 	 */
-	private drawNodeIOInfo(
-		node: WorkflowNode,
-		_log: { input?: unknown; output?: unknown }
-	): void {
-		// Small info indicator on bottom-right
-		const indicatorSize = 20;
-		const indicatorX = node.x + NODE_WIDTH - indicatorSize - 4;
-		const indicatorY = node.y + NODE_HEIGHT - indicatorSize - 4;
+	private shouldRenderExecutionInfo(state?: NodeExecutionState | null): boolean {
+		if (!state) {
+			return false;
+		}
+
+		return state.status === 'success' || state.status === 'completed' || state.status === 'error';
+	}
+
+	/**
+	 * Draw simplified node execution info with "More details" button
+	 */
+	private drawNodeIOInfo(node: WorkflowNode, state: NodeExecutionState): void {
+		const padding = 8;
+		const lineHeight = 12;
+		const boxX = node.x;
+		const boxY = node.y + NODE_HEIGHT + 8;
+		const boxHeight = 90; // Increased height to show input/output
+		const buttonWidth = 100;
+		const buttonHeight = 24;
 
 		// Background
-		this.ctx.fillStyle = 'rgba(59, 130, 246, 0.8)';
+		this.ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
 		this.ctx.beginPath();
-		this.ctx.arc(
-			indicatorX + indicatorSize / 2,
-			indicatorY + indicatorSize / 2,
-			indicatorSize / 2,
-			0,
-			Math.PI * 2
-		);
+		this.drawRoundRect(boxX, boxY, NODE_WIDTH, boxHeight, 8);
 		this.ctx.fill();
 
-		// Info icon
+		// Border
+		this.ctx.strokeStyle = 'rgba(59, 130, 246, 0.65)';
+		this.ctx.lineWidth = 1 / this.state.scale;
+		this.ctx.beginPath();
+		this.drawRoundRect(boxX, boxY, NODE_WIDTH, boxHeight, 8);
+		this.ctx.stroke();
+
+		let currentY = boxY + padding;
+
+		// Status text
+		const statusText = state.error ? `Error: ${state.error.substring(0, 30)}...` :
+			state.duration !== undefined ? `Duration: ${state.duration}ms` : 'Completed';
+
 		this.ctx.font = `${10 / this.state.scale}px sans-serif`;
+		this.ctx.fillStyle = state.error ? '#fca5a5' : '#93c5fd';
+		this.ctx.textAlign = 'left';
+		this.ctx.textBaseline = 'top';
+		this.ctx.fillText(statusText, boxX + padding, currentY);
+		currentY += lineHeight;
+
+		// Input preview
+		if (state.input !== undefined) {
+			this.ctx.fillStyle = '#94a3b8';
+			this.ctx.font = `${9 / this.state.scale}px sans-serif`;
+			this.ctx.fillText('Input:', boxX + padding, currentY);
+			currentY += lineHeight;
+
+			const inputPreview = this.formatValuePreview(state.input, 35);
+			this.ctx.fillStyle = '#cbd5e1';
+			this.ctx.fillText(inputPreview, boxX + padding + 4, currentY);
+			currentY += lineHeight;
+		}
+
+		// Output preview
+		if (state.output !== undefined) {
+			this.ctx.fillStyle = '#94a3b8';
+			this.ctx.font = `${9 / this.state.scale}px sans-serif`;
+			this.ctx.fillText('Output:', boxX + padding, currentY);
+			currentY += lineHeight;
+
+			const outputPreview = this.formatValuePreview(state.output, 35);
+			this.ctx.fillStyle = '#cbd5e1';
+			this.ctx.fillText(outputPreview, boxX + padding + 4, currentY);
+		}
+
+		// "More details" button
+		const buttonX = boxX + (NODE_WIDTH - buttonWidth) / 2;
+		const buttonY = boxY + boxHeight - buttonHeight - padding;
+
+		// Button background
+		this.ctx.fillStyle = 'rgba(59, 130, 246, 0.8)';
+		this.ctx.beginPath();
+		this.drawRoundRect(buttonX, buttonY, buttonWidth, buttonHeight, 4);
+		this.ctx.fill();
+
+		// Button text
+		this.ctx.font = `${11 / this.state.scale}px sans-serif`;
 		this.ctx.fillStyle = '#fff';
 		this.ctx.textAlign = 'center';
 		this.ctx.textBaseline = 'middle';
-		this.ctx.fillText(
-			'ℹ',
-			indicatorX + indicatorSize / 2,
-			indicatorY + indicatorSize / 2
+		this.ctx.fillText('More details', buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
+
+		// Store button bounds for click detection
+		this.moreDetailsButtons.set(node.id, {
+			x: buttonX,
+			y: buttonY,
+			width: buttonWidth,
+			height: buttonHeight,
+		});
+
+		// Store info area bounds
+		this.executionInfoAreas.set(node.id, {
+			x: boxX,
+			y: boxY,
+			width: NODE_WIDTH,
+			height: boxHeight,
+		});
+	}
+
+	/**
+	 * Format a value as a brief preview string
+	 */
+	private formatValuePreview(value: unknown, maxLength: number): string {
+		if (value === null) return 'null';
+		if (value === undefined) return 'undefined';
+
+		if (typeof value === 'string') {
+			return value.length > maxLength ? `${value.substring(0, maxLength)}...` : value;
+		}
+
+		if (typeof value === 'number' || typeof value === 'boolean') {
+			const str = String(value);
+			return str.length > maxLength ? `${str.substring(0, maxLength)}...` : str;
+		}
+
+		if (typeof value === 'object') {
+			try {
+				const json = JSON.stringify(value);
+				return json.length > maxLength ? `${json.substring(0, maxLength)}...` : json;
+			} catch {
+				return '[Complex Object]';
+			}
+		}
+
+		// For other types (function, symbol, etc.)
+		return `[${typeof value}]`;
+	}
+
+	/**
+	 * Build display sections for execution data
+	 */
+	private buildExecutionSections(state: NodeExecutionState): Array<{ title: string; lines: string[] }> {
+		const sections: Array<{ title: string; lines: string[] }> = [];
+
+		sections.push({
+			title: 'Input',
+			lines: [this.formatExecutionValue(state.input)],
+		});
+
+		sections.push({
+			title: 'Output',
+			lines: [this.formatExecutionValue(state.output)],
+		});
+
+		const metadataLines = this.buildMetadataLines(state);
+		if (metadataLines.length > 0) {
+			sections.push({
+				title: 'Metadata',
+				lines: metadataLines,
+			});
+		}
+
+		if (state.error) {
+			sections.push({
+				title: 'Error',
+				lines: [state.error],
+			});
+		}
+
+		return sections;
+	}
+
+	/**
+	 * Build metadata lines from execution state
+	 */
+	private buildMetadataLines(state: NodeExecutionState): string[] {
+		const lines: string[] = [];
+		lines.push(`Status: ${state.status}`);
+		if (typeof state.duration === 'number') {
+			lines.push(`Duration: ${Math.max(0, Math.round(state.duration))}ms`);
+		}
+		const startTime = this.formatTimestamp(state.startTime);
+		if (startTime) {
+			lines.push(`Start: ${startTime}`);
+		}
+		const endTime = this.formatTimestamp(state.endTime);
+		if (endTime) {
+			lines.push(`End: ${endTime}`);
+		}
+		return lines;
+	}
+
+	/**
+	 * Convert execution value into a readable string
+	 */
+	private formatExecutionValue(value: unknown): string {
+		if (value === undefined || value === null) {
+			return 'No data';
+		}
+		if (typeof value === 'string') {
+			const trimmed = value.trim();
+			return trimmed.length > 0 ? trimmed : '(empty string)';
+		}
+		if (typeof value === 'number' || typeof value === 'boolean') {
+			return String(value);
+		}
+		try {
+			const serialized = JSON.stringify(value);
+			if (serialized) {
+				return serialized;
+			}
+		} catch (error) {
+			console.warn('Failed to stringify execution value:', error);
+		}
+		if (typeof value === 'object' && value !== null) {
+			return '[Complex Object]';
+		}
+		return `[${typeof value}]`;
+	}
+
+	/**
+	 * Wrap text into multiple lines within the provided width
+	 */
+	private wrapText(text: string, maxWidth: number, fontSize: number, maxLines = 3): string[] {
+		const previousFont = this.ctx.font;
+		this.ctx.font = `${fontSize}px sans-serif`;
+
+		const sanitized = text.replace(/\s+/g, ' ').trim();
+		if (sanitized.length === 0) {
+			this.ctx.font = previousFont;
+			return ['No data'];
+		}
+
+		const limited = sanitized.slice(0, 500);
+		const lines: string[] = [];
+		let remaining = limited;
+
+		while (remaining.length > 0 && lines.length < maxLines) {
+			let low = 1;
+			let high = remaining.length;
+			let best = 1;
+
+			while (low <= high) {
+				const mid = Math.floor((low + high) / 2);
+				const slice = remaining.slice(0, mid);
+				if (this.ctx.measureText(slice).width <= maxWidth) {
+					best = mid;
+					low = mid + 1;
+				} else {
+					high = mid - 1;
+				}
+			}
+
+			let line = remaining.slice(0, best).trim();
+			remaining = remaining.slice(best).replace(/^\s+/, '');
+
+			if (remaining.length > 0 && lines.length === maxLines - 1) {
+				if (line.length > 1) {
+					line = `${line.slice(0, line.length - 1)}…`;
+				} else {
+					line = `${line}…`;
+				}
+				lines.push(line);
+				this.ctx.font = previousFont;
+				return lines;
+			}
+
+			lines.push(line);
+		}
+
+		this.ctx.font = previousFont;
+		return lines.length > 0 ? lines : ['No data'];
+	}
+
+	/**
+	 * Format timestamp into readable time
+	 */
+	private formatTimestamp(timestamp?: number): string | null {
+		if (!timestamp) {
+			return null;
+		}
+		const date = new Date(timestamp);
+		if (Number.isNaN(date.getTime())) {
+			return null;
+		}
+		return date.toLocaleTimeString();
+	}
+
+	/**
+	 * Prepare metadata payload for event consumers
+	 */
+	private createExecutionMetadata(state?: NodeExecutionState): {
+		status?: NodeExecutionState['status'];
+		duration?: number;
+		startTime?: number;
+		endTime?: number;
+		error?: string;
+	} | undefined {
+		if (!state) {
+			return undefined;
+		}
+
+		const metadata: {
+			status?: NodeExecutionState['status'];
+			duration?: number;
+			startTime?: number;
+			endTime?: number;
+			error?: string;
+		} = {};
+
+		if (state.status) {
+			metadata.status = state.status;
+		}
+		if (typeof state.duration === 'number') {
+			metadata.duration = state.duration;
+		}
+		if (state.startTime) {
+			metadata.startTime = state.startTime;
+		}
+		if (state.endTime) {
+			metadata.endTime = state.endTime;
+		}
+		if (state.error) {
+			metadata.error = state.error;
+		}
+
+		return Object.keys(metadata).length > 0 ? metadata : undefined;
+	}
+
+	/**
+	 * Check if a point is inside a rectangular bounds object
+	 */
+	private isPointInsideBounds(
+		x: number,
+		y: number,
+		bounds: { x: number; y: number; width: number; height: number }
+	): boolean {
+		return (
+			x >= bounds.x &&
+			x <= bounds.x + bounds.width &&
+			y >= bounds.y &&
+			y <= bounds.y + bounds.height
 		);
 	}
 
@@ -947,6 +1260,21 @@ export class WorkflowCanvas {
 	private onMouseDown(e: MouseEvent): void {
 		const pos = this.screenToWorld(e.offsetX, e.offsetY);
 
+		// First, check if clicking on any "More details" button (they're below nodes)
+		for (const node of this.workflow.getNodes()) {
+			if (this.isOverMoreDetailsButton(node, pos.x, pos.y)) {
+				const executionState = this.executionStates.get(node.id);
+				if (executionState) {
+					this.events.emit('execution:details-click', {
+						nodeId: node.id,
+						nodeName: node.name,
+						executionState,
+					});
+				}
+				return;
+			}
+		}
+
 		// Check if clicking on a node
 		const node = this.getNodeAt(pos.x, pos.y);
 
@@ -1028,15 +1356,27 @@ export class WorkflowCanvas {
 		}
 		
 		// Update cursor
-		const node = this.getNodeAt(pos.x, pos.y);
-		if (node) {
-			if (this.isOverOutputHandle(node, pos.x, pos.y)) {
-				this.canvas.setCssProps({ cursor: 'crosshair' });
-			} else {
-				this.canvas.setCssProps({ cursor: 'move' });
+		// First check if over any "More details" button
+		let overButton = false;
+		for (const buttonNode of this.workflow.getNodes()) {
+			if (this.isOverMoreDetailsButton(buttonNode, pos.x, pos.y)) {
+				this.canvas.setCssProps({ cursor: 'pointer' });
+				overButton = true;
+				break;
 			}
-		} else {
-			this.canvas.setCssProps({ cursor: 'default' });
+		}
+
+		if (!overButton) {
+			const node = this.getNodeAt(pos.x, pos.y);
+			if (node) {
+				if (this.isOverOutputHandle(node, pos.x, pos.y)) {
+					this.canvas.setCssProps({ cursor: 'crosshair' });
+				} else {
+					this.canvas.setCssProps({ cursor: 'move' });
+				}
+			} else {
+				this.canvas.setCssProps({ cursor: 'default' });
+			}
 		}
 	}
 	
@@ -1045,35 +1385,6 @@ export class WorkflowCanvas {
 	 */
 	private onMouseUp(e: MouseEvent): void {
 		const pos = this.screenToWorld(e.offsetX, e.offsetY);
-
-		// Check if clicking on "View Full" button for execution info
-		const nodes = this.workflow.getNodes();
-		for (const node of nodes) {
-			const executionLog = this.executionLogs.get(node.id);
-			if (executionLog && (executionLog.input || executionLog.output)) {
-				const infoY = node.y + NODE_HEIGHT + 10;
-				const boxHeight = 50;
-				const buttonWidth = 90;
-				const buttonHeight = 24;
-				const buttonX = node.x + NODE_WIDTH - buttonWidth - 8;
-				const buttonY = infoY + (boxHeight - buttonHeight) / 2;
-
-				// Check if click is within the button bounds
-				if (pos.x >= buttonX && pos.x <= buttonX + buttonWidth &&
-					pos.y >= buttonY && pos.y <= buttonY + buttonHeight) {
-					// Reset dragging state before showing modal
-					this.isDragging = false;
-					this.isPanning = false;
-					this.state.draggingNodeId = null;
-					this.state.creatingConnection = null;
-
-					// Emit event to show full execution data
-					this.events.emit('execution:view-full', { nodeId: node.id, log: executionLog });
-					this.scheduleRedraw();
-					return;
-				}
-			}
-		}
 
 		// Finish creating connection
 		if (this.state.creatingConnection) {
@@ -1162,6 +1473,8 @@ export class WorkflowCanvas {
 		deleteItem.setText('🗑️ delete');
 		deleteItem.addEventListener('click', () => {
 			this.workflow.removeNode(node.id);
+			this.executionStates.delete(node.id);
+			this.executionInfoAreas.delete(node.id);
 			this.events.emit('node:removed', { nodeId: node.id });
 			menu.remove();
 			this.scheduleRedraw(); // Use optimized redraw
@@ -1292,6 +1605,8 @@ export class WorkflowCanvas {
 			// Delete selected node
 			else if (this.state.selectedNodeId) {
 				this.workflow.removeNode(this.state.selectedNodeId);
+				this.executionStates.delete(this.state.selectedNodeId);
+				this.executionInfoAreas.delete(this.state.selectedNodeId);
 				this.events.emit('node:removed', { nodeId: this.state.selectedNodeId });
 				this.state.selectedNodeId = null;
 				this.scheduleRedraw();
@@ -1339,7 +1654,22 @@ export class WorkflowCanvas {
 		const dist = Math.sqrt((x - hx) ** 2 + (y - hy) ** 2);
 		return dist <= HANDLE_RADIUS + 5;
 	}
-	
+
+	/**
+	 * Check if over "More details" button
+	 */
+	private isOverMoreDetailsButton(node: WorkflowNode, x: number, y: number): boolean {
+		const button = this.moreDetailsButtons.get(node.id);
+		if (!button) return false;
+
+		return (
+			x >= button.x &&
+			x <= button.x + button.width &&
+			y >= button.y &&
+			y <= button.y + button.height
+		);
+	}
+
 	/**
 	 * Check if over input handle
 	 */
@@ -1432,7 +1762,7 @@ export class WorkflowCanvas {
 	setWorkflow(workflow: WorkflowGraph): void {
 		this.workflow = workflow;
 		this.executionStates.clear();
-		this.executionLogs.clear();
+		this.executionInfoAreas.clear();
 		this.renderCache.nodes.clear();
 		this.renderCache.connections.clear();
 		this.renderCache.grid = null;
@@ -1452,29 +1782,8 @@ export class WorkflowCanvas {
 	 */
 	clearExecutionStates(): void {
 		this.executionStates.clear();
-		this.executionLogs.clear();
+		this.executionInfoAreas.clear();
 		this.scheduleRedraw(); // Use optimized redraw
-	}
-
-	/**
-	 * Update node execution logs with input/output data
-	 */
-	updateExecutionLogs(logs: Array<{ nodeId: string; input?: unknown; output?: unknown }>): void {
-		this.executionLogs.clear();
-		for (const log of logs) {
-			this.executionLogs.set(log.nodeId, {
-				input: log.input,
-				output: log.output
-			});
-		}
-		this.scheduleRedraw();
-	}
-
-	/**
-	 * Get execution log for a specific node
-	 */
-	getExecutionLog(nodeId: string): { input?: unknown; output?: unknown } | undefined {
-		return this.executionLogs.get(nodeId);
 	}
 
 	/**

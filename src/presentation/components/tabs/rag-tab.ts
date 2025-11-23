@@ -656,30 +656,43 @@ function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 				}
 			}));
 
-	createSetting({
-		path: 'ragConfig.reRankingEnabled',
-		label: 'Enable re-ranking',
-		description: 'Re-rank search results using a secondary model'
-	}).addToggle(toggle => toggle
-			.setValue(plugin.settings.ragConfig.reRankingEnabled)
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.reRankingEnabled = value;
-				await plugin.saveSettings();
-			}));
+	// Re-ranking toggle with dynamic re-rendering
+	const reRankingContainer = section.createDiv('ia-reranking-container');
 
-	if (plugin.settings.ragConfig.reRankingEnabled) {
-		createSetting({
-			path: 'ragConfig.reRankingModel',
-			label: 'Re-Ranking Model',
-			description: 'Model to use for re-ranking results'
-		}).addText(text => text
-				.setPlaceholder('Cross-encoder/ms-marco-MiniLM-L-6-v2')
-				.setValue(plugin.settings.ragConfig.reRankingModel)
+	const renderReRankingSettings = () => {
+		reRankingContainer.empty();
+
+		const createReRankingSetting = (options: ConfigFieldMetadataOptions) =>
+			applyConfigFieldMetadata(new Setting(reRankingContainer), options);
+
+		createReRankingSetting({
+			path: 'ragConfig.reRankingEnabled',
+			label: 'Enable re-ranking',
+			description: 'Re-rank search results using a secondary model'
+		}).addToggle(toggle => toggle
+				.setValue(plugin.settings.ragConfig.reRankingEnabled)
 				.onChange(async (value) => {
-					plugin.settings.ragConfig.reRankingModel = value;
+					plugin.settings.ragConfig.reRankingEnabled = value;
 					await plugin.saveSettings();
+					renderReRankingSettings();
 				}));
-	}
+
+		if (plugin.settings.ragConfig.reRankingEnabled) {
+			createReRankingSetting({
+				path: 'ragConfig.reRankingModel',
+				label: 'Re-Ranking Model',
+				description: 'Model to use for re-ranking results'
+			}).addText(text => text
+					.setPlaceholder('Cross-encoder/ms-marco-MiniLM-L-6-v2')
+					.setValue(plugin.settings.ragConfig.reRankingModel)
+					.onChange(async (value) => {
+						plugin.settings.ragConfig.reRankingModel = value;
+						await plugin.saveSettings();
+					}));
+		}
+	};
+
+	renderReRankingSettings();
 }
 
 function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
@@ -691,114 +704,137 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 	});
 	graderDesc.addClass('setting-item-description');
 
-	const createSetting = (options: ConfigFieldMetadataOptions) =>
-		applyConfigFieldMetadata(new Setting(section), options);
+	// Grading toggle with dynamic re-rendering
+	const gradingContainer = section.createDiv('ia-grading-container');
 
-	createSetting({
-		path: 'ragConfig.enableGradingThreshold',
-		label: 'Enable grading threshold',
-		description: 'Filter chunks below quality thresholds'
-	}).addToggle(toggle => toggle
-			.setValue(plugin.settings.ragConfig.enableGradingThreshold)
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.enableGradingThreshold = value;
-				await plugin.saveSettings();
-			}));
+	const renderGradingOptions = () => {
+		gradingContainer.empty();
 
-	if (plugin.settings.ragConfig.enableGradingThreshold) {
+		const createSetting = (options: ConfigFieldMetadataOptions) =>
+			applyConfigFieldMetadata(new Setting(gradingContainer), options);
+
 		createSetting({
-			path: 'ragConfig.graderModelSource',
-			label: 'Grader model source',
-			description: 'Where to get the grader model from'
-		}).addDropdown(dropdown => dropdown
-				.addOptions({
-					'chat': 'Chat Model',
-					'custom': 'Custom Model'
-				})
-				.setValue(plugin.settings.ragConfig.graderModelSource)
+			path: 'ragConfig.enableGradingThreshold',
+			label: 'Enable grading threshold',
+			description: 'Filter chunks below quality thresholds'
+		}).addToggle(toggle => toggle
+				.setValue(plugin.settings.ragConfig.enableGradingThreshold)
 				.onChange(async (value) => {
-					plugin.settings.ragConfig.graderModelSource = value;
+					plugin.settings.ragConfig.enableGradingThreshold = value;
 					await plugin.saveSettings();
+					renderGradingOptions();
 				}));
 
-		if (plugin.settings.ragConfig.graderModelSource === 'custom' && plugin.settings.ragConfig.graderModel) {
-			createSetting({
-				path: 'ragConfig.graderModel',
-				label: 'Grader model',
-				description: 'specific model to use for grading'
-			}).addText(text => text
-					.setPlaceholder('Gpt-4')
-					.setValue(plugin.settings.ragConfig.graderModel || '')
-					.onChange(async (value) => {
-						plugin.settings.ragConfig.graderModel = value;
-						await plugin.saveSettings();
-					}));
-		}
+		if (plugin.settings.ragConfig.enableGradingThreshold) {
+			// Model source container for nested dynamic rendering
+			const modelSourceContainer = gradingContainer.createDiv('ia-grading-model-source-container');
 
-		createSetting({
-			path: 'ragConfig.graderParallelProcessing',
-			label: 'Parallel processing',
-			description: 'Number of chunks to grade in parallel'
-		}).addText(text => text
-				.setPlaceholder('3')
-				.setValue(plugin.settings.ragConfig.graderParallelProcessing?.toString() || '3')
-				.onChange(async (value) => {
-					const num = parseInt(value);
-					if (!isNaN(num) && num > 0) {
-						plugin.settings.ragConfig.graderParallelProcessing = num;
-						await plugin.saveSettings();
-					}
-				}));
+			const renderModelSourceOptions = () => {
+				modelSourceContainer.empty();
 
-		if (plugin.settings.ragConfig.minRelevanceScore !== undefined) {
+				const createModelSourceSetting = (options: ConfigFieldMetadataOptions) =>
+					applyConfigFieldMetadata(new Setting(modelSourceContainer), options);
+
+				createModelSourceSetting({
+					path: 'ragConfig.graderModelSource',
+					label: 'Grader model source',
+					description: 'Where to get the grader model from'
+				}).addDropdown(dropdown => dropdown
+						.addOptions({
+							'chat': 'Chat Model',
+							'custom': 'Custom Model'
+						})
+						.setValue(plugin.settings.ragConfig.graderModelSource)
+						.onChange(async (value) => {
+							plugin.settings.ragConfig.graderModelSource = value;
+							await plugin.saveSettings();
+							renderModelSourceOptions();
+						}));
+
+				if (plugin.settings.ragConfig.graderModelSource === 'custom') {
+					createModelSourceSetting({
+						path: 'ragConfig.graderModel',
+						label: 'Grader model',
+						description: 'specific model to use for grading'
+					}).addText(text => text
+							.setPlaceholder('Gpt-4')
+							.setValue(plugin.settings.ragConfig.graderModel || '')
+							.onChange(async (value) => {
+								plugin.settings.ragConfig.graderModel = value;
+								await plugin.saveSettings();
+							}));
+				}
+			};
+
+			renderModelSourceOptions();
+
 			createSetting({
-				path: 'ragConfig.minRelevanceScore',
-				label: 'Min relevance score',
-				description: 'Minimum relevance score (0.0-1.0)'
+				path: 'ragConfig.graderParallelProcessing',
+				label: 'Parallel processing',
+				description: 'Number of chunks to grade in parallel'
 			}).addText(text => text
-					.setPlaceholder('0.5')
-					.setValue(plugin.settings.ragConfig.minRelevanceScore?.toString() || '0.5')
+					.setPlaceholder('3')
+					.setValue(plugin.settings.ragConfig.graderParallelProcessing?.toString() || '3')
 					.onChange(async (value) => {
-						const num = parseFloat(value);
-						if (!isNaN(num) && num >= 0 && num <= 1) {
-							plugin.settings.ragConfig.minRelevanceScore = num;
+						const num = parseInt(value);
+						if (!isNaN(num) && num > 0) {
+							plugin.settings.ragConfig.graderParallelProcessing = num;
 							await plugin.saveSettings();
 						}
 					}));
-		}
 
-		if (plugin.settings.ragConfig.minAccuracyScore !== undefined) {
-			createSetting({
-				path: 'ragConfig.minAccuracyScore',
-				label: 'Min accuracy score',
-				description: 'Minimum accuracy score (0.0-1.0)'
-			}).addText(text => text
-					.setPlaceholder('0.5')
-					.setValue(plugin.settings.ragConfig.minAccuracyScore?.toString() || '0.5')
-					.onChange(async (value) => {
-						const num = parseFloat(value);
-						if (!isNaN(num) && num >= 0 && num <= 1) {
-							plugin.settings.ragConfig.minAccuracyScore = num;
-							await plugin.saveSettings();
-						}
-					}));
-		}
+			if (plugin.settings.ragConfig.minRelevanceScore !== undefined) {
+				createSetting({
+					path: 'ragConfig.minRelevanceScore',
+					label: 'Min relevance score',
+					description: 'Minimum relevance score (0.0-1.0)'
+				}).addText(text => text
+						.setPlaceholder('0.5')
+						.setValue(plugin.settings.ragConfig.minRelevanceScore?.toString() || '0.5')
+						.onChange(async (value) => {
+							const num = parseFloat(value);
+							if (!isNaN(num) && num >= 0 && num <= 1) {
+								plugin.settings.ragConfig.minRelevanceScore = num;
+								await plugin.saveSettings();
+							}
+						}));
+			}
 
-		if (plugin.settings.ragConfig.minSupportQualityScore !== undefined) {
-			createSetting({
-				path: 'ragConfig.minSupportQualityScore',
-				label: 'Min support quality score',
-				description: 'Minimum support quality score (0.0-1.0)'
-			}).addText(text => text
-					.setPlaceholder('0.5')
-					.setValue(plugin.settings.ragConfig.minSupportQualityScore?.toString() || '0.5')
-					.onChange(async (value) => {
-						const num = parseFloat(value);
-						if (!isNaN(num) && num >= 0 && num <= 1) {
-							plugin.settings.ragConfig.minSupportQualityScore = num;
-							await plugin.saveSettings();
-						}
-					}));
+			if (plugin.settings.ragConfig.minAccuracyScore !== undefined) {
+				createSetting({
+					path: 'ragConfig.minAccuracyScore',
+					label: 'Min accuracy score',
+					description: 'Minimum accuracy score (0.0-1.0)'
+				}).addText(text => text
+						.setPlaceholder('0.5')
+						.setValue(plugin.settings.ragConfig.minAccuracyScore?.toString() || '0.5')
+						.onChange(async (value) => {
+							const num = parseFloat(value);
+							if (!isNaN(num) && num >= 0 && num <= 1) {
+								plugin.settings.ragConfig.minAccuracyScore = num;
+								await plugin.saveSettings();
+							}
+						}));
+			}
+
+			if (plugin.settings.ragConfig.minSupportQualityScore !== undefined) {
+				createSetting({
+					path: 'ragConfig.minSupportQualityScore',
+					label: 'Min support quality score',
+					description: 'Minimum support quality score (0.0-1.0)'
+				}).addText(text => text
+						.setPlaceholder('0.5')
+						.setValue(plugin.settings.ragConfig.minSupportQualityScore?.toString() || '0.5')
+						.onChange(async (value) => {
+							const num = parseFloat(value);
+							if (!isNaN(num) && num >= 0 && num <= 1) {
+								plugin.settings.ragConfig.minSupportQualityScore = num;
+								await plugin.saveSettings();
+							}
+						}));
+			}
 		}
-	}
+	};
+
+	renderGradingOptions();
 }
