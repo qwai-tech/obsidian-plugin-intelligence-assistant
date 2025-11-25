@@ -47,6 +47,8 @@ export interface WorkflowNode {
  * Connection between two nodes
  */
 export interface Connection {
+	/** Unique identifier */
+	id: string;
 	/** Source node ID */
 	from: string;
 	/** Target node ID */
@@ -99,10 +101,12 @@ export interface ExecutionLogEntry {
 	nodeId: string;
 	/** Node name */
 	nodeName: string;
+	/** Node type */
+	nodeType: string;
 	/** Timestamp */
 	timestamp: number;
 	/** Status */
-	status: 'started' | 'completed' | 'error';
+	status: 'pending' | 'running' | 'completed' | 'error';
 	/** Duration in ms (for completed/error) */
 	duration?: number;
 	/** Error message (for error status) */

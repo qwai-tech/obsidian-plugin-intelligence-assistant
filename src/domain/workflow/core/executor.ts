@@ -119,8 +119,9 @@ export class WorkflowExecutor {
 		this.log.push({
 			nodeId: node.id,
 			nodeName: node.name,
+			nodeType: node.type,
 			timestamp: startTime,
-			status: 'started',
+			status: 'running',
 		});
 
 		try {
@@ -168,6 +169,7 @@ export class WorkflowExecutor {
 			this.log.push({
 				nodeId: node.id,
 				nodeName: node.name,
+				nodeType: node.type,
 				timestamp: endTime,
 				status: 'completed',
 				duration,
@@ -199,6 +201,7 @@ export class WorkflowExecutor {
 			this.log.push({
 				nodeId: node.id,
 				nodeName: node.name,
+				nodeType: node.type,
 				timestamp: endTime,
 				status: 'error',
 				duration,

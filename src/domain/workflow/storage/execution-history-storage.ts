@@ -102,7 +102,18 @@ export class ExecutionHistoryStorage {
 			success: boolean;
 			duration: number;
 			error?: string;
-			log: unknown[];
+			log: Array<{
+				nodeId: string;
+				nodeName: string;
+				nodeType: string;
+				status: 'pending' | 'running' | 'completed' | 'error';
+				startTime?: number;
+				endTime?: number;
+				duration?: number;
+				input?: unknown;
+				output?: unknown;
+				error?: string;
+			}>;
 		},
 		metadata?: ExecutionRecord['metadata']
 	): Promise<string> {

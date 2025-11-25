@@ -160,6 +160,7 @@ export function createSimpleWorkflow(
 		// Connect to previous node
 		if (i > 0) {
 			workflow.addConnection({
+				id: `edge_${nodeIds[i - 1]}_${nodeId}`,
 				from: nodeIds[i - 1],
 				to: nodeId,
 			});

@@ -101,6 +101,7 @@ export class WorkflowError extends Error {
     return {
       nodeId: this.node?.id ?? 'unknown',
       nodeName: this.node?.name ?? 'Unknown Node',
+      nodeType: this.node?.type ?? 'unknown',
       timestamp: this.timestamp,
       status: 'error',
       error: this.message,

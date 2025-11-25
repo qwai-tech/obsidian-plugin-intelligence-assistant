@@ -5,6 +5,7 @@
  * data processing, control flow, file operations, and web services.
  */
 
+import { TFile } from 'obsidian';
 import { ExecutionContext, NodeDef } from '../core/types';
 
 // Helper function to safely get error message
@@ -13,13 +14,7 @@ function getErrorMessage(error: unknown): string {
 	return String(error);
 }
 
-// Vault service interface for type safety
-interface VaultService {
-	getFileByPath: (_path: string) => unknown;
-	readBinary: (_file: unknown) => Promise<ArrayBuffer>;
-	read: (_file: unknown) => Promise<string>;
-	getFileStat: (_file: unknown) => Promise<{ ctime: number; mtime: number; size: number } | null>;
-}
+
 
 // RSS feed types
 interface RSSItem {
@@ -211,7 +206,7 @@ export const parseCSVNode: NodeDef = {
       description: 'Whether to trim whitespace from field values',
     }
   ],
-  execute(inputs, config, _context: ExecutionContext) {
+  async execute(inputs, config, _context: ExecutionContext) {
     const { delimiter = ',', hasHeader = true, trimFields = true } = config;
     
     try {
@@ -379,7 +374,7 @@ export const formatJSONNode: NodeDef = {
       description: 'Whether to enforce strict JSON validation',
     }
   ],
-  execute(inputs, config, _context: ExecutionContext) {
+  async execute(inputs, config, _context: ExecutionContext) {
     const { operation = 'format', indent = 2, propertyName = '', strictValidation = true } = config;
     
     try {
@@ -591,8 +586,6 @@ export const switchNode: NodeDef = {
             context.services,
             {
               timeout: 2000,
-              builtinModules: [],
-              allowAsync: false,
             }
           );
 
@@ -611,7 +604,7 @@ export const switchNode: NodeDef = {
       
       // If no matches, use default
       if (matchedOutputs.length === 0) {
-        matchedOutputs.push(defaultOutput);
+        matchedOutputs.push(String(defaultOutput));
       }
       
       return [{
@@ -715,10 +708,10 @@ export const readFileNode: NodeDef = {
     }
 
     try {
-      const vault = context.services.vault as VaultService;
+      const vault = context.services.vault;
       // Check if file exists
-      const file = vault.getFileByPath(filePath);
-      if (!file) {
+      const file = vault.getAbstractFileByPath(filePath);
+      if (!file || !(file instanceof TFile)) {
         if (fallbackContent) {
           return [{
             json: {
@@ -753,7 +746,7 @@ export const readFileNode: NodeDef = {
       }
 
       // Get file stats
-      const stat = await vault.getFileStat(file);
+      const stat = await vault.adapter.stat(filePath);
 
       return [{
         json: {
@@ -841,11 +834,18 @@ export const rssFeedReaderNode: NodeDef = {
     }
   ],
   async execute(inputs, config, context: ExecutionContext) {
-    const { maxItems = 20, includeContent = false, timeout = 30, userAgent = '' } = config;
+    const maxItems = typeof config.maxItems === 'number' ? config.maxItems : 20;
+    const includeContent = typeof config.includeContent === 'boolean' ? config.includeContent : false;
+    const timeout = typeof config.timeout === 'number' ? config.timeout : 30;
+    const userAgent = typeof config.userAgent === 'string' ? config.userAgent : '';
     const feedUrl = inputs[0]?.json?.url || inputs[0]?.json?.feedUrl || '';
     
     if (!feedUrl) {
       throw new Error('No feed URL provided');
+    }
+
+    if (typeof feedUrl !== 'string') {
+        throw new Error('Feed URL must be a string');
     }
     
     if (!context.services.http) {
@@ -865,14 +865,9 @@ export const rssFeedReaderNode: NodeDef = {
       const response = await context.services.http.request(feedUrl, {
         method: 'GET',
         headers,
-        timeout: timeout * 1000,
-      }) as { headers?: Record<string, string>; data?: unknown; text?: string };
+      });
 
-      const feedContent: string = typeof response.data === 'string' ? response.data : (response.text || '');
-
-      if (typeof feedUrl !== 'string') {
-        throw new Error('Feed URL must be a string');
-      }
+      const feedContent: string = response.text || '';
 
       // Simple RSS/Atom parsing - in a real implementation you'd use a proper parser
       const feedData = parseFeed(feedContent, feedUrl);
@@ -891,11 +886,10 @@ export const rssFeedReaderNode: NodeDef = {
               const contentResponse = await context.services.http.request(item.link, {
                 method: 'GET',
                 headers,
-                timeout: timeout * 1000,
-              }) as { data?: unknown; text?: string };
+              });
 
               // Extract text content (very simplified)
-              const htmlContent: string = typeof contentResponse.data === 'string' ? contentResponse.data : (contentResponse.text || '');
+              const htmlContent: string = contentResponse.text || '';
               const textContent = htmlContent.replace(/<[^>]*>/g, '').substring(0, 1000);
               item.fullContent = textContent;
             } catch (error) {

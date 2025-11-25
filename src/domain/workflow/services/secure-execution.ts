@@ -3,85 +3,74 @@
  *
  * Provides a secure sandboxed environment for executing user-provided code snippets
  * in workflow nodes like Transform, Filter, and Condition nodes.
- * 
- * Uses VM2 sandbox for secure JavaScript execution with configurable restrictions.
+ *
+ * Uses isolated-vm for a secure V8 isolate-based sandbox.
  */
 
-import { NodeVM, VMScript } from 'vm2';
+import * as ivm from 'isolated-vm';
 import { WorkflowServices } from '../core/types';
+import { WorkflowLogger as log } from '../../../utils/logger';
 
-// Predefined safe globals that can be accessed in the sandbox
 const SAFE_GLOBALS = {
   console: {
-    log: (...args: unknown[]) => console.debug('[SANDBOX]', ...args),
-    warn: (...args: unknown[]) => console.warn('[SANDBOX]', ...args),
-    error: (...args: unknown[]) => console.error('[SANDBOX]', ...args),
-    info: (...args: unknown[]) => console.debug('[SANDBOX]', ...args),
+    log: (...args: unknown[]) => log.debug('[SANDBOX]', ...args),
+    warn: (...args: unknown[]) => log.warn('[SANDBOX]', ...args),
+    error: (...args: unknown[]) => log.error('[SANDBOX]', ...args),
+    info: (...args: unknown[]) => log.debug('[SANDBOX]', ...args),
   },
-  Math: Math,
-  Date: Date,
-  RegExp: RegExp,
-  JSON: JSON,
-  Object: Object,
-  Array: Array,
-  String: String,
-  Number: Number,
-  Boolean: Boolean,
-  isNaN: isNaN,
-  isFinite: isFinite,
-  parseFloat: parseFloat,
-  parseInt: parseInt,
-  decodeURI: decodeURI,
-  decodeURIComponent: decodeURIComponent,
-  encodeURI: encodeURI,
-  encodeURIComponent: encodeURIComponent,
+  Math,
+  Date,
+  RegExp,
+  JSON,
+  Object,
+  Array,
+  String,
+  Number,
+  Boolean,
+  isNaN,
+  isFinite,
+  parseFloat,
+  parseInt,
+  decodeURI,
+  decodeURIComponent,
+  encodeURI,
+  encodeURIComponent,
 };
 
-// Restricted modules that are explicitly forbidden
-const FORBIDDEN_MODULES = [
-  'fs', 'path', 'child_process', 'process', 'os', 'net', 'http', 'https', 
-  'crypto', 'cluster', 'dgram', 'dns', 'domain', 'events', 'punycode', 
-  'querystring', 'readline', 'repl', 'stream', 'string_decoder', 'tls', 
-  'tty', 'url', 'util', 'v8', 'vm', 'zlib', 'inspector'
-];
-
 export interface SecureExecutionOptions {
-  /** Maximum execution time in milliseconds (default: 5000ms) */
   timeout?: number;
-  /** Maximum memory allocation in MB (default: 100MB) */
   memoryLimit?: number;
-  /** Allowed built-in modules (default: []) */
-  builtinModules?: string[];
-  /** External modules that can be required (default: {}) */
-  externalModules?: Record<string, unknown>;
-  /** Whether to allow asynchronous operations (default: false) */
-  allowAsync?: boolean;
-  /** Custom context variables to inject */
   context?: Record<string, unknown>;
 }
 
 export interface SecureExecutionResult {
-  /** Execution result */
   result: unknown;
-  /** Execution time in milliseconds */
   executionTime: number;
-  /** Memory usage information */
   memoryUsage?: {
     heapUsed: number;
     heapTotal: number;
   };
-  /** Warnings during execution */
-  warnings?: string[];
 }
 
 export class SecureCodeExecutionService {
   private static instance: SecureCodeExecutionService;
-  
-  private constructor() {}
+  private isolate: ivm.Isolate;
+  private isIsolateReady: boolean = false;
 
-  /**
-   * Get singleton instance
-   */
+  private constructor() {
+    try {
+      this.isolate = new ivm.Isolate({ memoryLimit: 128 });
+      this.isIsolateReady = true;
+    } catch (error) {
+      log.error(
+        'Failed to initialize isolated-vm. Secure execution will not be available.',
+        undefined,
+        error,
+      );
+      this.isIsolateReady = false;
+    }
+  }
+
   static getInstance(): SecureCodeExecutionService {
     if (!SecureCodeExecutionService.instance) {
       SecureCodeExecutionService.instance = new SecureCodeExecutionService();
@@ -89,241 +78,132 @@ export class SecureCodeExecutionService {
     return SecureCodeExecutionService.instance;
   }
 
-  /**
-   * Execute user-provided code securely in a sandboxed environment
-   */
+  dispose() {
+    if (this.isIsolateReady && !this.isolate.isDisposed) {
+      this.isolate.dispose();
+    }
+  }
+
   async executeCode(
     code: string,
     args: Record<string, unknown>,
     _services: WorkflowServices,
     options: SecureExecutionOptions = {}
   ): Promise<SecureExecutionResult> {
+    if (!this.isIsolateReady) {
+      throw new Error('Secure execution environment is not available.');
+    }
+
     const startTime = Date.now();
-    
-    // Default options
-    const opts: Required<SecureExecutionOptions> = {
-      timeout: options.timeout ?? 5000,
-      memoryLimit: options.memoryLimit ?? 100,
-      builtinModules: options.builtinModules ?? [],
-      externalModules: options.externalModules ?? {},
-      allowAsync: options.allowAsync ?? false,
-      context: options.context ?? {},
-    };
+    const timeout = options.timeout ?? 5000;
+
+    // Validate code before execution
+    this.validateCodeSafety(code);
+
+    const context = await this.isolate.createContext();
 
     try {
-      // Validate code length to prevent abuse
-      if (code.length > 100000) { // 100KB limit
-        throw new Error('Code snippet too large (maximum 100KB)');
+      const jail = context.global;
+      await jail.set('global', jail.derefInto());
+
+      // Set up sandbox environment
+      const sandbox = this.createSandboxEnvironment(args, _services, options);
+      for (const key of Object.keys(sandbox)) {
+        // Functions need to be transferred as references
+        if (typeof sandbox[key] === 'function') {
+          await jail.set(key, new ivm.Callback(sandbox[key] as (...args: unknown[]) => unknown));
+        } else {
+          // Other values can be transferred by value, but structuredClone is safer
+          await jail.set(key, new ivm.ExternalCopy(sandbox[key]).copyInto());
+        }
       }
 
-      // Validate code safety to prevent dangerous patterns
-      this.validateCodeSafety(code);
-
-      // Create sandbox environment with restricted access
-      const sandbox = this.createSandboxEnvironment(args, _services, opts);
-
-      // Configure VM with strict security settings
-      const vm = new NodeVM({
-        console: 'redirect',
-        sandbox,
-        require: {
-          external: false, // No external modules allowed by default
-          builtin: opts.builtinModules,
-          root: './', // Restrict to current directory if needed
-          mock: opts.externalModules,
-        },
-        nesting: false, // No nesting allowed
-        wrapper: 'commonjs', // Use CommonJS module wrapper
-        sourceExtensions: ['js'],
-        compiler: 'javascript',
-        eval: false, // No eval allowed
-        wasm: false, // No WebAssembly
-        allowAsync: opts.allowAsync,
-        fixAsync: !opts.allowAsync, // Fix async if not allowed
-      });
-
-      // Set execution timeout
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => {
-          reject(new Error(`Code execution timed out after ${opts.timeout}ms`));
-        }, opts.timeout);
-      });
-
-      // Execute code with timeout protection
-      const executionPromise = (async () => {
-        try {
-          // Compile script for better performance on repeated executions
-          const script = new VMScript(`module.exports = (function(${Object.keys(args).join(', ')})) { ${code} })`);
-          const compiledFunction = vm.run(script) as (...args: unknown[]) => unknown;
-
-          // Execute the function with provided arguments
-          const result = await compiledFunction(...Object.values(args));
-          
-          return {
-            result,
-            executionTime: Date.now() - startTime,
-            memoryUsage: this.getMemoryUsage(),
-          };
-        } catch (compileError: unknown) {
-          // If compilation fails, try executing as an expression
-          const err = compileError instanceof Error ? compileError : new Error(String(compileError));
-          if (err.message.includes('Unexpected token')) {
-            try {
-              const script = new VMScript(`module.exports = ${code}`);
-              const result = (vm.run(script) as unknown);
-              return {
-                result,
-                executionTime: Date.now() - startTime,
-                memoryUsage: this.getMemoryUsage(),
-              };
-            } catch {
-              throw new Error(`Code compilation failed: ${err.message}`);
-            }
+      const argNames = Object.keys(args);
+      const argValues: unknown[] = Object.values(args);
+      
+      const scriptText = `
+        new Promise(async (resolve, reject) => {
+          try {
+            const result = await (async (${argNames.join(', ')}
+) => {
+              "use strict";
+              ${code}
+            })(...args);
+            resolve(result);
+          } catch (err) {
+            reject(err);
           }
-          throw new Error(`Code execution failed: ${err.message}`);
-        }
-      })();
+        });
+      `;
 
-      // Race execution against timeout
-      const result = await Promise.race([executionPromise, timeoutPromise]);
-      return result;
+      const script = await this.isolate.compileScript(scriptText, {
+        filename: 'workflow-script'
+      });
+      
+      const resultPromise = await script.run(context, {
+        arguments: {
+          copy: true,
+          internal: true,
+          values: [ new ivm.ExternalCopy(argValues).copyInto() ]
+        },
+        result: { promise: true, copy: true },
+        timeout,
+      }) as Promise<unknown>;
+
+      const result = await resultPromise;
+      const executionTime = Date.now() - startTime;
+      const heapStatistics = await this.isolate.getHeapStatistics();
+
+      return {
+        result,
+        executionTime,
+        memoryUsage: {
+          heapUsed: heapStatistics.total_heap_size,
+          heapTotal: heapStatistics.heap_size_limit,
+        },
+      };
+
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       throw new Error(`Secure code execution failed: ${errorMessage}`);
+    } finally {
+      try {
+        context.release();
+      } catch (err) {
+        log.warn('Failed to release context', err);
+      }
     }
   }
 
-  /**
-   * Create a secure sandbox environment with whitelisted globals
-   */
   private createSandboxEnvironment(
     args: Record<string, unknown>,
-    services: WorkflowServices,
-    options: Required<SecureExecutionOptions>
+    _services: WorkflowServices,
+    options: SecureExecutionOptions
   ): Record<string, unknown> {
     const sandbox: Record<string, unknown> = {
-      // Safe globals
       ...SAFE_GLOBALS,
-
-      // User-provided arguments
       ...args,
-
-      // Limited services access
-      services: {
-        // Only expose safe service methods
-        log: services.vault ? (_message: string) => {
-          console.debug(`[Workflow Service] ${_message}`);
-        } : undefined,
-      },
-      
-      // Custom context variables
       ...options.context,
-      
-      // Utility functions
-      setTimeout: (fn: (...args: unknown[]) => void, delay: number) => {
-        if (delay > options.timeout) {
-          throw new Error('setTimeout delay exceeds execution timeout');
-        }
-        return setTimeout(fn, Math.min(delay, options.timeout));
-      },
-      clearTimeout: clearTimeout,
     };
-
-    // Remove dangerous properties
-    this.sanitizeSandbox(sandbox);
-    
+    // No need for complex sanitization as isolated-vm provides a clean environment
     return sandbox;
   }
 
-  /**
-   * Sanitize sandbox to remove potentially dangerous properties
-   */
-  private sanitizeSandbox(sandbox: Record<string, unknown>): void {
-    // Remove or neutralize dangerous global properties
-    if (sandbox.global && typeof sandbox.global === 'object' && sandbox.global !== null) {
-      const globalObj = sandbox.global as Record<string, unknown>;
-      if ('process' in globalObj) {
-        delete globalObj.process;
-      }
-      if ('Buffer' in globalObj) {
-        delete globalObj.Buffer;
-      }
-      if ('console' in globalObj) {
-        delete globalObj.console;
-      }
-    }
-    
-    if ('constructor' in sandbox) {
-      Reflect.deleteProperty(sandbox, 'constructor');
-    }
-
-    if ('prototype' in sandbox) {
-      Reflect.deleteProperty(sandbox, 'prototype');
-    }
-    
-    // Prevent access to forbidden modules
-    for (const moduleName of FORBIDDEN_MODULES) {
-      if (moduleName in sandbox) {
-        delete sandbox[moduleName];
-      }
-    }
-  }
-
-  /**
-   * Get current memory usage
-   */
-  private getMemoryUsage(): { heapUsed: number; heapTotal: number } | undefined {
-    if (typeof process !== 'undefined' && process.memoryUsage) {
-      const usage = process.memoryUsage();
-      return {
-        heapUsed: usage.heapUsed,
-        heapTotal: usage.heapTotal,
-      };
-    }
-    return undefined;
-  }
-
-  /**
-   * Validate that code doesn't contain dangerous patterns
-   */
   private validateCodeSafety(code: string): void {
     const dangerousPatterns = [
-      /\b(process|global|require|Buffer|__dirname|__filename|module|exports)\b/,
-      /\b(import|export)\b/,
+      /import\s/,
+      /require\s*\(/,
       /eval\s*\(/,
-      /\b(Function|VM|Worker|WebAssembly)\b/,
-      /\b(child_process|fs|path|os|net|http|https|crypto)\b/,
+      /\b(process|Buffer|__dirname|__filename|module|exports)\b/,
+      /\b(Function|Worker|WebAssembly)\b/,
+      /\b(fs|path|os|net|http|https|crypto)\b/,
     ];
 
     for (const pattern of dangerousPatterns) {
       if (pattern.test(code)) {
         const match = code.match(pattern);
-        throw new Error(`Potentially dangerous code pattern detected: ${match ? match[0] : 'unknown'}`);
+        throw new Error(`Potentially dangerous code pattern detected: "${match ? match[0] : 'unknown'}"`);
       }
     }
-  }
-
-  /**
-   * Execute a function with additional safety checks
-   */
-  async executeFunction<T>(
-    func: (...args: unknown[]) => T,
-    args: unknown[],
-    timeout: number = 5000
-  ): Promise<T> {
-    return new Promise<T>((resolve, reject) => {
-      const timer = setTimeout(() => {
-        reject(new Error(`Function execution timed out after ${timeout}ms`));
-      }, timeout);
-
-      try {
-        const result = func(...args);
-        clearTimeout(timer);
-        resolve(result);
-      } catch (error: unknown) {
-        clearTimeout(timer);
-        reject(error instanceof Error ? error : new Error(String(error)));
-      }
-    });
   }
 }

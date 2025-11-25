@@ -5,6 +5,7 @@
  * single-node execution, breakpoints, and step-by-step execution.
  */
 
+import { isRecord } from '@/types/type-utils';
 import {
   WorkflowNode,
   NodeData,
@@ -120,8 +121,9 @@ export class DebugService {
     const logEntry: ExecutionLogEntry = {
       nodeId: node.id,
       nodeName: node.name,
+      nodeType: node.type,
       timestamp: startTime,
-      status: 'started',
+      status: 'running',
     };
     session.log.push(logEntry);
 
@@ -161,6 +163,7 @@ export class DebugService {
       const completionLog: ExecutionLogEntry = {
         nodeId: node.id,
         nodeName: node.name,
+        nodeType: node.type,
         timestamp: endTime,
         status: 'completed',
         duration: endTime - startTime,
@@ -187,6 +190,7 @@ export class DebugService {
       const errorLog: ExecutionLogEntry = {
         nodeId: node.id,
         nodeName: node.name,
+        nodeType: node.type,
         timestamp: endTime,
         status: 'error',
         duration: endTime - startTime,
@@ -413,7 +417,8 @@ export class DebugService {
     
     // Create a context with provided input data
     if (contextData) {
-      this.sessions.get(sessionId)?.nodeInputs.set(node.id, [{ json: contextData }]);
+      const json = isRecord(contextData) ? contextData : { data: contextData };
+      this.sessions.get(sessionId)?.nodeInputs.set(node.id, [{ json }]);
     }
 
     const result = await this.executeNode(sessionId, node.id, workflow, services);

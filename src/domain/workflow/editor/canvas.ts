@@ -1394,6 +1394,7 @@ export class WorkflowCanvas {
 				// Check if clicking on input handle
 				if (this.isOverInputHandle(targetNode, pos.x, pos.y)) {
 					const connection: Connection = {
+						id: `edge_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
 						from: this.state.creatingConnection.fromNodeId,
 						to: targetNode.id,
 					};

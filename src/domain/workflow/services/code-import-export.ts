@@ -221,7 +221,7 @@ export class CodeImportExportService {
     const nodeMatches = workflowSection.match(/(\s+-\s*id:\s*(\S+)[\s\S]*?)(?=\n\s*-\s*id:|\n\s*connections:|$)/g);
     if (nodeMatches) {
       for (const match of nodeMatches) {
-        const node: unknown = {};
+        const node: Record<string, unknown> = {};
         const id = match.match(/id:\s*(\S+)/)?.[1];
         const type = match.match(/type:\s*(\S+)/)?.[1];
         const name = match.match(/name:\s*(.+)/)?.[1]?.trim();
@@ -238,7 +238,7 @@ export class CodeImportExportService {
           try {
             node.config = JSON.parse(configMatch) as Record<string, unknown>;
           } catch {
-            node.config = configMatch as Record<string, unknown>; // Keep as string if not valid JSON
+            node.config = { yaml_string: configMatch }; // Keep as string in a wrapper if not valid JSON
           }
         } else {
           node.config = {};

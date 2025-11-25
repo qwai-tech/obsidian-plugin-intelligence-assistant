@@ -1,3 +1,5 @@
+import { Connection, WorkflowNode } from '@/domain/workflow/core/types';
+
 /**
  * Workflow Feature Types
  * Types for workflow system
@@ -7,8 +9,8 @@ export interface Workflow {
 	id: string;
 	name: string;
 	description?: string;
-	nodes: unknown[];
-	edges: unknown[];
+	nodes: WorkflowNode[];
+	edges: Connection[];
 	createdAt: number;
 	updatedAt: number;
 }

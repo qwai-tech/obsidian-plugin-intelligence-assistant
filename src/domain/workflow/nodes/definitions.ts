@@ -103,7 +103,7 @@ function requireAIService(context: ExecutionContext): WorkflowAIService {
 /**
  * Get all available models with provider information
  */
-function getAvailableModelsWithProvider(): Promise<{ label: string; value: string }[]> {
+async function getAvailableModelsWithProvider(): Promise<{ label: string; value: string }[]> {
 	try {
 		// For now, return a comprehensive list with provider info
 		const defaultModels = [
@@ -186,14 +186,47 @@ const startNode: NodeDef = {
 			description: 'Initial input data for workflow (JSON format)',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		try {
 			// Parse input JSON
 			const data: unknown = typeof config.input === 'string'
 				? JSON.parse(config.input || '{}')
 				: config.input || {};
 
-			return [{ json: toRecord(data) }];
+			// Validate that input doesn't use reserved system keys
+			const dataRecord = toRecord(data);
+			const reservedKeys = ['json', 'binary'];
+			const invalidKeys: string[] = [];
+			const underscoreKeys: string[] = [];
+
+			for (const key of Object.keys(dataRecord)) {
+				// Check for NodeData-level reserved keys
+				if (reservedKeys.includes(key)) {
+					invalidKeys.push(key);
+				}
+				// Check for underscore-prefixed keys (workflow metadata)
+				if (key.startsWith('_')) {
+					underscoreKeys.push(key);
+				}
+			}
+
+			// Report validation errors
+			if (invalidKeys.length > 0) {
+				throw new Error(
+					`Invalid input: Cannot use reserved system keys: ${invalidKeys.join(', ')}. ` +
+					`These keys are reserved for workflow internal use.`
+				);
+			}
+
+			if (underscoreKeys.length > 0) {
+				throw new Error(
+					`Invalid input: Cannot use underscore-prefixed keys: ${underscoreKeys.join(', ')}. ` +
+					`Keys starting with '_' are reserved for workflow metadata. ` +
+					`Please rename these keys (e.g., '${underscoreKeys[0]}' → '${underscoreKeys[0].substring(1)}').`
+				);
+			}
+
+			return [{ json: dataRecord }];
 		} catch (error) {
 			throw new Error(`Failed to parse input data: ${getErrorMessage(error)}`);
 		}
@@ -253,11 +286,14 @@ const llmChatNode: NodeDef = {
 		},
 	],
 	async execute(inputs, config, context: ExecutionContext) {
-		const { model, prompt, systemPrompt, temperature } = config;
+		const prompt = typeof config.prompt === 'string' ? config.prompt : '';
+		const systemPrompt = typeof config.systemPrompt === 'string' ? config.systemPrompt : 'You are a helpful assistant.';
+		const model = typeof config.model === 'string' ? config.model : 'openai:gpt-4o';
+		const temperature = typeof config.temperature === 'number' ? config.temperature : 0.7;
 
 		// Resolve variables in prompt and system prompt
-		const finalPrompt = resolveVariables(typeof prompt === 'string' ? prompt : '', inputs);
-		const finalSystemPrompt = resolveVariables(typeof systemPrompt === 'string' ? systemPrompt : '', inputs);
+		const finalPrompt = resolveVariables(prompt, inputs);
+		const finalSystemPrompt = resolveVariables(systemPrompt, inputs);
 
 		// Call AI service
 		if (!context.services.ai) {
@@ -265,10 +301,8 @@ const llmChatNode: NodeDef = {
 		}
 
 		try {
-			const modelId = typeof model === 'string' ? model : toStringSafe(model, '');
-			const tempNum = typeof temperature === 'number'
-				? temperature
-				: (typeof temperature === 'string' ? Number(temperature) : undefined);
+			const modelId = model;
+			const tempNum = temperature;
 
 			const response = await context.services.ai.chat([
 				{ role: 'system', content: finalSystemPrompt },
@@ -314,7 +348,7 @@ const transformNode: NodeDef = {
 		},
 	],
 	async execute(inputs, config, context: ExecutionContext) {
-		const { code } = config;
+		const code = typeof config.code === 'string' ? config.code : 'return input;';
 
 		try {
 			// Import secure execution service
@@ -330,8 +364,6 @@ const transformNode: NodeDef = {
 					context.services,
 					{
 						timeout: 5000,
-						builtinModules: [],
-						allowAsync: false,
 					}
 				);
 				
@@ -366,7 +398,7 @@ const filterNode: NodeDef = {
 		},
 	],
 	async execute(inputs, config, context: ExecutionContext) {
-		const { condition } = config;
+		const condition = typeof config.condition === 'string' ? config.condition : 'return true;';
 
 		try {
 			// Import secure execution service
@@ -382,8 +414,6 @@ const filterNode: NodeDef = {
 						context.services,
 						{
 							timeout: 3000,
-							builtinModules: [],
-							allowAsync: false,
 						}
 					);
 					
@@ -426,7 +456,7 @@ const mergeNode: NodeDef = {
 			description: 'How to merge multiple inputs',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const { mode } = config;
 
 		switch (mode) {
@@ -482,7 +512,7 @@ const splitNode: NodeDef = {
 			description: 'Delimiter to split text by',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const splitMode = typeof config.splitMode === 'string' ? config.splitMode : 'array';
 		const fieldName = typeof config.fieldName === 'string' ? config.fieldName : '';
 		const delimiter = typeof config.delimiter === 'string' ? config.delimiter : ',';
@@ -569,7 +599,7 @@ const aggregateNode: NodeDef = {
 			description: 'Field to aggregate (not needed for count)',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const operation = typeof config.operation === 'string' ? config.operation : 'count';
 		const fieldName = typeof config.fieldName === 'string' ? config.fieldName : 'value';
 
@@ -652,7 +682,7 @@ const setVariablesNode: NodeDef = {
 			description: 'Key-value pairs of variables to set. Use {{fieldName}} for dynamic values',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const varsConfig = typeof config.variables === 'string'
 			? parseJsonValue<Record<string, unknown>>(config.variables, {})
 			: toRecord(config.variables);
@@ -706,7 +736,7 @@ const conditionNode: NodeDef = {
 		},
 	],
 	async execute(inputs, config, context: ExecutionContext) {
-		const { condition } = config;
+		const condition = typeof config.condition === 'string' ? config.condition : 'return true;';
 
 		try {
 			// Import secure execution service
@@ -721,8 +751,6 @@ const conditionNode: NodeDef = {
 				context.services,
 				{
 					timeout: 3000,
-					builtinModules: [],
-					allowAsync: false,
 				}
 			);
 
@@ -776,8 +804,10 @@ const loopNode: NodeDef = {
 			description: 'Number of times to loop',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
-		const { loopMode, itemsField, loopCount } = config;
+	async execute(inputs, config, _context: ExecutionContext) {
+		const loopMode = typeof config.loopMode === 'string' ? config.loopMode : 'items';
+		const itemsField = typeof config.itemsField === 'string' ? config.itemsField : 'items';
+		const loopCount = typeof config.loopCount === 'number' ? config.loopCount : 10;
 
 		try {
 			const results: NodeData[] = [];
@@ -785,11 +815,11 @@ const loopNode: NodeDef = {
 			if (loopMode === 'items') {
 				// Loop over items in specified field
 				const input = inputs[0]?.json || {};
-				const fieldName = resolveVariables(typeof itemsField === 'string' ? itemsField : '', inputs);
+				const fieldName = resolveVariables(itemsField, inputs);
 				const items = isRecord(input) ? input[fieldName] : undefined;
 
 				if (!Array.isArray(items)) {
-					throw new Error(`Field "${fieldName ?? 'unknown'}" is not an array or does not exist`);
+					throw new Error(`Field "${fieldName}" is not an array or does not exist`);
 				}
 
 				// Output each item as separate data
@@ -865,7 +895,7 @@ const switchNode: NodeDef = {
 			description: 'Output when no case matches',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const fieldName = typeof config.field === 'string' ? config.field : '';
 		const defaultOutput = typeof config.defaultOutput === 'string' ? config.defaultOutput : 'default';
 		const rawCases = typeof config.cases === 'string'
@@ -1575,7 +1605,7 @@ const jsonParseNode: NodeDef = {
 			description: 'Field containing JSON string',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const fieldName = typeof config.field === 'string' ? config.field : 'json';
 
 		try {
@@ -1628,7 +1658,7 @@ const jsonStringifyNode: NodeDef = {
 			description: 'Format with indentation',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const fieldName = typeof config.field === 'string' ? config.field : '';
 		const prettyPrint = toBooleanSafe(config.pretty, false);
 
@@ -1724,7 +1754,7 @@ const stringNode: NodeDef = {
 			description: 'Value to concatenate (concat operation)',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const operationValue = typeof config.operation === 'string' ? config.operation : 'uppercase';
 		const fieldName = typeof config.field === 'string' ? config.field : 'text';
 		const searchValueText = typeof config.searchValue === 'string' ? config.searchValue : '';
@@ -1839,7 +1869,7 @@ const dateTimeNode: NodeDef = {
 			description: 'Time unit',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const operationValue = typeof config.operation === 'string' ? config.operation : 'now';
 		const dateFieldName = typeof config.dateField === 'string' ? config.dateField : 'date';
 		const formatValue = typeof config.format === 'string' ? config.format : 'YYYY-MM-DD';
@@ -1970,7 +2000,7 @@ const mathNode: NodeDef = {
 			description: 'Second operand (field name or number, not used for unary operations)',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const { operation, field1, field2 } = config;
 
 		try {
@@ -2360,7 +2390,7 @@ const regexNode: NodeDef = {
 			description: 'Replacement string',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const operationValue = typeof config.operation === 'string' ? config.operation : 'match';
 		const fieldName = typeof config.field === 'string' ? config.field : 'text';
 		const patternValue = typeof config.pattern === 'string' ? config.pattern : '';
@@ -2504,7 +2534,7 @@ const arrayOpsNode: NodeDef = {
 			description: 'Field to sort by (for array of objects)',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const operationValue = typeof config.operation === 'string' ? config.operation : 'length';
 		const fieldName = typeof config.field === 'string' ? config.field : 'items';
 		const separatorValue = typeof config.separator === 'string' ? config.separator : ', ';
@@ -2634,7 +2664,7 @@ const objectOpsNode: NodeDef = {
 			description: 'Dot-notation path to nested value',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const operationValue = typeof config.operation === 'string' ? config.operation : 'keys';
 		const fieldsValue = typeof config.fields === 'string' ? config.fields : '';
 		const nestedPath = typeof config.path === 'string' ? config.path : '';
@@ -2809,7 +2839,7 @@ const notificationNode: NodeDef = {
 			description: 'How long to show notification (milliseconds)',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const messageTemplate = typeof config.message === 'string' ? config.message : '';
 		const titleTemplate = typeof config.title === 'string' ? config.title : 'Workflow Notification';
 		const durationValue = Math.max(0, toNumberSafe(config.duration, 5000));
@@ -2861,7 +2891,7 @@ const getMetadataNode: NodeDef = {
 			description: 'Path to the note (e.g., "folder/note.md")',
 		},
 	],
-	execute(inputs, config, context: ExecutionContext) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const pathTemplate = typeof config.path === 'string' ? config.path : '';
 		const vault = requireVault(context);
 		const metadataCache = requireMetadataCache(context);
@@ -2936,7 +2966,7 @@ const listFilesNode: NodeDef = {
 			description: 'Filter by extension (e.g., "md", "pdf")',
 		},
 	],
-	execute(inputs, config, context: ExecutionContext) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const folderTemplate = typeof config.folder === 'string' ? config.folder : '';
 		const recursiveValue = toBooleanSafe(config.recursive, false);
 		const extensionFilter = typeof config.extension === 'string' ? config.extension : '';
@@ -3139,7 +3169,7 @@ const scheduleNode: NodeDef = {
 			default: true,
 		},
 	],
-	execute(_inputs, config, _context: ExecutionContext) {
+	async execute(_inputs, config, _context: ExecutionContext) {
 		// Note: Actual scheduling would require integration with plugin's scheduler
 		const cronExpression = typeof config.cron === 'string' ? config.cron : '';
 		const enabled = toBooleanSafe(config.enabled, true);
@@ -3180,7 +3210,7 @@ const fileWatcherNode: NodeDef = {
 			default: 'modify',
 		},
 	],
-	execute(_inputs, config, _context: ExecutionContext) {
+	async execute(_inputs, config, _context: ExecutionContext) {
 		// Note: Actual file watching would require plugin integration
 		const folderPath = typeof config.folder === 'string' ? config.folder : '';
 		const eventType = typeof config.eventType === 'string' ? config.eventType : 'modify';
@@ -3221,7 +3251,7 @@ const webhookNode: NodeDef = {
 			default: 'POST',
 		},
 	],
-	execute(_inputs, config, _context: ExecutionContext) {
+	async execute(_inputs, config, _context: ExecutionContext) {
 		// Note: Actual webhook would require HTTP server integration
 		const webhookPath = typeof config.path === 'string' ? config.path : '/webhook';
 		const method = typeof config.method === 'string' ? config.method : 'POST';
@@ -3273,7 +3303,7 @@ const csvParserNode: NodeDef = {
 			default: true,
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const csvTemplate = typeof config.csvData === 'string' ? config.csvData : '';
 		const delimiterValue = typeof config.delimiter === 'string' && config.delimiter.trim() !== ''
 			? config.delimiter
@@ -3347,7 +3377,7 @@ const csvBuilderNode: NodeDef = {
 			default: true,
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const dataTemplate = typeof config.dataArray === 'string' ? config.dataArray : '';
 		const delimiterValue = typeof config.delimiter === 'string' && config.delimiter !== '' ? config.delimiter : ',';
 		const includeHeaderValue = toBooleanSafe(config.includeHeader, true);
@@ -3427,7 +3457,7 @@ const markdownParserNode: NodeDef = {
 			description: 'Markdown to parse',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const markdownTemplate = typeof config.markdown === 'string' ? config.markdown : '';
 
 		try {
@@ -3498,7 +3528,7 @@ const templateNode: NodeDef = {
 			description: 'Template string with {{placeholders}}',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const templateValue = typeof config.template === 'string' ? config.template : '';
 
 		try {
@@ -3615,7 +3645,7 @@ const vectorSearchNode: NodeDef = {
 			description: 'Maximum number of results',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const queryTemplate = typeof config.query === 'string' ? config.query : '';
 		const limitValue = Math.max(1, toNumberSafe(config.limit, 10));
 
@@ -3741,7 +3771,7 @@ const errorHandlerNode: NodeDef = {
 			description: 'Default value to return on error (JSON)',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const continueOnErrorValue = toBooleanSafe(config.continueOnError, true);
 		const defaultValueTemplate = typeof config.defaultValue === 'string' ? config.defaultValue : '{}';
 
@@ -3795,7 +3825,7 @@ const retryNode: NodeDef = {
 			description: 'Delay between retries in milliseconds',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const maxRetriesValue = Math.max(0, toNumberSafe(config.maxRetries, 3));
 		const retryDelayValue = Math.max(0, toNumberSafe(config.retryDelay, 1000));
 
@@ -3864,7 +3894,7 @@ const throttleNode: NodeDef = {
 			description: 'Time interval in milliseconds',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const limitValue = Math.max(1, toNumberSafe(config.limit, 10));
 		const intervalValue = Math.max(0, toNumberSafe(config.interval, 1000));
 
@@ -3924,7 +3954,7 @@ const cacheNode: NodeDef = {
 			description: 'Time to live in seconds',
 		},
 	],
-	execute(inputs, config, context: ExecutionContext) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const keyTemplate = typeof config.key === 'string' ? config.key : '';
 		const operationValue = typeof config.operation === 'string' ? config.operation : 'get';
 		const valueTemplate = typeof config.value === 'string' ? config.value : '';
@@ -3999,7 +4029,7 @@ const databaseQueryNode: NodeDef = {
 			description: 'SQL query to execute',
 		},
 	],
-	execute(_inputs, config, _context: ExecutionContext) {
+	async execute(_inputs, config, _context: ExecutionContext) {
 		const queryTemplate = typeof config.query === 'string' ? config.query : '';
 
 		return [{
@@ -4043,7 +4073,7 @@ const keyValueStoreNode: NodeDef = {
 			default: '',
 		},
 	],
-	execute(inputs, config, context: ExecutionContext) {
+	async execute(inputs, config, context: ExecutionContext) {
 		const keyTemplate = typeof config.key === 'string' ? config.key : '';
 		const operationValue = typeof config.operation === 'string' ? config.operation : 'get';
 		const valueTemplate = typeof config.value === 'string' ? config.value : '';
@@ -4133,7 +4163,7 @@ const textSplitterNode: NodeDef = {
 			description: 'Characters per chunk (for fixed mode)',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const textTemplate = typeof config.text === 'string' ? config.text : '';
 		const modeValue = typeof config.mode === 'string' ? config.mode : 'paragraph';
 		const chunkSizeValue = Math.max(1, toNumberSafe(config.chunkSize, 1000));
@@ -4189,7 +4219,7 @@ const wordCountNode: NodeDef = {
 			default: '',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const textTemplate = typeof config.text === 'string' ? config.text : '';
 
 		try {
@@ -4235,7 +4265,7 @@ const languageDetectNode: NodeDef = {
 			default: '',
 		},
 	],
-	execute(inputs, config, _context: ExecutionContext) {
+	async execute(inputs, config, _context: ExecutionContext) {
 		const textTemplate = typeof config.text === 'string' ? config.text : '';
 
 		try {

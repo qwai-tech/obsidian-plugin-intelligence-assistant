@@ -4,6 +4,7 @@
  */
 
 import type { Workflow } from '@/types';
+import type { WorkflowNode, Connection } from './core/types';
 
 export class WorkflowModel {
 	constructor(private readonly _data: Workflow) {}
@@ -11,7 +12,7 @@ export class WorkflowModel {
 	/**
 	 * Add a node to the workflow
 	 */
-	addNode(node: Record<string, unknown> & { id: string }): void {
+	addNode(node: WorkflowNode): void {
 		this._data.nodes.push(node);
 		this._data.updatedAt = Date.now();
 	}
@@ -31,7 +32,7 @@ export class WorkflowModel {
 	/**
 	 * Get node by ID
 	 */
-	getNode(nodeId: string): (Record<string, unknown> & { id: string }) | undefined {
+	getNode(nodeId: string): WorkflowNode | undefined {
 		return this._data.nodes.find(n => n.id === nodeId);
 	}
 
@@ -50,7 +51,7 @@ export class WorkflowModel {
 	/**
 	 * Add an edge to the workflow
 	 */
-	addEdge(edge: Record<string, unknown> & { id: string; source: string; target: string }): void {
+	addEdge(edge: Connection): void {
 		this._data.edges.push(edge);
 		this._data.updatedAt = Date.now();
 	}
@@ -70,21 +71,21 @@ export class WorkflowModel {
 	/**
 	 * Get edge by ID
 	 */
-	getEdge(edgeId: string): (Record<string, unknown> & { id: string; source: string; target: string }) | undefined {
+	getEdge(edgeId: string): Connection | undefined {
 		return this._data.edges.find(e => e.id === edgeId);
 	}
 
 	/**
 	 * Get all nodes
 	 */
-	getNodes(): (Record<string, unknown> & { id: string })[] {
+	getNodes(): WorkflowNode[] {
 		return [...this._data.nodes];
 	}
 
 	/**
 	 * Get all edges
 	 */
-	getEdges(): (Record<string, unknown> & { id: string; source: string; target: string })[] {
+	getEdges(): Connection[] {
 		return [...this._data.edges];
 	}
 
@@ -112,34 +113,34 @@ export class WorkflowModel {
 	/**
 	 * Get incoming edges for a node
 	 */
-	getIncomingEdges(nodeId: string): (Record<string, unknown> & { id: string; source: string; target: string })[] {
-		return this._data.edges.filter(e => e.target === nodeId);
+	getIncomingEdges(nodeId: string): Connection[] {
+		return this._data.edges.filter(e => e.to === nodeId);
 	}
 
 	/**
 	 * Get outgoing edges for a node
 	 */
-	getOutgoingEdges(nodeId: string): (Record<string, unknown> & { id: string; source: string; target: string })[] {
-		return this._data.edges.filter(e => e.source === nodeId);
+	getOutgoingEdges(nodeId: string): Connection[] {
+		return this._data.edges.filter(e => e.from === nodeId);
 	}
 
 	/**
 	 * Get connected nodes for a node
 	 */
 	getConnectedNodes(nodeId: string): {
-		incoming: (Record<string, unknown> & { id: string })[];
-		outgoing: (Record<string, unknown> & { id: string })[];
+		incoming: WorkflowNode[];
+		outgoing: WorkflowNode[];
 	} {
 		const incomingEdges = this.getIncomingEdges(nodeId);
 		const outgoingEdges = this.getOutgoingEdges(nodeId);
 
 		return {
 			incoming: incomingEdges
-				.map(e => this.getNode(e.source))
-				.filter((node): node is Record<string, unknown> & { id: string } => node !== undefined),
+				.map(e => this.getNode(e.from))
+				.filter((node): node is WorkflowNode => node !== undefined),
 			outgoing: outgoingEdges
-				.map(e => this.getNode(e.target))
-				.filter((node): node is Record<string, unknown> & { id: string } => node !== undefined)
+				.map(e => this.getNode(e.to))
+				.filter((node): node is WorkflowNode => node !== undefined)
 		};
 	}
 
@@ -207,8 +208,8 @@ export class WorkflowModel {
 		// Validate edges point to valid nodes
 		for (const edge of this._data.edges) {
 			const edgeId = String(edge.id ?? 'unknown');
-			const edgeSource = String(edge.source ?? 'unknown');
-			const edgeTarget = String(edge.target ?? 'unknown');
+			const edgeSource = String(edge.from ?? 'unknown');
+			const edgeTarget = String(edge.to ?? 'unknown');
 
 			if (!this.getNode(edgeSource)) {
 				errors.push(`Edge ${edgeId} references invalid source node: ${edgeSource}`);
