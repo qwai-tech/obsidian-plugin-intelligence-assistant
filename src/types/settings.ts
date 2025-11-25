@@ -14,10 +14,64 @@ import type { SystemPrompt, Agent } from './core/agent';
 import type { AgentMemory } from './features/memory';
 import * as defaultUserConfigJson from '../../config/default/settings.json';
 
+/**
+ * Quick Action Configuration
+ * Defines settings for editor context menu AI actions
+ */
+export interface QuickActionConfig {
+	id: string;
+	name: string;
+	enabled: boolean;
+	prompt: string;
+	model?: string; // If not specified, use default model
+	actionType: 'replace' | 'explain';
+}
+
 const DEFAULT_USER_CONFIG: UserConfig = defaultUserConfigJson as UserConfig;
 const DEFAULT_TITLE_PROMPT = 'Generate a short, descriptive title (max 6 words) for this conversation:\n\n{conversation}\n\nTitle:';
 const deepClone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 const generateId = (prefix = 'openapi'): string => `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
+
+/**
+ * Default Quick Actions Configuration
+ */
+const DEFAULT_QUICK_ACTIONS: QuickActionConfig[] = [
+	{
+		id: 'make-longer',
+		name: 'Make text longer',
+		enabled: true,
+		prompt: 'Expand and elaborate on the following text, making it more detailed and comprehensive while maintaining the original meaning and tone. Only return the expanded text without any additional commentary:\n\n',
+		actionType: 'replace'
+	},
+	{
+		id: 'summarize',
+		name: 'Summarize text',
+		enabled: true,
+		prompt: 'Provide a concise summary of the following text. Only return the summary without any additional commentary:\n\n',
+		actionType: 'replace'
+	},
+	{
+		id: 'improve-writing',
+		name: 'Improve writing',
+		enabled: true,
+		prompt: 'Improve the writing quality, clarity, and style of the following text. Only return the improved text without any additional commentary:\n\n',
+		actionType: 'replace'
+	},
+	{
+		id: 'fix-grammar',
+		name: 'Fix grammar',
+		enabled: true,
+		prompt: 'Fix any grammar, spelling, and punctuation errors in the following text. Only return the corrected text without any additional commentary:\n\n',
+		actionType: 'replace'
+	},
+	{
+		id: 'explain',
+		name: 'Explain text',
+		enabled: true,
+		prompt: 'Explain the following text in simple terms:\n\n',
+		actionType: 'explain'
+	}
+];
 
 const normalizeOpenApiConfigs = (value: unknown): OpenApiToolConfig[] => {
 	if (!value) {
@@ -134,6 +188,10 @@ export interface UserConfig {
 		activeId: string | null;
 		memories: AgentMemory[];
 	};
+	quickActions?: {
+		list: QuickActionConfig[];
+		prefix?: string; // Unified prefix (string/emoji) for all quick actions
+	};
 }
 
 export function userConfigToPluginSettings(userConfig?: UserConfig | null): PluginSettings {
@@ -153,6 +211,7 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 	const webSearch = deepClone(source.search?.web ?? DEFAULT_USER_CONFIG.search.web);
 	const agents = deepClone(source.agents?.list ?? []);
 	const agentMemories = deepClone(source.agents?.memories ?? []);
+	const quickActions = deepClone(source.quickActions?.list ?? DEFAULT_QUICK_ACTIONS);
 
 	const rag = source.rag ?? DEFAULT_USER_CONFIG.rag;
 	const retrieval = rag.retrieval ?? DEFAULT_USER_CONFIG.rag.retrieval;
@@ -217,7 +276,9 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 		activeSystemPromptId: source.prompts?.activeId ?? null,
 		agents: agents,
 		agentMemories: agentMemories,
-		activeAgentId: source.agents?.activeId ?? null
+		activeAgentId: source.agents?.activeId ?? null,
+		quickActions: quickActions,
+		quickActionPrefix: source.quickActions?.prefix ?? '⚡'
 	};
 }
 
@@ -307,6 +368,10 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 			list: deepClone(settings.agents ?? []),
 			activeId: settings.activeAgentId ?? null,
 			memories: deepClone(settings.agentMemories ?? [])
+		},
+		quickActions: {
+			list: deepClone(settings.quickActions ?? DEFAULT_QUICK_ACTIONS),
+			prefix: settings.quickActionPrefix ?? '⚡'
 		}
 	};
 }
@@ -347,6 +412,10 @@ export interface PluginSettings {
 	agents: Agent[];
 	agentMemories: AgentMemory[];
 	activeAgentId: string | null;
+
+	// Quick Actions
+	quickActions: QuickActionConfig[];
+	quickActionPrefix: string; // Unified prefix (string/emoji) for all quick actions in context menu
 
 }
 

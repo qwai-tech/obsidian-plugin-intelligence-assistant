@@ -179,11 +179,17 @@ export class ConversationManager extends Events {
 	 */
 	async switchConversation(convId: string): Promise<void> {
 		await this.ensureStorageReady();
-		// Don't switch if already on the same conversation
+
+		// If clicking on the same conversation, just close the list
 		if (this.state.currentConversationId === convId) {
+			// Close conversation list (only if not pinned)
+			if (!this.state.conversationListPinned) {
+				this.state.conversationListVisible = false;
+				this.conversationListContainer.addClass('ia-hidden');
+			}
 			return;
 		}
-		
+
 		// Save current conversation before switching (skip re-render to avoid double render)
 		await this.saveCurrentConversation(true);
 
@@ -454,6 +460,7 @@ export class ConversationManager extends Events {
 			convItem.setCssProps({ 'padding': '8px 12px' });
 			convItem.addClass('ia-clickable');
 			convItem.setCssProps({ 'border-radius': '4px' });
+			convItem.setCssProps({ 'cursor': 'pointer' });
 
 			if (conv.id === this.state.currentConversationId) {
 				convItem.addClass('active');
@@ -463,7 +470,11 @@ export class ConversationManager extends Events {
 			// Single click on item to switch conversation
 			convItem.addEventListener('click', (e) => {
 				// Don't switch if clicking on action buttons
-				if ((e.target as HTMLElement).closest('.conversation-actions')) return;
+				const target = e.target as HTMLElement;
+				if (target.closest('.conversation-actions') || target.closest('button')) {
+					return;
+				}
+				e.stopPropagation();
 				void this.switchConversation(conv.id);
 			});
 
@@ -471,6 +482,7 @@ export class ConversationManager extends Events {
 			convContent.setCssProps({ 'flex': '1' });
 			convContent.setCssProps({ 'overflow': 'hidden' });
 			convContent.setCssProps({ 'min-width': '0' });
+			convContent.setCssProps({ 'pointer-events': 'none' }); // Let clicks pass through to parent
 
 			const convTitle = convContent.createDiv('conversation-title');
 			convTitle.setCssProps({ 'overflow': 'hidden' });
@@ -506,6 +518,7 @@ export class ConversationManager extends Events {
 			actions.setCssProps({ 'gap': '4px' });
 			actions.setCssProps({ 'opacity': '0' });
 			actions.setCssProps({ 'transition': 'opacity 0.2s' });
+			actions.setCssProps({ 'pointer-events': 'auto' }); // Enable clicks on action buttons
 
 			// Show actions on hover
 			convItem.addEventListener('mouseenter', () => {

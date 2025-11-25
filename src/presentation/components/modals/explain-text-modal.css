@@ -1,0 +1,120 @@
+/* Explain Text Modal Styles */
+
+.explain-text-modal {
+	padding: 0;
+}
+
+.explain-text-modal-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 16px 20px;
+	border-bottom: 1px solid var(--background-modifier-border);
+	background-color: var(--background-secondary);
+}
+
+.explain-text-modal-icon {
+	font-size: 20px;
+}
+
+.explain-text-modal-title {
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--text-normal);
+}
+
+.explain-text-modal-content {
+	padding: 20px;
+	max-height: 60vh;
+	overflow-y: auto;
+}
+
+.explain-text-modal-loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 40px;
+	color: var(--text-muted);
+	font-size: 14px;
+}
+
+.explain-text-modal-text {
+	color: var(--text-normal);
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+.explain-text-modal-text-content {
+	/* Markdown rendering styles */
+	word-wrap: break-word;
+}
+
+/* Markdown specific styles */
+.explain-text-modal-text-content p {
+	margin-top: 0;
+	margin-bottom: 1em;
+}
+
+.explain-text-modal-text-content p:last-child {
+	margin-bottom: 0;
+}
+
+.explain-text-modal-text-content h1,
+.explain-text-modal-text-content h2,
+.explain-text-modal-text-content h3,
+.explain-text-modal-text-content h4,
+.explain-text-modal-text-content h5,
+.explain-text-modal-text-content h6 {
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+	font-weight: 600;
+}
+
+.explain-text-modal-text-content h1:first-child,
+.explain-text-modal-text-content h2:first-child,
+.explain-text-modal-text-content h3:first-child {
+	margin-top: 0;
+}
+
+.explain-text-modal-text-content ul,
+.explain-text-modal-text-content ol {
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+	padding-left: 2em;
+}
+
+.explain-text-modal-text-content code {
+	background-color: var(--background-primary-alt);
+	padding: 2px 4px;
+	border-radius: 3px;
+	font-family: var(--font-monospace);
+	font-size: 0.9em;
+}
+
+.explain-text-modal-text-content pre {
+	background-color: var(--background-primary-alt);
+	padding: 12px;
+	border-radius: 4px;
+	overflow-x: auto;
+	margin: 1em 0;
+}
+
+.explain-text-modal-text-content pre code {
+	background-color: transparent;
+	padding: 0;
+}
+
+.explain-text-modal-text-content blockquote {
+	border-left: 3px solid var(--background-modifier-border);
+	padding-left: 1em;
+	margin: 1em 0;
+	color: var(--text-muted);
+}
+
+.explain-text-modal-error {
+	color: var(--text-error);
+	padding: 16px;
+	background-color: var(--background-modifier-error);
+	border-radius: 4px;
+	font-size: 14px;
+}

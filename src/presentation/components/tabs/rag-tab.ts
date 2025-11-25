@@ -1,12 +1,13 @@
 /**
  * RAG Settings Tab
- * Displays Retrieval-Augmented Generation configuration
+ * Displays Retrieval-Augmented Generation configuration and Web Search
  */
 
 import { Setting, Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { RAGManager } from '@/infrastructure/rag-manager';
 import { applyConfigFieldMetadata, type ConfigFieldMetadataOptions } from '@/presentation/utils/config-field-metadata';
+import { displayWebSearchTab } from './websearch-tab';
 
 export function displayRAGTab(
 	containerEl: HTMLElement,
@@ -15,7 +16,7 @@ export function displayRAGTab(
 	containerEl.createEl('h3', { text: 'RAG configuration' });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Configure retrieval-augmented generation to enhance AI responses with your vault content.'
+		text: 'Configure retrieval-augmented generation and web search to enhance AI responses.'
 	});
 	desc.addClass('ia-section-description');
 
@@ -35,7 +36,8 @@ export function displayRAGTab(
 		{ id: 'chunking', label: 'Chunking', icon: '📄' },
 		{ id: 'search', label: 'Search', icon: '🔍' },
 		{ id: 'filters', label: 'Filters', icon: '🗂️' },
-		{ id: 'advanced', label: 'Advanced', icon: '⚙️' }
+		{ id: 'advanced', label: 'Advanced', icon: '⚙️' },
+		{ id: 'websearch', label: 'Web Search', icon: '🌐' }
 	];
 
 	let activeTab = 'overview';
@@ -58,6 +60,9 @@ export function displayRAGTab(
 				break;
 			case 'advanced':
 				renderAdvancedTab(tabContentContainer, plugin);
+				break;
+			case 'websearch':
+				displayWebSearchTab(tabContentContainer, plugin);
 				break;
 		}
 	};

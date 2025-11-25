@@ -470,7 +470,7 @@ export class ChatView extends ItemView {
 		// Find the model to check if it has vision capability
 		const allModels = await ModelManager.getAllAvailableModels(this.plugin.settings.llmConfigs);
 		const model = allModels.find(m => m.id === modelId);
-		
+
 		return model?.capabilities?.includes('vision') || false;
 	}
 

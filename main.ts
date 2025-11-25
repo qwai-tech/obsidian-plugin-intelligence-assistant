@@ -1,5 +1,6 @@
-import { Menu, Plugin, TAbstractFile, WorkspaceLeaf } from 'obsidian';
+import { Menu, Plugin, TAbstractFile, WorkspaceLeaf, Editor, MarkdownView, Notice } from 'obsidian';
 import './src/presentation/components/chat/settings.css';
+import './src/presentation/components/modals/explain-text-modal.css';
 import type {
 	PluginSettings,
 	MCPServerConfig,
@@ -29,6 +30,9 @@ import { ToolManager } from './src/application/services/tool-manager';
 import { OpenApiToolLoader } from './src/application/services/openapi-tool-loader';
 import { WorkflowEditorView, WORKFLOW_EDITOR_VIEW_TYPE } from './src/presentation/views/workflow-editor-view';
 import { IntelligenceAssistantSettingTab } from './src/presentation/components/settings-tab';
+import { ProviderFactory } from './src/infrastructure/llm/provider-factory';
+import { ModelManager } from './src/infrastructure/llm/model-manager';
+import { ExplainTextModal } from './src/presentation/components/modals/explain-text-modal';
 import {
 	USER_CONFIG_FOLDER,
 	USER_CONFIG_PATH
@@ -110,21 +114,23 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private mcpToolCacheRepository: McpToolCacheRepository | null = null;
 
 	async onload() {
+		const loadStart = Date.now();
+
 		// Initialize architecture components using dependency injection
 		this.initializeArchitecture();
-		
+
 		this.pluginDataPath = `${this.app.vault.configDir}/plugins/${this.manifest.id}/data`;
 		await this.ensureFolderExists(this.pluginDataPath);
-		
+
 		// Initialize conversation storage system first
 		this.conversationStorageService = new ConversationStorageService(this.app);
 		await this.conversationStorageService.initialize();
-		
+
 		await this.loadSettings();
-		await this.migrateConversationsIfNeeded();
-		await this.ensureDefaultAgent();
-		await this.ensureAutoConnectedMcpServers();
-		await this.reloadOpenApiTools().catch(error => console.error('[OpenAPI] Failed to load tools', error));
+
+		// Defer non-critical initialization to background (don't block startup)
+		// These will run asynchronously after the plugin has loaded
+		void this.deferredInitialization();
 
 		// Register the chat view
 		this.registerView(
@@ -159,6 +165,44 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 		// Register file explorer context menu actions
 		this.registerFileMenuActions();
+
+		// Register editor context menu actions
+		this.registerEditorMenuActions();
+
+		const loadTime = Date.now() - loadStart;
+		console.debug(`[Plugin] Load time: ${loadTime}ms`);
+	}
+
+	/**
+	 * Deferred initialization for non-critical features
+	 * Runs in background without blocking plugin startup
+	 */
+	private async deferredInitialization(): Promise<void> {
+		try {
+			const deferredStart = Date.now();
+			console.debug('[Plugin] Starting deferred initialization...');
+
+			// Run these in parallel for faster completion
+			await Promise.all([
+				this.migrateConversationsIfNeeded().catch(error =>
+					console.error('[Plugin] Conversation migration failed:', error)
+				),
+				this.ensureDefaultAgent().catch(error =>
+					console.error('[Plugin] Ensure default agent failed:', error)
+				),
+				this.ensureAutoConnectedMcpServers().catch(error =>
+					console.error('[Plugin] MCP auto-connect failed:', error)
+				),
+				this.reloadOpenApiTools().catch(error =>
+					console.error('[Plugin] OpenAPI tools load failed:', error)
+				)
+			]);
+
+			const deferredTime = Date.now() - deferredStart;
+			console.debug(`[Plugin] Deferred initialization complete (${deferredTime}ms)`);
+		} catch (error) {
+			console.error('[Plugin] Deferred initialization error:', error);
+		}
 	}
 
 		onunload() {
@@ -270,7 +314,13 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	}
 
 	async loadSettings() {
+		const totalStart = Date.now();
+
+		const repoStart = Date.now();
 		await this.ensureDataRepositories();
+		console.debug(`[Settings] Ensure repositories: ${Date.now() - repoStart}ms`);
+
+		const configStart = Date.now();
 		const userConfigExists = await this.userConfigExists();
 		const userConfig = userConfigExists ? await this.readUserConfigFile() : null;
 		let storedSettings: PluginSettings | null = null;
@@ -297,11 +347,15 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, storedSettings ?? {});
 		this.legacyConversations = legacyConversations;
+		console.debug(`[Settings] Read config files: ${Date.now() - configStart}ms`);
 
 		// Hydrate providers first as other methods may depend on it
+		const providerStart = Date.now();
 		await this.hydrateProvidersFromRepository();
-		
+		console.debug(`[Settings] Hydrate providers: ${Date.now() - providerStart}ms`);
+
 		// Then hydrate other repositories in parallel
+		const hydrateStart = Date.now();
 		await Promise.all([
 			this.hydratePromptsFromRepository(),
 			this.hydrateAgentsFromRepository(),
@@ -309,11 +363,12 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			this.hydrateMcpServersFromRepository(),
 			this.migrateWorkflowData(legacyData)
 		]);
+		console.debug(`[Settings] Hydrate other data: ${Date.now() - hydrateStart}ms`);
 
 		if (!userConfig) {
 			await this.writeUserSettingsFile(this.settings);
 		}
-		
+
 		// Migrate old agents that still have modelId to use new modelStrategy
 		for (const agent of this.settings.agents) {
 			const agentWithOldModel = agent as Agent & { modelId?: string };
@@ -327,7 +382,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				// Remove the old field
 				delete agentWithOldModel.modelId;
 			}
-			
+
 			// Ensure modelStrategy exists for all agents
 			if (!agent.modelStrategy) {
 				agent.modelStrategy = {
@@ -336,6 +391,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				};
 			}
 		}
+
+		const totalTime = Date.now() - totalStart;
+		console.debug(`[Settings] Total load time: ${totalTime}ms`);
 	}
 
 	async saveSettings() {
@@ -535,6 +593,14 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		this.registerEvent(this.app.workspace.on('file-menu', handler));
 	}
 
+	private registerEditorMenuActions() {
+		const handler = (menu: Menu, editor: Editor, view: MarkdownView) => {
+			this.addEditorQuickActions(menu, editor, view);
+		};
+
+		this.registerEvent(this.app.workspace.on('editor-menu', handler));
+	}
+
 	private addWorkflowCreationAction(menu: Menu, file?: TAbstractFile) {
 		const targetFolder = getTargetFolder(this.app, file);
 
@@ -549,6 +615,143 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 					await createWorkflowFile(this.app, targetFolder);
 				});
 		});
+	}
+
+	private addEditorQuickActions(menu: Menu, editor: Editor, view: MarkdownView) {
+		const selectedText = editor.getSelection();
+
+		// Only show AI actions if text is selected
+		if (!selectedText || selectedText.trim().length === 0) {
+			return;
+		}
+
+		// Get enabled quick actions from settings
+		const enabledActions = this.settings.quickActions.filter(action => action.enabled);
+
+		if (enabledActions.length === 0) {
+			return;
+		}
+
+		// Add separator before AI actions
+		menu.addSeparator();
+
+		// Icon mapping for common actions
+		const iconMap: Record<string, string> = {
+			'make-longer': 'text-cursor-input',
+			'summarize': 'list-collapse',
+			'improve-writing': 'pencil',
+			'fix-grammar': 'spellcheck',
+			'explain': 'lightbulb'
+		};
+
+		// Get the prefix (default to ⚡ if not set)
+		const prefix = this.settings.quickActionPrefix || '⚡';
+
+		// Add menu items for each enabled action
+		for (const action of enabledActions) {
+			menu.addItem((item) => {
+				// Add prefix to action name
+				const displayName = prefix ? `${prefix} ${action.name}` : action.name;
+
+				item.setTitle(displayName)
+					.setIcon(iconMap[action.id] || 'bot')
+					.onClick(async () => {
+						await this.handleEditorAIAction(
+							editor,
+							view,
+							selectedText,
+							action.prompt,
+							action.actionType,
+							action.model
+						);
+					});
+			});
+		}
+	}
+
+	private async handleEditorAIAction(
+		editor: Editor,
+		view: MarkdownView,
+		selectedText: string,
+		promptPrefix: string,
+		actionType: 'replace' | 'explain',
+		customModel?: string
+	): Promise<void> {
+		// Check if LLM is configured
+		if (this.settings.llmConfigs.length === 0) {
+			new Notice('Please configure an LLM provider in settings first');
+			return;
+		}
+
+		// Use custom model if specified, otherwise use default model
+		const modelId = customModel || this.settings.defaultModel;
+		if (!modelId) {
+			new Notice('Please select a default model in settings');
+			return;
+		}
+
+		// Find the config for the model
+		const config = ModelManager.findConfigForModelByProvider(modelId, this.settings.llmConfigs);
+		if (!config) {
+			new Notice(`No valid provider configuration found for model: ${modelId}`);
+			return;
+		}
+
+		// Show loading notice
+		const loadingNotice = new Notice('Processing...', 0);
+
+		try {
+			// Create provider
+			const provider = ProviderFactory.createProvider(config);
+
+			// Build the prompt
+			const fullPrompt = promptPrefix + selectedText;
+
+			// For explain action, show modal immediately
+			let modal: ExplainTextModal | null = null;
+			if (actionType === 'explain') {
+				modal = new ExplainTextModal(this.app, 'Explanation');
+				modal.open();
+			}
+
+			// Call LLM API with streaming
+			let result = '';
+			await provider.streamChat(
+				{
+					messages: [{ role: 'user', content: fullPrompt }],
+					model: modelId,
+					temperature: 0.7,
+				},
+				(chunk) => {
+					if (!chunk.done && chunk.content) {
+						result += chunk.content;
+						// Update modal in real-time if explaining
+						if (modal) {
+							modal.updateContent(result);
+						}
+					}
+				}
+			);
+
+			loadingNotice.hide();
+
+			// Handle the result based on action type
+			if (actionType === 'replace') {
+				// Replace selected text with the result
+				editor.replaceSelection(result.trim());
+				new Notice('Text updated successfully');
+			} else if (actionType === 'explain') {
+				// Modal is already showing and updated
+				if (!result) {
+					modal?.showError('No explanation generated');
+				}
+			}
+		} catch (error) {
+			loadingNotice.hide();
+			const errorMsg = error instanceof Error ? error.message : String(error);
+			new Notice(`Error: ${errorMsg}`);
+			console.error('[Editor AI Action] Error:', error);
+		}
 	}
 
 	private async migrateConversationsIfNeeded() {

@@ -17,6 +17,7 @@ export function displayGeneralTab(
 	});
 	desc.setCssProps({ 'color': 'var(--text-muted)' });
 	desc.setCssProps({ 'margin-bottom': '20px' });
+
 	// Plugin Version
 	new Setting(containerEl)
 		.setName('Plugin version')

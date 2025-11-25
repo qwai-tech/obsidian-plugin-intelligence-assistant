@@ -8,14 +8,14 @@ import { } from '../views/chat-view';
 import { } from '@/constants';
 import { } from '../utils/ui-helpers';
 import { displayGeneralTab } from './tabs/general-tab';
-import { displayWebSearchTab } from './tabs/websearch-tab';
 import { displayPromptsTab } from './tabs/prompts-tab';
 import { displayToolsTab } from './tabs/tools-tab';
 import { displayAgentsTab } from './tabs/agents-tab';
 import { displayMCPTab } from './tabs/mcp-tab';
-import { displayProviderTab } from './tabs/provider-tab';
+import { displayLLMTab } from './tabs/llm-tab';
 import { displayRAGTab } from './tabs/rag-tab';
-import { displayModelsTab, type ModelFilters } from './tabs/models-tab';
+import { displayQuickActionsTab } from './tabs/quickactions-tab';
+import type { ModelFilters } from './tabs/models-tab';
 
 
 export class IntelligenceAssistantSettingTab extends PluginSettingTab {
@@ -46,14 +46,13 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		const tabNav = containerEl.createDiv('settings-tabs');
 		const tabDefs: Array<{ slug: string; label: string }> = [
 			{ slug: 'general', label: 'General' },
-			{ slug: 'provider', label: 'Provider' },
-			{ slug: 'models', label: 'Models' },
+			{ slug: 'llm', label: 'LLM' },
 			{ slug: 'mcp', label: 'MCP' },
 			{ slug: 'tools', label: 'Tools' },
 			{ slug: 'rag', label: 'RAG' },
-			{ slug: 'websearch', label: 'Web search' },
 			{ slug: 'prompts', label: 'Prompts' },
-			{ slug: 'agents', label: 'Agents' }
+			{ slug: 'agents', label: 'Agents' },
+			{ slug: 'quickactions', label: 'Quick Actions' }
 		];
 
 		const tabContent = containerEl.createDiv('settings-tab-content');
@@ -90,11 +89,8 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			case 'general':
 				this.displayGeneralTab(contentEl);
 				break;
-			case 'provider':
-				this.displayProviderTab(contentEl);
-				break;
-			case 'models':
-				this.displayModelsTab(contentEl);
+			case 'llm':
+				this.displayLLMTab(contentEl);
 				break;
 			case 'mcp':
 				this.displayMCPTab(contentEl);
@@ -105,14 +101,14 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			case 'rag':
 				this.displayRAGTab(contentEl);
 				break;
-			case 'websearch':
-				this.displayWebSearchTab(contentEl);
-				break;
 			case 'prompts':
 				this.displayPromptsTab(contentEl);
 				break;
 			case 'agents':
 				this.displayAgentsTab(contentEl);
+				break;
+			case 'quickactions':
+				this.displayQuickActionsTab(contentEl);
 				break;
 		}
 	}
@@ -120,17 +116,8 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 	private displayGeneralTab(containerEl: HTMLElement) {
 		displayGeneralTab(containerEl, this.plugin);
 	}
-	
-	private displayProviderTab(containerEl: HTMLElement) {
-		displayProviderTab(
-			containerEl,
-			this.plugin,
-			this.app,
-			() => this.display()
-		);
-	}
 
-	private displayModelsTab(containerEl: HTMLElement) {
+	private displayLLMTab(containerEl: HTMLElement) {
 		const filters: ModelFilters = {
 			providerFilter: this.modelProviderFilter,
 			capabilityFilter: this.modelCapabilityFilter,
@@ -145,9 +132,10 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			if (newFilters.searchTerm !== undefined) this.modelSearchTerm = newFilters.searchTerm;
 		};
 
-		displayModelsTab(
+		displayLLMTab(
 			containerEl,
 			this.plugin,
+			this.app,
 			filters,
 			onFilterChange,
 			() => this.display()
@@ -175,20 +163,20 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		);
 	}
 
-	private displayWebSearchTab(containerEl: HTMLElement) {
-		displayWebSearchTab(containerEl, this.plugin);
-	}
-
 	private displayPromptsTab(containerEl: HTMLElement) {
 		displayPromptsTab(containerEl, this.plugin, this.app, () => this.display());
+	}
+
+	private displayRAGTab(containerEl: HTMLElement) {
+		displayRAGTab(containerEl, this.plugin);
 	}
 
 	private displayAgentsTab(containerEl: HTMLElement) {
 		displayAgentsTab(containerEl, this.plugin, this.app, () => this.display());
 	}
 
-	private displayRAGTab(containerEl: HTMLElement) {
-		displayRAGTab(containerEl, this.plugin);
+	private displayQuickActionsTab(containerEl: HTMLElement) {
+		displayQuickActionsTab(containerEl, this.plugin, this.app, () => this.display());
 	}
 
 	private async testAllMCPConnections() {
