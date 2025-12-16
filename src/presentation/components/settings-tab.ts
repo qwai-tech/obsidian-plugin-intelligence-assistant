@@ -25,6 +25,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 	private modelCapabilityFilter: string = 'all';
 	private modelEnabledFilter: 'all' | 'enabled' | 'disabled' = 'all';
 	private modelSearchTerm: string = '';
+	private llmSubTab: 'provider' | 'models' = 'provider';
 	private mcpToolsServerFilter: string = 'all';
 	private mcpToolsSearchTerm: string = '';
 	private toolsSubTab: 'built-in' | 'mcp' | 'openapi' = 'built-in';
@@ -138,7 +139,9 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			this.app,
 			filters,
 			onFilterChange,
-			() => this.display()
+			() => this.display(),
+			this.llmSubTab,
+			(tab) => { this.llmSubTab = tab; }
 		);
 	}
 

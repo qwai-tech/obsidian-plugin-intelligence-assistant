@@ -25,7 +25,7 @@ Transform any vault into an AI-native workspace. The Intelligence Assistant plug
 ### Requirements
 - Obsidian v0.15.0 or later.
 - Node.js 18+ with npm if you plan to build from source.
-- API keys for whichever LLM providers you intend to use (OpenAI, Anthropic, Google, DeepSeek, Ollama, SAP AI Core, etc.).
+- API keys for whichever LLM providers you intend to use (OpenAI, Anthropic, Google, DeepSeek, Ollama, SAP AI Core, etc.). Local CLI providers (Claude Code, Codex, Qwen Code) do not require API keys but do require the CLIs to be installed on your PATH. For CLI providers, models are sourced from a curated list and, when possible, from the CLI’s local config (e.g., `~/.claude.json`, `~/.codex/config.toml`, `~/.qwen/settings.json`).
 
 ## Chat Experience
 

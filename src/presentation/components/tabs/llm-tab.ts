@@ -14,7 +14,9 @@ export function displayLLMTab(
 	app: App,
 	modelFilters: ModelFilters,
 	onModelFilterChange: (filters: Partial<ModelFilters>) => void,
-	refreshDisplay: () => void
+	refreshDisplay: () => void,
+	initialActiveTab: 'provider' | 'models' = 'provider',
+	onActiveTabChange?: (tab: 'provider' | 'models') => void
 ): void {
 	containerEl.createEl('h3', { text: 'LLM configuration' });
 
@@ -38,7 +40,7 @@ export function displayLLMTab(
 		{ id: 'models', label: 'Models', icon: '🤖' }
 	];
 
-	let activeTab = 'provider';
+	let activeTab: 'provider' | 'models' = initialActiveTab;
 
 	const renderActiveTab = () => {
 		tabContentContainer.empty();
@@ -71,6 +73,7 @@ export function displayLLMTab(
 
 		tabBtn.addEventListener('click', () => {
 			activeTab = tab.id;
+			onActiveTabChange?.(activeTab);
 			// Update all buttons
 			tabNavContainer.querySelectorAll('.ia-llm-subtab-btn').forEach((btn, index) => {
 				const isActive = subTabs[index].id === activeTab;

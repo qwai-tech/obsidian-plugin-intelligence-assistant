@@ -59,7 +59,7 @@ export function displayProviderTab(
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
 		const draft: LLMConfig = {
-			provider: 'openai',
+			provider: '',
 			apiKey: '',
 			baseUrl: '',
 			cachedModels: []
@@ -67,6 +67,7 @@ export function displayProviderTab(
 		new ProviderConfigModal(app, draft, async (updated) => {
 			plugin.settings.llmConfigs.push(updated);
 			await plugin.saveSettings();
+			await plugin.refreshChatViewsModels();
 			refreshDisplay();
 		}).open();
 	});
@@ -81,8 +82,14 @@ export function displayProviderTab(
 	const tbody = table.tBodies[0];
 
 	plugin.settings.llmConfigs.forEach((config, index) => {
+		// Normalize Ollama base URL to default if missing (helps with status detection)
+		const ollamaBaseUrl = config.provider === 'ollama'
+			? (config.baseUrl && config.baseUrl.trim() !== '' ? config.baseUrl.trim() : 'http://localhost:11434')
+			: undefined;
+
 		const row = tbody.insertRow();
 		row.addClass('ia-table-row');
+		row.addClass('provider-row'); // Add for test compatibility
 
 		const providerCell = row.insertCell();
 		providerCell.addClass('ia-table-cell');
@@ -98,8 +105,10 @@ export function displayProviderTab(
 				iconContainer.appendChild(svgElement);
 			}
 		}
-		const providerName = providerHeader.createDiv('ia-provider-name');
-		providerName.setText(providerMeta.label);
+		// Create span with ia-provider-name class for test compatibility
+		const providerNameSpan = providerHeader.createSpan();
+		providerNameSpan.addClass('ia-provider-name');
+		providerNameSpan.setText(providerMeta.label);
 
 		// For Ollama, add a version placeholder that will be updated
 		let versionEl: HTMLElement | null = null;
@@ -109,10 +118,11 @@ export function displayProviderTab(
 			versionEl.setCssProps({ 'font-style': 'italic' });
 		}
 
-		if (config.baseUrl) {
+		const urlToShow = config.provider === 'ollama' ? (ollamaBaseUrl ?? '') : config.baseUrl;
+		if (urlToShow) {
 			const url = providerStack.createDiv('ia-table-subtext');
 			url.addClass('ia-code');
-			url.setText(config.baseUrl);
+			url.setText(urlToShow);
 		}
 
 		const statusCell = row.insertCell();
@@ -125,12 +135,19 @@ export function displayProviderTab(
 		let guidance = '';
 
 		switch (config.provider) {
+			case 'claude-code':
+			case 'codex':
+			case 'qwen-code':
+				// CLI tools only need a command path if not on PATH
+				hasCredentials = true;
+				guidance = 'Requires local CLI';
+				break;
 			case 'sap-ai-core':
 				hasCredentials = Boolean(config.serviceKey);
 				guidance = 'Provide service key';
 				break;
 			case 'ollama':
-				hasCredentials = Boolean(config.baseUrl);
+				hasCredentials = Boolean(ollamaBaseUrl);
 				guidance = 'Configure base URL';
 				break;
 			default:
@@ -170,13 +187,13 @@ export function displayProviderTab(
 		}
 
 		// For Ollama, check server connectivity
-		if (config.provider === 'ollama' && config.baseUrl) {
+		if (config.provider === 'ollama' && ollamaBaseUrl) {
 			const serverStatusLine = statusStack.createDiv('ia-table-subtext');
 			serverStatusLine.setText('Checking server...');
 			serverStatusLine.setCssProps({ 'font-style': 'italic' });
 
 			// Check Ollama server status
-			checkOllamaStatus(config.baseUrl).then((status) => {
+			checkOllamaStatus(ollamaBaseUrl).then((status) => {
 				if (status.online) {
 					serverStatusLine.setText(`Server: online`);
 					serverStatusLine.setCssProps({ 'color': 'var(--text-success)' });
@@ -185,6 +202,10 @@ export function displayProviderTab(
 					// Update version in provider cell
 					if (versionEl && status.version) {
 						versionEl.setText(`Version: ${status.version}`);
+						versionEl.setCssProps({ 'font-style': 'normal' });
+						versionEl.setCssProps({ 'color': 'var(--text-muted)' });
+					} else if (versionEl) {
+						versionEl.setText('Server online');
 						versionEl.setCssProps({ 'font-style': 'normal' });
 						versionEl.setCssProps({ 'color': 'var(--text-muted)' });
 					}
@@ -226,6 +247,11 @@ export function displayProviderTab(
 					versionEl.setCssProps({ 'color': 'var(--text-error)' });
 					versionEl.setCssProps({ 'font-style': 'normal' });
 				}
+				// Keep status badge consistent with failure
+				statusBadge.removeClass('is-success');
+				statusBadge.removeClass('is-warning');
+				statusBadge.addClass('is-danger');
+				statusBadge.setText('Server error');
 			});
 		}
 
@@ -265,6 +291,7 @@ export function displayProviderTab(
 			new ProviderConfigModal(app, draft, async (updated) => {
 				plugin.settings.llmConfigs[index] = updated;
 				await plugin.saveSettings();
+				await plugin.refreshChatViewsModels();
 				refreshDisplay();
 			}).open();
 		});
@@ -278,6 +305,7 @@ export function displayProviderTab(
 				new OllamaModelManagerModal(app, config, () => {
 					void (async () => {
 						await plugin.saveSettings();
+						await plugin.refreshChatViewsModels();
 						refreshDisplay();
 					})();
 				}).open();
@@ -296,6 +324,7 @@ export function displayProviderTab(
 					config.cachedModels = models;
 					config.cacheTimestamp = Date.now();
 					await plugin.saveSettings();
+					await plugin.refreshChatViewsModels();
 					new Notice(`Models refreshed for ${config.provider}.`);
 					refreshDisplay();
 				} catch (_error) {
@@ -317,6 +346,7 @@ export function displayProviderTab(
 				if (await showConfirm(app, `Remove provider ${config.provider}?`)) {
 					plugin.settings.llmConfigs.splice(index, 1);
 					await plugin.saveSettings();
+					await plugin.refreshChatViewsModels();
 					refreshDisplay();
 				}
 			})();

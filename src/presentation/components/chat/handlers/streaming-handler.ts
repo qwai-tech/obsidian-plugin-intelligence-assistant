@@ -39,6 +39,9 @@ export async function handleStreamingChat(
 		model: string;
 		temperature: number;
 		maxTokens: number;
+		topP?: number;
+		frequencyPenalty?: number;
+		presencePenalty?: number;
 	},
 	options: StreamingHandlerOptions
 ): Promise<StreamingResult> {

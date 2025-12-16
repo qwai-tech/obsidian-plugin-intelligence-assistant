@@ -1,6 +1,6 @@
 import { BaseLLMProvider } from './base-provider';
 import { ChatRequest, ChatResponse, StreamChunk } from './types';
-import type { ModelInfo, ModelCapability } from '@/types';
+import type { ModelInfo, ModelCapability, LLMConfig } from '@/types';
 import { requestUrl } from 'obsidian';
 
 /**
@@ -36,12 +36,32 @@ interface TokenResponse {
 	expires_in: number;
 }
 
+/**
+ * Full deployment information matching SAP AI Core API response
+ * Based on the deployment object structure from SAP AI Core API
+ */
 interface DeploymentInfo {
 	id: string;
 	modelName: string;
 	modelVersion?: string;
-	scenarioId?: string;     // Store scenario information
+	scenarioId?: string;
 	createdAt: number;
+	// Full API response fields
+	status?: string;
+	targetStatus?: string;
+	lastOperation?: string;
+	configurationId?: string;
+	configurationName?: string;
+	latestRunningConfigurationId?: string;
+	deploymentUrl?: string;
+	submissionTime?: string;
+	startTime?: string;
+	modifiedAt?: string;
+	completionTime?: string;
+	executableId?: string;
+	// Deployment health tracking
+	lastHealthCheck?: number;
+	isHealthy?: boolean;
 }
 
 export class SAPAICoreProvider extends BaseLLMProvider {
@@ -53,7 +73,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	private deploymentCache = new Map<string, { deployment: DeploymentInfo; expiry: number }>();
 
 	constructor(config: unknown) {
-		super(config);
+		super(config as LLMConfig);
 		this.parseServiceKey();
 	}
 
@@ -196,15 +216,28 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	/**
 	 * Get API version query parameter for Azure OpenAI models
 	 * Returns the appropriate api-version based on the model name
+	 * Reference: https://learn.microsoft.com/en-us/azure/ai-foundry/openai/reference-preview
 	 */
 	private getApiVersion(executableId?: string, modelName?: string): string | null {
-		if (executableId !== 'azure-openai') {
-			return null; // Only Azure OpenAI requires api-version
+		// Azure OpenAI requires an api-version query param; infer when executableId is missing
+		const looksLikeAzure = executableId === 'azure-openai' || (modelName ? modelName.startsWith('gpt-') || modelName.startsWith('o1') || modelName.startsWith('o3') || modelName.startsWith('o4') : false);
+		if (!looksLikeAzure) {
+			return null;
 		}
 
-		// o1 and o3-mini use a different API version
-		if (modelName && (modelName.includes('o1') || modelName.includes('o3-mini'))) {
+		// GPT-5 and newer models use the latest API version
+		if (modelName && modelName.includes('gpt-5')) {
+			return '2025-04-01-preview';  // Latest API version for GPT-5
+		}
+
+		// o-series models (o1, o3, o4) use newer API versions
+		if (modelName && (modelName.includes('o1') || modelName.includes('o3') || modelName.includes('o4'))) {
 			return '2024-12-01-preview';
+		}
+
+		// gpt-4.1 uses newer preview version
+		if (modelName && modelName.includes('gpt-4.1')) {
+			return '2024-10-21-preview';
 		}
 
 		// Default API version for most Azure OpenAI models
@@ -212,38 +245,83 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	}
 
 	/**
+	 * Determine if a model should use max_completion_tokens instead of max_tokens
+	 * GPT-5 and newer models require max_completion_tokens
+	 * Reference: https://learn.microsoft.com/en-us/azure/ai-foundry/openai/reference-preview
+	 */
+	private shouldUseMaxCompletionTokens(modelName?: string): boolean {
+		if (!modelName) {
+			return false;
+		}
+
+		// GPT-5 requires max_completion_tokens
+		if (modelName.includes('gpt-5')) {
+			return true;
+		}
+
+		// o-series models (o1, o3, o4) also use the new parameter
+		if (modelName.includes('o1') || modelName.includes('o3') || modelName.includes('o4')) {
+			return true;
+		}
+
+		// Older models use max_tokens
+		return false;
+	}
+
+
+	/**
 	 * Resolve deployment ID from model name
 	 *
 	 * Implements the SAP AI SDK pattern of resolving deployment ID from model name
 	 * with automatic caching for 5 minutes (the default TTL in SAP AI SDK).
+	 * Now includes full deployment metadata in the cache.
 	 */
 	private async resolveDeploymentId(modelName: string, modelVersion?: string): Promise<string> {
 		const cacheKey = modelVersion ? `${modelName}:${modelVersion}` : modelName;
 		const now = Date.now();
 
-		// Check cache first
+		// Check cache first and validate deployment health
 		const cached = this.deploymentCache.get(cacheKey);
 		if (cached && now < cached.expiry) {
-			console.debug(`Using cached deployment ID for ${cacheKey}: ${cached.deployment.id}`);
-			return cached.deployment.id;
+			// If cached deployment is more than 1 minute old, verify it's still healthy
+			if (cached.deployment.lastHealthCheck && (now - cached.deployment.lastHealthCheck) > 60000) {
+				console.debug(`Health check triggered for cached deployment ${cacheKey}`);
+				const isHealthy = await this.checkDeploymentHealth(cached.deployment.id);
+				if (!isHealthy) {
+					console.warn(`Cached deployment ${cached.deployment.id} is no longer healthy, fetching new deployment`);
+					this.deploymentCache.delete(cacheKey);
+					// Fall through to fetch new deployment
+				} else {
+					console.debug(`Using cached deployment ID for ${cacheKey}: ${cached.deployment.id}`);
+					return cached.deployment.id;
+				}
+			} else {
+				console.debug(`Using cached deployment ID for ${cacheKey}: ${cached.deployment.id}`);
+				return cached.deployment.id;
+			}
 		}
 
 		// Fetch deployment information from SAP AI Core
 		const deploymentInfo = await this.fetchDeploymentId(modelName, modelVersion);
 
-		// Cache the deployment information
+		// Cache the complete deployment information with all metadata
 		this.deploymentCache.set(cacheKey, {
 			deployment: deploymentInfo,
 			expiry: now + (5 * 60 * 1000) // 5 minutes in milliseconds
 		});
 
-		console.debug(`Fetched and cached deployment info for ${cacheKey}: ${JSON.stringify(deploymentInfo)}`);
+		console.debug(`Fetched and cached deployment info for ${cacheKey}:`, {
+			id: deploymentInfo.id,
+			status: deploymentInfo.status,
+			configurationName: deploymentInfo.configurationName,
+			deploymentUrl: deploymentInfo.deploymentUrl
+		});
 		return deploymentInfo.id;
 	}
 
 	/**
 	 * Fetch deployment information from SAP AI Core based on model name and version
-	 * Returns complete deployment info including the deployment URL
+	 * Returns complete deployment info including the deployment URL and all metadata
 	 */
 	private async fetchDeploymentId(modelName: string, modelVersion?: string): Promise<DeploymentInfo> {
 		const headers = await this.getAuthHeaders();
@@ -251,21 +329,37 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 					   this.config.baseUrl ||
 					   'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
 
-		// Query SAP AI Core for deployments matching the model criteria
-		// Using the /v2/lm/deployments endpoint with query parameters
-		const url = `${baseUrl}/v2/lm/deployments?$filter=status eq 'RUNNING'`;
+		// Fetch both deployments and configurations to get executableId
+		const deploymentsUrl = `${baseUrl}/v2/lm/deployments?$filter=status eq 'RUNNING'`;
+		const configurationsUrl = `${baseUrl}/v2/lm/configurations`;
 
-		const response = await requestUrl({
-			url,
-			method: 'GET',
-			headers,
-		});
+		const [deploymentsResponse, configurationsResponse] = await Promise.all([
+			requestUrl({ url: deploymentsUrl, method: 'GET', headers }),
+			requestUrl({ url: configurationsUrl, method: 'GET', headers }).catch(() => null)
+		]);
 
-		if (response.status !== 200) {
-			throw new Error(`Failed to fetch deployments for model ${modelName}: ${response.status} - ${response.text || 'Unknown error'}`);
+		if (deploymentsResponse.status !== 200) {
+			throw new Error(`Failed to fetch deployments for model ${modelName}: ${deploymentsResponse.status} - ${deploymentsResponse.text || 'Unknown error'}`);
 		}
 
-		const data = response.json as {
+		// Build configuration map for executableId lookup
+		const configMap = new Map<string, { executableId?: string }>();
+		if (configurationsResponse && configurationsResponse.status === 200) {
+			const configurationsData = configurationsResponse.json as {
+				resources?: unknown[];
+				value?: unknown[];
+			};
+			const configs = configurationsData.resources || configurationsData.value || [];
+			for (const config of configs) {
+				if (Array.isArray(config)) continue;
+				const typedConfig = config as { id: string; executableId?: string };
+				if (typedConfig.id) {
+					configMap.set(typedConfig.id, { executableId: typedConfig.executableId });
+				}
+			}
+		}
+
+		const data = deploymentsResponse.json as {
 			resources?: unknown[];
 			value?: unknown[];
 		};
@@ -273,14 +367,18 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 						Array.isArray(data.value) ? data.value :
 						Array.isArray(data) ? data : [];
 
-		// Filter deployments by model name (this would need to check the actual configuration)
+		// Filter deployments by model name
 		deployments = deployments.filter((deployment: unknown) => {
-			// Type guard for deployment structure
+			// Type guard for deployment structure matching the API example
 			const hasConfig = (obj: unknown): obj is {
-				configuration?: { parameters?: Record<string, unknown> };
-				parameters?: Record<string, unknown>;
-				name?: string;
+				details?: {
+					resources?: {
+						backendDetails?: { model?: { name?: string; version?: string } };
+						backend_details?: { model?: { name?: string; version?: string } };
+					};
+				};
 				configurationName?: string;
+				name?: string;
 			} => {
 				return typeof obj === 'object' && obj !== null;
 			};
@@ -289,19 +387,12 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				return false;
 			}
 
-			// Check if deployment configuration matches the requested model
-			const config = deployment.configuration || {};
-			const parameters = config.parameters || deployment.parameters || {};
+			// Extract model name from details.resources.backendDetails.model.name (preferred)
+			const backendModel = deployment.details?.resources?.backendDetails?.model?.name ||
+								deployment.details?.resources?.backend_details?.model?.name;
 
-			// For different model types, check their specific parameters
-			// This is a simplified check - in practice, the exact configuration structure may vary
-			const modelConfig = (parameters).huggingface ||
-								(parameters).azureOpenai ||
-								(parameters).openai || {};
-
-			const modelConfigTyped = modelConfig as { model?: string; modelName?: string };
-			const deployedModelName = modelConfigTyped.model || modelConfigTyped.modelName ||
-									  deployment.name || deployment.configurationName || '';
+			// Also check configurationName as fallback
+			const deployedModelName = backendModel || deployment.configurationName || deployment.name || '';
 
 			return String(deployedModelName).toLowerCase().includes(modelName.toLowerCase());
 		});
@@ -314,42 +405,275 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		// (This matches SAP AI SDK behavior which uses the first deployment if multiple exist)
 		const deployment = deployments[0] as {
 			id: string;
-			configuration?: { scenarioId?: string };
+			status?: string;
+			targetStatus?: string;
+			lastOperation?: string;
 			scenarioId?: string;
-			scenario_id?: string;
+			configurationId?: string;
+			configurationName?: string;
+			latestRunningConfigurationId?: string;
+			deploymentUrl?: string;
+			createdAt?: string;
+			modifiedAt?: string;
+			submissionTime?: string;
+			startTime?: string;
+			completionTime?: string;
+			details?: {
+				resources?: {
+					backendDetails?: { model?: { name?: string; version?: string } };
+					backend_details?: { model?: { name?: string; version?: string } };
+				};
+			};
 		};
-		const deploymentId = deployment.id;
 
-		// Extract scenario information to determine the correct endpoint path
-		const config = deployment.configuration || {};
-		const scenarioId = config.scenarioId || deployment.scenarioId || deployment.scenario_id || '';
+		// Extract model information from the deployment details
+		const backendModel = deployment.details?.resources?.backendDetails?.model ||
+							deployment.details?.resources?.backend_details?.model;
 
-		// Return complete deployment information
+		// Get executableId from configuration
+		const configId = deployment.configurationId || deployment.latestRunningConfigurationId;
+		const executableId = configId && configMap.has(configId)
+			? configMap.get(configId)!.executableId
+			: undefined;
+
+		// Return complete deployment information with all metadata
 		return {
-			id: deploymentId,
-			modelName,
-			modelVersion,
-			scenarioId,
-			createdAt: Date.now()
+			id: deployment.id,
+			modelName: backendModel?.name || modelName,
+			modelVersion: backendModel?.version || modelVersion,
+			scenarioId: deployment.scenarioId,
+			createdAt: Date.now(),
+			status: deployment.status,
+			targetStatus: deployment.targetStatus,
+			lastOperation: deployment.lastOperation,
+			configurationId: deployment.configurationId,
+			configurationName: deployment.configurationName,
+			latestRunningConfigurationId: deployment.latestRunningConfigurationId,
+			deploymentUrl: deployment.deploymentUrl,
+			submissionTime: deployment.submissionTime,
+			startTime: deployment.startTime,
+			modifiedAt: deployment.modifiedAt,
+			completionTime: deployment.completionTime,
+			executableId,
+			lastHealthCheck: Date.now(),
+			isHealthy: deployment.status === 'RUNNING'
 		};
 	}
 
-	/** 
+	/**
+	 * Get detailed information for a specific deployment by ID
+	 *
+	 * @param deploymentId The deployment ID to fetch details for
+	 * @returns Complete deployment information including status and metadata
+	 */
+	async getDeploymentDetails(deploymentId: string): Promise<DeploymentInfo | null> {
+		try {
+			const headers = await this.getAuthHeaders();
+			const baseUrl = this.serviceKey?.serviceurls?.AI_API_URL ||
+						   this.config.baseUrl ||
+						   'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
+
+			const url = `${baseUrl}/v2/lm/deployments/${deploymentId}`;
+
+			const response = await requestUrl({
+				url,
+				method: 'GET',
+				headers,
+			});
+
+			if (response.status !== 200) {
+				console.warn(`Failed to fetch deployment details for ${deploymentId}: ${response.status}`);
+				return null;
+			}
+
+			const deployment = response.json as {
+				id: string;
+				status?: string;
+				targetStatus?: string;
+				lastOperation?: string;
+				scenarioId?: string;
+				configurationId?: string;
+				configurationName?: string;
+				latestRunningConfigurationId?: string;
+				deploymentUrl?: string;
+				createdAt?: string;
+				modifiedAt?: string;
+				submissionTime?: string;
+				startTime?: string;
+				completionTime?: string;
+				details?: {
+					resources?: {
+						backendDetails?: { model?: { name?: string; version?: string } };
+						backend_details?: { model?: { name?: string; version?: string } };
+					};
+				};
+			};
+
+			const backendModel = deployment.details?.resources?.backendDetails?.model ||
+								deployment.details?.resources?.backend_details?.model;
+
+			return {
+				id: deployment.id,
+				modelName: backendModel?.name || deployment.configurationName || '',
+				modelVersion: backendModel?.version,
+				scenarioId: deployment.scenarioId,
+				createdAt: Date.now(),
+				status: deployment.status,
+				targetStatus: deployment.targetStatus,
+				lastOperation: deployment.lastOperation,
+				configurationId: deployment.configurationId,
+				configurationName: deployment.configurationName,
+				latestRunningConfigurationId: deployment.latestRunningConfigurationId,
+				deploymentUrl: deployment.deploymentUrl,
+				submissionTime: deployment.submissionTime,
+				startTime: deployment.startTime,
+				modifiedAt: deployment.modifiedAt,
+				completionTime: deployment.completionTime,
+				lastHealthCheck: Date.now(),
+				isHealthy: deployment.status === 'RUNNING'
+			};
+		} catch (error) {
+			console.error(`Error fetching deployment details for ${deploymentId}:`, error);
+			return null;
+		}
+	}
+
+	/**
+	 * Check deployment health and update cache
+	 *
+	 * @param deploymentId The deployment ID to check
+	 * @returns True if deployment is healthy and running
+	 */
+	async checkDeploymentHealth(deploymentId: string): Promise<boolean> {
+		const deploymentInfo = await this.getDeploymentDetails(deploymentId);
+
+		if (!deploymentInfo) {
+			return false;
+		}
+
+		// Update cache with health check results
+		const cacheKey = deploymentInfo.modelName + (deploymentInfo.modelVersion ? `:${deploymentInfo.modelVersion}` : '');
+		const cached = this.deploymentCache.get(cacheKey);
+		if (cached) {
+			cached.deployment.lastHealthCheck = Date.now();
+			cached.deployment.isHealthy = deploymentInfo.status === 'RUNNING';
+			cached.deployment.status = deploymentInfo.status;
+		}
+
+		return deploymentInfo.status === 'RUNNING';
+	}
+
+	/**
+	 * List all deployments with optional filtering
+	 *
+	 * @param statusFilter Optional status filter (e.g., 'RUNNING', 'STOPPED')
+	 * @returns Array of deployment information
+	 */
+	async listDeployments(statusFilter?: string): Promise<DeploymentInfo[]> {
+		try {
+			const headers = await this.getAuthHeaders();
+			const baseUrl = this.serviceKey?.serviceurls?.AI_API_URL ||
+						   this.config.baseUrl ||
+						   'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
+
+			// Build URL with optional status filter
+			let url = `${baseUrl}/v2/lm/deployments`;
+			if (statusFilter) {
+				url += `?$filter=status eq '${statusFilter}'`;
+			}
+
+			const response = await requestUrl({
+				url,
+				method: 'GET',
+				headers,
+			});
+
+			if (response.status !== 200) {
+				console.warn(`Failed to list deployments: ${response.status}`);
+				return [];
+			}
+
+			const data = response.json as {
+				resources?: unknown[];
+				value?: unknown[];
+			};
+
+			const deployments = Array.isArray(data.resources) ? data.resources :
+							   Array.isArray(data.value) ? data.value :
+							   Array.isArray(data) ? data : [];
+
+			const deploymentInfos: DeploymentInfo[] = [];
+
+			for (const deployment of deployments) {
+				const typedDeployment = deployment as {
+					id: string;
+					status?: string;
+					targetStatus?: string;
+					lastOperation?: string;
+					scenarioId?: string;
+					configurationId?: string;
+					configurationName?: string;
+					latestRunningConfigurationId?: string;
+					deploymentUrl?: string;
+					createdAt?: string;
+					modifiedAt?: string;
+					submissionTime?: string;
+					startTime?: string;
+					completionTime?: string;
+					details?: {
+						resources?: {
+							backendDetails?: { model?: { name?: string; version?: string } };
+							backend_details?: { model?: { name?: string; version?: string } };
+						};
+					};
+				};
+
+				const backendModel = typedDeployment.details?.resources?.backendDetails?.model ||
+									typedDeployment.details?.resources?.backend_details?.model;
+
+				deploymentInfos.push({
+					id: typedDeployment.id,
+					modelName: backendModel?.name || typedDeployment.configurationName || '',
+					modelVersion: backendModel?.version,
+					scenarioId: typedDeployment.scenarioId,
+					createdAt: Date.now(),
+					status: typedDeployment.status,
+					targetStatus: typedDeployment.targetStatus,
+					lastOperation: typedDeployment.lastOperation,
+					configurationId: typedDeployment.configurationId,
+					configurationName: typedDeployment.configurationName,
+					latestRunningConfigurationId: typedDeployment.latestRunningConfigurationId,
+					deploymentUrl: typedDeployment.deploymentUrl,
+					submissionTime: typedDeployment.submissionTime,
+					startTime: typedDeployment.startTime,
+					modifiedAt: typedDeployment.modifiedAt,
+					completionTime: typedDeployment.completionTime,
+					lastHealthCheck: Date.now(),
+					isHealthy: typedDeployment.status === 'RUNNING'
+				});
+			}
+
+			console.debug(`Listed ${deploymentInfos.length} deployments${statusFilter ? ` with status ${statusFilter}` : ''}`);
+			return deploymentInfos;
+		} catch (error) {
+			console.error('Error listing deployments:', error);
+			return [];
+		}
+	}
+
+	/**
 	 * Chat completion using SAP AI Core Inference Service
-	 * 
+	 *
 	 * Makes a synchronous chat completion request to SAP AI Core.
 	 * Supports both deployment IDs and model names (with automatic resolution).
-	 * 
+	 * Handles different executable types (AWS Bedrock, Azure OpenAI, etc.) with
+	 * appropriate endpoint formats and request/response structures.
+	 *
 	 * @param request The chat request containing messages and parameters
 	 * @returns The chat response with content and token usage
 	 */
 	async chat(request: ChatRequest): Promise<ChatResponse> {
 		const headers = await this.getAuthHeaders();
-
-		// Use SAP AI Core Inference Service endpoint
-		const baseUrl = this.serviceKey?.serviceurls?.AI_API_URL ||
-						this.config.baseUrl ||
-						'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
 
 		// Extract model name from provider-prefixed ID (sap-ai-core:gpt-4o -> gpt-4o)
 		const modelId = request.model;
@@ -359,44 +683,267 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		const modelInfo = this.config.cachedModels?.find(m => m.id === modelId);
 
 		let deploymentId: string;
+		let deploymentUrl: string | undefined;
 		let executableId: string | undefined;
 		let modelName: string;
 
 		if (modelInfo && modelInfo.deploymentId) {
-			// Found in cached models - use the stored deployment ID
+			// Found in cached models - use the stored deployment ID and URL
 			deploymentId = modelInfo.deploymentId;
+			deploymentUrl = modelInfo.deploymentUrl;
 			executableId = modelInfo.executableId;
 			modelName = modelInfo.name || unprefixedModelName;
-			console.debug(`Using cached model info for ${modelId}, deployment: ${deploymentId}`);
+			console.debug(`Using cached model info for ${modelId}, deployment: ${deploymentId}, deploymentUrl: ${deploymentUrl || 'not available'}, executableId: ${executableId ?? 'unknown'}`);
 		} else {
 			// Not in cache or no deployment ID - try to resolve dynamically using unprefixed name
 			console.debug(`Model ${modelId} not found in cache, attempting dynamic resolution`);
+			const cacheKey = unprefixedModelName;
 			deploymentId = await this.resolveDeploymentId(unprefixedModelName);
 			modelName = unprefixedModelName;
+
+			// Try to get deploymentUrl from deployment cache
+			const cached = this.deploymentCache.get(cacheKey);
+			if (cached) {
+				deploymentUrl = cached.deployment.deploymentUrl;
+				executableId = cached.deployment.executableId;
+			}
 		}
 
-		// Always construct the URL with /chat/completions endpoint
-		let url = `${baseUrl}/v2/inference/deployments/${deploymentId}/chat/completions`;
+		// Use deploymentUrl if available, otherwise construct from baseUrl
+		const baseUrl = deploymentUrl ||
+						this.serviceKey?.serviceurls?.AI_API_URL ||
+						this.config.baseUrl ||
+						'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
 
-		// Add api-version query parameter for Azure OpenAI models
-		const apiVersion = this.getApiVersion(executableId, modelName);
-		if (apiVersion) {
-			url += `?api-version=${apiVersion}`;
+		// Determine endpoint and request format based on executableId
+		let url: string;
+		let body: unknown;
+
+		if (executableId === 'aws-bedrock') {
+			// AWS Bedrock models - use appropriate endpoint and format
+			if (modelName.toLowerCase().includes('claude')) {
+				// Claude models: Use /invoke with Anthropic native format
+				url = deploymentUrl ? `${deploymentUrl}/invoke` : `${baseUrl}/v2/inference/deployments/${deploymentId}/invoke`;
+				body = {
+					anthropic_version: 'bedrock-2023-05-31',
+					max_tokens: request.maxTokens ?? 2000,
+					messages: request.messages.map(msg => ({
+						role: msg.role,
+						content: msg.content
+					})),
+					temperature: request.temperature ?? 0.7,
+					...(request.topP !== undefined && { top_p: request.topP }),
+					...(request.topK !== undefined && { top_k: request.topK }),
+					...(request.stopSequences !== undefined && { stop_sequences: request.stopSequences }),
+				};
+			} else if (modelName.toLowerCase().includes('titan')) {
+				// Amazon Titan models: Use /invoke with Titan format
+				url = deploymentUrl ? `${deploymentUrl}/invoke` : `${baseUrl}/v2/inference/deployments/${deploymentId}/invoke`;
+				// Convert messages to single inputText for Titan
+				const inputText = request.messages.map(m => m.content).join('\n');
+				body = {
+					inputText,
+					textGenerationConfig: {
+						maxTokenCount: request.maxTokens ?? 2000,
+						temperature: request.temperature ?? 0.7,
+						topP: request.topP ?? 1,
+						stopSequences: request.stopSequences ?? [],
+					}
+				};
+			} else {
+				// Other Bedrock models (Nova, etc.): Use /converse with unified Bedrock format
+				url = deploymentUrl ? `${deploymentUrl}/converse` : `${baseUrl}/v2/inference/deployments/${deploymentId}/converse`;
+				body = {
+					inferenceConfig: {
+						maxTokens: request.maxTokens ?? 2000,
+						temperature: request.temperature ?? 0.7,
+						...(request.topP !== undefined && { topP: request.topP }),
+						stopSequences: request.stopSequences ?? [],
+					},
+					messages: request.messages.map(msg => ({
+						role: msg.role,
+						content: [{ text: msg.content }]
+					}))
+				};
+			}
+		} else if (executableId === 'gcp-vertexai') {
+			// GCP Vertex AI models - use Gemini API format
+			// Endpoint format: /models/<modelName>:generateContent
+			url = deploymentUrl ? `${deploymentUrl}/models/${modelName}:generateContent` : `${baseUrl}/v2/inference/deployments/${deploymentId}/models/${modelName}:generateContent`;
+
+			// Convert chat messages to Gemini contents format
+			// Gemini expects alternating user/model roles, combine consecutive same-role messages
+			const geminiContents = [];
+			for (const msg of request.messages) {
+				const role = msg.role === 'assistant' ? 'model' : 'user';
+				geminiContents.push({
+					role,
+					parts: [{ text: msg.content }]
+				});
+			}
+
+			// Build generation config with comprehensive parameters
+			const generationConfig: Record<string, unknown> = {
+				maxOutputTokens: request.maxTokens ?? 2000,
+				temperature: request.temperature ?? 0.7,
+			};
+			if (request.topP !== undefined) generationConfig.topP = request.topP;
+			if (request.topK !== undefined) generationConfig.topK = request.topK;
+			if (request.stopSequences !== undefined) generationConfig.stopSequences = request.stopSequences;
+
+			body = {
+				generation_config: generationConfig,
+				contents: geminiContents,
+			};
+		} else {
+			// Azure OpenAI and other providers - use /chat/completions endpoint
+			url = deploymentUrl ? `${deploymentUrl}/chat/completions` : `${baseUrl}/v2/inference/deployments/${deploymentId}/chat/completions`;
+
+			// Add api-version query parameter for Azure OpenAI models
+			const apiVersion = this.getApiVersion(executableId, modelName);
+			if (apiVersion) {
+				url += `?api-version=${apiVersion}`;
+			}
+
+			// Azure OpenAI chat completions request body following latest API specification
+			// Reference: https://learn.microsoft.com/en-us/azure/ai-foundry/openai/reference-preview
+			const requestBody: Record<string, unknown> = {
+				// Required parameters
+				messages: request.messages.map(msg => ({ role: msg.role, content: msg.content })),
+			};
+
+			// Core sampling parameters
+			// GPT-5 and newer models (like o1) often have strict temperature requirements (e.g. only 1.0)
+			if (this.shouldUseMaxCompletionTokens(modelName) && (request.temperature === 0.7 || request.temperature === undefined)) {
+				// For GPT-5/o-series, omit temperature if it's the UI default (0.7) to let server use its default (1.0)
+			} else {
+				requestBody.temperature = request.temperature ?? 0.7;
+			}
+
+			// Token limits - GPT-5 and newer models use max_completion_tokens, older models use max_tokens
+			if (this.shouldUseMaxCompletionTokens(modelName)) {
+				// GPT-5 and o-series models require max_completion_tokens
+				requestBody.max_completion_tokens = request.maxCompletionTokens ?? request.maxTokens ?? 2000;
+			} else {
+				// Older models use max_tokens
+				requestBody.max_tokens = request.maxTokens ?? 2000;
+
+				// Also include max_completion_tokens if explicitly provided
+				if (request.maxCompletionTokens !== undefined) {
+					requestBody.max_completion_tokens = request.maxCompletionTokens;
+				}
+			}
+
+			// Sampling parameters
+			if (request.topP !== undefined) {
+				requestBody.top_p = request.topP;
+			}
+
+			// Penalty parameters
+			if (request.frequencyPenalty !== undefined) {
+				requestBody.frequency_penalty = request.frequencyPenalty;
+			}
+			if (request.presencePenalty !== undefined) {
+				requestBody.presence_penalty = request.presencePenalty;
+			}
+
+			// Stop sequences (Azure OpenAI supports up to 4 sequences)
+			if (request.stop !== undefined) {
+				requestBody.stop = request.stop;
+			} else if (request.stopSequences !== undefined) {
+				requestBody.stop = request.stopSequences.slice(0, 4);
+			}
+
+			// Number of completions (default to request.n or 1 for cost optimization)
+			requestBody.n = request.n ?? 1;
+
+			// Logit bias for token probability modification
+			if (request.logitBias !== undefined) {
+				requestBody.logit_bias = request.logitBias;
+			}
+
+			// Log probabilities
+			if (request.logprobs !== undefined) {
+				requestBody.logprobs = request.logprobs;
+			}
+			if (request.topLogprobs !== undefined) {
+				// Must be between 0 and 20
+				requestBody.top_logprobs = Math.min(Math.max(request.topLogprobs, 0), 20);
+			}
+
+			// User identifier for monitoring and abuse detection
+			if (request.user !== undefined) {
+				requestBody.user = request.user;
+			}
+
+			// Response format (JSON mode, structured outputs)
+			if (request.responseFormat !== undefined) {
+				requestBody.response_format = request.responseFormat;
+			}
+
+			// Deterministic sampling seed
+			if (request.seed !== undefined) {
+				requestBody.seed = request.seed;
+			}
+
+			// Function calling / Tools
+			if (request.tools !== undefined) {
+				requestBody.tools = request.tools;
+			}
+			if (request.toolChoice !== undefined) {
+				requestBody.tool_choice = request.toolChoice;
+			}
+			if (request.parallelToolCalls !== undefined) {
+				requestBody.parallel_tool_calls = request.parallelToolCalls;
+			}
+
+			// Azure OpenAI specific: chat extensions
+			if (request.dataSources !== undefined) {
+				requestBody.data_sources = request.dataSources;
+			}
+
+			// Audio output configuration
+			if (request.audio !== undefined) {
+				requestBody.audio = request.audio;
+			}
+			if (request.modalities !== undefined) {
+				requestBody.modalities = request.modalities;
+			}
+
+			// Advanced features
+			if (request.prediction !== undefined) {
+				requestBody.prediction = request.prediction;
+			}
+			if (request.metadata !== undefined) {
+				requestBody.metadata = request.metadata;
+			}
+			if (request.store !== undefined) {
+				requestBody.store = request.store;
+			}
+
+			// Reasoning effort (for o1 models)
+			if (request.reasoningEffort !== undefined) {
+				requestBody.reasoning_effort = request.reasoningEffort;
+			}
+
+			// User security context
+			if (request.userSecurityContext !== undefined) {
+				requestBody.user_security_context = request.userSecurityContext;
+			}
+
+			body = requestBody;
 		}
-
-		// Prepare the request body in OpenAI-compatible format
-		const body = {
-			messages: request.messages.map(msg => ({ role: msg.role, content: msg.content })),
-			temperature: request.temperature ?? 0.7,
-			max_tokens: request.maxTokens ?? 2000,
-		};
 
 		// Log deployment ID and other details for debugging
 		console.debug(`SAP AI Core endpoint: ${url}`);
-		console.debug(`Resource Group being used: ${this.config.resourceGroup || 'default'}`);
-
-		// Log the request for debugging
-		console.debug(`SAP AI Core request to: ${url}, deployment: ${deploymentId}, model: ${request.model}, messages: ${request.messages.length}`);
+		console.debug(`SAP AI Core request params:`, {
+			deploymentId,
+			deploymentUrl,
+			model: request.model,
+			executableId: executableId ?? 'unknown',
+			apiVersion: this.getApiVersion(executableId, modelName),
+			resourceGroup: this.config.resourceGroup || 'default'
+		});
 
 		let response;
 		try {
@@ -409,57 +956,169 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		} catch (error) {
 			console.error(`SAP AI Core request failed to URL: ${url}`, error);
 			const errorMessage = error instanceof Error ? error.message : String(error);
+
+			// Try to get deployment status for better error message
+			const deploymentDetails = await this.getDeploymentDetails(deploymentId);
+			if (deploymentDetails) {
+				throw new Error(
+					`SAP AI Core API request failed to connect: ${errorMessage}\n` +
+					`Deployment Status: ${deploymentDetails.status || 'UNKNOWN'}\n` +
+					`Deployment ID: ${deploymentId}`
+				);
+			}
+
 			throw new Error(`SAP AI Core API request failed to connect: ${errorMessage}`);
 		}
 
 		if (response.status === 404) {
-			// The deployment might not exist or the endpoint format might be wrong
+			// Check deployment status when getting 404
+			const deploymentDetails = await this.getDeploymentDetails(deploymentId);
+			if (deploymentDetails) {
+				throw new Error(
+					`SAP AI Core deployment not found: ${deploymentId}.\n` +
+					`Current Status: ${deploymentDetails.status || 'UNKNOWN'}\n` +
+					`Target Status: ${deploymentDetails.targetStatus || 'UNKNOWN'}\n` +
+					`Last Operation: ${deploymentDetails.lastOperation || 'UNKNOWN'}\n` +
+					`Verify the deployment is running and accessible.`
+				);
+			}
 			throw new Error(`SAP AI Core deployment not found: ${deploymentId}. Verify the deployment ID is correct and the deployment is running.`);
 		} else if (response.status !== 200) {
 			const errorText = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
+
+			// Get deployment status for better diagnostics
+			const deploymentDetails = await this.getDeploymentDetails(deploymentId);
+			if (deploymentDetails && deploymentDetails.status !== 'RUNNING') {
+				throw new Error(
+					`SAP AI Core API request failed: ${response.status} - ${errorText}\n` +
+					`Deployment Status: ${deploymentDetails.status || 'UNKNOWN'} (expected RUNNING)\n` +
+					`Deployment ID: ${deploymentId}`
+				);
+			}
+
 			throw new Error(`SAP AI Core API request failed: ${response.status} - ${errorText}`);
 		}
 
-		const data = response.json as {
-			choices?: Array<{ message?: { content?: string } }>;
-			usage?: {
-				prompt_tokens?: number;
-				promptTokens?: number;
-				completion_tokens?: number;
-				completionTokens?: number;
-				total_tokens?: number;
-				totalTokens?: number;
-			};
-		};
+		// Parse response based on executableId
+		let content: string;
+		let usage = { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
 
-		// Extract response from SAP AI Core (should follow OpenAI-compatible format)
-		const content = data.choices?.[0]?.message?.content || '';
-		const usage = data.usage || {};
+		if (executableId === 'aws-bedrock') {
+			if (modelName.toLowerCase().includes('claude')) {
+				// Anthropic Claude response format
+				const data = response.json as {
+					content?: Array<{ text?: string }>;
+					usage?: {
+						input_tokens?: number;
+						output_tokens?: number;
+					};
+				};
+				content = data.content?.[0]?.text || '';
+				if (data.usage) {
+					usage = {
+						promptTokens: data.usage.input_tokens || 0,
+						completionTokens: data.usage.output_tokens || 0,
+						totalTokens: (data.usage.input_tokens || 0) + (data.usage.output_tokens || 0),
+					};
+				}
+			} else if (modelName.toLowerCase().includes('titan')) {
+				// Amazon Titan response format
+				const data = response.json as {
+					results?: Array<{ outputText?: string }>;
+					inputTextTokenCount?: number;
+				};
+				content = data.results?.[0]?.outputText || '';
+				// Titan doesn't provide detailed token usage
+				usage = {
+					promptTokens: data.inputTextTokenCount || 0,
+					completionTokens: 0,
+					totalTokens: data.inputTextTokenCount || 0,
+				};
+			} else {
+				// Bedrock Converse response format
+				const data = response.json as {
+					output?: {
+						message?: {
+							content?: Array<{ text?: string }>;
+						};
+					};
+					usage?: {
+						inputTokens?: number;
+						outputTokens?: number;
+						totalTokens?: number;
+					};
+				};
+				content = data.output?.message?.content?.[0]?.text || '';
+				if (data.usage) {
+					usage = {
+						promptTokens: data.usage.inputTokens || 0,
+						completionTokens: data.usage.outputTokens || 0,
+						totalTokens: data.usage.totalTokens || 0,
+					};
+				}
+			}
+		} else if (executableId === 'gcp-vertexai') {
+			// GCP Vertex AI Gemini response format
+			const data = response.json as {
+				candidates?: Array<{
+					content?: {
+						parts?: Array<{ text?: string }>;
+					};
+				}>;
+				usageMetadata?: {
+					promptTokenCount?: number;
+					candidatesTokenCount?: number;
+					totalTokenCount?: number;
+				};
+			};
+			// Extract text from the first candidate's first part
+			content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+			if (data.usageMetadata) {
+				usage = {
+					promptTokens: data.usageMetadata.promptTokenCount || 0,
+					completionTokens: data.usageMetadata.candidatesTokenCount || 0,
+					totalTokens: data.usageMetadata.totalTokenCount || 0,
+				};
+			}
+		} else {
+			// OpenAI-compatible response format
+			const data = response.json as {
+				choices?: Array<{ message?: { content?: string } }>;
+				usage?: {
+					prompt_tokens?: number;
+					promptTokens?: number;
+					completion_tokens?: number;
+					completionTokens?: number;
+					total_tokens?: number;
+					totalTokens?: number;
+				};
+			};
+			content = data.choices?.[0]?.message?.content || '';
+			const responseUsage = data.usage || {};
+			usage = {
+				promptTokens: responseUsage.prompt_tokens || responseUsage.promptTokens || 0,
+				completionTokens: responseUsage.completion_tokens || responseUsage.completionTokens || 0,
+				totalTokens: responseUsage.total_tokens || responseUsage.totalTokens || 0,
+			};
+		}
 
 		console.debug(`SAP AI Core response: ${String(content).substring(0, 50)}... (truncated)`);
 
 		return {
 			content,
-			usage: {
-				promptTokens: usage.prompt_tokens || usage.promptTokens || 0,
-				completionTokens: usage.completion_tokens || usage.completionTokens || 0,
-				totalTokens: usage.total_tokens || usage.totalTokens || 0,
-			},
+			usage,
 		};
 	}
 
 	/**
 	 * Streaming chat using SAP AI Core Inference Service
-	 * 
+	 *
 	 * Supports both deployment IDs and model names (with automatic resolution).
+	 * Handles different executable types with appropriate streaming endpoints.
 	 */
 	async streamChat(request: ChatRequest, onChunk: (_chunk: StreamChunk) => void): Promise<void> {
 		const headers = await this.getAuthHeaders();
-
-		// Use SAP AI Core Inference Service endpoint
-		const baseUrl = this.serviceKey?.serviceurls?.AI_API_URL ||
-						this.config.baseUrl ||
-						'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
+		headers['Accept'] = 'text/event-stream';
 
 		// Extract model name from provider-prefixed ID (sap-ai-core:gpt-4o -> gpt-4o)
 		const modelId = request.model;
@@ -469,24 +1128,50 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		const modelInfo = this.config.cachedModels?.find(m => m.id === modelId);
 
 		let deploymentId: string;
+		let deploymentUrl: string | undefined;
 		let executableId: string | undefined;
 		let modelName: string;
 
 		if (modelInfo && modelInfo.deploymentId) {
-			// Found in cached models - use the stored deployment ID
+			// Found in cached models - use the stored deployment ID and URL
 			deploymentId = modelInfo.deploymentId;
+			deploymentUrl = modelInfo.deploymentUrl;
 			executableId = modelInfo.executableId;
 			modelName = modelInfo.name || unprefixedModelName;
-			console.debug(`Using cached model info for ${modelId}, deployment: ${deploymentId}`);
+			console.debug(`Using cached model info for ${modelId}, deployment: ${deploymentId}, deploymentUrl: ${deploymentUrl || 'not available'}, executableId: ${executableId ?? 'unknown'}`);
 		} else {
 			// Not in cache or no deployment ID - try to resolve dynamically using unprefixed name
 			console.debug(`Model ${modelId} not found in cache, attempting dynamic resolution`);
+			const cacheKey = unprefixedModelName;
 			deploymentId = await this.resolveDeploymentId(unprefixedModelName);
 			modelName = unprefixedModelName;
+
+			// Try to get deploymentUrl from deployment cache
+			const cached = this.deploymentCache.get(cacheKey);
+			if (cached) {
+				deploymentUrl = cached.deployment.deploymentUrl;
+				executableId = cached.deployment.executableId;
+			}
 		}
 
-		// Always construct the URL with /chat/completions endpoint
-		let url = `${baseUrl}/v2/inference/deployments/${deploymentId}/chat/completions`;
+		// Use deploymentUrl if available, otherwise construct from baseUrl
+		const baseUrl = deploymentUrl ||
+						this.serviceKey?.serviceurls?.AI_API_URL ||
+						this.config.baseUrl ||
+						'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
+
+		// Handle AWS Bedrock streaming separately
+		if (executableId === 'aws-bedrock') {
+			return this.streamBedrockChat(request, onChunk, baseUrl, deploymentId, modelName, deploymentUrl);
+		}
+
+		// Handle GCP Vertex AI streaming separately
+		if (executableId === 'gcp-vertexai') {
+			return this.streamVertexAIChat(request, onChunk, baseUrl, deploymentId, modelName, deploymentUrl);
+		}
+
+		// Azure OpenAI and other providers - use /chat/completions with streaming
+		let url = deploymentUrl ? `${deploymentUrl}/chat/completions` : `${baseUrl}/v2/inference/deployments/${deploymentId}/chat/completions`;
 
 		// Add api-version query parameter for Azure OpenAI models
 		const apiVersion = this.getApiVersion(executableId, modelName);
@@ -494,19 +1179,149 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			url += `?api-version=${apiVersion}`;
 		}
 
-		// For direct inference, use standard OpenAI-compatible format with streaming enabled
-		const body = {
+		// Azure OpenAI streaming request body following latest API specification
+		// Reference: https://learn.microsoft.com/en-us/azure/ai-foundry/openai/reference-preview
+		const requestBody: Record<string, unknown> = {
+			// Required parameters
 			messages: request.messages.map(msg => ({ role: msg.role, content: msg.content })),
-			temperature: request.temperature ?? 0.7,
-			max_tokens: request.maxTokens ?? 2000,
+
+			// Streaming enabled
 			stream: true,
 		};
 
-		// Log deployment ID and other details for debugging
-		console.debug(`SAP AI Core streaming endpoint: ${url}`);
-		console.debug(`Resource Group being used: ${this.config.resourceGroup || 'default'}`);
+		// Core sampling parameters
+		// GPT-5 and newer models (like o1) often have strict temperature requirements (e.g. only 1.0)
+		if (this.shouldUseMaxCompletionTokens(modelName) && (request.temperature === 0.7 || request.temperature === undefined)) {
+			// For GPT-5/o-series, omit temperature if it's the UI default (0.7) to let server use its default (1.0)
+		} else {
+			requestBody.temperature = request.temperature ?? 0.7;
+		}
 
-		console.debug(`SAP AI Core streaming started for deployment: ${deploymentId}, model: ${request.model}`);
+		// Token limits - GPT-5 and newer models use max_completion_tokens, older models use max_tokens
+		if (this.shouldUseMaxCompletionTokens(modelName)) {
+			// GPT-5 and o-series models require max_completion_tokens
+			requestBody.max_completion_tokens = request.maxCompletionTokens ?? request.maxTokens ?? 2000;
+		} else {
+			// Older models use max_tokens
+			requestBody.max_tokens = request.maxTokens ?? 2000;
+
+			// Also include max_completion_tokens if explicitly provided
+			if (request.maxCompletionTokens !== undefined) {
+				requestBody.max_completion_tokens = request.maxCompletionTokens;
+			}
+		}
+
+		// Streaming options
+		if (request.streamOptions !== undefined) {
+			requestBody.stream_options = request.streamOptions;
+		}
+
+		// Sampling parameters
+		if (request.topP !== undefined) {
+			requestBody.top_p = request.topP;
+		}
+
+		// Penalty parameters
+		if (request.frequencyPenalty !== undefined) {
+			requestBody.frequency_penalty = request.frequencyPenalty;
+		}
+		if (request.presencePenalty !== undefined) {
+			requestBody.presence_penalty = request.presencePenalty;
+		}
+
+		// Stop sequences (Azure OpenAI supports up to 4 sequences)
+		if (request.stop !== undefined) {
+			requestBody.stop = request.stop;
+		} else if (request.stopSequences !== undefined) {
+			requestBody.stop = request.stopSequences.slice(0, 4);
+		}
+
+		// Number of completions (default to request.n or 1 for cost optimization)
+		requestBody.n = request.n ?? 1;
+
+		// Logit bias for token probability modification
+		if (request.logitBias !== undefined) {
+			requestBody.logit_bias = request.logitBias;
+		}
+
+		// Log probabilities
+		if (request.logprobs !== undefined) {
+			requestBody.logprobs = request.logprobs;
+		}
+		if (request.topLogprobs !== undefined) {
+			requestBody.top_logprobs = Math.min(Math.max(request.topLogprobs, 0), 20);
+		}
+
+		// User identifier for monitoring and abuse detection
+		if (request.user !== undefined) {
+			requestBody.user = request.user;
+		}
+
+		// Response format (JSON mode, structured outputs)
+		if (request.responseFormat !== undefined) {
+			requestBody.response_format = request.responseFormat;
+		}
+
+		// Deterministic sampling seed
+		if (request.seed !== undefined) {
+			requestBody.seed = request.seed;
+		}
+
+		// Function calling / Tools
+		if (request.tools !== undefined) {
+			requestBody.tools = request.tools;
+		}
+		if (request.toolChoice !== undefined) {
+			requestBody.tool_choice = request.toolChoice;
+		}
+		if (request.parallelToolCalls !== undefined) {
+			requestBody.parallel_tool_calls = request.parallelToolCalls;
+		}
+
+		// Azure OpenAI specific: chat extensions
+		if (request.dataSources !== undefined) {
+			requestBody.data_sources = request.dataSources;
+		}
+
+		// Audio output configuration
+		if (request.audio !== undefined) {
+			requestBody.audio = request.audio;
+		}
+		if (request.modalities !== undefined) {
+			requestBody.modalities = request.modalities;
+		}
+
+		// Advanced features
+		if (request.prediction !== undefined) {
+			requestBody.prediction = request.prediction;
+		}
+		if (request.metadata !== undefined) {
+			requestBody.metadata = request.metadata;
+		}
+		if (request.store !== undefined) {
+			requestBody.store = request.store;
+		}
+
+		// Reasoning effort (for o1 models)
+		if (request.reasoningEffort !== undefined) {
+			requestBody.reasoning_effort = request.reasoningEffort;
+		}
+
+		// User security context
+		if (request.userSecurityContext !== undefined) {
+			requestBody.user_security_context = request.userSecurityContext;
+		}
+
+		const body = requestBody;
+
+		console.debug(`SAP AI Core streaming endpoint: ${url}`);
+		console.debug(`SAP AI Core streaming params:`, {
+			deploymentId,
+			deploymentUrl,
+			model: request.model,
+			executableId: executableId ?? 'unknown',
+			apiVersion: this.getApiVersion(executableId, modelName)
+		});
 
 		let response;
 		try {
@@ -515,6 +1330,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				method: 'POST',
 				headers,
 				body: JSON.stringify(body),
+				throw: false,
 			});
 		} catch (error) {
 			console.error(`SAP AI Core streaming request failed to URL: ${url}`, error);
@@ -523,10 +1339,54 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		}
 
 		if (response.status === 404) {
-			// The deployment might not exist or the endpoint format might be wrong
-			throw new Error(`SAP AI Core deployment not found for streaming: ${deploymentId}. Verify the deployment ID is correct and the deployment is running.`);
+			// Check deployment status for better error diagnostics
+			const deploymentDetails = await this.getDeploymentDetails(deploymentId);
+			let errorMsg = `SAP AI Core deployment not found for streaming: ${deploymentId}\n`;
+			errorMsg += `URL attempted: ${url}\n`;
+
+			if (deploymentDetails) {
+				errorMsg += `Deployment Status: ${deploymentDetails.status || 'UNKNOWN'}\n`;
+				errorMsg += `Target Status: ${deploymentDetails.targetStatus || 'UNKNOWN'}\n`;
+				errorMsg += `Deployment URL: ${deploymentDetails.deploymentUrl || 'Not available'}\n`;
+				errorMsg += `Configuration: ${deploymentDetails.configurationName || 'Unknown'}\n`;
+
+				if (deploymentDetails.status !== 'RUNNING') {
+					errorMsg += `\nThe deployment exists but is not in RUNNING status. `;
+					errorMsg += `Current status is '${deploymentDetails.status || 'UNKNOWN'}'. `;
+					errorMsg += `Please wait for the deployment to reach RUNNING status before making requests.`;
+				} else {
+					errorMsg += `\nThe deployment is RUNNING but the endpoint was not found. `;
+					errorMsg += `This may indicate an incorrect API path or version.`;
+				}
+			} else {
+				errorMsg += `\nCould not fetch deployment details. The deployment may not exist or you may not have access to it.`;
+			}
+
+			console.error(errorMsg);
+			throw new Error(errorMsg);
 		} else if (response.status !== 200) {
-			throw new Error(`SAP AI Core streaming API request failed: ${response.status} - ${response.text || 'Unknown error'}`);
+			const errorText = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
+			console.warn(`SAP AI Core streaming failed (status ${response.status}), falling back to non-streaming`, errorText);
+
+			// Fallback to non-streaming
+			const fallbackResponse = await requestUrl({
+				url,
+				method: 'POST',
+				headers: { ...headers, Accept: 'application/json' },
+				body: JSON.stringify({ ...body, stream: false }),
+			});
+
+			if (fallbackResponse.status !== 200) {
+				throw new Error(`SAP AI Core API request failed: ${fallbackResponse.status} - ${fallbackResponse.text}`);
+			}
+
+			const data = fallbackResponse.json as { choices?: Array<{ message?: { content?: string } }> };
+			const content = data.choices?.[0]?.message?.content || '';
+			if (content) {
+				onChunk({ content, done: false });
+			}
+			onChunk({ content: '', done: true });
+			return;
 		}
 
 		// Parse SSE stream
@@ -573,6 +1433,334 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		}
 
 		console.debug('SAP AI Core streaming ended');
+		onChunk({ content: '', done: true });
+	}
+
+	/**
+	 * Handle streaming for GCP Vertex AI (Gemini) models
+	 * Uses the :streamGenerateContent endpoint for Gemini models
+	 */
+	private async streamVertexAIChat(
+		request: ChatRequest,
+		onChunk: (_chunk: StreamChunk) => void,
+		baseUrl: string,
+		deploymentId: string,
+		modelName: string,
+		deploymentUrl?: string
+	): Promise<void> {
+		const headers = await this.getAuthHeaders();
+		headers['Accept'] = 'text/event-stream';
+
+		// Gemini streaming endpoint: /models/<modelName>:streamGenerateContent
+		const url = deploymentUrl
+			? `${deploymentUrl}/models/${modelName}:streamGenerateContent`
+			: `${baseUrl}/v2/inference/deployments/${deploymentId}/models/${modelName}:streamGenerateContent`;
+
+		// Convert chat messages to Gemini contents format
+		const geminiContents = [];
+		for (const msg of request.messages) {
+			const role = msg.role === 'assistant' ? 'model' : 'user';
+			geminiContents.push({
+				role,
+				parts: [{ text: msg.content }]
+			});
+		}
+
+		// Build generation config with comprehensive parameters
+		const generationConfig: Record<string, unknown> = {
+			maxOutputTokens: request.maxTokens ?? 2000,
+			temperature: request.temperature ?? 0.7,
+		};
+		if (request.topP !== undefined) generationConfig.topP = request.topP;
+		if (request.topK !== undefined) generationConfig.topK = request.topK;
+		if (request.stopSequences !== undefined) generationConfig.stopSequences = request.stopSequences;
+
+		const body = {
+			generation_config: generationConfig,
+			contents: geminiContents,
+		};
+
+		console.debug(`SAP AI Core Vertex AI streaming endpoint: ${url}`);
+		console.debug(`SAP AI Core Vertex AI streaming started for deployment: ${deploymentId}, model: ${modelName}`);
+
+		let response;
+		try {
+			response = await requestUrl({
+				url,
+				method: 'POST',
+				headers,
+				body: JSON.stringify(body),
+				throw: false,
+			});
+		} catch (error) {
+			console.error(`SAP AI Core Vertex AI streaming request failed to URL: ${url}`, error);
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			throw new Error(`SAP AI Core Vertex AI streaming API request failed to connect: ${errorMessage}`);
+		}
+
+		if (response.status === 404) {
+			throw new Error(`SAP AI Core deployment not found for Vertex AI streaming: ${deploymentId}. Verify the deployment ID is correct and the deployment is running.`);
+		} else if (response.status !== 200) {
+			const errorText = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
+			console.warn(`SAP AI Core Vertex AI streaming failed (status ${response.status}), falling back to non-streaming`, errorText);
+
+			// Fallback to non-streaming
+			const fallbackUrl = url.replace(':streamGenerateContent', ':generateContent');
+			const fallbackResponse = await requestUrl({
+				url: fallbackUrl,
+				method: 'POST',
+				headers: { ...headers, Accept: 'application/json' },
+				body: JSON.stringify(body),
+			});
+
+			if (fallbackResponse.status !== 200) {
+				throw new Error(`SAP AI Core Vertex AI API request failed: ${fallbackResponse.status} - ${fallbackResponse.text}`);
+			}
+
+			// Parse non-streaming response
+			const data = fallbackResponse.json as {
+				candidates?: Array<{
+					content?: {
+						parts?: Array<{ text?: string }>;
+					};
+				}>;
+			};
+			const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+			if (content) onChunk({ content, done: false });
+			onChunk({ content: '', done: true });
+			return;
+		}
+
+		// Parse SSE stream for Vertex AI
+		const text = typeof response.text === 'string' ? response.text : String(response.text);
+		const lines = text.split('\n');
+
+		for (const line of lines) {
+			if (line.trim() === '') continue;
+
+			if (line.startsWith('data: ')) {
+				const data = line.slice(6).trim();
+
+				if (data === '[DONE]') {
+					console.debug('SAP AI Core Vertex AI streaming completed');
+					onChunk({ content: '', done: true });
+					return;
+				}
+
+				try {
+					const parsed = JSON.parse(data) as {
+						candidates?: Array<{
+							content?: {
+								parts?: Array<{ text?: string }>;
+							};
+							finishReason?: string;
+						}>;
+					};
+
+					// Extract text from candidates
+					const content = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+					if (content) {
+						onChunk({ content, done: false });
+					}
+
+					const finishReason = parsed.candidates?.[0]?.finishReason;
+					if (finishReason && finishReason !== 'STOP') {
+						console.debug(`SAP AI Core Vertex AI streaming finished with reason: ${finishReason}`);
+					}
+					if (finishReason) {
+						onChunk({ content: '', done: true });
+						return;
+					}
+				} catch (e) {
+					console.error('Failed to parse Vertex AI SSE chunk:', e, 'Data:', data);
+				}
+			}
+		}
+
+		console.debug('SAP AI Core Vertex AI streaming ended');
+		onChunk({ content: '', done: true });
+	}
+
+	/**
+	 * Handle streaming for AWS Bedrock models
+	 * Uses the /invoke-with-response-stream endpoint for Bedrock models
+	 */
+	private async streamBedrockChat(
+		request: ChatRequest,
+		onChunk: (_chunk: StreamChunk) => void,
+		baseUrl: string,
+		deploymentId: string,
+		modelName: string,
+		deploymentUrl?: string
+	): Promise<void> {
+		const headers = await this.getAuthHeaders();
+		headers['Accept'] = 'text/event-stream';
+
+		// Determine endpoint and request format based on model type
+		let url: string;
+		let body: unknown;
+
+		if (modelName.toLowerCase().includes('claude')) {
+			// Claude models: Use /invoke-with-response-stream with Anthropic native format
+			url = deploymentUrl
+				? `${deploymentUrl}/invoke-with-response-stream`
+				: `${baseUrl}/v2/inference/deployments/${deploymentId}/invoke-with-response-stream`;
+			body = {
+				anthropic_version: 'bedrock-2023-05-31',
+				max_tokens: request.maxTokens ?? 2000,
+				messages: request.messages.map(msg => ({
+					role: msg.role,
+					content: msg.content
+				})),
+				temperature: request.temperature ?? 0.7,
+				...(request.topP !== undefined && { top_p: request.topP }),
+				...(request.topK !== undefined && { top_k: request.topK }),
+				...(request.stopSequences !== undefined && { stop_sequences: request.stopSequences }),
+			};
+		} else if (modelName.toLowerCase().includes('titan')) {
+			// Amazon Titan models: Streaming not commonly supported, fallback to non-streaming
+			console.warn('Titan models may not support streaming, attempting non-streaming request');
+			url = deploymentUrl
+				? `${deploymentUrl}/invoke`
+				: `${baseUrl}/v2/inference/deployments/${deploymentId}/invoke`;
+			const inputText = request.messages.map(m => m.content).join('\n');
+			body = {
+				inputText,
+				textGenerationConfig: {
+					maxTokenCount: request.maxTokens ?? 2000,
+					temperature: request.temperature ?? 0.7,
+					topP: request.topP ?? 1,
+					stopSequences: request.stopSequences ?? [],
+				}
+			};
+		} else {
+			// Other Bedrock models (Nova, etc.): Use /invoke-with-response-stream with converse format
+			url = deploymentUrl
+				? `${deploymentUrl}/invoke-with-response-stream`
+				: `${baseUrl}/v2/inference/deployments/${deploymentId}/invoke-with-response-stream`;
+			body = {
+				inferenceConfig: {
+					maxTokens: request.maxTokens ?? 2000,
+					temperature: request.temperature ?? 0.7,
+					...(request.topP !== undefined && { topP: request.topP }),
+					stopSequences: request.stopSequences ?? [],
+				},
+				messages: request.messages.map(msg => ({
+					role: msg.role,
+					content: [{ text: msg.content }]
+				}))
+			};
+		}
+
+		console.debug(`SAP AI Core Bedrock streaming endpoint: ${url}`);
+		console.debug(`SAP AI Core Bedrock streaming started for deployment: ${deploymentId}, model: ${modelName}`);
+
+		let response;
+		try {
+			response = await requestUrl({
+				url,
+				method: 'POST',
+				headers,
+				body: JSON.stringify(body),
+				throw: false,
+			});
+		} catch (error) {
+			console.error(`SAP AI Core Bedrock streaming request failed to URL: ${url}`, error);
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			throw new Error(`SAP AI Core Bedrock streaming API request failed to connect: ${errorMessage}`);
+		}
+
+		if (response.status === 404) {
+			throw new Error(`SAP AI Core deployment not found for Bedrock streaming: ${deploymentId}. Verify the deployment ID is correct and the deployment is running.`);
+		} else if (response.status !== 200) {
+			const errorText = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
+			console.warn(`SAP AI Core Bedrock streaming failed (status ${response.status}), falling back to non-streaming`, errorText);
+
+			// Fallback to non-streaming for Titan or if streaming fails
+			const fallbackResponse = await requestUrl({
+				url: url.replace('/invoke-with-response-stream', '/invoke').replace('/converse-stream', '/converse'),
+				method: 'POST',
+				headers: { ...headers, Accept: 'application/json' },
+				body: JSON.stringify(body),
+			});
+
+			if (fallbackResponse.status !== 200) {
+				throw new Error(`SAP AI Core Bedrock API request failed: ${fallbackResponse.status} - ${fallbackResponse.text}`);
+			}
+
+			// Parse non-streaming response
+			if (modelName.toLowerCase().includes('claude')) {
+				const data = fallbackResponse.json as { content?: Array<{ text?: string }> };
+				const content = data.content?.[0]?.text || '';
+				if (content) onChunk({ content, done: false });
+			} else if (modelName.toLowerCase().includes('titan')) {
+				const data = fallbackResponse.json as { results?: Array<{ outputText?: string }> };
+				const content = data.results?.[0]?.outputText || '';
+				if (content) onChunk({ content, done: false });
+			} else {
+				const data = fallbackResponse.json as { output?: { message?: { content?: Array<{ text?: string }> } } };
+				const content = data.output?.message?.content?.[0]?.text || '';
+				if (content) onChunk({ content, done: false });
+			}
+			onChunk({ content: '', done: true });
+			return;
+		}
+
+		// Parse SSE stream for Bedrock
+		const text = typeof response.text === 'string' ? response.text : String(response.text);
+		const lines = text.split('\n');
+
+		for (const line of lines) {
+			if (line.trim() === '') continue;
+
+			if (line.startsWith('data: ')) {
+				const data = line.slice(6).trim();
+
+				if (data === '[DONE]') {
+					console.debug('SAP AI Core Bedrock streaming completed');
+					onChunk({ content: '', done: true });
+					return;
+				}
+
+				try {
+					const parsed = JSON.parse(data);
+
+					// Handle different Bedrock streaming response formats
+					if (modelName.toLowerCase().includes('claude')) {
+						// Anthropic Claude streaming format
+						const chunk = parsed as { type?: string; delta?: { text?: string }; content_block?: { text?: string } };
+						const content = chunk.delta?.text || chunk.content_block?.text;
+						if (content) {
+							onChunk({ content, done: false });
+						}
+						if (chunk.type === 'message_stop' || chunk.type === 'content_block_stop') {
+							console.debug('SAP AI Core Claude streaming finished');
+							onChunk({ content: '', done: true });
+							return;
+						}
+					} else {
+						// Bedrock Converse streaming format
+						const chunk = parsed as {
+							contentBlockDelta?: { delta?: { text?: string } };
+							messageStop?: unknown;
+						};
+						const content = chunk.contentBlockDelta?.delta?.text;
+						if (content) {
+							onChunk({ content, done: false });
+						}
+						if (chunk.messageStop) {
+							console.debug('SAP AI Core Bedrock streaming finished');
+							onChunk({ content: '', done: true });
+							return;
+						}
+					}
+				} catch (e) {
+					console.error('Failed to parse Bedrock SSE chunk:', e, 'Data:', data);
+				}
+			}
+		}
+
+		console.debug('SAP AI Core Bedrock streaming ended');
 		onChunk({ content: '', done: true });
 	}
 
@@ -655,6 +1843,13 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 					name?: string;
 					scenarioId?: string;
 					scenario_id?: string;
+					deploymentUrl?: string;
+					targetStatus?: string;
+					createdAt?: string;
+					modifiedAt?: string;
+					submissionTime?: string;
+					startTime?: string;
+					completionTime?: string;
 				} = deployment as {
 					status?: string;
 					deploymentStatus?: string;
@@ -672,6 +1867,13 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 					name?: string;
 					scenarioId?: string;
 					scenario_id?: string;
+					deploymentUrl?: string;
+					targetStatus?: string;
+					createdAt?: string;
+					modifiedAt?: string;
+					submissionTime?: string;
+					startTime?: string;
+					completionTime?: string;
 				};
 
 				// Check if deployment is running
@@ -733,8 +1935,18 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 						capabilities,
 						enabled: true,
 						deploymentId: typedDeployment.id,  // Store deployment ID separately
+						deploymentUrl: typedDeployment.deploymentUrl,  // Full deployment URL
+						configurationId: typedDeployment.configurationId || typedDeployment.configuration?.id,  // Configuration ID
+						configurationName: typedDeployment.configurationName,  // Configuration name
 						scenarioId,     // Save the scenario ID
 						executableId: executableId || undefined,   // Save the executable ID (e.g., 'azure-openai', 'aws-bedrock')
+						status: typedDeployment.status,  // Deployment status (e.g., 'RUNNING')
+						targetStatus: typedDeployment.targetStatus,  // Target status
+						createdAt: typedDeployment.createdAt,  // Creation timestamp
+						modifiedAt: typedDeployment.modifiedAt,  // Last modification timestamp
+						submissionTime: typedDeployment.submissionTime,  // Submission timestamp
+						startTime: typedDeployment.startTime,  // Start timestamp
+						completionTime: typedDeployment.completionTime,  // Completion timestamp (if completed)
 					});
 
 					console.debug(`SAP AI Core: Found deployment ${typedDeployment.id} -> ${modelName}${modelVersion ? ` (v${modelVersion})` : ''} [${executableId || 'unknown'}]`);
@@ -764,6 +1976,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			{ id: 'sap-ai-core:gpt-4o', name: 'GPT-4o', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'audio', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'sap-ai-core:gpt-4o-mini', name: 'GPT-4o Mini', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'audio', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'sap-ai-core:gpt-35-turbo', name: 'GPT-3.5 Turbo', provider: 'sap-ai-core', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'sap-ai-core:anthropic--claude-4-sonnet', name: 'Claude 4 Sonnet', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'sap-ai-core:text-embedding-3-large', name: 'Text Embedding 3 Large', provider: 'sap-ai-core', capabilities: ['embedding'], enabled: true },
 		];
 	}

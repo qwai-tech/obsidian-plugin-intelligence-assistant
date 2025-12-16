@@ -6,6 +6,15 @@ export class OpenAIProvider extends BaseStreamingProvider {
 		return 'OpenAI';
 	}
 
+	/**
+	 * Base URL for OpenAI-compatible APIs.
+	 * Subclasses can override to swap in other OpenAI-style endpoints.
+	 */
+	// biome-ignore lint/nursery/noMisusedGetSet: readability helper for subclasses
+	protected get apiBase(): string {
+		return this.getBaseUrl('https://api.openai.com/v1');
+	}
+
 	protected getProviderName(): string {
 		return 'OpenAI';
 	}
@@ -18,7 +27,7 @@ export class OpenAIProvider extends BaseStreamingProvider {
 	}
 
 	async chat(request: ChatRequest): Promise<ChatResponse> {
-		const url = this.getBaseUrl('https://api.openai.com/v1') + '/chat/completions';
+		const url = this.apiBase + '/chat/completions';
 
 		const maxTokensValue = request.maxTokens ?? 2000;
 		const modelName = this.extractModelName(request.model);
@@ -56,7 +65,7 @@ export class OpenAIProvider extends BaseStreamingProvider {
 	}
 
 	protected prepareStreamRequest(request: ChatRequest): { url: string; body: unknown } {
-		const url = this.getBaseUrl('https://api.openai.com/v1') + '/chat/completions';
+		const url = this.apiBase + '/chat/completions';
 
 		const maxTokensValue = request.maxTokens ?? 2000;
 		const modelName = this.extractModelName(request.model);

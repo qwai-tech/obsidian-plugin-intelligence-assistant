@@ -1,5 +1,8 @@
 import type { LLMConfig, ModelInfo, ModelCapability } from '@/types';
 import { Notice, requestUrl } from 'obsidian';
+import { promises as fs } from 'fs';
+import path from 'path';
+import os from 'os';
 
 export class ModelManager {
 	private static modelCache = new Map<string, Promise<ModelInfo[]>>();
@@ -19,12 +22,20 @@ export class ModelManager {
 			{ id: 'openai:text-embedding-3-large', name: 'Text Embedding 3 Large', provider: 'openai', capabilities: ['embedding'], enabled: true },
 			{ id: 'openai:text-embedding-3-small', name: 'Text Embedding 3 Small', provider: 'openai', capabilities: ['embedding'], enabled: true },
 		],
+		codex: [
+			{ id: 'codex:code-davinci-002', name: 'Code Davinci 002', provider: 'codex', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'codex:code-cushman-001', name: 'Code Cushman 001', provider: 'codex', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+		],
 		anthropic: [
 			{ id: 'anthropic:claude-3-5-sonnet-20241022', name: 'Claude 3.5 Sonnet', provider: 'anthropic', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode', 'computer_use'], enabled: true },
 			{ id: 'anthropic:claude-3-5-haiku-20241022', name: 'Claude 3.5 Haiku', provider: 'anthropic', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'anthropic:claude-3-opus-20240229', name: 'Claude 3 Opus', provider: 'anthropic', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'anthropic:claude-3-sonnet-20240229', name: 'Claude 3 Sonnet', provider: 'anthropic', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'anthropic:claude-3-haiku-20240307', name: 'Claude 3 Haiku', provider: 'anthropic', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+		],
+		'claude-code': [
+			{ id: 'claude-code:claude-3-5-sonnet-20241022', name: 'Claude 3.5 Sonnet (Code)', provider: 'claude-code', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode', 'computer_use'], enabled: true },
+			{ id: 'claude-code:claude-3-5-haiku-20241022', name: 'Claude 3.5 Haiku (Code)', provider: 'claude-code', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 		],
 		google: [
 			{ id: 'google:gemini-2.0-flash-exp', name: 'Gemini 2.0 Flash (Experimental)', provider: 'google', capabilities: ['chat', 'vision', 'audio', 'video', 'function_calling', 'streaming', 'json_mode', 'multimodal_output', 'code_execution'], enabled: true },
@@ -38,6 +49,11 @@ export class ModelManager {
 			{ id: 'deepseek:deepseek-reasoner', name: 'DeepSeek Reasoner', provider: 'deepseek', capabilities: ['chat', 'reasoning', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'deepseek:deepseek-coder', name: 'DeepSeek Coder', provider: 'deepseek', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 		],
+		'qwen-code': [
+			{ id: 'qwen-code:qwen2.5-coder-32b-instruct', name: 'Qwen2.5-Coder 32B', provider: 'qwen-code', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'qwen-code:qwen2.5-coder-14b-instruct', name: 'Qwen2.5-Coder 14B', provider: 'qwen-code', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'qwen-code:qwen2.5-coder-7b-instruct', name: 'Qwen2.5-Coder 7B', provider: 'qwen-code', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+		],
 		openrouter: [
 			{ id: 'openrouter:openai/gpt-4o', name: 'GPT-4o', provider: 'openrouter', capabilities: ['chat', 'vision', 'audio', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'openrouter:openai/gpt-4o-mini', name: 'GPT-4o Mini', provider: 'openrouter', capabilities: ['chat', 'vision', 'audio', 'function_calling', 'streaming', 'json_mode'], enabled: true },
@@ -50,6 +66,7 @@ export class ModelManager {
 			{ id: 'sap-ai-core:gpt-4o-mini', name: 'GPT-4o Mini', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'audio', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'sap-ai-core:gpt-4-turbo', name: 'GPT-4 Turbo', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'sap-ai-core:gpt-35-turbo', name: 'GPT-3.5 Turbo', provider: 'sap-ai-core', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'sap-ai-core:anthropic--claude-4-sonnet', name: 'Claude 4 Sonnet', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'sap-ai-core:text-embedding-ada-002', name: 'Text Embedding Ada', provider: 'sap-ai-core', capabilities: ['embedding'], enabled: true },
 		],
 	};
@@ -411,6 +428,80 @@ export class ModelManager {
 		}
 	}
 
+	private static async readCliModelFromConfig(
+		provider: 'claude-code' | 'codex' | 'qwen-code'
+	): Promise<string | null> {
+		// Known config locations (best-effort)
+		const home = os.homedir();
+		const candidates: Array<{ file: string; type: 'json' | 'toml' }> = [];
+
+		if (provider === 'claude-code') {
+			candidates.push(
+				{ file: path.join(home, '.claude.json'), type: 'json' },
+				{ file: path.join(home, '.claude', 'settings.json'), type: 'json' }
+			);
+		} else if (provider === 'codex') {
+			candidates.push(
+				{ file: path.join(home, '.codex', 'config.toml'), type: 'toml' },
+				{ file: path.join(home, '.codex', 'config.json'), type: 'json' }
+			);
+		} else if (provider === 'qwen-code') {
+			candidates.push(
+				{ file: path.join(home, '.qwen', 'settings.json'), type: 'json' },
+				{ file: path.join(home, '.qwen.json'), type: 'json' }
+			);
+		}
+
+		for (const candidate of candidates) {
+			try {
+				const raw = await fs.readFile(candidate.file, 'utf8');
+				if (candidate.type === 'json') {
+					const json = JSON.parse(raw) as Record<string, unknown>;
+					const model =
+						(typeof json.model === 'string' && json.model)
+						|| (typeof json.defaultModel === 'string' && json.defaultModel)
+						|| (typeof json.default_model === 'string' && json.default_model);
+					if (model) return model;
+				} else {
+					// Minimal TOML parse for `model = "..."` lines
+					const match = raw.match(/model\s*=\s*["']([^"']+)["']/);
+					if (match?.[1]) return match[1];
+				}
+			} catch {
+				// Ignore and move to next candidate
+			}
+		}
+
+		return null;
+	}
+
+	private static async getCliModels(provider: 'claude-code' | 'codex' | 'qwen-code'): Promise<ModelInfo[]> {
+		const defaultModels = this.DEFAULT_MODELS[provider] ?? [];
+		const discovered = await this.readCliModelFromConfig(provider);
+
+		if (!discovered) {
+			return defaultModels;
+		}
+
+		const prefixedId = `${provider}:${discovered}`;
+		const alreadyExists = defaultModels.some(m => m.id === prefixedId);
+
+		if (alreadyExists) {
+			return defaultModels;
+		}
+
+		const capabilities: ModelCapability[] = ['chat', 'streaming', 'json_mode', 'function_calling'];
+		const customModel: ModelInfo = {
+			id: prefixedId,
+			name: discovered,
+			provider,
+			capabilities,
+			enabled: true,
+		};
+
+		return [customModel, ...defaultModels];
+	}
+
 	/**
 	 * Filter models based on regex pattern
 	 */
@@ -441,6 +532,22 @@ export class ModelManager {
 		}
 
 		const fetchPromise = (async () => {
+			// Ollama: always query live models to ensure we only show installed ones
+			if (config.provider === 'ollama') {
+				try {
+					console.debug('[ModelManager] Fetching Ollama models (live list)...');
+					const { OllamaProvider } = await import('./ollama-provider');
+					const ollamaProvider = new OllamaProvider(config);
+					const models = await ollamaProvider.fetchModels();
+					// Update cached models in memory for downstream consumers
+					config.cachedModels = models;
+					config.cacheTimestamp = Date.now();
+					return models;
+				} catch (error) {
+					console.error('[ModelManager] Failed to fetch Ollama models:', error);
+				}
+			}
+
 			// Use stored models if available (persistent storage, no expiration)
 			if (!forceRefresh && config.cachedModels && config.cachedModels.length > 0) {
 				console.debug(`Using stored models for ${config.provider} (${config.cachedModels.length} models)`);
@@ -475,15 +582,26 @@ export class ModelManager {
 					case 'openai':
 						models = await this.fetchOpenAIModels(config.apiKey, config.baseUrl);
 						break;
+					case 'codex':
+						models = await this.getCliModels('codex');
+						break;
 					case 'anthropic':
 						// Anthropic doesn't have a models API, use default list
 						models = this.DEFAULT_MODELS.anthropic;
+						break;
+					case 'claude-code':
+						// Follows Anthropic's API surface; use curated defaults
+						models = await this.getCliModels('claude-code');
 						break;
 					case 'google':
 						models = await this.fetchGoogleModels(config.apiKey, config.baseUrl);
 						break;
 					case 'deepseek':
 						models = await this.fetchDeepSeekModels(config.apiKey, config.baseUrl);
+						break;
+					case 'qwen-code':
+						// DashScope offers an OpenAI-compatible surface, but it lacks a public models list
+						models = await this.getCliModels('qwen-code');
 						break;
 					case 'openrouter':
 						models = await this.fetchOpenRouterModels(config.apiKey, config.baseUrl);
@@ -567,9 +685,11 @@ export class ModelManager {
 	 */
 	static getProviderFromModelId(modelId: string): string | null {
 		if (modelId.startsWith('gpt-') || modelId.startsWith('o1-') || modelId.startsWith('o3-')) return 'openai';
+		if (modelId.startsWith('code-')) return 'codex';
 		if (modelId.startsWith('claude-')) return 'anthropic';
 		if (modelId.startsWith('gemini-')) return 'google';
 		if (modelId.startsWith('deepseek-')) return 'deepseek';
+		if (modelId.toLowerCase().startsWith('qwen')) return 'qwen-code';
 		if (modelId.includes('/')) return 'openrouter'; // OpenRouter uses format: provider/model
 		return null;
 	}

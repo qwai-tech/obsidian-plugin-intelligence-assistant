@@ -33,6 +33,9 @@ export interface ConversationConfig {
 	agentId?: string | null;
 	temperature?: number;
 	maxTokens?: number;
+	topP?: number;
+	frequencyPenalty?: number;
+	presencePenalty?: number;
 	ragEnabled?: boolean;
 	webSearchEnabled?: boolean;
 }

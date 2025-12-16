@@ -33,6 +33,9 @@ export class ChatViewState extends Events {
 	// Configuration
 	private _temperature: number = 0.7;
 	private _maxTokens: number = 4000;
+	private _topP: number = 1.0;
+	private _frequencyPenalty: number = 0;
+	private _presencePenalty: number = 0;
 	private _mode: 'chat' | 'agent' = 'chat';
 
 	// Feature flags
@@ -111,6 +114,39 @@ export class ChatViewState extends Events {
 		const oldValue = this._temperature;
 		this._temperature = value;
 		this.trigger('state-change', { field: 'temperature', oldValue, newValue: value });
+	}
+
+	// Top P
+	get topP(): number {
+		return this._topP;
+	}
+
+	set topP(value: number) {
+		const oldValue = this._topP;
+		this._topP = value;
+		this.trigger('state-change', { field: 'topP', oldValue, newValue: value });
+	}
+
+	// Frequency Penalty
+	get frequencyPenalty(): number {
+		return this._frequencyPenalty;
+	}
+
+	set frequencyPenalty(value: number) {
+		const oldValue = this._frequencyPenalty;
+		this._frequencyPenalty = value;
+		this.trigger('state-change', { field: 'frequencyPenalty', oldValue, newValue: value });
+	}
+
+	// Presence Penalty
+	get presencePenalty(): number {
+		return this._presencePenalty;
+	}
+
+	set presencePenalty(value: number) {
+		const oldValue = this._presencePenalty;
+		this._presencePenalty = value;
+		this.trigger('state-change', { field: 'presencePenalty', oldValue, newValue: value });
 	}
 
 	// Max tokens
@@ -322,6 +358,9 @@ export class ChatViewState extends Events {
 		this.availableModels = [];
 		this.temperature = 0.7;
 		this.maxTokens = 4000;
+		this.topP = 1.0;
+		this.frequencyPenalty = 0;
+		this.presencePenalty = 0;
 		this.mode = 'chat';
 		this.enableRAG = false;
 		this.enableWebSearch = false;
@@ -344,6 +383,9 @@ export class ChatViewState extends Events {
 			availableModelsCount: this._availableModels.length,
 			temperature: this._temperature,
 			maxTokens: this._maxTokens,
+			topP: this._topP,
+			frequencyPenalty: this._frequencyPenalty,
+			presencePenalty: this._presencePenalty,
 			mode: this._mode,
 			enableRAG: this._enableRAG,
 			enableWebSearch: this._enableWebSearch,

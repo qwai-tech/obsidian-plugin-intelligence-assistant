@@ -1,11 +1,13 @@
-import {App, Modal, Setting} from 'obsidian';
+import {App, Modal, Notice, Setting} from 'obsidian';
 import type { LLMConfig } from '@/types';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
+import { OllamaModelManagerModal } from './ollama-model-manager-modal';
 
 export class ProviderConfigModal extends Modal {
 	private draft: LLMConfig;
 	private readonly onSaveCallback: (config: LLMConfig) => void | Promise<void>;
 	private providerContainer: HTMLElement | null = null;
+	private readonly cliProviders = new Set(['claude-code', 'codex', 'qwen-code']);
 
 	constructor(app: App, initial: LLMConfig, onSave: (config: LLMConfig) => void | Promise<void>) {
 		super(app);
@@ -24,10 +26,14 @@ export class ProviderConfigModal extends Modal {
 			label: 'Provider',
 			description: 'Select the LLM provider type'
 		}).addDropdown(dropdown => dropdown
+				.addOption('', '-- Select provider --')
 				.addOption('openai', 'OpenAI')
+				.addOption('codex', 'Codex')
 				.addOption('anthropic', 'Anthropic')
+				.addOption('claude-code', 'Claude Code')
 				.addOption('google', 'Google (Gemini)')
 				.addOption('deepseek', 'DeepSeek')
+				.addOption('qwen-code', 'Qwen Code')
 				.addOption('ollama', 'Ollama (local)')
 				.addOption('openrouter', 'OpenRouter')
 				.addOption('sap-ai-core', 'SAP AI Core')
@@ -83,6 +89,14 @@ export class ProviderConfigModal extends Modal {
 		saveBtn.setCssProps({ 'border-radius': '4px' });
 		saveBtn.addEventListener('click', () => {
 			void (async () => {
+				// Validate before saving
+				const validationError = this.validateConfig();
+				if (validationError) {
+					// Show validation error using Obsidian Notice
+					new Notice(validationError, 5000);
+					return;
+				}
+
 				await this.onSaveCallback(JSON.parse(JSON.stringify(this.draft)) as LLMConfig);
 				this.close();
 			})();
@@ -96,7 +110,34 @@ export class ProviderConfigModal extends Modal {
 
 		this.providerContainer.empty();
 
-		if (this.draft.provider === 'sap-ai-core') {
+		if (this.cliProviders.has(this.draft.provider)) {
+			// For CLI providers, show API Key field but mark as optional (not needed for CLI)
+			applyConfigFieldMetadata(new Setting(this.providerContainer), {
+				path: 'llmConfigs[].apiKey',
+				label: 'API Key',
+				description: 'Not required for CLI-based providers'
+			}).addText(text => {
+					text.setPlaceholder('Not needed for CLI providers');
+					text.inputEl.type = 'password';
+					text.setValue(this.draft.apiKey || '');
+					// Don't disable - just make it readonly for better UX
+					text.inputEl.readOnly = true;
+					text.onChange(value => {
+						this.draft.apiKey = value.trim() || undefined;
+					});
+				});
+
+			applyConfigFieldMetadata(new Setting(this.providerContainer), {
+				path: 'llmConfigs[].commandPath',
+				label: 'CLI command path',
+				description: 'Optional path to the CLI binary (leave empty to use PATH)'
+			}).addText(text => text
+					.setPlaceholder(this.draft.provider)
+					.setValue(this.draft.commandPath || '')
+					.onChange(value => {
+						this.draft.commandPath = value.trim() || undefined;
+					}));
+		} else if (this.draft.provider === 'sap-ai-core') {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].serviceKey',
 				label: 'Service key',
@@ -134,6 +175,17 @@ export class ProviderConfigModal extends Modal {
 					.setValue(this.draft.baseUrl || 'http://localhost:11434')
 					.onChange(value => {
 						this.draft.baseUrl = value.trim() || undefined;
+					}));
+
+			new Setting(this.providerContainer)
+				.setName('Manage Models')
+				.setDesc('Pull new models or update existing ones from the Ollama registry.')
+				.addButton(button => button
+					.setButtonText('⏬ Pull Ollama Model')
+					.onClick(() => {
+						new OllamaModelManagerModal(this.app, this.draft, () => {
+							// No specific action needed on close as this is just pulling models
+						}).open();
 					}));
 		} else {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
@@ -181,6 +233,29 @@ export class ProviderConfigModal extends Modal {
 			default:
 				return '';
 		}
+	}
+
+	private validateConfig(): string | null {
+		// Validate provider is selected
+		if (!this.draft.provider || this.draft.provider.trim() === '') {
+			return 'Please select a provider type';
+		}
+
+		// Validate API key length if provided
+		if (this.draft.apiKey && this.draft.apiKey.length > 500) {
+			return 'API key is too long. Maximum length is 500 characters.';
+		}
+
+		// Validate base URL if provided
+		if (this.draft.baseUrl && this.draft.baseUrl.trim() !== '') {
+			try {
+				new URL(this.draft.baseUrl);
+			} catch (_e) {
+				return 'Invalid base URL format. Please enter a valid URL (e.g., https://api.example.com)';
+			}
+		}
+
+		return null; // No validation errors
 	}
 
 	onClose() {

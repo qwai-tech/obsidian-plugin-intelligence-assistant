@@ -8,6 +8,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import type { ModelInfo, ModelCapability } from '@/types';
 import { createTable } from '@/presentation/utils/ui-helpers';
 import { getProviderMeta } from '../components/provider-meta';
+import { OllamaModelManagerModal } from '../modals/ollama-model-manager-modal';
 
 export interface ModelFilters {
 	providerFilter: string;
@@ -60,6 +61,7 @@ export function displayModelsTab(
 			}
 
 			await plugin.saveSettings();
+			await plugin.refreshChatViewsModels();
 			new Notice('Models refreshed successfully!');
 
 			// Redisplay the tab
@@ -209,6 +211,7 @@ export function displayModelsTab(
 			void (async () => {
 				model.enabled = !model.enabled;
 				await plugin.saveSettings();
+				await plugin.refreshChatViewsModels();
 				refreshDisplay();
 			})();
 		});
@@ -224,6 +227,7 @@ export function displayModelsTab(
 					void (async () => {
 						plugin.settings.defaultModel = model.id;
 						await plugin.saveSettings();
+						await plugin.refreshChatViewsModels();
 						new Notice(`Default chat model set to ${model.name}`);
 						refreshDisplay();
 					})();
@@ -242,6 +246,7 @@ export function displayModelsTab(
 					void (async () => {
 						plugin.settings.ragConfig.embeddingModel = model.id;
 						await plugin.saveSettings();
+						await plugin.refreshChatViewsModels();
 						new Notice(`Default embedding model set to ${model.name}`);
 						refreshDisplay();
 					})();

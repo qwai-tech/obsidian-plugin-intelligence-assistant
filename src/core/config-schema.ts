@@ -49,6 +49,8 @@ export class ConfigSchema {
 		const errors: ConfigValidationError[] = [];
 		const warnings: ConfigValidationWarning[] = [];
 
+		const cliProviders = new Set(['claude-code', 'codex', 'qwen-code']);
+
 		// Validate LLM configurations
 		if (settings.llmConfigs) {
 			settings.llmConfigs.forEach((config, index) => {
@@ -61,7 +63,7 @@ export class ConfigSchema {
 				}
 
 				// Validate URL format if baseUrl is provided
-				if (config.baseUrl) {
+				if (config.baseUrl && !cliProviders.has(config.provider)) {
 					try {
 						new URL(config.baseUrl);
 					} catch {

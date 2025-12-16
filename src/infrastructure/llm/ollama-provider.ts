@@ -105,7 +105,24 @@ export class OllamaProvider extends BaseLLMProvider {
 		// Type guard for response body (Obsidian RequestUrlResponse may not declare 'body')
 		const bodyUnknown: ReadableStream<Uint8Array> | undefined = (response as { body?: ReadableStream<Uint8Array> }).body;
 		if (!bodyUnknown) {
-			throw new Error('Response body is null');
+			// Some environments don't expose streaming bodies via requestUrl. Fallback to non-streaming request.
+			console.warn('[Ollama] Streaming body missing, falling back to non-streaming request');
+			const fallback = await requestUrl({
+				url: url,
+				method: 'POST',
+				headers: this.getHeaders(),
+				body: JSON.stringify({ ...requestBody, stream: false })
+			});
+			if (fallback.status < 200 || fallback.status >= 300) {
+				const errorText = fallback.text;
+				throw new Error(`Ollama API request failed (fallback): ${String(fallback.status)} ${String(errorText)}`);
+			}
+			const data = fallback.json as OllamaChatApiResponse;
+			if (data.message?.content) {
+				onChunk({ content: data.message.content, done: false });
+			}
+			onChunk({ content: '', done: true });
+			return;
 		}
 		if (!(bodyUnknown instanceof ReadableStream)) {
 			throw new Error('Response body is not a ReadableStream');

@@ -25,8 +25,18 @@ export interface ModelInfo {
 	enabled: boolean;
 	// SAP AI Core specific fields
 	deploymentId?: string;
+	deploymentUrl?: string;
+	configurationId?: string;
+	configurationName?: string;
 	scenarioId?: string;
 	executableId?: string;
+	status?: string;
+	targetStatus?: string;
+	createdAt?: string;
+	modifiedAt?: string;
+	submissionTime?: string;
+	startTime?: string;
+	completionTime?: string;
 }
 
 export interface LLMConfig {
@@ -34,6 +44,7 @@ export interface LLMConfig {
 	apiKey?: string;  // Optional for Ollama
 	baseUrl?: string;
 	modelFilter?: string;
+	commandPath?: string; // Optional path to CLI binary for local providers
 	serviceKey?: string | Record<string, unknown>;  // For SAP AI Core
 	resourceGroup?: string;  // For SAP AI Core
 	cachedModels?: ModelInfo[];

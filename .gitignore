@@ -166,3 +166,13 @@ docs/archived/
 .build/
 .output/
 tmp/
+
+# E2E Test artifacts
+test-results/
+playwright-report/
+.obsidian-cache/
+# E2E test environment variables (may contain API keys)
+.env.test
+# Test vault data (auto-generated, may contain sensitive config)
+tests/e2e/test-vault/.obsidian/plugins/*/settings.json
+tests/e2e/test-vault/.obsidian/workspace.json

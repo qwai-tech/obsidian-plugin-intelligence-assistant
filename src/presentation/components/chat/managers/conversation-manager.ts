@@ -101,14 +101,16 @@ export class ConversationManager extends Events {
 	async createNewConversation(): Promise<void> {
 		await this.ensureStorageReady();
 		const storage = this.storageService!;
+		// Always start new conversations from default chat settings
+		const defaultConfig = this.buildDefaultConversationConfig();
 		const newConv: Conversation = {
 			id: `conv_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
 			title: 'New Conversation',
 			messages: [],
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
-			mode: this.state.mode,
-			config: this.buildCurrentConversationConfig()
+			mode: 'chat',
+			config: defaultConfig
 		};
 
 		// Save to storage service
@@ -144,6 +146,15 @@ export class ConversationManager extends Events {
 			}
 			if (typeof conv.config.maxTokens === 'number') {
 				this.state.maxTokens = conv.config.maxTokens;
+			}
+			if (typeof conv.config.topP === 'number') {
+				this.state.topP = conv.config.topP;
+			}
+			if (typeof conv.config.frequencyPenalty === 'number') {
+				this.state.frequencyPenalty = conv.config.frequencyPenalty;
+			}
+			if (typeof conv.config.presencePenalty === 'number') {
+				this.state.presencePenalty = conv.config.presencePenalty;
 			}
 			if (typeof conv.config.ragEnabled === 'boolean') {
 				this.state.enableRAG = conv.config.ragEnabled;
@@ -269,8 +280,28 @@ export class ConversationManager extends Events {
 			agentId: this.state.mode === 'agent' ? (this.plugin.settings.activeAgentId ?? null) : null,
 			temperature: this.state.temperature,
 			maxTokens: this.state.maxTokens,
+			topP: this.state.topP,
+			frequencyPenalty: this.state.frequencyPenalty,
+			presencePenalty: this.state.presencePenalty,
 			ragEnabled: this.state.enableRAG,
 			webSearchEnabled: this.state.enableWebSearch
+		};
+	}
+
+	private buildDefaultConversationConfig(): Conversation['config'] {
+		// Prefer the configured default model; fall back to current selection if unset
+		const defaultModel = this.plugin.settings.defaultModel || this.modelSelect?.value || undefined;
+		return {
+			modelId: defaultModel || undefined,
+			promptId: null,
+			agentId: null,
+			temperature: 0.7,
+			maxTokens: 4000,
+			topP: 1.0,
+			frequencyPenalty: 0,
+			presencePenalty: 0,
+			ragEnabled: false,
+			webSearchEnabled: false
 		};
 	}
 

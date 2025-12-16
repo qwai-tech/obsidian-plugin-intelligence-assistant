@@ -34,7 +34,8 @@ class Builder {
                 '@lezer/common',
                 '@lezer/highlight',
                 '@lezer/lr',
-                'vm2'
+                'vm2',
+                'isolated-vm'
             ]
         };
     }

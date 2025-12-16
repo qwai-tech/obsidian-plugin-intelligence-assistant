@@ -291,6 +291,16 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		await ensureDefaultAgentService(this.settings, async () => await this.saveSettings());
 	}
 
+	public async refreshChatViewsModels(): Promise<void> {
+		const leaves = this.app.workspace.getLeavesOfType(CHAT_VIEW_TYPE);
+		for (const leaf of leaves) {
+			const view = leaf.view;
+			if (view instanceof ChatView) {
+				await view.refreshModels();
+			}
+		}
+	}
+
 	async openChatViewInRightSidebar() {
 		// Try to find an existing chat view
 		const existing = this.app.workspace.getLeavesOfType(CHAT_VIEW_TYPE);

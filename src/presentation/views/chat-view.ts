@@ -59,6 +59,9 @@ export class ChatView extends ItemView {
 	public modelSelect: HTMLSelectElement; // Public so it can be accessed by DocumentGrader
 	private temperatureSlider: HTMLInputElement;
 	private maxTokensInput: HTMLInputElement;
+	private topPSlider: HTMLInputElement | null = null;
+	private frequencyPenaltySlider: HTMLInputElement | null = null;
+	private presencePenaltySlider: HTMLInputElement | null = null;
 	private modelControlsContainer: HTMLElement | null = null;
 	private agentConfigSummaryEl: HTMLElement | null = null;
 	private agentSummaryDetailsEl: HTMLElement | null = null;
@@ -90,6 +93,9 @@ export class ChatView extends ItemView {
 	private stopBtn: HTMLElement | null = null;
 	private sendHint: HTMLElement | null = null;
 	private temperatureValueEl: HTMLElement | null = null;
+	private topPValueEl: HTMLElement | null = null;
+	private frequencyPenaltyValueEl: HTMLElement | null = null;
+	private presencePenaltyValueEl: HTMLElement | null = null;
 
 	constructor(leaf: WorkspaceLeaf, plugin: IntelligenceAssistantPlugin) {
 		super(leaf);
@@ -365,14 +371,27 @@ export class ChatView extends ItemView {
 	}
 
 
-	private async refreshModels(showNotice: boolean = false) {
+	public async refreshModels(showNotice: boolean = false) {
 		try {
+			const previousSelection = this.modelSelect?.value ?? '';
+
 			// Get all available models from configured providers (uses stored models by default)
 			this.state.availableModels = await ModelManager.getAllAvailableModels(this.plugin.settings.llmConfigs);
 
 			// Update model selector
 			this.updateModelOptions();
 			this.updateModelControlDisplay();
+
+			// Restore selection if possible, otherwise fall back to default
+			if (this.modelSelect) {
+				if (previousSelection && this.state.availableModels.some(m => m.id === previousSelection)) {
+					this.modelSelect.value = previousSelection;
+				} else if (this.plugin.settings.defaultModel && this.state.availableModels.some(m => m.id === this.plugin.settings.defaultModel)) {
+					this.modelSelect.value = this.plugin.settings.defaultModel;
+				}
+			}
+
+			await this.updateImageButtonVisibility();
 
 			if (showNotice) {
 				new Notice('Models refreshed');
@@ -526,11 +545,19 @@ export class ChatView extends ItemView {
 			console.error('[Chat] Error during chat:', errMsg);
 			new Notice(`Chat error: ${errMsg}`);
 
-			this.state.messages.pop();
-			const lastMessage = this.chatContainer.lastElementChild;
-			if (lastMessage) {
-				this.chatContainer.removeChild(lastMessage);
-			}
+			// Do not remove the user message. Instead, add an error message.
+			const errorMessage: Message = {
+				role: 'assistant',
+				content: `❌ **Error:** ${errMsg}`,
+				model: selectedModel
+			};
+			(errorMessage as { provider?: string | null }).provider = config.provider ?? null;
+			
+			this.state.messages.push(errorMessage);
+			this.addMessageToUI(errorMessage);
+			
+			// Save the conversation with the error
+			await this.conversationManager.saveCurrentConversation();
 		}
 	}
 	private async buildReferenceContext(
@@ -594,7 +621,10 @@ export class ChatView extends ItemView {
 			...config,
 			model: selectedModel,
 			temperature: this.state.temperature,
-			maxTokens: this.state.maxTokens
+			maxTokens: this.state.maxTokens,
+			topP: this.state.topP,
+			frequencyPenalty: this.state.frequencyPenalty,
+			presencePenalty: this.state.presencePenalty
 		};
 
 		const provider = ProviderFactory.createProvider(modelConfig);
@@ -779,7 +809,10 @@ After calling a tool, you will receive the result and can continue the conversat
 					messages: _finalMessages,
 					model: selectedModel,
 					temperature: this.state.temperature,
-					maxTokens: this.state.maxTokens
+					maxTokens: this.state.maxTokens,
+					topP: this.state.topP,
+					frequencyPenalty: this.state.frequencyPenalty,
+					presencePenalty: this.state.presencePenalty
 				},
 				{
 					chatContainer: this.chatContainer,
@@ -2027,6 +2060,21 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				this.maxTokensInput.value = config.maxTokens.toString();
 			}
 		}
+		if (typeof config.topP === 'number') {
+			this.state.topP = config.topP;
+			if (this.topPSlider) this.topPSlider.value = config.topP.toString();
+			if (this.topPValueEl) this.topPValueEl.setText(config.topP.toFixed(2));
+		}
+		if (typeof config.frequencyPenalty === 'number') {
+			this.state.frequencyPenalty = config.frequencyPenalty;
+			if (this.frequencyPenaltySlider) this.frequencyPenaltySlider.value = config.frequencyPenalty.toString();
+			if (this.frequencyPenaltyValueEl) this.frequencyPenaltyValueEl.setText(config.frequencyPenalty.toFixed(1));
+		}
+		if (typeof config.presencePenalty === 'number') {
+			this.state.presencePenalty = config.presencePenalty;
+			if (this.presencePenaltySlider) this.presencePenaltySlider.value = config.presencePenalty.toString();
+			if (this.presencePenaltyValueEl) this.presencePenaltyValueEl.setText(config.presencePenalty.toFixed(1));
+		}
 		if (typeof config.ragEnabled === 'boolean') {
 			this.state.enableRAG = config.ragEnabled;
 		}
@@ -2107,6 +2155,21 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			if (this.maxTokensInput) {
 				this.maxTokensInput.value = defaultMaxTokens.toString();
 			}
+
+			const defaultTopP = 1.0;
+			this.state.topP = defaultTopP;
+			if (this.topPSlider) this.topPSlider.value = defaultTopP.toString();
+			if (this.topPValueEl) this.topPValueEl.setText(defaultTopP.toFixed(2));
+
+			const defaultPenalty = 0;
+			this.state.frequencyPenalty = defaultPenalty;
+			if (this.frequencyPenaltySlider) this.frequencyPenaltySlider.value = defaultPenalty.toString();
+			if (this.frequencyPenaltyValueEl) this.frequencyPenaltyValueEl.setText(defaultPenalty.toFixed(1));
+
+			this.state.presencePenalty = defaultPenalty;
+			if (this.presencePenaltySlider) this.presencePenaltySlider.value = defaultPenalty.toString();
+			if (this.presencePenaltyValueEl) this.presencePenaltyValueEl.setText(defaultPenalty.toFixed(1));
+
 			this.state.enableRAG = false;
 			this.state.enableWebSearch = false;
 		}
@@ -2189,17 +2252,58 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		row.addClass('chat-model-row');
 
 		this.modelControlsContainer = row.createDiv('chat-model-controls');
-		this.modelControlsContainer.addClass('chat-model-controls');
+		this.modelControlsContainer.addClass('ia-chat-model-controls');
 
-		const modelGroup = this.modelControlsContainer.createDiv('chat-model-select');
+		const modelGroup = this.modelControlsContainer.createDiv('chat-select-group');
+		modelGroup.addClass('ia-model-select-group');
 		modelGroup.addClass('chat-model-select');
 		modelGroup.createSpan({ text: '🤖 model', cls: 'chat-label' });
 		this.modelSelect = modelGroup.createEl('select', { cls: 'model-select' });
+		this.modelSelect.addClass('ia-model-select');
 		this.modelSelect.addEventListener('change', () => {
 			void this.onModelChange();
 		});
 
-		const tempGroup = this.modelControlsContainer.createDiv('chat-param-group');
+		// Settings toggle button
+		const settingsBtn = this.modelControlsContainer.createEl('button', { cls: 'chat-params-toggle' });
+		settingsBtn.innerHTML = '⚙️';
+		settingsBtn.title = 'Show/hide advanced parameters';
+		settingsBtn.setCssProps({
+			'background': 'transparent',
+			'border': 'none',
+			'cursor': 'pointer',
+			'padding': '4px',
+			'opacity': '0.7'
+		});
+
+		// Container for advanced params (hidden by default)
+		const paramsContainer = this.modelControlsContainer.createDiv('chat-params-container');
+		paramsContainer.addClass('ia-hidden');
+		paramsContainer.setCssProps({
+			'display': 'none',
+			'align-items': 'center',
+			'gap': '12px',
+			'flex-wrap': 'wrap',
+			'width': '100%',
+			'padding-top': '8px',
+			'border-top': '1px dashed var(--background-modifier-border)',
+			'margin-top': '8px'
+		});
+
+		settingsBtn.addEventListener('click', () => {
+			const isHidden = paramsContainer.hasClass('ia-hidden');
+			if (isHidden) {
+				paramsContainer.removeClass('ia-hidden');
+				paramsContainer.setCssProps({ 'display': 'flex' });
+				settingsBtn.setCssProps({ 'opacity': '1', 'background': 'var(--background-modifier-hover)' });
+			} else {
+				paramsContainer.addClass('ia-hidden');
+				paramsContainer.setCssProps({ 'display': 'none' });
+				settingsBtn.setCssProps({ 'opacity': '0.7', 'background': 'transparent' });
+			}
+		});
+
+		const tempGroup = paramsContainer.createDiv('chat-param-group');
 		tempGroup.addClass('chat-param-group');
 		tempGroup.createSpan({ text: '🌡️ temperature', cls: 'chat-label' });
 		this.temperatureSlider = tempGroup.createEl('input', { type: 'range' });
@@ -2214,7 +2318,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			this.updateTemperatureDisplay(this.state.temperature);
 		});
 
-		const tokensGroup = this.modelControlsContainer.createDiv('chat-param-group');
+		const tokensGroup = paramsContainer.createDiv('chat-param-group');
 		tokensGroup.addClass('chat-param-group');
 		tokensGroup.createSpan({ text: '📊 max tokens', cls: 'chat-label' });
 		this.maxTokensInput = tokensGroup.createEl('input', { type: 'number', cls: 'chat-number-input' });
@@ -2227,6 +2331,57 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			if (!isNaN(value) && value > 0) {
 				this.state.maxTokens = value;
 			}
+		});
+
+		// Top P
+		const topPGroup = paramsContainer.createDiv('chat-param-group');
+		topPGroup.addClass('chat-param-group');
+		topPGroup.createSpan({ text: '🎯 Top P', cls: 'chat-label' });
+		this.topPSlider = topPGroup.createEl('input', { type: 'range' });
+		this.topPSlider.min = '0';
+		this.topPSlider.max = '1';
+		this.topPSlider.step = '0.05';
+		this.topPSlider.value = this.state.topP.toString();
+		this.topPSlider.addClass('chat-slider');
+		this.topPValueEl = topPGroup.createSpan({ text: this.state.topP.toFixed(2), cls: 'chat-param-value' });
+		this.topPSlider.addEventListener('input', () => {
+			const val = parseFloat(this.topPSlider!.value);
+			this.state.topP = val;
+			this.topPValueEl!.setText(val.toFixed(2));
+		});
+
+		// Frequency Penalty
+		const freqGroup = paramsContainer.createDiv('chat-param-group');
+		freqGroup.addClass('chat-param-group');
+		freqGroup.createSpan({ text: '🔁 Frequency Penalty', cls: 'chat-label' });
+		this.frequencyPenaltySlider = freqGroup.createEl('input', { type: 'range' });
+		this.frequencyPenaltySlider.min = '-2';
+		this.frequencyPenaltySlider.max = '2';
+		this.frequencyPenaltySlider.step = '0.1';
+		this.frequencyPenaltySlider.value = this.state.frequencyPenalty.toString();
+		this.frequencyPenaltySlider.addClass('chat-slider');
+		this.frequencyPenaltyValueEl = freqGroup.createSpan({ text: this.state.frequencyPenalty.toFixed(1), cls: 'chat-param-value' });
+		this.frequencyPenaltySlider.addEventListener('input', () => {
+			const val = parseFloat(this.frequencyPenaltySlider!.value);
+			this.state.frequencyPenalty = val;
+			this.frequencyPenaltyValueEl!.setText(val.toFixed(1));
+		});
+
+		// Presence Penalty
+		const presGroup = paramsContainer.createDiv('chat-param-group');
+		presGroup.addClass('chat-param-group');
+		presGroup.createSpan({ text: '👀 Presence Penalty', cls: 'chat-label' });
+		this.presencePenaltySlider = presGroup.createEl('input', { type: 'range' });
+		this.presencePenaltySlider.min = '-2';
+		this.presencePenaltySlider.max = '2';
+		this.presencePenaltySlider.step = '0.1';
+		this.presencePenaltySlider.value = this.state.presencePenalty.toString();
+		this.presencePenaltySlider.addClass('chat-slider');
+		this.presencePenaltyValueEl = presGroup.createSpan({ text: this.state.presencePenalty.toFixed(1), cls: 'chat-param-value' });
+		this.presencePenaltySlider.addEventListener('input', () => {
+			const val = parseFloat(this.presencePenaltySlider!.value);
+			this.state.presencePenalty = val;
+			this.presencePenaltyValueEl!.setText(val.toFixed(1));
 		});
 
 		this.agentConfigSummaryEl = row.createDiv('chat-agent-summary');
@@ -2246,8 +2401,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	private createTokenRow(parent: HTMLElement) {
 		const row = parent.createDiv('chat-token-row');
 		row.addClass('chat-token-row');
-		this.modelCountEl = row.createSpan({ cls: 'chat-token-chip', text: 'Models: 0' });
-		this.tokenSummaryEl = row.createSpan({ cls: 'chat-token-chip', text: 'Tokens: 0' });
+		        this.modelCountEl = row.createSpan({ cls: 'chat-token-chip', text: 'Models: 0' });
+		        this.modelCountEl.addClass('ia-model-count');		this.tokenSummaryEl = row.createSpan({ cls: 'chat-token-chip', text: 'Tokens: 0' });
+		this.tokenSummaryEl.addClass('ia-token-summary-display');
 	}
 
 	private async updateQuickActionsState() {
@@ -2783,6 +2939,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				messages: [...this.state.messages], // Use all messages including the tool results we just added
 				temperature: this.state.temperature,
 				maxTokens: this.state.maxTokens,
+				topP: this.state.topP,
+				frequencyPenalty: this.state.frequencyPenalty,
+				presencePenalty: this.state.presencePenalty
 			};
 
 			// Add system prompts and context if needed
