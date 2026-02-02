@@ -90,8 +90,7 @@ src/
 │
 ├── domain/                 # Domain models
 │   ├── agent/              # Agent model and logic
-│   ├── conversation/       # Conversation model
-│   └── workflow/           # Workflow model
+│   └── conversation/       # Conversation model
 │
 ├── services/               # Application services
 │   └── base-service.ts     # Base service class
@@ -166,7 +165,6 @@ await eventBus.emit(PluginEvent.MESSAGE_SENT, { content: 'Hello' });
 - Tool events (executed, failed)
 - RAG events (indexed, searched, cleared)
 - MCP events (server connected/disconnected, tool registered)
-- Workflow events (created, updated, deleted, executed)
 - System events (settings updated, plugin loaded/unloaded, errors)
 
 ### Configuration Manager
@@ -264,25 +262,6 @@ const totalTokens = conversation.getTotalTokens();
 
 // Summary generation
 const summary = conversation.getSummary();
-```
-
-### Workflow Model
-
-Location: `src/domain/workflow/workflow.model.ts`
-
-Manages workflow nodes and edges:
-
-```typescript
-const workflow = WorkflowModel.create('My Workflow', 'Description');
-
-// Add nodes
-workflow.addNode({ id: 'node1', type: 'llm', data: {} });
-
-// Add edges
-workflow.addEdge({ id: 'edge1', source: 'node1', target: 'node2' });
-
-// Validation
-const result = workflow.validate();
 ```
 
 ## Application Layer
@@ -389,8 +368,7 @@ types/
 │   ├── mcp.ts
 │   ├── rag.ts
 │   ├── tool.ts
-│   ├── web-search.ts
-│   └── workflow.ts
+│   └── web-search.ts
 ├── ui/             # UI types
 │   └── settings.ts
 └── index.ts        # Single export point
@@ -404,7 +382,6 @@ types/
 - `ModelInfo` - Model metadata
 - `RAGConfig` - RAG settings
 - `ToolDefinition` - Tool interface
-- `Workflow` - Workflow definition
 
 ## Testing Strategy
 
@@ -440,7 +417,7 @@ const mockFile = createMockFile('/path/to/file.md');
 
 - **Core Infrastructure:** 100% (container, event-bus, error-handler)
 - **Configuration:** 100% (config-manager, config-schema)
-- **Domain Models:** 100% (agent, conversation, workflow)
+- **Domain Models:** 100% (agent, conversation)
 
 **Test Statistics:**
 - 126 tests in new architecture
@@ -553,7 +530,7 @@ Planned improvements to the architecture:
 
 1. **Command Pattern** - For undo/redo functionality
 2. **Repository Pattern** - For data persistence abstraction
-3. **State Machine** - For complex workflow states
+3. **State Machine** - For complex state management
 4. **Middleware Pipeline** - For request/response processing
 5. **Decorator Pattern** - For tool execution enhancement
 

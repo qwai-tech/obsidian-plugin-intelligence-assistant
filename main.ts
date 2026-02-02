@@ -1,4 +1,4 @@
-import { Menu, Plugin, TAbstractFile, WorkspaceLeaf, Editor, MarkdownView, Notice } from 'obsidian';
+import { Menu, Plugin, WorkspaceLeaf, Editor, MarkdownView, Notice } from 'obsidian';
 import './src/presentation/components/chat/settings.css';
 import './src/presentation/components/modals/explain-text-modal.css';
 import type {
@@ -19,8 +19,6 @@ import type {
 	MemoryEmbeddingMetadata,
 	BuiltInToolConfig,
 	MCPRegistry,
-	Workflow,
-	WorkflowExecution,
 	Message,
 	UserConfig
 } from './src/types';
@@ -28,7 +26,6 @@ import { DEFAULT_SETTINGS, pluginSettingsToUserConfig, userConfigToPluginSetting
 import { ChatView, CHAT_VIEW_TYPE } from './src/presentation/views/chat-view';
 import { ToolManager } from './src/application/services/tool-manager';
 import { OpenApiToolLoader } from './src/application/services/openapi-tool-loader';
-import { WorkflowEditorView, WORKFLOW_EDITOR_VIEW_TYPE } from './src/presentation/views/workflow-editor-view';
 import { IntelligenceAssistantSettingTab } from './src/presentation/components/settings-tab';
 import { ProviderFactory } from './src/infrastructure/llm/provider-factory';
 import { ModelManager } from './src/infrastructure/llm/model-manager';
@@ -38,7 +35,6 @@ import {
 	USER_CONFIG_PATH
 } from './src/constants';
 
-import { createWorkflowFile, getTargetFolder } from './src/application/services/workflow-service';
 import { ensureDefaultAgent as ensureDefaultAgentService } from './src/application/services/agent-service';
 import { ConversationStorageService } from './src/application/services/conversation-storage-service';
 import { ConversationMigrationService } from './src/application/services/conversation-migration-service';
@@ -50,7 +46,6 @@ import { ConversationRepository } from './src/infrastructure/persistence/obsidia
 import {
 	AgentRepository,
 	PromptRepository,
-	WorkflowDataRepository,
 	ModelCacheRepository,
 	ProviderRepository,
 	McpServerRepository,
@@ -74,8 +69,6 @@ export type {
 	MemoryEmbeddingMetadata,
 	BuiltInToolConfig,
 	MCPRegistry,
-	Workflow,
-	WorkflowExecution,
 	Message,
 	CachedMCPTool
 };
@@ -107,7 +100,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private legacyConversations: Conversation[] = [];
 	private promptRepository: PromptRepository | null = null;
 	private agentRepository: AgentRepository | null = null;
-	private workflowRepository: WorkflowDataRepository | null = null;
 	private modelCacheRepository: ModelCacheRepository | null = null;
 	private providerRepository: ProviderRepository | null = null;
 	private mcpServerRepository: McpServerRepository | null = null;
@@ -138,13 +130,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			(leaf: WorkspaceLeaf) => new ChatView(leaf, this)
 		);
 
-		// Register the workflow editor view
-		this.registerView(
-			WORKFLOW_EDITOR_VIEW_TYPE,
-			(leaf: WorkspaceLeaf) => new WorkflowEditorView(leaf, this)
-		);
-		this.registerExtensions(['workflow'], WORKFLOW_EDITOR_VIEW_TYPE);
-
 		// Add command to open chat in right sidebar
 		this.addCommand({
 			id: 'open-chat-sidebar',
@@ -162,9 +147,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new IntelligenceAssistantSettingTab(this.app, this));
-
-		// Register file explorer context menu actions
-		this.registerFileMenuActions();
 
 		// Register editor context menu actions
 		this.registerEditorMenuActions();
@@ -370,8 +352,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			this.hydratePromptsFromRepository(),
 			this.hydrateAgentsFromRepository(),
 			this.hydrateModelCaches(),
-			this.hydrateMcpServersFromRepository(),
-			this.migrateWorkflowData(legacyData)
+			this.hydrateMcpServersFromRepository()
 		]);
 		console.debug(`[Settings] Hydrate other data: ${Date.now() - hydrateStart}ms`);
 
@@ -457,9 +438,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		if (!this.agentRepository) {
 			this.agentRepository = new AgentRepository(this.app);
 		}
-		if (!this.workflowRepository) {
-			this.workflowRepository = new WorkflowDataRepository(this.app);
-		}
 		if (!this.modelCacheRepository) {
 			this.modelCacheRepository = new ModelCacheRepository(this.app);
 		}
@@ -476,7 +454,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		await Promise.all([
 			this.promptRepository.initialize(),
 			this.agentRepository.initialize(),
-			this.workflowRepository.initialize(),
 			this.modelCacheRepository.initialize(),
 			this.providerRepository.initialize(),
 			this.mcpServerRepository.initialize(),
@@ -534,34 +511,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		}
 	}
 
-	private async migrateWorkflowData(legacyData: unknown): Promise<void> {
-		if (!this.workflowRepository) return;
-		
-		let legacyWorkflows: Workflow[] = [];
-		let legacyExecutions: WorkflowExecution[] = [];
-		
-		if (legacyData && typeof legacyData === 'object') {
-			const dataObj = legacyData as Record<string, unknown>;
-			if (Array.isArray(dataObj.workflows)) {
-				legacyWorkflows = dataObj.workflows as Workflow[];
-			}
-			if (Array.isArray(dataObj.workflowExecutions)) {
-				legacyExecutions = dataObj.workflowExecutions as WorkflowExecution[];
-			}
-		}
-
-		if (legacyWorkflows.length > 0) {
-			const existing = await this.workflowRepository.loadAllWorkflows();
-			if (existing.length === 0) {
-				await this.workflowRepository.replaceAll(legacyWorkflows);
-			}
-		}
-
-		for (const execution of legacyExecutions) {
-			await this.workflowRepository.saveExecution(execution);
-		}
-	}
-
 	private async persistDataRepositories(): Promise<void> {
 		await this.ensureDataRepositories();
 		const tasks: Promise<void>[] = [];
@@ -595,36 +544,12 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		await Promise.all(ops);
 	}
 
-	private registerFileMenuActions() {
-		const handler = (menu: Menu, file?: TAbstractFile) => {
-			this.addWorkflowCreationAction(menu, file);
-		};
-
-		this.registerEvent(this.app.workspace.on('file-menu', handler));
-	}
-
 	private registerEditorMenuActions() {
 		const handler = (menu: Menu, editor: Editor, view: MarkdownView) => {
 			this.addEditorQuickActions(menu, editor, view);
 		};
 
 		this.registerEvent(this.app.workspace.on('editor-menu', handler));
-	}
-
-	private addWorkflowCreationAction(menu: Menu, file?: TAbstractFile) {
-		const targetFolder = getTargetFolder(this.app, file);
-
-		if (!targetFolder) {
-			return;
-		}
-
-		menu.addItem((item) => {
-			item.setTitle('Create intelligence workflow')
-				.setIcon('git-branch-plus')
-				.onClick(async () => {
-					await createWorkflowFile(this.app, targetFolder);
-				});
-		});
 	}
 
 	private addEditorQuickActions(menu: Menu, editor: Editor, view: MarkdownView) {
@@ -803,14 +728,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			await this.providerRepository.saveAll(this.settings.llmConfigs);
 			await this.writeUserSettingsFile(this.settings);
 		}
-	}
-
-	public async getWorkflowDataRepository(): Promise<WorkflowDataRepository> {
-		await this.ensureDataRepositories();
-		if (!this.workflowRepository) {
-			throw new Error('Workflow repository not initialized');
-		}
-		return this.workflowRepository;
 	}
 
 	public async getConversationStorageService(): Promise<ConversationStorageService> {

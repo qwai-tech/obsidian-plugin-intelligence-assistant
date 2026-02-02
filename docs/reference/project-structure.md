@@ -26,8 +26,7 @@ obsidian-plugin-intelligence-assistant/
 │   │   ├── api.md               # API reference
 │   │   └── project-structure.md # This file
 │   └── archive/
-│       ├── old-scripts/         # Legacy automation
-│       └── old-workflows-backup # Archived workflow data
+│       └── old-scripts/         # Legacy automation
 ├── main.ts                      # Plugin entry point
 ├── main.js                      # Compiled output
 ├── manifest.json                # Obsidian manifest
@@ -43,7 +42,6 @@ obsidian-plugin-intelligence-assistant/
 ├── data/                        # Runtime data managed by the plugin
 │   ├── prompts/                 # System prompts (index + per-prompt JSON)
 │   ├── agents/                  # Agent definitions (index + per-agent JSON)
-│   ├── workflow/                # Workflow metadata & execution history
 │   ├── llm-providers.json       # Stored LLM provider configurations
 │   ├── mcp-servers.json         # Stored MCP server configurations
 │   ├── vector_store/            # Notes vector index (e.g., notes.json)
@@ -77,8 +75,6 @@ src/
 │   │   └── agent.model.ts      # Agent domain model
 │   ├── conversation/
 │   │   └── conversation.model.ts  # Conversation model
-│   ├── workflow/
-│   │   └── workflow.model.ts   # Workflow model
 │   └── index.ts                # Exports
 │
 └── test-support/                # Test utilities
@@ -155,8 +151,6 @@ src/
 │   │   │   └── chat-view-state.ts
 │   │   ├── utils/              # View utilities
 │   │   └── __tests__/          # View tests
-│   │
-│   └── workflow-editor-view.ts # Workflow editor
 │
 └── settings/                    # Settings UI
     ├── settings-tab.ts         # Main settings tab
@@ -189,27 +183,10 @@ src/
     │   ├── mcp.ts
     │   ├── rag.ts
     │   ├── web-search.ts
-    │   ├── workflow.ts
     │   ├── think.ts
     │   ├── memory.ts
     │   └── index.ts
     └── common/                 # Common types
-```
-
-### Workflow System (v2)
-
-```
-src/
-└── workflow-v2/                 # Advanced workflow system
-    ├── core/                   # Core types and interfaces
-    ├── nodes/                  # Node implementations
-    ├── ports/                  # Port system
-    ├── adapters/               # Hexagonal adapters
-    ├── services/               # Workflow services
-    ├── editor/                 # Visual editor
-    ├── expression/             # Expression engine
-    ├── storage/                # Workflow storage
-    └── __tests__/              # Workflow tests
 ```
 
 ### Utilities
@@ -224,8 +201,7 @@ src/
 └── styles/                      # CSS styles
     ├── main.css
     ├── chat.css
-    ├── settings.css
-    └── workflow.css
+    └── settings.css
 ```
 
 ## Test Structure (`src/__tests__/`)
@@ -245,8 +221,7 @@ src/__tests__/
 │
 └── domain/                      # Domain model tests
     ├── agent.model.test.ts     # Agent model tests
-    ├── conversation.model.test.ts  # Conversation tests
-    └── workflow.model.test.ts  # Workflow tests
+    └── conversation.model.test.ts  # Conversation tests
 ```
 
 ### Feature Tests
@@ -266,12 +241,8 @@ src/
 ├── views/chat/managers/__tests__/  # Manager tests
 │   └── conversation-manager.test.ts
 │
-├── views/chat/state/__tests__/     # State tests
-│   └── chat-view-state.test.ts
-│
-└── workflow-v2/__tests__/      # Workflow tests
-    ├── secure-execution.test.ts
-    └── ...
+└── views/chat/state/__tests__/     # State tests
+    └── chat-view-state.test.ts
 ```
 
 ## Documentation (`docs/`)
@@ -284,8 +255,7 @@ docs/
 │   ├── 03-configuration.md     # Configuration guide
 │   └── 06-controllers.md       # Controllers guide
 │
-├── old-scripts/                # Legacy scripts (archived)
-└── old-workflows-backup/       # Legacy workflows (archived)
+└── old-scripts/                # Legacy scripts (archived)
 ```
 
 ## Build & Development
@@ -335,7 +305,6 @@ Manages all plugin configuration:
 Rich domain models following DDD principles:
 - **Agent Model** - Agent configuration and behavior
 - **Conversation Model** - Chat conversation logic
-- **Workflow Model** - Workflow definition and validation
 
 ### `/src/views/chat/controllers/` - MVC Controllers
 Implements MVC pattern for chat view:
@@ -356,7 +325,6 @@ Comprehensive test coverage:
 - **Architecture Tests** - Core infrastructure (126 tests)
 - **Integration Tests** - LLM providers
 - **Unit Tests** - Individual components
-- **E2E Tests** - Workflow system
 
 ## Module Dependencies
 

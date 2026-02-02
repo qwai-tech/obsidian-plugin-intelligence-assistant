@@ -1,13 +1,12 @@
 # Intelligence Assistant for Obsidian
 
-Transform any vault into an AI-native workspace. The Intelligence Assistant plugin delivers a fast chat interface, configurable agents, MCP tool integrations, and workflow automation so you can reason over notes, trigger actions, and build repeatable processes without leaving Obsidian.
+Transform any vault into an AI-native workspace. The Intelligence Assistant plugin delivers a fast chat interface, configurable agents, and MCP tool integrations so you can reason over notes and trigger actions without leaving Obsidian.
 
 ## Feature Highlights
 
 - **Modern Chat View** – Switch between Chat and Agent modes, choose prompts or agents inline, and see provider/model badges plus token usage as you converse.
 - **Context-Rich Replies** – Optional RAG layer powered by the vault vector store (`data/vector_store/notes.json`) with on/off indicators and tooltips that explain the current index.
 - **Custom Agents & MCP** – Define reusable agents (stored in `data/agents/`) with tool permissions, memory options, and MCP server access. Cached MCP tool catalogs live under `data/cache/mcp-tools/` for instant reuse.
-- **Workflow Automation** *(Beta)* – Visual workflows, executions, and logs are saved in `data/workflow/`, enabling multi-step AI procedures that you can rerun or audit later.
 - **Seamless Persistence** – Conversations remember their model, prompt/agent, temperature, token cap, and retrieval flags so reopening a thread restores the exact configuration.
 
 ## Quick Start
@@ -55,13 +54,12 @@ Configure multiple OpenAPI sources under **Settings → Tools → HTTP / OpenAPI
 
 Every path/verb pair becomes an agent tool, so adding multiple specs lets you reuse different HTTP APIs without writing custom code.
 
-## Agents, Workflows, and Data Layout
+## Agents and Data Layout
 
 ```
 data/
 ├── agents/                 # Agent index + JSON definitions
 ├── prompts/                # Prompt index + JSON definitions
-├── workflow/               # Workflows and per-run execution logs
 ├── vector_store/notes.json # Vault embeddings for RAG
 ├── llm-providers.json      # Saved provider credentials/config
 ├── mcp-servers.json        # Registered MCP servers
@@ -70,7 +68,7 @@ data/
     └── mcp-tools/          # Cached tool manifests per MCP server
 ```
 
-Provider and workflow metadata now live exclusively in `data/`, keeping `config/user/settings.json` lean and user-editable.
+Provider metadata lives exclusively in `data/`, keeping `config/user/settings.json` lean and user-editable.
 
 ## Development
 

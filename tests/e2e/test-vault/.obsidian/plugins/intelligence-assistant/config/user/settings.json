@@ -1,0 +1,181 @@
+{
+  "version": 1,
+  "providers": {
+    "defaultModel": "deepseek-chat",
+    "titleSummaryModel": "deepseek-chat",
+    "list": [
+      {
+        "provider": "deepseek",
+        "apiKey": "sk-ba6fe4b8e3c14906a8146834542ca6b6",
+        "baseUrl": "https://api.deepseek.com/v1"
+      }
+    ]
+  },
+  "conversations": {
+    "title": {
+      "mode": "first-message",
+      "prompt": "Generate a short, descriptive title (max 6 words) for this conversation:\n\n{conversation}\n\nTitle:"
+    },
+    "icon": {
+      "enabled": true
+    },
+    "defaultMode": "chat",
+    "activeId": null
+  },
+  "mcp": {
+    "servers": [
+      {
+        "name": "Demo Auto MCP",
+        "command": "node demo-mcp.js",
+        "args": [
+          "--port",
+          "8080"
+        ],
+        "env": {
+          "DEMO": "true"
+        },
+        "enabled": true,
+        "connectionMode": "auto",
+        "cachedTools": [
+          {
+            "name": "demo-tool",
+            "description": "Seeded demo tool",
+            "args": []
+          }
+        ],
+        "cacheTimestamp": 1764162061386
+      },
+      {
+        "name": "Disabled MCP",
+        "command": "",
+        "args": [],
+        "env": {},
+        "enabled": false,
+        "connectionMode": "manual",
+        "cachedTools": []
+      }
+    ],
+    "registries": [
+      {
+        "name": "Official MCP Registry",
+        "url": "https://registry.modelcontextprotocol.io/v0/servers",
+        "enabled": true
+      }
+    ]
+  },
+  "tools": {
+    "builtIn": [
+      {
+        "type": "read_file",
+        "enabled": true
+      },
+      {
+        "type": "write_file",
+        "enabled": true
+      },
+      {
+        "type": "list_files",
+        "enabled": true
+      },
+      {
+        "type": "search_files",
+        "enabled": true
+      },
+      {
+        "type": "create_note",
+        "enabled": true
+      },
+      {
+        "type": "append_to_note",
+        "enabled": true
+      }
+    ],
+    "openApi": []
+  },
+  "rag": {
+    "enabled": true,
+    "retrieval": {
+      "chunkSize": 5000,
+      "chunkOverlap": 200,
+      "topK": 5,
+      "similarityThreshold": 0.3,
+      "relevanceScoreWeight": 0.7,
+      "searchType": "similarity",
+      "chunkingStrategy": "sentence",
+      "contextWindowLimit": 2000,
+      "filterByTag": [],
+      "excludeByTag": [
+        "exclude-from-rag",
+        "draft"
+      ]
+    },
+    "embedding": {
+      "model": "text-embedding-3-small",
+      "vectorStore": "memory",
+      "embedChangedFiles": true,
+      "maxTokensPerChunk": 2048,
+      "minChunkSize": 50,
+      "batchSize": 10,
+      "indexingMode": "automatic",
+      "includeFileTypes": [
+        ".md"
+      ],
+      "excludeFileTypes": [
+        ".git/",
+        "node_modules/",
+        ".obsidian/"
+      ],
+      "excludeFolders": []
+    },
+    "caching": {
+      "enabled": false,
+      "cacheSize": 50
+    },
+    "grader": {
+      "enabled": true,
+      "modelSource": "chat",
+      "model": "",
+      "promptTemplate": "",
+      "parallelProcessing": 5,
+      "thresholds": {
+        "relevance": 5,
+        "accuracy": 7,
+        "supportQuality": 6
+      }
+    },
+    "enableCompression": false,
+    "reranking": {
+      "enabled": false,
+      "model": "cross-encoder"
+    }
+  },
+  "search": {
+    "web": {
+      "enabled": false,
+      "provider": "duckduckgo",
+      "maxResults": 5,
+      "autoTrigger": true,
+      "searchLanguage": "en",
+      "searchCountry": "US",
+      "timeRange": "any"
+    }
+  },
+  "prompts": {
+    "system": [
+      {
+        "id": "default",
+        "name": "Default Assistant",
+        "content": "You are a helpful AI assistant.",
+        "enabled": true,
+        "createdAt": 0,
+        "updatedAt": 0
+      }
+    ],
+    "activeId": null
+  },
+  "agents": {
+    "list": [],
+    "activeId": null,
+    "memories": []
+  }
+}

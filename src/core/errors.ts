@@ -67,15 +67,6 @@ export class MCPConnectionError extends AppError {
 }
 
 /**
- * Workflow Execution Error
- */
-export class WorkflowExecutionError extends AppError {
-  constructor(workflowId: string, message: string, context?: Record<string, unknown>) {
-    super('WORKFLOW_EXECUTION_ERROR', `Workflow "${workflowId}": ${message}`, 'business', false, context, 400);
-  }
-}
-
-/**
  * Configuration Error
  */
 export class ConfigurationError extends AppError {

@@ -13,5 +13,4 @@ export * from './rag-service';
 export * from './search-tools';
 export * from './tool-manager';
 export * from './web-search-service';
-export * from './workflow-service';
 export * from './types';
