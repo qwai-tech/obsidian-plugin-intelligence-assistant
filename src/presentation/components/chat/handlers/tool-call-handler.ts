@@ -99,6 +99,14 @@ export async function processToolCalls(
 						toolAllowed = hasSpecificToolEnabled || hasServerEnabled;
 					} else if (tool.provider && tool.provider.startsWith('openapi:')) {
 						toolAllowed = options?.allowOpenApiTools ?? false;
+					} else if (tool.provider && tool.provider.startsWith('cli:')) {
+						// This is a CLI tool - check agent's CLI tool permissions
+						if (agent.enabledAllCLITools) {
+							toolAllowed = true;
+						} else {
+							const toolId = tool.provider.substring(4); // Remove 'cli:' prefix
+							toolAllowed = agent.enabledCLITools?.includes(toolId) ?? false;
+						}
 					} else {
 						// For built-in tools, check if it's in enabledBuiltInTools
 						toolAllowed = agent.enabledBuiltInTools.includes(toolCall.name);
@@ -163,161 +171,151 @@ export async function processToolCalls(
 
 /**
  * Updates the execution trace display with current steps
+ * Renders Thinking blocks and Tool Call cards with collapsible Input/Output
  */
 export function updateExecutionTrace(container: HTMLElement, steps: AgentExecutionStep[]): void {
-	// Clear existing trace content
 	container.empty();
 
-	// Create timeline for execution steps
-	const timeline = container.createDiv('agent-execution-timeline');
+	for (let i = 0; i < steps.length; i++) {
+		const step = steps[i];
 
-	const latestIndex = steps.length - 1;
-	steps.forEach((step, index) => {
-		const stepEl = timeline.createDiv(`agent-step agent-step-${step.type}`);
-		if (index === latestIndex) {
-			stepEl.addClass('agent-step--latest');
-		}
-		if (step.status) {
-			stepEl.addClass(`agent-step-status-${step.status}`);
-		}
-
-		// Step indicator
-		const indicator = stepEl.createDiv('agent-step-indicator');
-		if (step.type === 'thought') {
-			indicator.setText('🧠');
+		if (step.type === 'thought' || step.type === 'response') {
+			renderThinkingBlock(container, step);
 		} else if (step.type === 'action') {
-			indicator.setText('⚡');
-		} else {
-			indicator.setText('👁️');
+			// Pair action with the following observation (if present)
+			const observation = (i + 1 < steps.length && steps[i + 1].type === 'observation')
+				? steps[++i] : null;
+			renderToolCallCard(container, step, observation);
 		}
-
-		// Step content
-		const contentEl = stepEl.createDiv('agent-step-content');
-
-		// Step header
-		const header = contentEl.createDiv('agent-step-header');
-		header.createSpan({ text: step.type.charAt(0).toUpperCase() + step.type.slice(1), cls: 'agent-step-type' });
-
-		const time = new Date(step.timestamp);
-		const timeStr = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-		header.createSpan({ text: timeStr, cls: 'agent-step-time' });
-
-		if (step.status) {
-			const statusPill = header.createSpan('agent-step-status');
-			statusPill.setText(step.status === 'pending' ? 'Pending' : step.status === 'success' ? 'success' : 'error');
-			statusPill.addClass(`agent-step-status--${step.status}`);
-		}
-
-		// Step body
-		const body = contentEl.createDiv('agent-step-body');
-		if (step.type === 'action') {
-			// Format action nicely
-			const match = step.content.match(/^(\w+)\((.*)\)$/);
-			if (match) {
-				const toolName = match[1];
-				const args = match[2];
-				body.createEl('strong', { text: toolName });
-				body.createEl('pre', { text: args });
-			} else {
-				body.setText(step.content);
-			}
-		} else if (step.type === 'observation') {
-			// Format observation as code block
-			const pre = body.createEl('pre');
-			pre.setText(step.content);
-		} else {
-			body.setText(step.content);
-		}
-	});
-
-	const traceRoot = container.closest('.agent-execution-trace-container');
-	if (traceRoot) {
-		const countEl = traceRoot.querySelector('.agent-trace-count');
-		if (countEl) {
-			countEl.textContent = `${steps.length} steps`;
-		}
-		const statusEl = traceRoot.querySelector('[data-trace-status]');
-		if (statusEl) {
-			const status = getTraceStatus(steps);
-			statusEl.setAttr('data-trace-status', status.state);
-			statusEl.setText(status.label);
-		}
+		// Standalone observations (without a preceding action) are skipped
 	}
 }
 
-function getTraceStatus(steps: AgentExecutionStep[]): { state: string; label: string } {
-	if (!steps.length) {
-		return { state: 'idle', label: 'Idle' };
+function renderThinkingBlock(container: HTMLElement, step: AgentExecutionStep): void {
+	const block = container.createDiv('agent-thinking-block');
+
+	const labelRow = block.createDiv('agent-thinking-block__label-row');
+	labelRow.createSpan().setText('🧠');
+	const label = labelRow.createSpan('agent-thinking-block__label');
+	label.setText('Thinking');
+
+	const contentEl = block.createDiv('agent-thinking-block__content');
+	contentEl.setText(step.content);
+}
+
+function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionStep, observationStep: AgentExecutionStep | null): void {
+	const isError = observationStep?.status === 'error';
+	const isPending = actionStep.status === 'pending';
+	const statusClass = isError ? 'is-error' : isPending ? 'is-pending' : 'is-success';
+
+	// Card container
+	const card = container.createDiv('agent-tool-call-card');
+	card.addClass(statusClass);
+
+	// Parse "toolName({...})" format
+	const match = actionStep.content.match(/^([\w]+)\(([\s\S]*)\)$/);
+	const toolName = match ? match[1] : actionStep.content;
+	let argsStr = match ? match[2] : '';
+
+	// Pretty-print arguments JSON
+	try {
+		const parsed = JSON.parse(argsStr);
+		argsStr = JSON.stringify(parsed, null, 2);
+	} catch (_e) { /* keep as-is */ }
+
+	// Part 1: Title — tool name + status indicator
+	const titleRow = card.createDiv('agent-tool-call__title');
+	const dot = titleRow.createSpan('agent-tool-call__status-dot');
+	dot.setText('●');
+	const nameEl = titleRow.createSpan('agent-tool-call__name');
+	nameEl.setText(toolName);
+	if (isPending) {
+		const spinner = titleRow.createSpan('agent-tool-call__spinner');
+		spinner.setText('...');
 	}
 
-	const last = steps[steps.length - 1];
-	if (last.status === 'error') {
-		return { state: 'error', label: 'error' };
+	// Part 2: Input — collapsible
+	if (argsStr && argsStr !== '{}') {
+		renderCollapsibleSection(card, 'Input', argsStr);
 	}
-	if (last.type === 'action' && last.status === 'pending') {
-		return { state: 'running', label: 'Running tool' };
+
+	// Part 3: Output — collapsible
+	if (observationStep) {
+		renderCollapsibleSection(card, 'Output', observationStep.content, isError);
+	} else if (isPending) {
+		const pendingOutput = card.createDiv('agent-tool-call__pending');
+		pendingOutput.setText('Running...');
 	}
-	if (last.type === 'thought') {
-		return { state: 'thinking', label: 'Thinking' };
+}
+
+function renderCollapsibleSection(parent: HTMLElement, title: string, content: string, isError?: boolean): void {
+	const section = parent.createDiv('agent-collapsible-section');
+
+	const header = section.createDiv('agent-collapsible-section__header');
+	header.createSpan().setText(title);
+	const chevron = header.createSpan();
+	chevron.setText('∨');
+
+	const body = section.createDiv('agent-collapsible-section__body');
+	body.addClass('ia-hidden');
+	if (isError) {
+		body.addClass('agent-collapsible-section__body--error');
 	}
-	if (last.status === 'success' && last.type === 'observation') {
-		return { state: 'success', label: 'Tool result' };
-	}
-	return { state: 'running', label: 'Working' };
+	body.setText(content);
+
+	header.addEventListener('click', () => {
+		if (body.classList.contains('ia-hidden')) {
+			body.classList.remove('ia-hidden');
+			chevron.setText('∧');
+		} else {
+			body.classList.add('ia-hidden');
+			chevron.setText('∨');
+		}
+	});
 }
 
 /**
- * Creates a collapsible execution trace container
+ * Creates a collapsible "Execution Process" container
  */
-export function createAgentExecutionTraceContainer(messageBody: HTMLElement, stepCount: number): HTMLElement {
+export function createAgentExecutionTraceContainer(messageBody: HTMLElement, _stepCount: number): HTMLElement {
 	const traceContainer = messageBody.createDiv('agent-execution-trace-container');
 	traceContainer.addClass('ia-agent-trace-container');
 
-	// Collapsible header
 	const header = traceContainer.createDiv('agent-execution-trace-header');
-	const icon = header.createSpan('agent-trace-icon');
-	icon.setText('▶');
-	const title = header.createSpan('agent-trace-title');
-	title.setText('Execution trace');
-	const status = header.createSpan('agent-trace-status');
-	status.setAttr('data-trace-status', 'idle');
-	status.setText('Idle');
-	const count = header.createSpan('agent-trace-count');
-	count.setText(`${stepCount} steps`);
 	header.addClass('ia-agent-trace-header');
-	header.setCssProps({
-		'display': 'flex',
-		'align-items': 'center',
-		'gap': '8px',
-		'font-weight': '500',
-		'cursor': 'pointer',
-		'padding': '8px 12px',
-		'background': 'var(--background-secondary)',
-		'border-radius': '6px'
-	});
 
-	// Trace content (collapsed by default)
+	const title = header.createSpan('agent-trace-title');
+	title.setText('Execution Process');
+
+	const icon = header.createSpan('agent-trace-icon');
+	icon.setText('▲');
+
 	const content = traceContainer.createDiv('agent-execution-trace-content');
-	content.addClass('ia-hidden');
-	content.setCssProps({
-		'margin-top': '8px',
-		'padding': '12px',
-		'background': 'var(--background-primary)',
-		'border-radius': '6px',
-		'border': '1px solid var(--background-modifier-border)'
-	});
 
-	// Toggle on click
-	let isExpanded = false;
+	// Toggle on click - reads DOM state so external collapse is synced
 	header.addEventListener('click', () => {
-		isExpanded = !isExpanded;
-		if (isExpanded) {
-			content.removeClass('ia-hidden');
+		if (content.classList.contains('ia-hidden')) {
+			content.classList.remove('ia-hidden');
+			icon.setText('▲');
 		} else {
-			content.addClass('ia-hidden');
+			content.classList.add('ia-hidden');
+			icon.setText('▼');
 		}
-		icon.setText(isExpanded ? '▼' : '▶');
 	});
 
 	return content;
+}
+
+/**
+ * Collapse the execution trace (called when agent finishes)
+ */
+export function collapseExecutionTrace(contentEl: HTMLElement): void {
+	contentEl.classList.add('ia-hidden');
+	const traceRoot = contentEl.parentElement;
+	if (traceRoot) {
+		const icon = traceRoot.querySelector('.agent-trace-icon');
+		if (icon) {
+			icon.textContent = '▼';
+		}
+	}
 }

@@ -1,6 +1,8 @@
 // Application Services
 export * from './agent-service';
 export * from './chat.service';
+export * from './cli-tool';
+export * from './cli-tool-loader';
 export * from './conversation-migration-service';
 export * from './conversation-storage-service';
 export * from './file-tools';

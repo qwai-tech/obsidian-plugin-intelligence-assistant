@@ -30,6 +30,8 @@ export interface Agent {
 	enabledBuiltInTools: string[];
 	enabledMcpServers: string[];
 	enabledMcpTools?: string[];
+	enabledCLITools?: string[];
+	enabledAllCLITools?: boolean;
 	memoryType: 'short-term' | 'long-term' | 'none';
 	memoryConfig: {
 		summaryInterval: number;

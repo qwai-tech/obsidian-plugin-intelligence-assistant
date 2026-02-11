@@ -16,6 +16,7 @@ export interface StreamingHandlerOptions {
 	sendHint: HTMLElement | null;
 	onStopRequested: () => boolean;
 	estimateTokens: (text: string) => number;
+	onScrollAwayChanged?: (isScrolledAway: boolean) => void;
 }
 
 export interface StreamingResult {
@@ -51,24 +52,11 @@ export async function handleStreamingChat(
 	// Add thinking indicator
 	const thinkingIndicator = contentEl.createDiv('thinking-indicator');
 	thinkingIndicator.addClass('ia-thinking-indicator');
-	thinkingIndicator.setCssProps({
-		'display': 'flex',
-		'align-items': 'center',
-		'gap': '8px',
-		'color': 'var(--text-muted)',
-		'font-style': 'italic'
-	});
 
 	const typingDots = thinkingIndicator.createDiv('typing-dots');
-	const dot1 = typingDots.createSpan();
-	dot1.setText('●');
-	dot1.setCssProps({ 'animation': 'typing 1.4s infinite', 'animation-delay': '0s' });
-	const dot2 = typingDots.createSpan();
-	dot2.setText('●');
-	dot2.setCssProps({ 'animation': 'typing 1.4s infinite', 'animation-delay': '0.2s' });
-	const dot3 = typingDots.createSpan();
-	dot3.setText('●');
-	dot3.setCssProps({ 'animation': 'typing 1.4s infinite', 'animation-delay': '0.4s' });
+	typingDots.createSpan().setText('●');
+	typingDots.createSpan().setText('●');
+	typingDots.createSpan().setText('●');
 
 	thinkingIndicator.createSpan({ text: 'Thinking...' });
 
@@ -85,6 +73,36 @@ export async function handleStreamingChat(
 	const startTime = Date.now();
 
 	console.debug('[Chat] Starting stream chat...');
+
+	// Auto-scroll state: pause when user scrolls up
+	const SCROLL_THRESHOLD = 50;
+	let userScrolledAway = false;
+
+	const isNearBottom = () => {
+		const { scrollTop, scrollHeight, clientHeight } = options.chatContainer;
+		return scrollHeight - scrollTop - clientHeight < SCROLL_THRESHOLD;
+	};
+
+	const onUserScroll = () => {
+		const nearBottom = isNearBottom();
+		if (!nearBottom && !userScrolledAway) {
+			userScrolledAway = true;
+			options.onScrollAwayChanged?.(true);
+		} else if (nearBottom && userScrolledAway) {
+			userScrolledAway = false;
+			options.onScrollAwayChanged?.(false);
+		}
+	};
+
+	options.chatContainer.addEventListener('scroll', onUserScroll);
+
+	const smoothScrollToBottom = () => {
+		if (userScrolledAway) return;
+		options.chatContainer.scrollTo({
+			top: options.chatContainer.scrollHeight,
+			behavior: 'smooth'
+		});
+	};
 
 	// Create reasoning container (hidden initially)
 	let reasoningContainer: HTMLElement | null = null;
@@ -180,7 +198,7 @@ export async function handleStreamingChat(
 						setStreamingStatus(statusEl, 'streaming', `${tokenCount} tokens`);
 					}
 
-					options.chatContainer.scrollTop = options.chatContainer.scrollHeight;
+					smoothScrollToBottom();
 				} else {
 					// Remove cursors when done
 					const contentCursor = contentEl.querySelector('.streaming-cursor');
@@ -198,6 +216,10 @@ export async function handleStreamingChat(
 		streamError = _error as Error;
 		throw _error;
 	} finally {
+		// Clean up scroll listener
+		options.chatContainer.removeEventListener('scroll', onUserScroll);
+		options.onScrollAwayChanged?.(false);
+
 		// Hide stop button, show send hint
 		if (options.stopBtn) options.stopBtn.addClass('ia-hidden');
 		if (options.sendHint) options.sendHint.removeClass('ia-hidden');
@@ -259,7 +281,6 @@ function getRequiredElement(root: HTMLElement, selectors: string[], description:
 
 function setStreamingStatus(el: HTMLElement | null, state: StreamingStatusState, details?: string) {
 	if (!el) return;
-	el.setCssProps({ 'display': 'inline-flex' });
 	el.classList.add('is-visible');
 	el.setAttr('data-state', state);
 	if (state === 'error') {

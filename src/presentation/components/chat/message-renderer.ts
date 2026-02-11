@@ -5,6 +5,8 @@ import type { Message } from '@/types';
 import { marked } from 'marked';
 import { getProviderMeta } from '@/presentation/components/components/provider-meta';
 import { getModelDisplayName, resolveMessageProviderId } from '@/presentation/components/chat/utils';
+import { createAgentExecutionTraceContainer, updateExecutionTrace, collapseExecutionTrace } from '@/presentation/components/chat/handlers/tool-call-handler';
+import type { AgentExecutionStep as TraceStep } from '@/presentation/state/chat-view-state';
 
 export interface MessageRendererContext {
 	app: App;
@@ -46,12 +48,20 @@ export function renderMessage(
 	container: HTMLElement,
 	message: Message,
 	_context: MessageRendererContext,
-	callbacks?: MessageRendererCallbacks
+	callbacks?: MessageRendererCallbacks,
+	options?: { animate?: boolean }
 ): HTMLElement {
 	const messageEl = container.createDiv('ia-chat-message');
 	messageEl.addClass(`ia-chat-message--${message.role}`);
 	messageEl.addClass('chat-message');
 	messageEl.addClass(`message-${message.role}`);
+
+	if (options?.animate) {
+		messageEl.addClass('ia-chat-message--entering');
+		messageEl.addEventListener('animationend', () => {
+			messageEl.removeClass('ia-chat-message--entering');
+		}, { once: true });
+	}
 
 	const messageRow = messageEl.createDiv('ia-chat-message__row');
 	messageRow.addClass('message-row');
@@ -84,6 +94,10 @@ export function renderMessage(
 	const timestamp = header.createDiv('ia-chat-message__timestamp');
 	timestamp.addClass('message-timestamp');
 	timestamp.setText(new Date(timestampValue).toLocaleTimeString());
+
+	if (message.agentExecutionSteps?.length) {
+		renderExecutionTrace(body, message.agentExecutionSteps);
+	}
 
 	const content = body.createDiv('ia-chat-message__content');
 	content.addClass('message-content');
@@ -120,10 +134,6 @@ export function renderMessage(
 
 	if (message.reasoningSteps?.length || message.reasoningContent) {
 		renderReasoning(body, message);
-	}
-
-	if (message.agentExecutionSteps?.length) {
-		renderExecutionTrace(body, message.agentExecutionSteps);
 	}
 
 	const actions = body.createDiv('ia-chat-message__actions');
@@ -260,13 +270,54 @@ function renderMessageContent(target: HTMLElement, message: Message) {
 	try {
 		const cleanedContent = (message.content || '').replace(/\n{3,}/g, '\n\n');
 		const html = marked.parse(cleanedContent) as string;
-		// Use DOMParser to safely parse HTML
 		const parser = new DOMParser();
 		const doc = parser.parseFromString(html, 'text/html');
-		// Clear target and append parsed content
 		target.empty();
 		Array.from(doc.body.childNodes).forEach(node => {
 			target.appendChild(node.cloneNode(true));
+		});
+
+		// Post-process code blocks: add language label + copy button
+		target.querySelectorAll('pre').forEach(pre => {
+			const code = pre.querySelector('code');
+			if (!code) return;
+
+			// Extract language from class (e.g. "language-typescript")
+			const langClass = Array.from(code.classList).find(c => c.startsWith('language-'));
+			const lang = langClass ? langClass.replace('language-', '') : '';
+
+			// Wrap pre in a container
+			const wrapper = document.createElement('div');
+			wrapper.className = 'ia-code-block';
+			pre.parentNode?.insertBefore(wrapper, pre);
+			wrapper.appendChild(pre);
+
+			// Add header bar
+			const header = document.createElement('div');
+			header.className = 'ia-code-block__header';
+
+			const langLabel = document.createElement('span');
+			langLabel.className = 'ia-code-block__lang';
+			langLabel.textContent = lang || 'code';
+			header.appendChild(langLabel);
+
+			const copyBtn = document.createElement('button');
+			copyBtn.className = 'ia-code-block__copy';
+			copyBtn.textContent = 'Copy';
+			copyBtn.addEventListener('click', () => {
+				const text = code.textContent || '';
+				void navigator.clipboard.writeText(text).then(() => {
+					copyBtn.textContent = 'Copied!';
+					copyBtn.classList.add('is-copied');
+					setTimeout(() => {
+						copyBtn.textContent = 'Copy';
+						copyBtn.classList.remove('is-copied');
+					}, 1500);
+				});
+			});
+			header.appendChild(copyBtn);
+
+			wrapper.insertBefore(header, pre);
 		});
 	} catch (error) {
 		console.error('[MessageRenderer] Markdown render error', error);
@@ -301,17 +352,9 @@ function renderReasoning(container: HTMLElement, message: Message) {
 
 function renderExecutionTrace(container: HTMLElement, steps: Message['agentExecutionSteps']) {
 	if (!steps || steps.length === 0) return;
-	const section = container.createDiv('ia-chat-message__section');
-	section.createEl('h5', { text: 'Tool trace' });
-	const timeline = section.createDiv('ia-chat-message__timeline');
-	steps.forEach(step => {
-		const item = timeline.createDiv('ia-chat-message__timeline-item');
-		item.createSpan({
-			text: step.type.toUpperCase(),
-			cls: `ia-chat-message__timeline-badge ia-chat-message__timeline-badge--${step.type}`
-		});
-		item.createDiv({ text: step.content });
-	});
+	const traceContentEl = createAgentExecutionTraceContainer(container, steps.length);
+	updateExecutionTrace(traceContentEl, steps as unknown as TraceStep[]);
+	collapseExecutionTrace(traceContentEl);
 }
 
 function hasActionCallbacks(callbacks?: MessageRendererCallbacks): boolean {

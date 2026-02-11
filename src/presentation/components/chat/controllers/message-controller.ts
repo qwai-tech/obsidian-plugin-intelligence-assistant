@@ -70,7 +70,10 @@ export class MessageController extends BaseController {
 	scrollToBottom(): void {
 		if (this.messagesContainer) {
 			requestAnimationFrame(() => {
-				this.messagesContainer!.scrollTop = this.messagesContainer!.scrollHeight;
+				this.messagesContainer!.scrollTo({
+					top: this.messagesContainer!.scrollHeight,
+					behavior: 'smooth'
+				});
 			});
 		}
 	}

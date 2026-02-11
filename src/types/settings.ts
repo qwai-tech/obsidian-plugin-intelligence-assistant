@@ -10,6 +10,7 @@ import type { BuiltInToolConfig } from './common/tools';
 import type { RAGConfig } from './features/rag';
 import type { WebSearchConfig } from './features/web-search';
 import type { OpenApiToolConfig } from './features/openapi-tools';
+import type { CLIToolConfig } from './features/cli-tools';
 import type { SystemPrompt, Agent } from './core/agent';
 import type { AgentMemory } from './features/memory';
 import * as defaultUserConfigJson from '../../config/default/settings.json';
@@ -127,6 +128,7 @@ export interface UserConfig {
 	tools: {
 		builtIn: BuiltInToolConfig[];
 		openApi?: OpenApiToolConfig[];
+		cli?: CLIToolConfig[];
 	};
 	rag: {
 		enabled: boolean;
@@ -208,6 +210,7 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 	const mcpRegistries = deepClone(source.mcp?.registries ?? DEFAULT_USER_CONFIG.mcp.registries);
 	const builtInTools = deepClone(source.tools?.builtIn ?? DEFAULT_USER_CONFIG.tools.builtIn);
 	const openApiTools = normalizeOpenApiConfigs(source.tools?.openApi ?? DEFAULT_USER_CONFIG.tools.openApi);
+	const cliTools = deepClone(source.tools?.cli ?? []);
 	const webSearch = deepClone(source.search?.web ?? DEFAULT_USER_CONFIG.search.web);
 	const agents = deepClone(source.agents?.list ?? []);
 	const agentMemories = deepClone(source.agents?.memories ?? []);
@@ -235,6 +238,7 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 		mcpRegistries: mcpRegistries,
 		builtInTools: builtInTools,
 		openApiTools: openApiTools,
+		cliTools: cliTools,
 		ragConfig: {
 			enabled: rag.enabled,
 			chunkSize: retrieval.chunkSize,
@@ -307,7 +311,8 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 		},
 		tools: {
 			builtIn: deepClone(settings.builtInTools ?? []),
-			openApi: deepClone(settings.openApiTools ?? [])
+			openApi: deepClone(settings.openApiTools ?? []),
+			cli: deepClone(settings.cliTools ?? [])
 		},
 		rag: {
 			enabled: settings.ragConfig.enabled,
@@ -397,6 +402,7 @@ export interface PluginSettings {
 	// Tools Configuration
 	builtInTools: BuiltInToolConfig[];
 	openApiTools: OpenApiToolConfig[];
+	cliTools: CLIToolConfig[];
 
 	// RAG Configuration
 	ragConfig: RAGConfig;

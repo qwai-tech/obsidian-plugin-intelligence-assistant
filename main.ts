@@ -26,6 +26,7 @@ import { DEFAULT_SETTINGS, pluginSettingsToUserConfig, userConfigToPluginSetting
 import { ChatView, CHAT_VIEW_TYPE } from './src/presentation/views/chat-view';
 import { ToolManager } from './src/application/services/tool-manager';
 import { OpenApiToolLoader } from './src/application/services/openapi-tool-loader';
+import { CLIToolLoader } from './src/application/services/cli-tool-loader';
 import { IntelligenceAssistantSettingTab } from './src/presentation/components/settings-tab';
 import { ProviderFactory } from './src/infrastructure/llm/provider-factory';
 import { ModelManager } from './src/infrastructure/llm/model-manager';
@@ -95,6 +96,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private conversationMigrationService: ConversationMigrationService | null = null;
 	private sharedToolManager: ToolManager | null = null;
 	private openApiToolLoader: OpenApiToolLoader | null = null;
+	private cliToolLoader: CLIToolLoader | null = null;
 	private pluginDataPath = '';
 	private chatRibbonIconEl: HTMLElement | null = null;
 	private legacyConversations: Conversation[] = [];
@@ -177,6 +179,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				),
 				this.reloadOpenApiTools().catch(error =>
 					console.error('[Plugin] OpenAPI tools load failed:', error)
+				),
+				Promise.resolve().then(() => this.reloadCLITools()).catch(error =>
+					console.error('[Plugin] CLI tools load failed:', error)
 				)
 			]);
 
@@ -197,6 +202,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			this.sharedToolManager = null;
 		}
 		this.openApiToolLoader = null;
+		this.cliToolLoader = null;
 		this.chatRibbonIconEl = null;
 	}
 
@@ -254,6 +260,18 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	public async removeOpenApiConfig(configId: string): Promise<void> {
 		const loader = this.getOpenApiLoader();
 		await loader.removeConfig(configId);
+	}
+
+	private getCLIToolLoader(): CLIToolLoader {
+		if (!this.cliToolLoader) {
+			this.cliToolLoader = new CLIToolLoader(this.getToolManager());
+		}
+		return this.cliToolLoader;
+	}
+
+	public reloadCLITools(): void {
+		const loader = this.getCLIToolLoader();
+		loader.loadAll(this.settings.cliTools ?? []);
 	}
 
 	public hasEnabledOpenApiTools(): boolean {

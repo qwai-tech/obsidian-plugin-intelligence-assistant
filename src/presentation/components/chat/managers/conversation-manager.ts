@@ -3,7 +3,7 @@
  * Handles conversation lifecycle, UI rendering, and persistence
  */
 
-import {App, Menu} from 'obsidian';
+import {App, Menu, setIcon} from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import { showPrompt } from '@/presentation/components/modals/prompt-modal';
 import { Events } from 'obsidian';
@@ -29,6 +29,7 @@ export class ConversationManager extends Events {
 	private conversationListContainer: HTMLElement;
 	private storageService: ConversationStorageService | null = null;
 	private storageReadyPromise: Promise<void> | null = null;
+	private searchQuery: string = '';
 
 	constructor(
 		private app: App,
@@ -37,6 +38,7 @@ export class ConversationManager extends Events {
 		private chatContainer: HTMLElement,
 		private modelSelect: HTMLSelectElement,
 		private addMessageToUI: (_message: Message) => HTMLElement,
+		private renderMessageList: (_messages: Message[]) => void,
 		private updateTokenSummary: () => void
 	) {
 		super();
@@ -125,7 +127,8 @@ export class ConversationManager extends Events {
 		// Close conversation list after creating new conversation (only if not pinned)
 		if (!this.state.conversationListPinned) {
 			this.state.conversationListVisible = false;
-			this.conversationListContainer.addClass('ia-hidden');
+			this.conversationListContainer.removeClass('is-open');
+			this.conversationListContainer.addClass('is-collapsed');
 		}
 
 		this.trigger('conversation-created', newConv);
@@ -165,9 +168,9 @@ export class ConversationManager extends Events {
 		}
 		this.plugin.settings.activeConversationId = conv.id;
 
-		// Re-render messages
+		// Re-render messages (with agent chain grouping)
 		this.chatContainer.empty();
-		this.state.messages.forEach(msg => this.addMessageToUI(msg));
+		this.renderMessageList(this.state.messages);
 
 		// Update token summary after loading conversation
 		this.updateTokenSummary();
@@ -196,7 +199,8 @@ export class ConversationManager extends Events {
 			// Close conversation list (only if not pinned)
 			if (!this.state.conversationListPinned) {
 				this.state.conversationListVisible = false;
-				this.conversationListContainer.addClass('ia-hidden');
+				this.conversationListContainer.removeClass('is-open');
+				this.conversationListContainer.addClass('is-collapsed');
 			}
 			return;
 		}
@@ -212,7 +216,8 @@ export class ConversationManager extends Events {
 			// Close conversation list after switching (only if not pinned)
 			if (!this.state.conversationListPinned) {
 				this.state.conversationListVisible = false;
-				this.conversationListContainer.addClass('ia-hidden');
+				this.conversationListContainer.removeClass('is-open');
+				this.conversationListContainer.addClass('is-collapsed');
 			}
 		}
 	}
@@ -241,8 +246,8 @@ export class ConversationManager extends Events {
 
 		const conv = { ...existingConv }; // Create a copy
 
-		// Update messages (filter out system messages before saving)
-		conv.messages = this.state.messages.filter(m => m.role !== 'system') as Array<{ role: 'user' | 'assistant'; content: string; model?: string }>;
+		// Save all messages without filtering
+		conv.messages = [...this.state.messages];
 		conv.updatedAt = Date.now();
 		conv.mode = this.state.mode;
 		conv.config = this.buildCurrentConversationConfig();
@@ -403,9 +408,11 @@ export class ConversationManager extends Events {
 	async toggleConversationList(): Promise<void> {
 		this.state.conversationListVisible = !this.state.conversationListVisible;
 		if (this.state.conversationListVisible) {
-			this.conversationListContainer.removeClass('ia-hidden');
+			this.conversationListContainer.removeClass('is-collapsed');
+			this.conversationListContainer.addClass('is-open');
 		} else {
-			this.conversationListContainer.addClass('ia-hidden');
+			this.conversationListContainer.removeClass('is-open');
+			this.conversationListContainer.addClass('is-collapsed');
 		}
 		await this.renderConversationList();
 		this.trigger('list-toggled', this.state.conversationListVisible);
@@ -425,15 +432,12 @@ export class ConversationManager extends Events {
 	 */
 	private updateConversationListStyle(): void {
 		if (this.state.conversationListPinned) {
-			// Pinned mode: fixed sidebar
-			this.conversationListContainer.setCssProps({ 'position': 'relative' });
-			this.conversationListContainer.setCssProps({ 'box-shadow': 'none' });
+			this.conversationListContainer.addClass('is-pinned');
 			this.state.conversationListVisible = true;
-			this.conversationListContainer.removeClass('ia-hidden');
+			this.conversationListContainer.removeClass('is-collapsed');
+			this.conversationListContainer.addClass('is-open');
 		} else {
-			// Floating mode: overlay
-			this.conversationListContainer.setCssProps({ 'position': 'absolute' });
-			this.conversationListContainer.setCssProps({ 'box-shadow': '2px 0 8px rgba(0, 0, 0, 0.1)' });
+			this.conversationListContainer.removeClass('is-pinned');
 		}
 	}
 
@@ -450,22 +454,48 @@ export class ConversationManager extends Events {
 		listHeader.createEl('h3', { text: 'Conversations' });
 
 		const headerButtons = listHeader.createDiv('conversation-header-buttons');
-		headerButtons.removeClass('ia-hidden');
-		headerButtons.setCssProps({ 'gap': '4px' });
 
 		// Pin/Unpin button
-		const pinBtn = headerButtons.createEl('button', { text: this.state.conversationListPinned ? '📌' : '📍' });
-		pinBtn.addClass('pin-conversation-btn');
-		pinBtn.title = this.state.conversationListPinned ? 'Unpin' : 'Pin to sidebar';
+		const pinBtn = headerButtons.createDiv({ cls: 'clickable-icon pin-conversation-btn' });
+		setIcon(pinBtn, this.state.conversationListPinned ? 'pin-off' : 'pin');
+		pinBtn.setAttribute('aria-label', this.state.conversationListPinned ? 'Unpin' : 'Pin to sidebar');
 		pinBtn.addEventListener('click', () => {
 			void this.togglePinConversationList();
 		});
 
-		const newConvBtn = headerButtons.createEl('button', { text: '+' });
-		newConvBtn.addClass('new-conversation-btn');
-		newConvBtn.title = 'New conversation';
+		const newConvBtn = headerButtons.createDiv({ cls: 'clickable-icon new-conversation-btn' });
+		setIcon(newConvBtn, 'plus');
+		newConvBtn.setAttribute('aria-label', 'New conversation');
 		newConvBtn.addEventListener('click', () => {
 			void this.createNewConversation();
+		});
+
+		// Search input
+		const searchContainer = this.conversationListContainer.createDiv('conversation-search');
+		const searchInput = searchContainer.createEl('input', {
+			attr: { type: 'text', placeholder: 'Search conversations...' }
+		});
+		searchInput.addClass('conversation-search-input');
+		searchInput.value = this.searchQuery;
+		const searchIconEl = searchContainer.createDiv('conversation-search-icon');
+		setIcon(searchIconEl, 'search');
+
+		searchInput.addEventListener('input', () => {
+			this.searchQuery = searchInput.value;
+			const items = listContent.querySelectorAll('.conversation-item');
+			const groups = listContent.querySelectorAll('.conversation-date-group');
+			const query = this.searchQuery.toLowerCase();
+
+			items.forEach(item => {
+				const title = (item as HTMLElement).querySelector('.conversation-title')?.textContent?.toLowerCase() || '';
+				(item as HTMLElement).style.display = title.includes(query) ? '' : 'none';
+			});
+
+			// Hide empty date groups
+			groups.forEach(group => {
+				const visibleItems = (group as HTMLElement).querySelectorAll('.conversation-item:not([style*="display: none"])');
+				(group as HTMLElement).style.display = visibleItems.length > 0 ? '' : 'none';
+			});
 		});
 
 		// Conversation list
@@ -473,7 +503,7 @@ export class ConversationManager extends Events {
 
 		// Get all conversations metadata instead of the array from settings
 		const conversationsMetadata = await storage.getAllConversationsMetadata();
-		
+
 		if (conversationsMetadata.length === 0) {
 			listContent.createDiv('empty-state').setText('No conversations yet');
 			return;
@@ -482,20 +512,19 @@ export class ConversationManager extends Events {
 		// Sort by updatedAt (most recent first)
 		const sortedConversations = conversationsMetadata.sort((a, b) => b.updatedAt - a.updatedAt);
 
-		sortedConversations.forEach(conv => {
-			const convItem = listContent.createDiv('conversation-item');
-			convItem.setCssProps({ 'display': 'flex' });
-			convItem.setCssProps({ 'align-items': 'center' });
-			convItem.setCssProps({ 'justify-content': 'space-between' });
-			convItem.setCssProps({ 'gap': '8px' });
-			convItem.setCssProps({ 'padding': '8px 12px' });
+		// Group by date
+		const groups = this.groupConversationsByDate(sortedConversations);
+
+		for (const group of groups) {
+			const groupEl = listContent.createDiv('conversation-date-group');
+			groupEl.createDiv({ text: group.label, cls: 'conversation-date-label' });
+
+			group.conversations.forEach(conv => {
+			const convItem = groupEl.createDiv('conversation-item');
 			convItem.addClass('ia-clickable');
-			convItem.setCssProps({ 'border-radius': '4px' });
-			convItem.setCssProps({ 'cursor': 'pointer' });
 
 			if (conv.id === this.state.currentConversationId) {
 				convItem.addClass('active');
-				convItem.setCssProps({ 'background': 'var(--background-modifier-hover)' });
 			}
 
 			// Single click on item to switch conversation
@@ -510,16 +539,8 @@ export class ConversationManager extends Events {
 			});
 
 			const convContent = convItem.createDiv('conversation-content');
-			convContent.setCssProps({ 'flex': '1' });
-			convContent.setCssProps({ 'overflow': 'hidden' });
-			convContent.setCssProps({ 'min-width': '0' });
-			convContent.setCssProps({ 'pointer-events': 'none' }); // Let clicks pass through to parent
 
 			const convTitle = convContent.createDiv('conversation-title');
-			convTitle.setCssProps({ 'overflow': 'hidden' });
-			convTitle.setCssProps({ 'text-overflow': 'ellipsis' });
-			convTitle.setCssProps({ 'white-space': 'nowrap' });
-			convTitle.setCssProps({ 'font-weight': '500' });
 
 			// Add icon if enabled and available
 			if (this.plugin.settings.conversationIconEnabled && conv.icon) {
@@ -531,9 +552,6 @@ export class ConversationManager extends Events {
 
 			// Add timestamps below title
 			const convMeta = convContent.createDiv('conversation-meta');
-			convMeta.setCssProps({ 'font-size': '10px' });
-			convMeta.setCssProps({ 'color': 'var(--text-muted)' });
-			convMeta.setCssProps({ 'margin-top': '2px' });
 
 			const formatDate = (timestamp: number) => {
 				const date = new Date(timestamp);
@@ -543,32 +561,15 @@ export class ConversationManager extends Events {
 
 			convMeta.setText(`${formatDate(conv.createdAt)} | ${formatDate(conv.updatedAt)}`);
 
-			// Actions container
+			// Actions container (hover visibility handled by CSS)
 			const actions = convItem.createDiv('conversation-actions');
-			actions.removeClass('ia-hidden');
-			actions.setCssProps({ 'gap': '4px' });
-			actions.setCssProps({ 'opacity': '0' });
-			actions.setCssProps({ 'transition': 'opacity 0.2s' });
-			actions.setCssProps({ 'pointer-events': 'auto' }); // Enable clicks on action buttons
-
-			// Show actions on hover
-			convItem.addEventListener('mouseenter', () => {
-				actions.setCssProps({ 'opacity': '1' });
-			});
-			convItem.addEventListener('mouseleave', () => {
-				actions.setCssProps({ 'opacity': '0' });
-			});
 
 			// Delete button
-			const deleteBtn = actions.createEl('button', { text: '🗑️' });
-			deleteBtn.title = 'Delete';
-			deleteBtn.setCssProps({ 'padding': '4px 6px' });
-			deleteBtn.setCssProps({ 'font-size': '12px' });
-			deleteBtn.setCssProps({ 'border': 'none' });
-			deleteBtn.setCssProps({ 'background': 'transparent' });
+			const deleteBtn = actions.createEl('button');
+			deleteBtn.addClass('conversation-delete-btn');
 			deleteBtn.addClass('ia-clickable');
-			deleteBtn.setCssProps({ 'border-radius': '3px' });
-			deleteBtn.setCssProps({ 'color': 'var(--text-error)' });
+			setIcon(deleteBtn, 'trash-2');
+			deleteBtn.title = 'Delete';
 			deleteBtn.addEventListener('click', (e) => {
 				e.stopPropagation();
 				void this.deleteConversation(conv.id);
@@ -590,6 +591,40 @@ export class ConversationManager extends Events {
 				menu.showAtMouseEvent(e);
 			});
 		});
+		}
+	}
+
+	/**
+	 * Group conversations by date categories
+	 */
+	private groupConversationsByDate(conversations: Array<{ id: string; title: string; createdAt: number; updatedAt: number; icon?: string }>): Array<{ label: string; conversations: typeof conversations }> {
+		const now = new Date();
+		const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+		const yesterdayStart = todayStart - 86400000;
+		const weekStart = todayStart - (now.getDay() * 86400000);
+
+		const groups: Record<string, typeof conversations> = {
+			'Today': [],
+			'Yesterday': [],
+			'This week': [],
+			'Older': []
+		};
+
+		for (const conv of conversations) {
+			if (conv.updatedAt >= todayStart) {
+				groups['Today'].push(conv);
+			} else if (conv.updatedAt >= yesterdayStart) {
+				groups['Yesterday'].push(conv);
+			} else if (conv.updatedAt >= weekStart) {
+				groups['This week'].push(conv);
+			} else {
+				groups['Older'].push(conv);
+			}
+		}
+
+		return Object.entries(groups)
+			.filter(([, convs]) => convs.length > 0)
+			.map(([label, convs]) => ({ label, conversations: convs }));
 	}
 
 	/**

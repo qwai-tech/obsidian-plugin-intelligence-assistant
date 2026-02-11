@@ -2,7 +2,7 @@ import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, Modal, Sett
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { DEFAULT_AGENT_ID } from '@/constants';
-import type {Message, FileReference, Conversation, ConversationConfig, ModelInfo, Agent, LLMConfig} from '@/types';
+import type {Message, FileReference, Conversation, ConversationConfig, ModelInfo, Agent, LLMConfig, AgentExecutionStep} from '@/types';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
 import { marked } from 'marked';
@@ -13,7 +13,7 @@ import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import { renderMessage, MessageRendererCallbacks } from '@/presentation/components/chat/message-renderer';
 import { handleStreamingChat } from '@/presentation/components/chat/handlers/streaming-handler';
-import { processToolCalls, updateExecutionTrace, createAgentExecutionTraceContainer } from '@/presentation/components/chat/handlers/tool-call-handler';
+import { processToolCalls, updateExecutionTrace, createAgentExecutionTraceContainer, collapseExecutionTrace } from '@/presentation/components/chat/handlers/tool-call-handler';
 import {
 	MessageController,
 	AgentController,
@@ -55,6 +55,7 @@ export class ChatView extends ItemView {
 
 	private plugin: IntelligenceAssistantPlugin;
 	private chatContainer: HTMLElement;
+	private scrollToBottomBtn: HTMLElement;
 	private inputContainer: HTMLElement;
 	public modelSelect: HTMLSelectElement; // Public so it can be accessed by DocumentGrader
 	private temperatureSlider: HTMLInputElement;
@@ -174,19 +175,16 @@ export class ChatView extends ItemView {
 
 		// Floating conversation list sidebar (hidden by default)
 		this.conversationListContainer = mainLayout.createDiv('conversation-list-floating');
-		this.conversationListContainer.addClass('ia-hidden');
+		this.conversationListContainer.addClass('is-collapsed');
 
-		// Action row (history/new/settings)
+		// Toolbar Row A: breadcrumb + actions
 		this.createActionRow(this.mainChatContainer);
 
-		// Top controls (mode, prompts, agent)
-		this.createTopControls(this.mainChatContainer);
-
-		// Model + params row
-		this.createModelRow(this.mainChatContainer);
-
-		// Token usage row
-		this.createTokenRow(this.mainChatContainer);
+		// Toolbar Row B: mode + model + agent/prompt + token summary
+		const toolbarB = this.mainChatContainer.createDiv('chat-toolbar-b');
+		this.createTopControls(toolbarB);
+		this.createModelRow(toolbarB);
+		this.createTokenRow(toolbarB);
 
 		await this.refreshModels();
 
@@ -200,6 +198,16 @@ export class ChatView extends ItemView {
 
 		// Chat messages container
 		this.chatContainer = this.mainChatContainer.createDiv('chat-messages');
+
+		// Floating scroll-to-bottom button
+		this.scrollToBottomBtn = this.mainChatContainer.createDiv('ia-scroll-to-bottom');
+		this.scrollToBottomBtn.addClass('ia-hidden');
+		setIcon(this.scrollToBottomBtn, 'arrow-down');
+		this.scrollToBottomBtn.setAttribute('aria-label', 'Scroll to bottom');
+		this.scrollToBottomBtn.addEventListener('click', () => {
+			this.chatContainer.scrollTo({ top: this.chatContainer.scrollHeight, behavior: 'smooth' });
+			this.scrollToBottomBtn.addClass('ia-hidden');
+		});
 
 		// Input container
 		this.inputContainer = this.mainChatContainer.createDiv('chat-input-container');
@@ -225,10 +233,16 @@ export class ChatView extends ItemView {
 		});
 		textarea.addClass('chat-input');
 
+		// Send button
+		const sendBtn = editorWrapper.createEl('button', { cls: 'ia-send-btn' });
+		sendBtn.setAttribute('aria-label', 'Send message');
+		setIcon(sendBtn, 'arrow-up');
+
 		// Auto-resize textarea
 		textarea.addEventListener('input', () => {
 			textarea.setCssProps({ 'height': 'auto' });
-			textarea.setCssProps({ 'height': Math.min(textarea.scrollHeight, 120) + 'px' });
+			textarea.setCssProps({ 'height': Math.min(textarea.scrollHeight, 200) + 'px' });
+			sendBtn.toggleClass('is-active', textarea.value.trim().length > 0);
 		});
 
 		// Input footer (attachments + actions)
@@ -253,7 +267,8 @@ export class ChatView extends ItemView {
 
 		// Stop generation button (hidden by default)
 		this.stopBtn = rightControls.createEl('button', { cls: 'stop-generation-btn' });
-		this.stopBtn.setText('⏹️ stop');
+		setIcon(this.stopBtn, 'square');
+		this.stopBtn.createSpan({ text: ' Stop' });
 		this.stopBtn.addClass('ia-hidden');
 		this.stopBtn.addEventListener('click', () => {
 			this.state.stopStreamingRequested = true;
@@ -268,6 +283,7 @@ export class ChatView extends ItemView {
 
 			textarea.value = '';
 			textarea.setCssProps({ 'height': 'auto' });
+			sendBtn.removeClass('is-active');
 			await this.sendMessage(text);
 			// Clear attachments and references after sending
 			this.state.currentAttachments = [];
@@ -281,6 +297,10 @@ export class ChatView extends ItemView {
 				e.preventDefault();
 				void sendMessage();
 			}
+		});
+
+		sendBtn.addEventListener('click', () => {
+			void sendMessage();
 		});
 
 		// Styles are loaded from styles.css
@@ -299,7 +319,8 @@ export class ChatView extends ItemView {
 				// Check if click is outside conversation list
 				if (!this.conversationListContainer.contains(target)) {
 					this.state.conversationListVisible = false;
-					this.conversationListContainer.addClass('ia-hidden');
+					this.conversationListContainer.removeClass('is-open');
+					this.conversationListContainer.addClass('is-collapsed');
 				}
 			}
 		});
@@ -347,6 +368,7 @@ export class ChatView extends ItemView {
 			this.chatContainer,
 			this.modelSelect,
 			(message: Message) => this.addMessageToUI(message),
+			(messages: Message[]) => this.renderMessageList(messages),
 			() => this.updateTokenSummary()
 		);
 		void this.conversationManager.initializeContainer(this.conversationListContainer);
@@ -785,8 +807,16 @@ After calling a tool, you will receive the result and can continue the conversat
 			return { role: msg.role, content: formattedContent, model: msg.model };
 		});
 
-		const _finalMessages = [...systemMessages, ...llmMessages];
-		console.debug('[Chat] Final messages count:', _finalMessages.length);
+		// Deduplicate and apply context window limit to conversation messages
+		const activeAgent = this.getActiveAgent();
+		const contextWindow = activeAgent?.contextWindow ?? 20;
+		const dedupedLlmMessages = deduplicateMessages(llmMessages);
+		const truncatedLlmMessages = dedupedLlmMessages.length > contextWindow
+			? dedupedLlmMessages.slice(-contextWindow)
+			: dedupedLlmMessages;
+
+		const _finalMessages = [...systemMessages, ...truncatedLlmMessages];
+		console.debug('[Chat] Final messages count:', _finalMessages.length, '(deduped from:', llmMessages.length, ', context window:', contextWindow, ')');
 
 		let assistantMessageEl: HTMLElement | null = null;
 
@@ -819,7 +849,14 @@ After calling a tool, you will receive the result and can continue the conversat
 					stopBtn: this.stopBtn,
 					sendHint: this.sendHint,
 					onStopRequested: () => this.state.stopStreamingRequested,
-								estimateTokens: this.estimateTokens.bind(this) as (text: string) => number
+					estimateTokens: this.estimateTokens.bind(this) as (text: string) => number,
+					onScrollAwayChanged: (isAway: boolean) => {
+						if (isAway) {
+							this.scrollToBottomBtn.removeClass('ia-hidden');
+						} else {
+							this.scrollToBottomBtn.addClass('ia-hidden');
+						}
+					}
 				}
 			);
 
@@ -855,15 +892,21 @@ After calling a tool, you will receive the result and can continue the conversat
 				if (messageBody) {
 					const contentEl = this.findMessageContentElement(assistantMessageEl);
 					const traceContent = this.createAgentExecutionTraceContainer(messageBody);
-					await this.processToolCalls(fullContent, traceContent, contentEl || undefined);
+					if (contentEl) {
+						contentEl.empty(); // Clear raw streamed text; trace renders it in structured form
+					}
+					const toolsExecuted = await this.processToolCalls(fullContent, traceContent, contentEl || undefined);
 
 					const countSpan = messageBody.querySelector('.agent-trace-count');
 					if (countSpan) {
 						countSpan.textContent = `${this.state.agentExecutionSteps.length} steps`;
 					}
 
-					if (contentEl) {
+					// If no tools were called, this is already the final answer - show it and collapse trace
+					// If tools were called, continuation flow handles final answer + collapse
+					if (!toolsExecuted && contentEl) {
 						this.displayAgentFinalAnswer(contentEl);
+						collapseExecutionTrace(traceContent);
 					}
 				}
 			}
@@ -1026,7 +1069,92 @@ After calling a tool, you will receive the result and can continue the conversat
 			messages: this.state.messages
 		};
 
-		return renderMessage(this.chatContainer, message, options, callbacks);
+		// Remove empty state if present
+		const emptyState = this.chatContainer.querySelector('.ia-chat-empty-state');
+		if (emptyState) emptyState.remove();
+
+		return renderMessage(this.chatContainer, message, options, callbacks, { animate: true });
+	}
+
+	private renderEmptyState(): void {
+		// Only show if chat container is empty
+		if (this.chatContainer.querySelector('.ia-chat-message') || this.chatContainer.querySelector('.ia-chat-empty-state')) {
+			return;
+		}
+
+		const emptyEl = this.chatContainer.createDiv('ia-chat-empty-state');
+
+		const iconEl = emptyEl.createDiv('ia-chat-empty-state__icon');
+		setIcon(iconEl, 'message-square');
+
+		emptyEl.createEl('h3', { text: 'Start a conversation', cls: 'ia-chat-empty-state__heading' });
+		emptyEl.createEl('p', {
+			text: 'Type a message below to get started, or select a conversation from history.',
+			cls: 'ia-chat-empty-state__subtext'
+		});
+	}
+
+	/**
+	 * Render a list of messages, grouping agent tool-call chains into a single
+	 * collapsed Execution Process trace + final answer bubble.
+	 */
+	private renderMessageList(messages: Message[]): void {
+		let i = 0;
+		while (i < messages.length) {
+			const msg = messages[i];
+
+			if (msg.role === 'assistant' && hasAgentToolCall(msg.content)) {
+				// Collect consecutive assistant + system messages into a chain
+				// System messages contain tool results ("Tool X result: ...")
+				const chain: Message[] = [msg];
+				let j = i + 1;
+				while (j < messages.length) {
+					const next = messages[j];
+					if (next.role === 'system' && next.content.startsWith('Tool ')) {
+						chain.push(next);
+						j++;
+					} else if (next.role === 'assistant') {
+						chain.push(next);
+						j++;
+						if (!hasAgentToolCall(next.content)) {
+							break; // Just collected the final answer
+						}
+					} else {
+						break;
+					}
+				}
+
+				// Separate tool-call messages from the final answer
+				const lastMsg = chain[chain.length - 1];
+				const lastHasToolCall = hasAgentToolCall(lastMsg.content);
+				const traceMessages = lastHasToolCall ? chain : chain.slice(0, -1);
+				const finalContent = lastHasToolCall ? extractFinalContent(lastMsg) : lastMsg.content;
+
+				// Use saved execution steps if available, otherwise reconstruct
+				const savedSteps = chain.find(m => m.agentExecutionSteps?.length)?.agentExecutionSteps;
+				const steps = savedSteps ?? reconstructAgentSteps(traceMessages);
+
+				// Render as a single message with execution trace + final answer
+				const syntheticMsg: Message = {
+					...lastMsg,
+					content: finalContent,
+					agentExecutionSteps: steps
+				};
+				this.addMessageToUI(syntheticMsg);
+				i = j;
+			} else if (msg.role === 'system') {
+				// Skip system messages (tool results) that aren't part of an agent chain
+				i++;
+			} else {
+				this.addMessageToUI(msg);
+				i++;
+			}
+		}
+
+		// Show empty state if no messages were rendered
+		if (messages.length === 0) {
+			this.renderEmptyState();
+		}
 	}
 
 	private styleActionButton(btn: HTMLButtonElement) {
@@ -1818,9 +1946,12 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	private getAgentToolsLabel(agent: Agent): string {
 		const builtIn = agent.enabledBuiltInTools.length;
 		const mcp = agent.enabledMcpServers.length;
+		const cliTools = this.plugin.settings.cliTools?.filter(t => t.enabled) ?? [];
+		const cli = agent.enabledAllCLITools ? cliTools.length : (agent.enabledCLITools?.filter(id => cliTools.some(t => t.id === id)).length ?? 0);
 		const segments = [] as string[];
 		if (builtIn > 0) segments.push(`${builtIn} built-in`);
 		if (mcp > 0) segments.push(`${mcp} MCP`);
+		if (cli > 0) segments.push(`${cli} CLI`);
 		if (segments.length === 0) {
 			return 'None';
 		}
@@ -1972,8 +2103,14 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		}
 
 		if (!this.conversationListContainer) return;
-		const isVisible = this.conversationListContainer.style.display !== 'none';
-		this.conversationListContainer.setCssProps({ 'display': isVisible ? 'none' : 'flex' });
+		const isVisible = !this.conversationListContainer.hasClass('is-collapsed');
+		if (isVisible) {
+			this.conversationListContainer.removeClass('is-open');
+			this.conversationListContainer.addClass('is-collapsed');
+		} else {
+			this.conversationListContainer.removeClass('is-collapsed');
+			this.conversationListContainer.addClass('is-open');
+		}
 	}
 
 	private updateConversationTitle(title: string) {
@@ -2249,7 +2386,6 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private createModelRow(parent: HTMLElement) {
 		const row = parent.createDiv('chat-model-row');
-		row.addClass('chat-model-row');
 
 		this.modelControlsContainer = row.createDiv('chat-model-controls');
 		this.modelControlsContainer.addClass('ia-chat-model-controls');
@@ -2257,7 +2393,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const modelGroup = this.modelControlsContainer.createDiv('chat-select-group');
 		modelGroup.addClass('ia-model-select-group');
 		modelGroup.addClass('chat-model-select');
-		modelGroup.createSpan({ text: '🤖 model', cls: 'chat-label' });
+		modelGroup.createSpan({ text: 'Model', cls: 'chat-label' });
 		this.modelSelect = modelGroup.createEl('select', { cls: 'model-select' });
 		this.modelSelect.addClass('ia-model-select');
 		this.modelSelect.addEventListener('change', () => {
@@ -2266,46 +2402,28 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		// Settings toggle button
 		const settingsBtn = this.modelControlsContainer.createEl('button', { cls: 'chat-params-toggle' });
-		settingsBtn.innerHTML = '⚙️';
-		settingsBtn.title = 'Show/hide advanced parameters';
-		settingsBtn.setCssProps({
-			'background': 'transparent',
-			'border': 'none',
-			'cursor': 'pointer',
-			'padding': '4px',
-			'opacity': '0.7'
-		});
+		setIcon(settingsBtn, 'sliders-horizontal');
+		settingsBtn.title = 'Advanced parameters';
+		settingsBtn.addClass('ia-icon-btn');
 
-		// Container for advanced params (hidden by default)
+		// Container for advanced params (overlay, hidden by default)
 		const paramsContainer = this.modelControlsContainer.createDiv('chat-params-container');
 		paramsContainer.addClass('ia-hidden');
-		paramsContainer.setCssProps({
-			'display': 'none',
-			'align-items': 'center',
-			'gap': '12px',
-			'flex-wrap': 'wrap',
-			'width': '100%',
-			'padding-top': '8px',
-			'border-top': '1px dashed var(--background-modifier-border)',
-			'margin-top': '8px'
-		});
 
 		settingsBtn.addEventListener('click', () => {
 			const isHidden = paramsContainer.hasClass('ia-hidden');
 			if (isHidden) {
 				paramsContainer.removeClass('ia-hidden');
-				paramsContainer.setCssProps({ 'display': 'flex' });
-				settingsBtn.setCssProps({ 'opacity': '1', 'background': 'var(--background-modifier-hover)' });
+				settingsBtn.addClass('is-active');
 			} else {
 				paramsContainer.addClass('ia-hidden');
-				paramsContainer.setCssProps({ 'display': 'none' });
-				settingsBtn.setCssProps({ 'opacity': '0.7', 'background': 'transparent' });
+				settingsBtn.removeClass('is-active');
 			}
 		});
 
 		const tempGroup = paramsContainer.createDiv('chat-param-group');
 		tempGroup.addClass('chat-param-group');
-		tempGroup.createSpan({ text: '🌡️ temperature', cls: 'chat-label' });
+		tempGroup.createSpan({ text: 'Temperature', cls: 'chat-label' });
 		this.temperatureSlider = tempGroup.createEl('input', { type: 'range' });
 		this.temperatureSlider.min = '0';
 		this.temperatureSlider.max = '2';
@@ -2320,7 +2438,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		const tokensGroup = paramsContainer.createDiv('chat-param-group');
 		tokensGroup.addClass('chat-param-group');
-		tokensGroup.createSpan({ text: '📊 max tokens', cls: 'chat-label' });
+		tokensGroup.createSpan({ text: 'Max tokens', cls: 'chat-label' });
 		this.maxTokensInput = tokensGroup.createEl('input', { type: 'number', cls: 'chat-number-input' });
 		this.maxTokensInput.min = '100';
 		this.maxTokensInput.max = '100000';
@@ -2336,7 +2454,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		// Top P
 		const topPGroup = paramsContainer.createDiv('chat-param-group');
 		topPGroup.addClass('chat-param-group');
-		topPGroup.createSpan({ text: '🎯 Top P', cls: 'chat-label' });
+		topPGroup.createSpan({ text: 'Top P', cls: 'chat-label' });
 		this.topPSlider = topPGroup.createEl('input', { type: 'range' });
 		this.topPSlider.min = '0';
 		this.topPSlider.max = '1';
@@ -2353,7 +2471,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		// Frequency Penalty
 		const freqGroup = paramsContainer.createDiv('chat-param-group');
 		freqGroup.addClass('chat-param-group');
-		freqGroup.createSpan({ text: '🔁 Frequency Penalty', cls: 'chat-label' });
+		freqGroup.createSpan({ text: 'Freq. penalty', cls: 'chat-label' });
 		this.frequencyPenaltySlider = freqGroup.createEl('input', { type: 'range' });
 		this.frequencyPenaltySlider.min = '-2';
 		this.frequencyPenaltySlider.max = '2';
@@ -2370,7 +2488,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		// Presence Penalty
 		const presGroup = paramsContainer.createDiv('chat-param-group');
 		presGroup.addClass('chat-param-group');
-		presGroup.createSpan({ text: '👀 Presence Penalty', cls: 'chat-label' });
+		presGroup.createSpan({ text: 'Pres. penalty', cls: 'chat-label' });
 		this.presencePenaltySlider = presGroup.createEl('input', { type: 'range' });
 		this.presencePenaltySlider.min = '-2';
 		this.presencePenaltySlider.max = '2';
@@ -2450,7 +2568,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		this.headerActionsContainer = actionsContainer;
 
 		const addReferenceBtn = this.createHeaderActionButton(actionsContainer, {
-			icon: '📎',
+			icon: 'paperclip',
 			label: 'Add reference',
 			tooltip: 'Add file or folder reference (@)',
 			onClick: () => this.showReferenceMenu()
@@ -2458,7 +2576,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		addReferenceBtn.addClass('is-link');
 
 		this.imageActionItem = this.createHeaderActionButton(actionsContainer, {
-			icon: '🖼️',
+			icon: 'image',
 			label: 'Add picture',
 			tooltip: 'Attach an image to your message',
 			showStatus: true,
@@ -2472,7 +2590,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		});
 
 		this.ragActionItem = this.createHeaderActionButton(actionsContainer, {
-			icon: '📚',
+			icon: 'book-open',
 			label: 'RAG',
 			tooltip: 'Use indexed notes as context',
 			showStatus: true,
@@ -2481,7 +2599,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		this.ragActionItem?.addClass('is-toggle');
 
 		this.webActionItem = this.createHeaderActionButton(actionsContainer, {
-			icon: '🔍',
+			icon: 'search',
 			label: 'Web Search',
 			tooltip: 'Search the internet when needed',
 			showStatus: true,
@@ -2507,7 +2625,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			void config.onClick();
 		});
 
-		button.createSpan({ cls: 'header-action-icon', text: config.icon });
+		const iconEl = button.createSpan({ cls: 'header-action-icon' });
+		setIcon(iconEl, config.icon);
 		button.createSpan({ cls: 'header-action-label', text: config.label });
 		if (config.showStatus) {
 			button.createSpan({ cls: 'header-action-status' });
@@ -2751,7 +2870,6 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			if (finalAnswer) {
 				contentEl.empty();
 				const finalAnswerEl = contentEl.createDiv('agent-final-answer');
-				finalAnswerEl.createEl('h4', { text: 'Final answer' });
 				try {
 					const html = marked.parse(finalAnswer) as string;
 					// Use DOMParser to safely parse HTML
@@ -2892,7 +3010,23 @@ After calling a tool and receiving results, you can continue the conversation or
 					});
 				} else {
 					// For specific agents (not generic), use standard agent instructions without ReAct pattern
-					const toolsList = this.toolManager.getAllTools().map(tool =>
+					const activeAgent = this.plugin.settings.agents?.find(a => a.id === this.plugin.settings.activeAgentId);
+					const toolsList = this.toolManager.getAllTools().filter(tool => {
+						if (!activeAgent) return true;
+						if (tool.provider === 'built-in') return true; // already filtered by setToolConfigs
+						if (tool.provider?.startsWith('mcp:')) {
+							const serverName = tool.provider.substring(4);
+							if (activeAgent.enabledMcpServers.includes(serverName)) return true;
+							const fullKey = `${serverName}::${tool.definition.name}`;
+							return activeAgent.enabledMcpTools?.includes(fullKey) ?? false;
+						}
+						if (tool.provider?.startsWith('cli:')) {
+							if (activeAgent.enabledAllCLITools) return true;
+							const toolId = tool.provider.substring(4);
+							return activeAgent.enabledCLITools?.includes(toolId) ?? false;
+						}
+						return true;
+					}).map(tool =>
 						`- ${tool.definition.name}: ${tool.definition.description}`
 					).join('\n');
 
@@ -2919,14 +3053,33 @@ After calling a tool, you will receive the result and can continue the conversat
 				}
 			}
 
+			// Deduplicate and apply context window limit to conversation messages
+			const agentContextWindow = this.getActiveAgent()?.contextWindow ?? 20;
+			const dedupedMessages = deduplicateMessages(chatRequest.messages);
+			const truncatedMessages = dedupedMessages.length > agentContextWindow
+				? dedupedMessages.slice(-agentContextWindow)
+				: dedupedMessages;
+
 			// Insert system messages at the beginning
-			const allMessages = [...systemMessages, ...chatRequest.messages];
+			const allMessages = [...systemMessages, ...truncatedMessages];
+			console.debug('[Agent] continueAgentConversation messages count:', allMessages.length, '(deduped from:', chatRequest.messages.length, ', context window:', agentContextWindow, ')');
 
 			// Make the API call with the updated messages
 			// Use streaming like the main implementation
 			const provider = ProviderFactory.createProvider(config);
 			
-			// Streaming implementation - collect content silently
+			// Add a "Thinking..." indicator while the agent is processing
+			const responseStepIndex = this.state.agentExecutionSteps.length;
+			this.state.agentExecutionSteps.push({
+				type: 'response',
+				content: 'Thinking...',
+				timestamp: Date.now(),
+				status: 'pending'
+			});
+			if (traceContainer) {
+				this.updateExecutionTrace(traceContainer);
+			}
+
 			void provider.streamChat(
 				{
 					...chatRequest,
@@ -2937,28 +3090,42 @@ After calling a tool, you will receive the result and can continue the conversat
 					if (c && typeof c.content === 'string') {
 						fullContent += c.content;
 					}
- 
+
 					if (c && c.done) {
+						// Remove the thinking indicator
+						this.state.agentExecutionSteps.splice(responseStepIndex, 1);
+
 						// Add the assistant's response to the messages
 						this.state.messages.push({
 							role: 'assistant',
 							content: fullContent,
-							model: selectedModel // Use just the model ID, not provider:model
+							model: selectedModel
 						} as Message);
- 
-						// In Agent mode, check if the agent wants to call more tools with the new context
+
 						if (this.state.mode === 'agent' && traceContainer) {
-							// Wait briefly for the UI to update and then process any new tool calls
 							void (async () => {
 								await new Promise(resolve => setTimeout(resolve, 50));
-								await this.processToolCalls(fullContent, traceContainer);
+								const toolsExecuted = await this.processToolCalls(fullContent, traceContainer, _contentEl);
+
+								this.updateExecutionTrace(traceContainer);
+
+								if (!toolsExecuted && _contentEl) {
+									// Agent is done - display final answer and collapse trace
+									this.displayAgentFinalAnswer(_contentEl);
+									collapseExecutionTrace(traceContainer);
+									const traceRoot = traceContainer.closest('.agent-execution-trace-container');
+									if (traceRoot) {
+										const countEl = traceRoot.querySelector('.agent-trace-count');
+										if (countEl) {
+											countEl.textContent = String(this.state.agentExecutionSteps.length) + ' steps';
+										}
+									}
+								}
 							})();
 						}
- 
+
 						// Save conversation after successful message
 						void this.conversationManager.saveCurrentConversation();
- 
-						// Agent memory is temporarily disabled
 					}
 				}
 			);
@@ -4335,6 +4502,119 @@ After calling a tool, you will receive the result and can continue the conversat
 	}
 }
 	
+// ---------------------------------------------------------------------------
+// Agent chain helpers – used by ChatView.renderMessageList to reconstruct
+// historical agent tool-call chains from saved messages.
+// ---------------------------------------------------------------------------
+
+/** Returns true if the message content contains a JSON tool-call block. */
+function hasAgentToolCall(content: string): boolean {
+	const regex = /```json\s*\n([\s\S]*?)\n```/g;
+	let match;
+	while ((match = regex.exec(content)) !== null) {
+		try {
+			const json = JSON.parse(match[1]) as Record<string, unknown>;
+			const name = json.name ?? json.tool;
+			if (name && typeof name === 'string') {
+				return true;
+			}
+		} catch { /* not a tool-call block */ }
+	}
+	return false;
+}
+
+/**
+ * Reconstruct AgentExecutionStep[] from a sequence of assistant + system
+ * messages that contained tool calls and their results.
+ * System messages with format "Tool <name> result: <result>" become
+ * observation steps paired with the preceding action.
+ */
+function reconstructAgentSteps(messages: Message[]): AgentExecutionStep[] {
+	const steps: AgentExecutionStep[] = [];
+	for (const msg of messages) {
+		// System messages contain tool results
+		if (msg.role === 'system' && msg.content.startsWith('Tool ')) {
+			const resultMatch = msg.content.match(/^Tool\s+\S+\s+result:\s*([\s\S]*)$/);
+			const resultContent = resultMatch ? resultMatch[1] : msg.content;
+			const isError = resultContent.startsWith('Error:') || resultContent.startsWith('Unknown error');
+			steps.push({
+				type: 'observation',
+				content: resultContent,
+				timestamp: Date.now(),
+				status: isError ? 'error' : 'success'
+			});
+			continue;
+		}
+
+		// Extract Thought: text (everything between "Thought:" and the next
+		// "Action:" / code-fence / or end of string)
+		const thoughtMatch = msg.content.match(/Thought:(.*?)(?:Action:|```|$)/s);
+		if (thoughtMatch && thoughtMatch[1].trim()) {
+			steps.push({
+				type: 'thought',
+				content: thoughtMatch[1].trim(),
+				timestamp: Date.now()
+			});
+		}
+
+		// Extract every tool-call JSON block
+		const regex = /```json\s*\n([\s\S]*?)\n```/g;
+		let match;
+		while ((match = regex.exec(msg.content)) !== null) {
+			try {
+				const json = JSON.parse(match[1]) as Record<string, unknown>;
+				const name = (json.name ?? json.tool) as string | undefined;
+				if (name && typeof name === 'string') {
+					const args = typeof json.arguments === 'object' && json.arguments !== null
+						? json.arguments as Record<string, unknown>
+						: {};
+					steps.push({
+						type: 'action',
+						content: `${name}(${JSON.stringify(args)})`,
+						timestamp: Date.now(),
+						status: 'success'
+					});
+				}
+			} catch { /* ignore malformed blocks */ }
+		}
+	}
+	return steps;
+}
+
+/**
+ * Remove consecutive duplicate messages (same role + content).
+ * This prevents bloated payloads when an agent repeatedly calls the same tool.
+ */
+function deduplicateMessages(messages: Message[]): Message[] {
+	if (messages.length <= 1) return messages;
+	const result: Message[] = [messages[0]];
+	for (let i = 1; i < messages.length; i++) {
+		const prev = messages[i - 1];
+		const cur = messages[i];
+		if (cur.role === prev.role && cur.content === prev.content) {
+			continue; // skip duplicate
+		}
+		result.push(cur);
+	}
+	return result;
+}
+
+/**
+ * Strip tool-call blocks and ReAct scaffolding text from a message so only
+ * the model's plain-language content remains (used as the "final answer"
+ * when the last message in a chain also contained tool calls).
+ */
+function extractFinalContent(message: Message): string {
+	let content = message.content;
+	// Remove ```json … ``` blocks
+	content = content.replace(/```json\s*\n[\s\S]*?\n```/g, '');
+	// Remove Thought: … lines
+	content = content.replace(/Thought:.*?(?=Action:|```|$)/gs, '');
+	// Remove bare "Action:" labels
+	content = content.replace(/Action:\s*/g, '');
+	return content.trim();
+}
+
 // Modal for text input
 class TextInputModal extends Modal {
 	result: string;

@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Modal, Notice, Setting, ToggleComponent } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type {Agent, BuiltInToolConfig, MCPServerConfig} from '@/types';
+import type {Agent, BuiltInToolConfig, MCPServerConfig, CLIToolConfig} from '@/types';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
 
 export class AgentEditModal extends Modal {
@@ -24,6 +24,7 @@ export class AgentEditModal extends Modal {
 		this.agent.enabledBuiltInTools = this.agent.enabledBuiltInTools ?? [];
 		this.agent.enabledMcpServers = this.agent.enabledMcpServers ?? [];
 		this.agent.enabledMcpTools = this.agent.enabledMcpTools ?? [];
+		this.agent.enabledCLITools = this.agent.enabledCLITools ?? [];
 	}
 
 	onOpen() {
@@ -75,9 +76,9 @@ export class AgentEditModal extends Modal {
 			description: 'Choose how the agent will select its model'
 		}).addDropdown(dropdown => {
 				dropdown
-					.addOption('Default', 'Use default model (from settings)')
-					.addOption('Chat-view', 'Use chat view model')
-					.addOption('Fixed', 'Fixed model');
+					.addOption('default', 'Use default model (from settings)')
+					.addOption('chat-view', 'Use chat view model')
+					.addOption('fixed', 'Fixed model');
 				
 				// Set the initial value based on the current strategy
 				dropdown.setValue(this.agent.modelStrategy.strategy);
@@ -323,6 +324,58 @@ export class AgentEditModal extends Modal {
 					}));
 		});
 
+		// CLI Tools
+		const cliTools = this.plugin.settings.cliTools ?? [];
+		const enabledCLITools = cliTools.filter(t => t.enabled);
+		if (enabledCLITools.length > 0) {
+			const cliToolToggles: Array<{ id: string; toggle: ToggleComponent }> = [];
+
+			// Master toggle: all CLI tools
+			new Setting(contentEl)
+				.setName('CLI tools')
+				.setDesc('Grant access to all enabled CLI tools, or pick individually below')
+				.addToggle(toggle => {
+					toggle.setValue(this.agent.enabledAllCLITools ?? false);
+					toggle.onChange(value => {
+						this.agent.enabledAllCLITools = value;
+						this.syncCLIToolStates(cliToolToggles, enabledCLITools, value);
+					});
+				});
+
+			// Individual tool toggles
+			enabledCLITools.forEach((tool: CLIToolConfig) => {
+				new Setting(contentEl)
+					.setName(`⌨️ ${tool.name}`)
+					.setDesc(tool.description || tool.command)
+					.addToggle(toggle => {
+						toggle.setValue(this.agent.enabledCLITools?.includes(tool.id) ?? false);
+						toggle.onChange(value => {
+							if (!this.agent.enabledCLITools) {
+								this.agent.enabledCLITools = [];
+							}
+							if (value) {
+								if (!this.agent.enabledCLITools.includes(tool.id)) {
+									this.agent.enabledCLITools.push(tool.id);
+								}
+							} else {
+								const index = this.agent.enabledCLITools.indexOf(tool.id);
+								if (index > -1) {
+									this.agent.enabledCLITools.splice(index, 1);
+								}
+							}
+						});
+						cliToolToggles.push({ id: tool.id, toggle });
+					});
+			});
+
+			// Apply initial state: if master is on, sync all toggles
+			this.syncCLIToolStates(cliToolToggles, enabledCLITools, this.agent.enabledAllCLITools ?? false);
+		} else {
+			new Setting(contentEl)
+				.setName('CLI tools')
+				.setDesc('No CLI tools configured. Add and enable tools under Settings → Tools → CLI to use them here.');
+		}
+
 		// MCP Servers
 		contentEl.createEl('h3', { text: 'MCP access' });
 		if (this.plugin.settings.mcpServers.length === 0) {
@@ -529,6 +582,25 @@ export class AgentEditModal extends Modal {
 				}
 				statusEl.setText(selected ? 'Selected' : 'Not selected');
 				statusEl.toggleClass('is-selected', selected);
+			}
+		});
+	}
+
+	private syncCLIToolStates(entries: Array<{ id: string; toggle: ToggleComponent }>, tools: CLIToolConfig[], useAll: boolean) {
+		if (!this.agent.enabledCLITools) {
+			this.agent.enabledCLITools = [];
+		}
+		entries.forEach(({ id, toggle }) => {
+			if (useAll) {
+				if (!this.agent.enabledCLITools!.includes(id)) {
+					this.agent.enabledCLITools!.push(id);
+				}
+				if (!toggle.getValue()) {
+					toggle.setValue(true);
+				}
+				toggle.setDisabled(true);
+			} else {
+				toggle.setDisabled(false);
 			}
 		});
 	}
