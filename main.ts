@@ -141,6 +141,15 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			}
 		});
 
+		// Add command to open chat in main editor area
+		this.addCommand({
+			id: 'open-chat-main',
+			name: 'Open AI chat in main area',
+			callback: async () => {
+				await this.openChatViewInMainArea();
+			}
+		});
+
 		// Add ribbon icon for quick chat access
 		this.chatRibbonIconEl = this.addRibbonIcon('message-circle', 'Open AI chat', async () => {
 			await this.openChatViewInRightSidebar();
@@ -299,6 +308,21 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				await view.refreshModels();
 			}
 		}
+	}
+
+	async openChatViewInMainArea() {
+		// Try to find an existing chat view in the main area (root split)
+		const existing = this.app.workspace.getLeavesOfType(CHAT_VIEW_TYPE);
+		const mainLeaf = existing.find(leaf => leaf.getRoot() === this.app.workspace.rootSplit);
+		if (mainLeaf) {
+			await this.app.workspace.revealLeaf(mainLeaf);
+			return;
+		}
+
+		// Create a new tab in the main editor area
+		const leaf = this.app.workspace.getLeaf('tab');
+		await leaf.setViewState({ type: CHAT_VIEW_TYPE, active: true });
+		await this.app.workspace.revealLeaf(leaf);
 	}
 
 	async openChatViewInRightSidebar() {
