@@ -79,7 +79,10 @@
         "wdio-obsidian-service": "^2.1.6"
     },
     "dependencies": {
+        "@anthropic-ai/claude-agent-sdk": "^0.2.39",
         "@modelcontextprotocol/sdk": "^1.21.1",
+        "@openai/codex-sdk": "^0.99.0",
+        "@qwen-code/sdk": "^0.1.4",
         "@sap-ai-sdk/ai-api": "^2.1.0",
         "@sap-ai-sdk/orchestration": "^2.1.0",
         "isolated-vm": "^6.0.2",

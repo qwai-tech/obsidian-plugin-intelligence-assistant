@@ -216,58 +216,247 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	/**
 	 * Get API version query parameter for Azure OpenAI models
 	 * Returns the appropriate api-version based on the model name
-	 * Reference: https://learn.microsoft.com/en-us/azure/ai-foundry/openai/reference-preview
+	 *
+	 * SAP AI Core Remote Models (azure-openai executableId):
+	 *   gpt-5, gpt-5-mini, gpt-5-nano, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano,
+	 *   gpt-4o, gpt-4o-mini, gpt-4, gpt-35-turbo,
+	 *   o4-mini, o3, o3-mini, o1, o1-mini
 	 */
 	private getApiVersion(executableId?: string, modelName?: string): string | null {
 		// Azure OpenAI requires an api-version query param; infer when executableId is missing
-		const looksLikeAzure = executableId === 'azure-openai' || (modelName ? modelName.startsWith('gpt-') || modelName.startsWith('o1') || modelName.startsWith('o3') || modelName.startsWith('o4') : false);
+		const looksLikeAzure = executableId === 'azure-openai' || (modelName
+			? /^(gpt-|o[134]-|o[134]$)/.test(modelName)
+			: false);
 		if (!looksLikeAzure) {
 			return null;
 		}
 
-		// GPT-5 and newer models use the latest API version
-		if (modelName && modelName.includes('gpt-5')) {
-			return '2025-04-01-preview';  // Latest API version for GPT-5
+		// GPT-5 family and GPT-4.1 family use the latest preview API version
+		if (modelName && (modelName.includes('gpt-5') || modelName.includes('gpt-4.1'))) {
+			return '2025-04-01-preview';
 		}
 
-		// o-series models (o1, o3, o4) use newer API versions
-		if (modelName && (modelName.includes('o1') || modelName.includes('o3') || modelName.includes('o4'))) {
-			return '2024-12-01-preview';
+		// o-series reasoning models (o1, o3, o4) use newer API versions
+		if (modelName && /^o[134]/.test(modelName)) {
+			return '2025-04-01-preview';
 		}
 
-		// gpt-4.1 uses newer preview version
-		if (modelName && modelName.includes('gpt-4.1')) {
-			return '2024-10-21-preview';
+		// GPT-4o uses a stable modern version
+		if (modelName && modelName.includes('gpt-4o')) {
+			return '2024-10-21';
 		}
 
-		// Default API version for most Azure OpenAI models
-		return '2023-05-15';
+		// Default API version for older Azure OpenAI models (gpt-4, gpt-35-turbo)
+		return '2024-06-01';
 	}
 
 	/**
-	 * Determine if a model should use max_completion_tokens instead of max_tokens
-	 * GPT-5 and newer models require max_completion_tokens
-	 * Reference: https://learn.microsoft.com/en-us/azure/ai-foundry/openai/reference-preview
+	 * Determine if a model is a "reasoning" model that:
+	 *   - uses max_completion_tokens instead of max_tokens
+	 *   - does NOT support temperature, top_p, penalties, n>1, logprobs, logit_bias
+	 *
+	 * Reasoning models (Azure OpenAI via SAP AI Core):
+	 *   gpt-5, gpt-5-mini, gpt-5-nano, o4-mini, o3, o3-mini, o1, o1-mini
+	 *
+	 * Non-reasoning newer models that still use max_completion_tokens:
+	 *   gpt-4.1, gpt-4.1-mini, gpt-4.1-nano  (support temperature but use max_completion_tokens)
 	 */
-	private shouldUseMaxCompletionTokens(modelName?: string): boolean {
-		if (!modelName) {
-			return false;
-		}
-
-		// GPT-5 requires max_completion_tokens
-		if (modelName.includes('gpt-5')) {
-			return true;
-		}
-
-		// o-series models (o1, o3, o4) also use the new parameter
-		if (modelName.includes('o1') || modelName.includes('o3') || modelName.includes('o4')) {
-			return true;
-		}
-
-		// Older models use max_tokens
+	private isReasoning(modelName?: string): boolean {
+		if (!modelName) return false;
+		// GPT-5 family
+		if (modelName.includes('gpt-5')) return true;
+		// o-series reasoning models (o1, o3, o4)
+		if (/^o[134]/.test(modelName)) return true;
 		return false;
 	}
 
+	private shouldUseMaxCompletionTokens(modelName?: string): boolean {
+		if (!modelName) return false;
+		// Reasoning models always use max_completion_tokens
+		if (this.isReasoning(modelName)) return true;
+		// GPT-4.1 family also uses max_completion_tokens but supports temperature
+		if (modelName.includes('gpt-4.1')) return true;
+		return false;
+	}
+
+	// ─── Request Body Builders (shared between chat/stream) ──────────
+
+	/**
+	 * Build Anthropic Claude request body for Bedrock /invoke or /invoke-with-response-stream
+	 * Supports: system, messages, tools, metadata, stop_sequences, temperature, top_p, top_k
+	 */
+	private buildClaudeRequestBody(request: ChatRequest): Record<string, unknown> {
+		const claudeMessages = request.messages.filter(msg => msg.role !== 'system');
+		const systemMsg = request.messages.find(msg => msg.role === 'system');
+
+		const body: Record<string, unknown> = {
+			anthropic_version: 'bedrock-2023-05-31',
+			max_tokens: request.maxTokens ?? 2000,
+			messages: claudeMessages.map(msg => ({
+				role: msg.role,
+				content: msg.content
+			})),
+		};
+
+		// System prompt
+		if (systemMsg) body.system = systemMsg.content;
+
+		// Sampling parameters
+		if (request.temperature !== undefined) {
+			body.temperature = request.temperature;
+		} else {
+			body.temperature = 0.7;
+		}
+		if (request.topP !== undefined) body.top_p = request.topP;
+		if (request.topK !== undefined) body.top_k = request.topK;
+		if (request.stopSequences !== undefined) body.stop_sequences = request.stopSequences;
+
+		// Tools (function calling) — convert OpenAI format to Anthropic format
+		if (request.tools?.length) {
+			body.tools = request.tools.map(t => ({
+				name: t.function.name,
+				description: t.function.description,
+				input_schema: t.function.parameters ?? { type: 'object', properties: {} },
+			}));
+		}
+		if (request.toolChoice !== undefined) {
+			if (request.toolChoice === 'auto') body.tool_choice = { type: 'auto' };
+			else if (request.toolChoice === 'none') body.tool_choice = { type: 'none' };
+			else if (request.toolChoice === 'required') body.tool_choice = { type: 'any' };
+			else if (typeof request.toolChoice === 'object') {
+				body.tool_choice = { type: 'tool', name: request.toolChoice.function.name };
+			}
+		}
+
+		// Metadata
+		if (request.user !== undefined) {
+			body.metadata = { user_id: request.user };
+		}
+
+		return body;
+	}
+
+	/**
+	 * Build Bedrock Converse request body for /converse or /invoke-with-response-stream
+	 * Used for Nova Premier and other Bedrock models
+	 * Supports: system, messages, tools, inferenceConfig
+	 */
+	private buildConverseRequestBody(request: ChatRequest): Record<string, unknown> {
+		const converseMessages = request.messages.filter(msg => msg.role !== 'system');
+		const sysMsg = request.messages.find(msg => msg.role === 'system');
+
+		const inferenceConfig: Record<string, unknown> = {
+			maxTokens: request.maxTokens ?? 2000,
+			temperature: request.temperature ?? 0.7,
+			stopSequences: request.stopSequences ?? [],
+		};
+		if (request.topP !== undefined) inferenceConfig.topP = request.topP;
+
+		const body: Record<string, unknown> = {
+			inferenceConfig,
+			messages: converseMessages.map(msg => ({
+				role: msg.role,
+				content: [{ text: msg.content }]
+			})),
+		};
+
+		// System prompt
+		if (sysMsg) body.system = [{ text: sysMsg.content }];
+
+		// Tools (function calling) — convert OpenAI format to Converse toolConfig
+		if (request.tools?.length) {
+			body.toolConfig = {
+				tools: request.tools.map(t => ({
+					toolSpec: {
+						name: t.function.name,
+						description: t.function.description,
+						inputSchema: {
+							json: t.function.parameters ?? { type: 'object', properties: {} },
+						},
+					},
+				})),
+			};
+		}
+
+		return body;
+	}
+
+	/**
+	 * Build Gemini request body for /generateContent or /streamGenerateContent
+	 * Supports: system_instruction, contents, tools, generationConfig, responseFormat
+	 */
+	private buildGeminiRequestBody(request: ChatRequest): Record<string, unknown> {
+		// Convert chat messages to Gemini contents format
+		// System messages go into system_instruction, others into contents
+		const geminiContents: Array<{ role: string; parts: Array<{ text: string }> }> = [];
+		let systemInstruction: { parts: Array<{ text: string }> } | undefined;
+
+		for (const msg of request.messages) {
+			if (msg.role === 'system') {
+				systemInstruction = { parts: [{ text: msg.content }] };
+			} else {
+				const role = msg.role === 'assistant' ? 'model' : 'user';
+				geminiContents.push({
+					role,
+					parts: [{ text: msg.content }]
+				});
+			}
+		}
+
+		// Generation config
+		const generationConfig: Record<string, unknown> = {
+			maxOutputTokens: request.maxTokens ?? 2000,
+			temperature: request.temperature ?? 0.7,
+		};
+		if (request.topP !== undefined) generationConfig.topP = request.topP;
+		if (request.topK !== undefined) generationConfig.topK = request.topK;
+		if (request.stopSequences !== undefined) generationConfig.stopSequences = request.stopSequences;
+
+		// Response MIME type for JSON mode
+		if (request.responseFormat?.type === 'json_object') {
+			generationConfig.responseMimeType = 'application/json';
+		} else if (request.responseFormat?.type === 'json_schema' && request.responseFormat.json_schema) {
+			generationConfig.responseMimeType = 'application/json';
+			generationConfig.responseSchema = request.responseFormat.json_schema.schema;
+		}
+
+		const body: Record<string, unknown> = {
+			generationConfig,
+			contents: geminiContents,
+		};
+
+		// System instruction
+		if (systemInstruction) body.system_instruction = systemInstruction;
+
+		// Tools (function calling) — convert OpenAI format to Gemini format
+		if (request.tools?.length) {
+			body.tools = [{
+				functionDeclarations: request.tools.map(t => ({
+					name: t.function.name,
+					description: t.function.description,
+					parameters: t.function.parameters,
+				})),
+			}];
+		}
+		if (request.toolChoice !== undefined) {
+			if (request.toolChoice === 'auto') {
+				body.toolConfig = { functionCallingConfig: { mode: 'AUTO' } };
+			} else if (request.toolChoice === 'none') {
+				body.toolConfig = { functionCallingConfig: { mode: 'NONE' } };
+			} else if (request.toolChoice === 'required') {
+				body.toolConfig = { functionCallingConfig: { mode: 'ANY' } };
+			} else if (typeof request.toolChoice === 'object') {
+				body.toolConfig = {
+					functionCallingConfig: {
+						mode: 'ANY',
+						allowedFunctionNames: [request.toolChoice.function.name],
+					},
+				};
+			}
+		}
+
+		return body;
+	}
 
 	/**
 	 * Resolve deployment ID from model name
@@ -723,19 +912,9 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			// AWS Bedrock models - use appropriate endpoint and format
 			if (modelName.toLowerCase().includes('claude')) {
 				// Claude models: Use /invoke with Anthropic native format
+				// Extract system message separately (Anthropic API uses a top-level `system` field)
 				url = deploymentUrl ? `${deploymentUrl}/invoke` : `${baseUrl}/v2/inference/deployments/${deploymentId}/invoke`;
-				body = {
-					anthropic_version: 'bedrock-2023-05-31',
-					max_tokens: request.maxTokens ?? 2000,
-					messages: request.messages.map(msg => ({
-						role: msg.role,
-						content: msg.content
-					})),
-					temperature: request.temperature ?? 0.7,
-					...(request.topP !== undefined && { top_p: request.topP }),
-					...(request.topK !== undefined && { top_k: request.topK }),
-					...(request.stopSequences !== undefined && { stop_sequences: request.stopSequences }),
-				};
+				body = this.buildClaudeRequestBody(request);
 			} else if (modelName.toLowerCase().includes('titan')) {
 				// Amazon Titan models: Use /invoke with Titan format
 				url = deploymentUrl ? `${deploymentUrl}/invoke` : `${baseUrl}/v2/inference/deployments/${deploymentId}/invoke`;
@@ -753,48 +932,12 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			} else {
 				// Other Bedrock models (Nova, etc.): Use /converse with unified Bedrock format
 				url = deploymentUrl ? `${deploymentUrl}/converse` : `${baseUrl}/v2/inference/deployments/${deploymentId}/converse`;
-				body = {
-					inferenceConfig: {
-						maxTokens: request.maxTokens ?? 2000,
-						temperature: request.temperature ?? 0.7,
-						...(request.topP !== undefined && { topP: request.topP }),
-						stopSequences: request.stopSequences ?? [],
-					},
-					messages: request.messages.map(msg => ({
-						role: msg.role,
-						content: [{ text: msg.content }]
-					}))
-				};
+				body = this.buildConverseRequestBody(request);
 			}
 		} else if (executableId === 'gcp-vertexai') {
 			// GCP Vertex AI models - use Gemini API format
-			// Endpoint format: /models/<modelName>:generateContent
 			url = deploymentUrl ? `${deploymentUrl}/models/${modelName}:generateContent` : `${baseUrl}/v2/inference/deployments/${deploymentId}/models/${modelName}:generateContent`;
-
-			// Convert chat messages to Gemini contents format
-			// Gemini expects alternating user/model roles, combine consecutive same-role messages
-			const geminiContents = [];
-			for (const msg of request.messages) {
-				const role = msg.role === 'assistant' ? 'model' : 'user';
-				geminiContents.push({
-					role,
-					parts: [{ text: msg.content }]
-				});
-			}
-
-			// Build generation config with comprehensive parameters
-			const generationConfig: Record<string, unknown> = {
-				maxOutputTokens: request.maxTokens ?? 2000,
-				temperature: request.temperature ?? 0.7,
-			};
-			if (request.topP !== undefined) generationConfig.topP = request.topP;
-			if (request.topK !== undefined) generationConfig.topK = request.topK;
-			if (request.stopSequences !== undefined) generationConfig.stopSequences = request.stopSequences;
-
-			body = {
-				generation_config: generationConfig,
-				contents: geminiContents,
-			};
+			body = this.buildGeminiRequestBody(request);
 		} else {
 			// Azure OpenAI and other providers - use /chat/completions endpoint
 			url = deploymentUrl ? `${deploymentUrl}/chat/completions` : `${baseUrl}/v2/inference/deployments/${deploymentId}/chat/completions`;
@@ -812,17 +955,18 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				messages: request.messages.map(msg => ({ role: msg.role, content: msg.content })),
 			};
 
+			// Determine model capabilities
+			const isReasoning = this.isReasoning(modelName);
+			const usesMaxCompletionTokens = this.shouldUseMaxCompletionTokens(modelName);
+
 			// Core sampling parameters
-			// GPT-5 and newer models (like o1) often have strict temperature requirements (e.g. only 1.0)
-			if (this.shouldUseMaxCompletionTokens(modelName) && (request.temperature === 0.7 || request.temperature === undefined)) {
-				// For GPT-5/o-series, omit temperature if it's the UI default (0.7) to let server use its default (1.0)
-			} else {
+			// Reasoning models (GPT-5, o1, o3, o4) do not support temperature — omit entirely
+			if (!isReasoning) {
 				requestBody.temperature = request.temperature ?? 0.7;
 			}
 
-			// Token limits - GPT-5 and newer models use max_completion_tokens, older models use max_tokens
-			if (this.shouldUseMaxCompletionTokens(modelName)) {
-				// GPT-5 and o-series models require max_completion_tokens
+			// Token limits - newer models use max_completion_tokens, older models use max_tokens
+			if (usesMaxCompletionTokens) {
 				requestBody.max_completion_tokens = request.maxCompletionTokens ?? request.maxTokens ?? 2000;
 			} else {
 				// Older models use max_tokens
@@ -834,17 +978,19 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				}
 			}
 
-			// Sampling parameters
-			if (request.topP !== undefined) {
+			// Sampling parameters — not supported by reasoning models
+			if (!isReasoning && request.topP !== undefined) {
 				requestBody.top_p = request.topP;
 			}
 
-			// Penalty parameters
-			if (request.frequencyPenalty !== undefined) {
-				requestBody.frequency_penalty = request.frequencyPenalty;
-			}
-			if (request.presencePenalty !== undefined) {
-				requestBody.presence_penalty = request.presencePenalty;
+			// Penalty parameters — not supported by reasoning models
+			if (!isReasoning) {
+				if (request.frequencyPenalty !== undefined) {
+					requestBody.frequency_penalty = request.frequencyPenalty;
+				}
+				if (request.presencePenalty !== undefined) {
+					requestBody.presence_penalty = request.presencePenalty;
+				}
 			}
 
 			// Stop sequences (Azure OpenAI supports up to 4 sequences)
@@ -854,21 +1000,25 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				requestBody.stop = request.stopSequences.slice(0, 4);
 			}
 
-			// Number of completions (default to request.n or 1 for cost optimization)
-			requestBody.n = request.n ?? 1;
+			// Number of completions — reasoning models only support n=1
+			if (!isReasoning) {
+				requestBody.n = request.n ?? 1;
+			}
 
-			// Logit bias for token probability modification
-			if (request.logitBias !== undefined) {
+			// Logit bias — not supported by reasoning models
+			if (!isReasoning && request.logitBias !== undefined) {
 				requestBody.logit_bias = request.logitBias;
 			}
 
-			// Log probabilities
-			if (request.logprobs !== undefined) {
-				requestBody.logprobs = request.logprobs;
-			}
-			if (request.topLogprobs !== undefined) {
-				// Must be between 0 and 20
-				requestBody.top_logprobs = Math.min(Math.max(request.topLogprobs, 0), 20);
+			// Log probabilities — not supported by reasoning models
+			if (!isReasoning) {
+				if (request.logprobs !== undefined) {
+					requestBody.logprobs = request.logprobs;
+				}
+				if (request.topLogprobs !== undefined) {
+					// Must be between 0 and 20
+					requestBody.top_logprobs = Math.min(Math.max(request.topLogprobs, 0), 20);
+				}
 			}
 
 			// User identifier for monitoring and abuse detection
@@ -952,22 +1102,35 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				method: 'POST',
 				headers,
 				body: JSON.stringify(body),
+				throw: false
 			});
 		} catch (error) {
 			console.error(`SAP AI Core request failed to URL: ${url}`, error);
+
+			// Extract response body from Obsidian requestUrl error if available
+			const errObj = error as Record<string, unknown>;
+			const responseBody = typeof errObj.response === 'string'
+				? errObj.response
+				: (typeof errObj.text === 'string' ? errObj.text : null);
 			const errorMessage = error instanceof Error ? error.message : String(error);
+			const fullError = responseBody
+				? `${errorMessage}\nResponse: ${responseBody}`
+				: errorMessage;
+
+			console.error(`SAP AI Core error details:`, { responseBody, model: modelName, apiVersion: this.getApiVersion(executableId, modelName) });
 
 			// Try to get deployment status for better error message
 			const deploymentDetails = await this.getDeploymentDetails(deploymentId);
 			if (deploymentDetails) {
 				throw new Error(
-					`SAP AI Core API request failed to connect: ${errorMessage}\n` +
+					`SAP AI Core API request failed: ${fullError}\n` +
 					`Deployment Status: ${deploymentDetails.status || 'UNKNOWN'}\n` +
-					`Deployment ID: ${deploymentId}`
+					`Deployment ID: ${deploymentId}\n` +
+					`Model: ${modelName}`
 				);
 			}
 
-			throw new Error(`SAP AI Core API request failed to connect: ${errorMessage}`);
+			throw new Error(`SAP AI Core API request failed: ${fullError}`);
 		}
 
 		if (response.status === 404) {
@@ -985,6 +1148,12 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			throw new Error(`SAP AI Core deployment not found: ${deploymentId}. Verify the deployment ID is correct and the deployment is running.`);
 		} else if (response.status !== 200) {
 			const errorText = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
+			console.error(`SAP AI Core API error ${response.status}:`, {
+				response: errorText,
+				model: modelName,
+				apiVersion: this.getApiVersion(executableId, modelName),
+				requestBody: body
+			});
 
 			// Get deployment status for better diagnostics
 			const deploymentDetails = await this.getDeploymentDetails(deploymentId);
@@ -992,7 +1161,8 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				throw new Error(
 					`SAP AI Core API request failed: ${response.status} - ${errorText}\n` +
 					`Deployment Status: ${deploymentDetails.status || 'UNKNOWN'} (expected RUNNING)\n` +
-					`Deployment ID: ${deploymentId}`
+					`Deployment ID: ${deploymentId}\n` +
+					`Model: ${modelName}`
 				);
 			}
 
@@ -1189,17 +1359,18 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			stream: true,
 		};
 
+		// Determine model capabilities
+		const isReasoning = this.isReasoning(modelName);
+		const usesMaxCompletionTokens = this.shouldUseMaxCompletionTokens(modelName);
+
 		// Core sampling parameters
-		// GPT-5 and newer models (like o1) often have strict temperature requirements (e.g. only 1.0)
-		if (this.shouldUseMaxCompletionTokens(modelName) && (request.temperature === 0.7 || request.temperature === undefined)) {
-			// For GPT-5/o-series, omit temperature if it's the UI default (0.7) to let server use its default (1.0)
-		} else {
+		// Reasoning models (GPT-5, o1, o3, o4) do not support temperature — omit entirely
+		if (!isReasoning) {
 			requestBody.temperature = request.temperature ?? 0.7;
 		}
 
-		// Token limits - GPT-5 and newer models use max_completion_tokens, older models use max_tokens
-		if (this.shouldUseMaxCompletionTokens(modelName)) {
-			// GPT-5 and o-series models require max_completion_tokens
+		// Token limits - newer models use max_completion_tokens, older models use max_tokens
+		if (usesMaxCompletionTokens) {
 			requestBody.max_completion_tokens = request.maxCompletionTokens ?? request.maxTokens ?? 2000;
 		} else {
 			// Older models use max_tokens
@@ -1216,17 +1387,19 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			requestBody.stream_options = request.streamOptions;
 		}
 
-		// Sampling parameters
-		if (request.topP !== undefined) {
+		// Sampling parameters — not supported by reasoning models
+		if (!isReasoning && request.topP !== undefined) {
 			requestBody.top_p = request.topP;
 		}
 
-		// Penalty parameters
-		if (request.frequencyPenalty !== undefined) {
-			requestBody.frequency_penalty = request.frequencyPenalty;
-		}
-		if (request.presencePenalty !== undefined) {
-			requestBody.presence_penalty = request.presencePenalty;
+		// Penalty parameters — not supported by reasoning models
+		if (!isReasoning) {
+			if (request.frequencyPenalty !== undefined) {
+				requestBody.frequency_penalty = request.frequencyPenalty;
+			}
+			if (request.presencePenalty !== undefined) {
+				requestBody.presence_penalty = request.presencePenalty;
+			}
 		}
 
 		// Stop sequences (Azure OpenAI supports up to 4 sequences)
@@ -1236,20 +1409,24 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			requestBody.stop = request.stopSequences.slice(0, 4);
 		}
 
-		// Number of completions (default to request.n or 1 for cost optimization)
-		requestBody.n = request.n ?? 1;
+		// Number of completions — reasoning models only support n=1
+		if (!isReasoning) {
+			requestBody.n = request.n ?? 1;
+		}
 
-		// Logit bias for token probability modification
-		if (request.logitBias !== undefined) {
+		// Logit bias — not supported by reasoning models
+		if (!isReasoning && request.logitBias !== undefined) {
 			requestBody.logit_bias = request.logitBias;
 		}
 
-		// Log probabilities
-		if (request.logprobs !== undefined) {
-			requestBody.logprobs = request.logprobs;
-		}
-		if (request.topLogprobs !== undefined) {
-			requestBody.top_logprobs = Math.min(Math.max(request.topLogprobs, 0), 20);
+		// Log probabilities — not supported by reasoning models
+		if (!isReasoning) {
+			if (request.logprobs !== undefined) {
+				requestBody.logprobs = request.logprobs;
+			}
+			if (request.topLogprobs !== undefined) {
+				requestBody.top_logprobs = Math.min(Math.max(request.topLogprobs, 0), 20);
+			}
 		}
 
 		// User identifier for monitoring and abuse detection
@@ -1334,8 +1511,20 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			});
 		} catch (error) {
 			console.error(`SAP AI Core streaming request failed to URL: ${url}`, error);
+
+			// Extract response body from Obsidian requestUrl error if available
+			const errObj = error as Record<string, unknown>;
+			const responseBody = typeof errObj.response === 'string'
+				? errObj.response
+				: (typeof errObj.text === 'string' ? errObj.text : null);
 			const errorMessage = error instanceof Error ? error.message : String(error);
-			throw new Error(`SAP AI Core streaming API request failed to connect: ${errorMessage}`);
+			const fullError = responseBody
+				? `${errorMessage}\nResponse: ${responseBody}`
+				: errorMessage;
+
+			console.error(`SAP AI Core streaming error details:`, { responseBody, model: modelName });
+
+			throw new Error(`SAP AI Core streaming API request failed: ${fullError}`);
 		}
 
 		if (response.status === 404) {
@@ -1456,29 +1645,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			? `${deploymentUrl}/models/${modelName}:streamGenerateContent`
 			: `${baseUrl}/v2/inference/deployments/${deploymentId}/models/${modelName}:streamGenerateContent`;
 
-		// Convert chat messages to Gemini contents format
-		const geminiContents = [];
-		for (const msg of request.messages) {
-			const role = msg.role === 'assistant' ? 'model' : 'user';
-			geminiContents.push({
-				role,
-				parts: [{ text: msg.content }]
-			});
-		}
-
-		// Build generation config with comprehensive parameters
-		const generationConfig: Record<string, unknown> = {
-			maxOutputTokens: request.maxTokens ?? 2000,
-			temperature: request.temperature ?? 0.7,
-		};
-		if (request.topP !== undefined) generationConfig.topP = request.topP;
-		if (request.topK !== undefined) generationConfig.topK = request.topK;
-		if (request.stopSequences !== undefined) generationConfig.stopSequences = request.stopSequences;
-
-		const body = {
-			generation_config: generationConfig,
-			contents: geminiContents,
-		};
+		const body = this.buildGeminiRequestBody(request);
 
 		console.debug(`SAP AI Core Vertex AI streaming endpoint: ${url}`);
 		console.debug(`SAP AI Core Vertex AI streaming started for deployment: ${deploymentId}, model: ${modelName}`);
@@ -1605,18 +1772,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			url = deploymentUrl
 				? `${deploymentUrl}/invoke-with-response-stream`
 				: `${baseUrl}/v2/inference/deployments/${deploymentId}/invoke-with-response-stream`;
-			body = {
-				anthropic_version: 'bedrock-2023-05-31',
-				max_tokens: request.maxTokens ?? 2000,
-				messages: request.messages.map(msg => ({
-					role: msg.role,
-					content: msg.content
-				})),
-				temperature: request.temperature ?? 0.7,
-				...(request.topP !== undefined && { top_p: request.topP }),
-				...(request.topK !== undefined && { top_k: request.topK }),
-				...(request.stopSequences !== undefined && { stop_sequences: request.stopSequences }),
-			};
+			body = { ...this.buildClaudeRequestBody(request), stream: true };
 		} else if (modelName.toLowerCase().includes('titan')) {
 			// Amazon Titan models: Streaming not commonly supported, fallback to non-streaming
 			console.warn('Titan models may not support streaming, attempting non-streaming request');
@@ -1638,18 +1794,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			url = deploymentUrl
 				? `${deploymentUrl}/invoke-with-response-stream`
 				: `${baseUrl}/v2/inference/deployments/${deploymentId}/invoke-with-response-stream`;
-			body = {
-				inferenceConfig: {
-					maxTokens: request.maxTokens ?? 2000,
-					temperature: request.temperature ?? 0.7,
-					...(request.topP !== undefined && { topP: request.topP }),
-					stopSequences: request.stopSequences ?? [],
-				},
-				messages: request.messages.map(msg => ({
-					role: msg.role,
-					content: [{ text: msg.content }]
-				}))
-			};
+			body = this.buildConverseRequestBody(request);
 		}
 
 		console.debug(`SAP AI Core Bedrock streaming endpoint: ${url}`);
@@ -1723,12 +1868,10 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				}
 
 				try {
-					const parsed = JSON.parse(data);
-
 					// Handle different Bedrock streaming response formats
 					if (modelName.toLowerCase().includes('claude')) {
 						// Anthropic Claude streaming format
-						const chunk = parsed as { type?: string; delta?: { text?: string }; content_block?: { text?: string } };
+						const chunk = JSON.parse(data) as { type?: string; delta?: { text?: string }; content_block?: { text?: string } };
 						const content = chunk.delta?.text || chunk.content_block?.text;
 						if (content) {
 							onChunk({ content, done: false });
@@ -1740,7 +1883,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 						}
 					} else {
 						// Bedrock Converse streaming format
-						const chunk = parsed as {
+						const chunk = JSON.parse(data) as {
 							contentBlockDelta?: { delta?: { text?: string } };
 							messageStop?: unknown;
 						};
@@ -1970,43 +2113,91 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 	/**
 	 * Get default recommended models
+	 * Based on SAP AI Core Remote Model documentation
 	 */
 	private getDefaultModels(): ModelInfo[] {
 		return [
+			// Azure OpenAI — GPT models
+			{ id: 'sap-ai-core:gpt-5', name: 'GPT-5', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'reasoning', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'sap-ai-core:gpt-4.1', name: 'GPT-4.1', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'sap-ai-core:gpt-4o', name: 'GPT-4o', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'audio', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'sap-ai-core:gpt-4o-mini', name: 'GPT-4o Mini', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'audio', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			{ id: 'sap-ai-core:gpt-35-turbo', name: 'GPT-3.5 Turbo', provider: 'sap-ai-core', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			// Azure OpenAI — Reasoning models
+			{ id: 'sap-ai-core:o4-mini', name: 'o4-mini', provider: 'sap-ai-core', capabilities: ['chat', 'reasoning', 'function_calling', 'streaming'], enabled: true },
+			{ id: 'sap-ai-core:o3', name: 'o3', provider: 'sap-ai-core', capabilities: ['chat', 'reasoning', 'function_calling', 'streaming'], enabled: true },
+			// AWS Bedrock — Claude models
 			{ id: 'sap-ai-core:anthropic--claude-4-sonnet', name: 'Claude 4 Sonnet', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'sap-ai-core:anthropic--claude-4.5-haiku', name: 'Claude 4.5 Haiku', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			// GCP Vertex AI — Gemini models
+			{ id: 'sap-ai-core:gemini-2.5-flash', name: 'Gemini 2.5 Flash', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			// Embeddings
 			{ id: 'sap-ai-core:text-embedding-3-large', name: 'Text Embedding 3 Large', provider: 'sap-ai-core', capabilities: ['embedding'], enabled: true },
 		];
 	}
 
 	/**
 	 * Infer model capabilities from scenario ID and model name
+	 *
+	 * SAP AI Core Remote Models:
+	 *   Azure OpenAI: gpt-5/5-mini/5-nano, gpt-4.1/4.1-mini/4.1-nano, gpt-4o/4o-mini,
+	 *                 gpt-4, gpt-35-turbo, o4-mini, o3, o3-mini, o1, o1-mini
+	 *   AWS Bedrock:  Claude 4 Sonnet/Opus, Claude 4.5 Haiku/Opus, Nova Premier
+	 *   GCP Vertex:   Gemini 2.0 Flash/Flash Lite, Gemini 2.5 Flash/Flash Lite
 	 */
 	private inferCapabilities(scenarioId: string, modelName: string): ModelCapability[] {
 		const scenarioLower = scenarioId.toLowerCase();
 		const modelLower = modelName.toLowerCase();
-		const capabilities: ModelCapability[] = ['chat', 'streaming', 'json_mode'];
 
 		// Embedding models
 		if (modelLower.includes('embedding') || modelLower.includes('embed') || scenarioLower.includes('embedding')) {
 			return ['embedding'];
 		}
 
-		// Check for specific model capabilities
-		if (modelLower.includes('gpt-4o')) {
+		const capabilities: ModelCapability[] = ['chat', 'streaming'];
+
+		// Reasoning models (o-series, gpt-5)
+		if (this.isReasoning(modelName)) {
+			capabilities.push('reasoning', 'function_calling');
+			// GPT-5 family supports vision
+			if (modelLower.includes('gpt-5')) {
+				capabilities.push('vision', 'json_mode');
+			}
+			return capabilities;
+		}
+
+		// Add json_mode for non-reasoning chat models
+		capabilities.push('json_mode');
+
+		// GPT-4.1 family — vision + function calling
+		if (modelLower.includes('gpt-4.1')) {
+			capabilities.push('vision', 'function_calling');
+		}
+		// GPT-4o — vision + audio + function calling
+		else if (modelLower.includes('gpt-4o')) {
 			capabilities.push('vision', 'audio', 'function_calling');
-		} else if (modelLower.includes('gpt-4')) {
+		}
+		// GPT-4 (non-4o, non-4.1) — vision + function calling
+		else if (modelLower.includes('gpt-4')) {
 			capabilities.push('vision', 'function_calling');
-		} else if (modelLower.includes('gpt-35') || modelLower.includes('gpt-3.5')) {
+		}
+		// GPT-3.5 — function calling only
+		else if (modelLower.includes('gpt-35') || modelLower.includes('gpt-3.5')) {
 			capabilities.push('function_calling');
-		} else if (modelLower.includes('gemini')) {
+		}
+		// Gemini models — vision + function calling
+		else if (modelLower.includes('gemini')) {
 			capabilities.push('vision', 'function_calling');
-		} else if (modelLower.includes('claude')) {
+		}
+		// Claude models — vision + function calling
+		else if (modelLower.includes('claude')) {
 			capabilities.push('vision', 'function_calling');
-		} else if (scenarioLower.includes('azure-openai') || scenarioLower.includes('openai')) {
-			// Default Azure OpenAI models likely support function calling
+		}
+		// Nova Premier — vision + function calling
+		else if (modelLower.includes('nova')) {
+			capabilities.push('vision', 'function_calling');
+		}
+		// Fallback for other Azure OpenAI models
+		else if (scenarioLower.includes('azure-openai') || scenarioLower.includes('openai')) {
 			capabilities.push('function_calling');
 		}
 

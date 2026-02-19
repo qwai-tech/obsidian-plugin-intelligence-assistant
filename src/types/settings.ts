@@ -12,6 +12,7 @@ import type { WebSearchConfig } from './features/web-search';
 import type { OpenApiToolConfig } from './features/openapi-tools';
 import type { CLIToolConfig } from './features/cli-tools';
 import type { SystemPrompt, Agent } from './core/agent';
+import type { CLIAgentConfig, CLIProviderConfig } from './core/cli-agent';
 import type { AgentMemory } from './features/memory';
 import * as defaultUserConfigJson from '../../config/default/settings.json';
 
@@ -190,6 +191,12 @@ export interface UserConfig {
 		activeId: string | null;
 		memories: AgentMemory[];
 	};
+	cliProviders?: {
+		list: CLIProviderConfig[];
+	};
+	cliAgents?: {
+		list: CLIAgentConfig[];
+	};
 	quickActions?: {
 		list: QuickActionConfig[];
 		prefix?: string; // Unified prefix (string/emoji) for all quick actions
@@ -214,6 +221,8 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 	const webSearch = deepClone(source.search?.web ?? DEFAULT_USER_CONFIG.search.web);
 	const agents = deepClone(source.agents?.list ?? []);
 	const agentMemories = deepClone(source.agents?.memories ?? []);
+	const cliProviders = deepClone(source.cliProviders?.list ?? []);
+	const cliAgents = deepClone(source.cliAgents?.list ?? []);
 	const quickActions = deepClone(source.quickActions?.list ?? DEFAULT_QUICK_ACTIONS);
 
 	const rag = source.rag ?? DEFAULT_USER_CONFIG.rag;
@@ -281,6 +290,8 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 		agents: agents,
 		agentMemories: agentMemories,
 		activeAgentId: source.agents?.activeId ?? null,
+		cliProviders: cliProviders,
+		cliAgents: cliAgents,
 		quickActions: quickActions,
 		quickActionPrefix: source.quickActions?.prefix ?? '⚡'
 	};
@@ -374,6 +385,12 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 			activeId: settings.activeAgentId ?? null,
 			memories: deepClone(settings.agentMemories ?? [])
 		},
+		cliProviders: {
+			list: deepClone(settings.cliProviders ?? [])
+		},
+		cliAgents: {
+			list: deepClone(settings.cliAgents ?? [])
+		},
 		quickActions: {
 			list: deepClone(settings.quickActions ?? DEFAULT_QUICK_ACTIONS),
 			prefix: settings.quickActionPrefix ?? '⚡'
@@ -418,6 +435,10 @@ export interface PluginSettings {
 	agents: Agent[];
 	agentMemories: AgentMemory[];
 	activeAgentId: string | null;
+
+	// CLI Providers & Agents (SDK-based)
+	cliProviders: CLIProviderConfig[];
+	cliAgents: CLIAgentConfig[];
 
 	// Quick Actions
 	quickActions: QuickActionConfig[];

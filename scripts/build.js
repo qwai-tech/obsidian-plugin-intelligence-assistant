@@ -35,7 +35,10 @@ class Builder {
                 '@lezer/highlight',
                 '@lezer/lr',
                 'vm2',
-                'isolated-vm'
+                'isolated-vm',
+                '@anthropic-ai/claude-agent-sdk',
+                '@openai/codex-sdk',
+                '@qwen-code/sdk'
             ]
         };
     }

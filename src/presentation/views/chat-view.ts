@@ -1,10 +1,12 @@
-import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, Modal, Setting, setIcon } from 'obsidian';
+import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, Modal, Setting, setIcon, FileSystemAdapter } from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { DEFAULT_AGENT_ID } from '@/constants';
 import type {Message, FileReference, Conversation, ConversationConfig, ModelInfo, Agent, LLMConfig, AgentExecutionStep} from '@/types';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
+import { CLIAgentService } from '@/infrastructure/cli-agent/cli-agent-service';
+import type { CLIAgentConfig, CLIAgentMessage, CLIProviderConfig } from '@/types';
 import { marked } from 'marked';
 import { ToolManager } from '@/application/services/tool-manager';
 import { RAGManager } from '@/infrastructure/rag-manager';
@@ -82,6 +84,8 @@ export class ChatView extends ItemView {
 	private toolManager: ToolManager;
 	private ragManager: RAGManager;
 	private webSearchService: WebSearchService;
+	private cliAgentService: CLIAgentService;
+	private selectedCliAgentId: string | null = null;
 
 	// UI elements
 	private modeSelector: HTMLSelectElement | null = null;
@@ -112,6 +116,7 @@ export class ChatView extends ItemView {
 		this.chatController = new ChatController(this.app, this.plugin, this.state);
 
 		this.toolManager = this.plugin.getToolManager();
+		this.cliAgentService = new CLIAgentService();
 
 		// Create RAG manager with functions to get current chat model and default model
 		this.ragManager = new RAGManager(
@@ -518,6 +523,20 @@ export class ChatView extends ItemView {
 	private async sendMessage(text: string) {
 		console.debug('[Chat] sendMessage called with text:', text.substring(0, 100) + '...');
 
+		// Check if a CLI agent is selected — route to CLI agent execution
+		if (this.selectedCliAgentId) {
+			const cliAgent = (this.plugin.settings.cliAgents ?? []).find(a => a.id === this.selectedCliAgentId);
+			if (cliAgent) {
+				const cliProvider = (this.plugin.settings.cliProviders ?? []).find(p => p.id === cliAgent.providerId);
+				if (!cliProvider) {
+					new Notice('CLI agent references a missing provider. Please check CLI agent settings.');
+					return;
+				}
+				await this.sendCLIAgentMessage(text, cliProvider, cliAgent);
+				return;
+			}
+		}
+
 		if (this.plugin.settings.llmConfigs.length === 0) {
 			console.error('[Chat] No LLM configs found');
 			new Notice('Please configure an LLM provider in settings first');
@@ -582,6 +601,136 @@ export class ChatView extends ItemView {
 			await this.conversationManager.saveCurrentConversation();
 		}
 	}
+
+	private async sendCLIAgentMessage(text: string, cliProvider: CLIProviderConfig, cliAgent: CLIAgentConfig) {
+		const userMessage: Message = {
+			role: 'user',
+			content: text,
+			attachments: this.state.currentAttachments.length > 0 ? [...this.state.currentAttachments] : undefined
+		};
+		this.state.messages.push(userMessage);
+		this.addMessageToUI(userMessage);
+
+		// Create assistant message placeholder
+		const assistantMessage: Message = {
+			role: 'assistant',
+			content: '',
+			model: `${cliProvider.provider}:${cliAgent.model || 'default'}`
+		};
+		this.state.messages.push(assistantMessage);
+		const assistantMessageEl = this.addMessageToUI(assistantMessage);
+
+		const contentEl = assistantMessageEl?.querySelector('.ia-chat-message__content') ?? null;
+		const messageBody = assistantMessageEl?.querySelector('.ia-chat-message__body') ?? null;
+		let fullContent = '';
+		const executionSteps: AgentExecutionStep[] = [];
+
+		// Create execution trace container for tool calls (inserted before content)
+		let traceContainer: HTMLElement | null = null;
+		if (messageBody && contentEl) {
+			traceContainer = createAgentExecutionTraceContainer(messageBody as HTMLElement, 0);
+			// Move trace before content element
+			(messageBody as HTMLElement).insertBefore(traceContainer.parentElement!, contentEl);
+		}
+
+		try {
+			this.state.isStreaming = true;
+			this.state.stopStreamingRequested = false;
+			if (this.stopBtn) this.stopBtn.removeClass('ia-hidden');
+			if (this.sendHint) this.sendHint.addClass('ia-hidden');
+
+			const abortController = new AbortController();
+
+			// Wire stop button to abort controller
+			const origStopHandler = () => {
+				this.state.stopStreamingRequested = true;
+				abortController.abort();
+			};
+			if (this.stopBtn) this.stopBtn.addEventListener('click', origStopHandler, { once: true });
+
+			const vaultBasePath = this.app.vault.adapter instanceof FileSystemAdapter
+				? this.app.vault.adapter.getBasePath()
+				: undefined;
+			const pluginDir = vaultBasePath
+				? `${vaultBasePath}/${this.app.vault.configDir}/plugins/${this.plugin.manifest.id}`
+				: undefined;
+
+			await this.cliAgentService.execute(
+				cliProvider,
+				cliAgent,
+				text,
+				(message: CLIAgentMessage) => {
+					if (message.type === 'text' && message.content) {
+						fullContent += message.content;
+						if (contentEl) {
+							contentEl.textContent = fullContent;
+						}
+						this.chatContainer.scrollTo({ top: this.chatContainer.scrollHeight, behavior: 'smooth' });
+					} else if (message.type === 'tool-use') {
+						const toolName = message.toolName ?? 'unknown';
+						const step: AgentExecutionStep = {
+							type: 'action',
+							content: `${toolName}(${message.content})`,
+							timestamp: Date.now(),
+							status: 'success'
+						};
+						executionSteps.push(step);
+						if (traceContainer) {
+							updateExecutionTrace(traceContainer, executionSteps);
+						}
+						this.chatContainer.scrollTo({ top: this.chatContainer.scrollHeight, behavior: 'smooth' });
+					} else if (message.type === 'error') {
+						const step: AgentExecutionStep = {
+							type: 'observation',
+							content: message.content,
+							timestamp: Date.now(),
+							status: 'error'
+						};
+						executionSteps.push(step);
+						if (traceContainer) {
+							updateExecutionTrace(traceContainer, executionSteps);
+						}
+					}
+				},
+				abortController,
+				vaultBasePath,
+				pluginDir
+			);
+
+			assistantMessage.content = fullContent;
+			assistantMessage.agentExecutionSteps = executionSteps.length > 0 ? executionSteps : undefined;
+
+			// Collapse execution trace now that streaming is done
+			if (traceContainer && executionSteps.length > 0) {
+				collapseExecutionTrace(traceContainer);
+			}
+			// Hide trace container if no tool calls were made
+			if (traceContainer && executionSteps.length === 0 && traceContainer.parentElement) {
+				traceContainer.parentElement.setCssProps({ 'display': 'none' });
+			}
+
+			// Re-render content with markdown
+			if (contentEl && fullContent) {
+				this.renderMarkdownContent(contentEl as HTMLElement, fullContent);
+			}
+
+			await this.conversationManager.saveCurrentConversation();
+		} catch (error) {
+			const errMsg = error instanceof Error ? error.message : String(error);
+			console.error('[Chat] CLI Agent error:', errMsg);
+			new Notice(`CLI Agent error: ${errMsg}`);
+			assistantMessage.content = fullContent || `❌ **Error:** ${errMsg}`;
+			if (contentEl) {
+				contentEl.textContent = assistantMessage.content;
+			}
+		} finally {
+			this.state.isStreaming = false;
+			this.state.stopStreamingRequested = false;
+			if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
+			if (this.sendHint) this.sendHint.removeClass('ia-hidden');
+		}
+	}
+
 	private async buildReferenceContext(
 		text: string,
 		referenceInputs: (TFile | TFolder | FileReference)[] = []
@@ -1074,6 +1223,18 @@ After calling a tool, you will receive the result and can continue the conversat
 		if (emptyState) emptyState.remove();
 
 		return renderMessage(this.chatContainer, message, options, callbacks, { animate: true });
+	}
+
+	/** Render markdown content into a target element (used after CLI streaming completes) */
+	private renderMarkdownContent(target: HTMLElement, content: string): void {
+		const cleaned = content.replace(/\n{3,}/g, '\n\n');
+		const html = marked.parse(cleaned) as string;
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(html, 'text/html');
+		target.empty();
+		Array.from(doc.body.childNodes).forEach(node => {
+			target.appendChild(node.cloneNode(true));
+		});
 	}
 
 	private renderEmptyState(): void {
@@ -1857,9 +2018,10 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private updateModelControlDisplay() {
 		const isAgentMode = this.state.mode === 'agent';
+		const isCliAgent = !!this.selectedCliAgentId;
 		const activeAgent = this.getActiveAgent();
 		const usesChatViewModel = activeAgent?.modelStrategy?.strategy === 'chat-view';
-		const showControls = !isAgentMode || !activeAgent || usesChatViewModel;
+		const showControls = !isAgentMode || (!activeAgent && !isCliAgent) || usesChatViewModel;
 
 		if (this.modelControlsContainer) {
 			this.modelControlsContainer.setCssProps({ 'display': showControls ? '' : 'none' });
@@ -1874,12 +2036,14 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			this.maxTokensInput.disabled = !showControls;
 		}
 
-		const shouldShowSummary = isAgentMode && !!activeAgent && !usesChatViewModel;
+		const shouldShowSummary = isAgentMode && (!!activeAgent || isCliAgent) && !usesChatViewModel;
 			if (this.agentConfigSummaryEl) {
 				this.agentConfigSummaryEl.setCssProps({ 'display': shouldShowSummary ? 'flex' : 'none' });
 			}
 		if (shouldShowSummary && activeAgent) {
 			this.renderAgentSummary(activeAgent);
+		} else if (shouldShowSummary && isCliAgent) {
+			this.renderCliAgentSummary();
 		}
 	}
 
@@ -1903,6 +2067,28 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		chips
 			.filter(chip => chip.value && chip.value.trim().length > 0)
 			.forEach(({ label, value }) => this.createAgentSummaryChip(label, value));
+	}
+
+	private renderCliAgentSummary() {
+		if (!this.agentSummaryDetailsEl) return;
+		const cliAgent = (this.plugin.settings.cliAgents ?? []).find(a => a.id === this.selectedCliAgentId);
+		if (!cliAgent) return;
+		const cliProvider = (this.plugin.settings.cliProviders ?? []).find(p => p.id === cliAgent.providerId);
+
+		if (this.agentSummaryTitleEl) {
+			this.agentSummaryTitleEl.setText(`${cliAgent.icon || '⚡'} ${cliAgent.name} configuration`);
+		}
+
+		this.agentSummaryDetailsEl.empty();
+		const chips: { label: string; value: string }[] = [
+			{ label: 'Provider', value: cliProvider?.provider ?? 'unknown' },
+			{ label: 'Model', value: cliAgent.model || 'default' },
+			{ label: 'Mode', value: cliAgent.permissionMode }
+		];
+		if (cliAgent.maxTurns) chips.push({ label: 'Max turns', value: String(cliAgent.maxTurns) });
+		if (cliAgent.cwd) chips.push({ label: 'CWD', value: cliAgent.cwd });
+
+		chips.forEach(({ label, value }) => this.createAgentSummaryChip(label, value));
 	}
 
 	private createAgentSummaryChip(label: string, value: string) {
@@ -2080,6 +2266,21 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			this.modeSelector.value = 'agent';
 		}
 
+		// Check if a CLI agent was selected (prefixed with "cli:")
+		if (selectedId.startsWith('cli:')) {
+			const cliAgentId = selectedId.slice(4);
+			this.selectedCliAgentId = cliAgentId;
+			this.state.selectedCliAgentId = cliAgentId;
+			this.plugin.settings.activeAgentId = null;
+			await this.plugin.saveSettings();
+			await this.updateOptionsDisplay();
+			return;
+		}
+
+		// Regular agent selected - clear CLI agent selection
+		this.selectedCliAgentId = null;
+		this.state.selectedCliAgentId = null;
+
 		if (!selectedId) {
 			this.plugin.settings.activeAgentId = null;
 			await this.plugin.saveSettings();
@@ -2133,26 +2334,63 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		let settingsDirty = false;
 
 		if (this.state.mode === 'agent') {
-			let desiredAgentId = config.agentId ?? null;
-			if (!desiredAgentId) {
-				desiredAgentId = this.ensureDefaultAgentSelection();
-			}
-			if (desiredAgentId && !this.plugin.settings.agents.some(agent => agent.id === desiredAgentId)) {
-				desiredAgentId = this.ensureDefaultAgentSelection();
+			// Check if this is a CLI agent conversation
+			let cliAgentId = config.cliAgentId ?? null;
+			const cliAgents = this.plugin.settings.cliAgents ?? [];
+
+			// Fallback: infer CLI agent from message model field for old conversations
+			if (!cliAgentId && conv.messages.length > 0) {
+				const CLI_PREFIXES = ['claude-code:', 'codex:', 'qwen-code:'];
+				const cliMsg = conv.messages.find(m =>
+					m.role === 'assistant' && m.model && CLI_PREFIXES.some(p => m.model?.startsWith(p))
+				);
+				if (cliMsg?.model) {
+					const providerPrefix = cliMsg.model.split(':')[0] as import('@/types').CLIAgentProvider;
+					const matchedAgent = cliAgents.find(a => {
+						const provider = (this.plugin.settings.cliProviders ?? []).find(p => p.id === a.providerId);
+						return provider?.provider === providerPrefix;
+					});
+					if (matchedAgent) cliAgentId = matchedAgent.id;
+				}
 			}
 
-			if (desiredAgentId && this.plugin.settings.activeAgentId !== desiredAgentId) {
-				this.plugin.settings.activeAgentId = desiredAgentId;
-				settingsDirty = true;
-				await this.applyAgentConfig(desiredAgentId, { silent: true });
-			} else if (!desiredAgentId && this.plugin.settings.activeAgentId) {
+			if (cliAgentId && cliAgents.some(a => a.id === cliAgentId)) {
+				// Restore CLI agent selection
+				this.selectedCliAgentId = cliAgentId;
+				this.state.selectedCliAgentId = cliAgentId;
 				this.plugin.settings.activeAgentId = null;
 				settingsDirty = true;
-			}
 
-			this.refreshAgentSelect(desiredAgentId ?? undefined);
-			if (this.agentSelector) {
-				this.agentSelector.value = desiredAgentId || '';
+				this.refreshAgentSelect();
+				if (this.agentSelector) {
+					this.agentSelector.value = `cli:${cliAgentId}`;
+				}
+			} else {
+				// Regular agent
+				this.selectedCliAgentId = null;
+				this.state.selectedCliAgentId = null;
+
+				let desiredAgentId = config.agentId ?? null;
+				if (!desiredAgentId) {
+					desiredAgentId = this.ensureDefaultAgentSelection();
+				}
+				if (desiredAgentId && !this.plugin.settings.agents.some(agent => agent.id === desiredAgentId)) {
+					desiredAgentId = this.ensureDefaultAgentSelection();
+				}
+
+				if (desiredAgentId && this.plugin.settings.activeAgentId !== desiredAgentId) {
+					this.plugin.settings.activeAgentId = desiredAgentId;
+					settingsDirty = true;
+					await this.applyAgentConfig(desiredAgentId, { silent: true });
+				} else if (!desiredAgentId && this.plugin.settings.activeAgentId) {
+					this.plugin.settings.activeAgentId = null;
+					settingsDirty = true;
+				}
+
+				this.refreshAgentSelect(desiredAgentId ?? undefined);
+				if (this.agentSelector) {
+					this.agentSelector.value = desiredAgentId || '';
+				}
 			}
 		} else {
 			const availablePrompts = new Set(this.plugin.settings.systemPrompts.filter(p => p.enabled).map(p => p.id));
@@ -2709,9 +2947,36 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				selectEl.appendChild(option);
 			}
 
+		// Add CLI agents if any exist
+		const cliAgents = this.plugin.settings.cliAgents ?? [];
+		if (cliAgents.length > 0) {
+			const separator = document.createElement('option');
+			separator.value = '';
+			separator.textContent = '── CLI Agents ──';
+			separator.disabled = true;
+			selectEl.appendChild(separator);
+
+			for (const cliAgent of cliAgents) {
+				const option = document.createElement('option');
+				option.value = `cli:${cliAgent.id}`;
+				option.textContent = `⚡ ${cliAgent.name}`;
+				selectEl.appendChild(option);
+			}
+		}
+
 		if (currentActive) {
 			selectEl.value = currentActive;
 			return currentActive;
+		}
+
+		// Check if a CLI agent was previously selected
+		if (this.selectedCliAgentId) {
+			const cliValue = `cli:${this.selectedCliAgentId}`;
+			const cliExists = cliAgents.some(a => a.id === this.selectedCliAgentId);
+			if (cliExists) {
+				selectEl.value = cliValue;
+				return null;
+			}
 		}
 
 		placeholder.selected = true;

@@ -7,8 +7,6 @@ export class ProviderConfigModal extends Modal {
 	private draft: LLMConfig;
 	private readonly onSaveCallback: (config: LLMConfig) => void | Promise<void>;
 	private providerContainer: HTMLElement | null = null;
-	private readonly cliProviders = new Set(['claude-code', 'codex', 'qwen-code']);
-
 	constructor(app: App, initial: LLMConfig, onSave: (config: LLMConfig) => void | Promise<void>) {
 		super(app);
 		const clonedDraft = JSON.parse(JSON.stringify(initial)) as unknown as LLMConfig;
@@ -28,12 +26,9 @@ export class ProviderConfigModal extends Modal {
 		}).addDropdown(dropdown => dropdown
 				.addOption('', '-- Select provider --')
 				.addOption('openai', 'OpenAI')
-				.addOption('codex', 'Codex')
 				.addOption('anthropic', 'Anthropic')
-				.addOption('claude-code', 'Claude Code')
 				.addOption('google', 'Google (Gemini)')
 				.addOption('deepseek', 'DeepSeek')
-				.addOption('qwen-code', 'Qwen Code')
 				.addOption('ollama', 'Ollama (local)')
 				.addOption('openrouter', 'OpenRouter')
 				.addOption('sap-ai-core', 'SAP AI Core')
@@ -110,34 +105,7 @@ export class ProviderConfigModal extends Modal {
 
 		this.providerContainer.empty();
 
-		if (this.cliProviders.has(this.draft.provider)) {
-			// For CLI providers, show API Key field but mark as optional (not needed for CLI)
-			applyConfigFieldMetadata(new Setting(this.providerContainer), {
-				path: 'llmConfigs[].apiKey',
-				label: 'API Key',
-				description: 'Not required for CLI-based providers'
-			}).addText(text => {
-					text.setPlaceholder('Not needed for CLI providers');
-					text.inputEl.type = 'password';
-					text.setValue(this.draft.apiKey || '');
-					// Don't disable - just make it readonly for better UX
-					text.inputEl.readOnly = true;
-					text.onChange(value => {
-						this.draft.apiKey = value.trim() || undefined;
-					});
-				});
-
-			applyConfigFieldMetadata(new Setting(this.providerContainer), {
-				path: 'llmConfigs[].commandPath',
-				label: 'CLI command path',
-				description: 'Optional path to the CLI binary (leave empty to use PATH)'
-			}).addText(text => text
-					.setPlaceholder(this.draft.provider)
-					.setValue(this.draft.commandPath || '')
-					.onChange(value => {
-						this.draft.commandPath = value.trim() || undefined;
-					}));
-		} else if (this.draft.provider === 'sap-ai-core') {
+		if (this.draft.provider === 'sap-ai-core') {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].serviceKey',
 				label: 'Service key',

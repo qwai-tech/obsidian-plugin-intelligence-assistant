@@ -130,7 +130,7 @@ export class CLITool implements Tool {
 	/**
 	 * Run the command using child_process.spawn
 	 */
-	private runCommand(
+	private async runCommand(
 		command: string,
 		args: string[],
 		env: Record<string, string>

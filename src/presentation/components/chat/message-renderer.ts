@@ -28,7 +28,10 @@ export interface MessageRendererCallbacks {
 interface AssistantMeta {
 	modelLabel: string;
 	providerLabel: string;
+	isCliAgent?: boolean;
 }
+
+const CLI_PROVIDER_PREFIXES = ['claude-code', 'codex', 'qwen-code'];
 
 const BUTTONS: Array<{
 	key: keyof MessageRendererCallbacks;
@@ -217,8 +220,15 @@ function applyAvatarAndLabel(
 		|| (providerId ? providerColorFallbacks[providerId] : undefined)
 		|| '#3f3f46';
 	const fallbackAvatar = callbacks?.getProviderAvatar?.(message) ?? '🤖';
-	const modelLabel = getModelDisplayName(message.model) || message.model || 'Unknown Model';
+	// Detect CLI agent messages (model format: "claude-code:default", "codex:gpt-4o", etc.)
+	const isCliAgent = typeof message.model === 'string'
+		&& message.model.includes(':')
+		&& CLI_PROVIDER_PREFIXES.includes(message.model.split(':')[0].toLowerCase());
+
 	const providerLabel = providerMeta?.label || humanizeProvider(providerId) || 'Unknown Provider';
+	const modelLabel = isCliAgent
+		? providerLabel
+		: (getModelDisplayName(message.model) || message.model || 'Unknown Model');
 
 	avatar.addClass('ia-provider-avatar');
 	if (providerMeta?.iconSvg) {
@@ -244,15 +254,20 @@ function applyAvatarAndLabel(
 
 	return {
 		modelLabel,
-		providerLabel
+		providerLabel,
+		isCliAgent
 	};
 }
 
 function renderAssistantBadges(header: HTMLElement, meta: AssistantMeta) {
 	const badgeRow = header.createDiv('ia-chat-message__badges');
 	badgeRow.addClass('message-meta-badges');
-	createMetaBadge(badgeRow, 'Model', meta.modelLabel);
-	createMetaBadge(badgeRow, 'Provider', meta.providerLabel);
+	if (meta.isCliAgent) {
+		createMetaBadge(badgeRow, 'Provider', meta.providerLabel);
+	} else {
+		createMetaBadge(badgeRow, 'Model', meta.modelLabel);
+		createMetaBadge(badgeRow, 'Provider', meta.providerLabel);
+	}
 }
 
 function createMetaBadge(container: HTMLElement, label: string, value: string) {

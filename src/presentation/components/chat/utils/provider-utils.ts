@@ -20,6 +20,15 @@ export function resolveMessageProviderId(
 		: (typeof metadata.model === 'string' ? metadata.model : null);
 
 	if (rawModelId) {
+		// Check for CLI agent provider prefix (e.g. "claude-code:default", "codex:gpt-4o")
+		const CLI_PROVIDERS = ['claude-code', 'codex', 'qwen-code'];
+		if (rawModelId.includes(':')) {
+			const prefix = rawModelId.split(':')[0].toLowerCase();
+			if (CLI_PROVIDERS.includes(prefix)) {
+				return prefix;
+			}
+		}
+
 		const config = ModelManager.findConfigForModelByProvider(rawModelId, plugin.settings.llmConfigs);
 		if (config?.provider) {
 			return config.provider.toLowerCase();
