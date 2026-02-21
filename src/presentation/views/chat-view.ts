@@ -6,7 +6,7 @@ import type {Message, FileReference, Conversation, ConversationConfig, ModelInfo
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
 import { CLIAgentService } from '@/infrastructure/cli-agent/cli-agent-service';
-import type { CLIAgentConfig, CLIAgentMessage, CLIProviderConfig } from '@/types';
+import type { CLIAgentConfig, CLIAgentMessage } from '@/types';
 import { marked } from 'marked';
 import { ToolManager } from '@/application/services/tool-manager';
 import { RAGManager } from '@/infrastructure/rag-manager';
@@ -527,12 +527,7 @@ export class ChatView extends ItemView {
 		if (this.selectedCliAgentId) {
 			const cliAgent = (this.plugin.settings.cliAgents ?? []).find(a => a.id === this.selectedCliAgentId);
 			if (cliAgent) {
-				const cliProvider = (this.plugin.settings.cliProviders ?? []).find(p => p.id === cliAgent.providerId);
-				if (!cliProvider) {
-					new Notice('CLI agent references a missing provider. Please check CLI agent settings.');
-					return;
-				}
-				await this.sendCLIAgentMessage(text, cliProvider, cliAgent);
+				await this.sendCLIAgentMessage(text, cliAgent);
 				return;
 			}
 		}
@@ -602,7 +597,7 @@ export class ChatView extends ItemView {
 		}
 	}
 
-	private async sendCLIAgentMessage(text: string, cliProvider: CLIProviderConfig, cliAgent: CLIAgentConfig) {
+	private async sendCLIAgentMessage(text: string, cliAgent: CLIAgentConfig) {
 		const userMessage: Message = {
 			role: 'user',
 			content: text,
@@ -615,7 +610,7 @@ export class ChatView extends ItemView {
 		const assistantMessage: Message = {
 			role: 'assistant',
 			content: '',
-			model: `${cliProvider.provider}:${cliAgent.model || 'default'}`
+			model: `${cliAgent.provider}:${cliAgent.model || 'default'}`
 		};
 		this.state.messages.push(assistantMessage);
 		const assistantMessageEl = this.addMessageToUI(assistantMessage);
@@ -656,7 +651,6 @@ export class ChatView extends ItemView {
 				: undefined;
 
 			await this.cliAgentService.execute(
-				cliProvider,
 				cliAgent,
 				text,
 				(message: CLIAgentMessage) => {
@@ -2073,7 +2067,6 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (!this.agentSummaryDetailsEl) return;
 		const cliAgent = (this.plugin.settings.cliAgents ?? []).find(a => a.id === this.selectedCliAgentId);
 		if (!cliAgent) return;
-		const cliProvider = (this.plugin.settings.cliProviders ?? []).find(p => p.id === cliAgent.providerId);
 
 		if (this.agentSummaryTitleEl) {
 			this.agentSummaryTitleEl.setText(`${cliAgent.icon || '⚡'} ${cliAgent.name} configuration`);
@@ -2081,7 +2074,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		this.agentSummaryDetailsEl.empty();
 		const chips: { label: string; value: string }[] = [
-			{ label: 'Provider', value: cliProvider?.provider ?? 'unknown' },
+			{ label: 'Provider', value: cliAgent.provider },
 			{ label: 'Model', value: cliAgent.model || 'default' },
 			{ label: 'Mode', value: cliAgent.permissionMode }
 		];
@@ -2346,10 +2339,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				);
 				if (cliMsg?.model) {
 					const providerPrefix = cliMsg.model.split(':')[0] as import('@/types').CLIAgentProvider;
-					const matchedAgent = cliAgents.find(a => {
-						const provider = (this.plugin.settings.cliProviders ?? []).find(p => p.id === a.providerId);
-						return provider?.provider === providerPrefix;
-					});
+					const matchedAgent = cliAgents.find(a => a.provider === providerPrefix);
 					if (matchedAgent) cliAgentId = matchedAgent.id;
 				}
 			}

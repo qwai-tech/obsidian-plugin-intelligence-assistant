@@ -114,6 +114,52 @@
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
+/* ─── CLI Detection Panel ──────────────────────────────────────── */
+.ia-detection-panel {
+	margin-bottom: 16px;
+}
+.ia-detection-panel h4 {
+	margin: 0 0 8px;
+	font-size: var(--ia-font-size-sm);
+}
+.ia-detection-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 10px;
+}
+.ia-detection-card {
+	padding: 10px 12px;
+	border-radius: 8px;
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-secondary);
+}
+.ia-detection-card__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 6px;
+}
+.ia-detection-card__name {
+	font-weight: 600;
+	font-size: var(--ia-font-size-sm);
+}
+.ia-detection-card__row {
+	display: flex;
+	gap: 4px;
+	font-size: var(--ia-font-size-xs);
+	color: var(--text-muted);
+	line-height: 1.6;
+}
+.ia-detection-card__label {
+	flex-shrink: 0;
+}
+.ia-detection-card__value--ok {
+	color: var(--text-success);
+}
+.ia-detection-card__value--missing {
+	color: var(--text-faint);
+}
+
 .ia-toolbar {
 	display: flex;
 	gap: 10px;

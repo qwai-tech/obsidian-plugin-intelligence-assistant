@@ -650,10 +650,7 @@ export class ConversationManager extends Events {
 		if (conv.cliAgentId) {
 			const cliAgent = (this.plugin.settings.cliAgents ?? []).find(a => a.id === conv.cliAgentId);
 			if (!cliAgent) return null;
-			const cliProvider = (this.plugin.settings.cliProviders ?? []).find(p => p.id === cliAgent.providerId);
-			const providerLabel = cliProvider
-				? CLI_PROVIDER_LABELS[cliProvider.provider] ?? cliProvider.provider
-				: undefined;
+			const providerLabel = CLI_PROVIDER_LABELS[cliAgent.provider] ?? cliAgent.provider;
 			return { name: cliAgent.name, providerLabel };
 		}
 		if (conv.agentId) {

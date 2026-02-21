@@ -12,7 +12,7 @@ import { spawn } from 'child_process';
 import { createInterface } from 'readline';
 import { existsSync } from 'fs';
 import { join } from 'path';
-import type { CLIProviderConfig, CLIAgentConfig, CLIAgentMessage, CLIAgentResult } from '@/types';
+import type { CLIAgentConfig, CLIAgentMessage, CLIAgentResult } from '@/types';
 import { CLI_PROVIDER_LABELS } from '@/types/core/cli-agent';
 import { isSdkInstalled, SDK_PACKAGES } from './sdk-installer';
 import { getFullPath } from './shell-env';
@@ -25,7 +25,6 @@ export class CLIAgentService {
 	 * @param pluginDir — plugin installation directory for SDK resolution
 	 */
 	async execute(
-		providerConfig: CLIProviderConfig,
 		agentConfig: CLIAgentConfig,
 		prompt: string,
 		onMessage: (message: CLIAgentMessage) => void,
@@ -33,13 +32,15 @@ export class CLIAgentService {
 		defaultCwd?: string,
 		pluginDir?: string
 	): Promise<CLIAgentResult> {
+		const provider = agentConfig.provider;
+
 		// Pre-flight: ensure the SDK is installed
-		if (pluginDir && !isSdkInstalled(pluginDir, providerConfig.provider)) {
-			const label = CLI_PROVIDER_LABELS[providerConfig.provider];
-			const pkg = SDK_PACKAGES[providerConfig.provider].packageName;
+		if (pluginDir && !isSdkInstalled(pluginDir, provider)) {
+			const label = CLI_PROVIDER_LABELS[provider];
+			const pkg = SDK_PACKAGES[provider].packageName;
 			throw new Error(
 				`${label} SDK (${pkg}) is not installed. ` +
-				'Please install it from Settings > CLI Agents > Providers.'
+				'Please install it from Settings > CLI Agents.'
 			);
 		}
 
@@ -63,19 +64,19 @@ export class CLIAgentService {
 			Object.assign(processEnv, agentConfig.env);
 		}
 
-		// Add provider API key to env
-		if (providerConfig.apiKey) {
-			if (providerConfig.provider === 'claude-code') processEnv['ANTHROPIC_API_KEY'] = providerConfig.apiKey;
-			else if (providerConfig.provider === 'codex') processEnv['OPENAI_API_KEY'] = providerConfig.apiKey;
-			else if (providerConfig.provider === 'qwen-code') processEnv['DASHSCOPE_API_KEY'] = providerConfig.apiKey;
+		// Add API key to env
+		if (agentConfig.apiKey) {
+			if (provider === 'claude-code') processEnv['ANTHROPIC_API_KEY'] = agentConfig.apiKey;
+			else if (provider === 'codex') processEnv['OPENAI_API_KEY'] = agentConfig.apiKey;
+			else if (provider === 'qwen-code') processEnv['DASHSCOPE_API_KEY'] = agentConfig.apiKey;
 		}
 
 		// Build the JSON input for the bridge script
-		const bridgeInput = this.buildBridgeInput(providerConfig, agentConfig, prompt, cwd);
+		const bridgeInput = this.buildBridgeInput(agentConfig, prompt, cwd);
 
 		return this.runBridge(
 			nodeBin, bridgePath, pluginDir,
-			providerConfig.provider, bridgeInput,
+			provider, bridgeInput,
 			onMessage, abortController, processEnv
 		);
 	}
@@ -93,22 +94,20 @@ export class CLIAgentService {
 
 	/** Build the JSON input payload for the bridge script */
 	private buildBridgeInput(
-		provider: CLIProviderConfig,
 		agent: CLIAgentConfig,
 		prompt: string,
 		cwd: string
 	): Record<string, unknown> {
-		if (provider.provider === 'claude-code') {
-			return this.buildClaudeInput(provider, agent, prompt, cwd);
-		} else if (provider.provider === 'codex') {
-			return this.buildCodexInput(provider, agent, prompt, cwd);
+		if (agent.provider === 'claude-code') {
+			return this.buildClaudeInput(agent, prompt, cwd);
+		} else if (agent.provider === 'codex') {
+			return this.buildCodexInput(agent, prompt, cwd);
 		} else {
-			return this.buildQwenInput(provider, agent, prompt, cwd);
+			return this.buildQwenInput(agent, prompt, cwd);
 		}
 	}
 
 	private buildClaudeInput(
-		provider: CLIProviderConfig,
 		agent: CLIAgentConfig,
 		prompt: string,
 		cwd: string
@@ -130,10 +129,10 @@ export class CLIAgentService {
 		if (cwd) options['cwd'] = cwd;
 		if (agent.allowedTools) options['allowedTools'] = agent.allowedTools;
 		if (agent.disallowedTools) options['disallowedTools'] = agent.disallowedTools;
-		if (provider.maxBudgetUsd) options['maxBudgetUsd'] = provider.maxBudgetUsd;
-		if (provider.fallbackModel) options['fallbackModel'] = provider.fallbackModel;
-		if (provider.enableFileCheckpointing) options['enableFileCheckpointing'] = true;
-		if (provider.mcpServers && Object.keys(provider.mcpServers).length > 0) options['mcpServers'] = provider.mcpServers;
+		if (agent.maxBudgetUsd) options['maxBudgetUsd'] = agent.maxBudgetUsd;
+		if (agent.fallbackModel) options['fallbackModel'] = agent.fallbackModel;
+		if (agent.enableFileCheckpointing) options['enableFileCheckpointing'] = true;
+		if (agent.mcpServers && Object.keys(agent.mcpServers).length > 0) options['mcpServers'] = agent.mcpServers;
 		if (agent.maxThinkingTokens) options['maxThinkingTokens'] = agent.maxThinkingTokens;
 		if (agent.additionalDirectories?.length) options['additionalDirectories'] = agent.additionalDirectories;
 		if (agent.permissionMode === 'bypass') options['allowDangerouslySkipPermissions'] = true;
@@ -142,7 +141,6 @@ export class CLIAgentService {
 	}
 
 	private buildCodexInput(
-		provider: CLIProviderConfig,
 		agent: CLIAgentConfig,
 		prompt: string,
 		cwd: string
@@ -155,17 +153,17 @@ export class CLIAgentService {
 		};
 
 		const codexOptions: Record<string, unknown> = {};
-		if (provider.apiKey) codexOptions['apiKey'] = provider.apiKey;
-		if (provider.baseUrl) codexOptions['baseUrl'] = provider.baseUrl;
+		if (agent.apiKey) codexOptions['apiKey'] = agent.apiKey;
+		if (agent.baseUrl) codexOptions['baseUrl'] = agent.baseUrl;
 
 		const threadOptions: Record<string, unknown> = {};
 		if (agent.model) threadOptions['model'] = agent.model;
 		if (cwd) threadOptions['workingDirectory'] = cwd;
 		if (agent.systemPrompt) threadOptions['instructions'] = agent.systemPrompt;
-		if (provider.sandboxMode) threadOptions['sandboxMode'] = provider.sandboxMode;
-		if (provider.networkAccessEnabled != null) threadOptions['networkAccessEnabled'] = provider.networkAccessEnabled;
-		if (provider.webSearchMode) threadOptions['webSearchMode'] = provider.webSearchMode;
-		if (provider.skipGitRepoCheck != null) threadOptions['skipGitRepoCheck'] = provider.skipGitRepoCheck;
+		if (agent.sandboxMode) threadOptions['sandboxMode'] = agent.sandboxMode;
+		if (agent.networkAccessEnabled != null) threadOptions['networkAccessEnabled'] = agent.networkAccessEnabled;
+		if (agent.webSearchMode) threadOptions['webSearchMode'] = agent.webSearchMode;
+		if (agent.skipGitRepoCheck != null) threadOptions['skipGitRepoCheck'] = agent.skipGitRepoCheck;
 		if (agent.modelReasoningEffort) threadOptions['modelReasoningEffort'] = agent.modelReasoningEffort;
 		if (agent.additionalDirectories?.length) threadOptions['additionalDirectories'] = agent.additionalDirectories;
 		threadOptions['approvalPolicy'] = approvalModeMap[agent.permissionMode] ?? 'on-request';
@@ -174,7 +172,6 @@ export class CLIAgentService {
 	}
 
 	private buildQwenInput(
-		provider: CLIProviderConfig,
 		agent: CLIAgentConfig,
 		prompt: string,
 		cwd: string
@@ -188,9 +185,9 @@ export class CLIAgentService {
 		if (cwd) options['cwd'] = cwd;
 		if (agent.allowedTools) options['coreTools'] = agent.allowedTools;
 		if (agent.disallowedTools) options['excludeTools'] = agent.disallowedTools;
-		if (provider.debug) options['debug'] = true;
-		if (provider.authType) options['authType'] = provider.authType;
-		if (provider.mcpServers && Object.keys(provider.mcpServers).length > 0) options['mcpServers'] = provider.mcpServers;
+		if (agent.debug) options['debug'] = true;
+		if (agent.authType) options['authType'] = agent.authType;
+		if (agent.mcpServers && Object.keys(agent.mcpServers).length > 0) options['mcpServers'] = agent.mcpServers;
 		if (agent.maxSessionTurns) options['maxSessionTurns'] = agent.maxSessionTurns;
 
 		return { prompt, options };

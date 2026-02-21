@@ -30,7 +30,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 	private mcpToolsServerFilter: string = 'all';
 	private mcpToolsSearchTerm: string = '';
 	private toolsSubTab: 'built-in' | 'mcp' | 'openapi' | 'cli' = 'built-in';
-	private cliAgentsSubTab: 'providers' | 'agents' = 'providers';
+	// cliAgentsSubTab removed — single-tier UI
 	private ragSubTab: 'general' | 'vector' | 'grader' = 'general';
 	private ragIndexModePill?: HTMLElement;
 	private ragIndexModeMetric?: HTMLElement;
@@ -189,9 +189,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			containerEl,
 			this.plugin,
 			this.app,
-			() => this.display(),
-			this.cliAgentsSubTab,
-			(tab) => { this.cliAgentsSubTab = tab; }
+			() => this.display()
 		);
 	}
 

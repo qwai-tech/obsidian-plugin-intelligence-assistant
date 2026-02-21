@@ -11,19 +11,33 @@ export type CLIAgentProvider = 'claude-code' | 'codex' | 'qwen-code';
 export type CLIAgentPermissionMode = 'default' | 'plan' | 'auto-edit' | 'bypass';
 
 /**
- * CLI Provider — SDK connection and provider-level config.
- * Analogous to LLMConfig for LLM providers.
+ * CLI Agent — flat config combining provider settings and agent behavior.
  */
-export interface CLIProviderConfig {
+export interface CLIAgentConfig {
 	id: string;
+	name: string;
+	description: string;
+	icon: string;
 	provider: CLIAgentProvider;
 
-	// Authentication
+	// Basic behavior
+	model?: string;
+	systemPrompt?: string;
+	permissionMode: CLIAgentPermissionMode;
+
+	// Auth override (optional — CLIs have their own auth mechanisms)
 	apiKey?: string;
 	baseUrl?: string;                      // Codex
 	authType?: 'openai' | 'qwen-oauth';   // Qwen
 
-	// Provider-level SDK options
+	// Agent behavior
+	maxTurns?: number;
+	cwd?: string;
+	env?: Record<string, string>;
+	allowedTools?: string[];
+	disallowedTools?: string[];
+
+	// Provider-specific SDK options
 	mcpServers?: Record<string, unknown>;
 	maxBudgetUsd?: number;                 // Claude: global budget cap
 	fallbackModel?: string;                // Claude
@@ -33,31 +47,6 @@ export interface CLIProviderConfig {
 	webSearchMode?: 'disabled' | 'cached' | 'live';  // Codex
 	skipGitRepoCheck?: boolean;            // Codex
 	debug?: boolean;                       // Qwen
-
-	createdAt: number;
-	updatedAt: number;
-}
-
-/**
- * CLI Agent — references a CLI Provider and adds agent behavior config.
- * Analogous to Agent which references model strategies.
- */
-export interface CLIAgentConfig {
-	id: string;
-	name: string;
-	description: string;
-	icon: string;
-	providerId: string;  // References CLIProviderConfig.id
-
-	// Agent behavior
-	model?: string;
-	systemPrompt?: string;
-	permissionMode: CLIAgentPermissionMode;
-	maxTurns?: number;
-	cwd?: string;
-	env?: Record<string, string>;
-	allowedTools?: string[];
-	disallowedTools?: string[];
 
 	// Agent-specific SDK overrides
 	maxThinkingTokens?: number;         // Claude
@@ -69,7 +58,7 @@ export interface CLIAgentConfig {
 	updatedAt: number;
 }
 
-/** Auto-generated display label for a CLI provider */
+/** Display label for a CLI provider */
 export const CLI_PROVIDER_LABELS: Record<CLIAgentProvider, string> = {
 	'claude-code': 'Claude Code',
 	'codex': 'Codex',
@@ -99,4 +88,80 @@ export interface CLIAgentResult {
 		totalCostUsd?: number;
 	};
 	durationMs?: number;
+}
+
+// ---------------------------------------------------------------------------
+// Migration helpers — convert old two-tier (provider + agent) to flat config
+// ---------------------------------------------------------------------------
+
+/** @deprecated Legacy provider config — used only for migration from old settings */
+export interface CLIProviderConfig_Legacy {
+	id: string;
+	provider: CLIAgentProvider;
+	apiKey?: string;
+	baseUrl?: string;
+	authType?: 'openai' | 'qwen-oauth';
+	mcpServers?: Record<string, unknown>;
+	maxBudgetUsd?: number;
+	fallbackModel?: string;
+	enableFileCheckpointing?: boolean;
+	sandboxMode?: 'read-only' | 'workspace-write' | 'danger-full-access';
+	networkAccessEnabled?: boolean;
+	webSearchMode?: 'disabled' | 'cached' | 'live';
+	skipGitRepoCheck?: boolean;
+	debug?: boolean;
+	createdAt: number;
+	updatedAt: number;
+}
+
+/** @deprecated Legacy agent config — used only for migration from old settings */
+export interface CLIAgentConfig_Legacy {
+	id: string;
+	name: string;
+	description: string;
+	icon: string;
+	providerId: string;
+	model?: string;
+	systemPrompt?: string;
+	permissionMode: CLIAgentPermissionMode;
+	maxTurns?: number;
+	cwd?: string;
+	env?: Record<string, string>;
+	allowedTools?: string[];
+	disallowedTools?: string[];
+	maxThinkingTokens?: number;
+	additionalDirectories?: string[];
+	modelReasoningEffort?: 'minimal' | 'low' | 'medium' | 'high' | 'xhigh';
+	maxSessionTurns?: number;
+	createdAt: number;
+	updatedAt: number;
+}
+
+/** Migrate old two-tier configs to flat CLIAgentConfig */
+/* eslint-disable @typescript-eslint/no-deprecated -- intentional: reads legacy format during migration */
+export function migrateCliConfigs(
+	oldProviders: CLIProviderConfig_Legacy[],
+	oldAgents: CLIAgentConfig_Legacy[]
+): CLIAgentConfig[] {
+/* eslint-enable @typescript-eslint/no-deprecated -- re-enable after legacy params */
+	return oldAgents.map(agent => {
+		const prov = oldProviders.find(p => p.id === agent.providerId);
+		const { providerId: _pid, ...rest } = agent;
+		return {
+			...rest,
+			provider: prov?.provider ?? 'claude-code' as CLIAgentProvider,
+			apiKey: prov?.apiKey,
+			baseUrl: prov?.baseUrl,
+			authType: prov?.authType,
+			mcpServers: prov?.mcpServers,
+			maxBudgetUsd: prov?.maxBudgetUsd,
+			fallbackModel: prov?.fallbackModel,
+			enableFileCheckpointing: prov?.enableFileCheckpointing,
+			sandboxMode: prov?.sandboxMode,
+			networkAccessEnabled: prov?.networkAccessEnabled,
+			webSearchMode: prov?.webSearchMode,
+			skipGitRepoCheck: prov?.skipGitRepoCheck,
+			debug: prov?.debug,
+		};
+	});
 }
