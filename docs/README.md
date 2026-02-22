@@ -1,18 +1,23 @@
-# Intelligence Assistant Documentation
+# Intelligence Assistant — Documentation
 
-This folder centralizes every piece of documentation for the Obsidian Intelligence Assistant plugin. Use the sections below to find the information you need quickly.
+This folder contains all documentation for the Intelligence Assistant Obsidian plugin.
 
-## Structure
+## Contents
 
-- **architecture/** – High-level architecture overviews (English + 中文)
-- **reference/** – API surfaces, project topology, and other reference material
-- **archive/** – Legacy scripts and backups that are kept for historical context
+| Path | Description |
+|------|-------------|
+| [architecture/overview-en.md](architecture/overview-en.md) | Architecture overview (English) |
+| [architecture/overview-zh.md](architecture/overview-zh.md) | 架构总览（中文） |
+| [reference/project-structure.md](reference/project-structure.md) | Full annotated source tree |
+| [reference/api.md](reference/api.md) | Internal API reference (core layer) |
 
-## Quick Links
+## Quick orientation
 
-- Architecture overview (English): [architecture/overview-en.md](architecture/overview-en.md)
-- 架构总览（中文）: [architecture/overview-zh.md](architecture/overview-zh.md)
-- API reference: [reference/api.md](reference/api.md)
-- Project structure: [reference/project-structure.md](reference/project-structure.md)
+- **Main README**: [../README.md](../README.md) — user-facing feature docs and quick start
+- **Source**: `../src/` — all TypeScript source under six top-level namespaces: `core`, `domain`, `application`, `infrastructure`, `presentation`, `types`
+- **Entry point**: `../main.ts` — Obsidian plugin bootstrap
+- **Styles**: `../styles.css` — all CSS (auto-loaded by Obsidian)
 
-When adding new documentation, please place it in the appropriate section and link it here so contributors can discover it easily.
+## Adding new docs
+
+Place new documents in the most appropriate subfolder and add a link to the table above so they can be discovered.

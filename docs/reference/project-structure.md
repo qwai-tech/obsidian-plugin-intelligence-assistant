@@ -1,421 +1,275 @@
 # Project Structure
 
-Complete structure of the Obsidian Intelligence Assistant plugin.
+Full annotated source tree for the Intelligence Assistant plugin.
 
-## Statistics
-
-- **Total TypeScript Files:** 160
-  - Source Files: 143
-  - Test Files: 17
-- **Lines of Code:**
-  - Source: ~32,400
-  - Tests: ~6,000
-- **Build Output:** 1.3MB (main.js)
-
-## Root Directory
+## Root
 
 ```
 obsidian-plugin-intelligence-assistant/
-├── README.md                    # Project README
-├── docs/                        # Documentation hub
-│   ├── README.md                # Documentation index
-│   ├── architecture/
-│   │   ├── overview-en.md       # Architecture documentation (English)
-│   │   └── overview-zh.md       # Architecture documentation (Chinese)
-│   ├── reference/
-│   │   ├── api.md               # API reference
-│   │   └── project-structure.md # This file
-│   └── archive/
-│       └── old-scripts/         # Legacy automation
-├── main.ts                      # Plugin entry point
-├── main.js                      # Compiled output
-├── manifest.json                # Obsidian manifest
-├── package.json                 # NPM configuration
-├── tsconfig.json                # TypeScript configuration
-├── jest.config.js               # Jest test configuration
-├── jest.setup.js                # Jest setup
-├── scripts.config.js            # Build scripts config
-├── versions.json                # Version tracking
-├── config/                      # Config templates & user overrides
-│   └── default/
-│       └── settings.json        # Base template for user settings
-├── data/                        # Runtime data managed by the plugin
-│   ├── prompts/                 # System prompts (index + per-prompt JSON)
-│   ├── agents/                  # Agent definitions (index + per-agent JSON)
-│   ├── llm-providers.json       # Stored LLM provider configurations
-│   ├── mcp-servers.json         # Stored MCP server configurations
-│   ├── vector_store/            # Notes vector index (e.g., notes.json)
-│   └── cache/                   # Cached data
-│       ├── llm_models.json      # Cached LLM model metadata
-│       └── mcp-tools/           # Cached MCP tools per server
-└── data.json                    # Legacy plugin data snapshot
+├── main.ts                  # Plugin entry point (Obsidian bootstrap)
+├── main.js                  # Compiled output (loaded by Obsidian)
+├── styles.css               # All CSS — auto-loaded by Obsidian
+├── manifest.json            # Plugin manifest (id, version, minAppVersion)
+├── package.json             # npm config, scripts, dependencies
+├── tsconfig.json            # TypeScript config
+├── jest.config.js           # Jest configuration
+├── scripts/                 # Build, dev, deploy, version, clean scripts
+├── docs/                    # Documentation hub (this folder)
+│   ├── README.md            # Doc index
+│   ├── architecture/        # Architecture overviews
+│   └── reference/           # API and structure reference
+└── src/                     # All TypeScript source
 ```
 
-## Source Code Structure (`src/`)
+## `src/` — source tree
 
-### Core Architecture (New)
-
-```
-src/
-├── core/                        # Core infrastructure
-│   ├── container.ts            # Dependency injection container
-│   ├── event-bus.ts            # Event communication system
-│   ├── error-handler.ts        # Centralized error handling
-│   ├── errors.ts               # Custom error types
-│   ├── service-registry.ts     # Service registration
-│   └── index.ts                # Exports
-│
-├── config/                      # Configuration management
-│   ├── config-manager.ts       # Configuration CRUD
-│   ├── config-schema.ts        # Validation schema
-│   └── index.ts                # Exports
-│
-├── domain/                      # Domain models (DDD)
-│   ├── agent/
-│   │   └── agent.model.ts      # Agent domain model
-│   ├── conversation/
-│   │   └── conversation.model.ts  # Conversation model
-│   └── index.ts                # Exports
-│
-└── test-support/                # Test utilities
-    └── test-utils.ts           # Mock factories
-```
-
-### Application Layer
+### `src/core/` — Infrastructure core
 
 ```
-src/
-├── services/                    # Application services
-│   ├── base-service.ts         # Base service class
-│   ├── core/                   # Core services
-│   ├── features/               # Feature services
-│   └── integrations/           # Integration services
-│
-├── llm/                         # LLM integration
-│   ├── provider-factory.ts     # Provider factory
-│   ├── model-manager.ts        # Model management
-│   ├── base-streaming-provider.ts  # Base provider
-│   ├── providers/              # Specific providers
-│   │   ├── openai.ts
-│   │   ├── anthropic.ts
-│   │   ├── google.ts
-│   │   ├── deepseek.ts
-│   │   ├── ollama.ts
-│   │   └── openrouter.ts
-│   └── __tests__/              # LLM tests
-│
-├── tools/                       # Tool system
-│   ├── tool-manager.ts         # Tool coordination
-│   ├── tool-executor.ts        # Tool execution
-│   └── built-in/               # Built-in tools
-│
-├── rag/                         # RAG (Retrieval Augmented Generation)
-│   ├── rag-manager.ts          # RAG coordination
-│   ├── document-loader.ts      # Document loading
-│   ├── text-splitter.ts        # Text chunking
-│   ├── embedding.ts            # Embeddings
-│   └── vector-store.ts         # Vector storage
-│
-├── memory/                      # Agent memory
-│   └── agent-memory.ts         # Memory management
-│
-└── agents/                      # Agent system
-    └── agent-executor.ts       # Agent execution
+core/
+├── container.ts             # Dependency injection container (singleton/transient)
+├── event-bus.ts             # Async/sync event bus with 30+ plugin events
+├── error-handler.ts         # Centralized error processing
+├── errors.ts                # Custom error hierarchy
+├── config-manager.ts        # Settings CRUD with path-based access + validation
+├── config-schema.ts         # Schema definitions for config validation
+├── performance-monitor.ts   # Operation timing
+├── service-registry.ts      # Service registration helpers
+├── interfaces/
+│   ├── repository.interface.ts
+│   └── service.interface.ts
+└── types/
+    ├── common.types.ts
+    ├── event.types.ts
+    └── result.types.ts
 ```
 
-### Presentation Layer
+### `src/domain/` — Domain models
 
 ```
-src/
-├── views/                       # UI views
-│   ├── chat-view.ts            # Main chat view
-│   ├── chat/                   # Chat components
-│   │   ├── controllers/        # MVC controllers
+domain/
+├── agent/
+│   ├── agent.model.ts       # Agent domain model (validation, serialization)
+│   └── agent-templates.ts   # Default agent templates
+└── chat/
+    └── entities/
+        ├── conversation.model.ts  # Conversation aggregate
+        └── message.entity.ts      # Message value object
+```
+
+### `src/application/` — Application services
+
+```
+application/
+└── services/
+    ├── chat.service.ts              # Message routing, streaming orchestration
+    ├── llm-service.ts               # Provider selection, model resolution
+    ├── agent-service.ts             # Agent CRUD and selection
+    ├── mcp-client.ts                # MCP protocol client
+    ├── mcp-service.ts               # MCP server lifecycle + tool catalog
+    ├── mcp-tool-wrapper.ts          # Adapt MCP tools to agent tool interface
+    ├── rag-service.ts               # Vault indexing orchestration
+    ├── web-search-service.ts        # Provider-agnostic web search
+    ├── tool-manager.ts              # Register and dispatch all tool types
+    ├── conversation-storage-service.ts  # Conversation persistence
+    ├── conversation-migration-service.ts # Conversation format migration
+    ├── memory-service.ts            # Agent memory read/write
+    ├── cli-tool.ts                  # CLI tool type definitions
+    ├── cli-tool-loader.ts           # Load and register CLI tools
+    ├── openapi-tool-loader.ts       # Parse OpenAPI specs into agent tools
+    ├── file-tools.ts                # Built-in file tools
+    ├── search-tools.ts              # Built-in search tools
+    └── base-service.ts              # Abstract base service class
+```
+
+### `src/infrastructure/` — External adapters
+
+```
+infrastructure/
+├── llm/
+│   ├── base-provider.interface.ts   # LLM provider interface
+│   ├── base-provider.ts             # Common provider utilities
+│   ├── base-streaming-provider.ts   # Streaming base (handles SSE, tool calls)
+│   ├── provider-factory.ts          # Create provider instances
+│   ├── provider-registry.ts         # Register known providers
+│   ├── model-manager.ts             # Model catalog management
+│   ├── openai-provider.ts
+│   ├── anthropic-provider.ts
+│   ├── google-provider.ts
+│   ├── deepseek-provider.ts
+│   ├── ollama-provider.ts
+│   ├── openrouter-provider.ts
+│   ├── sap-ai-core-provider.ts
+│   └── types.ts
+│
+├── cli-agent/
+│   ├── cli-agent-service.ts         # Build SDK inputs; spawn bridge process
+│   ├── sdk-bridge.ts                # Template → sdk-bridge.mjs (auto-written)
+│   ├── sdk-installer.ts             # On-demand npm install for CLI SDKs
+│   └── shell-env.ts                 # Source login shell PATH (nvm, Homebrew)
+│
+├── persistence/
+│   ├── data/                        # JSON-file repositories
+│   │   ├── agent-repository.ts
+│   │   ├── prompt-repository.ts
+│   │   ├── provider-repository.ts
+│   │   ├── mcp-server-repository.ts
+│   │   ├── mcp-tool-cache-repository.ts
+│   │   └── model-cache-repository.ts
+│   └── obsidian/                    # Vault-based repositories
+│       ├── base-obsidian-repository.ts
+│       ├── conversation-repository.ts
+│       └── message-repository.ts
+│
+├── rag-manager.ts                   # RAG coordination (load → chunk → embed → index)
+├── vector-store.ts                  # Cosine-similarity nearest-neighbour vector store
+├── embedding-manager.ts             # Embedding model management
+├── embedding-worker.ts              # Embedding computation worker
+└── document-grader.ts               # Relevance filter before context injection
+```
+
+### `src/presentation/` — UI layer
+
+```
+presentation/
+├── views/
+│   └── chat-view.ts                 # Main ItemView — root DOM + controller wiring
+│
+├── components/
+│   ├── chat/
+│   │   ├── chat-view.component.ts   # Chat component bootstrap
+│   │   ├── chat-header.ts           # Top toolbar (mode, agent, model, controls)
+│   │   ├── message-list.component.ts
+│   │   ├── message-renderer.ts      # Markdown → DOM, code blocks, tool results
+│   │   ├── controllers/
 │   │   │   ├── base-controller.ts
-│   │   │   ├── message-controller.ts
-│   │   │   ├── agent-controller.ts
-│   │   │   ├── input-controller.ts
-│   │   │   ├── chat-controller.ts
-│   │   │   └── index.ts
-│   │   ├── components/         # UI components
-│   │   │   ├── chat-header.ts
-│   │   │   ├── input-controls-bar.ts
-│   │   │   └── message-renderer.ts
-│   │   ├── handlers/           # Event handlers
-│   │   │   ├── streaming-handler.ts
-│   │   │   ├── tool-call-handler.ts
-│   │   │   └── attachment-handler.ts
-│   │   ├── managers/           # Business logic managers
-│   │   │   └── conversation-manager.ts
-│   │   ├── state/              # State management
-│   │   │   └── chat-view-state.ts
-│   │   ├── utils/              # View utilities
-│   │   └── __tests__/          # View tests
+│   │   │   ├── chat-controller.ts   # Send/regenerate/stop message
+│   │   │   ├── message-controller.ts # Display messages
+│   │   │   ├── agent-controller.ts  # Agent selection
+│   │   │   └── input-controller.ts  # Input, attachments, @mentions
+│   │   ├── handlers/
+│   │   │   ├── streaming-handler.ts # Streaming UI + auto-scroll logic
+│   │   │   ├── tool-call-handler.ts # Tool-call accordion UI
+│   │   │   └── attachment-handler.ts # File/image attachment UI
+│   │   ├── managers/
+│   │   │   └── conversation-manager.ts # Conversation CRUD, history, persistence
+│   │   └── utils/
+│   │       ├── dom-helpers.ts
+│   │       └── provider-utils.ts
+│   │
+│   ├── tabs/
+│   │   ├── general-tab.ts
+│   │   ├── llm-tab.ts
+│   │   ├── models-tab.ts
+│   │   ├── provider-tab.ts
+│   │   ├── agents-tab.ts
+│   │   ├── cli-agents-tab.ts        # CLI agent management + auto-detection panel
+│   │   ├── prompts-tab.ts
+│   │   ├── tools-tab.ts
+│   │   ├── mcp-tab.ts
+│   │   ├── rag-tab.ts
+│   │   ├── websearch-tab.ts
+│   │   ├── quickactions-tab.ts
+│   │   └── base-tab.ts
+│   │
+│   ├── modals/
+│   │   ├── cli-agent-edit-modal.ts  # Thin-bridge CLI agent config modal
+│   │   ├── agent-edit-modal.ts
+│   │   ├── mcp-server-modal.ts
+│   │   ├── mcp-inspector-modal.ts   # Live MCP tool tester
+│   │   ├── provider-config-modal.ts
+│   │   ├── sdk-install-modal.ts     # CLI SDK install progress UI
+│   │   ├── ollama-model-manager-modal.ts
+│   │   ├── prompt-modal.ts
+│   │   ├── system-prompt-edit-modal.ts
+│   │   ├── confirm-modal.ts
+│   │   └── explain-text-modal.ts
+│   │
+│   ├── settings-tab.ts              # Root settings tab + migration logic
+│   └── components/
+│       ├── provider-meta.ts
+│       └── dom-helpers.ts
 │
-└── settings/                    # Settings UI
-    ├── settings-tab.ts         # Main settings tab
-    ├── tabs/                   # Setting tabs
-    │   ├── general-tab.ts
-    │   ├── provider-tab.ts
-    │   ├── models-tab.ts
-    │   ├── agents-tab.ts
-    │   ├── prompts-tab.ts
-    │   ├── tools-tab.ts
-    │   ├── mcp-tab.ts
-    │   ├── rag-tab.ts
-    │   └── websearch-tab.ts
-    ├── components/             # Setting components
-    └── modals/                 # Setting modals
-```
-
-### Type System
-
-```
-src/
-└── types/                       # TypeScript types
-    ├── index.ts                # Unified exports
-    ├── core/                   # Core types
-    │   ├── agent.ts
-    │   ├── conversation.ts
-    │   ├── model.ts
-    │   └── index.ts
-    ├── features/               # Feature types
-    │   ├── mcp.ts
-    │   ├── rag.ts
-    │   ├── web-search.ts
-    │   ├── think.ts
-    │   ├── memory.ts
-    │   └── index.ts
-    └── common/                 # Common types
-```
-
-### Utilities
-
-```
-src/
-├── utils/                       # General utilities
-│   ├── file-utils.ts
-│   ├── date-utils.ts
-│   └── string-utils.ts
+├── state/
+│   ├── chat-view-state.ts           # ChatViewState — reactive chat state
+│   └── chat.state.ts
 │
-└── styles/                      # CSS styles
-    ├── main.css
-    ├── chat.css
-    └── settings.css
+└── utils/
+    ├── config-field-metadata.ts
+    └── ui-helpers.ts
 ```
 
-## Test Structure (`src/__tests__/`)
-
-### Architecture Tests (New)
+### `src/types/` — Type definitions
 
 ```
-src/__tests__/
-├── core/                        # Core infrastructure tests
-│   ├── container.test.ts       # DI container tests
-│   ├── event-bus.test.ts       # Event bus tests
-│   └── error-handler.test.ts   # Error handler tests
-│
-├── config/                      # Configuration tests
-│   ├── config-manager.test.ts  # Config manager tests
-│   └── config-schema.test.ts   # Validation tests
-│
-└── domain/                      # Domain model tests
-    ├── agent.model.test.ts     # Agent model tests
-    └── conversation.model.test.ts  # Conversation tests
+types/
+├── index.ts                  # Single export point for all types
+├── settings.ts               # PluginSettings — root persisted settings schema
+├── type-utils.ts             # TypeScript utility types
+├── augmentations.d.ts        # Global augmentations
+├── core/
+│   ├── agent.ts              # Agent, AgentConfig
+│   ├── cli-agent.ts          # CLIAgentConfig, CLIAgentProvider, migration helpers
+│   ├── conversation.ts       # Conversation, Message
+│   └── model.ts              # ModelInfo, LLMConfig
+├── features/
+│   ├── mcp.ts                # MCPServer, MCPTool
+│   ├── rag.ts                # RAGConfig, DocumentChunk
+│   ├── web-search.ts         # WebSearchConfig, WebSearchProvider
+│   ├── memory.ts             # AgentMemory
+│   ├── think.ts              # ThinkingConfig
+│   ├── cli-tools.ts          # CLIToolDefinition
+│   └── openapi-tools.ts      # OpenAPIToolSource
+└── common/
+    ├── llm.ts                # LLMMessage, StreamChunk
+    ├── tools.ts              # ToolDefinition, ToolResult
+    ├── attachments.ts        # FileReference, ImageAttachment
+    └── reasoning.ts          # AgentExecutionStep
 ```
 
-### Feature Tests
+### `src/utils/` — General utilities
 
 ```
-src/
-├── llm/__tests__/              # LLM tests
-│   ├── base-streaming-provider.test.ts
-│   └── providers.integration.test.ts
-│
-├── views/chat/__tests__/       # View tests
-│   └── message-renderer.test.ts
-│
-├── views/chat/handlers/__tests__/  # Handler tests
-│   └── attachment-handler.test.ts
-│
-├── views/chat/managers/__tests__/  # Manager tests
-│   └── conversation-manager.test.ts
-│
-└── views/chat/state/__tests__/     # State tests
-    └── chat-view-state.test.ts
+utils/
+├── error-handler.ts          # App-level error formatting
+├── file-system.ts            # Vault file helpers
+├── logger.ts                 # Structured logging
+├── type-guards.ts            # TypeScript type guards
+└── ui-helpers.ts             # DOM/Obsidian UI helpers
 ```
 
-## Documentation (`docs/`)
+### `src/memory/`
 
 ```
-docs/
-├── architecture/                # Architecture documentation
-│   ├── 01-dependency-injection.md  # DI guide
-│   ├── 02-event-bus.md         # Event system guide
-│   ├── 03-configuration.md     # Configuration guide
-│   └── 06-controllers.md       # Controllers guide
-│
-└── old-scripts/                # Legacy scripts (archived)
+memory/
+└── agent-memory.ts           # Agent memory persistence (per-agent JSON)
 ```
 
-## Build & Development
+## Naming conventions
 
-```
-scripts/                         # Build scripts
-├── build.js                    # Production build
-├── dev.js                      # Development server
-├── deploy.js                   # Deployment
-├── clean.js                    # Clean build artifacts
-├── version.js                  # Version management
-├── config/                     # Script configuration
-└── utils/                      # Script utilities
-```
+| File pattern | Used for |
+|---|---|
+| `*.model.ts` | Domain models (`agent.model.ts`) |
+| `*-controller.ts` | MVC controllers |
+| `*-service.ts` | Application services |
+| `*-handler.ts` | Event/UI handlers |
+| `*-manager.ts` | Stateful coordinators |
+| `*-repository.ts` | Data access objects |
+| `*-provider.ts` | LLM provider adapters |
+| `*-tab.ts` | Settings tab components |
+| `*-modal.ts` | Modal components |
+| `*.test.ts` | Jest test files |
 
-## Configuration Files
+## Build output
 
-```
-Root Configuration:
-├── package.json                # NPM dependencies & scripts
-├── tsconfig.json               # TypeScript compiler config
-├── jest.config.js              # Jest test configuration
-├── jest.setup.js               # Jest initialization
-├── scripts.config.js           # Build scripts config
-├── manifest.json               # Obsidian plugin manifest
-├── versions.json               # Version tracking
-├── .gitignore                  # Git ignore patterns
-└── .eslintrc.js               # ESLint configuration (if exists)
-```
+The plugin compiles to a single `main.js` at the vault's plugin directory root. `styles.css` is copied alongside it. Both are read directly by Obsidian.
 
-## Key Directories Explained
+## Configuration files
 
-### `/src/core/` - Infrastructure Layer
-Contains fundamental infrastructure components:
-- **Dependency Injection** - Service lifecycle management
-- **Event Bus** - Decoupled communication
-- **Error Handling** - Centralized error processing
-- **Service Registry** - Service coordination
-
-### `/src/config/` - Configuration Layer
-Manages all plugin configuration:
-- **ConfigManager** - CRUD operations with validation
-- **ConfigSchema** - Validation rules and constraints
-- Migration support for version upgrades
-
-### `/src/domain/` - Domain Layer
-Rich domain models following DDD principles:
-- **Agent Model** - Agent configuration and behavior
-- **Conversation Model** - Chat conversation logic
-
-### `/src/views/chat/controllers/` - MVC Controllers
-Implements MVC pattern for chat view:
-- **Base Controller** - Abstract controller base
-- **Message Controller** - Message display
-- **Agent Controller** - Agent selection
-- **Input Controller** - User input handling
-- **Chat Controller** - Core chat operations
-
-### `/src/types/` - Type System
-Centralized TypeScript definitions:
-- **Core Types** - Fundamental domain types
-- **Feature Types** - Feature-specific types
-- **Common Types** - Shared type utilities
-
-### `/src/__tests__/` - Test Suite
-Comprehensive test coverage:
-- **Architecture Tests** - Core infrastructure (126 tests)
-- **Integration Tests** - LLM providers
-- **Unit Tests** - Individual components
-
-## Module Dependencies
-
-```
-┌─────────────────────────────────────────────────┐
-│            Presentation Layer                   │
-│  (Views, Controllers, Components, Handlers)     │
-└─────────────────┬───────────────────────────────┘
-                  │
-┌─────────────────▼───────────────────────────────┐
-│          Application Layer                      │
-│    (Services, Managers, LLM, Tools, RAG)        │
-└─────────────────┬───────────────────────────────┘
-                  │
-┌─────────────────▼───────────────────────────────┐
-│            Domain Layer                         │
-│    (Models, Entities, Value Objects)            │
-└─────────────────┬───────────────────────────────┘
-                  │
-┌─────────────────▼───────────────────────────────┐
-│         Infrastructure Layer                    │
-│  (Config, DI Container, Event Bus, Errors)      │
-└─────────────────────────────────────────────────┘
-```
-
-## File Naming Conventions
-
-- **Models:** `*.model.ts` (e.g., `agent.model.ts`)
-- **Controllers:** `*-controller.ts` (e.g., `chat-controller.ts`)
-- **Services:** `*-service.ts` or `*-manager.ts`
-- **Tests:** `*.test.ts` (e.g., `container.test.ts`)
-- **Types:** Simple names in `/types` directory
-- **Components:** `*.ts` in `/components` directory
-- **Utilities:** `*-utils.ts` (e.g., `test-utils.ts`)
-
-## Import Patterns
-
-```typescript
-// Core infrastructure
-import { Container } from './core/container';
-import { eventBus, PluginEvent } from './core/event-bus';
-import { ConfigManager } from './config/config-manager';
-
-// Domain models
-import { AgentModel } from './domain/agent/agent.model';
-import { ConversationModel } from './domain/conversation/conversation.model';
-
-// Controllers
-import { ChatController } from './views/chat/controllers/chat-controller';
-
-// Types (unified import point)
-import type { Agent, Conversation, Message } from './types';
-```
-
-## Build Output
-
-```
-dist/                           # Build directory
-└── main.js                    # Bundled output (1.3MB)
-
-Root level:
-└── main.js                    # Deployed plugin
-```
-
-## Environment Setup
-
-### Development
-```bash
-npm install                    # Install dependencies
-npm run dev                    # Start dev server
-npm run test:watch             # Run tests in watch mode
-```
-
-### Production
-```bash
-npm run build:production       # Production build
-npm test                       # Run all tests
-npm run deploy:production      # Deploy to production
-```
-
-## Code Quality
-
-- **Linting:** ESLint for TypeScript
-- **Type Checking:** TypeScript strict mode
-- **Testing:** Jest with 126+ tests
-- **Coverage:** Core modules at 100%
-- **Build:** esbuild for fast compilation
-
----
-
-**Version:** 1.0
-**Last Updated:** 2025-11-06
-**Total Files:** 160+ TypeScript files
-**Total Lines:** ~38,000 lines of code
+| File | Purpose |
+|---|---|
+| `tsconfig.json` | TypeScript compiler — path aliases (`@/` → `src/`), strict mode |
+| `jest.config.js` | Jest — ts-jest transform, jsdom environment, module name mapper |
+| `scripts/build.js` | esbuild production bundle |
+| `scripts/dev.js` | esbuild dev watcher with optional vault deploy |
+| `manifest.json` | Obsidian manifest — id, version, minAppVersion |
