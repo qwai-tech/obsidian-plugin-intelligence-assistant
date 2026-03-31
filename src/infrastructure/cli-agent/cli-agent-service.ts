@@ -271,6 +271,7 @@ export class CLIAgentService {
 			});
 
 			proc.on('close', (code) => {
+				rl.close();
 				if (abortController) {
 					abortController.signal.removeEventListener('abort', abortHandler);
 				}
@@ -293,6 +294,7 @@ export class CLIAgentService {
 			});
 
 			proc.on('error', (err) => {
+				rl.close();
 				if (abortController) {
 					abortController.signal.removeEventListener('abort', abortHandler);
 				}

@@ -3,7 +3,7 @@
  * Unified configuration modal for SDK-based CLI agents with progressive disclosure
  */
 
-import { App, Modal, Setting } from 'obsidian';
+import { App, Modal, Notice, Setting } from 'obsidian';
 import type { CLIAgentConfig, CLIAgentPermissionMode, CLIAgentProvider } from '@/types';
 import { CLI_PROVIDER_LABELS } from '@/types/core/cli-agent';
 import { getSdkStatus } from '@/infrastructure/cli-agent/sdk-installer';
@@ -21,6 +21,7 @@ export class CLIAgentEditModal extends Modal {
 	private readonly pluginDir: string;
 	private advancedContainer: HTMLElement | null = null;
 	private authContainer: HTMLElement | null = null;
+	private mcpJsonError = false;
 
 	constructor(
 		app: App,
@@ -54,6 +55,7 @@ export class CLIAgentEditModal extends Modal {
 					if (!this.draft.model) {
 						this.draft.model = DEFAULT_MODELS[this.draft.provider];
 					}
+					this.mcpJsonError = false;
 					this.renderAuth();
 					this.renderAdvanced();
 				});
@@ -116,6 +118,14 @@ export class CLIAgentEditModal extends Modal {
 
 		const saveBtn = buttonBar.createEl('button', { text: 'Save', cls: 'mod-cta' });
 		saveBtn.addEventListener('click', () => {
+			if (!this.draft.name.trim()) {
+				new Notice('Agent name is required.');
+				return;
+			}
+			if (this.mcpJsonError) {
+				new Notice('MCP servers field contains invalid JSON.');
+				return;
+			}
 			this.draft.updatedAt = Date.now();
 			void Promise.resolve(this.onSaveCallback(JSON.parse(JSON.stringify(this.draft)) as CLIAgentConfig));
 			this.close();
@@ -286,9 +296,20 @@ export class CLIAgentEditModal extends Modal {
 					text.setValue(this.draft.mcpServers ? JSON.stringify(this.draft.mcpServers, null, 2) : '');
 					text.inputEl.rows = 3;
 					text.onChange(value => {
-						try {
-							this.draft.mcpServers = value.trim() ? JSON.parse(value) as Record<string, unknown> : undefined;
-						} catch { /* keep current value */ }
+						if (!value.trim()) {
+							this.draft.mcpServers = undefined;
+							this.mcpJsonError = false;
+							text.inputEl.removeClass('ia-input--error');
+						} else {
+							try {
+								this.draft.mcpServers = JSON.parse(value) as Record<string, unknown>;
+								this.mcpJsonError = false;
+								text.inputEl.removeClass('ia-input--error');
+							} catch {
+								this.mcpJsonError = true;
+								text.inputEl.addClass('ia-input--error');
+							}
+						}
 					});
 				});
 		}
@@ -386,9 +407,20 @@ export class CLIAgentEditModal extends Modal {
 					text.setValue(this.draft.mcpServers ? JSON.stringify(this.draft.mcpServers, null, 2) : '');
 					text.inputEl.rows = 3;
 					text.onChange(value => {
-						try {
-							this.draft.mcpServers = value.trim() ? JSON.parse(value) as Record<string, unknown> : undefined;
-						} catch { /* keep current value */ }
+						if (!value.trim()) {
+							this.draft.mcpServers = undefined;
+							this.mcpJsonError = false;
+							text.inputEl.removeClass('ia-input--error');
+						} else {
+							try {
+								this.draft.mcpServers = JSON.parse(value) as Record<string, unknown>;
+								this.mcpJsonError = false;
+								text.inputEl.removeClass('ia-input--error');
+							} catch {
+								this.mcpJsonError = true;
+								text.inputEl.addClass('ia-input--error');
+							}
+						}
 					});
 				});
 		}

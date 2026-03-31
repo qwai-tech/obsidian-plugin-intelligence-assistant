@@ -524,9 +524,15 @@ export class ChatView extends ItemView {
 	private async sendMessage(text: string) {
 		console.debug('[Chat] sendMessage called with text:', text.substring(0, 100) + '...');
 
+		if (this.state.isStreaming) {
+			new Notice('Please wait for the current response to finish');
+			return;
+		}
+
 		// Check if a CLI agent is selected — route to CLI agent execution
-		if (this.selectedCliAgentId) {
-			const cliAgent = (this.plugin.settings.cliAgents ?? []).find(a => a.id === this.selectedCliAgentId);
+		const activeCliAgentId = this.state.selectedCliAgentId ?? this.selectedCliAgentId;
+		if (activeCliAgentId) {
+			const cliAgent = (this.plugin.settings.cliAgents ?? []).find(a => a.id === activeCliAgentId);
 			if (cliAgent) {
 				await this.sendCLIAgentMessage(text, cliAgent);
 				return;
@@ -708,21 +714,29 @@ export class ChatView extends ItemView {
 			if (contentEl && fullContent) {
 				this.renderMarkdownContent(contentEl as HTMLElement, fullContent);
 			}
-
-			await this.conversationManager.saveCurrentConversation();
 		} catch (error) {
 			const errMsg = error instanceof Error ? error.message : String(error);
 			console.error('[Chat] CLI Agent error:', errMsg);
 			new Notice(`CLI Agent error: ${errMsg}`);
 			assistantMessage.content = fullContent || `❌ **Error:** ${errMsg}`;
 			if (contentEl) {
-				contentEl.textContent = assistantMessage.content;
+				if (fullContent) {
+					this.renderMarkdownContent(contentEl as HTMLElement, fullContent);
+				} else {
+					contentEl.textContent = assistantMessage.content;
+				}
 			}
 		} finally {
 			this.state.isStreaming = false;
 			this.state.stopStreamingRequested = false;
 			if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
 			if (this.sendHint) this.sendHint.removeClass('ia-hidden');
+		}
+
+		try {
+			await this.conversationManager.saveCurrentConversation();
+		} catch (saveError) {
+			console.error('[Chat] Failed to save CLI agent conversation:', saveError);
 		}
 	}
 
@@ -2329,6 +2343,12 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		let settingsDirty = false;
 
+		if (this.state.mode !== 'agent') {
+			// Ensure CLI agent selection is cleared for non-agent (chat) mode
+			this.selectedCliAgentId = null;
+			this.state.selectedCliAgentId = null;
+		}
+
 		if (this.state.mode === 'agent') {
 			// Check if this is a CLI agent conversation
 			let cliAgentId = config.cliAgentId ?? null;
@@ -2494,6 +2514,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		} else {
 			this.state.mode = 'chat';
 			if (this.modeSelector) this.modeSelector.value = 'chat';
+			this.selectedCliAgentId = null;
+			this.state.selectedCliAgentId = null;
 			if (this.plugin.settings.activeAgentId) {
 				this.plugin.settings.activeAgentId = null;
 				settingsDirty = true;
@@ -2963,12 +2985,13 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		}
 
 		// Check if a CLI agent was previously selected
-		if (this.selectedCliAgentId) {
-			const cliValue = `cli:${this.selectedCliAgentId}`;
-			const cliExists = cliAgents.some(a => a.id === this.selectedCliAgentId);
+		const restoredCliId = this.state.selectedCliAgentId ?? this.selectedCliAgentId;
+		if (restoredCliId) {
+			const cliValue = `cli:${restoredCliId}`;
+			const cliExists = cliAgents.some(a => a.id === restoredCliId);
 			if (cliExists) {
 				selectEl.value = cliValue;
-				return null;
+				return cliValue;
 			}
 		}
 

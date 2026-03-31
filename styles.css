@@ -4124,3 +4124,9 @@
 		justify-content: flex-start;
 	}
 }
+
+/* Input error state (e.g. invalid JSON in CLI agent modal) */
+.ia-input--error {
+	border-color: var(--text-error) !important;
+	outline: 1px solid var(--text-error);
+}

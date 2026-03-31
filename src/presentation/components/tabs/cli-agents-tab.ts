@@ -104,10 +104,12 @@ function renderDetectionPanel(containerEl: HTMLElement, pluginDir: string, app: 
 			});
 		}
 
-		// Async CLI detection
+		// Async CLI detection — guard against settings tab being closed before result arrives
 		void detectCliBinary(info.commands).then(async (result) => {
+			if (!cliValue.isConnected) return;
 			if (result.found && result.command) {
 				const version = await getCliVersion(result.command);
+				if (!cliValue.isConnected) return;
 				const versionStr = version ? ` v${version}` : '';
 				cliValue.setText(`${result.command}${versionStr}`);
 				cliValue.addClass('ia-detection-card__value--ok');

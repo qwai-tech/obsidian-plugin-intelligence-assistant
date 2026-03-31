@@ -305,6 +305,7 @@ export class ConversationManager extends Events {
 			modelId: defaultModel || undefined,
 			promptId: null,
 			agentId: null,
+			cliAgentId: null,
 			temperature: 0.7,
 			maxTokens: 4000,
 			topP: 1.0,
