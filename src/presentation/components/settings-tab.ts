@@ -17,6 +17,7 @@ import { displayRAGTab } from './tabs/rag-tab';
 import { displayQuickActionsTab } from './tabs/quickactions-tab';
 import { displayCLIAgentsTab } from './tabs/cli-agents-tab';
 import type { ModelFilters } from './tabs/models-tab';
+import { isCliAgentSupported } from '@/utils/platform';
 
 
 export class IntelligenceAssistantSettingTab extends PluginSettingTab {
@@ -55,7 +56,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			{ slug: 'rag', label: 'RAG' },
 			{ slug: 'prompts', label: 'Prompts' },
 			{ slug: 'agents', label: 'Agents' },
-			{ slug: 'cli-agents', label: 'CLI Agents' },
+			...(isCliAgentSupported() ? [{ slug: 'cli-agents', label: 'CLI Agents' }] : []),
 			{ slug: 'quickactions', label: 'Quick Actions' }
 		];
 
@@ -112,7 +113,9 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 				this.displayAgentsTab(contentEl);
 				break;
 			case 'cli-agents':
-				this.displayCLIAgentsTab(contentEl);
+				if (isCliAgentSupported()) {
+					this.displayCLIAgentsTab(contentEl);
+				}
 				break;
 			case 'quickactions':
 				this.displayQuickActionsTab(contentEl);

@@ -23,6 +23,7 @@ import {
 	ChatController
 } from '@/presentation/components/chat/controllers';
 import { resolveMessageProviderId } from '@/presentation/components/chat/utils';
+import { isCliAgentSupported } from '@/utils/platform';
 import { } from '@/presentation/components/utils/dom-helpers';
 
 export const CHAT_VIEW_TYPE = 'intelligence-assistant-chat';
@@ -2937,8 +2938,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				selectEl.appendChild(option);
 			}
 
-		// Add CLI agents if any exist
-		const cliAgents = this.plugin.settings.cliAgents ?? [];
+		// Add CLI agents if any exist — macOS only
+		const cliAgents = isCliAgentSupported() ? (this.plugin.settings.cliAgents ?? []) : [];
 		if (cliAgents.length > 0) {
 			const separator = document.createElement('option');
 			separator.value = '';
