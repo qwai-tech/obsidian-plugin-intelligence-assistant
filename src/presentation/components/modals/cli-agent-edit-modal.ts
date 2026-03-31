@@ -143,6 +143,14 @@ export class CLIAgentEditModal extends Modal {
 					text.onChange(value => { this.draft.apiKey = value.trim() || undefined; });
 				});
 
+			if (this.draft.provider === 'claude-code') {
+				container.createEl('p', {
+					text: 'Tip: Claude Code also reads auth from ~/.claude/settings.json via the "env" block ' +
+						'(ANTHROPIC_AUTH_TOKEN, ANTHROPIC_BASE_URL). Useful for proxy setups — no API key needed here.',
+					cls: 'setting-item-description'
+				});
+			}
+
 			if (this.draft.provider === 'codex') {
 				new Setting(container)
 					.setName('Base URL')

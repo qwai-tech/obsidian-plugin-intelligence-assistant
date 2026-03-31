@@ -219,7 +219,7 @@ function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionSt
 
 	// Pretty-print arguments JSON
 	try {
-		const parsed = JSON.parse(argsStr);
+		const parsed: unknown = JSON.parse(argsStr);
 		argsStr = JSON.stringify(parsed, null, 2);
 	} catch (_e) { /* keep as-is */ }
 

@@ -1199,10 +1199,10 @@ After calling a tool, you will receive the result and can continue the conversat
 		const callbacks: MessageRendererCallbacks = {
 					saveMessageToNewNote: this.saveMessageToNewNote.bind(this) as (message: Message) => Promise<void>,
 					insertMessageToNote: this.insertMessageToNote.bind(this) as (message: Message) => Promise<void>,
-					regenerateMessage: this.regenerateMessage.bind(this) as (messageId: string) => Promise<void>,
-					displayRagSources: this.displayRagSources.bind(this) as (sources: unknown[]) => void,
-					getProviderAvatar: this.getProviderAvatar.bind(this) as (provider: string) => string,
-					getProviderColor: this.getProviderColor.bind(this) as (provider: string) => string
+					regenerateMessage: this.regenerateMessage.bind(this) as (message: Message, element: HTMLElement) => Promise<void>,
+					displayRagSources: (container: HTMLElement, message: Message) => this.displayRagSources(container, message.ragSources ?? []),
+					getProviderAvatar: this.getProviderAvatar.bind(this) as (message: Message) => string,
+					getProviderColor: this.getProviderColor.bind(this) as (message: Message) => string
 		};
 
 		const options = {

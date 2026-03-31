@@ -265,7 +265,7 @@ function getOptionalElement(root: HTMLElement, selectors: string[]): HTMLElement
 	for (const selector of selectors) {
 		const el = root.querySelector(selector);
 		if (el) {
-			return el;
+			return el as HTMLElement;
 		}
 	}
 	return null;

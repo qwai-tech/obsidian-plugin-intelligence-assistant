@@ -120,7 +120,11 @@ export class CLIAgentService {
 		};
 
 		const options: Record<string, unknown> = {
-			permissionMode: permissionModeMap[agent.permissionMode] ?? 'default'
+			permissionMode: permissionModeMap[agent.permissionMode] ?? 'default',
+			// Load user (~/.claude/settings.json) and project (.claude/settings.json) config.
+			// User-level settings carry global auth (ANTHROPIC_AUTH_TOKEN, ANTHROPIC_BASE_URL)
+			// and model defaults; project-level carries tool permissions, MCP servers, CLAUDE.md.
+			settingSources: ['user', 'project']
 		};
 
 		if (agent.model) options['model'] = agent.model;
