@@ -2219,6 +2219,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	private async handleModeChange(mode: 'chat' | 'agent') {
 		this.state.mode = mode;
 		if (mode === 'chat') {
+			this.selectedCliAgentId = null;
+			this.state.selectedCliAgentId = null;
 			if (this.plugin.settings.activeAgentId) {
 				this.plugin.settings.activeAgentId = null;
 				await this.plugin.saveSettings();
