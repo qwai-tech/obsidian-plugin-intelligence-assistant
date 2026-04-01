@@ -31,19 +31,28 @@ export class ConfigManager {
     this.config = this.getDefaultConfig();
   }
 
-  async load(): Promise<void> {
-    try {
-      const content = await this.vault.adapter.read(this.configPath);
-      this.config = JSON.parse(content) as PluginSettings;
-      ConfigSchema.validate(this.config);
-      this.dirty = false;
-    } catch {
-      // Use default config if file doesn't exist
-      this.config = this.getDefaultConfig();
-      this.dirty = true;
-      await this.save();
-    }
-  }
+	async load(): Promise<void> {
+		const configExists = await this.vault.adapter.exists(this.configPath);
+		try {
+			const content = await this.vault.adapter.read(this.configPath);
+			this.config = JSON.parse(content) as PluginSettings;
+			this.assertValid(ConfigSchema.validate(this.config), 'load configuration');
+			this.dirty = false;
+		} catch (error) {
+			if (configExists) {
+				this.config = this.getDefaultConfig();
+				this.dirty = false;
+				throw error instanceof Error
+					? error
+					: new Error(`Failed to load config: ${String(error)}`);
+			}
+
+			// Use default config if file doesn't exist
+			this.config = this.getDefaultConfig();
+			this.dirty = true;
+			await this.save();
+		}
+	}
 
   async save(): Promise<void> {
     if (!this.dirty) return;
@@ -56,13 +65,13 @@ export class ConfigManager {
     return clone(this.config[key]);
   }
 
-  async set<K extends keyof PluginSettings>(key: K, value: PluginSettings[K], validate = true): Promise<void> {
-    const previous = clone(this.config[key]);
-    this.config[key] = clone(value);
+	async set<K extends keyof PluginSettings>(key: K, value: PluginSettings[K], validate = true): Promise<void> {
+		const previous = clone(this.config[key]);
+		this.config[key] = clone(value);
 
-    if (validate) {
-      ConfigSchema.validateSection(key, this.config[key]);
-    }
+		if (validate) {
+			this.assertValid(ConfigSchema.validateSection(key, this.config[key]), `update ${String(key)}`);
+		}
 
     this.recordChange(String(key), previous, this.config[key]);
     this.dirty = true;
@@ -79,7 +88,7 @@ export class ConfigManager {
     return clone(value) as T;
   }
 
-  async setPath(path: string, value: unknown, validate = true): Promise<void> {
+	async setPath(path: string, value: unknown, validate = true): Promise<void> {
     const segments = normalizePath(path);
     const last = segments.pop();
     if (!last) return;
@@ -92,12 +101,12 @@ export class ConfigManager {
       target = target[segment] as Record<string, unknown>;
     }
 
-    const previous = clone(target[last]);
-    target[last] = clone(value);
+		const previous = clone(target[last]);
+		target[last] = clone(value);
 
-    if (validate) {
-      ConfigSchema.validate(this.config);
-    }
+		if (validate) {
+			this.assertValid(ConfigSchema.validate(this.config), `update ${path}`);
+		}
 
     this.recordChange(path, previous, value);
     this.dirty = true;
@@ -134,6 +143,14 @@ export class ConfigManager {
       this.history.pop();
     }
   }
+
+	private assertValid(result: ValidationResult, action: string): void {
+		if (result.valid) {
+			return;
+		}
+		const details = result.errors.map(error => `${error.path}: ${error.message}`).join('; ');
+		throw new Error(`Validation failed while attempting to ${action}${details ? `: ${details}` : ''}`);
+	}
 
   private getDefaultConfig(): PluginSettings {
     return clone(DEFAULT_SETTINGS);

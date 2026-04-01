@@ -114,6 +114,21 @@ export class OpenAIProvider extends BaseStreamingProvider {
 		return null;
 	}
 
+	async generateEmbedding(text: string, model: string): Promise<number[]> {
+		const url = this.apiBase + '/embeddings';
+		const body = {
+			model: this.extractModelName(model),
+			input: text,
+		};
+
+		const response = await this.makeRequest(url, body) as {
+			json: {
+				data: Array<{ embedding: number[] }>;
+			}
+		};
+		return response.json.data[0].embedding;
+	}
+
 	/**
 	 * Determine if model should use max_completion_tokens instead of max_tokens
 	 * Newer models (gpt-4o, gpt-4-turbo, gpt-5, o1, etc.) require max_completion_tokens

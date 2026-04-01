@@ -261,9 +261,9 @@ export class RAGManager {
     return this.vectorStore.getDetailedStats();
   }
 
-  private getStoredChunks(): Promise<unknown[]> {
-    return this.vectorStore.getStoredChunks();
-  }
+	  private getStoredChunks(): unknown[] {
+	    return this.vectorStore.getStoredChunks();
+	  }
 
   private setupFileChangeListener(): void {
     // Remove any existing listener

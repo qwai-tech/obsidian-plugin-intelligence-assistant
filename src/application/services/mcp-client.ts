@@ -1,8 +1,8 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { ChildProcess, spawn, exec } from 'child_process';
+import { exec } from 'child_process';
 import { promisify } from 'util';
-import { promises as fs } from 'fs';
+import { promises as fs, constants as fsConstants } from 'fs';
 import type { MCPServerConfig } from '@/types';
 
 export interface MCPTool {
@@ -17,22 +17,19 @@ export interface MCPTool {
 
 export class MCPClient {
 	private client: Client;
-	private transport: StdioClientTransport;
-	private process: ChildProcess | null = null;
+	private transport: StdioClientTransport | null = null;
 	private connected: boolean = false;
 
 	constructor(private _config: MCPServerConfig) {
-		this.client = new Client(
-			{
-				name: 'obsidian-intelligence-assistant',
-				version: '0.0.1',
-			},
-			{
-				capabilities: {
-					tools: {},
+			this.client = new Client(
+				{
+					name: 'obsidian-intelligence-assistant',
+					version: '0.0.1',
 				},
-			}
-		);
+				{
+					capabilities: {},
+				}
+			);
 	}
 
 	async connect(): Promise<void> {
@@ -47,16 +44,18 @@ export class MCPClient {
 				command = await this.resolveCommandPath(command);
 			}
 
-			// Spawn the MCP server process
-			this.process = spawn(command, this._config.args || [], {
-				env: { ...process.env, ...this._config.env },
-			});
-
 			// Create stdio transport
+			const mergedEnv = { ...process.env, ...this._config.env };
+			const env: Record<string, string> = {};
+			for (const [key, value] of Object.entries(mergedEnv)) {
+				if (value !== undefined) {
+					env[key] = value;
+				}
+			}
 			this.transport = new StdioClientTransport({
-				command: command,
+				command,
 				args: this._config.args || [],
-				env: this._config.env,
+				env,
 			});
 
 			// Connect the client
@@ -99,7 +98,7 @@ export class MCPClient {
 		// Check common paths
 		for (const path of commonPaths) {
 			try {
-				await fs.access(path, fs.constants.X_OK);
+				await fs.access(path, fsConstants.X_OK);
 				console.debug(`[MCP] Resolved ${command} to ${path}`);
 				return path;
 			} catch {
@@ -119,10 +118,7 @@ export class MCPClient {
 
 		try {
 			await this.client.close();
-			if (this.process) {
-				this.process.kill();
-				this.process = null;
-			}
+			this.transport = null;
 			this.connected = false;
 			console.debug(`[MCP] Disconnected from server: ${this._config.name}`);
 		} catch (error) {

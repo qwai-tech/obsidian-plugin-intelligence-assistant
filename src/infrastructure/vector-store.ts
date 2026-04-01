@@ -50,7 +50,25 @@ export class VectorStore {
 		}
 	}
 
-	async save(): Promise<void> {
+	private saveTimeout: NodeJS.Timeout | null = null;
+
+	async save(immediate = false): Promise<void> {
+		if (this.saveTimeout) {
+			clearTimeout(this.saveTimeout);
+			this.saveTimeout = null;
+		}
+
+		if (immediate) {
+			await this.performSave();
+		} else {
+			this.saveTimeout = setTimeout(() => {
+				void this.performSave();
+				this.saveTimeout = null;
+			}, 1000);
+		}
+	}
+
+	private async performSave(): Promise<void> {
 		await this.ensureDataFolder();
 		try {
 			const data: VectorStoreData = {
@@ -58,7 +76,7 @@ export class VectorStore {
 				createdAt: this._chunks.length > 0 ? Math.min(...this._chunks.map(c => c.metadata.timestamp)) : Date.now(),
 				updatedAt: Date.now()
 			};
-			await this.app.vault.adapter.write(this.dataPath, JSON.stringify(data, null, 2));
+			await this.app.vault.adapter.write(this.dataPath, JSON.stringify(data));
 			console.debug(`Saved ${this._chunks.length} _chunks to persistent storage`);
 		} catch (error) {
 			console.error('Error saving vector store:', error);
@@ -779,7 +797,7 @@ export class VectorStore {
 
   clear(): void {
     this._chunks = [];
-    this.save().catch(error => console.error('Failed to persist cleared vector store', error));
+    this.save(true).catch(error => console.error('Failed to persist cleared vector store', error));
   }
 
   getChunkCount(): number {

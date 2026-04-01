@@ -62,12 +62,12 @@ export class ChatController extends BaseController {
 		}
 
 		// Create user message
-		const userMessage: Message = {
-			role: 'user',
-			content: content.trim(),
-			attachments: this.state.currentAttachments,
-			references: this.state.currentReferences // TODO: Fix type definition
-		};
+			const userMessage: Message = {
+				role: 'user',
+				content: content.trim(),
+				attachments: this.state.currentAttachments,
+				references: this.state.currentReferences
+			};
 
 		// Add to conversation
 		this.state.addMessage(userMessage);
@@ -88,7 +88,7 @@ export class ChatController extends BaseController {
 		const agent = this.agentController.getCurrentAgent();
 		if (!agent) {
 			new Notice('No agent selected');
-			return;
+			return Promise.resolve();
 		}
 
 		this.isGenerating = true;
@@ -106,6 +106,8 @@ export class ChatController extends BaseController {
 			new Notice(`Failed to generate response: ${safeGetMessage(error)}`);
 			console.error('Chat error:', error);
 		}
+
+		return Promise.resolve();
 	}
 
 	/**

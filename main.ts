@@ -208,6 +208,14 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		// Cleanup architecture components
 		this.cleanupArchitecture();
 
+		// Cleanup CLI agent processes in all chat views
+		const chatLeaves = this.app.workspace.getLeavesOfType(CHAT_VIEW_TYPE);
+		for (const leaf of chatLeaves) {
+			if (leaf.view instanceof ChatView) {
+				leaf.view.cleanupCLIAgents();
+			}
+		}
+
 		// Clean up tool manager (don't detach leaves to preserve user layout)
 		if (this.sharedToolManager) {
 			this.sharedToolManager.cleanup().catch(error => console.error('[MCP] Cleanup failed', error));
@@ -385,6 +393,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, storedSettings ?? {});
 		this.legacyConversations = legacyConversations;
+		let settingsMutated = false;
 		console.debug(`[Settings] Read config files: ${Date.now() - configStart}ms`);
 
 		// Hydrate providers first as other methods may depend on it
@@ -402,10 +411,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		]);
 		console.debug(`[Settings] Hydrate other data: ${Date.now() - hydrateStart}ms`);
 
-		if (!userConfig) {
-			await this.writeUserSettingsFile(this.settings);
-		}
-
 		// Migrate old agents that still have modelId to use new modelStrategy
 		for (const agent of this.settings.agents) {
 			const agentWithOldModel = agent as Agent & { modelId?: string };
@@ -418,6 +423,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				};
 				// Remove the old field
 				delete agentWithOldModel.modelId;
+				settingsMutated = true;
 			}
 
 			// Ensure modelStrategy exists for all agents
@@ -426,7 +432,12 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 					strategy: 'default',
 					modelId: this.settings.defaultModel || 'gpt-4o'
 				};
+				settingsMutated = true;
 			}
+		}
+
+		if (!userConfig || settingsMutated) {
+			await this.writeUserSettingsFile(this.settings);
 		}
 
 		const totalTime = Date.now() - totalStart;

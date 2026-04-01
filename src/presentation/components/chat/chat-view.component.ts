@@ -57,9 +57,9 @@ export class ChatViewComponent {
     }
   }
 
-  private handleSendMessage(): Promise<void> {
-    const content = this.inputElement.value.trim();
-    if (!content) return;
+	  private handleSendMessage(): Promise<void> {
+	    const content = this.inputElement.value.trim();
+	    if (!content) return Promise.resolve();
 
     // Clear input
     this.inputElement.value = '';
@@ -67,15 +67,17 @@ export class ChatViewComponent {
     // Set loading state
     this.chatState.setIsLoading(true);
 
-    try {
-      // Use the plugin's chat service to send message
-      // This would be injected based on the architecture
-      // For now, we'll add a simple message as an example
-      console.debug('Sending message:', content);
-    } finally {
-      this.chatState.setIsLoading(false);
-    }
-  }
+	    try {
+	      // Use the plugin's chat service to send message
+	      // This would be injected based on the architecture
+	      // For now, we'll add a simple message as an example
+	      console.debug('Sending message:', content);
+	    } finally {
+	      this.chatState.setIsLoading(false);
+	    }
+
+	    return Promise.resolve();
+	  }
 
   onunload(): void {
     // Cleanup if needed

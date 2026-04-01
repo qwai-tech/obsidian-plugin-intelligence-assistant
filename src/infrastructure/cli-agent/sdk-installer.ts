@@ -45,6 +45,13 @@ export interface InstallProgress {
 	message: string;
 }
 
+let isInstalling = false;
+
+/** Check if an installation is currently in progress */
+export function isInstallInProgress(): boolean {
+	return isInstalling;
+}
+
 /** Check if an SDK is installed in the given plugin directory */
 export function isSdkInstalled(pluginDir: string, provider: CLIAgentProvider): boolean {
 	const info = SDK_PACKAGES[provider];
@@ -85,8 +92,14 @@ export function installSdk(
 	onProgress: (progress: InstallProgress) => void,
 	signal?: AbortSignal
 ): Promise<void> {
+	if (isInstalling) {
+		return Promise.reject(new Error('Another SDK installation is already in progress. Please wait for it to complete.'));
+	}
+
 	const info = SDK_PACKAGES[provider];
 	const pkg = `${info.packageName}@${info.version}`;
+
+	isInstalling = true;
 
 	return new Promise((resolve, reject) => {
 		onProgress({ stage: 'starting', message: `Installing ${pkg}...` });
@@ -108,6 +121,7 @@ export function installSdk(
 
 		const abortHandler = () => {
 			proc.kill('SIGTERM');
+			isInstalling = false;
 			reject(new Error('Installation cancelled'));
 		};
 		if (signal) {
@@ -132,6 +146,7 @@ export function installSdk(
 		});
 
 		proc.on('close', (code) => {
+			isInstalling = false;
 			if (signal) signal.removeEventListener('abort', abortHandler);
 
 			if (code === 0) {
@@ -150,6 +165,7 @@ export function installSdk(
 		});
 
 		proc.on('error', (err) => {
+			isInstalling = false;
 			if (signal) signal.removeEventListener('abort', abortHandler);
 			const message = err.message.includes('ENOENT')
 				? 'npm not found. Please install Node.js and npm.'

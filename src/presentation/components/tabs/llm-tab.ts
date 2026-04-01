@@ -35,7 +35,7 @@ export function displayLLMTab(
 	// Create content container for sub-tabs
 	const tabContentContainer = containerEl.createDiv('ia-llm-tab-content');
 
-	const subTabs = [
+	const subTabs: Array<{ id: 'provider' | 'models'; label: string; icon: string }> = [
 		{ id: 'provider', label: 'Providers', icon: '🔌' },
 		{ id: 'models', label: 'Models', icon: '🤖' }
 	];

@@ -8,9 +8,12 @@ import { ModelManager } from '@/infrastructure/llm/model-manager';
 import { CLIAgentService } from '@/infrastructure/cli-agent/cli-agent-service';
 import type { CLIAgentConfig, CLIAgentMessage } from '@/types';
 import { marked } from 'marked';
-import { ToolManager } from '@/application/services/tool-manager';
+import { 
+	ToolManager, 
+	WebSearchService, 
+	ChatService 
+} from '@/application/services';
 import { RAGManager } from '@/infrastructure/rag-manager';
-import { WebSearchService } from '@/application/services/web-search-service';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import { renderMessage, MessageRendererCallbacks } from '@/presentation/components/chat/message-renderer';
@@ -86,6 +89,7 @@ export class ChatView extends ItemView {
 	private ragManager: RAGManager;
 	private webSearchService: WebSearchService;
 	private cliAgentService: CLIAgentService;
+	private chatService: ChatService;
 	private selectedCliAgentId: string | null = null;
 
 	// UI elements
@@ -139,6 +143,13 @@ export class ChatView extends ItemView {
 		);
 
 		this.webSearchService = new WebSearchService(this.plugin.settings.webSearchConfig);
+		this.chatService = new ChatService(
+			this.app,
+			this.toolManager,
+			this.ragManager,
+			this.webSearchService,
+			this.plugin.settings.llmConfigs
+		);
 	}
 
 	getViewType(): string {
@@ -399,6 +410,12 @@ export class ChatView extends ItemView {
 	}
 
 
+	public cleanupCLIAgents(): void {
+		if (this.cliAgentService) {
+			this.cliAgentService.stopAll();
+		}
+	}
+
 	public async refreshModels(showNotice: boolean = false) {
 		try {
 			const previousSelection = this.modelSelect?.value ?? '';
@@ -563,7 +580,7 @@ export class ChatView extends ItemView {
 			return;
 		}
 
-		const { llmContent, references } = await this.buildReferenceContext(text, this.state.referencedFiles);
+		const { llmContent, references } = await this.chatService.buildReferenceContext(text, this.state.referencedFiles);
 
 		const userMessage: Message = {
 			role: 'user',
@@ -740,345 +757,104 @@ export class ChatView extends ItemView {
 		}
 	}
 
-	private async buildReferenceContext(
-		text: string,
-		referenceInputs: (TFile | TFolder | FileReference)[] = []
-	): Promise<{ llmContent: string; references: FileReference[] }> {
-		if (!referenceInputs || referenceInputs.length === 0) {
-			return { llmContent: text, references: [] };
-		}
-
-		const references: FileReference[] = referenceInputs.map(item => {
-			if (item instanceof TFile) {
-				return { type: 'file', path: item.path, name: item.name };
-			}
-			if (item instanceof TFolder) {
-				return { type: 'folder', path: item.path, name: item.name };
-			}
-			return item;
-		});
-
-		let llmContent = text + '\n\n---\n**Referenced Files/Folders:**\n\n';
-		for (const ref of references) {
-			if (ref.type === 'file') {
-				const file = this.app.vault.getAbstractFileByPath(ref.path);
-				if (file instanceof TFile) {
-					try {
-						const content = await this.app.vault.read(file);
-						llmContent += `\n### 📄 ${ref.path ?? 'unknown'}\n`;
-						llmContent += '```\n';
-						llmContent += content;
-						llmContent += '\n```\n';
-					} catch (_error) {
-						const errMsg = _error instanceof Error ? _error.message : String(_error);
-						llmContent += `\n### 📄 ${ref.path ?? 'unknown'}\n`;
-						llmContent += `*Error reading file: ${errMsg}*\n`;
-					}
-				} else {
-					llmContent += `\n### 📄 ${ref.path ?? 'unknown'}\n`;
-					llmContent += '*File not found*\n';
-				}
-			} else {
-				const filesInFolder = this.app.vault.getFiles().filter(f => f.path.startsWith(ref.path));
-				llmContent += `\n### 📁 ${ref.path ?? 'unknown'}\n`;
-				llmContent += `Contains ${filesInFolder.length} file(s):\n`;
-				filesInFolder.slice(0, 10).forEach(f => {
-					llmContent += `- ${f.path ?? 'unknown'}\n`;
-				});
-				if (filesInFolder.length > 10) {
-					llmContent += `... and ${filesInFolder.length - 10} more files\n`;
-				}
-			}
-		}
-
-		return { llmContent, references };
+	private finalizeStreamingUI() {
+		this.state.isStreaming = false;
+		this.state.stopStreamingRequested = false;
+		if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
+		if (this.sendHint) this.sendHint.removeClass('ia-hidden');
+		this.streamingMessageEl = null;
 	}
 
 	private async handleAssistantResponse(options: AssistantResponseOptions) {
-		const { text, selectedModel, config, llmContent, targetMessage } = options;
+		const { selectedModel, config, llmContent, targetMessage } = options;
 
-		const modelConfig = {
-			...config,
-			model: selectedModel,
-			temperature: this.state.temperature,
-			maxTokens: this.state.maxTokens,
-			topP: this.state.topP,
-			frequencyPenalty: this.state.frequencyPenalty,
-			presencePenalty: this.state.presencePenalty
-		};
-
-		const provider = ProviderFactory.createProvider(modelConfig);
-		const systemMessages: Message[] = [];
-
+		// 1. Prepare Active System Prompts from settings
+		const activeSystemPrompts: Message[] = [];
 		if (this.plugin.settings.activeSystemPromptId) {
-			const activePrompt = this.plugin.settings.systemPrompts.find(
-				p => p.id === this.plugin.settings.activeSystemPromptId
-			);
+			const activePrompt = this.plugin.settings.systemPrompts.find(p => p.id === this.plugin.settings.activeSystemPromptId);
 			if (activePrompt && activePrompt.enabled) {
-				systemMessages.push({
-					role: 'system' as const,
-					content: activePrompt.content
-				});
+				activeSystemPrompts.push({ role: 'system', content: activePrompt.content });
 			}
 		}
 
-		if (this.state.mode === 'agent') {
-			const toolsList = this.toolManager.getAllTools().map(tool =>
-				`- ${tool.definition.name}: ${tool.definition.description}`
-			).join('\n');
+		// 2. Prepare Messages for LLM (delegated to service)
+		const contextWindow = this.getActiveAgent()?.contextWindow ?? 20;
+		const llmMessages = this.chatService.prepareLlmMessages(this.state.messages, targetMessage, llmContent, contextWindow);
 
-			systemMessages.push({
-				role: 'system' as const,
-				content: `You are an AI agent with access to tools. You can call tools to help answer the user's questions.
+		// 3. Setup UI Placeholder
+		const placeholderAssistant: Message = { role: 'assistant', content: '', model: selectedModel };
+		(placeholderAssistant as any).provider = config.provider ?? null;
+		const assistantMessageEl = this.addMessageToUI(placeholderAssistant);
+		const contentEl = this.findMessageContentElement(assistantMessageEl);
 
-Available tools:
-${toolsList}
+		this.state.isStreaming = true;
+		this.state.stopStreamingRequested = false;
+		this.streamingMessageEl = assistantMessageEl;
+		if (this.stopBtn) this.stopBtn.removeClass('ia-hidden');
+		if (this.sendHint) this.sendHint.addClass('ia-hidden');
 
-To call a tool, respond with a JSON block in this format:
-\`\`\`json
-{
-  "name": "tool_name",
-  "arguments": {
-    "arg1": "value1",
-    "arg2": "value2"
-  }
-}
-\`\`\`
-
-After calling a tool, you will receive the result and can continue the conversation or call another tool if needed.`
-			});
-		}
-
-		let ragSources: import('@/types').RAGSource[] | undefined;
-		console.debug('[RAG Debug] enableRAG:', this.state.enableRAG, 'ragConfig.enabled:', this.plugin.settings.ragConfig.enabled);
-		if (this.state.enableRAG && this.plugin.settings.ragConfig.enabled) {
-			try {
-				console.debug('[RAG Debug] Querying RAG with text:', text);
-				const searchResults = await this.ragManager.query(text);
-				console.debug('[RAG Debug] Search results:', searchResults?.length || 0, 'results');
-				if (searchResults && searchResults.length > 0) {
-					ragSources = searchResults.map(result => ({
-						path: result.chunk.metadata.path,
-						content: result.chunk.content,
-						similarity: result.similarity,
-						title: result.chunk.metadata.title
-					}));
-
-					const ragContext = searchResults
-						.map(result => `Document: ${result.chunk.metadata.path}\nContent: ${result.chunk.content}`)
-						.join('\n\n');
-
-					console.debug('[RAG Debug] RAG context length:', ragContext.length);
-					systemMessages.push({
-						role: 'system' as const,
-						content: `RAG Context (retrieved from your vault):\n\n${ragContext}`
-					});
-				} else {
-					console.debug('[RAG Debug] No search results found');
-				}
-			} catch (_error) {
-				const errMsg = _error instanceof Error ? _error.message : String(_error);
-				console.error('[RAG Debug] Error retrieving RAG context:', errMsg);
-				new Notice(`Rag error: ${errMsg}`);
-			}
-		} else {
-			console.debug('[RAG Debug] RAG is disabled');
-		}
-
-		let shouldPerformWebSearch = this.state.enableWebSearch;
-		if (!shouldPerformWebSearch && this.plugin.settings.webSearchConfig.autoTrigger) {
-			shouldPerformWebSearch = this.shouldAutoTriggerWebSearch(text);
-		}
-
-		let webSearchResults: import('@/types').WebSearchResult[] | undefined;
-		if (shouldPerformWebSearch) {
-			try {
-				if (this.state.enableWebSearch) {
-					new Notice('🔍 searching the web...');
-				} else {
-					console.debug('[WebSearch] Auto-triggered search for query:', text);
-				}
-
-				const results = await this.webSearchService.search(text);
-				if (results && results.length > 0) {
-					webSearchResults = results;
-					const searchContext = this.webSearchService.formatResultsAsContext(results);
-					systemMessages.push({
-						role: 'system' as const,
-						content: searchContext
-					});
-
-					if (this.state.enableWebSearch) {
-						new Notice(`✅ found ${results.length} web results`);
-					} else {
-						console.debug(`[WebSearch] Auto-triggered: Found ${results.length} web results`);
-					}
-				} else if (this.state.enableWebSearch) {
-					new Notice('No web results found for your query');
-				}
-			} catch (_error) {
-				const errMsg = _error instanceof Error ? _error.message : String(_error);
-				console.error('Error performing web search:', errMsg);
-				if (this.state.enableWebSearch) {
-					new Notice(`Web search error: ${errMsg}`);
-				} else {
-					console.error('[WebSearch] Auto-triggered search error:', errMsg);
-				}
-			}
-		}
-
-		const targetIndex = this.state.messages.indexOf(targetMessage);
-		if (targetIndex === -1) {
-			throw new Error('Unable to locate target message for response');
-		}
-
-		const llmMessages = this.state.messages.map((msg, index) => {
-			const isTarget = index === targetIndex;
-			let baseContent = isTarget ? llmContent : msg.content;
-
-			if (!msg.attachments || msg.attachments.length === 0) {
-				return { role: msg.role, content: baseContent, model: msg.model };
-			}
-
-			let formattedContent = baseContent;
-			const fileAttachments = msg.attachments.filter(att => att.type === 'file');
-			if (fileAttachments.length > 0) {
-				formattedContent += '\n\n---\n**Attached Files:**\n\n';
-				fileAttachments.forEach(att => {
-					formattedContent += `\n### File: ${att.name ?? 'unknown'}\n`;
-					formattedContent += `Path: ${att.path ?? 'unknown'}\n\n`;
-					formattedContent += '```\n';
-					formattedContent += att.content || '';
-					formattedContent += '\n```\n';
-				});
-			}
-
-			const imageAttachments = msg.attachments.filter(att => att.type === 'image');
-			if (imageAttachments.length > 0) {
-				formattedContent += '\n\n---\n**Attached Images:**\n\n';
-				imageAttachments.forEach(att => {
-					formattedContent += `- Image: ${att.name ?? 'unknown'} (Path: ${att.path})\n`;
-				});
-				formattedContent += '\n*Note: Image content cannot be processed by text-only models. Please describe what you need help with regarding these images.*\n';
-			}
-
-			return { role: msg.role, content: formattedContent, model: msg.model };
-		});
-
-		// Deduplicate and apply context window limit to conversation messages
-		const activeAgent = this.getActiveAgent();
-		const contextWindow = activeAgent?.contextWindow ?? 20;
-		const dedupedLlmMessages = deduplicateMessages(llmMessages);
-		const truncatedLlmMessages = dedupedLlmMessages.length > contextWindow
-			? dedupedLlmMessages.slice(-contextWindow)
-			: dedupedLlmMessages;
-
-		const _finalMessages = [...systemMessages, ...truncatedLlmMessages];
-		console.debug('[Chat] Final messages count:', _finalMessages.length, '(deduped from:', llmMessages.length, ', context window:', contextWindow, ')');
-
-		let assistantMessageEl: HTMLElement | null = null;
+		let currentRagSources: any[] = [];
+		let currentWebResults: any[] = [];
 
 		try {
-			const placeholderAssistant: Message = {
-				role: 'assistant',
-				content: '',
-				model: selectedModel
-			};
-			(placeholderAssistant as { provider?: string | null }).provider = config.provider ?? null;
-			assistantMessageEl = this.addMessageToUI(placeholderAssistant);
-			this.state.isStreaming = true;
-			this.state.stopStreamingRequested = false;
-			this.streamingMessageEl = assistantMessageEl;
-
-			const streamingResult = await handleStreamingChat(
-				assistantMessageEl,
-				provider,
+			await this.chatService.streamResponse(
+				llmMessages,
 				{
-					messages: _finalMessages,
 					model: selectedModel,
+					mode: this.state.mode,
 					temperature: this.state.temperature,
 					maxTokens: this.state.maxTokens,
 					topP: this.state.topP,
 					frequencyPenalty: this.state.frequencyPenalty,
-					presencePenalty: this.state.presencePenalty
+					presencePenalty: this.state.presencePenalty,
+					enableRAG: this.state.enableRAG && this.plugin.settings.ragConfig.enabled,
+					enableWebSearch: this.state.enableWebSearch,
+					activeSystemPrompts
 				},
 				{
-					chatContainer: this.chatContainer,
-					stopBtn: this.stopBtn,
-					sendHint: this.sendHint,
-					onStopRequested: () => this.state.stopStreamingRequested,
-					estimateTokens: this.estimateTokens.bind(this) as (text: string) => number,
-					onScrollAwayChanged: (isAway: boolean) => {
-						if (isAway) {
-							this.scrollToBottomBtn.removeClass('ia-hidden');
-						} else {
-							this.scrollToBottomBtn.addClass('ia-hidden');
+					onChunk: (chunk: import('@/types/common/llm').StreamChunk) => {
+						if (contentEl && chunk.content) {
+							contentEl.appendText(chunk.content);
+							this.chatContainer.scrollTo({ top: this.chatContainer.scrollHeight, behavior: 'smooth' });
 						}
-					}
+					},
+					onRAGSources: (sources: import('@/types').RAGSource[]) => { currentRagSources = sources; },
+					onWebSearch: (results: import('@/types').WebSearchResult[]) => { currentWebResults = results; },
+					onComplete: async (finalMessage: Message) => {
+						this.state.messages.push(finalMessage);
+						this.updateTokenSummary();
+						
+						if (currentRagSources.length > 0 && assistantMessageEl) {
+							const messageBody = this.findMessageBodyElement(assistantMessageEl);
+							if (messageBody) this.displayRagSources(messageBody, currentRagSources);
+						}
+
+						if (this.state.mode === 'agent' && assistantMessageEl) {
+							const messageBody = this.findMessageBodyElement(assistantMessageEl);
+							if (messageBody) {
+								const traceContent = this.createAgentExecutionTraceContainer(messageBody);
+								if (contentEl) contentEl.empty();
+								const toolsExecuted = await this.processToolCalls(finalMessage.content, traceContent, contentEl || undefined);
+								if (!toolsExecuted && contentEl) {
+									this.displayAgentFinalAnswer(contentEl);
+									collapseExecutionTrace(traceContent);
+								}
+							}
+						}
+
+						await this.conversationManager.saveCurrentConversation();
+						this.finalizeStreamingUI();
+					},
+					onError: (error: Error) => {
+						new Notice(`Chat error: ${error.message}`);
+						this.finalizeStreamingUI();
+					},
+					checkAbort: () => this.state.stopStreamingRequested
 				}
 			);
-
-			const { fullContent, fullReasoning, promptTokens, completionTokens, totalTokens } = streamingResult;
-
-			this.state.messages.push({
-				role: 'assistant',
-				content: fullContent,
-				model: selectedModel,
-				ragSources,
-				webSearchResults,
-				webSearchProvider: webSearchResults ? this.plugin.settings.webSearchConfig.provider : undefined,
-				reasoningContent: fullReasoning || undefined,
-				tokenUsage: {
-					promptTokens,
-					completionTokens,
-					totalTokens
-				}
-			} as Message);
-
-			this.updateTokenSummary();
-
-			if (ragSources && ragSources.length > 0 && assistantMessageEl) {
-				const messageBody = this.findMessageBodyElement(assistantMessageEl);
-				if (messageBody) {
-					this.displayRagSources(messageBody, ragSources);
-				}
-			}
-
-			if (this.state.mode === 'agent' && assistantMessageEl) {
-				this.state.agentExecutionSteps = [];
-				const messageBody = this.findMessageBodyElement(assistantMessageEl);
-				if (messageBody) {
-					const contentEl = this.findMessageContentElement(assistantMessageEl);
-					const traceContent = this.createAgentExecutionTraceContainer(messageBody);
-					if (contentEl) {
-						contentEl.empty(); // Clear raw streamed text; trace renders it in structured form
-					}
-					const toolsExecuted = await this.processToolCalls(fullContent, traceContent, contentEl || undefined);
-
-					const countSpan = messageBody.querySelector('.agent-trace-count');
-					if (countSpan) {
-						countSpan.textContent = `${this.state.agentExecutionSteps.length} steps`;
-					}
-
-					// If no tools were called, this is already the final answer - show it and collapse trace
-					// If tools were called, continuation flow handles final answer + collapse
-					if (!toolsExecuted && contentEl) {
-						this.displayAgentFinalAnswer(contentEl);
-						collapseExecutionTrace(traceContent);
-					}
-				}
-			}
-
-			await this.conversationManager.saveCurrentConversation();
-		} catch (_error) {
-			if (assistantMessageEl && assistantMessageEl.isConnected) {
-				assistantMessageEl.remove();
-			}
-			throw (_error instanceof Error ? _error : new Error(String(_error)));
-		} finally {
-			this.state.isStreaming = false;
-			this.state.stopStreamingRequested = false;
-			this.streamingMessageEl = null;
+		} catch (error) {
+			this.finalizeStreamingUI();
+			throw error;
 		}
 	}
 
@@ -1439,7 +1215,7 @@ After calling a tool, you will receive the result and can continue the conversat
 			return;
 		}
 
-		const { llmContent } = await this.buildReferenceContext(
+		const { llmContent } = await this.chatService.buildReferenceContext(
 			previousUser.message.content,
 			previousUser.message.references || []
 		);
@@ -5384,5 +5160,5 @@ class SingleFileSelectionModal extends Modal {
 	onClose() {
 		const { contentEl } = this;
 		contentEl.empty();
-	}
+}
 }

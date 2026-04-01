@@ -118,6 +118,8 @@ After every change, run `npm run lint && npm run build`. Both must succeed befor
 | [docs/README.md](docs/README.md) | Documentation index |
 | [docs/architecture/overview-en.md](docs/architecture/overview-en.md) | Architecture overview (English) |
 | [docs/architecture/overview-zh.md](docs/architecture/overview-zh.md) | 架构总览（中文） |
+| [docs/project/project-guide-en.md](docs/project/project-guide-en.md) | Developer-oriented project guide (English) |
+| [docs/project/project-guide-zh.md](docs/project/project-guide-zh.md) | 面向开发者的项目指南（中文） |
 | [docs/reference/project-structure.md](docs/reference/project-structure.md) | Full source tree reference |
 
 Contributions, issues, and feature requests are welcome — open a PR or discussion.

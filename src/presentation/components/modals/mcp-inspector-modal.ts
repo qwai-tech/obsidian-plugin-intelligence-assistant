@@ -1,6 +1,7 @@
 import { App, Modal, Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { snapshotMcpTools } from '@plugin';
+import type { Tool } from '@/application/services/types';
 
 export class MCPInspectorModal extends Modal {
 	private plugin: IntelligenceAssistantPlugin;
@@ -275,7 +276,7 @@ export class MCPInspectorModal extends Modal {
 			.reduce((acc, [provider, tools]) => {
 				acc[provider] = tools;
 				return acc;
-			}, {} as Record<string, unknown[]>);
+			}, {} as Record<string, Tool[]>);
 
 		if (Object.keys(mcpTools).length === 0) {
 			container.createEl('p', { text: 'No MCP tools available. Check server connections.' });
@@ -535,11 +536,11 @@ export class MCPInspectorModal extends Modal {
 
 				if (!paramName) continue;
 
-				let value: unknown;
-				if (input instanceof HTMLInputElement && input.type === 'checkbox') {
-					value = input.checked;
-				} else if (input instanceof HTMLTextAreaElement || input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
-					value = input.value;
+					let value: string | boolean | undefined;
+					if (input instanceof HTMLInputElement && input.type === 'checkbox') {
+						value = input.checked;
+					} else if (input instanceof HTMLTextAreaElement || input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
+						value = input.value;
 				}
 
 				// Validate required fields
@@ -552,22 +553,34 @@ export class MCPInspectorModal extends Modal {
 				// Skip empty optional fields
 				if (!value) continue;
 
-				// Parse based on type
-				try {
-					if (paramType === 'number') {
-						value = parseFloat(value);
-						if (isNaN(value)) {
-							new Notice(`Invalid number for parameter: ${paramName}`);
-							validationError = true;
-							break;
+					// Parse based on type
+					try {
+						if (paramType === 'number') {
+							if (typeof value !== 'string') {
+								new Notice(`Invalid number for parameter: ${paramName}`);
+								validationError = true;
+								break;
+							}
+							const parsed = Number.parseFloat(value);
+							if (Number.isNaN(parsed)) {
+								new Notice(`Invalid number for parameter: ${paramName}`);
+								validationError = true;
+								break;
+							}
+							args[paramName] = parsed;
+						} else if (paramType === 'boolean') {
+							args[paramName] = value;
+						} else if (paramType === 'object' || paramType === 'array') {
+							if (typeof value !== 'string') {
+								new Notice(`Invalid JSON for parameter: ${paramName}`);
+								validationError = true;
+								break;
+							}
+							args[paramName] = JSON.parse(value);
+						} else {
+							args[paramName] = value;
 						}
-					} else if (paramType === 'boolean') {
-						// Already handled by checkbox
-					} else if (paramType === 'object' || paramType === 'array') {
-						value = JSON.parse(value);
-					}
-					args[paramName] = value;
-				} catch (error) {
+					} catch (error) {
 					console.error(`Invalid JSON for parameter ${paramName}:`, error);
 					new Notice(`Invalid JSON for parameter: ${paramName}`);
 					validationError = true;

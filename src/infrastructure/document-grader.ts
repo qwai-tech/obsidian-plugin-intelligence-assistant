@@ -28,16 +28,16 @@ export class DocumentGrader {
   private getChatModelFn?: () => string | null;
   private getDefaultModelFn?: () => string | undefined;
 
-  constructor(
-    config: RAGConfig, 
-    llmConfigs: LLMConfig[], 
-    getChatModelFn?: () => string | null,
-    getDefaultModelFn?: () => string | undefined
-  ) {
-    this.config = config as Record<string, unknown>;
-    this.llmConfigs = llmConfigs;
-    this.getChatModelFn = getChatModelFn;
-    this.getDefaultModelFn = getDefaultModelFn;
+	  constructor(
+	    config: RAGConfig, 
+	    llmConfigs: LLMConfig[], 
+	    getChatModelFn?: () => string | null,
+	    getDefaultModelFn?: () => string | undefined
+	  ) {
+	    this.config = config;
+	    this.llmConfigs = llmConfigs;
+	    this.getChatModelFn = getChatModelFn;
+	    this.getDefaultModelFn = getDefaultModelFn;
   }
 
   async gradeDocument(request: GradeRequest): Promise<DocumentGrade> {
@@ -159,10 +159,17 @@ export class DocumentGrader {
 
   private parseResponse(content: string): unknown {
     try {
+      // Look for JSON block wrapped in triple backticks first
+      const mdJsonMatch = content.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
+      if (mdJsonMatch) {
+        return JSON.parse(mdJsonMatch[1]);
+      }
+
+      // Fallback: search for first { and last }
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       return JSON.parse(jsonMatch ? jsonMatch[0] : content);
     } catch (error) {
-      console.error('[DocumentGrader] Failed to parse JSON response:', error);
+      console.error('[DocumentGrader] Failed to parse JSON response:', error, 'Content:', content);
       throw new Error('Invalid JSON response from model');
     }
   }

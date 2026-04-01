@@ -402,15 +402,16 @@ export class ModelManager {
 					const prefixedId = `openrouter:${model.id}`;
 
 					// Check for embedding models
-					if (model.id.includes('embedding') || model.architecture?.modality === 'text->embedding') {
-						return {
-							id: prefixedId,
-							name: model.name || model.id,
-							provider: 'openrouter',
-							capabilities: ['embedding'],
-							enabled: true
-						};
-					}
+						if (model.id.includes('embedding') || model.architecture?.modality === 'text->embedding') {
+							const embeddingCapabilities: ModelCapability[] = ['embedding'];
+							return {
+								id: prefixedId,
+								name: model.name || model.id,
+								provider: 'openrouter',
+								capabilities: embeddingCapabilities,
+								enabled: true
+							};
+						}
 
 					return {
 						id: prefixedId,

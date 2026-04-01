@@ -57,6 +57,26 @@ export class GoogleProvider extends BaseStreamingProvider {
 		};
 	}
 
+	async generateEmbedding(text: string, model: string): Promise<number[]> {
+		const baseUrl = this.getBaseUrl('https://generativelanguage.googleapis.com/v1beta');
+		const modelName = this.extractModelName(model);
+		const url = `${baseUrl ?? ''}/models/${modelName ?? ''}:embedContent?key=${this.config.apiKey ?? ''}`;
+
+		const body = {
+			model: `models/${modelName}`,
+			content: {
+				parts: [{ text }]
+			}
+		};
+
+		const response = await this.makeRequest(url, body) as {
+			json: {
+				embedding: { values: number[] };
+			}
+		};
+		return response.json.embedding.values;
+	}
+
 	protected prepareStreamRequest(request: ChatRequest): { url: string; body: unknown } {
 		const baseUrl = this.getBaseUrl('https://generativelanguage.googleapis.com/v1beta');
 		const model = this.extractModelName(request.model);

@@ -8,7 +8,7 @@
  * imports the SDK and streams events back via JSON-line stdout.
  */
 
-import { spawn } from 'child_process';
+import { spawn, ChildProcess } from 'child_process';
 import { createInterface } from 'readline';
 import { existsSync } from 'fs';
 import { join } from 'path';
@@ -19,6 +19,19 @@ import { getFullPath } from './shell-env';
 import { ensureBridgeScript } from './sdk-bridge';
 
 export class CLIAgentService {
+	private activeProcesses: Map<string, ChildProcess> = new Map();
+
+	/**
+	 * Stop all active CLI agent processes.
+	 */
+	public stopAll(): void {
+		for (const [id, proc] of this.activeProcesses.entries()) {
+			console.debug(`[CLI Agent] Stopping process: ${id}`);
+			proc.kill('SIGKILL'); // Force kill for global cleanup
+		}
+		this.activeProcesses.clear();
+	}
+
 	/**
 	 * Execute a CLI agent with the given prompt.
 	 * Streams normalized messages via onMessage callback.

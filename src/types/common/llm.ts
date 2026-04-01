@@ -110,4 +110,5 @@ export interface ILLMProvider {
 	name: string;
 	chat(_request: ChatRequest): Promise<ChatResponse>;
 	streamChat(_request: ChatRequest, _onChunk: (_chunk: StreamChunk) => void): Promise<void>;
+	generateEmbedding?(_text: string, _model: string): Promise<number[]>;
 }

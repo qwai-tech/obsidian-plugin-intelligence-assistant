@@ -13,6 +13,10 @@ export abstract class BaseLLMProvider implements ILLMProvider {
 	abstract chat(_request: ChatRequest): Promise<ChatResponse>;
 	abstract streamChat(_request: ChatRequest, _onChunk: (_chunk: StreamChunk) => void): Promise<void>;
 
+	async generateEmbedding(text: string, model: string): Promise<number[]> {
+		throw new Error(`Embedding generation not supported by ${this.name} provider.`);
+	}
+
 	protected getHeaders(): Record<string, string> {
 		return {
 			'Content-Type': 'application/json',

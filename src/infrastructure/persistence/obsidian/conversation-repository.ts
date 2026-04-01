@@ -1,5 +1,6 @@
 // Conversation repository
 import { Vault } from 'obsidian';
+import type { Conversation } from '@/types/core/conversation';
 import { ConversationModel } from '../../../domain/chat/entities/conversation.model';
 import { BaseObsidianRepository } from './base-obsidian-repository';
 
@@ -13,17 +14,19 @@ class ConversationSerializer {
     });
   }
 
-  deserialize(content: string): ConversationModel {
-    const data = JSON.parse(content) as {
-      createdAt: string | number | Date;
-      updatedAt: string | number | Date;
-      [key: string]: unknown;
-    };
-    data.createdAt = new Date(data.createdAt).getTime();
-    data.updatedAt = new Date(data.updatedAt).getTime();
-    return ConversationModel.fromJSON(data);
-  }
-}
+	deserialize(content: string): ConversationModel {
+		const data = JSON.parse(content) as Conversation & {
+	      createdAt: string | number | Date;
+	      updatedAt: string | number | Date;
+	    };
+		const normalized: Conversation = {
+			...data,
+			createdAt: new Date(data.createdAt).getTime(),
+			updatedAt: new Date(data.updatedAt).getTime()
+		};
+	    return ConversationModel.fromJSON(normalized);
+	  }
+	}
 
 export class ConversationRepository extends BaseObsidianRepository<ConversationModel> {
   constructor(vault: Vault) {

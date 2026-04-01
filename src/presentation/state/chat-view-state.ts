@@ -3,7 +3,7 @@
  * Centralized state container for chat view data and configuration
  */
 
-import type { Message, Attachment, ModelInfo } from '@/types';
+import type { Message, Attachment, ModelInfo, FileReference } from '@/types';
 import { TFile, TFolder } from 'obsidian';
 import { Events } from 'obsidian';
 
@@ -255,9 +255,9 @@ export class ChatViewState extends Events {
 	}
 
 	// Current references (for compatibility)
-	get currentReferences(): unknown[] {
+	get currentReferences(): FileReference[] {
 		return this._referencedFiles.map(file => ({
-			type: 'path' in file ? 'file' : 'folder',
+			type: file instanceof TFile ? 'file' : 'folder',
 			path: file.path,
 			name: file.name
 		}));

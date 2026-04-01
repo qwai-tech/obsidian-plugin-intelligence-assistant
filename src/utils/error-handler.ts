@@ -87,8 +87,8 @@ export async function handleAsyncError<T>(
 		}
 
 		// Return fallback if provided
-		if (fallback !== undefined) {
-			return fallback;
+			if (fallback !== undefined) {
+				return fallback as T;
 		}
 
 		return undefined;
@@ -133,8 +133,8 @@ export function handleSyncError<T>(
 		}
 
 		// Return fallback if provided
-		if (fallback !== undefined) {
-			return fallback;
+			if (fallback !== undefined) {
+				return fallback as T;
 		}
 
 		return undefined;

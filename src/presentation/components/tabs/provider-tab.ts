@@ -45,6 +45,30 @@ export function displayProviderTab(
 ): void {
 	containerEl.createEl('h3', { text: 'Provider configuration' });
 
+	// Security Warning
+	const warningContainer = containerEl.createDiv('ia-warning-box');
+	warningContainer.setCssProps({
+		'background-color': 'rgba(255, 100, 0, 0.1)',
+		'border-left': '4px solid #ff6400',
+		'padding': '12px',
+		'margin-bottom': '20px',
+		'border-radius': '4px'
+	});
+	
+	const warningTitle = warningContainer.createDiv();
+	warningTitle.createSpan({ text: '⚠️ Security Warning' });
+	warningTitle.setCssProps({ 'font-weight': 'bold', 'margin-bottom': '8px', 'display': 'block' });
+	
+	const warningText = warningContainer.createDiv();
+	warningText.setText('API keys are stored as plain text in your vault for compatibility. To prevent accidental leaks:');
+	warningText.setCssProps({ 'font-size': '0.9em', 'line-height': '1.4' });
+	
+	const warningList = warningContainer.createEl('ul');
+	warningList.setCssProps({ 'margin-top': '8px', 'margin-bottom': '0', 'font-size': '0.85em' });
+	warningList.createEl('li', { text: 'Do NOT share your .obsidian/plugins/intelligence-assistant/data/ folder.' });
+	warningList.createEl('li', { text: 'Add this folder to your .gitignore if you use Git sync.' });
+	warningList.createEl('li', { text: 'Be cautious when using public cloud sync services.' });
+
 	const desc = containerEl.createEl('p', {
 		text: 'Manage LLM providers and API credentials. Use the actions column to edit configuration details or refresh cached models.'
 	});

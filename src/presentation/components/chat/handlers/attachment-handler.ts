@@ -161,7 +161,7 @@ export class AttachmentHandler {
 
 		if (files.length === 0) {
 			new Notice('No files found in vault');
-			return;
+			return Promise.resolve();
 		}
 
 		// Create a simple file picker menu
@@ -190,6 +190,8 @@ export class AttachmentHandler {
 		} else {
 			menu.showAtPosition({ x: 0, y: 0 });
 		}
+
+		return Promise.resolve();
 	}
 
 	/**
@@ -215,7 +217,7 @@ export class AttachmentHandler {
 				}
 			})();
 		}).open();
-	  return Promise.resolve();
+		return Promise.resolve();
 	}
 
 	/**

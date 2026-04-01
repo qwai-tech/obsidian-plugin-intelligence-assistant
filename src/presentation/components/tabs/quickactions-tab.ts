@@ -142,12 +142,10 @@ export function displayQuickActionsTab(
 			deleteBtn.addClass('ia-button--danger');
 			deleteBtn.addEventListener('click', () => {
 				void (async () => {
-					const confirmed = await showConfirm(
-						app,
-						'Delete quick action',
-						`Are you sure you want to delete "${action.name}"?`,
-						'delete'
-					);
+						const confirmed = await showConfirm(
+							app,
+							`Delete quick action "${action.name}"?`
+						);
 					if (confirmed) {
 						plugin.settings.quickActions.splice(i, 1);
 						await plugin.saveSettings();

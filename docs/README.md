@@ -8,6 +8,8 @@ This folder contains all documentation for the Intelligence Assistant Obsidian p
 |------|-------------|
 | [architecture/overview-en.md](architecture/overview-en.md) | Architecture overview (English) |
 | [architecture/overview-zh.md](architecture/overview-zh.md) | 架构总览（中文） |
+| [project/project-guide-en.md](project/project-guide-en.md) | Developer-oriented project guide (English) |
+| [project/project-guide-zh.md](project/project-guide-zh.md) | 面向开发者的项目指南（中文） |
 | [reference/project-structure.md](reference/project-structure.md) | Full annotated source tree |
 | [reference/api.md](reference/api.md) | Internal API reference (core layer) |
 
