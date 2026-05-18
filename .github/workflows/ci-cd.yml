@@ -5,6 +5,8 @@ on:
     branches: [main, master]
     tags: ['*']
 
+permissions: {}
+
 env:
   PLUGIN_NAME: intelligence-assistant
   MAIN_FILE: main.js
@@ -38,12 +40,12 @@ jobs:
           ls -la
           exit 1
         fi
-        
+
         if [ ! -f ${{ env.STYLE_FILE }} ]; then
           echo "Plugin style file not found!"
           exit 1
         fi
-        
+
         if [ ! -f ${{ env.MANIFEST_FILE }} ]; then
           echo "Plugin manifest file not found!"
           exit 1
@@ -56,9 +58,8 @@ jobs:
 
     - name: Package plugin as .zip
       working-directory: ./release
-      run: |
-        zip -r ../${{ env.PLUGIN_NAME }}.zip ./*
-        
+      run: zip -r ../${{ env.PLUGIN_NAME }}.zip ./*
+
     - name: Upload packaged plugin as artifact
       uses: actions/upload-artifact@v4
       with:
@@ -74,59 +75,13 @@ jobs:
           release/${{ env.STYLE_FILE }}
           release/${{ env.MANIFEST_FILE }}
 
-    # Create GitHub release for tagged commits
     - name: Create GitHub Release
       if: startsWith(github.ref, 'refs/tags/')
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-
-    - name: Upload Release Asset - ZIP
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./${{ env.PLUGIN_NAME }}.zip
-        asset_name: ${{ env.PLUGIN_NAME }}.zip
-        asset_content_type: application/zip
-
-    - name: Upload Release Asset - Main.js
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./release/${{ env.MAIN_FILE }}
-        asset_name: ${{ env.MAIN_FILE }}
-        asset_content_type: application/javascript
-
-    - name: Upload Release Asset - Styles.css
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./release/${{ env.STYLE_FILE }}
-        asset_name: ${{ env.STYLE_FILE }}
-        asset_content_type: text/css
-
-    - name: Upload Release Asset - Manifest.json
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./release/${{ env.MANIFEST_FILE }}
-        asset_name: ${{ env.MANIFEST_FILE }}
-        asset_content_type: application/json
+        name: Release ${{ github.ref_name }}
+        files: |
+          ${{ env.PLUGIN_NAME }}.zip
+          release/${{ env.MAIN_FILE }}
+          release/${{ env.STYLE_FILE }}
+          release/${{ env.MANIFEST_FILE }}

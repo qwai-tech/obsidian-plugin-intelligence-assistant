@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [main, master]
 
+permissions:
+  contents: read
+
 env:
   PLUGIN_NAME: intelligence-assistant
 
