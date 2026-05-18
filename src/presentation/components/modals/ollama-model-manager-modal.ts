@@ -74,12 +74,12 @@ export class OllamaModelManagerModal extends Modal {
 				});
 			} else {
 				statusEl.setText('❌ Server offline');
-				statusEl.setCssProps({ 'color': 'var(--text-error)' });
+				statusEl.addClass('ia-text-error');
 			}
 		} catch (error) {
 			console.error('Failed to check Ollama server status:', error);
 			statusEl.setText('❌ Connection error');
-			statusEl.setCssProps({ 'color': 'var(--text-error)' });
+			statusEl.addClass('ia-text-error');
 		}
 	}
 
@@ -100,7 +100,7 @@ export class OllamaModelManagerModal extends Modal {
 			.addText(text => {
 				modelNameInput = text.inputEl;
 				text.setPlaceholder('llama2')
-					.inputEl.setCssProps({ 'width': '100%' });
+					.inputEl.addClass('ia-full-width');
 			})
 			.addButton(button => button
 				.setButtonText('Pull model')
@@ -117,11 +117,7 @@ export class OllamaModelManagerModal extends Modal {
 
 	private renderInstalledModels(containerEl: HTMLElement) {
 		const section = containerEl.createDiv('ia-modal-section');
-		const header = section.createDiv();
-		header.removeClass('ia-hidden');
-		header.setCssProps({ 'justify-content': 'space-between' });
-		header.setCssProps({ 'align-items': 'center' });
-		header.setCssProps({ 'margin-bottom': '12px' });
+		const header = section.createDiv('ia-modal-section-header');
 
 		header.createEl('h3', { text: 'Installed models' });
 
@@ -135,8 +131,6 @@ export class OllamaModelManagerModal extends Modal {
 		});
 
 		const modelList = section.createDiv('ia-model-list');
-		modelList.setCssProps({ 'max-height': '400px' });
-		modelList.setCssProps({ 'overflow-y': 'auto' });
 
 		if (this.models.length === 0) {
 			modelList.createEl('p', {
@@ -148,11 +142,6 @@ export class OllamaModelManagerModal extends Modal {
 
 		this.models.forEach(model => {
 			const modelRow = modelList.createDiv('ia-model-row');
-			modelRow.removeClass('ia-hidden');
-			modelRow.setCssProps({ 'justify-content': 'space-between' });
-			modelRow.setCssProps({ 'align-items': 'center' });
-			modelRow.setCssProps({ 'padding': '12px' });
-			modelRow.setCssProps({ 'border-bottom': '1px solid var(--background-modifier-border)' });
 
 			const modelInfo = modelRow.createDiv();
 			modelInfo.createEl('div', {
@@ -169,7 +158,7 @@ export class OllamaModelManagerModal extends Modal {
 			const deleteBtn = modelRow.createEl('button', { text: 'Delete' });
 			deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
-		deleteBtn.setCssProps({ 'margin-left': '8px' });
+		deleteBtn.addClass('ia-ml-8');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
 				await this.deleteModel(model.id, deleteBtn);
@@ -222,12 +211,7 @@ export class OllamaModelManagerModal extends Modal {
 			contentEl.empty();
 			contentEl.createEl('p', { text: message });
 			
-			const buttonBar = contentEl.createDiv();
-			buttonBar.removeClass('ia-hidden');
-			buttonBar.setCssProps({ 'display': 'flex' });
-			buttonBar.setCssProps({ 'justify-content': 'flex-end' });
-			buttonBar.setCssProps({ 'gap': '8px' });
-			buttonBar.setCssProps({ 'margin-top': '12px' });
+			const buttonBar = contentEl.createDiv('ia-confirm-button-bar');
 			
 			const cancelBtn = buttonBar.createEl('button', { text: 'Cancel' });
 			cancelBtn.addEventListener('click', () => {

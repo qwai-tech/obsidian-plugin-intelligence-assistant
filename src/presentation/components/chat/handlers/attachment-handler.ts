@@ -38,22 +38,15 @@ class SearchableImageModal extends Modal {
 			type: 'text',
 			placeholder: 'Search images...'
 		});
-		this.searchInput.setCssProps({ 'width': '100%' });
-		this.searchInput.setCssProps({ 'margin-bottom': '12px' });
-		this.searchInput.setCssProps({ 'padding': '8px' });
+		this.searchInput.addClass('ia-image-search-input');
 		this.searchInput.addEventListener('input', () => this.renderResults());
 
 		// Results container
 		this.resultsContainer = contentEl.createDiv('image-results');
-		this.resultsContainer.setCssProps({ 'max-height': '400px' });
-		this.resultsContainer.setCssProps({ 'overflow-y': 'auto' });
-		this.resultsContainer.setCssProps({ 'margin-bottom': '12px' });
+		this.resultsContainer.addClass('ia-image-results');
 
 		// Buttons
-		const buttonContainer = contentEl.createDiv();
-		buttonContainer.removeClass('ia-hidden');
-		buttonContainer.setCssProps({ 'gap': '8px' });
-		buttonContainer.setCssProps({ 'justify-content': 'flex-end' });
+		const buttonContainer = contentEl.createDiv('ia-image-picker-buttons');
 
 		const selectBtn = buttonContainer.createEl('button', { text: 'Select' });
 		selectBtn.addEventListener('click', () => {
@@ -82,17 +75,8 @@ class SearchableImageModal extends Modal {
 
 		filtered.slice(0, 50).forEach(file => {
 			const item = this.resultsContainer.createDiv('image-item');
-			item.setCssProps({ 'padding': '8px' });
 			item.addClass('ia-clickable');
-			item.setCssProps({ 'border-radius': '4px' });
-			item.setCssProps({ 'margin-bottom': '4px' });
-
-			if (this.selectedFiles.includes(file)) {
-				item.setCssProps({ 'background': 'var(--interactive-accent)' });
-				item.setCssProps({ 'color': 'var(--text-on-accent)' });
-			} else {
-				item.setCssProps({ 'background': 'var(--background-secondary)' });
-			}
+			item.toggleClass('ia-image-item--selected', this.selectedFiles.includes(file));
 
 			item.setText(`🖼️ ${file.path}`);
 
@@ -234,31 +218,17 @@ export class AttachmentHandler {
 		}
 
 		this.attachmentContainer.removeClass('ia-hidden');
-		this.attachmentContainer.setCssProps({ 'gap': '8px' });
-		this.attachmentContainer.setCssProps({ 'padding': '8px' });
-		this.attachmentContainer.setCssProps({ 'background': 'var(--background-secondary)' });
-		this.attachmentContainer.setCssProps({ 'border-radius': '4px' });
-		this.attachmentContainer.setCssProps({ 'flex-wrap': 'wrap' });
-		this.attachmentContainer.setCssProps({ 'margin-bottom': '8px' });
+		this.attachmentContainer.addClass('ia-attachment-preview-active');
 
 		this.state.currentAttachments.forEach((att, index) => {
 			const attPreview = this.attachmentContainer!.createDiv('attachment-preview-item');
-			attPreview.setCssProps({ 'position': 'relative' });
-			attPreview.setCssProps({ 'padding': '8px' });
-			attPreview.setCssProps({ 'background': 'var(--background-primary)' });
-			attPreview.setCssProps({ 'border-radius': '4px' });
-			attPreview.removeClass('ia-hidden');
-			attPreview.setCssProps({ 'align-items': 'center' });
-			attPreview.setCssProps({ 'gap': '8px' });
+			attPreview.addClass('ia-attachment-card');
 
 			if (att.type === 'image' && att.content) {
 				const img = attPreview.createEl('img');
 				img.src = att.content;
 				img.alt = att.name;
-				img.setCssProps({ 'width': '40px' });
-				img.setCssProps({ 'height': '40px' });
-				img.setCssProps({ 'object-fit': 'cover' });
-				img.setCssProps({ 'border-radius': '4px' });
+				img.addClass('ia-attachment-thumb');
 			} else {
 				attPreview.createSpan({ text: att.type === 'image' ? '🖼️' : '📎' });
 			}
@@ -267,13 +237,8 @@ export class AttachmentHandler {
 
 			// Remove button
 			const removeBtn = attPreview.createEl('button', { text: '×' });
-			removeBtn.setCssProps({ 'margin-left': 'auto' });
-			removeBtn.setCssProps({ 'padding': '0 6px' });
-			removeBtn.setCssProps({ 'border': 'none' });
-			removeBtn.setCssProps({ 'background': 'transparent' });
+			removeBtn.addClass('ia-attachment-remove-btn');
 			removeBtn.addClass('ia-clickable');
-			removeBtn.setCssProps({ 'font-size': '20px' });
-			removeBtn.setCssProps({ 'color': 'var(--text-error)' });
 			removeBtn.addEventListener('click', () => {
 				this.state.removeAttachment(index);
 			});

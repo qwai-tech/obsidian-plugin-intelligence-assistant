@@ -4453,3 +4453,219 @@
 	display: flex;
 	flex-direction: column;
 }
+
+/* ── Image-picker modal (SearchableImageModal) ──────────────────────────── */
+
+.ia-image-search-input {
+	width: 100%;
+	margin-bottom: 12px;
+	padding: 8px;
+}
+
+.ia-image-results {
+	max-height: 400px;
+	overflow-y: auto;
+	margin-bottom: 12px;
+}
+
+.ia-image-picker-buttons {
+	display: flex;
+	gap: 8px;
+	justify-content: flex-end;
+}
+
+/* image-item base: padding + radius + margin */
+.image-item {
+	padding: 8px;
+	border-radius: 4px;
+	margin-bottom: 4px;
+	background: var(--background-secondary);
+}
+
+.ia-image-item--selected {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+/* ── Attachment handler preview ─────────────────────────────────────────── */
+
+/* Active (non-empty) state for the attachment container */
+.ia-attachment-preview-active {
+	display: flex;
+	gap: 8px;
+	padding: 8px;
+	background: var(--background-secondary);
+	border-radius: 4px;
+	flex-wrap: wrap;
+	margin-bottom: 8px;
+}
+
+/* Individual attachment preview card */
+.ia-attachment-card {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px;
+	background: var(--background-primary);
+	border-radius: 4px;
+}
+
+/* Thumbnail image inside an attachment card */
+.ia-attachment-thumb {
+	width: 40px;
+	height: 40px;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+/* Remove button inside an attachment card */
+.ia-attachment-remove-btn {
+	margin-left: auto;
+	padding: 0 6px;
+	border: none;
+	background: transparent;
+	font-size: 20px;
+	color: var(--text-error);
+}
+
+/* ── dom-helpers.ts shared widget classes ────────────────────────────────── */
+
+/* Base button style (created by createButton()) */
+.ia-dom-btn {
+	padding: 6px 12px;
+	border-radius: 4px;
+	border: 1px solid var(--background-modifier-border);
+	font-size: 13px;
+}
+
+.ia-dom-btn--sm {
+	padding: 4px 8px;
+	font-size: 11px;
+}
+
+.ia-dom-btn--primary {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+	font-weight: 500;
+}
+
+.ia-dom-btn--danger {
+	background: var(--background-modifier-error);
+	color: var(--text-error);
+}
+
+.ia-dom-btn--ghost {
+	background: var(--background-primary);
+}
+
+/* Base select style (created by createSelect()) */
+.ia-dom-select {
+	padding: 6px 10px;
+	border-radius: 4px;
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-primary);
+	color: var(--text-normal);
+	font-size: 13px;
+}
+
+/* Label span (created by createLabel()) */
+.ia-dom-label {
+	font-weight: 500;
+	font-size: 13px;
+}
+
+.ia-dom-label--normal {
+	color: var(--text-normal);
+}
+
+.ia-dom-label--muted {
+	color: var(--text-muted);
+}
+
+.ia-dom-label--accent {
+	color: var(--text-accent);
+}
+
+/* Badge/pill element (created by createBadge()) */
+.ia-dom-badge {
+	font-size: 12px;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-weight: 500;
+	background: var(--background-primary);
+	color: var(--text-muted);
+}
+
+.ia-dom-badge--sm {
+	font-size: 11px;
+	padding: 2px 6px;
+}
+
+.ia-dom-badge--success {
+	background: var(--background-modifier-success);
+	color: var(--text-success);
+}
+
+.ia-dom-badge--warning {
+	background: var(--background-modifier-warning);
+	color: var(--text-warning);
+}
+
+.ia-dom-badge--error {
+	background: var(--background-modifier-error);
+	color: var(--text-error);
+}
+
+/* ── Ollama model manager modal layout ──────────────────────────────────── */
+
+/* Header row (title + refresh button) in installed-models section */
+.ia-modal-section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 12px;
+}
+
+/* Scrollable installed-model list */
+.ia-model-list {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+/* Single model row */
+.ia-model-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px;
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+/* Generic utility: pull element left with auto margin */
+.ia-ml-auto {
+	margin-left: auto;
+}
+
+/* Generic small left margin */
+.ia-ml-8 {
+	margin-left: 8px;
+}
+
+/* Flex column direction (toggled by createControlContainer when direction=column) */
+.ia-flex-col {
+	flex-direction: column;
+}
+
+/* Full-width input */
+.ia-full-width {
+	width: 100%;
+}
+
+/* Flex button bar at the bottom of an inline confirmation modal */
+.ia-confirm-button-bar {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 12px;
+}

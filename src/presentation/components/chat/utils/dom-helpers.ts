@@ -33,26 +33,21 @@ export function createButton(
 	if (options.title) btn.title = options.title;
 
 	// Apply base styles
-	btn.setCssProps({ 'padding': options.styles?.size === 'sm' ? '4px 8px' : '6px 12px' });
-	btn.setCssProps({ 'border-radius': '4px' });
-	btn.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
+	btn.addClass('ia-dom-btn');
 	btn.addClass('ia-clickable');
-	btn.setCssProps({ 'font-size': options.styles?.size === 'sm' ? '11px' : '13px' });
+	btn.toggleClass('ia-dom-btn--sm', options.styles?.size === 'sm');
 
 	// Apply variant styles
 	switch (options.styles?.variant) {
 		case 'primary':
-			btn.setCssProps({ 'background': 'var(--interactive-accent)' });
-			btn.setCssProps({ 'color': 'var(--text-on-accent)' });
-			btn.setCssProps({ 'font-weight': '500' });
+			btn.addClass('ia-dom-btn--primary');
 			break;
 		case 'danger':
-			btn.setCssProps({ 'background': 'var(--background-modifier-error)' });
-			btn.setCssProps({ 'color': 'var(--text-error)' });
+			btn.addClass('ia-dom-btn--danger');
 			break;
 		case 'ghost':
 		default:
-			btn.setCssProps({ 'background': 'var(--background-primary)' });
+			btn.addClass('ia-dom-btn--ghost');
 			break;
 	}
 
@@ -76,12 +71,7 @@ export function createSelect(
 ): HTMLSelectElement {
 	const select = parent.createEl('select', { cls: options.cls });
 
-	select.setCssProps({ 'padding': '6px 10px' });
-	select.setCssProps({ 'border-radius': '4px' });
-	select.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
-	select.setCssProps({ 'background': 'var(--background-primary)' });
-	select.setCssProps({ 'color': 'var(--text-normal)' });
-	select.setCssProps({ 'font-size': '13px' });
+	select.addClass('ia-dom-select');
 	select.addClass('ia-clickable');
 
 	if (options.styles?.flex) select.setCssProps({ 'flex': options.styles.flex });
@@ -112,7 +102,7 @@ export function createControlContainer(
 	const container = parent.createDiv(options?.cls);
 
 	container.removeClass('ia-hidden');
-	container.setCssProps({ 'flex-direction': options?.direction === 'column' ? 'column' : 'row' });
+	container.toggleClass('ia-flex-col', options?.direction === 'column');
 	container.setCssProps({ 'gap': options?.gap || '8px' });
 	if (options?.align) container.setCssProps({ 'align-items': options.align });
 	if (options?.flex) container.setCssProps({ 'flex': options.flex });
@@ -133,18 +123,20 @@ export function createLabel(
 ): HTMLSpanElement {
 	const label = parent.createSpan({ text });
 
-	label.setCssProps({ 'font-weight': options?.weight || '500' });
-	label.setCssProps({ 'font-size': '13px' });
+	label.addClass('ia-dom-label');
+	if (options?.weight && options.weight !== '500') {
+		label.setCssProps({ 'font-weight': options.weight });
+	}
 
 	switch (options?.variant) {
 		case 'muted':
-			label.setCssProps({ 'color': 'var(--text-muted)' });
+			label.addClass('ia-dom-label--muted');
 			break;
 		case 'accent':
-			label.setCssProps({ 'color': 'var(--text-accent)' });
+			label.addClass('ia-dom-label--accent');
 			break;
 		default:
-			label.setCssProps({ 'color': 'var(--text-normal)' });
+			label.addClass('ia-dom-label--normal');
 	}
 
 	return label;
@@ -163,27 +155,22 @@ export function createBadge(
 ): HTMLSpanElement {
 	const badge = parent.createSpan({ text });
 
-	badge.setCssProps({ 'font-size': options?.size === 'sm' ? '11px' : '12px' });
-	badge.setCssProps({ 'padding': options?.size === 'sm' ? '2px 6px' : '4px 8px' });
-	badge.setCssProps({ 'border-radius': '4px' });
-	badge.setCssProps({ 'font-weight': '500' });
+	badge.addClass('ia-dom-badge');
+	badge.toggleClass('ia-dom-badge--sm', options?.size === 'sm');
 
 	switch (options?.variant) {
 		case 'success':
-			badge.setCssProps({ 'background': 'var(--background-modifier-success)' });
-			badge.setCssProps({ 'color': 'var(--text-success)' });
+			badge.addClass('ia-dom-badge--success');
 			break;
 		case 'warning':
-			badge.setCssProps({ 'background': 'var(--background-modifier-warning)' });
-			badge.setCssProps({ 'color': 'var(--text-warning)' });
+			badge.addClass('ia-dom-badge--warning');
 			break;
 		case 'error':
-			badge.setCssProps({ 'background': 'var(--background-modifier-error)' });
-			badge.setCssProps({ 'color': 'var(--text-error)' });
+			badge.addClass('ia-dom-badge--error');
 			break;
 		default:
-			badge.setCssProps({ 'background': 'var(--background-primary)' });
-			badge.setCssProps({ 'color': 'var(--text-muted)' });
+			// default styles already applied by ia-dom-badge
+			break;
 	}
 
 	return badge;
