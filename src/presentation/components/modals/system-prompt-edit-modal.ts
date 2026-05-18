@@ -34,9 +34,7 @@ export class SystemPromptEditModal extends Modal {
 			.addTextArea(text => {
 				text.setValue(this.prompt.content);
 				text.inputEl.rows = 15;
-				text.inputEl.setCssProps({ 'width': '100%' });
-				text.inputEl.setCssProps({ 'font-family': 'var(--font-monospace)' });
-				text.inputEl.setCssProps({ 'font-size': '12px' });
+				text.inputEl.addClass('ia-textarea--code');
 				text.onChange(value => {
 					this.prompt.content = value;
 				});
@@ -53,11 +51,8 @@ export class SystemPromptEditModal extends Modal {
 				}));
 
 		// Buttons
-		const buttonContainer = contentEl.createDiv();
+		const buttonContainer = contentEl.createDiv('ia-modal-footer');
 		buttonContainer.removeClass('ia-hidden');
-		buttonContainer.setCssProps({ 'justify-content': 'flex-end' });
-		buttonContainer.setCssProps({ 'gap': '8px' });
-		buttonContainer.setCssProps({ 'margin-top': '16px' });
 
 		new ButtonComponent(buttonContainer)
 			.setButtonText('Cancel')

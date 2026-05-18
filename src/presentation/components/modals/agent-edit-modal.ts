@@ -204,8 +204,7 @@ export class AgentEditModal extends Modal {
 				});
 			});
 
-		this.customPromptSection = contentEl.createDiv();
-		this.customPromptSection.setCssProps({ 'margin-top': '12px' });
+		this.customPromptSection = contentEl.createDiv('ia-custom-prompt-section');
 		this.toggleCustomPromptSection(this.selectedSystemPromptId === '__custom__');
 
 		new Setting(this.customPromptSection)
@@ -226,9 +225,7 @@ export class AgentEditModal extends Modal {
 				customContentInput = text.inputEl;
 				text.setValue(this.customPromptContent);
 				text.inputEl.rows = 10;
-				text.inputEl.setCssProps({ 'width': '100%' });
-				text.inputEl.setCssProps({ 'font-family': 'var(--font-monospace)' });
-				text.inputEl.setCssProps({ 'font-size': '12px' });
+				text.inputEl.addClass('ia-textarea--code');
 				text.onChange(value => {
 					this.customPromptContent = value;
 				});
@@ -389,11 +386,8 @@ export class AgentEditModal extends Modal {
 		}
 
 		// Buttons
-		const buttonContainer = contentEl.createDiv();
+		const buttonContainer = contentEl.createDiv('ia-modal-footer');
 		buttonContainer.removeClass('ia-hidden');
-		buttonContainer.setCssProps({ 'justify-content': 'flex-end' });
-		buttonContainer.setCssProps({ 'gap': '8px' });
-		buttonContainer.setCssProps({ 'margin-top': '16px' });
 
 		new ButtonComponent(buttonContainer)
 			.setButtonText('Cancel')

@@ -38,27 +38,15 @@ export class SDKInstallModal extends Modal {
 
 		const sizeEl = contentEl.createEl('p');
 		sizeEl.setText(`Estimated download size: ~${String(info.estimatedSizeMB)} MB`);
-		sizeEl.setCssProps({ color: 'var(--text-muted)', 'font-size': 'var(--font-ui-smaller)' });
+		sizeEl.addClass('ia-sdk-size-hint');
 
-		this.statusEl = contentEl.createDiv();
+		this.statusEl = contentEl.createDiv('ia-sdk-status');
 		this.statusEl.setText('Starting installation...');
-		this.statusEl.setCssProps({ 'margin-top': '12px', 'font-weight': '600' });
 
 		this.logEl = contentEl.createEl('pre');
-		this.logEl.setCssProps({
-			'max-height': '200px',
-			'overflow-y': 'auto',
-			'background': 'var(--background-secondary)',
-			'padding': '8px',
-			'border-radius': '4px',
-			'font-size': 'var(--font-ui-smaller)',
-			'white-space': 'pre-wrap',
-			'word-break': 'break-all',
-			'margin-top': '8px'
-		});
+		this.logEl.addClass('ia-sdk-log');
 
-		this.actionBar = contentEl.createDiv();
-		this.actionBar.setCssProps({ display: 'flex', 'justify-content': 'flex-end', 'margin-top': '12px', gap: '8px' });
+		this.actionBar = contentEl.createDiv('ia-sdk-action-bar');
 
 		const cancelBtn = this.actionBar.createEl('button', { text: 'Cancel' });
 		cancelBtn.addClass('mod-warning');

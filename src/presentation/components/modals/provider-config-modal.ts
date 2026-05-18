@@ -66,22 +66,15 @@ export class ProviderConfigModal extends Modal {
 		this.providerContainer = contentEl.createDiv();
 		this.renderProviderSpecific();
 
-		const buttonBar = contentEl.createDiv();
+		const buttonBar = contentEl.createDiv('ia-modal-footer');
 		buttonBar.removeClass('ia-hidden');
-		buttonBar.setCssProps({ 'justify-content': 'flex-end' });
-		buttonBar.setCssProps({ 'gap': '8px' });
-		buttonBar.setCssProps({ 'margin-top': '16px' });
 
 		const cancelBtn = buttonBar.createEl('button', { text: 'Cancel' });
-		cancelBtn.setCssProps({ 'padding': '6px 16px' });
+		cancelBtn.addClass('ia-modal-btn');
 		cancelBtn.addEventListener('click', () => this.close());
 
 		const saveBtn = buttonBar.createEl('button', { text: 'Save' });
-		saveBtn.setCssProps({ 'padding': '6px 16px' });
-		saveBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
-		saveBtn.setCssProps({ 'color': 'white' });
-		saveBtn.setCssProps({ 'border': 'none' });
-		saveBtn.setCssProps({ 'border-radius': '4px' });
+		saveBtn.addClass('ia-modal-btn--primary');
 		saveBtn.addEventListener('click', () => {
 			void (async () => {
 				// Validate before saving
@@ -117,7 +110,7 @@ export class ProviderConfigModal extends Modal {
 					text.setValue(value || '');
 					text.setPlaceholder('{"clientid": "..."}');
 					text.inputEl.rows = 8;
-					text.inputEl.setCssProps({ 'font-family': 'var(--font-monospace)' });
+					text.inputEl.addClass('ia-textarea--code');
 					text.onChange((newValue) => {
 						try {
 							if (!newValue.trim()) {

@@ -4232,5 +4232,67 @@
 
 /* Button row at the bottom of a settings modal */
 .ia-modal-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
 	margin-top: 16px;
+}
+
+/* Cancel / secondary button in modal footer */
+.ia-modal-btn {
+	padding: 6px 16px;
+}
+
+/* Primary / accent button in modal footer */
+.ia-modal-btn--primary {
+	padding: 6px 16px;
+	background: var(--interactive-accent);
+	color: white;
+	border: none;
+	border-radius: 4px;
+}
+
+/* SDK install modal: estimated size hint below package name */
+.ia-sdk-size-hint {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
+
+/* SDK install modal: status line (Starting… / Done! / Error) */
+.ia-sdk-status {
+	margin-top: 12px;
+	font-weight: 600;
+}
+
+/* SDK install modal: scrollable log output pane */
+.ia-sdk-log {
+	max-height: 200px;
+	overflow-y: auto;
+	background: var(--background-secondary);
+	padding: 8px;
+	border-radius: 4px;
+	font-size: var(--font-ui-smaller);
+	white-space: pre-wrap;
+	word-break: break-all;
+	margin-top: 8px;
+}
+
+/* SDK install modal: action bar (cancel / close button row) */
+.ia-sdk-action-bar {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 12px;
+}
+
+/* Monospace textarea used for prompt content and service-key fields */
+.ia-textarea--code {
+	width: 100%;
+	font-family: var(--font-monospace);
+	font-size: 12px;
+}
+
+/* Agent edit modal: custom prompt sub-section container */
+.ia-custom-prompt-section {
+	margin-top: 12px;
 }
