@@ -27,7 +27,7 @@ export class MessageListComponent {
   }
 
   private createMessageElement(message: Message): HTMLElement {
-    const el = document.createElement('div');
+    const el = createEl('div');
     el.addClass('message');
     el.addClass(message.role);
     el.setText(message.content);

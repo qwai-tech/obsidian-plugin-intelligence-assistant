@@ -7,7 +7,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
     attr?: Record<string, string>;
   }
 ): HTMLElementTagNameMap[K] {
-  const el = document.createElement(tagName);
+  const el = createEl(tagName);
   if (options?.cls) el.addClass(options.cls);
   if (options?.text) el.setText(options.text);
   if (options?.attr) {

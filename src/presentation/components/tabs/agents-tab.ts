@@ -132,7 +132,7 @@ export function displayAgentsTab(
 		iconSpan.addClass('ia-agent-icon');
 		iconSpan.setText(agent.icon || '🤖');
 		iconSpan.setCssProps({ 'margin-right': '6px' });
-		titleEl.appendChild(document.createTextNode(agent.name));
+		titleEl.appendText(agent.name);
 
 		if (agent.id === DEFAULT_AGENT_ID) {
 			const badges = agentStack.createDiv('ia-table-badges');

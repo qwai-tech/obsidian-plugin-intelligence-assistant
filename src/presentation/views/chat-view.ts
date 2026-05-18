@@ -2113,23 +2113,21 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		selectEl.empty();
 
 		if (!agents || agents.length === 0) {
-			const placeholder = document.createElement('option');
+			const placeholder = selectEl.createEl('option');
 			placeholder.value = '';
 			placeholder.textContent = 'No agents configured';
 			placeholder.disabled = true;
 			placeholder.selected = true;
-			selectEl.appendChild(placeholder);
 			selectEl.disabled = true;
 			return null;
 		}
 
 		selectEl.disabled = false;
 
-		const placeholder = document.createElement('option');
+		const placeholder = selectEl.createEl('option');
 		placeholder.value = '';
 		placeholder.textContent = 'Select an agent…';
 		placeholder.disabled = true;
-		selectEl.appendChild(placeholder);
 
 		const validIds = new Set(agents.map(agent => agent.id));
 		const currentActive = preferredAgentId && validIds.has(preferredAgentId)
@@ -2139,26 +2137,23 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				: null);
 
 			for (const agent of agents) {
-				const option = document.createElement('option');
+				const option = selectEl.createEl('option');
 				option.value = agent.id;
 				option.textContent = `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}`;
-				selectEl.appendChild(option);
 			}
 
 		// Add CLI agents if any exist — macOS only
 		const cliAgents = isCliAgentSupported() ? (this.plugin.settings.cliAgents ?? []) : [];
 		if (cliAgents.length > 0) {
-			const separator = document.createElement('option');
+			const separator = selectEl.createEl('option');
 			separator.value = '';
 			separator.textContent = '── CLI Agents ──';
 			separator.disabled = true;
-			selectEl.appendChild(separator);
 
 			for (const cliAgent of cliAgents) {
-				const option = document.createElement('option');
+				const option = selectEl.createEl('option');
 				option.value = `cli:${cliAgent.id}`;
 				option.textContent = `⚡ ${cliAgent.name}`;
-				selectEl.appendChild(option);
 			}
 		}
 

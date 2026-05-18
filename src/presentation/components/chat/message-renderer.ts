@@ -302,21 +302,21 @@ function renderMessageContent(target: HTMLElement, message: Message) {
 			const lang = langClass ? langClass.replace('language-', '') : '';
 
 			// Wrap pre in a container
-			const wrapper = document.createElement('div');
+			const wrapper = createEl('div');
 			wrapper.className = 'ia-code-block';
 			pre.parentNode?.insertBefore(wrapper, pre);
 			wrapper.appendChild(pre);
 
 			// Add header bar
-			const header = document.createElement('div');
+			const header = createEl('div');
 			header.className = 'ia-code-block__header';
 
-			const langLabel = document.createElement('span');
+			const langLabel = createEl('span');
 			langLabel.className = 'ia-code-block__lang';
 			langLabel.textContent = lang || 'code';
 			header.appendChild(langLabel);
 
-			const copyBtn = document.createElement('button');
+			const copyBtn = createEl('button');
 			copyBtn.className = 'ia-code-block__copy';
 			copyBtn.textContent = 'Copy';
 			copyBtn.addEventListener('click', () => {
