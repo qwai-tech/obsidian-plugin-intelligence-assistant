@@ -13,12 +13,8 @@ env:
   MANIFEST_FILE: manifest.json
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
-      attestations: write
     outputs:
       version: ${{ steps.version.outputs.version }}
       tag_exists: ${{ steps.version.outputs.tag_exists }}
@@ -26,6 +22,30 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-tags: true
+
+    - name: Read version and check tag
+      id: version
+      run: |
+        VERSION=$(node -p "require('./manifest.json').version")
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        if git ls-remote --tags origin "refs/tags/$VERSION" | grep -q .; then
+          echo "tag_exists=true" >> "$GITHUB_OUTPUT"
+          echo "Tag $VERSION already exists — skipping release."
+        else
+          echo "tag_exists=false" >> "$GITHUB_OUTPUT"
+          echo "Tag $VERSION not found — will build and release."
+        fi
+
+  release:
+    needs: check
+    if: needs.check.outputs.tag_exists == 'false'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+    - uses: actions/checkout@v4
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -57,17 +77,6 @@ jobs:
           exit 1
         fi
 
-    - name: Read version from manifest
-      id: version
-      run: |
-        VERSION=$(node -p "require('./manifest.json').version")
-        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-        if git ls-remote --tags origin "refs/tags/$VERSION" | grep -q .; then
-          echo "tag_exists=true" >> "$GITHUB_OUTPUT"
-        else
-          echo "tag_exists=false" >> "$GITHUB_OUTPUT"
-        fi
-
     - name: Create release directory
       run: |
         mkdir -p release
@@ -93,31 +102,27 @@ jobs:
           release/${{ env.MANIFEST_FILE }}
 
     - name: Attest main.js
-      if: steps.version.outputs.tag_exists == 'false'
       uses: actions/attest-build-provenance@v2
       with:
         subject-path: release/${{ env.MAIN_FILE }}
 
     - name: Attest styles.css
-      if: steps.version.outputs.tag_exists == 'false'
       uses: actions/attest-build-provenance@v2
       with:
         subject-path: release/${{ env.STYLE_FILE }}
 
     - name: Attest manifest.json
-      if: steps.version.outputs.tag_exists == 'false'
       uses: actions/attest-build-provenance@v2
       with:
         subject-path: release/${{ env.MANIFEST_FILE }}
 
     - name: Create GitHub Release
-      if: steps.version.outputs.tag_exists == 'false'
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ steps.version.outputs.version }}
-        name: Intelligence Assistant ${{ steps.version.outputs.version }}
+        tag_name: ${{ needs.check.outputs.version }}
+        name: Intelligence Assistant ${{ needs.check.outputs.version }}
         body: |
-          ## Intelligence Assistant ${{ steps.version.outputs.version }}
+          ## Intelligence Assistant ${{ needs.check.outputs.version }}
 
           ### Installation
           Download and install via Obsidian's community plugins browser, or manually copy the files below to your vault's `.obsidian/plugins/intelligence-assistant/` folder.
