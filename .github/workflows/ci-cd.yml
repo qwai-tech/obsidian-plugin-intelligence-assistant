@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
+      attestations: write
     steps:
     - uses: actions/checkout@v4
 
@@ -60,6 +62,24 @@ jobs:
       working-directory: ./release
       run: zip -r ../${{ env.PLUGIN_NAME }}.zip ./*
 
+    - name: Attest main.js
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: release/${{ env.MAIN_FILE }}
+
+    - name: Attest styles.css
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: release/${{ env.STYLE_FILE }}
+
+    - name: Attest manifest.json
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: release/${{ env.MANIFEST_FILE }}
+
     - name: Upload packaged plugin as artifact
       uses: actions/upload-artifact@v4
       with:
@@ -80,8 +100,17 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         name: Release ${{ github.ref_name }}
+        body: |
+          ## Intelligence Assistant ${{ github.ref_name }}
+
+          ### Installation
+          Download and install via Obsidian's community plugins browser, or manually copy the files below to your vault's `.obsidian/plugins/intelligence-assistant/` folder.
+
+          ### Release assets
+          - `main.js` — plugin bundle
+          - `styles.css` — plugin styles
+          - `manifest.json` — plugin metadata
         files: |
-          ${{ env.PLUGIN_NAME }}.zip
           release/${{ env.MAIN_FILE }}
           release/${{ env.STYLE_FILE }}
           release/${{ env.MANIFEST_FILE }}

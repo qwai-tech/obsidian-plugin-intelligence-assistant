@@ -34,6 +34,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
+      attestations: write
     steps:
     - uses: actions/checkout@v4
 
@@ -76,6 +78,21 @@ jobs:
       working-directory: ./release
       run: zip -r ../${{ env.PLUGIN_NAME }}.zip ./*
 
+    - name: Attest main.js
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: release/${{ env.MAIN_FILE }}
+
+    - name: Attest styles.css
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: release/${{ env.STYLE_FILE }}
+
+    - name: Attest manifest.json
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: release/${{ env.MANIFEST_FILE }}
+
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
@@ -84,7 +101,6 @@ jobs:
         body: ${{ inputs.release_notes }}
         prerelease: ${{ inputs.is_prerelease }}
         files: |
-          ${{ env.PLUGIN_NAME }}.zip
           release/${{ env.MAIN_FILE }}
           release/${{ env.STYLE_FILE }}
           release/${{ env.MANIFEST_FILE }}
