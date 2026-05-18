@@ -625,7 +625,7 @@ export class ChatView extends ItemView {
 			}
 			// Hide trace container if no tool calls were made
 			if (traceContainer && executionSteps.length === 0 && traceContainer.parentElement) {
-				traceContainer.parentElement.setCssProps({ 'display': 'none' });
+				traceContainer.parentElement.addClass('ia-hidden');
 			}
 
 			// Re-render content with markdown
@@ -894,21 +894,8 @@ export class ChatView extends ItemView {
 	}
 
 	private styleActionButton(btn: HTMLButtonElement) {
-		btn.setCssProps({ 'padding': '2px 6px' });
-		btn.setCssProps({ 'border': 'none' });
-		btn.setCssProps({ 'background': 'transparent' });
+		btn.addClass('ia-action-btn');
 		btn.addClass('ia-clickable');
-		btn.setCssProps({ 'border-radius': '4px' });
-		btn.setCssProps({ 'opacity': '0.6' });
-		btn.setCssProps({ 'font-size': '14px' });
-		btn.addEventListener('mouseenter', () => {
-			btn.setCssProps({ 'opacity': '1' });
-			btn.setCssProps({ 'background': 'var(--background-modifier-hover)' });
-		});
-		btn.addEventListener('mouseleave', () => {
-			btn.setCssProps({ 'opacity': '0.6' });
-			btn.setCssProps({ 'background': 'transparent' });
-		});
 	}
 
 	private showReferenceMenu() {
@@ -1162,13 +1149,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				})();
 			});
 
-			// Hover effect
-			sourceCard.addEventListener('mouseenter', () => {
-				sourceCard.setCssProps({ 'border-color': 'var(--interactive-accent)' });
-			});
-			sourceCard.addEventListener('mouseleave', () => {
-				sourceCard.setCssProps({ 'border-color': 'var(--background-modifier-border)' });
-			});
+			// Hover effect handled by .rag-source-card:hover in CSS
 		});
 	}
 
@@ -1180,7 +1161,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		const labelEl = checkboxContainer.createEl('label');
 		labelEl.setText(label);
-		labelEl.setCssProps({ 'margin-left': '4px' });
+		labelEl.addClass('ia-checkbox-label');
 		labelEl.addClass('ia-clickable');
 		labelEl.addEventListener('click', () => {
 			checkbox.checked = !checkbox.checked;
@@ -1202,8 +1183,6 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (options.disabled) {
 			toggleBtn.addClass('disabled');
 			toggleBtn.disabled = true;
-			toggleBtn.setCssProps({ 'opacity': '0.5' });
-			toggleBtn.setCssProps({ 'cursor': 'not-allowed' });
 			if (options.disabledMessage) {
 				toggleBtn.title = options.disabledMessage;
 			}
@@ -1217,11 +1196,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		// Add status text if provided
 		if (options.statusText) {
-			const statusSpan = toggleBtn.createEl('span', { cls: 'toggle-status' });
+			const statusSpan = toggleBtn.createEl('span', { cls: 'toggle-status ia-toggle-status' });
 			statusSpan.setText(` (${options.statusText ?? ''})`);
-			statusSpan.setCssProps({ 'opacity': '0.7' });
-			statusSpan.setCssProps({ 'font-size': '0.8em' });
-			statusSpan.setCssProps({ 'margin-left': '4px' });
 		}
 
 		toggleBtn.addEventListener('click', (e) => {
@@ -1257,7 +1233,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			ragToggle.setAttr('title', 'Enable RAG in Settings → Chat Features → RAG.');
 			if (statusSpan) {
 				statusSpan.textContent = 'Disabled';
-				statusSpan.setCssProps({ 'cursor': 'not-allowed' });
+				statusSpan.addClass('ia-cursor-not-allowed');
+				statusSpan.removeClass('ia-cursor-help');
 				statusSpan.onclick = null;
 			}
 			return;
@@ -1276,7 +1253,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				} else {
 					statusSpan.textContent = 'Off';
 				}
-				statusSpan.setCssProps({ 'cursor': stats ? 'help' : 'default' });
+				statusSpan.toggleClass('ia-cursor-help', !!stats);
+				statusSpan.removeClass('ia-cursor-not-allowed');
 				// Ensure onclick handler is synchronous; call async via void
 				statusSpan.onclick = stats ? (event: MouseEvent) => {
 					event.stopPropagation();
@@ -1293,7 +1271,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			ragToggle.addClass('is-disabled');
 			if (statusSpan) {
 				statusSpan.textContent = 'Unavailable';
-				statusSpan.setCssProps({ 'cursor': 'not-allowed' });
+				statusSpan.addClass('ia-cursor-not-allowed');
+				statusSpan.removeClass('ia-cursor-help');
 				statusSpan.onclick = null;
 			}
 			const errMsg = _error instanceof Error ? _error.message : String(_error);
@@ -1491,7 +1470,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private async updateOptionsDisplay() {
 		if (this.headerActionsContainer) {
-			this.headerActionsContainer.setCssProps({ 'display': this.state.mode === 'agent' ? 'none' : '' });
+			this.headerActionsContainer.toggleClass('ia-hidden', this.state.mode === 'agent');
 		}
 
 		this.updatePromptSelectorVisibility();
@@ -1507,9 +1486,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			this.chatHeader.promptSelector.disabled = true;
 			if (this.chatHeader.promptSelectorGroup) this.chatHeader.promptSelectorGroup.addClass('ia-hidden');
 		} else {
-			this.chatHeader.promptSelector.setCssProps({ 'display': '' });
+			this.chatHeader.promptSelector.removeClass('ia-hidden');
 			this.chatHeader.promptSelector.disabled = false;
-			if (this.chatHeader.promptSelectorGroup) this.chatHeader.promptSelectorGroup.setCssProps({ 'display': '' });
+			if (this.chatHeader.promptSelectorGroup) this.chatHeader.promptSelectorGroup.removeClass('ia-hidden');
 		}
 	}
 
@@ -1518,11 +1497,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (this.state.mode === 'agent') {
 			const wasDisabled = this.chatHeader.agentSelector.disabled;
 			this.chatHeader.agentSelector.removeClass('ia-hidden');
-			this.chatHeader.agentSelector.setCssProps({ 'display': '' });
 			this.chatHeader.agentSelector.disabled = false;
 			if (this.chatHeader.agentSelectorGroup) {
 				this.chatHeader.agentSelectorGroup.removeClass('ia-hidden');
-				this.chatHeader.agentSelectorGroup.setCssProps({ 'display': '' });
 			}
 			if (wasDisabled) {
 				this.refreshAgentSelect();
@@ -1548,7 +1525,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const showControls = !isAgentMode || (!activeAgent && !isCliAgent) || usesChatViewModel;
 
 		if (this.chatHeader.modelControlsContainer) {
-			this.chatHeader.modelControlsContainer.setCssProps({ 'display': showControls ? '' : 'none' });
+			this.chatHeader.modelControlsContainer.toggleClass('ia-hidden', !showControls);
 		}
 		if (this.modelSelect) {
 			this.modelSelect.disabled = !showControls;
@@ -1562,7 +1539,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		const shouldShowSummary = isAgentMode && (!!activeAgent || isCliAgent) && !usesChatViewModel;
 			if (this.chatHeader.agentConfigSummaryEl) {
-				this.chatHeader.agentConfigSummaryEl.setCssProps({ 'display': shouldShowSummary ? 'flex' : 'none' });
+				this.chatHeader.agentConfigSummaryEl.toggleClass('ia-hidden', !shouldShowSummary);
 			}
 		if (shouldShowSummary && activeAgent) {
 			this.renderAgentSummary(activeAgent);
@@ -4092,16 +4069,10 @@ class SearchableReferenceModal extends Modal {
 			type: 'text',
 			placeholder: 'Search files and folders...'
 		});
-		this.searchInput.setCssProps({ 'width': '100%' });
-		this.searchInput.setCssProps({ 'padding': '8px' });
-		this.searchInput.setCssProps({ 'margin-bottom': '10px' });
-		this.searchInput.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
-		this.searchInput.setCssProps({ 'border-radius': '4px' });
+		this.searchInput.addClass('ia-modal-search-input');
 
 		// Results container
-		this.resultsContainer = contentEl.createDiv();
-		this.resultsContainer.setCssProps({ 'max-height': '400px' });
-		this.resultsContainer.setCssProps({ 'overflow-y': 'auto' });
+		this.resultsContainer = contentEl.createDiv('ia-modal-results');
 
 		// Initial display of all items
 		this.displayItems(this.allItems);
@@ -4124,17 +4095,14 @@ class SearchableReferenceModal extends Modal {
 		});
 
 		// Add button container with actions
-		const buttonContainer = contentEl.createDiv();
-		buttonContainer.removeClass('ia-hidden');
-		buttonContainer.setCssProps({ 'justify-content': 'space-between' });
-		buttonContainer.setCssProps({ 'margin-top': '10px' });
-		
+		const buttonContainer = contentEl.createDiv('ia-modal-btn-row');
+
 		const selectAllButton = buttonContainer.createEl('button', { text: 'Select all' });
 		selectAllButton.addEventListener('click', () => {
 			this.selectedItems = [...this.allItems];
 			this.updateDisplay();
 		});
-		
+
 		const selectNoneButton = buttonContainer.createEl('button', { text: 'Select none' });
 		selectNoneButton.addEventListener('click', () => {
 			this.selectedItems = [];
@@ -4158,25 +4126,19 @@ class SearchableReferenceModal extends Modal {
 		}
 
 		items.forEach(item => {
-			const itemEl = this.resultsContainer.createDiv('reference-item');
-			itemEl.removeClass('ia-hidden');
-			itemEl.setCssProps({ 'align-items': 'center' });
-			itemEl.setCssProps({ 'padding': '6px' });
-			itemEl.setCssProps({ 'border-bottom': '1px solid var(--background-modifier-border)' });
+			const itemEl = this.resultsContainer.createDiv('reference-item ia-modal-list-item');
 			itemEl.addClass('ia-clickable');
-			
+
 			if (this.selectedItems.some(selected => selected.path === item.path)) {
-				itemEl.setCssProps({ 'background-color': 'var(--background-modifier-active)' });
+				itemEl.addClass('ia-modal-item--selected');
 			}
-			
+
 			// Add icon
-			const iconEl = itemEl.createDiv();
-			iconEl.setCssProps({ 'margin-right': '8px' });
+			const iconEl = itemEl.createDiv('ia-modal-list-icon');
 			iconEl.setText(item instanceof TFolder ? '📁' : '📄');
-			
+
 			// Add path text
-			const textEl = itemEl.createDiv();
-			textEl.setCssProps({ 'flex': '1' });
+			const textEl = itemEl.createDiv('ia-flex-1');
 			textEl.setText(item.path);
 			
 			// Add click event to toggle selection
@@ -4241,16 +4203,10 @@ class SearchableImageModal extends Modal {
 			type: 'text',
 			placeholder: 'Search images...'
 		});
-		this.searchInput.setCssProps({ 'width': '100%' });
-		this.searchInput.setCssProps({ 'padding': '8px' });
-		this.searchInput.setCssProps({ 'margin-bottom': '10px' });
-		this.searchInput.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
-		this.searchInput.setCssProps({ 'border-radius': '4px' });
+		this.searchInput.addClass('ia-modal-search-input');
 
 		// Results container
-		this.resultsContainer = contentEl.createDiv();
-		this.resultsContainer.setCssProps({ 'max-height': '400px' });
-		this.resultsContainer.setCssProps({ 'overflow-y': 'auto' });
+		this.resultsContainer = contentEl.createDiv('ia-modal-results');
 
 		// Initial display of all images
 		this.displayImages(this.allImageFiles);
@@ -4258,7 +4214,7 @@ class SearchableImageModal extends Modal {
 		// Add search event listener
 		this.searchInput.addEventListener('input', (e) => {
 			const query = (e.target as HTMLInputElement).value.toLowerCase();
-			const filteredFiles = this.allImageFiles.filter((file: TFile) => 
+			const filteredFiles = this.allImageFiles.filter((file: TFile) =>
 				file.path.toLowerCase().includes(query)
 			);
 			this.displayImages(filteredFiles);
@@ -4273,17 +4229,14 @@ class SearchableImageModal extends Modal {
 		});
 
 		// Add button container with actions
-		const buttonContainer = contentEl.createDiv();
-		buttonContainer.removeClass('ia-hidden');
-		buttonContainer.setCssProps({ 'justify-content': 'space-between' });
-		buttonContainer.setCssProps({ 'margin-top': '10px' });
-		
+		const buttonContainer = contentEl.createDiv('ia-modal-btn-row');
+
 		const selectAllButton = buttonContainer.createEl('button', { text: 'Select all' });
 		selectAllButton.addEventListener('click', () => {
 			this.selectedFiles = [...this.allImageFiles];
 			this.updateDisplay();
 		});
-		
+
 		const selectNoneButton = buttonContainer.createEl('button', { text: 'Select none' });
 		selectNoneButton.addEventListener('click', () => {
 			this.selectedFiles = [];
@@ -4307,25 +4260,19 @@ class SearchableImageModal extends Modal {
 		}
 
 		files.forEach(file => {
-			const itemEl = this.resultsContainer.createDiv('image-item');
-			itemEl.removeClass('ia-hidden');
-			itemEl.setCssProps({ 'align-items': 'center' });
-			itemEl.setCssProps({ 'padding': '6px' });
-			itemEl.setCssProps({ 'border-bottom': '1px solid var(--background-modifier-border)' });
+			const itemEl = this.resultsContainer.createDiv('image-item ia-modal-list-item');
 			itemEl.addClass('ia-clickable');
-			
+
 			if (this.selectedFiles.some(selected => selected.path === file.path)) {
-				itemEl.setCssProps({ 'background-color': 'var(--background-modifier-active)' });
+				itemEl.addClass('ia-modal-item--selected');
 			}
-			
+
 			// Add icon
-			const iconEl = itemEl.createDiv();
-			iconEl.setCssProps({ 'margin-right': '8px' });
+			const iconEl = itemEl.createDiv('ia-modal-list-icon');
 			iconEl.setText('🖼️');
-			
+
 			// Add path text
-			const textEl = itemEl.createDiv();
-			textEl.setCssProps({ 'flex': '1' });
+			const textEl = itemEl.createDiv('ia-flex-1');
 			textEl.setText(file.path);
 			
 			// Add click event to toggle selection
@@ -4388,16 +4335,10 @@ class SingleFileSelectionModal extends Modal {
 			type: "text",
 			placeholder: "Search notes..."
 		});
-		this.searchInput.setCssProps({ 'width': "100%" });
-		this.searchInput.setCssProps({ 'padding': "8px" });
-		this.searchInput.setCssProps({ 'margin-bottom': "10px" });
-		this.searchInput.setCssProps({ 'border': "1px solid var(--background-modifier-border)" });
-		this.searchInput.setCssProps({ 'border-radius': "4px" });
+		this.searchInput.addClass('ia-modal-search-input');
 
 		// Results container
-		this.resultsContainer = contentEl.createDiv();
-		this.resultsContainer.setCssProps({ 'max-height': "400px" });
-		this.resultsContainer.setCssProps({ 'overflow-y': "auto" });
+		this.resultsContainer = contentEl.createDiv('ia-modal-results');
 
 		// Initial display of all items
 		this.displayFiles(this.allFiles);
@@ -4405,7 +4346,7 @@ class SingleFileSelectionModal extends Modal {
 		// Add search event listener
 		this.searchInput.addEventListener("input", (e) => {
 			const query = (e.target as HTMLInputElement).value.toLowerCase();
-			const filteredFiles = this.allFiles.filter(file => 
+			const filteredFiles = this.allFiles.filter(file =>
 				file.path.toLowerCase().includes(query)
 			);
 			this.displayFiles(filteredFiles);
@@ -4420,21 +4361,18 @@ class SingleFileSelectionModal extends Modal {
 		});
 
 		// Add button container with actions
-		const buttonContainer = contentEl.createDiv();
-		buttonContainer.removeClass('ia-hidden');
-		buttonContainer.setCssProps({ 'justify-content': "flex-end" });
-		buttonContainer.setCssProps({ 'margin-top': "10px" });
-		
+		const buttonContainer = contentEl.createDiv('ia-modal-btn-row--end');
+
 		const insertButton = buttonContainer.createEl("button", { text: "Insert to selected note" });
 		insertButton.addClass("mod-cta");
 		insertButton.addEventListener("click", () => {
 			this.close();
 			this.onChooseFile(this.selectedFile);
 		});
-		
+
 		// Add "Create New Note" button
 		const newNoteButton = buttonContainer.createEl("button", { text: "Create new note" });
-		newNoteButton.setCssProps({ 'margin-right': "10px" });
+		newNoteButton.addClass('ia-mr-10');
 		newNoteButton.addEventListener("click", () => {
 			this.close();
 			this.onChooseFile(null); // Signal to create a new note
@@ -4450,27 +4388,21 @@ class SingleFileSelectionModal extends Modal {
 		}
 
 		files.forEach(file => {
-			const fileEl = this.resultsContainer.createDiv("file-item");
-			fileEl.removeClass('ia-hidden');
-			fileEl.setCssProps({ 'align-items': "center" });
-			fileEl.setCssProps({ 'padding': "6px" });
-			fileEl.setCssProps({ 'border-bottom': "1px solid var(--background-modifier-border)" });
+			const fileEl = this.resultsContainer.createDiv("file-item ia-modal-list-item");
 			fileEl.addClass('ia-clickable');
-			
+
 			if (this.selectedFile && this.selectedFile.path === file.path) {
-				fileEl.setCssProps({ 'background-color': "var(--background-modifier-active)" });
+				fileEl.addClass('ia-modal-item--selected');
 			}
-			
+
 			// Add icon
-			const iconEl = fileEl.createDiv();
-			iconEl.setCssProps({ 'margin-right': "8px" });
+			const iconEl = fileEl.createDiv('ia-modal-list-icon');
 			iconEl.setText("📄");
-			
+
 			// Add path text
-			const textEl = fileEl.createDiv();
-			textEl.setCssProps({ 'flex': "1" });
+			const textEl = fileEl.createDiv('ia-flex-1');
 			textEl.setText(file.path);
-			
+
 			// Add click event to select the file
 			fileEl.addEventListener("click", () => {
 				this.selectedFile = file;

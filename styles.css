@@ -1484,6 +1484,7 @@
 
 .rag-source-card:hover {
 	background: var(--background-secondary-alt);
+	border-color: var(--interactive-accent);
 	transform: translateY(-2px);
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -3522,7 +3523,7 @@
 }
 
 .chat-agent-summary {
-	display: none;
+	display: flex;
 	flex-direction: column;
 	gap: 6px;
 	padding-top: 6px;
@@ -4668,4 +4669,108 @@
 	justify-content: flex-end;
 	gap: 8px;
 	margin-top: 12px;
+}
+
+/* ── Action button (copy/retry/etc) in message toolbar ───────────────────── */
+.ia-action-btn {
+	padding: 2px 6px;
+	border: none;
+	background: transparent;
+	border-radius: 4px;
+	opacity: 0.6;
+	font-size: 14px;
+}
+
+.ia-action-btn:hover {
+	opacity: 1;
+	background: var(--background-modifier-hover);
+}
+
+/* ── Checkbox label ───────────────────────────────────────────────────────── */
+.ia-checkbox-label {
+	margin-left: 4px;
+}
+
+/* ── Toggle button disabled state ────────────────────────────────────────── */
+.toggle-btn.disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* ── Status text inside a toggle button ──────────────────────────────────── */
+.ia-toggle-status {
+	opacity: 0.7;
+	font-size: 0.8em;
+	margin-left: 4px;
+}
+
+/* ── Cursor utilities ────────────────────────────────────────────────────── */
+.ia-cursor-not-allowed {
+	cursor: not-allowed;
+}
+
+.ia-cursor-help {
+	cursor: help;
+}
+
+/* ── Header actions visibility ───────────────────────────────────────────── */
+.ia-header-actions--hidden {
+	display: none;
+}
+
+/* ── Modal search input ──────────────────────────────────────────────────── */
+.ia-modal-search-input {
+	width: 100%;
+	padding: 8px;
+	margin-bottom: 10px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+}
+
+/* ── Modal results container ─────────────────────────────────────────────── */
+.ia-modal-results {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+/* ── Modal button row (space-between) ────────────────────────────────────── */
+.ia-modal-btn-row {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 10px;
+}
+
+/* ── Modal button row (flex-end) ─────────────────────────────────────────── */
+.ia-modal-btn-row--end {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 10px;
+}
+
+/* ── Modal list item ─────────────────────────────────────────────────────── */
+.ia-modal-list-item {
+	display: flex;
+	align-items: center;
+	padding: 6px;
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+/* ── Modal list item selected state ──────────────────────────────────────── */
+.ia-modal-item--selected {
+	background-color: var(--background-modifier-active);
+}
+
+/* ── Modal list icon ─────────────────────────────────────────────────────── */
+.ia-modal-list-icon {
+	margin-right: 8px;
+}
+
+/* ── Flex-1 utility ──────────────────────────────────────────────────────── */
+.ia-flex-1 {
+	flex: 1;
+}
+
+/* ── Margin-right utilities ──────────────────────────────────────────────── */
+.ia-mr-10 {
+	margin-right: 10px;
 }
