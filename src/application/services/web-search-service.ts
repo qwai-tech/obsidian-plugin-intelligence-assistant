@@ -1,4 +1,4 @@
-import { requestUrl } from 'obsidian';
+import { IHttpClient } from '@/core/interfaces';
 import type { WebSearchConfig } from '@/types';
 
 export interface WebSearchResult {
@@ -111,7 +111,7 @@ interface QwantSearchResponse {
 export class WebSearchService {
 	private config: WebSearchConfig;
 
-	constructor(config: WebSearchConfig) {
+	constructor(config: WebSearchConfig, private httpClient: IHttpClient) {
 		this.config = config;
 	}
 
@@ -188,27 +188,36 @@ export class WebSearchService {
 	/**
 	 * Determine if a query would benefit from a web search
 	 */
-	private shouldSearch(query: string): boolean {
-		// Common informational patterns that suggest search would be helpful
-		const infoPattern = /(?:what is|who is|how to|why is|when is|where is|define:|explain|tell me about|show me|find|information about|details on|facts about|latest news about|current status of|research on|study on)/i;
+	public shouldSearch(query: string): boolean {
+		if (!query || typeof query !== 'string') {
+			return false;
+		}
+
+		// Clean the input
+		let cleanedQuery = query.trim();
 		
-		// Check if query contains informational phrases
-		if (infoPattern.test(query)) {
+		// Remove common prefixes that indicate search intent
+		const searchIndicators = [
+			'find:', 'search:', 'google:', 'bing:', 'search for:', 
+			'look up:', 'find me:', 'find information about:'
+		];
+		
+		for (const indicator of searchIndicators) {
+			if (cleanedQuery.toLowerCase().startsWith(indicator)) {
+				cleanedQuery = cleanedQuery.substring(indicator.length).trim();
+				return true;
+			}
+		}
+
+		// Check for common informational patterns that suggest search would be helpful
+		const infoPattern = /(?:what is|who is|how to|why is|when is|where is|define:|explain|tell me about|show me|find|information about|details on|facts about|latest news about|current status of|research on|study on|current (events|news|status)|recent (developments|updates|trends|happenings)|best (practices|ways|methods|options|deals|prices)|most (recent|popular|effective|trending)|need to know about|looking for information on|can you tell me|do you know|what are|what do you know about|what happened|what will happen|current|latest|new|today|now|recently|upcoming|tomorrow|yesterday|last week|last month|last year|next week|next month|next year|this week|this month|this year|202[0-9]|203[0-9]|prices? of|cost of|how much does|how many people|population of|distance between|weather in|temperature in|forecast for|election results|stock price|exchange rate|exchange rates|current exchange|current stock|crypto price|cryptocurrency price|currency rate|currency rates|covid|pandemic|coronavirus|virus|outbreak|inflation|interest rate|unemployment|gdp|economic|economy|jobs|employment|real estate|housing|market|financial|finance|investment|investing|bitcoin|ethereum|crypto|cryptocurrency|nft|web3|ai|artificial intelligence|machine learning|deep learning|climate change|global warming|renewable energy|solar|wind|electric car|tesla|spacex|elon musk|apple|google|amazon|microsoft|meta|facebook|netflix|tesla stock|crypto market|stock market|financial market|olympics|world cup|championship|tournament|league|nfl|nba|mlb|nhl|epl|uefa|fifa|super bowl|world series|stanley cup|wimbledon|us open|french open|australian open)\b/i;
+		
+		if (infoPattern.test(cleanedQuery)) {
 			return true;
 		}
 
-		// Check if query contains likely search terms (not conversational)
-		// Look for specific terms, questions, or topics
-		const likelySearchTerms = /(?:\?|current|latest|new|today|now|recent|upcoming|news|trends|statistics|data|research|study|report|analysis|market|price|cost|buy|where to|how much|how many|review|comparison)/i;
-		
-		if (likelySearchTerms.test(query)) {
-			return true;
-		}
-
-		// Check if query is a specific question or contains keywords that require external knowledge
-		const specificTerms = /\b(?:news|events|updates|prices|weather|stocks|sports|scores|facts|statistics|research|studies|science|technology|health|medical|law|policy|government|politics|finance|economics|education|university|school|history|geography|culture|art|music|movies|tv|books|authors|biology|chemistry|physics|math|formula|equation|programming|code|software|hardware|gaming|sports|athletes|teams|games|tournaments|celebrity|actors|actresses|movies|films|reviews|ratings|restaurants|food|recipe|cooking|recipe|cooking|travel|vacation|hotel|flight|destination|weather|temperature|climate|environment|pollution|climate change)\b/i;
-		
-		if (specificTerms.test(query)) {
+		// Check if query is specific and long enough
+		if (cleanedQuery.length > 20) {
 			return true;
 		}
 
@@ -392,7 +401,7 @@ export class WebSearchService {
 		const searchUrl = `https://www.googleapis.com/customsearch/v1?key=${this.config.apiKey}&cx=${this.config.googleCseId}&q=${encodeURIComponent(query)}&num=${Math.min(maxResults, 10)}&lr=${this.config.searchLanguage || 'lang_en'}`;
 		
 		try {
-			const response = await requestUrl({
+			const response = await this.httpClient.request({
 				url: searchUrl,
 				method: 'GET',
 			});
@@ -434,7 +443,7 @@ export class WebSearchService {
 		const searchUrl = `https://api.bing.microsoft.com/v7.0/search?q=${encodeURIComponent(query)}&count=${Math.min(maxResults, 50)}&mkt=${this.config.searchCountry || 'en-US'}&setLang=${this.config.searchLanguage || 'en'}`;
 		
 		try {
-			const response = await requestUrl({
+			const response = await this.httpClient.request({
 				url: searchUrl,
 				method: 'GET',
 				headers: {
@@ -476,7 +485,7 @@ export class WebSearchService {
 			// Use DuckDuckGo HTML scraping approach (no API key required)
 			const searchUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}&kl=${this.config.searchCountry || 'us-en'}`;
 			
-			const response = await requestUrl({
+			const response = await this.httpClient.request({
 				url: searchUrl,
 				method: 'GET',
 				headers: {
@@ -567,7 +576,7 @@ export class WebSearchService {
 		const searchUrl = `${endpoint}?${params.toString()}`;
 		
 		try {
-			const response = await requestUrl({
+			const response = await this.httpClient.request({
 				url: searchUrl,
 				method: 'GET',
 			});
@@ -608,7 +617,7 @@ export class WebSearchService {
 		}
 
 		try {
-			const response = await requestUrl({
+			const response = await this.httpClient.request({
 				url: 'https://api.tavily.com/search',
 				method: 'POST',
 				headers: {
@@ -675,7 +684,7 @@ export class WebSearchService {
 		const searchUrl = `${this.config.searxngEndpoint}?${params.toString()}`;
 		
 		try {
-			const response = await requestUrl({
+			const response = await this.httpClient.request({
 				url: searchUrl,
 				method: 'GET',
 				headers: {
@@ -753,7 +762,7 @@ export class WebSearchService {
 		const searchUrl = `https://api.search.brave.com/res/v1/web/search?${params.toString()}`;
 		
 		try {
-			const response = await requestUrl({
+			const response = await this.httpClient.request({
 				url: searchUrl,
 				method: 'GET',
 				headers: headers
@@ -794,7 +803,7 @@ export class WebSearchService {
 		try {
 			const searchUrl = `https://search.yahoo.com/search?p=${encodeURIComponent(query)}&n=${maxResults}&b=${this.config.searchCountry || 'us'}`;
 			
-			const response = await requestUrl({
+			const response = await this.httpClient.request({
 				url: searchUrl,
 				method: 'GET',
 				headers: {
@@ -865,7 +874,7 @@ export class WebSearchService {
 		try {
 			const searchUrl = `https://yandex.com/search/?text=${encodeURIComponent(query)}&num=${maxResults}`;
 			
-			const response = await requestUrl({
+			const response = await this.httpClient.request({
 				url: searchUrl,
 				method: 'GET',
 				headers: {
@@ -955,7 +964,7 @@ export class WebSearchService {
 		const searchUrl = `https://api.qwant.com/api/search/web?${params.toString()}`;
 		
 		try {
-			const response = await requestUrl({
+			const response = await this.httpClient.request({
 				url: searchUrl,
 				method: 'GET',
 				headers: headers
@@ -1024,7 +1033,7 @@ export class WebSearchService {
 		const searchUrl = `https://api.mojeek.com/api/search?${params.toString()}`;
 		
 		try {
-			const response = await requestUrl({
+			const response = await this.httpClient.request({
 				url: searchUrl,
 				method: 'GET',
 				headers: {

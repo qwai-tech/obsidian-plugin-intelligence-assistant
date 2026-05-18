@@ -3,7 +3,6 @@
  * Core business logic for AI chat, coordinating RAG, Web Search, and LLM Providers.
  */
 
-import type { App, TFile, TFolder } from 'obsidian';
 import type { 
 	Message, 
 	LLMConfig, 
@@ -11,6 +10,7 @@ import type {
 	WebSearchResult, 
 	FileReference 
 } from '@/types';
+import { IFileSystem } from '@/core/interfaces';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
 import type { ToolManager } from './tool-manager';
@@ -35,7 +35,7 @@ export interface ChatOptions {
 
 export class ChatService {
 	constructor(
-		private app: App,
+		private fileSystem: IFileSystem,
 		private toolManager: ToolManager,
 		private ragManager: RAGManager,
 		private webSearchService: WebSearchService,
@@ -101,39 +101,23 @@ export class ChatService {
 	 */
 	async buildReferenceContext(
 		text: string,
-		referenceInputs: (TFile | TFolder | FileReference)[] = []
+		references: FileReference[] = []
 	): Promise<{ llmContent: string; references: FileReference[] }> {
-		if (!referenceInputs || referenceInputs.length === 0) {
+		if (!references || references.length === 0) {
 			return { llmContent: text, references: [] };
 		}
-
-		const references: FileReference[] = referenceInputs.map(item => {
-			if (item instanceof (this.app.vault.getAbstractFileByPath('') as any).constructor && (item as any).extension !== undefined) {
-				return { type: 'file', path: (item as TFile).path, name: (item as TFile).name };
-			}
-			if (item instanceof (this.app.vault.getAbstractFileByPath('') as any).constructor && (item as any).children !== undefined) {
-				return { type: 'folder', path: (item as TFolder).path, name: (item as TFolder).name };
-			}
-			return item as FileReference;
-		});
 
 		let llmContent = text + '\n\n---\n**Referenced Files/Folders:**\n\n';
 		for (const ref of references) {
 			if (ref.type === 'file') {
-				const file = this.app.vault.getAbstractFileByPath(ref.path);
-				if (file instanceof (this.app.vault.getAbstractFileByPath('') as any).constructor) {
-					try {
-						const content = await this.app.vault.read(file as TFile);
-						llmContent += `\n### 📄 ${ref.path}\n\`\`\`\n${content}\n\`\`\`\n`;
-					} catch (error) {
-						llmContent += `\n### 📄 ${ref.path}\n*Error reading file: ${String(error)}*\n`;
-					}
+				try {
+					const content = await this.fileSystem.read(ref.path);
+					llmContent += `\n### 📄 ${ref.path}\n\`\`\`\n${content}\n\`\`\`\n`;
+				} catch (error) {
+					llmContent += `\n### 📄 ${ref.path}\n*Error reading file: ${String(error)}*\n`;
 				}
 			} else {
-				const folder = this.app.vault.getAbstractFileByPath(ref.path);
-				if (folder instanceof (this.app.vault.getAbstractFileByPath('') as any).constructor) {
-					llmContent += `\n### 📁 ${ref.path}\n(Referenced as context)\n`;
-				}
+				llmContent += `\n### 📁 ${ref.path}\n(Referenced as context)\n`;
 			}
 		}
 

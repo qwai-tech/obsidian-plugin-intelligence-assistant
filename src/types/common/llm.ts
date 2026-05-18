@@ -93,6 +93,7 @@ export interface ChatRequest {
 
 export interface ChatResponse {
 	content: string;
+	reasoning?: string;
 	usage?: {
 		promptTokens: number;
 		completionTokens: number;
@@ -102,8 +103,8 @@ export interface ChatResponse {
 
 export interface StreamChunk {
 	content: string;
-	done: boolean;
 	reasoning?: string;
+	done: boolean;
 }
 
 export interface ILLMProvider {

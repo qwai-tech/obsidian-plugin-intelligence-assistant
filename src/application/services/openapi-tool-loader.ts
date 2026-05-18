@@ -1,6 +1,5 @@
-import { App, FileSystemAdapter, normalizePath, requestUrl } from 'obsidian';
-import { readFile } from 'fs/promises';
-import * as nodePath from 'path';
+import { normalizePath, requestUrl } from 'obsidian';
+import { IFileSystem } from '@/core/interfaces';
 import type { OpenApiToolConfig, OpenApiAuthType } from '@/types';
 import type { Tool, ToolDefinition, ToolParameter, ToolResult } from './types';
 import { ToolManager } from './tool-manager';
@@ -194,7 +193,7 @@ export class OpenApiToolLoader {
 	private providerMap = new Map<string, string>();
 
 	constructor(
-		private readonly app: App,
+		private readonly fileSystem: IFileSystem,
 		private readonly toolManager: ToolManager,
 		private readonly pluginDataPath: string
 	) {}
@@ -289,18 +288,11 @@ export class OpenApiToolLoader {
 			throw new Error('OpenAPI file path is required');
 		}
 
-		const adapter = this.app.vault.adapter;
 		const normalized = normalizePath(specPath);
 		try {
-			return await adapter.read(normalized);
+			return await this.fileSystem.read(normalized);
 		} catch (error) {
-			if (adapter instanceof FileSystemAdapter) {
-				const basePath = adapter.getBasePath();
-				const resolved = nodePath.isAbsolute(specPath)
-					? specPath
-					: nodePath.join(basePath, specPath);
-				return await readFile(resolved, 'utf-8');
-			}
+			console.error(`[OpenAPI] Failed to read spec from ${normalized}`, error);
 			throw error instanceof Error ? error : new Error('Unable to read OpenAPI spec');
 		}
 	}
@@ -311,43 +303,27 @@ export class OpenApiToolLoader {
 		}
 
 		const cache = this.getCachePaths(config.id);
-		await this.ensureFolderExists(cache.directoryAbsolute);
-		const adapter = this.app.vault.adapter;
+		await this.fileSystem.mkdir(cache.directoryAbsolute);
 		const shouldRefetch = options?.forceRefetch ?? false;
-		const cacheExists = await adapter.exists(cache.absolutePath);
+		const cacheExists = await this.fileSystem.exists(cache.absolutePath);
 
 		if (!cacheExists || shouldRefetch) {
 			const response = await requestUrl({ url: config.specUrl.trim(), method: 'GET' });
 			const contents = response.text;
-			await adapter.write(cache.absolutePath, contents);
+			await this.fileSystem.write(cache.absolutePath, contents);
 			if (options?.persistCacheMetadata) {
 				config.lastFetchedAt = Date.now();
 			}
 			return contents;
 		}
 
-		return await adapter.read(cache.absolutePath);
+		return await this.fileSystem.read(cache.absolutePath);
 	}
 
 	private getCachePaths(configId: string): { absolutePath: string; directoryAbsolute: string } {
 		const directoryAbsolute = `${this.pluginDataPath}/openapi`;
 		const absolutePath = `${directoryAbsolute}/${configId}.json`;
 		return { absolutePath: normalizePath(absolutePath), directoryAbsolute: normalizePath(directoryAbsolute) };
-	}
-
-	private async ensureFolderExists(folder: string): Promise<void> {
-		const adapter = this.app.vault.adapter;
-		if (await adapter.exists(folder)) {
-			return;
-		}
-		const segments = folder.split('/');
-		let current = '';
-		for (const segment of segments) {
-			current = current ? `${current}/${segment}` : segment;
-			if (!(await adapter.exists(current))) {
-				await adapter.mkdir(current);
-			}
-		}
 	}
 
 	private extractServerUrl(spec: OpenApiDocumentLike): string | undefined {

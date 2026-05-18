@@ -43,6 +43,8 @@ import { ConversationMigrationService } from './src/application/services/convers
 
 // Import architecture components
 import { container } from './src/core/container';
+import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-system';
+import { ObsidianHttpClient } from './src/infrastructure/obsidian/obsidian-http-client';
 import { MessageRepository } from './src/infrastructure/persistence/obsidian/message-repository';
 import { ConversationRepository } from './src/infrastructure/persistence/obsidian/conversation-repository';
 import {
@@ -228,6 +230,8 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 	private initializeArchitecture(): void {
 		// Register services with the container
+		container.register('FileSystem', () => new ObsidianFileSystem(this.app));
+		container.register('HttpClient', () => new ObsidianHttpClient());
 		container.register('MessageRepository', () => new MessageRepository(this.app.vault));
 		container.register('ConversationRepository', () => new ConversationRepository(this.app.vault));
 		// ChatService registration is commented out as it requires proper LLM provider and event bus setup
@@ -252,7 +256,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 	private getOpenApiLoader(): OpenApiToolLoader {
 		if (!this.openApiToolLoader) {
-			this.openApiToolLoader = new OpenApiToolLoader(this.app, this.getToolManager(), this.pluginDataPath);
+			this.openApiToolLoader = new OpenApiToolLoader(new ObsidianFileSystem(this.app), this.getToolManager(), this.pluginDataPath);
 		}
 		return this.openApiToolLoader;
 	}
