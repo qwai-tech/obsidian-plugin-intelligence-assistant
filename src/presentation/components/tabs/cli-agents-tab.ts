@@ -98,7 +98,7 @@ function renderDetectionPanel(containerEl: HTMLElement, pluginDir: string, app: 
 				text: sdkStatus === 'outdated' ? 'Update SDK' : 'Install SDK',
 				cls: 'ia-button ia-button--ghost'
 			});
-			installBtn.setCssProps({ 'margin-top': '4px', 'font-size': 'var(--font-ui-smaller)' });
+			installBtn.addClass('ia-sdk-install-btn');
 			installBtn.addEventListener('click', () => {
 				new SDKInstallModal(app, provider, pluginDir).open();
 			});
@@ -210,8 +210,7 @@ function renderAgentsSection(
 			const installBtn = sdkCell.createEl('button', {
 				text: sdkStatus === 'outdated' ? 'Update' : 'Install'
 			});
-			installBtn.addClass('ia-button', 'ia-button--ghost');
-			installBtn.setCssProps({ 'margin-left': '6px', 'font-size': 'var(--font-ui-smaller)' });
+			installBtn.addClass('ia-button', 'ia-button--ghost', 'ia-sdk-install-btn--inline');
 			installBtn.addEventListener('click', () => {
 				void new SDKInstallModal(app, agent.provider, pluginDir)
 					.waitForResult()

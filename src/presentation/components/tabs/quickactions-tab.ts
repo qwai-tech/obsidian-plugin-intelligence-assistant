@@ -83,8 +83,7 @@ export function displayQuickActionsTab(
 			actionCell.addClass('ia-table-cell');
 			const actionStack = actionCell.createDiv('ia-table-stack');
 
-			const titleContainer = actionStack.createDiv();
-			titleContainer.setCssProps({ 'display': 'flex', 'align-items': 'center', 'gap': '8px' });
+			const titleContainer = actionStack.createDiv('ia-action-title-row');
 
 			const enableToggle = titleContainer.createEl('input', { type: 'checkbox' });
 			enableToggle.checked = action.enabled;
@@ -158,7 +157,6 @@ export function displayQuickActionsTab(
 
 	// Usage info
 	const infoEl = containerEl.createDiv('ia-info-box');
-	infoEl.setCssProps({ 'margin-top': '20px' });
 
 	infoEl.createEl('h4', { text: 'Usage' });
 	const usageList = infoEl.createEl('ul');
@@ -253,7 +251,7 @@ function openQuickActionEditModal(
 
 			// Buttons
 			const buttonContainer = contentEl.createDiv();
-			buttonContainer.setCssProps({ 'margin-top': '16px' });
+			buttonContainer.addClass('ia-modal-footer');
 
 			new ButtonComponent(buttonContainer)
 				.setButtonText('Cancel')

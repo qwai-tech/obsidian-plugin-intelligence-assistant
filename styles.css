@@ -4198,3 +4198,39 @@
 	color: var(--text-muted);
 	font-size: 0.9em;
 }
+
+/* ─── Settings Tab Shared Helpers ──────────────────────────────── */
+
+/* Subheading used in settings tabs (e.g. web-search groups) */
+.ia-settings-subheading {
+	margin-top: 1.5em;
+}
+
+/* Install SDK button inside a detection card (stacked layout) */
+.ia-sdk-install-btn {
+	margin-top: 4px;
+	font-size: var(--font-ui-smaller);
+}
+
+/* Install / Update button shown inline inside a table cell */
+.ia-sdk-install-btn--inline {
+	margin-left: 6px;
+	font-size: var(--font-ui-smaller);
+}
+
+/* Flex row used to align toggle + title inside a table action cell */
+.ia-action-title-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* Info / usage box at the bottom of a settings tab */
+.ia-info-box {
+	margin-top: 20px;
+}
+
+/* Button row at the bottom of a settings modal */
+.ia-modal-footer {
+	margin-top: 16px;
+}

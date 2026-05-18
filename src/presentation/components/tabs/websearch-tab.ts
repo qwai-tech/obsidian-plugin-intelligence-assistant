@@ -16,8 +16,7 @@ export function displayWebSearchTab(
 	const desc = containerEl.createEl('p', {
 		text: 'Configure web search functionality to enhance AI responses with up-to-date information from the internet.'
 	});
-	desc.setCssProps({ 'color': 'var(--text-muted)' });
-	desc.setCssProps({ 'margin-bottom': '20px' });
+	desc.addClass('ia-section-description', 'ia-section-description--spaced');
 
 	const config = plugin.settings.webSearchConfig;
 
@@ -40,7 +39,6 @@ export function displayWebSearchTab(
 
 	const addSubheading = (text: string) => {
 		const heading = containerEl.createEl('h4', { text });
-		heading.setCssProps({ 'margin-top': '1.5em' });
 		heading.addClass('ia-settings-subheading');
 		return heading;
 	};

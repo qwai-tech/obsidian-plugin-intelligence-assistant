@@ -15,8 +15,7 @@ export function displayGeneralTab(
 	const desc = containerEl.createEl('p', {
 		text: 'Configure general settings for the intelligence assistant plugin.'
 	});
-	desc.setCssProps({ 'color': 'var(--text-muted)' });
-	desc.setCssProps({ 'margin-bottom': '20px' });
+	desc.addClass('ia-section-description', 'ia-section-description--spaced');
 	// Plugin Version
 	new Setting(containerEl)
 		.setName('Plugin version')
