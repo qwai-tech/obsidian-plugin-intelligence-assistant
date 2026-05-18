@@ -62,15 +62,15 @@ export class OllamaModelManagerModal extends Modal {
 				statusEl.empty();
 				statusEl.createEl('span', {
 					text: `✅ Server online`,
-					attr: { style: 'color: var(--text-success); font-weight: 600;' }
+					cls: 'ia-server-status-online'
 				});
 				statusEl.createEl('span', {
 					text: ` | Version: ${data.version || 'unknown'}`,
-					attr: { style: 'color: var(--text-muted); margin-left: 8px;' }
+					cls: 'ia-server-status-meta'
 				});
 				statusEl.createEl('span', {
 					text: ` | ${baseUrl}`,
-					attr: { style: 'color: var(--text-muted); margin-left: 8px; font-size: 0.9em;' }
+					cls: 'ia-server-status-url'
 				});
 			} else {
 				statusEl.setText('❌ Server offline');
@@ -89,7 +89,7 @@ export class OllamaModelManagerModal extends Modal {
 
 		section.createEl('p', {
 			text: 'Enter a model name to download from Ollama library (e.g., llama2, mistral, codellama)',
-			attr: { style: 'color: var(--text-muted); font-size: 0.9em;' }
+			cls: 'ia-pull-section-hint'
 		});
 
 		let modelNameInput: HTMLInputElement;
@@ -141,7 +141,7 @@ export class OllamaModelManagerModal extends Modal {
 		if (this.models.length === 0) {
 			modelList.createEl('p', {
 				text: 'No models found. Pull a model to get started.',
-				attr: { style: 'color: var(--text-muted); font-style: italic;' }
+				cls: 'ia-model-list-empty'
 			});
 			return;
 		}
@@ -157,13 +157,13 @@ export class OllamaModelManagerModal extends Modal {
 			const modelInfo = modelRow.createDiv();
 			modelInfo.createEl('div', {
 				text: model.id,
-				attr: { style: 'font-weight: 600; margin-bottom: 4px;' }
+				cls: 'ia-model-name'
 			});
 
 			const capabilities = model.capabilities?.join(', ') || 'unknown';
 			modelInfo.createEl('div', {
 				text: `Capabilities: ${capabilities}`,
-				attr: { style: 'color: var(--text-muted); font-size: 0.9em;' }
+				cls: 'ia-model-capabilities'
 			});
 
 			const deleteBtn = modelRow.createEl('button', { text: 'Delete' });

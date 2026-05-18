@@ -4135,3 +4135,66 @@
 .ia-hidden {
 	display: none !important;
 }
+
+/* ── RAG tab stats ──────────────────────────────────────────────────────── */
+.ia-rag-stats-title {
+	font-weight: bold;
+	margin-bottom: 8px;
+}
+
+.ia-stat-label {
+	font-size: 0.9em;
+	color: var(--text-muted);
+}
+
+.ia-stat-value {
+	font-weight: 600;
+}
+
+.ia-rag-empty-notice {
+	margin-top: 8px;
+	font-size: 0.9em;
+	color: var(--text-muted);
+	font-style: italic;
+}
+
+.ia-rag-stats-error {
+	color: var(--text-error);
+}
+
+/* ── Ollama model manager modal ─────────────────────────────────────────── */
+.ia-server-status-online {
+	color: var(--text-success);
+	font-weight: 600;
+}
+
+.ia-server-status-meta {
+	color: var(--text-muted);
+	margin-left: 8px;
+}
+
+.ia-server-status-url {
+	color: var(--text-muted);
+	margin-left: 8px;
+	font-size: 0.9em;
+}
+
+.ia-pull-section-hint {
+	color: var(--text-muted);
+	font-size: 0.9em;
+}
+
+.ia-model-list-empty {
+	color: var(--text-muted);
+	font-style: italic;
+}
+
+.ia-model-name {
+	font-weight: 600;
+	margin-bottom: 4px;
+}
+
+.ia-model-capabilities {
+	color: var(--text-muted);
+	font-size: 0.9em;
+}

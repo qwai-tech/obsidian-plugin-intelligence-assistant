@@ -217,7 +217,7 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 
 			statsContainer.createEl('div', {
 				text: `Index statistics`,
-				attr: { style: 'font-weight: bold; margin-bottom: 8px;' }
+				cls: 'ia-rag-stats-title'
 			});
 
 			const statsGrid = statsContainer.createDiv();
@@ -231,11 +231,11 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 				statItem.setCssProps({ 'flex-direction': 'column' });
 				statItem.createEl('span', {
 					text: label,
-					attr: { style: 'font-size: 0.9em; color: var(--text-muted);' }
+					cls: 'ia-stat-label'
 				});
 				statItem.createEl('span', {
 					text: (value ?? 0).toString(),
-					attr: { style: 'font-weight: 600;' }
+					cls: 'ia-stat-value'
 				});
 			};
 
@@ -256,13 +256,13 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 			if (chunkCount === 0) {
 				statsContainer.createEl('div', {
 					text: 'Index is empty. Select rebuild index to start indexing.',
-					attr: { style: 'margin-top: 8px; font-size: 0.9em; color: var(--text-muted); font-style: italic;' }
+					cls: 'ia-rag-empty-notice'
 				});
 			}
 		} catch (error) {
 			statsContainer.createEl('div', {
 				text: '⚠️ unable to load index statistics',
-				attr: { style: 'color: var(--text-error);' }
+				cls: 'ia-rag-stats-error'
 			});
 			console.error('Failed to load RAG stats:', error);
 		}
