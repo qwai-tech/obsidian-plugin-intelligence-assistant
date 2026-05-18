@@ -47,24 +47,14 @@ export function displayProviderTab(
 
 	// Security Warning
 	const warningContainer = containerEl.createDiv('ia-warning-box');
-	warningContainer.setCssProps({
-		'background-color': 'rgba(255, 100, 0, 0.1)',
-		'border-left': '4px solid #ff6400',
-		'padding': '12px',
-		'margin-bottom': '20px',
-		'border-radius': '4px'
-	});
-	
-	const warningTitle = warningContainer.createDiv();
+
+	const warningTitle = warningContainer.createDiv('ia-warning-title');
 	warningTitle.createSpan({ text: '⚠️ Security Warning' });
-	warningTitle.setCssProps({ 'font-weight': 'bold', 'margin-bottom': '8px', 'display': 'block' });
-	
-	const warningText = warningContainer.createDiv();
+
+	const warningText = warningContainer.createDiv('ia-warning-text');
 	warningText.setText('API keys are stored as plain text in your vault for compatibility. To prevent accidental leaks:');
-	warningText.setCssProps({ 'font-size': '0.9em', 'line-height': '1.4' });
-	
-	const warningList = warningContainer.createEl('ul');
-	warningList.setCssProps({ 'margin-top': '8px', 'margin-bottom': '0', 'font-size': '0.85em' });
+
+	const warningList = warningContainer.createEl('ul', { cls: 'ia-warning-list' });
 	warningList.createEl('li', { text: `Do NOT share your ${app.vault.configDir}/plugins/intelligence-assistant/data/ folder.` });
 	warningList.createEl('li', { text: 'Add this folder to your .gitignore if you use Git sync.' });
 	warningList.createEl('li', { text: 'Be cautious when using public cloud sync services.' });
@@ -139,7 +129,7 @@ export function displayProviderTab(
 		if (config.provider === 'ollama') {
 			versionEl = providerStack.createDiv('ia-table-subtext');
 			versionEl.setText('Checking version...');
-			versionEl.setCssProps({ 'font-style': 'italic' });
+			versionEl.addClass('ia-text-italic');
 		}
 
 		const urlToShow = config.provider === 'ollama' ? (ollamaBaseUrl ?? '') : config.baseUrl;
@@ -214,24 +204,24 @@ export function displayProviderTab(
 		if (config.provider === 'ollama' && ollamaBaseUrl) {
 			const serverStatusLine = statusStack.createDiv('ia-table-subtext');
 			serverStatusLine.setText('Checking server...');
-			serverStatusLine.setCssProps({ 'font-style': 'italic' });
+			serverStatusLine.addClass('ia-text-italic');
 
 			// Check Ollama server status
 			checkOllamaStatus(ollamaBaseUrl).then((status) => {
 				if (status.online) {
 					serverStatusLine.setText(`Server: online`);
-					serverStatusLine.setCssProps({ 'color': 'var(--text-success)' });
-					serverStatusLine.setCssProps({ 'font-style': 'normal' });
+					serverStatusLine.removeClass('ia-text-italic');
+					serverStatusLine.addClass('ia-text-success');
 
 					// Update version in provider cell
 					if (versionEl && status.version) {
 						versionEl.setText(`Version: ${status.version}`);
-						versionEl.setCssProps({ 'font-style': 'normal' });
-						versionEl.setCssProps({ 'color': 'var(--text-muted)' });
+						versionEl.removeClass('ia-text-italic');
+						versionEl.addClass('ia-text-muted');
 					} else if (versionEl) {
 						versionEl.setText('Server online');
-						versionEl.setCssProps({ 'font-style': 'normal' });
-						versionEl.setCssProps({ 'color': 'var(--text-muted)' });
+						versionEl.removeClass('ia-text-italic');
+						versionEl.addClass('ia-text-muted');
 					}
 
 					// Update status badge if server is online
@@ -246,14 +236,14 @@ export function displayProviderTab(
 					}
 				} else {
 					serverStatusLine.setText(`Server: offline or unreachable`);
-					serverStatusLine.setCssProps({ 'color': 'var(--text-error)' });
-					serverStatusLine.setCssProps({ 'font-style': 'normal' });
+					serverStatusLine.removeClass('ia-text-italic');
+					serverStatusLine.addClass('ia-text-error');
 
 					// Update version display
 					if (versionEl) {
 						versionEl.setText('Server offline');
-						versionEl.setCssProps({ 'color': 'var(--text-error)' });
-						versionEl.setCssProps({ 'font-style': 'normal' });
+						versionEl.removeClass('ia-text-italic');
+						versionEl.addClass('ia-text-error');
 					}
 
 					// Update status to show server is offline
@@ -264,12 +254,13 @@ export function displayProviderTab(
 				}
 			}).catch(() => {
 				serverStatusLine.setText('Server: connection error');
-				serverStatusLine.setCssProps({ 'color': 'var(--text-error)' });
+				serverStatusLine.removeClass('ia-text-italic');
+				serverStatusLine.addClass('ia-text-error');
 
 				if (versionEl) {
 					versionEl.setText('Connection error');
-					versionEl.setCssProps({ 'color': 'var(--text-error)' });
-					versionEl.setCssProps({ 'font-style': 'normal' });
+					versionEl.removeClass('ia-text-italic');
+					versionEl.addClass('ia-text-error');
 				}
 				// Keep status badge consistent with failure
 				statusBadge.removeClass('is-success');

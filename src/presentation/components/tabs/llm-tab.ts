@@ -27,10 +27,6 @@ export function displayLLMTab(
 
 	// Create sub-tab navigation
 	const tabNavContainer = containerEl.createDiv('ia-llm-tab-nav');
-	tabNavContainer.setCssProps({ 'gap': '8px' });
-	tabNavContainer.setCssProps({ 'margin-bottom': '20px' });
-	tabNavContainer.setCssProps({ 'border-bottom': '1px solid var(--background-modifier-border)' });
-	tabNavContainer.setCssProps({ 'padding-bottom': '8px' });
 
 	// Create content container for sub-tabs
 	const tabContentContainer = containerEl.createDiv('ia-llm-tab-content');
@@ -62,14 +58,8 @@ export function displayLLMTab(
 			cls: 'ia-llm-subtab-btn'
 		});
 
-		tabBtn.setCssProps({ 'padding': '8px 16px' });
-		tabBtn.setCssProps({ 'border': 'none' });
-		tabBtn.setCssProps({ 'background': activeTab === tab.id ? 'var(--interactive-accent)' : 'transparent' });
-		tabBtn.setCssProps({ 'color': activeTab === tab.id ? 'var(--text-on-accent)' : 'var(--text-normal)' });
+		tabBtn.toggleClass('ia-llm-subtab-btn--active', activeTab === tab.id);
 		tabBtn.addClass('ia-clickable');
-		tabBtn.setCssProps({ 'border-radius': '4px' });
-		tabBtn.setCssProps({ 'cursor': 'pointer' });
-		tabBtn.setCssProps({ 'transition': 'all 0.2s' });
 
 		tabBtn.addEventListener('click', () => {
 			activeTab = tab.id;
@@ -77,24 +67,9 @@ export function displayLLMTab(
 			// Update all buttons
 			tabNavContainer.querySelectorAll('.ia-llm-subtab-btn').forEach((btn, index) => {
 				const isActive = subTabs[index].id === activeTab;
-				(btn as HTMLElement).setCssProps({
-					'background': isActive ? 'var(--interactive-accent)' : 'transparent',
-					'color': isActive ? 'var(--text-on-accent)' : 'var(--text-normal)'
-				});
+				(btn as HTMLElement).toggleClass('ia-llm-subtab-btn--active', isActive);
 			});
 			renderActiveTab();
-		});
-
-		// Hover effect
-		tabBtn.addEventListener('mouseenter', () => {
-			if (activeTab !== tab.id) {
-				tabBtn.setCssProps({ 'background': 'var(--background-modifier-hover)' });
-			}
-		});
-		tabBtn.addEventListener('mouseleave', () => {
-			if (activeTab !== tab.id) {
-				tabBtn.setCssProps({ 'background': 'transparent' });
-			}
 		});
 	});
 

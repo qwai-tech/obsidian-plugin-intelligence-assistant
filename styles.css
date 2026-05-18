@@ -4296,3 +4296,106 @@
 .ia-custom-prompt-section {
 	margin-top: 12px;
 }
+
+/* ── Provider tab ───────────────────────────────────────────────────────── */
+
+/* Security-warning banner at the top of the provider tab */
+.ia-warning-box {
+	background-color: rgba(255, 100, 0, 0.1);
+	border-left: 4px solid #ff6400;
+	padding: 12px;
+	margin-bottom: 20px;
+	border-radius: 4px;
+}
+
+.ia-warning-title {
+	font-weight: bold;
+	margin-bottom: 8px;
+	display: block;
+}
+
+.ia-warning-text {
+	font-size: 0.9em;
+	line-height: 1.4;
+}
+
+.ia-warning-list {
+	margin-top: 8px;
+	margin-bottom: 0;
+	font-size: 0.85em;
+}
+
+/* Italic placeholder shown while checking the Ollama server */
+.ia-text-italic {
+	font-style: italic;
+}
+
+/* Ollama server / version text states */
+.ia-text-success {
+	color: var(--text-success);
+}
+
+.ia-text-muted {
+	color: var(--text-muted);
+}
+
+.ia-text-error {
+	color: var(--text-error);
+}
+
+/* ── Sub-tab navigation (RAG tab + LLM tab) ─────────────────────────────── */
+
+/* Shared nav container used by both the RAG and LLM sub-tab strips */
+.ia-rag-tab-nav,
+.ia-llm-tab-nav {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 20px;
+	border-bottom: 1px solid var(--background-modifier-border);
+	padding-bottom: 8px;
+}
+
+/* Base sub-tab button style */
+.ia-rag-subtab-btn,
+.ia-llm-subtab-btn {
+	padding: 8px 16px;
+	border: none;
+	background: transparent;
+	color: var(--text-normal);
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+/* Active state */
+.ia-rag-subtab-btn--active,
+.ia-llm-subtab-btn--active {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+/* Hover – only applied when the button is not active */
+.ia-rag-subtab-btn:not(.ia-rag-subtab-btn--active):hover,
+.ia-llm-subtab-btn:not(.ia-llm-subtab-btn--active):hover {
+	background: var(--background-modifier-hover);
+}
+
+/* ── RAG stats grid ─────────────────────────────────────────────────────── */
+
+.ia-rag-stats {
+	margin-bottom: 16px;
+	padding: 12px;
+	background-color: var(--background-secondary);
+	border-radius: 4px;
+}
+
+.ia-rag-stats-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
+}
+
+.ia-stat-item {
+	display: flex;
+	flex-direction: column;
+}

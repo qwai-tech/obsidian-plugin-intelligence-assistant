@@ -23,10 +23,6 @@ export function displayRAGTab(
 	// Create sub-tab navigation
 	const tabNavContainer = containerEl.createDiv('ia-rag-tab-nav');
 	tabNavContainer.removeClass('ia-hidden');
-	tabNavContainer.setCssProps({ 'gap': '8px' });
-	tabNavContainer.setCssProps({ 'margin-bottom': '20px' });
-	tabNavContainer.setCssProps({ 'border-bottom': '1px solid var(--background-modifier-border)' });
-	tabNavContainer.setCssProps({ 'padding-bottom': '8px' });
 
 	// Create content container for sub-tabs
 	const tabContentContainer = containerEl.createDiv('ia-rag-tab-content');
@@ -74,37 +70,17 @@ export function displayRAGTab(
 			cls: 'ia-rag-subtab-btn'
 		});
 
-		tabBtn.setCssProps({ 'padding': '8px 16px' });
-		tabBtn.setCssProps({ 'border': 'none' });
-		tabBtn.setCssProps({ 'background': activeTab === tab.id ? 'var(--interactive-accent)' : 'transparent' });
-		tabBtn.setCssProps({ 'color': activeTab === tab.id ? 'var(--text-on-accent)' : 'var(--text-normal)' });
+		tabBtn.toggleClass('ia-rag-subtab-btn--active', activeTab === tab.id);
 		tabBtn.addClass('ia-clickable');
-		tabBtn.setCssProps({ 'border-radius': '4px' });
-		tabBtn.setCssProps({ 'transition': 'all 0.2s' });
 
 		tabBtn.addEventListener('click', () => {
 			activeTab = tab.id;
 			// Update all buttons
 			tabNavContainer.querySelectorAll('.ia-rag-subtab-btn').forEach((btn, index) => {
 				const isActive = subTabs[index].id === activeTab;
-				(btn as HTMLElement).setCssProps({
-					'background': isActive ? 'var(--interactive-accent)' : 'transparent',
-					'color': isActive ? 'var(--text-on-accent)' : 'var(--text-normal)'
-				});
+				(btn as HTMLElement).toggleClass('ia-rag-subtab-btn--active', isActive);
 			});
 			renderActiveTab();
-		});
-
-		// Hover effect
-		tabBtn.addEventListener('mouseenter', () => {
-			if (activeTab !== tab.id) {
-				tabBtn.setCssProps({ 'background': 'var(--background-modifier-hover)' });
-			}
-		});
-		tabBtn.addEventListener('mouseleave', () => {
-			if (activeTab !== tab.id) {
-				tabBtn.setCssProps({ 'background': 'transparent' });
-			}
 		});
 	});
 
@@ -196,10 +172,6 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 
 	// Create a stats container that will be updated
 	const statsContainer = section.createDiv('ia-rag-stats');
-	statsContainer.setCssProps({ 'margin-bottom': '16px' });
-	statsContainer.setCssProps({ 'padding': '12px' });
-	statsContainer.setCssProps({ 'background-color': 'var(--background-secondary)' });
-	statsContainer.setCssProps({ 'border-radius': '4px' });
 
 	// Function to update stats display
 	const updateStats = async () => {
@@ -220,15 +192,10 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 				cls: 'ia-rag-stats-title'
 			});
 
-			const statsGrid = statsContainer.createDiv();
-			statsGrid.removeClass('ia-hidden');
-			statsGrid.setCssProps({ 'grid-template-columns': '1fr 1fr' });
-			statsGrid.setCssProps({ 'gap': '8px' });
+			const statsGrid = statsContainer.createDiv('ia-rag-stats-grid');
 
 			const addStat = (label: string, value: string | number | undefined) => {
-				const statItem = statsGrid.createDiv();
-				statItem.removeClass('ia-hidden');
-				statItem.setCssProps({ 'flex-direction': 'column' });
+				const statItem = statsGrid.createDiv('ia-stat-item');
 				statItem.createEl('span', {
 					text: label,
 					cls: 'ia-stat-label'
