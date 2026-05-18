@@ -4130,3 +4130,8 @@
 	border-color: var(--text-error) !important;
 	outline: 1px solid var(--text-error);
 }
+
+/* Generic hidden utility class */
+.ia-hidden {
+	display: none !important;
+}

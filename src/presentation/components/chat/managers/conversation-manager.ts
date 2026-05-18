@@ -193,6 +193,25 @@ export class ConversationManager extends Events {
 	}
 
 	/**
+	 * Get the token usage summary for the current conversation
+	 */
+	public getTokenSummary(): { prompt: number; completion: number; total: number } {
+		let prompt = 0;
+		let completion = 0;
+		let total = 0;
+
+		for (const message of this.state.messages) {
+			if (message.role === 'assistant' && message.tokenUsage) {
+				prompt += message.tokenUsage.promptTokens || 0;
+				completion += message.tokenUsage.completionTokens || 0;
+				total += message.tokenUsage.totalTokens || 0;
+			}
+		}
+
+		return { prompt, completion, total };
+	}
+
+	/**
 	 * Switch to a different conversation
 	 */
 	async switchConversation(convId: string): Promise<void> {
@@ -498,13 +517,13 @@ export class ConversationManager extends Events {
 
 			items.forEach(item => {
 				const title = (item as HTMLElement).querySelector('.conversation-title')?.textContent?.toLowerCase() || '';
-				(item as HTMLElement).style.display = title.includes(query) ? '' : 'none';
+				(item as HTMLElement).toggleClass('ia-hidden', !title.includes(query));
 			});
 
 			// Hide empty date groups
 			groups.forEach(group => {
-				const visibleItems = (group as HTMLElement).querySelectorAll('.conversation-item:not([style*="display: none"])');
-				(group as HTMLElement).style.display = visibleItems.length > 0 ? '' : 'none';
+				const visibleItems = (group as HTMLElement).querySelectorAll('.conversation-item:not(.ia-hidden)');
+				(group as HTMLElement).toggleClass('ia-hidden', visibleItems.length === 0);
 			});
 		});
 
