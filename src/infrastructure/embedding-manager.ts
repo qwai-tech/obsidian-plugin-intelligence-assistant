@@ -229,7 +229,7 @@ export class EmbeddingManager {
       const requestId = `embedding-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
       this.pendingRequests.set(requestId, { resolve, reject });
       this.worker!.postMessage({ id: requestId, text, dimensions });
-      setTimeout(() => {
+      activeWindow.setTimeout(() => {
         if (this.pendingRequests.has(requestId)) {
           this.pendingRequests.delete(requestId);
           reject(new Error('Embedding generation timed out'));

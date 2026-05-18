@@ -116,7 +116,7 @@ export class DocumentGrader {
       grades.push(...batchGrades);
 
       if (i + parallelLimit < requests.length) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => activeWindow.setTimeout(resolve, 100));
       }
     }
 

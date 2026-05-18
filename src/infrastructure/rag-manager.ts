@@ -100,7 +100,7 @@ export class RAGManager {
         
         if (currentIndex < files.length) {
           // Schedule next batch after a short delay to allow UI to update
-          setTimeout(() => {
+          activeWindow.setTimeout(() => {
             processBatch().catch(reject);
           }, 10); // 10ms delay allows UI to remain responsive
         } else {

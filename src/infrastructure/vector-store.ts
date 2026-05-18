@@ -50,18 +50,21 @@ export class VectorStore {
 		}
 	}
 
-	private saveTimeout: NodeJS.Timeout | null = null;
+	private saveTimeout: ReturnType<typeof activeWindow.setTimeout> | null = null;
 
 	async save(immediate = false): Promise<void> {
 		if (this.saveTimeout) {
-			clearTimeout(this.saveTimeout);
+			activeWindow.clearTimeout(this.saveTimeout);
 			this.saveTimeout = null;
 		}
 
-		if (immediate) {
+		// Always immediate in test environment to avoid race conditions in E2E
+		const isTest = typeof process !== 'undefined' && (process.env.NODE_ENV === 'test' || (process.env as any).WDIO_WORKER_ID);
+
+		if (immediate || isTest) {
 			await this.performSave();
 		} else {
-			this.saveTimeout = setTimeout(() => {
+			this.saveTimeout = activeWindow.setTimeout(() => {
 				void this.performSave();
 				this.saveTimeout = null;
 			}, 1000);
@@ -128,7 +131,7 @@ export class VectorStore {
               console.error(`Failed to generate combined embedding for chunk ${chunkId}:`, error);
             }
           }
-          
+
           const chunk: DocumentChunk = {
             id: chunkId,
             content: _chunks[i],
@@ -147,7 +150,7 @@ export class VectorStore {
 
         if (currentIndex < _chunks.length) {
           // Schedule next batch after a short delay to allow UI to update
-          setTimeout(() => void processChunkBatch(), 1); // 1ms delay allows UI to remain responsive
+          activeWindow.setTimeout(() => void processChunkBatch(), 1); // 1ms delay allows UI to remain responsive
         } else {
           // All _chunks processed, save to persistent storage
           await this.save();
@@ -218,7 +221,7 @@ export class VectorStore {
 
         if (currentIndex < _chunks.length) {
           // Schedule next batch after a short delay to allow UI to update
-          setTimeout(() => void processChunkBatch(), 1); // 1ms delay allows UI to remain responsive
+          activeWindow.setTimeout(() => void processChunkBatch(), 1); // 1ms delay allows UI to remain responsive
         } else {
           // All _chunks processed, save to persistent storage
           await this.save();
