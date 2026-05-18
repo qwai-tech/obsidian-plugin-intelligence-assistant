@@ -37,7 +37,7 @@ export class PromptModal extends Modal {
 		this.inputEl.addClass('ia-prompt-input');
 
 		// Focus and select the input
-		setTimeout(() => {
+		activeWindow.setTimeout(() => {
 			this.inputEl?.focus();
 			this.inputEl?.select();
 		}, 10);

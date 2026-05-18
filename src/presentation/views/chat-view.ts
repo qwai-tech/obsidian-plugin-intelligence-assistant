@@ -25,8 +25,12 @@ import {
 	InputController,
 	ChatController
 } from '@/presentation/components/chat/controllers';
+import { ChatHeaderComponent } from '@/presentation/components/chat/chat-header.component';
+import { ChatInputComponent } from '@/presentation/components/chat/chat-input.component';
 import { resolveMessageProviderId } from '@/presentation/components/chat/utils';
 import { isCliAgentSupported } from '@/utils/platform';
+import { ObsidianFileSystem } from '@/infrastructure/obsidian/obsidian-file-system';
+import { ObsidianHttpClient } from '@/infrastructure/obsidian/obsidian-http-client';
 import { } from '@/presentation/components/utils/dom-helpers';
 
 export const CHAT_VIEW_TYPE = 'intelligence-assistant-chat';
@@ -52,6 +56,8 @@ export class ChatView extends ItemView {
 
 	// Managers
 	private conversationManager: ConversationManager;
+	private chatHeader: ChatHeaderComponent;
+	private chatInput: ChatInputComponent;
 
 	// Controllers
 	private messageController: MessageController;
@@ -64,19 +70,9 @@ export class ChatView extends ItemView {
 	private scrollToBottomBtn: HTMLElement;
 	private inputContainer: HTMLElement;
 	public modelSelect: HTMLSelectElement; // Public so it can be accessed by DocumentGrader
-	private temperatureSlider: HTMLInputElement;
-	private maxTokensInput: HTMLInputElement;
-	private topPSlider: HTMLInputElement | null = null;
-	private frequencyPenaltySlider: HTMLInputElement | null = null;
-	private presencePenaltySlider: HTMLInputElement | null = null;
-	private modelControlsContainer: HTMLElement | null = null;
-	private agentConfigSummaryEl: HTMLElement | null = null;
-	private agentSummaryDetailsEl: HTMLElement | null = null;
-	private agentSummaryTitleEl: HTMLElement | null = null;
+
 	private conversationListContainer: HTMLElement;
 	private mainChatContainer: HTMLElement;
-	private modelCountEl: HTMLElement | null = null;
-	private tokenSummaryEl: HTMLElement | null = null;
 	private attachmentContainer: HTMLElement | null = null;
 	private referenceContainer: HTMLElement | null = null;
 	private ragActionItem: HTMLElement | null = null;
@@ -93,20 +89,9 @@ export class ChatView extends ItemView {
 	private selectedCliAgentId: string | null = null;
 
 	// UI elements
-	private modeSelector: HTMLSelectElement | null = null;
-	private promptSelectorGroup: HTMLElement | null = null;
-	private agentSelectorGroup: HTMLElement | null = null;
-	private agentSelector: HTMLSelectElement | null = null;
-	private conversationTitleEl: HTMLElement | null = null;
-	private promptSelector: HTMLSelectElement | null = null;
 	private streamingMessageEl: HTMLElement | null = null;
 	private stopBtn: HTMLElement | null = null;
 	private sendHint: HTMLElement | null = null;
-	private temperatureValueEl: HTMLElement | null = null;
-	private topPValueEl: HTMLElement | null = null;
-	private frequencyPenaltyValueEl: HTMLElement | null = null;
-	private presencePenaltyValueEl: HTMLElement | null = null;
-
 	constructor(leaf: WorkspaceLeaf, plugin: IntelligenceAssistantPlugin) {
 		super(leaf);
 		this.plugin = plugin;
@@ -142,9 +127,9 @@ export class ChatView extends ItemView {
 			() => this.plugin.settings.defaultModel
 		);
 
-		this.webSearchService = new WebSearchService(this.plugin.settings.webSearchConfig);
+		this.webSearchService = new WebSearchService(this.plugin.settings.webSearchConfig, new ObsidianHttpClient());
 		this.chatService = new ChatService(
-			this.app,
+			new ObsidianFileSystem(this.app),
 			this.toolManager,
 			this.ragManager,
 			this.webSearchService,
@@ -194,14 +179,42 @@ export class ChatView extends ItemView {
 		this.conversationListContainer = mainLayout.createDiv('conversation-list-floating');
 		this.conversationListContainer.addClass('is-collapsed');
 
-		// Toolbar Row A: breadcrumb + actions
-		this.createActionRow(this.mainChatContainer);
+		// Initialize Chat Header Component
+		this.chatHeader = new ChatHeaderComponent(
+			this.mainChatContainer,
+			this.app,
+			this.plugin,
+			this.state,
+			{
+				onToggleConversations: () => this.toggleConversationListVisibility(),
+				onNewChat: async () => {
+					await this.resetToDefaultChatConfiguration();
+					await this.conversationManager.createNewConversation();
+				},
+				onModelChange: () => this.onModelChange(),
+				onSettingsOpen: () => {
+					const settingApi = (this.app as any).setting;
+					if (settingApi) {
+						settingApi.open();
+						settingApi.openTabById('intelligence-assistant');
+					}
+				},
+				onTemperatureChange: (val) => { this.state.temperature = val; },
+				onMaxTokensChange: (val) => { this.state.maxTokens = val; },
+				onTopPChange: (val) => { this.state.topP = val; },
+				onFrequencyPenaltyChange: (val) => { this.state.frequencyPenalty = val; },
+				onPresencePenaltyChange: (val) => { this.state.presencePenalty = val; },
+				onModeChange: (mode) => this.handleModeChange(mode),
+				onPromptChange: async (promptId) => {
+					this.plugin.settings.activeSystemPromptId = promptId;
+					await this.plugin.saveSettings();
+				},
+				onAgentChange: (agentId) => this.handleAgentSelection(agentId)
+			}
+		);
 
-		// Toolbar Row B: mode + model + agent/prompt + token summary
-		const toolbarB = this.mainChatContainer.createDiv('chat-toolbar-b');
-		this.createTopControls(toolbarB);
-		this.createModelRow(toolbarB);
-		this.createTokenRow(toolbarB);
+		// Redirect legacy property references
+		this.modelSelect = this.chatHeader.modelSelect;
 
 		await this.refreshModels();
 
@@ -226,102 +239,37 @@ export class ChatView extends ItemView {
 			this.scrollToBottomBtn.addClass('ia-hidden');
 		});
 
-		// Input container
-		this.inputContainer = this.mainChatContainer.createDiv('chat-input-container');
-
-		const inputHeader = this.inputContainer.createDiv('chat-input-header');
-
-		// Reference area with @ mentions
-		this.referenceContainer = inputHeader.createDiv('input-reference-area');
-		this.referenceContainer.addClass('ia-hidden');
-
-		this.referenceContainer.createDiv('reference-list');
-
-		// Header quick actions (references, RAG, Web, image)
-		this.setupHeaderActions(inputHeader);
-
-		// Text input area
-		const editorWrapper = this.inputContainer.createDiv('chat-input-editor');
-		const textarea = editorWrapper.createEl('textarea', {
-			attr: {
-				placeholder: 'Type your message... (Enter to send, Shift+Enter for new line)',
-				rows: '1'
+		// Initialize Chat Input Component
+		this.chatInput = new ChatInputComponent(
+			this.mainChatContainer,
+			this.app,
+			this.plugin,
+			this.state,
+			{
+				onSendMessage: async (text) => await this.sendMessage(text),
+				onAttachImage: async () => await this.attachImage(),
+				onToggleRag: async () => await this.handleQuickActionRag(),
+				onToggleWeb: async () => await this.handleQuickActionWeb(),
+				onShowReferenceMenu: () => this.showReferenceMenu(),
+				onStopStreaming: () => {
+					this.state.stopStreamingRequested = true;
+					if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
+					if (this.sendHint) this.sendHint.removeClass('ia-hidden');
+					new Notice('Stopping generation...');
+				}
 			}
-		});
-		textarea.addClass('chat-input');
+		);
 
-		// Send button
-		const sendBtn = editorWrapper.createEl('button', { cls: 'ia-send-btn' });
-		sendBtn.setAttribute('aria-label', 'Send message');
-		setIcon(sendBtn, 'arrow-up');
-
-		// Auto-resize textarea
-		textarea.addEventListener('input', () => {
-			textarea.setCssProps({ 'height': 'auto' });
-			textarea.setCssProps({ 'height': Math.min(textarea.scrollHeight, 200) + 'px' });
-			sendBtn.toggleClass('is-active', textarea.value.trim().length > 0);
-		});
-
-		// Input footer (attachments + actions)
-		const controlsSection = this.inputContainer.createDiv('chat-input-footer');
-		const bottomControls = controlsSection.createDiv('input-bottom-controls');
-		bottomControls.createDiv('bottom-left-controls');
-
-		// Attachment preview area
-		const middleControls = bottomControls.createDiv('bottom-middle-controls');
-		this.attachmentContainer = middleControls.createDiv('attachment-preview');
-		this.attachmentContainer.addClass('ia-hidden');
-
-		// Right section - Send info and stop button
-		const rightControls = bottomControls.createDiv('bottom-right-controls');
-
-		// Send hint
-		this.sendHint = rightControls.createEl('span');
-		this.sendHint.addClass('ia-send-hint');
-		this.sendHint.setText('Press ');
-		this.sendHint.createEl('kbd', { text: 'Enter' });
-		this.sendHint.appendText(' to send');
-
-		// Stop generation button (hidden by default)
-		this.stopBtn = rightControls.createEl('button', { cls: 'stop-generation-btn' });
-		setIcon(this.stopBtn, 'square');
-		this.stopBtn.createSpan({ text: ' Stop' });
-		this.stopBtn.addClass('ia-hidden');
-		this.stopBtn.addEventListener('click', () => {
-			this.state.stopStreamingRequested = true;
-			if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
-			if (this.sendHint) this.sendHint.removeClass('ia-hidden');
-			new Notice('Stopping generation...');
-		});
-
-		const sendMessage = async () => {
-			const text = textarea.value.trim();
-			if (!text && this.state.currentAttachments.length === 0 && this.state.referencedFiles.length === 0) return;
-
-			textarea.value = '';
-			textarea.setCssProps({ 'height': 'auto' });
-			sendBtn.removeClass('is-active');
-			await this.sendMessage(text);
-			// Clear attachments and references after sending
-			this.state.currentAttachments = [];
-			this.state.referencedFiles = [];
-			this.updateAttachmentPreview();
-			this.updateReferenceDisplay();
-		};
-
-		textarea.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter' && !e.shiftKey) {
-				e.preventDefault();
-				void sendMessage();
-			}
-		});
-
-		sendBtn.addEventListener('click', () => {
-			void sendMessage();
-		});
-
-		// Styles are loaded from styles.css
-		// this.addStyles();
+		// Redirect legacy property references
+		this.inputContainer = this.chatInput.inputContainer;
+		this.referenceContainer = this.chatInput.referenceContainer;
+		this.attachmentContainer = this.chatInput.attachmentContainer;
+		this.ragActionItem = this.chatInput.ragActionItem;
+		this.webActionItem = this.chatInput.webActionItem;
+		this.imageActionItem = this.chatInput.imageActionItem;
+		this.headerActionsContainer = this.chatInput.headerActionsContainer;
+		this.stopBtn = this.chatInput.stopBtn;
+		this.sendHint = this.chatInput.sendHint;
 
 		// Initialize MCP servers
 		await this.initializeMCPServers();
@@ -369,7 +317,7 @@ export class ChatView extends ItemView {
 
 		// Configure controllers with UI elements
 		this.messageController.setContainer(this.chatContainer);
-		this.inputController.setInputElement(textarea);
+		this.inputController.setInputElement(this.chatInput.textarea);
 		this.inputController.setAttachmentPreviewElement(this.attachmentContainer);
 		this.chatController.configure({
 			messagesContainer: this.chatContainer,
@@ -451,66 +399,7 @@ export class ChatView extends ItemView {
 	}
 
 	private updateModelOptions() {
-		this.modelSelect.empty();
-
-		// Update model count
-		if (this.modelCountEl) {
-			this.modelCountEl.setText(`Models: ${this.state.availableModels.length}`);
-		}
-
-		if (this.state.availableModels.length === 0) {
-			const option = this.modelSelect.createEl('option', { text: 'No models available' });
-			option.value = '';
-			option.disabled = true;
-			if (this.modelCountEl) {
-				this.modelCountEl.setText('Models: 0');
-			}
-			return;
-		}
-
-		const defaultModel = this.plugin.settings.defaultModel;
-
-		// Group by provider
-		const groupedModels = this.state.availableModels.reduce((acc, model) => {
-			if (!acc[model.provider]) {
-				acc[model.provider] = [];
-			}
-			acc[model.provider].push(model);
-			return acc;
-		}, {} as Record<string, ModelInfo[]>);
-
-		// Sort providers: put providers with default model first
-		const sortedProviders = Object.entries(groupedModels).sort(([providerA, modelsA], [providerB, modelsB]) => {
-			const aHasDefault = modelsA.some(m => m.id === defaultModel);
-			const bHasDefault = modelsB.some(m => m.id === defaultModel);
-			if (aHasDefault && !bHasDefault) return -1;
-			if (!aHasDefault && bHasDefault) return 1;
-			return providerA.localeCompare(providerB);
-		});
-
-		// Add options grouped by provider
-		sortedProviders.forEach(([provider, models]) => {
-			const optgroup = this.modelSelect.createEl('optgroup');
-			optgroup.label = `${provider.toUpperCase()} (${models.length})`;
-
-			// Sort models: default first, then alphabetically
-			const sortedModels = [...models].sort((a, b) => {
-				if (a.id === defaultModel) return -1;
-				if (b.id === defaultModel) return 1;
-				return a.name.localeCompare(b.name);
-			});
-
-			sortedModels.forEach(model => {
-				const isDefault = model.id === defaultModel;
-				const option = optgroup.createEl('option', {
-					text: isDefault ? `⭐ ${model.name ?? 'unknown'} (Default)` : model.name,
-				});
-				option.value = model.id;
-				if (isDefault) {
-					option.setCssProps({ 'font-weight': '600' });
-				}
-			});
-		});
+		this.chatHeader.updateModelOptions();
 	}
 
 	private async onModelChange() {
@@ -580,7 +469,19 @@ export class ChatView extends ItemView {
 			return;
 		}
 
-		const { llmContent, references } = await this.chatService.buildReferenceContext(text, this.state.referencedFiles);
+		const referenceInputs: FileReference[] = this.state.referencedFiles.map(item => ({
+			type: item instanceof TFolder ? 'folder' : 'file',
+			path: item.path,
+			name: item.name
+		}));
+
+		const { llmContent, references } = await this.chatService.buildReferenceContext(text, referenceInputs);
+
+		// Clear input state
+		this.state.currentAttachments = [];
+		this.state.referencedFiles = [];
+		this.chatInput.updateAttachmentPreview();
+		this.chatInput.updateReferenceDisplay();
 
 		const userMessage: Message = {
 			role: 'user',
@@ -821,7 +722,14 @@ export class ChatView extends ItemView {
 					onRAGSources: (sources: import('@/types').RAGSource[]) => { currentRagSources = sources; },
 					onWebSearch: (results: import('@/types').WebSearchResult[]) => { currentWebResults = results; },
 					onComplete: async (finalMessage: Message) => {
-						this.state.messages.push(finalMessage);
+						// Update the existing placeholder message in state
+						const index = this.state.messages.indexOf(placeholderAssistant);
+						if (index !== -1) {
+							this.state.messages[index] = finalMessage;
+						} else {
+							this.state.messages.push(finalMessage);
+						}
+						
 						this.updateTokenSummary();
 						
 						if (currentRagSources.length > 0 && assistantMessageEl) {
@@ -862,128 +770,10 @@ export class ChatView extends ItemView {
 	 * Determines if web search should be automatically triggered based on the user's query
 	 */
 	private shouldAutoTriggerWebSearch(query: string): boolean {
-		// Check if auto-trigger is enabled in settings
 		if (!this.plugin.settings.webSearchConfig.autoTrigger) {
 			return false;
 		}
-
-		// Use the same logic as in WebSearchService to determine if search is needed
-		// However, we'll be more conservative in auto-triggering
-		if (!query || typeof query !== 'string') {
-			return false;
-		}
-
-		// Clean the input
-		let cleanedQuery = query.trim();
-		
-		// Remove common prefixes that indicate search intent
-		const searchIndicators = [
-			'find:', 'search:', 'google:', 'bing:', 'search for:', 
-			'look up:', 'find me:', 'find information about:'
-		];
-		
-		for (const indicator of searchIndicators) {
-			if (cleanedQuery.toLowerCase().startsWith(indicator)) {
-				cleanedQuery = cleanedQuery.substring(indicator.length).trim();
-				// If user explicitly indicated search, return true
-				return true;
-			}
-		}
-
-		// Filter out potentially harmful or inappropriate queries
-		if (!this.isValidAutoSearchQuery(cleanedQuery)) {
-			return false;
-		}
-
-		// Check if the query would benefit from a web search
-		return this.isQuerySuitableForWebSearch(cleanedQuery);
-	}
-
-	/**
-	 * Validate if the query is appropriate for auto web searching
-	 */
-	private isValidAutoSearchQuery(query: string): boolean {
-		// Check for potentially harmful patterns
-		const harmfulPatterns = [
-			/^\s*execut/i,
-			/^\s*system\(/,
-			/^\s*eval\s*\(/,
-			/^\s*import\s+/,
-			/\b(os|sys|subprocess|exec|eval|import|require)\b/
-		];
-
-		for (const pattern of harmfulPatterns) {
-			if (pattern.test(query)) {
-				return false;
-			}
-		}
-
-		// Check for very short or non-informational queries
-		if (query.length < 3) {
-			return false;
-		}
-
-		// Filter out conversational phrases that don't require search
-		const nonInfoQueries = [
-			'hello', 'hi', 'hey', 'ok', 'yes', 'no', 'thanks', 'thank you',
-			'please', 'okay', 'cool', 'great', 'awesome', 'nice', 'good', 'bad',
-			'bye', 'farewell', 'ciao'
-		];
-
-		const lowerQuery = query.toLowerCase().trim();
-		if (nonInfoQueries.includes(lowerQuery)) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Determine if a query is suitable for web search using enhanced logic
-	 */
-	private isQuerySuitableForWebSearch(query: string): boolean {
-		// Check for common informational patterns that suggest search would be helpful
-		const infoPattern = /(?:what is|who is|how to|why is|when is|where is|define:|explain|tell me about|show me|find|information about|details on|facts about|latest news about|current status of|research on|study on|current (events|news|status)|recent (developments|updates|trends|happenings)|best (practices|ways|methods|options|deals|prices)|most (recent|popular|effective|trending)|need to know about|looking for information on|can you tell me|do you know|what are|what do you know about|what happened|what will happen|current|latest|new|today|now|recently|upcoming|tomorrow|yesterday|last week|last month|last year|next week|next month|next year|this week|this month|this year|202[0-9]|203[0-9]|prices? of|cost of|how much does|how many people|population of|distance between|weather in|temperature in|forecast for|election results|stock price|exchange rate|exchange rates|current exchange|current stock|crypto price|cryptocurrency price|currency rate|currency rates|covid|pandemic|coronavirus|virus|outbreak|inflation|interest rate|unemployment|gdp|economic|economy|jobs|employment|real estate|housing|market|financial|finance|investment|investing|bitcoin|ethereum|crypto|cryptocurrency|nft|web3|ai|artificial intelligence|machine learning|deep learning|climate change|global warming|renewable energy|solar|wind|electric car|tesla|spacex|elon musk|apple|google|amazon|microsoft|meta|facebook|netflix|tesla stock|crypto market|stock market|financial market|olympics|world cup|championship|tournament|league|nfl|nba|mlb|nhl|epl|uefa|fifa|super bowl|world series|stanley cup|wimbledon|us open|french open|australian open)\b/i;
-		
-		if (infoPattern.test(query)) {
-			return true;
-		}
-
-		// Check for specific topics that typically require external knowledge
-		const externalKnowledgePattern = /\b(news|events|updates|prices?|weather|stocks?|sports?|scores?|facts?|statistics|research|studies|science|technology|health|medical|law|policy|government|politics|finance|economics|education|university|school|history|geography|culture|art|music|movies?|tv|books?|authors?|celebrity|actors?|actresses?|products?|companies|reviews?|ratings?|restaurants|travel|vacation|hotel|flight|destination|temperature|climate|environment|pollution|climate change|election|president|prime minister|congress|parliament|senate|house of representatives|olympics|world cup|championship|awards?|prices?|cost|buy|where to|how much|how many|compare|versus|difference between|who won|who is the|who was the|when did|where is|what time|what date|current|latest|recent|new|upcoming|top|best|most popular|most common|most important|most significant|most influential|most famous|most successful|most powerful|most visited|largest|smallest|tallest|shortest|oldest|youngest|richest|poorest|fastest|slowest|strongest|weakest|highest|lowest|longest|shortest|heaviest|lightest|biggest|smallest|youngest|oldest|newest|earliest|latest|current|present|actual|real|true|correct|right|accurate|precise|exact|specific|detailed|comprehensive|thorough|complete|full|total|entire|whole|all|every|each|individual|particular|special|unique|distinct|different|various|multiple|several|many|much|lots of|plenty of|a lot of|tons of|tons|loads|loads of|abundant|numerous|countless|innumerable|myriad|multitude|plethora|slew|host|raft|bunch|group|collection|series|range|variety|assortment|selection|choice|menu|catalog|list|directory|guide|manual|handbook|book|volume|edition|version|type|kind|sort|form|shape|style|design|pattern|model|make|brand|manufacturer|producer|supplier|vendor|retailer|shop|store|market|bazaar|mall|center|plaza|complex|area|region|zone|district|neighborhood|locality|location|place|spot|position|site|venue|address|destination|goal|target|purpose|objective|aim|intention|plan|strategy|tactic|approach|method|way|manner|style|technique|procedure|process|operation|function|activity|action|movement|motion|change|development|progress|advancement|evolution|growth|expansion|improvement|enhancement|upgrade|update|revision|modification|adjustment|alteration|transformation|conversion|changeover|switch|replacement|substitute|alternative|option|possibility|chance|opportunity|prospect|potential|promise|hope|expectation|anticipation|prediction|forecast|estimate|calculation|computation|evaluation|assessment|analysis|examination|investigation|research|study|survey|poll|census|count|tally|total|sum|aggregate|amount|quantity|number|count|frequency|rate|ratio|proportion|percentage|fraction|decimal|figure|value|statistic|data|information|knowledge|facts|details|particulars|specifics|elements|components|parts|pieces|segments|sections|divisions|subdivisions|portions|shares|slices|bits|fragments|snippets|extracts|selections|samples|specimens|examples|instances|cases|situations|scenarios|contexts|circumstances|conditions|states|stages|phases|periods|eras|epochs|ages|times|moments|occasions|events|incidents|occurrences|happenings|affairs|matters|issues|problems|challenges|difficulties|obstacles|barriers|walls|fences|boundaries|limits|constraints|restrictions|limitations|rules|regulations|guidelines|principles|standards|criteria|benchmarks|measures|metrics|indicators|signs|symbols|marks|labels|tags|signs|notices|announcements|declarations|statements|pronouncements|proclamations|edicts|commands|orders|instructions|directives|guides|manuals|handbooks|instructions|directions|guidance|advice|counsel|suggestions|recommendations|tips|tricks|hacks|shortcuts|methods|ways|approaches|strategies|techniques|tactics|procedures|processes|operations|systems|methods|ways|approaches|strategies|techniques|tactics|procedures|processes|operations|systems|solutions|answers|responses|reactions|outcomes|results|products|effects|consequences|impacts|influences|effects|impacts|consequences|results|outcomes|products|effects|impacts|consequences|results|outcomes|products)\b/i;
-		
-		if (externalKnowledgePattern.test(query)) {
-			return true;
-		}
-
-		// Check if query contains question words combined with likely search terms
-		const questionWords = ['what', 'who', 'where', 'when', 'why', 'how'];
-		const containsQuestionWord = questionWords.some(word => 
-			query.toLowerCase().startsWith(word + ' ') || 
-			query.toLowerCase().includes(' ' + word + ' '));
-		
-		if (containsQuestionWord && query.length > 10) { // Longer questions are more likely to need search
-			return true;
-		}
-
-		// Check for time-sensitive queries
-		const timeSensitivePattern = /\b(today|now|currently|recently|lately|just now|this (week|month|year|season|quarter)|last (week|month|year|season|quarter)|next (week|month|year|season|quarter)|current|latest|upcoming|tomorrow|yesterday|202[0-9]|203[0-9]|january|february|march|april|may|june|july|august|september|october|november|december|monday|tuesday|wednesday|thursday|friday|saturday|sunday|morning|afternoon|evening|night|day|week|month|year|season|quarter|fiscal year|calendar year|calendar month|calendar week)\b/i;
-		if (timeSensitivePattern.test(query)) {
-			return true;
-		}
-
-		// Check for queries that might need comparison
-		const comparisonPattern = /\b(compare|versus|vs\.?|difference|differences|similarities|pros and cons|advantages and disadvantages|benefits and drawbacks|pros vs cons|advantages vs disadvantages|benefits vs drawbacks|better|worse|superior|inferior|preferred|recommended|top|best|worst|poorest|richest|fastest|slowest|tallest|shortest|largest|smallest|cheapest|most expensive|most expensive|least expensive|highest rated|lowest rated|most popular|least popular|most common|least common|most frequent|least frequent|most successful|least successful|most effective|least effective|most efficient|least efficient|most productive|least productive|most profitable|least profitable|most sustainable|least sustainable|most reliable|least reliable|most trusted|least trusted|most secure|least secure|most accurate|least accurate|most precise|least precise|most stable|least stable|most consistent|least consistent|most predictable|least predictable|most surprising|least surprising|most interesting|least interesting|most important|least important|most significant|least significant|most influential|least influential|most powerful|least powerful|most attractive|least attractive|most appealing|least appealing|most desirable|least desirable|most valuable|least valuable|most useful|least useful|most practical|least practical|most convenient|least convenient|most user-friendly|least user-friendly|most accessible|least accessible|most affordable|least affordable|most cost-effective|least cost-effective|most economical|least economical|most efficient|least efficient|most time-saving|least time-saving|most energy-saving|least energy-saving|most environmentally friendly|least environmentally friendly|most eco-friendly|least eco-friendly|most sustainable|least sustainable|most ethical|least ethical|most moral|least moral|most honest|least honest|most transparent|least transparent|most open|least open|most democratic|least democratic|most inclusive|least inclusive|most diverse|least diverse|most representative|least representative|most equal|least equal|most fair|least fair|most just|least just|most equitable|least equitable|most balanced|least balanced|most objective|least objective|most subjective|least subjective|most personal|least personal|most intimate|least intimate|most private|least private|most public|least public|most official|least official|most formal|least formal|most casual|least casual|most relaxed|least relaxed|most comfortable|least comfortable|most relaxing|least relaxing|most entertaining|least entertaining|most fun|least fun|most enjoyable|least enjoyable|most exciting|least exciting|most thrilling|least thrilling|most adventurous|least adventurous|most creative|least creative|most innovative|least innovative|most original|least original|most artistic|least artistic|most musical|least musical|most talented|least talented|most skilled|least skilled|most experienced|least experienced|most qualified|least qualified|most skilled|least skilled|most talented|least talented|most capable|least capable|most competent|least competent|most confident|least confident|most optimistic|least optimistic|most pessimistic|least pessimistic|most positive|least positive|most negative|least negative|most optimistic|least optimistic|most cheerful|least cheerful|most optimistic|least optimistic|most pessimistic|least pessimistic|most hopeful|least hopeful|most despairing|least despairing|most trusting|least trusting|most suspicious|least suspicious|most paranoid|least paranoid|most confident|least confident|most trusting|least trusting|most suspicious|least suspicious|most paranoid|least paranoid|most confident|least confident|most trusting|least trusting|most suspicious|least suspicious|most paranoid|least paranoid)\b/i;
-		if (comparisonPattern.test(query)) {
-			return true;
-		}
-
-		// If query is specific and long enough, it might need search
-		if (query.length > 15) {
-			return true;
-		}
-
-		return false;
+		return this.webSearchService.shouldSearch(query);
 	}
 
 	private addMessageToUI(message: Message): HTMLElement {
@@ -1136,44 +926,11 @@ export class ChatView extends ItemView {
 	}
 
 	private updateReferenceDisplay() {
-		if (!this.referenceContainer) return;
+		this.chatInput.updateReferenceDisplay();
+	}
 
-		const _referenceList = this.referenceContainer.querySelector('.reference-list') as HTMLElement;
-		if (!_referenceList) return;
-
-		_referenceList.empty();
-
-		if (this.state.referencedFiles.length === 0) {
-			this.referenceContainer.addClass('ia-hidden');
-			return;
-		}
-
-		this.referenceContainer.removeClass('ia-hidden');
-
-		this.state.referencedFiles.forEach((item, index) => {
-			const refItem = _referenceList.createDiv('reference-item');
-			const icon = refItem.createSpan('reference-icon');
-			icon.setText(item instanceof TFolder ? '📁' : '📄');
-			const pathSpan = refItem.createSpan('reference-path');
-			pathSpan.setText(item.path);
-
-			// Make it clickable to open the file/folder
-			refItem.addClass('ia-clickable');
-			refItem.addEventListener('click', () => {
-				if (item instanceof TFile) {
-					void this.app.workspace.getLeaf().openFile(item);
-				}
-			});
-
-			// Remove button
-			const removeBtn = refItem.createEl('button', { text: '×' });
-			removeBtn.addClass('reference-remove-btn');
-			removeBtn.addEventListener('click', (e: MouseEvent) => {
-				e.stopPropagation();
-				this.state.referencedFiles.splice(index, 1);
-				this.updateReferenceDisplay();
-			});
-		});
+	private updateAttachmentPreview() {
+		this.chatInput.updateAttachmentPreview();
 	}
 
 	private async regenerateMessage(message: Message, messageEl?: HTMLElement) {
@@ -1728,26 +1485,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	 * Calculate and update the total token usage summary for the conversation
 	 */
 	private updateTokenSummary() {
-		if (!this.tokenSummaryEl) return;
-
-		let totalPromptTokens = 0;
-		let totalCompletionTokens = 0;
-		let totalTokens = 0;
-
-		for (const message of this.state.messages) {
-			if (message.role === 'assistant' && message.tokenUsage) {
-				totalPromptTokens += message.tokenUsage.promptTokens || 0;
-				totalCompletionTokens += message.tokenUsage.completionTokens || 0;
-				totalTokens += message.tokenUsage.totalTokens || 0;
-			}
-		}
-
-		// Format the display text
-		if (totalTokens > 0) {
-			this.tokenSummaryEl.setText(`Tokens: ${totalTokens} (${totalPromptTokens} input + ${totalCompletionTokens} output)`);
-		} else {
-			this.tokenSummaryEl.setText('Tokens: 0');
-		}
+		const summary = this.conversationManager.getTokenSummary();
+		this.chatHeader.updateTokenSummary(`Tokens: ${summary.total} (${summary.prompt} input + ${summary.completion} output)`);
 	}
 
 	private async updateOptionsDisplay() {
@@ -1762,36 +1501,36 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	}
 
 	private updatePromptSelectorVisibility() {
-		if (!this.promptSelector) return;
+		if (!this.chatHeader.promptSelector) return;
 		if (this.state.mode === 'agent') {
-			this.promptSelector.addClass('ia-hidden');
-			this.promptSelector.disabled = true;
-			if (this.promptSelectorGroup) this.promptSelectorGroup.addClass('ia-hidden');
+			this.chatHeader.promptSelector.addClass('ia-hidden');
+			this.chatHeader.promptSelector.disabled = true;
+			if (this.chatHeader.promptSelectorGroup) this.chatHeader.promptSelectorGroup.addClass('ia-hidden');
 		} else {
-			this.promptSelector.setCssProps({ 'display': '' });
-			this.promptSelector.disabled = false;
-			if (this.promptSelectorGroup) this.promptSelectorGroup.setCssProps({ 'display': '' });
+			this.chatHeader.promptSelector.setCssProps({ 'display': '' });
+			this.chatHeader.promptSelector.disabled = false;
+			if (this.chatHeader.promptSelectorGroup) this.chatHeader.promptSelectorGroup.setCssProps({ 'display': '' });
 		}
 	}
 
 	private updateAgentSelectorVisibility() {
-		if (!this.agentSelector) return;
+		if (!this.chatHeader.agentSelector) return;
 		if (this.state.mode === 'agent') {
-			const wasDisabled = this.agentSelector.disabled;
-			this.agentSelector.removeClass('ia-hidden');
-			this.agentSelector.setCssProps({ 'display': '' });
-			this.agentSelector.disabled = false;
-			if (this.agentSelectorGroup) {
-				this.agentSelectorGroup.removeClass('ia-hidden');
-				this.agentSelectorGroup.setCssProps({ 'display': '' });
+			const wasDisabled = this.chatHeader.agentSelector.disabled;
+			this.chatHeader.agentSelector.removeClass('ia-hidden');
+			this.chatHeader.agentSelector.setCssProps({ 'display': '' });
+			this.chatHeader.agentSelector.disabled = false;
+			if (this.chatHeader.agentSelectorGroup) {
+				this.chatHeader.agentSelectorGroup.removeClass('ia-hidden');
+				this.chatHeader.agentSelectorGroup.setCssProps({ 'display': '' });
 			}
 			if (wasDisabled) {
 				this.refreshAgentSelect();
 			}
 		} else {
-			this.agentSelector.addClass('ia-hidden');
-			this.agentSelector.disabled = true;
-			if (this.agentSelectorGroup) this.agentSelectorGroup.addClass('ia-hidden');
+			this.chatHeader.agentSelector.addClass('ia-hidden');
+			this.chatHeader.agentSelector.disabled = true;
+			if (this.chatHeader.agentSelectorGroup) this.chatHeader.agentSelectorGroup.addClass('ia-hidden');
 		}
 	}
 
@@ -1808,22 +1547,22 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const usesChatViewModel = activeAgent?.modelStrategy?.strategy === 'chat-view';
 		const showControls = !isAgentMode || (!activeAgent && !isCliAgent) || usesChatViewModel;
 
-		if (this.modelControlsContainer) {
-			this.modelControlsContainer.setCssProps({ 'display': showControls ? '' : 'none' });
+		if (this.chatHeader.modelControlsContainer) {
+			this.chatHeader.modelControlsContainer.setCssProps({ 'display': showControls ? '' : 'none' });
 		}
 		if (this.modelSelect) {
 			this.modelSelect.disabled = !showControls;
 		}
-		if (this.temperatureSlider) {
-			this.temperatureSlider.disabled = !showControls;
+		if (this.chatHeader.temperatureSlider) {
+			this.chatHeader.temperatureSlider.disabled = !showControls;
 		}
-		if (this.maxTokensInput) {
-			this.maxTokensInput.disabled = !showControls;
+		if (this.chatHeader.maxTokensInput) {
+			this.chatHeader.maxTokensInput.disabled = !showControls;
 		}
 
 		const shouldShowSummary = isAgentMode && (!!activeAgent || isCliAgent) && !usesChatViewModel;
-			if (this.agentConfigSummaryEl) {
-				this.agentConfigSummaryEl.setCssProps({ 'display': shouldShowSummary ? 'flex' : 'none' });
+			if (this.chatHeader.agentConfigSummaryEl) {
+				this.chatHeader.agentConfigSummaryEl.setCssProps({ 'display': shouldShowSummary ? 'flex' : 'none' });
 			}
 		if (shouldShowSummary && activeAgent) {
 			this.renderAgentSummary(activeAgent);
@@ -1833,12 +1572,12 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	}
 
 	private renderAgentSummary(agent: Agent) {
-		if (!this.agentSummaryDetailsEl) return;
-		if (this.agentSummaryTitleEl) {
-			this.agentSummaryTitleEl.setText(`${agent.icon || '🤖'} ${agent.name ?? 'unknown'} configuration`);
+		if (!this.chatHeader.agentSummaryDetailsEl) return;
+		if (this.chatHeader.agentSummaryTitleEl) {
+			this.chatHeader.agentSummaryTitleEl.setText(`${agent.icon || '🤖'} ${agent.name ?? 'unknown'} configuration`);
 		}
 
-		this.agentSummaryDetailsEl.empty();
+		this.chatHeader.agentSummaryDetailsEl.empty();
 		const chips = [
 			{ label: 'Model', value: this.getAgentModelSummary(agent) },
 			{ label: 'Temp', value: this.formatTemperature(agent.temperature) },
@@ -1855,15 +1594,15 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	}
 
 	private renderCliAgentSummary() {
-		if (!this.agentSummaryDetailsEl) return;
+		if (!this.chatHeader.agentSummaryDetailsEl) return;
 		const cliAgent = (this.plugin.settings.cliAgents ?? []).find(a => a.id === this.selectedCliAgentId);
 		if (!cliAgent) return;
 
-		if (this.agentSummaryTitleEl) {
-			this.agentSummaryTitleEl.setText(`${cliAgent.icon || '⚡'} ${cliAgent.name} configuration`);
+		if (this.chatHeader.agentSummaryTitleEl) {
+			this.chatHeader.agentSummaryTitleEl.setText(`${cliAgent.icon || '⚡'} ${cliAgent.name} configuration`);
 		}
 
-		this.agentSummaryDetailsEl.empty();
+		this.chatHeader.agentSummaryDetailsEl.empty();
 		const chips: { label: string; value: string }[] = [
 			{ label: 'Provider', value: cliAgent.provider },
 			{ label: 'Model', value: cliAgent.model || 'default' },
@@ -1876,8 +1615,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	}
 
 	private createAgentSummaryChip(label: string, value: string) {
-		if (!this.agentSummaryDetailsEl) return;
-		const chip = this.agentSummaryDetailsEl.createSpan({ cls: 'chat-agent-chip' });
+		if (!this.chatHeader.agentSummaryDetailsEl) return;
+		const chip = this.chatHeader.agentSummaryDetailsEl.createSpan({ cls: 'chat-agent-chip' });
 		chip.createSpan({ cls: 'chat-agent-chip-label', text: label });
 		chip.createSpan({ cls: 'chat-agent-chip-value', text: value });
 	}
@@ -1946,60 +1685,21 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	}
 
 	private updateTemperatureDisplay(value: number) {
-		if (this.temperatureSlider) {
-			this.temperatureSlider.value = value.toString();
+		if (this.chatHeader.temperatureSlider) {
+			this.chatHeader.temperatureSlider.value = value.toString();
 		}
-		if (this.temperatureValueEl) {
-			this.temperatureValueEl.setText(this.formatTemperature(value));
+		if (this.chatHeader.temperatureValueEl) {
+			this.chatHeader.temperatureValueEl.setText(this.formatTemperature(value));
 		}
-	}
-
-	private createTopControls(parent: HTMLElement) {
-		const topControls = parent.createDiv('chat-top-controls');
-		topControls.addClass('chat-top-controls');
-
-		const modeGroup = topControls.createDiv('chat-select-group');
-		modeGroup.addClass('chat-select-group');
-		modeGroup.createSpan({ text: 'Mode', cls: 'chat-label' });
-		this.modeSelector = modeGroup.createEl('select', { cls: 'mode-selector' });
-		this.modeSelector.createEl('option', { value: 'chat', text: 'Chat' });
-		this.modeSelector.createEl('option', { value: 'agent', text: 'Agent' });
-		this.modeSelector.value = this.state.mode;
-		this.modeSelector.addEventListener('change', () => {
-			const value = (this.modeSelector?.value ?? 'chat') as 'chat' | 'agent';
-			void this.handleModeChange(value);
-		});
-
-		this.promptSelectorGroup = topControls.createDiv('chat-select-group');
-		this.promptSelectorGroup.addClass('chat-select-group');
-		this.promptSelectorGroup.createSpan({ text: 'Prompt', cls: 'chat-label' });
-		this.promptSelector = this.promptSelectorGroup.createEl('select', { cls: 'prompt-selector' });
-		this.populatePromptSelectorOptions();
-		this.promptSelector.addEventListener('change', () => {
-			this.plugin.settings.activeSystemPromptId = this.promptSelector?.value || null;
-			void this.plugin.saveSettings();
-		});
-
-		this.agentSelectorGroup = topControls.createDiv('chat-select-group');
-		this.agentSelectorGroup.addClass('chat-select-group');
-		this.agentSelectorGroup.createSpan({ text: 'Agent', cls: 'chat-label' });
-		this.agentSelector = this.agentSelectorGroup.createEl('select', { cls: 'agent-selector' });
-		this.agentSelector.addEventListener('change', () => {
-			void this.handleAgentSelection(this.agentSelector?.value ?? '');
-		});
-
-		this.refreshAgentSelect();
-		this.updatePromptSelectorVisibility();
-		this.updateAgentSelectorVisibility();
 	}
 
 	private populatePromptSelectorOptions() {
-		if (!this.promptSelector) return;
+		if (!this.chatHeader.promptSelector) return;
 		const enabledPrompts = this.plugin.settings.systemPrompts.filter(p => p.enabled);
-		this.promptSelector.empty();
-		this.promptSelector.createEl('option', { value: '', text: 'No system prompt' });
+		this.chatHeader.promptSelector.empty();
+		this.chatHeader.promptSelector.createEl('option', { value: '', text: 'No system prompt' });
 		enabledPrompts.forEach(p => {
-			const option = this.promptSelector!.createEl('option', { value: p.id, text: p.name });
+			const option = this.chatHeader.promptSelector!.createEl('option', { value: p.id, text: p.name });
 			if (this.plugin.settings.activeSystemPromptId === p.id) {
 				option.selected = true;
 			}
@@ -2039,8 +1739,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			}
 		}
 
-		if (this.modeSelector) {
-			this.modeSelector.value = mode;
+		if (this.chatHeader.modeSelector) {
+			this.chatHeader.modeSelector.value = mode;
 		}
 
 		await this.updateOptionsDisplay();
@@ -2048,8 +1748,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private async handleAgentSelection(selectedId: string) {
 		this.state.mode = 'agent';
-		if (this.modeSelector) {
-			this.modeSelector.value = 'agent';
+		if (this.chatHeader.modeSelector) {
+			this.chatHeader.modeSelector.value = 'agent';
 		}
 
 		// Check if a CLI agent was selected (prefixed with "cli:")
@@ -2101,14 +1801,14 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	}
 
 	private updateConversationTitle(title: string) {
-		if (this.conversationTitleEl) {
-			this.conversationTitleEl.setText(title || 'Current Conversation');
+		if (this.chatHeader.conversationTitleEl) {
+			this.chatHeader.conversationTitleEl.setText(title || 'Current Conversation');
 		}
 	}
 
 	private async applyConversationConfig(conv: Conversation) {
-		if (this.modeSelector) {
-			this.modeSelector.value = this.state.mode;
+		if (this.chatHeader.modeSelector) {
+			this.chatHeader.modeSelector.value = this.state.mode;
 		}
 
 		const config = conv.config;
@@ -2151,8 +1851,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				settingsDirty = true;
 
 				this.refreshAgentSelect();
-				if (this.agentSelector) {
-					this.agentSelector.value = `cli:${cliAgentId}`;
+				if (this.chatHeader.agentSelector) {
+					this.chatHeader.agentSelector.value = `cli:${cliAgentId}`;
 				}
 			} else {
 				// Regular agent
@@ -2177,8 +1877,8 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				}
 
 				this.refreshAgentSelect(desiredAgentId ?? undefined);
-				if (this.agentSelector) {
-					this.agentSelector.value = desiredAgentId || '';
+				if (this.chatHeader.agentSelector) {
+					this.chatHeader.agentSelector.value = desiredAgentId || '';
 				}
 			}
 		} else {
@@ -2190,11 +1890,11 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				this.plugin.settings.activeSystemPromptId = promptToUse || null;
 				settingsDirty = true;
 			}
-			if (this.promptSelector) {
-				this.promptSelector.value = promptToUse;
+			if (this.chatHeader.promptSelector) {
+				this.chatHeader.promptSelector.value = promptToUse;
 			}
-			if (this.agentSelector) {
-				this.agentSelector.value = '';
+			if (this.chatHeader.agentSelector) {
+				this.chatHeader.agentSelector.value = '';
 			}
 			if (this.plugin.settings.activeAgentId) {
 				this.plugin.settings.activeAgentId = null;
@@ -2220,24 +1920,24 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		}
 		if (typeof config.maxTokens === 'number') {
 			this.state.maxTokens = config.maxTokens;
-			if (this.maxTokensInput) {
-				this.maxTokensInput.value = config.maxTokens.toString();
+			if (this.chatHeader.maxTokensInput) {
+				this.chatHeader.maxTokensInput.value = config.maxTokens.toString();
 			}
 		}
 		if (typeof config.topP === 'number') {
 			this.state.topP = config.topP;
-			if (this.topPSlider) this.topPSlider.value = config.topP.toString();
-			if (this.topPValueEl) this.topPValueEl.setText(config.topP.toFixed(2));
+			if (this.chatHeader.topPSlider) this.chatHeader.topPSlider.value = config.topP.toString();
+			if (this.chatHeader.topPValueEl) this.chatHeader.topPValueEl.setText(config.topP.toFixed(2));
 		}
 		if (typeof config.frequencyPenalty === 'number') {
 			this.state.frequencyPenalty = config.frequencyPenalty;
-			if (this.frequencyPenaltySlider) this.frequencyPenaltySlider.value = config.frequencyPenalty.toString();
-			if (this.frequencyPenaltyValueEl) this.frequencyPenaltyValueEl.setText(config.frequencyPenalty.toFixed(1));
+			if (this.chatHeader.frequencyPenaltySlider) this.chatHeader.frequencyPenaltySlider.value = config.frequencyPenalty.toString();
+			if (this.chatHeader.frequencyPenaltyValueEl) this.chatHeader.frequencyPenaltyValueEl.setText(config.frequencyPenalty.toFixed(1));
 		}
 		if (typeof config.presencePenalty === 'number') {
 			this.state.presencePenalty = config.presencePenalty;
-			if (this.presencePenaltySlider) this.presencePenaltySlider.value = config.presencePenalty.toString();
-			if (this.presencePenaltyValueEl) this.presencePenaltyValueEl.setText(config.presencePenalty.toFixed(1));
+			if (this.chatHeader.presencePenaltySlider) this.chatHeader.presencePenaltySlider.value = config.presencePenalty.toString();
+			if (this.chatHeader.presencePenaltyValueEl) this.chatHeader.presencePenaltyValueEl.setText(config.presencePenalty.toFixed(1));
 		}
 		if (typeof config.ragEnabled === 'boolean') {
 			this.state.enableRAG = config.ragEnabled;
@@ -2261,7 +1961,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		if (defaultMode === 'agent') {
 			this.state.mode = 'agent';
-			if (this.modeSelector) this.modeSelector.value = 'agent';
+			if (this.chatHeader.modeSelector) this.chatHeader.modeSelector.value = 'agent';
 			let agentId = this.ensureDefaultAgentSelection();
 			if (agentId && !this.plugin.settings.agents.some(agent => agent.id === agentId)) {
 				agentId = null;
@@ -2273,15 +1973,15 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				}
 				await this.applyAgentConfig(agentId, { silent: true });
 				this.refreshAgentSelect(agentId);
-				if (this.agentSelector) this.agentSelector.value = agentId;
+				if (this.chatHeader.agentSelector) this.chatHeader.agentSelector.value = agentId;
 			} else {
 				if (this.plugin.settings.activeAgentId) {
 					this.plugin.settings.activeAgentId = null;
 					settingsDirty = true;
 				}
 			}
-			if (this.promptSelector) {
-				this.promptSelector.value = '';
+			if (this.chatHeader.promptSelector) {
+				this.chatHeader.promptSelector.value = '';
 			}
 			if (this.plugin.settings.activeSystemPromptId !== null) {
 				this.plugin.settings.activeSystemPromptId = null;
@@ -2289,7 +1989,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			}
 		} else {
 			this.state.mode = 'chat';
-			if (this.modeSelector) this.modeSelector.value = 'chat';
+			if (this.chatHeader.modeSelector) this.chatHeader.modeSelector.value = 'chat';
 			this.selectedCliAgentId = null;
 			this.state.selectedCliAgentId = null;
 			if (this.plugin.settings.activeAgentId) {
@@ -2297,13 +1997,13 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				settingsDirty = true;
 			}
 			this.refreshAgentSelect();
-			if (this.agentSelector) this.agentSelector.value = '';
+			if (this.chatHeader.agentSelector) this.chatHeader.agentSelector.value = '';
 			if (this.plugin.settings.activeSystemPromptId !== null) {
 				this.plugin.settings.activeSystemPromptId = null;
 				settingsDirty = true;
 			}
-			if (this.promptSelector) {
-				this.promptSelector.value = '';
+			if (this.chatHeader.promptSelector) {
+				this.chatHeader.promptSelector.value = '';
 			}
 
 			const defaultModel = this.plugin.settings.defaultModel;
@@ -2318,23 +2018,23 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			this.state.temperature = defaultTemperature;
 			this.updateTemperatureDisplay(defaultTemperature);
 			this.state.maxTokens = defaultMaxTokens;
-			if (this.maxTokensInput) {
-				this.maxTokensInput.value = defaultMaxTokens.toString();
+			if (this.chatHeader.maxTokensInput) {
+				this.chatHeader.maxTokensInput.value = defaultMaxTokens.toString();
 			}
 
 			const defaultTopP = 1.0;
 			this.state.topP = defaultTopP;
-			if (this.topPSlider) this.topPSlider.value = defaultTopP.toString();
-			if (this.topPValueEl) this.topPValueEl.setText(defaultTopP.toFixed(2));
+			if (this.chatHeader.topPSlider) this.chatHeader.topPSlider.value = defaultTopP.toString();
+			if (this.chatHeader.topPValueEl) this.chatHeader.topPValueEl.setText(defaultTopP.toFixed(2));
 
 			const defaultPenalty = 0;
 			this.state.frequencyPenalty = defaultPenalty;
-			if (this.frequencyPenaltySlider) this.frequencyPenaltySlider.value = defaultPenalty.toString();
-			if (this.frequencyPenaltyValueEl) this.frequencyPenaltyValueEl.setText(defaultPenalty.toFixed(1));
+			if (this.chatHeader.frequencyPenaltySlider) this.chatHeader.frequencyPenaltySlider.value = defaultPenalty.toString();
+			if (this.chatHeader.frequencyPenaltyValueEl) this.chatHeader.frequencyPenaltyValueEl.setText(defaultPenalty.toFixed(1));
 
 			this.state.presencePenalty = defaultPenalty;
-			if (this.presencePenaltySlider) this.presencePenaltySlider.value = defaultPenalty.toString();
-			if (this.presencePenaltyValueEl) this.presencePenaltyValueEl.setText(defaultPenalty.toFixed(1));
+			if (this.chatHeader.presencePenaltySlider) this.chatHeader.presencePenaltySlider.value = defaultPenalty.toString();
+			if (this.chatHeader.presencePenaltyValueEl) this.chatHeader.presencePenaltyValueEl.setText(defaultPenalty.toFixed(1));
 
 			this.state.enableRAG = false;
 			this.state.enableWebSearch = false;
@@ -2346,217 +2046,10 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		await this.updateOptionsDisplay();
 	}
 
-	private createActionRow(parent: HTMLElement) {
-		const row = parent.createDiv('chat-action-row');
-
-		const breadcrumb = row.createDiv('chat-breadcrumb');
-		const historyLink = breadcrumb.createSpan({ cls: 'chat-breadcrumb-link chat-action-btn' });
-		setIcon(historyLink.createSpan({ cls: 'chat-action-icon' }), 'list');
-		historyLink.createSpan({ text: 'Conversations', cls: 'chat-action-text' });
-		historyLink.setAttr('role', 'button');
-		historyLink.tabIndex = 0;
-		const activateHistory = async (event: Event) => {
-			event.preventDefault();
-			event.stopPropagation();
-			await this.toggleConversationListVisibility();
-		};
-		historyLink.addEventListener('click', (event: MouseEvent) => { void activateHistory(event); });
-		historyLink.addEventListener('keydown', (event: KeyboardEvent) => {
-			if (event.key === 'Enter' || event.key === ' ') {
-				void activateHistory(event);
-			}
-		});
-		breadcrumb.createSpan({ text: '/', cls: 'chat-breadcrumb-sep' });
-		this.conversationTitleEl = breadcrumb.createSpan({ text: 'Current conversation', cls: 'chat-breadcrumb-current' });
-
-		const actions = row.createDiv('chat-action-buttons');
-
-		const newLink = actions.createSpan({ cls: 'chat-action-btn' });
-		setIcon(newLink.createSpan({ cls: 'chat-action-icon' }), 'plus');
-		newLink.createSpan({ text: 'New', cls: 'chat-action-text' });
-		newLink.setAttr('role', 'button');
-		newLink.tabIndex = 0;
-		const activateNew = async (event: Event) => {
-			event.preventDefault();
-			event.stopPropagation();
-			await this.resetToDefaultChatConfiguration();
-			await this.conversationManager.createNewConversation();
-		};
-		newLink.addEventListener('click', (event: MouseEvent) => { void activateNew(event); });
-		newLink.addEventListener('keydown', (event: KeyboardEvent) => {
-			if (event.key === 'Enter' || event.key === ' ') {
-				void activateNew(event);
-			}
-		});
-
-		const settingsLink = actions.createSpan({ cls: 'chat-action-btn' });
-		setIcon(settingsLink.createSpan({ cls: 'chat-action-icon' }), 'settings');
-		settingsLink.createSpan({ text: 'Settings', cls: 'chat-action-text' });
-		settingsLink.setAttr('role', 'button');
-		settingsLink.tabIndex = 0;
-		const activateSettings = (event: Event) => {
-			event.preventDefault();
-			event.stopPropagation();
-			const settingApi = (this.app as unknown as { setting?: { open: () => void; openTabById: (id: string) => void } }).setting;
-			if (settingApi) {
-				settingApi.open();
-				settingApi.openTabById('intelligence-assistant');
-			} else {
-				new Notice('Settings API unavailable');
-			}
-		};
-		settingsLink.addEventListener('click', activateSettings);
-		settingsLink.addEventListener('keydown', (event: KeyboardEvent) => {
-			if (event.key === 'Enter' || event.key === ' ') {
-				activateSettings(event);
-			}
-		});
-	}
-
-	private createModelRow(parent: HTMLElement) {
-		const row = parent.createDiv('chat-model-row');
-
-		this.modelControlsContainer = row.createDiv('chat-model-controls');
-		this.modelControlsContainer.addClass('ia-chat-model-controls');
-
-		const modelGroup = this.modelControlsContainer.createDiv('chat-select-group');
-		modelGroup.addClass('ia-model-select-group');
-		modelGroup.addClass('chat-model-select');
-		modelGroup.createSpan({ text: 'Model', cls: 'chat-label' });
-		this.modelSelect = modelGroup.createEl('select', { cls: 'model-select' });
-		this.modelSelect.addClass('ia-model-select');
-		this.modelSelect.addEventListener('change', () => {
-			void this.onModelChange();
-		});
-
-		// Settings toggle button
-		const settingsBtn = this.modelControlsContainer.createEl('button', { cls: 'chat-params-toggle' });
-		setIcon(settingsBtn, 'sliders-horizontal');
-		settingsBtn.title = 'Advanced parameters';
-		settingsBtn.addClass('ia-icon-btn');
-
-		// Container for advanced params (overlay, hidden by default)
-		const paramsContainer = this.modelControlsContainer.createDiv('chat-params-container');
-		paramsContainer.addClass('ia-hidden');
-
-		settingsBtn.addEventListener('click', () => {
-			const isHidden = paramsContainer.hasClass('ia-hidden');
-			if (isHidden) {
-				paramsContainer.removeClass('ia-hidden');
-				settingsBtn.addClass('is-active');
-			} else {
-				paramsContainer.addClass('ia-hidden');
-				settingsBtn.removeClass('is-active');
-			}
-		});
-
-		const tempGroup = paramsContainer.createDiv('chat-param-group');
-		tempGroup.addClass('chat-param-group');
-		tempGroup.createSpan({ text: 'Temperature', cls: 'chat-label' });
-		this.temperatureSlider = tempGroup.createEl('input', { type: 'range' });
-		this.temperatureSlider.min = '0';
-		this.temperatureSlider.max = '2';
-		this.temperatureSlider.step = '0.1';
-		this.temperatureSlider.value = this.state.temperature.toString();
-		this.temperatureSlider.addClass('chat-slider');
-		this.temperatureValueEl = tempGroup.createSpan({ text: this.formatTemperature(this.state.temperature), cls: 'chat-param-value' });
-		this.temperatureSlider.addEventListener('input', () => {
-			this.state.temperature = parseFloat(this.temperatureSlider.value);
-			this.updateTemperatureDisplay(this.state.temperature);
-		});
-
-		const tokensGroup = paramsContainer.createDiv('chat-param-group');
-		tokensGroup.addClass('chat-param-group');
-		tokensGroup.createSpan({ text: 'Max tokens', cls: 'chat-label' });
-		this.maxTokensInput = tokensGroup.createEl('input', { type: 'number', cls: 'chat-number-input' });
-		this.maxTokensInput.min = '100';
-		this.maxTokensInput.max = '100000';
-		this.maxTokensInput.step = '100';
-		this.maxTokensInput.value = this.state.maxTokens.toString();
-		this.maxTokensInput.addEventListener('input', () => {
-			const value = parseInt(this.maxTokensInput.value);
-			if (!isNaN(value) && value > 0) {
-				this.state.maxTokens = value;
-			}
-		});
-
-		// Top P
-		const topPGroup = paramsContainer.createDiv('chat-param-group');
-		topPGroup.addClass('chat-param-group');
-		topPGroup.createSpan({ text: 'Top P', cls: 'chat-label' });
-		this.topPSlider = topPGroup.createEl('input', { type: 'range' });
-		this.topPSlider.min = '0';
-		this.topPSlider.max = '1';
-		this.topPSlider.step = '0.05';
-		this.topPSlider.value = this.state.topP.toString();
-		this.topPSlider.addClass('chat-slider');
-		this.topPValueEl = topPGroup.createSpan({ text: this.state.topP.toFixed(2), cls: 'chat-param-value' });
-		this.topPSlider.addEventListener('input', () => {
-			const val = parseFloat(this.topPSlider!.value);
-			this.state.topP = val;
-			this.topPValueEl!.setText(val.toFixed(2));
-		});
-
-		// Frequency Penalty
-		const freqGroup = paramsContainer.createDiv('chat-param-group');
-		freqGroup.addClass('chat-param-group');
-		freqGroup.createSpan({ text: 'Freq. penalty', cls: 'chat-label' });
-		this.frequencyPenaltySlider = freqGroup.createEl('input', { type: 'range' });
-		this.frequencyPenaltySlider.min = '-2';
-		this.frequencyPenaltySlider.max = '2';
-		this.frequencyPenaltySlider.step = '0.1';
-		this.frequencyPenaltySlider.value = this.state.frequencyPenalty.toString();
-		this.frequencyPenaltySlider.addClass('chat-slider');
-		this.frequencyPenaltyValueEl = freqGroup.createSpan({ text: this.state.frequencyPenalty.toFixed(1), cls: 'chat-param-value' });
-		this.frequencyPenaltySlider.addEventListener('input', () => {
-			const val = parseFloat(this.frequencyPenaltySlider!.value);
-			this.state.frequencyPenalty = val;
-			this.frequencyPenaltyValueEl!.setText(val.toFixed(1));
-		});
-
-		// Presence Penalty
-		const presGroup = paramsContainer.createDiv('chat-param-group');
-		presGroup.addClass('chat-param-group');
-		presGroup.createSpan({ text: 'Pres. penalty', cls: 'chat-label' });
-		this.presencePenaltySlider = presGroup.createEl('input', { type: 'range' });
-		this.presencePenaltySlider.min = '-2';
-		this.presencePenaltySlider.max = '2';
-		this.presencePenaltySlider.step = '0.1';
-		this.presencePenaltySlider.value = this.state.presencePenalty.toString();
-		this.presencePenaltySlider.addClass('chat-slider');
-		this.presencePenaltyValueEl = presGroup.createSpan({ text: this.state.presencePenalty.toFixed(1), cls: 'chat-param-value' });
-		this.presencePenaltySlider.addEventListener('input', () => {
-			const val = parseFloat(this.presencePenaltySlider!.value);
-			this.state.presencePenalty = val;
-			this.presencePenaltyValueEl!.setText(val.toFixed(1));
-		});
-
-		this.agentConfigSummaryEl = row.createDiv('chat-agent-summary');
-		this.agentConfigSummaryEl.addClass('chat-agent-summary');
-		this.agentConfigSummaryEl.addClass('ia-hidden');
-		this.agentSummaryTitleEl = this.agentConfigSummaryEl.createSpan({
-			cls: 'chat-agent-summary-title',
-			text: 'Agent configuration'
-		});
-		this.agentSummaryDetailsEl = this.agentConfigSummaryEl.createDiv('chat-agent-summary-details');
-		this.agentSummaryDetailsEl.createSpan({
-			cls: 'chat-agent-summary-text',
-			text: 'Agent controls determine model, temperature, and token limits.'
-		});
-	}
-
-	private createTokenRow(parent: HTMLElement) {
-		const row = parent.createDiv('chat-token-row');
-		row.addClass('chat-token-row');
-		        this.modelCountEl = row.createSpan({ cls: 'chat-token-chip', text: 'Models: 0' });
-		        this.modelCountEl.addClass('ia-model-count');		this.tokenSummaryEl = row.createSpan({ cls: 'chat-token-chip', text: 'Tokens: 0' });
-		this.tokenSummaryEl.addClass('ia-token-summary-display');
-	}
-
 	private async updateQuickActionsState() {
 		if (this.ragActionItem) {
 			const enabled = this.plugin.settings.ragConfig.enabled;
-			this.updateActionToggleState(
+			this.chatInput.updateActionToggleState(
 				this.ragActionItem,
 				enabled,
 				this.state.enableRAG,
@@ -2566,7 +2059,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		if (this.webActionItem) {
 			const enabled = this.plugin.settings.webSearchConfig.enabled;
-			this.updateActionToggleState(
+			this.chatInput.updateActionToggleState(
 				this.webActionItem,
 				enabled,
 				this.state.enableWebSearch,
@@ -2575,92 +2068,6 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		}
 
 		await this.updateImageButtonVisibility();
-	}
-
-	private updateActionToggleState(
-		item: HTMLElement,
-		enabled: boolean,
-		active: boolean,
-		statusText: string
-	) {
-		item.toggleClass('is-disabled', !enabled);
-		item.toggleClass('is-active', enabled && active);
-		const status = item.querySelector('.header-action-status');
-		if (status) {
-			status.textContent = statusText;
-		}
-	}
-
-	private setupHeaderActions(inputHeader: HTMLElement) {
-		const actionsContainer = inputHeader.createDiv('chat-header-actions');
-		actionsContainer.addClass('chat-header-actions');
-		this.headerActionsContainer = actionsContainer;
-
-		const addReferenceBtn = this.createHeaderActionButton(actionsContainer, {
-			icon: 'paperclip',
-			label: 'Add reference',
-			tooltip: 'Add file or folder reference (@)',
-			onClick: () => this.showReferenceMenu()
-		});
-		addReferenceBtn.addClass('is-link');
-
-		this.imageActionItem = this.createHeaderActionButton(actionsContainer, {
-			icon: 'image',
-			label: 'Add picture',
-			tooltip: 'Attach an image to your message',
-			showStatus: true,
-			onClick: () => {
-				if (this.imageActionItem?.hasClass('is-disabled')) {
-					new Notice('Image attachment is unavailable for the current model.');
-					return;
-				}
-				void this.attachImage();
-			}
-		});
-
-		this.ragActionItem = this.createHeaderActionButton(actionsContainer, {
-			icon: 'book-open',
-			label: 'RAG',
-			tooltip: 'Use indexed notes as context',
-			showStatus: true,
-			onClick: () => { void this.handleQuickActionRag(); }
-		});
-		this.ragActionItem?.addClass('is-toggle');
-
-		this.webActionItem = this.createHeaderActionButton(actionsContainer, {
-			icon: 'search',
-			label: 'Web Search',
-			tooltip: 'Search the internet when needed',
-			showStatus: true,
-			onClick: () => { void this.handleQuickActionWeb(); }
-		});
-		this.webActionItem?.addClass('is-toggle');
-
-		void this.updateQuickActionsState();
-		void this.updateRagStatus();
-	}
-
-	private createHeaderActionButton(
-		container: HTMLElement,
-		config: { icon: string; label: string; tooltip?: string; showStatus?: boolean; onClick: () => void }
-	): HTMLButtonElement {
-		const button = container.createEl('button', { cls: 'header-action-btn' });
-		button.type = 'button';
-		if (config.tooltip) {
-			button.setAttr('title', config.tooltip);
-		}
-		button.addEventListener('click', (event) => {
-			event.preventDefault();
-			void config.onClick();
-		});
-
-		const iconEl = button.createSpan({ cls: 'header-action-icon' });
-		setIcon(iconEl, config.icon);
-		button.createSpan({ cls: 'header-action-label', text: config.label });
-		if (config.showStatus) {
-			button.createSpan({ cls: 'header-action-status' });
-		}
-		return button;
 	}
 
 	private async handleQuickActionRag() {
@@ -2698,9 +2105,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	}
 
 	private refreshAgentSelect(preferredAgentId?: string): string | null {
-		if (!this.agentSelector) return null;
+		if (!this.chatHeader.agentSelector) return null;
 
-		const selectEl = this.agentSelector;
+		const selectEl = this.chatHeader.agentSelector;
 		const agents = this.plugin.settings.agents;
 
 		selectEl.empty();
@@ -2785,11 +2192,11 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		this.state.maxTokens = agent.maxTokens;
 
 		// Update UI elements if they exist
-		if (this.temperatureSlider) {
-			this.temperatureSlider.value = String(agent.temperature);
+		if (this.chatHeader.temperatureSlider) {
+			this.chatHeader.temperatureSlider.value = String(agent.temperature);
 		}
-		if (this.maxTokensInput) {
-			this.maxTokensInput.value = String(agent.maxTokens);
+		if (this.chatHeader.maxTokensInput) {
+			this.chatHeader.maxTokensInput.value = String(agent.maxTokens);
 		}
 
 		// Select agent's model based on strategy
@@ -3038,13 +2445,13 @@ ${toolsList}
 
 To call a tool, respond with a JSON block in this format:
 \`\`\`json
-{
+ {
   "name": "tool_name",
   "arguments": {
     "arg1": "value1",
     "arg2": "value2"
   }
-}
+ }
 \`\`\`
 
 Always think before you act. Only call one tool at a time. After receiving the result, think about what to do next.
@@ -3096,13 +2503,13 @@ ${toolsList}
 
 To call a tool, respond with a JSON block in this format:
 \`\`\`json
-{
+ {
   "name": "tool_name",
   "arguments": {
     "arg1": "value1",
     "arg2": "value2"
   }
-}
+ }
 \`\`\`
 
 After calling a tool, you will receive the result and can continue the conversation or call another tool if needed.`
@@ -3161,7 +2568,7 @@ After calling a tool, you will receive the result and can continue the conversat
 
 						if (this.state.mode === 'agent' && traceContainer) {
 							void (async () => {
-								await new Promise(resolve => setTimeout(resolve, 50));
+								await new Promise(resolve => activeWindow.setTimeout(resolve, 50));
 								const toolsExecuted = await this.processToolCalls(fullContent, traceContainer, _contentEl);
 
 								this.updateExecutionTrace(traceContainer);
@@ -3267,69 +2674,7 @@ After calling a tool, you will receive the result and can continue the conversat
 		return window.btoa(binary);
 	}
 
-	private updateAttachmentPreview() {
-		if (!this.attachmentContainer) return;
-
-		this.attachmentContainer.empty();
-
-		if (this.state.currentAttachments.length === 0) {
-			this.attachmentContainer.addClass('ia-hidden');
-			return;
-		}
-
-		this.attachmentContainer.removeClass('ia-hidden');
-		this.attachmentContainer.setCssProps({ 'gap': '8px' });
-		this.attachmentContainer.setCssProps({ 'padding': '8px' });
-		this.attachmentContainer.setCssProps({ 'background': 'var(--background-secondary)' });
-		this.attachmentContainer.setCssProps({ 'border-radius': '4px' });
-		this.attachmentContainer.setCssProps({ 'flex-wrap': 'wrap' });
-		this.attachmentContainer.setCssProps({ 'margin-bottom': '8px' });
-
-		this.state.currentAttachments.forEach((att, index) => {
-			const attPreview = this.attachmentContainer!.createDiv('attachment-preview-item');
-			attPreview.setCssProps({ 'position': 'relative' });
-			attPreview.setCssProps({ 'padding': '8px' });
-			attPreview.setCssProps({ 'background': 'var(--background-primary)' });
-			attPreview.setCssProps({ 'border-radius': '4px' });
-			attPreview.removeClass('ia-hidden');
-			attPreview.setCssProps({ 'align-items': 'center' });
-			attPreview.setCssProps({ 'gap': '8px' });
-
-			if (att.type === 'image' && att.content) {
-				const img = attPreview.createEl('img');
-				img.src = att.content;
-				img.alt = att.name;
-				img.setCssProps({ 'width': '40px' });
-				img.setCssProps({ 'height': '40px' });
-				img.setCssProps({ 'object-fit': 'cover' });
-				img.setCssProps({ 'border-radius': '4px' });
-			} else {
-				attPreview.createSpan({ text: att.type === 'image' ? '🖼️' : '📎' });
-			}
-
-			attPreview.createSpan({ text: att.name });
-
-			// Remove button
-			const removeBtn = attPreview.createEl('button', { text: '×' });
-			removeBtn.setCssProps({ 'margin-left': 'auto' });
-			removeBtn.setCssProps({ 'padding': '0 6px' });
-			removeBtn.setCssProps({ 'border': 'none' });
-			removeBtn.setCssProps({ 'background': 'transparent' });
-			removeBtn.addClass('ia-clickable');
-			removeBtn.setCssProps({ 'font-size': '20px' });
-			removeBtn.setCssProps({ 'color': 'var(--text-error)' });
-			removeBtn.addEventListener('click', () => {
-				this.state.currentAttachments.splice(index, 1);
-				this.updateAttachmentPreview();
-			});
-		});
-	}
-
-// 	private addStyles() {
-// 		const styleEl = document.createElement('style');
-// 		styleEl.textContent = `
 // 			.intelligence-assistant-chat-container {
-// 				display: flex;
 // 				flex-direction: column;
 // 				height: 100%;
 // 				padding: 0;
@@ -4523,14 +3868,6 @@ After calling a tool, you will receive the result and can continue the conversat
 // 		border-left: 2px solid var(--interactive-accent);
 // 	}
 // 
-// 	.rag-source-content:hover {
-// 		background: var(--background-secondary);
-// 	}
-// 			}
-// 		`;
-// 		document.head.appendChild(styleEl);
-// 	}
-
 	async initializeMCPServers() {
 		const { initializeMCPServers } = await import('@/application/services/mcp-service');
 		void initializeMCPServers(
@@ -4559,7 +3896,6 @@ After calling a tool, you will receive the result and can continue the conversat
 	}
 }
 	
-// ---------------------------------------------------------------------------
 // Agent chain helpers – used by ChatView.renderMessageList to reconstruct
 // historical agent tool-call chains from saved messages.
 // ---------------------------------------------------------------------------

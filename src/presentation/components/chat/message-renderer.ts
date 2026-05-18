@@ -324,7 +324,7 @@ function renderMessageContent(target: HTMLElement, message: Message) {
 				void navigator.clipboard.writeText(text).then(() => {
 					copyBtn.textContent = 'Copied!';
 					copyBtn.classList.add('is-copied');
-					setTimeout(() => {
+					activeWindow.setTimeout(() => {
 						copyBtn.textContent = 'Copy';
 						copyBtn.classList.remove('is-copied');
 					}, 1500);
