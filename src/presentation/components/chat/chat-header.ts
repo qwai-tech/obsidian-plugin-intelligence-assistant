@@ -30,11 +30,6 @@ export function createChatHeader(
 ): ChatHeaderElements {
 	const header = parent.createDiv('chat-header');
 	header.removeClass('ia-hidden');
-	header.setCssProps({ 'gap': '12px' });
-	header.setCssProps({ 'padding': '12px' });
-	header.setCssProps({ 'border-bottom': '1px solid var(--background-modifier-border)' });
-	header.setCssProps({ 'background': 'var(--background-secondary)' });
-	header.setCssProps({ 'align-items': 'center' });
 
 	// Toggle conversation list button
 	createButton(header, {
@@ -50,49 +45,29 @@ export function createChatHeader(
 	// Model selector container
 	const modelContainer = header.createDiv('model-selector');
 	modelContainer.removeClass('ia-hidden');
-	modelContainer.setCssProps({ 'align-items': 'center' });
-	modelContainer.setCssProps({ 'gap': '8px' });
-	modelContainer.setCssProps({ 'flex': '1' });
 
 	// Model label
 	const modelLabel = modelContainer.createSpan({ text: '🤖 model:' });
-	modelLabel.setCssProps({ 'font-weight': '500' });
-	modelLabel.setCssProps({ 'font-size': '13px' });
+	modelLabel.addClass('ia-model-label');
 
 	// Model select dropdown
 	const modelSelect = modelContainer.createEl('select');
-	modelSelect.setCssProps({ 'flex': '1' });
-	modelSelect.setCssProps({ 'padding': '6px 10px' });
-	modelSelect.setCssProps({ 'border-radius': '4px' });
-	modelSelect.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
-	modelSelect.setCssProps({ 'background': 'var(--background-primary)' });
-	modelSelect.setCssProps({ 'color': 'var(--text-normal)' });
-	modelSelect.setCssProps({ 'font-size': '13px' });
 	modelSelect.addClass('ia-clickable');
 	modelSelect.addEventListener('change', () => options.onModelChange());
 
 	// Actions container
-	const modelActions = header.createDiv();
+	const modelActions = header.createDiv('ia-model-actions');
 	modelActions.removeClass('ia-hidden');
-	modelActions.setCssProps({ 'gap': '6px' });
 
 	// Model count info badge
 	const modelCountEl = header.createSpan();
-	modelCountEl.setCssProps({ 'font-size': '11px' });
-	modelCountEl.setCssProps({ 'color': 'var(--text-muted)' });
-	modelCountEl.setCssProps({ 'padding': '4px 8px' });
-	modelCountEl.setCssProps({ 'background': 'var(--background-primary)' });
-	modelCountEl.setCssProps({ 'border-radius': '4px' });
+	modelCountEl.addClass('ia-badge');
 	modelCountEl.setText('Loading...');
 
 	// Token usage summary badge
 	const tokenSummaryEl = header.createSpan();
-	tokenSummaryEl.setCssProps({ 'font-size': '11px' });
-	tokenSummaryEl.setCssProps({ 'color': 'var(--text-muted)' });
-	tokenSummaryEl.setCssProps({ 'padding': '4px 8px' });
-	tokenSummaryEl.setCssProps({ 'background': 'var(--background-primary)' });
-	tokenSummaryEl.setCssProps({ 'border-radius': '4px' });
-	tokenSummaryEl.setCssProps({ 'margin-left': '8px' });
+	tokenSummaryEl.addClass('ia-badge');
+	tokenSummaryEl.addClass('ia-badge--ml');
 	tokenSummaryEl.setText('Tokens: 0');
 	tokenSummaryEl.title = 'Total tokens used in this conversation';
 

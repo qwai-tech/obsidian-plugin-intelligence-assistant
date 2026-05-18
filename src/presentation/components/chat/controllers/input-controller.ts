@@ -211,26 +211,18 @@ export class InputController extends BaseController {
 		}
 
 		this.attachmentPreviewElement.removeClass('ia-hidden');
-		this.attachmentPreviewElement.setCssProps({ 'gap': '8px' });
-		this.attachmentPreviewElement.setCssProps({ 'padding': '8px' });
-		this.attachmentPreviewElement.setCssProps({ 'background': 'var(--background-secondary)' });
+		this.attachmentPreviewElement.addClass('ia-attachment-preview-list');
 
 		attachments.forEach((attachment, index) => {
-			const item = this.attachmentPreviewElement!.createDiv();
+			const item = this.attachmentPreviewElement!.createDiv('ia-attachment-item');
 			item.removeClass('ia-hidden');
-			item.setCssProps({ 'align-items': 'center' });
-			item.setCssProps({ 'gap': '4px' });
-			item.setCssProps({ 'padding': '4px 8px' });
-			item.setCssProps({ 'background': 'var(--background-primary)' });
-			item.setCssProps({ 'border-radius': '4px' });
 
 			item.createSpan({ text: attachment.type === 'image' ? '🖼️' : '📎' });
 			const name = item.createSpan({ text: attachment.name });
-			name.setCssProps({ 'font-size': '0.9em' });
+			name.addClass('ia-attachment-filename');
 
 			const removeBtn = item.createEl('button', { text: '×' });
-			removeBtn.setCssProps({ 'border': 'none' });
-			removeBtn.setCssProps({ 'background': 'transparent' });
+			removeBtn.addClass('ia-attachment-remove-inline');
 			removeBtn.addClass('ia-clickable');
 			removeBtn.addEventListener('click', () => this.removeAttachment(index));
 		});

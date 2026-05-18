@@ -2937,9 +2937,10 @@
 .chat-header {
 	display: flex;
 	align-items: center;
-	gap: 10px;
-	padding: 10px 0;
+	gap: 12px;
+	padding: 12px;
 	border-bottom: 1px solid var(--background-modifier-border);
+	background: var(--background-secondary);
 	margin-bottom: 10px;
 	flex-wrap: wrap;
 }
@@ -2959,6 +2960,7 @@
 	border: 1px solid var(--background-modifier-border);
 	background: var(--background-primary);
 	color: var(--text-normal);
+	font-size: 13px;
 	font-weight: 500;
 }
 
@@ -4004,6 +4006,58 @@
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 4px;
 	font-size: var(--ia-font-size-2xs);
+}
+
+/* ---- chat header component classes ---- */
+.ia-model-label {
+	font-weight: 500;
+	font-size: 13px;
+}
+
+.ia-model-actions {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.ia-badge {
+	font-size: 11px;
+	color: var(--text-muted);
+	padding: 4px 8px;
+	background: var(--background-primary);
+	border-radius: 4px;
+}
+
+.ia-badge--ml {
+	margin-left: 8px;
+}
+
+/* ---- input controller attachment classes ---- */
+.ia-attachment-preview-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	padding: 8px;
+	background: var(--background-secondary);
+}
+
+.ia-attachment-item {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 8px;
+	background: var(--background-primary);
+	border-radius: 4px;
+}
+
+.ia-attachment-filename {
+	font-size: 0.9em;
+}
+
+.ia-attachment-remove-inline {
+	border: none;
+	background: transparent;
+	cursor: pointer;
 }
 
 .rag-sources-container {
