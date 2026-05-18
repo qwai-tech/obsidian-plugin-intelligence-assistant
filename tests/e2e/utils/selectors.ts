@@ -96,11 +96,11 @@ export const SELECTORS = {
 
 
 
-				newChatButton: 'button[title="New conversation"]',
+				newChatButton: '.ia-new-chat-btn',
 
-				settingsButton: 'button[title="Open plugin settings"]',
+				settingsButton: '.ia-settings-btn',
 
-				toggleConversationsButton: 'button[title="Toggle conversation list"]',
+				toggleConversationsButton: '.ia-history-btn',
 
 		// Input area
 		inputContainer: '.chat-input-container', // Parent container for the chat input

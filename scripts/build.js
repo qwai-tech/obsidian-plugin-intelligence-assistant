@@ -130,7 +130,7 @@ class Builder {
         logger.step('3', 'Building with esbuild');
         
         const esbuild = require('esbuild');
-        const builtins = require('builtin-modules');
+        const { builtinModules: builtins } = require('node:module');
         
         const banner = `
 /*
@@ -212,7 +212,7 @@ if you want to view the source, please visit the github repository of this plugi
                 },
                 entryPoints: [this.config.entryPoint],
                 bundle: true,
-                external: [...this.config.externals, ...(Array.isArray(builtins.default) ? builtins.default : builtins)],
+                external: [...this.config.externals, ...builtins],
                 format: 'cjs',
                 target: 'es2018',
                 platform: 'node',

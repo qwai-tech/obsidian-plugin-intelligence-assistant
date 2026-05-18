@@ -89,8 +89,18 @@ function seedLlMConfig(config: UserConfig): UserConfig {
 		seeded.providers.titleSummaryModel = seeded.providers.titleSummaryModel || SEEDED_MODELS[0].id;
 	}
 
-	if (seeded.rag?.embedding && !seeded.rag.embedding.model) {
-		seeded.rag.embedding.model = 'text-embedding-3-small';
+	if (seeded.rag) {
+		seeded.rag.enabled = true;
+		if (seeded.rag.embedding && !seeded.rag.embedding.model) {
+			seeded.rag.embedding.model = 'text-embedding-3-small';
+		}
+	} else {
+		seeded.rag = {
+			enabled: true,
+			embedding: {
+				model: 'text-embedding-3-small'
+			}
+		};
 	}
 
 	seeded.mcp = seeded.mcp ?? { servers: [], registries: [] };

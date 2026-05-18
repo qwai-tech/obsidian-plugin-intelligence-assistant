@@ -1,73 +1,97 @@
-const chalk = require('chalk').default || require('chalk');
-const ora = require('ora');
+const pc = require('picocolors');
 
 class Logger {
     constructor() {
         this.colors = {
-            success: chalk.green,
-            error: chalk.red,
-            warning: chalk.yellow,
-            info: chalk.blue,
-            highlight: chalk.cyan,
-            muted: chalk.gray
+            success: pc.green,
+            error: pc.red,
+            warning: pc.yellow,
+            info: pc.blue,
+            highlight: pc.cyan,
+            muted: pc.gray
         };
     }
 
     success(message, spinner = null) {
         if (spinner) {
-            spinner.succeed(chalk.green(message));
+            spinner.succeed(pc.green(message));
         } else {
-            console.log(chalk.green('✅'), message);
+            console.log(pc.green('✅'), message);
         }
     }
 
     error(message, spinner = null) {
         if (spinner) {
-            spinner.fail(chalk.red(message));
+            spinner.fail(pc.red(message));
         } else {
-            console.log(chalk.red('❌'), message);
+            console.log(pc.red('❌'), message);
         }
     }
 
     warning(message) {
-        console.log(chalk.yellow('⚠️'), message);
+        console.log(pc.yellow('⚠️'), message);
     }
 
     info(message) {
-        console.log(chalk.blue('ℹ️'), message);
+        console.log(pc.blue('ℹ️'), message);
     }
 
     highlight(message) {
-        console.log(chalk.cyan('🔸'), message);
+        console.log(pc.cyan('🔸'), message);
     }
 
     muted(message) {
-        console.log(chalk.gray('   '), message);
+        console.log(pc.gray('   '), message);
     }
 
     spinner(text) {
-        return ora({
-            text: chalk.cyan(text),
-            color: 'cyan'
-        });
+        const frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+        let frameIndex = 0;
+        let interval = null;
+        const stream = process.stderr;
+
+        const render = () => {
+            stream.write('\r' + pc.cyan(frames[frameIndex]) + '  ' + pc.cyan(text) + '  ');
+            frameIndex = (frameIndex + 1) % frames.length;
+        };
+
+        return {
+            start() {
+                interval = setInterval(render, 80);
+                render();
+                return this;
+            },
+            stop() {
+                if (interval) { clearInterval(interval); interval = null; }
+                stream.write('\r\x1b[K');
+            },
+            succeed(msg) {
+                this.stop();
+                console.log(pc.green('✔'), msg || text);
+            },
+            fail(msg) {
+                this.stop();
+                console.log(pc.red('✖'), msg || text);
+            }
+        };
     }
 
     section(title) {
         console.log('');
-        console.log(chalk.bold.blue(`\n📋 ${title}`));
-        console.log(chalk.blue('─'.repeat(50)));
+        console.log(pc.bold(pc.blue(`\n📋 ${title}`)));
+        console.log(pc.blue('─'.repeat(50)));
     }
 
     step(step, message) {
-        console.log(chalk.cyan(`   ${step}.`), message);
+        console.log(pc.cyan(`   ${step}.`), message);
     }
 
     file(path) {
-        console.log(chalk.magenta('📁'), path);
+        console.log(pc.magenta('📁'), path);
     }
 
     command(cmd) {
-        console.log(chalk.yellow('⚡'), chalk.gray(cmd));
+        console.log(pc.yellow('⚡'), pc.gray(cmd));
     }
 }
 

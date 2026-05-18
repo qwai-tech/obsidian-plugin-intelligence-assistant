@@ -135,7 +135,17 @@ export async function stopGeneration() {
  */
 export async function clearChat() {
 	const newChatButton = await $(SELECTORS.chat.newChatButton);
+	await newChatButton.waitForClickable({ timeout: 5000 });
 	await newChatButton.click();
+	
+	// Wait for message list to clear
+	await browser.waitUntil(
+		async () => (await $$(SELECTORS.chat.message)).length === 0,
+		{
+			timeout: 5000,
+			timeoutMsg: 'Chat did not clear after clicking New button',
+		}
+	);
 	await browser.pause(500);
 }
 

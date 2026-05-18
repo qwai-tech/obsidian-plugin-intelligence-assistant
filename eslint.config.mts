@@ -2,7 +2,7 @@ import { defineConfig } from "eslint/config";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsparser from "@typescript-eslint/parser";
 import obsidianmd from "eslint-plugin-obsidianmd";
-import eslintComments from "eslint-plugin-eslint-comments";
+import eslintComments from "@eslint-community/eslint-plugin-eslint-comments";
 
 export default defineConfig([
   {
