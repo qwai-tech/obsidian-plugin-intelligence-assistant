@@ -65,7 +65,7 @@ export function displayProviderTab(
 	
 	const warningList = warningContainer.createEl('ul');
 	warningList.setCssProps({ 'margin-top': '8px', 'margin-bottom': '0', 'font-size': '0.85em' });
-	warningList.createEl('li', { text: 'Do NOT share your .obsidian/plugins/intelligence-assistant/data/ folder.' });
+	warningList.createEl('li', { text: `Do NOT share your ${app.vault.configDir}/plugins/intelligence-assistant/data/ folder.` });
 	warningList.createEl('li', { text: 'Add this folder to your .gitignore if you use Git sync.' });
 	warningList.createEl('li', { text: 'Be cautious when using public cloud sync services.' });
 
