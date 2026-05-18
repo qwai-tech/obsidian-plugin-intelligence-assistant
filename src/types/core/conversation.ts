@@ -31,7 +31,6 @@ export interface ConversationConfig {
 	modelId?: string;
 	promptId?: string | null;
 	agentId?: string | null;
-	cliAgentId?: string | null;
 	temperature?: number;
 	maxTokens?: number;
 	topP?: number;

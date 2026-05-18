@@ -165,30 +165,18 @@ export class ChatHeaderComponent {
 
 		this.agentSelector.empty();
 		const agents = this.plugin.settings.agents || [];
-		const cliAgents = this.plugin.settings.cliAgents || [];
 
-		if (agents.length === 0 && cliAgents.length === 0) {
+		if (agents.length === 0) {
 			this.agentSelector.createEl('option', { value: '', text: 'No agents available' });
 			return;
 		}
 
 		const activeId = selectedId || this.plugin.settings.activeAgentId || '';
 
-		if (agents.length > 0) {
-			const group = this.agentSelector.createEl('optgroup', { attr: { label: 'Standard Agents' } });
-			agents.forEach(agent => {
-				const option = group.createEl('option', { value: agent.id, text: `${agent.icon || '🤖'} ${agent.name}` });
-				if (agent.id === activeId) option.selected = true;
-			});
-		}
-
-		if (cliAgents.length > 0) {
-			const group = this.agentSelector.createEl('optgroup', { attr: { label: 'CLI Agents (SDK)' } });
-			cliAgents.forEach(agent => {
-				const option = group.createEl('option', { value: agent.id, text: `💻 ${agent.name}` });
-				if (agent.id === activeId) option.selected = true;
-			});
-		}
+		agents.forEach(agent => {
+			const option = this.agentSelector.createEl('option', { value: agent.id, text: `${agent.icon || '🤖'} ${agent.name}` });
+			if (agent.id === activeId) option.selected = true;
+		});
 	}
 
 	public updatePromptSelectorVisibility() {

@@ -13,7 +13,6 @@ import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { ConversationStorageService } from '@/application/services/conversation-storage-service';
-import { CLI_PROVIDER_LABELS } from '@/types/core/cli-agent';
 
 /**
  * Events emitted by ConversationManager
@@ -144,9 +143,6 @@ export class ConversationManager extends Events {
 		if (conv.mode) {
 			this.state.mode = conv.mode;
 		}
-		// Restore CLI agent selection from config
-		this.state.selectedCliAgentId = conv.config?.cliAgentId ?? null;
-
 		if (conv.config) {
 			if (typeof conv.config.temperature === 'number') {
 				this.state.temperature = conv.config.temperature;
@@ -306,7 +302,6 @@ export class ConversationManager extends Events {
 			modelId: this.getEffectiveModelIdForState(),
 			promptId: this.state.mode === 'chat' ? (this.plugin.settings.activeSystemPromptId ?? null) : null,
 			agentId: this.state.mode === 'agent' ? (this.plugin.settings.activeAgentId ?? null) : null,
-			cliAgentId: this.state.mode === 'agent' ? (this.state.selectedCliAgentId ?? null) : null,
 			temperature: this.state.temperature,
 			maxTokens: this.state.maxTokens,
 			topP: this.state.topP,
@@ -324,7 +319,6 @@ export class ConversationManager extends Events {
 			modelId: defaultModel || undefined,
 			promptId: null,
 			agentId: null,
-			cliAgentId: null,
 			temperature: 0.7,
 			maxTokens: 4000,
 			topP: 1.0,
@@ -338,10 +332,6 @@ export class ConversationManager extends Events {
 	private getEffectiveModelIdForState(): string | undefined {
 		const selectedModel = this.modelSelect?.value?.trim();
 		if (this.state.mode === 'agent') {
-			// CLI agents manage their own model — don't store the chat view dropdown value
-			if (this.state.selectedCliAgentId) {
-				return undefined;
-			}
 			const agentId = this.plugin.settings.activeAgentId;
 			const agent = agentId ? this.plugin.settings.agents.find(a => a.id === agentId) : null;
 			if (agent) {
@@ -581,14 +571,10 @@ export class ConversationManager extends Events {
 
 			// Mode & model/agent info line
 			const convInfo = convContent.createDiv('conversation-info');
-			const isCliAgent = !!conv.cliAgentId;
-			const isAgent = conv.mode === 'agent' && !isCliAgent;
+			const isAgent = conv.mode === 'agent';
 
 			const modeBadge = convInfo.createSpan('conversation-info__mode');
-			if (isCliAgent) {
-				modeBadge.setText('CLI Agent');
-				modeBadge.addClass('is-cli-agent');
-			} else if (isAgent) {
+			if (isAgent) {
 				modeBadge.setText('Agent');
 				modeBadge.addClass('is-agent');
 			} else {
@@ -596,17 +582,7 @@ export class ConversationManager extends Events {
 				modeBadge.addClass('is-chat');
 			}
 
-			if (isCliAgent) {
-				const agentInfo = this.resolveConversationAgentInfo(conv);
-				if (agentInfo) {
-					convInfo.createSpan('conversation-info__sep').setText('|');
-					convInfo.createSpan('conversation-info__agent').setText(agentInfo.name);
-					if (agentInfo.providerLabel) {
-						convInfo.createSpan('conversation-info__sep').setText('|');
-						convInfo.createSpan('conversation-info__provider').setText(agentInfo.providerLabel);
-					}
-				}
-			} else if (isAgent) {
+			if (isAgent) {
 				const agentInfo = this.resolveConversationAgentInfo(conv);
 				if (agentInfo) {
 					convInfo.createSpan('conversation-info__sep').setText('|');
@@ -665,14 +641,8 @@ export class ConversationManager extends Events {
 		}
 	}
 
-	/** Resolve agent name and provider label for a conversation metadata entry */
-	private resolveConversationAgentInfo(conv: { agentId?: string; cliAgentId?: string }): { name: string; providerLabel?: string } | null {
-		if (conv.cliAgentId) {
-			const cliAgent = (this.plugin.settings.cliAgents ?? []).find(a => a.id === conv.cliAgentId);
-			if (!cliAgent) return null;
-			const providerLabel = CLI_PROVIDER_LABELS[cliAgent.provider] ?? cliAgent.provider;
-			return { name: cliAgent.name, providerLabel };
-		}
+	/** Resolve agent name for a conversation metadata entry */
+	private resolveConversationAgentInfo(conv: { agentId?: string }): { name: string } | null {
 		if (conv.agentId) {
 			const agent = (this.plugin.settings.agents ?? []).find(a => a.id === conv.agentId);
 			return agent ? { name: agent.name } : null;
@@ -683,7 +653,7 @@ export class ConversationManager extends Events {
 	/**
 	 * Group conversations by date categories
 	 */
-	private groupConversationsByDate(conversations: Array<{ id: string; title: string; createdAt: number; updatedAt: number; icon?: string; model?: string; mode?: string; agentId?: string; cliAgentId?: string }>): Array<{ label: string; conversations: typeof conversations }> {
+	private groupConversationsByDate(conversations: Array<{ id: string; title: string; createdAt: number; updatedAt: number; icon?: string; model?: string; mode?: string; agentId?: string }>): Array<{ label: string; conversations: typeof conversations }> {
 		const now = new Date();
 		const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
 		const yesterdayStart = todayStart - 86400000;

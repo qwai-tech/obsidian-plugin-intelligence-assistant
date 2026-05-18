@@ -15,9 +15,7 @@ import { displayMCPTab } from './tabs/mcp-tab';
 import { displayLLMTab } from './tabs/llm-tab';
 import { displayRAGTab } from './tabs/rag-tab';
 import { displayQuickActionsTab } from './tabs/quickactions-tab';
-import { displayCLIAgentsTab } from './tabs/cli-agents-tab';
 import type { ModelFilters } from './tabs/models-tab';
-import { isCliAgentSupported } from '@/utils/platform';
 
 
 export class IntelligenceAssistantSettingTab extends PluginSettingTab {
@@ -56,7 +54,6 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			{ slug: 'rag', label: 'RAG' },
 			{ slug: 'prompts', label: 'Prompts' },
 			{ slug: 'agents', label: 'Agents' },
-			...(isCliAgentSupported() ? [{ slug: 'cli-agents', label: 'CLI Agents' }] : []),
 			{ slug: 'quickactions', label: 'Quick Actions' }
 		];
 
@@ -111,11 +108,6 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 				break;
 			case 'agents':
 				this.displayAgentsTab(contentEl);
-				break;
-			case 'cli-agents':
-				if (isCliAgentSupported()) {
-					this.displayCLIAgentsTab(contentEl);
-				}
 				break;
 			case 'quickactions':
 				this.displayQuickActionsTab(contentEl);
@@ -185,15 +177,6 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 
 	private displayAgentsTab(containerEl: HTMLElement) {
 		displayAgentsTab(containerEl, this.plugin, this.app, () => this.display());
-	}
-
-	private displayCLIAgentsTab(containerEl: HTMLElement) {
-		displayCLIAgentsTab(
-			containerEl,
-			this.plugin,
-			this.app,
-			() => this.display()
-		);
 	}
 
 	private displayQuickActionsTab(containerEl: HTMLElement) {

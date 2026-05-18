@@ -27,7 +27,6 @@ import { ChatView, CHAT_VIEW_TYPE } from './src/presentation/views/chat-view';
 import { ToolManager } from './src/application/services/tool-manager';
 import { OpenApiToolLoader } from './src/application/services/openapi-tool-loader';
 import { CLIToolLoader } from './src/application/services/cli-tool-loader';
-import { isCliAgentSupported } from './src/utils/platform';
 import { IntelligenceAssistantSettingTab } from './src/presentation/components/settings-tab';
 import { ProviderFactory } from './src/infrastructure/llm/provider-factory';
 import { ModelManager } from './src/infrastructure/llm/model-manager';
@@ -192,11 +191,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				this.reloadOpenApiTools().catch(error =>
 					console.error('[Plugin] OpenAPI tools load failed:', error)
 				),
-				...(isCliAgentSupported()
-					? [Promise.resolve().then(() => this.reloadCLITools()).catch(error =>
-						console.error('[Plugin] CLI tools load failed:', error)
-					)]
-					: [])
+				Promise.resolve().then(() => this.reloadCLITools()).catch(error =>
+					console.error('[Plugin] CLI tools load failed:', error)
+				)
 			]);
 
 			const deferredTime = Date.now() - deferredStart;
@@ -209,14 +206,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		onunload() {
 		// Cleanup architecture components
 		this.cleanupArchitecture();
-
-		// Cleanup CLI agent processes in all chat views
-		const chatLeaves = this.app.workspace.getLeavesOfType(CHAT_VIEW_TYPE);
-		for (const leaf of chatLeaves) {
-			if (leaf.view instanceof ChatView) {
-				leaf.view.cleanupCLIAgents();
-			}
-		}
 
 		// Clean up tool manager (don't detach leaves to preserve user layout)
 		if (this.sharedToolManager) {
@@ -294,7 +283,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	}
 
 	public reloadCLITools(): void {
-		if (!isCliAgentSupported()) return;
 		const loader = this.getCLIToolLoader();
 		loader.loadAll(this.settings.cliTools ?? []);
 	}

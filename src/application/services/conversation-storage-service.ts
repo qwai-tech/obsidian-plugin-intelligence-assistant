@@ -28,7 +28,6 @@ interface ConversationMetadata {
   mode: ConversationMode;
   icon?: string;
   agentId?: string;
-  cliAgentId?: string;
 }
 
 interface ConversationIndex {
@@ -330,8 +329,7 @@ export class ConversationStorageService {
       model: conversation.config?.modelId || this.extractPrimaryModel(conversation) || undefined,
       mode: conversation.mode ?? 'chat',
       icon: conversation.icon,
-      agentId: conversation.config?.agentId ?? undefined,
-      cliAgentId: conversation.config?.cliAgentId ?? undefined
+      agentId: conversation.config?.agentId ?? undefined
     };
   }
 
@@ -344,8 +342,7 @@ export class ConversationStorageService {
       a.model !== b.model ||
       a.icon !== b.icon ||
       a.mode !== b.mode ||
-      a.agentId !== b.agentId ||
-      a.cliAgentId !== b.cliAgentId
+      a.agentId !== b.agentId
     );
   }
 

@@ -12,7 +12,6 @@ import type { WebSearchConfig } from './features/web-search';
 import type { OpenApiToolConfig } from './features/openapi-tools';
 import type { CLIToolConfig } from './features/cli-tools';
 import type { SystemPrompt, Agent } from './core/agent';
-import { type CLIAgentConfig, type CLIProviderConfig_Legacy, type CLIAgentConfig_Legacy, migrateCliConfigs } from './core/cli-agent';
 import type { AgentMemory } from './features/memory';
 import * as defaultUserConfigJson from '../../config/default/settings.json';
 
@@ -191,12 +190,6 @@ export interface UserConfig {
 		activeId: string | null;
 		memories: AgentMemory[];
 	};
-	/** @deprecated Legacy — migrated into cliAgents on load */
-	// eslint-disable-next-line @typescript-eslint/no-deprecated -- intentional: reads legacy format during migration
-	cliProviders?: { list: CLIProviderConfig_Legacy[] };
-	cliAgents?: {
-		list: CLIAgentConfig[];
-	};
 	quickActions?: {
 		list: QuickActionConfig[];
 		prefix?: string; // Unified prefix (string/emoji) for all quick actions
@@ -221,14 +214,6 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 	const webSearch = deepClone(source.search?.web ?? DEFAULT_USER_CONFIG.search.web);
 	const agents = deepClone(source.agents?.list ?? []);
 	const agentMemories = deepClone(source.agents?.memories ?? []);
-	// Migrate old two-tier CLI configs to flat format
-	const rawCliAgents = deepClone(source.cliAgents?.list ?? []);
-	// eslint-disable-next-line @typescript-eslint/no-deprecated -- intentional: reads legacy format during migration
-	const oldCliProviders = source.cliProviders?.list ?? [];
-	const cliAgents: CLIAgentConfig[] = oldCliProviders.length > 0
-		// eslint-disable-next-line @typescript-eslint/no-deprecated -- intentional: passes legacy types to migration function
-		? migrateCliConfigs(deepClone(oldCliProviders), rawCliAgents as unknown as CLIAgentConfig_Legacy[])
-		: rawCliAgents;
 	const quickActions = deepClone(source.quickActions?.list ?? DEFAULT_QUICK_ACTIONS);
 
 	const rag = source.rag ?? DEFAULT_USER_CONFIG.rag;
@@ -296,7 +281,6 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 		agents: agents,
 		agentMemories: agentMemories,
 		activeAgentId: source.agents?.activeId ?? null,
-		cliAgents: cliAgents,
 		quickActions: quickActions,
 		quickActionPrefix: source.quickActions?.prefix ?? '⚡'
 	};
@@ -390,9 +374,6 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 			activeId: settings.activeAgentId ?? null,
 			memories: deepClone(settings.agentMemories ?? [])
 		},
-		cliAgents: {
-			list: deepClone(settings.cliAgents ?? [])
-		},
 		quickActions: {
 			list: deepClone(settings.quickActions ?? DEFAULT_QUICK_ACTIONS),
 			prefix: settings.quickActionPrefix ?? '⚡'
@@ -437,9 +418,6 @@ export interface PluginSettings {
 	agents: Agent[];
 	agentMemories: AgentMemory[];
 	activeAgentId: string | null;
-
-	// CLI Agents (SDK-based)
-	cliAgents: CLIAgentConfig[];
 
 	// Quick Actions
 	quickActions: QuickActionConfig[];

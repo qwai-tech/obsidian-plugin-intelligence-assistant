@@ -54,9 +54,6 @@ export class ChatViewState extends Events {
 	private _isStreaming: boolean = false;
 	private _stopStreamingRequested: boolean = false;
 
-	// CLI agent selection
-	private _selectedCliAgentId: string | null = null;
-
 	// Agent execution
 	private _agentExecutionSteps: AgentExecutionStep[] = [];
 
@@ -326,17 +323,6 @@ export class ChatViewState extends Events {
 		this.trigger('state-change', { field: 'stopStreamingRequested', oldValue, newValue: value });
 	}
 
-	// CLI agent selection
-	get selectedCliAgentId(): string | null {
-		return this._selectedCliAgentId;
-	}
-
-	set selectedCliAgentId(value: string | null) {
-		const oldValue = this._selectedCliAgentId;
-		this._selectedCliAgentId = value;
-		this.trigger('state-change', { field: 'selectedCliAgentId', oldValue, newValue: value });
-	}
-
 	// Agent execution steps
 	get agentExecutionSteps(): AgentExecutionStep[] {
 		return this._agentExecutionSteps;
@@ -382,7 +368,6 @@ export class ChatViewState extends Events {
 		this.conversationListPinned = false;
 		this.clearAttachments();
 		this.clearReferencedFiles();
-		this.selectedCliAgentId = null;
 		this.isStreaming = false;
 		this.stopStreamingRequested = false;
 		this.clearAgentExecutionSteps();
