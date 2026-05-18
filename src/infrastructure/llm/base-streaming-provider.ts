@@ -70,7 +70,6 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 		const { url, body: requestBody } = this.prepareStreamRequest(request);
 
 		try {
-			// eslint-disable-next-line no-restricted-globals -- requestUrl cannot stream SSE responses
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: this.getHeaders(),

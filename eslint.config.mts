@@ -113,5 +113,17 @@ export default defineConfig([
         }
       ]
     }
+  },
+
+  {
+    files: ["**/base-streaming-provider.ts"],
+    rules: {
+      "no-restricted-globals": [
+        "error",
+        { name: "confirm", message: "Use an Obsidian modal instead of confirm." },
+        { name: "event", message: "The global event object is deprecated." }
+        // fetch intentionally omitted: requestUrl cannot handle SSE streaming
+      ]
+    }
   }
 ]);
