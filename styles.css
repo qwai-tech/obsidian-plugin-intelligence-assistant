@@ -3056,6 +3056,125 @@
 	width: 100%;
 }
 
+/* ── Assistant message ── */
+
+.message-assistant .message-row,
+.ia-chat-message--assistant .message-row {
+	align-items: flex-end;
+}
+
+.message-assistant .message-avatar,
+.ia-chat-message--assistant .message-avatar {
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+}
+
+/* message-body is a transparent flex column — NOT the visual bubble */
+.message-assistant .message-body,
+.ia-chat-message--assistant .message-body {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	max-width: 100%;
+	padding: 0;
+	background: transparent;
+	border: none;
+	border-radius: 0;
+	overflow: visible;
+}
+
+/* display:contents removes the .message-meta wrapper from layout,
+   making its children (.ia-chat-message__badges, .message-timestamp)
+   direct flex children of .message-body so we can use order on them */
+.message-assistant .message-meta,
+.ia-chat-message--assistant .message-meta {
+	display: contents;
+}
+
+.message-assistant .message-name,
+.message-assistant .ia-chat-message__status,
+.ia-chat-message--assistant .message-name,
+.ia-chat-message--assistant .ia-chat-message__status {
+	display: none;
+}
+
+/* Content IS the visual bubble (order:1, appears first) */
+.message-assistant .message-content,
+.ia-chat-message--assistant .message-content {
+	order: 1;
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px 16px 16px 16px;
+	padding: 8px 12px;
+	color: var(--text-normal);
+}
+
+/* Reasoning traces and section blocks stay between content and actions */
+.message-assistant .agent-execution-trace-container,
+.message-assistant .ia-agent-trace-container,
+.message-assistant .ia-chat-message__section {
+	order: 2;
+}
+
+/* Action bar — below content, hover reveal, order:3 */
+.message-assistant .message-actions,
+.ia-chat-message--assistant .message-actions {
+	order: 3;
+	display: flex;
+	gap: 2px;
+	max-height: 0;
+	overflow: hidden;
+	opacity: 0;
+	transition: max-height 0.15s ease, opacity 0.15s ease, margin-top 0.15s ease;
+	pointer-events: none;
+	margin-top: 0;
+}
+
+.message-assistant .message-body:hover .message-actions,
+.ia-chat-message--assistant:hover .message-actions {
+	max-height: 36px;
+	opacity: 1;
+	pointer-events: auto;
+	margin-top: 4px;
+}
+
+/* Badges — below bubble, always visible (order:10) */
+.message-assistant .ia-chat-message__badges,
+.ia-chat-message--assistant .ia-chat-message__badges {
+	order: 10;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin-top: 5px;
+}
+
+/* Timestamp — after badges (order:11) */
+.message-assistant .message-timestamp,
+.ia-chat-message--assistant .message-timestamp {
+	order: 11;
+	opacity: 1;
+	font-size: var(--ia-font-size-3xs);
+	color: var(--text-faint);
+	margin-top: 2px;
+	margin-left: 0;
+	transition: none;
+}
+
+/* Token usage footer — last (order:12) */
+.message-assistant .ia-chat-message__footer,
+.message-assistant .ia-chat-message__annotation,
+.ia-chat-message--assistant .ia-chat-message__footer,
+.ia-chat-message--assistant .ia-chat-message__annotation {
+	order: 12;
+	display: block;
+	margin-top: 2px;
+	font-size: var(--ia-font-size-3xs);
+	color: var(--text-faint);
+	opacity: 1;
+	transition: none;
+}
+
+/* ── User message ──*/
 .message-user .message-row {
 	flex-direction: row-reverse;
 	align-items: flex-end;
