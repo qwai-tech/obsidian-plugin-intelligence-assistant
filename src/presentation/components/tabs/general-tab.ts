@@ -21,7 +21,7 @@ export function displayGeneralTab(
 		.setName('Plugin version')
 		.setDesc('Current version of the intelligence assistant plugin')
 		.addText(text => text
-			.setValue('0.0.1')
+			.setValue(plugin.manifest.version)
 			.setDisabled(true));
 
 	// Default Model
