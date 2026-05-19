@@ -33,6 +33,8 @@ export interface ChatOptions {
 	autoTriggerWebSearch?: boolean;
 	activeSystemPrompts?: Message[];
 	contextWindow?: number;
+	tokenBudget?: number;
+	conversationId?: string;
 }
 
 export interface AgentLoopCallbacks {
@@ -42,6 +44,7 @@ export interface AgentLoopCallbacks {
 	onThought: (thought: string) => void;
 	onComplete: (finalMessage: Message) => void;
 	onError: (error: Error) => void;
+	onTokenUsage?: (step: number, cumulativeTokens: number, budget: number) => void;
 	checkAbort?: () => boolean;
 }
 
@@ -65,7 +68,8 @@ export class ChatService {
 		private toolManager: ToolManager,
 		private ragManager: RAGManager,
 		private webSearchService: WebSearchService,
-		private llmConfigs: LLMConfig[]
+		private llmConfigs: LLMConfig[],
+		private usageRepo?: { recordUsage: (r: {model:string;provider:string;promptTokens:number;completionTokens:number;totalTokens:number;timestamp:number;conversationId?:string}) => Promise<void> }
 	) {}
 
 	findLLMConfig(modelId: string): LLMConfig | null {
@@ -232,9 +236,12 @@ export class ChatService {
 			const finalMessages = [...systemMessages, ...messages];
 
 			// 5. Stream from Provider
+			// Use object wrapper: TypeScript 5.9 narrows callback-assigned let vars to their
+			// initial value, making them `never` in truthy branches. Object properties avoid this.
 			let fullContent = '';
 			let fullReasoning = '';
-			
+			const streamState = { usage: null as { promptTokens: number; completionTokens: number; totalTokens: number } | null };
+
 			await provider.streamChat(
 				{
 					messages: finalMessages,
@@ -247,10 +254,13 @@ export class ChatService {
 				},
 				(chunk) => {
 					if (callbacks.checkAbort && callbacks.checkAbort()) return;
-					
+
 					if (chunk.content) {
 						fullContent += chunk.content;
 						callbacks.onChunk(chunk);
+					}
+					if (chunk.usage) {
+						streamState.usage = chunk.usage;
 					}
 					if (chunk.reasoning) {
 						fullReasoning += chunk.reasoning;
@@ -259,6 +269,8 @@ export class ChatService {
 				}
 			);
 
+			const streamUsage = streamState.usage;
+
 			// 6. Finalize Result
 			const assistantMessage: Message = {
 				role: 'assistant',
@@ -266,8 +278,21 @@ export class ChatService {
 				model: selectedModel,
 				ragSources: ragSources.length > 0 ? ragSources : undefined,
 				webSearchResults: webResults.length > 0 ? webResults : undefined,
-				reasoningContent: fullReasoning || undefined
+				reasoningContent: fullReasoning || undefined,
+				tokenUsage: streamUsage ? { promptTokens: streamUsage.promptTokens, completionTokens: streamUsage.completionTokens, totalTokens: streamUsage.totalTokens } : undefined,
 			};
+
+			if (this.usageRepo && streamUsage) {
+				void this.usageRepo.recordUsage({
+					model: selectedModel,
+					provider: config.provider,
+					promptTokens: streamUsage.promptTokens,
+					completionTokens: streamUsage.completionTokens,
+					totalTokens: streamUsage.totalTokens,
+					timestamp: Date.now(),
+					conversationId: options.conversationId
+				});
+			}
 
 			callbacks.onComplete(assistantMessage);
 
@@ -348,7 +373,12 @@ export class ChatService {
 		];
 
 		const MAX_AGENT_STEPS = activeAgent?.reactMaxSteps ?? 10;
+		const MAX_CONSECUTIVE_FAILURES = 3;
 		const workingMessages = [...messages];
+		const consecutiveFailures = new Map<string, number>();
+		const tokenBudget = options.tokenBudget ?? 100000;
+		let cumulativeTokens = 0;
+		let lastStepUsage: { promptTokens: number; completionTokens: number; totalTokens: number } | null = null;
 		let finalContent = '';
 
 		try {
@@ -365,6 +395,10 @@ export class ChatService {
 				// Build native function calling tools
 				const nativeTools = this.toolManager.toOpenAIFunctions();
 				const streamToolCalls: Array<{ name: string; arguments: Record<string, unknown> }> = [];
+
+				// Per-step usage capture via object wrapper: TypeScript 5.9 narrows
+				// callback-assigned let vars to their initial value; object properties avoid this.
+				const stepCapture = { usage: null as { promptTokens: number; completionTokens: number; totalTokens: number } | null };
 
 				// Stream LLM call
 				finalContent = '';
@@ -386,6 +420,9 @@ export class ChatService {
 							finalContent += chunk.content;
 							callbacks.onChunk(chunk);
 						}
+						if (chunk.usage) {
+							stepCapture.usage = chunk.usage;
+						}
 						if (chunk.toolCalls) {
 							for (const tc of chunk.toolCalls) {
 								try {
@@ -401,16 +438,64 @@ export class ChatService {
 					}
 				);
 
+				const stepUsage = stepCapture.usage;
+
 				if (callbacks.checkAbort?.()) break;
 
+				// Track token usage from provider
+				if (stepUsage) {
+					cumulativeTokens += stepUsage.totalTokens;
+				} else {
+					cumulativeTokens += Math.ceil(((finalContent?.length ?? 0) + (baseSystemMessages.reduce((s, m) => s + (m.content?.length ?? 0), 0))) / 4);
+				}
+				if (this.usageRepo && stepUsage) {
+					void this.usageRepo.recordUsage({
+						model: selectedModel,
+						provider: config.provider,
+						promptTokens: stepUsage.promptTokens,
+						completionTokens: stepUsage.completionTokens,
+						totalTokens: stepUsage.totalTokens,
+						timestamp: Date.now(),
+						conversationId: options.conversationId
+					});
+				}
+				lastStepUsage = stepUsage;
+				callbacks.onTokenUsage?.(step, cumulativeTokens, tokenBudget);
+				if (cumulativeTokens > tokenBudget) {
+					const msg = `Token budget exceeded: ${cumulativeTokens} > ${tokenBudget}. Terminating agent loop.`;
+					callbacks.onError(new Error(msg));
+					return;
+				}
+
 				// Parse tool calls: prefer native, fall back to text parsing
-				if (!reactEnabled) { callbacks.onComplete({ role: 'assistant', content: finalContent, model: selectedModel, ragSources: ragSources.length > 0 ? ragSources : undefined, webSearchResults: webResults.length > 0 ? webResults : undefined } as Message); return; }
+			if (!reactEnabled) {
+			callbacks.onComplete({
+				role: 'assistant', content: finalContent, model: selectedModel,
+				ragSources: ragSources.length > 0 ? ragSources : undefined,
+				webSearchResults: webResults.length > 0 ? webResults : undefined,
+				tokenUsage: lastStepUsage ?? undefined
+			} as Message);
+			return;
+		}
+
+		// Extract thought from ReAct pattern
+		const thoughtMatch = finalContent.match(/Thought:\s*([\s\S]*?)(?=Action:|```|$)/i);
+		if (thoughtMatch?.[1]?.trim()) {
+			callbacks.onThought(thoughtMatch[1].trim());
+		}
 				const toolCalls = streamToolCalls.length > 0
 					? streamToolCalls
 					: this.parseToolCallsFromContent(finalContent);
 				if (toolCalls.length === 0) break;
 
 				let anyToolExecuted = false;
+				// Push assistant message once for all tool calls in this response
+				workingMessages.push({
+					role: 'assistant',
+					content: finalContent,
+					model: selectedModel
+				} as Message);
+
 				for (const toolCall of toolCalls) {
 					if (callbacks.checkAbort?.()) break;
 
@@ -431,18 +516,28 @@ export class ChatService {
 						}
 					}
 
+					// Track consecutive failures
+					if (result.success) {
+						consecutiveFailures.delete(toolCall.name);
+					} else {
+						const fails = (consecutiveFailures.get(toolCall.name) || 0) + 1;
+						consecutiveFailures.set(toolCall.name, fails);
+						if (fails >= MAX_CONSECUTIVE_FAILURES) {
+							const msg = `Tool "${toolCall.name}" failed ${fails} consecutive times. Terminating agent loop.`;
+							callbacks.onToolResult(toolCall.name, false, msg);
+							callbacks.onError(new Error(msg));
+							return;
+						}
+					}
+
+					// Structured diagnosis for failures
 					const output = result.success
 						? JSON.stringify(result.result)
-						: `Error: ${result.error ?? 'Unknown error'}`;
+						: this.diagnoseToolError(toolCall.name, toolCall.arguments, result.error ?? 'Unknown error');
 
 					callbacks.onToolResult(toolCall.name, result.success, output);
 
 					// Add tool result to working messages for next iteration
-					workingMessages.push({
-						role: 'assistant',
-						content: finalContent,
-						model: selectedModel
-					} as Message);
 					workingMessages.push({
 						role: 'system',
 						content: `Tool ${toolCall.name} result: ${output}`
@@ -459,7 +554,8 @@ export class ChatService {
 				content: finalContent,
 				model: selectedModel,
 				ragSources: ragSources.length > 0 ? ragSources : undefined,
-				webSearchResults: webResults.length > 0 ? webResults : undefined
+				webSearchResults: webResults.length > 0 ? webResults : undefined,
+				tokenUsage: lastStepUsage ?? undefined
 			};
 
 			callbacks.onComplete(assistantMessage);
@@ -602,7 +698,69 @@ After calling a tool, you will receive the result and can continue the conversat
 		return agent.enabledBuiltInTools.includes(toolName);
 	}
 
-		async generateConversationTitle(
+	private diagnoseToolError(
+		toolName: string,
+		args: Record<string, unknown>,
+		error: string
+	): string {
+		const suggestions: string[] = [];
+		const argList = Object.entries(args).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(', ');
+
+		// File tools
+		if (toolName === 'read_file' || toolName === 'write_file' || toolName === 'append_to_note') {
+			const path = typeof args.path === 'string' ? args.path : 'unknown';
+			if (error.includes('not found') || error.includes('does not exist')) {
+				suggestions.push(`Verify the file path is correct. Paths are relative to the vault root.`);
+				suggestions.push(`Use list_files to browse available files before reading.`);
+			}
+			if (error.includes('Permission')) {
+				suggestions.push(`The file is outside the vault boundary. Use paths within your vault only.`);
+			}
+		}
+
+		if (toolName === 'write_file' || toolName === 'create_note') {
+			if (error.includes('already exists')) {
+				suggestions.push(`File already exists. Use append_to_note to add content, or choose a different name.`);
+			}
+		}
+
+		// Search tools
+		if (toolName === 'search_files') {
+			if (error.includes('no results') || error.includes('not found')) {
+				suggestions.push(`Try broader search terms or use list_files to browse available files.`);
+				suggestions.push(`Enable search_content=true to search inside file contents.`);
+			}
+		}
+
+		// MCP tools
+		if (error.includes('not connected') || error.includes('disconnected')) {
+			suggestions.push(`The MCP server for "${toolName}" is not connected. Check Settings → MCP to reconnect.`);
+		}
+
+		// CLI tools
+		if (error.includes('timeout')) {
+			suggestions.push(`The command timed out. Try reducing the scope or increasing the timeout in Tool settings.`);
+		}
+		if (error.includes('command not found') || error.includes('ENOENT')) {
+			suggestions.push(`The command for "${toolName}" was not found. Verify it is installed and on your PATH.`);
+		}
+
+		// Generic fallback
+		if (suggestions.length === 0) {
+			suggestions.push(`Check the tool arguments (${argList}) and try again with corrected inputs.`);
+			suggestions.push(`If the error persists, try a different approach or tool.`);
+		}
+
+		return [
+			`Tool "${toolName}" failed: ${error}`,
+			`Arguments: ${argList}`,
+			'',
+			'Suggestions:',
+			...suggestions.map(s => `  • ${s}`)
+		].join('\n');
+	}
+
+	async generateConversationTitle(
 			messages: Message[],
 			promptTemplate: string,
 			modelId: string

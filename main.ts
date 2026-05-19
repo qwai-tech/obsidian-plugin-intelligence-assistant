@@ -44,6 +44,7 @@ import { ConversationMigrationService } from './src/application/services/convers
 import { container } from './src/core/container';
 import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-system';
 import { ObsidianHttpClient } from './src/infrastructure/obsidian/obsidian-http-client';
+import { TokenUsageRepository } from './src/infrastructure/persistence/data/token-usage-repository';
 import { MessageRepository } from './src/infrastructure/persistence/obsidian/message-repository';
 import { ConversationRepository } from './src/infrastructure/persistence/obsidian/conversation-repository';
 import {
@@ -108,6 +109,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private providerRepository: ProviderRepository | null = null;
 	private mcpServerRepository: McpServerRepository | null = null;
 	private mcpToolCacheRepository: McpToolCacheRepository | null = null;
+	public tokenUsageRepo: TokenUsageRepository | null = null;
 
 	async onload() {
 		const loadStart = Date.now();
@@ -496,6 +498,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		if (!this.mcpServerRepository) {
 			this.mcpServerRepository = new McpServerRepository(this.app);
 		}
+			if (!this.tokenUsageRepo) {
+				this.tokenUsageRepo = new TokenUsageRepository(this.app);
+			}
 		if (!this.mcpToolCacheRepository) {
 			this.mcpToolCacheRepository = new McpToolCacheRepository(this.app);
 		}
@@ -506,7 +511,8 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			this.modelCacheRepository.initialize(),
 			this.providerRepository.initialize(),
 			this.mcpServerRepository.initialize(),
-			this.mcpToolCacheRepository.initialize()
+			this.mcpToolCacheRepository.initialize(),
+				this.tokenUsageRepo.initialize(),
 		]);
 	}
 

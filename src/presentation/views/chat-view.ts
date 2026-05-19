@@ -129,7 +129,8 @@ export class ChatView extends ItemView {
 			this.toolManager,
 			this.ragManager,
 			this.webSearchService,
-			this.plugin.settings.llmConfigs
+			this.plugin.settings.llmConfigs,
+			this.plugin.tokenUsageRepo ?? undefined
 		);
 	}
 
@@ -559,7 +560,8 @@ export class ChatView extends ItemView {
 					presencePenalty: this.state.presencePenalty,
 					enableRAG: this.state.enableRAG && this.plugin.settings.ragConfig.enabled,
 					enableWebSearch: this.state.enableWebSearch,
-					activeSystemPrompts
+					activeSystemPrompts,
+					conversationId: this.state.currentConversationId ?? undefined
 				},
 				{
 					onChunk: (chunk: import('@/types/common/llm').StreamChunk) => {
@@ -634,7 +636,8 @@ export class ChatView extends ItemView {
 				agentId: this.plugin.settings.activeAgentId,
 				agents: this.plugin.settings.agents,
 				isGenericAgent,
-				allowOpenApiTools: this.plugin.hasEnabledOpenApiTools()
+				allowOpenApiTools: this.plugin.hasEnabledOpenApiTools(),
+				conversationId: this.state.currentConversationId ?? undefined
 			},
 			{
 				onChunk: (chunk) => {
@@ -643,6 +646,9 @@ export class ChatView extends ItemView {
 						this.chatContainer.scrollTo({ top: this.chatContainer.scrollHeight, behavior: 'smooth' });
 					}
 				},
+					onTokenUsage: (step, cumulativeTokens, budget) => {
+						this.chatHeader.updateTokenSummary(`Tokens: ${cumulativeTokens.toLocaleString()} / ${budget.toLocaleString()} (step ${step + 1})`);
+					},
 				onToolCall: (toolName, args) => {
 					this.state.agentExecutionSteps.push({
 						type: 'action',
