@@ -7,6 +7,7 @@ export class ConfirmModal extends Modal {
 	private message: string;
 	private onConfirm: () => void;
 	private onCancel?: () => void;
+	private resolved = false;
 
 	constructor(
 		app: App,
@@ -25,18 +26,15 @@ export class ConfirmModal extends Modal {
 		contentEl.empty();
 		contentEl.addClass('ia-confirm-modal');
 
-		// Message
 		contentEl.createEl('p', { text: this.message });
 
-		// Buttons
 		const buttonContainer = contentEl.createDiv('modal-button-container');
 
 		const cancelBtn = buttonContainer.createEl('button', { text: 'Cancel' });
 		cancelBtn.addEventListener('click', () => {
+			this.resolved = true;
 			this.close();
-			if (this.onCancel) {
-				this.onCancel();
-			}
+			this.onCancel?.();
 		});
 
 		const confirmBtn = buttonContainer.createEl('button', {
@@ -44,14 +42,19 @@ export class ConfirmModal extends Modal {
 			cls: 'mod-warning'
 		});
 		confirmBtn.addEventListener('click', () => {
+			this.resolved = true;
 			this.close();
 			this.onConfirm();
 		});
 	}
 
 	onClose(): void {
-		const { contentEl } = this;
-		contentEl.empty();
+		this.contentEl.empty();
+		// Resolve as cancelled if closed via Escape/X without a button click
+		if (!this.resolved) {
+			this.resolved = true;
+			this.onCancel?.();
+		}
 	}
 }
 

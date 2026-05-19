@@ -167,6 +167,8 @@ export class OllamaProvider extends BaseLLMProvider {
 							const parsed = JSON.parse(line) as {
 								message?: { content?: string };
 								done?: boolean;
+								prompt_eval_count?: number;
+								eval_count?: number;
 							};
 
 							// Ollama sends content in message.content field
@@ -177,7 +179,12 @@ export class OllamaProvider extends BaseLLMProvider {
 
 							// Check if streaming is done
 							if (parsed.done === true) {
-								onChunk({ content: '', done: true });
+								const usage = (parsed.prompt_eval_count ?? parsed.eval_count) ? {
+									promptTokens: parsed.prompt_eval_count ?? 0,
+									completionTokens: parsed.eval_count ?? 0,
+									totalTokens: (parsed.prompt_eval_count ?? 0) + (parsed.eval_count ?? 0),
+								} : undefined;
+								onChunk({ content: '', done: true, usage });
 								return;
 							}
 						} catch (e) {

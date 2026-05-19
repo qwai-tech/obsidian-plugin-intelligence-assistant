@@ -2930,6 +2930,21 @@
 	cursor: pointer;
 }
 
+.conversation-rename-btn {
+	padding: 4px 6px;
+	font-size: var(--ia-font-size-xs);
+	border: none;
+	background: transparent;
+	border-radius: 3px;
+	color: var(--text-muted);
+	cursor: pointer;
+}
+
+.conversation-rename-btn:hover {
+	color: var(--text-normal);
+	background: var(--background-modifier-hover);
+}
+
 .conversation-list-floating.is-pinned {
 	position: relative;
 	box-shadow: none;

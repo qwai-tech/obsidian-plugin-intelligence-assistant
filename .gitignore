@@ -176,3 +176,4 @@ playwright-report/
 # Test vault data (auto-generated, may contain sensitive config)
 tests/e2e/test-vault/.obsidian/plugins/*/settings.json
 tests/e2e/test-vault/.obsidian/workspace.json
+.envrc

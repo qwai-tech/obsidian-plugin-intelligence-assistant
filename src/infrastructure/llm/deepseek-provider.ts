@@ -51,12 +51,13 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 		const url = this.getBaseUrl('https://api.deepseek.com/v1') + '/chat/completions';
 		const modelName = this.extractModelName(request.model);
 
-		const body = {
+		const body: Record<string, unknown> = {
 			model: modelName,
 			messages: request.messages,
 			temperature: request.temperature ?? 0.7,
 			max_tokens: request.maxTokens ?? 2000,
 			stream: true,
+			stream_options: { include_usage: true },
 		};
 
 		return { url, body };
@@ -79,8 +80,7 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 			return { content: null, done: true };
 		}
 
-		// Type guard for data structure
-		const hasChoices = (obj: unknown): obj is { choices: Array<{ delta?: { reasoning_content?: string; content?: string } }> } => {
+		const hasChoices = (obj: unknown): obj is { choices: Array<{ delta?: { reasoning_content?: string; content?: string } }>; usage?: { prompt_tokens: number; completion_tokens: number; total_tokens: number } } => {
 			return typeof obj === 'object' && obj !== null && 'choices' in obj;
 		};
 
@@ -88,20 +88,25 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 			return null;
 		}
 
+		// Extract usage from final chunk (when stream_options.include_usage is enabled)
+		const sdata = data as Record<string, unknown>;
+		const usage = sdata.usage ? {
+			promptTokens: (sdata.usage as Record<string, number>).prompt_tokens ?? 0,
+			completionTokens: (sdata.usage as Record<string, number>).completion_tokens ?? 0,
+			totalTokens: (sdata.usage as Record<string, number>).total_tokens ?? 0,
+		} : undefined;
+
 		const delta = data.choices?.[0]?.delta;
 
 		// DeepSeek R1 models return reasoning_content
 		const reasoning = delta?.reasoning_content;
 		const content = delta?.content;
 
-		// Send chunk if there's any content (reasoning or actual response)
 		if (reasoning || content) {
-			return {
-				content: content || '',
-				done: false,
-				// Note: reasoning is provider-specific, would need type extension
-				// For now, we'll just send content
-			};
+			return { content: content || '', done: false, usage };
+		}
+		if (usage) {
+			return { content: null, done: false, usage };
 		}
 
 		return null;

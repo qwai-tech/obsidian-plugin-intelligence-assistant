@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const { watch } = 'fs';
-const { join, basename } = 'path';
+const { watch } = require('fs');
+const { join, basename, dirname } = require('path');
 const logger = require('./utils/logger');
 const FileUtils = require('./utils/file-utils');
 const Builder = require('./build');
@@ -78,9 +78,9 @@ class DevServer {
         }
 
         logger.section('🚀 Development Server');
-        logger.info(`Hot Reload: ${args.hot ? '✅' : '❌'}`);
-        logger.info(`File Watch: ${args.watch ? '✅' : '❌'}`);
-        logger.info(`Auto Deploy: ${args.deploy ? `✅ (${args.deployTarget})` : '❌'}`);
+        logger.info(`Hot Reload: ${this.args.hot ? '✅' : '❌'}`);
+        logger.info(`File Watch: ${this.args.watch ? '✅' : '❌'}`);
+        logger.info(`Auto Deploy: ${this.args.deploy ? `✅ (${this.args.deployTarget})` : '❌'}`);
         
         try {
             // Initialize deployer if needed

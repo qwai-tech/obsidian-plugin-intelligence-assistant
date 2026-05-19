@@ -76,6 +76,7 @@ export class OpenAIProvider extends BaseStreamingProvider {
 			messages: request.messages,
 			temperature: request.temperature ?? 0.7,
 			stream: true,
+				stream_options: { include_usage: true },
 		};
 
 		// Use max_completion_tokens for newer models
@@ -139,15 +140,26 @@ export class OpenAIProvider extends BaseStreamingProvider {
 			return { content: null, done: false, toolCalls };
 		}
 
-		// On normal stop, clear accumulator
+		// On normal stop, clear accumulator and let [DONE] signal termination
+		// (usage chunk may follow before [DONE] when stream_options.include_usage is enabled)
 		if (choice?.finish_reason === 'stop') {
 			this.toolCallAccumulator.clear();
-			return { content: null, done: true };
+			return null;
 		}
 
+		// Extract usage from final chunk (when stream_options.include_usage is enabled)
+		const usageData = (data as Record<string, unknown>).usage as Record<string, number> | null | undefined;
+		const usage = usageData ? {
+			promptTokens: usageData.prompt_tokens ?? 0,
+			completionTokens: usageData.completion_tokens ?? 0,
+			totalTokens: usageData.total_tokens ?? 0,
+		} : undefined;
 		const content = delta?.content;
 		if (content) {
-			return { content, done: false };
+			return { content, done: false, usage };
+		}
+		if (usage) {
+			return { content: null, done: false, usage };
 		}
 
 		return null;

@@ -53,7 +53,7 @@ export class OpenRouterProvider extends BaseStreamingProvider {
 		const url = this.getBaseUrl('https://openrouter.ai/api/v1') + '/chat/completions';
 		const modelName = this.extractModelName(request.model);
 
-		const body = {
+		const body: Record<string, unknown> = {
 			model: modelName,
 			messages: request.messages,
 			temperature: request.temperature ?? 0.7,
@@ -93,9 +93,19 @@ export class OpenRouterProvider extends BaseStreamingProvider {
 			return null;
 		}
 
+		const sdata = data as Record<string, unknown>;
+		const usage = sdata.usage ? {
+			promptTokens: (sdata.usage as Record<string, number>).prompt_tokens ?? 0,
+			completionTokens: (sdata.usage as Record<string, number>).completion_tokens ?? 0,
+			totalTokens: (sdata.usage as Record<string, number>).total_tokens ?? 0,
+		} : undefined;
+
 		const content = data.choices?.[0]?.delta?.content;
 		if (content) {
-			return { content, done: false };
+			return { content, done: false, usage };
+		}
+		if (usage) {
+			return { content: null, done: false, usage };
 		}
 
 		return null;

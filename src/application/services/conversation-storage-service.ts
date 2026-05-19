@@ -56,6 +56,7 @@ export class ConversationStorageService {
   private conversationsFolder: string = CONVERSATION_FOLDER;
   private indexFilePath: string = `${CONVERSATION_FOLDER}/${INDEX_FILE_NAME}`;
   private _writeLock: Promise<void> = Promise.resolve();
+  private _indexCache: ConversationIndex | null = null;
 
   constructor(private app: App) {
     this.vault = app.vault;
@@ -286,12 +287,14 @@ export class ConversationStorageService {
   }
 
   private async loadIndex(): Promise<ConversationIndex> {
+    if (this._indexCache) return this._indexCache;
     try {
       const content = await this.vault.adapter.read(this.indexFilePath);
       const parsed = JSON.parse(content) as ConversationIndex;
       if (!parsed.version) {
         parsed.version = INDEX_FILE_VERSION;
       }
+      this._indexCache = parsed;
       return parsed;
     } catch (error) {
       console.error('Failed to load conversation index:', error);
@@ -300,6 +303,7 @@ export class ConversationStorageService {
   }
 
   private async saveIndex(index: ConversationIndex): Promise<void> {
+    this._indexCache = index;
     const payload = JSON.stringify(index, null, 2);
     await this.vault.adapter.write(this.indexFilePath, payload);
   }

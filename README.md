@@ -4,7 +4,7 @@ Transform your vault into an AI-native workspace. Intelligence Assistant brings 
 
 > Desktop only. Requires Obsidian v1.7.2+.
 
-## Feature Highlights
+## ✨ Feature Highlights
 
 - **Modern Chat View** — Streaming chat with provider/model badges, token usage display, tool-call visualization, and an Agent mode that runs multi-step agentic loops with native function calling.
 - **Multiple LLM Providers** — OpenAI, Anthropic, Google Gemini, DeepSeek, Ollama (local), OpenRouter, and SAP AI Core. Add your own credentials per provider.
@@ -17,21 +17,21 @@ Transform your vault into an AI-native workspace. Intelligence Assistant brings 
 - **Quick Actions** — Pre-configured editor context menu actions (summarize, explain, fix grammar, improve writing, expand text).
 - **Context Attachments** — Attach files, images, or vault references to any message.
 
-## Quick Start
+## 🚀 Quick Start
 
-### Community Plugin (recommended)
+### 📦 Community Plugin (recommended)
 
 1. Open **Settings → Community plugins** in Obsidian.
 2. Browse for **"Intelligence Assistant"** and install.
 3. Enable the plugin, then open **Settings → Intelligence Assistant** to configure providers.
 
-### Manual Install
+### 🔧 Manual Install
 
 1. Download the latest release.
 2. Extract into `<vault>/.obsidian/plugins/intelligence-assistant/`.
 3. Reload Obsidian and enable the plugin.
 
-### Requirements
+### 📋 Requirements
 
 | Requirement | Details |
 |---|---|
@@ -39,7 +39,7 @@ Transform your vault into an AI-native workspace. Intelligence Assistant brings 
 | Node.js | 18+ with npm (for building from source) |
 | LLM API key | Per provider (OpenAI, Anthropic, Google, DeepSeek, OpenRouter, etc.) |
 
-## Chat Experience
+## 💬 Chat Experience
 
 1. Open the chat via the ribbon icon or **Command Palette → Open AI chat in sidebar**.
 2. Choose **Chat** or **Agent** mode in the toolbar. Agent mode runs the model in a ReAct loop with tool calls.
@@ -48,7 +48,7 @@ Transform your vault into an AI-native workspace. Intelligence Assistant brings 
 5. Attach files or vault references with `@filename`.
 6. Every response shows the provider, model, and token usage. Use **Insert to Notes** to drop a reply into the active file.
 
-## Agents
+## 🤖 Agents
 
 Defined under **Settings → Agents**. Each agent has:
 
@@ -59,7 +59,7 @@ Defined under **Settings → Agents**. Each agent has:
 
 Agent mode uses **native function calling** (OpenAI) with automatic fallback to text-based tool parsing for other providers.
 
-## MCP Tools
+## 🔌 MCP Tools
 
 Connect MCP servers under **Settings → MCP**. The plugin:
 - Connects at startup and caches the tool manifest
@@ -67,22 +67,22 @@ Connect MCP servers under **Settings → MCP**. The plugin:
 - Provides a live **MCP Inspector** for testing tools interactively
 - Supports stdio transport
 
-## Web Search
+## 🌐 Web Search
 
 Configure under **Settings → Web Search**. Pick one of 8 supported providers (Google, Bing, Brave, SerpAPI, Tavily, SearXNG, Qwant, Mojeek) and set locale, result freshness, and domain filters. Credentials are stored per vault.
 
-## HTTP / OpenAPI Tools
+## 📡 HTTP / OpenAPI Tools
 
 Add OpenAPI specs under **Settings → Tools → HTTP / OpenAPI**. For each source:
 - Point at a local `.json` file or a remote URL (cached locally)
 - Override the base server URL and inject auth headers or query params
 - Enable/disable the source; reload tool definitions on demand
 
-## CLI Tools
+## ⌨️ CLI Tools
 
 Define custom shell commands under **Settings → Tools → CLI Tools**. Each tool supports parameter templates (`{{param}}`), argument/env insertion modes, working directory, timeout, and platform-specific presets (25+ built-in presets for file, search, network, code, data, and system operations).
 
-## Development
+## 🛠️ Development
 
 ```bash
 npm install          # install dependencies
@@ -95,11 +95,11 @@ npm run build        # production bundle
 
 Additional scripts: `npm run dev:deploy` (build + deploy to local vault), `npm run deploy:local`.
 
-### Post-task rule
+### ✅ Post-task rule
 
 After every change, run `npm run lint && npm run build`. Both must succeed before the work is considered done.
 
-## Documentation
+## 📖 Documentation
 
 | Document | Description |
 |---|---|

@@ -326,7 +326,6 @@ export class ChatView extends ItemView {
 		this.conversationManager = new ConversationManager(
 			this.app,
 			this.plugin,
-				this.chatService,
 			this.state,
 			this.chatContainer,
 			this.modelSelect,

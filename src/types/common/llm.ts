@@ -105,6 +105,11 @@ export interface StreamChunk {
 	content: string;
 	reasoning?: string;
 	done: boolean;
+	usage?: {
+		promptTokens: number;
+		completionTokens: number;
+		totalTokens: number;
+	};
 	toolCalls?: Array<{
 		id: string;
 		type: 'function';

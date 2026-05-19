@@ -105,13 +105,24 @@ export class GoogleProvider extends BaseStreamingProvider {
 			return null;
 		}
 
+		// Extract usage metadata from Google's structure
+		const gdata = data as Record<string, unknown>;
+		const usageMeta = gdata.usageMetadata as { promptTokenCount?: number; candidatesTokenCount?: number; totalTokenCount?: number } | undefined;
+		const usage = usageMeta ? {
+			promptTokens: usageMeta.promptTokenCount ?? 0,
+			completionTokens: usageMeta.candidatesTokenCount ?? 0,
+			totalTokens: usageMeta.totalTokenCount ?? 0,
+		} : undefined;
+
 		// Extract content from Google's structure
 		const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
 		if (content) {
-			return { content, done: false };
+			return { content, done: false, usage };
+		}
+		if (usage) {
+			return { content: null, done: false, usage };
 		}
 
-		// No content to process
 		return null;
 	}
 }

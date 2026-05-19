@@ -24,6 +24,7 @@ export const LLM_MODEL_CACHE_PATH = `${CACHE_DATA_FOLDER}/llm_models.json`;
 export const LLM_PROVIDERS_PATH = `${DATA_FOLDER}/llm-providers.json`;
 export const MCP_SERVERS_PATH = `${DATA_FOLDER}/mcp-servers.json`;
 export const MCP_TOOLS_CACHE_FOLDER = `${CACHE_DATA_FOLDER}/mcp-tools`;
+export const TOKEN_USAGE_PATH = `${DATA_FOLDER}/token-usage.json`;
 
 /**
  * Get plugin paths using vault's config directory

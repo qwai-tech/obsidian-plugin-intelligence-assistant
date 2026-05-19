@@ -2,6 +2,8 @@ import { BaseStreamingProvider, ParsedStreamChunk } from './base-streaming-provi
 import { ChatRequest, ChatResponse, Message } from './types';
 
 export class AnthropicProvider extends BaseStreamingProvider {
+	private _inputTokens = 0;
+
 	get name(): string {
 		return 'Anthropic';
 	}
@@ -91,30 +93,46 @@ export class AnthropicProvider extends BaseStreamingProvider {
 	}
 
 	protected parseStreamChunk(data: unknown): ParsedStreamChunk | null {
-		// Type guard for data structure
 		const hasType = (obj: unknown): obj is { type: string } => {
 			return typeof obj === 'object' && obj !== null && 'type' in obj;
 		};
 
-		if (!hasType(data)) {
+		if (!hasType(data)) return null;
+
+		// Capture input tokens from message_start
+		if (data.type === 'message_start') {
+			const d = data as { message?: { usage?: { input_tokens?: number } } };
+			this._inputTokens = d.message?.usage?.input_tokens ?? 0;
 			return null;
 		}
 
-		// Check if stream is complete
+		// Extract finalized output tokens from message_delta
+		if (data.type === 'message_delta') {
+			const d = data as { usage?: { output_tokens?: number } };
+			const outputTokens = d.usage?.output_tokens ?? 0;
+			return {
+				content: null,
+				done: false,
+				usage: {
+					promptTokens: this._inputTokens,
+					completionTokens: outputTokens,
+					totalTokens: this._inputTokens + outputTokens,
+				},
+			};
+		}
+
+		// message_stop signals end of stream (usage already emitted in message_delta)
 		if (data.type === 'message_stop') {
 			return { content: null, done: true };
 		}
 
-		// Extract content from Anthropic's structure
+		// Extract text content from content_block_delta
 		if (data.type === 'content_block_delta') {
 			const delta = (data as { delta?: { text?: string } }).delta;
 			const content = delta?.text;
-			if (content) {
-				return { content, done: false };
-			}
+			if (content) return { content, done: false };
 		}
 
-		// Ignore other event types
 		return null;
 	}
 }

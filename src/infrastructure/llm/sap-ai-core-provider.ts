@@ -1600,11 +1600,18 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 							delta?: { content?: string };
 							finish_reason?: string;
 						}>;
+						usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
 					};
 
 					// Handle OpenAI-compatible SSE response format from SAP AI Core
 					const content = parsed.choices?.[0]?.delta?.content;
 					const finishReason = parsed.choices?.[0]?.finish_reason;
+
+					const usage = parsed.usage ? {
+						promptTokens: parsed.usage.prompt_tokens ?? 0,
+						completionTokens: parsed.usage.completion_tokens ?? 0,
+						totalTokens: parsed.usage.total_tokens ?? 0,
+					} : undefined;
 
 					if (content) {
 						onChunk({ content, done: false });

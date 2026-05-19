@@ -15,6 +15,7 @@ import { displayMCPTab } from './tabs/mcp-tab';
 import { displayLLMTab } from './tabs/llm-tab';
 import { displayRAGTab } from './tabs/rag-tab';
 import { displayQuickActionsTab } from './tabs/quickactions-tab';
+import { displayUsageTab } from './tabs/usage-tab';
 import type { ModelFilters } from './tabs/models-tab';
 
 
@@ -54,7 +55,8 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			{ slug: 'rag', label: 'RAG' },
 			{ slug: 'prompts', label: 'Prompts' },
 			{ slug: 'agents', label: 'Agents' },
-			{ slug: 'quickactions', label: 'Quick Actions' }
+			{ slug: 'quickactions', label: 'Quick Actions' },
+			{ slug: 'usage', label: 'Usage' }
 		];
 
 		const tabContent = containerEl.createDiv('settings-tab-content');
@@ -111,6 +113,9 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 				break;
 			case 'quickactions':
 				this.displayQuickActionsTab(contentEl);
+				break;
+			case 'usage':
+				this.displayUsageTab(contentEl);
 				break;
 		}
 	}
@@ -177,6 +182,10 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 
 	private displayAgentsTab(containerEl: HTMLElement) {
 		displayAgentsTab(containerEl, this.plugin, this.app, () => this.display());
+	}
+
+	private displayUsageTab(containerEl: HTMLElement) {
+		void displayUsageTab(containerEl, this.plugin, this.app, () => this.display());
 	}
 
 	private displayQuickActionsTab(containerEl: HTMLElement) {

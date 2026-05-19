@@ -271,6 +271,8 @@ export class ConversationManager extends Events {
 		conv.mode = this.state.mode;
 		conv.config = this.buildCurrentConversationConfig();
 
+		const titleBefore = existingConv.title;
+
 		// Auto-generate/update title based on settings (only once for new conversations)
 		const shouldUpdateTitle = this.shouldUpdateConversationTitle(conv);
 		if (shouldUpdateTitle) {
@@ -289,8 +291,8 @@ export class ConversationManager extends Events {
 		// Save the updated conversation to storage
 		await storage.updateConversation(conv);
 
-		// Only re-render if not skipped (e.g., when switching conversations)
-		if (!skipRender) {
+		// Only re-render when title changed — regular message saves don't need a full list rebuild
+		if (!skipRender && conv.title !== titleBefore) {
 			void this.renderConversationList();
 		}
 
@@ -358,17 +360,23 @@ export class ConversationManager extends Events {
 		const conv = await storage.getConversationMetadata(convId);
 		if (!conv) return;
 
-		if (!await showConfirm(this.app, `Delete conversation "${conv.title}"?`)) return;
+		const wasVisible = this.state.conversationListVisible;
 
-		// Delete from storage service
+		if (!await showConfirm(this.app, `Delete conversation "${conv.title}"?`)) {
+			this.restoreListVisibility(wasVisible);
+			return;
+		}
+
 		const deleted = await storage.deleteConversation(convId);
-		if (!deleted) return;
+		if (!deleted) {
+			this.restoreListVisibility(wasVisible);
+			return;
+		}
 
 		// If deleting current conversation, switch to another or create new
 		if (convId === this.state.currentConversationId) {
 			const allConversationsMetadata = await storage.getAllConversationsMetadata();
 			if (allConversationsMetadata.length > 0) {
-				// Load the most recent conversation
 				const sortedConversations = allConversationsMetadata.sort((a, b) => b.updatedAt - a.updatedAt);
 				const mostRecentConv = await storage.loadConversation(sortedConversations[0].id);
 				if (mostRecentConv) {
@@ -376,9 +384,11 @@ export class ConversationManager extends Events {
 				}
 			} else {
 				await this.createNewConversation();
+				return; // createNewConversation already handles list re-render
 			}
 		}
 
+		this.restoreListVisibility(wasVisible);
 		void this.renderConversationList();
 		this.trigger('conversation-deleted', convId);
 	}
@@ -392,32 +402,34 @@ export class ConversationManager extends Events {
 		const conv = await storage.getConversationMetadata(convId);
 		if (!conv) return;
 
+		const wasVisible = this.state.conversationListVisible;
+
 		const newTitle = await showPrompt(this.app, 'Enter new title:', conv.title);
 		if (newTitle && newTitle.trim()) {
 			const success = await storage.renameConversation(convId, newTitle.trim());
 			if (success) {
-				// Reload the conversation if it's the current one to reflect the changes
-				if (convId === this.state.currentConversationId) {
-					const updatedConv = await storage.loadConversation(convId);
-					if (updatedConv) {
-						// Update the state without reloading the UI to avoid flickering
-						updatedConv.title = newTitle.trim();
-						this.state.currentConversationId = updatedConv.id;
-						this.state.messages = updatedConv.messages;
-					}
-				}
+				this.restoreListVisibility(wasVisible);
 				void this.renderConversationList();
-				
-				// Trigger update event with the updated metadata
+
 				const updatedMetadata = await storage.getConversationMetadata(convId);
 				if (updatedMetadata) {
-					this.trigger('conversation-updated', { 
-						id: convId, 
+					this.trigger('conversation-updated', {
+						id: convId,
 						title: updatedMetadata.title,
 						messages: this.state.messages
 					});
 				}
 			}
+		} else {
+			this.restoreListVisibility(wasVisible);
+		}
+	}
+
+	private restoreListVisibility(wasVisible: boolean): void {
+		if (wasVisible && !this.state.conversationListPinned) {
+			this.state.conversationListVisible = true;
+			this.conversationListContainer.removeClass('is-collapsed');
+			this.conversationListContainer.addClass('is-open');
 		}
 	}
 
@@ -611,6 +623,17 @@ export class ConversationManager extends Events {
 			// Actions container (hover visibility handled by CSS)
 			const actions = convItem.createDiv('conversation-actions');
 
+			// Rename button
+			const renameBtn = actions.createEl('button');
+			renameBtn.addClass('conversation-rename-btn');
+			renameBtn.addClass('ia-clickable');
+			setIcon(renameBtn, 'pencil');
+			renameBtn.title = 'Rename';
+			renameBtn.addEventListener('click', (e) => {
+				e.stopPropagation();
+				void this.renameConversation(conv.id);
+			});
+
 			// Delete button
 			const deleteBtn = actions.createEl('button');
 			deleteBtn.addClass('conversation-delete-btn');
@@ -626,6 +649,14 @@ export class ConversationManager extends Events {
 			convItem.addEventListener('contextmenu', (e) => {
 				e.preventDefault();
 				const menu = new Menu();
+
+				menu.addItem((item) => {
+					item.setTitle('Rename')
+						.setIcon('pencil')
+						.onClick(() => {
+							void this.renameConversation(conv.id);
+						});
+				});
 
 				menu.addItem((item) => {
 					item.setTitle('Delete')
