@@ -5,7 +5,7 @@
 
 /* Utility Classes */
 .ia-hidden {
-	display: none !important;
+	display: none;
 }
 
 .ia-clickable {
@@ -136,6 +136,8 @@
 	border-bottom: 1px solid var(--background-modifier-border);
 	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 	cursor: default;
+	animation: fadeInUp 0.3s ease;
+	animation-fill-mode: both;
 }
 
 .elegant-table tbody tr:last-child {
@@ -305,7 +307,7 @@
 	outline: none;
 }
 
-.action-btn:hover {
+.action-btn:hover:not(:disabled) {
 	background: var(--interactive-accent);
 	color: white;
 	border-color: transparent;
@@ -357,7 +359,7 @@
 	opacity: 0.5;
 	cursor: not-allowed;
 	box-shadow: none;
-	transform: none !important;
+	transform: none;
 }
 
 /* Primary Action Button (outside table) */
@@ -1072,7 +1074,7 @@ input.settings-filter-control {
 
 /* Agent Icon Input */
 .agent-icon-input {
-	width: 48px !important;
+	width: 48px;
 	text-align: center;
 	font-size: 18px;
 }
@@ -1166,11 +1168,6 @@ input.settings-filter-control {
 		opacity: 1;
 		transform: translateY(0);
 	}
-}
-
-.elegant-table tbody tr {
-	animation: fadeInUp 0.3s ease;
-	animation-fill-mode: both;
 }
 
 .elegant-table tbody tr:nth-child(1) { animation-delay: 0.05s; }

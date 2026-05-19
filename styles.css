@@ -932,7 +932,7 @@
 }
 
 .provider-details-cell {
-	padding: 0 !important;
+	padding: 0;
 	background: var(--background-secondary);
 }
 
@@ -1222,31 +1222,31 @@
 
 /* Enhanced Code Editor */
 .enhanced-code-editor {
-	font-family: 'Monaco', 'Menlo', 'Consolas', monospace !important;
+	font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
 	min-height: 180px;
-	background: rgba(0, 0, 0, 0.2) !important;
-	border: 1px solid #334155 !important;
-	border-radius: 6px !important;
-	padding: 12px !important;
-	color: #e2e8f0 !important;
-	font-size: 13px !important;
-	line-height: 1.6 !important;
+	background: rgba(0, 0, 0, 0.2);
+	border: 1px solid #334155;
+	border-radius: 6px;
+	padding: 12px;
+	color: #e2e8f0;
+	font-size: 13px;
+	line-height: 1.6;
 }
 
 .enhanced-code-editor:focus {
-	border-color: #4f46e5 !important;
-	box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3) !important;
+	border-color: #4f46e5;
+	box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
 }
 
 /* Enhanced input validation states */
 .config-panel-input.valid {
-	border-color: #10b981 !important;
-	background: rgba(16, 185, 129, 0.05) !important;
+	border-color: #10b981;
+	background: rgba(16, 185, 129, 0.05);
 }
 
 .config-panel-input.invalid {
-	border-color: #ef4444 !important;
-	background: rgba(239, 68, 68, 0.05) !important;
+	border-color: #ef4444;
+	background: rgba(239, 68, 68, 0.05);
 }
 
 /* Message entrance animation */
@@ -4202,7 +4202,7 @@
 
 /* Generic hidden utility class */
 .ia-hidden {
-	display: none !important;
+	display: none;
 }
 
 /* ── RAG tab stats ──────────────────────────────────────────────────────── */
