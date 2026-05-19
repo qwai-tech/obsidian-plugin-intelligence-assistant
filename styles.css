@@ -3209,11 +3209,6 @@
 	color: white;
 }
 
-.message-assistant .message-avatar {
-	background: var(--background-secondary);
-	border: 1px solid var(--background-modifier-border);
-}
-
 .message-tool {
 	padding: 12px;
 	margin: 12px 0;
