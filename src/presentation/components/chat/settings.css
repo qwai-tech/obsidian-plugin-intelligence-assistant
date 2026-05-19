@@ -40,22 +40,22 @@
 /* Tab Navigation */
 .settings-tabs {
 	display: flex;
-	gap: 8px;
-	margin-bottom: 24px;
-	padding-bottom: 12px;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin-bottom: 20px;
+	padding-bottom: 10px;
 	border-bottom: 2px solid var(--background-modifier-border);
-	overflow-x: auto;
 }
 
 .settings-tab {
-	padding: 10px 20px;
+	padding: 6px 12px;
 	cursor: pointer;
 	border: none;
 	background: transparent;
 	color: var(--text-muted);
-	border-radius: 8px;
-	font-weight: 600;
-	font-size: 13px;
+	border-radius: 6px;
+	font-weight: 500;
+	font-size: 12px;
 	transition: all 0.2s ease;
 	white-space: nowrap;
 	position: relative;
@@ -73,16 +73,7 @@
 }
 
 .settings-tab.is-active::after {
-	content: '';
-	position: absolute;
-	bottom: -14px;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 0;
-	height: 0;
-	border-left: 6px solid transparent;
-	border-right: 6px solid transparent;
-	border-top: 6px solid var(--interactive-accent);
+	display: none;
 }
 
 /* Table Wrapper */
