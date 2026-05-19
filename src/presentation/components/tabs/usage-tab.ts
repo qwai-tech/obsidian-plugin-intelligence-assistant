@@ -21,7 +21,7 @@ export async function displayUsageTab(
 	});
 	desc.addClass('ia-section-description');
 
-	const repo = plugin.tokenUsageRepo ?? undefined;
+	const repo = plugin.tokenUsageRepo;
 	if (!repo) {
 		containerEl.createEl('p', { text: 'Token usage tracking is not available.' });
 		return;
@@ -104,8 +104,7 @@ export async function displayUsageTab(
 		addStatCard('Completion', grandTotal.completionTokens.toLocaleString(), 'tokens out');
 
 		// ---- By Provider ----
-		const providerHdr = statsContainer.createDiv('ia-usage-section-hdr');
-		providerHdr.createEl('h4', { text: 'By provider' });
+		statsContainer.createDiv('ia-usage-section-hdr').createEl('h4', { text: 'By provider' });
 
 		if (byProvider.size === 0) {
 			statsContainer.createEl('p', { text: 'No usage data yet.' }).addClass('ia-muted');
@@ -128,8 +127,7 @@ export async function displayUsageTab(
 		}
 
 		// ---- By Model ----
-		const modelHdr = statsContainer.createDiv('ia-usage-section-hdr');
-		modelHdr.createEl('h4', { text: 'By model' });
+		statsContainer.createDiv('ia-usage-section-hdr').createEl('h4', { text: 'By model' });
 
 		if (byModel.size === 0) {
 			statsContainer.createEl('p', { text: 'No usage data yet.' }).addClass('ia-muted');
@@ -168,7 +166,11 @@ export async function displayUsageTab(
 
 				const timeCell = row.insertCell();
 				timeCell.addClass('ia-table-cell');
-				timeCell.setText(new Date(r.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+				const d = new Date(r.timestamp);
+				const timeStr = activeRange === 'today'
+					? d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+					: d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+				timeCell.setText(timeStr);
 
 				const modelCell = row.insertCell();
 				modelCell.addClass('ia-table-cell');
