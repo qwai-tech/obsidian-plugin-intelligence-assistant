@@ -1170,12 +1170,6 @@ input.settings-filter-control {
 	}
 }
 
-.elegant-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
-.elegant-table tbody tr:nth-child(2) { animation-delay: 0.1s; }
-.elegant-table tbody tr:nth-child(3) { animation-delay: 0.15s; }
-.elegant-table tbody tr:nth-child(4) { animation-delay: 0.2s; }
-.elegant-table tbody tr:nth-child(5) { animation-delay: 0.25s; }
-.elegant-table tbody tr:nth-child(n+6) { animation-delay: 0.3s; }
 
 /* Loading State */
 .table-loading {
