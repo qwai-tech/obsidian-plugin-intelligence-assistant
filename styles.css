@@ -3173,39 +3173,99 @@
 	color: var(--text-faint);
 }
 
-/* ── User message ──*/
-.message-user .message-row {
+/* ── User message ── */
+
+.message-user .message-row,
+.ia-chat-message--user .message-row {
 	flex-direction: row-reverse;
 	align-items: flex-end;
 }
 
-.message-user .message-body {
-	background: transparent;
-	border: none;
-	padding: 0;
-	border-radius: 0;
+.message-user .message-avatar,
+.ia-chat-message--user .message-avatar {
+	background: var(--interactive-accent);
+	color: white;
+}
+
+/* Transparent flex column wrapper, right-aligned */
+.message-user .message-body,
+.ia-chat-message--user .message-body {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
+	min-width: 0;
+	max-width: 72%;
+	padding: 0;
+	background: transparent;
+	border: none;
+	border-radius: 0;
+	overflow: visible;
 }
 
-.message-user .message-meta,
-.message-user .message-actions,
-.message-user .ia-chat-message__footer,
-.message-user .ia-chat-message__annotation {
+/* Hide name, badges, status — keep meta for timestamp only */
+.message-user .message-name,
+.message-user .ia-chat-message__badges,
+.message-user .ia-chat-message__status,
+.ia-chat-message--user .message-name,
+.ia-chat-message--user .ia-chat-message__badges,
+.ia-chat-message--user .ia-chat-message__status {
 	display: none;
 }
 
-.message-user .message-content {
+/* meta row: timestamp only, right-aligned, below bubble */
+.message-user .message-meta,
+.ia-chat-message--user .message-meta {
+	display: flex;
+	justify-content: flex-end;
+	order: 10;
+	margin-top: 3px;
+}
+
+/* User timestamp always visible */
+.message-user .message-timestamp,
+.ia-chat-message--user .message-timestamp {
+	font-size: var(--ia-font-size-3xs);
+	color: var(--text-faint);
+}
+
+/* User content IS the bubble */
+.message-user .message-content,
+.ia-chat-message--user .message-content {
+	order: 1;
 	background: var(--interactive-accent);
 	color: var(--text-on-accent);
 	padding: 8px 12px;
 	border-radius: 16px 16px 4px 16px;
 }
 
-.message-user .message-avatar {
-	background: var(--interactive-accent);
-	color: white;
+/* Copy action — right-aligned, hover reveal */
+.message-user .message-actions,
+.ia-chat-message--user .message-actions {
+	order: 2;
+	display: flex;
+	justify-content: flex-end;
+	gap: 2px;
+	max-height: none;
+	overflow: visible;
+	opacity: 0;
+	transition: opacity 0.15s ease;
+	pointer-events: none;
+	margin-top: 3px;
+	background: transparent;
+}
+
+.message-user .message-body:hover .message-actions,
+.ia-chat-message--user .message-body:hover .message-actions {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+/* Hide token footer for user messages */
+.message-user .ia-chat-message__footer,
+.message-user .ia-chat-message__annotation,
+.ia-chat-message--user .ia-chat-message__footer,
+.ia-chat-message--user .ia-chat-message__annotation {
+	display: none;
 }
 
 .message-tool {
