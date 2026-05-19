@@ -44,54 +44,43 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		const {containerEl} = this;
 
 		containerEl.empty();
+		;
 
-		const layout = containerEl.createDiv('settings-layout');
-		const sidebar = layout.createDiv('settings-sidebar');
-		const tabContent = layout.createDiv('settings-tab-content');
-
-		const groups: Array<{ label: string; tabs: Array<{ slug: string; label: string }> }> = [
-			{ label: 'General', tabs: [
-				{ slug: 'general', label: 'General' },
-			]},
-			{ label: 'AI', tabs: [
-				{ slug: 'llm', label: 'LLM' },
-				{ slug: 'mcp', label: 'MCP' },
-				{ slug: 'tools', label: 'Tools' },
-				{ slug: 'agents', label: 'Agents' },
-			]},
-			{ label: 'Knowledge', tabs: [
-				{ slug: 'rag', label: 'RAG' },
-				{ slug: 'prompts', label: 'Prompts' },
-			]},
-			{ label: 'Other', tabs: [
-				{ slug: 'quickactions', label: 'Quick Actions' },
-				{ slug: 'usage', label: 'Usage' },
-			]},
+		const tabNav = containerEl.createDiv('settings-tabs');
+		const tabDefs: Array<{ slug: string; label: string }> = [
+			{ slug: 'general', label: 'General' },
+			{ slug: 'llm', label: 'LLM' },
+			{ slug: 'mcp', label: 'MCP' },
+			{ slug: 'tools', label: 'Tools' },
+			{ slug: 'rag', label: 'RAG' },
+			{ slug: 'prompts', label: 'Prompts' },
+			{ slug: 'agents', label: 'Agents' },
+			{ slug: 'quickactions', label: 'Quick Actions' },
+			{ slug: 'usage', label: 'Usage' }
 		];
 
-		const allBtns: HTMLElement[] = [];
+		const tabContent = containerEl.createDiv('settings-tab-content');
 
-		groups.forEach(group => {
-			const section = sidebar.createDiv('settings-sidebar-section');
-			section.createDiv({ cls: 'settings-sidebar-label', text: group.label });
-			group.tabs.forEach(def => {
-				const btn = section.createEl('button', { text: def.label, cls: 'settings-tab' });
-				btn.dataset.slug = def.slug;
-				if (def.slug === this.activeTab) btn.addClass('is-active');
-				allBtns.push(btn);
-				btn.addEventListener('click', () => {
-					this.switchTab(def.slug, allBtns, tabContent);
-				});
+		tabDefs.forEach(def => {
+			const btn = tabNav.createEl('button', { text: def.label });
+			btn.className = 'settings-tab';
+			btn.dataset.slug = def.slug;
+			if (def.slug === this.activeTab) {
+				btn.addClass('is-active');
+			}
+			btn.addEventListener('click', () => {
+				this.switchTab(def.slug, tabNav.querySelectorAll('.settings-tab'), tabContent);
 			});
 		});
 
-		this.switchTab(this.activeTab, allBtns, tabContent);
+		const initial = tabDefs.find(def => def.slug === this.activeTab) ?? tabDefs[0];
+		this.switchTab(initial.slug, tabNav.querySelectorAll('.settings-tab'), tabContent);
 	}
 
-	private switchTab(slug: string, allTabs: HTMLElement[], contentEl: HTMLElement) {
+	private switchTab(slug: string, allTabs: NodeListOf<Element>, contentEl: HTMLElement) {
 		this.activeTab = slug;
 		allTabs.forEach(tab => {
-			if (tab.dataset.slug === slug) {
+			if ((tab as HTMLElement).dataset.slug === slug) {
 				tab.addClass('is-active');
 			} else {
 				tab.removeClass('is-active');
