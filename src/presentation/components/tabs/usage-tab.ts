@@ -27,18 +27,17 @@ export async function displayUsageTab(
 		return;
 	}
 
-	// ---- Time-range selector ----
-	const filterBar = containerEl.createDiv('ia-section-actions');
-	filterBar.createSpan({ text: 'Show: ', cls: 'ia-muted' });
+	// ---- Tab bar ----
+	const tabBar = containerEl.createDiv('ia-tab-bar');
 
 	type Range = 'today' | 'week' | 'month' | 'all';
 	let activeRange: Range = 'all';
 
-	const rangeButtons: Array<{ range: Range; label: string }> = [
-		{ range: 'today', label: 'Today' },
-		{ range: 'week', label: 'This week' },
-		{ range: 'month', label: 'This month' },
-		{ range: 'all', label: 'All time' },
+	const rangeConfig: Array<{ range: Range; label: string; subLabel: string }> = [
+		{ range: 'today', label: 'Today', subLabel: 'today' },
+		{ range: 'week', label: 'This week', subLabel: 'this week' },
+		{ range: 'month', label: 'This month', subLabel: 'this month' },
+		{ range: 'all', label: 'All time', subLabel: 'all time' },
 	];
 
 	const statsContainer = containerEl.createDiv('ia-usage-stats');
@@ -86,15 +85,28 @@ export async function displayUsageTab(
 			byModel.set(r.model, ms);
 		}
 
-		// ---- Summary pills ----
-		const controls = statsContainer.createDiv('ia-section-actions');
-		const summary = controls.createDiv('ia-section-summary');
+		// ---- Stat grid ----
+		const subLabel = rangeConfig.find(c => c.range === activeRange)?.subLabel ?? 'all time';
 		const totalK = (grandTotal.totalTokens / 1000).toFixed(1);
-		summary.createSpan({ cls: 'ia-section-summary-pill', text: `${totalK}K tokens` });
-		summary.createSpan({ cls: 'ia-section-summary-pill', text: `${grandTotal.callCount} calls` });
+
+		const statGrid = statsContainer.createDiv('ia-usage-stat-grid');
+
+		const addStatCard = (label: string, value: string, sub: string) => {
+			const card = statGrid.createDiv('ia-usage-stat-card');
+			card.createDiv({ cls: 'ia-usage-stat-card__label', text: label });
+			card.createDiv({ cls: 'ia-usage-stat-card__value', text: value });
+			card.createDiv({ cls: 'ia-usage-stat-card__sub', text: sub });
+		};
+
+		addStatCard('Total tokens', `${totalK}K`, subLabel);
+		addStatCard('API calls', String(grandTotal.callCount), subLabel);
+		addStatCard('Prompt tokens', grandTotal.promptTokens.toLocaleString(), 'tokens in');
+		addStatCard('Completion', grandTotal.completionTokens.toLocaleString(), 'tokens out');
 
 		// ---- By Provider ----
-		statsContainer.createEl('h4', { text: 'By provider' });
+		const providerHdr = statsContainer.createDiv('ia-usage-section-hdr');
+		providerHdr.createEl('h4', { text: 'By provider' });
+
 		if (byProvider.size === 0) {
 			statsContainer.createEl('p', { text: 'No usage data yet.' }).addClass('ia-muted');
 		} else {
@@ -102,14 +114,23 @@ export async function displayUsageTab(
 			const tbody = t.tBodies[0];
 			for (const [name, s] of byProvider) {
 				const row = tbody.insertRow();
-				row.addClass('ia-table-row');
-				[name, s.promptTokens.toLocaleString(), s.completionTokens.toLocaleString(), s.totalTokens.toLocaleString(), `${s.callCount} calls`]
-					.forEach(text => { const c = row.insertCell(); c.addClass('ia-table-cell'); c.setText(text); });
+				const nameCell = row.insertCell();
+				nameCell.addClass('ia-table-cell');
+				nameCell.setText(name);
+				[s.promptTokens.toLocaleString(), s.completionTokens.toLocaleString(), s.totalTokens.toLocaleString(), String(s.callCount)]
+					.forEach(text => {
+						const c = row.insertCell();
+						c.addClass('ia-table-cell');
+						c.addClass('ia-table-cell--right');
+						c.setText(text);
+					});
 			}
 		}
 
 		// ---- By Model ----
-		statsContainer.createEl('h4', { text: 'By model' });
+		const modelHdr = statsContainer.createDiv('ia-usage-section-hdr');
+		modelHdr.createEl('h4', { text: 'By model' });
+
 		if (byModel.size === 0) {
 			statsContainer.createEl('p', { text: 'No usage data yet.' }).addClass('ia-muted');
 		} else {
@@ -117,29 +138,50 @@ export async function displayUsageTab(
 			const tbody = t.tBodies[0];
 			for (const [name, s] of byModel) {
 				const row = tbody.insertRow();
-				row.addClass('ia-table-row');
-				[name, s.promptTokens.toLocaleString(), s.completionTokens.toLocaleString(), s.totalTokens.toLocaleString(), `${s.callCount} calls`]
-					.forEach(text => { const c = row.insertCell(); c.addClass('ia-table-cell'); c.setText(text); });
+				const nameCell = row.insertCell();
+				nameCell.addClass('ia-table-cell');
+				nameCell.addClass('ia-code');
+				nameCell.setText(name);
+				[s.promptTokens.toLocaleString(), s.completionTokens.toLocaleString(), s.totalTokens.toLocaleString(), String(s.callCount)]
+					.forEach(text => {
+						const c = row.insertCell();
+						c.addClass('ia-table-cell');
+						c.addClass('ia-table-cell--right');
+						c.setText(text);
+					});
 			}
 		}
 
 		// ---- Recent Activity (last 10 from filtered range) ----
-		statsContainer.createEl('h4', { text: 'Recent activity' });
+		const recentHdr = statsContainer.createDiv('ia-usage-section-hdr');
+		recentHdr.createEl('h4', { text: 'Recent activity' });
+		recentHdr.createSpan({ text: 'last 10' });
+
 		const recent = records.slice(-10).reverse();
 		if (recent.length === 0) {
 			statsContainer.createEl('p', { text: 'No recent activity.' }).addClass('ia-muted');
 		} else {
-			const t = createTable(statsContainer, ['Time', 'Model', 'Provider', 'Tokens']);
+			const t = createTable(statsContainer, ['Time', 'Model', 'In', 'Out', 'Total']);
 			const tbody = t.tBodies[0];
 			for (const r of recent) {
 				const row = tbody.insertRow();
-				row.addClass('ia-table-row');
-				[
-					new Date(r.timestamp).toLocaleString(),
-					r.model,
-					r.provider,
-					`${r.promptTokens.toLocaleString()} + ${r.completionTokens.toLocaleString()} = ${r.totalTokens.toLocaleString()}`
-				].forEach(text => { const c = row.insertCell(); c.addClass('ia-table-cell'); c.setText(text); });
+
+				const timeCell = row.insertCell();
+				timeCell.addClass('ia-table-cell');
+				timeCell.setText(new Date(r.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+
+				const modelCell = row.insertCell();
+				modelCell.addClass('ia-table-cell');
+				modelCell.addClass('ia-code');
+				modelCell.setText(r.model);
+
+				[r.promptTokens.toLocaleString(), r.completionTokens.toLocaleString(), r.totalTokens.toLocaleString()]
+					.forEach(text => {
+						const c = row.insertCell();
+						c.addClass('ia-table-cell');
+						c.addClass('ia-table-cell--right');
+						c.setText(text);
+					});
 			}
 		}
 
@@ -157,17 +199,17 @@ export async function displayUsageTab(
 		});
 	};
 
-	// Render filter buttons
-	const btnEls: Map<Range, HTMLElement> = new Map();
-	for (const { range, label } of rangeButtons) {
-		const btn = filterBar.createEl('button', { text: label, cls: 'ia-button' });
-		if (range === activeRange) btn.addClass('ia-button--active');
-		btnEls.set(range, btn);
-		btn.addEventListener('click', () => {
+	// Render tab elements
+	const tabEls: Map<Range, HTMLElement> = new Map();
+	for (const { range, label } of rangeConfig) {
+		const tab = tabBar.createDiv({ cls: 'ia-tab', text: label });
+		if (range === activeRange) tab.addClass('ia-tab--active');
+		tabEls.set(range, tab);
+		tab.addEventListener('click', () => {
 			activeRange = range;
-			btnEls.forEach((el, r) => {
-				if (r === activeRange) el.addClass('ia-button--active');
-				else el.removeClass('ia-button--active');
+			tabEls.forEach((el, r) => {
+				if (r === activeRange) el.addClass('ia-tab--active');
+				else el.removeClass('ia-tab--active');
 			});
 			void renderStats();
 		});
