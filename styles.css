@@ -159,6 +159,10 @@
 .ia-detection-card__value--missing {
 	color: var(--text-faint);
 }
+.ia-detection-card__value--muted {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+}
 
 .ia-toolbar {
 	display: flex;
@@ -2220,6 +2224,47 @@
 	word-wrap: break-word;
 	font-size: var(--ia-font-size-s);
 	white-space: normal;
+}
+
+.message-body {
+	flex: 1;
+	min-width: 0;
+}
+
+/* ── footer / annotation base ── */
+
+.ia-chat-message__footer,
+.ia-chat-message__annotation {
+	font-size: var(--ia-font-size-3xs);
+	color: var(--text-faint);
+}
+
+/* ── copy button group ── */
+
+.ia-chat-copy-group {
+	display: flex;
+	gap: 4px;
+	margin-left: auto;
+}
+
+.ia-chat-copy-btn {
+	padding: 2px 8px;
+	border-radius: 4px;
+	border: 1px solid var(--background-modifier-border);
+	background: transparent;
+	color: var(--text-muted);
+	font-size: var(--ia-font-size-2xs);
+	cursor: pointer;
+}
+
+.ia-chat-copy-btn:hover:not(:disabled) {
+	color: var(--text-normal);
+	background: var(--background-modifier-hover);
+}
+
+.ia-chat-copy-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
 }
 
 /* Agent Execution Trace Styles */
