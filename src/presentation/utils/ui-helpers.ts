@@ -2,23 +2,19 @@
  * Presentation utility helpers for rendering tables and status indicators.
  */
 
-const TABLE_CLASS = 'ia-table';
-const HEADER_ROW_CLASS = 'ia-table__header';
-const CELL_CLASS = 'ia-table__cell';
-
 export function createTable(containerEl: HTMLElement, headers: string[]): HTMLTableElement {
 	const wrapper = containerEl.createDiv('ia-table-container');
 	wrapper.addClass('ia-scrollable');
 
-	const table = wrapper.createEl('table', { cls: TABLE_CLASS });
-	const thead = table.createEl('thead');
-	const headerRow = thead.createEl('tr', { cls: HEADER_ROW_CLASS });
+	const table = wrapper.createEl('table', { cls: 'ia-table' });
 
+	const thead = table.createEl('thead', { cls: 'ia-table-head' });
+	const headerRow = thead.createEl('tr');
 	headers.forEach(headerText => {
-		headerRow.createEl('th', { text: headerText, cls: CELL_CLASS });
+		headerRow.createEl('th', { text: headerText, cls: 'ia-table-header' });
 	});
 
-	table.createEl('tbody');
+	table.createEl('tbody', { cls: 'ia-table-body' });
 	return table;
 }
 
