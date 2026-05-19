@@ -3112,7 +3112,10 @@
 /* Reasoning traces and section blocks stay between content and actions */
 .message-assistant .agent-execution-trace-container,
 .message-assistant .ia-agent-trace-container,
-.message-assistant .ia-chat-message__section {
+.message-assistant .ia-chat-message__section,
+.ia-chat-message--assistant .agent-execution-trace-container,
+.ia-chat-message--assistant .ia-agent-trace-container,
+.ia-chat-message--assistant .ia-chat-message__section {
 	order: 2;
 }
 
@@ -3131,8 +3134,8 @@
 }
 
 .message-assistant .message-body:hover .message-actions,
-.ia-chat-message--assistant:hover .message-actions {
-	max-height: 36px;
+.ia-chat-message--assistant .message-body:hover .message-actions {
+	max-height: 60px;
 	opacity: 1;
 	pointer-events: auto;
 	margin-top: 4px;
@@ -3152,12 +3155,10 @@
 .message-assistant .message-timestamp,
 .ia-chat-message--assistant .message-timestamp {
 	order: 11;
-	opacity: 1;
 	font-size: var(--ia-font-size-3xs);
 	color: var(--text-faint);
 	margin-top: 2px;
 	margin-left: 0;
-	transition: none;
 }
 
 /* Token usage footer — last (order:12) */
@@ -3170,8 +3171,6 @@
 	margin-top: 2px;
 	font-size: var(--ia-font-size-3xs);
 	color: var(--text-faint);
-	opacity: 1;
-	transition: none;
 }
 
 /* ── User message ──*/
