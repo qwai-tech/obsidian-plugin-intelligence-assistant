@@ -14,6 +14,11 @@ export interface ParsedStreamChunk {
 	content: string | null;
 	/** Whether this signals the end of the stream */
 	done: boolean;
+	toolCalls?: Array<{
+		id: string;
+		type: 'function';
+		function: { name: string; arguments: string };
+	}>;
 }
 
 /**
@@ -155,7 +160,10 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 									return;
 								}
 
-								if (result.content) {
+								if (result.toolCalls && result.toolCalls.length > 0) {
+						onChunk({ content: '', done: false, toolCalls: result.toolCalls });
+					}
+					if (result.content) {
 									onChunk({ content: result.content, done: false });
 								}
 							}

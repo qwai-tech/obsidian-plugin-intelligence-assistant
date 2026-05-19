@@ -9,20 +9,34 @@ import { MessageController } from './message-controller';
 import { AgentController } from './agent-controller';
 import { safeGetMessage } from '@/utils/type-guards';
 import type { Message, Agent, LLMConfig, ModelInfo } from '@/types';
+import type { ChatService } from '@/application/services/chat.service';
+import type { StreamChunk } from '@/types/common/llm';
+
+export interface ChatUICallbacks {
+	onChunk: (chunk: StreamChunk) => void;
+	onComplete: (message: Message) => void;
+	onError: (error: Error) => void;
+	onRagSources?: (sources: unknown[]) => void;
+	onWebSearch?: (results: unknown[]) => void;
+	checkAbort?: () => boolean;
+}
 
 export interface ChatControllerOptions {
 	messagesContainer: HTMLElement;
 	messageController: MessageController;
 	agentController: AgentController;
+	chatService?: ChatService;
+	uiCallbacks?: ChatUICallbacks;
 }
 
 export class ChatController extends BaseController {
 	private messagesContainer!: HTMLElement;
 	private messageController!: MessageController;
 	private agentController!: AgentController;
+	private chatService: ChatService | null = null;
+	private uiCallbacks: ChatUICallbacks | null = null;
 	private isGenerating: boolean = false;
 
-	// Getters for protected properties
 	protected get plugin() {
 		return this._plugin;
 	}
@@ -31,83 +45,122 @@ export class ChatController extends BaseController {
 		return this._app;
 	}
 
-	async initialize(): Promise<void> {
-		// Initialize chat controller
-	}
+	async initialize(): Promise<void> {}
 
 	cleanup(): void {
 		this.isGenerating = false;
 	}
 
-	/**
-	 * Configure controller with dependencies
-	 */
 	configure(options: ChatControllerOptions): void {
 		this.messagesContainer = options.messagesContainer;
 		this.messageController = options.messageController;
 		this.agentController = options.agentController;
+		if (options.chatService) this.chatService = options.chatService;
+		if (options.uiCallbacks) this.uiCallbacks = options.uiCallbacks;
 	}
 
-	/**
-	 * Send a user message
-	 */
 	async sendMessage(content: string): Promise<void> {
 		if (this.isGenerating) {
 			new Notice('Please wait for the current response to complete');
 			return;
 		}
 
-		if (!content.trim()) {
-			return;
-		}
+		if (!content.trim()) return;
 
-		// Create user message
-			const userMessage: Message = {
-				role: 'user',
-				content: content.trim(),
-				attachments: this.state.currentAttachments,
-				references: this.state.currentReferences
-			};
+		const userMessage: Message = {
+			role: 'user',
+			content: content.trim(),
+			attachments: this.state.currentAttachments,
+			references: this.state.currentReferences
+		};
 
-		// Add to conversation
 		this.state.addMessage(userMessage);
-
-		// Clear input
 		this.state.clearAttachments();
 		this.state.clearReferences();
 
-		// Generate response
 		await this.generateResponse();
 	}
 
-	/**
-	 * Generate AI response
-	 * TODO: Complete MVC refactoring - this is a placeholder
-	 */
-	generateResponse(): Promise<void> {
-		const agent = this.agentController.getCurrentAgent();
-		if (!agent) {
-			new Notice('No agent selected');
-			return Promise.resolve();
+	async generateResponse(): Promise<void> {
+		if (!this.chatService) {
+			new Notice('ChatService not configured. Using ChatView fallback.');
+			this.isGenerating = false;
+			return;
+		}
+
+		const modelId = this.plugin.settings.defaultModel;
+		if (!modelId) {
+			new Notice('No model selected');
+			this.isGenerating = false;
+			return;
+		}
+
+		const config = this.chatService.findLLMConfig(modelId);
+		if (!config) {
+			new Notice('No provider configuration found');
+			this.isGenerating = false;
+			return;
 		}
 
 		this.isGenerating = true;
+		const allMessages = this.state.messages;
 
 		try {
-			// TODO: Implement proper MVC-based response generation
-			// The actual chat implementation is currently in chat-view.ts
-			// This controller needs to be properly integrated
+			if (this.state.mode === 'agent') {
+				await this.chatService.executeAgentLoop(
+					allMessages,
+					{
+						model: modelId,
+						mode: 'agent',
+						temperature: this.state.temperature,
+						maxTokens: this.state.maxTokens,
+						enableRAG: this.state.enableRAG,
+						enableWebSearch: this.state.enableWebSearch,
+						agentId: this.plugin.settings.activeAgentId,
+						agents: this.plugin.settings.agents,
+						isGenericAgent: !this.plugin.settings.activeAgentId
+					},
+					{
+						onChunk: (chunk) => { this.uiCallbacks?.onChunk(chunk); },
+						onToolCall: () => {},
+						onToolResult: () => {},
+						onThought: () => {},
+						onComplete: (msg) => { this.uiCallbacks?.onComplete(msg); },
+						onError: (err) => { this.uiCallbacks?.onError(err); },
+						checkAbort: () => this.uiCallbacks?.checkAbort?.() ?? false
+					}
+				);
+			} else {
+				const contextWindow = 20;
+				const llmContent = allMessages[allMessages.length - 1]?.content || '';
+				const llmMessages = this.chatService.prepareLlmMessages(allMessages, allMessages[allMessages.length - 1], llmContent, contextWindow);
 
-			new Notice('Response generation not yet implemented in MVC controller');
-			this.isGenerating = false;
-
+				await this.chatService.streamResponse(
+					llmMessages,
+					{
+						model: modelId,
+						mode: 'chat',
+						temperature: this.state.temperature,
+						maxTokens: this.state.maxTokens,
+						enableRAG: this.state.enableRAG,
+						enableWebSearch: this.state.enableWebSearch
+					},
+					{
+						onChunk: (chunk) => { this.uiCallbacks?.onChunk(chunk); },
+						onComplete: (msg) => { this.uiCallbacks?.onComplete(msg); },
+						onError: (err) => { this.uiCallbacks?.onError(err); },
+						onRAGSources: (sources) => { this.uiCallbacks?.onRagSources?.(sources); },
+						onWebSearch: (results) => { this.uiCallbacks?.onWebSearch?.(results); },
+						checkAbort: () => this.uiCallbacks?.checkAbort?.() ?? false
+					}
+				);
+			}
 		} catch (error: unknown) {
-			this.isGenerating = false;
-			new Notice(`Failed to generate response: ${safeGetMessage(error)}`);
+			new Notice(`Chat error: ${safeGetMessage(error)}`);
 			console.error('Chat error:', error);
+		} finally {
+			this.isGenerating = false;
 		}
-
-		return Promise.resolve();
 	}
 
 	/**

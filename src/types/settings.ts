@@ -14,6 +14,7 @@ import type { CLIToolConfig } from './features/cli-tools';
 import type { SystemPrompt, Agent } from './core/agent';
 import type { AgentMemory } from './features/memory';
 import * as defaultUserConfigJson from '../../config/default/settings.json';
+import { deepClone } from '@/utils/type-guards';
 
 /**
  * Quick Action Configuration
@@ -30,7 +31,6 @@ export interface QuickActionConfig {
 
 const DEFAULT_USER_CONFIG: UserConfig = defaultUserConfigJson as UserConfig;
 const DEFAULT_TITLE_PROMPT = 'Generate a short, descriptive title (max 6 words) for this conversation:\n\n{conversation}\n\nTitle:';
-const deepClone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 const generateId = (prefix = 'openapi'): string => `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
 
 /**
@@ -292,7 +292,7 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 		providers: {
 			defaultModel: settings.defaultModel,
 			titleSummaryModel: settings.titleSummaryModel,
-			list: []
+			list: deepClone(settings.llmConfigs)
 		},
 		conversations: {
 			title: {

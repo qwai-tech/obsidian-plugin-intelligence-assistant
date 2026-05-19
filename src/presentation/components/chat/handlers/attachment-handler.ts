@@ -3,116 +3,11 @@
  * Manages file and image attachments for chat messages
  */
 
-import { App, Menu, Modal, Notice, TFile } from 'obsidian';
+import { App, Menu, Notice, TFile } from 'obsidian';
+import { SearchableImageModal } from '@/presentation/components/modals/searchable-image-modal';
 import { Attachment } from '@/types';
 import { ChatViewState, StateChangeEvent } from '@/presentation/state/chat-view-state';
 
-/**
- * Modal for selecting images from vault
- */
-class SearchableImageModal extends Modal {
-	private onChooseFiles: (_files: TFile[]) => void;
-	private searchInput: HTMLInputElement;
-	private resultsContainer: HTMLElement;
-	private allImageFiles: TFile[];
-	private selectedFiles: TFile[] = [];
-
-	constructor(app: App, onChooseFiles: (_files: TFile[]) => void) {
-		super(app);
-		this.onChooseFiles = onChooseFiles;
-		this.allImageFiles = this.app.vault.getFiles().filter(file => {
-			const ext = file.extension.toLowerCase();
-			return ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp'].includes(ext);
-		});
-	}
-
-	onOpen() {
-		const { contentEl } = this;
-		contentEl.empty();
-		contentEl.addClass('image-picker-modal');
-
-		contentEl.createEl('h2', { text: 'Select images' });
-
-		// Search input
-		this.searchInput = contentEl.createEl('input', {
-			type: 'text',
-			placeholder: 'Search images...'
-		});
-		this.searchInput.addClass('ia-image-search-input');
-		this.searchInput.addEventListener('input', () => this.renderResults());
-
-		// Results container
-		this.resultsContainer = contentEl.createDiv('image-results');
-		this.resultsContainer.addClass('ia-image-results');
-
-		// Buttons
-		const buttonContainer = contentEl.createDiv('ia-image-picker-buttons');
-
-		const selectBtn = buttonContainer.createEl('button', { text: 'Select' });
-		selectBtn.addEventListener('click', () => {
-			this.onChooseFiles(this.selectedFiles);
-			this.close();
-		});
-
-		const cancelBtn = buttonContainer.createEl('button', { text: 'Cancel' });
-		cancelBtn.addEventListener('click', () => this.close());
-
-		this.renderResults();
-	}
-
-	private renderResults() {
-		this.resultsContainer.empty();
-
-		const query = this.searchInput.value.toLowerCase();
-		const filtered = query
-			? this.allImageFiles.filter(file => file.path.toLowerCase().includes(query))
-			: this.allImageFiles;
-
-		if (filtered.length === 0) {
-			this.resultsContainer.createDiv({ text: 'No images found' });
-			return;
-		}
-
-		filtered.slice(0, 50).forEach(file => {
-			const item = this.resultsContainer.createDiv('image-item');
-			item.addClass('ia-clickable');
-			item.toggleClass('ia-image-item--selected', this.selectedFiles.includes(file));
-
-			item.setText(`🖼️ ${file.path}`);
-
-			item.addEventListener('click', () => {
-				const index = this.selectedFiles.indexOf(file);
-				if (index > -1) {
-					this.selectedFiles.splice(index, 1);
-				} else {
-					this.selectedFiles.push(file);
-				}
-				this.renderResults();
-			});
-
-			item.addEventListener('mouseenter', () => {
-				if (!this.selectedFiles.includes(file)) {
-					item.setCssProps({ 'background': 'var(--background-modifier-hover)' });
-				}
-			});
-
-			item.addEventListener('mouseleave', () => {
-				if (!this.selectedFiles.includes(file)) {
-					item.setCssProps({ 'background': 'var(--background-secondary)' });
-				}
-			});
-		});
-	}
-
-	onClose() {
-		const { contentEl } = this;
-		contentEl.empty();
-	}
-}
-
-/**
- * Handles file and image attachments
- */
 export class AttachmentHandler {
 	private attachmentContainer: HTMLElement | null = null;
 

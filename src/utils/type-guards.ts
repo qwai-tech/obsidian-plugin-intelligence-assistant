@@ -3,6 +3,10 @@
  * Provides safe type checking functions for common patterns
  */
 
+export function deepClone<T>(value: T): T {
+	return JSON.parse(JSON.stringify(value)) as T;
+}
+
 /**
  * Check if value is an Error instance
  */

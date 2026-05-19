@@ -428,8 +428,6 @@ function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssi
 	}).addDropdown(dropdown => dropdown
 			.addOptions({
 				'similarity': 'Similarity',
-				'mmr': 'MMR (Diverse Results)',
-				'hybrid': 'Hybrid'
 			})
 			.setValue(plugin.settings.ragConfig.searchType)
 			.onChange(async (value) => {
@@ -576,16 +574,6 @@ function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 	const createSetting = (options: ConfigFieldMetadataOptions) =>
 		applyConfigFieldMetadata(new Setting(section), options);
 
-	createSetting({
-		path: 'ragConfig.enableCompression',
-		label: 'Enable compression',
-		description: 'Compress embeddings to reduce storage size'
-	}).addToggle(toggle => toggle
-			.setValue(plugin.settings.ragConfig.enableCompression)
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.enableCompression = value;
-				await plugin.saveSettings();
-			}));
 
 	createSetting({
 		path: 'ragConfig.embeddingBatchSize',
@@ -602,69 +590,9 @@ function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 				}
 			}));
 
-	createSetting({
-		path: 'ragConfig.enableSemanticCaching',
-		label: 'Enable semantic caching',
-		description: 'Cache search results for faster retrieval'
-	}).addToggle(toggle => toggle
-			.setValue(plugin.settings.ragConfig.enableSemanticCaching)
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.enableSemanticCaching = value;
-				await plugin.saveSettings();
-			}));
 
-	createSetting({
-		path: 'ragConfig.cacheSize',
-		label: 'Cache size',
-		description: 'Number of cached search results to maintain'
-	}).addText(text => text
-			.setPlaceholder('100')
-			.setValue(plugin.settings.ragConfig.cacheSize.toString())
-			.onChange(async (value) => {
-				const num = parseInt(value);
-				if (!isNaN(num) && num > 0) {
-					plugin.settings.ragConfig.cacheSize = num;
-					await plugin.saveSettings();
-				}
-			}));
 
 	// Re-ranking toggle with dynamic re-rendering
-	const reRankingContainer = section.createDiv('ia-reranking-container');
-
-	const renderReRankingSettings = () => {
-		reRankingContainer.empty();
-
-		const createReRankingSetting = (options: ConfigFieldMetadataOptions) =>
-			applyConfigFieldMetadata(new Setting(reRankingContainer), options);
-
-		createReRankingSetting({
-			path: 'ragConfig.reRankingEnabled',
-			label: 'Enable re-ranking',
-			description: 'Re-rank search results using a secondary model'
-		}).addToggle(toggle => toggle
-				.setValue(plugin.settings.ragConfig.reRankingEnabled)
-				.onChange(async (value) => {
-					plugin.settings.ragConfig.reRankingEnabled = value;
-					await plugin.saveSettings();
-					renderReRankingSettings();
-				}));
-
-		if (plugin.settings.ragConfig.reRankingEnabled) {
-			createReRankingSetting({
-				path: 'ragConfig.reRankingModel',
-				label: 'Re-Ranking Model',
-				description: 'Model to use for re-ranking results'
-			}).addText(text => text
-					.setPlaceholder('Cross-encoder/ms-marco-MiniLM-L-6-v2')
-					.setValue(plugin.settings.ragConfig.reRankingModel)
-					.onChange(async (value) => {
-						plugin.settings.ragConfig.reRankingModel = value;
-						await plugin.saveSettings();
-					}));
-		}
-	};
-
-	renderReRankingSettings();
 }
 
 function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {

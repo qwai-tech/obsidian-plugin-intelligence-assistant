@@ -1,10 +1,10 @@
 // Message repository
 import { Vault } from 'obsidian';
-import { Message } from '../../../domain/chat/entities/message.entity';
+import { MessageEntity } from '../../../domain/chat/entities/message.entity';
 import { BaseObsidianRepository } from './base-obsidian-repository';
 
 class MessageSerializer {
-  serialize(message: Message): string {
+  serialize(message: MessageEntity): string {
     return JSON.stringify({
       id: message.id,
       content: message.content,
@@ -14,7 +14,7 @@ class MessageSerializer {
     });
   }
 
-  deserialize(content: string): Message {
+  deserialize(content: string): MessageEntity {
     const data = JSON.parse(content) as {
       id: string;
       content: string;
@@ -22,7 +22,7 @@ class MessageSerializer {
       timestamp: string | number | Date;
       metadata?: Record<string, unknown>;
     };
-    return new Message(
+    return new MessageEntity(
       data.id,
       data.content,
       data.role,
@@ -32,12 +32,12 @@ class MessageSerializer {
   }
 }
 
-export class MessageRepository extends BaseObsidianRepository<Message> {
+export class MessageRepository extends BaseObsidianRepository<MessageEntity> {
   constructor(vault: Vault) {
     super(vault, 'chats/messages', new MessageSerializer());
   }
 
-  protected getEntityId(entity: Message): string {
+  protected getEntityId(entity: MessageEntity): string {
     return entity.id;
   }
 }

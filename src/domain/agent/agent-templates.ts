@@ -1,16 +1,11 @@
-import type { Agent, AgentModelStrategy } from '@/types';
-
-const fixedStrategy = (modelId: string): AgentModelStrategy => ({
-	strategy: 'fixed',
-	modelId
-});
+import type { Agent } from '@/types';
 
 export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = [
 	{
 		name: 'Research Assistant',
 		description: 'Helps with research, note-taking, and information gathering. Uses web search and RAG to find relevant information.',
 		icon: '📋',
-		modelStrategy: fixedStrategy('gpt-4o'),
+		modelStrategy: { strategy: 'default', modelId: '' },
 		temperature: 0.7,
 		maxTokens: 2000,
 		systemPromptId: 'default',
@@ -30,7 +25,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		name: 'Code Expert',
 		description: 'Expert programming assistant for code analysis, debugging, and development. Uses thinking mode for complex problems.',
 		icon: '💻',
-		modelStrategy: fixedStrategy('gpt-4o'),
+		modelStrategy: { strategy: 'default', modelId: '' },
 		temperature: 0.3,
 		maxTokens: 3000,
 		systemPromptId: 'code-expert',
@@ -50,7 +45,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		name: 'Writing Coach',
 		description: 'Creative writing assistant for content creation, editing, and storytelling. Focuses on style and clarity.',
 		icon: '✍️',
-		modelStrategy: fixedStrategy('gpt-4o'),
+		modelStrategy: { strategy: 'default', modelId: '' },
 		temperature: 0.8,
 		maxTokens: 2500,
 		systemPromptId: 'creative-writer',
@@ -70,7 +65,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		name: 'Quick Assistant',
 		description: 'Fast, lightweight assistant for quick questions and simple tasks. No memory or advanced features.',
 		icon: '⚡',
-		modelStrategy: fixedStrategy('gpt-4o-mini'),
+		modelStrategy: { strategy: 'default', modelId: '' },
 		temperature: 0.7,
 		maxTokens: 1000,
 		systemPromptId: 'default',
@@ -90,7 +85,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		name: 'Data Analyst',
 		description: 'Analyzes data, creates insights, and helps with data-driven decision making. Uses reasoning for complex analysis.',
 		icon: '📊',
-		modelStrategy: fixedStrategy('o1'),
+		modelStrategy: { strategy: 'default', modelId: '' },
 		temperature: 0.5,
 		maxTokens: 2000,
 		systemPromptId: 'default',
@@ -110,7 +105,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		name: 'Knowledge Manager',
 		description: 'Manages your knowledge base with advanced file operations and search. Perfect for organizing notes.',
 		icon: '🗂️',
-		modelStrategy: fixedStrategy('gpt-4o'),
+		modelStrategy: { strategy: 'default', modelId: '' },
 		temperature: 0.6,
 		maxTokens: 2000,
 		systemPromptId: 'default',

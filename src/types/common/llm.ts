@@ -105,11 +105,70 @@ export interface StreamChunk {
 	content: string;
 	reasoning?: string;
 	done: boolean;
+	toolCalls?: Array<{
+		id: string;
+		type: 'function';
+		function: {
+			name: string;
+			arguments: string;
+		};
+	}>;
+}
+
+export interface ProviderCapabilities {
+	chat: boolean;
+	embeddings: boolean;
+	streaming: boolean;
+	functions: boolean;
+	models: boolean;
+}
+
+export interface ModelConfig {
+	id: string;
+	name: string;
+	maxTokens: number;
+	contextWindow: number;
+	supportsFunctions: boolean;
+	capabilities: string[];
+}
+
+export interface LLMProviderConfig {
+	apiKey: string;
+	baseUrl?: string;
+	defaultModel?: string;
+	timeout?: number;
+	[key: string]: unknown;
+}
+
+export interface TokenCount {
+	count: number;
+	model: string;
+}
+
+export interface ValidationResult {
+	success: boolean;
+	errors: string[];
+}
+
+export interface ConnectionTest {
+	success: boolean;
+	message: string;
+	models?: string[];
 }
 
 export interface ILLMProvider {
-	name: string;
+	readonly name: string;
+	readonly version?: string;
+	readonly capabilities?: ProviderCapabilities;
+	readonly models?: ModelConfig[];
+	readonly isInitialized?: boolean;
+
 	chat(_request: ChatRequest): Promise<ChatResponse>;
 	streamChat(_request: ChatRequest, _onChunk: (_chunk: StreamChunk) => void): Promise<void>;
 	generateEmbedding?(_text: string, _model: string): Promise<number[]>;
+	initialize?(_config: LLMProviderConfig): Promise<void>;
+	countTokens?(_text: string, _model?: string): Promise<TokenCount>;
+	validateConfig?(_config: LLMProviderConfig): ValidationResult;
+	testConnection?(_config?: LLMProviderConfig): Promise<ConnectionTest>;
+	cleanup?(): Promise<void>;
 }

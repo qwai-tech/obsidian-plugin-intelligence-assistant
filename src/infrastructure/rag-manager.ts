@@ -47,8 +47,6 @@ export class RAGManager {
     // Load persisted vector store data
     await this.vectorStore.load();
     
-    // Initialize embedding worker for background processing
-    EmbeddingManager.initializeWorker();
     
     // Setup file change listener if enabled
     if (this.config.enabled && this.config.embedChangedFiles) {

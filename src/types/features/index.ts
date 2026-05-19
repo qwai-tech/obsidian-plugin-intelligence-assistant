@@ -8,5 +8,4 @@ export * from './mcp';
 export * from './openapi-tools';
 export * from './web-search';
 export * from './memory';
-export * from './think';
 export * from './cli-tools';

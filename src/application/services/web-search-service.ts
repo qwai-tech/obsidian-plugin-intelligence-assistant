@@ -46,15 +46,26 @@ interface SerpApiResponse {
 	organic_results?: SerpApiOrganicResult[];
 }
 
-interface BraveSearchResult {
+interface TavilySearchResult {
 	title: string;
 	url: string;
 	content?: string;
-	snippet?: string;
 }
 
-interface BraveSearchResponse {
-	results?: BraveSearchResult[];
+interface TavilySearchResponse {
+	results?: TavilySearchResult[];
+}
+
+interface BraveWebResult {
+	title: string;
+	url: string;
+	description?: string;
+}
+
+interface BraveWebSearchResponse {
+	web?: {
+		results?: BraveWebResult[];
+	};
 }
 
 interface SearchApiResult {
@@ -69,28 +80,16 @@ interface SearchApiResponse {
 	results?: SearchApiResult[];
 }
 
-interface KagiWebResult {
-	title: string;
-	url: string;
-	description?: string;
-	snippet?: string;
-	domain?: string;
-}
-
-interface KagiSearchResponse {
-	web?: KagiWebResult[];
-}
-
-interface JinaSearchItem {
+interface MojeekResultItem {
 	title: string;
 	url: string;
 	desc?: string;
-	domain?: string;
 }
 
-interface JinaSearchResponse {
-	data?: JinaSearchItem[] | JinaSearchItem;
-	results?: JinaSearchItem[];
+interface MojeekSearchResponse {
+	response?: {
+		results?: MojeekResultItem[];
+	};
 }
 
 interface QwantSearchItem {
@@ -346,8 +345,6 @@ export class WebSearchService {
 				case 'bing':
 					results = await this.searchBing(optimizedQuery, maxResults);
 					break;
-				case 'duckduckgo':
-					results = await this.searchDuckDuckGo(optimizedQuery, maxResults);
 					break;
 				case 'serpapi':
 					results = await this.searchSerpAPI(optimizedQuery, maxResults);
@@ -361,11 +358,7 @@ export class WebSearchService {
 				case 'brave':
 					results = await this.searchBrave(optimizedQuery, maxResults);
 					break;
-				case 'yahoo':
-					results = await this.searchYahoo(optimizedQuery, maxResults);
 					break;
-				case 'yandex':
-					results = await this.searchYandex(optimizedQuery, maxResults);
 					break;
 				case 'qwant':
 					results = await this.searchQwant(optimizedQuery, maxResults);
@@ -374,8 +367,7 @@ export class WebSearchService {
 					results = await this.searchMojeek(optimizedQuery, maxResults);
 					break;
 				default:
-					console.warn(`[WebSearch] Unknown provider: ${this.config.provider}, defaulting to DuckDuckGo`);
-					results = await this.searchDuckDuckGo(optimizedQuery, maxResults);
+					console.warn(`[WebSearch] Unknown provider: ${this.config.provider}, defaulting to Google`);
 			}
 
 			return this.applyDomainFilters(results);
@@ -478,54 +470,6 @@ export class WebSearchService {
 	}
 
 	/**
-	 * Search using DuckDuckGo HTML scraping
-	 */
-	private async searchDuckDuckGo(query: string, maxResults: number): Promise<WebSearchResult[]> {
-		try {
-			// Use DuckDuckGo HTML scraping approach (no API key required)
-			const searchUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}&kl=${this.config.searchCountry || 'us-en'}`;
-			
-			const response = await this.httpClient.request({
-				url: searchUrl,
-				method: 'GET',
-				headers: {
-					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-				}
-			});
-
-			if (response.status !== 200) {
-				throw new Error(`DuckDuckGo search failed: ${response.status}`);
-			}
-
-			const html = response.text;
-			const results = this.parseDuckDuckGoHTML(html, maxResults);
-
-			console.debug(`[WebSearch] DuckDuckGo found ${results.length} results`);
-			return results;
-		} catch (error) {
-			console.error('[WebSearch] DuckDuckGo search error:', error);
-			throw error;
-		}
-	}
-
-	/**
-	 * Parse DuckDuckGo HTML results
-	 * Note: This is fragile and may break if DDG changes their HTML structure
-	 */
-	private parseDuckDuckGoHTML(html: string, maxResults: number): WebSearchResult[] {
-		const results: WebSearchResult[] = [];
-
-		try {
-			// Look for result containers in DDG HTML
-			const doc = new DOMParser().parseFromString(html, 'text/html');
-			const resultElements = doc.querySelectorAll('.result');
-
-			for (let i = 0; i < resultElements.length && results.length < maxResults; i++) {
-				const result = resultElements[i];
-				const titleElement = result.querySelector('.result__a');
-				const snippetElement = result.querySelector('.result__snippet') || result.querySelector('.result__extract');
-				const urlElement = result.querySelector('.result__url');
-
 				if (titleElement && titleElement.textContent?.trim()) {
 					const title = titleElement.textContent.trim();
 					const url = urlElement ? urlElement.textContent?.trim() : (titleElement as HTMLAnchorElement).href;
@@ -640,7 +584,7 @@ export class WebSearchService {
 				throw new Error(`Tavily search failed: ${response.status}`);
 			}
 
-			const data = response.json as BraveSearchResponse;
+			const data = response.json as TavilySearchResponse;
 			const results: WebSearchResult[] = [];
 
 			if (data.results && Array.isArray(data.results)) {
@@ -648,7 +592,7 @@ export class WebSearchService {
 					results.push({
 						title: item.title,
 						url: item.url,
-						snippet: item.content || item.snippet || 'No description available',
+						snippet: item.content || 'No description available',
 						source: new URL(item.url).hostname
 					});
 				}
@@ -772,16 +716,16 @@ export class WebSearchService {
 				throw new Error(`Brave search failed: ${response.status}`);
 			}
 
-			const data = response.json as KagiSearchResponse;
+			const data = response.json as BraveWebSearchResponse;
 			const results: WebSearchResult[] = [];
 
-			if (data.web && Array.isArray(data.web)) {
-				for (const item of data.web) {
+			if (data.web?.results && Array.isArray(data.web.results)) {
+				for (const item of data.web.results) {
 					results.push({
 						title: item.title,
 						url: item.url,
-						snippet: item.description || item.snippet || 'No description available',
-						source: item.domain || new URL(item.url).hostname
+						snippet: item.description || 'No description available',
+						source: new URL(item.url).hostname
 					});
 				}
 			}
@@ -792,148 +736,6 @@ export class WebSearchService {
 			console.error('[WebSearch] Brave search error:', error);
 			throw error;
 		}
-	}
-
-	/**
-	 * Search using Yahoo Search (HTML scraping approach)
-	 */
-	private async searchYahoo(query: string, maxResults: number): Promise<WebSearchResult[]> {
-		// Note: Yahoo doesn't provide a free public API, so we'll use HTML scraping
-		// This approach is fragile and subject to change
-		try {
-			const searchUrl = `https://search.yahoo.com/search?p=${encodeURIComponent(query)}&n=${maxResults}&b=${this.config.searchCountry || 'us'}`;
-			
-			const response = await this.httpClient.request({
-				url: searchUrl,
-				method: 'GET',
-				headers: {
-					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-				}
-			});
-
-			if (response.status !== 200) {
-				throw new Error(`Yahoo search failed: ${response.status}`);
-			}
-
-			const html = response.text;
-			const results = this.parseYahooHTML(html, maxResults);
-
-			console.debug(`[WebSearch] Yahoo found ${results.length} results`);
-			return results;
-		} catch (error) {
-			console.error('[WebSearch] Yahoo search error:', error);
-			throw error;
-		}
-	}
-
-	/**
-	 * Parse Yahoo HTML results
-	 */
-	private parseYahooHTML(html: string, maxResults: number): WebSearchResult[] {
-		const results: WebSearchResult[] = [];
-
-		try {
-			const doc = new DOMParser().parseFromString(html, 'text/html');
-			// Yahoo uses multiple possible selectors for search results
-			const resultElements = doc.querySelectorAll('div#web > ol#r1-0 li > div, .dd .mw');
-
-			for (let i = 0; i < resultElements.length && results.length < maxResults; i++) {
-				const result = resultElements[i];
-				const titleElement = result.querySelector('h3 > a, .title > a');
-				const snippetElement = result.querySelector('p, .compText');
-				const urlElement = result.querySelector('h3 > a, .title > a');
-
-				if (titleElement && titleElement.textContent?.trim()) {
-					const title = titleElement.textContent.trim();
-					const url = urlElement ? (urlElement as HTMLAnchorElement).href : '';
-					const snippet = snippetElement ? snippetElement.textContent?.trim() : 'No description available';
-
-					if (url) {
-						results.push({
-							title,
-							url,
-							snippet: snippet || 'No description available',
-							source: new URL(url).hostname
-						});
-					}
-				}
-			}
-		} catch (error) {
-			console.error('[WebSearch] Yahoo HTML parsing error:', error);
-		}
-
-		return results;
-	}
-
-	/**
-	 * Search using Yandex Search (HTML scraping approach)
-	 */
-	private async searchYandex(query: string, maxResults: number): Promise<WebSearchResult[]> {
-		// Yandex doesn't provide a free public API, so we'll use HTML scraping
-		// This approach is fragile and subject to change
-		try {
-			const searchUrl = `https://yandex.com/search/?text=${encodeURIComponent(query)}&num=${maxResults}`;
-			
-			const response = await this.httpClient.request({
-				url: searchUrl,
-				method: 'GET',
-				headers: {
-					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-					'Accept-Language': this.config.searchLanguage || 'en-US,en;q=0.9'
-				}
-			});
-
-			if (response.status !== 200) {
-				throw new Error(`Yandex search failed: ${response.status}`);
-			}
-
-			const html = response.text;
-			const results = this.parseYandexHTML(html, maxResults);
-
-			console.debug(`[WebSearch] Yandex found ${results.length} results`);
-			return results;
-		} catch (error) {
-			console.error('[WebSearch] Yandex search error:', error);
-			throw error;
-		}
-	}
-
-	/**
-	 * Parse Yandex HTML results
-	 */
-	private parseYandexHTML(html: string, maxResults: number): WebSearchResult[] {
-		const results: WebSearchResult[] = [];
-
-		try {
-			const doc = new DOMParser().parseFromString(html, 'text/html');
-			const resultElements = doc.querySelectorAll('li.serp-item, .serp-item div.CachedPage, .OrganicTitle');
-
-			for (let i = 0; i < resultElements.length && results.length < maxResults; i++) {
-				const result = resultElements[i];
-				const titleElement = result.querySelector('.OrganicTitle, .Link, a.Titles');
-				const snippetElement = result.querySelector('.OrganicText, .text-container, .res-desc');
-				const urlElement = result.querySelector('.Link');
-
-				if (titleElement && titleElement.textContent?.trim()) {
-					const title = titleElement.textContent.trim();
-					const url = urlElement ? (urlElement as HTMLAnchorElement).href : '';
-					const snippet = snippetElement ? snippetElement.textContent?.trim() : 'No description available';
-
-					if (url) {
-						results.push({
-							title,
-							url: url.startsWith('http') ? url : `https://yandex.com${url}`,
-							snippet: snippet || 'No description available',
-							source: new URL(url.startsWith('http') ? url : `https://yandex.com${url}`).hostname
-						});
-					}
-				}
-			}
-		} catch (error) {
-			console.error('[WebSearch] Yandex HTML parsing error:', error);
-		}
-
-		return results;
 	}
 
 	/**
@@ -1046,11 +848,11 @@ export class WebSearchService {
 				throw new Error(`Mojeek search failed: ${response.status}`);
 			}
 
-			const data = response.json as JinaSearchResponse;
+			const data = response.json as MojeekSearchResponse;
 			const results: WebSearchResult[] = [];
 
-			if (data.results && Array.isArray(data.results)) {
-				for (const item of data.results) {
+			if (data.response?.results && Array.isArray(data.response.results)) {
+				for (const item of data.response.results) {
 					if (results.length >= maxResults) break;
 					results.push({
 						title: item.title,
@@ -1103,9 +905,9 @@ export class WebSearchService {
 		return [
 			{
 				title: `Search results for "${originalQuery}"`,
-				url: `https://duckduckgo.com/?q=${encodeURIComponent(originalQuery)}`,
-				snippet: 'Web search is enabled but results could not be fetched. This is a placeholder result. Click to open DuckDuckGo search.',
-				source: 'duckduckgo.com'
+				url: `https://google.com/?q=${encodeURIComponent(originalQuery)}`,
+				snippet: 'Web search is enabled but results could not be fetched. This is a placeholder result. Click to open Google search.',
+				source: 'google.com'
 			}
 		];
 	}

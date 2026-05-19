@@ -319,3 +319,85 @@ export function collapseExecutionTrace(contentEl: HTMLElement): void {
 		}
 	}
 }
+
+/**
+ * Returns true if the message content contains a JSON tool-call block.
+ */
+export function hasAgentToolCall(content: string): boolean {
+	const regex = /```json\s*\n([\s\S]*?)\n```/g;
+	let match;
+	while ((match = regex.exec(content)) !== null) {
+		try {
+			const json = JSON.parse(match[1]) as Record<string, unknown>;
+			const name = json.name ?? json.tool;
+			if (name && typeof name === 'string') {
+				return true;
+			}
+		} catch { /* not a tool-call block */ }
+	}
+	return false;
+}
+
+/**
+ * Strip tool-call blocks and ReAct scaffolding text from a message so only
+ * the model's plain-language content remains.
+ */
+export function extractFinalContent(message: Message): string {
+	let content = message.content;
+	content = content.replace(/```json\s*\n[\s\S]*?\n```/g, '');
+	content = content.replace(/Thought:.*?(?=Action:|```|$)/gs, '');
+	content = content.replace(/Action:\s*/g, '');
+	return content.trim();
+}
+
+/**
+ * Reconstruct AgentExecutionStep[] from a sequence of assistant + system
+ * messages that contained tool calls and their results.
+ */
+export function reconstructAgentSteps(messages: Message[]): AgentExecutionStep[] {
+	const steps: AgentExecutionStep[] = [];
+	for (const msg of messages) {
+		if (msg.role === 'system' && msg.content.startsWith('Tool ')) {
+			const resultMatch = msg.content.match(/^Tool\s+\S+\s+result:\s*([\s\S]*)$/);
+			const resultContent = resultMatch ? resultMatch[1] : msg.content;
+			const isError = resultContent.startsWith('Error:') || resultContent.startsWith('Unknown error');
+			steps.push({
+				type: 'observation',
+				content: resultContent,
+				timestamp: Date.now(),
+				status: isError ? 'error' : 'success'
+			});
+			continue;
+		}
+
+		const thoughtMatch = msg.content.match(/Thought:(.*?)(?:Action:|```|$)/s);
+		if (thoughtMatch && thoughtMatch[1].trim()) {
+			steps.push({
+				type: 'thought',
+				content: thoughtMatch[1].trim(),
+				timestamp: Date.now()
+			});
+		}
+
+		const regex = /```json\s*\n([\s\S]*?)\n```/g;
+		let match;
+		while ((match = regex.exec(msg.content)) !== null) {
+			try {
+				const json = JSON.parse(match[1]) as Record<string, unknown>;
+				const name = (json.name ?? json.tool) as string | undefined;
+				if (name && typeof name === 'string') {
+					const args = typeof json.arguments === 'object' && json.arguments !== null
+						? json.arguments as Record<string, unknown>
+						: {};
+					steps.push({
+						type: 'action',
+						content: `${name}(${JSON.stringify(args)})`,
+						timestamp: Date.now(),
+						status: 'success'
+					});
+				}
+			} catch { /* ignore malformed blocks */ }
+		}
+	}
+	return steps;
+}

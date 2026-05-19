@@ -2,6 +2,8 @@ import { BaseStreamingProvider, ParsedStreamChunk } from './base-streaming-provi
 import { ChatRequest, ChatResponse } from './types';
 
 export class OpenAIProvider extends BaseStreamingProvider {
+	private toolCallAccumulator: Map<number, { id: string; name: string; arguments: string }> = new Map();
+
 	get name(): string {
 		return 'OpenAI';
 	}
@@ -83,34 +85,71 @@ export class OpenAIProvider extends BaseStreamingProvider {
 			body.max_tokens = maxTokensValue;
 		}
 
+		if (request.tools && request.tools.length > 0) {
+			body.tools = request.tools;
+			if (request.toolChoice) {
+				body.tool_choice = request.toolChoice;
+			}
+			if (request.parallelToolCalls !== undefined) {
+				body.parallel_tool_calls = request.parallelToolCalls;
+			}
+		}
+
 		return { url, body };
 	}
 
 	protected parseStreamChunk(data: unknown): ParsedStreamChunk | null {
-		// Handle string "[DONE]" marker (already handled by base class)
-		// This is here for documentation
 		if (data === '[DONE]') {
 			return { content: null, done: true };
 		}
 
-		// Type guard for OpenAI's data structure
 		const hasChoices = (obj: unknown): obj is {
-			choices?: Array<{ delta?: { content?: string } }>;
+			choices?: Array<{
+				delta?: { content?: string; tool_calls?: Array<{ index: number; id?: string; type?: string; function?: { name?: string; arguments?: string } }> };
+				finish_reason?: string;
+			}>;
 		} => {
 			return typeof obj === 'object' && obj !== null && 'choices' in obj;
 		};
 
-		if (!hasChoices(data)) {
-			return null;
+		if (!hasChoices(data)) return null;
+
+		const choice = data.choices?.[0];
+		const delta = choice?.delta;
+
+		// Accumulate tool calls from deltas
+		if (delta?.tool_calls) {
+			for (const tc of delta.tool_calls) {
+				const existing = this.toolCallAccumulator.get(tc.index) || { id: '', name: '', arguments: '' };
+				if (tc.id) existing.id = tc.id;
+				if (tc.function?.name) existing.name = tc.function.name;
+				if (tc.function?.arguments) existing.arguments += tc.function.arguments;
+				this.toolCallAccumulator.set(tc.index, existing);
+			}
 		}
 
-		// Extract content from OpenAI's structure
-		const content = data.choices?.[0]?.delta?.content;
+		// When finish_reason is tool_calls, emit accumulated tool calls
+		if (choice?.finish_reason === 'tool_calls' && this.toolCallAccumulator.size > 0) {
+			const toolCalls = Array.from(this.toolCallAccumulator.values()).map(tc => ({
+				id: tc.id,
+				type: 'function' as const,
+				function: { name: tc.name, arguments: tc.arguments }
+			}));
+			this.toolCallAccumulator.clear();
+			return { content: null, done: false, toolCalls };
+		}
+
+		// On normal stop, clear accumulator
+		if (choice?.finish_reason === 'stop') {
+			this.toolCallAccumulator.clear();
+			return { content: null, done: true };
+		}
+
+		const content = delta?.content;
 		if (content) {
 			return { content, done: false };
 		}
 
-		// No content to process
 		return null;
 	}
 

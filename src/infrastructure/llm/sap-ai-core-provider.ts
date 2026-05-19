@@ -2130,8 +2130,6 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			{ id: 'sap-ai-core:anthropic--claude-4.5-haiku', name: 'Claude 4.5 Haiku', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			// GCP Vertex AI — Gemini models
 			{ id: 'sap-ai-core:gemini-2.5-flash', name: 'Gemini 2.5 Flash', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			// Embeddings
-			{ id: 'sap-ai-core:text-embedding-3-large', name: 'Text Embedding 3 Large', provider: 'sap-ai-core', capabilities: ['embedding'], enabled: true },
 		];
 	}
 

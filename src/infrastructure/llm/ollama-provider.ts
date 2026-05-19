@@ -73,6 +73,25 @@ export class OllamaProvider extends BaseLLMProvider {
 		};
 	}
 
+	async generateEmbedding(text: string, model: string): Promise<number[]> {
+		const url = `${this.getBaseUrl()}/api/embed`;
+		const modelName = model.includes(':') ? model.split(':').slice(1).join(':') : model;
+		const response = await requestUrl({
+			url,
+			method: 'POST',
+			headers: this.getHeaders(),
+			body: JSON.stringify({ model: modelName, input: text }),
+		});
+		if (response.status < 200 || response.status >= 300) {
+			throw new Error(`Ollama embed API failed: ${String(response.status)}`);
+		}
+		const data = response.json as { embeddings?: number[][] };
+		if (data.embeddings && data.embeddings.length > 0) {
+			return data.embeddings[0];
+		}
+		throw new Error('Ollama embedding returned empty result');
+	}
+
 	async streamChat(request: ChatRequest, onChunk: (_chunk: StreamChunk) => void): Promise<void> {
 		const url = `${this.getBaseUrl()}/api/chat`;
 

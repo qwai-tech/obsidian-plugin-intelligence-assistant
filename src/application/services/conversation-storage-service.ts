@@ -55,6 +55,7 @@ export class ConversationStorageService {
   private initialized = false;
   private conversationsFolder: string = CONVERSATION_FOLDER;
   private indexFilePath: string = `${CONVERSATION_FOLDER}/${INDEX_FILE_NAME}`;
+  private _writeLock: Promise<void> = Promise.resolve();
 
   constructor(private app: App) {
     this.vault = app.vault;
@@ -63,6 +64,18 @@ export class ConversationStorageService {
   /**
    * Public initialization hook (idempotent)
    */
+  private async _withWriteLock<T>(fn: () => Promise<T>): Promise<T> {
+    const prev = this._writeLock;
+    let release: () => void;
+    this._writeLock = new Promise<void>(resolve => { release = resolve; });
+    await prev;
+    try {
+      return await fn();
+    } finally {
+      release!();
+    }
+  }
+
   async initialize(): Promise<void> {
     await this.ensureInitialized();
   }
@@ -72,20 +85,21 @@ export class ConversationStorageService {
    */
   async createConversation(conversation: Conversation): Promise<void> {
     await this.ensureInitialized();
-    const index = await this.loadIndex();
+    await this._withWriteLock(async () => {
+      const index = await this.loadIndex();
+      const normalizedConversation = this.normalizeConversation(conversation);
+      const filePath = this.generateConversationFilePath(normalizedConversation, index);
 
-    const normalizedConversation = this.normalizeConversation(conversation);
-    const filePath = this.generateConversationFilePath(normalizedConversation, index);
+      await this.writeConversationFile(filePath, normalizedConversation);
 
-    await this.writeConversationFile(filePath, normalizedConversation);
+      const metadata = this.buildMetadata(normalizedConversation, filePath);
+      const updatedIndex: ConversationIndex = {
+        version: INDEX_FILE_VERSION,
+        conversations: [...index.conversations, metadata].sort((a, b) => b.updatedAt - a.updatedAt)
+      };
 
-    const metadata = this.buildMetadata(normalizedConversation, filePath);
-    const updatedIndex: ConversationIndex = {
-      version: INDEX_FILE_VERSION,
-      conversations: [...index.conversations, metadata].sort((a, b) => b.updatedAt - a.updatedAt)
-    };
-
-    await this.saveIndex(updatedIndex);
+      await this.saveIndex(updatedIndex);
+    });
   }
 
   /**
@@ -129,25 +143,27 @@ export class ConversationStorageService {
    */
   async updateConversation(conversation: Conversation): Promise<void> {
     await this.ensureInitialized();
-    const index = await this.loadIndex();
-    const metadata = index.conversations.find(conv => conv.id === conversation.id);
+    await this._withWriteLock(async () => {
+      const index = await this.loadIndex();
+      const metadata = index.conversations.find(conv => conv.id === conversation.id);
 
-    if (!metadata) {
-      throw new Error(`Conversation ${conversation.id} not found in index`);
-    }
+      if (!metadata) {
+        throw new Error(`Conversation ${conversation.id} not found in index`);
+      }
 
-    const normalizedConversation = this.normalizeConversation(conversation);
-    await this.writeConversationFile(metadata.file, normalizedConversation);
+      const normalizedConversation = this.normalizeConversation(conversation);
+      await this.writeConversationFile(metadata.file, normalizedConversation);
 
-    const refreshedMetadata = this.buildMetadata(normalizedConversation, metadata.file);
-    const updatedIndex = {
-      version: INDEX_FILE_VERSION,
-      conversations: index.conversations
-        .map(conv => (conv.id === refreshedMetadata.id ? refreshedMetadata : conv))
-        .sort((a, b) => b.updatedAt - a.updatedAt)
-    };
+      const refreshedMetadata = this.buildMetadata(normalizedConversation, metadata.file);
+      const updatedIndex = {
+        version: INDEX_FILE_VERSION,
+        conversations: index.conversations
+          .map(conv => (conv.id === refreshedMetadata.id ? refreshedMetadata : conv))
+          .sort((a, b) => b.updatedAt - a.updatedAt)
+      };
 
-    await this.saveIndex(updatedIndex);
+      await this.saveIndex(updatedIndex);
+    });
   }
 
   /**
@@ -155,32 +171,34 @@ export class ConversationStorageService {
    */
   async deleteConversation(convId: string): Promise<boolean> {
     await this.ensureInitialized();
-    const index = await this.loadIndex();
-    const entryIndex = index.conversations.findIndex(conv => conv.id === convId);
+    return this._withWriteLock(async () => {
+      const index = await this.loadIndex();
+      const entryIndex = index.conversations.findIndex(conv => conv.id === convId);
 
-    if (entryIndex === -1) {
-      return false;
-    }
-
-    const metadata = index.conversations[entryIndex];
-
-    try {
-      if (await this.vault.adapter.exists(metadata.file)) {
-        await this.vault.adapter.remove(metadata.file);
+      if (entryIndex === -1) {
+        return false;
       }
-    } catch (error) {
-      console.warn(`Failed to delete conversation file ${metadata.file}:`, error);
-    }
 
-    const updatedIndex = {
-      version: INDEX_FILE_VERSION,
-      conversations: index.conversations
-        .filter(conv => conv.id !== convId)
-        .sort((a, b) => b.updatedAt - a.updatedAt)
-    };
+      const metadata = index.conversations[entryIndex];
 
-    await this.saveIndex(updatedIndex);
-    return true;
+      try {
+        if (await this.vault.adapter.exists(metadata.file)) {
+          await this.vault.adapter.remove(metadata.file);
+        }
+      } catch (error) {
+        console.warn(`Failed to delete conversation file ${metadata.file}:`, error);
+      }
+
+      const updatedIndex = {
+        version: INDEX_FILE_VERSION,
+        conversations: index.conversations
+          .filter(conv => conv.id !== convId)
+          .sort((a, b) => b.updatedAt - a.updatedAt)
+      };
+
+      await this.saveIndex(updatedIndex);
+      return true;
+    });
   }
 
   /**

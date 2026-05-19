@@ -62,6 +62,18 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 		return { url, body };
 	}
 
+	async generateEmbedding(text: string, model: string): Promise<number[]> {
+		const url = this.getBaseUrl('https://api.deepseek.com/v1') + '/embeddings';
+		const body = {
+			model: this.extractModelName(model),
+			input: text,
+		};
+		const response = await this.makeRequest(url, body) as {
+			json: { data: Array<{ embedding: number[] }> };
+		};
+		return response.json.data[0].embedding;
+	}
+
 	protected parseStreamChunk(data: unknown): ParsedStreamChunk | null {
 		if (data === '[DONE]') {
 			return { content: null, done: true };

@@ -36,6 +36,8 @@ core/
 ├── performance-monitor.ts   # Operation timing
 ├── service-registry.ts      # Service registration helpers
 ├── interfaces/
+│   ├── file-system.interface.ts
+│   ├── http-client.interface.ts
 │   ├── repository.interface.ts
 │   └── service.interface.ts
 └── types/
@@ -63,17 +65,14 @@ domain/
 application/
 └── services/
     ├── chat.service.ts              # Message routing, streaming orchestration
-    ├── llm-service.ts               # Provider selection, model resolution
     ├── agent-service.ts             # Agent CRUD and selection
     ├── mcp-client.ts                # MCP protocol client
     ├── mcp-service.ts               # MCP server lifecycle + tool catalog
     ├── mcp-tool-wrapper.ts          # Adapt MCP tools to agent tool interface
-    ├── rag-service.ts               # Vault indexing orchestration
     ├── web-search-service.ts        # Provider-agnostic web search
     ├── tool-manager.ts              # Register and dispatch all tool types
     ├── conversation-storage-service.ts  # Conversation persistence
     ├── conversation-migration-service.ts # Conversation format migration
-    ├── memory-service.ts            # Agent memory read/write
     ├── cli-tool.ts                  # CLI tool type definitions
     ├── cli-tool-loader.ts           # Load and register CLI tools
     ├── openapi-tool-loader.ts       # Parse OpenAPI specs into agent tools
@@ -87,11 +86,9 @@ application/
 ```
 infrastructure/
 ├── llm/
-│   ├── base-provider.interface.ts   # LLM provider interface
 │   ├── base-provider.ts             # Common provider utilities
 │   ├── base-streaming-provider.ts   # Streaming base (handles SSE, tool calls)
 │   ├── provider-factory.ts          # Create provider instances
-│   ├── provider-registry.ts         # Register known providers
 │   ├── model-manager.ts             # Model catalog management
 │   ├── openai-provider.ts
 │   ├── anthropic-provider.ts
@@ -124,7 +121,6 @@ infrastructure/
 ├── rag-manager.ts                   # RAG coordination (load → chunk → embed → index)
 ├── vector-store.ts                  # Cosine-similarity nearest-neighbour vector store
 ├── embedding-manager.ts             # Embedding model management
-├── embedding-worker.ts              # Embedding computation worker
 └── document-grader.ts               # Relevance filter before context injection
 ```
 
@@ -184,6 +180,10 @@ presentation/
 │   │   ├── system-prompt-edit-modal.ts
 │   │   ├── confirm-modal.ts
 │   │   └── explain-text-modal.ts
+│   │   ├── text-input-modal.ts
+│   │   ├── searchable-reference-modal.ts
+│   │   ├── searchable-image-modal.ts
+│   │   └── single-file-selection-modal.ts
 │   │
 │   ├── settings-tab.ts              # Root settings tab + migration logic
 │   └── components/
@@ -217,7 +217,6 @@ types/
 │   ├── rag.ts                # RAGConfig, DocumentChunk
 │   ├── web-search.ts         # WebSearchConfig, WebSearchProvider
 │   ├── memory.ts             # AgentMemory
-│   ├── think.ts              # ThinkingConfig
 │   ├── cli-tools.ts          # CLIToolDefinition
 │   └── openapi-tools.ts      # OpenAPIToolSource
 └── common/

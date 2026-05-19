@@ -79,7 +79,7 @@ export class VectorStore {
 				createdAt: this._chunks.length > 0 ? Math.min(...this._chunks.map(c => c.metadata.timestamp)) : Date.now(),
 				updatedAt: Date.now()
 			};
-			await this.app.vault.adapter.write(this.dataPath, JSON.stringify(data));
+			await this.app.vault.adapter.write(this.dataPath, JSON.stringify(data, null, 0));
 			console.debug(`Saved ${this._chunks.length} _chunks to persistent storage`);
 		} catch (error) {
 			console.error('Error saving vector store:', error);
@@ -300,27 +300,10 @@ export class VectorStore {
     // Apply top K limit
     similarities = similarities.slice(0, config.topK);
     
-    // Apply re-ranking if enabled
-    if (config.reRankingEnabled) {
-      similarities = await this.reRankResults(query, similarities, config);
-    }
     
     return similarities;
   }
   
-  private async reRankResults(query: string, results: SearchResult[], config: RAGConfig): Promise<SearchResult[]> {
-    // Simple re-ranking implementation - in a real implementation, this would use a dedicated re-ranking model
-    // For now, we'll just return the results as is, but in a real implementation you would:
-    // 1. Use a cross-encoder model to re-score the query-chunk pairs
-    // 2. Apply the re-ranking model to get new scores
-    // 3. Sort by the new scores
-    
-    console.debug(`Re-ranking ${results.length} results using ${config.reRankingModel ?? 'default model'}`);
-    
-    // In a real implementation, we would call a re-ranking model here
-    // For now, just return the results as-is but this is where re-ranking would happen
-    return Promise.resolve(results);
-  }
 
   private chunkContent(content: string, config: RAGConfig): string[] {
     // Protect against extremely large content that could cause memory issues

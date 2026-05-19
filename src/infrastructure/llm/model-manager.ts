@@ -43,6 +43,7 @@ export class ModelManager {
 			{ id: 'google:gemini-1.5-pro', name: 'Gemini 1.5 Pro', provider: 'google', capabilities: ['chat', 'vision', 'audio', 'video', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'google:gemini-1.5-flash', name: 'Gemini 1.5 Flash', provider: 'google', capabilities: ['chat', 'vision', 'audio', 'video', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'google:gemini-pro', name: 'Gemini Pro', provider: 'google', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'google:text-embedding-004', name: 'Text Embedding 004', provider: 'google', capabilities: ['embedding'], enabled: true },
 		],
 		deepseek: [
 			{ id: 'deepseek:deepseek-chat', name: 'DeepSeek Chat', provider: 'deepseek', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
@@ -67,7 +68,7 @@ export class ModelManager {
 			{ id: 'sap-ai-core:gpt-4-turbo', name: 'GPT-4 Turbo', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'sap-ai-core:gpt-35-turbo', name: 'GPT-3.5 Turbo', provider: 'sap-ai-core', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'sap-ai-core:anthropic--claude-4-sonnet', name: 'Claude 4 Sonnet', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			{ id: 'sap-ai-core:text-embedding-ada-002', name: 'Text Embedding Ada', provider: 'sap-ai-core', capabilities: ['embedding'], enabled: true },
+			{ id: 'sap-ai-core:text-embedding-ada-002', name: 'Text Embedding Ada', provider: 'sap-ai-core', capabilities: ['chat'], enabled: false },
 		],
 	};
 

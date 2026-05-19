@@ -1,5 +1,5 @@
 // Message entity as defined in the architecture
-export class Message {
+export class MessageEntity {
   public readonly id: string;
   public readonly content: string;
   public readonly role: 'user' | 'assistant' | 'system';
@@ -20,13 +20,13 @@ export class Message {
     this.metadata = metadata;
   }
 
-  static create(content: string, role: string, metadata?: Record<string, unknown>): Message {
+  static create(content: string, role: string, metadata?: Record<string, unknown>): MessageEntity {
     // Validate role
     if (!['user', 'assistant', 'system'].includes(role)) {
       throw new Error(`Invalid role: ${role}`);
     }
 
-    return new Message(
+    return new MessageEntity(
       `msg_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
       content,
       role as 'user' | 'assistant' | 'system',
@@ -35,8 +35,8 @@ export class Message {
     );
   }
 
-  updateContent(newContent: string): Message {
-    return new Message(
+  updateContent(newContent: string): MessageEntity {
+    return new MessageEntity(
       this.id,
       newContent,
       this.role,

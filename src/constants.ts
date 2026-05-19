@@ -3,7 +3,7 @@
  */
 
 // Plugin Information
-export const PLUGIN_VERSION = '0.0.1';
+export const PLUGIN_VERSION = '0.0.3';
 export const PLUGIN_NAME = 'Intelligence Assistant';
 
 // Plugin Paths

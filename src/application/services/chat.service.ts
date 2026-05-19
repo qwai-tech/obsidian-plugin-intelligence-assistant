@@ -3,17 +3,19 @@
  * Core business logic for AI chat, coordinating RAG, Web Search, and LLM Providers.
  */
 
-import type { 
-	Message, 
-	LLMConfig, 
-	RAGSource, 
-	WebSearchResult, 
-	FileReference 
+import type {
+	Message,
+	LLMConfig,
+	RAGSource,
+	WebSearchResult,
+	FileReference,
+	Agent
 } from '@/types';
 import { IFileSystem } from '@/core/interfaces';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
 import type { ToolManager } from './tool-manager';
+import type { ToolCall } from './types';
 import type { RAGManager } from '@/infrastructure/rag-manager';
 import type { WebSearchService } from './web-search-service';
 import type { StreamChunk } from '@/types/common/llm';
@@ -33,6 +35,30 @@ export interface ChatOptions {
 	contextWindow?: number;
 }
 
+export interface AgentLoopCallbacks {
+	onChunk: (chunk: StreamChunk) => void;
+	onToolCall: (toolName: string, args: Record<string, unknown>) => void;
+	onToolResult: (toolName: string, success: boolean, output: string) => void;
+	onThought: (thought: string) => void;
+	onComplete: (finalMessage: Message) => void;
+	onError: (error: Error) => void;
+	checkAbort?: () => boolean;
+}
+
+export function deduplicateMessages(messages: Message[]): Message[] {
+	if (messages.length <= 1) return messages;
+	const result: Message[] = [messages[0]];
+	for (let i = 1; i < messages.length; i++) {
+		const prev = messages[i - 1];
+		const cur = messages[i];
+		if (cur.role === prev.role && cur.content === prev.content) {
+			continue;
+		}
+		result.push(cur);
+	}
+	return result;
+}
+
 export class ChatService {
 	constructor(
 		private fileSystem: IFileSystem,
@@ -41,6 +67,10 @@ export class ChatService {
 		private webSearchService: WebSearchService,
 		private llmConfigs: LLMConfig[]
 	) {}
+
+	findLLMConfig(modelId: string): LLMConfig | null {
+		return ModelManager.findConfigForModelByProvider(modelId, this.llmConfigs);
+	}
 
 	/**
 	 * Prepare messages for LLM, including formatting attachments and applying context window
@@ -245,4 +275,369 @@ export class ChatService {
 			callbacks.onError(error instanceof Error ? error : new Error(String(error)));
 		}
 	}
+
+	/**
+	 * Execute full agent loop: LLM call → parse tool calls → execute → repeat.
+	 * Handles the ReAct pattern internally. ChatView only receives UI callbacks.
+	 */
+	async executeAgentLoop(
+		messages: Message[],
+		options: ChatOptions & {
+			agentId?: string;
+			agents?: Agent[];
+			isGenericAgent?: boolean;
+			allowOpenApiTools?: boolean;
+		},
+		callbacks: AgentLoopCallbacks
+	): Promise<void> {
+		const { model: selectedModel } = options;
+		const config = ModelManager.findConfigForModelByProvider(selectedModel, this.llmConfigs);
+		if (!config) {
+			callbacks.onError(new Error(`No provider configuration found for model: ${selectedModel}`));
+			return;
+		}
+
+		const provider = ProviderFactory.createProvider(config);
+		const activeAgent = options.agentId
+			? (options.agents ?? []).find(a => a.id === options.agentId)
+			: undefined;
+		const contextWindow = options.contextWindow ?? activeAgent?.contextWindow ?? 20;
+		const reactEnabled = activeAgent?.reactEnabled ?? true;
+
+		// Build agent system prompt (once, reused across loop iterations)
+		const agentSystemMessages = this.buildAgentSystemMessages(
+			options.isGenericAgent ?? !options.agentId,
+			activeAgent,
+			options.allowOpenApiTools ?? false
+		);
+
+		// Inject RAG + Web Search on first call only
+		const userQuery = messages[messages.length - 1]?.content || '';
+		const ragSources: RAGSource[] = [];
+		const webResults: WebSearchResult[] = [];
+
+		if (options.enableRAG) {
+			const searchResults = await this.ragManager.query(userQuery);
+			if (searchResults && searchResults.length > 0) {
+				for (const r of searchResults) {
+					ragSources.push({
+						path: r.chunk.metadata.path,
+						content: r.chunk.content,
+						similarity: r.similarity,
+						title: r.chunk.metadata.title
+					});
+				}
+				const ragContext = ragSources.map(s => `Document: ${s.path}\nContent: ${s.content}`).join('\n\n');
+				agentSystemMessages.push({ role: 'system', content: `RAG Context (retrieved from your vault):\n\n${ragContext}` });
+			}
+		}
+
+		if (options.enableWebSearch) {
+			const results = await this.webSearchService.search(userQuery);
+			if (results && results.length > 0) {
+				webResults.push(...results);
+				const webContext = this.webSearchService.formatResultsAsContext(results);
+				agentSystemMessages.push({ role: 'system', content: webContext });
+			}
+		}
+
+		// Active system prompts
+		const baseSystemMessages: Message[] = [
+			...(options.activeSystemPrompts || []),
+			...agentSystemMessages
+		];
+
+		const MAX_AGENT_STEPS = activeAgent?.reactMaxSteps ?? 10;
+		const workingMessages = [...messages];
+		let finalContent = '';
+
+		try {
+			for (let step = 0; step < MAX_AGENT_STEPS; step++) {
+				if (callbacks.checkAbort?.()) break;
+
+				// Deduplicate and apply context window
+				const deduped = deduplicateMessages(workingMessages);
+				const truncated = deduped.length > contextWindow
+					? deduped.slice(-contextWindow)
+					: deduped;
+				const allMessages = [...baseSystemMessages, ...truncated];
+
+				// Build native function calling tools
+				const nativeTools = this.toolManager.toOpenAIFunctions();
+				const streamToolCalls: Array<{ name: string; arguments: Record<string, unknown> }> = [];
+
+				// Stream LLM call
+				finalContent = '';
+				await provider.streamChat(
+					{
+						messages: allMessages,
+						model: selectedModel,
+						temperature: options.temperature,
+						maxTokens: options.maxTokens,
+						topP: options.topP,
+						frequencyPenalty: options.frequencyPenalty,
+						presencePenalty: options.presencePenalty,
+						tools: nativeTools.length > 0 ? nativeTools : undefined,
+						toolChoice: nativeTools.length > 0 ? 'auto' : undefined
+					},
+					(chunk) => {
+						if (callbacks.checkAbort?.()) return;
+						if (chunk.content) {
+							finalContent += chunk.content;
+							callbacks.onChunk(chunk);
+						}
+						if (chunk.toolCalls) {
+							for (const tc of chunk.toolCalls) {
+								try {
+									streamToolCalls.push({
+										name: tc.function.name,
+										arguments: JSON.parse(tc.function.arguments) as Record<string, unknown>
+									});
+								} catch {
+									streamToolCalls.push({ name: tc.function.name, arguments: {} });
+								}
+							}
+						}
+					}
+				);
+
+				if (callbacks.checkAbort?.()) break;
+
+				// Parse tool calls: prefer native, fall back to text parsing
+				if (!reactEnabled) { callbacks.onComplete({ role: 'assistant', content: finalContent, model: selectedModel, ragSources: ragSources.length > 0 ? ragSources : undefined, webSearchResults: webResults.length > 0 ? webResults : undefined } as Message); return; }
+				const toolCalls = streamToolCalls.length > 0
+					? streamToolCalls
+					: this.parseToolCallsFromContent(finalContent);
+				if (toolCalls.length === 0) break;
+
+				let anyToolExecuted = false;
+				for (const toolCall of toolCalls) {
+					if (callbacks.checkAbort?.()) break;
+
+					callbacks.onToolCall(toolCall.name, toolCall.arguments);
+
+					// Check tool permissions
+					const toolAllowed = this.isToolAllowed(toolCall.name, activeAgent, options.allowOpenApiTools ?? false);
+					let result: { success: boolean; result?: unknown; error?: string };
+
+					if (!toolAllowed) {
+						result = { success: false, error: `Tool ${toolCall.name} is not enabled for this agent` };
+					} else {
+						try {
+							const execResult = await this.toolManager.executeTool(toolCall);
+							result = { success: execResult.success, result: execResult.result, error: execResult.error };
+						} catch (err) {
+							result = { success: false, error: err instanceof Error ? err.message : String(err) };
+						}
+					}
+
+					const output = result.success
+						? JSON.stringify(result.result)
+						: `Error: ${result.error ?? 'Unknown error'}`;
+
+					callbacks.onToolResult(toolCall.name, result.success, output);
+
+					// Add tool result to working messages for next iteration
+					workingMessages.push({
+						role: 'assistant',
+						content: finalContent,
+						model: selectedModel
+					} as Message);
+					workingMessages.push({
+						role: 'system',
+						content: `Tool ${toolCall.name} result: ${output}`
+					} as Message);
+
+					anyToolExecuted = true;
+				}
+
+				if (!anyToolExecuted) break;
+			}
+
+			const assistantMessage: Message = {
+				role: 'assistant',
+				content: finalContent,
+				model: selectedModel,
+				ragSources: ragSources.length > 0 ? ragSources : undefined,
+				webSearchResults: webResults.length > 0 ? webResults : undefined
+			};
+
+			callbacks.onComplete(assistantMessage);
+		} catch (error) {
+			callbacks.onError(error instanceof Error ? error : new Error(String(error)));
+		}
+	}
+
+	private buildAgentSystemMessages(
+		isGenericAgent: boolean,
+		activeAgent?: Agent,
+		allowOpenApiTools?: boolean
+	): Message[] {
+		const messages: Message[] = [];
+
+		if (isGenericAgent) {
+			const toolsList = this.toolManager.getAllTools().map(tool =>
+				`- ${tool.definition.name}: ${tool.definition.description}`
+			).join('\n');
+
+			messages.push({
+				role: 'system',
+				content: `You are a ReAct (Reasoning + Action) agent. You think step-by-step and take actions when needed to solve user queries.
+
+Follow this ReAct pattern strictly:
+Thought: First, think about what you need to do to solve the query
+Action: Then, call a tool if needed with the proper arguments
+Observation: You will receive the result of your action
+Repeat: Continue thinking, acting, and observing until you can provide a final answer
+
+Available tools:
+${toolsList}
+
+To call a tool, respond with a JSON block in this format:
+\`\`\`json
+{
+  "name": "tool_name",
+  "arguments": {
+    "arg1": "value1",
+    "arg2": "value2"
+  }
+}
+\`\`\`
+
+Always think before you act. Only call one tool at a time. After receiving the result, think about what to do next.`
+			});
+		} else {
+			const toolsList = this.toolManager.getAllTools().filter(tool => {
+				if (!activeAgent) return true;
+				if (tool.provider === 'built-in') return true;
+				if (tool.provider?.startsWith('mcp:')) {
+					const serverName = tool.provider.substring(4);
+					if (activeAgent.enabledMcpServers.includes(serverName)) return true;
+					const fullKey = `${serverName}::${tool.definition.name}`;
+					return activeAgent.enabledMcpTools?.includes(fullKey) ?? false;
+				}
+				if (tool.provider?.startsWith('cli:')) {
+					if (activeAgent.enabledAllCLITools) return true;
+					const toolId = tool.provider.substring(4);
+					return activeAgent.enabledCLITools?.includes(toolId) ?? false;
+				}
+				if (tool.provider?.startsWith('openapi:')) {
+					return allowOpenApiTools ?? false;
+				}
+				return true;
+			}).map(tool => `- ${tool.definition.name}: ${tool.definition.description}`).join('\n');
+
+			messages.push({
+				role: 'system',
+				content: `You are an AI agent with access to tools. You can call tools to help answer the user's questions.
+
+Available tools:
+${toolsList}
+
+To call a tool, respond with a JSON block in this format:
+\`\`\`json
+{
+  "name": "tool_name",
+  "arguments": {
+    "arg1": "value1",
+    "arg2": "value2"
+  }
+}
+\`\`\`
+
+After calling a tool, you will receive the result and can continue the conversation or call another tool if needed.`
+			});
+		}
+
+		return messages;
+	}
+
+	private parseToolCallsFromContent(content: string): ToolCall[] {
+		const toolCalls: ToolCall[] = [];
+		const regex = /```json\s*\n([\s\S]*?)\n```/g;
+		let match;
+		while ((match = regex.exec(content)) !== null) {
+			try {
+				const json = JSON.parse(match[1]) as { name?: unknown; tool?: unknown; arguments?: unknown };
+				const toolName = json.name ?? json.tool;
+				if (!toolName || typeof toolName !== 'string') continue;
+				toolCalls.push({
+					name: toolName,
+					arguments: typeof json.arguments === 'object' && json.arguments !== null
+						? (json.arguments as Record<string, unknown>)
+						: {}
+				});
+			} catch { /* not a tool-call block */ }
+		}
+		return toolCalls;
+	}
+
+	private isToolAllowed(
+		toolName: string,
+		agent?: Agent,
+		allowOpenApiTools?: boolean
+	): boolean {
+		if (!agent) return true;
+
+		const tool = this.toolManager.getTool(toolName);
+		if (!tool) return false;
+
+		if (tool.provider?.startsWith('mcp:')) {
+			const serverName = tool.provider.substring(4);
+			const fullToolKey = `${serverName}::${toolName}`;
+			if (agent.enabledMcpTools?.includes(fullToolKey)) return true;
+			return agent.enabledMcpServers.includes(serverName);
+		}
+
+		if (tool.provider?.startsWith('openapi:')) {
+			return allowOpenApiTools ?? false;
+		}
+
+		if (tool.provider?.startsWith('cli:')) {
+			if (agent.enabledAllCLITools) return true;
+			const toolId = tool.provider.substring(4);
+			return agent.enabledCLITools?.includes(toolId) ?? false;
+		}
+
+		return agent.enabledBuiltInTools.includes(toolName);
+	}
+
+		async generateConversationTitle(
+			messages: Message[],
+			promptTemplate: string,
+			modelId: string
+		): Promise<string | null> {
+			const config = this.findLLMConfig(modelId);
+			if (!config) return null;
+			const provider = ProviderFactory.createProvider(config);
+			const conversationText = messages
+				.map(m => `${m.role}: ${m.content.substring(0, 200)}`)
+				.join('\n\n');
+			const prompt = promptTemplate.replace('{conversation}', conversationText);
+			const response = await provider.chat({
+				messages: [{ role: 'user', content: prompt }],
+				model: modelId,
+				temperature: 0.3
+			});
+			const title = response.content.trim().replace(/^["']|["']$/g, '').replace(/^Title:\s*/i, '');
+			return (title.length > 0 && title.length <= 100) ? title : null;
+		}
+
+		async generateConversationIcon(
+			title: string,
+			modelId: string
+		): Promise<string | null> {
+			const config = this.findLLMConfig(modelId);
+			if (!config) return null;
+			const provider = ProviderFactory.createProvider(config);
+			const response = await provider.chat({
+				messages: [{
+					role: 'user',
+					content: `Suggest a single emoji icon that represents this conversation: "${title}". Reply with only the emoji, no text.`
+				}],
+				model: modelId,
+				temperature: 0.5
+			});
+			return response.content.trim().match(/[\p{Emoji}]/u)?.[0] ?? null;
+		}
 }
