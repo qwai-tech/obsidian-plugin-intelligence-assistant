@@ -1399,21 +1399,13 @@
 	transform: translateY(0);
 }
 
-/* Message Actions */
+/* Message Actions — base (overridden per role below) */
 .message-actions {
 	display: flex;
 	gap: 2px;
 	opacity: 0;
-	transition: opacity 0.15s;
-	margin-top: 4px;
+	transition: opacity 0.15s ease;
 	pointer-events: none;
-}
-
-.chat-message:hover .message-actions,
-.ia-chat-message:hover .message-actions,
-.message-body:hover .message-actions {
-	opacity: 1;
-	pointer-events: auto;
 }
 
 .msg-action-btn {
@@ -2135,35 +2127,42 @@
 	text-align: right;
 }
 
-/* Enhanced Message Visual Distinction */
+/* ═══════════════════════════════════════════
+   CHAT MESSAGES — Bubble Layout
+   ═══════════════════════════════════════════ */
+
 .chat-message,
 .ia-chat-message {
-	margin-bottom: 16px;
-	padding: 12px;
-	border-radius: 12px;
-	transition: all 0.2s ease;
+	margin-bottom: 0;
+	padding: 0;
+	background: transparent;
+	border-radius: 0;
+	border: none;
+	box-shadow: none;
+	transition: none;
 }
 
-.ia-chat-message--streaming {
-	border: 1px solid rgba(59, 130, 246, 0.4);
-	box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.2), 0 4px 16px rgba(0, 0, 0, 0.1);
+/* Streaming indicator on the content bubble, not the wrapper */
+.ia-chat-message--streaming .message-content {
+	outline: 1px solid rgba(59, 130, 246, 0.35);
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
 }
 
 .message-user,
 .ia-chat-message--user {
-	background: var(--background-primary);
-	border-left: 3px solid var(--interactive-accent);
+	background: transparent;
 }
 
 .message-assistant,
 .ia-chat-message--assistant {
-	background: var(--background-secondary);
-	border-left: 3px solid var(--text-accent);
+	background: transparent;
 }
 
+/* ── Avatars ── */
+
 .message-avatar {
-	width: 28px;
-	height: 28px;
+	width: 26px;
+	height: 26px;
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
@@ -2171,117 +2170,56 @@
 	flex-shrink: 0;
 	color: var(--text-muted);
 	background: var(--background-modifier-border);
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .message-avatar svg {
 	fill: currentColor;
 	color: white;
-	width: 16px;
-	height: 16px;
+	width: 14px;
+	height: 14px;
 }
 
 .ia-provider-avatar svg {
-	width: 18px;
-	height: 18px;
+	width: 14px;
+	height: 14px;
 }
 
-.ia-chat-message__model-label {
-	font-weight: 600;
-	color: var(--text-normal);
-}
-
-.ia-chat-copy-group {
-	display: flex;
-	gap: 4px;
-	margin-left: auto;
-}
-
-.ia-chat-copy-btn {
-	padding: 2px 8px;
-	border-radius: 4px;
-	border: 1px solid var(--background-modifier-border);
-	background: transparent;
-	color: var(--text-muted);
-	font-size: var(--ia-font-size-2xs);
-	cursor: pointer;
-}
-
-.ia-chat-copy-btn:hover:not(:disabled) {
-	color: var(--text-normal);
-	background: var(--background-modifier-hover);
-}
-
-.ia-chat-copy-btn:disabled {
-	opacity: 0.5;
-	cursor: not-allowed;
-}
-
-.ia-chat-message__footer,
-.ia-chat-message__annotation {
-	margin-top: 8px;
-	padding-top: 6px;
-	border-top: 1px dashed var(--background-modifier-border);
-	font-size: var(--ia-font-size-2xs);
-	color: var(--text-muted);
-}
+/* ── Row layout (global: flex-end so avatars sit at bubble bottom) ── */
 
 .message-row {
 	display: flex;
-	gap: 10px;
-	align-items: flex-start;
+	gap: 8px;
+	align-items: flex-end;
 	width: 100%;
 	max-width: 100%;
 }
 
-.message-body {
-	flex: 1;
-	min-width: 0;
-}
+/* ── message-meta base ── */
 
 .message-meta {
 	display: flex;
 	align-items: center;
-	gap: 6px;
-	margin-bottom: 4px;
+	gap: 4px;
 	flex-wrap: wrap;
 }
 
 .message-name {
-	font-weight: 600;
 	font-size: var(--ia-font-size-xs);
-	color: var(--text-normal);
-}
-
-.message-user .message-name {
-	color: var(--interactive-accent);
+	color: var(--text-muted);
 }
 
 .message-timestamp {
 	font-size: var(--ia-font-size-3xs);
 	color: var(--text-faint);
-	margin-left: auto;
 }
+
+/* ── message-content base ── */
 
 .message-content {
 	line-height: 1.5;
 	word-wrap: break-word;
 	font-size: var(--ia-font-size-s);
 	white-space: normal;
-}
-
-.message-user .message-content {
-	color: var(--text-normal);
-}
-
-.message-assistant .message-content {
-	color: var(--text-normal);
-}
-
-/* Hover effect for messages */
-.chat-message:hover,
-.ia-chat-message:hover {
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Agent Execution Trace Styles */
@@ -2995,7 +2933,7 @@
 	padding: 12px 16px;
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	gap: 6px;
 }
 
 /* Empty conversation state */
@@ -3075,6 +3013,31 @@
 
 .message-user .message-row {
 	flex-direction: row-reverse;
+	align-items: flex-end;
+}
+
+.message-user .message-body {
+	background: transparent;
+	border: none;
+	padding: 0;
+	border-radius: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.message-user .message-meta,
+.message-user .message-actions,
+.message-user .ia-chat-message__footer,
+.message-user .ia-chat-message__annotation {
+	display: none;
+}
+
+.message-user .message-content {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+	padding: 8px 12px;
+	border-radius: 16px 16px 4px 16px;
 }
 
 .message-user .message-avatar {
@@ -3157,23 +3120,21 @@
 .ia-chat-message__badge {
 	display: inline-flex;
 	align-items: center;
-	gap: 4px;
-	padding: 2px 8px;
+	gap: 3px;
+	padding: 1px 6px;
 	border-radius: var(--ia-radius-full);
-	border: 1px solid var(--background-modifier-border);
-	background: var(--background-primary);
+	border: none;
+	background: transparent;
 	font-size: var(--ia-font-size-3xs);
-	color: var(--text-muted);
+	color: var(--text-faint);
 }
 
 .ia-chat-message__badge-label {
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.02em;
+	display: none;
 }
 
 .ia-chat-message__badge-value {
-	color: var(--text-normal);
+	color: var(--text-faint);
 }
 
 .message-content p {
