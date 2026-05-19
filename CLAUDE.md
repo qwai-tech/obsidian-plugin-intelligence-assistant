@@ -14,4 +14,9 @@ After completing any task, you MUST:
    npm run build
    ```
 
-If either check fails, fix the issues before considering the task complete.
+3. **Deploy to local Obsidian** - Deploy the built plugin to the local dev sandbox:
+   ```bash
+   node scripts/deploy.js --local
+   ```
+
+If lint or build fails, fix the issues before considering the task complete.
