@@ -4294,6 +4294,99 @@
 	gap: 8px;
 }
 
+/* ── Usage tab ──────────────────────────────────────────────────────────── */
+
+.ia-usage-stat-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 10px;
+	margin-bottom: 16px;
+}
+
+.ia-usage-stat-card {
+	padding: 12px 14px;
+	border-radius: var(--ia-radius-m);
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-secondary);
+}
+
+.ia-usage-stat-card__label {
+	font-size: var(--ia-font-size-3xs);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--text-muted);
+	margin-bottom: 4px;
+	font-weight: 600;
+}
+
+.ia-usage-stat-card__value {
+	font-size: 20px;
+	font-weight: 700;
+	color: var(--text-normal);
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
+}
+
+.ia-usage-stat-card__sub {
+	font-size: var(--ia-font-size-3xs);
+	color: var(--text-faint);
+	margin-top: 3px;
+}
+
+.ia-tab-bar {
+	display: flex;
+	border-bottom: 1px solid var(--background-modifier-border);
+	margin-bottom: 16px;
+}
+
+.ia-tab {
+	padding: 8px 14px;
+	font-size: var(--ia-font-size-xs);
+	font-weight: 500;
+	color: var(--text-muted);
+	cursor: pointer;
+	border-bottom: 2px solid transparent;
+	margin-bottom: -1px;
+	transition: color var(--ia-transition-fast), border-color var(--ia-transition-fast);
+}
+
+.ia-tab:hover:not(.ia-tab--active) {
+	color: var(--text-normal);
+}
+
+.ia-tab--active {
+	color: var(--interactive-accent);
+	border-bottom-color: var(--interactive-accent);
+	font-weight: 600;
+}
+
+.ia-usage-section-hdr {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+
+.ia-usage-section-hdr h4 {
+	margin: 0;
+	font-size: var(--ia-font-size-2xs);
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--text-muted);
+}
+
+.ia-usage-section-hdr span {
+	font-size: var(--ia-font-size-3xs);
+	color: var(--text-faint);
+}
+
+.ia-table-cell--right {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+	color: var(--text-muted);
+}
+
 /* Info / usage box at the bottom of a settings tab */
 .ia-info-box {
 	margin-top: 20px;
