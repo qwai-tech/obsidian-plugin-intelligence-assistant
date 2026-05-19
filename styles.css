@@ -3338,13 +3338,13 @@
 .ia-chat-message__badge {
 	display: inline-flex;
 	align-items: center;
-	gap: 3px;
+	gap: 2px;
 	padding: 1px 6px;
 	border-radius: var(--ia-radius-full);
 	border: none;
-	background: transparent;
+	background: var(--background-modifier-border);
 	font-size: var(--ia-font-size-3xs);
-	color: var(--text-faint);
+	color: var(--text-muted);
 }
 
 .ia-chat-message__badge-label {
@@ -3352,7 +3352,7 @@
 }
 
 .ia-chat-message__badge-value {
-	color: var(--text-faint);
+	color: var(--text-muted);
 }
 
 .message-content p {
