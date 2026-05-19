@@ -37,6 +37,67 @@
 	margin: 0 auto;
 }
 
+/* Settings Sidebar Layout */
+.settings-layout {
+	display: flex;
+	gap: 20px;
+	align-items: flex-start;
+}
+
+.settings-sidebar {
+	width: 148px;
+	flex-shrink: 0;
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	padding: 8px 0;
+	overflow: hidden;
+	position: sticky;
+	top: 0;
+}
+
+.settings-sidebar-section {
+	margin-bottom: 2px;
+}
+
+.settings-sidebar-label {
+	padding: 8px 12px 3px;
+	font-size: 10px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--text-faint);
+}
+
+.settings-sidebar .settings-tab {
+	display: block;
+	width: 100%;
+	text-align: left;
+	padding: 6px 12px;
+	border-radius: 0;
+	font-size: 12.5px;
+	font-weight: 500;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.settings-sidebar .settings-tab.is-active {
+	background: rgba(var(--interactive-accent-rgb, 99 102 241), 0.12);
+	color: var(--interactive-accent);
+	font-weight: 600;
+	box-shadow: none;
+}
+
+.settings-sidebar .settings-tab.is-active::after {
+	display: none;
+}
+
+.settings-layout .settings-tab-content {
+	flex: 1;
+	min-width: 0;
+}
+
 /* Tab Navigation */
 .settings-tabs {
 	display: flex;
