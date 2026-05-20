@@ -1,4 +1,4 @@
-import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, setIcon, Modal } from 'obsidian';
+import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, setIcon } from 'obsidian';
 import { t } from '@/i18n';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import { TextInputModal } from '@/presentation/components/modals/text-input-modal';
@@ -29,6 +29,7 @@ import {
 } from '@/presentation/components/chat/controllers';
 import { ChatHeaderComponent } from '@/presentation/components/chat/chat-header.component';
 import { ChatInputComponent } from '@/presentation/components/chat/chat-input.component';
+import { RagStatusPanel } from '@/presentation/components/chat/rag-status-panel';
 import { resolveMessageProviderId } from '@/presentation/components/chat/utils';
 import { ObsidianFileSystem } from '@/infrastructure/obsidian/obsidian-file-system';
 import { ObsidianHttpClient } from '@/infrastructure/obsidian/obsidian-http-client';
@@ -43,13 +44,6 @@ interface AssistantResponseOptions {
 	llmContent: string;
 	targetMessage: Message;
 }
-
-type RagIndexStats = {
-	chunkCount: number;
-	fileCount: number;
-	totalSize: number;
-	indexedFiles: string[];
-};
 
 export class ChatView extends ItemView {
 	// Centralized state management
@@ -87,6 +81,7 @@ export class ChatView extends ItemView {
 	private webSearchService: WebSearchService;
 	private chatService: ChatService;
 	private vaultExportService: VaultExportService;
+	private ragStatusPanel: RagStatusPanel;
 
 	// UI elements
 	private streamingMessageEl: HTMLElement | null = null;
@@ -120,6 +115,13 @@ export class ChatView extends ItemView {
 			this.plugin.settings.defaultModel
 		);
 		this.vaultExportService = new VaultExportService(this.app);
+		this.ragStatusPanel = new RagStatusPanel(
+			this.app,
+			this.ragManager,
+			() => this.state.enableRAG,
+			() => this.state.mode,
+			() => this.plugin.settings.ragConfig
+		);
 	}
 
 	getViewType(): string {
@@ -930,65 +932,8 @@ export class ChatView extends ItemView {
 	}
 
 
-	/**
-	 * display rag sources in a message body
-	 */
-private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types').RAGSource[]): void {
-		// Remove existing RAG sources container if any
-		const existingContainer = messageBody.querySelector('.rag-sources-container');
-		if (existingContainer) {
-			existingContainer.remove();
-		}
-
-		const ragSourcesContainer = messageBody.createDiv('rag-sources-container');
-
-		// Header
-		const header = ragSourcesContainer.createDiv('rag-sources-header');
-		header.setText(t(ragSources.length === 1 ? 'chat.ragStats.retrieved' : 'chat.ragStats.retrieved_plural', { count: ragSources.length }));
-
-		// Source cards
-		const sourcesGrid = ragSourcesContainer.createDiv('rag-sources-grid');
-		ragSources.forEach((source, _index) => {
-			const sourceCard = sourcesGrid.createDiv('rag-source-card');
-
-			// Title and similarity
-			const sourceHeader = sourceCard.createDiv('rag-source-header');
-			const titleEl = sourceHeader.createDiv('rag-source-title');
-			titleEl.setText(source.title || source.path.split('/').pop() || source.path);
-
-			const similarityEl = sourceHeader.createDiv('rag-source-similarity');
-			const similarityPercent = Math.round(source.similarity * 100);
-			similarityEl.setText(`${similarityPercent}%`);
-			similarityEl.setCssProps({ 'color': similarityPercent > 80 ? 'var(--text-success)' :
-										similarityPercent > 60 ? 'var(--text-accent)' :
-										'var(--text-muted)' });
-
-			// Path
-			const pathEl = sourceCard.createDiv('rag-source-path');
-			pathEl.setText(source.path);
-
-			// Content preview
-			const contentEl = sourceCard.createDiv('rag-source-content');
-			const preview = source.content.length > 150
-				? source.content.substring(0, 150) + '...'
-				: source.content;
-			contentEl.setText(preview);
-
-			// Click to open
-			sourceCard.addClass('ia-clickable');
-			sourceCard.addEventListener('click', () => {
-				void (async () => {
-					const file = this.app.vault.getAbstractFileByPath(source.path);
-					if (file instanceof TFile) {
-						await this.app.workspace.getLeaf().openFile(file);
-					} else {
-						new Notice(t('chat.notices.fileNotFound', { path: source.path ?? 'unknown' }));
-					}
-				})();
-			});
-
-			// Hover effect handled by .rag-source-card:hover in CSS
-		});
+	private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types').RAGSource[]): void {
+		this.ragStatusPanel.displaySources(messageBody, ragSources);
 	}
 
 	private createCheckbox(container: HTMLElement, label: string, checked: boolean, onChange: (checked: boolean) => void): HTMLInputElement {
@@ -1059,182 +1004,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	}
 	
 	private async updateRagStatus(target?: HTMLElement | null) {
-		const ragToggle = target ?? this.ragActionItem;
-		if (!ragToggle) return;
-
-		const statusSpanEl = ragToggle.querySelector('.header-action-status');
-		const statusSpan = statusSpanEl instanceof HTMLElement ? statusSpanEl : null;
-		const ragEnabledInSettings = this.plugin.settings.ragConfig.enabled;
-
-		if (!ragEnabledInSettings) {
-			ragToggle.addClass('is-disabled');
-			ragToggle.setAttr('title', 'Enable RAG in Settings → Chat Features → RAG.');
-			if (statusSpan) {
-				statusSpan.textContent = t('chat.status.disabled');
-				statusSpan.addClass('ia-cursor-not-allowed');
-				statusSpan.removeClass('ia-cursor-help');
-				statusSpan.onclick = null;
-			}
-			return;
-		}
-
-		try {
-			const stats = await this.ragManager.getDetailedStats();
-			// Mark potential async UI interactions as intentionally unawaited
-			ragToggle.removeClass('is-disabled');
-
-			const ragActive = this.state.enableRAG && this.state.mode === 'chat';
-			if (statusSpan) {
-				if (ragActive) {
-					const detail = stats.chunkCount > 0 ? `${stats.chunkCount} chunks` : 'No index';
-					statusSpan.textContent = t('chat.status.on', { detail });
-				} else {
-					statusSpan.textContent = t('chat.status.off');
-				}
-				statusSpan.toggleClass('ia-cursor-help', !!stats);
-				statusSpan.removeClass('ia-cursor-not-allowed');
-				// Ensure onclick handler is synchronous; call async via void
-				statusSpan.onclick = stats ? (event: MouseEvent) => {
-					event.stopPropagation();
-					void this.openRagStatsModal();
-				} : null;
-			}
-
-			if (stats) {
-				ragToggle.setAttr('title', this.buildRagTooltip(stats, ragActive));
-			} else {
-				ragToggle.removeAttribute('title');
-			}
-		} catch (_error) {
-			ragToggle.addClass('is-disabled');
-			if (statusSpan) {
-				statusSpan.textContent = t('chat.status.unavailable');
-				statusSpan.addClass('ia-cursor-not-allowed');
-				statusSpan.removeClass('ia-cursor-help');
-				statusSpan.onclick = null;
-			}
-			const errMsg = _error instanceof Error ? _error.message : String(_error);
-			console.error('Error updating RAG status:', errMsg);
-		}
-	}
-
-	private buildRagTooltip(stats: RagIndexStats, ragActive: boolean): string {
-		let tooltipText = `${t('chat.ragTooltip.status')}\n\n`;
-		tooltipText += `${t('chat.ragTooltip.totalChunks', { count: stats.chunkCount })}\n`;
-		tooltipText += `${t('chat.ragTooltip.filesIndexed', { count: stats.fileCount })}\n`;
-		tooltipText += `${t('chat.ragTooltip.totalSize', { size: (stats.totalSize / 1024).toFixed(1) })}\n`;
-
-		if (stats.indexedFiles && stats.indexedFiles.length > 0) {
-			tooltipText += `\n${t('chat.ragTooltip.indexedFiles')}\n`;
-			const filesToShow = stats.indexedFiles.slice(0, 10);
-			filesToShow.forEach(file => {
-				const fileName = file.split('/').pop() || file;
-					const displayName = fileName || 'unknown';
-					tooltipText += `  • ${displayName}\n`;
-			});
-
-			if (stats.indexedFiles.length > 10) {
-				const remainingCount = stats.indexedFiles.length - 10;
-				tooltipText += `${t('chat.ragTooltip.andMore', { count: remainingCount })}\n`;
-			}
-		} else {
-			tooltipText += `\n${t('chat.ragTooltip.noFilesYet')}\n`;
-			tooltipText += t('chat.ragTooltip.goToSettings');
-		}
-
-		if (!ragActive) {
-			tooltipText += `\n\n${t('chat.ragTooltip.ragOff')}`;
-		}
-
-		return tooltipText;
-	}
-
-	private async openRagStatsModal() {
-		try {
-			const stats = await this.ragManager.getDetailedStats();
-			this.showRagStatsModal(stats);
-		} catch (_error) {
-			const errMsg = _error instanceof Error ? _error.message : String(_error);
-			console.error('Error loading RAG stats modal:', errMsg);
-			new Notice(t('chat.notices.unableToLoadRag'));
-		}
-	}
-
-	private showRagStatsModal(stats: RagIndexStats) {
-		const modal = new Modal(this.app);
-		modal.titleEl.setText(t('chat.ragStats.title'));
-
-		const content = modal.contentEl;
-		content.empty();
-		content.addClass('rag-stats-modal');
-
-		// Summary stats
-		const summaryDiv = content.createDiv('rag-stats-summary');
-
-		const row1 = summaryDiv.createDiv('stat-row');
-		row1.createSpan({ cls: 'stat-label', text: t('chat.ragStats.totalChunks') });
-		row1.createSpan({ cls: 'stat-value', text: `${stats.chunkCount}` });
-
-		const row2 = summaryDiv.createDiv('stat-row');
-		row2.createSpan({ cls: 'stat-label', text: t('chat.ragStats.filesIndexed') });
-		row2.createSpan({ cls: 'stat-value', text: `${stats.fileCount}` });
-
-		const row3 = summaryDiv.createDiv('stat-row');
-		row3.createSpan({ cls: 'stat-label', text: t('chat.ragStats.totalSize') });
-		row3.createSpan({ cls: 'stat-value', text: `${(stats.totalSize / 1024).toFixed(1)} KB` });
-
-		const row4 = summaryDiv.createDiv('stat-row');
-		row4.createSpan({ cls: 'stat-label', text: t('chat.ragStats.avgChunks') });
-		row4.createSpan({ cls: 'stat-value', text: `${stats.fileCount > 0 ? (stats.chunkCount / stats.fileCount).toFixed(1) : '0'}` });
-
-		// File list
-		if (stats.indexedFiles && stats.indexedFiles.length > 0) {
-			const filesDiv = content.createDiv('rag-stats-files');
-			filesDiv.createEl('h4', { text: t('chat.ragStats.indexedFiles') });
-
-			const fileList = filesDiv.createDiv('rag-file-list');
-			stats.indexedFiles.forEach(filePath => {
-				const fileItem = fileList.createDiv('rag-file-item');
-				const fileName = filePath.split('/').pop() || filePath;
-				const fileLink = fileItem.createEl('a', {
-					text: fileName,
-					cls: 'rag-file-link'
-				});
-				fileLink.title = filePath;
-				fileLink.addEventListener('click', (e) => {
-					e.preventDefault();
-					void (async () => {
-						const file = this.app.vault.getAbstractFileByPath(filePath);
-						if (file instanceof TFile) {
-							await this.app.workspace.getLeaf().openFile(file);
-							modal.close();
-						} else {
-							new Notice(t('chat.notices.fileNotFound', { path: filePath ?? 'unknown' }));
-						}
-					})();
-				});
-
-				fileItem.createEl('span', {
-					text: filePath,
-					cls: 'rag-file-path'
-				});
-			});
-		} else {
-			const noFiles = content.createDiv('rag-no-files');
-			noFiles.createEl('p', { text: t('chat.ragStats.noFilesYet') });
-			noFiles.createEl('p', { text: t('chat.ragStats.howToBuild') });
-			const ol = noFiles.createEl('ol');
-			ol.createEl('li', { text: t('chat.ragStats.step1') });
-			ol.createEl('li', { text: t('chat.ragStats.step2') });
-			ol.createEl('li', { text: t('chat.ragStats.step3') });
-		}
-
-		// Close button
-		const btnContainer = content.createDiv('modal-button-container');
-		const closeBtn = btnContainer.createEl('button', { text: t('chat.ragStats.close'), cls: 'mod-cta' });
-		closeBtn.addEventListener('click', () => modal.close());
-
-		modal.open();
+		await this.ragStatusPanel.updateStatus(target ?? this.ragActionItem);
 	}
 
 	private getProviderAvatar(message: Message): string {
