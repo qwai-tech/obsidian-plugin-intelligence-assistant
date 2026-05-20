@@ -42,6 +42,7 @@ import { ConversationMigrationService } from './src/application/services/convers
 
 // Import architecture components
 import { container } from './src/core/container';
+import { initI18n } from './src/i18n';
 import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-system';
 import { ObsidianHttpClient } from './src/infrastructure/obsidian/obsidian-http-client';
 import { TokenUsageRepository } from './src/infrastructure/persistence/data/token-usage-repository';
@@ -112,6 +113,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	public tokenUsageRepo: TokenUsageRepository | null = null;
 
 	async onload() {
+		initI18n();
 		const loadStart = Date.now();
 
 		// Initialize architecture components using dependency injection

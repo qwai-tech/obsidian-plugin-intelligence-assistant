@@ -16,7 +16,7 @@ export function initI18n(langOverride?: string): void {
 	void i18n.init({
 		lng: lang,
 		fallbackLng: 'en',
-		initImmediate: false,
+		initAsync: false,
 		resources: {
 			en: { translation: en as Record<string, unknown> },
 			zh: { translation: zh as Record<string, unknown> },

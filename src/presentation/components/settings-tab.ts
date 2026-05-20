@@ -1,4 +1,5 @@
 import {App, Notice, PluginSettingTab} from 'obsidian';
+import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { snapshotMcpTools } from '@plugin';
 import type { } from './types';
@@ -47,15 +48,15 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 
 		const tabNav = containerEl.createDiv('settings-tabs');
 		const tabDefs: Array<{ slug: string; label: string }> = [
-			{ slug: 'general', label: 'General' },
-			{ slug: 'llm', label: 'LLM' },
-			{ slug: 'mcp', label: 'MCP' },
-			{ slug: 'tools', label: 'Tools' },
-			{ slug: 'rag', label: 'RAG' },
-			{ slug: 'prompts', label: 'Prompts' },
-			{ slug: 'agents', label: 'Agents' },
-			{ slug: 'quickactions', label: 'Quick Actions' },
-			{ slug: 'usage', label: 'Usage' }
+			{ slug: 'general', label: t('settings.tabs.general') },
+			{ slug: 'llm', label: t('settings.tabs.llm') },
+			{ slug: 'mcp', label: t('settings.tabs.mcp') },
+			{ slug: 'tools', label: t('settings.tabs.tools') },
+			{ slug: 'rag', label: t('settings.tabs.rag') },
+			{ slug: 'prompts', label: t('settings.tabs.prompts') },
+			{ slug: 'agents', label: t('settings.tabs.agents') },
+			{ slug: 'quickactions', label: t('settings.tabs.quickActions') },
+			{ slug: 'usage', label: t('settings.tabs.usage') }
 		];
 
 		const tabContent = containerEl.createDiv('settings-tab-content');
