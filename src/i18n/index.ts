@@ -2,11 +2,18 @@ import i18next from 'i18next';
 import en from './locales/en.json';
 import zh from './locales/zh.json';
 
-export function initI18n(): void {
-	const raw: string = (window as Window & { moment?: { locale(): string } }).moment?.locale() ?? 'en';
-	const lang = raw.startsWith('zh') ? 'zh' : 'en';
+const i18n = i18next.createInstance();
 
-	void i18next.init({
+export function initI18n(langOverride?: string): void {
+	let lang: string;
+	if (langOverride !== undefined) {
+		lang = langOverride;
+	} else {
+		const raw: string = (window as Window & { moment?: { locale(): string } }).moment?.locale() ?? 'en';
+		lang = raw.startsWith('zh') ? 'zh' : 'en';
+	}
+
+	void i18n.init({
 		lng: lang,
 		fallbackLng: 'en',
 		initImmediate: false,
@@ -19,5 +26,5 @@ export function initI18n(): void {
 }
 
 export function t(key: string, options?: Record<string, unknown>): string {
-	return i18next.t(key, options) as string;
+	return i18n.t(key, options) as string;
 }

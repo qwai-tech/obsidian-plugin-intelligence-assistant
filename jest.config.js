@@ -10,7 +10,9 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   moduleNameMapper: {
     '^obsidian$': '<rootDir>/__mocks__/obsidian.ts',
-    '^marked$': '<rootDir>/__mocks__/marked.ts'
+    '^marked$': '<rootDir>/__mocks__/marked.ts',
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@plugin$': '<rootDir>/main.ts'
   },
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',

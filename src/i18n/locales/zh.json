@@ -1,0 +1,325 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "通用",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "工具",
+      "rag": "RAG",
+      "prompts": "提示词",
+      "agents": "智能体",
+      "quickActions": "快捷操作",
+      "usage": "用量统计"
+    },
+    "general": {
+      "title": "通用设置",
+      "desc": "配置智能助手插件的通用选项。",
+      "pluginVersion": { "name": "插件版本", "desc": "智能助手插件的当前版本" },
+      "defaultModel": { "name": "默认模型", "desc": "对话时使用的默认模型", "placeholder": "Deepseek-chat" },
+      "defaultChatMode": { "name": "默认对话模式", "desc": "聊天视图打开时的默认模式", "chat": "对话模式", "agent": "智能体模式" },
+      "conversationTitleMode": { "name": "对话标题模式", "desc": "对话标题的生成方式", "firstMessage": "使用首条消息", "autoSummary": "自动生成摘要", "manual": "手动" },
+      "conversationIcons": { "name": "对话图标", "desc": "启用对话的自动图标生成" },
+      "configStatus": {
+        "name": "配置状态",
+        "desc": "插件整体配置状态",
+        "ok": "✅ 已配置（{{providers}} 个服务商，{{conversations}} 条对话）",
+        "incomplete": "⚠️ 配置不完整 - 请配置服务商和模型"
+      }
+    },
+    "llm": {
+      "title": "LLM 配置",
+      "desc": "配置语言模型服务商并管理可用模型。",
+      "subTabs": { "provider": "服务商", "models": "模型" }
+    },
+    "models": {
+      "title": "模型配置",
+      "desc": "查看并管理所有已配置服务商的模型。点击「刷新模型」获取最新可用模型。",
+      "providerCount": "已配置 {{count}} 个服务商",
+      "providerCount_plural": "已配置 {{count}} 个服务商",
+      "refreshAll": "🔄 刷新所有模型",
+      "empty": "尚未配置服务商，请先在服务商标签页中添加。",
+      "noModels": "暂无可用模型，请点击「刷新所有模型」或在服务商标签页中单独刷新。",
+      "noMatch": "没有模型符合当前过滤条件，请调整或清除过滤器。",
+      "modelCount": "• 已缓存 {{count}} 个模型",
+      "modelCount_plural": "• 已缓存 {{count}} 个模型",
+      "matchCount": "• {{count}} 个符合过滤条件",
+      "matchCount_plural": "• {{count}} 个符合过滤条件",
+      "status": { "enabled": "已启用", "disabled": "已禁用" },
+      "actions": {
+        "disable": "禁用",
+        "enable": "启用",
+        "setDefaultChat": "设为默认对话模型",
+        "defaultChat": "默认对话模型",
+        "setDefaultEmbedding": "设为默认嵌入模型",
+        "defaultEmbedding": "默认嵌入模型"
+      },
+      "notices": {
+        "fetching": "正在获取 {{provider}} 的模型...",
+        "fetchFailed": "刷新 {{provider}} 模型失败",
+        "refreshed": "模型刷新成功！",
+        "refreshFailed": "刷新模型失败",
+        "defaultChatSet": "默认对话模型已设为 {{name}}",
+        "defaultEmbeddingSet": "默认嵌入模型已设为 {{name}}"
+      },
+      "filters": { "allProviders": "所有服务商", "allCapabilities": "所有能力" }
+    },
+    "provider": {
+      "title": "服务商配置",
+      "securityTitle": "⚠️ 安全提示",
+      "securityDesc": "API 密钥以明文存储在您的 Vault 中以保证兼容性。为防止意外泄露：",
+      "securityItem1": "请勿共享 {{configDir}}/plugins/intelligence-assistant/data/ 目录。",
+      "securityItem2": "如使用 Git 同步，请将此目录添加到 .gitignore。",
+      "securityItem3": "使用公共云同步服务时请谨慎。",
+      "desc": "管理 LLM 服务商和 API 凭据。使用操作列编辑配置详情或刷新缓存模型。",
+      "count": "已配置 {{count}} 个服务商",
+      "count_plural": "已配置 {{count}} 个服务商",
+      "addBtn": "+ 添加服务商",
+      "empty": "未配置服务商，点击「添加服务商」开始。",
+      "tableHeaders": { "provider": "服务商", "status": "状态", "actions": "操作" },
+      "status": {
+        "ready": "就绪",
+        "needsConfig": "需要配置",
+        "checking": "检查中...",
+        "credentialsSet": "已设置凭据",
+        "serverOnline": "服务器在线",
+        "serverOffline": "服务器离线",
+        "serverError": "服务器错误"
+      },
+      "guidance": {
+        "requiresCli": "需要本地 CLI",
+        "provideServiceKey": "提供服务密钥",
+        "configureBaseUrl": "配置基础 URL",
+        "addApiKey": "添加 API 密钥"
+      },
+      "models": { "none": "无模型", "count": "{{count}} 个模型", "count_plural": "{{count}} 个模型" },
+      "ollama": {
+        "checkingVersion": "正在检查版本...",
+        "server": {
+          "checking": "正在检查服务器...",
+          "online": "服务器：在线",
+          "offline": "服务器：离线或不可达",
+          "error": "服务器：连接错误",
+          "versionOnline": "服务器在线",
+          "versionOffline": "服务器离线",
+          "versionError": "连接错误",
+          "version": "版本：{{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "上次刷新：{{timeAgo}}",
+        "neverRefreshed": "从未刷新",
+        "justNow": "刚刚",
+        "minutesAgo": "{{n}} 分钟前",
+        "hoursAgo": "{{n}} 小时前",
+        "daysAgo": "{{n}} 天前"
+      },
+      "actions": {
+        "edit": "编辑",
+        "manageModels": "管理模型",
+        "refreshModels": "刷新模型",
+        "refreshing": "刷新中...",
+        "delete": "删除"
+      },
+      "notices": { "refreshed": "已刷新 {{provider}} 的模型。", "refreshFailed": "刷新模型失败" },
+      "confirm": { "delete": "移除服务商 {{provider}}？" }
+    },
+    "mcp": {
+      "title": "MCP 服务器管理",
+      "desc": "配置模型上下文协议（MCP）服务器，为智能体扩展外部工具和数据源。",
+      "inspectorBtn": "🔍 打开 MCP 检查器",
+      "testAllBtn": "🧪 测试所有连接",
+      "refreshAllBtn": "🔄 刷新所有工具",
+      "addBtn": "+ 添加 MCP 服务器",
+      "empty": "未配置 MCP 服务器，点击「添加 MCP 服务器」开始。",
+      "tableHeaders": { "name": "名称", "command": "命令", "arguments": "参数", "status": "状态", "tools": "工具", "actions": "操作" },
+      "untitled": "未命名 MCP 服务器",
+      "notConfigured": "未配置",
+      "noArgs": "无",
+      "cached": "已缓存",
+      "disabled": "已禁用",
+      "envVars": "{{count}} 个环境变量",
+      "envVars_plural": "{{count}} 个环境变量",
+      "status": {
+        "disabled": "已禁用",
+        "connected": "已连接",
+        "disconnected": "未连接",
+        "enableToManage": "启用以管理连接",
+        "manualConnect": "手动连接",
+        "autoConnect": "自动连接"
+      },
+      "toolCount": {
+        "live": "{{count}} 个实时工具",
+        "live_plural": "{{count}} 个实时工具",
+        "cached": "{{count}} 个缓存工具",
+        "cached_plural": "{{count}} 个缓存工具"
+      },
+      "actions": {
+        "edit": "编辑",
+        "enabled": "✓ 已启用",
+        "enabledOff": "✗ 已禁用",
+        "connect": "连接",
+        "disconnect": "断开",
+        "connecting": "连接中...",
+        "disconnecting": "断开中...",
+        "test": "测试",
+        "testing": "测试中...",
+        "delete": "删除"
+      },
+      "notices": {
+        "disconnected": "已从 {{name}} 断开连接",
+        "connected": "已连接到 {{name}}",
+        "autoConnectFailed": "自动连接 {{name}} 失败",
+        "enableFirst": "连接前请先启用服务器",
+        "disconnectFailed": "从 {{name}} 断开连接失败",
+        "connectFailed": "连接 {{name}} 失败",
+        "testNoCommand": "❌ 请在测试连接前输入命令",
+        "testSuccess": "✅ 连接成功！找到 {{count}} 个工具。",
+        "testFailed": "❌ 连接失败：{{message}}",
+        "refreshedAll": "✅ 已刷新 {{count}} 个服务器的工具",
+        "refreshedAll_plural": "✅ 已刷新 {{count}} 个服务器的工具",
+        "refreshedPartial": "✅ 已刷新 {{success}} 个服务器，❌ {{failed}} 个失败"
+      },
+      "confirm": { "delete": "删除 MCP 服务器\"{{name}}\"？" }
+    },
+    "agents": {
+      "title": "智能体管理",
+      "desc": "创建和管理具有特定功能、工具和行为的 AI 智能体。",
+      "count": "已配置 {{count}} 个智能体",
+      "count_plural": "已配置 {{count}} 个智能体",
+      "addBtn": "+ 添加智能体",
+      "empty": "未配置智能体，点击「添加智能体」开始。",
+      "tableHeaders": { "agent": "智能体", "model": "模型", "capabilities": "能力", "tools": "工具", "actions": "操作" },
+      "defaultBadge": "默认",
+      "systemPrompt": "系统提示词 • {{promptName}}",
+      "customPrompt": "自定义提示词",
+      "model": {
+        "notSet": "未设置",
+        "notFound": "模型不在缓存中",
+        "useChatView": "使用聊天视图模型",
+        "useChatViewDesc": "将使用聊天视图中选中的模型",
+        "useDefault": "使用默认模型",
+        "useDefaultDesc": "将使用设置中的默认模型"
+      },
+      "capabilities": { "noSpecialModes": "无特殊模式" },
+      "tools": {
+        "builtIn": "{{count}} 个内置工具",
+        "mcpServer": "{{count}} 个 MCP 服务器",
+        "mcpServer_plural": "{{count}} 个 MCP 服务器",
+        "mcpTool": "{{count}} 个 MCP 工具",
+        "mcpTool_plural": "{{count}} 个 MCP 工具",
+        "noTools": "未启用工具"
+      },
+      "actions": { "edit": "编辑", "delete": "删除", "protected": "受保护" },
+      "confirm": { "delete": "删除智能体\"{{name}}\"？" }
+    },
+    "prompts": {
+      "title": "系统提示词",
+      "desc": "管理定义 AI 助手行为和个性的系统提示词。",
+      "addBtn": "+ 添加系统提示词",
+      "empty": "未配置系统提示词，点击「添加系统提示词」开始。",
+      "tableHeaders": { "name": "名称", "contentPreview": "内容预览", "created": "创建时间", "updated": "更新时间", "enabled": "启用状态", "actions": "操作" },
+      "status": { "enabled": "已启用", "disabled": "已禁用" },
+      "actions": { "edit": "编辑", "disable": "禁用", "enable": "启用", "delete": "删除" },
+      "confirm": { "delete": "删除提示词\"{{name}}\"？" }
+    },
+    "tools": {
+      "title": "工具配置",
+      "desc": "查看内置工具并探索已连接服务器加载的 MCP 工具。启用智能体可执行的操作。",
+      "subTabs": { "builtIn": "内置工具", "mcp": "MCP 工具", "openapi": "HTTP / OpenAPI", "cli": "CLI 工具" }
+    },
+    "rag": {
+      "title": "RAG 配置",
+      "desc": "配置检索增强生成和网络搜索，增强 AI 响应。",
+      "subTabs": { "overview": "概览", "chunking": "分块", "search": "搜索", "filters": "过滤器", "advanced": "高级", "websearch": "网络搜索" }
+    },
+    "websearch": {
+      "title": "网络搜索配置",
+      "desc": "配置网络搜索功能，以互联网最新信息增强 AI 响应。",
+      "generalBehavior": "通用行为",
+      "providers": {
+        "duckduckgo": "DuckDuckGo（无需密钥）",
+        "google": "Google 自定义搜索",
+        "bing": "Bing 网络搜索",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave 搜索",
+        "yahoo": "Yahoo（HTML 抓取）",
+        "yandex": "Yandex（HTML 抓取）",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "快捷操作",
+      "desc": "配置出现在编辑器上下文菜单中的 AI 快捷操作（选中文本时显示）。",
+      "actionPrefix": { "name": "操作前缀", "desc": "在上下文菜单中所有快捷操作前显示的前缀（表情符号或文字）", "placeholder": "⚡" },
+      "count": "已配置 {{count}} 个操作（{{enabled}} 个已启用）",
+      "count_plural": "已配置 {{count}} 个操作（{{enabled}} 个已启用）",
+      "addBtn": "+ 添加快捷操作"
+    },
+    "usage": {
+      "title": "Token 用量",
+      "desc": "跟踪各服务商和模型的 Token 消耗。数据在所有对话中累积。",
+      "notAvailable": "Token 用量跟踪不可用。",
+      "ranges": { "today": "今日", "week": "本周", "month": "本月", "all": "全部" }
+    }
+  },
+  "chat": {
+    "placeholder": "输入消息...（Enter 发送，Shift+Enter 换行）",
+    "conversations": "对话列表",
+    "toggleConversationsTitle": "切换对话列表",
+    "currentConversation": "当前对话",
+    "new": "新建",
+    "settings": "设置",
+    "openSettingsTitle": "打开插件设置",
+    "mode": "模式",
+    "prompt": "提示词",
+    "agent": "智能体",
+    "modeOptions": { "chat": "对话", "agent": "智能体" },
+    "noSystemPrompt": "无系统提示词",
+    "noAgentsAvailable": "暂无智能体",
+    "sendHintPrefix": "按 ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " 发送",
+    "sendAriaLabel": "发送消息",
+    "stop": " 停止",
+    "addReference": "添加引用",
+    "addReferenceTooltip": "添加文件或文件夹引用 (@)"
+  },
+  "modals": {
+    "confirm": { "cancel": "取消", "confirm": "确认" },
+    "agentEdit": {
+      "title": "编辑智能体",
+      "icon": { "name": "图标", "desc": "代表此智能体的表情符号或字符" },
+      "description": { "name": "描述", "desc": "智能体的简要描述" },
+      "modelStrategy": {
+        "name": "模型策略",
+        "options": { "default": "使用默认模型（来自设置）", "chatView": "使用聊天视图模型", "fixed": "固定模型" },
+        "noModels": "无缓存模型"
+      },
+      "systemPrompt": {
+        "createNew": "➕ 创建新提示词…",
+        "promptName": { "name": "提示词名称", "desc": "新系统提示词的显示名称" },
+        "promptContent": { "name": "提示词内容", "desc": "新系统提示词的内容" }
+      },
+      "capabilities": "能力",
+      "memory": { "title": "记忆", "notice": "智能体记忆功能正在迭代中，暂时不可用。" },
+      "tools": {
+        "title": "工具",
+        "builtIn": { "name": "内置工具", "desc": "选择此智能体可使用的内置工具" },
+        "cli": { "name": "CLI 工具", "desc": "授权访问所有已启用的 CLI 工具，或在下方单独选择", "noTools": "未配置 CLI 工具。请在设置 → 工具 → CLI 中添加并启用。" }
+      },
+      "mcp": { "title": "MCP 访问", "noServers": "未配置 MCP 服务器。请在设置 → MCP 中添加服务器以解锁这些选项。" },
+      "notices": { "promptRequired": "请为新系统提示词提供名称和内容。" }
+    }
+  },
+  "notices": {
+    "noProvider": "请先在设置中配置 LLM 服务商",
+    "noModel": "请在设置中选择默认模型",
+    "noValidProvider": "未找到模型 {{modelId}} 的有效服务商配置",
+    "processing": "处理中...",
+    "textUpdated": "文本更新成功",
+    "error": "错误：{{message}}"
+  }
+}
