@@ -6,6 +6,7 @@
 import { Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { ModelInfo, ModelCapability } from '@/types';
+import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
 import { getProviderMeta } from '../components/provider-meta';
 import { OllamaModelManagerModal } from '../modals/ollama-model-manager-modal';
@@ -24,20 +25,20 @@ export function displayModelsTab(
 	onFilterChange: (filters: Partial<ModelFilters>) => void,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Model configuration' });
+	containerEl.createEl('h3', { text: t('settings.models.title') });
 
 	const desc = containerEl.createEl('p', {
-		text: 'View and manage models from all configured providers. Click "refresh models" to fetch the latest available models.'
+		text: t('settings.models.desc')
 	});
 	desc.addClass('ia-section-description');
 
 	const controls = containerEl.createDiv('ia-section-actions');
 	controls.addClass('ia-section-actions--wrap');
 	const summary = controls.createDiv('ia-section-summary');
-	summary.createSpan({ text: `${plugin.settings.llmConfigs.length} provider${plugin.settings.llmConfigs.length === 1 ? '' : 's'} configured` });
+	summary.createSpan({ text: t('settings.models.providerCount', { count: plugin.settings.llmConfigs.length }) });
 
 	// Add refresh all button
-	const refreshAllBtn = controls.createEl('button', { text: '🔄 refresh all models' });
+	const refreshAllBtn = controls.createEl('button', { text: t('settings.models.refreshAll') });
 	refreshAllBtn.addClass('ia-button');
 	refreshAllBtn.addClass('ia-button--ghost');
 	refreshAllBtn.addEventListener('click', () => {
@@ -50,28 +51,28 @@ export function displayModelsTab(
 
 			for (const config of plugin.settings.llmConfigs) {
 				try {
-					new Notice(`Fetching models for ${config.provider}...`);
+					new Notice(t('settings.models.notices.fetching', { provider: config.provider }));
 					const models = await ModelManager.getModelsForConfig(config, true);
 					config.cachedModels = models;
 					config.cacheTimestamp = Date.now();
 				} catch (error) {
 					console.error(`Failed to refresh models for ${config.provider}:`, error);
-					new Notice(`Failed to refresh ${config.provider} models`);
+					new Notice(t('settings.models.notices.fetchFailed', { provider: config.provider }));
 				}
 			}
 
 			await plugin.saveSettings();
 			await plugin.refreshChatViewsModels();
-			new Notice('Models refreshed successfully!');
+			new Notice(t('settings.models.notices.refreshed'));
 
 			// Redisplay the tab
 			refreshDisplay();
 		} catch (error) {
 			console.error('Failed to refresh models:', error);
-			new Notice('Failed to refresh models');
+			new Notice(t('settings.models.notices.refreshFailed'));
 		} finally {
 			refreshAllBtn.disabled = false;
-			refreshAllBtn.textContent = '🔄 refresh all models';
+			refreshAllBtn.textContent = t('settings.models.refreshAll');
 			}
 		})();
 	});
@@ -79,7 +80,7 @@ export function displayModelsTab(
 	// Show message if no providers configured
 	if (plugin.settings.llmConfigs.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No providers configured yet. Add providers in the provider tab first.');
+		emptyDiv.setText(t('settings.models.empty'));
 		return;
 	}
 
@@ -101,20 +102,20 @@ export function displayModelsTab(
 
 	const filteredModels = applyModelFilters(allModels, filters);
 
-	summary.createSpan({ text: `• ${allModels.length} model${allModels.length === 1 ? '' : 's'} cached` }).addClass('ia-section-summary-pill');
+	summary.createSpan({ text: t('settings.models.modelCount', { count: allModels.length }) }).addClass('ia-section-summary-pill');
 	if (filteredModels.length !== allModels.length) {
-		summary.createSpan({ text: `• ${filteredModels.length} match${filteredModels.length === 1 ? '' : 'es'} selected filters` }).addClass('ia-section-summary-pill');
+		summary.createSpan({ text: t('settings.models.matchCount', { count: filteredModels.length }) }).addClass('ia-section-summary-pill');
 	}
 
 	if (allModels.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No models available. Click "refresh all models" or refresh individual providers in the provider tab.');
+		emptyDiv.setText(t('settings.models.noModels'));
 		return;
 	}
 
 	if (filteredModels.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No models match the current filters. Adjust or clear filters to see results.');
+		emptyDiv.setText(t('settings.models.noMatch'));
 		return;
 	}
 
@@ -184,7 +185,7 @@ export function displayModelsTab(
 		const statusStack = statusCell.createDiv('ia-table-stack');
 		const statusBadge = statusStack.createDiv('ia-status-badge');
 		statusBadge.addClass(model.enabled ? 'is-success' : 'is-danger');
-		statusBadge.setText(model.enabled ? 'Enabled' : 'Disabled');
+		statusBadge.setText(model.enabled ? t('settings.models.status.enabled') : t('settings.models.status.disabled'));
 
 		const statusDetails: string[] = [];
 		const isDefaultChat = plugin.settings.defaultModel === model.id;
@@ -204,7 +205,7 @@ export function displayModelsTab(
 		actionsCell.addClass('ia-table-cell');
 		actionsCell.addClass('ia-table-actions');
 
-		const toggleBtn = actionsCell.createEl('button', { text: model.enabled ? 'Disable' : 'Enable' });
+		const toggleBtn = actionsCell.createEl('button', { text: model.enabled ? t('settings.models.actions.disable') : t('settings.models.actions.enable') });
 		toggleBtn.addClass('ia-button');
 		toggleBtn.addClass(model.enabled ? 'ia-button--ghost' : 'ia-button--primary');
 		toggleBtn.addEventListener('click', () => {
@@ -217,7 +218,7 @@ export function displayModelsTab(
 		});
 
 		if ((model.capabilities ?? []).includes('chat')) {
-			const chatBtn = actionsCell.createEl('button', { text: isDefaultChat ? 'Default Chat' : 'Set Default Chat' });
+			const chatBtn = actionsCell.createEl('button', { text: isDefaultChat ? t('settings.models.actions.defaultChat') : t('settings.models.actions.setDefaultChat') });
 			chatBtn.addClass('ia-button');
 			chatBtn.addClass(isDefaultChat ? 'ia-button--success' : 'ia-button--ghost');
 			if (isDefaultChat) {
@@ -228,7 +229,7 @@ export function displayModelsTab(
 						plugin.settings.defaultModel = model.id;
 						await plugin.saveSettings();
 						await plugin.refreshChatViewsModels();
-						new Notice(`Default chat model set to ${model.name}`);
+						new Notice(t('settings.models.notices.defaultChatSet', { name: model.name }));
 						refreshDisplay();
 					})();
 				});
@@ -236,7 +237,7 @@ export function displayModelsTab(
 		}
 
 		if ((model.capabilities ?? []).includes('embedding') && plugin.settings.ragConfig) {
-			const embeddingBtn = actionsCell.createEl('button', { text: isDefaultEmbedding ? 'Default Embedding' : 'Set Default Embedding' });
+			const embeddingBtn = actionsCell.createEl('button', { text: isDefaultEmbedding ? t('settings.models.actions.defaultEmbedding') : t('settings.models.actions.setDefaultEmbedding') });
 			embeddingBtn.addClass('ia-button');
 			embeddingBtn.addClass(isDefaultEmbedding ? 'ia-button--success' : 'ia-button--ghost');
 			if (isDefaultEmbedding) {
@@ -247,7 +248,7 @@ export function displayModelsTab(
 						plugin.settings.ragConfig.embeddingModel = model.id;
 						await plugin.saveSettings();
 						await plugin.refreshChatViewsModels();
-						new Notice(`Default embedding model set to ${model.name}`);
+						new Notice(t('settings.models.notices.defaultEmbeddingSet', { name: model.name }));
 						refreshDisplay();
 					})();
 				});
@@ -269,7 +270,7 @@ function renderModelFilters(
 	const providerSelect = filterBar.createEl('select');
 	providerSelect.addClass('ia-filter-control');
 	providerSelect.addClass('ia-filter-control--compact');
-	providerSelect.createEl('option', { value: 'all', text: 'All providers' });
+	providerSelect.createEl('option', { value: 'all', text: t('settings.models.filters.allProviders') });
 
 	const providerIds = Array.from(new Set(plugin.settings.llmConfigs.map(({ provider }) => provider)));
 	providerIds.sort((a, b) => getProviderMeta(a).label.localeCompare(getProviderMeta(b).label));
@@ -291,7 +292,7 @@ function renderModelFilters(
 	const capabilitySelect = filterBar.createEl('select');
 	capabilitySelect.addClass('ia-filter-control');
 	capabilitySelect.addClass('ia-filter-control--compact');
-	capabilitySelect.createEl('option', { value: 'all', text: 'All capabilities' });
+	capabilitySelect.createEl('option', { value: 'all', text: t('settings.models.filters.allCapabilities') });
 
 	const capabilityOptions = Array.from(new Set(capabilities)).sort((a, b) => a.localeCompare(b));
 	capabilityOptions.forEach(capability => {

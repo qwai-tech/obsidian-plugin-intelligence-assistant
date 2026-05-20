@@ -5,6 +5,7 @@
 
 import type { App } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
+import { t } from '@/i18n';
 import { displayProviderTab } from './provider-tab';
 import { displayModelsTab, type ModelFilters } from './models-tab';
 
@@ -18,10 +19,10 @@ export function displayLLMTab(
 	initialActiveTab: 'provider' | 'models' = 'provider',
 	onActiveTabChange?: (tab: 'provider' | 'models') => void
 ): void {
-	containerEl.createEl('h3', { text: 'LLM configuration' });
+	containerEl.createEl('h3', { text: t('settings.llm.title') });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Configure language model providers and manage available models.'
+		text: t('settings.llm.desc')
 	});
 	desc.addClass('ia-section-description');
 
@@ -32,8 +33,8 @@ export function displayLLMTab(
 	const tabContentContainer = containerEl.createDiv('ia-llm-tab-content');
 
 	const subTabs: Array<{ id: 'provider' | 'models'; label: string; icon: string }> = [
-		{ id: 'provider', label: 'Providers', icon: '🔌' },
-		{ id: 'models', label: 'Models', icon: '🤖' }
+		{ id: 'provider', label: t('settings.llm.subTabs.provider'), icon: '🔌' },
+		{ id: 'models', label: t('settings.llm.subTabs.models'), icon: '🤖' }
 	];
 
 	let activeTab: 'provider' | 'models' = initialActiveTab;

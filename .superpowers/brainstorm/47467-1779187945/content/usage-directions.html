@@ -1,0 +1,263 @@
+<style>
+  .preview-wrap { max-width: 520px; margin: 0 auto; }
+
+  .usage-shell {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+  }
+
+  /* ── OPTION A: Dashboard/hero style ── */
+  .a-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+  .a-stat-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .a-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-secondary); margin-bottom: 4px; }
+  .a-stat-value { font-size: 22px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+  .a-stat-sub { font-size: 11px; color: var(--text-secondary); margin-top: 3px; }
+  .a-filter-tabs {
+    display: flex;
+    gap: 0;
+    padding: 10px 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .a-tab {
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .a-tab.active { color: #6366f1; border-bottom-color: #6366f1; font-weight: 600; }
+  .a-section { padding: 12px 16px; }
+  .a-section-title { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600; }
+  .a-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .a-table th { text-align: left; padding: 6px 10px; color: var(--text-secondary); font-weight: 600; font-size: 11px; border-bottom: 1px solid var(--border); }
+  .a-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
+  .a-table tr:last-child td { border-bottom: none; }
+  .a-table tr:hover td { background: var(--bg-secondary); }
+  .a-table .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+
+  /* ── OPTION B: Card-per-section ── */
+  .b-header { padding: 14px 16px 8px; }
+  .b-filter-group {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .b-filter-btn {
+    padding: 5px 12px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .b-filter-btn:last-child { border-right: none; }
+  .b-filter-btn.active { background: #6366f1; color: white; font-weight: 600; }
+  .b-pills { display: flex; gap: 6px; margin-bottom: 12px; }
+  .b-pill {
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .b-pill.accent { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3); color: #6366f1; }
+  .b-card {
+    margin: 0 12px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .b-card-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--text-secondary);
+  }
+  .b-card-header .dot { width: 6px; height: 6px; border-radius: 50%; background: #6366f1; }
+  .b-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .b-table th { text-align: left; padding: 6px 12px; color: var(--text-secondary); font-weight: 600; font-size: 11px; border-bottom: 1px solid var(--border); }
+  .b-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); }
+  .b-table tr:last-child td { border-bottom: none; }
+  .b-table .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+  .b-footer { padding: 0 12px 12px; }
+  .b-clear { font-size: 11px; color: var(--text-secondary); padding: 5px 12px; border-radius: 5px; border: 1px solid var(--border); background: transparent; cursor: pointer; }
+  .b-clear:hover { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.3); color: #ef4444; }
+
+  /* ── OPTION C: Compact/minimal ── */
+  .c-header { padding: 14px 16px 0; }
+  .c-range-chips {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    padding: 3px;
+    background: var(--bg-secondary);
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    width: fit-content;
+  }
+  .c-chip {
+    padding: 4px 12px;
+    border-radius: 5px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .c-chip.active {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,.12);
+  }
+  .c-summary { display: flex; gap: 16px; padding: 10px 16px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg-secondary); margin-bottom: 12px; }
+  .c-metric { display: flex; flex-direction: column; }
+  .c-metric-val { font-size: 18px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+  .c-metric-lbl { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
+  .c-section-hdr {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--text-secondary);
+  }
+  .c-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .c-table th { text-align: left; padding: 5px 16px; color: var(--text-secondary); font-weight: 600; font-size: 11px; }
+  .c-table td { padding: 6px 16px; border-top: 1px solid var(--border); }
+  .c-table tr:hover td { background: var(--bg-secondary); }
+  .c-table .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+  .c-footer { padding: 10px 16px; border-top: 1px solid var(--border); }
+  .c-clear { font-size: 11px; color: var(--text-secondary); padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border); background: transparent; cursor: pointer; }
+  .c-clear:hover { color: #ef4444; border-color: rgba(239,68,68,.3); background: rgba(239,68,68,.06); }
+</style>
+
+<h2>Usage tab — 3 directions</h2>
+<p class="subtitle">Click a design to select it.</p>
+
+<div style="display:flex; flex-direction:column; gap:24px; max-width:540px; margin:0 auto;">
+
+  <!-- OPTION A -->
+  <div class="design-card" data-choice="A" onclick="toggleSelect(this)" style="border-radius:10px; overflow:hidden; border:2px solid var(--border); cursor:pointer;">
+    <div style="padding:8px 14px; background:var(--bg-secondary); border-bottom:1px solid var(--border); font-size:12px; font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+      <span>A — Dashboard / hero numbers</span>
+      <span style="font-weight:400; color:var(--text-secondary)">stat cards + underline tabs</span>
+    </div>
+    <div class="usage-shell" style="border:none; border-radius:0;">
+      <div class="a-hero">
+        <div class="a-stat-card">
+          <div class="a-stat-label">Total tokens</div>
+          <div class="a-stat-value">0.5K</div>
+          <div class="a-stat-sub">All time</div>
+        </div>
+        <div class="a-stat-card">
+          <div class="a-stat-label">API calls</div>
+          <div class="a-stat-value">2</div>
+          <div class="a-stat-sub">All time</div>
+        </div>
+      </div>
+      <div class="a-filter-tabs">
+        <div class="a-tab">Today</div>
+        <div class="a-tab">This week</div>
+        <div class="a-tab">This month</div>
+        <div class="a-tab active">All time</div>
+      </div>
+      <div class="a-section">
+        <div class="a-section-title">By provider</div>
+        <table class="a-table">
+          <thead><tr><th>Provider</th><th class="num">Prompt</th><th class="num">Completion</th><th class="num">Total</th></tr></thead>
+          <tbody><tr><td>deepseek</td><td class="num">13</td><td class="num">501</td><td class="num">514</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION B -->
+  <div class="design-card" data-choice="B" onclick="toggleSelect(this)" style="border-radius:10px; overflow:hidden; border:2px solid var(--border); cursor:pointer;">
+    <div style="padding:8px 14px; background:var(--bg-secondary); border-bottom:1px solid var(--border); font-size:12px; font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+      <span>B — Cards per section</span>
+      <span style="font-weight:400; color:var(--text-secondary)">segmented filter + bordered cards</span>
+    </div>
+    <div class="usage-shell" style="border:none; border-radius:0;">
+      <div class="b-header">
+        <div class="b-filter-group">
+          <div class="b-filter-btn">Today</div>
+          <div class="b-filter-btn">This week</div>
+          <div class="b-filter-btn">This month</div>
+          <div class="b-filter-btn active">All time</div>
+        </div>
+        <div class="b-pills">
+          <div class="b-pill accent">0.5K tokens</div>
+          <div class="b-pill">2 calls</div>
+        </div>
+      </div>
+      <div class="b-card">
+        <div class="b-card-header"><div class="dot"></div> By provider</div>
+        <table class="b-table">
+          <thead><tr><th>Provider</th><th class="num">Prompt</th><th class="num">Completion</th><th class="num">Total</th><th class="num">Calls</th></tr></thead>
+          <tbody><tr><td>deepseek</td><td class="num">13</td><td class="num">501</td><td class="num">514</td><td class="num">2</td></tr></tbody>
+        </table>
+      </div>
+      <div class="b-footer">
+        <button class="b-clear">Clear all usage data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION C -->
+  <div class="design-card" data-choice="C" onclick="toggleSelect(this)" style="border-radius:10px; overflow:hidden; border:2px solid var(--border); cursor:pointer;">
+    <div style="padding:8px 14px; background:var(--bg-secondary); border-bottom:1px solid var(--border); font-size:12px; font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+      <span>C — Compact + pill filter</span>
+      <span style="font-weight:400; color:var(--text-secondary)">pill-segment bar + inline metrics</span>
+    </div>
+    <div class="usage-shell" style="border:none; border-radius:0;">
+      <div class="c-header">
+        <div class="c-range-chips">
+          <div class="c-chip">Today</div>
+          <div class="c-chip">Week</div>
+          <div class="c-chip">Month</div>
+          <div class="c-chip active">All</div>
+        </div>
+      </div>
+      <div class="c-summary">
+        <div class="c-metric"><div class="c-metric-val">0.5K</div><div class="c-metric-lbl">tokens</div></div>
+        <div class="c-metric"><div class="c-metric-val">2</div><div class="c-metric-lbl">API calls</div></div>
+        <div class="c-metric"><div class="c-metric-val">13</div><div class="c-metric-lbl">prompt</div></div>
+        <div class="c-metric"><div class="c-metric-val">501</div><div class="c-metric-lbl">completion</div></div>
+      </div>
+      <div class="c-section-hdr">By provider</div>
+      <table class="c-table">
+        <thead><tr><th>Provider</th><th class="num">Prompt</th><th class="num">Completion</th><th class="num">Total</th></tr></thead>
+        <tbody><tr><td>deepseek</td><td class="num">13</td><td class="num">501</td><td class="num">514</td></tr></tbody>
+      </table>
+      <div class="c-footer">
+        <button class="c-clear">Clear all data</button>
+      </div>
+    </div>
+  </div>
+
+</div>

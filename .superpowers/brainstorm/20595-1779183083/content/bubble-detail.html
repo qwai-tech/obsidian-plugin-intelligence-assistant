@@ -1,0 +1,243 @@
+<style>
+  .preview-wrap {
+    max-width: 460px;
+    margin: 0 auto;
+  }
+  .preview-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+
+  /* ── chat shell ── */
+  .chat-shell {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+  }
+  .chat-header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chat-header strong { color: var(--text-primary); font-size: 13px; }
+  .chat-header .dot { width:6px; height:6px; border-radius:50%; background: #34c759; }
+  .chat-body {
+    padding: 14px 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chat-input-bar {
+    border-top: 1px solid var(--border);
+    padding: 8px 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: var(--bg-secondary);
+  }
+  .chat-input-bar .input-mock {
+    flex: 1;
+    background: var(--bg-tertiary);
+    border-radius: 20px;
+    padding: 6px 14px;
+    color: var(--text-secondary);
+    font-size: 12px;
+  }
+  .chat-input-bar .send-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #0071e3; color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; cursor: pointer; border: none;
+  }
+
+  /* ── message row ── */
+  .msg {
+    display: flex;
+    gap: 7px;
+    align-items: flex-end;
+  }
+  .msg.user { flex-direction: row-reverse; }
+
+  .av {
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; flex-shrink: 0;
+    background: var(--bg-tertiary);
+  }
+  .av.user { background: #0071e3; }
+  .av svg { width: 14px; height: 14px; }
+
+  /* ── bubble ── */
+  .bubble-col { display: flex; flex-direction: column; max-width: 78%; }
+  .bubble-col.user { align-items: flex-end; }
+
+  .bubble {
+    padding: 8px 12px;
+    line-height: 1.5;
+    border-radius: 4px 16px 16px 16px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    word-break: break-word;
+  }
+  .bubble.user {
+    background: #0071e3;
+    color: white;
+    border-radius: 16px 16px 4px 16px;
+  }
+
+  /* ── meta row (always visible, below assistant bubble) ── */
+  .meta {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    padding-left: 2px;
+  }
+  .meta.user {
+    justify-content: flex-end;
+    padding-left: 0;
+    padding-right: 2px;
+  }
+  .meta-badge {
+    font-size: 10px;
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+    border-radius: 99px;
+    padding: 1px 7px;
+  }
+  .meta-time {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    margin-left: auto;
+  }
+  .meta-sep { color: var(--text-tertiary); font-size: 10px; }
+
+  /* ── action buttons ── */
+  .actions {
+    margin-top: 4px;
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+    padding-left: 2px;
+  }
+  .action-btn {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .action-btn:hover { color: var(--text-primary); background: var(--bg-tertiary); }
+
+  /* ── token footer ── */
+  .token-row {
+    margin-top: 3px;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    padding-left: 2px;
+  }
+
+  /* ── annotation callout ── */
+  .callout {
+    margin-top: 28px;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .callout h4 { color: var(--text-primary); font-size: 12px; margin-bottom: 6px; }
+  .callout ul { padding-left: 16px; }
+  .callout li { margin-bottom: 3px; }
+  .callout .accent { color: #0071e3; font-weight: 600; }
+</style>
+
+<h2>Design B — Bubble chat (detailed)</h2>
+<p class="subtitle">Exact layout for the final implementation. Click the card to approve.</p>
+
+<div class="preview-wrap">
+  <div class="design-card" data-choice="approved" onclick="toggleSelect(this)" style="border-radius:12px; overflow:hidden; border:2px solid var(--border); cursor:pointer; transition:border-color .15s, box-shadow .15s;">
+
+    <div class="chat-shell">
+      <div class="chat-header">
+        <div class="dot"></div>
+        <strong>讲一个笑话</strong>
+        <span style="margin-left:auto; font-size:11px">deepseek-v4-flash</span>
+      </div>
+      <div class="chat-body">
+
+        <!-- User message -->
+        <div class="msg user">
+          <div class="av user">🧑</div>
+          <div class="bubble-col user">
+            <div class="bubble user">讲一个笑话</div>
+            <div class="meta user">
+              <span class="meta-time">5:18 PM</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assistant message -->
+        <div class="msg">
+          <div class="av" style="background:#0a0a0a; color:white; font-size:11px; font-weight:700;">DS</div>
+          <div class="bubble-col">
+            <div class="bubble">
+              当然！这是一个关于"为什么"的笑话：<br><br>
+              小明问爸爸："为什么饺子长得像耳朵？"<br>
+              爸爸想了想说："因为……饺子（嚼子）是用来嚼的，不是用来听的呀！"<br>
+              （笑点解析：利用"饺子"和"教子"谐音，但强行用"嚼子"替换，制造无厘头反差。）😄
+            </div>
+            <div class="meta">
+              <span class="meta-badge">deepseek-v4-flash</span>
+              <span class="meta-sep">·</span>
+              <span class="meta-badge">DeepSeek</span>
+              <span class="meta-time">5:18 PM</span>
+            </div>
+            <div class="actions">
+              <button class="action-btn">Copy</button>
+              <button class="action-btn">Save</button>
+              <button class="action-btn">Insert to Notes</button>
+              <button class="action-btn">Regenerate</button>
+            </div>
+            <div class="token-row">Tokens: 7 input · 175 output · 182 total</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="chat-input-bar">
+        <div class="input-mock">Type a message…</div>
+        <button class="send-btn">↑</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="callout">
+    <h4>What this design specifies</h4>
+    <ul>
+      <li><span class="accent">User</span>: accent bubble, right-aligned, small avatar bottom-right, timestamp below</li>
+      <li><span class="accent">Assistant</span>: neutral bubble, left-aligned, provider avatar bottom-left</li>
+      <li><span class="accent">Below assistant bubble</span>: model + provider badges, timestamp — always visible</li>
+      <li><span class="accent">Action buttons</span>: Copy / Save / Insert to Notes / Regenerate — always visible</li>
+      <li><span class="accent">Token usage</span>: one quiet line below actions</li>
+      <li><span class="accent">No name labels</span> inside or above bubbles</li>
+    </ul>
+  </div>
+</div>

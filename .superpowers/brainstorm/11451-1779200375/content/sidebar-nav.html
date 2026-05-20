@@ -1,0 +1,233 @@
+<style>
+  /* ── Obsidian-like shell ── */
+  .shell {
+    display: flex;
+    height: 520px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    background: var(--bg-primary);
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 160px;
+    flex-shrink: 0;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border);
+    padding: 12px 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-section {
+    margin-bottom: 4px;
+  }
+
+  .sidebar-section-label {
+    padding: 6px 14px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.12s, color 0.12s;
+    white-space: nowrap;
+  }
+  .nav-item:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+  .nav-item.active {
+    background: rgba(99,102,241,0.12);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .nav-item .icon {
+    font-size: 13px;
+    opacity: 0.75;
+    width: 16px;
+    text-align: center;
+  }
+  .nav-item.active .icon { opacity: 1; }
+
+  /* ── Content area ── */
+  .content {
+    flex: 1;
+    padding: 20px 22px;
+    overflow-y: auto;
+    background: var(--bg-primary);
+  }
+  .content h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .content .desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  /* placeholder content blocks */
+  .mock-row {
+    height: 34px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 10px;
+  }
+  .mock-label {
+    width: 80px; height: 10px; border-radius: 3px; background: var(--border);
+  }
+  .mock-value {
+    height: 10px; border-radius: 3px; background: rgba(99,102,241,0.2);
+  }
+  .mock-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .mock-stat-card {
+    padding: 10px 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .mock-stat-card .s-label { height: 8px; width: 60%; background: var(--border); border-radius: 3px; margin-bottom: 6px; }
+  .mock-stat-card .s-value { height: 16px; width: 40%; background: rgba(99,102,241,0.3); border-radius: 3px; }
+</style>
+
+<h2>Settings — Sidebar Navigation</h2>
+<p class="subtitle">9 tabs grouped into a left sidebar. Click the nav item to preview the active state. Does this feel right?</p>
+
+<div class="shell">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">General</div>
+      <div class="nav-item" onclick="setActive(this,'general')">
+        <span class="icon">⚙️</span> General
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">AI</div>
+      <div class="nav-item" onclick="setActive(this,'llm')">
+        <span class="icon">🔌</span> LLM
+      </div>
+      <div class="nav-item" onclick="setActive(this,'mcp')">
+        <span class="icon">🔧</span> MCP
+      </div>
+      <div class="nav-item" onclick="setActive(this,'tools')">
+        <span class="icon">🛠</span> Tools
+      </div>
+      <div class="nav-item" onclick="setActive(this,'agents')">
+        <span class="icon">🤖</span> Agents
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Knowledge</div>
+      <div class="nav-item" onclick="setActive(this,'rag')">
+        <span class="icon">📚</span> RAG
+      </div>
+      <div class="nav-item" onclick="setActive(this,'prompts')">
+        <span class="icon">✏️</span> Prompts
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Other</div>
+      <div class="nav-item" onclick="setActive(this,'quickactions')">
+        <span class="icon">⚡</span> Quick Actions
+      </div>
+      <div class="nav-item active" onclick="setActive(this,'usage')">
+        <span class="icon">📊</span> Usage
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="content" id="content-area">
+    <h3>Usage</h3>
+    <p class="desc">Token consumption across providers and models.</p>
+    <div class="mock-stat-grid">
+      <div class="mock-stat-card"><div class="s-label"></div><div class="s-value"></div></div>
+      <div class="mock-stat-card"><div class="s-label"></div><div class="s-value"></div></div>
+      <div class="mock-stat-card"><div class="s-label"></div><div class="s-value"></div></div>
+      <div class="mock-stat-card"><div class="s-label"></div><div class="s-value"></div></div>
+    </div>
+    <div class="mock-row"><div class="mock-label"></div><div class="mock-value" style="width:50px"></div><div class="mock-value" style="width:40px"></div><div class="mock-value" style="width:45px"></div></div>
+    <div class="mock-row"><div class="mock-label"></div><div class="mock-value" style="width:60px"></div><div class="mock-value" style="width:30px"></div><div class="mock-value" style="width:50px"></div></div>
+    <div class="mock-row"><div class="mock-label"></div><div class="mock-value" style="width:45px"></div><div class="mock-value" style="width:55px"></div><div class="mock-value" style="width:35px"></div></div>
+  </div>
+</div>
+
+<div style="margin-top:14px; max-width:680px; margin-left:auto; margin-right:auto; display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12px;">
+  <div style="padding:10px 14px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:8px;">
+    <strong style="display:block; margin-bottom:5px; color:var(--text-primary)">分组方案</strong>
+    <ul style="margin:0; padding-left:16px; color:var(--text-secondary); line-height:1.7">
+      <li><strong>General</strong> — General</li>
+      <li><strong>AI</strong> — LLM · MCP · Tools · Agents</li>
+      <li><strong>Knowledge</strong> — RAG · Prompts</li>
+      <li><strong>Other</strong> — Quick Actions · Usage</li>
+    </ul>
+  </div>
+  <div style="padding:10px 14px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:8px;">
+    <strong style="display:block; margin-bottom:5px; color:var(--text-primary)">与现在的差异</strong>
+    <ul style="margin:0; padding-left:16px; color:var(--text-secondary); line-height:1.7">
+      <li>横排9个按钮 → 左侧竖排分组</li>
+      <li>宽度固定 160px，内容区更宽</li>
+      <li>Tab 内容逻辑完全不变</li>
+      <li>CSS + settings-tab.ts 各改一处</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const contentMap = {
+  general: { title: 'General', desc: 'Plugin settings, language, and appearance.', type: 'rows' },
+  llm: { title: 'LLM', desc: 'Configure language model providers and manage available models.', type: 'rows' },
+  mcp: { title: 'MCP', desc: 'Model Context Protocol servers and tool integrations.', type: 'rows' },
+  tools: { title: 'Tools', desc: 'Built-in, MCP, OpenAPI, and CLI tools configuration.', type: 'rows' },
+  agents: { title: 'Agents', desc: 'AI agent definitions and configurations.', type: 'rows' },
+  rag: { title: 'RAG', desc: 'Retrieval-augmented generation and vector store settings.', type: 'rows' },
+  prompts: { title: 'Prompts', desc: 'Prompt templates and system instructions.', type: 'rows' },
+  quickactions: { title: 'Quick Actions', desc: 'Configurable quick-action shortcuts for the chat view.', type: 'rows' },
+  usage: { title: 'Usage', desc: 'Token consumption across providers and models.', type: 'stats' },
+};
+
+function setActive(el, key) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+
+  const info = contentMap[key];
+  const ca = document.getElementById('content-area');
+  const rows = [0,1,2].map(() => `<div class="mock-row"><div class="mock-label"></div><div class="mock-value" style="width:${30+Math.random()*40|0}px"></div><div class="mock-value" style="width:${20+Math.random()*30|0}px"></div></div>`).join('');
+  const stats = `<div class="mock-stat-grid">${[0,1,2,3].map(()=>`<div class="mock-stat-card"><div class="s-label"></div><div class="s-value"></div></div>`).join('')}</div>` + rows;
+
+  ca.innerHTML = `<h3>${info.title}</h3><p class="desc">${info.desc}</p>${info.type==='stats' ? stats : rows+rows+rows}`;
+}
+</script>

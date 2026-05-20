@@ -1,0 +1,302 @@
+<style>
+  /* Replicate actual plugin classes using frame CSS vars */
+  .preview-wrap { max-width: 540px; margin: 0 auto; }
+
+  .ia-usage-shell {
+    background: var(--bg-primary);
+    border-radius: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+  }
+
+  /* ── Stat cards grid (new class: ia-usage-stat-grid / ia-usage-stat-card) ── */
+  .ia-usage-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .ia-usage-stat-card {
+    padding: 12px 14px;
+    border-radius: 8px;                          /* --ia-radius-m */
+    border: 1px solid var(--border);             /* --background-modifier-border */
+    background: var(--bg-secondary);             /* --background-secondary */
+  }
+  .ia-usage-stat-card__label {
+    font-size: 10px;                             /* --ia-font-size-3xs */
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--text-secondary);                /* --text-muted */
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .ia-usage-stat-card__value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);                  /* --text-normal */
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .ia-usage-stat-card__sub {
+    font-size: 10px;
+    color: var(--text-tertiary);                 /* --text-faint */
+    margin-top: 3px;
+  }
+
+  /* ── Tab bar (new class: ia-tab-bar / ia-tab / ia-tab--active) ── */
+  .ia-tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+    gap: 0;
+  }
+  .ia-tab {
+    padding: 8px 14px;
+    font-size: 12px;                             /* --ia-font-size-xs */
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .ia-tab:hover:not(.ia-tab--active) { color: var(--text-primary); }
+  .ia-tab--active {
+    color: var(--accent);                        /* --interactive-accent */
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── Section header (new class: ia-usage-section-hdr) ── */
+  .ia-usage-section-hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .ia-usage-section-hdr h4 {
+    margin: 0;
+    font-size: 11px;                             /* --ia-font-size-2xs */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--text-secondary);
+  }
+  .ia-usage-section-hdr span {
+    font-size: 10px;
+    color: var(--text-tertiary);
+  }
+
+  /* Existing ia-table-container / ia-table / ia-table-head / ia-table-header / ia-table-body / ia-table-cell */
+  .ia-table-container {
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;                         /* --ia-radius-l */
+    overflow: hidden;
+    background: var(--bg-primary);
+    box-shadow: 0 4px 12px rgba(15,23,42,.06);
+  }
+  .ia-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .ia-table-head { background: linear-gradient(135deg, rgba(59,130,246,.06) 0%, rgba(147,197,253,.04) 100%); }
+  .ia-table-header {
+    padding: 10px 16px;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+  .ia-table-header.r { text-align: right; }
+  .ia-table-body tr { border-bottom: 1px solid var(--border); transition: background .2s ease; }
+  .ia-table-body tr:last-child { border-bottom: none; }
+  .ia-table-body tr:hover { background: var(--bg-hover); }
+  .ia-table-cell { padding: 10px 16px; vertical-align: middle; color: var(--text-primary); }
+  .ia-table-cell.r { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+  .ia-table-cell.mono { font-size: 11px; font-family: var(--font-monospace, monospace); color: var(--text-secondary); }
+
+  /* Existing ia-button / ia-button--danger */
+  .ia-button {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background .15s ease;
+  }
+  .ia-button--danger {
+    background: rgba(255,92,87,.12);
+    color: #ff5c57;
+    border-color: rgba(255,92,87,.3);
+  }
+  .ia-button--danger:hover { background: rgba(255,92,87,.2); }
+
+  /* ia-section-actions (existing) */
+  .ia-section-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+</style>
+
+<h2>Design A — using the plugin's design system</h2>
+<p class="subtitle">Same layout, same CSS classes and tokens as the rest of the settings UI. Click to approve.</p>
+
+<div class="preview-wrap">
+  <div class="design-card" data-choice="approved" onclick="toggleSelect(this)"
+       style="border-radius:10px; overflow:hidden; border:2px solid var(--border); cursor:pointer; padding:20px 20px 12px;">
+
+    <div class="ia-usage-shell">
+
+      <!-- 4 stat cards: ia-usage-stat-grid / ia-usage-stat-card -->
+      <div class="ia-usage-stat-grid">
+        <div class="ia-usage-stat-card">
+          <div class="ia-usage-stat-card__label">Total tokens</div>
+          <div class="ia-usage-stat-card__value">0.5K</div>
+          <div class="ia-usage-stat-card__sub">all time</div>
+        </div>
+        <div class="ia-usage-stat-card">
+          <div class="ia-usage-stat-card__label">API calls</div>
+          <div class="ia-usage-stat-card__value">2</div>
+          <div class="ia-usage-stat-card__sub">all time</div>
+        </div>
+        <div class="ia-usage-stat-card">
+          <div class="ia-usage-stat-card__label">Prompt tokens</div>
+          <div class="ia-usage-stat-card__value">13</div>
+          <div class="ia-usage-stat-card__sub">tokens in</div>
+        </div>
+        <div class="ia-usage-stat-card">
+          <div class="ia-usage-stat-card__label">Completion</div>
+          <div class="ia-usage-stat-card__value">501</div>
+          <div class="ia-usage-stat-card__sub">tokens out</div>
+        </div>
+      </div>
+
+      <!-- Tab bar: ia-tab-bar / ia-tab / ia-tab--active -->
+      <div class="ia-tab-bar">
+        <div class="ia-tab">Today</div>
+        <div class="ia-tab">This week</div>
+        <div class="ia-tab">This month</div>
+        <div class="ia-tab ia-tab--active">All time</div>
+      </div>
+
+      <!-- By provider — ia-usage-section-hdr + ia-table-container/ia-table -->
+      <div class="ia-usage-section-hdr">
+        <h4>By provider</h4>
+      </div>
+      <div class="ia-table-container">
+        <table class="ia-table">
+          <thead class="ia-table-head">
+            <tr>
+              <th class="ia-table-header">Provider</th>
+              <th class="ia-table-header r">Prompt</th>
+              <th class="ia-table-header r">Completion</th>
+              <th class="ia-table-header r">Total</th>
+              <th class="ia-table-header r">Calls</th>
+            </tr>
+          </thead>
+          <tbody class="ia-table-body">
+            <tr>
+              <td class="ia-table-cell">deepseek</td>
+              <td class="ia-table-cell r">13</td>
+              <td class="ia-table-cell r">501</td>
+              <td class="ia-table-cell r">514</td>
+              <td class="ia-table-cell r">2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- By model -->
+      <div class="ia-usage-section-hdr">
+        <h4>By model</h4>
+      </div>
+      <div class="ia-table-container">
+        <table class="ia-table">
+          <thead class="ia-table-head">
+            <tr>
+              <th class="ia-table-header">Model</th>
+              <th class="ia-table-header r">Prompt</th>
+              <th class="ia-table-header r">Completion</th>
+              <th class="ia-table-header r">Total</th>
+              <th class="ia-table-header r">Calls</th>
+            </tr>
+          </thead>
+          <tbody class="ia-table-body">
+            <tr>
+              <td class="ia-table-cell mono">deepseek:deepseek-v4-flash</td>
+              <td class="ia-table-cell r">7</td>
+              <td class="ia-table-cell r">175</td>
+              <td class="ia-table-cell r">182</td>
+              <td class="ia-table-cell r">1</td>
+            </tr>
+            <tr>
+              <td class="ia-table-cell mono">deepseek:deepseek-v4-pro</td>
+              <td class="ia-table-cell r">6</td>
+              <td class="ia-table-cell r">326</td>
+              <td class="ia-table-cell r">332</td>
+              <td class="ia-table-cell r">1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="ia-usage-section-hdr">
+        <h4>Recent activity</h4>
+        <span>last 10</span>
+      </div>
+      <div class="ia-table-container">
+        <table class="ia-table">
+          <thead class="ia-table-head">
+            <tr>
+              <th class="ia-table-header">Time</th>
+              <th class="ia-table-header">Model</th>
+              <th class="ia-table-header r">In</th>
+              <th class="ia-table-header r">Out</th>
+              <th class="ia-table-header r">Total</th>
+            </tr>
+          </thead>
+          <tbody class="ia-table-body">
+            <tr>
+              <td class="ia-table-cell" style="font-size:11px; color:var(--text-secondary); white-space:nowrap">5:25 PM</td>
+              <td class="ia-table-cell mono">deepseek-v4-pro</td>
+              <td class="ia-table-cell r">6</td>
+              <td class="ia-table-cell r">326</td>
+              <td class="ia-table-cell r">332</td>
+            </tr>
+            <tr>
+              <td class="ia-table-cell" style="font-size:11px; color:var(--text-secondary); white-space:nowrap">4:08 PM</td>
+              <td class="ia-table-cell mono">deepseek-v4-flash</td>
+              <td class="ia-table-cell r">7</td>
+              <td class="ia-table-cell r">175</td>
+              <td class="ia-table-cell r">182</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Clear button: ia-button ia-button--danger (existing class) -->
+      <div class="ia-section-actions">
+        <button class="ia-button ia-button--danger">Clear all usage data</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="margin-top:14px; padding:12px 14px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:8px; font-size:12px; line-height:1.6; color:var(--text-secondary);">
+    <strong style="color:var(--text-primary); display:block; margin-bottom:5px;">CSS changes</strong>
+    <ul style="padding-left:16px; margin:0;">
+      <li><strong>New classes</strong> (3): <code>ia-usage-stat-grid</code>, <code>ia-usage-stat-card</code>, <code>ia-tab-bar / ia-tab / ia-tab--active</code></li>
+      <li><strong>Reused existing</strong>: <code>ia-table-container</code>, <code>ia-table</code>, <code>ia-table-head/header/body/cell</code>, <code>ia-button--danger</code>, <code>ia-section-actions</code></li>
+      <li>No TypeScript logic changes — same data, just new HTML structure + classes</li>
+    </ul>
+  </div>
+</div>

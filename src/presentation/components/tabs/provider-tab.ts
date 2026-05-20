@@ -7,6 +7,7 @@ import { App, Notice, requestUrl } from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { LLMConfig } from '@/types';
+import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
 import { ProviderConfigModal, OllamaModelManagerModal } from '../modals';
 import { getProviderMeta } from '../components/provider-meta';
@@ -43,32 +44,32 @@ export function displayProviderTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Provider configuration' });
+	containerEl.createEl('h3', { text: t('settings.provider.title') });
 
 	// Security Warning
 	const warningContainer = containerEl.createDiv('ia-warning-box');
 
 	const warningTitle = warningContainer.createDiv('ia-warning-title');
-	warningTitle.createSpan({ text: '⚠️ Security Warning' });
+	warningTitle.createSpan({ text: t('settings.provider.securityTitle') });
 
 	const warningText = warningContainer.createDiv('ia-warning-text');
-	warningText.setText('API keys are stored as plain text in your vault for compatibility. To prevent accidental leaks:');
+	warningText.setText(t('settings.provider.securityDesc'));
 
 	const warningList = warningContainer.createEl('ul', { cls: 'ia-warning-list' });
-	warningList.createEl('li', { text: `Do NOT share your ${app.vault.configDir}/plugins/intelligence-assistant/data/ folder.` });
-	warningList.createEl('li', { text: 'Add this folder to your .gitignore if you use Git sync.' });
-	warningList.createEl('li', { text: 'Be cautious when using public cloud sync services.' });
+	warningList.createEl('li', { text: t('settings.provider.securityItem1', { configDir: app.vault.configDir }) });
+	warningList.createEl('li', { text: t('settings.provider.securityItem2') });
+	warningList.createEl('li', { text: t('settings.provider.securityItem3') });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Manage LLM providers and API credentials. Use the actions column to edit configuration details or refresh cached models.'
+		text: t('settings.provider.desc')
 	});
 	desc.addClass('ia-section-description');
 
 	const actionsRow = containerEl.createDiv('ia-section-actions');
 	const summary = actionsRow.createDiv('ia-section-summary');
-	summary.createSpan({ text: `${plugin.settings.llmConfigs.length} provider${plugin.settings.llmConfigs.length === 1 ? '' : 's'} configured` });
+	summary.createSpan({ text: t('settings.provider.count', { count: plugin.settings.llmConfigs.length }) });
 
-	const addBtn = actionsRow.createEl('button', { text: '+ Add provider' });
+	const addBtn = actionsRow.createEl('button', { text: t('settings.provider.addBtn') });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -88,11 +89,11 @@ export function displayProviderTab(
 
 	if (plugin.settings.llmConfigs.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No providers configured. Select "Add provider" to get started.');
+		emptyDiv.setText(t('settings.provider.empty'));
 		return;
 	}
 
-	const table = createTable(containerEl, ['Provider', 'Status', 'Actions']);
+	const table = createTable(containerEl, [t('settings.provider.tableHeaders.provider'), t('settings.provider.tableHeaders.status'), t('settings.provider.tableHeaders.actions')]);
 	const tbody = table.tBodies[0];
 
 	plugin.settings.llmConfigs.forEach((config, index) => {
@@ -128,7 +129,7 @@ export function displayProviderTab(
 		let versionEl: HTMLElement | null = null;
 		if (config.provider === 'ollama') {
 			versionEl = providerStack.createDiv('ia-table-subtext');
-			versionEl.setText('Checking version...');
+			versionEl.setText(t('settings.provider.ollama.checkingVersion'));
 			versionEl.addClass('ia-text-italic');
 		}
 
@@ -154,36 +155,36 @@ export function displayProviderTab(
 			case 'qwen-code':
 				// CLI tools only need a command path if not on PATH
 				hasCredentials = true;
-				guidance = 'Requires local CLI';
+				guidance = t('settings.provider.guidance.requiresCli');
 				break;
 			case 'sap-ai-core':
 				hasCredentials = Boolean(config.serviceKey);
-				guidance = 'Provide service key';
+				guidance = t('settings.provider.guidance.provideServiceKey');
 				break;
 			case 'ollama':
 				hasCredentials = Boolean(ollamaBaseUrl);
-				guidance = 'Configure base URL';
+				guidance = t('settings.provider.guidance.configureBaseUrl');
 				break;
 			default:
 				hasCredentials = Boolean(config.apiKey);
-				guidance = 'Add API key';
+				guidance = t('settings.provider.guidance.addApiKey');
 				break;
 		}
 
-		let statusLabel = 'Needs Configuration';
+		let statusLabel = t('settings.provider.status.needsConfig');
 		let statusClass = 'is-danger';
-		const modelSummary = hasModels ? `${modelCount} model${modelCount === 1 ? '' : 's'}` : 'No models';
+		const modelSummary = hasModels ? t('settings.provider.models.count', { count: modelCount }) : t('settings.provider.models.none');
 
 		if (hasCredentials && hasModels) {
-			statusLabel = 'Ready';
+			statusLabel = t('settings.provider.status.ready');
 			statusClass = 'is-success';
 		} else if (hasCredentials) {
 			// For Ollama, show "Checking..." initially since we'll check server status
 			if (config.provider === 'ollama') {
-				statusLabel = 'Checking...';
+				statusLabel = t('settings.provider.status.checking');
 				statusClass = 'is-warning';
 			} else {
-				statusLabel = 'Credentials Set';
+				statusLabel = t('settings.provider.status.credentialsSet');
 				statusClass = 'is-warning';
 			}
 		}
@@ -203,23 +204,23 @@ export function displayProviderTab(
 		// For Ollama, check server connectivity
 		if (config.provider === 'ollama' && ollamaBaseUrl) {
 			const serverStatusLine = statusStack.createDiv('ia-table-subtext');
-			serverStatusLine.setText('Checking server...');
+			serverStatusLine.setText(t('settings.provider.ollama.server.checking'));
 			serverStatusLine.addClass('ia-text-italic');
 
 			// Check Ollama server status
 			checkOllamaStatus(ollamaBaseUrl).then((status) => {
 				if (status.online) {
-					serverStatusLine.setText(`Server: online`);
+					serverStatusLine.setText(t('settings.provider.ollama.server.online'));
 					serverStatusLine.removeClass('ia-text-italic');
 					serverStatusLine.addClass('ia-text-success');
 
 					// Update version in provider cell
 					if (versionEl && status.version) {
-						versionEl.setText(`Version: ${status.version}`);
+						versionEl.setText(t('settings.provider.ollama.server.version', { version: status.version }));
 						versionEl.removeClass('ia-text-italic');
 						versionEl.addClass('ia-text-muted');
 					} else if (versionEl) {
-						versionEl.setText('Server online');
+						versionEl.setText(t('settings.provider.ollama.server.versionOnline'));
 						versionEl.removeClass('ia-text-italic');
 						versionEl.addClass('ia-text-muted');
 					}
@@ -228,20 +229,20 @@ export function displayProviderTab(
 					if (hasModels) {
 						statusBadge.removeClass('is-warning');
 						statusBadge.addClass('is-success');
-						statusBadge.setText('Ready');
+						statusBadge.setText(t('settings.provider.status.ready'));
 					} else {
 						statusBadge.removeClass('is-danger');
 						statusBadge.addClass('is-warning');
-						statusBadge.setText('Server online');
+						statusBadge.setText(t('settings.provider.status.serverOnline'));
 					}
 				} else {
-					serverStatusLine.setText(`Server: offline or unreachable`);
+					serverStatusLine.setText(t('settings.provider.ollama.server.offline'));
 					serverStatusLine.removeClass('ia-text-italic');
 					serverStatusLine.addClass('ia-text-error');
 
 					// Update version display
 					if (versionEl) {
-						versionEl.setText('Server offline');
+						versionEl.setText(t('settings.provider.ollama.server.versionOffline'));
 						versionEl.removeClass('ia-text-italic');
 						versionEl.addClass('ia-text-error');
 					}
@@ -250,15 +251,15 @@ export function displayProviderTab(
 					statusBadge.removeClass('is-success');
 					statusBadge.removeClass('is-warning');
 					statusBadge.addClass('is-danger');
-					statusBadge.setText('Server offline');
+					statusBadge.setText(t('settings.provider.status.serverOffline'));
 				}
 			}).catch(() => {
-				serverStatusLine.setText('Server: connection error');
+				serverStatusLine.setText(t('settings.provider.ollama.server.error'));
 				serverStatusLine.removeClass('ia-text-italic');
 				serverStatusLine.addClass('ia-text-error');
 
 				if (versionEl) {
-					versionEl.setText('Connection error');
+					versionEl.setText(t('settings.provider.ollama.server.versionError'));
 					versionEl.removeClass('ia-text-italic');
 					versionEl.addClass('ia-text-error');
 				}
@@ -266,7 +267,7 @@ export function displayProviderTab(
 				statusBadge.removeClass('is-success');
 				statusBadge.removeClass('is-warning');
 				statusBadge.addClass('is-danger');
-				statusBadge.setText('Server error');
+				statusBadge.setText(t('settings.provider.status.serverError'));
 			});
 		}
 
@@ -279,26 +280,26 @@ export function displayProviderTab(
 
 			let timeAgo: string;
 			if (diffMinutes < 1) {
-				timeAgo = 'just now';
+				timeAgo = t('settings.provider.refresh.justNow');
 			} else if (diffMinutes < 60) {
-				timeAgo = `${diffMinutes}m ago`;
+				timeAgo = t('settings.provider.refresh.minutesAgo', { n: diffMinutes });
 			} else if (diffMinutes < 1440) {
 				const hours = Math.floor(diffMinutes / 60);
-				timeAgo = `${hours}h ago`;
+				timeAgo = t('settings.provider.refresh.hoursAgo', { n: hours });
 			} else {
 				const days = Math.floor(diffMinutes / 1440);
-				timeAgo = `${days}d ago`;
+				timeAgo = t('settings.provider.refresh.daysAgo', { n: days });
 			}
-			refreshLine.setText(`Last refresh: ${timeAgo}`);
+			refreshLine.setText(t('settings.provider.refresh.lastRefresh', { timeAgo }));
 		} else {
-			refreshLine.setText('Never refreshed');
+			refreshLine.setText(t('settings.provider.refresh.neverRefreshed'));
 		}
 
 		const actionsCell = row.insertCell();
 		actionsCell.addClass('ia-table-cell');
 		actionsCell.addClass('ia-table-actions');
 
-		const editBtn = actionsCell.createEl('button', { text: 'Edit' });
+		const editBtn = actionsCell.createEl('button', { text: t('settings.provider.actions.edit') });
 		editBtn.addClass('ia-button');
 		editBtn.addClass('ia-button--ghost');
 		editBtn.addEventListener('click', () => {
@@ -313,7 +314,7 @@ export function displayProviderTab(
 
 		// For Ollama, add "Manage Models" button instead of just "Refresh Models"
 		if (config.provider === 'ollama') {
-			const manageBtn = actionsCell.createEl('button', { text: 'Manage models' });
+			const manageBtn = actionsCell.createEl('button', { text: t('settings.provider.actions.manageModels') });
 			manageBtn.addClass('ia-button');
 			manageBtn.addClass('ia-button--ghost');
 			manageBtn.addEventListener('click', () => {
@@ -326,12 +327,12 @@ export function displayProviderTab(
 				}).open();
 			});
 		} else {
-		const refreshBtn = actionsCell.createEl('button', { text: 'Refresh models' });
+		const refreshBtn = actionsCell.createEl('button', { text: t('settings.provider.actions.refreshModels') });
 		refreshBtn.addClass('ia-button');
 		refreshBtn.addClass('ia-button--ghost');
 		refreshBtn.addEventListener('click', () => {
 			void (async () => {
-				refreshBtn.textContent = 'Refreshing...';
+				refreshBtn.textContent = t('settings.provider.actions.refreshing');
 				refreshBtn.disabled = true;
 				try {
 					const { ModelManager } = await import('@/infrastructure/llm/model-manager');
@@ -340,25 +341,25 @@ export function displayProviderTab(
 					config.cacheTimestamp = Date.now();
 					await plugin.saveSettings();
 					await plugin.refreshChatViewsModels();
-					new Notice(`Models refreshed for ${config.provider}.`);
+					new Notice(t('settings.provider.notices.refreshed', { provider: config.provider }));
 					refreshDisplay();
 				} catch (_error) {
 					console.error('Failed to refresh models', _error);
-					new Notice('Failed to refresh models');
+					new Notice(t('settings.provider.notices.refreshFailed'));
 				} finally {
 					refreshBtn.disabled = false;
-					refreshBtn.textContent = 'Refresh models';
+					refreshBtn.textContent = t('settings.provider.actions.refreshModels');
 				}
 			})();
 		});
 		}
 
-		const deleteBtn = actionsCell.createEl('button', { text: 'Delete' });
+		const deleteBtn = actionsCell.createEl('button', { text: t('settings.provider.actions.delete') });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
-				if (await showConfirm(app, `Remove provider ${config.provider}?`)) {
+				if (await showConfirm(app, t('settings.provider.confirm.delete', { provider: config.provider }))) {
 					plugin.settings.llmConfigs.splice(index, 1);
 					await plugin.saveSettings();
 					await plugin.refreshChatViewsModels();

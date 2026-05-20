@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intelligence Assistant — Mockups</title>
+<style>
+  /* ── Obsidian dark theme tokens ── */
+  :root {
+    --background-primary: #1e1e1e;
+    --background-secondary: #252525;
+    --background-secondary-alt: #1a1a1a;
+    --background-modifier-border: #3d3d3d;
+    --background-modifier-hover: #2a2a2a;
+    --text-normal: #dcddde;
+    --text-muted: #888;
+    --text-faint: #555;
+    --text-on-accent: #fff;
+    --interactive-accent: #7c3aed;
+    --interactive-accent-hover: #6d28d9;
+    --color-green: #4ade80;
+    --color-blue: #60a5fa;
+    --color-orange: #fb923c;
+    --color-red: #f87171;
+    --color-yellow: #facc15;
+    --scrollbar-bg: transparent;
+    --font-text: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-monospace: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+    --ia-font-size-3xs: 10px;
+    --ia-font-size-2xs: 11px;
+    --ia-font-size-xs: 12px;
+    --ia-font-size-s: 13px;
+    --ia-font-size-m: 14px;
+    --ia-font-size-l: 16px;
+    --ia-radius-s: 4px;
+    --ia-radius-base: 6px;
+    --ia-radius-m: 8px;
+    --ia-radius-l: 12px;
+    --ia-radius-full: 9999px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #111;
+    font-family: var(--font-text);
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    padding: 48px;
+  }
+
+  /* ── Scene wrapper ── */
+  .scene {
+    width: 780px;
+    background: var(--background-primary);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+    border: 1px solid var(--background-modifier-border);
+  }
+
+  /* ── Window chrome ── */
+  .window-chrome {
+    height: 36px;
+    background: var(--background-secondary-alt);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 8px;
+    border-bottom: 1px solid var(--background-modifier-border);
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green { background: #28c840; }
+  .window-title {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-faint);
+    font-weight: 500;
+    margin-right: 36px;
+  }
+
+  /* ── Obsidian layout ── */
+  .obsidian-layout {
+    display: flex;
+    height: 480px;
+  }
+
+  .sidebar-left {
+    width: 220px;
+    background: var(--background-secondary-alt);
+    border-right: 1px solid var(--background-modifier-border);
+    padding: 8px 0;
+    flex-shrink: 0;
+  }
+
+  .sidebar-item {
+    padding: 5px 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sidebar-item.active { color: var(--text-normal); background: var(--background-modifier-hover); }
+  .sidebar-item svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── Chat panel ── */
+  .chat-header {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--background-modifier-border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--background-primary);
+  }
+
+  .mode-btn {
+    padding: 3px 10px;
+    border-radius: var(--ia-radius-full);
+    font-size: var(--ia-font-size-xs);
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--background-modifier-border);
+    color: var(--text-muted);
+    background: transparent;
+  }
+  .mode-btn.active {
+    background: var(--interactive-accent);
+    border-color: var(--interactive-accent);
+    color: #fff;
+  }
+
+  .provider-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: var(--ia-radius-full);
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    font-size: var(--ia-font-size-xs);
+    color: var(--text-muted);
+  }
+  .provider-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--color-green);
+  }
+
+  .header-spacer { flex: 1; }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--background-primary);
+  }
+
+  /* ── Message bubbles ── */
+  .message-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    width: 100%;
+  }
+
+  .message-avatar {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .message-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .bubble {
+    padding: 8px 12px;
+    font-size: var(--ia-font-size-s);
+    line-height: 1.55;
+    color: var(--text-normal);
+    word-wrap: break-word;
+  }
+
+  /* User */
+  .message-user .message-row { flex-direction: row-reverse; }
+  .message-user .message-body { align-items: flex-end; max-width: 72%; }
+  .message-user .message-avatar {
+    background: var(--interactive-accent);
+    color: white;
+  }
+  .message-user .bubble {
+    background: var(--interactive-accent);
+    color: #fff;
+    border-radius: 16px 16px 4px 16px;
+  }
+
+  /* Assistant */
+  .message-assistant .message-avatar {
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    color: var(--text-muted);
+    font-size: 10px;
+  }
+  .message-assistant .bubble {
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px 16px 16px 16px;
+    max-width: 100%;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+  }
+
+  .msg-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 1px 7px;
+    border-radius: var(--ia-radius-full);
+    background: var(--background-modifier-border);
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .msg-badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--color-green); }
+
+  .msg-timestamp {
+    font-size: 10px;
+    color: var(--text-faint);
+    margin-top: 2px;
+  }
+
+  /* ── Chat input ── */
+  .chat-input-area {
+    padding: 10px 12px;
+    border-top: 1px solid var(--background-modifier-border);
+    background: var(--background-primary);
+  }
+  .chat-input-box {
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: var(--ia-radius-m);
+    padding: 8px 12px;
+    font-size: var(--ia-font-size-s);
+    color: var(--text-muted);
+    width: 100%;
+  }
+  .chat-input-toolbar {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    align-items: center;
+  }
+  .tool-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: var(--ia-radius-full);
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .tool-chip.on {
+    background: rgba(124, 58, 237, 0.15);
+    border-color: rgba(124, 58, 237, 0.4);
+    color: #a78bfa;
+  }
+  .send-btn {
+    margin-left: auto;
+    width: 28px; height: 28px;
+    background: var(--interactive-accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+  }
+
+  /* ── Code blocks in messages ── */
+  .bubble pre {
+    background: rgba(0,0,0,0.3);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11px;
+    font-family: var(--font-monospace);
+    color: #e2e8f0;
+    margin: 6px 0;
+    overflow-x: auto;
+  }
+
+  .bubble p { margin: 4px 0; }
+  .bubble p:first-child { margin-top: 0; }
+  .bubble p:last-child { margin-bottom: 0; }
+
+  .bubble ul { padding-left: 16px; margin: 4px 0; }
+  .bubble li { margin: 2px 0; font-size: var(--ia-font-size-s); }
+
+  .bubble strong { color: #e2e8f0; font-weight: 600; }
+
+  /* ── Agent trace ── */
+  .agent-trace {
+    margin: 6px 0;
+    border-radius: var(--ia-radius-base);
+    border: 1px solid var(--background-modifier-border);
+    overflow: hidden;
+    font-size: var(--ia-font-size-xs);
+  }
+  .trace-header {
+    padding: 5px 10px;
+    background: var(--background-secondary-alt);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .trace-header .step-count {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text-faint);
+  }
+  .tool-card {
+    padding: 6px 10px;
+    border-top: 1px solid var(--background-modifier-border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--background-primary);
+  }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .status-dot.success { background: var(--color-green); }
+  .status-dot.pending { background: var(--color-yellow); }
+  .status-dot.running {
+    background: var(--color-blue);
+    animation: pulse 1s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+  .tool-name { font-size: 11px; font-weight: 600; color: var(--text-normal); }
+  .tool-args { font-size: 10px; color: var(--text-faint); margin-top: 1px; font-family: var(--font-monospace); }
+  .tool-result { font-size: 10px; color: var(--color-green); margin-top: 1px; }
+
+  /* ── RAG citation ── */
+  .rag-citation {
+    margin-top: 8px;
+    padding: 6px 10px;
+    border-radius: var(--ia-radius-base);
+    background: rgba(124,58,237,0.08);
+    border: 1px solid rgba(124,58,237,0.2);
+    font-size: 11px;
+    color: #a78bfa;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .rag-citation span { color: var(--text-faint); }
+
+  /* ── Quick Actions scene ── */
+  .note-content {
+    flex: 1;
+    padding: 24px 32px;
+    font-size: 14px;
+    color: var(--text-normal);
+    line-height: 1.7;
+    position: relative;
+    overflow: hidden;
+    background: var(--background-primary);
+  }
+  .note-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-normal);
+    margin-bottom: 12px;
+  }
+  .note-body { font-size: 13px; line-height: 1.7; color: var(--text-normal); }
+
+  .text-selected {
+    background: rgba(124,58,237,0.25);
+    border-radius: 2px;
+    padding: 0 1px;
+    color: var(--text-normal);
+  }
+
+  .context-menu {
+    position: absolute;
+    top: 120px;
+    left: 260px;
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: var(--ia-radius-m);
+    padding: 4px 0;
+    min-width: 220px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    z-index: 10;
+  }
+  .menu-section {
+    padding: 4px 10px 2px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+    font-weight: 600;
+  }
+  .menu-item {
+    padding: 5px 12px;
+    font-size: 13px;
+    color: var(--text-normal);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .menu-item:hover, .menu-item.focused {
+    background: var(--interactive-accent);
+    color: white;
+  }
+  .menu-item .emoji { font-size: 14px; width: 18px; text-align: center; }
+  .menu-divider {
+    height: 1px;
+    background: var(--background-modifier-border);
+    margin: 4px 0;
+  }
+
+  /* ── Labels ── */
+  .scene-label {
+    color: #666;
+    font-size: 11px;
+    font-family: var(--font-monospace);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     SCENE 1: Chat View
+════════════════════════════════════════ -->
+<p class="scene-label">Scene 1 · Chat View</p>
+<div class="scene" id="scene-chat">
+  <div class="window-chrome">
+    <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+    <div class="window-title">Intelligence Assistant — My Vault</div>
+  </div>
+  <div class="obsidian-layout">
+    <div class="sidebar-left">
+      <div class="sidebar-item">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 2h14v2H1zm0 5h14v2H1zm0 5h14v2H1z"/></svg>
+        My Vault
+      </div>
+      <div class="sidebar-item" style="margin-top:4px; padding-left:20px; font-size:12px;">📁 Projects</div>
+      <div class="sidebar-item" style="padding-left:20px; font-size:12px;">📁 Research</div>
+      <div class="sidebar-item active" style="padding-left:20px; font-size:12px;">📝 RAG Architecture</div>
+      <div class="sidebar-item" style="padding-left:20px; font-size:12px;">📝 LLM Notes</div>
+      <div class="sidebar-item" style="padding-left:20px; font-size:12px;">📝 MCP Overview</div>
+      <div style="height:1px; background:var(--background-modifier-border); margin:8px 0;"></div>
+      <div class="sidebar-item">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm.75 4v3.25l2.5 1.5-.75 1.25-3-1.75V5h1.25z"/></svg>
+        Intelligence Assistant
+      </div>
+    </div>
+    <div class="main-area">
+      <div class="chat-header">
+        <button class="mode-btn">Chat</button>
+        <button class="mode-btn active">Agent</button>
+        <div class="header-spacer"></div>
+        <div class="provider-badge">
+          <div class="provider-dot"></div>
+          claude-3-5-sonnet
+        </div>
+        <div class="provider-badge" style="margin-left:4px;">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" style="color:#a78bfa"><path d="M8 1l2.5 5 5.5.8-4 3.9.9 5.3L8 13.4l-4.9 2.6.9-5.3L0 6.8l5.5-.8z"/></svg>
+          RAG
+        </div>
+      </div>
+      <div class="chat-messages">
+
+        <div class="message-user">
+          <div class="message-row">
+            <div class="message-avatar">L</div>
+            <div class="message-body">
+              <div class="bubble">Help me write a weekly review summary based on my notes from this week.</div>
+              <div class="msg-timestamp">14:32</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="message-assistant">
+          <div class="message-row">
+            <div class="message-avatar" style="font-size:10px; font-weight:700; color:#a78bfa;">IA</div>
+            <div class="message-body" style="max-width:100%;">
+              <div class="agent-trace">
+                <div class="trace-header">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" style="color:#60a5fa"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm.75 4v3.25l2.5 1.5-.75 1.25-3-1.75V5h1.25z"/></svg>
+                  Agent · 3 steps
+                  <span class="step-count">✓ Complete</span>
+                </div>
+                <div class="tool-card">
+                  <div class="status-dot success"></div>
+                  <div>
+                    <div class="tool-name">vault_search</div>
+                    <div class="tool-args">query: "weekly notes 2026-05" · top_k: 8</div>
+                    <div class="tool-result">→ Found 6 matching notes</div>
+                  </div>
+                </div>
+                <div class="tool-card">
+                  <div class="status-dot success"></div>
+                  <div>
+                    <div class="tool-name">read_note</div>
+                    <div class="tool-args">path: "Projects/Q2 Sprint Review.md"</div>
+                    <div class="tool-result">→ 1,240 tokens read</div>
+                  </div>
+                </div>
+                <div class="tool-card">
+                  <div class="status-dot success"></div>
+                  <div>
+                    <div class="tool-name">read_note</div>
+                    <div class="tool-args">path: "Research/RAG Architecture.md"</div>
+                    <div class="tool-result">→ 890 tokens read</div>
+                  </div>
+                </div>
+              </div>
+              <div class="bubble">
+                <p>Here's your weekly review based on your notes:</p>
+                <ul style="margin:8px 0;">
+                  <li><strong>Q2 Sprint:</strong> Shipped Intelligence Assistant v0.0.6 — MCP integration stable, RAG indexing optimized</li>
+                  <li><strong>Research:</strong> Documented hybrid RAG architecture notes — dense + sparse retrieval comparison</li>
+                  <li><strong>Pending:</strong> Chat UI bubble redesign (CSS-only), ProductHunt launch prep</li>
+                </ul>
+                <p>Want me to insert this into a new note?</p>
+              </div>
+              <div class="meta-row">
+                <div class="msg-badge"><div class="dot"></div> claude-3-5-sonnet</div>
+                <div class="msg-badge">Anthropic</div>
+                <div class="msg-badge">1,847 tokens</div>
+              </div>
+              <div class="msg-timestamp">14:32</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="chat-input-area">
+        <div class="chat-input-box">Insert this into Weekly Review 2026-05-20.md</div>
+        <div class="chat-input-toolbar">
+          <div class="tool-chip on">⚡ Agent</div>
+          <div class="tool-chip on">📚 RAG</div>
+          <div class="tool-chip">🌐 Web</div>
+          <div class="tool-chip">📎 Attach</div>
+          <div class="send-btn">↑</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     SCENE 2: Quick Actions
+════════════════════════════════════════ -->
+<p class="scene-label">Scene 2 · Quick Actions</p>
+<div class="scene" id="scene-quick-actions">
+  <div class="window-chrome">
+    <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+    <div class="window-title">RAG Architecture.md — My Vault</div>
+  </div>
+  <div class="obsidian-layout">
+    <div class="sidebar-left">
+      <div class="sidebar-item" style="padding-left:20px; font-size:12px;">📁 Projects</div>
+      <div class="sidebar-item" style="padding-left:20px; font-size:12px;">📁 Research</div>
+      <div class="sidebar-item active" style="padding-left:20px; font-size:12px;">📝 RAG Architecture</div>
+      <div class="sidebar-item" style="padding-left:20px; font-size:12px;">📝 LLM Notes</div>
+      <div class="sidebar-item" style="padding-left:20px; font-size:12px;">📝 MCP Overview</div>
+    </div>
+    <div class="main-area">
+      <div class="note-content">
+        <div class="note-title">RAG Architecture</div>
+        <div class="note-body">
+          <p>Retrieval-Augmented Generation (RAG) combines a retrieval system with a generative model. The retrieval component searches a document store for relevant context, which is then injected into the model's prompt.</p>
+          <br>
+          <p><span class="text-selected">Dense retrieval uses embedding similarity (cosine/dot-product) to find semantically related chunks. Sparse retrieval uses keyword matching via BM25. Hybrid approaches combine both for best recall and precision.</span></p>
+          <br>
+          <p>Key parameters: chunk size, overlap, top-k, similarity threshold.</p>
+        </div>
+
+        <div class="context-menu">
+          <div class="menu-section">✨ Intelligence Assistant</div>
+          <div class="menu-item focused">
+            <span class="emoji">📝</span> Summarize
+          </div>
+          <div class="menu-item">
+            <span class="emoji">💡</span> Explain
+          </div>
+          <div class="menu-item">
+            <span class="emoji">✅</span> Fix Grammar
+          </div>
+          <div class="menu-item">
+            <span class="emoji">✨</span> Improve Writing
+          </div>
+          <div class="menu-item">
+            <span class="emoji">🔭</span> Expand Text
+          </div>
+          <div class="menu-divider"></div>
+          <div class="menu-item" style="color:var(--text-muted); font-size:12px;">
+            <span class="emoji">⚙️</span> Configure actions…
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     SCENE 3: Multi-model selector
+════════════════════════════════════════ -->
+<p class="scene-label">Scene 3 · Multi-Provider Chat</p>
+<div class="scene" id="scene-providers">
+  <div class="window-chrome">
+    <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+    <div class="window-title">Intelligence Assistant</div>
+  </div>
+  <div class="obsidian-layout">
+    <div class="sidebar-left">
+      <div class="sidebar-item active">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm.75 4v3.25l2.5 1.5-.75 1.25-3-1.75V5h1.25z"/></svg>
+        Intelligence Assistant
+      </div>
+    </div>
+    <div class="main-area">
+      <div class="chat-header" style="flex-wrap:wrap; gap:6px; padding:10px 12px;">
+        <button class="mode-btn active">Chat</button>
+        <button class="mode-btn">Agent</button>
+        <div class="header-spacer"></div>
+        <!-- provider selector dropdown (mocked) -->
+        <div style="position:relative;">
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <div class="provider-badge" style="background:rgba(124,58,237,0.15); border-color:rgba(124,58,237,0.4); color:#a78bfa; cursor:pointer;">
+              <div class="provider-dot" style="background:#a78bfa;"></div>
+              Anthropic · claude-3-5-sonnet ▾
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Provider list as visual cards -->
+      <div style="padding:16px; display:flex; flex-direction:column; gap:10px; overflow-y:auto; flex:1; background:var(--background-primary);">
+        <div style="font-size:12px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em; font-weight:600; margin-bottom:4px;">Configured Providers</div>
+
+        <!-- provider rows -->
+        <div style="display:flex; flex-direction:column; gap:8px;">
+
+          <div style="background:var(--background-secondary); border:1px solid rgba(124,58,237,0.3); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+            <div style="width:32px; height:32px; border-radius:8px; background:#7c3aed; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:white;">A</div>
+            <div style="flex:1;">
+              <div style="font-size:13px; font-weight:600; color:var(--text-normal);">Anthropic</div>
+              <div style="font-size:11px; color:var(--text-faint);">claude-3-5-sonnet, claude-3-opus, claude-3-haiku</div>
+            </div>
+            <div style="font-size:10px; color:#4ade80; background:rgba(74,222,128,0.1); padding:2px 8px; border-radius:999px; border:1px solid rgba(74,222,128,0.2);">Active</div>
+          </div>
+
+          <div style="background:var(--background-secondary); border:1px solid var(--background-modifier-border); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+            <div style="width:32px; height:32px; border-radius:8px; background:#10b981; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:white;">OAI</div>
+            <div style="flex:1;">
+              <div style="font-size:13px; font-weight:600; color:var(--text-normal);">OpenAI</div>
+              <div style="font-size:11px; color:var(--text-faint);">gpt-4o, gpt-4o-mini, o1-preview</div>
+            </div>
+            <div style="font-size:10px; color:var(--text-faint); background:var(--background-modifier-border); padding:2px 8px; border-radius:999px;">Configured</div>
+          </div>
+
+          <div style="background:var(--background-secondary); border:1px solid var(--background-modifier-border); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+            <div style="width:32px; height:32px; border-radius:8px; background:#1a73e8; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:white;">G</div>
+            <div style="flex:1;">
+              <div style="font-size:13px; font-weight:600; color:var(--text-normal);">Google Gemini</div>
+              <div style="font-size:11px; color:var(--text-faint);">gemini-2.0-flash, gemini-1.5-pro</div>
+            </div>
+            <div style="font-size:10px; color:var(--text-faint); background:var(--background-modifier-border); padding:2px 8px; border-radius:999px;">Configured</div>
+          </div>
+
+          <div style="background:var(--background-secondary); border:1px solid var(--background-modifier-border); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+            <div style="width:32px; height:32px; border-radius:8px; background:#2563eb; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:white;">DS</div>
+            <div style="flex:1;">
+              <div style="font-size:13px; font-weight:600; color:var(--text-normal);">DeepSeek</div>
+              <div style="font-size:11px; color:var(--text-faint);">deepseek-chat, deepseek-reasoner</div>
+            </div>
+            <div style="font-size:10px; color:var(--text-faint); background:var(--background-modifier-border); padding:2px 8px; border-radius:999px;">Configured</div>
+          </div>
+
+          <div style="background:var(--background-secondary); border:1px solid var(--background-modifier-border); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+            <div style="width:32px; height:32px; border-radius:8px; background:#374151; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:#e5e7eb;">🦙</div>
+            <div style="flex:1;">
+              <div style="font-size:13px; font-weight:600; color:var(--text-normal);">Ollama <span style="font-size:10px; color:#4ade80; background:rgba(74,222,128,0.1); padding:1px 6px; border-radius:999px; margin-left:4px; border:1px solid rgba(74,222,128,0.2);">Local</span></div>
+              <div style="font-size:11px; color:var(--text-faint);">llama3.2, qwen2.5-coder, mistral</div>
+            </div>
+            <div style="font-size:10px; color:var(--text-faint); background:var(--background-modifier-border); padding:2px 8px; border-radius:999px;">Configured</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     SCENE 4: RAG response with citations
+════════════════════════════════════════ -->
+<p class="scene-label">Scene 4 · RAG — Vault Citations</p>
+<div class="scene" id="scene-rag">
+  <div class="window-chrome">
+    <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+    <div class="window-title">Intelligence Assistant — My Vault</div>
+  </div>
+  <div class="obsidian-layout">
+    <div class="sidebar-left">
+      <div class="sidebar-item active">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm.75 4v3.25l2.5 1.5-.75 1.25-3-1.75V5h1.25z"/></svg>
+        Intelligence Assistant
+      </div>
+    </div>
+    <div class="main-area">
+      <div class="chat-header">
+        <button class="mode-btn active">Chat</button>
+        <button class="mode-btn">Agent</button>
+        <div class="header-spacer"></div>
+        <div class="provider-badge">
+          <div class="provider-dot"></div>
+          gpt-4o
+        </div>
+        <div class="provider-badge" style="margin-left:4px; background:rgba(124,58,237,0.15); border-color:rgba(124,58,237,0.4); color:#a78bfa;">
+          📚 RAG on
+        </div>
+      </div>
+      <div class="chat-messages">
+
+        <div class="message-user">
+          <div class="message-row">
+            <div class="message-avatar">L</div>
+            <div class="message-body">
+              <div class="bubble">What were my key conclusions about hybrid retrieval?</div>
+              <div class="msg-timestamp">11:05</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="message-assistant">
+          <div class="message-row">
+            <div class="message-avatar" style="font-size:10px; font-weight:700; color:#a78bfa;">IA</div>
+            <div class="message-body" style="max-width:100%;">
+              <div class="bubble">
+                <p>Based on your notes, your key conclusions about hybrid retrieval were:</p>
+                <ul style="margin:8px 0;">
+                  <li><strong>Dense + Sparse beats either alone</strong> — BM25 handles exact keyword matches that embeddings miss; dense retrieval catches semantic similarity that BM25 misses.</li>
+                  <li><strong>RRF fusion outperforms weighted sum</strong> — Reciprocal Rank Fusion is more robust when the two result lists have different score distributions.</li>
+                  <li><strong>Re-ranking is worth the latency</strong> — a cross-encoder re-ranker on top of hybrid recall significantly improved final precision in your experiments.</li>
+                </ul>
+                <div class="rag-citation">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h7l3 3v9H2V2zm2 2v8h6V6H8V4H4z"/></svg>
+                  <span>From</span> Research/RAG Architecture.md <span>· similarity 0.94</span>
+                </div>
+                <div class="rag-citation" style="margin-top:4px;">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h7l3 3v9H2V2zm2 2v8h6V6H8V4H4z"/></svg>
+                  <span>From</span> Research/Retrieval Experiments Log.md <span>· similarity 0.87</span>
+                </div>
+              </div>
+              <div class="meta-row">
+                <div class="msg-badge"><div class="dot"></div> gpt-4o</div>
+                <div class="msg-badge">OpenAI</div>
+                <div class="msg-badge">📚 2 notes</div>
+                <div class="msg-badge">623 tokens</div>
+              </div>
+              <div class="msg-timestamp">11:05</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="chat-input-area">
+        <div class="chat-input-box">Ask anything about your vault…</div>
+        <div class="chat-input-toolbar">
+          <div class="tool-chip on">📚 RAG</div>
+          <div class="tool-chip">🌐 Web</div>
+          <div class="send-btn">↑</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

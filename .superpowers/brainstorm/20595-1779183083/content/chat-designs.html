@@ -1,0 +1,311 @@
+<style>
+  .designs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .design-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .design-card:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+  .design-card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.2); }
+  .design-label {
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-primary);
+  }
+  .design-label h3 { font-size: 13px; font-weight: 600; }
+  .design-label .tag { font-size: 11px; color: var(--text-secondary); background: var(--bg-tertiary); padding: 2px 8px; border-radius: 99px; }
+  .design-preview {
+    padding: 12px 14px;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .design-desc {
+    padding: 10px 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+    line-height: 1.5;
+  }
+
+  /* ===== DESIGN A: Linear / ChatGPT ===== */
+  .design-a .user-msg {
+    align-self: flex-end;
+    max-width: 76%;
+  }
+  .design-a .user-label {
+    font-size: 11px;
+    color: #86868b;
+    text-align: right;
+    margin-bottom: 3px;
+  }
+  .design-a .user-bubble {
+    background: #0071e3;
+    color: white;
+    padding: 8px 13px;
+    border-radius: 18px 18px 4px 18px;
+    line-height: 1.45;
+  }
+  .design-a .assistant-msg {
+    align-self: flex-start;
+    max-width: 100%;
+  }
+  .design-a .assistant-header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 6px;
+  }
+  .design-a .asst-icon {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #1a1a1a; display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: white; flex-shrink: 0;
+  }
+  .design-a .asst-name { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+  .design-a .asst-model { font-size: 11px; color: #86868b; }
+  .design-a .asst-text {
+    color: var(--text-primary);
+    line-height: 1.55;
+    padding-left: 27px;
+  }
+  .design-a .asst-actions {
+    padding-left: 27px;
+    margin-top: 6px;
+    display: flex;
+    gap: 4px;
+  }
+  .design-a .asst-actions button {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: #86868b;
+    cursor: pointer;
+  }
+  .design-a .divider { border: none; border-top: 1px solid var(--border); margin: 4px 0; }
+
+  /* ===== DESIGN B: Bubble / WhatsApp ===== */
+  .design-b .msg-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+  }
+  .design-b .msg-row.user { flex-direction: row-reverse; }
+  .design-b .avatar {
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0;
+    background: var(--bg-tertiary);
+  }
+  .design-b .avatar.user-av { background: #0071e3; font-size: 11px; }
+  .design-b .bubble {
+    padding: 8px 12px;
+    border-radius: 4px 16px 16px 16px;
+    max-width: 78%;
+    line-height: 1.45;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+  .design-b .bubble.user {
+    background: #0071e3;
+    color: white;
+    border-radius: 16px 16px 4px 16px;
+  }
+  .design-b .meta-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 3px;
+    padding-left: 32px;
+  }
+  .design-b .meta-row.user { flex-direction: row-reverse; padding-left: 0; padding-right: 32px; }
+  .design-b .meta-text { font-size: 10px; color: #86868b; }
+  .design-b .meta-btn { font-size: 10px; color: #86868b; cursor: pointer; }
+  .design-b .meta-btn:hover { color: var(--accent); }
+
+  /* ===== DESIGN C: Feed / Discord ===== */
+  .design-c .feed-msg {
+    display: flex;
+    gap: 10px;
+    padding: 3px 0;
+  }
+  .design-c .feed-msg:hover { background: rgba(0,0,0,0.03); border-radius: 6px; padding: 3px 4px; margin: 0 -4px; }
+  .design-c .feed-avatar {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0; margin-top: 1px;
+    background: var(--bg-tertiary);
+  }
+  .design-c .feed-avatar.user-av { background: #0071e3; font-size: 13px; }
+  .design-c .feed-body { flex: 1; min-width: 0; }
+  .design-c .feed-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+  .design-c .feed-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .design-c .feed-model { font-size: 11px; color: var(--accent); }
+  .design-c .feed-time { font-size: 11px; color: #86868b; margin-left: auto; }
+  .design-c .feed-text { color: var(--text-primary); line-height: 1.55; }
+  .design-c .feed-actions {
+    margin-top: 5px;
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+  }
+  .design-c .feed-msg:hover .feed-actions { opacity: 1; }
+  .design-c .feed-actions button {
+    font-size: 11px; padding: 2px 8px;
+    border-radius: 4px; border: 1px solid var(--border);
+    background: var(--bg-secondary); color: #86868b; cursor: pointer;
+  }
+</style>
+
+<h2>Chat UI — Pick a design direction</h2>
+<p class="subtitle">Three distinct approaches. Click a card to select it.</p>
+
+<div class="designs-grid">
+
+  <!-- OPTION A: Linear -->
+  <div class="design-card design-a" data-choice="a" onclick="toggleSelect(this)">
+    <div class="design-label">
+      <h3>A — Linear</h3>
+      <span class="tag">Like Claude.ai / ChatGPT</span>
+    </div>
+    <div class="design-preview" style="flex-direction:column">
+
+      <div class="user-msg">
+        <div class="user-label">You &nbsp;5:18 PM</div>
+        <div class="user-bubble">讲一个笑话</div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="assistant-msg">
+        <div class="assistant-header">
+          <div class="asst-icon">✦</div>
+          <span class="asst-name">deepseek-v4-flash</span>
+          <span class="asst-model">DeepSeek · 5:18 PM</span>
+        </div>
+        <div class="asst-text">当然！这是一个关于"为什么"的笑话：<br><br>
+          小明问爸爸："为什么饺子长得像耳朵？"<br>
+          爸爸想了想说："因为……饺子（嚼子）是用来嚼的，不是用来听的呀！"
+        </div>
+        <div class="asst-actions">
+          <button>Copy</button>
+          <button>Save</button>
+          <button>Regenerate</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="design-desc">
+      User message floats right as a colored bubble. Assistant response is full-width with a small icon + name header. Clean and spacious. Good for long responses.
+    </div>
+  </div>
+
+  <!-- OPTION B: Bubble -->
+  <div class="design-card design-b" data-choice="b" onclick="toggleSelect(this)">
+    <div class="design-label">
+      <h3>B — Bubble</h3>
+      <span class="tag">Like iMessage / WhatsApp</span>
+    </div>
+    <div class="design-preview" style="flex-direction:column">
+
+      <div class="msg-row user">
+        <div class="avatar user-av">🧑</div>
+        <div class="bubble user">讲一个笑话</div>
+      </div>
+      <div class="meta-row user">
+        <span class="meta-text">5:18 PM</span>
+      </div>
+
+      <div style="height:4px"></div>
+
+      <div class="msg-row">
+        <div class="avatar">✦</div>
+        <div class="bubble">
+          当然！这是一个关于"为什么"的笑话：<br><br>
+          小明问爸爸："为什么饺子长得像耳朵？"<br>
+          爸爸想了想说："因为……饺子（嚼子）是用来嚼的，不是用来听的呀！"
+        </div>
+      </div>
+      <div class="meta-row">
+        <span class="meta-text">deepseek-v4-flash · 5:18 PM</span>
+        <span class="meta-btn">copy</span>
+        <span class="meta-btn">save</span>
+        <span class="meta-btn">↺ regen</span>
+      </div>
+
+    </div>
+    <div class="design-desc">
+      Both sides use chat bubbles. User right (accent), assistant left (neutral). Compact and conversational feel. Best for short back-and-forth exchanges.
+    </div>
+  </div>
+
+  <!-- OPTION C: Feed -->
+  <div class="design-card design-c" data-choice="c" onclick="toggleSelect(this)">
+    <div class="design-label">
+      <h3>C — Feed</h3>
+      <span class="tag">Like Discord / Notion</span>
+    </div>
+    <div class="design-preview" style="flex-direction:column">
+
+      <div class="feed-msg">
+        <div class="feed-avatar user-av">🧑</div>
+        <div class="feed-body">
+          <div class="feed-header">
+            <span class="feed-name">You</span>
+            <span class="feed-time">5:18 PM</span>
+          </div>
+          <div class="feed-text">讲一个笑话</div>
+        </div>
+      </div>
+
+      <div style="height:6px"></div>
+
+      <div class="feed-msg">
+        <div class="feed-avatar">✦</div>
+        <div class="feed-body">
+          <div class="feed-header">
+            <span class="feed-name">Assistant</span>
+            <span class="feed-model">deepseek-v4-flash</span>
+            <span class="feed-time">5:18 PM</span>
+          </div>
+          <div class="feed-text">
+            当然！这是一个关于"为什么"的笑话：<br><br>
+            小明问爸爸："为什么饺子长得像耳朵？"<br>
+            爸爸想了想说："因为……饺子（嚼子）是用来嚼的，不是用来听的呀！"
+          </div>
+          <div class="feed-actions">
+            <button>Copy</button>
+            <button>Save</button>
+            <button>Regenerate</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="design-desc">
+      Full-width feed layout. Avatar + name + timestamp on one row, content below. Actions appear on hover. Best for dense information (reasoning, tool calls, long outputs).
+    </div>
+  </div>
+
+</div>

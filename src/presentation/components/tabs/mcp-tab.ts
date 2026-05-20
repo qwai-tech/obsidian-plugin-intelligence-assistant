@@ -8,6 +8,7 @@ import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { snapshotMcpTools } from '@plugin';
 import type { MCPServerConfig } from '@/types';
+import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
 import { MCPInspectorModal, MCPServerModal } from '../modals';
 
@@ -18,17 +19,17 @@ export function displayMCPTab(
 	testAllMCPConnections: () => Promise<void>,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'MCP server management' });
+	containerEl.createEl('h3', { text: t('settings.mcp.title') });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Configure Model Context Protocol (MCP) servers to extend agent capabilities with external tools and data sources.'
+		text: t('settings.mcp.desc')
 	});
 	desc.addClass('ia-section-description');
 
 	const toolbar = containerEl.createDiv('ia-toolbar');
 
 	// Add MCP Inspector button
-	const inspectorBtn = toolbar.createEl('button', { text: '🔍 Open MCP inspector' });
+	const inspectorBtn = toolbar.createEl('button', { text: t('settings.mcp.inspectorBtn') });
 	inspectorBtn.addClass('ia-button');
 	inspectorBtn.addClass('ia-button--ghost');
 	inspectorBtn.addEventListener('click', () => {
@@ -36,7 +37,7 @@ export function displayMCPTab(
 	});
 
 	// Add Test All Connections button
-	const testAllBtn = toolbar.createEl('button', { text: '🧪 test all connections' });
+	const testAllBtn = toolbar.createEl('button', { text: t('settings.mcp.testAllBtn') });
 	testAllBtn.addClass('ia-button');
 	testAllBtn.addClass('ia-button--ghost');
 	testAllBtn.addEventListener('click', () => {
@@ -46,7 +47,7 @@ export function displayMCPTab(
 	});
 
 	// Add Refresh All Tools button
-	const refreshAllBtn = toolbar.createEl('button', { text: '🔄 refresh all tools' });
+	const refreshAllBtn = toolbar.createEl('button', { text: t('settings.mcp.refreshAllBtn') });
 	refreshAllBtn.addClass('ia-button');
 	refreshAllBtn.addClass('ia-button--ghost');
 	refreshAllBtn.addEventListener('click', () => {
@@ -80,15 +81,15 @@ export function displayMCPTab(
 			const successful = results.filter(r => r.success).length;
 			const failed = results.filter(r => !r.success).length;
 			if (failed === 0) {
-				new Notice(`✅ refreshed tools for ${successful} server${successful !== 1 ? 's' : ''}`);
+				new Notice(t('settings.mcp.notices.refreshedAll', { count: successful }));
 			} else {
-				new Notice(`✅ refreshed ${successful} server${successful !== 1 ? 's' : ''}, ❌ ${failed} failed`);
+				new Notice(t('settings.mcp.notices.refreshedPartial', { success: successful, failed }));
 			}
 		})();
 	});
 
 	// Add new MCP server button
-	const addBtn = toolbar.createEl('button', { text: '+ Add MCP server' });
+	const addBtn = toolbar.createEl('button', { text: t('settings.mcp.addBtn') });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -112,11 +113,18 @@ export function displayMCPTab(
 	// Display existing MCP servers in a table if they exist
 	if (plugin.settings.mcpServers.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No MCP servers configured. Select Add MCP server to get started.');
+		emptyDiv.setText(t('settings.mcp.empty'));
 		return;
 	}
 
-	const table = createTable(containerEl, ['Name', 'Command', 'Arguments', 'Status', 'Tools', 'Actions']);
+	const table = createTable(containerEl, [
+		t('settings.mcp.tableHeaders.name'),
+		t('settings.mcp.tableHeaders.command'),
+		t('settings.mcp.tableHeaders.arguments'),
+		t('settings.mcp.tableHeaders.status'),
+		t('settings.mcp.tableHeaders.tools'),
+		t('settings.mcp.tableHeaders.actions')
+	]);
 	const tbody = table.tBodies[0];
 	const cacheFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 	const toolManager = plugin.getToolManager();
@@ -138,22 +146,22 @@ export function displayMCPTab(
 		const nameCell = row.insertCell();
 		nameCell.addClass('ia-table-cell');
 		const nameStack = nameCell.createDiv('ia-table-stack');
-		nameStack.createDiv('ia-table-primary').setText(server.name || 'Untitled MCP Server');
+		nameStack.createDiv('ia-table-primary').setText(server.name || t('settings.mcp.untitled'));
 		const envCount = server.env ? Object.keys(server.env).length : 0;
 		if (envCount > 0) {
-			nameStack.createDiv('ia-table-subtext').setText(`${envCount} env var${envCount === 1 ? '' : 's'}`);
+			nameStack.createDiv('ia-table-subtext').setText(t('settings.mcp.envVars', { count: envCount }));
 		}
 
 		// Command column
 		const commandCell = row.insertCell();
 		commandCell.addClass('ia-table-cell');
 		const commandDisplay = commandCell.createDiv(server.command ? 'ia-code' : 'ia-table-subtext');
-		commandDisplay.setText(server.command || 'Not configured');
+		commandDisplay.setText(server.command || t('settings.mcp.notConfigured'));
 
 		// Arguments column
 		const argsCell = row.insertCell();
 		argsCell.addClass('ia-table-cell');
-		const argsPreview = server.args && server.args.length > 0 ? server.args.join(', ') : 'None';
+		const argsPreview = server.args && server.args.length > 0 ? server.args.join(', ') : t('settings.mcp.noArgs');
 		const argsDisplay = argsCell.createDiv(server.args && server.args.length > 0 ? 'ia-code' : 'ia-table-subtext');
 		argsDisplay.setText(argsPreview);
 
@@ -173,31 +181,31 @@ export function displayMCPTab(
 
 		if (!server.enabled) {
 			statusKind = 'error';
-			statusLabel = 'Disabled';
+			statusLabel = t('settings.mcp.status.disabled');
 		} else if (isConnected) {
 			statusKind = 'success';
-			statusLabel = 'connected';
+			statusLabel = t('settings.mcp.status.connected');
 		} else {
 			statusKind = 'warning';
-			statusLabel = 'disconnected';
+			statusLabel = t('settings.mcp.status.disconnected');
 		}
 
 		createStatusIndicator(statusStack, statusKind, statusLabel);
 
 		const statusDetails: string[] = [];
 		if (!server.enabled) {
-			statusDetails.push('Enable to manage connections');
+			statusDetails.push(t('settings.mcp.status.enableToManage'));
 		} else {
-			statusDetails.push(connectionMode === 'manual' ? 'Manual connect' : 'Auto-connect');
+			statusDetails.push(connectionMode === 'manual' ? t('settings.mcp.status.manualConnect') : t('settings.mcp.status.autoConnect'));
 			if (isConnected) {
-				statusDetails.push(`${toolCount} live tool${toolCount === 1 ? '' : 's'}`);
+				statusDetails.push(t('settings.mcp.toolCount.live', { count: toolCount }));
 			} else if (cachedToolCount > 0) {
-				statusDetails.push(`${cachedToolCount} cached tool${cachedToolCount === 1 ? '' : 's'}`);
+				statusDetails.push(t('settings.mcp.toolCount.cached', { count: cachedToolCount }));
 			}
 		}
 
 		if (!isConnected && cacheDate) {
-			statusDetails.push(`Cached ${cacheFormatter.format(cacheDate)}`);
+			statusDetails.push(`${t('settings.mcp.cached')} ${cacheFormatter.format(cacheDate)}`);
 		}
 
 		if (statusDetails.length > 0) {
@@ -212,11 +220,11 @@ export function displayMCPTab(
 			toolsBadge.setText(toolCount.toString());
 		} else if (cachedToolCount > 0) {
 			toolsBadge.setText(cachedToolCount.toString());
-			toolsCell.createDiv('ia-table-subtext').setText('Cached');
+			toolsCell.createDiv('ia-table-subtext').setText(t('settings.mcp.cached'));
 		} else {
 			toolsBadge.setText('0');
 			if (!server.enabled) {
-				toolsCell.createDiv('ia-table-subtext').setText('Disabled');
+				toolsCell.createDiv('ia-table-subtext').setText(t('settings.mcp.disabled'));
 			}
 		}
 
@@ -225,7 +233,7 @@ export function displayMCPTab(
 		actionsCell.addClass('ia-table-cell');
 		actionsCell.addClass('ia-table-actions');
 
-		const editBtn = actionsCell.createEl('button', { text: 'Edit' });
+		const editBtn = actionsCell.createEl('button', { text: t('settings.mcp.actions.edit') });
 		editBtn.addClass('ia-button');
 		editBtn.addClass('ia-button--ghost');
 		editBtn.addEventListener('click', () => {
@@ -240,7 +248,7 @@ export function displayMCPTab(
 
 		// Enable/Disable toggle
 		const toggleBtn = actionsCell.createEl('button', {
-			text: server.enabled ? '✓ Enabled' : '✗ Disabled'
+			text: server.enabled ? t('settings.mcp.actions.enabled') : t('settings.mcp.actions.enabledOff')
 		});
 		toggleBtn.addClass('ia-button');
 		toggleBtn.addClass(server.enabled ? 'ia-button--success' : 'ia-button--ghost');
@@ -260,7 +268,7 @@ export function displayMCPTab(
 							server.cacheTimestamp = Date.now();
 						} catch (error) {
 							console.error(`[MCP] Failed to auto-connect ${server.name}:`, error);
-							new Notice(`Failed to auto-connect ${server.name}`);
+							new Notice(t('settings.mcp.notices.autoConnectFailed', { name: server.name }));
 						}
 					}
 				} finally {
@@ -270,7 +278,7 @@ export function displayMCPTab(
 			})();
 		});
 
-		const connectBtn = actionsCell.createEl('button', { text: isConnected ? 'disconnect' : 'connect' });
+		const connectBtn = actionsCell.createEl('button', { text: isConnected ? t('settings.mcp.actions.disconnect') : t('settings.mcp.actions.connect') });
 		connectBtn.addClass('ia-button');
 		connectBtn.addClass(isConnected ? 'ia-button--danger' : 'ia-button--ghost');
 		connectBtn.disabled = !server.enabled;
@@ -279,26 +287,30 @@ export function displayMCPTab(
 				const currentlyConnected = toolManager.getMCPServers().includes(server.name);
 				const originalText = connectBtn.textContent ?? '';
 				connectBtn.disabled = true;
-				connectBtn.textContent = currentlyConnected ? 'Disconnecting...' : 'Connecting...';
+				connectBtn.textContent = currentlyConnected ? t('settings.mcp.actions.disconnecting') : t('settings.mcp.actions.connecting');
 
 				try {
 					if (currentlyConnected) {
 						await toolManager.unregisterMCPServer(server.name);
-						new Notice(`Disconnected from ${server.name}`);
+						new Notice(t('settings.mcp.notices.disconnected', { name: server.name }));
 					} else {
 						if (!server.enabled) {
-							new Notice('Enable the server before connecting');
+							new Notice(t('settings.mcp.notices.enableFirst'));
 							return;
 						}
 						const tools = await toolManager.registerMCPServer(server);
 						server.cachedTools = snapshotMcpTools(tools);
 						server.cacheTimestamp = Date.now();
 						await plugin.saveSettings();
-						new Notice(`Connected to ${server.name}`);
+						new Notice(t('settings.mcp.notices.connected', { name: server.name }));
 					}
 				} catch (error) {
 					console.error(`[MCP] Failed to ${currentlyConnected ? 'disconnect' : 'connect'} ${server.name}:`, error);
-					new Notice(`Failed to ${currentlyConnected ? 'disconnect from' : 'connect to'} ${server.name}`);
+					if (currentlyConnected) {
+						new Notice(t('settings.mcp.notices.disconnectFailed', { name: server.name }));
+					} else {
+						new Notice(t('settings.mcp.notices.connectFailed', { name: server.name }));
+					}
 				} finally {
 					connectBtn.disabled = !server.enabled;
 					connectBtn.textContent = originalText;
@@ -308,18 +320,18 @@ export function displayMCPTab(
 		});
 
 		// Test button
-		const testBtn = actionsCell.createEl('button', { text: 'Test' });
+		const testBtn = actionsCell.createEl('button', { text: t('settings.mcp.actions.test') });
 		testBtn.addClass('ia-button');
 		testBtn.addClass('ia-button--ghost');
 		testBtn.addEventListener('click', () => {
 			void (async () => {
 				// Validate command before testing
 				if (!server.command || server.command.trim() === '') {
-					new Notice('❌ please enter a command before testing connection');
+					new Notice(t('settings.mcp.notices.testNoCommand'));
 					return;
 				}
 
-				testBtn.textContent = 'Testing...';
+				testBtn.textContent = t('settings.mcp.actions.testing');
 				testBtn.disabled = true;
 
 				try {
@@ -335,7 +347,7 @@ export function displayMCPTab(
 					server.cacheTimestamp = Date.now();
 					await plugin.saveSettings();
 
-					new Notice(`✅ connected successfully! Found ${tools.length} tools.`);
+					new Notice(t('settings.mcp.notices.testSuccess', { count: tools.length }));
 					refreshDisplay(); // Refresh the entire view to update status indicators
 				} catch (error) {
 					console.error('[MCP] Test connection failed:', error);
@@ -351,21 +363,21 @@ export function displayMCPTab(
 						displayMessage = `Command "${server.command}" not found. Please check the command path.`;
 					}
 
-					new Notice(`❌ Connection failed: ${displayMessage}`);
+					new Notice(t('settings.mcp.notices.testFailed', { message: displayMessage }));
 				} finally {
 					testBtn.disabled = false;
-					testBtn.textContent = 'Test';
+					testBtn.textContent = t('settings.mcp.actions.test');
 				}
 			})();
 		});
 
 		// Delete button
-		const deleteBtn = actionsCell.createEl('button', { text: 'Delete' });
+		const deleteBtn = actionsCell.createEl('button', { text: t('settings.mcp.actions.delete') });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
-				if (await showConfirm(app, `Delete MCP server "${server.name}"?`)) {
+				if (await showConfirm(app, t('settings.mcp.confirm.delete', { name: server.name }))) {
 					plugin.settings.mcpServers.splice(index, 1);
 					await plugin.saveSettings();
 					refreshDisplay();
