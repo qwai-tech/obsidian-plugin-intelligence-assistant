@@ -5,6 +5,7 @@
 
 import { Notice } from 'obsidian';
 import { BaseController } from './base-controller';
+import { t } from '@/i18n';
 import { MessageController } from './message-controller';
 import { AgentController } from './agent-controller';
 import { safeGetMessage } from '@/utils/type-guards';
@@ -61,7 +62,7 @@ export class ChatController extends BaseController {
 
 	async sendMessage(content: string): Promise<void> {
 		if (this.isGenerating) {
-			new Notice('Please wait for the current response to complete');
+			new Notice(t('chat.notices.waitForComplete'));
 			return;
 		}
 
@@ -83,21 +84,21 @@ export class ChatController extends BaseController {
 
 	async generateResponse(): Promise<void> {
 		if (!this.chatService) {
-			new Notice('ChatService not configured. Using ChatView fallback.');
+			new Notice(t('chat.notices.chatServiceFallback'));
 			this.isGenerating = false;
 			return;
 		}
 
 		const modelId = this.plugin.settings.defaultModel;
 		if (!modelId) {
-			new Notice('No model selected');
+			new Notice(t('chat.notices.noModelSelected'));
 			this.isGenerating = false;
 			return;
 		}
 
 		const config = this.chatService.findLLMConfig(modelId);
 		if (!config) {
-			new Notice('No provider configuration found');
+			new Notice(t('chat.notices.noProviderConfig'));
 			this.isGenerating = false;
 			return;
 		}
@@ -156,7 +157,7 @@ export class ChatController extends BaseController {
 				);
 			}
 		} catch (error: unknown) {
-			new Notice(`Chat error: ${safeGetMessage(error)}`);
+			new Notice(t('chat.notices.chatError', { message: safeGetMessage(error) }));
 			console.error('Chat error:', error);
 		} finally {
 			this.isGenerating = false;
@@ -169,7 +170,7 @@ export class ChatController extends BaseController {
 	async regenerateResponse(): Promise<void> {
 		const messages = this.state.messages;
 		if (messages.length < 2) {
-			new Notice('No response to regenerate');
+			new Notice(t('chat.notices.noResponseToRegenerate'));
 			return;
 		}
 
@@ -186,7 +187,7 @@ export class ChatController extends BaseController {
 	 */
 	stopGeneration(): void {
 		this.isGenerating = false;
-		new Notice('Generation stopped');
+		new Notice(t('chat.notices.generationStopped'));
 	}
 
 	/**

@@ -6,6 +6,7 @@
 import { Notice, Menu, TFile, TFolder } from 'obsidian';
 import { BaseController } from './base-controller';
 import type {Attachment} from '@/types';
+import { t } from '@/i18n';
 
 export class InputController extends BaseController {
 	private inputElement: HTMLTextAreaElement | null = null;
@@ -131,7 +132,7 @@ export class InputController extends BaseController {
 
 		this.state.addAttachment(attachment);
 		this.updateAttachmentPreview();
-		new Notice(`Attached: ${file.name}`);
+		new Notice(t('chat.notices.attached', { name: file.name }));
 	}
 
 	/**
@@ -151,7 +152,7 @@ export class InputController extends BaseController {
 
 		this.state.addAttachment(attachment);
 		this.updateAttachmentPreview();
-		new Notice(`Attached: ${file.name}`);
+		new Notice(t('chat.notices.attached', { name: file.name }));
 	}
 
 	/**
@@ -161,7 +162,7 @@ export class InputController extends BaseController {
 		// Use addReferencedFile instead of addReference
 		this.state.addReferencedFile(file);
 		this.updateReferencePreview();
-		new Notice(`Referenced: ${file.name}`);
+		new Notice(t('chat.notices.referenced', { name: file.name }));
 	}
 
 	/**

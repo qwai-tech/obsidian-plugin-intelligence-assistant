@@ -1,4 +1,5 @@
-import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, setIcon } from 'obsidian';
+import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, setIcon, Modal } from 'obsidian';
+import { t } from '@/i18n';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import { TextInputModal } from '@/presentation/components/modals/text-input-modal';
 import { SearchableReferenceModal } from '@/presentation/components/modals/searchable-reference-modal';
@@ -104,24 +105,7 @@ export class ChatView extends ItemView {
 
 		this.toolManager = this.plugin.getToolManager();
 
-		// Create RAG manager with functions to get current chat model and default model
-		this.ragManager = new RAGManager(
-			this.app,
-			this.plugin.settings.ragConfig,
-			this.plugin.settings.llmConfigs,
-			// Function to get current chat view's selected model
-			() => {
-				if (this.modelSelect instanceof HTMLSelectElement) {
-					const modelValue = this.modelSelect.value;
-					if (modelValue && modelValue.trim() !== '') {
-						return modelValue;
-					}
-				}
-				return null;
-			},
-			// Function to get global default model from settings
-			() => this.plugin.settings.defaultModel
-		);
+		this.ragManager = this.plugin.getRAGManager();
 
 		this.webSearchService = new WebSearchService(this.plugin.settings.webSearchConfig, new ObsidianHttpClient());
 		this.chatService = new ChatService(
@@ -130,7 +114,8 @@ export class ChatView extends ItemView {
 			this.ragManager,
 			this.webSearchService,
 			this.plugin.settings.llmConfigs,
-			this.plugin.tokenUsageRepo ?? undefined
+			this.plugin.tokenUsageRepo ?? undefined,
+			this.plugin.settings.defaultModel
 		);
 	}
 
@@ -252,7 +237,7 @@ export class ChatView extends ItemView {
 					this.state.stopStreamingRequested = true;
 					if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
 					if (this.sendHint) this.sendHint.removeClass('ia-hidden');
-					new Notice('Stopping generation...');
+					new Notice(t('chat.notices.stopping'));
 				}
 			}
 		);
@@ -298,7 +283,7 @@ export class ChatView extends ItemView {
 		} catch (_error) {
 			const err = _error instanceof Error ? _error : new Error(String(_error));
 			console.error('Error initializing RAG:', err);
-			new Notice(`Rag initialization error: ${err.message}`);
+			new Notice(t('chat.notices.ragInitError', { message: err.message }));
 		}
 
 		// Initialize RAG if enabled for actual search functionality
@@ -378,13 +363,13 @@ export class ChatView extends ItemView {
 			await this.updateImageButtonVisibility();
 
 			if (showNotice) {
-				new Notice('Models refreshed');
+				new Notice(t('chat.notices.modelsRefreshed'));
 			}
 		} catch (_error) {
 			const err = _error instanceof Error ? _error : new Error(String(_error));
 			console.error('Failed to refresh models:', err);
 			if (showNotice) {
-				new Notice(`Failed to refresh models: ${err.message}`);
+				new Notice(t('chat.notices.modelsRefreshFailed', { message: err.message }));
 			}
 		}
 	}
@@ -406,7 +391,7 @@ export class ChatView extends ItemView {
 		this.imageActionItem.toggleClass('is-disabled', !available);
 		const status = this.imageActionItem.querySelector('.header-action-status');
 		if (status) {
-			status.textContent = available ? 'Available' : 'Unavailable';
+			status.textContent = available ? t('chat.status.available') : t('chat.status.unavailable');
 		}
 	}
 
@@ -422,13 +407,13 @@ export class ChatView extends ItemView {
 		console.debug('[Chat] sendMessage called with text:', text.substring(0, 100) + '...');
 
 		if (this.state.isStreaming) {
-			new Notice('Please wait for the current response to finish');
+			new Notice(t('chat.notices.waitForResponse'));
 			return;
 		}
 
 		if (this.plugin.settings.llmConfigs.length === 0) {
 			console.error('[Chat] No LLM configs found');
-			new Notice('Please configure an LLM provider in settings first');
+			new Notice(t('chat.notices.configureProvider'));
 			return;
 		}
 
@@ -437,7 +422,7 @@ export class ChatView extends ItemView {
 
 		if (!selectedModel) {
 			console.error('[Chat] No model selected');
-			new Notice('Please select a model');
+			new Notice(t('chat.notices.selectModel'));
 			return;
 		}
 
@@ -446,7 +431,7 @@ export class ChatView extends ItemView {
 
 		if (!config) {
 			console.error('[Chat] No config found for model:', selectedModel);
-			new Notice('No valid provider configuration found for this model');
+			new Notice(t('chat.notices.noValidProvider'));
 			return;
 		}
 
@@ -485,7 +470,7 @@ export class ChatView extends ItemView {
 		} catch (_error) {
 			const errMsg = _error instanceof Error ? _error.message : String(_error);
 			console.error('[Chat] Error during chat:', errMsg);
-			new Notice(`Chat error: ${errMsg}`);
+			new Notice(t('chat.notices.chatError', { message: errMsg }));
 
 			// Do not remove the user message. Instead, add an error message.
 			const errorMessage: Message = {
@@ -528,8 +513,7 @@ export class ChatView extends ItemView {
 		const llmMessages = this.chatService.prepareLlmMessages(this.state.messages, targetMessage, llmContent, contextWindow);
 
 		// 3. Setup UI Placeholder
-		const placeholderAssistant: Message = { role: 'assistant', content: '', model: selectedModel };
-		(placeholderAssistant as any).provider = config.provider ?? null;
+		const placeholderAssistant: Message = { role: 'assistant', content: '', model: selectedModel, provider: config.provider ?? undefined };
 		const assistantMessageEl = this.addMessageToUI(placeholderAssistant);
 		const contentEl = this.findMessageContentElement(assistantMessageEl);
 
@@ -592,7 +576,7 @@ export class ChatView extends ItemView {
 						this.finalizeStreamingUI();
 					},
 					onError: (error: Error) => {
-						new Notice(`Chat error: ${error.message}`);
+						new Notice(t('chat.notices.chatError', { message: error.message }));
 						this.finalizeStreamingUI();
 					},
 					checkAbort: () => this.state.stopStreamingRequested
@@ -692,7 +676,7 @@ export class ChatView extends ItemView {
 					this.finalizeStreamingUI();
 				},
 				onError: (error) => {
-					new Notice(`Chat error: ${error.message}`);
+					new Notice(t('chat.notices.chatError', { message: error.message }));
 					this.finalizeStreamingUI();
 				},
 				checkAbort: () => this.state.stopStreamingRequested
@@ -758,9 +742,9 @@ export class ChatView extends ItemView {
 		const iconEl = emptyEl.createDiv('ia-chat-empty-state__icon');
 		setIcon(iconEl, 'message-square');
 
-		emptyEl.createEl('h3', { text: 'Start a conversation', cls: 'ia-chat-empty-state__heading' });
+		emptyEl.createEl('h3', { text: t('chat.emptyHeading'), cls: 'ia-chat-empty-state__heading' });
 		emptyEl.createEl('p', {
-			text: 'Type a message below to get started, or select a conversation from history.',
+			text: t('chat.emptySubtext'),
 			cls: 'ia-chat-empty-state__subtext'
 		});
 	}
@@ -842,7 +826,7 @@ export class ChatView extends ItemView {
 			});
 			this.updateReferenceDisplay();
 			if (selectedItems.length > 0) {
-				new Notice(`Added ${selectedItems.length} reference(s)`);
+				new Notice(t('chat.notices.referencesAdded', { count: selectedItems.length }));
 			}
 		}).open();
 	}
@@ -861,36 +845,36 @@ export class ChatView extends ItemView {
 		}
 
 		if (this.state.isStreaming) {
-			new Notice('Please wait for the current response to finish');
+			new Notice(t('chat.notices.waitForResponse'));
 			return;
 		}
 
 		const assistantIndex = this.state.messages.indexOf(message);
 		if (assistantIndex === -1) {
-			new Notice('Cannot find message to regenerate');
+			new Notice(t('chat.notices.noMessageToRegenerate'));
 			return;
 		}
 
 		if (assistantIndex !== this.state.messages.length - 1) {
-			new Notice('Only the most recent response can be regenerated right now');
+			new Notice(t('chat.notices.regenerateOnlyLatest'));
 			return;
 		}
 
 		const previousUser = this.findPreviousUserMessage(assistantIndex);
 		if (!previousUser) {
-			new Notice('Cannot find user message to regenerate from');
+			new Notice(t('chat.notices.regenerateNoUserMsg'));
 			return;
 		}
 
 		const selectedModel = this.modelSelect.value;
 		if (!selectedModel) {
-			new Notice('Please select a model');
+			new Notice(t('chat.notices.selectModel'));
 			return;
 		}
 
 		const config = this.chatService.findLLMConfig(selectedModel);
 		if (!config) {
-			new Notice('No valid provider configuration found for this model');
+			new Notice(t('chat.notices.noValidProvider'));
 			return;
 		}
 
@@ -914,11 +898,11 @@ export class ChatView extends ItemView {
 				llmContent,
 				targetMessage: previousUser.message
 			});
-			new Notice('Regenerated response');
+			new Notice(t('chat.notices.regenerated'));
 		} catch (_error) {
 			const errMsg = _error instanceof Error ? _error.message : String(_error);
 			console.error('Regenerate error:', errMsg);
-			new Notice(`Regenerate failed: ${errMsg}`);
+			new Notice(t('chat.notices.regenerateFailed', { message: errMsg }));
 			this.state.messages.push(originalAssistant);
 			this.addMessageToUI(originalAssistant);
 		}
@@ -968,7 +952,7 @@ export class ChatView extends ItemView {
 
 						// Create the file
 						await this.app.vault.create(fileName, content);
-						new Notice(`Note created: ${fileName ?? 'unknown'}`);
+						new Notice(t('chat.notices.noteCreated', { name: fileName ?? 'unknown' }));
 
 						// Open the new note
 						const file = this.app.vault.getAbstractFileByPath(fileName);
@@ -978,7 +962,7 @@ export class ChatView extends ItemView {
 					} catch (_error) {
 						const errMsg = _error instanceof Error ? _error.message : String(_error);
 						console.error('Error creating note:', errMsg);
-						new Notice('Failed to create note: ' + errMsg);
+						new Notice(t('chat.notices.noteCreateFailed', { message: errMsg }));
 					}
 				})();
 			}
@@ -1009,14 +993,14 @@ export class ChatView extends ItemView {
 
 						// Write back
 						await this.app.vault.modify(selectedFile, content);
-						new Notice(`Message inserted to: ${selectedFile.path ?? 'unknown'}`);
+						new Notice(t('chat.notices.messageInserted', { path: selectedFile.path ?? 'unknown' }));
 
 						// Open the file
 						await this.app.workspace.getLeaf(false).openFile(selectedFile);
 					} catch (_error) {
 						const errMsg = _error instanceof Error ? _error.message : String(_error);
 						console.error('Error inserting to note:', errMsg);
-						new Notice('Failed to insert message: ' + errMsg);
+						new Notice(t('chat.notices.messageInsertFailed', { message: errMsg }));
 					}
 				} else {
 					// create new note option was selected
@@ -1041,7 +1025,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		// Header
 		const header = ragSourcesContainer.createDiv('rag-sources-header');
-		header.setText(`📚 retrieved from ${ragSources.length} document${ragSources.length > 1 ? 's' : ''}`);
+		header.setText(t(ragSources.length === 1 ? 'chat.ragStats.retrieved' : 'chat.ragStats.retrieved_plural', { count: ragSources.length }));
 
 		// Source cards
 		const sourcesGrid = ragSourcesContainer.createDiv('rag-sources-grid');
@@ -1079,7 +1063,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 					if (file instanceof TFile) {
 						await this.app.workspace.getLeaf().openFile(file);
 					} else {
-						new Notice(`File not found: ${source.path ?? 'unknown'}`);
+						new Notice(t('chat.notices.fileNotFound', { path: source.path ?? 'unknown' }));
 					}
 				})();
 			});
@@ -1167,7 +1151,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			ragToggle.addClass('is-disabled');
 			ragToggle.setAttr('title', 'Enable RAG in Settings → Chat Features → RAG.');
 			if (statusSpan) {
-				statusSpan.textContent = 'Disabled';
+				statusSpan.textContent = t('chat.status.disabled');
 				statusSpan.addClass('ia-cursor-not-allowed');
 				statusSpan.removeClass('ia-cursor-help');
 				statusSpan.onclick = null;
@@ -1184,9 +1168,9 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			if (statusSpan) {
 				if (ragActive) {
 					const detail = stats.chunkCount > 0 ? `${stats.chunkCount} chunks` : 'No index';
-					statusSpan.textContent = `On · ${detail}`;
+					statusSpan.textContent = t('chat.status.on', { detail });
 				} else {
-					statusSpan.textContent = 'Off';
+					statusSpan.textContent = t('chat.status.off');
 				}
 				statusSpan.toggleClass('ia-cursor-help', !!stats);
 				statusSpan.removeClass('ia-cursor-not-allowed');
@@ -1205,7 +1189,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		} catch (_error) {
 			ragToggle.addClass('is-disabled');
 			if (statusSpan) {
-				statusSpan.textContent = 'Unavailable';
+				statusSpan.textContent = t('chat.status.unavailable');
 				statusSpan.addClass('ia-cursor-not-allowed');
 				statusSpan.removeClass('ia-cursor-help');
 				statusSpan.onclick = null;
@@ -1216,13 +1200,13 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	}
 
 	private buildRagTooltip(stats: RagIndexStats, ragActive: boolean): string {
-		let tooltipText = `RAG Index Status:\n\n`;
-		tooltipText += `📊 Total Chunks: ${stats.chunkCount}\n`;
-		tooltipText += `📁 Files Indexed: ${stats.fileCount}\n`;
-		tooltipText += `💾 Total Size: ${(stats.totalSize / 1024).toFixed(1)} KB\n`;
+		let tooltipText = `${t('chat.ragTooltip.status')}\n\n`;
+		tooltipText += `${t('chat.ragTooltip.totalChunks', { count: stats.chunkCount })}\n`;
+		tooltipText += `${t('chat.ragTooltip.filesIndexed', { count: stats.fileCount })}\n`;
+		tooltipText += `${t('chat.ragTooltip.totalSize', { size: (stats.totalSize / 1024).toFixed(1) })}\n`;
 
 		if (stats.indexedFiles && stats.indexedFiles.length > 0) {
-			tooltipText += `\n📄 indexed Files:\n`;
+			tooltipText += `\n${t('chat.ragTooltip.indexedFiles')}\n`;
 			const filesToShow = stats.indexedFiles.slice(0, 10);
 			filesToShow.forEach(file => {
 				const fileName = file.split('/').pop() || file;
@@ -1232,15 +1216,15 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 			if (stats.indexedFiles.length > 10) {
 				const remainingCount = stats.indexedFiles.length - 10;
-				tooltipText += `  ... and ${remainingCount} more\n`;
+				tooltipText += `${t('chat.ragTooltip.andMore', { count: remainingCount })}\n`;
 			}
 		} else {
-			tooltipText += `\n⚠️ no files indexed yet.\n`;
-			tooltipText += `Go to Settings → RAG to build the index.`;
+			tooltipText += `\n${t('chat.ragTooltip.noFilesYet')}\n`;
+			tooltipText += t('chat.ragTooltip.goToSettings');
 		}
 
 		if (!ragActive) {
-			tooltipText += `\n\nℹ️ RAG is currently turned off for this chat.`;
+			tooltipText += `\n\n${t('chat.ragTooltip.ragOff')}`;
 		}
 
 		return tooltipText;
@@ -1253,13 +1237,13 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		} catch (_error) {
 			const errMsg = _error instanceof Error ? _error.message : String(_error);
 			console.error('Error loading RAG stats modal:', errMsg);
-			new Notice('Unable to load RAG statistics.');
+			new Notice(t('chat.notices.unableToLoadRag'));
 		}
 	}
 
 	private showRagStatsModal(stats: RagIndexStats) {
 		const modal = new Modal(this.app);
-		modal.titleEl.setText('RAG statistics');
+		modal.titleEl.setText(t('chat.ragStats.title'));
 
 		const content = modal.contentEl;
 		content.empty();
@@ -1269,25 +1253,25 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const summaryDiv = content.createDiv('rag-stats-summary');
 
 		const row1 = summaryDiv.createDiv('stat-row');
-		row1.createSpan({ cls: 'stat-label', text: '📊 total chunks:' });
+		row1.createSpan({ cls: 'stat-label', text: t('chat.ragStats.totalChunks') });
 		row1.createSpan({ cls: 'stat-value', text: `${stats.chunkCount}` });
 
 		const row2 = summaryDiv.createDiv('stat-row');
-		row2.createSpan({ cls: 'stat-label', text: '📁 files indexed:' });
+		row2.createSpan({ cls: 'stat-label', text: t('chat.ragStats.filesIndexed') });
 		row2.createSpan({ cls: 'stat-value', text: `${stats.fileCount}` });
 
 		const row3 = summaryDiv.createDiv('stat-row');
-		row3.createSpan({ cls: 'stat-label', text: '💾 total size:' });
+		row3.createSpan({ cls: 'stat-label', text: t('chat.ragStats.totalSize') });
 		row3.createSpan({ cls: 'stat-value', text: `${(stats.totalSize / 1024).toFixed(1)} KB` });
 
 		const row4 = summaryDiv.createDiv('stat-row');
-		row4.createSpan({ cls: 'stat-label', text: '📈 Avg Chunks/File:' });
+		row4.createSpan({ cls: 'stat-label', text: t('chat.ragStats.avgChunks') });
 		row4.createSpan({ cls: 'stat-value', text: `${stats.fileCount > 0 ? (stats.chunkCount / stats.fileCount).toFixed(1) : '0'}` });
 
 		// File list
 		if (stats.indexedFiles && stats.indexedFiles.length > 0) {
 			const filesDiv = content.createDiv('rag-stats-files');
-			filesDiv.createEl('h4', { text: '📄 indexed files' });
+			filesDiv.createEl('h4', { text: t('chat.ragStats.indexedFiles') });
 
 			const fileList = filesDiv.createDiv('rag-file-list');
 			stats.indexedFiles.forEach(filePath => {
@@ -1306,7 +1290,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 							await this.app.workspace.getLeaf().openFile(file);
 							modal.close();
 						} else {
-							new Notice(`File not found: ${filePath ?? 'unknown'}`);
+							new Notice(t('chat.notices.fileNotFound', { path: filePath ?? 'unknown' }));
 						}
 					})();
 				});
@@ -1318,17 +1302,17 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 			});
 		} else {
 			const noFiles = content.createDiv('rag-no-files');
-			noFiles.createEl('p', { text: '⚠️ no files have been indexed yet.' });
-			noFiles.createEl('p', { text: 'To build the RAG index:' });
+			noFiles.createEl('p', { text: t('chat.ragStats.noFilesYet') });
+			noFiles.createEl('p', { text: t('chat.ragStats.howToBuild') });
 			const ol = noFiles.createEl('ol');
-			ol.createEl('li', { text: 'Go to Settings → RAG' });
-			ol.createEl('li', { text: 'Enable RAG' });
-			ol.createEl('li', { text: 'Select index vault' });
+			ol.createEl('li', { text: t('chat.ragStats.step1') });
+			ol.createEl('li', { text: t('chat.ragStats.step2') });
+			ol.createEl('li', { text: t('chat.ragStats.step3') });
 		}
 
 		// Close button
 		const btnContainer = content.createDiv('modal-button-container');
-		const closeBtn = btnContainer.createEl('button', { text: 'Close', cls: 'mod-cta' });
+		const closeBtn = btnContainer.createEl('button', { text: t('chat.ragStats.close'), cls: 'mod-cta' });
 		closeBtn.addEventListener('click', () => modal.close());
 
 		modal.open();
@@ -1483,18 +1467,18 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	private renderAgentSummary(agent: Agent) {
 		if (!this.chatHeader.agentSummaryDetailsEl) return;
 		if (this.chatHeader.agentSummaryTitleEl) {
-			this.chatHeader.agentSummaryTitleEl.setText(`${agent.icon || '🤖'} ${agent.name ?? 'unknown'} configuration`);
+			this.chatHeader.agentSummaryTitleEl.setText(t('chat.agentSummary.configuration', { name: `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}` }));
 		}
 
 		this.chatHeader.agentSummaryDetailsEl.empty();
 		const chips = [
-			{ label: 'Model', value: this.getAgentModelSummary(agent) },
-			{ label: 'Temp', value: this.formatTemperature(agent.temperature) },
-			{ label: 'Max', value: this.formatTokenLimit(agent.maxTokens) },
-			{ label: 'RAG', value: this.formatToggleStatus(agent.ragEnabled) },
-			{ label: 'Web', value: this.formatToggleStatus(agent.webSearchEnabled) },
-			{ label: 'Tools', value: this.getAgentToolsLabel(agent) },
-			{ label: 'Memory', value: this.getAgentMemoryLabel(agent) }
+			{ label: t('chat.agentSummary.model'), value: this.getAgentModelSummary(agent) },
+			{ label: t('chat.agentSummary.temp'), value: this.formatTemperature(agent.temperature) },
+			{ label: t('chat.agentSummary.max'), value: this.formatTokenLimit(agent.maxTokens) },
+			{ label: t('chat.agentSummary.rag'), value: this.formatToggleStatus(agent.ragEnabled) },
+			{ label: t('chat.agentSummary.web'), value: this.formatToggleStatus(agent.webSearchEnabled) },
+			{ label: t('chat.agentSummary.tools'), value: this.getAgentToolsLabel(agent) },
+			{ label: t('chat.agentSummary.memory'), value: this.getAgentMemoryLabel(agent) }
 		];
 
 		chips
@@ -1513,44 +1497,44 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const strategy = agent.modelStrategy?.strategy ?? 'fixed';
 		if (strategy === 'fixed') {
 			const fixedId = agent.modelStrategy.modelId || '';
-			const name = fixedId ? this.getModelDisplayName(fixedId) : 'Custom model';
-			return `${name ?? 'unknown'} · Fixed`;
+			const name = fixedId ? this.getModelDisplayName(fixedId) : t('chat.agentSummary.customModel');
+			return t('chat.agentSummary.modelFixed', { name: name ?? 'unknown' });
 		}
 		if (strategy === 'default') {
 			const defaultId = this.plugin.settings.defaultModel || '';
-			const name = defaultId ? this.getModelDisplayName(defaultId) : 'Not set';
-			return `${name ?? 'unknown'} · Default`;
+			const name = defaultId ? this.getModelDisplayName(defaultId) : t('chat.agentSummary.notSet');
+			return t('chat.agentSummary.modelDefault', { name: name ?? 'unknown' });
 		}
 		const currentId = this.modelSelect?.value || this.plugin.settings.defaultModel || '';
-		const name = currentId ? this.getModelDisplayName(currentId) : 'Chat view model';
-		return `${name ?? 'unknown'} · Chat View`;
+		const name = currentId ? this.getModelDisplayName(currentId) : t('chat.agentSummary.customModel');
+		return t('chat.agentSummary.modelChatView', { name: name ?? 'unknown' });
 	}
 
 	private getModelDisplayName(modelId: string | null | undefined): string {
-		if (!modelId) return 'Not set';
+		if (!modelId) return t('chat.agentSummary.notSet');
 		const match = this.state.availableModels.find(model => model.id === modelId);
 		return match?.name || modelId;
 	}
 
 	private formatTokenLimit(value: number): string {
-		return value > 0 ? value.toLocaleString() : 'Auto';
+		return value > 0 ? value.toLocaleString() : t('chat.agentSummary.auto');
 	}
 
 	private formatToggleStatus(enabled: boolean): string {
-		return enabled ? 'On' : 'Off';
+		return enabled ? t('chat.agentSummary.on') : t('chat.agentSummary.off');
 	}
 
 	private getAgentToolsLabel(agent: Agent): string {
 		const builtIn = agent.enabledBuiltInTools.length;
 		const mcp = agent.enabledMcpServers.length;
-		const cliTools = this.plugin.settings.cliTools?.filter(t => t.enabled) ?? [];
-		const cli = agent.enabledAllCLITools ? cliTools.length : (agent.enabledCLITools?.filter(id => cliTools.some(t => t.id === id)).length ?? 0);
+		const cliTools = this.plugin.settings.cliTools?.filter(tool => tool.enabled) ?? [];
+		const cli = agent.enabledAllCLITools ? cliTools.length : (agent.enabledCLITools?.filter(id => cliTools.some(tool => tool.id === id)).length ?? 0);
 		const segments = [] as string[];
-		if (builtIn > 0) segments.push(`${builtIn} built-in`);
-		if (mcp > 0) segments.push(`${mcp} MCP`);
-		if (cli > 0) segments.push(`${cli} CLI`);
+		if (builtIn > 0) segments.push(t('chat.agentSummary.builtIn', { count: builtIn }));
+		if (mcp > 0) segments.push(t('chat.agentSummary.mcp', { count: mcp }));
+		if (cli > 0) segments.push(t('chat.agentSummary.cli', { count: cli }));
 		if (segments.length === 0) {
-			return 'None';
+			return t('chat.agentSummary.none');
 		}
 		return segments.join(' + ');
 	}
@@ -1558,11 +1542,11 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 	private getAgentMemoryLabel(agent: Agent): string {
 		switch (agent.memoryType) {
 			case 'short-term':
-				return 'Short-term';
+				return t('chat.agentSummary.shortTerm');
 			case 'long-term':
-				return 'Long-term';
+				return t('chat.agentSummary.longTerm');
 			default:
-				return 'Disabled';
+				return t('chat.agentSummary.disabledMemory');
 		}
 	}
 
@@ -1585,7 +1569,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (!this.chatHeader.promptSelector) return;
 		const enabledPrompts = this.plugin.settings.systemPrompts.filter(p => p.enabled);
 		this.chatHeader.promptSelector.empty();
-		this.chatHeader.promptSelector.createEl('option', { value: '', text: 'No system prompt' });
+		this.chatHeader.promptSelector.createEl('option', { value: '', text: t('chat.noSystemPrompt') });
 		enabledPrompts.forEach(p => {
 			const option = this.chatHeader.promptSelector!.createEl('option', { value: p.id, text: p.name });
 			if (this.plugin.settings.activeSystemPromptId === p.id) {
@@ -1616,7 +1600,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				await this.applyAgentConfig(ensuredAgentId);
 				this.refreshAgentSelect(ensuredAgentId);
 			} else {
-				new Notice('No agents available. Configure agents in Settings → Agents.');
+				new Notice(t('chat.notices.noAgents'));
 				if (this.plugin.settings.activeAgentId) {
 					this.plugin.settings.activeAgentId = null;
 					await this.plugin.saveSettings();
@@ -1882,7 +1866,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				this.ragActionItem,
 				enabled,
 				this.state.enableRAG,
-				enabled ? (this.state.enableRAG ? 'On' : 'Off') : 'Disabled'
+				enabled ? (this.state.enableRAG ? t('chat.agentSummary.on') : t('chat.agentSummary.off')) : t('chat.status.disabled')
 			);
 		}
 
@@ -1892,7 +1876,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				this.webActionItem,
 				enabled,
 				this.state.enableWebSearch,
-				enabled ? (this.state.enableWebSearch ? 'On' : 'Off') : 'Disabled'
+				enabled ? (this.state.enableWebSearch ? t('chat.agentSummary.on') : t('chat.agentSummary.off')) : t('chat.status.disabled')
 			);
 		}
 
@@ -1901,7 +1885,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private async handleQuickActionRag() {
 		if (!this.plugin.settings.ragConfig.enabled) {
-			new Notice('RAG is disabled in settings. Enable it under settings → chat features → RAG.');
+			new Notice(t('chat.notices.ragDisabled'));
 			return;
 		}
 		this.state.enableRAG = !this.state.enableRAG;
@@ -1911,7 +1895,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 	private async handleQuickActionWeb() {
 		if (!this.plugin.settings.webSearchConfig.enabled) {
-			new Notice('Web search is disabled in settings. Enable it under settings → chat features → web search.');
+			new Notice(t('chat.notices.webSearchDisabled'));
 			return;
 		}
 		this.state.enableWebSearch = !this.state.enableWebSearch;
@@ -1944,7 +1928,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		if (!agents || agents.length === 0) {
 			const placeholder = selectEl.createEl('option');
 			placeholder.value = '';
-			placeholder.textContent = 'No agents configured';
+			placeholder.textContent = t('chat.noAgentConfig');
 			placeholder.disabled = true;
 			placeholder.selected = true;
 			selectEl.disabled = true;
@@ -1955,7 +1939,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 
 		const placeholder = selectEl.createEl('option');
 		placeholder.value = '';
-		placeholder.textContent = 'Select an agent…';
+		placeholder.textContent = t('chat.selectAgent');
 		placeholder.disabled = true;
 
 		const validIds = new Set(agents.map(agent => agent.id));
@@ -2071,7 +2055,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		this.refreshAgentSelect(agentId);
 
 		if (!options?.silent) {
-			new Notice(`Applied configuration for agent: ${agent.icon || '🤖'} ${agent.name ?? 'unknown'}`);
+			new Notice(t('chat.notices.agentConfigApplied', { name: `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}` }));
 		}
 	}
 
@@ -2168,7 +2152,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 		const files = this.app.vault.getMarkdownFiles();
 
 		if (files.length === 0) {
-			new Notice('No files found in vault');
+			new Notice(t('chat.notices.noFilesInVault'));
 			return;
 		}
 
@@ -2188,7 +2172,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 								content: content
 							});
 							this.updateAttachmentPreview();
-							new Notice(`Attached: ${file.name ?? 'unknown'}`);
+							new Notice(t('chat.notices.attached', { name: file.name ?? 'unknown' }));
 						})();
 					});
 			});
@@ -2214,7 +2198,7 @@ private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types'
 				}
 				this.updateAttachmentPreview();
 				if (selectedFiles.length > 0) {
-					new Notice(`Attached ${selectedFiles.length} image(s)`);
+					new Notice(t('chat.notices.attachedImages', { count: selectedFiles.length }));
 				}
 			})();
 		}).open();

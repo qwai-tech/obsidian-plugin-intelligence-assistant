@@ -1,5 +1,6 @@
 import { App, ButtonComponent, Modal, Setting } from 'obsidian';
 import type { SystemPrompt } from '@/types';
+import { t } from '@/i18n';
 
 export class SystemPromptEditModal extends Modal {
 	private prompt: SystemPrompt;
@@ -15,22 +16,20 @@ export class SystemPromptEditModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: 'Edit system prompt' });
+		contentEl.createEl('h2', { text: t('modals.promptEdit.title') });
 
-		// Name field
 		new Setting(contentEl)
-			.setName('Name')
-			.setDesc('Display name for this prompt')
+			.setName(t('modals.promptEdit.name.name'))
+			.setDesc(t('modals.promptEdit.name.desc'))
 			.addText(text => text
 				.setValue(this.prompt.name)
 				.onChange(value => {
 					this.prompt.name = value;
 				}));
 
-		// Content text area
 		new Setting(contentEl)
-			.setName('Content')
-			.setDesc('The system prompt content')
+			.setName(t('modals.promptEdit.content.name'))
+			.setDesc(t('modals.promptEdit.content.desc'))
 			.addTextArea(text => {
 				text.setValue(this.prompt.content);
 				text.inputEl.rows = 15;
@@ -40,28 +39,26 @@ export class SystemPromptEditModal extends Modal {
 				});
 			});
 
-		// Enabled toggle
 		new Setting(contentEl)
-			.setName('Enabled')
-			.setDesc('Whether this prompt is active')
+			.setName(t('modals.promptEdit.enabled.name'))
+			.setDesc(t('modals.promptEdit.enabled.desc'))
 			.addToggle(toggle => toggle
 				.setValue(this.prompt.enabled)
 				.onChange(value => {
 					this.prompt.enabled = value;
 				}));
 
-		// Buttons
 		const buttonContainer = contentEl.createDiv('ia-modal-footer');
 		buttonContainer.removeClass('ia-hidden');
 
 		new ButtonComponent(buttonContainer)
-			.setButtonText('Cancel')
+			.setButtonText(t('modals.promptEdit.cancel'))
 			.onClick(() => {
 				this.close();
 			});
 
 		new ButtonComponent(buttonContainer)
-			.setButtonText('Save')
+			.setButtonText(t('modals.promptEdit.save'))
 			.setCta()
 			.onClick(async () => {
 				this.prompt.updatedAt = Date.now();

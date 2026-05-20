@@ -4,6 +4,7 @@
  */
 
 import {App, Menu, setIcon} from 'obsidian';
+import { t } from '@/i18n';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import { showPrompt } from '@/presentation/components/modals/prompt-modal';
 import { Events } from 'obsidian';
@@ -107,7 +108,7 @@ export class ConversationManager extends Events {
 		const defaultConfig = this.buildDefaultConversationConfig();
 		const newConv: Conversation = {
 			id: `conv_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
-			title: 'New Conversation',
+			title: t('chat.newConversation'),
 			messages: [],
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
@@ -256,7 +257,7 @@ export class ConversationManager extends Events {
 			// If conversation doesn't exist, create a new one
 			existingConv = {
 				id: this.state.currentConversationId,
-				title: 'New Conversation',
+				title: t('chat.newConversation'),
 				messages: [],
 				createdAt: Date.now(),
 				updatedAt: Date.now(),
@@ -482,7 +483,7 @@ export class ConversationManager extends Events {
 
 		// Header with new conversation button and pin button
 		const listHeader = this.conversationListContainer.createDiv('conversation-list-header');
-		listHeader.createEl('h3', { text: 'Conversations' });
+		listHeader.createEl('h3', { text: t('chat.conversations') });
 
 		const headerButtons = listHeader.createDiv('conversation-header-buttons');
 
@@ -504,7 +505,7 @@ export class ConversationManager extends Events {
 		// Search input
 		const searchContainer = this.conversationListContainer.createDiv('conversation-search');
 		const searchInput = searchContainer.createEl('input', {
-			attr: { type: 'text', placeholder: 'Search conversations...' }
+			attr: { type: 'text', placeholder: t('chat.searchConversations') }
 		});
 		searchInput.addClass('conversation-search-input');
 		searchInput.value = this.searchQuery;

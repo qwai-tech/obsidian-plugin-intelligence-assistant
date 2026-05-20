@@ -1,4 +1,5 @@
 import { App, TFile, TFolder, Modal } from 'obsidian';
+import { t } from '@/i18n';
 
 export class SearchableReferenceModal extends Modal {
 	private onChooseItems: (items: (TFile | TFolder)[]) => void;
@@ -19,11 +20,11 @@ export class SearchableReferenceModal extends Modal {
 		const { contentEl } = this;
 		contentEl.addClass('searchable-reference-modal');
 
-		contentEl.createEl('h2', { text: 'Add references' });
+		contentEl.createEl('h2', { text: t('chat.modals.reference.title') });
 
 		this.searchInput = contentEl.createEl('input', {
 			type: 'text',
-			placeholder: 'Search files and folders...'
+			placeholder: t('chat.modals.reference.searchPlaceholder')
 		});
 		this.searchInput.addClass('ia-modal-search-input');
 
@@ -48,19 +49,19 @@ export class SearchableReferenceModal extends Modal {
 
 		const buttonContainer = contentEl.createDiv('ia-modal-btn-row');
 
-		const selectAllButton = buttonContainer.createEl('button', { text: 'Select all' });
+		const selectAllButton = buttonContainer.createEl('button', { text: t('chat.modals.reference.selectAll') });
 		selectAllButton.addEventListener('click', () => {
 			this.selectedItems = [...this.allItems];
 			this.updateDisplay();
 		});
 
-		const selectNoneButton = buttonContainer.createEl('button', { text: 'Select none' });
+		const selectNoneButton = buttonContainer.createEl('button', { text: t('chat.modals.reference.selectNone') });
 		selectNoneButton.addEventListener('click', () => {
 			this.selectedItems = [];
 			this.updateDisplay();
 		});
 
-		const addButton = buttonContainer.createEl('button', { text: 'Add selected' });
+		const addButton = buttonContainer.createEl('button', { text: t('chat.modals.reference.addSelected') });
 		addButton.addClass('mod-cta');
 		addButton.addEventListener('click', () => {
 			this.close();
@@ -72,7 +73,7 @@ export class SearchableReferenceModal extends Modal {
 		this.resultsContainer.empty();
 
 		if (items.length === 0) {
-			this.resultsContainer.createDiv({ text: 'No matching files or folders found.' });
+			this.resultsContainer.createDiv({ text: t('chat.modals.reference.noResults') });
 			return;
 		}
 

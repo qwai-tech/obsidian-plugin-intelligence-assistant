@@ -196,11 +196,11 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		const mcpServers = this.plugin.settings.mcpServers;
 
 		if (mcpServers.length === 0) {
-			new Notice('⚠️ No MCP servers configured');
+			new Notice(t('settings.mcp.notices.noServersConfigured'));
 			return;
 		}
 
-		new Notice(`🧪 Testing ${mcpServers.length} MCP server connections...`);
+		new Notice(t('settings.mcp.notices.testingAll', { count: mcpServers.length }));
 
 		const results: {name: string, success: boolean, error?: string}[] = [];
 		let settingsDirty = false;
@@ -250,9 +250,9 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		const failed = results.filter(r => !r.success).length;
 
 		if (failed === 0) {
-			new Notice(`✅ all ${successful} mcp servers connected successfully!`);
+			new Notice(t('settings.mcp.notices.testAllSuccess', { count: successful }));
 		} else {
-			new Notice(`⚠️ ${successful} connected, ${failed} failed`);
+			new Notice(t('settings.mcp.notices.testAllPartial', { successful, failed }));
 
 			// Show detailed results in console
 			console.debug('[MCP] Connection test results:');

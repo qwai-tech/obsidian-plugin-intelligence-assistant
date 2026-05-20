@@ -2,6 +2,7 @@ import { App, Modal, Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { snapshotMcpTools } from '@plugin';
 import type { Tool } from '@/application/services/types';
+import { t } from '@/i18n';
 
 export class MCPInspectorModal extends Modal {
 	private plugin: IntelligenceAssistantPlugin;
@@ -15,9 +16,9 @@ export class MCPInspectorModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: 'MCP inspector' });
+		contentEl.createEl('h2', { text: t('modals.mcpInspector.title') });
 		const descEl = contentEl.createEl('p', {
-			text: 'Inspect and debug Model Context Protocol (MCP) server connections and tools.'
+			text: t('modals.mcpInspector.desc')
 		});
 		descEl.setCssProps({ 'color': 'var(--text-muted)' });
 
@@ -26,9 +27,9 @@ export class MCPInspectorModal extends Modal {
 		tabContainer.removeClass('ia-hidden');
 		tabContainer.setCssProps({ 'margin-bottom': '16px' });
 
-		const connectionsTab = tabContainer.createEl('button', { text: 'Connections' });
-		const toolsTab = tabContainer.createEl('button', { text: 'Tools' });
-		const logsTab = tabContainer.createEl('button', { text: 'Logs' });
+		const connectionsTab = tabContainer.createEl('button', { text: t('modals.mcpInspector.tabs.connections') });
+		const toolsTab = tabContainer.createEl('button', { text: t('modals.mcpInspector.tabs.tools') });
+		const logsTab = tabContainer.createEl('button', { text: t('modals.mcpInspector.tabs.logs') });
 
 		// Style tabs
 		const tabs = [connectionsTab, toolsTab, logsTab];
@@ -129,7 +130,7 @@ export class MCPInspectorModal extends Modal {
 		});
 
 		// Refresh button
-		const refreshBtn = contentEl.createEl('button', { text: '🔄 refresh' });
+		const refreshBtn = contentEl.createEl('button', { text: t('modals.mcpInspector.refreshBtn') });
 		refreshBtn.setCssProps({ 'margin-top': '16px' });
 		refreshBtn.setCssProps({ 'padding': '6px 12px' });
 		refreshBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
@@ -152,7 +153,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderConnectionsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: 'MCP server connections' });
+		container.createEl('h3', { text: t('modals.mcpInspector.connections.title') });
 
 		// Check for active connections
 		const toolManager = this.plugin.getToolManager();
@@ -161,7 +162,7 @@ export class MCPInspectorModal extends Modal {
 
 		// Display configured servers
 		if (this.plugin.settings.mcpServers.length === 0) {
-			container.createEl('p', { text: 'No MCP servers configured.' });
+			container.createEl('p', { text: t('modals.mcpInspector.connections.noServers') });
 			return;
 		}
 
@@ -170,10 +171,10 @@ export class MCPInspectorModal extends Modal {
 		table.setCssProps({ 'border-collapse': 'collapse' });
 
 		const headerRow = table.createEl('tr');
-		headerRow.createEl('th', { text: 'Server name' });
-		headerRow.createEl('th', { text: 'Status' });
-		headerRow.createEl('th', { text: 'Tools available' });
-		headerRow.createEl('th', { text: 'Actions' });
+		headerRow.createEl('th', { text: t('modals.mcpInspector.connections.headers.server') });
+		headerRow.createEl('th', { text: t('modals.mcpInspector.connections.headers.status') });
+		headerRow.createEl('th', { text: t('modals.mcpInspector.connections.headers.tools') });
+		headerRow.createEl('th', { text: t('modals.mcpInspector.connections.headers.actions') });
 
 		for (const server of this.plugin.settings.mcpServers) {
 			const row = table.createEl('tr');
@@ -187,13 +188,13 @@ export class MCPInspectorModal extends Modal {
 			const isConnected = connectedServers.includes(server.name);
 
 			if (!isEnabled) {
-				statusCell.setText('Disabled');
+				statusCell.setText(t('modals.mcpInspector.connections.statusDisabled'));
 				statusCell.setCssProps({ 'color': 'var(--text-muted)' });
 			} else if (isConnected) {
-				statusCell.setText('● connected');
+				statusCell.setText(t('modals.mcpInspector.connections.statusConnected'));
 				statusCell.setCssProps({ 'color': 'var(--text-success)' });
 			} else {
-				statusCell.setText('○ disconnected');
+				statusCell.setText(t('modals.mcpInspector.connections.statusDisconnected'));
 				statusCell.setCssProps({ 'color': 'var(--text-error)' });
 			}
 
@@ -203,16 +204,16 @@ export class MCPInspectorModal extends Modal {
 			const cachedTools = server.cachedTools?.length ?? 0;
 			const activeCount = serverTools.length;
 			if (isConnected) {
-				toolsCell.setText(`${activeCount} tool${activeCount === 1 ? '' : 's'}`);
+				toolsCell.setText(t(activeCount === 1 ? 'modals.mcpInspector.connections.toolsLive' : 'modals.mcpInspector.connections.toolsLive_plural', { count: activeCount }));
 			} else if (cachedTools > 0) {
-				toolsCell.setText(`${cachedTools} tool${cachedTools === 1 ? '' : 's'} (cached)`);
+				toolsCell.setText(t(cachedTools === 1 ? 'modals.mcpInspector.connections.toolsCached' : 'modals.mcpInspector.connections.toolsCached_plural', { count: cachedTools }));
 			} else {
-				toolsCell.setText('0 tools');
+				toolsCell.setText(t('modals.mcpInspector.connections.noTools'));
 			}
 
 			// Actions
 			const actionsCell = row.createEl('td');
-			const actionBtn = actionsCell.createEl('button', { text: isConnected ? 'Disconnect' : 'Connect' });
+			const actionBtn = actionsCell.createEl('button', { text: isConnected ? t('modals.mcpInspector.connections.disconnectBtn') : t('modals.mcpInspector.connections.connectBtn') });
 			actionBtn.setCssProps({ 'padding': '4px 8px' });
 			actionBtn.setCssProps({ 'font-size': '12px' });
 			actionBtn.addClass('ia-clickable');
@@ -231,27 +232,29 @@ export class MCPInspectorModal extends Modal {
 					const currentlyConnected = toolManager.getMCPServers().includes(server.name);
 					actionBtn.disabled = true;
 					const originalText = actionBtn.textContent ?? '';
-					actionBtn.textContent = currentlyConnected ? 'Disconnecting...' : 'Connecting...';
+					actionBtn.textContent = currentlyConnected ? t('modals.mcpInspector.connections.disconnecting') : t('modals.mcpInspector.connections.connecting');
 
 					try {
 						if (currentlyConnected) {
 							await toolManager.unregisterMCPServer(server.name);
-							new Notice(`Disconnected from ${server.name}`);
+							new Notice(t('modals.mcpInspector.connections.notices.disconnected', { name: server.name }));
 						} else {
 							if (!server.enabled) {
-								new Notice('Enable the server in settings before connecting');
+								new Notice(t('modals.mcpInspector.connections.notices.enableFirst'));
 								return;
 							}
 							const tools = await toolManager.registerMCPServer(server);
 							server.cachedTools = snapshotMcpTools(tools);
 							server.cacheTimestamp = Date.now();
 							await this.plugin.saveSettings();
-							new Notice(`Connected to ${server.name}`);
+							new Notice(t('modals.mcpInspector.connections.notices.connected', { name: server.name }));
 						}
 					} catch (_error) {
 						const err = _error instanceof Error ? _error : new Error(String(_error));
 						console.error(`[MCP] Failed to ${currentlyConnected ? 'disconnect' : 'connect'} ${server.name}:`, err);
-						new Notice(`Failed to ${currentlyConnected ? 'disconnect from' : 'connect to'} ${server.name}: ${err.message}`);
+						new Notice(currentlyConnected
+							? t('modals.mcpInspector.connections.notices.failedDisconnect', { name: server.name, message: err.message })
+							: t('modals.mcpInspector.connections.notices.failedConnect', { name: server.name, message: err.message }));
 					} finally {
 						actionBtn.disabled = !server.enabled;
 						actionBtn.textContent = originalText;
@@ -264,7 +267,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderToolsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: 'Available MCP tools' });
+		container.createEl('h3', { text: t('modals.mcpInspector.tools.title') });
 
 		// Check for active connections
 		const toolManager = this.plugin.getToolManager();
@@ -279,7 +282,7 @@ export class MCPInspectorModal extends Modal {
 			}, {} as Record<string, Tool[]>);
 
 		if (Object.keys(mcpTools).length === 0) {
-			container.createEl('p', { text: 'No MCP tools available. Check server connections.' });
+			container.createEl('p', { text: t('modals.mcpInspector.tools.noTools') });
 			return;
 		}
 
@@ -288,10 +291,10 @@ export class MCPInspectorModal extends Modal {
 			const serverName = provider.substring(4); // Remove 'mcp:' prefix
 			const serverSection = container.createDiv();
 
-			serverSection.createEl('h4', { text: `Server: ${serverName}` });
+			serverSection.createEl('h4', { text: t('modals.mcpInspector.tools.serverPrefix', { name: serverName }) });
 
 			if (tools.length === 0) {
-				serverSection.createEl('p', { text: 'No tools available' });
+				serverSection.createEl('p', { text: t('modals.mcpInspector.tools.noToolsInServer') });
 				continue;
 			}
 
@@ -300,16 +303,16 @@ export class MCPInspectorModal extends Modal {
 			toolsTable.setCssProps({ 'border-collapse': 'collapse' });
 
 			const headerRow = toolsTable.createEl('tr');
-			headerRow.createEl('th', { text: 'Tool name' });
-			headerRow.createEl('th', { text: 'Description' });
-			headerRow.createEl('th', { text: 'Parameters' });
+			headerRow.createEl('th', { text: t('modals.mcpInspector.tools.headers.tool') });
+			headerRow.createEl('th', { text: t('modals.mcpInspector.tools.headers.description') });
+			headerRow.createEl('th', { text: t('modals.mcpInspector.tools.headers.parameters') });
 
 			for (const tool of tools) {
 				const row = toolsTable.createEl('tr');
 				const def = tool.definition as { name: string; description?: string; parameters?: Array<{ name: string; type: string; description?: string }> };
 
 				row.createEl('td', { text: def.name });
-				row.createEl('td', { text: def.description || 'No description' });
+				row.createEl('td', { text: def.description || t('modals.mcpInspector.tools.noDescription') });
 
 				const paramsCell = row.createEl('td');
 				if (def.parameters && def.parameters.length > 0) {
@@ -321,7 +324,7 @@ export class MCPInspectorModal extends Modal {
 						paramItem.setText(`${param.name} (${param.type}): ${param.description || ''}`);
 					}
 				} else {
-					paramsCell.setText('None');
+					paramsCell.setText(t('modals.mcpInspector.tools.noParams'));
 				}
 			}
 		}
@@ -329,7 +332,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderLogsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: 'MCP connection logs' });
+		container.createEl('h3', { text: t('modals.mcpInspector.logs.title') });
 
 		// Display any stored logs or debugging information
 		const logContainer = container.createDiv();
@@ -343,30 +346,30 @@ export class MCPInspectorModal extends Modal {
 		logContainer.setCssProps({ 'font-size': '12px' });
 
 		logContainer.createEl('p', {
-			text: 'MCP connection logs will appear here. Currently showing placeholder information.'
+			text: t('modals.mcpInspector.logs.placeholder')
 		});
 
 		logContainer.createEl('p', {
-			text: '• connection events'
+			text: t('modals.mcpInspector.logs.events.connection')
 		});
 
 		logContainer.createEl('p', {
-			text: '• tool registration events'
+			text: t('modals.mcpInspector.logs.events.tools')
 		});
 
 		logContainer.createEl('p', {
-			text: '• error logs'
+			text: t('modals.mcpInspector.logs.events.errors')
 		});
 
 		logContainer.createEl('p', {
-			text: '• communication details'
+			text: t('modals.mcpInspector.logs.events.comms')
 		});
 
 		// Add a test tool execution section
 		const testSection = container.createDiv();
 		testSection.setCssProps({ 'margin-top': '16px' });
 
-		testSection.createEl('h4', { text: 'Test tool execution' });
+		testSection.createEl('h4', { text: t('modals.mcpInspector.logs.testTitle') });
 
 		const selectionRow = testSection.createDiv();
 		selectionRow.removeClass('ia-hidden');
@@ -379,7 +382,7 @@ export class MCPInspectorModal extends Modal {
 		const inspectorToolManager = this.plugin.getToolManager();
 		const connectedServers = inspectorToolManager.getMCPServers();
 
-		serverSelect.createEl('option', { text: 'Select a server...', value: '' });
+		serverSelect.createEl('option', { text: t('modals.mcpInspector.logs.selectServer'), value: '' });
 		for (const serverName of connectedServers) {
 			serverSelect.createEl('option', { text: serverName, value: serverName });
 		}
@@ -387,7 +390,7 @@ export class MCPInspectorModal extends Modal {
 		const toolSelect = selectionRow.createEl('select');
 		toolSelect.setCssProps({ 'flex': '1' });
 		toolSelect.disabled = true;
-		toolSelect.createEl('option', { text: 'Select a tool...', value: '' });
+		toolSelect.createEl('option', { text: t('modals.mcpInspector.logs.selectTool'), value: '' });
 
 		// Container for dynamic parameter inputs
 		const paramsContainer = testSection.createDiv();
@@ -409,7 +412,7 @@ export class MCPInspectorModal extends Modal {
 				const toolsByProvider = inspectorToolManager.getToolsByProvider();
 				const serverTools = toolsByProvider.get(`mcp:${serverSelect.value}`) || [];
 
-				toolSelect.createEl('option', { text: 'Select a tool...', value: '' });
+				toolSelect.createEl('option', { text: t('modals.mcpInspector.logs.selectTool'), value: '' });
 				for (const tool of serverTools) {
 					toolSelect.createEl('option', {
 						text: tool.definition.name,
@@ -433,7 +436,7 @@ export class MCPInspectorModal extends Modal {
 
 			// Show parameters section
 			paramsContainer.removeClass('ia-hidden');
-			paramsContainer.createEl('h5', { text: 'Parameters' });
+			paramsContainer.createEl('h5', { text: t('modals.mcpInspector.logs.parametersTitle') });
 
 			for (const param of tool.definition.parameters) {
 				const paramRow = paramsContainer.createDiv();
@@ -459,7 +462,7 @@ export class MCPInspectorModal extends Modal {
 				if (param.enum) {
 					// Enum: use select dropdown
 					input = paramRow.createEl('select');
-					input.createEl('option', { text: 'Select...', value: '' });
+					input.createEl('option', { text: t('modals.mcpInspector.logs.selectEnum'), value: '' });
 					for (const enumValue of param.enum) {
 						input.createEl('option', { text: enumValue, value: enumValue });
 					}
@@ -493,7 +496,7 @@ export class MCPInspectorModal extends Modal {
 		buttonsRow.setCssProps({ 'margin-bottom': '12px' });
 
 		// Test execution button
-		const testBtn = buttonsRow.createEl('button', { text: 'Perform tool' });
+		const testBtn = buttonsRow.createEl('button', { text: t('modals.mcpInspector.logs.performBtn') });
 		testBtn.addClass('ia-button');
 		testBtn.addClass('ia-button--primary');
 		testBtn.disabled = true;
@@ -503,7 +506,7 @@ export class MCPInspectorModal extends Modal {
 		});
 
 		// Clear button
-		const clearBtn = buttonsRow.createEl('button', { text: 'Clear results' });
+		const clearBtn = buttonsRow.createEl('button', { text: t('modals.mcpInspector.logs.clearBtn') });
 		clearBtn.addClass('ia-button');
 		clearBtn.addClass('ia-button--ghost');
 
@@ -545,7 +548,7 @@ export class MCPInspectorModal extends Modal {
 
 				// Validate required fields
 				if (required && !value) {
-					new Notice(`Required parameter missing: ${paramName}`);
+					new Notice(t('modals.mcpInspector.logs.notices.requiredMissing', { name: paramName }));
 					validationError = true;
 					break;
 				}
@@ -557,13 +560,13 @@ export class MCPInspectorModal extends Modal {
 					try {
 						if (paramType === 'number') {
 							if (typeof value !== 'string') {
-								new Notice(`Invalid number for parameter: ${paramName}`);
+								new Notice(t('modals.mcpInspector.logs.notices.invalidNumber', { name: paramName }));
 								validationError = true;
 								break;
 							}
 							const parsed = Number.parseFloat(value);
 							if (Number.isNaN(parsed)) {
-								new Notice(`Invalid number for parameter: ${paramName}`);
+								new Notice(t('modals.mcpInspector.logs.notices.invalidNumber', { name: paramName }));
 								validationError = true;
 								break;
 							}
@@ -572,7 +575,7 @@ export class MCPInspectorModal extends Modal {
 							args[paramName] = value;
 						} else if (paramType === 'object' || paramType === 'array') {
 							if (typeof value !== 'string') {
-								new Notice(`Invalid JSON for parameter: ${paramName}`);
+								new Notice(t('modals.mcpInspector.logs.notices.invalidJson', { name: paramName }));
 								validationError = true;
 								break;
 							}
@@ -582,7 +585,7 @@ export class MCPInspectorModal extends Modal {
 						}
 					} catch (error) {
 					console.error(`Invalid JSON for parameter ${paramName}:`, error);
-					new Notice(`Invalid JSON for parameter: ${paramName}`);
+					new Notice(t('modals.mcpInspector.logs.notices.invalidJson', { name: paramName }));
 					validationError = true;
 					break;
 				}
@@ -592,7 +595,7 @@ export class MCPInspectorModal extends Modal {
 
 			// Execute tool
 			testBtn.disabled = true;
-			testBtn.textContent = 'Executing...';
+			testBtn.textContent = t('modals.mcpInspector.logs.executing');
 			resultContainer.addClass('ia-hidden');
 
 			try {
@@ -611,17 +614,17 @@ export class MCPInspectorModal extends Modal {
 
 				if (result.success) {
 					header.setCssProps({ 'color': 'var(--text-success)' });
-					header.setText('✅ execution successful');
+					header.setText(t('modals.mcpInspector.logs.success'));
 				} else {
 					header.setCssProps({ 'color': 'var(--text-error)' });
-					header.setText('❌ execution failed');
+					header.setText(t('modals.mcpInspector.logs.failed'));
 				}
 
 				if (result.error) {
 					const errorDiv = resultContainer.createEl('div');
 					errorDiv.setCssProps({ 'color': 'var(--text-error)' });
 					errorDiv.setCssProps({ 'margin-bottom': '8px' });
-					errorDiv.setText(`Error: ${result.error}`);
+					errorDiv.setText(t('modals.mcpInspector.logs.errorLabel', { message: result.error }));
 				}
 
 				if (result.result !== undefined) {
@@ -634,7 +637,7 @@ export class MCPInspectorModal extends Modal {
 						: JSON.stringify(result.result, null, 2));
 				}
 
-				new Notice(result.success ? 'Tool executed successfully' : 'Tool execution failed');
+				new Notice(result.success ? t('modals.mcpInspector.logs.notices.success') : t('modals.mcpInspector.logs.notices.failed'));
 			} catch (error: unknown) {
 				resultContainer.empty();
 				resultContainer.removeClass('ia-hidden');
@@ -643,15 +646,15 @@ export class MCPInspectorModal extends Modal {
 				header.setCssProps({ 'color': 'var(--text-error)' });
 				header.setCssProps({ 'font-weight': '600' });
 				header.setCssProps({ 'margin-bottom': '8px' });
-				header.setText('❌ execution error');
+				header.setText(t('modals.mcpInspector.logs.errorTitle'));
 
 				const errorDiv = resultContainer.createEl('div');
 				errorDiv.setText(error instanceof Error ? error.message : 'Unknown error');
 
-				new Notice(`Execution error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+				new Notice(t('modals.mcpInspector.logs.notices.error', { message: error instanceof Error ? error.message : 'Unknown error' }));
 			} finally {
 				testBtn.disabled = false;
-				testBtn.textContent = 'Perform tool';
+				testBtn.textContent = t('modals.mcpInspector.logs.performBtn');
 			}
 			})();
 		});
@@ -666,11 +669,11 @@ export class MCPInspectorModal extends Modal {
 		const mcpServers = this.plugin.settings.mcpServers;
 
 		if (mcpServers.length === 0) {
-			new Notice('⚠️ No MCP servers configured');
+			new Notice(t('modals.mcpInspector.testAll.noServers'));
 			return;
 		}
 
-		new Notice(`🧪 Testing ${mcpServers.length} MCP server connections...`);
+		new Notice(t('modals.mcpInspector.testAll.testing', { count: mcpServers.length }));
 
 		const results: {name: string, success: boolean, error?: string}[] = [];
 		let settingsDirty = false;
@@ -720,9 +723,9 @@ export class MCPInspectorModal extends Modal {
 		const failed = results.filter(r => !r.success).length;
 
 		if (failed === 0) {
-			new Notice(`✅ all ${successful} mcp servers connected successfully!`);
+			new Notice(t('modals.mcpInspector.testAll.allSuccess', { count: successful }));
 		} else {
-			new Notice(`⚠️ ${successful} connected, ${failed} failed`);
+			new Notice(t('modals.mcpInspector.testAll.partial', { success: successful, failed }));
 
 			// Show detailed results in console
 			console.debug('[MCP] Connection test results:');

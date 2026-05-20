@@ -312,16 +312,16 @@ function renderModelFilters(
 	const statusSelect = filterBar.createEl('select');
 	statusSelect.addClass('ia-filter-control');
 	statusSelect.addClass('ia-filter-control--compact');
-	statusSelect.createEl('option', { value: 'all', text: 'All states' });
-	statusSelect.createEl('option', { value: 'enabled', text: 'Enabled' });
-	statusSelect.createEl('option', { value: 'disabled', text: 'Disabled' });
+	statusSelect.createEl('option', { value: 'all', text: t('settings.models.filters.allStates') });
+	statusSelect.createEl('option', { value: 'enabled', text: t('settings.models.status.enabled') });
+	statusSelect.createEl('option', { value: 'disabled', text: t('settings.models.status.disabled') });
 	statusSelect.value = filters.enabledFilter;
 	statusSelect.addEventListener('change', (event: Event) => {
 		onFilterChange({ enabledFilter: (event.target as HTMLSelectElement).value as 'all' | 'enabled' | 'disabled' });
 		refreshDisplay();
 	});
 
-	const searchInput = filterBar.createEl('input', { type: 'search', placeholder: 'Search name or ID' });
+	const searchInput = filterBar.createEl('input', { type: 'search', placeholder: t('settings.models.filters.searchPlaceholder') });
 	searchInput.addClass('ia-filter-control');
 	searchInput.addClass('ia-filter-search');
 	searchInput.value = filters.searchTerm;

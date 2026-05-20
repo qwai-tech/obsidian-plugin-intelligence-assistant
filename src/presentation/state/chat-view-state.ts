@@ -4,20 +4,16 @@
  */
 
 import type { Message, Attachment, ModelInfo, FileReference } from '@/types';
+import type { AgentExecutionStep } from '@/types/common/reasoning';
 import { TFile, TFolder } from 'obsidian';
 import { Events } from 'obsidian';
+
+export type { AgentExecutionStep };
 
 export interface StateChangeEvent {
 	field: string;
 	oldValue: unknown;
 	newValue: unknown;
-}
-
-export interface AgentExecutionStep {
-	type: 'thought' | 'action' | 'observation' | 'response';
-	content: string;
-	timestamp: number;
-	status?: 'pending' | 'success' | 'error';
 }
 
 /**

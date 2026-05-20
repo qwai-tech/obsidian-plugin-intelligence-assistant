@@ -1,4 +1,5 @@
 import { App, TFile, Modal } from 'obsidian';
+import { t } from '@/i18n';
 
 export class SearchableImageModal extends Modal {
 	private onChooseFiles: (files: TFile[]) => void;
@@ -22,11 +23,11 @@ export class SearchableImageModal extends Modal {
 		const { contentEl } = this;
 		contentEl.addClass('searchable-image-modal');
 
-		contentEl.createEl('h2', { text: 'Attach images' });
+		contentEl.createEl('h2', { text: t('chat.modals.image.title') });
 
 		this.searchInput = contentEl.createEl('input', {
 			type: 'text',
-			placeholder: 'Search images...'
+			placeholder: t('chat.modals.image.searchPlaceholder')
 		});
 		this.searchInput.addClass('ia-modal-search-input');
 
@@ -51,19 +52,19 @@ export class SearchableImageModal extends Modal {
 
 		const buttonContainer = contentEl.createDiv('ia-modal-btn-row');
 
-		const selectAllButton = buttonContainer.createEl('button', { text: 'Select all' });
+		const selectAllButton = buttonContainer.createEl('button', { text: t('chat.modals.image.selectAll') });
 		selectAllButton.addEventListener('click', () => {
 			this.selectedFiles = [...this.allImageFiles];
 			this.updateDisplay();
 		});
 
-		const selectNoneButton = buttonContainer.createEl('button', { text: 'Select none' });
+		const selectNoneButton = buttonContainer.createEl('button', { text: t('chat.modals.image.selectNone') });
 		selectNoneButton.addEventListener('click', () => {
 			this.selectedFiles = [];
 			this.updateDisplay();
 		});
 
-		const addButton = buttonContainer.createEl('button', { text: 'Add selected' });
+		const addButton = buttonContainer.createEl('button', { text: t('chat.modals.image.addSelected') });
 		addButton.addClass('mod-cta');
 		addButton.addEventListener('click', () => {
 			this.close();
@@ -75,7 +76,7 @@ export class SearchableImageModal extends Modal {
 		this.resultsContainer.empty();
 
 		if (files.length === 0) {
-			this.resultsContainer.createDiv({ text: 'No matching images found.' });
+			this.resultsContainer.createDiv({ text: t('chat.modals.image.noResults') });
 			return;
 		}
 

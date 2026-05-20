@@ -5,6 +5,7 @@
 
 import { App, Modal, Notice, Setting, requestUrl } from 'obsidian';
 import type { LLMConfig, ModelInfo } from '@/types';
+import { t } from '@/i18n';
 
 export class OllamaModelManagerModal extends Modal {
 	private config: LLMConfig;
@@ -23,14 +24,13 @@ export class OllamaModelManagerModal extends Modal {
 		contentEl.empty();
 		contentEl.addClass('ia-ollama-manager-modal');
 
-		contentEl.createEl('h2', { text: 'Manage Ollama models' });
+		contentEl.createEl('h2', { text: t('modals.ollamaManager.title') });
 
-		// Server info section
 		const serverInfo = contentEl.createDiv('ia-modal-section');
-		serverInfo.createEl('h3', { text: 'Server information' });
+		serverInfo.createEl('h3', { text: t('modals.ollamaManager.serverInfo') });
 
 		const serverStatus = serverInfo.createDiv('ia-server-status');
-		serverStatus.setText('Checking server...');
+		serverStatus.setText(t('modals.ollamaManager.checkingServer'));
 
 		void this.checkServerStatus(serverStatus);
 
@@ -40,10 +40,9 @@ export class OllamaModelManagerModal extends Modal {
 		// Installed models section
 		this.renderInstalledModels(contentEl);
 
-		// Close button
 		new Setting(contentEl)
 			.addButton(button => button
-				.setButtonText('Close')
+				.setButtonText(t('modals.ollamaManager.closeBtn'))
 				.onClick(() => this.close()));
 	}
 
@@ -61,54 +60,54 @@ export class OllamaModelManagerModal extends Modal {
 				const data = response.json as { version?: string };
 				statusEl.empty();
 				statusEl.createEl('span', {
-					text: `✅ Server online`,
+					text: t('modals.ollamaManager.serverOnline'),
 					cls: 'ia-server-status-online'
 				});
 				statusEl.createEl('span', {
-					text: ` | Version: ${data.version || 'unknown'}`,
+					text: t('modals.ollamaManager.versionLabel', { version: data.version || 'unknown' }),
 					cls: 'ia-server-status-meta'
 				});
 				statusEl.createEl('span', {
-					text: ` | ${baseUrl}`,
+					text: t('modals.ollamaManager.urlLabel', { url: baseUrl }),
 					cls: 'ia-server-status-url'
 				});
 			} else {
-				statusEl.setText('❌ Server offline');
+				statusEl.setText(t('modals.ollamaManager.serverOffline'));
 				statusEl.addClass('ia-text-error');
 			}
 		} catch (error) {
 			console.error('Failed to check Ollama server status:', error);
-			statusEl.setText('❌ Connection error');
+			statusEl.setText(t('modals.ollamaManager.connectionError'));
 			statusEl.addClass('ia-text-error');
 		}
 	}
 
 	private renderPullSection(containerEl: HTMLElement) {
 		const section = containerEl.createDiv('ia-modal-section');
-		section.createEl('h3', { text: 'Pull new model' });
+		section.createEl('h3', { text: t('modals.ollamaManager.pullTitle') });
 
 		section.createEl('p', {
-			text: 'Enter a model name to download from Ollama library (e.g., llama2, mistral, codellama)',
+			text: t('modals.ollamaManager.pullHint'),
 			cls: 'ia-pull-section-hint'
 		});
 
 		let modelNameInput: HTMLInputElement;
 
 		new Setting(section)
-			.setName('Model name')
-			.setDesc('Example: llama2, mistral, codellama:7b')
+			.setName(t('modals.ollamaManager.modelName.name'))
+			.setDesc(t('modals.ollamaManager.modelName.example'))
 			.addText(text => {
 				modelNameInput = text.inputEl;
 				text.setPlaceholder('llama2')
 					.inputEl.addClass('ia-full-width');
 			})
 			.addButton(button => button
-				.setButtonText('Pull model')
+				.setButtonText(t('modals.ollamaManager.pullBtn'))
 				.setCta()
 				.onClick(async () => {
 					const modelName = modelNameInput.value.trim();
 					if (!modelName) {
-						new Notice('Please enter a model name');
+						new Notice(t('modals.ollamaManager.notices.enterName'));
 						return;
 					}
 					await this.pullModel(modelName, button.buttonEl);
@@ -119,9 +118,9 @@ export class OllamaModelManagerModal extends Modal {
 		const section = containerEl.createDiv('ia-modal-section');
 		const header = section.createDiv('ia-modal-section-header');
 
-		header.createEl('h3', { text: 'Installed models' });
+		header.createEl('h3', { text: t('modals.ollamaManager.installedTitle') });
 
-		const refreshBtn = header.createEl('button', { text: '🔄 Refresh list' });
+		const refreshBtn = header.createEl('button', { text: t('modals.ollamaManager.refreshList') });
 		refreshBtn.addClass('ia-button');
 		refreshBtn.addClass('ia-button--ghost');
 		refreshBtn.addEventListener('click', () => {
@@ -134,7 +133,7 @@ export class OllamaModelManagerModal extends Modal {
 
 		if (this.models.length === 0) {
 			modelList.createEl('p', {
-				text: 'No models found. Pull a model to get started.',
+				text: t('modals.ollamaManager.noModels'),
 				cls: 'ia-model-list-empty'
 			});
 			return;
@@ -151,11 +150,11 @@ export class OllamaModelManagerModal extends Modal {
 
 			const capabilities = model.capabilities?.join(', ') || 'unknown';
 			modelInfo.createEl('div', {
-				text: `Capabilities: ${capabilities}`,
+				text: t('modals.ollamaManager.capabilities', { caps: capabilities }),
 				cls: 'ia-model-capabilities'
 			});
 
-			const deleteBtn = modelRow.createEl('button', { text: 'Delete' });
+			const deleteBtn = modelRow.createEl('button', { text: t('modals.ollamaManager.deleteBtn') });
 			deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
 		deleteBtn.addClass('ia-ml-8');
@@ -176,7 +175,7 @@ export class OllamaModelManagerModal extends Modal {
 			const baseUrl = this.config.baseUrl || 'http://localhost:11434';
 			const url = baseUrl.endsWith('/') ? `${baseUrl}api/pull` : `${baseUrl}/api/pull`;
 
-			new Notice(`Pulling ${modelName}... This may take a while.`);
+			new Notice(t('modals.ollamaManager.notices.pulling', { name: modelName }));
 
 			const response = await requestUrl({
 				url,
@@ -187,16 +186,16 @@ export class OllamaModelManagerModal extends Modal {
 			});
 
 			if (response.status >= 200 && response.status < 300) {
-				new Notice(`✅ Successfully pulled ${modelName}`);
+				new Notice(t('modals.ollamaManager.notices.pullSuccess', { name: modelName }));
 				await this.refreshModelList();
 			} else {
 				const errorText = response.text;
 				console.error('Pull model error:', errorText);
-				new Notice(`❌ Failed to pull model: ${errorText}`);
+				new Notice(t('modals.ollamaManager.notices.pullFailed', { message: errorText }));
 			}
 		} catch (_error) {
 			console.error('Failed to pull model:', _error);
-			new Notice(`❌ Failed to pull model: ${_error instanceof Error ? _error.message : 'Unknown error'}`);
+			new Notice(t('modals.ollamaManager.notices.pullFailed', { message: _error instanceof Error ? _error.message : 'Unknown error' }));
 		} finally {
 			(buttonEl as HTMLButtonElement).disabled = false;
 			buttonEl.textContent = _originalText;
@@ -206,20 +205,20 @@ export class OllamaModelManagerModal extends Modal {
 	private async confirmDelete(message: string): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
 			const modal = new Modal(this.app);
-			modal.titleEl.setText('Confirm deletion');
+			modal.titleEl.setText(t('modals.ollamaManager.confirmDelete.title'));
 			const { contentEl } = modal;
 			contentEl.empty();
 			contentEl.createEl('p', { text: message });
-			
+
 			const buttonBar = contentEl.createDiv('ia-confirm-button-bar');
-			
-			const cancelBtn = buttonBar.createEl('button', { text: 'Cancel' });
+
+			const cancelBtn = buttonBar.createEl('button', { text: t('modals.ollamaManager.confirmDelete.cancel') });
 			cancelBtn.addEventListener('click', () => {
 				modal.close();
 				resolve(false);
 			});
-			
-			const confirmBtn = buttonBar.createEl('button', { text: 'Delete' });
+
+			const confirmBtn = buttonBar.createEl('button', { text: t('modals.ollamaManager.confirmDelete.confirm') });
 			confirmBtn.addClass('ia-button');
 			confirmBtn.addClass('ia-button--danger');
 			confirmBtn.addEventListener('click', () => {
@@ -232,7 +231,7 @@ export class OllamaModelManagerModal extends Modal {
 	}
 	
 	private async deleteModel(modelName: string, buttonEl: HTMLElement) {
-		const confirmed = await this.confirmDelete(`Are you sure you want to delete the model "${modelName}"?`);
+		const confirmed = await this.confirmDelete(t('modals.ollamaManager.confirmDelete.message', { name: modelName }));
 		if (!confirmed) {
 			return;
 		}
@@ -254,16 +253,16 @@ export class OllamaModelManagerModal extends Modal {
 			});
 
 			if (response.status >= 200 && response.status < 300) {
-				new Notice(`✅ Deleted ${modelName}`);
+				new Notice(t('modals.ollamaManager.notices.deleted', { name: modelName }));
 				await this.refreshModelList();
 			} else {
 				const errorText = response.text;
 				console.error('Delete model error:', errorText);
-				new Notice(`❌ Failed to delete model: ${errorText}`);
+				new Notice(t('modals.ollamaManager.notices.deleteFailed', { message: errorText }));
 			}
 		} catch (_error) {
 			console.error('Failed to delete model:', _error);
-			new Notice(`❌ Failed to delete model: ${_error instanceof Error ? _error.message : 'Unknown error'}`);
+			new Notice(t('modals.ollamaManager.notices.deleteFailed', { message: _error instanceof Error ? _error.message : 'Unknown error' }));
 		} finally {
 			(buttonEl as HTMLButtonElement).disabled = false;
 			buttonEl.textContent = _originalText;
@@ -274,7 +273,7 @@ export class OllamaModelManagerModal extends Modal {
 		let originalText: string | null = null;
 		if (buttonEl) {
 			originalText = buttonEl.textContent;
-			buttonEl.textContent = 'Refreshing...';
+			buttonEl.textContent = t('modals.ollamaManager.notices.refreshing');
 			(buttonEl as HTMLButtonElement).disabled = true;
 		}
 
@@ -292,14 +291,14 @@ export class OllamaModelManagerModal extends Modal {
 			// Notify parent to save and refresh
 			this.onUpdate();
 
-			new Notice('✅ Model list refreshed');
+			new Notice(t('modals.ollamaManager.notices.refreshSuccess'));
 		} catch (_error) {
 			console.error('Failed to refresh models:', _error);
-			new Notice('❌ Failed to refresh model list');
+			new Notice(t('modals.ollamaManager.notices.refreshFailed'));
 		} finally {
 			if (buttonEl) {
 				(buttonEl as HTMLButtonElement).disabled = false;
-				buttonEl.textContent = originalText ?? 'Refresh models';
+				buttonEl.textContent = originalText ?? t('modals.ollamaManager.refreshList');
 			}
 		}
 	}

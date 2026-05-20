@@ -8,6 +8,7 @@ import type { ToolCall } from '@/application/services/types';
 import type { ToolManager } from '@/application/services/tool-manager';
 import type { Agent } from '@/types';
 import type { AgentExecutionStep } from '@/presentation/state/chat-view-state';
+import { t } from '@/i18n';
 
 /**
  * Processes tool calls from agent response content
@@ -197,7 +198,7 @@ function renderThinkingBlock(container: HTMLElement, step: AgentExecutionStep): 
 	const labelRow = block.createDiv('agent-thinking-block__label-row');
 	labelRow.createSpan().setText('🧠');
 	const label = labelRow.createSpan('agent-thinking-block__label');
-	label.setText('Thinking');
+	label.setText(t('chat.toolCall.thinking'));
 
 	const contentEl = block.createDiv('agent-thinking-block__content');
 	contentEl.setText(step.content);
@@ -236,15 +237,15 @@ function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionSt
 
 	// Part 2: Input — collapsible
 	if (argsStr && argsStr !== '{}') {
-		renderCollapsibleSection(card, 'Input', argsStr);
+		renderCollapsibleSection(card, t('chat.toolCall.input'), argsStr);
 	}
 
 	// Part 3: Output — collapsible
 	if (observationStep) {
-		renderCollapsibleSection(card, 'Output', observationStep.content, isError);
+		renderCollapsibleSection(card, t('chat.toolCall.output'), observationStep.content, isError);
 	} else if (isPending) {
 		const pendingOutput = card.createDiv('agent-tool-call__pending');
-		pendingOutput.setText('Running...');
+		pendingOutput.setText(t('chat.toolCall.running'));
 	}
 }
 
@@ -285,7 +286,7 @@ export function createAgentExecutionTraceContainer(messageBody: HTMLElement, _st
 	header.addClass('ia-agent-trace-header');
 
 	const title = header.createSpan('agent-trace-title');
-	title.setText('Execution Process');
+	title.setText(t('chat.toolCall.executionProcess'));
 
 	const icon = header.createSpan('agent-trace-icon');
 	icon.setText('▲');

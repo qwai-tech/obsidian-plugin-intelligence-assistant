@@ -1,5 +1,6 @@
 import type { App } from 'obsidian';
 import { Notice } from 'obsidian';
+import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Message } from '@/types';
 import { marked } from 'marked';
@@ -35,11 +36,11 @@ const CLI_PROVIDER_PREFIXES = ['claude-code', 'codex', 'qwen-code'];
 
 const BUTTONS: Array<{
 	key: keyof MessageRendererCallbacks;
-	label: string;
+	labelKey: string;
 }> = [
-	{ key: 'saveMessageToNewNote', label: 'Save' },
-	{ key: 'insertMessageToNote', label: 'Insert to Notes' },
-	{ key: 'regenerateMessage', label: 'Regenerate' }
+	{ key: 'saveMessageToNewNote', labelKey: 'chat.message.save' },
+	{ key: 'insertMessageToNote', labelKey: 'chat.message.insertToNotes' },
+	{ key: 'regenerateMessage', labelKey: 'chat.message.regenerate' }
 ];
 
 const ensureArray = <T>(value: T | T[] | undefined): T[] => {
@@ -108,24 +109,24 @@ export function renderMessage(
 	renderMessageContent(content, message);
 
 	if (message.attachments?.length) {
-		renderListSection(body, 'Attachments', message.attachments, att => `${att.name} (${att.path})`);
+		renderListSection(body, t('chat.message.attachments'), message.attachments, att => `${att.name} (${att.path})`);
 	}
 
 	if (message.references?.length) {
-		renderListSection(body, 'References', message.references, ref => `${ref.name} (${ref.path})`);
+		renderListSection(body, t('chat.message.references'), message.references, ref => `${ref.name} (${ref.path})`);
 	}
 
 	if (message.ragSources?.length) {
 		if (callbacks?.displayRagSources) {
 			callbacks.displayRagSources(body, message);
 		} else {
-			renderListSection(body, 'RAG Sources', message.ragSources, src => `${src.title || src.path}`);
+			renderListSection(body, t('chat.message.ragSources'), message.ragSources, src => `${src.title || src.path}`);
 		}
 	}
 
 	if (message.webSearchResults?.length) {
 		const section = body.createDiv('ia-chat-message__section');
-		section.createEl('h5', { text: 'Web results' });
+		section.createEl('h5', { text: t('chat.message.webResults') });
 		const list = section.createEl('ul');
 		message.webSearchResults.forEach(result => {
 			const item = list.createEl('li');
@@ -145,7 +146,8 @@ export function renderMessage(
 	createCopyButtons(actions, content);
 
 	if (message.role === 'assistant' && hasActionCallbacks(callbacks)) {
-		BUTTONS.forEach(({ key, label: actionLabel }) => {
+		BUTTONS.forEach(({ key, labelKey }) => {
+			const actionLabel = t(labelKey);
 			const handler = callbacks?.[key];
 			if (!handler) return;
 			const btn = actions.createEl('button', { cls: 'msg-action-btn', text: actionLabel });
@@ -318,14 +320,14 @@ function renderMessageContent(target: HTMLElement, message: Message) {
 
 			const copyBtn = createEl('button');
 			copyBtn.className = 'ia-code-block__copy';
-			copyBtn.textContent = 'Copy';
+			copyBtn.textContent = t('chat.message.copy');
 			copyBtn.addEventListener('click', () => {
 				const text = code.textContent || '';
 				void navigator.clipboard.writeText(text).then(() => {
-					copyBtn.textContent = 'Copied!';
+					copyBtn.textContent = t('chat.message.copied');
 					copyBtn.classList.add('is-copied');
 					activeWindow.setTimeout(() => {
-						copyBtn.textContent = 'Copy';
+						copyBtn.textContent = t('chat.message.copy');
 						copyBtn.classList.remove('is-copied');
 					}, 1500);
 				});
@@ -350,7 +352,7 @@ function renderListSection<T>(root: HTMLElement, title: string, items: T[], form
 function renderReasoning(container: HTMLElement, message: Message) {
 	const section = container.createDiv('ia-chat-message__section');
 	const details = section.createEl('details');
-	const summary = details.createEl('summary', { text: 'Reasoning' });
+	const summary = details.createEl('summary', { text: t('chat.message.reasoning') });
 	summary.addClass('ia-chat-message__summary');
 	const content = details.createDiv('ia-chat-message__reasoning');
 
@@ -381,7 +383,7 @@ function createCopyButtons(actions: HTMLElement, contentEl: HTMLElement | null) 
 	const copyGroup = actions.createDiv('ia-chat-message__copy-group');
 	copyGroup.addClass('ia-chat-copy-group');
 
-	const copyAllBtn = copyGroup.createEl('button', { text: 'Copy' });
+	const copyAllBtn = copyGroup.createEl('button', { text: t('chat.message.copy') });
 	copyAllBtn.classList.add('ia-chat-copy-btn');
 	copyAllBtn.title = 'Copy entire message';
 	copyAllBtn.disabled = !contentEl;
@@ -390,10 +392,10 @@ function createCopyButtons(actions: HTMLElement, contentEl: HTMLElement | null) 
 			if (!contentEl) return;
 			try {
 				await copyMessageContent(contentEl);
-				new Notice('Message copied');
+				new Notice(t('chat.message.copied'));
 			} catch (error) {
 				console.error('Copy failed:', error);
-				new Notice('Failed to copy message');
+				new Notice(t('chat.message.copyFailed'));
 			}
 		})();
 	});
@@ -422,13 +424,13 @@ async function writeTextToClipboard(text: string) {
 function renderTokenUsageFooter(container: HTMLElement, usage?: Message['tokenUsage']) {
 	if (!usage) return;
 	const summary: string[] = [];
-	if (usage.promptTokens) summary.push(`Prompt: ${usage.promptTokens}`);
-	if (usage.completionTokens) summary.push(`Completion: ${usage.completionTokens}`);
-	if (usage.totalTokens) summary.push(`Total: ${usage.totalTokens}`);
+	if (usage.promptTokens) summary.push(`${t('chat.message.tokenUsagePrompt')}: ${usage.promptTokens}`);
+	if (usage.completionTokens) summary.push(`${t('chat.message.tokenUsageCompletion')}: ${usage.completionTokens}`);
+	if (usage.totalTokens) summary.push(`${t('chat.message.tokenUsageTotal')}: ${usage.totalTokens}`);
 	if (summary.length === 0) return;
 
 	const footer = container.createDiv('ia-chat-message__footer');
 	footer.addClass('ia-chat-message__annotation');
 	footer.setAttr('data-exclude-from-copy', 'true');
-	footer.setText(`Token usage · ${summary.join(' · ')}`);
+	footer.setText(`${t('chat.message.tokenUsage')} · ${summary.join(' · ')}`);
 }

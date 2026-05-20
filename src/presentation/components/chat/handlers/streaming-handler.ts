@@ -6,6 +6,7 @@
 import { marked } from 'marked';
 import type { Message } from '@/types';
 import type { ILLMProvider } from '@/types';
+import { t } from '@/i18n';
 
 const MESSAGE_CONTENT_SELECTORS = ['[data-message-content]', '.ia-chat-message__content', '.message-content'];
 const MESSAGE_STATUS_SELECTORS = ['[data-message-status]', '.ia-chat-message__status'];
@@ -58,7 +59,7 @@ export async function handleStreamingChat(
 	typingDots.createSpan().setText('●');
 	typingDots.createSpan().setText('●');
 
-	thinkingIndicator.createSpan({ text: 'Thinking...' });
+	thinkingIndicator.createSpan({ text: t('chat.streaming.thinking') });
 
 	// Show stop button, hide send hint
 	if (options.stopBtn) options.stopBtn.removeClass('ia-hidden');

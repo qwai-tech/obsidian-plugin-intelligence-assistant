@@ -12,35 +12,12 @@ export class RAGManager {
   private documentGrader: DocumentGrader;
   private fileChangeListener: ((file: TFile) => void) | null = null;
   private initialized: boolean = false;
-  private getChatModel?: () => string | null;
-  private getDefaultModel?: () => string | undefined;
-
-  constructor(app: App, config: RAGConfig, llmConfigs: LLMConfig[], getChatModel?: () => string | null, getDefaultModel?: () => string | undefined) {
+  constructor(app: App, config: RAGConfig, llmConfigs: LLMConfig[]) {
     this.app = app;
     this.config = config;
     this.llmConfigs = llmConfigs;
-    this.getChatModel = getChatModel;
-    this.getDefaultModel = getDefaultModel;
-    this.vectorStore = new VectorStore(app);
-    // Pass functions that can retrieve current values dynamically
-    this.documentGrader = new DocumentGrader(
-      config,
-      llmConfigs,
-      () => {
-        // Dynamically get the current chat model when needed
-        if (this.getChatModel) {
-          return this.getChatModel();
-        }
-        return null;
-      },
-      () => {
-        // Dynamically get the current default model when needed
-        if (this.getDefaultModel) {
-          return this.getDefaultModel();
-        }
-        return undefined;
-      }
-    );
+    this.vectorStore = new VectorStore(app, llmConfigs);
+    this.documentGrader = new DocumentGrader(config, llmConfigs);
   }
 
   async initialize(): Promise<void> {
@@ -130,7 +107,7 @@ export class RAGManager {
     await this.vectorStore.addContent(content, metadata, this.config);
   }
 
-  async query(query: string): Promise<SearchResult[]> {
+  async query(query: string, chatModel?: string, defaultModel?: string): Promise<SearchResult[]> {
     console.debug('[RAG Manager] Query called with:', query);
     console.debug('[RAG Manager] Config enabled:', this.config.enabled);
     if (!this.config.enabled) {
@@ -171,7 +148,7 @@ export class RAGManager {
         }));
         
         // Grade all documents
-        const grades = await this.documentGrader.gradeDocuments(gradeRequests);
+        const grades = await this.documentGrader.gradeDocuments(gradeRequests, chatModel, defaultModel);
         console.debug('[RAG Manager] Graded', grades.length, 'documents');
         
         // Filter results based on grades
@@ -192,12 +169,12 @@ export class RAGManager {
     return results;
   }
 
-  async getRelevantContext(query: string, maxChars?: number): Promise<string> {
+  async getRelevantContext(query: string, maxChars?: number, chatModel?: string, defaultModel?: string): Promise<string> {
     if (!this.config.enabled) {
       return '';
     }
-    
-    const results = await this.query(query);
+
+    const results = await this.query(query, chatModel, defaultModel);
     
     if (results.length === 0) {
       return '';
@@ -300,56 +277,21 @@ export class RAGManager {
     }
   }
 
-  updateConfig(config: RAGConfig, llmConfigs?: LLMConfig[], getDefaultModel?: () => string | undefined, getChatModel?: () => string | null): void {
+  updateConfig(config: RAGConfig, llmConfigs?: LLMConfig[]): void {
     const wasEmbeddingChangedFiles = this.config.embedChangedFiles;
     this.config = config;
-
-    // Update llmConfigs if provided
     if (llmConfigs) {
       this.llmConfigs = llmConfigs;
     }
-
-    // Update getDefaultModel if provided
-    if (getDefaultModel !== undefined) {
-      this.getDefaultModel = getDefaultModel;
-    }
-
-    // Update getChatModel if provided
-    if (getChatModel !== undefined) {
-      this.getChatModel = getChatModel;
-    }
-
-    // Recreate DocumentGrader with new config, llmConfigs, and defaultModel getter
-    // This ensures that grader prompt, model source, and other settings take effect immediately
-    this.documentGrader = new DocumentGrader(
-      this.config,
-      this.llmConfigs,
-      () => {
-        // Dynamically get the current chat model when needed
-        if (this.getChatModel) {
-          return this.getChatModel();
-        }
-        return null;
-      },
-      () => {
-        // Dynamically get the current default model when needed
-        if (this.getDefaultModel) {
-          return this.getDefaultModel();
-        }
-        return undefined;
-      }
-    );
+    this.documentGrader = new DocumentGrader(this.config, this.llmConfigs);
 
     if (!config.enabled) {
       this.vectorStore.clear();
     }
 
-    // Handle file change listener based on new config
     if (config.embedChangedFiles && !wasEmbeddingChangedFiles) {
-      // Enable file change listener
       this.setupFileChangeListener();
     } else if (!config.embedChangedFiles && wasEmbeddingChangedFiles) {
-      // Disable file change listener
       this.removeFileChangeListener();
     }
   }

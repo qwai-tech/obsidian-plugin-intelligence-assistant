@@ -2,6 +2,7 @@ import {App, Modal, Notice, Setting} from 'obsidian';
 import type { LLMConfig } from '@/types';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
 import { OllamaModelManagerModal } from './ollama-model-manager-modal';
+import { t } from '@/i18n';
 
 export class ProviderConfigModal extends Modal {
 	private draft: LLMConfig;
@@ -17,22 +18,22 @@ export class ProviderConfigModal extends Modal {
 		onOpen() {
 		const { contentEl } = this;
 		contentEl.empty();
-		contentEl.createEl('h2', { text: 'Provider settings' });
+		contentEl.createEl('h2', { text: t('modals.provider.title') });
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'llmConfigs[].provider',
-			label: 'Provider',
-			description: 'Select the LLM provider type'
+			label: t('modals.provider.selectProvider.name'),
+			description: t('modals.provider.selectProvider.desc')
 		}).addDropdown(dropdown => dropdown
-				.addOption('', '-- Select provider --')
-				.addOption('openai', 'OpenAI')
-				.addOption('anthropic', 'Anthropic')
-				.addOption('google', 'Google (Gemini)')
-				.addOption('deepseek', 'DeepSeek')
-				.addOption('ollama', 'Ollama (local)')
-				.addOption('openrouter', 'OpenRouter')
-				.addOption('sap-ai-core', 'SAP AI Core')
-				.addOption('custom', 'Custom (OpenAI compatible)')
+				.addOption('', t('modals.provider.selectProvider.placeholder'))
+				.addOption('openai', t('modals.provider.providers.openai'))
+				.addOption('anthropic', t('modals.provider.providers.anthropic'))
+				.addOption('google', t('modals.provider.providers.google'))
+				.addOption('deepseek', t('modals.provider.providers.deepseek'))
+				.addOption('ollama', t('modals.provider.providers.ollama'))
+				.addOption('openrouter', t('modals.provider.providers.openrouter'))
+				.addOption('sap-ai-core', t('modals.provider.providers.sapAiCore'))
+				.addOption('custom', t('modals.provider.providers.custom'))
 				.setValue(this.draft.provider)
 				.onChange(value => {
 					this.draft.provider = value;
@@ -41,8 +42,8 @@ export class ProviderConfigModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'llmConfigs[].modelFilter',
-			label: 'Model filter',
-			description: 'Optional regex pattern to limit available models'
+			label: t('modals.provider.modelFilter.name'),
+			description: t('modals.provider.modelFilter.desc')
 		}).addText(text => text
 				.setPlaceholder('Gpt-4|claude-')
 				.setValue(this.draft.modelFilter || '')
@@ -53,8 +54,8 @@ export class ProviderConfigModal extends Modal {
 		if (this.draft.provider === 'sap-ai-core') {
 			applyConfigFieldMetadata(new Setting(contentEl), {
 				path: 'llmConfigs[].resourceGroup',
-				label: 'Resource group',
-				description: 'Optional SAP AI Core resource group'
+				label: t('modals.provider.resourceGroup.name'),
+				description: t('modals.provider.resourceGroup.desc')
 			}).addText(text => text
 					.setPlaceholder('Default')
 					.setValue(this.draft.resourceGroup || '')
@@ -69,11 +70,11 @@ export class ProviderConfigModal extends Modal {
 		const buttonBar = contentEl.createDiv('ia-modal-footer');
 		buttonBar.removeClass('ia-hidden');
 
-		const cancelBtn = buttonBar.createEl('button', { text: 'Cancel' });
+		const cancelBtn = buttonBar.createEl('button', { text: t('modals.provider.cancel') });
 		cancelBtn.addClass('ia-modal-btn');
 		cancelBtn.addEventListener('click', () => this.close());
 
-		const saveBtn = buttonBar.createEl('button', { text: 'Save' });
+		const saveBtn = buttonBar.createEl('button', { text: t('modals.provider.save') });
 		saveBtn.addClass('ia-modal-btn--primary');
 		saveBtn.addEventListener('click', () => {
 			void (async () => {
@@ -101,8 +102,8 @@ export class ProviderConfigModal extends Modal {
 		if (this.draft.provider === 'sap-ai-core') {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].serviceKey',
-				label: 'Service key',
-				description: 'SAP AI Core service key (JSON string)'
+				label: t('modals.provider.serviceKey.name'),
+				description: t('modals.provider.serviceKey.desc')
 			}).addTextArea(text => {
 					const value = typeof this.draft.serviceKey === 'string'
 						? this.draft.serviceKey
@@ -129,8 +130,8 @@ export class ProviderConfigModal extends Modal {
 		} else if (this.draft.provider === 'ollama') {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].baseUrl',
-				label: 'Base URL',
-				description: 'Ollama server URL'
+				label: t('modals.provider.baseUrl.name'),
+				description: t('modals.provider.baseUrl.ollamaDesc')
 			}).addText(text => text
 					.setPlaceholder('http://localhost:11434')
 					.setValue(this.draft.baseUrl || 'http://localhost:11434')
@@ -139,10 +140,10 @@ export class ProviderConfigModal extends Modal {
 					}));
 
 			new Setting(this.providerContainer)
-				.setName('Manage Models')
-				.setDesc('Pull new models or update existing ones from the Ollama registry.')
+				.setName(t('modals.provider.manageModels.name'))
+				.setDesc(t('modals.provider.manageModels.desc'))
 				.addButton(button => button
-					.setButtonText('⏬ Pull Ollama Model')
+					.setButtonText(t('modals.provider.manageModels.btn'))
 					.onClick(() => {
 						new OllamaModelManagerModal(this.app, this.draft, () => {
 							// No specific action needed on close as this is just pulling models
@@ -151,8 +152,8 @@ export class ProviderConfigModal extends Modal {
 		} else {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].apiKey',
-				label: 'API Key',
-				description: 'Authentication key for the selected provider'
+				label: t('modals.provider.apiKey.name'),
+				description: t('modals.provider.apiKey.desc')
 			}).addText(text => {
 					text.setPlaceholder('Sk-...');
 					text.inputEl.type = 'password';
@@ -163,12 +164,12 @@ export class ProviderConfigModal extends Modal {
 				});
 
 			const baseUrlDesc = this.draft.provider === 'custom'
-				? 'OpenAI-compatible API endpoint (required)'
-				: 'Custom API endpoint (optional)';
+				? t('modals.provider.baseUrl.customDesc')
+				: t('modals.provider.baseUrl.optionalDesc');
 
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].baseUrl',
-				label: 'Base URL',
+				label: t('modals.provider.baseUrl.name'),
 				description: baseUrlDesc
 			}).addText(text => text
 					.setPlaceholder(this.getDefaultBaseUrl(this.draft.provider))
@@ -199,20 +200,18 @@ export class ProviderConfigModal extends Modal {
 	private validateConfig(): string | null {
 		// Validate provider is selected
 		if (!this.draft.provider || this.draft.provider.trim() === '') {
-			return 'Please select a provider type';
+			return t('modals.provider.validation.selectProvider');
 		}
 
-		// Validate API key length if provided
 		if (this.draft.apiKey && this.draft.apiKey.length > 500) {
-			return 'API key is too long. Maximum length is 500 characters.';
+			return t('modals.provider.validation.apiKeyTooLong');
 		}
 
-		// Validate base URL if provided
 		if (this.draft.baseUrl && this.draft.baseUrl.trim() !== '') {
 			try {
 				new URL(this.draft.baseUrl);
 			} catch (_e) {
-				return 'Invalid base URL format. Please enter a valid URL (e.g., https://api.example.com)';
+				return t('modals.provider.validation.invalidUrl');
 			}
 		}
 

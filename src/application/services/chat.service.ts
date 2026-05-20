@@ -69,7 +69,8 @@ export class ChatService {
 		private ragManager: RAGManager,
 		private webSearchService: WebSearchService,
 		private llmConfigs: LLMConfig[],
-		private usageRepo?: { recordUsage: (r: {model:string;provider:string;promptTokens:number;completionTokens:number;totalTokens:number;timestamp:number;conversationId?:string}) => Promise<void> }
+		private usageRepo?: { recordUsage: (r: {model:string;provider:string;promptTokens:number;completionTokens:number;totalTokens:number;timestamp:number;conversationId?:string}) => Promise<void> },
+		private defaultModel?: string
 	) {}
 
 	findLLMConfig(modelId: string): LLMConfig | null {
@@ -199,7 +200,7 @@ export class ChatService {
 			// 2. Handle RAG
 			let ragSources: RAGSource[] = [];
 			if (options.enableRAG) {
-				const searchResults = await this.ragManager.query(userQuery);
+				const searchResults = await this.ragManager.query(userQuery, selectedModel, this.defaultModel);
 				if (searchResults && searchResults.length > 0) {
 					ragSources = searchResults.map(r => ({
 						path: r.chunk.metadata.path,
@@ -342,7 +343,7 @@ export class ChatService {
 		const webResults: WebSearchResult[] = [];
 
 		if (options.enableRAG) {
-			const searchResults = await this.ragManager.query(userQuery);
+			const searchResults = await this.ragManager.query(userQuery, selectedModel, this.defaultModel);
 			if (searchResults && searchResults.length > 0) {
 				for (const r of searchResults) {
 					ragSources.push({

@@ -1,4 +1,5 @@
 import { Modal, App, MarkdownRenderer, Component } from 'obsidian';
+import { t } from '@/i18n';
 
 /**
  * Modal to display text explanation results with markdown rendering
@@ -41,14 +42,14 @@ export class ExplainTextModal extends Modal {
 				console.error('[ExplainTextModal] Error rendering content:', error);
 				contentContainer.empty();
 				const errorDiv = contentContainer.createDiv('explain-text-modal-error');
-				errorDiv.setText('Error rendering explanation');
+				errorDiv.setText(t('modals.explain.error'));
 			});
 		}
 	}
 
 	private renderLoading(container: HTMLElement): void {
 		const loadingDiv = container.createDiv('explain-text-modal-loading');
-		loadingDiv.createSpan({ text: '⏳ Processing...' });
+		loadingDiv.createSpan({ text: t('modals.explain.loading') });
 	}
 
 	private async renderContent(container: HTMLElement): Promise<void> {
@@ -83,7 +84,7 @@ export class ExplainTextModal extends Modal {
 				console.error('[ExplainTextModal] Error rendering content:', error);
 				contentContainer.empty();
 				const errorDiv = contentContainer.createDiv('explain-text-modal-error');
-				errorDiv.setText('Error rendering explanation');
+				errorDiv.setText(t('modals.explain.error'));
 			});
 		}
 	}
@@ -97,7 +98,7 @@ export class ExplainTextModal extends Modal {
 		if (contentContainer) {
 			contentContainer.empty();
 			const errorDiv = contentContainer.createDiv('explain-text-modal-error');
-			errorDiv.createSpan({ text: '❌ Error: ' });
+			errorDiv.createSpan({ text: t('modals.explain.errorPrefix') });
 			errorDiv.createSpan({ text: error });
 		}
 	}

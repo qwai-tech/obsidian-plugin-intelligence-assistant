@@ -1,6 +1,7 @@
 import { App, Modal, Notice, Setting } from 'obsidian';
 import type { MCPServerConfig } from '@/types';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
+import { t } from '@/i18n';
 
 export class MCPServerModal extends Modal {
 	private draft: MCPServerConfig;
@@ -34,12 +35,12 @@ export class MCPServerModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: this.mode === 'edit' ? 'Edit MCP server' : 'Add MCP server' });
+		contentEl.createEl('h2', { text: this.mode === 'edit' ? t('modals.mcpServer.titleEdit') : t('modals.mcpServer.titleAdd') });
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].name',
-			label: 'Server name',
-			description: 'Friendly name shown throughout the plugin'
+			label: t('modals.mcpServer.serverName.name'),
+			description: t('modals.mcpServer.serverName.desc')
 		}).addText(text => {
 				text.setPlaceholder('Acme MCP server');
 				text.setValue(this.draft.name ?? '');
@@ -50,11 +51,11 @@ export class MCPServerModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].connectionMode',
-			label: 'Connection mode',
-			description: 'Choose whether to connect automatically or only when triggered manually'
+			label: t('modals.mcpServer.connectionMode.name'),
+			description: t('modals.mcpServer.connectionMode.desc')
 		}).addDropdown(dropdown => dropdown
-				.addOption('Auto', 'Auto-connect when chat opens')
-				.addOption('Manual', 'Manual connect')
+				.addOption('Auto', t('modals.mcpServer.connectionMode.auto'))
+				.addOption('Manual', t('modals.mcpServer.connectionMode.manual'))
 				.setValue(this.draft.connectionMode ?? 'auto')
 				.onChange(value => {
 					this.draft.connectionMode = value as 'auto' | 'manual';
@@ -62,8 +63,8 @@ export class MCPServerModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].command',
-			label: 'Command',
-			description: 'Executable or script that starts the MCP server'
+			label: t('modals.mcpServer.command.name'),
+			description: t('modals.mcpServer.command.desc')
 		}).addText(text => {
 				text.setPlaceholder('npx @acme/mcp-server');
 				text.setValue(this.draft.command ?? '');
@@ -74,8 +75,8 @@ export class MCPServerModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].args',
-			label: 'Arguments',
-			description: 'Comma or newline separated arguments (optional)'
+			label: t('modals.mcpServer.arguments.name'),
+			description: t('modals.mcpServer.arguments.desc')
 		}).addText(text => {
 				text.setPlaceholder('--port=3000, --config=server.json');
 				text.setValue(this.argsText);
@@ -87,8 +88,8 @@ export class MCPServerModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].env',
-			label: 'Environment variables',
-			description: 'Optional KEY=VALUE pairs, one per line'
+			label: t('modals.mcpServer.envVars.name'),
+			description: t('modals.mcpServer.envVars.desc')
 		}).addTextArea(text => {
 				text.setPlaceholder('Api_key=xyz' + '\n' + 'node_env=production');
 				text.setValue(this.envText);
@@ -104,8 +105,8 @@ export class MCPServerModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].enabled',
-			label: 'Enabled',
-			description: 'Disable to keep the server configured without connecting automatically'
+			label: t('modals.mcpServer.enabled.name'),
+			description: t('modals.mcpServer.enabled.desc')
 		}).addToggle(toggle => toggle
 				.setValue(this.draft.enabled ?? true)
 				.onChange(value => {
@@ -116,23 +117,23 @@ export class MCPServerModal extends Modal {
 		const buttonBar = contentEl.createDiv('ia-modal-footer');
 		buttonBar.removeClass('ia-hidden');
 
-		const cancelBtn = buttonBar.createEl('button', { text: 'Cancel' });
+		const cancelBtn = buttonBar.createEl('button', { text: t('modals.mcpServer.cancel') });
 		cancelBtn.addClass('ia-modal-btn');
 		cancelBtn.addEventListener('click', () => this.close());
 
-		const saveBtn = buttonBar.createEl('button', { text: this.mode === 'edit' ? 'Save changes' : 'Add server' });
+		const saveBtn = buttonBar.createEl('button', { text: this.mode === 'edit' ? t('modals.mcpServer.saveEdit') : t('modals.mcpServer.saveAdd') });
 		saveBtn.addClass('ia-modal-btn--primary');
 		saveBtn.addEventListener('click', () => {
 			void (async () => {
 				const name = (this.draft.name ?? '').trim();
 				if (!name) {
-					new Notice('Server name is required');
+					new Notice(t('modals.mcpServer.validation.nameRequired'));
 					return;
 				}
 
 				const command = (this.draft.command ?? '').trim();
 				if (!command) {
-					new Notice('Command is required');
+					new Notice(t('modals.mcpServer.validation.commandRequired'));
 					return;
 				}
 

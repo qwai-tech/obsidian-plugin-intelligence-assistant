@@ -12,6 +12,7 @@ export interface Message {
 	role: 'user' | 'assistant' | 'system';
 	content: string;
 	model?: string;
+	provider?: string;
 	attachments?: Attachment[];
 	references?: FileReference[];
 	ragSources?: RAGSource[];

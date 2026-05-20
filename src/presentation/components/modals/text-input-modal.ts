@@ -1,4 +1,5 @@
 import { App, Modal, Setting } from 'obsidian';
+import { t } from '@/i18n';
 
 export class TextInputModal extends Modal {
 	result: string;
@@ -21,7 +22,7 @@ export class TextInputModal extends Modal {
 		contentEl.createEl('h2', { text: this.title });
 
 		new Setting(contentEl)
-			.setName('Name')
+			.setName(t('modals.textInput.nameLabel'))
 			.addText(text => {
 				text.setPlaceholder(this.placeholder)
 					.setValue(this.defaultValue)
@@ -41,14 +42,14 @@ export class TextInputModal extends Modal {
 
 		new Setting(contentEl)
 			.addButton(btn => btn
-				.setButtonText('Create')
+				.setButtonText(t('modals.textInput.create'))
 				.setCta()
 				.onClick(() => {
 					this.close();
 					this.onSubmit(this.result || this.defaultValue);
 				}))
 			.addButton(btn => btn
-				.setButtonText('Cancel')
+				.setButtonText(t('modals.textInput.cancel'))
 				.onClick(() => {
 					this.close();
 				}));

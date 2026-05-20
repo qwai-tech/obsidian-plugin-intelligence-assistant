@@ -1,4 +1,5 @@
 import { Modal, App } from 'obsidian';
+import { t } from '@/i18n';
 
 /**
  * Prompt modal to replace window.prompt()
@@ -56,13 +57,13 @@ export class PromptModal extends Modal {
 		// Buttons
 		const buttonContainer = contentEl.createDiv('modal-button-container');
 
-		const cancelBtn = buttonContainer.createEl('button', { text: 'Cancel' });
+		const cancelBtn = buttonContainer.createEl('button', { text: t('modals.prompt.cancel') });
 		cancelBtn.addEventListener('click', () => {
 			this.cancel();
 		});
 
 		const submitBtn = buttonContainer.createEl('button', {
-			text: 'OK',
+			text: t('modals.prompt.ok'),
 			cls: 'mod-cta'
 		});
 		submitBtn.addEventListener('click', () => {

@@ -4,19 +4,12 @@
 
 import { ErrorHandler } from '../../core/error-handler';
 import { LLMProviderError, ValidationError, ConfigurationError } from '../../core/errors';
-import { EventBus } from '../../core/event-bus';
 
 describe('ErrorHandler', () => {
 	let errorHandler: ErrorHandler;
-	let eventBus: EventBus;
 
 	beforeEach(() => {
 		errorHandler = new ErrorHandler();
-		eventBus = new EventBus();
-	});
-
-	afterEach(() => {
-		eventBus.removeAllListeners();
 	});
 
 	describe('handle', () => {
@@ -88,7 +81,7 @@ describe('ErrorHandler', () => {
 		it('should execute async function successfully', async () => {
 			const result = await errorHandler.handleAsync(
 				async () => 'success',
-				{ showNotice: false, emitEvent: false }
+				{ showNotice: false }
 			);
 
 			expect(result).toBe('success');
@@ -101,7 +94,7 @@ describe('ErrorHandler', () => {
 				async () => {
 					throw new Error('Async error');
 				},
-				{ showNotice: false, emitEvent: false }
+				{ showNotice: false }
 			);
 
 			expect(result).toBeNull();
@@ -115,7 +108,7 @@ describe('ErrorHandler', () => {
 		it('should execute sync function successfully', () => {
 			const result = errorHandler.handleSync(
 				() => 'success',
-				{ showNotice: false, emitEvent: false }
+				{ showNotice: false }
 			);
 
 			expect(result).toBe('success');
@@ -128,7 +121,7 @@ describe('ErrorHandler', () => {
 				() => {
 					throw new Error('Sync error');
 				},
-				{ showNotice: false, emitEvent: false }
+				{ showNotice: false }
 			);
 
 			expect(result).toBeNull();

@@ -1,4 +1,4 @@
-import type { RAGConfig } from '@/types';
+import type { RAGConfig, LLMConfig } from '@/types';
 import { ProviderFactory } from './llm/provider-factory';
 import { ModelManager } from './llm/model-manager';
 
@@ -44,13 +44,13 @@ export class EmbeddingManager {
     return this.EMBEDDING_MODELS.find(m => m.id === this.DEFAULT_EMBEDDING_MODEL) || this.EMBEDDING_MODELS[0];
   }
 
-  static getAllEmbeddingModels(): EmbeddingModel[] {
+  static getAllEmbeddingModels(llmConfigs?: LLMConfig[]): EmbeddingModel[] {
     const embeddingModels = [...this.EMBEDDING_MODELS];
 
     try {
-      const plugin = this.getPluginInstance();
-      if (plugin?.settings?.llmConfigs) {
-        plugin.settings.llmConfigs.forEach((config: any) => {
+      const configs = llmConfigs ?? (this.getPluginInstance()?.settings?.llmConfigs as LLMConfig[] | undefined);
+      if (configs) {
+        configs.forEach((config: any) => {
           if (config.cachedModels) {
             config.cachedModels.forEach((model: any) => {
               if (model.capabilities?.includes('embedding') && model.enabled !== false) {
@@ -96,7 +96,7 @@ export class EmbeddingManager {
     return this.getDefaultEmbeddingModel();
   }
 
-  static async generateEmbedding(text: string, modelId?: string): Promise<number[]> {
+  static async generateEmbedding(text: string, modelId?: string, llmConfigs?: LLMConfig[]): Promise<number[]> {
     const model = modelId
       ? this.getEmbeddingModelById(modelId)
       : this.getDefaultEmbeddingModel();
@@ -105,12 +105,12 @@ export class EmbeddingManager {
       throw new Error(`Embedding model ${modelId ?? ''} not found`);
     }
 
-    const plugin = this.getPluginInstance();
-    if (!plugin?.settings?.llmConfigs) {
-      throw new Error('Plugin instance not available for embedding generation');
+    const configs = llmConfigs ?? (this.getPluginInstance()?.settings?.llmConfigs as LLMConfig[] | undefined);
+    if (!configs) {
+      throw new Error('No LLM configs available for embedding generation');
     }
 
-    const config = ModelManager.findConfigForModelByProvider(model.id, plugin.settings.llmConfigs);
+    const config = ModelManager.findConfigForModelByProvider(model.id, configs);
     if (!config) {
       throw new Error(`No provider configuration found for embedding model: ${model.id}`);
     }

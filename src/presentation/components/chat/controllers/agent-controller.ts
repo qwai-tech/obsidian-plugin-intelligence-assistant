@@ -7,6 +7,7 @@ import { Notice } from 'obsidian';
 import { BaseController } from './base-controller';
 import type { Agent } from '@/types';
 import { DEFAULT_AGENT_ID } from '@/constants';
+import { t } from '@/i18n';
 
 export class AgentController extends BaseController {
 	private currentAgentId: string | null = null;
@@ -49,7 +50,7 @@ export class AgentController extends BaseController {
 	async setCurrentAgent(agentId: string): Promise<void> {
 		const agent = this.getAgent(agentId);
 		if (!agent) {
-			new Notice('Agent not found');
+			new Notice(t('chat.notices.agentNotFound'));
 			return;
 		}
 

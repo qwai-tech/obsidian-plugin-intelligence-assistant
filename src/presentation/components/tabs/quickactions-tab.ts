@@ -63,11 +63,17 @@ export function displayQuickActionsTab(
 	// Display existing quick actions in a table
 	if (plugin.settings.quickActions.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No quick actions configured. Select add quick action to get started.');
+		emptyDiv.setText(t('settings.quickActions.empty'));
 		return;
 	}
 
-	const table = createTable(containerEl, ['Action', 'Type', 'Model', 'Prompt Preview', 'Actions']);
+	const table = createTable(containerEl, [
+		t('settings.quickActions.tableHeaders.action'),
+		t('settings.quickActions.tableHeaders.type'),
+		t('settings.quickActions.tableHeaders.model'),
+		t('settings.quickActions.tableHeaders.promptPreview'),
+		t('settings.quickActions.tableHeaders.actions')
+	]);
 	const tbody = table.tBodies[0];
 
 	// Get available models for display
@@ -97,13 +103,16 @@ export function displayQuickActionsTab(
 			});
 
 			const titleEl = titleContainer.createDiv('ia-table-title');
-			titleEl.setText(action.name);
+			const builtInNameKey = `settings.quickActions.builtIn.${action.id}.name`;
+			const displayName = t(builtInNameKey, { defaultValue: action.name });
+			titleEl.setText(displayName);
 
 			// Type column
 			const typeCell = row.insertCell();
 			typeCell.addClass('ia-table-cell');
 			const typeBadges = typeCell.createDiv('ia-table-badges');
-			const typeBadge = typeBadges.createEl('span', { text: action.actionType });
+			const typeLabel = t(`settings.quickActions.edit.actionType.${action.actionType}`, { defaultValue: action.actionType });
+			const typeBadge = typeBadges.createEl('span', { text: typeLabel });
 			typeBadge.addClass('ia-tag');
 
 			// Model column
@@ -112,15 +121,17 @@ export function displayQuickActionsTab(
 			const modelStack = modelCell.createDiv('ia-table-stack');
 			const modelName = action.model
 				? (modelMap.get(action.model) || action.model)
-				: 'Default';
+				: t('settings.quickActions.defaultModel');
 			modelStack.createDiv('ia-table-title').setText(modelName);
 
 			// Prompt preview column
 			const promptCell = row.insertCell();
 			promptCell.addClass('ia-table-cell');
-			const promptPreview = action.prompt.length > 60
-				? action.prompt.substring(0, 60) + '...'
-				: action.prompt;
+			const builtInPromptKey = `settings.quickActions.builtIn.${action.id}.prompt`;
+			const displayPrompt = t(builtInPromptKey, { defaultValue: action.prompt });
+			const promptPreview = displayPrompt.length > 60
+				? displayPrompt.substring(0, 60) + '...'
+				: displayPrompt;
 			promptCell.createDiv('ia-table-subtext').setText(promptPreview);
 
 			// Actions column
@@ -129,7 +140,7 @@ export function displayQuickActionsTab(
 			actionsCell.addClass('ia-table-actions');
 
 			// Edit button
-			const editBtn = actionsCell.createEl('button', { text: 'Edit' });
+			const editBtn = actionsCell.createEl('button', { text: t('settings.quickActions.editBtn') });
 			editBtn.addClass('ia-button');
 			editBtn.addClass('ia-button--ghost');
 			editBtn.addEventListener('click', () => {
@@ -137,14 +148,14 @@ export function displayQuickActionsTab(
 			});
 
 			// Delete button
-			const deleteBtn = actionsCell.createEl('button', { text: 'delete' });
+			const deleteBtn = actionsCell.createEl('button', { text: t('settings.quickActions.deleteBtn') });
 			deleteBtn.addClass('ia-button');
 			deleteBtn.addClass('ia-button--danger');
 			deleteBtn.addEventListener('click', () => {
 				void (async () => {
 						const confirmed = await showConfirm(
 							app,
-							`Delete quick action "${action.name}"?`
+							t('settings.quickActions.confirm.delete', { name: action.name })
 						);
 					if (confirmed) {
 						plugin.settings.quickActions.splice(i, 1);
@@ -159,13 +170,13 @@ export function displayQuickActionsTab(
 	// Usage info
 	const infoEl = containerEl.createDiv('ia-info-box');
 
-	infoEl.createEl('h4', { text: 'Usage' });
+	infoEl.createEl('h4', { text: t('settings.quickActions.usageInfo.title') });
 	const usageList = infoEl.createEl('ul');
-	usageList.createEl('li', { text: 'Select text in any note' });
-	usageList.createEl('li', { text: 'Right-click to open context menu' });
-	usageList.createEl('li', { text: 'Choose a quick action from the menu' });
-	usageList.createEl('li', { text: 'Actions marked as "replace" will replace the selected text with the AI result' });
-	usageList.createEl('li', { text: 'Actions marked as "explain" will show the result in a modal dialog' });
+	usageList.createEl('li', { text: t('settings.quickActions.usageInfo.step1') });
+	usageList.createEl('li', { text: t('settings.quickActions.usageInfo.step2') });
+	usageList.createEl('li', { text: t('settings.quickActions.usageInfo.step3') });
+	usageList.createEl('li', { text: t('settings.quickActions.usageInfo.step4Replace') });
+	usageList.createEl('li', { text: t('settings.quickActions.usageInfo.step4Explain') });
 }
 
 /**
@@ -193,12 +204,12 @@ function openQuickActionEditModal(
 			const { contentEl } = this;
 			contentEl.empty();
 
-			contentEl.createEl('h2', { text: 'Edit quick action' });
+			contentEl.createEl('h2', { text: t('settings.quickActions.edit.title') });
 
 			// Name
 			new Setting(contentEl)
-				.setName('Name')
-				.setDesc('Display name for this action in the context menu')
+				.setName(t('settings.quickActions.edit.name.name'))
+				.setDesc(t('settings.quickActions.edit.name.desc'))
 				.addText(text => text
 					.setValue(this.action.name)
 					.setPlaceholder('e.g., Make text longer')
@@ -209,11 +220,11 @@ function openQuickActionEditModal(
 
 			// Action Type
 			new Setting(contentEl)
-				.setName('Action type')
-				.setDesc('How the AI response should be handled')
+				.setName(t('settings.quickActions.edit.actionType.name'))
+				.setDesc(t('settings.quickActions.edit.actionType.desc'))
 				.addDropdown(dropdown => dropdown
-					.addOption('replace', 'Replace selected text')
-					.addOption('explain', 'Show in modal')
+					.addOption('replace', t('settings.quickActions.edit.actionType.replace'))
+					.addOption('explain', t('settings.quickActions.edit.actionType.explain'))
 					.setValue(this.action.actionType)
 					.onChange(value => {
 						this.action.actionType = value as 'replace' | 'explain';
@@ -223,10 +234,10 @@ function openQuickActionEditModal(
 			// Model
 			void ModelManager.getAllAvailableModels(this.plugin.settings.llmConfigs).then(models => {
 				new Setting(contentEl)
-					.setName('Model')
-					.setDesc('Language model to use for this action (leave blank to use default)')
+					.setName(t('settings.quickActions.edit.model.name'))
+					.setDesc(t('settings.quickActions.edit.model.desc'))
 					.addDropdown(dropdown => {
-						dropdown.addOption('', 'Use default model');
+						dropdown.addOption('', t('settings.quickActions.edit.model.default'));
 						models.forEach(model => {
 							dropdown.addOption(model.id, model.name);
 						});
@@ -239,8 +250,8 @@ function openQuickActionEditModal(
 
 			// Prompt
 			new Setting(contentEl)
-				.setName('Prompt template')
-				.setDesc('Instructions sent to the AI. The selected text will be appended automatically.')
+				.setName(t('settings.quickActions.edit.promptTemplate.name'))
+				.setDesc(t('settings.quickActions.edit.promptTemplate.desc'))
 				.addTextArea(text => {
 					text.setValue(this.action.prompt);
 					text.setPlaceholder('e.g., Expand and elaborate on the following text...');
@@ -255,13 +266,13 @@ function openQuickActionEditModal(
 			buttonContainer.addClass('ia-modal-footer');
 
 			new ButtonComponent(buttonContainer)
-				.setButtonText('Cancel')
+				.setButtonText(t('settings.quickActions.edit.cancel'))
 				.onClick(() => {
 					this.close();
 				});
 
 			new ButtonComponent(buttonContainer)
-				.setButtonText('Save')
+				.setButtonText(t('settings.quickActions.edit.save'))
 				.setCta()
 				.onClick(() => {
 					void (async () => {

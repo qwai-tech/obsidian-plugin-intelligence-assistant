@@ -11,7 +11,7 @@ export interface ReasoningStep {
 }
 
 export interface AgentExecutionStep {
-	type: 'thought' | 'action' | 'observation';
+	type: 'thought' | 'action' | 'observation' | 'response';
 	content: string;
 	timestamp: number;
 	status?: 'pending' | 'success' | 'error';

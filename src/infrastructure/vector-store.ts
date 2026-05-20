@@ -1,5 +1,5 @@
 import {App, TFile} from 'obsidian';
-import type { RAGConfig } from '@/types';
+import type { RAGConfig, LLMConfig } from '@/types';
 import { VECTOR_STORE_FOLDER, VECTOR_STORE_NOTES_PATH } from '@/constants';
 import { ensureFolderExists } from '@/utils/file-system';
 import { EmbeddingManager } from './embedding-manager';
@@ -31,9 +31,11 @@ export class VectorStore {
 	private _chunks: DocumentChunk[] = [];
 	private app: App;
 	private dataPath = VECTOR_STORE_NOTES_PATH;
+	private llmConfigs?: LLMConfig[];
 
-  constructor(app: App) {
+  constructor(app: App, llmConfigs?: LLMConfig[]) {
     this.app = app;
+    this.llmConfigs = llmConfigs;
   }
 
 	async load(): Promise<void> {
@@ -754,17 +756,11 @@ export class VectorStore {
   }
 
   private async generateEmbedding(text: string, embeddingModel?: string): Promise<number[] | undefined> {
-    // This would normally call an embedding API or local model
-    // Using the EmbeddingManager to generate the embedding
-    
     try {
-      // If no embedding model is specified, return undefined to use simple search
       if (!embeddingModel) {
         return undefined;
       }
-      
-      // Use the EmbeddingManager to generate the embedding
-      return await EmbeddingManager.generateEmbedding(text, embeddingModel);
+      return await EmbeddingManager.generateEmbedding(text, embeddingModel, this.llmConfigs);
     } catch (error) {
       console.error('Error generating embedding:', error);
       return undefined;

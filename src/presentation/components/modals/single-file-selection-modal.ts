@@ -1,4 +1,5 @@
 import { App, TFile, Modal } from 'obsidian';
+import { t } from '@/i18n';
 
 export class SingleFileSelectionModal extends Modal {
 	private onChooseFile: (file: TFile | null) => void;
@@ -19,11 +20,11 @@ export class SingleFileSelectionModal extends Modal {
 		const { contentEl } = this;
 		contentEl.addClass("single-file-selection-modal");
 
-		contentEl.createEl("h2", { text: "Insert to note" });
+		contentEl.createEl("h2", { text: t('chat.modals.insertNote.title') });
 
 		this.searchInput = contentEl.createEl("input", {
 			type: "text",
-			placeholder: "Search notes..."
+			placeholder: t('chat.modals.insertNote.searchPlaceholder')
 		});
 		this.searchInput.addClass('ia-modal-search-input');
 
@@ -48,14 +49,14 @@ export class SingleFileSelectionModal extends Modal {
 
 		const buttonContainer = contentEl.createDiv('ia-modal-btn-row--end');
 
-		const insertButton = buttonContainer.createEl("button", { text: "Insert to selected note" });
+		const insertButton = buttonContainer.createEl("button", { text: t('chat.modals.insertNote.insert') });
 		insertButton.addClass("mod-cta");
 		insertButton.addEventListener("click", () => {
 			this.close();
 			this.onChooseFile(this.selectedFile);
 		});
 
-		const newNoteButton = buttonContainer.createEl("button", { text: "Create new note" });
+		const newNoteButton = buttonContainer.createEl("button", { text: t('chat.modals.insertNote.createNew') });
 		newNoteButton.addClass('ia-mr-10');
 		newNoteButton.addEventListener("click", () => {
 			this.close();
@@ -67,7 +68,7 @@ export class SingleFileSelectionModal extends Modal {
 		this.resultsContainer.empty();
 
 		if (files.length === 0) {
-			this.resultsContainer.createDiv({ text: "No matching notes found." });
+			this.resultsContainer.createDiv({ text: t('chat.modals.insertNote.noResults') });
 			return;
 		}
 

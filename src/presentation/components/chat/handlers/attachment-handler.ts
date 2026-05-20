@@ -7,6 +7,7 @@ import { App, Menu, Notice, TFile } from 'obsidian';
 import { SearchableImageModal } from '@/presentation/components/modals/searchable-image-modal';
 import { Attachment } from '@/types';
 import { ChatViewState, StateChangeEvent } from '@/presentation/state/chat-view-state';
+import { t } from '@/i18n';
 
 export class AttachmentHandler {
 	private attachmentContainer: HTMLElement | null = null;
@@ -39,7 +40,7 @@ export class AttachmentHandler {
 		const files = this.app.vault.getMarkdownFiles();
 
 		if (files.length === 0) {
-			new Notice('No files found in vault');
+			new Notice(t('chat.notices.noFilesInVault'));
 			return Promise.resolve();
 		}
 
@@ -58,7 +59,7 @@ export class AttachmentHandler {
 								path: file.path,
 								content: content
 							});
-							new Notice(`Attached: ${file.name}`);
+							new Notice(t('chat.notices.attached', { name: file.name }));
 						})();
 					});
 			});
@@ -92,7 +93,7 @@ export class AttachmentHandler {
 					});
 				}
 				if (selectedFiles.length > 0) {
-					new Notice(`Attached ${selectedFiles.length} image(s)`);
+					new Notice(t('chat.notices.attachedImages', { count: selectedFiles.length }));
 				}
 			})();
 		}).open();

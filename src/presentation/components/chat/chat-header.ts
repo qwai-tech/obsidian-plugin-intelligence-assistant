@@ -6,6 +6,7 @@
 import { App } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import {createButton} from '../utils/dom-helpers';
+import { t } from '@/i18n';
 
 export interface ChatHeaderElements {
 	modelSelect: HTMLSelectElement;
@@ -34,7 +35,7 @@ export function createChatHeader(
 	// Toggle conversation list button
 	createButton(header, {
 		text: '☰',
-		title: 'Toggle Conversations',
+		title: t('chat.toggleConversationsTitle'),
 		styles: { size: 'md', variant: 'ghost' },
 		onClick: (e) => {
 			e.stopPropagation();
@@ -74,7 +75,7 @@ export function createChatHeader(
 	// New chat button
 	createButton(modelActions, {
 		text: '➕ new',
-		title: 'New Chat',
+		title: t('chat.newChat'),
 		styles: { size: 'md', variant: 'ghost' },
 		onClick: () => options.onNewChat()
 	});
@@ -82,7 +83,7 @@ export function createChatHeader(
 	// Settings button
 	createButton(modelActions, {
 		text: '⚙️',
-		title: 'Open Settings',
+		title: t('chat.openSettingsTitle'),
 		styles: { size: 'md', variant: 'ghost' },
 		onClick: () => {
 			// Open plugin settings with proper type checking

@@ -206,7 +206,7 @@ export class ChatHeaderComponent {
 		const modelGroup = modelControlsContainer.createDiv('chat-select-group');
 		modelGroup.addClass('ia-model-select-group');
 		modelGroup.addClass('chat-model-select');
-		modelGroup.createSpan({ text: 'Model', cls: 'chat-label' });
+		modelGroup.createSpan({ text: t('chat.header.model'), cls: 'chat-label' });
 		this.modelSelect = modelGroup.createEl('select', { cls: 'model-select' });
 		this.modelSelect.addClass('ia-model-select');
 		this.modelSelect.addEventListener('change', () => {
@@ -216,7 +216,7 @@ export class ChatHeaderComponent {
 		// Settings toggle button
 		const settingsBtn = modelControlsContainer.createEl('button', { cls: 'chat-params-toggle' });
 		setIcon(settingsBtn, 'sliders-horizontal');
-		settingsBtn.title = 'Advanced parameters';
+		settingsBtn.title = t('chat.header.advancedParams');
 		settingsBtn.addClass('ia-icon-btn');
 
 		const paramsContainer = modelControlsContainer.createDiv('chat-params-container');
@@ -235,7 +235,7 @@ export class ChatHeaderComponent {
 
 		// Temperature
 		const tempGroup = paramsContainer.createDiv('chat-param-group');
-		tempGroup.createSpan({ text: 'Temperature', cls: 'chat-label' });
+		tempGroup.createSpan({ text: t('chat.header.temperature'), cls: 'chat-label' });
 		this.temperatureSlider = tempGroup.createEl('input', { type: 'range' });
 		this.temperatureSlider.min = '0';
 		this.temperatureSlider.max = '2';
@@ -251,7 +251,7 @@ export class ChatHeaderComponent {
 
 		// Max Tokens
 		const tokensGroup = paramsContainer.createDiv('chat-param-group');
-		tokensGroup.createSpan({ text: 'Max tokens', cls: 'chat-label' });
+		tokensGroup.createSpan({ text: t('chat.header.maxTokens'), cls: 'chat-label' });
 		this.maxTokensInput = tokensGroup.createEl('input', { type: 'number', cls: 'chat-number-input' });
 		this.maxTokensInput.value = this.state.maxTokens.toString();
 		this.maxTokensInput.addEventListener('input', () => {
@@ -263,7 +263,7 @@ export class ChatHeaderComponent {
 
 		// Top P
 		const topPGroup = paramsContainer.createDiv('chat-param-group');
-		topPGroup.createSpan({ text: 'Top P', cls: 'chat-label' });
+		topPGroup.createSpan({ text: t('chat.header.topP'), cls: 'chat-label' });
 		this.topPSlider = topPGroup.createEl('input', { type: 'range' });
 		this.topPSlider.min = '0';
 		this.topPSlider.max = '1';
@@ -279,7 +279,7 @@ export class ChatHeaderComponent {
 
 		// Frequency Penalty
 		const freqGroup = paramsContainer.createDiv('chat-param-group');
-		freqGroup.createSpan({ text: 'Freq. penalty', cls: 'chat-label' });
+		freqGroup.createSpan({ text: t('chat.header.freqPenalty'), cls: 'chat-label' });
 		this.frequencyPenaltySlider = freqGroup.createEl('input', { type: 'range' });
 		this.frequencyPenaltySlider.min = '-2';
 		this.frequencyPenaltySlider.max = '2';
@@ -295,7 +295,7 @@ export class ChatHeaderComponent {
 
 		// Presence Penalty
 		const presGroup = paramsContainer.createDiv('chat-param-group');
-		presGroup.createSpan({ text: 'Pres. penalty', cls: 'chat-label' });
+		presGroup.createSpan({ text: t('chat.header.presPenalty'), cls: 'chat-label' });
 		this.presencePenaltySlider = presGroup.createEl('input', { type: 'range' });
 		this.presencePenaltySlider.min = '-2';
 		this.presencePenaltySlider.max = '2';
@@ -311,20 +311,20 @@ export class ChatHeaderComponent {
 
 		this.agentConfigSummaryEl = row.createDiv('chat-agent-summary');
 		this.agentConfigSummaryEl.addClass('ia-hidden');
-		this.agentSummaryTitleEl = this.agentConfigSummaryEl.createSpan({ text: 'Agent configuration' });
+		this.agentSummaryTitleEl = this.agentConfigSummaryEl.createSpan({ text: t('chat.header.agentConfig') });
 		this.agentSummaryDetailsEl = this.agentConfigSummaryEl.createDiv('chat-agent-summary-details');
 	}
 
 	private createTokenRow(parent: HTMLElement) {
 		const row = parent.createDiv('chat-token-row');
-		this.modelCountEl = row.createSpan({ cls: 'chat-token-chip', text: 'Models: 0' });
-		this.tokenSummaryEl = row.createSpan({ cls: 'chat-token-chip', text: 'Tokens: 0' });
+		this.modelCountEl = row.createSpan({ cls: 'chat-token-chip', text: t('chat.header.modelsCount', { count: 0 }) });
+		this.tokenSummaryEl = row.createSpan({ cls: 'chat-token-chip', text: t('chat.header.tokensCount', { count: 0 }) });
 	}
 
 	private formatTemperature(temp: number): string {
-		if (temp === 0) return '0 (Precise)';
-		if (temp === 1) return '1 (Balanced)';
-		if (temp === 2) return '2 (Creative)';
+		if (temp === 0) return t('chat.temperature.precise');
+		if (temp === 1) return t('chat.temperature.balanced');
+		if (temp === 2) return t('chat.temperature.creative');
 		return temp.toString();
 	}
 
@@ -339,7 +339,7 @@ export class ChatHeaderComponent {
 
 	public updateConversationTitle(title: string) {
 		if (this.conversationTitleEl) {
-			this.conversationTitleEl.setText(title || 'Current conversation');
+			this.conversationTitleEl.setText(title || t('chat.currentConversation'));
 		}
 	}
 
@@ -351,7 +351,7 @@ export class ChatHeaderComponent {
 
 	public updateModelCount(count: number) {
 		if (this.modelCountEl) {
-			this.modelCountEl.setText(`Models: ${count}`);
+			this.modelCountEl.setText(t('chat.header.modelsCount', { count }));
 		}
 	}
 
@@ -360,11 +360,11 @@ export class ChatHeaderComponent {
 		this.modelSelect.empty();
 
 		if (this.modelCountEl) {
-			this.modelCountEl.setText(`Models: ${this.state.availableModels.length}`);
+			this.modelCountEl.setText(t('chat.header.modelsCount', { count: this.state.availableModels.length }));
 		}
 
 		if (this.state.availableModels.length === 0) {
-			const option = this.modelSelect.createEl('option', { text: 'No models available' });
+			const option = this.modelSelect.createEl('option', { text: t('chat.header.noModels') });
 			option.value = '';
 			option.disabled = true;
 			return;

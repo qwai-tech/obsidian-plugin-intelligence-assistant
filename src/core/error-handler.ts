@@ -5,12 +5,10 @@
 
 import { Notice } from 'obsidian';
 import { AppError } from './errors';
-import { eventBus, PluginEvent } from './event-bus';
 
 export interface ErrorHandlerOptions {
 	showNotice?: boolean;
 	logToConsole?: boolean;
-	emitEvent?: boolean;
 	context?: string;
 }
 
@@ -22,74 +20,40 @@ export class ErrorHandler {
 		const {
 			showNotice = true,
 			logToConsole = true,
-			emitEvent = true,
 			context
 		} = options;
 
 		if (error instanceof AppError) {
-			this.handleAppError(error, { showNotice, logToConsole, emitEvent, context });
+			this.handleAppError(error, { showNotice, logToConsole, context });
 		} else {
-			this.handleUnknownError(error, { showNotice, logToConsole, emitEvent, context });
+			this.handleUnknownError(error, { showNotice, logToConsole, context });
 		}
 	}
 
 	/**
 	 * Handle application error
 	 */
-	private handleAppError(
-		error: AppError,
-		options: ErrorHandlerOptions
-	): void {
-		const { showNotice, logToConsole, emitEvent, context } = options;
-
+	private handleAppError(error: AppError, options: ErrorHandlerOptions): void {
+		const { showNotice, logToConsole, context } = options;
 		const prefix = context ? `[${context}]` : '';
 		const message = `${prefix} ${error.message}`;
-
 		if (logToConsole) {
-			console.error(`[${error._code}]`, message, error._context ?? {}, error.stack);
+			console.error(`[${error._code}]`, message, error._context, error.stack);
 		}
-
 		if (showNotice) {
 			new Notice(`Error: ${error.message}`, 5000);
 		}
-
-		if (emitEvent) {
-			eventBus.emitSync(PluginEvent.ERROR_OCCURRED, {
-				error: error.toJSON(),
-				context
-			});
-		}
 	}
 
-	/**
-	 * Handle unknown error
-	 */
-	private handleUnknownError(
-		error: Error,
-		options: ErrorHandlerOptions
-	): void {
-		const { showNotice, logToConsole, emitEvent, context } = options;
-
+	private handleUnknownError(error: Error, options: ErrorHandlerOptions): void {
+		const { showNotice, logToConsole, context } = options;
 		const prefix = context ? `[${context}]` : '';
 		const message = `${prefix} ${error.message}`;
-
 		if (logToConsole) {
 			console.error('[UNKNOWN_ERROR]', message, error.stack);
 		}
-
 		if (showNotice) {
 			new Notice(`Unexpected error: ${error.message}`, 5000);
-		}
-
-		if (emitEvent) {
-			eventBus.emitSync(PluginEvent.ERROR_OCCURRED, {
-				error: {
-					name: error.name,
-					message: error.message,
-					stack: error.stack
-				},
-				context
-			});
 		}
 	}
 

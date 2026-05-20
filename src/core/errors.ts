@@ -14,8 +14,12 @@ export class AppError extends Error {
     public _statusCode: number = 500
   ) {
     super(message);
-    this.name = 'AppError';
+    this.name = new.target.name;
   }
+
+  get code(): string { return this._code; }
+  get context(): Record<string, unknown> | undefined { return this._context; }
+  get statusCode(): number { return this._statusCode; }
 
   toJSON() {
     return {

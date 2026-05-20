@@ -135,12 +135,12 @@ export class ChatInputComponent {
 
 		this.imageActionItem = this.createHeaderActionButton(actionsContainer, {
 			icon: 'image',
-			label: 'Add picture',
-			tooltip: 'Attach an image to your message',
+			label: t('chat.addPicture'),
+			tooltip: t('chat.addPictureTooltip'),
 			showStatus: true,
 			onClick: () => {
 				if (this.imageActionItem?.hasClass('is-disabled')) {
-					new Notice('Image attachment is unavailable for the current model.');
+					new Notice(t('chat.imageUnavailable'));
 					return;
 				}
 				void this.callbacks.onAttachImage();
@@ -149,8 +149,8 @@ export class ChatInputComponent {
 
 		this.ragActionItem = this.createHeaderActionButton(actionsContainer, {
 			icon: 'book-open',
-			label: 'RAG',
-			tooltip: 'Use indexed notes as context',
+			label: t('chat.ragLabel'),
+			tooltip: t('chat.ragTooltipLabel'),
 			showStatus: true,
 			onClick: () => { void this.callbacks.onToggleRag(); }
 		});
@@ -158,8 +158,8 @@ export class ChatInputComponent {
 
 		this.webActionItem = this.createHeaderActionButton(actionsContainer, {
 			icon: 'search',
-			label: 'Web Search',
-			tooltip: 'Search the internet when needed',
+			label: t('chat.webSearchLabel'),
+			tooltip: t('chat.webSearchTooltipLabel'),
 			showStatus: true,
 			onClick: () => { void this.callbacks.onToggleWeb(); }
 		});

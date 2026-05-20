@@ -292,7 +292,7 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 		providers: {
 			defaultModel: settings.defaultModel,
 			titleSummaryModel: settings.titleSummaryModel,
-			list: deepClone(settings.llmConfigs)
+			list: [] // managed by ProviderRepository; not persisted here
 		},
 		conversations: {
 			title: {
@@ -366,13 +366,13 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 			web: deepClone(settings.webSearchConfig)
 		},
 		prompts: {
-			system: deepClone(settings.systemPrompts ?? []),
+			system: [], // managed by PromptRepository; not persisted here
 			activeId: settings.activeSystemPromptId ?? null
 		},
 		agents: {
-			list: deepClone(settings.agents ?? []),
+			list: [], // managed by AgentRepository; not persisted here
 			activeId: settings.activeAgentId ?? null,
-			memories: deepClone(settings.agentMemories ?? [])
+			memories: [] // managed by AgentRepository; not persisted here
 		},
 		quickActions: {
 			list: deepClone(settings.quickActions ?? DEFAULT_QUICK_ACTIONS),

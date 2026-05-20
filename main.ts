@@ -39,15 +39,13 @@ import {
 import { ensureDefaultAgent as ensureDefaultAgentService } from './src/application/services/agent-service';
 import { ConversationStorageService } from './src/application/services/conversation-storage-service';
 import { ConversationMigrationService } from './src/application/services/conversation-migration-service';
+import { RAGManager } from './src/infrastructure/rag-manager';
+import { SettingsService } from './src/application/services/settings-service';
 
-// Import architecture components
-import { container } from './src/core/container';
 import { initI18n, t } from './src/i18n';
 import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-system';
 import { ObsidianHttpClient } from './src/infrastructure/obsidian/obsidian-http-client';
 import { TokenUsageRepository } from './src/infrastructure/persistence/data/token-usage-repository';
-import { MessageRepository } from './src/infrastructure/persistence/obsidian/message-repository';
-import { ConversationRepository } from './src/infrastructure/persistence/obsidian/conversation-repository';
 import {
 	AgentRepository,
 	PromptRepository,
@@ -111,13 +109,16 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private mcpServerRepository: McpServerRepository | null = null;
 	private mcpToolCacheRepository: McpToolCacheRepository | null = null;
 	public tokenUsageRepo: TokenUsageRepository | null = null;
+	private _ragManager: RAGManager | null = null;
+	public settingsService!: SettingsService;
 
 	async onload() {
 		initI18n();
+		this.settingsService = new SettingsService(
+			() => this.settings,
+			() => this.saveSettings()
+		);
 		const loadStart = Date.now();
-
-		// Initialize architecture components using dependency injection
-		this.initializeArchitecture();
 
 		this.pluginDataPath = `${this.app.vault.configDir}/plugins/${this.manifest.id}/data`;
 		await this.ensureFolderExists(this.pluginDataPath);
@@ -208,9 +209,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	}
 
 		onunload() {
-		// Cleanup architecture components
-		this.cleanupArchitecture();
-
 		// Clean up tool manager (don't detach leaves to preserve user layout)
 		if (this.sharedToolManager) {
 			this.sharedToolManager.cleanup().catch(error => console.error('[MCP] Cleanup failed', error));
@@ -221,23 +219,16 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		this.chatRibbonIconEl = null;
 	}
 
-	private initializeArchitecture(): void {
-		// Register services with the container
-		container.register('FileSystem', () => new ObsidianFileSystem(this.app));
-		container.register('HttpClient', () => new ObsidianHttpClient());
-		container.register('MessageRepository', () => new MessageRepository(this.app.vault));
-		container.register('ConversationRepository', () => new ConversationRepository(this.app.vault));
-		// ChatService registration is commented out as it requires proper LLM provider and event bus setup
-		// container.register('ChatService', () => {
-		// 	const messageRepo = container.get<MessageRepository>('MessageRepository');
-		// 	const conversationRepo = container.get<ConversationRepository>('ConversationRepository');
-		// 	return new ChatService(messageRepo, conversationRepo, llmProvider, eventBus);
-		// });
-	}
 
-	private cleanupArchitecture(): void {
-		// Cleanup registered services
-		// await serviceRegistry.cleanupAll();
+	public getRAGManager(): RAGManager {
+		if (!this._ragManager) {
+			this._ragManager = new RAGManager(
+				this.app,
+				this.settings.ragConfig,
+				this.settings.llmConfigs
+			);
+		}
+		return this._ragManager;
 	}
 
 	public getToolManager(): ToolManager {

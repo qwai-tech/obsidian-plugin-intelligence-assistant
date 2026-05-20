@@ -25,27 +25,18 @@ export interface GradeRequest {
 export class DocumentGrader {
   private config: RAGConfig;
   private llmConfigs: LLMConfig[];
-  private getChatModelFn?: () => string | null;
-  private getDefaultModelFn?: () => string | undefined;
 
-	  constructor(
-	    config: RAGConfig, 
-	    llmConfigs: LLMConfig[], 
-	    getChatModelFn?: () => string | null,
-	    getDefaultModelFn?: () => string | undefined
-	  ) {
-	    this.config = config;
-	    this.llmConfigs = llmConfigs;
-	    this.getChatModelFn = getChatModelFn;
-	    this.getDefaultModelFn = getDefaultModelFn;
+  constructor(config: RAGConfig, llmConfigs: LLMConfig[]) {
+    this.config = config;
+    this.llmConfigs = llmConfigs;
   }
 
-  async gradeDocument(request: GradeRequest): Promise<DocumentGrade> {
+  async gradeDocument(request: GradeRequest, chatModel?: string, defaultModel?: string): Promise<DocumentGrade> {
     if (!this.config.enableGradingThreshold) {
       return this.getDefaultGrade(request);
     }
 
-    const graderModel = await this.resolveGraderModel();
+    const graderModel = await this.resolveGraderModel(chatModel, defaultModel);
     if (!graderModel) {
       console.warn('[DocumentGrader] No grader model available');
       return this.getDefaultGrade(request);
@@ -100,7 +91,7 @@ export class DocumentGrader {
     }
   }
 
-  async gradeDocuments(requests: GradeRequest[]): Promise<DocumentGrade[]> {
+  async gradeDocuments(requests: GradeRequest[], chatModel?: string, defaultModel?: string): Promise<DocumentGrade[]> {
     if (!this.config.enableGradingThreshold) {
       return requests.map(req => this.getDefaultGrade(req));
     }
@@ -111,7 +102,7 @@ export class DocumentGrader {
     for (let i = 0; i < requests.length; i += parallelLimit) {
       const batch = requests.slice(i, i + parallelLimit);
       const batchGrades = await Promise.all(
-        batch.map(request => this.gradeDocument(request))
+        batch.map(request => this.gradeDocument(request, chatModel, defaultModel))
       );
       grades.push(...batchGrades);
 
@@ -235,51 +226,33 @@ Respond with a JSON object in this exact format:
     return 5;
   }
 
-  private async resolveGraderModel(): Promise<string | null> {
+  private async resolveGraderModel(chatModel?: string, defaultModel?: string): Promise<string | null> {
     const source = this.config.graderModelSource || 'default';
     console.debug('[DocumentGrader] Resolving grader model with source:', source);
 
     switch (source) {
       case 'chat': {
-        // Use the model selected in the Chat View Page
-        if (this.getChatModelFn) {
-          const chatModel = this.getChatModelFn();
-          if (chatModel?.trim()) {
-            console.debug('[DocumentGrader] Using chat model from active view:', chatModel);
-            return chatModel.trim();
-          } else {
-            console.warn('[DocumentGrader] Chat model not available from active view');
-          }
-        } else {
-          console.warn('[DocumentGrader] No chat model function available');
+        if (chatModel?.trim()) {
+          console.debug('[DocumentGrader] Using chat model:', chatModel);
+          return chatModel.trim();
         }
-        
-        // If chat model is not available, fall back to default model
-        console.warn('[DocumentGrader] Falling back to default model for chat source');
-        const currentDefaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
-        if (currentDefaultModel?.trim()) {
-          console.debug('[DocumentGrader] Using default model as fallback:', currentDefaultModel);
-          return currentDefaultModel.trim();
+        console.warn('[DocumentGrader] Chat model not available, falling back to default');
+        if (defaultModel?.trim()) {
+          return defaultModel.trim();
         }
-        // If no default model, fall back to first available reasoning model
         return await this.getFirstAvailableReasoningModel();
       }
 
       case 'default': {
-        // Use the Settings -> General -> Default Model only
-        const defaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
         if (defaultModel?.trim()) {
           console.debug('[DocumentGrader] Using default model from settings:', defaultModel);
           return defaultModel.trim();
-        } else {
-          console.warn('[DocumentGrader] No default model configured in settings');
-          // If no default model is set, fall back to first available reasoning model
-          return await this.getFirstAvailableReasoningModel();
         }
+        console.warn('[DocumentGrader] No default model configured in settings');
+        return await this.getFirstAvailableReasoningModel();
       }
 
       case 'specific': {
-        // Use the manually specified model from the model list in settings
         if (this.config.graderModel?.trim()) {
           try {
             const availableModels = await ModelManager.getAllAvailableModels(this.llmConfigs);
@@ -287,35 +260,20 @@ Respond with a JSON object in this exact format:
             if (configuredGraderModel) {
               console.debug('[DocumentGrader] Using configured grader model:', configuredGraderModel.id);
               return configuredGraderModel.id;
-            } else {
-              console.warn('[DocumentGrader] Configured grader model not found:', this.config.graderModel);
-              // If specific model is not found, fall back to default model
-              console.warn('[DocumentGrader] Falling back to default model for specific source');
-              const fallbackDefaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
-              if (fallbackDefaultModel?.trim()) {
-                console.debug('[DocumentGrader] Using default model as fallback:', fallbackDefaultModel);
-                return fallbackDefaultModel.trim();
-              }
-              // If no default model, fall back to first available reasoning model
-              return await this.getFirstAvailableReasoningModel();
             }
+            console.warn('[DocumentGrader] Configured grader model not found:', this.config.graderModel);
+            if (defaultModel?.trim()) return defaultModel.trim();
+            return await this.getFirstAvailableReasoningModel();
           } catch (error) {
             console.error('[DocumentGrader] Error validating configured grader model:', error);
-            // Fall back to default model
-            const fallbackDefaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
-            if (fallbackDefaultModel?.trim()) {
-              console.debug('[DocumentGrader] Using default model as fallback after error:', fallbackDefaultModel);
-              return fallbackDefaultModel.trim();
-            }
+            if (defaultModel?.trim()) return defaultModel.trim();
             return await this.getFirstAvailableReasoningModel();
           }
         } else {
           console.warn('[DocumentGrader] Specific model source selected but no model configured');
-          // Fall back to default model
-          const fallbackDefaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
-          if (fallbackDefaultModel?.trim()) {
-            console.debug('[DocumentGrader] Using default model as fallback:', fallbackDefaultModel);
-            return fallbackDefaultModel.trim();
+          if (defaultModel?.trim()) {
+            console.debug('[DocumentGrader] Using default model as fallback:', defaultModel);
+            return defaultModel.trim();
           }
           return await this.getFirstAvailableReasoningModel();
         }
@@ -323,11 +281,9 @@ Respond with a JSON object in this exact format:
 
       default: {
         console.warn('[DocumentGrader] Unknown grader model source');
-        // For any unknown values, use default model
-        const unknownDefaultModel = this.getDefaultModelFn ? this.getDefaultModelFn() : undefined;
-        if (unknownDefaultModel?.trim()) {
-          console.debug('[DocumentGrader] Using default model for unknown source:', unknownDefaultModel);
-          return unknownDefaultModel.trim();
+        if (defaultModel?.trim()) {
+          console.debug('[DocumentGrader] Using default model for unknown source:', defaultModel);
+          return defaultModel.trim();
         }
         return await this.getFirstAvailableReasoningModel();
       }

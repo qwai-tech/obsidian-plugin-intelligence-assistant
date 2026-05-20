@@ -14,11 +14,32 @@
     "general": {
       "title": "通用设置",
       "desc": "配置智能助手插件的通用选项。",
-      "pluginVersion": { "name": "插件版本", "desc": "智能助手插件的当前版本" },
-      "defaultModel": { "name": "默认模型", "desc": "对话时使用的默认模型", "placeholder": "Deepseek-chat" },
-      "defaultChatMode": { "name": "默认对话模式", "desc": "聊天视图打开时的默认模式", "chat": "对话模式", "agent": "智能体模式" },
-      "conversationTitleMode": { "name": "对话标题模式", "desc": "对话标题的生成方式", "firstMessage": "使用首条消息", "autoSummary": "自动生成摘要", "manual": "手动" },
-      "conversationIcons": { "name": "对话图标", "desc": "启用对话的自动图标生成" },
+      "pluginVersion": {
+        "name": "插件版本",
+        "desc": "智能助手插件的当前版本"
+      },
+      "defaultModel": {
+        "name": "默认模型",
+        "desc": "对话时使用的默认模型",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "默认对话模式",
+        "desc": "聊天视图打开时的默认模式",
+        "chat": "对话模式",
+        "agent": "智能体模式"
+      },
+      "conversationTitleMode": {
+        "name": "对话标题模式",
+        "desc": "对话标题的生成方式",
+        "firstMessage": "使用首条消息",
+        "autoSummary": "自动生成摘要",
+        "manual": "手动"
+      },
+      "conversationIcons": {
+        "name": "对话图标",
+        "desc": "启用对话的自动图标生成"
+      },
       "configStatus": {
         "name": "配置状态",
         "desc": "插件整体配置状态",
@@ -29,7 +50,10 @@
     "llm": {
       "title": "LLM 配置",
       "desc": "配置语言模型服务商并管理可用模型。",
-      "subTabs": { "provider": "服务商", "models": "模型" }
+      "subTabs": {
+        "provider": "服务商",
+        "models": "模型"
+      }
     },
     "models": {
       "title": "模型配置",
@@ -44,7 +68,10 @@
       "modelCount_plural": "• 已缓存 {{count}} 个模型",
       "matchCount": "• {{count}} 个符合过滤条件",
       "matchCount_plural": "• {{count}} 个符合过滤条件",
-      "status": { "enabled": "已启用", "disabled": "已禁用" },
+      "status": {
+        "enabled": "已启用",
+        "disabled": "已禁用"
+      },
       "actions": {
         "disable": "禁用",
         "enable": "启用",
@@ -61,7 +88,12 @@
         "defaultChatSet": "默认对话模型已设为 {{name}}",
         "defaultEmbeddingSet": "默认嵌入模型已设为 {{name}}"
       },
-      "filters": { "allProviders": "所有服务商", "allCapabilities": "所有能力" }
+      "filters": {
+        "allProviders": "所有服务商",
+        "allCapabilities": "所有能力",
+        "allStates": "所有状态",
+        "searchPlaceholder": "搜索名称或 ID"
+      }
     },
     "provider": {
       "title": "服务商配置",
@@ -75,7 +107,11 @@
       "count_plural": "已配置 {{count}} 个服务商",
       "addBtn": "+ 添加服务商",
       "empty": "未配置服务商，点击「添加服务商」开始。",
-      "tableHeaders": { "provider": "服务商", "status": "状态", "actions": "操作" },
+      "tableHeaders": {
+        "provider": "服务商",
+        "status": "状态",
+        "actions": "操作"
+      },
       "status": {
         "ready": "就绪",
         "needsConfig": "需要配置",
@@ -91,7 +127,11 @@
         "configureBaseUrl": "配置基础 URL",
         "addApiKey": "添加 API 密钥"
       },
-      "models": { "none": "无模型", "count": "{{count}} 个模型", "count_plural": "{{count}} 个模型" },
+      "models": {
+        "none": "无模型",
+        "count": "{{count}} 个模型",
+        "count_plural": "{{count}} 个模型"
+      },
       "ollama": {
         "checkingVersion": "正在检查版本...",
         "server": {
@@ -120,8 +160,13 @@
         "refreshing": "刷新中...",
         "delete": "删除"
       },
-      "notices": { "refreshed": "已刷新 {{provider}} 的模型。", "refreshFailed": "刷新模型失败" },
-      "confirm": { "delete": "移除服务商 {{provider}}？" }
+      "notices": {
+        "refreshed": "已刷新 {{provider}} 的模型。",
+        "refreshFailed": "刷新模型失败"
+      },
+      "confirm": {
+        "delete": "移除服务商 {{provider}}？"
+      }
     },
     "mcp": {
       "title": "MCP 服务器管理",
@@ -131,7 +176,14 @@
       "refreshAllBtn": "🔄 刷新所有工具",
       "addBtn": "+ 添加 MCP 服务器",
       "empty": "未配置 MCP 服务器，点击「添加 MCP 服务器」开始。",
-      "tableHeaders": { "name": "名称", "command": "命令", "arguments": "参数", "status": "状态", "tools": "工具", "actions": "操作" },
+      "tableHeaders": {
+        "name": "名称",
+        "command": "命令",
+        "arguments": "参数",
+        "status": "状态",
+        "tools": "工具",
+        "actions": "操作"
+      },
       "untitled": "未命名 MCP 服务器",
       "notConfigured": "未配置",
       "noArgs": "无",
@@ -177,9 +229,15 @@
         "testFailed": "❌ 连接失败：{{message}}",
         "refreshedAll": "✅ 已刷新 {{count}} 个服务器的工具",
         "refreshedAll_plural": "✅ 已刷新 {{count}} 个服务器的工具",
-        "refreshedPartial": "✅ 已刷新 {{success}} 个服务器，❌ {{failed}} 个失败"
+        "refreshedPartial": "✅ 已刷新 {{success}} 个服务器，❌ {{failed}} 个失败",
+        "noServersConfigured": "⚠️ 未配置MCP服务器",
+        "testingAll": "🧪 正在测试 {{count}} 个MCP服务器连接...",
+        "testAllSuccess": "✅ 所有 {{count}} 个MCP服务器连接成功！",
+        "testAllPartial": "⚠️ {{successful}} 个连接成功，{{failed}} 个失败"
       },
-      "confirm": { "delete": "删除 MCP 服务器\"{{name}}\"？" }
+      "confirm": {
+        "delete": "删除 MCP 服务器\"{{name}}\"？"
+      }
     },
     "agents": {
       "title": "智能体管理",
@@ -188,7 +246,13 @@
       "count_plural": "已配置 {{count}} 个智能体",
       "addBtn": "+ 添加智能体",
       "empty": "未配置智能体，点击「添加智能体」开始。",
-      "tableHeaders": { "agent": "智能体", "model": "模型", "capabilities": "能力", "tools": "工具", "actions": "操作" },
+      "tableHeaders": {
+        "agent": "智能体",
+        "model": "模型",
+        "capabilities": "能力",
+        "tools": "工具",
+        "actions": "操作"
+      },
       "defaultBadge": "默认",
       "systemPrompt": "系统提示词 • {{promptName}}",
       "customPrompt": "自定义提示词",
@@ -200,7 +264,9 @@
         "useDefault": "使用默认模型",
         "useDefaultDesc": "将使用设置中的默认模型"
       },
-      "capabilities": { "noSpecialModes": "无特殊模式" },
+      "capabilities": {
+        "noSpecialModes": "无特殊模式"
+      },
       "tools": {
         "builtIn": "{{count}} 个内置工具",
         "mcpServer": "{{count}} 个 MCP 服务器",
@@ -209,28 +275,534 @@
         "mcpTool_plural": "{{count}} 个 MCP 工具",
         "noTools": "未启用工具"
       },
-      "actions": { "edit": "编辑", "delete": "删除", "protected": "受保护" },
-      "confirm": { "delete": "删除智能体\"{{name}}\"？" }
+      "actions": {
+        "edit": "编辑",
+        "delete": "删除",
+        "protected": "受保护"
+      },
+      "confirm": {
+        "delete": "删除智能体\"{{name}}\"？"
+      }
     },
     "prompts": {
       "title": "系统提示词",
       "desc": "管理定义 AI 助手行为和个性的系统提示词。",
       "addBtn": "+ 添加系统提示词",
       "empty": "未配置系统提示词，点击「添加系统提示词」开始。",
-      "tableHeaders": { "name": "名称", "contentPreview": "内容预览", "created": "创建时间", "updated": "更新时间", "enabled": "启用状态", "actions": "操作" },
-      "status": { "enabled": "已启用", "disabled": "已禁用" },
-      "actions": { "edit": "编辑", "disable": "禁用", "enable": "启用", "delete": "删除" },
-      "confirm": { "delete": "删除提示词\"{{name}}\"？" }
+      "tableHeaders": {
+        "name": "名称",
+        "contentPreview": "内容预览",
+        "created": "创建时间",
+        "updated": "更新时间",
+        "enabled": "启用状态",
+        "actions": "操作"
+      },
+      "status": {
+        "enabled": "已启用",
+        "disabled": "已禁用"
+      },
+      "actions": {
+        "edit": "编辑",
+        "disable": "禁用",
+        "enable": "启用",
+        "delete": "删除"
+      },
+      "confirm": {
+        "delete": "删除提示词\"{{name}}\"？"
+      }
     },
     "tools": {
       "title": "工具配置",
       "desc": "查看内置工具并探索已连接服务器加载的 MCP 工具。启用智能体可执行的操作。",
-      "subTabs": { "builtIn": "内置工具", "mcp": "MCP 工具", "openapi": "HTTP / OpenAPI", "cli": "CLI 工具" }
+      "subTabs": {
+        "builtIn": "内置工具",
+        "mcp": "MCP 工具",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI 工具"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "名称",
+          "category": "分类",
+          "description": "描述",
+          "parameters": "参数",
+          "enabled": "启用"
+        },
+        "categories": {
+          "fileOps": "文件操作",
+          "searchDisc": "搜索与发现",
+          "noteMgmt": "笔记管理"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "读取 Vault 中文件的内容",
+            "params": "path（必填）：要读取的文件路径"
+          },
+          "writeFile": {
+            "desc": "在 Vault 中写入或更新文件",
+            "params": "path（必填），content（必填）：文件路径和要写入的内容"
+          },
+          "listFiles": {
+            "desc": "列出 Vault 或特定文件夹中的文件",
+            "params": "folder（可选），extension（可选）：按文件夹和扩展名过滤"
+          },
+          "searchFiles": {
+            "desc": "在 Vault 中按名称或内容搜索文件",
+            "params": "query（必填），search_content（可选），limit（可选）：搜索词及选项"
+          },
+          "createNote": {
+            "desc": "创建具有指定内容的新笔记",
+            "params": "title（必填），content（必填），folder（可选）：笔记标题、内容和位置"
+          },
+          "appendNote": {
+            "desc": "向现有笔记追加内容",
+            "params": "path（必填），content（必填）：笔记路径和要追加的内容"
+          }
+        },
+        "infoTitle": "💡 关于工具",
+        "infoText": "内置工具按插件设置配置。MCP 工具独立管理——使用 MCP 标签页连接服务器并刷新工具可用性。",
+        "toolNames": {
+          "read_file": "读取文件",
+          "write_file": "写入文件",
+          "list_files": "列出文件",
+          "search_files": "搜索文件",
+          "create_note": "创建笔记",
+          "append_note": "追加笔记"
+        }
+      },
+      "mcpTools": {
+        "noTools": "无可用 MCP 工具。请连接服务器或刷新缓存工具以填充此列表。",
+        "tableHeaders": {
+          "server": "服务器",
+          "tool": "工具",
+          "description": "描述",
+          "parameters": "参数",
+          "source": "来源"
+        },
+        "noDescription": "无描述",
+        "schemaUnavailable": "Schema 不可用",
+        "live": "实时",
+        "cached": "缓存",
+        "status": {
+          "connected": "已连接",
+          "disconnected": "未连接"
+        }
+      },
+      "openapi": {
+        "desc": "从 OpenAPI 文档生成 HTTP 工具。远程规范缓存在 {{cacheDir}} 下。",
+        "addBtn": "添加 HTTP 源",
+        "noSources": "尚未配置 HTTP 源。",
+        "unnamed": "未命名 HTTP 源",
+        "tableHeaders": {
+          "name": "名称",
+          "source": "来源",
+          "auth": "认证",
+          "status": "状态",
+          "actions": "操作"
+        },
+        "sourceUrl": "未设置远程 URL",
+        "sourcePath": "未设置文件路径",
+        "authHeader": "Header（{{key}}）",
+        "authQuery": "Query（{{key}}）",
+        "authNone": "无",
+        "statusEnabled": "已启用",
+        "statusDisabled": "已禁用",
+        "actions": {
+          "edit": "编辑",
+          "reload": "重载",
+          "refetch": "重新获取",
+          "delete": "删除"
+        },
+        "notices": {
+          "removed": "HTTP 源已删除",
+          "reloaded": "已重载 {{count}} 个操作",
+          "reloadFailed": "重载 HTTP 源失败，请查看控制台了解详情。"
+        },
+        "modal": {
+          "defaultTitle": "HTTP 源",
+          "displayName": {
+            "name": "显示名称",
+            "desc": "智能体选择工具源时显示的名称"
+          },
+          "enabled": {
+            "name": "启用",
+            "desc": "启用后将此 HTTP API 暴露给所有智能体"
+          },
+          "sourceType": {
+            "name": "来源类型",
+            "file": "本地文件",
+            "url": "远程 URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "获取后缓存在插件数据目录中"
+          },
+          "cachedFile": "缓存文件：{{path}}（{{date}}）",
+          "neverFetched": "从未获取",
+          "specPath": {
+            "name": "OpenAPI 文件路径",
+            "desc": "Vault 内的相对路径或绝对路径"
+          },
+          "baseUrl": {
+            "name": "Base URL 覆盖",
+            "desc": "覆盖文档中的第一个服务器条目（可选）"
+          },
+          "auth": {
+            "name": "认证",
+            "desc": "调用此源时自动插入 API 密钥",
+            "none": "无",
+            "header": "HTTP header",
+            "query": "Query 参数"
+          },
+          "credKey": {
+            "name": "凭据键名"
+          },
+          "credValue": {
+            "name": "凭据值"
+          },
+          "actions": {
+            "name": "操作",
+            "reloadTools": "重载工具",
+            "refetchTooltip": "从 URL 重新获取规范",
+            "deleteTooltip": "删除源"
+          }
+        }
+      },
+      "cli": {
+        "desc": "定义智能体可执行的本地命令行工具。使用 {{param}} 模板语法传递动态参数。",
+        "addBtn": "添加 CLI 工具",
+        "presetsBtn": "从预设添加",
+        "noTools": "尚未配置 CLI 工具。",
+        "tableHeaders": {
+          "name": "名称",
+          "command": "命令",
+          "parameters": "参数",
+          "status": "状态",
+          "actions": "操作"
+        },
+        "unnamed": "未命名 CLI 工具",
+        "paramCount": "{{count}} 个参数",
+        "paramCount_plural": "{{count}} 个参数",
+        "noParams": "无",
+        "statusEnabled": "已启用",
+        "statusDisabled": "已禁用",
+        "actions": {
+          "edit": "编辑",
+          "disable": "禁用",
+          "enable": "启用",
+          "delete": "删除"
+        },
+        "notices": {
+          "removed": "CLI 工具已删除"
+        },
+        "infoTitle": "💡 关于 CLI 工具",
+        "infoText": "CLI 工具在本地执行 shell 命令。在参数中使用 {{paramName}} 进行模板替换，或将参数配置为作为参数或环境变量传递。",
+        "modal": {
+          "defaultTitle": "CLI 工具",
+          "toolName": {
+            "name": "工具名称",
+            "desc": "智能体调用此工具时使用的标识符"
+          },
+          "description": {
+            "name": "描述",
+            "desc": "向 AI 描述此工具的用途"
+          },
+          "enabled": {
+            "name": "启用",
+            "desc": "启用后允许智能体使用此工具"
+          },
+          "commandConfig": "命令配置",
+          "command": {
+            "name": "命令",
+            "desc": "要运行的可执行程序（如 node、python、bash、/path/to/script）"
+          },
+          "args": {
+            "name": "参数",
+            "desc": "命令参数，每行一个。使用 {{paramName}} 进行模板替换。"
+          },
+          "cwd": {
+            "name": "工作目录",
+            "desc": "运行命令的目录（可选）"
+          },
+          "timeout": {
+            "name": "超时（毫秒）",
+            "desc": "最大执行时间，单位毫秒（默认：{{timeout}}）"
+          },
+          "shell": {
+            "name": "在 Shell 中运行",
+            "desc": "通过 Shell 执行命令（支持管道等 Shell 特性）"
+          },
+          "paramsTitle": "参数",
+          "paramsDesc": "定义 AI 可传递给此工具的参数。",
+          "addParam": "添加参数",
+          "noParams": "未定义参数。",
+          "paramN": "参数 {{n}}",
+          "param": {
+            "name": "名称",
+            "type": {
+              "name": "类型",
+              "string": "字符串",
+              "number": "数字",
+              "boolean": "布尔值"
+            },
+            "description": "描述",
+            "required": "必填",
+            "insertAs": {
+              "name": "传入方式",
+              "desc": "如何将此参数传递给命令",
+              "template": "模板（{{name}}）",
+              "arg": "作为参数追加",
+              "env": "环境变量"
+            },
+            "envName": {
+              "name": "环境变量名",
+              "desc": "覆盖环境变量名称（默认为参数名大写）"
+            }
+          },
+          "envTitle": "环境变量",
+          "envDesc": "运行命令时设置的静态环境变量。",
+          "envVars": {
+            "name": "环境变量",
+            "desc": "格式：KEY=value，每行一个"
+          }
+        },
+        "presets": {
+          "title": "从预设添加 CLI 工具",
+          "desc": "选择预设快速添加预配置的 CLI 工具，添加后可自定义。",
+          "addBtn": "添加",
+          "addedBtn": "已添加",
+          "closeBtn": "关闭",
+          "notices": {
+            "added": "已添加「{{name}}」- 请在 CLI 工具列表中启用它"
+          },
+          "categories": {
+            "file": "文件操作",
+            "search": "搜索",
+            "network": "网络",
+            "code": "代码执行",
+            "data": "数据处理",
+            "system": "系统信息",
+            "apps": "macOS 应用与桌面"
+          },
+          "names": {
+            "preset-cat": "读取文件 (cat)",
+            "preset-ls": "列出目录 (ls)",
+            "preset-find": "查找文件 (find)",
+            "preset-grep": "文本搜索 (grep)",
+            "preset-ripgrep": "快速搜索 (rg)",
+            "preset-curl": "HTTP 请求 (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "运行 Python 代码",
+            "preset-node": "运行 JavaScript (Node)",
+            "preset-bash": "运行 Shell 脚本",
+            "preset-jq": "JSON 处理器 (jq)",
+            "preset-wc": "字数统计 (wc)",
+            "preset-date": "当前日期/时间",
+            "preset-pwd": "当前目录 (pwd)",
+            "preset-whoami": "当前用户",
+            "preset-uname": "系统信息 (uname)",
+            "preset-open": "打开文件/URL (open)",
+            "preset-open-app": "启动应用 (open -a)",
+            "preset-safari": "在 Safari 中打开",
+            "preset-chrome": "在 Chrome 中打开",
+            "preset-firefox": "在 Firefox 中打开",
+            "preset-pbcopy": "复制到剪贴板",
+            "preset-pbpaste": "从剪贴板粘贴",
+            "preset-say": "文字转语音 (say)",
+            "preset-osascript": "AppleScript 运行器",
+            "preset-notify": "桌面通知",
+            "preset-screencapture": "屏幕截图",
+            "preset-applescript-list-apps": "列出运行中的应用"
+          }
+        }
+      }
     },
     "rag": {
       "title": "RAG 配置",
       "desc": "配置检索增强生成和网络搜索，增强 AI 响应。",
-      "subTabs": { "overview": "概览", "chunking": "分块", "search": "搜索", "filters": "过滤器", "advanced": "高级", "websearch": "网络搜索" }
+      "subTabs": {
+        "overview": "概览",
+        "chunking": "分块",
+        "search": "搜索",
+        "filters": "过滤器",
+        "advanced": "高级",
+        "websearch": "网络搜索"
+      },
+      "general": {
+        "title": "通用设置",
+        "enableRag": {
+          "name": "启用 RAG",
+          "desc": "启用检索增强生成以获得更好的上下文"
+        },
+        "vectorStore": {
+          "name": "向量存储",
+          "desc": "用于存储嵌入向量的数据库",
+          "memory": "内存模式",
+          "disk": "磁盘模式"
+        },
+        "embeddingModel": {
+          "name": "嵌入模型",
+          "desc": "用于生成嵌入向量的模型"
+        },
+        "embedChanged": {
+          "name": "自动嵌入已修改文件",
+          "desc": "文件修改时自动重新嵌入"
+        }
+      },
+      "indexMgmt": {
+        "title": "索引管理",
+        "desc": "管理 RAG 索引并查看已索引内容的统计信息。",
+        "statsTitle": "索引统计",
+        "stats": {
+          "totalChunks": "总块数",
+          "uniqueFiles": "唯一文件数",
+          "totalChars": "总字符数",
+          "avgChunkSize": "平均块大小"
+        },
+        "empty": "索引为空，点击「重建索引」开始索引。",
+        "error": "⚠️ 无法加载索引统计信息",
+        "rebuild": {
+          "name": "重建索引",
+          "desc": "重新索引 Vault 中的所有文件，可能需要一些时间。",
+          "btn": "重建",
+          "rebuilding": "重建中..."
+        },
+        "refresh": {
+          "name": "刷新索引",
+          "desc": "更新自上次索引以来已修改的文件。",
+          "btn": "刷新",
+          "refreshing": "刷新中..."
+        },
+        "clear": {
+          "name": "清除索引",
+          "desc": "删除所有已索引的数据，之后需要重建索引。",
+          "btn": "清除",
+          "clearing": "清除中..."
+        },
+        "notices": {
+          "rebuilt": "索引重建成功",
+          "rebuildFailed": "重建索引失败",
+          "refreshed": "索引刷新成功",
+          "refreshFailed": "刷新索引失败",
+          "cleared": "索引清除成功",
+          "clearFailed": "清除索引失败"
+        }
+      },
+      "chunking": {
+        "title": "分块设置",
+        "strategy": {
+          "name": "分块策略",
+          "desc": "将文档分割为块的策略",
+          "recursive": "递归（智能）",
+          "fixed": "固定大小",
+          "sentence": "按句子",
+          "paragraph": "按段落"
+        },
+        "chunkSize": {
+          "name": "块大小",
+          "desc": "每块的字符数（推荐 500-2000）"
+        },
+        "chunkOverlap": {
+          "name": "块重叠",
+          "desc": "块之间重叠的字符数"
+        },
+        "minChunkSize": {
+          "name": "最小块大小",
+          "desc": "要创建的最小块大小"
+        },
+        "maxTokens": {
+          "name": "每块最大 Token 数",
+          "desc": "每块允许的最大 Token 数"
+        }
+      },
+      "search": {
+        "title": "搜索设置",
+        "searchType": {
+          "name": "搜索类型",
+          "desc": "相似度搜索的类型",
+          "similarity": "相似度搜索"
+        },
+        "topK": {
+          "name": "Top K 结果数",
+          "desc": "检索最相关块的数量（1-20）"
+        },
+        "threshold": {
+          "name": "相似度阈值",
+          "desc": "包含结果的最低相似度分数（0.0-1.0）"
+        },
+        "weight": {
+          "name": "相关性分数权重",
+          "desc": "相关性评分的权重（0.0-1.0）"
+        },
+        "contextLimit": {
+          "name": "上下文窗口限制",
+          "desc": "检索上下文的最大 Token 数"
+        }
+      },
+      "filters": {
+        "title": "文件过滤器",
+        "excludeFolders": {
+          "name": "排除文件夹",
+          "desc": "从索引中排除的文件夹（逗号分隔）"
+        },
+        "includeTypes": {
+          "name": "包含文件类型",
+          "desc": "要包含的文件类型（空 = 所有类型）"
+        },
+        "excludeTypes": {
+          "name": "排除文件类型",
+          "desc": "从索引中排除的文件类型"
+        },
+        "filterByTag": {
+          "name": "按标签过滤",
+          "desc": "仅索引具有这些标签的文件（空 = 所有文件）"
+        },
+        "excludeByTag": {
+          "name": "按标签排除",
+          "desc": "从索引中排除具有这些标签的文件"
+        }
+      },
+      "advanced": {
+        "title": "高级设置",
+        "batchSize": {
+          "name": "嵌入批处理大小",
+          "desc": "并行嵌入的块数"
+        }
+      },
+      "grading": {
+        "title": "评分设置",
+        "desc": "在发送给 LLM 之前对检索到的块进行相关性评分，有助于过滤低质量结果。",
+        "enableGrading": {
+          "name": "启用评分阈值",
+          "desc": "过滤低于质量阈值的块"
+        },
+        "graderSource": {
+          "name": "评分模型来源",
+          "desc": "获取评分模型的来源",
+          "chat": "对话模型",
+          "custom": "自定义模型"
+        },
+        "graderModel": {
+          "name": "评分模型",
+          "desc": "用于评分的特定模型"
+        },
+        "parallel": {
+          "name": "并行处理",
+          "desc": "并行评分的块数"
+        },
+        "minRelevance": {
+          "name": "最低相关性分数",
+          "desc": "最低相关性分数（0.0-1.0）"
+        },
+        "minAccuracy": {
+          "name": "最低准确性分数",
+          "desc": "最低准确性分数（0.0-1.0）"
+        },
+        "minSupport": {
+          "name": "最低支持质量分数",
+          "desc": "最低支持质量分数（0.0-1.0）"
+        }
+      }
     },
     "websearch": {
       "title": "网络搜索配置",
@@ -253,16 +825,122 @@
     "quickActions": {
       "title": "快捷操作",
       "desc": "配置出现在编辑器上下文菜单中的 AI 快捷操作（选中文本时显示）。",
-      "actionPrefix": { "name": "操作前缀", "desc": "在上下文菜单中所有快捷操作前显示的前缀（表情符号或文字）", "placeholder": "⚡" },
+      "actionPrefix": {
+        "name": "操作前缀",
+        "desc": "在上下文菜单中所有快捷操作前显示的前缀（表情符号或文字）",
+        "placeholder": "⚡"
+      },
       "count": "已配置 {{count}} 个操作（{{enabled}} 个已启用）",
       "count_plural": "已配置 {{count}} 个操作（{{enabled}} 个已启用）",
-      "addBtn": "+ 添加快捷操作"
+      "addBtn": "+ 添加快捷操作",
+      "empty": "未配置快捷操作，点击「添加快捷操作」开始。",
+      "tableHeaders": {
+        "action": "操作",
+        "type": "类型",
+        "model": "模型",
+        "promptPreview": "提示词预览",
+        "actions": "操作"
+      },
+      "defaultModel": "默认",
+      "editBtn": "编辑",
+      "deleteBtn": "删除",
+      "confirm": {
+        "delete": "删除快捷操作「{{name}}」？"
+      },
+      "usageInfo": {
+        "title": "使用方法",
+        "step1": "在任意笔记中选中文字",
+        "step2": "右键打开上下文菜单",
+        "step3": "从菜单中选择快捷操作",
+        "step4Replace": "标记为「replace」的操作将用 AI 结果替换选中文字",
+        "step4Explain": "标记为「explain」的操作将在弹窗中显示结果"
+      },
+      "edit": {
+        "title": "编辑快捷操作",
+        "name": {
+          "name": "名称",
+          "desc": "在上下文菜单中显示的名称"
+        },
+        "actionType": {
+          "name": "操作类型",
+          "desc": "AI 响应的处理方式",
+          "replace": "替换选中文字",
+          "explain": "在弹窗中显示"
+        },
+        "model": {
+          "name": "模型",
+          "desc": "此操作使用的语言模型（留空则使用默认模型）",
+          "default": "使用默认模型"
+        },
+        "promptTemplate": {
+          "name": "提示词模板",
+          "desc": "发送给 AI 的指令，选中的文字将自动附加在末尾。"
+        },
+        "cancel": "取消",
+        "save": "保存"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "使文本更长",
+          "prompt": "扩展并详细阐述以下文本，使其更加详细和全面，同时保持原有的意思和语气。只返回扩展后的文本，不要添加任何额外评论：\n\n"
+        },
+        "summarize": {
+          "name": "总结文本",
+          "prompt": "提供以下文本的简洁摘要。只返回摘要，不要添加任何额外评论：\n\n"
+        },
+        "improve-writing": {
+          "name": "改善写作",
+          "prompt": "提升以下文本的写作质量、清晰度和风格。只返回改进后的文本，不要添加任何额外评论：\n\n"
+        },
+        "fix-grammar": {
+          "name": "修正语法",
+          "prompt": "修正以下文本中的语法、拼写和标点错误。只返回修正后的文本，不要添加任何额外评论：\n\n"
+        },
+        "explain": {
+          "name": "解释文本",
+          "prompt": "用简单的语言解释以下文本：\n\n"
+        }
+      }
     },
     "usage": {
       "title": "Token 用量",
       "desc": "跟踪各服务商和模型的 Token 消耗。数据在所有对话中累积。",
       "notAvailable": "Token 用量跟踪不可用。",
-      "ranges": { "today": "今日", "week": "本周", "month": "本月", "all": "全部" }
+      "ranges": {
+        "today": "今日",
+        "week": "本周",
+        "month": "本月",
+        "all": "全部"
+      },
+      "stats": {
+        "totalTokens": "总 Token 数",
+        "apiCalls": "API 调用次数",
+        "promptTokens": "提示词 Token",
+        "completion": "补全 Token",
+        "tokensIn": "输入 token",
+        "tokensOut": "输出 token"
+      },
+      "byProvider": "按服务商",
+      "byModel": "按模型",
+      "noData": "暂无用量数据。",
+      "recentActivity": "最近活动",
+      "last10": "最近 10 条",
+      "noRecent": "暂无最近活动。",
+      "tableHeaders": {
+        "provider": "服务商",
+        "model": "模型",
+        "prompt": "提示词",
+        "completion": "补全",
+        "total": "合计",
+        "calls": "调用次数",
+        "time": "时间",
+        "in": "输入",
+        "out": "输出"
+      },
+      "clearBtn": "清除所有用量数据",
+      "confirm": {
+        "clear": "清除所有 Token 用量记录？此操作不可撤销。"
+      }
     }
   },
   "chat": {
@@ -276,7 +954,10 @@
     "mode": "模式",
     "prompt": "提示词",
     "agent": "智能体",
-    "modeOptions": { "chat": "对话", "agent": "智能体" },
+    "modeOptions": {
+      "chat": "对话",
+      "agent": "智能体"
+    },
     "noSystemPrompt": "无系统提示词",
     "noAgentsAvailable": "暂无智能体",
     "sendHintPrefix": "按 ",
@@ -285,33 +966,548 @@
     "sendAriaLabel": "发送消息",
     "stop": " 停止",
     "addReference": "添加引用",
-    "addReferenceTooltip": "添加文件或文件夹引用 (@)"
+    "addReferenceTooltip": "添加文件或文件夹引用 (@)",
+    "agentSummary": {
+      "model": "模型",
+      "temp": "温度",
+      "max": "最大",
+      "rag": "RAG",
+      "web": "网络",
+      "tools": "工具",
+      "memory": "记忆",
+      "none": "无",
+      "configuration": "{{name}} 配置",
+      "modelFixed": "{{name}} · 固定",
+      "modelDefault": "{{name}} · 默认",
+      "modelChatView": "{{name}} · 聊天视图",
+      "customModel": "自定义模型",
+      "notSet": "未设置",
+      "auto": "自动",
+      "on": "开",
+      "off": "关",
+      "shortTerm": "短期",
+      "longTerm": "长期",
+      "disabledMemory": "已禁用",
+      "builtIn": "{{count}} 个内置",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "notices": {
+      "stopping": "正在停止生成...",
+      "ragInitError": "RAG 初始化错误：{{message}}",
+      "modelsRefreshed": "模型已刷新",
+      "modelsRefreshFailed": "刷新模型失败：{{message}}",
+      "waitForResponse": "请等待当前响应完成",
+      "configureProvider": "请先在设置中配置 LLM 提供商",
+      "selectModel": "请选择一个模型",
+      "noValidProvider": "未找到此模型的有效提供商配置",
+      "chatError": "聊天错误：{{message}}",
+      "noMessageToRegenerate": "找不到要重新生成的消息",
+      "regenerateOnlyLatest": "目前只能重新生成最新的响应",
+      "regenerateNoUserMsg": "找不到用于重新生成的用户消息",
+      "regenerated": "响应已重新生成",
+      "regenerateFailed": "重新生成失败：{{message}}",
+      "noteCreated": "笔记已创建：{{name}}",
+      "noteCreateFailed": "创建笔记失败：{{message}}",
+      "messageInserted": "消息已插入到：{{path}}",
+      "messageInsertFailed": "插入消息失败：{{message}}",
+      "noAgents": "没有可用的智能体。请在设置 → 智能体中配置。",
+      "ragDisabled": "RAG 已在设置中禁用。请在设置 → 聊天功能 → RAG 中启用。",
+      "webSearchDisabled": "网络搜索已在设置中禁用。请在设置 → 聊天功能 → 网络搜索中启用。",
+      "noFilesInVault": "在仓库中未找到文件",
+      "attached": "已附加：{{name}}",
+      "attachedImages": "已附加 {{count}} 张图片",
+      "referencesAdded": "已添加 {{count}} 个引用",
+      "fileNotFound": "文件未找到：{{path}}",
+      "agentConfigApplied": "已应用智能体配置：{{name}}",
+      "waitForComplete": "请等待当前响应完成",
+      "chatServiceFallback": "ChatService 未配置，使用 ChatView 后备方案。",
+      "noModelSelected": "未选择模型",
+      "noProviderConfig": "未找到提供商配置",
+      "generationStopped": "生成已停止",
+      "noResponseToRegenerate": "没有可重新生成的响应",
+      "agentNotFound": "未找到智能体",
+      "unableToLoadRag": "无法加载 RAG 统计信息。",
+      "referenced": "已引用: {{name}}"
+    },
+    "status": {
+      "available": "可用",
+      "unavailable": "不可用",
+      "disabled": "已禁用",
+      "on": "开 · {{detail}}",
+      "off": "关"
+    },
+    "ragStats": {
+      "title": "RAG 统计",
+      "totalChunks": "📊 总块数：",
+      "filesIndexed": "📁 已索引文件：",
+      "totalSize": "💾 总大小：",
+      "avgChunks": "📈 平均块数/文件：",
+      "indexedFiles": "📄 已索引文件",
+      "noFilesYet": "⚠️ 尚未索引任何文件。",
+      "howToBuild": "构建 RAG 索引：",
+      "step1": "前往设置 → RAG",
+      "step2": "启用 RAG",
+      "step3": "选择索引仓库",
+      "close": "关闭",
+      "retrieved": "📚 从 {{count}} 篇文档中检索",
+      "retrieved_plural": "📚 从 {{count}} 篇文档中检索"
+    },
+    "ragTooltip": {
+      "status": "RAG 索引状态：",
+      "totalChunks": "📊 总块数：{{count}}",
+      "filesIndexed": "📁 已索引文件：{{count}}",
+      "totalSize": "💾 总大小：{{size}} KB",
+      "indexedFiles": "📄 已索引文件：",
+      "andMore": "  ... 还有 {{count}} 个",
+      "noFilesYet": "⚠️ 尚未索引任何文件。",
+      "goToSettings": "前往设置 → RAG 构建索引。",
+      "ragOff": "ℹ️ 此聊天的 RAG 当前已关闭。"
+    },
+    "message": {
+      "webResults": "网络结果",
+      "attachments": "附件",
+      "references": "引用",
+      "ragSources": "RAG 来源",
+      "reasoning": "推理过程",
+      "copy": "复制",
+      "copied": "消息已复制",
+      "copyFailed": "复制消息失败",
+      "tokenUsage": "Token 用量",
+      "tokenUsagePrompt": "提示词",
+      "tokenUsageCompletion": "补全",
+      "tokenUsageTotal": "总计",
+      "save": "保存",
+      "insertToNotes": "插入笔记",
+      "regenerate": "重新生成"
+    },
+    "streaming": {
+      "thinking": "思考中..."
+    },
+    "toolCall": {
+      "thinking": "思考中",
+      "executionProcess": "执行过程",
+      "input": "输入",
+      "output": "输出",
+      "running": "运行中..."
+    },
+    "emptyHeading": "开始对话",
+    "emptySubtext": "在下方输入消息开始，或从历史记录中选择对话。",
+    "noAgentConfig": "未配置智能体",
+    "selectAgent": "选择智能体…",
+    "addPicture": "添加图片",
+    "addPictureTooltip": "向消息附加图片",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "使用已索引的笔记作为上下文",
+    "webSearchLabel": "网络搜索",
+    "webSearchTooltipLabel": "在需要时搜索互联网",
+    "imageUnavailable": "当前模型不支持图片附件。",
+    "newChat": "新建对话",
+    "newConversation": "新建对话",
+    "searchConversations": "搜索对话...",
+    "header": {
+      "model": "模型",
+      "advancedParams": "高级参数",
+      "temperature": "温度",
+      "maxTokens": "最大令牌数",
+      "topP": "Top P",
+      "freqPenalty": "频率惩罚",
+      "presPenalty": "存在惩罚",
+      "agentConfig": "代理配置",
+      "modelsCount": "模型数: {{count}}",
+      "tokensCount": "令牌数: {{count}}",
+      "noModels": "暂无可用模型"
+    },
+    "temperature": {
+      "precise": "0 (精确)",
+      "balanced": "1 (均衡)",
+      "creative": "2 (创意)"
+    },
+    "modals": {
+      "image": {
+        "title": "附加图片",
+        "searchPlaceholder": "搜索图片...",
+        "selectAll": "全选",
+        "selectNone": "取消全选",
+        "addSelected": "添加所选",
+        "noResults": "未找到匹配图片。"
+      },
+      "reference": {
+        "title": "添加引用",
+        "searchPlaceholder": "搜索文件和文件夹...",
+        "selectAll": "全选",
+        "selectNone": "取消全选",
+        "addSelected": "添加所选",
+        "noResults": "未找到匹配的文件或文件夹。"
+      },
+      "insertNote": {
+        "title": "插入笔记",
+        "searchPlaceholder": "搜索笔记...",
+        "insert": "插入到所选笔记",
+        "createNew": "创建新笔记",
+        "noResults": "未找到匹配笔记。"
+      }
+    }
   },
   "modals": {
-    "confirm": { "cancel": "取消", "confirm": "确认" },
+    "confirm": {
+      "cancel": "取消",
+      "confirm": "确认"
+    },
     "agentEdit": {
       "title": "编辑智能体",
-      "icon": { "name": "图标", "desc": "代表此智能体的表情符号或字符" },
-      "description": { "name": "描述", "desc": "智能体的简要描述" },
+      "icon": {
+        "name": "图标",
+        "desc": "代表此智能体的表情符号或字符"
+      },
+      "description": {
+        "name": "描述",
+        "desc": "智能体的简要描述"
+      },
       "modelStrategy": {
         "name": "模型策略",
-        "options": { "default": "使用默认模型（来自设置）", "chatView": "使用聊天视图模型", "fixed": "固定模型" },
-        "noModels": "无缓存模型"
+        "options": {
+          "default": "使用默认模型（来自设置）",
+          "chatView": "使用聊天视图模型",
+          "fixed": "固定模型"
+        },
+        "noModels": "无缓存模型",
+        "desc": "选择智能体如何选择模型"
       },
       "systemPrompt": {
         "createNew": "➕ 创建新提示词…",
-        "promptName": { "name": "提示词名称", "desc": "新系统提示词的显示名称" },
-        "promptContent": { "name": "提示词内容", "desc": "新系统提示词的内容" }
+        "promptName": {
+          "name": "提示词名称",
+          "desc": "新系统提示词的显示名称"
+        },
+        "promptContent": {
+          "name": "提示词内容",
+          "desc": "新系统提示词的内容"
+        },
+        "name": "系统提示词",
+        "desc": "从现有提示词中选择，或为此智能体定义新提示词。"
       },
       "capabilities": "能力",
-      "memory": { "title": "记忆", "notice": "智能体记忆功能正在迭代中，暂时不可用。" },
+      "memory": {
+        "title": "记忆",
+        "notice": "智能体记忆功能正在迭代中，暂时不可用。"
+      },
       "tools": {
         "title": "工具",
-        "builtIn": { "name": "内置工具", "desc": "选择此智能体可使用的内置工具" },
-        "cli": { "name": "CLI 工具", "desc": "授权访问所有已启用的 CLI 工具，或在下方单独选择", "noTools": "未配置 CLI 工具。请在设置 → 工具 → CLI 中添加并启用。" }
+        "builtIn": {
+          "name": "内置工具",
+          "desc": "选择此智能体可使用的内置工具"
+        },
+        "cli": {
+          "name": "CLI 工具",
+          "desc": "授权访问所有已启用的 CLI 工具，或在下方单独选择",
+          "noTools": "未配置 CLI 工具。请在设置 → 工具 → CLI 中添加并启用。"
+        }
       },
-      "mcp": { "title": "MCP 访问", "noServers": "未配置 MCP 服务器。请在设置 → MCP 中添加服务器以解锁这些选项。" },
-      "notices": { "promptRequired": "请为新系统提示词提供名称和内容。" }
+      "mcp": {
+        "title": "MCP 访问",
+        "noServers": "未配置 MCP 服务器。请在设置 → MCP 中添加服务器以解锁这些选项。",
+        "toolsCached": "已缓存 {{count}} 个工具",
+        "toolsCached_plural": "已缓存 {{count}} 个工具",
+        "noToolsCached": "尚无缓存工具。启用完全访问权限或刷新缓存。",
+        "showTools": "显示工具",
+        "hideTools": "隐藏工具",
+        "selected": "已选择",
+        "notSelected": "未选择",
+        "noToolsAvailable": "此服务器暂无可用工具。"
+      },
+      "notices": {
+        "promptRequired": "请为新系统提示词提供名称和内容。"
+      },
+      "name": {
+        "label": "名称",
+        "desc": "智能体的显示名称"
+      },
+      "fixedModel": {
+        "name": "固定模型",
+        "desc": "为此智能体选择特定模型。",
+        "descNoModels": "无可用缓存模型。请在模型标签页中刷新模型。"
+      },
+      "temperature": {
+        "label": "温度",
+        "desc": "控制随机性 (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "最大 Token 数",
+        "desc": "生成的最大 Token 数量"
+      },
+      "contextWindow": {
+        "label": "上下文窗口",
+        "desc": "上下文中包含的历史消息数量"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "启用检索增强生成"
+      },
+      "webSearch": {
+        "name": "网络搜索",
+        "desc": "启用网络搜索功能"
+      },
+      "react": {
+        "name": "ReAct 模式",
+        "desc": "启用 ReAct（推理+行动）智能体模式"
+      },
+      "reactMaxSteps": {
+        "name": "ReAct 最大步数",
+        "desc": "ReAct 循环中的最大步数"
+      },
+      "reactAutoContinue": {
+        "name": "ReAct 自动继续",
+        "desc": "自动继续 ReAct 循环"
+      }
+    },
+    "provider": {
+      "title": "服务商设置",
+      "selectProvider": {
+        "name": "服务商",
+        "desc": "选择 LLM 服务商类型",
+        "placeholder": "-- 选择服务商 --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google（Gemini）",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama（本地）",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "自定义（OpenAI 兼容）"
+      },
+      "modelFilter": {
+        "name": "模型过滤器",
+        "desc": "可选的正则表达式，用于限制可用模型"
+      },
+      "resourceGroup": {
+        "name": "资源组",
+        "desc": "可选的 SAP AI Core 资源组"
+      },
+      "serviceKey": {
+        "name": "服务密钥",
+        "desc": "SAP AI Core 服务密钥（JSON 字符串）"
+      },
+      "baseUrl": {
+        "name": "Base URL",
+        "ollamaDesc": "Ollama 服务器 URL",
+        "customDesc": "OpenAI 兼容的 API 端点（必填）",
+        "optionalDesc": "自定义 API 端点（可选）"
+      },
+      "manageModels": {
+        "name": "管理模型",
+        "desc": "从 Ollama 仓库拉取新模型或更新现有模型。",
+        "btn": "⏬ 拉取 Ollama 模型"
+      },
+      "apiKey": {
+        "name": "API 密钥",
+        "desc": "所选服务商的认证密钥"
+      },
+      "cancel": "取消",
+      "save": "保存",
+      "validation": {
+        "selectProvider": "请选择服务商类型",
+        "apiKeyTooLong": "API 密钥过长，最大长度为 500 个字符。",
+        "invalidUrl": "Base URL 格式无效，请输入有效的 URL（例如 https://api.example.com）"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP 检查器",
+      "desc": "检查和调试模型上下文协议（MCP）服务器连接和工具。",
+      "tabs": {
+        "connections": "连接",
+        "tools": "工具",
+        "logs": "日志"
+      },
+      "refreshBtn": "🔄 刷新",
+      "connections": {
+        "title": "MCP 服务器连接",
+        "noServers": "未配置 MCP 服务器。",
+        "headers": {
+          "server": "服务器名称",
+          "status": "状态",
+          "tools": "可用工具",
+          "actions": "操作"
+        },
+        "statusDisabled": "已禁用",
+        "statusConnected": "● 已连接",
+        "statusDisconnected": "○ 未连接",
+        "toolsLive": "{{count}} 个工具",
+        "toolsLive_plural": "{{count}} 个工具",
+        "toolsCached": "{{count}} 个工具（缓存）",
+        "toolsCached_plural": "{{count}} 个工具（缓存）",
+        "noTools": "0 个工具",
+        "connectBtn": "连接",
+        "disconnectBtn": "断开",
+        "connecting": "连接中...",
+        "disconnecting": "断开中...",
+        "notices": {
+          "disconnected": "已从 {{name}} 断开连接",
+          "enableFirst": "连接前请先在设置中启用服务器",
+          "connected": "已连接到 {{name}}",
+          "failedDisconnect": "从 {{name}} 断开连接失败：{{message}}",
+          "failedConnect": "连接 {{name}} 失败：{{message}}"
+        }
+      },
+      "tools": {
+        "title": "可用 MCP 工具",
+        "noTools": "无可用 MCP 工具，请检查服务器连接。",
+        "serverPrefix": "服务器：{{name}}",
+        "noToolsInServer": "无可用工具",
+        "headers": {
+          "tool": "工具名称",
+          "description": "描述",
+          "parameters": "参数"
+        },
+        "noDescription": "无描述",
+        "noParams": "无"
+      },
+      "logs": {
+        "title": "MCP 连接日志",
+        "placeholder": "MCP 连接日志将显示在此处，目前显示占位信息。",
+        "events": {
+          "connection": "• 连接事件",
+          "tools": "• 工具注册事件",
+          "errors": "• 错误日志",
+          "comms": "• 通信详情"
+        },
+        "testTitle": "测试工具执行",
+        "selectServer": "选择服务器...",
+        "selectTool": "选择工具...",
+        "parametersTitle": "参数",
+        "selectEnum": "选择...",
+        "performBtn": "执行工具",
+        "clearBtn": "清除结果",
+        "executing": "执行中...",
+        "success": "✅ 执行成功",
+        "failed": "❌ 执行失败",
+        "errorTitle": "❌ 执行错误",
+        "errorLabel": "错误：{{message}}",
+        "notices": {
+          "success": "工具执行成功",
+          "failed": "工具执行失败",
+          "error": "执行错误：{{message}}",
+          "requiredMissing": "缺少必填参数：{{name}}",
+          "invalidNumber": "参数 {{name}} 的数字格式无效",
+          "invalidJson": "参数 {{name}} 的 JSON 格式无效"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ 未配置 MCP 服务器",
+        "testing": "🧪 正在测试 {{count}} 个 MCP 服务器连接...",
+        "allSuccess": "✅ 所有 {{count}} 个 MCP 服务器连接成功！",
+        "partial": "⚠️ {{success}} 个已连接，{{failed}} 个失败"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "编辑 MCP 服务器",
+      "titleAdd": "添加 MCP 服务器",
+      "serverName": {
+        "name": "服务器名称",
+        "desc": "在插件中显示的友好名称"
+      },
+      "connectionMode": {
+        "name": "连接模式",
+        "desc": "选择自动连接还是仅在手动触发时连接",
+        "auto": "聊天打开时自动连接",
+        "manual": "手动连接"
+      },
+      "command": {
+        "name": "命令",
+        "desc": "启动 MCP 服务器的可执行文件或脚本"
+      },
+      "arguments": {
+        "name": "参数",
+        "desc": "逗号或换行分隔的参数（可选）"
+      },
+      "envVars": {
+        "name": "环境变量",
+        "desc": "可选的 KEY=VALUE 键值对，每行一个"
+      },
+      "enabled": {
+        "name": "启用",
+        "desc": "禁用后保留服务器配置但不自动连接"
+      },
+      "cancel": "取消",
+      "saveEdit": "保存更改",
+      "saveAdd": "添加服务器",
+      "validation": {
+        "nameRequired": "服务器名称为必填项",
+        "commandRequired": "命令为必填项"
+      }
+    },
+    "ollamaManager": {
+      "title": "管理 Ollama 模型",
+      "serverInfo": "服务器信息",
+      "checkingServer": "正在检查服务器...",
+      "serverOnline": "✅ 服务器在线",
+      "versionLabel": " | 版本：{{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ 服务器离线",
+      "connectionError": "❌ 连接错误",
+      "pullTitle": "拉取新模型",
+      "pullHint": "输入模型名称以从 Ollama 库下载（如 llama2、mistral、codellama）",
+      "modelName": {
+        "name": "模型名称",
+        "example": "示例：llama2、mistral、codellama:7b"
+      },
+      "pullBtn": "拉取模型",
+      "installedTitle": "已安装模型",
+      "refreshList": "🔄 刷新列表",
+      "noModels": "未找到模型，请先拉取一个模型。",
+      "capabilities": "能力：{{caps}}",
+      "deleteBtn": "删除",
+      "closeBtn": "关闭",
+      "confirmDelete": {
+        "title": "确认删除",
+        "message": "确定要删除模型「{{name}}」吗？",
+        "cancel": "取消",
+        "confirm": "删除"
+      },
+      "notices": {
+        "enterName": "请输入模型名称",
+        "pulling": "正在拉取 {{name}}...可能需要一些时间。",
+        "pullSuccess": "✅ 成功拉取 {{name}}",
+        "pullFailed": "❌ 拉取模型失败：{{message}}",
+        "deleted": "✅ 已删除 {{name}}",
+        "deleteFailed": "❌ 删除模型失败：{{message}}",
+        "refreshing": "刷新中...",
+        "refreshSuccess": "✅ 模型列表刷新成功",
+        "refreshFailed": "❌ 刷新模型列表失败"
+      }
+    },
+    "promptEdit": {
+      "title": "编辑系统提示词",
+      "name": {
+        "name": "名称",
+        "desc": "此提示词的显示名称"
+      },
+      "content": {
+        "name": "内容",
+        "desc": "系统提示词的内容"
+      },
+      "enabled": {
+        "name": "启用",
+        "desc": "是否激活此提示词"
+      },
+      "cancel": "取消",
+      "save": "保存"
+    },
+    "prompt": {
+      "cancel": "取消",
+      "ok": "确定"
+    },
+    "textInput": {
+      "nameLabel": "名称",
+      "create": "创建",
+      "cancel": "取消"
+    },
+    "explain": {
+      "loading": "⏳ 处理中...",
+      "error": "渲染解释时出错",
+      "errorPrefix": "❌ 错误："
     }
   },
   "notices": {

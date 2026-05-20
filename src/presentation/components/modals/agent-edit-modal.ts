@@ -36,8 +36,8 @@ export class AgentEditModal extends Modal {
 
 		// Icon field
 		new Setting(contentEl)
-			.setName('Icon')
-			.setDesc('Emoji or character to represent this agent')
+			.setName(t('modals.agentEdit.icon.name'))
+			.setDesc(t('modals.agentEdit.icon.desc'))
 			.addText(text => text
 				.setValue(this.agent.icon)
 				.onChange(value => {
@@ -47,8 +47,8 @@ export class AgentEditModal extends Modal {
 		// Name field
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].name',
-			label: 'Name',
-			description: 'Display name for this agent'
+			label: t('modals.agentEdit.name.label'),
+			description: t('modals.agentEdit.name.desc')
 		}).addText(text => text
 				.setValue(this.agent.name)
 				.onChange(value => {
@@ -57,8 +57,8 @@ export class AgentEditModal extends Modal {
 
 		// Description field
 		new Setting(contentEl)
-			.setName('Description')
-			.setDesc('Brief description of the agent')
+			.setName(t('modals.agentEdit.description.name'))
+			.setDesc(t('modals.agentEdit.description.desc'))
 			.addTextArea(text => {
 				text.setValue(this.agent.description);
 				text.inputEl.rows = 3;
@@ -73,8 +73,8 @@ export class AgentEditModal extends Modal {
 		
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].modelStrategy.strategy',
-			label: 'Model strategy',
-			description: 'Choose how the agent will select its model'
+			label: t('modals.agentEdit.modelStrategy.name'),
+			description: t('modals.agentEdit.modelStrategy.desc')
 		}).addDropdown(dropdown => {
 				dropdown
 					.addOption('default', t('modals.agentEdit.modelStrategy.options.default'))
@@ -97,10 +97,10 @@ export class AgentEditModal extends Modal {
 		// Fixed Model Selection (only shown when strategy is 'fixed')
 		this.fixedModelSetting = applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].modelStrategy.modelId',
-			label: 'Fixed model',
+			label: t('modals.agentEdit.fixedModel.name'),
 			description: hasCachedModels
-				? 'Select a specific model for this agent.'
-				: 'No cached models available. Refresh models in the Models tab.'
+				? t('modals.agentEdit.fixedModel.desc')
+				: t('modals.agentEdit.fixedModel.descNoModels')
 		})
 			.addDropdown(dropdown => {
 				if (!hasCachedModels) {
@@ -133,8 +133,8 @@ export class AgentEditModal extends Modal {
 		// Temperature field
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].temperature',
-			label: 'Temperature',
-			description: 'Controls randomness (0.0 - 2.0)'
+			label: t('modals.agentEdit.temperature.label'),
+			description: t('modals.agentEdit.temperature.desc')
 		}).addSlider(slider => slider
 				.setLimits(0, 2, 0.1)
 				.setValue(this.agent.temperature)
@@ -145,8 +145,8 @@ export class AgentEditModal extends Modal {
 		// Max Tokens field
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].maxTokens',
-			label: 'Max tokens',
-			description: 'Maximum number of tokens to generate'
+			label: t('modals.agentEdit.maxTokens.label'),
+			description: t('modals.agentEdit.maxTokens.desc')
 		}).addText(text => text
 				.setValue(String(this.agent.maxTokens))
 				.onChange(value => {
@@ -159,8 +159,8 @@ export class AgentEditModal extends Modal {
 		// Context Window field
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].contextWindow',
-			label: 'Context window',
-			description: 'Number of previous messages to include in context'
+			label: t('modals.agentEdit.contextWindow.label'),
+			description: t('modals.agentEdit.contextWindow.desc')
 		}).addText(text => text
 				.setValue(String(this.agent.contextWindow))
 				.onChange(value => {
@@ -182,8 +182,8 @@ export class AgentEditModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].systemPromptId',
-			label: 'System prompt',
-			description: 'Choose from existing prompts or define a new one for this agent.'
+			label: t('modals.agentEdit.systemPrompt.name'),
+			description: t('modals.agentEdit.systemPrompt.desc')
 		}).addDropdown(dropdown => {
 				prompts.forEach(prompt => {
 					dropdown.addOption(prompt.id, prompt.name);
@@ -237,8 +237,8 @@ export class AgentEditModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].ragEnabled',
-			label: 'RAG',
-			description: 'Enable retrieval augmented generation'
+			label: t('modals.agentEdit.rag.name'),
+			description: t('modals.agentEdit.rag.desc')
 		}).addToggle(toggle => toggle
 				.setValue(this.agent.ragEnabled)
 				.onChange(value => {
@@ -247,8 +247,8 @@ export class AgentEditModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].webSearchEnabled',
-			label: 'Web search',
-			description: 'Enable web search capabilities'
+			label: t('modals.agentEdit.webSearch.name'),
+			description: t('modals.agentEdit.webSearch.desc')
 		}).addToggle(toggle => toggle
 				.setValue(this.agent.webSearchEnabled)
 				.onChange(value => {
@@ -257,8 +257,8 @@ export class AgentEditModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].reactEnabled',
-			label: 'ReAct Mode',
-			description: 'Enable ReAct (Reasoning + Acting) agent pattern'
+			label: t('modals.agentEdit.react.name'),
+			description: t('modals.agentEdit.react.desc')
 		}).addToggle(toggle => toggle
 				.setValue(this.agent.reactEnabled)
 				.onChange(value => {
@@ -268,8 +268,8 @@ export class AgentEditModal extends Modal {
 		if (this.agent.reactEnabled) {
 			applyConfigFieldMetadata(new Setting(contentEl), {
 				path: 'agents[].reactMaxSteps',
-				label: 'ReAct Max Steps',
-				description: 'Maximum number of steps in ReAct loop'
+				label: t('modals.agentEdit.reactMaxSteps.name'),
+				description: t('modals.agentEdit.reactMaxSteps.desc')
 			}).addSlider(slider => slider
 					.setLimits(1, 20, 1)
 					.setValue(this.agent.reactMaxSteps)
@@ -279,8 +279,8 @@ export class AgentEditModal extends Modal {
 
 			applyConfigFieldMetadata(new Setting(contentEl), {
 				path: 'agents[].reactAutoContinue',
-				label: 'ReAct Auto Continue',
-				description: 'Automatically continue ReAct loop'
+				label: t('modals.agentEdit.reactAutoContinue.name'),
+				description: t('modals.agentEdit.reactAutoContinue.desc')
 			}).addToggle(toggle => toggle
 					.setValue(this.agent.reactAutoContinue)
 					.onChange(value => {
@@ -304,8 +304,10 @@ export class AgentEditModal extends Modal {
 			.setDesc(t('modals.agentEdit.tools.builtIn.desc'));
 
 		this.plugin.settings.builtInTools.forEach((tool: BuiltInToolConfig) => {
+			const fallbackName = tool.type.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
+			const toolNameKey = `settings.tools.builtIn.toolNames.${tool.type}`;
 			new Setting(contentEl)
-				.setName(tool.type.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()))
+				.setName(t(toolNameKey, { defaultValue: fallbackName }))
 				.addToggle(toggle => toggle
 					.setValue(this.agent.enabledBuiltInTools.includes(tool.type))
 					.onChange(value => {
@@ -469,15 +471,15 @@ export class AgentEditModal extends Modal {
 		const serverSetting = new Setting(wrapper)
 			.setName(server.name)
 			.setDesc(hasTools
-				? `${server.cachedTools!.length} tool${server.cachedTools!.length === 1 ? '' : 's'} cached`
-				: 'No tools cached yet. Enable full access or refresh the cache.');
+				? t(server.cachedTools!.length === 1 ? 'modals.agentEdit.mcp.toolsCached' : 'modals.agentEdit.mcp.toolsCached_plural', { count: server.cachedTools!.length })
+				: t('modals.agentEdit.mcp.noToolsCached'));
 		serverSetting.settingEl.addClass('ia-mcp-server-header');
 
 		if (hasTools) {
 			serverSetting.addExtraButton(button => {
 				const updateButton = () => {
 					button.setIcon(toolsVisible ? 'chevron-up' : 'chevron-down');
-					button.setTooltip(toolsVisible ? 'Hide tools' : 'Show tools');
+					button.setTooltip(toolsVisible ? t('modals.agentEdit.mcp.hideTools') : t('modals.agentEdit.mcp.showTools'));
 				};
 				updateButton();
 				button.onClick(() => {
@@ -493,7 +495,7 @@ export class AgentEditModal extends Modal {
 		const serverStatus = serverSetting.controlEl.createDiv('ia-mcp-status');
 		const updateServerStatus = () => {
 			const selected = this.agent.enabledMcpServers.includes(server.name);
-			serverStatus.setText(selected ? 'Selected' : 'Not selected');
+			serverStatus.setText(selected ? t('modals.agentEdit.mcp.selected') : t('modals.agentEdit.mcp.notSelected'));
 			serverStatus.toggleClass('is-selected', selected);
 		};
 
@@ -549,7 +551,7 @@ export class AgentEditModal extends Modal {
 		} else {
 			const note = wrapper.createDiv('ia-mcp-tools-empty');
 			note.addClass('ia-table-subtext');
-			note.setText('No tools available from this server yet.');
+			note.setText(t('modals.agentEdit.mcp.noToolsAvailable'));
 		}
 
 		this.syncMcpToolStates(toolEntries, server.name);
@@ -567,7 +569,7 @@ export class AgentEditModal extends Modal {
 					toggle.setValue(true);
 				}
 				toggle.setDisabled(true);
-				statusEl.setText('Selected');
+				statusEl.setText(t('modals.agentEdit.mcp.selected'));
 				statusEl.toggleClass('is-selected', true);
 			} else {
 				toggle.setDisabled(false);
@@ -575,7 +577,7 @@ export class AgentEditModal extends Modal {
 				if (toggle.getValue() !== selected) {
 					toggle.setValue(selected);
 				}
-				statusEl.setText(selected ? 'Selected' : 'Not selected');
+				statusEl.setText(selected ? t('modals.agentEdit.mcp.selected') : t('modals.agentEdit.mcp.notSelected'));
 				statusEl.toggleClass('is-selected', selected);
 			}
 		});

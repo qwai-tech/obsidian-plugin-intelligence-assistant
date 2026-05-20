@@ -91,15 +91,21 @@ function renderBuiltInTools(content: HTMLElement, plugin: IntelligenceAssistantP
 		parameters: string;
 		icon: string;
 	}> = {
-		'read_file': { category: 'File Operations', description: 'Read the contents of a file from your vault', parameters: 'path (required): Path to the file to read', icon: '📖' },
-		'write_file': { category: 'File Operations', description: 'Write or update a file in your vault', parameters: 'path (required), content (required): File path and content to write', icon: '✍️' },
-		'list_files': { category: 'File Operations', description: 'List files in the vault or a specific folder', parameters: 'folder (optional), extension (optional): Filter by folder and file extension', icon: '📁' },
-		'search_files': { category: 'Search & Discovery', description: 'Search for files by name or content in your vault', parameters: 'query (required), search_content (optional), limit (optional): Search query and options', icon: '🔍' },
-		'create_note': { category: 'Note Management', description: 'Create a new note with specified content', parameters: 'title (required), content (required), folder (optional): Note title, content, and location', icon: '📝' },
-		'append_to_note': { category: 'Note Management', description: 'Append content to an existing note', parameters: 'path (required), content (required): Note path and content to append', icon: '➕' }
+		'read_file': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.readFile.desc'), parameters: t('settings.tools.builtIn.toolMeta.readFile.params'), icon: '📖' },
+		'write_file': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.writeFile.desc'), parameters: t('settings.tools.builtIn.toolMeta.writeFile.params'), icon: '✍️' },
+		'list_files': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.listFiles.desc'), parameters: t('settings.tools.builtIn.toolMeta.listFiles.params'), icon: '📁' },
+		'search_files': { category: t('settings.tools.builtIn.categories.searchDisc'), description: t('settings.tools.builtIn.toolMeta.searchFiles.desc'), parameters: t('settings.tools.builtIn.toolMeta.searchFiles.params'), icon: '🔍' },
+		'create_note': { category: t('settings.tools.builtIn.categories.noteMgmt'), description: t('settings.tools.builtIn.toolMeta.createNote.desc'), parameters: t('settings.tools.builtIn.toolMeta.createNote.params'), icon: '📝' },
+		'append_to_note': { category: t('settings.tools.builtIn.categories.noteMgmt'), description: t('settings.tools.builtIn.toolMeta.appendNote.desc'), parameters: t('settings.tools.builtIn.toolMeta.appendNote.params'), icon: '➕' }
 	};
 
-	const table = createTable(content, ['Name', 'Category', 'Description', 'Parameters', 'Enabled']);
+	const table = createTable(content, [
+		t('settings.tools.builtIn.tableHeaders.name'),
+		t('settings.tools.builtIn.tableHeaders.category'),
+		t('settings.tools.builtIn.tableHeaders.description'),
+		t('settings.tools.builtIn.tableHeaders.parameters'),
+		t('settings.tools.builtIn.tableHeaders.enabled')
+	]);
 	const tbody = table.tBodies[0];
 
 	plugin.settings.builtInTools.forEach(tool => {
@@ -115,7 +121,8 @@ function renderBuiltInTools(content: HTMLElement, plugin: IntelligenceAssistantP
 		nameCell.addClass('ia-table-cell');
 		const nameDiv = nameCell.createDiv('tool-name');
 		nameDiv.createSpan('tool-icon').setText(metadata.icon);
-		nameDiv.createSpan().setText(tool.type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+		const fallbackName = tool.type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+		nameDiv.createSpan().setText(t(`settings.tools.builtIn.toolNames.${tool.type}`, { defaultValue: fallbackName }));
 
 		const categoryCell = row.insertCell();
 		categoryCell.addClass('ia-table-cell');
@@ -147,11 +154,11 @@ function renderBuiltInTools(content: HTMLElement, plugin: IntelligenceAssistantP
 	});
 
 	const infoBox = content.createDiv('info-callout');
-	const infoTitle = infoBox.createEl('h5', { text: '💡 about tools' });
+	const infoTitle = infoBox.createEl('h5', { text: t('settings.tools.builtIn.infoTitle') });
 	infoTitle.addClass('info-callout-title');
 
 	const infoText = infoBox.createEl('p', {
-		text: 'Built-in tools are configured per plugin settings. MCP tools are managed independently—use the MCP tab to connect servers and refresh tool availability.'
+		text: t('settings.tools.builtIn.infoText')
 	});
 	infoText.addClass('table-subtext');
 }
@@ -182,7 +189,7 @@ function renderMcpTools(
 	const formatCachedParams = (cached?: CachedMCPTool): string => {
 		const schema = cached?.inputSchema;
 		if (!schema || !schema.properties || Object.keys(schema.properties).length === 0) {
-			return 'Schema unavailable';
+			return t('settings.tools.mcpTools.schemaUnavailable');
 		}
 		const requiredSet = new Set(schema.required ?? []);
 		return Object.entries(schema.properties)
@@ -201,7 +208,7 @@ function renderMcpTools(
 
 		for (const cached of cachedTools) {
 			merged.set(cached.name, {
-				description: cached.description ?? 'No description',
+				description: cached.description ?? t('settings.tools.mcpTools.noDescription'),
 				parameters: formatCachedParams(cached),
 				isLive: false
 			});
@@ -209,7 +216,7 @@ function renderMcpTools(
 
 		for (const tool of liveTools) {
 			merged.set(tool.definition.name, {
-				description: tool.definition.description || 'No description',
+				description: tool.definition.description || t('settings.tools.mcpTools.noDescription'),
 				parameters: formatLiveParams(tool),
 				isLive: true
 			});
@@ -231,13 +238,19 @@ function renderMcpTools(
 	if (!hasRows) {
 		const note = content.createEl('p');
 		note.addClass('ia-table-subtext');
-		note.setText('No MCP tools available. Connect a server or refresh cached tools to populate this list.');
+		note.setText(t('settings.tools.mcpTools.noTools'));
 		return;
 	}
 
 	rows.sort((a, b) => a.serverName.localeCompare(b.serverName) || a.name.localeCompare(b.name));
 
-	const table = createTable(content, ['Server', 'Tool', 'Description', 'Parameters', 'Source']);
+	const table = createTable(content, [
+		t('settings.tools.mcpTools.tableHeaders.server'),
+		t('settings.tools.mcpTools.tableHeaders.tool'),
+		t('settings.tools.mcpTools.tableHeaders.description'),
+		t('settings.tools.mcpTools.tableHeaders.parameters'),
+		t('settings.tools.mcpTools.tableHeaders.source')
+	]);
 	const tbody = table.tBodies[0];
 	let currentServer: string | null = null;
 
@@ -252,7 +265,7 @@ function renderMcpTools(
 			serverStack.createDiv('ia-table-title').setText(row.serverName);
 			const statusHost = serverStack.createDiv();
 			const isConnected = connectedServers.has(row.serverName);
-			createStatusIndicator(statusHost, isConnected ? 'success' : 'warning', isConnected ? 'connected' : 'disconnected');
+			createStatusIndicator(statusHost, isConnected ? 'success' : 'warning', isConnected ? t('settings.tools.mcpTools.status.connected') : t('settings.tools.mcpTools.status.disconnected'));
 			currentServer = row.serverName;
 		} else {
 			serverCell.setText('');
@@ -274,7 +287,7 @@ function renderMcpTools(
 		const sourceCell = tr.insertCell();
 		sourceCell.addClass('ia-table-cell');
 		sourceCell.addClass('ia-table-subtext');
-		sourceCell.setText(row.isLive ? 'Live' : 'Cached');
+		sourceCell.setText(row.isLive ? t('settings.tools.mcpTools.live') : t('settings.tools.mcpTools.cached'));
 	}
 }
 
@@ -285,10 +298,10 @@ function renderOpenApiTools(content: HTMLElement, plugin: IntelligenceAssistantP
 	const configs = plugin.settings.openApiTools;
 	const cacheDir = `${plugin.app.vault.configDir}/plugins/${plugin.manifest.id}/data/openapi/`;
 	content.createEl('p', {
-		text: `Generate HTTP tools from OpenAPI documents. Remote specs are cached under ${cacheDir}.`,
+		text: t('settings.tools.openapi.desc', { cacheDir }),
 	}).addClass('ia-table-subtext');
 
-	const addButton = content.createEl('button', { text: 'Add HTTP source' });
+	const addButton = content.createEl('button', { text: t('settings.tools.openapi.addBtn') });
 	addButton.addClass('mod-cta');
 	addButton.addEventListener('click', () => {
 		void (async () => {
@@ -300,18 +313,24 @@ function renderOpenApiTools(content: HTMLElement, plugin: IntelligenceAssistantP
 	});
 
 	if (configs.length === 0) {
-		content.createEl('p', { text: 'No HTTP sources configured yet.' }).addClass('ia-table-subtext');
+		content.createEl('p', { text: t('settings.tools.openapi.noSources') }).addClass('ia-table-subtext');
 		return;
 	}
 
-	const table = createTable(content, ['Name', 'Source', 'Auth', 'Status', 'Actions']);
+	const table = createTable(content, [
+		t('settings.tools.openapi.tableHeaders.name'),
+		t('settings.tools.openapi.tableHeaders.source'),
+		t('settings.tools.openapi.tableHeaders.auth'),
+		t('settings.tools.openapi.tableHeaders.status'),
+		t('settings.tools.openapi.tableHeaders.actions')
+	]);
 	const tbody = table.tBodies[0];
 	const sorted = [...configs].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 	for (const config of sorted) {
 		const row = tbody.insertRow();
 		row.addClass('ia-table-row');
 
-		row.insertCell().setText(config.name || 'Unnamed HTTP source');
+		row.insertCell().setText(config.name || t('settings.tools.openapi.unnamed'));
 		const sourceCell = row.insertCell();
 		sourceCell.addClass('ia-table-subtext');
 		sourceCell.setText(formatSource(config));
@@ -320,24 +339,24 @@ function renderOpenApiTools(content: HTMLElement, plugin: IntelligenceAssistantP
 		authCell.setText(formatAuth(config));
 		const statusCell = row.insertCell();
 		statusCell.addClass('ia-table-subtext');
-		statusCell.setText(config.enabled ? 'Enabled' : 'Disabled');
+		statusCell.setText(config.enabled ? t('settings.tools.openapi.statusEnabled') : t('settings.tools.openapi.statusDisabled'));
 
 		const actionsCell = row.insertCell();
 		actionsCell.addClass('ia-table-cell');
 		actionsCell.addClass('ia-table-cell--actions');
 
-		const editBtn = actionsCell.createEl('button', { text: 'Edit' });
+		const editBtn = actionsCell.createEl('button', { text: t('settings.tools.openapi.actions.edit') });
 		editBtn.addEventListener('click', () => new OpenApiConfigModal(plugin, config, refreshDisplay).open());
 
-		const reloadBtn = actionsCell.createEl('button', { text: 'Reload' });
+		const reloadBtn = actionsCell.createEl('button', { text: t('settings.tools.openapi.actions.reload') });
 		reloadBtn.addEventListener('click', () => { void reloadConfig(plugin, config.id, false, refreshDisplay); });
 
 		if (config.sourceType === 'url') {
-			const refetchBtn = actionsCell.createEl('button', { text: 'Refetch' });
+			const refetchBtn = actionsCell.createEl('button', { text: t('settings.tools.openapi.actions.refetch') });
 			refetchBtn.addEventListener('click', () => { void reloadConfig(plugin, config.id, true, refreshDisplay); });
 		}
 
-		const deleteBtn = actionsCell.createEl('button', { text: 'Delete' });
+		const deleteBtn = actionsCell.createEl('button', { text: t('settings.tools.openapi.actions.delete') });
 		deleteBtn.addClass('mod-warning');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
@@ -348,7 +367,7 @@ function renderOpenApiTools(content: HTMLElement, plugin: IntelligenceAssistantP
 					await plugin.saveSettings();
 					await plugin.removeOpenApiConfig(config.id);
 					refreshDisplay();
-					new Notice('HTTP source removed');
+					new Notice(t('settings.tools.openapi.notices.removed'));
 				}
 			})();
 		});
@@ -357,18 +376,18 @@ function renderOpenApiTools(content: HTMLElement, plugin: IntelligenceAssistantP
 
 function formatSource(config: OpenApiToolConfig): string {
 	return config.sourceType === 'url'
-		? config.specUrl?.trim() || 'Remote URL not set'
-		: config.specPath?.trim() || 'File path not set';
+		? config.specUrl?.trim() || t('settings.tools.openapi.sourceUrl')
+		: config.specPath?.trim() || t('settings.tools.openapi.sourcePath');
 }
 
 function formatAuth(config: OpenApiToolConfig): string {
 	switch (config.authType) {
 		case 'header':
-			return `Header (${config.authKey || 'n/a'})`;
+			return t('settings.tools.openapi.authHeader', { key: config.authKey || 'n/a' });
 		case 'query':
-			return `Query (${config.authKey || 'n/a'})`;
+			return t('settings.tools.openapi.authQuery', { key: config.authKey || 'n/a' });
 		default:
-			return 'None';
+			return t('settings.tools.openapi.authNone');
 	}
 }
 
@@ -385,10 +404,10 @@ async function reloadConfig(
 		});
 		await plugin.saveSettings();
 		refreshDisplay();
-		new Notice(`Reloaded ${loaded} operations`);
+		new Notice(t('settings.tools.openapi.notices.reloaded', { count: loaded }));
 	} catch (error) {
 		console.error('[OpenAPI] Failed to reload tools', error);
-		new Notice('Failed to reload HTTP source. Check the console for details.');
+		new Notice(t('settings.tools.openapi.notices.reloadFailed'));
 	}
 }
 
@@ -422,7 +441,7 @@ class OpenApiConfigModal extends Modal {
 	onOpen(): void {
 		const { contentEl } = this;
 		contentEl.empty();
-		contentEl.createEl('h3', { text: this.config.name || 'HTTP Source' });
+		contentEl.createEl('h3', { text: this.config.name || t('settings.tools.openapi.modal.defaultTitle') });
 
 		const persist = async () => {
 			await this.plugin.saveSettings();
@@ -434,8 +453,8 @@ class OpenApiConfigModal extends Modal {
 		};
 
 		new Setting(contentEl)
-			.setName('Display name')
-			.setDesc('Shown to agents when choosing a tool source')
+			.setName(t('settings.tools.openapi.modal.displayName.name'))
+			.setDesc(t('settings.tools.openapi.modal.displayName.desc'))
 			.addText(text => {
 				text.setPlaceholder('HTTP Source')
 					.setValue(this.config.name ?? '')
@@ -446,8 +465,8 @@ class OpenApiConfigModal extends Modal {
 			});
 
 		new Setting(contentEl)
-			.setName('Enabled')
-			.setDesc('Enable to expose this HTTP API to every agent')
+			.setName(t('settings.tools.openapi.modal.enabled.name'))
+			.setDesc(t('settings.tools.openapi.modal.enabled.desc'))
 			.addToggle(toggle => toggle
 				.setValue(Boolean(this.config.enabled))
 				.onChange(async (value) => {
@@ -457,10 +476,10 @@ class OpenApiConfigModal extends Modal {
 				}));
 
 		new Setting(contentEl)
-			.setName('Source type')
+			.setName(t('settings.tools.openapi.modal.sourceType.name'))
 			.addDropdown(dropdown => {
-				dropdown.addOption('file', 'Local file');
-				dropdown.addOption('url', 'Remote URL');
+				dropdown.addOption('file', t('settings.tools.openapi.modal.sourceType.file'));
+				dropdown.addOption('url', t('settings.tools.openapi.modal.sourceType.url'));
 				dropdown.setValue(this.config.sourceType ?? 'file')
 					.onChange(async (value) => {
 						this.config.sourceType = value as OpenApiSourceType;
@@ -477,8 +496,8 @@ class OpenApiConfigModal extends Modal {
 
 		if (this.config.sourceType === 'url') {
 			new Setting(contentEl)
-				.setName('OpenAPI URL')
-				.setDesc('Fetched and cached inside the plugin data directory')
+				.setName(t('settings.tools.openapi.modal.specUrl.name'))
+				.setDesc(t('settings.tools.openapi.modal.specUrl.desc'))
 				.addText(text => {
 					text.setPlaceholder('https://example.com/openapi.json')
 						.setValue(this.config.specUrl ?? '')
@@ -488,12 +507,12 @@ class OpenApiConfigModal extends Modal {
 					text.inputEl.onblur = () => { void persist(); };
 				});
 			const cachePath = `${this.plugin.app.vault.configDir}/plugins/${this.plugin.manifest.id}/data/openapi/${this.config.id}.json`;
-			const lastFetched = this.config.lastFetchedAt ? new Date(this.config.lastFetchedAt).toLocaleString() : 'Never fetched';
-			contentEl.createEl('p', { text: `Cached file: ${cachePath} (${lastFetched})` }).addClass('ia-table-subtext');
+			const lastFetched = this.config.lastFetchedAt ? new Date(this.config.lastFetchedAt).toLocaleString() : t('settings.tools.openapi.modal.neverFetched');
+			contentEl.createEl('p', { text: t('settings.tools.openapi.modal.cachedFile', { path: cachePath, date: lastFetched }) }).addClass('ia-table-subtext');
 		} else {
 			new Setting(contentEl)
-				.setName('OpenAPI file path')
-				.setDesc('Relative path inside the vault or an absolute path')
+				.setName(t('settings.tools.openapi.modal.specPath.name'))
+				.setDesc(t('settings.tools.openapi.modal.specPath.desc'))
 				.addText(text => {
 					text.setPlaceholder('integrations/openapi.json')
 						.setValue(this.config.specPath ?? '')
@@ -505,8 +524,8 @@ class OpenApiConfigModal extends Modal {
 		}
 
 		new Setting(contentEl)
-			.setName('Base URL override')
-			.setDesc('Override the first server entry from the document (optional)')
+			.setName(t('settings.tools.openapi.modal.baseUrl.name'))
+			.setDesc(t('settings.tools.openapi.modal.baseUrl.desc'))
 			.addText(text => {
 				text.setPlaceholder('https://api.example.com')
 					.setValue(this.config.baseUrl ?? '')
@@ -517,12 +536,12 @@ class OpenApiConfigModal extends Modal {
 			});
 
 		new Setting(contentEl)
-			.setName('Authentication')
-			.setDesc('Automatically insert API keys when calling this source')
+			.setName(t('settings.tools.openapi.modal.auth.name'))
+			.setDesc(t('settings.tools.openapi.modal.auth.desc'))
 			.addDropdown(dropdown => {
-				dropdown.addOption('none', 'None');
-				dropdown.addOption('header', 'HTTP header');
-				dropdown.addOption('query', 'Query parameter');
+				dropdown.addOption('none', t('settings.tools.openapi.modal.auth.none'));
+				dropdown.addOption('header', t('settings.tools.openapi.modal.auth.header'));
+				dropdown.addOption('query', t('settings.tools.openapi.modal.auth.query'));
 				dropdown.setValue(this.config.authType ?? 'none')
 					.onChange(async (value) => {
 						this.config.authType = value as OpenApiAuthType;
@@ -531,7 +550,7 @@ class OpenApiConfigModal extends Modal {
 			});
 
 		new Setting(contentEl)
-			.setName('Credential key')
+			.setName(t('settings.tools.openapi.modal.credKey.name'))
 			.addText(text => {
 				text.setPlaceholder(this.config.authType === 'header' ? 'Authorization' : 'api_key')
 					.setValue(this.config.authKey ?? '')
@@ -542,7 +561,7 @@ class OpenApiConfigModal extends Modal {
 			});
 
 		new Setting(contentEl)
-			.setName('Credential value')
+			.setName(t('settings.tools.openapi.modal.credValue.name'))
 			.addText(text => {
 				text.setPlaceholder('sk-your-token')
 					.setValue(this.config.authValue ?? '')
@@ -553,23 +572,23 @@ class OpenApiConfigModal extends Modal {
 			});
 
 		const actions = new Setting(contentEl)
-			.setName('Actions');
+			.setName(t('settings.tools.openapi.modal.actions.name'));
 		actions.addButton(button => {
-			button.setButtonText('Reload tools')
+			button.setButtonText(t('settings.tools.openapi.modal.actions.reloadTools'))
 				.onClick(() => { void reload(false); });
 		});
 
 		if (this.config.sourceType === 'url') {
 		actions.addExtraButton(button => {
 				button.setIcon('refresh-cw')
-					.setTooltip('Refetch spec from URL')
+					.setTooltip(t('settings.tools.openapi.modal.actions.refetchTooltip'))
 					.onClick(() => { void reload(true); });
 			});
 		}
 
 			actions.addExtraButton(button => {
 				button.setIcon('x')
-					.setTooltip('Delete source')
+					.setTooltip(t('settings.tools.openapi.modal.actions.deleteTooltip'))
 					.onClick(() => {
 						void (async () => {
 							const list = this.plugin.settings.openApiTools;
@@ -605,13 +624,13 @@ function renderCliTools(
 	const configs = plugin.settings.cliTools;
 
 	content.createEl('p', {
-		text: 'Define local command-line tools that agents can execute. Use templates like {{param}} for dynamic arguments.',
+		text: t('settings.tools.cli.desc'),
 	}).addClass('ia-table-subtext');
 
 	const buttonContainer = content.createDiv();
 	buttonContainer.setCssProps({ 'display': 'flex', 'gap': '8px', 'margin-bottom': '16px' });
 
-	const addButton = buttonContainer.createEl('button', { text: 'Add CLI Tool' });
+	const addButton = buttonContainer.createEl('button', { text: t('settings.tools.cli.addBtn') });
 	addButton.addClass('mod-cta');
 	addButton.addEventListener('click', () => {
 		void (async () => {
@@ -622,17 +641,23 @@ function renderCliTools(
 		})();
 	});
 
-	const presetButton = buttonContainer.createEl('button', { text: 'Add from Presets' });
+	const presetButton = buttonContainer.createEl('button', { text: t('settings.tools.cli.presetsBtn') });
 	presetButton.addEventListener('click', () => {
 		new CLIToolPresetModal(plugin, refreshDisplay).open();
 	});
 
 	if (configs.length === 0) {
-		content.createEl('p', { text: 'No CLI tools configured yet.' }).addClass('ia-table-subtext');
+		content.createEl('p', { text: t('settings.tools.cli.noTools') }).addClass('ia-table-subtext');
 		return;
 	}
 
-	const table = createTable(content, ['Name', 'Command', 'Parameters', 'Status', 'Actions']);
+	const table = createTable(content, [
+		t('settings.tools.cli.tableHeaders.name'),
+		t('settings.tools.cli.tableHeaders.command'),
+		t('settings.tools.cli.tableHeaders.parameters'),
+		t('settings.tools.cli.tableHeaders.status'),
+		t('settings.tools.cli.tableHeaders.actions')
+	]);
 	const tbody = table.tBodies[0];
 	const sorted = [...configs].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
@@ -644,7 +669,7 @@ function renderCliTools(
 		nameCell.addClass('ia-table-cell');
 		const nameDiv = nameCell.createDiv('tool-name');
 		nameDiv.createSpan('tool-icon').setText('⌨️');
-		nameDiv.createSpan().setText(config.name || 'Unnamed CLI Tool');
+		nameDiv.createSpan().setText(config.name || t('settings.tools.cli.unnamed'));
 
 		const commandCell = row.insertCell();
 		commandCell.addClass('ia-table-cell');
@@ -658,20 +683,20 @@ function renderCliTools(
 		paramsCell.addClass('ia-table-cell');
 		paramsCell.addClass('ia-table-subtext');
 		const paramCount = config.parameters?.length ?? 0;
-		paramsCell.setText(paramCount > 0 ? `${paramCount} parameter${paramCount > 1 ? 's' : ''}` : 'None');
+		paramsCell.setText(paramCount > 0 ? t(paramCount === 1 ? 'settings.tools.cli.paramCount' : 'settings.tools.cli.paramCount_plural', { count: paramCount }) : t('settings.tools.cli.noParams'));
 
 		const statusCell = row.insertCell();
 		statusCell.addClass('ia-table-cell');
-		createStatusIndicator(statusCell, config.enabled ? 'success' : 'warning', config.enabled ? 'Enabled' : 'Disabled');
+		createStatusIndicator(statusCell, config.enabled ? 'success' : 'warning', config.enabled ? t('settings.tools.cli.statusEnabled') : t('settings.tools.cli.statusDisabled'));
 
 		const actionsCell = row.insertCell();
 		actionsCell.addClass('ia-table-cell');
 		actionsCell.addClass('ia-table-cell--actions');
 
-		const editBtn = actionsCell.createEl('button', { text: 'Edit' });
+		const editBtn = actionsCell.createEl('button', { text: t('settings.tools.cli.actions.edit') });
 		editBtn.addEventListener('click', () => new CLIToolConfigModal(plugin, config, refreshDisplay).open());
 
-		const toggleBtn = actionsCell.createEl('button', { text: config.enabled ? 'Disable' : 'Enable' });
+		const toggleBtn = actionsCell.createEl('button', { text: config.enabled ? t('settings.tools.cli.actions.disable') : t('settings.tools.cli.actions.enable') });
 		toggleBtn.addEventListener('click', () => {
 			void (async () => {
 				config.enabled = !config.enabled;
@@ -681,7 +706,7 @@ function renderCliTools(
 			})();
 		});
 
-		const deleteBtn = actionsCell.createEl('button', { text: 'Delete' });
+		const deleteBtn = actionsCell.createEl('button', { text: t('settings.tools.cli.actions.delete') });
 		deleteBtn.addClass('mod-warning');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
@@ -692,18 +717,18 @@ function renderCliTools(
 					await plugin.saveSettings();
 					plugin.reloadCLITools();
 					refreshDisplay();
-					new Notice('CLI tool removed');
+					new Notice(t('settings.tools.cli.notices.removed'));
 				}
 			})();
 		});
 	}
 
 	const infoBox = content.createDiv('info-callout');
-	const infoTitle = infoBox.createEl('h5', { text: '💡 About CLI Tools' });
+	const infoTitle = infoBox.createEl('h5', { text: t('settings.tools.cli.infoTitle') });
 	infoTitle.addClass('info-callout-title');
 
 	const infoText = infoBox.createEl('p', {
-		text: 'CLI tools execute shell commands locally. Use {{paramName}} in arguments for template substitution, or configure parameters to be passed as arguments or environment variables.'
+		text: t('settings.tools.cli.infoText')
 	});
 	infoText.addClass('table-subtext');
 }
@@ -734,7 +759,7 @@ class CLIToolConfigModal extends Modal {
 	onOpen(): void {
 		const { contentEl } = this;
 		contentEl.empty();
-		contentEl.createEl('h3', { text: this.config.name || 'CLI Tool' });
+		contentEl.createEl('h3', { text: this.config.name || t('settings.tools.cli.modal.defaultTitle') });
 
 		const persist = async () => {
 			await this.plugin.saveSettings();
@@ -743,8 +768,8 @@ class CLIToolConfigModal extends Modal {
 		};
 
 		new Setting(contentEl)
-			.setName('Tool name')
-			.setDesc('Identifier used by agents to call this tool')
+			.setName(t('settings.tools.cli.modal.toolName.name'))
+			.setDesc(t('settings.tools.cli.modal.toolName.desc'))
 			.addText(text => {
 				text.setPlaceholder('my_tool')
 					.setValue(this.config.name ?? '')
@@ -755,8 +780,8 @@ class CLIToolConfigModal extends Modal {
 			});
 
 		new Setting(contentEl)
-			.setName('Description')
-			.setDesc('Describe what this tool does for the AI')
+			.setName(t('settings.tools.cli.modal.description.name'))
+			.setDesc(t('settings.tools.cli.modal.description.desc'))
 			.addTextArea(text => {
 				text.setPlaceholder('Executes a command to...')
 					.setValue(this.config.description ?? '')
@@ -768,8 +793,8 @@ class CLIToolConfigModal extends Modal {
 			});
 
 		new Setting(contentEl)
-			.setName('Enabled')
-			.setDesc('Enable to allow agents to use this tool')
+			.setName(t('settings.tools.cli.modal.enabled.name'))
+			.setDesc(t('settings.tools.cli.modal.enabled.desc'))
 			.addToggle(toggle => toggle
 				.setValue(Boolean(this.config.enabled))
 				.onChange(async (value) => {
@@ -777,11 +802,11 @@ class CLIToolConfigModal extends Modal {
 					await persist();
 				}));
 
-		contentEl.createEl('h4', { text: 'Command Configuration' });
+		contentEl.createEl('h4', { text: t('settings.tools.cli.modal.commandConfig') });
 
 		new Setting(contentEl)
-			.setName('Command')
-			.setDesc('The executable to run (e.g., node, python, bash, /path/to/script)')
+			.setName(t('settings.tools.cli.modal.command.name'))
+			.setDesc(t('settings.tools.cli.modal.command.desc'))
 			.addText(text => {
 				text.setPlaceholder('python')
 					.setValue(this.config.command ?? '')
@@ -792,8 +817,8 @@ class CLIToolConfigModal extends Modal {
 			});
 
 		new Setting(contentEl)
-			.setName('Arguments')
-			.setDesc('Command arguments, one per line. Use {{paramName}} for template substitution.')
+			.setName(t('settings.tools.cli.modal.args.name'))
+			.setDesc(t('settings.tools.cli.modal.args.desc'))
 			.addTextArea(text => {
 				text.setPlaceholder('-c\n{{code}}')
 					.setValue((this.config.args ?? []).join('\n'))
@@ -805,8 +830,8 @@ class CLIToolConfigModal extends Modal {
 			});
 
 		new Setting(contentEl)
-			.setName('Working directory')
-			.setDesc('Directory to run the command in (optional)')
+			.setName(t('settings.tools.cli.modal.cwd.name'))
+			.setDesc(t('settings.tools.cli.modal.cwd.desc'))
 			.addText(text => {
 				text.setPlaceholder('/path/to/directory')
 					.setValue(this.config.cwd ?? '')
@@ -817,8 +842,8 @@ class CLIToolConfigModal extends Modal {
 			});
 
 		new Setting(contentEl)
-			.setName('Timeout (ms)')
-			.setDesc(`Maximum execution time in milliseconds (default: ${DEFAULT_CLI_TIMEOUT})`)
+			.setName(t('settings.tools.cli.modal.timeout.name'))
+			.setDesc(t('settings.tools.cli.modal.timeout.desc', { timeout: DEFAULT_CLI_TIMEOUT }))
 			.addText(text => {
 				text.setPlaceholder(String(DEFAULT_CLI_TIMEOUT))
 					.setValue(this.config.timeout ? String(this.config.timeout) : '')
@@ -830,8 +855,8 @@ class CLIToolConfigModal extends Modal {
 			});
 
 		new Setting(contentEl)
-			.setName('Run in shell')
-			.setDesc('Execute the command through a shell (enables shell features like pipes)')
+			.setName(t('settings.tools.cli.modal.shell.name'))
+			.setDesc(t('settings.tools.cli.modal.shell.desc'))
 			.addToggle(toggle => toggle
 				.setValue(this.config.shell ?? true)
 				.onChange(async (value) => {
@@ -839,16 +864,16 @@ class CLIToolConfigModal extends Modal {
 					await persist();
 				}));
 
-		contentEl.createEl('h4', { text: 'Parameters' });
+		contentEl.createEl('h4', { text: t('settings.tools.cli.modal.paramsTitle') });
 		contentEl.createEl('p', {
-			text: 'Define parameters that the AI can pass to this tool.',
+			text: t('settings.tools.cli.modal.paramsDesc'),
 			cls: 'ia-table-subtext'
 		});
 
 		const paramsContainer = contentEl.createDiv('cli-params-container');
 		this.renderParameters(paramsContainer, persist);
 
-		const addParamBtn = contentEl.createEl('button', { text: 'Add Parameter' });
+		const addParamBtn = contentEl.createEl('button', { text: t('settings.tools.cli.modal.addParam') });
 		addParamBtn.addEventListener('click', () => {
 			if (!this.config.parameters) {
 				this.config.parameters = [];
@@ -864,15 +889,15 @@ class CLIToolConfigModal extends Modal {
 			void persist();
 		});
 
-		contentEl.createEl('h4', { text: 'Environment Variables' });
+		contentEl.createEl('h4', { text: t('settings.tools.cli.modal.envTitle') });
 		contentEl.createEl('p', {
-			text: 'Static environment variables to set when running the command.',
+			text: t('settings.tools.cli.modal.envDesc'),
 			cls: 'ia-table-subtext'
 		});
 
 		new Setting(contentEl)
-			.setName('Environment variables')
-			.setDesc('Format: KEY=value, one per line')
+			.setName(t('settings.tools.cli.modal.envVars.name'))
+			.setDesc(t('settings.tools.cli.modal.envVars.desc'))
 			.addTextArea(text => {
 				const envStr = this.config.env
 					? Object.entries(this.config.env).map(([k, v]) => `${k}=${v}`).join('\n')
@@ -899,7 +924,7 @@ class CLIToolConfigModal extends Modal {
 
 		const params = this.config.parameters ?? [];
 		if (params.length === 0) {
-			container.createEl('p', { text: 'No parameters defined.', cls: 'ia-table-subtext' });
+			container.createEl('p', { text: t('settings.tools.cli.modal.noParams'), cls: 'ia-table-subtext' });
 			return;
 		}
 
@@ -921,7 +946,7 @@ class CLIToolConfigModal extends Modal {
 				'margin-bottom': '0.5em'
 			});
 
-			headerDiv.createEl('strong', { text: `Parameter ${i + 1}` });
+			headerDiv.createEl('strong', { text: t('settings.tools.cli.modal.paramN', { n: i + 1 }) });
 
 			const removeBtn = headerDiv.createEl('button', { text: '✕' });
 			removeBtn.setCssProps({ 'padding': '2px 6px' });
@@ -932,7 +957,7 @@ class CLIToolConfigModal extends Modal {
 			});
 
 			new Setting(paramDiv)
-				.setName('Name')
+				.setName(t('settings.tools.cli.modal.param.name'))
 				.addText(text => {
 					text.setValue(param.name)
 						.onChange(value => { param.name = value; });
@@ -940,11 +965,11 @@ class CLIToolConfigModal extends Modal {
 				});
 
 			new Setting(paramDiv)
-				.setName('Type')
+				.setName(t('settings.tools.cli.modal.param.type.name'))
 				.addDropdown(dropdown => {
-					dropdown.addOption('string', 'String');
-					dropdown.addOption('number', 'Number');
-					dropdown.addOption('boolean', 'Boolean');
+					dropdown.addOption('string', t('settings.tools.cli.modal.param.type.string'));
+					dropdown.addOption('number', t('settings.tools.cli.modal.param.type.number'));
+					dropdown.addOption('boolean', t('settings.tools.cli.modal.param.type.boolean'));
 					dropdown.setValue(param.type)
 						.onChange(value => {
 							param.type = value as 'string' | 'number' | 'boolean';
@@ -953,7 +978,7 @@ class CLIToolConfigModal extends Modal {
 				});
 
 			new Setting(paramDiv)
-				.setName('Description')
+				.setName(t('settings.tools.cli.modal.param.description'))
 				.addText(text => {
 					text.setValue(param.description)
 						.onChange(value => { param.description = value; });
@@ -961,7 +986,7 @@ class CLIToolConfigModal extends Modal {
 				});
 
 			new Setting(paramDiv)
-				.setName('Required')
+				.setName(t('settings.tools.cli.modal.param.required'))
 				.addToggle(toggle => toggle
 					.setValue(param.required ?? false)
 					.onChange(value => {
@@ -970,12 +995,12 @@ class CLIToolConfigModal extends Modal {
 					}));
 
 			new Setting(paramDiv)
-				.setName('Insert as')
-				.setDesc('How to pass this parameter to the command')
+				.setName(t('settings.tools.cli.modal.param.insertAs.name'))
+				.setDesc(t('settings.tools.cli.modal.param.insertAs.desc'))
 				.addDropdown(dropdown => {
 					dropdown.addOption('template', 'Template ({{name}})');
-					dropdown.addOption('arg', 'Append as argument');
-					dropdown.addOption('env', 'Environment variable');
+					dropdown.addOption('arg', t('settings.tools.cli.modal.param.insertAs.arg'));
+					dropdown.addOption('env', t('settings.tools.cli.modal.param.insertAs.env'));
 					dropdown.setValue(param.insertAs ?? 'template')
 						.onChange(value => {
 							param.insertAs = value as 'template' | 'arg' | 'env';
@@ -985,8 +1010,8 @@ class CLIToolConfigModal extends Modal {
 
 			if (param.insertAs === 'env') {
 				new Setting(paramDiv)
-					.setName('Env variable name')
-					.setDesc('Override the environment variable name (defaults to uppercase parameter name)')
+					.setName(t('settings.tools.cli.modal.param.envName.name'))
+					.setDesc(t('settings.tools.cli.modal.param.envName.desc'))
 					.addText(text => {
 						text.setPlaceholder(param.name.toUpperCase())
 							.setValue(param.envName ?? '')
@@ -1018,10 +1043,10 @@ class CLIToolPresetModal extends Modal {
 	onOpen(): void {
 		const { contentEl } = this;
 		contentEl.empty();
-		contentEl.createEl('h3', { text: 'Add CLI tool from presets' });
+		contentEl.createEl('h3', { text: t('settings.tools.cli.presets.title') });
 
 		contentEl.createEl('p', {
-			text: 'Select a preset to quickly add a pre-configured CLI tool. You can customize it after adding.',
+			text: t('settings.tools.cli.presets.desc'),
 			cls: 'ia-table-subtext'
 		});
 
@@ -1040,7 +1065,7 @@ class CLIToolPresetModal extends Modal {
 
 		// Render each category
 		for (const [category, categoryPresets] of categories) {
-			const categoryName = PRESET_CATEGORIES[category as keyof typeof PRESET_CATEGORIES] || category;
+			const categoryName = t(`settings.tools.cli.presets.categories.${category}`, { defaultValue: PRESET_CATEGORIES[category as keyof typeof PRESET_CATEGORIES] || category });
 			contentEl.createEl('h4', { text: categoryName });
 
 			const categoryContainer = contentEl.createDiv('cli-preset-category');
@@ -1060,7 +1085,7 @@ class CLIToolPresetModal extends Modal {
 				});
 
 				const infoDiv = presetDiv.createDiv();
-				infoDiv.createEl('strong', { text: preset.name });
+				infoDiv.createEl('strong', { text: t(`settings.tools.cli.presets.names.${preset.id}`, { defaultValue: preset.name }) });
 				infoDiv.createEl('div', {
 					text: preset.config.description,
 					cls: 'ia-table-subtext'
@@ -1071,7 +1096,7 @@ class CLIToolPresetModal extends Modal {
 				commandDiv.setCssProps({ 'font-size': '11px', 'color': 'var(--text-muted)' });
 
 				const addBtn = presetDiv.createEl('button', {
-					text: isAlreadyAdded ? 'Added' : 'Add'
+					text: isAlreadyAdded ? t('settings.tools.cli.presets.addedBtn') : t('settings.tools.cli.presets.addBtn')
 				});
 				if (isAlreadyAdded) {
 					addBtn.disabled = true;
@@ -1088,7 +1113,7 @@ class CLIToolPresetModal extends Modal {
 		// Add close button
 		const footer = contentEl.createDiv();
 		footer.setCssProps({ 'margin-top': '16px', 'text-align': 'right' });
-		const closeBtn = footer.createEl('button', { text: 'Close' });
+		const closeBtn = footer.createEl('button', { text: t('settings.tools.cli.presets.closeBtn') });
 		closeBtn.addEventListener('click', () => this.close());
 	}
 
@@ -1113,12 +1138,12 @@ class CLIToolPresetModal extends Modal {
 		this.onChange();
 
 		// Update button state
-		button.textContent = 'Added';
+		button.textContent = t('settings.tools.cli.presets.addedBtn');
 		button.disabled = true;
 		button.removeClass('mod-cta');
 		button.setCssProps({ 'opacity': '0.5' });
 
-		new Notice(`Added "${preset.name}" - enable it in the CLI tools list`);
+		new Notice(t('settings.tools.cli.presets.notices.added', { name: preset.name }));
 	}
 
 	onClose(): void {
