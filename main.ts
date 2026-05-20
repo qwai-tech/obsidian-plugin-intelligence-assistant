@@ -1,4 +1,4 @@
-import { Menu, Plugin, WorkspaceLeaf, Editor, MarkdownView, Notice } from 'obsidian';
+import { Plugin, WorkspaceLeaf } from 'obsidian';
 import './src/presentation/components/chat/settings.css';
 import './src/presentation/components/modals/explain-text-modal.css';
 import type {
@@ -28,9 +28,6 @@ import { ToolManager } from './src/application/services/tool-manager';
 import { OpenApiToolLoader } from './src/application/services/openapi-tool-loader';
 import { CLIToolLoader } from './src/application/services/cli-tool-loader';
 import { IntelligenceAssistantSettingTab } from './src/presentation/components/settings-tab';
-import { ProviderFactory } from './src/infrastructure/llm/provider-factory';
-import { ModelManager } from './src/infrastructure/llm/model-manager';
-import { ExplainTextModal } from './src/presentation/components/modals/explain-text-modal';
 import {
 	USER_CONFIG_FOLDER,
 	USER_CONFIG_PATH
@@ -42,18 +39,10 @@ import { ConversationMigrationService } from './src/application/services/convers
 import { RAGManager } from './src/infrastructure/rag-manager';
 import { SettingsService } from './src/application/services/settings-service';
 
-import { initI18n, t } from './src/i18n';
+import { initI18n } from './src/i18n';
 import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-system';
-import { ObsidianHttpClient } from './src/infrastructure/obsidian/obsidian-http-client';
-import { TokenUsageRepository } from './src/infrastructure/persistence/data/token-usage-repository';
-import {
-	AgentRepository,
-	PromptRepository,
-	ModelCacheRepository,
-	ProviderRepository,
-	McpServerRepository,
-	McpToolCacheRepository
-} from './src/infrastructure/persistence';
+import { PluginDataService } from './src/application/services/plugin-data-service';
+import { EditorQuickActions } from './src/presentation/editor/editor-quick-actions';
 
 // Re-export for backward compatibility
 export type {
@@ -102,13 +91,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private pluginDataPath = '';
 	private chatRibbonIconEl: HTMLElement | null = null;
 	private legacyConversations: Conversation[] = [];
-	private promptRepository: PromptRepository | null = null;
-	private agentRepository: AgentRepository | null = null;
-	private modelCacheRepository: ModelCacheRepository | null = null;
-	private providerRepository: ProviderRepository | null = null;
-	private mcpServerRepository: McpServerRepository | null = null;
-	private mcpToolCacheRepository: McpToolCacheRepository | null = null;
-	public tokenUsageRepo: TokenUsageRepository | null = null;
+	private dataService!: PluginDataService;
+	private editorQuickActions!: EditorQuickActions;
+	public get tokenUsageRepo() { return this.dataService?.tokenUsageRepo ?? null; }
 	private _ragManager: RAGManager | null = null;
 	public settingsService!: SettingsService;
 
@@ -126,6 +111,15 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		// Initialize conversation storage system first
 		this.conversationStorageService = new ConversationStorageService(this.app);
 		await this.conversationStorageService.initialize();
+
+		this.dataService = new PluginDataService(this.app);
+		await this.dataService.initialize();
+		this.editorQuickActions = new EditorQuickActions(this.app, () => ({
+			quickActions: this.settings.quickActions,
+			quickActionPrefix: this.settings.quickActionPrefix || '⚡',
+			llmConfigs: this.settings.llmConfigs,
+			defaultModel: this.settings.defaultModel,
+		}));
 
 		await this.loadSettings();
 
@@ -167,7 +161,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		this.addSettingTab(new IntelligenceAssistantSettingTab(this.app, this));
 
 		// Register editor context menu actions
-		this.registerEditorMenuActions();
+		this.editorQuickActions.register(this);
 
 		const loadTime = Date.now() - loadStart;
 		console.debug(`[Plugin] Load time: ${loadTime}ms`);
@@ -349,14 +343,12 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	async loadSettings() {
 		const totalStart = Date.now();
 
-		const repoStart = Date.now();
-		await this.ensureDataRepositories();
-		console.debug(`[Settings] Ensure repositories: ${Date.now() - repoStart}ms`);
+		// dataService already initialized in onload() before this call
+		console.debug(`[Settings] Repositories ready: ${Date.now() - totalStart}ms`);
 
 		const configStart = Date.now();
 		const userConfigExists = await this.userConfigExists();
 		const userConfig = userConfigExists ? await this.readUserConfigFile() : null;
-		let storedSettings: PluginSettings | null = null;
 		let legacyConversations: Conversation[] = [];
 		let legacyData: unknown = null;
 
@@ -366,11 +358,10 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			console.debug('No legacy data found', error);
 		}
 
+		let storedSettings: PluginSettings | null = null;
 		if (userConfig) {
 			storedSettings = userConfigToPluginSettings(userConfig);
-		}
-
-		if (!storedSettings && legacyData && typeof legacyData === 'object') {
+		} else if (legacyData && typeof legacyData === 'object') {
 			storedSettings = legacyData as PluginSettings;
 			const dataObj = legacyData as Record<string, unknown>;
 			if (Array.isArray(dataObj.conversations)) {
@@ -380,45 +371,24 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, storedSettings ?? {});
 		this.legacyConversations = legacyConversations;
-		let settingsMutated = false;
 		console.debug(`[Settings] Read config files: ${Date.now() - configStart}ms`);
 
-		// Hydrate providers first as other methods may depend on it
-		const providerStart = Date.now();
-		await this.hydrateProvidersFromRepository();
-		console.debug(`[Settings] Hydrate providers: ${Date.now() - providerStart}ms`);
-
-		// Then hydrate other repositories in parallel
 		const hydrateStart = Date.now();
-		await Promise.all([
-			this.hydratePromptsFromRepository(),
-			this.hydrateAgentsFromRepository(),
-			this.hydrateModelCaches(),
-			this.hydrateMcpServersFromRepository()
-		]);
-		console.debug(`[Settings] Hydrate other data: ${Date.now() - hydrateStart}ms`);
+		const hydrated = await this.dataService.hydrateAll(this.settings);
+		Object.assign(this.settings, hydrated);
+		console.debug(`[Settings] Hydrate all: ${Date.now() - hydrateStart}ms`);
 
-		// Migrate old agents that still have modelId to use new modelStrategy
+		// Migrate old agents: modelId → modelStrategy
+		let settingsMutated = false;
 		for (const agent of this.settings.agents) {
 			const agentWithOldModel = agent as Agent & { modelId?: string };
 			if ('modelId' in agent && typeof agentWithOldModel.modelId === 'string') {
-				const modelId = agentWithOldModel.modelId;
-				// Convert the old modelId to the new modelStrategy format
-				agent.modelStrategy = {
-					strategy: 'fixed',
-					modelId: modelId
-				};
-				// Remove the old field
+				agent.modelStrategy = { strategy: 'fixed', modelId: agentWithOldModel.modelId };
 				delete agentWithOldModel.modelId;
 				settingsMutated = true;
 			}
-
-			// Ensure modelStrategy exists for all agents
 			if (!agent.modelStrategy) {
-				agent.modelStrategy = {
-					strategy: 'default',
-					modelId: this.settings.defaultModel || 'gpt-4o'
-				};
+				agent.modelStrategy = { strategy: 'default', modelId: this.settings.defaultModel || 'gpt-4o' };
 				settingsMutated = true;
 			}
 		}
@@ -427,12 +397,11 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			await this.writeUserSettingsFile(this.settings);
 		}
 
-		const totalTime = Date.now() - totalStart;
-		console.debug(`[Settings] Total load time: ${totalTime}ms`);
+		console.debug(`[Settings] Total load time: ${Date.now() - totalStart}ms`);
 	}
 
 	async saveSettings() {
-		await this.persistDataRepositories();
+		await this.dataService.persistAll(this.settings);
 		await this.writeUserSettingsFile(this.settings);
 	}
 
@@ -475,268 +444,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		}
 	}
 
-	private async ensureDataRepositories(): Promise<void> {
-		if (!this.promptRepository) {
-			this.promptRepository = new PromptRepository(this.app);
-		}
-		if (!this.agentRepository) {
-			this.agentRepository = new AgentRepository(this.app);
-		}
-		if (!this.modelCacheRepository) {
-			this.modelCacheRepository = new ModelCacheRepository(this.app);
-		}
-		if (!this.providerRepository) {
-			this.providerRepository = new ProviderRepository(this.app);
-		}
-		if (!this.mcpServerRepository) {
-			this.mcpServerRepository = new McpServerRepository(this.app);
-		}
-			if (!this.tokenUsageRepo) {
-				this.tokenUsageRepo = new TokenUsageRepository(this.app);
-			}
-		if (!this.mcpToolCacheRepository) {
-			this.mcpToolCacheRepository = new McpToolCacheRepository(this.app);
-		}
-
-		await Promise.all([
-			this.promptRepository.initialize(),
-			this.agentRepository.initialize(),
-			this.modelCacheRepository.initialize(),
-			this.providerRepository.initialize(),
-			this.mcpServerRepository.initialize(),
-			this.mcpToolCacheRepository.initialize(),
-				this.tokenUsageRepo.initialize(),
-		]);
-	}
-
-	private async hydratePromptsFromRepository(): Promise<void> {
-		if (!this.promptRepository) return;
-		const { prompts, activeId } = await this.promptRepository.loadAll();
-		if (prompts.length > 0) {
-			this.settings.systemPrompts = prompts;
-			this.settings.activeSystemPromptId = activeId;
-		} else if (this.settings.systemPrompts.length > 0) {
-			await this.promptRepository.saveAll(this.settings.systemPrompts, this.settings.activeSystemPromptId ?? null);
-		}
-	}
-
-	private async hydrateAgentsFromRepository(): Promise<void> {
-		if (!this.agentRepository) return;
-		const { agents, activeId } = await this.agentRepository.loadAll();
-		if (agents.length > 0) {
-			this.settings.agents = agents;
-			this.settings.activeAgentId = activeId;
-		} else if (this.settings.agents.length > 0) {
-			await this.agentRepository.saveAll(this.settings.agents, this.settings.activeAgentId ?? null);
-		}
-	}
-
-	private async hydrateModelCaches(): Promise<void> {
-		if (!this.modelCacheRepository) return;
-		await this.modelCacheRepository.applyCacheToConfigs(this.settings.llmConfigs ?? []);
-	}
-
-	private async hydrateMcpServersFromRepository(): Promise<void> {
-		if (!this.mcpServerRepository || !this.mcpToolCacheRepository) return;
-		const servers = await this.mcpServerRepository.loadAll();
-		if (servers.length > 0) {
-			const cacheMap = await this.mcpToolCacheRepository.loadAll();
-			for (const server of servers) {
-				const cache = cacheMap[server.name];
-				if (cache) {
-					server.cachedTools = cache.tools;
-					server.cacheTimestamp = cache.updatedAt;
-				}
-			}
-			this.settings.mcpServers = servers;
-			return;
-		}
-
-		if (this.settings.mcpServers?.length) {
-			await this.mcpServerRepository.saveAll(this.settings.mcpServers);
-			await this.persistMcpToolCaches(this.settings.mcpServers);
-			await this.writeUserSettingsFile(this.settings);
-		}
-	}
-
-	private async persistDataRepositories(): Promise<void> {
-		await this.ensureDataRepositories();
-		const tasks: Promise<void>[] = [];
-		if (this.promptRepository) {
-			tasks.push(this.promptRepository.saveAll(this.settings.systemPrompts ?? [], this.settings.activeSystemPromptId ?? null));
-		}
-		if (this.agentRepository) {
-			tasks.push(this.agentRepository.saveAll(this.settings.agents ?? [], this.settings.activeAgentId ?? null));
-		}
-		if (this.modelCacheRepository) {
-			tasks.push(this.modelCacheRepository.saveFromConfigs(this.settings.llmConfigs ?? []));
-		}
-		if (this.providerRepository) {
-			tasks.push(this.providerRepository.saveAll(this.settings.llmConfigs ?? []));
-		}
-		if (this.mcpServerRepository) {
-			tasks.push(this.mcpServerRepository.saveAll(this.settings.mcpServers ?? []));
-		}
-		if (this.mcpToolCacheRepository) {
-			tasks.push(this.persistMcpToolCaches(this.settings.mcpServers ?? []));
-		}
-		await Promise.all(tasks);
-	}
-
-	private async persistMcpToolCaches(servers: MCPServerConfig[]): Promise<void> {
-		const repo = this.mcpToolCacheRepository;
-		if (!repo) return;
-		const ops = (servers ?? []).map(server =>
-			repo.save(server.name, server.cachedTools ?? [], server.cacheTimestamp)
-		);
-		await Promise.all(ops);
-	}
-
-	private registerEditorMenuActions() {
-		const handler = (menu: Menu, editor: Editor, view: MarkdownView) => {
-			this.addEditorQuickActions(menu, editor, view);
-		};
-
-		this.registerEvent(this.app.workspace.on('editor-menu', handler));
-	}
-
-	private addEditorQuickActions(menu: Menu, editor: Editor, view: MarkdownView) {
-		const selectedText = editor.getSelection();
-
-		// Only show AI actions if text is selected
-		if (!selectedText || selectedText.trim().length === 0) {
-			return;
-		}
-
-		// Get enabled quick actions from settings
-		const enabledActions = this.settings.quickActions.filter(action => action.enabled);
-
-		if (enabledActions.length === 0) {
-			return;
-		}
-
-		// Add separator before AI actions
-		menu.addSeparator();
-
-		// Icon mapping for common actions
-		const iconMap: Record<string, string> = {
-			'make-longer': 'text-cursor-input',
-			'summarize': 'list-collapse',
-			'improve-writing': 'pencil',
-			'fix-grammar': 'spellcheck',
-			'explain': 'lightbulb'
-		};
-
-		// Get the prefix (default to ⚡ if not set)
-		const prefix = this.settings.quickActionPrefix || '⚡';
-
-		// Add menu items for each enabled action
-		for (const action of enabledActions) {
-			menu.addItem((item) => {
-				// Add prefix to action name
-				const displayName = prefix ? `${prefix} ${action.name}` : action.name;
-
-				item.setTitle(displayName)
-					.setIcon(iconMap[action.id] || 'bot')
-					.onClick(async () => {
-						await this.handleEditorAIAction(
-							editor,
-							view,
-							selectedText,
-							action.prompt,
-							action.actionType,
-							action.model
-						);
-					});
-			});
-		}
-	}
-
-	private async handleEditorAIAction(
-		editor: Editor,
-		view: MarkdownView,
-		selectedText: string,
-		promptPrefix: string,
-		actionType: 'replace' | 'explain',
-		customModel?: string
-	): Promise<void> {
-		// Check if LLM is configured
-		if (this.settings.llmConfigs.length === 0) {
-			new Notice(t('notices.noProvider'));
-			return;
-		}
-
-		// Use custom model if specified, otherwise use default model
-		const modelId = customModel || this.settings.defaultModel;
-		if (!modelId) {
-			new Notice(t('notices.noModel'));
-			return;
-		}
-
-		// Find the config for the model
-		const config = ModelManager.findConfigForModelByProvider(modelId, this.settings.llmConfigs);
-		if (!config) {
-			new Notice(t('notices.noValidProvider', { modelId }));
-			return;
-		}
-
-		// Show loading notice
-		const loadingNotice = new Notice(t('notices.processing'), 0);
-
-		try {
-			// Create provider
-			const provider = ProviderFactory.createProvider(config);
-
-			// Build the prompt
-			const fullPrompt = promptPrefix + selectedText;
-
-			// For explain action, show modal immediately
-			let modal: ExplainTextModal | null = null;
-			if (actionType === 'explain') {
-				modal = new ExplainTextModal(this.app, 'Explanation');
-				modal.open();
-			}
-
-			// Call LLM API with streaming
-			let result = '';
-			await provider.streamChat(
-				{
-					messages: [{ role: 'user', content: fullPrompt }],
-					model: modelId,
-					temperature: 0.7,
-				},
-				(chunk) => {
-					if (!chunk.done && chunk.content) {
-						result += chunk.content;
-						// Update modal in real-time if explaining
-						if (modal) {
-							modal.updateContent(result);
-						}
-					}
-				}
-			);
-
-			loadingNotice.hide();
-
-			// Handle the result based on action type
-			if (actionType === 'replace') {
-				// Replace selected text with the result
-				editor.replaceSelection(result.trim());
-				new Notice(t('notices.textUpdated'));
-			} else if (actionType === 'explain') {
-				// Modal is already showing and updated
-				if (!result) {
-					modal?.showError('No explanation generated');
-				}
-			}
-		} catch (error) {
-			loadingNotice.hide();
-			const errorMsg = error instanceof Error ? error.message : String(error);
-			new Notice(t('notices.error', { message: errorMsg }));
-			console.error('[Editor AI Action] Error:', error);
-		}
-	}
-
 	private async migrateConversationsIfNeeded() {
 		if (!this.conversationStorageService) {
 			console.error('Conversation storage service not initialized');
@@ -761,20 +468,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			} else {
 				console.error('Conversation migration failed');
 			}
-		}
-	}
-
-	private async hydrateProvidersFromRepository(): Promise<void> {
-		if (!this.providerRepository) return;
-		const providers = await this.providerRepository.loadAll();
-		if (providers.length > 0) {
-			this.settings.llmConfigs = providers;
-			return;
-		}
-
-		if (this.settings.llmConfigs && this.settings.llmConfigs.length > 0) {
-			await this.providerRepository.saveAll(this.settings.llmConfigs);
-			await this.writeUserSettingsFile(this.settings);
 		}
 	}
 
