@@ -16,6 +16,7 @@ import {
 	ChatService 
 } from '@/application/services';
 import { RAGManager } from '@/infrastructure/rag-manager';
+import { VaultExportService } from '@/application/services/vault-export-service';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import { renderMessage, MessageRendererCallbacks } from '@/presentation/components/chat/message-renderer';
@@ -85,6 +86,7 @@ export class ChatView extends ItemView {
 	private ragManager: RAGManager;
 	private webSearchService: WebSearchService;
 	private chatService: ChatService;
+	private vaultExportService: VaultExportService;
 
 	// UI elements
 	private streamingMessageEl: HTMLElement | null = null;
@@ -117,6 +119,7 @@ export class ChatView extends ItemView {
 			this.plugin.tokenUsageRepo ?? undefined,
 			this.plugin.settings.defaultModel
 		);
+		this.vaultExportService = new VaultExportService(this.app);
 	}
 
 	getViewType(): string {
@@ -919,95 +922,11 @@ export class ChatView extends ItemView {
 	}
 
 	private saveMessageToNewNote(message: Message) {
-		// Use modal for input
-		const defaultName = `Chat Message ${new Date().toLocaleDateString()}`;
-
-		new TextInputModal(
-			this.app,
-			'Create New Note',
-			'Enter note name',
-			defaultName,
-			(noteName) => {
-				void (async () => {
-					if (!noteName || !noteName.trim()) return;
-
-					try {
-						// Create note path (sanitize name)
-						const fileName = noteName.replace(/[\\/:*?"<>|]/g, '-') + '.md';
-
-						// Format content with metadata
-						let content = `# ${noteName ?? 'unknown'}\n\n`;
-						content += `Created from AI chat on ${new Date().toLocaleString()}\n\n`;
-						content += `---\n\n`;
-
-						// Add role header
-						if (message.role === 'user') {
-							content += `## 💬 User Message\n\n`;
-						} else {
-							const modelName = (message as { model?: string }).model || 'Assistant';
-							content += `## 🤖 ${String(modelName)}\n\n`;
-						}
-
-						content += message.content + '\n';
-
-						// Create the file
-						await this.app.vault.create(fileName, content);
-						new Notice(t('chat.notices.noteCreated', { name: fileName ?? 'unknown' }));
-
-						// Open the new note
-						const file = this.app.vault.getAbstractFileByPath(fileName);
-						if (file instanceof TFile) {
-							await this.app.workspace.getLeaf(false).openFile(file);
-						}
-					} catch (_error) {
-						const errMsg = _error instanceof Error ? _error.message : String(_error);
-						console.error('Error creating note:', errMsg);
-						new Notice(t('chat.notices.noteCreateFailed', { message: errMsg }));
-					}
-				})();
-			}
-		).open();
+		this.vaultExportService.saveToNewNote(message);
 	}
 
 	private insertMessageToNote(message: Message) {
-		new SingleFileSelectionModal(this.app, (selectedFile) => {
-			void (async () => {
-				if (selectedFile) {
-					// insert into selected file
-					try {
-						// read current content
-						let content = await this.app.vault.read(selectedFile);
-
-						// add message content
-						content += `\n\n---\n\n`;
-
-						// add role header
-						if (message.role === 'user') {
-							content += `## 💬 User Message (${new Date().toLocaleString()})\n\n`;
-						} else {
-							const modelName = (message as { model?: string }).model || 'Assistant';
-							content += `## 🤖 ${String(modelName)} (${new Date().toLocaleString()})\n\n`;
-						}
-
-						content += message.content + '\n';
-
-						// Write back
-						await this.app.vault.modify(selectedFile, content);
-						new Notice(t('chat.notices.messageInserted', { path: selectedFile.path ?? 'unknown' }));
-
-						// Open the file
-						await this.app.workspace.getLeaf(false).openFile(selectedFile);
-					} catch (_error) {
-						const errMsg = _error instanceof Error ? _error.message : String(_error);
-						console.error('Error inserting to note:', errMsg);
-						new Notice(t('chat.notices.messageInsertFailed', { message: errMsg }));
-					}
-				} else {
-					// create new note option was selected
-					void this.saveMessageToNewNote(message);
-				}
-			})();
-		}).open();
+		this.vaultExportService.insertIntoNote(message);
 	}
 
 
