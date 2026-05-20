@@ -1,0 +1,325 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "General",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Tools",
+      "rag": "RAG",
+      "prompts": "Prompts",
+      "agents": "Agents",
+      "quickActions": "Quick Actions",
+      "usage": "Usage"
+    },
+    "general": {
+      "title": "General settings",
+      "desc": "Configure general settings for the intelligence assistant plugin.",
+      "pluginVersion": { "name": "Plugin version", "desc": "Current version of the intelligence assistant plugin" },
+      "defaultModel": { "name": "Default model", "desc": "Default model to use for conversations", "placeholder": "Deepseek-chat" },
+      "defaultChatMode": { "name": "Default chat mode", "desc": "Choose which mode the chat view opens with", "chat": "Chat mode", "agent": "Agent mode" },
+      "conversationTitleMode": { "name": "Conversation title mode", "desc": "How to generate conversation titles", "firstMessage": "Use first message", "autoSummary": "Auto generate summary", "manual": "Manual" },
+      "conversationIcons": { "name": "Conversation icons", "desc": "Enable automatic icon generation for conversations" },
+      "configStatus": {
+        "name": "Configuration status",
+        "desc": "Overall plugin configuration status",
+        "ok": "✅ Configured ({{providers}} providers, {{conversations}} conversations)",
+        "incomplete": "⚠️ Incomplete - Please configure providers and models"
+      }
+    },
+    "llm": {
+      "title": "LLM configuration",
+      "desc": "Configure language model providers and manage available models.",
+      "subTabs": { "provider": "Providers", "models": "Models" }
+    },
+    "models": {
+      "title": "Model configuration",
+      "desc": "View and manage models from all configured providers. Click \"refresh models\" to fetch the latest available models.",
+      "providerCount": "{{count}} provider configured",
+      "providerCount_plural": "{{count}} providers configured",
+      "refreshAll": "🔄 refresh all models",
+      "empty": "No providers configured yet. Add providers in the provider tab first.",
+      "noModels": "No models available. Click \"refresh all models\" or refresh individual providers in the provider tab.",
+      "noMatch": "No models match the current filters. Adjust or clear filters to see results.",
+      "modelCount": "• {{count}} model cached",
+      "modelCount_plural": "• {{count}} models cached",
+      "matchCount": "• {{count}} match selected filters",
+      "matchCount_plural": "• {{count}} matches selected filters",
+      "status": { "enabled": "Enabled", "disabled": "Disabled" },
+      "actions": {
+        "disable": "Disable",
+        "enable": "Enable",
+        "setDefaultChat": "Set Default Chat",
+        "defaultChat": "Default Chat",
+        "setDefaultEmbedding": "Set Default Embedding",
+        "defaultEmbedding": "Default Embedding"
+      },
+      "notices": {
+        "fetching": "Fetching models for {{provider}}...",
+        "fetchFailed": "Failed to refresh {{provider}} models",
+        "refreshed": "Models refreshed successfully!",
+        "refreshFailed": "Failed to refresh models",
+        "defaultChatSet": "Default chat model set to {{name}}",
+        "defaultEmbeddingSet": "Default embedding model set to {{name}}"
+      },
+      "filters": { "allProviders": "All providers", "allCapabilities": "All capabilities" }
+    },
+    "provider": {
+      "title": "Provider configuration",
+      "securityTitle": "⚠️ Security Warning",
+      "securityDesc": "API keys are stored as plain text in your vault for compatibility. To prevent accidental leaks:",
+      "securityItem1": "Do NOT share your {{configDir}}/plugins/intelligence-assistant/data/ folder.",
+      "securityItem2": "Add this folder to your .gitignore if you use Git sync.",
+      "securityItem3": "Be cautious when using public cloud sync services.",
+      "desc": "Manage LLM providers and API credentials. Use the actions column to edit configuration details or refresh cached models.",
+      "count": "{{count}} provider configured",
+      "count_plural": "{{count}} providers configured",
+      "addBtn": "+ Add provider",
+      "empty": "No providers configured. Select \"Add provider\" to get started.",
+      "tableHeaders": { "provider": "Provider", "status": "Status", "actions": "Actions" },
+      "status": {
+        "ready": "Ready",
+        "needsConfig": "Needs Configuration",
+        "checking": "Checking...",
+        "credentialsSet": "Credentials Set",
+        "serverOnline": "Server online",
+        "serverOffline": "Server offline",
+        "serverError": "Server error"
+      },
+      "guidance": {
+        "requiresCli": "Requires local CLI",
+        "provideServiceKey": "Provide service key",
+        "configureBaseUrl": "Configure base URL",
+        "addApiKey": "Add API key"
+      },
+      "models": { "none": "No models", "count": "{{count}} model", "count_plural": "{{count}} models" },
+      "ollama": {
+        "checkingVersion": "Checking version...",
+        "server": {
+          "checking": "Checking server...",
+          "online": "Server: online",
+          "offline": "Server: offline or unreachable",
+          "error": "Server: connection error",
+          "versionOnline": "Server online",
+          "versionOffline": "Server offline",
+          "versionError": "Connection error",
+          "version": "Version: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Last refresh: {{timeAgo}}",
+        "neverRefreshed": "Never refreshed",
+        "justNow": "just now",
+        "minutesAgo": "{{n}}m ago",
+        "hoursAgo": "{{n}}h ago",
+        "daysAgo": "{{n}}d ago"
+      },
+      "actions": {
+        "edit": "Edit",
+        "manageModels": "Manage models",
+        "refreshModels": "Refresh models",
+        "refreshing": "Refreshing...",
+        "delete": "Delete"
+      },
+      "notices": { "refreshed": "Models refreshed for {{provider}}.", "refreshFailed": "Failed to refresh models" },
+      "confirm": { "delete": "Remove provider {{provider}}?" }
+    },
+    "mcp": {
+      "title": "MCP server management",
+      "desc": "Configure Model Context Protocol (MCP) servers to extend agent capabilities with external tools and data sources.",
+      "inspectorBtn": "🔍 Open MCP inspector",
+      "testAllBtn": "🧪 test all connections",
+      "refreshAllBtn": "🔄 refresh all tools",
+      "addBtn": "+ Add MCP server",
+      "empty": "No MCP servers configured. Select Add MCP server to get started.",
+      "tableHeaders": { "name": "Name", "command": "Command", "arguments": "Arguments", "status": "Status", "tools": "Tools", "actions": "Actions" },
+      "untitled": "Untitled MCP Server",
+      "notConfigured": "Not configured",
+      "noArgs": "None",
+      "cached": "Cached",
+      "disabled": "Disabled",
+      "envVars": "{{count}} env var",
+      "envVars_plural": "{{count}} env vars",
+      "status": {
+        "disabled": "Disabled",
+        "connected": "connected",
+        "disconnected": "disconnected",
+        "enableToManage": "Enable to manage connections",
+        "manualConnect": "Manual connect",
+        "autoConnect": "Auto-connect"
+      },
+      "toolCount": {
+        "live": "{{count}} live tool",
+        "live_plural": "{{count}} live tools",
+        "cached": "{{count}} cached tool",
+        "cached_plural": "{{count}} cached tools"
+      },
+      "actions": {
+        "edit": "Edit",
+        "enabled": "✓ Enabled",
+        "enabledOff": "✗ Disabled",
+        "connect": "connect",
+        "disconnect": "disconnect",
+        "connecting": "Connecting...",
+        "disconnecting": "Disconnecting...",
+        "test": "Test",
+        "testing": "Testing...",
+        "delete": "Delete"
+      },
+      "notices": {
+        "disconnected": "Disconnected from {{name}}",
+        "connected": "Connected to {{name}}",
+        "autoConnectFailed": "Failed to auto-connect {{name}}",
+        "enableFirst": "Enable the server before connecting",
+        "disconnectFailed": "Failed to disconnect from {{name}}",
+        "connectFailed": "Failed to connect to {{name}}",
+        "testNoCommand": "❌ please enter a command before testing connection",
+        "testSuccess": "✅ connected successfully! Found {{count}} tools.",
+        "testFailed": "❌ Connection failed: {{message}}",
+        "refreshedAll": "✅ refreshed tools for {{count}} server",
+        "refreshedAll_plural": "✅ refreshed tools for {{count}} servers",
+        "refreshedPartial": "✅ refreshed {{success}} servers, ❌ {{failed}} failed"
+      },
+      "confirm": { "delete": "Delete MCP server \"{{name}}\"?" }
+    },
+    "agents": {
+      "title": "Agent management",
+      "desc": "Create and manage AI agents with specific capabilities, tools, and behaviors.",
+      "count": "{{count}} agent configured",
+      "count_plural": "{{count}} agents configured",
+      "addBtn": "+ add agent",
+      "empty": "No agents configured. Select add agent to get started.",
+      "tableHeaders": { "agent": "Agent", "model": "Model", "capabilities": "Capabilities", "tools": "Tools", "actions": "Actions" },
+      "defaultBadge": "Default",
+      "systemPrompt": "System prompt • {{promptName}}",
+      "customPrompt": "Custom prompt",
+      "model": {
+        "notSet": "Not set",
+        "notFound": "Model not found in cache",
+        "useChatView": "Use Chat View Model",
+        "useChatViewDesc": "Will use model selected in chat view",
+        "useDefault": "Use Default Model",
+        "useDefaultDesc": "Will use default model from settings"
+      },
+      "capabilities": { "noSpecialModes": "No special modes" },
+      "tools": {
+        "builtIn": "{{count}} built-in",
+        "mcpServer": "{{count}} mcp server",
+        "mcpServer_plural": "{{count}} mcp servers",
+        "mcpTool": "{{count}} mcp tool",
+        "mcpTool_plural": "{{count}} mcp tools",
+        "noTools": "No tools enabled"
+      },
+      "actions": { "edit": "Edit", "delete": "delete", "protected": "protected" },
+      "confirm": { "delete": "Delete agent \"{{name}}\"?" }
+    },
+    "prompts": {
+      "title": "System prompts",
+      "desc": "Manage system prompts that define the behavior and personality of your AI assistant.",
+      "addBtn": "+ add system prompt",
+      "empty": "No system prompts configured. Select add system prompt to get started.",
+      "tableHeaders": { "name": "Name", "contentPreview": "Content Preview", "created": "Created", "updated": "Updated", "enabled": "Enabled", "actions": "Actions" },
+      "status": { "enabled": "Enabled", "disabled": "Disabled" },
+      "actions": { "edit": "Edit", "disable": "Disable", "enable": "Enable", "delete": "Delete" },
+      "confirm": { "delete": "Delete prompt \"{{name}}\"?" }
+    },
+    "tools": {
+      "title": "Tool configuration",
+      "desc": "Review built-in tools and explore MCP tools loaded from connected servers. Enable the actions your agents should be able to perform.",
+      "subTabs": { "builtIn": "Built-in Tools", "mcp": "MCP tools", "openapi": "HTTP / OpenAPI", "cli": "CLI Tools" }
+    },
+    "rag": {
+      "title": "RAG configuration",
+      "desc": "Configure retrieval-augmented generation and web search to enhance AI responses.",
+      "subTabs": { "overview": "Overview", "chunking": "Chunking", "search": "Search", "filters": "Filters", "advanced": "Advanced", "websearch": "Web Search" }
+    },
+    "websearch": {
+      "title": "Web search configuration",
+      "desc": "Configure web search functionality to enhance AI responses with up-to-date information from the internet.",
+      "generalBehavior": "General behavior",
+      "providers": {
+        "duckduckgo": "DuckDuckGo (no key required)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (HTML scraping)",
+        "yandex": "Yandex (HTML scraping)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Quick actions",
+      "desc": "Configure AI-powered quick actions that appear in the editor context menu when text is selected.",
+      "actionPrefix": { "name": "Action prefix", "desc": "Prefix (emoji or text) to display before all quick actions in the context menu", "placeholder": "⚡" },
+      "count": "{{count}} action configured ({{enabled}} enabled)",
+      "count_plural": "{{count}} actions configured ({{enabled}} enabled)",
+      "addBtn": "+ add quick action"
+    },
+    "usage": {
+      "title": "Token usage",
+      "desc": "Track token consumption across providers and models. Data is accumulated across all conversations.",
+      "notAvailable": "Token usage tracking is not available.",
+      "ranges": { "today": "Today", "week": "This week", "month": "This month", "all": "All time" }
+    }
+  },
+  "chat": {
+    "placeholder": "Type your message... (Enter to send, Shift+Enter for new line)",
+    "conversations": "Conversations",
+    "toggleConversationsTitle": "Toggle conversation list",
+    "currentConversation": "Current conversation",
+    "new": "New",
+    "settings": "Settings",
+    "openSettingsTitle": "Open plugin settings",
+    "mode": "Mode",
+    "prompt": "Prompt",
+    "agent": "Agent",
+    "modeOptions": { "chat": "Chat", "agent": "Agent" },
+    "noSystemPrompt": "No system prompt",
+    "noAgentsAvailable": "No agents available",
+    "sendHintPrefix": "Press ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " to send",
+    "sendAriaLabel": "Send message",
+    "stop": " Stop",
+    "addReference": "Add reference",
+    "addReferenceTooltip": "Add file or folder reference (@)"
+  },
+  "modals": {
+    "confirm": { "cancel": "Cancel", "confirm": "Confirm" },
+    "agentEdit": {
+      "title": "Edit agent",
+      "icon": { "name": "Icon", "desc": "Emoji or character to represent this agent" },
+      "description": { "name": "Description", "desc": "Brief description of the agent" },
+      "modelStrategy": {
+        "name": "Model strategy",
+        "options": { "default": "Use default model (from settings)", "chatView": "Use chat view model", "fixed": "Fixed model" },
+        "noModels": "No models cached"
+      },
+      "systemPrompt": {
+        "createNew": "➕ create new prompt…",
+        "promptName": { "name": "Prompt name", "desc": "Display name for the new system prompt" },
+        "promptContent": { "name": "Prompt content", "desc": "Content for the new system prompt" }
+      },
+      "capabilities": "Capabilities",
+      "memory": { "title": "Memory", "notice": "Agent memory is temporarily unavailable while we iterate on the experience." },
+      "tools": {
+        "title": "Tools",
+        "builtIn": { "name": "Built-in tools", "desc": "Select which built-in tools this agent can use" },
+        "cli": { "name": "CLI tools", "desc": "Grant access to all enabled CLI tools, or pick individually below", "noTools": "No CLI tools configured. Add and enable tools under Settings → Tools → CLI to use them here." }
+      },
+      "mcp": { "title": "MCP access", "noServers": "No MCP servers configured. Add servers under Settings → MCP to unlock these options." },
+      "notices": { "promptRequired": "Please provide a name and content for the new system prompt." }
+    }
+  },
+  "notices": {
+    "noProvider": "Please configure an LLM provider in settings first",
+    "noModel": "Please select a default model in settings",
+    "noValidProvider": "No valid provider configuration found for model: {{modelId}}",
+    "processing": "Processing...",
+    "textUpdated": "Text updated successfully",
+    "error": "Error: {{message}}"
+  }
+}
