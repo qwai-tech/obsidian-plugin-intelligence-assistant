@@ -2,6 +2,7 @@ import { App, setIcon, Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ConversationManager } from './managers/conversation-manager';
+import { t } from '@/i18n';
 import type { ModelInfo } from '@/types';
 
 export interface ChatHeaderCallbacks {
@@ -71,21 +72,21 @@ export class ChatHeaderComponent {
 		const breadcrumb = row.createDiv('chat-breadcrumb');
 		const historyBtn = breadcrumb.createEl('button', { cls: 'chat-breadcrumb-link chat-action-btn ia-history-btn' });
 		setIcon(historyBtn.createSpan({ cls: 'chat-action-icon' }), 'list');
-		historyBtn.createSpan({ text: 'Conversations', cls: 'chat-action-text' });
-		historyBtn.setAttr('title', 'Toggle conversation list');
+		historyBtn.createSpan({ text: t('chat.conversations'), cls: 'chat-action-text' });
+		historyBtn.setAttr('title', t('chat.toggleConversationsTitle'));
 		historyBtn.addEventListener('click', (event: MouseEvent) => {
 			event.preventDefault();
 			event.stopPropagation();
 			void this.callbacks.onToggleConversations();
 		});
 		breadcrumb.createSpan({ text: '/', cls: 'chat-breadcrumb-sep' });
-		this.conversationTitleEl = breadcrumb.createSpan({ text: 'Current conversation', cls: 'chat-breadcrumb-current' });
+		this.conversationTitleEl = breadcrumb.createSpan({ text: t('chat.currentConversation'), cls: 'chat-breadcrumb-current' });
 
 		const actions = row.createDiv('chat-action-buttons');
 
 		const newLink = actions.createSpan({ cls: 'chat-action-btn' });
 		setIcon(newLink.createSpan({ cls: 'chat-action-icon' }), 'plus');
-		newLink.createSpan({ text: 'New', cls: 'chat-action-text' });
+		newLink.createSpan({ text: t('chat.new'), cls: 'chat-action-text' });
 		newLink.setAttr('role', 'button');
 		newLink.tabIndex = 0;
 		const activateNew = async (event: Event) => {
@@ -102,9 +103,9 @@ export class ChatHeaderComponent {
 
 		const settingsLink = actions.createSpan({ cls: 'chat-action-btn' });
 		setIcon(settingsLink.createSpan({ cls: 'chat-action-icon' }), 'settings');
-		settingsLink.createSpan({ text: 'Settings', cls: 'chat-action-text' });
+		settingsLink.createSpan({ text: t('chat.settings'), cls: 'chat-action-text' });
 		settingsLink.setAttr('role', 'button');
-		settingsLink.setAttr('title', 'Open plugin settings');
+		settingsLink.setAttr('title', t('chat.openSettingsTitle'));
 		settingsLink.tabIndex = 0;
 		settingsLink.addEventListener('click', (e) => {
 			e.preventDefault();
@@ -117,10 +118,10 @@ export class ChatHeaderComponent {
 		const topControls = parent.createDiv('chat-top-controls');
 
 		const modeGroup = topControls.createDiv('chat-select-group');
-		modeGroup.createSpan({ text: 'Mode', cls: 'chat-label' });
+		modeGroup.createSpan({ text: t('chat.mode'), cls: 'chat-label' });
 		this.modeSelector = modeGroup.createEl('select', { cls: 'mode-selector' });
-		this.modeSelector.createEl('option', { value: 'chat', text: 'Chat' });
-		this.modeSelector.createEl('option', { value: 'agent', text: 'Agent' });
+		this.modeSelector.createEl('option', { value: 'chat', text: t('chat.modeOptions.chat') });
+		this.modeSelector.createEl('option', { value: 'agent', text: t('chat.modeOptions.agent') });
 		this.modeSelector.value = this.state.mode;
 		this.modeSelector.addEventListener('change', () => {
 			const value = (this.modeSelector.value ?? 'chat') as 'chat' | 'agent';
@@ -128,7 +129,7 @@ export class ChatHeaderComponent {
 		});
 
 		this.promptSelectorGroup = topControls.createDiv('chat-select-group');
-		this.promptSelectorGroup.createSpan({ text: 'Prompt', cls: 'chat-label' });
+		this.promptSelectorGroup.createSpan({ text: t('chat.prompt'), cls: 'chat-label' });
 		this.promptSelector = this.promptSelectorGroup.createEl('select', { cls: 'prompt-selector' });
 		this.populatePromptSelectorOptions();
 		this.promptSelector.addEventListener('change', () => {
@@ -136,7 +137,7 @@ export class ChatHeaderComponent {
 		});
 
 		this.agentSelectorGroup = topControls.createDiv('chat-select-group');
-		this.agentSelectorGroup.createSpan({ text: 'Agent', cls: 'chat-label' });
+		this.agentSelectorGroup.createSpan({ text: t('chat.agent'), cls: 'chat-label' });
 		this.agentSelector = this.agentSelectorGroup.createEl('select', { cls: 'agent-selector' });
 		this.agentSelector.addEventListener('change', () => {
 			void this.callbacks.onAgentChange(this.agentSelector.value ?? '');
@@ -151,7 +152,7 @@ export class ChatHeaderComponent {
 		if (!this.promptSelector) return;
 		const enabledPrompts = this.plugin.settings.systemPrompts.filter(p => p.enabled);
 		this.promptSelector.empty();
-		this.promptSelector.createEl('option', { value: '', text: 'No system prompt' });
+		this.promptSelector.createEl('option', { value: '', text: t('chat.noSystemPrompt') });
 		enabledPrompts.forEach(p => {
 			const option = this.promptSelector.createEl('option', { value: p.id, text: p.name });
 			if (this.plugin.settings.activeSystemPromptId === p.id) {
@@ -167,7 +168,7 @@ export class ChatHeaderComponent {
 		const agents = this.plugin.settings.agents || [];
 
 		if (agents.length === 0) {
-			this.agentSelector.createEl('option', { value: '', text: 'No agents available' });
+			this.agentSelector.createEl('option', { value: '', text: t('chat.noAgentsAvailable') });
 			return;
 		}
 

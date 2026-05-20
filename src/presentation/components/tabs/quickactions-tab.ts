@@ -6,6 +6,7 @@
 import { App, ButtonComponent, Modal, Setting } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { QuickActionConfig } from '@/types';
+import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
@@ -16,19 +17,19 @@ export function displayQuickActionsTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Quick actions' });
+	containerEl.createEl('h3', { text: t('settings.quickActions.title') });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Configure AI-powered quick actions that appear in the editor context menu when text is selected.'
+		text: t('settings.quickActions.desc')
 	});
 	desc.addClass('ia-section-description');
 
 	// Prefix configuration
 	new Setting(containerEl)
-		.setName('Action prefix')
-		.setDesc('Prefix (emoji or text) to display before all quick actions in the context menu')
+		.setName(t('settings.quickActions.actionPrefix.name'))
+		.setDesc(t('settings.quickActions.actionPrefix.desc'))
 		.addText(text => text
-			.setPlaceholder('⚡')
+			.setPlaceholder(t('settings.quickActions.actionPrefix.placeholder'))
 			.setValue(plugin.settings.quickActionPrefix || '⚡')
 			.onChange(async (value) => {
 				plugin.settings.quickActionPrefix = value || '⚡';
@@ -40,10 +41,10 @@ export function displayQuickActionsTab(
 	const summary = actionsRow.createDiv('ia-section-summary');
 	const enabledCount = plugin.settings.quickActions.filter(a => a.enabled).length;
 	summary.createSpan({
-		text: `${plugin.settings.quickActions.length} action${plugin.settings.quickActions.length === 1 ? '' : 's'} configured (${enabledCount} enabled)`
+		text: t('settings.quickActions.count', { count: plugin.settings.quickActions.length, enabled: enabledCount })
 	});
 
-	const addBtn = actionsRow.createEl('button', { text: '+ add quick action' });
+	const addBtn = actionsRow.createEl('button', { text: t('settings.quickActions.addBtn') });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {

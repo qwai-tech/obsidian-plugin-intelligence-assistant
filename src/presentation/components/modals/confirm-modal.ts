@@ -1,4 +1,5 @@
 import { Modal, App } from 'obsidian';
+import { t } from '@/i18n';
 
 /**
  * Confirmation modal to replace window.confirm()
@@ -30,7 +31,7 @@ export class ConfirmModal extends Modal {
 
 		const buttonContainer = contentEl.createDiv('modal-button-container');
 
-		const cancelBtn = buttonContainer.createEl('button', { text: 'Cancel' });
+		const cancelBtn = buttonContainer.createEl('button', { text: t('modals.confirm.cancel') });
 		cancelBtn.addEventListener('click', () => {
 			this.resolved = true;
 			this.close();
@@ -38,7 +39,7 @@ export class ConfirmModal extends Modal {
 		});
 
 		const confirmBtn = buttonContainer.createEl('button', {
-			text: 'Confirm',
+			text: t('modals.confirm.confirm'),
 			cls: 'mod-warning'
 		});
 		confirmBtn.addEventListener('click', () => {

@@ -26,5 +26,5 @@ export function initI18n(langOverride?: string): void {
 }
 
 export function t(key: string, options?: Record<string, unknown>): string {
-	return i18n.t(key, options) as string;
+	return i18n.t(key, options);
 }

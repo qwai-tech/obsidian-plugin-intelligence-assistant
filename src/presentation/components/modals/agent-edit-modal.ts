@@ -1,6 +1,7 @@
 import { App, ButtonComponent, Modal, Notice, Setting, ToggleComponent } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type {Agent, BuiltInToolConfig, MCPServerConfig, CLIToolConfig} from '@/types';
+import { t } from '@/i18n';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
 
 export class AgentEditModal extends Modal {
@@ -31,7 +32,7 @@ export class AgentEditModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: 'Edit agent' });
+		contentEl.createEl('h2', { text: t('modals.agentEdit.title') });
 
 		// Icon field
 		new Setting(contentEl)
@@ -76,9 +77,9 @@ export class AgentEditModal extends Modal {
 			description: 'Choose how the agent will select its model'
 		}).addDropdown(dropdown => {
 				dropdown
-					.addOption('default', 'Use default model (from settings)')
-					.addOption('chat-view', 'Use chat view model')
-					.addOption('fixed', 'Fixed model');
+					.addOption('default', t('modals.agentEdit.modelStrategy.options.default'))
+					.addOption('chat-view', t('modals.agentEdit.modelStrategy.options.chatView'))
+					.addOption('fixed', t('modals.agentEdit.modelStrategy.options.fixed'));
 				
 				// Set the initial value based on the current strategy
 				dropdown.setValue(this.agent.modelStrategy.strategy);
@@ -103,7 +104,7 @@ export class AgentEditModal extends Modal {
 		})
 			.addDropdown(dropdown => {
 				if (!hasCachedModels) {
-					dropdown.addOption('', 'No models cached');
+					dropdown.addOption('', t('modals.agentEdit.modelStrategy.noModels'));
 					dropdown.selectEl.disabled = true;
 					return;
 				}
@@ -187,7 +188,7 @@ export class AgentEditModal extends Modal {
 				prompts.forEach(prompt => {
 					dropdown.addOption(prompt.id, prompt.name);
 				});
-				dropdown.addOption('__custom__', '➕ create new prompt…');
+				dropdown.addOption('__custom__', t('modals.agentEdit.systemPrompt.createNew'));
 				dropdown.setValue(this.selectedSystemPromptId);
 				dropdown.onChange(value => {
 					this.selectedSystemPromptId = value;
@@ -208,8 +209,8 @@ export class AgentEditModal extends Modal {
 		this.toggleCustomPromptSection(this.selectedSystemPromptId === '__custom__');
 
 		new Setting(this.customPromptSection)
-			.setName('Prompt name')
-			.setDesc('Display name for the new system prompt')
+			.setName(t('modals.agentEdit.systemPrompt.promptName.name'))
+			.setDesc(t('modals.agentEdit.systemPrompt.promptName.desc'))
 			.addText(text => {
 				customNameInput = text.inputEl;
 				text.setValue(this.customPromptName);
@@ -219,8 +220,8 @@ export class AgentEditModal extends Modal {
 			});
 
 		new Setting(this.customPromptSection)
-			.setName('Prompt content')
-			.setDesc('Content for the new system prompt')
+			.setName(t('modals.agentEdit.systemPrompt.promptContent.name'))
+			.setDesc(t('modals.agentEdit.systemPrompt.promptContent.desc'))
 			.addTextArea(text => {
 				customContentInput = text.inputEl;
 				text.setValue(this.customPromptContent);
@@ -232,7 +233,7 @@ export class AgentEditModal extends Modal {
 			});
 
 		// Capabilities section
-		contentEl.createEl('h3', { text: 'Capabilities' });
+		contentEl.createEl('h3', { text: t('modals.agentEdit.capabilities') });
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].ragEnabled',
@@ -288,19 +289,19 @@ export class AgentEditModal extends Modal {
 		}
 
 		// Memory settings placeholder (temporarily disabled)
-		contentEl.createEl('h3', { text: 'Memory' });
+		contentEl.createEl('h3', { text: t('modals.agentEdit.memory.title') });
 		const memoryNotice = contentEl.createEl('p', {
-			text: 'Agent memory is temporarily unavailable while we iterate on the experience.'
+			text: t('modals.agentEdit.memory.notice')
 		});
 		memoryNotice.addClass('ia-section-description');
 
 		// Built-in Tools
-		contentEl.createEl('h3', { text: 'Tools' });
+		contentEl.createEl('h3', { text: t('modals.agentEdit.tools.title') });
 
 		// Built-in tools
 		new Setting(contentEl)
-			.setName('Built-in tools')
-			.setDesc('Select which built-in tools this agent can use');
+			.setName(t('modals.agentEdit.tools.builtIn.name'))
+			.setDesc(t('modals.agentEdit.tools.builtIn.desc'));
 
 		this.plugin.settings.builtInTools.forEach((tool: BuiltInToolConfig) => {
 			new Setting(contentEl)
@@ -323,14 +324,14 @@ export class AgentEditModal extends Modal {
 
 		// CLI Tools
 		const cliTools = this.plugin.settings.cliTools ?? [];
-		const enabledCLITools = cliTools.filter(t => t.enabled);
+		const enabledCLITools = cliTools.filter(tool => tool.enabled);
 		if (enabledCLITools.length > 0) {
 			const cliToolToggles: Array<{ id: string; toggle: ToggleComponent }> = [];
 
 			// Master toggle: all CLI tools
 			new Setting(contentEl)
-				.setName('CLI tools')
-				.setDesc('Grant access to all enabled CLI tools, or pick individually below')
+				.setName(t('modals.agentEdit.tools.cli.name'))
+				.setDesc(t('modals.agentEdit.tools.cli.desc'))
 				.addToggle(toggle => {
 					toggle.setValue(this.agent.enabledAllCLITools ?? false);
 					toggle.onChange(value => {
@@ -369,15 +370,15 @@ export class AgentEditModal extends Modal {
 			this.syncCLIToolStates(cliToolToggles, enabledCLITools, this.agent.enabledAllCLITools ?? false);
 		} else {
 			new Setting(contentEl)
-				.setName('CLI tools')
-				.setDesc('No CLI tools configured. Add and enable tools under Settings → Tools → CLI to use them here.');
+				.setName(t('modals.agentEdit.tools.cli.name'))
+				.setDesc(t('modals.agentEdit.tools.cli.noTools'));
 		}
 
 		// MCP Servers
-		contentEl.createEl('h3', { text: 'MCP access' });
+		contentEl.createEl('h3', { text: t('modals.agentEdit.mcp.title') });
 		if (this.plugin.settings.mcpServers.length === 0) {
 			const empty = contentEl.createDiv('ia-table-subtext');
-			empty.setText('No MCP servers configured. Add servers under Settings → MCP to unlock these options.');
+			empty.setText(t('modals.agentEdit.mcp.noServers'));
 		} else {
 			const mcpContainer = contentEl.createDiv('ia-mcp-control');
 			this.plugin.settings.mcpServers.forEach(server => {
@@ -390,13 +391,13 @@ export class AgentEditModal extends Modal {
 		buttonContainer.removeClass('ia-hidden');
 
 		new ButtonComponent(buttonContainer)
-			.setButtonText('Cancel')
+			.setButtonText(t('modals.confirm.cancel'))
 			.onClick(() => {
 				this.close();
 			});
 
 		new ButtonComponent(buttonContainer)
-			.setButtonText('Save')
+			.setButtonText(t('modals.confirm.confirm'))
 			.setCta()
 			.onClick(() => {
 				void (async () => {
@@ -404,7 +405,7 @@ export class AgentEditModal extends Modal {
 						const name = this.customPromptName?.trim();
 						const content = this.customPromptContent?.trim();
 						if (!name || !content) {
-							new Notice('Please provide a name and content for the new system prompt.');
+							new Notice(t('modals.agentEdit.notices.promptRequired'));
 							return;
 						}
 

@@ -7,6 +7,7 @@ import { Notice, Setting, Modal } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { CachedMCPTool, OpenApiToolConfig, OpenApiAuthType, OpenApiSourceType, CLIToolConfig, CLIToolParameter } from '@/types';
 import type { Tool } from '@/application/services/types';
+import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
 import { DEFAULT_CLI_TIMEOUT, CLI_TOOL_DEFAULTS, getAvailablePresets, PRESET_CATEGORIES, type CLIToolPreset } from '@/types/features/cli-tools';
 
@@ -19,19 +20,19 @@ export function displayToolsTab(
 	setToolsSubTab: (tab: ToolsSubTab) => void,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Tool configuration' });
+	containerEl.createEl('h3', { text: t('settings.tools.title') });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Review built-in tools and explore MCP tools loaded from connected servers. Enable the actions your agents should be able to perform.'
+		text: t('settings.tools.desc')
 	});
 	desc.addClass('ia-section-description');
 
 	const tabBar = containerEl.createDiv('settings-tabs');
 	const tabDefs: Array<{ slug: ToolsSubTab; label: string }> = [
-		{ slug: 'built-in', label: 'Built-in Tools' },
-		{ slug: 'mcp', label: 'MCP tools' },
-		{ slug: 'openapi', label: 'HTTP / OpenAPI' },
-		{ slug: 'cli', label: 'CLI Tools' }
+		{ slug: 'built-in', label: t('settings.tools.subTabs.builtIn') },
+		{ slug: 'mcp', label: t('settings.tools.subTabs.mcp') },
+		{ slug: 'openapi', label: t('settings.tools.subTabs.openapi') },
+		{ slug: 'cli', label: t('settings.tools.subTabs.cli') }
 	];
 
 	tabDefs.forEach(def => {
@@ -1025,7 +1026,7 @@ class CLIToolPresetModal extends Modal {
 		});
 
 		const presets = getAvailablePresets();
-		const existingNames = new Set(this.plugin.settings.cliTools?.map(t => t.name) ?? []);
+		const existingNames = new Set(this.plugin.settings.cliTools?.map(tool => tool.name) ?? []);
 
 		// Group presets by category
 		const categories = new Map<string, CLIToolPreset[]>();

@@ -6,6 +6,7 @@
 import { Setting, Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { RAGManager } from '@/infrastructure/rag-manager';
+import { t } from '@/i18n';
 import { applyConfigFieldMetadata, type ConfigFieldMetadataOptions } from '@/presentation/utils/config-field-metadata';
 import { displayWebSearchTab } from './websearch-tab';
 
@@ -13,10 +14,10 @@ export function displayRAGTab(
 	containerEl: HTMLElement,
 	plugin: IntelligenceAssistantPlugin
 ): void {
-	containerEl.createEl('h3', { text: 'RAG configuration' });
+	containerEl.createEl('h3', { text: t('settings.rag.title') });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Configure retrieval-augmented generation and web search to enhance AI responses.'
+		text: t('settings.rag.desc')
 	});
 	desc.addClass('ia-section-description');
 
@@ -28,12 +29,12 @@ export function displayRAGTab(
 	const tabContentContainer = containerEl.createDiv('ia-rag-tab-content');
 
 	const subTabs = [
-		{ id: 'overview', label: 'Overview', icon: '🏠' },
-		{ id: 'chunking', label: 'Chunking', icon: '📄' },
-		{ id: 'search', label: 'Search', icon: '🔍' },
-		{ id: 'filters', label: 'Filters', icon: '🗂️' },
-		{ id: 'advanced', label: 'Advanced', icon: '⚙️' },
-		{ id: 'websearch', label: 'Web Search', icon: '🌐' }
+		{ id: 'overview', label: t('settings.rag.subTabs.overview'), icon: '🏠' },
+		{ id: 'chunking', label: t('settings.rag.subTabs.chunking'), icon: '📄' },
+		{ id: 'search', label: t('settings.rag.subTabs.search'), icon: '🔍' },
+		{ id: 'filters', label: t('settings.rag.subTabs.filters'), icon: '🗂️' },
+		{ id: 'advanced', label: t('settings.rag.subTabs.advanced'), icon: '⚙️' },
+		{ id: 'websearch', label: t('settings.rag.subTabs.websearch'), icon: '🌐' }
 	];
 
 	let activeTab = 'overview';

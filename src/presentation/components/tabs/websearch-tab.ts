@@ -5,16 +5,17 @@
 
 import { Setting } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
+import { t } from '@/i18n';
 import { applyConfigFieldMetadata, type ConfigFieldMetadataOptions } from '@/presentation/utils/config-field-metadata';
 
 export function displayWebSearchTab(
 	containerEl: HTMLElement,
 	plugin: IntelligenceAssistantPlugin
 ): void {
-	containerEl.createEl('h3', { text: 'Web search configuration' });
+	containerEl.createEl('h3', { text: t('settings.websearch.title') });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Configure web search functionality to enhance AI responses with up-to-date information from the internet.'
+		text: t('settings.websearch.desc')
 	});
 	desc.addClass('ia-section-description', 'ia-section-description--spaced');
 
@@ -24,17 +25,17 @@ export function displayWebSearchTab(
 		applyConfigFieldMetadata(new Setting(containerEl), options);
 
 	const providerOptions: Array<{ value: string; label: string }> = [
-		{ value: 'duckduckgo', label: 'DuckDuckGo (no key required)' },
-		{ value: 'google', label: 'Google Custom Search' },
-		{ value: 'bing', label: 'Bing Web Search' },
-		{ value: 'serpapi', label: 'SerpAPI' },
-		{ value: 'tavily', label: 'Tavily' },
-		{ value: 'searxng', label: 'SearXNG' },
-		{ value: 'brave', label: 'Brave Search' },
-		{ value: 'yahoo', label: 'Yahoo (HTML scraping)' },
-		{ value: 'yandex', label: 'Yandex (HTML scraping)' },
-		{ value: 'qwant', label: 'Qwant' },
-		{ value: 'mojeek', label: 'Mojeek' }
+		{ value: 'duckduckgo', label: t('settings.websearch.providers.duckduckgo') },
+		{ value: 'google', label: t('settings.websearch.providers.google') },
+		{ value: 'bing', label: t('settings.websearch.providers.bing') },
+		{ value: 'serpapi', label: t('settings.websearch.providers.serpapi') },
+		{ value: 'tavily', label: t('settings.websearch.providers.tavily') },
+		{ value: 'searxng', label: t('settings.websearch.providers.searxng') },
+		{ value: 'brave', label: t('settings.websearch.providers.brave') },
+		{ value: 'yahoo', label: t('settings.websearch.providers.yahoo') },
+		{ value: 'yandex', label: t('settings.websearch.providers.yandex') },
+		{ value: 'qwant', label: t('settings.websearch.providers.qwant') },
+		{ value: 'mojeek', label: t('settings.websearch.providers.mojeek') }
 	];
 
 	const addSubheading = (text: string) => {
@@ -43,7 +44,7 @@ export function displayWebSearchTab(
 		return heading;
 	};
 
-	addSubheading('General behavior');
+	addSubheading(t('settings.websearch.generalBehavior'));
 
 	createSetting({
 		path: 'webSearchConfig.enabled',

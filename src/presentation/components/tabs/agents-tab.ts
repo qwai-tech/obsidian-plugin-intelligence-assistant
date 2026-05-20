@@ -7,6 +7,7 @@ import { App } from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Agent, ModelInfo } from '@/types';
+import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
 import { AgentEditModal } from '../modals';
 import { DEFAULT_AGENT_ID } from '@/constants';
@@ -17,19 +18,19 @@ export function displayAgentsTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'Agent management' });
+	containerEl.createEl('h3', { text: t('settings.agents.title') });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Create and manage AI agents with specific capabilities, tools, and behaviors.'
+		text: t('settings.agents.desc')
 	});
 	desc.addClass('ia-section-description');
 
 	// Add new agent button
 	const actionsRow = containerEl.createDiv('ia-section-actions');
 	const agentSummary = actionsRow.createDiv('ia-section-summary');
-	agentSummary.createSpan({ text: `${plugin.settings.agents.length} agent${plugin.settings.agents.length === 1 ? '' : 's'} configured` });
+	agentSummary.createSpan({ text: t('settings.agents.count', { count: plugin.settings.agents.length }) });
 
-	const addBtn = actionsRow.createEl('button', { text: '+ add agent' });
+	const addBtn = actionsRow.createEl('button', { text: t('settings.agents.addBtn') });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -73,11 +74,17 @@ export function displayAgentsTab(
 	// Display existing agents in a table if they exist
 	if (plugin.settings.agents.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No agents configured. Select add agent to get started.');
+		emptyDiv.setText(t('settings.agents.empty'));
 		return;
 	}
 
-	const table = createTable(containerEl, ['Agent', 'Model', 'Capabilities', 'Tools', 'Actions']);
+	const table = createTable(containerEl, [
+		t('settings.agents.tableHeaders.agent'),
+		t('settings.agents.tableHeaders.model'),
+		t('settings.agents.tableHeaders.capabilities'),
+		t('settings.agents.tableHeaders.tools'),
+		t('settings.agents.tableHeaders.actions')
+	]);
 	const tbody = table.tBodies[0];
 
 	const promptMap = new Map(plugin.settings.systemPrompts.map(prompt => [prompt.id, prompt]));
@@ -136,7 +143,7 @@ export function displayAgentsTab(
 
 		if (agent.id === DEFAULT_AGENT_ID) {
 			const badges = agentStack.createDiv('ia-table-badges');
-			const tag = badges.createEl('span', { text: 'Default' });
+			const tag = badges.createEl('span', { text: t('settings.agents.defaultBadge') });
 			tag.addClass('ia-tag');
 		}
 
@@ -144,32 +151,36 @@ export function displayAgentsTab(
 			agentStack.createDiv('ia-table-subtext').setText(agent.description);
 		}
 
-		const promptName = promptMap.get(agent.systemPromptId)?.name || 'Custom prompt';
-		agentStack.createDiv('ia-table-subtext').setText(`System prompt • ${promptName}`);
+		const promptName = promptMap.get(agent.systemPromptId)?.name;
+		agentStack.createDiv('ia-table-subtext').setText(
+			promptName
+				? t('settings.agents.systemPrompt', { promptName })
+				: t('settings.agents.customPrompt')
+		);
 
 		// Model column
 		const modelCell = row.insertCell();
 		modelCell.addClass('ia-table-cell');
 		const modelStack = modelCell.createDiv('ia-table-stack');
-		
+
 		// Determine what to display based on the model strategy
-		let displayModel = 'Not set';
-		let displaySubtext = 'Model not found in cache';
-		
+		let displayModel = t('settings.agents.model.notSet');
+		let displaySubtext = t('settings.agents.model.notFound');
+
 		if (agent.modelStrategy.strategy === 'fixed' && agent.modelStrategy.modelId) {
 			const modelInfo = modelLookup.get(agent.modelStrategy.modelId) || null;
 			displayModel = modelInfo?.name || agent.modelStrategy.modelId;
 			if (modelInfo) {
 				displaySubtext = `${formatLabel(modelInfo.provider)} • ${modelInfo.id}`;
 			} else {
-				displaySubtext = 'Model not found in cache';
+				displaySubtext = t('settings.agents.model.notFound');
 			}
 		} else if (agent.modelStrategy.strategy === 'chat-view') {
-			displayModel = 'Use Chat View Model';
-			displaySubtext = 'Will use model selected in chat view';
+			displayModel = t('settings.agents.model.useChatView');
+			displaySubtext = t('settings.agents.model.useChatViewDesc');
 		} else if (agent.modelStrategy.strategy === 'default') {
-			displayModel = 'Use Default Model';
-			displaySubtext = 'Will use default model from settings';
+			displayModel = t('settings.agents.model.useDefault');
+			displaySubtext = t('settings.agents.model.useDefaultDesc');
 		}
 
 		const modelTitle = modelStack.createDiv('ia-table-title');
@@ -190,7 +201,7 @@ export function displayAgentsTab(
 		if (agent.reactEnabled) addCapability('ReAct');
 
 		if (capsDiv.childElementCount === 0) {
-			capsCell.createDiv('ia-table-subtext').setText('No special modes');
+			capsCell.createDiv('ia-table-subtext').setText(t('settings.agents.capabilities.noSpecialModes'));
 		}
 
 		// Tools column
@@ -199,23 +210,23 @@ export function displayAgentsTab(
 		const toolsBadges = toolsCell.createDiv('ia-table-badges');
 
 		if (agent.enabledBuiltInTools.length > 0) {
-			const builtInBadge = toolsBadges.createEl('span', { text: `${agent.enabledBuiltInTools.length} built-in` });
+			const builtInBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.builtIn', { count: agent.enabledBuiltInTools.length }) });
 			builtInBadge.addClass('ia-tag');
 		}
 
 		const serverCount = agent.enabledMcpServers.length;
 		const toolCount = agent.enabledMcpTools.length;
 		if (serverCount > 0) {
-			const mcpBadge = toolsBadges.createEl('span', { text: `${serverCount} mcp server${serverCount === 1 ? '' : 's'}` });
+			const mcpBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.mcpServer', { count: serverCount }) });
 			mcpBadge.addClass('ia-tag');
 		}
 		if (toolCount > 0) {
-			const toolBadge = toolsBadges.createEl('span', { text: `${toolCount} mcp tool${toolCount === 1 ? '' : 's'}` });
+			const toolBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.mcpTool', { count: toolCount }) });
 			toolBadge.addClass('ia-tag');
 		}
 
 		if (toolsBadges.childElementCount === 0) {
-			toolsCell.createDiv('ia-table-subtext').setText('No tools enabled');
+			toolsCell.createDiv('ia-table-subtext').setText(t('settings.agents.tools.noTools'));
 		}
 
 		// Actions column
@@ -223,7 +234,7 @@ export function displayAgentsTab(
 		actionsCell.addClass('ia-table-cell');
 		actionsCell.addClass('ia-table-actions');
 
-		const editBtn = actionsCell.createEl('button', { text: 'Edit' });
+		const editBtn = actionsCell.createEl('button', { text: t('settings.agents.actions.edit') });
 		editBtn.addClass('ia-button');
 		editBtn.addClass('ia-button--ghost');
 		editBtn.addEventListener('click', () => {
@@ -238,7 +249,7 @@ export function displayAgentsTab(
 		});
 
 		const canDelete = agent.id !== DEFAULT_AGENT_ID && plugin.settings.agents.length > 1;
-		const deleteBtn = actionsCell.createEl('button', { text: canDelete ? 'delete' : 'protected' });
+		const deleteBtn = actionsCell.createEl('button', { text: canDelete ? t('settings.agents.actions.delete') : t('settings.agents.actions.protected') });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
 		if (!canDelete) {
@@ -246,7 +257,7 @@ export function displayAgentsTab(
 		} else {
 			deleteBtn.addEventListener('click', () => {
 				void (async () => {
-					if (await showConfirm(app, `Delete agent "${agent.name}"?`)) {
+					if (await showConfirm(app, t('settings.agents.confirm.delete', { name: agent.name }))) {
 					const agentIndex = plugin.settings.agents.findIndex(a => a.id === agent.id);
 					if (agentIndex !== -1) {
 						plugin.settings.agents.splice(agentIndex, 1);

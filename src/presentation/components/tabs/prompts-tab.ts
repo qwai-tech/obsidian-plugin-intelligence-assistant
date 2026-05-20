@@ -6,7 +6,7 @@
 import {App} from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
-
+import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
 import { SystemPromptEditModal } from '../modals';
 
@@ -16,10 +16,10 @@ export function displayPromptsTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: 'System prompts' });
+	containerEl.createEl('h3', { text: t('settings.prompts.title') });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Manage system prompts that define the behavior and personality of your AI assistant.'
+		text: t('settings.prompts.desc')
 	});
 	desc.addClass('ia-section-description');
 	desc.addClass('ia-section-description--spaced');
@@ -29,7 +29,7 @@ export function displayPromptsTab(
 	actionRow.addClass('ia-section-actions--wrap');
 
 	// Add new prompt button
-	const addBtn = actionRow.createEl('button', { text: '+ add system prompt' });
+	const addBtn = actionRow.createEl('button', { text: t('settings.prompts.addBtn') });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -48,11 +48,18 @@ export function displayPromptsTab(
 	// Display existing prompts in a table if they exist
 	if (plugin.settings.systemPrompts.length === 0) {
 		const emptyDiv = containerEl.createDiv('ia-empty-state');
-		emptyDiv.setText('No system prompts configured. Select add system prompt to get started.');
+		emptyDiv.setText(t('settings.prompts.empty'));
 		return;
 	}
 
-	const table = createTable(containerEl, ['Name', 'Content Preview', 'Created', 'Updated', 'Enabled', 'Actions']);
+	const table = createTable(containerEl, [
+		t('settings.prompts.tableHeaders.name'),
+		t('settings.prompts.tableHeaders.contentPreview'),
+		t('settings.prompts.tableHeaders.created'),
+		t('settings.prompts.tableHeaders.updated'),
+		t('settings.prompts.tableHeaders.enabled'),
+		t('settings.prompts.tableHeaders.actions')
+	]);
 	const tbody = table.tBodies[0];
 
 	plugin.settings.systemPrompts.forEach((prompt, index) => {
@@ -92,7 +99,7 @@ export function displayPromptsTab(
 		enabledCell.addClass('ia-table-cell');
 		enabledCell.addClass('ia-table-cell--center');
 		const statusHost = enabledCell.createDiv();
-		createStatusIndicator(statusHost, prompt.enabled ? 'success' : 'warning', prompt.enabled ? 'Enabled' : 'Disabled');
+		createStatusIndicator(statusHost, prompt.enabled ? 'success' : 'warning', prompt.enabled ? t('settings.prompts.status.enabled') : t('settings.prompts.status.disabled'));
 
 		// Actions column
 		const actionsCell = row.insertCell();
@@ -100,7 +107,7 @@ export function displayPromptsTab(
 		actionsCell.addClass('ia-table-actions');
 
 		// Edit button (opens modal for full content review)
-		const editBtn = actionsCell.createEl('button', { text: 'Edit' });
+		const editBtn = actionsCell.createEl('button', { text: t('settings.prompts.actions.edit') });
 		editBtn.addClass('ia-button');
 		editBtn.addClass('ia-button--ghost');
 		editBtn.addEventListener('click', () => {
@@ -117,7 +124,7 @@ export function displayPromptsTab(
 		});
 
 		// Enable or disable prompt
-		const toggleBtn = actionsCell.createEl('button', { text: prompt.enabled ? 'Disable' : 'Enable' });
+		const toggleBtn = actionsCell.createEl('button', { text: prompt.enabled ? t('settings.prompts.actions.disable') : t('settings.prompts.actions.enable') });
 		toggleBtn.addClass('ia-button');
 		toggleBtn.addClass('ia-button--ghost');
 		toggleBtn.addEventListener('click', () => {
@@ -130,12 +137,12 @@ export function displayPromptsTab(
 		});
 
 		// Delete button
-		const deleteBtn = actionsCell.createEl('button', { text: 'Delete' });
+		const deleteBtn = actionsCell.createEl('button', { text: t('settings.prompts.actions.delete') });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
-				if (await showConfirm(app, `Delete prompt "${prompt.name}"?`)) {
+				if (await showConfirm(app, t('settings.prompts.confirm.delete', { name: prompt.name }))) {
 					plugin.settings.systemPrompts.splice(index, 1);
 					await plugin.saveSettings();
 					refreshDisplay();

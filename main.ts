@@ -42,7 +42,7 @@ import { ConversationMigrationService } from './src/application/services/convers
 
 // Import architecture components
 import { container } from './src/core/container';
-import { initI18n } from './src/i18n';
+import { initI18n, t } from './src/i18n';
 import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-system';
 import { ObsidianHttpClient } from './src/infrastructure/obsidian/obsidian-http-client';
 import { TokenUsageRepository } from './src/infrastructure/persistence/data/token-usage-repository';
@@ -671,26 +671,26 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	): Promise<void> {
 		// Check if LLM is configured
 		if (this.settings.llmConfigs.length === 0) {
-			new Notice('Please configure an LLM provider in settings first');
+			new Notice(t('notices.noProvider'));
 			return;
 		}
 
 		// Use custom model if specified, otherwise use default model
 		const modelId = customModel || this.settings.defaultModel;
 		if (!modelId) {
-			new Notice('Please select a default model in settings');
+			new Notice(t('notices.noModel'));
 			return;
 		}
 
 		// Find the config for the model
 		const config = ModelManager.findConfigForModelByProvider(modelId, this.settings.llmConfigs);
 		if (!config) {
-			new Notice(`No valid provider configuration found for model: ${modelId}`);
+			new Notice(t('notices.noValidProvider', { modelId }));
 			return;
 		}
 
 		// Show loading notice
-		const loadingNotice = new Notice('Processing...', 0);
+		const loadingNotice = new Notice(t('notices.processing'), 0);
 
 		try {
 			// Create provider
@@ -731,7 +731,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			if (actionType === 'replace') {
 				// Replace selected text with the result
 				editor.replaceSelection(result.trim());
-				new Notice('Text updated successfully');
+				new Notice(t('notices.textUpdated'));
 			} else if (actionType === 'explain') {
 				// Modal is already showing and updated
 				if (!result) {
@@ -741,7 +741,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		} catch (error) {
 			loadingNotice.hide();
 			const errorMsg = error instanceof Error ? error.message : String(error);
-			new Notice(`Error: ${errorMsg}`);
+			new Notice(t('notices.error', { message: errorMsg }));
 			console.error('[Editor AI Action] Error:', error);
 		}
 	}

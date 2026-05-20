@@ -1,6 +1,7 @@
 import { App, setIcon, Notice, TFile, TFolder } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
+import { t } from '@/i18n';
 
 export interface ChatInputCallbacks {
 	onSendMessage: (text: string) => Promise<void>;
@@ -51,7 +52,7 @@ export class ChatInputComponent {
 		const editorWrapper = this.inputContainer.createDiv('chat-input-editor');
 		this.textarea = editorWrapper.createEl('textarea', {
 			attr: {
-				placeholder: 'Type your message... (Enter to send, Shift+Enter for new line)',
+				placeholder: t('chat.placeholder'),
 				rows: '1'
 			}
 		});
@@ -59,7 +60,7 @@ export class ChatInputComponent {
 
 		// Send button
 		this.sendBtn = editorWrapper.createEl('button', { cls: 'ia-send-btn' });
-		this.sendBtn.setAttribute('aria-label', 'Send message');
+		this.sendBtn.setAttribute('aria-label', t('chat.sendAriaLabel'));
 		setIcon(this.sendBtn, 'arrow-up');
 
 		// Auto-resize textarea
@@ -85,14 +86,14 @@ export class ChatInputComponent {
 		// Send hint
 		this.sendHint = rightControls.createEl('span');
 		this.sendHint.addClass('ia-send-hint');
-		this.sendHint.setText('Press ');
-		this.sendHint.createEl('kbd', { text: 'Enter' });
-		this.sendHint.appendText(' to send');
+		this.sendHint.setText(t('chat.sendHintPrefix'));
+		this.sendHint.createEl('kbd', { text: t('chat.sendHintKey') });
+		this.sendHint.appendText(t('chat.sendHintSuffix'));
 
 		// Stop button
 		this.stopBtn = rightControls.createEl('button', { cls: 'stop-generation-btn' });
 		setIcon(this.stopBtn, 'square');
-		this.stopBtn.createSpan({ text: ' Stop' });
+		this.stopBtn.createSpan({ text: t('chat.stop') });
 		this.stopBtn.addClass('ia-hidden');
 		this.stopBtn.addEventListener('click', () => {
 			this.callbacks.onStopStreaming();
@@ -127,8 +128,8 @@ export class ChatInputComponent {
 
 		this.createHeaderActionButton(actionsContainer, {
 			icon: 'paperclip',
-			label: 'Add reference',
-			tooltip: 'Add file or folder reference (@)',
+			label: t('chat.addReference'),
+			tooltip: t('chat.addReferenceTooltip'),
 			onClick: () => this.callbacks.onShowReferenceMenu()
 		}).addClass('is-link');
 

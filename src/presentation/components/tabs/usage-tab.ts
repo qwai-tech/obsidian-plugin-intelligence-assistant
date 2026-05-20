@@ -6,6 +6,7 @@
 import type { App } from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import { createTable } from '@/presentation/utils/ui-helpers';
+import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 
 export async function displayUsageTab(
@@ -14,16 +15,16 @@ export async function displayUsageTab(
 	_app: App,
 	_refreshDisplay: () => void
 ): Promise<void> {
-	containerEl.createEl('h3', { text: 'Token usage' });
+	containerEl.createEl('h3', { text: t('settings.usage.title') });
 
 	const desc = containerEl.createEl('p', {
-		text: 'Track token consumption across providers and models. Data is accumulated across all conversations.'
+		text: t('settings.usage.desc')
 	});
 	desc.addClass('ia-section-description');
 
 	const repo = plugin.tokenUsageRepo;
 	if (!repo) {
-		containerEl.createEl('p', { text: 'Token usage tracking is not available.' });
+		containerEl.createEl('p', { text: t('settings.usage.notAvailable') });
 		return;
 	}
 
@@ -34,10 +35,10 @@ export async function displayUsageTab(
 	let activeRange: Range = 'all';
 
 	const rangeConfig: Array<{ range: Range; label: string; subLabel: string }> = [
-		{ range: 'today', label: 'Today', subLabel: 'today' },
-		{ range: 'week', label: 'This week', subLabel: 'this week' },
-		{ range: 'month', label: 'This month', subLabel: 'this month' },
-		{ range: 'all', label: 'All time', subLabel: 'all time' },
+		{ range: 'today', label: t('settings.usage.ranges.today'), subLabel: t('settings.usage.ranges.today') },
+		{ range: 'week', label: t('settings.usage.ranges.week'), subLabel: t('settings.usage.ranges.week') },
+		{ range: 'month', label: t('settings.usage.ranges.month'), subLabel: t('settings.usage.ranges.month') },
+		{ range: 'all', label: t('settings.usage.ranges.all'), subLabel: t('settings.usage.ranges.all') },
 	];
 
 	const statsContainer = containerEl.createDiv('ia-usage-stats');
@@ -109,8 +110,8 @@ export async function displayUsageTab(
 		if (byProvider.size === 0) {
 			statsContainer.createEl('p', { text: 'No usage data yet.' }).addClass('ia-muted');
 		} else {
-			const t = createTable(statsContainer, ['Provider', 'Prompt', 'Completion', 'Total', 'Calls']);
-			const tbody = t.tBodies[0];
+			const tbl = createTable(statsContainer, ['Provider', 'Prompt', 'Completion', 'Total', 'Calls']);
+			const tbody = tbl.tBodies[0];
 			for (const [name, s] of byProvider) {
 				const row = tbody.insertRow();
 				const nameCell = row.insertCell();
@@ -132,8 +133,8 @@ export async function displayUsageTab(
 		if (byModel.size === 0) {
 			statsContainer.createEl('p', { text: 'No usage data yet.' }).addClass('ia-muted');
 		} else {
-			const t = createTable(statsContainer, ['Model', 'Prompt', 'Completion', 'Total', 'Calls']);
-			const tbody = t.tBodies[0];
+			const tbl = createTable(statsContainer, ['Model', 'Prompt', 'Completion', 'Total', 'Calls']);
+			const tbody = tbl.tBodies[0];
 			for (const [name, s] of byModel) {
 				const row = tbody.insertRow();
 				const nameCell = row.insertCell();
@@ -159,8 +160,8 @@ export async function displayUsageTab(
 		if (recent.length === 0) {
 			statsContainer.createEl('p', { text: 'No recent activity.' }).addClass('ia-muted');
 		} else {
-			const t = createTable(statsContainer, ['Time', 'Model', 'In', 'Out', 'Total']);
-			const tbody = t.tBodies[0];
+			const tbl = createTable(statsContainer, ['Time', 'Model', 'In', 'Out', 'Total']);
+			const tbody = tbl.tBodies[0];
 			for (const r of recent) {
 				const row = tbody.insertRow();
 
