@@ -159,7 +159,6 @@ export class ChatView extends ItemView {
 		// Initialize Chat Header Component
 		this.chatHeader = new ChatHeaderComponent(
 			this.mainChatContainer,
-			this.app,
 			this.plugin,
 			this.state,
 			{
@@ -167,26 +166,7 @@ export class ChatView extends ItemView {
 				onNewChat: async () => {
 					await this.resetToDefaultChatConfiguration();
 					await this.conversationManager.createNewConversation();
-				},
-				onModelChange: () => this.onModelChange(),
-				onSettingsOpen: () => {
-					const settingApi = (this.app as any).setting;
-					if (settingApi) {
-						settingApi.open();
-						settingApi.openTabById('intelligence-assistant');
-					}
-				},
-				onTemperatureChange: (val) => { this.state.temperature = val; },
-				onMaxTokensChange: (val) => { this.state.maxTokens = val; },
-				onTopPChange: (val) => { this.state.topP = val; },
-				onFrequencyPenaltyChange: (val) => { this.state.frequencyPenalty = val; },
-				onPresencePenaltyChange: (val) => { this.state.presencePenalty = val; },
-				onModeChange: (mode) => this.handleModeChange(mode),
-				onPromptChange: async (promptId) => {
-					this.plugin.settings.activeSystemPromptId = promptId;
-					await this.plugin.saveSettings();
-				},
-				onAgentChange: (agentId) => this.handleAgentSelection(agentId)
+				}
 			}
 		);
 
@@ -366,7 +346,6 @@ export class ChatView extends ItemView {
 
 			// Update model selector
 			this.updateModelOptions();
-			this.updateModelControlDisplay();
 
 			// Restore selection if possible, otherwise fall back to default
 			if (this.modelSelect) {
@@ -727,28 +706,12 @@ export class ChatView extends ItemView {
 	 * Calculate and update the total token usage summary for the conversation
 	 */
 	private updateTokenSummary() {
-		const summary = this.conversationManager.getTokenSummary();
-		this.chatHeader.updateTokenSummary(`Tokens: ${summary.total} (${summary.prompt} input + ${summary.completion} output)`);
+		// Token counts are no longer displayed in the chat UI (moved to Settings)
 	}
 
 	private async updateOptionsDisplay() {
 		this.chatInput.updateModeSelector(this.state.mode);
-		this.updatePromptSelectorVisibility();
 		await this.updateQuickActionsState();
-		this.updateModelControlDisplay();
-	}
-
-	private updatePromptSelectorVisibility() {
-		if (!this.chatHeader.promptSelector) return;
-		if (this.state.mode === 'agent') {
-			this.chatHeader.promptSelector.addClass('ia-hidden');
-			this.chatHeader.promptSelector.disabled = true;
-			if (this.chatHeader.promptSelectorGroup) this.chatHeader.promptSelectorGroup.addClass('ia-hidden');
-		} else {
-			this.chatHeader.promptSelector.removeClass('ia-hidden');
-			this.chatHeader.promptSelector.disabled = false;
-			if (this.chatHeader.promptSelectorGroup) this.chatHeader.promptSelectorGroup.removeClass('ia-hidden');
-		}
 	}
 
 	private getActiveAgent(): Agent | null {
@@ -757,62 +720,7 @@ export class ChatView extends ItemView {
 		return this.plugin.settings.agents.find(agent => agent.id === activeId) || null;
 	}
 
-	private updateModelControlDisplay() {
-		const isAgentMode = this.state.mode === 'agent';
-		const activeAgent = this.getActiveAgent();
-		const usesChatViewModel = activeAgent?.modelStrategy?.strategy === 'chat-view';
-		const showControls = !isAgentMode || !activeAgent || usesChatViewModel;
 
-		if (this.chatHeader.modelControlsContainer) {
-			this.chatHeader.modelControlsContainer.toggleClass('ia-hidden', !showControls);
-		}
-		if (this.modelSelect) {
-			this.modelSelect.disabled = !showControls;
-		}
-		if (this.chatHeader.temperatureSlider) {
-			this.chatHeader.temperatureSlider.disabled = !showControls;
-		}
-		if (this.chatHeader.maxTokensInput) {
-			this.chatHeader.maxTokensInput.disabled = !showControls;
-		}
-
-		const shouldShowSummary = isAgentMode && !!activeAgent && !usesChatViewModel;
-			if (this.chatHeader.agentConfigSummaryEl) {
-				this.chatHeader.agentConfigSummaryEl.toggleClass('ia-hidden', !shouldShowSummary);
-			}
-		if (shouldShowSummary && activeAgent) {
-			this.renderAgentSummary(activeAgent);
-		}
-	}
-
-	private renderAgentSummary(agent: Agent) {
-		if (!this.chatHeader.agentSummaryDetailsEl) return;
-		if (this.chatHeader.agentSummaryTitleEl) {
-			this.chatHeader.agentSummaryTitleEl.setText(t('chat.agentSummary.configuration', { name: `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}` }));
-		}
-
-		this.chatHeader.agentSummaryDetailsEl.empty();
-		const chips = [
-			{ label: t('chat.agentSummary.model'), value: this.getAgentModelSummary(agent) },
-			{ label: t('chat.agentSummary.temp'), value: this.formatTemperature(agent.temperature) },
-			{ label: t('chat.agentSummary.max'), value: this.formatTokenLimit(agent.maxTokens) },
-			{ label: t('chat.agentSummary.rag'), value: this.formatToggleStatus(agent.ragEnabled) },
-			{ label: t('chat.agentSummary.web'), value: this.formatToggleStatus(agent.webSearchEnabled) },
-			{ label: t('chat.agentSummary.tools'), value: this.getAgentToolsLabel(agent) },
-			{ label: t('chat.agentSummary.memory'), value: this.getAgentMemoryLabel(agent) }
-		];
-
-		chips
-			.filter(chip => chip.value && chip.value.trim().length > 0)
-			.forEach(({ label, value }) => this.createAgentSummaryChip(label, value));
-	}
-
-	private createAgentSummaryChip(label: string, value: string) {
-		if (!this.chatHeader.agentSummaryDetailsEl) return;
-		const chip = this.chatHeader.agentSummaryDetailsEl.createSpan({ cls: 'chat-agent-chip' });
-		chip.createSpan({ cls: 'chat-agent-chip-label', text: label });
-		chip.createSpan({ cls: 'chat-agent-chip-value', text: value });
-	}
 
 	private getAgentModelSummary(agent: Agent): string {
 		const strategy = agent.modelStrategy?.strategy ?? 'fixed';
@@ -877,27 +785,7 @@ export class ChatView extends ItemView {
 			: value.toFixed(1).replace(/0+$/, '').replace(/\.$/, '');
 	}
 
-	private updateTemperatureDisplay(value: number) {
-		if (this.chatHeader.temperatureSlider) {
-			this.chatHeader.temperatureSlider.value = value.toString();
-		}
-		if (this.chatHeader.temperatureValueEl) {
-			this.chatHeader.temperatureValueEl.setText(this.formatTemperature(value));
-		}
-	}
 
-	private populatePromptSelectorOptions() {
-		if (!this.chatHeader.promptSelector) return;
-		const enabledPrompts = this.plugin.settings.systemPrompts.filter(p => p.enabled);
-		this.chatHeader.promptSelector.empty();
-		this.chatHeader.promptSelector.createEl('option', { value: '', text: t('chat.noSystemPrompt') });
-		enabledPrompts.forEach(p => {
-			const option = this.chatHeader.promptSelector!.createEl('option', { value: p.id, text: p.name });
-			if (this.plugin.settings.activeSystemPromptId === p.id) {
-				option.selected = true;
-			}
-		});
-	}
 
 	private async handleModeChange(mode: 'chat' | 'agent') {
 		this.state.mode = mode;
@@ -931,6 +819,12 @@ export class ChatView extends ItemView {
 		}
 
 		this.chatInput.updateModeSelector(mode);
+		if (mode === 'agent') {
+			const activeAgent = this.getActiveAgent();
+			this.chatHeader.updateAgentBadge(activeAgent ? `${activeAgent.icon || '🤖'} ${activeAgent.name}` : null);
+		} else {
+			this.chatHeader.updateAgentBadge(null);
+		}
 
 		await this.updateOptionsDisplay();
 	}
@@ -973,9 +867,7 @@ export class ChatView extends ItemView {
 	}
 
 	private updateConversationTitle(title: string) {
-		if (this.chatHeader.conversationTitleEl) {
-			this.chatHeader.conversationTitleEl.setText(title || 'Current Conversation');
-		}
+		this.chatHeader.updateConversationTitle(title);
 	}
 
 	private async applyConversationConfig(conv: Conversation) {
@@ -1020,9 +912,6 @@ export class ChatView extends ItemView {
 				this.plugin.settings.activeSystemPromptId = promptToUse || null;
 				settingsDirty = true;
 			}
-			if (this.chatHeader.promptSelector) {
-				this.chatHeader.promptSelector.value = promptToUse;
-			}
 			if (this.chatInput.agentSelector) {
 				this.chatInput.agentSelector.value = '';
 			}
@@ -1046,28 +935,18 @@ export class ChatView extends ItemView {
 		}
 		if (typeof config.temperature === 'number') {
 			this.state.temperature = config.temperature;
-			this.updateTemperatureDisplay(config.temperature);
 		}
 		if (typeof config.maxTokens === 'number') {
 			this.state.maxTokens = config.maxTokens;
-			if (this.chatHeader.maxTokensInput) {
-				this.chatHeader.maxTokensInput.value = config.maxTokens.toString();
-			}
 		}
 		if (typeof config.topP === 'number') {
 			this.state.topP = config.topP;
-			if (this.chatHeader.topPSlider) this.chatHeader.topPSlider.value = config.topP.toString();
-			if (this.chatHeader.topPValueEl) this.chatHeader.topPValueEl.setText(config.topP.toFixed(2));
 		}
 		if (typeof config.frequencyPenalty === 'number') {
 			this.state.frequencyPenalty = config.frequencyPenalty;
-			if (this.chatHeader.frequencyPenaltySlider) this.chatHeader.frequencyPenaltySlider.value = config.frequencyPenalty.toString();
-			if (this.chatHeader.frequencyPenaltyValueEl) this.chatHeader.frequencyPenaltyValueEl.setText(config.frequencyPenalty.toFixed(1));
 		}
 		if (typeof config.presencePenalty === 'number') {
 			this.state.presencePenalty = config.presencePenalty;
-			if (this.chatHeader.presencePenaltySlider) this.chatHeader.presencePenaltySlider.value = config.presencePenalty.toString();
-			if (this.chatHeader.presencePenaltyValueEl) this.chatHeader.presencePenaltyValueEl.setText(config.presencePenalty.toFixed(1));
 		}
 		if (typeof config.ragEnabled === 'boolean') {
 			this.state.enableRAG = config.ragEnabled;
@@ -1110,9 +989,6 @@ export class ChatView extends ItemView {
 					settingsDirty = true;
 				}
 			}
-			if (this.chatHeader.promptSelector) {
-				this.chatHeader.promptSelector.value = '';
-			}
 			if (this.plugin.settings.activeSystemPromptId !== null) {
 				this.plugin.settings.activeSystemPromptId = null;
 				settingsDirty = true;
@@ -1120,6 +996,7 @@ export class ChatView extends ItemView {
 		} else {
 			this.state.mode = 'chat';
 			this.chatInput.updateModeSelector('chat');
+			this.chatHeader.updateAgentBadge(null);
 			if (this.plugin.settings.activeAgentId) {
 				this.plugin.settings.activeAgentId = null;
 				settingsDirty = true;
@@ -1129,9 +1006,6 @@ export class ChatView extends ItemView {
 			if (this.plugin.settings.activeSystemPromptId !== null) {
 				this.plugin.settings.activeSystemPromptId = null;
 				settingsDirty = true;
-			}
-			if (this.chatHeader.promptSelector) {
-				this.chatHeader.promptSelector.value = '';
 			}
 
 			const defaultModel = this.plugin.settings.defaultModel;
@@ -1144,25 +1018,14 @@ export class ChatView extends ItemView {
 			const defaultTemperature = 0.7;
 			const defaultMaxTokens = 4000;
 			this.state.temperature = defaultTemperature;
-			this.updateTemperatureDisplay(defaultTemperature);
 			this.state.maxTokens = defaultMaxTokens;
-			if (this.chatHeader.maxTokensInput) {
-				this.chatHeader.maxTokensInput.value = defaultMaxTokens.toString();
-			}
 
 			const defaultTopP = 1.0;
 			this.state.topP = defaultTopP;
-			if (this.chatHeader.topPSlider) this.chatHeader.topPSlider.value = defaultTopP.toString();
-			if (this.chatHeader.topPValueEl) this.chatHeader.topPValueEl.setText(defaultTopP.toFixed(2));
 
 			const defaultPenalty = 0;
 			this.state.frequencyPenalty = defaultPenalty;
-			if (this.chatHeader.frequencyPenaltySlider) this.chatHeader.frequencyPenaltySlider.value = defaultPenalty.toString();
-			if (this.chatHeader.frequencyPenaltyValueEl) this.chatHeader.frequencyPenaltyValueEl.setText(defaultPenalty.toFixed(1));
-
 			this.state.presencePenalty = defaultPenalty;
-			if (this.chatHeader.presencePenaltySlider) this.chatHeader.presencePenaltySlider.value = defaultPenalty.toString();
-			if (this.chatHeader.presencePenaltyValueEl) this.chatHeader.presencePenaltyValueEl.setText(defaultPenalty.toFixed(1));
 
 			this.state.enableRAG = false;
 			this.state.enableWebSearch = false;
@@ -1245,14 +1108,6 @@ export class ChatView extends ItemView {
 		this.state.temperature = agent.temperature;
 		this.state.maxTokens = agent.maxTokens;
 
-		// Update UI elements if they exist
-		if (this.chatHeader.temperatureSlider) {
-			this.chatHeader.temperatureSlider.value = String(agent.temperature);
-		}
-		if (this.chatHeader.maxTokensInput) {
-			this.chatHeader.maxTokensInput.value = String(agent.maxTokens);
-		}
-
 		// Select agent's model based on strategy
 		let effectiveModelId: string;
 		switch (agent.modelStrategy.strategy) {
@@ -1325,6 +1180,7 @@ export class ChatView extends ItemView {
 		}
 
 		this.refreshAgentSelect(agentId);
+		this.chatHeader.updateAgentBadge(`${agent.icon || '🤖'} ${agent.name ?? 'unknown'}`);
 
 		if (!options?.silent) {
 			new Notice(t('chat.notices.agentConfigApplied', { name: `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}` }));
