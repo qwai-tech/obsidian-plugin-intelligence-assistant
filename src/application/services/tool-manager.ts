@@ -225,23 +225,26 @@ export class ToolManager {
 	}
 
 	// Convert tool definitions to OpenAI function calling format
-	toOpenAIFunctions(): unknown[] {
+	toOpenAIFunctions(): Array<{ type: 'function'; function: { name: string; description: string; parameters: Record<string, unknown> } }> {
 		return this.getAllTools().map(tool => ({
-			name: tool.definition.name,
-			description: tool.definition.description,
-			parameters: {
-				type: 'object',
-				properties: tool.definition.parameters.reduce((acc, param) => {
-					acc[param.name] = {
-						type: param.type,
-						description: param.description,
-						...(param.enum ? { enum: param.enum } : {})
-					};
-					return acc;
-				}, {} as Record<string, unknown>),
-				required: tool.definition.parameters
-					.filter(p => p.required)
-					.map(p => p.name)
+			type: 'function' as const,
+			function: {
+				name: tool.definition.name,
+				description: tool.definition.description,
+				parameters: {
+					type: 'object',
+					properties: tool.definition.parameters.reduce((acc, param) => {
+						acc[param.name] = {
+							type: param.type,
+							description: param.description,
+							...(param.enum ? { enum: param.enum } : {})
+						};
+						return acc;
+					}, {} as Record<string, unknown>),
+					required: tool.definition.parameters
+						.filter(p => p.required)
+						.map(p => p.name)
+				}
 			}
 		}));
 	}

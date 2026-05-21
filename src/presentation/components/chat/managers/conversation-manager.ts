@@ -720,7 +720,7 @@ export class ConversationManager extends Events {
 	 */
 	private shouldUpdateConversationTitle(conv: Conversation): boolean {
 		// Only generate title once for "New Conversation" with at least 2 messages
-		if (conv.title === 'New Conversation' && this.state.messages.length >= 2) {
+		if (conv.title === t('chat.newConversation') && this.state.messages.length >= 2) {
 			return true;
 		}
 

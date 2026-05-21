@@ -60,9 +60,7 @@ export function displayAgentsTab(
 			},
 			ragEnabled: false,
 			webSearchEnabled: false,
-			reactEnabled: false,
-			reactMaxSteps: 10,
-			reactAutoContinue: true,
+			maxSteps: 10,
 			createdAt: Date.now(),
 			updatedAt: Date.now()
 		};
@@ -198,7 +196,6 @@ export function displayAgentsTab(
 
 		if (agent.ragEnabled) addCapability('RAG');
 		if (agent.webSearchEnabled) addCapability('Web');
-		if (agent.reactEnabled) addCapability('ReAct');
 
 		if (capsDiv.childElementCount === 0) {
 			capsCell.createDiv('ia-table-subtext').setText(t('settings.agents.capabilities.noSpecialModes'));

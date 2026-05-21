@@ -33,13 +33,6 @@ export class AgentModel {
 	}
 
 	/**
-	 * Check if ReAct mode is enabled
-	 */
-	isReActEnabled(): boolean {
-		return this._data.reactEnabled;
-	}
-
-	/**
 	 * Get agent capabilities
 	 */
 	getCapabilities(): string[] {
@@ -47,7 +40,6 @@ export class AgentModel {
 
 		if (this.isRAGEnabled()) capabilities.push('RAG');
 		if (this.isWebSearchEnabled()) capabilities.push('Web Search');
-		if (this.isReActEnabled()) capabilities.push('ReAct');
 		if (this.canUseTooling()) capabilities.push('Tools');
 
 		return capabilities;

@@ -61,8 +61,7 @@ describe('AgentModel', () => {
 				createTestAgent({
 					enabledBuiltInTools: ['tool1'],
 					ragEnabled: true,
-					webSearchEnabled: true,
-					reactEnabled: true
+					webSearchEnabled: true
 				})
 			);
 
@@ -71,7 +70,6 @@ describe('AgentModel', () => {
 			expect(capabilities).toContain('Tools');
 			expect(capabilities).toContain('RAG');
 			expect(capabilities).toContain('Web Search');
-			expect(capabilities).toContain('ReAct');
 		});
 
 		it('should return empty array when no capabilities enabled', () => {
@@ -80,8 +78,7 @@ describe('AgentModel', () => {
 					enabledBuiltInTools: [],
 					enabledMcpServers: [],
 					ragEnabled: false,
-					webSearchEnabled: false,
-					reactEnabled: false
+					webSearchEnabled: false
 				})
 			);
 
@@ -180,7 +177,7 @@ describe('AgentModel', () => {
 				createTestAgent({
 					name: 'Test Agent',
 					icon: '🤖',
-					modelId: 'gpt-4',
+					modelStrategy: { strategy: 'fixed', modelId: 'gpt-4' },
 					enabledBuiltInTools: ['tool1', 'tool2']
 				})
 			);
@@ -189,7 +186,7 @@ describe('AgentModel', () => {
 
 			expect(summary.name).toBe('Test Agent');
 			expect(summary.icon).toBe('🤖');
-			expect(summary.model).toBe('test-model');
+			expect(summary.model).toBe('gpt-4');
 			expect(summary.capabilities).toContain('Tools');
 			expect(summary.toolsCount).toBe(2);
 		});

@@ -438,7 +438,7 @@ async function writeTextToClipboard(text: string) {
 }
 
 export function appendTokenUsageToMessage(messageEl: HTMLElement, usage: Message['tokenUsage']) {
-	const body = messageEl.querySelector('.ia-chat-message__body') as HTMLElement | null;
+	const body = messageEl.querySelector<HTMLElement>('.ia-chat-message__body');
 	if (!body) return;
 	const existing = body.querySelector('.ia-chat-message__footer');
 	if (existing) existing.remove();

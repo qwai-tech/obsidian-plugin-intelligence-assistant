@@ -163,7 +163,6 @@ export class AgentController extends BaseController {
 		const capabilities: string[] = [];
 		if (agent.ragEnabled) capabilities.push('RAG');
 		if (agent.webSearchEnabled) capabilities.push('Web Search');
-		if (agent.reactEnabled) capabilities.push('ReAct');
 		if (agent.enabledBuiltInTools.length > 0 || agent.enabledMcpServers.length > 0) {
 			capabilities.push('Tools');
 		}
@@ -179,7 +178,7 @@ export class AgentController extends BaseController {
 	/**
 	 * Check if agent has capability
 	 */
-	hasCapability(capability: 'rag' | 'webSearch' | 'react' | 'tools'): boolean {
+	hasCapability(capability: 'rag' | 'webSearch' | 'tools'): boolean {
 		const agent = this.getCurrentAgent();
 		if (!agent) return false;
 
@@ -188,8 +187,6 @@ export class AgentController extends BaseController {
 				return agent.ragEnabled;
 			case 'webSearch':
 				return agent.webSearchEnabled;
-			case 'react':
-				return agent.reactEnabled;
 			case 'tools':
 				return agent.enabledBuiltInTools.length > 0 || agent.enabledMcpServers.length > 0;
 			default:

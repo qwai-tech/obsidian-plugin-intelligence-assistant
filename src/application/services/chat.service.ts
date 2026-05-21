@@ -15,7 +15,6 @@ import { IFileSystem } from '@/core/interfaces';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
 import type { ToolManager } from './tool-manager';
-import type { ToolCall } from './types';
 import type { RAGManager } from '@/infrastructure/rag-manager';
 import type { WebSearchService } from './web-search-service';
 import type { StreamChunk } from '@/types/common/llm';
@@ -39,7 +38,7 @@ export interface ChatOptions {
 
 export interface AgentLoopCallbacks {
 	onChunk: (chunk: StreamChunk) => void;
-	onToolCall: (toolName: string, args: Record<string, unknown>) => void;
+	onToolCall: (toolName: string, args: Record<string, unknown>, thinking?: string) => void;
 	onToolResult: (toolName: string, success: boolean, output: string) => void;
 	onThought: (thought: string) => void;
 	onComplete: (finalMessage: Message) => void;
@@ -328,16 +327,15 @@ export class ChatService {
 			? (options.agents ?? []).find(a => a.id === options.agentId)
 			: undefined;
 		const contextWindow = options.contextWindow ?? activeAgent?.contextWindow ?? 20;
-		const reactEnabled = activeAgent?.reactEnabled ?? true;
+		const maxSteps = activeAgent?.maxSteps ?? 10;
 
-		// Build agent system prompt (once, reused across loop iterations)
 		const agentSystemMessages = this.buildAgentSystemMessages(
 			options.isGenericAgent ?? !options.agentId,
 			activeAgent,
 			options.allowOpenApiTools ?? false
 		);
 
-		// Inject RAG + Web Search on first call only
+		// Inject RAG + Web Search context once
 		const userQuery = messages[messages.length - 1]?.content || '';
 		const ragSources: RAGSource[] = [];
 		const webResults: WebSearchResult[] = [];
@@ -346,15 +344,10 @@ export class ChatService {
 			const searchResults = await this.ragManager.query(userQuery, selectedModel, this.defaultModel);
 			if (searchResults && searchResults.length > 0) {
 				for (const r of searchResults) {
-					ragSources.push({
-						path: r.chunk.metadata.path,
-						content: r.chunk.content,
-						similarity: r.similarity,
-						title: r.chunk.metadata.title
-					});
+					ragSources.push({ path: r.chunk.metadata.path, content: r.chunk.content, similarity: r.similarity, title: r.chunk.metadata.title });
 				}
 				const ragContext = ragSources.map(s => `Document: ${s.path}\nContent: ${s.content}`).join('\n\n');
-				agentSystemMessages.push({ role: 'system', content: `RAG Context (retrieved from your vault):\n\n${ragContext}` });
+				agentSystemMessages.push({ role: 'system', content: `RAG Context:\n\n${ragContext}` });
 			}
 		}
 
@@ -362,47 +355,50 @@ export class ChatService {
 			const results = await this.webSearchService.search(userQuery);
 			if (results && results.length > 0) {
 				webResults.push(...results);
-				const webContext = this.webSearchService.formatResultsAsContext(results);
-				agentSystemMessages.push({ role: 'system', content: webContext });
+				agentSystemMessages.push({ role: 'system', content: this.webSearchService.formatResultsAsContext(results) });
 			}
 		}
 
-		// Active system prompts
 		const baseSystemMessages: Message[] = [
 			...(options.activeSystemPrompts || []),
 			...agentSystemMessages
 		];
 
-		const MAX_AGENT_STEPS = activeAgent?.reactMaxSteps ?? 10;
+		// Working messages: standard Message[] plus tool-result entries.
+		// Tool result entries use role:'tool' with tool_call_id — required by the
+		// OpenAI function-calling protocol but not part of the display Message type.
+		// We cast to Message[] only when passing to the provider.
+		type ToolResultEntry = { role: 'tool'; content: string; tool_call_id: string };
+		type AssistantWithCalls = Message & {
+			tool_calls?: Array<{ id: string; type: 'function'; function: { name: string; arguments: string } }>;
+			reasoning_content?: string;
+		};
+		type WorkingMessage = Message | ToolResultEntry | AssistantWithCalls;
+
+		const workingMessages: WorkingMessage[] = [...messages];
+		const nativeTools = this.toolManager.toOpenAIFunctions();
 		const MAX_CONSECUTIVE_FAILURES = 3;
-		const workingMessages = [...messages];
 		const consecutiveFailures = new Map<string, number>();
-		const tokenBudget = options.tokenBudget ?? 100000;
-		let cumulativeTokens = 0;
+
+		let lastContent = '';
+		let lastReasoning = '';
 		let lastStepUsage: { promptTokens: number; completionTokens: number; totalTokens: number } | null = null;
-		let finalContent = '';
 
 		try {
-			for (let step = 0; step < MAX_AGENT_STEPS; step++) {
+			for (let step = 0; step < maxSteps; step++) {
 				if (callbacks.checkAbort?.()) break;
 
-				// Deduplicate and apply context window
-				const deduped = deduplicateMessages(workingMessages);
-				const truncated = deduped.length > contextWindow
-					? deduped.slice(-contextWindow)
-					: deduped;
+				// Apply context window
+				const deduped = deduplicateMessages(workingMessages as Message[]);
+				const truncated = deduped.length > contextWindow ? deduped.slice(-contextWindow) : deduped;
 				const allMessages = [...baseSystemMessages, ...truncated];
 
-				// Build native function calling tools
-				const nativeTools = this.toolManager.toOpenAIFunctions();
-				const streamToolCalls: Array<{ name: string; arguments: Record<string, unknown> }> = [];
+				// Native tool calls accumulated during this step
+				const pendingToolCalls: Array<{ id: string; name: string; arguments: Record<string, unknown> }> = [];
+				const stepCapture: { usage: { promptTokens: number; completionTokens: number; totalTokens: number } | null } = { usage: null };
 
-				// Per-step usage capture via object wrapper: TypeScript 5.9 narrows
-				// callback-assigned let vars to their initial value; object properties avoid this.
-				const stepCapture = { usage: null as { promptTokens: number; completionTokens: number; totalTokens: number } | null };
-
-				// Stream LLM call
-				finalContent = '';
+				lastContent = '';
+				lastReasoning = '';
 				await provider.streamChat(
 					{
 						messages: allMessages,
@@ -413,153 +409,117 @@ export class ChatService {
 						frequencyPenalty: options.frequencyPenalty,
 						presencePenalty: options.presencePenalty,
 						tools: nativeTools.length > 0 ? nativeTools : undefined,
-						toolChoice: nativeTools.length > 0 ? 'auto' : undefined
+						toolChoice: nativeTools.length > 0 ? 'auto' : undefined,
 					},
-					(chunk) => {
+					(chunk: StreamChunk) => {
 						if (callbacks.checkAbort?.()) return;
 						if (chunk.content) {
-							finalContent += chunk.content;
+							lastContent += chunk.content;
 							callbacks.onChunk(chunk);
 						}
-						if (chunk.usage) {
-							stepCapture.usage = chunk.usage;
-						}
+						if (chunk.reasoning) lastReasoning += chunk.reasoning;
+						if (chunk.usage) stepCapture.usage = chunk.usage;
 						if (chunk.toolCalls) {
 							for (const tc of chunk.toolCalls) {
 								try {
-									streamToolCalls.push({
+									pendingToolCalls.push({
+										id: tc.id,
 										name: tc.function.name,
-										arguments: JSON.parse(tc.function.arguments) as Record<string, unknown>
+										arguments: JSON.parse(tc.function.arguments) as Record<string, unknown>,
 									});
 								} catch {
-									streamToolCalls.push({ name: tc.function.name, arguments: {} });
+									pendingToolCalls.push({ id: tc.id, name: tc.function.name, arguments: {} });
 								}
 							}
 						}
 					}
 				);
 
-				const stepUsage = stepCapture.usage;
-
 				if (callbacks.checkAbort?.()) break;
 
-				// Track token usage from provider
-				if (stepUsage) {
-					cumulativeTokens += stepUsage.totalTokens;
-				} else {
-					cumulativeTokens += Math.ceil(((finalContent?.length ?? 0) + (baseSystemMessages.reduce((s, m) => s + (m.content?.length ?? 0), 0))) / 4);
-				}
-				if (this.usageRepo && stepUsage) {
+				// Record usage
+				lastStepUsage = stepCapture.usage;
+				if (this.usageRepo && lastStepUsage) {
 					void this.usageRepo.recordUsage({
-						model: selectedModel,
-						provider: config.provider,
-						promptTokens: stepUsage.promptTokens,
-						completionTokens: stepUsage.completionTokens,
-						totalTokens: stepUsage.totalTokens,
-						timestamp: Date.now(),
-						conversationId: options.conversationId
+						model: selectedModel, provider: config.provider,
+						promptTokens: lastStepUsage.promptTokens,
+						completionTokens: lastStepUsage.completionTokens,
+						totalTokens: lastStepUsage.totalTokens,
+						timestamp: Date.now(), conversationId: options.conversationId,
 					});
 				}
-				lastStepUsage = stepUsage;
-				callbacks.onTokenUsage?.(step, cumulativeTokens, tokenBudget);
-				if (cumulativeTokens > tokenBudget) {
-					const msg = `Token budget exceeded: ${cumulativeTokens} > ${tokenBudget}. Terminating agent loop.`;
-					callbacks.onError(new Error(msg));
-					return;
-				}
 
-				// Parse tool calls: prefer native, fall back to text parsing
-			if (!reactEnabled) {
-			callbacks.onComplete({
-				role: 'assistant', content: finalContent, model: selectedModel,
-				ragSources: ragSources.length > 0 ? ragSources : undefined,
-				webSearchResults: webResults.length > 0 ? webResults : undefined,
-				tokenUsage: lastStepUsage ?? undefined
-			} as Message);
-			return;
-		}
+				// No tool calls → model gave its final answer
+				if (pendingToolCalls.length === 0) break;
 
-		// Extract thought from ReAct pattern
-		const thoughtMatch = finalContent.match(/Thought:\s*([\s\S]*?)(?=Action:|```|$)/i);
-		if (thoughtMatch?.[1]?.trim()) {
-			callbacks.onThought(thoughtMatch[1].trim());
-		}
-				const toolCalls = streamToolCalls.length > 0
-					? streamToolCalls
-					: this.parseToolCallsFromContent(finalContent);
-				if (toolCalls.length === 0) break;
-
-				let anyToolExecuted = false;
-				// Push assistant message once for all tool calls in this response
-				workingMessages.push({
+				// Push assistant message with tool_calls so next iteration has proper context.
+				// reasoning_content must be echoed back for DeepSeek thinking models.
+				const assistantEntry: AssistantWithCalls = {
 					role: 'assistant',
-					content: finalContent,
-					model: selectedModel
-				} as Message);
+					content: lastContent,
+					model: selectedModel,
+					tool_calls: pendingToolCalls.map(tc => ({
+						id: tc.id, type: 'function' as const,
+						function: { name: tc.name, arguments: JSON.stringify(tc.arguments) },
+					})),
+					reasoning_content: lastReasoning || undefined,
+				};
+				workingMessages.push(assistantEntry);
 
-				for (const toolCall of toolCalls) {
-					if (callbacks.checkAbort?.()) break;
+				// Execute tools in parallel
+				const toolResults = await Promise.all(
+					pendingToolCalls.map(async (tc) => {
+						callbacks.onToolCall(tc.name, tc.arguments, lastReasoning || undefined);
 
-					callbacks.onToolCall(toolCall.name, toolCall.arguments);
+						const toolAllowed = this.isToolAllowed(tc.name, activeAgent, options.allowOpenApiTools ?? false);
+						let result: { success: boolean; result?: unknown; error?: string };
 
-					// Check tool permissions
-					const toolAllowed = this.isToolAllowed(toolCall.name, activeAgent, options.allowOpenApiTools ?? false);
-					let result: { success: boolean; result?: unknown; error?: string };
-
-					if (!toolAllowed) {
-						result = { success: false, error: `Tool ${toolCall.name} is not enabled for this agent` };
-					} else {
-						try {
-							const execResult = await this.toolManager.executeTool(toolCall);
-							result = { success: execResult.success, result: execResult.result, error: execResult.error };
-						} catch (err) {
-							result = { success: false, error: err instanceof Error ? err.message : String(err) };
+						if (!toolAllowed) {
+							result = { success: false, error: `Tool ${tc.name} is not enabled for this agent` };
+						} else {
+							try {
+								const execResult = await this.toolManager.executeTool(tc);
+								result = { success: execResult.success, result: execResult.result, error: execResult.error };
+							} catch (err) {
+								result = { success: false, error: err instanceof Error ? err.message : String(err) };
+							}
 						}
-					}
 
-					// Track consecutive failures
-					if (result.success) {
-						consecutiveFailures.delete(toolCall.name);
-					} else {
-						const fails = (consecutiveFailures.get(toolCall.name) || 0) + 1;
-						consecutiveFailures.set(toolCall.name, fails);
-						if (fails >= MAX_CONSECUTIVE_FAILURES) {
-							const msg = `Tool "${toolCall.name}" failed ${fails} consecutive times. Terminating agent loop.`;
-							callbacks.onToolResult(toolCall.name, false, msg);
-							callbacks.onError(new Error(msg));
-							return;
+						if (result.success) {
+							consecutiveFailures.delete(tc.name);
+						} else {
+							const fails = (consecutiveFailures.get(tc.name) ?? 0) + 1;
+							consecutiveFailures.set(tc.name, fails);
+							if (fails >= MAX_CONSECUTIVE_FAILURES) {
+								const msg = `Tool "${tc.name}" failed ${fails} consecutive times.`;
+								callbacks.onToolResult(tc.name, false, msg);
+								throw new Error(msg);
+							}
 						}
-					}
 
-					// Structured diagnosis for failures
-					const output = result.success
-						? JSON.stringify(result.result)
-						: this.diagnoseToolError(toolCall.name, toolCall.arguments, result.error ?? 'Unknown error');
+						const output = result.success
+							? JSON.stringify(result.result)
+							: this.diagnoseToolError(tc.name, tc.arguments, result.error ?? 'Unknown error');
 
-					callbacks.onToolResult(toolCall.name, result.success, output);
+						callbacks.onToolResult(tc.name, result.success, output);
+						return { id: tc.id, name: tc.name, output };
+					})
+				);
 
-					// Add tool result to working messages for next iteration
-					workingMessages.push({
-						role: 'system',
-						content: `Tool ${toolCall.name} result: ${output}`
-					} as Message);
-
-					anyToolExecuted = true;
+				// Push tool results with proper role:'tool' format
+				for (const r of toolResults) {
+					workingMessages.push({ role: 'tool', content: r.output, tool_call_id: r.id });
 				}
-
-				if (!anyToolExecuted) break;
 			}
 
-			const assistantMessage: Message = {
+			callbacks.onComplete({
 				role: 'assistant',
-				content: finalContent,
+				content: lastContent,
 				model: selectedModel,
 				ragSources: ragSources.length > 0 ? ragSources : undefined,
 				webSearchResults: webResults.length > 0 ? webResults : undefined,
-				tokenUsage: lastStepUsage ?? undefined
-			};
-
-			callbacks.onComplete(assistantMessage);
+				tokenUsage: lastStepUsage ?? undefined,
+			} as Message);
 		} catch (error) {
 			callbacks.onError(error instanceof Error ? error : new Error(String(error)));
 		}
@@ -573,38 +533,12 @@ export class ChatService {
 		const messages: Message[] = [];
 
 		if (isGenericAgent) {
-			const toolsList = this.toolManager.getAllTools().map(tool =>
-				`- ${tool.definition.name}: ${tool.definition.description}`
-			).join('\n');
-
 			messages.push({
 				role: 'system',
-				content: `You are a ReAct (Reasoning + Action) agent. You think step-by-step and take actions when needed to solve user queries.
-
-Follow this ReAct pattern strictly:
-Thought: First, think about what you need to do to solve the query
-Action: Then, call a tool if needed with the proper arguments
-Observation: You will receive the result of your action
-Repeat: Continue thinking, acting, and observing until you can provide a final answer
-
-Available tools:
-${toolsList}
-
-To call a tool, respond with a JSON block in this format:
-\`\`\`json
-{
-  "name": "tool_name",
-  "arguments": {
-    "arg1": "value1",
-    "arg2": "value2"
-  }
-}
-\`\`\`
-
-Always think before you act. Only call one tool at a time. After receiving the result, think about what to do next.`
+				content: `You are an AI agent with access to tools. Use the available tools to help answer the user's questions. Call tools when needed, and provide a clear final answer once you have the information you need.`
 			});
 		} else {
-			const toolsList = this.toolManager.getAllTools().filter(tool => {
+			const filteredTools = this.toolManager.getAllTools().filter(tool => {
 				if (!activeAgent) return true;
 				if (tool.provider === 'built-in') return true;
 				if (tool.provider?.startsWith('mcp:')) {
@@ -622,51 +556,17 @@ Always think before you act. Only call one tool at a time. After receiving the r
 					return allowOpenApiTools ?? false;
 				}
 				return true;
-			}).map(tool => `- ${tool.definition.name}: ${tool.definition.description}`).join('\n');
-
-			messages.push({
-				role: 'system',
-				content: `You are an AI agent with access to tools. You can call tools to help answer the user's questions.
-
-Available tools:
-${toolsList}
-
-To call a tool, respond with a JSON block in this format:
-\`\`\`json
-{
-  "name": "tool_name",
-  "arguments": {
-    "arg1": "value1",
-    "arg2": "value2"
-  }
-}
-\`\`\`
-
-After calling a tool, you will receive the result and can continue the conversation or call another tool if needed.`
 			});
+
+			if (filteredTools.length > 0) {
+				messages.push({
+					role: 'system',
+					content: `You are an AI agent with access to tools. Use the available tools to help answer the user's questions. Call tools when needed, and provide a clear final answer once you have the information you need.`
+				});
+			}
 		}
 
 		return messages;
-	}
-
-	private parseToolCallsFromContent(content: string): ToolCall[] {
-		const toolCalls: ToolCall[] = [];
-		const regex = /```json\s*\n([\s\S]*?)\n```/g;
-		let match;
-		while ((match = regex.exec(content)) !== null) {
-			try {
-				const json = JSON.parse(match[1]) as { name?: unknown; tool?: unknown; arguments?: unknown };
-				const toolName = json.name ?? json.tool;
-				if (!toolName || typeof toolName !== 'string') continue;
-				toolCalls.push({
-					name: toolName,
-					arguments: typeof json.arguments === 'object' && json.arguments !== null
-						? (json.arguments as Record<string, unknown>)
-						: {}
-				});
-			} catch { /* not a tool-call block */ }
-		}
-		return toolCalls;
 	}
 
 	private isToolAllowed(
@@ -709,7 +609,6 @@ After calling a tool, you will receive the result and can continue the conversat
 
 		// File tools
 		if (toolName === 'read_file' || toolName === 'write_file' || toolName === 'append_to_note') {
-			const path = typeof args.path === 'string' ? args.path : 'unknown';
 			if (error.includes('not found') || error.includes('does not exist')) {
 				suggestions.push(`Verify the file path is correct. Paths are relative to the vault root.`);
 				suggestions.push(`Use list_files to browse available files before reading.`);

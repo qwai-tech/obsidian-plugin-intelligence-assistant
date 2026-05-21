@@ -255,39 +255,6 @@ export class AgentEditModal extends Modal {
 					this.agent.webSearchEnabled = value;
 				}));
 
-		applyConfigFieldMetadata(new Setting(contentEl), {
-			path: 'agents[].reactEnabled',
-			label: t('modals.agentEdit.react.name'),
-			description: t('modals.agentEdit.react.desc')
-		}).addToggle(toggle => toggle
-				.setValue(this.agent.reactEnabled)
-				.onChange(value => {
-					this.agent.reactEnabled = value;
-				}));
-
-		if (this.agent.reactEnabled) {
-			applyConfigFieldMetadata(new Setting(contentEl), {
-				path: 'agents[].reactMaxSteps',
-				label: t('modals.agentEdit.reactMaxSteps.name'),
-				description: t('modals.agentEdit.reactMaxSteps.desc')
-			}).addSlider(slider => slider
-					.setLimits(1, 20, 1)
-					.setValue(this.agent.reactMaxSteps)
-					.onChange(value => {
-						this.agent.reactMaxSteps = value;
-					}));
-
-			applyConfigFieldMetadata(new Setting(contentEl), {
-				path: 'agents[].reactAutoContinue',
-				label: t('modals.agentEdit.reactAutoContinue.name'),
-				description: t('modals.agentEdit.reactAutoContinue.desc')
-			}).addToggle(toggle => toggle
-					.setValue(this.agent.reactAutoContinue)
-					.onChange(value => {
-						this.agent.reactAutoContinue = value;
-					}));
-		}
-
 		// Memory settings placeholder (temporarily disabled)
 		contentEl.createEl('h3', { text: t('modals.agentEdit.memory.title') });
 		const memoryNotice = contentEl.createEl('p', {
@@ -295,8 +262,20 @@ export class AgentEditModal extends Modal {
 		});
 		memoryNotice.addClass('ia-section-description');
 
-		// Built-in Tools
+		// Tools section
 		contentEl.createEl('h3', { text: t('modals.agentEdit.tools.title') });
+
+		applyConfigFieldMetadata(new Setting(contentEl), {
+			path: 'agents[].maxSteps',
+			label: t('modals.agentEdit.maxSteps.name'),
+			description: t('modals.agentEdit.maxSteps.desc')
+		}).addSlider(slider => slider
+				.setLimits(1, 20, 1)
+				.setValue(this.agent.maxSteps)
+				.setDynamicTooltip()
+				.onChange(value => {
+					this.agent.maxSteps = value;
+				}));
 
 		// Built-in tools
 		new Setting(contentEl)

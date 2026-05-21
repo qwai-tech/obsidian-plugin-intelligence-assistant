@@ -39,9 +39,7 @@ export interface Agent {
 	};
 	ragEnabled: boolean;
 	webSearchEnabled: boolean;
-	reactEnabled: boolean;
-	reactMaxSteps: number;
-	reactAutoContinue: boolean;
+	maxSteps: number;
 	createdAt: number;
 	updatedAt: number;
 }

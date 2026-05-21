@@ -78,11 +78,7 @@ export const DEFAULT_MEMORY_CONFIG = {
 	MAX_MEMORIES: 50,
 } as const;
 
-// ReAct Configuration
-export const DEFAULT_REACT_CONFIG = {
-	MAX_STEPS: 10,
-	AUTO_CONTINUE: true,
-} as const;
+export const DEFAULT_MAX_STEPS = 10;
 
 // UI Constants
 export const UI_CONSTANTS = {

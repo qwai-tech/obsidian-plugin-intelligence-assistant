@@ -17,9 +17,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		memoryConfig: { summaryInterval: 10, maxMemories: 100 },
 		ragEnabled: true,
 		webSearchEnabled: true,
-		reactEnabled: false,
-		reactMaxSteps: 10,
-		reactAutoContinue: true
+		maxSteps: 10
 	},
 	{
 		name: 'Code Expert',
@@ -37,9 +35,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		memoryConfig: { summaryInterval: 15, maxMemories: 50 },
 		ragEnabled: false,
 		webSearchEnabled: false,
-		reactEnabled: true,
-		reactMaxSteps: 10,
-		reactAutoContinue: true
+		maxSteps: 10
 	},
 	{
 		name: 'Writing Coach',
@@ -57,9 +53,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		memoryConfig: { summaryInterval: 10, maxMemories: 100 },
 		ragEnabled: true,
 		webSearchEnabled: false,
-		reactEnabled: false,
-		reactMaxSteps: 10,
-		reactAutoContinue: true
+		maxSteps: 10
 	},
 	{
 		name: 'Quick Assistant',
@@ -77,9 +71,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		memoryConfig: { summaryInterval: 10, maxMemories: 10 },
 		ragEnabled: false,
 		webSearchEnabled: false,
-		reactEnabled: false,
-		reactMaxSteps: 10,
-		reactAutoContinue: true
+		maxSteps: 10
 	},
 	{
 		name: 'Data Analyst',
@@ -97,9 +89,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		memoryConfig: { summaryInterval: 10, maxMemories: 50 },
 		ragEnabled: false,
 		webSearchEnabled: true,
-		reactEnabled: true,
-		reactMaxSteps: 10,
-		reactAutoContinue: true
+		maxSteps: 10
 	},
 	{
 		name: 'Knowledge Manager',
@@ -117,9 +107,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		memoryConfig: { summaryInterval: 10, maxMemories: 200 },
 		ragEnabled: true,
 		webSearchEnabled: false,
-		reactEnabled: false,
-		reactMaxSteps: 10,
-		reactAutoContinue: true
+		maxSteps: 10
 	}
 ];
 

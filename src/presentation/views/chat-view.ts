@@ -976,8 +976,10 @@ export class ChatView extends ItemView {
 	}
 
 	private async updateQuickActionsState() {
+		const isAgentMode = this.state.mode === 'agent';
+
 		if (this.ragActionItem) {
-			const enabled = this.plugin.settings.ragConfig.enabled;
+			const enabled = !isAgentMode && this.plugin.settings.ragConfig.enabled;
 			this.chatInput.updateActionToggleState(
 				this.ragActionItem,
 				enabled,
@@ -987,7 +989,7 @@ export class ChatView extends ItemView {
 		}
 
 		if (this.webActionItem) {
-			const enabled = this.plugin.settings.webSearchConfig.enabled;
+			const enabled = !isAgentMode && this.plugin.settings.webSearchConfig.enabled;
 			this.chatInput.updateActionToggleState(
 				this.webActionItem,
 				enabled,

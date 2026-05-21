@@ -8,7 +8,7 @@ import {
 	DEFAULT_AGENT_ID,
 	DEFAULT_MODEL_CONFIG,
 	DEFAULT_MEMORY_CONFIG,
-	DEFAULT_REACT_CONFIG
+	DEFAULT_MAX_STEPS
 } from '@/constants';
 
 /**
@@ -19,10 +19,18 @@ export async function ensureDefaultAgent(
 	settings: PluginSettings,
 	saveSettings: () => Promise<void>
 ): Promise<void> {
-	// Ensure all agents have MCP fields initialized
+	// Ensure all agents have required fields and migrate legacy fields
 	settings.agents.forEach(agent => {
 		agent.enabledMcpServers = agent.enabledMcpServers ?? [];
 		agent.enabledMcpTools = agent.enabledMcpTools ?? [];
+		const a = agent as unknown as Record<string, unknown>;
+		if ('reactMaxSteps' in a && typeof a.reactMaxSteps === 'number') {
+			agent.maxSteps = a.reactMaxSteps;
+			delete a.reactMaxSteps;
+		}
+		if ('reactEnabled' in a) delete a.reactEnabled;
+		if ('reactAutoContinue' in a) delete a.reactAutoContinue;
+		if (!agent.maxSteps || agent.maxSteps < 1) agent.maxSteps = DEFAULT_MAX_STEPS;
 	});
 
 	const enabledBuiltInTools = settings.builtInTools
@@ -66,9 +74,7 @@ export async function ensureDefaultAgent(
 			},
 			ragEnabled: settings.ragConfig.enabled,
 			webSearchEnabled: settings.webSearchConfig.enabled,
-			reactEnabled: false,
-			reactMaxSteps: DEFAULT_REACT_CONFIG.MAX_STEPS,
-			reactAutoContinue: DEFAULT_REACT_CONFIG.AUTO_CONTINUE,
+			maxSteps: DEFAULT_MAX_STEPS,
 			createdAt: timestamp,
 			updatedAt: timestamp
 		};

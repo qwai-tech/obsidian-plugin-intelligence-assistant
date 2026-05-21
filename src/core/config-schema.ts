@@ -169,14 +169,7 @@ export class ConfigSchema {
 					});
 				}
 
-				// Validate ReAct configuration
-				if (agent.reactEnabled && agent.reactMaxSteps !== undefined && agent.reactMaxSteps < 1) {
-					errors.push({
-						path: `agents[${index}].reactMaxSteps`,
-						message: 'ReAct max steps must be positive',
-						value: agent.reactMaxSteps
-					});
-				}
+
 			});
 		}
 
@@ -294,7 +287,7 @@ export class ConfigSchema {
 			'topK': { min: 1, type: 'number' },
 			'similarityThreshold': { min: 0, max: 1, type: 'number' },
 			'maxResults': { min: 1, type: 'number' },
-			'reactMaxSteps': { min: 1, type: 'number' }
+			'maxSteps': { min: 1, type: 'number' }
 		};
 
 		// Extract field name from path
