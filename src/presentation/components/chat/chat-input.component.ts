@@ -179,7 +179,7 @@ export class ChatInputComponent {
 
 	public updateModeSelector(mode: 'chat' | 'agent') {
 		if (this.modeSelector) this.modeSelector.value = mode;
-		if (this.modePillGroup) this.modePillGroup.toggleClass('ia-hidden', mode === 'agent');
+		if (this.modelSelect) this.modelSelect.toggleClass('ia-hidden', mode === 'agent');
 		if (this.agentPillGroup) this.agentPillGroup.toggleClass('ia-hidden', mode !== 'agent');
 	}
 
