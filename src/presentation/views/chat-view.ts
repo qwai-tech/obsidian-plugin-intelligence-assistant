@@ -821,7 +821,7 @@ export class ChatView extends ItemView {
 		this.chatInput.updateModeSelector(mode);
 		if (mode === 'agent') {
 			const activeAgent = this.getActiveAgent();
-			this.chatHeader.updateAgentBadge(activeAgent ? `${activeAgent.icon || '🤖'} ${activeAgent.name}` : null);
+			this.chatHeader.updateAgentBadge(activeAgent ? (activeAgent.name ?? 'unknown') : null);
 		} else {
 			this.chatHeader.updateAgentBadge(null);
 		}
@@ -1180,7 +1180,7 @@ export class ChatView extends ItemView {
 		}
 
 		this.refreshAgentSelect(agentId);
-		this.chatHeader.updateAgentBadge(`${agent.icon || '🤖'} ${agent.name ?? 'unknown'}`);
+		this.chatHeader.updateAgentBadge(agent.name ?? 'unknown');
 
 		if (!options?.silent) {
 			new Notice(t('chat.notices.agentConfigApplied', { name: `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}` }));
