@@ -9,7 +9,7 @@ import type { CachedMCPTool, OpenApiToolConfig, OpenApiAuthType, OpenApiSourceTy
 import type { Tool } from '@/application/services/types';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
-import { DEFAULT_CLI_TIMEOUT, CLI_TOOL_DEFAULTS, getAvailablePresets, PRESET_CATEGORIES, type CLIToolPreset } from '@/types/features/cli-tools';
+import { DEFAULT_CLI_TIMEOUT, CLI_TOOL_DEFAULTS, getAvailablePresets, PRESET_CATEGORIES, CLI_TOOL_PRESETS, type CLIToolPreset } from '@/types/features/cli-tools';
 
 type ToolsSubTab = 'built-in' | 'mcp' | 'openapi' | 'cli';
 
@@ -669,7 +669,10 @@ function renderCliTools(
 		nameCell.addClass('ia-table-cell');
 		const nameDiv = nameCell.createDiv('tool-name');
 		nameDiv.createSpan('tool-icon').setText('⌨️');
-		nameDiv.createSpan().setText(config.name || t('settings.tools.cli.unnamed'));
+		const preset = CLI_TOOL_PRESETS.find(p => p.config.name === config.name);
+		const displayName = preset?.name
+			?? config.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+		nameDiv.createSpan().setText(displayName || t('settings.tools.cli.unnamed'));
 
 		const commandCell = row.insertCell();
 		commandCell.addClass('ia-table-cell');

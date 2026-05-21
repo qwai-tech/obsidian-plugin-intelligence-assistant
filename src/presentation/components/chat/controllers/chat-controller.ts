@@ -10,6 +10,7 @@ import { AgentController } from './agent-controller';
 import type { Message, LLMConfig, ModelInfo, FileReference } from '@/types';
 import type { ChatService } from '@/application/services/chat.service';
 import { renderAssistantMarkdown, appendTokenUsageToMessage } from '@/presentation/components/chat/message-renderer';
+import { createAgentExecutionTraceContainer, updateExecutionTrace, collapseExecutionTrace } from '@/presentation/components/chat/handlers/tool-call-handler';
 import type { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import type { RagStatusPanel } from '@/presentation/components/chat/rag-status-panel';
 import type { StreamChunk } from '@/types/common/llm';
@@ -301,25 +302,28 @@ export class ChatController extends BaseController {
 					onWebSearch: () => {},
 					onComplete: (finalMessage: Message) => {
 						void (async () => {
-							const index = this.state.messages.indexOf(placeholderAssistant);
-							if (index !== -1) {
-								this.state.messages[index] = finalMessage;
-							} else {
-								this.state.messages.push(finalMessage);
+							try {
+								const index = this.state.messages.indexOf(placeholderAssistant);
+								if (index !== -1) {
+									this.state.messages[index] = finalMessage;
+								} else {
+									this.state.messages.push(finalMessage);
+								}
+								if (contentEl && finalMessage.content) {
+									renderAssistantMarkdown(contentEl, finalMessage.content);
+								}
+								if (assistantMessageEl && finalMessage.tokenUsage) {
+									appendTokenUsageToMessage(assistantMessageEl, finalMessage.tokenUsage);
+								}
+								this.updateTokenSummary();
+								if (currentRagSources.length > 0 && assistantMessageEl) {
+									const messageBody = this.findMessageBodyElement(assistantMessageEl);
+									if (messageBody) this.ragStatusPanel.displaySources(messageBody, currentRagSources);
+								}
+								await this.conversationManager.saveCurrentConversation();
+							} finally {
+								this.finalizeStreamingUI();
 							}
-							if (contentEl && finalMessage.content) {
-								renderAssistantMarkdown(contentEl, finalMessage.content);
-							}
-							if (assistantMessageEl && finalMessage.tokenUsage) {
-								appendTokenUsageToMessage(assistantMessageEl, finalMessage.tokenUsage);
-							}
-							this.updateTokenSummary();
-							if (currentRagSources.length > 0 && assistantMessageEl) {
-								const messageBody = this.findMessageBodyElement(assistantMessageEl);
-								if (messageBody) this.ragStatusPanel.displaySources(messageBody, currentRagSources);
-							}
-							await this.conversationManager.saveCurrentConversation();
-							this.finalizeStreamingUI();
 						})();
 					},
 					onError: (error: Error) => {
@@ -346,6 +350,9 @@ export class ChatController extends BaseController {
 	): Promise<void> {
 		const isGenericAgent = !this.plugin.settings.activeAgentId;
 
+		// Reset execution steps from previous turns to avoid state accumulation
+		this.state.agentExecutionSteps = [];
+
 		await this.chatService.executeAgentLoop(
 			llmMessages,
 			{
@@ -356,8 +363,8 @@ export class ChatController extends BaseController {
 				topP: this.state.topP,
 				frequencyPenalty: this.state.frequencyPenalty,
 				presencePenalty: this.state.presencePenalty,
-				enableRAG: this.state.enableRAG && this.plugin.settings.ragConfig.enabled,
-				enableWebSearch: this.state.enableWebSearch,
+				enableRAG: false,
+				enableWebSearch: false,
 				activeSystemPrompts,
 				contextWindow,
 				agentId: this.plugin.settings.activeAgentId ?? undefined,
@@ -376,23 +383,23 @@ export class ChatController extends BaseController {
 				onTokenUsage: (_step, cumulativeTokens, budget) => {
 					void cumulativeTokens; void budget;
 				},
-				onToolCall: (toolName, args) => {
+				onToolCall: (toolName, args, thinking) => {
 					this.state.agentExecutionSteps.push({
 						type: 'action',
 						content: `${toolName}(${JSON.stringify(args)})`,
+						toolName,
+						args,
+						thinking: thinking || undefined,
 						timestamp: Date.now(),
 						status: 'pending',
 					});
 				},
 				onToolResult: (_toolName, success, output) => {
-					const lastAction = [...this.state.agentExecutionSteps].reverse().find(s => s.type === 'action');
-					if (lastAction) lastAction.status = success ? 'success' : 'error';
-					this.state.agentExecutionSteps.push({
-						type: 'observation',
-						content: output,
-						timestamp: Date.now(),
-						status: success ? 'success' : 'error',
-					});
+					const lastAction = [...this.state.agentExecutionSteps].reverse().find(s => s.type === 'action' && s.status === 'pending');
+					if (lastAction) {
+						lastAction.status = success ? 'success' : 'error';
+						lastAction.result = output;
+					}
 				},
 				onThought: (thought) => {
 					this.state.agentExecutionSteps.push({
@@ -403,14 +410,28 @@ export class ChatController extends BaseController {
 				},
 				onComplete: (finalMessage) => {
 					void (async () => {
+						try {
+						if (this.state.agentExecutionSteps.length > 0) {
+							finalMessage.agentExecutionSteps = [...this.state.agentExecutionSteps];
+						}
 						const index = this.state.messages.indexOf(placeholderAssistant);
 						if (index !== -1) {
 							this.state.messages[index] = finalMessage;
 						} else {
 							this.state.messages.push(finalMessage);
 						}
-						if (contentEl && finalMessage.content) {
+						if (contentEl && finalMessage.content?.trim()) {
 							renderAssistantMarkdown(contentEl, finalMessage.content);
+						}
+						if (this.state.agentExecutionSteps.length > 0 && assistantMessageEl) {
+							const messageBody = this.findMessageBodyElement(assistantMessageEl);
+							if (messageBody) {
+								const traceContent = createAgentExecutionTraceContainer(messageBody, this.state.agentExecutionSteps.length);
+								updateExecutionTrace(traceContent, this.state.agentExecutionSteps);
+								if (finalMessage.content?.trim()) {
+									collapseExecutionTrace(traceContent);
+								}
+							}
 						}
 						if (assistantMessageEl && finalMessage.tokenUsage) {
 							appendTokenUsageToMessage(assistantMessageEl, finalMessage.tokenUsage);
@@ -421,7 +442,9 @@ export class ChatController extends BaseController {
 							if (messageBody) this.ragStatusPanel.displaySources(messageBody, finalMessage.ragSources);
 						}
 						await this.conversationManager.saveCurrentConversation();
-						this.finalizeStreamingUI();
+						} finally {
+							this.finalizeStreamingUI();
+						}
 					})();
 				},
 				onError: (error) => {

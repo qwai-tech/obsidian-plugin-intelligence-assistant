@@ -48,8 +48,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.enabled',
-		label: 'Enable web search',
-		description: 'Allow AI to search the web for current information'
+		label: t('settings.websearch.enabled.name'),
+		description: t('settings.websearch.enabled.desc')
 	}).addToggle(toggle => toggle
 			.setValue(config.enabled)
 			.onChange((value) => {
@@ -59,8 +59,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.autoTrigger',
-		label: 'Auto-trigger search',
-		description: 'Automatically trigger web search when the query requires current information (e.g., news, prices, recent events)'
+		label: t('settings.websearch.autoTrigger.name'),
+		description: t('settings.websearch.autoTrigger.desc')
 	}).addToggle(toggle => toggle
 			.setValue(config.autoTrigger ?? true)
 			.onChange((value) => {
@@ -70,8 +70,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.maxResults',
-		label: 'Maximum results',
-		description: 'Maximum number of search results to return'
+		label: t('settings.websearch.maxResults.name'),
+		description: t('settings.websearch.maxResults.desc')
 	}).addText(text => text
 			.setPlaceholder('5')
 			.setValue(String(config.maxResults))
@@ -85,17 +85,17 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.timeRange',
-		label: 'Result freshness',
-		description: 'Limit results to a time range supported by providers (Google, SearXNG, Mojeek)'
+		label: t('settings.websearch.timeRange.name'),
+		description: t('settings.websearch.timeRange.desc')
 	}).addDropdown(dropdown => {
 		const timeRange = config.timeRange ?? 'any';
 		const options: Array<[string, string]> = [
-			['any', 'Any time (default)'],
-			['h', 'Past hour'],
-			['d', 'Past 24 hours'],
-			['w', 'Past week'],
-			['m', 'Past month'],
-			['y', 'Past year']
+			['any', t('settings.websearch.timeRange.any')],
+			['h', t('settings.websearch.timeRange.h')],
+			['d', t('settings.websearch.timeRange.d')],
+			['w', t('settings.websearch.timeRange.w')],
+			['m', t('settings.websearch.timeRange.m')],
+			['y', t('settings.websearch.timeRange.y')]
 		];
 		options.forEach(([value, label]) => {
 			dropdown.addOption(value, label);
@@ -108,12 +108,12 @@ export function displayWebSearchTab(
 			});
 	});
 
-	addSubheading('Provider selection');
+	addSubheading(t('settings.websearch.providerSelection'));
 
 	createSetting({
 		path: 'webSearchConfig.provider',
-		label: 'Search provider',
-		description: 'Choose from privacy-friendly scrapers or API-backed engines'
+		label: t('settings.websearch.provider.name'),
+		description: t('settings.websearch.provider.desc')
 	}).addDropdown(dropdown => {
 		providerOptions.forEach(option => {
 			dropdown.addOption(option.value, option.label);
@@ -126,12 +126,12 @@ export function displayWebSearchTab(
 			});
 	});
 
-	addSubheading('Locale & filters');
+	addSubheading(t('settings.websearch.localeFilters'));
 
 	createSetting({
 		path: 'webSearchConfig.searchLanguage',
-		label: 'Language code',
-		description: 'ISO language code (e.g., en, fr, zh-CN) forwarded to providers that support localization'
+		label: t('settings.websearch.searchLanguage.name'),
+		description: t('settings.websearch.searchLanguage.desc')
 	}).addText(text => text
 			.setPlaceholder('en')
 			.setValue(config.searchLanguage ?? '')
@@ -142,8 +142,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.searchCountry',
-		label: 'Country/market code',
-		description: 'Two-letter country code (e.g., US, DE) used by Bing, DuckDuckGo, Brave, and others'
+		label: t('settings.websearch.searchCountry.name'),
+		description: t('settings.websearch.searchCountry.desc')
 	}).addText(text => text
 			.setPlaceholder('US')
 			.setValue(config.searchCountry ?? '')
@@ -154,8 +154,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.includeDomains',
-		label: 'Include only these domains',
-		description: 'Comma-separated list used by SerpAPI and Brave to limit results to specific sites'
+		label: t('settings.websearch.includeDomains.name'),
+		description: t('settings.websearch.includeDomains.desc')
 	}).addText(text => text
 			.setPlaceholder('example.com, docs.example.org')
 			.setValue(config.includeDomains ?? '')
@@ -166,8 +166,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.excludeDomains',
-		label: 'Exclude domains',
-		description: 'Comma-separated domains to filter out after fetching results'
+		label: t('settings.websearch.excludeDomains.name'),
+		description: t('settings.websearch.excludeDomains.desc')
 	}).addText(text => text
 			.setPlaceholder('spam.example.com')
 			.setValue(config.excludeDomains ?? '')
@@ -176,12 +176,12 @@ export function displayWebSearchTab(
 				void plugin.saveSettings();
 			}));
 
-	addSubheading('API credentials & endpoints');
+	addSubheading(t('settings.websearch.apiCredentials'));
 
 	createSetting({
 		path: 'webSearchConfig.apiKey',
-		label: 'Default API key',
-		description: 'Shared API key used by Google, Bing, SerpAPI, Tavily, or Brave when provider-specific keys are not set'
+		label: t('settings.websearch.apiKey.name'),
+		description: t('settings.websearch.apiKey.desc')
 	}).addText(text => text
 			.setPlaceholder('sk-...')
 			.setValue(config.apiKey ?? '')
@@ -192,8 +192,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.googleCseId',
-		label: 'Google Custom Search Engine ID',
-		description: 'Required with a Google API key when using the Google provider'
+		label: t('settings.websearch.googleCseId.name'),
+		description: t('settings.websearch.googleCseId.desc')
 	}).addText(text => text
 			.setPlaceholder('search-engine-id')
 			.setValue(config.googleCseId ?? '')
@@ -204,8 +204,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.serpapiEndpoint',
-		label: 'SerpAPI endpoint',
-		description: 'Override the SerpAPI base URL if you are self-hosting'
+		label: t('settings.websearch.serpapiEndpoint.name'),
+		description: t('settings.websearch.serpapiEndpoint.desc')
 	}).addText(text => text
 			.setPlaceholder('https://serpapi.com/search')
 			.setValue(config.serpapiEndpoint ?? '')
@@ -216,8 +216,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.tavilyApiKey',
-		label: 'Tavily API key',
-		description: 'Overrides the default key when using the Tavily provider'
+		label: t('settings.websearch.tavilyApiKey.name'),
+		description: t('settings.websearch.tavilyApiKey.desc')
 	}).addText(text => text
 			.setPlaceholder('tvly-...')
 			.setValue(config.tavilyApiKey ?? '')
@@ -228,8 +228,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.searxngEndpoint',
-		label: 'SearXNG endpoint',
-		description: 'Base URL of your SearXNG instance (must return JSON)'
+		label: t('settings.websearch.searxngEndpoint.name'),
+		description: t('settings.websearch.searxngEndpoint.desc')
 	}).addText(text => text
 			.setPlaceholder('https://searxng.example.com/search')
 			.setValue(config.searxngEndpoint ?? '')
@@ -240,8 +240,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.braveApiKey',
-		label: 'Brave API key',
-		description: 'Use a Brave Search API subscription token when selected as the provider'
+		label: t('settings.websearch.braveApiKey.name'),
+		description: t('settings.websearch.braveApiKey.desc')
 	}).addText(text => text
 			.setPlaceholder('brv-...')
 			.setValue(config.braveApiKey ?? '')
@@ -252,8 +252,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.qwantApiKey',
-		label: 'Qwant API key (optional)',
-		description: 'Add a bearer token if your Qwant plan issues one'
+		label: t('settings.websearch.qwantApiKey.name'),
+		description: t('settings.websearch.qwantApiKey.desc')
 	}).addText(text => text
 			.setPlaceholder('qwant-...')
 			.setValue(config.qwantApiKey ?? '')
@@ -264,8 +264,8 @@ export function displayWebSearchTab(
 
 	createSetting({
 		path: 'webSearchConfig.mojeekApiKey',
-		label: 'Mojeek API key',
-		description: 'Required for the Mojeek provider'
+		label: t('settings.websearch.mojeekApiKey.name'),
+		description: t('settings.websearch.mojeekApiKey.desc')
 	}).addText(text => text
 			.setPlaceholder('mjk-...')
 			.setValue(config.mojeekApiKey ?? '')

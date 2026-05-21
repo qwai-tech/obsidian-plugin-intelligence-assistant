@@ -808,6 +808,83 @@
       "title": "网络搜索配置",
       "desc": "配置网络搜索功能，以互联网最新信息增强 AI 响应。",
       "generalBehavior": "通用行为",
+      "providerSelection": "搜索提供商",
+      "localeFilters": "语言与过滤",
+      "apiCredentials": "API 密钥与端点",
+      "enabled": {
+        "name": "启用网络搜索",
+        "desc": "允许 AI 联网搜索获取最新信息"
+      },
+      "autoTrigger": {
+        "name": "自动触发搜索",
+        "desc": "当查询需要最新信息时（如新闻、价格、近期事件）自动触发网络搜索"
+      },
+      "maxResults": {
+        "name": "最大结果数",
+        "desc": "返回的最大搜索结果数量"
+      },
+      "timeRange": {
+        "name": "结果时效性",
+        "desc": "将结果限制在特定时间范围内（支持 Google、SearXNG、Mojeek）",
+        "any": "不限时间（默认）",
+        "h": "过去一小时",
+        "d": "过去 24 小时",
+        "w": "过去一周",
+        "m": "过去一月",
+        "y": "过去一年"
+      },
+      "provider": {
+        "name": "搜索提供商",
+        "desc": "选择隐私友好的抓取引擎或 API 支持的搜索引擎"
+      },
+      "searchLanguage": {
+        "name": "语言代码",
+        "desc": "ISO 语言代码（如 en、fr、zh-CN），将传递给支持本地化的提供商"
+      },
+      "searchCountry": {
+        "name": "国家/市场代码",
+        "desc": "两位字母国家代码（如 US、DE），供 Bing、DuckDuckGo、Brave 等使用"
+      },
+      "includeDomains": {
+        "name": "仅包含以下域名",
+        "desc": "逗号分隔的域名列表，SerpAPI 和 Brave 将仅返回这些站点的结果"
+      },
+      "excludeDomains": {
+        "name": "排除域名",
+        "desc": "获取结果后过滤掉的逗号分隔域名列表"
+      },
+      "apiKey": {
+        "name": "默认 API 密钥",
+        "desc": "未设置提供商特定密钥时，供 Google、Bing、SerpAPI、Tavily 或 Brave 使用的共享 API 密钥"
+      },
+      "googleCseId": {
+        "name": "Google 自定义搜索引擎 ID",
+        "desc": "使用 Google 提供商时，需与 Google API 密钥配合使用"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI 端点",
+        "desc": "如自行部署，可覆盖 SerpAPI 基础 URL"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API 密钥",
+        "desc": "使用 Tavily 提供商时覆盖默认密钥"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG 端点",
+        "desc": "您的 SearXNG 实例的基础 URL（需返回 JSON）"
+      },
+      "braveApiKey": {
+        "name": "Brave API 密钥",
+        "desc": "选择 Brave 作为提供商时使用 Brave Search API 订阅令牌"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API 密钥（可选）",
+        "desc": "如您的 Qwant 计划提供 Bearer 令牌，可在此填写"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API 密钥",
+        "desc": "使用 Mojeek 提供商时必填"
+      },
       "providers": {
         "duckduckgo": "DuckDuckGo（无需密钥）",
         "google": "Google 自定义搜索",
@@ -1248,17 +1325,9 @@
         "name": "网络搜索",
         "desc": "启用网络搜索功能"
       },
-      "react": {
-        "name": "ReAct 模式",
-        "desc": "启用 ReAct（推理+行动）智能体模式"
-      },
-      "reactMaxSteps": {
-        "name": "ReAct 最大步数",
-        "desc": "ReAct 循环中的最大步数"
-      },
-      "reactAutoContinue": {
-        "name": "ReAct 自动继续",
-        "desc": "自动继续 ReAct 循环"
+      "maxSteps": {
+        "name": "最大工具调用步数",
+        "desc": "每轮 Agent 最多执行的工具调用步数"
       }
     },
     "provider": {

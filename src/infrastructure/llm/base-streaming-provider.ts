@@ -14,6 +14,8 @@ export interface ParsedStreamChunk {
 	content: string | null;
 	/** Whether this signals the end of the stream */
 	done: boolean;
+	/** Reasoning/thinking content (DeepSeek thinking models) */
+	reasoning?: string;
 	usage?: {
 		promptTokens: number;
 		completionTokens: number;
@@ -168,8 +170,8 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 								if (result.toolCalls && result.toolCalls.length > 0) {
 									onChunk({ content: '', done: false, toolCalls: result.toolCalls });
 								}
-								if (result.content) {
-									onChunk({ content: result.content, done: false, usage: result.usage });
+								if (result.content || result.reasoning) {
+									onChunk({ content: result.content ?? '', done: false, reasoning: result.reasoning, usage: result.usage });
 								} else if (result.usage) {
 									onChunk({ content: '', done: false, usage: result.usage });
 								}

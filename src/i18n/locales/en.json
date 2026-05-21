@@ -808,6 +808,83 @@
       "title": "Web search configuration",
       "desc": "Configure web search functionality to enhance AI responses with up-to-date information from the internet.",
       "generalBehavior": "General behavior",
+      "providerSelection": "Provider selection",
+      "localeFilters": "Locale & filters",
+      "apiCredentials": "API credentials & endpoints",
+      "enabled": {
+        "name": "Enable web search",
+        "desc": "Allow AI to search the web for current information"
+      },
+      "autoTrigger": {
+        "name": "Auto-trigger search",
+        "desc": "Automatically trigger web search when the query requires current information (e.g., news, prices, recent events)"
+      },
+      "maxResults": {
+        "name": "Maximum results",
+        "desc": "Maximum number of search results to return"
+      },
+      "timeRange": {
+        "name": "Result freshness",
+        "desc": "Limit results to a time range supported by providers (Google, SearXNG, Mojeek)",
+        "any": "Any time (default)",
+        "h": "Past hour",
+        "d": "Past 24 hours",
+        "w": "Past week",
+        "m": "Past month",
+        "y": "Past year"
+      },
+      "provider": {
+        "name": "Search provider",
+        "desc": "Choose from privacy-friendly scrapers or API-backed engines"
+      },
+      "searchLanguage": {
+        "name": "Language code",
+        "desc": "ISO language code (e.g., en, fr, zh-CN) forwarded to providers that support localization"
+      },
+      "searchCountry": {
+        "name": "Country/market code",
+        "desc": "Two-letter country code (e.g., US, DE) used by Bing, DuckDuckGo, Brave, and others"
+      },
+      "includeDomains": {
+        "name": "Include only these domains",
+        "desc": "Comma-separated list used by SerpAPI and Brave to limit results to specific sites"
+      },
+      "excludeDomains": {
+        "name": "Exclude domains",
+        "desc": "Comma-separated domains to filter out after fetching results"
+      },
+      "apiKey": {
+        "name": "Default API key",
+        "desc": "Shared API key used by Google, Bing, SerpAPI, Tavily, or Brave when provider-specific keys are not set"
+      },
+      "googleCseId": {
+        "name": "Google Custom Search Engine ID",
+        "desc": "Required with a Google API key when using the Google provider"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI endpoint",
+        "desc": "Override the SerpAPI base URL if you are self-hosting"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API key",
+        "desc": "Overrides the default key when using the Tavily provider"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG endpoint",
+        "desc": "Base URL of your SearXNG instance (must return JSON)"
+      },
+      "braveApiKey": {
+        "name": "Brave API key",
+        "desc": "Use a Brave Search API subscription token when selected as the provider"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API key (optional)",
+        "desc": "Add a bearer token if your Qwant plan issues one"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API key",
+        "desc": "Required for the Mojeek provider"
+      },
       "providers": {
         "duckduckgo": "DuckDuckGo (no key required)",
         "google": "Google Custom Search",
@@ -1248,17 +1325,9 @@
         "name": "Web search",
         "desc": "Enable web search capabilities"
       },
-      "react": {
-        "name": "ReAct Mode",
-        "desc": "Enable ReAct (Reasoning + Acting) agent pattern"
-      },
-      "reactMaxSteps": {
-        "name": "ReAct Max Steps",
-        "desc": "Maximum number of steps in ReAct loop"
-      },
-      "reactAutoContinue": {
-        "name": "ReAct Auto Continue",
-        "desc": "Automatically continue ReAct loop"
+      "maxSteps": {
+        "name": "Max Tool Steps",
+        "desc": "Maximum number of tool-call steps per agent turn"
       }
     },
     "provider": {

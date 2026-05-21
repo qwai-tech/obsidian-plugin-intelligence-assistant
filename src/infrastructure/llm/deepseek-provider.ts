@@ -2,6 +2,8 @@ import { BaseStreamingProvider, ParsedStreamChunk } from './base-streaming-provi
 import { ChatRequest, ChatResponse } from './types';
 
 export class DeepSeekProvider extends BaseStreamingProvider {
+	private toolCallAccumulator: Map<number, { id: string; name: string; arguments: string }> = new Map();
+
 	get name(): string {
 		return 'DeepSeek';
 	}
@@ -60,6 +62,13 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 			stream_options: { include_usage: true },
 		};
 
+		if (request.tools && request.tools.length > 0) {
+			body.tools = request.tools;
+			if (request.toolChoice) {
+				body.tool_choice = request.toolChoice;
+			}
+		}
+
 		return { url, body };
 	}
 
@@ -80,7 +89,17 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 			return { content: null, done: true };
 		}
 
-		const hasChoices = (obj: unknown): obj is { choices: Array<{ delta?: { reasoning_content?: string; content?: string } }>; usage?: { prompt_tokens: number; completion_tokens: number; total_tokens: number } } => {
+		const hasChoices = (obj: unknown): obj is {
+			choices?: Array<{
+				delta?: {
+					reasoning_content?: string;
+					content?: string;
+					tool_calls?: Array<{ index: number; id?: string; type?: string; function?: { name?: string; arguments?: string } }>;
+				};
+				finish_reason?: string;
+			}>;
+			usage?: { prompt_tokens: number; completion_tokens: number; total_tokens: number };
+		} => {
 			return typeof obj === 'object' && obj !== null && 'choices' in obj;
 		};
 
@@ -88,7 +107,7 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 			return null;
 		}
 
-		// Extract usage from final chunk (when stream_options.include_usage is enabled)
+		// Extract usage from final chunk
 		const sdata = data as Record<string, unknown>;
 		const usage = sdata.usage ? {
 			promptTokens: (sdata.usage as Record<string, number>).prompt_tokens ?? 0,
@@ -96,14 +115,41 @@ export class DeepSeekProvider extends BaseStreamingProvider {
 			totalTokens: (sdata.usage as Record<string, number>).total_tokens ?? 0,
 		} : undefined;
 
-		const delta = data.choices?.[0]?.delta;
+		const choice = data.choices?.[0];
+		const delta = choice?.delta;
 
-		// DeepSeek R1 models return reasoning_content
-		const reasoning = delta?.reasoning_content;
+		// Accumulate tool call deltas
+		if (delta?.tool_calls) {
+			for (const tc of delta.tool_calls) {
+				const existing = this.toolCallAccumulator.get(tc.index) ?? { id: '', name: '', arguments: '' };
+				if (tc.id) existing.id = tc.id;
+				if (tc.function?.name) existing.name = tc.function.name;
+				if (tc.function?.arguments) existing.arguments += tc.function.arguments;
+				this.toolCallAccumulator.set(tc.index, existing);
+			}
+		}
+
+		// Emit tool calls when the model finishes calling tools
+		if (choice?.finish_reason === 'tool_calls' && this.toolCallAccumulator.size > 0) {
+			const toolCalls = Array.from(this.toolCallAccumulator.values()).map(tc => ({
+				id: tc.id,
+				type: 'function' as const,
+				function: { name: tc.name, arguments: tc.arguments }
+			}));
+			this.toolCallAccumulator.clear();
+			return { content: null, done: false, toolCalls };
+		}
+
+		if (choice?.finish_reason === 'stop') {
+			this.toolCallAccumulator.clear();
+			return null;
+		}
+
+		const reasoningContent = delta?.reasoning_content;
 		const content = delta?.content;
 
-		if (reasoning || content) {
-			return { content: content || '', done: false, usage };
+		if (reasoningContent || content) {
+			return { content: content || null, done: false, reasoning: reasoningContent || undefined, usage };
 		}
 		if (usage) {
 			return { content: null, done: false, usage };
