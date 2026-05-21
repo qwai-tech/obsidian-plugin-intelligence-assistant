@@ -751,25 +751,6 @@ export class ChatView extends ItemView {
 		}
 	}
 
-	private updateAgentSelectorVisibility() {
-		if (!this.chatHeader.agentSelector) return;
-		if (this.state.mode === 'agent') {
-			const wasDisabled = this.chatHeader.agentSelector.disabled;
-			this.chatHeader.agentSelector.removeClass('ia-hidden');
-			this.chatHeader.agentSelector.disabled = false;
-			if (this.chatHeader.agentSelectorGroup) {
-				this.chatHeader.agentSelectorGroup.removeClass('ia-hidden');
-			}
-			if (wasDisabled) {
-				this.refreshAgentSelect();
-			}
-		} else {
-			this.chatHeader.agentSelector.addClass('ia-hidden');
-			this.chatHeader.agentSelector.disabled = true;
-			if (this.chatHeader.agentSelectorGroup) this.chatHeader.agentSelectorGroup.addClass('ia-hidden');
-		}
-	}
-
 	private getActiveAgent(): Agent | null {
 		const activeId = this.plugin.settings.activeAgentId;
 		if (!activeId) return null;
