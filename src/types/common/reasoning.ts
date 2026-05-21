@@ -15,4 +15,12 @@ export interface AgentExecutionStep {
 	content: string;
 	timestamp: number;
 	status?: 'pending' | 'success' | 'error';
+	/** Structured tool name (for action steps) */
+	toolName?: string;
+	/** Structured args (for action steps) */
+	args?: Record<string, unknown>;
+	/** Tool result string (for action steps — replaces separate observation) */
+	result?: string;
+	/** Reasoning text that preceded this tool call */
+	thinking?: string;
 }

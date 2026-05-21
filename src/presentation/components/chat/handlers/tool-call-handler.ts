@@ -181,10 +181,12 @@ export function updateExecutionTrace(container: HTMLElement, steps: AgentExecuti
 		const step = steps[i];
 
 		if (step.type === 'thought' || step.type === 'response') {
-			renderThinkingBlock(container, step);
+			renderThinkingBlock(container, step.content);
 		} else if (step.type === 'action') {
-			// Pair action with the following observation (if present)
-			const observation = (i + 1 < steps.length && steps[i + 1].type === 'observation')
+			// New format: result stored on the action step itself
+			// Old format: paired with the following observation step
+			const hasInlineResult = step.result !== undefined;
+			const observation = (!hasInlineResult && i + 1 < steps.length && steps[i + 1].type === 'observation')
 				? steps[++i] : null;
 			renderToolCallCard(container, step, observation);
 		}
@@ -192,7 +194,7 @@ export function updateExecutionTrace(container: HTMLElement, steps: AgentExecuti
 	}
 }
 
-function renderThinkingBlock(container: HTMLElement, step: AgentExecutionStep): void {
+function renderThinkingBlock(container: HTMLElement, content: string): void {
 	const block = container.createDiv('agent-thinking-block');
 
 	const labelRow = block.createDiv('agent-thinking-block__label-row');
@@ -201,77 +203,87 @@ function renderThinkingBlock(container: HTMLElement, step: AgentExecutionStep): 
 	label.setText(t('chat.toolCall.thinking'));
 
 	const contentEl = block.createDiv('agent-thinking-block__content');
-	contentEl.setText(step.content);
+	contentEl.setText(content);
 }
 
-function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionStep, observationStep: AgentExecutionStep | null): void {
-	const isError = observationStep?.status === 'error';
-	const isPending = actionStep.status === 'pending';
-	const statusClass = isError ? 'is-error' : isPending ? 'is-pending' : 'is-success';
+function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionStep, legacyObservation: AgentExecutionStep | null): void {
+	// Resolve tool name and args — prefer structured fields, fall back to string parsing
+	let toolName: string;
+	let argsStr: string;
 
-	// Card container
+	if (actionStep.toolName) {
+		toolName = actionStep.toolName;
+		argsStr = actionStep.args ? JSON.stringify(actionStep.args, null, 2) : '';
+	} else {
+		const match = actionStep.content.match(/^([\w]+)\(([\s\S]*)\)$/);
+		toolName = match ? match[1] : actionStep.content;
+		argsStr = match ? match[2] : '';
+		try {
+			const parsed: unknown = JSON.parse(argsStr);
+			argsStr = JSON.stringify(parsed, null, 2);
+		} catch (_e) { /* keep as-is */ }
+	}
+
+	// Resolve result — prefer inline, fall back to legacy observation
+	const resultContent = actionStep.result ?? legacyObservation?.content ?? null;
+	const isError = actionStep.status === 'error' || legacyObservation?.status === 'error';
+	const isPending = actionStep.status === 'pending';
+
+	// Thinking bubble before the card
+	if (actionStep.thinking) {
+		renderThinkingBlock(container, actionStep.thinking);
+	}
+
+	const statusClass = isError ? 'is-error' : isPending ? 'is-pending' : 'is-success';
 	const card = container.createDiv('agent-tool-call-card');
 	card.addClass(statusClass);
 
-	// Parse "toolName({...})" format
-	const match = actionStep.content.match(/^([\w]+)\(([\s\S]*)\)$/);
-	const toolName = match ? match[1] : actionStep.content;
-	let argsStr = match ? match[2] : '';
-
-	// Pretty-print arguments JSON
-	try {
-		const parsed: unknown = JSON.parse(argsStr);
-		argsStr = JSON.stringify(parsed, null, 2);
-	} catch (_e) { /* keep as-is */ }
-
-	// Part 1: Title — tool name + status indicator
+	// Title row: status dot + tool name + status text
 	const titleRow = card.createDiv('agent-tool-call__title');
 	const dot = titleRow.createSpan('agent-tool-call__status-dot');
-	dot.setText('●');
+	dot.setText(isError ? '✕' : isPending ? '◌' : '✓');
 	const nameEl = titleRow.createSpan('agent-tool-call__name');
 	nameEl.setText(toolName);
 	if (isPending) {
 		const spinner = titleRow.createSpan('agent-tool-call__spinner');
-		spinner.setText('...');
+		spinner.setText(t('chat.toolCall.running'));
 	}
 
-	// Part 2: Input — collapsible
+	// Input section — collapsible, collapsed by default
 	if (argsStr && argsStr !== '{}') {
-		renderCollapsibleSection(card, t('chat.toolCall.input'), argsStr);
+		renderCollapsibleSection(card, t('chat.toolCall.input'), argsStr, false, false);
 	}
 
-	// Part 3: Output — collapsible
-	if (observationStep) {
-		renderCollapsibleSection(card, t('chat.toolCall.output'), observationStep.content, isError);
-	} else if (isPending) {
-		const pendingOutput = card.createDiv('agent-tool-call__pending');
-		pendingOutput.setText(t('chat.toolCall.running'));
+	// Output section — collapsible, expanded by default on error, collapsed on success
+	if (resultContent !== null) {
+		renderCollapsibleSection(card, t('chat.toolCall.output'), resultContent, isError, isError);
 	}
 }
 
-function renderCollapsibleSection(parent: HTMLElement, title: string, content: string, isError?: boolean): void {
+function renderCollapsibleSection(
+	parent: HTMLElement,
+	title: string,
+	content: string,
+	isError?: boolean,
+	startExpanded?: boolean
+): void {
 	const section = parent.createDiv('agent-collapsible-section');
 
 	const header = section.createDiv('agent-collapsible-section__header');
 	header.createSpan().setText(title);
-	const chevron = header.createSpan();
-	chevron.setText('∨');
+	const chevron = header.createSpan('agent-collapsible-section__chevron');
 
 	const body = section.createDiv('agent-collapsible-section__body');
-	body.addClass('ia-hidden');
-	if (isError) {
-		body.addClass('agent-collapsible-section__body--error');
-	}
+	if (isError) body.addClass('agent-collapsible-section__body--error');
+
+	const collapse = () => { body.addClass('ia-hidden'); chevron.setText('▶'); };
+	const expand = () => { body.classList.remove('ia-hidden'); chevron.setText('▼'); };
+
 	body.setText(content);
+	if (startExpanded) { expand(); } else { collapse(); }
 
 	header.addEventListener('click', () => {
-		if (body.classList.contains('ia-hidden')) {
-			body.classList.remove('ia-hidden');
-			chevron.setText('∧');
-		} else {
-			body.classList.add('ia-hidden');
-			chevron.setText('∨');
-		}
+		if (body.classList.contains('ia-hidden')) { expand(); } else { collapse(); }
 	});
 }
 
@@ -340,20 +352,17 @@ export function hasAgentToolCall(content: string): boolean {
 }
 
 /**
- * Strip tool-call blocks and ReAct scaffolding text from a message so only
- * the model's plain-language content remains.
+ * Strip legacy JSON tool-call blocks from a message so only the plain-language content remains.
+ * Used for backward-compatible rendering of old conversations.
  */
 export function extractFinalContent(message: Message): string {
-	let content = message.content;
-	content = content.replace(/```json\s*\n[\s\S]*?\n```/g, '');
-	content = content.replace(/Thought:.*?(?=Action:|```|$)/gs, '');
-	content = content.replace(/Action:\s*/g, '');
-	return content.trim();
+	return message.content.replace(/```json\s*\n[\s\S]*?\n```/g, '').trim();
 }
 
 /**
- * Reconstruct AgentExecutionStep[] from a sequence of assistant + system
- * messages that contained tool calls and their results.
+ * Reconstruct AgentExecutionStep[] from a sequence of legacy assistant + system
+ * messages that contained JSON tool-call blocks.
+ * Used for backward-compatible rendering of old conversations.
  */
 export function reconstructAgentSteps(messages: Message[]): AgentExecutionStep[] {
 	const steps: AgentExecutionStep[] = [];
@@ -369,15 +378,6 @@ export function reconstructAgentSteps(messages: Message[]): AgentExecutionStep[]
 				status: isError ? 'error' : 'success'
 			});
 			continue;
-		}
-
-		const thoughtMatch = msg.content.match(/Thought:(.*?)(?:Action:|```|$)/s);
-		if (thoughtMatch && thoughtMatch[1].trim()) {
-			steps.push({
-				type: 'thought',
-				content: thoughtMatch[1].trim(),
-				timestamp: Date.now()
-			});
 		}
 
 		const regex = /```json\s*\n([\s\S]*?)\n```/g;
