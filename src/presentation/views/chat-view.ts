@@ -722,68 +722,6 @@ export class ChatView extends ItemView {
 
 
 
-	private getAgentModelSummary(agent: Agent): string {
-		const strategy = agent.modelStrategy?.strategy ?? 'fixed';
-		if (strategy === 'fixed') {
-			const fixedId = agent.modelStrategy.modelId || '';
-			const name = fixedId ? this.getModelDisplayName(fixedId) : t('chat.agentSummary.customModel');
-			return t('chat.agentSummary.modelFixed', { name: name ?? 'unknown' });
-		}
-		if (strategy === 'default') {
-			const defaultId = this.plugin.settings.defaultModel || '';
-			const name = defaultId ? this.getModelDisplayName(defaultId) : t('chat.agentSummary.notSet');
-			return t('chat.agentSummary.modelDefault', { name: name ?? 'unknown' });
-		}
-		const currentId = this.modelSelect?.value || this.plugin.settings.defaultModel || '';
-		const name = currentId ? this.getModelDisplayName(currentId) : t('chat.agentSummary.customModel');
-		return t('chat.agentSummary.modelChatView', { name: name ?? 'unknown' });
-	}
-
-	private getModelDisplayName(modelId: string | null | undefined): string {
-		if (!modelId) return t('chat.agentSummary.notSet');
-		const match = this.state.availableModels.find(model => model.id === modelId);
-		return match?.name || modelId;
-	}
-
-	private formatTokenLimit(value: number): string {
-		return value > 0 ? value.toLocaleString() : t('chat.agentSummary.auto');
-	}
-
-	private formatToggleStatus(enabled: boolean): string {
-		return enabled ? t('chat.agentSummary.on') : t('chat.agentSummary.off');
-	}
-
-	private getAgentToolsLabel(agent: Agent): string {
-		const builtIn = agent.enabledBuiltInTools.length;
-		const mcp = agent.enabledMcpServers.length;
-		const cliTools = this.plugin.settings.cliTools?.filter(tool => tool.enabled) ?? [];
-		const cli = agent.enabledAllCLITools ? cliTools.length : (agent.enabledCLITools?.filter(id => cliTools.some(tool => tool.id === id)).length ?? 0);
-		const segments = [] as string[];
-		if (builtIn > 0) segments.push(t('chat.agentSummary.builtIn', { count: builtIn }));
-		if (mcp > 0) segments.push(t('chat.agentSummary.mcp', { count: mcp }));
-		if (cli > 0) segments.push(t('chat.agentSummary.cli', { count: cli }));
-		if (segments.length === 0) {
-			return t('chat.agentSummary.none');
-		}
-		return segments.join(' + ');
-	}
-
-	private getAgentMemoryLabel(agent: Agent): string {
-		switch (agent.memoryType) {
-			case 'short-term':
-				return t('chat.agentSummary.shortTerm');
-			case 'long-term':
-				return t('chat.agentSummary.longTerm');
-			default:
-				return t('chat.agentSummary.disabledMemory');
-		}
-	}
-
-	private formatTemperature(value: number): string {
-		return Number.isInteger(value)
-			? value.toString()
-			: value.toFixed(1).replace(/0+$/, '').replace(/\.$/, '');
-	}
 
 
 
