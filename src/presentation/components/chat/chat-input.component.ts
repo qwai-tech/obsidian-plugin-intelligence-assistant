@@ -1,7 +1,8 @@
-import { App, setIcon, Notice, TFile, TFolder } from 'obsidian';
+import { App, setIcon, TFile, TFolder } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { t } from '@/i18n';
+import type { ModelInfo } from '@/types';
 
 export interface ChatInputCallbacks {
 	onSendMessage: (text: string) => Promise<void>;
@@ -10,6 +11,9 @@ export interface ChatInputCallbacks {
 	onToggleWeb: () => Promise<void>;
 	onShowReferenceMenu: () => void;
 	onStopStreaming: () => void;
+	onModeChange: (mode: 'chat' | 'agent') => Promise<void>;
+	onModelChange: () => Promise<void>;
+	onAgentChange: (agentId: string) => Promise<void>;
 }
 
 export class ChatInputComponent {
@@ -19,11 +23,15 @@ export class ChatInputComponent {
 	public textarea: HTMLTextAreaElement;
 	public sendBtn: HTMLButtonElement;
 	public stopBtn: HTMLButtonElement;
-	public sendHint: HTMLElement;
-	public ragActionItem: HTMLElement;
-	public webActionItem: HTMLElement;
-	public imageActionItem: HTMLElement;
-	public headerActionsContainer: HTMLElement;
+	public modelSelect: HTMLSelectElement;
+	public modeSelector: HTMLSelectElement;
+	public agentSelector: HTMLSelectElement;
+	public ragActionItem: HTMLElement | null = null;
+	public webActionItem: HTMLElement | null = null;
+	public imageActionItem: HTMLElement | null = null;
+
+	private modePillGroup: HTMLElement;
+	private agentPillGroup: HTMLElement;
 
 	constructor(
 		private parent: HTMLElement,
@@ -36,73 +44,45 @@ export class ChatInputComponent {
 	}
 
 	private render() {
-		this.inputContainer = this.parent.createDiv('chat-input-container');
-
-		const inputHeader = this.inputContainer.createDiv('chat-input-header');
-
-		// Reference area
-		this.referenceContainer = inputHeader.createDiv('input-reference-area');
+		this.referenceContainer = this.parent.createDiv('input-reference-area');
 		this.referenceContainer.addClass('ia-hidden');
 		this.referenceContainer.createDiv('reference-list');
 
-		// Header quick actions
-		this.setupHeaderActions(inputHeader);
+		this.inputContainer = this.parent.createDiv('chat-input-container');
 
-		// Text input area
-		const editorWrapper = this.inputContainer.createDiv('chat-input-editor');
-		this.textarea = editorWrapper.createEl('textarea', {
-			attr: {
-				placeholder: t('chat.placeholder'),
-				rows: '1'
-			}
+		const chatInputBox = this.inputContainer.createDiv('chat-input-box');
+
+		this.buildToolbar(chatInputBox.createDiv('chat-input-toolbar'));
+
+		const editorRow = chatInputBox.createDiv('chat-input-editor');
+
+		this.attachmentContainer = editorRow.createDiv('attachment-preview');
+		this.attachmentContainer.addClass('ia-hidden');
+
+		this.textarea = editorRow.createEl('textarea', {
+			attr: { placeholder: t('chat.placeholder'), rows: '1' }
 		});
 		this.textarea.addClass('chat-input');
 
-		// Send button
-		this.sendBtn = editorWrapper.createEl('button', { cls: 'ia-send-btn' });
+		this.sendBtn = editorRow.createEl('button', { cls: 'ia-send-btn' });
 		this.sendBtn.setAttribute('aria-label', t('chat.sendAriaLabel'));
 		setIcon(this.sendBtn, 'arrow-up');
 
-		// Auto-resize textarea
+		this.stopBtn = editorRow.createEl('button', { cls: 'stop-generation-btn' });
+		setIcon(this.stopBtn, 'square');
+		this.stopBtn.createSpan({ text: t('chat.stop') });
+		this.stopBtn.addClass('ia-hidden');
+		this.stopBtn.addEventListener('click', () => this.callbacks.onStopStreaming());
+
 		this.textarea.addEventListener('input', () => {
 			this.textarea.setCssProps({ 'height': 'auto' });
 			this.textarea.setCssProps({ 'height': Math.min(this.textarea.scrollHeight, 200) + 'px' });
 			this.sendBtn.toggleClass('is-active', this.textarea.value.trim().length > 0);
 		});
 
-		// Input footer
-		const controlsSection = this.inputContainer.createDiv('chat-input-footer');
-		const bottomControls = controlsSection.createDiv('input-bottom-controls');
-		bottomControls.createDiv('bottom-left-controls');
-
-		// Attachment preview area
-		const middleControls = bottomControls.createDiv('bottom-middle-controls');
-		this.attachmentContainer = middleControls.createDiv('attachment-preview');
-		this.attachmentContainer.addClass('ia-hidden');
-
-		// Right section
-		const rightControls = bottomControls.createDiv('bottom-right-controls');
-
-		// Send hint
-		this.sendHint = rightControls.createEl('span');
-		this.sendHint.addClass('ia-send-hint');
-		this.sendHint.setText(t('chat.sendHintPrefix'));
-		this.sendHint.createEl('kbd', { text: t('chat.sendHintKey') });
-		this.sendHint.appendText(t('chat.sendHintSuffix'));
-
-		// Stop button
-		this.stopBtn = rightControls.createEl('button', { cls: 'stop-generation-btn' });
-		setIcon(this.stopBtn, 'square');
-		this.stopBtn.createSpan({ text: t('chat.stop') });
-		this.stopBtn.addClass('ia-hidden');
-		this.stopBtn.addEventListener('click', () => {
-			this.callbacks.onStopStreaming();
-		});
-
 		const handleSend = async () => {
 			const text = this.textarea.value.trim();
 			if (!text && this.state.currentAttachments.length === 0 && this.state.referencedFiles.length === 0) return;
-
 			this.textarea.value = '';
 			this.textarea.setCssProps({ 'height': 'auto' });
 			this.sendBtn.removeClass('is-active');
@@ -115,78 +95,190 @@ export class ChatInputComponent {
 				void handleSend();
 			}
 		});
+		this.sendBtn.addEventListener('click', () => void handleSend());
+	}
 
-		this.sendBtn.addEventListener('click', () => {
-			void handleSend();
+	private buildToolbar(toolbar: HTMLElement) {
+		// Left: mode + model pills (visible in chat mode)
+		this.modePillGroup = toolbar.createDiv('chat-input-pill-group');
+
+		this.modeSelector = this.modePillGroup.createEl('select', { cls: 'chat-input-mode-pill' });
+		this.modeSelector.createEl('option', { value: 'chat', text: t('chat.modeOptions.chat') });
+		this.modeSelector.createEl('option', { value: 'agent', text: t('chat.modeOptions.agent') });
+		this.modeSelector.value = this.state.mode;
+		this.modeSelector.addEventListener('change', () => {
+			void this.callbacks.onModeChange((this.modeSelector.value ?? 'chat') as 'chat' | 'agent');
+		});
+
+		this.modelSelect = this.modePillGroup.createEl('select', { cls: 'chat-input-model-pill' });
+		this.modelSelect.addEventListener('change', () => void this.callbacks.onModelChange());
+
+		// Left: agent pill (visible in agent mode)
+		this.agentPillGroup = toolbar.createDiv('chat-input-pill-group');
+		if (this.state.mode !== 'agent') this.agentPillGroup.addClass('ia-hidden');
+
+		this.agentSelector = this.agentPillGroup.createEl('select', { cls: 'chat-input-agent-pill' });
+		this.agentSelector.addEventListener('change', () => {
+			void this.callbacks.onAgentChange(this.agentSelector.value ?? '');
+		});
+		this.refreshAgentSelect();
+
+		// Spacer
+		toolbar.createDiv('chat-input-toolbar-spacer');
+
+		// Right: paperclip (always shown)
+		const referenceBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn is-link' });
+		referenceBtn.type = 'button';
+		referenceBtn.setAttr('title', t('chat.addReferenceTooltip'));
+		setIcon(referenceBtn.createSpan({ cls: 'header-action-icon' }), 'paperclip');
+		referenceBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			this.callbacks.onShowReferenceMenu();
+		});
+
+		// RAG (only rendered if enabled in settings)
+		if (this.plugin.settings.ragConfig.enabled) {
+			this.ragActionItem = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
+			(this.ragActionItem as HTMLButtonElement).type = 'button';
+			this.ragActionItem.setAttr('title', t('chat.ragTooltipLabel'));
+			setIcon(this.ragActionItem.createSpan({ cls: 'header-action-icon' }), 'book-open');
+			this.ragActionItem.createSpan({ cls: 'header-action-label', text: t('chat.ragLabel') });
+			this.ragActionItem.addEventListener('click', (e) => {
+				e.preventDefault();
+				void this.callbacks.onToggleRag();
+			});
+		}
+
+		// Web search (only rendered if enabled in settings)
+		if (this.plugin.settings.webSearchConfig.enabled) {
+			this.webActionItem = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
+			(this.webActionItem as HTMLButtonElement).type = 'button';
+			this.webActionItem.setAttr('title', t('chat.webSearchTooltipLabel'));
+			setIcon(this.webActionItem.createSpan({ cls: 'header-action-icon' }), 'search');
+			this.webActionItem.createSpan({ cls: 'header-action-label', text: t('chat.webSearchLabel') });
+			this.webActionItem.addEventListener('click', (e) => {
+				e.preventDefault();
+				void this.callbacks.onToggleWeb();
+			});
+		}
+
+		// Image (created hidden; shown/hidden by setImageButtonVisible)
+		this.imageActionItem = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn ia-hidden' });
+		(this.imageActionItem as HTMLButtonElement).type = 'button';
+		this.imageActionItem.setAttr('title', t('chat.addPictureTooltip'));
+		setIcon(this.imageActionItem.createSpan({ cls: 'header-action-icon' }), 'image');
+		this.imageActionItem.createSpan({ cls: 'header-action-label', text: t('chat.addPicture') });
+		this.imageActionItem.addEventListener('click', (e) => {
+			e.preventDefault();
+			void this.callbacks.onAttachImage();
 		});
 	}
 
-	private setupHeaderActions(inputHeader: HTMLElement) {
-		const actionsContainer = inputHeader.createDiv('chat-header-actions');
-		actionsContainer.addClass('chat-header-actions');
-		this.headerActionsContainer = actionsContainer;
+	public updateModeSelector(mode: 'chat' | 'agent') {
+		if (this.modeSelector) this.modeSelector.value = mode;
+		if (this.modePillGroup) this.modePillGroup.toggleClass('ia-hidden', mode === 'agent');
+		if (this.agentPillGroup) this.agentPillGroup.toggleClass('ia-hidden', mode !== 'agent');
+	}
 
-		this.createHeaderActionButton(actionsContainer, {
-			icon: 'paperclip',
-			label: t('chat.addReference'),
-			tooltip: t('chat.addReferenceTooltip'),
-			onClick: () => this.callbacks.onShowReferenceMenu()
-		}).addClass('is-link');
+	public refreshAgentSelect(preferredId?: string): string | null {
+		if (!this.agentSelector) return null;
+		const agents = this.plugin.settings.agents ?? [];
+		this.agentSelector.empty();
 
-		this.imageActionItem = this.createHeaderActionButton(actionsContainer, {
-			icon: 'image',
-			label: t('chat.addPicture'),
-			tooltip: t('chat.addPictureTooltip'),
-			showStatus: true,
-			onClick: () => {
-				if (this.imageActionItem?.hasClass('is-disabled')) {
-					new Notice(t('chat.imageUnavailable'));
-					return;
-				}
-				void this.callbacks.onAttachImage();
+		if (agents.length === 0) {
+			const opt = this.agentSelector.createEl('option', { value: '', text: t('chat.noAgentsAvailable') });
+			opt.disabled = true;
+			opt.selected = true;
+			this.agentSelector.disabled = true;
+			return null;
+		}
+
+		this.agentSelector.disabled = false;
+		const placeholder = this.agentSelector.createEl('option', { value: '', text: t('chat.selectAgent') });
+		placeholder.disabled = true;
+
+		const validIds = new Set(agents.map(a => a.id));
+		const activeId = preferredId && validIds.has(preferredId)
+			? preferredId
+			: (this.plugin.settings.activeAgentId && validIds.has(this.plugin.settings.activeAgentId)
+				? this.plugin.settings.activeAgentId
+				: null);
+
+		for (const agent of agents) {
+			const opt = this.agentSelector.createEl('option', {
+				value: agent.id,
+				text: `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}`
+			});
+			if (agent.id === activeId) opt.selected = true;
+		}
+
+		if (activeId) {
+			this.agentSelector.value = activeId;
+			return activeId;
+		}
+		placeholder.selected = true;
+		return null;
+	}
+
+	public updateModelOptions() {
+		if (!this.modelSelect) return;
+		this.modelSelect.empty();
+
+		const models = this.state.availableModels;
+		const defaultModel = this.plugin.settings.defaultModel;
+
+		if (models.length === 0) {
+			const opt = this.modelSelect.createEl('option', { text: t('chat.header.noModels') });
+			opt.value = '';
+			opt.disabled = true;
+			return;
+		}
+
+		const grouped = models.reduce((acc, m) => {
+			if (!acc[m.provider]) acc[m.provider] = [];
+			acc[m.provider].push(m);
+			return acc;
+		}, {} as Record<string, ModelInfo[]>);
+
+		const sortedProviders = Object.entries(grouped).sort(([, a], [, b]) => {
+			const aHas = a.some(m => m.id === defaultModel);
+			const bHas = b.some(m => m.id === defaultModel);
+			if (aHas && !bHas) return -1;
+			if (!aHas && bHas) return 1;
+			return 0;
+		});
+
+		for (const [provider, providerModels] of sortedProviders) {
+			const group = this.modelSelect.createEl('optgroup');
+			group.label = `${provider.toUpperCase()} (${providerModels.length})`;
+			const sorted = [...providerModels].sort((a, b) => {
+				if (a.id === defaultModel) return -1;
+				if (b.id === defaultModel) return 1;
+				return a.name.localeCompare(b.name);
+			});
+			for (const m of sorted) {
+				const opt = group.createEl('option', { value: m.id, text: m.name });
+				if (m.id === defaultModel) opt.selected = true;
 			}
-		});
-
-		this.ragActionItem = this.createHeaderActionButton(actionsContainer, {
-			icon: 'book-open',
-			label: t('chat.ragLabel'),
-			tooltip: t('chat.ragTooltipLabel'),
-			showStatus: true,
-			onClick: () => { void this.callbacks.onToggleRag(); }
-		});
-		this.ragActionItem.addClass('is-toggle');
-
-		this.webActionItem = this.createHeaderActionButton(actionsContainer, {
-			icon: 'search',
-			label: t('chat.webSearchLabel'),
-			tooltip: t('chat.webSearchTooltipLabel'),
-			showStatus: true,
-			onClick: () => { void this.callbacks.onToggleWeb(); }
-		});
-		this.webActionItem.addClass('is-toggle');
+		}
 	}
 
-	private createHeaderActionButton(
-		container: HTMLElement,
-		config: { icon: string; label: string; tooltip?: string; showStatus?: boolean; onClick: () => void }
-	): HTMLButtonElement {
-		const button = container.createEl('button', { cls: 'header-action-btn' });
-		button.type = 'button';
-		if (config.tooltip) {
-			button.setAttr('title', config.tooltip);
+	public setImageButtonVisible(visible: boolean) {
+		if (this.imageActionItem) {
+			this.imageActionItem.toggleClass('ia-hidden', !visible);
 		}
-		button.addEventListener('click', (event) => {
-			event.preventDefault();
-			void config.onClick();
-		});
+	}
 
-		const iconEl = button.createSpan({ cls: 'header-action-icon' });
-		setIcon(iconEl, config.icon);
-		button.createSpan({ cls: 'header-action-label', text: config.label });
-		if (config.showStatus) {
-			button.createSpan({ cls: 'header-action-status' });
+	public updateActionToggleState(
+		item: HTMLElement,
+		enabled: boolean,
+		active: boolean,
+		_statusText: string
+	) {
+		item.toggleClass('ia-hidden', !enabled);
+		if (enabled) {
+			item.toggleClass('is-active', active);
 		}
-		return button;
 	}
 
 	public updateReferenceDisplay() {
@@ -208,16 +300,13 @@ export class ChatInputComponent {
 			const refItem = referenceList.createDiv('reference-item');
 			const icon = refItem.createSpan('reference-icon');
 			icon.setText(item instanceof TFolder ? '📁' : '📄');
-			const pathSpan = refItem.createSpan('reference-path');
-			pathSpan.setText(item.path);
-
+			refItem.createSpan('reference-path').setText(item.path);
 			refItem.addClass('ia-clickable');
 			refItem.addEventListener('click', () => {
 				if (item instanceof TFile) {
 					void this.app.workspace.getLeaf().openFile(item);
 				}
 			});
-
 			const removeBtn = refItem.createEl('button', { text: '×', cls: 'reference-remove' });
 			removeBtn.addEventListener('click', (e) => {
 				e.stopPropagation();
@@ -238,12 +327,11 @@ export class ChatInputComponent {
 		}
 
 		this.attachmentContainer.removeClass('ia-hidden');
-		// Styles are handled by CSS classes now or set here for legacy
 		this.attachmentContainer.addClass('ia-attachment-preview-container');
 
 		this.state.currentAttachments.forEach((att, index) => {
 			const attPreview = this.attachmentContainer.createDiv('attachment-preview-item');
-			
+
 			if (att.type === 'image' && att.content) {
 				const img = attPreview.createEl('img');
 				img.src = att.content;
@@ -262,25 +350,5 @@ export class ChatInputComponent {
 				this.updateAttachmentPreview();
 			});
 		});
-	}
-
-	public updateQuickActionsVisibility(isAgentMode: boolean) {
-		if (this.headerActionsContainer) {
-			this.headerActionsContainer.toggleClass('ia-hidden', isAgentMode);
-		}
-	}
-
-	public updateActionToggleState(
-		item: HTMLElement,
-		enabled: boolean,
-		active: boolean,
-		statusText: string
-	) {
-		item.toggleClass('is-disabled', !enabled);
-		item.toggleClass('is-active', enabled && active);
-		const status = item.querySelector('.header-action-status');
-		if (status) {
-			status.textContent = statusText;
-		}
 	}
 }
