@@ -278,6 +278,22 @@ function createMetaBadge(container: HTMLElement, label: string, value: string) {
 	badge.createSpan({ cls: 'ia-chat-message__badge-value', text: value });
 }
 
+export function renderAssistantMarkdown(target: HTMLElement, content: string): void {
+	try {
+		const cleanedContent = (content || '').replace(/\n{3,}/g, '\n\n');
+		const html = marked.parse(cleanedContent) as string;
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(html, 'text/html');
+		target.empty();
+		Array.from(doc.body.childNodes).forEach(node => {
+			target.appendChild(node.cloneNode(true));
+		});
+	} catch (error) {
+		console.error('[MessageRenderer] Markdown render error', error);
+		target.setText(content);
+	}
+}
+
 function renderMessageContent(target: HTMLElement, message: Message) {
 	if (message.role !== 'assistant') {
 		target.setText(message.content);

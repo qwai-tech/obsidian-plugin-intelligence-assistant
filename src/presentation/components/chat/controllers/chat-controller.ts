@@ -9,6 +9,7 @@ import { MessageController } from './message-controller';
 import { AgentController } from './agent-controller';
 import type { Message, LLMConfig, ModelInfo, FileReference } from '@/types';
 import type { ChatService } from '@/application/services/chat.service';
+import { renderAssistantMarkdown } from '@/presentation/components/chat/message-renderer';
 import type { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import type { RagStatusPanel } from '@/presentation/components/chat/rag-status-panel';
 import type { StreamChunk } from '@/types/common/llm';
@@ -306,6 +307,9 @@ export class ChatController extends BaseController {
 							} else {
 								this.state.messages.push(finalMessage);
 							}
+							if (contentEl && finalMessage.content) {
+								renderAssistantMarkdown(contentEl, finalMessage.content);
+							}
 							this.updateTokenSummary();
 							if (currentRagSources.length > 0 && assistantMessageEl) {
 								const messageBody = this.findMessageBodyElement(assistantMessageEl);
@@ -401,6 +405,9 @@ export class ChatController extends BaseController {
 							this.state.messages[index] = finalMessage;
 						} else {
 							this.state.messages.push(finalMessage);
+						}
+						if (contentEl && finalMessage.content) {
+							renderAssistantMarkdown(contentEl, finalMessage.content);
 						}
 						this.updateTokenSummary();
 						if (finalMessage.ragSources?.length && assistantMessageEl) {

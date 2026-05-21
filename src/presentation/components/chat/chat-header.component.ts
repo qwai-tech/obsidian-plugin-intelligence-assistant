@@ -1,5 +1,6 @@
 import { setIcon } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
+import { hasSettings } from '@/utils/type-guards';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { t } from '@/i18n';
 
@@ -47,6 +48,18 @@ export class ChatHeaderComponent {
 			e.preventDefault();
 			e.stopPropagation();
 			void this.callbacks.onNewChat();
+		});
+
+		const settingsBtn = header.createEl('button', { cls: 'chat-header-icon-btn' });
+		setIcon(settingsBtn, 'settings');
+		settingsBtn.setAttr('title', t('chat.settings'));
+		settingsBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			if (hasSettings(this.plugin.app)) {
+				this.plugin.app.setting.open();
+				this.plugin.app.setting.openTabById('intelligence-assistant');
+			}
 		});
 	}
 
