@@ -66,7 +66,6 @@ export class ChatView extends ItemView {
 	private ragActionItem: HTMLElement | null = null;
 	private webActionItem: HTMLElement | null = null;
 	private imageActionItem: HTMLElement | null = null;
-	private headerActionsContainer: HTMLElement | null = null;
 
 	// Services
 	private toolManager: ToolManager;
@@ -78,7 +77,6 @@ export class ChatView extends ItemView {
 
 	// UI elements
 	private stopBtn: HTMLElement | null = null;
-	private sendHint: HTMLElement | null = null;
 	constructor(leaf: WorkspaceLeaf, plugin: IntelligenceAssistantPlugin) {
 		super(leaf);
 		this.plugin = plugin;
@@ -192,19 +190,6 @@ export class ChatView extends ItemView {
 			}
 		);
 
-		// Redirect legacy property references
-		this.modelSelect = this.chatHeader.modelSelect;
-
-		await this.refreshModels();
-
-		// Set default model if configured
-		if (this.plugin.settings.defaultModel && this.modelSelect.value === '') {
-			this.modelSelect.value = this.plugin.settings.defaultModel;
-		}
-		
-		// Update image button visibility based on the selected model's vision capability
-		await this.updateImageButtonVisibility();
-
 		// Chat messages container
 		this.chatContainer = this.mainChatContainer.createDiv('chat-messages');
 
@@ -233,22 +218,33 @@ export class ChatView extends ItemView {
 				onStopStreaming: () => {
 					this.state.stopStreamingRequested = true;
 					if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
-					if (this.sendHint) this.sendHint.removeClass('ia-hidden');
 					new Notice(t('chat.notices.stopping'));
-				}
+				},
+				onModeChange: (mode) => this.handleModeChange(mode),
+				onModelChange: () => this.onModelChange(),
+				onAgentChange: (agentId) => this.handleAgentSelection(agentId)
 			}
 		);
 
-		// Redirect legacy property references
+		// Redirect property references
 		this.inputContainer = this.chatInput.inputContainer;
 		this.referenceContainer = this.chatInput.referenceContainer;
 		this.attachmentContainer = this.chatInput.attachmentContainer;
 		this.ragActionItem = this.chatInput.ragActionItem;
 		this.webActionItem = this.chatInput.webActionItem;
 		this.imageActionItem = this.chatInput.imageActionItem;
-		this.headerActionsContainer = this.chatInput.headerActionsContainer;
 		this.stopBtn = this.chatInput.stopBtn;
-		this.sendHint = this.chatInput.sendHint;
+		this.modelSelect = this.chatInput.modelSelect;
+
+		await this.refreshModels();
+
+		// Set default model if configured
+		if (this.plugin.settings.defaultModel && this.modelSelect.value === '') {
+			this.modelSelect.value = this.plugin.settings.defaultModel;
+		}
+
+		// Update image button visibility based on the selected model's vision capability
+		await this.updateImageButtonVisibility();
 
 		// Initialize MCP servers
 		await this.initializeMCPServers();
@@ -335,10 +331,8 @@ export class ChatView extends ItemView {
 			onStreamingStateChange: (isStreaming: boolean) => {
 				if (isStreaming) {
 					if (this.stopBtn) this.stopBtn.removeClass('ia-hidden');
-					if (this.sendHint) this.sendHint.addClass('ia-hidden');
 				} else {
 					if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
-					if (this.sendHint) this.sendHint.removeClass('ia-hidden');
 				}
 			},
 		});
@@ -398,7 +392,7 @@ export class ChatView extends ItemView {
 	}
 
 	private updateModelOptions() {
-		this.chatHeader.updateModelOptions();
+		this.chatInput.updateModelOptions();
 	}
 
 	private async onModelChange() {
@@ -407,15 +401,10 @@ export class ChatView extends ItemView {
 	}
 
 	private async updateImageButtonVisibility() {
-		if (!this.imageActionItem) return;
 		const selectedModel = this.modelSelect?.value || '';
 		const supportsVision = selectedModel && await this.modelSupportsVision(selectedModel);
-		const available = this.state.mode === 'chat' && supportsVision;
-		this.imageActionItem.toggleClass('is-disabled', !available);
-		const status = this.imageActionItem.querySelector('.header-action-status');
-		if (status) {
-			status.textContent = available ? t('chat.status.available') : t('chat.status.unavailable');
-		}
+		const available = this.state.mode === 'chat' && !!supportsVision;
+		this.chatInput.setImageButtonVisible(available);
 	}
 
 	private async modelSupportsVision(modelId: string): Promise<boolean> {
@@ -743,12 +732,8 @@ export class ChatView extends ItemView {
 	}
 
 	private async updateOptionsDisplay() {
-		if (this.headerActionsContainer) {
-			this.headerActionsContainer.toggleClass('ia-hidden', this.state.mode === 'agent');
-		}
-
+		this.chatInput.updateModeSelector(this.state.mode);
 		this.updatePromptSelectorVisibility();
-		this.updateAgentSelectorVisibility();
 		await this.updateQuickActionsState();
 		this.updateModelControlDisplay();
 	}
@@ -964,18 +949,14 @@ export class ChatView extends ItemView {
 			}
 		}
 
-		if (this.chatHeader.modeSelector) {
-			this.chatHeader.modeSelector.value = mode;
-		}
+		this.chatInput.updateModeSelector(mode);
 
 		await this.updateOptionsDisplay();
 	}
 
 	private async handleAgentSelection(selectedId: string) {
 		this.state.mode = 'agent';
-		if (this.chatHeader.modeSelector) {
-			this.chatHeader.modeSelector.value = 'agent';
-		}
+		this.chatInput.updateModeSelector('agent');
 
 		if (!selectedId) {
 			this.plugin.settings.activeAgentId = null;
@@ -1017,9 +998,7 @@ export class ChatView extends ItemView {
 	}
 
 	private async applyConversationConfig(conv: Conversation) {
-		if (this.chatHeader.modeSelector) {
-			this.chatHeader.modeSelector.value = this.state.mode;
-		}
+		this.chatInput.updateModeSelector(this.state.mode);
 
 		const config = conv.config;
 		if (!config) {
@@ -1048,8 +1027,8 @@ export class ChatView extends ItemView {
 			}
 
 			this.refreshAgentSelect(desiredAgentId ?? undefined);
-			if (this.chatHeader.agentSelector) {
-				this.chatHeader.agentSelector.value = desiredAgentId || '';
+			if (this.chatInput.agentSelector) {
+				this.chatInput.agentSelector.value = desiredAgentId || '';
 			}
 		} else {
 			const availablePrompts = new Set(this.plugin.settings.systemPrompts.filter(p => p.enabled).map(p => p.id));
@@ -1063,8 +1042,8 @@ export class ChatView extends ItemView {
 			if (this.chatHeader.promptSelector) {
 				this.chatHeader.promptSelector.value = promptToUse;
 			}
-			if (this.chatHeader.agentSelector) {
-				this.chatHeader.agentSelector.value = '';
+			if (this.chatInput.agentSelector) {
+				this.chatInput.agentSelector.value = '';
 			}
 			if (this.plugin.settings.activeAgentId) {
 				this.plugin.settings.activeAgentId = null;
@@ -1131,7 +1110,7 @@ export class ChatView extends ItemView {
 
 		if (defaultMode === 'agent') {
 			this.state.mode = 'agent';
-			if (this.chatHeader.modeSelector) this.chatHeader.modeSelector.value = 'agent';
+			this.chatInput.updateModeSelector('agent');
 			let agentId = this.ensureDefaultAgentSelection();
 			if (agentId && !this.plugin.settings.agents.some(agent => agent.id === agentId)) {
 				agentId = null;
@@ -1143,7 +1122,7 @@ export class ChatView extends ItemView {
 				}
 				await this.applyAgentConfig(agentId, { silent: true });
 				this.refreshAgentSelect(agentId);
-				if (this.chatHeader.agentSelector) this.chatHeader.agentSelector.value = agentId;
+				if (this.chatInput.agentSelector) this.chatInput.agentSelector.value = agentId;
 			} else {
 				if (this.plugin.settings.activeAgentId) {
 					this.plugin.settings.activeAgentId = null;
@@ -1159,13 +1138,13 @@ export class ChatView extends ItemView {
 			}
 		} else {
 			this.state.mode = 'chat';
-			if (this.chatHeader.modeSelector) this.chatHeader.modeSelector.value = 'chat';
+			this.chatInput.updateModeSelector('chat');
 			if (this.plugin.settings.activeAgentId) {
 				this.plugin.settings.activeAgentId = null;
 				settingsDirty = true;
 			}
 			this.refreshAgentSelect();
-			if (this.chatHeader.agentSelector) this.chatHeader.agentSelector.value = '';
+			if (this.chatInput.agentSelector) this.chatInput.agentSelector.value = '';
 			if (this.plugin.settings.activeSystemPromptId !== null) {
 				this.plugin.settings.activeSystemPromptId = null;
 				settingsDirty = true;
@@ -1273,50 +1252,7 @@ export class ChatView extends ItemView {
 	}
 
 	private refreshAgentSelect(preferredAgentId?: string): string | null {
-		if (!this.chatHeader.agentSelector) return null;
-
-		const selectEl = this.chatHeader.agentSelector;
-		const agents = this.plugin.settings.agents;
-
-		selectEl.empty();
-
-		if (!agents || agents.length === 0) {
-			const placeholder = selectEl.createEl('option');
-			placeholder.value = '';
-			placeholder.textContent = t('chat.noAgentConfig');
-			placeholder.disabled = true;
-			placeholder.selected = true;
-			selectEl.disabled = true;
-			return null;
-		}
-
-		selectEl.disabled = false;
-
-		const placeholder = selectEl.createEl('option');
-		placeholder.value = '';
-		placeholder.textContent = t('chat.selectAgent');
-		placeholder.disabled = true;
-
-		const validIds = new Set(agents.map(agent => agent.id));
-		const currentActive = preferredAgentId && validIds.has(preferredAgentId)
-			? preferredAgentId
-			: (this.plugin.settings.activeAgentId && validIds.has(this.plugin.settings.activeAgentId)
-				? this.plugin.settings.activeAgentId
-				: null);
-
-			for (const agent of agents) {
-				const option = selectEl.createEl('option');
-				option.value = agent.id;
-				option.textContent = `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}`;
-			}
-
-		if (currentActive) {
-			selectEl.value = currentActive;
-			return currentActive;
-		}
-
-		placeholder.selected = true;
-		return null;
+		return this.chatInput.refreshAgentSelect(preferredAgentId);
 	}
 
 
