@@ -107,7 +107,7 @@ export class ChatInputComponent {
 		this.modeSelector.createEl('option', { value: 'agent', text: t('chat.modeOptions.agent') });
 		this.modeSelector.value = this.state.mode;
 		this.modeSelector.addEventListener('change', () => {
-			void this.callbacks.onModeChange((this.modeSelector.value ?? 'chat') as 'chat' | 'agent');
+			void this.callbacks.onModeChange(this.modeSelector.value as 'chat' | 'agent');
 		});
 
 		this.modelSelect = this.modePillGroup.createEl('select', { cls: 'chat-input-model-pill' });
@@ -119,7 +119,7 @@ export class ChatInputComponent {
 
 		this.agentSelector = this.agentPillGroup.createEl('select', { cls: 'chat-input-agent-pill' });
 		this.agentSelector.addEventListener('change', () => {
-			void this.callbacks.onAgentChange(this.agentSelector.value ?? '');
+			void this.callbacks.onAgentChange(this.agentSelector.value);
 		});
 		this.refreshAgentSelect();
 
@@ -138,8 +138,9 @@ export class ChatInputComponent {
 
 		// RAG (only rendered if enabled in settings)
 		if (this.plugin.settings.ragConfig.enabled) {
-			this.ragActionItem = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
-			(this.ragActionItem as HTMLButtonElement).type = 'button';
+			const ragBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
+			ragBtn.type = 'button';
+			this.ragActionItem = ragBtn;
 			this.ragActionItem.setAttr('title', t('chat.ragTooltipLabel'));
 			setIcon(this.ragActionItem.createSpan({ cls: 'header-action-icon' }), 'book-open');
 			this.ragActionItem.createSpan({ cls: 'header-action-label', text: t('chat.ragLabel') });
@@ -151,8 +152,9 @@ export class ChatInputComponent {
 
 		// Web search (only rendered if enabled in settings)
 		if (this.plugin.settings.webSearchConfig.enabled) {
-			this.webActionItem = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
-			(this.webActionItem as HTMLButtonElement).type = 'button';
+			const webBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
+			webBtn.type = 'button';
+			this.webActionItem = webBtn;
 			this.webActionItem.setAttr('title', t('chat.webSearchTooltipLabel'));
 			setIcon(this.webActionItem.createSpan({ cls: 'header-action-icon' }), 'search');
 			this.webActionItem.createSpan({ cls: 'header-action-label', text: t('chat.webSearchLabel') });
@@ -163,8 +165,9 @@ export class ChatInputComponent {
 		}
 
 		// Image (created hidden; shown/hidden by setImageButtonVisible)
-		this.imageActionItem = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn ia-hidden' });
-		(this.imageActionItem as HTMLButtonElement).type = 'button';
+		const imageBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn ia-hidden' });
+		imageBtn.type = 'button';
+		this.imageActionItem = imageBtn;
 		this.imageActionItem.setAttr('title', t('chat.addPictureTooltip'));
 		setIcon(this.imageActionItem.createSpan({ cls: 'header-action-icon' }), 'image');
 		this.imageActionItem.createSpan({ cls: 'header-action-label', text: t('chat.addPicture') });
