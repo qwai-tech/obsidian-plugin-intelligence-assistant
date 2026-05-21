@@ -42,7 +42,7 @@ Transform your vault into an AI-native workspace. Intelligence Assistant brings 
 ## 💬 Chat Experience
 
 1. Open the chat via the ribbon icon or **Command Palette → Open AI chat in sidebar**.
-2. Choose **Chat** or **Agent** mode in the toolbar. Agent mode runs the model in a ReAct loop with tool calls.
+2. Choose **Chat** or **Agent** mode in the toolbar. Agent mode runs the model in an agentic loop with native function calling and tool execution.
 3. Pick a provider, model, temperature, and token cap from the header controls.
 4. Toggle **RAG** (vault context) or **Web search** in the input bar.
 5. Attach files or vault references with `@filename`.
@@ -54,7 +54,7 @@ Defined under **Settings → Agents**. Each agent has:
 
 - System prompt, tool permissions, MCP server access
 - Model strategy: `default` (use settings default), `chat-view` (follow chat selector), or `fixed` (specific model)
-- Capabilities: RAG, Web Search, ReAct mode with configurable max steps
+- Capabilities: RAG, Web Search, agentic tool-call loops with configurable max steps
 - Custom icon and display name
 
 Agent mode uses **native function calling** (OpenAI) with automatic fallback to text-based tool parsing for other providers.
@@ -82,6 +82,12 @@ Add OpenAPI specs under **Settings → Tools → HTTP / OpenAPI**. For each sour
 
 Define custom shell commands under **Settings → Tools → CLI Tools**. Each tool supports parameter templates (`{{param}}`), argument/env insertion modes, working directory, timeout, and platform-specific presets (25+ built-in presets for file, search, network, code, data, and system operations).
 
+## 🌐 Internationalization
+
+The plugin supports all 46 Obsidian languages. Locale is detected automatically from your Obsidian language setting. Translations are community-driven — feel free to improve them via PR.
+
+[中文文档](README-zh.md) | [English](README.md)
+
 ## 🛠️ Development
 
 ```bash
@@ -103,6 +109,7 @@ After every change, run `npm run lint && npm run build`. Both must succeed befor
 
 | Document | Description |
 |---|---|
+| [README-zh.md](README-zh.md) | Chinese README (中文说明) |
 | [docs/README.md](docs/README.md) | Documentation index |
 | [docs/architecture/overview-en.md](docs/architecture/overview-en.md) | Architecture overview (English) |
 | [docs/architecture/overview-zh.md](docs/architecture/overview-zh.md) | Architecture overview (Chinese) |
