@@ -670,8 +670,9 @@ function renderCliTools(
 		const nameDiv = nameCell.createDiv('tool-name');
 		nameDiv.createSpan('tool-icon').setText('⌨️');
 		const preset = CLI_TOOL_PRESETS.find(p => p.config.name === config.name);
-		const displayName = preset?.name
-			?? config.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+		const displayName = preset
+			? t(`settings.tools.cli.presets.names.${preset.id}`)
+			: config.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 		nameDiv.createSpan().setText(displayName || t('settings.tools.cli.unnamed'));
 
 		const commandCell = row.insertCell();
