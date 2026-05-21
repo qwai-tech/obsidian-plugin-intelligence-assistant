@@ -7,7 +7,7 @@ import { SearchableImageModal } from '@/presentation/components/modals/searchabl
 import { SingleFileSelectionModal } from '@/presentation/components/modals/single-file-selection-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { DEFAULT_AGENT_ID } from '@/constants';
-import type {Message, FileReference, Conversation, ConversationConfig, Agent, LLMConfig} from '@/types';
+import type {Message, Conversation, ConversationConfig, Agent} from '@/types';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
 import { marked } from 'marked';
 import { 
@@ -37,13 +37,6 @@ import { } from '@/presentation/components/utils/dom-helpers';
 
 export const CHAT_VIEW_TYPE = 'intelligence-assistant-chat';
 
-interface AssistantResponseOptions {
-	text: string;
-	selectedModel: string;
-	config: LLMConfig;
-	llmContent: string;
-	targetMessage: Message;
-}
 
 export class ChatView extends ItemView {
 	// Centralized state management
@@ -84,7 +77,6 @@ export class ChatView extends ItemView {
 	private ragStatusPanel: RagStatusPanel;
 
 	// UI elements
-	private streamingMessageEl: HTMLElement | null = null;
 	private stopBtn: HTMLElement | null = null;
 	private sendHint: HTMLElement | null = null;
 	constructor(leaf: WorkspaceLeaf, plugin: IntelligenceAssistantPlugin) {
@@ -306,11 +298,6 @@ export class ChatView extends ItemView {
 		this.messageController.setContainer(this.chatContainer);
 		this.inputController.setInputElement(this.chatInput.textarea);
 		this.inputController.setAttachmentPreviewElement(this.attachmentContainer);
-		this.chatController.configure({
-			messagesContainer: this.chatContainer,
-			messageController: this.messageController,
-			agentController: this.agentController
-		});
 
 		// Initialize conversation manager
 		this.conversationManager = new ConversationManager(
@@ -324,6 +311,37 @@ export class ChatView extends ItemView {
 			() => this.updateTokenSummary()
 		);
 		void this.conversationManager.initializeContainer(this.conversationListContainer);
+
+		// Configure chat controller with full pipeline options (after conversationManager is set up)
+		this.chatController.configure({
+			messagesContainer: this.chatContainer,
+			chatContainer: this.chatContainer,
+			messageController: this.messageController,
+			agentController: this.agentController,
+			chatService: this.chatService,
+			conversationManager: this.conversationManager,
+			ragStatusPanel: this.ragStatusPanel,
+			getSelectedModel: () => this.modelSelect?.value ?? '',
+			clearInputUI: () => {
+				if (this.chatInput) {
+					this.chatInput.updateAttachmentPreview();
+					this.chatInput.updateReferenceDisplay();
+				}
+			},
+			addMessageToUI: (message: Message) => this.addMessageToUI(message),
+			updateTokenSummary: () => this.updateTokenSummary(),
+			findMessageContentElement: (el: HTMLElement) => this.findMessageContentElement(el),
+			findMessageBodyElement: (el: HTMLElement) => this.findMessageBodyElement(el),
+			onStreamingStateChange: (isStreaming: boolean) => {
+				if (isStreaming) {
+					if (this.stopBtn) this.stopBtn.removeClass('ia-hidden');
+					if (this.sendHint) this.sendHint.addClass('ia-hidden');
+				} else {
+					if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
+					if (this.sendHint) this.sendHint.removeClass('ia-hidden');
+				}
+			},
+		});
 		this.conversationManager.on('conversation-loaded', (conv: Conversation) => {
 			this.updateConversationTitle(conv.title);
 			void this.applyConversationConfig(conv);
@@ -409,284 +427,7 @@ export class ChatView extends ItemView {
 	}
 
 	private async sendMessage(text: string) {
-		console.debug('[Chat] sendMessage called with text:', text.substring(0, 100) + '...');
-
-		if (this.state.isStreaming) {
-			new Notice(t('chat.notices.waitForResponse'));
-			return;
-		}
-
-		if (this.plugin.settings.llmConfigs.length === 0) {
-			console.error('[Chat] No LLM configs found');
-			new Notice(t('chat.notices.configureProvider'));
-			return;
-		}
-
-		const selectedModel = this.modelSelect.value;
-		console.debug('[Chat] Selected model:', selectedModel);
-
-		if (!selectedModel) {
-			console.error('[Chat] No model selected');
-			new Notice(t('chat.notices.selectModel'));
-			return;
-		}
-
-		const config = this.chatService.findLLMConfig(selectedModel);
-		console.debug('[Chat] Found config:', config ? config.provider : 'none');
-
-		if (!config) {
-			console.error('[Chat] No config found for model:', selectedModel);
-			new Notice(t('chat.notices.noValidProvider'));
-			return;
-		}
-
-		const referenceInputs: FileReference[] = this.state.referencedFiles.map(item => ({
-			type: item instanceof TFolder ? 'folder' : 'file',
-			path: item.path,
-			name: item.name
-		}));
-
-		const { llmContent, references } = await this.chatService.buildReferenceContext(text, referenceInputs);
-
-		// Clear input state
-		this.state.currentAttachments = [];
-		this.state.referencedFiles = [];
-		this.chatInput.updateAttachmentPreview();
-		this.chatInput.updateReferenceDisplay();
-
-		const userMessage: Message = {
-			role: 'user',
-			content: text,
-			attachments: this.state.currentAttachments.length > 0 ? [...this.state.currentAttachments] : undefined,
-			references: references.length > 0 ? references : undefined
-		};
-
-		this.state.messages.push(userMessage);
-		this.addMessageToUI(userMessage);
-
-		try {
-			await this.handleAssistantResponse({
-				text,
-				selectedModel,
-				config,
-				llmContent,
-				targetMessage: userMessage
-			});
-		} catch (_error) {
-			const errMsg = _error instanceof Error ? _error.message : String(_error);
-			console.error('[Chat] Error during chat:', errMsg);
-			new Notice(t('chat.notices.chatError', { message: errMsg }));
-
-			// Do not remove the user message. Instead, add an error message.
-			const errorMessage: Message = {
-				role: 'assistant',
-				content: `❌ **Error:** ${errMsg}`,
-				model: selectedModel
-			};
-			(errorMessage as { provider?: string | null }).provider = config.provider ?? null;
-			
-			this.state.messages.push(errorMessage);
-			this.addMessageToUI(errorMessage);
-			
-			// Save the conversation with the error
-			await this.conversationManager.saveCurrentConversation();
-		}
-	}
-
-	private finalizeStreamingUI() {
-		this.state.isStreaming = false;
-		this.state.stopStreamingRequested = false;
-		if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
-		if (this.sendHint) this.sendHint.removeClass('ia-hidden');
-		this.streamingMessageEl = null;
-	}
-
-	private async handleAssistantResponse(options: AssistantResponseOptions) {
-		const { selectedModel, config, llmContent, targetMessage } = options;
-
-		// 1. Prepare Active System Prompts from settings
-		const activeSystemPrompts: Message[] = [];
-		if (this.plugin.settings.activeSystemPromptId) {
-			const activePrompt = this.plugin.settings.systemPrompts.find(p => p.id === this.plugin.settings.activeSystemPromptId);
-			if (activePrompt && activePrompt.enabled) {
-				activeSystemPrompts.push({ role: 'system', content: activePrompt.content });
-			}
-		}
-
-		// 2. Prepare Messages for LLM (delegated to service)
-		const contextWindow = this.getActiveAgent()?.contextWindow ?? 20;
-		const llmMessages = this.chatService.prepareLlmMessages(this.state.messages, targetMessage, llmContent, contextWindow);
-
-		// 3. Setup UI Placeholder
-		const placeholderAssistant: Message = { role: 'assistant', content: '', model: selectedModel, provider: config.provider ?? undefined };
-		const assistantMessageEl = this.addMessageToUI(placeholderAssistant);
-		const contentEl = this.findMessageContentElement(assistantMessageEl);
-
-		this.state.isStreaming = true;
-		this.state.stopStreamingRequested = false;
-		this.streamingMessageEl = assistantMessageEl;
-		if (this.stopBtn) this.stopBtn.removeClass('ia-hidden');
-		if (this.sendHint) this.sendHint.addClass('ia-hidden');
-
-		let currentRagSources: any[] = [];
-		let currentWebResults: any[] = [];
-
-		try {
-			if (this.state.mode === 'agent') {
-				await this.runAgentLoop(llmMessages, selectedModel, contextWindow, activeSystemPrompts, placeholderAssistant, assistantMessageEl, contentEl);
-				return;
-			}
-			await this.chatService.streamResponse(
-				llmMessages,
-				{
-					model: selectedModel,
-					mode: this.state.mode,
-					temperature: this.state.temperature,
-					maxTokens: this.state.maxTokens,
-					topP: this.state.topP,
-					frequencyPenalty: this.state.frequencyPenalty,
-					presencePenalty: this.state.presencePenalty,
-					enableRAG: this.state.enableRAG && this.plugin.settings.ragConfig.enabled,
-					enableWebSearch: this.state.enableWebSearch,
-					activeSystemPrompts,
-					conversationId: this.state.currentConversationId ?? undefined
-				},
-				{
-					onChunk: (chunk: import('@/types/common/llm').StreamChunk) => {
-						if (contentEl && chunk.content) {
-							contentEl.appendText(chunk.content);
-							this.chatContainer.scrollTo({ top: this.chatContainer.scrollHeight, behavior: 'smooth' });
-						}
-					},
-					onRAGSources: (sources: import('@/types').RAGSource[]) => { currentRagSources = sources; },
-					onWebSearch: (results: import('@/types').WebSearchResult[]) => { currentWebResults = results; },
-					onComplete: async (finalMessage: Message) => {
-						// Update the existing placeholder message in state
-						const index = this.state.messages.indexOf(placeholderAssistant);
-						if (index !== -1) {
-							this.state.messages[index] = finalMessage;
-						} else {
-							this.state.messages.push(finalMessage);
-						}
-						
-						this.updateTokenSummary();
-						
-						if (currentRagSources.length > 0 && assistantMessageEl) {
-							const messageBody = this.findMessageBodyElement(assistantMessageEl);
-							if (messageBody) this.displayRagSources(messageBody, currentRagSources);
-						}
-
-
-						await this.conversationManager.saveCurrentConversation();
-						this.finalizeStreamingUI();
-					},
-					onError: (error: Error) => {
-						new Notice(t('chat.notices.chatError', { message: error.message }));
-						this.finalizeStreamingUI();
-					},
-					checkAbort: () => this.state.stopStreamingRequested
-				}
-			);
-		} catch (error) {
-			this.finalizeStreamingUI();
-			throw error;
-		}
-	}
-
-	/**
-	 * Run agent mode via ChatService.executeAgentLoop (ReAct loop in application layer).
-	 */
-	private async runAgentLoop(
-		llmMessages: Message[],
-		selectedModel: string,
-		contextWindow: number,
-		activeSystemPrompts: Message[],
-		placeholderAssistant: Message,
-		assistantMessageEl: HTMLElement,
-		contentEl: HTMLElement | null
-	): Promise<void> {
-		const isGenericAgent = !this.plugin.settings.activeAgentId;
-
-		await this.chatService.executeAgentLoop(
-			llmMessages,
-			{
-				model: selectedModel,
-				mode: 'agent',
-				temperature: this.state.temperature,
-				maxTokens: this.state.maxTokens,
-				topP: this.state.topP,
-				frequencyPenalty: this.state.frequencyPenalty,
-				presencePenalty: this.state.presencePenalty,
-				enableRAG: this.state.enableRAG && this.plugin.settings.ragConfig.enabled,
-				enableWebSearch: this.state.enableWebSearch,
-				activeSystemPrompts,
-				contextWindow,
-				agentId: this.plugin.settings.activeAgentId,
-				agents: this.plugin.settings.agents,
-				isGenericAgent,
-				allowOpenApiTools: this.plugin.hasEnabledOpenApiTools(),
-				conversationId: this.state.currentConversationId ?? undefined
-			},
-			{
-				onChunk: (chunk) => {
-					if (contentEl && chunk.content) {
-						contentEl.appendText(chunk.content);
-						this.chatContainer.scrollTo({ top: this.chatContainer.scrollHeight, behavior: 'smooth' });
-					}
-				},
-					onTokenUsage: (step, cumulativeTokens, budget) => {
-						this.chatHeader.updateTokenSummary(`Tokens: ${cumulativeTokens.toLocaleString()} / ${budget.toLocaleString()} (step ${step + 1})`);
-					},
-				onToolCall: (toolName, args) => {
-					this.state.agentExecutionSteps.push({
-						type: 'action',
-						content: `${toolName}(${JSON.stringify(args)})`,
-						timestamp: Date.now(),
-						status: 'pending'
-					});
-				},
-				onToolResult: (toolName, success, output) => {
-					const lastAction = [...this.state.agentExecutionSteps].reverse().find(s => s.type === 'action');
-					if (lastAction) lastAction.status = success ? 'success' : 'error';
-					this.state.agentExecutionSteps.push({
-						type: 'observation',
-						content: output,
-						timestamp: Date.now(),
-						status: success ? 'success' : 'error'
-					});
-				},
-				onThought: (thought) => {
-					this.state.agentExecutionSteps.push({
-						type: 'thought',
-						content: thought,
-						timestamp: Date.now()
-					});
-				},
-				onComplete: async (finalMessage) => {
-					const index = this.state.messages.indexOf(placeholderAssistant);
-					if (index !== -1) {
-						this.state.messages[index] = finalMessage;
-					} else {
-						this.state.messages.push(finalMessage);
-					}
-
-					this.updateTokenSummary();
-
-					if (finalMessage.ragSources && finalMessage.ragSources.length > 0 && assistantMessageEl) {
-						const messageBody = this.findMessageBodyElement(assistantMessageEl);
-						if (messageBody) this.displayRagSources(messageBody, finalMessage.ragSources);
-					}
-
-					await this.conversationManager.saveCurrentConversation();
-					this.finalizeStreamingUI();
-				},
-				onError: (error) => {
-					new Notice(t('chat.notices.chatError', { message: error.message }));
-					this.finalizeStreamingUI();
-				},
-				checkAbort: () => this.state.stopStreamingRequested
-			}
-		);
+		await this.chatController.sendMessage(text);
 	}
 
 
@@ -845,82 +586,7 @@ export class ChatView extends ItemView {
 	}
 
 	private async regenerateMessage(message: Message, messageEl?: HTMLElement) {
-		if (message.role !== 'assistant') {
-			return;
-		}
-
-		if (this.state.isStreaming) {
-			new Notice(t('chat.notices.waitForResponse'));
-			return;
-		}
-
-		const assistantIndex = this.state.messages.indexOf(message);
-		if (assistantIndex === -1) {
-			new Notice(t('chat.notices.noMessageToRegenerate'));
-			return;
-		}
-
-		if (assistantIndex !== this.state.messages.length - 1) {
-			new Notice(t('chat.notices.regenerateOnlyLatest'));
-			return;
-		}
-
-		const previousUser = this.findPreviousUserMessage(assistantIndex);
-		if (!previousUser) {
-			new Notice(t('chat.notices.regenerateNoUserMsg'));
-			return;
-		}
-
-		const selectedModel = this.modelSelect.value;
-		if (!selectedModel) {
-			new Notice(t('chat.notices.selectModel'));
-			return;
-		}
-
-		const config = this.chatService.findLLMConfig(selectedModel);
-		if (!config) {
-			new Notice(t('chat.notices.noValidProvider'));
-			return;
-		}
-
-		const { llmContent } = await this.chatService.buildReferenceContext(
-			previousUser.message.content,
-			previousUser.message.references || []
-		);
-
-		if (messageEl?.isConnected) {
-			messageEl.remove();
-		}
-
-		this.state.messages.splice(assistantIndex, 1);
-		const originalAssistant = message;
-
-		try {
-			await this.handleAssistantResponse({
-				text: previousUser.message.content,
-				selectedModel,
-				config,
-				llmContent,
-				targetMessage: previousUser.message
-			});
-			new Notice(t('chat.notices.regenerated'));
-		} catch (_error) {
-			const errMsg = _error instanceof Error ? _error.message : String(_error);
-			console.error('Regenerate error:', errMsg);
-			new Notice(t('chat.notices.regenerateFailed', { message: errMsg }));
-			this.state.messages.push(originalAssistant);
-			this.addMessageToUI(originalAssistant);
-		}
-	}
-
-	private findPreviousUserMessage(startIndex: number): { message: Message; index: number } | null {
-		for (let i = startIndex - 1; i >= 0; i--) {
-			const candidate = this.state.messages[i];
-			if (candidate.role === 'user') {
-				return { message: candidate, index: i };
-			}
-		}
-		return null;
+		await this.chatController.regenerateMessage(message, messageEl);
 	}
 
 	private saveMessageToNewNote(message: Message) {
