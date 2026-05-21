@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const { join } = require('path');
+const { existsSync } = require('fs');
 const logger = require('./utils/logger');
 const FileUtils = require('./utils/file-utils');
 const { getDeploymentConfig, validateConfig, config: deploymentConfig } = require('./config/deployment');
@@ -119,21 +120,34 @@ class Deployer {
 
     async deployFiles() {
         logger.step('4', 'Deploying files');
-        
+
         let successCount = 0;
         let skipCount = 0;
-        
+
         for (const fileName of this.config.files) {
             const sourcePath = join(this.sourceDir, fileName);
             const destPath = join(this.pluginDestPath, fileName);
-            
+
             if (FileUtils.copyFile(sourcePath, destPath, { required: false })) {
                 successCount++;
             } else {
                 skipCount++;
             }
         }
-        
+
+        // Deploy locale directory
+        const localesSrc = join(this.sourceDir, 'locales');
+        const localesDest = join(this.pluginDestPath, 'locales');
+        if (existsSync(localesSrc)) {
+            FileUtils.ensureDirectory(localesDest);
+            const { readdirSync } = require('fs');
+            const localeFiles = readdirSync(localesSrc).filter(f => f.endsWith('.json'));
+            for (const f of localeFiles) {
+                FileUtils.copyFile(join(localesSrc, f), join(localesDest, f));
+            }
+            successCount += localeFiles.length;
+        }
+
         logger.success(`Deployed: ${successCount} files`);
         if (skipCount > 0) {
             logger.warning(`Skipped: ${skipCount} files`);

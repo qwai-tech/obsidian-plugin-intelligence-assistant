@@ -234,11 +234,33 @@ if you want to view the source, please visit the github repository of this plugi
                 await context.rebuild();
                 await context.dispose(); // Clean up esbuild context
                 logger.success('esbuild completed');
+
+                // Copy locale files to output directory (exclude bundled en/zh)
+                this.copyLocales();
             }
             
         } catch (error) {
             throw new Error(`esbuild failed: ${error.message}`);
         }
+    }
+
+    copyLocales() {
+        const srcDir = join(this.sourceDir, 'src', 'i18n', 'locales');
+        const destDir = join(this.sourceDir, 'locales');
+
+        if (!existsSync(srcDir)) return;
+
+        FileUtils.ensureDirectory(destDir);
+
+        // Exclude en.json and zh.json (bundled in main.js)
+        const bundled = new Set(['en.json', 'zh.json']);
+        const files = require('fs').readdirSync(srcDir).filter(f => f.endsWith('.json') && !bundled.has(f));
+
+        for (const file of files) {
+            FileUtils.copyFile(join(srcDir, file), join(destDir, file), { required: true });
+        }
+
+        logger.success(`Copied ${files.length} locale files to locales/`);
     }
 
     async analyzeBuild() {

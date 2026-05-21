@@ -98,7 +98,8 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	public settingsService!: SettingsService;
 
 	async onload() {
-		initI18n();
+		const pluginDir = `${this.app.vault.configDir}/plugins/${this.manifest.id}`;
+		initI18n(undefined, pluginDir);
 		this.settingsService = new SettingsService(
 			() => this.settings,
 			() => this.saveSettings()
