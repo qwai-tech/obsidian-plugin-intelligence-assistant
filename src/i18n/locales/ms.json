@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Umum",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Alat",
+      "rag": "RAG",
+      "prompts": "Prompt",
+      "agents": "Ejen",
+      "quickActions": "Tindakan Pantas",
+      "usage": "Penggunaan"
+    },
+    "general": {
+      "title": "Tetapan umum",
+      "desc": "Konfigurasikan tetapan umum untuk pemalam pembantu kecerdasan.",
+      "pluginVersion": {
+        "name": "Versi pemalam",
+        "desc": "Versi semasa pemalam pembantu kecerdasan"
+      },
+      "defaultModel": {
+        "name": "Model lalai",
+        "desc": "Model lalai yang digunakan untuk perbualan",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Mod sembang lalai",
+        "desc": "Pilih mod pembukaan paparan sembang",
+        "chat": "Mod sembang",
+        "agent": "Mod ejen"
+      },
+      "conversationTitleMode": {
+        "name": "Mod tajuk perbualan",
+        "desc": "Cara menjana tajuk perbualan",
+        "firstMessage": "Gunakan mesej pertama",
+        "autoSummary": "Jana ringkasan automatik",
+        "manual": "Manual"
+      },
+      "conversationIcons": {
+        "name": "Ikon perbualan",
+        "desc": "Aktifkan penjanaan ikon automatik untuk perbualan"
+      },
+      "configStatus": {
+        "name": "Status konfigurasi",
+        "desc": "Status konfigurasi pemalam keseluruhan",
+        "ok": "✅ Dikonfigurasi ({{providers}} pembekal, {{conversations}} perbualan)",
+        "incomplete": "⚠️ Tidak lengkap - Sila konfigurasikan pembekal dan model"
+      }
+    },
+    "llm": {
+      "title": "Konfigurasi LLM",
+      "desc": "Konfigurasikan pembekal model bahasa dan urus model yang tersedia.",
+      "subTabs": {
+        "provider": "Pembekal",
+        "models": "Model"
+      }
+    },
+    "models": {
+      "title": "Konfigurasi model",
+      "desc": "Lihat dan urus model daripada semua pembekal yang dikonfigurasi. Klik \"segarkan model\" untuk mendapatkan model terbaru yang tersedia.",
+      "providerCount": "{{count}} pembekal dikonfigurasi",
+      "providerCount_plural": "{{count}} pembekal dikonfigurasi",
+      "refreshAll": "🔄 segarkan semua model",
+      "empty": "Tiada pembekal dikonfigurasi lagi. Tambah pembekal dalam tab pembekal terlebih dahulu.",
+      "noModels": "Tiada model tersedia. Klik \"segarkan semua model\" atau segarkan pembekal individu dalam tab pembekal.",
+      "noMatch": "Tiada model sepadan dengan penapis semasa. Laraskan atau kosongkan penapis untuk melihat keputusan.",
+      "modelCount": "• {{count}} model dicache",
+      "modelCount_plural": "• {{count}} model dicache",
+      "matchCount": "• {{count}} sepadan dengan penapis yang dipilih",
+      "matchCount_plural": "• {{count}} sepadan dengan penapis yang dipilih",
+      "status": {
+        "enabled": "Aktif",
+        "disabled": "Tidak aktif"
+      },
+      "actions": {
+        "disable": "Nyahaktifkan",
+        "enable": "Aktifkan",
+        "setDefaultChat": "Tetapkan Sembang Lalai",
+        "defaultChat": "Sembang Lalai",
+        "setDefaultEmbedding": "Tetapkan Embedding Lalai",
+        "defaultEmbedding": "Embedding Lalai"
+      },
+      "notices": {
+        "fetching": "Mengambil model untuk {{provider}}...",
+        "fetchFailed": "Gagal menyegarkan model {{provider}}",
+        "refreshed": "Model berjaya disegarkan!",
+        "refreshFailed": "Gagal menyegarkan model",
+        "defaultChatSet": "Model sembang lalai ditetapkan kepada {{name}}",
+        "defaultEmbeddingSet": "Model embedding lalai ditetapkan kepada {{name}}"
+      },
+      "filters": {
+        "allProviders": "Semua pembekal",
+        "allCapabilities": "Semua keupayaan",
+        "allStates": "Semua status",
+        "searchPlaceholder": "Cari nama atau ID"
+      }
+    },
+    "provider": {
+      "title": "Konfigurasi pembekal",
+      "securityTitle": "⚠️ Amaran Keselamatan",
+      "securityDesc": "Kunci API disimpan sebagai teks biasa dalam vault anda untuk keserasian. Untuk mencegah kebocoran tidak sengaja:",
+      "securityItem1": "JANGAN kongsi folder {{configDir}}/plugins/intelligence-assistant/data/ anda.",
+      "securityItem2": "Tambah folder ini ke .gitignore jika anda menggunakan penyegerakan Git.",
+      "securityItem3": "Berhati-hati apabila menggunakan perkhidmatan penyegerakan awan awam.",
+      "desc": "Urus pembekal LLM dan kelayakan API. Gunakan lajur tindakan untuk mengedit butiran konfigurasi atau menyegarkan model yang dicache.",
+      "count": "{{count}} pembekal dikonfigurasi",
+      "count_plural": "{{count}} pembekal dikonfigurasi",
+      "addBtn": "+ Tambah pembekal",
+      "empty": "Tiada pembekal dikonfigurasi. Pilih \"Tambah pembekal\" untuk bermula.",
+      "tableHeaders": {
+        "provider": "Pembekal",
+        "status": "Status",
+        "actions": "Tindakan"
+      },
+      "status": {
+        "ready": "Sedia",
+        "needsConfig": "Perlu Konfigurasi",
+        "checking": "Memeriksa...",
+        "credentialsSet": "Kelayakan Ditetapkan",
+        "serverOnline": "Pelayan dalam talian",
+        "serverOffline": "Pelayan luar talian",
+        "serverError": "Ralat pelayan"
+      },
+      "guidance": {
+        "requiresCli": "Memerlukan CLI tempatan",
+        "provideServiceKey": "Berikan kunci perkhidmatan",
+        "configureBaseUrl": "Konfigurasikan URL asas",
+        "addApiKey": "Tambah kunci API"
+      },
+      "models": {
+        "none": "Tiada model",
+        "count": "{{count}} model",
+        "count_plural": "{{count}} model"
+      },
+      "ollama": {
+        "checkingVersion": "Memeriksa versi...",
+        "server": {
+          "checking": "Memeriksa pelayan...",
+          "online": "Pelayan: dalam talian",
+          "offline": "Pelayan: luar talian atau tidak boleh dicapai",
+          "error": "Pelayan: ralat sambungan",
+          "versionOnline": "Pelayan dalam talian",
+          "versionOffline": "Pelayan luar talian",
+          "versionError": "Ralat sambungan",
+          "version": "Versi: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Terakhir disegarkan: {{timeAgo}}",
+        "neverRefreshed": "Tidak pernah disegarkan",
+        "justNow": "baru sahaja",
+        "minutesAgo": "{{n}} minit lalu",
+        "hoursAgo": "{{n}} jam lalu",
+        "daysAgo": "{{n}} hari lalu"
+      },
+      "actions": {
+        "edit": "Edit",
+        "manageModels": "Urus model",
+        "refreshModels": "Segarkan model",
+        "refreshing": "Menyegarkan...",
+        "delete": "Padam"
+      },
+      "notices": {
+        "refreshed": "Model disegarkan untuk {{provider}}.",
+        "refreshFailed": "Gagal menyegarkan model"
+      },
+      "confirm": {
+        "delete": "Alih keluar pembekal {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "Pengurusan pelayan MCP",
+      "desc": "Konfigurasikan pelayan Model Context Protocol (MCP) untuk meluaskan keupayaan ejen dengan alat dan sumber data luaran.",
+      "inspectorBtn": "🔍 Buka pemeriksa MCP",
+      "testAllBtn": "🧪 uji semua sambungan",
+      "refreshAllBtn": "🔄 segarkan semua alat",
+      "addBtn": "+ Tambah pelayan MCP",
+      "empty": "Tiada pelayan MCP dikonfigurasi. Pilih Tambah pelayan MCP untuk bermula.",
+      "tableHeaders": {
+        "name": "Nama",
+        "command": "Perintah",
+        "arguments": "Argumen",
+        "status": "Status",
+        "tools": "Alat",
+        "actions": "Tindakan"
+      },
+      "untitled": "Pelayan MCP Tanpa Tajuk",
+      "notConfigured": "Tidak dikonfigurasi",
+      "noArgs": "Tiada",
+      "cached": "Dicache",
+      "disabled": "Tidak aktif",
+      "envVars": "{{count}} pemboleh ubah persekitaran",
+      "envVars_plural": "{{count}} pemboleh ubah persekitaran",
+      "status": {
+        "disabled": "Tidak aktif",
+        "connected": "disambungkan",
+        "disconnected": "diputuskan",
+        "enableToManage": "Aktifkan untuk mengurus sambungan",
+        "manualConnect": "Sambung manual",
+        "autoConnect": "Sambung automatik"
+      },
+      "toolCount": {
+        "live": "{{count}} alat langsung",
+        "live_plural": "{{count}} alat langsung",
+        "cached": "{{count}} alat dicache",
+        "cached_plural": "{{count}} alat dicache"
+      },
+      "actions": {
+        "edit": "Edit",
+        "enabled": "✓ Aktif",
+        "enabledOff": "✗ Tidak aktif",
+        "connect": "sambung",
+        "disconnect": "putus",
+        "connecting": "Menyambung...",
+        "disconnecting": "Memutuskan...",
+        "test": "Uji",
+        "testing": "Menguji...",
+        "delete": "Padam"
+      },
+      "notices": {
+        "disconnected": "Diputuskan daripada {{name}}",
+        "connected": "Disambungkan ke {{name}}",
+        "autoConnectFailed": "Gagal menyambung automatik {{name}}",
+        "enableFirst": "Aktifkan pelayan sebelum menyambung",
+        "disconnectFailed": "Gagal memutuskan daripada {{name}}",
+        "connectFailed": "Gagal menyambung ke {{name}}",
+        "testNoCommand": "❌ sila masukkan perintah sebelum menguji sambungan",
+        "testSuccess": "✅ berjaya disambungkan! Dijumpai {{count}} alat.",
+        "testFailed": "❌ Sambungan gagal: {{message}}",
+        "refreshedAll": "✅ menyegarkan alat untuk {{count}} pelayan",
+        "refreshedAll_plural": "✅ menyegarkan alat untuk {{count}} pelayan",
+        "refreshedPartial": "✅ disegarkan {{success}} pelayan, ❌ {{failed}} gagal",
+        "noServersConfigured": "⚠️ Tiada pelayan MCP dikonfigurasi",
+        "testingAll": "🧪 Menguji {{count}} sambungan pelayan MCP...",
+        "testAllSuccess": "✅ semua {{count}} pelayan MCP berjaya disambungkan!",
+        "testAllPartial": "⚠️ {{successful}} disambungkan, {{failed}} gagal"
+      },
+      "confirm": {
+        "delete": "Padam pelayan MCP \"{{name}}\"?"
+      }
+    },
+    "agents": {
+      "title": "Pengurusan ejen",
+      "desc": "Cipta dan urus ejen AI dengan keupayaan, alat, dan tingkah laku tertentu.",
+      "count": "{{count}} ejen dikonfigurasi",
+      "count_plural": "{{count}} ejen dikonfigurasi",
+      "addBtn": "+ tambah ejen",
+      "empty": "Tiada ejen dikonfigurasi. Pilih tambah ejen untuk bermula.",
+      "tableHeaders": {
+        "agent": "Ejen",
+        "model": "Model",
+        "capabilities": "Keupayaan",
+        "tools": "Alat",
+        "actions": "Tindakan"
+      },
+      "defaultBadge": "Lalai",
+      "systemPrompt": "Prompt sistem • {{promptName}}",
+      "customPrompt": "Prompt tersuai",
+      "model": {
+        "notSet": "Tidak ditetapkan",
+        "notFound": "Model tidak dijumpai dalam cache",
+        "useChatView": "Gunakan Model Paparan Sembang",
+        "useChatViewDesc": "Akan menggunakan model yang dipilih dalam paparan sembang",
+        "useDefault": "Gunakan Model Lalai",
+        "useDefaultDesc": "Akan menggunakan model lalai daripada tetapan"
+      },
+      "capabilities": {
+        "noSpecialModes": "Tiada mod khas"
+      },
+      "tools": {
+        "builtIn": "{{count}} terbina dalam",
+        "mcpServer": "{{count}} pelayan MCP",
+        "mcpServer_plural": "{{count}} pelayan MCP",
+        "mcpTool": "{{count}} alat MCP",
+        "mcpTool_plural": "{{count}} alat MCP",
+        "noTools": "Tiada alat diaktifkan"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "padam",
+        "protected": "dilindungi"
+      },
+      "confirm": {
+        "delete": "Padam ejen \"{{name}}\"?"
+      }
+    },
+    "prompts": {
+      "title": "Prompt sistem",
+      "desc": "Urus prompt sistem yang menentukan tingkah laku dan keperibadian pembantu AI anda.",
+      "addBtn": "+ tambah prompt sistem",
+      "empty": "Tiada prompt sistem dikonfigurasi. Pilih tambah prompt sistem untuk bermula.",
+      "tableHeaders": {
+        "name": "Nama",
+        "contentPreview": "Pratonton Kandungan",
+        "created": "Dicipta",
+        "updated": "Dikemas kini",
+        "enabled": "Aktif",
+        "actions": "Tindakan"
+      },
+      "status": {
+        "enabled": "Aktif",
+        "disabled": "Tidak aktif"
+      },
+      "actions": {
+        "edit": "Edit",
+        "disable": "Nyahaktifkan",
+        "enable": "Aktifkan",
+        "delete": "Padam"
+      },
+      "confirm": {
+        "delete": "Padam prompt \"{{name}}\"?"
+      }
+    },
+    "tools": {
+      "title": "Konfigurasi alat",
+      "desc": "Semak alat terbina dalam dan terokai alat MCP yang dimuatkan daripada pelayan yang disambungkan. Aktifkan tindakan yang boleh dilakukan oleh ejen anda.",
+      "subTabs": {
+        "builtIn": "Alat Terbina Dalam",
+        "mcp": "Alat MCP",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "Alat CLI"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Nama",
+          "category": "Kategori",
+          "description": "Penerangan",
+          "parameters": "Parameter",
+          "enabled": "Aktif"
+        },
+        "categories": {
+          "fileOps": "Operasi Fail",
+          "searchDisc": "Carian & Penemuan",
+          "noteMgmt": "Pengurusan Nota"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Baca kandungan fail daripada vault anda",
+            "params": "path (diperlukan): Laluan ke fail yang hendak dibaca"
+          },
+          "writeFile": {
+            "desc": "Tulis atau kemas kini fail dalam vault anda",
+            "params": "path (diperlukan), content (diperlukan): Laluan fail dan kandungan yang hendak ditulis"
+          },
+          "listFiles": {
+            "desc": "Senaraikan fail dalam vault atau folder tertentu",
+            "params": "folder (pilihan), extension (pilihan): Tapis mengikut folder dan sambungan fail"
+          },
+          "searchFiles": {
+            "desc": "Cari fail mengikut nama atau kandungan dalam vault anda",
+            "params": "query (diperlukan), search_content (pilihan), limit (pilihan): Pertanyaan carian dan pilihan"
+          },
+          "createNote": {
+            "desc": "Cipta nota baru dengan kandungan yang ditentukan",
+            "params": "title (diperlukan), content (diperlukan), folder (pilihan): Tajuk nota, kandungan, dan lokasi"
+          },
+          "appendNote": {
+            "desc": "Tambah kandungan ke nota yang sedia ada",
+            "params": "path (diperlukan), content (diperlukan): Laluan nota dan kandungan yang hendak ditambah"
+          }
+        },
+        "infoTitle": "💡 tentang alat",
+        "infoText": "Alat terbina dalam dikonfigurasi mengikut tetapan pemalam. Alat MCP diurus secara bebas—gunakan tab MCP untuk menyambung pelayan dan menyegarkan ketersediaan alat.",
+        "toolNames": {
+          "read_file": "Baca Fail",
+          "write_file": "Tulis Fail",
+          "list_files": "Senarai Fail",
+          "search_files": "Cari Fail",
+          "create_note": "Cipta Nota",
+          "append_note": "Tambah Nota"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Tiada alat MCP tersedia. Sambungkan pelayan atau segarkan alat yang dicache untuk mengisi senarai ini.",
+        "tableHeaders": {
+          "server": "Pelayan",
+          "tool": "Alat",
+          "description": "Penerangan",
+          "parameters": "Parameter",
+          "source": "Sumber"
+        },
+        "noDescription": "Tiada penerangan",
+        "schemaUnavailable": "Skema tidak tersedia",
+        "live": "Langsung",
+        "cached": "Dicache",
+        "status": {
+          "connected": "disambungkan",
+          "disconnected": "diputuskan"
+        }
+      },
+      "openapi": {
+        "desc": "Jana alat HTTP daripada dokumen OpenAPI. Spesifikasi jauh dicache di bawah {{cacheDir}}.",
+        "addBtn": "Tambah sumber HTTP",
+        "noSources": "Tiada sumber HTTP dikonfigurasi lagi.",
+        "unnamed": "Sumber HTTP tanpa nama",
+        "tableHeaders": {
+          "name": "Nama",
+          "source": "Sumber",
+          "auth": "Pengesahan",
+          "status": "Status",
+          "actions": "Tindakan"
+        },
+        "sourceUrl": "URL jauh tidak ditetapkan",
+        "sourcePath": "Laluan fail tidak ditetapkan",
+        "authHeader": "Header ({{key}})",
+        "authQuery": "Query ({{key}})",
+        "authNone": "Tiada",
+        "statusEnabled": "Aktif",
+        "statusDisabled": "Tidak aktif",
+        "actions": {
+          "edit": "Edit",
+          "reload": "Muat semula",
+          "refetch": "Ambil semula",
+          "delete": "Padam"
+        },
+        "notices": {
+          "removed": "Sumber HTTP dipadam",
+          "reloaded": "Memuat semula {{count}} operasi",
+          "reloadFailed": "Gagal memuat semula sumber HTTP. Semak konsol untuk butiran."
+        },
+        "modal": {
+          "defaultTitle": "Sumber HTTP",
+          "displayName": {
+            "name": "Nama paparan",
+            "desc": "Ditunjukkan kepada ejen semasa memilih sumber alat"
+          },
+          "enabled": {
+            "name": "Aktif",
+            "desc": "Aktifkan untuk mendedahkan API HTTP ini kepada setiap ejen"
+          },
+          "sourceType": {
+            "name": "Jenis sumber",
+            "file": "Fail tempatan",
+            "url": "URL jauh"
+          },
+          "specUrl": {
+            "name": "URL OpenAPI",
+            "desc": "Diambil dan dicache dalam direktori data pemalam"
+          },
+          "cachedFile": "Fail dicache: {{path}} ({{date}})",
+          "neverFetched": "Tidak pernah diambil",
+          "specPath": {
+            "name": "Laluan fail OpenAPI",
+            "desc": "Laluan relatif dalam vault atau laluan mutlak"
+          },
+          "baseUrl": {
+            "name": "Penggantian URL asas",
+            "desc": "Gantikan entri pelayan pertama daripada dokumen (pilihan)"
+          },
+          "auth": {
+            "name": "Pengesahan",
+            "desc": "Masukkan kunci API secara automatik semasa memanggil sumber ini",
+            "none": "Tiada",
+            "header": "Header HTTP",
+            "query": "Parameter query"
+          },
+          "credKey": {
+            "name": "Kunci kelayakan"
+          },
+          "credValue": {
+            "name": "Nilai kelayakan"
+          },
+          "actions": {
+            "name": "Tindakan",
+            "reloadTools": "Muat semula alat",
+            "refetchTooltip": "Ambil semula spesifikasi daripada URL",
+            "deleteTooltip": "Padam sumber"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Tentukan alat baris perintah tempatan yang boleh dilaksanakan oleh ejen. Gunakan templat seperti {{param}} untuk argumen dinamik.",
+        "addBtn": "Tambah Alat CLI",
+        "presetsBtn": "Tambah daripada Praset",
+        "noTools": "Tiada alat CLI dikonfigurasi lagi.",
+        "tableHeaders": {
+          "name": "Nama",
+          "command": "Perintah",
+          "parameters": "Parameter",
+          "status": "Status",
+          "actions": "Tindakan"
+        },
+        "unnamed": "Alat CLI Tanpa Nama",
+        "paramCount": "{{count}} parameter",
+        "paramCount_plural": "{{count}} parameter",
+        "noParams": "Tiada",
+        "statusEnabled": "Aktif",
+        "statusDisabled": "Tidak aktif",
+        "actions": {
+          "edit": "Edit",
+          "disable": "Nyahaktifkan",
+          "enable": "Aktifkan",
+          "delete": "Padam"
+        },
+        "notices": {
+          "removed": "Alat CLI dipadam"
+        },
+        "infoTitle": "💡 Tentang Alat CLI",
+        "infoText": "Alat CLI melaksanakan perintah shell secara tempatan. Gunakan {{paramName}} dalam argumen untuk penggantian templat, atau konfigurasikan parameter untuk dihantar sebagai argumen atau pemboleh ubah persekitaran.",
+        "modal": {
+          "defaultTitle": "Alat CLI",
+          "toolName": {
+            "name": "Nama alat",
+            "desc": "Pengecam yang digunakan oleh ejen untuk memanggil alat ini"
+          },
+          "description": {
+            "name": "Penerangan",
+            "desc": "Terangkan apa yang dilakukan alat ini untuk AI"
+          },
+          "enabled": {
+            "name": "Aktif",
+            "desc": "Aktifkan untuk membenarkan ejen menggunakan alat ini"
+          },
+          "commandConfig": "Konfigurasi Perintah",
+          "command": {
+            "name": "Perintah",
+            "desc": "Boleh laksana untuk dijalankan (cth., node, python, bash, /path/to/script)"
+          },
+          "args": {
+            "name": "Argumen",
+            "desc": "Argumen perintah, satu setiap baris. Gunakan {{paramName}} untuk penggantian templat."
+          },
+          "cwd": {
+            "name": "Direktori kerja",
+            "desc": "Direktori untuk menjalankan perintah (pilihan)"
+          },
+          "timeout": {
+            "name": "Tamat masa (ms)",
+            "desc": "Masa pelaksanaan maksimum dalam milisaat (lalai: {{timeout}})"
+          },
+          "shell": {
+            "name": "Jalankan dalam shell",
+            "desc": "Laksanakan perintah melalui shell (mengaktifkan ciri shell seperti paip)"
+          },
+          "paramsTitle": "Parameter",
+          "paramsDesc": "Tentukan parameter yang boleh dihantar AI ke alat ini.",
+          "addParam": "Tambah Parameter",
+          "noParams": "Tiada parameter ditentukan.",
+          "paramN": "Parameter {{n}}",
+          "param": {
+            "name": "Nama",
+            "type": {
+              "name": "Jenis",
+              "string": "String",
+              "number": "Nombor",
+              "boolean": "Boolean"
+            },
+            "description": "Penerangan",
+            "required": "Diperlukan",
+            "insertAs": {
+              "name": "Masukkan sebagai",
+              "desc": "Cara menghantar parameter ini ke perintah",
+              "template": "Templat ({{name}})",
+              "arg": "Tambah sebagai argumen",
+              "env": "Pemboleh ubah persekitaran"
+            },
+            "envName": {
+              "name": "Nama pemboleh ubah persekitaran",
+              "desc": "Gantikan nama pemboleh ubah persekitaran (lalai kepada nama parameter huruf besar)"
+            }
+          },
+          "envTitle": "Pemboleh Ubah Persekitaran",
+          "envDesc": "Pemboleh ubah persekitaran statik untuk ditetapkan semasa menjalankan perintah.",
+          "envVars": {
+            "name": "Pemboleh ubah persekitaran",
+            "desc": "Format: KEY=value, satu setiap baris"
+          }
+        },
+        "presets": {
+          "title": "Tambah alat CLI daripada praset",
+          "desc": "Pilih praset untuk menambah alat CLI yang telah dikonfigurasi dengan cepat. Anda boleh menyesuaikannya selepas menambah.",
+          "addBtn": "Tambah",
+          "addedBtn": "Ditambah",
+          "closeBtn": "Tutup",
+          "notices": {
+            "added": "Menambah \"{{name}}\" - aktifkan dalam senarai alat CLI"
+          },
+          "categories": {
+            "file": "Operasi Fail",
+            "search": "Carian",
+            "network": "Rangkaian",
+            "code": "Pelaksanaan Kod",
+            "data": "Pemprosesan Data",
+            "system": "Maklumat Sistem",
+            "apps": "Aplikasi macOS & Desktop"
+          },
+          "names": {
+            "preset-cat": "Baca Fail (cat)",
+            "preset-ls": "Senarai Direktori (ls)",
+            "preset-find": "Cari Fail (find)",
+            "preset-grep": "Cari Teks (grep)",
+            "preset-ripgrep": "Carian Pantas (rg)",
+            "preset-curl": "Permintaan HTTP (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Jalankan Kod Python",
+            "preset-node": "Jalankan JavaScript (Node)",
+            "preset-bash": "Jalankan Skrip Shell",
+            "preset-jq": "Pemproses JSON (jq)",
+            "preset-wc": "Kiraan Perkataan (wc)",
+            "preset-date": "Tarikh/Masa Semasa",
+            "preset-pwd": "Direktori Semasa (pwd)",
+            "preset-whoami": "Pengguna Semasa",
+            "preset-uname": "Info Sistem (uname)",
+            "preset-open": "Buka Fail/URL (open)",
+            "preset-open-app": "Lancarkan Aplikasi (open -a)",
+            "preset-safari": "Buka dalam Safari",
+            "preset-chrome": "Buka dalam Chrome",
+            "preset-firefox": "Buka dalam Firefox",
+            "preset-pbcopy": "Salin ke Clipboard",
+            "preset-pbpaste": "Tampal daripada Clipboard",
+            "preset-say": "Teks-ke-Ucapan (say)",
+            "preset-osascript": "Pelaksana AppleScript",
+            "preset-notify": "Pemberitahuan Desktop",
+            "preset-screencapture": "Tangkap Skrin",
+            "preset-applescript-list-apps": "Senarai Aplikasi Berjalan"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "Konfigurasi RAG",
+      "desc": "Konfigurasikan retrieval-augmented generation dan carian web untuk meningkatkan respons AI.",
+      "subTabs": {
+        "overview": "Gambaran Keseluruhan",
+        "chunking": "Chunking",
+        "search": "Carian",
+        "filters": "Penapis",
+        "advanced": "Lanjutan",
+        "websearch": "Carian Web"
+      },
+      "general": {
+        "title": "Tetapan umum",
+        "enableRag": {
+          "name": "Aktifkan RAG",
+          "desc": "Aktifkan Retrieval-Augmented Generation untuk konteks yang ditingkatkan"
+        },
+        "vectorStore": {
+          "name": "Storan vektor",
+          "desc": "Pangkalan data vektor untuk menyimpan embedding",
+          "memory": "Dalam Memori",
+          "disk": "Berasaskan Cakera"
+        },
+        "embeddingModel": {
+          "name": "Model embedding",
+          "desc": "Model yang digunakan untuk menjana embedding"
+        },
+        "embedChanged": {
+          "name": "Embed fail yang berubah secara automatik",
+          "desc": "Secara automatik re-embed fail apabila diubah suai"
+        }
+      },
+      "indexMgmt": {
+        "title": "Pengurusan indeks",
+        "desc": "Urus indeks RAG anda dan lihat statistik tentang kandungan yang diindeks.",
+        "statsTitle": "Statistik indeks",
+        "stats": {
+          "totalChunks": "Jumlah Chunk",
+          "uniqueFiles": "Fail Unik",
+          "totalChars": "Jumlah Aksara",
+          "avgChunkSize": "Saiz Chunk Purata"
+        },
+        "empty": "Indeks kosong. Pilih bina semula indeks untuk mula mengindeks.",
+        "error": "⚠️ tidak dapat memuatkan statistik indeks",
+        "rebuild": {
+          "name": "Bina semula indeks",
+          "desc": "Re-indeks semua fail dalam vault anda. Ini mungkin mengambil masa.",
+          "btn": "Bina Semula",
+          "rebuilding": "Membina semula..."
+        },
+        "refresh": {
+          "name": "Segarkan indeks",
+          "desc": "Kemas kini indeks dengan fail yang berubah sejak pengindeksan terakhir.",
+          "btn": "Segarkan",
+          "refreshing": "Menyegarkan..."
+        },
+        "clear": {
+          "name": "Kosongkan indeks",
+          "desc": "Keluarkan semua data yang diindeks. Anda perlu membina semula indeks.",
+          "btn": "Kosongkan",
+          "clearing": "Mengosongkan..."
+        },
+        "notices": {
+          "rebuilt": "Indeks berjaya dibina semula",
+          "rebuildFailed": "Gagal membina semula indeks",
+          "refreshed": "Indeks berjaya disegarkan",
+          "refreshFailed": "Gagal menyegarkan indeks",
+          "cleared": "Indeks berjaya dikosongkan",
+          "clearFailed": "Gagal mengosongkan indeks"
+        }
+      },
+      "chunking": {
+        "title": "Tetapan chunking",
+        "strategy": {
+          "name": "Strategi chunking",
+          "desc": "Strategi untuk membahagikan dokumen kepada chunk",
+          "recursive": "Rekursif (Bijak)",
+          "fixed": "Saiz Tetap",
+          "sentence": "Mengikut Ayat",
+          "paragraph": "Mengikut Perenggan"
+        },
+        "chunkSize": {
+          "name": "Saiz chunk",
+          "desc": "Bilangan aksara setiap chunk (500-2000 disyorkan)"
+        },
+        "chunkOverlap": {
+          "name": "Pertindihan chunk",
+          "desc": "Bilangan aksara yang bertindih antara chunk"
+        },
+        "minChunkSize": {
+          "name": "Saiz chunk minimum",
+          "desc": "Saiz chunk minimum untuk dicipta"
+        },
+        "maxTokens": {
+          "name": "Token maksimum setiap chunk",
+          "desc": "Token maksimum yang dibenarkan setiap chunk"
+        }
+      },
+      "search": {
+        "title": "Tetapan carian",
+        "searchType": {
+          "name": "Jenis carian",
+          "desc": "Jenis carian persamaan untuk dilakukan",
+          "similarity": "Persamaan"
+        },
+        "topK": {
+          "name": "Keputusan Top K",
+          "desc": "Bilangan chunk paling relevan untuk diambil (1-20)"
+        },
+        "threshold": {
+          "name": "Ambang persamaan",
+          "desc": "Skor persamaan minimum untuk memasukkan keputusan (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Pemberat skor relevansi",
+          "desc": "Pemberat untuk pemarkahan relevansi (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Had tetingkap konteks",
+          "desc": "Token maksimum untuk konteks yang diambil"
+        }
+      },
+      "filters": {
+        "title": "Penapis fail",
+        "excludeFolders": {
+          "name": "Kecualikan folder",
+          "desc": "Folder yang dikecualikan daripada pengindeksan (dipisahkan koma)"
+        },
+        "includeTypes": {
+          "name": "Sertakan jenis fail",
+          "desc": "Jenis fail untuk disertakan (kosong = semua jenis)"
+        },
+        "excludeTypes": {
+          "name": "Kecualikan jenis fail",
+          "desc": "Jenis fail yang dikecualikan daripada pengindeksan"
+        },
+        "filterByTag": {
+          "name": "Tapis mengikut tag",
+          "desc": "Hanya indeks fail dengan tag ini (kosong = semua fail)"
+        },
+        "excludeByTag": {
+          "name": "Kecualikan mengikut tag",
+          "desc": "Kecualikan fail dengan tag ini daripada pengindeksan"
+        }
+      },
+      "advanced": {
+        "title": "Tetapan lanjutan",
+        "batchSize": {
+          "name": "Saiz batch embedding",
+          "desc": "Bilangan chunk yang di-embed secara selari"
+        }
+      },
+      "grading": {
+        "title": "Tetapan penilaian",
+        "desc": "Nilai chunk yang diambil untuk relevansi sebelum dihantar ke LLM. Ini membantu menapis keputusan berkualiti rendah.",
+        "enableGrading": {
+          "name": "Aktifkan ambang penilaian",
+          "desc": "Tapis chunk di bawah ambang kualiti"
+        },
+        "graderSource": {
+          "name": "Sumber model penilai",
+          "desc": "Dari mana mendapat model penilai",
+          "chat": "Model Sembang",
+          "custom": "Model Tersuai"
+        },
+        "graderModel": {
+          "name": "Model penilai",
+          "desc": "Model tertentu yang digunakan untuk penilaian"
+        },
+        "parallel": {
+          "name": "Pemprosesan selari",
+          "desc": "Bilangan chunk yang dinilai secara selari"
+        },
+        "minRelevance": {
+          "name": "Skor relevansi minimum",
+          "desc": "Skor relevansi minimum (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Skor ketepatan minimum",
+          "desc": "Skor ketepatan minimum (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Skor kualiti sokongan minimum",
+          "desc": "Skor kualiti sokongan minimum (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Konfigurasi carian web",
+      "desc": "Konfigurasikan fungsi carian web untuk meningkatkan respons AI dengan maklumat terkini daripada internet.",
+      "generalBehavior": "Tingkah laku umum",
+      "providerSelection": "Pemilihan pembekal",
+      "localeFilters": "Lokal & penapis",
+      "apiCredentials": "Kelayakan API & titik akhir",
+      "enabled": {
+        "name": "Aktifkan carian web",
+        "desc": "Benarkan AI mencari maklumat semasa di web"
+      },
+      "autoTrigger": {
+        "name": "Pencetus carian automatik",
+        "desc": "Secara automatik mencetuskan carian web apabila pertanyaan memerlukan maklumat semasa (cth., berita, harga, peristiwa terkini)"
+      },
+      "maxResults": {
+        "name": "Keputusan maksimum",
+        "desc": "Bilangan maksimum keputusan carian untuk dikembalikan"
+      },
+      "timeRange": {
+        "name": "Kesegaran keputusan",
+        "desc": "Hadkan keputusan kepada julat masa yang disokong oleh pembekal (Google, SearXNG, Mojeek)",
+        "any": "Bila-bila masa (lalai)",
+        "h": "Sejam lalu",
+        "d": "24 jam lepas",
+        "w": "Minggu lepas",
+        "m": "Bulan lepas",
+        "y": "Tahun lepas"
+      },
+      "provider": {
+        "name": "Pembekal carian",
+        "desc": "Pilih daripada pengikis mesra privasi atau enjin berasaskan API"
+      },
+      "searchLanguage": {
+        "name": "Kod bahasa",
+        "desc": "Kod bahasa ISO (cth., en, fr, zh-CN) dihantar ke pembekal yang menyokong lokalisasi"
+      },
+      "searchCountry": {
+        "name": "Kod negara/pasaran",
+        "desc": "Kod negara dua huruf (cth., US, DE) yang digunakan oleh Bing, DuckDuckGo, Brave, dan lain-lain"
+      },
+      "includeDomains": {
+        "name": "Sertakan domain ini sahaja",
+        "desc": "Senarai dipisahkan koma yang digunakan oleh SerpAPI dan Brave untuk mengehadkan keputusan kepada laman tertentu"
+      },
+      "excludeDomains": {
+        "name": "Kecualikan domain",
+        "desc": "Domain dipisahkan koma untuk ditapis selepas mengambil keputusan"
+      },
+      "apiKey": {
+        "name": "Kunci API lalai",
+        "desc": "Kunci API dikongsi yang digunakan oleh Google, Bing, SerpAPI, Tavily, atau Brave apabila kunci khusus pembekal tidak ditetapkan"
+      },
+      "googleCseId": {
+        "name": "ID Google Custom Search Engine",
+        "desc": "Diperlukan dengan kunci API Google apabila menggunakan pembekal Google"
+      },
+      "serpapiEndpoint": {
+        "name": "Titik akhir SerpAPI",
+        "desc": "Gantikan URL asas SerpAPI jika anda self-hosting"
+      },
+      "tavilyApiKey": {
+        "name": "Kunci API Tavily",
+        "desc": "Menggantikan kunci lalai apabila menggunakan pembekal Tavily"
+      },
+      "searxngEndpoint": {
+        "name": "Titik akhir SearXNG",
+        "desc": "URL asas instans SearXNG anda (mesti mengembalikan JSON)"
+      },
+      "braveApiKey": {
+        "name": "Kunci API Brave",
+        "desc": "Gunakan token langganan Brave Search API apabila dipilih sebagai pembekal"
+      },
+      "qwantApiKey": {
+        "name": "Kunci API Qwant (pilihan)",
+        "desc": "Tambah token bearer jika pelan Qwant anda mengeluarkannya"
+      },
+      "mojeekApiKey": {
+        "name": "Kunci API Mojeek",
+        "desc": "Diperlukan untuk pembekal Mojeek"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (tiada kunci diperlukan)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (pengikisan HTML)",
+        "yandex": "Yandex (pengikisan HTML)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Tindakan pantas",
+      "desc": "Konfigurasikan tindakan pantas berkuasa AI yang muncul dalam menu konteks editor apabila teks dipilih.",
+      "actionPrefix": {
+        "name": "Awalan tindakan",
+        "desc": "Awalan (emoji atau teks) untuk dipaparkan sebelum semua tindakan pantas dalam menu konteks",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} tindakan dikonfigurasi ({{enabled}} aktif)",
+      "count_plural": "{{count}} tindakan dikonfigurasi ({{enabled}} aktif)",
+      "addBtn": "+ tambah tindakan pantas",
+      "empty": "Tiada tindakan pantas dikonfigurasi. Pilih tambah tindakan pantas untuk bermula.",
+      "tableHeaders": {
+        "action": "Tindakan",
+        "type": "Jenis",
+        "model": "Model",
+        "promptPreview": "Pratonton Prompt",
+        "actions": "Tindakan"
+      },
+      "defaultModel": "Lalai",
+      "editBtn": "Edit",
+      "deleteBtn": "padam",
+      "confirm": {
+        "delete": "Padam tindakan pantas \"{{name}}\"?"
+      },
+      "usageInfo": {
+        "title": "Penggunaan",
+        "step1": "Pilih teks dalam mana-mana nota",
+        "step2": "Klik kanan untuk membuka menu konteks",
+        "step3": "Pilih tindakan pantas daripada menu",
+        "step4Replace": "Tindakan bertanda \"ganti\" akan menggantikan teks yang dipilih dengan hasil AI",
+        "step4Explain": "Tindakan bertanda \"jelaskan\" akan menunjukkan keputusan dalam dialog modal"
+      },
+      "edit": {
+        "title": "Edit tindakan pantas",
+        "name": {
+          "name": "Nama",
+          "desc": "Nama paparan untuk tindakan ini dalam menu konteks"
+        },
+        "actionType": {
+          "name": "Jenis tindakan",
+          "desc": "Cara mengendalikan respons AI",
+          "replace": "Gantikan teks yang dipilih",
+          "explain": "Tunjukkan dalam modal"
+        },
+        "model": {
+          "name": "Model",
+          "desc": "Model bahasa yang digunakan untuk tindakan ini (biarkan kosong untuk menggunakan lalai)",
+          "default": "Gunakan model lalai"
+        },
+        "promptTemplate": {
+          "name": "Templat prompt",
+          "desc": "Arahan yang dihantar ke AI. Teks yang dipilih akan ditambah secara automatik."
+        },
+        "cancel": "Batal",
+        "save": "Simpan"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Panjangkan teks",
+          "prompt": "Perluas dan huraikan teks berikut, menjadikannya lebih terperinci dan komprehensif sambil mengekalkan makna dan nada asal. Hanya kembalikan teks yang diperluas tanpa ulasan tambahan:\n\n"
+        },
+        "summarize": {
+          "name": "Ringkaskan teks",
+          "prompt": "Berikan ringkasan ringkas teks berikut. Hanya kembalikan ringkasan tanpa ulasan tambahan:\n\n"
+        },
+        "improve-writing": {
+          "name": "Tingkatkan penulisan",
+          "prompt": "Tingkatkan kualiti penulisan, kejelasan, dan gaya teks berikut. Hanya kembalikan teks yang ditingkatkan tanpa ulasan tambahan:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Betulkan tatabahasa",
+          "prompt": "Betulkan sebarang ralat tatabahasa, ejaan, dan tanda baca dalam teks berikut. Hanya kembalikan teks yang telah dibetulkan tanpa ulasan tambahan:\n\n"
+        },
+        "explain": {
+          "name": "Jelaskan teks",
+          "prompt": "Jelaskan teks berikut dengan kata-kata mudah:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Penggunaan token",
+      "desc": "Jejak penggunaan token merentasi pembekal dan model. Data dikumpul merentasi semua perbualan.",
+      "notAvailable": "Penjejakan penggunaan token tidak tersedia.",
+      "ranges": {
+        "today": "Hari ini",
+        "week": "Minggu ini",
+        "month": "Bulan ini",
+        "all": "Sepanjang masa"
+      },
+      "stats": {
+        "totalTokens": "Jumlah token",
+        "apiCalls": "Panggilan API",
+        "promptTokens": "Token prompt",
+        "completion": "Penyempurnaan",
+        "tokensIn": "token masuk",
+        "tokensOut": "token keluar"
+      },
+      "byProvider": "Mengikut pembekal",
+      "byModel": "Mengikut model",
+      "noData": "Tiada data penggunaan lagi.",
+      "recentActivity": "Aktiviti terkini",
+      "last10": "10 terakhir",
+      "noRecent": "Tiada aktiviti terkini.",
+      "tableHeaders": {
+        "provider": "Pembekal",
+        "model": "Model",
+        "prompt": "Prompt",
+        "completion": "Penyempurnaan",
+        "total": "Jumlah",
+        "calls": "Panggilan",
+        "time": "Masa",
+        "in": "Masuk",
+        "out": "Keluar"
+      },
+      "clearBtn": "Kosongkan semua data penggunaan",
+      "confirm": {
+        "clear": "Kosongkan semua rekod penggunaan token? Ini tidak boleh dibatalkan."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Taip mesej anda... (Enter untuk hantar, Shift+Enter untuk baris baru)",
+    "conversations": "Perbualan",
+    "toggleConversationsTitle": "Togol senarai perbualan",
+    "currentConversation": "Perbualan semasa",
+    "new": "Baharu",
+    "settings": "Tetapan",
+    "openSettingsTitle": "Buka tetapan pemalam",
+    "mode": "Mod",
+    "prompt": "Prompt",
+    "agent": "Ejen",
+    "modeOptions": {
+      "chat": "Sembang",
+      "agent": "Ejen"
+    },
+    "noSystemPrompt": "Tiada prompt sistem",
+    "noAgentsAvailable": "Tiada ejen tersedia",
+    "sendHintPrefix": "Tekan ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " untuk hantar",
+    "sendAriaLabel": "Hantar mesej",
+    "stop": " Henti",
+    "addReference": "Tambah rujukan",
+    "addReferenceTooltip": "Tambah rujukan fail atau folder (@)",
+    "emptyHeading": "Mulakan perbualan",
+    "emptySubtext": "Taip mesej di bawah untuk bermula, atau pilih perbualan daripada sejarah.",
+    "noAgentConfig": "Tiada ejen dikonfigurasi",
+    "selectAgent": "Pilih ejen…",
+    "notices": {
+      "stopping": "Menghentikan penjanaan...",
+      "ragInitError": "Ralat permulaan RAG: {{message}}",
+      "modelsRefreshed": "Model disegarkan",
+      "modelsRefreshFailed": "Gagal menyegarkan model: {{message}}",
+      "waitForResponse": "Sila tunggu sehingga respons semasa selesai",
+      "configureProvider": "Sila konfigurasikan pembekal LLM dalam tetapan terlebih dahulu",
+      "selectModel": "Sila pilih model",
+      "noValidProvider": "Tiada konfigurasi pembekal yang sah untuk model ini",
+      "chatError": "Ralat sembang: {{message}}",
+      "noMessageToRegenerate": "Tidak dapat menemui mesej untuk dijanakan semula",
+      "regenerateOnlyLatest": "Hanya respons terbaru yang boleh dijanakan semula buat masa ini",
+      "regenerateNoUserMsg": "Tidak dapat menemui mesej pengguna untuk dijanakan semula",
+      "regenerated": "Respons dijanakan semula",
+      "regenerateFailed": "Penjanaan semula gagal: {{message}}",
+      "noteCreated": "Nota dicipta: {{name}}",
+      "noteCreateFailed": "Gagal mencipta nota: {{message}}",
+      "messageInserted": "Mesej dimasukkan ke: {{path}}",
+      "messageInsertFailed": "Gagal memasukkan mesej: {{message}}",
+      "noAgents": "Tiada ejen tersedia. Konfigurasikan ejen dalam Tetapan → Ejen.",
+      "ragDisabled": "RAG dinyahaktifkan dalam tetapan. Aktifkan di bawah tetapan → ciri sembang → RAG.",
+      "webSearchDisabled": "Carian web dinyahaktifkan dalam tetapan. Aktifkan di bawah tetapan → ciri sembang → carian web.",
+      "noFilesInVault": "Tiada fail dijumpai dalam vault",
+      "attached": "Dilampirkan: {{name}}",
+      "attachedImages": "Melampirkan {{count}} gambar",
+      "referencesAdded": "Menambah {{count}} rujukan",
+      "fileNotFound": "Fail tidak dijumpai: {{path}}",
+      "agentConfigApplied": "Konfigurasi digunakan untuk ejen: {{name}}",
+      "waitForComplete": "Sila tunggu sehingga respons semasa selesai",
+      "chatServiceFallback": "ChatService tidak dikonfigurasi. Menggunakan fallback ChatView.",
+      "noModelSelected": "Tiada model dipilih",
+      "noProviderConfig": "Tiada konfigurasi pembekal dijumpai",
+      "generationStopped": "Penjanaan dihentikan",
+      "noResponseToRegenerate": "Tiada respons untuk dijanakan semula",
+      "agentNotFound": "Ejen tidak dijumpai",
+      "unableToLoadRag": "Tidak dapat memuatkan statistik RAG.",
+      "referenced": "Dirujuk: {{name}}"
+    },
+    "status": {
+      "available": "Tersedia",
+      "unavailable": "Tidak tersedia",
+      "disabled": "Tidak aktif",
+      "on": "Aktif · {{detail}}",
+      "off": "Tidak aktif"
+    },
+    "ragStats": {
+      "title": "Statistik RAG",
+      "totalChunks": "📊 jumlah chunk:",
+      "filesIndexed": "📁 fail diindeks:",
+      "totalSize": "💾 jumlah saiz:",
+      "avgChunks": "📈 Purata Chunk/Fail:",
+      "indexedFiles": "📄 fail yang diindeks",
+      "noFilesYet": "⚠️ tiada fail yang diindeks lagi.",
+      "howToBuild": "Untuk membina indeks RAG:",
+      "step1": "Pergi ke Tetapan → RAG",
+      "step2": "Aktifkan RAG",
+      "step3": "Pilih indeks vault",
+      "close": "Tutup",
+      "retrieved": "📚 diambil daripada {{count}} dokumen",
+      "retrieved_plural": "📚 diambil daripada {{count}} dokumen"
+    },
+    "ragTooltip": {
+      "status": "Status Indeks RAG:",
+      "totalChunks": "📊 Jumlah Chunk: {{count}}",
+      "filesIndexed": "📁 Fail Diindeks: {{count}}",
+      "totalSize": "💾 Jumlah Saiz: {{size}} KB",
+      "indexedFiles": "📄 Fail yang diindeks:",
+      "andMore": "  ... dan {{count}} lagi",
+      "noFilesYet": "⚠️ tiada fail diindeks lagi.",
+      "goToSettings": "Pergi ke Tetapan → RAG untuk membina indeks.",
+      "ragOff": "ℹ️ RAG sedang dimatikan untuk sembang ini."
+    },
+    "agentSummary": {
+      "model": "Model",
+      "temp": "Suhu",
+      "max": "Maks",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Alat",
+      "memory": "Memori",
+      "none": "Tiada",
+      "configuration": "Konfigurasi {{name}}",
+      "modelFixed": "{{name}} · Tetap",
+      "modelDefault": "{{name}} · Lalai",
+      "modelChatView": "{{name}} · Paparan Sembang",
+      "customModel": "Model tersuai",
+      "notSet": "Tidak ditetapkan",
+      "auto": "Automatik",
+      "on": "Aktif",
+      "off": "Tidak aktif",
+      "shortTerm": "Jangka pendek",
+      "longTerm": "Jangka panjang",
+      "disabledMemory": "Tidak aktif",
+      "builtIn": "{{count}} terbina dalam",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Keputusan web",
+      "attachments": "Lampiran",
+      "references": "Rujukan",
+      "ragSources": "Sumber RAG",
+      "reasoning": "Penaakulan",
+      "copy": "Salin",
+      "copied": "Mesej disalin",
+      "copyFailed": "Gagal menyalin mesej",
+      "tokenUsage": "Penggunaan token",
+      "tokenUsagePrompt": "Prompt",
+      "tokenUsageCompletion": "Penyempurnaan",
+      "tokenUsageTotal": "Jumlah",
+      "save": "Simpan",
+      "insertToNotes": "Masukkan ke Nota",
+      "regenerate": "Jana Semula"
+    },
+    "streaming": {
+      "thinking": "Sedang berfikir..."
+    },
+    "toolCall": {
+      "thinking": "Berfikir",
+      "executionProcess": "Proses Pelaksanaan",
+      "input": "Input",
+      "output": "Output",
+      "running": "Menjalankan..."
+    },
+    "addPicture": "Tambah gambar",
+    "addPictureTooltip": "Lampirkan gambar ke mesej anda",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Gunakan nota yang diindeks sebagai konteks",
+    "webSearchLabel": "Carian Web",
+    "webSearchTooltipLabel": "Cari internet apabila diperlukan",
+    "imageUnavailable": "Lampiran gambar tidak tersedia untuk model semasa.",
+    "newChat": "Sembang Baharu",
+    "newConversation": "Perbualan Baharu",
+    "searchConversations": "Cari perbualan...",
+    "header": {
+      "model": "Model",
+      "advancedParams": "Parameter lanjutan",
+      "temperature": "Suhu",
+      "maxTokens": "Token maks",
+      "topP": "Top P",
+      "freqPenalty": "Penalti frekuensi",
+      "presPenalty": "Penalti kehadiran",
+      "agentConfig": "Konfigurasi ejen",
+      "modelsCount": "Model: {{count}}",
+      "tokensCount": "Token: {{count}}",
+      "noModels": "Tiada model tersedia"
+    },
+    "temperature": {
+      "precise": "0 (Tepat)",
+      "balanced": "1 (Seimbang)",
+      "creative": "2 (Kreatif)"
+    },
+    "modals": {
+      "image": {
+        "title": "Lampirkan gambar",
+        "searchPlaceholder": "Cari gambar...",
+        "selectAll": "Pilih semua",
+        "selectNone": "Nyahpilih semua",
+        "addSelected": "Tambah yang dipilih",
+        "noResults": "Tiada gambar yang sepadan dijumpai."
+      },
+      "reference": {
+        "title": "Tambah rujukan",
+        "searchPlaceholder": "Cari fail dan folder...",
+        "selectAll": "Pilih semua",
+        "selectNone": "Nyahpilih semua",
+        "addSelected": "Tambah yang dipilih",
+        "noResults": "Tiada fail atau folder yang sepadan dijumpai."
+      },
+      "insertNote": {
+        "title": "Masukkan ke nota",
+        "searchPlaceholder": "Cari nota...",
+        "insert": "Masukkan ke nota yang dipilih",
+        "createNew": "Cipta nota baharu",
+        "noResults": "Tiada nota yang sepadan dijumpai."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Batal",
+      "confirm": "Sahkan"
+    },
+    "agentEdit": {
+      "title": "Edit ejen",
+      "icon": {
+        "name": "Ikon",
+        "desc": "Emoji atau aksara untuk mewakili ejen ini"
+      },
+      "description": {
+        "name": "Penerangan",
+        "desc": "Penerangan ringkas ejen"
+      },
+      "modelStrategy": {
+        "name": "Strategi model",
+        "options": {
+          "default": "Gunakan model lalai (daripada tetapan)",
+          "chatView": "Gunakan model paparan sembang",
+          "fixed": "Model tetap"
+        },
+        "noModels": "Tiada model dicache",
+        "desc": "Pilih cara ejen akan memilih modelnya"
+      },
+      "systemPrompt": {
+        "createNew": "➕ cipta prompt baharu…",
+        "promptName": {
+          "name": "Nama prompt",
+          "desc": "Nama paparan untuk prompt sistem baharu"
+        },
+        "promptContent": {
+          "name": "Kandungan prompt",
+          "desc": "Kandungan untuk prompt sistem baharu"
+        },
+        "name": "Prompt sistem",
+        "desc": "Pilih daripada prompt sedia ada atau tentukan yang baharu untuk ejen ini."
+      },
+      "capabilities": "Keupayaan",
+      "memory": {
+        "title": "Memori",
+        "notice": "Memori ejen tidak tersedia buat sementara waktu semasa kami menambah baik pengalaman tersebut."
+      },
+      "tools": {
+        "title": "Alat",
+        "builtIn": {
+          "name": "Alat terbina dalam",
+          "desc": "Pilih alat terbina dalam yang boleh digunakan oleh ejen ini"
+        },
+        "cli": {
+          "name": "Alat CLI",
+          "desc": "Berikan akses kepada semua alat CLI yang diaktifkan, atau pilih secara individu di bawah",
+          "noTools": "Tiada alat CLI dikonfigurasi. Tambah dan aktifkan alat di bawah Tetapan → Alat → CLI untuk menggunakannya di sini."
+        }
+      },
+      "mcp": {
+        "title": "Akses MCP",
+        "noServers": "Tiada pelayan MCP dikonfigurasi. Tambah pelayan di bawah Tetapan → MCP untuk membuka kunci pilihan ini.",
+        "toolsCached": "{{count}} alat dicache",
+        "toolsCached_plural": "{{count}} alat dicache",
+        "noToolsCached": "Tiada alat dicache lagi. Aktifkan akses penuh atau segarkan cache.",
+        "showTools": "Tunjukkan alat",
+        "hideTools": "Sembunyikan alat",
+        "selected": "Dipilih",
+        "notSelected": "Tidak dipilih",
+        "noToolsAvailable": "Tiada alat tersedia daripada pelayan ini lagi."
+      },
+      "notices": {
+        "promptRequired": "Sila berikan nama dan kandungan untuk prompt sistem baharu."
+      },
+      "name": {
+        "label": "Nama",
+        "desc": "Nama paparan untuk ejen ini"
+      },
+      "fixedModel": {
+        "name": "Model tetap",
+        "desc": "Pilih model tertentu untuk ejen ini.",
+        "descNoModels": "Tiada model yang dicache tersedia. Segarkan model dalam tab Model."
+      },
+      "temperature": {
+        "label": "Suhu",
+        "desc": "Mengawal kerawakan (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Token maks",
+        "desc": "Bilangan maksimum token untuk dijanakan"
+      },
+      "contextWindow": {
+        "label": "Tetingkap konteks",
+        "desc": "Bilangan mesej sebelumnya untuk disertakan dalam konteks"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Aktifkan retrieval augmented generation"
+      },
+      "webSearch": {
+        "name": "Carian web",
+        "desc": "Aktifkan keupayaan carian web"
+      },
+      "maxSteps": {
+        "name": "Langkah Alat Maks",
+        "desc": "Bilangan maksimum langkah panggilan alat setiap giliran ejen"
+      }
+    },
+    "provider": {
+      "title": "Tetapan pembekal",
+      "selectProvider": {
+        "name": "Pembekal",
+        "desc": "Pilih jenis pembekal LLM",
+        "placeholder": "-- Pilih pembekal --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (tempatan)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Tersuai (serasi OpenAI)"
+      },
+      "modelFilter": {
+        "name": "Penapis model",
+        "desc": "Corak regex pilihan untuk mengehadkan model yang tersedia"
+      },
+      "resourceGroup": {
+        "name": "Kumpulan sumber",
+        "desc": "Kumpulan sumber SAP AI Core pilihan"
+      },
+      "serviceKey": {
+        "name": "Kunci perkhidmatan",
+        "desc": "Kunci perkhidmatan SAP AI Core (string JSON)"
+      },
+      "baseUrl": {
+        "name": "URL asas",
+        "ollamaDesc": "URL pelayan Ollama",
+        "customDesc": "Titik akhir API serasi OpenAI (diperlukan)",
+        "optionalDesc": "Titik akhir API tersuai (pilihan)"
+      },
+      "manageModels": {
+        "name": "Urus Model",
+        "desc": "Tarik model baharu atau kemas kini yang sedia ada daripada registry Ollama.",
+        "btn": "⏬ Tarik Model Ollama"
+      },
+      "apiKey": {
+        "name": "Kunci API",
+        "desc": "Kunci pengesahan untuk pembekal yang dipilih"
+      },
+      "cancel": "Batal",
+      "save": "Simpan",
+      "validation": {
+        "selectProvider": "Sila pilih jenis pembekal",
+        "apiKeyTooLong": "Kunci API terlalu panjang. Panjang maksimum ialah 500 aksara.",
+        "invalidUrl": "Format URL asas tidak sah. Sila masukkan URL yang sah (cth., https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "Pemeriksa MCP",
+      "desc": "Periksa dan debug sambungan pelayan dan alat Model Context Protocol (MCP).",
+      "tabs": {
+        "connections": "Sambungan",
+        "tools": "Alat",
+        "logs": "Log"
+      },
+      "refreshBtn": "🔄 segarkan",
+      "connections": {
+        "title": "Sambungan pelayan MCP",
+        "noServers": "Tiada pelayan MCP dikonfigurasi.",
+        "headers": {
+          "server": "Nama pelayan",
+          "status": "Status",
+          "tools": "Alat tersedia",
+          "actions": "Tindakan"
+        },
+        "statusDisabled": "Tidak aktif",
+        "statusConnected": "● disambungkan",
+        "statusDisconnected": "○ diputuskan",
+        "toolsLive": "{{count}} alat",
+        "toolsLive_plural": "{{count}} alat",
+        "toolsCached": "{{count}} alat (dicache)",
+        "toolsCached_plural": "{{count}} alat (dicache)",
+        "noTools": "0 alat",
+        "connectBtn": "Sambung",
+        "disconnectBtn": "Putus",
+        "connecting": "Menyambung...",
+        "disconnecting": "Memutuskan...",
+        "notices": {
+          "disconnected": "Diputuskan daripada {{name}}",
+          "enableFirst": "Aktifkan pelayan dalam tetapan sebelum menyambung",
+          "connected": "Disambungkan ke {{name}}",
+          "failedDisconnect": "Gagal memutuskan daripada {{name}}: {{message}}",
+          "failedConnect": "Gagal menyambung ke {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Alat MCP yang tersedia",
+        "noTools": "Tiada alat MCP tersedia. Semak sambungan pelayan.",
+        "serverPrefix": "Pelayan: {{name}}",
+        "noToolsInServer": "Tiada alat tersedia",
+        "headers": {
+          "tool": "Nama alat",
+          "description": "Penerangan",
+          "parameters": "Parameter"
+        },
+        "noDescription": "Tiada penerangan",
+        "noParams": "Tiada"
+      },
+      "logs": {
+        "title": "Log sambungan MCP",
+        "placeholder": "Log sambungan MCP akan muncul di sini. Pada masa ini menunjukkan maklumat placeholder.",
+        "events": {
+          "connection": "• peristiwa sambungan",
+          "tools": "• peristiwa pendaftaran alat",
+          "errors": "• log ralat",
+          "comms": "• butiran komunikasi"
+        },
+        "testTitle": "Uji pelaksanaan alat",
+        "selectServer": "Pilih pelayan...",
+        "selectTool": "Pilih alat...",
+        "parametersTitle": "Parameter",
+        "selectEnum": "Pilih...",
+        "performBtn": "Jalankan alat",
+        "clearBtn": "Kosongkan keputusan",
+        "executing": "Melaksanakan...",
+        "success": "✅ pelaksanaan berjaya",
+        "failed": "❌ pelaksanaan gagal",
+        "errorTitle": "❌ ralat pelaksanaan",
+        "errorLabel": "Ralat: {{message}}",
+        "notices": {
+          "success": "Alat berjaya dilaksanakan",
+          "failed": "Pelaksanaan alat gagal",
+          "error": "Ralat pelaksanaan: {{message}}",
+          "requiredMissing": "Parameter diperlukan tiada: {{name}}",
+          "invalidNumber": "Nombor tidak sah untuk parameter: {{name}}",
+          "invalidJson": "JSON tidak sah untuk parameter: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Tiada pelayan MCP dikonfigurasi",
+        "testing": "🧪 Menguji {{count}} sambungan pelayan MCP...",
+        "allSuccess": "✅ semua {{count}} pelayan MCP berjaya disambungkan!",
+        "partial": "⚠️ {{success}} disambungkan, {{failed}} gagal"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Edit pelayan MCP",
+      "titleAdd": "Tambah pelayan MCP",
+      "serverName": {
+        "name": "Nama pelayan",
+        "desc": "Nama mesra yang ditunjukkan sepanjang pemalam"
+      },
+      "connectionMode": {
+        "name": "Mod sambungan",
+        "desc": "Pilih sama ada untuk menyambung secara automatik atau hanya apabila dicetuskan secara manual",
+        "auto": "Sambung automatik apabila sembang dibuka",
+        "manual": "Sambung manual"
+      },
+      "command": {
+        "name": "Perintah",
+        "desc": "Boleh laksana atau skrip yang memulakan pelayan MCP"
+      },
+      "arguments": {
+        "name": "Argumen",
+        "desc": "Argumen dipisahkan koma atau baris baharu (pilihan)"
+      },
+      "envVars": {
+        "name": "Pemboleh ubah persekitaran",
+        "desc": "Pasangan KEY=VALUE pilihan, satu setiap baris"
+      },
+      "enabled": {
+        "name": "Aktif",
+        "desc": "Nyahaktifkan untuk mengekalkan pelayan dikonfigurasi tanpa menyambung secara automatik"
+      },
+      "cancel": "Batal",
+      "saveEdit": "Simpan perubahan",
+      "saveAdd": "Tambah pelayan",
+      "validation": {
+        "nameRequired": "Nama pelayan diperlukan",
+        "commandRequired": "Perintah diperlukan"
+      }
+    },
+    "ollamaManager": {
+      "title": "Urus model Ollama",
+      "serverInfo": "Maklumat pelayan",
+      "checkingServer": "Memeriksa pelayan...",
+      "serverOnline": "✅ Pelayan dalam talian",
+      "versionLabel": " | Versi: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Pelayan luar talian",
+      "connectionError": "❌ Ralat sambungan",
+      "pullTitle": "Tarik model baharu",
+      "pullHint": "Masukkan nama model untuk dimuat turun daripada perpustakaan Ollama (cth., llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Nama model",
+        "example": "Contoh: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Tarik model",
+      "installedTitle": "Model yang dipasang",
+      "refreshList": "🔄 Segarkan senarai",
+      "noModels": "Tiada model dijumpai. Tarik model untuk bermula.",
+      "capabilities": "Keupayaan: {{caps}}",
+      "deleteBtn": "Padam",
+      "closeBtn": "Tutup",
+      "confirmDelete": {
+        "title": "Sahkan pemadaman",
+        "message": "Adakah anda pasti mahu memadam model \"{{name}}\"?",
+        "cancel": "Batal",
+        "confirm": "Padam"
+      },
+      "notices": {
+        "enterName": "Sila masukkan nama model",
+        "pulling": "Menarik {{name}}... Ini mungkin mengambil masa.",
+        "pullSuccess": "✅ Berjaya menarik {{name}}",
+        "pullFailed": "❌ Gagal menarik model: {{message}}",
+        "deleted": "✅ Memadam {{name}}",
+        "deleteFailed": "❌ Gagal memadam model: {{message}}",
+        "refreshing": "Menyegarkan...",
+        "refreshSuccess": "✅ Senarai model disegarkan",
+        "refreshFailed": "❌ Gagal menyegarkan senarai model"
+      }
+    },
+    "promptEdit": {
+      "title": "Edit prompt sistem",
+      "name": {
+        "name": "Nama",
+        "desc": "Nama paparan untuk prompt ini"
+      },
+      "content": {
+        "name": "Kandungan",
+        "desc": "Kandungan prompt sistem"
+      },
+      "enabled": {
+        "name": "Aktif",
+        "desc": "Sama ada prompt ini aktif"
+      },
+      "cancel": "Batal",
+      "save": "Simpan"
+    },
+    "prompt": {
+      "cancel": "Batal",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Nama",
+      "create": "Cipta",
+      "cancel": "Batal"
+    },
+    "explain": {
+      "loading": "⏳ Memproses...",
+      "error": "Ralat memaparkan penjelasan",
+      "errorPrefix": "❌ Ralat: "
+    }
+  },
+  "notices": {
+    "noProvider": "Sila konfigurasikan pembekal LLM dalam tetapan terlebih dahulu",
+    "noModel": "Sila pilih model lalai dalam tetapan",
+    "noValidProvider": "Tiada konfigurasi pembekal yang sah untuk model: {{modelId}}",
+    "processing": "Memproses...",
+    "textUpdated": "Teks berjaya dikemas kini",
+    "error": "Ralat: {{message}}"
+  }
+}

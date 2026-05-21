@@ -232,7 +232,7 @@
         "refreshedPartial": "✅ refreshed {{success}} servers, ❌ {{failed}} failed",
         "noServersConfigured": "⚠️ No MCP servers configured",
         "testingAll": "🧪 Testing {{count}} MCP server connections...",
-        "testAllSuccess": "✅ all {{count}} MCP servers connected successfully!",
+        "testAllSuccess": "✅ all {{count}} mcp servers connected successfully!",
         "testAllPartial": "⚠️ {{successful}} connected, {{failed}} failed"
       },
       "confirm": {
@@ -241,7 +241,7 @@
     },
     "agents": {
       "title": "Agent management",
-      "desc": "Create and manage AI agents with specific capabilities, tools, and behaviors.",
+      "desc": "Create and manage AI agents with specific capabilities, tools, and behaviours.",
       "count": "{{count}} agent configured",
       "count_plural": "{{count}} agents configured",
       "addBtn": "+ add agent",
@@ -269,10 +269,10 @@
       },
       "tools": {
         "builtIn": "{{count}} built-in",
-        "mcpServer": "{{count}} MCP server",
-        "mcpServer_plural": "{{count}} MCP servers",
-        "mcpTool": "{{count}} MCP tool",
-        "mcpTool_plural": "{{count}} MCP tools",
+        "mcpServer": "{{count}} mcp server",
+        "mcpServer_plural": "{{count}} mcp servers",
+        "mcpTool": "{{count}} mcp tool",
+        "mcpTool_plural": "{{count}} mcp tools",
         "noTools": "No tools enabled"
       },
       "actions": {
@@ -286,7 +286,7 @@
     },
     "prompts": {
       "title": "System prompts",
-      "desc": "Manage system prompts that define the behavior and personality of your AI assistant.",
+      "desc": "Manage system prompts that define the behaviour and personality of your AI assistant.",
       "addBtn": "+ add system prompt",
       "empty": "No system prompts configured. Select add system prompt to get started.",
       "tableHeaders": {
@@ -359,7 +359,7 @@
             "params": "path (required), content (required): Note path and content to append"
           }
         },
-        "infoTitle": "💡 About Tools",
+        "infoTitle": "💡 about tools",
         "infoText": "Built-in tools are configured per plugin settings. MCP tools are managed independently—use the MCP tab to connect servers and refresh tool availability.",
         "toolNames": {
           "read_file": "Read File",
@@ -568,7 +568,7 @@
         },
         "presets": {
           "title": "Add CLI tool from presets",
-          "desc": "Select a preset to quickly add a pre-configured CLI tool. You can customize it after adding.",
+          "desc": "Select a preset to quickly add a pre-configured CLI tool. You can customise it after adding.",
           "addBtn": "Add",
           "addedBtn": "Added",
           "closeBtn": "Close",
@@ -807,7 +807,7 @@
     "websearch": {
       "title": "Web search configuration",
       "desc": "Configure web search functionality to enhance AI responses with up-to-date information from the internet.",
-      "generalBehavior": "General behavior",
+      "generalBehavior": "General behaviour",
       "providerSelection": "Provider selection",
       "localeFilters": "Locale & filters",
       "apiCredentials": "API credentials & endpoints",
@@ -839,7 +839,7 @@
       },
       "searchLanguage": {
         "name": "Language code",
-        "desc": "ISO language code (e.g., en, fr, zh-CN) forwarded to providers that support localization"
+        "desc": "ISO language code (e.g., en, fr, zh-CN) forwarded to providers that support localisation"
       },
       "searchCountry": {
         "name": "Country/market code",
@@ -930,7 +930,7 @@
         "step2": "Right-click to open context menu",
         "step3": "Choose a quick action from the menu",
         "step4Replace": "Actions marked as \"replace\" will replace the selected text with the AI result",
-        "step4Explain": "Actions marked as \"explain\" will show the result in a modal dialog"
+        "step4Explain": "Actions marked as \"explain\" will show the result in a modal dialogue"
       },
       "edit": {
         "title": "Edit quick action",
@@ -959,10 +959,10 @@
       "builtIn": {
         "make-longer": {
           "name": "Make text longer",
-          "prompt": "Expand and elaborate on the following text, making it more detailed and comprehensive while maintaining the original meaning and tone. Only return the expanded text without any additional commentary:\n\n"
+          "prompt": "Expand and elaborate on the following text, making it more detailed and comprehensive whilst maintaining the original meaning and tone. Only return the expanded text without any additional commentary:\n\n"
         },
         "summarize": {
-          "name": "Summarize text",
+          "name": "Summarise text",
           "prompt": "Provide a concise summary of the following text. Only return the summary without any additional commentary:\n\n"
         },
         "improve-writing": {
@@ -1050,7 +1050,7 @@
     "selectAgent": "Select an agent…",
     "notices": {
       "stopping": "Stopping generation...",
-      "ragInitError": "RAG initialization error: {{message}}",
+      "ragInitError": "RAG initialisation error: {{message}}",
       "modelsRefreshed": "Models refreshed",
       "modelsRefreshFailed": "Failed to refresh models: {{message}}",
       "waitForResponse": "Please wait for the current response to finish",
@@ -1267,7 +1267,7 @@
       "capabilities": "Capabilities",
       "memory": {
         "title": "Memory",
-        "notice": "Agent memory is temporarily unavailable while we iterate on the experience."
+        "notice": "Agent memory is temporarily unavailable whilst we iterate on the experience."
       },
       "tools": {
         "title": "Tools",
@@ -1466,7 +1466,7 @@
       "testAll": {
         "noServers": "⚠️ No MCP servers configured",
         "testing": "🧪 Testing {{count}} MCP server connections...",
-        "allSuccess": "✅ all {{count}} MCP servers connected successfully!",
+        "allSuccess": "✅ all {{count}} mcp servers connected successfully!",
         "partial": "⚠️ {{success}} connected, {{failed}} failed"
       }
     },

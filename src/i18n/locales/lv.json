@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Vispārīgi",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Rīki",
+      "rag": "RAG",
+      "prompts": "Uzvednes",
+      "agents": "Aģenti",
+      "quickActions": "Ātrās darbības",
+      "usage": "Lietojums"
+    },
+    "general": {
+      "title": "Vispārīgie iestatījumi",
+      "desc": "Konfigurēt vispārīgos iestatījumus inteliģentā asistenta spraudnim.",
+      "pluginVersion": {
+        "name": "Spraudņa versija",
+        "desc": "Inteliģentā asistenta spraudņa pašreizējā versija"
+      },
+      "defaultModel": {
+        "name": "Noklusējuma modelis",
+        "desc": "Noklusējuma modelis, ko izmantot sarunās",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Noklusējuma tērzēšanas režīms",
+        "desc": "Izvēlieties, kurā režīmā tiek atvērts tērzēšanas skats",
+        "chat": "Tērzēšanas režīms",
+        "agent": "Aģenta režīms"
+      },
+      "conversationTitleMode": {
+        "name": "Sarunas virsraksta režīms",
+        "desc": "Kā ģenerēt sarunas virsrakstus",
+        "firstMessage": "Izmantot pirmo ziņojumu",
+        "autoSummary": "Automātiski ģenerēt kopsavilkumu",
+        "manual": "Manuāli"
+      },
+      "conversationIcons": {
+        "name": "Sarunas ikonas",
+        "desc": "Iespējot automātisku ikonu ģenerēšanu sarunām"
+      },
+      "configStatus": {
+        "name": "Konfigurācijas statuss",
+        "desc": "Kopējais spraudņa konfigurācijas statuss",
+        "ok": "✅ Konfigurēts ({{providers}} pakalpojumu sniedzēji, {{conversations}} sarunas)",
+        "incomplete": "⚠️ Nepilnīgs – Lūdzu, konfigurējiet pakalpojumu sniedzējus un modeļus"
+      }
+    },
+    "llm": {
+      "title": "LLM konfigurācija",
+      "desc": "Konfigurēt valodas modeļu pakalpojumu sniedzējus un pārvaldīt pieejamos modeļus.",
+      "subTabs": {
+        "provider": "Pakalpojumu sniedzēji",
+        "models": "Modeļi"
+      }
+    },
+    "models": {
+      "title": "Modeļa konfigurācija",
+      "desc": "Skatīt un pārvaldīt modeļus no visiem konfigurētajiem pakalpojumu sniedzējiem. Noklikšķiniet uz «atsvaidzināt modeļus», lai iegūtu jaunākos pieejamos modeļus.",
+      "providerCount": "{{count}} pakalpojumu sniedzējs konfigurēts",
+      "providerCount_plural": "{{count}} pakalpojumu sniedzēji konfigurēti",
+      "refreshAll": "🔄 atsvaidzināt visus modeļus",
+      "empty": "Vēl nav konfigurētu pakalpojumu sniedzēju. Vispirms pievienojiet pakalpojumu sniedzējus pakalpojumu sniedzēju cilnē.",
+      "noModels": "Nav pieejamu modeļu. Noklikšķiniet uz «atsvaidzināt visus modeļus» vai atsvaidziniet atsevišķus pakalpojumu sniedzējus pakalpojumu sniedzēju cilnē.",
+      "noMatch": "Neviens modelis neatbilst pašreizējiem filtriem. Pielāgojiet vai notīriet filtrus, lai skatītu rezultātus.",
+      "modelCount": "• {{count}} modelis kešatmiņā",
+      "modelCount_plural": "• {{count}} modeļi kešatmiņā",
+      "matchCount": "• {{count}} atbilst izvēlētajiem filtriem",
+      "matchCount_plural": "• {{count}} atbilst izvēlētajiem filtriem",
+      "status": {
+        "enabled": "Iespējots",
+        "disabled": "Atspējots"
+      },
+      "actions": {
+        "disable": "Atspējot",
+        "enable": "Iespējot",
+        "setDefaultChat": "Iestatīt kā noklusējuma tērzēšanu",
+        "defaultChat": "Noklusējuma tērzēšana",
+        "setDefaultEmbedding": "Iestatīt kā noklusējuma iegulšanu",
+        "defaultEmbedding": "Noklusējuma iegulšana"
+      },
+      "notices": {
+        "fetching": "Ielādē modeļus pakalpojumam {{provider}}...",
+        "fetchFailed": "Neizdevās atsvaidzināt {{provider}} modeļus",
+        "refreshed": "Modeļi veiksmīgi atsvaidzināti!",
+        "refreshFailed": "Neizdevās atsvaidzināt modeļus",
+        "defaultChatSet": "Noklusējuma tērzēšanas modelis iestatīts uz {{name}}",
+        "defaultEmbeddingSet": "Noklusējuma iegulšanas modelis iestatīts uz {{name}}"
+      },
+      "filters": {
+        "allProviders": "Visi pakalpojumu sniedzēji",
+        "allCapabilities": "Visas iespējas",
+        "allStates": "Visi stāvokļi",
+        "searchPlaceholder": "Meklēt pēc nosaukuma vai ID"
+      }
+    },
+    "provider": {
+      "title": "Pakalpojumu sniedzēja konfigurācija",
+      "securityTitle": "⚠️ Drošības brīdinājums",
+      "securityDesc": "API atslēgas tiek glabātas kā vienkāršs teksts jūsu velventī saderības dēļ. Lai novērstu nejaušu noplūdi:",
+      "securityItem1": "NEDALIETIES ar {{configDir}}/plugins/intelligence-assistant/data/ mapi.",
+      "securityItem2": "Pievienojiet šo mapi .gitignore failam, ja izmantojat Git sinhronizāciju.",
+      "securityItem3": "Esiet uzmanīgi, izmantojot publiskos mākoņsinhronizācijas pakalpojumus.",
+      "desc": "Pārvaldīt LLM pakalpojumu sniedzējus un API akreditācijas datus. Izmantojiet darbību kolonnu, lai rediģētu konfigurācijas informāciju vai atsvaidzinātu kešatmiņā saglabātos modeļus.",
+      "count": "{{count}} pakalpojumu sniedzējs konfigurēts",
+      "count_plural": "{{count}} pakalpojumu sniedzēji konfigurēti",
+      "addBtn": "+ Pievienot pakalpojumu sniedzēju",
+      "empty": "Nav konfigurētu pakalpojumu sniedzēju. Izvēlieties «Pievienot pakalpojumu sniedzēju», lai sāktu.",
+      "tableHeaders": {
+        "provider": "Pakalpojumu sniedzējs",
+        "status": "Statuss",
+        "actions": "Darbības"
+      },
+      "status": {
+        "ready": "Gatavs",
+        "needsConfig": "Nepieciešama konfigurācija",
+        "checking": "Pārbauda...",
+        "credentialsSet": "Akreditācijas dati iestatīti",
+        "serverOnline": "Serveris tiešsaistē",
+        "serverOffline": "Serveris bezsaistē",
+        "serverError": "Servera kļūda"
+      },
+      "guidance": {
+        "requiresCli": "Nepieciešams lokāls CLI",
+        "provideServiceKey": "Norādiet pakalpojuma atslēgu",
+        "configureBaseUrl": "Konfigurēt bāzes URL",
+        "addApiKey": "Pievienot API atslēgu"
+      },
+      "models": {
+        "none": "Nav modeļu",
+        "count": "{{count}} modelis",
+        "count_plural": "{{count}} modeļi"
+      },
+      "ollama": {
+        "checkingVersion": "Pārbauda versiju...",
+        "server": {
+          "checking": "Pārbauda serveri...",
+          "online": "Serveris: tiešsaistē",
+          "offline": "Serveris: bezsaistē vai nesasniedzams",
+          "error": "Serveris: savienojuma kļūda",
+          "versionOnline": "Serveris tiešsaistē",
+          "versionOffline": "Serveris bezsaistē",
+          "versionError": "Savienojuma kļūda",
+          "version": "Versija: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Pēdējā atsvaidzināšana: {{timeAgo}}",
+        "neverRefreshed": "Nekad nav atsvaidzināts",
+        "justNow": "tikko",
+        "minutesAgo": "pirms {{n}} min",
+        "hoursAgo": "pirms {{n}} h",
+        "daysAgo": "pirms {{n}} d"
+      },
+      "actions": {
+        "edit": "Rediģēt",
+        "manageModels": "Pārvaldīt modeļus",
+        "refreshModels": "Atsvaidzināt modeļus",
+        "refreshing": "Atsvaidzina...",
+        "delete": "Dzēst"
+      },
+      "notices": {
+        "refreshed": "Modeļi atsvaidzināti pakalpojumam {{provider}}.",
+        "refreshFailed": "Neizdevās atsvaidzināt modeļus"
+      },
+      "confirm": {
+        "delete": "Noņemt pakalpojumu sniedzēju {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "MCP servera pārvaldība",
+      "desc": "Konfigurēt Model Context Protocol (MCP) serverus, lai paplašinātu aģentu iespējas ar ārējiem rīkiem un datu avotiem.",
+      "inspectorBtn": "🔍 Atvērt MCP inspektoru",
+      "testAllBtn": "🧪 pārbaudīt visus savienojumus",
+      "refreshAllBtn": "🔄 atsvaidzināt visus rīkus",
+      "addBtn": "+ Pievienot MCP serveri",
+      "empty": "Nav konfigurētu MCP serveru. Izvēlieties Pievienot MCP serveri, lai sāktu.",
+      "tableHeaders": {
+        "name": "Nosaukums",
+        "command": "Komanda",
+        "arguments": "Argumenti",
+        "status": "Statuss",
+        "tools": "Rīki",
+        "actions": "Darbības"
+      },
+      "untitled": "Nenosaukts MCP serveris",
+      "notConfigured": "Nav konfigurēts",
+      "noArgs": "Nav",
+      "cached": "Kešatmiņā",
+      "disabled": "Atspējots",
+      "envVars": "{{count}} vides mainīgais",
+      "envVars_plural": "{{count}} vides mainīgie",
+      "status": {
+        "disabled": "Atspējots",
+        "connected": "savienots",
+        "disconnected": "atvienots",
+        "enableToManage": "Iespējot, lai pārvaldītu savienojumus",
+        "manualConnect": "Manuāls savienojums",
+        "autoConnect": "Automātisks savienojums"
+      },
+      "toolCount": {
+        "live": "{{count}} aktīvs rīks",
+        "live_plural": "{{count}} aktīvi rīki",
+        "cached": "{{count}} kešatmiņā saglabāts rīks",
+        "cached_plural": "{{count}} kešatmiņā saglabāti rīki"
+      },
+      "actions": {
+        "edit": "Rediģēt",
+        "enabled": "✓ Iespējots",
+        "enabledOff": "✗ Atspējots",
+        "connect": "savienot",
+        "disconnect": "atvienot",
+        "connecting": "Savieno...",
+        "disconnecting": "Atvieno...",
+        "test": "Pārbaudīt",
+        "testing": "Pārbauda...",
+        "delete": "Dzēst"
+      },
+      "notices": {
+        "disconnected": "Atvienots no {{name}}",
+        "connected": "Savienots ar {{name}}",
+        "autoConnectFailed": "Neizdevās automātiski savienoties ar {{name}}",
+        "enableFirst": "Iespējojiet serveri pirms savienošanas",
+        "disconnectFailed": "Neizdevās atvienoties no {{name}}",
+        "connectFailed": "Neizdevās savienoties ar {{name}}",
+        "testNoCommand": "❌ lūdzu, ievadiet komandu pirms savienojuma pārbaudes",
+        "testSuccess": "✅ veiksmīgi savienots! Atrasti {{count}} rīki.",
+        "testFailed": "❌ Savienojums neizdevās: {{message}}",
+        "refreshedAll": "✅ atsvaidzināti rīki {{count}} serverim",
+        "refreshedAll_plural": "✅ atsvaidzināti rīki {{count}} serveriem",
+        "refreshedPartial": "✅ atsvaidzināti {{success}} serveri, ❌ {{failed}} neizdevās",
+        "noServersConfigured": "⚠️ Nav konfigurētu MCP serveru",
+        "testingAll": "🧪 Pārbauda {{count}} MCP servera savienojumus...",
+        "testAllSuccess": "✅ visi {{count}} MCP serveri veiksmīgi savienoti!",
+        "testAllPartial": "⚠️ {{successful}} savienoti, {{failed}} neizdevās"
+      },
+      "confirm": {
+        "delete": "Dzēst MCP serveri «{{name}}»?"
+      }
+    },
+    "agents": {
+      "title": "Aģentu pārvaldība",
+      "desc": "Izveidot un pārvaldīt AI aģentus ar specifiskām iespējām, rīkiem un uzvedību.",
+      "count": "{{count}} aģents konfigurēts",
+      "count_plural": "{{count}} aģenti konfigurēti",
+      "addBtn": "+ pievienot aģentu",
+      "empty": "Nav konfigurētu aģentu. Izvēlieties pievienot aģentu, lai sāktu.",
+      "tableHeaders": {
+        "agent": "Aģents",
+        "model": "Modelis",
+        "capabilities": "Iespējas",
+        "tools": "Rīki",
+        "actions": "Darbības"
+      },
+      "defaultBadge": "Noklusējums",
+      "systemPrompt": "Sistēmas uzvedne • {{promptName}}",
+      "customPrompt": "Pielāgota uzvedne",
+      "model": {
+        "notSet": "Nav iestatīts",
+        "notFound": "Modelis nav atrasts kešatmiņā",
+        "useChatView": "Izmantot tērzēšanas skata modeli",
+        "useChatViewDesc": "Izmantos modeli, kas atlasīts tērzēšanas skatā",
+        "useDefault": "Izmantot noklusējuma modeli",
+        "useDefaultDesc": "Izmantos noklusējuma modeli no iestatījumiem"
+      },
+      "capabilities": {
+        "noSpecialModes": "Nav īpašu režīmu"
+      },
+      "tools": {
+        "builtIn": "{{count}} iebūvēts",
+        "mcpServer": "{{count}} MCP serveris",
+        "mcpServer_plural": "{{count}} MCP serveri",
+        "mcpTool": "{{count}} MCP rīks",
+        "mcpTool_plural": "{{count}} MCP rīki",
+        "noTools": "Nav iespējotu rīku"
+      },
+      "actions": {
+        "edit": "Rediģēt",
+        "delete": "dzēst",
+        "protected": "aizsargāts"
+      },
+      "confirm": {
+        "delete": "Dzēst aģentu «{{name}}»?"
+      }
+    },
+    "prompts": {
+      "title": "Sistēmas uzvednes",
+      "desc": "Pārvaldīt sistēmas uzvednes, kas nosaka AI asistenta uzvedību un personību.",
+      "addBtn": "+ pievienot sistēmas uzvedni",
+      "empty": "Nav konfigurētu sistēmas uzvedņu. Izvēlieties pievienot sistēmas uzvedni, lai sāktu.",
+      "tableHeaders": {
+        "name": "Nosaukums",
+        "contentPreview": "Satura priekšskatījums",
+        "created": "Izveidots",
+        "updated": "Atjaunināts",
+        "enabled": "Iespējots",
+        "actions": "Darbības"
+      },
+      "status": {
+        "enabled": "Iespējots",
+        "disabled": "Atspējots"
+      },
+      "actions": {
+        "edit": "Rediģēt",
+        "disable": "Atspējot",
+        "enable": "Iespējot",
+        "delete": "Dzēst"
+      },
+      "confirm": {
+        "delete": "Dzēst uzvedni «{{name}}»?"
+      }
+    },
+    "tools": {
+      "title": "Rīku konfigurācija",
+      "desc": "Pārskatīt iebūvētos rīkus un izpētīt MCP rīkus, kas ielādēti no pievienotajiem serveriem. Iespējojiet darbības, ko jūsu aģentiem vajadzētu varēt veikt.",
+      "subTabs": {
+        "builtIn": "Iebūvētie rīki",
+        "mcp": "MCP rīki",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI rīki"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Nosaukums",
+          "category": "Kategorija",
+          "description": "Apraksts",
+          "parameters": "Parametri",
+          "enabled": "Iespējots"
+        },
+        "categories": {
+          "fileOps": "Failu darbības",
+          "searchDisc": "Meklēšana un atklāšana",
+          "noteMgmt": "Piezīmju pārvaldība"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Lasīt faila saturu no jūsu velventa",
+            "params": "path (obligāts): Ceļš uz lasāmo failu"
+          },
+          "writeFile": {
+            "desc": "Rakstīt vai atjaunināt failu jūsu velventī",
+            "params": "path (obligāts), content (obligāts): Faila ceļš un saturs, ko rakstīt"
+          },
+          "listFiles": {
+            "desc": "Uzskaitīt failus velventī vai konkrētā mapē",
+            "params": "folder (neobligāts), extension (neobligāts): Filtrēt pēc mapes un faila paplašinājuma"
+          },
+          "searchFiles": {
+            "desc": "Meklēt failus pēc nosaukuma vai satura jūsu velventī",
+            "params": "query (obligāts), search_content (neobligāts), limit (neobligāts): Meklēšanas vaicājums un opcijas"
+          },
+          "createNote": {
+            "desc": "Izveidot jaunu piezīmi ar norādīto saturu",
+            "params": "title (obligāts), content (obligāts), folder (neobligāts): Piezīmes virsraksts, saturs un atrašanās vieta"
+          },
+          "appendNote": {
+            "desc": "Pievienot saturu esošai piezīmei",
+            "params": "path (obligāts), content (obligāts): Piezīmes ceļš un pievienojamais saturs"
+          }
+        },
+        "infoTitle": "💡 par rīkiem",
+        "infoText": "Iebūvētie rīki tiek konfigurēti atbilstoši spraudņa iestatījumiem. MCP rīki tiek pārvaldīti neatkarīgi — izmantojiet MCP cilni, lai pievienotos serveriem un atsvaidzinātu rīku pieejamību.",
+        "toolNames": {
+          "read_file": "Lasīt failu",
+          "write_file": "Rakstīt failu",
+          "list_files": "Uzskaitīt failus",
+          "search_files": "Meklēt failus",
+          "create_note": "Izveidot piezīmi",
+          "append_note": "Pievienot piezīmei"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Nav pieejamu MCP rīku. Pievienojieties serverim vai atsvaidziniet kešatmiņā saglabātos rīkus, lai aizpildītu šo sarakstu.",
+        "tableHeaders": {
+          "server": "Serveris",
+          "tool": "Rīks",
+          "description": "Apraksts",
+          "parameters": "Parametri",
+          "source": "Avots"
+        },
+        "noDescription": "Nav apraksta",
+        "schemaUnavailable": "Shēma nav pieejama",
+        "live": "Aktīvs",
+        "cached": "Kešatmiņā",
+        "status": {
+          "connected": "savienots",
+          "disconnected": "atvienots"
+        }
+      },
+      "openapi": {
+        "desc": "Ģenerēt HTTP rīkus no OpenAPI dokumentiem. Attālinātās specifikācijas tiek kešotas direktorijā {{cacheDir}}.",
+        "addBtn": "Pievienot HTTP avotu",
+        "noSources": "Vēl nav konfigurētu HTTP avotu.",
+        "unnamed": "Nenosaukts HTTP avots",
+        "tableHeaders": {
+          "name": "Nosaukums",
+          "source": "Avots",
+          "auth": "Autentifikācija",
+          "status": "Statuss",
+          "actions": "Darbības"
+        },
+        "sourceUrl": "Attālinātais URL nav iestatīts",
+        "sourcePath": "Faila ceļš nav iestatīts",
+        "authHeader": "Galvene ({{key}})",
+        "authQuery": "Vaicājums ({{key}})",
+        "authNone": "Nav",
+        "statusEnabled": "Iespējots",
+        "statusDisabled": "Atspējots",
+        "actions": {
+          "edit": "Rediģēt",
+          "reload": "Atkārtoti ielādēt",
+          "refetch": "Atkārtoti iegūt",
+          "delete": "Dzēst"
+        },
+        "notices": {
+          "removed": "HTTP avots noņemts",
+          "reloaded": "Atkārtoti ielādētas {{count}} darbības",
+          "reloadFailed": "Neizdevās atkārtoti ielādēt HTTP avotu. Skatiet konsoli sīkākai informācijai."
+        },
+        "modal": {
+          "defaultTitle": "HTTP avots",
+          "displayName": {
+            "name": "Parādāmais nosaukums",
+            "desc": "Rādīts aģentiem, izvēloties rīka avotu"
+          },
+          "enabled": {
+            "name": "Iespējots",
+            "desc": "Iespējot, lai šo HTTP API pakļautu visiem aģentiem"
+          },
+          "sourceType": {
+            "name": "Avota tips",
+            "file": "Lokāls fails",
+            "url": "Attālinātais URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Iegūts un kešots spraudņa datu direktorijā"
+          },
+          "cachedFile": "Kešotais fails: {{path}} ({{date}})",
+          "neverFetched": "Nekad nav iegūts",
+          "specPath": {
+            "name": "OpenAPI faila ceļš",
+            "desc": "Relatīvs ceļš velventī vai absolūts ceļš"
+          },
+          "baseUrl": {
+            "name": "Bāzes URL ignorēšana",
+            "desc": "Ignorēt pirmo servera ierakstu no dokumenta (neobligāts)"
+          },
+          "auth": {
+            "name": "Autentifikācija",
+            "desc": "Automātiski ievietot API atslēgas, zvanot šim avotam",
+            "none": "Nav",
+            "header": "HTTP galvene",
+            "query": "Vaicājuma parametrs"
+          },
+          "credKey": {
+            "name": "Akreditācijas atslēga"
+          },
+          "credValue": {
+            "name": "Akreditācijas vērtība"
+          },
+          "actions": {
+            "name": "Darbības",
+            "reloadTools": "Atkārtoti ielādēt rīkus",
+            "refetchTooltip": "Atkārtoti iegūt specifikāciju no URL",
+            "deleteTooltip": "Dzēst avotu"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Definēt lokālus komandrindas rīkus, kurus aģenti var izpildīt. Izmantojiet veidnes, piemēram, {{param}}, dinamiskajiem argumentiem.",
+        "addBtn": "Pievienot CLI rīku",
+        "presetsBtn": "Pievienot no priekšiestatījumiem",
+        "noTools": "Vēl nav konfigurētu CLI rīku.",
+        "tableHeaders": {
+          "name": "Nosaukums",
+          "command": "Komanda",
+          "parameters": "Parametri",
+          "status": "Statuss",
+          "actions": "Darbības"
+        },
+        "unnamed": "Nenosaukts CLI rīks",
+        "paramCount": "{{count}} parametrs",
+        "paramCount_plural": "{{count}} parametri",
+        "noParams": "Nav",
+        "statusEnabled": "Iespējots",
+        "statusDisabled": "Atspējots",
+        "actions": {
+          "edit": "Rediģēt",
+          "disable": "Atspējot",
+          "enable": "Iespējot",
+          "delete": "Dzēst"
+        },
+        "notices": {
+          "removed": "CLI rīks noņemts"
+        },
+        "infoTitle": "💡 Par CLI rīkiem",
+        "infoText": "CLI rīki izpilda čaulas komandas lokāli. Izmantojiet {{paramName}} argumentos veidnes aizstāšanai vai konfigurējiet parametrus, kas jānodod kā argumenti vai vides mainīgie.",
+        "modal": {
+          "defaultTitle": "CLI rīks",
+          "toolName": {
+            "name": "Rīka nosaukums",
+            "desc": "Identifikators, ko aģenti izmanto, lai izsauktu šo rīku"
+          },
+          "description": {
+            "name": "Apraksts",
+            "desc": "Aprakstiet, ko šis rīks dara AI"
+          },
+          "enabled": {
+            "name": "Iespējots",
+            "desc": "Iespējot, lai aģenti varētu izmantot šo rīku"
+          },
+          "commandConfig": "Komandas konfigurācija",
+          "command": {
+            "name": "Komanda",
+            "desc": "Izpildāmā faila nosaukums (piem., node, python, bash, /ceļš/uz/skriptu)"
+          },
+          "args": {
+            "name": "Argumenti",
+            "desc": "Komandas argumenti, viens katrā rindā. Izmantojiet {{paramName}} veidnes aizstāšanai."
+          },
+          "cwd": {
+            "name": "Darba direktorija",
+            "desc": "Direktorija, kurā palaist komandu (neobligāts)"
+          },
+          "timeout": {
+            "name": "Taimauts (ms)",
+            "desc": "Maksimālais izpildes laiks milisekundēs (noklusējums: {{timeout}})"
+          },
+          "shell": {
+            "name": "Palaist čaulā",
+            "desc": "Izpildīt komandu caur čaulu (iespējo čaulas funkcijas, piemēram, cauruļvadus)"
+          },
+          "paramsTitle": "Parametri",
+          "paramsDesc": "Definēt parametrus, ko AI var nodot šim rīkam.",
+          "addParam": "Pievienot parametru",
+          "noParams": "Nav definētu parametru.",
+          "paramN": "Parametrs {{n}}",
+          "param": {
+            "name": "Nosaukums",
+            "type": {
+              "name": "Tips",
+              "string": "Virkne",
+              "number": "Skaitlis",
+              "boolean": "Būla"
+            },
+            "description": "Apraksts",
+            "required": "Obligāts",
+            "insertAs": {
+              "name": "Ievietot kā",
+              "desc": "Kā nodot šo parametru komandai",
+              "template": "Veidne ({{name}})",
+              "arg": "Pievienot kā argumentu",
+              "env": "Vides mainīgais"
+            },
+            "envName": {
+              "name": "Vides mainīgā nosaukums",
+              "desc": "Ignorēt vides mainīgā nosaukumu (noklusējums ir parametra nosaukums ar lielajiem burtiem)"
+            }
+          },
+          "envTitle": "Vides mainīgie",
+          "envDesc": "Statiskie vides mainīgie, kas iestatāmi, palaižot komandu.",
+          "envVars": {
+            "name": "Vides mainīgie",
+            "desc": "Formāts: ATSLĒGA=vērtība, viens katrā rindā"
+          }
+        },
+        "presets": {
+          "title": "Pievienot CLI rīku no priekšiestatījumiem",
+          "desc": "Izvēlieties priekšiestatījumu, lai ātri pievienotu iepriekš konfigurētu CLI rīku. Pēc pievienošanas to var pielāgot.",
+          "addBtn": "Pievienot",
+          "addedBtn": "Pievienots",
+          "closeBtn": "Aizvērt",
+          "notices": {
+            "added": "Pievienots «{{name}}» – iespējojiet to CLI rīku sarakstā"
+          },
+          "categories": {
+            "file": "Failu darbības",
+            "search": "Meklēšana",
+            "network": "Tīkls",
+            "code": "Koda izpilde",
+            "data": "Datu apstrāde",
+            "system": "Sistēmas informācija",
+            "apps": "macOS lietotnes un darbvirsma"
+          },
+          "names": {
+            "preset-cat": "Lasīt failu (cat)",
+            "preset-ls": "Uzskaitīt direktoriju (ls)",
+            "preset-find": "Atrast failus (find)",
+            "preset-grep": "Meklēt tekstu (grep)",
+            "preset-ripgrep": "Ātrā meklēšana (rg)",
+            "preset-curl": "HTTP pieprasījums (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Palaist Python kodu",
+            "preset-node": "Palaist JavaScript (Node)",
+            "preset-bash": "Palaist čaulas skriptu",
+            "preset-jq": "JSON procesors (jq)",
+            "preset-wc": "Vārdu skaits (wc)",
+            "preset-date": "Pašreizējais datums/laiks",
+            "preset-pwd": "Pašreizējā direktorija (pwd)",
+            "preset-whoami": "Pašreizējais lietotājs",
+            "preset-uname": "Sistēmas informācija (uname)",
+            "preset-open": "Atvērt failu/URL (open)",
+            "preset-open-app": "Palaist lietotni (open -a)",
+            "preset-safari": "Atvērt Safari",
+            "preset-chrome": "Atvērt Chrome",
+            "preset-firefox": "Atvērt Firefox",
+            "preset-pbcopy": "Kopēt starpliktuvē",
+            "preset-pbpaste": "Ielīmēt no starpliktuves",
+            "preset-say": "Teksts uz runu (say)",
+            "preset-osascript": "AppleScript izpildītājs",
+            "preset-notify": "Darbvirsmas paziņojums",
+            "preset-screencapture": "Ekrānuzņēmums",
+            "preset-applescript-list-apps": "Uzskaitīt darbojošās lietotnes"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG konfigurācija",
+      "desc": "Konfigurēt retrieval-augmented generation un tīmekļa meklēšanu, lai uzlabotu AI atbildes.",
+      "subTabs": {
+        "overview": "Pārskats",
+        "chunking": "Sadalīšana",
+        "search": "Meklēšana",
+        "filters": "Filtri",
+        "advanced": "Papildu",
+        "websearch": "Tīmekļa meklēšana"
+      },
+      "general": {
+        "title": "Vispārīgie iestatījumi",
+        "enableRag": {
+          "name": "Iespējot RAG",
+          "desc": "Iespējot Retrieval-Augmented Generation uzlabotam kontekstam"
+        },
+        "vectorStore": {
+          "name": "Vektoru krātuve",
+          "desc": "Vektoru datubāze iegulšanu glabāšanai",
+          "memory": "Atmiņā",
+          "disk": "Diska bāzēts"
+        },
+        "embeddingModel": {
+          "name": "Iegulšanas modelis",
+          "desc": "Modelis, ko izmantot iegulšanu ģenerēšanai"
+        },
+        "embedChanged": {
+          "name": "Automātiski iegult mainītos failus",
+          "desc": "Automātiski atkārtoti iegult failus, kad tie tiek modificēti"
+        }
+      },
+      "indexMgmt": {
+        "title": "Indeksa pārvaldība",
+        "desc": "Pārvaldīt RAG indeksu un skatīt statistiku par indeksēto saturu.",
+        "statsTitle": "Indeksa statistika",
+        "stats": {
+          "totalChunks": "Kopējais daļu skaits",
+          "uniqueFiles": "Unikālie faili",
+          "totalChars": "Kopējais rakstzīmju skaits",
+          "avgChunkSize": "Vid. daļas lielums"
+        },
+        "empty": "Indekss ir tukšs. Izvēlieties atjaunot indeksu, lai sāktu indeksēšanu.",
+        "error": "⚠️ nevar ielādēt indeksa statistiku",
+        "rebuild": {
+          "name": "Atjaunot indeksu",
+          "desc": "Atkārtoti indeksēt visus failus velventī. Tas var aizņemt kādu laiku.",
+          "btn": "Atjaunot",
+          "rebuilding": "Atjauno..."
+        },
+        "refresh": {
+          "name": "Atsvaidzināt indeksu",
+          "desc": "Atjaunināt indeksu ar mainītajiem failiem kopš pēdējās indeksēšanas.",
+          "btn": "Atsvaidzināt",
+          "refreshing": "Atsvaidzina..."
+        },
+        "clear": {
+          "name": "Notīrīt indeksu",
+          "desc": "Noņemt visus indeksētos datus. Jums būs jāatjauno indekss.",
+          "btn": "Notīrīt",
+          "clearing": "Notīra..."
+        },
+        "notices": {
+          "rebuilt": "Indekss veiksmīgi atjaunots",
+          "rebuildFailed": "Neizdevās atjaunot indeksu",
+          "refreshed": "Indekss veiksmīgi atsvaidzināts",
+          "refreshFailed": "Neizdevās atsvaidzināt indeksu",
+          "cleared": "Indekss veiksmīgi notīrīts",
+          "clearFailed": "Neizdevās notīrīt indeksu"
+        }
+      },
+      "chunking": {
+        "title": "Sadalīšanas iestatījumi",
+        "strategy": {
+          "name": "Sadalīšanas stratēģija",
+          "desc": "Stratēģija dokumentu sadalīšanai daļās",
+          "recursive": "Rekursīvs (viedais)",
+          "fixed": "Fiksēts lielums",
+          "sentence": "Pa teikumiem",
+          "paragraph": "Pa rindkopām"
+        },
+        "chunkSize": {
+          "name": "Daļas lielums",
+          "desc": "Rakstzīmju skaits vienā daļā (ieteicams 500–2000)"
+        },
+        "chunkOverlap": {
+          "name": "Daļu pārklāšanās",
+          "desc": "Pārklājošo rakstzīmju skaits starp daļām"
+        },
+        "minChunkSize": {
+          "name": "Minimālais daļas lielums",
+          "desc": "Minimālais izveidojamais daļas lielums"
+        },
+        "maxTokens": {
+          "name": "Maks. pilnvaru skaits vienā daļā",
+          "desc": "Maksimālais atļautais pilnvaru skaits vienā daļā"
+        }
+      },
+      "search": {
+        "title": "Meklēšanas iestatījumi",
+        "searchType": {
+          "name": "Meklēšanas tips",
+          "desc": "Veicamās līdzības meklēšanas tips",
+          "similarity": "Līdzība"
+        },
+        "topK": {
+          "name": "Top K rezultāti",
+          "desc": "Visatbilstošāko daļu skaits, ko iegūt (1–20)"
+        },
+        "threshold": {
+          "name": "Līdzības slieksnis",
+          "desc": "Minimālais līdzības rādītājs rezultātu iekļaušanai (0,0–1,0)"
+        },
+        "weight": {
+          "name": "Atbilstības rādītāja svars",
+          "desc": "Svars atbilstības vērtēšanai (0,0–1,0)"
+        },
+        "contextLimit": {
+          "name": "Konteksta loga ierobežojums",
+          "desc": "Maksimālais pilnvaru skaits iegūtajam kontekstam"
+        }
+      },
+      "filters": {
+        "title": "Failu filtri",
+        "excludeFolders": {
+          "name": "Izslēgt mapes",
+          "desc": "Mapes, kas jāizslēdz no indeksēšanas (atdalītas ar komatiem)"
+        },
+        "includeTypes": {
+          "name": "Iekļaut failu tipus",
+          "desc": "Iekļaujamie failu tipi (tukšs = visi tipi)"
+        },
+        "excludeTypes": {
+          "name": "Izslēgt failu tipus",
+          "desc": "Failu tipi, kas jāizslēdz no indeksēšanas"
+        },
+        "filterByTag": {
+          "name": "Filtrēt pēc birkas",
+          "desc": "Indeksēt tikai failus ar šīm birkām (tukšs = visi faili)"
+        },
+        "excludeByTag": {
+          "name": "Izslēgt pēc birkas",
+          "desc": "Izslēgt failus ar šīm birkām no indeksēšanas"
+        }
+      },
+      "advanced": {
+        "title": "Papildu iestatījumi",
+        "batchSize": {
+          "name": "Iegulšanas partijas lielums",
+          "desc": "Vienlaicīgi iegulstamo daļu skaits"
+        }
+      },
+      "grading": {
+        "title": "Vērtēšanas iestatījumi",
+        "desc": "Vērtēt iegūtās daļas pēc atbilstības pirms nosūtīšanas LLM. Tas palīdz filtrēt zemas kvalitātes rezultātus.",
+        "enableGrading": {
+          "name": "Iespējot vērtēšanas slieksni",
+          "desc": "Filtrēt daļas, kas ir zemāk par kvalitātes sliekšņiem"
+        },
+        "graderSource": {
+          "name": "Vērtētāja modeļa avots",
+          "desc": "No kurienes iegūt vērtētāja modeli",
+          "chat": "Tērzēšanas modelis",
+          "custom": "Pielāgots modelis"
+        },
+        "graderModel": {
+          "name": "Vērtētāja modelis",
+          "desc": "Konkrēts modelis, ko izmantot vērtēšanai"
+        },
+        "parallel": {
+          "name": "Paralēlā apstrāde",
+          "desc": "Vienlaicīgi vērtējamo daļu skaits"
+        },
+        "minRelevance": {
+          "name": "Minimālais atbilstības rādītājs",
+          "desc": "Minimālais atbilstības rādītājs (0,0–1,0)"
+        },
+        "minAccuracy": {
+          "name": "Minimālais precizitātes rādītājs",
+          "desc": "Minimālais precizitātes rādītājs (0,0–1,0)"
+        },
+        "minSupport": {
+          "name": "Minimālais atbalsta kvalitātes rādītājs",
+          "desc": "Minimālais atbalsta kvalitātes rādītājs (0,0–1,0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Tīmekļa meklēšanas konfigurācija",
+      "desc": "Konfigurēt tīmekļa meklēšanas funkcionalitāti, lai uzlabotu AI atbildes ar aktuālu informāciju no interneta.",
+      "generalBehavior": "Vispārīgā uzvedība",
+      "providerSelection": "Pakalpojumu sniedzēja izvēle",
+      "localeFilters": "Lokalizācija un filtri",
+      "apiCredentials": "API akreditācijas dati un galapunkti",
+      "enabled": {
+        "name": "Iespējot tīmekļa meklēšanu",
+        "desc": "Ļaut AI meklēt tīmeklī aktuālu informāciju"
+      },
+      "autoTrigger": {
+        "name": "Automātiski aktivizēt meklēšanu",
+        "desc": "Automātiski aktivizēt tīmekļa meklēšanu, kad vaicājumam nepieciešama aktuāla informācija (piem., ziņas, cenas, nesenie notikumi)"
+      },
+      "maxResults": {
+        "name": "Maksimālais rezultātu skaits",
+        "desc": "Maksimālais atgriežamo meklēšanas rezultātu skaits"
+      },
+      "timeRange": {
+        "name": "Rezultātu aktualitāte",
+        "desc": "Ierobežot rezultātus ar pakalpojumu sniedzēju atbalstītu laika diapazonu (Google, SearXNG, Mojeek)",
+        "any": "Jebkurš laiks (noklusējums)",
+        "h": "Pēdējā stunda",
+        "d": "Pēdējās 24 stundas",
+        "w": "Pēdējā nedēļa",
+        "m": "Pēdējais mēnesis",
+        "y": "Pēdējais gads"
+      },
+      "provider": {
+        "name": "Meklēšanas pakalpojumu sniedzējs",
+        "desc": "Izvēlieties no privātuma draudzīgiem skraperiem vai API balstītiem dzinējiem"
+      },
+      "searchLanguage": {
+        "name": "Valodas kods",
+        "desc": "ISO valodas kods (piem., lv, en, fr), kas tiek nosūtīts pakalpojumu sniedzējiem, kuri atbalsta lokalizāciju"
+      },
+      "searchCountry": {
+        "name": "Valsts/tirgus kods",
+        "desc": "Divu burtu valsts kods (piem., LV, US), ko izmanto Bing, DuckDuckGo, Brave un citi"
+      },
+      "includeDomains": {
+        "name": "Iekļaut tikai šos domēnus",
+        "desc": "Ar komatu atdalīts saraksts, ko izmanto SerpAPI un Brave, lai ierobežotu rezultātus ar konkrētām vietnēm"
+      },
+      "excludeDomains": {
+        "name": "Izslēgt domēnus",
+        "desc": "Ar komatu atdalīti domēni, kas jāfiltrē pēc rezultātu iegūšanas"
+      },
+      "apiKey": {
+        "name": "Noklusējuma API atslēga",
+        "desc": "Koplietota API atslēga, ko izmanto Google, Bing, SerpAPI, Tavily vai Brave, ja nav iestatītas pakalpojumu sniedzēja specifiskās atslēgas"
+      },
+      "googleCseId": {
+        "name": "Google Custom Search Engine ID",
+        "desc": "Nepieciešams ar Google API atslēgu, izmantojot Google pakalpojumu sniedzēju"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI galapunkts",
+        "desc": "Ignorēt SerpAPI bāzes URL, ja izmantojat pašmitināšanu"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API atslēga",
+        "desc": "Ignorē noklusējuma atslēgu, izmantojot Tavily pakalpojumu sniedzēju"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG galapunkts",
+        "desc": "Jūsu SearXNG instances bāzes URL (jāatgriež JSON)"
+      },
+      "braveApiKey": {
+        "name": "Brave API atslēga",
+        "desc": "Izmantojiet Brave Search API abonementa pilnvaru, kad tas ir atlasīts kā pakalpojumu sniedzējs"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API atslēga (neobligāts)",
+        "desc": "Pievienojiet nesēja pilnvaru, ja jūsu Qwant plāns to izsniedz"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API atslēga",
+        "desc": "Nepieciešams Mojeek pakalpojumu sniedzējam"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (nav nepieciešama atslēga)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (HTML skraping)",
+        "yandex": "Yandex (HTML skraping)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Ātrās darbības",
+      "desc": "Konfigurēt AI darbinātas ātrās darbības, kas parādās redaktora konteksta izvēlnē, kad ir atlasīts teksts.",
+      "actionPrefix": {
+        "name": "Darbības prefikss",
+        "desc": "Prefikss (emocijzīme vai teksts), kas tiek rādīts pirms visām ātrā darbībām konteksta izvēlnē",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} darbība konfigurēta ({{enabled}} iespējotas)",
+      "count_plural": "{{count}} darbības konfigurētas ({{enabled}} iespējotas)",
+      "addBtn": "+ pievienot ātro darbību",
+      "empty": "Nav konfigurētu ātro darbību. Izvēlieties pievienot ātro darbību, lai sāktu.",
+      "tableHeaders": {
+        "action": "Darbība",
+        "type": "Tips",
+        "model": "Modelis",
+        "promptPreview": "Uzvednes priekšskatījums",
+        "actions": "Darbības"
+      },
+      "defaultModel": "Noklusējums",
+      "editBtn": "Rediģēt",
+      "deleteBtn": "dzēst",
+      "confirm": {
+        "delete": "Dzēst ātro darbību «{{name}}»?"
+      },
+      "usageInfo": {
+        "title": "Lietošana",
+        "step1": "Atlasiet tekstu jebkurā piezīmē",
+        "step2": "Ar peles labo pogu noklikšķiniet, lai atvērtu konteksta izvēlni",
+        "step3": "Izvēlieties ātro darbību no izvēlnes",
+        "step4Replace": "Darbības, kas atzīmētas kā «aizstāt», aizstās atlasīto tekstu ar AI rezultātu",
+        "step4Explain": "Darbības, kas atzīmētas kā «paskaidrot», parādīs rezultātu modālajā dialogā"
+      },
+      "edit": {
+        "title": "Rediģēt ātro darbību",
+        "name": {
+          "name": "Nosaukums",
+          "desc": "Parādāmais nosaukums šai darbībai konteksta izvēlnē"
+        },
+        "actionType": {
+          "name": "Darbības tips",
+          "desc": "Kā apstrādāt AI atbildi",
+          "replace": "Aizstāt atlasīto tekstu",
+          "explain": "Rādīt modālajā logā"
+        },
+        "model": {
+          "name": "Modelis",
+          "desc": "Valodas modelis, ko izmantot šai darbībai (atstājiet tukšu, lai izmantotu noklusējumu)",
+          "default": "Izmantot noklusējuma modeli"
+        },
+        "promptTemplate": {
+          "name": "Uzvednes veidne",
+          "desc": "Instrukcijas, kas nosūtītas AI. Atlasītais teksts tiks pievienots automātiski."
+        },
+        "cancel": "Atcelt",
+        "save": "Saglabāt"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Pagarināt tekstu",
+          "prompt": "Paplašiniet un elaborējiet sekojošo tekstu, padarot to detalizētāku un visaptverošāku, saglabājot sākotnējo nozīmi un toni. Atgrieziet tikai paplašināto tekstu bez papildu komentāriem:\n\n"
+        },
+        "summarize": {
+          "name": "Apkopot tekstu",
+          "prompt": "Sniedziet kodolīgu sekojošā teksta kopsavilkumu. Atgrieziet tikai kopsavilkumu bez papildu komentāriem:\n\n"
+        },
+        "improve-writing": {
+          "name": "Uzlabot rakstījumu",
+          "prompt": "Uzlabojiet sekojošā teksta rakstīšanas kvalitāti, skaidrību un stilu. Atgrieziet tikai uzlaboto tekstu bez papildu komentāriem:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Labot gramatikas kļūdas",
+          "prompt": "Labojiet visas gramatikas, pareizrakstības un interpunkcijas kļūdas sekojošajā tekstā. Atgrieziet tikai koriģēto tekstu bez papildu komentāriem:\n\n"
+        },
+        "explain": {
+          "name": "Paskaidrot tekstu",
+          "prompt": "Paskaidrojiet sekojošo tekstu vienkāršos vārdos:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Pilnvaru lietojums",
+      "desc": "Izsekot pilnvaru patēriņam dažādiem pakalpojumu sniedzējiem un modeļiem. Dati tiek uzkrāti visās sarunās.",
+      "notAvailable": "Pilnvaru lietojuma izsekošana nav pieejama.",
+      "ranges": {
+        "today": "Šodien",
+        "week": "Šonedēļ",
+        "month": "Šomēnes",
+        "all": "Visu laiku"
+      },
+      "stats": {
+        "totalTokens": "Kopējais pilnvaru skaits",
+        "apiCalls": "API izsaukumi",
+        "promptTokens": "Uzvednes pilnvari",
+        "completion": "Pabeigšana",
+        "tokensIn": "pilnvari ienāk",
+        "tokensOut": "pilnvari iziet"
+      },
+      "byProvider": "Pēc pakalpojumu sniedzēja",
+      "byModel": "Pēc modeļa",
+      "noData": "Vēl nav lietojuma datu.",
+      "recentActivity": "Nesenā aktivitāte",
+      "last10": "pēdējie 10",
+      "noRecent": "Nav nesenās aktivitātes.",
+      "tableHeaders": {
+        "provider": "Pakalpojumu sniedzējs",
+        "model": "Modelis",
+        "prompt": "Uzvedne",
+        "completion": "Pabeigšana",
+        "total": "Kopā",
+        "calls": "Izsaukumi",
+        "time": "Laiks",
+        "in": "Ienāk",
+        "out": "Iziet"
+      },
+      "clearBtn": "Notīrīt visus lietojuma datus",
+      "confirm": {
+        "clear": "Notīrīt visus pilnvaru lietojuma ierakstus? To nevar atsaukt."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Rakstiet savu ziņojumu... (Enter, lai nosūtītu; Shift+Enter jaunai rindai)",
+    "conversations": "Sarunas",
+    "toggleConversationsTitle": "Pārslēgt sarunu sarakstu",
+    "currentConversation": "Pašreizējā saruna",
+    "new": "Jauns",
+    "settings": "Iestatījumi",
+    "openSettingsTitle": "Atvērt spraudņa iestatījumus",
+    "mode": "Režīms",
+    "prompt": "Uzvedne",
+    "agent": "Aģents",
+    "modeOptions": {
+      "chat": "Tērzēšana",
+      "agent": "Aģents"
+    },
+    "noSystemPrompt": "Nav sistēmas uzvednes",
+    "noAgentsAvailable": "Nav pieejamu aģentu",
+    "sendHintPrefix": "Nospiediet ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": ", lai nosūtītu",
+    "sendAriaLabel": "Nosūtīt ziņojumu",
+    "stop": " Apturēt",
+    "addReference": "Pievienot atsauci",
+    "addReferenceTooltip": "Pievienot faila vai mapes atsauci (@)",
+    "emptyHeading": "Sāciet sarunu",
+    "emptySubtext": "Rakstiet ziņojumu zemāk, lai sāktu, vai atlasiet sarunu no vēstures.",
+    "noAgentConfig": "Nav konfigurētu aģentu",
+    "selectAgent": "Atlasiet aģentu…",
+    "notices": {
+      "stopping": "Aptur ģenerēšanu...",
+      "ragInitError": "RAG inicializācijas kļūda: {{message}}",
+      "modelsRefreshed": "Modeļi atsvaidzināti",
+      "modelsRefreshFailed": "Neizdevās atsvaidzināt modeļus: {{message}}",
+      "waitForResponse": "Lūdzu, uzgaidiet, līdz pašreizējā atbilde ir pabeigta",
+      "configureProvider": "Vispirms konfigurējiet LLM pakalpojumu sniedzēju iestatījumos",
+      "selectModel": "Lūdzu, atlasiet modeli",
+      "noValidProvider": "Šim modelim nav atrasta derīga pakalpojumu sniedzēja konfigurācija",
+      "chatError": "Tērzēšanas kļūda: {{message}}",
+      "noMessageToRegenerate": "Nevar atrast ziņojumu, ko reģenerēt",
+      "regenerateOnlyLatest": "Šobrīd var reģenerēt tikai pēdējo atbildi",
+      "regenerateNoUserMsg": "Nevar atrast lietotāja ziņojumu, no kura reģenerēt",
+      "regenerated": "Atbilde reģenerēta",
+      "regenerateFailed": "Reģenerācija neizdevās: {{message}}",
+      "noteCreated": "Piezīme izveidota: {{name}}",
+      "noteCreateFailed": "Neizdevās izveidot piezīmi: {{message}}",
+      "messageInserted": "Ziņojums ievietots: {{path}}",
+      "messageInsertFailed": "Neizdevās ievietot ziņojumu: {{message}}",
+      "noAgents": "Nav pieejamu aģentu. Konfigurējiet aģentus Iestatījumi → Aģenti.",
+      "ragDisabled": "RAG ir atspējots iestatījumos. Iespējojiet to sadaļā iestatījumi → tērzēšanas funkcijas → RAG.",
+      "webSearchDisabled": "Tīmekļa meklēšana ir atspējota iestatījumos. Iespējojiet to sadaļā iestatījumi → tērzēšanas funkcijas → tīmekļa meklēšana.",
+      "noFilesInVault": "Velventī nav atrasts neviens fails",
+      "attached": "Pievienots: {{name}}",
+      "attachedImages": "Pievienotas {{count}} attēls(-i)",
+      "referencesAdded": "Pievienotas {{count}} atsauces",
+      "fileNotFound": "Fails nav atrasts: {{path}}",
+      "agentConfigApplied": "Piemērota aģenta konfigurācija: {{name}}",
+      "waitForComplete": "Lūdzu, uzgaidiet, līdz pašreizējā atbilde ir pabeigta",
+      "chatServiceFallback": "ChatService nav konfigurēts. Izmanto ChatView rezerves variantu.",
+      "noModelSelected": "Nav atlasīts modelis",
+      "noProviderConfig": "Nav atrasta pakalpojumu sniedzēja konfigurācija",
+      "generationStopped": "Ģenerēšana apturēta",
+      "noResponseToRegenerate": "Nav atbildes, ko reģenerēt",
+      "agentNotFound": "Aģents nav atrasts",
+      "unableToLoadRag": "Nevar ielādēt RAG statistiku.",
+      "referenced": "Atsaukts: {{name}}"
+    },
+    "status": {
+      "available": "Pieejams",
+      "unavailable": "Nav pieejams",
+      "disabled": "Atspējots",
+      "on": "Ieslēgts · {{detail}}",
+      "off": "Izslēgts"
+    },
+    "ragStats": {
+      "title": "RAG statistika",
+      "totalChunks": "📊 kopējais daļu skaits:",
+      "filesIndexed": "📁 indeksētie faili:",
+      "totalSize": "💾 kopējais lielums:",
+      "avgChunks": "📈 vid. daļas/failā:",
+      "indexedFiles": "📄 indeksētie faili",
+      "noFilesYet": "⚠️ vēl nav indeksēts neviens fails.",
+      "howToBuild": "Lai veidotu RAG indeksu:",
+      "step1": "Doties uz Iestatījumi → RAG",
+      "step2": "Iespējot RAG",
+      "step3": "Atlasīt velventī indeksēšanu",
+      "close": "Aizvērt",
+      "retrieved": "📚 iegūts no {{count}} dokumenta",
+      "retrieved_plural": "📚 iegūts no {{count}} dokumentiem"
+    },
+    "ragTooltip": {
+      "status": "RAG indeksa statuss:",
+      "totalChunks": "📊 Kopējais daļu skaits: {{count}}",
+      "filesIndexed": "📁 Indeksētie faili: {{count}}",
+      "totalSize": "💾 Kopējais lielums: {{size}} KB",
+      "indexedFiles": "📄 Indeksētie faili:",
+      "andMore": "  ... un vēl {{count}}",
+      "noFilesYet": "⚠️ vēl nav indeksēts neviens fails.",
+      "goToSettings": "Doties uz Iestatījumi → RAG, lai veidotu indeksu.",
+      "ragOff": "ℹ️ RAG pašlaik ir izslēgts šajā tērzēšanā."
+    },
+    "agentSummary": {
+      "model": "Modelis",
+      "temp": "Temp",
+      "max": "Maks",
+      "rag": "RAG",
+      "web": "Tīmeklis",
+      "tools": "Rīki",
+      "memory": "Atmiņa",
+      "none": "Nav",
+      "configuration": "{{name}} konfigurācija",
+      "modelFixed": "{{name}} · Fiksēts",
+      "modelDefault": "{{name}} · Noklusējums",
+      "modelChatView": "{{name}} · Tērzēšanas skats",
+      "customModel": "Pielāgots modelis",
+      "notSet": "Nav iestatīts",
+      "auto": "Auto",
+      "on": "Ieslēgts",
+      "off": "Izslēgts",
+      "shortTerm": "Īstermiņa",
+      "longTerm": "Ilgtermiņa",
+      "disabledMemory": "Atspējots",
+      "builtIn": "{{count}} iebūvēts",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Tīmekļa rezultāti",
+      "attachments": "Pielikumi",
+      "references": "Atsauces",
+      "ragSources": "RAG avoti",
+      "reasoning": "Argumentācija",
+      "copy": "Kopēt",
+      "copied": "Ziņojums nokopēts",
+      "copyFailed": "Neizdevās nokopēt ziņojumu",
+      "tokenUsage": "Pilnvaru lietojums",
+      "tokenUsagePrompt": "Uzvedne",
+      "tokenUsageCompletion": "Pabeigšana",
+      "tokenUsageTotal": "Kopā",
+      "save": "Saglabāt",
+      "insertToNotes": "Ievietot piezīmēs",
+      "regenerate": "Reģenerēt"
+    },
+    "streaming": {
+      "thinking": "Domā..."
+    },
+    "toolCall": {
+      "thinking": "Domā",
+      "executionProcess": "Izpildes process",
+      "input": "Ievade",
+      "output": "Izvade",
+      "running": "Darbojas..."
+    },
+    "addPicture": "Pievienot attēlu",
+    "addPictureTooltip": "Pievienot attēlu ziņojumam",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Izmantot indeksētās piezīmes kā kontekstu",
+    "webSearchLabel": "Tīmekļa meklēšana",
+    "webSearchTooltipLabel": "Meklēt internetā pēc vajadzības",
+    "imageUnavailable": "Attēlu pielikums nav pieejams pašreizējam modelim.",
+    "newChat": "Jauna tērzēšana",
+    "newConversation": "Jauna saruna",
+    "searchConversations": "Meklēt sarunās...",
+    "header": {
+      "model": "Modelis",
+      "advancedParams": "Papildu parametri",
+      "temperature": "Temperatūra",
+      "maxTokens": "Maks. pilnvaru skaits",
+      "topP": "Top P",
+      "freqPenalty": "Biežuma sods",
+      "presPenalty": "Klātbūtnes sods",
+      "agentConfig": "Aģenta konfigurācija",
+      "modelsCount": "Modeļi: {{count}}",
+      "tokensCount": "Pilnvari: {{count}}",
+      "noModels": "Nav pieejamu modeļu"
+    },
+    "temperature": {
+      "precise": "0 (Precīzs)",
+      "balanced": "1 (Līdzsvarots)",
+      "creative": "2 (Radošs)"
+    },
+    "modals": {
+      "image": {
+        "title": "Pievienot attēlus",
+        "searchPlaceholder": "Meklēt attēlus...",
+        "selectAll": "Atlasīt visus",
+        "selectNone": "Noņemt atlasi",
+        "addSelected": "Pievienot atlasītos",
+        "noResults": "Nav atrasts neviens atbilstošs attēls."
+      },
+      "reference": {
+        "title": "Pievienot atsauces",
+        "searchPlaceholder": "Meklēt failus un mapes...",
+        "selectAll": "Atlasīt visus",
+        "selectNone": "Noņemt atlasi",
+        "addSelected": "Pievienot atlasītos",
+        "noResults": "Nav atrasts neviens atbilstošs fails vai mape."
+      },
+      "insertNote": {
+        "title": "Ievietot piezīmē",
+        "searchPlaceholder": "Meklēt piezīmes...",
+        "insert": "Ievietot atlasītajā piezīmē",
+        "createNew": "Izveidot jaunu piezīmi",
+        "noResults": "Nav atrasta neviena atbilstoša piezīme."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Atcelt",
+      "confirm": "Apstiprināt"
+    },
+    "agentEdit": {
+      "title": "Rediģēt aģentu",
+      "icon": {
+        "name": "Ikona",
+        "desc": "Emocijzīme vai rakstzīme, kas pārstāv šo aģentu"
+      },
+      "description": {
+        "name": "Apraksts",
+        "desc": "Īss aģenta apraksts"
+      },
+      "modelStrategy": {
+        "name": "Modeļa stratēģija",
+        "options": {
+          "default": "Izmantot noklusējuma modeli (no iestatījumiem)",
+          "chatView": "Izmantot tērzēšanas skata modeli",
+          "fixed": "Fiksēts modelis"
+        },
+        "noModels": "Kešatmiņā nav modeļu",
+        "desc": "Izvēlieties, kā aģents atlasīs savu modeli"
+      },
+      "systemPrompt": {
+        "createNew": "➕ izveidot jaunu uzvedni…",
+        "promptName": {
+          "name": "Uzvednes nosaukums",
+          "desc": "Parādāmais nosaukums jaunajai sistēmas uzvedne"
+        },
+        "promptContent": {
+          "name": "Uzvednes saturs",
+          "desc": "Jaunās sistēmas uzvednes saturs"
+        },
+        "name": "Sistēmas uzvedne",
+        "desc": "Izvēlieties no esošajām uzvedvēm vai definējiet jaunu šim aģentam."
+      },
+      "capabilities": "Iespējas",
+      "memory": {
+        "title": "Atmiņa",
+        "notice": "Aģenta atmiņa uz laiku nav pieejama, kamēr mēs pilnveidojam pieredzi."
+      },
+      "tools": {
+        "title": "Rīki",
+        "builtIn": {
+          "name": "Iebūvētie rīki",
+          "desc": "Atlasiet, kurus iebūvētos rīkus šis aģents var izmantot"
+        },
+        "cli": {
+          "name": "CLI rīki",
+          "desc": "Piešķirt piekļuvi visiem iespējotajiem CLI rīkiem vai atlasīt atsevišķi zemāk",
+          "noTools": "Nav konfigurētu CLI rīku. Pievienojiet un iespējojiet rīkus sadaļā Iestatījumi → Rīki → CLI, lai tos izmantotu šeit."
+        }
+      },
+      "mcp": {
+        "title": "MCP piekļuve",
+        "noServers": "Nav konfigurētu MCP serveru. Pievienojiet serverus sadaļā Iestatījumi → MCP, lai atbloķētu šīs opcijas.",
+        "toolsCached": "{{count}} rīks kešatmiņā",
+        "toolsCached_plural": "{{count}} rīki kešatmiņā",
+        "noToolsCached": "Kešatmiņā vēl nav rīku. Iespējojiet pilnu piekļuvi vai atsvaidziniet kešatmiņu.",
+        "showTools": "Rādīt rīkus",
+        "hideTools": "Slēpt rīkus",
+        "selected": "Atlasīts",
+        "notSelected": "Nav atlasīts",
+        "noToolsAvailable": "Šajā serverī vēl nav pieejamu rīku."
+      },
+      "notices": {
+        "promptRequired": "Lūdzu, norādiet nosaukumu un saturu jaunajai sistēmas uzvedne."
+      },
+      "name": {
+        "label": "Nosaukums",
+        "desc": "Parādāmais nosaukums šim aģentam"
+      },
+      "fixedModel": {
+        "name": "Fiksēts modelis",
+        "desc": "Atlasiet konkrētu modeli šim aģentam.",
+        "descNoModels": "Nav pieejamu kešotās modeļu. Atsvaidziniet modeļus cilnē Modeļi."
+      },
+      "temperature": {
+        "label": "Temperatūra",
+        "desc": "Kontrolē nejaušību (0,0–2,0)"
+      },
+      "maxTokens": {
+        "label": "Maks. pilnvaru skaits",
+        "desc": "Maksimālais ģenerējamo pilnvaru skaits"
+      },
+      "contextWindow": {
+        "label": "Konteksta logs",
+        "desc": "Kontekstā iekļaujamo iepriekšējo ziņojumu skaits"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Iespējot retrieval augmented generation"
+      },
+      "webSearch": {
+        "name": "Tīmekļa meklēšana",
+        "desc": "Iespējot tīmekļa meklēšanas iespējas"
+      },
+      "maxSteps": {
+        "name": "Maks. rīku soļi",
+        "desc": "Maksimālais rīku izsaukuma soļu skaits vienā aģenta kārtā"
+      }
+    },
+    "provider": {
+      "title": "Pakalpojumu sniedzēja iestatījumi",
+      "selectProvider": {
+        "name": "Pakalpojumu sniedzējs",
+        "desc": "Atlasiet LLM pakalpojumu sniedzēja tipu",
+        "placeholder": "-- Atlasīt pakalpojumu sniedzēju --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (lokāls)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Pielāgots (OpenAI saderīgs)"
+      },
+      "modelFilter": {
+        "name": "Modeļa filtrs",
+        "desc": "Neobligāts regulārās izteiksmes raksts pieejamo modeļu ierobežošanai"
+      },
+      "resourceGroup": {
+        "name": "Resursu grupa",
+        "desc": "Neobligāta SAP AI Core resursu grupa"
+      },
+      "serviceKey": {
+        "name": "Pakalpojuma atslēga",
+        "desc": "SAP AI Core pakalpojuma atslēga (JSON virkne)"
+      },
+      "baseUrl": {
+        "name": "Bāzes URL",
+        "ollamaDesc": "Ollama servera URL",
+        "customDesc": "OpenAI saderīgs API galapunkts (obligāts)",
+        "optionalDesc": "Pielāgots API galapunkts (neobligāts)"
+      },
+      "manageModels": {
+        "name": "Pārvaldīt modeļus",
+        "desc": "Lejupielādēt jaunus modeļus vai atjaunināt esošos no Ollama reģistra.",
+        "btn": "⏬ Lejupielādēt Ollama modeli"
+      },
+      "apiKey": {
+        "name": "API atslēga",
+        "desc": "Autentifikācijas atslēga atlasītajam pakalpojumu sniedzējam"
+      },
+      "cancel": "Atcelt",
+      "save": "Saglabāt",
+      "validation": {
+        "selectProvider": "Lūdzu, atlasiet pakalpojumu sniedzēja tipu",
+        "apiKeyTooLong": "API atslēga ir pārāk gara. Maksimālais garums ir 500 rakstzīmes.",
+        "invalidUrl": "Nederīgs bāzes URL formāts. Lūdzu, ievadiet derīgu URL (piem., https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP inspektors",
+      "desc": "Inspicēt un atkļūdot Model Context Protocol (MCP) servera savienojumus un rīkus.",
+      "tabs": {
+        "connections": "Savienojumi",
+        "tools": "Rīki",
+        "logs": "Žurnāli"
+      },
+      "refreshBtn": "🔄 atsvaidzināt",
+      "connections": {
+        "title": "MCP servera savienojumi",
+        "noServers": "Nav konfigurētu MCP serveru.",
+        "headers": {
+          "server": "Servera nosaukums",
+          "status": "Statuss",
+          "tools": "Pieejamie rīki",
+          "actions": "Darbības"
+        },
+        "statusDisabled": "Atspējots",
+        "statusConnected": "● savienots",
+        "statusDisconnected": "○ atvienots",
+        "toolsLive": "{{count}} rīks",
+        "toolsLive_plural": "{{count}} rīki",
+        "toolsCached": "{{count}} rīks (kešatmiņā)",
+        "toolsCached_plural": "{{count}} rīki (kešatmiņā)",
+        "noTools": "0 rīku",
+        "connectBtn": "Savienot",
+        "disconnectBtn": "Atvienot",
+        "connecting": "Savieno...",
+        "disconnecting": "Atvieno...",
+        "notices": {
+          "disconnected": "Atvienots no {{name}}",
+          "enableFirst": "Iespējojiet serveri iestatījumos pirms savienošanas",
+          "connected": "Savienots ar {{name}}",
+          "failedDisconnect": "Neizdevās atvienoties no {{name}}: {{message}}",
+          "failedConnect": "Neizdevās savienoties ar {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Pieejamie MCP rīki",
+        "noTools": "Nav pieejamu MCP rīku. Pārbaudiet servera savienojumus.",
+        "serverPrefix": "Serveris: {{name}}",
+        "noToolsInServer": "Nav pieejamu rīku",
+        "headers": {
+          "tool": "Rīka nosaukums",
+          "description": "Apraksts",
+          "parameters": "Parametri"
+        },
+        "noDescription": "Nav apraksta",
+        "noParams": "Nav"
+      },
+      "logs": {
+        "title": "MCP savienojumu žurnāli",
+        "placeholder": "MCP savienojumu žurnāli parādīsies šeit. Pašlaik tiek rādīta viettura informācija.",
+        "events": {
+          "connection": "• savienojuma notikumi",
+          "tools": "• rīku reģistrācijas notikumi",
+          "errors": "• kļūdu žurnāli",
+          "comms": "• komunikācijas detaļas"
+        },
+        "testTitle": "Pārbaudīt rīka izpildi",
+        "selectServer": "Atlasīt serveri...",
+        "selectTool": "Atlasīt rīku...",
+        "parametersTitle": "Parametri",
+        "selectEnum": "Atlasīt...",
+        "performBtn": "Izpildīt rīku",
+        "clearBtn": "Notīrīt rezultātus",
+        "executing": "Izpilda...",
+        "success": "✅ izpilde veiksmīga",
+        "failed": "❌ izpilde neizdevās",
+        "errorTitle": "❌ izpildes kļūda",
+        "errorLabel": "Kļūda: {{message}}",
+        "notices": {
+          "success": "Rīks veiksmīgi izpildīts",
+          "failed": "Rīka izpilde neizdevās",
+          "error": "Izpildes kļūda: {{message}}",
+          "requiredMissing": "Trūkst obligātais parametrs: {{name}}",
+          "invalidNumber": "Nederīgs skaitlis parametram: {{name}}",
+          "invalidJson": "Nederīgs JSON parametram: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Nav konfigurētu MCP serveru",
+        "testing": "🧪 Pārbauda {{count}} MCP servera savienojumus...",
+        "allSuccess": "✅ visi {{count}} MCP serveri veiksmīgi savienoti!",
+        "partial": "⚠️ {{success}} savienoti, {{failed}} neizdevās"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Rediģēt MCP serveri",
+      "titleAdd": "Pievienot MCP serveri",
+      "serverName": {
+        "name": "Servera nosaukums",
+        "desc": "Draudzīgs nosaukums, kas rādīts visā spraudnī"
+      },
+      "connectionMode": {
+        "name": "Savienojuma režīms",
+        "desc": "Izvēlieties, vai savienoties automātiski vai tikai manuāli aktivizējot",
+        "auto": "Automātiski savienoties, atverot tērzēšanu",
+        "manual": "Manuāls savienojums"
+      },
+      "command": {
+        "name": "Komanda",
+        "desc": "Izpildāmais fails vai skripts, kas palaiž MCP serveri"
+      },
+      "arguments": {
+        "name": "Argumenti",
+        "desc": "Ar komatiem vai jaunrindām atdalīti argumenti (neobligāts)"
+      },
+      "envVars": {
+        "name": "Vides mainīgie",
+        "desc": "Neobligāti ATSLĒGA=VĒRTĪBA pāri, viens katrā rindā"
+      },
+      "enabled": {
+        "name": "Iespējots",
+        "desc": "Atspējot, lai saglabātu servera konfigurāciju bez automātiskas savienošanas"
+      },
+      "cancel": "Atcelt",
+      "saveEdit": "Saglabāt izmaiņas",
+      "saveAdd": "Pievienot serveri",
+      "validation": {
+        "nameRequired": "Servera nosaukums ir obligāts",
+        "commandRequired": "Komanda ir obligāta"
+      }
+    },
+    "ollamaManager": {
+      "title": "Pārvaldīt Ollama modeļus",
+      "serverInfo": "Servera informācija",
+      "checkingServer": "Pārbauda serveri...",
+      "serverOnline": "✅ Serveris tiešsaistē",
+      "versionLabel": " | Versija: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Serveris bezsaistē",
+      "connectionError": "❌ Savienojuma kļūda",
+      "pullTitle": "Lejupielādēt jaunu modeli",
+      "pullHint": "Ievadiet modeļa nosaukumu, lai lejupielādētu no Ollama bibliotēkas (piem., llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Modeļa nosaukums",
+        "example": "Piemērs: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Lejupielādēt modeli",
+      "installedTitle": "Instalētie modeļi",
+      "refreshList": "🔄 Atsvaidzināt sarakstu",
+      "noModels": "Nav atrasts neviens modelis. Lejupielādējiet modeli, lai sāktu.",
+      "capabilities": "Iespējas: {{caps}}",
+      "deleteBtn": "Dzēst",
+      "closeBtn": "Aizvērt",
+      "confirmDelete": {
+        "title": "Apstiprināt dzēšanu",
+        "message": "Vai tiešām vēlaties dzēst modeli «{{name}}»?",
+        "cancel": "Atcelt",
+        "confirm": "Dzēst"
+      },
+      "notices": {
+        "enterName": "Lūdzu, ievadiet modeļa nosaukumu",
+        "pulling": "Lejupielādē {{name}}... Tas var aizņemt kādu laiku.",
+        "pullSuccess": "✅ Veiksmīgi lejupielādēts {{name}}",
+        "pullFailed": "❌ Neizdevās lejupielādēt modeli: {{message}}",
+        "deleted": "✅ Dzēsts {{name}}",
+        "deleteFailed": "❌ Neizdevās dzēst modeli: {{message}}",
+        "refreshing": "Atsvaidzina...",
+        "refreshSuccess": "✅ Modeļu saraksts atsvaidzināts",
+        "refreshFailed": "❌ Neizdevās atsvaidzināt modeļu sarakstu"
+      }
+    },
+    "promptEdit": {
+      "title": "Rediģēt sistēmas uzvedni",
+      "name": {
+        "name": "Nosaukums",
+        "desc": "Parādāmais nosaukums šai uzvedne"
+      },
+      "content": {
+        "name": "Saturs",
+        "desc": "Sistēmas uzvednes saturs"
+      },
+      "enabled": {
+        "name": "Iespējots",
+        "desc": "Vai šī uzvedne ir aktīva"
+      },
+      "cancel": "Atcelt",
+      "save": "Saglabāt"
+    },
+    "prompt": {
+      "cancel": "Atcelt",
+      "ok": "Labi"
+    },
+    "textInput": {
+      "nameLabel": "Nosaukums",
+      "create": "Izveidot",
+      "cancel": "Atcelt"
+    },
+    "explain": {
+      "loading": "⏳ Apstrādā...",
+      "error": "Kļūda rādot skaidrojumu",
+      "errorPrefix": "❌ Kļūda: "
+    }
+  },
+  "notices": {
+    "noProvider": "Vispirms konfigurējiet LLM pakalpojumu sniedzēju iestatījumos",
+    "noModel": "Iestatījumos atlasiet noklusējuma modeli",
+    "noValidProvider": "Modelim nav atrasta derīga pakalpojumu sniedzēja konfigurācija: {{modelId}}",
+    "processing": "Apstrādā...",
+    "textUpdated": "Teksts veiksmīgi atjaunināts",
+    "error": "Kļūda: {{message}}"
+  }
+}

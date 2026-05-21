@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Chung",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Công cụ",
+      "rag": "RAG",
+      "prompts": "Lời nhắc",
+      "agents": "Tác nhân",
+      "quickActions": "Thao tác nhanh",
+      "usage": "Sử dụng"
+    },
+    "general": {
+      "title": "Cài đặt chung",
+      "desc": "Cấu hình cài đặt chung cho plugin trợ lý thông minh.",
+      "pluginVersion": {
+        "name": "Phiên bản plugin",
+        "desc": "Phiên bản hiện tại của plugin trợ lý thông minh"
+      },
+      "defaultModel": {
+        "name": "Mô hình mặc định",
+        "desc": "Mô hình mặc định để sử dụng cho hội thoại",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Chế độ trò chuyện mặc định",
+        "desc": "Chọn chế độ mở cửa sổ trò chuyện",
+        "chat": "Chế độ trò chuyện",
+        "agent": "Chế độ tác nhân"
+      },
+      "conversationTitleMode": {
+        "name": "Chế độ tiêu đề hội thoại",
+        "desc": "Cách tạo tiêu đề hội thoại",
+        "firstMessage": "Dùng tin nhắn đầu tiên",
+        "autoSummary": "Tự động tạo tóm tắt",
+        "manual": "Thủ công"
+      },
+      "conversationIcons": {
+        "name": "Biểu tượng hội thoại",
+        "desc": "Bật tính năng tự động tạo biểu tượng cho hội thoại"
+      },
+      "configStatus": {
+        "name": "Trạng thái cấu hình",
+        "desc": "Trạng thái cấu hình tổng thể của plugin",
+        "ok": "✅ Đã cấu hình ({{providers}} nhà cung cấp, {{conversations}} hội thoại)",
+        "incomplete": "⚠️ Chưa hoàn chỉnh - Vui lòng cấu hình nhà cung cấp và mô hình"
+      }
+    },
+    "llm": {
+      "title": "Cấu hình LLM",
+      "desc": "Cấu hình nhà cung cấp mô hình ngôn ngữ và quản lý các mô hình khả dụng.",
+      "subTabs": {
+        "provider": "Nhà cung cấp",
+        "models": "Mô hình"
+      }
+    },
+    "models": {
+      "title": "Cấu hình mô hình",
+      "desc": "Xem và quản lý các mô hình từ tất cả nhà cung cấp đã cấu hình. Nhấp \"làm mới mô hình\" để tải các mô hình mới nhất.",
+      "providerCount": "{{count}} nhà cung cấp đã cấu hình",
+      "providerCount_plural": "{{count}} nhà cung cấp đã cấu hình",
+      "refreshAll": "🔄 làm mới tất cả mô hình",
+      "empty": "Chưa có nhà cung cấp nào được cấu hình. Thêm nhà cung cấp trong tab nhà cung cấp trước.",
+      "noModels": "Không có mô hình nào. Nhấp \"làm mới tất cả mô hình\" hoặc làm mới từng nhà cung cấp trong tab nhà cung cấp.",
+      "noMatch": "Không có mô hình nào khớp với bộ lọc hiện tại. Điều chỉnh hoặc xóa bộ lọc để xem kết quả.",
+      "modelCount": "• {{count}} mô hình đã lưu cache",
+      "modelCount_plural": "• {{count}} mô hình đã lưu cache",
+      "matchCount": "• {{count}} kết quả khớp bộ lọc đã chọn",
+      "matchCount_plural": "• {{count}} kết quả khớp bộ lọc đã chọn",
+      "status": {
+        "enabled": "Đã bật",
+        "disabled": "Đã tắt"
+      },
+      "actions": {
+        "disable": "Tắt",
+        "enable": "Bật",
+        "setDefaultChat": "Đặt làm mặc định trò chuyện",
+        "defaultChat": "Trò chuyện mặc định",
+        "setDefaultEmbedding": "Đặt làm mặc định nhúng",
+        "defaultEmbedding": "Nhúng mặc định"
+      },
+      "notices": {
+        "fetching": "Đang tải mô hình cho {{provider}}...",
+        "fetchFailed": "Không thể làm mới mô hình {{provider}}",
+        "refreshed": "Đã làm mới mô hình thành công!",
+        "refreshFailed": "Không thể làm mới mô hình",
+        "defaultChatSet": "Mô hình trò chuyện mặc định đã được đặt thành {{name}}",
+        "defaultEmbeddingSet": "Mô hình nhúng mặc định đã được đặt thành {{name}}"
+      },
+      "filters": {
+        "allProviders": "Tất cả nhà cung cấp",
+        "allCapabilities": "Tất cả khả năng",
+        "allStates": "Tất cả trạng thái",
+        "searchPlaceholder": "Tìm kiếm tên hoặc ID"
+      }
+    },
+    "provider": {
+      "title": "Cấu hình nhà cung cấp",
+      "securityTitle": "⚠️ Cảnh báo bảo mật",
+      "securityDesc": "Khóa API được lưu dưới dạng văn bản thuần trong vault của bạn để tương thích. Để tránh rò rỉ ngoài ý muốn:",
+      "securityItem1": "KHÔNG chia sẻ thư mục {{configDir}}/plugins/intelligence-assistant/data/.",
+      "securityItem2": "Thêm thư mục này vào .gitignore nếu bạn dùng Git sync.",
+      "securityItem3": "Hãy cẩn thận khi sử dụng các dịch vụ đồng bộ hóa đám mây công cộng.",
+      "desc": "Quản lý nhà cung cấp LLM và thông tin xác thực API. Sử dụng cột thao tác để chỉnh sửa chi tiết cấu hình hoặc làm mới mô hình được lưu cache.",
+      "count": "{{count}} nhà cung cấp đã cấu hình",
+      "count_plural": "{{count}} nhà cung cấp đã cấu hình",
+      "addBtn": "+ Thêm nhà cung cấp",
+      "empty": "Chưa có nhà cung cấp nào. Chọn \"Thêm nhà cung cấp\" để bắt đầu.",
+      "tableHeaders": {
+        "provider": "Nhà cung cấp",
+        "status": "Trạng thái",
+        "actions": "Thao tác"
+      },
+      "status": {
+        "ready": "Sẵn sàng",
+        "needsConfig": "Cần cấu hình",
+        "checking": "Đang kiểm tra...",
+        "credentialsSet": "Đã đặt thông tin xác thực",
+        "serverOnline": "Máy chủ trực tuyến",
+        "serverOffline": "Máy chủ ngoại tuyến",
+        "serverError": "Lỗi máy chủ"
+      },
+      "guidance": {
+        "requiresCli": "Yêu cầu CLI cục bộ",
+        "provideServiceKey": "Cung cấp khóa dịch vụ",
+        "configureBaseUrl": "Cấu hình URL cơ sở",
+        "addApiKey": "Thêm khóa API"
+      },
+      "models": {
+        "none": "Không có mô hình",
+        "count": "{{count}} mô hình",
+        "count_plural": "{{count}} mô hình"
+      },
+      "ollama": {
+        "checkingVersion": "Đang kiểm tra phiên bản...",
+        "server": {
+          "checking": "Đang kiểm tra máy chủ...",
+          "online": "Máy chủ: trực tuyến",
+          "offline": "Máy chủ: ngoại tuyến hoặc không thể truy cập",
+          "error": "Máy chủ: lỗi kết nối",
+          "versionOnline": "Máy chủ trực tuyến",
+          "versionOffline": "Máy chủ ngoại tuyến",
+          "versionError": "Lỗi kết nối",
+          "version": "Phiên bản: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Lần làm mới cuối: {{timeAgo}}",
+        "neverRefreshed": "Chưa bao giờ làm mới",
+        "justNow": "vừa xong",
+        "minutesAgo": "{{n}} phút trước",
+        "hoursAgo": "{{n}} giờ trước",
+        "daysAgo": "{{n}} ngày trước"
+      },
+      "actions": {
+        "edit": "Chỉnh sửa",
+        "manageModels": "Quản lý mô hình",
+        "refreshModels": "Làm mới mô hình",
+        "refreshing": "Đang làm mới...",
+        "delete": "Xóa"
+      },
+      "notices": {
+        "refreshed": "Đã làm mới mô hình cho {{provider}}.",
+        "refreshFailed": "Không thể làm mới mô hình"
+      },
+      "confirm": {
+        "delete": "Xóa nhà cung cấp {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "Quản lý máy chủ MCP",
+      "desc": "Cấu hình máy chủ Model Context Protocol (MCP) để mở rộng khả năng của tác nhân với các công cụ và nguồn dữ liệu bên ngoài.",
+      "inspectorBtn": "🔍 Mở MCP inspector",
+      "testAllBtn": "🧪 kiểm tra tất cả kết nối",
+      "refreshAllBtn": "🔄 làm mới tất cả công cụ",
+      "addBtn": "+ Thêm máy chủ MCP",
+      "empty": "Chưa có máy chủ MCP nào. Chọn Thêm máy chủ MCP để bắt đầu.",
+      "tableHeaders": {
+        "name": "Tên",
+        "command": "Lệnh",
+        "arguments": "Đối số",
+        "status": "Trạng thái",
+        "tools": "Công cụ",
+        "actions": "Thao tác"
+      },
+      "untitled": "Máy chủ MCP chưa đặt tên",
+      "notConfigured": "Chưa cấu hình",
+      "noArgs": "Không có",
+      "cached": "Đã lưu cache",
+      "disabled": "Đã tắt",
+      "envVars": "{{count}} biến môi trường",
+      "envVars_plural": "{{count}} biến môi trường",
+      "status": {
+        "disabled": "Đã tắt",
+        "connected": "đã kết nối",
+        "disconnected": "đã ngắt kết nối",
+        "enableToManage": "Bật để quản lý kết nối",
+        "manualConnect": "Kết nối thủ công",
+        "autoConnect": "Tự động kết nối"
+      },
+      "toolCount": {
+        "live": "{{count}} công cụ trực tiếp",
+        "live_plural": "{{count}} công cụ trực tiếp",
+        "cached": "{{count}} công cụ đã lưu cache",
+        "cached_plural": "{{count}} công cụ đã lưu cache"
+      },
+      "actions": {
+        "edit": "Chỉnh sửa",
+        "enabled": "✓ Đã bật",
+        "enabledOff": "✗ Đã tắt",
+        "connect": "kết nối",
+        "disconnect": "ngắt kết nối",
+        "connecting": "Đang kết nối...",
+        "disconnecting": "Đang ngắt kết nối...",
+        "test": "Kiểm tra",
+        "testing": "Đang kiểm tra...",
+        "delete": "Xóa"
+      },
+      "notices": {
+        "disconnected": "Đã ngắt kết nối khỏi {{name}}",
+        "connected": "Đã kết nối tới {{name}}",
+        "autoConnectFailed": "Không thể tự động kết nối {{name}}",
+        "enableFirst": "Bật máy chủ trước khi kết nối",
+        "disconnectFailed": "Không thể ngắt kết nối khỏi {{name}}",
+        "connectFailed": "Không thể kết nối tới {{name}}",
+        "testNoCommand": "❌ vui lòng nhập lệnh trước khi kiểm tra kết nối",
+        "testSuccess": "✅ đã kết nối thành công! Tìm thấy {{count}} công cụ.",
+        "testFailed": "❌ Kết nối thất bại: {{message}}",
+        "refreshedAll": "✅ đã làm mới công cụ cho {{count}} máy chủ",
+        "refreshedAll_plural": "✅ đã làm mới công cụ cho {{count}} máy chủ",
+        "refreshedPartial": "✅ đã làm mới {{success}} máy chủ, ❌ {{failed}} thất bại",
+        "noServersConfigured": "⚠️ Không có máy chủ MCP nào được cấu hình",
+        "testingAll": "🧪 Đang kiểm tra {{count}} kết nối máy chủ MCP...",
+        "testAllSuccess": "✅ tất cả {{count}} máy chủ MCP đã kết nối thành công!",
+        "testAllPartial": "⚠️ {{successful}} đã kết nối, {{failed}} thất bại"
+      },
+      "confirm": {
+        "delete": "Xóa máy chủ MCP \"{{name}}\"?"
+      }
+    },
+    "agents": {
+      "title": "Quản lý tác nhân",
+      "desc": "Tạo và quản lý các tác nhân AI với khả năng, công cụ và hành vi cụ thể.",
+      "count": "{{count}} tác nhân đã cấu hình",
+      "count_plural": "{{count}} tác nhân đã cấu hình",
+      "addBtn": "+ thêm tác nhân",
+      "empty": "Chưa có tác nhân nào. Chọn thêm tác nhân để bắt đầu.",
+      "tableHeaders": {
+        "agent": "Tác nhân",
+        "model": "Mô hình",
+        "capabilities": "Khả năng",
+        "tools": "Công cụ",
+        "actions": "Thao tác"
+      },
+      "defaultBadge": "Mặc định",
+      "systemPrompt": "Lời nhắc hệ thống • {{promptName}}",
+      "customPrompt": "Lời nhắc tùy chỉnh",
+      "model": {
+        "notSet": "Chưa đặt",
+        "notFound": "Không tìm thấy mô hình trong cache",
+        "useChatView": "Dùng mô hình từ cửa sổ trò chuyện",
+        "useChatViewDesc": "Sẽ sử dụng mô hình được chọn trong cửa sổ trò chuyện",
+        "useDefault": "Dùng mô hình mặc định",
+        "useDefaultDesc": "Sẽ sử dụng mô hình mặc định từ cài đặt"
+      },
+      "capabilities": {
+        "noSpecialModes": "Không có chế độ đặc biệt"
+      },
+      "tools": {
+        "builtIn": "{{count}} tích hợp sẵn",
+        "mcpServer": "{{count}} máy chủ MCP",
+        "mcpServer_plural": "{{count}} máy chủ MCP",
+        "mcpTool": "{{count}} công cụ MCP",
+        "mcpTool_plural": "{{count}} công cụ MCP",
+        "noTools": "Không có công cụ nào được bật"
+      },
+      "actions": {
+        "edit": "Chỉnh sửa",
+        "delete": "xóa",
+        "protected": "được bảo vệ"
+      },
+      "confirm": {
+        "delete": "Xóa tác nhân \"{{name}}\"?"
+      }
+    },
+    "prompts": {
+      "title": "Lời nhắc hệ thống",
+      "desc": "Quản lý các lời nhắc hệ thống xác định hành vi và tính cách của trợ lý AI.",
+      "addBtn": "+ thêm lời nhắc hệ thống",
+      "empty": "Chưa có lời nhắc hệ thống nào. Chọn thêm lời nhắc hệ thống để bắt đầu.",
+      "tableHeaders": {
+        "name": "Tên",
+        "contentPreview": "Xem trước nội dung",
+        "created": "Đã tạo",
+        "updated": "Đã cập nhật",
+        "enabled": "Đã bật",
+        "actions": "Thao tác"
+      },
+      "status": {
+        "enabled": "Đã bật",
+        "disabled": "Đã tắt"
+      },
+      "actions": {
+        "edit": "Chỉnh sửa",
+        "disable": "Tắt",
+        "enable": "Bật",
+        "delete": "Xóa"
+      },
+      "confirm": {
+        "delete": "Xóa lời nhắc \"{{name}}\"?"
+      }
+    },
+    "tools": {
+      "title": "Cấu hình công cụ",
+      "desc": "Xem lại các công cụ tích hợp sẵn và khám phá các công cụ MCP được tải từ các máy chủ đã kết nối. Bật các hành động mà tác nhân của bạn có thể thực hiện.",
+      "subTabs": {
+        "builtIn": "Công cụ tích hợp",
+        "mcp": "Công cụ MCP",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "Công cụ CLI"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Tên",
+          "category": "Danh mục",
+          "description": "Mô tả",
+          "parameters": "Tham số",
+          "enabled": "Đã bật"
+        },
+        "categories": {
+          "fileOps": "Thao tác tệp",
+          "searchDisc": "Tìm kiếm & Khám phá",
+          "noteMgmt": "Quản lý ghi chú"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Đọc nội dung của một tệp từ vault của bạn",
+            "params": "path (bắt buộc): Đường dẫn đến tệp cần đọc"
+          },
+          "writeFile": {
+            "desc": "Ghi hoặc cập nhật một tệp trong vault của bạn",
+            "params": "path (bắt buộc), content (bắt buộc): Đường dẫn tệp và nội dung cần ghi"
+          },
+          "listFiles": {
+            "desc": "Liệt kê các tệp trong vault hoặc một thư mục cụ thể",
+            "params": "folder (tùy chọn), extension (tùy chọn): Lọc theo thư mục và phần mở rộng tệp"
+          },
+          "searchFiles": {
+            "desc": "Tìm kiếm tệp theo tên hoặc nội dung trong vault của bạn",
+            "params": "query (bắt buộc), search_content (tùy chọn), limit (tùy chọn): Truy vấn tìm kiếm và tùy chọn"
+          },
+          "createNote": {
+            "desc": "Tạo ghi chú mới với nội dung được chỉ định",
+            "params": "title (bắt buộc), content (bắt buộc), folder (tùy chọn): Tiêu đề, nội dung và vị trí ghi chú"
+          },
+          "appendNote": {
+            "desc": "Thêm nội dung vào cuối một ghi chú hiện có",
+            "params": "path (bắt buộc), content (bắt buộc): Đường dẫn ghi chú và nội dung cần thêm"
+          }
+        },
+        "infoTitle": "💡 về công cụ",
+        "infoText": "Công cụ tích hợp được cấu hình theo cài đặt plugin. Công cụ MCP được quản lý độc lập—sử dụng tab MCP để kết nối máy chủ và làm mới tính khả dụng của công cụ.",
+        "toolNames": {
+          "read_file": "Đọc tệp",
+          "write_file": "Ghi tệp",
+          "list_files": "Liệt kê tệp",
+          "search_files": "Tìm kiếm tệp",
+          "create_note": "Tạo ghi chú",
+          "append_note": "Thêm vào ghi chú"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Không có công cụ MCP nào. Kết nối máy chủ hoặc làm mới công cụ đã lưu cache để hiển thị danh sách.",
+        "tableHeaders": {
+          "server": "Máy chủ",
+          "tool": "Công cụ",
+          "description": "Mô tả",
+          "parameters": "Tham số",
+          "source": "Nguồn"
+        },
+        "noDescription": "Không có mô tả",
+        "schemaUnavailable": "Schema không khả dụng",
+        "live": "Trực tiếp",
+        "cached": "Đã lưu cache",
+        "status": {
+          "connected": "đã kết nối",
+          "disconnected": "đã ngắt kết nối"
+        }
+      },
+      "openapi": {
+        "desc": "Tạo công cụ HTTP từ tài liệu OpenAPI. Các spec từ xa được lưu cache trong {{cacheDir}}.",
+        "addBtn": "Thêm nguồn HTTP",
+        "noSources": "Chưa có nguồn HTTP nào được cấu hình.",
+        "unnamed": "Nguồn HTTP chưa đặt tên",
+        "tableHeaders": {
+          "name": "Tên",
+          "source": "Nguồn",
+          "auth": "Xác thực",
+          "status": "Trạng thái",
+          "actions": "Thao tác"
+        },
+        "sourceUrl": "Chưa đặt URL từ xa",
+        "sourcePath": "Chưa đặt đường dẫn tệp",
+        "authHeader": "Header ({{key}})",
+        "authQuery": "Query ({{key}})",
+        "authNone": "Không có",
+        "statusEnabled": "Đã bật",
+        "statusDisabled": "Đã tắt",
+        "actions": {
+          "edit": "Chỉnh sửa",
+          "reload": "Tải lại",
+          "refetch": "Tải lại từ nguồn",
+          "delete": "Xóa"
+        },
+        "notices": {
+          "removed": "Đã xóa nguồn HTTP",
+          "reloaded": "Đã tải lại {{count}} thao tác",
+          "reloadFailed": "Không thể tải lại nguồn HTTP. Kiểm tra console để biết chi tiết."
+        },
+        "modal": {
+          "defaultTitle": "Nguồn HTTP",
+          "displayName": {
+            "name": "Tên hiển thị",
+            "desc": "Hiển thị cho tác nhân khi chọn nguồn công cụ"
+          },
+          "enabled": {
+            "name": "Đã bật",
+            "desc": "Bật để hiển thị API HTTP này cho mọi tác nhân"
+          },
+          "sourceType": {
+            "name": "Loại nguồn",
+            "file": "Tệp cục bộ",
+            "url": "URL từ xa"
+          },
+          "specUrl": {
+            "name": "URL OpenAPI",
+            "desc": "Được tải và lưu cache trong thư mục dữ liệu plugin"
+          },
+          "cachedFile": "Tệp đã lưu cache: {{path}} ({{date}})",
+          "neverFetched": "Chưa bao giờ tải",
+          "specPath": {
+            "name": "Đường dẫn tệp OpenAPI",
+            "desc": "Đường dẫn tương đối trong vault hoặc đường dẫn tuyệt đối"
+          },
+          "baseUrl": {
+            "name": "Ghi đè URL cơ sở",
+            "desc": "Ghi đè mục máy chủ đầu tiên trong tài liệu (tùy chọn)"
+          },
+          "auth": {
+            "name": "Xác thực",
+            "desc": "Tự động chèn khóa API khi gọi nguồn này",
+            "none": "Không có",
+            "header": "HTTP header",
+            "query": "Tham số query"
+          },
+          "credKey": {
+            "name": "Khóa thông tin xác thực"
+          },
+          "credValue": {
+            "name": "Giá trị thông tin xác thực"
+          },
+          "actions": {
+            "name": "Thao tác",
+            "reloadTools": "Tải lại công cụ",
+            "refetchTooltip": "Tải lại spec từ URL",
+            "deleteTooltip": "Xóa nguồn"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Xác định các công cụ dòng lệnh cục bộ mà tác nhân có thể thực thi. Sử dụng mẫu như {{param}} cho các đối số động.",
+        "addBtn": "Thêm công cụ CLI",
+        "presetsBtn": "Thêm từ cài đặt sẵn",
+        "noTools": "Chưa có công cụ CLI nào được cấu hình.",
+        "tableHeaders": {
+          "name": "Tên",
+          "command": "Lệnh",
+          "parameters": "Tham số",
+          "status": "Trạng thái",
+          "actions": "Thao tác"
+        },
+        "unnamed": "Công cụ CLI chưa đặt tên",
+        "paramCount": "{{count}} tham số",
+        "paramCount_plural": "{{count}} tham số",
+        "noParams": "Không có",
+        "statusEnabled": "Đã bật",
+        "statusDisabled": "Đã tắt",
+        "actions": {
+          "edit": "Chỉnh sửa",
+          "disable": "Tắt",
+          "enable": "Bật",
+          "delete": "Xóa"
+        },
+        "notices": {
+          "removed": "Đã xóa công cụ CLI"
+        },
+        "infoTitle": "💡 Về công cụ CLI",
+        "infoText": "Công cụ CLI thực thi lệnh shell cục bộ. Sử dụng {{paramName}} trong đối số để thay thế mẫu, hoặc cấu hình tham số để truyền dưới dạng đối số hoặc biến môi trường.",
+        "modal": {
+          "defaultTitle": "Công cụ CLI",
+          "toolName": {
+            "name": "Tên công cụ",
+            "desc": "Định danh được tác nhân dùng để gọi công cụ này"
+          },
+          "description": {
+            "name": "Mô tả",
+            "desc": "Mô tả chức năng của công cụ này cho AI"
+          },
+          "enabled": {
+            "name": "Đã bật",
+            "desc": "Bật để cho phép tác nhân sử dụng công cụ này"
+          },
+          "commandConfig": "Cấu hình lệnh",
+          "command": {
+            "name": "Lệnh",
+            "desc": "Tệp thực thi để chạy (ví dụ: node, python, bash, /path/to/script)"
+          },
+          "args": {
+            "name": "Đối số",
+            "desc": "Các đối số lệnh, mỗi dòng một cái. Sử dụng {{paramName}} để thay thế mẫu."
+          },
+          "cwd": {
+            "name": "Thư mục làm việc",
+            "desc": "Thư mục để chạy lệnh (tùy chọn)"
+          },
+          "timeout": {
+            "name": "Thời gian chờ (ms)",
+            "desc": "Thời gian thực thi tối đa tính bằng mili giây (mặc định: {{timeout}})"
+          },
+          "shell": {
+            "name": "Chạy trong shell",
+            "desc": "Thực thi lệnh qua shell (bật các tính năng shell như pipe)"
+          },
+          "paramsTitle": "Tham số",
+          "paramsDesc": "Xác định các tham số mà AI có thể truyền vào công cụ này.",
+          "addParam": "Thêm tham số",
+          "noParams": "Chưa có tham số nào được xác định.",
+          "paramN": "Tham số {{n}}",
+          "param": {
+            "name": "Tên",
+            "type": {
+              "name": "Kiểu",
+              "string": "Chuỗi",
+              "number": "Số",
+              "boolean": "Boolean"
+            },
+            "description": "Mô tả",
+            "required": "Bắt buộc",
+            "insertAs": {
+              "name": "Chèn dưới dạng",
+              "desc": "Cách truyền tham số này vào lệnh",
+              "template": "Mẫu ({{name}})",
+              "arg": "Thêm vào làm đối số",
+              "env": "Biến môi trường"
+            },
+            "envName": {
+              "name": "Tên biến môi trường",
+              "desc": "Ghi đè tên biến môi trường (mặc định là tên tham số viết hoa)"
+            }
+          },
+          "envTitle": "Biến môi trường",
+          "envDesc": "Biến môi trường tĩnh cần đặt khi chạy lệnh.",
+          "envVars": {
+            "name": "Biến môi trường",
+            "desc": "Định dạng: KEY=value, mỗi dòng một cái"
+          }
+        },
+        "presets": {
+          "title": "Thêm công cụ CLI từ cài đặt sẵn",
+          "desc": "Chọn cài đặt sẵn để nhanh chóng thêm công cụ CLI đã được cấu hình. Bạn có thể tùy chỉnh sau khi thêm.",
+          "addBtn": "Thêm",
+          "addedBtn": "Đã thêm",
+          "closeBtn": "Đóng",
+          "notices": {
+            "added": "Đã thêm \"{{name}}\" - bật nó trong danh sách công cụ CLI"
+          },
+          "categories": {
+            "file": "Thao tác tệp",
+            "search": "Tìm kiếm",
+            "network": "Mạng",
+            "code": "Thực thi mã",
+            "data": "Xử lý dữ liệu",
+            "system": "Thông tin hệ thống",
+            "apps": "Ứng dụng macOS & Máy tính để bàn"
+          },
+          "names": {
+            "preset-cat": "Đọc tệp (cat)",
+            "preset-ls": "Liệt kê thư mục (ls)",
+            "preset-find": "Tìm tệp (find)",
+            "preset-grep": "Tìm kiếm văn bản (grep)",
+            "preset-ripgrep": "Tìm kiếm nhanh (rg)",
+            "preset-curl": "Yêu cầu HTTP (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Chạy mã Python",
+            "preset-node": "Chạy JavaScript (Node)",
+            "preset-bash": "Chạy Shell Script",
+            "preset-jq": "Bộ xử lý JSON (jq)",
+            "preset-wc": "Đếm từ (wc)",
+            "preset-date": "Ngày/Giờ hiện tại",
+            "preset-pwd": "Thư mục hiện tại (pwd)",
+            "preset-whoami": "Người dùng hiện tại",
+            "preset-uname": "Thông tin hệ thống (uname)",
+            "preset-open": "Mở tệp/URL (open)",
+            "preset-open-app": "Khởi chạy ứng dụng (open -a)",
+            "preset-safari": "Mở trong Safari",
+            "preset-chrome": "Mở trong Chrome",
+            "preset-firefox": "Mở trong Firefox",
+            "preset-pbcopy": "Sao chép vào clipboard",
+            "preset-pbpaste": "Dán từ clipboard",
+            "preset-say": "Chuyển văn bản thành giọng nói (say)",
+            "preset-osascript": "Trình chạy AppleScript",
+            "preset-notify": "Thông báo máy tính để bàn",
+            "preset-screencapture": "Chụp màn hình",
+            "preset-applescript-list-apps": "Liệt kê ứng dụng đang chạy"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "Cấu hình RAG",
+      "desc": "Cấu hình tạo sinh tăng cường truy xuất và tìm kiếm web để nâng cao phản hồi của AI.",
+      "subTabs": {
+        "overview": "Tổng quan",
+        "chunking": "Phân đoạn",
+        "search": "Tìm kiếm",
+        "filters": "Bộ lọc",
+        "advanced": "Nâng cao",
+        "websearch": "Tìm kiếm web"
+      },
+      "general": {
+        "title": "Cài đặt chung",
+        "enableRag": {
+          "name": "Bật RAG",
+          "desc": "Bật Retrieval-Augmented Generation để có ngữ cảnh nâng cao"
+        },
+        "vectorStore": {
+          "name": "Kho vector",
+          "desc": "Cơ sở dữ liệu vector để lưu trữ các embedding",
+          "memory": "Trong bộ nhớ",
+          "disk": "Trên đĩa"
+        },
+        "embeddingModel": {
+          "name": "Mô hình embedding",
+          "desc": "Mô hình để tạo các embedding"
+        },
+        "embedChanged": {
+          "name": "Tự động nhúng tệp đã thay đổi",
+          "desc": "Tự động nhúng lại tệp khi chúng được sửa đổi"
+        }
+      },
+      "indexMgmt": {
+        "title": "Quản lý chỉ mục",
+        "desc": "Quản lý chỉ mục RAG và xem thống kê về nội dung đã được lập chỉ mục.",
+        "statsTitle": "Thống kê chỉ mục",
+        "stats": {
+          "totalChunks": "Tổng số đoạn",
+          "uniqueFiles": "Tệp duy nhất",
+          "totalChars": "Tổng ký tự",
+          "avgChunkSize": "Kích thước đoạn trung bình"
+        },
+        "empty": "Chỉ mục trống. Chọn xây dựng lại chỉ mục để bắt đầu lập chỉ mục.",
+        "error": "⚠️ không thể tải thống kê chỉ mục",
+        "rebuild": {
+          "name": "Xây dựng lại chỉ mục",
+          "desc": "Lập chỉ mục lại tất cả tệp trong vault. Quá trình này có thể mất một lúc.",
+          "btn": "Xây dựng lại",
+          "rebuilding": "Đang xây dựng lại..."
+        },
+        "refresh": {
+          "name": "Làm mới chỉ mục",
+          "desc": "Cập nhật chỉ mục với các tệp đã thay đổi kể từ lần lập chỉ mục cuối.",
+          "btn": "Làm mới",
+          "refreshing": "Đang làm mới..."
+        },
+        "clear": {
+          "name": "Xóa chỉ mục",
+          "desc": "Xóa tất cả dữ liệu đã lập chỉ mục. Bạn sẽ cần xây dựng lại chỉ mục.",
+          "btn": "Xóa",
+          "clearing": "Đang xóa..."
+        },
+        "notices": {
+          "rebuilt": "Đã xây dựng lại chỉ mục thành công",
+          "rebuildFailed": "Không thể xây dựng lại chỉ mục",
+          "refreshed": "Đã làm mới chỉ mục thành công",
+          "refreshFailed": "Không thể làm mới chỉ mục",
+          "cleared": "Đã xóa chỉ mục thành công",
+          "clearFailed": "Không thể xóa chỉ mục"
+        }
+      },
+      "chunking": {
+        "title": "Cài đặt phân đoạn",
+        "strategy": {
+          "name": "Chiến lược phân đoạn",
+          "desc": "Chiến lược chia tài liệu thành các đoạn",
+          "recursive": "Đệ quy (thông minh)",
+          "fixed": "Kích thước cố định",
+          "sentence": "Theo câu",
+          "paragraph": "Theo đoạn văn"
+        },
+        "chunkSize": {
+          "name": "Kích thước đoạn",
+          "desc": "Số ký tự mỗi đoạn (khuyến nghị 500-2000)"
+        },
+        "chunkOverlap": {
+          "name": "Chồng lấp đoạn",
+          "desc": "Số ký tự chồng lấp giữa các đoạn"
+        },
+        "minChunkSize": {
+          "name": "Kích thước đoạn tối thiểu",
+          "desc": "Kích thước đoạn tối thiểu cần tạo"
+        },
+        "maxTokens": {
+          "name": "Token tối đa mỗi đoạn",
+          "desc": "Số token tối đa cho phép mỗi đoạn"
+        }
+      },
+      "search": {
+        "title": "Cài đặt tìm kiếm",
+        "searchType": {
+          "name": "Loại tìm kiếm",
+          "desc": "Loại tìm kiếm tương đồng cần thực hiện",
+          "similarity": "Tương đồng"
+        },
+        "topK": {
+          "name": "K kết quả hàng đầu",
+          "desc": "Số đoạn có liên quan nhất cần truy xuất (1-20)"
+        },
+        "threshold": {
+          "name": "Ngưỡng tương đồng",
+          "desc": "Điểm tương đồng tối thiểu để đưa vào kết quả (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Trọng số điểm liên quan",
+          "desc": "Trọng số cho tính điểm liên quan (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Giới hạn cửa sổ ngữ cảnh",
+          "desc": "Token tối đa cho ngữ cảnh đã truy xuất"
+        }
+      },
+      "filters": {
+        "title": "Bộ lọc tệp",
+        "excludeFolders": {
+          "name": "Loại trừ thư mục",
+          "desc": "Các thư mục cần loại trừ khỏi lập chỉ mục (phân cách bằng dấu phẩy)"
+        },
+        "includeTypes": {
+          "name": "Bao gồm loại tệp",
+          "desc": "Loại tệp cần bao gồm (trống = tất cả loại)"
+        },
+        "excludeTypes": {
+          "name": "Loại trừ loại tệp",
+          "desc": "Loại tệp cần loại trừ khỏi lập chỉ mục"
+        },
+        "filterByTag": {
+          "name": "Lọc theo thẻ",
+          "desc": "Chỉ lập chỉ mục tệp có các thẻ này (trống = tất cả tệp)"
+        },
+        "excludeByTag": {
+          "name": "Loại trừ theo thẻ",
+          "desc": "Loại trừ tệp có các thẻ này khỏi lập chỉ mục"
+        }
+      },
+      "advanced": {
+        "title": "Cài đặt nâng cao",
+        "batchSize": {
+          "name": "Kích thước lô nhúng",
+          "desc": "Số đoạn cần nhúng song song"
+        }
+      },
+      "grading": {
+        "title": "Cài đặt đánh giá",
+        "desc": "Đánh giá các đoạn được truy xuất về độ liên quan trước khi gửi đến LLM. Điều này giúp lọc ra các kết quả chất lượng thấp.",
+        "enableGrading": {
+          "name": "Bật ngưỡng đánh giá",
+          "desc": "Lọc các đoạn dưới ngưỡng chất lượng"
+        },
+        "graderSource": {
+          "name": "Nguồn mô hình đánh giá",
+          "desc": "Nơi lấy mô hình đánh giá",
+          "chat": "Mô hình trò chuyện",
+          "custom": "Mô hình tùy chỉnh"
+        },
+        "graderModel": {
+          "name": "Mô hình đánh giá",
+          "desc": "Mô hình cụ thể để sử dụng cho việc đánh giá"
+        },
+        "parallel": {
+          "name": "Xử lý song song",
+          "desc": "Số đoạn cần đánh giá song song"
+        },
+        "minRelevance": {
+          "name": "Điểm liên quan tối thiểu",
+          "desc": "Điểm liên quan tối thiểu (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Điểm chính xác tối thiểu",
+          "desc": "Điểm chính xác tối thiểu (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Điểm chất lượng hỗ trợ tối thiểu",
+          "desc": "Điểm chất lượng hỗ trợ tối thiểu (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Cấu hình tìm kiếm web",
+      "desc": "Cấu hình chức năng tìm kiếm web để nâng cao phản hồi của AI với thông tin cập nhật từ internet.",
+      "generalBehavior": "Hành vi chung",
+      "providerSelection": "Chọn nhà cung cấp",
+      "localeFilters": "Ngôn ngữ & bộ lọc",
+      "apiCredentials": "Thông tin xác thực API & điểm cuối",
+      "enabled": {
+        "name": "Bật tìm kiếm web",
+        "desc": "Cho phép AI tìm kiếm web để có thông tin hiện tại"
+      },
+      "autoTrigger": {
+        "name": "Tự động kích hoạt tìm kiếm",
+        "desc": "Tự động kích hoạt tìm kiếm web khi truy vấn yêu cầu thông tin hiện tại (ví dụ: tin tức, giá cả, sự kiện gần đây)"
+      },
+      "maxResults": {
+        "name": "Số kết quả tối đa",
+        "desc": "Số lượng kết quả tìm kiếm tối đa cần trả về"
+      },
+      "timeRange": {
+        "name": "Độ tươi mới của kết quả",
+        "desc": "Giới hạn kết quả theo khoảng thời gian được hỗ trợ bởi nhà cung cấp (Google, SearXNG, Mojeek)",
+        "any": "Bất kỳ thời gian nào (mặc định)",
+        "h": "Giờ qua",
+        "d": "24 giờ qua",
+        "w": "Tuần qua",
+        "m": "Tháng qua",
+        "y": "Năm qua"
+      },
+      "provider": {
+        "name": "Nhà cung cấp tìm kiếm",
+        "desc": "Chọn từ các trình thu thập thân thiện với quyền riêng tư hoặc các công cụ tìm kiếm hỗ trợ API"
+      },
+      "searchLanguage": {
+        "name": "Mã ngôn ngữ",
+        "desc": "Mã ngôn ngữ ISO (ví dụ: en, fr, zh-CN) được chuyển tiếp đến các nhà cung cấp hỗ trợ địa phương hóa"
+      },
+      "searchCountry": {
+        "name": "Mã quốc gia/thị trường",
+        "desc": "Mã quốc gia hai chữ cái (ví dụ: US, DE) được sử dụng bởi Bing, DuckDuckGo, Brave và các dịch vụ khác"
+      },
+      "includeDomains": {
+        "name": "Chỉ bao gồm các tên miền này",
+        "desc": "Danh sách phân cách bằng dấu phẩy được SerpAPI và Brave dùng để giới hạn kết quả cho các trang web cụ thể"
+      },
+      "excludeDomains": {
+        "name": "Loại trừ tên miền",
+        "desc": "Các tên miền phân cách bằng dấu phẩy để lọc ra sau khi tải kết quả"
+      },
+      "apiKey": {
+        "name": "Khóa API mặc định",
+        "desc": "Khóa API dùng chung được Google, Bing, SerpAPI, Tavily hoặc Brave sử dụng khi không đặt khóa riêng cho nhà cung cấp"
+      },
+      "googleCseId": {
+        "name": "ID công cụ tìm kiếm tùy chỉnh Google",
+        "desc": "Bắt buộc cùng với khóa API Google khi sử dụng nhà cung cấp Google"
+      },
+      "serpapiEndpoint": {
+        "name": "Điểm cuối SerpAPI",
+        "desc": "Ghi đè URL cơ sở SerpAPI nếu bạn tự lưu trữ"
+      },
+      "tavilyApiKey": {
+        "name": "Khóa API Tavily",
+        "desc": "Ghi đè khóa mặc định khi sử dụng nhà cung cấp Tavily"
+      },
+      "searxngEndpoint": {
+        "name": "Điểm cuối SearXNG",
+        "desc": "URL cơ sở của phiên bản SearXNG của bạn (phải trả về JSON)"
+      },
+      "braveApiKey": {
+        "name": "Khóa API Brave",
+        "desc": "Sử dụng token đăng ký Brave Search API khi được chọn làm nhà cung cấp"
+      },
+      "qwantApiKey": {
+        "name": "Khóa API Qwant (tùy chọn)",
+        "desc": "Thêm bearer token nếu gói Qwant của bạn cấp một cái"
+      },
+      "mojeekApiKey": {
+        "name": "Khóa API Mojeek",
+        "desc": "Bắt buộc cho nhà cung cấp Mojeek"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (không cần khóa)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (thu thập HTML)",
+        "yandex": "Yandex (thu thập HTML)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Thao tác nhanh",
+      "desc": "Cấu hình các thao tác nhanh được hỗ trợ bởi AI xuất hiện trong menu ngữ cảnh trình soạn thảo khi văn bản được chọn.",
+      "actionPrefix": {
+        "name": "Tiền tố hành động",
+        "desc": "Tiền tố (emoji hoặc văn bản) hiển thị trước tất cả thao tác nhanh trong menu ngữ cảnh",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} hành động đã cấu hình ({{enabled}} đã bật)",
+      "count_plural": "{{count}} hành động đã cấu hình ({{enabled}} đã bật)",
+      "addBtn": "+ thêm thao tác nhanh",
+      "empty": "Chưa có thao tác nhanh nào. Chọn thêm thao tác nhanh để bắt đầu.",
+      "tableHeaders": {
+        "action": "Hành động",
+        "type": "Loại",
+        "model": "Mô hình",
+        "promptPreview": "Xem trước lời nhắc",
+        "actions": "Thao tác"
+      },
+      "defaultModel": "Mặc định",
+      "editBtn": "Chỉnh sửa",
+      "deleteBtn": "xóa",
+      "confirm": {
+        "delete": "Xóa thao tác nhanh \"{{name}}\"?"
+      },
+      "usageInfo": {
+        "title": "Cách dùng",
+        "step1": "Chọn văn bản trong bất kỳ ghi chú nào",
+        "step2": "Nhấp chuột phải để mở menu ngữ cảnh",
+        "step3": "Chọn một thao tác nhanh từ menu",
+        "step4Replace": "Các hành động được đánh dấu là \"thay thế\" sẽ thay thế văn bản đã chọn bằng kết quả AI",
+        "step4Explain": "Các hành động được đánh dấu là \"giải thích\" sẽ hiển thị kết quả trong hộp thoại"
+      },
+      "edit": {
+        "title": "Chỉnh sửa thao tác nhanh",
+        "name": {
+          "name": "Tên",
+          "desc": "Tên hiển thị cho hành động này trong menu ngữ cảnh"
+        },
+        "actionType": {
+          "name": "Loại hành động",
+          "desc": "Cách xử lý phản hồi của AI",
+          "replace": "Thay thế văn bản đã chọn",
+          "explain": "Hiển thị trong hộp thoại"
+        },
+        "model": {
+          "name": "Mô hình",
+          "desc": "Mô hình ngôn ngữ để sử dụng cho hành động này (để trống để dùng mặc định)",
+          "default": "Dùng mô hình mặc định"
+        },
+        "promptTemplate": {
+          "name": "Mẫu lời nhắc",
+          "desc": "Hướng dẫn gửi đến AI. Văn bản đã chọn sẽ được thêm tự động."
+        },
+        "cancel": "Hủy",
+        "save": "Lưu"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Làm dài văn bản",
+          "prompt": "Mở rộng và trình bày chi tiết hơn về đoạn văn bản sau, làm cho nó chi tiết và toàn diện hơn trong khi vẫn giữ nguyên ý nghĩa và giọng văn gốc. Chỉ trả về văn bản đã mở rộng mà không có bình luận nào thêm:\n\n"
+        },
+        "summarize": {
+          "name": "Tóm tắt văn bản",
+          "prompt": "Cung cấp bản tóm tắt ngắn gọn của đoạn văn bản sau. Chỉ trả về bản tóm tắt mà không có bình luận nào thêm:\n\n"
+        },
+        "improve-writing": {
+          "name": "Cải thiện văn phong",
+          "prompt": "Cải thiện chất lượng viết, sự rõ ràng và phong cách của đoạn văn bản sau. Chỉ trả về văn bản đã cải thiện mà không có bình luận nào thêm:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Sửa ngữ pháp",
+          "prompt": "Sửa các lỗi ngữ pháp, chính tả và dấu câu trong đoạn văn bản sau. Chỉ trả về văn bản đã sửa mà không có bình luận nào thêm:\n\n"
+        },
+        "explain": {
+          "name": "Giải thích văn bản",
+          "prompt": "Giải thích đoạn văn bản sau bằng ngôn ngữ đơn giản:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Sử dụng token",
+      "desc": "Theo dõi mức tiêu thụ token trên các nhà cung cấp và mô hình. Dữ liệu được tích lũy qua tất cả hội thoại.",
+      "notAvailable": "Theo dõi sử dụng token không khả dụng.",
+      "ranges": {
+        "today": "Hôm nay",
+        "week": "Tuần này",
+        "month": "Tháng này",
+        "all": "Tất cả thời gian"
+      },
+      "stats": {
+        "totalTokens": "Tổng token",
+        "apiCalls": "Lượt gọi API",
+        "promptTokens": "Token lời nhắc",
+        "completion": "Hoàn thành",
+        "tokensIn": "token vào",
+        "tokensOut": "token ra"
+      },
+      "byProvider": "Theo nhà cung cấp",
+      "byModel": "Theo mô hình",
+      "noData": "Chưa có dữ liệu sử dụng.",
+      "recentActivity": "Hoạt động gần đây",
+      "last10": "10 gần nhất",
+      "noRecent": "Không có hoạt động gần đây.",
+      "tableHeaders": {
+        "provider": "Nhà cung cấp",
+        "model": "Mô hình",
+        "prompt": "Lời nhắc",
+        "completion": "Hoàn thành",
+        "total": "Tổng cộng",
+        "calls": "Lượt gọi",
+        "time": "Thời gian",
+        "in": "Vào",
+        "out": "Ra"
+      },
+      "clearBtn": "Xóa tất cả dữ liệu sử dụng",
+      "confirm": {
+        "clear": "Xóa tất cả bản ghi sử dụng token? Không thể hoàn tác."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Nhập tin nhắn của bạn... (Enter để gửi, Shift+Enter để xuống dòng)",
+    "conversations": "Hội thoại",
+    "toggleConversationsTitle": "Bật/tắt danh sách hội thoại",
+    "currentConversation": "Hội thoại hiện tại",
+    "new": "Mới",
+    "settings": "Cài đặt",
+    "openSettingsTitle": "Mở cài đặt plugin",
+    "mode": "Chế độ",
+    "prompt": "Lời nhắc",
+    "agent": "Tác nhân",
+    "modeOptions": {
+      "chat": "Trò chuyện",
+      "agent": "Tác nhân"
+    },
+    "noSystemPrompt": "Không có lời nhắc hệ thống",
+    "noAgentsAvailable": "Không có tác nhân nào",
+    "sendHintPrefix": "Nhấn ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " để gửi",
+    "sendAriaLabel": "Gửi tin nhắn",
+    "stop": " Dừng",
+    "addReference": "Thêm tham chiếu",
+    "addReferenceTooltip": "Thêm tham chiếu tệp hoặc thư mục (@)",
+    "emptyHeading": "Bắt đầu hội thoại",
+    "emptySubtext": "Nhập tin nhắn bên dưới để bắt đầu, hoặc chọn hội thoại từ lịch sử.",
+    "noAgentConfig": "Chưa cấu hình tác nhân nào",
+    "selectAgent": "Chọn một tác nhân…",
+    "notices": {
+      "stopping": "Đang dừng tạo sinh...",
+      "ragInitError": "Lỗi khởi tạo RAG: {{message}}",
+      "modelsRefreshed": "Đã làm mới mô hình",
+      "modelsRefreshFailed": "Không thể làm mới mô hình: {{message}}",
+      "waitForResponse": "Vui lòng chờ phản hồi hiện tại hoàn thành",
+      "configureProvider": "Vui lòng cấu hình nhà cung cấp LLM trong cài đặt trước",
+      "selectModel": "Vui lòng chọn một mô hình",
+      "noValidProvider": "Không tìm thấy cấu hình nhà cung cấp hợp lệ cho mô hình này",
+      "chatError": "Lỗi trò chuyện: {{message}}",
+      "noMessageToRegenerate": "Không thể tìm thấy tin nhắn để tạo lại",
+      "regenerateOnlyLatest": "Chỉ có thể tạo lại phản hồi gần nhất ngay bây giờ",
+      "regenerateNoUserMsg": "Không thể tìm thấy tin nhắn người dùng để tạo lại",
+      "regenerated": "Đã tạo lại phản hồi",
+      "regenerateFailed": "Tạo lại thất bại: {{message}}",
+      "noteCreated": "Đã tạo ghi chú: {{name}}",
+      "noteCreateFailed": "Không thể tạo ghi chú: {{message}}",
+      "messageInserted": "Đã chèn tin nhắn vào: {{path}}",
+      "messageInsertFailed": "Không thể chèn tin nhắn: {{message}}",
+      "noAgents": "Không có tác nhân nào. Cấu hình tác nhân trong Cài đặt → Tác nhân.",
+      "ragDisabled": "RAG bị tắt trong cài đặt. Bật nó trong cài đặt → tính năng chat → RAG.",
+      "webSearchDisabled": "Tìm kiếm web bị tắt trong cài đặt. Bật nó trong cài đặt → tính năng chat → tìm kiếm web.",
+      "noFilesInVault": "Không tìm thấy tệp nào trong vault",
+      "attached": "Đã đính kèm: {{name}}",
+      "attachedImages": "Đã đính kèm {{count}} hình ảnh",
+      "referencesAdded": "Đã thêm {{count}} tham chiếu",
+      "fileNotFound": "Không tìm thấy tệp: {{path}}",
+      "agentConfigApplied": "Đã áp dụng cấu hình cho tác nhân: {{name}}",
+      "waitForComplete": "Vui lòng chờ phản hồi hiện tại hoàn thành",
+      "chatServiceFallback": "ChatService chưa được cấu hình. Đang dùng ChatView dự phòng.",
+      "noModelSelected": "Chưa chọn mô hình",
+      "noProviderConfig": "Không tìm thấy cấu hình nhà cung cấp",
+      "generationStopped": "Đã dừng tạo sinh",
+      "noResponseToRegenerate": "Không có phản hồi để tạo lại",
+      "agentNotFound": "Không tìm thấy tác nhân",
+      "unableToLoadRag": "Không thể tải thống kê RAG.",
+      "referenced": "Đã tham chiếu: {{name}}"
+    },
+    "status": {
+      "available": "Khả dụng",
+      "unavailable": "Không khả dụng",
+      "disabled": "Đã tắt",
+      "on": "Bật · {{detail}}",
+      "off": "Tắt"
+    },
+    "ragStats": {
+      "title": "Thống kê RAG",
+      "totalChunks": "📊 tổng số đoạn:",
+      "filesIndexed": "📁 tệp đã lập chỉ mục:",
+      "totalSize": "💾 tổng kích thước:",
+      "avgChunks": "📈 Đoạn trung bình/tệp:",
+      "indexedFiles": "📄 tệp đã lập chỉ mục",
+      "noFilesYet": "⚠️ chưa có tệp nào được lập chỉ mục.",
+      "howToBuild": "Để xây dựng chỉ mục RAG:",
+      "step1": "Vào Cài đặt → RAG",
+      "step2": "Bật RAG",
+      "step3": "Chọn lập chỉ mục vault",
+      "close": "Đóng",
+      "retrieved": "📚 đã truy xuất từ {{count}} tài liệu",
+      "retrieved_plural": "📚 đã truy xuất từ {{count}} tài liệu"
+    },
+    "ragTooltip": {
+      "status": "Trạng thái chỉ mục RAG:",
+      "totalChunks": "📊 Tổng số đoạn: {{count}}",
+      "filesIndexed": "📁 Tệp đã lập chỉ mục: {{count}}",
+      "totalSize": "💾 Tổng kích thước: {{size}} KB",
+      "indexedFiles": "📄 Tệp đã lập chỉ mục:",
+      "andMore": "  ... và {{count}} tệp nữa",
+      "noFilesYet": "⚠️ chưa có tệp nào được lập chỉ mục.",
+      "goToSettings": "Vào Cài đặt → RAG để xây dựng chỉ mục.",
+      "ragOff": "ℹ️ RAG hiện đang tắt cho cuộc trò chuyện này."
+    },
+    "agentSummary": {
+      "model": "Mô hình",
+      "temp": "Nhiệt độ",
+      "max": "Tối đa",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Công cụ",
+      "memory": "Bộ nhớ",
+      "none": "Không có",
+      "configuration": "Cấu hình {{name}}",
+      "modelFixed": "{{name}} · Cố định",
+      "modelDefault": "{{name}} · Mặc định",
+      "modelChatView": "{{name}} · Cửa sổ trò chuyện",
+      "customModel": "Mô hình tùy chỉnh",
+      "notSet": "Chưa đặt",
+      "auto": "Tự động",
+      "on": "Bật",
+      "off": "Tắt",
+      "shortTerm": "Ngắn hạn",
+      "longTerm": "Dài hạn",
+      "disabledMemory": "Đã tắt",
+      "builtIn": "{{count}} tích hợp sẵn",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Kết quả web",
+      "attachments": "Tệp đính kèm",
+      "references": "Tham chiếu",
+      "ragSources": "Nguồn RAG",
+      "reasoning": "Suy luận",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép tin nhắn",
+      "copyFailed": "Không thể sao chép tin nhắn",
+      "tokenUsage": "Sử dụng token",
+      "tokenUsagePrompt": "Lời nhắc",
+      "tokenUsageCompletion": "Hoàn thành",
+      "tokenUsageTotal": "Tổng cộng",
+      "save": "Lưu",
+      "insertToNotes": "Chèn vào ghi chú",
+      "regenerate": "Tạo lại"
+    },
+    "streaming": {
+      "thinking": "Đang suy nghĩ..."
+    },
+    "toolCall": {
+      "thinking": "Đang suy nghĩ",
+      "executionProcess": "Quá trình thực thi",
+      "input": "Đầu vào",
+      "output": "Đầu ra",
+      "running": "Đang chạy..."
+    },
+    "addPicture": "Thêm hình ảnh",
+    "addPictureTooltip": "Đính kèm hình ảnh vào tin nhắn của bạn",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Dùng ghi chú đã lập chỉ mục làm ngữ cảnh",
+    "webSearchLabel": "Tìm kiếm web",
+    "webSearchTooltipLabel": "Tìm kiếm internet khi cần",
+    "imageUnavailable": "Đính kèm hình ảnh không khả dụng cho mô hình hiện tại.",
+    "newChat": "Trò chuyện mới",
+    "newConversation": "Hội thoại mới",
+    "searchConversations": "Tìm kiếm hội thoại...",
+    "header": {
+      "model": "Mô hình",
+      "advancedParams": "Tham số nâng cao",
+      "temperature": "Nhiệt độ",
+      "maxTokens": "Token tối đa",
+      "topP": "Top P",
+      "freqPenalty": "Phạt tần suất",
+      "presPenalty": "Phạt hiện diện",
+      "agentConfig": "Cấu hình tác nhân",
+      "modelsCount": "Mô hình: {{count}}",
+      "tokensCount": "Token: {{count}}",
+      "noModels": "Không có mô hình nào"
+    },
+    "temperature": {
+      "precise": "0 (Chính xác)",
+      "balanced": "1 (Cân bằng)",
+      "creative": "2 (Sáng tạo)"
+    },
+    "modals": {
+      "image": {
+        "title": "Đính kèm hình ảnh",
+        "searchPlaceholder": "Tìm kiếm hình ảnh...",
+        "selectAll": "Chọn tất cả",
+        "selectNone": "Bỏ chọn tất cả",
+        "addSelected": "Thêm đã chọn",
+        "noResults": "Không tìm thấy hình ảnh phù hợp."
+      },
+      "reference": {
+        "title": "Thêm tham chiếu",
+        "searchPlaceholder": "Tìm kiếm tệp và thư mục...",
+        "selectAll": "Chọn tất cả",
+        "selectNone": "Bỏ chọn tất cả",
+        "addSelected": "Thêm đã chọn",
+        "noResults": "Không tìm thấy tệp hoặc thư mục phù hợp."
+      },
+      "insertNote": {
+        "title": "Chèn vào ghi chú",
+        "searchPlaceholder": "Tìm kiếm ghi chú...",
+        "insert": "Chèn vào ghi chú đã chọn",
+        "createNew": "Tạo ghi chú mới",
+        "noResults": "Không tìm thấy ghi chú phù hợp."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Hủy",
+      "confirm": "Xác nhận"
+    },
+    "agentEdit": {
+      "title": "Chỉnh sửa tác nhân",
+      "icon": {
+        "name": "Biểu tượng",
+        "desc": "Emoji hoặc ký tự để đại diện cho tác nhân này"
+      },
+      "description": {
+        "name": "Mô tả",
+        "desc": "Mô tả ngắn gọn về tác nhân"
+      },
+      "modelStrategy": {
+        "name": "Chiến lược mô hình",
+        "options": {
+          "default": "Dùng mô hình mặc định (từ cài đặt)",
+          "chatView": "Dùng mô hình từ cửa sổ trò chuyện",
+          "fixed": "Mô hình cố định"
+        },
+        "noModels": "Chưa có mô hình nào trong cache",
+        "desc": "Chọn cách tác nhân sẽ chọn mô hình của mình"
+      },
+      "systemPrompt": {
+        "createNew": "➕ tạo lời nhắc mới…",
+        "promptName": {
+          "name": "Tên lời nhắc",
+          "desc": "Tên hiển thị cho lời nhắc hệ thống mới"
+        },
+        "promptContent": {
+          "name": "Nội dung lời nhắc",
+          "desc": "Nội dung cho lời nhắc hệ thống mới"
+        },
+        "name": "Lời nhắc hệ thống",
+        "desc": "Chọn từ các lời nhắc hiện có hoặc xác định lời nhắc mới cho tác nhân này."
+      },
+      "capabilities": "Khả năng",
+      "memory": {
+        "title": "Bộ nhớ",
+        "notice": "Bộ nhớ tác nhân tạm thời không khả dụng trong khi chúng tôi cải tiến trải nghiệm."
+      },
+      "tools": {
+        "title": "Công cụ",
+        "builtIn": {
+          "name": "Công cụ tích hợp sẵn",
+          "desc": "Chọn các công cụ tích hợp sẵn mà tác nhân này có thể sử dụng"
+        },
+        "cli": {
+          "name": "Công cụ CLI",
+          "desc": "Cấp quyền truy cập vào tất cả công cụ CLI đã bật, hoặc chọn riêng lẻ bên dưới",
+          "noTools": "Chưa có công cụ CLI nào. Thêm và bật công cụ trong Cài đặt → Công cụ → CLI để sử dụng ở đây."
+        }
+      },
+      "mcp": {
+        "title": "Quyền truy cập MCP",
+        "noServers": "Chưa có máy chủ MCP nào. Thêm máy chủ trong Cài đặt → MCP để mở khóa các tùy chọn này.",
+        "toolsCached": "{{count}} công cụ đã lưu cache",
+        "toolsCached_plural": "{{count}} công cụ đã lưu cache",
+        "noToolsCached": "Chưa có công cụ nào trong cache. Bật toàn quyền truy cập hoặc làm mới cache.",
+        "showTools": "Hiển thị công cụ",
+        "hideTools": "Ẩn công cụ",
+        "selected": "Đã chọn",
+        "notSelected": "Chưa chọn",
+        "noToolsAvailable": "Chưa có công cụ nào từ máy chủ này."
+      },
+      "notices": {
+        "promptRequired": "Vui lòng cung cấp tên và nội dung cho lời nhắc hệ thống mới."
+      },
+      "name": {
+        "label": "Tên",
+        "desc": "Tên hiển thị cho tác nhân này"
+      },
+      "fixedModel": {
+        "name": "Mô hình cố định",
+        "desc": "Chọn mô hình cụ thể cho tác nhân này.",
+        "descNoModels": "Không có mô hình nào trong cache. Làm mới mô hình trong tab Mô hình."
+      },
+      "temperature": {
+        "label": "Nhiệt độ",
+        "desc": "Kiểm soát tính ngẫu nhiên (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Token tối đa",
+        "desc": "Số token tối đa cần tạo"
+      },
+      "contextWindow": {
+        "label": "Cửa sổ ngữ cảnh",
+        "desc": "Số tin nhắn trước đó cần đưa vào ngữ cảnh"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Bật tạo sinh tăng cường truy xuất"
+      },
+      "webSearch": {
+        "name": "Tìm kiếm web",
+        "desc": "Bật khả năng tìm kiếm web"
+      },
+      "maxSteps": {
+        "name": "Số bước công cụ tối đa",
+        "desc": "Số bước gọi công cụ tối đa mỗi lượt tác nhân"
+      }
+    },
+    "provider": {
+      "title": "Cài đặt nhà cung cấp",
+      "selectProvider": {
+        "name": "Nhà cung cấp",
+        "desc": "Chọn loại nhà cung cấp LLM",
+        "placeholder": "-- Chọn nhà cung cấp --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (cục bộ)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Tùy chỉnh (tương thích OpenAI)"
+      },
+      "modelFilter": {
+        "name": "Bộ lọc mô hình",
+        "desc": "Mẫu regex tùy chọn để giới hạn các mô hình khả dụng"
+      },
+      "resourceGroup": {
+        "name": "Nhóm tài nguyên",
+        "desc": "Nhóm tài nguyên SAP AI Core tùy chọn"
+      },
+      "serviceKey": {
+        "name": "Khóa dịch vụ",
+        "desc": "Khóa dịch vụ SAP AI Core (chuỗi JSON)"
+      },
+      "baseUrl": {
+        "name": "URL cơ sở",
+        "ollamaDesc": "URL máy chủ Ollama",
+        "customDesc": "Điểm cuối API tương thích OpenAI (bắt buộc)",
+        "optionalDesc": "Điểm cuối API tùy chỉnh (tùy chọn)"
+      },
+      "manageModels": {
+        "name": "Quản lý mô hình",
+        "desc": "Tải mô hình mới hoặc cập nhật các mô hình hiện có từ registry Ollama.",
+        "btn": "⏬ Tải mô hình Ollama"
+      },
+      "apiKey": {
+        "name": "Khóa API",
+        "desc": "Khóa xác thực cho nhà cung cấp đã chọn"
+      },
+      "cancel": "Hủy",
+      "save": "Lưu",
+      "validation": {
+        "selectProvider": "Vui lòng chọn loại nhà cung cấp",
+        "apiKeyTooLong": "Khóa API quá dài. Độ dài tối đa là 500 ký tự.",
+        "invalidUrl": "Định dạng URL cơ sở không hợp lệ. Vui lòng nhập URL hợp lệ (ví dụ: https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP inspector",
+      "desc": "Kiểm tra và gỡ lỗi kết nối và công cụ của máy chủ Model Context Protocol (MCP).",
+      "tabs": {
+        "connections": "Kết nối",
+        "tools": "Công cụ",
+        "logs": "Nhật ký"
+      },
+      "refreshBtn": "🔄 làm mới",
+      "connections": {
+        "title": "Kết nối máy chủ MCP",
+        "noServers": "Chưa có máy chủ MCP nào được cấu hình.",
+        "headers": {
+          "server": "Tên máy chủ",
+          "status": "Trạng thái",
+          "tools": "Công cụ khả dụng",
+          "actions": "Thao tác"
+        },
+        "statusDisabled": "Đã tắt",
+        "statusConnected": "● đã kết nối",
+        "statusDisconnected": "○ đã ngắt kết nối",
+        "toolsLive": "{{count}} công cụ",
+        "toolsLive_plural": "{{count}} công cụ",
+        "toolsCached": "{{count}} công cụ (đã lưu cache)",
+        "toolsCached_plural": "{{count}} công cụ (đã lưu cache)",
+        "noTools": "0 công cụ",
+        "connectBtn": "Kết nối",
+        "disconnectBtn": "Ngắt kết nối",
+        "connecting": "Đang kết nối...",
+        "disconnecting": "Đang ngắt kết nối...",
+        "notices": {
+          "disconnected": "Đã ngắt kết nối khỏi {{name}}",
+          "enableFirst": "Bật máy chủ trong cài đặt trước khi kết nối",
+          "connected": "Đã kết nối tới {{name}}",
+          "failedDisconnect": "Không thể ngắt kết nối khỏi {{name}}: {{message}}",
+          "failedConnect": "Không thể kết nối tới {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Công cụ MCP khả dụng",
+        "noTools": "Không có công cụ MCP nào. Kiểm tra kết nối máy chủ.",
+        "serverPrefix": "Máy chủ: {{name}}",
+        "noToolsInServer": "Không có công cụ nào khả dụng",
+        "headers": {
+          "tool": "Tên công cụ",
+          "description": "Mô tả",
+          "parameters": "Tham số"
+        },
+        "noDescription": "Không có mô tả",
+        "noParams": "Không có"
+      },
+      "logs": {
+        "title": "Nhật ký kết nối MCP",
+        "placeholder": "Nhật ký kết nối MCP sẽ xuất hiện ở đây. Hiện đang hiển thị thông tin mẫu.",
+        "events": {
+          "connection": "• sự kiện kết nối",
+          "tools": "• sự kiện đăng ký công cụ",
+          "errors": "• nhật ký lỗi",
+          "comms": "• chi tiết giao tiếp"
+        },
+        "testTitle": "Kiểm tra thực thi công cụ",
+        "selectServer": "Chọn máy chủ...",
+        "selectTool": "Chọn công cụ...",
+        "parametersTitle": "Tham số",
+        "selectEnum": "Chọn...",
+        "performBtn": "Thực hiện công cụ",
+        "clearBtn": "Xóa kết quả",
+        "executing": "Đang thực thi...",
+        "success": "✅ thực thi thành công",
+        "failed": "❌ thực thi thất bại",
+        "errorTitle": "❌ lỗi thực thi",
+        "errorLabel": "Lỗi: {{message}}",
+        "notices": {
+          "success": "Công cụ đã thực thi thành công",
+          "failed": "Thực thi công cụ thất bại",
+          "error": "Lỗi thực thi: {{message}}",
+          "requiredMissing": "Thiếu tham số bắt buộc: {{name}}",
+          "invalidNumber": "Số không hợp lệ cho tham số: {{name}}",
+          "invalidJson": "JSON không hợp lệ cho tham số: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Không có máy chủ MCP nào được cấu hình",
+        "testing": "🧪 Đang kiểm tra {{count}} kết nối máy chủ MCP...",
+        "allSuccess": "✅ tất cả {{count}} máy chủ MCP đã kết nối thành công!",
+        "partial": "⚠️ {{success}} đã kết nối, {{failed}} thất bại"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Chỉnh sửa máy chủ MCP",
+      "titleAdd": "Thêm máy chủ MCP",
+      "serverName": {
+        "name": "Tên máy chủ",
+        "desc": "Tên thân thiện hiển thị trong toàn bộ plugin"
+      },
+      "connectionMode": {
+        "name": "Chế độ kết nối",
+        "desc": "Chọn kết nối tự động hay chỉ khi được kích hoạt thủ công",
+        "auto": "Tự động kết nối khi chat mở",
+        "manual": "Kết nối thủ công"
+      },
+      "command": {
+        "name": "Lệnh",
+        "desc": "Tệp thực thi hoặc script khởi động máy chủ MCP"
+      },
+      "arguments": {
+        "name": "Đối số",
+        "desc": "Các đối số phân cách bằng dấu phẩy hoặc xuống dòng (tùy chọn)"
+      },
+      "envVars": {
+        "name": "Biến môi trường",
+        "desc": "Các cặp KEY=VALUE tùy chọn, mỗi dòng một cái"
+      },
+      "enabled": {
+        "name": "Đã bật",
+        "desc": "Tắt để giữ máy chủ được cấu hình mà không tự động kết nối"
+      },
+      "cancel": "Hủy",
+      "saveEdit": "Lưu thay đổi",
+      "saveAdd": "Thêm máy chủ",
+      "validation": {
+        "nameRequired": "Tên máy chủ là bắt buộc",
+        "commandRequired": "Lệnh là bắt buộc"
+      }
+    },
+    "ollamaManager": {
+      "title": "Quản lý mô hình Ollama",
+      "serverInfo": "Thông tin máy chủ",
+      "checkingServer": "Đang kiểm tra máy chủ...",
+      "serverOnline": "✅ Máy chủ trực tuyến",
+      "versionLabel": " | Phiên bản: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Máy chủ ngoại tuyến",
+      "connectionError": "❌ Lỗi kết nối",
+      "pullTitle": "Tải mô hình mới",
+      "pullHint": "Nhập tên mô hình để tải từ thư viện Ollama (ví dụ: llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Tên mô hình",
+        "example": "Ví dụ: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Tải mô hình",
+      "installedTitle": "Mô hình đã cài đặt",
+      "refreshList": "🔄 Làm mới danh sách",
+      "noModels": "Không tìm thấy mô hình nào. Tải mô hình để bắt đầu.",
+      "capabilities": "Khả năng: {{caps}}",
+      "deleteBtn": "Xóa",
+      "closeBtn": "Đóng",
+      "confirmDelete": {
+        "title": "Xác nhận xóa",
+        "message": "Bạn có chắc muốn xóa mô hình \"{{name}}\"?",
+        "cancel": "Hủy",
+        "confirm": "Xóa"
+      },
+      "notices": {
+        "enterName": "Vui lòng nhập tên mô hình",
+        "pulling": "Đang tải {{name}}... Quá trình này có thể mất một lúc.",
+        "pullSuccess": "✅ Đã tải thành công {{name}}",
+        "pullFailed": "❌ Không thể tải mô hình: {{message}}",
+        "deleted": "✅ Đã xóa {{name}}",
+        "deleteFailed": "❌ Không thể xóa mô hình: {{message}}",
+        "refreshing": "Đang làm mới...",
+        "refreshSuccess": "✅ Đã làm mới danh sách mô hình",
+        "refreshFailed": "❌ Không thể làm mới danh sách mô hình"
+      }
+    },
+    "promptEdit": {
+      "title": "Chỉnh sửa lời nhắc hệ thống",
+      "name": {
+        "name": "Tên",
+        "desc": "Tên hiển thị cho lời nhắc này"
+      },
+      "content": {
+        "name": "Nội dung",
+        "desc": "Nội dung lời nhắc hệ thống"
+      },
+      "enabled": {
+        "name": "Đã bật",
+        "desc": "Lời nhắc này có đang hoạt động không"
+      },
+      "cancel": "Hủy",
+      "save": "Lưu"
+    },
+    "prompt": {
+      "cancel": "Hủy",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Tên",
+      "create": "Tạo",
+      "cancel": "Hủy"
+    },
+    "explain": {
+      "loading": "⏳ Đang xử lý...",
+      "error": "Lỗi hiển thị giải thích",
+      "errorPrefix": "❌ Lỗi: "
+    }
+  },
+  "notices": {
+    "noProvider": "Vui lòng cấu hình nhà cung cấp LLM trong cài đặt trước",
+    "noModel": "Vui lòng chọn mô hình mặc định trong cài đặt",
+    "noValidProvider": "Không tìm thấy cấu hình nhà cung cấp hợp lệ cho mô hình: {{modelId}}",
+    "processing": "Đang xử lý...",
+    "textUpdated": "Văn bản đã được cập nhật thành công",
+    "error": "Lỗi: {{message}}"
+  }
+}

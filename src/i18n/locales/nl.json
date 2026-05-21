@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Algemeen",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Tools",
+      "rag": "RAG",
+      "prompts": "Prompts",
+      "agents": "Agenten",
+      "quickActions": "Snelle acties",
+      "usage": "Gebruik"
+    },
+    "general": {
+      "title": "Algemene instellingen",
+      "desc": "Configureer algemene instellingen voor de intelligentie-assistent plugin.",
+      "pluginVersion": {
+        "name": "Plugin versie",
+        "desc": "Huidige versie van de intelligentie-assistent plugin"
+      },
+      "defaultModel": {
+        "name": "Standaardmodel",
+        "desc": "Standaardmodel voor gesprekken",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Standaard chatmodus",
+        "desc": "Kies in welke modus de chatweergave opent",
+        "chat": "Chatmodus",
+        "agent": "Agentmodus"
+      },
+      "conversationTitleMode": {
+        "name": "Gesprekstitel modus",
+        "desc": "Hoe gesprekstitels worden gegenereerd",
+        "firstMessage": "Eerste bericht gebruiken",
+        "autoSummary": "Automatisch samenvatting genereren",
+        "manual": "Handmatig"
+      },
+      "conversationIcons": {
+        "name": "Gesprekspictogrammen",
+        "desc": "Automatische pictogramgeneratie voor gesprekken inschakelen"
+      },
+      "configStatus": {
+        "name": "Configuratiestatus",
+        "desc": "Algemene configuratiestatus van de plugin",
+        "ok": "✅ Geconfigureerd ({{providers}} providers, {{conversations}} gesprekken)",
+        "incomplete": "⚠️ Onvolledig - Configureer providers en modellen"
+      }
+    },
+    "llm": {
+      "title": "LLM configuratie",
+      "desc": "Configureer taalmodelproviders en beheer beschikbare modellen.",
+      "subTabs": {
+        "provider": "Providers",
+        "models": "Modellen"
+      }
+    },
+    "models": {
+      "title": "Modelconfiguratie",
+      "desc": "Bekijk en beheer modellen van alle geconfigureerde providers. Klik op \"modellen vernieuwen\" om de nieuwste beschikbare modellen op te halen.",
+      "providerCount": "{{count}} provider geconfigureerd",
+      "providerCount_plural": "{{count}} providers geconfigureerd",
+      "refreshAll": "🔄 alle modellen vernieuwen",
+      "empty": "Nog geen providers geconfigureerd. Voeg eerst providers toe op het providertabblad.",
+      "noModels": "Geen modellen beschikbaar. Klik op \"alle modellen vernieuwen\" of vernieuw individuele providers op het providertabblad.",
+      "noMatch": "Geen modellen voldoen aan de huidige filters. Pas de filters aan of wis ze om resultaten te zien.",
+      "modelCount": "• {{count}} model gecached",
+      "modelCount_plural": "• {{count}} modellen gecached",
+      "matchCount": "• {{count}} overeenkomst met geselecteerde filters",
+      "matchCount_plural": "• {{count}} overeenkomsten met geselecteerde filters",
+      "status": {
+        "enabled": "Ingeschakeld",
+        "disabled": "Uitgeschakeld"
+      },
+      "actions": {
+        "disable": "Uitschakelen",
+        "enable": "Inschakelen",
+        "setDefaultChat": "Instellen als standaard chat",
+        "defaultChat": "Standaard chat",
+        "setDefaultEmbedding": "Instellen als standaard embedding",
+        "defaultEmbedding": "Standaard embedding"
+      },
+      "notices": {
+        "fetching": "Modellen ophalen voor {{provider}}...",
+        "fetchFailed": "Vernieuwen van {{provider}} modellen mislukt",
+        "refreshed": "Modellen succesvol vernieuwd!",
+        "refreshFailed": "Vernieuwen van modellen mislukt",
+        "defaultChatSet": "Standaard chatmodel ingesteld op {{name}}",
+        "defaultEmbeddingSet": "Standaard embeddingmodel ingesteld op {{name}}"
+      },
+      "filters": {
+        "allProviders": "Alle providers",
+        "allCapabilities": "Alle mogelijkheden",
+        "allStates": "Alle statussen",
+        "searchPlaceholder": "Zoek naam of ID"
+      }
+    },
+    "provider": {
+      "title": "Providerconfiguratie",
+      "securityTitle": "⚠️ Beveiligingswaarschuwing",
+      "securityDesc": "API-sleutels worden als platte tekst opgeslagen in uw kluis voor compatibiliteit. Om onbedoelde lekken te voorkomen:",
+      "securityItem1": "Deel uw {{configDir}}/plugins/intelligence-assistant/data/ map NIET.",
+      "securityItem2": "Voeg deze map toe aan uw .gitignore als u Git-synchronisatie gebruikt.",
+      "securityItem3": "Wees voorzichtig bij het gebruik van openbare cloudsynchronisatiediensten.",
+      "desc": "Beheer LLM providers en API-referenties. Gebruik de actikolom om configuratiedetails te bewerken of gecachede modellen te vernieuwen.",
+      "count": "{{count}} provider geconfigureerd",
+      "count_plural": "{{count}} providers geconfigureerd",
+      "addBtn": "+ Provider toevoegen",
+      "empty": "Geen providers geconfigureerd. Selecteer \"Provider toevoegen\" om te beginnen.",
+      "tableHeaders": {
+        "provider": "Provider",
+        "status": "Status",
+        "actions": "Acties"
+      },
+      "status": {
+        "ready": "Gereed",
+        "needsConfig": "Configuratie vereist",
+        "checking": "Controleren...",
+        "credentialsSet": "Referenties ingesteld",
+        "serverOnline": "Server online",
+        "serverOffline": "Server offline",
+        "serverError": "Serverfout"
+      },
+      "guidance": {
+        "requiresCli": "Vereist lokale CLI",
+        "provideServiceKey": "Geef servicesleutel op",
+        "configureBaseUrl": "Configureer basis-URL",
+        "addApiKey": "API-sleutel toevoegen"
+      },
+      "models": {
+        "none": "Geen modellen",
+        "count": "{{count}} model",
+        "count_plural": "{{count}} modellen"
+      },
+      "ollama": {
+        "checkingVersion": "Versie controleren...",
+        "server": {
+          "checking": "Server controleren...",
+          "online": "Server: online",
+          "offline": "Server: offline of onbereikbaar",
+          "error": "Server: verbindingsfout",
+          "versionOnline": "Server online",
+          "versionOffline": "Server offline",
+          "versionError": "Verbindingsfout",
+          "version": "Versie: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Laatste vernieuwing: {{timeAgo}}",
+        "neverRefreshed": "Nooit vernieuwd",
+        "justNow": "zojuist",
+        "minutesAgo": "{{n}}m geleden",
+        "hoursAgo": "{{n}}u geleden",
+        "daysAgo": "{{n}}d geleden"
+      },
+      "actions": {
+        "edit": "Bewerken",
+        "manageModels": "Modellen beheren",
+        "refreshModels": "Modellen vernieuwen",
+        "refreshing": "Vernieuwen...",
+        "delete": "Verwijderen"
+      },
+      "notices": {
+        "refreshed": "Modellen vernieuwd voor {{provider}}.",
+        "refreshFailed": "Vernieuwen van modellen mislukt"
+      },
+      "confirm": {
+        "delete": "Provider {{provider}} verwijderen?"
+      }
+    },
+    "mcp": {
+      "title": "MCP serverbeheer",
+      "desc": "Configureer Model Context Protocol (MCP) servers om agentmogelijkheden uit te breiden met externe tools en gegevensbronnen.",
+      "inspectorBtn": "🔍 MCP inspector openen",
+      "testAllBtn": "🧪 alle verbindingen testen",
+      "refreshAllBtn": "🔄 alle tools vernieuwen",
+      "addBtn": "+ MCP server toevoegen",
+      "empty": "Geen MCP servers geconfigureerd. Selecteer MCP server toevoegen om te beginnen.",
+      "tableHeaders": {
+        "name": "Naam",
+        "command": "Commando",
+        "arguments": "Argumenten",
+        "status": "Status",
+        "tools": "Tools",
+        "actions": "Acties"
+      },
+      "untitled": "Naamloze MCP Server",
+      "notConfigured": "Niet geconfigureerd",
+      "noArgs": "Geen",
+      "cached": "Gecached",
+      "disabled": "Uitgeschakeld",
+      "envVars": "{{count}} omgevingsvariabele",
+      "envVars_plural": "{{count}} omgevingsvariabelen",
+      "status": {
+        "disabled": "Uitgeschakeld",
+        "connected": "verbonden",
+        "disconnected": "verbroken",
+        "enableToManage": "Inschakelen om verbindingen te beheren",
+        "manualConnect": "Handmatig verbinden",
+        "autoConnect": "Automatisch verbinden"
+      },
+      "toolCount": {
+        "live": "{{count}} live tool",
+        "live_plural": "{{count}} live tools",
+        "cached": "{{count}} gecachede tool",
+        "cached_plural": "{{count}} gecachede tools"
+      },
+      "actions": {
+        "edit": "Bewerken",
+        "enabled": "✓ Ingeschakeld",
+        "enabledOff": "✗ Uitgeschakeld",
+        "connect": "verbinden",
+        "disconnect": "verbreken",
+        "connecting": "Verbinden...",
+        "disconnecting": "Verbreken...",
+        "test": "Testen",
+        "testing": "Testen...",
+        "delete": "Verwijderen"
+      },
+      "notices": {
+        "disconnected": "Verbinding verbroken met {{name}}",
+        "connected": "Verbonden met {{name}}",
+        "autoConnectFailed": "Automatisch verbinden met {{name}} mislukt",
+        "enableFirst": "Schakel de server in voordat u verbinding maakt",
+        "disconnectFailed": "Verbinding verbreken met {{name}} mislukt",
+        "connectFailed": "Verbinding maken met {{name}} mislukt",
+        "testNoCommand": "❌ voer een commando in voordat u de verbinding test",
+        "testSuccess": "✅ succesvol verbonden! {{count}} tools gevonden.",
+        "testFailed": "❌ Verbinding mislukt: {{message}}",
+        "refreshedAll": "✅ tools vernieuwd voor {{count}} server",
+        "refreshedAll_plural": "✅ tools vernieuwd voor {{count}} servers",
+        "refreshedPartial": "✅ {{success}} servers vernieuwd, ❌ {{failed}} mislukt",
+        "noServersConfigured": "⚠️ Geen MCP servers geconfigureerd",
+        "testingAll": "🧪 {{count}} MCP serververbindingen testen...",
+        "testAllSuccess": "✅ alle {{count}} mcp servers succesvol verbonden!",
+        "testAllPartial": "⚠️ {{successful}} verbonden, {{failed}} mislukt"
+      },
+      "confirm": {
+        "delete": "MCP server \"{{name}}\" verwijderen?"
+      }
+    },
+    "agents": {
+      "title": "Agentbeheer",
+      "desc": "Maak en beheer AI-agenten met specifieke mogelijkheden, tools en gedragingen.",
+      "count": "{{count}} agent geconfigureerd",
+      "count_plural": "{{count}} agenten geconfigureerd",
+      "addBtn": "+ agent toevoegen",
+      "empty": "Geen agenten geconfigureerd. Selecteer agent toevoegen om te beginnen.",
+      "tableHeaders": {
+        "agent": "Agent",
+        "model": "Model",
+        "capabilities": "Mogelijkheden",
+        "tools": "Tools",
+        "actions": "Acties"
+      },
+      "defaultBadge": "Standaard",
+      "systemPrompt": "Systeemprompt • {{promptName}}",
+      "customPrompt": "Aangepaste prompt",
+      "model": {
+        "notSet": "Niet ingesteld",
+        "notFound": "Model niet gevonden in cache",
+        "useChatView": "Chatweergavemodel gebruiken",
+        "useChatViewDesc": "Gebruikt het model geselecteerd in de chatweergave",
+        "useDefault": "Standaardmodel gebruiken",
+        "useDefaultDesc": "Gebruikt het standaardmodel uit de instellingen"
+      },
+      "capabilities": {
+        "noSpecialModes": "Geen speciale modi"
+      },
+      "tools": {
+        "builtIn": "{{count}} ingebouwd",
+        "mcpServer": "{{count}} mcp server",
+        "mcpServer_plural": "{{count}} mcp servers",
+        "mcpTool": "{{count}} mcp tool",
+        "mcpTool_plural": "{{count}} mcp tools",
+        "noTools": "Geen tools ingeschakeld"
+      },
+      "actions": {
+        "edit": "Bewerken",
+        "delete": "verwijderen",
+        "protected": "beveiligd"
+      },
+      "confirm": {
+        "delete": "Agent \"{{name}}\" verwijderen?"
+      }
+    },
+    "prompts": {
+      "title": "Systeemprompts",
+      "desc": "Beheer systeemprompts die het gedrag en de persoonlijkheid van uw AI-assistent definiëren.",
+      "addBtn": "+ systeemprompt toevoegen",
+      "empty": "Geen systeemprompts geconfigureerd. Selecteer systeemprompt toevoegen om te beginnen.",
+      "tableHeaders": {
+        "name": "Naam",
+        "contentPreview": "Inhoudsvoorbeeld",
+        "created": "Aangemaakt",
+        "updated": "Bijgewerkt",
+        "enabled": "Ingeschakeld",
+        "actions": "Acties"
+      },
+      "status": {
+        "enabled": "Ingeschakeld",
+        "disabled": "Uitgeschakeld"
+      },
+      "actions": {
+        "edit": "Bewerken",
+        "disable": "Uitschakelen",
+        "enable": "Inschakelen",
+        "delete": "Verwijderen"
+      },
+      "confirm": {
+        "delete": "Prompt \"{{name}}\" verwijderen?"
+      }
+    },
+    "tools": {
+      "title": "Toolconfiguratie",
+      "desc": "Bekijk ingebouwde tools en verken MCP tools geladen van verbonden servers. Schakel de acties in die uw agenten moeten kunnen uitvoeren.",
+      "subTabs": {
+        "builtIn": "Ingebouwde tools",
+        "mcp": "MCP tools",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI tools"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Naam",
+          "category": "Categorie",
+          "description": "Beschrijving",
+          "parameters": "Parameters",
+          "enabled": "Ingeschakeld"
+        },
+        "categories": {
+          "fileOps": "Bestandsbewerkingen",
+          "searchDisc": "Zoeken en ontdekken",
+          "noteMgmt": "Notitiebeheer"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Lees de inhoud van een bestand uit uw kluis",
+            "params": "pad (vereist): Pad naar het te lezen bestand"
+          },
+          "writeFile": {
+            "desc": "Schrijf of update een bestand in uw kluis",
+            "params": "pad (vereist), inhoud (vereist): Bestandspad en inhoud om te schrijven"
+          },
+          "listFiles": {
+            "desc": "Bestanden weergeven in de kluis of een specifieke map",
+            "params": "map (optioneel), extensie (optioneel): Filteren op map en bestandsextensie"
+          },
+          "searchFiles": {
+            "desc": "Zoek bestanden op naam of inhoud in uw kluis",
+            "params": "zoekopdracht (vereist), zoek_inhoud (optioneel), limiet (optioneel): Zoekopdracht en opties"
+          },
+          "createNote": {
+            "desc": "Maak een nieuwe notitie met de opgegeven inhoud",
+            "params": "titel (vereist), inhoud (vereist), map (optioneel): Notitietitel, inhoud en locatie"
+          },
+          "appendNote": {
+            "desc": "Voeg inhoud toe aan een bestaande notitie",
+            "params": "pad (vereist), inhoud (vereist): Notitiepad en toe te voegen inhoud"
+          }
+        },
+        "infoTitle": "💡 over tools",
+        "infoText": "Ingebouwde tools worden geconfigureerd per plugin-instellingen. MCP tools worden onafhankelijk beheerd—gebruik het MCP-tabblad om servers te verbinden en de beschikbaarheid van tools te vernieuwen.",
+        "toolNames": {
+          "read_file": "Bestand lezen",
+          "write_file": "Bestand schrijven",
+          "list_files": "Bestanden weergeven",
+          "search_files": "Bestanden zoeken",
+          "create_note": "Notitie aanmaken",
+          "append_note": "Notitie toevoegen"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Geen MCP tools beschikbaar. Verbind een server of vernieuw gecachede tools om deze lijst te vullen.",
+        "tableHeaders": {
+          "server": "Server",
+          "tool": "Tool",
+          "description": "Beschrijving",
+          "parameters": "Parameters",
+          "source": "Bron"
+        },
+        "noDescription": "Geen beschrijving",
+        "schemaUnavailable": "Schema niet beschikbaar",
+        "live": "Live",
+        "cached": "Gecached",
+        "status": {
+          "connected": "verbonden",
+          "disconnected": "verbroken"
+        }
+      },
+      "openapi": {
+        "desc": "Genereer HTTP tools van OpenAPI documenten. Externe specificaties worden gecached onder {{cacheDir}}.",
+        "addBtn": "HTTP-bron toevoegen",
+        "noSources": "Nog geen HTTP-bronnen geconfigureerd.",
+        "unnamed": "Naamloze HTTP-bron",
+        "tableHeaders": {
+          "name": "Naam",
+          "source": "Bron",
+          "auth": "Authenticatie",
+          "status": "Status",
+          "actions": "Acties"
+        },
+        "sourceUrl": "Externe URL niet ingesteld",
+        "sourcePath": "Bestandspad niet ingesteld",
+        "authHeader": "Header ({{key}})",
+        "authQuery": "Query ({{key}})",
+        "authNone": "Geen",
+        "statusEnabled": "Ingeschakeld",
+        "statusDisabled": "Uitgeschakeld",
+        "actions": {
+          "edit": "Bewerken",
+          "reload": "Herladen",
+          "refetch": "Opnieuw ophalen",
+          "delete": "Verwijderen"
+        },
+        "notices": {
+          "removed": "HTTP-bron verwijderd",
+          "reloaded": "{{count}} bewerkingen herladen",
+          "reloadFailed": "Herladen van HTTP-bron mislukt. Controleer de console voor details."
+        },
+        "modal": {
+          "defaultTitle": "HTTP-bron",
+          "displayName": {
+            "name": "Weergavenaam",
+            "desc": "Getoond aan agenten bij het kiezen van een toolbron"
+          },
+          "enabled": {
+            "name": "Ingeschakeld",
+            "desc": "Inschakelen om deze HTTP API beschikbaar te maken voor elke agent"
+          },
+          "sourceType": {
+            "name": "Brontype",
+            "file": "Lokaal bestand",
+            "url": "Externe URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Opgehaald en gecached in de plugin-gegevensmap"
+          },
+          "cachedFile": "Gecached bestand: {{path}} ({{date}})",
+          "neverFetched": "Nooit opgehaald",
+          "specPath": {
+            "name": "OpenAPI bestandspad",
+            "desc": "Relatief pad binnen de kluis of een absoluut pad"
+          },
+          "baseUrl": {
+            "name": "Basis-URL overschrijving",
+            "desc": "Overschrijf de eerste serverinvoer uit het document (optioneel)"
+          },
+          "auth": {
+            "name": "Authenticatie",
+            "desc": "Automatisch API-sleutels invoegen bij het aanroepen van deze bron",
+            "none": "Geen",
+            "header": "HTTP header",
+            "query": "Queryparameter"
+          },
+          "credKey": {
+            "name": "Referentiesleutel"
+          },
+          "credValue": {
+            "name": "Referentiewaarde"
+          },
+          "actions": {
+            "name": "Acties",
+            "reloadTools": "Tools herladen",
+            "refetchTooltip": "Specificatie opnieuw ophalen van URL",
+            "deleteTooltip": "Bron verwijderen"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Definieer lokale commandoregeltools die agenten kunnen uitvoeren. Gebruik sjablonen zoals {{param}} voor dynamische argumenten.",
+        "addBtn": "CLI tool toevoegen",
+        "presetsBtn": "Toevoegen uit voorinstellingen",
+        "noTools": "Nog geen CLI tools geconfigureerd.",
+        "tableHeaders": {
+          "name": "Naam",
+          "command": "Commando",
+          "parameters": "Parameters",
+          "status": "Status",
+          "actions": "Acties"
+        },
+        "unnamed": "Naamloze CLI tool",
+        "paramCount": "{{count}} parameter",
+        "paramCount_plural": "{{count}} parameters",
+        "noParams": "Geen",
+        "statusEnabled": "Ingeschakeld",
+        "statusDisabled": "Uitgeschakeld",
+        "actions": {
+          "edit": "Bewerken",
+          "disable": "Uitschakelen",
+          "enable": "Inschakelen",
+          "delete": "Verwijderen"
+        },
+        "notices": {
+          "removed": "CLI tool verwijderd"
+        },
+        "infoTitle": "💡 Over CLI tools",
+        "infoText": "CLI tools voeren shell-commando's lokaal uit. Gebruik {{paramName}} in argumenten voor sjabloonvervanging, of configureer parameters om door te geven als argumenten of omgevingsvariabelen.",
+        "modal": {
+          "defaultTitle": "CLI tool",
+          "toolName": {
+            "name": "Toolnaam",
+            "desc": "Identifier die agenten gebruiken om deze tool aan te roepen"
+          },
+          "description": {
+            "name": "Beschrijving",
+            "desc": "Beschrijf wat deze tool doet voor de AI"
+          },
+          "enabled": {
+            "name": "Ingeschakeld",
+            "desc": "Inschakelen om agenten deze tool te laten gebruiken"
+          },
+          "commandConfig": "Commando-configuratie",
+          "command": {
+            "name": "Commando",
+            "desc": "Het uitvoerbare bestand (bijv. node, python, bash, /pad/naar/script)"
+          },
+          "args": {
+            "name": "Argumenten",
+            "desc": "Commandoargumenten, één per regel. Gebruik {{paramName}} voor sjabloonvervanging."
+          },
+          "cwd": {
+            "name": "Werkmap",
+            "desc": "Map om het commando in uit te voeren (optioneel)"
+          },
+          "timeout": {
+            "name": "Time-out (ms)",
+            "desc": "Maximale uitvoeringstijd in milliseconden (standaard: {{timeout}})"
+          },
+          "shell": {
+            "name": "Uitvoeren in shell",
+            "desc": "Voer het commando uit via een shell (schakelt shellfuncties zoals pipes in)"
+          },
+          "paramsTitle": "Parameters",
+          "paramsDesc": "Definieer parameters die de AI aan deze tool kan doorgeven.",
+          "addParam": "Parameter toevoegen",
+          "noParams": "Geen parameters gedefinieerd.",
+          "paramN": "Parameter {{n}}",
+          "param": {
+            "name": "Naam",
+            "type": {
+              "name": "Type",
+              "string": "Tekst",
+              "number": "Getal",
+              "boolean": "Booleaans"
+            },
+            "description": "Beschrijving",
+            "required": "Vereist",
+            "insertAs": {
+              "name": "Invoegen als",
+              "desc": "Hoe deze parameter aan het commando wordt doorgegeven",
+              "template": "Sjabloon ({{name}})",
+              "arg": "Toevoegen als argument",
+              "env": "Omgevingsvariabele"
+            },
+            "envName": {
+              "name": "Naam van omgevingsvariabele",
+              "desc": "Overschrijf de naam van de omgevingsvariabele (standaard is parameternaam in hoofdletters)"
+            }
+          },
+          "envTitle": "Omgevingsvariabelen",
+          "envDesc": "Statische omgevingsvariabelen die worden ingesteld bij het uitvoeren van het commando.",
+          "envVars": {
+            "name": "Omgevingsvariabelen",
+            "desc": "Indeling: SLEUTEL=waarde, één per regel"
+          }
+        },
+        "presets": {
+          "title": "CLI tool toevoegen uit voorinstellingen",
+          "desc": "Selecteer een voorinstelling om snel een vooraf geconfigureerde CLI tool toe te voegen. U kunt het aanpassen na het toevoegen.",
+          "addBtn": "Toevoegen",
+          "addedBtn": "Toegevoegd",
+          "closeBtn": "Sluiten",
+          "notices": {
+            "added": "\"{{name}}\" toegevoegd - schakel het in de CLI toolslijst in"
+          },
+          "categories": {
+            "file": "Bestandsbewerkingen",
+            "search": "Zoeken",
+            "network": "Netwerk",
+            "code": "Code uitvoeren",
+            "data": "Gegevensverwerking",
+            "system": "Systeeminformatie",
+            "apps": "macOS Apps en bureaublad"
+          },
+          "names": {
+            "preset-cat": "Bestand lezen (cat)",
+            "preset-ls": "Map weergeven (ls)",
+            "preset-find": "Bestanden zoeken (find)",
+            "preset-grep": "Tekst zoeken (grep)",
+            "preset-ripgrep": "Snel zoeken (rg)",
+            "preset-curl": "HTTP verzoek (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Python code uitvoeren",
+            "preset-node": "JavaScript uitvoeren (Node)",
+            "preset-bash": "Shell script uitvoeren",
+            "preset-jq": "JSON verwerker (jq)",
+            "preset-wc": "Woorden tellen (wc)",
+            "preset-date": "Huidige datum/tijd",
+            "preset-pwd": "Huidige map (pwd)",
+            "preset-whoami": "Huidige gebruiker",
+            "preset-uname": "Systeeminformatie (uname)",
+            "preset-open": "Bestand/URL openen (open)",
+            "preset-open-app": "App starten (open -a)",
+            "preset-safari": "Openen in Safari",
+            "preset-chrome": "Openen in Chrome",
+            "preset-firefox": "Openen in Firefox",
+            "preset-pbcopy": "Kopiëren naar klembord",
+            "preset-pbpaste": "Plakken van klembord",
+            "preset-say": "Tekst-naar-spraak (say)",
+            "preset-osascript": "AppleScript uitvoerder",
+            "preset-notify": "Bureaubladmelding",
+            "preset-screencapture": "Schermafbeelding",
+            "preset-applescript-list-apps": "Actieve apps weergeven"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG configuratie",
+      "desc": "Configureer retrieval-augmented generation en webzoeken om AI-antwoorden te verbeteren.",
+      "subTabs": {
+        "overview": "Overzicht",
+        "chunking": "Chunking",
+        "search": "Zoeken",
+        "filters": "Filters",
+        "advanced": "Geavanceerd",
+        "websearch": "Webzoeken"
+      },
+      "general": {
+        "title": "Algemene instellingen",
+        "enableRag": {
+          "name": "RAG inschakelen",
+          "desc": "Schakel Retrieval-Augmented Generation in voor verbeterde context"
+        },
+        "vectorStore": {
+          "name": "Vectoropslag",
+          "desc": "Vectordatabase voor het opslaan van embeddings",
+          "memory": "In geheugen",
+          "disk": "Op schijf"
+        },
+        "embeddingModel": {
+          "name": "Embeddingmodel",
+          "desc": "Model voor het genereren van embeddings"
+        },
+        "embedChanged": {
+          "name": "Gewijzigde bestanden automatisch embedden",
+          "desc": "Bestanden automatisch opnieuw embedden wanneer ze worden gewijzigd"
+        }
+      },
+      "indexMgmt": {
+        "title": "Indexbeheer",
+        "desc": "Beheer uw RAG index en bekijk statistieken over geïndexeerde inhoud.",
+        "statsTitle": "Indexstatistieken",
+        "stats": {
+          "totalChunks": "Totaal aantal chunks",
+          "uniqueFiles": "Unieke bestanden",
+          "totalChars": "Totaal aantal tekens",
+          "avgChunkSize": "Gem. chunkgrootte"
+        },
+        "empty": "Index is leeg. Selecteer index opnieuw opbouwen om te beginnen met indexeren.",
+        "error": "⚠️ kan indexstatistieken niet laden",
+        "rebuild": {
+          "name": "Index opnieuw opbouwen",
+          "desc": "Indexeer alle bestanden in uw kluis opnieuw. Dit kan even duren.",
+          "btn": "Opnieuw opbouwen",
+          "rebuilding": "Opnieuw opbouwen..."
+        },
+        "refresh": {
+          "name": "Index vernieuwen",
+          "desc": "Werk de index bij met gewijzigde bestanden sinds de laatste indexering.",
+          "btn": "Vernieuwen",
+          "refreshing": "Vernieuwen..."
+        },
+        "clear": {
+          "name": "Index wissen",
+          "desc": "Verwijder alle geïndexeerde gegevens. U moet de index opnieuw opbouwen.",
+          "btn": "Wissen",
+          "clearing": "Wissen..."
+        },
+        "notices": {
+          "rebuilt": "Index succesvol opnieuw opgebouwd",
+          "rebuildFailed": "Index opnieuw opbouwen mislukt",
+          "refreshed": "Index succesvol vernieuwd",
+          "refreshFailed": "Index vernieuwen mislukt",
+          "cleared": "Index succesvol gewist",
+          "clearFailed": "Index wissen mislukt"
+        }
+      },
+      "chunking": {
+        "title": "Chunkinginstellingen",
+        "strategy": {
+          "name": "Chunkingstrategie",
+          "desc": "Strategie voor het verdelen van documenten in chunks",
+          "recursive": "Recursief (slim)",
+          "fixed": "Vaste grootte",
+          "sentence": "Per zin",
+          "paragraph": "Per alinea"
+        },
+        "chunkSize": {
+          "name": "Chunkgrootte",
+          "desc": "Aantal tekens per chunk (500-2000 aanbevolen)"
+        },
+        "chunkOverlap": {
+          "name": "Chunkoverlap",
+          "desc": "Aantal overlappende tekens tussen chunks"
+        },
+        "minChunkSize": {
+          "name": "Min. chunkgrootte",
+          "desc": "Minimale chunkgrootte om aan te maken"
+        },
+        "maxTokens": {
+          "name": "Max. tokens per chunk",
+          "desc": "Maximum aantal tokens toegestaan per chunk"
+        }
+      },
+      "search": {
+        "title": "Zoekinstellingen",
+        "searchType": {
+          "name": "Zoektype",
+          "desc": "Type gelijkeniszoekopdracht om uit te voeren",
+          "similarity": "Gelijkenis"
+        },
+        "topK": {
+          "name": "Top K resultaten",
+          "desc": "Aantal meest relevante chunks om op te halen (1-20)"
+        },
+        "threshold": {
+          "name": "Gelijkheidsdrempel",
+          "desc": "Minimale gelijkenisscore voor resultaten (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Relevantiescore gewicht",
+          "desc": "Gewicht voor relevantiescore (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Contextvenster limiet",
+          "desc": "Maximum tokens voor opgehaalde context"
+        }
+      },
+      "filters": {
+        "title": "Bestandsfilters",
+        "excludeFolders": {
+          "name": "Mappen uitsluiten",
+          "desc": "Mappen om uit te sluiten van indexering (kommagescheiden)"
+        },
+        "includeTypes": {
+          "name": "Bestandstypen opnemen",
+          "desc": "Op te nemen bestandstypen (leeg = alle typen)"
+        },
+        "excludeTypes": {
+          "name": "Bestandstypen uitsluiten",
+          "desc": "Bestandstypen om uit te sluiten van indexering"
+        },
+        "filterByTag": {
+          "name": "Filteren op tag",
+          "desc": "Alleen bestanden met deze tags indexeren (leeg = alle bestanden)"
+        },
+        "excludeByTag": {
+          "name": "Uitsluiten op tag",
+          "desc": "Bestanden met deze tags uitsluiten van indexering"
+        }
+      },
+      "advanced": {
+        "title": "Geavanceerde instellingen",
+        "batchSize": {
+          "name": "Embedding batchgrootte",
+          "desc": "Aantal chunks om parallel te embedden"
+        }
+      },
+      "grading": {
+        "title": "Beoordelingsinstellingen",
+        "desc": "Beoordeel opgehaalde chunks op relevantie voordat ze naar de LLM worden gestuurd. Dit helpt resultaten van lage kwaliteit te filteren.",
+        "enableGrading": {
+          "name": "Beoordelingsdrempel inschakelen",
+          "desc": "Chunks onder kwaliteitsdrempels filteren"
+        },
+        "graderSource": {
+          "name": "Beoordelaarmodelbron",
+          "desc": "Waar het beoordelaarmodel vandaan te halen",
+          "chat": "Chatmodel",
+          "custom": "Aangepast model"
+        },
+        "graderModel": {
+          "name": "Beoordelaarmodel",
+          "desc": "Specifiek model om te gebruiken voor beoordeling"
+        },
+        "parallel": {
+          "name": "Parallelle verwerking",
+          "desc": "Aantal chunks om parallel te beoordelen"
+        },
+        "minRelevance": {
+          "name": "Min. relevantiescor",
+          "desc": "Minimale relevantiescor (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Min. nauwkeurigheidsscor",
+          "desc": "Minimale nauwkeurigheidsscor (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Min. ondersteuningskwaliteitsscor",
+          "desc": "Minimale ondersteuningskwaliteitsscor (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Webzoekconfiguratie",
+      "desc": "Configureer webzoekfunctionaliteit om AI-antwoorden te verbeteren met actuele informatie van het internet.",
+      "generalBehavior": "Algemeen gedrag",
+      "providerSelection": "Providerselectie",
+      "localeFilters": "Taal- en regiofilters",
+      "apiCredentials": "API-referenties en eindpunten",
+      "enabled": {
+        "name": "Webzoeken inschakelen",
+        "desc": "AI toestaan het web te doorzoeken voor actuele informatie"
+      },
+      "autoTrigger": {
+        "name": "Zoeken automatisch activeren",
+        "desc": "Webzoeken automatisch activeren wanneer de zoekopdracht actuele informatie vereist (bijv. nieuws, prijzen, recente gebeurtenissen)"
+      },
+      "maxResults": {
+        "name": "Maximum resultaten",
+        "desc": "Maximum aantal te retourneren zoekresultaten"
+      },
+      "timeRange": {
+        "name": "Versheid resultaten",
+        "desc": "Beperk resultaten tot een tijdsbereik ondersteund door providers (Google, SearXNG, Mojeek)",
+        "any": "Elke tijd (standaard)",
+        "h": "Afgelopen uur",
+        "d": "Afgelopen 24 uur",
+        "w": "Afgelopen week",
+        "m": "Afgelopen maand",
+        "y": "Afgelopen jaar"
+      },
+      "provider": {
+        "name": "Zoekprovider",
+        "desc": "Kies uit privacyvriendelijke scrapers of API-ondersteunde zoekmachines"
+      },
+      "searchLanguage": {
+        "name": "Taalcode",
+        "desc": "ISO-taalcode (bijv. nl, en, zh-CN) doorgestuurd naar providers die lokalisatie ondersteunen"
+      },
+      "searchCountry": {
+        "name": "Land-/marktcode",
+        "desc": "Tweeletter landcode (bijv. NL, DE) gebruikt door Bing, DuckDuckGo, Brave en anderen"
+      },
+      "includeDomains": {
+        "name": "Alleen deze domeinen opnemen",
+        "desc": "Kommagescheiden lijst gebruikt door SerpAPI en Brave om resultaten te beperken tot specifieke sites"
+      },
+      "excludeDomains": {
+        "name": "Domeinen uitsluiten",
+        "desc": "Kommagescheiden domeinen om te filteren na het ophalen van resultaten"
+      },
+      "apiKey": {
+        "name": "Standaard API-sleutel",
+        "desc": "Gedeelde API-sleutel gebruikt door Google, Bing, SerpAPI, Tavily of Brave wanneer providerspecifieke sleutels niet zijn ingesteld"
+      },
+      "googleCseId": {
+        "name": "Google Aangepaste zoekmachine-ID",
+        "desc": "Vereist met een Google API-sleutel bij gebruik van de Google provider"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI eindpunt",
+        "desc": "Overschrijf de SerpAPI basis-URL als u zelf host"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API-sleutel",
+        "desc": "Overschrijft de standaardsleutel bij gebruik van de Tavily provider"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG eindpunt",
+        "desc": "Basis-URL van uw SearXNG instantie (moet JSON retourneren)"
+      },
+      "braveApiKey": {
+        "name": "Brave API-sleutel",
+        "desc": "Gebruik een Brave Search API-abonnementstoken bij selectie als provider"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API-sleutel (optioneel)",
+        "desc": "Voeg een bearer-token toe als uw Qwant-plan er een uitgeeft"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API-sleutel",
+        "desc": "Vereist voor de Mojeek provider"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (geen sleutel vereist)",
+        "google": "Google Aangepast zoeken",
+        "bing": "Bing webzoeken",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave zoeken",
+        "yahoo": "Yahoo (HTML scraping)",
+        "yandex": "Yandex (HTML scraping)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Snelle acties",
+      "desc": "Configureer AI-gestuurde snelle acties die verschijnen in het contextmenu van de editor wanneer tekst is geselecteerd.",
+      "actionPrefix": {
+        "name": "Actieprefix",
+        "desc": "Prefix (emoji of tekst) om voor alle snelle acties in het contextmenu weer te geven",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} actie geconfigureerd ({{enabled}} ingeschakeld)",
+      "count_plural": "{{count}} acties geconfigureerd ({{enabled}} ingeschakeld)",
+      "addBtn": "+ snelle actie toevoegen",
+      "empty": "Geen snelle acties geconfigureerd. Selecteer snelle actie toevoegen om te beginnen.",
+      "tableHeaders": {
+        "action": "Actie",
+        "type": "Type",
+        "model": "Model",
+        "promptPreview": "Promptvoorbeeld",
+        "actions": "Acties"
+      },
+      "defaultModel": "Standaard",
+      "editBtn": "Bewerken",
+      "deleteBtn": "verwijderen",
+      "confirm": {
+        "delete": "Snelle actie \"{{name}}\" verwijderen?"
+      },
+      "usageInfo": {
+        "title": "Gebruik",
+        "step1": "Selecteer tekst in een notitie",
+        "step2": "Klik met de rechtermuisknop om het contextmenu te openen",
+        "step3": "Kies een snelle actie uit het menu",
+        "step4Replace": "Acties gemarkeerd als \"vervangen\" vervangen de geselecteerde tekst door het AI-resultaat",
+        "step4Explain": "Acties gemarkeerd als \"uitleggen\" tonen het resultaat in een modaal dialoogvenster"
+      },
+      "edit": {
+        "title": "Snelle actie bewerken",
+        "name": {
+          "name": "Naam",
+          "desc": "Weergavenaam voor deze actie in het contextmenu"
+        },
+        "actionType": {
+          "name": "Actietype",
+          "desc": "Hoe de AI-reactie moet worden verwerkt",
+          "replace": "Geselecteerde tekst vervangen",
+          "explain": "Weergeven in modaal"
+        },
+        "model": {
+          "name": "Model",
+          "desc": "Taalmodel voor deze actie (leeg laten om standaard te gebruiken)",
+          "default": "Standaardmodel gebruiken"
+        },
+        "promptTemplate": {
+          "name": "Promptsjabloon",
+          "desc": "Instructies die naar de AI worden gestuurd. De geselecteerde tekst wordt automatisch toegevoegd."
+        },
+        "cancel": "Annuleren",
+        "save": "Opslaan"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Tekst langer maken",
+          "prompt": "Breidt de volgende tekst uit en elaboreer erover, maak hem gedetailleerder en uitgebreider terwijl de oorspronkelijke betekenis en toon behouden blijft. Retourneer alleen de uitgebreide tekst zonder aanvullend commentaar:\n\n"
+        },
+        "summarize": {
+          "name": "Tekst samenvatten",
+          "prompt": "Geef een beknopte samenvatting van de volgende tekst. Retourneer alleen de samenvatting zonder aanvullend commentaar:\n\n"
+        },
+        "improve-writing": {
+          "name": "Schrijven verbeteren",
+          "prompt": "Verbeter de schrijfkwaliteit, duidelijkheid en stijl van de volgende tekst. Retourneer alleen de verbeterde tekst zonder aanvullend commentaar:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Grammatica corrigeren",
+          "prompt": "Corrigeer grammatica-, spelling- en interpunctiefouten in de volgende tekst. Retourneer alleen de gecorrigeerde tekst zonder aanvullend commentaar:\n\n"
+        },
+        "explain": {
+          "name": "Tekst uitleggen",
+          "prompt": "Leg de volgende tekst in eenvoudige bewoordingen uit:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Tokengebruik",
+      "desc": "Volg tokenconsumptie over providers en modellen. Gegevens worden opgebouwd over alle gesprekken.",
+      "notAvailable": "Tokengebruikstracking is niet beschikbaar.",
+      "ranges": {
+        "today": "Vandaag",
+        "week": "Deze week",
+        "month": "Deze maand",
+        "all": "Alle tijd"
+      },
+      "stats": {
+        "totalTokens": "Totaal tokens",
+        "apiCalls": "API-aanroepen",
+        "promptTokens": "Prompttokens",
+        "completion": "Voltooiing",
+        "tokensIn": "tokens in",
+        "tokensOut": "tokens uit"
+      },
+      "byProvider": "Per provider",
+      "byModel": "Per model",
+      "noData": "Nog geen gebruiksgegevens.",
+      "recentActivity": "Recente activiteit",
+      "last10": "laatste 10",
+      "noRecent": "Geen recente activiteit.",
+      "tableHeaders": {
+        "provider": "Provider",
+        "model": "Model",
+        "prompt": "Prompt",
+        "completion": "Voltooiing",
+        "total": "Totaal",
+        "calls": "Aanroepen",
+        "time": "Tijd",
+        "in": "In",
+        "out": "Uit"
+      },
+      "clearBtn": "Alle gebruiksgegevens wissen",
+      "confirm": {
+        "clear": "Alle tokengebruiksrecords wissen? Dit kan niet ongedaan worden gemaakt."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Typ uw bericht... (Enter om te verzenden, Shift+Enter voor nieuwe regel)",
+    "conversations": "Gesprekken",
+    "toggleConversationsTitle": "Gesprekkenlijst in-/uitschakelen",
+    "currentConversation": "Huidig gesprek",
+    "new": "Nieuw",
+    "settings": "Instellingen",
+    "openSettingsTitle": "Plugin-instellingen openen",
+    "mode": "Modus",
+    "prompt": "Prompt",
+    "agent": "Agent",
+    "modeOptions": {
+      "chat": "Chat",
+      "agent": "Agent"
+    },
+    "noSystemPrompt": "Geen systeemprompt",
+    "noAgentsAvailable": "Geen agenten beschikbaar",
+    "sendHintPrefix": "Druk op ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " om te verzenden",
+    "sendAriaLabel": "Bericht verzenden",
+    "stop": " Stoppen",
+    "addReference": "Referentie toevoegen",
+    "addReferenceTooltip": "Bestands- of mapreferentie toevoegen (@)",
+    "emptyHeading": "Start een gesprek",
+    "emptySubtext": "Typ hieronder een bericht om te beginnen, of selecteer een gesprek uit de geschiedenis.",
+    "noAgentConfig": "Geen agenten geconfigureerd",
+    "selectAgent": "Selecteer een agent…",
+    "notices": {
+      "stopping": "Generatie stoppen...",
+      "ragInitError": "RAG initialisatiefout: {{message}}",
+      "modelsRefreshed": "Modellen vernieuwd",
+      "modelsRefreshFailed": "Vernieuwen van modellen mislukt: {{message}}",
+      "waitForResponse": "Wacht tot het huidige antwoord is afgerond",
+      "configureProvider": "Configureer eerst een LLM provider in de instellingen",
+      "selectModel": "Selecteer een model",
+      "noValidProvider": "Geen geldige providerconfiguratie gevonden voor dit model",
+      "chatError": "Chatfout: {{message}}",
+      "noMessageToRegenerate": "Kan bericht om te regenereren niet vinden",
+      "regenerateOnlyLatest": "Alleen het meest recente antwoord kan op dit moment worden geregenereerd",
+      "regenerateNoUserMsg": "Kan gebruikersbericht om van te regenereren niet vinden",
+      "regenerated": "Antwoord geregenereerd",
+      "regenerateFailed": "Regenereren mislukt: {{message}}",
+      "noteCreated": "Notitie aangemaakt: {{name}}",
+      "noteCreateFailed": "Notitie aanmaken mislukt: {{message}}",
+      "messageInserted": "Bericht ingevoegd in: {{path}}",
+      "messageInsertFailed": "Bericht invoegen mislukt: {{message}}",
+      "noAgents": "Geen agenten beschikbaar. Configureer agenten in Instellingen → Agenten.",
+      "ragDisabled": "RAG is uitgeschakeld in de instellingen. Schakel het in via instellingen → chatfuncties → RAG.",
+      "webSearchDisabled": "Webzoeken is uitgeschakeld in de instellingen. Schakel het in via instellingen → chatfuncties → webzoeken.",
+      "noFilesInVault": "Geen bestanden gevonden in kluis",
+      "attached": "Bijgevoegd: {{name}}",
+      "attachedImages": "{{count}} afbeelding(en) bijgevoegd",
+      "referencesAdded": "{{count}} referentie(s) toegevoegd",
+      "fileNotFound": "Bestand niet gevonden: {{path}}",
+      "agentConfigApplied": "Configuratie toegepast voor agent: {{name}}",
+      "waitForComplete": "Wacht tot het huidige antwoord is voltooid",
+      "chatServiceFallback": "ChatService niet geconfigureerd. ChatView fallback gebruiken.",
+      "noModelSelected": "Geen model geselecteerd",
+      "noProviderConfig": "Geen providerconfiguratie gevonden",
+      "generationStopped": "Generatie gestopt",
+      "noResponseToRegenerate": "Geen antwoord om te regenereren",
+      "agentNotFound": "Agent niet gevonden",
+      "unableToLoadRag": "Kan RAG-statistieken niet laden.",
+      "referenced": "Gerefereerd: {{name}}"
+    },
+    "status": {
+      "available": "Beschikbaar",
+      "unavailable": "Niet beschikbaar",
+      "disabled": "Uitgeschakeld",
+      "on": "Aan · {{detail}}",
+      "off": "Uit"
+    },
+    "ragStats": {
+      "title": "RAG statistieken",
+      "totalChunks": "📊 totaal chunks:",
+      "filesIndexed": "📁 bestanden geïndexeerd:",
+      "totalSize": "💾 totale grootte:",
+      "avgChunks": "📈 Gem. chunks/bestand:",
+      "indexedFiles": "📄 geïndexeerde bestanden",
+      "noFilesYet": "⚠️ er zijn nog geen bestanden geïndexeerd.",
+      "howToBuild": "Om de RAG index op te bouwen:",
+      "step1": "Ga naar Instellingen → RAG",
+      "step2": "RAG inschakelen",
+      "step3": "Index kluis selecteren",
+      "close": "Sluiten",
+      "retrieved": "📚 opgehaald uit {{count}} document",
+      "retrieved_plural": "📚 opgehaald uit {{count}} documenten"
+    },
+    "ragTooltip": {
+      "status": "RAG Index Status:",
+      "totalChunks": "📊 Totaal chunks: {{count}}",
+      "filesIndexed": "📁 Bestanden geïndexeerd: {{count}}",
+      "totalSize": "💾 Totale grootte: {{size}} KB",
+      "indexedFiles": "📄 geïndexeerde bestanden:",
+      "andMore": "  ... en {{count}} meer",
+      "noFilesYet": "⚠️ nog geen bestanden geïndexeerd.",
+      "goToSettings": "Ga naar Instellingen → RAG om de index te bouwen.",
+      "ragOff": "ℹ️ RAG is momenteel uitgeschakeld voor deze chat."
+    },
+    "agentSummary": {
+      "model": "Model",
+      "temp": "Temp",
+      "max": "Max",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Tools",
+      "memory": "Geheugen",
+      "none": "Geen",
+      "configuration": "{{name}} configuratie",
+      "modelFixed": "{{name}} · Vast",
+      "modelDefault": "{{name}} · Standaard",
+      "modelChatView": "{{name}} · Chatweergave",
+      "customModel": "Aangepast model",
+      "notSet": "Niet ingesteld",
+      "auto": "Automatisch",
+      "on": "Aan",
+      "off": "Uit",
+      "shortTerm": "Kortetermijn",
+      "longTerm": "Langetermijn",
+      "disabledMemory": "Uitgeschakeld",
+      "builtIn": "{{count}} ingebouwd",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Webresultaten",
+      "attachments": "Bijlagen",
+      "references": "Referenties",
+      "ragSources": "RAG bronnen",
+      "reasoning": "Redenering",
+      "copy": "Kopiëren",
+      "copied": "Bericht gekopieerd",
+      "copyFailed": "Kopiëren van bericht mislukt",
+      "tokenUsage": "Tokengebruik",
+      "tokenUsagePrompt": "Prompt",
+      "tokenUsageCompletion": "Voltooiing",
+      "tokenUsageTotal": "Totaal",
+      "save": "Opslaan",
+      "insertToNotes": "Invoegen in notities",
+      "regenerate": "Regenereren"
+    },
+    "streaming": {
+      "thinking": "Nadenken..."
+    },
+    "toolCall": {
+      "thinking": "Nadenken",
+      "executionProcess": "Uitvoeringsproces",
+      "input": "Invoer",
+      "output": "Uitvoer",
+      "running": "Uitvoeren..."
+    },
+    "addPicture": "Afbeelding toevoegen",
+    "addPictureTooltip": "Een afbeelding aan uw bericht toevoegen",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Geïndexeerde notities als context gebruiken",
+    "webSearchLabel": "Webzoeken",
+    "webSearchTooltipLabel": "Zoek op internet wanneer nodig",
+    "imageUnavailable": "Afbeeldingbijlage is niet beschikbaar voor het huidige model.",
+    "newChat": "Nieuwe chat",
+    "newConversation": "Nieuw gesprek",
+    "searchConversations": "Gesprekken zoeken...",
+    "header": {
+      "model": "Model",
+      "advancedParams": "Geavanceerde parameters",
+      "temperature": "Temperatuur",
+      "maxTokens": "Max tokens",
+      "topP": "Top P",
+      "freqPenalty": "Freq. straf",
+      "presPenalty": "Aanw. straf",
+      "agentConfig": "Agentconfiguratie",
+      "modelsCount": "Modellen: {{count}}",
+      "tokensCount": "Tokens: {{count}}",
+      "noModels": "Geen modellen beschikbaar"
+    },
+    "temperature": {
+      "precise": "0 (Precies)",
+      "balanced": "1 (Gebalanceerd)",
+      "creative": "2 (Creatief)"
+    },
+    "modals": {
+      "image": {
+        "title": "Afbeeldingen bijvoegen",
+        "searchPlaceholder": "Afbeeldingen zoeken...",
+        "selectAll": "Alles selecteren",
+        "selectNone": "Niets selecteren",
+        "addSelected": "Geselecteerde toevoegen",
+        "noResults": "Geen overeenkomende afbeeldingen gevonden."
+      },
+      "reference": {
+        "title": "Referenties toevoegen",
+        "searchPlaceholder": "Bestanden en mappen zoeken...",
+        "selectAll": "Alles selecteren",
+        "selectNone": "Niets selecteren",
+        "addSelected": "Geselecteerde toevoegen",
+        "noResults": "Geen overeenkomende bestanden of mappen gevonden."
+      },
+      "insertNote": {
+        "title": "Invoegen in notitie",
+        "searchPlaceholder": "Notities zoeken...",
+        "insert": "Invoegen in geselecteerde notitie",
+        "createNew": "Nieuwe notitie aanmaken",
+        "noResults": "Geen overeenkomende notities gevonden."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Annuleren",
+      "confirm": "Bevestigen"
+    },
+    "agentEdit": {
+      "title": "Agent bewerken",
+      "icon": {
+        "name": "Pictogram",
+        "desc": "Emoji of teken om deze agent te vertegenwoordigen"
+      },
+      "description": {
+        "name": "Beschrijving",
+        "desc": "Korte beschrijving van de agent"
+      },
+      "modelStrategy": {
+        "name": "Modelstrategie",
+        "options": {
+          "default": "Standaardmodel gebruiken (uit instellingen)",
+          "chatView": "Chatweergavemodel gebruiken",
+          "fixed": "Vast model"
+        },
+        "noModels": "Geen modellen gecached",
+        "desc": "Kies hoe de agent zijn model selecteert"
+      },
+      "systemPrompt": {
+        "createNew": "➕ nieuwe prompt aanmaken…",
+        "promptName": {
+          "name": "Promptnaam",
+          "desc": "Weergavenaam voor de nieuwe systeemprompt"
+        },
+        "promptContent": {
+          "name": "Promptinhoud",
+          "desc": "Inhoud voor de nieuwe systeemprompt"
+        },
+        "name": "Systeemprompt",
+        "desc": "Kies uit bestaande prompts of definieer een nieuwe voor deze agent."
+      },
+      "capabilities": "Mogelijkheden",
+      "memory": {
+        "title": "Geheugen",
+        "notice": "Agentgeheugen is tijdelijk niet beschikbaar terwijl we de ervaring verbeteren."
+      },
+      "tools": {
+        "title": "Tools",
+        "builtIn": {
+          "name": "Ingebouwde tools",
+          "desc": "Selecteer welke ingebouwde tools deze agent kan gebruiken"
+        },
+        "cli": {
+          "name": "CLI tools",
+          "desc": "Geef toegang tot alle ingeschakelde CLI tools, of kies hieronder individueel",
+          "noTools": "Geen CLI tools geconfigureerd. Voeg tools toe en schakel ze in via Instellingen → Tools → CLI om ze hier te gebruiken."
+        }
+      },
+      "mcp": {
+        "title": "MCP toegang",
+        "noServers": "Geen MCP servers geconfigureerd. Voeg servers toe via Instellingen → MCP om deze opties te ontgrendelen.",
+        "toolsCached": "{{count}} tool gecached",
+        "toolsCached_plural": "{{count}} tools gecached",
+        "noToolsCached": "Nog geen tools gecached. Schakel volledige toegang in of vernieuw de cache.",
+        "showTools": "Tools tonen",
+        "hideTools": "Tools verbergen",
+        "selected": "Geselecteerd",
+        "notSelected": "Niet geselecteerd",
+        "noToolsAvailable": "Nog geen tools beschikbaar van deze server."
+      },
+      "notices": {
+        "promptRequired": "Geef een naam en inhoud op voor de nieuwe systeemprompt."
+      },
+      "name": {
+        "label": "Naam",
+        "desc": "Weergavenaam voor deze agent"
+      },
+      "fixedModel": {
+        "name": "Vast model",
+        "desc": "Selecteer een specifiek model voor deze agent.",
+        "descNoModels": "Geen gecachede modellen beschikbaar. Vernieuw modellen op het tabblad Modellen."
+      },
+      "temperature": {
+        "label": "Temperatuur",
+        "desc": "Regelt willekeurigheid (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Max tokens",
+        "desc": "Maximum aantal te genereren tokens"
+      },
+      "contextWindow": {
+        "label": "Contextvenster",
+        "desc": "Aantal vorige berichten om in de context op te nemen"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Retrieval augmented generation inschakelen"
+      },
+      "webSearch": {
+        "name": "Webzoeken",
+        "desc": "Webzoekmogelijkheden inschakelen"
+      },
+      "maxSteps": {
+        "name": "Max toolstappen",
+        "desc": "Maximum aantal toolaanroepstappen per agenttour"
+      }
+    },
+    "provider": {
+      "title": "Providerinstellingen",
+      "selectProvider": {
+        "name": "Provider",
+        "desc": "Selecteer het LLM providertype",
+        "placeholder": "-- Selecteer provider --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (lokaal)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Aangepast (OpenAI compatibel)"
+      },
+      "modelFilter": {
+        "name": "Modelfilter",
+        "desc": "Optioneel regex-patroon om beschikbare modellen te beperken"
+      },
+      "resourceGroup": {
+        "name": "Resourcegroep",
+        "desc": "Optionele SAP AI Core resourcegroep"
+      },
+      "serviceKey": {
+        "name": "Servicesleutel",
+        "desc": "SAP AI Core servicesleutel (JSON string)"
+      },
+      "baseUrl": {
+        "name": "Basis-URL",
+        "ollamaDesc": "Ollama server URL",
+        "customDesc": "OpenAI-compatibel API eindpunt (vereist)",
+        "optionalDesc": "Aangepast API eindpunt (optioneel)"
+      },
+      "manageModels": {
+        "name": "Modellen beheren",
+        "desc": "Trek nieuwe modellen of update bestaande modellen uit het Ollama register.",
+        "btn": "⏬ Ollama model ophalen"
+      },
+      "apiKey": {
+        "name": "API-sleutel",
+        "desc": "Authenticatiesleutel voor de geselecteerde provider"
+      },
+      "cancel": "Annuleren",
+      "save": "Opslaan",
+      "validation": {
+        "selectProvider": "Selecteer een providertype",
+        "apiKeyTooLong": "API-sleutel is te lang. Maximale lengte is 500 tekens.",
+        "invalidUrl": "Ongeldig basis-URL-formaat. Voer een geldige URL in (bijv. https://api.voorbeeld.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP inspector",
+      "desc": "Inspecteer en debug Model Context Protocol (MCP) serververbindingen en tools.",
+      "tabs": {
+        "connections": "Verbindingen",
+        "tools": "Tools",
+        "logs": "Logboeken"
+      },
+      "refreshBtn": "🔄 vernieuwen",
+      "connections": {
+        "title": "MCP serververbindingen",
+        "noServers": "Geen MCP servers geconfigureerd.",
+        "headers": {
+          "server": "Servernaam",
+          "status": "Status",
+          "tools": "Beschikbare tools",
+          "actions": "Acties"
+        },
+        "statusDisabled": "Uitgeschakeld",
+        "statusConnected": "● verbonden",
+        "statusDisconnected": "○ verbroken",
+        "toolsLive": "{{count}} tool",
+        "toolsLive_plural": "{{count}} tools",
+        "toolsCached": "{{count}} tool (gecached)",
+        "toolsCached_plural": "{{count}} tools (gecached)",
+        "noTools": "0 tools",
+        "connectBtn": "Verbinden",
+        "disconnectBtn": "Verbreken",
+        "connecting": "Verbinden...",
+        "disconnecting": "Verbreken...",
+        "notices": {
+          "disconnected": "Verbinding verbroken met {{name}}",
+          "enableFirst": "Schakel de server in instellingen in voordat u verbinding maakt",
+          "connected": "Verbonden met {{name}}",
+          "failedDisconnect": "Verbinding verbreken met {{name}} mislukt: {{message}}",
+          "failedConnect": "Verbinding maken met {{name}} mislukt: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Beschikbare MCP tools",
+        "noTools": "Geen MCP tools beschikbaar. Controleer serververbindingen.",
+        "serverPrefix": "Server: {{name}}",
+        "noToolsInServer": "Geen tools beschikbaar",
+        "headers": {
+          "tool": "Toolnaam",
+          "description": "Beschrijving",
+          "parameters": "Parameters"
+        },
+        "noDescription": "Geen beschrijving",
+        "noParams": "Geen"
+      },
+      "logs": {
+        "title": "MCP verbindingslogboeken",
+        "placeholder": "MCP verbindingslogboeken verschijnen hier. Momenteel worden tijdelijke aanduidingen weergegeven.",
+        "events": {
+          "connection": "• verbindingsgebeurtenissen",
+          "tools": "• toolregistratiegebeurtenissen",
+          "errors": "• foutlogboeken",
+          "comms": "• communicatiedetails"
+        },
+        "testTitle": "Tooluitvoering testen",
+        "selectServer": "Selecteer een server...",
+        "selectTool": "Selecteer een tool...",
+        "parametersTitle": "Parameters",
+        "selectEnum": "Selecteren...",
+        "performBtn": "Tool uitvoeren",
+        "clearBtn": "Resultaten wissen",
+        "executing": "Uitvoeren...",
+        "success": "✅ uitvoering succesvol",
+        "failed": "❌ uitvoering mislukt",
+        "errorTitle": "❌ uitvoeringsfout",
+        "errorLabel": "Fout: {{message}}",
+        "notices": {
+          "success": "Tool succesvol uitgevoerd",
+          "failed": "Tooluitvoering mislukt",
+          "error": "Uitvoeringsfout: {{message}}",
+          "requiredMissing": "Vereiste parameter ontbreekt: {{name}}",
+          "invalidNumber": "Ongeldig getal voor parameter: {{name}}",
+          "invalidJson": "Ongeldige JSON voor parameter: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Geen MCP servers geconfigureerd",
+        "testing": "🧪 {{count}} MCP serververbindingen testen...",
+        "allSuccess": "✅ alle {{count}} mcp servers succesvol verbonden!",
+        "partial": "⚠️ {{success}} verbonden, {{failed}} mislukt"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "MCP server bewerken",
+      "titleAdd": "MCP server toevoegen",
+      "serverName": {
+        "name": "Servernaam",
+        "desc": "Vriendelijke naam die overal in de plugin wordt weergegeven"
+      },
+      "connectionMode": {
+        "name": "Verbindingsmodus",
+        "desc": "Kies of u automatisch verbinding wilt maken of alleen wanneer handmatig geactiveerd",
+        "auto": "Automatisch verbinden wanneer chat opent",
+        "manual": "Handmatig verbinden"
+      },
+      "command": {
+        "name": "Commando",
+        "desc": "Uitvoerbaar bestand of script dat de MCP server start"
+      },
+      "arguments": {
+        "name": "Argumenten",
+        "desc": "Komma- of regelgescheiden argumenten (optioneel)"
+      },
+      "envVars": {
+        "name": "Omgevingsvariabelen",
+        "desc": "Optionele SLEUTEL=WAARDE paren, één per regel"
+      },
+      "enabled": {
+        "name": "Ingeschakeld",
+        "desc": "Uitschakelen om de server geconfigureerd te houden zonder automatisch verbinding te maken"
+      },
+      "cancel": "Annuleren",
+      "saveEdit": "Wijzigingen opslaan",
+      "saveAdd": "Server toevoegen",
+      "validation": {
+        "nameRequired": "Servernaam is vereist",
+        "commandRequired": "Commando is vereist"
+      }
+    },
+    "ollamaManager": {
+      "title": "Ollama modellen beheren",
+      "serverInfo": "Serverinformatie",
+      "checkingServer": "Server controleren...",
+      "serverOnline": "✅ Server online",
+      "versionLabel": " | Versie: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Server offline",
+      "connectionError": "❌ Verbindingsfout",
+      "pullTitle": "Nieuw model ophalen",
+      "pullHint": "Voer een modelnaam in om te downloaden uit de Ollama bibliotheek (bijv. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Modelnaam",
+        "example": "Voorbeeld: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Model ophalen",
+      "installedTitle": "Geïnstalleerde modellen",
+      "refreshList": "🔄 Lijst vernieuwen",
+      "noModels": "Geen modellen gevonden. Haal een model op om te beginnen.",
+      "capabilities": "Mogelijkheden: {{caps}}",
+      "deleteBtn": "Verwijderen",
+      "closeBtn": "Sluiten",
+      "confirmDelete": {
+        "title": "Verwijdering bevestigen",
+        "message": "Weet u zeker dat u het model \"{{name}}\" wilt verwijderen?",
+        "cancel": "Annuleren",
+        "confirm": "Verwijderen"
+      },
+      "notices": {
+        "enterName": "Voer een modelnaam in",
+        "pulling": "{{name}} ophalen... Dit kan even duren.",
+        "pullSuccess": "✅ {{name}} succesvol opgehaald",
+        "pullFailed": "❌ Model ophalen mislukt: {{message}}",
+        "deleted": "✅ {{name}} verwijderd",
+        "deleteFailed": "❌ Model verwijderen mislukt: {{message}}",
+        "refreshing": "Vernieuwen...",
+        "refreshSuccess": "✅ Modellijst vernieuwd",
+        "refreshFailed": "❌ Modellijst vernieuwen mislukt"
+      }
+    },
+    "promptEdit": {
+      "title": "Systeemprompt bewerken",
+      "name": {
+        "name": "Naam",
+        "desc": "Weergavenaam voor deze prompt"
+      },
+      "content": {
+        "name": "Inhoud",
+        "desc": "De systeempromptinhoud"
+      },
+      "enabled": {
+        "name": "Ingeschakeld",
+        "desc": "Of deze prompt actief is"
+      },
+      "cancel": "Annuleren",
+      "save": "Opslaan"
+    },
+    "prompt": {
+      "cancel": "Annuleren",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Naam",
+      "create": "Aanmaken",
+      "cancel": "Annuleren"
+    },
+    "explain": {
+      "loading": "⏳ Verwerken...",
+      "error": "Fout bij het weergeven van de uitleg",
+      "errorPrefix": "❌ Fout: "
+    }
+  },
+  "notices": {
+    "noProvider": "Configureer eerst een LLM provider in de instellingen",
+    "noModel": "Selecteer een standaardmodel in de instellingen",
+    "noValidProvider": "Geen geldige providerconfiguratie gevonden voor model: {{modelId}}",
+    "processing": "Verwerken...",
+    "textUpdated": "Tekst succesvol bijgewerkt",
+    "error": "Fout: {{message}}"
+  }
+}

@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Algemeen",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Gereedskap",
+      "rag": "RAG",
+      "prompts": "Aanwysings",
+      "agents": "Agente",
+      "quickActions": "Vinnige Aksies",
+      "usage": "Gebruik"
+    },
+    "general": {
+      "title": "Algemene instellings",
+      "desc": "Stel algemene instellings vir die intelligensie-assistent-inprop in.",
+      "pluginVersion": {
+        "name": "Inprop-weergawe",
+        "desc": "Huidige weergawe van die intelligensie-assistent-inprop"
+      },
+      "defaultModel": {
+        "name": "Verstekmodel",
+        "desc": "Verstekmodel om vir gesprekke te gebruik",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Verstek kletmodus",
+        "desc": "Kies watter modus die kletaansig mee oopmaak",
+        "chat": "Kletmodus",
+        "agent": "Agentmodus"
+      },
+      "conversationTitleMode": {
+        "name": "Gesprekstitelmodus",
+        "desc": "Hoe om gesprekstitels te genereer",
+        "firstMessage": "Gebruik eerste boodskap",
+        "autoSummary": "Genereer outomatiese opsomming",
+        "manual": "Handmatig"
+      },
+      "conversationIcons": {
+        "name": "Gesprekikone",
+        "desc": "Aktiveer outomatiese ikoonopwekking vir gesprekke"
+      },
+      "configStatus": {
+        "name": "Konfigurasie-status",
+        "desc": "Algehele inprop-konfigurasie-status",
+        "ok": "✅ Gekonfigureer ({{providers}} verskaffers, {{conversations}} gesprekke)",
+        "incomplete": "⚠️ Onvolledig - Stel asseblief verskaffers en modelle in"
+      }
+    },
+    "llm": {
+      "title": "LLM-konfigurasie",
+      "desc": "Stel taalmodelverskaffer in en bestuur beskikbare modelle.",
+      "subTabs": {
+        "provider": "Verskaffers",
+        "models": "Modelle"
+      }
+    },
+    "models": {
+      "title": "Modelkonfigurasie",
+      "desc": "Bekyk en bestuur modelle van alle gekonfigureerde verskaffers. Klik \"verfris modelle\" om die nuutste beskikbare modelle te haal.",
+      "providerCount": "{{count}} verskaffer gekonfigureer",
+      "providerCount_plural": "{{count}} verskaffers gekonfigureer",
+      "refreshAll": "🔄 verfris alle modelle",
+      "empty": "Geen verskaffers nog gekonfigureer nie. Voeg eers verskaffers by in die verskaffer-oortjie.",
+      "noModels": "Geen modelle beskikbaar nie. Klik \"verfris alle modelle\" of verfris individuele verskaffers in die verskaffer-oortjie.",
+      "noMatch": "Geen modelle stem ooreen met die huidige filters nie. Pas filters aan of verwyder filters om resultate te sien.",
+      "modelCount": "• {{count}} model gekassineer",
+      "modelCount_plural": "• {{count}} modelle gekassineer",
+      "matchCount": "• {{count}} stem ooreen met geselekteerde filters",
+      "matchCount_plural": "• {{count}} stem ooreen met geselekteerde filters",
+      "status": {
+        "enabled": "Geaktiveer",
+        "disabled": "Gedeaktiveer"
+      },
+      "actions": {
+        "disable": "Deaktiveer",
+        "enable": "Aktiveer",
+        "setDefaultChat": "Stel Verstekgesprek",
+        "defaultChat": "Verstekgesprek",
+        "setDefaultEmbedding": "Stel Verstekinsluiting",
+        "defaultEmbedding": "Verstekinsluiting"
+      },
+      "notices": {
+        "fetching": "Haal modelle vir {{provider}}...",
+        "fetchFailed": "Kon nie {{provider}}-modelle verfris nie",
+        "refreshed": "Modelle suksesvol verfris!",
+        "refreshFailed": "Kon nie modelle verfris nie",
+        "defaultChatSet": "Verstekgeselskapmodel ingestel op {{name}}",
+        "defaultEmbeddingSet": "Verstekinsluiting-model ingestel op {{name}}"
+      },
+      "filters": {
+        "allProviders": "Alle verskaffers",
+        "allCapabilities": "Alle vermoëns",
+        "allStates": "Alle toestande",
+        "searchPlaceholder": "Soek naam of ID"
+      }
+    },
+    "provider": {
+      "title": "Verskafferkonfigurasie",
+      "securityTitle": "⚠️ Sekuriteitswaarskuwing",
+      "securityDesc": "API-sleutels word as gewone teks in u gewelf gestoor vir versoenbaarheid. Om toevallige lekke te voorkom:",
+      "securityItem1": "Moenie u {{configDir}}/plugins/intelligence-assistant/data/-gids deel nie.",
+      "securityItem2": "Voeg hierdie gids by u .gitignore as u Git-sinchronisasie gebruik.",
+      "securityItem3": "Wees versigtig wanneer u openbare wolksinchronisasiedienste gebruik.",
+      "desc": "Bestuur LLM-verskaffers en API-geloofsbriewe. Gebruik die aksieskolom om konfigurasiebesonderhede te redigeer of gekassineerde modelle te verfris.",
+      "count": "{{count}} verskaffer gekonfigureer",
+      "count_plural": "{{count}} verskaffers gekonfigureer",
+      "addBtn": "+ Voeg verskaffer by",
+      "empty": "Geen verskaffers gekonfigureer nie. Kies \"Voeg verskaffer by\" om te begin.",
+      "tableHeaders": {
+        "provider": "Verskaffer",
+        "status": "Status",
+        "actions": "Aksies"
+      },
+      "status": {
+        "ready": "Gereed",
+        "needsConfig": "Benodig Konfigurasie",
+        "checking": "Nagaan...",
+        "credentialsSet": "Geloofsbriewe Gestel",
+        "serverOnline": "Bediener aanlyn",
+        "serverOffline": "Bediener aflyn",
+        "serverError": "Bedienerfout"
+      },
+      "guidance": {
+        "requiresCli": "Vereis plaaslike CLI",
+        "provideServiceKey": "Verskaf diensleutel",
+        "configureBaseUrl": "Stel basis-URL in",
+        "addApiKey": "Voeg API-sleutel by"
+      },
+      "models": {
+        "none": "Geen modelle",
+        "count": "{{count}} model",
+        "count_plural": "{{count}} modelle"
+      },
+      "ollama": {
+        "checkingVersion": "Nagaan weergawe...",
+        "server": {
+          "checking": "Nagaan bediener...",
+          "online": "Bediener: aanlyn",
+          "offline": "Bediener: aflyn of onbereikbaar",
+          "error": "Bediener: verbindingsfout",
+          "versionOnline": "Bediener aanlyn",
+          "versionOffline": "Bediener aflyn",
+          "versionError": "Verbindingsfout",
+          "version": "Weergawe: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Laaste verfrisding: {{timeAgo}}",
+        "neverRefreshed": "Nooit verfris nie",
+        "justNow": "so pas",
+        "minutesAgo": "{{n}}m gelede",
+        "hoursAgo": "{{n}}u gelede",
+        "daysAgo": "{{n}}d gelede"
+      },
+      "actions": {
+        "edit": "Redigeer",
+        "manageModels": "Bestuur modelle",
+        "refreshModels": "Verfris modelle",
+        "refreshing": "Verfris...",
+        "delete": "Verwyder"
+      },
+      "notices": {
+        "refreshed": "Modelle verfris vir {{provider}}.",
+        "refreshFailed": "Kon nie modelle verfris nie"
+      },
+      "confirm": {
+        "delete": "Verwyder verskaffer {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "MCP-bedienerbestuur",
+      "desc": "Stel Model Context Protocol (MCP)-bedieners in om agentvermoëns uit te brei met eksterne gereedskap en databronne.",
+      "inspectorBtn": "🔍 Maak MCP-inspekteur oop",
+      "testAllBtn": "🧪 toets alle verbindings",
+      "refreshAllBtn": "🔄 verfris alle gereedskap",
+      "addBtn": "+ Voeg MCP-bediener by",
+      "empty": "Geen MCP-bedieners gekonfigureer nie. Kies Voeg MCP-bediener by om te begin.",
+      "tableHeaders": {
+        "name": "Naam",
+        "command": "Opdrag",
+        "arguments": "Argumente",
+        "status": "Status",
+        "tools": "Gereedskap",
+        "actions": "Aksies"
+      },
+      "untitled": "Naamlose MCP-bediener",
+      "notConfigured": "Nie gekonfigureer nie",
+      "noArgs": "Geen",
+      "cached": "Gekassineer",
+      "disabled": "Gedeaktiveer",
+      "envVars": "{{count}} omgewingsveranderlike",
+      "envVars_plural": "{{count}} omgewingsveranderlikes",
+      "status": {
+        "disabled": "Gedeaktiveer",
+        "connected": "verbind",
+        "disconnected": "ontkoppel",
+        "enableToManage": "Aktiveer om verbindings te bestuur",
+        "manualConnect": "Handmatige verbinding",
+        "autoConnect": "Outoverbinding"
+      },
+      "toolCount": {
+        "live": "{{count}} lewendige gereedskap",
+        "live_plural": "{{count}} lewendige gereedskap",
+        "cached": "{{count}} gekassineerde gereedskap",
+        "cached_plural": "{{count}} gekassineerde gereedskap"
+      },
+      "actions": {
+        "edit": "Redigeer",
+        "enabled": "✓ Geaktiveer",
+        "enabledOff": "✗ Gedeaktiveer",
+        "connect": "verbind",
+        "disconnect": "ontkoppel",
+        "connecting": "Verbind...",
+        "disconnecting": "Ontkoppel...",
+        "test": "Toets",
+        "testing": "Toets...",
+        "delete": "Verwyder"
+      },
+      "notices": {
+        "disconnected": "Ontkoppel van {{name}}",
+        "connected": "Verbind met {{name}}",
+        "autoConnectFailed": "Kon nie outomaties verbind met {{name}} nie",
+        "enableFirst": "Aktiveer die bediener voor verbinding",
+        "disconnectFailed": "Kon nie van {{name}} ontkoppel nie",
+        "connectFailed": "Kon nie met {{name}} verbind nie",
+        "testNoCommand": "❌ voer asseblief 'n opdrag in voor toetsing van verbinding",
+        "testSuccess": "✅ suksesvol verbind! {{count}} gereedskap gevind.",
+        "testFailed": "❌ Verbinding misluk: {{message}}",
+        "refreshedAll": "✅ gereedskap verfris vir {{count}} bediener",
+        "refreshedAll_plural": "✅ gereedskap verfris vir {{count}} bedieners",
+        "refreshedPartial": "✅ {{success}} bedieners verfris, ❌ {{failed}} misluk",
+        "noServersConfigured": "⚠️ Geen MCP-bedieners gekonfigureer nie",
+        "testingAll": "🧪 Toets {{count}} MCP-bedienerverbindings...",
+        "testAllSuccess": "✅ alle {{count}} mcp-bedieners suksesvol verbind!",
+        "testAllPartial": "⚠️ {{successful}} verbind, {{failed}} misluk"
+      },
+      "confirm": {
+        "delete": "Verwyder MCP-bediener \"{{name}}\"?"
+      }
+    },
+    "agents": {
+      "title": "Agentbestuur",
+      "desc": "Skep en bestuur KI-agente met spesifieke vermoëns, gereedskap en gedrag.",
+      "count": "{{count}} agent gekonfigureer",
+      "count_plural": "{{count}} agente gekonfigureer",
+      "addBtn": "+ voeg agent by",
+      "empty": "Geen agente gekonfigureer nie. Kies voeg agent by om te begin.",
+      "tableHeaders": {
+        "agent": "Agent",
+        "model": "Model",
+        "capabilities": "Vermoëns",
+        "tools": "Gereedskap",
+        "actions": "Aksies"
+      },
+      "defaultBadge": "Verstek",
+      "systemPrompt": "Stelselaanwysing • {{promptName}}",
+      "customPrompt": "Pasgemaakte aanwysing",
+      "model": {
+        "notSet": "Nie gestel nie",
+        "notFound": "Model nie in kas gevind nie",
+        "useChatView": "Gebruik Kletaansig-model",
+        "useChatViewDesc": "Sal model gebruik wat in kletaansig gekies is",
+        "useDefault": "Gebruik Verstekmodel",
+        "useDefaultDesc": "Sal verstekmodel van instellings gebruik"
+      },
+      "capabilities": {
+        "noSpecialModes": "Geen spesiale modusse nie"
+      },
+      "tools": {
+        "builtIn": "{{count}} ingeboude",
+        "mcpServer": "{{count}} mcp-bediener",
+        "mcpServer_plural": "{{count}} mcp-bedieners",
+        "mcpTool": "{{count}} mcp-gereedskap",
+        "mcpTool_plural": "{{count}} mcp-gereedskap",
+        "noTools": "Geen gereedskap geaktiveer nie"
+      },
+      "actions": {
+        "edit": "Redigeer",
+        "delete": "verwyder",
+        "protected": "beskerm"
+      },
+      "confirm": {
+        "delete": "Verwyder agent \"{{name}}\"?"
+      }
+    },
+    "prompts": {
+      "title": "Stelselaanwysings",
+      "desc": "Bestuur stelselaanwysings wat die gedrag en persoonlikheid van u KI-assistent definieer.",
+      "addBtn": "+ voeg stelselaanwysing by",
+      "empty": "Geen stelselaanwysings gekonfigureer nie. Kies voeg stelselaanwysing by om te begin.",
+      "tableHeaders": {
+        "name": "Naam",
+        "contentPreview": "Inhoudsvoorskou",
+        "created": "Geskep",
+        "updated": "Opgedateer",
+        "enabled": "Geaktiveer",
+        "actions": "Aksies"
+      },
+      "status": {
+        "enabled": "Geaktiveer",
+        "disabled": "Gedeaktiveer"
+      },
+      "actions": {
+        "edit": "Redigeer",
+        "disable": "Deaktiveer",
+        "enable": "Aktiveer",
+        "delete": "Verwyder"
+      },
+      "confirm": {
+        "delete": "Verwyder aanwysing \"{{name}}\"?"
+      }
+    },
+    "tools": {
+      "title": "Gereedskap-konfigurasie",
+      "desc": "Hersien ingeboude gereedskap en verken MCP-gereedskap wat van verbinde bedieners gelaai is. Aktiveer die aksies wat u agente moet kan uitvoer.",
+      "subTabs": {
+        "builtIn": "Ingeboude Gereedskap",
+        "mcp": "MCP-gereedskap",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI-gereedskap"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Naam",
+          "category": "Kategorie",
+          "description": "Beskrywing",
+          "parameters": "Parameters",
+          "enabled": "Geaktiveer"
+        },
+        "categories": {
+          "fileOps": "Lêerbewerkings",
+          "searchDisc": "Soek en Ontdekking",
+          "noteMgmt": "Nota-bestuur"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Lees die inhoud van 'n lêer uit u gewelf",
+            "params": "pad (vereis): Pad na die lêer om te lees"
+          },
+          "writeFile": {
+            "desc": "Skryf of dateer 'n lêer in u gewelf op",
+            "params": "pad (vereis), inhoud (vereis): Lêerpad en inhoud om te skryf"
+          },
+          "listFiles": {
+            "desc": "Lys lêers in die gewelf of 'n spesifieke gids",
+            "params": "gids (opsioneel), uitbreiding (opsioneel): Filter op gids en lêeruitbreiding"
+          },
+          "searchFiles": {
+            "desc": "Soek lêers op naam of inhoud in u gewelf",
+            "params": "navraag (vereis), soek_inhoud (opsioneel), limiet (opsioneel): Soeknavraag en opsies"
+          },
+          "createNote": {
+            "desc": "Skep 'n nuwe nota met gespesifiseerde inhoud",
+            "params": "titel (vereis), inhoud (vereis), gids (opsioneel): Notatitel, inhoud en ligging"
+          },
+          "appendNote": {
+            "desc": "Voeg inhoud by 'n bestaande nota",
+            "params": "pad (vereis), inhoud (vereis): Notapad en inhoud om by te voeg"
+          }
+        },
+        "infoTitle": "💡 oor gereedskap",
+        "infoText": "Ingeboude gereedskap word per inprop-instellings gekonfigureer. MCP-gereedskap word onafhanklik bestuur — gebruik die MCP-oortjie om bedieners te verbind en gereedskap-beskikbaarheid te verfris.",
+        "toolNames": {
+          "read_file": "Lees Lêer",
+          "write_file": "Skryf Lêer",
+          "list_files": "Lys Lêers",
+          "search_files": "Soek Lêers",
+          "create_note": "Skep Nota",
+          "append_note": "Voeg by Nota"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Geen MCP-gereedskap beskikbaar nie. Verbind 'n bediener of verfris gekassineerde gereedskap om hierdie lys te vul.",
+        "tableHeaders": {
+          "server": "Bediener",
+          "tool": "Gereedskap",
+          "description": "Beskrywing",
+          "parameters": "Parameters",
+          "source": "Bron"
+        },
+        "noDescription": "Geen beskrywing",
+        "schemaUnavailable": "Skema nie beskikbaar nie",
+        "live": "Lewend",
+        "cached": "Gekassineer",
+        "status": {
+          "connected": "verbind",
+          "disconnected": "ontkoppel"
+        }
+      },
+      "openapi": {
+        "desc": "Genereer HTTP-gereedskap van OpenAPI-dokumente. Afgeleë spesifikasies word onder {{cacheDir}} gekassineer.",
+        "addBtn": "Voeg HTTP-bron by",
+        "noSources": "Geen HTTP-bronne nog gekonfigureer nie.",
+        "unnamed": "Naamlose HTTP-bron",
+        "tableHeaders": {
+          "name": "Naam",
+          "source": "Bron",
+          "auth": "Verifikasie",
+          "status": "Status",
+          "actions": "Aksies"
+        },
+        "sourceUrl": "Afgeleë URL nie gestel nie",
+        "sourcePath": "Lêerpad nie gestel nie",
+        "authHeader": "Opskrif ({{key}})",
+        "authQuery": "Navraag ({{key}})",
+        "authNone": "Geen",
+        "statusEnabled": "Geaktiveer",
+        "statusDisabled": "Gedeaktiveer",
+        "actions": {
+          "edit": "Redigeer",
+          "reload": "Herlaai",
+          "refetch": "Herlaai van bron",
+          "delete": "Verwyder"
+        },
+        "notices": {
+          "removed": "HTTP-bron verwyder",
+          "reloaded": "{{count}} bewerkings hergelaai",
+          "reloadFailed": "Kon nie HTTP-bron herlaai nie. Kyk die konsole vir besonderhede."
+        },
+        "modal": {
+          "defaultTitle": "HTTP-bron",
+          "displayName": {
+            "name": "Vertoonnaam",
+            "desc": "Wys aan agente wanneer 'n gereedskap-bron gekies word"
+          },
+          "enabled": {
+            "name": "Geaktiveer",
+            "desc": "Aktiveer om hierdie HTTP API aan elke agent bloot te stel"
+          },
+          "sourceType": {
+            "name": "Brontipe",
+            "file": "Plaaslike lêer",
+            "url": "Afgeleë URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Gehaal en gekassineer binne die inprop-datagids"
+          },
+          "cachedFile": "Gekassineerde lêer: {{path}} ({{date}})",
+          "neverFetched": "Nooit gehaal nie",
+          "specPath": {
+            "name": "OpenAPI-lêerpad",
+            "desc": "Relatiewe pad binne die gewelf of 'n absolute pad"
+          },
+          "baseUrl": {
+            "name": "Basis-URL-opheffing",
+            "desc": "Oorskry die eerste bedieneritem uit die dokument (opsioneel)"
+          },
+          "auth": {
+            "name": "Verifikasie",
+            "desc": "Voeg outomaties API-sleutels in wanneer hierdie bron opgeroep word",
+            "none": "Geen",
+            "header": "HTTP-opskrif",
+            "query": "Navraag-parameter"
+          },
+          "credKey": {
+            "name": "Geloofsbrief-sleutel"
+          },
+          "credValue": {
+            "name": "Geloofsbrief-waarde"
+          },
+          "actions": {
+            "name": "Aksies",
+            "reloadTools": "Herlaai gereedskap",
+            "refetchTooltip": "Herlaai spesifikasie van URL",
+            "deleteTooltip": "Verwyder bron"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Definieer plaaslike opdraglyn-gereedskap wat agente kan uitvoer. Gebruik templates soos {{param}} vir dinamiese argumente.",
+        "addBtn": "Voeg CLI-gereedskap by",
+        "presetsBtn": "Voeg by vanuit voorinstellings",
+        "noTools": "Geen CLI-gereedskap nog gekonfigureer nie.",
+        "tableHeaders": {
+          "name": "Naam",
+          "command": "Opdrag",
+          "parameters": "Parameters",
+          "status": "Status",
+          "actions": "Aksies"
+        },
+        "unnamed": "Naamlose CLI-gereedskap",
+        "paramCount": "{{count}} parameter",
+        "paramCount_plural": "{{count}} parameters",
+        "noParams": "Geen",
+        "statusEnabled": "Geaktiveer",
+        "statusDisabled": "Gedeaktiveer",
+        "actions": {
+          "edit": "Redigeer",
+          "disable": "Deaktiveer",
+          "enable": "Aktiveer",
+          "delete": "Verwyder"
+        },
+        "notices": {
+          "removed": "CLI-gereedskap verwyder"
+        },
+        "infoTitle": "💡 Oor CLI-gereedskap",
+        "infoText": "CLI-gereedskap voer shell-opdragte plaaslik uit. Gebruik {{paramName}} in argumente vir sjabloonvervanging, of stel parameters in om as argumente of omgewingsveranderlikes deur te gee.",
+        "modal": {
+          "defaultTitle": "CLI-gereedskap",
+          "toolName": {
+            "name": "Gereedskap-naam",
+            "desc": "Identifiseerder wat deur agente gebruik word om hierdie gereedskap op te roep"
+          },
+          "description": {
+            "name": "Beskrywing",
+            "desc": "Beskryf wat hierdie gereedskap doen vir die KI"
+          },
+          "enabled": {
+            "name": "Geaktiveer",
+            "desc": "Aktiveer om agente toe te laat om hierdie gereedskap te gebruik"
+          },
+          "commandConfig": "Opdrag-konfigurasie",
+          "command": {
+            "name": "Opdrag",
+            "desc": "Die uitvoerbare om te laat loop (bv. node, python, bash, /pad/na/skrip)"
+          },
+          "args": {
+            "name": "Argumente",
+            "desc": "Opdrag-argumente, een per reël. Gebruik {{paramName}} vir sjabloonvervanging."
+          },
+          "cwd": {
+            "name": "Werksgids",
+            "desc": "Gids om die opdrag in te laat loop (opsioneel)"
+          },
+          "timeout": {
+            "name": "Tydslimiet (ms)",
+            "desc": "Maksimum uitvoeringstyd in millisekondes (verstek: {{timeout}})"
+          },
+          "shell": {
+            "name": "Laat loop in dop",
+            "desc": "Voer die opdrag deur 'n dop uit (aktiveer dopkenmerke soos pyplyn)"
+          },
+          "paramsTitle": "Parameters",
+          "paramsDesc": "Definieer parameters wat die KI aan hierdie gereedskap kan deurgee.",
+          "addParam": "Voeg Parameter by",
+          "noParams": "Geen parameters gedefinieer nie.",
+          "paramN": "Parameter {{n}}",
+          "param": {
+            "name": "Naam",
+            "type": {
+              "name": "Tipe",
+              "string": "String",
+              "number": "Nommer",
+              "boolean": "Booleaans"
+            },
+            "description": "Beskrywing",
+            "required": "Vereis",
+            "insertAs": {
+              "name": "Voeg in as",
+              "desc": "Hoe om hierdie parameter aan die opdrag deur te gee",
+              "template": "Sjabloon ({{name}})",
+              "arg": "Voeg by as argument",
+              "env": "Omgewingsveranderlike"
+            },
+            "envName": {
+              "name": "Omgewingsveranderlike naam",
+              "desc": "Oorskry die omgewingsveranderlike naam (verstek na hoofletter parameternaam)"
+            }
+          },
+          "envTitle": "Omgewingsveranderlikes",
+          "envDesc": "Statiese omgewingsveranderlikes om in te stel wanneer die opdrag uitgevoer word.",
+          "envVars": {
+            "name": "Omgewingsveranderlikes",
+            "desc": "Formaat: SLEUTEL=waarde, een per reël"
+          }
+        },
+        "presets": {
+          "title": "Voeg CLI-gereedskap by vanuit voorinstellings",
+          "desc": "Kies 'n voorinstelling om vinnig 'n vooraf-gekonfigureerde CLI-gereedskap by te voeg. U kan dit aanpas na byvoeging.",
+          "addBtn": "Voeg by",
+          "addedBtn": "Bygevoeg",
+          "closeBtn": "Sluit",
+          "notices": {
+            "added": "\"{{name}}\" bygevoeg - aktiveer dit in die CLI-gereedskaplys"
+          },
+          "categories": {
+            "file": "Lêerbewerkings",
+            "search": "Soek",
+            "network": "Netwerk",
+            "code": "Kode-uitvoering",
+            "data": "Dataverwerking",
+            "system": "Stelselinligting",
+            "apps": "macOS-programme en werkskerm"
+          },
+          "names": {
+            "preset-cat": "Lees Lêer (cat)",
+            "preset-ls": "Lys Gids (ls)",
+            "preset-find": "Vind Lêers (find)",
+            "preset-grep": "Soek Teks (grep)",
+            "preset-ripgrep": "Vinnige Soek (rg)",
+            "preset-curl": "HTTP-versoek (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Laat Python-kode loop",
+            "preset-node": "Laat JavaScript loop (Node)",
+            "preset-bash": "Laat Shell-skrip loop",
+            "preset-jq": "JSON-verwerker (jq)",
+            "preset-wc": "Woordtelling (wc)",
+            "preset-date": "Huidige Datum/Tyd",
+            "preset-pwd": "Huidige Gids (pwd)",
+            "preset-whoami": "Huidige Gebruiker",
+            "preset-uname": "Stelselinligting (uname)",
+            "preset-open": "Maak Lêer/URL oop (open)",
+            "preset-open-app": "Laai Program (open -a)",
+            "preset-safari": "Maak oop in Safari",
+            "preset-chrome": "Maak oop in Chrome",
+            "preset-firefox": "Maak oop in Firefox",
+            "preset-pbcopy": "Kopieer na Knipbord",
+            "preset-pbpaste": "Plak van Knipbord",
+            "preset-say": "Teks-na-spraak (say)",
+            "preset-osascript": "AppleScript-uitvoerder",
+            "preset-notify": "Werkskerm-kennisgewing",
+            "preset-screencapture": "Skermkiekie",
+            "preset-applescript-list-apps": "Lys Lopende Programme"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG-konfigurasie",
+      "desc": "Stel herwinning-versterkte generasie en websoek in om KI-antwoorde te verbeter.",
+      "subTabs": {
+        "overview": "Oorsig",
+        "chunking": "Verdeling",
+        "search": "Soek",
+        "filters": "Filters",
+        "advanced": "Gevorderd",
+        "websearch": "Websoek"
+      },
+      "general": {
+        "title": "Algemene instellings",
+        "enableRag": {
+          "name": "Aktiveer RAG",
+          "desc": "Aktiveer Herwinning-versterkte Generasie vir verbeterde konteks"
+        },
+        "vectorStore": {
+          "name": "Vektorstoor",
+          "desc": "Vektordatabasis vir die stoor van insluitings",
+          "memory": "In-geheue",
+          "disk": "Skyfgebaseer"
+        },
+        "embeddingModel": {
+          "name": "Insluitingsmodel",
+          "desc": "Model om te gebruik vir die opwekking van insluitings"
+        },
+        "embedChanged": {
+          "name": "Sluit veranderde lêers outomaties in",
+          "desc": "Sluit lêers outomaties weer in wanneer dit gewysig word"
+        }
+      },
+      "indexMgmt": {
+        "title": "Indeksbestuur",
+        "desc": "Bestuur u RAG-indeks en bekyk statistieke oor geïndekseerde inhoud.",
+        "statsTitle": "Indeksstatistieke",
+        "stats": {
+          "totalChunks": "Totale Stukkies",
+          "uniqueFiles": "Unieke Lêers",
+          "totalChars": "Totale Karakters",
+          "avgChunkSize": "Gemid. Stukkie-grootte"
+        },
+        "empty": "Indeks is leeg. Kies herbou indeks om indeksering te begin.",
+        "error": "⚠️ kan nie indeksstatistieke laai nie",
+        "rebuild": {
+          "name": "Herbou indeks",
+          "desc": "Herindekseer alle lêers in u gewelf. Dit kan 'n rukkie neem.",
+          "btn": "Herbou",
+          "rebuilding": "Herbou..."
+        },
+        "refresh": {
+          "name": "Verfris indeks",
+          "desc": "Dateer die indeks op met enige veranderde lêers sedert laaste indeksering.",
+          "btn": "Verfris",
+          "refreshing": "Verfris..."
+        },
+        "clear": {
+          "name": "Verwyder indeks",
+          "desc": "Verwyder alle geïndekseerde data. U sal die indeks moet herbou.",
+          "btn": "Verwyder",
+          "clearing": "Verwyder..."
+        },
+        "notices": {
+          "rebuilt": "Indeks suksesvol herbou",
+          "rebuildFailed": "Kon nie indeks herbou nie",
+          "refreshed": "Indeks suksesvol verfris",
+          "refreshFailed": "Kon nie indeks verfris nie",
+          "cleared": "Indeks suksesvol verwyder",
+          "clearFailed": "Kon nie indeks verwyder nie"
+        }
+      },
+      "chunking": {
+        "title": "Verdelingsinstellings",
+        "strategy": {
+          "name": "Verdelingstrategie",
+          "desc": "Strategie vir die verdeling van dokumente in stukkies",
+          "recursive": "Rekursief (Slim)",
+          "fixed": "Vaste Grootte",
+          "sentence": "Per Sin",
+          "paragraph": "Per Paragraaf"
+        },
+        "chunkSize": {
+          "name": "Stukkie-grootte",
+          "desc": "Aantal karakters per stukkie (500-2000 aanbeveel)"
+        },
+        "chunkOverlap": {
+          "name": "Stukkie-oorvleueling",
+          "desc": "Aantal oorvleuelende karakters tussen stukkies"
+        },
+        "minChunkSize": {
+          "name": "Min. stukkie-grootte",
+          "desc": "Minimum stukkie-grootte om te skep"
+        },
+        "maxTokens": {
+          "name": "Maks. tokens per stukkie",
+          "desc": "Maksimum tokens toegelaat per stukkie"
+        }
+      },
+      "search": {
+        "title": "Soekinstellings",
+        "searchType": {
+          "name": "Soektipe",
+          "desc": "Tipe gelykenissoek om uit te voer",
+          "similarity": "Gelykenis"
+        },
+        "topK": {
+          "name": "Boonste K-resultate",
+          "desc": "Aantal mees relevante stukkies om te herwin (1-20)"
+        },
+        "threshold": {
+          "name": "Gelykenis-drempelwaarde",
+          "desc": "Minimum gelykenistelling om resultate in te sluit (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Relevansiepuntetelling-gewig",
+          "desc": "Gewig vir relevansiepuntetelling (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Konteksvenster-limiet",
+          "desc": "Maksimum tokens vir herwinne konteks"
+        }
+      },
+      "filters": {
+        "title": "Lêerfilters",
+        "excludeFolders": {
+          "name": "Sluit gidse uit",
+          "desc": "Gidse om van indeksering uit te sluit (komma-geskeide)"
+        },
+        "includeTypes": {
+          "name": "Sluit lêertipes in",
+          "desc": "Lêertipes om in te sluit (leeg = alle tipes)"
+        },
+        "excludeTypes": {
+          "name": "Sluit lêertipes uit",
+          "desc": "Lêertipes om van indeksering uit te sluit"
+        },
+        "filterByTag": {
+          "name": "Filter op etiket",
+          "desc": "Indekseer slegs lêers met hierdie etikette (leeg = alle lêers)"
+        },
+        "excludeByTag": {
+          "name": "Sluit op etiket uit",
+          "desc": "Sluit lêers met hierdie etikette van indeksering uit"
+        }
+      },
+      "advanced": {
+        "title": "Gevorderde instellings",
+        "batchSize": {
+          "name": "Insluitings-lotgrootte",
+          "desc": "Aantal stukkies om gelyktydig in te sluit"
+        }
+      },
+      "grading": {
+        "title": "Graderingsinstellings",
+        "desc": "Gradeer herwinne stukkies vir relevansie voordat dit na die LLM gestuur word. Dit help om lae-kwaliteit resultate te filter.",
+        "enableGrading": {
+          "name": "Aktiveer graderingsdrempel",
+          "desc": "Filter stukkies onder kwaliteitsdrempels"
+        },
+        "graderSource": {
+          "name": "Gradeerder-model-bron",
+          "desc": "Waar om die gradeerder-model vandaan te kry",
+          "chat": "Geselskapmodel",
+          "custom": "Pasgemaakte Model"
+        },
+        "graderModel": {
+          "name": "Gradeerder-model",
+          "desc": "Spesifieke model om vir gradering te gebruik"
+        },
+        "parallel": {
+          "name": "Parallelle verwerking",
+          "desc": "Aantal stukkies om gelyktydig te gradeer"
+        },
+        "minRelevance": {
+          "name": "Min. relevansiepunt",
+          "desc": "Minimum relevansiepunt (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Min. akkuraatheids-punt",
+          "desc": "Minimum akkuraatheids-punt (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Min. ondersteuningskwaliteitspunt",
+          "desc": "Minimum ondersteuningskwaliteitspunt (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Websoek-konfigurasie",
+      "desc": "Stel websoekfunksionaliteit in om KI-antwoorde te verbeter met bygewerkte inligting van die internet.",
+      "generalBehavior": "Algemene gedrag",
+      "providerSelection": "Verskaffer-keuse",
+      "localeFilters": "Taalgebied en filters",
+      "apiCredentials": "API-geloofsbriewe en eindpunte",
+      "enabled": {
+        "name": "Aktiveer websoek",
+        "desc": "Laat KI toe om die web te deursoek vir huidige inligting"
+      },
+      "autoTrigger": {
+        "name": "Outo-aktiveer soek",
+        "desc": "Aktiveer outomaties websoek wanneer die navraag huidige inligting vereis (bv. nuus, pryse, onlangse gebeure)"
+      },
+      "maxResults": {
+        "name": "Maksimum resultate",
+        "desc": "Maksimum aantal soekresultate om terug te gee"
+      },
+      "timeRange": {
+        "name": "Resultaat-varsheid",
+        "desc": "Beperk resultate tot 'n tydsreeks wat deur verskaffers ondersteun word (Google, SearXNG, Mojeek)",
+        "any": "Enige tyd (verstek)",
+        "h": "Afgelope uur",
+        "d": "Afgelope 24 uur",
+        "w": "Afgelope week",
+        "m": "Afgelope maand",
+        "y": "Afgelope jaar"
+      },
+      "provider": {
+        "name": "Soekverskaffer",
+        "desc": "Kies uit privaatheid-vriendelike scrapers of API-ondersteunde enjins"
+      },
+      "searchLanguage": {
+        "name": "Taalkode",
+        "desc": "ISO-taalkode (bv. en, fr, zh-CN) wat deurgestuur word na verskaffers wat lokalisering ondersteun"
+      },
+      "searchCountry": {
+        "name": "Land/markkode",
+        "desc": "Twee-letter landkode (bv. US, DE) wat deur Bing, DuckDuckGo, Brave en ander gebruik word"
+      },
+      "includeDomains": {
+        "name": "Sluit slegs hierdie domeine in",
+        "desc": "Komma-geskeide lys wat deur SerpAPI en Brave gebruik word om resultate tot spesifieke webwerwe te beperk"
+      },
+      "excludeDomains": {
+        "name": "Sluit domeine uit",
+        "desc": "Komma-geskeide domeine om na die haal van resultate uit te filter"
+      },
+      "apiKey": {
+        "name": "Verstek API-sleutel",
+        "desc": "Gedeelde API-sleutel wat deur Google, Bing, SerpAPI, Tavily of Brave gebruik word wanneer verskaffer-spesifieke sleutels nie gestel is nie"
+      },
+      "googleCseId": {
+        "name": "Google Pasgemaakte Soekenjin ID",
+        "desc": "Vereis met 'n Google API-sleutel wanneer die Google-verskaffer gebruik word"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI-eindpunt",
+        "desc": "Oorskry die SerpAPI-basis-URL as u self-huisves"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API-sleutel",
+        "desc": "Oorskry die versteksleutel wanneer die Tavily-verskaffer gebruik word"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG-eindpunt",
+        "desc": "Basis-URL van u SearXNG-instansie (moet JSON teruggee)"
+      },
+      "braveApiKey": {
+        "name": "Brave API-sleutel",
+        "desc": "Gebruik 'n Brave Search API-intekentoken wanneer as verskaffer gekies"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API-sleutel (opsioneel)",
+        "desc": "Voeg 'n draertoken by as u Qwant-plan een uitreik"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API-sleutel",
+        "desc": "Vereis vir die Mojeek-verskaffer"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (geen sleutel vereis)",
+        "google": "Google Pasgemaakte Soek",
+        "bing": "Bing Websoek",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Soek",
+        "yahoo": "Yahoo (HTML-skraping)",
+        "yandex": "Yandex (HTML-skraping)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Vinnige aksies",
+      "desc": "Stel KI-aangedrewe vinnige aksies in wat in die redigeerder-kontekskieslys verskyn wanneer teks gekies is.",
+      "actionPrefix": {
+        "name": "Aksie-voorvoegsel",
+        "desc": "Voorvoegsel (emoji of teks) om voor alle vinnige aksies in die kontekskieslys te vertoon",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} aksie gekonfigureer ({{enabled}} geaktiveer)",
+      "count_plural": "{{count}} aksies gekonfigureer ({{enabled}} geaktiveer)",
+      "addBtn": "+ voeg vinnige aksie by",
+      "empty": "Geen vinnige aksies gekonfigureer nie. Kies voeg vinnige aksie by om te begin.",
+      "tableHeaders": {
+        "action": "Aksie",
+        "type": "Tipe",
+        "model": "Model",
+        "promptPreview": "Aanwysingsvoorskou",
+        "actions": "Aksies"
+      },
+      "defaultModel": "Verstek",
+      "editBtn": "Redigeer",
+      "deleteBtn": "verwyder",
+      "confirm": {
+        "delete": "Verwyder vinnige aksie \"{{name}}\"?"
+      },
+      "usageInfo": {
+        "title": "Gebruik",
+        "step1": "Kies teks in enige nota",
+        "step2": "Regskliek om die kontekskieslys oop te maak",
+        "step3": "Kies 'n vinnige aksie uit die kieslys",
+        "step4Replace": "Aksies gemerk as \"vervang\" sal die gekose teks vervang met die KI-resultaat",
+        "step4Explain": "Aksies gemerk as \"verduidelik\" sal die resultaat in 'n modaalvenster wys"
+      },
+      "edit": {
+        "title": "Redigeer vinnige aksie",
+        "name": {
+          "name": "Naam",
+          "desc": "Vertoonnaam vir hierdie aksie in die kontekskieslys"
+        },
+        "actionType": {
+          "name": "Aksietipe",
+          "desc": "Hoe die KI-antwoord hanteer moet word",
+          "replace": "Vervang gekose teks",
+          "explain": "Wys in modaalvenster"
+        },
+        "model": {
+          "name": "Model",
+          "desc": "Taalmodel om vir hierdie aksie te gebruik (laat leeg om verstek te gebruik)",
+          "default": "Gebruik verstekmodel"
+        },
+        "promptTemplate": {
+          "name": "Aanwysings-sjabloon",
+          "desc": "Instruksies gestuur aan die KI. Die gekose teks sal outomaties aangeheg word."
+        },
+        "cancel": "Kanselleer",
+        "save": "Stoor"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Maak teks langer",
+          "prompt": "Brei die volgende teks uit en elaboreer dit, maak dit meer gedetailleerd en omvattend terwyl die oorspronklike betekenis en toon behou word. Gee slegs die uitgebreide teks terug sonder enige addisionele kommentaar:\n\n"
+        },
+        "summarize": {
+          "name": "Vat teks op",
+          "prompt": "Verskaf 'n bondige opsomming van die volgende teks. Gee slegs die opsomming terug sonder enige addisionele kommentaar:\n\n"
+        },
+        "improve-writing": {
+          "name": "Verbeter skryfwerk",
+          "prompt": "Verbeter die skryfkwaliteit, duidelikheid en styl van die volgende teks. Gee slegs die verbeterde teks terug sonder enige addisionele kommentaar:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Regstel grammatika",
+          "prompt": "Stel enige grammatika-, spelling- en leestekensfoute in die volgende teks reg. Gee slegs die reg-gestelde teks terug sonder enige addisionele kommentaar:\n\n"
+        },
+        "explain": {
+          "name": "Verduidelik teks",
+          "prompt": "Verduidelik die volgende teks in eenvoudige terme:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Token-gebruik",
+      "desc": "Volg token-verbruik oor verskaffers en modelle. Data word oor alle gesprekke opgehoop.",
+      "notAvailable": "Token-gebruikopsporing is nie beskikbaar nie.",
+      "ranges": {
+        "today": "Vandag",
+        "week": "Hierdie week",
+        "month": "Hierdie maand",
+        "all": "Alle tye"
+      },
+      "stats": {
+        "totalTokens": "Totale tokens",
+        "apiCalls": "API-oproepe",
+        "promptTokens": "Aanwysings-tokens",
+        "completion": "Voltooiing",
+        "tokensIn": "tokens in",
+        "tokensOut": "tokens uit"
+      },
+      "byProvider": "Per verskaffer",
+      "byModel": "Per model",
+      "noData": "Geen gebruiksdata nog nie.",
+      "recentActivity": "Onlangse aktiwiteit",
+      "last10": "laaste 10",
+      "noRecent": "Geen onlangse aktiwiteit nie.",
+      "tableHeaders": {
+        "provider": "Verskaffer",
+        "model": "Model",
+        "prompt": "Aanwysing",
+        "completion": "Voltooiing",
+        "total": "Totaal",
+        "calls": "Oproepe",
+        "time": "Tyd",
+        "in": "In",
+        "out": "Uit"
+      },
+      "clearBtn": "Verwyder alle gebruiksdata",
+      "confirm": {
+        "clear": "Verwyder alle token-gebruiksrekords? Dit kan nie ongedaan gemaak word nie."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Tik u boodskap... (Enter om te stuur, Shift+Enter vir nuwe reël)",
+    "conversations": "Gesprekke",
+    "toggleConversationsTitle": "Wissel gesprekslys",
+    "currentConversation": "Huidige gesprek",
+    "new": "Nuut",
+    "settings": "Instellings",
+    "openSettingsTitle": "Maak inprop-instellings oop",
+    "mode": "Modus",
+    "prompt": "Aanwysing",
+    "agent": "Agent",
+    "modeOptions": {
+      "chat": "Klet",
+      "agent": "Agent"
+    },
+    "noSystemPrompt": "Geen stelselaanwysing",
+    "noAgentsAvailable": "Geen agente beskikbaar nie",
+    "sendHintPrefix": "Druk ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " om te stuur",
+    "sendAriaLabel": "Stuur boodskap",
+    "stop": " Stop",
+    "addReference": "Voeg verwysing by",
+    "addReferenceTooltip": "Voeg lêer- of gids-verwysing by (@)",
+    "emptyHeading": "Begin 'n gesprek",
+    "emptySubtext": "Tik 'n boodskap hieronder om te begin, of kies 'n gesprek uit die geskiedenis.",
+    "noAgentConfig": "Geen agente gekonfigureer nie",
+    "selectAgent": "Kies 'n agent…",
+    "notices": {
+      "stopping": "Generasie stop...",
+      "ragInitError": "RAG-inisialiserings-fout: {{message}}",
+      "modelsRefreshed": "Modelle verfris",
+      "modelsRefreshFailed": "Kon nie modelle verfris nie: {{message}}",
+      "waitForResponse": "Wag asseblief vir die huidige antwoord om te voltooi",
+      "configureProvider": "Stel asseblief eers 'n LLM-verskaffer in instellings in",
+      "selectModel": "Kies asseblief 'n model",
+      "noValidProvider": "Geen geldige verskafferkonfigurasie gevind vir hierdie model nie",
+      "chatError": "Kletfout: {{message}}",
+      "noMessageToRegenerate": "Kan nie boodskap vind om te hergenereer nie",
+      "regenerateOnlyLatest": "Slegs die mees onlangse antwoord kan tans hergenereer word",
+      "regenerateNoUserMsg": "Kan nie gebruikersboodskap vind om van te hergenereer nie",
+      "regenerated": "Antwoord hergenereer",
+      "regenerateFailed": "Hergenerering misluk: {{message}}",
+      "noteCreated": "Nota geskep: {{name}}",
+      "noteCreateFailed": "Kon nie nota skep nie: {{message}}",
+      "messageInserted": "Boodskap ingevoeg by: {{path}}",
+      "messageInsertFailed": "Kon nie boodskap invoeg nie: {{message}}",
+      "noAgents": "Geen agente beskikbaar nie. Stel agente in by Instellings → Agente.",
+      "ragDisabled": "RAG is gedeaktiveer in instellings. Aktiveer dit onder instellings → gespreks-kenmerke → RAG.",
+      "webSearchDisabled": "Websoek is gedeaktiveer in instellings. Aktiveer dit onder instellings → gespreks-kenmerke → websoek.",
+      "noFilesInVault": "Geen lêers gevind in gewelf nie",
+      "attached": "Aangeheg: {{name}}",
+      "attachedImages": "{{count}} prent(e) aangeheg",
+      "referencesAdded": "{{count}} verwysing(e) bygevoeg",
+      "fileNotFound": "Lêer nie gevind nie: {{path}}",
+      "agentConfigApplied": "Konfigurasie toegepas vir agent: {{name}}",
+      "waitForComplete": "Wag asseblief vir die huidige antwoord om te voltooi",
+      "chatServiceFallback": "ChatService nie gekonfigureer nie. ChatView-terugval gebruik.",
+      "noModelSelected": "Geen model gekies nie",
+      "noProviderConfig": "Geen verskafferkonfigurasie gevind nie",
+      "generationStopped": "Generasie gestop",
+      "noResponseToRegenerate": "Geen antwoord om te hergenereer nie",
+      "agentNotFound": "Agent nie gevind nie",
+      "unableToLoadRag": "Kan nie RAG-statistieke laai nie.",
+      "referenced": "Verwys na: {{name}}"
+    },
+    "status": {
+      "available": "Beskikbaar",
+      "unavailable": "Nie beskikbaar nie",
+      "disabled": "Gedeaktiveer",
+      "on": "Aan · {{detail}}",
+      "off": "Af"
+    },
+    "ragStats": {
+      "title": "RAG-statistieke",
+      "totalChunks": "📊 totale stukkies:",
+      "filesIndexed": "📁 lêers geïndekseer:",
+      "totalSize": "💾 totale grootte:",
+      "avgChunks": "📈 Gemid. Stukkies/Lêer:",
+      "indexedFiles": "📄 geïndekseerde lêers",
+      "noFilesYet": "⚠️ geen lêers is nog geïndekseer nie.",
+      "howToBuild": "Om die RAG-indeks te bou:",
+      "step1": "Gaan na Instellings → RAG",
+      "step2": "Aktiveer RAG",
+      "step3": "Kies indekseer gewelf",
+      "close": "Sluit",
+      "retrieved": "📚 herwin van {{count}} dokument",
+      "retrieved_plural": "📚 herwin van {{count}} dokumente"
+    },
+    "ragTooltip": {
+      "status": "RAG-indeks Status:",
+      "totalChunks": "📊 Totale Stukkies: {{count}}",
+      "filesIndexed": "📁 Lêers Geïndekseer: {{count}}",
+      "totalSize": "💾 Totale Grootte: {{size}} KB",
+      "indexedFiles": "📄 geïndekseerde Lêers:",
+      "andMore": "  ... en {{count}} meer",
+      "noFilesYet": "⚠️ geen lêers nog geïndekseer nie.",
+      "goToSettings": "Gaan na Instellings → RAG om die indeks te bou.",
+      "ragOff": "ℹ️ RAG is tans afgeskakel vir hierdie klet."
+    },
+    "agentSummary": {
+      "model": "Model",
+      "temp": "Temp",
+      "max": "Maks",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Gereedskap",
+      "memory": "Geheue",
+      "none": "Geen",
+      "configuration": "{{name}} konfigurasie",
+      "modelFixed": "{{name}} · Vas",
+      "modelDefault": "{{name}} · Verstek",
+      "modelChatView": "{{name}} · Kletaansig",
+      "customModel": "Pasgemaakte model",
+      "notSet": "Nie gestel nie",
+      "auto": "Outo",
+      "on": "Aan",
+      "off": "Af",
+      "shortTerm": "Korttermyn",
+      "longTerm": "Langtermyn",
+      "disabledMemory": "Gedeaktiveer",
+      "builtIn": "{{count}} ingeboude",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Webresultate",
+      "attachments": "Aanhegsels",
+      "references": "Verwysings",
+      "ragSources": "RAG-bronne",
+      "reasoning": "Redenering",
+      "copy": "Kopieer",
+      "copied": "Boodskap gekopieer",
+      "copyFailed": "Kon nie boodskap kopieer nie",
+      "tokenUsage": "Token-gebruik",
+      "tokenUsagePrompt": "Aanwysing",
+      "tokenUsageCompletion": "Voltooiing",
+      "tokenUsageTotal": "Totaal",
+      "save": "Stoor",
+      "insertToNotes": "Voeg in Notas",
+      "regenerate": "Hergenereer"
+    },
+    "streaming": {
+      "thinking": "Dink..."
+    },
+    "toolCall": {
+      "thinking": "Dink",
+      "executionProcess": "Uitvoeringsproses",
+      "input": "Invoer",
+      "output": "Uitvoer",
+      "running": "Hardloop..."
+    },
+    "addPicture": "Voeg prent by",
+    "addPictureTooltip": "Heg 'n prent aan u boodskap",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Gebruik geïndekseerde notas as konteks",
+    "webSearchLabel": "Websoek",
+    "webSearchTooltipLabel": "Soek die internet wanneer nodig",
+    "imageUnavailable": "Prentaanhegsel is nie beskikbaar vir die huidige model nie.",
+    "newChat": "Nuwe Klet",
+    "newConversation": "Nuwe Gesprek",
+    "searchConversations": "Soek gesprekke...",
+    "header": {
+      "model": "Model",
+      "advancedParams": "Gevorderde parameters",
+      "temperature": "Temperatuur",
+      "maxTokens": "Maks. tokens",
+      "topP": "Top P",
+      "freqPenalty": "Frekw. boete",
+      "presPenalty": "Teenw. boete",
+      "agentConfig": "Agent-konfigurasie",
+      "modelsCount": "Modelle: {{count}}",
+      "tokensCount": "Tokens: {{count}}",
+      "noModels": "Geen modelle beskikbaar nie"
+    },
+    "temperature": {
+      "precise": "0 (Presies)",
+      "balanced": "1 (Gebalanseerd)",
+      "creative": "2 (Kreatief)"
+    },
+    "modals": {
+      "image": {
+        "title": "Heg prente aan",
+        "searchPlaceholder": "Soek prente...",
+        "selectAll": "Kies alles",
+        "selectNone": "Kies niks",
+        "addSelected": "Voeg gekose by",
+        "noResults": "Geen ooreenstemmende prente gevind nie."
+      },
+      "reference": {
+        "title": "Voeg verwysings by",
+        "searchPlaceholder": "Soek lêers en gidse...",
+        "selectAll": "Kies alles",
+        "selectNone": "Kies niks",
+        "addSelected": "Voeg gekose by",
+        "noResults": "Geen ooreenstemmende lêers of gidse gevind nie."
+      },
+      "insertNote": {
+        "title": "Voeg in nota",
+        "searchPlaceholder": "Soek notas...",
+        "insert": "Voeg in gekose nota",
+        "createNew": "Skep nuwe nota",
+        "noResults": "Geen ooreenstemmende notas gevind nie."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Kanselleer",
+      "confirm": "Bevestig"
+    },
+    "agentEdit": {
+      "title": "Redigeer agent",
+      "icon": {
+        "name": "Ikoon",
+        "desc": "Emoji of karakter om hierdie agent voor te stel"
+      },
+      "description": {
+        "name": "Beskrywing",
+        "desc": "Kort beskrywing van die agent"
+      },
+      "modelStrategy": {
+        "name": "Modelstrategie",
+        "options": {
+          "default": "Gebruik verstekmodel (van instellings)",
+          "chatView": "Gebruik kletaansig-model",
+          "fixed": "Vaste model"
+        },
+        "noModels": "Geen modelle gekassineer nie",
+        "desc": "Kies hoe die agent sy model sal kies"
+      },
+      "systemPrompt": {
+        "createNew": "➕ skep nuwe aanwysing…",
+        "promptName": {
+          "name": "Aanwysing-naam",
+          "desc": "Vertoonnaam vir die nuwe stelselaanwysing"
+        },
+        "promptContent": {
+          "name": "Aanwysing-inhoud",
+          "desc": "Inhoud vir die nuwe stelselaanwysing"
+        },
+        "name": "Stelselaanwysing",
+        "desc": "Kies uit bestaande aanwysings of definieer 'n nuwe een vir hierdie agent."
+      },
+      "capabilities": "Vermoëns",
+      "memory": {
+        "title": "Geheue",
+        "notice": "Agent-geheue is tydelik nie beskikbaar nie terwyl ons die ervaring verbeter."
+      },
+      "tools": {
+        "title": "Gereedskap",
+        "builtIn": {
+          "name": "Ingeboude gereedskap",
+          "desc": "Kies watter ingeboude gereedskap hierdie agent kan gebruik"
+        },
+        "cli": {
+          "name": "CLI-gereedskap",
+          "desc": "Verleen toegang tot alle geaktiveerde CLI-gereedskap, of kies individueel hieronder",
+          "noTools": "Geen CLI-gereedskap gekonfigureer nie. Voeg gereedskap by en aktiveer dit onder Instellings → Gereedskap → CLI om dit hier te gebruik."
+        }
+      },
+      "mcp": {
+        "title": "MCP-toegang",
+        "noServers": "Geen MCP-bedieners gekonfigureer nie. Voeg bedieners by onder Instellings → MCP om hierdie opsies te ontsluit.",
+        "toolsCached": "{{count}} gereedskap gekassineer",
+        "toolsCached_plural": "{{count}} gereedskap gekassineer",
+        "noToolsCached": "Nog geen gereedskap gekassineer nie. Aktiveer volle toegang of verfris die kas.",
+        "showTools": "Wys gereedskap",
+        "hideTools": "Verberg gereedskap",
+        "selected": "Gekies",
+        "notSelected": "Nie gekies nie",
+        "noToolsAvailable": "Geen gereedskap nog beskikbaar van hierdie bediener nie."
+      },
+      "notices": {
+        "promptRequired": "Verskaf asseblief 'n naam en inhoud vir die nuwe stelselaanwysing."
+      },
+      "name": {
+        "label": "Naam",
+        "desc": "Vertoonnaam vir hierdie agent"
+      },
+      "fixedModel": {
+        "name": "Vaste model",
+        "desc": "Kies 'n spesifieke model vir hierdie agent.",
+        "descNoModels": "Geen gekassineerde modelle beskikbaar nie. Verfris modelle in die Modelle-oortjie."
+      },
+      "temperature": {
+        "label": "Temperatuur",
+        "desc": "Beheer willekeurigheid (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Maks. tokens",
+        "desc": "Maksimum aantal tokens om te genereer"
+      },
+      "contextWindow": {
+        "label": "Konteksvenster",
+        "desc": "Aantal vorige boodskappe om in konteks in te sluit"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Aktiveer herwinning-versterkte generasie"
+      },
+      "webSearch": {
+        "name": "Websoek",
+        "desc": "Aktiveer websoekvermoëns"
+      },
+      "maxSteps": {
+        "name": "Maks. Gereedskapstappe",
+        "desc": "Maksimum aantal gereedskap-oproepe per agentbeurt"
+      }
+    },
+    "provider": {
+      "title": "Verskaffer-instellings",
+      "selectProvider": {
+        "name": "Verskaffer",
+        "desc": "Kies die LLM-verskaffer-tipe",
+        "placeholder": "-- Kies verskaffer --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (plaaslik)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Gepasmaak (OpenAI-versoenbaar)"
+      },
+      "modelFilter": {
+        "name": "Modelfilter",
+        "desc": "Opsionele regex-patroon om beskikbare modelle te beperk"
+      },
+      "resourceGroup": {
+        "name": "Hulpbrongroep",
+        "desc": "Opsionele SAP AI Core-hulpbrongroep"
+      },
+      "serviceKey": {
+        "name": "Diensleutel",
+        "desc": "SAP AI Core-diensleutel (JSON-string)"
+      },
+      "baseUrl": {
+        "name": "Basis-URL",
+        "ollamaDesc": "Ollama-bediener-URL",
+        "customDesc": "OpenAI-versoenbare API-eindpunt (vereis)",
+        "optionalDesc": "Gepasmaakte API-eindpunt (opsioneel)"
+      },
+      "manageModels": {
+        "name": "Bestuur Modelle",
+        "desc": "Trek nuwe modelle of dateer bestaandes op van die Ollama-register.",
+        "btn": "⏬ Trek Ollama-model"
+      },
+      "apiKey": {
+        "name": "API-sleutel",
+        "desc": "Verifikasie-sleutel vir die gekose verskaffer"
+      },
+      "cancel": "Kanselleer",
+      "save": "Stoor",
+      "validation": {
+        "selectProvider": "Kies asseblief 'n verskaffer-tipe",
+        "apiKeyTooLong": "API-sleutel is te lank. Maksimum lengte is 500 karakters.",
+        "invalidUrl": "Ongeldige basis-URL-formaat. Voer asseblief 'n geldige URL in (bv. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP-inspekteur",
+      "desc": "Inspekteer en ontfout Model Context Protocol (MCP)-bedienerverbindings en gereedskap.",
+      "tabs": {
+        "connections": "Verbindings",
+        "tools": "Gereedskap",
+        "logs": "Logboeke"
+      },
+      "refreshBtn": "🔄 verfris",
+      "connections": {
+        "title": "MCP-bedienerverbindings",
+        "noServers": "Geen MCP-bedieners gekonfigureer nie.",
+        "headers": {
+          "server": "Bedienernaam",
+          "status": "Status",
+          "tools": "Gereedskap beskikbaar",
+          "actions": "Aksies"
+        },
+        "statusDisabled": "Gedeaktiveer",
+        "statusConnected": "● verbind",
+        "statusDisconnected": "○ ontkoppel",
+        "toolsLive": "{{count}} gereedskap",
+        "toolsLive_plural": "{{count}} gereedskap",
+        "toolsCached": "{{count}} gereedskap (gekassineer)",
+        "toolsCached_plural": "{{count}} gereedskap (gekassineer)",
+        "noTools": "0 gereedskap",
+        "connectBtn": "Verbind",
+        "disconnectBtn": "Ontkoppel",
+        "connecting": "Verbind...",
+        "disconnecting": "Ontkoppel...",
+        "notices": {
+          "disconnected": "Ontkoppel van {{name}}",
+          "enableFirst": "Aktiveer die bediener in instellings voor verbinding",
+          "connected": "Verbind met {{name}}",
+          "failedDisconnect": "Kon nie van {{name}} ontkoppel nie: {{message}}",
+          "failedConnect": "Kon nie met {{name}} verbind nie: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Beskikbare MCP-gereedskap",
+        "noTools": "Geen MCP-gereedskap beskikbaar nie. Kyk bedienerverbindings.",
+        "serverPrefix": "Bediener: {{name}}",
+        "noToolsInServer": "Geen gereedskap beskikbaar nie",
+        "headers": {
+          "tool": "Gereedskap-naam",
+          "description": "Beskrywing",
+          "parameters": "Parameters"
+        },
+        "noDescription": "Geen beskrywing",
+        "noParams": "Geen"
+      },
+      "logs": {
+        "title": "MCP-verbindinglogboeke",
+        "placeholder": "MCP-verbindinglogboeke sal hier verskyn. Toon tans plaasvervanger-inligting.",
+        "events": {
+          "connection": "• verbindingsgebeurtenisse",
+          "tools": "• gereedskap-registrasiegebeurtenisse",
+          "errors": "• foutlogboeke",
+          "comms": "• kommunikasie-besonderhede"
+        },
+        "testTitle": "Toets gereedskap-uitvoering",
+        "selectServer": "Kies 'n bediener...",
+        "selectTool": "Kies 'n gereedskap...",
+        "parametersTitle": "Parameters",
+        "selectEnum": "Kies...",
+        "performBtn": "Voer gereedskap uit",
+        "clearBtn": "Verwyder resultate",
+        "executing": "Uitvoering...",
+        "success": "✅ uitvoering suksesvol",
+        "failed": "❌ uitvoering misluk",
+        "errorTitle": "❌ uitvoeringsfout",
+        "errorLabel": "Fout: {{message}}",
+        "notices": {
+          "success": "Gereedskap suksesvol uitgevoer",
+          "failed": "Gereedskap-uitvoering misluk",
+          "error": "Uitvoeringsfout: {{message}}",
+          "requiredMissing": "Vereiste parameter ontbreek: {{name}}",
+          "invalidNumber": "Ongeldige nommer vir parameter: {{name}}",
+          "invalidJson": "Ongeldige JSON vir parameter: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Geen MCP-bedieners gekonfigureer nie",
+        "testing": "🧪 Toets {{count}} MCP-bedienerverbindings...",
+        "allSuccess": "✅ alle {{count}} mcp-bedieners suksesvol verbind!",
+        "partial": "⚠️ {{success}} verbind, {{failed}} misluk"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Redigeer MCP-bediener",
+      "titleAdd": "Voeg MCP-bediener by",
+      "serverName": {
+        "name": "Bedienernaam",
+        "desc": "Vriendelike naam wat regdeur die inprop gewys word"
+      },
+      "connectionMode": {
+        "name": "Verbindingsmodus",
+        "desc": "Kies of outomaties verbind of slegs wanneer handmatig geaktiveer",
+        "auto": "Outoverbinding wanneer klet oopgaan",
+        "manual": "Handmatige verbinding"
+      },
+      "command": {
+        "name": "Opdrag",
+        "desc": "Uitvoerbare of skrip wat die MCP-bediener begin"
+      },
+      "arguments": {
+        "name": "Argumente",
+        "desc": "Komma of nuwe reël geskeide argumente (opsioneel)"
+      },
+      "envVars": {
+        "name": "Omgewingsveranderlikes",
+        "desc": "Opsionele SLEUTEL=WAARDE-pare, een per reël"
+      },
+      "enabled": {
+        "name": "Geaktiveer",
+        "desc": "Deaktiveer om die bediener gekonfigureer te hou sonder outomatiese verbinding"
+      },
+      "cancel": "Kanselleer",
+      "saveEdit": "Stoor wysigings",
+      "saveAdd": "Voeg bediener by",
+      "validation": {
+        "nameRequired": "Bedienernaam is vereis",
+        "commandRequired": "Opdrag is vereis"
+      }
+    },
+    "ollamaManager": {
+      "title": "Bestuur Ollama-modelle",
+      "serverInfo": "Bediener-inligting",
+      "checkingServer": "Nagaan bediener...",
+      "serverOnline": "✅ Bediener aanlyn",
+      "versionLabel": " | Weergawe: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Bediener aflyn",
+      "connectionError": "❌ Verbindingsfout",
+      "pullTitle": "Trek nuwe model",
+      "pullHint": "Voer 'n modelnaam in om van die Ollama-biblioteek af te laai (bv. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Modelnaam",
+        "example": "Voorbeeld: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Trek model",
+      "installedTitle": "Geïnstalleerde modelle",
+      "refreshList": "🔄 Verfris lys",
+      "noModels": "Geen modelle gevind nie. Trek 'n model om te begin.",
+      "capabilities": "Vermoëns: {{caps}}",
+      "deleteBtn": "Verwyder",
+      "closeBtn": "Sluit",
+      "confirmDelete": {
+        "title": "Bevestig verwydering",
+        "message": "Is u seker dat u die model \"{{name}}\" wil verwyder?",
+        "cancel": "Kanselleer",
+        "confirm": "Verwyder"
+      },
+      "notices": {
+        "enterName": "Voer asseblief 'n modelnaam in",
+        "pulling": "Trek {{name}}... Dit kan 'n rukkie neem.",
+        "pullSuccess": "✅ {{name}} suksesvol getrek",
+        "pullFailed": "❌ Kon nie model trek nie: {{message}}",
+        "deleted": "✅ {{name}} verwyder",
+        "deleteFailed": "❌ Kon nie model verwyder nie: {{message}}",
+        "refreshing": "Verfris...",
+        "refreshSuccess": "✅ Modellys verfris",
+        "refreshFailed": "❌ Kon nie modellys verfris nie"
+      }
+    },
+    "promptEdit": {
+      "title": "Redigeer stelselaanwysing",
+      "name": {
+        "name": "Naam",
+        "desc": "Vertoonnaam vir hierdie aanwysing"
+      },
+      "content": {
+        "name": "Inhoud",
+        "desc": "Die stelselaanwysing-inhoud"
+      },
+      "enabled": {
+        "name": "Geaktiveer",
+        "desc": "Of hierdie aanwysing aktief is"
+      },
+      "cancel": "Kanselleer",
+      "save": "Stoor"
+    },
+    "prompt": {
+      "cancel": "Kanselleer",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Naam",
+      "create": "Skep",
+      "cancel": "Kanselleer"
+    },
+    "explain": {
+      "loading": "⏳ Verwerk...",
+      "error": "Fout tydens weergawe van verduideliking",
+      "errorPrefix": "❌ Fout: "
+    }
+  },
+  "notices": {
+    "noProvider": "Stel asseblief eers 'n LLM-verskaffer in instellings in",
+    "noModel": "Kies asseblief 'n verstekmodel in instellings",
+    "noValidProvider": "Geen geldige verskafferkonfigurasie gevind vir model: {{modelId}}",
+    "processing": "Verwerk...",
+    "textUpdated": "Teks suksesvol opgedateer",
+    "error": "Fout: {{message}}"
+  }
+}

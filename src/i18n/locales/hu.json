@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Általános",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Eszközök",
+      "rag": "RAG",
+      "prompts": "Promptok",
+      "agents": "Ügynökök",
+      "quickActions": "Gyors műveletek",
+      "usage": "Használat"
+    },
+    "general": {
+      "title": "Általános beállítások",
+      "desc": "Az intelligens asszisztens bővítmény általános beállításainak konfigurálása.",
+      "pluginVersion": {
+        "name": "Bővítmény verzió",
+        "desc": "Az intelligens asszisztens bővítmény jelenlegi verziója"
+      },
+      "defaultModel": {
+        "name": "Alapértelmezett modell",
+        "desc": "A beszélgetésekhez alapértelmezetten használt modell",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Alapértelmezett csevegési mód",
+        "desc": "Válassza ki, melyik módban nyíljon meg a csevegési nézet",
+        "chat": "Csevegési mód",
+        "agent": "Ügynök mód"
+      },
+      "conversationTitleMode": {
+        "name": "Beszélgetés cím módja",
+        "desc": "Hogyan generálódjanak a beszélgetések címei",
+        "firstMessage": "Első üzenet használata",
+        "autoSummary": "Automatikus összefoglaló generálása",
+        "manual": "Manuális"
+      },
+      "conversationIcons": {
+        "name": "Beszélgetés ikonok",
+        "desc": "Automatikus ikongenerálás engedélyezése a beszélgetésekhez"
+      },
+      "configStatus": {
+        "name": "Konfigurációs állapot",
+        "desc": "A bővítmény általános konfigurációs állapota",
+        "ok": "✅ Konfigurálva ({{providers}} szolgáltató, {{conversations}} beszélgetés)",
+        "incomplete": "⚠️ Hiányos – Kérjük, konfigurálja a szolgáltatókat és a modelleket"
+      }
+    },
+    "llm": {
+      "title": "LLM konfiguráció",
+      "desc": "Nyelvi modell szolgáltatók konfigurálása és az elérhető modellek kezelése.",
+      "subTabs": {
+        "provider": "Szolgáltatók",
+        "models": "Modellek"
+      }
+    },
+    "models": {
+      "title": "Modell konfiguráció",
+      "desc": "Az összes konfigurált szolgáltatótól származó modellek megtekintése és kezelése. Kattintson a \"modellek frissítése\" gombra a legújabb elérhető modellek lekéréséhez.",
+      "providerCount": "{{count}} szolgáltató konfigurálva",
+      "providerCount_plural": "{{count}} szolgáltató konfigurálva",
+      "refreshAll": "🔄 összes modell frissítése",
+      "empty": "Még nincsenek konfigurált szolgáltatók. Először adjon hozzá szolgáltatókat a szolgáltató fülön.",
+      "noModels": "Nincsenek elérhető modellek. Kattintson az \"összes modell frissítése\" gombra, vagy frissítse az egyes szolgáltatókat a szolgáltató fülön.",
+      "noMatch": "Egy modell sem felel meg az aktuális szűrőknek. Módosítsa vagy törölje a szűrőket az eredmények megtekintéséhez.",
+      "modelCount": "• {{count}} modell gyorsítótárban",
+      "modelCount_plural": "• {{count}} modell gyorsítótárban",
+      "matchCount": "• {{count}} megfelel a kiválasztott szűrőknek",
+      "matchCount_plural": "• {{count}} megfelel a kiválasztott szűrőknek",
+      "status": {
+        "enabled": "Engedélyezve",
+        "disabled": "Letiltva"
+      },
+      "actions": {
+        "disable": "Letiltás",
+        "enable": "Engedélyezés",
+        "setDefaultChat": "Alapértelmezett csevegési modell beállítása",
+        "defaultChat": "Alapértelmezett csevegési modell",
+        "setDefaultEmbedding": "Alapértelmezett beágyazási modell beállítása",
+        "defaultEmbedding": "Alapértelmezett beágyazási modell"
+      },
+      "notices": {
+        "fetching": "{{provider}} modelljeinek lekérése...",
+        "fetchFailed": "Nem sikerült frissíteni a {{provider}} modelljeit",
+        "refreshed": "A modellek sikeresen frissítve!",
+        "refreshFailed": "Nem sikerült frissíteni a modelleket",
+        "defaultChatSet": "Az alapértelmezett csevegési modell beállítva: {{name}}",
+        "defaultEmbeddingSet": "Az alapértelmezett beágyazási modell beállítva: {{name}}"
+      },
+      "filters": {
+        "allProviders": "Összes szolgáltató",
+        "allCapabilities": "Összes képesség",
+        "allStates": "Összes állapot",
+        "searchPlaceholder": "Keresés név vagy azonosító alapján"
+      }
+    },
+    "provider": {
+      "title": "Szolgáltató konfiguráció",
+      "securityTitle": "⚠️ Biztonsági figyelmeztetés",
+      "securityDesc": "Az API-kulcsok kompatibilitási okokból egyszerű szövegként tárolódnak a vaultban. A véletlen kiszivárgás megelőzése érdekében:",
+      "securityItem1": "NE ossza meg a {{configDir}}/plugins/intelligence-assistant/data/ mappát.",
+      "securityItem2": "Adja hozzá ezt a mappát a .gitignore fájlhoz, ha Git szinkronizálást használ.",
+      "securityItem3": "Legyen óvatos nyilvános felhőalapú szinkronizálási szolgáltatások használatakor.",
+      "desc": "LLM szolgáltatók és API-hitelesítő adatok kezelése. A műveletek oszlopban szerkesztheti a konfigurációs részleteket, vagy frissítheti a gyorsítótárazott modelleket.",
+      "count": "{{count}} szolgáltató konfigurálva",
+      "count_plural": "{{count}} szolgáltató konfigurálva",
+      "addBtn": "+ Szolgáltató hozzáadása",
+      "empty": "Nincsenek konfigurált szolgáltatók. Válassza a \"Szolgáltató hozzáadása\" lehetőséget a kezdéshez.",
+      "tableHeaders": {
+        "provider": "Szolgáltató",
+        "status": "Állapot",
+        "actions": "Műveletek"
+      },
+      "status": {
+        "ready": "Kész",
+        "needsConfig": "Konfiguráció szükséges",
+        "checking": "Ellenőrzés...",
+        "credentialsSet": "Hitelesítő adatok beállítva",
+        "serverOnline": "Szerver online",
+        "serverOffline": "Szerver offline",
+        "serverError": "Szerverhiba"
+      },
+      "guidance": {
+        "requiresCli": "Helyi CLI szükséges",
+        "provideServiceKey": "Adja meg a szolgáltatáskulcsot",
+        "configureBaseUrl": "Konfigurálja az alap URL-t",
+        "addApiKey": "Adjon hozzá API-kulcsot"
+      },
+      "models": {
+        "none": "Nincsenek modellek",
+        "count": "{{count}} modell",
+        "count_plural": "{{count}} modell"
+      },
+      "ollama": {
+        "checkingVersion": "Verzió ellenőrzése...",
+        "server": {
+          "checking": "Szerver ellenőrzése...",
+          "online": "Szerver: online",
+          "offline": "Szerver: offline vagy nem érhető el",
+          "error": "Szerver: kapcsolódási hiba",
+          "versionOnline": "Szerver online",
+          "versionOffline": "Szerver offline",
+          "versionError": "Kapcsolódási hiba",
+          "version": "Verzió: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Utolsó frissítés: {{timeAgo}}",
+        "neverRefreshed": "Még nem frissítve",
+        "justNow": "most",
+        "minutesAgo": "{{n}} perce",
+        "hoursAgo": "{{n}} órája",
+        "daysAgo": "{{n}} napja"
+      },
+      "actions": {
+        "edit": "Szerkesztés",
+        "manageModels": "Modellek kezelése",
+        "refreshModels": "Modellek frissítése",
+        "refreshing": "Frissítés...",
+        "delete": "Törlés"
+      },
+      "notices": {
+        "refreshed": "A {{provider}} modelljei frissítve.",
+        "refreshFailed": "Nem sikerült frissíteni a modelleket"
+      },
+      "confirm": {
+        "delete": "Eltávolítja a(z) {{provider}} szolgáltatót?"
+      }
+    },
+    "mcp": {
+      "title": "MCP szerver kezelése",
+      "desc": "Model Context Protocol (MCP) szerverek konfigurálása az ügynök képességeinek bővítéséhez külső eszközökkel és adatforrásokkal.",
+      "inspectorBtn": "🔍 MCP vizsgáló megnyitása",
+      "testAllBtn": "🧪 összes kapcsolat tesztelése",
+      "refreshAllBtn": "🔄 összes eszköz frissítése",
+      "addBtn": "+ MCP szerver hozzáadása",
+      "empty": "Nincsenek konfigurált MCP szerverek. Válassza az MCP szerver hozzáadása lehetőséget a kezdéshez.",
+      "tableHeaders": {
+        "name": "Név",
+        "command": "Parancs",
+        "arguments": "Argumentumok",
+        "status": "Állapot",
+        "tools": "Eszközök",
+        "actions": "Műveletek"
+      },
+      "untitled": "Névtelen MCP szerver",
+      "notConfigured": "Nincs konfigurálva",
+      "noArgs": "Nincs",
+      "cached": "Gyorsítótárban",
+      "disabled": "Letiltva",
+      "envVars": "{{count}} környezeti változó",
+      "envVars_plural": "{{count}} környezeti változó",
+      "status": {
+        "disabled": "Letiltva",
+        "connected": "csatlakozva",
+        "disconnected": "lecsatlakozva",
+        "enableToManage": "Engedélyezze a kapcsolatok kezeléséhez",
+        "manualConnect": "Manuális csatlakozás",
+        "autoConnect": "Automatikus csatlakozás"
+      },
+      "toolCount": {
+        "live": "{{count}} élő eszköz",
+        "live_plural": "{{count}} élő eszköz",
+        "cached": "{{count}} gyorsítótárazott eszköz",
+        "cached_plural": "{{count}} gyorsítótárazott eszköz"
+      },
+      "actions": {
+        "edit": "Szerkesztés",
+        "enabled": "✓ Engedélyezve",
+        "enabledOff": "✗ Letiltva",
+        "connect": "csatlakozás",
+        "disconnect": "lecsatlakozás",
+        "connecting": "Csatlakozás...",
+        "disconnecting": "Lecsatlakozás...",
+        "test": "Teszt",
+        "testing": "Tesztelés...",
+        "delete": "Törlés"
+      },
+      "notices": {
+        "disconnected": "Lecsatlakozva erről: {{name}}",
+        "connected": "Csatlakozva ehhez: {{name}}",
+        "autoConnectFailed": "Nem sikerült automatikusan csatlakozni ehhez: {{name}}",
+        "enableFirst": "Engedélyezze a szervert csatlakozás előtt",
+        "disconnectFailed": "Nem sikerült lecsatlakozni erről: {{name}}",
+        "connectFailed": "Nem sikerült csatlakozni ehhez: {{name}}",
+        "testNoCommand": "❌ kérjük, adjon meg egy parancsot a kapcsolat tesztelése előtt",
+        "testSuccess": "✅ sikeresen csatlakozva! {{count}} eszköz található.",
+        "testFailed": "❌ Kapcsolódás sikertelen: {{message}}",
+        "refreshedAll": "✅ eszközök frissítve {{count}} szerveren",
+        "refreshedAll_plural": "✅ eszközök frissítve {{count}} szerveren",
+        "refreshedPartial": "✅ {{success}} szerver frissítve, ❌ {{failed}} sikertelen",
+        "noServersConfigured": "⚠️ Nincsenek konfigurált MCP szerverek",
+        "testingAll": "🧪 {{count}} MCP szerver kapcsolatának tesztelése...",
+        "testAllSuccess": "✅ mind a {{count}} MCP szerver sikeresen csatlakoztatva!",
+        "testAllPartial": "⚠️ {{successful}} csatlakozva, {{failed}} sikertelen"
+      },
+      "confirm": {
+        "delete": "Törli a(z) \"{{name}}\" MCP szervert?"
+      }
+    },
+    "agents": {
+      "title": "Ügynök kezelése",
+      "desc": "AI ügynökök létrehozása és kezelése meghatározott képességekkel, eszközökkel és viselkedéssel.",
+      "count": "{{count}} ügynök konfigurálva",
+      "count_plural": "{{count}} ügynök konfigurálva",
+      "addBtn": "+ ügynök hozzáadása",
+      "empty": "Nincsenek konfigurált ügynökök. Válassza az ügynök hozzáadása lehetőséget a kezdéshez.",
+      "tableHeaders": {
+        "agent": "Ügynök",
+        "model": "Modell",
+        "capabilities": "Képességek",
+        "tools": "Eszközök",
+        "actions": "Műveletek"
+      },
+      "defaultBadge": "Alapértelmezett",
+      "systemPrompt": "Rendszerprompt • {{promptName}}",
+      "customPrompt": "Egyéni prompt",
+      "model": {
+        "notSet": "Nincs beállítva",
+        "notFound": "A modell nem található a gyorsítótárban",
+        "useChatView": "Csevegési nézet modelljének használata",
+        "useChatViewDesc": "A csevegési nézetben kiválasztott modellt fogja használni",
+        "useDefault": "Alapértelmezett modell használata",
+        "useDefaultDesc": "A beállításokban megadott alapértelmezett modellt fogja használni"
+      },
+      "capabilities": {
+        "noSpecialModes": "Nincsenek speciális módok"
+      },
+      "tools": {
+        "builtIn": "{{count}} beépített",
+        "mcpServer": "{{count}} MCP szerver",
+        "mcpServer_plural": "{{count}} MCP szerver",
+        "mcpTool": "{{count}} MCP eszköz",
+        "mcpTool_plural": "{{count}} MCP eszköz",
+        "noTools": "Nincsenek engedélyezett eszközök"
+      },
+      "actions": {
+        "edit": "Szerkesztés",
+        "delete": "törlés",
+        "protected": "védett"
+      },
+      "confirm": {
+        "delete": "Törli a(z) \"{{name}}\" ügynököt?"
+      }
+    },
+    "prompts": {
+      "title": "Rendszerpromptok",
+      "desc": "Az AI asszisztens viselkedését és személyiségét meghatározó rendszerpromptok kezelése.",
+      "addBtn": "+ rendszerprompt hozzáadása",
+      "empty": "Nincsenek konfigurált rendszerpromptok. Válassza a rendszerprompt hozzáadása lehetőséget a kezdéshez.",
+      "tableHeaders": {
+        "name": "Név",
+        "contentPreview": "Tartalom előnézet",
+        "created": "Létrehozva",
+        "updated": "Frissítve",
+        "enabled": "Engedélyezve",
+        "actions": "Műveletek"
+      },
+      "status": {
+        "enabled": "Engedélyezve",
+        "disabled": "Letiltva"
+      },
+      "actions": {
+        "edit": "Szerkesztés",
+        "disable": "Letiltás",
+        "enable": "Engedélyezés",
+        "delete": "Törlés"
+      },
+      "confirm": {
+        "delete": "Törli a(z) \"{{name}}\" promptot?"
+      }
+    },
+    "tools": {
+      "title": "Eszköz konfiguráció",
+      "desc": "Tekintse át a beépített eszközöket, és fedezze fel a csatlakoztatott szerverekről betöltött MCP eszközöket. Engedélyezze azokat a műveleteket, amelyeket az ügynökei végrehajthatnak.",
+      "subTabs": {
+        "builtIn": "Beépített eszközök",
+        "mcp": "MCP eszközök",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI eszközök"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Név",
+          "category": "Kategória",
+          "description": "Leírás",
+          "parameters": "Paraméterek",
+          "enabled": "Engedélyezve"
+        },
+        "categories": {
+          "fileOps": "Fájlműveletek",
+          "searchDisc": "Keresés és felfedezés",
+          "noteMgmt": "Jegyzet kezelése"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Egy fájl tartalmának beolvasása a vaultból",
+            "params": "path (kötelező): Az olvasandó fájl elérési útja"
+          },
+          "writeFile": {
+            "desc": "Fájl írása vagy frissítése a vaultban",
+            "params": "path (kötelező), content (kötelező): A fájl elérési útja és a tartalom az íráshoz"
+          },
+          "listFiles": {
+            "desc": "Fájlok listázása a vaultban vagy egy adott mappában",
+            "params": "folder (opcionális), extension (opcionális): Szűrés mappa és fájlkiterjesztés szerint"
+          },
+          "searchFiles": {
+            "desc": "Fájlok keresése név vagy tartalom alapján a vaultban",
+            "params": "query (kötelező), search_content (opcionális), limit (opcionális): Keresési kifejezés és beállítások"
+          },
+          "createNote": {
+            "desc": "Új jegyzet létrehozása megadott tartalommal",
+            "params": "title (kötelező), content (kötelező), folder (opcionális): Jegyzet címe, tartalma és helye"
+          },
+          "appendNote": {
+            "desc": "Tartalom hozzáfűzése egy meglévő jegyzethez",
+            "params": "path (kötelező), content (kötelező): Jegyzet elérési útja és a hozzáfűzendő tartalom"
+          }
+        },
+        "infoTitle": "💡 az eszközökről",
+        "infoText": "A beépített eszközök a bővítmény beállításai szerint vannak konfigurálva. Az MCP eszközök kezelése független – használja az MCP fület a szerverek csatlakoztatásához és az eszközök elérhetőségének frissítéséhez.",
+        "toolNames": {
+          "read_file": "Fájl olvasása",
+          "write_file": "Fájl írása",
+          "list_files": "Fájlok listázása",
+          "search_files": "Fájlok keresése",
+          "create_note": "Jegyzet létrehozása",
+          "append_note": "Hozzáfűzés a jegyzethez"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Nincsenek elérhető MCP eszközök. Csatlakoztasson egy szervert, vagy frissítse a gyorsítótárazott eszközöket a lista feltöltéséhez.",
+        "tableHeaders": {
+          "server": "Szerver",
+          "tool": "Eszköz",
+          "description": "Leírás",
+          "parameters": "Paraméterek",
+          "source": "Forrás"
+        },
+        "noDescription": "Nincs leírás",
+        "schemaUnavailable": "A séma nem érhető el",
+        "live": "Élő",
+        "cached": "Gyorsítótárban",
+        "status": {
+          "connected": "csatlakozva",
+          "disconnected": "lecsatlakozva"
+        }
+      },
+      "openapi": {
+        "desc": "HTTP eszközök generálása OpenAPI dokumentumokból. A távoli specifikációk a {{cacheDir}} alatt kerülnek gyorsítótárazásra.",
+        "addBtn": "HTTP forrás hozzáadása",
+        "noSources": "Még nincsenek konfigurált HTTP források.",
+        "unnamed": "Névtelen HTTP forrás",
+        "tableHeaders": {
+          "name": "Név",
+          "source": "Forrás",
+          "auth": "Hitelesítés",
+          "status": "Állapot",
+          "actions": "Műveletek"
+        },
+        "sourceUrl": "Távoli URL nincs beállítva",
+        "sourcePath": "Fájlelérési út nincs beállítva",
+        "authHeader": "Fejléc ({{key}})",
+        "authQuery": "Lekérdezés ({{key}})",
+        "authNone": "Nincs",
+        "statusEnabled": "Engedélyezve",
+        "statusDisabled": "Letiltva",
+        "actions": {
+          "edit": "Szerkesztés",
+          "reload": "Újratöltés",
+          "refetch": "Újralekérés",
+          "delete": "Törlés"
+        },
+        "notices": {
+          "removed": "HTTP forrás eltávolítva",
+          "reloaded": "{{count}} művelet újratöltve",
+          "reloadFailed": "Nem sikerült újratölteni a HTTP forrást. Ellenőrizze a konzolt a részletekért."
+        },
+        "modal": {
+          "defaultTitle": "HTTP forrás",
+          "displayName": {
+            "name": "Megjelenítendő név",
+            "desc": "Az ügynökök számára megjelenített név az eszközforrás kiválasztásakor"
+          },
+          "enabled": {
+            "name": "Engedélyezve",
+            "desc": "Engedélyezze, hogy ezt a HTTP API-t minden ügynök számára elérhetővé tegye"
+          },
+          "sourceType": {
+            "name": "Forrás típusa",
+            "file": "Helyi fájl",
+            "url": "Távoli URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Lekérve és gyorsítótárazva a bővítmény adatkönyvtárában"
+          },
+          "cachedFile": "Gyorsítótárazott fájl: {{path}} ({{date}})",
+          "neverFetched": "Még nem lett lekérve",
+          "specPath": {
+            "name": "OpenAPI fájlelérési út",
+            "desc": "Relatív elérési út a vaulton belül, vagy abszolút elérési út"
+          },
+          "baseUrl": {
+            "name": "Alap URL felülírása",
+            "desc": "A dokumentum első szerver bejegyzésének felülírása (opcionális)"
+          },
+          "auth": {
+            "name": "Hitelesítés",
+            "desc": "API-kulcsok automatikus beszúrása ezen forrás hívásakor",
+            "none": "Nincs",
+            "header": "HTTP fejléc",
+            "query": "Lekérdezési paraméter"
+          },
+          "credKey": {
+            "name": "Hitelesítő adat kulcsa"
+          },
+          "credValue": {
+            "name": "Hitelesítő adat értéke"
+          },
+          "actions": {
+            "name": "Műveletek",
+            "reloadTools": "Eszközök újratöltése",
+            "refetchTooltip": "Specifikáció újralekérése URL-ről",
+            "deleteTooltip": "Forrás törlése"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Helyi parancssori eszközök meghatározása, amelyeket az ügynökök végrehajthatnak. Használjon {{param}} sablonokat a dinamikus argumentumokhoz.",
+        "addBtn": "CLI eszköz hozzáadása",
+        "presetsBtn": "Hozzáadás előre beállítottakból",
+        "noTools": "Még nincsenek konfigurált CLI eszközök.",
+        "tableHeaders": {
+          "name": "Név",
+          "command": "Parancs",
+          "parameters": "Paraméterek",
+          "status": "Állapot",
+          "actions": "Műveletek"
+        },
+        "unnamed": "Névtelen CLI eszköz",
+        "paramCount": "{{count}} paraméter",
+        "paramCount_plural": "{{count}} paraméter",
+        "noParams": "Nincs",
+        "statusEnabled": "Engedélyezve",
+        "statusDisabled": "Letiltva",
+        "actions": {
+          "edit": "Szerkesztés",
+          "disable": "Letiltás",
+          "enable": "Engedélyezés",
+          "delete": "Törlés"
+        },
+        "notices": {
+          "removed": "CLI eszköz eltávolítva"
+        },
+        "infoTitle": "💡 A CLI eszközökről",
+        "infoText": "A CLI eszközök helyileg hajtanak végre shell parancsokat. Használja a {{paramName}} sablont az argumentumokban a helyettesítéshez, vagy konfigurálja a paramétereket argumentumokként vagy környezeti változókként való átadáshoz.",
+        "modal": {
+          "defaultTitle": "CLI eszköz",
+          "toolName": {
+            "name": "Eszköz neve",
+            "desc": "Az ügynökök által az eszköz hívásához használt azonosító"
+          },
+          "description": {
+            "name": "Leírás",
+            "desc": "Írja le, mit csinál ez az eszköz az AI számára"
+          },
+          "enabled": {
+            "name": "Engedélyezve",
+            "desc": "Engedélyezze, hogy az ügynökök használhassák ezt az eszközt"
+          },
+          "commandConfig": "Parancs konfiguráció",
+          "command": {
+            "name": "Parancs",
+            "desc": "A futtatandó végrehajtható fájl (pl. node, python, bash, /path/to/script)"
+          },
+          "args": {
+            "name": "Argumentumok",
+            "desc": "Parancs argumentumok, soronként egy. Használja a {{paramName}} sablont a helyettesítéshez."
+          },
+          "cwd": {
+            "name": "Munkakönyvtár",
+            "desc": "A parancs futtatásának könyvtára (opcionális)"
+          },
+          "timeout": {
+            "name": "Időtúllépés (ms)",
+            "desc": "Maximális végrehajtási idő ezredmásodpercben (alapértelmezett: {{timeout}})"
+          },
+          "shell": {
+            "name": "Futtatás shellben",
+            "desc": "A parancs végrehajtása shellen keresztül (lehetővé teszi a shell funkciókat, mint a csővezetékek)"
+          },
+          "paramsTitle": "Paraméterek",
+          "paramsDesc": "Határozza meg azokat a paramétereket, amelyeket az AI átadhat ennek az eszköznek.",
+          "addParam": "Paraméter hozzáadása",
+          "noParams": "Nincsenek meghatározott paraméterek.",
+          "paramN": "{{n}}. paraméter",
+          "param": {
+            "name": "Név",
+            "type": {
+              "name": "Típus",
+              "string": "Szöveg",
+              "number": "Szám",
+              "boolean": "Logikai érték"
+            },
+            "description": "Leírás",
+            "required": "Kötelező",
+            "insertAs": {
+              "name": "Beszúrás módja",
+              "desc": "Hogyan adja át ezt a paramétert a parancsnak",
+              "template": "Sablon ({{name}})",
+              "arg": "Argumentumként hozzáfűzve",
+              "env": "Környezeti változó"
+            },
+            "envName": {
+              "name": "Környezeti változó neve",
+              "desc": "A környezeti változó nevének felülírása (alapértelmezés: a paraméter neve nagybetűkkel)"
+            }
+          },
+          "envTitle": "Környezeti változók",
+          "envDesc": "A parancs futtatásakor beállítandó statikus környezeti változók.",
+          "envVars": {
+            "name": "Környezeti változók",
+            "desc": "Formátum: KULCS=érték, soronként egy"
+          }
+        },
+        "presets": {
+          "title": "CLI eszköz hozzáadása előre beállítottakból",
+          "desc": "Válasszon egy előre beállítottat az előre konfigurált CLI eszköz gyors hozzáadásához. Hozzáadás után testreszabhatja.",
+          "addBtn": "Hozzáadás",
+          "addedBtn": "Hozzáadva",
+          "closeBtn": "Bezárás",
+          "notices": {
+            "added": "Hozzáadva: \"{{name}}\" – engedélyezze a CLI eszközök listájában"
+          },
+          "categories": {
+            "file": "Fájlműveletek",
+            "search": "Keresés",
+            "network": "Hálózat",
+            "code": "Kódvégrehajtás",
+            "data": "Adatfeldolgozás",
+            "system": "Rendszerinformáció",
+            "apps": "macOS alkalmazások és asztal"
+          },
+          "names": {
+            "preset-cat": "Fájl olvasása (cat)",
+            "preset-ls": "Könyvtár listázása (ls)",
+            "preset-find": "Fájlok keresése (find)",
+            "preset-grep": "Szöveg keresése (grep)",
+            "preset-ripgrep": "Gyors keresés (rg)",
+            "preset-curl": "HTTP kérés (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Python kód futtatása",
+            "preset-node": "JavaScript futtatása (Node)",
+            "preset-bash": "Shell szkript futtatása",
+            "preset-jq": "JSON feldolgozó (jq)",
+            "preset-wc": "Szószámláló (wc)",
+            "preset-date": "Aktuális dátum/idő",
+            "preset-pwd": "Aktuális könyvtár (pwd)",
+            "preset-whoami": "Aktuális felhasználó",
+            "preset-uname": "Rendszerinformáció (uname)",
+            "preset-open": "Fájl/URL megnyitása (open)",
+            "preset-open-app": "Alkalmazás indítása (open -a)",
+            "preset-safari": "Megnyitás Safariban",
+            "preset-chrome": "Megnyitás Chrome-ban",
+            "preset-firefox": "Megnyitás Firefoxban",
+            "preset-pbcopy": "Másolás vágólapra",
+            "preset-pbpaste": "Beillesztés vágólapról",
+            "preset-say": "Szövegfelolvasás (say)",
+            "preset-osascript": "AppleScript futtatója",
+            "preset-notify": "Asztali értesítés",
+            "preset-screencapture": "Képernyőkép",
+            "preset-applescript-list-apps": "Futó alkalmazások listázása"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG konfiguráció",
+      "desc": "A visszakeresés-alapú generálás és webkeresés konfigurálása az AI válaszok javítása érdekében.",
+      "subTabs": {
+        "overview": "Áttekintés",
+        "chunking": "Darabolás",
+        "search": "Keresés",
+        "filters": "Szűrők",
+        "advanced": "Speciális",
+        "websearch": "Webkeresés"
+      },
+      "general": {
+        "title": "Általános beállítások",
+        "enableRag": {
+          "name": "RAG engedélyezése",
+          "desc": "A visszakeresés-alapú generálás engedélyezése a kibővített kontextushoz"
+        },
+        "vectorStore": {
+          "name": "Vektortár",
+          "desc": "Vektoros adatbázis a beágyazások tárolásához",
+          "memory": "Memóriában",
+          "disk": "Lemez alapú"
+        },
+        "embeddingModel": {
+          "name": "Beágyazási modell",
+          "desc": "A beágyazások generálásához használt modell"
+        },
+        "embedChanged": {
+          "name": "Módosított fájlok automatikus beágyazása",
+          "desc": "Fájlok automatikus újrabeágyazása módosításukkor"
+        }
+      },
+      "indexMgmt": {
+        "title": "Index kezelése",
+        "desc": "Kezelje a RAG indexét, és tekintse meg az indexelt tartalom statisztikáit.",
+        "statsTitle": "Index statisztikák",
+        "stats": {
+          "totalChunks": "Összes darab",
+          "uniqueFiles": "Egyedi fájlok",
+          "totalChars": "Összes karakter",
+          "avgChunkSize": "Átlagos darabméret"
+        },
+        "empty": "Az index üres. Válassza az index újraépítése lehetőséget az indexelés megkezdéséhez.",
+        "error": "⚠️ nem sikerült betölteni az index statisztikáit",
+        "rebuild": {
+          "name": "Index újraépítése",
+          "desc": "A vault összes fájljának újraindexelése. Ez eltarthat egy ideig.",
+          "btn": "Újraépítés",
+          "rebuilding": "Újraépítés..."
+        },
+        "refresh": {
+          "name": "Index frissítése",
+          "desc": "Az index frissítése az utolsó indexelés óta megváltozott fájlokkal.",
+          "btn": "Frissítés",
+          "refreshing": "Frissítés..."
+        },
+        "clear": {
+          "name": "Index törlése",
+          "desc": "Az összes indexelt adat eltávolítása. Az indexet újra kell majd építeni.",
+          "btn": "Törlés",
+          "clearing": "Törlés..."
+        },
+        "notices": {
+          "rebuilt": "Az index sikeresen újraépítve",
+          "rebuildFailed": "Nem sikerült újraépíteni az indexet",
+          "refreshed": "Az index sikeresen frissítve",
+          "refreshFailed": "Nem sikerült frissíteni az indexet",
+          "cleared": "Az index sikeresen törölve",
+          "clearFailed": "Nem sikerült törölni az indexet"
+        }
+      },
+      "chunking": {
+        "title": "Darabolási beállítások",
+        "strategy": {
+          "name": "Darabolási stratégia",
+          "desc": "A dokumentumok darabokra osztásának stratégiája",
+          "recursive": "Rekurzív (okos)",
+          "fixed": "Rögzített méret",
+          "sentence": "Mondat szerint",
+          "paragraph": "Bekezdés szerint"
+        },
+        "chunkSize": {
+          "name": "Darabméret",
+          "desc": "Karakterek száma darabonként (500-2000 ajánlott)"
+        },
+        "chunkOverlap": {
+          "name": "Darab átfedés",
+          "desc": "Az átfedő karakterek száma a darabok között"
+        },
+        "minChunkSize": {
+          "name": "Min. darabméret",
+          "desc": "Létrehozandó minimális darabméret"
+        },
+        "maxTokens": {
+          "name": "Max. tokenek darabonként",
+          "desc": "Darabonként megengedett maximális tokenek száma"
+        }
+      },
+      "search": {
+        "title": "Keresési beállítások",
+        "searchType": {
+          "name": "Keresési típus",
+          "desc": "A végrehajtandó hasonlósági keresés típusa",
+          "similarity": "Hasonlóság"
+        },
+        "topK": {
+          "name": "Top K eredmény",
+          "desc": "A lekérendő legrelevántisabb darabok száma (1-20)"
+        },
+        "threshold": {
+          "name": "Hasonlósági küszöb",
+          "desc": "Az eredmények felvételéhez szükséges minimális hasonlósági pontszám (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Relevancia pontszám súlya",
+          "desc": "A relevancia pontozáshoz használt súly (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Kontextusablak korlát",
+          "desc": "A visszakeresett kontextus maximális tokenjei"
+        }
+      },
+      "filters": {
+        "title": "Fájlszűrők",
+        "excludeFolders": {
+          "name": "Mappák kizárása",
+          "desc": "Az indexelésből kizárandó mappák (vesszővel elválasztva)"
+        },
+        "includeTypes": {
+          "name": "Fájltípusok megadása",
+          "desc": "Felveendő fájltípusok (üres = minden típus)"
+        },
+        "excludeTypes": {
+          "name": "Fájltípusok kizárása",
+          "desc": "Az indexelésből kizárandó fájltípusok"
+        },
+        "filterByTag": {
+          "name": "Szűrés címke szerint",
+          "desc": "Csak ezekkel a címkékkel rendelkező fájlok indexelése (üres = minden fájl)"
+        },
+        "excludeByTag": {
+          "name": "Kizárás címke szerint",
+          "desc": "Ezekkel a címkékkel rendelkező fájlok kizárása az indexelésből"
+        }
+      },
+      "advanced": {
+        "title": "Speciális beállítások",
+        "batchSize": {
+          "name": "Beágyazási köteg mérete",
+          "desc": "A párhuzamosan beágyazandó darabok száma"
+        }
+      },
+      "grading": {
+        "title": "Értékelési beállítások",
+        "desc": "A visszakeresett darabok értékelése relevancia szempontjából az LLM-nek való elküldés előtt. Ez segít kiszűrni az alacsony minőségű eredményeket.",
+        "enableGrading": {
+          "name": "Értékelési küszöb engedélyezése",
+          "desc": "Minőségi küszöb alatti darabok szűrése"
+        },
+        "graderSource": {
+          "name": "Értékelő modell forrása",
+          "desc": "Honnan szerezze be az értékelő modellt",
+          "chat": "Csevegési modell",
+          "custom": "Egyéni modell"
+        },
+        "graderModel": {
+          "name": "Értékelő modell",
+          "desc": "Az értékeléshez használandó konkrét modell"
+        },
+        "parallel": {
+          "name": "Párhuzamos feldolgozás",
+          "desc": "Párhuzamosan értékelt darabok száma"
+        },
+        "minRelevance": {
+          "name": "Min. relevancia pontszám",
+          "desc": "Minimális relevancia pontszám (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Min. pontossági pontszám",
+          "desc": "Minimális pontossági pontszám (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Min. támogatási minőségi pontszám",
+          "desc": "Minimális támogatási minőségi pontszám (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Webkeresés konfiguráció",
+      "desc": "A webkeresési funkció konfigurálása az AI válaszok naprakész internetes információkkal való gazdagítása érdekében.",
+      "generalBehavior": "Általános viselkedés",
+      "providerSelection": "Szolgáltató kiválasztása",
+      "localeFilters": "Területi beállítások és szűrők",
+      "apiCredentials": "API-hitelesítő adatok és végpontok",
+      "enabled": {
+        "name": "Webkeresés engedélyezése",
+        "desc": "Az AI számára engedélyezi az interneten való keresést aktuális információkért"
+      },
+      "autoTrigger": {
+        "name": "Automatikus keresésindítás",
+        "desc": "Automatikusan indítja a webkeresést, ha a lekérdezés aktuális információkat igényel (pl. hírek, árak, legújabb események)"
+      },
+      "maxResults": {
+        "name": "Maximális eredmények száma",
+        "desc": "A visszaadandó keresési eredmények maximális száma"
+      },
+      "timeRange": {
+        "name": "Eredmények frissessége",
+        "desc": "Az eredmények szűkítése a szolgáltatók által támogatott időtartományra (Google, SearXNG, Mojeek)",
+        "any": "Bármikor (alapértelmezett)",
+        "h": "Elmúlt óra",
+        "d": "Elmúlt 24 óra",
+        "w": "Elmúlt hét",
+        "m": "Elmúlt hónap",
+        "y": "Elmúlt év"
+      },
+      "provider": {
+        "name": "Keresési szolgáltató",
+        "desc": "Válasszon adatvédelem-barát lekérdezők vagy API-alapú keresőmotorok közül"
+      },
+      "searchLanguage": {
+        "name": "Nyelvkód",
+        "desc": "ISO nyelvkód (pl. en, fr, zh-CN), amelyet a lokalizációt támogató szolgáltatóknak továbbítanak"
+      },
+      "searchCountry": {
+        "name": "Ország/piaci kód",
+        "desc": "Kétbetűs országkód (pl. US, DE), amelyet a Bing, DuckDuckGo, Brave és mások használnak"
+      },
+      "includeDomains": {
+        "name": "Csak ezeket a domaineket vegye fel",
+        "desc": "Vesszővel elválasztott lista, amelyet a SerpAPI és Brave használ az eredmények adott webhelyekre korlátozásához"
+      },
+      "excludeDomains": {
+        "name": "Domainek kizárása",
+        "desc": "Vesszővel elválasztott domainek az eredmények lekérése utáni kiszűréshez"
+      },
+      "apiKey": {
+        "name": "Alapértelmezett API-kulcs",
+        "desc": "Megosztott API-kulcs, amelyet a Google, Bing, SerpAPI, Tavily vagy Brave használ, ha a szolgáltatóspecifikus kulcsok nincsenek beállítva"
+      },
+      "googleCseId": {
+        "name": "Google egyéni keresőmotor azonosítója",
+        "desc": "Szükséges egy Google API-kulccsal a Google szolgáltató használatakor"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI végpont",
+        "desc": "A SerpAPI alap URL felülírása, ha saját kiszolgálót üzemeltet"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API-kulcs",
+        "desc": "Felülírja az alapértelmezett kulcsot a Tavily szolgáltató használatakor"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG végpont",
+        "desc": "A SearXNG példányának alap URL-je (JSON-t kell visszaadnia)"
+      },
+      "braveApiKey": {
+        "name": "Brave API-kulcs",
+        "desc": "Brave Search API előfizetői token használata, ha ez van kiválasztva szolgáltatóként"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API-kulcs (opcionális)",
+        "desc": "Adjon hozzá bearer tokent, ha a Qwant előfizetése ilyet biztosít"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API-kulcs",
+        "desc": "Szükséges a Mojeek szolgáltatóhoz"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (kulcs nélkül)",
+        "google": "Google egyéni keresés",
+        "bing": "Bing webkeresés",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave keresés",
+        "yahoo": "Yahoo (HTML lekérés)",
+        "yandex": "Yandex (HTML lekérés)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Gyors műveletek",
+      "desc": "AI-alapú gyors műveletek konfigurálása, amelyek a szöveg kijelölésekor megjelennek a szerkesztő kontextusmenüjében.",
+      "actionPrefix": {
+        "name": "Művelet előtag",
+        "desc": "Az összes gyors művelet előtt megjelenő előtag (emoji vagy szöveg) a kontextusmenüben",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} művelet konfigurálva ({{enabled}} engedélyezve)",
+      "count_plural": "{{count}} művelet konfigurálva ({{enabled}} engedélyezve)",
+      "addBtn": "+ gyors művelet hozzáadása",
+      "empty": "Nincsenek konfigurált gyors műveletek. Válassza a gyors művelet hozzáadása lehetőséget a kezdéshez.",
+      "tableHeaders": {
+        "action": "Művelet",
+        "type": "Típus",
+        "model": "Modell",
+        "promptPreview": "Prompt előnézet",
+        "actions": "Műveletek"
+      },
+      "defaultModel": "Alapértelmezett",
+      "editBtn": "Szerkesztés",
+      "deleteBtn": "törlés",
+      "confirm": {
+        "delete": "Törli a(z) \"{{name}}\" gyors műveletet?"
+      },
+      "usageInfo": {
+        "title": "Használat",
+        "step1": "Jelöljön ki szöveget bármely jegyzetben",
+        "step2": "Kattintson jobb gombbal a kontextusmenü megnyitásához",
+        "step3": "Válasszon egy gyors műveletet a menüből",
+        "step4Replace": "A \"csere\" jelölésű műveletek a kijelölt szöveget az AI eredményével helyettesítik",
+        "step4Explain": "A \"magyarázat\" jelölésű műveletek az eredményt egy modális párbeszédablakban jelenítik meg"
+      },
+      "edit": {
+        "title": "Gyors művelet szerkesztése",
+        "name": {
+          "name": "Név",
+          "desc": "A kontextusmenüben megjelenő neve ennek a műveletnek"
+        },
+        "actionType": {
+          "name": "Művelet típusa",
+          "desc": "Hogyan kezelje az AI válaszát",
+          "replace": "Kijelölt szöveg cseréje",
+          "explain": "Megjelenítés modálban"
+        },
+        "model": {
+          "name": "Modell",
+          "desc": "Az ehhez a művelethez használandó nyelvi modell (hagyja üresen az alapértelmezett használatához)",
+          "default": "Alapértelmezett modell használata"
+        },
+        "promptTemplate": {
+          "name": "Prompt sablon",
+          "desc": "Az AI-nak küldött utasítások. A kijelölt szöveg automatikusan hozzáfűzésre kerül."
+        },
+        "cancel": "Mégse",
+        "save": "Mentés"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Szöveg hosszabbítása",
+          "prompt": "Bővítse ki és részletezze a következő szöveget, tegye részletesebbé és átfogóbbá az eredeti jelentés és hangnem megtartásával. Csak a kibővített szöveget adja vissza, további megjegyzések nélkül:\n\n"
+        },
+        "summarize": {
+          "name": "Szöveg összefoglalása",
+          "prompt": "Adjon tömör összefoglalót a következő szövegről. Csak az összefoglalót adja vissza, további megjegyzések nélkül:\n\n"
+        },
+        "improve-writing": {
+          "name": "Írás javítása",
+          "prompt": "Javítsa a következő szöveg írásminőségét, érthetőségét és stílusát. Csak a javított szöveget adja vissza, további megjegyzések nélkül:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Nyelvtan javítása",
+          "prompt": "Javítsa ki a következő szöveg nyelvtani, helyesírási és írásjelhasználati hibáit. Csak a javított szöveget adja vissza, további megjegyzések nélkül:\n\n"
+        },
+        "explain": {
+          "name": "Szöveg magyarázata",
+          "prompt": "Magyarázza el egyszerű szavakkal a következő szöveget:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Token használat",
+      "desc": "Token-felhasználás nyomon követése szolgáltatók és modellek szerint. Az adatok az összes beszélgetésből halmozódnak fel.",
+      "notAvailable": "A token-felhasználás követése nem érhető el.",
+      "ranges": {
+        "today": "Ma",
+        "week": "Ezen a héten",
+        "month": "Ebben a hónapban",
+        "all": "Mindörökké"
+      },
+      "stats": {
+        "totalTokens": "Összes token",
+        "apiCalls": "API hívások",
+        "promptTokens": "Prompt tokenek",
+        "completion": "Befejezés",
+        "tokensIn": "bejövő tokenek",
+        "tokensOut": "kimenő tokenek"
+      },
+      "byProvider": "Szolgáltató szerint",
+      "byModel": "Modell szerint",
+      "noData": "Még nincs használati adat.",
+      "recentActivity": "Legutóbbi tevékenység",
+      "last10": "utolsó 10",
+      "noRecent": "Nincs legutóbbi tevékenység.",
+      "tableHeaders": {
+        "provider": "Szolgáltató",
+        "model": "Modell",
+        "prompt": "Prompt",
+        "completion": "Befejezés",
+        "total": "Összesen",
+        "calls": "Hívások",
+        "time": "Idő",
+        "in": "Be",
+        "out": "Ki"
+      },
+      "clearBtn": "Összes használati adat törlése",
+      "confirm": {
+        "clear": "Törli az összes token-felhasználási rekordot? Ez nem vonható vissza."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Írja be az üzenetét... (Enter a küldéshez, Shift+Enter új sorhoz)",
+    "conversations": "Beszélgetések",
+    "toggleConversationsTitle": "Beszélgetéslista ki/bekapcsolása",
+    "currentConversation": "Aktuális beszélgetés",
+    "new": "Új",
+    "settings": "Beállítások",
+    "openSettingsTitle": "Bővítmény beállítások megnyitása",
+    "mode": "Mód",
+    "prompt": "Prompt",
+    "agent": "Ügynök",
+    "modeOptions": {
+      "chat": "Csevegés",
+      "agent": "Ügynök"
+    },
+    "noSystemPrompt": "Nincs rendszerprompt",
+    "noAgentsAvailable": "Nincsenek elérhető ügynökök",
+    "sendHintPrefix": "Nyomja meg az ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " billentyűt a küldéshez",
+    "sendAriaLabel": "Üzenet küldése",
+    "stop": " Leállítás",
+    "addReference": "Hivatkozás hozzáadása",
+    "addReferenceTooltip": "Fájl vagy mappa hivatkozás hozzáadása (@)",
+    "emptyHeading": "Kezdjen el egy beszélgetést",
+    "emptySubtext": "Írjon egy üzenetet alább a kezdéshez, vagy válasszon egy beszélgetést az előzmények közül.",
+    "noAgentConfig": "Nincsenek konfigurált ügynökök",
+    "selectAgent": "Válasszon ügynököt…",
+    "notices": {
+      "stopping": "Generálás leállítása...",
+      "ragInitError": "RAG inicializálási hiba: {{message}}",
+      "modelsRefreshed": "Modellek frissítve",
+      "modelsRefreshFailed": "Nem sikerült frissíteni a modelleket: {{message}}",
+      "waitForResponse": "Kérjük, várja meg az aktuális válasz befejezését",
+      "configureProvider": "Kérjük, először konfiguráljon egy LLM szolgáltatót a beállításokban",
+      "selectModel": "Kérjük, válasszon egy modellt",
+      "noValidProvider": "Nem található érvényes szolgáltatókonfiguráció ehhez a modellhez",
+      "chatError": "Csevegési hiba: {{message}}",
+      "noMessageToRegenerate": "Nem található az újragenerálni kívánt üzenet",
+      "regenerateOnlyLatest": "Jelenleg csak a legutóbbi válasz generálható újra",
+      "regenerateNoUserMsg": "Nem található a felhasználói üzenet az újrageneráláshoz",
+      "regenerated": "Válasz újragenerálva",
+      "regenerateFailed": "Újragenerálás sikertelen: {{message}}",
+      "noteCreated": "Jegyzet létrehozva: {{name}}",
+      "noteCreateFailed": "Nem sikerült létrehozni a jegyzetet: {{message}}",
+      "messageInserted": "Üzenet beillesztve ide: {{path}}",
+      "messageInsertFailed": "Nem sikerült beilleszteni az üzenetet: {{message}}",
+      "noAgents": "Nincsenek elérhető ügynökök. Konfigurálja az ügynököket a Beállítások → Ügynökök menüben.",
+      "ragDisabled": "A RAG le van tiltva a beállításokban. Engedélyezze a beállítások → csevegési funkciók → RAG menüpontban.",
+      "webSearchDisabled": "A webkeresés le van tiltva a beállításokban. Engedélyezze a beállítások → csevegési funkciók → webkeresés menüpontban.",
+      "noFilesInVault": "Nem találhatók fájlok a vaultban",
+      "attached": "Csatolva: {{name}}",
+      "attachedImages": "{{count}} kép csatolva",
+      "referencesAdded": "{{count}} hivatkozás hozzáadva",
+      "fileNotFound": "A fájl nem található: {{path}}",
+      "agentConfigApplied": "Az ügynök konfigurációja alkalmazva: {{name}}",
+      "waitForComplete": "Kérjük, várja meg az aktuális válasz befejezését",
+      "chatServiceFallback": "A ChatService nincs konfigurálva. A ChatView tartalék változat kerül használatba.",
+      "noModelSelected": "Nincs kiválasztott modell",
+      "noProviderConfig": "Nem található szolgáltatókonfiguráció",
+      "generationStopped": "Generálás leállítva",
+      "noResponseToRegenerate": "Nincs újragenerálandó válasz",
+      "agentNotFound": "Az ügynök nem található",
+      "unableToLoadRag": "Nem sikerült betölteni a RAG statisztikákat.",
+      "referenced": "Hivatkozva: {{name}}"
+    },
+    "status": {
+      "available": "Elérhető",
+      "unavailable": "Nem elérhető",
+      "disabled": "Letiltva",
+      "on": "Be · {{detail}}",
+      "off": "Ki"
+    },
+    "ragStats": {
+      "title": "RAG statisztikák",
+      "totalChunks": "📊 összes darab:",
+      "filesIndexed": "📁 indexelt fájlok:",
+      "totalSize": "💾 teljes méret:",
+      "avgChunks": "📈 Átl. darabok/fájl:",
+      "indexedFiles": "📄 indexelt fájlok",
+      "noFilesYet": "⚠️ még nem lett indexelve egyetlen fájl sem.",
+      "howToBuild": "A RAG index felépítéséhez:",
+      "step1": "Menjen a Beállítások → RAG menübe",
+      "step2": "Engedélyezze a RAG-ot",
+      "step3": "Válassza az index vault lehetőséget",
+      "close": "Bezárás",
+      "retrieved": "📚 {{count}} dokumentumból visszakeresve",
+      "retrieved_plural": "📚 {{count}} dokumentumból visszakeresve"
+    },
+    "ragTooltip": {
+      "status": "RAG index állapota:",
+      "totalChunks": "📊 Összes darab: {{count}}",
+      "filesIndexed": "📁 Indexelt fájlok: {{count}}",
+      "totalSize": "💾 Teljes méret: {{size}} KB",
+      "indexedFiles": "📄 indexelt fájlok:",
+      "andMore": "  ... és {{count}} további",
+      "noFilesYet": "⚠️ még nincsenek indexelt fájlok.",
+      "goToSettings": "Menjen a Beállítások → RAG menübe az index felépítéséhez.",
+      "ragOff": "ℹ️ A RAG jelenleg ki van kapcsolva ebben a csevegésben."
+    },
+    "agentSummary": {
+      "model": "Modell",
+      "temp": "Hőm.",
+      "max": "Max.",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Eszközök",
+      "memory": "Memória",
+      "none": "Nincs",
+      "configuration": "{{name}} konfiguráció",
+      "modelFixed": "{{name}} · Rögzített",
+      "modelDefault": "{{name}} · Alapértelmezett",
+      "modelChatView": "{{name}} · Csevegési nézet",
+      "customModel": "Egyéni modell",
+      "notSet": "Nincs beállítva",
+      "auto": "Automatikus",
+      "on": "Be",
+      "off": "Ki",
+      "shortTerm": "Rövid távú",
+      "longTerm": "Hosszú távú",
+      "disabledMemory": "Letiltva",
+      "builtIn": "{{count}} beépített",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Webes eredmények",
+      "attachments": "Mellékletek",
+      "references": "Hivatkozások",
+      "ragSources": "RAG források",
+      "reasoning": "Érvelés",
+      "copy": "Másolás",
+      "copied": "Üzenet másolva",
+      "copyFailed": "Nem sikerült másolni az üzenetet",
+      "tokenUsage": "Token használat",
+      "tokenUsagePrompt": "Prompt",
+      "tokenUsageCompletion": "Befejezés",
+      "tokenUsageTotal": "Összesen",
+      "save": "Mentés",
+      "insertToNotes": "Beillesztés a jegyzetekbe",
+      "regenerate": "Újragenerálás"
+    },
+    "streaming": {
+      "thinking": "Gondolkodás..."
+    },
+    "toolCall": {
+      "thinking": "Gondolkodás",
+      "executionProcess": "Végrehajtási folyamat",
+      "input": "Bemenet",
+      "output": "Kimenet",
+      "running": "Futtatás..."
+    },
+    "addPicture": "Kép hozzáadása",
+    "addPictureTooltip": "Kép csatolása az üzenethez",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Indexelt jegyzetek használata kontextusként",
+    "webSearchLabel": "Webkeresés",
+    "webSearchTooltipLabel": "Internetkeresés szükség esetén",
+    "imageUnavailable": "A képmellékelés nem érhető el az aktuális modellhez.",
+    "newChat": "Új csevegés",
+    "newConversation": "Új beszélgetés",
+    "searchConversations": "Keresés a beszélgetések között...",
+    "header": {
+      "model": "Modell",
+      "advancedParams": "Speciális paraméterek",
+      "temperature": "Hőmérséklet",
+      "maxTokens": "Max. tokenek",
+      "topP": "Top P",
+      "freqPenalty": "Gyak. büntetés",
+      "presPenalty": "Jel. büntetés",
+      "agentConfig": "Ügynök konfiguráció",
+      "modelsCount": "Modellek: {{count}}",
+      "tokensCount": "Tokenek: {{count}}",
+      "noModels": "Nincsenek elérhető modellek"
+    },
+    "temperature": {
+      "precise": "0 (Pontos)",
+      "balanced": "1 (Kiegyensúlyozott)",
+      "creative": "2 (Kreatív)"
+    },
+    "modals": {
+      "image": {
+        "title": "Képek csatolása",
+        "searchPlaceholder": "Képek keresése...",
+        "selectAll": "Összes kijelölése",
+        "selectNone": "Kijelölés törlése",
+        "addSelected": "Kijelöltek hozzáadása",
+        "noResults": "Nem találhatók egyező képek."
+      },
+      "reference": {
+        "title": "Hivatkozások hozzáadása",
+        "searchPlaceholder": "Fájlok és mappák keresése...",
+        "selectAll": "Összes kijelölése",
+        "selectNone": "Kijelölés törlése",
+        "addSelected": "Kijelöltek hozzáadása",
+        "noResults": "Nem találhatók egyező fájlok vagy mappák."
+      },
+      "insertNote": {
+        "title": "Beillesztés a jegyzetbe",
+        "searchPlaceholder": "Jegyzetek keresése...",
+        "insert": "Beillesztés a kijelölt jegyzetbe",
+        "createNew": "Új jegyzet létrehozása",
+        "noResults": "Nem találhatók egyező jegyzetek."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Mégse",
+      "confirm": "Megerősítés"
+    },
+    "agentEdit": {
+      "title": "Ügynök szerkesztése",
+      "icon": {
+        "name": "Ikon",
+        "desc": "Ezt az ügynököt jelképező emoji vagy karakter"
+      },
+      "description": {
+        "name": "Leírás",
+        "desc": "Az ügynök rövid leírása"
+      },
+      "modelStrategy": {
+        "name": "Modellstratégia",
+        "options": {
+          "default": "Alapértelmezett modell használata (a beállításokból)",
+          "chatView": "Csevegési nézet modelljének használata",
+          "fixed": "Rögzített modell"
+        },
+        "noModels": "Nincsenek gyorsítótárazott modellek",
+        "desc": "Válassza meg, hogyan válassza ki az ügynök a modelljét"
+      },
+      "systemPrompt": {
+        "createNew": "➕ új prompt létrehozása…",
+        "promptName": {
+          "name": "Prompt neve",
+          "desc": "Az új rendszerprompt megjelenítendő neve"
+        },
+        "promptContent": {
+          "name": "Prompt tartalma",
+          "desc": "Az új rendszerprompt tartalma"
+        },
+        "name": "Rendszerprompt",
+        "desc": "Válasszon a meglévő promptok közül, vagy határozzon meg egy újat ehhez az ügynökhöz."
+      },
+      "capabilities": "Képességek",
+      "memory": {
+        "title": "Memória",
+        "notice": "Az ügynök memóriája átmenetileg nem érhető el, miközben a felhasználói élményen dolgozunk."
+      },
+      "tools": {
+        "title": "Eszközök",
+        "builtIn": {
+          "name": "Beépített eszközök",
+          "desc": "Válassza ki, mely beépített eszközöket használhatja ez az ügynök"
+        },
+        "cli": {
+          "name": "CLI eszközök",
+          "desc": "Hozzáférés engedélyezése az összes engedélyezett CLI eszközhöz, vagy válasszon egyenként alább",
+          "noTools": "Nincsenek konfigurált CLI eszközök. Adjon hozzá és engedélyezzen eszközöket a Beállítások → Eszközök → CLI menüben az itt való használathoz."
+        }
+      },
+      "mcp": {
+        "title": "MCP hozzáférés",
+        "noServers": "Nincsenek konfigurált MCP szerverek. Adjon hozzá szervereket a Beállítások → MCP menüben ezen lehetőségek feloldásához.",
+        "toolsCached": "{{count}} eszköz gyorsítótárban",
+        "toolsCached_plural": "{{count}} eszköz gyorsítótárban",
+        "noToolsCached": "Még nincsenek gyorsítótárazott eszközök. Engedélyezze a teljes hozzáférést, vagy frissítse a gyorsítótárat.",
+        "showTools": "Eszközök megjelenítése",
+        "hideTools": "Eszközök elrejtése",
+        "selected": "Kiválasztva",
+        "notSelected": "Nincs kiválasztva",
+        "noToolsAvailable": "Ebből a szerverből még nem érhetők el eszközök."
+      },
+      "notices": {
+        "promptRequired": "Kérjük, adjon meg nevet és tartalmat az új rendszerprompthoz."
+      },
+      "name": {
+        "label": "Név",
+        "desc": "Az ügynök megjelenítendő neve"
+      },
+      "fixedModel": {
+        "name": "Rögzített modell",
+        "desc": "Válasszon egy konkrét modellt ehhez az ügynökhöz.",
+        "descNoModels": "Nincsenek elérhető gyorsítótárazott modellek. Frissítse a modelleket a Modellek fülön."
+      },
+      "temperature": {
+        "label": "Hőmérséklet",
+        "desc": "Véletlenszerűséget szabályoz (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Max. tokenek",
+        "desc": "A generálandó tokenek maximális száma"
+      },
+      "contextWindow": {
+        "label": "Kontextusablak",
+        "desc": "A kontextusba felveendő előző üzenetek száma"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Visszakeresés-alapú generálás engedélyezése"
+      },
+      "webSearch": {
+        "name": "Webkeresés",
+        "desc": "Webkeresési képességek engedélyezése"
+      },
+      "maxSteps": {
+        "name": "Max. eszközlépések",
+        "desc": "Az ügynök körönkénti maximális eszközhívási lépéseinek száma"
+      }
+    },
+    "provider": {
+      "title": "Szolgáltató beállítások",
+      "selectProvider": {
+        "name": "Szolgáltató",
+        "desc": "Válassza ki az LLM szolgáltató típusát",
+        "placeholder": "-- Válasszon szolgáltatót --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (helyi)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Egyéni (OpenAI-kompatibilis)"
+      },
+      "modelFilter": {
+        "name": "Modellszűrő",
+        "desc": "Opcionális regex minta az elérhető modellek korlátozásához"
+      },
+      "resourceGroup": {
+        "name": "Erőforráscsoport",
+        "desc": "Opcionális SAP AI Core erőforráscsoport"
+      },
+      "serviceKey": {
+        "name": "Szolgáltatáskulcs",
+        "desc": "SAP AI Core szolgáltatáskulcs (JSON karakterlánc)"
+      },
+      "baseUrl": {
+        "name": "Alap URL",
+        "ollamaDesc": "Ollama szerver URL",
+        "customDesc": "OpenAI-kompatibilis API végpont (kötelező)",
+        "optionalDesc": "Egyéni API végpont (opcionális)"
+      },
+      "manageModels": {
+        "name": "Modellek kezelése",
+        "desc": "Új modellek letöltése vagy meglévők frissítése az Ollama regiszterből.",
+        "btn": "⏬ Ollama modell letöltése"
+      },
+      "apiKey": {
+        "name": "API-kulcs",
+        "desc": "A kiválasztott szolgáltató hitelesítési kulcsa"
+      },
+      "cancel": "Mégse",
+      "save": "Mentés",
+      "validation": {
+        "selectProvider": "Kérjük, válasszon egy szolgáltató típust",
+        "apiKeyTooLong": "Az API-kulcs túl hosszú. A maximális hossz 500 karakter.",
+        "invalidUrl": "Érvénytelen alap URL formátum. Kérjük, adjon meg érvényes URL-t (pl. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP vizsgáló",
+      "desc": "Model Context Protocol (MCP) szerver kapcsolatok és eszközök vizsgálata és hibakeresése.",
+      "tabs": {
+        "connections": "Kapcsolatok",
+        "tools": "Eszközök",
+        "logs": "Naplók"
+      },
+      "refreshBtn": "🔄 frissítés",
+      "connections": {
+        "title": "MCP szerver kapcsolatok",
+        "noServers": "Nincsenek konfigurált MCP szerverek.",
+        "headers": {
+          "server": "Szerver neve",
+          "status": "Állapot",
+          "tools": "Elérhető eszközök",
+          "actions": "Műveletek"
+        },
+        "statusDisabled": "Letiltva",
+        "statusConnected": "● csatlakozva",
+        "statusDisconnected": "○ lecsatlakozva",
+        "toolsLive": "{{count}} eszköz",
+        "toolsLive_plural": "{{count}} eszköz",
+        "toolsCached": "{{count}} eszköz (gyorsítótárban)",
+        "toolsCached_plural": "{{count}} eszköz (gyorsítótárban)",
+        "noTools": "0 eszköz",
+        "connectBtn": "Csatlakozás",
+        "disconnectBtn": "Lecsatlakozás",
+        "connecting": "Csatlakozás...",
+        "disconnecting": "Lecsatlakozás...",
+        "notices": {
+          "disconnected": "Lecsatlakozva erről: {{name}}",
+          "enableFirst": "Engedélyezze a szervert a beállításokban csatlakozás előtt",
+          "connected": "Csatlakozva ehhez: {{name}}",
+          "failedDisconnect": "Nem sikerült lecsatlakozni erről: {{name}}: {{message}}",
+          "failedConnect": "Nem sikerült csatlakozni ehhez: {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Elérhető MCP eszközök",
+        "noTools": "Nincsenek elérhető MCP eszközök. Ellenőrizze a szerver kapcsolatokat.",
+        "serverPrefix": "Szerver: {{name}}",
+        "noToolsInServer": "Nincsenek elérhető eszközök",
+        "headers": {
+          "tool": "Eszköz neve",
+          "description": "Leírás",
+          "parameters": "Paraméterek"
+        },
+        "noDescription": "Nincs leírás",
+        "noParams": "Nincs"
+      },
+      "logs": {
+        "title": "MCP kapcsolati naplók",
+        "placeholder": "Az MCP kapcsolati naplók itt jelennek meg. Jelenleg helyőrző információk láthatók.",
+        "events": {
+          "connection": "• kapcsolódási események",
+          "tools": "• eszközregisztrációs események",
+          "errors": "• hibanaplók",
+          "comms": "• kommunikációs részletek"
+        },
+        "testTitle": "Eszközvégrehajtás tesztelése",
+        "selectServer": "Válasszon szervert...",
+        "selectTool": "Válasszon eszközt...",
+        "parametersTitle": "Paraméterek",
+        "selectEnum": "Kiválasztás...",
+        "performBtn": "Eszköz végrehajtása",
+        "clearBtn": "Eredmények törlése",
+        "executing": "Végrehajtás...",
+        "success": "✅ végrehajtás sikeres",
+        "failed": "❌ végrehajtás sikertelen",
+        "errorTitle": "❌ végrehajtási hiba",
+        "errorLabel": "Hiba: {{message}}",
+        "notices": {
+          "success": "Az eszköz sikeresen végrehajtva",
+          "failed": "Az eszköz végrehajtása sikertelen",
+          "error": "Végrehajtási hiba: {{message}}",
+          "requiredMissing": "Kötelező paraméter hiányzik: {{name}}",
+          "invalidNumber": "Érvénytelen szám a paraméterhez: {{name}}",
+          "invalidJson": "Érvénytelen JSON a paraméterhez: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Nincsenek konfigurált MCP szerverek",
+        "testing": "🧪 {{count}} MCP szerver kapcsolatának tesztelése...",
+        "allSuccess": "✅ mind a {{count}} MCP szerver sikeresen csatlakoztatva!",
+        "partial": "⚠️ {{success}} csatlakozva, {{failed}} sikertelen"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "MCP szerver szerkesztése",
+      "titleAdd": "MCP szerver hozzáadása",
+      "serverName": {
+        "name": "Szerver neve",
+        "desc": "A bővítményben mindenhol megjelenő barátságos név"
+      },
+      "connectionMode": {
+        "name": "Kapcsolódási mód",
+        "desc": "Válassza ki, hogy automatikusan vagy csak manuális kiváltáskor csatlakozzon",
+        "auto": "Automatikus csatlakozás a csevegés megnyitásakor",
+        "manual": "Manuális csatlakozás"
+      },
+      "command": {
+        "name": "Parancs",
+        "desc": "Az MCP szervert indító végrehajtható fájl vagy szkript"
+      },
+      "arguments": {
+        "name": "Argumentumok",
+        "desc": "Vesszővel vagy újsorral elválasztott argumentumok (opcionális)"
+      },
+      "envVars": {
+        "name": "Környezeti változók",
+        "desc": "Opcionális KULCS=ÉRTÉK párok, soronként egy"
+      },
+      "enabled": {
+        "name": "Engedélyezve",
+        "desc": "Tiltsa le, hogy a szerver konfigurálva maradjon automatikus csatlakozás nélkül"
+      },
+      "cancel": "Mégse",
+      "saveEdit": "Változtatások mentése",
+      "saveAdd": "Szerver hozzáadása",
+      "validation": {
+        "nameRequired": "A szerver neve kötelező",
+        "commandRequired": "A parancs kötelező"
+      }
+    },
+    "ollamaManager": {
+      "title": "Ollama modellek kezelése",
+      "serverInfo": "Szerver információ",
+      "checkingServer": "Szerver ellenőrzése...",
+      "serverOnline": "✅ Szerver online",
+      "versionLabel": " | Verzió: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Szerver offline",
+      "connectionError": "❌ Kapcsolódási hiba",
+      "pullTitle": "Új modell letöltése",
+      "pullHint": "Adjon meg egy modellnevet az Ollama könyvtárból való letöltéshez (pl. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Modell neve",
+        "example": "Példa: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Modell letöltése",
+      "installedTitle": "Telepített modellek",
+      "refreshList": "🔄 Lista frissítése",
+      "noModels": "Nem találhatók modellek. Töltsön le egy modellt a kezdéshez.",
+      "capabilities": "Képességek: {{caps}}",
+      "deleteBtn": "Törlés",
+      "closeBtn": "Bezárás",
+      "confirmDelete": {
+        "title": "Törlés megerősítése",
+        "message": "Biztosan törölni szeretné a(z) \"{{name}}\" modellt?",
+        "cancel": "Mégse",
+        "confirm": "Törlés"
+      },
+      "notices": {
+        "enterName": "Kérjük, adjon meg egy modellnevet",
+        "pulling": "{{name}} letöltése... Ez eltarthat egy ideig.",
+        "pullSuccess": "✅ Sikeresen letöltve: {{name}}",
+        "pullFailed": "❌ Nem sikerült letölteni a modellt: {{message}}",
+        "deleted": "✅ Törölve: {{name}}",
+        "deleteFailed": "❌ Nem sikerült törölni a modellt: {{message}}",
+        "refreshing": "Frissítés...",
+        "refreshSuccess": "✅ Modelllista frissítve",
+        "refreshFailed": "❌ Nem sikerült frissíteni a modelllistát"
+      }
+    },
+    "promptEdit": {
+      "title": "Rendszerprompt szerkesztése",
+      "name": {
+        "name": "Név",
+        "desc": "A prompt megjelenítendő neve"
+      },
+      "content": {
+        "name": "Tartalom",
+        "desc": "A rendszerprompt tartalma"
+      },
+      "enabled": {
+        "name": "Engedélyezve",
+        "desc": "Aktív-e ez a prompt"
+      },
+      "cancel": "Mégse",
+      "save": "Mentés"
+    },
+    "prompt": {
+      "cancel": "Mégse",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Név",
+      "create": "Létrehozás",
+      "cancel": "Mégse"
+    },
+    "explain": {
+      "loading": "⏳ Feldolgozás...",
+      "error": "Hiba a magyarázat megjelenítésekor",
+      "errorPrefix": "❌ Hiba: "
+    }
+  },
+  "notices": {
+    "noProvider": "Kérjük, először konfiguráljon egy LLM szolgáltatót a beállításokban",
+    "noModel": "Kérjük, válasszon egy alapértelmezett modellt a beállításokban",
+    "noValidProvider": "Nem található érvényes szolgáltatókonfiguráció ehhez a modellhez: {{modelId}}",
+    "processing": "Feldolgozás...",
+    "textUpdated": "A szöveg sikeresen frissítve",
+    "error": "Hiba: {{message}}"
+  }
+}

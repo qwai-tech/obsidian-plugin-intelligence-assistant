@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Obecné",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Nástroje",
+      "rag": "RAG",
+      "prompts": "Prompty",
+      "agents": "Agenti",
+      "quickActions": "Rychlé akce",
+      "usage": "Použití"
+    },
+    "general": {
+      "title": "Obecná nastavení",
+      "desc": "Nakonfigurujte obecná nastavení pluginu inteligentního asistenta.",
+      "pluginVersion": {
+        "name": "Verze pluginu",
+        "desc": "Aktuální verze pluginu inteligentního asistenta"
+      },
+      "defaultModel": {
+        "name": "Výchozí model",
+        "desc": "Výchozí model pro konverzace",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Výchozí režim chatu",
+        "desc": "Vyberte režim, ve kterém se otevírá pohled chatu",
+        "chat": "Režim chatu",
+        "agent": "Režim agenta"
+      },
+      "conversationTitleMode": {
+        "name": "Režim názvu konverzace",
+        "desc": "Jak generovat názvy konverzací",
+        "firstMessage": "Použít první zprávu",
+        "autoSummary": "Automaticky generovat shrnutí",
+        "manual": "Ručně"
+      },
+      "conversationIcons": {
+        "name": "Ikony konverzací",
+        "desc": "Povolit automatické generování ikon pro konverzace"
+      },
+      "configStatus": {
+        "name": "Stav konfigurace",
+        "desc": "Celkový stav konfigurace pluginu",
+        "ok": "✅ Nakonfigurováno ({{providers}} poskytovatelů, {{conversations}} konverzací)",
+        "incomplete": "⚠️ Neúplné – nakonfigurujte poskytovatele a modely"
+      }
+    },
+    "llm": {
+      "title": "Konfigurace LLM",
+      "desc": "Nakonfigurujte poskytovatele jazykových modelů a spravujte dostupné modely.",
+      "subTabs": {
+        "provider": "Poskytovatelé",
+        "models": "Modely"
+      }
+    },
+    "models": {
+      "title": "Konfigurace modelů",
+      "desc": "Prohlížejte a spravujte modely od všech nakonfigurovaných poskytovatelů. Klikněte na \"obnovit modely\" pro načtení nejnovějších dostupných modelů.",
+      "providerCount": "{{count}} poskytovatel nakonfigurován",
+      "providerCount_plural": "{{count}} poskytovatelů nakonfigurováno",
+      "refreshAll": "🔄 obnovit všechny modely",
+      "empty": "Žádní poskytovatelé nejsou nakonfigurováni. Nejprve přidejte poskytovatele na kartě poskytovatelů.",
+      "noModels": "Žádné modely nejsou dostupné. Klikněte na \"obnovit všechny modely\" nebo obnovte jednotlivé poskytovatele na kartě poskytovatelů.",
+      "noMatch": "Žádné modely neodpovídají aktuálním filtrům. Upravte nebo odstraňte filtry pro zobrazení výsledků.",
+      "modelCount": "• {{count}} model v mezipaměti",
+      "modelCount_plural": "• {{count}} modelů v mezipaměti",
+      "matchCount": "• {{count}} odpovídá vybraným filtrům",
+      "matchCount_plural": "• {{count}} odpovídá vybraným filtrům",
+      "status": {
+        "enabled": "Povoleno",
+        "disabled": "Zakázáno"
+      },
+      "actions": {
+        "disable": "Zakázat",
+        "enable": "Povolit",
+        "setDefaultChat": "Nastavit výchozí chat",
+        "defaultChat": "Výchozí chat",
+        "setDefaultEmbedding": "Nastavit výchozí vkládání",
+        "defaultEmbedding": "Výchozí vkládání"
+      },
+      "notices": {
+        "fetching": "Načítání modelů pro {{provider}}...",
+        "fetchFailed": "Nepodařilo se obnovit modely {{provider}}",
+        "refreshed": "Modely byly úspěšně obnoveny!",
+        "refreshFailed": "Nepodařilo se obnovit modely",
+        "defaultChatSet": "Výchozí chatovací model nastaven na {{name}}",
+        "defaultEmbeddingSet": "Výchozí model vkládání nastaven na {{name}}"
+      },
+      "filters": {
+        "allProviders": "Všichni poskytovatelé",
+        "allCapabilities": "Všechny schopnosti",
+        "allStates": "Všechny stavy",
+        "searchPlaceholder": "Hledat název nebo ID"
+      }
+    },
+    "provider": {
+      "title": "Konfigurace poskytovatele",
+      "securityTitle": "⚠️ Bezpečnostní upozornění",
+      "securityDesc": "API klíče jsou uloženy jako prostý text ve vašem trezoru kvůli kompatibilitě. Aby se zabránilo náhodným únikům:",
+      "securityItem1": "NESDÍLEJTE složku {{configDir}}/plugins/intelligence-assistant/data/.",
+      "securityItem2": "Přidejte tuto složku do .gitignore, pokud používáte synchronizaci Git.",
+      "securityItem3": "Buďte opatrní při používání veřejných cloudových synchronizačních služeb.",
+      "desc": "Spravujte poskytovatele LLM a přihlašovací údaje API. Použijte sloupec akcí pro úpravu podrobností konfigurace nebo obnovení modelů v mezipaměti.",
+      "count": "{{count}} poskytovatel nakonfigurován",
+      "count_plural": "{{count}} poskytovatelů nakonfigurováno",
+      "addBtn": "+ Přidat poskytovatele",
+      "empty": "Žádní poskytovatelé nejsou nakonfigurováni. Vyberte \"Přidat poskytovatele\" pro začátek.",
+      "tableHeaders": {
+        "provider": "Poskytovatel",
+        "status": "Stav",
+        "actions": "Akce"
+      },
+      "status": {
+        "ready": "Připraven",
+        "needsConfig": "Vyžaduje konfiguraci",
+        "checking": "Kontroluji...",
+        "credentialsSet": "Přihlašovací údaje nastaveny",
+        "serverOnline": "Server online",
+        "serverOffline": "Server offline",
+        "serverError": "Chyba serveru"
+      },
+      "guidance": {
+        "requiresCli": "Vyžaduje místní CLI",
+        "provideServiceKey": "Zadejte servisní klíč",
+        "configureBaseUrl": "Nakonfigurujte základní URL",
+        "addApiKey": "Přidat API klíč"
+      },
+      "models": {
+        "none": "Žádné modely",
+        "count": "{{count}} model",
+        "count_plural": "{{count}} modelů"
+      },
+      "ollama": {
+        "checkingVersion": "Kontroluji verzi...",
+        "server": {
+          "checking": "Kontroluji server...",
+          "online": "Server: online",
+          "offline": "Server: offline nebo nedostupný",
+          "error": "Server: chyba připojení",
+          "versionOnline": "Server online",
+          "versionOffline": "Server offline",
+          "versionError": "Chyba připojení",
+          "version": "Verze: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Poslední obnovení: {{timeAgo}}",
+        "neverRefreshed": "Nikdy neobnoveno",
+        "justNow": "právě teď",
+        "minutesAgo": "před {{n}} min",
+        "hoursAgo": "před {{n}} hod",
+        "daysAgo": "před {{n}} dny"
+      },
+      "actions": {
+        "edit": "Upravit",
+        "manageModels": "Spravovat modely",
+        "refreshModels": "Obnovit modely",
+        "refreshing": "Obnovuji...",
+        "delete": "Smazat"
+      },
+      "notices": {
+        "refreshed": "Modely pro {{provider}} obnoveny.",
+        "refreshFailed": "Nepodařilo se obnovit modely"
+      },
+      "confirm": {
+        "delete": "Odebrat poskytovatele {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "Správa serverů MCP",
+      "desc": "Nakonfigurujte servery Model Context Protocol (MCP) pro rozšíření schopností agentů o externí nástroje a zdroje dat.",
+      "inspectorBtn": "🔍 Otevřít inspektor MCP",
+      "testAllBtn": "🧪 otestovat všechna připojení",
+      "refreshAllBtn": "🔄 obnovit všechny nástroje",
+      "addBtn": "+ Přidat server MCP",
+      "empty": "Žádné servery MCP nejsou nakonfigurovány. Vyberte Přidat server MCP pro začátek.",
+      "tableHeaders": {
+        "name": "Název",
+        "command": "Příkaz",
+        "arguments": "Argumenty",
+        "status": "Stav",
+        "tools": "Nástroje",
+        "actions": "Akce"
+      },
+      "untitled": "Nepojmenovaný server MCP",
+      "notConfigured": "Není nakonfigurováno",
+      "noArgs": "Žádné",
+      "cached": "V mezipaměti",
+      "disabled": "Zakázáno",
+      "envVars": "{{count}} proměnná prostředí",
+      "envVars_plural": "{{count}} proměnných prostředí",
+      "status": {
+        "disabled": "Zakázáno",
+        "connected": "připojeno",
+        "disconnected": "odpojeno",
+        "enableToManage": "Povolte pro správu připojení",
+        "manualConnect": "Ruční připojení",
+        "autoConnect": "Automatické připojení"
+      },
+      "toolCount": {
+        "live": "{{count}} živý nástroj",
+        "live_plural": "{{count}} živých nástrojů",
+        "cached": "{{count}} nástroj v mezipaměti",
+        "cached_plural": "{{count}} nástrojů v mezipaměti"
+      },
+      "actions": {
+        "edit": "Upravit",
+        "enabled": "✓ Povoleno",
+        "enabledOff": "✗ Zakázáno",
+        "connect": "připojit",
+        "disconnect": "odpojit",
+        "connecting": "Připojuji...",
+        "disconnecting": "Odpojuji...",
+        "test": "Test",
+        "testing": "Testuji...",
+        "delete": "Smazat"
+      },
+      "notices": {
+        "disconnected": "Odpojeno od {{name}}",
+        "connected": "Připojeno k {{name}}",
+        "autoConnectFailed": "Nepodařilo se automaticky připojit k {{name}}",
+        "enableFirst": "Před připojením povolte server",
+        "disconnectFailed": "Nepodařilo se odpojit od {{name}}",
+        "connectFailed": "Nepodařilo se připojit k {{name}}",
+        "testNoCommand": "❌ před testováním připojení zadejte příkaz",
+        "testSuccess": "✅ úspěšně připojeno! Nalezeno {{count}} nástrojů.",
+        "testFailed": "❌ Připojení selhalo: {{message}}",
+        "refreshedAll": "✅ obnoveny nástroje pro {{count}} server",
+        "refreshedAll_plural": "✅ obnoveny nástroje pro {{count}} serverů",
+        "refreshedPartial": "✅ obnoveno {{success}} serverů, ❌ {{failed}} selhalo",
+        "noServersConfigured": "⚠️ Žádné servery MCP nejsou nakonfigurovány",
+        "testingAll": "🧪 Testování {{count}} připojení k serverům MCP...",
+        "testAllSuccess": "✅ všechny {{count}} servery MCP úspěšně připojeny!",
+        "testAllPartial": "⚠️ {{successful}} připojeno, {{failed}} selhalo"
+      },
+      "confirm": {
+        "delete": "Smazat server MCP \"{{name}}\"?"
+      }
+    },
+    "agents": {
+      "title": "Správa agentů",
+      "desc": "Vytvářejte a spravujte AI agenty s konkrétními schopnostmi, nástroji a chováním.",
+      "count": "{{count}} agent nakonfigurován",
+      "count_plural": "{{count}} agentů nakonfigurováno",
+      "addBtn": "+ přidat agenta",
+      "empty": "Žádní agenti nejsou nakonfigurováni. Vyberte přidat agenta pro začátek.",
+      "tableHeaders": {
+        "agent": "Agent",
+        "model": "Model",
+        "capabilities": "Schopnosti",
+        "tools": "Nástroje",
+        "actions": "Akce"
+      },
+      "defaultBadge": "Výchozí",
+      "systemPrompt": "Systémový prompt • {{promptName}}",
+      "customPrompt": "Vlastní prompt",
+      "model": {
+        "notSet": "Nenastaveno",
+        "notFound": "Model nebyl nalezen v mezipaměti",
+        "useChatView": "Použít model pohledu chatu",
+        "useChatViewDesc": "Použije model vybraný v pohledu chatu",
+        "useDefault": "Použít výchozí model",
+        "useDefaultDesc": "Použije výchozí model z nastavení"
+      },
+      "capabilities": {
+        "noSpecialModes": "Žádné speciální režimy"
+      },
+      "tools": {
+        "builtIn": "{{count}} vestavěný",
+        "mcpServer": "{{count}} server MCP",
+        "mcpServer_plural": "{{count}} serverů MCP",
+        "mcpTool": "{{count}} nástroj MCP",
+        "mcpTool_plural": "{{count}} nástrojů MCP",
+        "noTools": "Žádné nástroje nejsou povoleny"
+      },
+      "actions": {
+        "edit": "Upravit",
+        "delete": "smazat",
+        "protected": "chráněno"
+      },
+      "confirm": {
+        "delete": "Smazat agenta \"{{name}}\"?"
+      }
+    },
+    "prompts": {
+      "title": "Systémové prompty",
+      "desc": "Spravujte systémové prompty, které definují chování a osobnost vašeho AI asistenta.",
+      "addBtn": "+ přidat systémový prompt",
+      "empty": "Žádné systémové prompty nejsou nakonfigurovány. Vyberte přidat systémový prompt pro začátek.",
+      "tableHeaders": {
+        "name": "Název",
+        "contentPreview": "Náhled obsahu",
+        "created": "Vytvořeno",
+        "updated": "Aktualizováno",
+        "enabled": "Povoleno",
+        "actions": "Akce"
+      },
+      "status": {
+        "enabled": "Povoleno",
+        "disabled": "Zakázáno"
+      },
+      "actions": {
+        "edit": "Upravit",
+        "disable": "Zakázat",
+        "enable": "Povolit",
+        "delete": "Smazat"
+      },
+      "confirm": {
+        "delete": "Smazat prompt \"{{name}}\"?"
+      }
+    },
+    "tools": {
+      "title": "Konfigurace nástrojů",
+      "desc": "Prohlížejte vestavěné nástroje a prozkoumávejte nástroje MCP načtené z připojených serverů. Povolte akce, které by vaši agenti měli být schopni provádět.",
+      "subTabs": {
+        "builtIn": "Vestavěné nástroje",
+        "mcp": "Nástroje MCP",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "Nástroje CLI"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Název",
+          "category": "Kategorie",
+          "description": "Popis",
+          "parameters": "Parametry",
+          "enabled": "Povoleno"
+        },
+        "categories": {
+          "fileOps": "Operace se soubory",
+          "searchDisc": "Vyhledávání a objevování",
+          "noteMgmt": "Správa poznámek"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Přečíst obsah souboru z vašeho trezoru",
+            "params": "path (povinný): Cesta k souboru ke čtení"
+          },
+          "writeFile": {
+            "desc": "Zapsat nebo aktualizovat soubor ve vašem trezoru",
+            "params": "path (povinný), content (povinný): Cesta k souboru a obsah k zapsání"
+          },
+          "listFiles": {
+            "desc": "Zobrazit soubory v trezoru nebo konkrétní složce",
+            "params": "folder (volitelný), extension (volitelný): Filtrovat podle složky a přípony souboru"
+          },
+          "searchFiles": {
+            "desc": "Hledat soubory podle názvu nebo obsahu ve vašem trezoru",
+            "params": "query (povinný), search_content (volitelný), limit (volitelný): Vyhledávací dotaz a možnosti"
+          },
+          "createNote": {
+            "desc": "Vytvořit novou poznámku se zadaným obsahem",
+            "params": "title (povinný), content (povinný), folder (volitelný): Název poznámky, obsah a umístění"
+          },
+          "appendNote": {
+            "desc": "Přidat obsah k existující poznámce",
+            "params": "path (povinný), content (povinný): Cesta k poznámce a obsah k přidání"
+          }
+        },
+        "infoTitle": "💡 o nástrojích",
+        "infoText": "Vestavěné nástroje jsou konfigurovány podle nastavení pluginu. Nástroje MCP jsou spravovány nezávisle – použijte kartu MCP pro připojení serverů a obnovení dostupnosti nástrojů.",
+        "toolNames": {
+          "read_file": "Číst soubor",
+          "write_file": "Zapsat soubor",
+          "list_files": "Zobrazit soubory",
+          "search_files": "Hledat soubory",
+          "create_note": "Vytvořit poznámku",
+          "append_note": "Přidat k poznámce"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Žádné nástroje MCP nejsou dostupné. Připojte server nebo obnovte nástroje z mezipaměti pro naplnění tohoto seznamu.",
+        "tableHeaders": {
+          "server": "Server",
+          "tool": "Nástroj",
+          "description": "Popis",
+          "parameters": "Parametry",
+          "source": "Zdroj"
+        },
+        "noDescription": "Bez popisu",
+        "schemaUnavailable": "Schéma není dostupné",
+        "live": "Živé",
+        "cached": "V mezipaměti",
+        "status": {
+          "connected": "připojeno",
+          "disconnected": "odpojeno"
+        }
+      },
+      "openapi": {
+        "desc": "Generovat HTTP nástroje z dokumentů OpenAPI. Vzdálené specifikace jsou uloženy v mezipaměti pod {{cacheDir}}.",
+        "addBtn": "Přidat HTTP zdroj",
+        "noSources": "Žádné HTTP zdroje nejsou nakonfigurovány.",
+        "unnamed": "Nepojmenovaný HTTP zdroj",
+        "tableHeaders": {
+          "name": "Název",
+          "source": "Zdroj",
+          "auth": "Autentizace",
+          "status": "Stav",
+          "actions": "Akce"
+        },
+        "sourceUrl": "Vzdálená URL není nastavena",
+        "sourcePath": "Cesta k souboru není nastavena",
+        "authHeader": "Hlavička ({{key}})",
+        "authQuery": "Dotaz ({{key}})",
+        "authNone": "Žádná",
+        "statusEnabled": "Povoleno",
+        "statusDisabled": "Zakázáno",
+        "actions": {
+          "edit": "Upravit",
+          "reload": "Znovu načíst",
+          "refetch": "Znovu stáhnout",
+          "delete": "Smazat"
+        },
+        "notices": {
+          "removed": "HTTP zdroj odstraněn",
+          "reloaded": "Znovu načteno {{count}} operací",
+          "reloadFailed": "Nepodařilo se znovu načíst HTTP zdroj. Zkontrolujte konzoli pro podrobnosti."
+        },
+        "modal": {
+          "defaultTitle": "HTTP zdroj",
+          "displayName": {
+            "name": "Zobrazovaný název",
+            "desc": "Zobrazeno agentům při výběru zdroje nástrojů"
+          },
+          "enabled": {
+            "name": "Povoleno",
+            "desc": "Povolte pro zpřístupnění tohoto HTTP API každému agentovi"
+          },
+          "sourceType": {
+            "name": "Typ zdroje",
+            "file": "Místní soubor",
+            "url": "Vzdálená URL"
+          },
+          "specUrl": {
+            "name": "URL OpenAPI",
+            "desc": "Staženo a uloženo v mezipaměti v datovém adresáři pluginu"
+          },
+          "cachedFile": "Soubor v mezipaměti: {{path}} ({{date}})",
+          "neverFetched": "Nikdy nestaženo",
+          "specPath": {
+            "name": "Cesta k souboru OpenAPI",
+            "desc": "Relativní cesta uvnitř trezoru nebo absolutní cesta"
+          },
+          "baseUrl": {
+            "name": "Přepis základní URL",
+            "desc": "Přepište první záznam serveru z dokumentu (volitelné)"
+          },
+          "auth": {
+            "name": "Autentizace",
+            "desc": "Automaticky vkládat API klíče při volání tohoto zdroje",
+            "none": "Žádná",
+            "header": "HTTP hlavička",
+            "query": "Parametr dotazu"
+          },
+          "credKey": {
+            "name": "Klíč přihlašovacích údajů"
+          },
+          "credValue": {
+            "name": "Hodnota přihlašovacích údajů"
+          },
+          "actions": {
+            "name": "Akce",
+            "reloadTools": "Znovu načíst nástroje",
+            "refetchTooltip": "Znovu stáhnout specifikaci z URL",
+            "deleteTooltip": "Smazat zdroj"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Definujte místní nástroje příkazového řádku, které mohou agenti spouštět. Používejte šablony jako {{param}} pro dynamické argumenty.",
+        "addBtn": "Přidat nástroj CLI",
+        "presetsBtn": "Přidat z předvoleb",
+        "noTools": "Žádné nástroje CLI nejsou nakonfigurovány.",
+        "tableHeaders": {
+          "name": "Název",
+          "command": "Příkaz",
+          "parameters": "Parametry",
+          "status": "Stav",
+          "actions": "Akce"
+        },
+        "unnamed": "Nepojmenovaný nástroj CLI",
+        "paramCount": "{{count}} parametr",
+        "paramCount_plural": "{{count}} parametrů",
+        "noParams": "Žádné",
+        "statusEnabled": "Povoleno",
+        "statusDisabled": "Zakázáno",
+        "actions": {
+          "edit": "Upravit",
+          "disable": "Zakázat",
+          "enable": "Povolit",
+          "delete": "Smazat"
+        },
+        "notices": {
+          "removed": "Nástroj CLI odstraněn"
+        },
+        "infoTitle": "💡 O nástrojích CLI",
+        "infoText": "Nástroje CLI spouštějí příkazy shellu místně. Používejte {{paramName}} v argumentech pro nahrazování šablon nebo nakonfigurujte parametry, které mají být předány jako argumenty nebo proměnné prostředí.",
+        "modal": {
+          "defaultTitle": "Nástroj CLI",
+          "toolName": {
+            "name": "Název nástroje",
+            "desc": "Identifikátor používaný agenty pro volání tohoto nástroje"
+          },
+          "description": {
+            "name": "Popis",
+            "desc": "Popište, co tento nástroj dělá pro AI"
+          },
+          "enabled": {
+            "name": "Povoleno",
+            "desc": "Povolte, aby agenti mohli používat tento nástroj"
+          },
+          "commandConfig": "Konfigurace příkazu",
+          "command": {
+            "name": "Příkaz",
+            "desc": "Spustitelný soubor ke spuštění (např. node, python, bash, /cesta/ke/skriptu)"
+          },
+          "args": {
+            "name": "Argumenty",
+            "desc": "Argumenty příkazu, jeden na řádek. Používejte {{paramName}} pro nahrazování šablon."
+          },
+          "cwd": {
+            "name": "Pracovní adresář",
+            "desc": "Adresář, ve kterém se má příkaz spustit (volitelné)"
+          },
+          "timeout": {
+            "name": "Časový limit (ms)",
+            "desc": "Maximální doba provádění v milisekundách (výchozí: {{timeout}})"
+          },
+          "shell": {
+            "name": "Spustit v shellu",
+            "desc": "Provést příkaz přes shell (umožňuje funkce shellu jako roury)"
+          },
+          "paramsTitle": "Parametry",
+          "paramsDesc": "Definujte parametry, které může AI předat tomuto nástroji.",
+          "addParam": "Přidat parametr",
+          "noParams": "Žádné parametry nejsou definovány.",
+          "paramN": "Parametr {{n}}",
+          "param": {
+            "name": "Název",
+            "type": {
+              "name": "Typ",
+              "string": "Řetězec",
+              "number": "Číslo",
+              "boolean": "Logická hodnota"
+            },
+            "description": "Popis",
+            "required": "Povinný",
+            "insertAs": {
+              "name": "Vložit jako",
+              "desc": "Jak předat tento parametr příkazu",
+              "template": "Šablona ({{name}})",
+              "arg": "Přidat jako argument",
+              "env": "Proměnná prostředí"
+            },
+            "envName": {
+              "name": "Název proměnné prostředí",
+              "desc": "Přepište název proměnné prostředí (výchozí je název parametru velkými písmeny)"
+            }
+          },
+          "envTitle": "Proměnné prostředí",
+          "envDesc": "Statické proměnné prostředí nastavené při spuštění příkazu.",
+          "envVars": {
+            "name": "Proměnné prostředí",
+            "desc": "Formát: KLÍČ=hodnota, jeden na řádek"
+          }
+        },
+        "presets": {
+          "title": "Přidat nástroj CLI z předvoleb",
+          "desc": "Vyberte předvolbu pro rychlé přidání předkonfigurovaného nástroje CLI. Po přidání jej můžete přizpůsobit.",
+          "addBtn": "Přidat",
+          "addedBtn": "Přidáno",
+          "closeBtn": "Zavřít",
+          "notices": {
+            "added": "Přidáno \"{{name}}\" – povolte jej v seznamu nástrojů CLI"
+          },
+          "categories": {
+            "file": "Operace se soubory",
+            "search": "Vyhledávání",
+            "network": "Síť",
+            "code": "Spuštění kódu",
+            "data": "Zpracování dat",
+            "system": "Informace o systému",
+            "apps": "Aplikace macOS a plocha"
+          },
+          "names": {
+            "preset-cat": "Číst soubor (cat)",
+            "preset-ls": "Zobrazit adresář (ls)",
+            "preset-find": "Najít soubory (find)",
+            "preset-grep": "Hledat text (grep)",
+            "preset-ripgrep": "Rychlé vyhledávání (rg)",
+            "preset-curl": "HTTP požadavek (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Spustit kód Python",
+            "preset-node": "Spustit JavaScript (Node)",
+            "preset-bash": "Spustit skript shellu",
+            "preset-jq": "Procesor JSON (jq)",
+            "preset-wc": "Počet slov (wc)",
+            "preset-date": "Aktuální datum/čas",
+            "preset-pwd": "Aktuální adresář (pwd)",
+            "preset-whoami": "Aktuální uživatel",
+            "preset-uname": "Informace o systému (uname)",
+            "preset-open": "Otevřít soubor/URL (open)",
+            "preset-open-app": "Spustit aplikaci (open -a)",
+            "preset-safari": "Otevřít v Safari",
+            "preset-chrome": "Otevřít v Chrome",
+            "preset-firefox": "Otevřít v Firefox",
+            "preset-pbcopy": "Kopírovat do schránky",
+            "preset-pbpaste": "Vložit ze schránky",
+            "preset-say": "Převod textu na řeč (say)",
+            "preset-osascript": "Spouštěč AppleScript",
+            "preset-notify": "Oznámení na ploše",
+            "preset-screencapture": "Snímek obrazovky",
+            "preset-applescript-list-apps": "Zobrazit spuštěné aplikace"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "Konfigurace RAG",
+      "desc": "Nakonfigurujte generování rozšířené o vyhledávání a webové vyhledávání pro zlepšení odpovědí AI.",
+      "subTabs": {
+        "overview": "Přehled",
+        "chunking": "Rozdělování",
+        "search": "Vyhledávání",
+        "filters": "Filtry",
+        "advanced": "Pokročilé",
+        "websearch": "Webové vyhledávání"
+      },
+      "general": {
+        "title": "Obecná nastavení",
+        "enableRag": {
+          "name": "Povolit RAG",
+          "desc": "Povolte generování rozšířené o vyhledávání pro rozšířený kontext"
+        },
+        "vectorStore": {
+          "name": "Vektorové úložiště",
+          "desc": "Vektorová databáze pro ukládání vložení",
+          "memory": "V paměti",
+          "disk": "Na disku"
+        },
+        "embeddingModel": {
+          "name": "Model vkládání",
+          "desc": "Model pro generování vložení"
+        },
+        "embedChanged": {
+          "name": "Automaticky vkládat změněné soubory",
+          "desc": "Automaticky znovu vložit soubory při jejich změně"
+        }
+      },
+      "indexMgmt": {
+        "title": "Správa indexu",
+        "desc": "Spravujte index RAG a prohlížejte statistiky o indexovaném obsahu.",
+        "statsTitle": "Statistiky indexu",
+        "stats": {
+          "totalChunks": "Celkem bloků",
+          "uniqueFiles": "Jedinečné soubory",
+          "totalChars": "Celkem znaků",
+          "avgChunkSize": "Průměrná velikost bloku"
+        },
+        "empty": "Index je prázdný. Vyberte přebudovat index pro zahájení indexování.",
+        "error": "⚠️ nelze načíst statistiky indexu",
+        "rebuild": {
+          "name": "Přebudovat index",
+          "desc": "Znovu zaindexovat všechny soubory v trezoru. Může to chvíli trvat.",
+          "btn": "Přebudovat",
+          "rebuilding": "Přebudovávám..."
+        },
+        "refresh": {
+          "name": "Obnovit index",
+          "desc": "Aktualizovat index o všechny změněné soubory od posledního indexování.",
+          "btn": "Obnovit",
+          "refreshing": "Obnovuji..."
+        },
+        "clear": {
+          "name": "Vymazat index",
+          "desc": "Odebrat všechna indexovaná data. Bude nutné přebudovat index.",
+          "btn": "Vymazat",
+          "clearing": "Mažu..."
+        },
+        "notices": {
+          "rebuilt": "Index úspěšně přebudován",
+          "rebuildFailed": "Nepodařilo se přebudovat index",
+          "refreshed": "Index úspěšně obnoven",
+          "refreshFailed": "Nepodařilo se obnovit index",
+          "cleared": "Index úspěšně vymazán",
+          "clearFailed": "Nepodařilo se vymazat index"
+        }
+      },
+      "chunking": {
+        "title": "Nastavení rozdělování",
+        "strategy": {
+          "name": "Strategie rozdělování",
+          "desc": "Strategie pro rozdělení dokumentů na bloky",
+          "recursive": "Rekurzivní (chytrý)",
+          "fixed": "Pevná velikost",
+          "sentence": "Po větách",
+          "paragraph": "Po odstavcích"
+        },
+        "chunkSize": {
+          "name": "Velikost bloku",
+          "desc": "Počet znaků na blok (doporučeno 500-2000)"
+        },
+        "chunkOverlap": {
+          "name": "Překrývání bloků",
+          "desc": "Počet překrývajících se znaků mezi bloky"
+        },
+        "minChunkSize": {
+          "name": "Minimální velikost bloku",
+          "desc": "Minimální velikost bloku k vytvoření"
+        },
+        "maxTokens": {
+          "name": "Max. tokenů na blok",
+          "desc": "Maximální povolený počet tokenů na blok"
+        }
+      },
+      "search": {
+        "title": "Nastavení vyhledávání",
+        "searchType": {
+          "name": "Typ vyhledávání",
+          "desc": "Typ vyhledávání podobnosti k provedení",
+          "similarity": "Podobnost"
+        },
+        "topK": {
+          "name": "Počet výsledků Top K",
+          "desc": "Počet nejrelevantnějších bloků k načtení (1-20)"
+        },
+        "threshold": {
+          "name": "Práh podobnosti",
+          "desc": "Minimální skóre podobnosti pro zahrnutí výsledků (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Váha skóre relevance",
+          "desc": "Váha pro hodnocení relevance (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Limit kontextového okna",
+          "desc": "Maximální počet tokenů pro načtený kontext"
+        }
+      },
+      "filters": {
+        "title": "Filtry souborů",
+        "excludeFolders": {
+          "name": "Vyloučit složky",
+          "desc": "Složky vyloučené z indexování (oddělené čárkami)"
+        },
+        "includeTypes": {
+          "name": "Zahrnout typy souborů",
+          "desc": "Typy souborů k zahrnutí (prázdné = všechny typy)"
+        },
+        "excludeTypes": {
+          "name": "Vyloučit typy souborů",
+          "desc": "Typy souborů vyloučené z indexování"
+        },
+        "filterByTag": {
+          "name": "Filtrovat podle štítku",
+          "desc": "Indexovat pouze soubory s těmito štítky (prázdné = všechny soubory)"
+        },
+        "excludeByTag": {
+          "name": "Vyloučit podle štítku",
+          "desc": "Vyloučit z indexování soubory s těmito štítky"
+        }
+      },
+      "advanced": {
+        "title": "Pokročilá nastavení",
+        "batchSize": {
+          "name": "Velikost dávky vkládání",
+          "desc": "Počet bloků k paralelnímu vložení"
+        }
+      },
+      "grading": {
+        "title": "Nastavení hodnocení",
+        "desc": "Hodnoťte načtené bloky pro relevanci před odesláním do LLM. Pomáhá to filtrovat výsledky nízké kvality.",
+        "enableGrading": {
+          "name": "Povolit práh hodnocení",
+          "desc": "Filtrovat bloky pod prahy kvality"
+        },
+        "graderSource": {
+          "name": "Zdroj modelu hodnotitele",
+          "desc": "Odkud získat model hodnotitele",
+          "chat": "Chatovací model",
+          "custom": "Vlastní model"
+        },
+        "graderModel": {
+          "name": "Model hodnotitele",
+          "desc": "Konkrétní model pro hodnocení"
+        },
+        "parallel": {
+          "name": "Paralelní zpracování",
+          "desc": "Počet bloků k paralelnímu hodnocení"
+        },
+        "minRelevance": {
+          "name": "Minimální skóre relevance",
+          "desc": "Minimální skóre relevance (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Minimální skóre přesnosti",
+          "desc": "Minimální skóre přesnosti (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Minimální skóre kvality podpory",
+          "desc": "Minimální skóre kvality podpory (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Konfigurace webového vyhledávání",
+      "desc": "Nakonfigurujte funkci webového vyhledávání pro zlepšení odpovědí AI aktuálními informacemi z internetu.",
+      "generalBehavior": "Obecné chování",
+      "providerSelection": "Výběr poskytovatele",
+      "localeFilters": "Místní nastavení a filtry",
+      "apiCredentials": "Přihlašovací údaje API a koncové body",
+      "enabled": {
+        "name": "Povolit webové vyhledávání",
+        "desc": "Umožnit AI prohledávat web pro aktuální informace"
+      },
+      "autoTrigger": {
+        "name": "Automatické spuštění vyhledávání",
+        "desc": "Automaticky spustit webové vyhledávání, když dotaz vyžaduje aktuální informace (např. zprávy, ceny, nedávné události)"
+      },
+      "maxResults": {
+        "name": "Maximální počet výsledků",
+        "desc": "Maximální počet výsledků vyhledávání k vrácení"
+      },
+      "timeRange": {
+        "name": "Čerstvost výsledků",
+        "desc": "Omezit výsledky na časový rozsah podporovaný poskytovateli (Google, SearXNG, Mojeek)",
+        "any": "Kdykoli (výchozí)",
+        "h": "Poslední hodina",
+        "d": "Posledních 24 hodin",
+        "w": "Poslední týden",
+        "m": "Poslední měsíc",
+        "y": "Poslední rok"
+      },
+      "provider": {
+        "name": "Poskytovatel vyhledávání",
+        "desc": "Vybírejte ze scraperů šetrných k soukromí nebo vyhledávačů s API"
+      },
+      "searchLanguage": {
+        "name": "Kód jazyka",
+        "desc": "Kód jazyka ISO (např. cs, en, zh-CN) předaný poskytovatelům podporujícím lokalizaci"
+      },
+      "searchCountry": {
+        "name": "Kód země/trhu",
+        "desc": "Dvoupísmenný kód země (např. CZ, DE) používaný Bing, DuckDuckGo, Brave a dalšími"
+      },
+      "includeDomains": {
+        "name": "Zahrnout pouze tyto domény",
+        "desc": "Seznam oddělený čárkami používaný SerpAPI a Brave pro omezení výsledků na konkrétní weby"
+      },
+      "excludeDomains": {
+        "name": "Vyloučit domény",
+        "desc": "Domény oddělené čárkami pro odfiltrování po načtení výsledků"
+      },
+      "apiKey": {
+        "name": "Výchozí API klíč",
+        "desc": "Sdílený API klíč používaný Google, Bing, SerpAPI, Tavily nebo Brave, pokud nejsou nastaveny klíče specifické pro poskytovatele"
+      },
+      "googleCseId": {
+        "name": "ID vlastního vyhledávacího modulu Google",
+        "desc": "Vyžadováno s API klíčem Google při použití poskytovatele Google"
+      },
+      "serpapiEndpoint": {
+        "name": "Koncový bod SerpAPI",
+        "desc": "Přepište základní URL SerpAPI, pokud jej hostujete sami"
+      },
+      "tavilyApiKey": {
+        "name": "API klíč Tavily",
+        "desc": "Přepíše výchozí klíč při použití poskytovatele Tavily"
+      },
+      "searxngEndpoint": {
+        "name": "Koncový bod SearXNG",
+        "desc": "Základní URL vaší instance SearXNG (musí vracet JSON)"
+      },
+      "braveApiKey": {
+        "name": "API klíč Brave",
+        "desc": "Použijte token předplatného Brave Search API, pokud je vybrán jako poskytovatel"
+      },
+      "qwantApiKey": {
+        "name": "API klíč Qwant (volitelný)",
+        "desc": "Přidejte bearer token, pokud váš plán Qwant jeden vydává"
+      },
+      "mojeekApiKey": {
+        "name": "API klíč Mojeek",
+        "desc": "Vyžadováno pro poskytovatele Mojeek"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (klíč není vyžadován)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (HTML scraping)",
+        "yandex": "Yandex (HTML scraping)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Rychlé akce",
+      "desc": "Nakonfigurujte rychlé akce s podporou AI, které se zobrazují v kontextovém menu editoru při výběru textu.",
+      "actionPrefix": {
+        "name": "Předpona akce",
+        "desc": "Předpona (emoji nebo text) zobrazená před všemi rychlými akcemi v kontextovém menu",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} akce nakonfigurována ({{enabled}} povolena)",
+      "count_plural": "{{count}} akcí nakonfigurováno ({{enabled}} povoleno)",
+      "addBtn": "+ přidat rychlou akci",
+      "empty": "Žádné rychlé akce nejsou nakonfigurovány. Vyberte přidat rychlou akci pro začátek.",
+      "tableHeaders": {
+        "action": "Akce",
+        "type": "Typ",
+        "model": "Model",
+        "promptPreview": "Náhled promptu",
+        "actions": "Akce"
+      },
+      "defaultModel": "Výchozí",
+      "editBtn": "Upravit",
+      "deleteBtn": "smazat",
+      "confirm": {
+        "delete": "Smazat rychlou akci \"{{name}}\"?"
+      },
+      "usageInfo": {
+        "title": "Použití",
+        "step1": "Vyberte text v libovolné poznámce",
+        "step2": "Klikněte pravým tlačítkem pro otevření kontextového menu",
+        "step3": "Vyberte rychlou akci z menu",
+        "step4Replace": "Akce označené jako \"nahradit\" nahradí vybraný text výsledkem AI",
+        "step4Explain": "Akce označené jako \"vysvětlit\" zobrazí výsledek v modálním dialogu"
+      },
+      "edit": {
+        "title": "Upravit rychlou akci",
+        "name": {
+          "name": "Název",
+          "desc": "Zobrazovaný název této akce v kontextovém menu"
+        },
+        "actionType": {
+          "name": "Typ akce",
+          "desc": "Jak má být zpracována odpověď AI",
+          "replace": "Nahradit vybraný text",
+          "explain": "Zobrazit v modálním okně"
+        },
+        "model": {
+          "name": "Model",
+          "desc": "Jazykový model pro tuto akci (ponechte prázdné pro použití výchozího)",
+          "default": "Použít výchozí model"
+        },
+        "promptTemplate": {
+          "name": "Šablona promptu",
+          "desc": "Instrukce odeslané AI. Vybraný text bude automaticky přidán."
+        },
+        "cancel": "Zrušit",
+        "save": "Uložit"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Prodloužit text",
+          "prompt": "Rozšiřte a propracujte následující text, udělejte jej podrobnějším a komplexnějším při zachování původního významu a tónu. Vraťte pouze rozšířený text bez dalších komentářů:\n\n"
+        },
+        "summarize": {
+          "name": "Shrnout text",
+          "prompt": "Poskytněte stručné shrnutí následujícího textu. Vraťte pouze shrnutí bez dalších komentářů:\n\n"
+        },
+        "improve-writing": {
+          "name": "Zlepšit psaní",
+          "prompt": "Zlepšete kvalitu psaní, přehlednost a styl následujícího textu. Vraťte pouze vylepšený text bez dalších komentářů:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Opravit gramatiku",
+          "prompt": "Opravte jakékoli gramatické, pravopisné a interpunkční chyby v následujícím textu. Vraťte pouze opravený text bez dalších komentářů:\n\n"
+        },
+        "explain": {
+          "name": "Vysvětlit text",
+          "prompt": "Vysvětlete následující text jednoduchými slovy:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Použití tokenů",
+      "desc": "Sledujte spotřebu tokenů u poskytovatelů a modelů. Data jsou shromažďována ze všech konverzací.",
+      "notAvailable": "Sledování použití tokenů není dostupné.",
+      "ranges": {
+        "today": "Dnes",
+        "week": "Tento týden",
+        "month": "Tento měsíc",
+        "all": "Celá doba"
+      },
+      "stats": {
+        "totalTokens": "Celkem tokenů",
+        "apiCalls": "Volání API",
+        "promptTokens": "Tokeny promptu",
+        "completion": "Dokončení",
+        "tokensIn": "tokeny vstupní",
+        "tokensOut": "tokeny výstupní"
+      },
+      "byProvider": "Podle poskytovatele",
+      "byModel": "Podle modelu",
+      "noData": "Žádná data o použití.",
+      "recentActivity": "Nedávná aktivita",
+      "last10": "posledních 10",
+      "noRecent": "Žádná nedávná aktivita.",
+      "tableHeaders": {
+        "provider": "Poskytovatel",
+        "model": "Model",
+        "prompt": "Prompt",
+        "completion": "Dokončení",
+        "total": "Celkem",
+        "calls": "Volání",
+        "time": "Čas",
+        "in": "Vstup",
+        "out": "Výstup"
+      },
+      "clearBtn": "Vymazat všechna data o použití",
+      "confirm": {
+        "clear": "Vymazat všechny záznamy o použití tokenů? Tuto akci nelze vrátit zpět."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Zadejte zprávu... (Enter pro odeslání, Shift+Enter pro nový řádek)",
+    "conversations": "Konverzace",
+    "toggleConversationsTitle": "Přepnout seznam konverzací",
+    "currentConversation": "Aktuální konverzace",
+    "new": "Nová",
+    "settings": "Nastavení",
+    "openSettingsTitle": "Otevřít nastavení pluginu",
+    "mode": "Režim",
+    "prompt": "Prompt",
+    "agent": "Agent",
+    "modeOptions": {
+      "chat": "Chat",
+      "agent": "Agent"
+    },
+    "noSystemPrompt": "Žádný systémový prompt",
+    "noAgentsAvailable": "Žádní agenti nejsou dostupní",
+    "sendHintPrefix": "Stiskněte ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " pro odeslání",
+    "sendAriaLabel": "Odeslat zprávu",
+    "stop": " Zastavit",
+    "addReference": "Přidat odkaz",
+    "addReferenceTooltip": "Přidat odkaz na soubor nebo složku (@)",
+    "emptyHeading": "Zahájit konverzaci",
+    "emptySubtext": "Zadejte zprávu níže pro začátek nebo vyberte konverzaci z historie.",
+    "noAgentConfig": "Žádní agenti nejsou nakonfigurováni",
+    "selectAgent": "Vyberte agenta…",
+    "notices": {
+      "stopping": "Zastavuji generování...",
+      "ragInitError": "Chyba inicializace RAG: {{message}}",
+      "modelsRefreshed": "Modely obnoveny",
+      "modelsRefreshFailed": "Nepodařilo se obnovit modely: {{message}}",
+      "waitForResponse": "Počkejte na dokončení aktuální odpovědi",
+      "configureProvider": "Nejprve nakonfigurujte poskytovatele LLM v nastavení",
+      "selectModel": "Vyberte model",
+      "noValidProvider": "Pro tento model nebyla nalezena platná konfigurace poskytovatele",
+      "chatError": "Chyba chatu: {{message}}",
+      "noMessageToRegenerate": "Nelze najít zprávu k regeneraci",
+      "regenerateOnlyLatest": "Právě teď lze regenerovat pouze nejnovější odpověď",
+      "regenerateNoUserMsg": "Nelze najít uživatelskou zprávu k regeneraci",
+      "regenerated": "Odpověď regenerována",
+      "regenerateFailed": "Regenerace selhala: {{message}}",
+      "noteCreated": "Poznámka vytvořena: {{name}}",
+      "noteCreateFailed": "Nepodařilo se vytvořit poznámku: {{message}}",
+      "messageInserted": "Zpráva vložena do: {{path}}",
+      "messageInsertFailed": "Nepodařilo se vložit zprávu: {{message}}",
+      "noAgents": "Žádní agenti nejsou dostupní. Nakonfigurujte agenty v Nastavení → Agenti.",
+      "ragDisabled": "RAG je v nastavení zakázán. Povolte jej v nastavení → funkce chatu → RAG.",
+      "webSearchDisabled": "Webové vyhledávání je v nastavení zakázáno. Povolte jej v nastavení → funkce chatu → webové vyhledávání.",
+      "noFilesInVault": "V trezoru nebyly nalezeny žádné soubory",
+      "attached": "Přiloženo: {{name}}",
+      "attachedImages": "Přiloženo {{count}} obrázků",
+      "referencesAdded": "Přidáno {{count}} odkazů",
+      "fileNotFound": "Soubor nenalezen: {{path}}",
+      "agentConfigApplied": "Použita konfigurace agenta: {{name}}",
+      "waitForComplete": "Počkejte na dokončení aktuální odpovědi",
+      "chatServiceFallback": "ChatService není nakonfigurován. Používám záložní ChatView.",
+      "noModelSelected": "Žádný model není vybrán",
+      "noProviderConfig": "Konfigurace poskytovatele nenalezena",
+      "generationStopped": "Generování zastaveno",
+      "noResponseToRegenerate": "Žádná odpověď k regeneraci",
+      "agentNotFound": "Agent nenalezen",
+      "unableToLoadRag": "Nelze načíst statistiky RAG.",
+      "referenced": "Odkazováno: {{name}}"
+    },
+    "status": {
+      "available": "Dostupné",
+      "unavailable": "Nedostupné",
+      "disabled": "Zakázáno",
+      "on": "Zapnuto · {{detail}}",
+      "off": "Vypnuto"
+    },
+    "ragStats": {
+      "title": "Statistiky RAG",
+      "totalChunks": "📊 celkem bloků:",
+      "filesIndexed": "📁 indexované soubory:",
+      "totalSize": "💾 celková velikost:",
+      "avgChunks": "📈 Prům. bloků/soubor:",
+      "indexedFiles": "📄 indexované soubory",
+      "noFilesYet": "⚠️ žádné soubory nebyly dosud indexovány.",
+      "howToBuild": "Pro vytvoření indexu RAG:",
+      "step1": "Přejděte do Nastavení → RAG",
+      "step2": "Povolte RAG",
+      "step3": "Vyberte indexovat trezor",
+      "close": "Zavřít",
+      "retrieved": "📚 načteno z {{count}} dokumentu",
+      "retrieved_plural": "📚 načteno z {{count}} dokumentů"
+    },
+    "ragTooltip": {
+      "status": "Stav indexu RAG:",
+      "totalChunks": "📊 Celkem bloků: {{count}}",
+      "filesIndexed": "📁 Indexované soubory: {{count}}",
+      "totalSize": "💾 Celková velikost: {{size}} KB",
+      "indexedFiles": "📄 indexované soubory:",
+      "andMore": "  ... a {{count}} dalších",
+      "noFilesYet": "⚠️ zatím žádné indexované soubory.",
+      "goToSettings": "Přejděte do Nastavení → RAG pro vytvoření indexu.",
+      "ragOff": "ℹ️ RAG je v tomto chatu aktuálně vypnut."
+    },
+    "agentSummary": {
+      "model": "Model",
+      "temp": "Teplota",
+      "max": "Max",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Nástroje",
+      "memory": "Paměť",
+      "none": "Žádné",
+      "configuration": "Konfigurace {{name}}",
+      "modelFixed": "{{name}} · Pevný",
+      "modelDefault": "{{name}} · Výchozí",
+      "modelChatView": "{{name}} · Pohled chatu",
+      "customModel": "Vlastní model",
+      "notSet": "Nenastaveno",
+      "auto": "Auto",
+      "on": "Zapnuto",
+      "off": "Vypnuto",
+      "shortTerm": "Krátkodobá",
+      "longTerm": "Dlouhodobá",
+      "disabledMemory": "Zakázáno",
+      "builtIn": "{{count}} vestavěný",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Webové výsledky",
+      "attachments": "Přílohy",
+      "references": "Odkazy",
+      "ragSources": "Zdroje RAG",
+      "reasoning": "Uvažování",
+      "copy": "Kopírovat",
+      "copied": "Zpráva zkopírována",
+      "copyFailed": "Nepodařilo se zkopírovat zprávu",
+      "tokenUsage": "Použití tokenů",
+      "tokenUsagePrompt": "Prompt",
+      "tokenUsageCompletion": "Dokončení",
+      "tokenUsageTotal": "Celkem",
+      "save": "Uložit",
+      "insertToNotes": "Vložit do poznámek",
+      "regenerate": "Regenerovat"
+    },
+    "streaming": {
+      "thinking": "Přemýšlím..."
+    },
+    "toolCall": {
+      "thinking": "Přemýšlení",
+      "executionProcess": "Průběh provádění",
+      "input": "Vstup",
+      "output": "Výstup",
+      "running": "Spouštím..."
+    },
+    "addPicture": "Přidat obrázek",
+    "addPictureTooltip": "Přiložit obrázek ke zprávě",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Používat indexované poznámky jako kontext",
+    "webSearchLabel": "Webové vyhledávání",
+    "webSearchTooltipLabel": "Prohledávat internet v případě potřeby",
+    "imageUnavailable": "Příloha obrázku není pro aktuální model dostupná.",
+    "newChat": "Nový chat",
+    "newConversation": "Nová konverzace",
+    "searchConversations": "Hledat konverzace...",
+    "header": {
+      "model": "Model",
+      "advancedParams": "Pokročilé parametry",
+      "temperature": "Teplota",
+      "maxTokens": "Max. tokenů",
+      "topP": "Top P",
+      "freqPenalty": "Penalizace frekvence",
+      "presPenalty": "Penalizace přítomnosti",
+      "agentConfig": "Konfigurace agenta",
+      "modelsCount": "Modely: {{count}}",
+      "tokensCount": "Tokeny: {{count}}",
+      "noModels": "Žádné modely nejsou dostupné"
+    },
+    "temperature": {
+      "precise": "0 (Přesný)",
+      "balanced": "1 (Vyvážený)",
+      "creative": "2 (Kreativní)"
+    },
+    "modals": {
+      "image": {
+        "title": "Přiložit obrázky",
+        "searchPlaceholder": "Hledat obrázky...",
+        "selectAll": "Vybrat vše",
+        "selectNone": "Zrušit výběr",
+        "addSelected": "Přidat vybrané",
+        "noResults": "Nebyly nalezeny žádné odpovídající obrázky."
+      },
+      "reference": {
+        "title": "Přidat odkazy",
+        "searchPlaceholder": "Hledat soubory a složky...",
+        "selectAll": "Vybrat vše",
+        "selectNone": "Zrušit výběr",
+        "addSelected": "Přidat vybrané",
+        "noResults": "Nebyly nalezeny žádné odpovídající soubory ani složky."
+      },
+      "insertNote": {
+        "title": "Vložit do poznámky",
+        "searchPlaceholder": "Hledat poznámky...",
+        "insert": "Vložit do vybrané poznámky",
+        "createNew": "Vytvořit novou poznámku",
+        "noResults": "Nebyly nalezeny žádné odpovídající poznámky."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Zrušit",
+      "confirm": "Potvrdit"
+    },
+    "agentEdit": {
+      "title": "Upravit agenta",
+      "icon": {
+        "name": "Ikona",
+        "desc": "Emoji nebo znak reprezentující tohoto agenta"
+      },
+      "description": {
+        "name": "Popis",
+        "desc": "Stručný popis agenta"
+      },
+      "modelStrategy": {
+        "name": "Strategie modelu",
+        "options": {
+          "default": "Použít výchozí model (z nastavení)",
+          "chatView": "Použít model pohledu chatu",
+          "fixed": "Pevný model"
+        },
+        "noModels": "Žádné modely v mezipaměti",
+        "desc": "Vyberte, jak bude agent vybírat svůj model"
+      },
+      "systemPrompt": {
+        "createNew": "➕ vytvořit nový prompt…",
+        "promptName": {
+          "name": "Název promptu",
+          "desc": "Zobrazovaný název nového systémového promptu"
+        },
+        "promptContent": {
+          "name": "Obsah promptu",
+          "desc": "Obsah nového systémového promptu"
+        },
+        "name": "Systémový prompt",
+        "desc": "Vyberte ze stávajících promptů nebo definujte nový pro tohoto agenta."
+      },
+      "capabilities": "Schopnosti",
+      "memory": {
+        "title": "Paměť",
+        "notice": "Paměť agenta je dočasně nedostupná, zatímco pracujeme na zlepšení tohoto zážitku."
+      },
+      "tools": {
+        "title": "Nástroje",
+        "builtIn": {
+          "name": "Vestavěné nástroje",
+          "desc": "Vyberte, které vestavěné nástroje může tento agent používat"
+        },
+        "cli": {
+          "name": "Nástroje CLI",
+          "desc": "Udělte přístup ke všem povoleným nástrojům CLI nebo vyberte jednotlivě níže",
+          "noTools": "Žádné nástroje CLI nejsou nakonfigurovány. Přidejte a povolte nástroje v Nastavení → Nástroje → CLI pro jejich použití zde."
+        }
+      },
+      "mcp": {
+        "title": "Přístup k MCP",
+        "noServers": "Žádné servery MCP nejsou nakonfigurovány. Přidejte servery v Nastavení → MCP pro odemknutí těchto možností.",
+        "toolsCached": "{{count}} nástroj v mezipaměti",
+        "toolsCached_plural": "{{count}} nástrojů v mezipaměti",
+        "noToolsCached": "Žádné nástroje v mezipaměti. Povolte plný přístup nebo obnovte mezipaměť.",
+        "showTools": "Zobrazit nástroje",
+        "hideTools": "Skrýt nástroje",
+        "selected": "Vybráno",
+        "notSelected": "Nevybráno",
+        "noToolsAvailable": "Z tohoto serveru zatím nejsou dostupné žádné nástroje."
+      },
+      "notices": {
+        "promptRequired": "Zadejte název a obsah nového systémového promptu."
+      },
+      "name": {
+        "label": "Název",
+        "desc": "Zobrazovaný název tohoto agenta"
+      },
+      "fixedModel": {
+        "name": "Pevný model",
+        "desc": "Vyberte konkrétní model pro tohoto agenta.",
+        "descNoModels": "Žádné modely v mezipaměti nejsou dostupné. Obnovte modely na kartě Modely."
+      },
+      "temperature": {
+        "label": "Teplota",
+        "desc": "Ovládá náhodnost (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Max. tokenů",
+        "desc": "Maximální počet tokenů k vygenerování"
+      },
+      "contextWindow": {
+        "label": "Kontextové okno",
+        "desc": "Počet předchozích zpráv zahrnutých do kontextu"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Povolit generování rozšířené o vyhledávání"
+      },
+      "webSearch": {
+        "name": "Webové vyhledávání",
+        "desc": "Povolit schopnosti webového vyhledávání"
+      },
+      "maxSteps": {
+        "name": "Max. kroků nástrojů",
+        "desc": "Maximální počet kroků volání nástrojů na tah agenta"
+      }
+    },
+    "provider": {
+      "title": "Nastavení poskytovatele",
+      "selectProvider": {
+        "name": "Poskytovatel",
+        "desc": "Vyberte typ poskytovatele LLM",
+        "placeholder": "-- Vyberte poskytovatele --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (místní)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Vlastní (kompatibilní s OpenAI)"
+      },
+      "modelFilter": {
+        "name": "Filtr modelů",
+        "desc": "Volitelný vzor regex pro omezení dostupných modelů"
+      },
+      "resourceGroup": {
+        "name": "Skupina prostředků",
+        "desc": "Volitelná skupina prostředků SAP AI Core"
+      },
+      "serviceKey": {
+        "name": "Servisní klíč",
+        "desc": "Servisní klíč SAP AI Core (řetězec JSON)"
+      },
+      "baseUrl": {
+        "name": "Základní URL",
+        "ollamaDesc": "URL serveru Ollama",
+        "customDesc": "Koncový bod API kompatibilní s OpenAI (povinný)",
+        "optionalDesc": "Vlastní koncový bod API (volitelný)"
+      },
+      "manageModels": {
+        "name": "Spravovat modely",
+        "desc": "Stahujte nové modely nebo aktualizujte stávající z registru Ollama.",
+        "btn": "⏬ Stáhnout model Ollama"
+      },
+      "apiKey": {
+        "name": "API klíč",
+        "desc": "Autentizační klíč pro vybraného poskytovatele"
+      },
+      "cancel": "Zrušit",
+      "save": "Uložit",
+      "validation": {
+        "selectProvider": "Vyberte typ poskytovatele",
+        "apiKeyTooLong": "API klíč je příliš dlouhý. Maximální délka je 500 znaků.",
+        "invalidUrl": "Neplatný formát základní URL. Zadejte platnou URL (např. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "Inspektor MCP",
+      "desc": "Kontrolujte a laďte připojení serverů a nástrojů Model Context Protocol (MCP).",
+      "tabs": {
+        "connections": "Připojení",
+        "tools": "Nástroje",
+        "logs": "Záznamy"
+      },
+      "refreshBtn": "🔄 obnovit",
+      "connections": {
+        "title": "Připojení serverů MCP",
+        "noServers": "Žádné servery MCP nejsou nakonfigurovány.",
+        "headers": {
+          "server": "Název serveru",
+          "status": "Stav",
+          "tools": "Dostupné nástroje",
+          "actions": "Akce"
+        },
+        "statusDisabled": "Zakázáno",
+        "statusConnected": "● připojeno",
+        "statusDisconnected": "○ odpojeno",
+        "toolsLive": "{{count}} nástroj",
+        "toolsLive_plural": "{{count}} nástrojů",
+        "toolsCached": "{{count}} nástroj (v mezipaměti)",
+        "toolsCached_plural": "{{count}} nástrojů (v mezipaměti)",
+        "noTools": "0 nástrojů",
+        "connectBtn": "Připojit",
+        "disconnectBtn": "Odpojit",
+        "connecting": "Připojuji...",
+        "disconnecting": "Odpojuji...",
+        "notices": {
+          "disconnected": "Odpojeno od {{name}}",
+          "enableFirst": "Povolte server v nastavení před připojením",
+          "connected": "Připojeno k {{name}}",
+          "failedDisconnect": "Nepodařilo se odpojit od {{name}}: {{message}}",
+          "failedConnect": "Nepodařilo se připojit k {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Dostupné nástroje MCP",
+        "noTools": "Žádné nástroje MCP nejsou dostupné. Zkontrolujte připojení serverů.",
+        "serverPrefix": "Server: {{name}}",
+        "noToolsInServer": "Žádné nástroje nejsou dostupné",
+        "headers": {
+          "tool": "Název nástroje",
+          "description": "Popis",
+          "parameters": "Parametry"
+        },
+        "noDescription": "Bez popisu",
+        "noParams": "Žádné"
+      },
+      "logs": {
+        "title": "Záznamy připojení MCP",
+        "placeholder": "Záznamy připojení MCP se zobrazí zde. Aktuálně jsou zobrazeny zástupné informace.",
+        "events": {
+          "connection": "• události připojení",
+          "tools": "• události registrace nástrojů",
+          "errors": "• záznamy chyb",
+          "comms": "• podrobnosti komunikace"
+        },
+        "testTitle": "Testovací provádění nástroje",
+        "selectServer": "Vybrat server...",
+        "selectTool": "Vybrat nástroj...",
+        "parametersTitle": "Parametry",
+        "selectEnum": "Vybrat...",
+        "performBtn": "Provést nástroj",
+        "clearBtn": "Vymazat výsledky",
+        "executing": "Provádím...",
+        "success": "✅ provedení úspěšné",
+        "failed": "❌ provedení selhalo",
+        "errorTitle": "❌ chyba provádění",
+        "errorLabel": "Chyba: {{message}}",
+        "notices": {
+          "success": "Nástroj byl úspěšně proveden",
+          "failed": "Provedení nástroje selhalo",
+          "error": "Chyba provádění: {{message}}",
+          "requiredMissing": "Chybí povinný parametr: {{name}}",
+          "invalidNumber": "Neplatné číslo pro parametr: {{name}}",
+          "invalidJson": "Neplatný JSON pro parametr: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Žádné servery MCP nejsou nakonfigurovány",
+        "testing": "🧪 Testování {{count}} připojení k serverům MCP...",
+        "allSuccess": "✅ všechny {{count}} servery MCP úspěšně připojeny!",
+        "partial": "⚠️ {{success}} připojeno, {{failed}} selhalo"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Upravit server MCP",
+      "titleAdd": "Přidat server MCP",
+      "serverName": {
+        "name": "Název serveru",
+        "desc": "Přátelský název zobrazený v celém pluginu"
+      },
+      "connectionMode": {
+        "name": "Režim připojení",
+        "desc": "Zvolte, zda se připojit automaticky nebo pouze při ručním spuštění",
+        "auto": "Automaticky připojit při otevření chatu",
+        "manual": "Ruční připojení"
+      },
+      "command": {
+        "name": "Příkaz",
+        "desc": "Spustitelný soubor nebo skript, který spustí server MCP"
+      },
+      "arguments": {
+        "name": "Argumenty",
+        "desc": "Argumenty oddělené čárkami nebo novým řádkem (volitelné)"
+      },
+      "envVars": {
+        "name": "Proměnné prostředí",
+        "desc": "Volitelné páry KLÍČ=HODNOTA, jeden na řádek"
+      },
+      "enabled": {
+        "name": "Povoleno",
+        "desc": "Zakažte pro zachování nakonfigurovaného serveru bez automatického připojování"
+      },
+      "cancel": "Zrušit",
+      "saveEdit": "Uložit změny",
+      "saveAdd": "Přidat server",
+      "validation": {
+        "nameRequired": "Název serveru je povinný",
+        "commandRequired": "Příkaz je povinný"
+      }
+    },
+    "ollamaManager": {
+      "title": "Spravovat modely Ollama",
+      "serverInfo": "Informace o serveru",
+      "checkingServer": "Kontroluji server...",
+      "serverOnline": "✅ Server online",
+      "versionLabel": " | Verze: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Server offline",
+      "connectionError": "❌ Chyba připojení",
+      "pullTitle": "Stáhnout nový model",
+      "pullHint": "Zadejte název modelu ke stažení z knihovny Ollama (např. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Název modelu",
+        "example": "Příklad: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Stáhnout model",
+      "installedTitle": "Nainstalované modely",
+      "refreshList": "🔄 Obnovit seznam",
+      "noModels": "Nebyly nalezeny žádné modely. Stáhněte model pro začátek.",
+      "capabilities": "Schopnosti: {{caps}}",
+      "deleteBtn": "Smazat",
+      "closeBtn": "Zavřít",
+      "confirmDelete": {
+        "title": "Potvrdit smazání",
+        "message": "Opravdu chcete smazat model \"{{name}}\"?",
+        "cancel": "Zrušit",
+        "confirm": "Smazat"
+      },
+      "notices": {
+        "enterName": "Zadejte název modelu",
+        "pulling": "Stahuji {{name}}... Může to chvíli trvat.",
+        "pullSuccess": "✅ Úspěšně staženo {{name}}",
+        "pullFailed": "❌ Nepodařilo se stáhnout model: {{message}}",
+        "deleted": "✅ Smazáno {{name}}",
+        "deleteFailed": "❌ Nepodařilo se smazat model: {{message}}",
+        "refreshing": "Obnovuji...",
+        "refreshSuccess": "✅ Seznam modelů obnoven",
+        "refreshFailed": "❌ Nepodařilo se obnovit seznam modelů"
+      }
+    },
+    "promptEdit": {
+      "title": "Upravit systémový prompt",
+      "name": {
+        "name": "Název",
+        "desc": "Zobrazovaný název tohoto promptu"
+      },
+      "content": {
+        "name": "Obsah",
+        "desc": "Obsah systémového promptu"
+      },
+      "enabled": {
+        "name": "Povoleno",
+        "desc": "Zda je tento prompt aktivní"
+      },
+      "cancel": "Zrušit",
+      "save": "Uložit"
+    },
+    "prompt": {
+      "cancel": "Zrušit",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Název",
+      "create": "Vytvořit",
+      "cancel": "Zrušit"
+    },
+    "explain": {
+      "loading": "⏳ Zpracovávám...",
+      "error": "Chyba při vykreslování vysvětlení",
+      "errorPrefix": "❌ Chyba: "
+    }
+  },
+  "notices": {
+    "noProvider": "Nejprve nakonfigurujte poskytovatele LLM v nastavení",
+    "noModel": "V nastavení vyberte výchozí model",
+    "noValidProvider": "Pro model nebyla nalezena platná konfigurace poskytovatele: {{modelId}}",
+    "processing": "Zpracovávám...",
+    "textUpdated": "Text úspěšně aktualizován",
+    "error": "Chyba: {{message}}"
+  }
+}

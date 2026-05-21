@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Generelt",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Værktøjer",
+      "rag": "RAG",
+      "prompts": "Prompter",
+      "agents": "Agenter",
+      "quickActions": "Hurtighandlinger",
+      "usage": "Forbrug"
+    },
+    "general": {
+      "title": "Generelle indstillinger",
+      "desc": "Konfigurer generelle indstillinger for intelligent assistent-plugin'et.",
+      "pluginVersion": {
+        "name": "Plugin-version",
+        "desc": "Aktuel version af intelligent assistent-plugin'et"
+      },
+      "defaultModel": {
+        "name": "Standardmodel",
+        "desc": "Standardmodel til brug i samtaler",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Standard chattilstand",
+        "desc": "Vælg hvilken tilstand chatvisningen åbnes med",
+        "chat": "Chattilstand",
+        "agent": "Agenttilstand"
+      },
+      "conversationTitleMode": {
+        "name": "Samtaletiteltilstand",
+        "desc": "Sådan genereres samtaletitler",
+        "firstMessage": "Brug første besked",
+        "autoSummary": "Generer opsummering automatisk",
+        "manual": "Manuel"
+      },
+      "conversationIcons": {
+        "name": "Samtaleikoner",
+        "desc": "Aktivér automatisk ikongenerering for samtaler"
+      },
+      "configStatus": {
+        "name": "Konfigurationsstatus",
+        "desc": "Overordnet konfigurationsstatus for plugin'et",
+        "ok": "✅ Konfigureret ({{providers}} udbydere, {{conversations}} samtaler)",
+        "incomplete": "⚠️ Ufuldstændig - Konfigurer venligst udbydere og modeller"
+      }
+    },
+    "llm": {
+      "title": "LLM-konfiguration",
+      "desc": "Konfigurer sprogmodelsudby­dere og administrer tilgængelige modeller.",
+      "subTabs": {
+        "provider": "Udbydere",
+        "models": "Modeller"
+      }
+    },
+    "models": {
+      "title": "Modelkonfiguration",
+      "desc": "Vis og administrer modeller fra alle konfigurerede udbydere. Klik på \"opdater modeller\" for at hente de seneste tilgængelige modeller.",
+      "providerCount": "{{count}} udbyder konfigureret",
+      "providerCount_plural": "{{count}} udbydere konfigureret",
+      "refreshAll": "🔄 opdater alle modeller",
+      "empty": "Ingen udbydere konfigureret endnu. Tilføj udbydere i udbyderens fane først.",
+      "noModels": "Ingen modeller tilgængelige. Klik på \"opdater alle modeller\" eller opdater individuelle udbydere i udbyderens fane.",
+      "noMatch": "Ingen modeller matcher de nuværende filtre. Juster eller ryd filtre for at se resultater.",
+      "modelCount": "• {{count}} model i cache",
+      "modelCount_plural": "• {{count}} modeller i cache",
+      "matchCount": "• {{count}} match med valgte filtre",
+      "matchCount_plural": "• {{count}} matches med valgte filtre",
+      "status": {
+        "enabled": "Aktiveret",
+        "disabled": "Deaktiveret"
+      },
+      "actions": {
+        "disable": "Deaktiver",
+        "enable": "Aktiver",
+        "setDefaultChat": "Angiv standard chat",
+        "defaultChat": "Standard chat",
+        "setDefaultEmbedding": "Angiv standard embedding",
+        "defaultEmbedding": "Standard embedding"
+      },
+      "notices": {
+        "fetching": "Henter modeller for {{provider}}...",
+        "fetchFailed": "Kunne ikke opdatere {{provider}}-modeller",
+        "refreshed": "Modeller opdateret!",
+        "refreshFailed": "Kunne ikke opdatere modeller",
+        "defaultChatSet": "Standard chatmodel sat til {{name}}",
+        "defaultEmbeddingSet": "Standard embeddingmodel sat til {{name}}"
+      },
+      "filters": {
+        "allProviders": "Alle udbydere",
+        "allCapabilities": "Alle funktioner",
+        "allStates": "Alle tilstande",
+        "searchPlaceholder": "Søg navn eller ID"
+      }
+    },
+    "provider": {
+      "title": "Udbyderindstillinger",
+      "securityTitle": "⚠️ Sikkerhedsadvarsel",
+      "securityDesc": "API-nøgler gemmes som klartekst i din vault af kompatibilitetshensyn. For at forhindre utilsigtede lækager:",
+      "securityItem1": "Del IKKE din mappe {{configDir}}/plugins/intelligence-assistant/data/.",
+      "securityItem2": "Tilføj denne mappe til din .gitignore, hvis du bruger Git-synkronisering.",
+      "securityItem3": "Vær forsigtig ved brug af offentlige cloud-synkroniseringstjenester.",
+      "desc": "Administrer LLM-udbydere og API-legitimationsoplysninger. Brug handlingskolonnen til at redigere konfigurationsoplysninger eller opdatere cachelagrede modeller.",
+      "count": "{{count}} udbyder konfigureret",
+      "count_plural": "{{count}} udbydere konfigureret",
+      "addBtn": "+ Tilføj udbyder",
+      "empty": "Ingen udbydere konfigureret. Vælg \"Tilføj udbyder\" for at komme i gang.",
+      "tableHeaders": {
+        "provider": "Udbyder",
+        "status": "Status",
+        "actions": "Handlinger"
+      },
+      "status": {
+        "ready": "Klar",
+        "needsConfig": "Kræver konfiguration",
+        "checking": "Kontrollerer...",
+        "credentialsSet": "Legitimationsoplysninger angivet",
+        "serverOnline": "Server online",
+        "serverOffline": "Server offline",
+        "serverError": "Serverfejl"
+      },
+      "guidance": {
+        "requiresCli": "Kræver lokal CLI",
+        "provideServiceKey": "Angiv servicenøgle",
+        "configureBaseUrl": "Konfigurer basis-URL",
+        "addApiKey": "Tilføj API-nøgle"
+      },
+      "models": {
+        "none": "Ingen modeller",
+        "count": "{{count}} model",
+        "count_plural": "{{count}} modeller"
+      },
+      "ollama": {
+        "checkingVersion": "Kontrollerer version...",
+        "server": {
+          "checking": "Kontrollerer server...",
+          "online": "Server: online",
+          "offline": "Server: offline eller utilgængelig",
+          "error": "Server: forbindelsesfejl",
+          "versionOnline": "Server online",
+          "versionOffline": "Server offline",
+          "versionError": "Forbindelsesfejl",
+          "version": "Version: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Senest opdateret: {{timeAgo}}",
+        "neverRefreshed": "Aldrig opdateret",
+        "justNow": "lige nu",
+        "minutesAgo": "{{n}}m siden",
+        "hoursAgo": "{{n}}t siden",
+        "daysAgo": "{{n}}d siden"
+      },
+      "actions": {
+        "edit": "Rediger",
+        "manageModels": "Administrer modeller",
+        "refreshModels": "Opdater modeller",
+        "refreshing": "Opdaterer...",
+        "delete": "Slet"
+      },
+      "notices": {
+        "refreshed": "Modeller opdateret for {{provider}}.",
+        "refreshFailed": "Kunne ikke opdatere modeller"
+      },
+      "confirm": {
+        "delete": "Fjern udbyder {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "MCP-serveradministration",
+      "desc": "Konfigurer Model Context Protocol (MCP)-servere for at udvide agentens funktioner med eksterne værktøjer og datakilder.",
+      "inspectorBtn": "🔍 Åbn MCP-inspektor",
+      "testAllBtn": "🧪 test alle forbindelser",
+      "refreshAllBtn": "🔄 opdater alle værktøjer",
+      "addBtn": "+ Tilføj MCP-server",
+      "empty": "Ingen MCP-servere konfigureret. Vælg Tilføj MCP-server for at komme i gang.",
+      "tableHeaders": {
+        "name": "Navn",
+        "command": "Kommando",
+        "arguments": "Argumenter",
+        "status": "Status",
+        "tools": "Værktøjer",
+        "actions": "Handlinger"
+      },
+      "untitled": "Unavngivet MCP-server",
+      "notConfigured": "Ikke konfigureret",
+      "noArgs": "Ingen",
+      "cached": "I cache",
+      "disabled": "Deaktiveret",
+      "envVars": "{{count}} miljøvariabel",
+      "envVars_plural": "{{count}} miljøvariabler",
+      "status": {
+        "disabled": "Deaktiveret",
+        "connected": "forbundet",
+        "disconnected": "afbrudt",
+        "enableToManage": "Aktiver for at administrere forbindelser",
+        "manualConnect": "Manuel forbindelse",
+        "autoConnect": "Automatisk forbindelse"
+      },
+      "toolCount": {
+        "live": "{{count}} aktivt værktøj",
+        "live_plural": "{{count}} aktive værktøjer",
+        "cached": "{{count}} cachelagret værktøj",
+        "cached_plural": "{{count}} cachelagrede værktøjer"
+      },
+      "actions": {
+        "edit": "Rediger",
+        "enabled": "✓ Aktiveret",
+        "enabledOff": "✗ Deaktiveret",
+        "connect": "opret forbindelse",
+        "disconnect": "afbryd forbindelse",
+        "connecting": "Opretter forbindelse...",
+        "disconnecting": "Afbryder forbindelse...",
+        "test": "Test",
+        "testing": "Tester...",
+        "delete": "Slet"
+      },
+      "notices": {
+        "disconnected": "Afbrudt fra {{name}}",
+        "connected": "Forbundet til {{name}}",
+        "autoConnectFailed": "Kunne ikke oprette automatisk forbindelse til {{name}}",
+        "enableFirst": "Aktiver serveren inden tilslutning",
+        "disconnectFailed": "Kunne ikke afbryde forbindelsen til {{name}}",
+        "connectFailed": "Kunne ikke oprette forbindelse til {{name}}",
+        "testNoCommand": "❌ angiv en kommando inden test af forbindelsen",
+        "testSuccess": "✅ forbundet! Fandt {{count}} værktøjer.",
+        "testFailed": "❌ Forbindelsen mislykkedes: {{message}}",
+        "refreshedAll": "✅ opdaterede værktøjer for {{count}} server",
+        "refreshedAll_plural": "✅ opdaterede værktøjer for {{count}} servere",
+        "refreshedPartial": "✅ {{success}} servere opdateret, ❌ {{failed}} mislykkedes",
+        "noServersConfigured": "⚠️ Ingen MCP-servere konfigureret",
+        "testingAll": "🧪 Tester {{count}} MCP-serverforbindelser...",
+        "testAllSuccess": "✅ alle {{count}} mcp-servere forbundet!",
+        "testAllPartial": "⚠️ {{successful}} forbundet, {{failed}} mislykkedes"
+      },
+      "confirm": {
+        "delete": "Slet MCP-server \"{{name}}\"?"
+      }
+    },
+    "agents": {
+      "title": "Agentadministration",
+      "desc": "Opret og administrer AI-agenter med specifikke funktioner, værktøjer og adfærd.",
+      "count": "{{count}} agent konfigureret",
+      "count_plural": "{{count}} agenter konfigureret",
+      "addBtn": "+ tilføj agent",
+      "empty": "Ingen agenter konfigureret. Vælg tilføj agent for at komme i gang.",
+      "tableHeaders": {
+        "agent": "Agent",
+        "model": "Model",
+        "capabilities": "Funktioner",
+        "tools": "Værktøjer",
+        "actions": "Handlinger"
+      },
+      "defaultBadge": "Standard",
+      "systemPrompt": "Systemprompt • {{promptName}}",
+      "customPrompt": "Brugerdefineret prompt",
+      "model": {
+        "notSet": "Ikke angivet",
+        "notFound": "Model ikke fundet i cache",
+        "useChatView": "Brug chatvisningsmodel",
+        "useChatViewDesc": "Vil bruge den model, der er valgt i chatvisningen",
+        "useDefault": "Brug standardmodel",
+        "useDefaultDesc": "Vil bruge standardmodellen fra indstillinger"
+      },
+      "capabilities": {
+        "noSpecialModes": "Ingen særlige tilstande"
+      },
+      "tools": {
+        "builtIn": "{{count}} indbygget",
+        "mcpServer": "{{count}} mcp-server",
+        "mcpServer_plural": "{{count}} mcp-servere",
+        "mcpTool": "{{count}} mcp-værktøj",
+        "mcpTool_plural": "{{count}} mcp-værktøjer",
+        "noTools": "Ingen værktøjer aktiveret"
+      },
+      "actions": {
+        "edit": "Rediger",
+        "delete": "slet",
+        "protected": "beskyttet"
+      },
+      "confirm": {
+        "delete": "Slet agent \"{{name}}\"?"
+      }
+    },
+    "prompts": {
+      "title": "Systemprompter",
+      "desc": "Administrer systemprompter, der definerer adfærden og personligheden af din AI-assistent.",
+      "addBtn": "+ tilføj systemprompt",
+      "empty": "Ingen systemprompter konfigureret. Vælg tilføj systemprompt for at komme i gang.",
+      "tableHeaders": {
+        "name": "Navn",
+        "contentPreview": "Indholdsforhåndsvisning",
+        "created": "Oprettet",
+        "updated": "Opdateret",
+        "enabled": "Aktiveret",
+        "actions": "Handlinger"
+      },
+      "status": {
+        "enabled": "Aktiveret",
+        "disabled": "Deaktiveret"
+      },
+      "actions": {
+        "edit": "Rediger",
+        "disable": "Deaktiver",
+        "enable": "Aktiver",
+        "delete": "Slet"
+      },
+      "confirm": {
+        "delete": "Slet prompt \"{{name}}\"?"
+      }
+    },
+    "tools": {
+      "title": "Værktøjskonfiguration",
+      "desc": "Gennemse indbyggede værktøjer og udforsk MCP-værktøjer indlæst fra tilsluttede servere. Aktiver de handlinger, dine agenter skal kunne udføre.",
+      "subTabs": {
+        "builtIn": "Indbyggede værktøjer",
+        "mcp": "MCP-værktøjer",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI-værktøjer"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Navn",
+          "category": "Kategori",
+          "description": "Beskrivelse",
+          "parameters": "Parametre",
+          "enabled": "Aktiveret"
+        },
+        "categories": {
+          "fileOps": "Filhandlinger",
+          "searchDisc": "Søgning og opdagelse",
+          "noteMgmt": "Notitiehåndtering"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Læs indholdet af en fil fra din vault",
+            "params": "path (påkrævet): Sti til filen der skal læses"
+          },
+          "writeFile": {
+            "desc": "Skriv eller opdater en fil i din vault",
+            "params": "path (påkrævet), content (påkrævet): Filsti og indhold der skal skrives"
+          },
+          "listFiles": {
+            "desc": "List filer i vault'en eller en specifik mappe",
+            "params": "folder (valgfrit), extension (valgfrit): Filtrer efter mappe og filtypenavn"
+          },
+          "searchFiles": {
+            "desc": "Søg efter filer efter navn eller indhold i din vault",
+            "params": "query (påkrævet), search_content (valgfrit), limit (valgfrit): Søgeforespørgsel og indstillinger"
+          },
+          "createNote": {
+            "desc": "Opret en ny notitie med specificeret indhold",
+            "params": "title (påkrævet), content (påkrævet), folder (valgfrit): Notitietitel, indhold og placering"
+          },
+          "appendNote": {
+            "desc": "Tilføj indhold til en eksisterende notitie",
+            "params": "path (påkrævet), content (påkrævet): Notitiens sti og indhold der skal tilføjes"
+          }
+        },
+        "infoTitle": "💡 om værktøjer",
+        "infoText": "Indbyggede værktøjer er konfigureret pr. plugin-indstillinger. MCP-værktøjer administreres uafhængigt—brug MCP-fanen til at tilslutte servere og opdatere tilgængelighed af værktøjer.",
+        "toolNames": {
+          "read_file": "Læs fil",
+          "write_file": "Skriv fil",
+          "list_files": "List filer",
+          "search_files": "Søg filer",
+          "create_note": "Opret notitie",
+          "append_note": "Tilføj til notitie"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Ingen MCP-værktøjer tilgængelige. Tilslut en server eller opdater cachelagrede værktøjer for at udfylde denne liste.",
+        "tableHeaders": {
+          "server": "Server",
+          "tool": "Værktøj",
+          "description": "Beskrivelse",
+          "parameters": "Parametre",
+          "source": "Kilde"
+        },
+        "noDescription": "Ingen beskrivelse",
+        "schemaUnavailable": "Skema ikke tilgængeligt",
+        "live": "Live",
+        "cached": "I cache",
+        "status": {
+          "connected": "forbundet",
+          "disconnected": "afbrudt"
+        }
+      },
+      "openapi": {
+        "desc": "Generer HTTP-værktøjer fra OpenAPI-dokumenter. Fjernspecifikationer cachelagres under {{cacheDir}}.",
+        "addBtn": "Tilføj HTTP-kilde",
+        "noSources": "Ingen HTTP-kilder konfigureret endnu.",
+        "unnamed": "Unavngivet HTTP-kilde",
+        "tableHeaders": {
+          "name": "Navn",
+          "source": "Kilde",
+          "auth": "Godkendelse",
+          "status": "Status",
+          "actions": "Handlinger"
+        },
+        "sourceUrl": "Fjern-URL ikke angivet",
+        "sourcePath": "Filsti ikke angivet",
+        "authHeader": "Header ({{key}})",
+        "authQuery": "Forespørgsel ({{key}})",
+        "authNone": "Ingen",
+        "statusEnabled": "Aktiveret",
+        "statusDisabled": "Deaktiveret",
+        "actions": {
+          "edit": "Rediger",
+          "reload": "Genindlæs",
+          "refetch": "Hent igen",
+          "delete": "Slet"
+        },
+        "notices": {
+          "removed": "HTTP-kilde fjernet",
+          "reloaded": "Genindlæste {{count}} handlinger",
+          "reloadFailed": "Kunne ikke genindlæse HTTP-kilde. Tjek konsollen for detaljer."
+        },
+        "modal": {
+          "defaultTitle": "HTTP-kilde",
+          "displayName": {
+            "name": "Visningsnavn",
+            "desc": "Vises til agenter, når de vælger enværktøjskilde"
+          },
+          "enabled": {
+            "name": "Aktiveret",
+            "desc": "Aktiver for at eksponere denne HTTP API for alle agenter"
+          },
+          "sourceType": {
+            "name": "Kildetype",
+            "file": "Lokal fil",
+            "url": "Fjern-URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Hentes og cachelagres inde i plugin-datamappen"
+          },
+          "cachedFile": "Cachelagret fil: {{path}} ({{date}})",
+          "neverFetched": "Aldrig hentet",
+          "specPath": {
+            "name": "OpenAPI-filsti",
+            "desc": "Relativ sti inde i vault'en eller en absolut sti"
+          },
+          "baseUrl": {
+            "name": "Tilsidesæt basis-URL",
+            "desc": "Tilsidesæt den første serverpost fra dokumentet (valgfrit)"
+          },
+          "auth": {
+            "name": "Godkendelse",
+            "desc": "Indsæt automatisk API-nøgler ved kald til denne kilde",
+            "none": "Ingen",
+            "header": "HTTP-header",
+            "query": "Forespørgselsparameter"
+          },
+          "credKey": {
+            "name": "Legitimationsnøgle"
+          },
+          "credValue": {
+            "name": "Legitimationsværdi"
+          },
+          "actions": {
+            "name": "Handlinger",
+            "reloadTools": "Genindlæs værktøjer",
+            "refetchTooltip": "Hent specifikation fra URL igen",
+            "deleteTooltip": "Slet kilde"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Definer lokale kommandolinjeværktøjer, som agenter kan udføre. Brug skabeloner som {{param}} til dynamiske argumenter.",
+        "addBtn": "Tilføj CLI-værktøj",
+        "presetsBtn": "Tilføj fra forudindstillinger",
+        "noTools": "Ingen CLI-værktøjer konfigureret endnu.",
+        "tableHeaders": {
+          "name": "Navn",
+          "command": "Kommando",
+          "parameters": "Parametre",
+          "status": "Status",
+          "actions": "Handlinger"
+        },
+        "unnamed": "Unavngivet CLI-værktøj",
+        "paramCount": "{{count}} parameter",
+        "paramCount_plural": "{{count}} parametre",
+        "noParams": "Ingen",
+        "statusEnabled": "Aktiveret",
+        "statusDisabled": "Deaktiveret",
+        "actions": {
+          "edit": "Rediger",
+          "disable": "Deaktiver",
+          "enable": "Aktiver",
+          "delete": "Slet"
+        },
+        "notices": {
+          "removed": "CLI-værktøj fjernet"
+        },
+        "infoTitle": "💡 Om CLI-værktøjer",
+        "infoText": "CLI-værktøjer udfører shell-kommandoer lokalt. Brug {{paramName}} i argumenter til skabelonsubstitution, eller konfigurer parametre til at blive sendt som argumenter eller miljøvariabler.",
+        "modal": {
+          "defaultTitle": "CLI-værktøj",
+          "toolName": {
+            "name": "Værktøjsnavn",
+            "desc": "Identifikator brugt af agenter til at kalde dette værktøj"
+          },
+          "description": {
+            "name": "Beskrivelse",
+            "desc": "Beskriv hvad dette værktøj gør for AI'en"
+          },
+          "enabled": {
+            "name": "Aktiveret",
+            "desc": "Aktiver for at tillade agenter at bruge dette værktøj"
+          },
+          "commandConfig": "Kommandokonfiguration",
+          "command": {
+            "name": "Kommando",
+            "desc": "Den eksekverbare fil der skal køres (f.eks. node, python, bash, /sti/til/script)"
+          },
+          "args": {
+            "name": "Argumenter",
+            "desc": "Kommandoargumenter, ét pr. linje. Brug {{paramName}} til skabelonsubstitution."
+          },
+          "cwd": {
+            "name": "Arbejdsmappe",
+            "desc": "Mappe til at køre kommandoen i (valgfrit)"
+          },
+          "timeout": {
+            "name": "Timeout (ms)",
+            "desc": "Maksimal udførelsestid i millisekunder (standard: {{timeout}})"
+          },
+          "shell": {
+            "name": "Kør i shell",
+            "desc": "Udfør kommandoen via en shell (aktiverer shell-funktioner som pipes)"
+          },
+          "paramsTitle": "Parametre",
+          "paramsDesc": "Definer parametre, som AI'en kan sende til dette værktøj.",
+          "addParam": "Tilføj parameter",
+          "noParams": "Ingen parametre defineret.",
+          "paramN": "Parameter {{n}}",
+          "param": {
+            "name": "Navn",
+            "type": {
+              "name": "Type",
+              "string": "Streng",
+              "number": "Tal",
+              "boolean": "Boolesk"
+            },
+            "description": "Beskrivelse",
+            "required": "Påkrævet",
+            "insertAs": {
+              "name": "Indsæt som",
+              "desc": "Sådan sendes denne parameter til kommandoen",
+              "template": "Skabelon ({{name}})",
+              "arg": "Tilføj som argument",
+              "env": "Miljøvariabel"
+            },
+            "envName": {
+              "name": "Navn på miljøvariabel",
+              "desc": "Tilsidesæt miljøvariabelnavnet (standard: parameternavn med store bogstaver)"
+            }
+          },
+          "envTitle": "Miljøvariabler",
+          "envDesc": "Statiske miljøvariabler der skal angives ved kørsel af kommandoen.",
+          "envVars": {
+            "name": "Miljøvariabler",
+            "desc": "Format: NØGLE=værdi, én pr. linje"
+          }
+        },
+        "presets": {
+          "title": "Tilføj CLI-værktøj fra forudindstillinger",
+          "desc": "Vælg en forudindstilling for hurtigt at tilføje et forudkonfigureret CLI-værktøj. Du kan tilpasse det efter tilføjelse.",
+          "addBtn": "Tilføj",
+          "addedBtn": "Tilføjet",
+          "closeBtn": "Luk",
+          "notices": {
+            "added": "Tilføjede \"{{name}}\" - aktiver det i CLI-værktøjslisten"
+          },
+          "categories": {
+            "file": "Filhandlinger",
+            "search": "Søgning",
+            "network": "Netværk",
+            "code": "Kodeudførelse",
+            "data": "Databehandling",
+            "system": "Systemoplysninger",
+            "apps": "macOS-apps og skrivebord"
+          },
+          "names": {
+            "preset-cat": "Læs fil (cat)",
+            "preset-ls": "List mappe (ls)",
+            "preset-find": "Find filer (find)",
+            "preset-grep": "Søg tekst (grep)",
+            "preset-ripgrep": "Hurtig søgning (rg)",
+            "preset-curl": "HTTP-anmodning (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Kør Python-kode",
+            "preset-node": "Kør JavaScript (Node)",
+            "preset-bash": "Kør shell-script",
+            "preset-jq": "JSON-processor (jq)",
+            "preset-wc": "Ordtælling (wc)",
+            "preset-date": "Aktuel dato/tid",
+            "preset-pwd": "Aktuel mappe (pwd)",
+            "preset-whoami": "Aktuel bruger",
+            "preset-uname": "Systeminfo (uname)",
+            "preset-open": "Åbn fil/URL (open)",
+            "preset-open-app": "Start app (open -a)",
+            "preset-safari": "Åbn i Safari",
+            "preset-chrome": "Åbn i Chrome",
+            "preset-firefox": "Åbn i Firefox",
+            "preset-pbcopy": "Kopiér til udklipsholder",
+            "preset-pbpaste": "Indsæt fra udklipsholder",
+            "preset-say": "Tekst-til-tale (say)",
+            "preset-osascript": "AppleScript-udførelse",
+            "preset-notify": "Skrivebordsnotifikation",
+            "preset-screencapture": "Skærmbillede",
+            "preset-applescript-list-apps": "List kørende apps"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG-konfiguration",
+      "desc": "Konfigurer hentningsforstærket generering og websøgning for at forbedre AI-svar.",
+      "subTabs": {
+        "overview": "Oversigt",
+        "chunking": "Opdeling",
+        "search": "Søgning",
+        "filters": "Filtre",
+        "advanced": "Avanceret",
+        "websearch": "Websøgning"
+      },
+      "general": {
+        "title": "Generelle indstillinger",
+        "enableRag": {
+          "name": "Aktiver RAG",
+          "desc": "Aktiver hentningsforstærket generering for forbedret kontekst"
+        },
+        "vectorStore": {
+          "name": "Vektorlager",
+          "desc": "Vektordatabase til lagring af embeddings",
+          "memory": "I hukommelsen",
+          "disk": "Diskbaseret"
+        },
+        "embeddingModel": {
+          "name": "Embeddingmodel",
+          "desc": "Model til brug ved generering af embeddings"
+        },
+        "embedChanged": {
+          "name": "Indlejr ændrede filer automatisk",
+          "desc": "Genindlejr automatisk filer, når de ændres"
+        }
+      },
+      "indexMgmt": {
+        "title": "Indeksadministration",
+        "desc": "Administrer dit RAG-indeks og se statistik om indekseret indhold.",
+        "statsTitle": "Indeksstatistik",
+        "stats": {
+          "totalChunks": "Samlede fragmenter",
+          "uniqueFiles": "Unikke filer",
+          "totalChars": "Samlede tegn",
+          "avgChunkSize": "Gennemsnitlig fragmentstørrelse"
+        },
+        "empty": "Indeks er tomt. Vælg genopbyg indeks for at starte indeksering.",
+        "error": "⚠️ kan ikke indlæse indeksstatistik",
+        "rebuild": {
+          "name": "Genopbyg indeks",
+          "desc": "Genindekser alle filer i din vault. Dette kan tage et stykke tid.",
+          "btn": "Genopbyg",
+          "rebuilding": "Genopbygger..."
+        },
+        "refresh": {
+          "name": "Opdater indeks",
+          "desc": "Opdater indekset med eventuelle ændrede filer siden sidste indeksering.",
+          "btn": "Opdater",
+          "refreshing": "Opdaterer..."
+        },
+        "clear": {
+          "name": "Ryd indeks",
+          "desc": "Fjern alle indekserede data. Du skal genopbygge indekset.",
+          "btn": "Ryd",
+          "clearing": "Rydder..."
+        },
+        "notices": {
+          "rebuilt": "Indeks genopbygget",
+          "rebuildFailed": "Kunne ikke genopbygge indeks",
+          "refreshed": "Indeks opdateret",
+          "refreshFailed": "Kunne ikke opdatere indeks",
+          "cleared": "Indeks ryddet",
+          "clearFailed": "Kunne ikke rydde indeks"
+        }
+      },
+      "chunking": {
+        "title": "Opdelingsindstillinger",
+        "strategy": {
+          "name": "Opdelingsstrategi",
+          "desc": "Strategi til opdeling af dokumenter i fragmenter",
+          "recursive": "Rekursiv (intelligent)",
+          "fixed": "Fast størrelse",
+          "sentence": "Efter sætning",
+          "paragraph": "Efter afsnit"
+        },
+        "chunkSize": {
+          "name": "Fragmentstørrelse",
+          "desc": "Antal tegn pr. fragment (500-2000 anbefales)"
+        },
+        "chunkOverlap": {
+          "name": "Fragmentoverlap",
+          "desc": "Antal overlappende tegn mellem fragmenter"
+        },
+        "minChunkSize": {
+          "name": "Minimum fragmentstørrelse",
+          "desc": "Minimum fragmentstørrelse der skal oprettes"
+        },
+        "maxTokens": {
+          "name": "Maks. tokens pr. fragment",
+          "desc": "Maksimalt antal tokens tilladt pr. fragment"
+        }
+      },
+      "search": {
+        "title": "Søgeindstillinger",
+        "searchType": {
+          "name": "Søgetype",
+          "desc": "Type af lighedssøgning der skal udføres",
+          "similarity": "Lighed"
+        },
+        "topK": {
+          "name": "Top K-resultater",
+          "desc": "Antal mest relevante fragmenter der skal hentes (1-20)"
+        },
+        "threshold": {
+          "name": "Lighedstærskel",
+          "desc": "Minimum lighedsscore for at inkludere resultater (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Relevansscorevægt",
+          "desc": "Vægt til relevansscoring (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Kontekstvinduegrænse",
+          "desc": "Maksimalt antal tokens til hentet kontekst"
+        }
+      },
+      "filters": {
+        "title": "Filfiltre",
+        "excludeFolders": {
+          "name": "Ekskludér mapper",
+          "desc": "Mapper der skal ekskluderes fra indeksering (kommasepareret)"
+        },
+        "includeTypes": {
+          "name": "Inkludér filtyper",
+          "desc": "Filtyper der skal inkluderes (tom = alle typer)"
+        },
+        "excludeTypes": {
+          "name": "Ekskludér filtyper",
+          "desc": "Filtyper der skal ekskluderes fra indeksering"
+        },
+        "filterByTag": {
+          "name": "Filtrer efter tag",
+          "desc": "Indekser kun filer med disse tags (tom = alle filer)"
+        },
+        "excludeByTag": {
+          "name": "Ekskludér efter tag",
+          "desc": "Ekskludér filer med disse tags fra indeksering"
+        }
+      },
+      "advanced": {
+        "title": "Avancerede indstillinger",
+        "batchSize": {
+          "name": "Embedding-batchstørrelse",
+          "desc": "Antal fragmenter der skal indlejres parallelt"
+        }
+      },
+      "grading": {
+        "title": "Vurderingsindstillinger",
+        "desc": "Vurdér hentede fragmenter for relevans inden afsendelse til LLM. Dette hjælper med at filtrere lavkvalitetsresultater.",
+        "enableGrading": {
+          "name": "Aktiver vurderingstærskel",
+          "desc": "Filtrer fragmenter under kvalitetstærsklerne"
+        },
+        "graderSource": {
+          "name": "Vurderingsmodelkilde",
+          "desc": "Hvorfra vurderingsmodellen hentes",
+          "chat": "Chatmodel",
+          "custom": "Brugerdefineret model"
+        },
+        "graderModel": {
+          "name": "Vurderingsmodel",
+          "desc": "Specifik model til brug ved vurdering"
+        },
+        "parallel": {
+          "name": "Parallel behandling",
+          "desc": "Antal fragmenter der skal vurderes parallelt"
+        },
+        "minRelevance": {
+          "name": "Min. relevansscore",
+          "desc": "Minimum relevansscore (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Min. nøjagtighedsscore",
+          "desc": "Minimum nøjagtighedsscore (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Min. støttekvalitetsscore",
+          "desc": "Minimum støttekvalitetsscore (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Websøgningskonfiguration",
+      "desc": "Konfigurer websøgningsfunktionalitet for at forbedre AI-svar med opdateret information fra internettet.",
+      "generalBehavior": "Generel adfærd",
+      "providerSelection": "Udbydervalg",
+      "localeFilters": "Lokalitet og filtre",
+      "apiCredentials": "API-legitimationsoplysninger og endpoints",
+      "enabled": {
+        "name": "Aktiver websøgning",
+        "desc": "Tillad AI at søge på nettet efter aktuel information"
+      },
+      "autoTrigger": {
+        "name": "Udløs søgning automatisk",
+        "desc": "Udløs automatisk websøgning, når forespørgslen kræver aktuel information (f.eks. nyheder, priser, nylige begivenheder)"
+      },
+      "maxResults": {
+        "name": "Maksimale resultater",
+        "desc": "Maksimalt antal søgeresultater der skal returneres"
+      },
+      "timeRange": {
+        "name": "Resultaters aktualitet",
+        "desc": "Begræns resultater til et tidsinterval understøttet af udbydere (Google, SearXNG, Mojeek)",
+        "any": "Enhver tid (standard)",
+        "h": "Seneste time",
+        "d": "Seneste 24 timer",
+        "w": "Seneste uge",
+        "m": "Seneste måned",
+        "y": "Seneste år"
+      },
+      "provider": {
+        "name": "Søgeudbyder",
+        "desc": "Vælg mellem privatlivsvenlige scrapere eller API-baserede søgemaskiner"
+      },
+      "searchLanguage": {
+        "name": "Sprogkode",
+        "desc": "ISO-sprogkode (f.eks. en, fr, zh-CN) videresendt til udbydere, der understøtter lokalisering"
+      },
+      "searchCountry": {
+        "name": "Lande-/markedskode",
+        "desc": "To-bogstavs landekode (f.eks. US, DE) brugt af Bing, DuckDuckGo, Brave og andre"
+      },
+      "includeDomains": {
+        "name": "Inkludér kun disse domæner",
+        "desc": "Kommasepareret liste brugt af SerpAPI og Brave til at begrænse resultater til specifikke sider"
+      },
+      "excludeDomains": {
+        "name": "Ekskludér domæner",
+        "desc": "Kommaseparerede domæner der skal filtreres efter hentning af resultater"
+      },
+      "apiKey": {
+        "name": "Standard API-nøgle",
+        "desc": "Delt API-nøgle brugt af Google, Bing, SerpAPI, Tavily eller Brave, når udbyderspecifikke nøgler ikke er angivet"
+      },
+      "googleCseId": {
+        "name": "Google brugerdefineret søgemaskine-ID",
+        "desc": "Krævet med en Google API-nøgle ved brug af Google-udbyderen"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI-endpoint",
+        "desc": "Tilsidesæt SerpAPI-basis-URL'en, hvis du selv hoster"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API-nøgle",
+        "desc": "Tilsidesætter standardnøglen ved brug af Tavily-udbyderen"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG-endpoint",
+        "desc": "Basis-URL for din SearXNG-instans (skal returnere JSON)"
+      },
+      "braveApiKey": {
+        "name": "Brave API-nøgle",
+        "desc": "Brug et Brave Search API-abonnementstoken, når det er valgt som udbyder"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API-nøgle (valgfrit)",
+        "desc": "Tilføj et bearer-token, hvis din Qwant-plan udsteder et"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API-nøgle",
+        "desc": "Krævet til Mojeek-udbyderen"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (ingen nøgle krævet)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (HTML-scraping)",
+        "yandex": "Yandex (HTML-scraping)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Hurtighandlinger",
+      "desc": "Konfigurer AI-drevne hurtighandlinger, der vises i editorens kontekstmenu, når tekst er valgt.",
+      "actionPrefix": {
+        "name": "Handlingspræfiks",
+        "desc": "Præfiks (emoji eller tekst) der vises før alle hurtighandlinger i kontekstmenuen",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} handling konfigureret ({{enabled}} aktiveret)",
+      "count_plural": "{{count}} handlinger konfigureret ({{enabled}} aktiveret)",
+      "addBtn": "+ tilføj hurtighandling",
+      "empty": "Ingen hurtighandlinger konfigureret. Vælg tilføj hurtighandling for at komme i gang.",
+      "tableHeaders": {
+        "action": "Handling",
+        "type": "Type",
+        "model": "Model",
+        "promptPreview": "Promptforhåndsvisning",
+        "actions": "Handlinger"
+      },
+      "defaultModel": "Standard",
+      "editBtn": "Rediger",
+      "deleteBtn": "slet",
+      "confirm": {
+        "delete": "Slet hurtighandling \"{{name}}\"?"
+      },
+      "usageInfo": {
+        "title": "Brug",
+        "step1": "Vælg tekst i en vilkårlig notitie",
+        "step2": "Højreklik for at åbne kontekstmenuen",
+        "step3": "Vælg en hurtighandling fra menuen",
+        "step4Replace": "Handlinger markeret som \"erstat\" vil erstatte den valgte tekst med AI-resultatet",
+        "step4Explain": "Handlinger markeret som \"forklar\" vil vise resultatet i en modal dialogboks"
+      },
+      "edit": {
+        "title": "Rediger hurtighandling",
+        "name": {
+          "name": "Navn",
+          "desc": "Visningsnavn for denne handling i kontekstmenuen"
+        },
+        "actionType": {
+          "name": "Handlingstype",
+          "desc": "Sådan håndteres AI-svaret",
+          "replace": "Erstat valgt tekst",
+          "explain": "Vis i modal"
+        },
+        "model": {
+          "name": "Model",
+          "desc": "Sprogmodel til brug for denne handling (lad være tom for at bruge standard)",
+          "default": "Brug standardmodel"
+        },
+        "promptTemplate": {
+          "name": "Promptskabelon",
+          "desc": "Instruktioner sendt til AI'en. Den valgte tekst tilføjes automatisk."
+        },
+        "cancel": "Annullér",
+        "save": "Gem"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Gør tekst længere",
+          "prompt": "Udvid og uddyb følgende tekst, gør den mere detaljeret og fyldestgørende, mens den originale betydning og tone bevares. Returner kun den udvidede tekst uden yderligere kommentarer:\n\n"
+        },
+        "summarize": {
+          "name": "Opsummer tekst",
+          "prompt": "Giv et kortfattet resume af følgende tekst. Returner kun resuméet uden yderligere kommentarer:\n\n"
+        },
+        "improve-writing": {
+          "name": "Forbedr skrivning",
+          "prompt": "Forbedre skrivekvaliteten, klarheden og stilen i følgende tekst. Returner kun den forbedrede tekst uden yderligere kommentarer:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Ret grammatik",
+          "prompt": "Ret eventuelle grammatik-, stavnings- og tegnsætningsfejl i følgende tekst. Returner kun den rettede tekst uden yderligere kommentarer:\n\n"
+        },
+        "explain": {
+          "name": "Forklar tekst",
+          "prompt": "Forklar følgende tekst med enkle ord:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Token-forbrug",
+      "desc": "Spor tokenforbrug på tværs af udbydere og modeller. Data akkumuleres på tværs af alle samtaler.",
+      "notAvailable": "Token-forbrugssporing er ikke tilgængelig.",
+      "ranges": {
+        "today": "I dag",
+        "week": "Denne uge",
+        "month": "Denne måned",
+        "all": "Hele tiden"
+      },
+      "stats": {
+        "totalTokens": "Samlede tokens",
+        "apiCalls": "API-kald",
+        "promptTokens": "Prompttokens",
+        "completion": "Afslutning",
+        "tokensIn": "tokens ind",
+        "tokensOut": "tokens ud"
+      },
+      "byProvider": "Efter udbyder",
+      "byModel": "Efter model",
+      "noData": "Ingen brugsdata endnu.",
+      "recentActivity": "Nylig aktivitet",
+      "last10": "seneste 10",
+      "noRecent": "Ingen nylig aktivitet.",
+      "tableHeaders": {
+        "provider": "Udbyder",
+        "model": "Model",
+        "prompt": "Prompt",
+        "completion": "Afslutning",
+        "total": "Total",
+        "calls": "Kald",
+        "time": "Tid",
+        "in": "Ind",
+        "out": "Ud"
+      },
+      "clearBtn": "Ryd alle brugsdata",
+      "confirm": {
+        "clear": "Ryd alle token-forbrugsposter? Dette kan ikke fortrydes."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Skriv din besked... (Enter for at sende, Shift+Enter for ny linje)",
+    "conversations": "Samtaler",
+    "toggleConversationsTitle": "Skift samtaleliste",
+    "currentConversation": "Aktuel samtale",
+    "new": "Ny",
+    "settings": "Indstillinger",
+    "openSettingsTitle": "Åbn plugin-indstillinger",
+    "mode": "Tilstand",
+    "prompt": "Prompt",
+    "agent": "Agent",
+    "modeOptions": {
+      "chat": "Chat",
+      "agent": "Agent"
+    },
+    "noSystemPrompt": "Ingen systemprompt",
+    "noAgentsAvailable": "Ingen agenter tilgængelige",
+    "sendHintPrefix": "Tryk ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " for at sende",
+    "sendAriaLabel": "Send besked",
+    "stop": " Stop",
+    "addReference": "Tilføj reference",
+    "addReferenceTooltip": "Tilføj fil- eller mappereference (@)",
+    "emptyHeading": "Start en samtale",
+    "emptySubtext": "Skriv en besked nedenfor for at komme i gang, eller vælg en samtale fra historikken.",
+    "noAgentConfig": "Ingen agenter konfigureret",
+    "selectAgent": "Vælg en agent…",
+    "notices": {
+      "stopping": "Stopper generering...",
+      "ragInitError": "RAG-initialiseringsfejl: {{message}}",
+      "modelsRefreshed": "Modeller opdateret",
+      "modelsRefreshFailed": "Kunne ikke opdatere modeller: {{message}}",
+      "waitForResponse": "Vent venligst på at det aktuelle svar er færdigt",
+      "configureProvider": "Konfigurér venligst en LLM-udbyder i indstillingerne først",
+      "selectModel": "Vælg en model",
+      "noValidProvider": "Ingen gyldig udbyderindstilling fundet for denne model",
+      "chatError": "Chatfejl: {{message}}",
+      "noMessageToRegenerate": "Kan ikke finde besked til regenerering",
+      "regenerateOnlyLatest": "Kun det seneste svar kan regenereres nu",
+      "regenerateNoUserMsg": "Kan ikke finde brugerbesked til regenerering fra",
+      "regenerated": "Svar regenereret",
+      "regenerateFailed": "Regenerering mislykkedes: {{message}}",
+      "noteCreated": "Notitie oprettet: {{name}}",
+      "noteCreateFailed": "Kunne ikke oprette notitie: {{message}}",
+      "messageInserted": "Besked indsat i: {{path}}",
+      "messageInsertFailed": "Kunne ikke indsætte besked: {{message}}",
+      "noAgents": "Ingen agenter tilgængelige. Konfigurér agenter i Indstillinger → Agenter.",
+      "ragDisabled": "RAG er deaktiveret i indstillinger. Aktivér det under indstillinger → chatfunktioner → RAG.",
+      "webSearchDisabled": "Websøgning er deaktiveret i indstillinger. Aktivér det under indstillinger → chatfunktioner → websøgning.",
+      "noFilesInVault": "Ingen filer fundet i vault",
+      "attached": "Vedhæftet: {{name}}",
+      "attachedImages": "Vedhæftede {{count}} billede(r)",
+      "referencesAdded": "Tilføjede {{count}} reference(r)",
+      "fileNotFound": "Fil ikke fundet: {{path}}",
+      "agentConfigApplied": "Konfiguration anvendt for agent: {{name}}",
+      "waitForComplete": "Vent venligst på at det aktuelle svar er færdigt",
+      "chatServiceFallback": "ChatService ikke konfigureret. Bruger ChatView-reserveløsning.",
+      "noModelSelected": "Ingen model valgt",
+      "noProviderConfig": "Ingen udbyderindstilling fundet",
+      "generationStopped": "Generering stoppet",
+      "noResponseToRegenerate": "Intet svar at regenerere",
+      "agentNotFound": "Agent ikke fundet",
+      "unableToLoadRag": "Kan ikke indlæse RAG-statistik.",
+      "referenced": "Refereret: {{name}}"
+    },
+    "status": {
+      "available": "Tilgængelig",
+      "unavailable": "Ikke tilgængelig",
+      "disabled": "Deaktiveret",
+      "on": "Til · {{detail}}",
+      "off": "Fra"
+    },
+    "ragStats": {
+      "title": "RAG-statistik",
+      "totalChunks": "📊 samlede fragmenter:",
+      "filesIndexed": "📁 filer indekseret:",
+      "totalSize": "💾 samlet størrelse:",
+      "avgChunks": "📈 Gns. fragmenter/fil:",
+      "indexedFiles": "📄 indekserede filer",
+      "noFilesYet": "⚠️ ingen filer er indekseret endnu.",
+      "howToBuild": "Sådan bygges RAG-indekset:",
+      "step1": "Gå til Indstillinger → RAG",
+      "step2": "Aktiver RAG",
+      "step3": "Vælg indekser vault",
+      "close": "Luk",
+      "retrieved": "📚 hentet fra {{count}} dokument",
+      "retrieved_plural": "📚 hentet fra {{count}} dokumenter"
+    },
+    "ragTooltip": {
+      "status": "RAG-indeksstatus:",
+      "totalChunks": "📊 Samlede fragmenter: {{count}}",
+      "filesIndexed": "📁 Filer indekseret: {{count}}",
+      "totalSize": "💾 Samlet størrelse: {{size}} KB",
+      "indexedFiles": "📄 Indekserede filer:",
+      "andMore": "  ... og {{count}} mere",
+      "noFilesYet": "⚠️ ingen filer indekseret endnu.",
+      "goToSettings": "Gå til Indstillinger → RAG for at bygge indekset.",
+      "ragOff": "ℹ️ RAG er i øjeblikket slået fra for denne chat."
+    },
+    "agentSummary": {
+      "model": "Model",
+      "temp": "Temp",
+      "max": "Maks",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Værktøjer",
+      "memory": "Hukommelse",
+      "none": "Ingen",
+      "configuration": "{{name}}-konfiguration",
+      "modelFixed": "{{name}} · Fast",
+      "modelDefault": "{{name}} · Standard",
+      "modelChatView": "{{name}} · Chatvisning",
+      "customModel": "Brugerdefineret model",
+      "notSet": "Ikke angivet",
+      "auto": "Automatisk",
+      "on": "Til",
+      "off": "Fra",
+      "shortTerm": "Kortsigtet",
+      "longTerm": "Langsigtet",
+      "disabledMemory": "Deaktiveret",
+      "builtIn": "{{count}} indbygget",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Webresultater",
+      "attachments": "Vedhæftninger",
+      "references": "Referencer",
+      "ragSources": "RAG-kilder",
+      "reasoning": "Ræsonnering",
+      "copy": "Kopiér",
+      "copied": "Besked kopieret",
+      "copyFailed": "Kunne ikke kopiere besked",
+      "tokenUsage": "Token-forbrug",
+      "tokenUsagePrompt": "Prompt",
+      "tokenUsageCompletion": "Afslutning",
+      "tokenUsageTotal": "Total",
+      "save": "Gem",
+      "insertToNotes": "Indsæt i notitier",
+      "regenerate": "Regenerer"
+    },
+    "streaming": {
+      "thinking": "Tænker..."
+    },
+    "toolCall": {
+      "thinking": "Tænker",
+      "executionProcess": "Udførelsesproces",
+      "input": "Input",
+      "output": "Output",
+      "running": "Kører..."
+    },
+    "addPicture": "Tilføj billede",
+    "addPictureTooltip": "Vedhæft et billede til din besked",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Brug indekserede notitier som kontekst",
+    "webSearchLabel": "Websøgning",
+    "webSearchTooltipLabel": "Søg på internettet efter behov",
+    "imageUnavailable": "Billedvedhæftning er ikke tilgængelig for den aktuelle model.",
+    "newChat": "Ny chat",
+    "newConversation": "Ny samtale",
+    "searchConversations": "Søg samtaler...",
+    "header": {
+      "model": "Model",
+      "advancedParams": "Avancerede parametre",
+      "temperature": "Temperatur",
+      "maxTokens": "Maks. tokens",
+      "topP": "Top P",
+      "freqPenalty": "Frekvenspenalty",
+      "presPenalty": "Tilstedeværelsespenalty",
+      "agentConfig": "Agentkonfiguration",
+      "modelsCount": "Modeller: {{count}}",
+      "tokensCount": "Tokens: {{count}}",
+      "noModels": "Ingen modeller tilgængelige"
+    },
+    "temperature": {
+      "precise": "0 (Præcis)",
+      "balanced": "1 (Afbalanceret)",
+      "creative": "2 (Kreativ)"
+    },
+    "modals": {
+      "image": {
+        "title": "Vedhæft billeder",
+        "searchPlaceholder": "Søg billeder...",
+        "selectAll": "Vælg alle",
+        "selectNone": "Fravælg alle",
+        "addSelected": "Tilføj valgte",
+        "noResults": "Ingen matchende billeder fundet."
+      },
+      "reference": {
+        "title": "Tilføj referencer",
+        "searchPlaceholder": "Søg filer og mapper...",
+        "selectAll": "Vælg alle",
+        "selectNone": "Fravælg alle",
+        "addSelected": "Tilføj valgte",
+        "noResults": "Ingen matchende filer eller mapper fundet."
+      },
+      "insertNote": {
+        "title": "Indsæt i notitie",
+        "searchPlaceholder": "Søg notitier...",
+        "insert": "Indsæt i valgt notitie",
+        "createNew": "Opret ny notitie",
+        "noResults": "Ingen matchende notitier fundet."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Annullér",
+      "confirm": "Bekræft"
+    },
+    "agentEdit": {
+      "title": "Rediger agent",
+      "icon": {
+        "name": "Ikon",
+        "desc": "Emoji eller tegn til at repræsentere denne agent"
+      },
+      "description": {
+        "name": "Beskrivelse",
+        "desc": "Kort beskrivelse af agenten"
+      },
+      "modelStrategy": {
+        "name": "Modelstrategi",
+        "options": {
+          "default": "Brug standardmodel (fra indstillinger)",
+          "chatView": "Brug chatvisningsmodel",
+          "fixed": "Fast model"
+        },
+        "noModels": "Ingen cachelagrede modeller",
+        "desc": "Vælg, hvordan agenten vil vælge sin model"
+      },
+      "systemPrompt": {
+        "createNew": "➕ opret ny prompt…",
+        "promptName": {
+          "name": "Promptnavn",
+          "desc": "Visningsnavn for den nye systemprompt"
+        },
+        "promptContent": {
+          "name": "Promptindhold",
+          "desc": "Indhold til den nye systemprompt"
+        },
+        "name": "Systemprompt",
+        "desc": "Vælg fra eksisterende prompter, eller definer en ny til denne agent."
+      },
+      "capabilities": "Funktioner",
+      "memory": {
+        "title": "Hukommelse",
+        "notice": "Agenthukommelse er midlertidigt utilgængelig, mens vi itererer på oplevelsen."
+      },
+      "tools": {
+        "title": "Værktøjer",
+        "builtIn": {
+          "name": "Indbyggede værktøjer",
+          "desc": "Vælg hvilke indbyggede værktøjer denne agent kan bruge"
+        },
+        "cli": {
+          "name": "CLI-værktøjer",
+          "desc": "Giv adgang til alle aktiverede CLI-værktøjer, eller vælg individuelt nedenfor",
+          "noTools": "Ingen CLI-værktøjer konfigureret. Tilføj og aktiver værktøjer under Indstillinger → Værktøjer → CLI for at bruge dem her."
+        }
+      },
+      "mcp": {
+        "title": "MCP-adgang",
+        "noServers": "Ingen MCP-servere konfigureret. Tilføj servere under Indstillinger → MCP for at låse disse muligheder op.",
+        "toolsCached": "{{count}} cachelagret værktøj",
+        "toolsCached_plural": "{{count}} cachelagrede værktøjer",
+        "noToolsCached": "Ingen cachelagrede værktøjer endnu. Aktivér fuld adgang, eller opdater cachen.",
+        "showTools": "Vis værktøjer",
+        "hideTools": "Skjul værktøjer",
+        "selected": "Valgt",
+        "notSelected": "Ikke valgt",
+        "noToolsAvailable": "Ingen værktøjer tilgængelige fra denne server endnu."
+      },
+      "notices": {
+        "promptRequired": "Angiv venligst et navn og indhold til den nye systemprompt."
+      },
+      "name": {
+        "label": "Navn",
+        "desc": "Visningsnavn for denne agent"
+      },
+      "fixedModel": {
+        "name": "Fast model",
+        "desc": "Vælg en specifik model til denne agent.",
+        "descNoModels": "Ingen cachelagrede modeller tilgængelige. Opdater modeller i modellfanen."
+      },
+      "temperature": {
+        "label": "Temperatur",
+        "desc": "Styrer tilfældighed (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Maks. tokens",
+        "desc": "Maksimalt antal tokens der skal genereres"
+      },
+      "contextWindow": {
+        "label": "Kontekstvindue",
+        "desc": "Antal tidligere beskeder der skal inkluderes i konteksten"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Aktiver hentningsforstærket generering"
+      },
+      "webSearch": {
+        "name": "Websøgning",
+        "desc": "Aktiver websøgningsfunktioner"
+      },
+      "maxSteps": {
+        "name": "Maks. værktøjstrin",
+        "desc": "Maksimalt antal trin for værktøjskald pr. agenttur"
+      }
+    },
+    "provider": {
+      "title": "Udbyderindstillinger",
+      "selectProvider": {
+        "name": "Udbyder",
+        "desc": "Vælg LLM-udbydertypen",
+        "placeholder": "-- Vælg udbyder --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (lokal)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Brugerdefineret (OpenAI-kompatibel)"
+      },
+      "modelFilter": {
+        "name": "Modelfilter",
+        "desc": "Valgfrit regex-mønster til begrænsning af tilgængelige modeller"
+      },
+      "resourceGroup": {
+        "name": "Ressourcegruppe",
+        "desc": "Valgfri SAP AI Core-ressourcegruppe"
+      },
+      "serviceKey": {
+        "name": "Servicenøgle",
+        "desc": "SAP AI Core-servicenøgle (JSON-streng)"
+      },
+      "baseUrl": {
+        "name": "Basis-URL",
+        "ollamaDesc": "Ollama-server-URL",
+        "customDesc": "OpenAI-kompatibelt API-endpoint (påkrævet)",
+        "optionalDesc": "Brugerdefineret API-endpoint (valgfrit)"
+      },
+      "manageModels": {
+        "name": "Administrer modeller",
+        "desc": "Hent nye modeller eller opdater eksisterende fra Ollama-registret.",
+        "btn": "⏬ Hent Ollama-model"
+      },
+      "apiKey": {
+        "name": "API-nøgle",
+        "desc": "Godkendelsesnøgle for den valgte udbyder"
+      },
+      "cancel": "Annullér",
+      "save": "Gem",
+      "validation": {
+        "selectProvider": "Vælg venligst en udbydertype",
+        "apiKeyTooLong": "API-nøglen er for lang. Maksimal længde er 500 tegn.",
+        "invalidUrl": "Ugyldigt basis-URL-format. Angiv venligst en gyldig URL (f.eks. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP-inspektor",
+      "desc": "Inspicér og fejlfind Model Context Protocol (MCP)-serverforbindelser og -værktøjer.",
+      "tabs": {
+        "connections": "Forbindelser",
+        "tools": "Værktøjer",
+        "logs": "Logger"
+      },
+      "refreshBtn": "🔄 opdater",
+      "connections": {
+        "title": "MCP-serverforbindelser",
+        "noServers": "Ingen MCP-servere konfigureret.",
+        "headers": {
+          "server": "Servernavn",
+          "status": "Status",
+          "tools": "Tilgængelige værktøjer",
+          "actions": "Handlinger"
+        },
+        "statusDisabled": "Deaktiveret",
+        "statusConnected": "● forbundet",
+        "statusDisconnected": "○ afbrudt",
+        "toolsLive": "{{count}} værktøj",
+        "toolsLive_plural": "{{count}} værktøjer",
+        "toolsCached": "{{count}} værktøj (cachelagret)",
+        "toolsCached_plural": "{{count}} værktøjer (cachelagret)",
+        "noTools": "0 værktøjer",
+        "connectBtn": "Opret forbindelse",
+        "disconnectBtn": "Afbryd forbindelse",
+        "connecting": "Opretter forbindelse...",
+        "disconnecting": "Afbryder forbindelse...",
+        "notices": {
+          "disconnected": "Afbrudt fra {{name}}",
+          "enableFirst": "Aktiver serveren i indstillingerne inden tilslutning",
+          "connected": "Forbundet til {{name}}",
+          "failedDisconnect": "Kunne ikke afbryde forbindelsen til {{name}}: {{message}}",
+          "failedConnect": "Kunne ikke oprette forbindelse til {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Tilgængelige MCP-værktøjer",
+        "noTools": "Ingen MCP-værktøjer tilgængelige. Tjek serverforbindelser.",
+        "serverPrefix": "Server: {{name}}",
+        "noToolsInServer": "Ingen værktøjer tilgængelige",
+        "headers": {
+          "tool": "Værktøjsnavn",
+          "description": "Beskrivelse",
+          "parameters": "Parametre"
+        },
+        "noDescription": "Ingen beskrivelse",
+        "noParams": "Ingen"
+      },
+      "logs": {
+        "title": "MCP-forbindelseslogs",
+        "placeholder": "MCP-forbindelseslogs vil vises her. Viser i øjeblikket pladsholder-information.",
+        "events": {
+          "connection": "• forbindelseshændelser",
+          "tools": "• registreringshændelser for værktøjer",
+          "errors": "• fejllogs",
+          "comms": "• kommunikationsdetaljer"
+        },
+        "testTitle": "Test værktøjsudførelse",
+        "selectServer": "Vælg en server...",
+        "selectTool": "Vælg et værktøj...",
+        "parametersTitle": "Parametre",
+        "selectEnum": "Vælg...",
+        "performBtn": "Udfør værktøj",
+        "clearBtn": "Ryd resultater",
+        "executing": "Udfører...",
+        "success": "✅ udførelse lykkedes",
+        "failed": "❌ udførelse mislykkedes",
+        "errorTitle": "❌ udførelsesfejl",
+        "errorLabel": "Fejl: {{message}}",
+        "notices": {
+          "success": "Værktøj udført",
+          "failed": "Udførelse af værktøj mislykkedes",
+          "error": "Udførelsesfejl: {{message}}",
+          "requiredMissing": "Påkrævet parameter mangler: {{name}}",
+          "invalidNumber": "Ugyldigt tal for parameter: {{name}}",
+          "invalidJson": "Ugyldig JSON for parameter: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Ingen MCP-servere konfigureret",
+        "testing": "🧪 Tester {{count}} MCP-serverforbindelser...",
+        "allSuccess": "✅ alle {{count}} mcp-servere forbundet!",
+        "partial": "⚠️ {{success}} forbundet, {{failed}} mislykkedes"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Rediger MCP-server",
+      "titleAdd": "Tilføj MCP-server",
+      "serverName": {
+        "name": "Servernavn",
+        "desc": "Brugervenligt navn vist i hele plugin'et"
+      },
+      "connectionMode": {
+        "name": "Forbindelsestilstand",
+        "desc": "Vælg, om der skal oprettes forbindelse automatisk eller kun, når det udløses manuelt",
+        "auto": "Automatisk forbindelse, når chat åbnes",
+        "manual": "Manuel forbindelse"
+      },
+      "command": {
+        "name": "Kommando",
+        "desc": "Eksekverbar fil eller script, der starter MCP-serveren"
+      },
+      "arguments": {
+        "name": "Argumenter",
+        "desc": "Komma- eller linjeseparerede argumenter (valgfrit)"
+      },
+      "envVars": {
+        "name": "Miljøvariabler",
+        "desc": "Valgfrie NØGLE=VÆRDI-par, ét pr. linje"
+      },
+      "enabled": {
+        "name": "Aktiveret",
+        "desc": "Deaktiver for at beholde serveren konfigureret uden automatisk tilslutning"
+      },
+      "cancel": "Annullér",
+      "saveEdit": "Gem ændringer",
+      "saveAdd": "Tilføj server",
+      "validation": {
+        "nameRequired": "Servernavn er påkrævet",
+        "commandRequired": "Kommando er påkrævet"
+      }
+    },
+    "ollamaManager": {
+      "title": "Administrer Ollama-modeller",
+      "serverInfo": "Serveroplysninger",
+      "checkingServer": "Kontrollerer server...",
+      "serverOnline": "✅ Server online",
+      "versionLabel": " | Version: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Server offline",
+      "connectionError": "❌ Forbindelsesfejl",
+      "pullTitle": "Hent ny model",
+      "pullHint": "Indtast et modelnavn til download fra Ollama-biblioteket (f.eks. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Modelnavn",
+        "example": "Eksempel: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Hent model",
+      "installedTitle": "Installerede modeller",
+      "refreshList": "🔄 Opdater liste",
+      "noModels": "Ingen modeller fundet. Hent en model for at komme i gang.",
+      "capabilities": "Funktioner: {{caps}}",
+      "deleteBtn": "Slet",
+      "closeBtn": "Luk",
+      "confirmDelete": {
+        "title": "Bekræft sletning",
+        "message": "Er du sikker på, at du vil slette modellen \"{{name}}\"?",
+        "cancel": "Annullér",
+        "confirm": "Slet"
+      },
+      "notices": {
+        "enterName": "Angiv venligst et modelnavn",
+        "pulling": "Henter {{name}}... Dette kan tage et stykke tid.",
+        "pullSuccess": "✅ {{name}} hentet",
+        "pullFailed": "❌ Kunne ikke hente model: {{message}}",
+        "deleted": "✅ {{name}} slettet",
+        "deleteFailed": "❌ Kunne ikke slette model: {{message}}",
+        "refreshing": "Opdaterer...",
+        "refreshSuccess": "✅ Modelliste opdateret",
+        "refreshFailed": "❌ Kunne ikke opdatere modelliste"
+      }
+    },
+    "promptEdit": {
+      "title": "Rediger systemprompt",
+      "name": {
+        "name": "Navn",
+        "desc": "Visningsnavn for denne prompt"
+      },
+      "content": {
+        "name": "Indhold",
+        "desc": "Systempromptens indhold"
+      },
+      "enabled": {
+        "name": "Aktiveret",
+        "desc": "Om denne prompt er aktiv"
+      },
+      "cancel": "Annullér",
+      "save": "Gem"
+    },
+    "prompt": {
+      "cancel": "Annullér",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Navn",
+      "create": "Opret",
+      "cancel": "Annullér"
+    },
+    "explain": {
+      "loading": "⏳ Behandler...",
+      "error": "Fejl ved gengivelse af forklaring",
+      "errorPrefix": "❌ Fejl: "
+    }
+  },
+  "notices": {
+    "noProvider": "Konfigurér venligst en LLM-udbyder i indstillingerne først",
+    "noModel": "Vælg venligst en standardmodel i indstillingerne",
+    "noValidProvider": "Ingen gyldig udbyderindstilling fundet for model: {{modelId}}",
+    "processing": "Behandler...",
+    "textUpdated": "Tekst opdateret",
+    "error": "Fejl: {{message}}"
+  }
+}

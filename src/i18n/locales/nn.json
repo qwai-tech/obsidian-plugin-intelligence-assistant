@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Generelt",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Verktøy",
+      "rag": "RAG",
+      "prompts": "Leidetekstar",
+      "agents": "Agentar",
+      "quickActions": "Hurtighandlingar",
+      "usage": "Bruk"
+    },
+    "general": {
+      "title": "Generelle innstillingar",
+      "desc": "Konfigurer generelle innstillingar for intelligensassistent-tillegget.",
+      "pluginVersion": {
+        "name": "Tilleggsversjon",
+        "desc": "Gjeldande versjon av intelligensassistent-tillegget"
+      },
+      "defaultModel": {
+        "name": "Standardmodell",
+        "desc": "Standardmodell som vert nytta til samtalar",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Standard chattmodus",
+        "desc": "Vel kva modus chattvindauget opnar med",
+        "chat": "Chattmodus",
+        "agent": "Agentmodus"
+      },
+      "conversationTitleMode": {
+        "name": "Samtaletittel-modus",
+        "desc": "Korleis samtaletitlar vert genererte",
+        "firstMessage": "Nytt første melding",
+        "autoSummary": "Generer samandrag automatisk",
+        "manual": "Manuell"
+      },
+      "conversationIcons": {
+        "name": "Samtaleikoner",
+        "desc": "Aktiver automatisk ikon-generering for samtalar"
+      },
+      "configStatus": {
+        "name": "Konfigurasjonsstatus",
+        "desc": "Samla konfigurasjonsstatus for tillegget",
+        "ok": "✅ Konfigurert ({{providers}} leverandørar, {{conversations}} samtalar)",
+        "incomplete": "⚠️ Ufullstendig – Konfigurer leverandørar og modellar"
+      }
+    },
+    "llm": {
+      "title": "LLM-konfigurasjon",
+      "desc": "Konfigurer leverandørar av språkmodellar og handter tilgjengelege modellar.",
+      "subTabs": {
+        "provider": "Leverandørar",
+        "models": "Modellar"
+      }
+    },
+    "models": {
+      "title": "Modellkonfigurasjon",
+      "desc": "Sjå og handter modellar frå alle konfigurerte leverandørar. Klikk «oppdater modellar» for å hente dei siste tilgjengelege modellane.",
+      "providerCount": "{{count}} leverandør konfigurert",
+      "providerCount_plural": "{{count}} leverandørar konfigurert",
+      "refreshAll": "🔄 oppdater alle modellar",
+      "empty": "Ingen leverandørar konfigurert enno. Legg til leverandørar i leverandørfana fyrst.",
+      "noModels": "Ingen modellar tilgjengelege. Klikk «oppdater alle modellar» eller oppdater individuelle leverandørar i leverandørfana.",
+      "noMatch": "Ingen modellar samsvarar med dei gjeldande filtrera. Juster eller fjern filtre for å sjå resultat.",
+      "modelCount": "• {{count}} modell i mellomlageret",
+      "modelCount_plural": "• {{count}} modellar i mellomlageret",
+      "matchCount": "• {{count}} samsvarar med valde filtre",
+      "matchCount_plural": "• {{count}} samsvarar med valde filtre",
+      "status": {
+        "enabled": "Aktivert",
+        "disabled": "Deaktivert"
+      },
+      "actions": {
+        "disable": "Deaktiver",
+        "enable": "Aktiver",
+        "setDefaultChat": "Set som standard chatt",
+        "defaultChat": "Standard chatt",
+        "setDefaultEmbedding": "Set som standard innbygging",
+        "defaultEmbedding": "Standard innbygging"
+      },
+      "notices": {
+        "fetching": "Hentar modellar for {{provider}}...",
+        "fetchFailed": "Klarte ikkje å oppdatere {{provider}}-modellar",
+        "refreshed": "Modellar vart oppdaterte!",
+        "refreshFailed": "Klarte ikkje å oppdatere modellar",
+        "defaultChatSet": "Standard chattmodell sett til {{name}}",
+        "defaultEmbeddingSet": "Standard innbyggingsmodell sett til {{name}}"
+      },
+      "filters": {
+        "allProviders": "Alle leverandørar",
+        "allCapabilities": "Alle eigenskapar",
+        "allStates": "Alle tilstandar",
+        "searchPlaceholder": "Søk etter namn eller ID"
+      }
+    },
+    "provider": {
+      "title": "Leverandørkonfigurasjon",
+      "securityTitle": "⚠️ Tryggleiksåtvaring",
+      "securityDesc": "API-nøklar vert lagra som klartekst i kvelvet ditt av kompatibilitetsomsyn. For å hindre utilsikta lekkasjar:",
+      "securityItem1": "Del IKKJE {{configDir}}/plugins/intelligence-assistant/data/-mappa.",
+      "securityItem2": "Legg denne mappa til .gitignore dersom du nyttar Git-synkronisering.",
+      "securityItem3": "Ver varsam når du nyttar offentlege skysynkroniseringstenester.",
+      "desc": "Handter LLM-leverandørar og API-legitimasjon. Nytt handlingskolonnen til å redigere konfigurasjonsdetaljar eller oppdatere mellomlagra modellar.",
+      "count": "{{count}} leverandør konfigurert",
+      "count_plural": "{{count}} leverandørar konfigurert",
+      "addBtn": "+ Legg til leverandør",
+      "empty": "Ingen leverandørar konfigurert. Vel «Legg til leverandør» for å kome i gang.",
+      "tableHeaders": {
+        "provider": "Leverandør",
+        "status": "Status",
+        "actions": "Handlingar"
+      },
+      "status": {
+        "ready": "Klar",
+        "needsConfig": "Treng konfigurasjon",
+        "checking": "Sjekkar...",
+        "credentialsSet": "Legitimasjon sett",
+        "serverOnline": "Tenar online",
+        "serverOffline": "Tenar offline",
+        "serverError": "Tenarfeil"
+      },
+      "guidance": {
+        "requiresCli": "Krev lokal CLI",
+        "provideServiceKey": "Oppgje tenastenøkkel",
+        "configureBaseUrl": "Konfigurer basis-URL",
+        "addApiKey": "Legg til API-nøkkel"
+      },
+      "models": {
+        "none": "Ingen modellar",
+        "count": "{{count}} modell",
+        "count_plural": "{{count}} modellar"
+      },
+      "ollama": {
+        "checkingVersion": "Sjekkar versjon...",
+        "server": {
+          "checking": "Sjekkar tenar...",
+          "online": "Tenar: online",
+          "offline": "Tenar: offline eller utilgjengeleg",
+          "error": "Tenar: tilkoblingsfeil",
+          "versionOnline": "Tenar online",
+          "versionOffline": "Tenar offline",
+          "versionError": "Tilkoblingsfeil",
+          "version": "Versjon: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Sist oppdatert: {{timeAgo}}",
+        "neverRefreshed": "Aldri oppdatert",
+        "justNow": "akkurat no",
+        "minutesAgo": "{{n}} min sidan",
+        "hoursAgo": "{{n}} t sidan",
+        "daysAgo": "{{n}} d sidan"
+      },
+      "actions": {
+        "edit": "Rediger",
+        "manageModels": "Handter modellar",
+        "refreshModels": "Oppdater modellar",
+        "refreshing": "Oppdaterer...",
+        "delete": "Slett"
+      },
+      "notices": {
+        "refreshed": "Modellar vart oppdaterte for {{provider}}.",
+        "refreshFailed": "Klarte ikkje å oppdatere modellar"
+      },
+      "confirm": {
+        "delete": "Fjern leverandøren {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "MCP-tenarhandtering",
+      "desc": "Konfigurer Model Context Protocol (MCP)-tenarar for å utvide agentfunksjonane med eksterne verktøy og datakjelder.",
+      "inspectorBtn": "🔍 Opne MCP-inspektør",
+      "testAllBtn": "🧪 test alle tilkoplingar",
+      "refreshAllBtn": "🔄 oppdater alle verktøy",
+      "addBtn": "+ Legg til MCP-tenar",
+      "empty": "Ingen MCP-tenarar konfigurert. Vel Legg til MCP-tenar for å kome i gang.",
+      "tableHeaders": {
+        "name": "Namn",
+        "command": "Kommando",
+        "arguments": "Argument",
+        "status": "Status",
+        "tools": "Verktøy",
+        "actions": "Handlingar"
+      },
+      "untitled": "Namnlaus MCP-tenar",
+      "notConfigured": "Ikkje konfigurert",
+      "noArgs": "Ingen",
+      "cached": "Mellomlagra",
+      "disabled": "Deaktivert",
+      "envVars": "{{count}} miljøvariabel",
+      "envVars_plural": "{{count}} miljøvariablar",
+      "status": {
+        "disabled": "Deaktivert",
+        "connected": "tilkopla",
+        "disconnected": "fråkopla",
+        "enableToManage": "Aktiver for å handtere tilkoplingar",
+        "manualConnect": "Manuell tilkopling",
+        "autoConnect": "Automatisk tilkopling"
+      },
+      "toolCount": {
+        "live": "{{count}} aktivt verktøy",
+        "live_plural": "{{count}} aktive verktøy",
+        "cached": "{{count}} mellomlagra verktøy",
+        "cached_plural": "{{count}} mellomlagra verktøy"
+      },
+      "actions": {
+        "edit": "Rediger",
+        "enabled": "✓ Aktivert",
+        "enabledOff": "✗ Deaktivert",
+        "connect": "kople til",
+        "disconnect": "kople frå",
+        "connecting": "Koplast til...",
+        "disconnecting": "Koplast frå...",
+        "test": "Test",
+        "testing": "Testar...",
+        "delete": "Slett"
+      },
+      "notices": {
+        "disconnected": "Fråkopla frå {{name}}",
+        "connected": "Kopla til {{name}}",
+        "autoConnectFailed": "Automatisk tilkopling til {{name}} mislukkast",
+        "enableFirst": "Aktiver tenaren før tilkopling",
+        "disconnectFailed": "Klarte ikkje å kople frå {{name}}",
+        "connectFailed": "Klarte ikkje å kople til {{name}}",
+        "testNoCommand": "❌ skriv inn ein kommando før du testar tilkoplinga",
+        "testSuccess": "✅ kopla til! Fann {{count}} verktøy.",
+        "testFailed": "❌ Tilkopling mislukkast: {{message}}",
+        "refreshedAll": "✅ oppdaterte verktøy for {{count}} tenar",
+        "refreshedAll_plural": "✅ oppdaterte verktøy for {{count}} tenarar",
+        "refreshedPartial": "✅ oppdaterte {{success}} tenarar, ❌ {{failed}} mislukkast",
+        "noServersConfigured": "⚠️ Ingen MCP-tenarar konfigurert",
+        "testingAll": "🧪 Testar {{count}} MCP-tenartilkoplingar...",
+        "testAllSuccess": "✅ alle {{count}} MCP-tenarar vart tilkopla!",
+        "testAllPartial": "⚠️ {{successful}} tilkopla, {{failed}} mislukkast"
+      },
+      "confirm": {
+        "delete": "Slett MCP-tenaren «{{name}}»?"
+      }
+    },
+    "agents": {
+      "title": "Agenthandtering",
+      "desc": "Opprett og handter AI-agentar med spesifikke eigenskapar, verktøy og åtferd.",
+      "count": "{{count}} agent konfigurert",
+      "count_plural": "{{count}} agentar konfigurert",
+      "addBtn": "+ legg til agent",
+      "empty": "Ingen agentar konfigurert. Vel legg til agent for å kome i gang.",
+      "tableHeaders": {
+        "agent": "Agent",
+        "model": "Modell",
+        "capabilities": "Eigenskapar",
+        "tools": "Verktøy",
+        "actions": "Handlingar"
+      },
+      "defaultBadge": "Standard",
+      "systemPrompt": "Systemleidetekst • {{promptName}}",
+      "customPrompt": "Eigendefinert leidetekst",
+      "model": {
+        "notSet": "Ikkje sett",
+        "notFound": "Modell ikkje funnen i mellomlageret",
+        "useChatView": "Nytt chattvindaugemodell",
+        "useChatViewDesc": "Vil nytte modellen som er vald i chattvindauget",
+        "useDefault": "Nytt standardmodell",
+        "useDefaultDesc": "Vil nytte standardmodell frå innstillingar"
+      },
+      "capabilities": {
+        "noSpecialModes": "Ingen spesielle moduser"
+      },
+      "tools": {
+        "builtIn": "{{count}} innebygd",
+        "mcpServer": "{{count}} MCP-tenar",
+        "mcpServer_plural": "{{count}} MCP-tenarar",
+        "mcpTool": "{{count}} MCP-verktøy",
+        "mcpTool_plural": "{{count}} MCP-verktøy",
+        "noTools": "Ingen verktøy aktivert"
+      },
+      "actions": {
+        "edit": "Rediger",
+        "delete": "slett",
+        "protected": "verna"
+      },
+      "confirm": {
+        "delete": "Slett agenten «{{name}}»?"
+      }
+    },
+    "prompts": {
+      "title": "Systemleidetekstar",
+      "desc": "Handter systemleidetekstar som definerer åtferda og personlegdomen til AI-assistenten.",
+      "addBtn": "+ legg til systemleidetekst",
+      "empty": "Ingen systemleidetekstar konfigurert. Vel legg til systemleidetekst for å kome i gang.",
+      "tableHeaders": {
+        "name": "Namn",
+        "contentPreview": "Innhaldsførehandsvising",
+        "created": "Oppretta",
+        "updated": "Oppdatert",
+        "enabled": "Aktivert",
+        "actions": "Handlingar"
+      },
+      "status": {
+        "enabled": "Aktivert",
+        "disabled": "Deaktivert"
+      },
+      "actions": {
+        "edit": "Rediger",
+        "disable": "Deaktiver",
+        "enable": "Aktiver",
+        "delete": "Slett"
+      },
+      "confirm": {
+        "delete": "Slett leideteksten «{{name}}»?"
+      }
+    },
+    "tools": {
+      "title": "Verktøykonfigurasjon",
+      "desc": "Sjå innebygde verktøy og utforsk MCP-verktøy lasta frå tilkopla tenarar. Aktiver handlingane agentane dine skal kunne utføre.",
+      "subTabs": {
+        "builtIn": "Innebygde verktøy",
+        "mcp": "MCP-verktøy",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI-verktøy"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Namn",
+          "category": "Kategori",
+          "description": "Skildring",
+          "parameters": "Parametrar",
+          "enabled": "Aktivert"
+        },
+        "categories": {
+          "fileOps": "Filoperasjonar",
+          "searchDisc": "Søk og oppdaging",
+          "noteMgmt": "Notatkandtering"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Les innhaldet i ei fil frå kvelvet ditt",
+            "params": "path (påkravd): Sti til fila som skal lesast"
+          },
+          "writeFile": {
+            "desc": "Skriv eller oppdater ei fil i kvelvet ditt",
+            "params": "path (påkravd), content (påkravd): Filsti og innhald som skal skrivast"
+          },
+          "listFiles": {
+            "desc": "List opp filer i kvelvet eller ei bestemt mappe",
+            "params": "folder (valfritt), extension (valfritt): Filtrer etter mappe og filtype"
+          },
+          "searchFiles": {
+            "desc": "Søk etter filer etter namn eller innhald i kvelvet ditt",
+            "params": "query (påkravd), search_content (valfritt), limit (valfritt): Søkespørsmål og alternativ"
+          },
+          "createNote": {
+            "desc": "Opprett eit nytt notat med oppgjeve innhald",
+            "params": "title (påkravd), content (påkravd), folder (valfritt): Notattittel, innhald og plassering"
+          },
+          "appendNote": {
+            "desc": "Legg til innhald i eit eksisterande notat",
+            "params": "path (påkravd), content (påkravd): Notatsti og innhald som skal leggjast til"
+          }
+        },
+        "infoTitle": "💡 om verktøy",
+        "infoText": "Innebygde verktøy vert konfigurert per tilleggsinnstillingar. MCP-verktøy vert handtert sjølvstendig – nytt MCP-fana til å kople til tenarar og oppdatere tilgjengelege verktøy.",
+        "toolNames": {
+          "read_file": "Les fil",
+          "write_file": "Skriv fil",
+          "list_files": "List opp filer",
+          "search_files": "Søk etter filer",
+          "create_note": "Opprett notat",
+          "append_note": "Legg til i notat"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Ingen MCP-verktøy tilgjengelege. Kople til ein tenar eller oppdater mellomlagra verktøy for å fylle lista.",
+        "tableHeaders": {
+          "server": "Tenar",
+          "tool": "Verktøy",
+          "description": "Skildring",
+          "parameters": "Parametrar",
+          "source": "Kjelde"
+        },
+        "noDescription": "Ingen skildring",
+        "schemaUnavailable": "Skjema utilgjengeleg",
+        "live": "Live",
+        "cached": "Mellomlagra",
+        "status": {
+          "connected": "tilkopla",
+          "disconnected": "fråkopla"
+        }
+      },
+      "openapi": {
+        "desc": "Generer HTTP-verktøy frå OpenAPI-dokument. Eksterne spesifikasjonar vert mellomlagra under {{cacheDir}}.",
+        "addBtn": "Legg til HTTP-kjelde",
+        "noSources": "Ingen HTTP-kjelder konfigurert enno.",
+        "unnamed": "Namnlaus HTTP-kjelde",
+        "tableHeaders": {
+          "name": "Namn",
+          "source": "Kjelde",
+          "auth": "Autentisering",
+          "status": "Status",
+          "actions": "Handlingar"
+        },
+        "sourceUrl": "Ekstern URL ikkje sett",
+        "sourcePath": "Filsti ikkje sett",
+        "authHeader": "Hode ({{key}})",
+        "authQuery": "Spørjing ({{key}})",
+        "authNone": "Ingen",
+        "statusEnabled": "Aktivert",
+        "statusDisabled": "Deaktivert",
+        "actions": {
+          "edit": "Rediger",
+          "reload": "Last inn på nytt",
+          "refetch": "Hent på nytt",
+          "delete": "Slett"
+        },
+        "notices": {
+          "removed": "HTTP-kjelde fjerna",
+          "reloaded": "Lasta inn {{count}} operasjonar på nytt",
+          "reloadFailed": "Klarte ikkje å laste inn HTTP-kjelda på nytt. Sjå konsollen for detaljar."
+        },
+        "modal": {
+          "defaultTitle": "HTTP-kjelde",
+          "displayName": {
+            "name": "Visingsnamn",
+            "desc": "Vert vist til agentar når dei vel ei verktøykjelde"
+          },
+          "enabled": {
+            "name": "Aktivert",
+            "desc": "Aktiver for å eksponere dette HTTP-API-et for alle agentar"
+          },
+          "sourceType": {
+            "name": "Kjeltype",
+            "file": "Lokal fil",
+            "url": "Ekstern URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Vert henta og mellomlagra inne i tilleggsdatamappa"
+          },
+          "cachedFile": "Mellomlagra fil: {{path}} ({{date}})",
+          "neverFetched": "Aldri henta",
+          "specPath": {
+            "name": "OpenAPI-filsti",
+            "desc": "Relativ sti inne i kvelvet eller ein absolutt sti"
+          },
+          "baseUrl": {
+            "name": "Basis-URL-overstyring",
+            "desc": "Overstyr den første tenaroppføringa frå dokumentet (valfritt)"
+          },
+          "auth": {
+            "name": "Autentisering",
+            "desc": "Set automatisk inn API-nøklar når du kallar denne kjelda",
+            "none": "Ingen",
+            "header": "HTTP-hode",
+            "query": "Spørjingsparameter"
+          },
+          "credKey": {
+            "name": "Legitimasjonsnøkkel"
+          },
+          "credValue": {
+            "name": "Legitimasjonsverdi"
+          },
+          "actions": {
+            "name": "Handlingar",
+            "reloadTools": "Last inn verktøy på nytt",
+            "refetchTooltip": "Hent spesifikasjon frå URL på nytt",
+            "deleteTooltip": "Slett kjelde"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Definer lokale kommandolinjeverktøy som agentar kan køyre. Nytt malar som {{param}} for dynamiske argument.",
+        "addBtn": "Legg til CLI-verktøy",
+        "presetsBtn": "Legg til frå førehandsinnstillingar",
+        "noTools": "Ingen CLI-verktøy konfigurert enno.",
+        "tableHeaders": {
+          "name": "Namn",
+          "command": "Kommando",
+          "parameters": "Parametrar",
+          "status": "Status",
+          "actions": "Handlingar"
+        },
+        "unnamed": "Namnlaust CLI-verktøy",
+        "paramCount": "{{count}} parameter",
+        "paramCount_plural": "{{count}} parametrar",
+        "noParams": "Ingen",
+        "statusEnabled": "Aktivert",
+        "statusDisabled": "Deaktivert",
+        "actions": {
+          "edit": "Rediger",
+          "disable": "Deaktiver",
+          "enable": "Aktiver",
+          "delete": "Slett"
+        },
+        "notices": {
+          "removed": "CLI-verktøy fjerna"
+        },
+        "infoTitle": "💡 Om CLI-verktøy",
+        "infoText": "CLI-verktøy køyrer skalkommandoar lokalt. Nytt {{paramName}} i argument for malsubstitusjon, eller konfigurer parametrar som skal sendast som argument eller miljøvariablar.",
+        "modal": {
+          "defaultTitle": "CLI-verktøy",
+          "toolName": {
+            "name": "Verktøynamn",
+            "desc": "Identifikator nytta av agentar for å kalle dette verktøyet"
+          },
+          "description": {
+            "name": "Skildring",
+            "desc": "Skildra kva dette verktøyet gjer for AI-en"
+          },
+          "enabled": {
+            "name": "Aktivert",
+            "desc": "Aktiver for å la agentar nytte dette verktøyet"
+          },
+          "commandConfig": "Kommandokonfigurasjon",
+          "command": {
+            "name": "Kommando",
+            "desc": "Den køyrbare fila som skal køyrast (t.d. node, python, bash, /sti/til/skript)"
+          },
+          "args": {
+            "name": "Argument",
+            "desc": "Kommandoargument, eitt per linje. Nytt {{paramName}} for malsubstitusjon."
+          },
+          "cwd": {
+            "name": "Arbeidsmappe",
+            "desc": "Mappe å køyre kommandoen i (valfritt)"
+          },
+          "timeout": {
+            "name": "Tidsgrense (ms)",
+            "desc": "Maksimal køyretid i millisekund (standard: {{timeout}})"
+          },
+          "shell": {
+            "name": "Køyr i skal",
+            "desc": "Køyr kommandoen gjennom eit skal (aktiverer skalfunksjonar som røyr)"
+          },
+          "paramsTitle": "Parametrar",
+          "paramsDesc": "Definer parametrar som AI-en kan sende til dette verktøyet.",
+          "addParam": "Legg til parameter",
+          "noParams": "Ingen parametrar definerte.",
+          "paramN": "Parameter {{n}}",
+          "param": {
+            "name": "Namn",
+            "type": {
+              "name": "Type",
+              "string": "Streng",
+              "number": "Tal",
+              "boolean": "Boolsk"
+            },
+            "description": "Skildring",
+            "required": "Påkravd",
+            "insertAs": {
+              "name": "Set inn som",
+              "desc": "Korleis denne parameteren vert send til kommandoen",
+              "template": "Mal ({{name}})",
+              "arg": "Legg til som argument",
+              "env": "Miljøvariabel"
+            },
+            "envName": {
+              "name": "Miljøvariabelnamn",
+              "desc": "Overstyr miljøvariabelnamnet (standard er parameternamn med store bokstavar)"
+            }
+          },
+          "envTitle": "Miljøvariablar",
+          "envDesc": "Statiske miljøvariablar som vert sette når kommandoen køyrer.",
+          "envVars": {
+            "name": "Miljøvariablar",
+            "desc": "Format: NØKKEL=verdi, éin per linje"
+          }
+        },
+        "presets": {
+          "title": "Legg til CLI-verktøy frå førehandsinnstillingar",
+          "desc": "Vel ei førehandsinnstilling for raskt å leggje til eit førehandskonfigurert CLI-verktøy. Du kan tilpasse det etter at det er lagt til.",
+          "addBtn": "Legg til",
+          "addedBtn": "Lagt til",
+          "closeBtn": "Lukk",
+          "notices": {
+            "added": "La til «{{name}}» – aktiver det i CLI-verktøylista"
+          },
+          "categories": {
+            "file": "Filoperasjonar",
+            "search": "Søk",
+            "network": "Nettverk",
+            "code": "Kodekøyring",
+            "data": "Datahandsaming",
+            "system": "Systeminformasjon",
+            "apps": "macOS-appar og skrivebord"
+          },
+          "names": {
+            "preset-cat": "Les fil (cat)",
+            "preset-ls": "List opp mappe (ls)",
+            "preset-find": "Finn filer (find)",
+            "preset-grep": "Søk i tekst (grep)",
+            "preset-ripgrep": "Raskt søk (rg)",
+            "preset-curl": "HTTP-førespurnad (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Køyr Python-kode",
+            "preset-node": "Køyr JavaScript (Node)",
+            "preset-bash": "Køyr skalskript",
+            "preset-jq": "JSON-prosessor (jq)",
+            "preset-wc": "Ordteljing (wc)",
+            "preset-date": "Gjeldande dato/tid",
+            "preset-pwd": "Gjeldande mappe (pwd)",
+            "preset-whoami": "Gjeldande brukar",
+            "preset-uname": "Systeminformasjon (uname)",
+            "preset-open": "Opne fil/URL (open)",
+            "preset-open-app": "Start app (open -a)",
+            "preset-safari": "Opne i Safari",
+            "preset-chrome": "Opne i Chrome",
+            "preset-firefox": "Opne i Firefox",
+            "preset-pbcopy": "Kopier til utklippstavle",
+            "preset-pbpaste": "Lim inn frå utklippstavle",
+            "preset-say": "Tekst-til-tale (say)",
+            "preset-osascript": "AppleScript-køyrar",
+            "preset-notify": "Skrivebordsvarsel",
+            "preset-screencapture": "Skjermbilete",
+            "preset-applescript-list-apps": "List opp køyrande appar"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG-konfigurasjon",
+      "desc": "Konfigurer retrieval-augmented generation og nettsøk for å forbetre AI-svar.",
+      "subTabs": {
+        "overview": "Oversikt",
+        "chunking": "Oppdeling",
+        "search": "Søk",
+        "filters": "Filtre",
+        "advanced": "Avansert",
+        "websearch": "Nettsøk"
+      },
+      "general": {
+        "title": "Generelle innstillingar",
+        "enableRag": {
+          "name": "Aktiver RAG",
+          "desc": "Aktiver Retrieval-Augmented Generation for forbetra kontekst"
+        },
+        "vectorStore": {
+          "name": "Vektorlager",
+          "desc": "Vektordatabase for lagring av innbyggingar",
+          "memory": "I minnet",
+          "disk": "Diskbasert"
+        },
+        "embeddingModel": {
+          "name": "Innbyggingsmodell",
+          "desc": "Modell som vert nytta til å generere innbyggingar"
+        },
+        "embedChanged": {
+          "name": "Bygg inn endra filer automatisk",
+          "desc": "Bygg automatisk inn filer på nytt når dei vert endra"
+        }
+      },
+      "indexMgmt": {
+        "title": "Indekshandtering",
+        "desc": "Handter RAG-indeksen og sjå statistikk om indeksert innhald.",
+        "statsTitle": "Indeksstatistikk",
+        "stats": {
+          "totalChunks": "Totalt antal delar",
+          "uniqueFiles": "Unike filer",
+          "totalChars": "Totalt antal teikn",
+          "avgChunkSize": "Gjennomsnittleg delstorleik"
+        },
+        "empty": "Indeksen er tom. Vel gjenoppbygg indeks for å starte indeksering.",
+        "error": "⚠️ kan ikkje laste indeksstatistikk",
+        "rebuild": {
+          "name": "Gjenoppbygg indeks",
+          "desc": "Reindekser alle filer i kvelvet. Dette kan ta ei stund.",
+          "btn": "Gjenoppbygg",
+          "rebuilding": "Gjenoppbyggjer..."
+        },
+        "refresh": {
+          "name": "Oppdater indeks",
+          "desc": "Oppdater indeksen med endra filer sidan siste indeksering.",
+          "btn": "Oppdater",
+          "refreshing": "Oppdaterer..."
+        },
+        "clear": {
+          "name": "Tøm indeks",
+          "desc": "Fjern alle indekserte data. Du må gjenoppbygge indeksen.",
+          "btn": "Tøm",
+          "clearing": "Tømmer..."
+        },
+        "notices": {
+          "rebuilt": "Indeks gjenoppbygd",
+          "rebuildFailed": "Klarte ikkje å gjenoppbygge indeks",
+          "refreshed": "Indeks oppdatert",
+          "refreshFailed": "Klarte ikkje å oppdatere indeks",
+          "cleared": "Indeks tømt",
+          "clearFailed": "Klarte ikkje å tømme indeks"
+        }
+      },
+      "chunking": {
+        "title": "Oppdelingsinnstillingar",
+        "strategy": {
+          "name": "Oppdelingsstrategi",
+          "desc": "Strategi for å dele dokument i delar",
+          "recursive": "Rekursiv (smart)",
+          "fixed": "Fast storleik",
+          "sentence": "Etter setning",
+          "paragraph": "Etter avsnitt"
+        },
+        "chunkSize": {
+          "name": "Delstorleik",
+          "desc": "Antal teikn per del (500–2000 tilrådd)"
+        },
+        "chunkOverlap": {
+          "name": "Deloverlapp",
+          "desc": "Antal overlappande teikn mellom delar"
+        },
+        "minChunkSize": {
+          "name": "Minste delstorleik",
+          "desc": "Minste delstorleik som vert oppretta"
+        },
+        "maxTokens": {
+          "name": "Maks token per del",
+          "desc": "Maksimalt antal token tillate per del"
+        }
+      },
+      "search": {
+        "title": "Søkeinnstillingar",
+        "searchType": {
+          "name": "Søketype",
+          "desc": "Type likskapsøk som skal utførast",
+          "similarity": "Likskap"
+        },
+        "topK": {
+          "name": "Topp K resultat",
+          "desc": "Antal mest relevante delar å hente (1–20)"
+        },
+        "threshold": {
+          "name": "Likskapterskel",
+          "desc": "Minste likskapsskår for å inkludere resultat (0,0–1,0)"
+        },
+        "weight": {
+          "name": "Relevansskårvekt",
+          "desc": "Vekt for relevansskåring (0,0–1,0)"
+        },
+        "contextLimit": {
+          "name": "Kontekstvindusbegrensing",
+          "desc": "Maksimalt antal token for henta kontekst"
+        }
+      },
+      "filters": {
+        "title": "Filfiltre",
+        "excludeFolders": {
+          "name": "Ekskluder mapper",
+          "desc": "Mapper som skal ekskluderast frå indeksering (kommaseparert)"
+        },
+        "includeTypes": {
+          "name": "Inkluder filtypar",
+          "desc": "Filtypar som skal inkluderast (tom = alle typar)"
+        },
+        "excludeTypes": {
+          "name": "Ekskluder filtypar",
+          "desc": "Filtypar som skal ekskluderast frå indeksering"
+        },
+        "filterByTag": {
+          "name": "Filtrer etter merkelapp",
+          "desc": "Indekser berre filer med desse merkelappane (tom = alle filer)"
+        },
+        "excludeByTag": {
+          "name": "Ekskluder etter merkelapp",
+          "desc": "Ekskluder filer med desse merkelappane frå indeksering"
+        }
+      },
+      "advanced": {
+        "title": "Avanserte innstillingar",
+        "batchSize": {
+          "name": "Innbyggingsbatchstorleik",
+          "desc": "Antal delar som vert bygde inn parallelt"
+        }
+      },
+      "grading": {
+        "title": "Vurderingsinnstillingar",
+        "desc": "Vurder henta delar for relevans før dei vert sendt til LLM. Dette hjelper med å filtrere bort resultat av låg kvalitet.",
+        "enableGrading": {
+          "name": "Aktiver vurderingsterskel",
+          "desc": "Filtrer delar under kvalitetstersklar"
+        },
+        "graderSource": {
+          "name": "Vurderingsmodellkjelde",
+          "desc": "Kvar vurderingsmodellen vert henta frå",
+          "chat": "Chattmodell",
+          "custom": "Eigendefinert modell"
+        },
+        "graderModel": {
+          "name": "Vurderingsmodell",
+          "desc": "Spesifikk modell som vert nytta til vurdering"
+        },
+        "parallel": {
+          "name": "Parallellhandsaming",
+          "desc": "Antal delar som vert vurderte parallelt"
+        },
+        "minRelevance": {
+          "name": "Minimums relevansskår",
+          "desc": "Minste relevansskår (0,0–1,0)"
+        },
+        "minAccuracy": {
+          "name": "Minimums nøyaktigheitsskår",
+          "desc": "Minste nøyaktigheitsskår (0,0–1,0)"
+        },
+        "minSupport": {
+          "name": "Minimums støttekvalitetsskår",
+          "desc": "Minste støttekvalitetsskår (0,0–1,0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Nettsøkkonfigurasjon",
+      "desc": "Konfigurer nettsøkfunksjonalitet for å forbetre AI-svar med oppdatert informasjon frå internett.",
+      "generalBehavior": "Generell åtferd",
+      "providerSelection": "Leverandørval",
+      "localeFilters": "Lokal og filtre",
+      "apiCredentials": "API-legitimasjon og endepunkt",
+      "enabled": {
+        "name": "Aktiver nettsøk",
+        "desc": "La AI søke på nettet etter aktuell informasjon"
+      },
+      "autoTrigger": {
+        "name": "Utløys søk automatisk",
+        "desc": "Utløys automatisk nettsøk når spørsmålet krev aktuell informasjon (t.d. nyhende, prisar, nyleg hendingar)"
+      },
+      "maxResults": {
+        "name": "Maksimalt antal resultat",
+        "desc": "Maksimalt antal søkeresultat som vert returnert"
+      },
+      "timeRange": {
+        "name": "Resultatferskleik",
+        "desc": "Avgrens resultat til eit tidsrom støtta av leverandørar (Google, SearXNG, Mojeek)",
+        "any": "Når som helst (standard)",
+        "h": "Siste timen",
+        "d": "Siste 24 timar",
+        "w": "Siste veka",
+        "m": "Siste månaden",
+        "y": "Siste året"
+      },
+      "provider": {
+        "name": "Søkeleverandør",
+        "desc": "Vel blant personvernvenlege skraparar eller API-baserte søkjemotorar"
+      },
+      "searchLanguage": {
+        "name": "Språkkode",
+        "desc": "ISO-språkkode (t.d. nn, no, en) vidaresend til leverandørar som støttar lokalisering"
+      },
+      "searchCountry": {
+        "name": "Land/marknadstkode",
+        "desc": "Tobokstavs landkode (t.d. NO, US) nytta av Bing, DuckDuckGo, Brave og andre"
+      },
+      "includeDomains": {
+        "name": "Inkluder berre desse domena",
+        "desc": "Kommaseparert liste nytta av SerpAPI og Brave for å avgrense resultat til bestemte nettstader"
+      },
+      "excludeDomains": {
+        "name": "Ekskluder domene",
+        "desc": "Kommaseparerte domene som vert filtrerte bort etter henting av resultat"
+      },
+      "apiKey": {
+        "name": "Standard API-nøkkel",
+        "desc": "Delt API-nøkkel nytta av Google, Bing, SerpAPI, Tavily eller Brave når leverandørspesifikke nøklar ikkje er sette"
+      },
+      "googleCseId": {
+        "name": "Google Custom Search Engine-ID",
+        "desc": "Påkravd med ein Google API-nøkkel ved bruk av Google-leverandøren"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI-endepunkt",
+        "desc": "Overstyr SerpAPI-basis-URL dersom du er sjølvert"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API-nøkkel",
+        "desc": "Overstyrer standardnøkkelen ved bruk av Tavily-leverandøren"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG-endepunkt",
+        "desc": "Basis-URL for din SearXNG-instans (må returnere JSON)"
+      },
+      "braveApiKey": {
+        "name": "Brave API-nøkkel",
+        "desc": "Nytt eit Brave Search API-abonnementstoken når det er vald som leverandør"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API-nøkkel (valfritt)",
+        "desc": "Legg til eit bearer-token dersom Qwant-planen din utferdar eitt"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API-nøkkel",
+        "desc": "Påkravd for Mojeek-leverandøren"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (ingen nøkkel nødvendig)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (HTML-skraping)",
+        "yandex": "Yandex (HTML-skraping)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Hurtighandlingar",
+      "desc": "Konfigurer AI-drivne hurtighandlingar som vert viste i redigeringsprogrammets kontekstmeny når tekst er vald.",
+      "actionPrefix": {
+        "name": "Handlingsprefiks",
+        "desc": "Prefiks (emoji eller tekst) som vert vist framfor alle hurtighandlingar i kontekstmenyen",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} handling konfigurert ({{enabled}} aktivert)",
+      "count_plural": "{{count}} handlingar konfigurert ({{enabled}} aktivert)",
+      "addBtn": "+ legg til hurtighandling",
+      "empty": "Ingen hurtighandlingar konfigurert. Vel legg til hurtighandling for å kome i gang.",
+      "tableHeaders": {
+        "action": "Handling",
+        "type": "Type",
+        "model": "Modell",
+        "promptPreview": "Leidetekstførehandsvising",
+        "actions": "Handlingar"
+      },
+      "defaultModel": "Standard",
+      "editBtn": "Rediger",
+      "deleteBtn": "slett",
+      "confirm": {
+        "delete": "Slett hurtighandlinga «{{name}}»?"
+      },
+      "usageInfo": {
+        "title": "Bruk",
+        "step1": "Vel tekst i eit notat",
+        "step2": "Høgreklikk for å opne kontekstmenyen",
+        "step3": "Vel ei hurtighandling frå menyen",
+        "step4Replace": "Handlingar merkte som «erstatt» vil erstatte den valde teksten med AI-resultatet",
+        "step4Explain": "Handlingar merkte som «forklar» vil vise resultatet i ein modaldialog"
+      },
+      "edit": {
+        "title": "Rediger hurtighandling",
+        "name": {
+          "name": "Namn",
+          "desc": "Visingsnamn for denne handlinga i kontekstmenyen"
+        },
+        "actionType": {
+          "name": "Handlingstype",
+          "desc": "Korleis AI-svaret skal handterast",
+          "replace": "Erstatt vald tekst",
+          "explain": "Vis i modal"
+        },
+        "model": {
+          "name": "Modell",
+          "desc": "Språkmodell som vert nytta til denne handlinga (lat stå tomt for å nytte standard)",
+          "default": "Nytt standardmodell"
+        },
+        "promptTemplate": {
+          "name": "Leidetekstmal",
+          "desc": "Instruksjonar sendt til AI-en. Den valde teksten vert lagt til automatisk."
+        },
+        "cancel": "Avbryt",
+        "save": "Lagre"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Gjer teksten lengre",
+          "prompt": "Utvid og utarbeid følgjande tekst, gjer henne meir detaljert og heilskapleg medan du beheld den opphavlege meininga og tonen. Returner berre den utvida teksten utan ytterlegare kommentarar:\n\n"
+        },
+        "summarize": {
+          "name": "Samanfatt tekst",
+          "prompt": "Gje eit kortfatta samandrag av følgjande tekst. Returner berre samandraget utan ytterlegare kommentarar:\n\n"
+        },
+        "improve-writing": {
+          "name": "Forbetre skriving",
+          "prompt": "Forbetre skrivekvaliteten, klårliken og stilen til følgjande tekst. Returner berre den forbetra teksten utan ytterlegare kommentarar:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Rett grammatikk",
+          "prompt": "Rett eventuelle grammatikk-, stave- og teiknsettingsfeil i følgjande tekst. Returner berre den korrigerte teksten utan ytterlegare kommentarar:\n\n"
+        },
+        "explain": {
+          "name": "Forklar tekst",
+          "prompt": "Forklar følgjande tekst med enkle ord:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Token-bruk",
+      "desc": "Spor tokenforbruk på tvers av leverandørar og modellar. Data vert akkumulert over alle samtalar.",
+      "notAvailable": "Token-brukssporing er ikkje tilgjengeleg.",
+      "ranges": {
+        "today": "I dag",
+        "week": "Denne veka",
+        "month": "Denne månaden",
+        "all": "Heile perioden"
+      },
+      "stats": {
+        "totalTokens": "Totalt antal token",
+        "apiCalls": "API-kall",
+        "promptTokens": "Leideteksttoken",
+        "completion": "Fullføring",
+        "tokensIn": "token inn",
+        "tokensOut": "token ut"
+      },
+      "byProvider": "Etter leverandør",
+      "byModel": "Etter modell",
+      "noData": "Ingen bruksdata enno.",
+      "recentActivity": "Nyleg aktivitet",
+      "last10": "siste 10",
+      "noRecent": "Ingen nyleg aktivitet.",
+      "tableHeaders": {
+        "provider": "Leverandør",
+        "model": "Modell",
+        "prompt": "Leidetekst",
+        "completion": "Fullføring",
+        "total": "Totalt",
+        "calls": "Kall",
+        "time": "Tid",
+        "in": "Inn",
+        "out": "Ut"
+      },
+      "clearBtn": "Slett alle bruksdata",
+      "confirm": {
+        "clear": "Slett alle token-bruksoppføringar? Dette kan ikkje angrast."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Skriv meldinga di... (Enter for å sende, Shift+Enter for ny linje)",
+    "conversations": "Samtalar",
+    "toggleConversationsTitle": "Vis/skjul samtaleliste",
+    "currentConversation": "Gjeldande samtale",
+    "new": "Ny",
+    "settings": "Innstillingar",
+    "openSettingsTitle": "Opne tilleggsinnstillingar",
+    "mode": "Modus",
+    "prompt": "Leidetekst",
+    "agent": "Agent",
+    "modeOptions": {
+      "chat": "Chatt",
+      "agent": "Agent"
+    },
+    "noSystemPrompt": "Ingen systemleidetekst",
+    "noAgentsAvailable": "Ingen agentar tilgjengelege",
+    "sendHintPrefix": "Trykk ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " for å sende",
+    "sendAriaLabel": "Send melding",
+    "stop": " Stopp",
+    "addReference": "Legg til referanse",
+    "addReferenceTooltip": "Legg til fil- eller mappereferanse (@)",
+    "emptyHeading": "Start ein samtale",
+    "emptySubtext": "Skriv ei melding nedanfor for å kome i gang, eller vel ein samtale frå historikken.",
+    "noAgentConfig": "Ingen agentar konfigurert",
+    "selectAgent": "Vel ein agent…",
+    "notices": {
+      "stopping": "Stoppar generering...",
+      "ragInitError": "RAG-initialiseringsfeil: {{message}}",
+      "modelsRefreshed": "Modellar oppdatert",
+      "modelsRefreshFailed": "Klarte ikkje å oppdatere modellar: {{message}}",
+      "waitForResponse": "Vent til det noverande svaret er ferdig",
+      "configureProvider": "Konfigurer ein LLM-leverandør i innstillingane fyrst",
+      "selectModel": "Vel ein modell",
+      "noValidProvider": "Ingen gyldig leverandørkonfigurasjon funnen for denne modellen",
+      "chatError": "Chattfeil: {{message}}",
+      "noMessageToRegenerate": "Finn ikkje melding å regenerere",
+      "regenerateOnlyLatest": "Berre det siste svaret kan regenererast akkurat no",
+      "regenerateNoUserMsg": "Finn ikkje brukarmelding å regenerere frå",
+      "regenerated": "Regenererte svar",
+      "regenerateFailed": "Regenerering mislukkast: {{message}}",
+      "noteCreated": "Notat oppretta: {{name}}",
+      "noteCreateFailed": "Klarte ikkje å opprette notat: {{message}}",
+      "messageInserted": "Melding sett inn i: {{path}}",
+      "messageInsertFailed": "Klarte ikkje å setje inn melding: {{message}}",
+      "noAgents": "Ingen agentar tilgjengelege. Konfigurer agentar i Innstillingar → Agentar.",
+      "ragDisabled": "RAG er deaktivert i innstillingane. Aktiver det under innstillingar → chattfunksjonar → RAG.",
+      "webSearchDisabled": "Nettsøk er deaktivert i innstillingane. Aktiver det under innstillingar → chattfunksjonar → nettsøk.",
+      "noFilesInVault": "Ingen filer funne i kvelvet",
+      "attached": "Vedlagd: {{name}}",
+      "attachedImages": "Vedlagd {{count}} bilete",
+      "referencesAdded": "La til {{count}} referanse(r)",
+      "fileNotFound": "Fil ikkje funnen: {{path}}",
+      "agentConfigApplied": "Nytta konfigurasjon for agenten: {{name}}",
+      "waitForComplete": "Vent til det noverande svaret er fullført",
+      "chatServiceFallback": "ChatService ikkje konfigurert. Nyttar ChatView-reserve.",
+      "noModelSelected": "Ingen modell vald",
+      "noProviderConfig": "Ingen leverandørkonfigurasjon funnen",
+      "generationStopped": "Generering stoppa",
+      "noResponseToRegenerate": "Ingen svar å regenerere",
+      "agentNotFound": "Agent ikkje funnen",
+      "unableToLoadRag": "Kan ikkje laste RAG-statistikk.",
+      "referenced": "Referert: {{name}}"
+    },
+    "status": {
+      "available": "Tilgjengeleg",
+      "unavailable": "Utilgjengeleg",
+      "disabled": "Deaktivert",
+      "on": "På · {{detail}}",
+      "off": "Av"
+    },
+    "ragStats": {
+      "title": "RAG-statistikk",
+      "totalChunks": "📊 totalt antal delar:",
+      "filesIndexed": "📁 indekserte filer:",
+      "totalSize": "💾 total storleik:",
+      "avgChunks": "📈 gj.snitt delar/fil:",
+      "indexedFiles": "📄 indekserte filer",
+      "noFilesYet": "⚠️ ingen filer er indekserte enno.",
+      "howToBuild": "Slik byggjer du RAG-indeksen:",
+      "step1": "Gå til Innstillingar → RAG",
+      "step2": "Aktiver RAG",
+      "step3": "Vel indekser kvelv",
+      "close": "Lukk",
+      "retrieved": "📚 henta frå {{count}} dokument",
+      "retrieved_plural": "📚 henta frå {{count}} dokument"
+    },
+    "ragTooltip": {
+      "status": "RAG-indeksstatus:",
+      "totalChunks": "📊 Totalt antal delar: {{count}}",
+      "filesIndexed": "📁 Indekserte filer: {{count}}",
+      "totalSize": "💾 Total storleik: {{size}} KB",
+      "indexedFiles": "📄 Indekserte filer:",
+      "andMore": "  ... og {{count}} til",
+      "noFilesYet": "⚠️ ingen filer er indekserte enno.",
+      "goToSettings": "Gå til Innstillingar → RAG for å byggje indeksen.",
+      "ragOff": "ℹ️ RAG er for tida slått av for denne chatten."
+    },
+    "agentSummary": {
+      "model": "Modell",
+      "temp": "Temp",
+      "max": "Maks",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Verktøy",
+      "memory": "Minne",
+      "none": "Ingen",
+      "configuration": "{{name}}-konfigurasjon",
+      "modelFixed": "{{name}} · Fast",
+      "modelDefault": "{{name}} · Standard",
+      "modelChatView": "{{name}} · Chattvindauge",
+      "customModel": "Eigendefinert modell",
+      "notSet": "Ikkje sett",
+      "auto": "Auto",
+      "on": "På",
+      "off": "Av",
+      "shortTerm": "Kortvarig",
+      "longTerm": "Langvarig",
+      "disabledMemory": "Deaktivert",
+      "builtIn": "{{count}} innebygd",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Nettresultat",
+      "attachments": "Vedlegg",
+      "references": "Referansar",
+      "ragSources": "RAG-kjelder",
+      "reasoning": "Resonnement",
+      "copy": "Kopier",
+      "copied": "Melding kopiert",
+      "copyFailed": "Klarte ikkje å kopiere melding",
+      "tokenUsage": "Token-bruk",
+      "tokenUsagePrompt": "Leidetekst",
+      "tokenUsageCompletion": "Fullføring",
+      "tokenUsageTotal": "Totalt",
+      "save": "Lagre",
+      "insertToNotes": "Set inn i notat",
+      "regenerate": "Regenerer"
+    },
+    "streaming": {
+      "thinking": "Tenkjer..."
+    },
+    "toolCall": {
+      "thinking": "Tenkjer",
+      "executionProcess": "Køyringsprosess",
+      "input": "Inn",
+      "output": "Ut",
+      "running": "Køyrer..."
+    },
+    "addPicture": "Legg til bilete",
+    "addPictureTooltip": "Legg ved eit bilete i meldinga",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Nytt indekserte notat som kontekst",
+    "webSearchLabel": "Nettsøk",
+    "webSearchTooltipLabel": "Søk på internett ved behov",
+    "imageUnavailable": "Biletevedlegg er ikkje tilgjengeleg for den gjeldande modellen.",
+    "newChat": "Ny chatt",
+    "newConversation": "Ny samtale",
+    "searchConversations": "Søk i samtalar...",
+    "header": {
+      "model": "Modell",
+      "advancedParams": "Avanserte parametrar",
+      "temperature": "Temperatur",
+      "maxTokens": "Maks token",
+      "topP": "Topp P",
+      "freqPenalty": "Frekvensstraff",
+      "presPenalty": "Tilstadeveringsstraff",
+      "agentConfig": "Agentkonfigurasjon",
+      "modelsCount": "Modellar: {{count}}",
+      "tokensCount": "Token: {{count}}",
+      "noModels": "Ingen modellar tilgjengelege"
+    },
+    "temperature": {
+      "precise": "0 (Presis)",
+      "balanced": "1 (Balansert)",
+      "creative": "2 (Kreativ)"
+    },
+    "modals": {
+      "image": {
+        "title": "Legg ved bilete",
+        "searchPlaceholder": "Søk etter bilete...",
+        "selectAll": "Vel alle",
+        "selectNone": "Vel ingen",
+        "addSelected": "Legg til valde",
+        "noResults": "Ingen samsvarande bilete funne."
+      },
+      "reference": {
+        "title": "Legg til referansar",
+        "searchPlaceholder": "Søk etter filer og mapper...",
+        "selectAll": "Vel alle",
+        "selectNone": "Vel ingen",
+        "addSelected": "Legg til valde",
+        "noResults": "Ingen samsvarande filer eller mapper funne."
+      },
+      "insertNote": {
+        "title": "Set inn i notat",
+        "searchPlaceholder": "Søk etter notat...",
+        "insert": "Set inn i valt notat",
+        "createNew": "Opprett nytt notat",
+        "noResults": "Ingen samsvarande notat funne."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Avbryt",
+      "confirm": "Stadfest"
+    },
+    "agentEdit": {
+      "title": "Rediger agent",
+      "icon": {
+        "name": "Ikon",
+        "desc": "Emoji eller teikn som representerer denne agenten"
+      },
+      "description": {
+        "name": "Skildring",
+        "desc": "Kort skildring av agenten"
+      },
+      "modelStrategy": {
+        "name": "Modellstrategi",
+        "options": {
+          "default": "Nytt standardmodell (frå innstillingar)",
+          "chatView": "Nytt chattvindaugemodell",
+          "fixed": "Fast modell"
+        },
+        "noModels": "Ingen modellar i mellomlageret",
+        "desc": "Vel korleis agenten vel sin modell"
+      },
+      "systemPrompt": {
+        "createNew": "➕ opprett ny leidetekst…",
+        "promptName": {
+          "name": "Leidetekstnamn",
+          "desc": "Visingsnamn for den nye systemleideteksten"
+        },
+        "promptContent": {
+          "name": "Leidetekstinnhald",
+          "desc": "Innhald for den nye systemleideteksten"
+        },
+        "name": "Systemleidetekst",
+        "desc": "Vel frå eksisterande leidetekstar eller definer ein ny for denne agenten."
+      },
+      "capabilities": "Eigenskapar",
+      "memory": {
+        "title": "Minne",
+        "notice": "Agentminne er mellombels utilgjengeleg medan vi arbeider med forbetringar."
+      },
+      "tools": {
+        "title": "Verktøy",
+        "builtIn": {
+          "name": "Innebygde verktøy",
+          "desc": "Vel kva innebygde verktøy denne agenten kan nytte"
+        },
+        "cli": {
+          "name": "CLI-verktøy",
+          "desc": "Gje tilgang til alle aktiverte CLI-verktøy, eller vel individuelt nedanfor",
+          "noTools": "Ingen CLI-verktøy konfigurert. Legg til og aktiver verktøy under Innstillingar → Verktøy → CLI for å nytte dei her."
+        }
+      },
+      "mcp": {
+        "title": "MCP-tilgang",
+        "noServers": "Ingen MCP-tenarar konfigurert. Legg til tenarar under Innstillingar → MCP for å låse opp desse alternativa.",
+        "toolsCached": "{{count}} verktøy i mellomlageret",
+        "toolsCached_plural": "{{count}} verktøy i mellomlageret",
+        "noToolsCached": "Ingen verktøy i mellomlageret enno. Aktiver full tilgang eller oppdater mellomlageret.",
+        "showTools": "Vis verktøy",
+        "hideTools": "Gøym verktøy",
+        "selected": "Vald",
+        "notSelected": "Ikkje vald",
+        "noToolsAvailable": "Ingen verktøy tilgjengelege frå denne tenaren enno."
+      },
+      "notices": {
+        "promptRequired": "Oppgje eit namn og innhald for den nye systemleideteksten."
+      },
+      "name": {
+        "label": "Namn",
+        "desc": "Visingsnamn for denne agenten"
+      },
+      "fixedModel": {
+        "name": "Fast modell",
+        "desc": "Vel ein bestemt modell for denne agenten.",
+        "descNoModels": "Ingen mellomlagra modellar tilgjengelege. Oppdater modellar i Modell-fana."
+      },
+      "temperature": {
+        "label": "Temperatur",
+        "desc": "Styrer tilfeldighet (0,0–2,0)"
+      },
+      "maxTokens": {
+        "label": "Maks token",
+        "desc": "Maksimalt antal token å generere"
+      },
+      "contextWindow": {
+        "label": "Kontekstvindauge",
+        "desc": "Antal tidlegare meldingar som vert inkluderte i konteksten"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Aktiver retrieval augmented generation"
+      },
+      "webSearch": {
+        "name": "Nettsøk",
+        "desc": "Aktiver nettsøkfunksjonar"
+      },
+      "maxSteps": {
+        "name": "Maks verktøysteg",
+        "desc": "Maksimalt antal verktøy-kallsteg per agenttur"
+      }
+    },
+    "provider": {
+      "title": "Leverandørinnstillingar",
+      "selectProvider": {
+        "name": "Leverandør",
+        "desc": "Vel LLM-leverandørtype",
+        "placeholder": "-- Vel leverandør --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (lokal)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Eigendefinert (OpenAI-kompatibel)"
+      },
+      "modelFilter": {
+        "name": "Modellfilter",
+        "desc": "Valfritt regex-mønster for å avgrense tilgjengelege modellar"
+      },
+      "resourceGroup": {
+        "name": "Ressursgruppe",
+        "desc": "Valfri SAP AI Core-ressursgruppe"
+      },
+      "serviceKey": {
+        "name": "Tenastenøkkel",
+        "desc": "SAP AI Core-tenastenøkkel (JSON-streng)"
+      },
+      "baseUrl": {
+        "name": "Basis-URL",
+        "ollamaDesc": "Ollama-tenar-URL",
+        "customDesc": "OpenAI-kompatibelt API-endepunkt (påkravd)",
+        "optionalDesc": "Eigendefinert API-endepunkt (valfritt)"
+      },
+      "manageModels": {
+        "name": "Handter modellar",
+        "desc": "Hent nye modellar eller oppdater eksisterande frå Ollama-registeret.",
+        "btn": "⏬ Hent Ollama-modell"
+      },
+      "apiKey": {
+        "name": "API-nøkkel",
+        "desc": "Autentiseringsnøkkel for den valde leverandøren"
+      },
+      "cancel": "Avbryt",
+      "save": "Lagre",
+      "validation": {
+        "selectProvider": "Vel ein leverandørtype",
+        "apiKeyTooLong": "API-nøkkelen er for lang. Maksimal lengd er 500 teikn.",
+        "invalidUrl": "Ugyldig basis-URL-format. Skriv inn ein gyldig URL (t.d. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP-inspektør",
+      "desc": "Inspiser og feilsøk Model Context Protocol (MCP)-tenartilkoplingar og -verktøy.",
+      "tabs": {
+        "connections": "Tilkoplingar",
+        "tools": "Verktøy",
+        "logs": "Logg"
+      },
+      "refreshBtn": "🔄 oppdater",
+      "connections": {
+        "title": "MCP-tenartilkoplingar",
+        "noServers": "Ingen MCP-tenarar konfigurert.",
+        "headers": {
+          "server": "Tenarnamn",
+          "status": "Status",
+          "tools": "Tilgjengelege verktøy",
+          "actions": "Handlingar"
+        },
+        "statusDisabled": "Deaktivert",
+        "statusConnected": "● tilkopla",
+        "statusDisconnected": "○ fråkopla",
+        "toolsLive": "{{count}} verktøy",
+        "toolsLive_plural": "{{count}} verktøy",
+        "toolsCached": "{{count}} verktøy (mellomlagra)",
+        "toolsCached_plural": "{{count}} verktøy (mellomlagra)",
+        "noTools": "0 verktøy",
+        "connectBtn": "Kople til",
+        "disconnectBtn": "Kople frå",
+        "connecting": "Koplast til...",
+        "disconnecting": "Koplast frå...",
+        "notices": {
+          "disconnected": "Fråkopla frå {{name}}",
+          "enableFirst": "Aktiver tenaren i innstillingane før tilkopling",
+          "connected": "Kopla til {{name}}",
+          "failedDisconnect": "Klarte ikkje å kople frå {{name}}: {{message}}",
+          "failedConnect": "Klarte ikkje å kople til {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Tilgjengelege MCP-verktøy",
+        "noTools": "Ingen MCP-verktøy tilgjengelege. Sjekk tenartilkoplingar.",
+        "serverPrefix": "Tenar: {{name}}",
+        "noToolsInServer": "Ingen verktøy tilgjengelege",
+        "headers": {
+          "tool": "Verktøynamn",
+          "description": "Skildring",
+          "parameters": "Parametrar"
+        },
+        "noDescription": "Ingen skildring",
+        "noParams": "Ingen"
+      },
+      "logs": {
+        "title": "MCP-tilkoplingslogg",
+        "placeholder": "MCP-tilkoplingslogg vert vist her. Viser for tida plasshaldaryformasjon.",
+        "events": {
+          "connection": "• tilkoplingshendingar",
+          "tools": "• verktøyregistreringshendingar",
+          "errors": "• feillogg",
+          "comms": "• kommunikasjonsdetaljar"
+        },
+        "testTitle": "Test verktøykøyring",
+        "selectServer": "Vel ein tenar...",
+        "selectTool": "Vel eit verktøy...",
+        "parametersTitle": "Parametrar",
+        "selectEnum": "Vel...",
+        "performBtn": "Køyr verktøy",
+        "clearBtn": "Tøm resultat",
+        "executing": "Køyrer...",
+        "success": "✅ køyring vellukka",
+        "failed": "❌ køyring mislukkast",
+        "errorTitle": "❌ køyringsfeil",
+        "errorLabel": "Feil: {{message}}",
+        "notices": {
+          "success": "Verktøy vart køyrd",
+          "failed": "Verktøykøyring mislukkast",
+          "error": "Køyringsfeil: {{message}}",
+          "requiredMissing": "Påkravd parameter manglar: {{name}}",
+          "invalidNumber": "Ugyldig tal for parameter: {{name}}",
+          "invalidJson": "Ugyldig JSON for parameter: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Ingen MCP-tenarar konfigurert",
+        "testing": "🧪 Testar {{count}} MCP-tenartilkoplingar...",
+        "allSuccess": "✅ alle {{count}} MCP-tenarar vart tilkopla!",
+        "partial": "⚠️ {{success}} tilkopla, {{failed}} mislukkast"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Rediger MCP-tenar",
+      "titleAdd": "Legg til MCP-tenar",
+      "serverName": {
+        "name": "Tenarnamn",
+        "desc": "Venleg namn som vert vist gjennom tillegget"
+      },
+      "connectionMode": {
+        "name": "Tilkoplingsmodus",
+        "desc": "Vel om du vil kople til automatisk eller berre ved manuell utløysing",
+        "auto": "Kople til automatisk når chatten opnar",
+        "manual": "Manuell tilkopling"
+      },
+      "command": {
+        "name": "Kommando",
+        "desc": "Køyrbar fil eller skript som startar MCP-tenaren"
+      },
+      "arguments": {
+        "name": "Argument",
+        "desc": "Komma- eller linjeskiftseparerte argument (valfritt)"
+      },
+      "envVars": {
+        "name": "Miljøvariablar",
+        "desc": "Valfrie NØKKEL=VERDI-par, éitt per linje"
+      },
+      "enabled": {
+        "name": "Aktivert",
+        "desc": "Deaktiver for å behalde tenaren konfigurert utan å kople til automatisk"
+      },
+      "cancel": "Avbryt",
+      "saveEdit": "Lagre endringar",
+      "saveAdd": "Legg til tenar",
+      "validation": {
+        "nameRequired": "Tenarnamn er påkravd",
+        "commandRequired": "Kommando er påkravd"
+      }
+    },
+    "ollamaManager": {
+      "title": "Handter Ollama-modellar",
+      "serverInfo": "Tenarinformasjon",
+      "checkingServer": "Sjekkar tenar...",
+      "serverOnline": "✅ Tenar online",
+      "versionLabel": " | Versjon: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Tenar offline",
+      "connectionError": "❌ Tilkoblingsfeil",
+      "pullTitle": "Hent ny modell",
+      "pullHint": "Skriv inn eit modellnamn for å laste ned frå Ollama-biblioteket (t.d. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Modellnamn",
+        "example": "Eksempel: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Hent modell",
+      "installedTitle": "Installerte modellar",
+      "refreshList": "🔄 Oppdater liste",
+      "noModels": "Ingen modellar funne. Hent ein modell for å kome i gang.",
+      "capabilities": "Eigenskapar: {{caps}}",
+      "deleteBtn": "Slett",
+      "closeBtn": "Lukk",
+      "confirmDelete": {
+        "title": "Stadfest sletting",
+        "message": "Er du sikker på at du vil slette modellen «{{name}}»?",
+        "cancel": "Avbryt",
+        "confirm": "Slett"
+      },
+      "notices": {
+        "enterName": "Skriv inn eit modellnamn",
+        "pulling": "Hentar {{name}}... Dette kan ta ei stund.",
+        "pullSuccess": "✅ Henta {{name}}",
+        "pullFailed": "❌ Klarte ikkje å hente modell: {{message}}",
+        "deleted": "✅ Sletta {{name}}",
+        "deleteFailed": "❌ Klarte ikkje å slette modell: {{message}}",
+        "refreshing": "Oppdaterer...",
+        "refreshSuccess": "✅ Modelliste oppdatert",
+        "refreshFailed": "❌ Klarte ikkje å oppdatere modellista"
+      }
+    },
+    "promptEdit": {
+      "title": "Rediger systemleidetekst",
+      "name": {
+        "name": "Namn",
+        "desc": "Visingsnamn for denne leideteksten"
+      },
+      "content": {
+        "name": "Innhald",
+        "desc": "Innhaldet i systemleideteksten"
+      },
+      "enabled": {
+        "name": "Aktivert",
+        "desc": "Om denne leideteksten er aktiv"
+      },
+      "cancel": "Avbryt",
+      "save": "Lagre"
+    },
+    "prompt": {
+      "cancel": "Avbryt",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Namn",
+      "create": "Opprett",
+      "cancel": "Avbryt"
+    },
+    "explain": {
+      "loading": "⏳ Handsamar...",
+      "error": "Feil ved vising av forklaring",
+      "errorPrefix": "❌ Feil: "
+    }
+  },
+  "notices": {
+    "noProvider": "Konfigurer ein LLM-leverandør i innstillingane fyrst",
+    "noModel": "Vel ein standardmodell i innstillingane",
+    "noValidProvider": "Ingen gyldig leverandørkonfigurasjon funnen for modellen: {{modelId}}",
+    "processing": "Handsamar...",
+    "textUpdated": "Tekst oppdatert",
+    "error": "Feil: {{message}}"
+  }
+}

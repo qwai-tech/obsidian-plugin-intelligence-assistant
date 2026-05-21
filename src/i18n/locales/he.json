@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "כללי",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "כלים",
+      "rag": "RAG",
+      "prompts": "הנחיות",
+      "agents": "סוכנים",
+      "quickActions": "פעולות מהירות",
+      "usage": "שימוש"
+    },
+    "general": {
+      "title": "הגדרות כלליות",
+      "desc": "הגדר את ההגדרות הכלליות עבור תוסף העוזר החכם.",
+      "pluginVersion": {
+        "name": "גרסת התוסף",
+        "desc": "הגרסה הנוכחית של תוסף העוזר החכם"
+      },
+      "defaultModel": {
+        "name": "מודל ברירת מחדל",
+        "desc": "מודל ברירת המחדל לשיחות",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "מצב שיחה ברירת מחדל",
+        "desc": "בחר באיזה מצב תיפתח תצוגת השיחה",
+        "chat": "מצב שיחה",
+        "agent": "מצב סוכן"
+      },
+      "conversationTitleMode": {
+        "name": "מצב כותרת שיחה",
+        "desc": "כיצד ליצור כותרות שיחה",
+        "firstMessage": "השתמש בהודעה הראשונה",
+        "autoSummary": "צור סיכום אוטומטי",
+        "manual": "ידני"
+      },
+      "conversationIcons": {
+        "name": "אייקוני שיחה",
+        "desc": "אפשר יצירת אייקון אוטומטי לשיחות"
+      },
+      "configStatus": {
+        "name": "סטטוס הגדרות",
+        "desc": "סטטוס הגדרות התוסף הכולל",
+        "ok": "✅ מוגדר ({{providers}} ספקים, {{conversations}} שיחות)",
+        "incomplete": "⚠️ לא שלם - אנא הגדר ספקים ומודלים"
+      }
+    },
+    "llm": {
+      "title": "הגדרת LLM",
+      "desc": "הגדר ספקי מודלי שפה ונהל מודלים זמינים.",
+      "subTabs": {
+        "provider": "ספקים",
+        "models": "מודלים"
+      }
+    },
+    "models": {
+      "title": "הגדרת מודלים",
+      "desc": "הצג ונהל מודלים מכל הספקים המוגדרים. לחץ על \"רענן מודלים\" לקבלת המודלים הזמינים האחרונים.",
+      "providerCount": "{{count}} ספק מוגדר",
+      "providerCount_plural": "{{count}} ספקים מוגדרים",
+      "refreshAll": "🔄 רענן את כל המודלים",
+      "empty": "אין ספקים מוגדרים עדיין. הוסף ספקים בלשונית הספקים תחילה.",
+      "noModels": "אין מודלים זמינים. לחץ על \"רענן את כל המודלים\" או רענן ספקים בנפרד בלשונית הספקים.",
+      "noMatch": "אין מודלים התואמים למסננים הנוכחיים. התאם או נקה מסננים כדי לראות תוצאות.",
+      "modelCount": "• {{count}} מודל במטמון",
+      "modelCount_plural": "• {{count}} מודלים במטמון",
+      "matchCount": "• {{count}} תואם למסננים הנבחרים",
+      "matchCount_plural": "• {{count}} תואמים למסננים הנבחרים",
+      "status": {
+        "enabled": "פעיל",
+        "disabled": "מושבת"
+      },
+      "actions": {
+        "disable": "השבת",
+        "enable": "הפעל",
+        "setDefaultChat": "הגדר כברירת מחדל לשיחה",
+        "defaultChat": "ברירת מחדל לשיחה",
+        "setDefaultEmbedding": "הגדר כברירת מחדל להטמעה",
+        "defaultEmbedding": "ברירת מחדל להטמעה"
+      },
+      "notices": {
+        "fetching": "מאחזר מודלים עבור {{provider}}...",
+        "fetchFailed": "נכשל בריענון מודלים של {{provider}}",
+        "refreshed": "מודלים רועננו בהצלחה!",
+        "refreshFailed": "נכשל בריענון מודלים",
+        "defaultChatSet": "מודל שיחה ברירת המחדל הוגדר ל-{{name}}",
+        "defaultEmbeddingSet": "מודל הטמעה ברירת המחדל הוגדר ל-{{name}}"
+      },
+      "filters": {
+        "allProviders": "כל הספקים",
+        "allCapabilities": "כל היכולות",
+        "allStates": "כל המצבים",
+        "searchPlaceholder": "חפש לפי שם או מזהה"
+      }
+    },
+    "provider": {
+      "title": "הגדרת ספק",
+      "securityTitle": "⚠️ אזהרת אבטחה",
+      "securityDesc": "מפתחות API מאוחסנים כטקסט רגיל בכספת שלך לצורך תאימות. למניעת דליפות מקריות:",
+      "securityItem1": "אל תשתף את תיקיית {{configDir}}/plugins/intelligence-assistant/data/.",
+      "securityItem2": "הוסף תיקייה זו ל-.gitignore אם אתה משתמש בסנכרון Git.",
+      "securityItem3": "היה זהיר בעת שימוש בשירותי סנכרון ענן ציבוריים.",
+      "desc": "נהל ספקי LLM ואישורי API. השתמש בעמודת הפעולות לעריכת פרטי הגדרות או רענון מודלים במטמון.",
+      "count": "{{count}} ספק מוגדר",
+      "count_plural": "{{count}} ספקים מוגדרים",
+      "addBtn": "+ הוסף ספק",
+      "empty": "אין ספקים מוגדרים. בחר \"הוסף ספק\" כדי להתחיל.",
+      "tableHeaders": {
+        "provider": "ספק",
+        "status": "סטטוס",
+        "actions": "פעולות"
+      },
+      "status": {
+        "ready": "מוכן",
+        "needsConfig": "נדרשת הגדרה",
+        "checking": "בודק...",
+        "credentialsSet": "אישורים הוגדרו",
+        "serverOnline": "שרת מקוון",
+        "serverOffline": "שרת לא מקוון",
+        "serverError": "שגיאת שרת"
+      },
+      "guidance": {
+        "requiresCli": "דורש CLI מקומי",
+        "provideServiceKey": "ספק מפתח שירות",
+        "configureBaseUrl": "הגדר כתובת URL בסיסית",
+        "addApiKey": "הוסף מפתח API"
+      },
+      "models": {
+        "none": "אין מודלים",
+        "count": "{{count}} מודל",
+        "count_plural": "{{count}} מודלים"
+      },
+      "ollama": {
+        "checkingVersion": "בודק גרסה...",
+        "server": {
+          "checking": "בודק שרת...",
+          "online": "שרת: מקוון",
+          "offline": "שרת: לא מקוון או לא נגיש",
+          "error": "שרת: שגיאת חיבור",
+          "versionOnline": "שרת מקוון",
+          "versionOffline": "שרת לא מקוון",
+          "versionError": "שגיאת חיבור",
+          "version": "גרסה: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "ריענון אחרון: {{timeAgo}}",
+        "neverRefreshed": "לא רועןן מעולם",
+        "justNow": "עכשיו",
+        "minutesAgo": "לפני {{n}} דקות",
+        "hoursAgo": "לפני {{n}} שעות",
+        "daysAgo": "לפני {{n}} ימים"
+      },
+      "actions": {
+        "edit": "ערוך",
+        "manageModels": "נהל מודלים",
+        "refreshModels": "רענן מודלים",
+        "refreshing": "מרענן...",
+        "delete": "מחק"
+      },
+      "notices": {
+        "refreshed": "מודלים רועננו עבור {{provider}}.",
+        "refreshFailed": "נכשל בריענון מודלים"
+      },
+      "confirm": {
+        "delete": "הסר ספק {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "ניהול שרת MCP",
+      "desc": "הגדר שרתי Model Context Protocol (MCP) להרחבת יכולות הסוכן עם כלים ומקורות נתונים חיצוניים.",
+      "inspectorBtn": "🔍 פתח בודק MCP",
+      "testAllBtn": "🧪 בדוק את כל החיבורים",
+      "refreshAllBtn": "🔄 רענן את כל הכלים",
+      "addBtn": "+ הוסף שרת MCP",
+      "empty": "אין שרתי MCP מוגדרים. בחר הוסף שרת MCP כדי להתחיל.",
+      "tableHeaders": {
+        "name": "שם",
+        "command": "פקודה",
+        "arguments": "ארגומנטים",
+        "status": "סטטוס",
+        "tools": "כלים",
+        "actions": "פעולות"
+      },
+      "untitled": "שרת MCP ללא שם",
+      "notConfigured": "לא מוגדר",
+      "noArgs": "ללא",
+      "cached": "במטמון",
+      "disabled": "מושבת",
+      "envVars": "{{count}} משתנה סביבה",
+      "envVars_plural": "{{count}} משתני סביבה",
+      "status": {
+        "disabled": "מושבת",
+        "connected": "מחובר",
+        "disconnected": "מנותק",
+        "enableToManage": "הפעל לניהול חיבורים",
+        "manualConnect": "התחבר ידנית",
+        "autoConnect": "התחבר אוטומטית"
+      },
+      "toolCount": {
+        "live": "{{count}} כלי חי",
+        "live_plural": "{{count}} כלים חיים",
+        "cached": "{{count}} כלי במטמון",
+        "cached_plural": "{{count}} כלים במטמון"
+      },
+      "actions": {
+        "edit": "ערוך",
+        "enabled": "✓ פעיל",
+        "enabledOff": "✗ מושבת",
+        "connect": "התחבר",
+        "disconnect": "התנתק",
+        "connecting": "מתחבר...",
+        "disconnecting": "מתנתק...",
+        "test": "בדוק",
+        "testing": "בודק...",
+        "delete": "מחק"
+      },
+      "notices": {
+        "disconnected": "התנתק מ-{{name}}",
+        "connected": "מחובר ל-{{name}}",
+        "autoConnectFailed": "נכשל בהתחברות אוטומטית ל-{{name}}",
+        "enableFirst": "הפעל את השרת לפני ההתחברות",
+        "disconnectFailed": "נכשל בניתוק מ-{{name}}",
+        "connectFailed": "נכשל בהתחברות ל-{{name}}",
+        "testNoCommand": "❌ אנא הזן פקודה לפני בדיקת החיבור",
+        "testSuccess": "✅ התחבר בהצלחה! נמצאו {{count}} כלים.",
+        "testFailed": "❌ החיבור נכשל: {{message}}",
+        "refreshedAll": "✅ רועננו כלים עבור {{count}} שרת",
+        "refreshedAll_plural": "✅ רועננו כלים עבור {{count}} שרתים",
+        "refreshedPartial": "✅ רועננו {{success}} שרתים, ❌ {{failed}} נכשלו",
+        "noServersConfigured": "⚠️ אין שרתי MCP מוגדרים",
+        "testingAll": "🧪 בודק {{count}} חיבורי שרת MCP...",
+        "testAllSuccess": "✅ כל {{count}} שרתי mcp התחברו בהצלחה!",
+        "testAllPartial": "⚠️ {{successful}} התחברו, {{failed}} נכשלו"
+      },
+      "confirm": {
+        "delete": "מחק שרת MCP \"{{name}}\"?"
+      }
+    },
+    "agents": {
+      "title": "ניהול סוכנים",
+      "desc": "צור ונהל סוכני AI עם יכולות, כלים והתנהגויות ספציפיות.",
+      "count": "{{count}} סוכן מוגדר",
+      "count_plural": "{{count}} סוכנים מוגדרים",
+      "addBtn": "+ הוסף סוכן",
+      "empty": "אין סוכנים מוגדרים. בחר הוסף סוכן כדי להתחיל.",
+      "tableHeaders": {
+        "agent": "סוכן",
+        "model": "מודל",
+        "capabilities": "יכולות",
+        "tools": "כלים",
+        "actions": "פעולות"
+      },
+      "defaultBadge": "ברירת מחדל",
+      "systemPrompt": "הנחיית מערכת • {{promptName}}",
+      "customPrompt": "הנחייה מותאמת אישית",
+      "model": {
+        "notSet": "לא הוגדר",
+        "notFound": "מודל לא נמצא במטמון",
+        "useChatView": "השתמש במודל תצוגת שיחה",
+        "useChatViewDesc": "ישתמש במודל שנבחר בתצוגת השיחה",
+        "useDefault": "השתמש במודל ברירת המחדל",
+        "useDefaultDesc": "ישתמש במודל ברירת המחדל מההגדרות"
+      },
+      "capabilities": {
+        "noSpecialModes": "אין מצבים מיוחדים"
+      },
+      "tools": {
+        "builtIn": "{{count}} מובנה",
+        "mcpServer": "{{count}} שרת mcp",
+        "mcpServer_plural": "{{count}} שרתי mcp",
+        "mcpTool": "{{count}} כלי mcp",
+        "mcpTool_plural": "{{count}} כלי mcp",
+        "noTools": "אין כלים פעילים"
+      },
+      "actions": {
+        "edit": "ערוך",
+        "delete": "מחק",
+        "protected": "מוגן"
+      },
+      "confirm": {
+        "delete": "מחק סוכן \"{{name}}\"?"
+      }
+    },
+    "prompts": {
+      "title": "הנחיות מערכת",
+      "desc": "נהל הנחיות מערכת המגדירות את ההתנהגות והאישיות של עוזר ה-AI שלך.",
+      "addBtn": "+ הוסף הנחיית מערכת",
+      "empty": "אין הנחיות מערכת מוגדרות. בחר הוסף הנחיית מערכת כדי להתחיל.",
+      "tableHeaders": {
+        "name": "שם",
+        "contentPreview": "תצוגה מקדימה של תוכן",
+        "created": "נוצר",
+        "updated": "עודכן",
+        "enabled": "פעיל",
+        "actions": "פעולות"
+      },
+      "status": {
+        "enabled": "פעיל",
+        "disabled": "מושבת"
+      },
+      "actions": {
+        "edit": "ערוך",
+        "disable": "השבת",
+        "enable": "הפעל",
+        "delete": "מחק"
+      },
+      "confirm": {
+        "delete": "מחק הנחייה \"{{name}}\"?"
+      }
+    },
+    "tools": {
+      "title": "הגדרת כלים",
+      "desc": "בדוק כלים מובנים וחקור כלי MCP הנטענים משרתים מחוברים. הפעל את הפעולות שהסוכנים שלך אמורים לבצע.",
+      "subTabs": {
+        "builtIn": "כלים מובנים",
+        "mcp": "כלי MCP",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "כלי CLI"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "שם",
+          "category": "קטגוריה",
+          "description": "תיאור",
+          "parameters": "פרמטרים",
+          "enabled": "פעיל"
+        },
+        "categories": {
+          "fileOps": "פעולות קבצים",
+          "searchDisc": "חיפוש וגילוי",
+          "noteMgmt": "ניהול פתקים"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "קרא את תוכן קובץ מהכספת שלך",
+            "params": "path (נדרש): נתיב לקובץ לקריאה"
+          },
+          "writeFile": {
+            "desc": "כתוב או עדכן קובץ בכספת שלך",
+            "params": "path (נדרש), content (נדרש): נתיב קובץ ותוכן לכתיבה"
+          },
+          "listFiles": {
+            "desc": "רשום קבצים בכספת או בתיקייה ספציפית",
+            "params": "folder (אופציונלי), extension (אופציונלי): סנן לפי תיקייה וסיומת קובץ"
+          },
+          "searchFiles": {
+            "desc": "חפש קבצים לפי שם או תוכן בכספת שלך",
+            "params": "query (נדרש), search_content (אופציונלי), limit (אופציונלי): שאילתת חיפוש ואפשרויות"
+          },
+          "createNote": {
+            "desc": "צור פתק חדש עם תוכן מוגדר",
+            "params": "title (נדרש), content (נדרש), folder (אופציונלי): כותרת פתק, תוכן ומיקום"
+          },
+          "appendNote": {
+            "desc": "הוסף תוכן לפתק קיים",
+            "params": "path (נדרש), content (נדרש): נתיב פתק ותוכן להוספה"
+          }
+        },
+        "infoTitle": "💡 אודות כלים",
+        "infoText": "כלים מובנים מוגדרים לפי הגדרות התוסף. כלי MCP מנוהלים באופן עצמאי — השתמש בלשונית MCP לחיבור שרתים ורענון זמינות הכלים.",
+        "toolNames": {
+          "read_file": "קרא קובץ",
+          "write_file": "כתוב קובץ",
+          "list_files": "רשום קבצים",
+          "search_files": "חפש קבצים",
+          "create_note": "צור פתק",
+          "append_note": "הוסף לפתק"
+        }
+      },
+      "mcpTools": {
+        "noTools": "אין כלי MCP זמינים. חבר שרת או רענן כלים במטמון כדי לאכלס רשימה זו.",
+        "tableHeaders": {
+          "server": "שרת",
+          "tool": "כלי",
+          "description": "תיאור",
+          "parameters": "פרמטרים",
+          "source": "מקור"
+        },
+        "noDescription": "אין תיאור",
+        "schemaUnavailable": "הסכימה אינה זמינה",
+        "live": "חי",
+        "cached": "במטמון",
+        "status": {
+          "connected": "מחובר",
+          "disconnected": "מנותק"
+        }
+      },
+      "openapi": {
+        "desc": "צור כלי HTTP ממסמכי OpenAPI. מפרטים מרוחקים נשמרים במטמון תחת {{cacheDir}}.",
+        "addBtn": "הוסף מקור HTTP",
+        "noSources": "אין מקורות HTTP מוגדרים עדיין.",
+        "unnamed": "מקור HTTP ללא שם",
+        "tableHeaders": {
+          "name": "שם",
+          "source": "מקור",
+          "auth": "אימות",
+          "status": "סטטוס",
+          "actions": "פעולות"
+        },
+        "sourceUrl": "כתובת URL מרוחקת לא הוגדרה",
+        "sourcePath": "נתיב קובץ לא הוגדר",
+        "authHeader": "כותרת ({{key}})",
+        "authQuery": "שאילתה ({{key}})",
+        "authNone": "ללא",
+        "statusEnabled": "פעיל",
+        "statusDisabled": "מושבת",
+        "actions": {
+          "edit": "ערוך",
+          "reload": "טען מחדש",
+          "refetch": "אחזר מחדש",
+          "delete": "מחק"
+        },
+        "notices": {
+          "removed": "מקור HTTP הוסר",
+          "reloaded": "נטענו מחדש {{count}} פעולות",
+          "reloadFailed": "נכשל בטעינה מחדש של מקור HTTP. בדוק את הקונסול לפרטים."
+        },
+        "modal": {
+          "defaultTitle": "מקור HTTP",
+          "displayName": {
+            "name": "שם תצוגה",
+            "desc": "מוצג לסוכנים בעת בחירת מקור כלי"
+          },
+          "enabled": {
+            "name": "פעיל",
+            "desc": "הפעל כדי לחשוף API HTTP זה לכל סוכן"
+          },
+          "sourceType": {
+            "name": "סוג מקור",
+            "file": "קובץ מקומי",
+            "url": "URL מרוחק"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "נאחזר ונשמר במטמון בתוך ספריית נתוני התוסף"
+          },
+          "cachedFile": "קובץ במטמון: {{path}} ({{date}})",
+          "neverFetched": "לא נאחזר מעולם",
+          "specPath": {
+            "name": "נתיב קובץ OpenAPI",
+            "desc": "נתיב יחסי בתוך הכספת או נתיב מוחלט"
+          },
+          "baseUrl": {
+            "name": "עקיפת URL בסיסי",
+            "desc": "עקוף את רשומת השרת הראשונה מהמסמך (אופציונלי)"
+          },
+          "auth": {
+            "name": "אימות",
+            "desc": "הכנס אוטומטית מפתחות API בעת קריאה למקור זה",
+            "none": "ללא",
+            "header": "כותרת HTTP",
+            "query": "פרמטר שאילתה"
+          },
+          "credKey": {
+            "name": "מפתח אישור"
+          },
+          "credValue": {
+            "name": "ערך אישור"
+          },
+          "actions": {
+            "name": "פעולות",
+            "reloadTools": "טען כלים מחדש",
+            "refetchTooltip": "אחזר מפרט מ-URL",
+            "deleteTooltip": "מחק מקור"
+          }
+        }
+      },
+      "cli": {
+        "desc": "הגדר כלי שורת פקודה מקומיים שסוכנים יכולים להפעיל. השתמש בתבניות כמו {{param}} לארגומנטים דינמיים.",
+        "addBtn": "הוסף כלי CLI",
+        "presetsBtn": "הוסף מהגדרות מוכנות",
+        "noTools": "אין כלי CLI מוגדרים עדיין.",
+        "tableHeaders": {
+          "name": "שם",
+          "command": "פקודה",
+          "parameters": "פרמטרים",
+          "status": "סטטוס",
+          "actions": "פעולות"
+        },
+        "unnamed": "כלי CLI ללא שם",
+        "paramCount": "{{count}} פרמטר",
+        "paramCount_plural": "{{count}} פרמטרים",
+        "noParams": "ללא",
+        "statusEnabled": "פעיל",
+        "statusDisabled": "מושבת",
+        "actions": {
+          "edit": "ערוך",
+          "disable": "השבת",
+          "enable": "הפעל",
+          "delete": "מחק"
+        },
+        "notices": {
+          "removed": "כלי CLI הוסר"
+        },
+        "infoTitle": "💡 אודות כלי CLI",
+        "infoText": "כלי CLI מפעילים פקודות מעטפת מקומית. השתמש ב-{{paramName}} בארגומנטים להחלפת תבנית, או הגדר פרמטרים להעברה כארגומנטים או משתני סביבה.",
+        "modal": {
+          "defaultTitle": "כלי CLI",
+          "toolName": {
+            "name": "שם כלי",
+            "desc": "מזהה שסוכנים משתמשים בו לקריאה לכלי זה"
+          },
+          "description": {
+            "name": "תיאור",
+            "desc": "תאר מה כלי זה עושה עבור ה-AI"
+          },
+          "enabled": {
+            "name": "פעיל",
+            "desc": "הפעל כדי לאפשר לסוכנים להשתמש בכלי זה"
+          },
+          "commandConfig": "הגדרת פקודה",
+          "command": {
+            "name": "פקודה",
+            "desc": "הקובץ ההרצה להפעלה (למשל, node, python, bash, /path/to/script)"
+          },
+          "args": {
+            "name": "ארגומנטים",
+            "desc": "ארגומנטי פקודה, אחד לכל שורה. השתמש ב-{{paramName}} להחלפת תבנית."
+          },
+          "cwd": {
+            "name": "ספריית עבודה",
+            "desc": "ספרייה להפעלת הפקודה בה (אופציונלי)"
+          },
+          "timeout": {
+            "name": "פסק זמן (ms)",
+            "desc": "זמן הפעלה מקסימלי במילישניות (ברירת מחדל: {{timeout}})"
+          },
+          "shell": {
+            "name": "הפעל במעטפת",
+            "desc": "הפעל את הפקודה דרך מעטפת (מאפשר תכונות מעטפת כמו צינורות)"
+          },
+          "paramsTitle": "פרמטרים",
+          "paramsDesc": "הגדר פרמטרים שה-AI יכול להעביר לכלי זה.",
+          "addParam": "הוסף פרמטר",
+          "noParams": "אין פרמטרים מוגדרים.",
+          "paramN": "פרמטר {{n}}",
+          "param": {
+            "name": "שם",
+            "type": {
+              "name": "סוג",
+              "string": "מחרוזת",
+              "number": "מספר",
+              "boolean": "בוליאני"
+            },
+            "description": "תיאור",
+            "required": "נדרש",
+            "insertAs": {
+              "name": "הכנס כ-",
+              "desc": "כיצד להעביר פרמטר זה לפקודה",
+              "template": "תבנית ({{name}})",
+              "arg": "הוסף כארגומנט",
+              "env": "משתנה סביבה"
+            },
+            "envName": {
+              "name": "שם משתנה סביבה",
+              "desc": "עקוף את שם משתנה הסביבה (ברירת מחדל: שם פרמטר באותיות גדולות)"
+            }
+          },
+          "envTitle": "משתני סביבה",
+          "envDesc": "משתני סביבה סטטיים להגדרה בעת הפעלת הפקודה.",
+          "envVars": {
+            "name": "משתני סביבה",
+            "desc": "פורמט: מפתח=ערך, אחד לכל שורה"
+          }
+        },
+        "presets": {
+          "title": "הוסף כלי CLI מהגדרות מוכנות",
+          "desc": "בחר הגדרה מוכנה להוספה מהירה של כלי CLI מוגדר מראש. ניתן להתאים אותו לאחר ההוספה.",
+          "addBtn": "הוסף",
+          "addedBtn": "נוסף",
+          "closeBtn": "סגור",
+          "notices": {
+            "added": "נוסף \"{{name}}\" - הפעל אותו ברשימת כלי CLI"
+          },
+          "categories": {
+            "file": "פעולות קבצים",
+            "search": "חיפוש",
+            "network": "רשת",
+            "code": "הרצת קוד",
+            "data": "עיבוד נתונים",
+            "system": "מידע מערכת",
+            "apps": "אפליקציות macOS ושולחן עבודה"
+          },
+          "names": {
+            "preset-cat": "קרא קובץ (cat)",
+            "preset-ls": "רשום ספרייה (ls)",
+            "preset-find": "מצא קבצים (find)",
+            "preset-grep": "חפש טקסט (grep)",
+            "preset-ripgrep": "חיפוש מהיר (rg)",
+            "preset-curl": "בקשת HTTP (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "הפעל קוד Python",
+            "preset-node": "הפעל JavaScript (Node)",
+            "preset-bash": "הפעל סקריפט מעטפת",
+            "preset-jq": "מעבד JSON (jq)",
+            "preset-wc": "ספירת מילים (wc)",
+            "preset-date": "תאריך/שעה נוכחיים",
+            "preset-pwd": "ספרייה נוכחית (pwd)",
+            "preset-whoami": "משתמש נוכחי",
+            "preset-uname": "מידע מערכת (uname)",
+            "preset-open": "פתח קובץ/URL (open)",
+            "preset-open-app": "הפעל אפליקציה (open -a)",
+            "preset-safari": "פתח ב-Safari",
+            "preset-chrome": "פתח ב-Chrome",
+            "preset-firefox": "פתח ב-Firefox",
+            "preset-pbcopy": "העתק ללוח",
+            "preset-pbpaste": "הדבק מלוח",
+            "preset-say": "המרת טקסט לדיבור (say)",
+            "preset-osascript": "מפעיל AppleScript",
+            "preset-notify": "התראת שולחן עבודה",
+            "preset-screencapture": "צילום מסך",
+            "preset-applescript-list-apps": "רשום אפליקציות פועלות"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "הגדרת RAG",
+      "desc": "הגדר יצירה מוגברת על ידי אחזור וחיפוש באינטרנט לשיפור תגובות AI.",
+      "subTabs": {
+        "overview": "סקירה כללית",
+        "chunking": "פיצול",
+        "search": "חיפוש",
+        "filters": "מסננים",
+        "advanced": "מתקדם",
+        "websearch": "חיפוש ברשת"
+      },
+      "general": {
+        "title": "הגדרות כלליות",
+        "enableRag": {
+          "name": "הפעל RAG",
+          "desc": "הפעל יצירה מוגברת על ידי אחזור לקונטקסט משופר"
+        },
+        "vectorStore": {
+          "name": "מאגר וקטורים",
+          "desc": "מסד נתונים וקטורי לאחסון הטמעות",
+          "memory": "בזיכרון",
+          "disk": "מבוסס דיסק"
+        },
+        "embeddingModel": {
+          "name": "מודל הטמעה",
+          "desc": "מודל לשימוש ביצירת הטמעות"
+        },
+        "embedChanged": {
+          "name": "הטמע קבצים שונו אוטומטית",
+          "desc": "הטמע מחדש קבצים אוטומטית כשהם משתנים"
+        }
+      },
+      "indexMgmt": {
+        "title": "ניהול אינדקס",
+        "desc": "נהל את אינדקס ה-RAG שלך וצפה בסטטיסטיקות על התוכן המאונדקס.",
+        "statsTitle": "סטטיסטיקות אינדקס",
+        "stats": {
+          "totalChunks": "סך כל הפיסות",
+          "uniqueFiles": "קבצים ייחודיים",
+          "totalChars": "סך כל התווים",
+          "avgChunkSize": "גודל פיסה ממוצע"
+        },
+        "empty": "האינדקס ריק. בחר בנה מחדש אינדקס כדי להתחיל אינדוקס.",
+        "error": "⚠️ לא ניתן לטעון סטטיסטיקות אינדקס",
+        "rebuild": {
+          "name": "בנה מחדש אינדקס",
+          "desc": "אנדקס מחדש את כל הקבצים בכספת שלך. זה עשוי לקחת זמן.",
+          "btn": "בנה מחדש",
+          "rebuilding": "בונה מחדש..."
+        },
+        "refresh": {
+          "name": "רענן אינדקס",
+          "desc": "עדכן את האינדקס עם קבצים שהשתנו מאז האינדוקס האחרון.",
+          "btn": "רענן",
+          "refreshing": "מרענן..."
+        },
+        "clear": {
+          "name": "נקה אינדקס",
+          "desc": "הסר את כל הנתונים המאונדקסים. יהיה עליך לבנות מחדש את האינדקס.",
+          "btn": "נקה",
+          "clearing": "מנקה..."
+        },
+        "notices": {
+          "rebuilt": "האינדקס נבנה מחדש בהצלחה",
+          "rebuildFailed": "נכשל בבנייה מחדש של האינדקס",
+          "refreshed": "האינדקס רועןן בהצלחה",
+          "refreshFailed": "נכשל בריענון האינדקס",
+          "cleared": "האינדקס נוקה בהצלחה",
+          "clearFailed": "נכשל בניקוי האינדקס"
+        }
+      },
+      "chunking": {
+        "title": "הגדרות פיצול",
+        "strategy": {
+          "name": "אסטרטגיית פיצול",
+          "desc": "אסטרטגיה לפיצול מסמכים לפיסות",
+          "recursive": "רקורסיבי (חכם)",
+          "fixed": "גודל קבוע",
+          "sentence": "לפי משפט",
+          "paragraph": "לפי פסקה"
+        },
+        "chunkSize": {
+          "name": "גודל פיסה",
+          "desc": "מספר תווים לפיסה (מומלץ 500-2000)"
+        },
+        "chunkOverlap": {
+          "name": "חפיפת פיסות",
+          "desc": "מספר תווים חופפים בין פיסות"
+        },
+        "minChunkSize": {
+          "name": "גודל פיסה מינימלי",
+          "desc": "גודל פיסה מינימלי ליצירה"
+        },
+        "maxTokens": {
+          "name": "מקסימום טוקנים לפיסה",
+          "desc": "מקסימום טוקנים מותרים לפיסה"
+        }
+      },
+      "search": {
+        "title": "הגדרות חיפוש",
+        "searchType": {
+          "name": "סוג חיפוש",
+          "desc": "סוג חיפוש הדמיון לביצוע",
+          "similarity": "דמיון"
+        },
+        "topK": {
+          "name": "תוצאות K עליות",
+          "desc": "מספר הפיסות הרלוונטיות ביותר לאחזר (1-20)"
+        },
+        "threshold": {
+          "name": "סף דמיון",
+          "desc": "ציון דמיון מינימלי לכלול תוצאות (0.0-1.0)"
+        },
+        "weight": {
+          "name": "משקל ציון רלוונטיות",
+          "desc": "משקל לניקוד רלוונטיות (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "מגבלת חלון קונטקסט",
+          "desc": "מקסימום טוקנים לקונטקסט שאוחזר"
+        }
+      },
+      "filters": {
+        "title": "מסנני קבצים",
+        "excludeFolders": {
+          "name": "הוצא ספריות",
+          "desc": "ספריות להוציא מהאינדוקס (מופרדות בפסיקים)"
+        },
+        "includeTypes": {
+          "name": "כלול סוגי קבצים",
+          "desc": "סוגי קבצים לכלול (ריק = כל הסוגים)"
+        },
+        "excludeTypes": {
+          "name": "הוצא סוגי קבצים",
+          "desc": "סוגי קבצים להוציא מהאינדוקס"
+        },
+        "filterByTag": {
+          "name": "סנן לפי תג",
+          "desc": "אנדקס רק קבצים עם תגים אלה (ריק = כל הקבצים)"
+        },
+        "excludeByTag": {
+          "name": "הוצא לפי תג",
+          "desc": "הוצא קבצים עם תגים אלה מהאינדוקס"
+        }
+      },
+      "advanced": {
+        "title": "הגדרות מתקדמות",
+        "batchSize": {
+          "name": "גודל אצווה להטמעה",
+          "desc": "מספר פיסות להטמעה במקביל"
+        }
+      },
+      "grading": {
+        "title": "הגדרות דירוג",
+        "desc": "דרג פיסות שאוחזרו לרלוונטיות לפני שליחה ל-LLM. זה עוזר לסנן תוצאות באיכות נמוכה.",
+        "enableGrading": {
+          "name": "הפעל סף דירוג",
+          "desc": "סנן פיסות מתחת לסף האיכות"
+        },
+        "graderSource": {
+          "name": "מקור מודל דירוג",
+          "desc": "מאיפה לקחת את מודל הדירוג",
+          "chat": "מודל שיחה",
+          "custom": "מודל מותאם אישית"
+        },
+        "graderModel": {
+          "name": "מודל דירוג",
+          "desc": "מודל ספציפי לשימוש לדירוג"
+        },
+        "parallel": {
+          "name": "עיבוד מקביל",
+          "desc": "מספר פיסות לדירוג במקביל"
+        },
+        "minRelevance": {
+          "name": "ציון רלוונטיות מינימלי",
+          "desc": "ציון רלוונטיות מינימלי (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "ציון דיוק מינימלי",
+          "desc": "ציון דיוק מינימלי (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "ציון איכות תמיכה מינימלי",
+          "desc": "ציון איכות תמיכה מינימלי (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "הגדרת חיפוש ברשת",
+      "desc": "הגדר פונקציונליות חיפוש ברשת לשיפור תגובות AI עם מידע עדכני מהאינטרנט.",
+      "generalBehavior": "התנהגות כללית",
+      "providerSelection": "בחירת ספק",
+      "localeFilters": "מיקום ומסננים",
+      "apiCredentials": "אישורי API ונקודות קצה",
+      "enabled": {
+        "name": "הפעל חיפוש ברשת",
+        "desc": "אפשר ל-AI לחפש ברשת מידע עדכני"
+      },
+      "autoTrigger": {
+        "name": "הפעל חיפוש אוטומטי",
+        "desc": "הפעל אוטומטית חיפוש ברשת כשהשאילתה דורשת מידע עדכני (למשל, חדשות, מחירים, אירועים אחרונים)"
+      },
+      "maxResults": {
+        "name": "מקסימום תוצאות",
+        "desc": "מספר מקסימלי של תוצאות חיפוש להחזיר"
+      },
+      "timeRange": {
+        "name": "רעננות תוצאות",
+        "desc": "הגבל תוצאות לטווח זמן הנתמך על ידי ספקים (Google, SearXNG, Mojeek)",
+        "any": "כל זמן (ברירת מחדל)",
+        "h": "שעה אחרונה",
+        "d": "24 שעות אחרונות",
+        "w": "שבוע אחרון",
+        "m": "חודש אחרון",
+        "y": "שנה אחרונה"
+      },
+      "provider": {
+        "name": "ספק חיפוש",
+        "desc": "בחר מ-scrapers ידידותיים לפרטיות או מנועים מגובים ב-API"
+      },
+      "searchLanguage": {
+        "name": "קוד שפה",
+        "desc": "קוד שפת ISO (למשל, en, fr, zh-CN) מועבר לספקים התומכים בלוקליזציה"
+      },
+      "searchCountry": {
+        "name": "קוד מדינה/שוק",
+        "desc": "קוד מדינה בן שתי אותיות (למשל, US, DE) המשמש את Bing, DuckDuckGo, Brave ואחרים"
+      },
+      "includeDomains": {
+        "name": "כלול רק דומיינים אלה",
+        "desc": "רשימה מופרדת בפסיקים המשמשת את SerpAPI ו-Brave להגבלת תוצאות לאתרים ספציפיים"
+      },
+      "excludeDomains": {
+        "name": "הוצא דומיינים",
+        "desc": "דומיינים מופרדים בפסיקים לסינון לאחר אחזור תוצאות"
+      },
+      "apiKey": {
+        "name": "מפתח API ברירת מחדל",
+        "desc": "מפתח API משותף המשמש את Google, Bing, SerpAPI, Tavily, או Brave כשמפתחות ספציפיים לספק לא הוגדרו"
+      },
+      "googleCseId": {
+        "name": "מזהה מנוע חיפוש מותאם אישית של Google",
+        "desc": "נדרש עם מפתח API של Google בשימוש בספק Google"
+      },
+      "serpapiEndpoint": {
+        "name": "נקודת קצה SerpAPI",
+        "desc": "עקוף את כתובת URL הבסיסית של SerpAPI אם אתה מארח בעצמך"
+      },
+      "tavilyApiKey": {
+        "name": "מפתח API של Tavily",
+        "desc": "עוקף את המפתח ברירת המחדל בשימוש בספק Tavily"
+      },
+      "searxngEndpoint": {
+        "name": "נקודת קצה SearXNG",
+        "desc": "כתובת URL בסיסית של מופע SearXNG שלך (חייב להחזיר JSON)"
+      },
+      "braveApiKey": {
+        "name": "מפתח API של Brave",
+        "desc": "השתמש באסימון מנוי Brave Search API כשנבחר כספק"
+      },
+      "qwantApiKey": {
+        "name": "מפתח API של Qwant (אופציונלי)",
+        "desc": "הוסף אסימון bearer אם תוכנית Qwant שלך מנפיקה אחד"
+      },
+      "mojeekApiKey": {
+        "name": "מפתח API של Mojeek",
+        "desc": "נדרש עבור ספק Mojeek"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (לא נדרש מפתח)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (גרידת HTML)",
+        "yandex": "Yandex (גרידת HTML)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "פעולות מהירות",
+      "desc": "הגדר פעולות מהירות מבוססות AI המופיעות בתפריט ההקשר של העורך כשטקסט נבחר.",
+      "actionPrefix": {
+        "name": "קידומת פעולה",
+        "desc": "קידומת (אמוג'י או טקסט) להצגה לפני כל הפעולות המהירות בתפריט ההקשר",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} פעולה מוגדרת ({{enabled}} פעילות)",
+      "count_plural": "{{count}} פעולות מוגדרות ({{enabled}} פעילות)",
+      "addBtn": "+ הוסף פעולה מהירה",
+      "empty": "אין פעולות מהירות מוגדרות. בחר הוסף פעולה מהירה כדי להתחיל.",
+      "tableHeaders": {
+        "action": "פעולה",
+        "type": "סוג",
+        "model": "מודל",
+        "promptPreview": "תצוגה מקדימה של הנחייה",
+        "actions": "פעולות"
+      },
+      "defaultModel": "ברירת מחדל",
+      "editBtn": "ערוך",
+      "deleteBtn": "מחק",
+      "confirm": {
+        "delete": "מחק פעולה מהירה \"{{name}}\"?"
+      },
+      "usageInfo": {
+        "title": "שימוש",
+        "step1": "בחר טקסט בכל פתק",
+        "step2": "לחץ קליק ימני לפתיחת תפריט ההקשר",
+        "step3": "בחר פעולה מהירה מהתפריט",
+        "step4Replace": "פעולות המסומנות כ\"החלף\" יחליפו את הטקסט שנבחר בתוצאת ה-AI",
+        "step4Explain": "פעולות המסומנות כ\"הסבר\" יציגו את התוצאה בחלון מודלי"
+      },
+      "edit": {
+        "title": "ערוך פעולה מהירה",
+        "name": {
+          "name": "שם",
+          "desc": "שם תצוגה לפעולה זו בתפריט ההקשר"
+        },
+        "actionType": {
+          "name": "סוג פעולה",
+          "desc": "כיצד לטפל בתגובת ה-AI",
+          "replace": "החלף טקסט שנבחר",
+          "explain": "הצג במודל"
+        },
+        "model": {
+          "name": "מודל",
+          "desc": "מודל שפה לשימוש לפעולה זו (השאר ריק לשימוש בברירת מחדל)",
+          "default": "השתמש במודל ברירת המחדל"
+        },
+        "promptTemplate": {
+          "name": "תבנית הנחייה",
+          "desc": "הוראות הנשלחות ל-AI. הטקסט שנבחר יצורף אוטומטית."
+        },
+        "cancel": "ביטול",
+        "save": "שמור"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "הפוך טקסט לארוך יותר",
+          "prompt": "הרחב ופרט את הטקסט הבא, הפוך אותו למפורט ומקיף יותר תוך שמירה על המשמעות והטון המקוריים. החזר רק את הטקסט המורחב ללא הערות נוספות:\n\n"
+        },
+        "summarize": {
+          "name": "סכם טקסט",
+          "prompt": "ספק סיכום תמציתי של הטקסט הבא. החזר רק את הסיכום ללא הערות נוספות:\n\n"
+        },
+        "improve-writing": {
+          "name": "שפר כתיבה",
+          "prompt": "שפר את איכות הכתיבה, הבהירות והסגנון של הטקסט הבא. החזר רק את הטקסט המשופר ללא הערות נוספות:\n\n"
+        },
+        "fix-grammar": {
+          "name": "תקן דקדוק",
+          "prompt": "תקן שגיאות דקדוק, איות ופיסוק בטקסט הבא. החזר רק את הטקסט המתוקן ללא הערות נוספות:\n\n"
+        },
+        "explain": {
+          "name": "הסבר טקסט",
+          "prompt": "הסבר את הטקסט הבא במונחים פשוטים:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "שימוש בטוקנים",
+      "desc": "עקוב אחר צריכת טוקנים בספקים ומודלים. הנתונים מצטברים על פני כל השיחות.",
+      "notAvailable": "מעקב אחר שימוש בטוקנים אינו זמין.",
+      "ranges": {
+        "today": "היום",
+        "week": "השבוע",
+        "month": "החודש",
+        "all": "כל הזמן"
+      },
+      "stats": {
+        "totalTokens": "סך טוקנים",
+        "apiCalls": "קריאות API",
+        "promptTokens": "טוקני הנחייה",
+        "completion": "השלמה",
+        "tokensIn": "טוקנים נכנסים",
+        "tokensOut": "טוקנים יוצאים"
+      },
+      "byProvider": "לפי ספק",
+      "byModel": "לפי מודל",
+      "noData": "אין נתוני שימוש עדיין.",
+      "recentActivity": "פעילות אחרונה",
+      "last10": "10 אחרונים",
+      "noRecent": "אין פעילות אחרונה.",
+      "tableHeaders": {
+        "provider": "ספק",
+        "model": "מודל",
+        "prompt": "הנחייה",
+        "completion": "השלמה",
+        "total": "סך הכל",
+        "calls": "קריאות",
+        "time": "זמן",
+        "in": "כניסה",
+        "out": "יציאה"
+      },
+      "clearBtn": "נקה את כל נתוני השימוש",
+      "confirm": {
+        "clear": "למחוק את כל רשומות השימוש בטוקנים? לא ניתן לבטל פעולה זו."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "הקלד את הודעתך... (Enter לשליחה, Shift+Enter לשורה חדשה)",
+    "conversations": "שיחות",
+    "toggleConversationsTitle": "הצג/הסתר רשימת שיחות",
+    "currentConversation": "שיחה נוכחית",
+    "new": "חדש",
+    "settings": "הגדרות",
+    "openSettingsTitle": "פתח הגדרות תוסף",
+    "mode": "מצב",
+    "prompt": "הנחייה",
+    "agent": "סוכן",
+    "modeOptions": {
+      "chat": "שיחה",
+      "agent": "סוכן"
+    },
+    "noSystemPrompt": "אין הנחיית מערכת",
+    "noAgentsAvailable": "אין סוכנים זמינים",
+    "sendHintPrefix": "לחץ ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " לשליחה",
+    "sendAriaLabel": "שלח הודעה",
+    "stop": " עצור",
+    "addReference": "הוסף הפניה",
+    "addReferenceTooltip": "הוסף הפניה לקובץ או תיקייה (@)",
+    "emptyHeading": "התחל שיחה",
+    "emptySubtext": "הקלד הודעה למטה כדי להתחיל, או בחר שיחה מהיסטוריה.",
+    "noAgentConfig": "אין סוכנים מוגדרים",
+    "selectAgent": "בחר סוכן…",
+    "notices": {
+      "stopping": "עוצר יצירה...",
+      "ragInitError": "שגיאת אתחול RAG: {{message}}",
+      "modelsRefreshed": "מודלים רועננו",
+      "modelsRefreshFailed": "נכשל בריענון מודלים: {{message}}",
+      "waitForResponse": "אנא המתן לסיום התגובה הנוכחית",
+      "configureProvider": "אנא הגדר ספק LLM בהגדרות תחילה",
+      "selectModel": "אנא בחר מודל",
+      "noValidProvider": "לא נמצאה הגדרת ספק תקפה עבור מודל זה",
+      "chatError": "שגיאת שיחה: {{message}}",
+      "noMessageToRegenerate": "לא ניתן למצוא הודעה ליצירה מחדש",
+      "regenerateOnlyLatest": "כרגע ניתן ליצור מחדש רק את התגובה האחרונה",
+      "regenerateNoUserMsg": "לא ניתן למצוא הודעת משתמש ליצירה מחדש",
+      "regenerated": "תגובה נוצרה מחדש",
+      "regenerateFailed": "יצירה מחדש נכשלה: {{message}}",
+      "noteCreated": "פתק נוצר: {{name}}",
+      "noteCreateFailed": "נכשל ביצירת פתק: {{message}}",
+      "messageInserted": "הודעה הוכנסה ל: {{path}}",
+      "messageInsertFailed": "נכשל בהכנסת הודעה: {{message}}",
+      "noAgents": "אין סוכנים זמינים. הגדר סוכנים בהגדרות ← סוכנים.",
+      "ragDisabled": "RAG מושבת בהגדרות. הפעל אותו בהגדרות ← תכונות שיחה ← RAG.",
+      "webSearchDisabled": "חיפוש ברשת מושבת בהגדרות. הפעל אותו בהגדרות ← תכונות שיחה ← חיפוש ברשת.",
+      "noFilesInVault": "לא נמצאו קבצים בכספת",
+      "attached": "מצורף: {{name}}",
+      "attachedImages": "צורפו {{count}} תמונות",
+      "referencesAdded": "נוספו {{count}} הפניות",
+      "fileNotFound": "קובץ לא נמצא: {{path}}",
+      "agentConfigApplied": "הוחלה הגדרה לסוכן: {{name}}",
+      "waitForComplete": "אנא המתן לסיום התגובה הנוכחית",
+      "chatServiceFallback": "ChatService לא מוגדר. משתמש בגיבוי ChatView.",
+      "noModelSelected": "לא נבחר מודל",
+      "noProviderConfig": "לא נמצאה הגדרת ספק",
+      "generationStopped": "יצירה נעצרה",
+      "noResponseToRegenerate": "אין תגובה ליצירה מחדש",
+      "agentNotFound": "סוכן לא נמצא",
+      "unableToLoadRag": "לא ניתן לטעון סטטיסטיקות RAG.",
+      "referenced": "הפניה ל: {{name}}"
+    },
+    "status": {
+      "available": "זמין",
+      "unavailable": "לא זמין",
+      "disabled": "מושבת",
+      "on": "פועל · {{detail}}",
+      "off": "כבוי"
+    },
+    "ragStats": {
+      "title": "סטטיסטיקות RAG",
+      "totalChunks": "📊 סך פיסות:",
+      "filesIndexed": "📁 קבצים מאונדקסים:",
+      "totalSize": "💾 גודל כולל:",
+      "avgChunks": "📈 ממוצע פיסות/קובץ:",
+      "indexedFiles": "📄 קבצים מאונדקסים",
+      "noFilesYet": "⚠️ לא אונדקסו קבצים עדיין.",
+      "howToBuild": "לבניית אינדקס ה-RAG:",
+      "step1": "לך להגדרות ← RAG",
+      "step2": "הפעל RAG",
+      "step3": "בחר אינדקס כספת",
+      "close": "סגור",
+      "retrieved": "📚 נאחזר מ-{{count}} מסמך",
+      "retrieved_plural": "📚 נאחזר מ-{{count}} מסמכים"
+    },
+    "ragTooltip": {
+      "status": "סטטוס אינדקס RAG:",
+      "totalChunks": "📊 סך פיסות: {{count}}",
+      "filesIndexed": "📁 קבצים מאונדקסים: {{count}}",
+      "totalSize": "💾 גודל כולל: {{size}} KB",
+      "indexedFiles": "📄 קבצים מאונדקסים:",
+      "andMore": "  ... ו-{{count}} נוספים",
+      "noFilesYet": "⚠️ לא אונדקסו קבצים עדיין.",
+      "goToSettings": "לך להגדרות ← RAG לבניית האינדקס.",
+      "ragOff": "ℹ️ RAG כבוי כרגע לשיחה זו."
+    },
+    "agentSummary": {
+      "model": "מודל",
+      "temp": "טמפ'",
+      "max": "מקס",
+      "rag": "RAG",
+      "web": "רשת",
+      "tools": "כלים",
+      "memory": "זיכרון",
+      "none": "ללא",
+      "configuration": "הגדרת {{name}}",
+      "modelFixed": "{{name}} · קבוע",
+      "modelDefault": "{{name}} · ברירת מחדל",
+      "modelChatView": "{{name}} · תצוגת שיחה",
+      "customModel": "מודל מותאם אישית",
+      "notSet": "לא הוגדר",
+      "auto": "אוטומטי",
+      "on": "פועל",
+      "off": "כבוי",
+      "shortTerm": "קצר טווח",
+      "longTerm": "ארוך טווח",
+      "disabledMemory": "מושבת",
+      "builtIn": "{{count}} מובנה",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "תוצאות רשת",
+      "attachments": "קבצים מצורפים",
+      "references": "הפניות",
+      "ragSources": "מקורות RAG",
+      "reasoning": "הסקה",
+      "copy": "העתק",
+      "copied": "הודעה הועתקה",
+      "copyFailed": "נכשל בהעתקת הודעה",
+      "tokenUsage": "שימוש בטוקנים",
+      "tokenUsagePrompt": "הנחייה",
+      "tokenUsageCompletion": "השלמה",
+      "tokenUsageTotal": "סך הכל",
+      "save": "שמור",
+      "insertToNotes": "הכנס לפתקים",
+      "regenerate": "צור מחדש"
+    },
+    "streaming": {
+      "thinking": "חושב..."
+    },
+    "toolCall": {
+      "thinking": "חושב",
+      "executionProcess": "תהליך הפעלה",
+      "input": "קלט",
+      "output": "פלט",
+      "running": "פועל..."
+    },
+    "addPicture": "הוסף תמונה",
+    "addPictureTooltip": "צרף תמונה להודעתך",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "השתמש בפתקים מאונדקסים כקונטקסט",
+    "webSearchLabel": "חיפוש ברשת",
+    "webSearchTooltipLabel": "חפש באינטרנט לפי הצורך",
+    "imageUnavailable": "צירוף תמונה אינו זמין עבור המודל הנוכחי.",
+    "newChat": "שיחה חדשה",
+    "newConversation": "שיחה חדשה",
+    "searchConversations": "חפש שיחות...",
+    "header": {
+      "model": "מודל",
+      "advancedParams": "פרמטרים מתקדמים",
+      "temperature": "טמפרטורה",
+      "maxTokens": "מקסימום טוקנים",
+      "topP": "Top P",
+      "freqPenalty": "עונש תדירות",
+      "presPenalty": "עונש נוכחות",
+      "agentConfig": "הגדרת סוכן",
+      "modelsCount": "מודלים: {{count}}",
+      "tokensCount": "טוקנים: {{count}}",
+      "noModels": "אין מודלים זמינים"
+    },
+    "temperature": {
+      "precise": "0 (מדויק)",
+      "balanced": "1 (מאוזן)",
+      "creative": "2 (יצירתי)"
+    },
+    "modals": {
+      "image": {
+        "title": "צרף תמונות",
+        "searchPlaceholder": "חפש תמונות...",
+        "selectAll": "בחר הכל",
+        "selectNone": "בטל בחירה",
+        "addSelected": "הוסף נבחרים",
+        "noResults": "לא נמצאו תמונות תואמות."
+      },
+      "reference": {
+        "title": "הוסף הפניות",
+        "searchPlaceholder": "חפש קבצים ותיקיות...",
+        "selectAll": "בחר הכל",
+        "selectNone": "בטל בחירה",
+        "addSelected": "הוסף נבחרים",
+        "noResults": "לא נמצאו קבצים או תיקיות תואמים."
+      },
+      "insertNote": {
+        "title": "הכנס לפתק",
+        "searchPlaceholder": "חפש פתקים...",
+        "insert": "הכנס לפתק הנבחר",
+        "createNew": "צור פתק חדש",
+        "noResults": "לא נמצאו פתקים תואמים."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "ביטול",
+      "confirm": "אשר"
+    },
+    "agentEdit": {
+      "title": "ערוך סוכן",
+      "icon": {
+        "name": "אייקון",
+        "desc": "אמוג'י או תו לייצוג סוכן זה"
+      },
+      "description": {
+        "name": "תיאור",
+        "desc": "תיאור קצר של הסוכן"
+      },
+      "modelStrategy": {
+        "name": "אסטרטגיית מודל",
+        "options": {
+          "default": "השתמש במודל ברירת מחדל (מהגדרות)",
+          "chatView": "השתמש במודל תצוגת שיחה",
+          "fixed": "מודל קבוע"
+        },
+        "noModels": "אין מודלים במטמון",
+        "desc": "בחר כיצד הסוכן יבחר את המודל שלו"
+      },
+      "systemPrompt": {
+        "createNew": "➕ צור הנחייה חדשה…",
+        "promptName": {
+          "name": "שם הנחייה",
+          "desc": "שם תצוגה עבור הנחיית המערכת החדשה"
+        },
+        "promptContent": {
+          "name": "תוכן הנחייה",
+          "desc": "תוכן עבור הנחיית המערכת החדשה"
+        },
+        "name": "הנחיית מערכת",
+        "desc": "בחר מהנחיות קיימות או הגדר חדשה עבור סוכן זה."
+      },
+      "capabilities": "יכולות",
+      "memory": {
+        "title": "זיכרון",
+        "notice": "זיכרון הסוכן אינו זמין זמנית בזמן שאנו עובדים על החוויה."
+      },
+      "tools": {
+        "title": "כלים",
+        "builtIn": {
+          "name": "כלים מובנים",
+          "desc": "בחר אילו כלים מובנים סוכן זה יכול להשתמש"
+        },
+        "cli": {
+          "name": "כלי CLI",
+          "desc": "הענק גישה לכל כלי ה-CLI הפעילים, או בחר בנפרד למטה",
+          "noTools": "אין כלי CLI מוגדרים. הוסף והפעל כלים בהגדרות ← כלים ← CLI לשימוש כאן."
+        }
+      },
+      "mcp": {
+        "title": "גישת MCP",
+        "noServers": "אין שרתי MCP מוגדרים. הוסף שרתים בהגדרות ← MCP לביטול נעילת אפשרויות אלה.",
+        "toolsCached": "{{count}} כלי במטמון",
+        "toolsCached_plural": "{{count}} כלים במטמון",
+        "noToolsCached": "אין כלים במטמון עדיין. הפעל גישה מלאה או רענן את המטמון.",
+        "showTools": "הצג כלים",
+        "hideTools": "הסתר כלים",
+        "selected": "נבחר",
+        "notSelected": "לא נבחר",
+        "noToolsAvailable": "אין כלים זמינים משרת זה עדיין."
+      },
+      "notices": {
+        "promptRequired": "אנא ספק שם ותוכן עבור הנחיית המערכת החדשה."
+      },
+      "name": {
+        "label": "שם",
+        "desc": "שם תצוגה עבור סוכן זה"
+      },
+      "fixedModel": {
+        "name": "מודל קבוע",
+        "desc": "בחר מודל ספציפי עבור סוכן זה.",
+        "descNoModels": "אין מודלים במטמון. רענן מודלים בלשונית מודלים."
+      },
+      "temperature": {
+        "label": "טמפרטורה",
+        "desc": "שולט באקראיות (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "מקסימום טוקנים",
+        "desc": "מספר מקסימלי של טוקנים ליצירה"
+      },
+      "contextWindow": {
+        "label": "חלון קונטקסט",
+        "desc": "מספר הודעות קודמות לכלול בקונטקסט"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "הפעל יצירה מוגברת על ידי אחזור"
+      },
+      "webSearch": {
+        "name": "חיפוש ברשת",
+        "desc": "הפעל יכולות חיפוש ברשת"
+      },
+      "maxSteps": {
+        "name": "מקסימום שלבי כלים",
+        "desc": "מספר מקסימלי של שלבי קריאת כלים לכל תור סוכן"
+      }
+    },
+    "provider": {
+      "title": "הגדרות ספק",
+      "selectProvider": {
+        "name": "ספק",
+        "desc": "בחר סוג ספק LLM",
+        "placeholder": "-- בחר ספק --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (מקומי)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "מותאם אישית (תואם OpenAI)"
+      },
+      "modelFilter": {
+        "name": "מסנן מודלים",
+        "desc": "תבנית regex אופציונלית להגבלת מודלים זמינים"
+      },
+      "resourceGroup": {
+        "name": "קבוצת משאבים",
+        "desc": "קבוצת משאבים אופציונלית של SAP AI Core"
+      },
+      "serviceKey": {
+        "name": "מפתח שירות",
+        "desc": "מפתח שירות SAP AI Core (מחרוזת JSON)"
+      },
+      "baseUrl": {
+        "name": "כתובת URL בסיסית",
+        "ollamaDesc": "כתובת URL שרת Ollama",
+        "customDesc": "נקודת קצה API תואמת OpenAI (נדרש)",
+        "optionalDesc": "נקודת קצה API מותאמת אישית (אופציונלי)"
+      },
+      "manageModels": {
+        "name": "נהל מודלים",
+        "desc": "משוך מודלים חדשים או עדכן קיימים מ-Ollama registry.",
+        "btn": "⏬ משוך מודל Ollama"
+      },
+      "apiKey": {
+        "name": "מפתח API",
+        "desc": "מפתח אימות לספק הנבחר"
+      },
+      "cancel": "ביטול",
+      "save": "שמור",
+      "validation": {
+        "selectProvider": "אנא בחר סוג ספק",
+        "apiKeyTooLong": "מפתח API ארוך מדי. אורך מקסימלי הוא 500 תווים.",
+        "invalidUrl": "פורמט כתובת URL בסיסית לא תקף. אנא הזן כתובת URL תקפה (למשל, https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "בודק MCP",
+      "desc": "בדוק ואפתר שגיאות חיבורי שרת Model Context Protocol (MCP) וכלים.",
+      "tabs": {
+        "connections": "חיבורים",
+        "tools": "כלים",
+        "logs": "יומנים"
+      },
+      "refreshBtn": "🔄 רענן",
+      "connections": {
+        "title": "חיבורי שרת MCP",
+        "noServers": "אין שרתי MCP מוגדרים.",
+        "headers": {
+          "server": "שם שרת",
+          "status": "סטטוס",
+          "tools": "כלים זמינים",
+          "actions": "פעולות"
+        },
+        "statusDisabled": "מושבת",
+        "statusConnected": "● מחובר",
+        "statusDisconnected": "○ מנותק",
+        "toolsLive": "{{count}} כלי",
+        "toolsLive_plural": "{{count}} כלים",
+        "toolsCached": "{{count}} כלי (במטמון)",
+        "toolsCached_plural": "{{count}} כלים (במטמון)",
+        "noTools": "0 כלים",
+        "connectBtn": "התחבר",
+        "disconnectBtn": "התנתק",
+        "connecting": "מתחבר...",
+        "disconnecting": "מתנתק...",
+        "notices": {
+          "disconnected": "התנתק מ-{{name}}",
+          "enableFirst": "הפעל את השרת בהגדרות לפני ההתחברות",
+          "connected": "מחובר ל-{{name}}",
+          "failedDisconnect": "נכשל בניתוק מ-{{name}}: {{message}}",
+          "failedConnect": "נכשל בהתחברות ל-{{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "כלי MCP זמינים",
+        "noTools": "אין כלי MCP זמינים. בדוק חיבורי שרת.",
+        "serverPrefix": "שרת: {{name}}",
+        "noToolsInServer": "אין כלים זמינים",
+        "headers": {
+          "tool": "שם כלי",
+          "description": "תיאור",
+          "parameters": "פרמטרים"
+        },
+        "noDescription": "אין תיאור",
+        "noParams": "ללא"
+      },
+      "logs": {
+        "title": "יומני חיבור MCP",
+        "placeholder": "יומני חיבור MCP יופיעו כאן. כרגע מציג מידע זמני.",
+        "events": {
+          "connection": "• אירועי חיבור",
+          "tools": "• אירועי רישום כלים",
+          "errors": "• יומני שגיאות",
+          "comms": "• פרטי תקשורת"
+        },
+        "testTitle": "בדוק הפעלת כלי",
+        "selectServer": "בחר שרת...",
+        "selectTool": "בחר כלי...",
+        "parametersTitle": "פרמטרים",
+        "selectEnum": "בחר...",
+        "performBtn": "הפעל כלי",
+        "clearBtn": "נקה תוצאות",
+        "executing": "מפעיל...",
+        "success": "✅ הפעלה הצליחה",
+        "failed": "❌ הפעלה נכשלה",
+        "errorTitle": "❌ שגיאת הפעלה",
+        "errorLabel": "שגיאה: {{message}}",
+        "notices": {
+          "success": "הכלי הופעל בהצלחה",
+          "failed": "הפעלת הכלי נכשלה",
+          "error": "שגיאת הפעלה: {{message}}",
+          "requiredMissing": "פרמטר נדרש חסר: {{name}}",
+          "invalidNumber": "מספר לא תקף עבור פרמטר: {{name}}",
+          "invalidJson": "JSON לא תקף עבור פרמטר: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ אין שרתי MCP מוגדרים",
+        "testing": "🧪 בודק {{count}} חיבורי שרת MCP...",
+        "allSuccess": "✅ כל {{count}} שרתי mcp התחברו בהצלחה!",
+        "partial": "⚠️ {{success}} התחברו, {{failed}} נכשלו"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "ערוך שרת MCP",
+      "titleAdd": "הוסף שרת MCP",
+      "serverName": {
+        "name": "שם שרת",
+        "desc": "שם ידידותי המוצג בכל רחבי התוסף"
+      },
+      "connectionMode": {
+        "name": "מצב חיבור",
+        "desc": "בחר אם להתחבר אוטומטית או רק כשמופעל ידנית",
+        "auto": "התחבר אוטומטית כשהשיחה נפתחת",
+        "manual": "התחבר ידנית"
+      },
+      "command": {
+        "name": "פקודה",
+        "desc": "קובץ הרצה או סקריפט שמפעיל את שרת MCP"
+      },
+      "arguments": {
+        "name": "ארגומנטים",
+        "desc": "ארגומנטים מופרדים בפסיק או בשורה חדשה (אופציונלי)"
+      },
+      "envVars": {
+        "name": "משתני סביבה",
+        "desc": "זוגות KEY=VALUE אופציונליים, אחד לכל שורה"
+      },
+      "enabled": {
+        "name": "פעיל",
+        "desc": "השבת כדי לשמור את השרת מוגדר מבלי להתחבר אוטומטית"
+      },
+      "cancel": "ביטול",
+      "saveEdit": "שמור שינויים",
+      "saveAdd": "הוסף שרת",
+      "validation": {
+        "nameRequired": "שם שרת נדרש",
+        "commandRequired": "פקודה נדרשת"
+      }
+    },
+    "ollamaManager": {
+      "title": "נהל מודלי Ollama",
+      "serverInfo": "מידע שרת",
+      "checkingServer": "בודק שרת...",
+      "serverOnline": "✅ שרת מקוון",
+      "versionLabel": " | גרסה: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ שרת לא מקוון",
+      "connectionError": "❌ שגיאת חיבור",
+      "pullTitle": "משוך מודל חדש",
+      "pullHint": "הזן שם מודל להורדה מספריית Ollama (למשל, llama2, mistral, codellama)",
+      "modelName": {
+        "name": "שם מודל",
+        "example": "דוגמה: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "משוך מודל",
+      "installedTitle": "מודלים מותקנים",
+      "refreshList": "🔄 רענן רשימה",
+      "noModels": "לא נמצאו מודלים. משוך מודל כדי להתחיל.",
+      "capabilities": "יכולות: {{caps}}",
+      "deleteBtn": "מחק",
+      "closeBtn": "סגור",
+      "confirmDelete": {
+        "title": "אשר מחיקה",
+        "message": "האם אתה בטוח שברצונך למחוק את מודל \"{{name}}\"?",
+        "cancel": "ביטול",
+        "confirm": "מחק"
+      },
+      "notices": {
+        "enterName": "אנא הזן שם מודל",
+        "pulling": "מושך {{name}}... זה עשוי לקחת זמן.",
+        "pullSuccess": "✅ {{name}} נמשך בהצלחה",
+        "pullFailed": "❌ נכשל במשיכת מודל: {{message}}",
+        "deleted": "✅ {{name}} נמחק",
+        "deleteFailed": "❌ נכשל במחיקת מודל: {{message}}",
+        "refreshing": "מרענן...",
+        "refreshSuccess": "✅ רשימת מודלים רועננה",
+        "refreshFailed": "❌ נכשל בריענון רשימת מודלים"
+      }
+    },
+    "promptEdit": {
+      "title": "ערוך הנחיית מערכת",
+      "name": {
+        "name": "שם",
+        "desc": "שם תצוגה עבור הנחייה זו"
+      },
+      "content": {
+        "name": "תוכן",
+        "desc": "תוכן הנחיית המערכת"
+      },
+      "enabled": {
+        "name": "פעיל",
+        "desc": "האם הנחייה זו פעילה"
+      },
+      "cancel": "ביטול",
+      "save": "שמור"
+    },
+    "prompt": {
+      "cancel": "ביטול",
+      "ok": "אישור"
+    },
+    "textInput": {
+      "nameLabel": "שם",
+      "create": "צור",
+      "cancel": "ביטול"
+    },
+    "explain": {
+      "loading": "⏳ מעבד...",
+      "error": "שגיאה בעיבוד הסבר",
+      "errorPrefix": "❌ שגיאה: "
+    }
+  },
+  "notices": {
+    "noProvider": "אנא הגדר ספק LLM בהגדרות תחילה",
+    "noModel": "אנא בחר מודל ברירת מחדל בהגדרות",
+    "noValidProvider": "לא נמצאה הגדרת ספק תקפה עבור מודל: {{modelId}}",
+    "processing": "מעבד...",
+    "textUpdated": "הטקסט עודכן בהצלחה",
+    "error": "שגיאה: {{message}}"
+  }
+}

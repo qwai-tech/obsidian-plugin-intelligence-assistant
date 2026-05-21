@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Général",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Outils",
+      "rag": "RAG",
+      "prompts": "Prompts",
+      "agents": "Agents",
+      "quickActions": "Actions rapides",
+      "usage": "Utilisation"
+    },
+    "general": {
+      "title": "Paramètres généraux",
+      "desc": "Configurer les paramètres généraux du plugin assistant intelligent.",
+      "pluginVersion": {
+        "name": "Version du plugin",
+        "desc": "Version actuelle du plugin assistant intelligent"
+      },
+      "defaultModel": {
+        "name": "Modèle par défaut",
+        "desc": "Modèle par défaut pour les conversations",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Mode de chat par défaut",
+        "desc": "Choisir le mode d'ouverture de la vue chat",
+        "chat": "Mode chat",
+        "agent": "Mode agent"
+      },
+      "conversationTitleMode": {
+        "name": "Mode de titre de conversation",
+        "desc": "Comment générer les titres de conversation",
+        "firstMessage": "Utiliser le premier message",
+        "autoSummary": "Générer un résumé automatiquement",
+        "manual": "Manuel"
+      },
+      "conversationIcons": {
+        "name": "Icônes de conversation",
+        "desc": "Activer la génération automatique d'icônes pour les conversations"
+      },
+      "configStatus": {
+        "name": "État de la configuration",
+        "desc": "État global de la configuration du plugin",
+        "ok": "✅ Configuré ({{providers}} fournisseurs, {{conversations}} conversations)",
+        "incomplete": "⚠️ Incomplet - Veuillez configurer les fournisseurs et les modèles"
+      }
+    },
+    "llm": {
+      "title": "Configuration LLM",
+      "desc": "Configurer les fournisseurs de modèles de langage et gérer les modèles disponibles.",
+      "subTabs": {
+        "provider": "Fournisseurs",
+        "models": "Modèles"
+      }
+    },
+    "models": {
+      "title": "Configuration des modèles",
+      "desc": "Afficher et gérer les modèles de tous les fournisseurs configurés. Cliquez sur « actualiser les modèles » pour récupérer les derniers modèles disponibles.",
+      "providerCount": "{{count}} fournisseur configuré",
+      "providerCount_plural": "{{count}} fournisseurs configurés",
+      "refreshAll": "🔄 actualiser tous les modèles",
+      "empty": "Aucun fournisseur configuré. Ajoutez des fournisseurs dans l'onglet fournisseur d'abord.",
+      "noModels": "Aucun modèle disponible. Cliquez sur « actualiser tous les modèles » ou actualisez les fournisseurs individuels dans l'onglet fournisseur.",
+      "noMatch": "Aucun modèle ne correspond aux filtres actuels. Ajustez ou effacez les filtres pour voir les résultats.",
+      "modelCount": "• {{count}} modèle en cache",
+      "modelCount_plural": "• {{count}} modèles en cache",
+      "matchCount": "• {{count}} correspond aux filtres sélectionnés",
+      "matchCount_plural": "• {{count}} correspondent aux filtres sélectionnés",
+      "status": {
+        "enabled": "Activé",
+        "disabled": "Désactivé"
+      },
+      "actions": {
+        "disable": "Désactiver",
+        "enable": "Activer",
+        "setDefaultChat": "Définir comme chat par défaut",
+        "defaultChat": "Chat par défaut",
+        "setDefaultEmbedding": "Définir comme incorporation par défaut",
+        "defaultEmbedding": "Incorporation par défaut"
+      },
+      "notices": {
+        "fetching": "Récupération des modèles pour {{provider}}...",
+        "fetchFailed": "Échec de l'actualisation des modèles {{provider}}",
+        "refreshed": "Modèles actualisés avec succès !",
+        "refreshFailed": "Échec de l'actualisation des modèles",
+        "defaultChatSet": "Modèle de chat par défaut défini sur {{name}}",
+        "defaultEmbeddingSet": "Modèle d'incorporation par défaut défini sur {{name}}"
+      },
+      "filters": {
+        "allProviders": "Tous les fournisseurs",
+        "allCapabilities": "Toutes les capacités",
+        "allStates": "Tous les états",
+        "searchPlaceholder": "Rechercher par nom ou ID"
+      }
+    },
+    "provider": {
+      "title": "Configuration du fournisseur",
+      "securityTitle": "⚠️ Avertissement de sécurité",
+      "securityDesc": "Les clés API sont stockées en texte clair dans votre coffre pour des raisons de compatibilité. Pour éviter les fuites accidentelles :",
+      "securityItem1": "Ne partagez PAS votre dossier {{configDir}}/plugins/intelligence-assistant/data/.",
+      "securityItem2": "Ajoutez ce dossier à votre .gitignore si vous utilisez la synchronisation Git.",
+      "securityItem3": "Soyez prudent lors de l'utilisation de services de synchronisation cloud publics.",
+      "desc": "Gérer les fournisseurs LLM et les identifiants API. Utilisez la colonne d'actions pour modifier les détails de configuration ou actualiser les modèles en cache.",
+      "count": "{{count}} fournisseur configuré",
+      "count_plural": "{{count}} fournisseurs configurés",
+      "addBtn": "+ Ajouter un fournisseur",
+      "empty": "Aucun fournisseur configuré. Sélectionnez « Ajouter un fournisseur » pour commencer.",
+      "tableHeaders": {
+        "provider": "Fournisseur",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "status": {
+        "ready": "Prêt",
+        "needsConfig": "Configuration requise",
+        "checking": "Vérification...",
+        "credentialsSet": "Identifiants définis",
+        "serverOnline": "Serveur en ligne",
+        "serverOffline": "Serveur hors ligne",
+        "serverError": "Erreur serveur"
+      },
+      "guidance": {
+        "requiresCli": "Nécessite une CLI locale",
+        "provideServiceKey": "Fournir une clé de service",
+        "configureBaseUrl": "Configurer l'URL de base",
+        "addApiKey": "Ajouter une clé API"
+      },
+      "models": {
+        "none": "Aucun modèle",
+        "count": "{{count}} modèle",
+        "count_plural": "{{count}} modèles"
+      },
+      "ollama": {
+        "checkingVersion": "Vérification de la version...",
+        "server": {
+          "checking": "Vérification du serveur...",
+          "online": "Serveur : en ligne",
+          "offline": "Serveur : hors ligne ou inaccessible",
+          "error": "Serveur : erreur de connexion",
+          "versionOnline": "Serveur en ligne",
+          "versionOffline": "Serveur hors ligne",
+          "versionError": "Erreur de connexion",
+          "version": "Version : {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Dernière actualisation : {{timeAgo}}",
+        "neverRefreshed": "Jamais actualisé",
+        "justNow": "à l'instant",
+        "minutesAgo": "il y a {{n}} min",
+        "hoursAgo": "il y a {{n}} h",
+        "daysAgo": "il y a {{n}} j"
+      },
+      "actions": {
+        "edit": "Modifier",
+        "manageModels": "Gérer les modèles",
+        "refreshModels": "Actualiser les modèles",
+        "refreshing": "Actualisation...",
+        "delete": "Supprimer"
+      },
+      "notices": {
+        "refreshed": "Modèles actualisés pour {{provider}}.",
+        "refreshFailed": "Échec de l'actualisation des modèles"
+      },
+      "confirm": {
+        "delete": "Supprimer le fournisseur {{provider}} ?"
+      }
+    },
+    "mcp": {
+      "title": "Gestion des serveurs MCP",
+      "desc": "Configurer les serveurs Model Context Protocol (MCP) pour étendre les capacités des agents avec des outils et sources de données externes.",
+      "inspectorBtn": "🔍 Ouvrir l'inspecteur MCP",
+      "testAllBtn": "🧪 tester toutes les connexions",
+      "refreshAllBtn": "🔄 actualiser tous les outils",
+      "addBtn": "+ Ajouter un serveur MCP",
+      "empty": "Aucun serveur MCP configuré. Sélectionnez Ajouter un serveur MCP pour commencer.",
+      "tableHeaders": {
+        "name": "Nom",
+        "command": "Commande",
+        "arguments": "Arguments",
+        "status": "Statut",
+        "tools": "Outils",
+        "actions": "Actions"
+      },
+      "untitled": "Serveur MCP sans titre",
+      "notConfigured": "Non configuré",
+      "noArgs": "Aucun",
+      "cached": "En cache",
+      "disabled": "Désactivé",
+      "envVars": "{{count}} variable d'environnement",
+      "envVars_plural": "{{count}} variables d'environnement",
+      "status": {
+        "disabled": "Désactivé",
+        "connected": "connecté",
+        "disconnected": "déconnecté",
+        "enableToManage": "Activer pour gérer les connexions",
+        "manualConnect": "Connexion manuelle",
+        "autoConnect": "Connexion automatique"
+      },
+      "toolCount": {
+        "live": "{{count}} outil actif",
+        "live_plural": "{{count}} outils actifs",
+        "cached": "{{count}} outil en cache",
+        "cached_plural": "{{count}} outils en cache"
+      },
+      "actions": {
+        "edit": "Modifier",
+        "enabled": "✓ Activé",
+        "enabledOff": "✗ Désactivé",
+        "connect": "connecter",
+        "disconnect": "déconnecter",
+        "connecting": "Connexion...",
+        "disconnecting": "Déconnexion...",
+        "test": "Tester",
+        "testing": "Test en cours...",
+        "delete": "Supprimer"
+      },
+      "notices": {
+        "disconnected": "Déconnecté de {{name}}",
+        "connected": "Connecté à {{name}}",
+        "autoConnectFailed": "Échec de la connexion automatique à {{name}}",
+        "enableFirst": "Activez le serveur avant de vous connecter",
+        "disconnectFailed": "Échec de la déconnexion de {{name}}",
+        "connectFailed": "Échec de la connexion à {{name}}",
+        "testNoCommand": "❌ veuillez saisir une commande avant de tester la connexion",
+        "testSuccess": "✅ connecté avec succès ! {{count}} outils trouvés.",
+        "testFailed": "❌ Connexion échouée : {{message}}",
+        "refreshedAll": "✅ outils actualisés pour {{count}} serveur",
+        "refreshedAll_plural": "✅ outils actualisés pour {{count}} serveurs",
+        "refreshedPartial": "✅ {{success}} serveurs actualisés, ❌ {{failed}} échecs",
+        "noServersConfigured": "⚠️ Aucun serveur MCP configuré",
+        "testingAll": "🧪 Test de {{count}} connexion de serveur MCP...",
+        "testAllSuccess": "✅ tous les {{count}} serveurs MCP connectés avec succès !",
+        "testAllPartial": "⚠️ {{successful}} connectés, {{failed}} échoués"
+      },
+      "confirm": {
+        "delete": "Supprimer le serveur MCP « {{name}} » ?"
+      }
+    },
+    "agents": {
+      "title": "Gestion des agents",
+      "desc": "Créer et gérer des agents IA avec des capacités, outils et comportements spécifiques.",
+      "count": "{{count}} agent configuré",
+      "count_plural": "{{count}} agents configurés",
+      "addBtn": "+ ajouter un agent",
+      "empty": "Aucun agent configuré. Sélectionnez ajouter un agent pour commencer.",
+      "tableHeaders": {
+        "agent": "Agent",
+        "model": "Modèle",
+        "capabilities": "Capacités",
+        "tools": "Outils",
+        "actions": "Actions"
+      },
+      "defaultBadge": "Par défaut",
+      "systemPrompt": "Prompt système • {{promptName}}",
+      "customPrompt": "Prompt personnalisé",
+      "model": {
+        "notSet": "Non défini",
+        "notFound": "Modèle introuvable dans le cache",
+        "useChatView": "Utiliser le modèle de la vue chat",
+        "useChatViewDesc": "Utilisera le modèle sélectionné dans la vue chat",
+        "useDefault": "Utiliser le modèle par défaut",
+        "useDefaultDesc": "Utilisera le modèle par défaut des paramètres"
+      },
+      "capabilities": {
+        "noSpecialModes": "Aucun mode spécial"
+      },
+      "tools": {
+        "builtIn": "{{count}} intégré",
+        "mcpServer": "{{count}} serveur MCP",
+        "mcpServer_plural": "{{count}} serveurs MCP",
+        "mcpTool": "{{count}} outil MCP",
+        "mcpTool_plural": "{{count}} outils MCP",
+        "noTools": "Aucun outil activé"
+      },
+      "actions": {
+        "edit": "Modifier",
+        "delete": "supprimer",
+        "protected": "protégé"
+      },
+      "confirm": {
+        "delete": "Supprimer l'agent « {{name}} » ?"
+      }
+    },
+    "prompts": {
+      "title": "Prompts système",
+      "desc": "Gérer les prompts système qui définissent le comportement et la personnalité de votre assistant IA.",
+      "addBtn": "+ ajouter un prompt système",
+      "empty": "Aucun prompt système configuré. Sélectionnez ajouter un prompt système pour commencer.",
+      "tableHeaders": {
+        "name": "Nom",
+        "contentPreview": "Aperçu du contenu",
+        "created": "Créé",
+        "updated": "Mis à jour",
+        "enabled": "Activé",
+        "actions": "Actions"
+      },
+      "status": {
+        "enabled": "Activé",
+        "disabled": "Désactivé"
+      },
+      "actions": {
+        "edit": "Modifier",
+        "disable": "Désactiver",
+        "enable": "Activer",
+        "delete": "Supprimer"
+      },
+      "confirm": {
+        "delete": "Supprimer le prompt « {{name}} » ?"
+      }
+    },
+    "tools": {
+      "title": "Configuration des outils",
+      "desc": "Examiner les outils intégrés et explorer les outils MCP chargés depuis les serveurs connectés. Activez les actions que vos agents doivent pouvoir effectuer.",
+      "subTabs": {
+        "builtIn": "Outils intégrés",
+        "mcp": "Outils MCP",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "Outils CLI"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Nom",
+          "category": "Catégorie",
+          "description": "Description",
+          "parameters": "Paramètres",
+          "enabled": "Activé"
+        },
+        "categories": {
+          "fileOps": "Opérations sur les fichiers",
+          "searchDisc": "Recherche et découverte",
+          "noteMgmt": "Gestion des notes"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Lire le contenu d'un fichier depuis votre coffre",
+            "params": "path (requis) : Chemin vers le fichier à lire"
+          },
+          "writeFile": {
+            "desc": "Écrire ou mettre à jour un fichier dans votre coffre",
+            "params": "path (requis), content (requis) : Chemin du fichier et contenu à écrire"
+          },
+          "listFiles": {
+            "desc": "Lister les fichiers dans le coffre ou un dossier spécifique",
+            "params": "folder (optionnel), extension (optionnel) : Filtrer par dossier et extension de fichier"
+          },
+          "searchFiles": {
+            "desc": "Rechercher des fichiers par nom ou contenu dans votre coffre",
+            "params": "query (requis), search_content (optionnel), limit (optionnel) : Requête de recherche et options"
+          },
+          "createNote": {
+            "desc": "Créer une nouvelle note avec le contenu spécifié",
+            "params": "title (requis), content (requis), folder (optionnel) : Titre, contenu et emplacement de la note"
+          },
+          "appendNote": {
+            "desc": "Ajouter du contenu à une note existante",
+            "params": "path (requis), content (requis) : Chemin de la note et contenu à ajouter"
+          }
+        },
+        "infoTitle": "💡 À propos des outils",
+        "infoText": "Les outils intégrés sont configurés par paramètres de plugin. Les outils MCP sont gérés indépendamment — utilisez l'onglet MCP pour connecter des serveurs et actualiser la disponibilité des outils.",
+        "toolNames": {
+          "read_file": "Lire un fichier",
+          "write_file": "Écrire un fichier",
+          "list_files": "Lister les fichiers",
+          "search_files": "Rechercher des fichiers",
+          "create_note": "Créer une note",
+          "append_note": "Ajouter à une note"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Aucun outil MCP disponible. Connectez un serveur ou actualisez les outils en cache pour remplir cette liste.",
+        "tableHeaders": {
+          "server": "Serveur",
+          "tool": "Outil",
+          "description": "Description",
+          "parameters": "Paramètres",
+          "source": "Source"
+        },
+        "noDescription": "Aucune description",
+        "schemaUnavailable": "Schéma indisponible",
+        "live": "En direct",
+        "cached": "En cache",
+        "status": {
+          "connected": "connecté",
+          "disconnected": "déconnecté"
+        }
+      },
+      "openapi": {
+        "desc": "Générer des outils HTTP depuis des documents OpenAPI. Les spécifications distantes sont mises en cache sous {{cacheDir}}.",
+        "addBtn": "Ajouter une source HTTP",
+        "noSources": "Aucune source HTTP configurée.",
+        "unnamed": "Source HTTP sans nom",
+        "tableHeaders": {
+          "name": "Nom",
+          "source": "Source",
+          "auth": "Auth",
+          "status": "Statut",
+          "actions": "Actions"
+        },
+        "sourceUrl": "URL distante non définie",
+        "sourcePath": "Chemin de fichier non défini",
+        "authHeader": "En-tête ({{key}})",
+        "authQuery": "Requête ({{key}})",
+        "authNone": "Aucune",
+        "statusEnabled": "Activé",
+        "statusDisabled": "Désactivé",
+        "actions": {
+          "edit": "Modifier",
+          "reload": "Recharger",
+          "refetch": "Récupérer à nouveau",
+          "delete": "Supprimer"
+        },
+        "notices": {
+          "removed": "Source HTTP supprimée",
+          "reloaded": "{{count}} opérations rechargées",
+          "reloadFailed": "Échec du rechargement de la source HTTP. Vérifiez la console pour les détails."
+        },
+        "modal": {
+          "defaultTitle": "Source HTTP",
+          "displayName": {
+            "name": "Nom d'affichage",
+            "desc": "Affiché aux agents lors du choix d'une source d'outil"
+          },
+          "enabled": {
+            "name": "Activé",
+            "desc": "Activer pour exposer cette API HTTP à tous les agents"
+          },
+          "sourceType": {
+            "name": "Type de source",
+            "file": "Fichier local",
+            "url": "URL distante"
+          },
+          "specUrl": {
+            "name": "URL OpenAPI",
+            "desc": "Récupérée et mise en cache dans le répertoire de données du plugin"
+          },
+          "cachedFile": "Fichier en cache : {{path}} ({{date}})",
+          "neverFetched": "Jamais récupéré",
+          "specPath": {
+            "name": "Chemin du fichier OpenAPI",
+            "desc": "Chemin relatif dans le coffre ou chemin absolu"
+          },
+          "baseUrl": {
+            "name": "Remplacement de l'URL de base",
+            "desc": "Remplacer la première entrée de serveur du document (optionnel)"
+          },
+          "auth": {
+            "name": "Authentification",
+            "desc": "Insérer automatiquement les clés API lors de l'appel de cette source",
+            "none": "Aucune",
+            "header": "En-tête HTTP",
+            "query": "Paramètre de requête"
+          },
+          "credKey": {
+            "name": "Clé d'identification"
+          },
+          "credValue": {
+            "name": "Valeur d'identification"
+          },
+          "actions": {
+            "name": "Actions",
+            "reloadTools": "Recharger les outils",
+            "refetchTooltip": "Récupérer la spécification depuis l'URL",
+            "deleteTooltip": "Supprimer la source"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Définir des outils de ligne de commande locaux que les agents peuvent exécuter. Utilisez des modèles comme {{param}} pour les arguments dynamiques.",
+        "addBtn": "Ajouter un outil CLI",
+        "presetsBtn": "Ajouter depuis les préréglages",
+        "noTools": "Aucun outil CLI configuré.",
+        "tableHeaders": {
+          "name": "Nom",
+          "command": "Commande",
+          "parameters": "Paramètres",
+          "status": "Statut",
+          "actions": "Actions"
+        },
+        "unnamed": "Outil CLI sans nom",
+        "paramCount": "{{count}} paramètre",
+        "paramCount_plural": "{{count}} paramètres",
+        "noParams": "Aucun",
+        "statusEnabled": "Activé",
+        "statusDisabled": "Désactivé",
+        "actions": {
+          "edit": "Modifier",
+          "disable": "Désactiver",
+          "enable": "Activer",
+          "delete": "Supprimer"
+        },
+        "notices": {
+          "removed": "Outil CLI supprimé"
+        },
+        "infoTitle": "💡 À propos des outils CLI",
+        "infoText": "Les outils CLI exécutent des commandes shell localement. Utilisez {{paramName}} dans les arguments pour la substitution de modèle, ou configurez des paramètres à passer comme arguments ou variables d'environnement.",
+        "modal": {
+          "defaultTitle": "Outil CLI",
+          "toolName": {
+            "name": "Nom de l'outil",
+            "desc": "Identifiant utilisé par les agents pour appeler cet outil"
+          },
+          "description": {
+            "name": "Description",
+            "desc": "Décrire ce que fait cet outil pour l'IA"
+          },
+          "enabled": {
+            "name": "Activé",
+            "desc": "Activer pour permettre aux agents d'utiliser cet outil"
+          },
+          "commandConfig": "Configuration de la commande",
+          "command": {
+            "name": "Commande",
+            "desc": "L'exécutable à lancer (ex. node, python, bash, /chemin/vers/script)"
+          },
+          "args": {
+            "name": "Arguments",
+            "desc": "Arguments de commande, un par ligne. Utilisez {{paramName}} pour la substitution de modèle."
+          },
+          "cwd": {
+            "name": "Répertoire de travail",
+            "desc": "Répertoire dans lequel exécuter la commande (optionnel)"
+          },
+          "timeout": {
+            "name": "Délai d'expiration (ms)",
+            "desc": "Durée maximale d'exécution en millisecondes (défaut : {{timeout}})"
+          },
+          "shell": {
+            "name": "Exécuter dans un shell",
+            "desc": "Exécuter la commande via un shell (active les fonctionnalités shell comme les pipes)"
+          },
+          "paramsTitle": "Paramètres",
+          "paramsDesc": "Définir les paramètres que l'IA peut passer à cet outil.",
+          "addParam": "Ajouter un paramètre",
+          "noParams": "Aucun paramètre défini.",
+          "paramN": "Paramètre {{n}}",
+          "param": {
+            "name": "Nom",
+            "type": {
+              "name": "Type",
+              "string": "Chaîne",
+              "number": "Nombre",
+              "boolean": "Booléen"
+            },
+            "description": "Description",
+            "required": "Requis",
+            "insertAs": {
+              "name": "Insérer comme",
+              "desc": "Comment passer ce paramètre à la commande",
+              "template": "Modèle ({{name}})",
+              "arg": "Ajouter comme argument",
+              "env": "Variable d'environnement"
+            },
+            "envName": {
+              "name": "Nom de la variable d'environnement",
+              "desc": "Remplacer le nom de la variable d'environnement (défaut : nom du paramètre en majuscules)"
+            }
+          },
+          "envTitle": "Variables d'environnement",
+          "envDesc": "Variables d'environnement statiques à définir lors de l'exécution de la commande.",
+          "envVars": {
+            "name": "Variables d'environnement",
+            "desc": "Format : CLÉ=valeur, une par ligne"
+          }
+        },
+        "presets": {
+          "title": "Ajouter un outil CLI depuis les préréglages",
+          "desc": "Sélectionnez un préréglage pour ajouter rapidement un outil CLI préconfiguré. Vous pouvez le personnaliser après l'ajout.",
+          "addBtn": "Ajouter",
+          "addedBtn": "Ajouté",
+          "closeBtn": "Fermer",
+          "notices": {
+            "added": "« {{name}} » ajouté - activez-le dans la liste des outils CLI"
+          },
+          "categories": {
+            "file": "Opérations sur les fichiers",
+            "search": "Recherche",
+            "network": "Réseau",
+            "code": "Exécution de code",
+            "data": "Traitement des données",
+            "system": "Informations système",
+            "apps": "Applications macOS & Bureau"
+          },
+          "names": {
+            "preset-cat": "Lire un fichier (cat)",
+            "preset-ls": "Lister un répertoire (ls)",
+            "preset-find": "Trouver des fichiers (find)",
+            "preset-grep": "Rechercher du texte (grep)",
+            "preset-ripgrep": "Recherche rapide (rg)",
+            "preset-curl": "Requête HTTP (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Exécuter du code Python",
+            "preset-node": "Exécuter du JavaScript (Node)",
+            "preset-bash": "Exécuter un script shell",
+            "preset-jq": "Processeur JSON (jq)",
+            "preset-wc": "Compter les mots (wc)",
+            "preset-date": "Date/heure actuelle",
+            "preset-pwd": "Répertoire courant (pwd)",
+            "preset-whoami": "Utilisateur courant",
+            "preset-uname": "Infos système (uname)",
+            "preset-open": "Ouvrir un fichier/URL (open)",
+            "preset-open-app": "Lancer une application (open -a)",
+            "preset-safari": "Ouvrir dans Safari",
+            "preset-chrome": "Ouvrir dans Chrome",
+            "preset-firefox": "Ouvrir dans Firefox",
+            "preset-pbcopy": "Copier dans le presse-papiers",
+            "preset-pbpaste": "Coller depuis le presse-papiers",
+            "preset-say": "Synthèse vocale (say)",
+            "preset-osascript": "Exécuteur AppleScript",
+            "preset-notify": "Notification bureau",
+            "preset-screencapture": "Capture d'écran",
+            "preset-applescript-list-apps": "Lister les applications en cours"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "Configuration RAG",
+      "desc": "Configurer la génération augmentée par récupération et la recherche web pour améliorer les réponses de l'IA.",
+      "subTabs": {
+        "overview": "Aperçu",
+        "chunking": "Découpage",
+        "search": "Recherche",
+        "filters": "Filtres",
+        "advanced": "Avancé",
+        "websearch": "Recherche web"
+      },
+      "general": {
+        "title": "Paramètres généraux",
+        "enableRag": {
+          "name": "Activer le RAG",
+          "desc": "Activer la génération augmentée par récupération pour un contexte enrichi"
+        },
+        "vectorStore": {
+          "name": "Magasin de vecteurs",
+          "desc": "Base de données vectorielle pour stocker les incorporations",
+          "memory": "En mémoire",
+          "disk": "Basé sur disque"
+        },
+        "embeddingModel": {
+          "name": "Modèle d'incorporation",
+          "desc": "Modèle à utiliser pour générer les incorporations"
+        },
+        "embedChanged": {
+          "name": "Incorporer automatiquement les fichiers modifiés",
+          "desc": "Réincorporer automatiquement les fichiers lorsqu'ils sont modifiés"
+        }
+      },
+      "indexMgmt": {
+        "title": "Gestion de l'index",
+        "desc": "Gérer l'index RAG et afficher les statistiques sur le contenu indexé.",
+        "statsTitle": "Statistiques de l'index",
+        "stats": {
+          "totalChunks": "Fragments totaux",
+          "uniqueFiles": "Fichiers uniques",
+          "totalChars": "Caractères totaux",
+          "avgChunkSize": "Taille moy. des fragments"
+        },
+        "empty": "L'index est vide. Sélectionnez reconstruire l'index pour commencer l'indexation.",
+        "error": "⚠️ impossible de charger les statistiques de l'index",
+        "rebuild": {
+          "name": "Reconstruire l'index",
+          "desc": "Réindexer tous les fichiers de votre coffre. Cela peut prendre un moment.",
+          "btn": "Reconstruire",
+          "rebuilding": "Reconstruction..."
+        },
+        "refresh": {
+          "name": "Actualiser l'index",
+          "desc": "Mettre à jour l'index avec les fichiers modifiés depuis la dernière indexation.",
+          "btn": "Actualiser",
+          "refreshing": "Actualisation..."
+        },
+        "clear": {
+          "name": "Effacer l'index",
+          "desc": "Supprimer toutes les données indexées. Vous devrez reconstruire l'index.",
+          "btn": "Effacer",
+          "clearing": "Effacement..."
+        },
+        "notices": {
+          "rebuilt": "Index reconstruit avec succès",
+          "rebuildFailed": "Échec de la reconstruction de l'index",
+          "refreshed": "Index actualisé avec succès",
+          "refreshFailed": "Échec de l'actualisation de l'index",
+          "cleared": "Index effacé avec succès",
+          "clearFailed": "Échec de l'effacement de l'index"
+        }
+      },
+      "chunking": {
+        "title": "Paramètres de découpage",
+        "strategy": {
+          "name": "Stratégie de découpage",
+          "desc": "Stratégie pour diviser les documents en fragments",
+          "recursive": "Récursif (intelligent)",
+          "fixed": "Taille fixe",
+          "sentence": "Par phrase",
+          "paragraph": "Par paragraphe"
+        },
+        "chunkSize": {
+          "name": "Taille du fragment",
+          "desc": "Nombre de caractères par fragment (500-2000 recommandé)"
+        },
+        "chunkOverlap": {
+          "name": "Chevauchement des fragments",
+          "desc": "Nombre de caractères chevauchants entre les fragments"
+        },
+        "minChunkSize": {
+          "name": "Taille minimale du fragment",
+          "desc": "Taille minimale du fragment à créer"
+        },
+        "maxTokens": {
+          "name": "Tokens max par fragment",
+          "desc": "Nombre maximum de tokens autorisés par fragment"
+        }
+      },
+      "search": {
+        "title": "Paramètres de recherche",
+        "searchType": {
+          "name": "Type de recherche",
+          "desc": "Type de recherche par similarité à effectuer",
+          "similarity": "Similarité"
+        },
+        "topK": {
+          "name": "K meilleurs résultats",
+          "desc": "Nombre de fragments les plus pertinents à récupérer (1-20)"
+        },
+        "threshold": {
+          "name": "Seuil de similarité",
+          "desc": "Score de similarité minimum pour inclure les résultats (0,0-1,0)"
+        },
+        "weight": {
+          "name": "Pondération du score de pertinence",
+          "desc": "Pondération pour le score de pertinence (0,0-1,0)"
+        },
+        "contextLimit": {
+          "name": "Limite de la fenêtre de contexte",
+          "desc": "Tokens maximum pour le contexte récupéré"
+        }
+      },
+      "filters": {
+        "title": "Filtres de fichiers",
+        "excludeFolders": {
+          "name": "Exclure les dossiers",
+          "desc": "Dossiers à exclure de l'indexation (séparés par des virgules)"
+        },
+        "includeTypes": {
+          "name": "Inclure les types de fichiers",
+          "desc": "Types de fichiers à inclure (vide = tous les types)"
+        },
+        "excludeTypes": {
+          "name": "Exclure les types de fichiers",
+          "desc": "Types de fichiers à exclure de l'indexation"
+        },
+        "filterByTag": {
+          "name": "Filtrer par étiquette",
+          "desc": "Indexer uniquement les fichiers avec ces étiquettes (vide = tous les fichiers)"
+        },
+        "excludeByTag": {
+          "name": "Exclure par étiquette",
+          "desc": "Exclure les fichiers avec ces étiquettes de l'indexation"
+        }
+      },
+      "advanced": {
+        "title": "Paramètres avancés",
+        "batchSize": {
+          "name": "Taille du lot d'incorporation",
+          "desc": "Nombre de fragments à incorporer en parallèle"
+        }
+      },
+      "grading": {
+        "title": "Paramètres d'évaluation",
+        "desc": "Évaluer la pertinence des fragments récupérés avant de les envoyer au LLM. Cela aide à filtrer les résultats de faible qualité.",
+        "enableGrading": {
+          "name": "Activer le seuil d'évaluation",
+          "desc": "Filtrer les fragments en dessous des seuils de qualité"
+        },
+        "graderSource": {
+          "name": "Source du modèle d'évaluation",
+          "desc": "D'où provient le modèle d'évaluation",
+          "chat": "Modèle de chat",
+          "custom": "Modèle personnalisé"
+        },
+        "graderModel": {
+          "name": "Modèle d'évaluation",
+          "desc": "Modèle spécifique à utiliser pour l'évaluation"
+        },
+        "parallel": {
+          "name": "Traitement parallèle",
+          "desc": "Nombre de fragments à évaluer en parallèle"
+        },
+        "minRelevance": {
+          "name": "Score de pertinence min.",
+          "desc": "Score de pertinence minimum (0,0-1,0)"
+        },
+        "minAccuracy": {
+          "name": "Score de précision min.",
+          "desc": "Score de précision minimum (0,0-1,0)"
+        },
+        "minSupport": {
+          "name": "Score de qualité d'appui min.",
+          "desc": "Score de qualité d'appui minimum (0,0-1,0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Configuration de la recherche web",
+      "desc": "Configurer la fonctionnalité de recherche web pour améliorer les réponses de l'IA avec des informations actualisées d'internet.",
+      "generalBehavior": "Comportement général",
+      "providerSelection": "Sélection du fournisseur",
+      "localeFilters": "Paramètres régionaux & filtres",
+      "apiCredentials": "Identifiants API & points de terminaison",
+      "enabled": {
+        "name": "Activer la recherche web",
+        "desc": "Permettre à l'IA de rechercher sur le web des informations actuelles"
+      },
+      "autoTrigger": {
+        "name": "Déclencher la recherche automatiquement",
+        "desc": "Déclencher automatiquement la recherche web lorsque la requête nécessite des informations actuelles (ex. actualités, prix, événements récents)"
+      },
+      "maxResults": {
+        "name": "Résultats maximum",
+        "desc": "Nombre maximum de résultats de recherche à retourner"
+      },
+      "timeRange": {
+        "name": "Fraîcheur des résultats",
+        "desc": "Limiter les résultats à une plage temporelle prise en charge par les fournisseurs (Google, SearXNG, Mojeek)",
+        "any": "Toute période (défaut)",
+        "h": "Dernière heure",
+        "d": "Dernières 24 heures",
+        "w": "Dernière semaine",
+        "m": "Dernier mois",
+        "y": "Dernière année"
+      },
+      "provider": {
+        "name": "Fournisseur de recherche",
+        "desc": "Choisir parmi des scrapers respectueux de la vie privée ou des moteurs basés sur des API"
+      },
+      "searchLanguage": {
+        "name": "Code de langue",
+        "desc": "Code de langue ISO (ex. en, fr, zh-CN) transmis aux fournisseurs qui prennent en charge la localisation"
+      },
+      "searchCountry": {
+        "name": "Code pays/marché",
+        "desc": "Code pays à deux lettres (ex. US, DE) utilisé par Bing, DuckDuckGo, Brave et d'autres"
+      },
+      "includeDomains": {
+        "name": "Inclure uniquement ces domaines",
+        "desc": "Liste séparée par des virgules utilisée par SerpAPI et Brave pour limiter les résultats à des sites spécifiques"
+      },
+      "excludeDomains": {
+        "name": "Exclure les domaines",
+        "desc": "Domaines séparés par des virgules à filtrer après la récupération des résultats"
+      },
+      "apiKey": {
+        "name": "Clé API par défaut",
+        "desc": "Clé API partagée utilisée par Google, Bing, SerpAPI, Tavily ou Brave lorsque les clés spécifiques au fournisseur ne sont pas définies"
+      },
+      "googleCseId": {
+        "name": "ID du moteur de recherche personnalisé Google",
+        "desc": "Requis avec une clé API Google lors de l'utilisation du fournisseur Google"
+      },
+      "serpapiEndpoint": {
+        "name": "Point de terminaison SerpAPI",
+        "desc": "Remplacer l'URL de base SerpAPI si vous hébergez vous-même"
+      },
+      "tavilyApiKey": {
+        "name": "Clé API Tavily",
+        "desc": "Remplace la clé par défaut lors de l'utilisation du fournisseur Tavily"
+      },
+      "searxngEndpoint": {
+        "name": "Point de terminaison SearXNG",
+        "desc": "URL de base de votre instance SearXNG (doit retourner du JSON)"
+      },
+      "braveApiKey": {
+        "name": "Clé API Brave",
+        "desc": "Utiliser un token d'abonnement Brave Search API lorsqu'il est sélectionné comme fournisseur"
+      },
+      "qwantApiKey": {
+        "name": "Clé API Qwant (optionnel)",
+        "desc": "Ajouter un token bearer si votre plan Qwant en fournit un"
+      },
+      "mojeekApiKey": {
+        "name": "Clé API Mojeek",
+        "desc": "Requis pour le fournisseur Mojeek"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (aucune clé requise)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (scraping HTML)",
+        "yandex": "Yandex (scraping HTML)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Actions rapides",
+      "desc": "Configurer des actions rapides propulsées par l'IA qui apparaissent dans le menu contextuel de l'éditeur lorsqu'un texte est sélectionné.",
+      "actionPrefix": {
+        "name": "Préfixe d'action",
+        "desc": "Préfixe (emoji ou texte) à afficher avant toutes les actions rapides dans le menu contextuel",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} action configurée ({{enabled}} activée)",
+      "count_plural": "{{count}} actions configurées ({{enabled}} activées)",
+      "addBtn": "+ ajouter une action rapide",
+      "empty": "Aucune action rapide configurée. Sélectionnez ajouter une action rapide pour commencer.",
+      "tableHeaders": {
+        "action": "Action",
+        "type": "Type",
+        "model": "Modèle",
+        "promptPreview": "Aperçu du prompt",
+        "actions": "Actions"
+      },
+      "defaultModel": "Par défaut",
+      "editBtn": "Modifier",
+      "deleteBtn": "supprimer",
+      "confirm": {
+        "delete": "Supprimer l'action rapide « {{name}} » ?"
+      },
+      "usageInfo": {
+        "title": "Utilisation",
+        "step1": "Sélectionner du texte dans une note",
+        "step2": "Clic droit pour ouvrir le menu contextuel",
+        "step3": "Choisir une action rapide dans le menu",
+        "step4Replace": "Les actions marquées comme « remplacer » remplaceront le texte sélectionné par le résultat de l'IA",
+        "step4Explain": "Les actions marquées comme « expliquer » afficheront le résultat dans une boîte de dialogue modale"
+      },
+      "edit": {
+        "title": "Modifier l'action rapide",
+        "name": {
+          "name": "Nom",
+          "desc": "Nom d'affichage de cette action dans le menu contextuel"
+        },
+        "actionType": {
+          "name": "Type d'action",
+          "desc": "Comment la réponse de l'IA doit être traitée",
+          "replace": "Remplacer le texte sélectionné",
+          "explain": "Afficher dans une fenêtre modale"
+        },
+        "model": {
+          "name": "Modèle",
+          "desc": "Modèle de langage à utiliser pour cette action (laisser vide pour utiliser le défaut)",
+          "default": "Utiliser le modèle par défaut"
+        },
+        "promptTemplate": {
+          "name": "Modèle de prompt",
+          "desc": "Instructions envoyées à l'IA. Le texte sélectionné sera ajouté automatiquement."
+        },
+        "cancel": "Annuler",
+        "save": "Enregistrer"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Allonger le texte",
+          "prompt": "Développez et élaborez le texte suivant pour le rendre plus détaillé et complet tout en conservant le sens et le ton d'origine. Retournez uniquement le texte développé sans commentaire supplémentaire :\n\n"
+        },
+        "summarize": {
+          "name": "Résumer le texte",
+          "prompt": "Fournissez un résumé concis du texte suivant. Retournez uniquement le résumé sans commentaire supplémentaire :\n\n"
+        },
+        "improve-writing": {
+          "name": "Améliorer l'écriture",
+          "prompt": "Améliorez la qualité, la clarté et le style d'écriture du texte suivant. Retournez uniquement le texte amélioré sans commentaire supplémentaire :\n\n"
+        },
+        "fix-grammar": {
+          "name": "Corriger la grammaire",
+          "prompt": "Corrigez toutes les erreurs de grammaire, d'orthographe et de ponctuation dans le texte suivant. Retournez uniquement le texte corrigé sans commentaire supplémentaire :\n\n"
+        },
+        "explain": {
+          "name": "Expliquer le texte",
+          "prompt": "Expliquez le texte suivant en termes simples :\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Utilisation des tokens",
+      "desc": "Suivre la consommation de tokens entre les fournisseurs et les modèles. Les données sont accumulées sur toutes les conversations.",
+      "notAvailable": "Le suivi de l'utilisation des tokens n'est pas disponible.",
+      "ranges": {
+        "today": "Aujourd'hui",
+        "week": "Cette semaine",
+        "month": "Ce mois",
+        "all": "Tout le temps"
+      },
+      "stats": {
+        "totalTokens": "Total des tokens",
+        "apiCalls": "Appels API",
+        "promptTokens": "Tokens de prompt",
+        "completion": "Complétion",
+        "tokensIn": "tokens entrants",
+        "tokensOut": "tokens sortants"
+      },
+      "byProvider": "Par fournisseur",
+      "byModel": "Par modèle",
+      "noData": "Aucune donnée d'utilisation.",
+      "recentActivity": "Activité récente",
+      "last10": "10 dernières",
+      "noRecent": "Aucune activité récente.",
+      "tableHeaders": {
+        "provider": "Fournisseur",
+        "model": "Modèle",
+        "prompt": "Prompt",
+        "completion": "Complétion",
+        "total": "Total",
+        "calls": "Appels",
+        "time": "Heure",
+        "in": "Entrant",
+        "out": "Sortant"
+      },
+      "clearBtn": "Effacer toutes les données d'utilisation",
+      "confirm": {
+        "clear": "Effacer tous les enregistrements d'utilisation des tokens ? Cette action est irréversible."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Saisir votre message... (Entrée pour envoyer, Maj+Entrée pour nouvelle ligne)",
+    "conversations": "Conversations",
+    "toggleConversationsTitle": "Afficher/masquer la liste des conversations",
+    "currentConversation": "Conversation actuelle",
+    "new": "Nouveau",
+    "settings": "Paramètres",
+    "openSettingsTitle": "Ouvrir les paramètres du plugin",
+    "mode": "Mode",
+    "prompt": "Prompt",
+    "agent": "Agent",
+    "modeOptions": {
+      "chat": "Chat",
+      "agent": "Agent"
+    },
+    "noSystemPrompt": "Aucun prompt système",
+    "noAgentsAvailable": "Aucun agent disponible",
+    "sendHintPrefix": "Appuyez sur ",
+    "sendHintKey": "Entrée",
+    "sendHintSuffix": " pour envoyer",
+    "sendAriaLabel": "Envoyer le message",
+    "stop": " Arrêter",
+    "addReference": "Ajouter une référence",
+    "addReferenceTooltip": "Ajouter une référence de fichier ou dossier (@)",
+    "emptyHeading": "Démarrer une conversation",
+    "emptySubtext": "Saisissez un message ci-dessous pour commencer, ou sélectionnez une conversation dans l'historique.",
+    "noAgentConfig": "Aucun agent configuré",
+    "selectAgent": "Sélectionner un agent…",
+    "notices": {
+      "stopping": "Arrêt de la génération...",
+      "ragInitError": "Erreur d'initialisation RAG : {{message}}",
+      "modelsRefreshed": "Modèles actualisés",
+      "modelsRefreshFailed": "Échec de l'actualisation des modèles : {{message}}",
+      "waitForResponse": "Veuillez attendre la fin de la réponse actuelle",
+      "configureProvider": "Veuillez d'abord configurer un fournisseur LLM dans les paramètres",
+      "selectModel": "Veuillez sélectionner un modèle",
+      "noValidProvider": "Aucune configuration de fournisseur valide trouvée pour ce modèle",
+      "chatError": "Erreur de chat : {{message}}",
+      "noMessageToRegenerate": "Impossible de trouver le message à régénérer",
+      "regenerateOnlyLatest": "Seule la réponse la plus récente peut être régénérée pour l'instant",
+      "regenerateNoUserMsg": "Impossible de trouver le message utilisateur à régénérer",
+      "regenerated": "Réponse régénérée",
+      "regenerateFailed": "Échec de la régénération : {{message}}",
+      "noteCreated": "Note créée : {{name}}",
+      "noteCreateFailed": "Échec de la création de la note : {{message}}",
+      "messageInserted": "Message inséré dans : {{path}}",
+      "messageInsertFailed": "Échec de l'insertion du message : {{message}}",
+      "noAgents": "Aucun agent disponible. Configurez des agents dans Paramètres → Agents.",
+      "ragDisabled": "Le RAG est désactivé dans les paramètres. Activez-le sous Paramètres → fonctionnalités chat → RAG.",
+      "webSearchDisabled": "La recherche web est désactivée dans les paramètres. Activez-la sous Paramètres → fonctionnalités chat → recherche web.",
+      "noFilesInVault": "Aucun fichier trouvé dans le coffre",
+      "attached": "Attaché : {{name}}",
+      "attachedImages": "{{count}} image(s) attachée(s)",
+      "referencesAdded": "{{count}} référence(s) ajoutée(s)",
+      "fileNotFound": "Fichier introuvable : {{path}}",
+      "agentConfigApplied": "Configuration appliquée pour l'agent : {{name}}",
+      "waitForComplete": "Veuillez attendre la fin de la réponse actuelle",
+      "chatServiceFallback": "ChatService non configuré. Utilisation du fallback ChatView.",
+      "noModelSelected": "Aucun modèle sélectionné",
+      "noProviderConfig": "Aucune configuration de fournisseur trouvée",
+      "generationStopped": "Génération arrêtée",
+      "noResponseToRegenerate": "Aucune réponse à régénérer",
+      "agentNotFound": "Agent introuvable",
+      "unableToLoadRag": "Impossible de charger les statistiques RAG.",
+      "referenced": "Référencé : {{name}}"
+    },
+    "status": {
+      "available": "Disponible",
+      "unavailable": "Indisponible",
+      "disabled": "Désactivé",
+      "on": "Activé · {{detail}}",
+      "off": "Désactivé"
+    },
+    "ragStats": {
+      "title": "Statistiques RAG",
+      "totalChunks": "📊 fragments totaux :",
+      "filesIndexed": "📁 fichiers indexés :",
+      "totalSize": "💾 taille totale :",
+      "avgChunks": "📈 Moy. fragments/fichier :",
+      "indexedFiles": "📄 fichiers indexés",
+      "noFilesYet": "⚠️ aucun fichier n'a encore été indexé.",
+      "howToBuild": "Pour construire l'index RAG :",
+      "step1": "Aller dans Paramètres → RAG",
+      "step2": "Activer le RAG",
+      "step3": "Sélectionner indexer le coffre",
+      "close": "Fermer",
+      "retrieved": "📚 récupéré depuis {{count}} document",
+      "retrieved_plural": "📚 récupéré depuis {{count}} documents"
+    },
+    "ragTooltip": {
+      "status": "État de l'index RAG :",
+      "totalChunks": "📊 Fragments totaux : {{count}}",
+      "filesIndexed": "📁 Fichiers indexés : {{count}}",
+      "totalSize": "💾 Taille totale : {{size}} Ko",
+      "indexedFiles": "📄 Fichiers indexés :",
+      "andMore": "  ... et {{count}} de plus",
+      "noFilesYet": "⚠️ aucun fichier indexé pour l'instant.",
+      "goToSettings": "Aller dans Paramètres → RAG pour construire l'index.",
+      "ragOff": "ℹ️ Le RAG est actuellement désactivé pour ce chat."
+    },
+    "agentSummary": {
+      "model": "Modèle",
+      "temp": "Temp",
+      "max": "Max",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Outils",
+      "memory": "Mémoire",
+      "none": "Aucun",
+      "configuration": "Configuration de {{name}}",
+      "modelFixed": "{{name}} · Fixe",
+      "modelDefault": "{{name}} · Par défaut",
+      "modelChatView": "{{name}} · Vue chat",
+      "customModel": "Modèle personnalisé",
+      "notSet": "Non défini",
+      "auto": "Auto",
+      "on": "Activé",
+      "off": "Désactivé",
+      "shortTerm": "Court terme",
+      "longTerm": "Long terme",
+      "disabledMemory": "Désactivé",
+      "builtIn": "{{count}} intégré",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Résultats web",
+      "attachments": "Pièces jointes",
+      "references": "Références",
+      "ragSources": "Sources RAG",
+      "reasoning": "Raisonnement",
+      "copy": "Copier",
+      "copied": "Message copié",
+      "copyFailed": "Échec de la copie du message",
+      "tokenUsage": "Utilisation des tokens",
+      "tokenUsagePrompt": "Prompt",
+      "tokenUsageCompletion": "Complétion",
+      "tokenUsageTotal": "Total",
+      "save": "Enregistrer",
+      "insertToNotes": "Insérer dans les notes",
+      "regenerate": "Régénérer"
+    },
+    "streaming": {
+      "thinking": "Réflexion en cours..."
+    },
+    "toolCall": {
+      "thinking": "Réflexion",
+      "executionProcess": "Processus d'exécution",
+      "input": "Entrée",
+      "output": "Sortie",
+      "running": "En cours..."
+    },
+    "addPicture": "Ajouter une image",
+    "addPictureTooltip": "Joindre une image à votre message",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Utiliser les notes indexées comme contexte",
+    "webSearchLabel": "Recherche web",
+    "webSearchTooltipLabel": "Rechercher sur internet si nécessaire",
+    "imageUnavailable": "La pièce jointe image n'est pas disponible pour le modèle actuel.",
+    "newChat": "Nouveau chat",
+    "newConversation": "Nouvelle conversation",
+    "searchConversations": "Rechercher des conversations...",
+    "header": {
+      "model": "Modèle",
+      "advancedParams": "Paramètres avancés",
+      "temperature": "Température",
+      "maxTokens": "Tokens max",
+      "topP": "Top P",
+      "freqPenalty": "Pénalité de fréquence",
+      "presPenalty": "Pénalité de présence",
+      "agentConfig": "Configuration de l'agent",
+      "modelsCount": "Modèles : {{count}}",
+      "tokensCount": "Tokens : {{count}}",
+      "noModels": "Aucun modèle disponible"
+    },
+    "temperature": {
+      "precise": "0 (Précis)",
+      "balanced": "1 (Équilibré)",
+      "creative": "2 (Créatif)"
+    },
+    "modals": {
+      "image": {
+        "title": "Joindre des images",
+        "searchPlaceholder": "Rechercher des images...",
+        "selectAll": "Tout sélectionner",
+        "selectNone": "Ne rien sélectionner",
+        "addSelected": "Ajouter la sélection",
+        "noResults": "Aucune image correspondante trouvée."
+      },
+      "reference": {
+        "title": "Ajouter des références",
+        "searchPlaceholder": "Rechercher des fichiers et dossiers...",
+        "selectAll": "Tout sélectionner",
+        "selectNone": "Ne rien sélectionner",
+        "addSelected": "Ajouter la sélection",
+        "noResults": "Aucun fichier ou dossier correspondant trouvé."
+      },
+      "insertNote": {
+        "title": "Insérer dans une note",
+        "searchPlaceholder": "Rechercher des notes...",
+        "insert": "Insérer dans la note sélectionnée",
+        "createNew": "Créer une nouvelle note",
+        "noResults": "Aucune note correspondante trouvée."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Annuler",
+      "confirm": "Confirmer"
+    },
+    "agentEdit": {
+      "title": "Modifier l'agent",
+      "icon": {
+        "name": "Icône",
+        "desc": "Emoji ou caractère pour représenter cet agent"
+      },
+      "description": {
+        "name": "Description",
+        "desc": "Brève description de l'agent"
+      },
+      "modelStrategy": {
+        "name": "Stratégie de modèle",
+        "options": {
+          "default": "Utiliser le modèle par défaut (des paramètres)",
+          "chatView": "Utiliser le modèle de la vue chat",
+          "fixed": "Modèle fixe"
+        },
+        "noModels": "Aucun modèle en cache",
+        "desc": "Choisir comment l'agent sélectionnera son modèle"
+      },
+      "systemPrompt": {
+        "createNew": "➕ créer un nouveau prompt…",
+        "promptName": {
+          "name": "Nom du prompt",
+          "desc": "Nom d'affichage pour le nouveau prompt système"
+        },
+        "promptContent": {
+          "name": "Contenu du prompt",
+          "desc": "Contenu du nouveau prompt système"
+        },
+        "name": "Prompt système",
+        "desc": "Choisir parmi les prompts existants ou en définir un nouveau pour cet agent."
+      },
+      "capabilities": "Capacités",
+      "memory": {
+        "title": "Mémoire",
+        "notice": "La mémoire des agents est temporairement indisponible pendant que nous améliorons l'expérience."
+      },
+      "tools": {
+        "title": "Outils",
+        "builtIn": {
+          "name": "Outils intégrés",
+          "desc": "Sélectionner quels outils intégrés cet agent peut utiliser"
+        },
+        "cli": {
+          "name": "Outils CLI",
+          "desc": "Accorder l'accès à tous les outils CLI activés, ou choisir individuellement ci-dessous",
+          "noTools": "Aucun outil CLI configuré. Ajoutez et activez des outils sous Paramètres → Outils → CLI pour les utiliser ici."
+        }
+      },
+      "mcp": {
+        "title": "Accès MCP",
+        "noServers": "Aucun serveur MCP configuré. Ajoutez des serveurs sous Paramètres → MCP pour débloquer ces options.",
+        "toolsCached": "{{count}} outil en cache",
+        "toolsCached_plural": "{{count}} outils en cache",
+        "noToolsCached": "Aucun outil en cache pour l'instant. Activez l'accès complet ou actualisez le cache.",
+        "showTools": "Afficher les outils",
+        "hideTools": "Masquer les outils",
+        "selected": "Sélectionné",
+        "notSelected": "Non sélectionné",
+        "noToolsAvailable": "Aucun outil disponible depuis ce serveur pour l'instant."
+      },
+      "notices": {
+        "promptRequired": "Veuillez fournir un nom et un contenu pour le nouveau prompt système."
+      },
+      "name": {
+        "label": "Nom",
+        "desc": "Nom d'affichage de cet agent"
+      },
+      "fixedModel": {
+        "name": "Modèle fixe",
+        "desc": "Sélectionner un modèle spécifique pour cet agent.",
+        "descNoModels": "Aucun modèle en cache disponible. Actualisez les modèles dans l'onglet Modèles."
+      },
+      "temperature": {
+        "label": "Température",
+        "desc": "Contrôle l'aléatoire (0,0 - 2,0)"
+      },
+      "maxTokens": {
+        "label": "Tokens max",
+        "desc": "Nombre maximum de tokens à générer"
+      },
+      "contextWindow": {
+        "label": "Fenêtre de contexte",
+        "desc": "Nombre de messages précédents à inclure dans le contexte"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Activer la génération augmentée par récupération"
+      },
+      "webSearch": {
+        "name": "Recherche web",
+        "desc": "Activer les capacités de recherche web"
+      },
+      "maxSteps": {
+        "name": "Étapes d'outils max",
+        "desc": "Nombre maximum d'étapes d'appel d'outil par tour d'agent"
+      }
+    },
+    "provider": {
+      "title": "Paramètres du fournisseur",
+      "selectProvider": {
+        "name": "Fournisseur",
+        "desc": "Sélectionner le type de fournisseur LLM",
+        "placeholder": "-- Sélectionner un fournisseur --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (local)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Personnalisé (compatible OpenAI)"
+      },
+      "modelFilter": {
+        "name": "Filtre de modèle",
+        "desc": "Modèle regex optionnel pour limiter les modèles disponibles"
+      },
+      "resourceGroup": {
+        "name": "Groupe de ressources",
+        "desc": "Groupe de ressources SAP AI Core optionnel"
+      },
+      "serviceKey": {
+        "name": "Clé de service",
+        "desc": "Clé de service SAP AI Core (chaîne JSON)"
+      },
+      "baseUrl": {
+        "name": "URL de base",
+        "ollamaDesc": "URL du serveur Ollama",
+        "customDesc": "Point de terminaison API compatible OpenAI (requis)",
+        "optionalDesc": "Point de terminaison API personnalisé (optionnel)"
+      },
+      "manageModels": {
+        "name": "Gérer les modèles",
+        "desc": "Télécharger de nouveaux modèles ou mettre à jour ceux existants depuis le registre Ollama.",
+        "btn": "⏬ Télécharger un modèle Ollama"
+      },
+      "apiKey": {
+        "name": "Clé API",
+        "desc": "Clé d'authentification pour le fournisseur sélectionné"
+      },
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "validation": {
+        "selectProvider": "Veuillez sélectionner un type de fournisseur",
+        "apiKeyTooLong": "La clé API est trop longue. La longueur maximale est de 500 caractères.",
+        "invalidUrl": "Format d'URL de base invalide. Veuillez saisir une URL valide (ex. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "Inspecteur MCP",
+      "desc": "Inspecter et déboguer les connexions et outils du serveur Model Context Protocol (MCP).",
+      "tabs": {
+        "connections": "Connexions",
+        "tools": "Outils",
+        "logs": "Journaux"
+      },
+      "refreshBtn": "🔄 actualiser",
+      "connections": {
+        "title": "Connexions aux serveurs MCP",
+        "noServers": "Aucun serveur MCP configuré.",
+        "headers": {
+          "server": "Nom du serveur",
+          "status": "Statut",
+          "tools": "Outils disponibles",
+          "actions": "Actions"
+        },
+        "statusDisabled": "Désactivé",
+        "statusConnected": "● connecté",
+        "statusDisconnected": "○ déconnecté",
+        "toolsLive": "{{count}} outil",
+        "toolsLive_plural": "{{count}} outils",
+        "toolsCached": "{{count}} outil (en cache)",
+        "toolsCached_plural": "{{count}} outils (en cache)",
+        "noTools": "0 outil",
+        "connectBtn": "Connecter",
+        "disconnectBtn": "Déconnecter",
+        "connecting": "Connexion...",
+        "disconnecting": "Déconnexion...",
+        "notices": {
+          "disconnected": "Déconnecté de {{name}}",
+          "enableFirst": "Activez le serveur dans les paramètres avant de vous connecter",
+          "connected": "Connecté à {{name}}",
+          "failedDisconnect": "Échec de la déconnexion de {{name}} : {{message}}",
+          "failedConnect": "Échec de la connexion à {{name}} : {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Outils MCP disponibles",
+        "noTools": "Aucun outil MCP disponible. Vérifiez les connexions aux serveurs.",
+        "serverPrefix": "Serveur : {{name}}",
+        "noToolsInServer": "Aucun outil disponible",
+        "headers": {
+          "tool": "Nom de l'outil",
+          "description": "Description",
+          "parameters": "Paramètres"
+        },
+        "noDescription": "Aucune description",
+        "noParams": "Aucun"
+      },
+      "logs": {
+        "title": "Journaux de connexion MCP",
+        "placeholder": "Les journaux de connexion MCP apparaîtront ici. Affichage d'informations temporaires pour l'instant.",
+        "events": {
+          "connection": "• événements de connexion",
+          "tools": "• événements d'enregistrement d'outils",
+          "errors": "• journaux d'erreurs",
+          "comms": "• détails de communication"
+        },
+        "testTitle": "Tester l'exécution d'un outil",
+        "selectServer": "Sélectionner un serveur...",
+        "selectTool": "Sélectionner un outil...",
+        "parametersTitle": "Paramètres",
+        "selectEnum": "Sélectionner...",
+        "performBtn": "Exécuter l'outil",
+        "clearBtn": "Effacer les résultats",
+        "executing": "Exécution...",
+        "success": "✅ exécution réussie",
+        "failed": "❌ exécution échouée",
+        "errorTitle": "❌ erreur d'exécution",
+        "errorLabel": "Erreur : {{message}}",
+        "notices": {
+          "success": "Outil exécuté avec succès",
+          "failed": "Échec de l'exécution de l'outil",
+          "error": "Erreur d'exécution : {{message}}",
+          "requiredMissing": "Paramètre requis manquant : {{name}}",
+          "invalidNumber": "Nombre invalide pour le paramètre : {{name}}",
+          "invalidJson": "JSON invalide pour le paramètre : {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Aucun serveur MCP configuré",
+        "testing": "🧪 Test de {{count}} connexion de serveur MCP...",
+        "allSuccess": "✅ tous les {{count}} serveurs MCP connectés avec succès !",
+        "partial": "⚠️ {{success}} connectés, {{failed}} échoués"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Modifier le serveur MCP",
+      "titleAdd": "Ajouter un serveur MCP",
+      "serverName": {
+        "name": "Nom du serveur",
+        "desc": "Nom convivial affiché dans tout le plugin"
+      },
+      "connectionMode": {
+        "name": "Mode de connexion",
+        "desc": "Choisir de se connecter automatiquement ou uniquement lors d'un déclenchement manuel",
+        "auto": "Connexion automatique à l'ouverture du chat",
+        "manual": "Connexion manuelle"
+      },
+      "command": {
+        "name": "Commande",
+        "desc": "Exécutable ou script qui démarre le serveur MCP"
+      },
+      "arguments": {
+        "name": "Arguments",
+        "desc": "Arguments séparés par des virgules ou des sauts de ligne (optionnel)"
+      },
+      "envVars": {
+        "name": "Variables d'environnement",
+        "desc": "Paires CLÉ=VALEUR optionnelles, une par ligne"
+      },
+      "enabled": {
+        "name": "Activé",
+        "desc": "Désactiver pour garder le serveur configuré sans connexion automatique"
+      },
+      "cancel": "Annuler",
+      "saveEdit": "Enregistrer les modifications",
+      "saveAdd": "Ajouter le serveur",
+      "validation": {
+        "nameRequired": "Le nom du serveur est requis",
+        "commandRequired": "La commande est requise"
+      }
+    },
+    "ollamaManager": {
+      "title": "Gérer les modèles Ollama",
+      "serverInfo": "Informations sur le serveur",
+      "checkingServer": "Vérification du serveur...",
+      "serverOnline": "✅ Serveur en ligne",
+      "versionLabel": " | Version : {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Serveur hors ligne",
+      "connectionError": "❌ Erreur de connexion",
+      "pullTitle": "Télécharger un nouveau modèle",
+      "pullHint": "Saisissez un nom de modèle pour le télécharger depuis la bibliothèque Ollama (ex. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Nom du modèle",
+        "example": "Exemple : llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Télécharger le modèle",
+      "installedTitle": "Modèles installés",
+      "refreshList": "🔄 Actualiser la liste",
+      "noModels": "Aucun modèle trouvé. Téléchargez un modèle pour commencer.",
+      "capabilities": "Capacités : {{caps}}",
+      "deleteBtn": "Supprimer",
+      "closeBtn": "Fermer",
+      "confirmDelete": {
+        "title": "Confirmer la suppression",
+        "message": "Êtes-vous sûr de vouloir supprimer le modèle « {{name}} » ?",
+        "cancel": "Annuler",
+        "confirm": "Supprimer"
+      },
+      "notices": {
+        "enterName": "Veuillez saisir un nom de modèle",
+        "pulling": "Téléchargement de {{name}}... Cela peut prendre un moment.",
+        "pullSuccess": "✅ {{name}} téléchargé avec succès",
+        "pullFailed": "❌ Échec du téléchargement du modèle : {{message}}",
+        "deleted": "✅ {{name}} supprimé",
+        "deleteFailed": "❌ Échec de la suppression du modèle : {{message}}",
+        "refreshing": "Actualisation...",
+        "refreshSuccess": "✅ Liste des modèles actualisée",
+        "refreshFailed": "❌ Échec de l'actualisation de la liste des modèles"
+      }
+    },
+    "promptEdit": {
+      "title": "Modifier le prompt système",
+      "name": {
+        "name": "Nom",
+        "desc": "Nom d'affichage de ce prompt"
+      },
+      "content": {
+        "name": "Contenu",
+        "desc": "Le contenu du prompt système"
+      },
+      "enabled": {
+        "name": "Activé",
+        "desc": "Si ce prompt est actif"
+      },
+      "cancel": "Annuler",
+      "save": "Enregistrer"
+    },
+    "prompt": {
+      "cancel": "Annuler",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Nom",
+      "create": "Créer",
+      "cancel": "Annuler"
+    },
+    "explain": {
+      "loading": "⏳ Traitement...",
+      "error": "Erreur lors du rendu de l'explication",
+      "errorPrefix": "❌ Erreur : "
+    }
+  },
+  "notices": {
+    "noProvider": "Veuillez d'abord configurer un fournisseur LLM dans les paramètres",
+    "noModel": "Veuillez sélectionner un modèle par défaut dans les paramètres",
+    "noValidProvider": "Aucune configuration de fournisseur valide trouvée pour le modèle : {{modelId}}",
+    "processing": "Traitement...",
+    "textUpdated": "Texte mis à jour avec succès",
+    "error": "Erreur : {{message}}"
+  }
+}

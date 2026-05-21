@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Allmänt",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Verktyg",
+      "rag": "RAG",
+      "prompts": "Prompts",
+      "agents": "Agenter",
+      "quickActions": "Snabbåtgärder",
+      "usage": "Användning"
+    },
+    "general": {
+      "title": "Allmänna inställningar",
+      "desc": "Konfigurera allmänna inställningar för intelligensassistentens plugin.",
+      "pluginVersion": {
+        "name": "Plugin-version",
+        "desc": "Aktuell version av intelligensassistentens plugin"
+      },
+      "defaultModel": {
+        "name": "Standardmodell",
+        "desc": "Standardmodell för konversationer",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Standardchattläge",
+        "desc": "Välj vilket läge chattvyn öppnas med",
+        "chat": "Chattläge",
+        "agent": "Agentläge"
+      },
+      "conversationTitleMode": {
+        "name": "Konversationstitelläge",
+        "desc": "Hur konversationstitlar genereras",
+        "firstMessage": "Använd första meddelandet",
+        "autoSummary": "Generera sammanfattning automatiskt",
+        "manual": "Manuellt"
+      },
+      "conversationIcons": {
+        "name": "Konversationsikoner",
+        "desc": "Aktivera automatisk ikongenerering för konversationer"
+      },
+      "configStatus": {
+        "name": "Konfigurationsstatus",
+        "desc": "Pluginens övergripande konfigurationsstatus",
+        "ok": "✅ Konfigurerad ({{providers}} leverantörer, {{conversations}} konversationer)",
+        "incomplete": "⚠️ Ofullständig - Konfigurera leverantörer och modeller"
+      }
+    },
+    "llm": {
+      "title": "LLM-konfiguration",
+      "desc": "Konfigurera språkmodellsleverantörer och hantera tillgängliga modeller.",
+      "subTabs": {
+        "provider": "Leverantörer",
+        "models": "Modeller"
+      }
+    },
+    "models": {
+      "title": "Modellkonfiguration",
+      "desc": "Visa och hantera modeller från alla konfigurerade leverantörer. Klicka på \"uppdatera modeller\" för att hämta de senaste tillgängliga modellerna.",
+      "providerCount": "{{count}} leverantör konfigurerad",
+      "providerCount_plural": "{{count}} leverantörer konfigurerade",
+      "refreshAll": "🔄 uppdatera alla modeller",
+      "empty": "Inga leverantörer konfigurerade ännu. Lägg till leverantörer på leverantörsfliken först.",
+      "noModels": "Inga modeller tillgängliga. Klicka på \"uppdatera alla modeller\" eller uppdatera enskilda leverantörer på leverantörsfliken.",
+      "noMatch": "Inga modeller matchar de aktuella filtren. Justera eller rensa filter för att se resultat.",
+      "modelCount": "• {{count}} modell cachad",
+      "modelCount_plural": "• {{count}} modeller cachade",
+      "matchCount": "• {{count}} träff på valda filter",
+      "matchCount_plural": "• {{count}} träffar på valda filter",
+      "status": {
+        "enabled": "Aktiverad",
+        "disabled": "Inaktiverad"
+      },
+      "actions": {
+        "disable": "Inaktivera",
+        "enable": "Aktivera",
+        "setDefaultChat": "Ange som standardchatt",
+        "defaultChat": "Standardchatt",
+        "setDefaultEmbedding": "Ange som standardinbäddning",
+        "defaultEmbedding": "Standardinbäddning"
+      },
+      "notices": {
+        "fetching": "Hämtar modeller för {{provider}}...",
+        "fetchFailed": "Det gick inte att uppdatera {{provider}}-modeller",
+        "refreshed": "Modeller uppdaterades!",
+        "refreshFailed": "Det gick inte att uppdatera modeller",
+        "defaultChatSet": "Standardchattmodell inställd på {{name}}",
+        "defaultEmbeddingSet": "Standardinbäddningsmodell inställd på {{name}}"
+      },
+      "filters": {
+        "allProviders": "Alla leverantörer",
+        "allCapabilities": "Alla funktioner",
+        "allStates": "Alla tillstånd",
+        "searchPlaceholder": "Sök namn eller ID"
+      }
+    },
+    "provider": {
+      "title": "Leverantörskonfiguration",
+      "securityTitle": "⚠️ Säkerhetsvarning",
+      "securityDesc": "API-nycklar lagras som klartext i ditt valv för kompatibilitet. För att förhindra oavsiktliga läckor:",
+      "securityItem1": "Dela INTE din {{configDir}}/plugins/intelligence-assistant/data/-mapp.",
+      "securityItem2": "Lägg till den här mappen i din .gitignore om du använder Git-synkronisering.",
+      "securityItem3": "Var försiktig när du använder offentliga molnsynkroniseringstjänster.",
+      "desc": "Hantera LLM-leverantörer och API-uppgifter. Använd åtgärdskolumnen för att redigera konfigurationsdetaljer eller uppdatera cachade modeller.",
+      "count": "{{count}} leverantör konfigurerad",
+      "count_plural": "{{count}} leverantörer konfigurerade",
+      "addBtn": "+ Lägg till leverantör",
+      "empty": "Inga leverantörer konfigurerade. Välj \"Lägg till leverantör\" för att komma igång.",
+      "tableHeaders": {
+        "provider": "Leverantör",
+        "status": "Status",
+        "actions": "Åtgärder"
+      },
+      "status": {
+        "ready": "Redo",
+        "needsConfig": "Kräver konfiguration",
+        "checking": "Kontrollerar...",
+        "credentialsSet": "Uppgifter angivna",
+        "serverOnline": "Server online",
+        "serverOffline": "Server offline",
+        "serverError": "Serverfel"
+      },
+      "guidance": {
+        "requiresCli": "Kräver lokal CLI",
+        "provideServiceKey": "Ange tjänstnyckel",
+        "configureBaseUrl": "Konfigurera bas-URL",
+        "addApiKey": "Lägg till API-nyckel"
+      },
+      "models": {
+        "none": "Inga modeller",
+        "count": "{{count}} modell",
+        "count_plural": "{{count}} modeller"
+      },
+      "ollama": {
+        "checkingVersion": "Kontrollerar version...",
+        "server": {
+          "checking": "Kontrollerar server...",
+          "online": "Server: online",
+          "offline": "Server: offline eller otillgänglig",
+          "error": "Server: anslutningsfel",
+          "versionOnline": "Server online",
+          "versionOffline": "Server offline",
+          "versionError": "Anslutningsfel",
+          "version": "Version: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Senaste uppdatering: {{timeAgo}}",
+        "neverRefreshed": "Aldrig uppdaterad",
+        "justNow": "just nu",
+        "minutesAgo": "{{n}}m sedan",
+        "hoursAgo": "{{n}}h sedan",
+        "daysAgo": "{{n}}d sedan"
+      },
+      "actions": {
+        "edit": "Redigera",
+        "manageModels": "Hantera modeller",
+        "refreshModels": "Uppdatera modeller",
+        "refreshing": "Uppdaterar...",
+        "delete": "Ta bort"
+      },
+      "notices": {
+        "refreshed": "Modeller uppdaterades för {{provider}}.",
+        "refreshFailed": "Det gick inte att uppdatera modeller"
+      },
+      "confirm": {
+        "delete": "Ta bort leverantören {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "MCP-serverhantering",
+      "desc": "Konfigurera Model Context Protocol (MCP)-servrar för att utöka agentfunktioner med externa verktyg och datakällor.",
+      "inspectorBtn": "🔍 Öppna MCP-inspektör",
+      "testAllBtn": "🧪 testa alla anslutningar",
+      "refreshAllBtn": "🔄 uppdatera alla verktyg",
+      "addBtn": "+ Lägg till MCP-server",
+      "empty": "Inga MCP-servrar konfigurerade. Välj Lägg till MCP-server för att komma igång.",
+      "tableHeaders": {
+        "name": "Namn",
+        "command": "Kommando",
+        "arguments": "Argument",
+        "status": "Status",
+        "tools": "Verktyg",
+        "actions": "Åtgärder"
+      },
+      "untitled": "Namnlös MCP-server",
+      "notConfigured": "Inte konfigurerad",
+      "noArgs": "Inga",
+      "cached": "Cachad",
+      "disabled": "Inaktiverad",
+      "envVars": "{{count}} miljövariabel",
+      "envVars_plural": "{{count}} miljövariabler",
+      "status": {
+        "disabled": "Inaktiverad",
+        "connected": "ansluten",
+        "disconnected": "frånkopplad",
+        "enableToManage": "Aktivera för att hantera anslutningar",
+        "manualConnect": "Manuell anslutning",
+        "autoConnect": "Automatisk anslutning"
+      },
+      "toolCount": {
+        "live": "{{count}} live-verktyg",
+        "live_plural": "{{count}} live-verktyg",
+        "cached": "{{count}} cachat verktyg",
+        "cached_plural": "{{count}} cachade verktyg"
+      },
+      "actions": {
+        "edit": "Redigera",
+        "enabled": "✓ Aktiverad",
+        "enabledOff": "✗ Inaktiverad",
+        "connect": "anslut",
+        "disconnect": "koppla från",
+        "connecting": "Ansluter...",
+        "disconnecting": "Kopplar från...",
+        "test": "Testa",
+        "testing": "Testar...",
+        "delete": "Ta bort"
+      },
+      "notices": {
+        "disconnected": "Frånkopplad från {{name}}",
+        "connected": "Ansluten till {{name}}",
+        "autoConnectFailed": "Det gick inte att automatiskt ansluta {{name}}",
+        "enableFirst": "Aktivera servern innan du ansluter",
+        "disconnectFailed": "Det gick inte att koppla från {{name}}",
+        "connectFailed": "Det gick inte att ansluta till {{name}}",
+        "testNoCommand": "❌ ange ett kommando innan du testar anslutningen",
+        "testSuccess": "✅ anslutningen lyckades! Hittade {{count}} verktyg.",
+        "testFailed": "❌ Anslutningen misslyckades: {{message}}",
+        "refreshedAll": "✅ verktyg uppdaterades för {{count}} server",
+        "refreshedAll_plural": "✅ verktyg uppdaterades för {{count}} servrar",
+        "refreshedPartial": "✅ {{success}} servrar uppdaterades, ❌ {{failed}} misslyckades",
+        "noServersConfigured": "⚠️ Inga MCP-servrar konfigurerade",
+        "testingAll": "🧪 Testar {{count}} MCP-serveranslutningar...",
+        "testAllSuccess": "✅ alla {{count}} mcp-servrar anslutna!",
+        "testAllPartial": "⚠️ {{successful}} anslutna, {{failed}} misslyckades"
+      },
+      "confirm": {
+        "delete": "Ta bort MCP-servern \"{{name}}\"?"
+      }
+    },
+    "agents": {
+      "title": "Agenthantering",
+      "desc": "Skapa och hantera AI-agenter med specifika funktioner, verktyg och beteenden.",
+      "count": "{{count}} agent konfigurerad",
+      "count_plural": "{{count}} agenter konfigurerade",
+      "addBtn": "+ lägg till agent",
+      "empty": "Inga agenter konfigurerade. Välj lägg till agent för att komma igång.",
+      "tableHeaders": {
+        "agent": "Agent",
+        "model": "Modell",
+        "capabilities": "Funktioner",
+        "tools": "Verktyg",
+        "actions": "Åtgärder"
+      },
+      "defaultBadge": "Standard",
+      "systemPrompt": "Systemprompt • {{promptName}}",
+      "customPrompt": "Anpassad prompt",
+      "model": {
+        "notSet": "Inte angiven",
+        "notFound": "Modellen hittades inte i cache",
+        "useChatView": "Använd chattvymodell",
+        "useChatViewDesc": "Använder modellen vald i chattvyn",
+        "useDefault": "Använd standardmodell",
+        "useDefaultDesc": "Använder standardmodellen från inställningarna"
+      },
+      "capabilities": {
+        "noSpecialModes": "Inga speciallägen"
+      },
+      "tools": {
+        "builtIn": "{{count}} inbyggd",
+        "mcpServer": "{{count}} mcp-server",
+        "mcpServer_plural": "{{count}} mcp-servrar",
+        "mcpTool": "{{count}} mcp-verktyg",
+        "mcpTool_plural": "{{count}} mcp-verktyg",
+        "noTools": "Inga verktyg aktiverade"
+      },
+      "actions": {
+        "edit": "Redigera",
+        "delete": "ta bort",
+        "protected": "skyddad"
+      },
+      "confirm": {
+        "delete": "Ta bort agenten \"{{name}}\"?"
+      }
+    },
+    "prompts": {
+      "title": "Systempromptar",
+      "desc": "Hantera systempromptar som definierar beteende och personlighet hos din AI-assistent.",
+      "addBtn": "+ lägg till systemprompt",
+      "empty": "Inga systempromptar konfigurerade. Välj lägg till systemprompt för att komma igång.",
+      "tableHeaders": {
+        "name": "Namn",
+        "contentPreview": "Innehållsförhandsvisning",
+        "created": "Skapad",
+        "updated": "Uppdaterad",
+        "enabled": "Aktiverad",
+        "actions": "Åtgärder"
+      },
+      "status": {
+        "enabled": "Aktiverad",
+        "disabled": "Inaktiverad"
+      },
+      "actions": {
+        "edit": "Redigera",
+        "disable": "Inaktivera",
+        "enable": "Aktivera",
+        "delete": "Ta bort"
+      },
+      "confirm": {
+        "delete": "Ta bort prompten \"{{name}}\"?"
+      }
+    },
+    "tools": {
+      "title": "Verktygskonfiguration",
+      "desc": "Granska inbyggda verktyg och utforska MCP-verktyg laddade från anslutna servrar. Aktivera åtgärderna som dina agenter ska kunna utföra.",
+      "subTabs": {
+        "builtIn": "Inbyggda verktyg",
+        "mcp": "MCP-verktyg",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI-verktyg"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Namn",
+          "category": "Kategori",
+          "description": "Beskrivning",
+          "parameters": "Parametrar",
+          "enabled": "Aktiverad"
+        },
+        "categories": {
+          "fileOps": "Filåtgärder",
+          "searchDisc": "Sökning och utforskning",
+          "noteMgmt": "Anteckningshantering"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Läs innehållet i en fil från ditt valv",
+            "params": "sökväg (krävs): Sökväg till filen som ska läsas"
+          },
+          "writeFile": {
+            "desc": "Skriv eller uppdatera en fil i ditt valv",
+            "params": "sökväg (krävs), innehåll (krävs): Filsökväg och innehåll att skriva"
+          },
+          "listFiles": {
+            "desc": "Lista filer i valvet eller en specifik mapp",
+            "params": "mapp (valfri), tillägg (valfritt): Filtrera efter mapp och filtillägg"
+          },
+          "searchFiles": {
+            "desc": "Sök efter filer efter namn eller innehåll i ditt valv",
+            "params": "fråga (krävs), sök_innehåll (valfritt), gräns (valfritt): Sökfråga och alternativ"
+          },
+          "createNote": {
+            "desc": "Skapa en ny anteckning med angivet innehåll",
+            "params": "titel (krävs), innehåll (krävs), mapp (valfri): Anteckningstiteln, innehåll och plats"
+          },
+          "appendNote": {
+            "desc": "Lägg till innehåll i en befintlig anteckning",
+            "params": "sökväg (krävs), innehåll (krävs): Anteckningens sökväg och innehåll att lägga till"
+          }
+        },
+        "infoTitle": "💡 om verktyg",
+        "infoText": "Inbyggda verktyg konfigureras per plugin-inställningar. MCP-verktyg hanteras oberoende—använd MCP-fliken för att ansluta servrar och uppdatera verktygstillgänglighet.",
+        "toolNames": {
+          "read_file": "Läs fil",
+          "write_file": "Skriv fil",
+          "list_files": "Lista filer",
+          "search_files": "Sök filer",
+          "create_note": "Skapa anteckning",
+          "append_note": "Lägg till i anteckning"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Inga MCP-verktyg tillgängliga. Anslut en server eller uppdatera cachade verktyg för att fylla den här listan.",
+        "tableHeaders": {
+          "server": "Server",
+          "tool": "Verktyg",
+          "description": "Beskrivning",
+          "parameters": "Parametrar",
+          "source": "Källa"
+        },
+        "noDescription": "Ingen beskrivning",
+        "schemaUnavailable": "Schema inte tillgängligt",
+        "live": "Live",
+        "cached": "Cachad",
+        "status": {
+          "connected": "ansluten",
+          "disconnected": "frånkopplad"
+        }
+      },
+      "openapi": {
+        "desc": "Generera HTTP-verktyg från OpenAPI-dokument. Fjärrspecifikationer cachas under {{cacheDir}}.",
+        "addBtn": "Lägg till HTTP-källa",
+        "noSources": "Inga HTTP-källor konfigurerade ännu.",
+        "unnamed": "Namnlös HTTP-källa",
+        "tableHeaders": {
+          "name": "Namn",
+          "source": "Källa",
+          "auth": "Autentisering",
+          "status": "Status",
+          "actions": "Åtgärder"
+        },
+        "sourceUrl": "Fjärr-URL inte angiven",
+        "sourcePath": "Filsökväg inte angiven",
+        "authHeader": "Huvud ({{key}})",
+        "authQuery": "Fråga ({{key}})",
+        "authNone": "Ingen",
+        "statusEnabled": "Aktiverad",
+        "statusDisabled": "Inaktiverad",
+        "actions": {
+          "edit": "Redigera",
+          "reload": "Ladda om",
+          "refetch": "Hämta igen",
+          "delete": "Ta bort"
+        },
+        "notices": {
+          "removed": "HTTP-källa borttagen",
+          "reloaded": "{{count}} åtgärder omladdade",
+          "reloadFailed": "Det gick inte att ladda om HTTP-källan. Kontrollera konsolen för detaljer."
+        },
+        "modal": {
+          "defaultTitle": "HTTP-källa",
+          "displayName": {
+            "name": "Visningsnamn",
+            "desc": "Visas för agenter när de väljer en verktygskälla"
+          },
+          "enabled": {
+            "name": "Aktiverad",
+            "desc": "Aktivera för att exponera detta HTTP API för alla agenter"
+          },
+          "sourceType": {
+            "name": "Källtyp",
+            "file": "Lokal fil",
+            "url": "Fjärr-URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Hämtas och cachas i plugin-datakatalogen"
+          },
+          "cachedFile": "Cachad fil: {{path}} ({{date}})",
+          "neverFetched": "Aldrig hämtad",
+          "specPath": {
+            "name": "OpenAPI-filsökväg",
+            "desc": "Relativ sökväg i valvet eller en absolut sökväg"
+          },
+          "baseUrl": {
+            "name": "Bas-URL-åsidosättning",
+            "desc": "Åsidosätt den första serverposten från dokumentet (valfritt)"
+          },
+          "auth": {
+            "name": "Autentisering",
+            "desc": "Infoga automatiskt API-nycklar vid anrop av den här källan",
+            "none": "Ingen",
+            "header": "HTTP-huvud",
+            "query": "Frågeparameter"
+          },
+          "credKey": {
+            "name": "Autentiseringsnyckel"
+          },
+          "credValue": {
+            "name": "Autentiseringsvärde"
+          },
+          "actions": {
+            "name": "Åtgärder",
+            "reloadTools": "Ladda om verktyg",
+            "refetchTooltip": "Hämta spec från URL igen",
+            "deleteTooltip": "Ta bort källa"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Definiera lokala kommandoradsverktyg som agenter kan köra. Använd mallar som {{param}} för dynamiska argument.",
+        "addBtn": "Lägg till CLI-verktyg",
+        "presetsBtn": "Lägg till från förinställningar",
+        "noTools": "Inga CLI-verktyg konfigurerade ännu.",
+        "tableHeaders": {
+          "name": "Namn",
+          "command": "Kommando",
+          "parameters": "Parametrar",
+          "status": "Status",
+          "actions": "Åtgärder"
+        },
+        "unnamed": "Namnlöst CLI-verktyg",
+        "paramCount": "{{count}} parameter",
+        "paramCount_plural": "{{count}} parametrar",
+        "noParams": "Inga",
+        "statusEnabled": "Aktiverad",
+        "statusDisabled": "Inaktiverad",
+        "actions": {
+          "edit": "Redigera",
+          "disable": "Inaktivera",
+          "enable": "Aktivera",
+          "delete": "Ta bort"
+        },
+        "notices": {
+          "removed": "CLI-verktyg borttaget"
+        },
+        "infoTitle": "💡 Om CLI-verktyg",
+        "infoText": "CLI-verktyg kör skalkommandon lokalt. Använd {{paramName}} i argument för mallsubstitution eller konfigurera parametrar som ska skickas som argument eller miljövariabler.",
+        "modal": {
+          "defaultTitle": "CLI-verktyg",
+          "toolName": {
+            "name": "Verktygsnamn",
+            "desc": "Identifierare som agenter använder för att anropa det här verktyget"
+          },
+          "description": {
+            "name": "Beskrivning",
+            "desc": "Beskriv vad det här verktyget gör för AI:n"
+          },
+          "enabled": {
+            "name": "Aktiverad",
+            "desc": "Aktivera för att tillåta agenter att använda det här verktyget"
+          },
+          "commandConfig": "Kommandokonfiguration",
+          "command": {
+            "name": "Kommando",
+            "desc": "Den körbara filen (t.ex. node, python, bash, /sökväg/till/skript)"
+          },
+          "args": {
+            "name": "Argument",
+            "desc": "Kommandoargument, ett per rad. Använd {{paramName}} för mallsubstitution."
+          },
+          "cwd": {
+            "name": "Arbetskatalog",
+            "desc": "Katalog att köra kommandot i (valfritt)"
+          },
+          "timeout": {
+            "name": "Tidsgräns (ms)",
+            "desc": "Maximal körningstid i millisekunder (standard: {{timeout}})"
+          },
+          "shell": {
+            "name": "Kör i skal",
+            "desc": "Kör kommandot via ett skal (aktiverar sskalfunktioner som rör)"
+          },
+          "paramsTitle": "Parametrar",
+          "paramsDesc": "Definiera parametrar som AI:n kan skicka till det här verktyget.",
+          "addParam": "Lägg till parameter",
+          "noParams": "Inga parametrar definierade.",
+          "paramN": "Parameter {{n}}",
+          "param": {
+            "name": "Namn",
+            "type": {
+              "name": "Typ",
+              "string": "Sträng",
+              "number": "Nummer",
+              "boolean": "Boolesk"
+            },
+            "description": "Beskrivning",
+            "required": "Krävs",
+            "insertAs": {
+              "name": "Infoga som",
+              "desc": "Hur den här parametern skickas till kommandot",
+              "template": "Mall ({{name}})",
+              "arg": "Lägg till som argument",
+              "env": "Miljövariabel"
+            },
+            "envName": {
+              "name": "Miljövariabelns namn",
+              "desc": "Åsidosätt miljövariabelns namn (standardvärde är parameternamnet i versaler)"
+            }
+          },
+          "envTitle": "Miljövariabler",
+          "envDesc": "Statiska miljövariabler att ange vid körning av kommandot.",
+          "envVars": {
+            "name": "Miljövariabler",
+            "desc": "Format: NYCKEL=värde, ett per rad"
+          }
+        },
+        "presets": {
+          "title": "Lägg till CLI-verktyg från förinställningar",
+          "desc": "Välj en förinställning för att snabbt lägga till ett förkonfigurerat CLI-verktyg. Du kan anpassa det efter att ha lagt till det.",
+          "addBtn": "Lägg till",
+          "addedBtn": "Tillagd",
+          "closeBtn": "Stäng",
+          "notices": {
+            "added": "\"{{name}}\" tillagd - aktivera den i CLI-verktygslistan"
+          },
+          "categories": {
+            "file": "Filåtgärder",
+            "search": "Sökning",
+            "network": "Nätverk",
+            "code": "Kodkörning",
+            "data": "Databehandling",
+            "system": "Systeminformation",
+            "apps": "macOS-appar och skrivbord"
+          },
+          "names": {
+            "preset-cat": "Läs fil (cat)",
+            "preset-ls": "Lista katalog (ls)",
+            "preset-find": "Sök filer (find)",
+            "preset-grep": "Sök text (grep)",
+            "preset-ripgrep": "Snabbsökning (rg)",
+            "preset-curl": "HTTP-förfrågan (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Kör Python-kod",
+            "preset-node": "Kör JavaScript (Node)",
+            "preset-bash": "Kör skalskript",
+            "preset-jq": "JSON-processor (jq)",
+            "preset-wc": "Ordräkning (wc)",
+            "preset-date": "Aktuellt datum/tid",
+            "preset-pwd": "Aktuell katalog (pwd)",
+            "preset-whoami": "Aktuell användare",
+            "preset-uname": "Systeminformation (uname)",
+            "preset-open": "Öppna fil/URL (open)",
+            "preset-open-app": "Starta app (open -a)",
+            "preset-safari": "Öppna i Safari",
+            "preset-chrome": "Öppna i Chrome",
+            "preset-firefox": "Öppna i Firefox",
+            "preset-pbcopy": "Kopiera till urklipp",
+            "preset-pbpaste": "Klistra in från urklipp",
+            "preset-say": "Text till tal (say)",
+            "preset-osascript": "AppleScript-körare",
+            "preset-notify": "Skrivbordsavisering",
+            "preset-screencapture": "Skärmbild",
+            "preset-applescript-list-apps": "Lista aktiva appar"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG-konfiguration",
+      "desc": "Konfigurera retrieval-augmented generation och webbsökning för att förbättra AI-svar.",
+      "subTabs": {
+        "overview": "Översikt",
+        "chunking": "Chunkning",
+        "search": "Sökning",
+        "filters": "Filter",
+        "advanced": "Avancerat",
+        "websearch": "Webbsökning"
+      },
+      "general": {
+        "title": "Allmänna inställningar",
+        "enableRag": {
+          "name": "Aktivera RAG",
+          "desc": "Aktivera Retrieval-Augmented Generation för förbättrad kontext"
+        },
+        "vectorStore": {
+          "name": "Vektorlager",
+          "desc": "Vektordatabas för att lagra inbäddningar",
+          "memory": "I minnet",
+          "disk": "Diskbaserad"
+        },
+        "embeddingModel": {
+          "name": "Inbäddningsmodell",
+          "desc": "Modell att använda för att generera inbäddningar"
+        },
+        "embedChanged": {
+          "name": "Bädda in ändrade filer automatiskt",
+          "desc": "Bädda automatiskt in filer på nytt när de ändras"
+        }
+      },
+      "indexMgmt": {
+        "title": "Indexhantering",
+        "desc": "Hantera ditt RAG-index och visa statistik om indexerat innehåll.",
+        "statsTitle": "Indexstatistik",
+        "stats": {
+          "totalChunks": "Totalt antal chunks",
+          "uniqueFiles": "Unika filer",
+          "totalChars": "Totalt antal tecken",
+          "avgChunkSize": "Genomsnittlig chunkstorlek"
+        },
+        "empty": "Index är tomt. Välj bygg om index för att börja indexera.",
+        "error": "⚠️ kan inte ladda indexstatistik",
+        "rebuild": {
+          "name": "Bygg om index",
+          "desc": "Indexera om alla filer i ditt valv. Det kan ta ett tag.",
+          "btn": "Bygg om",
+          "rebuilding": "Bygger om..."
+        },
+        "refresh": {
+          "name": "Uppdatera index",
+          "desc": "Uppdatera indexet med eventuella ändrade filer sedan senaste indexeringen.",
+          "btn": "Uppdatera",
+          "refreshing": "Uppdaterar..."
+        },
+        "clear": {
+          "name": "Rensa index",
+          "desc": "Ta bort alla indexerade data. Du måste bygga om indexet.",
+          "btn": "Rensa",
+          "clearing": "Rensar..."
+        },
+        "notices": {
+          "rebuilt": "Index byggt om",
+          "rebuildFailed": "Det gick inte att bygga om index",
+          "refreshed": "Index uppdaterat",
+          "refreshFailed": "Det gick inte att uppdatera index",
+          "cleared": "Index rensat",
+          "clearFailed": "Det gick inte att rensa index"
+        }
+      },
+      "chunking": {
+        "title": "Chunkinginställningar",
+        "strategy": {
+          "name": "Chunkningsstrategi",
+          "desc": "Strategi för att dela upp dokument i chunks",
+          "recursive": "Rekursiv (smart)",
+          "fixed": "Fast storlek",
+          "sentence": "Per mening",
+          "paragraph": "Per stycke"
+        },
+        "chunkSize": {
+          "name": "Chunkstorlek",
+          "desc": "Antal tecken per chunk (500-2000 rekommenderas)"
+        },
+        "chunkOverlap": {
+          "name": "Chunköverlagring",
+          "desc": "Antal överlappande tecken mellan chunks"
+        },
+        "minChunkSize": {
+          "name": "Minsta chunkstorlek",
+          "desc": "Minsta chunkstorlek att skapa"
+        },
+        "maxTokens": {
+          "name": "Max tokens per chunk",
+          "desc": "Maximalt antal tokens tillåtna per chunk"
+        }
+      },
+      "search": {
+        "title": "Sökinställningar",
+        "searchType": {
+          "name": "Söktyp",
+          "desc": "Typ av likhetsökning att utföra",
+          "similarity": "Likhet"
+        },
+        "topK": {
+          "name": "Topp K-resultat",
+          "desc": "Antal mest relevanta chunks att hämta (1-20)"
+        },
+        "threshold": {
+          "name": "Likhetströskel",
+          "desc": "Minsta likhetsvärde för att inkludera resultat (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Relevansvikts",
+          "desc": "Vikt för relevansbedömning (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Kontextfönstergräns",
+          "desc": "Maximalt antal tokens för hämtad kontext"
+        }
+      },
+      "filters": {
+        "title": "Filfilter",
+        "excludeFolders": {
+          "name": "Uteslut mappar",
+          "desc": "Mappar att utesluta från indexering (kommaseparerade)"
+        },
+        "includeTypes": {
+          "name": "Inkludera filtyper",
+          "desc": "Filtyper att inkludera (tomt = alla typer)"
+        },
+        "excludeTypes": {
+          "name": "Uteslut filtyper",
+          "desc": "Filtyper att utesluta från indexering"
+        },
+        "filterByTag": {
+          "name": "Filtrera efter tagg",
+          "desc": "Indexera bara filer med dessa taggar (tomt = alla filer)"
+        },
+        "excludeByTag": {
+          "name": "Uteslut efter tagg",
+          "desc": "Uteslut filer med dessa taggar från indexering"
+        }
+      },
+      "advanced": {
+        "title": "Avancerade inställningar",
+        "batchSize": {
+          "name": "Inbäddningsbatchstorlek",
+          "desc": "Antal chunks att bädda in parallellt"
+        }
+      },
+      "grading": {
+        "title": "Bedömningsinställningar",
+        "desc": "Bedöm hämtade chunks för relevans innan de skickas till LLM. Det hjälper till att filtrera bort lågkvalitativa resultat.",
+        "enableGrading": {
+          "name": "Aktivera bedömningströskel",
+          "desc": "Filtrera chunks under kvalitetströsklar"
+        },
+        "graderSource": {
+          "name": "Bedömarmodellkälla",
+          "desc": "Varifrån bedömarmodellen ska hämtas",
+          "chat": "Chattmodell",
+          "custom": "Anpassad modell"
+        },
+        "graderModel": {
+          "name": "Bedömarmodell",
+          "desc": "Specifik modell att använda för bedömning"
+        },
+        "parallel": {
+          "name": "Parallellbearbetning",
+          "desc": "Antal chunks att bedöma parallellt"
+        },
+        "minRelevance": {
+          "name": "Minsta relevanspoäng",
+          "desc": "Minsta relevanspoäng (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Minsta noggrannhetspoäng",
+          "desc": "Minsta noggrannhetspoäng (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Minsta stödkvalitetspoäng",
+          "desc": "Minsta stödkvalitetspoäng (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Webbsökningskonfiguration",
+      "desc": "Konfigurera webbsökningsfunktionalitet för att förbättra AI-svar med aktuell information från internet.",
+      "generalBehavior": "Allmänt beteende",
+      "providerSelection": "Leverantörsval",
+      "localeFilters": "Språk- och regionsfilter",
+      "apiCredentials": "API-uppgifter och slutpunkter",
+      "enabled": {
+        "name": "Aktivera webbsökning",
+        "desc": "Tillåt AI att söka på webben efter aktuell information"
+      },
+      "autoTrigger": {
+        "name": "Utlös sökning automatiskt",
+        "desc": "Utlös automatiskt webbsökning när frågan kräver aktuell information (t.ex. nyheter, priser, senaste händelser)"
+      },
+      "maxResults": {
+        "name": "Maximalt antal resultat",
+        "desc": "Maximalt antal sökresultat att returnera"
+      },
+      "timeRange": {
+        "name": "Resultatfärskhet",
+        "desc": "Begränsa resultat till ett tidsintervall som stöds av leverantörer (Google, SearXNG, Mojeek)",
+        "any": "Valfri tid (standard)",
+        "h": "Senaste timmen",
+        "d": "Senaste 24 timmarna",
+        "w": "Senaste veckan",
+        "m": "Senaste månaden",
+        "y": "Senaste året"
+      },
+      "provider": {
+        "name": "Sökleverantör",
+        "desc": "Välj bland integritetsvänliga skrapar eller API-stödda sökmotorer"
+      },
+      "searchLanguage": {
+        "name": "Språkkod",
+        "desc": "ISO-språkkod (t.ex. sv, en, zh-CN) vidarebefordrad till leverantörer som stöder lokalisering"
+      },
+      "searchCountry": {
+        "name": "Land-/marknadskod",
+        "desc": "Tvåbokstavs landskod (t.ex. SE, DE) som används av Bing, DuckDuckGo, Brave och andra"
+      },
+      "includeDomains": {
+        "name": "Inkludera bara dessa domäner",
+        "desc": "Kommaseparerad lista som används av SerpAPI och Brave för att begränsa resultat till specifika webbplatser"
+      },
+      "excludeDomains": {
+        "name": "Uteslut domäner",
+        "desc": "Kommaseparerade domäner att filtrera bort efter hämtning av resultat"
+      },
+      "apiKey": {
+        "name": "Standard-API-nyckel",
+        "desc": "Delad API-nyckel som används av Google, Bing, SerpAPI, Tavily eller Brave när leverantörsspecifika nycklar inte är angivna"
+      },
+      "googleCseId": {
+        "name": "Google Custom Search Engine-ID",
+        "desc": "Krävs med en Google API-nyckel när Google-leverantören används"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI-slutpunkt",
+        "desc": "Åsidosätt SerpAPI-bas-URL om du är självhostad"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API-nyckel",
+        "desc": "Åsidosätter standardnyckeln när Tavily-leverantören används"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG-slutpunkt",
+        "desc": "Bas-URL för din SearXNG-instans (måste returnera JSON)"
+      },
+      "braveApiKey": {
+        "name": "Brave API-nyckel",
+        "desc": "Använd en Brave Search API-prenumerationstoken när den valts som leverantör"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API-nyckel (valfritt)",
+        "desc": "Lägg till en bearer-token om din Qwant-plan utfärdar en"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API-nyckel",
+        "desc": "Krävs för Mojeek-leverantören"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (ingen nyckel krävs)",
+        "google": "Google Custom Search",
+        "bing": "Bing webbsökning",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (HTML-skrapning)",
+        "yandex": "Yandex (HTML-skrapning)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Snabbåtgärder",
+      "desc": "Konfigurera AI-drivna snabbåtgärder som visas i editorns snabbmeny när text är markerad.",
+      "actionPrefix": {
+        "name": "Åtgärdsprefix",
+        "desc": "Prefix (emoji eller text) att visa före alla snabbåtgärder i snabbmenyn",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} åtgärd konfigurerad ({{enabled}} aktiverade)",
+      "count_plural": "{{count}} åtgärder konfigurerade ({{enabled}} aktiverade)",
+      "addBtn": "+ lägg till snabbåtgärd",
+      "empty": "Inga snabbåtgärder konfigurerade. Välj lägg till snabbåtgärd för att komma igång.",
+      "tableHeaders": {
+        "action": "Åtgärd",
+        "type": "Typ",
+        "model": "Modell",
+        "promptPreview": "Promptförhandsvisning",
+        "actions": "Åtgärder"
+      },
+      "defaultModel": "Standard",
+      "editBtn": "Redigera",
+      "deleteBtn": "ta bort",
+      "confirm": {
+        "delete": "Ta bort snabbåtgärden \"{{name}}\"?"
+      },
+      "usageInfo": {
+        "title": "Användning",
+        "step1": "Markera text i en anteckning",
+        "step2": "Högerklicka för att öppna snabbmenyn",
+        "step3": "Välj en snabbåtgärd från menyn",
+        "step4Replace": "Åtgärder markerade som \"ersätt\" ersätter den markerade texten med AI-resultatet",
+        "step4Explain": "Åtgärder markerade som \"förklara\" visar resultatet i en modal dialog"
+      },
+      "edit": {
+        "title": "Redigera snabbåtgärd",
+        "name": {
+          "name": "Namn",
+          "desc": "Visningsnamn för den här åtgärden i snabbmenyn"
+        },
+        "actionType": {
+          "name": "Åtgärdstyp",
+          "desc": "Hur AI-svaret ska hanteras",
+          "replace": "Ersätt markerad text",
+          "explain": "Visa i modal"
+        },
+        "model": {
+          "name": "Modell",
+          "desc": "Språkmodell att använda för den här åtgärden (lämna tomt för att använda standard)",
+          "default": "Använd standardmodell"
+        },
+        "promptTemplate": {
+          "name": "Promptmall",
+          "desc": "Instruktioner som skickas till AI:n. Den markerade texten bifogas automatiskt."
+        },
+        "cancel": "Avbryt",
+        "save": "Spara"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Gör texten längre",
+          "prompt": "Expandera och elaborera på följande text, gör den mer detaljerad och uttömmande samtidigt som original meningen och tonen bibehålls. Returnera bara den expanderade texten utan ytterligare kommentarer:\n\n"
+        },
+        "summarize": {
+          "name": "Sammanfatta text",
+          "prompt": "Ge en kortfattad sammanfattning av följande text. Returnera bara sammanfattningen utan ytterligare kommentarer:\n\n"
+        },
+        "improve-writing": {
+          "name": "Förbättra skrivandet",
+          "prompt": "Förbättra skrivkvaliteten, klarheten och stilen i följande text. Returnera bara den förbättrade texten utan ytterligare kommentarer:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Åtgärda grammatik",
+          "prompt": "Åtgärda grammatik-, stavnings- och interpunktionsfel i följande text. Returnera bara den korrigerade texten utan ytterligare kommentarer:\n\n"
+        },
+        "explain": {
+          "name": "Förklara text",
+          "prompt": "Förklara följande text med enkla ord:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Tokenanvändning",
+      "desc": "Spåra tokenkonsumtion för leverantörer och modeller. Data ackumuleras över alla konversationer.",
+      "notAvailable": "Tokenanvändningsspårning är inte tillgänglig.",
+      "ranges": {
+        "today": "Idag",
+        "week": "Den här veckan",
+        "month": "Den här månaden",
+        "all": "Alltid"
+      },
+      "stats": {
+        "totalTokens": "Totalt tokens",
+        "apiCalls": "API-anrop",
+        "promptTokens": "Prompttokens",
+        "completion": "Avslutning",
+        "tokensIn": "tokens in",
+        "tokensOut": "tokens ut"
+      },
+      "byProvider": "Per leverantör",
+      "byModel": "Per modell",
+      "noData": "Inga användningsdata ännu.",
+      "recentActivity": "Senaste aktivitet",
+      "last10": "senaste 10",
+      "noRecent": "Ingen senaste aktivitet.",
+      "tableHeaders": {
+        "provider": "Leverantör",
+        "model": "Modell",
+        "prompt": "Prompt",
+        "completion": "Avslutning",
+        "total": "Totalt",
+        "calls": "Anrop",
+        "time": "Tid",
+        "in": "In",
+        "out": "Ut"
+      },
+      "clearBtn": "Rensa alla användningsdata",
+      "confirm": {
+        "clear": "Rensa alla tokenanvändningsposter? Det här kan inte ångras."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Skriv ditt meddelande... (Enter för att skicka, Shift+Enter för ny rad)",
+    "conversations": "Konversationer",
+    "toggleConversationsTitle": "Visa/dölj konversationslistan",
+    "currentConversation": "Aktuell konversation",
+    "new": "Ny",
+    "settings": "Inställningar",
+    "openSettingsTitle": "Öppna plugin-inställningar",
+    "mode": "Läge",
+    "prompt": "Prompt",
+    "agent": "Agent",
+    "modeOptions": {
+      "chat": "Chatt",
+      "agent": "Agent"
+    },
+    "noSystemPrompt": "Ingen systemprompt",
+    "noAgentsAvailable": "Inga agenter tillgängliga",
+    "sendHintPrefix": "Tryck på ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " för att skicka",
+    "sendAriaLabel": "Skicka meddelande",
+    "stop": " Stoppa",
+    "addReference": "Lägg till referens",
+    "addReferenceTooltip": "Lägg till fil- eller mappreferens (@)",
+    "emptyHeading": "Starta en konversation",
+    "emptySubtext": "Skriv ett meddelande nedan för att komma igång, eller välj en konversation från historiken.",
+    "noAgentConfig": "Inga agenter konfigurerade",
+    "selectAgent": "Välj en agent…",
+    "notices": {
+      "stopping": "Stoppar generering...",
+      "ragInitError": "RAG-initialiseringsfel: {{message}}",
+      "modelsRefreshed": "Modeller uppdaterades",
+      "modelsRefreshFailed": "Det gick inte att uppdatera modeller: {{message}}",
+      "waitForResponse": "Vänta tills det aktuella svaret är klart",
+      "configureProvider": "Konfigurera en LLM-leverantör i inställningarna först",
+      "selectModel": "Välj en modell",
+      "noValidProvider": "Ingen giltig leverantörskonfiguration hittades för den här modellen",
+      "chatError": "Chattfel: {{message}}",
+      "noMessageToRegenerate": "Kan inte hitta meddelande att regenerera",
+      "regenerateOnlyLatest": "Bara det senaste svaret kan regenereras just nu",
+      "regenerateNoUserMsg": "Kan inte hitta användarmeddelande att regenerera från",
+      "regenerated": "Svar regenererat",
+      "regenerateFailed": "Regenerering misslyckades: {{message}}",
+      "noteCreated": "Anteckning skapad: {{name}}",
+      "noteCreateFailed": "Det gick inte att skapa anteckning: {{message}}",
+      "messageInserted": "Meddelande infogat i: {{path}}",
+      "messageInsertFailed": "Det gick inte att infoga meddelande: {{message}}",
+      "noAgents": "Inga agenter tillgängliga. Konfigurera agenter i Inställningar → Agenter.",
+      "ragDisabled": "RAG är inaktiverat i inställningarna. Aktivera det under inställningar → chattfunktioner → RAG.",
+      "webSearchDisabled": "Webbsökning är inaktiverat i inställningarna. Aktivera det under inställningar → chattfunktioner → webbsökning.",
+      "noFilesInVault": "Inga filer hittades i valvet",
+      "attached": "Bifogad: {{name}}",
+      "attachedImages": "{{count}} bild(er) bifogade",
+      "referencesAdded": "{{count}} referens(er) tillagda",
+      "fileNotFound": "Filen hittades inte: {{path}}",
+      "agentConfigApplied": "Konfiguration tillämpad för agent: {{name}}",
+      "waitForComplete": "Vänta tills det aktuella svaret är slutfört",
+      "chatServiceFallback": "ChatService inte konfigurerad. Använder ChatView-reserv.",
+      "noModelSelected": "Ingen modell vald",
+      "noProviderConfig": "Ingen leverantörskonfiguration hittades",
+      "generationStopped": "Generering stoppad",
+      "noResponseToRegenerate": "Inget svar att regenerera",
+      "agentNotFound": "Agent hittades inte",
+      "unableToLoadRag": "Kan inte ladda RAG-statistik.",
+      "referenced": "Refererad: {{name}}"
+    },
+    "status": {
+      "available": "Tillgänglig",
+      "unavailable": "Ej tillgänglig",
+      "disabled": "Inaktiverad",
+      "on": "På · {{detail}}",
+      "off": "Av"
+    },
+    "ragStats": {
+      "title": "RAG-statistik",
+      "totalChunks": "📊 totalt chunks:",
+      "filesIndexed": "📁 filer indexerade:",
+      "totalSize": "💾 total storlek:",
+      "avgChunks": "📈 Genomsn. chunks/fil:",
+      "indexedFiles": "📄 indexerade filer",
+      "noFilesYet": "⚠️ inga filer har indexerats ännu.",
+      "howToBuild": "För att bygga RAG-indexet:",
+      "step1": "Gå till Inställningar → RAG",
+      "step2": "Aktivera RAG",
+      "step3": "Välj index-valv",
+      "close": "Stäng",
+      "retrieved": "📚 hämtat från {{count}} dokument",
+      "retrieved_plural": "📚 hämtat från {{count}} dokument"
+    },
+    "ragTooltip": {
+      "status": "RAG-indexstatus:",
+      "totalChunks": "📊 Totalt chunks: {{count}}",
+      "filesIndexed": "📁 Filer indexerade: {{count}}",
+      "totalSize": "💾 Total storlek: {{size}} KB",
+      "indexedFiles": "📄 indexerade filer:",
+      "andMore": "  ... och {{count}} till",
+      "noFilesYet": "⚠️ inga filer indexerade ännu.",
+      "goToSettings": "Gå till Inställningar → RAG för att bygga indexet.",
+      "ragOff": "ℹ️ RAG är för närvarande avstängt för den här chatten."
+    },
+    "agentSummary": {
+      "model": "Modell",
+      "temp": "Temp",
+      "max": "Max",
+      "rag": "RAG",
+      "web": "Webb",
+      "tools": "Verktyg",
+      "memory": "Minne",
+      "none": "Ingen",
+      "configuration": "{{name}}-konfiguration",
+      "modelFixed": "{{name}} · Fast",
+      "modelDefault": "{{name}} · Standard",
+      "modelChatView": "{{name}} · Chattvy",
+      "customModel": "Anpassad modell",
+      "notSet": "Inte angiven",
+      "auto": "Auto",
+      "on": "På",
+      "off": "Av",
+      "shortTerm": "Kortsiktigt",
+      "longTerm": "Långsiktigt",
+      "disabledMemory": "Inaktiverat",
+      "builtIn": "{{count}} inbyggd",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Webbresultat",
+      "attachments": "Bilagor",
+      "references": "Referenser",
+      "ragSources": "RAG-källor",
+      "reasoning": "Resonemang",
+      "copy": "Kopiera",
+      "copied": "Meddelande kopierat",
+      "copyFailed": "Det gick inte att kopiera meddelandet",
+      "tokenUsage": "Tokenanvändning",
+      "tokenUsagePrompt": "Prompt",
+      "tokenUsageCompletion": "Avslutning",
+      "tokenUsageTotal": "Totalt",
+      "save": "Spara",
+      "insertToNotes": "Infoga i anteckningar",
+      "regenerate": "Regenerera"
+    },
+    "streaming": {
+      "thinking": "Tänker..."
+    },
+    "toolCall": {
+      "thinking": "Tänker",
+      "executionProcess": "Körningsprocess",
+      "input": "Indata",
+      "output": "Utdata",
+      "running": "Kör..."
+    },
+    "addPicture": "Lägg till bild",
+    "addPictureTooltip": "Bifoga en bild till ditt meddelande",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Använd indexerade anteckningar som kontext",
+    "webSearchLabel": "Webbsökning",
+    "webSearchTooltipLabel": "Sök på internet när det behövs",
+    "imageUnavailable": "Bildbilaga är inte tillgänglig för den aktuella modellen.",
+    "newChat": "Ny chatt",
+    "newConversation": "Ny konversation",
+    "searchConversations": "Sök konversationer...",
+    "header": {
+      "model": "Modell",
+      "advancedParams": "Avancerade parametrar",
+      "temperature": "Temperatur",
+      "maxTokens": "Max tokens",
+      "topP": "Top P",
+      "freqPenalty": "Frekv. straff",
+      "presPenalty": "Närvaro. straff",
+      "agentConfig": "Agentkonfiguration",
+      "modelsCount": "Modeller: {{count}}",
+      "tokensCount": "Tokens: {{count}}",
+      "noModels": "Inga modeller tillgängliga"
+    },
+    "temperature": {
+      "precise": "0 (Precis)",
+      "balanced": "1 (Balanserad)",
+      "creative": "2 (Kreativ)"
+    },
+    "modals": {
+      "image": {
+        "title": "Bifoga bilder",
+        "searchPlaceholder": "Sök bilder...",
+        "selectAll": "Välj alla",
+        "selectNone": "Välj inga",
+        "addSelected": "Lägg till valda",
+        "noResults": "Inga matchande bilder hittades."
+      },
+      "reference": {
+        "title": "Lägg till referenser",
+        "searchPlaceholder": "Sök filer och mappar...",
+        "selectAll": "Välj alla",
+        "selectNone": "Välj inga",
+        "addSelected": "Lägg till valda",
+        "noResults": "Inga matchande filer eller mappar hittades."
+      },
+      "insertNote": {
+        "title": "Infoga i anteckning",
+        "searchPlaceholder": "Sök anteckningar...",
+        "insert": "Infoga i vald anteckning",
+        "createNew": "Skapa ny anteckning",
+        "noResults": "Inga matchande anteckningar hittades."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Avbryt",
+      "confirm": "Bekräfta"
+    },
+    "agentEdit": {
+      "title": "Redigera agent",
+      "icon": {
+        "name": "Ikon",
+        "desc": "Emoji eller tecken för att representera den här agenten"
+      },
+      "description": {
+        "name": "Beskrivning",
+        "desc": "Kort beskrivning av agenten"
+      },
+      "modelStrategy": {
+        "name": "Modellstrategi",
+        "options": {
+          "default": "Använd standardmodell (från inställningar)",
+          "chatView": "Använd chattvymodell",
+          "fixed": "Fast modell"
+        },
+        "noModels": "Inga modeller cachade",
+        "desc": "Välj hur agenten väljer sin modell"
+      },
+      "systemPrompt": {
+        "createNew": "➕ skapa ny prompt…",
+        "promptName": {
+          "name": "Promptnamn",
+          "desc": "Visningsnamn för den nya systemprompt"
+        },
+        "promptContent": {
+          "name": "Promptinnehåll",
+          "desc": "Innehåll för den nya systemprompt"
+        },
+        "name": "Systemprompt",
+        "desc": "Välj bland befintliga promptar eller definiera en ny för den här agenten."
+      },
+      "capabilities": "Funktioner",
+      "memory": {
+        "title": "Minne",
+        "notice": "Agentminne är tillfälligt otillgängligt medan vi itererar på upplevelsen."
+      },
+      "tools": {
+        "title": "Verktyg",
+        "builtIn": {
+          "name": "Inbyggda verktyg",
+          "desc": "Välj vilka inbyggda verktyg den här agenten kan använda"
+        },
+        "cli": {
+          "name": "CLI-verktyg",
+          "desc": "Ge åtkomst till alla aktiverade CLI-verktyg, eller välj individuellt nedan",
+          "noTools": "Inga CLI-verktyg konfigurerade. Lägg till och aktivera verktyg under Inställningar → Verktyg → CLI för att använda dem här."
+        }
+      },
+      "mcp": {
+        "title": "MCP-åtkomst",
+        "noServers": "Inga MCP-servrar konfigurerade. Lägg till servrar under Inställningar → MCP för att låsa upp dessa alternativ.",
+        "toolsCached": "{{count}} verktyg cachat",
+        "toolsCached_plural": "{{count}} verktyg cachade",
+        "noToolsCached": "Inga verktyg cachade ännu. Aktivera full åtkomst eller uppdatera cachen.",
+        "showTools": "Visa verktyg",
+        "hideTools": "Dölj verktyg",
+        "selected": "Vald",
+        "notSelected": "Inte vald",
+        "noToolsAvailable": "Inga verktyg tillgängliga från den här servern ännu."
+      },
+      "notices": {
+        "promptRequired": "Ange ett namn och innehåll för den nya systemprompt."
+      },
+      "name": {
+        "label": "Namn",
+        "desc": "Visningsnamn för den här agenten"
+      },
+      "fixedModel": {
+        "name": "Fast modell",
+        "desc": "Välj en specifik modell för den här agenten.",
+        "descNoModels": "Inga cachade modeller tillgängliga. Uppdatera modeller på fliken Modeller."
+      },
+      "temperature": {
+        "label": "Temperatur",
+        "desc": "Styr slumpmässighet (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Max tokens",
+        "desc": "Maximalt antal tokens att generera"
+      },
+      "contextWindow": {
+        "label": "Kontextfönster",
+        "desc": "Antal tidigare meddelanden att inkludera i kontext"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Aktivera retrieval augmented generation"
+      },
+      "webSearch": {
+        "name": "Webbsökning",
+        "desc": "Aktivera webbsökningsfunktioner"
+      },
+      "maxSteps": {
+        "name": "Max verktygssteg",
+        "desc": "Maximalt antal verktygsanropssteg per agenttur"
+      }
+    },
+    "provider": {
+      "title": "Leverantörsinställningar",
+      "selectProvider": {
+        "name": "Leverantör",
+        "desc": "Välj LLM-leverantörstyp",
+        "placeholder": "-- Välj leverantör --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (lokal)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Anpassad (OpenAI-kompatibel)"
+      },
+      "modelFilter": {
+        "name": "Modellfilter",
+        "desc": "Valfritt regex-mönster för att begränsa tillgängliga modeller"
+      },
+      "resourceGroup": {
+        "name": "Resursgrupp",
+        "desc": "Valfri SAP AI Core-resursgrupp"
+      },
+      "serviceKey": {
+        "name": "Tjänstnyckel",
+        "desc": "SAP AI Core-tjänstnyckel (JSON-sträng)"
+      },
+      "baseUrl": {
+        "name": "Bas-URL",
+        "ollamaDesc": "Ollama server-URL",
+        "customDesc": "OpenAI-kompatibel API-slutpunkt (krävs)",
+        "optionalDesc": "Anpassad API-slutpunkt (valfritt)"
+      },
+      "manageModels": {
+        "name": "Hantera modeller",
+        "desc": "Hämta nya modeller eller uppdatera befintliga från Ollama-registret.",
+        "btn": "⏬ Hämta Ollama-modell"
+      },
+      "apiKey": {
+        "name": "API-nyckel",
+        "desc": "Autentiseringsnyckel för den valda leverantören"
+      },
+      "cancel": "Avbryt",
+      "save": "Spara",
+      "validation": {
+        "selectProvider": "Välj en leverantörstyp",
+        "apiKeyTooLong": "API-nyckeln är för lång. Maximal längd är 500 tecken.",
+        "invalidUrl": "Ogiltigt bas-URL-format. Ange en giltig URL (t.ex. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP-inspektör",
+      "desc": "Inspektera och felsök Model Context Protocol (MCP)-serveranslutningar och verktyg.",
+      "tabs": {
+        "connections": "Anslutningar",
+        "tools": "Verktyg",
+        "logs": "Loggar"
+      },
+      "refreshBtn": "🔄 uppdatera",
+      "connections": {
+        "title": "MCP-serveranslutningar",
+        "noServers": "Inga MCP-servrar konfigurerade.",
+        "headers": {
+          "server": "Servernamn",
+          "status": "Status",
+          "tools": "Tillgängliga verktyg",
+          "actions": "Åtgärder"
+        },
+        "statusDisabled": "Inaktiverad",
+        "statusConnected": "● ansluten",
+        "statusDisconnected": "○ frånkopplad",
+        "toolsLive": "{{count}} verktyg",
+        "toolsLive_plural": "{{count}} verktyg",
+        "toolsCached": "{{count}} verktyg (cachat)",
+        "toolsCached_plural": "{{count}} verktyg (cachade)",
+        "noTools": "0 verktyg",
+        "connectBtn": "Anslut",
+        "disconnectBtn": "Koppla från",
+        "connecting": "Ansluter...",
+        "disconnecting": "Kopplar från...",
+        "notices": {
+          "disconnected": "Frånkopplad från {{name}}",
+          "enableFirst": "Aktivera servern i inställningarna innan du ansluter",
+          "connected": "Ansluten till {{name}}",
+          "failedDisconnect": "Det gick inte att koppla från {{name}}: {{message}}",
+          "failedConnect": "Det gick inte att ansluta till {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Tillgängliga MCP-verktyg",
+        "noTools": "Inga MCP-verktyg tillgängliga. Kontrollera serveranslutningar.",
+        "serverPrefix": "Server: {{name}}",
+        "noToolsInServer": "Inga verktyg tillgängliga",
+        "headers": {
+          "tool": "Verktygsnamn",
+          "description": "Beskrivning",
+          "parameters": "Parametrar"
+        },
+        "noDescription": "Ingen beskrivning",
+        "noParams": "Inga"
+      },
+      "logs": {
+        "title": "MCP-anslutningsloggar",
+        "placeholder": "MCP-anslutningsloggar visas här. Visar för närvarande platshållarinformation.",
+        "events": {
+          "connection": "• anslutningshändelser",
+          "tools": "• verktygsregistreringshändelser",
+          "errors": "• felloggar",
+          "comms": "• kommunikationsdetaljer"
+        },
+        "testTitle": "Testa verktygskörning",
+        "selectServer": "Välj en server...",
+        "selectTool": "Välj ett verktyg...",
+        "parametersTitle": "Parametrar",
+        "selectEnum": "Välj...",
+        "performBtn": "Utför verktyg",
+        "clearBtn": "Rensa resultat",
+        "executing": "Kör...",
+        "success": "✅ körning lyckades",
+        "failed": "❌ körning misslyckades",
+        "errorTitle": "❌ körningsfel",
+        "errorLabel": "Fel: {{message}}",
+        "notices": {
+          "success": "Verktyget kördes",
+          "failed": "Verktygskörning misslyckades",
+          "error": "Körningsfel: {{message}}",
+          "requiredMissing": "Obligatorisk parameter saknas: {{name}}",
+          "invalidNumber": "Ogiltigt nummer för parameter: {{name}}",
+          "invalidJson": "Ogiltig JSON för parameter: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Inga MCP-servrar konfigurerade",
+        "testing": "🧪 Testar {{count}} MCP-serveranslutningar...",
+        "allSuccess": "✅ alla {{count}} mcp-servrar anslutna!",
+        "partial": "⚠️ {{success}} anslutna, {{failed}} misslyckades"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Redigera MCP-server",
+      "titleAdd": "Lägg till MCP-server",
+      "serverName": {
+        "name": "Servernamn",
+        "desc": "Vänligt namn som visas i hela plugin:et"
+      },
+      "connectionMode": {
+        "name": "Anslutningsläge",
+        "desc": "Välj om du vill ansluta automatiskt eller bara när det utlöses manuellt",
+        "auto": "Anslut automatiskt när chatten öppnas",
+        "manual": "Manuell anslutning"
+      },
+      "command": {
+        "name": "Kommando",
+        "desc": "Körbar fil eller skript som startar MCP-servern"
+      },
+      "arguments": {
+        "name": "Argument",
+        "desc": "Komma- eller radavgränsade argument (valfritt)"
+      },
+      "envVars": {
+        "name": "Miljövariabler",
+        "desc": "Valfria NYCKEL=VÄRDE-par, ett per rad"
+      },
+      "enabled": {
+        "name": "Aktiverad",
+        "desc": "Inaktivera för att hålla servern konfigurerad utan att ansluta automatiskt"
+      },
+      "cancel": "Avbryt",
+      "saveEdit": "Spara ändringar",
+      "saveAdd": "Lägg till server",
+      "validation": {
+        "nameRequired": "Servernamn krävs",
+        "commandRequired": "Kommando krävs"
+      }
+    },
+    "ollamaManager": {
+      "title": "Hantera Ollama-modeller",
+      "serverInfo": "Serverinformation",
+      "checkingServer": "Kontrollerar server...",
+      "serverOnline": "✅ Server online",
+      "versionLabel": " | Version: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Server offline",
+      "connectionError": "❌ Anslutningsfel",
+      "pullTitle": "Hämta ny modell",
+      "pullHint": "Ange ett modellnamn för att ladda ner från Ollama-biblioteket (t.ex. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Modellnamn",
+        "example": "Exempel: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Hämta modell",
+      "installedTitle": "Installerade modeller",
+      "refreshList": "🔄 Uppdatera lista",
+      "noModels": "Inga modeller hittades. Hämta en modell för att komma igång.",
+      "capabilities": "Funktioner: {{caps}}",
+      "deleteBtn": "Ta bort",
+      "closeBtn": "Stäng",
+      "confirmDelete": {
+        "title": "Bekräfta borttagning",
+        "message": "Är du säker på att du vill ta bort modellen \"{{name}}\"?",
+        "cancel": "Avbryt",
+        "confirm": "Ta bort"
+      },
+      "notices": {
+        "enterName": "Ange ett modellnamn",
+        "pulling": "Hämtar {{name}}... Det kan ta ett tag.",
+        "pullSuccess": "✅ Hämtade {{name}}",
+        "pullFailed": "❌ Det gick inte att hämta modell: {{message}}",
+        "deleted": "✅ Tog bort {{name}}",
+        "deleteFailed": "❌ Det gick inte att ta bort modell: {{message}}",
+        "refreshing": "Uppdaterar...",
+        "refreshSuccess": "✅ Modellistan uppdaterades",
+        "refreshFailed": "❌ Det gick inte att uppdatera modellistan"
+      }
+    },
+    "promptEdit": {
+      "title": "Redigera systemprompt",
+      "name": {
+        "name": "Namn",
+        "desc": "Visningsnamn för den här prompten"
+      },
+      "content": {
+        "name": "Innehåll",
+        "desc": "Systempromptens innehåll"
+      },
+      "enabled": {
+        "name": "Aktiverad",
+        "desc": "Huruvida den här prompten är aktiv"
+      },
+      "cancel": "Avbryt",
+      "save": "Spara"
+    },
+    "prompt": {
+      "cancel": "Avbryt",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Namn",
+      "create": "Skapa",
+      "cancel": "Avbryt"
+    },
+    "explain": {
+      "loading": "⏳ Bearbetar...",
+      "error": "Fel vid rendering av förklaring",
+      "errorPrefix": "❌ Fel: "
+    }
+  },
+  "notices": {
+    "noProvider": "Konfigurera en LLM-leverantör i inställningarna först",
+    "noModel": "Välj en standardmodell i inställningarna",
+    "noValidProvider": "Ingen giltig leverantörskonfiguration hittades för modellen: {{modelId}}",
+    "processing": "Bearbetar...",
+    "textUpdated": "Texten uppdaterades",
+    "error": "Fel: {{message}}"
+  }
+}

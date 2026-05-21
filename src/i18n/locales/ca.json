@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "General",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Eines",
+      "rag": "RAG",
+      "prompts": "Instruccions",
+      "agents": "Agents",
+      "quickActions": "Accions ràpides",
+      "usage": "Ús"
+    },
+    "general": {
+      "title": "Configuració general",
+      "desc": "Configureu els ajustos generals del connector d'assistent intel·ligent.",
+      "pluginVersion": {
+        "name": "Versió del connector",
+        "desc": "Versió actual del connector d'assistent intel·ligent"
+      },
+      "defaultModel": {
+        "name": "Model predeterminat",
+        "desc": "Model predeterminat per a les converses",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Mode de xat predeterminat",
+        "desc": "Trieu en quin mode s'obre la vista de xat",
+        "chat": "Mode xat",
+        "agent": "Mode agent"
+      },
+      "conversationTitleMode": {
+        "name": "Mode de títol de conversa",
+        "desc": "Com generar els títols de conversa",
+        "firstMessage": "Utilitza el primer missatge",
+        "autoSummary": "Genera resum automàticament",
+        "manual": "Manual"
+      },
+      "conversationIcons": {
+        "name": "Icones de conversa",
+        "desc": "Activa la generació automàtica d'icones per a les converses"
+      },
+      "configStatus": {
+        "name": "Estat de la configuració",
+        "desc": "Estat general de la configuració del connector",
+        "ok": "✅ Configurat ({{providers}} proveïdors, {{conversations}} converses)",
+        "incomplete": "⚠️ Incomplet — Configureu els proveïdors i els models"
+      }
+    },
+    "llm": {
+      "title": "Configuració LLM",
+      "desc": "Configureu els proveïdors de models de llenguatge i gestioneu els models disponibles.",
+      "subTabs": {
+        "provider": "Proveïdors",
+        "models": "Models"
+      }
+    },
+    "models": {
+      "title": "Configuració de models",
+      "desc": "Visualitzeu i gestioneu models de tots els proveïdors configurats. Feu clic a \"actualitza models\" per obtenir els models disponibles més recents.",
+      "providerCount": "{{count}} proveïdor configurat",
+      "providerCount_plural": "{{count}} proveïdors configurats",
+      "refreshAll": "🔄 actualitza tots els models",
+      "empty": "No hi ha proveïdors configurats. Afegiu proveïdors primer a la pestanya de proveïdors.",
+      "noModels": "No hi ha models disponibles. Feu clic a „actualitza tots els models“ o actualitzeu els proveïdors individuals a la pestanya de proveïdors.",
+      "noMatch": "Cap model no coincideix amb els filtres actuals. Ajusteu o elimineu els filtres per veure resultats.",
+      "modelCount": "• {{count}} model a la memòria cau",
+      "modelCount_plural": "• {{count}} models a la memòria cau",
+      "matchCount": "• {{count}} coincideix amb els filtres seleccionats",
+      "matchCount_plural": "• {{count}} coincideixen amb els filtres seleccionats",
+      "status": {
+        "enabled": "Activat",
+        "disabled": "Desactivat"
+      },
+      "actions": {
+        "disable": "Desactiva",
+        "enable": "Activa",
+        "setDefaultChat": "Estableix xat predeterminat",
+        "defaultChat": "Xat predeterminat",
+        "setDefaultEmbedding": "Estableix incrustació predeterminada",
+        "defaultEmbedding": "Incrustació predeterminada"
+      },
+      "notices": {
+        "fetching": "S'obtenen models per a {{provider}}...",
+        "fetchFailed": "No s'han pogut actualitzar els models de {{provider}}",
+        "refreshed": "Models actualitzats correctament!",
+        "refreshFailed": "No s'han pogut actualitzar els models",
+        "defaultChatSet": "Model de xat predeterminat establert a {{name}}",
+        "defaultEmbeddingSet": "Model d'incrustació predeterminat establert a {{name}}"
+      },
+      "filters": {
+        "allProviders": "Tots els proveïdors",
+        "allCapabilities": "Totes les capacitats",
+        "allStates": "Tots els estats",
+        "searchPlaceholder": "Cerca per nom o ID"
+      }
+    },
+    "provider": {
+      "title": "Configuració del proveïdor",
+      "securityTitle": "⚠️ Avís de seguretat",
+      "securityDesc": "Les claus API s'emmagatzemen com a text pla al vostre vault per compatibilitat. Per evitar fuites accidentals:",
+      "securityItem1": "NO compartiu la carpeta {{configDir}}/plugins/intelligence-assistant/data/.",
+      "securityItem2": "Afegiu aquesta carpeta al vostre .gitignore si feu servir sincronització Git.",
+      "securityItem3": "Aneu amb compte quan feu servir serveis de sincronització al núvol públics.",
+      "desc": "Gestioneu els proveïdors LLM i les credencials API. Feu servir la columna d'accions per editar els detalls de configuració o actualitzar els models emmagatzemats a la memòria cau.",
+      "count": "{{count}} proveïdor configurat",
+      "count_plural": "{{count}} proveïdors configurats",
+      "addBtn": "+ Afegeix proveïdor",
+      "empty": "No hi ha proveïdors configurats. Seleccioneu „Afegeix proveïdor“ per començar.",
+      "tableHeaders": {
+        "provider": "Proveïdor",
+        "status": "Estat",
+        "actions": "Accions"
+      },
+      "status": {
+        "ready": "Preparat",
+        "needsConfig": "Cal configuració",
+        "checking": "Comprovant...",
+        "credentialsSet": "Credencials establertes",
+        "serverOnline": "Servidor en línia",
+        "serverOffline": "Servidor fora de línia",
+        "serverError": "Error del servidor"
+      },
+      "guidance": {
+        "requiresCli": "Requereix CLI local",
+        "provideServiceKey": "Proporcioneu la clau de servei",
+        "configureBaseUrl": "Configureu la URL base",
+        "addApiKey": "Afegeix clau API"
+      },
+      "models": {
+        "none": "Cap model",
+        "count": "{{count}} model",
+        "count_plural": "{{count}} models"
+      },
+      "ollama": {
+        "checkingVersion": "Comprovant la versió...",
+        "server": {
+          "checking": "Comprovant el servidor...",
+          "online": "Servidor: en línia",
+          "offline": "Servidor: fora de línia o inaccessible",
+          "error": "Servidor: error de connexió",
+          "versionOnline": "Servidor en línia",
+          "versionOffline": "Servidor fora de línia",
+          "versionError": "Error de connexió",
+          "version": "Versió: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Darrera actualització: {{timeAgo}}",
+        "neverRefreshed": "Mai actualitzat",
+        "justNow": "ara mateix",
+        "minutesAgo": "fa {{n}} min",
+        "hoursAgo": "fa {{n}} h",
+        "daysAgo": "fa {{n}} d"
+      },
+      "actions": {
+        "edit": "Edita",
+        "manageModels": "Gestiona models",
+        "refreshModels": "Actualitza models",
+        "refreshing": "Actualitzant...",
+        "delete": "Elimina"
+      },
+      "notices": {
+        "refreshed": "Models actualitzats per a {{provider}}.",
+        "refreshFailed": "No s'han pogut actualitzar els models"
+      },
+      "confirm": {
+        "delete": "Elimina el proveïdor {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "Gestió del servidor MCP",
+      "desc": "Configureu els servidors Model Context Protocol (MCP) per ampliar les capacitats de l'agent amb eines externes i fonts de dades.",
+      "inspectorBtn": "🔍 Obre l'inspector MCP",
+      "testAllBtn": "🧪 prova totes les connexions",
+      "refreshAllBtn": "🔄 actualitza totes les eines",
+      "addBtn": "+ Afegeix servidor MCP",
+      "empty": "No hi ha servidors MCP configurats. Seleccioneu Afegeix servidor MCP per començar.",
+      "tableHeaders": {
+        "name": "Nom",
+        "command": "Ordre",
+        "arguments": "Arguments",
+        "status": "Estat",
+        "tools": "Eines",
+        "actions": "Accions"
+      },
+      "untitled": "Servidor MCP sense títol",
+      "notConfigured": "No configurat",
+      "noArgs": "Cap",
+      "cached": "A la memòria cau",
+      "disabled": "Desactivat",
+      "envVars": "{{count}} variable env",
+      "envVars_plural": "{{count}} variables env",
+      "status": {
+        "disabled": "Desactivat",
+        "connected": "connectat",
+        "disconnected": "desconnectat",
+        "enableToManage": "Activa per gestionar les connexions",
+        "manualConnect": "Connexió manual",
+        "autoConnect": "Connexió automàtica"
+      },
+      "toolCount": {
+        "live": "{{count}} eina activa",
+        "live_plural": "{{count}} eines actives",
+        "cached": "{{count}} eina a la memòria cau",
+        "cached_plural": "{{count}} eines a la memòria cau"
+      },
+      "actions": {
+        "edit": "Edita",
+        "enabled": "✓ Activat",
+        "enabledOff": "✗ Desactivat",
+        "connect": "connecta",
+        "disconnect": "desconnecta",
+        "connecting": "Connectant...",
+        "disconnecting": "Desconnectant...",
+        "test": "Prova",
+        "testing": "Provant...",
+        "delete": "Elimina"
+      },
+      "notices": {
+        "disconnected": "Desconnectat de {{name}}",
+        "connected": "Connectat a {{name}}",
+        "autoConnectFailed": "La connexió automàtica a {{name}} ha fallat",
+        "enableFirst": "Activeu el servidor abans de connectar-vos",
+        "disconnectFailed": "La desconnexió de {{name}} ha fallat",
+        "connectFailed": "La connexió a {{name}} ha fallat",
+        "testNoCommand": "❌ introduïu una ordre abans de provar la connexió",
+        "testSuccess": "✅ connectat correctament! S'han trobat {{count}} eines.",
+        "testFailed": "❌ La connexió ha fallat: {{message}}",
+        "refreshedAll": "✅ eines actualitzades per a {{count}} servidor",
+        "refreshedAll_plural": "✅ eines actualitzades per a {{count}} servidors",
+        "refreshedPartial": "✅ {{success}} servidors actualitzats, ❌ {{failed}} fallits",
+        "noServersConfigured": "⚠️ No hi ha servidors MCP configurats",
+        "testingAll": "🧪 Provant {{count}} connexions de servidor MCP...",
+        "testAllSuccess": "✅ tots {{count}} servidors mcp connectats correctament!",
+        "testAllPartial": "⚠️ {{successful}} connectats, {{failed}} fallits"
+      },
+      "confirm": {
+        "delete": "Elimina el servidor MCP „{{name}}“?"
+      }
+    },
+    "agents": {
+      "title": "Gestió d'agents",
+      "desc": "Creeu i gestioneu agents d'IA amb capacitats, eines i comportaments específics.",
+      "count": "{{count}} agent configurat",
+      "count_plural": "{{count}} agents configurats",
+      "addBtn": "+ afegeix agent",
+      "empty": "No hi ha agents configurats. Seleccioneu afegeix agent per començar.",
+      "tableHeaders": {
+        "agent": "Agent",
+        "model": "Model",
+        "capabilities": "Capacitats",
+        "tools": "Eines",
+        "actions": "Accions"
+      },
+      "defaultBadge": "Predeterminat",
+      "systemPrompt": "Instrucció de sistema • {{promptName}}",
+      "customPrompt": "Instrucció personalitzada",
+      "model": {
+        "notSet": "No establert",
+        "notFound": "Model no trobat a la memòria cau",
+        "useChatView": "Usa el model de la vista de xat",
+        "useChatViewDesc": "Farà servir el model seleccionat a la vista de xat",
+        "useDefault": "Usa el model predeterminat",
+        "useDefaultDesc": "Farà servir el model predeterminat de la configuració"
+      },
+      "capabilities": {
+        "noSpecialModes": "Cap mode especial"
+      },
+      "tools": {
+        "builtIn": "{{count}} integrat",
+        "mcpServer": "{{count}} servidor mcp",
+        "mcpServer_plural": "{{count}} servidors mcp",
+        "mcpTool": "{{count}} eina mcp",
+        "mcpTool_plural": "{{count}} eines mcp",
+        "noTools": "Cap eina activada"
+      },
+      "actions": {
+        "edit": "Edita",
+        "delete": "elimina",
+        "protected": "protegit"
+      },
+      "confirm": {
+        "delete": "Elimina l'agent „{{name}}“?"
+      }
+    },
+    "prompts": {
+      "title": "Instruccions de sistema",
+      "desc": "Gestioneu les instruccions de sistema que defineixen el comportament i la personalitat del vostre assistent d'IA.",
+      "addBtn": "+ afegeix instrucció de sistema",
+      "empty": "No hi ha instruccions de sistema configurades. Seleccioneu afegeix instrucció de sistema per començar.",
+      "tableHeaders": {
+        "name": "Nom",
+        "contentPreview": "Previsualització del contingut",
+        "created": "Creat",
+        "updated": "Actualitzat",
+        "enabled": "Activat",
+        "actions": "Accions"
+      },
+      "status": {
+        "enabled": "Activat",
+        "disabled": "Desactivat"
+      },
+      "actions": {
+        "edit": "Edita",
+        "disable": "Desactiva",
+        "enable": "Activa",
+        "delete": "Elimina"
+      },
+      "confirm": {
+        "delete": "Elimina la instrucció „{{name}}“?"
+      }
+    },
+    "tools": {
+      "title": "Configuració d'eines",
+      "desc": "Reviseu les eines integrades i exploreu les eines MCP carregades des dels servidors connectats. Activeu les accions que els vostres agents han de poder realitzar.",
+      "subTabs": {
+        "builtIn": "Eines integrades",
+        "mcp": "Eines MCP",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "Eines CLI"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Nom",
+          "category": "Categoria",
+          "description": "Descripció",
+          "parameters": "Paràmetres",
+          "enabled": "Activat"
+        },
+        "categories": {
+          "fileOps": "Operacions amb fitxers",
+          "searchDisc": "Cerca i descobriment",
+          "noteMgmt": "Gestió de notes"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Llegeix el contingut d'un fitxer del vostre vault",
+            "params": "path (obligatori): Ruta al fitxer a llegir"
+          },
+          "writeFile": {
+            "desc": "Escriu o actualitza un fitxer al vostre vault",
+            "params": "path (obligatori), content (obligatori): Ruta del fitxer i contingut a escriure"
+          },
+          "listFiles": {
+            "desc": "Llista els fitxers del vault o d'una carpeta específica",
+            "params": "folder (opcional), extension (opcional): Filtra per carpeta i extensió de fitxer"
+          },
+          "searchFiles": {
+            "desc": "Cerca fitxers per nom o contingut al vostre vault",
+            "params": "query (obligatori), search_content (opcional), limit (opcional): Consulta de cerca i opcions"
+          },
+          "createNote": {
+            "desc": "Crea una nota nova amb el contingut especificat",
+            "params": "title (obligatori), content (obligatori), folder (opcional): Títol, contingut i ubicació de la nota"
+          },
+          "appendNote": {
+            "desc": "Afegeix contingut a una nota existent",
+            "params": "path (obligatori), content (obligatori): Ruta de la nota i contingut a afegir"
+          }
+        },
+        "infoTitle": "💡 sobre les eines",
+        "infoText": "Les eines integrades es configuren per configuració del connector. Les eines MCP es gestionen de manera independent — feu servir la pestanya MCP per connectar servidors i actualitzar la disponibilitat de les eines.",
+        "toolNames": {
+          "read_file": "Llegeix fitxer",
+          "write_file": "Escriu fitxer",
+          "list_files": "Llista fitxers",
+          "search_files": "Cerca fitxers",
+          "create_note": "Crea nota",
+          "append_note": "Afegeix a nota"
+        }
+      },
+      "mcpTools": {
+        "noTools": "No hi ha eines MCP disponibles. Connecteu un servidor o actualitzeu les eines de la memòria cau per omplir aquesta llista.",
+        "tableHeaders": {
+          "server": "Servidor",
+          "tool": "Eina",
+          "description": "Descripció",
+          "parameters": "Paràmetres",
+          "source": "Font"
+        },
+        "noDescription": "Sense descripció",
+        "schemaUnavailable": "Esquema no disponible",
+        "live": "En viu",
+        "cached": "A la memòria cau",
+        "status": {
+          "connected": "connectat",
+          "disconnected": "desconnectat"
+        }
+      },
+      "openapi": {
+        "desc": "Genereu eines HTTP a partir de documents OpenAPI. Les especificacions remotes s'emmagatzemen a la memòria cau a {{cacheDir}}.",
+        "addBtn": "Afegeix font HTTP",
+        "noSources": "Cap font HTTP configurada.",
+        "unnamed": "Font HTTP sense nom",
+        "tableHeaders": {
+          "name": "Nom",
+          "source": "Font",
+          "auth": "Autenticació",
+          "status": "Estat",
+          "actions": "Accions"
+        },
+        "sourceUrl": "URL remota no establerta",
+        "sourcePath": "Ruta de fitxer no establerta",
+        "authHeader": "Capçalera ({{key}})",
+        "authQuery": "Consulta ({{key}})",
+        "authNone": "Cap",
+        "statusEnabled": "Activat",
+        "statusDisabled": "Desactivat",
+        "actions": {
+          "edit": "Edita",
+          "reload": "Torna a carregar",
+          "refetch": "Torna a obtenir",
+          "delete": "Elimina"
+        },
+        "notices": {
+          "removed": "Font HTTP eliminada",
+          "reloaded": "{{count}} operacions tornades a carregar",
+          "reloadFailed": "No s'ha pogut tornar a carregar la font HTTP. Consulteu la consola per a detalls."
+        },
+        "modal": {
+          "defaultTitle": "Font HTTP",
+          "displayName": {
+            "name": "Nom de visualització",
+            "desc": "Es mostra als agents en triar una font d'eines"
+          },
+          "enabled": {
+            "name": "Activat",
+            "desc": "Activa per exposar aquesta API HTTP a tots els agents"
+          },
+          "sourceType": {
+            "name": "Tipus de font",
+            "file": "Fitxer local",
+            "url": "URL remota"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Obtingut i emmagatzemat a la memòria cau dins del directori de dades del connector"
+          },
+          "cachedFile": "Fitxer a la memòria cau: {{path}} ({{date}})",
+          "neverFetched": "Mai obtingut",
+          "specPath": {
+            "name": "Ruta del fitxer OpenAPI",
+            "desc": "Ruta relativa dins del vault o ruta absoluta"
+          },
+          "baseUrl": {
+            "name": "Substitució de la URL base",
+            "desc": "Substitueix la primera entrada de servidor del document (opcional)"
+          },
+          "auth": {
+            "name": "Autenticació",
+            "desc": "Insereix automàticament les claus API en cridar aquesta font",
+            "none": "Cap",
+            "header": "Capçalera HTTP",
+            "query": "Paràmetre de consulta"
+          },
+          "credKey": {
+            "name": "Clau de credencial"
+          },
+          "credValue": {
+            "name": "Valor de credencial"
+          },
+          "actions": {
+            "name": "Accions",
+            "reloadTools": "Torna a carregar eines",
+            "refetchTooltip": "Torna a obtenir l'especificació de la URL",
+            "deleteTooltip": "Elimina la font"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Definiu eines locals de línia d'ordres que els agents poden executar. Feu servir plantilles com {{param}} per a arguments dinàmics.",
+        "addBtn": "Afegeix eina CLI",
+        "presetsBtn": "Afegeix des de preajustos",
+        "noTools": "Cap eina CLI configurada.",
+        "tableHeaders": {
+          "name": "Nom",
+          "command": "Ordre",
+          "parameters": "Paràmetres",
+          "status": "Estat",
+          "actions": "Accions"
+        },
+        "unnamed": "Eina CLI sense nom",
+        "paramCount": "{{count}} paràmetre",
+        "paramCount_plural": "{{count}} paràmetres",
+        "noParams": "Cap",
+        "statusEnabled": "Activat",
+        "statusDisabled": "Desactivat",
+        "actions": {
+          "edit": "Edita",
+          "disable": "Desactiva",
+          "enable": "Activa",
+          "delete": "Elimina"
+        },
+        "notices": {
+          "removed": "Eina CLI eliminada"
+        },
+        "infoTitle": "💡 Sobre les eines CLI",
+        "infoText": "Les eines CLI executen ordres de shell localment. Feu servir {{paramName}} als arguments per a la substitució de plantilles, o configureu els paràmetres per passar-los com a arguments o variables d'entorn.",
+        "modal": {
+          "defaultTitle": "Eina CLI",
+          "toolName": {
+            "name": "Nom de l'eina",
+            "desc": "Identificador que fan servir els agents per cridar aquesta eina"
+          },
+          "description": {
+            "name": "Descripció",
+            "desc": "Descriviu què fa aquesta eina per a la IA"
+          },
+          "enabled": {
+            "name": "Activat",
+            "desc": "Activa per permetre als agents fer servir aquesta eina"
+          },
+          "commandConfig": "Configuració de l'ordre",
+          "command": {
+            "name": "Ordre",
+            "desc": "L'executable a executar (p. ex. node, python, bash, /ruta/al/script)"
+          },
+          "args": {
+            "name": "Arguments",
+            "desc": "Arguments de l'ordre, un per línia. Feu servir {{paramName}} per a la substitució de plantilles."
+          },
+          "cwd": {
+            "name": "Directori de treball",
+            "desc": "Directori on s'executa l'ordre (opcional)"
+          },
+          "timeout": {
+            "name": "Temps d'espera (ms)",
+            "desc": "Temps màxim d'execució en mil·lisegons (predeterminat: {{timeout}})"
+          },
+          "shell": {
+            "name": "Executa en shell",
+            "desc": "Executa l'ordre a través d'un shell (habilita funcions de shell com canonades)"
+          },
+          "paramsTitle": "Paràmetres",
+          "paramsDesc": "Definiu els paràmetres que la IA pot passar a aquesta eina.",
+          "addParam": "Afegeix paràmetre",
+          "noParams": "Cap paràmetre definit.",
+          "paramN": "Paràmetre {{n}}",
+          "param": {
+            "name": "Nom",
+            "type": {
+              "name": "Tipus",
+              "string": "Cadena",
+              "number": "Número",
+              "boolean": "Booleà"
+            },
+            "description": "Descripció",
+            "required": "Obligatori",
+            "insertAs": {
+              "name": "Insereix com",
+              "desc": "Com passar aquest paràmetre a l'ordre",
+              "template": "Plantilla ({{name}})",
+              "arg": "Afegeix com a argument",
+              "env": "Variable d'entorn"
+            },
+            "envName": {
+              "name": "Nom de la variable env",
+              "desc": "Substitueix el nom de la variable d'entorn (el predeterminat és el nom del paràmetre en majúscules)"
+            }
+          },
+          "envTitle": "Variables d'entorn",
+          "envDesc": "Variables d'entorn estàtiques a establir en executar l'ordre.",
+          "envVars": {
+            "name": "Variables d'entorn",
+            "desc": "Format: CLAU=valor, una per línia"
+          }
+        },
+        "presets": {
+          "title": "Afegeix eina CLI des de preajustos",
+          "desc": "Seleccioneu un preajust per afegir ràpidament una eina CLI preconfigurada. Podeu personalitzar-la després d'afegir-la.",
+          "addBtn": "Afegeix",
+          "addedBtn": "Afegit",
+          "closeBtn": "Tanca",
+          "notices": {
+            "added": "Afegit „{{name}}“ — activeu-lo a la llista d'eines CLI"
+          },
+          "categories": {
+            "file": "Operacions amb fitxers",
+            "search": "Cerca",
+            "network": "Xarxa",
+            "code": "Execució de codi",
+            "data": "Processament de dades",
+            "system": "Informació del sistema",
+            "apps": "Aplicacions de macOS i escriptori"
+          },
+          "names": {
+            "preset-cat": "Llegeix fitxer (cat)",
+            "preset-ls": "Llista directori (ls)",
+            "preset-find": "Cerca fitxers (find)",
+            "preset-grep": "Cerca text (grep)",
+            "preset-ripgrep": "Cerca ràpida (rg)",
+            "preset-curl": "Petició HTTP (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Executa codi Python",
+            "preset-node": "Executa JavaScript (Node)",
+            "preset-bash": "Executa script Bash",
+            "preset-jq": "Processador JSON (jq)",
+            "preset-wc": "Comptador de paraules (wc)",
+            "preset-date": "Data/hora actual",
+            "preset-pwd": "Directori actual (pwd)",
+            "preset-whoami": "Usuari actual",
+            "preset-uname": "Informació del sistema (uname)",
+            "preset-open": "Obre fitxer/URL (open)",
+            "preset-open-app": "Llança aplicació (open -a)",
+            "preset-safari": "Obre a Safari",
+            "preset-chrome": "Obre a Chrome",
+            "preset-firefox": "Obre a Firefox",
+            "preset-pbcopy": "Copia al porta-retalls",
+            "preset-pbpaste": "Enganxa del porta-retalls",
+            "preset-say": "Conversió text a veu (say)",
+            "preset-osascript": "Executor AppleScript",
+            "preset-notify": "Notificació d'escriptori",
+            "preset-screencapture": "Captura de pantalla",
+            "preset-applescript-list-apps": "Llista aplicacions en execució"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "Configuració RAG",
+      "desc": "Configureu RAG i la cerca web per millorar les respostes de la IA.",
+      "subTabs": {
+        "overview": "Visió general",
+        "chunking": "Segmentació",
+        "search": "Cerca",
+        "filters": "Filtres",
+        "advanced": "Avançat",
+        "websearch": "Cerca web"
+      },
+      "general": {
+        "title": "Configuració general",
+        "enableRag": {
+          "name": "Activa RAG",
+          "desc": "Activa RAG per a un context millorat"
+        },
+        "vectorStore": {
+          "name": "Magatzem de vectors",
+          "desc": "Base de dades vectorial per emmagatzemar incrustacions",
+          "memory": "A la memòria",
+          "disk": "Al disc"
+        },
+        "embeddingModel": {
+          "name": "Model d'incrustació",
+          "desc": "Model per generar incrustacions"
+        },
+        "embedChanged": {
+          "name": "Incrusta automàticament els fitxers modificats",
+          "desc": "Torna a incrustar automàticament els fitxers quan es modifiquen"
+        }
+      },
+      "indexMgmt": {
+        "title": "Gestió de l'índex",
+        "desc": "Gestioneu l'índex RAG i visualitzeu estadístiques sobre el contingut indexat.",
+        "statsTitle": "Estadístiques de l'índex",
+        "stats": {
+          "totalChunks": "Segments totals",
+          "uniqueFiles": "Fitxers únics",
+          "totalChars": "Caràcters totals",
+          "avgChunkSize": "Mida mitjana del segment"
+        },
+        "empty": "L'índex és buit. Seleccioneu reconstrueix l'índex per començar a indexar.",
+        "error": "⚠️ no es poden carregar les estadístiques de l'índex",
+        "rebuild": {
+          "name": "Reconstrueix l'índex",
+          "desc": "Torna a indexar tots els fitxers del vostre vault. Pot trigar una estona.",
+          "btn": "Reconstrueix",
+          "rebuilding": "Reconstruint..."
+        },
+        "refresh": {
+          "name": "Actualitza l'índex",
+          "desc": "Actualitza l'índex amb els fitxers modificats des de l'última indexació.",
+          "btn": "Actualitza",
+          "refreshing": "Actualitzant..."
+        },
+        "clear": {
+          "name": "Esborra l'índex",
+          "desc": "Elimina totes les dades indexades. Haureu de reconstruir l'índex.",
+          "btn": "Esborra",
+          "clearing": "Esborrant..."
+        },
+        "notices": {
+          "rebuilt": "Índex reconstruït correctament",
+          "rebuildFailed": "No s'ha pogut reconstruir l'índex",
+          "refreshed": "Índex actualitzat correctament",
+          "refreshFailed": "No s'ha pogut actualitzar l'índex",
+          "cleared": "Índex esborrat correctament",
+          "clearFailed": "No s'ha pogut esborrar l'índex"
+        }
+      },
+      "chunking": {
+        "title": "Configuració de segmentació",
+        "strategy": {
+          "name": "Estratègia de segmentació",
+          "desc": "Estratègia per dividir els documents en segments",
+          "recursive": "Recursiva (intel·ligent)",
+          "fixed": "Mida fixa",
+          "sentence": "Per oració",
+          "paragraph": "Per paràgraf"
+        },
+        "chunkSize": {
+          "name": "Mida del segment",
+          "desc": "Nombre de caràcters per segment (recomanat 500-2000)"
+        },
+        "chunkOverlap": {
+          "name": "Superposició de segments",
+          "desc": "Nombre de caràcters superposats entre segments"
+        },
+        "minChunkSize": {
+          "name": "Mida mínima del segment",
+          "desc": "Mida mínima del segment a crear"
+        },
+        "maxTokens": {
+          "name": "Màxim de tokens per segment",
+          "desc": "Màxim de tokens permesos per segment"
+        }
+      },
+      "search": {
+        "title": "Configuració de cerca",
+        "searchType": {
+          "name": "Tipus de cerca",
+          "desc": "Tipus de cerca de similitud a realitzar",
+          "similarity": "Similitud"
+        },
+        "topK": {
+          "name": "Top K resultats",
+          "desc": "Nombre dels segments més rellevants a recuperar (1-20)"
+        },
+        "threshold": {
+          "name": "Llindar de similitud",
+          "desc": "Puntuació mínima de similitud per incloure resultats (0,0-1,0)"
+        },
+        "weight": {
+          "name": "Pes de la puntuació de rellevància",
+          "desc": "Pes per a la puntuació de rellevància (0,0-1,0)"
+        },
+        "contextLimit": {
+          "name": "Límit de la finestra de context",
+          "desc": "Màxim de tokens per al context recuperat"
+        }
+      },
+      "filters": {
+        "title": "Filtres de fitxers",
+        "excludeFolders": {
+          "name": "Exclou carpetes",
+          "desc": "Carpetes a excloure de la indexació (separades per comes)"
+        },
+        "includeTypes": {
+          "name": "Inclou tipus de fitxers",
+          "desc": "Tipus de fitxers a incloure (buit = tots els tipus)"
+        },
+        "excludeTypes": {
+          "name": "Exclou tipus de fitxers",
+          "desc": "Tipus de fitxers a excloure de la indexació"
+        },
+        "filterByTag": {
+          "name": "Filtra per etiqueta",
+          "desc": "Indexa només els fitxers amb aquestes etiquetes (buit = tots els fitxers)"
+        },
+        "excludeByTag": {
+          "name": "Exclou per etiqueta",
+          "desc": "Exclou de la indexació els fitxers amb aquestes etiquetes"
+        }
+      },
+      "advanced": {
+        "title": "Configuració avançada",
+        "batchSize": {
+          "name": "Mida del lot d'incrustació",
+          "desc": "Nombre de segments a incrustar en paral·lel"
+        }
+      },
+      "grading": {
+        "title": "Configuració de qualificació",
+        "desc": "Qualifiqueu els segments recuperats per rellevància abans d'enviar-los al LLM. Ajuda a filtrar els resultats de baixa qualitat.",
+        "enableGrading": {
+          "name": "Activa el llindar de qualificació",
+          "desc": "Filtra els segments per sota dels llindars de qualitat"
+        },
+        "graderSource": {
+          "name": "Font del model qualificador",
+          "desc": "D'on obtenir el model qualificador",
+          "chat": "Model de xat",
+          "custom": "Model personalitzat"
+        },
+        "graderModel": {
+          "name": "Model qualificador",
+          "desc": "Model específic a fer servir per a la qualificació"
+        },
+        "parallel": {
+          "name": "Processament paral·lel",
+          "desc": "Nombre de segments a qualificar en paral·lel"
+        },
+        "minRelevance": {
+          "name": "Puntuació mínima de rellevància",
+          "desc": "Puntuació mínima de rellevància (0,0-1,0)"
+        },
+        "minAccuracy": {
+          "name": "Puntuació mínima de precisió",
+          "desc": "Puntuació mínima de precisió (0,0-1,0)"
+        },
+        "minSupport": {
+          "name": "Puntuació mínima de qualitat de suport",
+          "desc": "Puntuació mínima de qualitat de suport (0,0-1,0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Configuració de cerca web",
+      "desc": "Configureu la funcionalitat de cerca web per millorar les respostes de la IA amb informació actualitzada d'Internet.",
+      "generalBehavior": "Comportament general",
+      "providerSelection": "Selecció de proveïdor",
+      "localeFilters": "Configuració local i filtres",
+      "apiCredentials": "Credencials API i punts finals",
+      "enabled": {
+        "name": "Activa la cerca web",
+        "desc": "Permet a la IA cercar informació actualitzada al web"
+      },
+      "autoTrigger": {
+        "name": "Activa la cerca automàticament",
+        "desc": "Activa automàticament la cerca web quan la consulta requereix informació actual (p. ex. notícies, preus, esdeveniments recents)"
+      },
+      "maxResults": {
+        "name": "Nombre màxim de resultats",
+        "desc": "Nombre màxim de resultats de cerca a retornar"
+      },
+      "timeRange": {
+        "name": "Frescor dels resultats",
+        "desc": "Limiteu els resultats a un interval de temps compatible amb els proveïdors (Google, SearXNG, Mojeek)",
+        "any": "Qualsevol moment (predeterminat)",
+        "h": "Última hora",
+        "d": "Últimes 24 hores",
+        "w": "Última setmana",
+        "m": "Últim mes",
+        "y": "Últim any"
+      },
+      "provider": {
+        "name": "Proveïdor de cerca",
+        "desc": "Trieu entre scrapers respectuosos amb la privadesa o motors amb suport d'API"
+      },
+      "searchLanguage": {
+        "name": "Codi d'idioma",
+        "desc": "Codi d'idioma ISO (p. ex. en, fr, zh-CN) enviat als proveïdors que admeten localització"
+      },
+      "searchCountry": {
+        "name": "Codi de país/mercat",
+        "desc": "Codi de país de dues lletres (p. ex. US, DE) usat per Bing, DuckDuckGo, Brave i d'altres"
+      },
+      "includeDomains": {
+        "name": "Inclou només aquests dominis",
+        "desc": "Llista separada per comes que fan servir SerpAPI i Brave per limitar els resultats a llocs específics"
+      },
+      "excludeDomains": {
+        "name": "Exclou dominis",
+        "desc": "Dominis separats per comes per filtrar després d'obtenir els resultats"
+      },
+      "apiKey": {
+        "name": "Clau API predeterminada",
+        "desc": "Clau API compartida que fan servir Google, Bing, SerpAPI, Tavily o Brave quan no hi ha claus específiques del proveïdor"
+      },
+      "googleCseId": {
+        "name": "Google Custom Search Engine ID",
+        "desc": "Necessari amb una clau API de Google quan s'usa el proveïdor Google"
+      },
+      "serpapiEndpoint": {
+        "name": "Punt final SerpAPI",
+        "desc": "Substitueix la URL base de SerpAPI si l'allotgeu vosaltres mateixos"
+      },
+      "tavilyApiKey": {
+        "name": "Clau API Tavily",
+        "desc": "Substitueix la clau predeterminada quan s'usa el proveïdor Tavily"
+      },
+      "searxngEndpoint": {
+        "name": "Punt final SearXNG",
+        "desc": "URL base de la vostra instància SearXNG (ha de retornar JSON)"
+      },
+      "braveApiKey": {
+        "name": "Clau API Brave",
+        "desc": "Feu servir un token de subscripció Brave Search API quan s'ha seleccionat com a proveïdor"
+      },
+      "qwantApiKey": {
+        "name": "Clau API Qwant (opcional)",
+        "desc": "Afegiu un token bearer si el vostre pla Qwant n'emet un"
+      },
+      "mojeekApiKey": {
+        "name": "Clau API Mojeek",
+        "desc": "Necessari per al proveïdor Mojeek"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (no cal clau)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (scraping HTML)",
+        "yandex": "Yandex (scraping HTML)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Accions ràpides",
+      "desc": "Configureu les accions ràpides d'IA que apareixen al menú contextual de l'editor quan hi ha text seleccionat.",
+      "actionPrefix": {
+        "name": "Prefix d'acció",
+        "desc": "Prefix (emoji o text) per mostrar davant de totes les accions ràpides al menú contextual",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} acció configurada ({{enabled}} activades)",
+      "count_plural": "{{count}} accions configurades ({{enabled}} activades)",
+      "addBtn": "+ afegeix acció ràpida",
+      "empty": "Cap acció ràpida configurada. Seleccioneu afegeix acció ràpida per començar.",
+      "tableHeaders": {
+        "action": "Acció",
+        "type": "Tipus",
+        "model": "Model",
+        "promptPreview": "Previsualització de la instrucció",
+        "actions": "Accions"
+      },
+      "defaultModel": "Predeterminat",
+      "editBtn": "Edita",
+      "deleteBtn": "elimina",
+      "confirm": {
+        "delete": "Elimina l'acció ràpida „{{name}}“?"
+      },
+      "usageInfo": {
+        "title": "Ús",
+        "step1": "Seleccioneu text a qualsevol nota",
+        "step2": "Clic dret per obrir el menú contextual",
+        "step3": "Trieu una acció ràpida del menú",
+        "step4Replace": "Les accions marcades com a „substitueix“ substituiran el text seleccionat pel resultat de la IA",
+        "step4Explain": "Les accions marcades com a „explica“ mostraran el resultat en un diàleg modal"
+      },
+      "edit": {
+        "title": "Edita l'acció ràpida",
+        "name": {
+          "name": "Nom",
+          "desc": "Nom de visualització d'aquesta acció al menú contextual"
+        },
+        "actionType": {
+          "name": "Tipus d'acció",
+          "desc": "Com gestionar la resposta de la IA",
+          "replace": "Substitueix el text seleccionat",
+          "explain": "Mostra en un modal"
+        },
+        "model": {
+          "name": "Model",
+          "desc": "Model de llenguatge per a aquesta acció (deixeu en blanc per usar el predeterminat)",
+          "default": "Usa el model predeterminat"
+        },
+        "promptTemplate": {
+          "name": "Plantilla de la instrucció",
+          "desc": "Instruccions enviades a la IA. El text seleccionat s'afegirà automàticament."
+        },
+        "cancel": "Cancel·la",
+        "save": "Desa"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Allarga el text",
+          "prompt": "Amplia i elabora el text següent, fent-lo més detallat i complet tot mantenint el significat i el to originals. Retorna només el text ampliat sense cap comentari addicional:\n\n"
+        },
+        "summarize": {
+          "name": "Resume el text",
+          "prompt": "Proporcioneu un resum concís del text següent. Retorna només el resum sense cap comentari addicional:\n\n"
+        },
+        "improve-writing": {
+          "name": "Millora l'escriptura",
+          "prompt": "Millora la qualitat, la claredat i l'estil de l'escriptura del text següent. Retorna només el text millorat sense cap comentari addicional:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Corregeix la gramàtica",
+          "prompt": "Corregeix tots els errors gramaticals, ortogràfics i de puntuació del text següent. Retorna només el text corregit sense cap comentari addicional:\n\n"
+        },
+        "explain": {
+          "name": "Explica el text",
+          "prompt": "Explica el text següent en termes senzills:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Ús de tokens",
+      "desc": "Seguiu el consum de tokens per proveïdors i models. Les dades s'acumulen en totes les converses.",
+      "notAvailable": "El seguiment de l'ús de tokens no està disponible.",
+      "ranges": {
+        "today": "Avui",
+        "week": "Aquesta setmana",
+        "month": "Aquest mes",
+        "all": "Tot el temps"
+      },
+      "stats": {
+        "totalTokens": "Tokens totals",
+        "apiCalls": "Crides API",
+        "promptTokens": "Tokens d'instrucció",
+        "completion": "Finalització",
+        "tokensIn": "tokens d'entrada",
+        "tokensOut": "tokens de sortida"
+      },
+      "byProvider": "Per proveïdor",
+      "byModel": "Per model",
+      "noData": "Sense dades d'ús.",
+      "recentActivity": "Activitat recent",
+      "last10": "últimes 10",
+      "noRecent": "Sense activitat recent.",
+      "tableHeaders": {
+        "provider": "Proveïdor",
+        "model": "Model",
+        "prompt": "Instrucció",
+        "completion": "Finalització",
+        "total": "Total",
+        "calls": "Crides",
+        "time": "Hora",
+        "in": "Entrada",
+        "out": "Sortida"
+      },
+      "clearBtn": "Esborra totes les dades d'ús",
+      "confirm": {
+        "clear": "Esborrar tots els registres d'ús de tokens? Aquesta acció no es pot desfer."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Escriviu el vostre missatge... (Retorn per enviar, Maj+Retorn per a nova línia)",
+    "conversations": "Converses",
+    "toggleConversationsTitle": "Commuta la llista de converses",
+    "currentConversation": "Conversa actual",
+    "new": "Nou",
+    "settings": "Configuració",
+    "openSettingsTitle": "Obre la configuració del connector",
+    "mode": "Mode",
+    "prompt": "Instrucció",
+    "agent": "Agent",
+    "modeOptions": {
+      "chat": "Xat",
+      "agent": "Agent"
+    },
+    "noSystemPrompt": "Sense instrucció de sistema",
+    "noAgentsAvailable": "Cap agent disponible",
+    "sendHintPrefix": "Premeu ",
+    "sendHintKey": "Retorn",
+    "sendHintSuffix": " per enviar",
+    "sendAriaLabel": "Envia el missatge",
+    "stop": " Atura",
+    "addReference": "Afegeix referència",
+    "addReferenceTooltip": "Afegeix referència de fitxer o carpeta (@)",
+    "emptyHeading": "Inicieu una conversa",
+    "emptySubtext": "Escriviu un missatge a continuació per començar, o seleccioneu una conversa de l'historial.",
+    "noAgentConfig": "Cap agent configurat",
+    "selectAgent": "Seleccioneu un agent…",
+    "notices": {
+      "stopping": "S'atura la generació...",
+      "ragInitError": "Error d'inicialització RAG: {{message}}",
+      "modelsRefreshed": "Models actualitzats",
+      "modelsRefreshFailed": "No s'han pogut actualitzar els models: {{message}}",
+      "waitForResponse": "Espereu que acabi la resposta actual",
+      "configureProvider": "Primer configureu un proveïdor LLM a la configuració",
+      "selectModel": "Seleccioneu un model",
+      "noValidProvider": "No s'ha trobat cap configuració de proveïdor vàlida per a aquest model",
+      "chatError": "Error de xat: {{message}}",
+      "noMessageToRegenerate": "No s'ha trobat el missatge per regenerar",
+      "regenerateOnlyLatest": "Ara mateix només es pot regenerar la resposta més recent",
+      "regenerateNoUserMsg": "No s'ha trobat el missatge de l'usuari per regenerar",
+      "regenerated": "Resposta regenerada",
+      "regenerateFailed": "La regeneració ha fallat: {{message}}",
+      "noteCreated": "Nota creada: {{name}}",
+      "noteCreateFailed": "No s'ha pogut crear la nota: {{message}}",
+      "messageInserted": "Missatge inserit a: {{path}}",
+      "messageInsertFailed": "No s'ha pogut inserir el missatge: {{message}}",
+      "noAgents": "Cap agent disponible. Configureu agents a Configuració → Agents.",
+      "ragDisabled": "RAG està desactivat a la configuració. Activeu-lo a configuració → funcions de xat → RAG.",
+      "webSearchDisabled": "La cerca web està desactivada a la configuració. Activeu-la a configuració → funcions de xat → cerca web.",
+      "noFilesInVault": "No s'han trobat fitxers al vault",
+      "attached": "Adjuntat: {{name}}",
+      "attachedImages": "Adjuntades {{count}} imatge(s)",
+      "referencesAdded": "Afegides {{count}} referència(es)",
+      "fileNotFound": "Fitxer no trobat: {{path}}",
+      "agentConfigApplied": "Configuració aplicada per a l'agent: {{name}}",
+      "waitForComplete": "Espereu que acabi la resposta actual",
+      "chatServiceFallback": "ChatService no configurat. S'usa el fallback de ChatView.",
+      "noModelSelected": "Cap model seleccionat",
+      "noProviderConfig": "No s'ha trobat la configuració del proveïdor",
+      "generationStopped": "Generació aturada",
+      "noResponseToRegenerate": "Cap resposta per regenerar",
+      "agentNotFound": "Agent no trobat",
+      "unableToLoadRag": "No es poden carregar les estadístiques RAG.",
+      "referenced": "Referenciat: {{name}}"
+    },
+    "status": {
+      "available": "Disponible",
+      "unavailable": "No disponible",
+      "disabled": "Desactivat",
+      "on": "Activat · {{detail}}",
+      "off": "Desactivat"
+    },
+    "ragStats": {
+      "title": "Estadístiques RAG",
+      "totalChunks": "📊 segments totals:",
+      "filesIndexed": "📁 fitxers indexats:",
+      "totalSize": "💾 mida total:",
+      "avgChunks": "📈 Segments mitjans/fitxer:",
+      "indexedFiles": "📄 fitxers indexats",
+      "noFilesYet": "⚠️ encara no s'ha indexat cap fitxer.",
+      "howToBuild": "Per construir l'índex RAG:",
+      "step1": "Aneu a Configuració → RAG",
+      "step2": "Activa RAG",
+      "step3": "Seleccioneu indexar el vault",
+      "close": "Tanca",
+      "retrieved": "📚 recuperat de {{count}} document",
+      "retrieved_plural": "📚 recuperat de {{count}} documents"
+    },
+    "ragTooltip": {
+      "status": "Estat de l'índex RAG:",
+      "totalChunks": "📊 Segments totals: {{count}}",
+      "filesIndexed": "📁 Fitxers indexats: {{count}}",
+      "totalSize": "💾 Mida total: {{size}} KB",
+      "indexedFiles": "📄 fitxers indexats:",
+      "andMore": "  ... i {{count}} més",
+      "noFilesYet": "⚠️ encara no hi ha fitxers indexats.",
+      "goToSettings": "Aneu a Configuració → RAG per construir l'índex.",
+      "ragOff": "ℹ️ RAG està desactivat en aquest xat."
+    },
+    "agentSummary": {
+      "model": "Model",
+      "temp": "Temp",
+      "max": "Màx",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Eines",
+      "memory": "Memòria",
+      "none": "Cap",
+      "configuration": "Configuració de {{name}}",
+      "modelFixed": "{{name}} · Fix",
+      "modelDefault": "{{name}} · Predeterminat",
+      "modelChatView": "{{name}} · Vista de xat",
+      "customModel": "Model personalitzat",
+      "notSet": "No establert",
+      "auto": "Automàtic",
+      "on": "Activat",
+      "off": "Desactivat",
+      "shortTerm": "Curt termini",
+      "longTerm": "Llarg termini",
+      "disabledMemory": "Desactivat",
+      "builtIn": "{{count}} integrat",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Resultats web",
+      "attachments": "Fitxers adjunts",
+      "references": "referències",
+      "ragSources": "Fonts RAG",
+      "reasoning": "Raonament",
+      "copy": "Copia",
+      "copied": "Missatge copiat",
+      "copyFailed": "No s'ha pogut copiar el missatge",
+      "tokenUsage": "Ús de tokens",
+      "tokenUsagePrompt": "Instrucció",
+      "tokenUsageCompletion": "Finalització",
+      "tokenUsageTotal": "Total",
+      "save": "Desa",
+      "insertToNotes": "Insereix a les notes",
+      "regenerate": "Regenera"
+    },
+    "streaming": {
+      "thinking": "Pensant..."
+    },
+    "toolCall": {
+      "thinking": "Pensant",
+      "executionProcess": "Procés d'execució",
+      "input": "Entrada",
+      "output": "Sortida",
+      "running": "Executant..."
+    },
+    "addPicture": "Afegeix imatge",
+    "addPictureTooltip": "Adjunteu una imatge al vostre missatge",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Usa les notes indexades com a context",
+    "webSearchLabel": "Cerca web",
+    "webSearchTooltipLabel": "Cerca a Internet quan calgui",
+    "imageUnavailable": "L'adjunció d'imatges no està disponible per al model actual.",
+    "newChat": "Xat nou",
+    "newConversation": "Conversa nova",
+    "searchConversations": "Cerca converses...",
+    "header": {
+      "model": "Model",
+      "advancedParams": "Paràmetres avançats",
+      "temperature": "Temperatura",
+      "maxTokens": "Màx. tokens",
+      "topP": "Top P",
+      "freqPenalty": "Penalització de freqüència",
+      "presPenalty": "Penalització de presència",
+      "agentConfig": "Configuració de l'agent",
+      "modelsCount": "Models: {{count}}",
+      "tokensCount": "Tokens: {{count}}",
+      "noModels": "Cap model disponible"
+    },
+    "temperature": {
+      "precise": "0 (Precís)",
+      "balanced": "1 (Equilibrat)",
+      "creative": "2 (Creatiu)"
+    },
+    "modals": {
+      "image": {
+        "title": "Adjunta imatges",
+        "searchPlaceholder": "Cerca imatges...",
+        "selectAll": "Selecciona tot",
+        "selectNone": "Desselecciona tot",
+        "addSelected": "Afegeix seleccionats",
+        "noResults": "No s'han trobat imatges coincidents."
+      },
+      "reference": {
+        "title": "Afegeix referències",
+        "searchPlaceholder": "Cerca fitxers i carpetes...",
+        "selectAll": "Selecciona tot",
+        "selectNone": "Desselecciona tot",
+        "addSelected": "Afegeix seleccionats",
+        "noResults": "No s'han trobat fitxers o carpetes coincidents."
+      },
+      "insertNote": {
+        "title": "Insereix a la nota",
+        "searchPlaceholder": "Cerca notes...",
+        "insert": "Insereix a la nota seleccionada",
+        "createNew": "Crea una nota nova",
+        "noResults": "No s'han trobat notes coincidents."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Cancel·la",
+      "confirm": "Confirma"
+    },
+    "agentEdit": {
+      "title": "Edita l'agent",
+      "icon": {
+        "name": "Icona",
+        "desc": "Emoji o caràcter per representar aquest agent"
+      },
+      "description": {
+        "name": "Descripció",
+        "desc": "Breu descripció de l'agent"
+      },
+      "modelStrategy": {
+        "name": "Estratègia de model",
+        "options": {
+          "default": "Usa el model predeterminat (de la configuració)",
+          "chatView": "Usa el model de la vista de xat",
+          "fixed": "Model fix"
+        },
+        "noModels": "Cap model a la memòria cau",
+        "desc": "Trieu com l'agent seleccionarà el seu model"
+      },
+      "systemPrompt": {
+        "createNew": "➕ crea una nova instrucció…",
+        "promptName": {
+          "name": "Nom de la instrucció",
+          "desc": "Nom de visualització de la nova instrucció de sistema"
+        },
+        "promptContent": {
+          "name": "Contingut de la instrucció",
+          "desc": "Contingut de la nova instrucció de sistema"
+        },
+        "name": "Instrucció de sistema",
+        "desc": "Trieu entre les instruccions existents o definiu-ne una de nova per a aquest agent."
+      },
+      "capabilities": "Capacitats",
+      "memory": {
+        "title": "Memòria",
+        "notice": "La memòria de l'agent no està disponible temporalment mentre iterem sobre l'experiència."
+      },
+      "tools": {
+        "title": "Eines",
+        "builtIn": {
+          "name": "Eines integrades",
+          "desc": "Seleccioneu quines eines integrades pot usar aquest agent"
+        },
+        "cli": {
+          "name": "Eines CLI",
+          "desc": "Atorgueu accés a totes les eines CLI activades, o seleccioneu-les individualment a continuació",
+          "noTools": "Cap eina CLI configurada. Afegiu i activeu eines a Configuració → Eines → CLI per usar-les aquí."
+        }
+      },
+      "mcp": {
+        "title": "Accés MCP",
+        "noServers": "Cap servidor MCP configurat. Afegiu servidors a Configuració → MCP per desbloquejar aquestes opcions.",
+        "toolsCached": "{{count}} eina a la memòria cau",
+        "toolsCached_plural": "{{count}} eines a la memòria cau",
+        "noToolsCached": "Cap eina a la memòria cau. Activeu l'accés complet o actualitzeu la memòria cau.",
+        "showTools": "Mostra eines",
+        "hideTools": "Amaga eines",
+        "selected": "Seleccionat",
+        "notSelected": "No seleccionat",
+        "noToolsAvailable": "Cap eina disponible d'aquest servidor."
+      },
+      "notices": {
+        "promptRequired": "Proporcioneu un nom i contingut per a la nova instrucció de sistema."
+      },
+      "name": {
+        "label": "Nom",
+        "desc": "Nom de visualització d'aquest agent"
+      },
+      "fixedModel": {
+        "name": "Model fix",
+        "desc": "Seleccioneu un model específic per a aquest agent.",
+        "descNoModels": "Cap model emmagatzemat disponible. Actualitzeu els models a la pestanya Models."
+      },
+      "temperature": {
+        "label": "Temperatura",
+        "desc": "Controla l'aleatorietat (0,0 - 2,0)"
+      },
+      "maxTokens": {
+        "label": "Màx. tokens",
+        "desc": "Nombre màxim de tokens a generar"
+      },
+      "contextWindow": {
+        "label": "Finestra de context",
+        "desc": "Nombre de missatges anteriors a incloure al context"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Activa RAG"
+      },
+      "webSearch": {
+        "name": "Cerca web",
+        "desc": "Activa les capacitats de cerca web"
+      },
+      "maxSteps": {
+        "name": "Passos màxims d'eines",
+        "desc": "Nombre màxim de passos de crides d'eines per torn d'agent"
+      }
+    },
+    "provider": {
+      "title": "Configuració del proveïdor",
+      "selectProvider": {
+        "name": "Proveïdor",
+        "desc": "Seleccioneu el tipus de proveïdor LLM",
+        "placeholder": "-- Seleccioneu el proveïdor --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (local)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Personalitzat (compatible amb OpenAI)"
+      },
+      "modelFilter": {
+        "name": "Filtre de model",
+        "desc": "Patró regex opcional per limitar els models disponibles"
+      },
+      "resourceGroup": {
+        "name": "Grup de recursos",
+        "desc": "Grup de recursos SAP AI Core opcional"
+      },
+      "serviceKey": {
+        "name": "Clau de servei",
+        "desc": "Clau de servei SAP AI Core (cadena JSON)"
+      },
+      "baseUrl": {
+        "name": "URL base",
+        "ollamaDesc": "URL del servidor Ollama",
+        "customDesc": "Punt final d'API compatible amb OpenAI (obligatori)",
+        "optionalDesc": "Punt final d'API personalitzat (opcional)"
+      },
+      "manageModels": {
+        "name": "Gestiona els models",
+        "desc": "Baixeu models nous o actualitzeu els existents del registre Ollama.",
+        "btn": "⏬ Baixa model Ollama"
+      },
+      "apiKey": {
+        "name": "Clau API",
+        "desc": "Clau d'autenticació per al proveïdor seleccionat"
+      },
+      "cancel": "Cancel·la",
+      "save": "Desa",
+      "validation": {
+        "selectProvider": "Seleccioneu un tipus de proveïdor",
+        "apiKeyTooLong": "La clau API és massa llarga. La longitud màxima és de 500 caràcters.",
+        "invalidUrl": "Format d'URL base no vàlid. Introduïu una URL vàlida (p. ex. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "Inspector MCP",
+      "desc": "Inspeccioneu i depureu les connexions dels servidors Model Context Protocol (MCP) i les eines.",
+      "tabs": {
+        "connections": "Connexions",
+        "tools": "Eines",
+        "logs": "Registres"
+      },
+      "refreshBtn": "🔄 actualitza",
+      "connections": {
+        "title": "Connexions de servidor MCP",
+        "noServers": "Cap servidor MCP configurat.",
+        "headers": {
+          "server": "Nom del servidor",
+          "status": "Estat",
+          "tools": "Eines disponibles",
+          "actions": "Accions"
+        },
+        "statusDisabled": "Desactivat",
+        "statusConnected": "● connectat",
+        "statusDisconnected": "○ desconnectat",
+        "toolsLive": "{{count}} eina",
+        "toolsLive_plural": "{{count}} eines",
+        "toolsCached": "{{count}} eina (a la memòria cau)",
+        "toolsCached_plural": "{{count}} eines (a la memòria cau)",
+        "noTools": "0 eines",
+        "connectBtn": "Connecta",
+        "disconnectBtn": "Desconnecta",
+        "connecting": "Connectant...",
+        "disconnecting": "Desconnectant...",
+        "notices": {
+          "disconnected": "Desconnectat de {{name}}",
+          "enableFirst": "Activeu el servidor a la configuració abans de connectar-vos",
+          "connected": "Connectat a {{name}}",
+          "failedDisconnect": "No s'ha pogut desconnectar de {{name}}: {{message}}",
+          "failedConnect": "No s'ha pogut connectar a {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Eines MCP disponibles",
+        "noTools": "Cap eina MCP disponible. Comproveu les connexions del servidor.",
+        "serverPrefix": "Servidor: {{name}}",
+        "noToolsInServer": "Cap eina disponible",
+        "headers": {
+          "tool": "Nom de l'eina",
+          "description": "Descripció",
+          "parameters": "Paràmetres"
+        },
+        "noDescription": "Sense descripció",
+        "noParams": "Cap"
+      },
+      "logs": {
+        "title": "Registres de connexions MCP",
+        "placeholder": "Aquí apareixeran els registres de connexions MCP. Ara es mostren informacions de marcador de posició.",
+        "events": {
+          "connection": "• esdeveniments de connexió",
+          "tools": "• esdeveniments de registre d'eines",
+          "errors": "• registres d'errors",
+          "comms": "• detalls de comunicació"
+        },
+        "testTitle": "Prova l'execució d'eines",
+        "selectServer": "Seleccioneu un servidor...",
+        "selectTool": "Seleccioneu una eina...",
+        "parametersTitle": "Paràmetres",
+        "selectEnum": "Seleccioneu...",
+        "performBtn": "Executa l'eina",
+        "clearBtn": "Esborra els resultats",
+        "executing": "Executant...",
+        "success": "✅ execució correcta",
+        "failed": "❌ execució fallida",
+        "errorTitle": "❌ error d'execució",
+        "errorLabel": "Error: {{message}}",
+        "notices": {
+          "success": "Eina executada correctament",
+          "failed": "L'execució de l'eina ha fallat",
+          "error": "Error d'execució: {{message}}",
+          "requiredMissing": "Falta el paràmetre obligatori: {{name}}",
+          "invalidNumber": "Número no vàlid per al paràmetre: {{name}}",
+          "invalidJson": "JSON no vàlid per al paràmetre: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Cap servidor MCP configurat",
+        "testing": "🧪 S'estan provant {{count}} connexions de servidor MCP...",
+        "allSuccess": "✅ tots {{count}} servidors mcp connectats correctament!",
+        "partial": "⚠️ {{success}} connectats, {{failed}} fallits"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Edita el servidor MCP",
+      "titleAdd": "Afegeix servidor MCP",
+      "serverName": {
+        "name": "Nom del servidor",
+        "desc": "Nom amigable mostrat al connector"
+      },
+      "connectionMode": {
+        "name": "Mode de connexió",
+        "desc": "Trieu si us connecteu automàticament o només manualment",
+        "auto": "Connexió automàtica en obrir el xat",
+        "manual": "Connexió manual"
+      },
+      "command": {
+        "name": "Ordre",
+        "desc": "L'executable o script que inicia el servidor MCP"
+      },
+      "arguments": {
+        "name": "Arguments",
+        "desc": "Arguments separats per comes o línies noves (opcional)"
+      },
+      "envVars": {
+        "name": "Variables d'entorn",
+        "desc": "Parells CLAU=valor opcionals, un per línia"
+      },
+      "enabled": {
+        "name": "Activat",
+        "desc": "Desactiveu per mantenir el servidor configurat sense connectar automàticament"
+      },
+      "cancel": "Cancel·la",
+      "saveEdit": "Desa els canvis",
+      "saveAdd": "Afegeix servidor",
+      "validation": {
+        "nameRequired": "El nom del servidor és obligatori",
+        "commandRequired": "L'ordre és obligatòria"
+      }
+    },
+    "ollamaManager": {
+      "title": "Gestiona els models Ollama",
+      "serverInfo": "Informació del servidor",
+      "checkingServer": "Comprovant el servidor...",
+      "serverOnline": "✅ Servidor en línia",
+      "versionLabel": " | Versió: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Servidor fora de línia",
+      "connectionError": "❌ Error de connexió",
+      "pullTitle": "Baixa un model nou",
+      "pullHint": "Introduïu un nom de model per baixar de la biblioteca Ollama (p. ex. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Nom del model",
+        "example": "Exemple: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Baixa el model",
+      "installedTitle": "Models instal·lats",
+      "refreshList": "🔄 Actualitza la llista",
+      "noModels": "No s'han trobat models. Baixeu un model per començar.",
+      "capabilities": "Capacitats: {{caps}}",
+      "deleteBtn": "Elimina",
+      "closeBtn": "Tanca",
+      "confirmDelete": {
+        "title": "Confirma l'eliminació",
+        "message": "Esteu segurs que voleu eliminar el model „{{name}}“?",
+        "cancel": "Cancel·la",
+        "confirm": "Elimina"
+      },
+      "notices": {
+        "enterName": "Introduïu un nom de model",
+        "pulling": "Baixant {{name}}... Pot trigar una estona.",
+        "pullSuccess": "✅ {{name}} baixat correctament",
+        "pullFailed": "❌ No s'ha pogut baixar el model: {{message}}",
+        "deleted": "✅ {{name}} eliminat",
+        "deleteFailed": "❌ No s'ha pogut eliminar el model: {{message}}",
+        "refreshing": "Actualitzant...",
+        "refreshSuccess": "✅ Llista de models actualitzada",
+        "refreshFailed": "❌ No s'ha pogut actualitzar la llista de models"
+      }
+    },
+    "promptEdit": {
+      "title": "Edita la instrucció de sistema",
+      "name": {
+        "name": "Nom",
+        "desc": "Nom de visualització d'aquesta instrucció"
+      },
+      "content": {
+        "name": "Contingut",
+        "desc": "El contingut de la instrucció de sistema"
+      },
+      "enabled": {
+        "name": "Activat",
+        "desc": "Si aquesta instrucció està activa"
+      },
+      "cancel": "Cancel·la",
+      "save": "Desa"
+    },
+    "prompt": {
+      "cancel": "Cancel·la",
+      "ok": "D'acord"
+    },
+    "textInput": {
+      "nameLabel": "Nom",
+      "create": "Crea",
+      "cancel": "Cancel·la"
+    },
+    "explain": {
+      "loading": "⏳ Processant...",
+      "error": "Error en mostrar l'explicació",
+      "errorPrefix": "❌ Error: "
+    }
+  },
+  "notices": {
+    "noProvider": "Primer configureu un proveïdor LLM a la configuració",
+    "noModel": "Seleccioneu un model predeterminat a la configuració",
+    "noValidProvider": "No s'ha trobat cap configuració de proveïdor vàlida per al model: {{modelId}}",
+    "processing": "Processant...",
+    "textUpdated": "Text actualitzat correctament",
+    "error": "Error: {{message}}"
+  }
+}

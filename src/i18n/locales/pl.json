@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Ogólne",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Narzędzia",
+      "rag": "RAG",
+      "prompts": "Prompty",
+      "agents": "Agenci",
+      "quickActions": "Szybkie akcje",
+      "usage": "Użycie"
+    },
+    "general": {
+      "title": "Ustawienia ogólne",
+      "desc": "Skonfiguruj ogólne ustawienia wtyczki asystenta inteligencji.",
+      "pluginVersion": {
+        "name": "Wersja wtyczki",
+        "desc": "Aktualna wersja wtyczki asystenta inteligencji"
+      },
+      "defaultModel": {
+        "name": "Domyślny model",
+        "desc": "Domyślny model używany do rozmów",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Domyślny tryb czatu",
+        "desc": "Wybierz tryb, w którym otwiera się widok czatu",
+        "chat": "Tryb czatu",
+        "agent": "Tryb agenta"
+      },
+      "conversationTitleMode": {
+        "name": "Tryb tytułu rozmowy",
+        "desc": "Jak generować tytuły rozmów",
+        "firstMessage": "Użyj pierwszej wiadomości",
+        "autoSummary": "Automatycznie generuj podsumowanie",
+        "manual": "Ręcznie"
+      },
+      "conversationIcons": {
+        "name": "Ikony rozmów",
+        "desc": "Włącz automatyczne generowanie ikon dla rozmów"
+      },
+      "configStatus": {
+        "name": "Status konfiguracji",
+        "desc": "Ogólny status konfiguracji wtyczki",
+        "ok": "✅ Skonfigurowano ({{providers}} dostawców, {{conversations}} rozmów)",
+        "incomplete": "⚠️ Niekompletne — skonfiguruj dostawców i modele"
+      }
+    },
+    "llm": {
+      "title": "Konfiguracja LLM",
+      "desc": "Konfiguruj dostawców modeli językowych i zarządzaj dostępnymi modelami.",
+      "subTabs": {
+        "provider": "Dostawcy",
+        "models": "Modele"
+      }
+    },
+    "models": {
+      "title": "Konfiguracja modeli",
+      "desc": "Przeglądaj i zarządzaj modelami od wszystkich skonfigurowanych dostawców. Kliknij \"odśwież modele\", aby pobrać najnowsze dostępne modele.",
+      "providerCount": "{{count}} dostawca skonfigurowany",
+      "providerCount_plural": "{{count}} dostawców skonfigurowanych",
+      "refreshAll": "🔄 odśwież wszystkie modele",
+      "empty": "Brak skonfigurowanych dostawców. Najpierw dodaj dostawców na karcie dostawcy.",
+      "noModels": "Brak dostępnych modeli. Kliknij \"odśwież wszystkie modele\" lub odśwież poszczególnych dostawców na karcie dostawcy.",
+      "noMatch": "Żadne modele nie pasują do bieżących filtrów. Dostosuj lub wyczyść filtry, aby zobaczyć wyniki.",
+      "modelCount": "• {{count}} model w pamięci podręcznej",
+      "modelCount_plural": "• {{count}} modeli w pamięci podręcznej",
+      "matchCount": "• {{count}} pasuje do wybranych filtrów",
+      "matchCount_plural": "• {{count}} pasuje do wybranych filtrów",
+      "status": {
+        "enabled": "Włączony",
+        "disabled": "Wyłączony"
+      },
+      "actions": {
+        "disable": "Wyłącz",
+        "enable": "Włącz",
+        "setDefaultChat": "Ustaw domyślny czat",
+        "defaultChat": "Domyślny czat",
+        "setDefaultEmbedding": "Ustaw domyślne osadzanie",
+        "defaultEmbedding": "Domyślne osadzanie"
+      },
+      "notices": {
+        "fetching": "Pobieranie modeli dla {{provider}}...",
+        "fetchFailed": "Nie udało się odświeżyć modeli {{provider}}",
+        "refreshed": "Modele odświeżone pomyślnie!",
+        "refreshFailed": "Nie udało się odświeżyć modeli",
+        "defaultChatSet": "Domyślny model czatu ustawiony na {{name}}",
+        "defaultEmbeddingSet": "Domyślny model osadzania ustawiony na {{name}}"
+      },
+      "filters": {
+        "allProviders": "Wszyscy dostawcy",
+        "allCapabilities": "Wszystkie możliwości",
+        "allStates": "Wszystkie stany",
+        "searchPlaceholder": "Szukaj nazwy lub ID"
+      }
+    },
+    "provider": {
+      "title": "Konfiguracja dostawcy",
+      "securityTitle": "⚠️ Ostrzeżenie dotyczące bezpieczeństwa",
+      "securityDesc": "Klucze API są przechowywane jako zwykły tekst w Twoim sejfie dla zachowania kompatybilności. Aby zapobiec przypadkowym wyciekom:",
+      "securityItem1": "NIE udostępniaj folderu {{configDir}}/plugins/intelligence-assistant/data/.",
+      "securityItem2": "Dodaj ten folder do pliku .gitignore, jeśli używasz synchronizacji Git.",
+      "securityItem3": "Zachowaj ostrożność podczas korzystania z publicznych usług synchronizacji w chmurze.",
+      "desc": "Zarządzaj dostawcami LLM i poświadczeniami API. Użyj kolumny akcji, aby edytować szczegóły konfiguracji lub odświeżyć modele z pamięci podręcznej.",
+      "count": "{{count}} dostawca skonfigurowany",
+      "count_plural": "{{count}} dostawców skonfigurowanych",
+      "addBtn": "+ Dodaj dostawcę",
+      "empty": "Brak skonfigurowanych dostawców. Wybierz \"Dodaj dostawcę\", aby rozpocząć.",
+      "tableHeaders": {
+        "provider": "Dostawca",
+        "status": "Status",
+        "actions": "Akcje"
+      },
+      "status": {
+        "ready": "Gotowy",
+        "needsConfig": "Wymaga konfiguracji",
+        "checking": "Sprawdzanie...",
+        "credentialsSet": "Poświadczenia ustawione",
+        "serverOnline": "Serwer online",
+        "serverOffline": "Serwer offline",
+        "serverError": "Błąd serwera"
+      },
+      "guidance": {
+        "requiresCli": "Wymaga lokalnego CLI",
+        "provideServiceKey": "Podaj klucz usługi",
+        "configureBaseUrl": "Skonfiguruj bazowy URL",
+        "addApiKey": "Dodaj klucz API"
+      },
+      "models": {
+        "none": "Brak modeli",
+        "count": "{{count}} model",
+        "count_plural": "{{count}} modeli"
+      },
+      "ollama": {
+        "checkingVersion": "Sprawdzanie wersji...",
+        "server": {
+          "checking": "Sprawdzanie serwera...",
+          "online": "Serwer: online",
+          "offline": "Serwer: offline lub nieosiągalny",
+          "error": "Serwer: błąd połączenia",
+          "versionOnline": "Serwer online",
+          "versionOffline": "Serwer offline",
+          "versionError": "Błąd połączenia",
+          "version": "Wersja: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Ostatnie odświeżenie: {{timeAgo}}",
+        "neverRefreshed": "Nigdy nie odświeżono",
+        "justNow": "przed chwilą",
+        "minutesAgo": "{{n}} min temu",
+        "hoursAgo": "{{n}} godz. temu",
+        "daysAgo": "{{n}} dni temu"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "manageModels": "Zarządzaj modelami",
+        "refreshModels": "Odśwież modele",
+        "refreshing": "Odświeżanie...",
+        "delete": "Usuń"
+      },
+      "notices": {
+        "refreshed": "Modele odświeżone dla {{provider}}.",
+        "refreshFailed": "Nie udało się odświeżyć modeli"
+      },
+      "confirm": {
+        "delete": "Usunąć dostawcę {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "Zarządzanie serwerami MCP",
+      "desc": "Konfiguruj serwery Model Context Protocol (MCP), aby rozszerzyć możliwości agentów o zewnętrzne narzędzia i źródła danych.",
+      "inspectorBtn": "🔍 Otwórz inspektor MCP",
+      "testAllBtn": "🧪 przetestuj wszystkie połączenia",
+      "refreshAllBtn": "🔄 odśwież wszystkie narzędzia",
+      "addBtn": "+ Dodaj serwer MCP",
+      "empty": "Brak skonfigurowanych serwerów MCP. Wybierz Dodaj serwer MCP, aby rozpocząć.",
+      "tableHeaders": {
+        "name": "Nazwa",
+        "command": "Polecenie",
+        "arguments": "Argumenty",
+        "status": "Status",
+        "tools": "Narzędzia",
+        "actions": "Akcje"
+      },
+      "untitled": "Nienazwany serwer MCP",
+      "notConfigured": "Nie skonfigurowano",
+      "noArgs": "Brak",
+      "cached": "W pamięci podręcznej",
+      "disabled": "Wyłączony",
+      "envVars": "{{count}} zmienna środowiskowa",
+      "envVars_plural": "{{count}} zmiennych środowiskowych",
+      "status": {
+        "disabled": "Wyłączony",
+        "connected": "połączony",
+        "disconnected": "rozłączony",
+        "enableToManage": "Włącz, aby zarządzać połączeniami",
+        "manualConnect": "Ręczne połączenie",
+        "autoConnect": "Automatyczne połączenie"
+      },
+      "toolCount": {
+        "live": "{{count}} aktywne narzędzie",
+        "live_plural": "{{count}} aktywnych narzędzi",
+        "cached": "{{count}} narzędzie w pamięci podręcznej",
+        "cached_plural": "{{count}} narzędzi w pamięci podręcznej"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "enabled": "✓ Włączony",
+        "enabledOff": "✗ Wyłączony",
+        "connect": "połącz",
+        "disconnect": "rozłącz",
+        "connecting": "Łączenie...",
+        "disconnecting": "Rozłączanie...",
+        "test": "Test",
+        "testing": "Testowanie...",
+        "delete": "Usuń"
+      },
+      "notices": {
+        "disconnected": "Rozłączono z {{name}}",
+        "connected": "Połączono z {{name}}",
+        "autoConnectFailed": "Nie udało się automatycznie połączyć z {{name}}",
+        "enableFirst": "Włącz serwer przed nawiązaniem połączenia",
+        "disconnectFailed": "Nie udało się rozłączyć z {{name}}",
+        "connectFailed": "Nie udało się połączyć z {{name}}",
+        "testNoCommand": "❌ przed testowaniem połączenia wpisz polecenie",
+        "testSuccess": "✅ połączono pomyślnie! Znaleziono {{count}} narzędzi.",
+        "testFailed": "❌ Połączenie nie powiodło się: {{message}}",
+        "refreshedAll": "✅ odświeżono narzędzia dla {{count}} serwera",
+        "refreshedAll_plural": "✅ odświeżono narzędzia dla {{count}} serwerów",
+        "refreshedPartial": "✅ odświeżono {{success}} serwerów, ❌ {{failed}} nie powiodło się",
+        "noServersConfigured": "⚠️ Brak skonfigurowanych serwerów MCP",
+        "testingAll": "🧪 Testowanie {{count}} połączeń z serwerami MCP...",
+        "testAllSuccess": "✅ wszystkie {{count}} serwery MCP połączone pomyślnie!",
+        "testAllPartial": "⚠️ {{successful}} połączono, {{failed}} nie powiodło się"
+      },
+      "confirm": {
+        "delete": "Usunąć serwer MCP \"{{name}}\"?"
+      }
+    },
+    "agents": {
+      "title": "Zarządzanie agentami",
+      "desc": "Twórz i zarządzaj agentami AI z określonymi możliwościami, narzędziami i zachowaniami.",
+      "count": "{{count}} agent skonfigurowany",
+      "count_plural": "{{count}} agentów skonfigurowanych",
+      "addBtn": "+ dodaj agenta",
+      "empty": "Brak skonfigurowanych agentów. Wybierz dodaj agenta, aby rozpocząć.",
+      "tableHeaders": {
+        "agent": "Agent",
+        "model": "Model",
+        "capabilities": "Możliwości",
+        "tools": "Narzędzia",
+        "actions": "Akcje"
+      },
+      "defaultBadge": "Domyślny",
+      "systemPrompt": "Prompt systemowy • {{promptName}}",
+      "customPrompt": "Własny prompt",
+      "model": {
+        "notSet": "Nie ustawiono",
+        "notFound": "Modelu nie znaleziono w pamięci podręcznej",
+        "useChatView": "Użyj modelu widoku czatu",
+        "useChatViewDesc": "Użyje modelu wybranego w widoku czatu",
+        "useDefault": "Użyj domyślnego modelu",
+        "useDefaultDesc": "Użyje domyślnego modelu z ustawień"
+      },
+      "capabilities": {
+        "noSpecialModes": "Brak trybów specjalnych"
+      },
+      "tools": {
+        "builtIn": "{{count}} wbudowane",
+        "mcpServer": "{{count}} serwer MCP",
+        "mcpServer_plural": "{{count}} serwery MCP",
+        "mcpTool": "{{count}} narzędzie MCP",
+        "mcpTool_plural": "{{count}} narzędzi MCP",
+        "noTools": "Brak włączonych narzędzi"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "delete": "usuń",
+        "protected": "chroniony"
+      },
+      "confirm": {
+        "delete": "Usunąć agenta \"{{name}}\"?"
+      }
+    },
+    "prompts": {
+      "title": "Prompty systemowe",
+      "desc": "Zarządzaj promptami systemowymi, które definiują zachowanie i osobowość Twojego asystenta AI.",
+      "addBtn": "+ dodaj prompt systemowy",
+      "empty": "Brak skonfigurowanych promptów systemowych. Wybierz dodaj prompt systemowy, aby rozpocząć.",
+      "tableHeaders": {
+        "name": "Nazwa",
+        "contentPreview": "Podgląd treści",
+        "created": "Utworzono",
+        "updated": "Zaktualizowano",
+        "enabled": "Włączony",
+        "actions": "Akcje"
+      },
+      "status": {
+        "enabled": "Włączony",
+        "disabled": "Wyłączony"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "disable": "Wyłącz",
+        "enable": "Włącz",
+        "delete": "Usuń"
+      },
+      "confirm": {
+        "delete": "Usunąć prompt \"{{name}}\"?"
+      }
+    },
+    "tools": {
+      "title": "Konfiguracja narzędzi",
+      "desc": "Przeglądaj wbudowane narzędzia i eksploruj narzędzia MCP załadowane z połączonych serwerów. Włącz akcje, które Twoi agenci powinni móc wykonywać.",
+      "subTabs": {
+        "builtIn": "Narzędzia wbudowane",
+        "mcp": "Narzędzia MCP",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "Narzędzia CLI"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Nazwa",
+          "category": "Kategoria",
+          "description": "Opis",
+          "parameters": "Parametry",
+          "enabled": "Włączony"
+        },
+        "categories": {
+          "fileOps": "Operacje na plikach",
+          "searchDisc": "Wyszukiwanie i odkrywanie",
+          "noteMgmt": "Zarządzanie notatkami"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Odczytaj zawartość pliku z Twojego sejfu",
+            "params": "path (wymagany): Ścieżka do pliku do odczytania"
+          },
+          "writeFile": {
+            "desc": "Zapisz lub zaktualizuj plik w Twoim sejfie",
+            "params": "path (wymagany), content (wymagany): Ścieżka do pliku i treść do zapisania"
+          },
+          "listFiles": {
+            "desc": "Wylistuj pliki w sejfie lub określonym folderze",
+            "params": "folder (opcjonalny), extension (opcjonalny): Filtruj według folderu i rozszerzenia pliku"
+          },
+          "searchFiles": {
+            "desc": "Wyszukaj pliki według nazwy lub zawartości w Twoim sejfie",
+            "params": "query (wymagany), search_content (opcjonalny), limit (opcjonalny): Zapytanie wyszukiwania i opcje"
+          },
+          "createNote": {
+            "desc": "Utwórz nową notatkę o określonej treści",
+            "params": "title (wymagany), content (wymagany), folder (opcjonalny): Tytuł notatki, treść i lokalizacja"
+          },
+          "appendNote": {
+            "desc": "Dołącz treść do istniejącej notatki",
+            "params": "path (wymagany), content (wymagany): Ścieżka do notatki i treść do dołączenia"
+          }
+        },
+        "infoTitle": "💡 o narzędziach",
+        "infoText": "Narzędzia wbudowane są konfigurowane per ustawienia wtyczki. Narzędzia MCP są zarządzane niezależnie — użyj karty MCP, aby połączyć serwery i odświeżyć dostępność narzędzi.",
+        "toolNames": {
+          "read_file": "Odczytaj plik",
+          "write_file": "Zapisz plik",
+          "list_files": "Wylistuj pliki",
+          "search_files": "Szukaj plików",
+          "create_note": "Utwórz notatkę",
+          "append_note": "Dołącz do notatki"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Brak dostępnych narzędzi MCP. Połącz serwer lub odśwież narzędzia z pamięci podręcznej, aby wypełnić tę listę.",
+        "tableHeaders": {
+          "server": "Serwer",
+          "tool": "Narzędzie",
+          "description": "Opis",
+          "parameters": "Parametry",
+          "source": "Źródło"
+        },
+        "noDescription": "Brak opisu",
+        "schemaUnavailable": "Schemat niedostępny",
+        "live": "Na żywo",
+        "cached": "W pamięci podręcznej",
+        "status": {
+          "connected": "połączony",
+          "disconnected": "rozłączony"
+        }
+      },
+      "openapi": {
+        "desc": "Generuj narzędzia HTTP z dokumentów OpenAPI. Zdalne specyfikacje są buforowane w {{cacheDir}}.",
+        "addBtn": "Dodaj źródło HTTP",
+        "noSources": "Brak skonfigurowanych źródeł HTTP.",
+        "unnamed": "Nienazwane źródło HTTP",
+        "tableHeaders": {
+          "name": "Nazwa",
+          "source": "Źródło",
+          "auth": "Uwierzytelnianie",
+          "status": "Status",
+          "actions": "Akcje"
+        },
+        "sourceUrl": "Zdalny URL nie ustawiony",
+        "sourcePath": "Ścieżka do pliku nie ustawiona",
+        "authHeader": "Nagłówek ({{key}})",
+        "authQuery": "Zapytanie ({{key}})",
+        "authNone": "Brak",
+        "statusEnabled": "Włączony",
+        "statusDisabled": "Wyłączony",
+        "actions": {
+          "edit": "Edytuj",
+          "reload": "Przeładuj",
+          "refetch": "Pobierz ponownie",
+          "delete": "Usuń"
+        },
+        "notices": {
+          "removed": "Źródło HTTP usunięte",
+          "reloaded": "Przeładowano {{count}} operacji",
+          "reloadFailed": "Nie udało się przeładować źródła HTTP. Sprawdź konsolę, aby uzyskać szczegóły."
+        },
+        "modal": {
+          "defaultTitle": "Źródło HTTP",
+          "displayName": {
+            "name": "Wyświetlana nazwa",
+            "desc": "Wyświetlana agentom przy wyborze źródła narzędzi"
+          },
+          "enabled": {
+            "name": "Włączony",
+            "desc": "Włącz, aby udostępnić to API HTTP każdemu agentowi"
+          },
+          "sourceType": {
+            "name": "Typ źródła",
+            "file": "Plik lokalny",
+            "url": "Zdalny URL"
+          },
+          "specUrl": {
+            "name": "URL OpenAPI",
+            "desc": "Pobierane i buforowane w katalogu danych wtyczki"
+          },
+          "cachedFile": "Plik w pamięci podręcznej: {{path}} ({{date}})",
+          "neverFetched": "Nigdy nie pobrano",
+          "specPath": {
+            "name": "Ścieżka do pliku OpenAPI",
+            "desc": "Ścieżka względna wewnątrz sejfu lub ścieżka bezwzględna"
+          },
+          "baseUrl": {
+            "name": "Nadpisanie bazowego URL",
+            "desc": "Nadpisz pierwszy wpis serwera z dokumentu (opcjonalne)"
+          },
+          "auth": {
+            "name": "Uwierzytelnianie",
+            "desc": "Automatycznie wstawiaj klucze API przy wywoływaniu tego źródła",
+            "none": "Brak",
+            "header": "Nagłówek HTTP",
+            "query": "Parametr zapytania"
+          },
+          "credKey": {
+            "name": "Klucz poświadczeń"
+          },
+          "credValue": {
+            "name": "Wartość poświadczeń"
+          },
+          "actions": {
+            "name": "Akcje",
+            "reloadTools": "Przeładuj narzędzia",
+            "refetchTooltip": "Pobierz specyfikację ponownie z URL",
+            "deleteTooltip": "Usuń źródło"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Definiuj lokalne narzędzia wiersza poleceń, które agenci mogą wykonywać. Używaj szablonów jak {{param}} dla dynamicznych argumentów.",
+        "addBtn": "Dodaj narzędzie CLI",
+        "presetsBtn": "Dodaj z szablonów",
+        "noTools": "Brak skonfigurowanych narzędzi CLI.",
+        "tableHeaders": {
+          "name": "Nazwa",
+          "command": "Polecenie",
+          "parameters": "Parametry",
+          "status": "Status",
+          "actions": "Akcje"
+        },
+        "unnamed": "Nienazwane narzędzie CLI",
+        "paramCount": "{{count}} parametr",
+        "paramCount_plural": "{{count}} parametrów",
+        "noParams": "Brak",
+        "statusEnabled": "Włączony",
+        "statusDisabled": "Wyłączony",
+        "actions": {
+          "edit": "Edytuj",
+          "disable": "Wyłącz",
+          "enable": "Włącz",
+          "delete": "Usuń"
+        },
+        "notices": {
+          "removed": "Narzędzie CLI usunięte"
+        },
+        "infoTitle": "💡 O narzędziach CLI",
+        "infoText": "Narzędzia CLI wykonują polecenia powłoki lokalnie. Używaj {{paramName}} w argumentach do podstawiania szablonów lub konfiguruj parametry, które mają być przekazywane jako argumenty lub zmienne środowiskowe.",
+        "modal": {
+          "defaultTitle": "Narzędzie CLI",
+          "toolName": {
+            "name": "Nazwa narzędzia",
+            "desc": "Identyfikator używany przez agentów do wywołania tego narzędzia"
+          },
+          "description": {
+            "name": "Opis",
+            "desc": "Opisz, co to narzędzie robi dla AI"
+          },
+          "enabled": {
+            "name": "Włączony",
+            "desc": "Włącz, aby zezwolić agentom na używanie tego narzędzia"
+          },
+          "commandConfig": "Konfiguracja polecenia",
+          "command": {
+            "name": "Polecenie",
+            "desc": "Plik wykonywalny do uruchomienia (np. node, python, bash, /ścieżka/do/skryptu)"
+          },
+          "args": {
+            "name": "Argumenty",
+            "desc": "Argumenty polecenia, jeden w wierszu. Używaj {{paramName}} do podstawiania szablonów."
+          },
+          "cwd": {
+            "name": "Katalog roboczy",
+            "desc": "Katalog, w którym ma być uruchomione polecenie (opcjonalne)"
+          },
+          "timeout": {
+            "name": "Czas oczekiwania (ms)",
+            "desc": "Maksymalny czas wykonania w milisekundach (domyślnie: {{timeout}})"
+          },
+          "shell": {
+            "name": "Uruchom w powłoce",
+            "desc": "Wykonaj polecenie przez powłokę (włącza funkcje powłoki, takie jak potoki)"
+          },
+          "paramsTitle": "Parametry",
+          "paramsDesc": "Zdefiniuj parametry, które AI może przekazać do tego narzędzia.",
+          "addParam": "Dodaj parametr",
+          "noParams": "Brak zdefiniowanych parametrów.",
+          "paramN": "Parametr {{n}}",
+          "param": {
+            "name": "Nazwa",
+            "type": {
+              "name": "Typ",
+              "string": "Ciąg znaków",
+              "number": "Liczba",
+              "boolean": "Wartość logiczna"
+            },
+            "description": "Opis",
+            "required": "Wymagany",
+            "insertAs": {
+              "name": "Wstaw jako",
+              "desc": "Jak przekazać ten parametr do polecenia",
+              "template": "Szablon ({{name}})",
+              "arg": "Dołącz jako argument",
+              "env": "Zmienna środowiskowa"
+            },
+            "envName": {
+              "name": "Nazwa zmiennej środowiskowej",
+              "desc": "Nadpisz nazwę zmiennej środowiskowej (domyślnie wielkie litery nazwy parametru)"
+            }
+          },
+          "envTitle": "Zmienne środowiskowe",
+          "envDesc": "Statyczne zmienne środowiskowe do ustawienia podczas uruchamiania polecenia.",
+          "envVars": {
+            "name": "Zmienne środowiskowe",
+            "desc": "Format: KLUCZ=wartość, jeden w wierszu"
+          }
+        },
+        "presets": {
+          "title": "Dodaj narzędzie CLI z szablonów",
+          "desc": "Wybierz szablon, aby szybko dodać wstępnie skonfigurowane narzędzie CLI. Możesz je dostosować po dodaniu.",
+          "addBtn": "Dodaj",
+          "addedBtn": "Dodano",
+          "closeBtn": "Zamknij",
+          "notices": {
+            "added": "Dodano \"{{name}}\" — włącz je na liście narzędzi CLI"
+          },
+          "categories": {
+            "file": "Operacje na plikach",
+            "search": "Wyszukiwanie",
+            "network": "Sieć",
+            "code": "Wykonanie kodu",
+            "data": "Przetwarzanie danych",
+            "system": "Informacje o systemie",
+            "apps": "Aplikacje macOS i pulpit"
+          },
+          "names": {
+            "preset-cat": "Odczytaj plik (cat)",
+            "preset-ls": "Wylistuj katalog (ls)",
+            "preset-find": "Znajdź pliki (find)",
+            "preset-grep": "Przeszukaj tekst (grep)",
+            "preset-ripgrep": "Szybkie wyszukiwanie (rg)",
+            "preset-curl": "Żądanie HTTP (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Uruchom kod Python",
+            "preset-node": "Uruchom JavaScript (Node)",
+            "preset-bash": "Uruchom skrypt powłoki",
+            "preset-jq": "Procesor JSON (jq)",
+            "preset-wc": "Licznik słów (wc)",
+            "preset-date": "Aktualna data/godzina",
+            "preset-pwd": "Bieżący katalog (pwd)",
+            "preset-whoami": "Bieżący użytkownik",
+            "preset-uname": "Informacje o systemie (uname)",
+            "preset-open": "Otwórz plik/URL (open)",
+            "preset-open-app": "Uruchom aplikację (open -a)",
+            "preset-safari": "Otwórz w Safari",
+            "preset-chrome": "Otwórz w Chrome",
+            "preset-firefox": "Otwórz w Firefox",
+            "preset-pbcopy": "Kopiuj do schowka",
+            "preset-pbpaste": "Wklej ze schowka",
+            "preset-say": "Synteza mowy (say)",
+            "preset-osascript": "Uruchamiacz AppleScript",
+            "preset-notify": "Powiadomienie pulpitu",
+            "preset-screencapture": "Zrzut ekranu",
+            "preset-applescript-list-apps": "Lista uruchomionych aplikacji"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "Konfiguracja RAG",
+      "desc": "Konfiguruj generowanie wspomagane wyszukiwaniem i wyszukiwanie w sieci, aby wzbogacać odpowiedzi AI.",
+      "subTabs": {
+        "overview": "Przegląd",
+        "chunking": "Dzielenie na fragmenty",
+        "search": "Wyszukiwanie",
+        "filters": "Filtry",
+        "advanced": "Zaawansowane",
+        "websearch": "Wyszukiwanie w sieci"
+      },
+      "general": {
+        "title": "Ustawienia ogólne",
+        "enableRag": {
+          "name": "Włącz RAG",
+          "desc": "Włącz generowanie wspomagane wyszukiwaniem dla rozszerzonego kontekstu"
+        },
+        "vectorStore": {
+          "name": "Magazyn wektorów",
+          "desc": "Wektorowa baza danych do przechowywania osadzeń",
+          "memory": "W pamięci",
+          "disk": "Na dysku"
+        },
+        "embeddingModel": {
+          "name": "Model osadzania",
+          "desc": "Model używany do generowania osadzeń"
+        },
+        "embedChanged": {
+          "name": "Automatycznie osadzaj zmienione pliki",
+          "desc": "Automatycznie ponownie osadzaj pliki po ich zmodyfikowaniu"
+        }
+      },
+      "indexMgmt": {
+        "title": "Zarządzanie indeksem",
+        "desc": "Zarządzaj indeksem RAG i przeglądaj statystyki dotyczące zindeksowanej treści.",
+        "statsTitle": "Statystyki indeksu",
+        "stats": {
+          "totalChunks": "Łącznie fragmentów",
+          "uniqueFiles": "Unikalne pliki",
+          "totalChars": "Łącznie znaków",
+          "avgChunkSize": "Średni rozmiar fragmentu"
+        },
+        "empty": "Indeks jest pusty. Wybierz przebuduj indeks, aby rozpocząć indeksowanie.",
+        "error": "⚠️ nie można załadować statystyk indeksu",
+        "rebuild": {
+          "name": "Przebuduj indeks",
+          "desc": "Ponownie zindeksuj wszystkie pliki w Twoim sejfie. Może to chwilę potrwać.",
+          "btn": "Przebuduj",
+          "rebuilding": "Przebudowywanie..."
+        },
+        "refresh": {
+          "name": "Odśwież indeks",
+          "desc": "Zaktualizuj indeks o wszelkie zmienione pliki od ostatniego indeksowania.",
+          "btn": "Odśwież",
+          "refreshing": "Odświeżanie..."
+        },
+        "clear": {
+          "name": "Wyczyść indeks",
+          "desc": "Usuń wszystkie zindeksowane dane. Będziesz musiał przebudować indeks.",
+          "btn": "Wyczyść",
+          "clearing": "Czyszczenie..."
+        },
+        "notices": {
+          "rebuilt": "Indeks przebudowany pomyślnie",
+          "rebuildFailed": "Nie udało się przebudować indeksu",
+          "refreshed": "Indeks odświeżony pomyślnie",
+          "refreshFailed": "Nie udało się odświeżyć indeksu",
+          "cleared": "Indeks wyczyszczony pomyślnie",
+          "clearFailed": "Nie udało się wyczyścić indeksu"
+        }
+      },
+      "chunking": {
+        "title": "Ustawienia dzielenia na fragmenty",
+        "strategy": {
+          "name": "Strategia dzielenia",
+          "desc": "Strategia podziału dokumentów na fragmenty",
+          "recursive": "Rekurencyjne (inteligentne)",
+          "fixed": "Stały rozmiar",
+          "sentence": "Według zdań",
+          "paragraph": "Według akapitów"
+        },
+        "chunkSize": {
+          "name": "Rozmiar fragmentu",
+          "desc": "Liczba znaków na fragment (zalecane: 500-2000)"
+        },
+        "chunkOverlap": {
+          "name": "Nakładanie się fragmentów",
+          "desc": "Liczba nakładających się znaków między fragmentami"
+        },
+        "minChunkSize": {
+          "name": "Minimalny rozmiar fragmentu",
+          "desc": "Minimalny rozmiar fragmentu do utworzenia"
+        },
+        "maxTokens": {
+          "name": "Maks. tokenów na fragment",
+          "desc": "Maksymalna liczba tokenów dozwolona na fragment"
+        }
+      },
+      "search": {
+        "title": "Ustawienia wyszukiwania",
+        "searchType": {
+          "name": "Typ wyszukiwania",
+          "desc": "Typ wyszukiwania podobieństwa do wykonania",
+          "similarity": "Podobieństwo"
+        },
+        "topK": {
+          "name": "Liczba wyników Top K",
+          "desc": "Liczba najbardziej trafnych fragmentów do pobrania (1-20)"
+        },
+        "threshold": {
+          "name": "Próg podobieństwa",
+          "desc": "Minimalny wynik podobieństwa do uwzględnienia wyników (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Waga wyniku trafności",
+          "desc": "Waga dla oceny trafności (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Limit okna kontekstu",
+          "desc": "Maksymalna liczba tokenów dla pobranego kontekstu"
+        }
+      },
+      "filters": {
+        "title": "Filtry plików",
+        "excludeFolders": {
+          "name": "Wyklucz foldery",
+          "desc": "Foldery do wykluczenia z indeksowania (oddzielone przecinkami)"
+        },
+        "includeTypes": {
+          "name": "Uwzględnij typy plików",
+          "desc": "Typy plików do uwzględnienia (puste = wszystkie typy)"
+        },
+        "excludeTypes": {
+          "name": "Wyklucz typy plików",
+          "desc": "Typy plików do wykluczenia z indeksowania"
+        },
+        "filterByTag": {
+          "name": "Filtruj według tagu",
+          "desc": "Indeksuj tylko pliki z tymi tagami (puste = wszystkie pliki)"
+        },
+        "excludeByTag": {
+          "name": "Wyklucz według tagu",
+          "desc": "Wyklucz z indeksowania pliki z tymi tagami"
+        }
+      },
+      "advanced": {
+        "title": "Ustawienia zaawansowane",
+        "batchSize": {
+          "name": "Rozmiar partii osadzania",
+          "desc": "Liczba fragmentów do jednoczesnego osadzania"
+        }
+      },
+      "grading": {
+        "title": "Ustawienia oceniania",
+        "desc": "Oceniaj pobrane fragmenty pod kątem trafności przed wysłaniem do LLM. Pomaga to odfiltrować wyniki niskiej jakości.",
+        "enableGrading": {
+          "name": "Włącz próg oceniania",
+          "desc": "Filtruj fragmenty poniżej progów jakości"
+        },
+        "graderSource": {
+          "name": "Źródło modelu oceniającego",
+          "desc": "Skąd pobrać model oceniający",
+          "chat": "Model czatu",
+          "custom": "Własny model"
+        },
+        "graderModel": {
+          "name": "Model oceniający",
+          "desc": "Konkretny model do użycia przy ocenianiu"
+        },
+        "parallel": {
+          "name": "Przetwarzanie równoległe",
+          "desc": "Liczba fragmentów do jednoczesnego oceniania"
+        },
+        "minRelevance": {
+          "name": "Minimalny wynik trafności",
+          "desc": "Minimalny wynik trafności (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Minimalny wynik dokładności",
+          "desc": "Minimalny wynik dokładności (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Minimalny wynik jakości wsparcia",
+          "desc": "Minimalny wynik jakości wsparcia (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Konfiguracja wyszukiwania w sieci",
+      "desc": "Konfiguruj funkcjonalność wyszukiwania w sieci, aby wzbogacać odpowiedzi AI aktualnymi informacjami z internetu.",
+      "generalBehavior": "Ogólne zachowanie",
+      "providerSelection": "Wybór dostawcy",
+      "localeFilters": "Ustawienia regionalne i filtry",
+      "apiCredentials": "Poświadczenia API i punkty końcowe",
+      "enabled": {
+        "name": "Włącz wyszukiwanie w sieci",
+        "desc": "Zezwól AI na wyszukiwanie w sieci bieżących informacji"
+      },
+      "autoTrigger": {
+        "name": "Automatyczne wyzwalanie wyszukiwania",
+        "desc": "Automatycznie wyzwalaj wyszukiwanie w sieci, gdy zapytanie wymaga bieżących informacji (np. wiadomości, ceny, ostatnie zdarzenia)"
+      },
+      "maxResults": {
+        "name": "Maksymalna liczba wyników",
+        "desc": "Maksymalna liczba wyników wyszukiwania do zwrócenia"
+      },
+      "timeRange": {
+        "name": "Aktualność wyników",
+        "desc": "Ogranicz wyniki do zakresu czasu obsługiwanego przez dostawców (Google, SearXNG, Mojeek)",
+        "any": "Dowolny czas (domyślnie)",
+        "h": "Ostatnia godzina",
+        "d": "Ostatnie 24 godziny",
+        "w": "Ostatni tydzień",
+        "m": "Ostatni miesiąc",
+        "y": "Ostatni rok"
+      },
+      "provider": {
+        "name": "Dostawca wyszukiwania",
+        "desc": "Wybierz spośród scraperów przyjaznych prywatności lub wyszukiwarek z API"
+      },
+      "searchLanguage": {
+        "name": "Kod języka",
+        "desc": "Kod języka ISO (np. pl, en, zh-CN) przekazywany do dostawców obsługujących lokalizację"
+      },
+      "searchCountry": {
+        "name": "Kod kraju/rynku",
+        "desc": "Dwuliterowy kod kraju (np. PL, DE) używany przez Bing, DuckDuckGo, Brave i inne"
+      },
+      "includeDomains": {
+        "name": "Uwzględnij tylko te domeny",
+        "desc": "Lista oddzielona przecinkami używana przez SerpAPI i Brave do ograniczania wyników do konkretnych witryn"
+      },
+      "excludeDomains": {
+        "name": "Wyklucz domeny",
+        "desc": "Domeny oddzielone przecinkami do odfiltrowania po pobraniu wyników"
+      },
+      "apiKey": {
+        "name": "Domyślny klucz API",
+        "desc": "Wspólny klucz API używany przez Google, Bing, SerpAPI, Tavily lub Brave, gdy nie są ustawione klucze specyficzne dla dostawcy"
+      },
+      "googleCseId": {
+        "name": "ID niestandardowej wyszukiwarki Google",
+        "desc": "Wymagane z kluczem API Google przy użyciu dostawcy Google"
+      },
+      "serpapiEndpoint": {
+        "name": "Punkt końcowy SerpAPI",
+        "desc": "Nadpisz bazowy URL SerpAPI, jeśli hostujesz go samodzielnie"
+      },
+      "tavilyApiKey": {
+        "name": "Klucz API Tavily",
+        "desc": "Zastępuje domyślny klucz przy użyciu dostawcy Tavily"
+      },
+      "searxngEndpoint": {
+        "name": "Punkt końcowy SearXNG",
+        "desc": "Bazowy URL Twojej instancji SearXNG (musi zwracać JSON)"
+      },
+      "braveApiKey": {
+        "name": "Klucz API Brave",
+        "desc": "Użyj tokenu subskrypcji Brave Search API, gdy jest wybrany jako dostawca"
+      },
+      "qwantApiKey": {
+        "name": "Klucz API Qwant (opcjonalny)",
+        "desc": "Dodaj token bearer, jeśli Twój plan Qwant go zapewnia"
+      },
+      "mojeekApiKey": {
+        "name": "Klucz API Mojeek",
+        "desc": "Wymagany dla dostawcy Mojeek"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (klucz nie wymagany)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (scrapowanie HTML)",
+        "yandex": "Yandex (scrapowanie HTML)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Szybkie akcje",
+      "desc": "Konfiguruj szybkie akcje oparte na AI, które pojawiają się w menu kontekstowym edytora po zaznaczeniu tekstu.",
+      "actionPrefix": {
+        "name": "Prefiks akcji",
+        "desc": "Prefiks (emoji lub tekst) wyświetlany przed wszystkimi szybkimi akcjami w menu kontekstowym",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} akcja skonfigurowana ({{enabled}} włączona)",
+      "count_plural": "{{count}} akcji skonfigurowanych ({{enabled}} włączonych)",
+      "addBtn": "+ dodaj szybką akcję",
+      "empty": "Brak skonfigurowanych szybkich akcji. Wybierz dodaj szybką akcję, aby rozpocząć.",
+      "tableHeaders": {
+        "action": "Akcja",
+        "type": "Typ",
+        "model": "Model",
+        "promptPreview": "Podgląd promptu",
+        "actions": "Akcje"
+      },
+      "defaultModel": "Domyślny",
+      "editBtn": "Edytuj",
+      "deleteBtn": "usuń",
+      "confirm": {
+        "delete": "Usunąć szybką akcję \"{{name}}\"?"
+      },
+      "usageInfo": {
+        "title": "Użycie",
+        "step1": "Zaznacz tekst w dowolnej notatce",
+        "step2": "Kliknij prawym przyciskiem, aby otworzyć menu kontekstowe",
+        "step3": "Wybierz szybką akcję z menu",
+        "step4Replace": "Akcje oznaczone jako \"zamień\" zastąpią zaznaczony tekst wynikiem AI",
+        "step4Explain": "Akcje oznaczone jako \"wyjaśnij\" wyświetlą wynik w oknie dialogowym"
+      },
+      "edit": {
+        "title": "Edytuj szybką akcję",
+        "name": {
+          "name": "Nazwa",
+          "desc": "Wyświetlana nazwa tej akcji w menu kontekstowym"
+        },
+        "actionType": {
+          "name": "Typ akcji",
+          "desc": "Jak powinna być obsługiwana odpowiedź AI",
+          "replace": "Zamień zaznaczony tekst",
+          "explain": "Pokaż w oknie dialogowym"
+        },
+        "model": {
+          "name": "Model",
+          "desc": "Model językowy do użycia dla tej akcji (pozostaw puste, aby użyć domyślnego)",
+          "default": "Użyj domyślnego modelu"
+        },
+        "promptTemplate": {
+          "name": "Szablon promptu",
+          "desc": "Instrukcje wysyłane do AI. Zaznaczony tekst zostanie automatycznie dołączony."
+        },
+        "cancel": "Anuluj",
+        "save": "Zapisz"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Wydłuż tekst",
+          "prompt": "Rozwiń i rozbuduj poniższy tekst, czyniąc go bardziej szczegółowym i kompleksowym przy zachowaniu oryginalnego znaczenia i tonu. Zwróć tylko rozbudowany tekst bez dodatkowych komentarzy:\n\n"
+        },
+        "summarize": {
+          "name": "Podsumuj tekst",
+          "prompt": "Podaj zwięzłe podsumowanie poniższego tekstu. Zwróć tylko podsumowanie bez dodatkowych komentarzy:\n\n"
+        },
+        "improve-writing": {
+          "name": "Popraw pisownię",
+          "prompt": "Popraw jakość, przejrzystość i styl poniższego tekstu. Zwróć tylko poprawiony tekst bez dodatkowych komentarzy:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Popraw gramatykę",
+          "prompt": "Popraw wszelkie błędy gramatyczne, ortograficzne i interpunkcyjne w poniższym tekście. Zwróć tylko poprawiony tekst bez dodatkowych komentarzy:\n\n"
+        },
+        "explain": {
+          "name": "Wyjaśnij tekst",
+          "prompt": "Wyjaśnij poniższy tekst w prostych słowach:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Użycie tokenów",
+      "desc": "Śledź zużycie tokenów u dostawców i modeli. Dane są gromadzone we wszystkich rozmowach.",
+      "notAvailable": "Śledzenie użycia tokenów jest niedostępne.",
+      "ranges": {
+        "today": "Dzisiaj",
+        "week": "Ten tydzień",
+        "month": "Ten miesiąc",
+        "all": "Cały czas"
+      },
+      "stats": {
+        "totalTokens": "Łącznie tokenów",
+        "apiCalls": "Wywołania API",
+        "promptTokens": "Tokeny promptu",
+        "completion": "Uzupełnienie",
+        "tokensIn": "tokeny wejściowe",
+        "tokensOut": "tokeny wyjściowe"
+      },
+      "byProvider": "Według dostawcy",
+      "byModel": "Według modelu",
+      "noData": "Brak danych o użyciu.",
+      "recentActivity": "Ostatnia aktywność",
+      "last10": "ostatnie 10",
+      "noRecent": "Brak ostatniej aktywności.",
+      "tableHeaders": {
+        "provider": "Dostawca",
+        "model": "Model",
+        "prompt": "Prompt",
+        "completion": "Uzupełnienie",
+        "total": "Łącznie",
+        "calls": "Wywołania",
+        "time": "Czas",
+        "in": "Wejście",
+        "out": "Wyjście"
+      },
+      "clearBtn": "Wyczyść wszystkie dane użycia",
+      "confirm": {
+        "clear": "Wyczyścić wszystkie rekordy użycia tokenów? Tej operacji nie można cofnąć."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Wpisz wiadomość... (Enter, aby wysłać, Shift+Enter dla nowego wiersza)",
+    "conversations": "Rozmowy",
+    "toggleConversationsTitle": "Przełącz listę rozmów",
+    "currentConversation": "Bieżąca rozmowa",
+    "new": "Nowy",
+    "settings": "Ustawienia",
+    "openSettingsTitle": "Otwórz ustawienia wtyczki",
+    "mode": "Tryb",
+    "prompt": "Prompt",
+    "agent": "Agent",
+    "modeOptions": {
+      "chat": "Czat",
+      "agent": "Agent"
+    },
+    "noSystemPrompt": "Brak promptu systemowego",
+    "noAgentsAvailable": "Brak dostępnych agentów",
+    "sendHintPrefix": "Naciśnij ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": ", aby wysłać",
+    "sendAriaLabel": "Wyślij wiadomość",
+    "stop": " Zatrzymaj",
+    "addReference": "Dodaj odwołanie",
+    "addReferenceTooltip": "Dodaj odwołanie do pliku lub folderu (@)",
+    "emptyHeading": "Rozpocznij rozmowę",
+    "emptySubtext": "Wpisz wiadomość poniżej, aby rozpocząć, lub wybierz rozmowę z historii.",
+    "noAgentConfig": "Brak skonfigurowanych agentów",
+    "selectAgent": "Wybierz agenta…",
+    "notices": {
+      "stopping": "Zatrzymywanie generowania...",
+      "ragInitError": "Błąd inicjalizacji RAG: {{message}}",
+      "modelsRefreshed": "Modele odświeżone",
+      "modelsRefreshFailed": "Nie udało się odświeżyć modeli: {{message}}",
+      "waitForResponse": "Poczekaj na zakończenie bieżącej odpowiedzi",
+      "configureProvider": "Najpierw skonfiguruj dostawcę LLM w ustawieniach",
+      "selectModel": "Wybierz model",
+      "noValidProvider": "Nie znaleziono prawidłowej konfiguracji dostawcy dla tego modelu",
+      "chatError": "Błąd czatu: {{message}}",
+      "noMessageToRegenerate": "Nie można znaleźć wiadomości do regeneracji",
+      "regenerateOnlyLatest": "W tej chwili można regenerować tylko najnowszą odpowiedź",
+      "regenerateNoUserMsg": "Nie można znaleźć wiadomości użytkownika do regeneracji",
+      "regenerated": "Odpowiedź zregenerowana",
+      "regenerateFailed": "Regeneracja nie powiodła się: {{message}}",
+      "noteCreated": "Notatka utworzona: {{name}}",
+      "noteCreateFailed": "Nie udało się utworzyć notatki: {{message}}",
+      "messageInserted": "Wiadomość wstawiona do: {{path}}",
+      "messageInsertFailed": "Nie udało się wstawić wiadomości: {{message}}",
+      "noAgents": "Brak dostępnych agentów. Skonfiguruj agentów w Ustawienia → Agenci.",
+      "ragDisabled": "RAG jest wyłączony w ustawieniach. Włącz go w ustawieniach → funkcje czatu → RAG.",
+      "webSearchDisabled": "Wyszukiwanie w sieci jest wyłączone w ustawieniach. Włącz je w ustawieniach → funkcje czatu → wyszukiwanie w sieci.",
+      "noFilesInVault": "Nie znaleziono plików w sejfie",
+      "attached": "Dołączono: {{name}}",
+      "attachedImages": "Dołączono {{count}} obraz(y/ów)",
+      "referencesAdded": "Dodano {{count}} odwołanie(a/ń)",
+      "fileNotFound": "Nie znaleziono pliku: {{path}}",
+      "agentConfigApplied": "Zastosowano konfigurację agenta: {{name}}",
+      "waitForComplete": "Poczekaj na zakończenie bieżącej odpowiedzi",
+      "chatServiceFallback": "ChatService nie skonfigurowany. Używanie awaryjnego ChatView.",
+      "noModelSelected": "Nie wybrano modelu",
+      "noProviderConfig": "Nie znaleziono konfiguracji dostawcy",
+      "generationStopped": "Generowanie zatrzymane",
+      "noResponseToRegenerate": "Brak odpowiedzi do regeneracji",
+      "agentNotFound": "Nie znaleziono agenta",
+      "unableToLoadRag": "Nie można załadować statystyk RAG.",
+      "referenced": "Odwołano się do: {{name}}"
+    },
+    "status": {
+      "available": "Dostępny",
+      "unavailable": "Niedostępny",
+      "disabled": "Wyłączony",
+      "on": "Włączony · {{detail}}",
+      "off": "Wyłączony"
+    },
+    "ragStats": {
+      "title": "Statystyki RAG",
+      "totalChunks": "📊 łącznie fragmentów:",
+      "filesIndexed": "📁 zindeksowane pliki:",
+      "totalSize": "💾 łączny rozmiar:",
+      "avgChunks": "📈 Śr. fragmentów/plik:",
+      "indexedFiles": "📄 zindeksowane pliki",
+      "noFilesYet": "⚠️ żadne pliki nie zostały jeszcze zindeksowane.",
+      "howToBuild": "Aby zbudować indeks RAG:",
+      "step1": "Przejdź do Ustawienia → RAG",
+      "step2": "Włącz RAG",
+      "step3": "Wybierz indeksuj sejf",
+      "close": "Zamknij",
+      "retrieved": "📚 pobrano z {{count}} dokumentu",
+      "retrieved_plural": "📚 pobrano z {{count}} dokumentów"
+    },
+    "ragTooltip": {
+      "status": "Status indeksu RAG:",
+      "totalChunks": "📊 Łącznie fragmentów: {{count}}",
+      "filesIndexed": "📁 Zindeksowane pliki: {{count}}",
+      "totalSize": "💾 Łączny rozmiar: {{size}} KB",
+      "indexedFiles": "📄 zindeksowane pliki:",
+      "andMore": "  ... i {{count}} więcej",
+      "noFilesYet": "⚠️ brak zindeksowanych plików.",
+      "goToSettings": "Przejdź do Ustawienia → RAG, aby zbudować indeks.",
+      "ragOff": "ℹ️ RAG jest obecnie wyłączony dla tego czatu."
+    },
+    "agentSummary": {
+      "model": "Model",
+      "temp": "Temp",
+      "max": "Maks",
+      "rag": "RAG",
+      "web": "Sieć",
+      "tools": "Narzędzia",
+      "memory": "Pamięć",
+      "none": "Brak",
+      "configuration": "Konfiguracja {{name}}",
+      "modelFixed": "{{name}} · Stały",
+      "modelDefault": "{{name}} · Domyślny",
+      "modelChatView": "{{name}} · Widok czatu",
+      "customModel": "Własny model",
+      "notSet": "Nie ustawiono",
+      "auto": "Auto",
+      "on": "Włączony",
+      "off": "Wyłączony",
+      "shortTerm": "Krótkoterminowa",
+      "longTerm": "Długoterminowa",
+      "disabledMemory": "Wyłączona",
+      "builtIn": "{{count}} wbudowane",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Wyniki z sieci",
+      "attachments": "Załączniki",
+      "references": "Odwołania",
+      "ragSources": "Źródła RAG",
+      "reasoning": "Rozumowanie",
+      "copy": "Kopiuj",
+      "copied": "Wiadomość skopiowana",
+      "copyFailed": "Nie udało się skopiować wiadomości",
+      "tokenUsage": "Użycie tokenów",
+      "tokenUsagePrompt": "Prompt",
+      "tokenUsageCompletion": "Uzupełnienie",
+      "tokenUsageTotal": "Łącznie",
+      "save": "Zapisz",
+      "insertToNotes": "Wstaw do notatek",
+      "regenerate": "Regeneruj"
+    },
+    "streaming": {
+      "thinking": "Myślę..."
+    },
+    "toolCall": {
+      "thinking": "Myślenie",
+      "executionProcess": "Proces wykonania",
+      "input": "Wejście",
+      "output": "Wyjście",
+      "running": "Uruchamianie..."
+    },
+    "addPicture": "Dodaj zdjęcie",
+    "addPictureTooltip": "Dołącz obraz do swojej wiadomości",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Używaj zindeksowanych notatek jako kontekstu",
+    "webSearchLabel": "Wyszukiwanie w sieci",
+    "webSearchTooltipLabel": "Przeszukuj internet w razie potrzeby",
+    "imageUnavailable": "Załącznik obrazu jest niedostępny dla bieżącego modelu.",
+    "newChat": "Nowy czat",
+    "newConversation": "Nowa rozmowa",
+    "searchConversations": "Szukaj rozmów...",
+    "header": {
+      "model": "Model",
+      "advancedParams": "Parametry zaawansowane",
+      "temperature": "Temperatura",
+      "maxTokens": "Maks. tokenów",
+      "topP": "Top P",
+      "freqPenalty": "Kara częstotliwości",
+      "presPenalty": "Kara obecności",
+      "agentConfig": "Konfiguracja agenta",
+      "modelsCount": "Modele: {{count}}",
+      "tokensCount": "Tokeny: {{count}}",
+      "noModels": "Brak dostępnych modeli"
+    },
+    "temperature": {
+      "precise": "0 (Precyzyjny)",
+      "balanced": "1 (Zrównoważony)",
+      "creative": "2 (Kreatywny)"
+    },
+    "modals": {
+      "image": {
+        "title": "Dołącz obrazy",
+        "searchPlaceholder": "Szukaj obrazów...",
+        "selectAll": "Zaznacz wszystkie",
+        "selectNone": "Odznacz wszystkie",
+        "addSelected": "Dodaj zaznaczone",
+        "noResults": "Nie znaleziono pasujących obrazów."
+      },
+      "reference": {
+        "title": "Dodaj odwołania",
+        "searchPlaceholder": "Szukaj plików i folderów...",
+        "selectAll": "Zaznacz wszystkie",
+        "selectNone": "Odznacz wszystkie",
+        "addSelected": "Dodaj zaznaczone",
+        "noResults": "Nie znaleziono pasujących plików ani folderów."
+      },
+      "insertNote": {
+        "title": "Wstaw do notatki",
+        "searchPlaceholder": "Szukaj notatek...",
+        "insert": "Wstaw do wybranej notatki",
+        "createNew": "Utwórz nową notatkę",
+        "noResults": "Nie znaleziono pasujących notatek."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Anuluj",
+      "confirm": "Potwierdź"
+    },
+    "agentEdit": {
+      "title": "Edytuj agenta",
+      "icon": {
+        "name": "Ikona",
+        "desc": "Emoji lub znak reprezentujący tego agenta"
+      },
+      "description": {
+        "name": "Opis",
+        "desc": "Krótki opis agenta"
+      },
+      "modelStrategy": {
+        "name": "Strategia modelu",
+        "options": {
+          "default": "Użyj domyślnego modelu (z ustawień)",
+          "chatView": "Użyj modelu widoku czatu",
+          "fixed": "Stały model"
+        },
+        "noModels": "Brak modeli w pamięci podręcznej",
+        "desc": "Wybierz, jak agent będzie wybierał swój model"
+      },
+      "systemPrompt": {
+        "createNew": "➕ utwórz nowy prompt…",
+        "promptName": {
+          "name": "Nazwa promptu",
+          "desc": "Wyświetlana nazwa nowego promptu systemowego"
+        },
+        "promptContent": {
+          "name": "Treść promptu",
+          "desc": "Treść nowego promptu systemowego"
+        },
+        "name": "Prompt systemowy",
+        "desc": "Wybierz spośród istniejących promptów lub zdefiniuj nowy dla tego agenta."
+      },
+      "capabilities": "Możliwości",
+      "memory": {
+        "title": "Pamięć",
+        "notice": "Pamięć agenta jest tymczasowo niedostępna, podczas gdy pracujemy nad ulepszeniem tego doświadczenia."
+      },
+      "tools": {
+        "title": "Narzędzia",
+        "builtIn": {
+          "name": "Narzędzia wbudowane",
+          "desc": "Wybierz, których narzędzi wbudowanych może używać ten agent"
+        },
+        "cli": {
+          "name": "Narzędzia CLI",
+          "desc": "Przyznaj dostęp do wszystkich włączonych narzędzi CLI lub wybierz indywidualnie poniżej",
+          "noTools": "Brak skonfigurowanych narzędzi CLI. Dodaj i włącz narzędzia w Ustawienia → Narzędzia → CLI, aby używać ich tutaj."
+        }
+      },
+      "mcp": {
+        "title": "Dostęp do MCP",
+        "noServers": "Brak skonfigurowanych serwerów MCP. Dodaj serwery w Ustawienia → MCP, aby odblokować te opcje.",
+        "toolsCached": "{{count}} narzędzie w pamięci podręcznej",
+        "toolsCached_plural": "{{count}} narzędzi w pamięci podręcznej",
+        "noToolsCached": "Brak narzędzi w pamięci podręcznej. Włącz pełny dostęp lub odśwież pamięć podręczną.",
+        "showTools": "Pokaż narzędzia",
+        "hideTools": "Ukryj narzędzia",
+        "selected": "Wybrane",
+        "notSelected": "Nie wybrane",
+        "noToolsAvailable": "Brak dostępnych narzędzi z tego serwera."
+      },
+      "notices": {
+        "promptRequired": "Podaj nazwę i treść nowego promptu systemowego."
+      },
+      "name": {
+        "label": "Nazwa",
+        "desc": "Wyświetlana nazwa tego agenta"
+      },
+      "fixedModel": {
+        "name": "Stały model",
+        "desc": "Wybierz konkretny model dla tego agenta.",
+        "descNoModels": "Brak dostępnych modeli w pamięci podręcznej. Odśwież modele na karcie Modele."
+      },
+      "temperature": {
+        "label": "Temperatura",
+        "desc": "Kontroluje losowość (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Maks. tokenów",
+        "desc": "Maksymalna liczba tokenów do wygenerowania"
+      },
+      "contextWindow": {
+        "label": "Okno kontekstu",
+        "desc": "Liczba poprzednich wiadomości do uwzględnienia w kontekście"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Włącz generowanie wspomagane wyszukiwaniem"
+      },
+      "webSearch": {
+        "name": "Wyszukiwanie w sieci",
+        "desc": "Włącz możliwości wyszukiwania w sieci"
+      },
+      "maxSteps": {
+        "name": "Maks. kroków narzędzi",
+        "desc": "Maksymalna liczba kroków wywołania narzędzi na turę agenta"
+      }
+    },
+    "provider": {
+      "title": "Ustawienia dostawcy",
+      "selectProvider": {
+        "name": "Dostawca",
+        "desc": "Wybierz typ dostawcy LLM",
+        "placeholder": "-- Wybierz dostawcę --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (lokalny)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Własny (kompatybilny z OpenAI)"
+      },
+      "modelFilter": {
+        "name": "Filtr modeli",
+        "desc": "Opcjonalny wzorzec regex do ograniczenia dostępnych modeli"
+      },
+      "resourceGroup": {
+        "name": "Grupa zasobów",
+        "desc": "Opcjonalna grupa zasobów SAP AI Core"
+      },
+      "serviceKey": {
+        "name": "Klucz usługi",
+        "desc": "Klucz usługi SAP AI Core (ciąg JSON)"
+      },
+      "baseUrl": {
+        "name": "Bazowy URL",
+        "ollamaDesc": "URL serwera Ollama",
+        "customDesc": "Punkt końcowy API kompatybilny z OpenAI (wymagany)",
+        "optionalDesc": "Własny punkt końcowy API (opcjonalny)"
+      },
+      "manageModels": {
+        "name": "Zarządzaj modelami",
+        "desc": "Pobieraj nowe modele lub aktualizuj istniejące z rejestru Ollama.",
+        "btn": "⏬ Pobierz model Ollama"
+      },
+      "apiKey": {
+        "name": "Klucz API",
+        "desc": "Klucz uwierzytelniający dla wybranego dostawcy"
+      },
+      "cancel": "Anuluj",
+      "save": "Zapisz",
+      "validation": {
+        "selectProvider": "Wybierz typ dostawcy",
+        "apiKeyTooLong": "Klucz API jest zbyt długi. Maksymalna długość wynosi 500 znaków.",
+        "invalidUrl": "Nieprawidłowy format bazowego URL. Wprowadź prawidłowy URL (np. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "Inspektor MCP",
+      "desc": "Sprawdzaj i debuguj połączenia serwerów i narzędzi Model Context Protocol (MCP).",
+      "tabs": {
+        "connections": "Połączenia",
+        "tools": "Narzędzia",
+        "logs": "Dzienniki"
+      },
+      "refreshBtn": "🔄 odśwież",
+      "connections": {
+        "title": "Połączenia serwerów MCP",
+        "noServers": "Brak skonfigurowanych serwerów MCP.",
+        "headers": {
+          "server": "Nazwa serwera",
+          "status": "Status",
+          "tools": "Dostępne narzędzia",
+          "actions": "Akcje"
+        },
+        "statusDisabled": "Wyłączony",
+        "statusConnected": "● połączony",
+        "statusDisconnected": "○ rozłączony",
+        "toolsLive": "{{count}} narzędzie",
+        "toolsLive_plural": "{{count}} narzędzi",
+        "toolsCached": "{{count}} narzędzie (w pamięci podręcznej)",
+        "toolsCached_plural": "{{count}} narzędzi (w pamięci podręcznej)",
+        "noTools": "0 narzędzi",
+        "connectBtn": "Połącz",
+        "disconnectBtn": "Rozłącz",
+        "connecting": "Łączenie...",
+        "disconnecting": "Rozłączanie...",
+        "notices": {
+          "disconnected": "Rozłączono z {{name}}",
+          "enableFirst": "Włącz serwer w ustawieniach przed nawiązaniem połączenia",
+          "connected": "Połączono z {{name}}",
+          "failedDisconnect": "Nie udało się rozłączyć z {{name}}: {{message}}",
+          "failedConnect": "Nie udało się połączyć z {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Dostępne narzędzia MCP",
+        "noTools": "Brak dostępnych narzędzi MCP. Sprawdź połączenia serwerów.",
+        "serverPrefix": "Serwer: {{name}}",
+        "noToolsInServer": "Brak dostępnych narzędzi",
+        "headers": {
+          "tool": "Nazwa narzędzia",
+          "description": "Opis",
+          "parameters": "Parametry"
+        },
+        "noDescription": "Brak opisu",
+        "noParams": "Brak"
+      },
+      "logs": {
+        "title": "Dzienniki połączeń MCP",
+        "placeholder": "Dzienniki połączeń MCP pojawią się tutaj. Obecnie wyświetlane są informacje zastępcze.",
+        "events": {
+          "connection": "• zdarzenia połączenia",
+          "tools": "• zdarzenia rejestracji narzędzi",
+          "errors": "• dzienniki błędów",
+          "comms": "• szczegóły komunikacji"
+        },
+        "testTitle": "Testowe wykonanie narzędzia",
+        "selectServer": "Wybierz serwer...",
+        "selectTool": "Wybierz narzędzie...",
+        "parametersTitle": "Parametry",
+        "selectEnum": "Wybierz...",
+        "performBtn": "Wykonaj narzędzie",
+        "clearBtn": "Wyczyść wyniki",
+        "executing": "Wykonywanie...",
+        "success": "✅ wykonanie pomyślne",
+        "failed": "❌ wykonanie nieudane",
+        "errorTitle": "❌ błąd wykonania",
+        "errorLabel": "Błąd: {{message}}",
+        "notices": {
+          "success": "Narzędzie wykonane pomyślnie",
+          "failed": "Wykonanie narzędzia nie powiodło się",
+          "error": "Błąd wykonania: {{message}}",
+          "requiredMissing": "Brak wymaganego parametru: {{name}}",
+          "invalidNumber": "Nieprawidłowa liczba dla parametru: {{name}}",
+          "invalidJson": "Nieprawidłowy JSON dla parametru: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Brak skonfigurowanych serwerów MCP",
+        "testing": "🧪 Testowanie {{count}} połączeń z serwerami MCP...",
+        "allSuccess": "✅ wszystkie {{count}} serwery MCP połączone pomyślnie!",
+        "partial": "⚠️ {{success}} połączono, {{failed}} nie powiodło się"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Edytuj serwer MCP",
+      "titleAdd": "Dodaj serwer MCP",
+      "serverName": {
+        "name": "Nazwa serwera",
+        "desc": "Przyjazna nazwa wyświetlana w całej wtyczce"
+      },
+      "connectionMode": {
+        "name": "Tryb połączenia",
+        "desc": "Wybierz, czy połączyć automatycznie, czy tylko po ręcznym wyzwoleniu",
+        "auto": "Automatycznie połącz przy otwarciu czatu",
+        "manual": "Ręczne połączenie"
+      },
+      "command": {
+        "name": "Polecenie",
+        "desc": "Plik wykonywalny lub skrypt uruchamiający serwer MCP"
+      },
+      "arguments": {
+        "name": "Argumenty",
+        "desc": "Argumenty oddzielone przecinkami lub nowym wierszem (opcjonalne)"
+      },
+      "envVars": {
+        "name": "Zmienne środowiskowe",
+        "desc": "Opcjonalne pary KLUCZ=WARTOŚĆ, jedna w wierszu"
+      },
+      "enabled": {
+        "name": "Włączony",
+        "desc": "Wyłącz, aby zachować skonfigurowany serwer bez automatycznego łączenia"
+      },
+      "cancel": "Anuluj",
+      "saveEdit": "Zapisz zmiany",
+      "saveAdd": "Dodaj serwer",
+      "validation": {
+        "nameRequired": "Nazwa serwera jest wymagana",
+        "commandRequired": "Polecenie jest wymagane"
+      }
+    },
+    "ollamaManager": {
+      "title": "Zarządzaj modelami Ollama",
+      "serverInfo": "Informacje o serwerze",
+      "checkingServer": "Sprawdzanie serwera...",
+      "serverOnline": "✅ Serwer online",
+      "versionLabel": " | Wersja: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Serwer offline",
+      "connectionError": "❌ Błąd połączenia",
+      "pullTitle": "Pobierz nowy model",
+      "pullHint": "Wpisz nazwę modelu do pobrania z biblioteki Ollama (np. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Nazwa modelu",
+        "example": "Przykład: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Pobierz model",
+      "installedTitle": "Zainstalowane modele",
+      "refreshList": "🔄 Odśwież listę",
+      "noModels": "Nie znaleziono modeli. Pobierz model, aby rozpocząć.",
+      "capabilities": "Możliwości: {{caps}}",
+      "deleteBtn": "Usuń",
+      "closeBtn": "Zamknij",
+      "confirmDelete": {
+        "title": "Potwierdź usunięcie",
+        "message": "Czy na pewno chcesz usunąć model \"{{name}}\"?",
+        "cancel": "Anuluj",
+        "confirm": "Usuń"
+      },
+      "notices": {
+        "enterName": "Wprowadź nazwę modelu",
+        "pulling": "Pobieranie {{name}}... Może to chwilę potrwać.",
+        "pullSuccess": "✅ Pomyślnie pobrano {{name}}",
+        "pullFailed": "❌ Nie udało się pobrać modelu: {{message}}",
+        "deleted": "✅ Usunięto {{name}}",
+        "deleteFailed": "❌ Nie udało się usunąć modelu: {{message}}",
+        "refreshing": "Odświeżanie...",
+        "refreshSuccess": "✅ Lista modeli odświeżona",
+        "refreshFailed": "❌ Nie udało się odświeżyć listy modeli"
+      }
+    },
+    "promptEdit": {
+      "title": "Edytuj prompt systemowy",
+      "name": {
+        "name": "Nazwa",
+        "desc": "Wyświetlana nazwa tego promptu"
+      },
+      "content": {
+        "name": "Treść",
+        "desc": "Treść promptu systemowego"
+      },
+      "enabled": {
+        "name": "Włączony",
+        "desc": "Czy ten prompt jest aktywny"
+      },
+      "cancel": "Anuluj",
+      "save": "Zapisz"
+    },
+    "prompt": {
+      "cancel": "Anuluj",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Nazwa",
+      "create": "Utwórz",
+      "cancel": "Anuluj"
+    },
+    "explain": {
+      "loading": "⏳ Przetwarzanie...",
+      "error": "Błąd renderowania wyjaśnienia",
+      "errorPrefix": "❌ Błąd: "
+    }
+  },
+  "notices": {
+    "noProvider": "Najpierw skonfiguruj dostawcę LLM w ustawieniach",
+    "noModel": "Wybierz domyślny model w ustawieniach",
+    "noValidProvider": "Nie znaleziono prawidłowej konfiguracji dostawcy dla modelu: {{modelId}}",
+    "processing": "Przetwarzanie...",
+    "textUpdated": "Tekst zaktualizowany pomyślnie",
+    "error": "Błąd: {{message}}"
+  }
+}

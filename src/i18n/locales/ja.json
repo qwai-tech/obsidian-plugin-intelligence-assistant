@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "一般",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "ツール",
+      "rag": "RAG",
+      "prompts": "プロンプト",
+      "agents": "エージェント",
+      "quickActions": "クイックアクション",
+      "usage": "使用状況"
+    },
+    "general": {
+      "title": "一般設定",
+      "desc": "インテリジェンスアシスタントプラグインの一般設定を構成します。",
+      "pluginVersion": {
+        "name": "プラグインバージョン",
+        "desc": "インテリジェンスアシスタントプラグインの現在のバージョン"
+      },
+      "defaultModel": {
+        "name": "デフォルトモデル",
+        "desc": "会話に使用するデフォルトモデル",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "デフォルトチャットモード",
+        "desc": "チャットビューを開くモードを選択",
+        "chat": "チャットモード",
+        "agent": "エージェントモード"
+      },
+      "conversationTitleMode": {
+        "name": "会話タイトルモード",
+        "desc": "会話タイトルの生成方法",
+        "firstMessage": "最初のメッセージを使用",
+        "autoSummary": "サマリーを自動生成",
+        "manual": "手動"
+      },
+      "conversationIcons": {
+        "name": "会話アイコン",
+        "desc": "会話の自動アイコン生成を有効にする"
+      },
+      "configStatus": {
+        "name": "設定ステータス",
+        "desc": "プラグインの全体的な設定ステータス",
+        "ok": "✅ 設定済み ({{providers}} プロバイダー、{{conversations}} 会話)",
+        "incomplete": "⚠️ 未完了 - プロバイダーとモデルを設定してください"
+      }
+    },
+    "llm": {
+      "title": "LLM 設定",
+      "desc": "言語モデルプロバイダーを設定し、利用可能なモデルを管理します。",
+      "subTabs": {
+        "provider": "プロバイダー",
+        "models": "モデル"
+      }
+    },
+    "models": {
+      "title": "モデル設定",
+      "desc": "すべての設定済みプロバイダーからモデルを表示・管理します。「モデルを更新」をクリックして最新の利用可能なモデルを取得します。",
+      "providerCount": "{{count}} プロバイダー設定済み",
+      "providerCount_plural": "{{count}} プロバイダー設定済み",
+      "refreshAll": "🔄 すべてのモデルを更新",
+      "empty": "プロバイダーがまだ設定されていません。先にプロバイダータブでプロバイダーを追加してください。",
+      "noModels": "利用可能なモデルがありません。「すべてのモデルを更新」をクリックするか、プロバイダータブで個別のプロバイダーを更新してください。",
+      "noMatch": "現在のフィルターに一致するモデルがありません。フィルターを調整またはクリアして結果を表示してください。",
+      "modelCount": "• {{count}} モデルキャッシュ済み",
+      "modelCount_plural": "• {{count}} モデルキャッシュ済み",
+      "matchCount": "• {{count}} 件が選択フィルターに一致",
+      "matchCount_plural": "• {{count}} 件が選択フィルターに一致",
+      "status": {
+        "enabled": "有効",
+        "disabled": "無効"
+      },
+      "actions": {
+        "disable": "無効化",
+        "enable": "有効化",
+        "setDefaultChat": "デフォルトチャットに設定",
+        "defaultChat": "デフォルトチャット",
+        "setDefaultEmbedding": "デフォルト埋め込みに設定",
+        "defaultEmbedding": "デフォルト埋め込み"
+      },
+      "notices": {
+        "fetching": "{{provider}} のモデルを取得中...",
+        "fetchFailed": "{{provider}} モデルの更新に失敗しました",
+        "refreshed": "モデルが正常に更新されました！",
+        "refreshFailed": "モデルの更新に失敗しました",
+        "defaultChatSet": "デフォルトチャットモデルを {{name}} に設定しました",
+        "defaultEmbeddingSet": "デフォルト埋め込みモデルを {{name}} に設定しました"
+      },
+      "filters": {
+        "allProviders": "すべてのプロバイダー",
+        "allCapabilities": "すべての機能",
+        "allStates": "すべての状態",
+        "searchPlaceholder": "名前またはIDで検索"
+      }
+    },
+    "provider": {
+      "title": "プロバイダー設定",
+      "securityTitle": "⚠️ セキュリティ警告",
+      "securityDesc": "API キーは互換性のためにボルト内にプレーンテキストで保存されます。誤った漏洩を防ぐには：",
+      "securityItem1": "{{configDir}}/plugins/intelligence-assistant/data/ フォルダーを共有しないでください。",
+      "securityItem2": "Git 同期を使用する場合は、このフォルダーを .gitignore に追加してください。",
+      "securityItem3": "パブリッククラウド同期サービスを使用する際は注意してください。",
+      "desc": "LLM プロバイダーと API 認証情報を管理します。アクション列を使用して設定の詳細を編集するか、キャッシュされたモデルを更新します。",
+      "count": "{{count}} プロバイダー設定済み",
+      "count_plural": "{{count}} プロバイダー設定済み",
+      "addBtn": "+ プロバイダーを追加",
+      "empty": "プロバイダーが設定されていません。「プロバイダーを追加」を選択して開始してください。",
+      "tableHeaders": {
+        "provider": "プロバイダー",
+        "status": "ステータス",
+        "actions": "アクション"
+      },
+      "status": {
+        "ready": "準備完了",
+        "needsConfig": "設定が必要",
+        "checking": "確認中...",
+        "credentialsSet": "認証情報設定済み",
+        "serverOnline": "サーバーオンライン",
+        "serverOffline": "サーバーオフライン",
+        "serverError": "サーバーエラー"
+      },
+      "guidance": {
+        "requiresCli": "ローカル CLI が必要",
+        "provideServiceKey": "サービスキーを提供",
+        "configureBaseUrl": "ベース URL を設定",
+        "addApiKey": "API キーを追加"
+      },
+      "models": {
+        "none": "モデルなし",
+        "count": "{{count}} モデル",
+        "count_plural": "{{count}} モデル"
+      },
+      "ollama": {
+        "checkingVersion": "バージョン確認中...",
+        "server": {
+          "checking": "サーバー確認中...",
+          "online": "サーバー: オンライン",
+          "offline": "サーバー: オフラインまたは接続不可",
+          "error": "サーバー: 接続エラー",
+          "versionOnline": "サーバーオンライン",
+          "versionOffline": "サーバーオフライン",
+          "versionError": "接続エラー",
+          "version": "バージョン: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "最終更新: {{timeAgo}}",
+        "neverRefreshed": "更新されていません",
+        "justNow": "たった今",
+        "minutesAgo": "{{n}}分前",
+        "hoursAgo": "{{n}}時間前",
+        "daysAgo": "{{n}}日前"
+      },
+      "actions": {
+        "edit": "編集",
+        "manageModels": "モデルを管理",
+        "refreshModels": "モデルを更新",
+        "refreshing": "更新中...",
+        "delete": "削除"
+      },
+      "notices": {
+        "refreshed": "{{provider}} のモデルが更新されました。",
+        "refreshFailed": "モデルの更新に失敗しました"
+      },
+      "confirm": {
+        "delete": "プロバイダー {{provider}} を削除しますか？"
+      }
+    },
+    "mcp": {
+      "title": "MCP サーバー管理",
+      "desc": "Model Context Protocol (MCP) サーバーを設定して、外部ツールとデータソースでエージェント機能を拡張します。",
+      "inspectorBtn": "🔍 MCP インスペクターを開く",
+      "testAllBtn": "🧪 すべての接続をテスト",
+      "refreshAllBtn": "🔄 すべてのツールを更新",
+      "addBtn": "+ MCP サーバーを追加",
+      "empty": "MCP サーバーが設定されていません。「MCP サーバーを追加」を選択して開始してください。",
+      "tableHeaders": {
+        "name": "名前",
+        "command": "コマンド",
+        "arguments": "引数",
+        "status": "ステータス",
+        "tools": "ツール",
+        "actions": "アクション"
+      },
+      "untitled": "無題の MCP サーバー",
+      "notConfigured": "未設定",
+      "noArgs": "なし",
+      "cached": "キャッシュ済み",
+      "disabled": "無効",
+      "envVars": "{{count}} 環境変数",
+      "envVars_plural": "{{count}} 環境変数",
+      "status": {
+        "disabled": "無効",
+        "connected": "接続済み",
+        "disconnected": "切断済み",
+        "enableToManage": "接続を管理するには有効化してください",
+        "manualConnect": "手動接続",
+        "autoConnect": "自動接続"
+      },
+      "toolCount": {
+        "live": "{{count}} ライブツール",
+        "live_plural": "{{count}} ライブツール",
+        "cached": "{{count}} キャッシュツール",
+        "cached_plural": "{{count}} キャッシュツール"
+      },
+      "actions": {
+        "edit": "編集",
+        "enabled": "✓ 有効",
+        "enabledOff": "✗ 無効",
+        "connect": "接続",
+        "disconnect": "切断",
+        "connecting": "接続中...",
+        "disconnecting": "切断中...",
+        "test": "テスト",
+        "testing": "テスト中...",
+        "delete": "削除"
+      },
+      "notices": {
+        "disconnected": "{{name}} から切断しました",
+        "connected": "{{name}} に接続しました",
+        "autoConnectFailed": "{{name}} の自動接続に失敗しました",
+        "enableFirst": "接続する前にサーバーを有効化してください",
+        "disconnectFailed": "{{name}} からの切断に失敗しました",
+        "connectFailed": "{{name}} への接続に失敗しました",
+        "testNoCommand": "❌ 接続をテストする前にコマンドを入力してください",
+        "testSuccess": "✅ 接続に成功しました！{{count}} ツールが見つかりました。",
+        "testFailed": "❌ 接続に失敗しました: {{message}}",
+        "refreshedAll": "✅ {{count}} サーバーのツールを更新しました",
+        "refreshedAll_plural": "✅ {{count}} サーバーのツールを更新しました",
+        "refreshedPartial": "✅ {{success}} サーバー更新完了、❌ {{failed}} 失敗",
+        "noServersConfigured": "⚠️ MCP サーバーが設定されていません",
+        "testingAll": "🧪 {{count}} MCP サーバー接続をテスト中...",
+        "testAllSuccess": "✅ すべての {{count}} MCP サーバーが正常に接続されました！",
+        "testAllPartial": "⚠️ {{successful}} 接続済み、{{failed}} 失敗"
+      },
+      "confirm": {
+        "delete": "MCP サーバー「{{name}}」を削除しますか？"
+      }
+    },
+    "agents": {
+      "title": "エージェント管理",
+      "desc": "特定の機能、ツール、動作を持つ AI エージェントを作成・管理します。",
+      "count": "{{count}} エージェント設定済み",
+      "count_plural": "{{count}} エージェント設定済み",
+      "addBtn": "+ エージェントを追加",
+      "empty": "エージェントが設定されていません。「エージェントを追加」を選択して開始してください。",
+      "tableHeaders": {
+        "agent": "エージェント",
+        "model": "モデル",
+        "capabilities": "機能",
+        "tools": "ツール",
+        "actions": "アクション"
+      },
+      "defaultBadge": "デフォルト",
+      "systemPrompt": "システムプロンプト • {{promptName}}",
+      "customPrompt": "カスタムプロンプト",
+      "model": {
+        "notSet": "未設定",
+        "notFound": "キャッシュにモデルが見つかりません",
+        "useChatView": "チャットビューモデルを使用",
+        "useChatViewDesc": "チャットビューで選択されたモデルを使用します",
+        "useDefault": "デフォルトモデルを使用",
+        "useDefaultDesc": "設定のデフォルトモデルを使用します"
+      },
+      "capabilities": {
+        "noSpecialModes": "特別なモードなし"
+      },
+      "tools": {
+        "builtIn": "{{count}} 組み込み",
+        "mcpServer": "{{count}} MCP サーバー",
+        "mcpServer_plural": "{{count}} MCP サーバー",
+        "mcpTool": "{{count}} MCP ツール",
+        "mcpTool_plural": "{{count}} MCP ツール",
+        "noTools": "ツールが有効化されていません"
+      },
+      "actions": {
+        "edit": "編集",
+        "delete": "削除",
+        "protected": "保護済み"
+      },
+      "confirm": {
+        "delete": "エージェント「{{name}}」を削除しますか？"
+      }
+    },
+    "prompts": {
+      "title": "システムプロンプト",
+      "desc": "AI アシスタントの動作と個性を定義するシステムプロンプトを管理します。",
+      "addBtn": "+ システムプロンプトを追加",
+      "empty": "システムプロンプトが設定されていません。「システムプロンプトを追加」を選択して開始してください。",
+      "tableHeaders": {
+        "name": "名前",
+        "contentPreview": "コンテンツプレビュー",
+        "created": "作成日",
+        "updated": "更新日",
+        "enabled": "有効",
+        "actions": "アクション"
+      },
+      "status": {
+        "enabled": "有効",
+        "disabled": "無効"
+      },
+      "actions": {
+        "edit": "編集",
+        "disable": "無効化",
+        "enable": "有効化",
+        "delete": "削除"
+      },
+      "confirm": {
+        "delete": "プロンプト「{{name}}」を削除しますか？"
+      }
+    },
+    "tools": {
+      "title": "ツール設定",
+      "desc": "組み込みツールを確認し、接続されたサーバーから読み込まれた MCP ツールを探索します。エージェントが実行できるアクションを有効化してください。",
+      "subTabs": {
+        "builtIn": "組み込みツール",
+        "mcp": "MCP ツール",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI ツール"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "名前",
+          "category": "カテゴリー",
+          "description": "説明",
+          "parameters": "パラメーター",
+          "enabled": "有効"
+        },
+        "categories": {
+          "fileOps": "ファイル操作",
+          "searchDisc": "検索と探索",
+          "noteMgmt": "ノート管理"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "ボルトからファイルの内容を読み取ります",
+            "params": "path (必須): 読み取るファイルのパス"
+          },
+          "writeFile": {
+            "desc": "ボルト内のファイルを書き込みまたは更新します",
+            "params": "path (必須)、content (必須): ファイルパスと書き込む内容"
+          },
+          "listFiles": {
+            "desc": "ボルトまたは特定のフォルダー内のファイルを一覧表示します",
+            "params": "folder (省略可)、extension (省略可): フォルダーとファイル拡張子でフィルター"
+          },
+          "searchFiles": {
+            "desc": "ボルト内のファイルを名前または内容で検索します",
+            "params": "query (必須)、search_content (省略可)、limit (省略可): 検索クエリとオプション"
+          },
+          "createNote": {
+            "desc": "指定した内容で新しいノートを作成します",
+            "params": "title (必須)、content (必須)、folder (省略可): ノートのタイトル、内容、場所"
+          },
+          "appendNote": {
+            "desc": "既存のノートに内容を追記します",
+            "params": "path (必須)、content (必須): ノートのパスと追記する内容"
+          }
+        },
+        "infoTitle": "💡 ツールについて",
+        "infoText": "組み込みツールはプラグイン設定ごとに構成されます。MCP ツールは独立して管理されます—MCP タブを使用してサーバーに接続し、ツールの利用可能性を更新してください。",
+        "toolNames": {
+          "read_file": "ファイルを読む",
+          "write_file": "ファイルを書く",
+          "list_files": "ファイルを一覧表示",
+          "search_files": "ファイルを検索",
+          "create_note": "ノートを作成",
+          "append_note": "ノートに追記"
+        }
+      },
+      "mcpTools": {
+        "noTools": "MCP ツールが利用できません。サーバーに接続するかキャッシュされたツールを更新してこのリストを埋めてください。",
+        "tableHeaders": {
+          "server": "サーバー",
+          "tool": "ツール",
+          "description": "説明",
+          "parameters": "パラメーター",
+          "source": "ソース"
+        },
+        "noDescription": "説明なし",
+        "schemaUnavailable": "スキーマが利用できません",
+        "live": "ライブ",
+        "cached": "キャッシュ済み",
+        "status": {
+          "connected": "接続済み",
+          "disconnected": "切断済み"
+        }
+      },
+      "openapi": {
+        "desc": "OpenAPI ドキュメントから HTTP ツールを生成します。リモートスペックは {{cacheDir}} にキャッシュされます。",
+        "addBtn": "HTTP ソースを追加",
+        "noSources": "HTTP ソースがまだ設定されていません。",
+        "unnamed": "名前のない HTTP ソース",
+        "tableHeaders": {
+          "name": "名前",
+          "source": "ソース",
+          "auth": "認証",
+          "status": "ステータス",
+          "actions": "アクション"
+        },
+        "sourceUrl": "リモート URL が未設定",
+        "sourcePath": "ファイルパスが未設定",
+        "authHeader": "ヘッダー ({{key}})",
+        "authQuery": "クエリ ({{key}})",
+        "authNone": "なし",
+        "statusEnabled": "有効",
+        "statusDisabled": "無効",
+        "actions": {
+          "edit": "編集",
+          "reload": "再読み込み",
+          "refetch": "再取得",
+          "delete": "削除"
+        },
+        "notices": {
+          "removed": "HTTP ソースが削除されました",
+          "reloaded": "{{count}} 件の操作を再読み込みしました",
+          "reloadFailed": "HTTP ソースの再読み込みに失敗しました。詳細はコンソールを確認してください。"
+        },
+        "modal": {
+          "defaultTitle": "HTTP ソース",
+          "displayName": {
+            "name": "表示名",
+            "desc": "ツールソースを選択する際にエージェントに表示されます"
+          },
+          "enabled": {
+            "name": "有効",
+            "desc": "有効にするとこの HTTP API がすべてのエージェントに公開されます"
+          },
+          "sourceType": {
+            "name": "ソースタイプ",
+            "file": "ローカルファイル",
+            "url": "リモート URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "プラグインデータディレクトリ内に取得してキャッシュされます"
+          },
+          "cachedFile": "キャッシュファイル: {{path}} ({{date}})",
+          "neverFetched": "取得されていません",
+          "specPath": {
+            "name": "OpenAPI ファイルパス",
+            "desc": "ボルト内の相対パスまたは絶対パス"
+          },
+          "baseUrl": {
+            "name": "ベース URL オーバーライド",
+            "desc": "ドキュメントの最初のサーバーエントリをオーバーライドします（省略可）"
+          },
+          "auth": {
+            "name": "認証",
+            "desc": "このソースを呼び出す際に API キーを自動挿入します",
+            "none": "なし",
+            "header": "HTTP ヘッダー",
+            "query": "クエリパラメーター"
+          },
+          "credKey": {
+            "name": "認証情報キー"
+          },
+          "credValue": {
+            "name": "認証情報値"
+          },
+          "actions": {
+            "name": "アクション",
+            "reloadTools": "ツールを再読み込み",
+            "refetchTooltip": "URL からスペックを再取得",
+            "deleteTooltip": "ソースを削除"
+          }
+        }
+      },
+      "cli": {
+        "desc": "エージェントが実行できるローカルコマンドラインツールを定義します。動的な引数には {{param}} のようなテンプレートを使用します。",
+        "addBtn": "CLI ツールを追加",
+        "presetsBtn": "プリセットから追加",
+        "noTools": "CLI ツールがまだ設定されていません。",
+        "tableHeaders": {
+          "name": "名前",
+          "command": "コマンド",
+          "parameters": "パラメーター",
+          "status": "ステータス",
+          "actions": "アクション"
+        },
+        "unnamed": "名前のない CLI ツール",
+        "paramCount": "{{count}} パラメーター",
+        "paramCount_plural": "{{count}} パラメーター",
+        "noParams": "なし",
+        "statusEnabled": "有効",
+        "statusDisabled": "無効",
+        "actions": {
+          "edit": "編集",
+          "disable": "無効化",
+          "enable": "有効化",
+          "delete": "削除"
+        },
+        "notices": {
+          "removed": "CLI ツールが削除されました"
+        },
+        "infoTitle": "💡 CLI ツールについて",
+        "infoText": "CLI ツールはシェルコマンドをローカルで実行します。テンプレート置換には引数で {{paramName}} を使用するか、引数または環境変数として渡されるパラメーターを設定してください。",
+        "modal": {
+          "defaultTitle": "CLI ツール",
+          "toolName": {
+            "name": "ツール名",
+            "desc": "エージェントがこのツールを呼び出す際に使用する識別子"
+          },
+          "description": {
+            "name": "説明",
+            "desc": "AI のためにこのツールが何をするかを説明してください"
+          },
+          "enabled": {
+            "name": "有効",
+            "desc": "有効にするとエージェントがこのツールを使用できます"
+          },
+          "commandConfig": "コマンド設定",
+          "command": {
+            "name": "コマンド",
+            "desc": "実行する実行ファイル (例: node、python、bash、/path/to/script)"
+          },
+          "args": {
+            "name": "引数",
+            "desc": "コマンド引数。1行に1つ。テンプレート置換には {{paramName}} を使用。"
+          },
+          "cwd": {
+            "name": "作業ディレクトリ",
+            "desc": "コマンドを実行するディレクトリ（省略可）"
+          },
+          "timeout": {
+            "name": "タイムアウト (ms)",
+            "desc": "ミリ秒単位の最大実行時間（デフォルト: {{timeout}}）"
+          },
+          "shell": {
+            "name": "シェルで実行",
+            "desc": "シェルを通じてコマンドを実行します（パイプなどのシェル機能を有効にします）"
+          },
+          "paramsTitle": "パラメーター",
+          "paramsDesc": "AI がこのツールに渡せるパラメーターを定義します。",
+          "addParam": "パラメーターを追加",
+          "noParams": "パラメーターが定義されていません。",
+          "paramN": "パラメーター {{n}}",
+          "param": {
+            "name": "名前",
+            "type": {
+              "name": "タイプ",
+              "string": "文字列",
+              "number": "数値",
+              "boolean": "ブール値"
+            },
+            "description": "説明",
+            "required": "必須",
+            "insertAs": {
+              "name": "挿入方法",
+              "desc": "このパラメーターをコマンドに渡す方法",
+              "template": "テンプレート ({{name}})",
+              "arg": "引数として追加",
+              "env": "環境変数"
+            },
+            "envName": {
+              "name": "環境変数名",
+              "desc": "環境変数名をオーバーライドします（デフォルトは大文字のパラメーター名）"
+            }
+          },
+          "envTitle": "環境変数",
+          "envDesc": "コマンド実行時に設定する静的環境変数。",
+          "envVars": {
+            "name": "環境変数",
+            "desc": "形式: KEY=value、1行に1つ"
+          }
+        },
+        "presets": {
+          "title": "プリセットから CLI ツールを追加",
+          "desc": "プリセットを選択して、事前設定済みの CLI ツールをすばやく追加します。追加後にカスタマイズできます。",
+          "addBtn": "追加",
+          "addedBtn": "追加済み",
+          "closeBtn": "閉じる",
+          "notices": {
+            "added": "「{{name}}」を追加しました - CLI ツールリストで有効化してください"
+          },
+          "categories": {
+            "file": "ファイル操作",
+            "search": "検索",
+            "network": "ネットワーク",
+            "code": "コード実行",
+            "data": "データ処理",
+            "system": "システム情報",
+            "apps": "macOS アプリとデスクトップ"
+          },
+          "names": {
+            "preset-cat": "ファイルを読む (cat)",
+            "preset-ls": "ディレクトリを一覧表示 (ls)",
+            "preset-find": "ファイルを検索 (find)",
+            "preset-grep": "テキストを検索 (grep)",
+            "preset-ripgrep": "高速検索 (rg)",
+            "preset-curl": "HTTP リクエスト (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Python コードを実行",
+            "preset-node": "JavaScript を実行 (Node)",
+            "preset-bash": "シェルスクリプトを実行",
+            "preset-jq": "JSON プロセッサー (jq)",
+            "preset-wc": "文字数カウント (wc)",
+            "preset-date": "現在の日付/時刻",
+            "preset-pwd": "現在のディレクトリ (pwd)",
+            "preset-whoami": "現在のユーザー",
+            "preset-uname": "システム情報 (uname)",
+            "preset-open": "ファイル/URL を開く (open)",
+            "preset-open-app": "アプリを起動 (open -a)",
+            "preset-safari": "Safari で開く",
+            "preset-chrome": "Chrome で開く",
+            "preset-firefox": "Firefox で開く",
+            "preset-pbcopy": "クリップボードにコピー",
+            "preset-pbpaste": "クリップボードから貼り付け",
+            "preset-say": "テキスト読み上げ (say)",
+            "preset-osascript": "AppleScript ランナー",
+            "preset-notify": "デスクトップ通知",
+            "preset-screencapture": "スクリーンショット",
+            "preset-applescript-list-apps": "実行中のアプリを一覧表示"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG 設定",
+      "desc": "検索拡張生成とウェブ検索を設定して、AI の応答を強化します。",
+      "subTabs": {
+        "overview": "概要",
+        "chunking": "チャンク分割",
+        "search": "検索",
+        "filters": "フィルター",
+        "advanced": "詳細",
+        "websearch": "ウェブ検索"
+      },
+      "general": {
+        "title": "一般設定",
+        "enableRag": {
+          "name": "RAG を有効にする",
+          "desc": "コンテキスト強化のための検索拡張生成を有効にします"
+        },
+        "vectorStore": {
+          "name": "ベクターストア",
+          "desc": "埋め込みを保存するためのベクターデータベース",
+          "memory": "インメモリ",
+          "disk": "ディスクベース"
+        },
+        "embeddingModel": {
+          "name": "埋め込みモデル",
+          "desc": "埋め込みの生成に使用するモデル"
+        },
+        "embedChanged": {
+          "name": "変更されたファイルを自動的に埋め込む",
+          "desc": "ファイルが変更されたときに自動的に再埋め込みします"
+        }
+      },
+      "indexMgmt": {
+        "title": "インデックス管理",
+        "desc": "RAG インデックスを管理し、インデックス化されたコンテンツの統計を確認します。",
+        "statsTitle": "インデックス統計",
+        "stats": {
+          "totalChunks": "総チャンク数",
+          "uniqueFiles": "ユニークファイル数",
+          "totalChars": "総文字数",
+          "avgChunkSize": "平均チャンクサイズ"
+        },
+        "empty": "インデックスが空です。「インデックスを再構築」を選択してインデックス化を開始してください。",
+        "error": "⚠️ インデックス統計を読み込めません",
+        "rebuild": {
+          "name": "インデックスを再構築",
+          "desc": "ボルト内のすべてのファイルを再インデックスします。時間がかかる場合があります。",
+          "btn": "再構築",
+          "rebuilding": "再構築中..."
+        },
+        "refresh": {
+          "name": "インデックスを更新",
+          "desc": "最後のインデックス化以降に変更されたファイルでインデックスを更新します。",
+          "btn": "更新",
+          "refreshing": "更新中..."
+        },
+        "clear": {
+          "name": "インデックスをクリア",
+          "desc": "すべてのインデックスデータを削除します。インデックスを再構築する必要があります。",
+          "btn": "クリア",
+          "clearing": "クリア中..."
+        },
+        "notices": {
+          "rebuilt": "インデックスが正常に再構築されました",
+          "rebuildFailed": "インデックスの再構築に失敗しました",
+          "refreshed": "インデックスが正常に更新されました",
+          "refreshFailed": "インデックスの更新に失敗しました",
+          "cleared": "インデックスが正常にクリアされました",
+          "clearFailed": "インデックスのクリアに失敗しました"
+        }
+      },
+      "chunking": {
+        "title": "チャンク分割設定",
+        "strategy": {
+          "name": "チャンク分割戦略",
+          "desc": "ドキュメントをチャンクに分割するための戦略",
+          "recursive": "再帰的（スマート）",
+          "fixed": "固定サイズ",
+          "sentence": "文単位",
+          "paragraph": "段落単位"
+        },
+        "chunkSize": {
+          "name": "チャンクサイズ",
+          "desc": "チャンクあたりの文字数（500〜2000 推奨）"
+        },
+        "chunkOverlap": {
+          "name": "チャンクオーバーラップ",
+          "desc": "チャンク間の重複文字数"
+        },
+        "minChunkSize": {
+          "name": "最小チャンクサイズ",
+          "desc": "作成する最小チャンクサイズ"
+        },
+        "maxTokens": {
+          "name": "チャンクあたりの最大トークン数",
+          "desc": "チャンクあたりの最大許容トークン数"
+        }
+      },
+      "search": {
+        "title": "検索設定",
+        "searchType": {
+          "name": "検索タイプ",
+          "desc": "実行する類似検索のタイプ",
+          "similarity": "類似度"
+        },
+        "topK": {
+          "name": "上位 K 件の結果",
+          "desc": "取得する最も関連性の高いチャンクの数（1〜20）"
+        },
+        "threshold": {
+          "name": "類似度しきい値",
+          "desc": "結果に含める最小類似度スコア（0.0〜1.0）"
+        },
+        "weight": {
+          "name": "関連性スコアの重み",
+          "desc": "関連性スコアリングの重み（0.0〜1.0）"
+        },
+        "contextLimit": {
+          "name": "コンテキストウィンドウの制限",
+          "desc": "取得されたコンテキストの最大トークン数"
+        }
+      },
+      "filters": {
+        "title": "ファイルフィルター",
+        "excludeFolders": {
+          "name": "除外フォルダー",
+          "desc": "インデックス化から除外するフォルダー（カンマ区切り）"
+        },
+        "includeTypes": {
+          "name": "含めるファイルタイプ",
+          "desc": "含めるファイルタイプ（空 = すべてのタイプ）"
+        },
+        "excludeTypes": {
+          "name": "除外するファイルタイプ",
+          "desc": "インデックス化から除外するファイルタイプ"
+        },
+        "filterByTag": {
+          "name": "タグでフィルター",
+          "desc": "これらのタグを持つファイルのみをインデックス化します（空 = すべてのファイル）"
+        },
+        "excludeByTag": {
+          "name": "タグで除外",
+          "desc": "これらのタグを持つファイルをインデックス化から除外します"
+        }
+      },
+      "advanced": {
+        "title": "詳細設定",
+        "batchSize": {
+          "name": "埋め込みバッチサイズ",
+          "desc": "並行して埋め込むチャンクの数"
+        }
+      },
+      "grading": {
+        "title": "グレーディング設定",
+        "desc": "LLM に送信する前に取得されたチャンクの関連性を評価します。これにより低品質な結果をフィルタリングできます。",
+        "enableGrading": {
+          "name": "グレーディングしきい値を有効にする",
+          "desc": "品質しきい値以下のチャンクをフィルタリングします"
+        },
+        "graderSource": {
+          "name": "グレーダーモデルのソース",
+          "desc": "グレーダーモデルの取得元",
+          "chat": "チャットモデル",
+          "custom": "カスタムモデル"
+        },
+        "graderModel": {
+          "name": "グレーダーモデル",
+          "desc": "グレーディングに使用する特定のモデル"
+        },
+        "parallel": {
+          "name": "並列処理",
+          "desc": "並行してグレーディングするチャンクの数"
+        },
+        "minRelevance": {
+          "name": "最小関連性スコア",
+          "desc": "最小関連性スコア（0.0〜1.0）"
+        },
+        "minAccuracy": {
+          "name": "最小精度スコア",
+          "desc": "最小精度スコア（0.0〜1.0）"
+        },
+        "minSupport": {
+          "name": "最小サポート品質スコア",
+          "desc": "最小サポート品質スコア（0.0〜1.0）"
+        }
+      }
+    },
+    "websearch": {
+      "title": "ウェブ検索設定",
+      "desc": "AI の応答をインターネットからの最新情報で強化するためのウェブ検索機能を設定します。",
+      "generalBehavior": "一般的な動作",
+      "providerSelection": "プロバイダーの選択",
+      "localeFilters": "ロケールとフィルター",
+      "apiCredentials": "API 認証情報とエンドポイント",
+      "enabled": {
+        "name": "ウェブ検索を有効にする",
+        "desc": "AI が現在の情報をウェブで検索できるようにします"
+      },
+      "autoTrigger": {
+        "name": "検索を自動トリガー",
+        "desc": "クエリが現在の情報（ニュース、価格、最近のイベントなど）を必要とする場合に自動的にウェブ検索をトリガーします"
+      },
+      "maxResults": {
+        "name": "最大結果数",
+        "desc": "返される検索結果の最大数"
+      },
+      "timeRange": {
+        "name": "結果の鮮度",
+        "desc": "プロバイダーがサポートする時間範囲に結果を限定します（Google、SearXNG、Mojeek）",
+        "any": "すべての期間（デフォルト）",
+        "h": "過去1時間",
+        "d": "過去24時間",
+        "w": "過去1週間",
+        "m": "過去1ヶ月",
+        "y": "過去1年"
+      },
+      "provider": {
+        "name": "検索プロバイダー",
+        "desc": "プライバシーフレンドリーなスクレイパーまたは API バックエンドエンジンから選択"
+      },
+      "searchLanguage": {
+        "name": "言語コード",
+        "desc": "ISO 言語コード（例: en、fr、zh-CN）はローカライズをサポートするプロバイダーに転送されます"
+      },
+      "searchCountry": {
+        "name": "国/市場コード",
+        "desc": "Bing、DuckDuckGo、Brave などが使用する2文字の国コード（例: US、DE）"
+      },
+      "includeDomains": {
+        "name": "これらのドメインのみを含める",
+        "desc": "SerpAPI と Brave が特定のサイトに結果を限定するために使用するカンマ区切りリスト"
+      },
+      "excludeDomains": {
+        "name": "ドメインを除外",
+        "desc": "結果の取得後にフィルタリングするカンマ区切りのドメイン"
+      },
+      "apiKey": {
+        "name": "デフォルト API キー",
+        "desc": "プロバイダー固有のキーが設定されていない場合に Google、Bing、SerpAPI、Tavily、または Brave が使用する共有 API キー"
+      },
+      "googleCseId": {
+        "name": "Google カスタム検索エンジン ID",
+        "desc": "Google プロバイダーを使用する場合に Google API キーと共に必要"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI エンドポイント",
+        "desc": "セルフホスティングする場合に SerpAPI ベース URL をオーバーライドします"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API キー",
+        "desc": "Tavily プロバイダーを使用する場合にデフォルトキーをオーバーライドします"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG エンドポイント",
+        "desc": "SearXNG インスタンスのベース URL（JSON を返す必要があります）"
+      },
+      "braveApiKey": {
+        "name": "Brave API キー",
+        "desc": "プロバイダーとして選択した場合に Brave Search API サブスクリプショントークンを使用します"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API キー（省略可）",
+        "desc": "Qwant プランがベアラートークンを発行する場合に追加してください"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API キー",
+        "desc": "Mojeek プロバイダーに必要"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo（キー不要）",
+        "google": "Google カスタム検索",
+        "bing": "Bing ウェブ検索",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave 検索",
+        "yahoo": "Yahoo（HTML スクレイピング）",
+        "yandex": "Yandex（HTML スクレイピング）",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "クイックアクション",
+      "desc": "テキストが選択されているときにエディターのコンテキストメニューに表示される AI 駆動のクイックアクションを設定します。",
+      "actionPrefix": {
+        "name": "アクションプレフィックス",
+        "desc": "コンテキストメニューのすべてのクイックアクションの前に表示するプレフィックス（絵文字またはテキスト）",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} アクション設定済み ({{enabled}} 有効)",
+      "count_plural": "{{count}} アクション設定済み ({{enabled}} 有効)",
+      "addBtn": "+ クイックアクションを追加",
+      "empty": "クイックアクションが設定されていません。「クイックアクションを追加」を選択して開始してください。",
+      "tableHeaders": {
+        "action": "アクション",
+        "type": "タイプ",
+        "model": "モデル",
+        "promptPreview": "プロンプトプレビュー",
+        "actions": "アクション"
+      },
+      "defaultModel": "デフォルト",
+      "editBtn": "編集",
+      "deleteBtn": "削除",
+      "confirm": {
+        "delete": "クイックアクション「{{name}}」を削除しますか？"
+      },
+      "usageInfo": {
+        "title": "使い方",
+        "step1": "任意のノートでテキストを選択",
+        "step2": "右クリックしてコンテキストメニューを開く",
+        "step3": "メニューからクイックアクションを選択",
+        "step4Replace": "「replace」とマークされたアクションは選択したテキストを AI の結果に置き換えます",
+        "step4Explain": "「explain」とマークされたアクションはモーダルダイアログに結果を表示します"
+      },
+      "edit": {
+        "title": "クイックアクションを編集",
+        "name": {
+          "name": "名前",
+          "desc": "コンテキストメニューでのこのアクションの表示名"
+        },
+        "actionType": {
+          "name": "アクションタイプ",
+          "desc": "AI の応答の処理方法",
+          "replace": "選択したテキストを置き換え",
+          "explain": "モーダルに表示"
+        },
+        "model": {
+          "name": "モデル",
+          "desc": "このアクションに使用する言語モデル（デフォルトを使用する場合は空白のまま）",
+          "default": "デフォルトモデルを使用"
+        },
+        "promptTemplate": {
+          "name": "プロンプトテンプレート",
+          "desc": "AI に送信される指示。選択されたテキストは自動的に追記されます。"
+        },
+        "cancel": "キャンセル",
+        "save": "保存"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "テキストを長くする",
+          "prompt": "以下のテキストを展開して詳述し、元の意味とトーンを維持しながら、より詳細で包括的なものにしてください。追加のコメントなしに展開されたテキストのみを返してください：\n\n"
+        },
+        "summarize": {
+          "name": "テキストを要約する",
+          "prompt": "以下のテキストの簡潔な要約を提供してください。追加のコメントなしに要約のみを返してください：\n\n"
+        },
+        "improve-writing": {
+          "name": "文章を改善する",
+          "prompt": "以下のテキストの文章の質、明確さ、スタイルを改善してください。追加のコメントなしに改善されたテキストのみを返してください：\n\n"
+        },
+        "fix-grammar": {
+          "name": "文法を修正する",
+          "prompt": "以下のテキストの文法、スペル、句読点のエラーを修正してください。追加のコメントなしに修正されたテキストのみを返してください：\n\n"
+        },
+        "explain": {
+          "name": "テキストを説明する",
+          "prompt": "以下のテキストをわかりやすく説明してください：\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "トークン使用状況",
+      "desc": "プロバイダーとモデル全体のトークン消費を追跡します。データはすべての会話で累積されます。",
+      "notAvailable": "トークン使用状況の追跡は利用できません。",
+      "ranges": {
+        "today": "今日",
+        "week": "今週",
+        "month": "今月",
+        "all": "全期間"
+      },
+      "stats": {
+        "totalTokens": "総トークン数",
+        "apiCalls": "API 呼び出し",
+        "promptTokens": "プロンプトトークン",
+        "completion": "補完",
+        "tokensIn": "入力トークン",
+        "tokensOut": "出力トークン"
+      },
+      "byProvider": "プロバイダー別",
+      "byModel": "モデル別",
+      "noData": "使用データがまだありません。",
+      "recentActivity": "最近のアクティビティ",
+      "last10": "最新10件",
+      "noRecent": "最近のアクティビティはありません。",
+      "tableHeaders": {
+        "provider": "プロバイダー",
+        "model": "モデル",
+        "prompt": "プロンプト",
+        "completion": "補完",
+        "total": "合計",
+        "calls": "呼び出し",
+        "time": "時間",
+        "in": "入力",
+        "out": "出力"
+      },
+      "clearBtn": "すべての使用データをクリア",
+      "confirm": {
+        "clear": "すべてのトークン使用記録をクリアしますか？この操作は元に戻せません。"
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "メッセージを入力... (Enter で送信、Shift+Enter で改行)",
+    "conversations": "会話",
+    "toggleConversationsTitle": "会話リストを切り替え",
+    "currentConversation": "現在の会話",
+    "new": "新規",
+    "settings": "設定",
+    "openSettingsTitle": "プラグイン設定を開く",
+    "mode": "モード",
+    "prompt": "プロンプト",
+    "agent": "エージェント",
+    "modeOptions": {
+      "chat": "チャット",
+      "agent": "エージェント"
+    },
+    "noSystemPrompt": "システムプロンプトなし",
+    "noAgentsAvailable": "利用可能なエージェントなし",
+    "sendHintPrefix": "",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " で送信",
+    "sendAriaLabel": "メッセージを送信",
+    "stop": " 停止",
+    "addReference": "参照を追加",
+    "addReferenceTooltip": "ファイルまたはフォルダーの参照を追加 (@)",
+    "emptyHeading": "会話を始める",
+    "emptySubtext": "以下にメッセージを入力して開始するか、履歴から会話を選択してください。",
+    "noAgentConfig": "エージェントが設定されていません",
+    "selectAgent": "エージェントを選択...",
+    "notices": {
+      "stopping": "生成を停止中...",
+      "ragInitError": "RAG 初期化エラー: {{message}}",
+      "modelsRefreshed": "モデルが更新されました",
+      "modelsRefreshFailed": "モデルの更新に失敗しました: {{message}}",
+      "waitForResponse": "現在の応答が完了するまでお待ちください",
+      "configureProvider": "最初に設定で LLM プロバイダーを設定してください",
+      "selectModel": "モデルを選択してください",
+      "noValidProvider": "このモデルに対して有効なプロバイダー設定が見つかりません",
+      "chatError": "チャットエラー: {{message}}",
+      "noMessageToRegenerate": "再生成するメッセージが見つかりません",
+      "regenerateOnlyLatest": "現在は最新の応答のみ再生成できます",
+      "regenerateNoUserMsg": "再生成元のユーザーメッセージが見つかりません",
+      "regenerated": "応答を再生成しました",
+      "regenerateFailed": "再生成に失敗しました: {{message}}",
+      "noteCreated": "ノートを作成しました: {{name}}",
+      "noteCreateFailed": "ノートの作成に失敗しました: {{message}}",
+      "messageInserted": "{{path}} にメッセージを挿入しました",
+      "messageInsertFailed": "メッセージの挿入に失敗しました: {{message}}",
+      "noAgents": "エージェントが利用できません。設定 → エージェントでエージェントを設定してください。",
+      "ragDisabled": "RAG が設定で無効になっています。設定 → チャット機能 → RAG で有効にしてください。",
+      "webSearchDisabled": "ウェブ検索が設定で無効になっています。設定 → チャット機能 → ウェブ検索で有効にしてください。",
+      "noFilesInVault": "ボルトにファイルが見つかりません",
+      "attached": "添付: {{name}}",
+      "attachedImages": "{{count}} 枚の画像を添付しました",
+      "referencesAdded": "{{count}} 件の参照を追加しました",
+      "fileNotFound": "ファイルが見つかりません: {{path}}",
+      "agentConfigApplied": "エージェントの設定を適用しました: {{name}}",
+      "waitForComplete": "現在の応答が完了するまでお待ちください",
+      "chatServiceFallback": "ChatService が設定されていません。ChatView フォールバックを使用します。",
+      "noModelSelected": "モデルが選択されていません",
+      "noProviderConfig": "プロバイダー設定が見つかりません",
+      "generationStopped": "生成を停止しました",
+      "noResponseToRegenerate": "再生成する応答がありません",
+      "agentNotFound": "エージェントが見つかりません",
+      "unableToLoadRag": "RAG 統計を読み込めません。",
+      "referenced": "参照済み: {{name}}"
+    },
+    "status": {
+      "available": "利用可能",
+      "unavailable": "利用不可",
+      "disabled": "無効",
+      "on": "オン · {{detail}}",
+      "off": "オフ"
+    },
+    "ragStats": {
+      "title": "RAG 統計",
+      "totalChunks": "📊 総チャンク数:",
+      "filesIndexed": "📁 インデックス済みファイル数:",
+      "totalSize": "💾 総サイズ:",
+      "avgChunks": "📈 平均チャンク数/ファイル:",
+      "indexedFiles": "📄 インデックス済みファイル",
+      "noFilesYet": "⚠️ まだファイルがインデックス化されていません。",
+      "howToBuild": "RAG インデックスを構築するには：",
+      "step1": "設定 → RAG に移動",
+      "step2": "RAG を有効にする",
+      "step3": "ボルトインデックスを選択",
+      "close": "閉じる",
+      "retrieved": "📚 {{count}} ドキュメントから取得",
+      "retrieved_plural": "📚 {{count}} ドキュメントから取得"
+    },
+    "ragTooltip": {
+      "status": "RAG インデックスステータス:",
+      "totalChunks": "📊 総チャンク数: {{count}}",
+      "filesIndexed": "📁 インデックス済みファイル数: {{count}}",
+      "totalSize": "💾 総サイズ: {{size}} KB",
+      "indexedFiles": "📄 インデックス済みファイル:",
+      "andMore": "  ... と他 {{count}} 件",
+      "noFilesYet": "⚠️ まだファイルがインデックス化されていません。",
+      "goToSettings": "設定 → RAG に移動してインデックスを構築してください。",
+      "ragOff": "ℹ️ このチャットでは現在 RAG がオフになっています。"
+    },
+    "agentSummary": {
+      "model": "モデル",
+      "temp": "温度",
+      "max": "最大",
+      "rag": "RAG",
+      "web": "ウェブ",
+      "tools": "ツール",
+      "memory": "メモリ",
+      "none": "なし",
+      "configuration": "{{name}} の設定",
+      "modelFixed": "{{name}} · 固定",
+      "modelDefault": "{{name}} · デフォルト",
+      "modelChatView": "{{name}} · チャットビュー",
+      "customModel": "カスタムモデル",
+      "notSet": "未設定",
+      "auto": "自動",
+      "on": "オン",
+      "off": "オフ",
+      "shortTerm": "短期記憶",
+      "longTerm": "長期記憶",
+      "disabledMemory": "無効",
+      "builtIn": "{{count}} 組み込み",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "ウェブ結果",
+      "attachments": "添付ファイル",
+      "references": "参照",
+      "ragSources": "RAG ソース",
+      "reasoning": "推論",
+      "copy": "コピー",
+      "copied": "メッセージをコピーしました",
+      "copyFailed": "メッセージのコピーに失敗しました",
+      "tokenUsage": "トークン使用状況",
+      "tokenUsagePrompt": "プロンプト",
+      "tokenUsageCompletion": "補完",
+      "tokenUsageTotal": "合計",
+      "save": "保存",
+      "insertToNotes": "ノートに挿入",
+      "regenerate": "再生成"
+    },
+    "streaming": {
+      "thinking": "考え中..."
+    },
+    "toolCall": {
+      "thinking": "考え中",
+      "executionProcess": "実行プロセス",
+      "input": "入力",
+      "output": "出力",
+      "running": "実行中..."
+    },
+    "addPicture": "画像を追加",
+    "addPictureTooltip": "メッセージに画像を添付",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "インデックス済みノートをコンテキストとして使用",
+    "webSearchLabel": "ウェブ検索",
+    "webSearchTooltipLabel": "必要に応じてインターネットを検索",
+    "imageUnavailable": "現在のモデルでは画像添付は利用できません。",
+    "newChat": "新しいチャット",
+    "newConversation": "新しい会話",
+    "searchConversations": "会話を検索...",
+    "header": {
+      "model": "モデル",
+      "advancedParams": "詳細パラメーター",
+      "temperature": "温度",
+      "maxTokens": "最大トークン数",
+      "topP": "Top P",
+      "freqPenalty": "頻度ペナルティ",
+      "presPenalty": "存在ペナルティ",
+      "agentConfig": "エージェント設定",
+      "modelsCount": "モデル: {{count}}",
+      "tokensCount": "トークン: {{count}}",
+      "noModels": "利用可能なモデルがありません"
+    },
+    "temperature": {
+      "precise": "0 (精密)",
+      "balanced": "1 (バランス)",
+      "creative": "2 (クリエイティブ)"
+    },
+    "modals": {
+      "image": {
+        "title": "画像を添付",
+        "searchPlaceholder": "画像を検索...",
+        "selectAll": "すべて選択",
+        "selectNone": "選択解除",
+        "addSelected": "選択したものを追加",
+        "noResults": "一致する画像が見つかりません。"
+      },
+      "reference": {
+        "title": "参照を追加",
+        "searchPlaceholder": "ファイルとフォルダーを検索...",
+        "selectAll": "すべて選択",
+        "selectNone": "選択解除",
+        "addSelected": "選択したものを追加",
+        "noResults": "一致するファイルまたはフォルダーが見つかりません。"
+      },
+      "insertNote": {
+        "title": "ノートに挿入",
+        "searchPlaceholder": "ノートを検索...",
+        "insert": "選択したノートに挿入",
+        "createNew": "新しいノートを作成",
+        "noResults": "一致するノートが見つかりません。"
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "キャンセル",
+      "confirm": "確認"
+    },
+    "agentEdit": {
+      "title": "エージェントを編集",
+      "icon": {
+        "name": "アイコン",
+        "desc": "このエージェントを表す絵文字または文字"
+      },
+      "description": {
+        "name": "説明",
+        "desc": "エージェントの簡単な説明"
+      },
+      "modelStrategy": {
+        "name": "モデル戦略",
+        "options": {
+          "default": "デフォルトモデルを使用（設定から）",
+          "chatView": "チャットビューモデルを使用",
+          "fixed": "固定モデル"
+        },
+        "noModels": "キャッシュされたモデルがありません",
+        "desc": "エージェントがモデルを選択する方法を選択"
+      },
+      "systemPrompt": {
+        "createNew": "➕ 新しいプロンプトを作成...",
+        "promptName": {
+          "name": "プロンプト名",
+          "desc": "新しいシステムプロンプトの表示名"
+        },
+        "promptContent": {
+          "name": "プロンプト内容",
+          "desc": "新しいシステムプロンプトの内容"
+        },
+        "name": "システムプロンプト",
+        "desc": "既存のプロンプトから選択するか、このエージェント用に新しいプロンプトを定義してください。"
+      },
+      "capabilities": "機能",
+      "memory": {
+        "title": "メモリ",
+        "notice": "エージェントメモリは現在、エクスペリエンスを改善中のため一時的に利用できません。"
+      },
+      "tools": {
+        "title": "ツール",
+        "builtIn": {
+          "name": "組み込みツール",
+          "desc": "このエージェントが使用できる組み込みツールを選択"
+        },
+        "cli": {
+          "name": "CLI ツール",
+          "desc": "すべての有効な CLI ツールへのアクセスを許可するか、以下から個別に選択",
+          "noTools": "CLI ツールが設定されていません。設定 → ツール → CLI でツールを追加・有効化してください。"
+        }
+      },
+      "mcp": {
+        "title": "MCP アクセス",
+        "noServers": "MCP サーバーが設定されていません。設定 → MCP でサーバーを追加してこれらのオプションを利用できます。",
+        "toolsCached": "{{count}} ツールキャッシュ済み",
+        "toolsCached_plural": "{{count}} ツールキャッシュ済み",
+        "noToolsCached": "ツールがまだキャッシュされていません。フルアクセスを有効にするかキャッシュを更新してください。",
+        "showTools": "ツールを表示",
+        "hideTools": "ツールを非表示",
+        "selected": "選択済み",
+        "notSelected": "未選択",
+        "noToolsAvailable": "このサーバーからまだ利用可能なツールがありません。"
+      },
+      "notices": {
+        "promptRequired": "新しいシステムプロンプトの名前と内容を入力してください。"
+      },
+      "name": {
+        "label": "名前",
+        "desc": "このエージェントの表示名"
+      },
+      "fixedModel": {
+        "name": "固定モデル",
+        "desc": "このエージェントに特定のモデルを選択してください。",
+        "descNoModels": "キャッシュされたモデルがありません。モデルタブでモデルを更新してください。"
+      },
+      "temperature": {
+        "label": "温度",
+        "desc": "ランダム性を制御します（0.0 〜 2.0）"
+      },
+      "maxTokens": {
+        "label": "最大トークン数",
+        "desc": "生成する最大トークン数"
+      },
+      "contextWindow": {
+        "label": "コンテキストウィンドウ",
+        "desc": "コンテキストに含める過去のメッセージ数"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "検索拡張生成を有効にする"
+      },
+      "webSearch": {
+        "name": "ウェブ検索",
+        "desc": "ウェブ検索機能を有効にする"
+      },
+      "maxSteps": {
+        "name": "最大ツールステップ数",
+        "desc": "エージェントターンごとの最大ツール呼び出しステップ数"
+      }
+    },
+    "provider": {
+      "title": "プロバイダー設定",
+      "selectProvider": {
+        "name": "プロバイダー",
+        "desc": "LLM プロバイダーのタイプを選択",
+        "placeholder": "-- プロバイダーを選択 --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama（ローカル）",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "カスタム（OpenAI 互換）"
+      },
+      "modelFilter": {
+        "name": "モデルフィルター",
+        "desc": "利用可能なモデルを制限するオプションの正規表現パターン"
+      },
+      "resourceGroup": {
+        "name": "リソースグループ",
+        "desc": "オプションの SAP AI Core リソースグループ"
+      },
+      "serviceKey": {
+        "name": "サービスキー",
+        "desc": "SAP AI Core サービスキー（JSON 文字列）"
+      },
+      "baseUrl": {
+        "name": "ベース URL",
+        "ollamaDesc": "Ollama サーバー URL",
+        "customDesc": "OpenAI 互換 API エンドポイント（必須）",
+        "optionalDesc": "カスタム API エンドポイント（省略可）"
+      },
+      "manageModels": {
+        "name": "モデルを管理",
+        "desc": "Ollama レジストリから新しいモデルをプルするか、既存のモデルを更新します。",
+        "btn": "⏬ Ollama モデルをプル"
+      },
+      "apiKey": {
+        "name": "API キー",
+        "desc": "選択したプロバイダーの認証キー"
+      },
+      "cancel": "キャンセル",
+      "save": "保存",
+      "validation": {
+        "selectProvider": "プロバイダーのタイプを選択してください",
+        "apiKeyTooLong": "API キーが長すぎます。最大長は 500 文字です。",
+        "invalidUrl": "ベース URL の形式が無効です。有効な URL を入力してください（例: https://api.example.com）"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP インスペクター",
+      "desc": "Model Context Protocol (MCP) サーバーの接続とツールを検査・デバッグします。",
+      "tabs": {
+        "connections": "接続",
+        "tools": "ツール",
+        "logs": "ログ"
+      },
+      "refreshBtn": "🔄 更新",
+      "connections": {
+        "title": "MCP サーバー接続",
+        "noServers": "MCP サーバーが設定されていません。",
+        "headers": {
+          "server": "サーバー名",
+          "status": "ステータス",
+          "tools": "利用可能なツール",
+          "actions": "アクション"
+        },
+        "statusDisabled": "無効",
+        "statusConnected": "● 接続済み",
+        "statusDisconnected": "○ 切断済み",
+        "toolsLive": "{{count}} ツール",
+        "toolsLive_plural": "{{count}} ツール",
+        "toolsCached": "{{count}} ツール（キャッシュ済み）",
+        "toolsCached_plural": "{{count}} ツール（キャッシュ済み）",
+        "noTools": "0 ツール",
+        "connectBtn": "接続",
+        "disconnectBtn": "切断",
+        "connecting": "接続中...",
+        "disconnecting": "切断中...",
+        "notices": {
+          "disconnected": "{{name}} から切断しました",
+          "enableFirst": "接続する前に設定でサーバーを有効化してください",
+          "connected": "{{name}} に接続しました",
+          "failedDisconnect": "{{name}} からの切断に失敗しました: {{message}}",
+          "failedConnect": "{{name}} への接続に失敗しました: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "利用可能な MCP ツール",
+        "noTools": "MCP ツールが利用できません。サーバー接続を確認してください。",
+        "serverPrefix": "サーバー: {{name}}",
+        "noToolsInServer": "利用可能なツールがありません",
+        "headers": {
+          "tool": "ツール名",
+          "description": "説明",
+          "parameters": "パラメーター"
+        },
+        "noDescription": "説明なし",
+        "noParams": "なし"
+      },
+      "logs": {
+        "title": "MCP 接続ログ",
+        "placeholder": "MCP 接続ログがここに表示されます。現在はプレースホルダー情報を表示しています。",
+        "events": {
+          "connection": "• 接続イベント",
+          "tools": "• ツール登録イベント",
+          "errors": "• エラーログ",
+          "comms": "• 通信の詳細"
+        },
+        "testTitle": "ツール実行のテスト",
+        "selectServer": "サーバーを選択...",
+        "selectTool": "ツールを選択...",
+        "parametersTitle": "パラメーター",
+        "selectEnum": "選択...",
+        "performBtn": "ツールを実行",
+        "clearBtn": "結果をクリア",
+        "executing": "実行中...",
+        "success": "✅ 実行成功",
+        "failed": "❌ 実行失敗",
+        "errorTitle": "❌ 実行エラー",
+        "errorLabel": "エラー: {{message}}",
+        "notices": {
+          "success": "ツールが正常に実行されました",
+          "failed": "ツールの実行に失敗しました",
+          "error": "実行エラー: {{message}}",
+          "requiredMissing": "必須パラメーターが不足しています: {{name}}",
+          "invalidNumber": "パラメーターの数値が無効です: {{name}}",
+          "invalidJson": "パラメーターの JSON が無効です: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ MCP サーバーが設定されていません",
+        "testing": "🧪 {{count}} MCP サーバー接続をテスト中...",
+        "allSuccess": "✅ すべての {{count}} MCP サーバーが正常に接続されました！",
+        "partial": "⚠️ {{success}} 接続済み、{{failed}} 失敗"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "MCP サーバーを編集",
+      "titleAdd": "MCP サーバーを追加",
+      "serverName": {
+        "name": "サーバー名",
+        "desc": "プラグイン全体に表示されるわかりやすい名前"
+      },
+      "connectionMode": {
+        "name": "接続モード",
+        "desc": "自動接続するか手動でトリガーされたときのみ接続するかを選択",
+        "auto": "チャットが開くときに自動接続",
+        "manual": "手動接続"
+      },
+      "command": {
+        "name": "コマンド",
+        "desc": "MCP サーバーを起動する実行ファイルまたはスクリプト"
+      },
+      "arguments": {
+        "name": "引数",
+        "desc": "カンマまたは改行区切りの引数（省略可）"
+      },
+      "envVars": {
+        "name": "環境変数",
+        "desc": "オプションの KEY=VALUE ペア、1行に1つ"
+      },
+      "enabled": {
+        "name": "有効",
+        "desc": "無効にするとサーバーを設定したまま自動接続しません"
+      },
+      "cancel": "キャンセル",
+      "saveEdit": "変更を保存",
+      "saveAdd": "サーバーを追加",
+      "validation": {
+        "nameRequired": "サーバー名は必須です",
+        "commandRequired": "コマンドは必須です"
+      }
+    },
+    "ollamaManager": {
+      "title": "Ollama モデルを管理",
+      "serverInfo": "サーバー情報",
+      "checkingServer": "サーバー確認中...",
+      "serverOnline": "✅ サーバーオンライン",
+      "versionLabel": " | バージョン: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ サーバーオフライン",
+      "connectionError": "❌ 接続エラー",
+      "pullTitle": "新しいモデルをプル",
+      "pullHint": "Ollama ライブラリからダウンロードするモデル名を入力してください（例: llama2、mistral、codellama）",
+      "modelName": {
+        "name": "モデル名",
+        "example": "例: llama2、mistral、codellama:7b"
+      },
+      "pullBtn": "モデルをプル",
+      "installedTitle": "インストール済みモデル",
+      "refreshList": "🔄 リストを更新",
+      "noModels": "モデルが見つかりません。モデルをプルして開始してください。",
+      "capabilities": "機能: {{caps}}",
+      "deleteBtn": "削除",
+      "closeBtn": "閉じる",
+      "confirmDelete": {
+        "title": "削除を確認",
+        "message": "モデル「{{name}}」を削除してもよろしいですか？",
+        "cancel": "キャンセル",
+        "confirm": "削除"
+      },
+      "notices": {
+        "enterName": "モデル名を入力してください",
+        "pulling": "{{name}} をプル中... しばらくかかる場合があります。",
+        "pullSuccess": "✅ {{name}} を正常にプルしました",
+        "pullFailed": "❌ モデルのプルに失敗しました: {{message}}",
+        "deleted": "✅ {{name}} を削除しました",
+        "deleteFailed": "❌ モデルの削除に失敗しました: {{message}}",
+        "refreshing": "更新中...",
+        "refreshSuccess": "✅ モデルリストが更新されました",
+        "refreshFailed": "❌ モデルリストの更新に失敗しました"
+      }
+    },
+    "promptEdit": {
+      "title": "システムプロンプトを編集",
+      "name": {
+        "name": "名前",
+        "desc": "このプロンプトの表示名"
+      },
+      "content": {
+        "name": "内容",
+        "desc": "システムプロンプトの内容"
+      },
+      "enabled": {
+        "name": "有効",
+        "desc": "このプロンプトが有効かどうか"
+      },
+      "cancel": "キャンセル",
+      "save": "保存"
+    },
+    "prompt": {
+      "cancel": "キャンセル",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "名前",
+      "create": "作成",
+      "cancel": "キャンセル"
+    },
+    "explain": {
+      "loading": "⏳ 処理中...",
+      "error": "説明のレンダリング中にエラーが発生しました",
+      "errorPrefix": "❌ エラー: "
+    }
+  },
+  "notices": {
+    "noProvider": "最初に設定で LLM プロバイダーを設定してください",
+    "noModel": "設定でデフォルトモデルを選択してください",
+    "noValidProvider": "モデルに対して有効なプロバイダー設定が見つかりません: {{modelId}}",
+    "processing": "処理中...",
+    "textUpdated": "テキストが正常に更新されました",
+    "error": "エラー: {{message}}"
+  }
+}

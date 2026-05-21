@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "一般",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "工具",
+      "rag": "RAG",
+      "prompts": "提示詞",
+      "agents": "代理",
+      "quickActions": "快速動作",
+      "usage": "使用量"
+    },
+    "general": {
+      "title": "一般設定",
+      "desc": "設定智慧助理外掛程式的一般選項。",
+      "pluginVersion": {
+        "name": "外掛程式版本",
+        "desc": "智慧助理外掛程式的目前版本"
+      },
+      "defaultModel": {
+        "name": "預設模型",
+        "desc": "用於對話的預設模型",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "預設聊天模式",
+        "desc": "選擇聊天視圖開啟時的模式",
+        "chat": "聊天模式",
+        "agent": "代理模式"
+      },
+      "conversationTitleMode": {
+        "name": "對話標題模式",
+        "desc": "如何產生對話標題",
+        "firstMessage": "使用第一則訊息",
+        "autoSummary": "自動產生摘要",
+        "manual": "手動"
+      },
+      "conversationIcons": {
+        "name": "對話圖示",
+        "desc": "為對話啟用自動圖示產生功能"
+      },
+      "configStatus": {
+        "name": "設定狀態",
+        "desc": "外掛程式的整體設定狀態",
+        "ok": "✅ 已設定（{{providers}} 個提供者，{{conversations}} 則對話）",
+        "incomplete": "⚠️ 不完整 - 請設定提供者和模型"
+      }
+    },
+    "llm": {
+      "title": "LLM 設定",
+      "desc": "設定語言模型提供者並管理可用的模型。",
+      "subTabs": {
+        "provider": "提供者",
+        "models": "模型"
+      }
+    },
+    "models": {
+      "title": "模型設定",
+      "desc": "檢視並管理所有已設定提供者的模型。點擊「重新整理模型」以擷取最新可用的模型。",
+      "providerCount": "已設定 {{count}} 個提供者",
+      "providerCount_plural": "已設定 {{count}} 個提供者",
+      "refreshAll": "🔄 重新整理所有模型",
+      "empty": "尚未設定任何提供者。請先在提供者頁籤中新增提供者。",
+      "noModels": "沒有可用的模型。請點擊「重新整理所有模型」或在提供者頁籤中重新整理個別提供者。",
+      "noMatch": "沒有模型符合目前的篩選條件。請調整或清除篩選條件以查看結果。",
+      "modelCount": "• 快取了 {{count}} 個模型",
+      "modelCount_plural": "• 快取了 {{count}} 個模型",
+      "matchCount": "• {{count}} 個符合所選篩選條件",
+      "matchCount_plural": "• {{count}} 個符合所選篩選條件",
+      "status": {
+        "enabled": "已啟用",
+        "disabled": "已停用"
+      },
+      "actions": {
+        "disable": "停用",
+        "enable": "啟用",
+        "setDefaultChat": "設為預設聊天",
+        "defaultChat": "預設聊天",
+        "setDefaultEmbedding": "設為預設嵌入",
+        "defaultEmbedding": "預設嵌入"
+      },
+      "notices": {
+        "fetching": "正在擷取 {{provider}} 的模型...",
+        "fetchFailed": "無法重新整理 {{provider}} 的模型",
+        "refreshed": "模型重新整理成功！",
+        "refreshFailed": "無法重新整理模型",
+        "defaultChatSet": "預設聊天模型已設為 {{name}}",
+        "defaultEmbeddingSet": "預設嵌入模型已設為 {{name}}"
+      },
+      "filters": {
+        "allProviders": "所有提供者",
+        "allCapabilities": "所有功能",
+        "allStates": "所有狀態",
+        "searchPlaceholder": "搜尋名稱或 ID"
+      }
+    },
+    "provider": {
+      "title": "提供者設定",
+      "securityTitle": "⚠️ 安全性警告",
+      "securityDesc": "為了相容性，API 金鑰以明文儲存在您的知識庫中。為防止意外洩漏：",
+      "securityItem1": "請勿共享您的 {{configDir}}/plugins/intelligence-assistant/data/ 資料夾。",
+      "securityItem2": "如果您使用 Git 同步，請將此資料夾新增至 .gitignore。",
+      "securityItem3": "使用公共雲端同步服務時請謹慎。",
+      "desc": "管理 LLM 提供者和 API 憑證。使用操作欄位來編輯設定詳細資訊或重新整理快取模型。",
+      "count": "已設定 {{count}} 個提供者",
+      "count_plural": "已設定 {{count}} 個提供者",
+      "addBtn": "+ 新增提供者",
+      "empty": "未設定任何提供者。請選擇「新增提供者」以開始使用。",
+      "tableHeaders": {
+        "provider": "提供者",
+        "status": "狀態",
+        "actions": "操作"
+      },
+      "status": {
+        "ready": "就緒",
+        "needsConfig": "需要設定",
+        "checking": "檢查中...",
+        "credentialsSet": "已設定憑證",
+        "serverOnline": "伺服器上線",
+        "serverOffline": "伺服器離線",
+        "serverError": "伺服器錯誤"
+      },
+      "guidance": {
+        "requiresCli": "需要本地端 CLI",
+        "provideServiceKey": "提供服務金鑰",
+        "configureBaseUrl": "設定基礎 URL",
+        "addApiKey": "新增 API 金鑰"
+      },
+      "models": {
+        "none": "無模型",
+        "count": "{{count}} 個模型",
+        "count_plural": "{{count}} 個模型"
+      },
+      "ollama": {
+        "checkingVersion": "正在檢查版本...",
+        "server": {
+          "checking": "正在檢查伺服器...",
+          "online": "伺服器：上線",
+          "offline": "伺服器：離線或無法連線",
+          "error": "伺服器：連線錯誤",
+          "versionOnline": "伺服器上線",
+          "versionOffline": "伺服器離線",
+          "versionError": "連線錯誤",
+          "version": "版本：{{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "上次重新整理：{{timeAgo}}",
+        "neverRefreshed": "從未重新整理",
+        "justNow": "剛才",
+        "minutesAgo": "{{n}} 分鐘前",
+        "hoursAgo": "{{n}} 小時前",
+        "daysAgo": "{{n}} 天前"
+      },
+      "actions": {
+        "edit": "編輯",
+        "manageModels": "管理模型",
+        "refreshModels": "重新整理模型",
+        "refreshing": "重新整理中...",
+        "delete": "刪除"
+      },
+      "notices": {
+        "refreshed": "{{provider}} 的模型已重新整理。",
+        "refreshFailed": "無法重新整理模型"
+      },
+      "confirm": {
+        "delete": "移除提供者 {{provider}}？"
+      }
+    },
+    "mcp": {
+      "title": "MCP 伺服器管理",
+      "desc": "設定 Model Context Protocol (MCP) 伺服器，以使用外部工具和資料來源擴充代理功能。",
+      "inspectorBtn": "🔍 開啟 MCP 檢查器",
+      "testAllBtn": "🧪 測試所有連線",
+      "refreshAllBtn": "🔄 重新整理所有工具",
+      "addBtn": "+ 新增 MCP 伺服器",
+      "empty": "未設定任何 MCP 伺服器。請選擇「新增 MCP 伺服器」以開始使用。",
+      "tableHeaders": {
+        "name": "名稱",
+        "command": "命令",
+        "arguments": "引數",
+        "status": "狀態",
+        "tools": "工具",
+        "actions": "操作"
+      },
+      "untitled": "未命名 MCP 伺服器",
+      "notConfigured": "未設定",
+      "noArgs": "無",
+      "cached": "已快取",
+      "disabled": "已停用",
+      "envVars": "{{count}} 個環境變數",
+      "envVars_plural": "{{count}} 個環境變數",
+      "status": {
+        "disabled": "已停用",
+        "connected": "已連線",
+        "disconnected": "已中斷",
+        "enableToManage": "啟用以管理連線",
+        "manualConnect": "手動連線",
+        "autoConnect": "自動連線"
+      },
+      "toolCount": {
+        "live": "{{count}} 個即時工具",
+        "live_plural": "{{count}} 個即時工具",
+        "cached": "{{count}} 個已快取工具",
+        "cached_plural": "{{count}} 個已快取工具"
+      },
+      "actions": {
+        "edit": "編輯",
+        "enabled": "✓ 已啟用",
+        "enabledOff": "✗ 已停用",
+        "connect": "連線",
+        "disconnect": "中斷連線",
+        "connecting": "連線中...",
+        "disconnecting": "中斷連線中...",
+        "test": "測試",
+        "testing": "測試中...",
+        "delete": "刪除"
+      },
+      "notices": {
+        "disconnected": "已從 {{name}} 中斷連線",
+        "connected": "已連線至 {{name}}",
+        "autoConnectFailed": "無法自動連線至 {{name}}",
+        "enableFirst": "連線前請先啟用伺服器",
+        "disconnectFailed": "無法從 {{name}} 中斷連線",
+        "connectFailed": "無法連線至 {{name}}",
+        "testNoCommand": "❌ 測試連線前請先輸入命令",
+        "testSuccess": "✅ 連線成功！找到 {{count}} 個工具。",
+        "testFailed": "❌ 連線失敗：{{message}}",
+        "refreshedAll": "✅ 已重新整理 {{count}} 個伺服器的工具",
+        "refreshedAll_plural": "✅ 已重新整理 {{count}} 個伺服器的工具",
+        "refreshedPartial": "✅ 已重新整理 {{success}} 個伺服器，❌ {{failed}} 個失敗",
+        "noServersConfigured": "⚠️ 未設定任何 MCP 伺服器",
+        "testingAll": "🧪 正在測試 {{count}} 個 MCP 伺服器連線...",
+        "testAllSuccess": "✅ 所有 {{count}} 個 mcp 伺服器均已成功連線！",
+        "testAllPartial": "⚠️ {{successful}} 個已連線，{{failed}} 個失敗"
+      },
+      "confirm": {
+        "delete": "刪除 MCP 伺服器「{{name}}」？"
+      }
+    },
+    "agents": {
+      "title": "代理管理",
+      "desc": "建立並管理具有特定功能、工具和行為的 AI 代理。",
+      "count": "已設定 {{count}} 個代理",
+      "count_plural": "已設定 {{count}} 個代理",
+      "addBtn": "+ 新增代理",
+      "empty": "未設定任何代理。請選擇「新增代理」以開始使用。",
+      "tableHeaders": {
+        "agent": "代理",
+        "model": "模型",
+        "capabilities": "功能",
+        "tools": "工具",
+        "actions": "操作"
+      },
+      "defaultBadge": "預設",
+      "systemPrompt": "系統提示詞 • {{promptName}}",
+      "customPrompt": "自訂提示詞",
+      "model": {
+        "notSet": "未設定",
+        "notFound": "在快取中找不到模型",
+        "useChatView": "使用聊天視圖模型",
+        "useChatViewDesc": "將使用聊天視圖中選取的模型",
+        "useDefault": "使用預設模型",
+        "useDefaultDesc": "將使用設定中的預設模型"
+      },
+      "capabilities": {
+        "noSpecialModes": "無特殊模式"
+      },
+      "tools": {
+        "builtIn": "{{count}} 個內建",
+        "mcpServer": "{{count}} 個 mcp 伺服器",
+        "mcpServer_plural": "{{count}} 個 mcp 伺服器",
+        "mcpTool": "{{count}} 個 mcp 工具",
+        "mcpTool_plural": "{{count}} 個 mcp 工具",
+        "noTools": "未啟用任何工具"
+      },
+      "actions": {
+        "edit": "編輯",
+        "delete": "刪除",
+        "protected": "受保護"
+      },
+      "confirm": {
+        "delete": "刪除代理「{{name}}」？"
+      }
+    },
+    "prompts": {
+      "title": "系統提示詞",
+      "desc": "管理定義 AI 助理行為和個性的系統提示詞。",
+      "addBtn": "+ 新增系統提示詞",
+      "empty": "未設定任何系統提示詞。請選擇「新增系統提示詞」以開始使用。",
+      "tableHeaders": {
+        "name": "名稱",
+        "contentPreview": "內容預覽",
+        "created": "建立時間",
+        "updated": "更新時間",
+        "enabled": "已啟用",
+        "actions": "操作"
+      },
+      "status": {
+        "enabled": "已啟用",
+        "disabled": "已停用"
+      },
+      "actions": {
+        "edit": "編輯",
+        "disable": "停用",
+        "enable": "啟用",
+        "delete": "刪除"
+      },
+      "confirm": {
+        "delete": "刪除提示詞「{{name}}」？"
+      }
+    },
+    "tools": {
+      "title": "工具設定",
+      "desc": "檢視內建工具，並探索從已連線伺服器載入的 MCP 工具。啟用您希望代理能夠執行的動作。",
+      "subTabs": {
+        "builtIn": "內建工具",
+        "mcp": "MCP 工具",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI 工具"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "名稱",
+          "category": "類別",
+          "description": "描述",
+          "parameters": "參數",
+          "enabled": "已啟用"
+        },
+        "categories": {
+          "fileOps": "檔案操作",
+          "searchDisc": "搜尋與探索",
+          "noteMgmt": "筆記管理"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "從您的知識庫讀取檔案內容",
+            "params": "path（必填）：要讀取的檔案路徑"
+          },
+          "writeFile": {
+            "desc": "在您的知識庫中寫入或更新檔案",
+            "params": "path（必填）、content（必填）：檔案路徑和要寫入的內容"
+          },
+          "listFiles": {
+            "desc": "列出知識庫或特定資料夾中的檔案",
+            "params": "folder（選填）、extension（選填）：依資料夾和副檔名篩選"
+          },
+          "searchFiles": {
+            "desc": "在您的知識庫中依名稱或內容搜尋檔案",
+            "params": "query（必填）、search_content（選填）、limit（選填）：搜尋查詢和選項"
+          },
+          "createNote": {
+            "desc": "建立含有指定內容的新筆記",
+            "params": "title（必填）、content（必填）、folder（選填）：筆記標題、內容和位置"
+          },
+          "appendNote": {
+            "desc": "在現有筆記中附加內容",
+            "params": "path（必填）、content（必填）：筆記路徑和要附加的內容"
+          }
+        },
+        "infoTitle": "💡 關於工具",
+        "infoText": "內建工具依外掛程式設定進行設定。MCP 工具則獨立管理——請使用 MCP 頁籤連線伺服器並重新整理工具可用性。",
+        "toolNames": {
+          "read_file": "讀取檔案",
+          "write_file": "寫入檔案",
+          "list_files": "列出檔案",
+          "search_files": "搜尋檔案",
+          "create_note": "建立筆記",
+          "append_note": "附加至筆記"
+        }
+      },
+      "mcpTools": {
+        "noTools": "沒有可用的 MCP 工具。請連線伺服器或重新整理已快取的工具以填充此清單。",
+        "tableHeaders": {
+          "server": "伺服器",
+          "tool": "工具",
+          "description": "描述",
+          "parameters": "參數",
+          "source": "來源"
+        },
+        "noDescription": "無描述",
+        "schemaUnavailable": "結構描述不可用",
+        "live": "即時",
+        "cached": "已快取",
+        "status": {
+          "connected": "已連線",
+          "disconnected": "已中斷"
+        }
+      },
+      "openapi": {
+        "desc": "從 OpenAPI 文件產生 HTTP 工具。遠端規格會快取在 {{cacheDir}} 下。",
+        "addBtn": "新增 HTTP 來源",
+        "noSources": "尚未設定任何 HTTP 來源。",
+        "unnamed": "未命名 HTTP 來源",
+        "tableHeaders": {
+          "name": "名稱",
+          "source": "來源",
+          "auth": "驗證",
+          "status": "狀態",
+          "actions": "操作"
+        },
+        "sourceUrl": "未設定遠端 URL",
+        "sourcePath": "未設定檔案路徑",
+        "authHeader": "標頭 ({{key}})",
+        "authQuery": "查詢 ({{key}})",
+        "authNone": "無",
+        "statusEnabled": "已啟用",
+        "statusDisabled": "已停用",
+        "actions": {
+          "edit": "編輯",
+          "reload": "重新載入",
+          "refetch": "重新擷取",
+          "delete": "刪除"
+        },
+        "notices": {
+          "removed": "HTTP 來源已移除",
+          "reloaded": "已重新載入 {{count}} 個操作",
+          "reloadFailed": "無法重新載入 HTTP 來源。請查看主控台以取得詳細資訊。"
+        },
+        "modal": {
+          "defaultTitle": "HTTP 來源",
+          "displayName": {
+            "name": "顯示名稱",
+            "desc": "代理在選擇工具來源時顯示的名稱"
+          },
+          "enabled": {
+            "name": "已啟用",
+            "desc": "啟用後，所有代理均可使用此 HTTP API"
+          },
+          "sourceType": {
+            "name": "來源類型",
+            "file": "本機檔案",
+            "url": "遠端 URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "擷取後快取在外掛程式資料目錄中"
+          },
+          "cachedFile": "已快取的檔案：{{path}}（{{date}}）",
+          "neverFetched": "從未擷取",
+          "specPath": {
+            "name": "OpenAPI 檔案路徑",
+            "desc": "知識庫內的相對路徑或絕對路徑"
+          },
+          "baseUrl": {
+            "name": "基礎 URL 覆寫",
+            "desc": "覆寫文件中的第一個伺服器條目（選填）"
+          },
+          "auth": {
+            "name": "驗證",
+            "desc": "呼叫此來源時自動插入 API 金鑰",
+            "none": "無",
+            "header": "HTTP 標頭",
+            "query": "查詢參數"
+          },
+          "credKey": {
+            "name": "憑證金鑰"
+          },
+          "credValue": {
+            "name": "憑證值"
+          },
+          "actions": {
+            "name": "操作",
+            "reloadTools": "重新載入工具",
+            "refetchTooltip": "從 URL 重新擷取規格",
+            "deleteTooltip": "刪除來源"
+          }
+        }
+      },
+      "cli": {
+        "desc": "定義代理可執行的本機命令列工具。使用 {{param}} 等範本作為動態引數。",
+        "addBtn": "新增 CLI 工具",
+        "presetsBtn": "從預設值新增",
+        "noTools": "尚未設定任何 CLI 工具。",
+        "tableHeaders": {
+          "name": "名稱",
+          "command": "命令",
+          "parameters": "參數",
+          "status": "狀態",
+          "actions": "操作"
+        },
+        "unnamed": "未命名 CLI 工具",
+        "paramCount": "{{count}} 個參數",
+        "paramCount_plural": "{{count}} 個參數",
+        "noParams": "無",
+        "statusEnabled": "已啟用",
+        "statusDisabled": "已停用",
+        "actions": {
+          "edit": "編輯",
+          "disable": "停用",
+          "enable": "啟用",
+          "delete": "刪除"
+        },
+        "notices": {
+          "removed": "CLI 工具已移除"
+        },
+        "infoTitle": "💡 關於 CLI 工具",
+        "infoText": "CLI 工具在本機執行 shell 命令。在引數中使用 {{paramName}} 進行範本替換，或設定參數以作為引數或環境變數傳遞。",
+        "modal": {
+          "defaultTitle": "CLI 工具",
+          "toolName": {
+            "name": "工具名稱",
+            "desc": "代理呼叫此工具時使用的識別碼"
+          },
+          "description": {
+            "name": "描述",
+            "desc": "描述此工具對 AI 的用途"
+          },
+          "enabled": {
+            "name": "已啟用",
+            "desc": "啟用後允許代理使用此工具"
+          },
+          "commandConfig": "命令設定",
+          "command": {
+            "name": "命令",
+            "desc": "要執行的可執行檔（例如 node、python、bash、/path/to/script）"
+          },
+          "args": {
+            "name": "引數",
+            "desc": "命令引數，每行一個。使用 {{paramName}} 進行範本替換。"
+          },
+          "cwd": {
+            "name": "工作目錄",
+            "desc": "執行命令的目錄（選填）"
+          },
+          "timeout": {
+            "name": "逾時（毫秒）",
+            "desc": "最長執行時間（毫秒）（預設：{{timeout}}）"
+          },
+          "shell": {
+            "name": "在 shell 中執行",
+            "desc": "透過 shell 執行命令（啟用管道等 shell 功能）"
+          },
+          "paramsTitle": "參數",
+          "paramsDesc": "定義 AI 可傳遞給此工具的參數。",
+          "addParam": "新增參數",
+          "noParams": "未定義任何參數。",
+          "paramN": "參數 {{n}}",
+          "param": {
+            "name": "名稱",
+            "type": {
+              "name": "類型",
+              "string": "字串",
+              "number": "數字",
+              "boolean": "布林值"
+            },
+            "description": "描述",
+            "required": "必填",
+            "insertAs": {
+              "name": "插入方式",
+              "desc": "如何將此參數傳遞給命令",
+              "template": "範本 ({{name}})",
+              "arg": "附加為引數",
+              "env": "環境變數"
+            },
+            "envName": {
+              "name": "環境變數名稱",
+              "desc": "覆寫環境變數名稱（預設為大寫的參數名稱）"
+            }
+          },
+          "envTitle": "環境變數",
+          "envDesc": "執行命令時要設定的靜態環境變數。",
+          "envVars": {
+            "name": "環境變數",
+            "desc": "格式：KEY=value，每行一個"
+          }
+        },
+        "presets": {
+          "title": "從預設值新增 CLI 工具",
+          "desc": "選擇預設值以快速新增預先設定的 CLI 工具。新增後可以進行自訂。",
+          "addBtn": "新增",
+          "addedBtn": "已新增",
+          "closeBtn": "關閉",
+          "notices": {
+            "added": "已新增「{{name}}」- 請在 CLI 工具清單中啟用它"
+          },
+          "categories": {
+            "file": "檔案操作",
+            "search": "搜尋",
+            "network": "網路",
+            "code": "程式碼執行",
+            "data": "資料處理",
+            "system": "系統資訊",
+            "apps": "macOS 應用程式與桌面"
+          },
+          "names": {
+            "preset-cat": "讀取檔案 (cat)",
+            "preset-ls": "列出目錄 (ls)",
+            "preset-find": "尋找檔案 (find)",
+            "preset-grep": "搜尋文字 (grep)",
+            "preset-ripgrep": "快速搜尋 (rg)",
+            "preset-curl": "HTTP 請求 (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "執行 Python 程式碼",
+            "preset-node": "執行 JavaScript (Node)",
+            "preset-bash": "執行 Shell 指令碼",
+            "preset-jq": "JSON 處理器 (jq)",
+            "preset-wc": "字數統計 (wc)",
+            "preset-date": "目前日期/時間",
+            "preset-pwd": "目前目錄 (pwd)",
+            "preset-whoami": "目前使用者",
+            "preset-uname": "系統資訊 (uname)",
+            "preset-open": "開啟檔案/URL (open)",
+            "preset-open-app": "啟動應用程式 (open -a)",
+            "preset-safari": "在 Safari 中開啟",
+            "preset-chrome": "在 Chrome 中開啟",
+            "preset-firefox": "在 Firefox 中開啟",
+            "preset-pbcopy": "複製到剪貼板",
+            "preset-pbpaste": "從剪貼板貼上",
+            "preset-say": "文字轉語音 (say)",
+            "preset-osascript": "AppleScript 執行器",
+            "preset-notify": "桌面通知",
+            "preset-screencapture": "截圖",
+            "preset-applescript-list-apps": "列出執行中的應用程式"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG 設定",
+      "desc": "設定檢索增強生成和網頁搜尋，以增強 AI 回應。",
+      "subTabs": {
+        "overview": "概覽",
+        "chunking": "分塊",
+        "search": "搜尋",
+        "filters": "篩選器",
+        "advanced": "進階",
+        "websearch": "網頁搜尋"
+      },
+      "general": {
+        "title": "一般設定",
+        "enableRag": {
+          "name": "啟用 RAG",
+          "desc": "啟用檢索增強生成以增強上下文"
+        },
+        "vectorStore": {
+          "name": "向量儲存",
+          "desc": "用於儲存嵌入向量的向量資料庫",
+          "memory": "記憶體內",
+          "disk": "磁碟型"
+        },
+        "embeddingModel": {
+          "name": "嵌入模型",
+          "desc": "用於產生嵌入向量的模型"
+        },
+        "embedChanged": {
+          "name": "自動嵌入已變更的檔案",
+          "desc": "當檔案被修改時自動重新嵌入"
+        }
+      },
+      "indexMgmt": {
+        "title": "索引管理",
+        "desc": "管理您的 RAG 索引並檢視已索引內容的統計資訊。",
+        "statsTitle": "索引統計",
+        "stats": {
+          "totalChunks": "總區塊數",
+          "uniqueFiles": "唯一檔案數",
+          "totalChars": "總字元數",
+          "avgChunkSize": "平均區塊大小"
+        },
+        "empty": "索引為空。請選擇「重建索引」以開始索引。",
+        "error": "⚠️ 無法載入索引統計資訊",
+        "rebuild": {
+          "name": "重建索引",
+          "desc": "重新索引知識庫中的所有檔案。這可能需要一些時間。",
+          "btn": "重建",
+          "rebuilding": "重建中..."
+        },
+        "refresh": {
+          "name": "重新整理索引",
+          "desc": "使用自上次索引以來的任何已變更檔案更新索引。",
+          "btn": "重新整理",
+          "refreshing": "重新整理中..."
+        },
+        "clear": {
+          "name": "清除索引",
+          "desc": "移除所有已索引的資料。您需要重建索引。",
+          "btn": "清除",
+          "clearing": "清除中..."
+        },
+        "notices": {
+          "rebuilt": "索引重建成功",
+          "rebuildFailed": "無法重建索引",
+          "refreshed": "索引重新整理成功",
+          "refreshFailed": "無法重新整理索引",
+          "cleared": "索引清除成功",
+          "clearFailed": "無法清除索引"
+        }
+      },
+      "chunking": {
+        "title": "分塊設定",
+        "strategy": {
+          "name": "分塊策略",
+          "desc": "將文件分割成區塊的策略",
+          "recursive": "遞迴（智慧型）",
+          "fixed": "固定大小",
+          "sentence": "依句子",
+          "paragraph": "依段落"
+        },
+        "chunkSize": {
+          "name": "區塊大小",
+          "desc": "每個區塊的字元數（建議 500-2000）"
+        },
+        "chunkOverlap": {
+          "name": "區塊重疊",
+          "desc": "區塊之間的重疊字元數"
+        },
+        "minChunkSize": {
+          "name": "最小區塊大小",
+          "desc": "要建立的最小區塊大小"
+        },
+        "maxTokens": {
+          "name": "每個區塊的最大權杖數",
+          "desc": "每個區塊允許的最大權杖數"
+        }
+      },
+      "search": {
+        "title": "搜尋設定",
+        "searchType": {
+          "name": "搜尋類型",
+          "desc": "要執行的相似度搜尋類型",
+          "similarity": "相似度"
+        },
+        "topK": {
+          "name": "前 K 個結果",
+          "desc": "要擷取的最相關區塊數（1-20）"
+        },
+        "threshold": {
+          "name": "相似度閾值",
+          "desc": "包含結果的最低相似度分數（0.0-1.0）"
+        },
+        "weight": {
+          "name": "相關性分數權重",
+          "desc": "相關性評分的權重（0.0-1.0）"
+        },
+        "contextLimit": {
+          "name": "上下文視窗限制",
+          "desc": "已擷取上下文的最大權杖數"
+        }
+      },
+      "filters": {
+        "title": "檔案篩選器",
+        "excludeFolders": {
+          "name": "排除資料夾",
+          "desc": "要從索引中排除的資料夾（以逗號分隔）"
+        },
+        "includeTypes": {
+          "name": "包含的檔案類型",
+          "desc": "要包含的檔案類型（空白 = 所有類型）"
+        },
+        "excludeTypes": {
+          "name": "排除的檔案類型",
+          "desc": "要從索引中排除的檔案類型"
+        },
+        "filterByTag": {
+          "name": "依標籤篩選",
+          "desc": "只索引含有這些標籤的檔案（空白 = 所有檔案）"
+        },
+        "excludeByTag": {
+          "name": "依標籤排除",
+          "desc": "從索引中排除含有這些標籤的檔案"
+        }
+      },
+      "advanced": {
+        "title": "進階設定",
+        "batchSize": {
+          "name": "嵌入批次大小",
+          "desc": "並行嵌入的區塊數"
+        }
+      },
+      "grading": {
+        "title": "評分設定",
+        "desc": "在將已擷取的區塊傳送給 LLM 之前，先對其相關性進行評分。這有助於過濾低品質的結果。",
+        "enableGrading": {
+          "name": "啟用評分閾值",
+          "desc": "篩選低於品質閾值的區塊"
+        },
+        "graderSource": {
+          "name": "評分模型來源",
+          "desc": "從哪裡取得評分模型",
+          "chat": "聊天模型",
+          "custom": "自訂模型"
+        },
+        "graderModel": {
+          "name": "評分模型",
+          "desc": "用於評分的特定模型"
+        },
+        "parallel": {
+          "name": "並行處理",
+          "desc": "並行評分的區塊數"
+        },
+        "minRelevance": {
+          "name": "最低相關性分數",
+          "desc": "最低相關性分數（0.0-1.0）"
+        },
+        "minAccuracy": {
+          "name": "最低準確性分數",
+          "desc": "最低準確性分數（0.0-1.0）"
+        },
+        "minSupport": {
+          "name": "最低支援品質分數",
+          "desc": "最低支援品質分數（0.0-1.0）"
+        }
+      }
+    },
+    "websearch": {
+      "title": "網頁搜尋設定",
+      "desc": "設定網頁搜尋功能，以使用網際網路上的最新資訊來增強 AI 回應。",
+      "generalBehavior": "一般行為",
+      "providerSelection": "提供者選擇",
+      "localeFilters": "語言地區與篩選器",
+      "apiCredentials": "API 憑證與端點",
+      "enabled": {
+        "name": "啟用網頁搜尋",
+        "desc": "允許 AI 在網路上搜尋目前的資訊"
+      },
+      "autoTrigger": {
+        "name": "自動觸發搜尋",
+        "desc": "當查詢需要目前資訊時（例如新聞、價格、近期事件）自動觸發網頁搜尋"
+      },
+      "maxResults": {
+        "name": "最大結果數",
+        "desc": "要傳回的最大搜尋結果數"
+      },
+      "timeRange": {
+        "name": "結果新鮮度",
+        "desc": "將結果限制在提供者支援的時間範圍內（Google、SearXNG、Mojeek）",
+        "any": "任何時間（預設）",
+        "h": "過去一小時",
+        "d": "過去 24 小時",
+        "w": "過去一週",
+        "m": "過去一個月",
+        "y": "過去一年"
+      },
+      "provider": {
+        "name": "搜尋提供者",
+        "desc": "從注重隱私的抓取器或 API 支援的搜尋引擎中選擇"
+      },
+      "searchLanguage": {
+        "name": "語言代碼",
+        "desc": "ISO 語言代碼（例如 en、fr、zh-CN），轉發給支援本地化的提供者"
+      },
+      "searchCountry": {
+        "name": "國家/市場代碼",
+        "desc": "兩字母國家代碼（例如 US、DE），供 Bing、DuckDuckGo、Brave 等使用"
+      },
+      "includeDomains": {
+        "name": "僅包含這些網域",
+        "desc": "SerpAPI 和 Brave 使用的逗號分隔清單，用於將結果限制在特定網站"
+      },
+      "excludeDomains": {
+        "name": "排除網域",
+        "desc": "擷取結果後要過濾掉的逗號分隔網域"
+      },
+      "apiKey": {
+        "name": "預設 API 金鑰",
+        "desc": "當未設定提供者專屬金鑰時，Google、Bing、SerpAPI、Tavily 或 Brave 使用的共用 API 金鑰"
+      },
+      "googleCseId": {
+        "name": "Google 自訂搜尋引擎 ID",
+        "desc": "使用 Google 提供者時，需要與 Google API 金鑰搭配使用"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI 端點",
+        "desc": "若您自行託管，請覆寫 SerpAPI 基礎 URL"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API 金鑰",
+        "desc": "使用 Tavily 提供者時覆寫預設金鑰"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG 端點",
+        "desc": "您的 SearXNG 執行個體的基礎 URL（必須傳回 JSON）"
+      },
+      "braveApiKey": {
+        "name": "Brave API 金鑰",
+        "desc": "選擇 Brave Search 作為提供者時，使用 Brave Search API 訂閱權杖"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API 金鑰（選填）",
+        "desc": "如果您的 Qwant 方案會核發承載權杖，請在此新增"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API 金鑰",
+        "desc": "Mojeek 提供者的必要項目"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo（不需金鑰）",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo（HTML 抓取）",
+        "yandex": "Yandex（HTML 抓取）",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "快速動作",
+      "desc": "設定選取文字時在編輯器上下文選單中顯示的 AI 快速動作。",
+      "actionPrefix": {
+        "name": "動作前綴",
+        "desc": "在上下文選單中所有快速動作之前顯示的前綴（表情符號或文字）",
+        "placeholder": "⚡"
+      },
+      "count": "已設定 {{count}} 個動作（{{enabled}} 個已啟用）",
+      "count_plural": "已設定 {{count}} 個動作（{{enabled}} 個已啟用）",
+      "addBtn": "+ 新增快速動作",
+      "empty": "未設定任何快速動作。請選擇「新增快速動作」以開始使用。",
+      "tableHeaders": {
+        "action": "動作",
+        "type": "類型",
+        "model": "模型",
+        "promptPreview": "提示詞預覽",
+        "actions": "操作"
+      },
+      "defaultModel": "預設",
+      "editBtn": "編輯",
+      "deleteBtn": "刪除",
+      "confirm": {
+        "delete": "刪除快速動作「{{name}}」？"
+      },
+      "usageInfo": {
+        "title": "使用方式",
+        "step1": "在任何筆記中選取文字",
+        "step2": "右鍵點擊以開啟上下文選單",
+        "step3": "從選單中選擇快速動作",
+        "step4Replace": "標記為「取代」的動作將以 AI 結果取代選取的文字",
+        "step4Explain": "標記為「解釋」的動作將在對話方塊中顯示結果"
+      },
+      "edit": {
+        "title": "編輯快速動作",
+        "name": {
+          "name": "名稱",
+          "desc": "此動作在上下文選單中的顯示名稱"
+        },
+        "actionType": {
+          "name": "動作類型",
+          "desc": "如何處理 AI 回應",
+          "replace": "取代選取的文字",
+          "explain": "在對話方塊中顯示"
+        },
+        "model": {
+          "name": "模型",
+          "desc": "用於此動作的語言模型（留空以使用預設值）",
+          "default": "使用預設模型"
+        },
+        "promptTemplate": {
+          "name": "提示詞範本",
+          "desc": "傳送給 AI 的指令。選取的文字將自動附加。"
+        },
+        "cancel": "取消",
+        "save": "儲存"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "使文字更長",
+          "prompt": "擴展並詳細闡述以下文字，使其更詳細、更全面，同時保留原始含義和語氣。只傳回擴展後的文字，不需要額外的評論：\n\n"
+        },
+        "summarize": {
+          "name": "摘要文字",
+          "prompt": "提供以下文字的簡潔摘要。只傳回摘要，不需要額外的評論：\n\n"
+        },
+        "improve-writing": {
+          "name": "改善寫作",
+          "prompt": "提升以下文字的寫作品質、清晰度和風格。只傳回改善後的文字，不需要額外的評論：\n\n"
+        },
+        "fix-grammar": {
+          "name": "修正文法",
+          "prompt": "修正以下文字中的任何文法、拼字和標點符號錯誤。只傳回修正後的文字，不需要額外的評論：\n\n"
+        },
+        "explain": {
+          "name": "解釋文字",
+          "prompt": "以簡單的術語解釋以下文字：\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "權杖使用量",
+      "desc": "追蹤各提供者和模型的權杖消耗量。資料會在所有對話中累積。",
+      "notAvailable": "無法使用權杖使用量追蹤。",
+      "ranges": {
+        "today": "今天",
+        "week": "本週",
+        "month": "本月",
+        "all": "全部時間"
+      },
+      "stats": {
+        "totalTokens": "總權杖數",
+        "apiCalls": "API 呼叫次數",
+        "promptTokens": "提示詞權杖數",
+        "completion": "完成",
+        "tokensIn": "輸入的權杖",
+        "tokensOut": "輸出的權杖"
+      },
+      "byProvider": "依提供者",
+      "byModel": "依模型",
+      "noData": "尚無使用量資料。",
+      "recentActivity": "近期活動",
+      "last10": "最近 10 筆",
+      "noRecent": "無近期活動。",
+      "tableHeaders": {
+        "provider": "提供者",
+        "model": "模型",
+        "prompt": "提示詞",
+        "completion": "完成",
+        "total": "總計",
+        "calls": "呼叫次數",
+        "time": "時間",
+        "in": "輸入",
+        "out": "輸出"
+      },
+      "clearBtn": "清除所有使用量資料",
+      "confirm": {
+        "clear": "清除所有權杖使用量記錄？此操作無法復原。"
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "輸入您的訊息...（Enter 傳送，Shift+Enter 換行）",
+    "conversations": "對話",
+    "toggleConversationsTitle": "切換對話清單",
+    "currentConversation": "目前對話",
+    "new": "新增",
+    "settings": "設定",
+    "openSettingsTitle": "開啟外掛程式設定",
+    "mode": "模式",
+    "prompt": "提示詞",
+    "agent": "代理",
+    "modeOptions": {
+      "chat": "聊天",
+      "agent": "代理"
+    },
+    "noSystemPrompt": "無系統提示詞",
+    "noAgentsAvailable": "沒有可用的代理",
+    "sendHintPrefix": "按下 ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " 傳送",
+    "sendAriaLabel": "傳送訊息",
+    "stop": " 停止",
+    "addReference": "新增參考",
+    "addReferenceTooltip": "新增檔案或資料夾參考 (@)",
+    "emptyHeading": "開始對話",
+    "emptySubtext": "在下方輸入訊息以開始，或從歷史記錄中選擇對話。",
+    "noAgentConfig": "未設定任何代理",
+    "selectAgent": "選擇代理…",
+    "notices": {
+      "stopping": "正在停止生成...",
+      "ragInitError": "RAG 初始化錯誤：{{message}}",
+      "modelsRefreshed": "模型已重新整理",
+      "modelsRefreshFailed": "無法重新整理模型：{{message}}",
+      "waitForResponse": "請等待目前的回應完成",
+      "configureProvider": "請先在設定中設定 LLM 提供者",
+      "selectModel": "請選擇一個模型",
+      "noValidProvider": "找不到此模型的有效提供者設定",
+      "chatError": "聊天錯誤：{{message}}",
+      "noMessageToRegenerate": "找不到要重新生成的訊息",
+      "regenerateOnlyLatest": "目前只能重新生成最近的回應",
+      "regenerateNoUserMsg": "找不到要重新生成的使用者訊息",
+      "regenerated": "已重新生成回應",
+      "regenerateFailed": "重新生成失敗：{{message}}",
+      "noteCreated": "已建立筆記：{{name}}",
+      "noteCreateFailed": "無法建立筆記：{{message}}",
+      "messageInserted": "訊息已插入：{{path}}",
+      "messageInsertFailed": "無法插入訊息：{{message}}",
+      "noAgents": "沒有可用的代理。請在「設定 → 代理」中設定代理。",
+      "ragDisabled": "RAG 在設定中已停用。請在「設定 → 聊天功能 → RAG」中啟用。",
+      "webSearchDisabled": "網頁搜尋在設定中已停用。請在「設定 → 聊天功能 → 網頁搜尋」中啟用。",
+      "noFilesInVault": "在知識庫中找不到任何檔案",
+      "attached": "已附加：{{name}}",
+      "attachedImages": "已附加 {{count}} 張圖片",
+      "referencesAdded": "已新增 {{count}} 個參考",
+      "fileNotFound": "找不到檔案：{{path}}",
+      "agentConfigApplied": "已套用代理設定：{{name}}",
+      "waitForComplete": "請等待目前的回應完成",
+      "chatServiceFallback": "ChatService 未設定。使用 ChatView 備援方案。",
+      "noModelSelected": "未選擇任何模型",
+      "noProviderConfig": "找不到提供者設定",
+      "generationStopped": "生成已停止",
+      "noResponseToRegenerate": "沒有可重新生成的回應",
+      "agentNotFound": "找不到代理",
+      "unableToLoadRag": "無法載入 RAG 統計資料。",
+      "referenced": "已參考：{{name}}"
+    },
+    "status": {
+      "available": "可用",
+      "unavailable": "不可用",
+      "disabled": "已停用",
+      "on": "開啟 · {{detail}}",
+      "off": "關閉"
+    },
+    "ragStats": {
+      "title": "RAG 統計資料",
+      "totalChunks": "📊 總區塊數：",
+      "filesIndexed": "📁 已索引的檔案：",
+      "totalSize": "💾 總大小：",
+      "avgChunks": "📈 平均區塊/檔案：",
+      "indexedFiles": "📄 已索引的檔案",
+      "noFilesYet": "⚠️ 尚未索引任何檔案。",
+      "howToBuild": "建立 RAG 索引的步驟：",
+      "step1": "前往「設定 → RAG」",
+      "step2": "啟用 RAG",
+      "step3": "選擇索引知識庫",
+      "close": "關閉",
+      "retrieved": "📚 從 {{count}} 個文件中擷取",
+      "retrieved_plural": "📚 從 {{count}} 個文件中擷取"
+    },
+    "ragTooltip": {
+      "status": "RAG 索引狀態：",
+      "totalChunks": "📊 總區塊數：{{count}}",
+      "filesIndexed": "📁 已索引的檔案：{{count}}",
+      "totalSize": "💾 總大小：{{size}} KB",
+      "indexedFiles": "📄 已索引的檔案：",
+      "andMore": "  ...以及另外 {{count}} 個",
+      "noFilesYet": "⚠️ 尚未索引任何檔案。",
+      "goToSettings": "前往「設定 → RAG」建立索引。",
+      "ragOff": "ℹ️ 此聊天中的 RAG 目前已關閉。"
+    },
+    "agentSummary": {
+      "model": "模型",
+      "temp": "溫度",
+      "max": "最大值",
+      "rag": "RAG",
+      "web": "網頁",
+      "tools": "工具",
+      "memory": "記憶體",
+      "none": "無",
+      "configuration": "{{name}} 設定",
+      "modelFixed": "{{name}} · 固定",
+      "modelDefault": "{{name}} · 預設",
+      "modelChatView": "{{name}} · 聊天視圖",
+      "customModel": "自訂模型",
+      "notSet": "未設定",
+      "auto": "自動",
+      "on": "開啟",
+      "off": "關閉",
+      "shortTerm": "短期",
+      "longTerm": "長期",
+      "disabledMemory": "已停用",
+      "builtIn": "{{count}} 個內建",
+      "mcp": "{{count}} 個 MCP",
+      "cli": "{{count}} 個 CLI"
+    },
+    "message": {
+      "webResults": "網頁結果",
+      "attachments": "附件",
+      "references": "參考",
+      "ragSources": "RAG 來源",
+      "reasoning": "推理",
+      "copy": "複製",
+      "copied": "訊息已複製",
+      "copyFailed": "無法複製訊息",
+      "tokenUsage": "權杖使用量",
+      "tokenUsagePrompt": "提示詞",
+      "tokenUsageCompletion": "完成",
+      "tokenUsageTotal": "總計",
+      "save": "儲存",
+      "insertToNotes": "插入至筆記",
+      "regenerate": "重新生成"
+    },
+    "streaming": {
+      "thinking": "思考中..."
+    },
+    "toolCall": {
+      "thinking": "思考中",
+      "executionProcess": "執行過程",
+      "input": "輸入",
+      "output": "輸出",
+      "running": "執行中..."
+    },
+    "addPicture": "新增圖片",
+    "addPictureTooltip": "將圖片附加至您的訊息",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "使用已索引的筆記作為上下文",
+    "webSearchLabel": "網頁搜尋",
+    "webSearchTooltipLabel": "在需要時搜尋網際網路",
+    "imageUnavailable": "目前的模型不支援圖片附件。",
+    "newChat": "新聊天",
+    "newConversation": "新對話",
+    "searchConversations": "搜尋對話...",
+    "header": {
+      "model": "模型",
+      "advancedParams": "進階參數",
+      "temperature": "溫度",
+      "maxTokens": "最大權杖數",
+      "topP": "Top P",
+      "freqPenalty": "頻率懲罰",
+      "presPenalty": "存在懲罰",
+      "agentConfig": "代理設定",
+      "modelsCount": "模型：{{count}}",
+      "tokensCount": "權杖：{{count}}",
+      "noModels": "沒有可用的模型"
+    },
+    "temperature": {
+      "precise": "0（精確）",
+      "balanced": "1（平衡）",
+      "creative": "2（創意）"
+    },
+    "modals": {
+      "image": {
+        "title": "附加圖片",
+        "searchPlaceholder": "搜尋圖片...",
+        "selectAll": "全選",
+        "selectNone": "全部取消選取",
+        "addSelected": "新增所選",
+        "noResults": "找不到符合的圖片。"
+      },
+      "reference": {
+        "title": "新增參考",
+        "searchPlaceholder": "搜尋檔案和資料夾...",
+        "selectAll": "全選",
+        "selectNone": "全部取消選取",
+        "addSelected": "新增所選",
+        "noResults": "找不到符合的檔案或資料夾。"
+      },
+      "insertNote": {
+        "title": "插入至筆記",
+        "searchPlaceholder": "搜尋筆記...",
+        "insert": "插入至所選筆記",
+        "createNew": "建立新筆記",
+        "noResults": "找不到符合的筆記。"
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "取消",
+      "confirm": "確認"
+    },
+    "agentEdit": {
+      "title": "編輯代理",
+      "icon": {
+        "name": "圖示",
+        "desc": "代表此代理的表情符號或字元"
+      },
+      "description": {
+        "name": "描述",
+        "desc": "代理的簡短描述"
+      },
+      "modelStrategy": {
+        "name": "模型策略",
+        "options": {
+          "default": "使用預設模型（來自設定）",
+          "chatView": "使用聊天視圖模型",
+          "fixed": "固定模型"
+        },
+        "noModels": "無快取模型",
+        "desc": "選擇代理如何選取其模型"
+      },
+      "systemPrompt": {
+        "createNew": "➕ 建立新提示詞…",
+        "promptName": {
+          "name": "提示詞名稱",
+          "desc": "新系統提示詞的顯示名稱"
+        },
+        "promptContent": {
+          "name": "提示詞內容",
+          "desc": "新系統提示詞的內容"
+        },
+        "name": "系統提示詞",
+        "desc": "從現有提示詞中選擇，或為此代理定義新的提示詞。"
+      },
+      "capabilities": "功能",
+      "memory": {
+        "title": "記憶體",
+        "notice": "代理記憶體功能暫時無法使用，我們正在持續改進體驗。"
+      },
+      "tools": {
+        "title": "工具",
+        "builtIn": {
+          "name": "內建工具",
+          "desc": "選擇此代理可以使用的內建工具"
+        },
+        "cli": {
+          "name": "CLI 工具",
+          "desc": "授予所有已啟用 CLI 工具的存取權，或在下方個別選擇",
+          "noTools": "未設定任何 CLI 工具。請在「設定 → 工具 → CLI」中新增並啟用工具以在此使用。"
+        }
+      },
+      "mcp": {
+        "title": "MCP 存取",
+        "noServers": "未設定任何 MCP 伺服器。請在「設定 → MCP」中新增伺服器以解鎖這些選項。",
+        "toolsCached": "已快取 {{count}} 個工具",
+        "toolsCached_plural": "已快取 {{count}} 個工具",
+        "noToolsCached": "尚未快取任何工具。請啟用完整存取或重新整理快取。",
+        "showTools": "顯示工具",
+        "hideTools": "隱藏工具",
+        "selected": "已選取",
+        "notSelected": "未選取",
+        "noToolsAvailable": "此伺服器目前沒有可用的工具。"
+      },
+      "notices": {
+        "promptRequired": "請為新系統提示詞提供名稱和內容。"
+      },
+      "name": {
+        "label": "名稱",
+        "desc": "此代理的顯示名稱"
+      },
+      "fixedModel": {
+        "name": "固定模型",
+        "desc": "為此代理選擇特定模型。",
+        "descNoModels": "沒有可用的快取模型。請在模型頁籤中重新整理模型。"
+      },
+      "temperature": {
+        "label": "溫度",
+        "desc": "控制隨機性（0.0 - 2.0）"
+      },
+      "maxTokens": {
+        "label": "最大權杖數",
+        "desc": "要生成的最大權杖數"
+      },
+      "contextWindow": {
+        "label": "上下文視窗",
+        "desc": "要包含在上下文中的先前訊息數"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "啟用檢索增強生成"
+      },
+      "webSearch": {
+        "name": "網頁搜尋",
+        "desc": "啟用網頁搜尋功能"
+      },
+      "maxSteps": {
+        "name": "最大工具步驟數",
+        "desc": "每個代理輪次的最大工具呼叫步驟數"
+      }
+    },
+    "provider": {
+      "title": "提供者設定",
+      "selectProvider": {
+        "name": "提供者",
+        "desc": "選擇 LLM 提供者類型",
+        "placeholder": "-- 選擇提供者 --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama（本機）",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "自訂（相容 OpenAI）"
+      },
+      "modelFilter": {
+        "name": "模型篩選器",
+        "desc": "用於限制可用模型的選填正規表示式模式"
+      },
+      "resourceGroup": {
+        "name": "資源群組",
+        "desc": "選填的 SAP AI Core 資源群組"
+      },
+      "serviceKey": {
+        "name": "服務金鑰",
+        "desc": "SAP AI Core 服務金鑰（JSON 字串）"
+      },
+      "baseUrl": {
+        "name": "基礎 URL",
+        "ollamaDesc": "Ollama 伺服器 URL",
+        "customDesc": "相容 OpenAI 的 API 端點（必填）",
+        "optionalDesc": "自訂 API 端點（選填）"
+      },
+      "manageModels": {
+        "name": "管理模型",
+        "desc": "從 Ollama 登錄中提取新模型或更新現有模型。",
+        "btn": "⏬ 提取 Ollama 模型"
+      },
+      "apiKey": {
+        "name": "API 金鑰",
+        "desc": "所選提供者的驗證金鑰"
+      },
+      "cancel": "取消",
+      "save": "儲存",
+      "validation": {
+        "selectProvider": "請選擇提供者類型",
+        "apiKeyTooLong": "API 金鑰過長。最大長度為 500 個字元。",
+        "invalidUrl": "基礎 URL 格式無效。請輸入有效的 URL（例如 https://api.example.com）"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP 檢查器",
+      "desc": "檢查並偵錯 Model Context Protocol (MCP) 伺服器連線和工具。",
+      "tabs": {
+        "connections": "連線",
+        "tools": "工具",
+        "logs": "日誌"
+      },
+      "refreshBtn": "🔄 重新整理",
+      "connections": {
+        "title": "MCP 伺服器連線",
+        "noServers": "未設定任何 MCP 伺服器。",
+        "headers": {
+          "server": "伺服器名稱",
+          "status": "狀態",
+          "tools": "可用工具",
+          "actions": "操作"
+        },
+        "statusDisabled": "已停用",
+        "statusConnected": "● 已連線",
+        "statusDisconnected": "○ 已中斷",
+        "toolsLive": "{{count}} 個工具",
+        "toolsLive_plural": "{{count}} 個工具",
+        "toolsCached": "{{count}} 個工具（已快取）",
+        "toolsCached_plural": "{{count}} 個工具（已快取）",
+        "noTools": "0 個工具",
+        "connectBtn": "連線",
+        "disconnectBtn": "中斷連線",
+        "connecting": "連線中...",
+        "disconnecting": "中斷連線中...",
+        "notices": {
+          "disconnected": "已從 {{name}} 中斷連線",
+          "enableFirst": "連線前請先在設定中啟用伺服器",
+          "connected": "已連線至 {{name}}",
+          "failedDisconnect": "無法從 {{name}} 中斷連線：{{message}}",
+          "failedConnect": "無法連線至 {{name}}：{{message}}"
+        }
+      },
+      "tools": {
+        "title": "可用的 MCP 工具",
+        "noTools": "沒有可用的 MCP 工具。請檢查伺服器連線。",
+        "serverPrefix": "伺服器：{{name}}",
+        "noToolsInServer": "沒有可用的工具",
+        "headers": {
+          "tool": "工具名稱",
+          "description": "描述",
+          "parameters": "參數"
+        },
+        "noDescription": "無描述",
+        "noParams": "無"
+      },
+      "logs": {
+        "title": "MCP 連線日誌",
+        "placeholder": "MCP 連線日誌將顯示在此處。目前顯示的是佔位符資訊。",
+        "events": {
+          "connection": "• 連線事件",
+          "tools": "• 工具註冊事件",
+          "errors": "• 錯誤日誌",
+          "comms": "• 通訊詳細資訊"
+        },
+        "testTitle": "測試工具執行",
+        "selectServer": "選擇伺服器...",
+        "selectTool": "選擇工具...",
+        "parametersTitle": "參數",
+        "selectEnum": "選擇...",
+        "performBtn": "執行工具",
+        "clearBtn": "清除結果",
+        "executing": "執行中...",
+        "success": "✅ 執行成功",
+        "failed": "❌ 執行失敗",
+        "errorTitle": "❌ 執行錯誤",
+        "errorLabel": "錯誤：{{message}}",
+        "notices": {
+          "success": "工具執行成功",
+          "failed": "工具執行失敗",
+          "error": "執行錯誤：{{message}}",
+          "requiredMissing": "缺少必要的參數：{{name}}",
+          "invalidNumber": "參數的數字無效：{{name}}",
+          "invalidJson": "參數的 JSON 無效：{{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ 未設定任何 MCP 伺服器",
+        "testing": "🧪 正在測試 {{count}} 個 MCP 伺服器連線...",
+        "allSuccess": "✅ 所有 {{count}} 個 mcp 伺服器均已成功連線！",
+        "partial": "⚠️ {{success}} 個已連線，{{failed}} 個失敗"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "編輯 MCP 伺服器",
+      "titleAdd": "新增 MCP 伺服器",
+      "serverName": {
+        "name": "伺服器名稱",
+        "desc": "在整個外掛程式中顯示的友善名稱"
+      },
+      "connectionMode": {
+        "name": "連線模式",
+        "desc": "選擇自動連線或僅在手動觸發時連線",
+        "auto": "開啟聊天時自動連線",
+        "manual": "手動連線"
+      },
+      "command": {
+        "name": "命令",
+        "desc": "啟動 MCP 伺服器的可執行檔或指令碼"
+      },
+      "arguments": {
+        "name": "引數",
+        "desc": "以逗號或換行符號分隔的引數（選填）"
+      },
+      "envVars": {
+        "name": "環境變數",
+        "desc": "選填的 KEY=VALUE 對，每行一個"
+      },
+      "enabled": {
+        "name": "已啟用",
+        "desc": "停用以保持伺服器設定但不自動連線"
+      },
+      "cancel": "取消",
+      "saveEdit": "儲存變更",
+      "saveAdd": "新增伺服器",
+      "validation": {
+        "nameRequired": "伺服器名稱為必填項目",
+        "commandRequired": "命令為必填項目"
+      }
+    },
+    "ollamaManager": {
+      "title": "管理 Ollama 模型",
+      "serverInfo": "伺服器資訊",
+      "checkingServer": "正在檢查伺服器...",
+      "serverOnline": "✅ 伺服器上線",
+      "versionLabel": " | 版本：{{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ 伺服器離線",
+      "connectionError": "❌ 連線錯誤",
+      "pullTitle": "提取新模型",
+      "pullHint": "輸入模型名稱以從 Ollama 函式庫下載（例如 llama2、mistral、codellama）",
+      "modelName": {
+        "name": "模型名稱",
+        "example": "範例：llama2、mistral、codellama:7b"
+      },
+      "pullBtn": "提取模型",
+      "installedTitle": "已安裝的模型",
+      "refreshList": "🔄 重新整理清單",
+      "noModels": "找不到任何模型。請提取模型以開始使用。",
+      "capabilities": "功能：{{caps}}",
+      "deleteBtn": "刪除",
+      "closeBtn": "關閉",
+      "confirmDelete": {
+        "title": "確認刪除",
+        "message": "確定要刪除模型「{{name}}」嗎？",
+        "cancel": "取消",
+        "confirm": "刪除"
+      },
+      "notices": {
+        "enterName": "請輸入模型名稱",
+        "pulling": "正在提取 {{name}}...這可能需要一些時間。",
+        "pullSuccess": "✅ 成功提取 {{name}}",
+        "pullFailed": "❌ 無法提取模型：{{message}}",
+        "deleted": "✅ 已刪除 {{name}}",
+        "deleteFailed": "❌ 無法刪除模型：{{message}}",
+        "refreshing": "重新整理中...",
+        "refreshSuccess": "✅ 模型清單已重新整理",
+        "refreshFailed": "❌ 無法重新整理模型清單"
+      }
+    },
+    "promptEdit": {
+      "title": "編輯系統提示詞",
+      "name": {
+        "name": "名稱",
+        "desc": "此提示詞的顯示名稱"
+      },
+      "content": {
+        "name": "內容",
+        "desc": "系統提示詞的內容"
+      },
+      "enabled": {
+        "name": "已啟用",
+        "desc": "此提示詞是否為作用中"
+      },
+      "cancel": "取消",
+      "save": "儲存"
+    },
+    "prompt": {
+      "cancel": "取消",
+      "ok": "確定"
+    },
+    "textInput": {
+      "nameLabel": "名稱",
+      "create": "建立",
+      "cancel": "取消"
+    },
+    "explain": {
+      "loading": "⏳ 處理中...",
+      "error": "轉譯說明時發生錯誤",
+      "errorPrefix": "❌ 錯誤："
+    }
+  },
+  "notices": {
+    "noProvider": "請先在設定中設定 LLM 提供者",
+    "noModel": "請在設定中選擇預設模型",
+    "noValidProvider": "找不到模型的有效提供者設定：{{modelId}}",
+    "processing": "處理中...",
+    "textUpdated": "文字更新成功",
+    "error": "錯誤：{{message}}"
+  }
+}

@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Yleiset",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Työkalut",
+      "rag": "RAG",
+      "prompts": "Kehotteet",
+      "agents": "Agentit",
+      "quickActions": "Pikatoiminnot",
+      "usage": "Käyttö"
+    },
+    "general": {
+      "title": "Yleiset asetukset",
+      "desc": "Määritä tekoälyavustinlaajennuksen yleiset asetukset.",
+      "pluginVersion": {
+        "name": "Laajennuksen versio",
+        "desc": "Tekoälyavustinlaajennuksen nykyinen versio"
+      },
+      "defaultModel": {
+        "name": "Oletusmallin",
+        "desc": "Oletusmallin käyttö keskusteluihin",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Oletuskeskustelutila",
+        "desc": "Valitse tila, jolla chat-näkymä avautuu",
+        "chat": "Keskustelutila",
+        "agent": "Agenttitila"
+      },
+      "conversationTitleMode": {
+        "name": "Keskustelun otsikkotila",
+        "desc": "Miten luodaan keskustelun otsikot",
+        "firstMessage": "Käytä ensimmäistä viestiä",
+        "autoSummary": "Luo yhteenveto automaattisesti",
+        "manual": "Manuaalinen"
+      },
+      "conversationIcons": {
+        "name": "Keskustelun kuvakkeet",
+        "desc": "Ota käyttöön automaattinen kuvakkeiden luominen keskusteluille"
+      },
+      "configStatus": {
+        "name": "Konfiguraation tila",
+        "desc": "Laajennuksen konfiguraation kokonaistila",
+        "ok": "✅ Määritetty ({{providers}} palveluntarjoajaa, {{conversations}} keskustelua)",
+        "incomplete": "⚠️ Epätäydellinen - Määritä palveluntarjoajat ja mallit"
+      }
+    },
+    "llm": {
+      "title": "LLM-konfiguraatio",
+      "desc": "Määritä kielimallin palveluntarjoajat ja hallinnoi saatavilla olevia malleja.",
+      "subTabs": {
+        "provider": "Palveluntarjoajat",
+        "models": "Mallit"
+      }
+    },
+    "models": {
+      "title": "Mallin konfiguraatio",
+      "desc": "Tarkastele ja hallinnoi malleja kaikista määritetyistä palveluntarjoajista. Napsauta \"päivitä mallit\" hakea uusimmat saatavilla olevat mallit.",
+      "providerCount": "{{count}} palveluntarjoaja määritetty",
+      "providerCount_plural": "{{count}} palveluntarjoajaa määritetty",
+      "refreshAll": "🔄 päivitä kaikki mallit",
+      "empty": "Ei palveluntarjoajia määritetty. Lisää palveluntarjoajia ensin palveluntarjoaja-välilehdeltä.",
+      "noModels": "Ei saatavilla olevia malleja. Napsauta \"päivitä kaikki mallit\" tai päivitä yksittäiset palveluntarjoajat palveluntarjoaja-välilehdeltä.",
+      "noMatch": "Mikään malli ei vastaa nykyisiä suodattimia. Muuta tai poista suodattimet nähdäksesi tulokset.",
+      "modelCount": "• {{count}} malli välimuistissa",
+      "modelCount_plural": "• {{count}} mallia välimuistissa",
+      "matchCount": "• {{count}} vastaa valittuja suodattimia",
+      "matchCount_plural": "• {{count}} vastaavat valittuja suodattimia",
+      "status": {
+        "enabled": "Käytössä",
+        "disabled": "Pois käytöstä"
+      },
+      "actions": {
+        "disable": "Poista käytöstä",
+        "enable": "Ota käyttöön",
+        "setDefaultChat": "Aseta oletuskeskusteluksi",
+        "defaultChat": "Oletuskeskustelu",
+        "setDefaultEmbedding": "Aseta oletusupotukseksi",
+        "defaultEmbedding": "Oletusupotus"
+      },
+      "notices": {
+        "fetching": "Haetaan malleja kohteesta {{provider}}...",
+        "fetchFailed": "{{provider}}-mallien päivittäminen epäonnistui",
+        "refreshed": "Mallit päivitetty onnistuneesti!",
+        "refreshFailed": "Mallien päivittäminen epäonnistui",
+        "defaultChatSet": "Oletuskeskustelumalli asetettu: {{name}}",
+        "defaultEmbeddingSet": "Oletusupoutusmalli asetettu: {{name}}"
+      },
+      "filters": {
+        "allProviders": "Kaikki palveluntarjoajat",
+        "allCapabilities": "Kaikki ominaisuudet",
+        "allStates": "Kaikki tilat",
+        "searchPlaceholder": "Hae nimellä tai tunnuksella"
+      }
+    },
+    "provider": {
+      "title": "Palveluntarjoajan konfiguraatio",
+      "securityTitle": "⚠️ Tietoturvavaroitus",
+      "securityDesc": "API-avaimet tallennetaan pelkkänä tekstinä holvissasi yhteensopivuuden vuoksi. Estääksesi vahingolliset vuodot:",
+      "securityItem1": "ÄLÄ jaa {{configDir}}/plugins/intelligence-assistant/data/-kansiota.",
+      "securityItem2": "Lisää tämä kansio .gitignore-tiedostoon, jos käytät Git-synkronointia.",
+      "securityItem3": "Ole varovainen käyttäessäsi julkisia pilvisynkronointipalveluita.",
+      "desc": "Hallinnoi LLM-palveluntarjoajia ja API-tunnuksia. Käytä toimintosaraketta muokataksesi konfiguraatiotietoja tai päivittääksesi välimuistissa olevia malleja.",
+      "count": "{{count}} palveluntarjoaja määritetty",
+      "count_plural": "{{count}} palveluntarjoajaa määritetty",
+      "addBtn": "+ Lisää palveluntarjoaja",
+      "empty": "Ei palveluntarjoajia määritetty. Valitse \"Lisää palveluntarjoaja\" aloittaaksesi.",
+      "tableHeaders": {
+        "provider": "Palveluntarjoaja",
+        "status": "Tila",
+        "actions": "Toiminnot"
+      },
+      "status": {
+        "ready": "Valmis",
+        "needsConfig": "Tarvitsee konfiguraation",
+        "checking": "Tarkistetaan...",
+        "credentialsSet": "Tunnukset asetettu",
+        "serverOnline": "Palvelin online",
+        "serverOffline": "Palvelin offline",
+        "serverError": "Palvelinvirhe"
+      },
+      "guidance": {
+        "requiresCli": "Vaatii paikallisen CLI:n",
+        "provideServiceKey": "Anna palveluavain",
+        "configureBaseUrl": "Määritä perus-URL",
+        "addApiKey": "Lisää API-avain"
+      },
+      "models": {
+        "none": "Ei malleja",
+        "count": "{{count}} malli",
+        "count_plural": "{{count}} mallia"
+      },
+      "ollama": {
+        "checkingVersion": "Tarkistetaan versiota...",
+        "server": {
+          "checking": "Tarkistetaan palvelinta...",
+          "online": "Palvelin: online",
+          "offline": "Palvelin: offline tai ei tavoitettavissa",
+          "error": "Palvelin: yhteysvirhe",
+          "versionOnline": "Palvelin online",
+          "versionOffline": "Palvelin offline",
+          "versionError": "Yhteysvirhe",
+          "version": "Versio: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Viimeisin päivitys: {{timeAgo}}",
+        "neverRefreshed": "Ei koskaan päivitetty",
+        "justNow": "juuri nyt",
+        "minutesAgo": "{{n}} min sitten",
+        "hoursAgo": "{{n}} t sitten",
+        "daysAgo": "{{n}} pv sitten"
+      },
+      "actions": {
+        "edit": "Muokkaa",
+        "manageModels": "Hallinnoi malleja",
+        "refreshModels": "Päivitä mallit",
+        "refreshing": "Päivitetään...",
+        "delete": "Poista"
+      },
+      "notices": {
+        "refreshed": "Mallit päivitetty palveluntarjoajalle {{provider}}.",
+        "refreshFailed": "Mallien päivittäminen epäonnistui"
+      },
+      "confirm": {
+        "delete": "Poista palveluntarjoaja {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "MCP-palvelimen hallinta",
+      "desc": "Määritä Model Context Protocol (MCP) -palvelimia laajentamaan agenttien toimintoja ulkoisilla työkaluilla ja tietolähteillä.",
+      "inspectorBtn": "🔍 Avaa MCP-tarkastin",
+      "testAllBtn": "🧪 testaa kaikki yhteydet",
+      "refreshAllBtn": "🔄 päivitä kaikki työkalut",
+      "addBtn": "+ Lisää MCP-palvelin",
+      "empty": "Ei MCP-palvelimia määritetty. Valitse Lisää MCP-palvelin aloittaaksesi.",
+      "tableHeaders": {
+        "name": "Nimi",
+        "command": "Komento",
+        "arguments": "Argumentit",
+        "status": "Tila",
+        "tools": "Työkalut",
+        "actions": "Toiminnot"
+      },
+      "untitled": "Nimetön MCP-palvelin",
+      "notConfigured": "Ei määritetty",
+      "noArgs": "Ei mitään",
+      "cached": "Välimuistissa",
+      "disabled": "Pois käytöstä",
+      "envVars": "{{count}} ympäristömuuttuja",
+      "envVars_plural": "{{count}} ympäristömuuttujaa",
+      "status": {
+        "disabled": "Pois käytöstä",
+        "connected": "yhdistetty",
+        "disconnected": "yhteys katkaistu",
+        "enableToManage": "Ota käyttöön yhteyksien hallintaan",
+        "manualConnect": "Manuaalinen yhteys",
+        "autoConnect": "Automaattinen yhteys"
+      },
+      "toolCount": {
+        "live": "{{count}} live-työkalu",
+        "live_plural": "{{count}} live-työkalua",
+        "cached": "{{count}} välimuistin työkalu",
+        "cached_plural": "{{count}} välimuistin työkalua"
+      },
+      "actions": {
+        "edit": "Muokkaa",
+        "enabled": "✓ Käytössä",
+        "enabledOff": "✗ Pois käytöstä",
+        "connect": "yhdistä",
+        "disconnect": "katkaise yhteys",
+        "connecting": "Yhdistetään...",
+        "disconnecting": "Katkaistaan yhteyttä...",
+        "test": "Testaa",
+        "testing": "Testataan...",
+        "delete": "Poista"
+      },
+      "notices": {
+        "disconnected": "Yhteys katkaistu kohteesta {{name}}",
+        "connected": "Yhdistetty kohteeseen {{name}}",
+        "autoConnectFailed": "Automaattinen yhdistäminen epäonnistui: {{name}}",
+        "enableFirst": "Ota palvelin käyttöön ennen yhdistämistä",
+        "disconnectFailed": "Yhteyden katkaiseminen epäonnistui kohteesta {{name}}",
+        "connectFailed": "Yhdistäminen epäonnistui kohteeseen {{name}}",
+        "testNoCommand": "❌ syötä komento ennen yhteyden testaamista",
+        "testSuccess": "✅ yhdistettiin onnistuneesti! Löydettiin {{count}} työkalua.",
+        "testFailed": "❌ Yhteys epäonnistui: {{message}}",
+        "refreshedAll": "✅ päivitetty työkalut {{count}} palvelimelle",
+        "refreshedAll_plural": "✅ päivitetty työkalut {{count}} palvelimelle",
+        "refreshedPartial": "✅ päivitetty {{success}} palvelinta, ❌ {{failed}} epäonnistui",
+        "noServersConfigured": "⚠️ Ei MCP-palvelimia määritetty",
+        "testingAll": "🧪 Testataan {{count}} MCP-palvelimen yhteyksiä...",
+        "testAllSuccess": "✅ kaikki {{count}} mcp-palvelinta yhdistetty onnistuneesti!",
+        "testAllPartial": "⚠️ {{successful}} yhdistetty, {{failed}} epäonnistui"
+      },
+      "confirm": {
+        "delete": "Poista MCP-palvelin \"{{name}}\"?"
+      }
+    },
+    "agents": {
+      "title": "Agenttien hallinta",
+      "desc": "Luo ja hallinnoi tekoälyagentteja erityisillä ominaisuuksilla, työkaluilla ja käyttäytymisillä.",
+      "count": "{{count}} agentti määritetty",
+      "count_plural": "{{count}} agenttia määritetty",
+      "addBtn": "+ lisää agentti",
+      "empty": "Ei agentteja määritetty. Valitse lisää agentti aloittaaksesi.",
+      "tableHeaders": {
+        "agent": "Agentti",
+        "model": "Malli",
+        "capabilities": "Ominaisuudet",
+        "tools": "Työkalut",
+        "actions": "Toiminnot"
+      },
+      "defaultBadge": "Oletus",
+      "systemPrompt": "Järjestelmäkehotus • {{promptName}}",
+      "customPrompt": "Mukautettu kehotus",
+      "model": {
+        "notSet": "Ei asetettu",
+        "notFound": "Mallia ei löydy välimuistista",
+        "useChatView": "Käytä chat-näkymän mallia",
+        "useChatViewDesc": "Käyttää chat-näkymässä valittua mallia",
+        "useDefault": "Käytä oletusmallia",
+        "useDefaultDesc": "Käyttää asetusten oletusmallia"
+      },
+      "capabilities": {
+        "noSpecialModes": "Ei erityistiloja"
+      },
+      "tools": {
+        "builtIn": "{{count}} sisäänrakennettu",
+        "mcpServer": "{{count}} mcp-palvelin",
+        "mcpServer_plural": "{{count}} mcp-palvelinta",
+        "mcpTool": "{{count}} mcp-työkalu",
+        "mcpTool_plural": "{{count}} mcp-työkalua",
+        "noTools": "Ei työkaluja käytössä"
+      },
+      "actions": {
+        "edit": "Muokkaa",
+        "delete": "poista",
+        "protected": "suojattu"
+      },
+      "confirm": {
+        "delete": "Poista agentti \"{{name}}\"?"
+      }
+    },
+    "prompts": {
+      "title": "Järjestelmäkehotukset",
+      "desc": "Hallinnoi järjestelmäkehotuksia, jotka määrittävät tekoälyavustimesi käyttäytymisen ja persoonallisuuden.",
+      "addBtn": "+ lisää järjestelmäkehotus",
+      "empty": "Ei järjestelmäkehotuksia määritetty. Valitse lisää järjestelmäkehotus aloittaaksesi.",
+      "tableHeaders": {
+        "name": "Nimi",
+        "contentPreview": "Sisällön esikatselu",
+        "created": "Luotu",
+        "updated": "Päivitetty",
+        "enabled": "Käytössä",
+        "actions": "Toiminnot"
+      },
+      "status": {
+        "enabled": "Käytössä",
+        "disabled": "Pois käytöstä"
+      },
+      "actions": {
+        "edit": "Muokkaa",
+        "disable": "Poista käytöstä",
+        "enable": "Ota käyttöön",
+        "delete": "Poista"
+      },
+      "confirm": {
+        "delete": "Poista kehotus \"{{name}}\"?"
+      }
+    },
+    "tools": {
+      "title": "Työkalujen konfiguraatio",
+      "desc": "Tarkastele sisäänrakennettuja työkaluja ja tutustu MCP-työkaluihin, jotka on ladattu yhdistettyiltä palvelimilta. Ota käyttöön toiminnot, joita agenttien pitäisi voida suorittaa.",
+      "subTabs": {
+        "builtIn": "Sisäänrakennetut työkalut",
+        "mcp": "MCP-työkalut",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI-työkalut"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Nimi",
+          "category": "Luokka",
+          "description": "Kuvaus",
+          "parameters": "Parametrit",
+          "enabled": "Käytössä"
+        },
+        "categories": {
+          "fileOps": "Tiedosto-operaatiot",
+          "searchDisc": "Haku ja löytäminen",
+          "noteMgmt": "Muistiinpanojen hallinta"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Lue tiedoston sisältö holvistasi",
+            "params": "path (pakollinen): Luettavan tiedoston polku"
+          },
+          "writeFile": {
+            "desc": "Kirjoita tai päivitä tiedosto holvissasi",
+            "params": "path (pakollinen), content (pakollinen): Tiedoston polku ja kirjoitettava sisältö"
+          },
+          "listFiles": {
+            "desc": "Listaa tiedostot holvissa tai tietyssä kansiossa",
+            "params": "folder (valinnainen), extension (valinnainen): Suodata kansion ja tiedostopäätteen mukaan"
+          },
+          "searchFiles": {
+            "desc": "Hae tiedostoja nimellä tai sisällöllä holvissasi",
+            "params": "query (pakollinen), search_content (valinnainen), limit (valinnainen): Hakukysely ja asetukset"
+          },
+          "createNote": {
+            "desc": "Luo uusi muistiinpano määritetyllä sisällöllä",
+            "params": "title (pakollinen), content (pakollinen), folder (valinnainen): Muistiinpanon otsikko, sisältö ja sijainti"
+          },
+          "appendNote": {
+            "desc": "Lisää sisältöä olemassa olevaan muistiinpanoon",
+            "params": "path (pakollinen), content (pakollinen): Muistiinpanon polku ja lisättävä sisältö"
+          }
+        },
+        "infoTitle": "💡 tietoa työkaluista",
+        "infoText": "Sisäänrakennetut työkalut on konfiguroitu laajennusasetusten mukaan. MCP-työkaluja hallinnoidaan itsenäisesti — käytä MCP-välilehteä yhteyden muodostamiseen palvelimiin ja työkalujen saatavuuden päivittämiseen.",
+        "toolNames": {
+          "read_file": "Lue tiedosto",
+          "write_file": "Kirjoita tiedosto",
+          "list_files": "Listaa tiedostot",
+          "search_files": "Hae tiedostoja",
+          "create_note": "Luo muistiinpano",
+          "append_note": "Lisää muistiinpanoon"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Ei MCP-työkaluja saatavilla. Yhdistä palvelin tai päivitä välimuistissa olevat työkalut täyttääksesi tämän listan.",
+        "tableHeaders": {
+          "server": "Palvelin",
+          "tool": "Työkalu",
+          "description": "Kuvaus",
+          "parameters": "Parametrit",
+          "source": "Lähde"
+        },
+        "noDescription": "Ei kuvausta",
+        "schemaUnavailable": "Skeema ei saatavilla",
+        "live": "Live",
+        "cached": "Välimuistissa",
+        "status": {
+          "connected": "yhdistetty",
+          "disconnected": "yhteys katkaistu"
+        }
+      },
+      "openapi": {
+        "desc": "Luo HTTP-työkaluja OpenAPI-dokumenteista. Etäspesifikaatiot välimuistetaan kohteessa {{cacheDir}}.",
+        "addBtn": "Lisää HTTP-lähde",
+        "noSources": "Ei HTTP-lähteitä määritetty.",
+        "unnamed": "Nimetön HTTP-lähde",
+        "tableHeaders": {
+          "name": "Nimi",
+          "source": "Lähde",
+          "auth": "Todennus",
+          "status": "Tila",
+          "actions": "Toiminnot"
+        },
+        "sourceUrl": "Etä-URL:ia ei asetettu",
+        "sourcePath": "Tiedostopolkua ei asetettu",
+        "authHeader": "Otsake ({{key}})",
+        "authQuery": "Kysely ({{key}})",
+        "authNone": "Ei mitään",
+        "statusEnabled": "Käytössä",
+        "statusDisabled": "Pois käytöstä",
+        "actions": {
+          "edit": "Muokkaa",
+          "reload": "Lataa uudelleen",
+          "refetch": "Hae uudelleen",
+          "delete": "Poista"
+        },
+        "notices": {
+          "removed": "HTTP-lähde poistettu",
+          "reloaded": "Ladattu uudelleen {{count}} operaatiota",
+          "reloadFailed": "HTTP-lähteen uudelleenlataus epäonnistui. Tarkista konsoli lisätietoja varten."
+        },
+        "modal": {
+          "defaultTitle": "HTTP-lähde",
+          "displayName": {
+            "name": "Näyttönimi",
+            "desc": "Näytetään agenteille työkalulähteen valinnassa"
+          },
+          "enabled": {
+            "name": "Käytössä",
+            "desc": "Ota käyttöön paljastaaksesi tämä HTTP API kaikille agenteille"
+          },
+          "sourceType": {
+            "name": "Lähdetyyppi",
+            "file": "Paikallinen tiedosto",
+            "url": "Etä-URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Haettu ja välimuistettu laajennuksen datahakemistossa"
+          },
+          "cachedFile": "Välimuistitiedosto: {{path}} ({{date}})",
+          "neverFetched": "Ei koskaan haettu",
+          "specPath": {
+            "name": "OpenAPI-tiedostopolku",
+            "desc": "Suhteellinen polku holvissa tai absoluuttinen polku"
+          },
+          "baseUrl": {
+            "name": "Perus-URL:n ohitus",
+            "desc": "Ohita dokumentin ensimmäinen palvelinmerkintä (valinnainen)"
+          },
+          "auth": {
+            "name": "Todennus",
+            "desc": "Lisää API-avaimet automaattisesti tätä lähdettä kutsuttaessa",
+            "none": "Ei mitään",
+            "header": "HTTP-otsake",
+            "query": "Kyselyparametri"
+          },
+          "credKey": {
+            "name": "Tunnuksen avain"
+          },
+          "credValue": {
+            "name": "Tunnuksen arvo"
+          },
+          "actions": {
+            "name": "Toiminnot",
+            "reloadTools": "Lataa työkalut uudelleen",
+            "refetchTooltip": "Hae spesifikaatio uudelleen URL:sta",
+            "deleteTooltip": "Poista lähde"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Määritä paikalliset komentorivityökalut, joita agentit voivat suorittaa. Käytä malleja kuten {{param}} dynaamisille argumenteille.",
+        "addBtn": "Lisää CLI-työkalu",
+        "presetsBtn": "Lisää esiasetuksista",
+        "noTools": "Ei CLI-työkaluja määritetty.",
+        "tableHeaders": {
+          "name": "Nimi",
+          "command": "Komento",
+          "parameters": "Parametrit",
+          "status": "Tila",
+          "actions": "Toiminnot"
+        },
+        "unnamed": "Nimetön CLI-työkalu",
+        "paramCount": "{{count}} parametri",
+        "paramCount_plural": "{{count}} parametria",
+        "noParams": "Ei mitään",
+        "statusEnabled": "Käytössä",
+        "statusDisabled": "Pois käytöstä",
+        "actions": {
+          "edit": "Muokkaa",
+          "disable": "Poista käytöstä",
+          "enable": "Ota käyttöön",
+          "delete": "Poista"
+        },
+        "notices": {
+          "removed": "CLI-työkalu poistettu"
+        },
+        "infoTitle": "💡 Tietoa CLI-työkaluista",
+        "infoText": "CLI-työkalut suorittavat komentotulkki-komentoja paikallisesti. Käytä {{paramName}} argumenteissa mallikorvauksia varten tai määritä parametrit välitettäväksi argumentteina tai ympäristömuuttujina.",
+        "modal": {
+          "defaultTitle": "CLI-työkalu",
+          "toolName": {
+            "name": "Työkalun nimi",
+            "desc": "Tunniste, jota agentit käyttävät tämän työkalun kutsumiseen"
+          },
+          "description": {
+            "name": "Kuvaus",
+            "desc": "Kuvaile, mitä tämä työkalu tekee tekoälylle"
+          },
+          "enabled": {
+            "name": "Käytössä",
+            "desc": "Ota käyttöön salliaksesi agenttien käyttää tätä työkalua"
+          },
+          "commandConfig": "Komennon konfiguraatio",
+          "command": {
+            "name": "Komento",
+            "desc": "Suoritettava ohjelma (esim. node, python, bash, /polku/skriptiin)"
+          },
+          "args": {
+            "name": "Argumentit",
+            "desc": "Komennon argumentit, yksi per rivi. Käytä {{paramName}} mallikorvauksia varten."
+          },
+          "cwd": {
+            "name": "Työhakemisto",
+            "desc": "Hakemisto, jossa komento suoritetaan (valinnainen)"
+          },
+          "timeout": {
+            "name": "Aikakatkaisu (ms)",
+            "desc": "Enimmäissuoritusaika millisekunteina (oletus: {{timeout}})"
+          },
+          "shell": {
+            "name": "Suorita komentotulkissa",
+            "desc": "Suorita komento komentotulkin kautta (mahdollistaa komentotulkin ominaisuudet kuten putket)"
+          },
+          "paramsTitle": "Parametrit",
+          "paramsDesc": "Määritä parametrit, joita tekoäly voi välittää tälle työkalulle.",
+          "addParam": "Lisää parametri",
+          "noParams": "Ei parametreja määritetty.",
+          "paramN": "Parametri {{n}}",
+          "param": {
+            "name": "Nimi",
+            "type": {
+              "name": "Tyyppi",
+              "string": "Merkkijono",
+              "number": "Numero",
+              "boolean": "Totuusarvo"
+            },
+            "description": "Kuvaus",
+            "required": "Pakollinen",
+            "insertAs": {
+              "name": "Lisää muodossa",
+              "desc": "Miten tämä parametri välitetään komennolle",
+              "template": "Malli ({{name}})",
+              "arg": "Lisää argumenttina",
+              "env": "Ympäristömuuttuja"
+            },
+            "envName": {
+              "name": "Ympäristömuuttujan nimi",
+              "desc": "Ohita ympäristömuuttujan nimi (oletus: parametrin nimi isoilla kirjaimilla)"
+            }
+          },
+          "envTitle": "Ympäristömuuttujat",
+          "envDesc": "Staattiset ympäristömuuttujat, jotka asetetaan komennon suorituksen aikana.",
+          "envVars": {
+            "name": "Ympäristömuuttujat",
+            "desc": "Muoto: AVAIN=arvo, yksi per rivi"
+          }
+        },
+        "presets": {
+          "title": "Lisää CLI-työkalu esiasetuksista",
+          "desc": "Valitse esiasetus lisätäksesi nopeasti valmiiksi määritetty CLI-työkalu. Voit muokata sitä lisäämisen jälkeen.",
+          "addBtn": "Lisää",
+          "addedBtn": "Lisätty",
+          "closeBtn": "Sulje",
+          "notices": {
+            "added": "Lisätty \"{{name}}\" - ota se käyttöön CLI-työkalujen listassa"
+          },
+          "categories": {
+            "file": "Tiedosto-operaatiot",
+            "search": "Haku",
+            "network": "Verkko",
+            "code": "Koodin suoritus",
+            "data": "Datan käsittely",
+            "system": "Järjestelmätiedot",
+            "apps": "macOS-sovellukset ja työpöytä"
+          },
+          "names": {
+            "preset-cat": "Lue tiedosto (cat)",
+            "preset-ls": "Listaa hakemisto (ls)",
+            "preset-find": "Etsi tiedostoja (find)",
+            "preset-grep": "Hae tekstiä (grep)",
+            "preset-ripgrep": "Nopea haku (rg)",
+            "preset-curl": "HTTP-pyyntö (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Suorita Python-koodi",
+            "preset-node": "Suorita JavaScript (Node)",
+            "preset-bash": "Suorita komentotulkkiskripti",
+            "preset-jq": "JSON-prosessori (jq)",
+            "preset-wc": "Sanamäärä (wc)",
+            "preset-date": "Nykyinen päivämäärä/aika",
+            "preset-pwd": "Nykyinen hakemisto (pwd)",
+            "preset-whoami": "Nykyinen käyttäjä",
+            "preset-uname": "Järjestelmätiedot (uname)",
+            "preset-open": "Avaa tiedosto/URL (open)",
+            "preset-open-app": "Käynnistä sovellus (open -a)",
+            "preset-safari": "Avaa Safarissa",
+            "preset-chrome": "Avaa Chromessa",
+            "preset-firefox": "Avaa Firefoxissa",
+            "preset-pbcopy": "Kopioi leikepöydälle",
+            "preset-pbpaste": "Liitä leikepöydältä",
+            "preset-say": "Teksti puheeksi (say)",
+            "preset-osascript": "AppleScript-ajuri",
+            "preset-notify": "Työpöytäilmoitus",
+            "preset-screencapture": "Kuvakaappaus",
+            "preset-applescript-list-apps": "Listaa käynnissä olevat sovellukset"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG-konfiguraatio",
+      "desc": "Määritä hakuun perustuva generointi ja verkkohaku tekoälyn vastausten parantamiseksi.",
+      "subTabs": {
+        "overview": "Yleiskatsaus",
+        "chunking": "Paloittelu",
+        "search": "Haku",
+        "filters": "Suodattimet",
+        "advanced": "Lisäasetukset",
+        "websearch": "Verkkohaku"
+      },
+      "general": {
+        "title": "Yleiset asetukset",
+        "enableRag": {
+          "name": "Ota RAG käyttöön",
+          "desc": "Ota käyttöön hakuun perustuva generointi parannettuun kontekstiin"
+        },
+        "vectorStore": {
+          "name": "Vektorivarasto",
+          "desc": "Vektoritietokanta upotuksien tallentamiseen",
+          "memory": "Muistissa",
+          "disk": "Levypohjainen"
+        },
+        "embeddingModel": {
+          "name": "Upoutusmalli",
+          "desc": "Malli upotuksien luomiseen"
+        },
+        "embedChanged": {
+          "name": "Upota muuttuneet tiedostot automaattisesti",
+          "desc": "Upota tiedostot automaattisesti uudelleen, kun niitä muokataan"
+        }
+      },
+      "indexMgmt": {
+        "title": "Indeksin hallinta",
+        "desc": "Hallinnoi RAG-indeksiäsi ja tarkastele tilastoja indeksoidusta sisällöstä.",
+        "statsTitle": "Indeksitilastot",
+        "stats": {
+          "totalChunks": "Paloja yhteensä",
+          "uniqueFiles": "Yksilölliset tiedostot",
+          "totalChars": "Merkit yhteensä",
+          "avgChunkSize": "Keskimääräinen palakoko"
+        },
+        "empty": "Indeksi on tyhjä. Valitse rakenna indeksi aloittaaksesi indeksoinnin.",
+        "error": "⚠️ indeksitilastojen lataaminen epäonnistui",
+        "rebuild": {
+          "name": "Rakenna indeksi uudelleen",
+          "desc": "Indeksoi kaikki tiedostot holvissasi uudelleen. Tämä voi kestää jonkin aikaa.",
+          "btn": "Rakenna uudelleen",
+          "rebuilding": "Rakennetaan uudelleen..."
+        },
+        "refresh": {
+          "name": "Päivitä indeksi",
+          "desc": "Päivitä indeksi muuttuneilla tiedostoilla viime indeksoinnin jälkeen.",
+          "btn": "Päivitä",
+          "refreshing": "Päivitetään..."
+        },
+        "clear": {
+          "name": "Tyhjennä indeksi",
+          "desc": "Poista kaikki indeksoidut tiedot. Sinun on rakennettava indeksi uudelleen.",
+          "btn": "Tyhjennä",
+          "clearing": "Tyhjennetään..."
+        },
+        "notices": {
+          "rebuilt": "Indeksi rakennettu uudelleen onnistuneesti",
+          "rebuildFailed": "Indeksin uudelleenrakentaminen epäonnistui",
+          "refreshed": "Indeksi päivitetty onnistuneesti",
+          "refreshFailed": "Indeksin päivittäminen epäonnistui",
+          "cleared": "Indeksi tyhjennetty onnistuneesti",
+          "clearFailed": "Indeksin tyhjentäminen epäonnistui"
+        }
+      },
+      "chunking": {
+        "title": "Paloitteluasetukset",
+        "strategy": {
+          "name": "Paloittelustrategia",
+          "desc": "Strategia dokumenttien jakamiseen paloihin",
+          "recursive": "Rekursiivinen (älykäs)",
+          "fixed": "Kiinteä koko",
+          "sentence": "Lauseen mukaan",
+          "paragraph": "Kappaleen mukaan"
+        },
+        "chunkSize": {
+          "name": "Palakoko",
+          "desc": "Merkkien määrä per pala (suositus 500–2000)"
+        },
+        "chunkOverlap": {
+          "name": "Palojen päällekkäisyys",
+          "desc": "Päällekkäisten merkkien määrä palojen välillä"
+        },
+        "minChunkSize": {
+          "name": "Pienin palakoko",
+          "desc": "Luotavan palan vähimmäiskoko"
+        },
+        "maxTokens": {
+          "name": "Enimmäistokenit per pala",
+          "desc": "Suurin sallittu tokenien määrä per pala"
+        }
+      },
+      "search": {
+        "title": "Hakuasetukset",
+        "searchType": {
+          "name": "Hakutyyppi",
+          "desc": "Suoritettavan samankaltaisuushaun tyyppi",
+          "similarity": "Samankaltaisuus"
+        },
+        "topK": {
+          "name": "Top-K tulokset",
+          "desc": "Haettavien osuvimpien palojen määrä (1–20)"
+        },
+        "threshold": {
+          "name": "Samankaltaisuuskynnys",
+          "desc": "Vähimmäissamankaltaisuuspisteet tulosten sisällyttämiseen (0,0–1,0)"
+        },
+        "weight": {
+          "name": "Osuvuuspistepaino",
+          "desc": "Paino osuvuuspisteytystä varten (0,0–1,0)"
+        },
+        "contextLimit": {
+          "name": "Konteksti-ikkunan raja",
+          "desc": "Haetun kontekstin enimmäistokenit"
+        }
+      },
+      "filters": {
+        "title": "Tiedostosuodattimet",
+        "excludeFolders": {
+          "name": "Poista kansiot",
+          "desc": "Indeksoinnista poistettavat kansiot (pilkulla erotettu)"
+        },
+        "includeTypes": {
+          "name": "Sisällytä tiedostotyypit",
+          "desc": "Sisällytettävät tiedostotyypit (tyhjä = kaikki tyypit)"
+        },
+        "excludeTypes": {
+          "name": "Poista tiedostotyypit",
+          "desc": "Indeksoinnista poistettavat tiedostotyypit"
+        },
+        "filterByTag": {
+          "name": "Suodata tunnisteen mukaan",
+          "desc": "Indeksoi vain tiedostot, joilla on nämä tunnisteet (tyhjä = kaikki tiedostot)"
+        },
+        "excludeByTag": {
+          "name": "Poista tunnisteen mukaan",
+          "desc": "Poista tiedostot, joilla on nämä tunnisteet, indeksoinnista"
+        }
+      },
+      "advanced": {
+        "title": "Lisäasetukset",
+        "batchSize": {
+          "name": "Upotuksen eräkoko",
+          "desc": "Rinnakkain upotettavien palojen määrä"
+        }
+      },
+      "grading": {
+        "title": "Arviointiasetukset",
+        "desc": "Arvioi haettujen palojen osuvuus ennen niiden lähettämistä LLM:lle. Tämä auttaa suodattamaan heikkolaatuiset tulokset.",
+        "enableGrading": {
+          "name": "Ota arviointikynnys käyttöön",
+          "desc": "Suodata palat, jotka alittavat laatukynnykset"
+        },
+        "graderSource": {
+          "name": "Arviointimallin lähde",
+          "desc": "Mistä arviointimalli hankitaan",
+          "chat": "Keskustelumalli",
+          "custom": "Mukautettu malli"
+        },
+        "graderModel": {
+          "name": "Arviointimalli",
+          "desc": "Erityinen malli arviointiin käytettäväksi"
+        },
+        "parallel": {
+          "name": "Rinnakkaiskäsittely",
+          "desc": "Rinnakkain arvioitavien palojen määrä"
+        },
+        "minRelevance": {
+          "name": "Vähimmäisosuvuuspisteet",
+          "desc": "Vähimmäisosuvuuspisteet (0,0–1,0)"
+        },
+        "minAccuracy": {
+          "name": "Vähimmäistarkkuuspisteet",
+          "desc": "Vähimmäistarkkuuspisteet (0,0–1,0)"
+        },
+        "minSupport": {
+          "name": "Vähimmäistukipisteet",
+          "desc": "Vähimmäistukipisteet (0,0–1,0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Verkkohaun konfiguraatio",
+      "desc": "Määritä verkkohakutoiminto parantamaan tekoälyn vastauksia ajantasaisella tiedolla internetistä.",
+      "generalBehavior": "Yleinen käyttäytyminen",
+      "providerSelection": "Palveluntarjoajan valinta",
+      "localeFilters": "Alue ja suodattimet",
+      "apiCredentials": "API-tunnukset ja päätepisteet",
+      "enabled": {
+        "name": "Ota verkkohaku käyttöön",
+        "desc": "Salli tekoälyn hakea verkosta ajankohtaisia tietoja"
+      },
+      "autoTrigger": {
+        "name": "Automaattinen hakukäynnistys",
+        "desc": "Käynnistä verkkohaku automaattisesti, kun kysely edellyttää ajankohtaisia tietoja (esim. uutiset, hinnat, viimeaikaiset tapahtumat)"
+      },
+      "maxResults": {
+        "name": "Enimmäistulokset",
+        "desc": "Palautettavien hakutulosten enimmäismäärä"
+      },
+      "timeRange": {
+        "name": "Tulosten tuoreus",
+        "desc": "Rajoita tulokset palveluntarjoajien tukemaan aikaväliin (Google, SearXNG, Mojeek)",
+        "any": "Milloin tahansa (oletus)",
+        "h": "Viimeisen tunnin aikana",
+        "d": "Viimeisten 24 tunnin aikana",
+        "w": "Viimeisen viikon aikana",
+        "m": "Viimeisen kuukauden aikana",
+        "y": "Viimeisen vuoden aikana"
+      },
+      "provider": {
+        "name": "Hakupalveluntarjoaja",
+        "desc": "Valitse yksityisyyttä suojaavien kaapijien tai API-pohjaisten hakukoneiden välillä"
+      },
+      "searchLanguage": {
+        "name": "Kielikoodi",
+        "desc": "ISO-kielikoodi (esim. fi, en, fr) välitetään palveluntarjoajille, jotka tukevat lokalisointia"
+      },
+      "searchCountry": {
+        "name": "Maa-/markkinakoodi",
+        "desc": "Kaksikirjaiminen maakoodi (esim. FI, US) käytetään Bing, DuckDuckGo, Brave ja muiden toimesta"
+      },
+      "includeDomains": {
+        "name": "Sisällytä vain nämä verkkotunnukset",
+        "desc": "Pilkulla erotettu lista, jota SerpAPI ja Brave käyttävät tulosten rajoittamiseen tietyille sivustoille"
+      },
+      "excludeDomains": {
+        "name": "Poista verkkotunnukset",
+        "desc": "Pilkulla erotetut verkkotunnukset tulosten suodattamiseen haun jälkeen"
+      },
+      "apiKey": {
+        "name": "Oletus-API-avain",
+        "desc": "Yhteinen API-avain, jota Google, Bing, SerpAPI, Tavily tai Brave käyttävät, kun palveluntarjoajakohtaisia avaimia ei ole asetettu"
+      },
+      "googleCseId": {
+        "name": "Google Custom Search Engine -tunnus",
+        "desc": "Vaaditaan Google API -avaimen kanssa Google-palveluntarjoajaa käytettäessä"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI-päätepiste",
+        "desc": "Ohita SerpAPI:n perus-URL, jos isännöit itse"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API -avain",
+        "desc": "Ohittaa oletusavaimen Tavily-palveluntarjoajaa käytettäessä"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG-päätepiste",
+        "desc": "SearXNG-instanssisi perus-URL (täytyy palauttaa JSON)"
+      },
+      "braveApiKey": {
+        "name": "Brave API -avain",
+        "desc": "Käytä Brave Search API -tilausavainta, kun se on valittu palveluntarjoajaksi"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API -avain (valinnainen)",
+        "desc": "Lisää bearer-token, jos Qwant-suunnitelmasi myöntää sellaisen"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API -avain",
+        "desc": "Vaaditaan Mojeek-palveluntarjoajalle"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (ei avainta vaaditaan)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (HTML-kaapiminen)",
+        "yandex": "Yandex (HTML-kaapiminen)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Pikatoiminnot",
+      "desc": "Määritä tekoälypohjaiset pikatoiminnot, jotka näkyvät editorin kontekstivalikossa, kun tekstiä on valittuna.",
+      "actionPrefix": {
+        "name": "Toiminnon etuliite",
+        "desc": "Etuliite (emoji tai teksti) näytettäväksi kaikkien pikatoimintojen edessä kontekstivalikossa",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} toiminto määritetty ({{enabled}} käytössä)",
+      "count_plural": "{{count}} toimintoa määritetty ({{enabled}} käytössä)",
+      "addBtn": "+ lisää pikatoiminto",
+      "empty": "Ei pikatoimintoja määritetty. Valitse lisää pikatoiminto aloittaaksesi.",
+      "tableHeaders": {
+        "action": "Toiminto",
+        "type": "Tyyppi",
+        "model": "Malli",
+        "promptPreview": "Kehotuksen esikatselu",
+        "actions": "Toiminnot"
+      },
+      "defaultModel": "Oletus",
+      "editBtn": "Muokkaa",
+      "deleteBtn": "poista",
+      "confirm": {
+        "delete": "Poista pikatoiminto \"{{name}}\"?"
+      },
+      "usageInfo": {
+        "title": "Käyttö",
+        "step1": "Valitse teksti missä tahansa muistiinpanossa",
+        "step2": "Napsauta hiiren kakkospainikkeella avataaksesi kontekstivalikon",
+        "step3": "Valitse pikatoiminto valikosta",
+        "step4Replace": "\"Korvaa\"-merkityt toiminnot korvaavat valitun tekstin tekoälyn tuloksella",
+        "step4Explain": "\"Selitä\"-merkityt toiminnot näyttävät tuloksen modaali-ikkunassa"
+      },
+      "edit": {
+        "title": "Muokkaa pikatoimintoa",
+        "name": {
+          "name": "Nimi",
+          "desc": "Näyttönimi tälle toiminnolle kontekstivalikossa"
+        },
+        "actionType": {
+          "name": "Toimintotyyppi",
+          "desc": "Miten tekoälyn vastaus käsitellään",
+          "replace": "Korvaa valittu teksti",
+          "explain": "Näytä modaali-ikkunassa"
+        },
+        "model": {
+          "name": "Malli",
+          "desc": "Kielimalli tälle toiminnolle (jätä tyhjäksi käyttääksesi oletusta)",
+          "default": "Käytä oletusmallia"
+        },
+        "promptTemplate": {
+          "name": "Kehotusmalli",
+          "desc": "Tekoälylle lähetetyt ohjeet. Valittu teksti lisätään automaattisesti loppuun."
+        },
+        "cancel": "Peruuta",
+        "save": "Tallenna"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Pidentä tekstiä",
+          "prompt": "Laajenna ja erittele seuraavaa tekstiä, tehden siitä yksityiskohtaisemman ja kattavamman säilyttäen samalla alkuperäisen merkityksen ja sävyn. Palauta vain laajennettu teksti ilman lisäkommentteja:\n\n"
+        },
+        "summarize": {
+          "name": "Tiivistä teksti",
+          "prompt": "Tee tiivistelmä seuraavasta tekstistä. Palauta vain tiivistelmä ilman lisäkommentteja:\n\n"
+        },
+        "improve-writing": {
+          "name": "Paranna kirjoitusta",
+          "prompt": "Paranna seuraavan tekstin kirjoituslaatua, selkeyttä ja tyyliä. Palauta vain parannettu teksti ilman lisäkommentteja:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Korjaa kielioppi",
+          "prompt": "Korjaa kaikki kielioppi-, kirjoitus- ja välimerkkivirheet seuraavassa tekstissä. Palauta vain korjattu teksti ilman lisäkommentteja:\n\n"
+        },
+        "explain": {
+          "name": "Selitä teksti",
+          "prompt": "Selitä seuraava teksti yksinkertaisilla termeillä:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Tokenien käyttö",
+      "desc": "Seuraa tokenien kulutusta palveluntarjoajien ja mallien välillä. Tiedot kertyy kaikista keskusteluista.",
+      "notAvailable": "Tokenien käytön seuranta ei ole saatavilla.",
+      "ranges": {
+        "today": "Tänään",
+        "week": "Tällä viikolla",
+        "month": "Tässä kuussa",
+        "all": "Kaikki ajat"
+      },
+      "stats": {
+        "totalTokens": "Tokenit yhteensä",
+        "apiCalls": "API-kutsut",
+        "promptTokens": "Kehotustokenit",
+        "completion": "Täydennys",
+        "tokensIn": "tokenit sisään",
+        "tokensOut": "tokenit ulos"
+      },
+      "byProvider": "Palveluntarjoajan mukaan",
+      "byModel": "Mallin mukaan",
+      "noData": "Ei käyttötietoja vielä.",
+      "recentActivity": "Viimeaikainen toiminta",
+      "last10": "viimeiset 10",
+      "noRecent": "Ei viimeaikaista toimintaa.",
+      "tableHeaders": {
+        "provider": "Palveluntarjoaja",
+        "model": "Malli",
+        "prompt": "Kehotus",
+        "completion": "Täydennys",
+        "total": "Yhteensä",
+        "calls": "Kutsut",
+        "time": "Aika",
+        "in": "Sisään",
+        "out": "Ulos"
+      },
+      "clearBtn": "Tyhjennä kaikki käyttötiedot",
+      "confirm": {
+        "clear": "Tyhjennä kaikki tokenien käyttötiedot? Tätä ei voi kumota."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Kirjoita viestisi... (Enter lähettää, Shift+Enter uusi rivi)",
+    "conversations": "Keskustelut",
+    "toggleConversationsTitle": "Vaihda keskusteluluettelo",
+    "currentConversation": "Nykyinen keskustelu",
+    "new": "Uusi",
+    "settings": "Asetukset",
+    "openSettingsTitle": "Avaa laajennuksen asetukset",
+    "mode": "Tila",
+    "prompt": "Kehotus",
+    "agent": "Agentti",
+    "modeOptions": {
+      "chat": "Keskustelu",
+      "agent": "Agentti"
+    },
+    "noSystemPrompt": "Ei järjestelmäkehotusta",
+    "noAgentsAvailable": "Ei agentteja saatavilla",
+    "sendHintPrefix": "Paina ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " lähettääksesi",
+    "sendAriaLabel": "Lähetä viesti",
+    "stop": " Pysäytä",
+    "addReference": "Lisää viittaus",
+    "addReferenceTooltip": "Lisää tiedosto- tai kansioviittaus (@)",
+    "emptyHeading": "Aloita keskustelu",
+    "emptySubtext": "Kirjoita viesti alle aloittaaksesi tai valitse keskustelu historiasta.",
+    "noAgentConfig": "Ei agentteja määritetty",
+    "selectAgent": "Valitse agentti…",
+    "notices": {
+      "stopping": "Pysäytetään generointia...",
+      "ragInitError": "RAG-alustusvirhe: {{message}}",
+      "modelsRefreshed": "Mallit päivitetty",
+      "modelsRefreshFailed": "Mallien päivittäminen epäonnistui: {{message}}",
+      "waitForResponse": "Odota, että nykyinen vastaus päättyy",
+      "configureProvider": "Määritä ensin LLM-palveluntarjoaja asetuksissa",
+      "selectModel": "Valitse malli",
+      "noValidProvider": "Tälle mallille ei löydy kelvollista palveluntarjoajan konfiguraatiota",
+      "chatError": "Keskusteluvirhe: {{message}}",
+      "noMessageToRegenerate": "Regeneroitavaa viestiä ei löydy",
+      "regenerateOnlyLatest": "Vain viimeisin vastaus voidaan regeneroida tällä hetkellä",
+      "regenerateNoUserMsg": "Regeneroitavaa käyttäjäviestiä ei löydy",
+      "regenerated": "Vastaus regeneroitu",
+      "regenerateFailed": "Regenerointi epäonnistui: {{message}}",
+      "noteCreated": "Muistiinpano luotu: {{name}}",
+      "noteCreateFailed": "Muistiinpanon luominen epäonnistui: {{message}}",
+      "messageInserted": "Viesti lisätty kohteeseen: {{path}}",
+      "messageInsertFailed": "Viestin lisääminen epäonnistui: {{message}}",
+      "noAgents": "Ei agentteja saatavilla. Määritä agentit kohdassa Asetukset → Agentit.",
+      "ragDisabled": "RAG on poistettu käytöstä asetuksissa. Ota se käyttöön kohdassa asetukset → chat-ominaisuudet → RAG.",
+      "webSearchDisabled": "Verkkohaku on poistettu käytöstä asetuksissa. Ota se käyttöön kohdassa asetukset → chat-ominaisuudet → verkkohaku.",
+      "noFilesInVault": "Holvissa ei löydy tiedostoja",
+      "attached": "Liitetty: {{name}}",
+      "attachedImages": "Liitetty {{count}} kuva(a)",
+      "referencesAdded": "Lisätty {{count}} viittaus(ta)",
+      "fileNotFound": "Tiedostoa ei löydy: {{path}}",
+      "agentConfigApplied": "Sovellettu konfiguraatio agentille: {{name}}",
+      "waitForComplete": "Odota, että nykyinen vastaus valmistuu",
+      "chatServiceFallback": "ChatService ei ole määritetty. Käytetään ChatView-varavaihtoehtoa.",
+      "noModelSelected": "Ei mallia valittuna",
+      "noProviderConfig": "Palveluntarjoajan konfiguraatiota ei löydy",
+      "generationStopped": "Generointi pysäytetty",
+      "noResponseToRegenerate": "Ei vastausta regeneroitavaksi",
+      "agentNotFound": "Agenttia ei löydy",
+      "unableToLoadRag": "RAG-tilastojen lataaminen epäonnistui.",
+      "referenced": "Viitattu: {{name}}"
+    },
+    "status": {
+      "available": "Saatavilla",
+      "unavailable": "Ei saatavilla",
+      "disabled": "Pois käytöstä",
+      "on": "Päällä · {{detail}}",
+      "off": "Pois"
+    },
+    "ragStats": {
+      "title": "RAG-tilastot",
+      "totalChunks": "📊 paloja yhteensä:",
+      "filesIndexed": "📁 indeksoidut tiedostot:",
+      "totalSize": "💾 kokonaiskoko:",
+      "avgChunks": "📈 Keskimääräiset palat/tiedosto:",
+      "indexedFiles": "📄 indeksoidut tiedostot",
+      "noFilesYet": "⚠️ ei tiedostoja indeksoitu vielä.",
+      "howToBuild": "RAG-indeksin rakentaminen:",
+      "step1": "Siirry kohtaan Asetukset → RAG",
+      "step2": "Ota RAG käyttöön",
+      "step3": "Valitse indeksoi holvi",
+      "close": "Sulje",
+      "retrieved": "📚 haettu {{count}} dokumentista",
+      "retrieved_plural": "📚 haettu {{count}} dokumentista"
+    },
+    "ragTooltip": {
+      "status": "RAG-indeksin tila:",
+      "totalChunks": "📊 Paloja yhteensä: {{count}}",
+      "filesIndexed": "📁 Indeksoituja tiedostoja: {{count}}",
+      "totalSize": "💾 Kokonaiskoko: {{size}} KB",
+      "indexedFiles": "📄 indeksoidut tiedostot:",
+      "andMore": "  ... ja {{count}} lisää",
+      "noFilesYet": "⚠️ ei tiedostoja indeksoitu vielä.",
+      "goToSettings": "Siirry kohtaan Asetukset → RAG rakentaaksesi indeksin.",
+      "ragOff": "ℹ️ RAG on tällä hetkellä pois käytöstä tässä chatissa."
+    },
+    "agentSummary": {
+      "model": "Malli",
+      "temp": "Lämpötila",
+      "max": "Maks",
+      "rag": "RAG",
+      "web": "Verkko",
+      "tools": "Työkalut",
+      "memory": "Muisti",
+      "none": "Ei mitään",
+      "configuration": "{{name}} konfiguraatio",
+      "modelFixed": "{{name}} · Kiinteä",
+      "modelDefault": "{{name}} · Oletus",
+      "modelChatView": "{{name}} · Chat-näkymä",
+      "customModel": "Mukautettu malli",
+      "notSet": "Ei asetettu",
+      "auto": "Automaattinen",
+      "on": "Päällä",
+      "off": "Pois",
+      "shortTerm": "Lyhytaikainen",
+      "longTerm": "Pitkäaikainen",
+      "disabledMemory": "Pois käytöstä",
+      "builtIn": "{{count}} sisäänrakennettu",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Verkkotulokset",
+      "attachments": "Liitteet",
+      "references": "Viittaukset",
+      "ragSources": "RAG-lähteet",
+      "reasoning": "Päättely",
+      "copy": "Kopioi",
+      "copied": "Viesti kopioitu",
+      "copyFailed": "Viestin kopioiminen epäonnistui",
+      "tokenUsage": "Tokenien käyttö",
+      "tokenUsagePrompt": "Kehotus",
+      "tokenUsageCompletion": "Täydennys",
+      "tokenUsageTotal": "Yhteensä",
+      "save": "Tallenna",
+      "insertToNotes": "Lisää muistiinpanoihin",
+      "regenerate": "Regeneroi"
+    },
+    "streaming": {
+      "thinking": "Pohditaan..."
+    },
+    "toolCall": {
+      "thinking": "Pohditaan",
+      "executionProcess": "Suoritusprosessi",
+      "input": "Syöte",
+      "output": "Tuloste",
+      "running": "Suoritetaan..."
+    },
+    "addPicture": "Lisää kuva",
+    "addPictureTooltip": "Liitä kuva viestiisi",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Käytä indeksoituja muistiinpanoja kontekstina",
+    "webSearchLabel": "Verkkohaku",
+    "webSearchTooltipLabel": "Hae internetistä tarvittaessa",
+    "imageUnavailable": "Kuvan liittäminen ei ole saatavilla nykyiselle mallille.",
+    "newChat": "Uusi chat",
+    "newConversation": "Uusi keskustelu",
+    "searchConversations": "Hae keskusteluja...",
+    "header": {
+      "model": "Malli",
+      "advancedParams": "Lisäparametrit",
+      "temperature": "Lämpötila",
+      "maxTokens": "Enimmäistokenit",
+      "topP": "Top P",
+      "freqPenalty": "Toistumisrangaistus",
+      "presPenalty": "Läsnäolorangaistus",
+      "agentConfig": "Agentin konfiguraatio",
+      "modelsCount": "Mallit: {{count}}",
+      "tokensCount": "Tokenit: {{count}}",
+      "noModels": "Ei malleja saatavilla"
+    },
+    "temperature": {
+      "precise": "0 (Tarkka)",
+      "balanced": "1 (Tasapainoinen)",
+      "creative": "2 (Luova)"
+    },
+    "modals": {
+      "image": {
+        "title": "Liitä kuvia",
+        "searchPlaceholder": "Hae kuvia...",
+        "selectAll": "Valitse kaikki",
+        "selectNone": "Poista kaikki valinnat",
+        "addSelected": "Lisää valitut",
+        "noResults": "Ei vastaavia kuvia löydetty."
+      },
+      "reference": {
+        "title": "Lisää viittauksia",
+        "searchPlaceholder": "Hae tiedostoja ja kansioita...",
+        "selectAll": "Valitse kaikki",
+        "selectNone": "Poista kaikki valinnat",
+        "addSelected": "Lisää valitut",
+        "noResults": "Ei vastaavia tiedostoja tai kansioita löydetty."
+      },
+      "insertNote": {
+        "title": "Lisää muistiinpanoon",
+        "searchPlaceholder": "Hae muistiinpanoja...",
+        "insert": "Lisää valittuun muistiinpanoon",
+        "createNew": "Luo uusi muistiinpano",
+        "noResults": "Ei vastaavia muistiinpanoja löydetty."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Peruuta",
+      "confirm": "Vahvista"
+    },
+    "agentEdit": {
+      "title": "Muokkaa agenttia",
+      "icon": {
+        "name": "Kuvake",
+        "desc": "Emoji tai merkki tämän agentin esittämiseen"
+      },
+      "description": {
+        "name": "Kuvaus",
+        "desc": "Lyhyt kuvaus agentista"
+      },
+      "modelStrategy": {
+        "name": "Mallistrategia",
+        "options": {
+          "default": "Käytä oletusmallia (asetuksista)",
+          "chatView": "Käytä chat-näkymän mallia",
+          "fixed": "Kiinteä malli"
+        },
+        "noModels": "Ei välimuistissa olevia malleja",
+        "desc": "Valitse, miten agentti valitsee mallinsa"
+      },
+      "systemPrompt": {
+        "createNew": "➕ luo uusi kehotus…",
+        "promptName": {
+          "name": "Kehotuksen nimi",
+          "desc": "Näyttönimi uudelle järjestelmäkehotukselle"
+        },
+        "promptContent": {
+          "name": "Kehotuksen sisältö",
+          "desc": "Sisältö uudelle järjestelmäkehotukselle"
+        },
+        "name": "Järjestelmäkehotus",
+        "desc": "Valitse olemassa olevista kehotuksista tai määritä uusi tälle agentille."
+      },
+      "capabilities": "Ominaisuudet",
+      "memory": {
+        "title": "Muisti",
+        "notice": "Agentin muisti on tilapäisesti poissa käytöstä, kun parannamme kokemusta."
+      },
+      "tools": {
+        "title": "Työkalut",
+        "builtIn": {
+          "name": "Sisäänrakennetut työkalut",
+          "desc": "Valitse mitkä sisäänrakennetut työkalut tämä agentti voi käyttää"
+        },
+        "cli": {
+          "name": "CLI-työkalut",
+          "desc": "Anna pääsy kaikkiin käytössä oleviin CLI-työkaluihin tai valitse yksilöllisesti alta",
+          "noTools": "Ei CLI-työkaluja määritetty. Lisää ja ota käyttöön työkalut kohdassa Asetukset → Työkalut → CLI käyttääksesi niitä täällä."
+        }
+      },
+      "mcp": {
+        "title": "MCP-käyttöoikeus",
+        "noServers": "Ei MCP-palvelimia määritetty. Lisää palvelimia kohdassa Asetukset → MCP avataksesi nämä vaihtoehdot.",
+        "toolsCached": "{{count}} työkalu välimuistissa",
+        "toolsCached_plural": "{{count}} työkalua välimuistissa",
+        "noToolsCached": "Ei välimuistissa olevia työkaluja. Ota käyttöön täysi käyttöoikeus tai päivitä välimuisti.",
+        "showTools": "Näytä työkalut",
+        "hideTools": "Piilota työkalut",
+        "selected": "Valittu",
+        "notSelected": "Ei valittu",
+        "noToolsAvailable": "Tältä palvelimelta ei ole vielä saatavilla työkaluja."
+      },
+      "notices": {
+        "promptRequired": "Anna nimi ja sisältö uudelle järjestelmäkehotukselle."
+      },
+      "name": {
+        "label": "Nimi",
+        "desc": "Näyttönimi tälle agentille"
+      },
+      "fixedModel": {
+        "name": "Kiinteä malli",
+        "desc": "Valitse erityinen malli tälle agentille.",
+        "descNoModels": "Ei välimuistissa olevia malleja. Päivitä mallit Mallit-välilehdeltä."
+      },
+      "temperature": {
+        "label": "Lämpötila",
+        "desc": "Ohjaa satunnaisuutta (0,0 - 2,0)"
+      },
+      "maxTokens": {
+        "label": "Enimmäistokenit",
+        "desc": "Generoitavien tokenien enimmäismäärä"
+      },
+      "contextWindow": {
+        "label": "Konteksti-ikkuna",
+        "desc": "Kontekstiin sisällytettävien aiempien viestien määrä"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Ota käyttöön hakuun perustuva generointi"
+      },
+      "webSearch": {
+        "name": "Verkkohaku",
+        "desc": "Ota verkkohakuominaisuudet käyttöön"
+      },
+      "maxSteps": {
+        "name": "Enimmäistyökaluaskeleet",
+        "desc": "Työkalu-kutsuaskeleiden enimmäismäärä per agentin vuoro"
+      }
+    },
+    "provider": {
+      "title": "Palveluntarjoajan asetukset",
+      "selectProvider": {
+        "name": "Palveluntarjoaja",
+        "desc": "Valitse LLM-palveluntarjoajan tyyppi",
+        "placeholder": "-- Valitse palveluntarjoaja --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (paikallinen)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Mukautettu (OpenAI-yhteensopiva)"
+      },
+      "modelFilter": {
+        "name": "Mallisuodatin",
+        "desc": "Valinnainen regex-malli saatavilla olevien mallien rajoittamiseen"
+      },
+      "resourceGroup": {
+        "name": "Resurssiryhmä",
+        "desc": "Valinnainen SAP AI Core -resurssiryhmä"
+      },
+      "serviceKey": {
+        "name": "Palveluavain",
+        "desc": "SAP AI Core -palveluavain (JSON-merkkijono)"
+      },
+      "baseUrl": {
+        "name": "Perus-URL",
+        "ollamaDesc": "Ollama-palvelimen URL",
+        "customDesc": "OpenAI-yhteensopiva API-päätepiste (pakollinen)",
+        "optionalDesc": "Mukautettu API-päätepiste (valinnainen)"
+      },
+      "manageModels": {
+        "name": "Hallinnoi malleja",
+        "desc": "Hae uusia malleja tai päivitä olemassa olevia Ollama-rekisteristä.",
+        "btn": "⏬ Hae Ollama-malli"
+      },
+      "apiKey": {
+        "name": "API-avain",
+        "desc": "Valitun palveluntarjoajan todennusavain"
+      },
+      "cancel": "Peruuta",
+      "save": "Tallenna",
+      "validation": {
+        "selectProvider": "Valitse palveluntarjoajan tyyppi",
+        "apiKeyTooLong": "API-avain on liian pitkä. Enimmäispituus on 500 merkkiä.",
+        "invalidUrl": "Virheellinen perus-URL-muoto. Syötä kelvollinen URL (esim. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP-tarkastin",
+      "desc": "Tarkasta ja virheenkorjaa Model Context Protocol (MCP) -palvelinyhteyksiä ja työkaluja.",
+      "tabs": {
+        "connections": "Yhteydet",
+        "tools": "Työkalut",
+        "logs": "Lokit"
+      },
+      "refreshBtn": "🔄 päivitä",
+      "connections": {
+        "title": "MCP-palvelinkytkennät",
+        "noServers": "Ei MCP-palvelimia määritetty.",
+        "headers": {
+          "server": "Palvelimen nimi",
+          "status": "Tila",
+          "tools": "Saatavilla olevat työkalut",
+          "actions": "Toiminnot"
+        },
+        "statusDisabled": "Pois käytöstä",
+        "statusConnected": "● yhdistetty",
+        "statusDisconnected": "○ yhteys katkaistu",
+        "toolsLive": "{{count}} työkalu",
+        "toolsLive_plural": "{{count}} työkalua",
+        "toolsCached": "{{count}} työkalu (välimuistissa)",
+        "toolsCached_plural": "{{count}} työkalua (välimuistissa)",
+        "noTools": "0 työkalua",
+        "connectBtn": "Yhdistä",
+        "disconnectBtn": "Katkaise yhteys",
+        "connecting": "Yhdistetään...",
+        "disconnecting": "Katkaistaan yhteyttä...",
+        "notices": {
+          "disconnected": "Yhteys katkaistu kohteesta {{name}}",
+          "enableFirst": "Ota palvelin käyttöön asetuksissa ennen yhdistämistä",
+          "connected": "Yhdistetty kohteeseen {{name}}",
+          "failedDisconnect": "Yhteyden katkaiseminen epäonnistui kohteesta {{name}}: {{message}}",
+          "failedConnect": "Yhdistäminen epäonnistui kohteeseen {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Saatavilla olevat MCP-työkalut",
+        "noTools": "Ei MCP-työkaluja saatavilla. Tarkista palvelinkytkennät.",
+        "serverPrefix": "Palvelin: {{name}}",
+        "noToolsInServer": "Ei saatavilla olevia työkaluja",
+        "headers": {
+          "tool": "Työkalun nimi",
+          "description": "Kuvaus",
+          "parameters": "Parametrit"
+        },
+        "noDescription": "Ei kuvausta",
+        "noParams": "Ei mitään"
+      },
+      "logs": {
+        "title": "MCP-yhteyden lokit",
+        "placeholder": "MCP-yhteyden lokit näkyvät täällä. Näytetään tällä hetkellä paikkamerkkitietoja.",
+        "events": {
+          "connection": "• yhteystapahtumat",
+          "tools": "• työkalurekisteröintitapahtumat",
+          "errors": "• virhelokit",
+          "comms": "• viestintätiedot"
+        },
+        "testTitle": "Testaa työkalun suoritus",
+        "selectServer": "Valitse palvelin...",
+        "selectTool": "Valitse työkalu...",
+        "parametersTitle": "Parametrit",
+        "selectEnum": "Valitse...",
+        "performBtn": "Suorita työkalu",
+        "clearBtn": "Tyhjennä tulokset",
+        "executing": "Suoritetaan...",
+        "success": "✅ suoritus onnistui",
+        "failed": "❌ suoritus epäonnistui",
+        "errorTitle": "❌ suoritusvirhe",
+        "errorLabel": "Virhe: {{message}}",
+        "notices": {
+          "success": "Työkalu suoritettu onnistuneesti",
+          "failed": "Työkalun suoritus epäonnistui",
+          "error": "Suoritusvirhe: {{message}}",
+          "requiredMissing": "Pakollinen parametri puuttuu: {{name}}",
+          "invalidNumber": "Virheellinen numero parametrille: {{name}}",
+          "invalidJson": "Virheellinen JSON parametrille: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Ei MCP-palvelimia määritetty",
+        "testing": "🧪 Testataan {{count}} MCP-palvelimen yhteyksiä...",
+        "allSuccess": "✅ kaikki {{count}} mcp-palvelinta yhdistetty onnistuneesti!",
+        "partial": "⚠️ {{success}} yhdistetty, {{failed}} epäonnistui"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Muokkaa MCP-palvelinta",
+      "titleAdd": "Lisää MCP-palvelin",
+      "serverName": {
+        "name": "Palvelimen nimi",
+        "desc": "Koko laajennuksessa näytettävä helppo nimi"
+      },
+      "connectionMode": {
+        "name": "Yhteystila",
+        "desc": "Valitse, yhdistetäänkö automaattisesti vai vain manuaalisesti käynnistettäessä",
+        "auto": "Yhdistä automaattisesti chatin avautuessa",
+        "manual": "Manuaalinen yhteys"
+      },
+      "command": {
+        "name": "Komento",
+        "desc": "Suoritettava ohjelma tai skripti, joka käynnistää MCP-palvelimen"
+      },
+      "arguments": {
+        "name": "Argumentit",
+        "desc": "Pilkulla tai rivinvaihdolla erotetut argumentit (valinnainen)"
+      },
+      "envVars": {
+        "name": "Ympäristömuuttujat",
+        "desc": "Valinnaiset AVAIN=ARVO-parit, yksi per rivi"
+      },
+      "enabled": {
+        "name": "Käytössä",
+        "desc": "Poista käytöstä pitääksesi palvelin määritettynä ilman automaattista yhdistämistä"
+      },
+      "cancel": "Peruuta",
+      "saveEdit": "Tallenna muutokset",
+      "saveAdd": "Lisää palvelin",
+      "validation": {
+        "nameRequired": "Palvelimen nimi vaaditaan",
+        "commandRequired": "Komento vaaditaan"
+      }
+    },
+    "ollamaManager": {
+      "title": "Hallinnoi Ollama-malleja",
+      "serverInfo": "Palvelintiedot",
+      "checkingServer": "Tarkistetaan palvelinta...",
+      "serverOnline": "✅ Palvelin online",
+      "versionLabel": " | Versio: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Palvelin offline",
+      "connectionError": "❌ Yhteysvirhe",
+      "pullTitle": "Hae uusi malli",
+      "pullHint": "Syötä mallin nimi ladataksesi Ollama-kirjastosta (esim. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Mallin nimi",
+        "example": "Esimerkki: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Hae malli",
+      "installedTitle": "Asennetut mallit",
+      "refreshList": "🔄 Päivitä lista",
+      "noModels": "Ei malleja löydetty. Hae malli aloittaaksesi.",
+      "capabilities": "Ominaisuudet: {{caps}}",
+      "deleteBtn": "Poista",
+      "closeBtn": "Sulje",
+      "confirmDelete": {
+        "title": "Vahvista poistaminen",
+        "message": "Haluatko varmasti poistaa mallin \"{{name}}\"?",
+        "cancel": "Peruuta",
+        "confirm": "Poista"
+      },
+      "notices": {
+        "enterName": "Syötä mallin nimi",
+        "pulling": "Haetaan {{name}}... Tämä voi kestää jonkin aikaa.",
+        "pullSuccess": "✅ {{name}} haettu onnistuneesti",
+        "pullFailed": "❌ Mallin hakeminen epäonnistui: {{message}}",
+        "deleted": "✅ Poistettu {{name}}",
+        "deleteFailed": "❌ Mallin poistaminen epäonnistui: {{message}}",
+        "refreshing": "Päivitetään...",
+        "refreshSuccess": "✅ Mallilista päivitetty",
+        "refreshFailed": "❌ Mallilistan päivittäminen epäonnistui"
+      }
+    },
+    "promptEdit": {
+      "title": "Muokkaa järjestelmäkehotusta",
+      "name": {
+        "name": "Nimi",
+        "desc": "Näyttönimi tälle kehotukselle"
+      },
+      "content": {
+        "name": "Sisältö",
+        "desc": "Järjestelmäkehotuksen sisältö"
+      },
+      "enabled": {
+        "name": "Käytössä",
+        "desc": "Onko tämä kehotus aktiivinen"
+      },
+      "cancel": "Peruuta",
+      "save": "Tallenna"
+    },
+    "prompt": {
+      "cancel": "Peruuta",
+      "ok": "OK"
+    },
+    "textInput": {
+      "nameLabel": "Nimi",
+      "create": "Luo",
+      "cancel": "Peruuta"
+    },
+    "explain": {
+      "loading": "⏳ Käsitellään...",
+      "error": "Virhe selityksen näyttämisessä",
+      "errorPrefix": "❌ Virhe: "
+    }
+  },
+  "notices": {
+    "noProvider": "Määritä ensin LLM-palveluntarjoaja asetuksissa",
+    "noModel": "Valitse oletusmallin asetuksissa",
+    "noValidProvider": "Mallille ei löydy kelvollista palveluntarjoajan konfiguraatiota: {{modelId}}",
+    "processing": "Käsitellään...",
+    "textUpdated": "Teksti päivitetty onnistuneesti",
+    "error": "Virhe: {{message}}"
+  }
+}

@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Ĝenerala",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Iloj",
+      "rag": "RAG",
+      "prompts": "Instigiloj",
+      "agents": "Agentoj",
+      "quickActions": "Rapidaj Agoj",
+      "usage": "Uzado"
+    },
+    "general": {
+      "title": "Ĝeneralaj agordoj",
+      "desc": "Agordu ĝeneralajn agordojn por la inteligenta asistanta kromaĵo.",
+      "pluginVersion": {
+        "name": "Kromaĵa versio",
+        "desc": "Nuna versio de la inteligenta asistanta kromaĵo"
+      },
+      "defaultModel": {
+        "name": "Defaŭlta modelo",
+        "desc": "Defaŭlta modelo por konversacioj",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Defaŭlta babilmodo",
+        "desc": "Elektu kun kiu modo la babilvidaĵo malfermiĝas",
+        "chat": "Babilmodo",
+        "agent": "Agentmodo"
+      },
+      "conversationTitleMode": {
+        "name": "Konversacia titolmodo",
+        "desc": "Kiel generi konversaciajn titolojn",
+        "firstMessage": "Uzu unuan mesaĝon",
+        "autoSummary": "Aŭtomate generi resumon",
+        "manual": "Permana"
+      },
+      "conversationIcons": {
+        "name": "Konversaciaj ikonoj",
+        "desc": "Ebligi aŭtomatan ikonogeneracion por konversacioj"
+      },
+      "configStatus": {
+        "name": "Agordostato",
+        "desc": "Ĝenerala agordostato de la kromaĵo",
+        "ok": "✅ Agordita ({{providers}} provizantoj, {{conversations}} konversacioj)",
+        "incomplete": "⚠️ Nekompleta - Bonvolu agordi provizantojn kaj modelojn"
+      }
+    },
+    "llm": {
+      "title": "LLM-agordo",
+      "desc": "Agordu lingvajn modeloprovizantojn kaj administru disponeblajn modelojn.",
+      "subTabs": {
+        "provider": "Provizantoj",
+        "models": "Modeloj"
+      }
+    },
+    "models": {
+      "title": "Modelagordo",
+      "desc": "Rigardu kaj administru modelojn de ĉiuj agorditaj provizantoj. Alklaku \"aktualigi modelojn\" por preni la plej novajn disponeblajn modelojn.",
+      "providerCount": "{{count}} provizanto agordita",
+      "providerCount_plural": "{{count}} provizantoj agorditaj",
+      "refreshAll": "🔄 aktualigi ĉiujn modelojn",
+      "empty": "Neniu provizanto agordita ankoraŭ. Unue aldonu provizantojn en la provizanta langeto.",
+      "noModels": "Neniuj modeloj disponeblaj. Alklaku \"aktualigi ĉiujn modelojn\" aŭ aktualigu individuajn provizantojn en la provizanta langeto.",
+      "noMatch": "Neniu modelo kongruas kun la nunaj filtroj. Alĝustigu aŭ forigu filtrojn por vidi rezultojn.",
+      "modelCount": "• {{count}} modelo en kaŝmemoro",
+      "modelCount_plural": "• {{count}} modeloj en kaŝmemoro",
+      "matchCount": "• {{count}} kongruas kun elektitaj filtroj",
+      "matchCount_plural": "• {{count}} kongruas kun elektitaj filtroj",
+      "status": {
+        "enabled": "Ebligita",
+        "disabled": "Malŝaltita"
+      },
+      "actions": {
+        "disable": "Malŝalti",
+        "enable": "Ebligi",
+        "setDefaultChat": "Agordi kiel Defaŭltan Babilon",
+        "defaultChat": "Defaŭlta Babilo",
+        "setDefaultEmbedding": "Agordi kiel Defaŭltan Enigaĵon",
+        "defaultEmbedding": "Defaŭlta Enigaĵo"
+      },
+      "notices": {
+        "fetching": "Prenantas modelojn por {{provider}}...",
+        "fetchFailed": "Malsukcesis aktualigi {{provider}}-modelojn",
+        "refreshed": "Modeloj sukcese aktualizitaj!",
+        "refreshFailed": "Malsukcesis aktualigi modelojn",
+        "defaultChatSet": "Defaŭlta babilmodelo agordita al {{name}}",
+        "defaultEmbeddingSet": "Defaŭlta enigmodelo agordita al {{name}}"
+      },
+      "filters": {
+        "allProviders": "Ĉiuj provizantoj",
+        "allCapabilities": "Ĉiuj kapabloj",
+        "allStates": "Ĉiuj statoj",
+        "searchPlaceholder": "Serĉi nomon aŭ ID"
+      }
+    },
+    "provider": {
+      "title": "Provizantagordo",
+      "securityTitle": "⚠️ Sekureca Averto",
+      "securityDesc": "API-ŝlosiloj estas konservitaj kiel simpla teksto en via arkivo por kongrueco. Por malhelpi hazardan elfluon:",
+      "securityItem1": "NE dividu vian dosierujon {{configDir}}/plugins/intelligence-assistant/data/.",
+      "securityItem2": "Aldonu ĉi tiun dosierujon al via .gitignore se vi uzas Git-sinkronigon.",
+      "securityItem3": "Estu singarda dum uzado de publikaj nuba-sinkronigaj servoj.",
+      "desc": "Administru LLM-provizantojn kaj API-akreditaĵojn. Uzu la ago-kolumnon por redakti agorddetajlojn aŭ aktualigi kaŝmemoritajn modelojn.",
+      "count": "{{count}} provizanto agordita",
+      "count_plural": "{{count}} provizantoj agorditaj",
+      "addBtn": "+ Aldoni provizanton",
+      "empty": "Neniu provizanto agordita. Elektu \"Aldoni provizanton\" por komenci.",
+      "tableHeaders": {
+        "provider": "Provizanto",
+        "status": "Stato",
+        "actions": "Agoj"
+      },
+      "status": {
+        "ready": "Preta",
+        "needsConfig": "Bezonas Agordon",
+        "checking": "Kontrolante...",
+        "credentialsSet": "Akreditaĵoj Agorditaj",
+        "serverOnline": "Servilo enrete",
+        "serverOffline": "Servilo eksterrete",
+        "serverError": "Servilero"
+      },
+      "guidance": {
+        "requiresCli": "Postulas lokan CLI",
+        "provideServiceKey": "Provizu servoŝlosilon",
+        "configureBaseUrl": "Agordu bazan URL",
+        "addApiKey": "Aldonu API-ŝlosilon"
+      },
+      "models": {
+        "none": "Neniuj modeloj",
+        "count": "{{count}} modelo",
+        "count_plural": "{{count}} modeloj"
+      },
+      "ollama": {
+        "checkingVersion": "Kontrolante version...",
+        "server": {
+          "checking": "Kontrolante servilon...",
+          "online": "Servilo: enrete",
+          "offline": "Servilo: eksterrete aŭ neatingebla",
+          "error": "Servilo: konekteraro",
+          "versionOnline": "Servilo enrete",
+          "versionOffline": "Servilo eksterrete",
+          "versionError": "Konekteraro",
+          "version": "Versio: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Lasta aktualigo: {{timeAgo}}",
+        "neverRefreshed": "Neniam aktualizita",
+        "justNow": "ĵus nun",
+        "minutesAgo": "antaŭ {{n}}min",
+        "hoursAgo": "antaŭ {{n}}h",
+        "daysAgo": "antaŭ {{n}}t"
+      },
+      "actions": {
+        "edit": "Redakti",
+        "manageModels": "Administri modelojn",
+        "refreshModels": "Aktualigi modelojn",
+        "refreshing": "Aktualizante...",
+        "delete": "Forigi"
+      },
+      "notices": {
+        "refreshed": "Modeloj aktualizitaj por {{provider}}.",
+        "refreshFailed": "Malsukcesis aktualigi modelojn"
+      },
+      "confirm": {
+        "delete": "Forigi provizanton {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "MCP-serviloadministrado",
+      "desc": "Agordu Model Context Protocol (MCP)-servilojn por etendi agentkapablojn per eksteraj iloj kaj datumfontoj.",
+      "inspectorBtn": "🔍 Malfermi MCP-inspektiston",
+      "testAllBtn": "🧪 testi ĉiujn konektojn",
+      "refreshAllBtn": "🔄 aktualigi ĉiujn ilojn",
+      "addBtn": "+ Aldoni MCP-servilon",
+      "empty": "Neniu MCP-servilo agordita. Elektu Aldoni MCP-servilon por komenci.",
+      "tableHeaders": {
+        "name": "Nomo",
+        "command": "Komando",
+        "arguments": "Argumentoj",
+        "status": "Stato",
+        "tools": "Iloj",
+        "actions": "Agoj"
+      },
+      "untitled": "Sennoma MCP-Servilo",
+      "notConfigured": "Ne agordita",
+      "noArgs": "Neniu",
+      "cached": "Kaŝmemorіta",
+      "disabled": "Malŝaltita",
+      "envVars": "{{count}} mediavariablo",
+      "envVars_plural": "{{count}} mediavariabloj",
+      "status": {
+        "disabled": "Malŝaltita",
+        "connected": "konektita",
+        "disconnected": "malkonektita",
+        "enableToManage": "Ebligi por administri konektojn",
+        "manualConnect": "Permana konekto",
+        "autoConnect": "Aŭtomata konekto"
+      },
+      "toolCount": {
+        "live": "{{count}} viva ilo",
+        "live_plural": "{{count}} vivaj iloj",
+        "cached": "{{count}} kaŝmemorіta ilo",
+        "cached_plural": "{{count}} kaŝmemorіtaj iloj"
+      },
+      "actions": {
+        "edit": "Redakti",
+        "enabled": "✓ Ebligita",
+        "enabledOff": "✗ Malŝaltita",
+        "connect": "konekti",
+        "disconnect": "malkonekti",
+        "connecting": "Konektante...",
+        "disconnecting": "Malkonektante...",
+        "test": "Testi",
+        "testing": "Testante...",
+        "delete": "Forigi"
+      },
+      "notices": {
+        "disconnected": "Malkonektita de {{name}}",
+        "connected": "Konektita al {{name}}",
+        "autoConnectFailed": "Malsukcesis aŭtomata konekto al {{name}}",
+        "enableFirst": "Ebligi la servilon antaŭ konektado",
+        "disconnectFailed": "Malsukcesis malkonekti de {{name}}",
+        "connectFailed": "Malsukcesis konekti al {{name}}",
+        "testNoCommand": "❌ bonvolu enigi komandon antaŭ testi la konekton",
+        "testSuccess": "✅ sukcese konektita! Trovitaj {{count}} iloj.",
+        "testFailed": "❌ Konekto malsukcesis: {{message}}",
+        "refreshedAll": "✅ aktualizitaj iloj por {{count}} servilo",
+        "refreshedAll_plural": "✅ aktualizitaj iloj por {{count}} serviloj",
+        "refreshedPartial": "✅ aktualizitaj {{success}} serviloj, ❌ {{failed}} malsukcesis",
+        "noServersConfigured": "⚠️ Neniu MCP-servilo agordita",
+        "testingAll": "🧪 Testante {{count}} MCP-servilkonektojn...",
+        "testAllSuccess": "✅ ĉiuj {{count}} MCP-serviloj sukcese konektitaj!",
+        "testAllPartial": "⚠️ {{successful}} konektitaj, {{failed}} malsukcesis"
+      },
+      "confirm": {
+        "delete": "Forigi MCP-servilon \"{{name}}\"?"
+      }
+    },
+    "agents": {
+      "title": "Agentadministrado",
+      "desc": "Kreu kaj administru AI-agentojn kun specifaj kapabloj, iloj kaj kondutoj.",
+      "count": "{{count}} agento agordita",
+      "count_plural": "{{count}} agentoj agorditaj",
+      "addBtn": "+ aldoni agenton",
+      "empty": "Neniu agento agordita. Elektu aldoni agenton por komenci.",
+      "tableHeaders": {
+        "agent": "Agento",
+        "model": "Modelo",
+        "capabilities": "Kapabloj",
+        "tools": "Iloj",
+        "actions": "Agoj"
+      },
+      "defaultBadge": "Defaŭlta",
+      "systemPrompt": "Sistema instigilo • {{promptName}}",
+      "customPrompt": "Propra instigilo",
+      "model": {
+        "notSet": "Ne agordita",
+        "notFound": "Modelo ne trovita en kaŝmemoro",
+        "useChatView": "Uzi Babilvidaĵan Modelon",
+        "useChatViewDesc": "Uzos modelon elektitan en babilvidaĵo",
+        "useDefault": "Uzi Defaŭltan Modelon",
+        "useDefaultDesc": "Uzos defaŭltan modelon el agordoj"
+      },
+      "capabilities": {
+        "noSpecialModes": "Neniuj specialaj modusoj"
+      },
+      "tools": {
+        "builtIn": "{{count}} enkonstruita",
+        "mcpServer": "{{count}} MCP-servilo",
+        "mcpServer_plural": "{{count}} MCP-serviloj",
+        "mcpTool": "{{count}} MCP-ilo",
+        "mcpTool_plural": "{{count}} MCP-iloj",
+        "noTools": "Neniuj iloj ebligitaj"
+      },
+      "actions": {
+        "edit": "Redakti",
+        "delete": "forigi",
+        "protected": "protektita"
+      },
+      "confirm": {
+        "delete": "Forigi agenton \"{{name}}\"?"
+      }
+    },
+    "prompts": {
+      "title": "Sistemaj instigiloj",
+      "desc": "Administru sistemajn instigilojn kiuj difinas la konduton kaj personon de via AI-asistanto.",
+      "addBtn": "+ aldoni sisteman instigilon",
+      "empty": "Neniu sistema instigilo agordita. Elektu aldoni sisteman instigilon por komenci.",
+      "tableHeaders": {
+        "name": "Nomo",
+        "contentPreview": "Enhavantaŭrigardo",
+        "created": "Kreita",
+        "updated": "Ĝisdatigita",
+        "enabled": "Ebligita",
+        "actions": "Agoj"
+      },
+      "status": {
+        "enabled": "Ebligita",
+        "disabled": "Malŝaltita"
+      },
+      "actions": {
+        "edit": "Redakti",
+        "disable": "Malŝalti",
+        "enable": "Ebligi",
+        "delete": "Forigi"
+      },
+      "confirm": {
+        "delete": "Forigi instigilon \"{{name}}\"?"
+      }
+    },
+    "tools": {
+      "title": "Ilagordo",
+      "desc": "Revizu enkonstruitajn ilojn kaj esploru MCP-ilojn ŝargitajn de konektitaj serviloj. Ebligi la agojn kiujn viaj agentoj devas povi fari.",
+      "subTabs": {
+        "builtIn": "Enkonstruitaj Iloj",
+        "mcp": "MCP-iloj",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI-Iloj"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Nomo",
+          "category": "Kategorio",
+          "description": "Priskribo",
+          "parameters": "Parametroj",
+          "enabled": "Ebligita"
+        },
+        "categories": {
+          "fileOps": "Dosieroperacioj",
+          "searchDisc": "Serĉo kaj Malkovro",
+          "noteMgmt": "Notenmastrumado"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Legu la enhavon de dosiero el via arkivo",
+            "params": "vojo (deviga): Vojo al la dosiero por legi"
+          },
+          "writeFile": {
+            "desc": "Skribu aŭ ĝisdatigu dosieron en via arkivo",
+            "params": "vojo (deviga), enhavo (deviga): Dosiervojon kaj enhavon por skribi"
+          },
+          "listFiles": {
+            "desc": "Listigi dosierojn en la arkivo aŭ specifa dosierujo",
+            "params": "dosierujo (laŭvola), etendaĵo (laŭvola): Filtri laŭ dosierujo kaj dosieretendaĵo"
+          },
+          "searchFiles": {
+            "desc": "Serĉi dosierojn laŭ nomo aŭ enhavo en via arkivo",
+            "params": "demando (deviga), serĉi_enhavon (laŭvola), limo (laŭvola): Serĉa demando kaj opcioj"
+          },
+          "createNote": {
+            "desc": "Krei novan noton kun specifita enhavo",
+            "params": "titolo (deviga), enhavo (deviga), dosierujo (laŭvola): Nota titolo, enhavo kaj loko"
+          },
+          "appendNote": {
+            "desc": "Aldoni enhavon al ekzistanta noto",
+            "params": "vojo (deviga), enhavo (deviga): Nota vojo kaj enhavo por aldoni"
+          }
+        },
+        "infoTitle": "💡 pri iloj",
+        "infoText": "Enkonstruitaj iloj estas agordataj laŭ kromaĵaj agordoj. MCP-iloj estas administrataj sendepende — uzu la MCP-langeton por konekti servilojn kaj aktualigi ildisponigeblecon.",
+        "toolNames": {
+          "read_file": "Legi Dosieron",
+          "write_file": "Skribi Dosieron",
+          "list_files": "Listigi Dosierojn",
+          "search_files": "Serĉi Dosierojn",
+          "create_note": "Krei Noton",
+          "append_note": "Aldoni al Noto"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Neniuj MCP-iloj disponeblaj. Konektu servilon aŭ aktualigu kaŝmemoritan ilaron por plenigi ĉi tiun liston.",
+        "tableHeaders": {
+          "server": "Servilo",
+          "tool": "Ilo",
+          "description": "Priskribo",
+          "parameters": "Parametroj",
+          "source": "Fonto"
+        },
+        "noDescription": "Neniu priskribo",
+        "schemaUnavailable": "Skemo nedisponebla",
+        "live": "Viva",
+        "cached": "Kaŝmemorіta",
+        "status": {
+          "connected": "konektita",
+          "disconnected": "malkonektita"
+        }
+      },
+      "openapi": {
+        "desc": "Generu HTTP-ilojn el OpenAPI-dokumentoj. Foraj specifoj estas kaŝmemoritaj sub {{cacheDir}}.",
+        "addBtn": "Aldoni HTTP-fonton",
+        "noSources": "Neniuj HTTP-fontoj agorditaj ankoraŭ.",
+        "unnamed": "Sennoma HTTP-Fonto",
+        "tableHeaders": {
+          "name": "Nomo",
+          "source": "Fonto",
+          "auth": "Aŭtentigo",
+          "status": "Stato",
+          "actions": "Agoj"
+        },
+        "sourceUrl": "Fora URL ne agordita",
+        "sourcePath": "Dosiervojo ne agordita",
+        "authHeader": "Kaplinjo ({{key}})",
+        "authQuery": "Demando ({{key}})",
+        "authNone": "Neniu",
+        "statusEnabled": "Ebligita",
+        "statusDisabled": "Malŝaltita",
+        "actions": {
+          "edit": "Redakti",
+          "reload": "Reŝargi",
+          "refetch": "Reprenи",
+          "delete": "Forigi"
+        },
+        "notices": {
+          "removed": "HTTP-fonto forigita",
+          "reloaded": "Reŝargitaj {{count}} operacioj",
+          "reloadFailed": "Malsukcesis reŝargi HTTP-fonton. Kontrolu la konzolon por detaloj."
+        },
+        "modal": {
+          "defaultTitle": "HTTP-Fonto",
+          "displayName": {
+            "name": "Montrata nomo",
+            "desc": "Montrata al agentoj dum elektado de ilfonto"
+          },
+          "enabled": {
+            "name": "Ebligita",
+            "desc": "Ebligi por malkovri ĉi tiun HTTP-API al ĉiuj agentoj"
+          },
+          "sourceType": {
+            "name": "Fontotipo",
+            "file": "Loka dosiero",
+            "url": "Fora URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Prenita kaj kaŝmemorіta ene de la kromaĵa datadosierujo"
+          },
+          "cachedFile": "Kaŝmemorіta dosiero: {{path}} ({{date}})",
+          "neverFetched": "Neniam prenita",
+          "specPath": {
+            "name": "OpenAPI-dosiervojo",
+            "desc": "Relativa vojo ene de la arkivo aŭ absoluta vojo"
+          },
+          "baseUrl": {
+            "name": "Baza URL-anstataŭo",
+            "desc": "Anstataŭi la unuan servilentron el la dokumento (laŭvola)"
+          },
+          "auth": {
+            "name": "Aŭtentigo",
+            "desc": "Aŭtomate enigi API-ŝlosilojn dum alvokado de ĉi tiu fonto",
+            "none": "Neniu",
+            "header": "HTTP-kaplinjo",
+            "query": "Demandoparametro"
+          },
+          "credKey": {
+            "name": "Akreditaĵoŝlosilo"
+          },
+          "credValue": {
+            "name": "Akreditaĵovaloro"
+          },
+          "actions": {
+            "name": "Agoj",
+            "reloadTools": "Reŝargi ilojn",
+            "refetchTooltip": "Reprenи specifon el URL",
+            "deleteTooltip": "Forigi fonton"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Difinu lokajn komandlinioilojn kiujn agentoj povas ekzekuti. Uzu ŝablonojn kiel {{param}} por dinamikaj argumentoj.",
+        "addBtn": "Aldoni CLI-Ilon",
+        "presetsBtn": "Aldoni el Antaŭagordoj",
+        "noTools": "Neniuj CLI-iloj agorditaj ankoraŭ.",
+        "tableHeaders": {
+          "name": "Nomo",
+          "command": "Komando",
+          "parameters": "Parametroj",
+          "status": "Stato",
+          "actions": "Agoj"
+        },
+        "unnamed": "Sennoma CLI-Ilo",
+        "paramCount": "{{count}} parametro",
+        "paramCount_plural": "{{count}} parametroj",
+        "noParams": "Neniu",
+        "statusEnabled": "Ebligita",
+        "statusDisabled": "Malŝaltita",
+        "actions": {
+          "edit": "Redakti",
+          "disable": "Malŝalti",
+          "enable": "Ebligi",
+          "delete": "Forigi"
+        },
+        "notices": {
+          "removed": "CLI-ilo forigita"
+        },
+        "infoTitle": "💡 Pri CLI-Iloj",
+        "infoText": "CLI-iloj plenumas ŝelokomandojn loke. Uzu {{paramName}} en argumentoj por ŝablona anstataŭo, aŭ agordu parametrojn por esti pasataj kiel argumentoj aŭ mediavariabloj.",
+        "modal": {
+          "defaultTitle": "CLI-Ilo",
+          "toolName": {
+            "name": "Ilnomo",
+            "desc": "Identigilo uzata de agentoj por alvoki ĉi tiun ilon"
+          },
+          "description": {
+            "name": "Priskribo",
+            "desc": "Priskribu kion ĉi tiu ilo faras por la AI"
+          },
+          "enabled": {
+            "name": "Ebligita",
+            "desc": "Ebligi por permesi agentojn uzi ĉi tiun ilon"
+          },
+          "commandConfig": "Komandoagordo",
+          "command": {
+            "name": "Komando",
+            "desc": "La ekzekuteblaĵo por ruli (ekz., node, python, bash, /vojo/al/skripto)"
+          },
+          "args": {
+            "name": "Argumentoj",
+            "desc": "Komandaj argumentoj, unu por linio. Uzu {{paramName}} por ŝablona anstataŭo."
+          },
+          "cwd": {
+            "name": "Labordosierujo",
+            "desc": "Dosierujo por ruli la komandon (laŭvola)"
+          },
+          "timeout": {
+            "name": "Templimo (ms)",
+            "desc": "Maksimuma ekzekuttempo en milisekundoj (defaŭlte: {{timeout}})"
+          },
+          "shell": {
+            "name": "Ruli en ŝelo",
+            "desc": "Ekzekuti la komandon tra ŝelo (ebligas ŝelofunkciaĵojn kiel duktilojn)"
+          },
+          "paramsTitle": "Parametroj",
+          "paramsDesc": "Difinu parametrojn kiujn la AI povas pasi al ĉi tiu ilo.",
+          "addParam": "Aldoni Parametron",
+          "noParams": "Neniuj parametroj difinitaj.",
+          "paramN": "Parametro {{n}}",
+          "param": {
+            "name": "Nomo",
+            "type": {
+              "name": "Tipo",
+              "string": "Ĉeno",
+              "number": "Nombro",
+              "boolean": "Buleo"
+            },
+            "description": "Priskribo",
+            "required": "Deviga",
+            "insertAs": {
+              "name": "Enigi kiel",
+              "desc": "Kiel pasi ĉi tiun parametron al la komando",
+              "template": "Ŝablono ({{name}})",
+              "arg": "Aldoni kiel argumenton",
+              "env": "Mediavariablo"
+            },
+            "envName": {
+              "name": "Mediavariabla nomo",
+              "desc": "Anstataŭi la mediavariablan nomon (defaŭlte al granda parametronomo)"
+            }
+          },
+          "envTitle": "Mediavariabloj",
+          "envDesc": "Statikaj mediavariabloj agordataj dum rulado de la komando.",
+          "envVars": {
+            "name": "Mediavariabloj",
+            "desc": "Formato: ŜLOSILO=valoro, unu por linio"
+          }
+        },
+        "presets": {
+          "title": "Aldoni CLI-ilon el antaŭagordoj",
+          "desc": "Elektu antaŭagordon por rapide aldoni antaŭkonfigurita CLI-ilon. Vi povas ĝin personecigi post aldono.",
+          "addBtn": "Aldoni",
+          "addedBtn": "Aldonita",
+          "closeBtn": "Fermi",
+          "notices": {
+            "added": "Aldonita \"{{name}}\" - ebligi ĝin en la CLI-ilolisto"
+          },
+          "categories": {
+            "file": "Dosieroperacioj",
+            "search": "Serĉo",
+            "network": "Reto",
+            "code": "Kodekzekuto",
+            "data": "Datumtraktado",
+            "system": "Sisteminformoj",
+            "apps": "macOS-Programoj kaj Labortablo"
+          },
+          "names": {
+            "preset-cat": "Legi Dosieron (cat)",
+            "preset-ls": "Listigi Dosierujon (ls)",
+            "preset-find": "Trovi Dosierojn (find)",
+            "preset-grep": "Serĉi Tekston (grep)",
+            "preset-ripgrep": "Rapida Serĉo (rg)",
+            "preset-curl": "HTTP-Peto (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Ruli Python-Kodon",
+            "preset-node": "Ruli JavaScript (Node)",
+            "preset-bash": "Ruli Ŝeloskripton",
+            "preset-jq": "JSON-Procesoro (jq)",
+            "preset-wc": "Vortokalkulo (wc)",
+            "preset-date": "Nuna Dato/Horo",
+            "preset-pwd": "Nuna Dosierujo (pwd)",
+            "preset-whoami": "Nuna Uzanto",
+            "preset-uname": "Sistemaj Informoj (uname)",
+            "preset-open": "Malfermi Dosieron/URL (open)",
+            "preset-open-app": "Lanĉi Programon (open -a)",
+            "preset-safari": "Malfermi en Safari",
+            "preset-chrome": "Malfermi en Chrome",
+            "preset-firefox": "Malfermi en Firefox",
+            "preset-pbcopy": "Kopii al Tondujo",
+            "preset-pbpaste": "Alglui el Tondujo",
+            "preset-say": "Teksto-al-Parolo (say)",
+            "preset-osascript": "AppleScript-Pelisto",
+            "preset-notify": "Labortabla Sciigo",
+            "preset-screencapture": "Ekrankopio",
+            "preset-applescript-list-apps": "Listigi Rulantajn Programojn"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG-agordo",
+      "desc": "Agordu retroven-plifortigitan generacion kaj retserĉon por plibonigi AI-respondojn.",
+      "subTabs": {
+        "overview": "Superrigardo",
+        "chunking": "Tranĉado",
+        "search": "Serĉo",
+        "filters": "Filtroj",
+        "advanced": "Progresinta",
+        "websearch": "Retserĉo"
+      },
+      "general": {
+        "title": "Ĝeneralaj agordoj",
+        "enableRag": {
+          "name": "Ebligi RAG",
+          "desc": "Ebligi Retroven-Plifortigitan Generacion por plibonigita kunteksto"
+        },
+        "vectorStore": {
+          "name": "Vektora stokejo",
+          "desc": "Vektora datumbazo por stoki enigaĵojn",
+          "memory": "En-Memoro",
+          "disk": "Disk-Bazita"
+        },
+        "embeddingModel": {
+          "name": "Enigmodelo",
+          "desc": "Modelo por generi enigaĵojn"
+        },
+        "embedChanged": {
+          "name": "Aŭtomate enigi ŝanĝitajn dosierojn",
+          "desc": "Aŭtomate re-enigi dosierojn kiam ili estas modifitaj"
+        }
+      },
+      "indexMgmt": {
+        "title": "Indeksa mastrumado",
+        "desc": "Administru vian RAG-indekson kaj rigardu statistikojn pri indeksita enhavo.",
+        "statsTitle": "Indeksaj statistikoj",
+        "stats": {
+          "totalChunks": "Entutaj Fragmentoj",
+          "uniqueFiles": "Unikaj Dosieroj",
+          "totalChars": "Entutaj Signoj",
+          "avgChunkSize": "Mezuma Fragmentogrando"
+        },
+        "empty": "Indekso estas malplena. Elektu rekonstrui indekson por komenci indeksadon.",
+        "error": "⚠️ ne eblas ŝargi indeksajn statistikojn",
+        "rebuild": {
+          "name": "Rekonstrui indekson",
+          "desc": "Re-indeksi ĉiujn dosierojn en via arkivo. Tio povas daŭri iom.",
+          "btn": "Rekonstrui",
+          "rebuilding": "Rekonstruante..."
+        },
+        "refresh": {
+          "name": "Aktualigi indekson",
+          "desc": "Ĝisdatigi la indekson kun ŝanĝitaj dosieroj ekde la lasta indeksado.",
+          "btn": "Aktualigi",
+          "refreshing": "Aktualizante..."
+        },
+        "clear": {
+          "name": "Forviŝi indekson",
+          "desc": "Forigi ĉiujn indeksitajn datumojn. Vi devos rekonstrui la indekson.",
+          "btn": "Forviŝi",
+          "clearing": "Forviŝante..."
+        },
+        "notices": {
+          "rebuilt": "Indekso sukcese rekonstruita",
+          "rebuildFailed": "Malsukcesis rekonstrui indekson",
+          "refreshed": "Indekso sukcese aktualizita",
+          "refreshFailed": "Malsukcesis aktualigi indekson",
+          "cleared": "Indekso sukcese forviŝita",
+          "clearFailed": "Malsukcesis forviŝi indekson"
+        }
+      },
+      "chunking": {
+        "title": "Tranĉadagordoj",
+        "strategy": {
+          "name": "Tranĉadstrategio",
+          "desc": "Strategio por dividi dokumentojn en fragmentojn",
+          "recursive": "Rekursiva (Inteligenta)",
+          "fixed": "Fiksita Grando",
+          "sentence": "Laŭ Frazo",
+          "paragraph": "Laŭ Paragrafo"
+        },
+        "chunkSize": {
+          "name": "Fragmentogrando",
+          "desc": "Nombro da signoj por fragmento (rekomenditaj 500-2000)"
+        },
+        "chunkOverlap": {
+          "name": "Fragmento-interkovro",
+          "desc": "Nombro da interkovraj signoj inter fragmentoj"
+        },
+        "minChunkSize": {
+          "name": "Minimuma fragmentogrando",
+          "desc": "Minimuma fragmentogrando por krei"
+        },
+        "maxTokens": {
+          "name": "Maks. ĵetonoj por fragmento",
+          "desc": "Maksimuma permesita nombro da ĵetonoj por fragmento"
+        }
+      },
+      "search": {
+        "title": "Serĉagordoj",
+        "searchType": {
+          "name": "Serĉtipo",
+          "desc": "Tipo de similecserĉo por plenumi",
+          "similarity": "Simileco"
+        },
+        "topK": {
+          "name": "Plej-K rezultoj",
+          "desc": "Nombro da plej relevantaj fragmentoj por retrovi (1-20)"
+        },
+        "threshold": {
+          "name": "Similecosojlo",
+          "desc": "Minimuma similecpunkto por inkludi rezultojn (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Relevancpunkta pezo",
+          "desc": "Pezo por relevancpunktado (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Kuntekstofenestra limo",
+          "desc": "Maksimumaj ĵetonoj por retrovita kunteksto"
+        }
+      },
+      "filters": {
+        "title": "Dosierfiltroj",
+        "excludeFolders": {
+          "name": "Ekskludi dosierujojn",
+          "desc": "Dosierujoj por ekskludi el indeksado (komoseparitaj)"
+        },
+        "includeTypes": {
+          "name": "Inkludi dosierajn tipojn",
+          "desc": "Dosieraj tipoj por inkludi (malplena = ĉiuj tipoj)"
+        },
+        "excludeTypes": {
+          "name": "Ekskludi dosierajn tipojn",
+          "desc": "Dosieraj tipoj por ekskludi el indeksado"
+        },
+        "filterByTag": {
+          "name": "Filtri laŭ etikedo",
+          "desc": "Nur indeksi dosierojn kun ĉi tiuj etikedoj (malplena = ĉiuj dosieroj)"
+        },
+        "excludeByTag": {
+          "name": "Ekskludi laŭ etikedo",
+          "desc": "Ekskludi dosierojn kun ĉi tiuj etikedoj el indeksado"
+        }
+      },
+      "advanced": {
+        "title": "Progresintaj agordoj",
+        "batchSize": {
+          "name": "Enigpartia grando",
+          "desc": "Nombro da fragmentoj por enigi paralele"
+        }
+      },
+      "grading": {
+        "title": "Taksoagordoj",
+        "desc": "Taksu retrovitajn fragmentojn laŭ relevanco antaŭ sendi al la LLM. Tio helpas filtri malaltkvaliajn rezultojn.",
+        "enableGrading": {
+          "name": "Ebligi taksoosojlon",
+          "desc": "Filtri fragmentojn sub kvaliaj sojloj"
+        },
+        "graderSource": {
+          "name": "Taksomodela fonto",
+          "desc": "De kie preni la taksomodelon",
+          "chat": "Babilmodelo",
+          "custom": "Propra Modelo"
+        },
+        "graderModel": {
+          "name": "Taksomodelo",
+          "desc": "Specifa modelo por uzi por taksado"
+        },
+        "parallel": {
+          "name": "Paralela pretigo",
+          "desc": "Nombro da fragmentoj por taksi paralele"
+        },
+        "minRelevance": {
+          "name": "Min. relevancpunkto",
+          "desc": "Minimuma relevancpunkto (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Min. precizecpunkto",
+          "desc": "Minimuma precizecpunkto (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Min. subtenkvaliтpunkto",
+          "desc": "Minimuma subtenkvaliтpunkto (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Retserĉa agordo",
+      "desc": "Agordu retserĉan funkciaĵon por plibonigi AI-respondojn per ĝisdata informo el la interreto.",
+      "generalBehavior": "Ĝenerala konduto",
+      "providerSelection": "Provizantselektado",
+      "localeFilters": "Lokaĵo kaj filtroj",
+      "apiCredentials": "API-akreditaĵoj kaj finpunktoj",
+      "enabled": {
+        "name": "Ebligi retserĉon",
+        "desc": "Permesi AI serĉi la reton por aktuala informo"
+      },
+      "autoTrigger": {
+        "name": "Aŭtomata serĉdeklado",
+        "desc": "Aŭtomate dekladi retserĉon kiam la demando postulas aktualan informon (ekz., novaĵoj, prezoj, lastatempaj okazaĵoj)"
+      },
+      "maxResults": {
+        "name": "Maksimumaj rezultoj",
+        "desc": "Maksimuma nombro da serĉrezultoj por redoni"
+      },
+      "timeRange": {
+        "name": "Rezulta freŝeco",
+        "desc": "Limigi rezultojn al tempodaŭro subtenata de provizantoj (Google, SearXNG, Mojeek)",
+        "any": "Iu ajn tempo (defaŭlte)",
+        "h": "Pasinta horo",
+        "d": "Pasintaj 24 horoj",
+        "w": "Pasinta semajno",
+        "m": "Pasinta monato",
+        "y": "Pasinta jaro"
+      },
+      "provider": {
+        "name": "Serĉprovizanto",
+        "desc": "Elektu el privatec-amikaj skraptiloj aŭ API-subtenataj motoroj"
+      },
+      "searchLanguage": {
+        "name": "Lingvokodo",
+        "desc": "ISO-lingvokodo (ekz., en, fr, zh-CN) plusendita al provizantoj kiuj subtenas lokaligon"
+      },
+      "searchCountry": {
+        "name": "Lando/merkatkodo",
+        "desc": "Duliterа landokodo (ekz., US, DE) uzata de Bing, DuckDuckGo, Brave kaj aliaj"
+      },
+      "includeDomains": {
+        "name": "Inkludi nur ĉi tiujn domajnojn",
+        "desc": "Komoseparita listo uzata de SerpAPI kaj Brave por limigi rezultojn al specifaj ejoj"
+      },
+      "excludeDomains": {
+        "name": "Ekskludi domajnojn",
+        "desc": "Komoseparitaj domajnoj por filtri post prenado de rezultoj"
+      },
+      "apiKey": {
+        "name": "Defaŭlta API-ŝlosilo",
+        "desc": "Komuna API-ŝlosilo uzata de Google, Bing, SerpAPI, Tavily aŭ Brave kiam provizant-specifaj ŝlosiloj ne estas agordataj"
+      },
+      "googleCseId": {
+        "name": "Google Propra Serĉmotora ID",
+        "desc": "Necesa kun Google API-ŝlosilo dum uzado de la Google-provizanto"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI-finpunkto",
+        "desc": "Anstataŭi la SerpAPI-bazan URL se vi mem-gastigas"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API-ŝlosilo",
+        "desc": "Anstataŭas la defaŭltan ŝlosilon dum uzado de la Tavily-provizanto"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG-finpunkto",
+        "desc": "Baza URL de via SearXNG-ekzemplo (devas redoni JSON)"
+      },
+      "braveApiKey": {
+        "name": "Brave API-ŝlosilo",
+        "desc": "Uzu Brave Search API-abontokenon kiam elektita kiel provizanto"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API-ŝlosilo (laŭvola)",
+        "desc": "Aldonu portotokenon se via Qwant-plano eldonigas unu"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API-ŝlosilo",
+        "desc": "Necesa por la Mojeek-provizanto"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (neniu ŝlosilo necesa)",
+        "google": "Google Propra Serĉo",
+        "bing": "Bing Retserĉo",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (HTML-skrapado)",
+        "yandex": "Yandex (HTML-skrapado)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Rapidaj agoj",
+      "desc": "Agordu AI-plenumitajn rapidajn agojn kiuj aperas en la redaktila kuntekstmenuo kiam teksto estas elektita.",
+      "actionPrefix": {
+        "name": "Agprefikso",
+        "desc": "Prefikso (emoĝio aŭ teksto) por montri antaŭ ĉiuj rapidaj agoj en la kuntekstmenuo",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} ago agordita ({{enabled}} ebligita)",
+      "count_plural": "{{count}} agoj agorditaj ({{enabled}} ebligitaj)",
+      "addBtn": "+ aldoni rapidan agon",
+      "empty": "Neniu rapida ago agordita. Elektu aldoni rapidan agon por komenci.",
+      "tableHeaders": {
+        "action": "Ago",
+        "type": "Tipo",
+        "model": "Modelo",
+        "promptPreview": "Instigiloantaŭrigardo",
+        "actions": "Agoj"
+      },
+      "defaultModel": "Defaŭlta",
+      "editBtn": "Redakti",
+      "deleteBtn": "forigi",
+      "confirm": {
+        "delete": "Forigi rapidan agon \"{{name}}\"?"
+      },
+      "usageInfo": {
+        "title": "Uzado",
+        "step1": "Elekti tekston en iu ajn noto",
+        "step2": "Dekstre alklaku por malfermi kuntekstmenuon",
+        "step3": "Elekti rapidan agon el la menuo",
+        "step4Replace": "Agoj markataj kiel \"anstataŭigi\" anstataŭigos la elektitan tekston per la AI-rezulto",
+        "step4Explain": "Agoj markataj kiel \"klarigi\" montros la rezulton en modala dialogo"
+      },
+      "edit": {
+        "title": "Redakti rapidan agon",
+        "name": {
+          "name": "Nomo",
+          "desc": "Montrata nomo por ĉi tiu ago en la kuntekstmenuo"
+        },
+        "actionType": {
+          "name": "Agotipo",
+          "desc": "Kiel la AI-respondo estu traktata",
+          "replace": "Anstataŭigi elektitan tekston",
+          "explain": "Montri en modalo"
+        },
+        "model": {
+          "name": "Modelo",
+          "desc": "Lingvomодelo por uzi por ĉi tiu ago (lasu malplenan por uzi defaŭltan)",
+          "default": "Uzi defaŭltan modelon"
+        },
+        "promptTemplate": {
+          "name": "Instigilŝablono",
+          "desc": "Instrukcioj senditaj al la AI. La elektita teksto estos aŭtomate aldonita."
+        },
+        "cancel": "Nuligi",
+        "save": "Konservi"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Fari tekston pli longan",
+          "prompt": "Etendi kaj plidetali la jenan tekston, farante ĝin pli detalema kaj ampleksa konservante la originan signifon kaj tonon. Nur redonu la etenditan tekston sen ia ajn aldona komento:\n\n"
+        },
+        "summarize": {
+          "name": "Resumi tekston",
+          "prompt": "Provizu koncizan resumon de la jena teksto. Nur redonu la resumon sen ia ajn aldona komento:\n\n"
+        },
+        "improve-writing": {
+          "name": "Plibonigi verkstilон",
+          "prompt": "Plibonigu la verkkvaliton, klarecon kaj stilon de la jena teksto. Nur redonu la plibonigitan tekston sen ia ajn aldona komento:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Korekti gramatikon",
+          "prompt": "Korektu ĉiujn gramatikajn, literumajn kaj interpunkcajn erarojn en la jena teksto. Nur redonu la korektitan tekston sen ia ajn aldona komento:\n\n"
+        },
+        "explain": {
+          "name": "Klarigi tekston",
+          "prompt": "Klarigi la jenan tekston per simplaj vortoj:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Ĵetona uzado",
+      "desc": "Spuri ĵetonan konsumon tra provizantoj kaj modeloj. Datumoj estas amasigataj tra ĉiuj konversacioj.",
+      "notAvailable": "Ĵetona uzadospurado ne estas disponebla.",
+      "ranges": {
+        "today": "Hodiaŭ",
+        "week": "Ĉi-semajne",
+        "month": "Ĉi-monato",
+        "all": "Ĉiam"
+      },
+      "stats": {
+        "totalTokens": "Entutaj ĵetonoj",
+        "apiCalls": "API-alvokoj",
+        "promptTokens": "Instigilaj ĵetonoj",
+        "completion": "Kompletigo",
+        "tokensIn": "ĵetonoj enen",
+        "tokensOut": "ĵetonoj eksteren"
+      },
+      "byProvider": "Laŭ provizanto",
+      "byModel": "Laŭ modelo",
+      "noData": "Neniuj uzaddatumoj ankoraŭ.",
+      "recentActivity": "Lastatempa agado",
+      "last10": "lastaj 10",
+      "noRecent": "Neniu lastatempa agado.",
+      "tableHeaders": {
+        "provider": "Provizanto",
+        "model": "Modelo",
+        "prompt": "Instigilo",
+        "completion": "Kompletigo",
+        "total": "Entute",
+        "calls": "Alvokoj",
+        "time": "Tempo",
+        "in": "Enen",
+        "out": "Eksteren"
+      },
+      "clearBtn": "Forigi ĉiujn uzaddatumojn",
+      "confirm": {
+        "clear": "Forigi ĉiujn ĵetonajn uzaddokumentojn? Tio ne povas esti malfarte."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Tajpu vian mesaĝon... (Eniri por sendi, Shift+Eniri por nova linio)",
+    "conversations": "Konversacioj",
+    "toggleConversationsTitle": "Baskuligi konversacioliston",
+    "currentConversation": "Nuna konversacio",
+    "new": "Nova",
+    "settings": "Agordoj",
+    "openSettingsTitle": "Malfermi kromaĵajn agordojn",
+    "mode": "Modo",
+    "prompt": "Instigilo",
+    "agent": "Agento",
+    "modeOptions": {
+      "chat": "Babilo",
+      "agent": "Agento"
+    },
+    "noSystemPrompt": "Neniu sistema instigilo",
+    "noAgentsAvailable": "Neniuj agentoj disponeblaj",
+    "sendHintPrefix": "Premu ",
+    "sendHintKey": "Eniri",
+    "sendHintSuffix": " por sendi",
+    "sendAriaLabel": "Sendi mesaĝon",
+    "stop": " Haltigi",
+    "addReference": "Aldoni referencon",
+    "addReferenceTooltip": "Aldoni dosieron aŭ dosierujoreferencon (@)",
+    "emptyHeading": "Komenci konversacion",
+    "emptySubtext": "Tajpu mesaĝon malsupre por komenci, aŭ elektu konversacion el historio.",
+    "noAgentConfig": "Neniuj agentoj agordataj",
+    "selectAgent": "Elekti agenton…",
+    "notices": {
+      "stopping": "Haltante generadon...",
+      "ragInitError": "RAG-inigeraro: {{message}}",
+      "modelsRefreshed": "Modeloj aktualizitaj",
+      "modelsRefreshFailed": "Malsukcesis aktualigi modelojn: {{message}}",
+      "waitForResponse": "Bonvolu atendi ke la nuna respondo finiĝu",
+      "configureProvider": "Bonvolu unue agordi LLM-provizanton en agordoj",
+      "selectModel": "Bonvolu elekti modelon",
+      "noValidProvider": "Neniu valida provizantagordo trovita por ĉi tiu modelo",
+      "chatError": "Babileraro: {{message}}",
+      "noMessageToRegenerate": "Ne eblas trovi mesaĝon por regeneri",
+      "regenerateOnlyLatest": "Nur la plej lastatempa respondo povas esti regenerita nun",
+      "regenerateNoUserMsg": "Ne eblas trovi uzantmesaĝon por regeneri de",
+      "regenerated": "Regenerita respondo",
+      "regenerateFailed": "Regenerado malsukcesis: {{message}}",
+      "noteCreated": "Noto kreita: {{name}}",
+      "noteCreateFailed": "Malsukcesis krei noton: {{message}}",
+      "messageInserted": "Mesaĝo enmetita al: {{path}}",
+      "messageInsertFailed": "Malsukcesis enmeti mesaĝon: {{message}}",
+      "noAgents": "Neniuj agentoj disponeblaj. Agordu agentojn en Agordoj → Agentoj.",
+      "ragDisabled": "RAG estas malŝaltita en agordoj. Ebligi ĝin sub agordoj → babilfunkciaĵoj → RAG.",
+      "webSearchDisabled": "Retserĉo estas malŝaltita en agordoj. Ebligi ĝin sub agordoj → babilfunkciaĵoj → retserĉo.",
+      "noFilesInVault": "Neniuj dosieroj trovitaj en arkivo",
+      "attached": "Aldonita: {{name}}",
+      "attachedImages": "Aldonitaj {{count}} bildo(j)",
+      "referencesAdded": "Aldonitaj {{count}} referenco(j)",
+      "fileNotFound": "Dosiero ne trovita: {{path}}",
+      "agentConfigApplied": "Aplikita agordo por agento: {{name}}",
+      "waitForComplete": "Bonvolu atendi ke la nuna respondo finiĝu",
+      "chatServiceFallback": "ChatService ne agordita. Uzante ChatView-ŝtopfunkciaĵon.",
+      "noModelSelected": "Neniu modelo elektita",
+      "noProviderConfig": "Neniu provizantagordo trovita",
+      "generationStopped": "Generado haltita",
+      "noResponseToRegenerate": "Neniu respondo por regeneri",
+      "agentNotFound": "Agento ne trovita",
+      "unableToLoadRag": "Ne eblas ŝargi RAG-statistikojn.",
+      "referenced": "Referencita: {{name}}"
+    },
+    "status": {
+      "available": "Disponebla",
+      "unavailable": "Nedisponebla",
+      "disabled": "Malŝaltita",
+      "on": "Ŝaltita · {{detail}}",
+      "off": "Malŝaltita"
+    },
+    "ragStats": {
+      "title": "RAG-statistikoj",
+      "totalChunks": "📊 entutaj fragmentoj:",
+      "filesIndexed": "📁 dosieroj indeksitaj:",
+      "totalSize": "💾 entuta grandeco:",
+      "avgChunks": "📈 Mezumaj Fragmentoj/Dosiero:",
+      "indexedFiles": "📄 indeksitaj dosieroj",
+      "noFilesYet": "⚠️ neniu dosiero estis indeksita ankoraŭ.",
+      "howToBuild": "Por konstrui la RAG-indekson:",
+      "step1": "Iru al Agordoj → RAG",
+      "step2": "Ebligi RAG",
+      "step3": "Elekti indeksi arkivon",
+      "close": "Fermi",
+      "retrieved": "📚 retrovita el {{count}} dokumento",
+      "retrieved_plural": "📚 retrovita el {{count}} dokumentoj"
+    },
+    "ragTooltip": {
+      "status": "RAG-Indeksa Stato:",
+      "totalChunks": "📊 Entutaj Fragmentoj: {{count}}",
+      "filesIndexed": "📁 Dosieroj Indeksitaj: {{count}}",
+      "totalSize": "💾 Entuta Grandeco: {{size}} KB",
+      "indexedFiles": "📄 indeksitaj Dosieroj:",
+      "andMore": "  ... kaj {{count}} pliaj",
+      "noFilesYet": "⚠️ neniu dosiero indeksita ankoraŭ.",
+      "goToSettings": "Iru al Agordoj → RAG por konstrui la indekson.",
+      "ragOff": "ℹ️ RAG estas nuntempe malŝaltita por ĉi tiu babilo."
+    },
+    "agentSummary": {
+      "model": "Modelo",
+      "temp": "Temp",
+      "max": "Maks",
+      "rag": "RAG",
+      "web": "Reto",
+      "tools": "Iloj",
+      "memory": "Memoro",
+      "none": "Neniu",
+      "configuration": "{{name}}-agordo",
+      "modelFixed": "{{name}} · Fiksita",
+      "modelDefault": "{{name}} · Defaŭlta",
+      "modelChatView": "{{name}} · Babilvidaĵo",
+      "customModel": "Propra modelo",
+      "notSet": "Ne agordita",
+      "auto": "Aŭto",
+      "on": "Ŝaltita",
+      "off": "Malŝaltita",
+      "shortTerm": "Mallongdaŭra",
+      "longTerm": "Longdaŭra",
+      "disabledMemory": "Malŝaltita",
+      "builtIn": "{{count}} enkonstruita",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Retaj rezultoj",
+      "attachments": "Aldonaĵoj",
+      "references": "Referencoj",
+      "ragSources": "RAG-Fontoj",
+      "reasoning": "Rezonado",
+      "copy": "Kopii",
+      "copied": "Mesaĝo kopiita",
+      "copyFailed": "Malsukcesis kopii mesaĝon",
+      "tokenUsage": "Ĵetona uzado",
+      "tokenUsagePrompt": "Instigilo",
+      "tokenUsageCompletion": "Kompletigo",
+      "tokenUsageTotal": "Entute",
+      "save": "Konservi",
+      "insertToNotes": "Enmeti al Notoj",
+      "regenerate": "Regeneri"
+    },
+    "streaming": {
+      "thinking": "Pensante..."
+    },
+    "toolCall": {
+      "thinking": "Pensante",
+      "executionProcess": "Ekzekutprocezo",
+      "input": "Enigo",
+      "output": "Eliĝo",
+      "running": "Rulante..."
+    },
+    "addPicture": "Aldoni bildon",
+    "addPictureTooltip": "Aldoni bildon al via mesaĝo",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Uzi indeksitajn notojn kiel kuntekston",
+    "webSearchLabel": "Retserĉo",
+    "webSearchTooltipLabel": "Serĉi la interreton kiam necese",
+    "imageUnavailable": "Bildaldono ne disponeblas por la nuna modelo.",
+    "newChat": "Nova Babilo",
+    "newConversation": "Nova Konversacio",
+    "searchConversations": "Serĉi konversaciojn...",
+    "header": {
+      "model": "Modelo",
+      "advancedParams": "Progresintaj parametroj",
+      "temperature": "Temperaturo",
+      "maxTokens": "Maks. ĵetonoj",
+      "topP": "Supra P",
+      "freqPenalty": "Frekv. puno",
+      "presPenalty": "Ĉeest. puno",
+      "agentConfig": "Agentagordo",
+      "modelsCount": "Modeloj: {{count}}",
+      "tokensCount": "Ĵetonoj: {{count}}",
+      "noModels": "Neniuj modeloj disponeblaj"
+    },
+    "temperature": {
+      "precise": "0 (Preciza)",
+      "balanced": "1 (Ekvilibra)",
+      "creative": "2 (Kreiva)"
+    },
+    "modals": {
+      "image": {
+        "title": "Aldoni bildojn",
+        "searchPlaceholder": "Serĉi bildojn...",
+        "selectAll": "Elekti ĉiujn",
+        "selectNone": "Elekti neniun",
+        "addSelected": "Aldoni elektitajn",
+        "noResults": "Neniuj kongruaj bildoj trovitaj."
+      },
+      "reference": {
+        "title": "Aldoni referencojn",
+        "searchPlaceholder": "Serĉi dosierojn kaj dosierujojn...",
+        "selectAll": "Elekti ĉiujn",
+        "selectNone": "Elekti neniun",
+        "addSelected": "Aldoni elektitajn",
+        "noResults": "Neniuj kongruaj dosieroj aŭ dosierujoj trovitaj."
+      },
+      "insertNote": {
+        "title": "Enmeti al noto",
+        "searchPlaceholder": "Serĉi notojn...",
+        "insert": "Enmeti al elektita noto",
+        "createNew": "Krei novan noton",
+        "noResults": "Neniuj kongruaj notoj trovitaj."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Nuligi",
+      "confirm": "Konfirmi"
+    },
+    "agentEdit": {
+      "title": "Redakti agenton",
+      "icon": {
+        "name": "Ikono",
+        "desc": "Emoĝio aŭ signo por reprezenti ĉi tiun agenton"
+      },
+      "description": {
+        "name": "Priskribo",
+        "desc": "Mallonga priskribo de la agento"
+      },
+      "modelStrategy": {
+        "name": "Modelstrategio",
+        "options": {
+          "default": "Uzi defaŭltan modelon (el agordoj)",
+          "chatView": "Uzi babilvidaĵan modelon",
+          "fixed": "Fiksita modelo"
+        },
+        "noModels": "Neniuj kaŝmemorditaj modeloj",
+        "desc": "Elektu kiel la agento elektos sian modelon"
+      },
+      "systemPrompt": {
+        "createNew": "➕ krei novan instigilon…",
+        "promptName": {
+          "name": "Instigilnomo",
+          "desc": "Montrata nomo por la nova sistema instigilo"
+        },
+        "promptContent": {
+          "name": "Instigilenhavo",
+          "desc": "Enhavo por la nova sistema instigilo"
+        },
+        "name": "Sistema instigilo",
+        "desc": "Elektu el ekzistantaj instigiloj aŭ difinu novan por ĉi tiu agento."
+      },
+      "capabilities": "Kapabloj",
+      "memory": {
+        "title": "Memoro",
+        "notice": "Agentmemoro estas provizore nedisponebla dum ni plibonigas la sperton."
+      },
+      "tools": {
+        "title": "Iloj",
+        "builtIn": {
+          "name": "Enkonstruitaj iloj",
+          "desc": "Elektu kiujn enkonstruitajn ilojn ĉi tiu agento povas uzi"
+        },
+        "cli": {
+          "name": "CLI-iloj",
+          "desc": "Doni aliron al ĉiuj ebligitaj CLI-iloj, aŭ elekti individuajn malsupre",
+          "noTools": "Neniuj CLI-iloj agordataj. Aldonu kaj ebligi ilojn sub Agordoj → Iloj → CLI por uzi ilin ĉi tie."
+        }
+      },
+      "mcp": {
+        "title": "MCP-aliro",
+        "noServers": "Neniuj MCP-serviloj agordataj. Aldonu servilojn sub Agordoj → MCP por malŝlosi ĉi tiujn opciojn.",
+        "toolsCached": "{{count}} ilo kaŝmemorіta",
+        "toolsCached_plural": "{{count}} iloj kaŝmemorіtaj",
+        "noToolsCached": "Neniuj iloj ankoraŭ kaŝmemorіtaj. Ebligi plenan aliron aŭ aktualigi la kaŝmemoron.",
+        "showTools": "Montri ilojn",
+        "hideTools": "Kaŝi ilojn",
+        "selected": "Elektita",
+        "notSelected": "Ne elektita",
+        "noToolsAvailable": "Neniuj iloj disponeblaj de ĉi tiu servilo ankoraŭ."
+      },
+      "notices": {
+        "promptRequired": "Bonvolu provizi nomon kaj enhavon por la nova sistema instigilo."
+      },
+      "name": {
+        "label": "Nomo",
+        "desc": "Montrata nomo por ĉi tiu agento"
+      },
+      "fixedModel": {
+        "name": "Fiksita modelo",
+        "desc": "Elektu specifan modelon por ĉi tiu agento.",
+        "descNoModels": "Neniuj kaŝmemorditaj modeloj disponeblaj. Aktualigi modelojn en la Modeloj-langeto."
+      },
+      "temperature": {
+        "label": "Temperaturo",
+        "desc": "Regas hazardecon (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Maks. ĵetonoj",
+        "desc": "Maksimuma nombro da ĵetonoj por generi"
+      },
+      "contextWindow": {
+        "label": "Kuntekstofenestro",
+        "desc": "Nombro da antaŭaj mesaĝoj por inkludi en kuntekston"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Ebligi retroven-plifortigitan generacion"
+      },
+      "webSearch": {
+        "name": "Retserĉo",
+        "desc": "Ebligi retserĉajn kapablojn"
+      },
+      "maxSteps": {
+        "name": "Maks. Ilpaŝoj",
+        "desc": "Maksimuma nombro da ilvoka paŝoj por agentoturno"
+      }
+    },
+    "provider": {
+      "title": "Provizantagordoj",
+      "selectProvider": {
+        "name": "Provizanto",
+        "desc": "Elektu la LLM-provizanttipo",
+        "placeholder": "-- Elekti provizanton --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (loka)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Propra (OpenAI-kongrua)"
+      },
+      "modelFilter": {
+        "name": "Modelofiltro",
+        "desc": "Laŭvola regulesprima padrono por limigi disponeblajn modelojn"
+      },
+      "resourceGroup": {
+        "name": "Rimedgrupo",
+        "desc": "Laŭvola SAP AI Core-rimedgrupo"
+      },
+      "serviceKey": {
+        "name": "Servoŝlosilo",
+        "desc": "SAP AI Core-servoŝlosilo (JSON-ĉeno)"
+      },
+      "baseUrl": {
+        "name": "Baza URL",
+        "ollamaDesc": "Ollama-servila URL",
+        "customDesc": "OpenAI-kongrua API-finpunkto (deviga)",
+        "optionalDesc": "Propra API-finpunkto (laŭvola)"
+      },
+      "manageModels": {
+        "name": "Administri Modelojn",
+        "desc": "Tiri novajn modelojn aŭ ĝisdatigi ekzistantajn el la Ollama-registro.",
+        "btn": "⏬ Tiri Ollama-Modelon"
+      },
+      "apiKey": {
+        "name": "API-Ŝlosilo",
+        "desc": "Aŭtentiga ŝlosilo por la elektita provizanto"
+      },
+      "cancel": "Nuligi",
+      "save": "Konservi",
+      "validation": {
+        "selectProvider": "Bonvolu elekti provizanttipo",
+        "apiKeyTooLong": "API-ŝlosilo estas tro longa. Maksimuma longo estas 500 signoj.",
+        "invalidUrl": "Nevalida baza URL-formato. Bonvolu enigi validan URL (ekz., https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP-inspektisto",
+      "desc": "Inspektu kaj seraru Model Context Protocol (MCP)-servilkonektojn kaj ilojn.",
+      "tabs": {
+        "connections": "Konektoj",
+        "tools": "Iloj",
+        "logs": "Protokoloj"
+      },
+      "refreshBtn": "🔄 aktualigi",
+      "connections": {
+        "title": "MCP-servilkonektoj",
+        "noServers": "Neniuj MCP-serviloj agordataj.",
+        "headers": {
+          "server": "Servilnomo",
+          "status": "Stato",
+          "tools": "Iloj disponeblaj",
+          "actions": "Agoj"
+        },
+        "statusDisabled": "Malŝaltita",
+        "statusConnected": "● konektita",
+        "statusDisconnected": "○ malkonektita",
+        "toolsLive": "{{count}} ilo",
+        "toolsLive_plural": "{{count}} iloj",
+        "toolsCached": "{{count}} ilo (kaŝmemorіta)",
+        "toolsCached_plural": "{{count}} iloj (kaŝmemorіtaj)",
+        "noTools": "0 iloj",
+        "connectBtn": "Konekti",
+        "disconnectBtn": "Malkonekti",
+        "connecting": "Konektante...",
+        "disconnecting": "Malkonektante...",
+        "notices": {
+          "disconnected": "Malkonektita de {{name}}",
+          "enableFirst": "Ebligi la servilon en agordoj antaŭ konektado",
+          "connected": "Konektita al {{name}}",
+          "failedDisconnect": "Malsukcesis malkonekti de {{name}}: {{message}}",
+          "failedConnect": "Malsukcesis konekti al {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Disponeblaj MCP-iloj",
+        "noTools": "Neniuj MCP-iloj disponeblaj. Kontrolu servilkonektojn.",
+        "serverPrefix": "Servilo: {{name}}",
+        "noToolsInServer": "Neniuj iloj disponeblaj",
+        "headers": {
+          "tool": "Ilnomo",
+          "description": "Priskribo",
+          "parameters": "Parametroj"
+        },
+        "noDescription": "Neniu priskribo",
+        "noParams": "Neniu"
+      },
+      "logs": {
+        "title": "MCP-konektaj protokoloj",
+        "placeholder": "MCP-konektaj protokoloj aperos ĉi tie. Nuntempe montras anstataŭigan informon.",
+        "events": {
+          "connection": "• konektaj okazaĵoj",
+          "tools": "• ilregistradaj okazaĵoj",
+          "errors": "• erarprotokolo",
+          "comms": "• komunikadaj detaloj"
+        },
+        "testTitle": "Testi ilekzekuton",
+        "selectServer": "Elekti servilon...",
+        "selectTool": "Elekti ilon...",
+        "parametersTitle": "Parametroj",
+        "selectEnum": "Elekti...",
+        "performBtn": "Plenumi ilon",
+        "clearBtn": "Forigi rezultojn",
+        "executing": "Ekzekutante...",
+        "success": "✅ ekzekuto sukcesa",
+        "failed": "❌ ekzekuto malsukcesis",
+        "errorTitle": "❌ ekzekuteraro",
+        "errorLabel": "Eraro: {{message}}",
+        "notices": {
+          "success": "Ilo sukcese ekzekutita",
+          "failed": "Ilekzekuto malsukcesis",
+          "error": "Ekzekuteraro: {{message}}",
+          "requiredMissing": "Deviga parametro mankas: {{name}}",
+          "invalidNumber": "Nevalida nombro por parametro: {{name}}",
+          "invalidJson": "Nevalida JSON por parametro: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Neniuj MCP-serviloj agordataj",
+        "testing": "🧪 Testante {{count}} MCP-servilkonektojn...",
+        "allSuccess": "✅ ĉiuj {{count}} MCP-serviloj sukcese konektitaj!",
+        "partial": "⚠️ {{success}} konektitaj, {{failed}} malsukcesis"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Redakti MCP-servilon",
+      "titleAdd": "Aldoni MCP-servilon",
+      "serverName": {
+        "name": "Servilnomo",
+        "desc": "Amika nomo montrata tra la kromaĵo"
+      },
+      "connectionMode": {
+        "name": "Konektmodo",
+        "desc": "Elektu ĉu konekti aŭtomate aŭ nur kiam mane dekladate",
+        "auto": "Aŭtomata konekto kiam babilo malfermiĝas",
+        "manual": "Permana konekto"
+      },
+      "command": {
+        "name": "Komando",
+        "desc": "Ekzekuteblaĵo aŭ skripto kiu lanĉas la MCP-servilon"
+      },
+      "arguments": {
+        "name": "Argumentoj",
+        "desc": "Komao aŭ novlinio separitaj argumentoj (laŭvola)"
+      },
+      "envVars": {
+        "name": "Mediavariabloj",
+        "desc": "Laŭvolaj ŜLOSILO=valoro-paroj, unu por linio"
+      },
+      "enabled": {
+        "name": "Ebligita",
+        "desc": "Malŝalti por konservi la servilon agordita sen aŭtomata konektado"
+      },
+      "cancel": "Nuligi",
+      "saveEdit": "Konservi ŝanĝojn",
+      "saveAdd": "Aldoni servilon",
+      "validation": {
+        "nameRequired": "Servilnomo estas deviga",
+        "commandRequired": "Komando estas deviga"
+      }
+    },
+    "ollamaManager": {
+      "title": "Administri Ollama-modelojn",
+      "serverInfo": "Servilinformoj",
+      "checkingServer": "Kontrolante servilon...",
+      "serverOnline": "✅ Servilo enrete",
+      "versionLabel": " | Versio: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Servilo eksterrete",
+      "connectionError": "❌ Konekteraro",
+      "pullTitle": "Tiri novan modelon",
+      "pullHint": "Enigi modelonomon por elŝuti el la Ollama-biblioteko (ekz., llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Modelonomo",
+        "example": "Ekzemplo: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Tiri modelon",
+      "installedTitle": "Instalitaj modeloj",
+      "refreshList": "🔄 Aktualigi liston",
+      "noModels": "Neniuj modeloj trovitaj. Tiru modelon por komenci.",
+      "capabilities": "Kapabloj: {{caps}}",
+      "deleteBtn": "Forigi",
+      "closeBtn": "Fermi",
+      "confirmDelete": {
+        "title": "Konfirmi forigon",
+        "message": "Ĉu vi certe volas forigi la modelon \"{{name}}\"?",
+        "cancel": "Nuligi",
+        "confirm": "Forigi"
+      },
+      "notices": {
+        "enterName": "Bonvolu enigi modelonomon",
+        "pulling": "Tirante {{name}}... Tio povas daŭri iom.",
+        "pullSuccess": "✅ Sukcese tirita {{name}}",
+        "pullFailed": "❌ Malsukcesis tiri modelon: {{message}}",
+        "deleted": "✅ Forigita {{name}}",
+        "deleteFailed": "❌ Malsukcesis forigi modelon: {{message}}",
+        "refreshing": "Aktualizante...",
+        "refreshSuccess": "✅ Modellisto aktualizita",
+        "refreshFailed": "❌ Malsukcesis aktualigi modelliston"
+      }
+    },
+    "promptEdit": {
+      "title": "Redakti sisteman instigilon",
+      "name": {
+        "name": "Nomo",
+        "desc": "Montrata nomo por ĉi tiu instigilo"
+      },
+      "content": {
+        "name": "Enhavo",
+        "desc": "La sistema instigilenhavo"
+      },
+      "enabled": {
+        "name": "Ebligita",
+        "desc": "Ĉu ĉi tiu instigilo estas aktiva"
+      },
+      "cancel": "Nuligi",
+      "save": "Konservi"
+    },
+    "prompt": {
+      "cancel": "Nuligi",
+      "ok": "Bone"
+    },
+    "textInput": {
+      "nameLabel": "Nomo",
+      "create": "Krei",
+      "cancel": "Nuligi"
+    },
+    "explain": {
+      "loading": "⏳ Pretigante...",
+      "error": "Eraro dum renderado de klarigo",
+      "errorPrefix": "❌ Eraro: "
+    }
+  },
+  "notices": {
+    "noProvider": "Bonvolu unue agordi LLM-provizanton en agordoj",
+    "noModel": "Bonvolu elekti defaŭltan modelon en agordoj",
+    "noValidProvider": "Neniu valida provizantagordo trovita por modelo: {{modelId}}",
+    "processing": "Pretigante...",
+    "textUpdated": "Teksto sukcese ĝisdatigita",
+    "error": "Eraro: {{message}}"
+  }
+}

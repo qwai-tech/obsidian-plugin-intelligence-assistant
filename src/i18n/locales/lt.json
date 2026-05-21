@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Bendra",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Įrankiai",
+      "rag": "RAG",
+      "prompts": "Raginiai",
+      "agents": "Agentai",
+      "quickActions": "Greiti veiksmai",
+      "usage": "Naudojimas"
+    },
+    "general": {
+      "title": "Bendrieji nustatymai",
+      "desc": "Konfigūruoti bendruosius intelektualaus asistento įskiepio nustatymus.",
+      "pluginVersion": {
+        "name": "Įskiepio versija",
+        "desc": "Dabartinė intelektualaus asistento įskiepio versija"
+      },
+      "defaultModel": {
+        "name": "Numatytasis modelis",
+        "desc": "Numatytasis modelis naudojamas pokalbiuose",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Numatytasis pokalbio režimas",
+        "desc": "Pasirinkite, kuriuo režimu atidaromas pokalbio vaizdas",
+        "chat": "Pokalbio režimas",
+        "agent": "Agento režimas"
+      },
+      "conversationTitleMode": {
+        "name": "Pokalbio pavadinimo režimas",
+        "desc": "Kaip generuoti pokalbių pavadinimus",
+        "firstMessage": "Naudoti pirmą žinutę",
+        "autoSummary": "Automatiškai generuoti santrauką",
+        "manual": "Rankinis"
+      },
+      "conversationIcons": {
+        "name": "Pokalbio piktogramos",
+        "desc": "Įgalinti automatinį piktogramų generavimą pokalbiams"
+      },
+      "configStatus": {
+        "name": "Konfigūracijos būsena",
+        "desc": "Bendra įskiepio konfigūracijos būsena",
+        "ok": "✅ Sukonfigūruota ({{providers}} tiekėjai, {{conversations}} pokalbiai)",
+        "incomplete": "⚠️ Neišsami – Prašome sukonfigūruoti tiekėjus ir modelius"
+      }
+    },
+    "llm": {
+      "title": "LLM konfigūracija",
+      "desc": "Konfigūruoti kalbos modelių tiekėjus ir valdyti galimus modelius.",
+      "subTabs": {
+        "provider": "Tiekėjai",
+        "models": "Modeliai"
+      }
+    },
+    "models": {
+      "title": "Modelio konfigūracija",
+      "desc": "Peržiūrėti ir valdyti modelius iš visų sukonfigūruotų tiekėjų. Spauskite «atnaujinti modelius», kad gautumėte naujausius galimus modelius.",
+      "providerCount": "{{count}} tiekėjas sukonfigūruotas",
+      "providerCount_plural": "{{count}} tiekėjai sukonfigūruoti",
+      "refreshAll": "🔄 atnaujinti visus modelius",
+      "empty": "Dar nėra sukonfigūruotų tiekėjų. Pirmiausia pridėkite tiekėjus tiekėjų skirtuke.",
+      "noModels": "Nėra galimų modelių. Spauskite «atnaujinti visus modelius» arba atnaujinkite atskirus tiekėjus tiekėjų skirtuke.",
+      "noMatch": "Nė vienas modelis neatitinka dabartinių filtrų. Koreguokite arba išvalykite filtrus, kad pamatytumėte rezultatus.",
+      "modelCount": "• {{count}} modelis talpykloje",
+      "modelCount_plural": "• {{count}} modeliai talpykloje",
+      "matchCount": "• {{count}} atitinka pasirinktus filtrus",
+      "matchCount_plural": "• {{count}} atitinka pasirinktus filtrus",
+      "status": {
+        "enabled": "Įjungtas",
+        "disabled": "Išjungtas"
+      },
+      "actions": {
+        "disable": "Išjungti",
+        "enable": "Įjungti",
+        "setDefaultChat": "Nustatyti kaip numatytąjį pokalbį",
+        "defaultChat": "Numatytasis pokalbis",
+        "setDefaultEmbedding": "Nustatyti kaip numatytąjį įterpimą",
+        "defaultEmbedding": "Numatytasis įterpimas"
+      },
+      "notices": {
+        "fetching": "Gaunami modeliai tiekėjui {{provider}}...",
+        "fetchFailed": "Nepavyko atnaujinti {{provider}} modelių",
+        "refreshed": "Modeliai sėkmingai atnaujinti!",
+        "refreshFailed": "Nepavyko atnaujinti modelių",
+        "defaultChatSet": "Numatytasis pokalbio modelis nustatytas į {{name}}",
+        "defaultEmbeddingSet": "Numatytasis įterpimo modelis nustatytas į {{name}}"
+      },
+      "filters": {
+        "allProviders": "Visi tiekėjai",
+        "allCapabilities": "Visos galimybės",
+        "allStates": "Visos būsenos",
+        "searchPlaceholder": "Ieškoti pagal pavadinimą arba ID"
+      }
+    },
+    "provider": {
+      "title": "Tiekėjo konfigūracija",
+      "securityTitle": "⚠️ Saugos įspėjimas",
+      "securityDesc": "API raktai saugomi kaip paprastas tekstas jūsų saugykloje suderinamumo sumetimais. Kad išvengtumėte atsitiktinių nutekėjimų:",
+      "securityItem1": "NEDALINKITĖS {{configDir}}/plugins/intelligence-assistant/data/ aplanku.",
+      "securityItem2": "Pridėkite šį aplanką į .gitignore, jei naudojate Git sinchronizavimą.",
+      "securityItem3": "Būkite atsargūs naudodami viešas debesų sinchronizavimo paslaugas.",
+      "desc": "Valdyti LLM tiekėjus ir API kredencialus. Naudokite veiksmų stulpelį, kad redaguotumėte konfigūracijos informaciją arba atnaujintumėte talpykloje esančius modelius.",
+      "count": "{{count}} tiekėjas sukonfigūruotas",
+      "count_plural": "{{count}} tiekėjai sukonfigūruoti",
+      "addBtn": "+ Pridėti tiekėją",
+      "empty": "Nėra sukonfigūruotų tiekėjų. Pasirinkite «Pridėti tiekėją», kad pradėtumėte.",
+      "tableHeaders": {
+        "provider": "Tiekėjas",
+        "status": "Būsena",
+        "actions": "Veiksmai"
+      },
+      "status": {
+        "ready": "Paruoštas",
+        "needsConfig": "Reikalinga konfigūracija",
+        "checking": "Tikrinama...",
+        "credentialsSet": "Kredencialai nustatyti",
+        "serverOnline": "Serveris prisijungęs",
+        "serverOffline": "Serveris neprisijungęs",
+        "serverError": "Serverio klaida"
+      },
+      "guidance": {
+        "requiresCli": "Reikalingas vietinis CLI",
+        "provideServiceKey": "Pateikti paslaugos raktą",
+        "configureBaseUrl": "Sukonfigūruoti bazinį URL",
+        "addApiKey": "Pridėti API raktą"
+      },
+      "models": {
+        "none": "Nėra modelių",
+        "count": "{{count}} modelis",
+        "count_plural": "{{count}} modeliai"
+      },
+      "ollama": {
+        "checkingVersion": "Tikrinama versija...",
+        "server": {
+          "checking": "Tikrinamas serveris...",
+          "online": "Serveris: prisijungęs",
+          "offline": "Serveris: neprisijungęs arba nepasiekiamas",
+          "error": "Serveris: ryšio klaida",
+          "versionOnline": "Serveris prisijungęs",
+          "versionOffline": "Serveris neprisijungęs",
+          "versionError": "Ryšio klaida",
+          "version": "Versija: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Paskutinis atnaujinimas: {{timeAgo}}",
+        "neverRefreshed": "Niekada neatnaujinta",
+        "justNow": "ką tik",
+        "minutesAgo": "prieš {{n}} min",
+        "hoursAgo": "prieš {{n}} val",
+        "daysAgo": "prieš {{n}} d"
+      },
+      "actions": {
+        "edit": "Redaguoti",
+        "manageModels": "Valdyti modelius",
+        "refreshModels": "Atnaujinti modelius",
+        "refreshing": "Atnaujinama...",
+        "delete": "Ištrinti"
+      },
+      "notices": {
+        "refreshed": "Modeliai atnaujinti tiekėjui {{provider}}.",
+        "refreshFailed": "Nepavyko atnaujinti modelių"
+      },
+      "confirm": {
+        "delete": "Pašalinti tiekėją {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "MCP serverio valdymas",
+      "desc": "Konfigūruoti Model Context Protocol (MCP) serverius, kad išplėstumėte agento galimybes su išoriniais įrankiais ir duomenų šaltiniais.",
+      "inspectorBtn": "🔍 Atidaryti MCP inspektorių",
+      "testAllBtn": "🧪 patikrinti visus ryšius",
+      "refreshAllBtn": "🔄 atnaujinti visus įrankius",
+      "addBtn": "+ Pridėti MCP serverį",
+      "empty": "Nėra sukonfigūruotų MCP serverių. Pasirinkite Pridėti MCP serverį, kad pradėtumėte.",
+      "tableHeaders": {
+        "name": "Pavadinimas",
+        "command": "Komanda",
+        "arguments": "Argumentai",
+        "status": "Būsena",
+        "tools": "Įrankiai",
+        "actions": "Veiksmai"
+      },
+      "untitled": "Nepavadintas MCP serveris",
+      "notConfigured": "Nesukonfigūruotas",
+      "noArgs": "Nėra",
+      "cached": "Talpykloje",
+      "disabled": "Išjungtas",
+      "envVars": "{{count}} aplinkos kintamasis",
+      "envVars_plural": "{{count}} aplinkos kintamieji",
+      "status": {
+        "disabled": "Išjungtas",
+        "connected": "prijungtas",
+        "disconnected": "atjungtas",
+        "enableToManage": "Įjungti, kad galėtumėte valdyti ryšius",
+        "manualConnect": "Rankinis prisijungimas",
+        "autoConnect": "Automatinis prisijungimas"
+      },
+      "toolCount": {
+        "live": "{{count}} aktyvus įrankis",
+        "live_plural": "{{count}} aktyvūs įrankiai",
+        "cached": "{{count}} talpykloje esantis įrankis",
+        "cached_plural": "{{count}} talpykloje esantys įrankiai"
+      },
+      "actions": {
+        "edit": "Redaguoti",
+        "enabled": "✓ Įjungtas",
+        "enabledOff": "✗ Išjungtas",
+        "connect": "prisijungti",
+        "disconnect": "atjungti",
+        "connecting": "Jungiamasi...",
+        "disconnecting": "Atjungiama...",
+        "test": "Patikrinti",
+        "testing": "Tikrinama...",
+        "delete": "Ištrinti"
+      },
+      "notices": {
+        "disconnected": "Atjungta nuo {{name}}",
+        "connected": "Prisijungta prie {{name}}",
+        "autoConnectFailed": "Nepavyko automatiškai prisijungti prie {{name}}",
+        "enableFirst": "Prieš prisijungiant įjunkite serverį",
+        "disconnectFailed": "Nepavyko atjungti nuo {{name}}",
+        "connectFailed": "Nepavyko prisijungti prie {{name}}",
+        "testNoCommand": "❌ prieš tikrinant ryšį įveskite komandą",
+        "testSuccess": "✅ sėkmingai prisijungta! Rasta {{count}} įrankių.",
+        "testFailed": "❌ Ryšys nepavyko: {{message}}",
+        "refreshedAll": "✅ atnaujinti įrankiai {{count}} serveriui",
+        "refreshedAll_plural": "✅ atnaujinti įrankiai {{count}} serveriams",
+        "refreshedPartial": "✅ atnaujinta {{success}} serverių, ❌ {{failed}} nepavyko",
+        "noServersConfigured": "⚠️ Nėra sukonfigūruotų MCP serverių",
+        "testingAll": "🧪 Tikrinami {{count}} MCP serverio ryšiai...",
+        "testAllSuccess": "✅ visi {{count}} MCP serveriai sėkmingai prijungti!",
+        "testAllPartial": "⚠️ {{successful}} prijungta, {{failed}} nepavyko"
+      },
+      "confirm": {
+        "delete": "Ištrinti MCP serverį «{{name}}»?"
+      }
+    },
+    "agents": {
+      "title": "Agentų valdymas",
+      "desc": "Kurti ir valdyti DI agentus su specifinėmis galimybėmis, įrankiais ir elgesiu.",
+      "count": "{{count}} agentas sukonfigūruotas",
+      "count_plural": "{{count}} agentai sukonfigūruoti",
+      "addBtn": "+ pridėti agentą",
+      "empty": "Nėra sukonfigūruotų agentų. Pasirinkite pridėti agentą, kad pradėtumėte.",
+      "tableHeaders": {
+        "agent": "Agentas",
+        "model": "Modelis",
+        "capabilities": "Galimybės",
+        "tools": "Įrankiai",
+        "actions": "Veiksmai"
+      },
+      "defaultBadge": "Numatytasis",
+      "systemPrompt": "Sistemos raginys • {{promptName}}",
+      "customPrompt": "Pasirinktinis raginys",
+      "model": {
+        "notSet": "Nenustatyta",
+        "notFound": "Modelis nerastas talpykloje",
+        "useChatView": "Naudoti pokalbio vaizdo modelį",
+        "useChatViewDesc": "Naudos pokalbio vaizde pasirinktą modelį",
+        "useDefault": "Naudoti numatytąjį modelį",
+        "useDefaultDesc": "Naudos numatytąjį modelį iš nustatymų"
+      },
+      "capabilities": {
+        "noSpecialModes": "Nėra specialių režimų"
+      },
+      "tools": {
+        "builtIn": "{{count}} įtaisytasis",
+        "mcpServer": "{{count}} MCP serveris",
+        "mcpServer_plural": "{{count}} MCP serveriai",
+        "mcpTool": "{{count}} MCP įrankis",
+        "mcpTool_plural": "{{count}} MCP įrankiai",
+        "noTools": "Nėra įjungtų įrankių"
+      },
+      "actions": {
+        "edit": "Redaguoti",
+        "delete": "ištrinti",
+        "protected": "apsaugotas"
+      },
+      "confirm": {
+        "delete": "Ištrinti agentą «{{name}}»?"
+      }
+    },
+    "prompts": {
+      "title": "Sistemos raginiai",
+      "desc": "Valdyti sistemos raginius, apibrėžiančius DI asistento elgesį ir asmenybę.",
+      "addBtn": "+ pridėti sistemos raginį",
+      "empty": "Nėra sukonfigūruotų sistemos raginių. Pasirinkite pridėti sistemos raginį, kad pradėtumėte.",
+      "tableHeaders": {
+        "name": "Pavadinimas",
+        "contentPreview": "Turinio peržiūra",
+        "created": "Sukurta",
+        "updated": "Atnaujinta",
+        "enabled": "Įjungtas",
+        "actions": "Veiksmai"
+      },
+      "status": {
+        "enabled": "Įjungtas",
+        "disabled": "Išjungtas"
+      },
+      "actions": {
+        "edit": "Redaguoti",
+        "disable": "Išjungti",
+        "enable": "Įjungti",
+        "delete": "Ištrinti"
+      },
+      "confirm": {
+        "delete": "Ištrinti raginį «{{name}}»?"
+      }
+    },
+    "tools": {
+      "title": "Įrankių konfigūracija",
+      "desc": "Peržiūrėti įtaisytuosius įrankius ir nagrinėti MCP įrankius, įkeltus iš prijungtų serverių. Įjunkite veiksmus, kuriuos jūsų agentai turėtų galėti atlikti.",
+      "subTabs": {
+        "builtIn": "Įtaisytieji įrankiai",
+        "mcp": "MCP įrankiai",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI įrankiai"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Pavadinimas",
+          "category": "Kategorija",
+          "description": "Aprašymas",
+          "parameters": "Parametrai",
+          "enabled": "Įjungtas"
+        },
+        "categories": {
+          "fileOps": "Failų operacijos",
+          "searchDisc": "Paieška ir atradimas",
+          "noteMgmt": "Užrašų valdymas"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Perskaityti failo turinį iš jūsų saugyklos",
+            "params": "path (privalomas): Kelias iki nuskaitomo failo"
+          },
+          "writeFile": {
+            "desc": "Rašyti arba atnaujinti failą jūsų saugykloje",
+            "params": "path (privalomas), content (privalomas): Failo kelias ir turinys, kurį rašyti"
+          },
+          "listFiles": {
+            "desc": "Išvardyti failus saugykloje arba konkrečiame aplanke",
+            "params": "folder (neprivalomas), extension (neprivalomas): Filtruoti pagal aplanką ir failo plėtinį"
+          },
+          "searchFiles": {
+            "desc": "Ieškoti failų pagal pavadinimą arba turinį jūsų saugykloje",
+            "params": "query (privalomas), search_content (neprivalomas), limit (neprivalomas): Paieškos užklausa ir parinktys"
+          },
+          "createNote": {
+            "desc": "Sukurti naują užrašą su nurodytu turiniu",
+            "params": "title (privalomas), content (privalomas), folder (neprivalomas): Užrašo pavadinimas, turinys ir vieta"
+          },
+          "appendNote": {
+            "desc": "Pridėti turinį prie esamo užrašo",
+            "params": "path (privalomas), content (privalomas): Užrašo kelias ir turinys, kurį pridėti"
+          }
+        },
+        "infoTitle": "💡 apie įrankius",
+        "infoText": "Įtaisytieji įrankiai konfigūruojami pagal įskiepio nustatymus. MCP įrankiai valdomi nepriklausomai — naudokite MCP skirtuką, kad prisijungtumėte prie serverių ir atnaujintumėte įrankių pasiekiamumą.",
+        "toolNames": {
+          "read_file": "Skaityti failą",
+          "write_file": "Rašyti failą",
+          "list_files": "Išvardyti failus",
+          "search_files": "Ieškoti failų",
+          "create_note": "Sukurti užrašą",
+          "append_note": "Pridėti prie užrašo"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Nėra galimų MCP įrankių. Prisijunkite prie serverio arba atnaujinkite talpykloje esančius įrankius, kad užpildytumėte šį sąrašą.",
+        "tableHeaders": {
+          "server": "Serveris",
+          "tool": "Įrankis",
+          "description": "Aprašymas",
+          "parameters": "Parametrai",
+          "source": "Šaltinis"
+        },
+        "noDescription": "Nėra aprašymo",
+        "schemaUnavailable": "Schema nepasiekiama",
+        "live": "Aktyvus",
+        "cached": "Talpykloje",
+        "status": {
+          "connected": "prijungtas",
+          "disconnected": "atjungtas"
+        }
+      },
+      "openapi": {
+        "desc": "Generuoti HTTP įrankius iš OpenAPI dokumentų. Nuotolinės specifikacijos talpykloje saugomos direktorijai {{cacheDir}}.",
+        "addBtn": "Pridėti HTTP šaltinį",
+        "noSources": "Dar nėra sukonfigūruotų HTTP šaltinių.",
+        "unnamed": "Nepavadintas HTTP šaltinis",
+        "tableHeaders": {
+          "name": "Pavadinimas",
+          "source": "Šaltinis",
+          "auth": "Autentifikacija",
+          "status": "Būsena",
+          "actions": "Veiksmai"
+        },
+        "sourceUrl": "Nuotolinis URL nenustatytas",
+        "sourcePath": "Failo kelias nenustatytas",
+        "authHeader": "Antraštė ({{key}})",
+        "authQuery": "Užklausa ({{key}})",
+        "authNone": "Nėra",
+        "statusEnabled": "Įjungtas",
+        "statusDisabled": "Išjungtas",
+        "actions": {
+          "edit": "Redaguoti",
+          "reload": "Perkrauti",
+          "refetch": "Gauti iš naujo",
+          "delete": "Ištrinti"
+        },
+        "notices": {
+          "removed": "HTTP šaltinis pašalintas",
+          "reloaded": "Perkrauta {{count}} operacijų",
+          "reloadFailed": "Nepavyko perkrauti HTTP šaltinio. Išsamiau žr. konsolę."
+        },
+        "modal": {
+          "defaultTitle": "HTTP šaltinis",
+          "displayName": {
+            "name": "Rodomas pavadinimas",
+            "desc": "Rodomas agentams renkantis įrankio šaltinį"
+          },
+          "enabled": {
+            "name": "Įjungtas",
+            "desc": "Įjungti, kad šis HTTP API būtų pasiekiamas visiems agentams"
+          },
+          "sourceType": {
+            "name": "Šaltinio tipas",
+            "file": "Vietinis failas",
+            "url": "Nuotolinis URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Gaunamas ir talpykloje saugomas įskiepio duomenų kataloge"
+          },
+          "cachedFile": "Talpykloje esantis failas: {{path}} ({{date}})",
+          "neverFetched": "Niekada negauta",
+          "specPath": {
+            "name": "OpenAPI failo kelias",
+            "desc": "Santykinis kelias saugykloje arba absoliutus kelias"
+          },
+          "baseUrl": {
+            "name": "Bazinio URL perrašymas",
+            "desc": "Perrašyti pirmą serverio įrašą iš dokumento (neprivalomas)"
+          },
+          "auth": {
+            "name": "Autentifikacija",
+            "desc": "Automatiškai įterpti API raktus kviečiant šį šaltinį",
+            "none": "Nėra",
+            "header": "HTTP antraštė",
+            "query": "Užklausos parametras"
+          },
+          "credKey": {
+            "name": "Kredencialų raktas"
+          },
+          "credValue": {
+            "name": "Kredencialų reikšmė"
+          },
+          "actions": {
+            "name": "Veiksmai",
+            "reloadTools": "Perkrauti įrankius",
+            "refetchTooltip": "Gauti specifikaciją iš URL iš naujo",
+            "deleteTooltip": "Ištrinti šaltinį"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Apibrėžti vietinius komandinės eilutės įrankius, kuriuos agentai gali vykdyti. Naudokite šablonus kaip {{param}} dinaminiams argumentams.",
+        "addBtn": "Pridėti CLI įrankį",
+        "presetsBtn": "Pridėti iš išankstinių nustatymų",
+        "noTools": "Dar nėra sukonfigūruotų CLI įrankių.",
+        "tableHeaders": {
+          "name": "Pavadinimas",
+          "command": "Komanda",
+          "parameters": "Parametrai",
+          "status": "Būsena",
+          "actions": "Veiksmai"
+        },
+        "unnamed": "Nepavadintas CLI įrankis",
+        "paramCount": "{{count}} parametras",
+        "paramCount_plural": "{{count}} parametrai",
+        "noParams": "Nėra",
+        "statusEnabled": "Įjungtas",
+        "statusDisabled": "Išjungtas",
+        "actions": {
+          "edit": "Redaguoti",
+          "disable": "Išjungti",
+          "enable": "Įjungti",
+          "delete": "Ištrinti"
+        },
+        "notices": {
+          "removed": "CLI įrankis pašalintas"
+        },
+        "infoTitle": "💡 Apie CLI įrankius",
+        "infoText": "CLI įrankiai vykdo apvalkalo komandas lokaliai. Argumentuose naudokite {{paramName}} šablono pakeitimui arba konfigūruokite parametrus, kurie bus perduodami kaip argumentai arba aplinkos kintamieji.",
+        "modal": {
+          "defaultTitle": "CLI įrankis",
+          "toolName": {
+            "name": "Įrankio pavadinimas",
+            "desc": "Identifikatorius, kurį naudoja agentai šiam įrankiui kviesti"
+          },
+          "description": {
+            "name": "Aprašymas",
+            "desc": "Apibūdinkite, ką šis įrankis daro DI"
+          },
+          "enabled": {
+            "name": "Įjungtas",
+            "desc": "Įjungti, kad agentai galėtų naudoti šį įrankį"
+          },
+          "commandConfig": "Komandos konfigūracija",
+          "command": {
+            "name": "Komanda",
+            "desc": "Vykdomasis failas (pvz., node, python, bash, /kelias/iki/scenarijaus)"
+          },
+          "args": {
+            "name": "Argumentai",
+            "desc": "Komandos argumentai, po vieną eilutėje. Naudokite {{paramName}} šablono pakeitimui."
+          },
+          "cwd": {
+            "name": "Darbo katalogas",
+            "desc": "Katalogas, kuriame vykdyti komandą (neprivalomas)"
+          },
+          "timeout": {
+            "name": "Skirtasis laikas (ms)",
+            "desc": "Maksimalus vykdymo laikas milisekundėmis (numatytasis: {{timeout}})"
+          },
+          "shell": {
+            "name": "Vykdyti apvalkale",
+            "desc": "Vykdyti komandą per apvalkalą (įjungia apvalkalo funkcijas, tokias kaip vamzdžiai)"
+          },
+          "paramsTitle": "Parametrai",
+          "paramsDesc": "Apibrėžti parametrus, kuriuos DI gali perduoti šiam įrankiui.",
+          "addParam": "Pridėti parametrą",
+          "noParams": "Nėra apibrėžtų parametrų.",
+          "paramN": "Parametras {{n}}",
+          "param": {
+            "name": "Pavadinimas",
+            "type": {
+              "name": "Tipas",
+              "string": "Eilutė",
+              "number": "Skaičius",
+              "boolean": "Loginė reikšmė"
+            },
+            "description": "Aprašymas",
+            "required": "Privalomas",
+            "insertAs": {
+              "name": "Įterpti kaip",
+              "desc": "Kaip perduoti šį parametrą komandai",
+              "template": "Šablonas ({{name}})",
+              "arg": "Pridėti kaip argumentą",
+              "env": "Aplinkos kintamasis"
+            },
+            "envName": {
+              "name": "Aplinkos kintamojo pavadinimas",
+              "desc": "Perrašyti aplinkos kintamojo pavadinimą (numatytasis yra parametro pavadinimas didžiosiomis raidėmis)"
+            }
+          },
+          "envTitle": "Aplinkos kintamieji",
+          "envDesc": "Statiniai aplinkos kintamieji, nustatomi vykdant komandą.",
+          "envVars": {
+            "name": "Aplinkos kintamieji",
+            "desc": "Formatas: RAKTAS=reikšmė, po vieną eilutėje"
+          }
+        },
+        "presets": {
+          "title": "Pridėti CLI įrankį iš išankstinių nustatymų",
+          "desc": "Pasirinkite išankstinį nustatymą, kad greitai pridėtumėte iš anksto sukonfigūruotą CLI įrankį. Po pridėjimo galite jį tinkinti.",
+          "addBtn": "Pridėti",
+          "addedBtn": "Pridėta",
+          "closeBtn": "Uždaryti",
+          "notices": {
+            "added": "Pridėta «{{name}}» – įjunkite CLI įrankių sąraše"
+          },
+          "categories": {
+            "file": "Failų operacijos",
+            "search": "Paieška",
+            "network": "Tinklas",
+            "code": "Kodo vykdymas",
+            "data": "Duomenų apdorojimas",
+            "system": "Sistemos informacija",
+            "apps": "macOS programos ir darbalaukis"
+          },
+          "names": {
+            "preset-cat": "Skaityti failą (cat)",
+            "preset-ls": "Išvardyti katalogą (ls)",
+            "preset-find": "Rasti failus (find)",
+            "preset-grep": "Ieškoti teksto (grep)",
+            "preset-ripgrep": "Greita paieška (rg)",
+            "preset-curl": "HTTP užklausa (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Vykdyti Python kodą",
+            "preset-node": "Vykdyti JavaScript (Node)",
+            "preset-bash": "Vykdyti apvalkalo scenarijų",
+            "preset-jq": "JSON procesorius (jq)",
+            "preset-wc": "Žodžių skaičiavimas (wc)",
+            "preset-date": "Dabartinė data/laikas",
+            "preset-pwd": "Dabartinis katalogas (pwd)",
+            "preset-whoami": "Dabartinis vartotojas",
+            "preset-uname": "Sistemos informacija (uname)",
+            "preset-open": "Atidaryti failą/URL (open)",
+            "preset-open-app": "Paleisti programą (open -a)",
+            "preset-safari": "Atidaryti Safari",
+            "preset-chrome": "Atidaryti Chrome",
+            "preset-firefox": "Atidaryti Firefox",
+            "preset-pbcopy": "Kopijuoti į mainų sritį",
+            "preset-pbpaste": "Įklijuoti iš mainų srities",
+            "preset-say": "Tekstas į kalbą (say)",
+            "preset-osascript": "AppleScript vykdytojas",
+            "preset-notify": "Darbalaukio pranešimas",
+            "preset-screencapture": "Ekrano kopija",
+            "preset-applescript-list-apps": "Išvardyti veikiančias programas"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG konfigūracija",
+      "desc": "Konfigūruoti retrieval-augmented generation ir žiniatinklio paiešką, kad pagerėtų DI atsakymai.",
+      "subTabs": {
+        "overview": "Apžvalga",
+        "chunking": "Skaidymas",
+        "search": "Paieška",
+        "filters": "Filtrai",
+        "advanced": "Išplėstinė",
+        "websearch": "Žiniatinklio paieška"
+      },
+      "general": {
+        "title": "Bendrieji nustatymai",
+        "enableRag": {
+          "name": "Įjungti RAG",
+          "desc": "Įjungti Retrieval-Augmented Generation patobulintam kontekstui"
+        },
+        "vectorStore": {
+          "name": "Vektorių saugykla",
+          "desc": "Vektorių duomenų bazė įterpimams saugoti",
+          "memory": "Atmintyje",
+          "disk": "Diske"
+        },
+        "embeddingModel": {
+          "name": "Įterpimo modelis",
+          "desc": "Modelis, naudojamas įterpimams generuoti"
+        },
+        "embedChanged": {
+          "name": "Automatiškai įterpti pakeistus failus",
+          "desc": "Automatiškai pakartotinai įterpti failus, kai jie modifikuojami"
+        }
+      },
+      "indexMgmt": {
+        "title": "Indekso valdymas",
+        "desc": "Valdyti RAG indeksą ir peržiūrėti statistiką apie indeksuotą turinį.",
+        "statsTitle": "Indekso statistika",
+        "stats": {
+          "totalChunks": "Iš viso dalių",
+          "uniqueFiles": "Unikalūs failai",
+          "totalChars": "Iš viso simbolių",
+          "avgChunkSize": "Vid. dalies dydis"
+        },
+        "empty": "Indeksas tuščias. Pasirinkite atkurti indeksą, kad pradėtumėte indeksavimą.",
+        "error": "⚠️ nepavyko įkelti indekso statistikos",
+        "rebuild": {
+          "name": "Atkurti indeksą",
+          "desc": "Pakartotinai indeksuoti visus failus saugykloje. Tai gali užtrukti.",
+          "btn": "Atkurti",
+          "rebuilding": "Atkuriama..."
+        },
+        "refresh": {
+          "name": "Atnaujinti indeksą",
+          "desc": "Atnaujinti indeksą su pakeistais failais nuo paskutinio indeksavimo.",
+          "btn": "Atnaujinti",
+          "refreshing": "Atnaujinama..."
+        },
+        "clear": {
+          "name": "Išvalyti indeksą",
+          "desc": "Pašalinti visus indeksuotus duomenis. Turėsite atkurti indeksą.",
+          "btn": "Išvalyti",
+          "clearing": "Išvaloma..."
+        },
+        "notices": {
+          "rebuilt": "Indeksas sėkmingai atkurtas",
+          "rebuildFailed": "Nepavyko atkurti indekso",
+          "refreshed": "Indeksas sėkmingai atnaujintas",
+          "refreshFailed": "Nepavyko atnaujinti indekso",
+          "cleared": "Indeksas sėkmingai išvalytas",
+          "clearFailed": "Nepavyko išvalyti indekso"
+        }
+      },
+      "chunking": {
+        "title": "Skaidymo nustatymai",
+        "strategy": {
+          "name": "Skaidymo strategija",
+          "desc": "Strategija dokumentams skaidyti į dalis",
+          "recursive": "Rekursyvus (protingas)",
+          "fixed": "Fiksuotas dydis",
+          "sentence": "Pagal sakinius",
+          "paragraph": "Pagal pastraipas"
+        },
+        "chunkSize": {
+          "name": "Dalies dydis",
+          "desc": "Simbolių skaičius vienoje dalyje (rekomenduojama 500–2000)"
+        },
+        "chunkOverlap": {
+          "name": "Dalių persidengimas",
+          "desc": "Persidengančių simbolių skaičius tarp dalių"
+        },
+        "minChunkSize": {
+          "name": "Minimalus dalies dydis",
+          "desc": "Minimalus sukuriamos dalies dydis"
+        },
+        "maxTokens": {
+          "name": "Maks. žetonų skaičius vienoje dalyje",
+          "desc": "Maksimalus leidžiamų žetonų skaičius vienoje dalyje"
+        }
+      },
+      "search": {
+        "title": "Paieškos nustatymai",
+        "searchType": {
+          "name": "Paieškos tipas",
+          "desc": "Atliekamos panašumo paieškos tipas",
+          "similarity": "Panašumas"
+        },
+        "topK": {
+          "name": "Top K rezultatai",
+          "desc": "Labiausiai atitinkančių dalių skaičius, kurį gauti (1–20)"
+        },
+        "threshold": {
+          "name": "Panašumo slenkstis",
+          "desc": "Minimalus panašumo balas rezultatams įtraukti (0,0–1,0)"
+        },
+        "weight": {
+          "name": "Aktualumo balo svoris",
+          "desc": "Svoris aktualumo vertinimui (0,0–1,0)"
+        },
+        "contextLimit": {
+          "name": "Konteksto lango riba",
+          "desc": "Maksimalus žetonų skaičius gautam kontekstui"
+        }
+      },
+      "filters": {
+        "title": "Failų filtrai",
+        "excludeFolders": {
+          "name": "Neįtraukti aplankų",
+          "desc": "Aplankai, kurie turi būti neįtraukti iš indeksavimo (atskirti kableliais)"
+        },
+        "includeTypes": {
+          "name": "Įtraukti failų tipus",
+          "desc": "Įtrauktini failų tipai (tuščia = visi tipai)"
+        },
+        "excludeTypes": {
+          "name": "Neįtraukti failų tipų",
+          "desc": "Failų tipai, kurie turi būti neįtraukti iš indeksavimo"
+        },
+        "filterByTag": {
+          "name": "Filtruoti pagal žymą",
+          "desc": "Indeksuoti tik failus su šiomis žymomis (tuščia = visi failai)"
+        },
+        "excludeByTag": {
+          "name": "Neįtraukti pagal žymą",
+          "desc": "Neįtraukti failų su šiomis žymomis iš indeksavimo"
+        }
+      },
+      "advanced": {
+        "title": "Išplėstiniai nustatymai",
+        "batchSize": {
+          "name": "Įterpimo paketo dydis",
+          "desc": "Lygiagrečiai įterpiamų dalių skaičius"
+        }
+      },
+      "grading": {
+        "title": "Vertinimo nustatymai",
+        "desc": "Įvertinti gautas dalis pagal aktualumą prieš siunčiant LLM. Tai padeda filtruoti žemos kokybės rezultatus.",
+        "enableGrading": {
+          "name": "Įjungti vertinimo slenkstį",
+          "desc": "Filtruoti dalis, esančias žemiau kokybės slenksčių"
+        },
+        "graderSource": {
+          "name": "Vertintojo modelio šaltinis",
+          "desc": "Iš kur gauti vertintojo modelį",
+          "chat": "Pokalbio modelis",
+          "custom": "Pasirinktinis modelis"
+        },
+        "graderModel": {
+          "name": "Vertintojo modelis",
+          "desc": "Konkretus modelis, naudojamas vertinimui"
+        },
+        "parallel": {
+          "name": "Lygiagretus apdorojimas",
+          "desc": "Lygiagrečiai vertinamų dalių skaičius"
+        },
+        "minRelevance": {
+          "name": "Minimalus aktualumo balas",
+          "desc": "Minimalus aktualumo balas (0,0–1,0)"
+        },
+        "minAccuracy": {
+          "name": "Minimalus tikslumo balas",
+          "desc": "Minimalus tikslumo balas (0,0–1,0)"
+        },
+        "minSupport": {
+          "name": "Minimalus palaikymo kokybės balas",
+          "desc": "Minimalus palaikymo kokybės balas (0,0–1,0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Žiniatinklio paieškos konfigūracija",
+      "desc": "Konfigūruoti žiniatinklio paieškos funkcionalumą, kad DI atsakymai būtų patobulinami nauja informacija iš interneto.",
+      "generalBehavior": "Bendras elgesys",
+      "providerSelection": "Tiekėjo pasirinkimas",
+      "localeFilters": "Lokalė ir filtrai",
+      "apiCredentials": "API kredencialai ir galutiniai taškai",
+      "enabled": {
+        "name": "Įjungti žiniatinklio paiešką",
+        "desc": "Leisti DI ieškoti žiniatinklyje aktualios informacijos"
+      },
+      "autoTrigger": {
+        "name": "Automatiškai suaktyvinti paiešką",
+        "desc": "Automatiškai suaktyvinti žiniatinklio paiešką, kai užklausa reikalauja aktualios informacijos (pvz., naujienos, kainos, naujausi įvykiai)"
+      },
+      "maxResults": {
+        "name": "Maksimalus rezultatų skaičius",
+        "desc": "Maksimalus grąžinamų paieškos rezultatų skaičius"
+      },
+      "timeRange": {
+        "name": "Rezultatų aktualumas",
+        "desc": "Riboti rezultatus iki tiekėjų palaikomo laiko diapazono (Google, SearXNG, Mojeek)",
+        "any": "Bet kuris laikas (numatytasis)",
+        "h": "Paskutinė valanda",
+        "d": "Paskutinės 24 valandos",
+        "w": "Paskutinė savaitė",
+        "m": "Paskutinis mėnuo",
+        "y": "Paskutiniai metai"
+      },
+      "provider": {
+        "name": "Paieškos tiekėjas",
+        "desc": "Pasirinkite iš į privatumą orientuotų skraperių arba API pagrįstų paieškos sistemų"
+      },
+      "searchLanguage": {
+        "name": "Kalbos kodas",
+        "desc": "ISO kalbos kodas (pvz., lt, en, fr), perduodamas tiekėjams, palaiiantiems lokalizavimą"
+      },
+      "searchCountry": {
+        "name": "Šalies/rinkos kodas",
+        "desc": "Dviejų raidžių šalies kodas (pvz., LT, US), naudojamas Bing, DuckDuckGo, Brave ir kitų"
+      },
+      "includeDomains": {
+        "name": "Įtraukti tik šiuos domenus",
+        "desc": "Kableliais atskirtas sąrašas, naudojamas SerpAPI ir Brave, kad rezultatai būtų apriboti iki konkrečių svetainių"
+      },
+      "excludeDomains": {
+        "name": "Neįtraukti domenų",
+        "desc": "Kableliais atskirti domenai, kurie filtruojami po rezultatų gavimo"
+      },
+      "apiKey": {
+        "name": "Numatytasis API raktas",
+        "desc": "Bendrinamas API raktas, naudojamas Google, Bing, SerpAPI, Tavily arba Brave, kai nenustatomos tiekėjui būdingos atslėgos"
+      },
+      "googleCseId": {
+        "name": "Google Custom Search Engine ID",
+        "desc": "Reikalingas su Google API raktu naudojant Google tiekėją"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI galutinis taškas",
+        "desc": "Perrašyti SerpAPI bazinį URL, jei patys talpinate"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API raktas",
+        "desc": "Perrašo numatytąjį raktą naudojant Tavily tiekėją"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG galutinis taškas",
+        "desc": "Jūsų SearXNG egzemplioriaus bazinis URL (turi grąžinti JSON)"
+      },
+      "braveApiKey": {
+        "name": "Brave API raktas",
+        "desc": "Naudokite Brave Search API prenumeratos žetoną, kai jis pasirinktas kaip tiekėjas"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API raktas (neprivalomas)",
+        "desc": "Pridėkite turėtojo žetoną, jei jūsų Qwant planas jį išduoda"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API raktas",
+        "desc": "Reikalingas Mojeek tiekėjui"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (raktas nereikalingas)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (HTML skrapingas)",
+        "yandex": "Yandex (HTML skrapingas)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Greiti veiksmai",
+      "desc": "Konfigūruoti DI greitus veiksmus, kurie rodomi redaktoriaus kontekstiniame meniu pasirinkus tekstą.",
+      "actionPrefix": {
+        "name": "Veiksmo prefiksas",
+        "desc": "Prefiksas (jaustukų piktograma arba tekstas), rodomas prieš visus greitus veiksmus kontekstiniame meniu",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} veiksmas sukonfigūruotas ({{enabled}} įjungtas)",
+      "count_plural": "{{count}} veiksmai sukonfigūruoti ({{enabled}} įjungti)",
+      "addBtn": "+ pridėti greitą veiksmą",
+      "empty": "Nėra sukonfigūruotų greitų veiksmų. Pasirinkite pridėti greitą veiksmą, kad pradėtumėte.",
+      "tableHeaders": {
+        "action": "Veiksmas",
+        "type": "Tipas",
+        "model": "Modelis",
+        "promptPreview": "Raginio peržiūra",
+        "actions": "Veiksmai"
+      },
+      "defaultModel": "Numatytasis",
+      "editBtn": "Redaguoti",
+      "deleteBtn": "ištrinti",
+      "confirm": {
+        "delete": "Ištrinti greitą veiksmą «{{name}}»?"
+      },
+      "usageInfo": {
+        "title": "Naudojimas",
+        "step1": "Pasirinkite tekstą bet kuriame užraše",
+        "step2": "Dešiniu mygtuku spustelėkite, kad atsidarytų kontekstinis meniu",
+        "step3": "Pasirinkite greitą veiksmą iš meniu",
+        "step4Replace": "Veiksmai, pažymėti kaip «pakeisti», pakeis pasirinktą tekstą DI rezultatu",
+        "step4Explain": "Veiksmai, pažymėti kaip «paaiškinti», parodys rezultatą modaliame dialoge"
+      },
+      "edit": {
+        "title": "Redaguoti greitą veiksmą",
+        "name": {
+          "name": "Pavadinimas",
+          "desc": "Rodomas šio veiksmo pavadinimas kontekstiniame meniu"
+        },
+        "actionType": {
+          "name": "Veiksmo tipas",
+          "desc": "Kaip tvarkyti DI atsakymą",
+          "replace": "Pakeisti pasirinktą tekstą",
+          "explain": "Rodyti modaliame lange"
+        },
+        "model": {
+          "name": "Modelis",
+          "desc": "Kalbos modelis, naudojamas šiam veiksmui (palikite tuščią, kad naudotumėte numatytąjį)",
+          "default": "Naudoti numatytąjį modelį"
+        },
+        "promptTemplate": {
+          "name": "Raginio šablonas",
+          "desc": "Instrukcijos, siunčiamos DI. Pasirinktas tekstas bus pridėtas automatiškai."
+        },
+        "cancel": "Atšaukti",
+        "save": "Išsaugoti"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Padaryti tekstą ilgesnį",
+          "prompt": "Išplėskite ir elaboruokite šį tekstą, padarykite jį detalesnį ir išsamesnį išlaikydami pirminę prasmę ir toną. Grąžinkite tik išplėstą tekstą be papildomų komentarų:\n\n"
+        },
+        "summarize": {
+          "name": "Apibendrinti tekstą",
+          "prompt": "Pateikite glaustą šio teksto santrauką. Grąžinkite tik santrauką be papildomų komentarų:\n\n"
+        },
+        "improve-writing": {
+          "name": "Pagerinti rašymą",
+          "prompt": "Pagerinkite šio teksto rašymo kokybę, aiškumą ir stilių. Grąžinkite tik patobulintą tekstą be papildomų komentarų:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Ištaisyti gramatiką",
+          "prompt": "Ištaisykite visas gramatikos, rašybos ir skyrybos klaidas šiame tekste. Grąžinkite tik pataisytą tekstą be papildomų komentarų:\n\n"
+        },
+        "explain": {
+          "name": "Paaiškinti tekstą",
+          "prompt": "Paprastais žodžiais paaiškinkite šį tekstą:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Žetonų naudojimas",
+      "desc": "Stebėti žetonų suvartojimą įvairių tiekėjų ir modelių. Duomenys kaupiami visuose pokalbiuose.",
+      "notAvailable": "Žetonų naudojimo stebėjimas nepasiekiamas.",
+      "ranges": {
+        "today": "Šiandien",
+        "week": "Šią savaitę",
+        "month": "Šį mėnesį",
+        "all": "Visą laiką"
+      },
+      "stats": {
+        "totalTokens": "Iš viso žetonų",
+        "apiCalls": "API iškvietimai",
+        "promptTokens": "Raginio žetonai",
+        "completion": "Užbaigimas",
+        "tokensIn": "žetonai į",
+        "tokensOut": "žetonai iš"
+      },
+      "byProvider": "Pagal tiekėją",
+      "byModel": "Pagal modelį",
+      "noData": "Dar nėra naudojimo duomenų.",
+      "recentActivity": "Nesenа veikla",
+      "last10": "paskutiniai 10",
+      "noRecent": "Nėra nesenios veiklos.",
+      "tableHeaders": {
+        "provider": "Tiekėjas",
+        "model": "Modelis",
+        "prompt": "Raginys",
+        "completion": "Užbaigimas",
+        "total": "Iš viso",
+        "calls": "Iškvietimai",
+        "time": "Laikas",
+        "in": "Į",
+        "out": "Iš"
+      },
+      "clearBtn": "Išvalyti visus naudojimo duomenis",
+      "confirm": {
+        "clear": "Išvalyti visus žetonų naudojimo įrašus? Šio veiksmo negalima atšaukti."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Įveskite savo žinutę... (Enter, kad siųstumėte; Shift+Enter naujai eilutei)",
+    "conversations": "Pokalbiai",
+    "toggleConversationsTitle": "Perjungti pokalbių sąrašą",
+    "currentConversation": "Dabartinis pokalbis",
+    "new": "Naujas",
+    "settings": "Nustatymai",
+    "openSettingsTitle": "Atidaryti įskiepio nustatymus",
+    "mode": "Režimas",
+    "prompt": "Raginys",
+    "agent": "Agentas",
+    "modeOptions": {
+      "chat": "Pokalbis",
+      "agent": "Agentas"
+    },
+    "noSystemPrompt": "Nėra sistemos raginio",
+    "noAgentsAvailable": "Nėra galimų agentų",
+    "sendHintPrefix": "Paspauskite ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": ", kad siųstumėte",
+    "sendAriaLabel": "Siųsti žinutę",
+    "stop": " Sustabdyti",
+    "addReference": "Pridėti nuorodą",
+    "addReferenceTooltip": "Pridėti failo arba aplanko nuorodą (@)",
+    "emptyHeading": "Pradėkite pokalbį",
+    "emptySubtext": "Įveskite žinutę žemiau, kad pradėtumėte, arba pasirinkite pokalbį iš istorijos.",
+    "noAgentConfig": "Nėra sukonfigūruotų agentų",
+    "selectAgent": "Pasirinkite agentą…",
+    "notices": {
+      "stopping": "Stabdomas generavimas...",
+      "ragInitError": "RAG inicijavimo klaida: {{message}}",
+      "modelsRefreshed": "Modeliai atnaujinti",
+      "modelsRefreshFailed": "Nepavyko atnaujinti modelių: {{message}}",
+      "waitForResponse": "Palaukite, kol bus baigtas dabartinis atsakymas",
+      "configureProvider": "Pirmiausia sukonfigūruokite LLM tiekėją nustatymuose",
+      "selectModel": "Pasirinkite modelį",
+      "noValidProvider": "Šiam modeliui nerastas tinkamas tiekėjo konfigūravimas",
+      "chatError": "Pokalbio klaida: {{message}}",
+      "noMessageToRegenerate": "Nepavyko rasti žinutės, kurią regeneruoti",
+      "regenerateOnlyLatest": "Šiuo metu galima regeneruoti tik paskutinį atsakymą",
+      "regenerateNoUserMsg": "Nepavyko rasti vartotojo žinutės, nuo kurios regeneruoti",
+      "regenerated": "Atsakymas regeneruotas",
+      "regenerateFailed": "Regeneravimas nepavyko: {{message}}",
+      "noteCreated": "Užrašas sukurtas: {{name}}",
+      "noteCreateFailed": "Nepavyko sukurti užrašo: {{message}}",
+      "messageInserted": "Žinutė įterpta į: {{path}}",
+      "messageInsertFailed": "Nepavyko įterpti žinutės: {{message}}",
+      "noAgents": "Nėra galimų agentų. Sukonfigūruokite agentus Nustatymai → Agentai.",
+      "ragDisabled": "RAG išjungtas nustatymuose. Įjunkite jį nustatymai → pokalbio funkcijos → RAG.",
+      "webSearchDisabled": "Žiniatinklio paieška išjungta nustatymuose. Įjunkite ją nustatymai → pokalbio funkcijos → žiniatinklio paieška.",
+      "noFilesInVault": "Saugykloje nerasta failų",
+      "attached": "Pridėta: {{name}}",
+      "attachedImages": "Pridėtas (-i) {{count}} vaizdas (-ai)",
+      "referencesAdded": "Pridėta {{count}} nuoroda (-os)",
+      "fileNotFound": "Failas nerastas: {{path}}",
+      "agentConfigApplied": "Pritaikyta agento konfigūracija: {{name}}",
+      "waitForComplete": "Palaukite, kol bus baigtas dabartinis atsakymas",
+      "chatServiceFallback": "ChatService nesukonfigūruotas. Naudojamas ChatView atsarginis variantas.",
+      "noModelSelected": "Nepasirinktas modelis",
+      "noProviderConfig": "Nerasta tiekėjo konfigūracija",
+      "generationStopped": "Generavimas sustabdytas",
+      "noResponseToRegenerate": "Nėra atsakymo, kurį regeneruoti",
+      "agentNotFound": "Agentas nerastas",
+      "unableToLoadRag": "Nepavyko įkelti RAG statistikos.",
+      "referenced": "Paminėta: {{name}}"
+    },
+    "status": {
+      "available": "Pasiekiamas",
+      "unavailable": "Nepasiekiamas",
+      "disabled": "Išjungtas",
+      "on": "Įjungta · {{detail}}",
+      "off": "Išjungta"
+    },
+    "ragStats": {
+      "title": "RAG statistika",
+      "totalChunks": "📊 iš viso dalių:",
+      "filesIndexed": "📁 indeksuoti failai:",
+      "totalSize": "💾 bendras dydis:",
+      "avgChunks": "📈 vid. dalių/failui:",
+      "indexedFiles": "📄 indeksuoti failai",
+      "noFilesYet": "⚠️ dar nėra indeksuotų failų.",
+      "howToBuild": "Kaip sukurti RAG indeksą:",
+      "step1": "Eiti į Nustatymai → RAG",
+      "step2": "Įjungti RAG",
+      "step3": "Pasirinkti indeksuoti saugyklą",
+      "close": "Uždaryti",
+      "retrieved": "📚 gauta iš {{count}} dokumento",
+      "retrieved_plural": "📚 gauta iš {{count}} dokumentų"
+    },
+    "ragTooltip": {
+      "status": "RAG indekso būsena:",
+      "totalChunks": "📊 Iš viso dalių: {{count}}",
+      "filesIndexed": "📁 Indeksuoti failai: {{count}}",
+      "totalSize": "💾 Bendras dydis: {{size}} KB",
+      "indexedFiles": "📄 Indeksuoti failai:",
+      "andMore": "  ... ir dar {{count}}",
+      "noFilesYet": "⚠️ dar nėra indeksuotų failų.",
+      "goToSettings": "Eiti į Nustatymai → RAG, kad sukurtumėte indeksą.",
+      "ragOff": "ℹ️ RAG šiuo metu išjungtas šiame pokalbyje."
+    },
+    "agentSummary": {
+      "model": "Modelis",
+      "temp": "Temp",
+      "max": "Maks",
+      "rag": "RAG",
+      "web": "Žiniatinklis",
+      "tools": "Įrankiai",
+      "memory": "Atmintis",
+      "none": "Nėra",
+      "configuration": "{{name}} konfigūracija",
+      "modelFixed": "{{name}} · Fiksuotas",
+      "modelDefault": "{{name}} · Numatytasis",
+      "modelChatView": "{{name}} · Pokalbio vaizdas",
+      "customModel": "Pasirinktinis modelis",
+      "notSet": "Nenustatyta",
+      "auto": "Automatinis",
+      "on": "Įjungta",
+      "off": "Išjungta",
+      "shortTerm": "Trumpalaikė",
+      "longTerm": "Ilgalaikė",
+      "disabledMemory": "Išjungta",
+      "builtIn": "{{count}} įtaisytasis",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Žiniatinklio rezultatai",
+      "attachments": "Priedai",
+      "references": "Nuorodos",
+      "ragSources": "RAG šaltiniai",
+      "reasoning": "Samprotavimas",
+      "copy": "Kopijuoti",
+      "copied": "Žinutė nukopijuota",
+      "copyFailed": "Nepavyko nukopijuoti žinutės",
+      "tokenUsage": "Žetonų naudojimas",
+      "tokenUsagePrompt": "Raginys",
+      "tokenUsageCompletion": "Užbaigimas",
+      "tokenUsageTotal": "Iš viso",
+      "save": "Išsaugoti",
+      "insertToNotes": "Įterpti į užrašus",
+      "regenerate": "Regeneruoti"
+    },
+    "streaming": {
+      "thinking": "Galvojama..."
+    },
+    "toolCall": {
+      "thinking": "Galvojama",
+      "executionProcess": "Vykdymo procesas",
+      "input": "Įvestis",
+      "output": "Išvestis",
+      "running": "Vykdoma..."
+    },
+    "addPicture": "Pridėti paveikslėlį",
+    "addPictureTooltip": "Pridėti vaizdą prie žinutės",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Naudoti indeksuotus užrašus kaip kontekstą",
+    "webSearchLabel": "Žiniatinklio paieška",
+    "webSearchTooltipLabel": "Ieškoti internete prireikus",
+    "imageUnavailable": "Vaizdo priedas nepasiekiamas dabartiniam modeliui.",
+    "newChat": "Naujas pokalbis",
+    "newConversation": "Naujas pokalbis",
+    "searchConversations": "Ieškoti pokalbiuose...",
+    "header": {
+      "model": "Modelis",
+      "advancedParams": "Išplėstiniai parametrai",
+      "temperature": "Temperatūra",
+      "maxTokens": "Maks. žetonų",
+      "topP": "Top P",
+      "freqPenalty": "Dažnio bauda",
+      "presPenalty": "Buvimo bauda",
+      "agentConfig": "Agento konfigūracija",
+      "modelsCount": "Modeliai: {{count}}",
+      "tokensCount": "Žetonai: {{count}}",
+      "noModels": "Nėra galimų modelių"
+    },
+    "temperature": {
+      "precise": "0 (Tikslus)",
+      "balanced": "1 (Subalansuotas)",
+      "creative": "2 (Kūrybiškas)"
+    },
+    "modals": {
+      "image": {
+        "title": "Pridėti vaizdus",
+        "searchPlaceholder": "Ieškoti vaizdų...",
+        "selectAll": "Pasirinkti visus",
+        "selectNone": "Atžymėti visus",
+        "addSelected": "Pridėti pasirinktus",
+        "noResults": "Nerasta atitinkančių vaizdų."
+      },
+      "reference": {
+        "title": "Pridėti nuorodas",
+        "searchPlaceholder": "Ieškoti failų ir aplankų...",
+        "selectAll": "Pasirinkti visus",
+        "selectNone": "Atžymėti visus",
+        "addSelected": "Pridėti pasirinktus",
+        "noResults": "Nerasta atitinkančių failų ar aplankų."
+      },
+      "insertNote": {
+        "title": "Įterpti į užrašą",
+        "searchPlaceholder": "Ieškoti užrašų...",
+        "insert": "Įterpti į pasirinktą užrašą",
+        "createNew": "Sukurti naują užrašą",
+        "noResults": "Nerasta atitinkančių užrašų."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Atšaukti",
+      "confirm": "Patvirtinti"
+    },
+    "agentEdit": {
+      "title": "Redaguoti agentą",
+      "icon": {
+        "name": "Piktograma",
+        "desc": "Jaustukų piktograma arba simbolis, atstovaujantis šiam agentui"
+      },
+      "description": {
+        "name": "Aprašymas",
+        "desc": "Trumpas agento aprašymas"
+      },
+      "modelStrategy": {
+        "name": "Modelio strategija",
+        "options": {
+          "default": "Naudoti numatytąjį modelį (iš nustatymų)",
+          "chatView": "Naudoti pokalbio vaizdo modelį",
+          "fixed": "Fiksuotas modelis"
+        },
+        "noModels": "Talpykloje nėra modelių",
+        "desc": "Pasirinkite, kaip agentas rinks savo modelį"
+      },
+      "systemPrompt": {
+        "createNew": "➕ sukurti naują raginį…",
+        "promptName": {
+          "name": "Raginio pavadinimas",
+          "desc": "Rodomas naujo sistemos raginio pavadinimas"
+        },
+        "promptContent": {
+          "name": "Raginio turinys",
+          "desc": "Naujo sistemos raginio turinys"
+        },
+        "name": "Sistemos raginys",
+        "desc": "Pasirinkite iš esamų raginių arba apibrėžkite naują šiam agentui."
+      },
+      "capabilities": "Galimybės",
+      "memory": {
+        "title": "Atmintis",
+        "notice": "Agento atmintis laikinai nepasiekiama, kol tobuliname patirtį."
+      },
+      "tools": {
+        "title": "Įrankiai",
+        "builtIn": {
+          "name": "Įtaisytieji įrankiai",
+          "desc": "Pasirinkite, kuriuos įtaisytuosius įrankius šis agentas gali naudoti"
+        },
+        "cli": {
+          "name": "CLI įrankiai",
+          "desc": "Suteikti prieigą prie visų įjungtų CLI įrankių arba pasirinkti atskirai žemiau",
+          "noTools": "Nesukonfigūruoti CLI įrankiai. Pridėkite ir įjunkite įrankius Nustatymai → Įrankiai → CLI, kad galėtumėte juos naudoti čia."
+        }
+      },
+      "mcp": {
+        "title": "MCP prieiga",
+        "noServers": "Nesukonfigūruoti MCP serveriai. Pridėkite serverius Nustatymai → MCP, kad atrakintumėte šias parinktis.",
+        "toolsCached": "{{count}} įrankis talpykloje",
+        "toolsCached_plural": "{{count}} įrankiai talpykloje",
+        "noToolsCached": "Talpykloje dar nėra įrankių. Įjunkite visišką prieigą arba atnaujinkite talpyklą.",
+        "showTools": "Rodyti įrankius",
+        "hideTools": "Slėpti įrankius",
+        "selected": "Pasirinktas",
+        "notSelected": "Nepasirinktas",
+        "noToolsAvailable": "Iš šio serverio dar nėra galimų įrankių."
+      },
+      "notices": {
+        "promptRequired": "Pateikite pavadinimą ir turinį naujam sistemos raginiui."
+      },
+      "name": {
+        "label": "Pavadinimas",
+        "desc": "Rodomas šio agento pavadinimas"
+      },
+      "fixedModel": {
+        "name": "Fiksuotas modelis",
+        "desc": "Pasirinkite konkretų modelį šiam agentui.",
+        "descNoModels": "Nėra talpykloje esančių modelių. Atnaujinkite modelius skirtuke Modeliai."
+      },
+      "temperature": {
+        "label": "Temperatūra",
+        "desc": "Kontroliuoja atsitiktinumą (0,0–2,0)"
+      },
+      "maxTokens": {
+        "label": "Maks. žetonai",
+        "desc": "Maksimalus generuotinų žetonų skaičius"
+      },
+      "contextWindow": {
+        "label": "Konteksto langas",
+        "desc": "Ankstesnių žinučių, įtrauktų į kontekstą, skaičius"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Įjungti retrieval augmented generation"
+      },
+      "webSearch": {
+        "name": "Žiniatinklio paieška",
+        "desc": "Įjungti žiniatinklio paieškos galimybes"
+      },
+      "maxSteps": {
+        "name": "Maks. įrankių žingsniai",
+        "desc": "Maksimalus įrankių iškvietimo žingsnių skaičius per agento eilę"
+      }
+    },
+    "provider": {
+      "title": "Tiekėjo nustatymai",
+      "selectProvider": {
+        "name": "Tiekėjas",
+        "desc": "Pasirinkite LLM tiekėjo tipą",
+        "placeholder": "-- Pasirinkite tiekėją --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (vietinis)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Pasirinktinis (OpenAI suderinamas)"
+      },
+      "modelFilter": {
+        "name": "Modelio filtras",
+        "desc": "Neprivalomas reguliariųjų reiškinių šablonas galimų modelių ribojimui"
+      },
+      "resourceGroup": {
+        "name": "Išteklių grupė",
+        "desc": "Neprivaloma SAP AI Core išteklių grupė"
+      },
+      "serviceKey": {
+        "name": "Paslaugos raktas",
+        "desc": "SAP AI Core paslaugos raktas (JSON eilutė)"
+      },
+      "baseUrl": {
+        "name": "Bazinis URL",
+        "ollamaDesc": "Ollama serverio URL",
+        "customDesc": "OpenAI suderinamas API galutinis taškas (privalomas)",
+        "optionalDesc": "Pasirinktinis API galutinis taškas (neprivalomas)"
+      },
+      "manageModels": {
+        "name": "Valdyti modelius",
+        "desc": "Parsisiųsti naujus modelius arba atnaujinti esamus iš Ollama registro.",
+        "btn": "⏬ Parsisiųsti Ollama modelį"
+      },
+      "apiKey": {
+        "name": "API raktas",
+        "desc": "Autentifikavimo raktas pasirinktam tiekėjui"
+      },
+      "cancel": "Atšaukti",
+      "save": "Išsaugoti",
+      "validation": {
+        "selectProvider": "Pasirinkite tiekėjo tipą",
+        "apiKeyTooLong": "API raktas per ilgas. Maksimalus ilgis yra 500 simbolių.",
+        "invalidUrl": "Netinkamas bazinio URL formatas. Įveskite galiojantį URL (pvz., https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP inspektorius",
+      "desc": "Tikrinti ir derinti Model Context Protocol (MCP) serverio ryšius ir įrankius.",
+      "tabs": {
+        "connections": "Ryšiai",
+        "tools": "Įrankiai",
+        "logs": "Žurnalai"
+      },
+      "refreshBtn": "🔄 atnaujinti",
+      "connections": {
+        "title": "MCP serverio ryšiai",
+        "noServers": "Nesukonfigūruoti MCP serveriai.",
+        "headers": {
+          "server": "Serverio pavadinimas",
+          "status": "Būsena",
+          "tools": "Galimi įrankiai",
+          "actions": "Veiksmai"
+        },
+        "statusDisabled": "Išjungtas",
+        "statusConnected": "● prijungtas",
+        "statusDisconnected": "○ atjungtas",
+        "toolsLive": "{{count}} įrankis",
+        "toolsLive_plural": "{{count}} įrankiai",
+        "toolsCached": "{{count}} įrankis (talpykloje)",
+        "toolsCached_plural": "{{count}} įrankiai (talpykloje)",
+        "noTools": "0 įrankių",
+        "connectBtn": "Prisijungti",
+        "disconnectBtn": "Atjungti",
+        "connecting": "Jungiamasi...",
+        "disconnecting": "Atjungiama...",
+        "notices": {
+          "disconnected": "Atjungta nuo {{name}}",
+          "enableFirst": "Prieš prisijungiant įjunkite serverį nustatymuose",
+          "connected": "Prisijungta prie {{name}}",
+          "failedDisconnect": "Nepavyko atjungti nuo {{name}}: {{message}}",
+          "failedConnect": "Nepavyko prisijungti prie {{name}}: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Galimi MCP įrankiai",
+        "noTools": "Nėra galimų MCP įrankių. Patikrinkite serverio ryšius.",
+        "serverPrefix": "Serveris: {{name}}",
+        "noToolsInServer": "Nėra galimų įrankių",
+        "headers": {
+          "tool": "Įrankio pavadinimas",
+          "description": "Aprašymas",
+          "parameters": "Parametrai"
+        },
+        "noDescription": "Nėra aprašymo",
+        "noParams": "Nėra"
+      },
+      "logs": {
+        "title": "MCP ryšių žurnalai",
+        "placeholder": "MCP ryšių žurnalai bus rodomi čia. Šiuo metu rodoma vietos užpildymo informacija.",
+        "events": {
+          "connection": "• ryšio įvykiai",
+          "tools": "• įrankių registravimo įvykiai",
+          "errors": "• klaidų žurnalai",
+          "comms": "• komunikacijos detalės"
+        },
+        "testTitle": "Testuoti įrankio vykdymą",
+        "selectServer": "Pasirinkite serverį...",
+        "selectTool": "Pasirinkite įrankį...",
+        "parametersTitle": "Parametrai",
+        "selectEnum": "Pasirinkite...",
+        "performBtn": "Vykdyti įrankį",
+        "clearBtn": "Išvalyti rezultatus",
+        "executing": "Vykdoma...",
+        "success": "✅ vykdymas sėkmingas",
+        "failed": "❌ vykdymas nepavyko",
+        "errorTitle": "❌ vykdymo klaida",
+        "errorLabel": "Klaida: {{message}}",
+        "notices": {
+          "success": "Įrankis sėkmingai įvykdytas",
+          "failed": "Įrankio vykdymas nepavyko",
+          "error": "Vykdymo klaida: {{message}}",
+          "requiredMissing": "Trūksta privalomo parametro: {{name}}",
+          "invalidNumber": "Netinkamas skaičius parametrui: {{name}}",
+          "invalidJson": "Netinkamas JSON parametrui: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Nesukonfigūruoti MCP serveriai",
+        "testing": "🧪 Tikrinami {{count}} MCP serverio ryšiai...",
+        "allSuccess": "✅ visi {{count}} MCP serveriai sėkmingai prijungti!",
+        "partial": "⚠️ {{success}} prijungta, {{failed}} nepavyko"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Redaguoti MCP serverį",
+      "titleAdd": "Pridėti MCP serverį",
+      "serverName": {
+        "name": "Serverio pavadinimas",
+        "desc": "Draugiškas pavadinimas, rodomas visame įskiepyje"
+      },
+      "connectionMode": {
+        "name": "Ryšio režimas",
+        "desc": "Pasirinkite, ar jungtis automatiškai, ar tik rankiniu suaktyvinimu",
+        "auto": "Automatiškai prisijungti atidarius pokalbį",
+        "manual": "Rankinis prisijungimas"
+      },
+      "command": {
+        "name": "Komanda",
+        "desc": "Vykdomasis failas arba scenarijus, paleidžiantis MCP serverį"
+      },
+      "arguments": {
+        "name": "Argumentai",
+        "desc": "Kableliais arba naujomis eilutėmis atskirti argumentai (neprivalomas)"
+      },
+      "envVars": {
+        "name": "Aplinkos kintamieji",
+        "desc": "Neprivalomi RAKTAS=REIKŠMĖ poros, po vieną eilutėje"
+      },
+      "enabled": {
+        "name": "Įjungtas",
+        "desc": "Išjungti, kad serveris liktų sukonfigūruotas nesijungiant automatiškai"
+      },
+      "cancel": "Atšaukti",
+      "saveEdit": "Išsaugoti pakeitimus",
+      "saveAdd": "Pridėti serverį",
+      "validation": {
+        "nameRequired": "Serverio pavadinimas yra privalomas",
+        "commandRequired": "Komanda yra privaloma"
+      }
+    },
+    "ollamaManager": {
+      "title": "Valdyti Ollama modelius",
+      "serverInfo": "Serverio informacija",
+      "checkingServer": "Tikrinamas serveris...",
+      "serverOnline": "✅ Serveris prisijungęs",
+      "versionLabel": " | Versija: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Serveris neprisijungęs",
+      "connectionError": "❌ Ryšio klaida",
+      "pullTitle": "Parsisiųsti naują modelį",
+      "pullHint": "Įveskite modelio pavadinimą, kad parsisiųstumėte iš Ollama bibliotekos (pvz., llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Modelio pavadinimas",
+        "example": "Pavyzdys: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Parsisiųsti modelį",
+      "installedTitle": "Įdiegti modeliai",
+      "refreshList": "🔄 Atnaujinti sąrašą",
+      "noModels": "Nerasta modelių. Parsisiųskite modelį, kad pradėtumėte.",
+      "capabilities": "Galimybės: {{caps}}",
+      "deleteBtn": "Ištrinti",
+      "closeBtn": "Uždaryti",
+      "confirmDelete": {
+        "title": "Patvirtinti ištrynimą",
+        "message": "Ar tikrai norite ištrinti modelį «{{name}}»?",
+        "cancel": "Atšaukti",
+        "confirm": "Ištrinti"
+      },
+      "notices": {
+        "enterName": "Įveskite modelio pavadinimą",
+        "pulling": "Parsisiunčiama {{name}}... Tai gali užtrukti.",
+        "pullSuccess": "✅ Sėkmingai parsisiųsta {{name}}",
+        "pullFailed": "❌ Nepavyko parsisiųsti modelio: {{message}}",
+        "deleted": "✅ Ištrinta {{name}}",
+        "deleteFailed": "❌ Nepavyko ištrinti modelio: {{message}}",
+        "refreshing": "Atnaujinama...",
+        "refreshSuccess": "✅ Modelių sąrašas atnaujintas",
+        "refreshFailed": "❌ Nepavyko atnaujinti modelių sąrašo"
+      }
+    },
+    "promptEdit": {
+      "title": "Redaguoti sistemos raginį",
+      "name": {
+        "name": "Pavadinimas",
+        "desc": "Rodomas šio raginio pavadinimas"
+      },
+      "content": {
+        "name": "Turinys",
+        "desc": "Sistemos raginio turinys"
+      },
+      "enabled": {
+        "name": "Įjungtas",
+        "desc": "Ar šis raginys aktyvus"
+      },
+      "cancel": "Atšaukti",
+      "save": "Išsaugoti"
+    },
+    "prompt": {
+      "cancel": "Atšaukti",
+      "ok": "Gerai"
+    },
+    "textInput": {
+      "nameLabel": "Pavadinimas",
+      "create": "Sukurti",
+      "cancel": "Atšaukti"
+    },
+    "explain": {
+      "loading": "⏳ Apdorojama...",
+      "error": "Klaida rodant paaiškinimą",
+      "errorPrefix": "❌ Klaida: "
+    }
+  },
+  "notices": {
+    "noProvider": "Pirmiausia sukonfigūruokite LLM tiekėją nustatymuose",
+    "noModel": "Nustatymuose pasirinkite numatytąjį modelį",
+    "noValidProvider": "Modeliui nerasta tinkama tiekėjo konfigūracija: {{modelId}}",
+    "processing": "Apdorojama...",
+    "textUpdated": "Tekstas sėkmingai atnaujintas",
+    "error": "Klaida: {{message}}"
+  }
+}

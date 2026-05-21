@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Opće",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Alati",
+      "rag": "RAG",
+      "prompts": "Upiti",
+      "agents": "Agenti",
+      "quickActions": "Brze radnje",
+      "usage": "Korištenje"
+    },
+    "general": {
+      "title": "Opće postavke",
+      "desc": "Konfigurirajte opće postavke za dodatak inteligentnog asistenta.",
+      "pluginVersion": {
+        "name": "Verzija dodatka",
+        "desc": "Trenutna verzija dodatka inteligentnog asistenta"
+      },
+      "defaultModel": {
+        "name": "Zadani model",
+        "desc": "Zadani model za razgovore",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Zadani način razgovora",
+        "desc": "Odaberite u kojem načinu se otvara prikaz razgovora",
+        "chat": "Način razgovora",
+        "agent": "Način agenta"
+      },
+      "conversationTitleMode": {
+        "name": "Način naslova razgovora",
+        "desc": "Kako generirati naslove razgovora",
+        "firstMessage": "Koristi prvu poruku",
+        "autoSummary": "Automatski generiraj sažetak",
+        "manual": "Ručno"
+      },
+      "conversationIcons": {
+        "name": "Ikone razgovora",
+        "desc": "Omogući automatsko generiranje ikona za razgovore"
+      },
+      "configStatus": {
+        "name": "Status konfiguracije",
+        "desc": "Ukupni status konfiguracije dodatka",
+        "ok": "✅ Konfigurirano ({{providers}} pružatelja, {{conversations}} razgovora)",
+        "incomplete": "⚠️ Nepotpuno — Konfigurirajte pružatelje i modele"
+      }
+    },
+    "llm": {
+      "title": "LLM konfiguracija",
+      "desc": "Konfigurirajte pružatelje jezičnih modela i upravljajte dostupnim modelima.",
+      "subTabs": {
+        "provider": "Pružatelji",
+        "models": "Modeli"
+      }
+    },
+    "models": {
+      "title": "Konfiguracija modela",
+      "desc": "Pregledajte i upravljajte modelima svih konfiguriranih pružatelja. Kliknite „osvježi modele“ za dohvat najnovijih dostupnih modela.",
+      "providerCount": "{{count}} pružatelj konfiguriran",
+      "providerCount_plural": "{{count}} pružatelja konfigurirano",
+      "refreshAll": "🔄 osvježi sve modele",
+      "empty": "Nema konfiguriranih pružatelja. Najprije dodajte pružatelje na kartici pružatelja.",
+      "noModels": "Nema dostupnih modela. Kliknite „osvježi sve modele“ ili osvježite pojedine pružatelje na kartici pružatelja.",
+      "noMatch": "Nijedan model ne odgovara trenutnim filterima. Prilagodite ili obrišite filtere za prikaz rezultata.",
+      "modelCount": "• {{count}} model u predmemoriji",
+      "modelCount_plural": "• {{count}} modela u predmemoriji",
+      "matchCount": "• {{count}} odgovara odabranim filterima",
+      "matchCount_plural": "• {{count}} odgovara odabranim filterima",
+      "status": {
+        "enabled": "Omogućeno",
+        "disabled": "Onemogućeno"
+      },
+      "actions": {
+        "disable": "Onemogući",
+        "enable": "Omogući",
+        "setDefaultChat": "Postavi zadani razgovor",
+        "defaultChat": "Zadani razgovor",
+        "setDefaultEmbedding": "Postavi zadano ugradnju",
+        "defaultEmbedding": "Zadana ugradnja"
+      },
+      "notices": {
+        "fetching": "Dohvaćam modele za {{provider}}...",
+        "fetchFailed": "Osvježavanje modela {{provider}} nije uspjelo",
+        "refreshed": "Modeli su uspješno osvježeni!",
+        "refreshFailed": "Osvježavanje modela nije uspjelo",
+        "defaultChatSet": "Zadani model razgovora postavljen na {{name}}",
+        "defaultEmbeddingSet": "Zadani model ugradnje postavljen na {{name}}"
+      },
+      "filters": {
+        "allProviders": "Svi pružatelji",
+        "allCapabilities": "Sve mogućnosti",
+        "allStates": "Sva stanja",
+        "searchPlaceholder": "Pretraži naziv ili ID"
+      }
+    },
+    "provider": {
+      "title": "Konfiguracija pružatelja",
+      "securityTitle": "⚠️ Sigurnosno upozorenje",
+      "securityDesc": "API ključevi pohranjuju se kao čisti tekst u vašem trezoru radi kompatibilnosti. Kako biste spriječili slučajno curenje:",
+      "securityItem1": "NE dijelite mapu {{configDir}}/plugins/intelligence-assistant/data/.",
+      "securityItem2": "Dodajte ovu mapu u .gitignore ako koristite Git sinkronizaciju.",
+      "securityItem3": "Budite oprezni pri korištenju javnih usluga sinkronizacije u oblaku.",
+      "desc": "Upravljajte LLM pružateljima i API vjerodajnicama. Koristite stupac radnji za uređivanje pojedinosti konfiguracije ili osvježavanje predmemoriranih modela.",
+      "count": "{{count}} pružatelj konfiguriran",
+      "count_plural": "{{count}} pružatelja konfigurirano",
+      "addBtn": "+ Dodaj pružatelja",
+      "empty": "Nema konfiguriranih pružatelja. Odaberite „Dodaj pružatelja“ za početak.",
+      "tableHeaders": {
+        "provider": "Pružatelj",
+        "status": "Status",
+        "actions": "Radnje"
+      },
+      "status": {
+        "ready": "Spreman",
+        "needsConfig": "Potrebna konfiguracija",
+        "checking": "Provjeravam...",
+        "credentialsSet": "Vjerodajnice postavljene",
+        "serverOnline": "Poslužitelj online",
+        "serverOffline": "Poslužitelj offline",
+        "serverError": "Pogreška poslužitelja"
+      },
+      "guidance": {
+        "requiresCli": "Zahtijeva lokalni CLI",
+        "provideServiceKey": "Unesite servisni ključ",
+        "configureBaseUrl": "Konfiguriraj osnovni URL",
+        "addApiKey": "Dodaj API ključ"
+      },
+      "models": {
+        "none": "Nema modela",
+        "count": "{{count}} model",
+        "count_plural": "{{count}} modela"
+      },
+      "ollama": {
+        "checkingVersion": "Provjeravam verziju...",
+        "server": {
+          "checking": "Provjeravam poslužitelj...",
+          "online": "Poslužitelj: online",
+          "offline": "Poslužitelj: offline ili nedostupan",
+          "error": "Poslužitelj: pogreška veze",
+          "versionOnline": "Poslužitelj online",
+          "versionOffline": "Poslužitelj offline",
+          "versionError": "Pogreška veze",
+          "version": "Verzija: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Zadnje osvježavanje: {{timeAgo}}",
+        "neverRefreshed": "Nikad osvježeno",
+        "justNow": "upravo sad",
+        "minutesAgo": "prije {{n}} min",
+        "hoursAgo": "prije {{n}} h",
+        "daysAgo": "prije {{n}} d"
+      },
+      "actions": {
+        "edit": "Uredi",
+        "manageModels": "Upravljaj modelima",
+        "refreshModels": "Osvježi modele",
+        "refreshing": "Osvježavanje...",
+        "delete": "Obriši"
+      },
+      "notices": {
+        "refreshed": "Modeli osvježeni za {{provider}}.",
+        "refreshFailed": "Osvježavanje modela nije uspjelo"
+      },
+      "confirm": {
+        "delete": "Ukloni pružatelja {{provider}}?"
+      }
+    },
+    "mcp": {
+      "title": "Upravljanje MCP poslužiteljem",
+      "desc": "Konfigurirajte poslužitelje Model Context Protocol (MCP) za proširivanje mogućnosti agenta vanjskim alatima i izvorima podataka.",
+      "inspectorBtn": "🔍 Otvori MCP inspektor",
+      "testAllBtn": "🧪 testiraj sve veze",
+      "refreshAllBtn": "🔄 osvježi sve alate",
+      "addBtn": "+ Dodaj MCP poslužitelj",
+      "empty": "Nema konfiguriranih MCP poslužitelja. Odaberite Dodaj MCP poslužitelj za početak.",
+      "tableHeaders": {
+        "name": "Naziv",
+        "command": "Naredba",
+        "arguments": "Argumenti",
+        "status": "Status",
+        "tools": "Alati",
+        "actions": "Radnje"
+      },
+      "untitled": "MCP poslužitelj bez naziva",
+      "notConfigured": "Nije konfigurirano",
+      "noArgs": "Nema",
+      "cached": "U predmemoriji",
+      "disabled": "Onemogućeno",
+      "envVars": "{{count}} env varijabla",
+      "envVars_plural": "{{count}} env varijabli",
+      "status": {
+        "disabled": "Onemogućeno",
+        "connected": "povezano",
+        "disconnected": "odspojeno",
+        "enableToManage": "Omogući za upravljanje vezama",
+        "manualConnect": "Ručno spajanje",
+        "autoConnect": "Automatsko spajanje"
+      },
+      "toolCount": {
+        "live": "{{count}} aktivni alat",
+        "live_plural": "{{count}} aktivnih alata",
+        "cached": "{{count}} predmemorirani alat",
+        "cached_plural": "{{count}} predmemoriranih alata"
+      },
+      "actions": {
+        "edit": "Uredi",
+        "enabled": "✓ Omogućeno",
+        "enabledOff": "✗ Onemogućeno",
+        "connect": "spoji",
+        "disconnect": "odspoji",
+        "connecting": "Spajanje...",
+        "disconnecting": "Odspajanje...",
+        "test": "Test",
+        "testing": "Testiranje...",
+        "delete": "Obriši"
+      },
+      "notices": {
+        "disconnected": "Odspojeno od {{name}}",
+        "connected": "Spojeno na {{name}}",
+        "autoConnectFailed": "Automatsko spajanje na {{name}} nije uspjelo",
+        "enableFirst": "Omogućite poslužitelj prije spajanja",
+        "disconnectFailed": "Odspajanje od {{name}} nije uspjelo",
+        "connectFailed": "Spajanje na {{name}} nije uspjelo",
+        "testNoCommand": "❌ unesite naredbu prije testiranja veze",
+        "testSuccess": "✅ uspješno spojeno! Pronađeno {{count}} alata.",
+        "testFailed": "❌ Spajanje nije uspjelo: {{message}}",
+        "refreshedAll": "✅ alati osvježeni za {{count}} poslužitelj",
+        "refreshedAll_plural": "✅ alati osvježeni za {{count}} poslužitelja",
+        "refreshedPartial": "✅ osvježeno {{success}} poslužitelja, ❌ {{failed}} neuspješno",
+        "noServersConfigured": "⚠️ Nema konfiguriranih MCP poslužitelja",
+        "testingAll": "🧪 Testiranje {{count}} MCP veza poslužitelja...",
+        "testAllSuccess": "✅ svih {{count}} mcp poslužitelja uspješno spojeno!",
+        "testAllPartial": "⚠️ {{successful}} spojeno, {{failed}} neuspješno"
+      },
+      "confirm": {
+        "delete": "Obriši MCP poslužitelj „{{name}}“?"
+      }
+    },
+    "agents": {
+      "title": "Upravljanje agentima",
+      "desc": "Stvarajte i upravljajte AI agentima s određenim mogućnostima, alatima i ponašanjem.",
+      "count": "{{count}} agent konfiguriran",
+      "count_plural": "{{count}} agenata konfigurirano",
+      "addBtn": "+ dodaj agenta",
+      "empty": "Nema konfiguriranih agenata. Odaberite dodaj agenta za početak.",
+      "tableHeaders": {
+        "agent": "Agent",
+        "model": "Model",
+        "capabilities": "Mogućnosti",
+        "tools": "Alati",
+        "actions": "Radnje"
+      },
+      "defaultBadge": "Zadano",
+      "systemPrompt": "Sistemski upit • {{promptName}}",
+      "customPrompt": "Prilagođeni upit",
+      "model": {
+        "notSet": "Nije postavljeno",
+        "notFound": "Model nije pronađen u predmemoriji",
+        "useChatView": "Koristi model prikaza razgovora",
+        "useChatViewDesc": "Koristit će model odabran u prikazu razgovora",
+        "useDefault": "Koristi zadani model",
+        "useDefaultDesc": "Koristit će zadani model iz postavki"
+      },
+      "capabilities": {
+        "noSpecialModes": "Nema posebnih načina"
+      },
+      "tools": {
+        "builtIn": "{{count}} ugrađeni",
+        "mcpServer": "{{count}} mcp poslužitelj",
+        "mcpServer_plural": "{{count}} mcp poslužitelja",
+        "mcpTool": "{{count}} mcp alat",
+        "mcpTool_plural": "{{count}} mcp alata",
+        "noTools": "Nema omogućenih alata"
+      },
+      "actions": {
+        "edit": "Uredi",
+        "delete": "obriši",
+        "protected": "zaštićeno"
+      },
+      "confirm": {
+        "delete": "Obriši agenta „{{name}}“?"
+      }
+    },
+    "prompts": {
+      "title": "Sistemski upiti",
+      "desc": "Upravljajte sistemskim upitima koji definiraju ponašanje i osobnost vašeg AI asistenta.",
+      "addBtn": "+ dodaj sistemski upit",
+      "empty": "Nema konfiguriranih sistemskih upita. Odaberite dodaj sistemski upit za početak.",
+      "tableHeaders": {
+        "name": "Naziv",
+        "contentPreview": "Pregled sadržaja",
+        "created": "Stvoreno",
+        "updated": "Ažurirano",
+        "enabled": "Omogućeno",
+        "actions": "Radnje"
+      },
+      "status": {
+        "enabled": "Omogućeno",
+        "disabled": "Onemogućeno"
+      },
+      "actions": {
+        "edit": "Uredi",
+        "disable": "Onemogući",
+        "enable": "Omogući",
+        "delete": "Obriši"
+      },
+      "confirm": {
+        "delete": "Obriši upit „{{name}}“?"
+      }
+    },
+    "tools": {
+      "title": "Konfiguracija alata",
+      "desc": "Pregledajte ugrađene alate i istražite MCP alate učitane s povezanih poslužitelja. Omogućite radnje koje vaši agenti trebaju moći izvesti.",
+      "subTabs": {
+        "builtIn": "Ugrađeni alati",
+        "mcp": "MCP alati",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI alati"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Naziv",
+          "category": "Kategorija",
+          "description": "Opis",
+          "parameters": "Parametri",
+          "enabled": "Omogućeno"
+        },
+        "categories": {
+          "fileOps": "Operacije s datotekama",
+          "searchDisc": "Pretraživanje i otkrivanje",
+          "noteMgmt": "Upravljanje bilješkama"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Čitaj sadržaj datoteke iz vašeg trezora",
+            "params": "path (obavezno): Putanja do datoteke za čitanje"
+          },
+          "writeFile": {
+            "desc": "Zapiši ili ažuriraj datoteku u vašem trezoru",
+            "params": "path (obavezno), content (obavezno): Putanja datoteke i sadržaj za upis"
+          },
+          "listFiles": {
+            "desc": "Prikaži datoteke u trezoru ili određenoj mapi",
+            "params": "folder (neobavezno), extension (neobavezno): Filtriraj po mapi i ekstenziji datoteke"
+          },
+          "searchFiles": {
+            "desc": "Pretraži datoteke po nazivu ili sadržaju u vašem trezoru",
+            "params": "query (obavezno), search_content (neobavezno), limit (neobavezno): Upit za pretraživanje i opcije"
+          },
+          "createNote": {
+            "desc": "Stvori novu bilješku s određenim sadržajem",
+            "params": "title (obavezno), content (obavezno), folder (neobavezno): Naslov bilješke, sadržaj i lokacija"
+          },
+          "appendNote": {
+            "desc": "Dodaj sadržaj postojećoj bilješci",
+            "params": "path (obavezno), content (obavezno): Putanja bilješke i sadržaj za dodavanje"
+          }
+        },
+        "infoTitle": "💡 o alatima",
+        "infoText": "Ugrađeni alati konfiguriraju se prema postavkama dodatka. MCP alati upravljaju se neovisno — koristite karticu MCP za povezivanje poslužitelja i osvježavanje dostupnosti alata.",
+        "toolNames": {
+          "read_file": "Čitaj datoteku",
+          "write_file": "Zapiši datoteku",
+          "list_files": "Prikaži datoteke",
+          "search_files": "Pretraži datoteke",
+          "create_note": "Stvori bilješku",
+          "append_note": "Dodaj u bilješku"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Nema dostupnih MCP alata. Povežite poslužitelj ili osvježite predmemorirane alate za popunjavanje ovog popisa.",
+        "tableHeaders": {
+          "server": "Poslužitelj",
+          "tool": "Alat",
+          "description": "Opis",
+          "parameters": "Parametri",
+          "source": "Izvor"
+        },
+        "noDescription": "Nema opisa",
+        "schemaUnavailable": "Shema nedostupna",
+        "live": "Aktivno",
+        "cached": "U predmemoriji",
+        "status": {
+          "connected": "povezano",
+          "disconnected": "odspojeno"
+        }
+      },
+      "openapi": {
+        "desc": "Generiranje HTTP alata iz OpenAPI dokumenata. Udaljene specifikacije predmemoriraju se u {{cacheDir}}.",
+        "addBtn": "Dodaj HTTP izvor",
+        "noSources": "Nema konfiguriranih HTTP izvora.",
+        "unnamed": "HTTP izvor bez naziva",
+        "tableHeaders": {
+          "name": "Naziv",
+          "source": "Izvor",
+          "auth": "Autentifikacija",
+          "status": "Status",
+          "actions": "Radnje"
+        },
+        "sourceUrl": "Udaljeni URL nije postavljen",
+        "sourcePath": "Putanja datoteke nije postavljena",
+        "authHeader": "Zaglavlje ({{key}})",
+        "authQuery": "Upit ({{key}})",
+        "authNone": "Nema",
+        "statusEnabled": "Omogućeno",
+        "statusDisabled": "Onemogućeno",
+        "actions": {
+          "edit": "Uredi",
+          "reload": "Ponovo učitaj",
+          "refetch": "Ponovo dohvati",
+          "delete": "Obriši"
+        },
+        "notices": {
+          "removed": "HTTP izvor uklonjen",
+          "reloaded": "Ponovo učitano {{count}} operacija",
+          "reloadFailed": "Ponovo učitavanje HTTP izvora nije uspjelo. Provjerite konzolu za detalje."
+        },
+        "modal": {
+          "defaultTitle": "HTTP izvor",
+          "displayName": {
+            "name": "Prikazni naziv",
+            "desc": "Prikazuje se agentima pri odabiru izvora alata"
+          },
+          "enabled": {
+            "name": "Omogućeno",
+            "desc": "Omogući za izlaganje ovog HTTP API-ja svakom agentu"
+          },
+          "sourceType": {
+            "name": "Vrsta izvora",
+            "file": "Lokalna datoteka",
+            "url": "Udaljeni URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Dohvaćeno i predmemorirano unutar direktorija podataka dodatka"
+          },
+          "cachedFile": "Predmemorirana datoteka: {{path}} ({{date}})",
+          "neverFetched": "Nikad dohvaćeno",
+          "specPath": {
+            "name": "Putanja datoteke OpenAPI",
+            "desc": "Relativna putanja unutar trezora ili apsolutna putanja"
+          },
+          "baseUrl": {
+            "name": "Zamjena osnovnog URL-a",
+            "desc": "Zamijeni prvu stavku poslužitelja iz dokumenta (neobavezno)"
+          },
+          "auth": {
+            "name": "Autentifikacija",
+            "desc": "Automatski umeće API ključeve pri pozivu ovog izvora",
+            "none": "Nema",
+            "header": "HTTP zaglavlje",
+            "query": "Parametar upita"
+          },
+          "credKey": {
+            "name": "Ključ vjerodajnice"
+          },
+          "credValue": {
+            "name": "Vrijednost vjerodajnice"
+          },
+          "actions": {
+            "name": "Radnje",
+            "reloadTools": "Ponovo učitaj alate",
+            "refetchTooltip": "Ponovo dohvati specifikaciju s URL-a",
+            "deleteTooltip": "Obriši izvor"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Definirajte lokalne alate naredbenog retka koje agenti mogu izvršavati. Koristite predloške poput {{param}} za dinamičke argumente.",
+        "addBtn": "Dodaj CLI alat",
+        "presetsBtn": "Dodaj iz predefiniranih",
+        "noTools": "Nema konfiguriranih CLI alata.",
+        "tableHeaders": {
+          "name": "Naziv",
+          "command": "Naredba",
+          "parameters": "Parametri",
+          "status": "Status",
+          "actions": "Radnje"
+        },
+        "unnamed": "CLI alat bez naziva",
+        "paramCount": "{{count}} parametar",
+        "paramCount_plural": "{{count}} parametara",
+        "noParams": "Nema",
+        "statusEnabled": "Omogućeno",
+        "statusDisabled": "Onemogućeno",
+        "actions": {
+          "edit": "Uredi",
+          "disable": "Onemogući",
+          "enable": "Omogući",
+          "delete": "Obriši"
+        },
+        "notices": {
+          "removed": "CLI alat uklonjen"
+        },
+        "infoTitle": "💡 O CLI alatima",
+        "infoText": "CLI alati izvršavaju naredbe ljuske lokalno. Koristite {{paramName}} u argumentima za zamjenu predloška, ili konfigurirajte parametre koji se prosljeđuju kao argumenti ili varijable okruženja.",
+        "modal": {
+          "defaultTitle": "CLI alat",
+          "toolName": {
+            "name": "Naziv alata",
+            "desc": "Identifikator koji agenti koriste za pozivanje ovog alata"
+          },
+          "description": {
+            "name": "Opis",
+            "desc": "Opišite što ovaj alat radi za AI"
+          },
+          "enabled": {
+            "name": "Omogućeno",
+            "desc": "Omogući agentima korištenje ovog alata"
+          },
+          "commandConfig": "Konfiguracija naredbe",
+          "command": {
+            "name": "Naredba",
+            "desc": "Izvršna datoteka za pokretanje (npr. node, python, bash, /putanja/do/skripte)"
+          },
+          "args": {
+            "name": "Argumenti",
+            "desc": "Argumenti naredbe, po jedan u retku. Koristite {{paramName}} za zamjenu predloška."
+          },
+          "cwd": {
+            "name": "Radni direktorij",
+            "desc": "Direktorij u kojem se pokreće naredba (neobavezno)"
+          },
+          "timeout": {
+            "name": "Vremensko ograničenje (ms)",
+            "desc": "Maksimalno vrijeme izvršavanja u milisekundama (zadano: {{timeout}})"
+          },
+          "shell": {
+            "name": "Pokreni u ljusci",
+            "desc": "Izvrši naredbu kroz ljusku (omogućuje značajke ljuske poput cjevovoda)"
+          },
+          "paramsTitle": "Parametri",
+          "paramsDesc": "Definirajte parametre koje AI može prosljeđivati ovom alatu.",
+          "addParam": "Dodaj parametar",
+          "noParams": "Nema definiranih parametara.",
+          "paramN": "Parametar {{n}}",
+          "param": {
+            "name": "Naziv",
+            "type": {
+              "name": "Vrsta",
+              "string": "Niz znakova",
+              "number": "Broj",
+              "boolean": "Logička vrijednost"
+            },
+            "description": "Opis",
+            "required": "Obavezno",
+            "insertAs": {
+              "name": "Umetni kao",
+              "desc": "Kako prosljediti ovaj parametar naredbi",
+              "template": "Predložak ({{name}})",
+              "arg": "Dodaj kao argument",
+              "env": "Varijabla okruženja"
+            },
+            "envName": {
+              "name": "Naziv env varijable",
+              "desc": "Zamijeni naziv varijable okruženja (zadano je naziv parametra velikim slovima)"
+            }
+          },
+          "envTitle": "Varijable okruženja",
+          "envDesc": "Statične varijable okruženja koje se postavljaju pri pokretanju naredbe.",
+          "envVars": {
+            "name": "Varijable okruženja",
+            "desc": "Format: KLJUČ=vrijednost, jedna u retku"
+          }
+        },
+        "presets": {
+          "title": "Dodaj CLI alat iz predefiniranih",
+          "desc": "Odaberite predefiniranu opciju za brzo dodavanje unaprijed konfiguriranog CLI alata. Možete ga prilagoditi nakon dodavanja.",
+          "addBtn": "Dodaj",
+          "addedBtn": "Dodano",
+          "closeBtn": "Zatvori",
+          "notices": {
+            "added": "Dodano „{{name}}“ — omogućite ga u popisu CLI alata"
+          },
+          "categories": {
+            "file": "Operacije s datotekama",
+            "search": "Pretraživanje",
+            "network": "Mreža",
+            "code": "Izvršavanje koda",
+            "data": "Obrada podataka",
+            "system": "Informacije o sustavu",
+            "apps": "macOS aplikacije i radna površina"
+          },
+          "names": {
+            "preset-cat": "Čitaj datoteku (cat)",
+            "preset-ls": "Prikaži direktorij (ls)",
+            "preset-find": "Pronađi datoteke (find)",
+            "preset-grep": "Pretraži tekst (grep)",
+            "preset-ripgrep": "Brzo pretraživanje (rg)",
+            "preset-curl": "HTTP zahtjev (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Pokreni Python kod",
+            "preset-node": "Pokreni JavaScript (Node)",
+            "preset-bash": "Pokreni Bash skriptu",
+            "preset-jq": "JSON procesor (jq)",
+            "preset-wc": "Brojanje riječi (wc)",
+            "preset-date": "Trenutni datum/vrijeme",
+            "preset-pwd": "Trenutni direktorij (pwd)",
+            "preset-whoami": "Trenutni korisnik",
+            "preset-uname": "Informacije o sustavu (uname)",
+            "preset-open": "Otvori datoteku/URL (open)",
+            "preset-open-app": "Pokreni aplikaciju (open -a)",
+            "preset-safari": "Otvori u Safari",
+            "preset-chrome": "Otvori u Chrome",
+            "preset-firefox": "Otvori u Firefox",
+            "preset-pbcopy": "Kopiraj u međuspremnik",
+            "preset-pbpaste": "Zalijepi iz međuspremnika",
+            "preset-say": "Pretvorba teksta u govor (say)",
+            "preset-osascript": "Pokretač AppleScript",
+            "preset-notify": "Obavijest na radnoj površini",
+            "preset-screencapture": "Snimka zaslona",
+            "preset-applescript-list-apps": "Prikaži pokrenute aplikacije"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG konfiguracija",
+      "desc": "Konfigurirajte RAG i web pretraživanje za poboljšanje AI odgovora.",
+      "subTabs": {
+        "overview": "Pregled",
+        "chunking": "Segmentacija",
+        "search": "Pretraživanje",
+        "filters": "Filteri",
+        "advanced": "Napredno",
+        "websearch": "Web pretraživanje"
+      },
+      "general": {
+        "title": "Opće postavke",
+        "enableRag": {
+          "name": "Omogući RAG",
+          "desc": "Omogući RAG za poboljšani kontekst"
+        },
+        "vectorStore": {
+          "name": "Vektorska baza",
+          "desc": "Vektorska baza podataka za pohranu ugradnji",
+          "memory": "U memoriji",
+          "disk": "Na disku"
+        },
+        "embeddingModel": {
+          "name": "Model ugradnje",
+          "desc": "Model za generiranje ugradnji"
+        },
+        "embedChanged": {
+          "name": "Automatski ugradi promijenjene datoteke",
+          "desc": "Automatski ponovo ugradi datoteke kada se promijene"
+        }
+      },
+      "indexMgmt": {
+        "title": "Upravljanje indeksom",
+        "desc": "Upravljajte RAG indeksom i pregledajte statistike o indeksiranom sadržaju.",
+        "statsTitle": "Statistike indeksa",
+        "stats": {
+          "totalChunks": "Ukupni segmenti",
+          "uniqueFiles": "Jedinstvene datoteke",
+          "totalChars": "Ukupni znakovi",
+          "avgChunkSize": "Prosječna veličina segmenta"
+        },
+        "empty": "Indeks je prazan. Odaberite ponovo izgradi indeks za početak indeksiranja.",
+        "error": "⚠️ nije moguće učitati statistike indeksa",
+        "rebuild": {
+          "name": "Ponovo izgradi indeks",
+          "desc": "Ponovo indeksiraj sve datoteke u vašem trezoru. Ovo može potrajati.",
+          "btn": "Ponovo izgradi",
+          "rebuilding": "Ponovna izgradnja..."
+        },
+        "refresh": {
+          "name": "Osvježi indeks",
+          "desc": "Ažuriraj indeks s promijenjenim datotekama od zadnjeg indeksiranja.",
+          "btn": "Osvježi",
+          "refreshing": "Osvježavanje..."
+        },
+        "clear": {
+          "name": "Očisti indeks",
+          "desc": "Ukloni sve indeksirane podatke. Morat ćete ponovo izgraditi indeks.",
+          "btn": "Očisti",
+          "clearing": "Čišćenje..."
+        },
+        "notices": {
+          "rebuilt": "Indeks je uspješno ponovo izgrađen",
+          "rebuildFailed": "Ponovna izgradnja indeksa nije uspjela",
+          "refreshed": "Indeks je uspješno osvježen",
+          "refreshFailed": "Osvježavanje indeksa nije uspjelo",
+          "cleared": "Indeks je uspješno očišćen",
+          "clearFailed": "Čišćenje indeksa nije uspjelo"
+        }
+      },
+      "chunking": {
+        "title": "Postavke segmentacije",
+        "strategy": {
+          "name": "Strategija segmentacije",
+          "desc": "Strategija za podjelu dokumenata na segmente",
+          "recursive": "Rekurzivna (pametna)",
+          "fixed": "Fiksna veličina",
+          "sentence": "Po rečenici",
+          "paragraph": "Po odlomku"
+        },
+        "chunkSize": {
+          "name": "Veličina segmenta",
+          "desc": "Broj znakova po segmentu (preporučeno 500-2000)"
+        },
+        "chunkOverlap": {
+          "name": "Preklapanje segmenata",
+          "desc": "Broj preklapajućih znakova između segmenata"
+        },
+        "minChunkSize": {
+          "name": "Minimalna veličina segmenta",
+          "desc": "Minimalna veličina segmenta za stvaranje"
+        },
+        "maxTokens": {
+          "name": "Maksimalni tokeni po segmentu",
+          "desc": "Maksimalni dopušteni tokeni po segmentu"
+        }
+      },
+      "search": {
+        "title": "Postavke pretraživanja",
+        "searchType": {
+          "name": "Vrsta pretraživanja",
+          "desc": "Vrsta pretraživanja sličnosti za izvođenje",
+          "similarity": "Sličnost"
+        },
+        "topK": {
+          "name": "Top K rezultata",
+          "desc": "Broj najrelevantnijih segmenata za dohvat (1-20)"
+        },
+        "threshold": {
+          "name": "Prag sličnosti",
+          "desc": "Minimalni rezultat sličnosti za uključivanje rezultata (0,0-1,0)"
+        },
+        "weight": {
+          "name": "Težina rezultata relevantnosti",
+          "desc": "Težina za bodovanje relevantnosti (0,0-1,0)"
+        },
+        "contextLimit": {
+          "name": "Ograničenje kontekstnog prozora",
+          "desc": "Maksimalni tokeni za dohvaćeni kontekst"
+        }
+      },
+      "filters": {
+        "title": "Filteri datoteka",
+        "excludeFolders": {
+          "name": "Isključi mape",
+          "desc": "Mape za isključivanje iz indeksiranja (odvojene zarezom)"
+        },
+        "includeTypes": {
+          "name": "Uključi vrste datoteka",
+          "desc": "Vrste datoteka za uključivanje (prazno = sve vrste)"
+        },
+        "excludeTypes": {
+          "name": "Isključi vrste datoteka",
+          "desc": "Vrste datoteka za isključivanje iz indeksiranja"
+        },
+        "filterByTag": {
+          "name": "Filtriraj po oznaci",
+          "desc": "Indeksiraj samo datoteke s ovim oznakama (prazno = sve datoteke)"
+        },
+        "excludeByTag": {
+          "name": "Isključi po oznaci",
+          "desc": "Isključi datoteke s ovim oznakama iz indeksiranja"
+        }
+      },
+      "advanced": {
+        "title": "Napredne postavke",
+        "batchSize": {
+          "name": "Veličina serije ugradnje",
+          "desc": "Broj segmenata za ugradnju paralelno"
+        }
+      },
+      "grading": {
+        "title": "Postavke ocjenjivanja",
+        "desc": "Ocjenjujte dohvaćene segmente za relevantnost prije slanja LLM-u. Pomaže filtrirati rezultate niske kvalitete.",
+        "enableGrading": {
+          "name": "Omogući prag ocjenjivanja",
+          "desc": "Filtriraj segmente ispod pragova kvalitete"
+        },
+        "graderSource": {
+          "name": "Izvor modela ocjenjivača",
+          "desc": "Odakle dohvatiti model ocjenjivača",
+          "chat": "Model razgovora",
+          "custom": "Prilagođeni model"
+        },
+        "graderModel": {
+          "name": "Model ocjenjivača",
+          "desc": "Određeni model za korištenje pri ocjenjivanju"
+        },
+        "parallel": {
+          "name": "Paralelna obrada",
+          "desc": "Broj segmenata za paralelno ocjenjivanje"
+        },
+        "minRelevance": {
+          "name": "Min. rezultat relevantnosti",
+          "desc": "Minimalni rezultat relevantnosti (0,0-1,0)"
+        },
+        "minAccuracy": {
+          "name": "Min. rezultat točnosti",
+          "desc": "Minimalni rezultat točnosti (0,0-1,0)"
+        },
+        "minSupport": {
+          "name": "Min. rezultat kvalitete podrške",
+          "desc": "Minimalni rezultat kvalitete podrške (0,0-1,0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Konfiguracija web pretraživanja",
+      "desc": "Konfigurirajte funkcionalnost web pretraživanja za poboljšanje AI odgovora ažurnim informacijama s interneta.",
+      "generalBehavior": "Opće ponašanje",
+      "providerSelection": "Odabir pružatelja",
+      "localeFilters": "Lokalne postavke i filteri",
+      "apiCredentials": "API vjerodajnice i krajnje točke",
+      "enabled": {
+        "name": "Omogući web pretraživanje",
+        "desc": "Dopusti AI pretraživanje weba za aktualne informacije"
+      },
+      "autoTrigger": {
+        "name": "Automatski pokreni pretraživanje",
+        "desc": "Automatski pokreni web pretraživanje kada upit zahtijeva aktualne informacije (npr. vijesti, cijene, nedavni događaji)"
+      },
+      "maxResults": {
+        "name": "Maksimalni broj rezultata",
+        "desc": "Maksimalni broj rezultata pretraživanja za povrat"
+      },
+      "timeRange": {
+        "name": "Svježina rezultata",
+        "desc": "Ograniči rezultate na vremenski raspon podržan od pružatelja (Google, SearXNG, Mojeek)",
+        "any": "Bilo kada (zadano)",
+        "h": "Protekli sat",
+        "d": "Proteklih 24 sata",
+        "w": "Protekli tjedan",
+        "m": "Protekli mjesec",
+        "y": "Protekla godina"
+      },
+      "provider": {
+        "name": "Pružatelj pretraživanja",
+        "desc": "Odaberite između scrapera pogodnih za privatnost ili motora s API podrškom"
+      },
+      "searchLanguage": {
+        "name": "Kod jezika",
+        "desc": "ISO kod jezika (npr. en, fr, zh-CN) prosljeđuje se pružateljima koji podržavaju lokalizaciju"
+      },
+      "searchCountry": {
+        "name": "Kod države/tržišta",
+        "desc": "Dvoslovni kod države (npr. US, DE) koji koriste Bing, DuckDuckGo, Brave i drugi"
+      },
+      "includeDomains": {
+        "name": "Uključi samo ove domene",
+        "desc": "Popis odvojen zarezom koji SerpAPI i Brave koriste za ograničavanje rezultata na određene stranice"
+      },
+      "excludeDomains": {
+        "name": "Isključi domene",
+        "desc": "Domene odvojene zarezom za filtriranje nakon dohvata rezultata"
+      },
+      "apiKey": {
+        "name": "Zadani API ključ",
+        "desc": "Dijeljeni API ključ koji koriste Google, Bing, SerpAPI, Tavily ili Brave kada nisu postavljeni ključevi specifični za pružatelja"
+      },
+      "googleCseId": {
+        "name": "Google Custom Search Engine ID",
+        "desc": "Potrebno uz Google API ključ pri korištenju Google pružatelja"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI krajnja točka",
+        "desc": "Zamijeni SerpAPI osnovni URL ako ga sami hostujete"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API ključ",
+        "desc": "Zamjenjuje zadani ključ pri korištenju Tavily pružatelja"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG krajnja točka",
+        "desc": "Osnovni URL vaše SearXNG instance (mora vraćati JSON)"
+      },
+      "braveApiKey": {
+        "name": "Brave API ključ",
+        "desc": "Koristi pretplatnički token Brave Search API pri odabiru kao pružatelja"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API ključ (neobavezno)",
+        "desc": "Dodajte bearer token ako ga vaš Qwant plan izdaje"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API ključ",
+        "desc": "Potrebno za Mojeek pružatelja"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (ključ nije potreban)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (HTML scraping)",
+        "yandex": "Yandex (HTML scraping)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Brze radnje",
+      "desc": "Konfigurirajte AI brze radnje koje se pojavljuju u kontekstnom izborniku uređivača kada je tekst odabran.",
+      "actionPrefix": {
+        "name": "Prefiks radnje",
+        "desc": "Prefiks (emoji ili tekst) za prikaz ispred svih brzih radnji u kontekstnom izborniku",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} radnja konfigurirana ({{enabled}} omogućeno)",
+      "count_plural": "{{count}} radnji konfigurirano ({{enabled}} omogućeno)",
+      "addBtn": "+ dodaj brzu radnju",
+      "empty": "Nema konfiguriranih brzih radnji. Odaberite dodaj brzu radnju za početak.",
+      "tableHeaders": {
+        "action": "Radnja",
+        "type": "Vrsta",
+        "model": "Model",
+        "promptPreview": "Pregled upita",
+        "actions": "Radnje"
+      },
+      "defaultModel": "Zadano",
+      "editBtn": "Uredi",
+      "deleteBtn": "obriši",
+      "confirm": {
+        "delete": "Obriši brzu radnju „{{name}}“?"
+      },
+      "usageInfo": {
+        "title": "Korištenje",
+        "step1": "Odaberi tekst u bilo kojoj bilješci",
+        "step2": "Desni klik za otvaranje kontekstnog izbornika",
+        "step3": "Odaberi brzu radnju iz izbornika",
+        "step4Replace": "Radnje označene kao „zamijeni“ zamijenit će odabrani tekst AI rezultatom",
+        "step4Explain": "Radnje označene kao „objasni“ prikazat će rezultat u modalnom dijalogu"
+      },
+      "edit": {
+        "title": "Uredi brzu radnju",
+        "name": {
+          "name": "Naziv",
+          "desc": "Prikazni naziv ove radnje u kontekstnom izborniku"
+        },
+        "actionType": {
+          "name": "Vrsta radnje",
+          "desc": "Kako obraditi AI odgovor",
+          "replace": "Zamijeni odabrani tekst",
+          "explain": "Prikaži u modalnom prozoru"
+        },
+        "model": {
+          "name": "Model",
+          "desc": "Jezični model za ovu radnju (ostavite prazno za zadani)",
+          "default": "Koristi zadani model"
+        },
+        "promptTemplate": {
+          "name": "Predložak upita",
+          "desc": "Upute poslane AI. Odabrani tekst bit će automatski dodan."
+        },
+        "cancel": "Odustani",
+        "save": "Spremi"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Produži tekst",
+          "prompt": "Proširi i razradi sljedeći tekst, učinivši ga detaljnijim i sveobuhvatnijim uz zadržavanje izvornog značenja i tona. Vrati samo prošireni tekst bez dodatnih komentara:\n\n"
+        },
+        "summarize": {
+          "name": "Sažmi tekst",
+          "prompt": "Daj sažeto sažetje sljedećeg teksta. Vrati samo sažetak bez dodatnih komentara:\n\n"
+        },
+        "improve-writing": {
+          "name": "Poboljšaj pisanje",
+          "prompt": "Poboljšaj kvalitetu pisanja, jasnoću i stil sljedećeg teksta. Vrati samo poboljšani tekst bez dodatnih komentara:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Ispravi gramatiku",
+          "prompt": "Ispravi sve gramatičke, pravopisne i interpunkcijske pogreške u sljedećem tekstu. Vrati samo ispravljeni tekst bez dodatnih komentara:\n\n"
+        },
+        "explain": {
+          "name": "Objasni tekst",
+          "prompt": "Objasni sljedeći tekst jednostavnim riječima:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Korištenje tokena",
+      "desc": "Pratite potrošnju tokena po pružateljima i modelima. Podaci se akumuliraju kroz sve razgovore.",
+      "notAvailable": "Praćenje korištenja tokena nije dostupno.",
+      "ranges": {
+        "today": "Danas",
+        "week": "Ovaj tjedan",
+        "month": "Ovaj mjesec",
+        "all": "Sve vrijeme"
+      },
+      "stats": {
+        "totalTokens": "Ukupni tokeni",
+        "apiCalls": "API pozivi",
+        "promptTokens": "Tokeni upita",
+        "completion": "Dovršavanje",
+        "tokensIn": "tokeni ulaz",
+        "tokensOut": "tokeni izlaz"
+      },
+      "byProvider": "Po pružatelju",
+      "byModel": "Po modelu",
+      "noData": "Nema podataka o korištenju.",
+      "recentActivity": "Nedavna aktivnost",
+      "last10": "zadnjih 10",
+      "noRecent": "Nema nedavne aktivnosti.",
+      "tableHeaders": {
+        "provider": "Pružatelj",
+        "model": "Model",
+        "prompt": "Upit",
+        "completion": "Dovršavanje",
+        "total": "Ukupno",
+        "calls": "Pozivi",
+        "time": "Vrijeme",
+        "in": "Ulaz",
+        "out": "Izlaz"
+      },
+      "clearBtn": "Obriši sve podatke o korištenju",
+      "confirm": {
+        "clear": "Obrisati sve zapise o korištenju tokena? Ovo se ne može poništiti."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Upišite poruku... (Enter za slanje, Shift+Enter za novi redak)",
+    "conversations": "Razgovori",
+    "toggleConversationsTitle": "Uključi/isključi popis razgovora",
+    "currentConversation": "Trenutni razgovor",
+    "new": "Novo",
+    "settings": "Postavke",
+    "openSettingsTitle": "Otvori postavke dodatka",
+    "mode": "Način",
+    "prompt": "Upit",
+    "agent": "Agent",
+    "modeOptions": {
+      "chat": "Razgovor",
+      "agent": "Agent"
+    },
+    "noSystemPrompt": "Nema sistemskog upita",
+    "noAgentsAvailable": "Nema dostupnih agenata",
+    "sendHintPrefix": "Pritisnite ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " za slanje",
+    "sendAriaLabel": "Pošalji poruku",
+    "stop": " Zaustavi",
+    "addReference": "Dodaj referencu",
+    "addReferenceTooltip": "Dodaj referencu datoteke ili mape (@)",
+    "emptyHeading": "Pokrenite razgovor",
+    "emptySubtext": "Upišite poruku ispod za početak, ili odaberite razgovor iz povijesti.",
+    "noAgentConfig": "Nema konfiguriranih agenata",
+    "selectAgent": "Odaberite agenta…",
+    "notices": {
+      "stopping": "Zaustavljanje generiranja...",
+      "ragInitError": "Pogreška inicijalizacije RAG: {{message}}",
+      "modelsRefreshed": "Modeli osvježeni",
+      "modelsRefreshFailed": "Osvježavanje modela nije uspjelo: {{message}}",
+      "waitForResponse": "Pričekajte završetak trenutnog odgovora",
+      "configureProvider": "Najprije konfigurirajte LLM pružatelja u postavkama",
+      "selectModel": "Odaberite model",
+      "noValidProvider": "Za ovaj model nije pronađena valjana konfiguracija pružatelja",
+      "chatError": "Pogreška razgovora: {{message}}",
+      "noMessageToRegenerate": "Nije moguće pronaći poruku za regeneraciju",
+      "regenerateOnlyLatest": "Trenutno je moguće regenerirati samo najnoviji odgovor",
+      "regenerateNoUserMsg": "Nije moguće pronaći korisničku poruku za regeneraciju",
+      "regenerated": "Odgovor regeneriran",
+      "regenerateFailed": "Regeneracija nije uspjela: {{message}}",
+      "noteCreated": "Bilješka stvorena: {{name}}",
+      "noteCreateFailed": "Stvaranje bilješke nije uspjelo: {{message}}",
+      "messageInserted": "Poruka umetnuta u: {{path}}",
+      "messageInsertFailed": "Umetanje poruke nije uspjelo: {{message}}",
+      "noAgents": "Nema dostupnih agenata. Konfigurirajte ih u Postavke → Agenti.",
+      "ragDisabled": "RAG je onemogućen u postavkama. Omogućite ga u postavke → značajke razgovora → RAG.",
+      "webSearchDisabled": "Web pretraživanje je onemogućeno u postavkama. Omogućite ga u postavke → značajke razgovora → web pretraživanje.",
+      "noFilesInVault": "U trezoru nisu pronađene datoteke",
+      "attached": "Priloženo: {{name}}",
+      "attachedImages": "Priloženo {{count}} slika",
+      "referencesAdded": "Dodano {{count}} referenci",
+      "fileNotFound": "Datoteka nije pronađena: {{path}}",
+      "agentConfigApplied": "Primijenjena konfiguracija za agenta: {{name}}",
+      "waitForComplete": "Pričekajte završetak trenutnog odgovora",
+      "chatServiceFallback": "ChatService nije konfiguriran. Koristim ChatView rezervnu varijantu.",
+      "noModelSelected": "Nije odabran model",
+      "noProviderConfig": "Konfiguracija pružatelja nije pronađena",
+      "generationStopped": "Generiranje zaustavljeno",
+      "noResponseToRegenerate": "Nema odgovora za regeneraciju",
+      "agentNotFound": "Agent nije pronađen",
+      "unableToLoadRag": "Nije moguće učitati RAG statistike.",
+      "referenced": "Referencirano: {{name}}"
+    },
+    "status": {
+      "available": "Dostupno",
+      "unavailable": "Nedostupno",
+      "disabled": "Onemogućeno",
+      "on": "Uključeno · {{detail}}",
+      "off": "Isključeno"
+    },
+    "ragStats": {
+      "title": "RAG statistike",
+      "totalChunks": "📊 ukupni segmenti:",
+      "filesIndexed": "📁 indeksirane datoteke:",
+      "totalSize": "💾 ukupna veličina:",
+      "avgChunks": "📈 Prosječni segmenti/datoteka:",
+      "indexedFiles": "📄 indeksirane datoteke",
+      "noFilesYet": "⚠️ još nema indeksiranih datoteka.",
+      "howToBuild": "Za izgradnju RAG indeksa:",
+      "step1": "Idi na Postavke → RAG",
+      "step2": "Omogući RAG",
+      "step3": "Odaberi indeksiranje trezora",
+      "close": "Zatvori",
+      "retrieved": "📚 dohvaćeno iz {{count}} dokumenta",
+      "retrieved_plural": "📚 dohvaćeno iz {{count}} dokumenata"
+    },
+    "ragTooltip": {
+      "status": "Status RAG indeksa:",
+      "totalChunks": "📊 Ukupni segmenti: {{count}}",
+      "filesIndexed": "📁 Indeksirane datoteke: {{count}}",
+      "totalSize": "💾 Ukupna veličina: {{size}} KB",
+      "indexedFiles": "📄 indeksirane datoteke:",
+      "andMore": "  ... i još {{count}}",
+      "noFilesYet": "⚠️ još nema indeksiranih datoteka.",
+      "goToSettings": "Idi na Postavke → RAG za izgradnju indeksa.",
+      "ragOff": "ℹ️ RAG je trenutno isključen za ovaj razgovor."
+    },
+    "agentSummary": {
+      "model": "Model",
+      "temp": "Temp",
+      "max": "Maks",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Alati",
+      "memory": "Memorija",
+      "none": "Nema",
+      "configuration": "{{name}} konfiguracija",
+      "modelFixed": "{{name}} · Fiksno",
+      "modelDefault": "{{name}} · Zadano",
+      "modelChatView": "{{name}} · Prikaz razgovora",
+      "customModel": "Prilagođeni model",
+      "notSet": "Nije postavljeno",
+      "auto": "Automatski",
+      "on": "Uključeno",
+      "off": "Isključeno",
+      "shortTerm": "Kratkotrajna",
+      "longTerm": "Dugotrajna",
+      "disabledMemory": "Onemogućeno",
+      "builtIn": "{{count}} ugrađeni",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Web rezultati",
+      "attachments": "Privici",
+      "references": "Reference",
+      "ragSources": "RAG izvori",
+      "reasoning": "Zaključivanje",
+      "copy": "Kopiraj",
+      "copied": "Poruka kopirana",
+      "copyFailed": "Kopiranje poruke nije uspjelo",
+      "tokenUsage": "Korištenje tokena",
+      "tokenUsagePrompt": "Upit",
+      "tokenUsageCompletion": "Dovršavanje",
+      "tokenUsageTotal": "Ukupno",
+      "save": "Spremi",
+      "insertToNotes": "Umetni u bilješke",
+      "regenerate": "Regeneriraj"
+    },
+    "streaming": {
+      "thinking": "Razmišljam..."
+    },
+    "toolCall": {
+      "thinking": "Razmišljam",
+      "executionProcess": "Proces izvršavanja",
+      "input": "Ulaz",
+      "output": "Izlaz",
+      "running": "Pokrećem..."
+    },
+    "addPicture": "Dodaj sliku",
+    "addPictureTooltip": "Priloži sliku uz poruku",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Koristi indeksirane bilješke kao kontekst",
+    "webSearchLabel": "Web pretraživanje",
+    "webSearchTooltipLabel": "Pretraži internet kada je potrebno",
+    "imageUnavailable": "Prilaganje slika nije dostupno za trenutni model.",
+    "newChat": "Novi razgovor",
+    "newConversation": "Novi razgovor",
+    "searchConversations": "Pretraži razgovore...",
+    "header": {
+      "model": "Model",
+      "advancedParams": "Napredni parametri",
+      "temperature": "Temperatura",
+      "maxTokens": "Maks. tokeni",
+      "topP": "Top P",
+      "freqPenalty": "Kazna učestalosti",
+      "presPenalty": "Kazna prisutnosti",
+      "agentConfig": "Konfiguracija agenta",
+      "modelsCount": "Modeli: {{count}}",
+      "tokensCount": "Tokeni: {{count}}",
+      "noModels": "Nema dostupnih modela"
+    },
+    "temperature": {
+      "precise": "0 (Precizno)",
+      "balanced": "1 (Uravnoteženo)",
+      "creative": "2 (Kreativno)"
+    },
+    "modals": {
+      "image": {
+        "title": "Priloži slike",
+        "searchPlaceholder": "Pretraži slike...",
+        "selectAll": "Odaberi sve",
+        "selectNone": "Poništi odabir",
+        "addSelected": "Dodaj odabrane",
+        "noResults": "Nisu pronađene odgovarajuće slike."
+      },
+      "reference": {
+        "title": "Dodaj reference",
+        "searchPlaceholder": "Pretraži datoteke i mape...",
+        "selectAll": "Odaberi sve",
+        "selectNone": "Poništi odabir",
+        "addSelected": "Dodaj odabrane",
+        "noResults": "Nisu pronađene odgovarajuće datoteke ili mape."
+      },
+      "insertNote": {
+        "title": "Umetni u bilješku",
+        "searchPlaceholder": "Pretraži bilješke...",
+        "insert": "Umetni u odabranu bilješku",
+        "createNew": "Stvori novu bilješku",
+        "noResults": "Nisu pronađene odgovarajuće bilješke."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Odustani",
+      "confirm": "Potvrdi"
+    },
+    "agentEdit": {
+      "title": "Uredi agenta",
+      "icon": {
+        "name": "Ikona",
+        "desc": "Emoji ili znak za predstavljanje ovog agenta"
+      },
+      "description": {
+        "name": "Opis",
+        "desc": "Kratki opis agenta"
+      },
+      "modelStrategy": {
+        "name": "Strategija modela",
+        "options": {
+          "default": "Koristi zadani model (iz postavki)",
+          "chatView": "Koristi model prikaza razgovora",
+          "fixed": "Fiksni model"
+        },
+        "noModels": "Nema predmemoriranih modela",
+        "desc": "Odaberite kako agent odabire svoj model"
+      },
+      "systemPrompt": {
+        "createNew": "➕ stvori novi upit…",
+        "promptName": {
+          "name": "Naziv upita",
+          "desc": "Prikazni naziv novog sistemskog upita"
+        },
+        "promptContent": {
+          "name": "Sadržaj upita",
+          "desc": "Sadržaj novog sistemskog upita"
+        },
+        "name": "Sistemski upit",
+        "desc": "Odaberite iz postojećih upita ili definirajte novi za ovog agenta."
+      },
+      "capabilities": "Mogućnosti",
+      "memory": {
+        "title": "Memorija",
+        "notice": "Memorija agenta privremeno je nedostupna dok iteriramo na iskustvu."
+      },
+      "tools": {
+        "title": "Alati",
+        "builtIn": {
+          "name": "Ugrađeni alati",
+          "desc": "Odaberite koje ugrađene alate ovaj agent može koristiti"
+        },
+        "cli": {
+          "name": "CLI alati",
+          "desc": "Odobrite pristup svim omogućenim CLI alatima, ili odaberite pojedinačno ispod",
+          "noTools": "Nema konfiguriranih CLI alata. Dodajte i omogućite alate u Postavke → Alati → CLI."
+        }
+      },
+      "mcp": {
+        "title": "MCP pristup",
+        "noServers": "Nema konfiguriranih MCP poslužitelja. Dodajte poslužitelje u Postavke → MCP za otključavanje opcija.",
+        "toolsCached": "{{count}} alat u predmemoriji",
+        "toolsCached_plural": "{{count}} alata u predmemoriji",
+        "noToolsCached": "Nema alata u predmemoriji. Omogućite puni pristup ili osvježite predmemoriju.",
+        "showTools": "Prikaži alate",
+        "hideTools": "Sakrij alate",
+        "selected": "Odabrano",
+        "notSelected": "Nije odabrano",
+        "noToolsAvailable": "Nema dostupnih alata s ovog poslužitelja."
+      },
+      "notices": {
+        "promptRequired": "Unesite naziv i sadržaj novog sistemskog upita."
+      },
+      "name": {
+        "label": "Naziv",
+        "desc": "Prikazni naziv ovog agenta"
+      },
+      "fixedModel": {
+        "name": "Fiksni model",
+        "desc": "Odaberite određeni model za ovog agenta.",
+        "descNoModels": "Nema dostupnih predmemoriranih modela. Osvježite modele na kartici Modeli."
+      },
+      "temperature": {
+        "label": "Temperatura",
+        "desc": "Kontrolira nasumičnost (0,0 - 2,0)"
+      },
+      "maxTokens": {
+        "label": "Maks. tokeni",
+        "desc": "Maksimalni broj tokena za generiranje"
+      },
+      "contextWindow": {
+        "label": "Kontekstni prozor",
+        "desc": "Broj prethodnih poruka za uključivanje u kontekst"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Omogući RAG"
+      },
+      "webSearch": {
+        "name": "Web pretraživanje",
+        "desc": "Omogući mogućnosti web pretraživanja"
+      },
+      "maxSteps": {
+        "name": "Maks. koraci alata",
+        "desc": "Maksimalni broj koraka poziva alata po potezu agenta"
+      }
+    },
+    "provider": {
+      "title": "Postavke pružatelja",
+      "selectProvider": {
+        "name": "Pružatelj",
+        "desc": "Odaberite vrstu LLM pružatelja",
+        "placeholder": "-- Odaberi pružatelja --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (lokalno)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Prilagođeno (kompatibilno s OpenAI)"
+      },
+      "modelFilter": {
+        "name": "Filter modela",
+        "desc": "Neobavezni regex uzorak za ograničavanje dostupnih modela"
+      },
+      "resourceGroup": {
+        "name": "Grupa resursa",
+        "desc": "Neobavezna SAP AI Core grupa resursa"
+      },
+      "serviceKey": {
+        "name": "Servisni ključ",
+        "desc": "SAP AI Core servisni ključ (JSON niz)"
+      },
+      "baseUrl": {
+        "name": "Osnovni URL",
+        "ollamaDesc": "URL Ollama poslužitelja",
+        "customDesc": "OpenAI-kompatibilna API krajnja točka (obavezno)",
+        "optionalDesc": "Prilagođena API krajnja točka (neobavezno)"
+      },
+      "manageModels": {
+        "name": "Upravljaj modelima",
+        "desc": "Povucite nove modele ili ažurirajte postojeće iz Ollama registra.",
+        "btn": "⏬ Povuci Ollama model"
+      },
+      "apiKey": {
+        "name": "API ključ",
+        "desc": "Ključ za autentifikaciju odabranog pružatelja"
+      },
+      "cancel": "Odustani",
+      "save": "Spremi",
+      "validation": {
+        "selectProvider": "Odaberite vrstu pružatelja",
+        "apiKeyTooLong": "API ključ je predugačak. Maksimalna duljina je 500 znakova.",
+        "invalidUrl": "Nevaljani format osnovnog URL-a. Unesite valjani URL (npr. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP inspektor",
+      "desc": "Inspekcija i otklanjanje pogrešaka veza poslužitelja Model Context Protocol (MCP) i alata.",
+      "tabs": {
+        "connections": "Veze",
+        "tools": "Alati",
+        "logs": "Zapisnici"
+      },
+      "refreshBtn": "🔄 osvježi",
+      "connections": {
+        "title": "MCP veze poslužitelja",
+        "noServers": "Nema konfiguriranih MCP poslužitelja.",
+        "headers": {
+          "server": "Naziv poslužitelja",
+          "status": "Status",
+          "tools": "Dostupni alati",
+          "actions": "Radnje"
+        },
+        "statusDisabled": "Onemogućeno",
+        "statusConnected": "● spojeno",
+        "statusDisconnected": "○ odspojeno",
+        "toolsLive": "{{count}} alat",
+        "toolsLive_plural": "{{count}} alata",
+        "toolsCached": "{{count}} alat (u predmemoriji)",
+        "toolsCached_plural": "{{count}} alata (u predmemoriji)",
+        "noTools": "0 alata",
+        "connectBtn": "Spoji",
+        "disconnectBtn": "Odspoji",
+        "connecting": "Spajanje...",
+        "disconnecting": "Odspajanje...",
+        "notices": {
+          "disconnected": "Odspojeno od {{name}}",
+          "enableFirst": "Omogućite poslužitelj u postavkama prije spajanja",
+          "connected": "Spojeno na {{name}}",
+          "failedDisconnect": "Odspajanje od {{name}} nije uspjelo: {{message}}",
+          "failedConnect": "Spajanje na {{name}} nije uspjelo: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Dostupni MCP alati",
+        "noTools": "Nema dostupnih MCP alata. Provjerite veze poslužitelja.",
+        "serverPrefix": "Poslužitelj: {{name}}",
+        "noToolsInServer": "Nema dostupnih alata",
+        "headers": {
+          "tool": "Naziv alata",
+          "description": "Opis",
+          "parameters": "Parametri"
+        },
+        "noDescription": "Nema opisa",
+        "noParams": "Nema"
+      },
+      "logs": {
+        "title": "MCP zapisnici veza",
+        "placeholder": "Ovdje će se prikazati MCP zapisnici veza. Trenutno se prikazuju rezervne informacije.",
+        "events": {
+          "connection": "• događaji spajanja",
+          "tools": "• događaji registracije alata",
+          "errors": "• zapisnici pogrešaka",
+          "comms": "• detalji komunikacije"
+        },
+        "testTitle": "Testiraj izvršavanje alata",
+        "selectServer": "Odaberi poslužitelj...",
+        "selectTool": "Odaberi alat...",
+        "parametersTitle": "Parametri",
+        "selectEnum": "Odaberi...",
+        "performBtn": "Izvrši alat",
+        "clearBtn": "Obriši rezultate",
+        "executing": "Izvršavanje...",
+        "success": "✅ izvršavanje uspješno",
+        "failed": "❌ izvršavanje neuspješno",
+        "errorTitle": "❌ pogreška izvršavanja",
+        "errorLabel": "Pogreška: {{message}}",
+        "notices": {
+          "success": "Alat uspješno izvršen",
+          "failed": "Izvršavanje alata nije uspjelo",
+          "error": "Pogreška izvršavanja: {{message}}",
+          "requiredMissing": "Nedostaje obavezni parametar: {{name}}",
+          "invalidNumber": "Nevaljani broj za parametar: {{name}}",
+          "invalidJson": "Nevaljani JSON za parametar: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Nema konfiguriranih MCP poslužitelja",
+        "testing": "🧪 Testiranje {{count}} MCP veza poslužitelja...",
+        "allSuccess": "✅ svih {{count}} mcp poslužitelja uspješno spojeno!",
+        "partial": "⚠️ {{success}} spojeno, {{failed}} neuspješno"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Uredi MCP poslužitelj",
+      "titleAdd": "Dodaj MCP poslužitelj",
+      "serverName": {
+        "name": "Naziv poslužitelja",
+        "desc": "Prijazni naziv prikazan u dodatku"
+      },
+      "connectionMode": {
+        "name": "Način spajanja",
+        "desc": "Odaberite spojiti automatski ili samo ručno",
+        "auto": "Automatski spoji pri otvaranju razgovora",
+        "manual": "Ručno spajanje"
+      },
+      "command": {
+        "name": "Naredba",
+        "desc": "Izvršna datoteka ili skripta koja pokreće MCP poslužitelj"
+      },
+      "arguments": {
+        "name": "Argumenti",
+        "desc": "Argumenti odvojeni zarezom ili novim retkom (neobavezno)"
+      },
+      "envVars": {
+        "name": "Varijable okruženja",
+        "desc": "Neobavezni parovi KLJUČ=vrijednost, jedan u retku"
+      },
+      "enabled": {
+        "name": "Omogućeno",
+        "desc": "Onemogući za zadržavanje konfiguriranog poslužitelja bez automatskog spajanja"
+      },
+      "cancel": "Odustani",
+      "saveEdit": "Spremi promjene",
+      "saveAdd": "Dodaj poslužitelj",
+      "validation": {
+        "nameRequired": "Naziv poslužitelja je obavezan",
+        "commandRequired": "Naredba je obavezna"
+      }
+    },
+    "ollamaManager": {
+      "title": "Upravljaj Ollama modelima",
+      "serverInfo": "Informacije o poslužitelju",
+      "checkingServer": "Provjeravam poslužitelj...",
+      "serverOnline": "✅ Poslužitelj online",
+      "versionLabel": " | Verzija: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Poslužitelj offline",
+      "connectionError": "❌ Pogreška veze",
+      "pullTitle": "Povuci novi model",
+      "pullHint": "Unesite naziv modela za preuzimanje iz Ollama biblioteke (npr. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Naziv modela",
+        "example": "Primjer: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Povuci model",
+      "installedTitle": "Instalirani modeli",
+      "refreshList": "🔄 Osvježi popis",
+      "noModels": "Nema modela. Povucite model za početak.",
+      "capabilities": "Mogućnosti: {{caps}}",
+      "deleteBtn": "Obriši",
+      "closeBtn": "Zatvori",
+      "confirmDelete": {
+        "title": "Potvrdi brisanje",
+        "message": "Jeste li sigurni da želite obrisati model „{{name}}“?",
+        "cancel": "Odustani",
+        "confirm": "Obriši"
+      },
+      "notices": {
+        "enterName": "Unesite naziv modela",
+        "pulling": "Povlačim {{name}}... Ovo može potrajati.",
+        "pullSuccess": "✅ Uspješno povučen {{name}}",
+        "pullFailed": "❌ Povlačenje modela nije uspjelo: {{message}}",
+        "deleted": "✅ Obrisan {{name}}",
+        "deleteFailed": "❌ Brisanje modela nije uspjelo: {{message}}",
+        "refreshing": "Osvježavanje...",
+        "refreshSuccess": "✅ Popis modela osvježen",
+        "refreshFailed": "❌ Osvježavanje popisa modela nije uspjelo"
+      }
+    },
+    "promptEdit": {
+      "title": "Uredi sistemski upit",
+      "name": {
+        "name": "Naziv",
+        "desc": "Prikazni naziv ovog upita"
+      },
+      "content": {
+        "name": "Sadržaj",
+        "desc": "Sadržaj sistemskog upita"
+      },
+      "enabled": {
+        "name": "Omogućeno",
+        "desc": "Je li ovaj upit aktivan"
+      },
+      "cancel": "Odustani",
+      "save": "Spremi"
+    },
+    "prompt": {
+      "cancel": "Odustani",
+      "ok": "U redu"
+    },
+    "textInput": {
+      "nameLabel": "Naziv",
+      "create": "Stvori",
+      "cancel": "Odustani"
+    },
+    "explain": {
+      "loading": "⏳ Obrađujem...",
+      "error": "Pogreška pri prikazu objašnjenja",
+      "errorPrefix": "❌ Pogreška: "
+    }
+  },
+  "notices": {
+    "noProvider": "Najprije konfigurirajte LLM pružatelja u postavkama",
+    "noModel": "Odaberite zadani model u postavkama",
+    "noValidProvider": "Za model nije pronađena valjana konfiguracija pružatelja: {{modelId}}",
+    "processing": "Obrađujem...",
+    "textUpdated": "Tekst uspješno ažuriran",
+    "error": "Pogreška: {{message}}"
+  }
+}

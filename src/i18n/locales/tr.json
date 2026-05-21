@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Genel",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Araçlar",
+      "rag": "RAG",
+      "prompts": "İstemler",
+      "agents": "Ajanlar",
+      "quickActions": "Hızlı Eylemler",
+      "usage": "Kullanım"
+    },
+    "general": {
+      "title": "Genel ayarlar",
+      "desc": "Zeka asistanı eklentisi için genel ayarları yapılandırın.",
+      "pluginVersion": {
+        "name": "Eklenti sürümü",
+        "desc": "Zeka asistanı eklentisinin mevcut sürümü"
+      },
+      "defaultModel": {
+        "name": "Varsayılan model",
+        "desc": "Konuşmalar için kullanılacak varsayılan model",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Varsayılan sohbet modu",
+        "desc": "Sohbet görünümünün hangi modda açılacağını seçin",
+        "chat": "Sohbet modu",
+        "agent": "Ajan modu"
+      },
+      "conversationTitleMode": {
+        "name": "Konuşma başlığı modu",
+        "desc": "Konuşma başlıklarının nasıl oluşturulacağı",
+        "firstMessage": "İlk mesajı kullan",
+        "autoSummary": "Otomatik özet oluştur",
+        "manual": "Manuel"
+      },
+      "conversationIcons": {
+        "name": "Konuşma simgeleri",
+        "desc": "Konuşmalar için otomatik simge oluşturmayı etkinleştir"
+      },
+      "configStatus": {
+        "name": "Yapılandırma durumu",
+        "desc": "Genel eklenti yapılandırma durumu",
+        "ok": "✅ Yapılandırıldı ({{providers}} sağlayıcı, {{conversations}} konuşma)",
+        "incomplete": "⚠️ Eksik - Lütfen sağlayıcıları ve modelleri yapılandırın"
+      }
+    },
+    "llm": {
+      "title": "LLM yapılandırması",
+      "desc": "Dil modeli sağlayıcılarını yapılandırın ve mevcut modelleri yönetin.",
+      "subTabs": {
+        "provider": "Sağlayıcılar",
+        "models": "Modeller"
+      }
+    },
+    "models": {
+      "title": "Model yapılandırması",
+      "desc": "Tüm yapılandırılmış sağlayıcıların modellerini görüntüleyin ve yönetin. En son kullanılabilir modelleri almak için \"modelleri yenile\" seçeneğine tıklayın.",
+      "providerCount": "{{count}} sağlayıcı yapılandırıldı",
+      "providerCount_plural": "{{count}} sağlayıcı yapılandırıldı",
+      "refreshAll": "🔄 tüm modelleri yenile",
+      "empty": "Henüz sağlayıcı yapılandırılmadı. Önce sağlayıcı sekmesinde sağlayıcı ekleyin.",
+      "noModels": "Kullanılabilir model yok. \"Tüm modelleri yenile\" seçeneğine tıklayın veya sağlayıcı sekmesindeki sağlayıcıları tek tek yenileyin.",
+      "noMatch": "Mevcut filtrelerle eşleşen model yok. Sonuçları görmek için filtreleri ayarlayın veya temizleyin.",
+      "modelCount": "• {{count}} model önbellekte",
+      "modelCount_plural": "• {{count}} model önbellekte",
+      "matchCount": "• {{count}} seçili filtrelerle eşleşiyor",
+      "matchCount_plural": "• {{count}} seçili filtrelerle eşleşiyor",
+      "status": {
+        "enabled": "Etkin",
+        "disabled": "Devre dışı"
+      },
+      "actions": {
+        "disable": "Devre dışı bırak",
+        "enable": "Etkinleştir",
+        "setDefaultChat": "Varsayılan Sohbet Olarak Ayarla",
+        "defaultChat": "Varsayılan Sohbet",
+        "setDefaultEmbedding": "Varsayılan Gömme Olarak Ayarla",
+        "defaultEmbedding": "Varsayılan Gömme"
+      },
+      "notices": {
+        "fetching": "{{provider}} için modeller alınıyor...",
+        "fetchFailed": "{{provider}} modelleri yenilenemedi",
+        "refreshed": "Modeller başarıyla yenilendi!",
+        "refreshFailed": "Modeller yenilenemedi",
+        "defaultChatSet": "Varsayılan sohbet modeli {{name}} olarak ayarlandı",
+        "defaultEmbeddingSet": "Varsayılan gömme modeli {{name}} olarak ayarlandı"
+      },
+      "filters": {
+        "allProviders": "Tüm sağlayıcılar",
+        "allCapabilities": "Tüm özellikler",
+        "allStates": "Tüm durumlar",
+        "searchPlaceholder": "İsim veya ID ile ara"
+      }
+    },
+    "provider": {
+      "title": "Sağlayıcı yapılandırması",
+      "securityTitle": "⚠️ Güvenlik Uyarısı",
+      "securityDesc": "API anahtarları uyumluluk için vault'unuzda düz metin olarak saklanır. Kazara sızıntıları önlemek için:",
+      "securityItem1": "{{configDir}}/plugins/intelligence-assistant/data/ klasörünüzü PAYLAŞMAYIN.",
+      "securityItem2": "Git senkronizasyonu kullanıyorsanız bu klasörü .gitignore dosyanıza ekleyin.",
+      "securityItem3": "Genel bulut senkronizasyon hizmetlerini kullanırken dikkatli olun.",
+      "desc": "LLM sağlayıcılarını ve API kimlik bilgilerini yönetin. Yapılandırma ayrıntılarını düzenlemek veya önbellekteki modelleri yenilemek için eylemler sütununu kullanın.",
+      "count": "{{count}} sağlayıcı yapılandırıldı",
+      "count_plural": "{{count}} sağlayıcı yapılandırıldı",
+      "addBtn": "+ Sağlayıcı ekle",
+      "empty": "Sağlayıcı yapılandırılmadı. Başlamak için \"Sağlayıcı ekle\" seçeneğini seçin.",
+      "tableHeaders": {
+        "provider": "Sağlayıcı",
+        "status": "Durum",
+        "actions": "Eylemler"
+      },
+      "status": {
+        "ready": "Hazır",
+        "needsConfig": "Yapılandırma Gerekiyor",
+        "checking": "Kontrol ediliyor...",
+        "credentialsSet": "Kimlik Bilgileri Ayarlandı",
+        "serverOnline": "Sunucu çevrimiçi",
+        "serverOffline": "Sunucu çevrimdışı",
+        "serverError": "Sunucu hatası"
+      },
+      "guidance": {
+        "requiresCli": "Yerel CLI gerektirir",
+        "provideServiceKey": "Hizmet anahtarı sağlayın",
+        "configureBaseUrl": "Temel URL'yi yapılandırın",
+        "addApiKey": "API anahtarı ekleyin"
+      },
+      "models": {
+        "none": "Model yok",
+        "count": "{{count}} model",
+        "count_plural": "{{count}} model"
+      },
+      "ollama": {
+        "checkingVersion": "Sürüm kontrol ediliyor...",
+        "server": {
+          "checking": "Sunucu kontrol ediliyor...",
+          "online": "Sunucu: çevrimiçi",
+          "offline": "Sunucu: çevrimdışı veya erişilemiyor",
+          "error": "Sunucu: bağlantı hatası",
+          "versionOnline": "Sunucu çevrimiçi",
+          "versionOffline": "Sunucu çevrimdışı",
+          "versionError": "Bağlantı hatası",
+          "version": "Sürüm: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Son yenileme: {{timeAgo}}",
+        "neverRefreshed": "Hiç yenilenmedi",
+        "justNow": "şimdi",
+        "minutesAgo": "{{n}} dk önce",
+        "hoursAgo": "{{n}} sa önce",
+        "daysAgo": "{{n}} gün önce"
+      },
+      "actions": {
+        "edit": "Düzenle",
+        "manageModels": "Modelleri yönet",
+        "refreshModels": "Modelleri yenile",
+        "refreshing": "Yenileniyor...",
+        "delete": "Sil"
+      },
+      "notices": {
+        "refreshed": "{{provider}} için modeller yenilendi.",
+        "refreshFailed": "Modeller yenilenemedi"
+      },
+      "confirm": {
+        "delete": "{{provider}} sağlayıcısı kaldırılsın mı?"
+      }
+    },
+    "mcp": {
+      "title": "MCP sunucu yönetimi",
+      "desc": "Harici araçlar ve veri kaynaklarıyla ajan yeteneklerini genişletmek için Model Context Protocol (MCP) sunucularını yapılandırın.",
+      "inspectorBtn": "🔍 MCP denetçisini aç",
+      "testAllBtn": "🧪 tüm bağlantıları test et",
+      "refreshAllBtn": "🔄 tüm araçları yenile",
+      "addBtn": "+ MCP sunucusu ekle",
+      "empty": "MCP sunucusu yapılandırılmadı. Başlamak için MCP sunucusu ekle seçeneğini seçin.",
+      "tableHeaders": {
+        "name": "İsim",
+        "command": "Komut",
+        "arguments": "Argümanlar",
+        "status": "Durum",
+        "tools": "Araçlar",
+        "actions": "Eylemler"
+      },
+      "untitled": "İsimsiz MCP Sunucusu",
+      "notConfigured": "Yapılandırılmadı",
+      "noArgs": "Yok",
+      "cached": "Önbellekte",
+      "disabled": "Devre dışı",
+      "envVars": "{{count}} ortam değişkeni",
+      "envVars_plural": "{{count}} ortam değişkeni",
+      "status": {
+        "disabled": "Devre dışı",
+        "connected": "bağlı",
+        "disconnected": "bağlantısız",
+        "enableToManage": "Bağlantıları yönetmek için etkinleştirin",
+        "manualConnect": "Manuel bağlan",
+        "autoConnect": "Otomatik bağlan"
+      },
+      "toolCount": {
+        "live": "{{count}} canlı araç",
+        "live_plural": "{{count}} canlı araç",
+        "cached": "{{count}} önbellekteki araç",
+        "cached_plural": "{{count}} önbellekteki araç"
+      },
+      "actions": {
+        "edit": "Düzenle",
+        "enabled": "✓ Etkin",
+        "enabledOff": "✗ Devre dışı",
+        "connect": "bağlan",
+        "disconnect": "bağlantıyı kes",
+        "connecting": "Bağlanıyor...",
+        "disconnecting": "Bağlantı kesiliyor...",
+        "test": "Test et",
+        "testing": "Test ediliyor...",
+        "delete": "Sil"
+      },
+      "notices": {
+        "disconnected": "{{name}} bağlantısı kesildi",
+        "connected": "{{name}} ile bağlantı kuruldu",
+        "autoConnectFailed": "{{name}} otomatik bağlantısı başarısız oldu",
+        "enableFirst": "Bağlanmadan önce sunucuyu etkinleştirin",
+        "disconnectFailed": "{{name}} bağlantısı kesilemedi",
+        "connectFailed": "{{name}} ile bağlantı kurulamadı",
+        "testNoCommand": "❌ bağlantıyı test etmeden önce lütfen bir komut girin",
+        "testSuccess": "✅ başarıyla bağlanıldı! {{count}} araç bulundu.",
+        "testFailed": "❌ Bağlantı başarısız: {{message}}",
+        "refreshedAll": "✅ {{count}} sunucu için araçlar yenilendi",
+        "refreshedAll_plural": "✅ {{count}} sunucu için araçlar yenilendi",
+        "refreshedPartial": "✅ {{success}} sunucu yenilendi, ❌ {{failed}} başarısız",
+        "noServersConfigured": "⚠️ MCP sunucusu yapılandırılmadı",
+        "testingAll": "🧪 {{count}} MCP sunucu bağlantısı test ediliyor...",
+        "testAllSuccess": "✅ tüm {{count}} mcp sunucusu başarıyla bağlandı!",
+        "testAllPartial": "⚠️ {{successful}} bağlandı, {{failed}} başarısız"
+      },
+      "confirm": {
+        "delete": "\"{{name}}\" MCP sunucusu silinsin mi?"
+      }
+    },
+    "agents": {
+      "title": "Ajan yönetimi",
+      "desc": "Belirli yeteneklere, araçlara ve davranışlara sahip AI ajanları oluşturun ve yönetin.",
+      "count": "{{count}} ajan yapılandırıldı",
+      "count_plural": "{{count}} ajan yapılandırıldı",
+      "addBtn": "+ ajan ekle",
+      "empty": "Ajan yapılandırılmadı. Başlamak için ajan ekle seçeneğini seçin.",
+      "tableHeaders": {
+        "agent": "Ajan",
+        "model": "Model",
+        "capabilities": "Özellikler",
+        "tools": "Araçlar",
+        "actions": "Eylemler"
+      },
+      "defaultBadge": "Varsayılan",
+      "systemPrompt": "Sistem istemi • {{promptName}}",
+      "customPrompt": "Özel istem",
+      "model": {
+        "notSet": "Ayarlanmadı",
+        "notFound": "Model önbellekte bulunamadı",
+        "useChatView": "Sohbet Görünümü Modelini Kullan",
+        "useChatViewDesc": "Sohbet görünümünde seçilen modeli kullanır",
+        "useDefault": "Varsayılan Modeli Kullan",
+        "useDefaultDesc": "Ayarlardaki varsayılan modeli kullanır"
+      },
+      "capabilities": {
+        "noSpecialModes": "Özel mod yok"
+      },
+      "tools": {
+        "builtIn": "{{count}} yerleşik",
+        "mcpServer": "{{count}} mcp sunucusu",
+        "mcpServer_plural": "{{count}} mcp sunucusu",
+        "mcpTool": "{{count}} mcp aracı",
+        "mcpTool_plural": "{{count}} mcp aracı",
+        "noTools": "Araç etkinleştirilmedi"
+      },
+      "actions": {
+        "edit": "Düzenle",
+        "delete": "sil",
+        "protected": "korumalı"
+      },
+      "confirm": {
+        "delete": "\"{{name}}\" ajanı silinsin mi?"
+      }
+    },
+    "prompts": {
+      "title": "Sistem istemleri",
+      "desc": "AI asistanınızın davranışını ve kişiliğini tanımlayan sistem istemlerini yönetin.",
+      "addBtn": "+ sistem istemi ekle",
+      "empty": "Sistem istemi yapılandırılmadı. Başlamak için sistem istemi ekle seçeneğini seçin.",
+      "tableHeaders": {
+        "name": "İsim",
+        "contentPreview": "İçerik Önizlemesi",
+        "created": "Oluşturuldu",
+        "updated": "Güncellendi",
+        "enabled": "Etkin",
+        "actions": "Eylemler"
+      },
+      "status": {
+        "enabled": "Etkin",
+        "disabled": "Devre dışı"
+      },
+      "actions": {
+        "edit": "Düzenle",
+        "disable": "Devre dışı bırak",
+        "enable": "Etkinleştir",
+        "delete": "Sil"
+      },
+      "confirm": {
+        "delete": "\"{{name}}\" istemi silinsin mi?"
+      }
+    },
+    "tools": {
+      "title": "Araç yapılandırması",
+      "desc": "Yerleşik araçları inceleyin ve bağlı sunuculardan yüklenen MCP araçlarını keşfedin. Ajanlarınızın gerçekleştirebileceği eylemleri etkinleştirin.",
+      "subTabs": {
+        "builtIn": "Yerleşik Araçlar",
+        "mcp": "MCP araçları",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI Araçları"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "İsim",
+          "category": "Kategori",
+          "description": "Açıklama",
+          "parameters": "Parametreler",
+          "enabled": "Etkin"
+        },
+        "categories": {
+          "fileOps": "Dosya İşlemleri",
+          "searchDisc": "Arama ve Keşif",
+          "noteMgmt": "Not Yönetimi"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Vault'unuzdaki bir dosyanın içeriğini okuyun",
+            "params": "path (gerekli): Okunacak dosyanın yolu"
+          },
+          "writeFile": {
+            "desc": "Vault'unuzdaki bir dosyayı yazın veya güncelleyin",
+            "params": "path (gerekli), content (gerekli): Dosya yolu ve yazılacak içerik"
+          },
+          "listFiles": {
+            "desc": "Vault veya belirli bir klasördeki dosyaları listeleyin",
+            "params": "folder (isteğe bağlı), extension (isteğe bağlı): Klasör ve dosya uzantısına göre filtrele"
+          },
+          "searchFiles": {
+            "desc": "Vault'unuzda dosyaları isme veya içeriğe göre arayın",
+            "params": "query (gerekli), search_content (isteğe bağlı), limit (isteğe bağlı): Arama sorgusu ve seçenekleri"
+          },
+          "createNote": {
+            "desc": "Belirtilen içerikle yeni bir not oluşturun",
+            "params": "title (gerekli), content (gerekli), folder (isteğe bağlı): Not başlığı, içeriği ve konumu"
+          },
+          "appendNote": {
+            "desc": "Mevcut bir nota içerik ekleyin",
+            "params": "path (gerekli), content (gerekli): Not yolu ve eklenecek içerik"
+          }
+        },
+        "infoTitle": "💡 araçlar hakkında",
+        "infoText": "Yerleşik araçlar eklenti ayarları başına yapılandırılır. MCP araçları bağımsız olarak yönetilir—sunucuları bağlamak ve araç kullanılabilirliğini yenilemek için MCP sekmesini kullanın.",
+        "toolNames": {
+          "read_file": "Dosya Oku",
+          "write_file": "Dosya Yaz",
+          "list_files": "Dosyaları Listele",
+          "search_files": "Dosya Ara",
+          "create_note": "Not Oluştur",
+          "append_note": "Nota Ekle"
+        }
+      },
+      "mcpTools": {
+        "noTools": "MCP aracı mevcut değil. Bu listeyi doldurmak için bir sunucu bağlayın veya önbellekteki araçları yenileyin.",
+        "tableHeaders": {
+          "server": "Sunucu",
+          "tool": "Araç",
+          "description": "Açıklama",
+          "parameters": "Parametreler",
+          "source": "Kaynak"
+        },
+        "noDescription": "Açıklama yok",
+        "schemaUnavailable": "Şema mevcut değil",
+        "live": "Canlı",
+        "cached": "Önbellekte",
+        "status": {
+          "connected": "bağlı",
+          "disconnected": "bağlantısız"
+        }
+      },
+      "openapi": {
+        "desc": "OpenAPI belgelerinden HTTP araçları oluşturun. Uzak özellikler {{cacheDir}} altında önbelleğe alınır.",
+        "addBtn": "HTTP kaynağı ekle",
+        "noSources": "Henüz HTTP kaynağı yapılandırılmadı.",
+        "unnamed": "İsimsiz HTTP kaynağı",
+        "tableHeaders": {
+          "name": "İsim",
+          "source": "Kaynak",
+          "auth": "Kimlik doğrulama",
+          "status": "Durum",
+          "actions": "Eylemler"
+        },
+        "sourceUrl": "Uzak URL ayarlanmadı",
+        "sourcePath": "Dosya yolu ayarlanmadı",
+        "authHeader": "Başlık ({{key}})",
+        "authQuery": "Sorgu ({{key}})",
+        "authNone": "Yok",
+        "statusEnabled": "Etkin",
+        "statusDisabled": "Devre dışı",
+        "actions": {
+          "edit": "Düzenle",
+          "reload": "Yeniden yükle",
+          "refetch": "Yeniden getir",
+          "delete": "Sil"
+        },
+        "notices": {
+          "removed": "HTTP kaynağı kaldırıldı",
+          "reloaded": "{{count}} işlem yeniden yüklendi",
+          "reloadFailed": "HTTP kaynağı yeniden yüklenemedi. Ayrıntılar için konsolu kontrol edin."
+        },
+        "modal": {
+          "defaultTitle": "HTTP Kaynağı",
+          "displayName": {
+            "name": "Görünen ad",
+            "desc": "Bir araç kaynağı seçerken ajanlara gösterilir"
+          },
+          "enabled": {
+            "name": "Etkin",
+            "desc": "Bu HTTP API'yi her ajana açmak için etkinleştirin"
+          },
+          "sourceType": {
+            "name": "Kaynak türü",
+            "file": "Yerel dosya",
+            "url": "Uzak URL"
+          },
+          "specUrl": {
+            "name": "OpenAPI URL",
+            "desc": "Eklenti veri dizininde getirilir ve önbelleğe alınır"
+          },
+          "cachedFile": "Önbellekteki dosya: {{path}} ({{date}})",
+          "neverFetched": "Hiç getirilmedi",
+          "specPath": {
+            "name": "OpenAPI dosya yolu",
+            "desc": "Vault içindeki göreli yol veya mutlak yol"
+          },
+          "baseUrl": {
+            "name": "Temel URL geçersiz kılma",
+            "desc": "Belgedeki ilk sunucu girişini geçersiz kılar (isteğe bağlı)"
+          },
+          "auth": {
+            "name": "Kimlik doğrulama",
+            "desc": "Bu kaynağı çağırırken API anahtarlarını otomatik olarak ekle",
+            "none": "Yok",
+            "header": "HTTP başlığı",
+            "query": "Sorgu parametresi"
+          },
+          "credKey": {
+            "name": "Kimlik bilgisi anahtarı"
+          },
+          "credValue": {
+            "name": "Kimlik bilgisi değeri"
+          },
+          "actions": {
+            "name": "Eylemler",
+            "reloadTools": "Araçları yeniden yükle",
+            "refetchTooltip": "URL'den özelliği yeniden getir",
+            "deleteTooltip": "Kaynağı sil"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Ajanların çalıştırabileceği yerel komut satırı araçlarını tanımlayın. Dinamik argümanlar için {{param}} gibi şablonlar kullanın.",
+        "addBtn": "CLI Aracı Ekle",
+        "presetsBtn": "Ön Ayarlardan Ekle",
+        "noTools": "Henüz CLI aracı yapılandırılmadı.",
+        "tableHeaders": {
+          "name": "İsim",
+          "command": "Komut",
+          "parameters": "Parametreler",
+          "status": "Durum",
+          "actions": "Eylemler"
+        },
+        "unnamed": "İsimsiz CLI Aracı",
+        "paramCount": "{{count}} parametre",
+        "paramCount_plural": "{{count}} parametre",
+        "noParams": "Yok",
+        "statusEnabled": "Etkin",
+        "statusDisabled": "Devre dışı",
+        "actions": {
+          "edit": "Düzenle",
+          "disable": "Devre dışı bırak",
+          "enable": "Etkinleştir",
+          "delete": "Sil"
+        },
+        "notices": {
+          "removed": "CLI aracı kaldırıldı"
+        },
+        "infoTitle": "💡 CLI Araçları Hakkında",
+        "infoText": "CLI araçları kabuk komutlarını yerel olarak çalıştırır. Şablon ikamesi için argümanlarda {{paramName}} kullanın veya parametreleri argüman ya da ortam değişkeni olarak geçirecek şekilde yapılandırın.",
+        "modal": {
+          "defaultTitle": "CLI Aracı",
+          "toolName": {
+            "name": "Araç adı",
+            "desc": "Ajanların bu aracı çağırmak için kullandığı tanımlayıcı"
+          },
+          "description": {
+            "name": "Açıklama",
+            "desc": "Bu aracın ne yaptığını AI için açıklayın"
+          },
+          "enabled": {
+            "name": "Etkin",
+            "desc": "Ajanların bu aracı kullanmasına izin vermek için etkinleştirin"
+          },
+          "commandConfig": "Komut Yapılandırması",
+          "command": {
+            "name": "Komut",
+            "desc": "Çalıştırılacak program (örn. node, python, bash, /yol/betik)"
+          },
+          "args": {
+            "name": "Argümanlar",
+            "desc": "Komut argümanları, satır başına bir tane. Şablon ikamesi için {{paramName}} kullanın."
+          },
+          "cwd": {
+            "name": "Çalışma dizini",
+            "desc": "Komutun çalıştırılacağı dizin (isteğe bağlı)"
+          },
+          "timeout": {
+            "name": "Zaman aşımı (ms)",
+            "desc": "Milisaniye cinsinden maksimum yürütme süresi (varsayılan: {{timeout}})"
+          },
+          "shell": {
+            "name": "Kabukta çalıştır",
+            "desc": "Komutu bir kabuk aracılığıyla çalıştır (boru hatları gibi kabuk özelliklerini etkinleştirir)"
+          },
+          "paramsTitle": "Parametreler",
+          "paramsDesc": "AI'ın bu araca geçirebileceği parametreleri tanımlayın.",
+          "addParam": "Parametre Ekle",
+          "noParams": "Parametre tanımlanmadı.",
+          "paramN": "Parametre {{n}}",
+          "param": {
+            "name": "İsim",
+            "type": {
+              "name": "Tür",
+              "string": "Metin",
+              "number": "Sayı",
+              "boolean": "Mantıksal"
+            },
+            "description": "Açıklama",
+            "required": "Gerekli",
+            "insertAs": {
+              "name": "Şu şekilde ekle",
+              "desc": "Bu parametrenin komuta nasıl geçirileceği",
+              "template": "Şablon ({{name}})",
+              "arg": "Argüman olarak ekle",
+              "env": "Ortam değişkeni"
+            },
+            "envName": {
+              "name": "Ortam değişkeni adı",
+              "desc": "Ortam değişkeni adını geçersiz kıl (varsayılan: büyük harfli parametre adı)"
+            }
+          },
+          "envTitle": "Ortam Değişkenleri",
+          "envDesc": "Komutu çalıştırırken ayarlanacak statik ortam değişkenleri.",
+          "envVars": {
+            "name": "Ortam değişkenleri",
+            "desc": "Biçim: ANAHTAR=değer, satır başına bir tane"
+          }
+        },
+        "presets": {
+          "title": "Ön ayarlardan CLI aracı ekle",
+          "desc": "Önceden yapılandırılmış bir CLI aracı hızla eklemek için bir ön ayar seçin. Ekledikten sonra özelleştirebilirsiniz.",
+          "addBtn": "Ekle",
+          "addedBtn": "Eklendi",
+          "closeBtn": "Kapat",
+          "notices": {
+            "added": "\"{{name}}\" eklendi - CLI araçları listesinde etkinleştirin"
+          },
+          "categories": {
+            "file": "Dosya İşlemleri",
+            "search": "Arama",
+            "network": "Ağ",
+            "code": "Kod Yürütme",
+            "data": "Veri İşleme",
+            "system": "Sistem Bilgisi",
+            "apps": "macOS Uygulamaları ve Masaüstü"
+          },
+          "names": {
+            "preset-cat": "Dosya Oku (cat)",
+            "preset-ls": "Dizini Listele (ls)",
+            "preset-find": "Dosya Bul (find)",
+            "preset-grep": "Metin Ara (grep)",
+            "preset-ripgrep": "Hızlı Arama (rg)",
+            "preset-curl": "HTTP İsteği (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Python Kodu Çalıştır",
+            "preset-node": "JavaScript Çalıştır (Node)",
+            "preset-bash": "Kabuk Betiği Çalıştır",
+            "preset-jq": "JSON İşlemcisi (jq)",
+            "preset-wc": "Kelime Sayımı (wc)",
+            "preset-date": "Mevcut Tarih/Saat",
+            "preset-pwd": "Mevcut Dizin (pwd)",
+            "preset-whoami": "Mevcut Kullanıcı",
+            "preset-uname": "Sistem Bilgisi (uname)",
+            "preset-open": "Dosya/URL Aç (open)",
+            "preset-open-app": "Uygulama Başlat (open -a)",
+            "preset-safari": "Safari'de Aç",
+            "preset-chrome": "Chrome'da Aç",
+            "preset-firefox": "Firefox'ta Aç",
+            "preset-pbcopy": "Panoya Kopyala",
+            "preset-pbpaste": "Panodan Yapıştır",
+            "preset-say": "Metinden Konuşmaya (say)",
+            "preset-osascript": "AppleScript Çalıştırıcı",
+            "preset-notify": "Masaüstü Bildirimi",
+            "preset-screencapture": "Ekran Görüntüsü",
+            "preset-applescript-list-apps": "Çalışan Uygulamaları Listele"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG yapılandırması",
+      "desc": "AI yanıtlarını geliştirmek için geri alma artırımlı oluşturma ve web aramayı yapılandırın.",
+      "subTabs": {
+        "overview": "Genel Bakış",
+        "chunking": "Parçalama",
+        "search": "Arama",
+        "filters": "Filtreler",
+        "advanced": "Gelişmiş",
+        "websearch": "Web Araması"
+      },
+      "general": {
+        "title": "Genel ayarlar",
+        "enableRag": {
+          "name": "RAG'ı Etkinleştir",
+          "desc": "Geliştirilmiş bağlam için Geri Alma Artırımlı Oluşturma'yı etkinleştirin"
+        },
+        "vectorStore": {
+          "name": "Vektör deposu",
+          "desc": "Gömmeleri depolamak için vektör veritabanı",
+          "memory": "Bellek İçi",
+          "disk": "Disk Tabanlı"
+        },
+        "embeddingModel": {
+          "name": "Gömme modeli",
+          "desc": "Gömme oluşturmak için kullanılacak model"
+        },
+        "embedChanged": {
+          "name": "Değiştirilen dosyaları otomatik göm",
+          "desc": "Dosyalar değiştirildiğinde otomatik olarak yeniden göm"
+        }
+      },
+      "indexMgmt": {
+        "title": "Dizin yönetimi",
+        "desc": "RAG dizininizi yönetin ve dizinlenmiş içerik hakkında istatistikleri görüntüleyin.",
+        "statsTitle": "Dizin istatistikleri",
+        "stats": {
+          "totalChunks": "Toplam Parça",
+          "uniqueFiles": "Benzersiz Dosyalar",
+          "totalChars": "Toplam Karakter",
+          "avgChunkSize": "Ort. Parça Boyutu"
+        },
+        "empty": "Dizin boş. Dizinlemeyi başlatmak için dizini yeniden oluştur seçeneğini seçin.",
+        "error": "⚠️ dizin istatistikleri yüklenemiyor",
+        "rebuild": {
+          "name": "Dizini yeniden oluştur",
+          "desc": "Vault'unuzdaki tüm dosyaları yeniden dizinleyin. Bu biraz zaman alabilir.",
+          "btn": "Yeniden oluştur",
+          "rebuilding": "Yeniden oluşturuluyor..."
+        },
+        "refresh": {
+          "name": "Dizini yenile",
+          "desc": "Dizini son dizinlemeden bu yana değiştirilen dosyalarla güncelleyin.",
+          "btn": "Yenile",
+          "refreshing": "Yenileniyor..."
+        },
+        "clear": {
+          "name": "Dizini temizle",
+          "desc": "Tüm dizinlenmiş verileri kaldırın. Dizini yeniden oluşturmanız gerekecek.",
+          "btn": "Temizle",
+          "clearing": "Temizleniyor..."
+        },
+        "notices": {
+          "rebuilt": "Dizin başarıyla yeniden oluşturuldu",
+          "rebuildFailed": "Dizin yeniden oluşturulamadı",
+          "refreshed": "Dizin başarıyla yenilendi",
+          "refreshFailed": "Dizin yenilenemedi",
+          "cleared": "Dizin başarıyla temizlendi",
+          "clearFailed": "Dizin temizlenemedi"
+        }
+      },
+      "chunking": {
+        "title": "Parçalama ayarları",
+        "strategy": {
+          "name": "Parçalama stratejisi",
+          "desc": "Belgeleri parçalara bölme stratejisi",
+          "recursive": "Özyinelemeli (Akıllı)",
+          "fixed": "Sabit Boyut",
+          "sentence": "Cümleye Göre",
+          "paragraph": "Paragrafa Göre"
+        },
+        "chunkSize": {
+          "name": "Parça boyutu",
+          "desc": "Parça başına karakter sayısı (500-2000 önerilir)"
+        },
+        "chunkOverlap": {
+          "name": "Parça örtüşmesi",
+          "desc": "Parçalar arasındaki örtüşen karakter sayısı"
+        },
+        "minChunkSize": {
+          "name": "Min parça boyutu",
+          "desc": "Oluşturulacak minimum parça boyutu"
+        },
+        "maxTokens": {
+          "name": "Parça başına maksimum token",
+          "desc": "Parça başına izin verilen maksimum token sayısı"
+        }
+      },
+      "search": {
+        "title": "Arama ayarları",
+        "searchType": {
+          "name": "Arama türü",
+          "desc": "Gerçekleştirilecek benzerlik araması türü",
+          "similarity": "Benzerlik"
+        },
+        "topK": {
+          "name": "İlk K sonuç",
+          "desc": "Alınacak en alakalı parça sayısı (1-20)"
+        },
+        "threshold": {
+          "name": "Benzerlik eşiği",
+          "desc": "Sonuçları dahil etmek için minimum benzerlik puanı (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Alaka puanı ağırlığı",
+          "desc": "Alaka puanlaması için ağırlık (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Bağlam penceresi sınırı",
+          "desc": "Alınan bağlam için maksimum token sayısı"
+        }
+      },
+      "filters": {
+        "title": "Dosya filtreleri",
+        "excludeFolders": {
+          "name": "Klasörleri hariç tut",
+          "desc": "Dizinlemeden hariç tutulacak klasörler (virgülle ayrılmış)"
+        },
+        "includeTypes": {
+          "name": "Dosya türlerini dahil et",
+          "desc": "Dahil edilecek dosya türleri (boş = tüm türler)"
+        },
+        "excludeTypes": {
+          "name": "Dosya türlerini hariç tut",
+          "desc": "Dizinlemeden hariç tutulacak dosya türleri"
+        },
+        "filterByTag": {
+          "name": "Etikete göre filtrele",
+          "desc": "Yalnızca bu etiketlere sahip dosyaları dizinle (boş = tüm dosyalar)"
+        },
+        "excludeByTag": {
+          "name": "Etikete göre hariç tut",
+          "desc": "Bu etiketlere sahip dosyaları dizinlemeden hariç tut"
+        }
+      },
+      "advanced": {
+        "title": "Gelişmiş ayarlar",
+        "batchSize": {
+          "name": "Gömme toplu iş boyutu",
+          "desc": "Paralel olarak gömülecek parça sayısı"
+        }
+      },
+      "grading": {
+        "title": "Derecelendirme ayarları",
+        "desc": "LLM'ye göndermeden önce alınan parçaları alaka düzeyi açısından derecelendirin. Bu, düşük kaliteli sonuçları filtrelemeye yardımcı olur.",
+        "enableGrading": {
+          "name": "Derecelendirme eşiğini etkinleştir",
+          "desc": "Kalite eşiklerinin altındaki parçaları filtrele"
+        },
+        "graderSource": {
+          "name": "Derecelendirici model kaynağı",
+          "desc": "Derecelendirici modelin nereden alınacağı",
+          "chat": "Sohbet Modeli",
+          "custom": "Özel Model"
+        },
+        "graderModel": {
+          "name": "Derecelendirici model",
+          "desc": "Derecelendirme için kullanılacak belirli model"
+        },
+        "parallel": {
+          "name": "Paralel işleme",
+          "desc": "Paralel olarak derecelendirilecek parça sayısı"
+        },
+        "minRelevance": {
+          "name": "Min alaka puanı",
+          "desc": "Minimum alaka puanı (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Min doğruluk puanı",
+          "desc": "Minimum doğruluk puanı (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Min destek kalitesi puanı",
+          "desc": "Minimum destek kalitesi puanı (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Web arama yapılandırması",
+      "desc": "İnternetten güncel bilgilerle AI yanıtlarını geliştirmek için web arama işlevini yapılandırın.",
+      "generalBehavior": "Genel davranış",
+      "providerSelection": "Sağlayıcı seçimi",
+      "localeFilters": "Yerel ayar ve filtreler",
+      "apiCredentials": "API kimlik bilgileri ve uç noktalar",
+      "enabled": {
+        "name": "Web aramayı etkinleştir",
+        "desc": "AI'ın güncel bilgiler için web'de arama yapmasına izin verin"
+      },
+      "autoTrigger": {
+        "name": "Otomatik arama tetikle",
+        "desc": "Sorgu güncel bilgiler gerektirdiğinde web aramasını otomatik olarak tetikleyin (örn. haberler, fiyatlar, son olaylar)"
+      },
+      "maxResults": {
+        "name": "Maksimum sonuç",
+        "desc": "Döndürülecek maksimum arama sonucu sayısı"
+      },
+      "timeRange": {
+        "name": "Sonuç güncelliği",
+        "desc": "Sonuçları sağlayıcılar tarafından desteklenen bir zaman aralığıyla sınırlayın (Google, SearXNG, Mojeek)",
+        "any": "Herhangi bir zaman (varsayılan)",
+        "h": "Son bir saat",
+        "d": "Son 24 saat",
+        "w": "Son hafta",
+        "m": "Son ay",
+        "y": "Son yıl"
+      },
+      "provider": {
+        "name": "Arama sağlayıcısı",
+        "desc": "Gizlilik dostu kazıyıcılar veya API destekli motorlardan seçin"
+      },
+      "searchLanguage": {
+        "name": "Dil kodu",
+        "desc": "ISO dil kodu (örn. en, fr, zh-CN) yerelleştirmeyi destekleyen sağlayıcılara iletilir"
+      },
+      "searchCountry": {
+        "name": "Ülke/pazar kodu",
+        "desc": "Bing, DuckDuckGo, Brave ve diğerleri tarafından kullanılan iki harfli ülke kodu (örn. US, DE)"
+      },
+      "includeDomains": {
+        "name": "Yalnızca bu alanları dahil et",
+        "desc": "SerpAPI ve Brave tarafından sonuçları belirli sitelerle sınırlamak için kullanılan virgülle ayrılmış liste"
+      },
+      "excludeDomains": {
+        "name": "Alanları hariç tut",
+        "desc": "Sonuçları getirdikten sonra filtrelenecek virgülle ayrılmış alanlar"
+      },
+      "apiKey": {
+        "name": "Varsayılan API anahtarı",
+        "desc": "Sağlayıcıya özgü anahtarlar ayarlanmadığında Google, Bing, SerpAPI, Tavily veya Brave tarafından kullanılan paylaşılan API anahtarı"
+      },
+      "googleCseId": {
+        "name": "Google Özel Arama Motoru Kimliği",
+        "desc": "Google sağlayıcısını kullanırken Google API anahtarıyla birlikte gereklidir"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI uç noktası",
+        "desc": "Kendi sunucunuzda barındırıyorsanız SerpAPI temel URL'sini geçersiz kılın"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API anahtarı",
+        "desc": "Tavily sağlayıcısını kullanırken varsayılan anahtarı geçersiz kılar"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG uç noktası",
+        "desc": "SearXNG örneğinizin temel URL'si (JSON döndürmesi gerekir)"
+      },
+      "braveApiKey": {
+        "name": "Brave API anahtarı",
+        "desc": "Sağlayıcı olarak seçildiğinde Brave Search API abonelik tokenını kullanın"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API anahtarı (isteğe bağlı)",
+        "desc": "Qwant planınız bir taşıyıcı token sağlıyorsa ekleyin"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API anahtarı",
+        "desc": "Mojeek sağlayıcısı için gereklidir"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (anahtar gerektirmez)",
+        "google": "Google Özel Arama",
+        "bing": "Bing Web Araması",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Arama",
+        "yahoo": "Yahoo (HTML kazıma)",
+        "yandex": "Yandex (HTML kazıma)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Hızlı eylemler",
+      "desc": "Metin seçildiğinde düzenleyici bağlam menüsünde görünen AI destekli hızlı eylemleri yapılandırın.",
+      "actionPrefix": {
+        "name": "Eylem öneki",
+        "desc": "Bağlam menüsündeki tüm hızlı eylemlerden önce görüntülenecek önek (emoji veya metin)",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)",
+      "count_plural": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)",
+      "addBtn": "+ hızlı eylem ekle",
+      "empty": "Hızlı eylem yapılandırılmadı. Başlamak için hızlı eylem ekle seçeneğini seçin.",
+      "tableHeaders": {
+        "action": "Eylem",
+        "type": "Tür",
+        "model": "Model",
+        "promptPreview": "İstem Önizlemesi",
+        "actions": "Eylemler"
+      },
+      "defaultModel": "Varsayılan",
+      "editBtn": "Düzenle",
+      "deleteBtn": "sil",
+      "confirm": {
+        "delete": "\"{{name}}\" hızlı eylemi silinsin mi?"
+      },
+      "usageInfo": {
+        "title": "Kullanım",
+        "step1": "Herhangi bir notta metin seçin",
+        "step2": "Bağlam menüsünü açmak için sağ tıklayın",
+        "step3": "Menüden bir hızlı eylem seçin",
+        "step4Replace": "\"değiştir\" olarak işaretlenen eylemler seçilen metni AI sonucuyla değiştirecek",
+        "step4Explain": "\"açıkla\" olarak işaretlenen eylemler sonucu bir modal iletişim kutusunda gösterecek"
+      },
+      "edit": {
+        "title": "Hızlı eylemi düzenle",
+        "name": {
+          "name": "İsim",
+          "desc": "Bağlam menüsündeki bu eylem için görünen ad"
+        },
+        "actionType": {
+          "name": "Eylem türü",
+          "desc": "AI yanıtının nasıl işleneceği",
+          "replace": "Seçili metni değiştir",
+          "explain": "Modalde göster"
+        },
+        "model": {
+          "name": "Model",
+          "desc": "Bu eylem için kullanılacak dil modeli (varsayılanı kullanmak için boş bırakın)",
+          "default": "Varsayılan modeli kullan"
+        },
+        "promptTemplate": {
+          "name": "İstem şablonu",
+          "desc": "AI'ya gönderilen talimatlar. Seçilen metin otomatik olarak eklenir."
+        },
+        "cancel": "İptal",
+        "save": "Kaydet"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Metni uzat",
+          "prompt": "Aşağıdaki metni, orijinal anlam ve tonu koruyarak daha ayrıntılı ve kapsamlı hale getirerek genişletin ve ayrıntılandırın. Yalnızca genişletilmiş metni herhangi bir ek yorum olmaksızın döndürün:\n\n"
+        },
+        "summarize": {
+          "name": "Metni özetle",
+          "prompt": "Aşağıdaki metnin kısa bir özetini sağlayın. Yalnızca özeti herhangi bir ek yorum olmaksızın döndürün:\n\n"
+        },
+        "improve-writing": {
+          "name": "Yazımı geliştir",
+          "prompt": "Aşağıdaki metnin yazım kalitesini, netliğini ve stilini geliştirin. Yalnızca geliştirilmiş metni herhangi bir ek yorum olmaksızın döndürün:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Dilbilgisini düzelt",
+          "prompt": "Aşağıdaki metindeki dilbilgisi, yazım ve noktalama hatalarını düzeltin. Yalnızca düzeltilmiş metni herhangi bir ek yorum olmaksızın döndürün:\n\n"
+        },
+        "explain": {
+          "name": "Metni açıkla",
+          "prompt": "Aşağıdaki metni basit terimlerle açıklayın:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Token kullanımı",
+      "desc": "Sağlayıcılar ve modeller arasındaki token tüketimini takip edin. Veriler tüm konuşmalar boyunca biriktirilir.",
+      "notAvailable": "Token kullanım takibi mevcut değil.",
+      "ranges": {
+        "today": "Bugün",
+        "week": "Bu hafta",
+        "month": "Bu ay",
+        "all": "Tüm zamanlar"
+      },
+      "stats": {
+        "totalTokens": "Toplam token",
+        "apiCalls": "API çağrıları",
+        "promptTokens": "İstem tokenleri",
+        "completion": "Tamamlama",
+        "tokensIn": "gelen token",
+        "tokensOut": "giden token"
+      },
+      "byProvider": "Sağlayıcıya göre",
+      "byModel": "Modele göre",
+      "noData": "Henüz kullanım verisi yok.",
+      "recentActivity": "Son aktivite",
+      "last10": "son 10",
+      "noRecent": "Son aktivite yok.",
+      "tableHeaders": {
+        "provider": "Sağlayıcı",
+        "model": "Model",
+        "prompt": "İstem",
+        "completion": "Tamamlama",
+        "total": "Toplam",
+        "calls": "Çağrılar",
+        "time": "Zaman",
+        "in": "Gelen",
+        "out": "Giden"
+      },
+      "clearBtn": "Tüm kullanım verilerini temizle",
+      "confirm": {
+        "clear": "Tüm token kullanım kayıtları temizlensin mi? Bu işlem geri alınamaz."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Mesajınızı yazın... (Göndermek için Enter, yeni satır için Shift+Enter)",
+    "conversations": "Konuşmalar",
+    "toggleConversationsTitle": "Konuşma listesini aç/kapat",
+    "currentConversation": "Mevcut konuşma",
+    "new": "Yeni",
+    "settings": "Ayarlar",
+    "openSettingsTitle": "Eklenti ayarlarını aç",
+    "mode": "Mod",
+    "prompt": "İstem",
+    "agent": "Ajan",
+    "modeOptions": {
+      "chat": "Sohbet",
+      "agent": "Ajan"
+    },
+    "noSystemPrompt": "Sistem istemi yok",
+    "noAgentsAvailable": "Kullanılabilir ajan yok",
+    "sendHintPrefix": "Göndermek için ",
+    "sendHintKey": "Enter",
+    "sendHintSuffix": " tuşuna basın",
+    "sendAriaLabel": "Mesaj gönder",
+    "stop": " Durdur",
+    "addReference": "Referans ekle",
+    "addReferenceTooltip": "Dosya veya klasör referansı ekle (@)",
+    "emptyHeading": "Bir konuşma başlatın",
+    "emptySubtext": "Başlamak için aşağıya bir mesaj yazın veya geçmişten bir konuşma seçin.",
+    "noAgentConfig": "Ajan yapılandırılmadı",
+    "selectAgent": "Bir ajan seçin…",
+    "notices": {
+      "stopping": "Oluşturma durduruluyor...",
+      "ragInitError": "RAG başlatma hatası: {{message}}",
+      "modelsRefreshed": "Modeller yenilendi",
+      "modelsRefreshFailed": "Modeller yenilenemedi: {{message}}",
+      "waitForResponse": "Lütfen mevcut yanıtın tamamlanmasını bekleyin",
+      "configureProvider": "Lütfen önce ayarlarda bir LLM sağlayıcısı yapılandırın",
+      "selectModel": "Lütfen bir model seçin",
+      "noValidProvider": "Bu model için geçerli sağlayıcı yapılandırması bulunamadı",
+      "chatError": "Sohbet hatası: {{message}}",
+      "noMessageToRegenerate": "Yeniden oluşturulacak mesaj bulunamıyor",
+      "regenerateOnlyLatest": "Şu anda yalnızca en son yanıt yeniden oluşturulabilir",
+      "regenerateNoUserMsg": "Yeniden oluşturulacak kullanıcı mesajı bulunamıyor",
+      "regenerated": "Yanıt yeniden oluşturuldu",
+      "regenerateFailed": "Yeniden oluşturma başarısız: {{message}}",
+      "noteCreated": "Not oluşturuldu: {{name}}",
+      "noteCreateFailed": "Not oluşturulamadı: {{message}}",
+      "messageInserted": "Mesaj eklendi: {{path}}",
+      "messageInsertFailed": "Mesaj eklenemedi: {{message}}",
+      "noAgents": "Kullanılabilir ajan yok. Ayarlar → Ajanlar'dan ajanları yapılandırın.",
+      "ragDisabled": "RAG ayarlarda devre dışı. Ayarlar → sohbet özellikleri → RAG altında etkinleştirin.",
+      "webSearchDisabled": "Web araması ayarlarda devre dışı. Ayarlar → sohbet özellikleri → web araması altında etkinleştirin.",
+      "noFilesInVault": "Vault'ta dosya bulunamadı",
+      "attached": "Eklendi: {{name}}",
+      "attachedImages": "{{count}} görsel eklendi",
+      "referencesAdded": "{{count}} referans eklendi",
+      "fileNotFound": "Dosya bulunamadı: {{path}}",
+      "agentConfigApplied": "Ajan için yapılandırma uygulandı: {{name}}",
+      "waitForComplete": "Lütfen mevcut yanıtın tamamlanmasını bekleyin",
+      "chatServiceFallback": "ChatService yapılandırılmadı. ChatView yedek kullanılıyor.",
+      "noModelSelected": "Model seçilmedi",
+      "noProviderConfig": "Sağlayıcı yapılandırması bulunamadı",
+      "generationStopped": "Oluşturma durduruldu",
+      "noResponseToRegenerate": "Yeniden oluşturulacak yanıt yok",
+      "agentNotFound": "Ajan bulunamadı",
+      "unableToLoadRag": "RAG istatistikleri yüklenemiyor.",
+      "referenced": "Referans alındı: {{name}}"
+    },
+    "status": {
+      "available": "Kullanılabilir",
+      "unavailable": "Kullanılamaz",
+      "disabled": "Devre dışı",
+      "on": "Açık · {{detail}}",
+      "off": "Kapalı"
+    },
+    "ragStats": {
+      "title": "RAG istatistikleri",
+      "totalChunks": "📊 toplam parça:",
+      "filesIndexed": "📁 dizinlenen dosyalar:",
+      "totalSize": "💾 toplam boyut:",
+      "avgChunks": "📈 Ort. Parça/Dosya:",
+      "indexedFiles": "📄 dizinlenen dosyalar",
+      "noFilesYet": "⚠️ henüz hiçbir dosya dizinlenmedi.",
+      "howToBuild": "RAG dizinini oluşturmak için:",
+      "step1": "Ayarlar → RAG'a gidin",
+      "step2": "RAG'ı etkinleştirin",
+      "step3": "Vault dizinini seçin",
+      "close": "Kapat",
+      "retrieved": "📚 {{count}} belgeden alındı",
+      "retrieved_plural": "📚 {{count}} belgeden alındı"
+    },
+    "ragTooltip": {
+      "status": "RAG Dizin Durumu:",
+      "totalChunks": "📊 Toplam Parça: {{count}}",
+      "filesIndexed": "📁 Dizinlenen Dosyalar: {{count}}",
+      "totalSize": "💾 Toplam Boyut: {{size}} KB",
+      "indexedFiles": "📄 dizinlenen Dosyalar:",
+      "andMore": "  ... ve {{count}} daha",
+      "noFilesYet": "⚠️ henüz dizinlenen dosya yok.",
+      "goToSettings": "Dizini oluşturmak için Ayarlar → RAG'a gidin.",
+      "ragOff": "ℹ️ RAG şu anda bu sohbet için kapalı."
+    },
+    "agentSummary": {
+      "model": "Model",
+      "temp": "Sıcaklık",
+      "max": "Maks",
+      "rag": "RAG",
+      "web": "Web",
+      "tools": "Araçlar",
+      "memory": "Bellek",
+      "none": "Yok",
+      "configuration": "{{name}} yapılandırması",
+      "modelFixed": "{{name}} · Sabit",
+      "modelDefault": "{{name}} · Varsayılan",
+      "modelChatView": "{{name}} · Sohbet Görünümü",
+      "customModel": "Özel model",
+      "notSet": "Ayarlanmadı",
+      "auto": "Otomatik",
+      "on": "Açık",
+      "off": "Kapalı",
+      "shortTerm": "Kısa vadeli",
+      "longTerm": "Uzun vadeli",
+      "disabledMemory": "Devre dışı",
+      "builtIn": "{{count}} yerleşik",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Web sonuçları",
+      "attachments": "Ekler",
+      "references": "Referanslar",
+      "ragSources": "RAG Kaynakları",
+      "reasoning": "Akıl yürütme",
+      "copy": "Kopyala",
+      "copied": "Mesaj kopyalandı",
+      "copyFailed": "Mesaj kopyalanamadı",
+      "tokenUsage": "Token kullanımı",
+      "tokenUsagePrompt": "İstem",
+      "tokenUsageCompletion": "Tamamlama",
+      "tokenUsageTotal": "Toplam",
+      "save": "Kaydet",
+      "insertToNotes": "Notlara Ekle",
+      "regenerate": "Yeniden oluştur"
+    },
+    "streaming": {
+      "thinking": "Düşünüyor..."
+    },
+    "toolCall": {
+      "thinking": "Düşünüyor",
+      "executionProcess": "Yürütme Süreci",
+      "input": "Girdi",
+      "output": "Çıktı",
+      "running": "Çalışıyor..."
+    },
+    "addPicture": "Resim ekle",
+    "addPictureTooltip": "Mesajınıza bir görsel ekleyin",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Dizinlenmiş notları bağlam olarak kullan",
+    "webSearchLabel": "Web Araması",
+    "webSearchTooltipLabel": "Gerektiğinde internette ara",
+    "imageUnavailable": "Görsel eki mevcut model için kullanılamaz.",
+    "newChat": "Yeni Sohbet",
+    "newConversation": "Yeni Konuşma",
+    "searchConversations": "Konuşmalarda ara...",
+    "header": {
+      "model": "Model",
+      "advancedParams": "Gelişmiş parametreler",
+      "temperature": "Sıcaklık",
+      "maxTokens": "Maks token",
+      "topP": "Top P",
+      "freqPenalty": "Frekans cezası",
+      "presPenalty": "Varlık cezası",
+      "agentConfig": "Ajan yapılandırması",
+      "modelsCount": "Modeller: {{count}}",
+      "tokensCount": "Tokenler: {{count}}",
+      "noModels": "Kullanılabilir model yok"
+    },
+    "temperature": {
+      "precise": "0 (Kesin)",
+      "balanced": "1 (Dengeli)",
+      "creative": "2 (Yaratıcı)"
+    },
+    "modals": {
+      "image": {
+        "title": "Görsel ekle",
+        "searchPlaceholder": "Görsel ara...",
+        "selectAll": "Tümünü seç",
+        "selectNone": "Hiçbirini seçme",
+        "addSelected": "Seçilenleri ekle",
+        "noResults": "Eşleşen görsel bulunamadı."
+      },
+      "reference": {
+        "title": "Referans ekle",
+        "searchPlaceholder": "Dosya ve klasörlerde ara...",
+        "selectAll": "Tümünü seç",
+        "selectNone": "Hiçbirini seçme",
+        "addSelected": "Seçilenleri ekle",
+        "noResults": "Eşleşen dosya veya klasör bulunamadı."
+      },
+      "insertNote": {
+        "title": "Nota ekle",
+        "searchPlaceholder": "Not ara...",
+        "insert": "Seçilen nota ekle",
+        "createNew": "Yeni not oluştur",
+        "noResults": "Eşleşen not bulunamadı."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "İptal",
+      "confirm": "Onayla"
+    },
+    "agentEdit": {
+      "title": "Ajanı düzenle",
+      "icon": {
+        "name": "Simge",
+        "desc": "Bu ajanı temsil edecek emoji veya karakter"
+      },
+      "description": {
+        "name": "Açıklama",
+        "desc": "Ajanın kısa açıklaması"
+      },
+      "modelStrategy": {
+        "name": "Model stratejisi",
+        "options": {
+          "default": "Varsayılan modeli kullan (ayarlardan)",
+          "chatView": "Sohbet görünümü modelini kullan",
+          "fixed": "Sabit model"
+        },
+        "noModels": "Önbellekte model yok",
+        "desc": "Ajanın modelini nasıl seçeceğini belirleyin"
+      },
+      "systemPrompt": {
+        "createNew": "➕ yeni istem oluştur…",
+        "promptName": {
+          "name": "İstem adı",
+          "desc": "Yeni sistem istemi için görünen ad"
+        },
+        "promptContent": {
+          "name": "İstem içeriği",
+          "desc": "Yeni sistem istemi için içerik"
+        },
+        "name": "Sistem istemi",
+        "desc": "Mevcut istemlerden seçin veya bu ajan için yeni bir tane tanımlayın."
+      },
+      "capabilities": "Özellikler",
+      "memory": {
+        "title": "Bellek",
+        "notice": "Deneyim üzerinde çalışırken ajan belleği geçici olarak kullanılamaz."
+      },
+      "tools": {
+        "title": "Araçlar",
+        "builtIn": {
+          "name": "Yerleşik araçlar",
+          "desc": "Bu ajanın kullanabileceği yerleşik araçları seçin"
+        },
+        "cli": {
+          "name": "CLI araçları",
+          "desc": "Etkinleştirilen tüm CLI araçlarına erişim verin veya aşağıdan tek tek seçin",
+          "noTools": "CLI aracı yapılandırılmadı. Burada kullanmak için Ayarlar → Araçlar → CLI altında araç ekleyin ve etkinleştirin."
+        }
+      },
+      "mcp": {
+        "title": "MCP erişimi",
+        "noServers": "MCP sunucusu yapılandırılmadı. Bu seçeneklerin kilidini açmak için Ayarlar → MCP altında sunucu ekleyin.",
+        "toolsCached": "{{count}} araç önbellekte",
+        "toolsCached_plural": "{{count}} araç önbellekte",
+        "noToolsCached": "Henüz araç önbellekte değil. Tam erişimi etkinleştirin veya önbelleği yenileyin.",
+        "showTools": "Araçları göster",
+        "hideTools": "Araçları gizle",
+        "selected": "Seçildi",
+        "notSelected": "Seçilmedi",
+        "noToolsAvailable": "Bu sunucudan henüz araç mevcut değil."
+      },
+      "notices": {
+        "promptRequired": "Lütfen yeni sistem istemi için bir ad ve içerik sağlayın."
+      },
+      "name": {
+        "label": "İsim",
+        "desc": "Bu ajan için görünen ad"
+      },
+      "fixedModel": {
+        "name": "Sabit model",
+        "desc": "Bu ajan için belirli bir model seçin.",
+        "descNoModels": "Önbellekte model yok. Modeller sekmesinde modelleri yenileyin."
+      },
+      "temperature": {
+        "label": "Sıcaklık",
+        "desc": "Rastgeleliği kontrol eder (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Maks token",
+        "desc": "Oluşturulacak maksimum token sayısı"
+      },
+      "contextWindow": {
+        "label": "Bağlam penceresi",
+        "desc": "Bağlama dahil edilecek önceki mesaj sayısı"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Geri alma artırımlı oluşturmayı etkinleştir"
+      },
+      "webSearch": {
+        "name": "Web araması",
+        "desc": "Web arama özelliklerini etkinleştir"
+      },
+      "maxSteps": {
+        "name": "Maks Araç Adımları",
+        "desc": "Ajan turu başına maksimum araç çağrısı adımı sayısı"
+      }
+    },
+    "provider": {
+      "title": "Sağlayıcı ayarları",
+      "selectProvider": {
+        "name": "Sağlayıcı",
+        "desc": "LLM sağlayıcı türünü seçin",
+        "placeholder": "-- Sağlayıcı seçin --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (yerel)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Özel (OpenAI uyumlu)"
+      },
+      "modelFilter": {
+        "name": "Model filtresi",
+        "desc": "Kullanılabilir modelleri sınırlamak için isteğe bağlı regex deseni"
+      },
+      "resourceGroup": {
+        "name": "Kaynak grubu",
+        "desc": "İsteğe bağlı SAP AI Core kaynak grubu"
+      },
+      "serviceKey": {
+        "name": "Hizmet anahtarı",
+        "desc": "SAP AI Core hizmet anahtarı (JSON dizesi)"
+      },
+      "baseUrl": {
+        "name": "Temel URL",
+        "ollamaDesc": "Ollama sunucu URL'si",
+        "customDesc": "OpenAI uyumlu API uç noktası (gerekli)",
+        "optionalDesc": "Özel API uç noktası (isteğe bağlı)"
+      },
+      "manageModels": {
+        "name": "Modelleri Yönet",
+        "desc": "Ollama kayıt defterinden yeni modeller çekin veya mevcut olanları güncelleyin.",
+        "btn": "⏬ Ollama Modeli Çek"
+      },
+      "apiKey": {
+        "name": "API Anahtarı",
+        "desc": "Seçilen sağlayıcı için kimlik doğrulama anahtarı"
+      },
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "validation": {
+        "selectProvider": "Lütfen bir sağlayıcı türü seçin",
+        "apiKeyTooLong": "API anahtarı çok uzun. Maksimum uzunluk 500 karakterdir.",
+        "invalidUrl": "Geçersiz temel URL biçimi. Lütfen geçerli bir URL girin (örn. https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP denetçisi",
+      "desc": "Model Context Protocol (MCP) sunucu bağlantılarını ve araçlarını inceleyin ve hata ayıklayın.",
+      "tabs": {
+        "connections": "Bağlantılar",
+        "tools": "Araçlar",
+        "logs": "Günlükler"
+      },
+      "refreshBtn": "🔄 yenile",
+      "connections": {
+        "title": "MCP sunucu bağlantıları",
+        "noServers": "MCP sunucusu yapılandırılmadı.",
+        "headers": {
+          "server": "Sunucu adı",
+          "status": "Durum",
+          "tools": "Kullanılabilir araçlar",
+          "actions": "Eylemler"
+        },
+        "statusDisabled": "Devre dışı",
+        "statusConnected": "● bağlı",
+        "statusDisconnected": "○ bağlantısız",
+        "toolsLive": "{{count}} araç",
+        "toolsLive_plural": "{{count}} araç",
+        "toolsCached": "{{count}} araç (önbellekte)",
+        "toolsCached_plural": "{{count}} araç (önbellekte)",
+        "noTools": "0 araç",
+        "connectBtn": "Bağlan",
+        "disconnectBtn": "Bağlantıyı kes",
+        "connecting": "Bağlanıyor...",
+        "disconnecting": "Bağlantı kesiliyor...",
+        "notices": {
+          "disconnected": "{{name}} bağlantısı kesildi",
+          "enableFirst": "Bağlanmadan önce ayarlarda sunucuyu etkinleştirin",
+          "connected": "{{name}} ile bağlantı kuruldu",
+          "failedDisconnect": "{{name}} bağlantısı kesilemedi: {{message}}",
+          "failedConnect": "{{name}} ile bağlantı kurulamadı: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Kullanılabilir MCP araçları",
+        "noTools": "MCP aracı mevcut değil. Sunucu bağlantılarını kontrol edin.",
+        "serverPrefix": "Sunucu: {{name}}",
+        "noToolsInServer": "Kullanılabilir araç yok",
+        "headers": {
+          "tool": "Araç adı",
+          "description": "Açıklama",
+          "parameters": "Parametreler"
+        },
+        "noDescription": "Açıklama yok",
+        "noParams": "Yok"
+      },
+      "logs": {
+        "title": "MCP bağlantı günlükleri",
+        "placeholder": "MCP bağlantı günlükleri burada görünecek. Şu anda yer tutucu bilgi gösteriliyor.",
+        "events": {
+          "connection": "• bağlantı olayları",
+          "tools": "• araç kayıt olayları",
+          "errors": "• hata günlükleri",
+          "comms": "• iletişim ayrıntıları"
+        },
+        "testTitle": "Araç yürütmeyi test et",
+        "selectServer": "Sunucu seçin...",
+        "selectTool": "Araç seçin...",
+        "parametersTitle": "Parametreler",
+        "selectEnum": "Seçin...",
+        "performBtn": "Aracı çalıştır",
+        "clearBtn": "Sonuçları temizle",
+        "executing": "Yürütülüyor...",
+        "success": "✅ yürütme başarılı",
+        "failed": "❌ yürütme başarısız",
+        "errorTitle": "❌ yürütme hatası",
+        "errorLabel": "Hata: {{message}}",
+        "notices": {
+          "success": "Araç başarıyla yürütüldü",
+          "failed": "Araç yürütme başarısız oldu",
+          "error": "Yürütme hatası: {{message}}",
+          "requiredMissing": "Gerekli parametre eksik: {{name}}",
+          "invalidNumber": "Parametre için geçersiz sayı: {{name}}",
+          "invalidJson": "Parametre için geçersiz JSON: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ MCP sunucusu yapılandırılmadı",
+        "testing": "🧪 {{count}} MCP sunucu bağlantısı test ediliyor...",
+        "allSuccess": "✅ tüm {{count}} mcp sunucusu başarıyla bağlandı!",
+        "partial": "⚠️ {{success}} bağlandı, {{failed}} başarısız"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "MCP sunucusunu düzenle",
+      "titleAdd": "MCP sunucusu ekle",
+      "serverName": {
+        "name": "Sunucu adı",
+        "desc": "Eklenti genelinde gösterilen kolay ad"
+      },
+      "connectionMode": {
+        "name": "Bağlantı modu",
+        "desc": "Otomatik mı yoksa yalnızca manuel tetiklendiğinde mi bağlanılacağını seçin",
+        "auto": "Sohbet açıldığında otomatik bağlan",
+        "manual": "Manuel bağlan"
+      },
+      "command": {
+        "name": "Komut",
+        "desc": "MCP sunucusunu başlatan program veya betik"
+      },
+      "arguments": {
+        "name": "Argümanlar",
+        "desc": "Virgül veya yeni satırla ayrılmış argümanlar (isteğe bağlı)"
+      },
+      "envVars": {
+        "name": "Ortam değişkenleri",
+        "desc": "İsteğe bağlı ANAHTAR=DEĞER çiftleri, satır başına bir tane"
+      },
+      "enabled": {
+        "name": "Etkin",
+        "desc": "Sunucuyu otomatik bağlanmadan yapılandırılmış tutmak için devre dışı bırakın"
+      },
+      "cancel": "İptal",
+      "saveEdit": "Değişiklikleri kaydet",
+      "saveAdd": "Sunucu ekle",
+      "validation": {
+        "nameRequired": "Sunucu adı gereklidir",
+        "commandRequired": "Komut gereklidir"
+      }
+    },
+    "ollamaManager": {
+      "title": "Ollama modellerini yönet",
+      "serverInfo": "Sunucu bilgisi",
+      "checkingServer": "Sunucu kontrol ediliyor...",
+      "serverOnline": "✅ Sunucu çevrimiçi",
+      "versionLabel": " | Sürüm: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Sunucu çevrimdışı",
+      "connectionError": "❌ Bağlantı hatası",
+      "pullTitle": "Yeni model çek",
+      "pullHint": "Ollama kütüphanesinden indirmek için bir model adı girin (örn. llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Model adı",
+        "example": "Örnek: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Modeli çek",
+      "installedTitle": "Yüklü modeller",
+      "refreshList": "🔄 Listeyi yenile",
+      "noModels": "Model bulunamadı. Başlamak için bir model çekin.",
+      "capabilities": "Özellikler: {{caps}}",
+      "deleteBtn": "Sil",
+      "closeBtn": "Kapat",
+      "confirmDelete": {
+        "title": "Silmeyi onayla",
+        "message": "\"{{name}}\" modelini silmek istediğinizden emin misiniz?",
+        "cancel": "İptal",
+        "confirm": "Sil"
+      },
+      "notices": {
+        "enterName": "Lütfen bir model adı girin",
+        "pulling": "{{name}} çekiliyor... Bu biraz zaman alabilir.",
+        "pullSuccess": "✅ {{name}} başarıyla çekildi",
+        "pullFailed": "❌ Model çekilemedi: {{message}}",
+        "deleted": "✅ {{name}} silindi",
+        "deleteFailed": "❌ Model silinemedi: {{message}}",
+        "refreshing": "Yenileniyor...",
+        "refreshSuccess": "✅ Model listesi yenilendi",
+        "refreshFailed": "❌ Model listesi yenilenemedi"
+      }
+    },
+    "promptEdit": {
+      "title": "Sistem istemini düzenle",
+      "name": {
+        "name": "İsim",
+        "desc": "Bu istem için görünen ad"
+      },
+      "content": {
+        "name": "İçerik",
+        "desc": "Sistem istemi içeriği"
+      },
+      "enabled": {
+        "name": "Etkin",
+        "desc": "Bu istemin etkin olup olmadığı"
+      },
+      "cancel": "İptal",
+      "save": "Kaydet"
+    },
+    "prompt": {
+      "cancel": "İptal",
+      "ok": "Tamam"
+    },
+    "textInput": {
+      "nameLabel": "İsim",
+      "create": "Oluştur",
+      "cancel": "İptal"
+    },
+    "explain": {
+      "loading": "⏳ İşleniyor...",
+      "error": "Açıklama oluşturulurken hata",
+      "errorPrefix": "❌ Hata: "
+    }
+  },
+  "notices": {
+    "noProvider": "Lütfen önce ayarlarda bir LLM sağlayıcısı yapılandırın",
+    "noModel": "Lütfen ayarlarda bir varsayılan model seçin",
+    "noValidProvider": "Model için geçerli sağlayıcı yapılandırması bulunamadı: {{modelId}}",
+    "processing": "İşleniyor...",
+    "textUpdated": "Metin başarıyla güncellendi",
+    "error": "Hata: {{message}}"
+  }
+}

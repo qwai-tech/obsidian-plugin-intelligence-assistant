@@ -1,0 +1,1590 @@
+{
+  "settings": {
+    "tabs": {
+      "general": "Orokorra",
+      "llm": "LLM",
+      "mcp": "MCP",
+      "tools": "Tresnak",
+      "rag": "RAG",
+      "prompts": "Prompt-ak",
+      "agents": "Agenteak",
+      "quickActions": "Ekintza azkarrak",
+      "usage": "Erabilera"
+    },
+    "general": {
+      "title": "Ezarpen orokorrak",
+      "desc": "Konfiguratu ezarpen orokorrak adimen artifizialeko laguntzaile-pluginarentzat.",
+      "pluginVersion": {
+        "name": "Pluginaren bertsioa",
+        "desc": "Adimen artifizialeko laguntzaile-pluginaren egungo bertsioa"
+      },
+      "defaultModel": {
+        "name": "Lehenetsitako modeloa",
+        "desc": "Elkarrizketetarako erabiliko den lehenetsitako modeloa",
+        "placeholder": "Deepseek-chat"
+      },
+      "defaultChatMode": {
+        "name": "Lehenetsitako txat modua",
+        "desc": "Aukeratu txat-ikuspegia zein modutan irekiko den",
+        "chat": "Txat modua",
+        "agent": "Agente modua"
+      },
+      "conversationTitleMode": {
+        "name": "Elkarrizketa izenburuaren modua",
+        "desc": "Nola sortu elkarrizketa-izenburuak",
+        "firstMessage": "Erabili lehen mezua",
+        "autoSummary": "Sortu laburpena automatikoki",
+        "manual": "Eskuz"
+      },
+      "conversationIcons": {
+        "name": "Elkarrizketa-ikonoak",
+        "desc": "Gaitu elkarrizketetarako ikonoak automatikoki sortzea"
+      },
+      "configStatus": {
+        "name": "Konfigurazioaren egoera",
+        "desc": "Pluginaren konfigurazioaren egoera orokorra",
+        "ok": "✅ Konfiguratuta ({{providers}} hornitzaile, {{conversations}} elkarrizketa)",
+        "incomplete": "⚠️ Osatu gabe - Mesedez, konfiguratu hornitzaileak eta modeloak"
+      }
+    },
+    "llm": {
+      "title": "LLM konfigurazioa",
+      "desc": "Konfiguratu hizkuntza-modeloen hornitzaileak eta kudeatu eskuragarri dauden modeloak.",
+      "subTabs": {
+        "provider": "Hornitzaileak",
+        "models": "Modeloak"
+      }
+    },
+    "models": {
+      "title": "Modeloen konfigurazioa",
+      "desc": "Ikusi eta kudeatu modeloak hornitzaile guztietatik. Egin klik \"freskatu modelo guztiak\" erabilgarri dauden modelo berrienak eskuratzeko.",
+      "providerCount": "{{count}} hornitzaile konfiguratuta",
+      "providerCount_plural": "{{count}} hornitzaile konfiguratuta",
+      "refreshAll": "🔄 freskatu modelo guztiak",
+      "empty": "Oraindik ez dago hornitzailerik konfiguratuta. Gehitu hornitzaileak hornitzaileen fitxan lehenik.",
+      "noModels": "Ez dago modelo erabilgarririk. Egin klik \"freskatu modelo guztiak\" edo freskatu hornitzaile indibidualak hornitzaileen fitxan.",
+      "noMatch": "Modelo bakar batek ere ez ditu uneko iragazkiak betetzen. Doitu edo garbitu iragazkiak emaitzak ikusteko.",
+      "modelCount": "• {{count}} modelo katxetatuta",
+      "modelCount_plural": "• {{count}} modelo katxetatuta",
+      "matchCount": "• {{count}} bat dator hautatutako iragazkiekin",
+      "matchCount_plural": "• {{count}} bat datoz hautatutako iragazkiekin",
+      "status": {
+        "enabled": "Gaituta",
+        "disabled": "Desgaituta"
+      },
+      "actions": {
+        "disable": "Desgaitu",
+        "enable": "Gaitu",
+        "setDefaultChat": "Ezarri lehenetsitako txat gisa",
+        "defaultChat": "Lehenetsitako txata",
+        "setDefaultEmbedding": "Ezarri lehenetsitako eraketa gisa",
+        "defaultEmbedding": "Lehenetsitako eraketa"
+      },
+      "notices": {
+        "fetching": "{{provider}}-rentzako modeloak eskuratzen...",
+        "fetchFailed": "Ezin izan dira {{provider}} modeloak freskatu",
+        "refreshed": "Modeloak behar bezala freskatu dira!",
+        "refreshFailed": "Ezin izan dira modeloak freskatu",
+        "defaultChatSet": "Lehenetsitako txat-modeloa {{name}} ezarri da",
+        "defaultEmbeddingSet": "Lehenetsitako eraketa-modeloa {{name}} ezarri da"
+      },
+      "filters": {
+        "allProviders": "Hornitzaile guztiak",
+        "allCapabilities": "Gaitasun guztiak",
+        "allStates": "Egoera guztiak",
+        "searchPlaceholder": "Bilatu izena edo IDa"
+      }
+    },
+    "provider": {
+      "title": "Hornitzaileen konfigurazioa",
+      "securityTitle": "⚠️ Segurtasun abisua",
+      "securityDesc": "API giltzak testu arruntean gordetzen dira zure biltegian bateragarritasuna bermatzeko. Istripuzko filtrazioak saihesteko:",
+      "securityItem1": "Ez partekatu {{configDir}}/plugins/intelligence-assistant/data/ karpeta.",
+      "securityItem2": "Gehitu karpeta hau zure .gitignore fitxategian Git sinkronizazioa erabiltzen baduzu.",
+      "securityItem3": "Kontuz ibili hodeiko sinkronizazio zerbitzu publikoak erabiltzean.",
+      "desc": "Kudeatu LLM hornitzaileak eta API kredentzialak. Erabili ekintzak zutabea konfigurazio xehetasunak editatu edo modelo katxetatuak freskatzeko.",
+      "count": "{{count}} hornitzaile konfiguratuta",
+      "count_plural": "{{count}} hornitzaile konfiguratuta",
+      "addBtn": "+ Gehitu hornitzailea",
+      "empty": "Ez dago hornitzailerik konfiguratuta. Hautatu \"Gehitu hornitzailea\" hasteko.",
+      "tableHeaders": {
+        "provider": "Hornitzailea",
+        "status": "Egoera",
+        "actions": "Ekintzak"
+      },
+      "status": {
+        "ready": "Prest",
+        "needsConfig": "Konfigurazioa behar du",
+        "checking": "Egiaztatzen...",
+        "credentialsSet": "Kredentzialak ezarrita",
+        "serverOnline": "Zerbitzaria sarean",
+        "serverOffline": "Zerbitzaria lineaz kanpo",
+        "serverError": "Zerbitzariaren errorea"
+      },
+      "guidance": {
+        "requiresCli": "CLI lokala behar du",
+        "provideServiceKey": "Eman zerbitzu-giltza",
+        "configureBaseUrl": "Konfiguratu oinarrizko URLa",
+        "addApiKey": "Gehitu API giltza"
+      },
+      "models": {
+        "none": "Modelorik ez",
+        "count": "{{count}} modelo",
+        "count_plural": "{{count}} modelo"
+      },
+      "ollama": {
+        "checkingVersion": "Bertsioa egiaztatzen...",
+        "server": {
+          "checking": "Zerbitzaria egiaztatzen...",
+          "online": "Zerbitzaria: sarean",
+          "offline": "Zerbitzaria: lineaz kanpo edo heltzezin",
+          "error": "Zerbitzaria: konexio-errorea",
+          "versionOnline": "Zerbitzaria sarean",
+          "versionOffline": "Zerbitzaria lineaz kanpo",
+          "versionError": "Konexio-errorea",
+          "version": "Bertsioa: {{version}}"
+        }
+      },
+      "refresh": {
+        "lastRefresh": "Azken freskatzea: {{timeAgo}}",
+        "neverRefreshed": "Inoiz freskatu gabe",
+        "justNow": "oraintxe bertan",
+        "minutesAgo": "duela {{n}}m",
+        "hoursAgo": "duela {{n}}h",
+        "daysAgo": "duela {{n}}e"
+      },
+      "actions": {
+        "edit": "Editatu",
+        "manageModels": "Kudeatu modeloak",
+        "refreshModels": "Freskatu modeloak",
+        "refreshing": "Freskatzen...",
+        "delete": "Ezabatu"
+      },
+      "notices": {
+        "refreshed": "{{provider}}-rentzako modeloak freskatu dira.",
+        "refreshFailed": "Ezin izan dira modeloak freskatu"
+      },
+      "confirm": {
+        "delete": "{{provider}} hornitzailea kendu?"
+      }
+    },
+    "mcp": {
+      "title": "MCP zerbitzarien kudeaketa",
+      "desc": "Konfiguratu Model Context Protocol (MCP) zerbitzariak agenteen gaitasunak hedatzen dituzten kanpoko tresnekin eta datu-iturriekin.",
+      "inspectorBtn": "🔍 Ireki MCP ikuskatzailea",
+      "testAllBtn": "🧪 probatu konexio guztiak",
+      "refreshAllBtn": "🔄 freskatu tresna guztiak",
+      "addBtn": "+ Gehitu MCP zerbitzaria",
+      "empty": "Ez dago MCP zerbitzari konfiguraturik. Hautatu \"Gehitu MCP zerbitzaria\" hasteko.",
+      "tableHeaders": {
+        "name": "Izena",
+        "command": "Komandoa",
+        "arguments": "Argumentuak",
+        "status": "Egoera",
+        "tools": "Tresnak",
+        "actions": "Ekintzak"
+      },
+      "untitled": "MCP Zerbitzari izengabea",
+      "notConfigured": "Konfiguratu gabe",
+      "noArgs": "Bat ere ez",
+      "cached": "Katxetatuta",
+      "disabled": "Desgaituta",
+      "envVars": "{{count}} ingurune-aldagai",
+      "envVars_plural": "{{count}} ingurune-aldagai",
+      "status": {
+        "disabled": "Desgaituta",
+        "connected": "konektatuta",
+        "disconnected": "deskonektatuta",
+        "enableToManage": "Gaitu konexioak kudeatzeko",
+        "manualConnect": "Konexio eskuzkoa",
+        "autoConnect": "Konexio automatikoa"
+      },
+      "toolCount": {
+        "live": "{{count}} tresna zuzenean",
+        "live_plural": "{{count}} tresna zuzenean",
+        "cached": "{{count}} tresna katxetatuta",
+        "cached_plural": "{{count}} tresna katxetatuta"
+      },
+      "actions": {
+        "edit": "Editatu",
+        "enabled": "✓ Gaituta",
+        "enabledOff": "✗ Desgaituta",
+        "connect": "konektatu",
+        "disconnect": "deskonektatu",
+        "connecting": "Konektatzen...",
+        "disconnecting": "Deskonektatzen...",
+        "test": "Probatu",
+        "testing": "Probatzen...",
+        "delete": "Ezabatu"
+      },
+      "notices": {
+        "disconnected": "{{name}}-tik deskonektatuta",
+        "connected": "{{name}}-ra konektatuta",
+        "autoConnectFailed": "Ezin izan da {{name}} automatikoki konektatu",
+        "enableFirst": "Gaitu zerbitzaria konektatu aurretik",
+        "disconnectFailed": "Ezin izan da {{name}}-tik deskonektatu",
+        "connectFailed": "Ezin izan da {{name}}-ra konektatu",
+        "testNoCommand": "❌ mesedez, sartu komando bat konexioa probatu aurretik",
+        "testSuccess": "✅ behar bezala konektatuta! {{count}} tresna aurkitu dira.",
+        "testFailed": "❌ Konexioak huts egin du: {{message}}",
+        "refreshedAll": "✅ {{count}} zerbitzariren tresnak freskatu dira",
+        "refreshedAll_plural": "✅ {{count}} zerbitzariren tresnak freskatu dira",
+        "refreshedPartial": "✅ {{success}} zerbitzari freskatuta, ❌ {{failed}} huts",
+        "noServersConfigured": "⚠️ Ez dago MCP zerbitzari konfiguraturik",
+        "testingAll": "🧪 {{count}} MCP zerbitzarien konexioak probatzen...",
+        "testAllSuccess": "✅ {{count}} mcp zerbitzari guztiak behar bezala konektatu dira!",
+        "testAllPartial": "⚠️ {{success}} konektatuta, {{failed}} huts"
+      },
+      "confirm": {
+        "delete": "Ezabatu \"{{name}}\" MCP zerbitzaria?"
+      }
+    },
+    "agents": {
+      "title": "Agenteen kudeaketa",
+      "desc": "Sortu eta kudeatu AI agenteak gaitasun, tresna eta portaera zehatzekin.",
+      "count": "{{count}} agente konfiguratuta",
+      "count_plural": "{{count}} agente konfiguratuta",
+      "addBtn": "+ gehitu agentea",
+      "empty": "Ez dago agente konfiguraturik. Hautatu \"gehitu agentea\" hasteko.",
+      "tableHeaders": {
+        "agent": "Agentea",
+        "model": "Modeloa",
+        "capabilities": "Gaitasunak",
+        "tools": "Tresnak",
+        "actions": "Ekintzak"
+      },
+      "defaultBadge": "Lehenetsia",
+      "systemPrompt": "Sistemaren prompt-a • {{promptName}}",
+      "customPrompt": "Prompt pertsonalizatua",
+      "model": {
+        "notSet": "Ezarri gabe",
+        "notFound": "Modeloa ez da aurkitu katxean",
+        "useChatView": "Erabili Txat Ikuspegiko Modeloa",
+        "useChatViewDesc": "Txat ikuspegian hautatutako modeloa erabiliko du",
+        "useDefault": "Erabili Lehenetsitako Modeloa",
+        "useDefaultDesc": "Ezarpenetako lehenetsitako modeloa erabiliko du"
+      },
+      "capabilities": {
+        "noSpecialModes": "Modu berezirik ez"
+      },
+      "tools": {
+        "builtIn": "{{count}} tresna integratu",
+        "mcpServer": "{{count}} mcp zerbitzari",
+        "mcpServer_plural": "{{count}} mcp zerbitzari",
+        "mcpTool": "{{count}} mcp tresna",
+        "mcpTool_plural": "{{count}} mcp tresna",
+        "noTools": "Tresna gaiturik ez"
+      },
+      "actions": {
+        "edit": "Editatu",
+        "delete": "ezabatu",
+        "protected": "babestuta"
+      },
+      "confirm": {
+        "delete": "Ezabatu \"{{name}}\" agentea?"
+      }
+    },
+    "prompts": {
+      "title": "Sistemaren prompt-ak",
+      "desc": "Kudeatu zure AI laguntzailearen portaera eta nortasuna definitzen duten sistemaren prompt-ak.",
+      "addBtn": "+ gehitu sistemaren prompt-a",
+      "empty": "Ez dago sistemaren prompt konfiguraturik. Hautatu \"gehitu sistemaren prompt-a\" hasteko.",
+      "tableHeaders": {
+        "name": "Izena",
+        "contentPreview": "Edukiaren aurrebista",
+        "created": "Sortua",
+        "updated": "Eguneratua",
+        "enabled": "Gaituta",
+        "actions": "Ekintzak"
+      },
+      "status": {
+        "enabled": "Gaituta",
+        "disabled": "Desgaituta"
+      },
+      "actions": {
+        "edit": "Editatu",
+        "disable": "Desgaitu",
+        "enable": "Gaitu",
+        "delete": "Ezabatu"
+      },
+      "confirm": {
+        "delete": "Ezabatu \"{{name}}\" prompt-a?"
+      }
+    },
+    "tools": {
+      "title": "Tresnen konfigurazioa",
+      "desc": "Berrikusi tresna integratuak eta arakatu konektatutako zerbitzarietatik kargatutako MCP tresnak. Gaitu zure agenteek egin beharko lituzketen ekintzak.",
+      "subTabs": {
+        "builtIn": "Tresna Integratuak",
+        "mcp": "MCP tresnak",
+        "openapi": "HTTP / OpenAPI",
+        "cli": "CLI Tresnak"
+      },
+      "builtIn": {
+        "tableHeaders": {
+          "name": "Izena",
+          "category": "Kategoria",
+          "description": "Deskribapena",
+          "parameters": "Parametroak",
+          "enabled": "Gaituta"
+        },
+        "categories": {
+          "fileOps": "Fitxategi Eragiketak",
+          "searchDisc": "Bilaketa eta Aurkikuntza",
+          "noteMgmt": "Oharren Kudeaketa"
+        },
+        "toolMeta": {
+          "readFile": {
+            "desc": "Irakurri fitxategi baten edukiak zure biltegitik",
+            "params": "path (beharrezkoa): Irakurri beharreko fitxategiaren bidea"
+          },
+          "writeFile": {
+            "desc": "Idatzi edo eguneratu fitxategi bat zure biltegian",
+            "params": "path (beharrezkoa), content (beharrezkoa): Fitxategiaren bidea eta idazteko edukia"
+          },
+          "listFiles": {
+            "desc": "Zerrendatu fitxategiak biltegian edo karpeta zehatz batean",
+            "params": "folder (aukerakoa), extension (aukerakoa): Iragazkiak karpeta eta fitxategi-luzapenaren arabera"
+          },
+          "searchFiles": {
+            "desc": "Bilatu fitxategiak izenaren edo edukiaren arabera zure biltegian",
+            "params": "query (beharrezkoa), search_content (aukerakoa), limit (aukerakoa): Bilaketa-kontsulta eta aukerak"
+          },
+          "createNote": {
+            "desc": "Sortu ohar berria zehaztutako edukiarekin",
+            "params": "title (beharrezkoa), content (beharrezkoa), folder (aukerakoa): Oharraren izenburua, edukia eta kokalekua"
+          },
+          "appendNote": {
+            "desc": "Gehitu edukia lehendik dagoen ohar bati",
+            "params": "path (beharrezkoa), content (beharrezkoa): Oharraren bidea eta gehitzeko edukia"
+          }
+        },
+        "infoTitle": "💡 tresnei buruz",
+        "infoText": "Tresna integratuak plugin-ezarpenen arabera konfiguratzen dira. MCP tresnak modu independentean kudeatzen dira. Erabili MCP fitxa zerbitzariak konektatu eta tresnen erabilgarritasuna freskatzeko.",
+        "toolNames": {
+          "read_file": "Irakurri Fitxategia",
+          "write_file": "Idatzi Fitxategia",
+          "list_files": "Zerrendatu Fitxategiak",
+          "search_files": "Bilatu Fitxategiak",
+          "create_note": "Sortu Oharra",
+          "append_note": "Gehitu Oharrari"
+        }
+      },
+      "mcpTools": {
+        "noTools": "Ez dago MCP tresna erabilgarririk. Konektatu zerbitzari bat edo freskatu katxetatutako tresnak zerrenda betetzeko.",
+        "tableHeaders": {
+          "server": "Zerbitzaria",
+          "tool": "Tresna",
+          "description": "Deskribapena",
+          "parameters": "Parametroak",
+          "source": "Iturria"
+        },
+        "noDescription": "Deskribapenik ez",
+        "schemaUnavailable": "Eskema ez dago erabilgarri",
+        "live": "Zuzenean",
+        "cached": "Katxetatuta",
+        "status": {
+          "connected": "konektatuta",
+          "disconnected": "deskonektatuta"
+        }
+      },
+      "openapi": {
+        "desc": "Sortu HTTP tresnak OpenAPI dokumentuetatik. Urruneko zehaztapenak {{cacheDir}}-n katxeatzen dira.",
+        "addBtn": "Gehitu HTTP iturria",
+        "noSources": "Oraindik ez dago HTTP iturririk konfiguratuta.",
+        "unnamed": "HTTP iturri izengabea",
+        "tableHeaders": {
+          "name": "Izena",
+          "source": "Iturria",
+          "auth": "Autentifikazioa",
+          "status": "Egoera",
+          "actions": "Ekintzak"
+        },
+        "sourceUrl": "Urruneko URL-a ezarri gabe",
+        "sourcePath": "Fitxategi-bidea ezarri gabe",
+        "authHeader": "Goiburua ({{key}})",
+        "authQuery": "Kontsulta ({{key}})",
+        "authNone": "Bat ere ez",
+        "statusEnabled": "Gaituta",
+        "statusDisabled": "Desgaituta",
+        "actions": {
+          "edit": "Editatu",
+          "reload": "Birkargatu",
+          "refetch": "Berreskuratu",
+          "delete": "Ezabatu"
+        },
+        "notices": {
+          "removed": "HTTP iturria kendu da",
+          "reloaded": "{{count}} eragiketa birkargatu dira",
+          "reloadFailed": "Ezin izan da HTTP iturria birkargatu. Egiaztatu kontsola xehetasunetarako."
+        },
+        "modal": {
+          "defaultTitle": "HTTP Iturria",
+          "displayName": {
+            "name": "Bistaratzeko izena",
+            "desc": "Agentei erakusten zaie tresna-iturri bat aukeratzean"
+          },
+          "enabled": {
+            "name": "Gaituta",
+            "desc": "Gaitu HTTP API hau agente guztientzat erabilgarri egoteko"
+          },
+          "sourceType": {
+            "name": "Iturri-mota",
+            "file": "Fitxategi lokala",
+            "url": "Urruneko URLa"
+          },
+          "specUrl": {
+            "name": "OpenAPI URLa",
+            "desc": "Pluginaren datuen direktorioan eskuratu eta katxeatzen da"
+          },
+          "cachedFile": "Katxetatutako fitxategia: {{path}} ({{date}})",
+          "neverFetched": "Inoiz eskuratu gabe",
+          "specPath": {
+            "name": "OpenAPI fitxategi-bidea",
+            "desc": "Bide erlatibo bat biltegian edo bide absolutua"
+          },
+          "baseUrl": {
+            "name": "Oinarrizko URLaren gainidazketa",
+            "desc": "Dokumentuko lehen zerbitzari-sarrera gainidatzi (aukerakoa)"
+          },
+          "auth": {
+            "name": "Autentifikazioa",
+            "desc": "Txertatu API giltzak automatikoki iturri honetara deitzean",
+            "none": "Bat ere ez",
+            "header": "HTTP goiburua",
+            "query": "Kontsulta-parametroa"
+          },
+          "credKey": {
+            "name": "Kredentzial-giltza"
+          },
+          "credValue": {
+            "name": "Kredentzial-balioa"
+          },
+          "actions": {
+            "name": "Ekintzak",
+            "reloadTools": "Birkargatu tresnak",
+            "refetchTooltip": "Berreskuratu zehaztapena URL-tik",
+            "deleteTooltip": "Ezabatu iturria"
+          }
+        }
+      },
+      "cli": {
+        "desc": "Definitu agenteek exekuta ditzaketen komando-lerroko tresna lokalak. Erabili {{param}} bezalako txantiloiak argumentu dinamikoetarako.",
+        "addBtn": "Gehitu CLI Tresna",
+        "presetsBtn": "Gehitu Aurrezarpenetatik",
+        "noTools": "Oraindik ez dago CLI tresnarik konfiguratuta.",
+        "tableHeaders": {
+          "name": "Izena",
+          "command": "Komandoa",
+          "parameters": "Parametroak",
+          "status": "Egoera",
+          "actions": "Ekintzak"
+        },
+        "unnamed": "CLI Tresna izengabea",
+        "paramCount": "{{count}} parametro",
+        "paramCount_plural": "{{count}} parametro",
+        "noParams": "Bat ere ez",
+        "statusEnabled": "Gaituta",
+        "statusDisabled": "Desgaituta",
+        "actions": {
+          "edit": "Editatu",
+          "disable": "Desgaitu",
+          "enable": "Gaitu",
+          "delete": "Ezabatu"
+        },
+        "notices": {
+          "removed": "CLI tresna kendu da"
+        },
+        "infoTitle": "💡 CLI Tresnei buruz",
+        "infoText": "CLI tresnek komando-lerroko aginduak exekutatzen dituzte lokalean. Erabili {{paramName}} argumentuetan txantiloien ordezkapenerako, edo konfiguratu parametroak argumentu edo ingurune-aldagai gisa pasatzeko.",
+        "modal": {
+          "defaultTitle": "CLI Tresna",
+          "toolName": {
+            "name": "Tresnaren izena",
+            "desc": "Agenteek tresna honi deitzeko erabiltzen duten identifikatzailea"
+          },
+          "description": {
+            "name": "Deskribapena",
+            "desc": "Deskribatu tresna honek zer egiten duen AI-rentzat"
+          },
+          "enabled": {
+            "name": "Gaituta",
+            "desc": "Gaitu agenteek tresna hau erabili ahal izateko"
+          },
+          "commandConfig": "Komandoaren Konfigurazioa",
+          "command": {
+            "name": "Komandoa",
+            "desc": "Exekutatu beharrekoa (adibidez, node, python, bash, /path/to/script)"
+          },
+          "args": {
+            "name": "Argumentuak",
+            "desc": "Komandoaren argumentuak, lerro bakoitzeko bat. Erabili {{paramName}} txantiloien ordezkapenerako."
+          },
+          "cwd": {
+            "name": "Laneko direktorioa",
+            "desc": "Komandoa exekutatzeko direktorioa (aukerakoa)"
+          },
+          "timeout": {
+            "name": "Denbora-muga (ms)",
+            "desc": "Exekuzio-denbora maximoa milisegundotan (lehenetsia: {{timeout}})"
+          },
+          "shell": {
+            "name": "Exekutatu shellean",
+            "desc": "Exekutatu komandoa shell baten bidez (shell-en funtzioak gaitzen ditu, hala nola hodiak)"
+          },
+          "paramsTitle": "Parametroak",
+          "paramsDesc": "Definitu AI-ak tresna honi pasa diezazkiokeen parametroak.",
+          "addParam": "Gehitu Parametroa",
+          "noParams": "Ez dago parametro definiturik.",
+          "paramN": "Parametroa {{n}}",
+          "param": {
+            "name": "Izena",
+            "type": {
+              "name": "Mota",
+              "string": "Katea",
+              "number": "Zenbakia",
+              "boolean": "Boolearra"
+            },
+            "description": "Deskribapena",
+            "required": "Beharrezkoa",
+            "insertAs": {
+              "name": "Txertatu honela",
+              "desc": "Nola pasa parametro hau komandoari",
+              "template": "Txantiloia ({{name}})",
+              "arg": "Gehitu argumentu gisa",
+              "env": "Ingurune-aldagaia"
+            },
+            "envName": {
+              "name": "Ingurune-aldagaiaren izena",
+              "desc": "Ingurune-aldagaiaren izena gainidatzi (lehenetsia parametro-izena maiuskulaz)"
+            }
+          },
+          "envTitle": "Ingurune Aldagaiak",
+          "envDesc": "Komandoa exekutatzean ezarri beharreko ingurune-aldagai estatikoak.",
+          "envVars": {
+            "name": "Ingurune-aldagaiak",
+            "desc": "Formatua: KEY=balioa, lerro bakoitzeko bat"
+          }
+        },
+        "presets": {
+          "title": "Gehitu CLI tresna aurrezarpenetatik",
+          "desc": "Hautatu aurrezarpen bat aurrez konfiguratutako CLI tresna bat azkar gehitzeko. Pertsonalizatu dezakezu gehitu ondoren.",
+          "addBtn": "Gehitu",
+          "addedBtn": "Gehituta",
+          "closeBtn": "Itxi",
+          "notices": {
+            "added": "\"{{name}}\" gehituta - gaitu CLI tresnen zerrendan"
+          },
+          "categories": {
+            "file": "Fitxategi Eragiketak",
+            "search": "Bilaketa",
+            "network": "Sarea",
+            "code": "Kode Exekuzioa",
+            "data": "Datu Prozesaketa",
+            "system": "Sistemaren Informazioa",
+            "apps": "macOS Aplikazioak eta Mahaigaina"
+          },
+          "names": {
+            "preset-cat": "Irakurri Fitxategia (cat)",
+            "preset-ls": "Zerrendatu Direktorioa (ls)",
+            "preset-find": "Bilatu Fitxategiak (find)",
+            "preset-grep": "Bilatu Testua (grep)",
+            "preset-ripgrep": "Bilaketa Azkarra (rg)",
+            "preset-curl": "HTTP Eskaria (curl)",
+            "preset-curl-post": "HTTP POST (curl)",
+            "preset-python": "Exekutatu Python Kodea",
+            "preset-node": "Exekutatu JavaScript (Node)",
+            "preset-bash": "Exekutatu Shell Script",
+            "preset-jq": "JSON Prozesatzailea (jq)",
+            "preset-wc": "Hitz Kopurua (wc)",
+            "preset-date": "Data eta Ordua",
+            "preset-pwd": "Direktorioa (pwd)",
+            "preset-whoami": "Erabiltzailea",
+            "preset-uname": "Sistemaren Infoa (uname)",
+            "preset-open": "Ireki Fitxategia/URLa (open)",
+            "preset-open-app": "Abiarazi Aplikazioa (open -a)",
+            "preset-safari": "Ireki Safari-n",
+            "preset-chrome": "Ireki Chrome-n",
+            "preset-firefox": "Ireki Firefox-en",
+            "preset-pbcopy": "Kopiatu Arbelera",
+            "preset-pbpaste": "Itsatsi Arbeletik",
+            "preset-say": "Testu-ahotsa (say)",
+            "preset-osascript": "AppleScript Exekutatzailea",
+            "preset-notify": "Mahaigaineko Jakinarazpena",
+            "preset-screencapture": "Pantaila-argazkia",
+            "preset-applescript-list-apps": "Zerrendatu Aplikazioak"
+          }
+        }
+      }
+    },
+    "rag": {
+      "title": "RAG konfigurazioa",
+      "desc": "Konfiguratu berreskuratze-handitutako sorkuntza eta web bilaketa AI erantzunak hobetzeko.",
+      "subTabs": {
+        "overview": "Ikuspegi orokorra",
+        "chunking": "Zatiketa",
+        "search": "Bilaketa",
+        "filters": "Iragazkiak",
+        "advanced": "Aurreratua",
+        "websearch": "Web Bilaketa"
+      },
+      "general": {
+        "title": "Ezarpen orokorrak",
+        "enableRag": {
+          "name": "Gaitu RAG",
+          "desc": "Gaitu Berreskuratze-Handitutako Sorkuntza testuinguru hobeturako"
+        },
+        "vectorStore": {
+          "name": "Bektore-biltegia",
+          "desc": "Bektore-datu-basea eraketak gordetzeko",
+          "memory": "Memorian",
+          "disk": "Diskoan"
+        },
+        "embeddingModel": {
+          "name": "Eraketa-modeloa",
+          "desc": "Eraketak sortzeko erabiliko den modeloa"
+        },
+        "embedChanged": {
+          "name": "Txertatu fitxategi aldatuak automatikoki",
+          "desc": "Berrezarri fitxategiak automatikoki aldatzen direnean"
+        }
+      },
+      "indexMgmt": {
+        "title": "Indizearen kudeaketa",
+        "desc": "Kudeatu zure RAG indizea eta ikusi indexatutako edukiaren estatistikak.",
+        "statsTitle": "Indizearen estatistikak",
+        "stats": {
+          "totalChunks": "Zatiguneak Guztira",
+          "uniqueFiles": "Fitxategi Bereziak",
+          "totalChars": "Karaktereak Guztira",
+          "avgChunkSize": "Zatigunearen Batezbesteko Tamaina"
+        },
+        "empty": "Indizea hutsik dago. Hautatu \"berreraiki indizea\" indexatzen hasteko.",
+        "error": "⚠️ ezin dira indizearen estatistikak kargatu",
+        "rebuild": {
+          "name": "Berreraiki indizea",
+          "desc": "Berrindexatu biltegiko fitxategi guztiak. Denbora bat har dezake.",
+          "btn": "Berreraiki",
+          "rebuilding": "Berreraikitzen..."
+        },
+        "refresh": {
+          "name": "Freskatu indizea",
+          "desc": "Eguneratu indizea azken indexaziotik aldatu diren fitxategiekin.",
+          "btn": "Freskatu",
+          "refreshing": "Freskatzen..."
+        },
+        "clear": {
+          "name": "Garbitu indizea",
+          "desc": "Kendu indexatutako datu guztiak. Indizea berreraiki beharko duzu.",
+          "btn": "Garbitu",
+          "clearing": "Garbitzen..."
+        },
+        "notices": {
+          "rebuilt": "Indizea behar bezala berreraiki da",
+          "rebuildFailed": "Ezin izan da indizea berreraiki",
+          "refreshed": "Indizea behar bezala freskatu da",
+          "refreshFailed": "Ezin izan da indizea freskatu",
+          "cleared": "Indizea behar bezala garbitu da",
+          "clearFailed": "Ezin izan da indizea garbitu"
+        }
+      },
+      "chunking": {
+        "title": "Zatiketa-ezarpenak",
+        "strategy": {
+          "name": "Zatiketa-estrategia",
+          "desc": "Dokumentuak zatiguneetan banatzeko estrategia",
+          "recursive": "Errekurtsiboa (Adimenduna)",
+          "fixed": "Tamaina Finkoa",
+          "sentence": "Esakuneen arabera",
+          "paragraph": "Paragrafoen arabera"
+        },
+        "chunkSize": {
+          "name": "Zatigunearen tamaina",
+          "desc": "Karaktere kopurua zatigune bakoitzeko (gomendatua: 500-2000)"
+        },
+        "chunkOverlap": {
+          "name": "Zatiguneen gainjartzea",
+          "desc": "Zatiguneen arteko gainjartze-karaktere kopurua"
+        },
+        "minChunkSize": {
+          "name": "Gutxieneko zatigune-tamaina",
+          "desc": "Sortu beharreko gutxieneko zatigune-tamaina"
+        },
+        "maxTokens": {
+          "name": "Gehieneko tokenak zatigune bakoitzeko",
+          "desc": "Gehieneko token kopurua zatigune bakoitzeko"
+        }
+      },
+      "search": {
+        "title": "Bilaketa-ezarpenak",
+        "searchType": {
+          "name": "Bilaketa-mota",
+          "desc": "Egin beharreko antzekotasun-bilaketaren mota",
+          "similarity": "Antzekotasuna"
+        },
+        "topK": {
+          "name": "Goiko K emaitzak",
+          "desc": "Berreskuratu beharreko zatigunerik garrantzitsuenen kopurua (1-20)"
+        },
+        "threshold": {
+          "name": "Antzekotasun-atalasea",
+          "desc": "Emaitzak sartzeko gutxieneko antzekotasun-puntuazioa (0.0-1.0)"
+        },
+        "weight": {
+          "name": "Garrantzi-puntuazioaren pisua",
+          "desc": "Garrantzi-puntuazioaren pisua (0.0-1.0)"
+        },
+        "contextLimit": {
+          "name": "Testuinguru-leihoaren muga",
+          "desc": "Berreskuratutako testuinguruaren gehieneko tokenak"
+        }
+      },
+      "filters": {
+        "title": "Fitxategi-iragazkiak",
+        "excludeFolders": {
+          "name": "Baztertu karpetak",
+          "desc": "Indexaziotik baztertzeko karpetak (komaz bereizita)"
+        },
+        "includeTypes": {
+          "name": "Sartu fitxategi-motak",
+          "desc": "Sartu beharreko fitxategi-motak (hutsik = mota guztiak)"
+        },
+        "excludeTypes": {
+          "name": "Baztertu fitxategi-motak",
+          "desc": "Indexaziotik baztertzeko fitxategi-motak"
+        },
+        "filterByTag": {
+          "name": "Iragazi etiketaren arabera",
+          "desc": "Etiketa hauek dituzten fitxategiak soilik indexatu (hutsik = fitxategi guztiak)"
+        },
+        "excludeByTag": {
+          "name": "Baztertu etiketaren arabera",
+          "desc": "Baztertu etiketa hauek dituzten fitxategiak indexaziotik"
+        }
+      },
+      "advanced": {
+        "title": "Ezarpen aurreratuak",
+        "batchSize": {
+          "name": "Eraketa-lotearen tamaina",
+          "desc": "Paraleloan txertatu beharreko zatigune kopurua"
+        }
+      },
+      "grading": {
+        "title": "Kalifikazio-ezarpenak",
+        "desc": "Kalifikatu berreskuratutako zatiguneak garrantziaren arabera LLM-ri bidali aurretik. Honek kalitate baxuko emaitzak iragazten laguntzen du.",
+        "enableGrading": {
+          "name": "Gaitu kalifikazio-atalasea",
+          "desc": "Iragazi zatiguneak kalitate-atalaseen azpitik"
+        },
+        "graderSource": {
+          "name": "Kalifikatzaile-modeloaren iturria",
+          "desc": "Nondik lortu kalifikatzaile-modeloa",
+          "chat": "Txat Modeloa",
+          "custom": "Modelo Pertsonalizatua"
+        },
+        "graderModel": {
+          "name": "Kalifikatzaile-modeloa",
+          "desc": "Kalifikatzeko erabili beharreko modelo zehatza"
+        },
+        "parallel": {
+          "name": "Prozesaketa paraleloa",
+          "desc": "Paraleloan kalifikatu beharreko zatigune kopurua"
+        },
+        "minRelevance": {
+          "name": "Gutxieneko garrantzi-puntuazioa",
+          "desc": "Gutxieneko garrantzi-puntuazioa (0.0-1.0)"
+        },
+        "minAccuracy": {
+          "name": "Gutxieneko zehaztasun-puntuazioa",
+          "desc": "Gutxieneko zehaztasun-puntuazioa (0.0-1.0)"
+        },
+        "minSupport": {
+          "name": "Gutxieneko euskarri-kalitate puntuazioa",
+          "desc": "Gutxieneko euskarri-kalitate puntuazioa (0.0-1.0)"
+        }
+      }
+    },
+    "websearch": {
+      "title": "Web bilaketaren konfigurazioa",
+      "desc": "Konfiguratu web bilaketaren funtzionalitatea AI erantzunak interneteko informazio eguneratuarekin hobetzeko.",
+      "generalBehavior": "Portaera orokorra",
+      "providerSelection": "Hornitzailearen hautaketa",
+      "localeFilters": "Eskualdea eta iragazkiak",
+      "apiCredentials": "API kredentzialak eta amaierako puntuak",
+      "enabled": {
+        "name": "Gaitu web bilaketa",
+        "desc": "Baimendu AI-ak web-a bilatzea uneko informaziorako"
+      },
+      "autoTrigger": {
+        "name": "Bilaketa automatikoa",
+        "desc": "Abiarazi web bilaketa automatikoki galderak uneko informazioa eskatzen duenean (adibidez, berriak, prezioak, gertaera berriak)"
+      },
+      "maxResults": {
+        "name": "Gehieneko emaitzak",
+        "desc": "Itzuli beharreko bilaketa-emaitzen gehieneko kopurua"
+      },
+      "timeRange": {
+        "name": "Emaitzen freskotasuna",
+        "desc": "Mugatu emaitzak hornitzaileek onartzen duten denbora-tartera (Google, SearXNG, Mojeek)",
+        "any": "Edozein unetan (lehenetsia)",
+        "h": "Azken ordua",
+        "d": "Azken 24 orduak",
+        "w": "Azken astea",
+        "m": "Azken hilabetea",
+        "y": "Azken urtea"
+      },
+      "provider": {
+        "name": "Bilaketa-hornitzailea",
+        "desc": "Aukeratu pribatutasuna errespetatzen duten scraper-ak edo API bidezko motorrak"
+      },
+      "searchLanguage": {
+        "name": "Hizkuntza-kodea",
+        "desc": "ISO hizkuntza-kodea (adibidez, eu, fr, zh-CN) lokalizazioa onartzen duten hornitzaileei bidalia"
+      },
+      "searchCountry": {
+        "name": "Herrialde/merkatu kodea",
+        "desc": "Bi letrako herrialde-kodea (adibidez, US, DE) Bing, DuckDuckGo, Brave eta beste batzuek erabilia"
+      },
+      "includeDomains": {
+        "name": "Sartu domeinu hauek soilik",
+        "desc": "SerpAPI eta Brave-k erabilitako komaz bereizitako zerrenda emaitza jakinetara mugatzeko"
+      },
+      "excludeDomains": {
+        "name": "Baztertu domeinuak",
+        "desc": "Emaitzak eskuratu ondoren iragazteko komaz bereizitako domeinuak"
+      },
+      "apiKey": {
+        "name": "Lehenetsitako API giltza",
+        "desc": "Google, Bing, SerpAPI, Tavily edo Brave-k erabilitako API giltza partekatua, hornitzaile espezifikoko giltzarik ezarri gabe dagoenean"
+      },
+      "googleCseId": {
+        "name": "Google Custom Search Engine ID-a",
+        "desc": "Google API giltza batekin beharrezkoa Google hornitzailea erabiltzean"
+      },
+      "serpapiEndpoint": {
+        "name": "SerpAPI amaierekia",
+        "desc": "SerpAPI oinarrizko URL-a gainidatzi zuk zeuk ostatatzen baduzu"
+      },
+      "tavilyApiKey": {
+        "name": "Tavily API giltza",
+        "desc": "Lehenetsitako giltza gainidatzi Tavily hornitzailea erabiltzean"
+      },
+      "searxngEndpoint": {
+        "name": "SearXNG amaierekia",
+        "desc": "Zure SearXNG instantziaren oinarrizko URLa (JSON-a itzuli behar du)"
+      },
+      "braveApiKey": {
+        "name": "Brave API giltza",
+        "desc": "Erabili Brave Search API harpidetza-token bat hornitzaile gisa hautatuta dagoenean"
+      },
+      "qwantApiKey": {
+        "name": "Qwant API giltza (aukerakoa)",
+        "desc": "Gehitu bearer token bat zure Qwant planak bat ematen badu"
+      },
+      "mojeekApiKey": {
+        "name": "Mojeek API giltza",
+        "desc": "Mojeek hornitzailearentzat beharrezkoa"
+      },
+      "providers": {
+        "duckduckgo": "DuckDuckGo (giltzarik behar ez)",
+        "google": "Google Custom Search",
+        "bing": "Bing Web Search",
+        "serpapi": "SerpAPI",
+        "tavily": "Tavily",
+        "searxng": "SearXNG",
+        "brave": "Brave Search",
+        "yahoo": "Yahoo (HTML scraping)",
+        "yandex": "Yandex (HTML scraping)",
+        "qwant": "Qwant",
+        "mojeek": "Mojeek"
+      }
+    },
+    "quickActions": {
+      "title": "Ekintza azkarrak",
+      "desc": "Konfiguratu AI bidezko ekintza azkarrak editorearen testuinguru-menuan agertzen direnak testua hautatzen denean.",
+      "actionPrefix": {
+        "name": "Ekintzen aurrizkia",
+        "desc": "Ekintza azkar guztien aurretik testuinguru-menuan erakusteko aurrizkia (emoji edo testua)",
+        "placeholder": "⚡"
+      },
+      "count": "{{count}} ekintza konfiguratuta ({{enabled}} gaituta)",
+      "count_plural": "{{count}} ekintza konfiguratuta ({{enabled}} gaituta)",
+      "addBtn": "+ gehitu ekintza azkarra",
+      "empty": "Ez dago ekintza azkar konfiguraturik. Hautatu \"gehitu ekintza azkarra\" hasteko.",
+      "tableHeaders": {
+        "action": "Ekintza",
+        "type": "Mota",
+        "model": "Modeloa",
+        "promptPreview": "Prompt-aren Aurrebista",
+        "actions": "Ekintzak"
+      },
+      "defaultModel": "Lehenetsia",
+      "editBtn": "Editatu",
+      "deleteBtn": "ezabatu",
+      "confirm": {
+        "delete": "Ezabatu \"{{name}}\" ekintza azkarra?"
+      },
+      "usageInfo": {
+        "title": "Erabilera",
+        "step1": "Hautatu testua edozein oharretan",
+        "step2": "Egin klik eskuineko botoiaz testuinguru-menua irekitzeko",
+        "step3": "Aukeratu ekintza azkar bat menuan",
+        "step4Replace": "\"Ordezkatu\" gisa markatutako ekintzek hautatutako testua ordezkatuko dute AI emaitzarekin",
+        "step4Explain": "\"Azaldu\" gisa markatutako ekintzek emaitza elkarrizketa-koadro batean erakutsiko dute"
+      },
+      "edit": {
+        "title": "Editatu ekintza azkarra",
+        "name": {
+          "name": "Izena",
+          "desc": "Ekintza honen erakusteko izena testuinguru-menuan"
+        },
+        "actionType": {
+          "name": "Ekintza-mota",
+          "desc": "AI erantzuna nola kudeatu behar den",
+          "replace": "Ordezkatu hautatutako testua",
+          "explain": "Erakutsi modalean"
+        },
+        "model": {
+          "name": "Modeloa",
+          "desc": "Ekintza honetarako erabiliko den hizkuntza-modeloa (hutsik utzi lehenetsia erabiltzeko)",
+          "default": "Erabili lehenetsitako modeloa"
+        },
+        "promptTemplate": {
+          "name": "Prompt txantiloia",
+          "desc": "AI-ri bidaltzeko argibideak. Hautatutako testua automatikoki gehituko da."
+        },
+        "cancel": "Utzi",
+        "save": "Gorde"
+      },
+      "builtIn": {
+        "make-longer": {
+          "name": "Testua luzeagoa egin",
+          "prompt": "Zabaldu eta landu ondorengo testua, xehetasun gehiago eta osoagoa bihurtuz, jatorrizko esanahia eta tonua mantenduz. Itzuli soilik zabaldutako testua aparteko iruzkinik gabe:\n\n"
+        },
+        "summarize": {
+          "name": "Laburtu testua",
+          "prompt": "Eman ondorengo testuaren laburpen zehatza. Itzuli soilik laburpena aparteko iruzkinik gabe:\n\n"
+        },
+        "improve-writing": {
+          "name": "Hobetu idazketa",
+          "prompt": "Hobetu ondorengo testuaren idazketa-kalitatea, argitasuna eta estiloa. Itzuli soilik hobetutako testua aparteko iruzkinik gabe:\n\n"
+        },
+        "fix-grammar": {
+          "name": "Konpondu gramatika",
+          "prompt": "Konpondu gramatika-, ortografia- eta puntuazio-akatsak ondorengo testuan. Itzuli soilik zuzendutako testua aparteko iruzkinik gabe:\n\n"
+        },
+        "explain": {
+          "name": "Azaldu testua",
+          "prompt": "Azaldu ondorengo testua termino sinpleetan:\n\n"
+        }
+      }
+    },
+    "usage": {
+      "title": "Tokenen erabilera",
+      "desc": "Jarraitu tokenen kontsumoa hornitzaile eta modelo guztietan. Datuak elkarrizketa guztietan metatzen dira.",
+      "notAvailable": "Tokenen erabileraren jarraipena ez dago erabilgarri.",
+      "ranges": {
+        "today": "Gaur",
+        "week": "Aste honetan",
+        "month": "Hilabete honetan",
+        "all": "Denbora guztian"
+      },
+      "stats": {
+        "totalTokens": "Tokenak guztira",
+        "apiCalls": "API deiak",
+        "promptTokens": "Prompt tokenak",
+        "completion": "Osaketa",
+        "tokensIn": "sartutako tokenak",
+        "tokensOut": "irtendako tokenak"
+      },
+      "byProvider": "Hornitzailearen arabera",
+      "byModel": "Modeloaren arabera",
+      "noData": "Oraindik ez dago erabilera-daturik.",
+      "recentActivity": "Azken jarduera",
+      "last10": "azken 10",
+      "noRecent": "Ez dago azken jarduerarik.",
+      "tableHeaders": {
+        "provider": "Hornitzailea",
+        "model": "Modeloa",
+        "prompt": "Prompt-a",
+        "completion": "Osaketa",
+        "total": "Guztira",
+        "calls": "Deiak",
+        "time": "Ordua",
+        "in": "Sartuta",
+        "out": "Irtena"
+      },
+      "clearBtn": "Garbitu erabilera-datu guztiak",
+      "confirm": {
+        "clear": "Tokenen erabilera-erregistro guztiak garbitu? Hau ezin da desegin."
+      }
+    }
+  },
+  "chat": {
+    "placeholder": "Idatzi zure mezua... (Sartu bidaltzeko, Shift+Sartu lerro berrirako)",
+    "conversations": "Elkarrizketak",
+    "toggleConversationsTitle": "Txandakatu elkarrizketa-zerrenda",
+    "currentConversation": "Uneko elkarrizketa",
+    "new": "Berria",
+    "settings": "Ezarpenak",
+    "openSettingsTitle": "Ireki plugin-ezarpenak",
+    "mode": "Modua",
+    "prompt": "Prompt-a",
+    "agent": "Agentea",
+    "modeOptions": {
+      "chat": "Txata",
+      "agent": "Agentea"
+    },
+    "noSystemPrompt": "Sistemako prompt-ik ez",
+    "noAgentsAvailable": "Ez dago agente erabilgarririk",
+    "sendHintPrefix": "Sakatu ",
+    "sendHintKey": "Sartu",
+    "sendHintSuffix": " bidaltzeko",
+    "sendAriaLabel": "Bidali mezua",
+    "stop": " Gelditu",
+    "addReference": "Gehitu erreferentzia",
+    "addReferenceTooltip": "Gehitu fitxategi edo karpeta-erreferentzia (@)",
+    "emptyHeading": "Hasi elkarrizketa bat",
+    "emptySubtext": "Idatzi mezu bat behean hasteko, edo hautatu elkarrizketa bat historiatik.",
+    "noAgentConfig": "Ez dago agente konfiguraturik",
+    "selectAgent": "Hautatu agente bat...",
+    "notices": {
+      "stopping": "Sorkuntza gelditzen...",
+      "ragInitError": "RAG hasieratze-errorea: {{message}}",
+      "modelsRefreshed": "Modeloak freskatu dira",
+      "modelsRefreshFailed": "Ezin izan dira modeloak freskatu: {{message}}",
+      "waitForResponse": "Itxaron uneko erantzuna amaitu arte",
+      "configureProvider": "Mesedez, konfiguratu LLM hornitzaile bat ezarpenetan lehenik",
+      "selectModel": "Mesedez, hautatu modelo bat",
+      "noValidProvider": "Ez da modelo honentzako hornitzaile-konfigurazio baliogarririk aurkitu",
+      "chatError": "Txat errorea: {{message}}",
+      "noMessageToRegenerate": "Ezin da berriz sortzeko mezurik aurkitu",
+      "regenerateOnlyLatest": "Une honetan soilik azken erantzuna birsortu daiteke",
+      "regenerateNoUserMsg": "Ezin da berriz sortzeko erabiltzaile-mezurik aurkitu",
+      "regenerated": "Erantzuna birsortu da",
+      "regenerateFailed": "Birsorkuntzak huts egin du: {{message}}",
+      "noteCreated": "Oharra sortu da: {{name}}",
+      "noteCreateFailed": "Ezin izan da oharra sortu: {{message}}",
+      "messageInserted": "Mezua txertatu da hemen: {{path}}",
+      "messageInsertFailed": "Ezin izan da mezua txertatu: {{message}}",
+      "noAgents": "Ez dago agente erabilgarririk. Konfiguratu agenteak hemen: Ezarpenak → Agenteak.",
+      "ragDisabled": "RAG desgaituta dago ezarpenetan. Gaitu hemen: ezarpenak → txat ezaugarriak → RAG.",
+      "webSearchDisabled": "Web bilaketa desgaituta dago ezarpenetan. Gaitu hemen: ezarpenak → txat ezaugarriak → web bilaketa.",
+      "noFilesInVault": "Ez da fitxategirik aurkitu biltegian",
+      "attached": "Erantsita: {{name}}",
+      "attachedImages": "{{count}} irudi erantsita",
+      "referencesAdded": "{{count}} erreferentzia gehitu dira",
+      "fileNotFound": "Fitxategia ez da aurkitu: {{path}}",
+      "agentConfigApplied": "{{name}} agentearentzako konfigurazioa aplikatu da",
+      "waitForComplete": "Itxaron uneko erantzuna osatu arte",
+      "chatServiceFallback": "ChatService ez dago konfiguratuta. ChatView atzeralpena erabiltzen.",
+      "noModelSelected": "Ez da modelorik hautatu",
+      "noProviderConfig": "Ez da hornitzaile-konfiguraziorik aurkitu",
+      "generationStopped": "Sorkuntza gelditu da",
+      "noResponseToRegenerate": "Ez dago birsortzeko erantzunik",
+      "agentNotFound": "Agentea ez da aurkitu",
+      "unableToLoadRag": "Ezin dira RAG estatistikak kargatu.",
+      "referenced": "Erreferentziatua: {{name}}"
+    },
+    "status": {
+      "available": "Eskuragarri",
+      "unavailable": "Ez eskuragarri",
+      "disabled": "Desgaituta",
+      "on": "Piztuta · {{detail}}",
+      "off": "Itzalita"
+    },
+    "ragStats": {
+      "title": "RAG estatistikak",
+      "totalChunks": "📊 zatiguneak guztira:",
+      "filesIndexed": "📁 indexatutako fitxategiak:",
+      "totalSize": "💾 tamaina guztira:",
+      "avgChunks": "📈 Zatiguneak/Fitxategia batez beste:",
+      "indexedFiles": "📄 indexatutako fitxategiak",
+      "noFilesYet": "⚠️ oraindik ez da fitxategirik indexatu.",
+      "howToBuild": "RAG indizea eraikitzeko:",
+      "step1": "Joan hona: Ezarpenak → RAG",
+      "step2": "Gaitu RAG",
+      "step3": "Hautatu indexatze-biltegia",
+      "close": "Itxi",
+      "retrieved": "📚 {{count}} dokumentutik berreskuratuta",
+      "retrieved_plural": "📚 {{count}} dokumentutatik berreskuratuta"
+    },
+    "ragTooltip": {
+      "status": "RAG Indizearen Egoera:",
+      "totalChunks": "📊 Zatiguneak Guztira: {{count}}",
+      "filesIndexed": "📁 Indexatutako Fitxategiak: {{count}}",
+      "totalSize": "💾 Tamaina Guztira: {{size}} KB",
+      "indexedFiles": "📄 indexatutako fitxategiak:",
+      "andMore": "  ... eta {{count}} gehiago",
+      "noFilesYet": "⚠️ oraindik ez da fitxategirik indexatu.",
+      "goToSettings": "Joan hona: Ezarpenak → RAG indizea eraikitzeko.",
+      "ragOff": "ℹ️ RAG une honetan itzalita dago txat honetarako."
+    },
+    "agentSummary": {
+      "model": "Modeloa",
+      "temp": "Tenp",
+      "max": "Geh",
+      "rag": "RAG",
+      "web": "Weba",
+      "tools": "Tresnak",
+      "memory": "Memoria",
+      "none": "Bat ere ez",
+      "configuration": "{{name}} konfigurazioa",
+      "modelFixed": "{{name}} · Finkoa",
+      "modelDefault": "{{name}} · Lehenetsia",
+      "modelChatView": "{{name}} · Txat Ikuspegia",
+      "customModel": "Modelo pertsonalizatua",
+      "notSet": "Ezarri gabe",
+      "auto": "Auto",
+      "on": "Piztuta",
+      "off": "Itzalita",
+      "shortTerm": "Epe laburrera",
+      "longTerm": "Epe luzera",
+      "disabledMemory": "Desgaituta",
+      "builtIn": "{{count}} integratu",
+      "mcp": "{{count}} MCP",
+      "cli": "{{count}} CLI"
+    },
+    "message": {
+      "webResults": "Web emaitzak",
+      "attachments": "Eranskinak",
+      "references": "Erreferentziak",
+      "ragSources": "RAG Iturriak",
+      "reasoning": "Arrazoibidea",
+      "copy": "Kopiatu",
+      "copied": "Mezua kopiatu da",
+      "copyFailed": "Ezin izan da mezua kopiatu",
+      "tokenUsage": "Tokenen erabilera",
+      "tokenUsagePrompt": "Prompt-a",
+      "tokenUsageCompletion": "Osaketa",
+      "tokenUsageTotal": "Guztira",
+      "save": "Gorde",
+      "insertToNotes": "Txertatu Oharretan",
+      "regenerate": "Birsortu"
+    },
+    "streaming": {
+      "thinking": "Pentsatzen..."
+    },
+    "toolCall": {
+      "thinking": "Pentsatzen",
+      "executionProcess": "Exekuzio Prozesua",
+      "input": "Sarrera",
+      "output": "Irteera",
+      "running": "Exekutatzen..."
+    },
+    "addPicture": "Gehitu argazkia",
+    "addPictureTooltip": "Erantsi irudi bat zure mezuari",
+    "ragLabel": "RAG",
+    "ragTooltipLabel": "Erabili indexatutako oharrak testuinguru gisa",
+    "webSearchLabel": "Web Bilaketa",
+    "webSearchTooltipLabel": "Bilatu interneten behar denean",
+    "imageUnavailable": "Irudi-eranskina ez dago erabilgarri uneko modeloarentzat.",
+    "newChat": "Txat Berria",
+    "newConversation": "Elkarrizketa Berria",
+    "searchConversations": "Bilatu elkarrizketak...",
+    "header": {
+      "model": "Modeloa",
+      "advancedParams": "Parametro aurreratuak",
+      "temperature": "Tenperatura",
+      "maxTokens": "Token maximoak",
+      "topP": "Goi P",
+      "freqPenalty": "Fre. zigorra",
+      "presPenalty": "Aur. zigorra",
+      "agentConfig": "Agentearen konfigurazioa",
+      "modelsCount": "Modeloak: {{count}}",
+      "tokensCount": "Tokenak: {{count}}",
+      "noModels": "Ez dago modelo erabilgarririk"
+    },
+    "temperature": {
+      "precise": "0 (Zehatza)",
+      "balanced": "1 (Orekatua)",
+      "creative": "2 (Sortzailea)"
+    },
+    "modals": {
+      "image": {
+        "title": "Erantsi irudiak",
+        "searchPlaceholder": "Bilatu irudiak...",
+        "selectAll": "Hautatu guztiak",
+        "selectNone": "Hautatu bat ere ez",
+        "addSelected": "Gehitu hautatuak",
+        "noResults": "Ez da bat datorren irudirik aurkitu."
+      },
+      "reference": {
+        "title": "Gehitu erreferentziak",
+        "searchPlaceholder": "Bilatu fitxategiak eta karpetak...",
+        "selectAll": "Hautatu guztiak",
+        "selectNone": "Hautatu bat ere ez",
+        "addSelected": "Gehitu hautatuak",
+        "noResults": "Ez da bat datorren fitxategi edo karpetarik aurkitu."
+      },
+      "insertNote": {
+        "title": "Txertatu oharrean",
+        "searchPlaceholder": "Bilatu oharrak...",
+        "insert": "Txertatu hautatutako oharrean",
+        "createNew": "Sortu ohar berria",
+        "noResults": "Ez da bat datorren oharrik aurkitu."
+      }
+    }
+  },
+  "modals": {
+    "confirm": {
+      "cancel": "Utzi",
+      "confirm": "Berretsi"
+    },
+    "agentEdit": {
+      "title": "Editatu agentea",
+      "icon": {
+        "name": "Ikonoa",
+        "desc": "Agentea irudikatzeko emoji edo karakterea"
+      },
+      "description": {
+        "name": "Deskribapena",
+        "desc": "Agentearen deskribapen laburra"
+      },
+      "modelStrategy": {
+        "name": "Modelo-estrategia",
+        "options": {
+          "default": "Erabili lehenetsitako modeloa (ezarpenetatik)",
+          "chatView": "Erabili txat ikuspegiko modeloa",
+          "fixed": "Modelo finkoa"
+        },
+        "noModels": "Ez dago modelorik katxean",
+        "desc": "Aukeratu nola hautatuko duen agenteak bere modeloa"
+      },
+      "systemPrompt": {
+        "createNew": "➕ sortu prompt berria...",
+        "promptName": {
+          "name": "Prompt-aren izena",
+          "desc": "Prompt berriaren erakusteko izena"
+        },
+        "promptContent": {
+          "name": "Prompt-aren edukia",
+          "desc": "Prompt berriaren edukia"
+        },
+        "name": "Sistemaren prompt-a",
+        "desc": "Aukeratu lehendik dauden prompt-en artetik edo definitu berri bat agente honentzat."
+      },
+      "capabilities": "Gaitasunak",
+      "memory": {
+        "title": "Memoria",
+        "notice": "Agentearen memoria behin-behinean ez dago erabilgarri esperientzia lantzen ari garen bitartean."
+      },
+      "tools": {
+        "title": "Tresnak",
+        "builtIn": {
+          "name": "Tresna integratuak",
+          "desc": "Hautatu zein tresna integratu erabil ditzakeen agente honek"
+        },
+        "cli": {
+          "name": "CLI tresnak",
+          "desc": "Hautatu behean CLI tresna gaitutako guztietarako sarbidea emateko, edo banan-banan aukeratu",
+          "noTools": "Ez dago CLI tresna konfiguraturik. Gehitu eta gaitu tresnak hemen: Ezarpenak → Tresnak → CLI hor hemen erabiltzeko."
+        }
+      },
+      "mcp": {
+        "title": "MCP sarbidea",
+        "noServers": "Ez dago MCP zerbitzari konfiguraturik. Gehitu zerbitzariak hemen: Ezarpenak → MCP aukera hauek desblokeatzeko.",
+        "toolsCached": "{{count}} tresna katxetatuta",
+        "toolsCached_plural": "{{count}} tresna katxetatuta",
+        "noToolsCached": "Oraindik ez dago tresnarik katxean. Gaitu sarbide osoa edo freskatu katxea.",
+        "showTools": "Erakutsi tresnak",
+        "hideTools": "Ezkutatu tresnak",
+        "selected": "Hautatua",
+        "notSelected": "Hautatu gabe",
+        "noToolsAvailable": "Oraindik ez dago tresna erabilgarririk zerbitzari honetan."
+      },
+      "notices": {
+        "promptRequired": "Mesedez, eman izen bat eta edukia prompt berriarentzat."
+      },
+      "name": {
+        "label": "Izena",
+        "desc": "Agente honen erakusteko izena"
+      },
+      "fixedModel": {
+        "name": "Modelo finkoa",
+        "desc": "Hautatu modelo zehatz bat agente honentzat.",
+        "descNoModels": "Ez dago modelo katxerik erabilgarri. Freskatu modeloak Modeloak fitxan."
+      },
+      "temperature": {
+        "label": "Tenperatura",
+        "desc": "Ausazkotasuna kontrolatzen du (0.0 - 2.0)"
+      },
+      "maxTokens": {
+        "label": "Token maximoak",
+        "desc": "Sortu beharreko gehieneko token kopurua"
+      },
+      "contextWindow": {
+        "label": "Testuinguru-leihoa",
+        "desc": "Testuinguruan sartu beharreko aurreko mezu kopurua"
+      },
+      "rag": {
+        "name": "RAG",
+        "desc": "Gaitu berreskuratze-handitutako sorkuntza"
+      },
+      "webSearch": {
+        "name": "Web bilaketa",
+        "desc": "Gaitu web bilaketa gaitasunak"
+      },
+      "maxSteps": {
+        "name": "Gehieneko Tresna Pausoak",
+        "desc": "Agentearen txanda bakoitzeko tresna-deien pauso maximoa"
+      }
+    },
+    "provider": {
+      "title": "Hornitzailearen ezarpenak",
+      "selectProvider": {
+        "name": "Hornitzailea",
+        "desc": "Hautatu LLM hornitzaile mota",
+        "placeholder": "-- Hautatu hornitzailea --"
+      },
+      "providers": {
+        "openai": "OpenAI",
+        "anthropic": "Anthropic",
+        "google": "Google (Gemini)",
+        "deepseek": "DeepSeek",
+        "ollama": "Ollama (lokala)",
+        "openrouter": "OpenRouter",
+        "sapAiCore": "SAP AI Core",
+        "custom": "Pertsonalizatua (OpenAI-ekin bateragarria)"
+      },
+      "modelFilter": {
+        "name": "Modelo-iragazkia",
+        "desc": "Nahi izanez gero, regex patroia eskuragarri dauden modeloak mugatzeko"
+      },
+      "resourceGroup": {
+        "name": "Baliabide-taldea",
+        "desc": "Nahi izanez gero, SAP AI Core baliabide-taldea"
+      },
+      "serviceKey": {
+        "name": "Zerbitzu-giltza",
+        "desc": "SAP AI Core zerbitzu-giltza (JSON katea)"
+      },
+      "baseUrl": {
+        "name": "Oinarrizko URLa",
+        "ollamaDesc": "Ollama zerbitzariaren URLa",
+        "customDesc": "OpenAI-ekin bateragarria den API amaierako puntua (beharrezkoa)",
+        "optionalDesc": "API amaierako puntu pertsonalizatua (aukerakoa)"
+      },
+      "manageModels": {
+        "name": "Kudeatu Modeloak",
+        "desc": "Bota modelo berriak edo eguneratu lehendik daudenak Ollama erregistrotik.",
+        "btn": "⏬ Bota Ollama Modeloa"
+      },
+      "apiKey": {
+        "name": "API Giltza",
+        "desc": "Hautatutako hornitzailearen autentifikazio-giltza"
+      },
+      "cancel": "Utzi",
+      "save": "Gorde",
+      "validation": {
+        "selectProvider": "Mesedez, hautatu hornitzaile mota bat",
+        "apiKeyTooLong": "API giltza luzeegia da. Gehieneko luzera 500 karaktere da.",
+        "invalidUrl": "Oinarrizko URL formatu baliogabea. Mesedez, sartu URL baliozko bat (adibidez, https://api.example.com)"
+      }
+    },
+    "mcpInspector": {
+      "title": "MCP ikuskatzailea",
+      "desc": "Ikuskatu eta araztu Model Context Protocol (MCP) zerbitzarien konexioak eta tresnak.",
+      "tabs": {
+        "connections": "Konexioak",
+        "tools": "Tresnak",
+        "logs": "Erregistroak"
+      },
+      "refreshBtn": "🔄 freskatu",
+      "connections": {
+        "title": "MCP zerbitzarien konexioak",
+        "noServers": "Ez dago MCP zerbitzari konfiguraturik.",
+        "headers": {
+          "server": "Zerbitzariaren izena",
+          "status": "Egoera",
+          "tools": "Tresna erabilgarriak",
+          "actions": "Ekintzak"
+        },
+        "statusDisabled": "Desgaituta",
+        "statusConnected": "● konektatuta",
+        "statusDisconnected": "○ deskonektatuta",
+        "toolsLive": "{{count}} tresna",
+        "toolsLive_plural": "{{count}} tresna",
+        "toolsCached": "{{count}} tresna (katxean)",
+        "toolsCached_plural": "{{count}} tresna (katxean)",
+        "noTools": "0 tresna",
+        "connectBtn": "Konektatu",
+        "disconnectBtn": "Deskonektatu",
+        "connecting": "Konektatzen...",
+        "disconnecting": "Deskonektatzen...",
+        "notices": {
+          "disconnected": "{{name}}-tik deskonektatuta",
+          "enableFirst": "Gaitu zerbitzaria ezarpenetan konektatu aurretik",
+          "connected": "{{name}}-ra konektatuta",
+          "failedDisconnect": "Ezin izan da {{name}}-tik deskonektatu: {{message}}",
+          "failedConnect": "Ezin izan da {{name}}-ra konektatu: {{message}}"
+        }
+      },
+      "tools": {
+        "title": "Eskuragarri dauden MCP tresnak",
+        "noTools": "Ez dago MCP tresna erabilgarririk. Egiaztatu zerbitzarien konexioak.",
+        "serverPrefix": "Zerbitzaria: {{name}}",
+        "noToolsInServer": "Ez dago tresna erabilgarririk",
+        "headers": {
+          "tool": "Tresnaren izena",
+          "description": "Deskribapena",
+          "parameters": "Parametroak"
+        },
+        "noDescription": "Deskribapenik ez",
+        "noParams": "Bat ere ez"
+      },
+      "logs": {
+        "title": "MCP konexio-erregistroak",
+        "placeholder": "MCP konexio-erregistroak hemen agertuko dira. Une honetan informazio ordezkoa erakusten.",
+        "events": {
+          "connection": "• konexio-gertaerak",
+          "tools": "• tresna-erregistro gertaerak",
+          "errors": "• errore-erregistroak",
+          "comms": "• komunikazio-xehetasunak"
+        },
+        "testTitle": "Probatu tresnaren exekuzioa",
+        "selectServer": "Hautatu zerbitzari bat...",
+        "selectTool": "Hautatu tresna bat...",
+        "parametersTitle": "Parametroak",
+        "selectEnum": "Hautatu...",
+        "performBtn": "Exekutatu tresna",
+        "clearBtn": "Garbitu emaitzak",
+        "executing": "Exekutatzen...",
+        "success": "✅ exekuzioa arrakastatsua",
+        "failed": "❌ exekuzioak huts egin du",
+        "errorTitle": "❌ exekuzio-errorea",
+        "errorLabel": "Errorea: {{message}}",
+        "notices": {
+          "success": "Tresna behar bezala exekutatu da",
+          "failed": "Tresnaren exekuzioak huts egin du",
+          "error": "Exekuzio-errorea: {{message}}",
+          "requiredMissing": "Beharrezko parametroa falta da: {{name}}",
+          "invalidNumber": "Zenbaki baliogabea parametro honentzat: {{name}}",
+          "invalidJson": "JSON baliogabea parametro honentzat: {{name}}"
+        }
+      },
+      "testAll": {
+        "noServers": "⚠️ Ez dago MCP zerbitzari konfiguraturik",
+        "testing": "🧪 {{count}} MCP zerbitzarien konexioak probatzen...",
+        "allSuccess": "✅ {{count}} mcp zerbitzari guztiak behar bezala konektatu dira!",
+        "partial": "⚠️ {{success}} konektatuta, {{failed}} huts"
+      }
+    },
+    "mcpServer": {
+      "titleEdit": "Editatu MCP zerbitzaria",
+      "titleAdd": "Gehitu MCP zerbitzaria",
+      "serverName": {
+        "name": "Zerbitzariaren izena",
+        "desc": "Plugin osoan zehar erakusten den izen lagunkoia"
+      },
+      "connectionMode": {
+        "name": "Konexio-modua",
+        "desc": "Aukeratu automatikoki konektatu ala eskuz abiarazi behar den",
+        "auto": "Konektatu automatikoki txata irekitzean",
+        "manual": "Konexio eskuzkoa"
+      },
+      "command": {
+        "name": "Komandoa",
+        "desc": "MCP zerbitzaria abiarazten duen exekutagarria edo script-a"
+      },
+      "arguments": {
+        "name": "Argumentuak",
+        "desc": "Komaz edo lerro-jauziz bereizitako argumentuak (aukerakoa)"
+      },
+      "envVars": {
+        "name": "Ingurune-aldagaiak",
+        "desc": "Nahi izanez gero, KEY=BALIOA bikoteak, lerro bakoitzeko bat"
+      },
+      "enabled": {
+        "name": "Gaituta",
+        "desc": "Desgaitu zerbitzaria konfiguratuta mantentzeko automatikoki konektatu gabe"
+      },
+      "cancel": "Utzi",
+      "saveEdit": "Gorde aldaketak",
+      "saveAdd": "Gehitu zerbitzaria",
+      "validation": {
+        "nameRequired": "Zerbitzariaren izena beharrezkoa da",
+        "commandRequired": "Komandoa beharrezkoa da"
+      }
+    },
+    "ollamaManager": {
+      "title": "Kudeatu Ollama modeloak",
+      "serverInfo": "Zerbitzariaren informazioa",
+      "checkingServer": "Zerbitzaria egiaztatzen...",
+      "serverOnline": "✅ Zerbitzaria sarean",
+      "versionLabel": " | Bertsioa: {{version}}",
+      "urlLabel": " | {{url}}",
+      "serverOffline": "❌ Zerbitzaria lineaz kanpo",
+      "connectionError": "❌ Konexio-errorea",
+      "pullTitle": "Bota modelo berria",
+      "pullHint": "Sartu modelo-izen bat Ollama liburutegitik deskargatzeko (adibidez, llama2, mistral, codellama)",
+      "modelName": {
+        "name": "Modeloaren izena",
+        "example": "Adibidea: llama2, mistral, codellama:7b"
+      },
+      "pullBtn": "Bota modeloa",
+      "installedTitle": "Instalatutako modeloak",
+      "refreshList": "🔄 Freskatu zerrenda",
+      "noModels": "Ez da modelorik aurkitu. Bota modelo bat hasteko.",
+      "capabilities": "Gaitasunak: {{caps}}",
+      "deleteBtn": "Ezabatu",
+      "closeBtn": "Itxi",
+      "confirmDelete": {
+        "title": "Berretsi ezabaketa",
+        "message": "Ziur zaude \"{{name}}\" modeloa ezabatu nahi duzula?",
+        "cancel": "Utzi",
+        "confirm": "Ezabatu"
+      },
+      "notices": {
+        "enterName": "Mesedez, sartu modelo-izen bat",
+        "pulling": "{{name}} botatzen... Denbora bat har dezake.",
+        "pullSuccess": "✅ {{name}} behar bezala bota da",
+        "pullFailed": "❌ Ezin izan da modeloa bota: {{message}}",
+        "deleted": "✅ {{name}} ezabatu da",
+        "deleteFailed": "❌ Ezin izan da modeloa ezabatu: {{message}}",
+        "refreshing": "Freskatzen...",
+        "refreshSuccess": "✅ Modelo-zerrenda freskatu da",
+        "refreshFailed": "❌ Ezin izan da modelo-zerrenda freskatu"
+      }
+    },
+    "promptEdit": {
+      "title": "Editatu sistemaren prompt-a",
+      "name": {
+        "name": "Izena",
+        "desc": "Prompt honen erakusteko izena"
+      },
+      "content": {
+        "name": "Edukia",
+        "desc": "Sistemaren prompt-aren edukia"
+      },
+      "enabled": {
+        "name": "Gaituta",
+        "desc": "Prompt hau aktibo dagoen ala ez"
+      },
+      "cancel": "Utzi",
+      "save": "Gorde"
+    },
+    "prompt": {
+      "cancel": "Utzi",
+      "ok": "Ados"
+    },
+    "textInput": {
+      "nameLabel": "Izena",
+      "create": "Sortu",
+      "cancel": "Utzi"
+    },
+    "explain": {
+      "loading": "⏳ Prozesatzen...",
+      "error": "Errorea azalpena errendatzean",
+      "errorPrefix": "❌ Errorea: "
+    }
+  },
+  "notices": {
+    "noProvider": "Mesedez, konfiguratu LLM hornitzaile bat ezarpenetan lehenik",
+    "noModel": "Mesedez, hautatu lehenetsitako modelo bat ezarpenetan",
+    "noValidProvider": "Ez da modelo honentzako hornitzaile-konfigurazio baliogarririk aurkitu: {{modelId}}",
+    "processing": "Prozesatzen...",
+    "textUpdated": "Testua behar bezala eguneratu da",
+    "error": "Errorea: {{message}}"
+  }
+}
