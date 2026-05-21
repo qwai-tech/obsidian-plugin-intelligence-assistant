@@ -177,3 +177,4 @@ playwright-report/
 tests/e2e/test-vault/.obsidian/plugins/*/settings.json
 tests/e2e/test-vault/.obsidian/workspace.json
 .envrc
+locales/
