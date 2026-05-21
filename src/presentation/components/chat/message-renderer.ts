@@ -437,6 +437,14 @@ async function writeTextToClipboard(text: string) {
 	throw new Error('Clipboard API not available');
 }
 
+export function appendTokenUsageToMessage(messageEl: HTMLElement, usage: Message['tokenUsage']) {
+	const body = messageEl.querySelector('.ia-chat-message__body') as HTMLElement | null;
+	if (!body) return;
+	const existing = body.querySelector('.ia-chat-message__footer');
+	if (existing) existing.remove();
+	renderTokenUsageFooter(body, usage);
+}
+
 function renderTokenUsageFooter(container: HTMLElement, usage?: Message['tokenUsage']) {
 	if (!usage) return;
 	const summary: string[] = [];

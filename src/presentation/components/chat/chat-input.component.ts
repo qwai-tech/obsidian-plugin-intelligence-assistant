@@ -136,33 +136,31 @@ export class ChatInputComponent {
 			this.callbacks.onShowReferenceMenu();
 		});
 
-		// RAG (only rendered if enabled in settings)
-		if (this.plugin.settings.ragConfig.enabled) {
-			const ragBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
-			ragBtn.type = 'button';
-			this.ragActionItem = ragBtn;
-			this.ragActionItem.setAttr('title', t('chat.ragTooltipLabel'));
-			setIcon(this.ragActionItem.createSpan({ cls: 'header-action-icon' }), 'book-open');
-			this.ragActionItem.createSpan({ cls: 'header-action-label', text: t('chat.ragLabel') });
-			this.ragActionItem.addEventListener('click', (e) => {
-				e.preventDefault();
-				void this.callbacks.onToggleRag();
-			});
-		}
+		// RAG (always created; hidden until enabled in settings)
+		const ragBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
+		ragBtn.type = 'button';
+		this.ragActionItem = ragBtn;
+		this.ragActionItem.setAttr('title', t('chat.ragTooltipLabel'));
+		setIcon(this.ragActionItem.createSpan({ cls: 'header-action-icon' }), 'book-open');
+		this.ragActionItem.createSpan({ cls: 'header-action-label', text: t('chat.ragLabel') });
+		this.ragActionItem.addEventListener('click', (e) => {
+			e.preventDefault();
+			void this.callbacks.onToggleRag();
+		});
+		if (!this.plugin.settings.ragConfig.enabled) this.ragActionItem.addClass('ia-hidden');
 
-		// Web search (only rendered if enabled in settings)
-		if (this.plugin.settings.webSearchConfig.enabled) {
-			const webBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
-			webBtn.type = 'button';
-			this.webActionItem = webBtn;
-			this.webActionItem.setAttr('title', t('chat.webSearchTooltipLabel'));
-			setIcon(this.webActionItem.createSpan({ cls: 'header-action-icon' }), 'search');
-			this.webActionItem.createSpan({ cls: 'header-action-label', text: t('chat.webSearchLabel') });
-			this.webActionItem.addEventListener('click', (e) => {
-				e.preventDefault();
-				void this.callbacks.onToggleWeb();
-			});
-		}
+		// Web search (always created; hidden until enabled in settings)
+		const webBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
+		webBtn.type = 'button';
+		this.webActionItem = webBtn;
+		this.webActionItem.setAttr('title', t('chat.webSearchTooltipLabel'));
+		setIcon(this.webActionItem.createSpan({ cls: 'header-action-icon' }), 'search');
+		this.webActionItem.createSpan({ cls: 'header-action-label', text: t('chat.webSearchLabel') });
+		this.webActionItem.addEventListener('click', (e) => {
+			e.preventDefault();
+			void this.callbacks.onToggleWeb();
+		});
+		if (!this.plugin.settings.webSearchConfig.enabled) this.webActionItem.addClass('ia-hidden');
 
 		// Image (created hidden; shown/hidden by setImageButtonVisible)
 		const imageBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn ia-hidden' });
