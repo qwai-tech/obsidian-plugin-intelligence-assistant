@@ -100,33 +100,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	async onload() {
 		const pluginDir = `${this.app.vault.configDir}/plugins/${this.manifest.id}`;
 		initI18n(undefined, pluginDir);
-		this.settingsService = new SettingsService(
-			() => this.settings,
-			() => this.saveSettings()
-		);
 		const loadStart = Date.now();
 
-		this.pluginDataPath = `${this.app.vault.configDir}/plugins/${this.manifest.id}/data`;
-		await this.ensureFolderExists(this.pluginDataPath);
-
-		// Initialize conversation storage system first
-		this.conversationStorageService = new ConversationStorageService(this.app);
-		await this.conversationStorageService.initialize();
-
-		this.dataService = new PluginDataService(this.app);
-		await this.dataService.initialize();
-		this.editorQuickActions = new EditorQuickActions(this.app, () => ({
-			quickActions: this.settings.quickActions,
-			quickActionPrefix: this.settings.quickActionPrefix || '⚡',
-			llmConfigs: this.settings.llmConfigs,
-			defaultModel: this.settings.defaultModel,
-		}));
-
-		await this.loadSettings();
-
-		// Defer non-critical initialization to background (don't block startup)
-		// These will run asynchronously after the plugin has loaded
-		void this.deferredInitialization();
+		// ── UI registration: must complete even if data loading fails ──
 
 		// Register the chat view
 		this.registerView(
@@ -136,8 +112,8 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 		// Add command to open chat in right sidebar
 		this.addCommand({
-			id: 'open-chat-sidebar',
-			name: 'Open AI chat in sidebar',
+			id: "open-chat-sidebar",
+			name: "Open AI chat in sidebar",
 			callback: async () => {
 				await this.openChatViewInRightSidebar();
 			}
@@ -145,24 +121,55 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 		// Add command to open chat in main editor area
 		this.addCommand({
-			id: 'open-chat-main',
-			name: 'Open AI chat in main area',
+			id: "open-chat-main",
+			name: "Open AI chat in main area",
 			callback: async () => {
 				await this.openChatViewInMainArea();
 			}
 		});
 
 		// Add ribbon icon for quick chat access
-		this.chatRibbonIconEl = this.addRibbonIcon('message-circle', 'Open AI chat', async () => {
+		this.chatRibbonIconEl = this.addRibbonIcon("message-circle", "Open AI chat", async () => {
 			await this.openChatViewInRightSidebar();
 		});
-		this.chatRibbonIconEl?.addClass('ia-ribbon-chat-icon');
+		this.chatRibbonIconEl?.addClass("ia-ribbon-chat-icon");
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new IntelligenceAssistantSettingTab(this.app, this));
 
-		// Register editor context menu actions
-		this.editorQuickActions.register(this);
+		// ── Data initialization: wrapped so failures never break the UI ──
+
+		try {
+			this.settingsService = new SettingsService(
+				() => this.settings,
+				() => this.saveSettings()
+			);
+
+			this.pluginDataPath = `${this.app.vault.configDir}/plugins/${this.manifest.id}/data`;
+			await this.ensureFolderExists(this.pluginDataPath);
+
+			this.conversationStorageService = new ConversationStorageService(this.app);
+			await this.conversationStorageService.initialize();
+
+			this.dataService = new PluginDataService(this.app);
+			await this.dataService.initialize();
+			this.editorQuickActions = new EditorQuickActions(this.app, () => ({
+				quickActions: this.settings.quickActions,
+				quickActionPrefix: this.settings.quickActionPrefix || "⚡",
+				llmConfigs: this.settings.llmConfigs,
+				defaultModel: this.settings.defaultModel,
+			}));
+
+			await this.loadSettings();
+
+			// Register editor context menu actions
+			this.editorQuickActions.register(this);
+		} catch (error) {
+			console.error("[Plugin] Data initialization failed:", error);
+		}
+
+		// Defer non-critical initialization to background
+		void this.deferredInitialization();
 
 		const loadTime = Date.now() - loadStart;
 		console.debug(`[Plugin] Load time: ${loadTime}ms`);
