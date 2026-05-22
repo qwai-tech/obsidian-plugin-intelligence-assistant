@@ -192,3 +192,63 @@ describe('ToolRegistry - resolveForAgent', () => {
 		expect(registry.resolveForAgent({ sources: {} })).toHaveLength(0);
 	});
 });
+
+describe('ToolRegistry - unregisterSource', () => {
+	it('disposes the source and drops its tools', async () => {
+		const registry = new ToolRegistry();
+		const disposed: string[] = [];
+		registry.registerSource(
+			fakeSource('mcp', 'alpha', [fakeTool('search')], {
+				dispose: async () => {
+					disposed.push('alpha');
+				},
+			}),
+		);
+		registry.registerSource(fakeSource('builtin', 'builtin', [fakeTool('read_file')]));
+		await registry.reload();
+		await registry.unregisterSource('mcp', 'alpha');
+		expect(disposed).toEqual(['alpha']);
+		expect(registry.getTools().map((t) => t.toolId)).toEqual(['builtin:builtin:read_file']);
+	});
+
+	it('re-disambiguates remaining tools after a source is removed', async () => {
+		const registry = new ToolRegistry();
+		registry.registerSource(fakeSource('mcp', 'alpha', [fakeTool('search')]));
+		registry.registerSource(fakeSource('mcp', 'beta', [fakeTool('search')]));
+		await registry.reload();
+		expect(registry.getToolByLlmName('search_2')?.toolId).toBe('mcp:beta:search');
+		await registry.unregisterSource('mcp', 'alpha');
+		expect(registry.getToolByLlmName('search')?.toolId).toBe('mcp:beta:search');
+		expect(registry.getToolByLlmName('search_2')).toBeUndefined();
+	});
+
+	it('is a no-op for an unknown source', async () => {
+		const registry = new ToolRegistry();
+		await expect(registry.unregisterSource('cli', 'ghost')).resolves.toBeUndefined();
+	});
+});
+
+describe('ToolRegistry - dispose', () => {
+	it('disposes every source and clears all tools', async () => {
+		const registry = new ToolRegistry();
+		const disposed: string[] = [];
+		registry.registerSource(
+			fakeSource('mcp', 'alpha', [fakeTool('search')], {
+				dispose: async () => {
+					disposed.push('alpha');
+				},
+			}),
+		);
+		registry.registerSource(
+			fakeSource('cli', 'c1', [fakeTool('run')], {
+				dispose: async () => {
+					disposed.push('c1');
+				},
+			}),
+		);
+		await registry.reload();
+		await registry.dispose();
+		expect(disposed.sort()).toEqual(['alpha', 'c1']);
+		expect(registry.getTools()).toHaveLength(0);
+	});
+});

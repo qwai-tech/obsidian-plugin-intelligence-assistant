@@ -91,6 +91,39 @@ export class ToolRegistry {
 		});
 	}
 
+	/** Remove a source: release its resources, drop its tools, and re-disambiguate the rest. */
+	async unregisterSource(kind: ToolSourceKind, id: string): Promise<void> {
+		const key = sourceKey(kind, id);
+		const source = this.sources.get(key);
+		if (!source) {
+			return;
+		}
+		try {
+			await source.dispose();
+		} catch (err) {
+			console.error(`[ToolRegistry] dispose failed for ${key}:`, err);
+		}
+		this.sources.delete(key);
+		this.sourceTools.delete(key);
+		this.rebuild();
+	}
+
+	/** Release all sources and clear the registry. */
+	async dispose(): Promise<void> {
+		for (const [key, source] of this.sources) {
+			try {
+				await source.dispose();
+			} catch (err) {
+				console.error(`[ToolRegistry] dispose failed for ${key}:`, err);
+			}
+		}
+		this.sources.clear();
+		this.sourceTools.clear();
+		this.tools = [];
+		this.byToolId.clear();
+		this.byLlmName.clear();
+	}
+
 	/**
 	 * Re-aggregate the RegisteredTool list from cached source tools and disambiguate.
 	 * Does not call source.load() again.
