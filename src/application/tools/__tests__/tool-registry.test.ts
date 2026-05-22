@@ -75,6 +75,18 @@ describe('ToolRegistry - llm name disambiguation', () => {
 		expect(registry.getTools()[0].llmName).toBe('my_fancy_tool_');
 		expect(registry.getTools()[0].toolId).toBe('cli:c1:my.fancy tool!');
 	});
+
+	it('disambiguates names that collide only after sanitization', async () => {
+		const registry = new ToolRegistry();
+		registry.registerSource(fakeSource('mcp', 'alpha', [fakeTool('my.search')]));
+		registry.registerSource(fakeSource('mcp', 'beta', [fakeTool('my search')]));
+		await registry.reload();
+		const [first, second] = registry.getTools();
+		expect(first.llmName).toBe('my_search');
+		expect(first.toolId).toBe('mcp:alpha:my.search');
+		expect(second.llmName).toBe('my_search_2');
+		expect(second.toolId).toBe('mcp:beta:my search');
+	});
 });
 
 describe('ToolRegistry - reload failure isolation', () => {
