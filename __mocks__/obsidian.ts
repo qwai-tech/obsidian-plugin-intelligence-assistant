@@ -202,6 +202,10 @@ export const requestUrl = jest.fn(async (options: any) => {
 	};
 });
 
+export function normalizePath(path: string): string {
+	return path.replace(/\\/g, '/').replace(/\/+/g, '/').replace(/^\//, '');
+}
+
 // Export additional mocks as needed
 export const Platform = {
 	isMobile: false,
