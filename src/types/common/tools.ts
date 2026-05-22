@@ -56,6 +56,10 @@ export interface ToolOrigin {
 
 /**
  * 由 ToolSource.load() 产出的原始工具 —— 还没有 origin / toolId / llmName。
+ *
+ * 形状等同于既有的 `Tool` 接口去掉 `provider` 字段:`provider` 字符串标签
+ * 已被结构化的 `ToolOrigin` 取代,由 ToolRegistry 在聚合时注入,因此 source
+ * 自身产出的工具不携带来源信息。第 2 期各 ToolSource 实现直接产出 SourceTool。
  */
 export interface SourceTool {
 	definition: ToolDefinition;
