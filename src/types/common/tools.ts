@@ -40,14 +40,15 @@ export interface BuiltInToolConfig {
 }
 
 /**
- * 工具来源的种类。builtin/mcp/openapi/cli 只是「第一批」来源,
- * registry 不对它们做任何特判。
+ * The kind of a tool source. builtin/mcp/openapi/cli are merely the
+ * "first batch" of sources - the registry never special-cases them.
  */
 export type ToolSourceKind = 'builtin' | 'mcp' | 'openapi' | 'cli';
 
 /**
- * 一个工具的结构化来源标识,取代旧的字符串 `provider` 标签。
- * sourceId:builtin → 'builtin';mcp → server 名;openapi/cli → config.id
+ * Structured identity of a tool's source, replacing the old `provider`
+ * string tag. sourceId: builtin -> 'builtin'; mcp -> server name;
+ * openapi/cli -> config.id
  */
 export interface ToolOrigin {
 	kind: ToolSourceKind;
@@ -55,11 +56,12 @@ export interface ToolOrigin {
 }
 
 /**
- * 由 ToolSource.load() 产出的原始工具 —— 还没有 origin / toolId / llmName。
+ * A raw tool as produced by ToolSource.load() - without origin / toolId / llmName yet.
  *
- * 形状等同于既有的 `Tool` 接口去掉 `provider` 字段:`provider` 字符串标签
- * 已被结构化的 `ToolOrigin` 取代,由 ToolRegistry 在聚合时注入,因此 source
- * 自身产出的工具不携带来源信息。第 2 期各 ToolSource 实现直接产出 SourceTool。
+ * Shaped like the existing `Tool` interface minus the `provider` field: the
+ * `provider` string tag is replaced by the structured `ToolOrigin`, which the
+ * ToolRegistry injects during aggregation, so tools emitted by a source carry
+ * no origin info. Phase 2 ToolSource implementations emit SourceTool directly.
  */
 export interface SourceTool {
 	definition: ToolDefinition;
@@ -67,9 +69,9 @@ export interface SourceTool {
 }
 
 /**
- * 经 ToolRegistry 聚合、消歧后的工具。
- * - toolId:全局唯一内部键 = `${kind}:${sourceId}:${rawName}`
- * - llmName:LLM 可见名,冲突时确定性去重
+ * A tool after the ToolRegistry has aggregated and disambiguated it.
+ * - toolId: globally unique internal key = `${kind}:${sourceId}:${rawName}`
+ * - llmName: the LLM-facing name, deterministically de-duplicated on collision
  */
 export interface RegisteredTool {
 	toolId: string;
@@ -80,9 +82,9 @@ export interface RegisteredTool {
 }
 
 /**
- * 单个 agent 的工具访问配置。
- * key = `${kind}:${sourceId}`(一个 source);
- * value = 'all'(该 source 全部工具)或一组 toolId。
+ * Per-agent tool access configuration.
+ * key = `${kind}:${sourceId}` (one source);
+ * value = 'all' (every tool of that source) or a list of toolIds.
  */
 export interface AgentToolAccess {
 	sources: Record<string, 'all' | string[]>;

@@ -1,18 +1,18 @@
 /**
- * ToolSource —— 工具来源的统一接口。
- * builtin / mcp / openapi / cli 四种来源都实现它;ToolRegistry 一视同仁。
+ * ToolSource - the unified interface for a tool source.
+ * builtin / mcp / openapi / cli all implement it; the ToolRegistry treats them alike.
  */
 import type { SourceTool, ToolSourceKind } from '@/types/common/tools';
 
 export interface ToolSource {
-	/** 来源种类 */
+	/** Source kind */
 	readonly kind: ToolSourceKind;
-	/** 来源实例 id:builtin → 'builtin';mcp → server 名;openapi/cli → config.id */
+	/** Source instance id: builtin -> 'builtin'; mcp -> server name; openapi/cli -> config.id */
 	readonly id: string;
-	/** 展示用名称 */
+	/** Display label */
 	readonly label: string;
-	/** 加载该来源的工具(MCP 连接、OpenAPI 拉 spec、builtin/cli 同步构造) */
+	/** Load this source's tools (MCP connect, OpenAPI spec fetch, builtin/cli sync construct) */
 	load(): Promise<SourceTool[]>;
-	/** 释放资源(MCP 断连;其余 no-op) */
+	/** Release resources (MCP disconnect; no-op otherwise) */
 	dispose(): Promise<void>;
 }
