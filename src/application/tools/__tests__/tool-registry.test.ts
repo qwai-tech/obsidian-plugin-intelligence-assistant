@@ -252,3 +252,73 @@ describe('ToolRegistry - dispose', () => {
 		expect(registry.getTools()).toHaveLength(0);
 	});
 });
+
+describe('ToolRegistry - LLM format conversion', () => {
+	async function registryWithParamTool(): Promise<ToolRegistry> {
+		const registry = new ToolRegistry();
+		const tool: SourceTool = {
+			definition: {
+				name: 'search',
+				description: 'Search the vault',
+				parameters: [
+					{ name: 'query', type: 'string', description: 'Search query', required: true },
+					{ name: 'scope', type: 'string', description: 'Where to search', enum: ['notes', 'all'] },
+				],
+			},
+			execute: async () => ({ success: true }),
+		};
+		registry.registerSource(fakeSource('builtin', 'builtin', [tool]));
+		await registry.reload();
+		return registry;
+	}
+
+	it('converts tools to OpenAI function format using the llm name', async () => {
+		const registry = await registryWithParamTool();
+		const fns = registry.toOpenAIFunctions(registry.getTools());
+		expect(fns).toEqual([
+			{
+				type: 'function',
+				function: {
+					name: 'search',
+					description: 'Search the vault',
+					parameters: {
+						type: 'object',
+						properties: {
+							query: { type: 'string', description: 'Search query' },
+							scope: { type: 'string', description: 'Where to search', enum: ['notes', 'all'] },
+						},
+						required: ['query'],
+					},
+				},
+			},
+		]);
+	});
+
+	it('converts tools to Anthropic tool format using the llm name', async () => {
+		const registry = await registryWithParamTool();
+		const tools = registry.toAnthropicTools(registry.getTools());
+		expect(tools).toEqual([
+			{
+				name: 'search',
+				description: 'Search the vault',
+				input_schema: {
+					type: 'object',
+					properties: {
+						query: { type: 'string', description: 'Search query' },
+						scope: { type: 'string', description: 'Where to search', enum: ['notes', 'all'] },
+					},
+					required: ['query'],
+				},
+			},
+		]);
+	});
+
+	it('uses disambiguated names in converted output', async () => {
+		const registry = new ToolRegistry();
+		registry.registerSource(fakeSource('mcp', 'alpha', [fakeTool('search')]));
+		registry.registerSource(fakeSource('mcp', 'beta', [fakeTool('search')]));
+		await registry.reload();
+		const names = registry.toOpenAIFunctions(registry.getTools()).map((f) => f.function.name);
+		expect(names).toEqual(['search', 'search_2']);
+	});
+});
