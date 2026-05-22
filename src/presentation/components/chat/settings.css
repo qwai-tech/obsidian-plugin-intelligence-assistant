@@ -1258,3 +1258,49 @@ input.settings-filter-control {
 .ia-mcp-status.is-selected {
 	color: var(--interactive-accent);
 }
+
+/* ── Chat Header ── */
+
+.chat-header-simple {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding: 8px 12px;
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.chat-header-icon-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 4px;
+	border: none;
+	border-radius: 6px;
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	flex-shrink: 0;
+}
+
+.chat-header-icon-btn:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.chat-header-icon-btn svg {
+	width: 18px;
+	height: 18px;
+}
+
+.chat-header-title {
+	flex: 1;
+	font-size: 14px;
+	font-weight: 600;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding: 0 8px;
+	color: var(--text-normal);
+}
