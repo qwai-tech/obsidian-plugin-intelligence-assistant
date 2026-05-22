@@ -78,19 +78,18 @@ function resolveLocale(raw: string): string {
 	return 'en';
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function loadLocaleFile(lang: string, pluginDir?: string): Record<string, unknown> | undefined {
 	if (BUNDLED_LOCALES.has(lang) || !pluginDir) return undefined;
-	let content;
+	let content: Record<string, unknown> | undefined;
 	try {
 		// Dynamic require with computed path — esbuild cannot bundle this
-		// eslint-disable-next-line @typescript-eslint/no-require-imports
-		content = require(pluginDir + '/locales/' + lang + '.json');
+		// eslint-disable-next-line @typescript-eslint/no-require-imports -- runtime locale loading
+		content = require(pluginDir + '/locales/' + lang + '.json') as Record<string, unknown>;
 	} catch {
 		// Fail silently — caller falls back to en
 		content = undefined;
 	}
-	return content as Record<string, unknown> | undefined;
+	return content;
 }
 
 const BUNDLED: Record<string, Record<string, unknown>> = {
