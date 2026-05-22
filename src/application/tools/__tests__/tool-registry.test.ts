@@ -106,3 +106,46 @@ describe('ToolRegistry - reload failure isolation', () => {
 		expect(tools[0].toolId).toBe('builtin:builtin:read_file');
 	});
 });
+
+describe('ToolRegistry - executeTool', () => {
+	it('executes a tool by its llm name', async () => {
+		const registry = new ToolRegistry();
+		registry.registerSource(fakeSource('builtin', 'builtin', [fakeTool('read_file')]));
+		await registry.reload();
+		const result = await registry.executeTool('read_file', { path: 'x' });
+		expect(result.success).toBe(true);
+		expect(result.result).toEqual({ name: 'read_file', args: { path: 'x' } });
+	});
+
+	it('routes a disambiguated name to the correct tool', async () => {
+		const registry = new ToolRegistry();
+		registry.registerSource(fakeSource('mcp', 'alpha', [fakeTool('search')]));
+		registry.registerSource(fakeSource('mcp', 'beta', [fakeTool('search')]));
+		await registry.reload();
+		const result = await registry.executeTool('search_2', {});
+		expect(result.result).toMatchObject({ name: 'search' });
+		expect(registry.getToolByLlmName('search_2')?.toolId).toBe('mcp:beta:search');
+	});
+
+	it('returns a failure result for an unknown tool name', async () => {
+		const registry = new ToolRegistry();
+		const result = await registry.executeTool('nope', {});
+		expect(result.success).toBe(false);
+		expect(result.error).toContain('Tool not found');
+	});
+
+	it('catches errors thrown by tool execution', async () => {
+		const registry = new ToolRegistry();
+		const throwing: SourceTool = {
+			definition: { name: 'boom', description: 'boom', parameters: [] },
+			execute: async () => {
+				throw new Error('kaboom');
+			},
+		};
+		registry.registerSource(fakeSource('cli', 'c1', [throwing]));
+		await registry.reload();
+		const result = await registry.executeTool('boom', {});
+		expect(result.success).toBe(false);
+		expect(result.error).toContain('kaboom');
+	});
+});

@@ -4,7 +4,12 @@
  * toolIds and de-duplicated LLM-facing names, and provides per-agent
  * filtering, lookup, execution, and format conversion.
  */
-import type { RegisteredTool, SourceTool, ToolSourceKind } from '@/types/common/tools';
+import type {
+	RegisteredTool,
+	SourceTool,
+	ToolResult,
+	ToolSourceKind,
+} from '@/types/common/tools';
 import type { ToolSource } from './tool-source';
 
 /** Max length of an LLM function name (OpenAI / Anthropic limit). */
@@ -49,6 +54,22 @@ export class ToolRegistry {
 
 	getToolByLlmName(name: string): RegisteredTool | undefined {
 		return this.byLlmName.get(name);
+	}
+
+	/** Execute a tool by its LLM-facing name; returns a failure ToolResult if not found or on error. */
+	async executeTool(llmName: string, args: Record<string, unknown>): Promise<ToolResult> {
+		const tool = this.byLlmName.get(llmName);
+		if (!tool) {
+			return { success: false, error: `Tool not found: ${llmName}` };
+		}
+		try {
+			return await tool.execute(args);
+		} catch (err) {
+			return {
+				success: false,
+				error: `Tool execution failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+			};
+		}
 	}
 
 	/**
