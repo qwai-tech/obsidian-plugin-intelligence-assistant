@@ -1,6 +1,6 @@
 import { ToolRegistry } from '../tool-registry';
 import type { ToolSource } from '../tool-source';
-import type { SourceTool, ToolSourceKind } from '@/types/common/tools';
+import type { AgentToolAccess, SourceTool, ToolSourceKind } from '@/types/common/tools';
 
 /** Build a fake tool that returns a fixed result. */
 function fakeTool(name: string): SourceTool {
@@ -147,5 +147,48 @@ describe('ToolRegistry - executeTool', () => {
 		const result = await registry.executeTool('boom', {});
 		expect(result.success).toBe(false);
 		expect(result.error).toContain('kaboom');
+	});
+});
+
+describe('ToolRegistry - resolveForAgent', () => {
+	async function registryWithTools(): Promise<ToolRegistry> {
+		const registry = new ToolRegistry();
+		registry.registerSource(
+			fakeSource('builtin', 'builtin', [fakeTool('read_file'), fakeTool('write_file')]),
+		);
+		registry.registerSource(fakeSource('mcp', 'alpha', [fakeTool('search')]));
+		await registry.reload();
+		return registry;
+	}
+
+	it("includes every tool of a source mapped to 'all'", async () => {
+		const registry = await registryWithTools();
+		const access: AgentToolAccess = { sources: { 'builtin:builtin': 'all' } };
+		const resolved = registry.resolveForAgent(access);
+		expect(resolved.map((t) => t.toolId)).toEqual([
+			'builtin:builtin:read_file',
+			'builtin:builtin:write_file',
+		]);
+	});
+
+	it('includes only the listed tool ids when a source maps to an array', async () => {
+		const registry = await registryWithTools();
+		const access: AgentToolAccess = {
+			sources: { 'builtin:builtin': ['builtin:builtin:write_file'] },
+		};
+		const resolved = registry.resolveForAgent(access);
+		expect(resolved.map((t) => t.toolId)).toEqual(['builtin:builtin:write_file']);
+	});
+
+	it('excludes tools whose source is absent from the access map', async () => {
+		const registry = await registryWithTools();
+		const access: AgentToolAccess = { sources: { 'builtin:builtin': 'all' } };
+		const resolved = registry.resolveForAgent(access);
+		expect(resolved.some((t) => t.origin.kind === 'mcp')).toBe(false);
+	});
+
+	it('returns nothing for an empty access map', async () => {
+		const registry = await registryWithTools();
+		expect(registry.resolveForAgent({ sources: {} })).toHaveLength(0);
 	});
 });

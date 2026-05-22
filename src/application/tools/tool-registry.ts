@@ -5,6 +5,7 @@
  * filtering, lookup, execution, and format conversion.
  */
 import type {
+	AgentToolAccess,
 	RegisteredTool,
 	SourceTool,
 	ToolResult,
@@ -70,6 +71,24 @@ export class ToolRegistry {
 				error: `Tool execution failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
 			};
 		}
+	}
+
+	/**
+	 * Filter tools by an agent's tool access config.
+	 * source absent -> unavailable; 'all' -> all available; array -> available only if toolId matches.
+	 */
+	resolveForAgent(access: AgentToolAccess): RegisteredTool[] {
+		return this.tools.filter((tool) => {
+			const key = sourceKey(tool.origin.kind, tool.origin.sourceId);
+			const rule = access.sources[key];
+			if (rule === undefined) {
+				return false;
+			}
+			if (rule === 'all') {
+				return true;
+			}
+			return rule.includes(tool.toolId);
+		});
 	}
 
 	/**
