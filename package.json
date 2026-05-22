@@ -1,6 +1,6 @@
 {
     "name": "obsidian-plugin-intelligence-assistant",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "An Obsidian plugin",
     "main": "main.js",
     "scripts": {
