@@ -15,6 +15,7 @@
 - 这是一个 Obsidian 插件,源码在 `src/`,按 `core / domain / application / infrastructure / presentation` 分层。
 - 测试用 Jest:测试文件放在被测代码旁的 `__tests__/` 目录,命名 `*.test.ts`。`jest.config.js` 的 `roots` 是 `src`。
 - 跑单个测试文件:`npx jest <相对路径>`。
+- ⚠️ **测试基线**:跑 `npx jest` 当前已有约 88 个测试失败(9 个套件)。这些是 pre-existing 失败 —— 测试文件 import 了已移动的模块路径,以及若干与工具系统无关的逻辑失败(message-renderer、LLM provider 等),**与本重构无关**。本期验收是「新增测试全过 + 不引入新失败」,而非「全量通过」。
 - 代码风格:**tab 缩进**(与 `src/types/common/tools.ts`、`src/application/services/tool-manager.ts` 一致)。
 - 提交信息用 conventional commits(`feat:` / `fix:` / `docs:` / `chore:`)。
 - 完整设计见 `docs/superpowers/specs/2026-05-22-tool-system-refactor-design.md`。
@@ -955,10 +956,10 @@ Expected: 通过,无 error 或 warning。
 Run: `npm run build`
 Expected: 构建成功。
 
-- [ ] **Step 4:全量测试**
+- [ ] **Step 4:全量测试(对比基线)**
 
-Run: `npx jest`
-Expected: 全部测试通过,包含 `tool-registry.test.ts` 的全部用例,且无既有测试因本期改动而失败。
+Run: `npx jest 2>&1 | tail -8`
+Expected: 新增的 `tool-registry.test.ts` 全部用例通过;整体失败数维持在 pre-existing 基线(约 88 failed / 9 suites failed),本期**不得引入新的失败**。若失败数高于基线,定位并修复本期引入的问题。
 
 - [ ] **Step 5:部署到本地 Obsidian 沙箱(CLAUDE.md 要求)**
 
