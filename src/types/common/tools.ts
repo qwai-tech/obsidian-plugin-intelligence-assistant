@@ -38,3 +38,48 @@ export interface BuiltInToolConfig {
 	type: string;
 	enabled: boolean;
 }
+
+/**
+ * 工具来源的种类。builtin/mcp/openapi/cli 只是「第一批」来源,
+ * registry 不对它们做任何特判。
+ */
+export type ToolSourceKind = 'builtin' | 'mcp' | 'openapi' | 'cli';
+
+/**
+ * 一个工具的结构化来源标识,取代旧的字符串 `provider` 标签。
+ * sourceId:builtin → 'builtin';mcp → server 名;openapi/cli → config.id
+ */
+export interface ToolOrigin {
+	kind: ToolSourceKind;
+	sourceId: string;
+}
+
+/**
+ * 由 ToolSource.load() 产出的原始工具 —— 还没有 origin / toolId / llmName。
+ */
+export interface SourceTool {
+	definition: ToolDefinition;
+	execute(_args: Record<string, unknown>): Promise<ToolResult>;
+}
+
+/**
+ * 经 ToolRegistry 聚合、消歧后的工具。
+ * - toolId:全局唯一内部键 = `${kind}:${sourceId}:${rawName}`
+ * - llmName:LLM 可见名,冲突时确定性去重
+ */
+export interface RegisteredTool {
+	toolId: string;
+	llmName: string;
+	origin: ToolOrigin;
+	definition: ToolDefinition;
+	execute(_args: Record<string, unknown>): Promise<ToolResult>;
+}
+
+/**
+ * 单个 agent 的工具访问配置。
+ * key = `${kind}:${sourceId}`(一个 source);
+ * value = 'all'(该 source 全部工具)或一组 toolId。
+ */
+export interface AgentToolAccess {
+	sources: Record<string, 'all' | string[]>;
+}
