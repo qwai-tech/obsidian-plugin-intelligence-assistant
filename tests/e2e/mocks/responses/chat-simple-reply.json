@@ -1,0 +1,21 @@
+{
+  "id": "chatcmpl-mock-001",
+  "object": "chat.completion",
+  "created": 1716400000,
+  "model": "gpt-4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello! I'm an AI assistant. How can I help you with your notes today?"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10,
+    "completion_tokens": 17,
+    "total_tokens": 27
+  }
+}

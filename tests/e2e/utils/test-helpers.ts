@@ -1,97 +1,49 @@
 /**
- * Test helper utilities
+ * General E2E test helpers.
  */
 
-import { testConfig } from '../config/test-config';
-
-/**
- * Check if provider is configured for testing
- */
-export function hasProvider(): boolean {
-	return testConfig.hasProvider();
+/** Wait for the Obsidian plugin to fully load. */
+export async function waitForPluginReady(): Promise<void> {
+	await browser.pause(2000);
 }
 
-/**
- * Get provider configuration
- */
-export function getProviderConfig() {
-	return testConfig.providerConfig;
+/** Open the plugin settings modal. */
+export async function openSettings(): Promise<void> {
+	// Obsidian settings are opened via the command palette or ribbon
+	await browser.execute(() => {
+		const app = (window as any).app;
+		app.setting.open();
+	});
+	await browser.pause(500);
 }
 
-/**
- * Skip test if no provider is configured
- */
-export function skipWithoutProvider(testFn: () => void) {
-	if (hasProvider()) {
-		testFn();
-	} else {
-		it.skip('Test requires LLM provider configuration', () => {});
-	}
-}
-
-/**
- * Conditional test that only runs with provider
- */
-export function testWithProvider(name: string, testFn: () => void | Promise<void>) {
-	if (hasProvider()) {
-		it(name, testFn);
-	} else {
-		it.skip(`${name} (requires provider)`, () => {});
-	}
-}
-
-/**
- * Wait with exponential backoff
- */
-export async function waitWithBackoff(
-	condition: () => Promise<boolean>,
-	maxAttempts: number = 5,
-	initialDelay: number = 1000
-): Promise<boolean> {
-	let delay = initialDelay;
-
-	for (let attempt = 0; attempt < maxAttempts; attempt++) {
-		if (await condition()) {
-			return true;
+/** Navigate to a specific settings tab. */
+export async function navigateToSettingsTab(tabText: string): Promise<void> {
+	const tabs = await $$('.vertical-tab-header-item');
+	for (const tab of tabs) {
+		const text = await tab.getText();
+		if (text.includes(tabText)) {
+			await tab.click();
+			await browser.pause(300);
+			return;
 		}
-
-		await browser.pause(delay);
-		delay *= 2; // Exponential backoff
 	}
-
-	return false;
+	throw new Error(`Settings tab "${tabText}" not found`);
 }
 
-/**
- * Take screenshot with timestamp
- */
-export async function takeScreenshot(name: string) {
-	const timestamp = Date.now();
-	const filename = `${name}-${timestamp}.png`;
-	await browser.saveScreenshot(`./test-results/screenshots/${filename}`);
-	return filename;
-}
-
-/**
- * Assert element exists
- */
-export async function assertExists(selector: string, message?: string) {
-	const element = await $(selector);
-	const exists = await element.isExisting();
-	expect(exists).toBe(true);
-	if (message && !exists) {
-		throw new Error(message);
-	}
-}
-
-/**
- * Assert element is displayed
- */
-export async function assertDisplayed(selector: string, message?: string) {
-	const element = await $(selector);
-	const displayed = await element.isDisplayed();
-	expect(displayed).toBe(true);
-	if (message && !displayed) {
-		throw new Error(message);
-	}
+/** Open the chat view in the Obsidian workspace. */
+export async function openChatView(): Promise<void> {
+	await browser.execute(() => {
+		const app = (window as any).app;
+		const leaves = app.workspace.getLeavesOfType('intelligence-assistant-chat');
+		if (leaves.length === 0) {
+			app.workspace.getLeaf('tab').setViewState({
+				type: 'intelligence-assistant-chat',
+				active: true,
+			});
+		} else {
+			app.workspace.setActiveLeaf(leaves[0]);
+		}
+	});
+	await browser.pause(1000);
 }
