@@ -6,7 +6,7 @@
 import { Notice, Setting, Modal } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { CachedMCPTool, OpenApiToolConfig, OpenApiAuthType, OpenApiSourceType, CLIToolConfig, CLIToolParameter } from '@/types';
-import type { Tool } from '@/application/services/types';
+import type { RegisteredTool } from '@/types/common/tools';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
 import { DEFAULT_CLI_TIMEOUT, CLI_TOOL_DEFAULTS, getAvailablePresets, PRESET_CATEGORIES, CLI_TOOL_PRESETS, type CLIToolPreset } from '@/types/features/cli-tools';
@@ -148,7 +148,6 @@ function renderBuiltInTools(content: HTMLElement, plugin: IntelligenceAssistantP
 			void (async () => {
 				tool.enabled = toggle.checked;
 				await plugin.saveSettings();
-				plugin.syncToolManagerConfig();
 			})();
 		});
 	});
@@ -171,13 +170,28 @@ function renderMcpTools(
 	plugin: IntelligenceAssistantPlugin,
 	_refreshDisplay: () => void
 ): void {
-	const toolManager = plugin.getToolManager();
-	const toolsByProvider = toolManager.getToolsByProvider();
-	const connectedServers = new Set<string>(toolManager.getMCPServers());
+	const registry = plugin.getToolRegistry();
+	const allTools = registry.getTools();
+
+	// Group by origin key
+	const toolsByProvider = new Map<string, RegisteredTool[]>();
+	for (const tool of allTools) {
+		const key = `${tool.origin.kind}:${tool.origin.sourceId}`;
+		if (!toolsByProvider.has(key)) toolsByProvider.set(key, []);
+		toolsByProvider.get(key)!.push(tool);
+	}
+
+	// Connected MCP servers are those with loaded tools
+	const connectedServers = new Set<string>();
+	for (const tool of allTools) {
+		if (tool.origin.kind === 'mcp') {
+			connectedServers.add(tool.origin.sourceId);
+		}
+	}
 
 	const rows: Array<{ serverName: string; name: string; description: string; parameters: string; isLive: boolean }> = [];
 
-	const formatLiveParams = (tool: Tool): string => {
+	const formatLiveParams = (tool: RegisteredTool): string => {
 		if (!tool.definition.parameters.length) {
 			return '—';
 		}
@@ -215,7 +229,7 @@ function renderMcpTools(
 		}
 
 		for (const tool of liveTools) {
-			merged.set(tool.definition.name, {
+			merged.set(tool.llmName, {
 				description: tool.definition.description || t('settings.tools.mcpTools.noDescription'),
 				parameters: formatLiveParams(tool),
 				isLive: true

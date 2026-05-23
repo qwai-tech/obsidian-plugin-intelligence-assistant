@@ -8,6 +8,7 @@ import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { snapshotMcpTools } from '@plugin';
 import type { MCPServerConfig } from '@/types';
+import type { RegisteredTool } from '@/types/common/tools';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
 import { MCPInspectorModal, MCPServerModal } from '../modals';
@@ -135,8 +136,22 @@ export function displayMCPTab(
 			}
 		})
 		.catch(error => console.error('[MCP] Auto-connect check failed', error));
-	const toolsByProviderSnapshot = toolManager.getToolsByProvider();
-	const connectedServerSet = new Set(toolManager.getMCPServers());
+	const registry = plugin.getToolRegistry();
+	const allTools = registry.getTools();
+
+	const toolsByProviderSnapshot = new Map<string, RegisteredTool[]>();
+	for (const tool of allTools) {
+		const key = `${tool.origin.kind}:${tool.origin.sourceId}`;
+		if (!toolsByProviderSnapshot.has(key)) toolsByProviderSnapshot.set(key, []);
+		toolsByProviderSnapshot.get(key)!.push(tool);
+	}
+
+	const connectedServerSet = new Set<string>();
+	for (const tool of allTools) {
+		if (tool.origin.kind === 'mcp') {
+			connectedServerSet.add(tool.origin.sourceId);
+		}
+	}
 
 	plugin.settings.mcpServers.forEach((server, index) => {
 		const row = tbody.insertRow();
