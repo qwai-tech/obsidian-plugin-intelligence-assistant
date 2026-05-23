@@ -12,7 +12,7 @@ const obsidianVersion = process.env.OBSIDIAN_VERSION || 'latest';
 export const config: Options.Testrunner = {
 	...baseConfig,
 
-	specs: ['./tests/e2e/specs/release/**/*.spec.ts'],
+	specs: [path.resolve('tests/e2e/specs/release/**/*.spec.ts')],
 
 	maxInstances: 1,
 
@@ -23,7 +23,7 @@ export const config: Options.Testrunner = {
 				appVersion: obsidianVersion,
 				installerVersion: obsidianVersion,
 				plugins: ['.'],
-				vault: 'tests/e2e/test-vault',
+				vault: path.resolve('tests/e2e/test-vault'),
 			},
 		},
 	],
@@ -32,11 +32,10 @@ export const config: Options.Testrunner = {
 
 	mochaOpts: {
 		ui: 'bdd',
-		timeout: 180 * 1000, // 3 minutes for real AI
+		timeout: 180 * 1000,
 	},
 
 	onPrepare: async function () {
-		// Verify that API keys are available
 		const envTestPath = path.resolve('.env.test');
 		const fs = await import('fs');
 		if (!fs.existsSync(envTestPath)) {

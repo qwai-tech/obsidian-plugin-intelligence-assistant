@@ -12,14 +12,14 @@ const obsidianVersion = process.env.OBSIDIAN_VERSION || 'latest';
 export const config: Options.Testrunner = {
 	...baseConfig,
 
-	specs: ['./tests/e2e/specs/ci/**/*.spec.ts'],
+	specs: [path.resolve('tests/e2e/specs/ci/**/*.spec.ts')],
 
 	exclude: [
-		'./tests/e2e/fixtures/**',
-		'./tests/e2e/utils/**',
-		'./tests/e2e/config/**',
-		'./tests/e2e/mocks/**',
-		'./tests/e2e/pages/**',
+		path.resolve('tests/e2e/fixtures/**'),
+		path.resolve('tests/e2e/utils/**'),
+		path.resolve('tests/e2e/config/**'),
+		path.resolve('tests/e2e/mocks/**'),
+		path.resolve('tests/e2e/pages/**'),
 	],
 
 	maxInstances: 1,
@@ -31,7 +31,7 @@ export const config: Options.Testrunner = {
 				appVersion: obsidianVersion,
 				installerVersion: obsidianVersion,
 				plugins: ['.'],
-				vault: 'tests/e2e/test-vault',
+				vault: path.resolve('tests/e2e/test-vault'),
 			},
 		},
 	],
