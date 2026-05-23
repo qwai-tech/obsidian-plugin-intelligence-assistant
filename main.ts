@@ -43,6 +43,12 @@ import { initI18n } from './src/i18n';
 import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-system';
 import { PluginDataService } from './src/application/services/plugin-data-service';
 import { EditorQuickActions } from './src/presentation/editor/editor-quick-actions';
+import { ToolRegistry } from './src/application/tools/tool-registry';
+import { BuiltinToolSource } from './src/application/tools/sources/builtin-tool-source';
+import { McpToolSource } from './src/application/tools/sources/mcp-tool-source';
+import { OpenApiToolSource } from './src/application/tools/sources/openapi-tool-source';
+import { CliToolSource } from './src/application/tools/sources/cli-tool-source';
+import { migrateAllAgents } from './src/application/tools/tool-migrations';
 
 // Re-export for backward compatibility
 export type {
@@ -86,6 +92,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private conversationStorageService: ConversationStorageService | null = null;
 	private conversationMigrationService: ConversationMigrationService | null = null;
 	private sharedToolManager: ToolManager | null = null;
+	private sharedToolRegistry: ToolRegistry | null = null;
 	private openApiToolLoader: OpenApiToolLoader | null = null;
 	private cliToolLoader: CLIToolLoader | null = null;
 	private pluginDataPath = '';
@@ -200,7 +207,10 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				),
 				Promise.resolve().then(() => this.reloadCLITools()).catch(error =>
 					console.error('[Plugin] CLI tools load failed:', error)
-				)
+				),
+				this.initToolRegistry().catch(error =>
+					console.error('[Plugin] ToolRegistry init failed:', error)
+				),
 			]);
 
 			const deferredTime = Date.now() - deferredStart;
@@ -215,6 +225,12 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		if (this.sharedToolManager) {
 			this.sharedToolManager.cleanup().catch(error => console.error('[MCP] Cleanup failed', error));
 			this.sharedToolManager = null;
+		}
+		if (this.sharedToolRegistry) {
+			this.sharedToolRegistry.dispose().catch(error =>
+				console.error('[Plugin] ToolRegistry dispose failed:', error)
+			);
+			this.sharedToolRegistry = null;
 		}
 		this.openApiToolLoader = null;
 		this.cliToolLoader = null;
@@ -240,6 +256,13 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		return this.sharedToolManager;
 	}
 
+	public getToolRegistry(): ToolRegistry {
+		if (!this.sharedToolRegistry) {
+			this.sharedToolRegistry = new ToolRegistry();
+		}
+		return this.sharedToolRegistry;
+	}
+
 	private getOpenApiLoader(): OpenApiToolLoader {
 		if (!this.openApiToolLoader) {
 			this.openApiToolLoader = new OpenApiToolLoader(new ObsidianFileSystem(this.app), this.getToolManager(), this.pluginDataPath);
@@ -251,6 +274,44 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		if (this.sharedToolManager) {
 			this.sharedToolManager.setToolConfigs(this.settings.builtInTools);
 		}
+	}
+
+	/**
+	 * Initialize the ToolRegistry from current settings.
+	 * Creates sources for every enabled config entry and reloads.
+	 */
+	public async initToolRegistry(): Promise<void> {
+		const registry = this.getToolRegistry();
+
+		// Builtin: always register
+		registry.registerSource(new BuiltinToolSource(this.app));
+
+		// MCP servers: one source per enabled server
+		for (const server of (this.settings.mcpServers ?? [])) {
+			if (server.enabled) {
+				registry.registerSource(new McpToolSource(server));
+			}
+		}
+
+		// OpenAPI: one source per enabled config
+		const fs = new ObsidianFileSystem(this.app);
+		for (const config of (this.settings.openApiTools ?? [])) {
+			if (config.enabled) {
+				registry.registerSource(
+					new OpenApiToolSource(config, fs, this.pluginDataPath),
+				);
+			}
+		}
+
+		// CLI: one source per enabled config
+		for (const config of (this.settings.cliTools ?? [])) {
+			if (config.enabled) {
+				registry.registerSource(new CliToolSource(config));
+			}
+		}
+
+		await registry.reload();
+		console.debug('[Plugin] ToolRegistry initialized');
 	}
 
 	public async reloadOpenApiTools(options?: OpenApiReloadOptions): Promise<Map<string, number>> {
@@ -399,6 +460,14 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				agent.modelStrategy = { strategy: 'default', modelId: this.settings.defaultModel || 'gpt-4o' };
 				settingsMutated = true;
 			}
+		}
+
+		// Phase 3: migrate legacy tool fields to toolAccess
+		const cliIds = (this.settings.cliTools ?? []).map((c) => c.id);
+		const agentChanged = migrateAllAgents(this.settings.agents, cliIds);
+		if (agentChanged.size > 0) {
+			settingsMutated = true;
+			console.debug(`[Settings] Migrated toolAccess for ${agentChanged.size} agent(s)`);
 		}
 
 		if (!userConfig || settingsMutated) {

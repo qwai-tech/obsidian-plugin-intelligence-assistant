@@ -10,10 +10,9 @@ import { DEFAULT_AGENT_ID } from '@/constants';
 import type {Message, Conversation, ConversationConfig, Agent} from '@/types';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
 import { marked } from 'marked';
-import { 
-	ToolManager, 
-	WebSearchService, 
-	ChatService 
+import {
+	WebSearchService,
+	ChatService
 } from '@/application/services';
 import { RAGManager } from '@/infrastructure/rag-manager';
 import { VaultExportService } from '@/application/services/vault-export-service';
@@ -68,7 +67,6 @@ export class ChatView extends ItemView {
 	private imageActionItem: HTMLElement | null = null;
 
 	// Services
-	private toolManager: ToolManager;
 	private ragManager: RAGManager;
 	private webSearchService: WebSearchService;
 	private chatService: ChatService;
@@ -90,14 +88,12 @@ export class ChatView extends ItemView {
 		this.inputController = new InputController(this.app, this.plugin, this.state);
 		this.chatController = new ChatController(this.app, this.plugin, this.state);
 
-		this.toolManager = this.plugin.getToolManager();
-
 		this.ragManager = this.plugin.getRAGManager();
 
 		this.webSearchService = new WebSearchService(this.plugin.settings.webSearchConfig, new ObsidianHttpClient());
 		this.chatService = new ChatService(
 			new ObsidianFileSystem(this.app),
-			this.toolManager,
+			this.plugin.getToolRegistry(),
 			this.ragManager,
 			this.webSearchService,
 			this.plugin.settings.llmConfigs,
@@ -227,7 +223,7 @@ export class ChatView extends ItemView {
 		await this.updateImageButtonVisibility();
 
 		// Initialize MCP servers
-		await this.initializeMCPServers();
+		this.initializeMCPServers();
 
 		await this.updateOptionsDisplay();
 
@@ -1085,28 +1081,6 @@ export class ChatView extends ItemView {
 		this.state.enableRAG = agent.ragEnabled;
 		this.state.enableWebSearch = agent.webSearchEnabled;
 
-		// Update tool manager with agent's enabled tools
-		const toolConfigs = agent.enabledBuiltInTools.map((toolType: string) => ({
-			type: toolType,
-			enabled: true
-		}));
-		this.toolManager.setToolConfigs(toolConfigs);
-
-		// Ensure MCP servers for this agent are connected and tools are available
-		for (const serverName of agent.enabledMcpServers) {
-			const server = this.plugin.settings.mcpServers.find(s => s.name === serverName && s.enabled);
-			if (server) {
-				// Connect the server if not already connected
-				const isConnected = this.toolManager.getMCPServers().includes(serverName);
-				if (!isConnected) {
-					this.toolManager.registerMCPServer(server).catch((_error: unknown) => {
-						const errMsg = _error instanceof Error ? _error.message : String(_error);
-						console.error(`Failed to connect to MCP server ${serverName ?? 'unknown'} for agent:`, errMsg);
-					});
-				}
-			}
-		}
-
 		// Update RAG manager with agent configuration
 		try {
 			this.ragManager.updateConfig(this.plugin.settings.ragConfig);
@@ -1281,13 +1255,12 @@ export class ChatView extends ItemView {
 		return window.btoa(binary);
 	}
 
-	async initializeMCPServers() {
-		const { initializeMCPServers } = await import('@/application/services/mcp-service');
-		void initializeMCPServers(
-			this.plugin.settings.mcpServers,
-			this.toolManager,
-			async () => { await this.plugin.saveSettings(); }
-		);
+	initializeMCPServers() {
+		const registry = this.plugin.getToolRegistry();
+		const mcpCount = registry.getTools().filter(t => t.origin.kind === 'mcp').length;
+		if (mcpCount === 0) {
+			console.debug('[MCP] No MCP tools available');
+		}
 	}
 
 	async onClose() {
