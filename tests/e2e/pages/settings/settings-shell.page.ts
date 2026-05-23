@@ -1,5 +1,9 @@
 /**
  * Page Object for the Obsidian settings shell.
+ *
+ * Uses Obsidian's internal API (app.setting) to navigate reliably.
+ * DOM-based tab clicking is unreliable because community plugin tabs
+ * may be inside collapsible sections or scrolled out of view.
  */
 export class SettingsShellPage {
 	async open(): Promise<void> {
@@ -14,19 +18,52 @@ export class SettingsShellPage {
 		await browser.pause(300);
 	}
 
+	/**
+	 * Open the plugin's settings tab using Obsidian's internal API.
+	 * Tries the setting.activeTab approach first, then falls back to
+	 * the openTabById approach, then to DOM clicking.
+	 */
 	async openPluginSettings(): Promise<void> {
 		await this.open();
 
-		// Wait for the settings sidebar tabs to render
-		const sidebar = await $('.vertical-tab-header');
-		await sidebar.waitForDisplayed({ timeout: 5000 });
+		// Try using Obsidian's internal API to activate the plugin tab
+		const found = await browser.execute(() => {
+			const app = (window as any).app;
+			const setting = app.setting;
+			if (!setting) return false;
 
-		// Scroll through all tabs to find the plugin's tab
+			// The plugin's setting tab ID is the plugin ID
+			const pluginId = 'intelligence-assistant';
+
+			// Method 1: try openTabById
+			if (typeof setting.openTabById === 'function') {
+				setting.openTabById(pluginId);
+				return true;
+			}
+
+			// Method 2: iterate settingTabs
+			if (setting.settingTabs) {
+				for (const st of setting.settingTabs) {
+					if (st.id === pluginId || (st.name && st.name.toLowerCase().includes('intelligence'))) {
+						setting.activeTab = st;
+						return true;
+					}
+				}
+			}
+
+			return false;
+		});
+
+		if (found) {
+			await browser.pause(500);
+			return;
+		}
+
+		// Fallback: scroll and search DOM
 		const tabs = await $$('.vertical-tab-header-item');
 		for (const tab of tabs) {
-			// Scroll the tab into view in case it's off-screen
 			await tab.scrollIntoView();
-			await browser.pause(100);
+			await browser.pause(50);
 			const text = await tab.getText();
 			if (text.includes('Intelligence')) {
 				await tab.click();
@@ -39,7 +76,7 @@ export class SettingsShellPage {
 	}
 
 	async navigateToTab(tabName: string): Promise<void> {
-		// Try clicking sub-tab headers inside the plugin's own tab navigation
+		// Try the plugin's own sub-tab navigation first
 		const headers = await $$('.settings-tabs .setting-item');
 		for (const h of headers) {
 			const text = await h.getText();
@@ -49,7 +86,7 @@ export class SettingsShellPage {
 				return;
 			}
 		}
-		// Fallback: try any setting-item-name
+		// Fallback: any setting-item-name
 		const items = await $$('.setting-item-name');
 		for (const item of items) {
 			const text = await item.getText();
