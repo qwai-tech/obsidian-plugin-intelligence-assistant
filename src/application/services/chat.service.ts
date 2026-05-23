@@ -14,7 +14,7 @@ import type {
 import { IFileSystem } from '@/core/interfaces';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
-import type { ToolManager } from './tool-manager';
+import type { ToolRegistry } from '@/application/tools/tool-registry';
 import type { RAGManager } from '@/infrastructure/rag-manager';
 import type { WebSearchService } from './web-search-service';
 import type { StreamChunk } from '@/types/common/llm';
@@ -64,7 +64,7 @@ export function deduplicateMessages(messages: Message[]): Message[] {
 export class ChatService {
 	constructor(
 		private fileSystem: IFileSystem,
-		private toolManager: ToolManager,
+		private toolRegistry: ToolRegistry,
 		private ragManager: RAGManager,
 		private webSearchService: WebSearchService,
 		private llmConfigs: LLMConfig[],
@@ -186,8 +186,8 @@ export class ChatService {
 
 			// 1. Agent Mode: Tools system prompt
 			if (options.mode === 'agent') {
-				const toolsList = this.toolManager.getAllTools().map(tool =>
-					`- ${tool.definition.name}: ${tool.definition.description}`
+				const toolsList = this.toolRegistry.getTools().map(t =>
+					`- ${t.llmName}: ${t.definition.description}`
 				).join('\n');
 
 				systemMessages.push({
@@ -311,7 +311,6 @@ export class ChatService {
 			agentId?: string;
 			agents?: Agent[];
 			isGenericAgent?: boolean;
-			allowOpenApiTools?: boolean;
 		},
 		callbacks: AgentLoopCallbacks
 	): Promise<void> {
@@ -331,8 +330,7 @@ export class ChatService {
 
 		const agentSystemMessages = this.buildAgentSystemMessages(
 			options.isGenericAgent ?? !options.agentId,
-			activeAgent,
-			options.allowOpenApiTools ?? false
+			activeAgent
 		);
 
 		// Inject RAG + Web Search context once
@@ -376,7 +374,9 @@ export class ChatService {
 		type WorkingMessage = Message | ToolResultEntry | AssistantWithCalls;
 
 		const workingMessages: WorkingMessage[] = [...messages];
-		const nativeTools = this.toolManager.toOpenAIFunctions();
+		const access = activeAgent?.toolAccess ?? { sources: {} };
+		const resolvedTools = this.toolRegistry.resolveForAgent(access);
+		const nativeTools = this.toolRegistry.toOpenAIFunctions(resolvedTools);
 		const MAX_CONSECUTIVE_FAILURES = 3;
 		const consecutiveFailures = new Map<string, number>();
 
@@ -471,14 +471,14 @@ export class ChatService {
 					pendingToolCalls.map(async (tc) => {
 						callbacks.onToolCall(tc.name, tc.arguments, lastReasoning || undefined);
 
-						const toolAllowed = this.isToolAllowed(tc.name, activeAgent, options.allowOpenApiTools ?? false);
+						const isAllowed = resolvedTools.some(t => t.llmName === tc.name);
 						let result: { success: boolean; result?: unknown; error?: string };
 
-						if (!toolAllowed) {
-							result = { success: false, error: `Tool ${tc.name} is not enabled for this agent` };
+						if (!isAllowed) {
+							result = { success: false, error: `Tool "${tc.name}" is not enabled for this agent` };
 						} else {
 							try {
-								const execResult = await this.toolManager.executeTool(tc);
+								const execResult = await this.toolRegistry.executeTool(tc.name, tc.arguments);
 								result = { success: execResult.success, result: execResult.result, error: execResult.error };
 							} catch (err) {
 								result = { success: false, error: err instanceof Error ? err.message : String(err) };
@@ -527,8 +527,7 @@ export class ChatService {
 
 	private buildAgentSystemMessages(
 		isGenericAgent: boolean,
-		activeAgent?: Agent,
-		allowOpenApiTools?: boolean
+		activeAgent?: Agent
 	): Message[] {
 		const messages: Message[] = [];
 
@@ -537,69 +536,26 @@ export class ChatService {
 				role: 'system',
 				content: `You are an AI agent with access to tools. Use the available tools to help answer the user's questions. Call tools when needed, and provide a clear final answer once you have the information you need.`
 			});
-		} else {
-			const filteredTools = this.toolManager.getAllTools().filter(tool => {
-				if (!activeAgent) return true;
-				if (tool.provider === 'built-in') return true;
-				if (tool.provider?.startsWith('mcp:')) {
-					const serverName = tool.provider.substring(4);
-					if (activeAgent.enabledMcpServers.includes(serverName)) return true;
-					const fullKey = `${serverName}::${tool.definition.name}`;
-					return activeAgent.enabledMcpTools?.includes(fullKey) ?? false;
-				}
-				if (tool.provider?.startsWith('cli:')) {
-					if (activeAgent.enabledAllCLITools) return true;
-					const toolId = tool.provider.substring(4);
-					return activeAgent.enabledCLITools?.includes(toolId) ?? false;
-				}
-				if (tool.provider?.startsWith('openapi:')) {
-					return allowOpenApiTools ?? false;
-				}
-				return true;
-			});
+			return messages;
+		}
 
-			if (filteredTools.length > 0) {
-				messages.push({
-					role: 'system',
-					content: `You are an AI agent with access to tools. Use the available tools to help answer the user's questions. Call tools when needed, and provide a clear final answer once you have the information you need.`
-				});
-			}
+		const access = activeAgent?.toolAccess ?? { sources: {} };
+		const resolvedTools = this.toolRegistry.resolveForAgent(access);
+
+		if (resolvedTools.length > 0) {
+			const toolDescriptions = resolvedTools.map(t =>
+				`- ${t.llmName}: ${t.definition.description}`
+			).join('\n');
+			messages.push({
+				role: 'system',
+				content: `You are an AI agent with access to tools.\n\nAvailable tools:\n${toolDescriptions}\n\nTo call a tool, use JSON block format.`
+			});
 		}
 
 		return messages;
 	}
 
-	private isToolAllowed(
-		toolName: string,
-		agent?: Agent,
-		allowOpenApiTools?: boolean
-	): boolean {
-		if (!agent) return true;
-
-		const tool = this.toolManager.getTool(toolName);
-		if (!tool) return false;
-
-		if (tool.provider?.startsWith('mcp:')) {
-			const serverName = tool.provider.substring(4);
-			const fullToolKey = `${serverName}::${toolName}`;
-			if (agent.enabledMcpTools?.includes(fullToolKey)) return true;
-			return agent.enabledMcpServers.includes(serverName);
-		}
-
-		if (tool.provider?.startsWith('openapi:')) {
-			return allowOpenApiTools ?? false;
-		}
-
-		if (tool.provider?.startsWith('cli:')) {
-			if (agent.enabledAllCLITools) return true;
-			const toolId = tool.provider.substring(4);
-			return agent.enabledCLITools?.includes(toolId) ?? false;
-		}
-
-		return agent.enabledBuiltInTools.includes(toolName);
-	}
-
-	private diagnoseToolError(
+		private diagnoseToolError(
 		toolName: string,
 		args: Record<string, unknown>,
 		error: string
