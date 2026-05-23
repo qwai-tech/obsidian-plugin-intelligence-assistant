@@ -5,30 +5,54 @@ export class ToolsTabPage {
 	}
 
 	async toggleBuiltinTool(index: number): Promise<void> {
-		const toggles = await $$('.checkbox-container');
-		if (index < toggles.length) await toggles[index].click();
+		const items = await $$('.setting-item');
+		const toolItems: WebdriverIO.Element[] = [];
+		for (const item of items) {
+			const text = await item.getText();
+			if (text.includes('read_file') || text.includes('write_file')
+				|| text.includes('list_files') || text.includes('search_files')
+				|| text.includes('create_note') || text.includes('append_to_note')) {
+				toolItems.push(item);
+			}
+		}
+		if (index < toolItems.length) {
+			const checkbox = await toolItems[index].$('.checkbox-container');
+			if (checkbox) await checkbox.click();
+		}
 	}
 
 	async getBuiltinToolNames(): Promise<string[]> {
-		const items = await $$('.setting-item-name');
+		const items = await $$('.setting-item');
 		const names: string[] = [];
 		for (const item of items) {
-			names.push(await item.getText());
+			const text = await item.getText();
+			if (text.includes('read_file') || text.includes('write_file')
+				|| text.includes('list_files') || text.includes('search_files')
+				|| text.includes('create_note') || text.includes('append_to_note')) {
+				names.push(text.split('\n')[0] || text.substring(0, 40));
+			}
 		}
 		return names;
 	}
 
-	/** Navigate to the OpenAPI sub-tab under Tools */
-	async navigateToOpenApi(): Promise<void> {
-		const tab = await $('*=OpenAPI');
-		await tab.click();
-		await browser.pause(300);
+	/** Navigate to a Tools sub-tab by clicking the .settings-tab button. */
+	async navigateToSubTab(labelPattern: string): Promise<void> {
+		const buttons = await $$('.settings-tab');
+		for (const btn of buttons) {
+			const text = await btn.getText();
+			if (text.toLowerCase().includes(labelPattern.toLowerCase())) {
+				await btn.click();
+				await browser.pause(300);
+				return;
+			}
+		}
 	}
 
-	/** Navigate to the CLI sub-tab under Tools */
+	async navigateToOpenApi(): Promise<void> {
+		await this.navigateToSubTab('openapi');
+	}
+
 	async navigateToCli(): Promise<void> {
-		const tab = await $('*=CLI');
-		await tab.click();
-		await browser.pause(300);
+		await this.navigateToSubTab('cli');
 	}
 }
