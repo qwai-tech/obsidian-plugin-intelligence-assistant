@@ -12,6 +12,9 @@ export class AgentModel {
 	 * Check if agent can use tooling
 	 */
 	canUseTooling(): boolean {
+		if (this._data.toolAccess) {
+			return Object.keys(this._data.toolAccess.sources).length > 0;
+		}
 		return (
 			this._data.enabledBuiltInTools.length > 0 ||
 			this._data.enabledMcpServers.length > 0
@@ -56,6 +59,17 @@ export class AgentModel {
 	 * Get enabled tools count
 	 */
 	getToolsCount(): number {
+		if (this._data.toolAccess) {
+			let count = 0;
+			for (const rule of Object.values(this._data.toolAccess.sources)) {
+				if (rule === 'all') {
+					count += 1;
+				} else {
+					count += rule.length;
+				}
+			}
+			return count;
+		}
 		return this._data.enabledBuiltInTools.length + this._data.enabledMcpServers.length;
 	}
 
