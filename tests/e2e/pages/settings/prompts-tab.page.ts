@@ -1,8 +1,19 @@
-export class PromptsTabPage {
-	private get addPromptBtn() { return $('button=Add prompt'); }
+/** Find a button by partial text match. */
+async function findButtonByText(text: string): Promise<WebdriverIO.Element> {
+	const buttons = await $$('button');
+	for (const btn of buttons) {
+		const btnText = await btn.getText();
+		if (btnText.toLowerCase().includes(text.toLowerCase())) {
+			return btn;
+		}
+	}
+	throw new Error(`Button containing "${text}" not found`);
+}
 
+export class PromptsTabPage {
 	async clickAddPrompt(): Promise<void> {
-		await this.addPromptBtn.click();
+		const btn = await findButtonByText('Add');
+		await btn.click();
 		await browser.pause(300);
 	}
 

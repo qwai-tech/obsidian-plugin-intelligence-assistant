@@ -1,8 +1,19 @@
-export class AgentsTabPage {
-	private get addAgentBtn() { return $('button=Add agent'); }
+/** Find a button by partial text match. */
+async function findButtonByText(text: string): Promise<WebdriverIO.Element> {
+	const buttons = await $$('button');
+	for (const btn of buttons) {
+		const btnText = await btn.getText();
+		if (btnText.toLowerCase().includes(text.toLowerCase())) {
+			return btn;
+		}
+	}
+	throw new Error(`Button containing "${text}" not found`);
+}
 
+export class AgentsTabPage {
 	async clickAddAgent(): Promise<void> {
-		await this.addAgentBtn.click();
+		const btn = await findButtonByText('Add');
+		await btn.click();
 		await browser.pause(500);
 	}
 

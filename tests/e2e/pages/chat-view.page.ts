@@ -1,6 +1,33 @@
 /**
  * Page Object for the Intelligence Assistant chat view.
  */
+
+/** Find a button by partial text match. */
+async function findButtonByText(text: string): Promise<WebdriverIO.Element> {
+	const buttons = await $$('button');
+	for (const btn of buttons) {
+		const btnText = await btn.getText();
+		if (btnText.toLowerCase().includes(text.toLowerCase())) {
+			return btn;
+		}
+	}
+	throw new Error(`Button containing "${text}" not found`);
+}
+
+/** Find the first select element. */
+async function findSelect(): Promise<WebdriverIO.Element> {
+	const selects = await $$('select');
+	if (selects.length > 0) return selects[0];
+	throw new Error('No select element found');
+}
+
+/** Find the second select element (for mode switching). */
+async function findSecondSelect(): Promise<WebdriverIO.Element> {
+	const selects = await $$('select');
+	if (selects.length >= 2) return selects[1];
+	throw new Error('Second select element not found');
+}
+
 export class ChatViewPage {
 	private get container() { return $('.intelligence-assistant-chat-container'); }
 	private get msgInput() { return $('.chat-input'); }
@@ -8,10 +35,6 @@ export class ChatViewPage {
 	private get stopBtn() { return $('.stop-generation-btn'); }
 	private get newChatBtn() { return $('button[title*="New"]'); }
 	private get settingsBtn() { return $('button[title*="Settings"]'); }
-	private get historyBtn() { return $('button[title*="Conversation"]'); }
-	private get modelSelect() { return $('.ia-model-select'); }
-	private get modeSelect() { return $('.ia-model-n-mode select'); }
-	private get agentBadge() { return $('.chat-agent-header-badge'); }
 	private get messageList() { return $('.ia-chat-messages'); }
 	private get emptyState() { return $('.ia-chat-empty-state'); }
 	private get scrollToBottomBtn() { return $('.ia-scroll-to-bottom'); }
@@ -52,20 +75,33 @@ export class ChatViewPage {
 		await this.stopBtn.click();
 	}
 
+	async openHistory(): Promise<void> {
+		const btn = await findButtonByText('Conversation');
+		await btn.click();
+	}
+
 	async selectModel(modelLabel: string): Promise<void> {
-		await this.modelSelect.selectByVisibleText(modelLabel);
+		const sel = await findSelect();
+		await sel.selectByVisibleText(modelLabel);
 	}
 
 	async getSelectedModel(): Promise<string> {
-		return this.modelSelect.getValue();
+		const sel = await findSelect();
+		return sel.getValue();
 	}
 
 	async switchMode(mode: 'chat' | 'agent'): Promise<void> {
-		await this.modeSelect.selectByAttribute('value', mode);
-	}
-
-	async getAgentBadgeText(): Promise<string> {
-		return this.agentBadge.getText();
+		const modeSelect = await findSecondSelect();
+		await modeSelect.click();
+		const options = await modeSelect.$$('option');
+		for (const opt of options) {
+			const optText = await opt.getText();
+			if (optText.toLowerCase() === mode.toLowerCase()) {
+				await opt.click();
+				return;
+			}
+		}
+		throw new Error(`Mode "${mode}" option not found`);
 	}
 
 	async getMessageCount(): Promise<number> {

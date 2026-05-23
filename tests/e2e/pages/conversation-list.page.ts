@@ -1,13 +1,26 @@
 /**
  * Page Object for the floating conversation list sidebar.
  */
+
+/** Find a button by partial text match. */
+async function findButtonByText(text: string): Promise<WebdriverIO.Element> {
+	const buttons = await $$('button');
+	for (const btn of buttons) {
+		const btnText = await btn.getText();
+		if (btnText.toLowerCase().includes(text.toLowerCase())) {
+			return btn;
+		}
+	}
+	throw new Error(`Button containing "${text}" not found`);
+}
+
 export class ConversationListPage {
 	private get container() { return $('.conversation-list-floating'); }
 	private get items() { return $$('.ia-conversation-item'); }
 	private get searchInput() { return $('.conversation-list-floating input'); }
 
 	async open(): Promise<void> {
-		const btn = await $('button[title*="Conversation"]');
+		const btn = await findButtonByText('Conversation');
 		await btn.click();
 		await this.container.waitForDisplayed({ timeout: 5000 });
 	}

@@ -1,14 +1,25 @@
-export class MCPTabPage {
-	private get addServerBtn() { return $('button=Add server'); }
-	private get refreshAllBtn() { return $('button=Refresh all tools'); }
+/** Find a button by partial text match. */
+async function findButtonByText(text: string): Promise<WebdriverIO.Element> {
+	const buttons = await $$('button');
+	for (const btn of buttons) {
+		const btnText = await btn.getText();
+		if (btnText.toLowerCase().includes(text.toLowerCase())) {
+			return btn;
+		}
+	}
+	throw new Error(`Button containing "${text}" not found`);
+}
 
+export class MCPTabPage {
 	async clickAddServer(): Promise<void> {
-		await this.addServerBtn.click();
+		const btn = await findButtonByText('Add');
+		await btn.click();
 		await browser.pause(500);
 	}
 
 	async clickRefreshAllTools(): Promise<void> {
-		await this.refreshAllBtn.click();
+		const btn = await findButtonByText('Refresh');
+		await btn.click();
 		await browser.pause(1000);
 	}
 
