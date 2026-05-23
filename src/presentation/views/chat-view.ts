@@ -32,6 +32,7 @@ import { RagStatusPanel } from '@/presentation/components/chat/rag-status-panel'
 import { resolveMessageProviderId } from '@/presentation/components/chat/utils';
 import { ObsidianFileSystem } from '@/infrastructure/obsidian/obsidian-file-system';
 import { ObsidianHttpClient } from '@/infrastructure/obsidian/obsidian-http-client';
+import { TestIds } from '@/presentation/utils/test-ids';
 import { } from '@/presentation/components/utils/dom-helpers';
 
 export const CHAT_VIEW_TYPE = 'intelligence-assistant-chat';
@@ -123,9 +124,10 @@ export class ChatView extends ItemView {
 	}
 
 	async onOpen() {
-		const container = this.containerEl.children[1];
+		const container = this.containerEl.children[1] as HTMLElement;
 		container.empty();
 		container.addClass('intelligence-assistant-chat-container');
+		container.setAttribute('data-testid', TestIds.chat.container);
 
 		const configuredMode = this.plugin.settings.defaultChatMode ?? 'chat';
 		this.state.mode = configuredMode === 'agent' ? 'agent' : 'chat';
@@ -168,6 +170,7 @@ export class ChatView extends ItemView {
 
 		// Chat messages container
 		this.chatContainer = this.mainChatContainer.createDiv('chat-messages');
+		this.chatContainer.setAttribute('data-testid', TestIds.chat.messageList);
 
 		// Floating scroll-to-bottom button
 		this.scrollToBottomBtn = this.mainChatContainer.createDiv('ia-scroll-to-bottom');
@@ -448,6 +451,7 @@ export class ChatView extends ItemView {
 		}
 
 		const emptyEl = this.chatContainer.createDiv('ia-chat-empty-state');
+		emptyEl.setAttribute('data-testid', TestIds.chat.emptyState);
 
 		const iconEl = emptyEl.createDiv('ia-chat-empty-state__icon');
 		setIcon(iconEl, 'message-square');

@@ -1,5 +1,5 @@
-import * as fs from 'fs-extra';
-import * as path from 'path';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 
 const REPO_ROOT = path.resolve(__dirname, '../../..');
 const VAULT_ROOT = path.join(REPO_ROOT, 'tests/e2e/test-vault');
@@ -9,17 +9,35 @@ const TEMPLATE_ROOT = path.join(REPO_ROOT, 'tests/e2e/fixtures/vault-template');
 const LIVE_PLUGIN_DIR = path.join(VAULT_ROOT, PLUGIN_DIR_REL);
 const TEMPLATE_PLUGIN_DIR = path.join(TEMPLATE_ROOT, PLUGIN_DIR_REL);
 
+async function pathExists(p: string): Promise<boolean> {
+	try {
+		await fs.access(p);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+async function readJson<T>(p: string): Promise<T> {
+	const raw = await fs.readFile(p, 'utf-8');
+	return JSON.parse(raw) as T;
+}
+
+async function writeJson(p: string, data: unknown): Promise<void> {
+	await fs.writeFile(p, JSON.stringify(data, null, 2), 'utf-8');
+}
+
 /**
  * Wipe and recreate the test vault's plugin data folder from the template.
  * Called from `onPrepare` hooks and from spec-side `VaultFixture.reset()`.
  */
 export async function resetVaultTemplate(): Promise<void> {
-	if (!(await fs.pathExists(TEMPLATE_PLUGIN_DIR))) {
+	if (!(await pathExists(TEMPLATE_PLUGIN_DIR))) {
 		throw new Error(`vault-template missing at ${TEMPLATE_PLUGIN_DIR}`);
 	}
-	await fs.remove(LIVE_PLUGIN_DIR);
-	await fs.ensureDir(path.dirname(LIVE_PLUGIN_DIR));
-	await fs.copy(TEMPLATE_PLUGIN_DIR, LIVE_PLUGIN_DIR);
+	await fs.rm(LIVE_PLUGIN_DIR, { recursive: true, force: true });
+	await fs.mkdir(path.dirname(LIVE_PLUGIN_DIR), { recursive: true });
+	await fs.cp(TEMPLATE_PLUGIN_DIR, LIVE_PLUGIN_DIR, { recursive: true });
 }
 
 /**
@@ -34,11 +52,8 @@ export async function seedReleaseProvider(): Promise<void> {
 	const model = process.env.E2E_TEST_MODEL;
 	if (!provider || !apiKey || !model) return;
 
-	const settingsPath = path.join(
-		LIVE_PLUGIN_DIR,
-		'config/user/settings.json'
-	);
-	const settings = await fs.readJson(settingsPath) as Record<string, unknown>;
+	const settingsPath = path.join(LIVE_PLUGIN_DIR, 'config/user/settings.json');
+	const settings = await readJson<Record<string, unknown>>(settingsPath);
 	const providers = (settings.providers ?? {}) as Record<string, unknown>;
 	const list = Array.isArray(providers.list) ? providers.list : [];
 	list.unshift({
@@ -52,7 +67,7 @@ export async function seedReleaseProvider(): Promise<void> {
 	providers.defaultModel = model;
 	providers.titleSummaryModel = model;
 	settings.providers = providers;
-	await fs.writeJson(settingsPath, settings, { spaces: 2 });
+	await writeJson(settingsPath, settings);
 }
 
 /**
@@ -65,12 +80,11 @@ export class VaultFixture {
 	}
 
 	async readDataFile<T = unknown>(relativePath: string): Promise<T> {
-		const full = path.join(LIVE_PLUGIN_DIR, relativePath);
-		return fs.readJson(full) as Promise<T>;
+		return readJson<T>(path.join(LIVE_PLUGIN_DIR, relativePath));
 	}
 
 	async dataFileExists(relativePath: string): Promise<boolean> {
-		return fs.pathExists(path.join(LIVE_PLUGIN_DIR, relativePath));
+		return pathExists(path.join(LIVE_PLUGIN_DIR, relativePath));
 	}
 
 	getPluginDir(): string {

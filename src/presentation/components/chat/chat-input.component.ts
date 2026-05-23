@@ -3,6 +3,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { t } from '@/i18n';
 import type { ModelInfo } from '@/types';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 export interface ChatInputCallbacks {
 	onSendMessage: (text: string) => Promise<void>;

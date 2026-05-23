@@ -48,7 +48,8 @@
     "skipLibCheck": true,
     "types": [
       "node",
-      "obsidian"
+      "obsidian",
+      "@wdio/globals/types"
     ]
   },
   "include": [
