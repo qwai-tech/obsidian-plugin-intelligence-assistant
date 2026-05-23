@@ -121,14 +121,14 @@ export interface UserConfig {
 		defaultMode?: 'chat' | 'agent';
 		activeId: string | null;
 	};
-	mcp: {
-		servers: MCPServerConfig[];
-		registries: MCPRegistry[];
-	};
 	tools: {
-		builtIn: BuiltInToolConfig[];
-		openApi?: OpenApiToolConfig[];
-		cli?: CLIToolConfig[];
+		builtin: BuiltInToolConfig[];
+		mcp: {
+			servers: MCPServerConfig[];
+			registries: MCPRegistry[];
+		};
+		openapi: OpenApiToolConfig[];
+		cli: CLIToolConfig[];
 	};
 	rag: {
 		enabled: boolean;
@@ -206,11 +206,38 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 	}));
 
 	const providerList = deepClone(source.providers?.list ?? DEFAULT_USER_CONFIG.providers.list);
-	const mcpServers = deepClone(source.mcp?.servers ?? DEFAULT_USER_CONFIG.mcp.servers);
-	const mcpRegistries = deepClone(source.mcp?.registries ?? DEFAULT_USER_CONFIG.mcp.registries);
-	const builtInTools = deepClone(source.tools?.builtIn ?? DEFAULT_USER_CONFIG.tools.builtIn);
-	const openApiTools = normalizeOpenApiConfigs(source.tools?.openApi ?? DEFAULT_USER_CONFIG.tools.openApi);
-	const cliTools = deepClone(source.tools?.cli ?? []);
+	// Phase 4 migration: read from new config.tools.* paths first,
+	// fall back to old config.* paths, then fall back to defaults.
+	const rawSource = source as Record<string, unknown>;
+	const oldMcp = rawSource?.['mcp'] as
+		{ servers?: MCPServerConfig[]; registries?: MCPRegistry[] } | undefined;
+	const oldTools = rawSource?.['tools'] as
+		{ builtIn?: BuiltInToolConfig[]; openApi?: OpenApiToolConfig[]; cli?: CLIToolConfig[] } | undefined;
+
+	const mcpServers = deepClone(
+		source.tools?.mcp?.servers ??
+		oldMcp?.servers ??
+		DEFAULT_USER_CONFIG.tools.mcp.servers
+	);
+	const mcpRegistries = deepClone(
+		source.tools?.mcp?.registries ??
+		oldMcp?.registries ??
+		DEFAULT_USER_CONFIG.tools.mcp.registries
+	);
+	const builtInTools = deepClone(
+		source.tools?.builtin ??
+		oldTools?.builtIn ??
+		DEFAULT_USER_CONFIG.tools.builtin
+	);
+	const openApiTools = normalizeOpenApiConfigs(
+		source.tools?.openapi ??
+		oldTools?.openApi ??
+		DEFAULT_USER_CONFIG.tools.openapi
+	);
+	const cliTools = deepClone(
+		source.tools?.cli ??
+		oldTools?.cli ?? []
+	);
 	const webSearch = deepClone(source.search?.web ?? DEFAULT_USER_CONFIG.search.web);
 	const agents = deepClone(source.agents?.list ?? []);
 	const agentMemories = deepClone(source.agents?.memories ?? []);
@@ -305,14 +332,14 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 			defaultMode: settings.defaultChatMode ?? 'chat',
 			activeId: settings.activeConversationId
 		},
-		mcp: {
-			servers: [],
-			registries: deepClone(settings.mcpRegistries ?? [])
-		},
 		tools: {
-			builtIn: deepClone(settings.builtInTools ?? []),
-			openApi: deepClone(settings.openApiTools ?? []),
-			cli: deepClone(settings.cliTools ?? [])
+			builtin: deepClone(settings.builtInTools ?? []),
+			mcp: {
+				servers: [],
+				registries: deepClone(settings.mcpRegistries ?? []),
+			},
+			openapi: deepClone(settings.openApiTools ?? []),
+			cli: deepClone(settings.cliTools ?? []),
 		},
 		rag: {
 			enabled: settings.ragConfig.enabled,

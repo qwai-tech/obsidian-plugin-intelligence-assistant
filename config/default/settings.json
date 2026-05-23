@@ -16,18 +16,8 @@
     "defaultMode": "chat",
     "activeId": null
   },
-  "mcp": {
-    "servers": [],
-    "registries": [
-      {
-        "name": "Official MCP Registry",
-        "url": "https://registry.modelcontextprotocol.io/v0/servers",
-        "enabled": true
-      }
-    ]
-  },
   "tools": {
-    "builtIn": [
+    "builtin": [
       {
         "type": "read_file",
         "enabled": true
@@ -53,7 +43,18 @@
         "enabled": true
       }
     ],
-    "openApi": []
+    "mcp": {
+      "servers": [],
+      "registries": [
+        {
+          "name": "Official MCP Registry",
+          "url": "https://registry.modelcontextprotocol.io/v0/servers",
+          "enabled": true
+        }
+      ]
+    },
+    "openapi": [],
+    "cli": []
   },
   "rag": {
     "enabled": true,
