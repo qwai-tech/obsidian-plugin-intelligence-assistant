@@ -125,5 +125,59 @@ export default defineConfig([
         // fetch intentionally omitted: requestUrl cannot handle SSE streaming
       ]
     }
+  },
+
+  // E2E test files: relax strict TS rules that don't apply to test code
+  // (fs-extra typings, intentional WebdriverIO globals, Obsidian path rules
+  // that target plugin source). Keep the disciplinary rules below.
+  {
+    files: ["tests/e2e/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/require-await": "off",
+      "obsidianmd/hardcoded-config-path": "off",
+      "obsidianmd/prefer-file-manager-trash-file": "off",
+      "no-console": "off",
+    },
+  },
+
+  // E2E spec discipline: no hardcoded sleeps; specs may not touch DOM directly.
+  {
+    files: ["tests/e2e/specs/**/*.ts"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "CallExpression[callee.object.name='browser'][callee.property.name='pause']",
+          message: "Use page object waitFor* helpers or browser.waitUntil(condition) — no hardcoded sleeps.",
+        },
+        {
+          selector: "CallExpression[callee.name='$']",
+          message: "Specs must use Page Objects — do not call $ directly.",
+        },
+        {
+          selector: "CallExpression[callee.name='$$']",
+          message: "Specs must use Page Objects — do not call $$ directly.",
+        },
+      ],
+    },
+  },
+
+  {
+    files: ["tests/e2e/pages/**/*.ts", "tests/e2e/support/**/*.ts"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "CallExpression[callee.object.name='browser'][callee.property.name='pause']",
+          message: "Use browser.waitUntil(condition) — no hardcoded sleeps.",
+        },
+      ],
+    },
   }
 ]);

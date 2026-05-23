@@ -56,7 +56,8 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "scripts/**/*.ts",
-    "__mocks__/**/*.ts"
+    "__mocks__/**/*.ts",
+    "tests/e2e/**/*.ts"
   ],
   "exclude": [
     "node_modules",
