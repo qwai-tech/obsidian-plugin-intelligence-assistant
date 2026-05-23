@@ -3,6 +3,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import type {Agent, BuiltInToolConfig, MCPServerConfig, CLIToolConfig} from '@/types';
 import { t } from '@/i18n';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
+import { migrateAgentToolAccess } from '@/application/tools/tool-migrations';
 
 export class AgentEditModal extends Modal {
 	private agent: Agent;
@@ -26,6 +27,10 @@ export class AgentEditModal extends Modal {
 		this.agent.enabledMcpServers = this.agent.enabledMcpServers ?? [];
 		this.agent.enabledMcpTools = this.agent.enabledMcpTools ?? [];
 		this.agent.enabledCLITools = this.agent.enabledCLITools ?? [];
+
+		// Migrate legacy tool fields to toolAccess (for display in summary)
+		const allCliToolIds = this.plugin.settings.cliTools?.map(t => t.id) ?? [];
+		migrateAgentToolAccess(this.agent, allCliToolIds);
 	}
 
 	onOpen() {
@@ -367,6 +372,21 @@ export class AgentEditModal extends Modal {
 			});
 		}
 
+		// Tool access summary (read-only, from toolAccess model)
+		if (this.agent.toolAccess && Object.keys(this.agent.toolAccess.sources).length > 0) {
+			contentEl.createEl('h3', { text: t('modals.agentEdit.tools.title') + ' (toolAccess)' });
+			const summaryList = contentEl.createEl('ul');
+			for (const [sourceKey, access] of Object.entries(this.agent.toolAccess.sources)) {
+				const item = summaryList.createEl('li');
+				const sourceName = this.formatToolSourceKey(sourceKey);
+				if (access === 'all') {
+					item.setText(`${sourceName}: All tools enabled`);
+				} else {
+					item.setText(`${sourceName}: ${access.length} tool(s) enabled`);
+				}
+			}
+		}
+
 		// Buttons
 		const buttonContainer = contentEl.createDiv('ia-modal-footer');
 		buttonContainer.removeClass('ia-hidden');
@@ -407,7 +427,12 @@ export class AgentEditModal extends Modal {
 						this.agent.systemPromptId = this.selectedSystemPromptId;
 					}
 
-					this.agent.updatedAt = Date.now();
+					// Re-migrate tool access to reflect changes from old UI controls
+				delete this.agent.toolAccess;
+				const allCliToolIds = this.plugin.settings.cliTools?.map(t => t.id) ?? [];
+				migrateAgentToolAccess(this.agent, allCliToolIds);
+
+				this.agent.updatedAt = Date.now();
 					await this.onSaveCallback(this.agent);
 					this.close();
 				})();
@@ -646,6 +671,14 @@ export class AgentEditModal extends Modal {
 
 	private buildMcpToolKey(serverName: string, toolName: string): string {
 		return `${serverName}::${toolName}`;
+	}
+
+	private formatToolSourceKey(sourceKey: string): string {
+		const parts = sourceKey.split(':');
+		if (parts[0] === 'builtin') return 'Built-in Tools';
+		if (parts[0] === 'mcp') return `MCP: ${parts.slice(1).join(':')}`;
+		if (parts[0] === 'cli') return `CLI: ${parts.slice(1).join(':')}`;
+		return sourceKey;
 	}
 
 	private updateModelControls() {
