@@ -1,0 +1,31 @@
+{
+  "providers": {
+    "list": [
+      {
+        "provider": "openai",
+        "apiKey": "sk-test-fixture",
+        "baseUrl": "https://api.openai.com/v1",
+        "cachedModels": [
+          {
+            "id": "gpt-4o-mini",
+            "name": "GPT-4o Mini",
+            "provider": "openai",
+            "capabilities": ["chat", "streaming"],
+            "enabled": true
+          }
+        ],
+        "cacheTimestamp": 0
+      }
+    ],
+    "defaultModel": "gpt-4o-mini",
+    "titleSummaryModel": "gpt-4o-mini"
+  },
+  "rag": {
+    "enabled": false,
+    "embedding": { "model": "text-embedding-3-small" }
+  },
+  "mcp": {
+    "servers": [],
+    "registries": []
+  }
+}
