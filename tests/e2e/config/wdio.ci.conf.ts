@@ -30,7 +30,7 @@ export const config: Options.Testrunner = {
 			'wdio:obsidianOptions': {
 				appVersion: obsidianVersion,
 				installerVersion: obsidianVersion,
-				plugins: ['.'],
+				plugins: [path.resolve('.')],
 				vault: path.resolve('tests/e2e/test-vault'),
 			},
 		},
