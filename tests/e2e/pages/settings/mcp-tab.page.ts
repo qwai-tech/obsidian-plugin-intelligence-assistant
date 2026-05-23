@@ -1,10 +1,15 @@
-/** Find a button by partial text match. */
+/** Find a clickable element by partial text match. */
 async function findButtonByText(text: string): Promise<WebdriverIO.Element> {
-	const buttons = await $$('button');
-	for (const btn of buttons) {
-		const btnText = await btn.getText();
-		if (btnText.toLowerCase().includes(text.toLowerCase())) {
-			return btn;
+	const selectors = ['button.ia-button', '.ia-button', 'button'];
+	for (const sel of selectors) {
+		const elements = await $$(sel);
+		for (const el of elements) {
+			try {
+				const elText = await el.getText();
+				if (elText && elText.toLowerCase().includes(text.toLowerCase())) {
+					return el;
+				}
+			} catch { /* skip */ }
 		}
 	}
 	throw new Error(`Button containing "${text}" not found`);
@@ -12,13 +17,13 @@ async function findButtonByText(text: string): Promise<WebdriverIO.Element> {
 
 export class MCPTabPage {
 	async clickAddServer(): Promise<void> {
-		const btn = await findButtonByText('Add');
+		const btn = await findButtonByText('add');
 		await btn.click();
 		await browser.pause(500);
 	}
 
 	async clickRefreshAllTools(): Promise<void> {
-		const btn = await findButtonByText('Refresh');
+		const btn = await findButtonByText('refresh');
 		await btn.click();
 		await browser.pause(1000);
 	}
