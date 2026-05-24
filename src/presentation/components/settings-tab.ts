@@ -18,6 +18,7 @@ import { displayRAGTab } from './tabs/rag-tab';
 import { displayQuickActionsTab } from './tabs/quickactions-tab';
 import { displayUsageTab } from './tabs/usage-tab';
 import type { ModelFilters } from './tabs/models-tab';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 
 export class IntelligenceAssistantSettingTab extends PluginSettingTab {
@@ -44,7 +45,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		const {containerEl} = this;
 
 		containerEl.empty();
-		;
+		containerEl.setAttribute('data-testid', TestIds.settings.shell);
 
 		const tabNav = containerEl.createDiv('settings-tabs');
 		const tabDefs: Array<{ slug: string; label: string }> = [
@@ -65,6 +66,8 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			const btn = tabNav.createEl('button', { text: def.label });
 			btn.className = 'settings-tab';
 			btn.dataset.slug = def.slug;
+			btn.setAttribute('data-testid', TestIds.settings.tab);
+			btn.setAttribute('data-tab-id', def.slug);
 			if (def.slug === this.activeTab) {
 				btn.addClass('is-active');
 			}
