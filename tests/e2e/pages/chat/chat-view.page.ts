@@ -77,4 +77,11 @@ export class ChatViewPage extends BasePage {
 			return plugin?.conversationManager?.activeConversationId ?? '';
 		});
 	}
+
+	async isInputVisible(): Promise<boolean> { return this.isVisible(TestIds.chat.input); }
+	async isSendBtnPresent(): Promise<boolean> { return this.$testid(TestIds.chat.sendBtn).isExisting(); }
+	async isEmptyStateVisible(): Promise<boolean> { return this.isVisible(TestIds.chat.emptyState); }
+	async isModelSelectPresent(): Promise<boolean> { return this.$testid(TestIds.chat.modelSelect).isExisting(); }
+	async isModeSelectPresent(): Promise<boolean> { return this.$testid(TestIds.chat.modeSelect).isExisting(); }
+	async isContainerVisible(): Promise<boolean> { return this.isVisible(TestIds.chat.container); }
 }

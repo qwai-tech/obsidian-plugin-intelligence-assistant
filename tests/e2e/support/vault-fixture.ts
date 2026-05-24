@@ -9,6 +9,17 @@ const TEMPLATE_ROOT = path.join(REPO_ROOT, 'tests/e2e/fixtures/vault-template');
 const LIVE_PLUGIN_DIR = path.join(VAULT_ROOT, PLUGIN_DIR_REL);
 const TEMPLATE_PLUGIN_DIR = path.join(TEMPLATE_ROOT, PLUGIN_DIR_REL);
 
+/**
+ * Subdirectories of the plugin folder that hold runtime state.
+ * `config/` is the user settings.json; `data/` holds conversations,
+ * vector store, cache, agents, prompts, openapi tools, etc.
+ *
+ * The plugin binary (main.js, manifest.json, styles.css, main.js.map)
+ * lives outside these — wdio-obsidian-service installs it once at session
+ * start, and resets MUST NOT touch it or the next test sees no plugin.
+ */
+const RESET_SUBDIRS = ['config', 'data'] as const;
+
 async function pathExists(p: string): Promise<boolean> {
 	try {
 		await fs.access(p);
@@ -28,16 +39,26 @@ async function writeJson(p: string, data: unknown): Promise<void> {
 }
 
 /**
- * Wipe and recreate the test vault's plugin data folder from the template.
- * Called from `onPrepare` hooks and from spec-side `VaultFixture.reset()`.
+ * Reset runtime state subdirectories from the template. Leaves the plugin
+ * binary intact. Safe to call before every spec.
  */
 export async function resetVaultTemplate(): Promise<void> {
 	if (!(await pathExists(TEMPLATE_PLUGIN_DIR))) {
 		throw new Error(`vault-template missing at ${TEMPLATE_PLUGIN_DIR}`);
 	}
-	await fs.rm(LIVE_PLUGIN_DIR, { recursive: true, force: true });
-	await fs.mkdir(path.dirname(LIVE_PLUGIN_DIR), { recursive: true });
-	await fs.cp(TEMPLATE_PLUGIN_DIR, LIVE_PLUGIN_DIR, { recursive: true });
+	await fs.mkdir(LIVE_PLUGIN_DIR, { recursive: true });
+
+	for (const sub of RESET_SUBDIRS) {
+		const live = path.join(LIVE_PLUGIN_DIR, sub);
+		const tmpl = path.join(TEMPLATE_PLUGIN_DIR, sub);
+		await fs.rm(live, { recursive: true, force: true });
+		if (await pathExists(tmpl)) {
+			await fs.cp(tmpl, live, { recursive: true });
+		} else {
+			// template has no contents for this subdir; ensure the dir exists empty
+			await fs.mkdir(live, { recursive: true });
+		}
+	}
 }
 
 /**
