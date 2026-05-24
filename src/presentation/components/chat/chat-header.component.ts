@@ -3,6 +3,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import { hasSettings } from '@/utils/type-guards';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { t } from '@/i18n';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 export interface ChatHeaderCallbacks {
 	onToggleConversations: () => Promise<void>;
@@ -42,6 +43,7 @@ export class ChatHeaderComponent {
 		this.agentHeaderBadgeEl = header.createEl('span', { cls: 'chat-agent-header-badge ia-hidden' });
 
 		const newChatBtn = header.createEl('button', { cls: 'chat-header-icon-btn' });
+		newChatBtn.setAttribute('data-testid', TestIds.chat.newBtn);
 		setIcon(newChatBtn, 'plus');
 		newChatBtn.setAttr('title', t('chat.new'));
 		newChatBtn.addEventListener('click', (e) => {

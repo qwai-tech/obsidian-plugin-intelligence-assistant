@@ -8,6 +8,7 @@ import { getProviderMeta } from '@/presentation/components/components/provider-m
 import { getModelDisplayName, resolveMessageProviderId } from '@/presentation/components/chat/utils';
 import { createAgentExecutionTraceContainer, updateExecutionTrace, collapseExecutionTrace } from '@/presentation/components/chat/handlers/tool-call-handler';
 import type { AgentExecutionStep as TraceStep } from '@/presentation/state/chat-view-state';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 export interface MessageRendererContext {
 	app: App;
@@ -59,6 +60,11 @@ export function renderMessage(
 	messageEl.addClass(`ia-chat-message--${message.role}`);
 	messageEl.addClass('chat-message');
 	messageEl.addClass(`message-${message.role}`);
+	messageEl.setAttribute('data-testid', TestIds.chat.message);
+	messageEl.setAttribute('data-role', message.role);
+	// container.children includes messageEl itself (already inserted by createDiv);
+	// the new message is at index length-1.
+	messageEl.setAttribute('data-msg-id', String(container.children.length - 1));
 
 	if (options?.animate) {
 		messageEl.addClass('ia-chat-message--entering');

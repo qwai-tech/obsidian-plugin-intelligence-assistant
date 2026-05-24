@@ -64,12 +64,15 @@ export class ChatInputComponent {
 			attr: { placeholder: t('chat.placeholder'), rows: '1' }
 		});
 		this.textarea.addClass('chat-input');
+		this.textarea.setAttribute('data-testid', TestIds.chat.input);
 
 		this.sendBtn = editorRow.createEl('button', { cls: 'ia-send-btn' });
 		this.sendBtn.setAttribute('aria-label', t('chat.sendAriaLabel'));
+		this.sendBtn.setAttribute('data-testid', TestIds.chat.sendBtn);
 		setIcon(this.sendBtn, 'arrow-up');
 
 		this.stopBtn = editorRow.createEl('button', { cls: 'stop-generation-btn' });
+		this.stopBtn.setAttribute('data-testid', TestIds.chat.stopBtn);
 		setIcon(this.stopBtn, 'square');
 		this.stopBtn.createSpan({ text: t('chat.stop') });
 		this.stopBtn.addClass('ia-hidden');
@@ -104,6 +107,7 @@ export class ChatInputComponent {
 		this.modePillGroup = toolbar.createDiv('chat-input-pill-group');
 
 		this.modeSelector = this.modePillGroup.createEl('select', { cls: 'chat-input-mode-pill' });
+		this.modeSelector.setAttribute('data-testid', TestIds.chat.modeSelect);
 		this.modeSelector.createEl('option', { value: 'chat', text: t('chat.modeOptions.chat') });
 		this.modeSelector.createEl('option', { value: 'agent', text: t('chat.modeOptions.agent') });
 		this.modeSelector.value = this.state.mode;
@@ -112,6 +116,7 @@ export class ChatInputComponent {
 		});
 
 		this.modelSelect = this.modePillGroup.createEl('select', { cls: 'chat-input-model-pill' });
+		this.modelSelect.setAttribute('data-testid', TestIds.chat.modelSelect);
 		this.modelSelect.addEventListener('change', () => void this.callbacks.onModelChange());
 
 		// Left: agent pill (visible in agent mode)
