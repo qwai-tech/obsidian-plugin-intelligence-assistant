@@ -509,7 +509,12 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			}
 		}
 
-		// Phase 3: migrate legacy tool fields to toolAccess
+		// Migrate legacy per-source enable lists into toolAccess. This handles
+		// agents loaded via `agentRepository.loadAll()` (the dominant path
+		// once a user has saved agents to data/agents/*.json) — those bypass
+		// `userConfigToPluginSettings`'s Stage A migration entirely.
+		// The function is idempotent, so re-running on already-migrated agents
+		// is a no-op.
 		const cliIds = (this.settings.cliTools ?? []).map((c) => c.id);
 		const agentChanged = migrateAllAgents(this.settings.agents, cliIds);
 		if (agentChanged.size > 0) {
