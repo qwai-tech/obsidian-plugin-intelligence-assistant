@@ -243,8 +243,14 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	public async initToolRegistry(): Promise<void> {
 		const registry = this.getToolRegistry();
 
-		// Builtin: always register
-		registry.registerSource(new BuiltinToolSource(this.app));
+		// Builtin: always register, gated by per-tool enabled flags.
+		// The callback runs on every load() so toggling a builtin tool in
+		// settings and calling reloadBuiltinTools picks up the change.
+		registry.registerSource(new BuiltinToolSource(this.app, () =>
+			(this.settings.builtInTools ?? [])
+				.filter((t) => t.enabled)
+				.map((t) => t.type),
+		));
 
 		// MCP servers: one source per enabled server
 		for (const server of (this.settings.mcpServers ?? [])) {
@@ -331,6 +337,14 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	/** Remove an OpenAPI config's source from the registry. */
 	public async removeOpenApiConfig(configId: string): Promise<void> {
 		await this.getToolRegistry().unregisterSource('openapi', configId);
+	}
+
+	/** Refresh the builtin source after settings.builtInTools[].enabled changed. */
+	public async reloadBuiltinTools(): Promise<void> {
+		const registry = this.getToolRegistry();
+		if (registry.hasSource('builtin', 'builtin')) {
+			await registry.reloadSource('builtin', 'builtin');
+		}
 	}
 
 	/** Refresh CLI sources in the registry from settings. */
