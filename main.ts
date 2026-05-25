@@ -180,10 +180,10 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			console.debug('[Plugin] Starting deferred initialization...');
 
 			// Run these in parallel for faster completion. initToolRegistry()
-			// registers and loads every enabled source (builtin/mcp/openapi/cli)
-			// in one pass, so the per-kind reload calls that the old setup ran
-			// here are no longer needed. ensureAutoConnectedMcpServers stays —
-			// it only writes back the cache once a connection actually lands.
+			// now handles both source loading AND MCP cachedTools writeback,
+			// so the separate ensureAutoConnectedMcpServers call that used to
+			// live here is gone — it only runs on user-driven add/edit from
+			// mcp-tab now.
 			await Promise.all([
 				this.migrateConversationsIfNeeded().catch(error =>
 					console.error('[Plugin] Conversation migration failed:', error)
@@ -193,9 +193,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				),
 				this.initToolRegistry().catch(error =>
 					console.error('[Plugin] ToolRegistry init failed:', error)
-				),
-				this.ensureAutoConnectedMcpServers().catch(error =>
-					console.error('[Plugin] MCP auto-connect failed:', error)
 				),
 			]);
 
@@ -252,7 +249,10 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				.map((t) => t.type),
 		));
 
-		// MCP servers: one source per enabled server
+		// MCP servers: register every enabled server. Auto-mode servers are
+		// loaded eagerly (the registry's reload below) and their cachedTools
+		// gets written back here in one pass. Manual-mode servers are
+		// registered but their load is deferred to user-triggered "connect".
 		for (const server of (this.settings.mcpServers ?? [])) {
 			if (server.enabled) {
 				registry.registerSource(new McpToolSource(server));
@@ -277,6 +277,28 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		}
 
 		await registry.reload();
+
+		// MCP cache writeback: now that the registry has loaded what it can,
+		// snapshot each enabled MCP server's live tools into its cachedTools
+		// so the disconnected UI shows up-to-date state on next launch.
+		const { snapshotMcpTools } = await import('./src/application/tools/mcp-helpers');
+		let mcpCacheDirty = false;
+		for (const server of (this.settings.mcpServers ?? [])) {
+			if (!server.enabled) continue;
+			const serverTools = registry.getTools().filter(
+				(t) => t.origin.kind === 'mcp' && t.origin.sourceId === server.name,
+			);
+			if (serverTools.length > 0) {
+				const fresh = snapshotMcpTools(serverTools);
+				server.cachedTools = fresh;
+				server.cacheTimestamp = Date.now();
+				mcpCacheDirty = true;
+			}
+		}
+		if (mcpCacheDirty) {
+			await this.saveSettings();
+		}
+
 		console.debug('[Plugin] ToolRegistry initialized');
 	}
 

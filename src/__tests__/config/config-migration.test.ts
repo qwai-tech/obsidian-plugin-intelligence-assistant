@@ -150,7 +150,10 @@ describe('Phase 4: Config schema migration', () => {
 			};
 			const uc = pluginSettingsToUserConfig(settings);
 			expect(uc.tools.builtin).toEqual(sampleBuiltInTools());
-			expect(uc.tools.mcp.servers).toEqual([]);
+			// Phase 6: mcp.servers is now persisted via pluginSettingsToUserConfig
+			// in addition to the per-server repository, so config.tools.mcp.servers
+			// is the full server list (Phase 4 schema unification).
+			expect(uc.tools.mcp.servers).toEqual(sampleMCPServers());
 			expect(uc.tools.openapi).toEqual(sampleOpenApiTools());
 			expect(uc.tools.cli).toEqual(sampleCLITools());
 			expect((uc as any).mcp).toBeUndefined();

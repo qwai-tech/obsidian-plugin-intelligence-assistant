@@ -341,7 +341,11 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 		tools: {
 			builtin: deepClone(settings.builtInTools ?? []),
 			mcp: {
-				servers: [],
+				// MCP servers also persist via the per-server repository at
+				// data/mcp-servers.json. Writing them here too keeps the unified
+				// settings.json schema (Phase 4 design 5.1) honest — anyone
+				// inspecting only the config file gets the full picture.
+				servers: deepClone(settings.mcpServers ?? []),
 				registries: deepClone(settings.mcpRegistries ?? []),
 			},
 			openapi: deepClone(settings.openApiTools ?? []),
