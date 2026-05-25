@@ -1,8 +1,36 @@
 import { App, Modal, Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import { snapshotMcpTools } from '@plugin';
-import type { Tool } from '@/application/services/types';
+import { snapshotMcpTools } from '@/application/tools/mcp-helpers';
+import { McpToolSource } from '@/application/tools/sources/mcp-tool-source';
+import type { ToolRegistry } from '@/application/tools/tool-registry';
+import type { RegisteredTool } from '@/types/common/tools';
 import { t } from '@/i18n';
+
+/** Names of MCP servers that currently have tools loaded in the registry. */
+function getConnectedMcpServers(registry: ToolRegistry): string[] {
+	const seen = new Set<string>();
+	for (const tool of registry.getTools()) {
+		if (tool.origin.kind === 'mcp') {
+			seen.add(tool.origin.sourceId);
+		}
+	}
+	return [...seen];
+}
+
+/** Group all registered tools by `${origin.kind}:${origin.sourceId}` for the inspector UI. */
+function getToolsByProviderKey(registry: ToolRegistry): Map<string, RegisteredTool[]> {
+	const map = new Map<string, RegisteredTool[]>();
+	for (const tool of registry.getTools()) {
+		const key = `${tool.origin.kind}:${tool.origin.sourceId}`;
+		const bucket = map.get(key);
+		if (bucket) {
+			bucket.push(tool);
+		} else {
+			map.set(key, [tool]);
+		}
+	}
+	return map;
+}
 
 export class MCPInspectorModal extends Modal {
 	private plugin: IntelligenceAssistantPlugin;
@@ -156,9 +184,9 @@ export class MCPInspectorModal extends Modal {
 		container.createEl('h3', { text: t('modals.mcpInspector.connections.title') });
 
 		// Check for active connections
-		const toolManager = this.plugin.getToolManager();
-		const connectedServers = toolManager.getMCPServers();
-		const toolsByProvider = toolManager.getToolsByProvider();
+		const registry = this.plugin.getToolRegistry();
+		const connectedServers = getConnectedMcpServers(registry);
+		const toolsByProvider = getToolsByProviderKey(registry);
 
 		// Display configured servers
 		if (this.plugin.settings.mcpServers.length === 0) {
@@ -229,21 +257,22 @@ export class MCPInspectorModal extends Modal {
 			actionBtn.disabled = !isEnabled;
 			actionBtn.addEventListener('click', () => {
 				void (async () => {
-					const currentlyConnected = toolManager.getMCPServers().includes(server.name);
+					const currentlyConnected = registry.hasSource('mcp', server.name);
 					actionBtn.disabled = true;
 					const originalText = actionBtn.textContent ?? '';
 					actionBtn.textContent = currentlyConnected ? t('modals.mcpInspector.connections.disconnecting') : t('modals.mcpInspector.connections.connecting');
 
 					try {
 						if (currentlyConnected) {
-							await toolManager.unregisterMCPServer(server.name);
+							await registry.unregisterSource('mcp', server.name);
 							new Notice(t('modals.mcpInspector.connections.notices.disconnected', { name: server.name }));
 						} else {
 							if (!server.enabled) {
 								new Notice(t('modals.mcpInspector.connections.notices.enableFirst'));
 								return;
 							}
-							const tools = await toolManager.registerMCPServer(server);
+							registry.registerSource(new McpToolSource(server));
+							const tools = await registry.reloadSource('mcp', server.name);
 							server.cachedTools = snapshotMcpTools(tools);
 							server.cacheTimestamp = Date.now();
 							await this.plugin.saveSettings();
@@ -270,8 +299,8 @@ export class MCPInspectorModal extends Modal {
 		container.createEl('h3', { text: t('modals.mcpInspector.tools.title') });
 
 		// Check for active connections
-		const toolManager = this.plugin.getToolManager();
-		const toolsByProvider = toolManager.getToolsByProvider();
+		const toolsRegistry = this.plugin.getToolRegistry();
+		const toolsByProvider = getToolsByProviderKey(toolsRegistry);
 
 		// Filter to only MCP tools
 		const mcpTools = Array.from(toolsByProvider.entries())
@@ -279,7 +308,7 @@ export class MCPInspectorModal extends Modal {
 			.reduce((acc, [provider, tools]) => {
 				acc[provider] = tools;
 				return acc;
-			}, {} as Record<string, Tool[]>);
+			}, {} as Record<string, RegisteredTool[]>);
 
 		if (Object.keys(mcpTools).length === 0) {
 			container.createEl('p', { text: t('modals.mcpInspector.tools.noTools') });
@@ -379,8 +408,8 @@ export class MCPInspectorModal extends Modal {
 
 		const serverSelect = selectionRow.createEl('select');
 		serverSelect.setCssProps({ 'flex': '1' });
-		const inspectorToolManager = this.plugin.getToolManager();
-		const connectedServers = inspectorToolManager.getMCPServers();
+		const inspectorRegistry = this.plugin.getToolRegistry();
+		const connectedServers = getConnectedMcpServers(inspectorRegistry);
 
 		serverSelect.createEl('option', { text: t('modals.mcpInspector.logs.selectServer'), value: '' });
 		for (const serverName of connectedServers) {
@@ -409,14 +438,15 @@ export class MCPInspectorModal extends Modal {
 			paramsContainer.empty();
 
 			if (serverSelect.value) {
-				const toolsByProvider = inspectorToolManager.getToolsByProvider();
+				const toolsByProvider = getToolsByProviderKey(inspectorRegistry);
 				const serverTools = toolsByProvider.get(`mcp:${serverSelect.value}`) || [];
 
 				toolSelect.createEl('option', { text: t('modals.mcpInspector.logs.selectTool'), value: '' });
 				for (const tool of serverTools) {
 					toolSelect.createEl('option', {
 						text: tool.definition.name,
-						value: tool.definition.name
+						// Use llmName so executeTool() can find it after sanitization.
+						value: tool.llmName,
 					});
 				}
 			}
@@ -429,7 +459,7 @@ export class MCPInspectorModal extends Modal {
 
 			if (!toolSelect.value) return;
 
-			const tool = inspectorToolManager.getTool(toolSelect.value);
+			const tool = inspectorRegistry.getToolByLlmName(toolSelect.value);
 			if (!tool || !tool.definition.parameters || tool.definition.parameters.length === 0) {
 				return;
 			}
@@ -599,10 +629,7 @@ export class MCPInspectorModal extends Modal {
 			resultContainer.addClass('ia-hidden');
 
 			try {
-				const result = await inspectorToolManager.executeTool({
-					name: toolSelect.value,
-					arguments: args
-				});
+				const result = await inspectorRegistry.executeTool(toolSelect.value, args);
 
 				// Display result
 				resultContainer.empty();
@@ -685,15 +712,16 @@ export class MCPInspectorModal extends Modal {
 			}
 
 			try {
-				// Test connection
-				const { MCPClient } = await import('@/application/services/mcp-client');
-				const testClient = new MCPClient(server);
+				// Probe via a throw-away McpToolSource so the cache shape stays
+				// consistent with what the registry would produce. Not registered.
+				const probeSource = new McpToolSource(server);
+				const tools = await probeSource.load();
+				await probeSource.dispose();
 
-				await testClient.connect();
-				const tools = await testClient.listTools();
-				await testClient.disconnect();
-
-				server.cachedTools = snapshotMcpTools(tools);
+				server.cachedTools = tools.map((t) => ({
+					name: t.definition.name,
+					description: t.definition.description,
+				}));
 				server.cacheTimestamp = Date.now();
 				settingsDirty = true;
 

@@ -6,7 +6,8 @@
 import { App, Notice } from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
-import { snapshotMcpTools } from '@plugin';
+import { snapshotMcpTools } from '@/application/tools/mcp-helpers';
+import { McpToolSource } from '@/application/tools/sources/mcp-tool-source';
 import type { MCPServerConfig } from '@/types';
 import type { RegisteredTool } from '@/types/common/tools';
 import { t } from '@/i18n';
@@ -53,17 +54,19 @@ export function displayMCPTab(
 	refreshAllBtn.addClass('ia-button--ghost');
 	refreshAllBtn.addEventListener('click', () => {
 		void (async () => {
-			const toolManager = plugin.getToolManager();
+			const registry = plugin.getToolRegistry();
 			const results = [];
-			
+
 			for (const server of plugin.settings.mcpServers) {
 				if (!server.enabled) {
 					continue; // Skip disabled servers
 				}
 
 				try {
-					// Connect to the server and refresh its tools
-					const tools = await toolManager.registerMCPServer(server);
+					if (!registry.hasSource('mcp', server.name)) {
+						registry.registerSource(new McpToolSource(server));
+					}
+					const tools = await registry.reloadSource('mcp', server.name);
 					server.cachedTools = snapshotMcpTools(tools);
 					server.cacheTimestamp = Date.now();
 					results.push({ server: server.name, tools: tools.length, success: true });
@@ -128,7 +131,6 @@ export function displayMCPTab(
 	]);
 	const tbody = table.tBodies[0];
 	const cacheFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
-	const toolManager = plugin.getToolManager();
 	plugin.ensureAutoConnectedMcpServers()
 		.then(changed => {
 			if (changed) {
@@ -273,12 +275,15 @@ export function displayMCPTab(
 				server.enabled = !server.enabled;
 				try {
 					if (!server.enabled && wasEnabled && isConnected) {
-						await toolManager.unregisterMCPServer(server.name);
+						await registry.unregisterSource('mcp', server.name);
 					}
 
 					if (server.enabled && connectionMode === 'auto') {
 						try {
-							const tools = await toolManager.registerMCPServer(server);
+							if (!registry.hasSource('mcp', server.name)) {
+								registry.registerSource(new McpToolSource(server));
+							}
+							const tools = await registry.reloadSource('mcp', server.name);
 							server.cachedTools = snapshotMcpTools(tools);
 							server.cacheTimestamp = Date.now();
 						} catch (error) {
@@ -299,21 +304,22 @@ export function displayMCPTab(
 		connectBtn.disabled = !server.enabled;
 		connectBtn.addEventListener('click', () => {
 			void (async () => {
-				const currentlyConnected = toolManager.getMCPServers().includes(server.name);
+				const currentlyConnected = registry.hasSource('mcp', server.name);
 				const originalText = connectBtn.textContent ?? '';
 				connectBtn.disabled = true;
 				connectBtn.textContent = currentlyConnected ? t('settings.mcp.actions.disconnecting') : t('settings.mcp.actions.connecting');
 
 				try {
 					if (currentlyConnected) {
-						await toolManager.unregisterMCPServer(server.name);
+						await registry.unregisterSource('mcp', server.name);
 						new Notice(t('settings.mcp.notices.disconnected', { name: server.name }));
 					} else {
 						if (!server.enabled) {
 							new Notice(t('settings.mcp.notices.enableFirst'));
 							return;
 						}
-						const tools = await toolManager.registerMCPServer(server);
+						registry.registerSource(new McpToolSource(server));
+						const tools = await registry.reloadSource('mcp', server.name);
 						server.cachedTools = snapshotMcpTools(tools);
 						server.cacheTimestamp = Date.now();
 						await plugin.saveSettings();
@@ -350,19 +356,24 @@ export function displayMCPTab(
 				testBtn.disabled = true;
 
 				try {
-					// Import MCPClient for testing
-					const { MCPClient } = await import('@/application/services/mcp-client');
-					const testClient = new MCPClient(server);
+					// Probe via a throw-away McpToolSource so the cache shape stays
+					// consistent with what the registry would produce. The source is
+					// not registered with the live registry — this is a connection
+					// test only.
+					const probeSource = new McpToolSource(server);
+					const probeTools = await probeSource.load();
+					await probeSource.dispose();
 
-					await testClient.connect();
-					const tools = await testClient.listTools();
-					await testClient.disconnect();
-
-					server.cachedTools = snapshotMcpTools(tools);
+					// snapshotMcpTools needs the registry-side RegisteredTool shape;
+					// build the minimum required shape inline from the probe results.
+					server.cachedTools = probeTools.map((t) => ({
+						name: t.definition.name,
+						description: t.definition.description,
+					}));
 					server.cacheTimestamp = Date.now();
 					await plugin.saveSettings();
 
-					new Notice(t('settings.mcp.notices.testSuccess', { count: tools.length }));
+					new Notice(t('settings.mcp.notices.testSuccess', { count: probeTools.length }));
 					refreshDisplay(); // Refresh the entire view to update status indicators
 				} catch (error) {
 					console.error('[MCP] Test connection failed:', error);

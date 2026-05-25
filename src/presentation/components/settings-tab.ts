@@ -1,7 +1,6 @@
 import {App, Notice, PluginSettingTab} from 'obsidian';
 import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
-import { snapshotMcpTools } from '@plugin';
 import type { } from './types';
 import type {  } from '@/application/services/types';
 
@@ -215,15 +214,18 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			}
 
 			try {
-				// Test connection
-				const { MCPClient } = await import('@/application/services/mcp-client');
-				const testClient = new MCPClient(server);
+				// Probe via a throw-away McpToolSource so the cached shape stays
+				// consistent with the registry-produced cache. Not registered with
+				// the live registry — pure connection test.
+				const { McpToolSource } = await import('@/application/tools/sources/mcp-tool-source');
+				const probeSource = new McpToolSource(server);
+				const tools = await probeSource.load();
+				await probeSource.dispose();
 
-				await testClient.connect();
-				const tools = await testClient.listTools();
-				await testClient.disconnect();
-
-				server.cachedTools = snapshotMcpTools(tools);
+				server.cachedTools = tools.map((t) => ({
+					name: t.definition.name,
+					description: t.definition.description,
+				}));
 				server.cacheTimestamp = Date.now();
 				settingsDirty = true;
 

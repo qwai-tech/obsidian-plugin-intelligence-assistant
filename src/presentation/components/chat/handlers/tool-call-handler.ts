@@ -5,27 +5,27 @@
 
 import type { Message } from '@/types';
 import type { ToolCall } from '@/application/services/types';
-import type { ToolManager } from '@/application/services/tool-manager';
+import type { ToolRegistry } from '@/application/tools/tool-registry';
 import type { Agent } from '@/types';
 import type { AgentExecutionStep } from '@/presentation/state/chat-view-state';
 import { t } from '@/i18n';
 
 /**
- * Processes tool calls from agent response content
+ * Processes tool calls from agent response content.
+ *
+ * Permission gating now flows through `agent.toolAccess` via the registry's
+ * resolveForAgent — the old per-source string-prefix branches (mcp:/openapi:/
+ * cli:/builtin) are gone.
  */
-interface ToolCallOptions {
-	allowOpenApiTools?: boolean;
-}
 
 export async function processToolCalls(
 	content: string,
 	messages: Message[],
 	executionSteps: AgentExecutionStep[],
-	toolManager: ToolManager,
+	toolRegistry: ToolRegistry,
 	agent?: Agent, // Optional agent to check tool permissions against
 	traceContainer?: HTMLElement,
-	onContinue?: () => Promise<void>,
-	options?: ToolCallOptions
+	onContinue?: () => Promise<void>
 ): Promise<boolean> {
 	// Extract JSON tool calls from content
 	const jsonBlockRegex = /```json\s*\n([\s\S]*?)\n```/g;
@@ -80,42 +80,18 @@ export async function processToolCalls(
 			executionSteps.push(actionStep);
 			refreshTrace();
 
-			// Check if agent has this tool enabled (for agent-specific tool permissions)
+			// Defense-in-depth: chat.service already filtered the tool list via
+			// registry.resolveForAgent before sending it to the LLM, but the LLM
+			// can still hallucinate a tool name. Re-check membership here.
 			let toolAllowed = true;
-			
-			if (agent) {
-				const tool = toolManager.getTool(toolCall.name);
-				if (tool) {
-					if (tool.provider && tool.provider.startsWith('mcp:')) {
-						// This is an MCP tool - check agent's MCP tool permissions
-						const serverName = tool.provider.substring(4); // Remove 'mcp:' prefix
-						const fullToolKey = `${serverName ?? 'unknown'}::${toolCall.name ?? ''}`;
-						
-						// Check if this specific tool is enabled for the agent
-						const hasSpecificToolEnabled = agent.enabledMcpTools?.includes(fullToolKey) || false;
-						
-						// Also check if the entire server is enabled for the agent
-						const hasServerEnabled = agent.enabledMcpServers.includes(serverName);
-						
-						toolAllowed = hasSpecificToolEnabled || hasServerEnabled;
-					} else if (tool.provider && tool.provider.startsWith('openapi:')) {
-						toolAllowed = options?.allowOpenApiTools ?? false;
-					} else if (tool.provider && tool.provider.startsWith('cli:')) {
-						// This is a CLI tool - check agent's CLI tool permissions
-						if (agent.enabledAllCLITools) {
-							toolAllowed = true;
-						} else {
-							const toolId = tool.provider.substring(4); // Remove 'cli:' prefix
-							toolAllowed = agent.enabledCLITools?.includes(toolId) ?? false;
-						}
-					} else {
-						// For built-in tools, check if it's in enabledBuiltInTools
-						toolAllowed = agent.enabledBuiltInTools.includes(toolCall.name);
-					}
-				} else {
-					// Tool not found, so not allowed
-					toolAllowed = false;
-				}
+			const registeredTool = toolRegistry.getToolByLlmName(toolCall.name);
+
+			if (!registeredTool) {
+				toolAllowed = false;
+			} else if (agent) {
+				const access = agent.toolAccess ?? { sources: {} };
+				const allowed = toolRegistry.resolveForAgent(access);
+				toolAllowed = allowed.some((t) => t.toolId === registeredTool.toolId);
 			}
 
 			let result;
@@ -125,7 +101,7 @@ export async function processToolCalls(
 					error: `Tool ${toolCall.name} is not enabled for this agent`
 				};
 			} else {
-				result = await toolManager.executeTool(toolCall);
+				result = await toolRegistry.executeTool(toolCall.name, toolCall.arguments);
 			}
 
 			actionStep.status = result.success ? 'success' : 'error';

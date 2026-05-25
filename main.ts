@@ -72,7 +72,7 @@ export type {
 };
 
 // Re-export from MCP service for backward compatibility
-export { snapshotMcpTools } from './src/application/services/mcp-service';
+export { snapshotMcpTools } from './src/application/tools/mcp-helpers';
 
 // ToolConfig for ToolManager
 export interface ToolConfig {
@@ -350,10 +350,10 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	}
 
 	public async ensureAutoConnectedMcpServers(): Promise<boolean> {
-		const { ensureAutoConnectedMcpServers: initMCP } = await import('./src/application/services/mcp-service');
+		const { ensureAutoConnectedMcpServers: initMCP } = await import('./src/application/tools/mcp-helpers');
 		return await initMCP(
 			this.settings.mcpServers,
-			this.getToolManager(),
+			this.getToolRegistry(),
 			async () => await this.saveSettings()
 		);
 	}

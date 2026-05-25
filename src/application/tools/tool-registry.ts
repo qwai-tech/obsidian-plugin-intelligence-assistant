@@ -61,6 +61,33 @@ export class ToolRegistry {
 		this.rebuild();
 	}
 
+	/**
+	 * Reload a single registered source without touching the others.
+	 * Returns the tools just produced by that source. Throws if the source
+	 * was never registered, so callers see registration mistakes loudly.
+	 */
+	async reloadSource(kind: ToolSourceKind, id: string): Promise<RegisteredTool[]> {
+		const key = sourceKey(kind, id);
+		const source = this.sources.get(key);
+		if (!source) {
+			throw new Error(`[ToolRegistry] reloadSource: no source registered for ${key}`);
+		}
+		try {
+			this.sourceTools.set(key, await source.load());
+		} catch (err) {
+			this.sourceTools.set(key, []);
+			this.rebuild();
+			throw err;
+		}
+		this.rebuild();
+		return this.tools.filter((t) => t.origin.kind === kind && t.origin.sourceId === id);
+	}
+
+	/** True if a source with the given kind+id is currently registered. */
+	hasSource(kind: ToolSourceKind, id: string): boolean {
+		return this.sources.has(sourceKey(kind, id));
+	}
+
 	/** Return all aggregated tools. */
 	getTools(): RegisteredTool[] {
 		return this.tools;
