@@ -43,7 +43,7 @@ describe('userConfigToPluginSettings — agent toolAccess migration', () => {
 		const agent = settings.agents[0];
 
 		expect(agent.toolAccess).toBeDefined();
-		const sources = agent.toolAccess!.sources;
+		const sources = agent.toolAccess.sources;
 		expect(sources['builtin:builtin']).toEqual([
 			'builtin:builtin:read-file',
 			'builtin:builtin:write-file',
@@ -51,6 +51,14 @@ describe('userConfigToPluginSettings — agent toolAccess migration', () => {
 		expect(sources['mcp:demo-mcp']).toBe('all');
 		expect(sources['mcp:other']).toEqual(['mcp:other:tool-x']);
 		expect(sources['cli:cli-a']).toBe('all');
+
+		// Migration also strips the legacy fields so they don't get re-saved.
+		const raw = agent as unknown as Record<string, unknown>;
+		expect(raw.enabledBuiltInTools).toBeUndefined();
+		expect(raw.enabledMcpServers).toBeUndefined();
+		expect(raw.enabledMcpTools).toBeUndefined();
+		expect(raw.enabledCLITools).toBeUndefined();
+		expect(raw.enabledAllCLITools).toBeUndefined();
 	});
 
 	it('leaves agents alone when toolAccess is already present', () => {
@@ -61,7 +69,7 @@ describe('userConfigToPluginSettings — agent toolAccess migration', () => {
 		const config: UserConfig = { agents: { list: [preset] } } as UserConfig;
 
 		const settings = userConfigToPluginSettings(config);
-		expect(settings.agents[0].toolAccess?.sources).toEqual({
+		expect(settings.agents[0].toolAccess.sources).toEqual({
 			'builtin:builtin': 'all',
 		});
 	});

@@ -1,13 +1,29 @@
 /**
  * Agent tool-config migration.
- * Phase 3: migrates the 5 legacy per-agent tool fields into AgentToolAccess.
+ * Phase 3 wrote the migration from the 5 legacy per-agent tool fields into
+ * AgentToolAccess. Phase 5/6 removed the legacy fields from the Agent type;
+ * this module reads them off `unknown`-shaped JSON via a narrow LegacyAgent
+ * accessor so the rest of the codebase doesn't need to know they ever existed.
  */
 import type { Agent } from '@/types/core/agent';
 
 /**
+ * The legacy fields the migration consumes. Lives only here because the
+ * Agent type no longer carries them; older settings/agent JSON still does.
+ */
+interface LegacyAgentFields {
+	enabledBuiltInTools?: string[];
+	enabledMcpServers?: string[];
+	enabledMcpTools?: string[];
+	enabledCLITools?: string[];
+	enabledAllCLITools?: boolean;
+}
+
+/**
  * Migrate a single agent's legacy tool fields into toolAccess.
  * Idempotent: returns early if toolAccess already exists.
- * Mutates the agent in place.
+ * Mutates the agent in place and deletes the legacy fields if they were
+ * present, so subsequent saves persist only the new schema.
  */
 export function migrateAgentToolAccess(
 	agent: Agent,
@@ -17,10 +33,12 @@ export function migrateAgentToolAccess(
 		return false;
 	}
 
+	// Narrow to the legacy shape — the Agent type no longer declares these.
+	const legacy = agent as Agent & LegacyAgentFields;
 	const sources: Record<string, 'all' | string[]> = {};
-	const enabledBuiltInTools = agent.enabledBuiltInTools ?? [];
-	const enabledMcpServers = agent.enabledMcpServers ?? [];
-	const enabledMcpTools = agent.enabledMcpTools ?? [];
+	const enabledBuiltInTools = legacy.enabledBuiltInTools ?? [];
+	const enabledMcpServers = legacy.enabledMcpServers ?? [];
+	const enabledMcpTools = legacy.enabledMcpTools ?? [];
 
 	// Built-in tools: translate names to toolIds
 	if (enabledBuiltInTools.length > 0) {
@@ -55,13 +73,13 @@ export function migrateAgentToolAccess(
 	}
 
 	// CLI: enabledAllCLITools -> 'all' for every known CLI config
-	if (agent.enabledAllCLITools) {
+	if (legacy.enabledAllCLITools) {
 		for (const cliId of allCliToolIds) {
 			sources[`cli:${cliId}`] = 'all';
 		}
 	}
-	if (agent.enabledCLITools && agent.enabledCLITools.length > 0) {
-		for (const cliId of agent.enabledCLITools) {
+	if (legacy.enabledCLITools && legacy.enabledCLITools.length > 0) {
+		for (const cliId of legacy.enabledCLITools) {
 			if (!sources[`cli:${cliId}`]) {
 				sources[`cli:${cliId}`] = 'all';
 			}
@@ -69,6 +87,13 @@ export function migrateAgentToolAccess(
 	}
 
 	agent.toolAccess = { sources };
+	// Strip the legacy fields so they don't get re-persisted by callers
+	// that round-trip the agent through saveSettings / agentRepository.
+	delete legacy.enabledBuiltInTools;
+	delete legacy.enabledMcpServers;
+	delete legacy.enabledMcpTools;
+	delete legacy.enabledCLITools;
+	delete legacy.enabledAllCLITools;
 	return true;
 }
 

@@ -6,7 +6,23 @@ import type { Agent, LLMConfig, PluginSettings, Conversation } from '@/types';
 import { DEFAULT_SETTINGS } from '@/types';
 import { migrateAgentToolAccess } from '@/application/tools/tool-migrations';
 
-export function createTestAgent(overrides: Partial<Agent> = {}): Agent {
+/**
+ * Legacy per-source enable arrays. Removed from the Agent type in Phase 6
+ * but still accepted as test overrides so existing test cases that
+ * construct agents with `enabledBuiltInTools: ['x']` keep working — the
+ * fields are migrated into `toolAccess` before the agent is returned.
+ */
+interface LegacyAgentOverrides {
+	enabledBuiltInTools?: string[];
+	enabledMcpServers?: string[];
+	enabledMcpTools?: string[];
+	enabledCLITools?: string[];
+	enabledAllCLITools?: boolean;
+}
+
+export function createTestAgent(
+	overrides: Partial<Agent> & LegacyAgentOverrides = {},
+): Agent {
 	const now = Date.now();
 	const base: Agent = {
 		id: 'test-agent-1',
@@ -19,9 +35,6 @@ export function createTestAgent(overrides: Partial<Agent> = {}): Agent {
 		systemPromptId: 'default',
 		contextWindow: 20,
 		toolAccess: { sources: {} },
-		enabledBuiltInTools: [],
-		enabledMcpServers: [],
-		enabledMcpTools: [],
 		memoryType: 'none',
 		memoryConfig: { summaryInterval: 10, maxMemories: 50 },
 		ragEnabled: false,
@@ -31,11 +44,21 @@ export function createTestAgent(overrides: Partial<Agent> = {}): Agent {
 		updatedAt: now,
 		...overrides,
 	};
-	// If the test supplied legacy per-source enable lists but not toolAccess,
-	// synthesize toolAccess from them so the runtime (which only reads
-	// toolAccess post-Phase 5) sees the intended tool set.
-	if (!('toolAccess' in overrides)) {
-		const cliIds = (base.enabledCLITools ?? []).slice();
+
+	// If the test supplied legacy per-source overrides without an explicit
+	// toolAccess, synthesize toolAccess from them. The migration reads the
+	// fields off the agent in place (it doesn't know they're not part of
+	// Agent anymore) and strips them.
+	const overrodeToolAccess = 'toolAccess' in overrides;
+	const hasLegacyOverrides =
+		'enabledBuiltInTools' in overrides ||
+		'enabledMcpServers' in overrides ||
+		'enabledMcpTools' in overrides ||
+		'enabledCLITools' in overrides ||
+		'enabledAllCLITools' in overrides;
+
+	if (!overrodeToolAccess && hasLegacyOverrides) {
+		const cliIds = (overrides.enabledCLITools ?? []).slice();
 		(base as { toolAccess?: unknown }).toolAccess = undefined;
 		migrateAgentToolAccess(base, cliIds);
 		base.toolAccess = base.toolAccess ?? { sources: {} };

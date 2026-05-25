@@ -123,10 +123,10 @@ export function displayAgentsTab(
 	});
 
 	agents.forEach(agent => {
-		// Defensive defaults for the optional legacy fields the agent-edit
-		// modal still reads/writes. The modal recomputes toolAccess on save.
-		agent.enabledMcpServers ??= [];
-		agent.enabledMcpTools ??= [];
+		// Defensive default for toolAccess in case an agent landed here
+		// without going through the load-time migration (e.g. directly
+		// crafted JSON).
+		agent.toolAccess ??= { sources: {} };
 		const row = tbody.insertRow();
 		row.addClass('ia-table-row');
 
