@@ -1,4 +1,4 @@
-import { loadOpenApiTools } from '../openapi-tool-loader';
+import { loadOpenApiTools } from '../openapi-loader-core';
 import type { IFileSystem } from '@/core/interfaces';
 import type { OpenApiToolConfig } from '@/types/features/openapi-tools';
 

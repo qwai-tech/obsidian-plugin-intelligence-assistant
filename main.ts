@@ -24,9 +24,6 @@ import type {
 } from './src/types';
 import { DEFAULT_SETTINGS, pluginSettingsToUserConfig, userConfigToPluginSettings } from './src/types';
 import { ChatView, CHAT_VIEW_TYPE } from './src/presentation/views/chat-view';
-import { ToolManager } from './src/application/services/tool-manager';
-import { OpenApiToolLoader } from './src/application/services/openapi-tool-loader';
-import { CLIToolLoader } from './src/application/services/cli-tool-loader';
 import { IntelligenceAssistantSettingTab } from './src/presentation/components/settings-tab';
 import {
 	USER_CONFIG_FOLDER,
@@ -71,14 +68,8 @@ export type {
 	CachedMCPTool
 };
 
-// Re-export from MCP service for backward compatibility
+// Re-export the snapshot helper (used by some legacy tests/UI imports of @plugin).
 export { snapshotMcpTools } from './src/application/tools/mcp-helpers';
-
-// ToolConfig for ToolManager
-export interface ToolConfig {
-	type: string;
-	enabled: boolean;
-}
 
 interface OpenApiReloadOptions {
 	forceRefetch?: boolean;
@@ -91,10 +82,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	// Architecture components
 	private conversationStorageService: ConversationStorageService | null = null;
 	private conversationMigrationService: ConversationMigrationService | null = null;
-	private sharedToolManager: ToolManager | null = null;
 	private sharedToolRegistry: ToolRegistry | null = null;
-	private openApiToolLoader: OpenApiToolLoader | null = null;
-	private cliToolLoader: CLIToolLoader | null = null;
 	private pluginDataPath = '';
 	private chatRibbonIconEl: HTMLElement | null = null;
 	private legacyConversations: Conversation[] = [];
@@ -191,7 +179,11 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			const deferredStart = Date.now();
 			console.debug('[Plugin] Starting deferred initialization...');
 
-			// Run these in parallel for faster completion
+			// Run these in parallel for faster completion. initToolRegistry()
+			// registers and loads every enabled source (builtin/mcp/openapi/cli)
+			// in one pass, so the per-kind reload calls that the old setup ran
+			// here are no longer needed. ensureAutoConnectedMcpServers stays —
+			// it only writes back the cache once a connection actually lands.
 			await Promise.all([
 				this.migrateConversationsIfNeeded().catch(error =>
 					console.error('[Plugin] Conversation migration failed:', error)
@@ -199,17 +191,11 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				this.ensureDefaultAgent().catch(error =>
 					console.error('[Plugin] Ensure default agent failed:', error)
 				),
-				this.ensureAutoConnectedMcpServers().catch(error =>
-					console.error('[Plugin] MCP auto-connect failed:', error)
-				),
-				this.reloadOpenApiTools().catch(error =>
-					console.error('[Plugin] OpenAPI tools load failed:', error)
-				),
-				Promise.resolve().then(() => this.reloadCLITools()).catch(error =>
-					console.error('[Plugin] CLI tools load failed:', error)
-				),
 				this.initToolRegistry().catch(error =>
 					console.error('[Plugin] ToolRegistry init failed:', error)
+				),
+				this.ensureAutoConnectedMcpServers().catch(error =>
+					console.error('[Plugin] MCP auto-connect failed:', error)
 				),
 			]);
 
@@ -221,19 +207,13 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	}
 
 		onunload() {
-		// Clean up tool manager (don't detach leaves to preserve user layout)
-		if (this.sharedToolManager) {
-			this.sharedToolManager.cleanup().catch(error => console.error('[MCP] Cleanup failed', error));
-			this.sharedToolManager = null;
-		}
+		// Don't detach leaves on unload — preserves the user's open chat tabs.
 		if (this.sharedToolRegistry) {
 			this.sharedToolRegistry.dispose().catch(error =>
 				console.error('[Plugin] ToolRegistry dispose failed:', error)
 			);
 			this.sharedToolRegistry = null;
 		}
-		this.openApiToolLoader = null;
-		this.cliToolLoader = null;
 		this.chatRibbonIconEl = null;
 	}
 
@@ -249,31 +229,11 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		return this._ragManager;
 	}
 
-	public getToolManager(): ToolManager {
-		if (!this.sharedToolManager) {
-			this.sharedToolManager = new ToolManager(this.app, this.settings.builtInTools);
-		}
-		return this.sharedToolManager;
-	}
-
 	public getToolRegistry(): ToolRegistry {
 		if (!this.sharedToolRegistry) {
 			this.sharedToolRegistry = new ToolRegistry();
 		}
 		return this.sharedToolRegistry;
-	}
-
-	private getOpenApiLoader(): OpenApiToolLoader {
-		if (!this.openApiToolLoader) {
-			this.openApiToolLoader = new OpenApiToolLoader(new ObsidianFileSystem(this.app), this.getToolManager(), this.pluginDataPath);
-		}
-		return this.openApiToolLoader;
-	}
-
-	public syncToolManagerConfig() {
-		if (this.sharedToolManager) {
-			this.sharedToolManager.setToolConfigs(this.settings.builtInTools);
-		}
 	}
 
 	/**
@@ -314,35 +274,90 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		console.debug('[Plugin] ToolRegistry initialized');
 	}
 
-	public async reloadOpenApiTools(options?: OpenApiReloadOptions): Promise<Map<string, number>> {
-		const loader = this.getOpenApiLoader();
-		return await loader.reloadAll(this.settings.openApiTools ?? [], options);
+	/** Reload every enabled OpenAPI spec into the registry, returning per-id tool counts. */
+	public async reloadOpenApiTools(_options?: OpenApiReloadOptions): Promise<Map<string, number>> {
+		const registry = this.getToolRegistry();
+		const fs = new ObsidianFileSystem(this.app);
+		const results = new Map<string, number>();
+		const seenIds = new Set<string>();
+
+		for (const config of this.settings.openApiTools ?? []) {
+			if (!config.id) continue;
+			seenIds.add(config.id);
+			await registry.unregisterSource('openapi', config.id);
+			if (!config.enabled) {
+				results.set(config.id, 0);
+				continue;
+			}
+			registry.registerSource(new OpenApiToolSource(config, fs, this.pluginDataPath));
+			try {
+				const tools = await registry.reloadSource('openapi', config.id);
+				results.set(config.id, tools.length);
+			} catch (err) {
+				console.error(`[OpenAPI] reload failed for ${config.id}:`, err);
+				results.set(config.id, 0);
+			}
+		}
+
+		// Drop any registered openapi source whose config has been removed.
+		for (const tool of registry.getTools()) {
+			if (tool.origin.kind === 'openapi' && !seenIds.has(tool.origin.sourceId)) {
+				await registry.unregisterSource('openapi', tool.origin.sourceId);
+			}
+		}
+		return results;
 	}
 
-	public async reloadOpenApiConfig(configId: string, options?: OpenApiReloadOptions): Promise<number> {
-		const loader = this.getOpenApiLoader();
+	/** Reload a single OpenAPI config; returns the number of tools it produced. */
+	public async reloadOpenApiConfig(configId: string, _options?: OpenApiReloadOptions): Promise<number> {
 		const config = this.settings.openApiTools?.find(tool => tool.id === configId);
-		if (!config) {
+		if (!config) return 0;
+
+		const registry = this.getToolRegistry();
+		await registry.unregisterSource('openapi', configId);
+		if (!config.enabled) return 0;
+
+		const fs = new ObsidianFileSystem(this.app);
+		registry.registerSource(new OpenApiToolSource(config, fs, this.pluginDataPath));
+		try {
+			const tools = await registry.reloadSource('openapi', configId);
+			return tools.length;
+		} catch (err) {
+			console.error(`[OpenAPI] reload failed for ${configId}:`, err);
 			return 0;
 		}
-		return await loader.reloadConfig(config, options);
 	}
 
+	/** Remove an OpenAPI config's source from the registry. */
 	public async removeOpenApiConfig(configId: string): Promise<void> {
-		const loader = this.getOpenApiLoader();
-		await loader.removeConfig(configId);
+		await this.getToolRegistry().unregisterSource('openapi', configId);
 	}
 
-	private getCLIToolLoader(): CLIToolLoader {
-		if (!this.cliToolLoader) {
-			this.cliToolLoader = new CLIToolLoader(this.getToolManager());
-		}
-		return this.cliToolLoader;
-	}
-
+	/** Refresh CLI sources in the registry from settings. */
 	public reloadCLITools(): void {
-		const loader = this.getCLIToolLoader();
-		loader.loadAll(this.settings.cliTools ?? []);
+		const registry = this.getToolRegistry();
+		// Snapshot current cli sources so we can unregister stale ones.
+		const liveCliIds = new Set<string>(
+			registry.getTools()
+				.filter((t) => t.origin.kind === 'cli')
+				.map((t) => t.origin.sourceId),
+		);
+		void (async () => {
+			// Unregister all current cli sources (the CliToolSource has no
+			// connection state, so re-registering is cheap).
+			for (const id of liveCliIds) {
+				await registry.unregisterSource('cli', id);
+			}
+			for (const config of this.settings.cliTools ?? []) {
+				if (!config.enabled) continue;
+				registry.registerSource(new CliToolSource(config));
+				try {
+					await registry.reloadSource('cli', config.id);
+				} catch (err) {
+					console.error(`[CLI] reload failed for ${config.id}:`, err);
+				}
+			}
+		})();
 	}
 
 	public async ensureAutoConnectedMcpServers(): Promise<boolean> {

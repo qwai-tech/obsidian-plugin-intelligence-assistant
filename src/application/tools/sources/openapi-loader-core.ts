@@ -1,8 +1,7 @@
 import { normalizePath, requestUrl } from 'obsidian';
 import { IFileSystem } from '@/core/interfaces';
 import type { OpenApiToolConfig, OpenApiAuthType } from '@/types';
-import type { Tool, ToolDefinition, ToolParameter, ToolResult } from './types';
-import { ToolManager } from './tool-manager';
+import type { Tool, ToolDefinition, ToolParameter, ToolResult } from '@/application/services/types';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options' | 'trace';
 type ParameterLocation = 'path' | 'query' | 'header' | 'body';
@@ -507,74 +506,5 @@ export async function loadOpenApiTools(
 	return generateTools(parsedSpec, baseUrl, providerId, namespace, auth);
 }
 
-// ---------------------------------------------------------------------------
-// OpenApiToolLoader class — maintains ToolManager integration
-// ---------------------------------------------------------------------------
-
-export class OpenApiToolLoader {
-	private providerMap = new Map<string, string>();
-
-	constructor(
-		private readonly fileSystem: IFileSystem,
-		private readonly toolManager: ToolManager,
-		private readonly pluginDataPath: string
-	) {}
-
-	async reloadAll(configs: OpenApiToolConfig[], options?: ReloadOptions): Promise<Map<string, number>> {
-		const results = new Map<string, number>();
-		const seen = new Set<string>();
-
-		for (const config of configs) {
-			if (!config.id) {
-				continue;
-			}
-			const count = await this.reloadConfig(config, options);
-			results.set(config.id, count);
-			seen.add(config.id);
-		}
-
-		for (const [configId, providerId] of this.providerMap.entries()) {
-			if (!seen.has(configId)) {
-				this.toolManager.removeToolsByProvider(providerId);
-				this.providerMap.delete(configId);
-			}
-		}
-
-		return results;
-	}
-
-	async reloadConfig(config: OpenApiToolConfig, options?: ReloadOptions): Promise<number> {
-		if (!config.id) {
-			throw new Error('OpenAPI config is missing an id');
-		}
-
-		const previousProvider = this.providerMap.get(config.id);
-		if (previousProvider) {
-			this.toolManager.removeToolsByProvider(previousProvider);
-			this.providerMap.delete(config.id);
-		}
-
-		const tools = await loadOpenApiTools(config, this.fileSystem, this.pluginDataPath, options);
-		if (tools.length === 0) {
-			return 0;
-		}
-
-		for (const tool of tools) {
-			this.toolManager.registerTool(tool);
-			this.toolManager.enableTool(tool.definition.name);
-		}
-
-		const providerId = `openapi:${config.id}`;
-		this.providerMap.set(config.id, providerId);
-		return tools.length;
-	}
-
-	async removeConfig(configId: string): Promise<void> {
-		await Promise.resolve();
-		const providerId = this.providerMap.get(configId);
-		if (providerId) {
-			this.toolManager.removeToolsByProvider(providerId);
-			this.providerMap.delete(configId);
-		}
-	}
-}
+// OpenApiToolLoader class deleted in Phase 5 — OpenApiToolSource handles the
+// per-config load/dispose lifecycle via the ToolRegistry now.
