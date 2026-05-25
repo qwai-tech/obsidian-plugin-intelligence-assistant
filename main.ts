@@ -345,10 +345,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		loader.loadAll(this.settings.cliTools ?? []);
 	}
 
-	public hasEnabledOpenApiTools(): boolean {
-		return (this.settings.openApiTools ?? []).some(config => config.enabled);
-	}
-
 	public async ensureAutoConnectedMcpServers(): Promise<boolean> {
 		const { ensureAutoConnectedMcpServers: initMCP } = await import('./src/application/tools/mcp-helpers');
 		return await initMCP(

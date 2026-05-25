@@ -45,7 +45,6 @@ function makePlugin(overrides: Partial<{ settings: Partial<{ llmConfigs: unknown
 			...overrides.settings,
 		},
 		saveSettings: jest.fn().mockResolvedValue(undefined),
-		hasEnabledOpenApiTools: jest.fn().mockReturnValue(false),
 	} as any;
 }
 

@@ -370,7 +370,6 @@ export class ChatController extends BaseController {
 				agentId: this.plugin.settings.activeAgentId ?? undefined,
 				agents: this.plugin.settings.agents,
 				isGenericAgent,
-				allowOpenApiTools: this.plugin.hasEnabledOpenApiTools(),
 				conversationId: this.state.currentConversationId ?? undefined,
 			},
 			{
