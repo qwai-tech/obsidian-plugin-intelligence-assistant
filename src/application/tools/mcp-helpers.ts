@@ -1,7 +1,6 @@
 /**
- * MCP helpers that used to live in the now-deleted mcp-service.ts.
- * The logic is the same; the dependency flipped from ToolManager to
- * ToolRegistry.
+ * MCP helpers — snapshot tools for caching, and auto-connect enabled
+ * MCP servers via the ToolRegistry.
  */
 import type { MCPServerConfig, CachedMCPTool } from '@/types';
 import type { RegisteredTool } from '@/types/common/tools';

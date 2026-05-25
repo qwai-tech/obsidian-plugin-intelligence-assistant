@@ -1,8 +1,29 @@
-# E2E Test Suite — Backlog
+# E2E Test Suite & Tool System Refactor — Backlog
 
-Tracks unfinished work after Phase 0 (foundation) landed.
+Tracks unfinished work after Phase 0 (E2E foundation) and the Phase 5
+cleanup that finished the tool-system-refactor.
+
 Source of truth for principles: `docs/superpowers/specs/2026-05-24-e2e-rebuild-design.md`.
 Phase 0 plan + acceptance: `docs/superpowers/plans/2026-05-24-e2e-rebuild-phase-0-foundation.md`.
+Tool system Phase 5 cleanup: `docs/superpowers/plans/2026-05-25-tool-system-refactor-5-cleanup.md`.
+
+## Tool system follow-ups (after Phase 5 cleanup)
+
+- [ ] **Agent-edit-modal: native toolAccess editor.** Phase 5 kept the
+  modal's UI working state on the legacy `enabledBuiltInTools` /
+  `enabledMcpServers` / `enabledMcpTools` / `enabledCLITools` /
+  `enabledAllCLITools` arrays for minimal-risk reasons; it recomputes
+  `toolAccess` on save. Build a real toolAccess editor (per-source
+  'all' vs explicit toolId list, with disambiguation visible to the
+  user) and drop the legacy arrays from `types/core/agent.ts` entirely.
+- [ ] **Drop the 5 legacy fields from the Agent type.** After the modal
+  rewrite, remove `enabledBuiltInTools?`/`enabledMcpServers?`/
+  `enabledMcpTools?`/`enabledCLITools?`/`enabledAllCLITools?` and the
+  defensive `??= []` defaulting in `agents-tab.ts` lines 128-129.
+- [ ] **Persist write-side schema unification.** `userConfigToPluginSettings`
+  reads from both old `config.mcp.*` + `config.tools.*` paths but the
+  inverse mapper (`pluginSettingsToUserConfig`) should write only the
+  new schema. Verify and clean up.
 
 ---
 
@@ -33,12 +54,10 @@ These are concrete debts the Phase 0 rebuild took on knowingly.
   `getConversationId()` page-object method and `vault.readDataFile()`
   helper are already in place.
 
-- [ ] **Resolve the two pre-existing branch modifications.**
-  At session start, `src/presentation/components/chat/controllers/chat-controller.ts`
-  and `tests/e2e/test-vault/.../config/user/settings.json` were dirty
-  in the working tree but unrelated to the E2E rebuild. They were left
-  untouched throughout Phase 0. Either commit them under their original
-  intent or revert.
+- [x] **Resolve the two pre-existing branch modifications.** (chat-controller
+  resolved by Phase 5 Stage C; the test-vault/settings.json runtime-mutation
+  remains untracked and is normal — it gets reset by VaultFixture on every
+  spec run.)
 
 - [ ] **Triage the 32 pre-existing lint errors / 32 warnings on the
       `tool-system-refactor` branch.** Phase 0 preserved the baseline

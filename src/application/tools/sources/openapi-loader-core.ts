@@ -458,14 +458,12 @@ function describeSchema(schema: Record<string, unknown>): string {
 }
 
 // ---------------------------------------------------------------------------
-// Exported pure function — ToolManager-free core shared by OpenApiToolLoader
-// and OpenApiToolSource
+// loadOpenApiTools — pure function used by OpenApiToolSource.
 // ---------------------------------------------------------------------------
 
 /**
  * Load an OpenAPI spec for the given config and generate its HTTP tools.
- * This is the ToolManager-free core shared by the legacy OpenApiToolLoader
- * and the new OpenApiToolSource. Returns an empty list for a disabled config.
+ * Returns an empty list for a disabled config.
  */
 export async function loadOpenApiTools(
 	config: OpenApiToolConfig,
