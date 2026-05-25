@@ -105,6 +105,69 @@ describe('ToolRegistry - reload failure isolation', () => {
 		expect(tools).toHaveLength(1);
 		expect(tools[0].toolId).toBe('builtin:builtin:read_file');
 	});
+
+	it('reload preserves the previous successful snapshot when a source later fails', async () => {
+		const registry = new ToolRegistry();
+		let mode: 'ok' | 'fail' = 'ok';
+		const flaky: ToolSource = {
+			kind: 'mcp',
+			id: 'flaky',
+			label: 'flaky',
+			load: async () => {
+				if (mode === 'fail') throw new Error('disconnected');
+				return [fakeTool('search')];
+			},
+			dispose: async () => {},
+		};
+		registry.registerSource(flaky);
+
+		await registry.reload();
+		expect(registry.getTools().map((t) => t.toolId)).toEqual(['mcp:flaky:search']);
+
+		// Simulate transient failure on the next reload — the cached tool
+		// should stick around instead of being wiped to [].
+		mode = 'fail';
+		await registry.reload();
+		expect(registry.getTools().map((t) => t.toolId)).toEqual(['mcp:flaky:search']);
+	});
+
+	it('reloadSource preserves the previous snapshot when load() throws', async () => {
+		const registry = new ToolRegistry();
+		let mode: 'ok' | 'fail' = 'ok';
+		const flaky: ToolSource = {
+			kind: 'mcp',
+			id: 'flaky',
+			label: 'flaky',
+			load: async () => {
+				if (mode === 'fail') throw new Error('disconnected');
+				return [fakeTool('search')];
+			},
+			dispose: async () => {},
+		};
+		registry.registerSource(flaky);
+
+		await registry.reloadSource('mcp', 'flaky');
+		expect(registry.getTools()).toHaveLength(1);
+
+		mode = 'fail';
+		await expect(registry.reloadSource('mcp', 'flaky')).rejects.toThrow('disconnected');
+		// The cached tool is still present — caller still sees the last
+		// known-good state and can choose to retry or unregister.
+		expect(registry.getTools().map((t) => t.toolId)).toEqual(['mcp:flaky:search']);
+	});
+
+	it('reload seeds an empty snapshot for a source that fails on its first load', async () => {
+		const registry = new ToolRegistry();
+		registry.registerSource(
+			fakeSource('mcp', 'never-worked', [], {
+				load: async () => {
+					throw new Error('first time fail');
+				},
+			}),
+		);
+		await registry.reload();
+		expect(registry.getTools()).toEqual([]);
+	});
 });
 
 describe('ToolRegistry - executeTool', () => {

@@ -55,7 +55,12 @@ export class ToolRegistry {
 				this.sourceTools.set(key, await source.load());
 			} catch (err) {
 				console.error(`[ToolRegistry] load failed for ${key}:`, err);
-				this.sourceTools.set(key, []);
+				// Preserve the previous successful snapshot if one exists, so
+				// a transient failure doesn't wipe cached tools. Only seed
+				// an empty array if this source has never loaded successfully.
+				if (!this.sourceTools.has(key)) {
+					this.sourceTools.set(key, []);
+				}
 			}
 		}
 		this.rebuild();
@@ -65,6 +70,11 @@ export class ToolRegistry {
 	 * Reload a single registered source without touching the others.
 	 * Returns the tools just produced by that source. Throws if the source
 	 * was never registered, so callers see registration mistakes loudly.
+	 *
+	 * On load() failure the previous successful snapshot is preserved (so a
+	 * transient MCP disconnect doesn't wipe cached tools); the error is
+	 * still surfaced. Use the explicit `unregisterSource` to clear a
+	 * source's tools.
 	 */
 	async reloadSource(kind: ToolSourceKind, id: string): Promise<RegisteredTool[]> {
 		const key = sourceKey(kind, id);
@@ -72,13 +82,8 @@ export class ToolRegistry {
 		if (!source) {
 			throw new Error(`[ToolRegistry] reloadSource: no source registered for ${key}`);
 		}
-		try {
-			this.sourceTools.set(key, await source.load());
-		} catch (err) {
-			this.sourceTools.set(key, []);
-			this.rebuild();
-			throw err;
-		}
+		const result = await source.load();
+		this.sourceTools.set(key, result);
 		this.rebuild();
 		return this.tools.filter((t) => t.origin.kind === kind && t.origin.sourceId === id);
 	}
