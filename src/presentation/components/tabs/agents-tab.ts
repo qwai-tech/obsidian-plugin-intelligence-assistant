@@ -50,9 +50,9 @@ export function displayAgentsTab(
 			maxTokens: 2000,
 			systemPromptId: plugin.settings.systemPrompts[0]?.id || 'default',
 			contextWindow: 20,
-			enabledBuiltInTools: [...enabledTools],
-			enabledMcpServers: [],
-			enabledMcpTools: [],
+			toolAccess: enabledTools.length > 0
+				? { sources: { 'builtin:builtin': enabledTools.map((name) => `builtin:builtin:${name}`) } }
+				: { sources: {} },
 			memoryType: 'none',
 			memoryConfig: {
 				summaryInterval: 10,
@@ -123,8 +123,10 @@ export function displayAgentsTab(
 	});
 
 	agents.forEach(agent => {
-		agent.enabledMcpServers = agent.enabledMcpServers ?? [];
-		agent.enabledMcpTools = agent.enabledMcpTools ?? [];
+		// Defensive defaults for the optional legacy fields the agent-edit
+		// modal still reads/writes. The modal recomputes toolAccess on save.
+		agent.enabledMcpServers ??= [];
+		agent.enabledMcpTools ??= [];
 		const row = tbody.insertRow();
 		row.addClass('ia-table-row');
 
@@ -206,19 +208,28 @@ export function displayAgentsTab(
 		toolsCell.addClass('ia-table-cell');
 		const toolsBadges = toolsCell.createDiv('ia-table-badges');
 
-		if (agent.enabledBuiltInTools.length > 0) {
-			const builtInBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.builtIn', { count: agent.enabledBuiltInTools.length }) });
+		// Count tool badges from toolAccess (the source of truth post-Phase 5).
+		const sources = agent.toolAccess?.sources ?? {};
+		const builtInRule = sources['builtin:builtin'];
+		const builtInCount = builtInRule === 'all'
+			? plugin.settings.builtInTools.filter((t) => t.enabled).length
+			: (builtInRule?.length ?? 0);
+		const mcpServerCount = Object.keys(sources)
+			.filter((k) => k.startsWith('mcp:') && sources[k] === 'all').length;
+		const mcpToolCount = Object.entries(sources)
+			.filter(([k, v]) => k.startsWith('mcp:') && v !== 'all')
+			.reduce((sum, [, v]) => sum + (Array.isArray(v) ? v.length : 0), 0);
+
+		if (builtInCount > 0) {
+			const builtInBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.builtIn', { count: builtInCount }) });
 			builtInBadge.addClass('ia-tag');
 		}
-
-		const serverCount = agent.enabledMcpServers.length;
-		const toolCount = agent.enabledMcpTools.length;
-		if (serverCount > 0) {
-			const mcpBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.mcpServer', { count: serverCount }) });
+		if (mcpServerCount > 0) {
+			const mcpBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.mcpServer', { count: mcpServerCount }) });
 			mcpBadge.addClass('ia-tag');
 		}
-		if (toolCount > 0) {
-			const toolBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.mcpTool', { count: toolCount }) });
+		if (mcpToolCount > 0) {
+			const toolBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.mcpTool', { count: mcpToolCount }) });
 			toolBadge.addClass('ia-tag');
 		}
 

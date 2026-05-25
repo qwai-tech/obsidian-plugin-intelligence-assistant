@@ -4,10 +4,11 @@
 
 import type { Agent, LLMConfig, PluginSettings, Conversation } from '@/types';
 import { DEFAULT_SETTINGS } from '@/types';
+import { migrateAgentToolAccess } from '@/application/tools/tool-migrations';
 
 export function createTestAgent(overrides: Partial<Agent> = {}): Agent {
 	const now = Date.now();
-	return {
+	const base: Agent = {
 		id: 'test-agent-1',
 		name: 'Test Agent',
 		description: 'A test agent',
@@ -17,6 +18,7 @@ export function createTestAgent(overrides: Partial<Agent> = {}): Agent {
 		maxTokens: 1000,
 		systemPromptId: 'default',
 		contextWindow: 20,
+		toolAccess: { sources: {} },
 		enabledBuiltInTools: [],
 		enabledMcpServers: [],
 		enabledMcpTools: [],
@@ -29,6 +31,16 @@ export function createTestAgent(overrides: Partial<Agent> = {}): Agent {
 		updatedAt: now,
 		...overrides,
 	};
+	// If the test supplied legacy per-source enable lists but not toolAccess,
+	// synthesize toolAccess from them so the runtime (which only reads
+	// toolAccess post-Phase 5) sees the intended tool set.
+	if (!('toolAccess' in overrides)) {
+		const cliIds = (base.enabledCLITools ?? []).slice();
+		(base as { toolAccess?: unknown }).toolAccess = undefined;
+		migrateAgentToolAccess(base, cliIds);
+		base.toolAccess = base.toolAccess ?? { sources: {} };
+	}
+	return base;
 }
 
 export function createTestLLMConfig(overrides: Partial<LLMConfig> = {}): LLMConfig {

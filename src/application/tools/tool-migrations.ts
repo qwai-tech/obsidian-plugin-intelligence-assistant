@@ -18,28 +18,31 @@ export function migrateAgentToolAccess(
 	}
 
 	const sources: Record<string, 'all' | string[]> = {};
+	const enabledBuiltInTools = agent.enabledBuiltInTools ?? [];
+	const enabledMcpServers = agent.enabledMcpServers ?? [];
+	const enabledMcpTools = agent.enabledMcpTools ?? [];
 
 	// Built-in tools: translate names to toolIds
-	if (agent.enabledBuiltInTools.length > 0) {
-		sources['builtin:builtin'] = agent.enabledBuiltInTools.map(
+	if (enabledBuiltInTools.length > 0) {
+		sources['builtin:builtin'] = enabledBuiltInTools.map(
 			(name) => `builtin:builtin:${name}`,
 		);
 	}
 
 	// MCP servers: each listed server becomes 'all'
-	for (const serverName of agent.enabledMcpServers) {
+	for (const serverName of enabledMcpServers) {
 		sources[`mcp:${serverName}`] = 'all';
 	}
 
 	// MCP individual tools NOT already covered by enabledMcpServers
-	if (agent.enabledMcpTools && agent.enabledMcpTools.length > 0) {
+	if (enabledMcpTools.length > 0) {
 		const toolByServer = new Map<string, string[]>();
-		for (const fullKey of agent.enabledMcpTools) {
+		for (const fullKey of enabledMcpTools) {
 			const sepIdx = fullKey.indexOf('::');
 			if (sepIdx === -1) continue;
 			const server = fullKey.substring(0, sepIdx);
 			const toolName = fullKey.substring(sepIdx + 2);
-			if (!agent.enabledMcpServers.includes(server)) {
+			if (!enabledMcpServers.includes(server)) {
 				if (!toolByServer.has(server)) {
 					toolByServer.set(server, []);
 				}

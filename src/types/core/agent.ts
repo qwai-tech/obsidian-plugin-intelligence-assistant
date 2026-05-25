@@ -29,13 +29,22 @@ export interface Agent {
 	maxTokens: number;
 	systemPromptId: string;
 	contextWindow: number;
-	enabledBuiltInTools: string[];
-	enabledMcpServers: string[];
+	/**
+	 * Per-agent tool access. The source of truth for what tools an agent
+	 * can use. New code reads only this.
+	 */
+	toolAccess: AgentToolAccess;
+	// ── Legacy per-source enable lists from before the unified tool registry.
+	// Optional so configs persisted by older builds still load;
+	// userConfigToPluginSettings migrates them into `toolAccess` at load
+	// time via migrateAllAgents. The agent-edit-modal still uses these as
+	// its UI working state and recomputes toolAccess on save. Do not add
+	// new readers outside the migration + modal — use `toolAccess`.
+	enabledBuiltInTools?: string[];
+	enabledMcpServers?: string[];
 	enabledMcpTools?: string[];
 	enabledCLITools?: string[];
 	enabledAllCLITools?: boolean;
-	/** Per-agent tool access. Migrated from the 5 legacy fields. Runtime code reads only this. */
-	toolAccess?: AgentToolAccess;
 	memoryType: 'short-term' | 'long-term' | 'none';
 	memoryConfig: {
 		summaryInterval: number;

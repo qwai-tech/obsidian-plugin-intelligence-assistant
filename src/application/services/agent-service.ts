@@ -4,12 +4,25 @@
  */
 
 import type { PluginSettings } from '@/types';
+import type { AgentToolAccess } from '@/types/common/tools';
 import {
 	DEFAULT_AGENT_ID,
 	DEFAULT_MODEL_CONFIG,
 	DEFAULT_MEMORY_CONFIG,
 	DEFAULT_MAX_STEPS
 } from '@/constants';
+
+/** Build a toolAccess that grants the given builtin tool names. */
+function builtinAccess(toolNames: string[]): AgentToolAccess {
+	if (toolNames.length === 0) {
+		return { sources: {} };
+	}
+	return {
+		sources: {
+			'builtin:builtin': toolNames.map((name) => `builtin:builtin:${name}`),
+		},
+	};
+}
 
 /**
  * Ensure the default agent exists and is properly configured
@@ -19,10 +32,13 @@ export async function ensureDefaultAgent(
 	settings: PluginSettings,
 	saveSettings: () => Promise<void>
 ): Promise<void> {
-	// Ensure all agents have required fields and migrate legacy fields
+	// Ensure all agents have required fields and migrate legacy fields.
+	// Per-source enable lists (enabledBuiltInTools etc.) are no longer touched
+	// here — userConfigToPluginSettings already migrated them into toolAccess
+	// at load time via migrateAllAgents. Defensive default for toolAccess in
+	// case an agent landed here without going through that path.
 	settings.agents.forEach(agent => {
-		agent.enabledMcpServers = agent.enabledMcpServers ?? [];
-		agent.enabledMcpTools = agent.enabledMcpTools ?? [];
+		agent.toolAccess = agent.toolAccess ?? { sources: {} };
 		const a = agent as unknown as Record<string, unknown>;
 		if ('reactMaxSteps' in a && typeof a.reactMaxSteps === 'number') {
 			agent.maxSteps = a.reactMaxSteps;
@@ -64,9 +80,7 @@ export async function ensureDefaultAgent(
 			maxTokens: DEFAULT_MODEL_CONFIG.MAX_TOKENS,
 			systemPromptId: defaultPromptId,
 			contextWindow: DEFAULT_MODEL_CONFIG.CONTEXT_WINDOW,
-			enabledBuiltInTools: [...enabledBuiltInTools],
-			enabledMcpServers: [],
-			enabledMcpTools: [],
+			toolAccess: builtinAccess(enabledBuiltInTools),
 			memoryType: 'none',
 			memoryConfig: {
 				summaryInterval: DEFAULT_MEMORY_CONFIG.SUMMARY_INTERVAL,
@@ -83,8 +97,7 @@ export async function ensureDefaultAgent(
 	}
 
 	const ensuredAgent = defaultAgent;
-	ensuredAgent.enabledMcpServers = ensuredAgent.enabledMcpServers ?? [];
-	ensuredAgent.enabledMcpTools = ensuredAgent.enabledMcpTools ?? [];
+	ensuredAgent.toolAccess = ensuredAgent.toolAccess ?? { sources: {} };
 
 	// Migrate old agents that still have modelId to use new modelStrategy
 	if ('modelId' in ensuredAgent && typeof (ensuredAgent as Record<string, unknown>).modelId === 'string') {
@@ -108,10 +121,32 @@ export async function ensureDefaultAgent(
 		settingsDirty = true;
 	}
 
-	if (ensuredAgent.enabledBuiltInTools.length !== enabledBuiltInTools.length || !enabledBuiltInTools.every(tool => ensuredAgent.enabledBuiltInTools.includes(tool))) {
-		ensuredAgent.enabledBuiltInTools = [...enabledBuiltInTools];
-		ensuredAgent.updatedAt = Date.now();
-		settingsDirty = true;
+	// Sync the default agent's builtin tool access to whatever is globally
+	// enabled in settings.builtInTools. Compare against the current toolAccess
+	// builtin entry; rewrite only when it actually diverges.
+	const currentBuiltinIds = (() => {
+		const rule = ensuredAgent.toolAccess.sources['builtin:builtin'];
+		if (rule === 'all') return null; // 'all' is a different intent — leave it.
+		return rule ?? [];
+	})();
+	if (currentBuiltinIds !== null) {
+		const desiredIds = enabledBuiltInTools.map((name) => `builtin:builtin:${name}`);
+		const equal = currentBuiltinIds.length === desiredIds.length
+			&& desiredIds.every((id) => currentBuiltinIds.includes(id));
+		if (!equal) {
+			ensuredAgent.toolAccess = {
+				...ensuredAgent.toolAccess,
+				sources: {
+					...ensuredAgent.toolAccess.sources,
+					...(desiredIds.length > 0 ? { 'builtin:builtin': desiredIds } : {}),
+				},
+			};
+			if (desiredIds.length === 0) {
+				delete ensuredAgent.toolAccess.sources['builtin:builtin'];
+			}
+			ensuredAgent.updatedAt = Date.now();
+			settingsDirty = true;
+		}
 	}
 
 	if (!settings.systemPrompts.some(prompt => prompt.id === ensuredAgent.systemPromptId)) {

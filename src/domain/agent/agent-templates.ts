@@ -1,4 +1,17 @@
 import type { Agent } from '@/types';
+import type { AgentToolAccess } from '@/types/common/tools';
+
+/** Helper: build a toolAccess that grants explicit builtin tool ids only. */
+function builtinAccess(toolNames: string[]): AgentToolAccess {
+	if (toolNames.length === 0) {
+		return { sources: {} };
+	}
+	return {
+		sources: {
+			'builtin:builtin': toolNames.map((name) => `builtin:builtin:${name}`),
+		},
+	};
+}
 
 export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = [
 	{
@@ -10,9 +23,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		maxTokens: 2000,
 		systemPromptId: 'default',
 		contextWindow: 20,
-		enabledBuiltInTools: ['search_files', 'create_note', 'append_to_note', 'read_file'],
-		enabledMcpServers: [],
-		enabledMcpTools: [],
+		toolAccess: builtinAccess(['search_files', 'create_note', 'append_to_note', 'read_file']),
 		memoryType: 'none',
 		memoryConfig: { summaryInterval: 10, maxMemories: 100 },
 		ragEnabled: true,
@@ -28,9 +39,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		maxTokens: 3000,
 		systemPromptId: 'code-expert',
 		contextWindow: 30,
-		enabledBuiltInTools: ['read_file', 'write_file', 'list_files', 'search_files'],
-		enabledMcpServers: [],
-		enabledMcpTools: [],
+		toolAccess: builtinAccess(['read_file', 'write_file', 'list_files', 'search_files']),
 		memoryType: 'none',
 		memoryConfig: { summaryInterval: 15, maxMemories: 50 },
 		ragEnabled: false,
@@ -46,9 +55,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		maxTokens: 2500,
 		systemPromptId: 'creative-writer',
 		contextWindow: 25,
-		enabledBuiltInTools: ['read_file', 'search_files', 'create_note', 'append_to_note'],
-		enabledMcpServers: [],
-		enabledMcpTools: [],
+		toolAccess: builtinAccess(['read_file', 'search_files', 'create_note', 'append_to_note']),
 		memoryType: 'none',
 		memoryConfig: { summaryInterval: 10, maxMemories: 100 },
 		ragEnabled: true,
@@ -64,9 +71,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		maxTokens: 1000,
 		systemPromptId: 'default',
 		contextWindow: 10,
-		enabledBuiltInTools: [],
-		enabledMcpServers: [],
-		enabledMcpTools: [],
+		toolAccess: builtinAccess([]),
 		memoryType: 'none',
 		memoryConfig: { summaryInterval: 10, maxMemories: 10 },
 		ragEnabled: false,
@@ -82,9 +87,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		maxTokens: 2000,
 		systemPromptId: 'default',
 		contextWindow: 20,
-		enabledBuiltInTools: ['read_file', 'search_files', 'list_files'],
-		enabledMcpServers: [],
-		enabledMcpTools: [],
+		toolAccess: builtinAccess(['read_file', 'search_files', 'list_files']),
 		memoryType: 'none',
 		memoryConfig: { summaryInterval: 10, maxMemories: 50 },
 		ragEnabled: false,
@@ -100,9 +103,7 @@ export const AGENT_TEMPLATES: Omit<Agent, 'id' | 'createdAt' | 'updatedAt'>[] = 
 		maxTokens: 2000,
 		systemPromptId: 'default',
 		contextWindow: 20,
-		enabledBuiltInTools: ['read_file', 'write_file', 'list_files', 'search_files', 'create_note', 'append_to_note'],
-		enabledMcpServers: [],
-		enabledMcpTools: [],
+		toolAccess: builtinAccess(['read_file', 'write_file', 'list_files', 'search_files', 'create_note', 'append_to_note']),
 		memoryType: 'none',
 		memoryConfig: { summaryInterval: 10, maxMemories: 200 },
 		ragEnabled: true,

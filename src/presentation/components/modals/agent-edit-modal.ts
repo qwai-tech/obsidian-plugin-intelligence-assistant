@@ -23,10 +23,15 @@ export class AgentEditModal extends Modal {
 		this.agent = clonedAgent;
 		this.onSaveCallback = onSave;
 		this.selectedSystemPromptId = agent.systemPromptId;
-		this.agent.enabledBuiltInTools = this.agent.enabledBuiltInTools ?? [];
-		this.agent.enabledMcpServers = this.agent.enabledMcpServers ?? [];
-		this.agent.enabledMcpTools = this.agent.enabledMcpTools ?? [];
-		this.agent.enabledCLITools = this.agent.enabledCLITools ?? [];
+		// Legacy fields are still the editor's working state; on save() we
+		// recompute toolAccess from them via migrateAgentToolAccess (Stage E
+		// kept the modal UI as-is; a toolAccess-native editor is backlog).
+		// Initialize defaults so downstream TS sees them as defined arrays.
+		this.agent.enabledBuiltInTools ??= [];
+		this.agent.enabledMcpServers ??= [];
+		this.agent.enabledMcpTools ??= [];
+		this.agent.enabledCLITools ??= [];
+		this.agent.enabledAllCLITools ??= false;
 
 		// Migrate legacy tool fields to toolAccess (for display in summary)
 		const allCliToolIds = this.plugin.settings.cliTools?.map(t => t.id) ?? [];
@@ -293,17 +298,14 @@ export class AgentEditModal extends Modal {
 			new Setting(contentEl)
 				.setName(t(toolNameKey, { defaultValue: fallbackName }))
 				.addToggle(toggle => toggle
-					.setValue(this.agent.enabledBuiltInTools.includes(tool.type))
+					.setValue(this.builtInTools().includes(tool.type))
 					.onChange(value => {
+						const list = this.builtInTools();
 						if (value) {
-							if (!this.agent.enabledBuiltInTools.includes(tool.type)) {
-								this.agent.enabledBuiltInTools.push(tool.type);
-							}
+							if (!list.includes(tool.type)) list.push(tool.type);
 						} else {
-							const index = this.agent.enabledBuiltInTools.indexOf(tool.type);
-							if (index > -1) {
-								this.agent.enabledBuiltInTools.splice(index, 1);
-							}
+							const index = list.indexOf(tool.type);
+							if (index > -1) list.splice(index, 1);
 						}
 					}));
 		});
@@ -427,8 +429,12 @@ export class AgentEditModal extends Modal {
 						this.agent.systemPromptId = this.selectedSystemPromptId;
 					}
 
-					// Re-migrate tool access to reflect changes from old UI controls
-				delete this.agent.toolAccess;
+					// Re-migrate tool access to reflect changes from the legacy
+					// UI controls. The migration function early-returns if
+					// toolAccess already exists, so clear it first via cast
+					// (the field is required in the type but we want a fresh
+					// recompute from the modal's working legacy-field state).
+				(this.agent as { toolAccess?: unknown }).toolAccess = undefined;
 				const allCliToolIds = this.plugin.settings.cliTools?.map(t => t.id) ?? [];
 				migrateAgentToolAccess(this.agent, allCliToolIds);
 
@@ -438,6 +444,16 @@ export class AgentEditModal extends Modal {
 				})();
 			});
 	}
+
+	/**
+	 * Accessors for the legacy per-source enable arrays. The constructor
+	 * initializes them to []; these helpers narrow the optional types away
+	 * for the per-toggle callbacks below.
+	 */
+	private builtInTools(): string[] { return (this.agent.enabledBuiltInTools ??= []); }
+	private mcpServers(): string[] { return (this.agent.enabledMcpServers ??= []); }
+	private mcpTools(): string[] { return (this.agent.enabledMcpTools ??= []); }
+	private cliTools(): string[] { return (this.agent.enabledCLITools ??= []); }
 
 	private buildModelOptions(): Array<{ id: string; label: string }> {
 		const options: Array<{ id: string; label: string }> = [];
@@ -498,16 +514,16 @@ export class AgentEditModal extends Modal {
 
 		const serverStatus = serverSetting.controlEl.createDiv('ia-mcp-status');
 		const updateServerStatus = () => {
-			const selected = this.agent.enabledMcpServers.includes(server.name);
+			const selected = this.mcpServers().includes(server.name);
 			serverStatus.setText(selected ? t('modals.agentEdit.mcp.selected') : t('modals.agentEdit.mcp.notSelected'));
 			serverStatus.toggleClass('is-selected', selected);
 		};
 
 		serverSetting.addToggle(toggle => {
-			const initial = this.agent.enabledMcpServers.includes(server.name);
+			const initial = this.mcpServers().includes(server.name);
 			toggle.setValue(initial);
 			toggle.onChange(value => {
-				const list = this.agent.enabledMcpServers;
+				const list = this.mcpServers();
 				const idx = list.indexOf(server.name);
 				if (value && idx === -1) {
 					list.push(server.name);
@@ -538,7 +554,7 @@ export class AgentEditModal extends Modal {
 					toolSetting.addToggle(toggle => {
 						toggle.setValue(this.agent.enabledMcpTools?.includes(key) ?? false);
 						toggle.onChange(value => {
-							const list = this.agent.enabledMcpTools ?? (this.agent.enabledMcpTools = []);
+							const list = this.mcpTools();
 							const idx = list.indexOf(key);
 							if (value && idx === -1) {
 								list.push(key);
@@ -562,8 +578,8 @@ export class AgentEditModal extends Modal {
 	}
 
 	private syncMcpToolStates(entries: Array<{ key: string; toggle: ToggleComponent; statusEl: HTMLElement }>, serverName: string) {
-		const useAll = this.agent.enabledMcpServers.includes(serverName);
-		const list = this.agent.enabledMcpTools ?? (this.agent.enabledMcpTools = []);
+		const useAll = this.mcpServers().includes(serverName);
+		const list = this.mcpTools();
 		entries.forEach(({ key, toggle, statusEl }) => {
 			if (useAll) {
 				if (!list.includes(key)) {

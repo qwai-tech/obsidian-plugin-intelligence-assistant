@@ -163,7 +163,7 @@ export class AgentController extends BaseController {
 		const capabilities: string[] = [];
 		if (agent.ragEnabled) capabilities.push('RAG');
 		if (agent.webSearchEnabled) capabilities.push('Web Search');
-		if (agent.enabledBuiltInTools.length > 0 || agent.enabledMcpServers.length > 0) {
+		if (Object.keys(agent.toolAccess?.sources ?? {}).length > 0) {
 			capabilities.push('Tools');
 		}
 
@@ -188,7 +188,7 @@ export class AgentController extends BaseController {
 			case 'webSearch':
 				return agent.webSearchEnabled;
 			case 'tools':
-				return agent.enabledBuiltInTools.length > 0 || agent.enabledMcpServers.length > 0;
+				return Object.keys(agent.toolAccess?.sources ?? {}).length > 0;
 			default:
 				return false;
 		}
