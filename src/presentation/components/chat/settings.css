@@ -1275,7 +1275,11 @@ input.settings-filter-control {
 	justify-content: center;
 	width: 32px;
 	height: 32px;
+	min-width: 32px;
+	min-height: 32px;
 	padding: 4px;
+	font-size: 0;
+	line-height: 1;
 	border: none;
 	border-radius: 6px;
 	background: transparent;
@@ -1289,9 +1293,19 @@ input.settings-filter-control {
 	color: var(--text-normal);
 }
 
+.chat-header-icon-btn__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 18px;
+	height: 18px;
+	line-height: 1;
+}
+
 .chat-header-icon-btn svg {
 	width: 18px;
 	height: 18px;
+	display: block;
 }
 
 .chat-header-title {

@@ -170,7 +170,11 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			this.plugin,
 			this.toolsSubTab,
 			(tab) => { this.toolsSubTab = tab; },
-			() => this.display()
+			() => this.display(),
+			() => {
+				this.activeTab = 'mcp';
+				this.display();
+			}
 		);
 	}
 

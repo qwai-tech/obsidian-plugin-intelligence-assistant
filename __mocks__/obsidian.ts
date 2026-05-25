@@ -76,6 +76,10 @@ if (typeof HTMLElement !== 'undefined') {
 		this.textContent = text;
 	};
 
+	HTMLElement.prototype.setAttr = function(name: string, value: string) {
+		this.setAttribute(name, value);
+	};
+
 	HTMLElement.prototype.addClass = function(cls: string) {
 		this.classList.add(cls);
 	};
@@ -172,6 +176,13 @@ export class Menu {
 
 export class Notice {
 	constructor(message: string) {}
+}
+
+export function setIcon(el: HTMLElement, iconId: string): void {
+	const icon = document.createElement('span');
+	icon.className = 'mock-icon';
+	icon.setAttribute('data-icon', iconId);
+	el.appendChild(icon);
 }
 
 export class TFile {

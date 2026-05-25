@@ -17,7 +17,8 @@ export function displayToolsTab(
 	plugin: IntelligenceAssistantPlugin,
 	toolsSubTab: ToolsSubTab,
 	setToolsSubTab: (tab: ToolsSubTab) => void,
-	refreshDisplay: () => void
+	refreshDisplay: () => void,
+	openMcpManagement?: () => void
 ): void {
 	containerEl.createEl('h3', { text: t('settings.tools.title') });
 
@@ -51,7 +52,7 @@ export function displayToolsTab(
 					renderBuiltinToolsSection(content, plugin);
 					break;
 				case 'mcp':
-					renderMcpTools(content, plugin, refreshDisplay);
+					renderMcpTools(content, plugin, refreshDisplay, openMcpManagement);
 					break;
 				case 'openapi':
 					renderOpenapiToolsSection(content, plugin, refreshDisplay);
@@ -69,7 +70,7 @@ export function displayToolsTab(
 			renderBuiltinToolsSection(content, plugin);
 			break;
 		case 'mcp':
-			renderMcpTools(content, plugin, refreshDisplay);
+			renderMcpTools(content, plugin, refreshDisplay, openMcpManagement);
 			break;
 		case 'openapi':
 			renderOpenapiToolsSection(content, plugin, refreshDisplay);
@@ -86,7 +87,8 @@ export function displayToolsTab(
 function renderMcpTools(
 	content: HTMLElement,
 	plugin: IntelligenceAssistantPlugin,
-	_refreshDisplay: () => void
+	_refreshDisplay: () => void,
+	openMcpManagement?: () => void
 ): void {
 	const registry = plugin.getToolRegistry();
 	const allTools = registry.getTools();
@@ -168,6 +170,14 @@ function renderMcpTools(
 	const hasRows = rows.length > 0;
 
 	if (!hasRows) {
+		const actions = content.createDiv('ia-toolbar');
+		const addBtn = actions.createEl('button', { text: t('settings.tools.mcpTools.addBtn') });
+		addBtn.addClass('ia-button');
+		addBtn.addClass('ia-button--primary');
+		addBtn.addEventListener('click', () => {
+			openMcpManagement?.();
+		});
+
 		const note = content.createEl('p');
 		note.addClass('ia-table-subtext');
 		note.setText(t('settings.tools.mcpTools.noTools'));

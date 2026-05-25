@@ -371,6 +371,7 @@
         }
       },
       "mcpTools": {
+        "addBtn": "Add MCP tools",
         "noTools": "No MCP tools available. Connect a server or refresh cached tools to populate this list.",
         "tableHeaders": {
           "server": "Server",

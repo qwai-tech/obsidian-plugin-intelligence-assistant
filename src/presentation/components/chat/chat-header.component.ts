@@ -26,9 +26,15 @@ export class ChatHeaderComponent {
 	private render() {
 		const header = this.parent.createDiv('chat-header-simple');
 
-		const historyBtn = header.createEl('button', { cls: 'chat-header-icon-btn' });
-		setIcon(historyBtn, 'list');
-		historyBtn.setAttr('title', t('chat.toggleConversationsTitle'));
+		const createIconButton = (icon: string, title: string): HTMLButtonElement => {
+			const button = header.createEl('button', { cls: 'chat-header-icon-btn' });
+			const iconEl = button.createSpan({ cls: 'chat-header-icon-btn__icon' });
+			setIcon(iconEl, icon);
+			button.setAttr('title', title);
+			return button;
+		};
+
+		const historyBtn = createIconButton('list', t('chat.toggleConversationsTitle'));
 		historyBtn.addEventListener('click', (e) => {
 			e.preventDefault();
 			e.stopPropagation();
@@ -42,19 +48,15 @@ export class ChatHeaderComponent {
 
 		this.agentHeaderBadgeEl = header.createEl('span', { cls: 'chat-agent-header-badge ia-hidden' });
 
-		const newChatBtn = header.createEl('button', { cls: 'chat-header-icon-btn' });
+		const newChatBtn = createIconButton('plus', t('chat.new'));
 		newChatBtn.setAttribute('data-testid', TestIds.chat.newBtn);
-		setIcon(newChatBtn, 'plus');
-		newChatBtn.setAttr('title', t('chat.new'));
 		newChatBtn.addEventListener('click', (e) => {
 			e.preventDefault();
 			e.stopPropagation();
 			void this.callbacks.onNewChat();
 		});
 
-		const settingsBtn = header.createEl('button', { cls: 'chat-header-icon-btn' });
-		setIcon(settingsBtn, 'settings');
-		settingsBtn.setAttr('title', t('chat.settings'));
+		const settingsBtn = createIconButton('settings', t('chat.settings'));
 		settingsBtn.addEventListener('click', (e) => {
 			e.preventDefault();
 			e.stopPropagation();

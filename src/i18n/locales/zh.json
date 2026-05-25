@@ -371,6 +371,7 @@
         }
       },
       "mcpTools": {
+        "addBtn": "添加 MCP 工具",
         "noTools": "无可用 MCP 工具。请连接服务器或刷新缓存工具以填充此列表。",
         "tableHeaders": {
           "server": "服务器",
