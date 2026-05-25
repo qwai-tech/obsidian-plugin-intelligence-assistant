@@ -347,31 +347,31 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		}
 	}
 
-	/** Refresh CLI sources in the registry from settings. */
-	public reloadCLITools(): void {
+	/**
+	 * Refresh CLI sources in the registry from settings. Returns a Promise
+	 * so the caller (cli-tools-section) can await before re-rendering;
+	 * the registry's own mutex also serializes concurrent calls.
+	 */
+	public async reloadCLITools(): Promise<void> {
 		const registry = this.getToolRegistry();
-		// Snapshot current cli sources so we can unregister stale ones.
+		// Snapshot current cli source ids so we can unregister stale ones.
 		const liveCliIds = new Set<string>(
 			registry.getTools()
 				.filter((t) => t.origin.kind === 'cli')
 				.map((t) => t.origin.sourceId),
 		);
-		void (async () => {
-			// Unregister all current cli sources (the CliToolSource has no
-			// connection state, so re-registering is cheap).
-			for (const id of liveCliIds) {
-				await registry.unregisterSource('cli', id);
+		for (const id of liveCliIds) {
+			await registry.unregisterSource('cli', id);
+		}
+		for (const config of this.settings.cliTools ?? []) {
+			if (!config.enabled) continue;
+			registry.registerSource(new CliToolSource(config));
+			try {
+				await registry.reloadSource('cli', config.id);
+			} catch (err) {
+				console.error(`[CLI] reload failed for ${config.id}:`, err);
 			}
-			for (const config of this.settings.cliTools ?? []) {
-				if (!config.enabled) continue;
-				registry.registerSource(new CliToolSource(config));
-				try {
-					await registry.reloadSource('cli', config.id);
-				} catch (err) {
-					console.error(`[CLI] reload failed for ${config.id}:`, err);
-				}
-			}
-		})();
+		}
 	}
 
 	public async ensureAutoConnectedMcpServers(): Promise<boolean> {

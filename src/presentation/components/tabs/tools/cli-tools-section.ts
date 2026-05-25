@@ -103,7 +103,7 @@ export function renderCliToolsSection(
 			void (async () => {
 				config.enabled = !config.enabled;
 				await plugin.saveSettings();
-				plugin.reloadCLITools();
+				await plugin.reloadCLITools();
 				refreshDisplay();
 			})();
 		});
@@ -117,7 +117,7 @@ export function renderCliToolsSection(
 				if (index !== -1) {
 					list.splice(index, 1);
 					await plugin.saveSettings();
-					plugin.reloadCLITools();
+					await plugin.reloadCLITools();
 					refreshDisplay();
 					new Notice(t('settings.tools.cli.notices.removed'));
 				}
@@ -165,7 +165,7 @@ class CLIToolConfigModal extends Modal {
 
 		const persist = async () => {
 			await this.plugin.saveSettings();
-			this.plugin.reloadCLITools();
+			await this.plugin.reloadCLITools();
 			this.onChange();
 		};
 
@@ -536,7 +536,7 @@ class CLIToolPresetModal extends Modal {
 		}
 		this.plugin.settings.cliTools.push(newConfig);
 		await this.plugin.saveSettings();
-		this.plugin.reloadCLITools();
+		await this.plugin.reloadCLITools();
 		this.onChange();
 
 		// Update button state

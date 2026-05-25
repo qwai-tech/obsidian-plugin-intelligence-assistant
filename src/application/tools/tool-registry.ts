@@ -43,27 +43,53 @@ export class ToolRegistry {
 	private byToolId = new Map<string, RegisteredTool>();
 	private byLlmName = new Map<string, RegisteredTool>();
 
+	/**
+	 * Serial queue for mutating operations. Even though JS is single-threaded,
+	 * each mutator yields on `await source.load()` (network/subprocess work)
+	 * and could interleave with another mutator's setup. Serializing keeps
+	 * sourceTools, the index, and per-source lifecycle consistent.
+	 * Reads (getTools, getToolByLlmName, …) skip the queue.
+	 */
+	private mutationLock: Promise<void> = Promise.resolve();
+
+	private serialize<T>(fn: () => Promise<T>): Promise<T> {
+		const prev = this.mutationLock;
+		let release!: () => void;
+		this.mutationLock = new Promise<void>((res) => { release = res; });
+		const run = async (): Promise<T> => {
+			try {
+				await prev;
+				return await fn();
+			} finally {
+				release();
+			}
+		};
+		return run();
+	}
+
 	/** Register a tool source. Does not load immediately; call reload(). */
 	registerSource(source: ToolSource): void {
 		this.sources.set(sourceKey(source.kind, source.id), source);
 	}
 
 	/** Call load() on every registered source and rebuild the index. One source failing does not affect others. */
-	async reload(): Promise<void> {
-		for (const [key, source] of this.sources) {
-			try {
-				this.sourceTools.set(key, await source.load());
-			} catch (err) {
-				console.error(`[ToolRegistry] load failed for ${key}:`, err);
-				// Preserve the previous successful snapshot if one exists, so
-				// a transient failure doesn't wipe cached tools. Only seed
-				// an empty array if this source has never loaded successfully.
-				if (!this.sourceTools.has(key)) {
-					this.sourceTools.set(key, []);
+	reload(): Promise<void> {
+		return this.serialize(async () => {
+			for (const [key, source] of this.sources) {
+				try {
+					this.sourceTools.set(key, await source.load());
+				} catch (err) {
+					console.error(`[ToolRegistry] load failed for ${key}:`, err);
+					// Preserve the previous successful snapshot if one exists, so
+					// a transient failure doesn't wipe cached tools. Only seed
+					// an empty array if this source has never loaded successfully.
+					if (!this.sourceTools.has(key)) {
+						this.sourceTools.set(key, []);
+					}
 				}
 			}
-		}
-		this.rebuild();
+			this.rebuild();
+		});
 	}
 
 	/**
@@ -76,16 +102,18 @@ export class ToolRegistry {
 	 * still surfaced. Use the explicit `unregisterSource` to clear a
 	 * source's tools.
 	 */
-	async reloadSource(kind: ToolSourceKind, id: string): Promise<RegisteredTool[]> {
-		const key = sourceKey(kind, id);
-		const source = this.sources.get(key);
-		if (!source) {
-			throw new Error(`[ToolRegistry] reloadSource: no source registered for ${key}`);
-		}
-		const result = await source.load();
-		this.sourceTools.set(key, result);
-		this.rebuild();
-		return this.tools.filter((t) => t.origin.kind === kind && t.origin.sourceId === id);
+	reloadSource(kind: ToolSourceKind, id: string): Promise<RegisteredTool[]> {
+		return this.serialize(async () => {
+			const key = sourceKey(kind, id);
+			const source = this.sources.get(key);
+			if (!source) {
+				throw new Error(`[ToolRegistry] reloadSource: no source registered for ${key}`);
+			}
+			const result = await source.load();
+			this.sourceTools.set(key, result);
+			this.rebuild();
+			return this.tools.filter((t) => t.origin.kind === kind && t.origin.sourceId === id);
+		});
 	}
 
 	/** True if a source with the given kind+id is currently registered. */
@@ -141,36 +169,40 @@ export class ToolRegistry {
 	}
 
 	/** Remove a source: release its resources, drop its tools, and re-disambiguate the rest. */
-	async unregisterSource(kind: ToolSourceKind, id: string): Promise<void> {
-		const key = sourceKey(kind, id);
-		const source = this.sources.get(key);
-		if (!source) {
-			return;
-		}
-		try {
-			await source.dispose();
-		} catch (err) {
-			console.error(`[ToolRegistry] dispose failed for ${key}:`, err);
-		}
-		this.sources.delete(key);
-		this.sourceTools.delete(key);
-		this.rebuild();
-	}
-
-	/** Release all sources and clear the registry. */
-	async dispose(): Promise<void> {
-		for (const [key, source] of this.sources) {
+	unregisterSource(kind: ToolSourceKind, id: string): Promise<void> {
+		return this.serialize(async () => {
+			const key = sourceKey(kind, id);
+			const source = this.sources.get(key);
+			if (!source) {
+				return;
+			}
 			try {
 				await source.dispose();
 			} catch (err) {
 				console.error(`[ToolRegistry] dispose failed for ${key}:`, err);
 			}
-		}
-		this.sources.clear();
-		this.sourceTools.clear();
-		this.tools = [];
-		this.byToolId.clear();
-		this.byLlmName.clear();
+			this.sources.delete(key);
+			this.sourceTools.delete(key);
+			this.rebuild();
+		});
+	}
+
+	/** Release all sources and clear the registry. */
+	dispose(): Promise<void> {
+		return this.serialize(async () => {
+			for (const [key, source] of this.sources) {
+				try {
+					await source.dispose();
+				} catch (err) {
+					console.error(`[ToolRegistry] dispose failed for ${key}:`, err);
+				}
+			}
+			this.sources.clear();
+			this.sourceTools.clear();
+			this.tools = [];
+			this.byToolId.clear();
+			this.byLlmName.clear();
+		});
 	}
 
 	/** Convert a tool list to OpenAI function-calling format (function name uses llmName). */

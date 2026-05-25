@@ -156,6 +156,36 @@ describe('ToolRegistry - reload failure isolation', () => {
 		expect(registry.getTools().map((t) => t.toolId)).toEqual(['mcp:flaky:search']);
 	});
 
+	it('serializes concurrent reloadSource calls (no interleaved load() runs)', async () => {
+		const registry = new ToolRegistry();
+		const order: string[] = [];
+
+		const makeFlaky = (id: string, delayMs: number): ToolSource => ({
+			kind: 'mcp',
+			id,
+			label: id,
+			load: async () => {
+				order.push(`${id}:start`);
+				await new Promise((res) => setTimeout(res, delayMs));
+				order.push(`${id}:end`);
+				return [fakeTool(`tool_of_${id}`)];
+			},
+			dispose: async () => {},
+		});
+
+		registry.registerSource(makeFlaky('a', 30));
+		registry.registerSource(makeFlaky('b', 10));
+
+		await Promise.all([
+			registry.reloadSource('mcp', 'a'),
+			registry.reloadSource('mcp', 'b'),
+		]);
+
+		// Without serialization, b:start would land between a:start and a:end.
+		// With serialization, a runs to completion before b starts.
+		expect(order).toEqual(['a:start', 'a:end', 'b:start', 'b:end']);
+	});
+
 	it('reload seeds an empty snapshot for a source that fails on its first load', async () => {
 		const registry = new ToolRegistry();
 		registry.registerSource(
