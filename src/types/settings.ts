@@ -15,6 +15,7 @@ import type { SystemPrompt, Agent } from './core/agent';
 import type { AgentMemory } from './features/memory';
 import * as defaultUserConfigJson from '../../config/default/settings.json';
 import { deepClone } from '@/utils/type-guards';
+import { migrateAllAgents } from '@/application/tools/tool-migrations';
 
 /**
  * Quick Action Configuration
@@ -241,6 +242,11 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 	const webSearch = deepClone(source.search?.web ?? DEFAULT_USER_CONFIG.search.web);
 	const agents = deepClone(source.agents?.list ?? []);
 	const agentMemories = deepClone(source.agents?.memories ?? []);
+
+	// Phase 5: migrate legacy per-agent tool fields into AgentToolAccess on load.
+	// Idempotent — agents that already have toolAccess are left untouched.
+	const allCliToolIds: string[] = cliTools.map((c) => c.id);
+	migrateAllAgents(agents, allCliToolIds);
 	const quickActions = deepClone(source.quickActions?.list ?? DEFAULT_QUICK_ACTIONS);
 
 	const rag = source.rag ?? DEFAULT_USER_CONFIG.rag;
