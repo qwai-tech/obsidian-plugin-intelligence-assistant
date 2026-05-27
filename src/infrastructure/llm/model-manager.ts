@@ -1,6 +1,7 @@
 import type { LLMConfig, ModelInfo, ModelCapability } from '@/types';
 import { Notice, requestUrl } from 'obsidian';
 import { promises as fs } from 'fs';
+import { spawn } from 'child_process';
 import path from 'path';
 import os from 'os';
 
@@ -457,6 +458,97 @@ export class ModelManager {
 		return value.filter((item): item is string => typeof item === 'string' && item.length > 0);
 	}
 
+	private static extractQwenProviderModels(config: Record<string, unknown>): string[] {
+		const providers = config.modelProviders;
+		if (!providers || typeof providers !== 'object') {
+			return [];
+		}
+
+		const models: string[] = [];
+		for (const providerModels of Object.values(providers as Record<string, unknown>)) {
+			if (!Array.isArray(providerModels)) {
+				continue;
+			}
+
+			for (const providerModel of providerModels) {
+				if (!providerModel || typeof providerModel !== 'object') {
+					continue;
+				}
+				const id = (providerModel as Record<string, unknown>).id;
+				if (typeof id === 'string' && id.length > 0) {
+					models.push(id);
+				}
+			}
+		}
+
+		return Array.from(new Set(models));
+	}
+
+	private static collectModelIds(value: unknown): string[] {
+		if (!value) {
+			return [];
+		}
+
+		if (typeof value === 'string') {
+			return [value];
+		}
+
+		if (Array.isArray(value)) {
+			return value.flatMap(item => this.collectModelIds(item));
+		}
+
+		if (typeof value !== 'object') {
+			return [];
+		}
+
+		const record = value as Record<string, unknown>;
+		const id = record.id ?? record.model ?? record.model_id;
+		if (typeof id === 'string' && id.length > 0) {
+			return [id];
+		}
+
+		return ['models', 'data', 'catalog', 'items']
+			.flatMap(key => this.collectModelIds(record[key]));
+	}
+
+	private static runCliCommand(command: string, args: string[], timeout = 5000): Promise<string> {
+		return new Promise((resolve, reject) => {
+			const proc = spawn(command, args, {
+				shell: false,
+				env: process.env,
+				timeout,
+			});
+			let stdout = '';
+			let stderr = '';
+
+			proc.stdout?.on('data', (data: Buffer) => {
+				stdout += data.toString();
+			});
+			proc.stderr?.on('data', (data: Buffer) => {
+				stderr += data.toString();
+			});
+			proc.on('close', (code) => {
+				if (code === 0) {
+					resolve(stdout.trim());
+				} else {
+					reject(new Error(stderr.trim() || stdout.trim() || `Command exited with code ${String(code ?? 'unknown')}`));
+				}
+			});
+			proc.on('error', reject);
+		});
+	}
+
+	private static async readCodexModelsFromCli(config: LLMConfig): Promise<string[]> {
+		try {
+			const raw = await this.runCliCommand(config.commandPath?.trim() || 'codex', ['debug', 'models']);
+			const parsed = JSON.parse(raw) as unknown;
+			return Array.from(new Set(this.collectModelIds(parsed)));
+		} catch (error) {
+			console.debug('[ModelManager] Failed to read Codex model catalog from CLI:', error);
+			return [];
+		}
+	}
+
 	private static async readCliModelsFromConfig(
 		provider: 'claude-code' | 'codex' | 'qwen-code'
 	): Promise<string[]> {
@@ -490,12 +582,19 @@ export class ModelManager {
 				const raw = await fs.readFile(candidate.file, 'utf8');
 				if (candidate.type === 'json') {
 					const json = JSON.parse(raw) as Record<string, unknown>;
-					const model = this.extractModelName(json);
-					if (model) return [model];
-
 					if (provider === 'claude-code') {
+						const model = this.extractModelName(json);
+						if (model) return [model];
 						const availableModels = this.extractStringArray(json.availableModels);
 						if (availableModels.length > 0) return availableModels;
+					} else if (provider === 'qwen-code') {
+						const models = this.extractQwenProviderModels(json);
+						const model = this.extractModelName(json);
+						if (model) models.push(model);
+						if (models.length > 0) return Array.from(new Set(models));
+					} else {
+						const model = this.extractModelName(json);
+						if (model) return [model];
 					}
 				} else {
 					// Minimal TOML parse for `model = "..."` lines
@@ -535,13 +634,18 @@ export class ModelManager {
 			return [this.createCliModel(provider, explicitModel)];
 		}
 
-		const discoveredModels = await this.readCliModelsFromConfig(provider);
+		const discoveredModels = provider === 'codex'
+			? await this.readCodexModelsFromCli(config)
+			: await this.readCliModelsFromConfig(provider);
+		const configuredModels = discoveredModels.length > 0
+			? discoveredModels
+			: await this.readCliModelsFromConfig(provider);
 
-		if (discoveredModels.length === 0) {
+		if (configuredModels.length === 0) {
 			return defaultModels;
 		}
 
-		return discoveredModels.map(model => this.createCliModel(provider, model));
+		return configuredModels.map(model => this.createCliModel(provider, model));
 	}
 
 	/**

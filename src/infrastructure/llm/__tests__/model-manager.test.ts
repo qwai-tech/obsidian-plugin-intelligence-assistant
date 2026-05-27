@@ -1,10 +1,20 @@
 import { promises as fs } from 'fs';
+import { EventEmitter } from 'events';
+import { Readable } from 'stream';
+import { spawn } from 'child_process';
 import { ModelManager } from '../model-manager';
 import type { LLMConfig } from '@/types';
+
+jest.mock('child_process', () => ({
+	spawn: jest.fn(),
+}));
+
+const mockedSpawn = spawn as jest.MockedFunction<typeof spawn>;
 
 describe('ModelManager', () => {
 	afterEach(() => {
 		jest.restoreAllMocks();
+		jest.clearAllMocks();
 	});
 
 	it('uses discovered Claude Code settings model when refreshing without an API key', async () => {
@@ -123,5 +133,58 @@ describe('ModelManager', () => {
 		const models = await ModelManager.getModelsForConfig(config, true);
 
 		expect(models.map(model => model.id)).toEqual(['qwen-code:qwen3-coder-plus']);
+	});
+
+	it('reads Qwen Code modelProviders from settings', async () => {
+		jest.spyOn(fs, 'readFile').mockImplementation(async (file) => {
+			if (String(file).endsWith('.qwen/settings.json')) {
+				return JSON.stringify({
+					model: { name: 'qwen3-coder-flash' },
+					modelProviders: {
+						openai: [
+							{ id: 'gpt-5.5', name: 'GPT-5.5', envKey: 'OPENAI_API_KEY' },
+							{ id: 'gpt-5.5-mini', name: 'GPT-5.5 Mini', envKey: 'OPENAI_API_KEY' },
+						],
+					},
+				});
+			}
+			throw new Error('not found');
+		});
+
+		const config: LLMConfig = { provider: 'qwen-code' };
+		const models = await ModelManager.getModelsForConfig(config, true);
+
+		expect(models.map(model => model.id)).toEqual([
+			'qwen-code:gpt-5.5',
+			'qwen-code:gpt-5.5-mini',
+			'qwen-code:qwen3-coder-flash',
+		]);
+	});
+
+	it('reads Codex model catalog from codex debug models', async () => {
+		jest.spyOn(fs, 'readFile').mockRejectedValue(new Error('not found'));
+
+		const proc = new EventEmitter() as EventEmitter & {
+			stdout: Readable;
+			stderr: Readable;
+		};
+		proc.stdout = Readable.from([JSON.stringify({
+			models: [
+				{ id: 'gpt-5.5' },
+				{ id: 'gpt-5.5-codex' },
+			],
+		})]);
+		proc.stderr = Readable.from([]);
+		mockedSpawn.mockReturnValue(proc as ReturnType<typeof spawn>);
+		setTimeout(() => proc.emit('close', 0), 0);
+
+		const config: LLMConfig = { provider: 'codex' };
+		const models = await ModelManager.getModelsForConfig(config, true);
+
+		expect(mockedSpawn).toHaveBeenCalledWith('codex', ['debug', 'models'], expect.any(Object));
+		expect(models.map(model => model.id)).toEqual([
+			'codex:gpt-5.5',
+			'codex:gpt-5.5-codex',
+		]);
 	});
 });
