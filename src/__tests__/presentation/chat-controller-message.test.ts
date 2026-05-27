@@ -123,4 +123,26 @@ describe('ChatController (upgraded message pipeline)', () => {
 		expect(chatService.executeAgentLoop).toHaveBeenCalledTimes(1);
 		expect(chatService.streamResponse).not.toHaveBeenCalled();
 	});
+
+	it('passes agent RAG and web search state into executeAgentLoop', async () => {
+		state.mode = 'agent';
+		state.enableRAG = true;
+		state.enableWebSearch = true;
+		const plugin = makePlugin({
+			settings: {
+				ragConfig: { enabled: true } as any,
+				webSearchConfig: { enabled: true } as any,
+			} as any,
+		});
+		const localController = new ChatController({} as any, plugin, state);
+		const chatService = makeChatService();
+		localController.configure(makeOptions(chatService));
+
+		await localController.sendMessage('use my vault context');
+
+		expect(chatService.executeAgentLoop).toHaveBeenCalledTimes(1);
+		const options = chatService.executeAgentLoop.mock.calls[0][1];
+		expect(options.enableRAG).toBe(true);
+		expect(options.enableWebSearch).toBe(true);
+	});
 });

@@ -153,7 +153,7 @@ export class ChatInputComponent {
 			e.preventDefault();
 			void this.callbacks.onToggleRag();
 		});
-		if (!this.plugin.settings.ragConfig.enabled || this.state.mode === 'agent') this.ragActionItem.addClass('ia-hidden');
+		if (!this.plugin.settings.ragConfig.enabled) this.ragActionItem.addClass('ia-hidden');
 
 		// Web search (always created; hidden until enabled in settings)
 		const webBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
@@ -166,7 +166,7 @@ export class ChatInputComponent {
 			e.preventDefault();
 			void this.callbacks.onToggleWeb();
 		});
-		if (!this.plugin.settings.webSearchConfig.enabled || this.state.mode === 'agent') this.webActionItem.addClass('ia-hidden');
+		if (!this.plugin.settings.webSearchConfig.enabled) this.webActionItem.addClass('ia-hidden');
 
 		// Image (created hidden; shown/hidden by setImageButtonVisible)
 		const imageBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn ia-hidden' });
@@ -185,9 +185,8 @@ export class ChatInputComponent {
 		if (this.modeSelector) this.modeSelector.value = mode;
 		if (this.modelSelect) this.modelSelect.toggleClass('ia-hidden', mode === 'agent');
 		if (this.agentPillGroup) this.agentPillGroup.toggleClass('ia-hidden', mode !== 'agent');
-		// RAG and web search are not available in agent mode
-		if (this.ragActionItem) this.ragActionItem.toggleClass('ia-hidden', mode === 'agent' || !this.plugin.settings.ragConfig.enabled);
-		if (this.webActionItem) this.webActionItem.toggleClass('ia-hidden', mode === 'agent' || !this.plugin.settings.webSearchConfig.enabled);
+		if (this.ragActionItem) this.ragActionItem.toggleClass('ia-hidden', !this.plugin.settings.ragConfig.enabled);
+		if (this.webActionItem) this.webActionItem.toggleClass('ia-hidden', !this.plugin.settings.webSearchConfig.enabled);
 	}
 
 	public refreshAgentSelect(preferredId?: string): string | null {
