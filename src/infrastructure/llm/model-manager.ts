@@ -430,9 +430,70 @@ export class ModelManager {
 		}
 	}
 
-	private static async readCliModelFromConfig(
+	private static extractModelName(value: Record<string, unknown>): string | null {
+		return (
+			(typeof value.model === 'string' && value.model)
+			|| (typeof value.defaultModel === 'string' && value.defaultModel)
+			|| (typeof value.default_model === 'string' && value.default_model)
+		) || null;
+	}
+
+	private static extractClaudeProjectModels(config: Record<string, unknown>): string[] {
+		const projects = config.projects;
+		if (!projects || typeof projects !== 'object') {
+			return [];
+		}
+
+		const projectMap = projects as Record<string, unknown>;
+		const cwd = process.cwd();
+		const projectKeys = Object.keys(projectMap);
+		const projectKey = projectKeys.includes(cwd)
+			? cwd
+			: projectKeys
+				.filter(key => cwd.startsWith(`${key}${path.sep}`))
+				.sort((a, b) => b.length - a.length)[0];
+
+		if (!projectKey) {
+			return [];
+		}
+
+		const projectConfigs = [projectMap[projectKey]];
+
+		const explicitModels = projectConfigs
+			.filter((project): project is Record<string, unknown> => Boolean(project) && typeof project === 'object')
+			.map(project => this.extractModelName(project))
+			.filter((model): model is string => Boolean(model));
+
+		if (explicitModels.length > 0) {
+			return Array.from(new Set(explicitModels));
+		}
+
+		const usageTotals = new Map<string, number>();
+		for (const projectConfig of projectConfigs) {
+			if (!projectConfig || typeof projectConfig !== 'object') {
+				continue;
+			}
+			const usage = (projectConfig as Record<string, unknown>).lastModelUsage;
+			if (!usage || typeof usage !== 'object') {
+				continue;
+			}
+
+			for (const [model, stats] of Object.entries(usage as Record<string, { inputTokens?: number; outputTokens?: number }>)) {
+				const total = (stats?.inputTokens ?? 0) + (stats?.outputTokens ?? 0);
+				usageTotals.set(model, (usageTotals.get(model) ?? 0) + total);
+			}
+		}
+
+		return Array.from(usageTotals.entries())
+			.sort(([, a], [, b]) => {
+				return b - a;
+			})
+			.map(([model]) => model);
+	}
+
+	private static async readCliModelsFromConfig(
 		provider: 'claude-code' | 'codex' | 'qwen-code'
-	): Promise<string | null> {
+	): Promise<string[]> {
 		// Known config locations (best-effort)
 		const home = os.homedir();
 		const candidates: Array<{ file: string; type: 'json' | 'toml' }> = [];
@@ -459,49 +520,58 @@ export class ModelManager {
 				const raw = await fs.readFile(candidate.file, 'utf8');
 				if (candidate.type === 'json') {
 					const json = JSON.parse(raw) as Record<string, unknown>;
-					const model =
-						(typeof json.model === 'string' && json.model)
-						|| (typeof json.defaultModel === 'string' && json.defaultModel)
-						|| (typeof json.default_model === 'string' && json.default_model);
-					if (model) return model;
+					const model = this.extractModelName(json);
+					if (model) return [model];
+
+					if (provider === 'claude-code') {
+						const projectModels = this.extractClaudeProjectModels(json);
+						if (projectModels.length > 0) return projectModels;
+					}
 				} else {
 					// Minimal TOML parse for `model = "..."` lines
 					const match = raw.match(/model\s*=\s*["']([^"']+)["']/);
-					if (match?.[1]) return match[1];
+					if (match?.[1]) return [match[1]];
 				}
 			} catch {
 				// Ignore and move to next candidate
 			}
 		}
 
-		return null;
+		return [];
 	}
 
-	private static async getCliModels(provider: 'claude-code' | 'codex' | 'qwen-code'): Promise<ModelInfo[]> {
-		const defaultModels = this.DEFAULT_MODELS[provider] ?? [];
-		const discovered = await this.readCliModelFromConfig(provider);
-
-		if (!discovered) {
-			return defaultModels;
-		}
-
-		const prefixedId = `${provider}:${discovered}`;
-		const alreadyExists = defaultModels.some(m => m.id === prefixedId);
-
-		if (alreadyExists) {
-			return defaultModels;
-		}
-
+	private static createCliModel(provider: 'claude-code' | 'codex' | 'qwen-code', model: string): ModelInfo {
+		const modelName = model.startsWith(`${provider}:`)
+			? model.slice(provider.length + 1)
+			: model;
+		const prefixedId = `${provider}:${modelName}`;
+		const defaultModel = this.DEFAULT_MODELS[provider]?.find(item => item.id === prefixedId);
 		const capabilities: ModelCapability[] = ['chat', 'streaming', 'json_mode', 'function_calling'];
-		const customModel: ModelInfo = {
+
+		return defaultModel ?? {
 			id: prefixedId,
-			name: discovered,
+			name: modelName,
 			provider,
 			capabilities,
 			enabled: true,
 		};
+	}
 
-		return [customModel, ...defaultModels];
+	private static async getCliModels(provider: 'claude-code' | 'codex' | 'qwen-code', config: LLMConfig): Promise<ModelInfo[]> {
+		const defaultModels = this.DEFAULT_MODELS[provider] ?? [];
+		const explicitModel = config.modelId?.trim();
+
+		if (explicitModel) {
+			return [this.createCliModel(provider, explicitModel)];
+		}
+
+		const discoveredModels = await this.readCliModelsFromConfig(provider);
+
+		if (discoveredModels.length === 0) {
+			return defaultModels;
+		}
+
+		return discoveredModels.map(model => this.createCliModel(provider, model));
 	}
 
 	/**
@@ -526,7 +596,7 @@ export class ModelManager {
 	 * Get models for a specific config
 	 */
 	static async getModelsForConfig(config: LLMConfig, forceRefresh: boolean = false): Promise<ModelInfo[]> {
-		const cacheKey = `${config.provider ?? ''}:${config.apiKey ?? ''}:${config.baseUrl ?? ''}`;
+		const cacheKey = `${config.provider ?? ''}:${config.apiKey ?? ''}:${config.baseUrl ?? ''}:${config.modelId ?? ''}`;
 
 		if (!forceRefresh && this.modelCache.has(cacheKey)) {
 			console.debug(`Using cached models for ${config.provider}`);
@@ -551,6 +621,11 @@ export class ModelManager {
 			}
 
 			// Use stored models if available (persistent storage, no expiration)
+			if (this.isCliProvider(config.provider) && config.modelId?.trim()) {
+				console.debug(`[ModelManager] Using explicit CLI model for ${config.provider}`);
+				return this.getCliModels(config.provider, config);
+			}
+
 			if (!forceRefresh && config.cachedModels && config.cachedModels.length > 0) {
 				console.debug(`Using stored models for ${config.provider} (${config.cachedModels.length} models)`);
 				return config.cachedModels;
@@ -576,6 +651,12 @@ export class ModelManager {
 					console.error('[ModelManager] Failed to fetch SAP AI Core models:', error);
 					models = this.DEFAULT_MODELS['sap-ai-core'];
 				}
+			} else if (config.provider === 'claude-code') {
+				models = await this.getCliModels('claude-code', config);
+			} else if (config.provider === 'codex') {
+				models = await this.getCliModels('codex', config);
+			} else if (config.provider === 'qwen-code') {
+				models = await this.getCliModels('qwen-code', config);
 			} else if (!config.apiKey) {
 				console.debug(`[ModelManager] No API key for ${config.provider}, using default models`);
 				models = this.getDefaultModels(config.provider);
@@ -584,26 +665,15 @@ export class ModelManager {
 					case 'openai':
 						models = await this.fetchOpenAIModels(config.apiKey, config.baseUrl);
 						break;
-					case 'codex':
-						models = await this.getCliModels('codex');
-						break;
 					case 'anthropic':
 						// Anthropic doesn't have a models API, use default list
 						models = this.DEFAULT_MODELS.anthropic;
-						break;
-					case 'claude-code':
-						// Follows Anthropic's API surface; use curated defaults
-						models = await this.getCliModels('claude-code');
 						break;
 					case 'google':
 						models = await this.fetchGoogleModels(config.apiKey, config.baseUrl);
 						break;
 					case 'deepseek':
 						models = await this.fetchDeepSeekModels(config.apiKey, config.baseUrl);
-						break;
-					case 'qwen-code':
-						// DashScope offers an OpenAI-compatible surface, but it lacks a public models list
-						models = await this.getCliModels('qwen-code');
 						break;
 					case 'openrouter':
 						models = await this.fetchOpenRouterModels(config.apiKey, config.baseUrl);
@@ -637,6 +707,10 @@ export class ModelManager {
 	 */
 	static getDefaultModels(provider: string): ModelInfo[] {
 		return this.DEFAULT_MODELS[provider] || [];
+	}
+
+	private static isCliProvider(provider: string): provider is 'claude-code' | 'codex' | 'qwen-code' {
+		return provider === 'claude-code' || provider === 'codex' || provider === 'qwen-code';
 	}
 
 	/**

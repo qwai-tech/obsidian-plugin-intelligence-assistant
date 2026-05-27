@@ -4,6 +4,20 @@ import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-meta
 import { OllamaModelManagerModal } from './ollama-model-manager-modal';
 import { t } from '@/i18n';
 
+export const LLM_PROVIDER_OPTIONS: Array<{ value: string; labelKey: string }> = [
+	{ value: 'openai', labelKey: 'modals.provider.providers.openai' },
+	{ value: 'anthropic', labelKey: 'modals.provider.providers.anthropic' },
+	{ value: 'google', labelKey: 'modals.provider.providers.google' },
+	{ value: 'deepseek', labelKey: 'modals.provider.providers.deepseek' },
+	{ value: 'ollama', labelKey: 'modals.provider.providers.ollama' },
+	{ value: 'claude-code', labelKey: 'modals.provider.providers.claudeCode' },
+	{ value: 'codex', labelKey: 'modals.provider.providers.codex' },
+	{ value: 'qwen-code', labelKey: 'modals.provider.providers.qwenCode' },
+	{ value: 'openrouter', labelKey: 'modals.provider.providers.openrouter' },
+	{ value: 'sap-ai-core', labelKey: 'modals.provider.providers.sapAiCore' },
+	{ value: 'custom', labelKey: 'modals.provider.providers.custom' },
+];
+
 export class ProviderConfigModal extends Modal {
 	private draft: LLMConfig;
 	private readonly onSaveCallback: (config: LLMConfig) => void | Promise<void>;
@@ -24,21 +38,18 @@ export class ProviderConfigModal extends Modal {
 			path: 'llmConfigs[].provider',
 			label: t('modals.provider.selectProvider.name'),
 			description: t('modals.provider.selectProvider.desc')
-		}).addDropdown(dropdown => dropdown
-				.addOption('', t('modals.provider.selectProvider.placeholder'))
-				.addOption('openai', t('modals.provider.providers.openai'))
-				.addOption('anthropic', t('modals.provider.providers.anthropic'))
-				.addOption('google', t('modals.provider.providers.google'))
-				.addOption('deepseek', t('modals.provider.providers.deepseek'))
-				.addOption('ollama', t('modals.provider.providers.ollama'))
-				.addOption('openrouter', t('modals.provider.providers.openrouter'))
-				.addOption('sap-ai-core', t('modals.provider.providers.sapAiCore'))
-				.addOption('custom', t('modals.provider.providers.custom'))
+		}).addDropdown(dropdown => {
+			dropdown.addOption('', t('modals.provider.selectProvider.placeholder'));
+			LLM_PROVIDER_OPTIONS.forEach(option => {
+				dropdown.addOption(option.value, t(option.labelKey));
+			});
+			dropdown
 				.setValue(this.draft.provider)
 				.onChange(value => {
 					this.draft.provider = value;
 					void this.renderProviderSpecific();
-				}));
+				});
+		});
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'llmConfigs[].modelFilter',
@@ -149,6 +160,28 @@ export class ProviderConfigModal extends Modal {
 							// No specific action needed on close as this is just pulling models
 						}).open();
 					}));
+		} else if (this.isCliProvider(this.draft.provider)) {
+			applyConfigFieldMetadata(new Setting(this.providerContainer), {
+				path: 'llmConfigs[].modelId',
+				label: t('modals.provider.modelId.name'),
+				description: t('modals.provider.modelId.desc')
+			}).addText(text => text
+					.setPlaceholder(this.getDefaultModelPlaceholder(this.draft.provider))
+					.setValue(this.draft.modelId || '')
+					.onChange(value => {
+						this.draft.modelId = value.trim() || undefined;
+					}));
+
+			applyConfigFieldMetadata(new Setting(this.providerContainer), {
+				path: 'llmConfigs[].commandPath',
+				label: t('modals.provider.commandPath.name'),
+				description: t('modals.provider.commandPath.desc')
+			}).addText(text => text
+					.setPlaceholder(this.getDefaultCommand(this.draft.provider))
+					.setValue(this.draft.commandPath || '')
+					.onChange(value => {
+						this.draft.commandPath = value.trim() || undefined;
+					}));
 		} else {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].apiKey',
@@ -177,6 +210,36 @@ export class ProviderConfigModal extends Modal {
 					.onChange(value => {
 						this.draft.baseUrl = value.trim() || undefined;
 					}));
+		}
+	}
+
+	private getDefaultModelPlaceholder(provider: string): string {
+		switch (provider) {
+			case 'claude-code':
+				return 'claude-opus-4-7 or deepseek-v4-pro[1m]';
+			case 'codex':
+				return 'gpt-5';
+			case 'qwen-code':
+				return 'qwen2.5-coder-32b-instruct';
+			default:
+				return '';
+		}
+	}
+
+	private isCliProvider(provider: string): boolean {
+		return provider === 'claude-code' || provider === 'codex' || provider === 'qwen-code';
+	}
+
+	private getDefaultCommand(provider: string): string {
+		switch (provider) {
+			case 'claude-code':
+				return 'claude';
+			case 'codex':
+				return 'codex';
+			case 'qwen-code':
+				return 'qwen';
+			default:
+				return '';
 		}
 	}
 
