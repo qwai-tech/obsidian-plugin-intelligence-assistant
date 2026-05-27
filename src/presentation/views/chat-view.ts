@@ -34,6 +34,10 @@ import { ObsidianFileSystem } from '@/infrastructure/obsidian/obsidian-file-syst
 import { ObsidianHttpClient } from '@/infrastructure/obsidian/obsidian-http-client';
 import { TestIds } from '@/presentation/utils/test-ids';
 import { } from '@/presentation/components/utils/dom-helpers';
+import {
+	applyWriteProposal as applyWriteProposalToVault,
+	type WriteProposal,
+} from '@/application/services/write-proposal-service';
 
 export const CHAT_VIEW_TYPE = 'intelligence-assistant-chat';
 
@@ -443,7 +447,8 @@ export class ChatView extends ItemView {
 					regenerateMessage: this.regenerateMessage.bind(this) as (message: Message, element: HTMLElement) => Promise<void>,
 					displayRagSources: (container: HTMLElement, message: Message) => this.displayRagSources(container, message.ragSources ?? []),
 					getProviderAvatar: this.getProviderAvatar.bind(this) as (message: Message) => string,
-					getProviderColor: this.getProviderColor.bind(this) as (message: Message) => string
+					getProviderColor: this.getProviderColor.bind(this) as (message: Message) => string,
+					applyWriteProposal: (proposal: WriteProposal) => this.applyWriteProposal(proposal)
 		};
 
 		const options = {
@@ -591,6 +596,17 @@ export class ChatView extends ItemView {
 
 	private insertMessageToNote(message: Message) {
 		this.vaultExportService.insertIntoNote(message);
+	}
+
+	private async applyWriteProposal(proposal: WriteProposal): Promise<void> {
+		const confirmed = await showConfirm(
+			this.app,
+			`Apply ${proposal.operation} proposal for ${proposal.path}?`
+		);
+		if (!confirmed) return;
+
+		await applyWriteProposalToVault(this.app, proposal);
+		new Notice(`Applied proposal: ${proposal.path}`);
 	}
 
 

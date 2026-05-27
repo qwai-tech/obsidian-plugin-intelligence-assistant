@@ -9,6 +9,10 @@ import { getModelDisplayName, resolveMessageProviderId } from '@/presentation/co
 import { createAgentExecutionTraceContainer, updateExecutionTrace, collapseExecutionTrace } from '@/presentation/components/chat/handlers/tool-call-handler';
 import type { AgentExecutionStep as TraceStep } from '@/presentation/state/chat-view-state';
 import { TestIds } from '@/presentation/utils/test-ids';
+import {
+	extractWriteProposalsFromSteps,
+	type WriteProposal,
+} from '@/application/services/write-proposal-service';
 
 export interface MessageRendererContext {
 	app: App;
@@ -25,6 +29,7 @@ export interface MessageRendererCallbacks {
 	displayRagSources?: (container: HTMLElement, message: Message) => void;
 	getProviderAvatar?: (message: Message) => string;
 	getProviderColor?: (message: Message) => string;
+	applyWriteProposal?: (proposal: WriteProposal) => Promise<void>;
 }
 
 interface AssistantMeta {
@@ -104,6 +109,7 @@ export function renderMessage(
 
 	if (message.agentExecutionSteps?.length) {
 		renderExecutionTrace(body, message.agentExecutionSteps);
+		renderWriteProposalCards(body, message.agentExecutionSteps, callbacks);
 	}
 
 	const content = body.createDiv('ia-chat-message__content');
@@ -380,6 +386,59 @@ function renderExecutionTrace(container: HTMLElement, steps: Message['agentExecu
 	const traceContentEl = createAgentExecutionTraceContainer(container, steps.length);
 	updateExecutionTrace(traceContentEl, steps as unknown as TraceStep[]);
 	collapseExecutionTrace(traceContentEl);
+}
+
+function renderWriteProposalCards(
+	container: HTMLElement,
+	steps: Message['agentExecutionSteps'],
+	callbacks?: MessageRendererCallbacks
+) {
+	const proposals = extractWriteProposalsFromSteps(steps);
+	if (proposals.length === 0) return;
+
+	const section = container.createDiv('ia-write-proposals');
+	section.createEl('h5', { text: 'Write proposals' });
+
+	for (const proposal of proposals) {
+		const card = section.createDiv('ia-write-proposal-card');
+		const header = card.createDiv('ia-write-proposal-card__header');
+		header.createSpan({
+			cls: 'ia-write-proposal-card__operation',
+			text: proposal.operation,
+		});
+		header.createSpan({
+			cls: 'ia-write-proposal-card__path',
+			text: proposal.path,
+		});
+
+		card.createDiv({
+			cls: 'ia-write-proposal-card__note',
+			text: proposal.reason,
+		});
+
+		const details = card.createEl('details', { cls: 'ia-write-proposal-card__preview' });
+		details.createEl('summary', { text: 'Preview proposed content' });
+		details.createEl('pre', { text: proposal.proposedContent });
+
+		const actions = card.createDiv('ia-write-proposal-card__actions');
+		const applyBtn = actions.createEl('button', { text: 'Apply' });
+		applyBtn.disabled = typeof callbacks?.applyWriteProposal !== 'function';
+		applyBtn.addEventListener('click', () => {
+			void (async () => {
+				if (!callbacks?.applyWriteProposal) return;
+				applyBtn.disabled = true;
+				try {
+					await callbacks.applyWriteProposal(proposal);
+					applyBtn.setText('Applied');
+					applyBtn.addClass('is-applied');
+				} catch (error) {
+					console.error('[MessageRenderer] Failed to apply write proposal', error);
+					new Notice(error instanceof Error ? error.message : String(error));
+					applyBtn.disabled = false;
+				}
+			})();
+		});
+	}
 }
 
 function hasActionCallbacks(callbacks?: MessageRendererCallbacks): boolean {

@@ -2424,6 +2424,80 @@
 	border-top: 1px solid var(--background-modifier-border);
 }
 
+.ia-write-proposals {
+	margin: 8px 0 10px;
+	order: 2;
+}
+
+.ia-write-proposals h5 {
+	margin: 0 0 6px;
+	color: var(--text-muted);
+	font-size: var(--ia-font-size-xs);
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.ia-write-proposal-card {
+	border: 1px solid var(--background-modifier-border);
+	border-left: 3px solid var(--color-orange, var(--text-accent));
+	border-radius: var(--ia-radius-base);
+	background: var(--background-primary);
+	padding: 8px 10px;
+	margin-bottom: 8px;
+}
+
+.ia-write-proposal-card__header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 6px;
+}
+
+.ia-write-proposal-card__operation {
+	font-family: var(--font-monospace);
+	font-size: var(--ia-font-size-xs);
+	font-weight: 700;
+	color: var(--text-accent);
+}
+
+.ia-write-proposal-card__path {
+	font-family: var(--font-monospace);
+	font-size: var(--ia-font-size-xs);
+	color: var(--text-normal);
+	overflow-wrap: anywhere;
+}
+
+.ia-write-proposal-card__note {
+	color: var(--text-muted);
+	font-size: var(--ia-font-size-xs);
+	line-height: 1.4;
+	margin-bottom: 6px;
+}
+
+.ia-write-proposal-card__preview {
+	font-size: var(--ia-font-size-xs);
+	margin-bottom: 8px;
+}
+
+.ia-write-proposal-card__preview pre {
+	max-height: 220px;
+	overflow: auto;
+	white-space: pre-wrap;
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--ia-radius-small);
+	padding: 8px;
+}
+
+.ia-write-proposal-card__actions {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.ia-write-proposal-card__actions button.is-applied {
+	color: var(--color-green, var(--text-accent));
+}
+
 /* Collapsible sections (Input / Output) within tool cards */
 .agent-collapsible-section {
 	border-top: 1px solid var(--background-modifier-border);

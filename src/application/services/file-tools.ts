@@ -1,35 +1,6 @@
 import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
-
-interface WriteProposal {
-	type: 'write_proposal';
-	operation: 'create' | 'update' | 'append';
-	path: string;
-	content: string;
-	previousContent?: string;
-	proposedContent: string;
-	applied: false;
-	reason: string;
-}
-
-export function createWriteProposal(input: {
-	operation: WriteProposal['operation'];
-	path: string;
-	content: string;
-	previousContent?: string;
-	proposedContent?: string;
-}): WriteProposal {
-	return {
-		type: 'write_proposal',
-		operation: input.operation,
-		path: input.path,
-		content: input.content,
-		previousContent: input.previousContent,
-		proposedContent: input.proposedContent ?? input.content,
-		applied: false,
-		reason: 'Vault write was not applied. Review this proposal and explicitly confirm before making changes.',
-	};
-}
+import { createWriteProposal } from './write-proposal-service';
 
 export class ReadFileTool implements Tool {
 	constructor(private _app: App) {}

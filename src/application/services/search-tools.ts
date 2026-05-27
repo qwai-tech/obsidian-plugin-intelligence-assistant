@@ -1,6 +1,6 @@
 import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
-import { createWriteProposal } from './file-tools';
+import { createWriteProposal } from './write-proposal-service';
 
 export class SearchFilesTool implements Tool {
 	constructor(private _app: App) {}
