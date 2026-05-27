@@ -1,4 +1,7 @@
 import { spawn } from 'child_process';
+import { existsSync, readdirSync } from 'fs';
+import os from 'os';
+import path from 'path';
 import { BaseLLMProvider } from './base-provider';
 import type { ChatRequest, ChatResponse, StreamChunk } from './types';
 
@@ -37,7 +40,7 @@ export class CliProvider extends BaseLLMProvider {
 
 	private buildCommand(prompt: string, modelId: string): { command: string; args: string[] } {
 		const model = this.extractModelName(modelId);
-		const command = this.config.commandPath?.trim() || this.defaultCommand();
+		const command = this.resolveCommand();
 
 		switch (this.providerName) {
 			case 'claude-code':
@@ -67,6 +70,61 @@ export class CliProvider extends BaseLLMProvider {
 			case 'qwen-code':
 				return 'qwen';
 		}
+	}
+
+	private resolveCommand(): string {
+		const configured = this.config.commandPath?.trim();
+		if (configured) {
+			return configured;
+		}
+
+		const command = this.defaultCommand();
+		const home = os.homedir();
+		const candidates = [
+			path.join(home, '.nvm', 'versions', 'node'),
+			'/opt/homebrew/bin',
+			'/usr/local/bin',
+			'/usr/bin',
+			'/bin',
+		];
+
+		for (const candidate of candidates) {
+			if (candidate.endsWith('node')) {
+				const resolved = this.findNvmCommand(candidate, command);
+				if (resolved) {
+					return resolved;
+				}
+				continue;
+			}
+
+			const fullPath = path.join(candidate, command);
+			if (existsSync(fullPath)) {
+				return fullPath;
+			}
+		}
+
+		return command;
+	}
+
+	private findNvmCommand(nodeVersionsDir: string, command: string): string | null {
+		try {
+			if (!existsSync(nodeVersionsDir)) {
+				return null;
+			}
+
+			const versions = readdirSync(nodeVersionsDir)
+				.filter(entry => entry.startsWith('v'))
+				.sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+			for (const version of versions) {
+				const fullPath = path.join(nodeVersionsDir, version, 'bin', command);
+				if (existsSync(fullPath)) {
+					return fullPath;
+				}
+			}
+		} catch {
+			return null;
+		}
+		return null;
 	}
 
 	private buildPrompt(request: ChatRequest): string {
@@ -109,8 +167,23 @@ export class CliProvider extends BaseLLMProvider {
 				}
 			});
 			proc.on('error', error => {
+				if ('code' in error && error.code === 'ENOENT') {
+					reject(new Error(`Failed to execute ${this.name}: command not found. Set the provider Command path to the full CLI path, for example ${this.exampleCommandPath()}.`));
+					return;
+				}
 				reject(new Error(`Failed to execute ${this.name}: ${error.message}`));
 			});
 		});
+	}
+
+	private exampleCommandPath(): string {
+		switch (this.providerName) {
+			case 'claude-code':
+				return '/opt/homebrew/bin/claude';
+			case 'codex':
+				return '/Users/you/.nvm/versions/node/v22/bin/codex';
+			case 'qwen-code':
+				return '/opt/homebrew/bin/qwen';
+		}
 	}
 }
