@@ -338,8 +338,8 @@
             "params": "path (required): Path to the file to read"
           },
           "writeFile": {
-            "desc": "Write or update a file in your vault",
-            "params": "path (required), content (required): File path and content to write"
+            "desc": "Prepare a proposal to write or update a file in your vault",
+            "params": "path (required), content (required): File path and proposed content"
           },
           "listFiles": {
             "desc": "List files in the vault or a specific folder",
@@ -350,12 +350,12 @@
             "params": "query (required), search_content (optional), limit (optional): Search query and options"
           },
           "createNote": {
-            "desc": "Create a new note with specified content",
-            "params": "title (required), content (required), folder (optional): Note title, content, and location"
+            "desc": "Prepare a proposal to create a new note",
+            "params": "title (required), content (required), folder (optional): Note title, proposed content, and location"
           },
           "appendNote": {
-            "desc": "Append content to an existing note",
-            "params": "path (required), content (required): Note path and content to append"
+            "desc": "Prepare a proposal to append content to an existing note",
+            "params": "path (required), content (required): Note path and proposed content to append"
           }
         },
         "infoTitle": "💡 About Tools",

@@ -1,5 +1,6 @@
 import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
+import { createWriteProposal } from './file-tools';
 
 export class SearchFilesTool implements Tool {
 	constructor(private _app: App) {}
@@ -87,7 +88,7 @@ export class CreateNoteTool implements Tool {
 
 	definition: ToolDefinition = {
 		name: 'create_note',
-		description: 'Create a new note with the specified content',
+		description: 'Prepare a proposal to create a new note. This does not modify the vault until the user confirms.',
 		parameters: [
 			{
 				name: 'title',
@@ -129,10 +130,14 @@ export class CreateNoteTool implements Tool {
 				};
 			}
 
-			await this._app.vault.create(path, content);
 			return {
 				success: true,
-				result: `Note created: ${path}`
+				result: createWriteProposal({
+					operation: 'create',
+					path,
+					content,
+					proposedContent: content,
+				})
 			};
 		} catch (error: unknown) {
 			return {
@@ -148,7 +153,7 @@ export class AppendToNoteTool implements Tool {
 
 	definition: ToolDefinition = {
 		name: 'append_to_note',
-		description: 'Append content to an existing note',
+		description: 'Prepare a proposal to append content to an existing note. This does not modify the vault until the user confirms.',
 		parameters: [
 			{
 				name: 'path',
@@ -179,11 +184,17 @@ export class AppendToNoteTool implements Tool {
 			}
 
 			const existing = await this._app.vault.read(file);
-			await this._app.vault.modify(file, existing + '\n\n' + content);
+			const proposedContent = existing + '\n\n' + content;
 
 			return {
 				success: true,
-				result: `Content appended to: ${path}`
+				result: createWriteProposal({
+					operation: 'append',
+					path,
+					content,
+					previousContent: existing,
+					proposedContent,
+				})
 			};
 		} catch (error: unknown) {
 			return {

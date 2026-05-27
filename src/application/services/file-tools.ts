@@ -1,6 +1,36 @@
 import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
 
+interface WriteProposal {
+	type: 'write_proposal';
+	operation: 'create' | 'update' | 'append';
+	path: string;
+	content: string;
+	previousContent?: string;
+	proposedContent: string;
+	applied: false;
+	reason: string;
+}
+
+export function createWriteProposal(input: {
+	operation: WriteProposal['operation'];
+	path: string;
+	content: string;
+	previousContent?: string;
+	proposedContent?: string;
+}): WriteProposal {
+	return {
+		type: 'write_proposal',
+		operation: input.operation,
+		path: input.path,
+		content: input.content,
+		previousContent: input.previousContent,
+		proposedContent: input.proposedContent ?? input.content,
+		applied: false,
+		reason: 'Vault write was not applied. Review this proposal and explicitly confirm before making changes.',
+	};
+}
+
 export class ReadFileTool implements Tool {
 	constructor(private _app: App) {}
 
@@ -48,7 +78,7 @@ export class WriteFileTool implements Tool {
 
 	definition: ToolDefinition = {
 		name: 'write_file',
-		description: 'Write or update a file in the vault',
+		description: 'Prepare a proposal to write or update a vault file. This does not modify the vault until the user confirms.',
 		parameters: [
 			{
 				name: 'path',
@@ -72,18 +102,26 @@ export class WriteFileTool implements Tool {
 			const file = this._app.vault.getAbstractFileByPath(path);
 
 			if (file && file instanceof TFile) {
-				// File exists, update it
-				await this._app.vault.modify(file, content);
+				const previousContent = await this._app.vault.read(file);
 				return {
 					success: true,
-					result: `File updated: ${path}`
+					result: createWriteProposal({
+						operation: 'update',
+						path,
+						content,
+						previousContent,
+						proposedContent: content,
+					})
 				};
 			} else {
-				// Create new file
-				await this._app.vault.create(path, content);
 				return {
 					success: true,
-					result: `File created: ${path}`
+					result: createWriteProposal({
+						operation: 'create',
+						path,
+						content,
+						proposedContent: content,
+					})
 				};
 			}
 		} catch (error) {
