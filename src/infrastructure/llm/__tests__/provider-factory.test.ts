@@ -1,9 +1,9 @@
 import { ProviderFactory } from '../provider-factory';
 
 describe('ProviderFactory', () => {
-	it('creates CLI providers', () => {
-		expect(() => ProviderFactory.createProvider({ provider: 'claude-code' })).not.toThrow();
-		expect(() => ProviderFactory.createProvider({ provider: 'codex' })).not.toThrow();
-		expect(() => ProviderFactory.createProvider({ provider: 'qwen-code' })).not.toThrow();
+	it('rejects removed CLI providers', () => {
+		expect(() => ProviderFactory.createProvider({ provider: 'claude-code' })).toThrow('Unknown provider');
+		expect(() => ProviderFactory.createProvider({ provider: 'codex' })).toThrow('Unknown provider');
+		expect(() => ProviderFactory.createProvider({ provider: 'qwen-code' })).toThrow('Unknown provider');
 	});
 });

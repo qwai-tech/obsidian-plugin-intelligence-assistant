@@ -10,9 +10,6 @@ export const LLM_PROVIDER_OPTIONS: Array<{ value: string; labelKey: string }> = 
 	{ value: 'google', labelKey: 'modals.provider.providers.google' },
 	{ value: 'deepseek', labelKey: 'modals.provider.providers.deepseek' },
 	{ value: 'ollama', labelKey: 'modals.provider.providers.ollama' },
-	{ value: 'claude-code', labelKey: 'modals.provider.providers.claudeCode' },
-	{ value: 'codex', labelKey: 'modals.provider.providers.codex' },
-	{ value: 'qwen-code', labelKey: 'modals.provider.providers.qwenCode' },
 	{ value: 'openrouter', labelKey: 'modals.provider.providers.openrouter' },
 	{ value: 'sap-ai-core', labelKey: 'modals.provider.providers.sapAiCore' },
 	{ value: 'custom', labelKey: 'modals.provider.providers.custom' },
@@ -160,28 +157,6 @@ export class ProviderConfigModal extends Modal {
 							// No specific action needed on close as this is just pulling models
 						}).open();
 					}));
-		} else if (this.isCliProvider(this.draft.provider)) {
-			applyConfigFieldMetadata(new Setting(this.providerContainer), {
-				path: 'llmConfigs[].modelId',
-				label: t('modals.provider.modelId.name'),
-				description: t('modals.provider.modelId.desc')
-			}).addText(text => text
-					.setPlaceholder(this.getDefaultModelPlaceholder(this.draft.provider))
-					.setValue(this.draft.modelId || '')
-					.onChange(value => {
-						this.draft.modelId = value.trim() || undefined;
-					}));
-
-			applyConfigFieldMetadata(new Setting(this.providerContainer), {
-				path: 'llmConfigs[].commandPath',
-				label: t('modals.provider.commandPath.name'),
-				description: t('modals.provider.commandPath.desc')
-			}).addText(text => text
-					.setPlaceholder(this.getDefaultCommand(this.draft.provider))
-					.setValue(this.draft.commandPath || '')
-					.onChange(value => {
-						this.draft.commandPath = value.trim() || undefined;
-					}));
 		} else {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].apiKey',
@@ -210,36 +185,6 @@ export class ProviderConfigModal extends Modal {
 					.onChange(value => {
 						this.draft.baseUrl = value.trim() || undefined;
 					}));
-		}
-	}
-
-	private getDefaultModelPlaceholder(provider: string): string {
-		switch (provider) {
-			case 'claude-code':
-				return 'claude-opus-4-7 or deepseek-v4-pro[1m]';
-			case 'codex':
-				return 'gpt-5.5';
-			case 'qwen-code':
-				return 'qwen3-coder-plus';
-			default:
-				return '';
-		}
-	}
-
-	private isCliProvider(provider: string): boolean {
-		return provider === 'claude-code' || provider === 'codex' || provider === 'qwen-code';
-	}
-
-	private getDefaultCommand(provider: string): string {
-		switch (provider) {
-			case 'claude-code':
-				return 'claude';
-			case 'codex':
-				return 'codex';
-			case 'qwen-code':
-				return 'qwen';
-			default:
-				return '';
 		}
 	}
 

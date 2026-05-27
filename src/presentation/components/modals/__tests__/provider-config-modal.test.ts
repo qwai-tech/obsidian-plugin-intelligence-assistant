@@ -1,11 +1,11 @@
 import { LLM_PROVIDER_OPTIONS } from '../provider-config-modal';
 
 describe('ProviderConfigModal provider options', () => {
-	it('includes CLI providers in the LLM provider picker', () => {
+	it('excludes CLI providers from the LLM provider picker', () => {
 		const values = LLM_PROVIDER_OPTIONS.map(option => option.value);
 
-		expect(values).toContain('claude-code');
-		expect(values).toContain('codex');
-		expect(values).toContain('qwen-code');
+		expect(values).not.toContain('claude-code');
+		expect(values).not.toContain('codex');
+		expect(values).not.toContain('qwen-code');
 	});
 });

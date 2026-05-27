@@ -122,7 +122,6 @@
         "serverError": "服务器错误"
       },
       "guidance": {
-        "requiresCli": "需要本地 CLI",
         "provideServiceKey": "提供服务密钥",
         "configureBaseUrl": "配置基础 URL",
         "addApiKey": "添加 API 密钥"
@@ -1344,9 +1343,6 @@
         "google": "Google（Gemini）",
         "deepseek": "DeepSeek",
         "ollama": "Ollama（本地）",
-        "claudeCode": "Claude Code（CLI）",
-        "codex": "Codex（CLI）",
-        "qwenCode": "Qwen Code（CLI）",
         "openrouter": "OpenRouter",
         "sapAiCore": "SAP AI Core",
         "custom": "自定义（OpenAI 兼容）"
@@ -1368,14 +1364,6 @@
         "ollamaDesc": "Ollama 服务器 URL",
         "customDesc": "OpenAI 兼容的 API 端点（必填）",
         "optionalDesc": "自定义 API 端点（可选）"
-      },
-      "commandPath": {
-        "name": "命令路径",
-        "desc": "可选的 CLI 可执行文件路径。留空则使用 PATH 中的命令。"
-      },
-      "modelId": {
-        "name": "模型 ID",
-        "desc": "可选的 CLI 显式模型。CLI 配置为非默认模型时使用，例如通过 Claude Code 使用 DeepSeek。"
       },
       "manageModels": {
         "name": "管理模型",

@@ -150,13 +150,6 @@ export function displayProviderTab(
 		let guidance = '';
 
 		switch (config.provider) {
-			case 'claude-code':
-			case 'codex':
-			case 'qwen-code':
-				// CLI tools only need a command path if not on PATH
-				hasCredentials = true;
-				guidance = t('settings.provider.guidance.requiresCli');
-				break;
 			case 'sap-ai-core':
 				hasCredentials = Boolean(config.serviceKey);
 				guidance = t('settings.provider.guidance.provideServiceKey');

@@ -122,7 +122,6 @@
         "serverError": "Server error"
       },
       "guidance": {
-        "requiresCli": "Requires local CLI",
         "provideServiceKey": "Provide service key",
         "configureBaseUrl": "Configure base URL",
         "addApiKey": "Add API key"
@@ -1344,9 +1343,6 @@
         "google": "Google (Gemini)",
         "deepseek": "DeepSeek",
         "ollama": "Ollama (local)",
-        "claudeCode": "Claude Code (CLI)",
-        "codex": "Codex (CLI)",
-        "qwenCode": "Qwen Code (CLI)",
         "openrouter": "OpenRouter",
         "sapAiCore": "SAP AI Core",
         "custom": "Custom (OpenAI compatible)"
@@ -1368,14 +1364,6 @@
         "ollamaDesc": "Ollama server URL",
         "customDesc": "OpenAI-compatible API endpoint (required)",
         "optionalDesc": "Custom API endpoint (optional)"
-      },
-      "commandPath": {
-        "name": "Command path",
-        "desc": "Optional CLI executable path. Leave blank to use the command from PATH."
-      },
-      "modelId": {
-        "name": "Model ID",
-        "desc": "Optional explicit CLI model. Use this when the CLI is configured for a non-default model, such as DeepSeek through Claude Code."
       },
       "manageModels": {
         "name": "Manage Models",
