@@ -218,9 +218,9 @@ export class ProviderConfigModal extends Modal {
 			case 'claude-code':
 				return 'claude-opus-4-7 or deepseek-v4-pro[1m]';
 			case 'codex':
-				return 'gpt-5';
+				return 'gpt-5.5';
 			case 'qwen-code':
-				return 'qwen2.5-coder-32b-instruct';
+				return 'qwen3-coder-plus';
 			default:
 				return '';
 		}

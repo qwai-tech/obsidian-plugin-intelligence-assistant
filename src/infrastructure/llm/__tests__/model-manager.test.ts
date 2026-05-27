@@ -7,9 +7,9 @@ describe('ModelManager', () => {
 		jest.restoreAllMocks();
 	});
 
-	it('uses discovered CLI model config when refreshing Claude Code models without an API key', async () => {
+	it('uses discovered Claude Code settings model when refreshing without an API key', async () => {
 		jest.spyOn(fs, 'readFile').mockImplementation(async (file) => {
-			if (String(file).endsWith('.claude.json')) {
+			if (String(file).endsWith('.claude/settings.json')) {
 				return JSON.stringify({ model: 'claude-opus-4-7' });
 			}
 			throw new Error('not found');
@@ -60,19 +60,11 @@ describe('ModelManager', () => {
 		expect(models.map(model => model.id)).toEqual(['claude-code:deepseek-v4-flash']);
 	});
 
-	it('uses project Claude Code model usage when no explicit model is configured', async () => {
+	it('uses Claude Code availableModels setting instead of stale defaults', async () => {
 		jest.spyOn(fs, 'readFile').mockImplementation(async (file) => {
-			if (String(file).endsWith('.claude.json')) {
+			if (String(file).endsWith('.claude/settings.json')) {
 				return JSON.stringify({
-					projects: {
-						[process.cwd()]: {
-							lastModelUsage: {
-								'claude-haiku-4-5-20251001': { inputTokens: 10 },
-								'claude-opus-4-7[1m]': { inputTokens: 20 },
-								'deepseek-v4-pro[1m]': { inputTokens: 30 },
-							},
-						},
-					},
+					availableModels: ['sonnet', 'opus[1m]'],
 				});
 			}
 			throw new Error('not found');
@@ -82,13 +74,12 @@ describe('ModelManager', () => {
 		const models = await ModelManager.getModelsForConfig(config, true);
 
 		expect(models.map(model => model.id)).toEqual([
-			'claude-code:deepseek-v4-pro[1m]',
-			'claude-code:claude-opus-4-7[1m]',
-			'claude-code:claude-haiku-4-5-20251001',
+			'claude-code:sonnet',
+			'claude-code:opus[1m]',
 		]);
 	});
 
-	it('does not scan all Claude Code project usage when runtime cwd does not match a project', async () => {
+	it('does not scan Claude Code project usage history as model configuration', async () => {
 		jest.spyOn(process, 'cwd').mockReturnValue('/Applications/Obsidian.app');
 		jest.spyOn(fs, 'readFile').mockImplementation(async (file) => {
 			if (String(file).endsWith('.claude.json')) {
@@ -115,9 +106,22 @@ describe('ModelManager', () => {
 		const config: LLMConfig = { provider: 'claude-code' };
 		const models = await ModelManager.getModelsForConfig(config, true);
 
-		expect(models.map(model => model.id)).toEqual([
-			'claude-code:claude-3-5-sonnet-20241022',
-			'claude-code:claude-3-5-haiku-20241022',
-		]);
+		expect(models.map(model => model.id)).toContain('claude-code:default');
+		expect(models.map(model => model.id)).not.toContain('claude-code:claude-opus-4-7[1m]');
+		expect(models.map(model => model.id)).not.toContain('claude-code:deepseek-v4-pro[1m]');
+	});
+
+	it('reads Qwen Code model.name from settings', async () => {
+		jest.spyOn(fs, 'readFile').mockImplementation(async (file) => {
+			if (String(file).endsWith('.qwen/settings.json')) {
+				return JSON.stringify({ model: { name: 'qwen3-coder-plus' } });
+			}
+			throw new Error('not found');
+		});
+
+		const config: LLMConfig = { provider: 'qwen-code' };
+		const models = await ModelManager.getModelsForConfig(config, true);
+
+		expect(models.map(model => model.id)).toEqual(['qwen-code:qwen3-coder-plus']);
 	});
 });

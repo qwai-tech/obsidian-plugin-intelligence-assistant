@@ -23,8 +23,7 @@ export class ModelManager {
 			{ id: 'openai:text-embedding-3-small', name: 'Text Embedding 3 Small', provider: 'openai', capabilities: ['embedding'], enabled: true },
 		],
 		codex: [
-			{ id: 'codex:code-davinci-002', name: 'Code Davinci 002', provider: 'codex', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			{ id: 'codex:code-cushman-001', name: 'Code Cushman 001', provider: 'codex', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'codex:gpt-5.5', name: 'GPT-5.5', provider: 'codex', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode', 'reasoning'], enabled: true },
 		],
 		anthropic: [
 			{ id: 'anthropic:claude-3-5-sonnet-20241022', name: 'Claude 3.5 Sonnet', provider: 'anthropic', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode', 'computer_use'], enabled: true },
@@ -34,8 +33,13 @@ export class ModelManager {
 			{ id: 'anthropic:claude-3-haiku-20240307', name: 'Claude 3 Haiku', provider: 'anthropic', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 		],
 		'claude-code': [
-			{ id: 'claude-code:claude-3-5-sonnet-20241022', name: 'Claude 3.5 Sonnet (Code)', provider: 'claude-code', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode', 'computer_use'], enabled: true },
-			{ id: 'claude-code:claude-3-5-haiku-20241022', name: 'Claude 3.5 Haiku (Code)', provider: 'claude-code', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'claude-code:default', name: 'Claude Code Default', provider: 'claude-code', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode', 'computer_use'], enabled: true },
+			{ id: 'claude-code:sonnet', name: 'Sonnet', provider: 'claude-code', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode', 'computer_use'], enabled: true },
+			{ id: 'claude-code:opus', name: 'Opus', provider: 'claude-code', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode', 'computer_use', 'reasoning'], enabled: true },
+			{ id: 'claude-code:haiku', name: 'Haiku', provider: 'claude-code', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'claude-code:sonnet[1m]', name: 'Sonnet 1M', provider: 'claude-code', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode', 'computer_use'], enabled: true },
+			{ id: 'claude-code:opus[1m]', name: 'Opus 1M', provider: 'claude-code', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode', 'computer_use', 'reasoning'], enabled: true },
+			{ id: 'claude-code:opusplan', name: 'Opus Plan', provider: 'claude-code', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode', 'computer_use', 'reasoning'], enabled: true },
 		],
 		google: [
 			{ id: 'google:gemini-2.0-flash-exp', name: 'Gemini 2.0 Flash (Experimental)', provider: 'google', capabilities: ['chat', 'vision', 'audio', 'video', 'function_calling', 'streaming', 'json_mode', 'multimodal_output', 'code_execution'], enabled: true },
@@ -51,9 +55,7 @@ export class ModelManager {
 			{ id: 'deepseek:deepseek-coder', name: 'DeepSeek Coder', provider: 'deepseek', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 		],
 		'qwen-code': [
-			{ id: 'qwen-code:qwen2.5-coder-32b-instruct', name: 'Qwen2.5-Coder 32B', provider: 'qwen-code', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			{ id: 'qwen-code:qwen2.5-coder-14b-instruct', name: 'Qwen2.5-Coder 14B', provider: 'qwen-code', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			{ id: 'qwen-code:qwen2.5-coder-7b-instruct', name: 'Qwen2.5-Coder 7B', provider: 'qwen-code', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'qwen-code:qwen3-coder-plus', name: 'Qwen3 Coder Plus', provider: 'qwen-code', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 		],
 		openrouter: [
 			{ id: 'openrouter:openai/gpt-4o', name: 'GPT-4o', provider: 'openrouter', capabilities: ['chat', 'vision', 'audio', 'function_calling', 'streaming', 'json_mode'], enabled: true },
@@ -431,64 +433,28 @@ export class ModelManager {
 	}
 
 	private static extractModelName(value: Record<string, unknown>): string | null {
+		const modelConfig = value.model;
+
+		if (modelConfig && typeof modelConfig === 'object') {
+			const nestedModel = (modelConfig as Record<string, unknown>).name;
+			if (typeof nestedModel === 'string' && nestedModel) {
+				return nestedModel;
+			}
+		}
+
 		return (
-			(typeof value.model === 'string' && value.model)
+			(typeof modelConfig === 'string' && modelConfig)
 			|| (typeof value.defaultModel === 'string' && value.defaultModel)
 			|| (typeof value.default_model === 'string' && value.default_model)
 		) || null;
 	}
 
-	private static extractClaudeProjectModels(config: Record<string, unknown>): string[] {
-		const projects = config.projects;
-		if (!projects || typeof projects !== 'object') {
+	private static extractStringArray(value: unknown): string[] {
+		if (!Array.isArray(value)) {
 			return [];
 		}
 
-		const projectMap = projects as Record<string, unknown>;
-		const cwd = process.cwd();
-		const projectKeys = Object.keys(projectMap);
-		const projectKey = projectKeys.includes(cwd)
-			? cwd
-			: projectKeys
-				.filter(key => cwd.startsWith(`${key}${path.sep}`))
-				.sort((a, b) => b.length - a.length)[0];
-
-		if (!projectKey) {
-			return [];
-		}
-
-		const projectConfigs = [projectMap[projectKey]];
-
-		const explicitModels = projectConfigs
-			.filter((project): project is Record<string, unknown> => Boolean(project) && typeof project === 'object')
-			.map(project => this.extractModelName(project))
-			.filter((model): model is string => Boolean(model));
-
-		if (explicitModels.length > 0) {
-			return Array.from(new Set(explicitModels));
-		}
-
-		const usageTotals = new Map<string, number>();
-		for (const projectConfig of projectConfigs) {
-			if (!projectConfig || typeof projectConfig !== 'object') {
-				continue;
-			}
-			const usage = (projectConfig as Record<string, unknown>).lastModelUsage;
-			if (!usage || typeof usage !== 'object') {
-				continue;
-			}
-
-			for (const [model, stats] of Object.entries(usage as Record<string, { inputTokens?: number; outputTokens?: number }>)) {
-				const total = (stats?.inputTokens ?? 0) + (stats?.outputTokens ?? 0);
-				usageTotals.set(model, (usageTotals.get(model) ?? 0) + total);
-			}
-		}
-
-		return Array.from(usageTotals.entries())
-			.sort(([, a], [, b]) => {
-				return b - a;
-			})
-			.map(([model]) => model);
+		return value.filter((item): item is string => typeof item === 'string' && item.length > 0);
 	}
 
 	private static async readCliModelsFromConfig(
@@ -500,16 +466,20 @@ export class ModelManager {
 
 		if (provider === 'claude-code') {
 			candidates.push(
-				{ file: path.join(home, '.claude.json'), type: 'json' },
-				{ file: path.join(home, '.claude', 'settings.json'), type: 'json' }
+				{ file: path.join(process.cwd(), '.claude', 'settings.local.json'), type: 'json' },
+				{ file: path.join(process.cwd(), '.claude', 'settings.json'), type: 'json' },
+				{ file: path.join(home, '.claude', 'settings.json'), type: 'json' },
+				{ file: path.join(home, '.claude.json'), type: 'json' }
 			);
 		} else if (provider === 'codex') {
 			candidates.push(
+				{ file: path.join(process.cwd(), '.codex', 'config.toml'), type: 'toml' },
 				{ file: path.join(home, '.codex', 'config.toml'), type: 'toml' },
 				{ file: path.join(home, '.codex', 'config.json'), type: 'json' }
 			);
 		} else if (provider === 'qwen-code') {
 			candidates.push(
+				{ file: path.join(process.cwd(), '.qwen', 'settings.json'), type: 'json' },
 				{ file: path.join(home, '.qwen', 'settings.json'), type: 'json' },
 				{ file: path.join(home, '.qwen.json'), type: 'json' }
 			);
@@ -524,8 +494,8 @@ export class ModelManager {
 					if (model) return [model];
 
 					if (provider === 'claude-code') {
-						const projectModels = this.extractClaudeProjectModels(json);
-						if (projectModels.length > 0) return projectModels;
+						const availableModels = this.extractStringArray(json.availableModels);
+						if (availableModels.length > 0) return availableModels;
 					}
 				} else {
 					// Minimal TOML parse for `model = "..."` lines
