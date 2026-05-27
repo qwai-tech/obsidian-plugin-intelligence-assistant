@@ -70,7 +70,7 @@ export async function ensureDefaultAgent(
 		defaultAgent = {
 			id: DEFAULT_AGENT_ID,
 			name: 'Intelligence Assistant',
-			description: 'General-purpose agent with built-in Obsidian tools.',
+			description: 'Safe Obsidian knowledge agent for notes, links, properties, writing, and vault organization.',
 			icon: '✨',
 			modelStrategy: {
 				strategy: 'default',

@@ -1,14 +1,15 @@
 # Intelligence Assistant for Obsidian
 
-将你的知识库变成一个 AI 原生工作空间。Intelligence Assistant 提供快速的聊天界面、可配置的智能代理（Agent）、MCP 工具集成、基于笔记的 RAG 检索、网络搜索、CLI 工具和 HTTP/OpenAPI 工具——无需离开 Obsidian。
+将你的知识库变成 Obsidian 原生的 Agent 工作空间。Intelligence Assistant 理解当前笔记、选区、文件、文件夹和 Vault 引用，帮助你在 Obsidian 内完成问答、整理、写作和研究。
 
 > 仅支持桌面端。需要 Obsidian v1.7.2+。
 
 ## ✨ 核心功能
 
+- **Obsidian 原生 Agent** — 命令面板、编辑器选区、文件/文件夹右键菜单都可以直接把笔记任务交给 Agent，并自动附带对应 Vault 上下文。
 - **现代化聊天视图** — 流式对话，显示模型/提供商徽章、Token 用量、工具调用可视化；Agent 模式支持原生函数调用的多轮代理循环。
 - **多 LLM 提供商** — OpenAI、Anthropic、Google Gemini、DeepSeek、Ollama（本地）、OpenRouter 和 SAP AI Core。可为每个提供商配置独立的 API 密钥。
-- **可配置的智能代理** — 定义可复用的 Agent，支持自定义提示词、工具权限、模型策略（默认/聊天视图/固定）、RAG/网络搜索开关以及 MCP 服务器访问。
+- **可配置的智能代理** — 定义可复用的 Agent，支持自定义提示词、工具权限、模型策略（默认/聊天视图/固定）、RAG/网络搜索开关以及 MCP 服务器访问。涉及笔记修改的任务会先生成建议，不默认直接写入。
 - **MCP 集成** — 连接任意 Model Context Protocol 服务器。工具目录缓存后可即时复用。内置 MCP 检查器，支持在线测试工具。
 - **RAG 检索增强生成** — 使用本地向量存储为知识库建立索引，将相关笔记作为上下文注入每次查询。支持 OpenAI、Google、Ollama、DeepSeek、OpenRouter 的真实 Embedding API。
 - **网络搜索** — Google CSE、Bing、Brave、SerpAPI、Tavily、SearXNG、Qwant 和 Mojeek。可配置语言区域、结果时效性和域名过滤。

@@ -1,14 +1,15 @@
 # Intelligence Assistant for Obsidian
 
-Transform your vault into an AI-native workspace. Intelligence Assistant brings a fast chat interface, configurable agents, MCP tool integrations, RAG over your notes, web search, CLI tools, and HTTP/OpenAPI tools — all without leaving Obsidian.
+Turn your vault into an Obsidian-native Agent workspace. Intelligence Assistant understands current notes, selections, files, folders, and vault references so it can help you ask, organize, write, and research without leaving Obsidian.
 
 > Desktop only. Requires Obsidian v1.7.2+.
 
 ## ✨ Feature Highlights
 
+- **Obsidian-Native Agent** — Command Palette, editor selection, and file/folder menu entry points hand note tasks directly into Agent mode with the right vault context attached.
 - **Modern Chat View** — Streaming chat with provider/model badges, token usage display, tool-call visualization, and an Agent mode that runs multi-step agentic loops with native function calling.
 - **Multiple LLM Providers** — OpenAI, Anthropic, Google Gemini, DeepSeek, Ollama (local), OpenRouter, and SAP AI Core. Add your own credentials per provider.
-- **Configurable Agents** — Define reusable agents with custom prompts, tool permissions, model strategy (default/chat-view/fixed), RAG/Web/ReAct toggles, and MCP server access.
+- **Configurable Agents** — Define reusable agents with custom prompts, tool permissions, model strategy (default/chat-view/fixed), RAG/Web/ReAct toggles, and MCP server access. Safe note tasks are phrased as proposals before any file-changing action.
 - **MCP Integration** — Connect any Model Context Protocol server. Tool catalogs are cached for instant reuse. Includes a built-in MCP inspector for live testing.
 - **RAG** — Index your vault with a local vector store and inject relevant notes as context on every query. Uses real embedding APIs (OpenAI, Google, Ollama, DeepSeek, OpenRouter).
 - **Web Search** — Google CSE, Bing, Brave, SerpAPI, Tavily, SearXNG, Qwant, and Mojeek. Configurable locale, freshness, and domain filters.

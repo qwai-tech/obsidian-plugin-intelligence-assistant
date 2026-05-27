@@ -397,6 +397,34 @@ export class ChatView extends ItemView {
 		await this.chatController.sendMessage(text);
 	}
 
+	public async startAgentTask(options: {
+		prompt: string;
+		references?: Array<TFile | TFolder>;
+		sendImmediately?: boolean;
+	}): Promise<void> {
+		const prompt = options.prompt.trim();
+		if (!prompt) return;
+
+		if (this.state.mode !== 'agent') {
+			await this.handleModeChange('agent');
+		}
+
+		for (const reference of options.references ?? []) {
+			if (!this.state.referencedFiles.some(item => item.path === reference.path)) {
+				this.state.addReferencedFile(reference);
+			}
+		}
+		this.updateReferenceDisplay();
+
+		this.inputController.setInputValue(prompt);
+		this.chatInput.textarea.dispatchEvent(new Event('input', { bubbles: true }));
+		this.chatInput.textarea.focus();
+
+		if (options.sendImmediately) {
+			await this.sendMessage(prompt);
+		}
+	}
+
 
 	/**
 	 * Determines if web search should be automatically triggered based on the user's query
@@ -1286,4 +1314,3 @@ export class ChatView extends ItemView {
 	}
 }
 	
-

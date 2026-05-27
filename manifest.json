@@ -3,7 +3,7 @@
 	"name": "Intelligence Assistant",
 	"version": "0.0.11",
 	"minAppVersion": "1.7.2",
-	"description": "AI chat, agents, MCP tools, RAG, web search, CLI tools, and OpenAPI integration — all inside Obsidian.",
+	"description": "Obsidian-native Agent for asking, organizing, writing, and researching with your notes.",
 	"author": "QWAI",
 	"authorUrl": "https://github.com/qwai-tech",
 	"isDesktopOnly": true

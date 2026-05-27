@@ -1,4 +1,4 @@
-import { Plugin, WorkspaceLeaf } from 'obsidian';
+import { Editor, MarkdownView, Notice, Plugin, TFile, TFolder, WorkspaceLeaf } from 'obsidian';
 import './src/presentation/components/chat/settings.css';
 import './src/presentation/components/modals/explain-text-modal.css';
 import type {
@@ -40,12 +40,21 @@ import { initI18n } from './src/i18n';
 import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-system';
 import { PluginDataService } from './src/application/services/plugin-data-service';
 import { EditorQuickActions } from './src/presentation/editor/editor-quick-actions';
+import { TextInputModal } from './src/presentation/components/modals/text-input-modal';
 import { ToolRegistry } from './src/application/tools/tool-registry';
 import { BuiltinToolSource } from './src/application/tools/sources/builtin-tool-source';
 import { McpToolSource } from './src/application/tools/sources/mcp-tool-source';
 import { OpenApiToolSource } from './src/application/tools/sources/openapi-tool-source';
 import { CliToolSource } from './src/application/tools/sources/cli-tool-source';
 import { migrateAllAgents } from './src/application/tools/tool-migrations';
+import {
+	buildAskCurrentNotePrompt,
+	buildImproveSelectionPrompt,
+	buildOrganizeCurrentNotePrompt,
+	buildOrganizeFolderPrompt,
+	buildSummarizeCurrentNotePrompt,
+	buildSummarizeFilePrompt,
+} from './src/application/services/obsidian-agent-prompts';
 
 // Re-export for backward compatibility
 export type {
@@ -122,6 +131,8 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				await this.openChatViewInMainArea();
 			}
 		});
+
+		this.registerObsidianAgentEntryPoints();
 
 		// Add ribbon icon for quick chat access
 		this.chatRibbonIconEl = this.addRibbonIcon("message-circle", "Open AI chat", async () => {
@@ -419,28 +430,29 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		}
 	}
 
-	async openChatViewInMainArea() {
+	async openChatViewInMainArea(): Promise<ChatView | null> {
 		// Try to find an existing chat view in the main area (root split)
 		const existing = this.app.workspace.getLeavesOfType(CHAT_VIEW_TYPE);
 		const mainLeaf = existing.find(leaf => leaf.getRoot() === this.app.workspace.rootSplit);
 		if (mainLeaf) {
 			await this.app.workspace.revealLeaf(mainLeaf);
-			return;
+			return this.asChatView(mainLeaf);
 		}
 
 		// Create a new tab in the main editor area
 		const leaf = this.app.workspace.getLeaf('tab');
 		await leaf.setViewState({ type: CHAT_VIEW_TYPE, active: true });
 		await this.app.workspace.revealLeaf(leaf);
+		return this.asChatView(leaf);
 	}
 
-	async openChatViewInRightSidebar() {
+	async openChatViewInRightSidebar(): Promise<ChatView | null> {
 		// Try to find an existing chat view
 		const existing = this.app.workspace.getLeavesOfType(CHAT_VIEW_TYPE);
 		if (existing.length > 0) {
 			// If exists, just show it
 			await this.app.workspace.revealLeaf(existing[0]);
-			return;
+			return this.asChatView(existing[0]);
 		}
 
 		// Create a new leaf in the right sidebar
@@ -449,11 +461,136 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			await leaf.setViewState({ type: CHAT_VIEW_TYPE, active: true });
 			// Focus on the new view
 			await this.app.workspace.revealLeaf(leaf);
+			return this.asChatView(leaf);
 		} else {
 			// Fallback: create in any available leaf
 			const newLeaf = this.app.workspace.getLeaf(true);
 			await newLeaf.setViewState({ type: CHAT_VIEW_TYPE, active: true });
+			return this.asChatView(newLeaf);
 		}
+	}
+
+	private asChatView(leaf: WorkspaceLeaf | null | undefined): ChatView | null {
+		return leaf?.view instanceof ChatView ? leaf.view : null;
+	}
+
+	private async openAgentTask(prompt: string, references: Array<TFile | TFolder> = []): Promise<void> {
+		const view = await this.openChatViewInRightSidebar();
+		if (!view) {
+			new Notice('Unable to open Intelligence Assistant chat view.');
+			return;
+		}
+		await view.startAgentTask({ prompt, references });
+	}
+
+	private getActiveMarkdownFile(): TFile | null {
+		const file = this.app.workspace.getActiveFile();
+		return file instanceof TFile ? file : null;
+	}
+
+	private registerObsidianAgentEntryPoints(): void {
+		this.addCommand({
+			id: 'ask-agent-current-note',
+			name: 'Ask Agent about current note',
+			callback: () => {
+				const file = this.getActiveMarkdownFile();
+				if (!file) {
+					new Notice('Open a note before asking the Agent.');
+					return;
+				}
+				new TextInputModal(
+					this.app,
+					'Ask Agent about current note',
+					'What do you want to know?',
+					'What should I understand or do next?',
+					(question) => {
+						void this.openAgentTask(buildAskCurrentNotePrompt(file.path, question), [file]);
+					}
+				).open();
+			}
+		});
+
+		this.addCommand({
+			id: 'summarize-current-note-agent',
+			name: 'Summarize current note with Agent',
+			callback: async () => {
+				const file = this.getActiveMarkdownFile();
+				if (!file) {
+					new Notice('Open a note before summarizing with the Agent.');
+					return;
+				}
+				await this.openAgentTask(buildSummarizeCurrentNotePrompt(file.path), [file]);
+			}
+		});
+
+		this.addCommand({
+			id: 'organize-current-note-agent',
+			name: 'Organize current note with Agent',
+			callback: async () => {
+				const file = this.getActiveMarkdownFile();
+				if (!file) {
+					new Notice('Open a note before organizing with the Agent.');
+					return;
+				}
+				await this.openAgentTask(buildOrganizeCurrentNotePrompt(file.path), [file]);
+			}
+		});
+
+		this.addCommand({
+			id: 'improve-selection-agent',
+			name: 'Improve selection with Agent',
+			editorCallback: async (editor: Editor, view: MarkdownView) => {
+				const selection = editor.getSelection();
+				if (!selection.trim()) {
+					new Notice('Select text before asking the Agent to improve it.');
+					return;
+				}
+				const file = view.file ?? this.getActiveMarkdownFile();
+				await this.openAgentTask(
+					buildImproveSelectionPrompt(selection, file?.path),
+					file ? [file] : []
+				);
+			}
+		});
+
+		this.registerEvent(
+			this.app.workspace.on('file-menu', (menu, file) => {
+				if (file instanceof TFile) {
+					menu.addSeparator();
+					menu.addItem(item => item
+						.setTitle('Ask Agent about this file')
+						.setIcon('bot')
+						.onClick(() => {
+							new TextInputModal(
+								this.app,
+								'Ask Agent about file',
+								'What do you want to know?',
+								'What should I understand or do next?',
+								(question) => {
+									void this.openAgentTask(buildAskCurrentNotePrompt(file.path, question), [file]);
+								}
+							).open();
+						}));
+					menu.addItem(item => item
+						.setTitle('Summarize with Agent')
+						.setIcon('list-collapse')
+						.onClick(() => {
+							void this.openAgentTask(buildSummarizeFilePrompt(file.path), [file]);
+						}));
+					return;
+				}
+
+				if (file instanceof TFolder) {
+					menu.addSeparator();
+					menu.addItem(item => item
+						.setTitle('Organize folder with Agent')
+						.setIcon('folder-tree')
+						.onClick(() => {
+							void this.openAgentTask(buildOrganizeFolderPrompt(file.path), [file]);
+						}));
+				}
+			})
+		);
 	}
 
 	async loadSettings() {
