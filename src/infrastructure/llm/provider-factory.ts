@@ -7,6 +7,7 @@ import { DeepSeekProvider } from './deepseek-provider';
 import { OpenRouterProvider } from './openrouter-provider';
 import { SAPAICoreProvider } from './sap-ai-core-provider';
 import { OllamaProvider } from './ollama-provider';
+import { CliProvider } from './cli-provider';
 
 export class ProviderFactory {
 	static createProvider(config: LLMConfig): ILLMProvider {
@@ -25,6 +26,12 @@ export class ProviderFactory {
 				return new SAPAICoreProvider(config);
 			case 'ollama':
 				return new OllamaProvider(config);
+			case 'claude-code':
+				return new CliProvider(config, 'claude-code');
+			case 'codex':
+				return new CliProvider(config, 'codex');
+			case 'qwen-code':
+				return new CliProvider(config, 'qwen-code');
 			case 'custom':
 				// Custom provider uses OpenAI-compatible API
 				return new OpenAIProvider(config);
