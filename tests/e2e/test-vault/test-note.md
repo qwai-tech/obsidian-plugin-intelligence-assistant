@@ -13,6 +13,8 @@ This note is used by e2e tests to verify:
 
 You can add test content here that tests might use.
 
+AGENT_TOOL_SENTINEL
+
 ```javascript
 console.log('Hello from test note');
 ```

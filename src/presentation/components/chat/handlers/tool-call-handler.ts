@@ -9,6 +9,7 @@ import type { ToolRegistry } from '@/application/tools/tool-registry';
 import type { Agent } from '@/types';
 import type { AgentExecutionStep } from '@/presentation/state/chat-view-state';
 import { t } from '@/i18n';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 /**
  * Processes tool calls from agent response content.
@@ -222,6 +223,7 @@ function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionSt
 	const statusClass = isError ? 'is-error' : isPending ? 'is-pending' : 'is-success';
 	const card = container.createDiv('agent-tool-call-card');
 	card.addClass(statusClass);
+	card.setAttribute('data-testid', TestIds.chat.agentTraceToolCard);
 
 	// Title row: status dot + tool name + status text
 	const titleRow = card.createDiv('agent-tool-call__title');
@@ -229,6 +231,7 @@ function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionSt
 	dot.setText(isError ? '✕' : isPending ? '◌' : '✓');
 	const nameEl = titleRow.createSpan('agent-tool-call__name');
 	nameEl.setText(toolName);
+	nameEl.setAttribute('data-testid', TestIds.chat.agentTraceToolName);
 	const phaseLabel = formatPhaseLabel(actionStep.phase);
 	if (phaseLabel) {
 		titleRow.createSpan('agent-phase-badge').setText(phaseLabel);
@@ -245,7 +248,7 @@ function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionSt
 
 	// Output section — collapsible, expanded by default on error, collapsed on success
 	if (resultContent !== null) {
-		renderCollapsibleSection(card, t('chat.toolCall.output'), resultContent, isError, isError);
+		renderCollapsibleSection(card, t('chat.toolCall.output'), resultContent, isError, isError, TestIds.chat.agentTraceToolOutput);
 	}
 }
 
@@ -254,7 +257,8 @@ function renderCollapsibleSection(
 	title: string,
 	content: string,
 	isError?: boolean,
-	startExpanded?: boolean
+	startExpanded?: boolean,
+	bodyTestId?: string
 ): void {
 	const section = parent.createDiv('agent-collapsible-section');
 
@@ -264,6 +268,7 @@ function renderCollapsibleSection(
 
 	const body = section.createDiv('agent-collapsible-section__body');
 	if (isError) body.addClass('agent-collapsible-section__body--error');
+	if (bodyTestId) body.setAttribute('data-testid', bodyTestId);
 
 	const collapse = () => { body.addClass('ia-hidden'); chevron.setText('▶'); };
 	const expand = () => { body.classList.remove('ia-hidden'); chevron.setText('▼'); };
@@ -282,6 +287,7 @@ function renderCollapsibleSection(
 export function createAgentExecutionTraceContainer(messageBody: HTMLElement, _stepCount: number): HTMLElement {
 	const traceContainer = messageBody.createDiv('agent-execution-trace-container');
 	traceContainer.addClass('ia-agent-trace-container');
+	traceContainer.setAttribute('data-testid', TestIds.chat.agentTrace);
 
 	const header = traceContainer.createDiv('agent-execution-trace-header');
 	header.addClass('ia-agent-trace-header');

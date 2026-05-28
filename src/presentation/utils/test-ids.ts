@@ -19,6 +19,10 @@ export const TestIds = {
 		conversationToggleBtn: 'ia-chat-conversation-toggle-btn',
 		conversationList: 'ia-chat-conversation-list',
 		conversationItem: 'ia-chat-conversation-item', // + data-conv-id
+		agentTrace: 'ia-chat-agent-trace',
+		agentTraceToolCard: 'ia-chat-agent-trace-tool-card',
+		agentTraceToolName: 'ia-chat-agent-trace-tool-name',
+		agentTraceToolOutput: 'ia-chat-agent-trace-tool-output',
 	},
 
 	// Settings shell

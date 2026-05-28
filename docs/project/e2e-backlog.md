@@ -144,11 +144,11 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-2-agent-mcp-rag.md` (to
 
 ### Agent
 
-- [ ] **`agents/tool-call-loop.spec.ts`** (★ centerpiece) — agent mode,
+- [x] **`agents/tool-call-loop.spec.ts`** (★ centerpiece) — agent mode,
       mock LLM scenario [tool_call → text], execution trace shows the
       tool invocation + result, final reply contains the tool's
       sentinel value, second LLM call body contains the tool result
-      message (A2).
+      message (A2). (`tool-call-loop.spec.ts`)
 - [ ] **`agents/tool-permission-isolation.spec.ts`** — agent whitelists
       tool X only; LLM tries to call tool Y; registry blocks → trace
       shows rejection, not "UI didn't crash" (A3).

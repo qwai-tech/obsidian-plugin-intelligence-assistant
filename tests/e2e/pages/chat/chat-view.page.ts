@@ -91,6 +91,29 @@ export class ChatViewPage extends BasePage {
 		}, TestIds.chat.modelSelect, modelId);
 	}
 
+	async selectMode(mode: 'chat' | 'agent'): Promise<void> {
+		await this.waitFor(TestIds.chat.modeSelect);
+		await browser.execute((testId, value) => {
+			const select = document.querySelector(`[data-testid="${testId}"]`);
+			if (!(select instanceof HTMLSelectElement)) {
+				throw new Error(`Mode select not found: ${testId}`);
+			}
+			select.value = value;
+			select.dispatchEvent(new Event('change', { bubbles: true }));
+		}, TestIds.chat.modeSelect, mode);
+		await browser.waitUntil(
+			async () => browser.execute((testId, expectedMode) => {
+				const select = document.querySelector(`[data-testid="${testId}"]`);
+				if (!(select instanceof HTMLSelectElement) || select.value !== expectedMode) return false;
+				const plugin = (window as unknown as {
+					app: { plugins: { plugins: Record<string, { settings?: { activeAgentId?: string | null } }> } };
+				}).app.plugins.plugins['intelligence-assistant'];
+				return expectedMode === 'chat' || Boolean(plugin?.settings?.activeAgentId);
+			}, TestIds.chat.modeSelect, mode),
+			{ timeout: 10_000, timeoutMsg: `Chat mode did not switch to ${mode}` }
+		);
+	}
+
 	async getSelectedModel(): Promise<string> {
 		await this.waitFor(TestIds.chat.modelSelect);
 		return browser.execute((testId) => {
@@ -144,6 +167,14 @@ export class ChatViewPage extends BasePage {
 	async getLastAssistantText(): Promise<string> {
 		const assistants = (await this.getMessages()).filter((message) => message.role === 'assistant');
 		return assistants[assistants.length - 1]?.text ?? '';
+	}
+
+	async getToolTraceText(): Promise<string> {
+		await this.$testid(TestIds.chat.agentTrace).waitForExist({ timeout: 10_000 });
+		return browser.execute((testId) => {
+			const trace = document.querySelector(`[data-testid="${testId}"]`);
+			return trace instanceof HTMLElement ? (trace.textContent || '').trim() : '';
+		}, TestIds.chat.agentTrace);
 	}
 
 	async getConversationId(): Promise<string> {
