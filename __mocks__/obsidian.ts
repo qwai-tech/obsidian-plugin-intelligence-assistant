@@ -80,6 +80,12 @@ if (typeof HTMLElement !== 'undefined') {
 		this.setAttribute(name, value);
 	};
 
+	HTMLElement.prototype.setCssProps = function(props: Record<string, string>) {
+		Object.entries(props).forEach(([key, value]) => {
+			this.style.setProperty(key, value);
+		});
+	};
+
 	HTMLElement.prototype.addClass = function(cls: string) {
 		this.classList.add(cls);
 	};
