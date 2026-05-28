@@ -10,23 +10,42 @@
 
 ---
 
+## Execution Status
+
+Completed on branch `route-c-trinity-refactor`.
+
+- `ed69a58` — Obsidian-native Agent entry points, prompt builders,
+  `ChatView.startAgentTask()`, commands, file-menu entries, README
+  positioning, and safe defaults.
+
+Final verification has since been repeated as part of the completed
+Trinity refactor:
+
+- `npm test -- --runInBand`
+- `npm run type-check`
+- `npm run lint` (passes with existing 36 sentence-case warnings)
+- `npm run build`
+- `npm run deploy`
+
+---
+
 ### Task 1: Prompt Builder
 
 **Files:**
 - Create: `src/application/services/obsidian-agent-prompts.ts`
 - Create: `src/__tests__/application/obsidian-agent-prompts.test.ts`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 Create tests for current note, selection, and folder prompts. Each test should assert that safety language is present and the prompt contains the target path or selected text.
 
-- [ ] **Step 2: Run the failing test**
+- [x] **Step 2: Run the failing test**
 
 Run: `npm test -- src/__tests__/application/obsidian-agent-prompts.test.ts --runInBand`
 
 Expected: fail because `obsidian-agent-prompts.ts` does not exist yet.
 
-- [ ] **Step 3: Implement prompt builder**
+- [x] **Step 3: Implement prompt builder**
 
 Create exported functions:
 
@@ -39,7 +58,7 @@ export function buildSummarizeFilePrompt(path: string): string;
 export function buildOrganizeFolderPrompt(path: string): string;
 ```
 
-- [ ] **Step 4: Verify tests pass**
+- [x] **Step 4: Verify tests pass**
 
 Run: `npm test -- src/__tests__/application/obsidian-agent-prompts.test.ts --runInBand`
 
@@ -50,7 +69,7 @@ Expected: pass.
 **Files:**
 - Modify: `src/presentation/views/chat-view.ts`
 
-- [ ] **Step 1: Add public handoff method**
+- [x] **Step 1: Add public handoff method**
 
 Add:
 
@@ -64,7 +83,7 @@ public async startAgentTask(options: {
 
 The method should switch to Agent mode, add references, refresh reference display, set the textarea value, dispatch an input event, focus the textarea, and optionally call `sendMessage()`.
 
-- [ ] **Step 2: Run existing ChatView-adjacent tests**
+- [x] **Step 2: Run existing ChatView-adjacent tests**
 
 Run: `npm test -- src/presentation/components/chat/__tests__/chat-header.component.test.ts src/presentation/components/chat/__tests__/message-renderer.test.ts --runInBand`
 
@@ -75,15 +94,15 @@ Expected: pass.
 **Files:**
 - Modify: `main.ts`
 
-- [ ] **Step 1: Import prompt builders and Obsidian types**
+- [x] **Step 1: Import prompt builders and Obsidian types**
 
 Use the prompt builder from Task 1 and Obsidian types needed for active file, editor selection, and menu events.
 
-- [ ] **Step 2: Add helper to open ChatView and prefill Agent task**
+- [x] **Step 2: Add helper to open ChatView and prefill Agent task**
 
 Add a helper that opens the right-sidebar ChatView and calls `startAgentTask()`.
 
-- [ ] **Step 3: Register commands**
+- [x] **Step 3: Register commands**
 
 Add commands:
 
@@ -92,11 +111,11 @@ Add commands:
 - `organize-current-note-agent`
 - `improve-selection-agent`
 
-- [ ] **Step 4: Register file menu entries**
+- [x] **Step 4: Register file menu entries**
 
 Register `file-menu` event and add Agent actions for `TFile` and `TFolder`.
 
-- [ ] **Step 5: Verify TypeScript parsing/build**
+- [x] **Step 5: Verify TypeScript parsing/build**
 
 Run: `npm run build`
 
@@ -110,19 +129,19 @@ Expected: build completes. Existing known type-check warnings may remain, but th
 - Modify: `config/default/settings.json`
 - Modify: `src/application/services/agent-service.ts`
 
-- [ ] **Step 1: Update README positioning**
+- [x] **Step 1: Update README positioning**
 
 Lead with Obsidian-native Agent value before listing advanced tools.
 
-- [ ] **Step 2: Update default system prompt**
+- [x] **Step 2: Update default system prompt**
 
 Replace generic assistant prompt with an Obsidian-native assistant prompt that cites notes and asks before writes.
 
-- [ ] **Step 3: Update default Agent description**
+- [x] **Step 3: Update default Agent description**
 
 Describe the default Agent as a safe Obsidian knowledge assistant.
 
-- [ ] **Step 4: Verify defaults load**
+- [x] **Step 4: Verify defaults load**
 
 Run: `npm test -- src/__tests__/types/settings-migration.test.ts --runInBand`
 
@@ -133,7 +152,7 @@ Expected: pass.
 **Files:**
 - No new files.
 
-- [ ] **Step 1: Run targeted tests**
+- [x] **Step 1: Run targeted tests**
 
 Run:
 
@@ -141,11 +160,11 @@ Run:
 npm test -- src/__tests__/application/obsidian-agent-prompts.test.ts src/__tests__/presentation/editor-quick-actions.test.ts src/presentation/components/chat/__tests__/chat-header.component.test.ts --runInBand
 ```
 
-- [ ] **Step 2: Run build**
+- [x] **Step 2: Run build**
 
 Run: `npm run build`
 
-- [ ] **Step 3: Commit and push**
+- [x] **Step 3: Commit and push**
 
 Commit message:
 
@@ -153,6 +172,6 @@ Commit message:
 feat: add obsidian-native agent entry points
 ```
 
-- [ ] **Step 4: Deploy**
+- [x] **Step 4: Deploy**
 
 Run: `npm run deploy`
