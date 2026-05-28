@@ -214,6 +214,23 @@ describe('renderMessage', () => {
 			expect(messageEl.textContent).toContain('Final response');
 		});
 
+		it('renders SPAR phase labels in agent traces', () => {
+			const container = document.createElement('div');
+			const message: Message = {
+				role: 'assistant',
+				content: 'Done',
+				agentExecutionSteps: [
+					{ type: 'thought', phase: 'sense', content: 'Sensed active note', timestamp: 1 },
+					{ type: 'action', phase: 'act', content: 'read_file({"path":"A.md"})', toolName: 'read_file', args: { path: 'A.md' }, status: 'success', result: '"A"', timestamp: 2 },
+				],
+			};
+
+			const messageEl = renderMessage(container, message, mockContext);
+
+			expect(messageEl.textContent).toContain('Sense');
+			expect(messageEl.textContent).toContain('Act');
+		});
+
 		it('renders assistant action buttons and invokes callbacks', () => {
 			const saveMessageToNewNote = jest.fn().mockResolvedValue(undefined);
 			const regenerateMessage = jest.fn().mockResolvedValue(undefined);

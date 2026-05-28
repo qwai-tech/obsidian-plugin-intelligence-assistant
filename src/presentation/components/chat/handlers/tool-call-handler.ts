@@ -157,7 +157,7 @@ export function updateExecutionTrace(container: HTMLElement, steps: AgentExecuti
 		const step = steps[i];
 
 		if (step.type === 'thought' || step.type === 'response') {
-			renderThinkingBlock(container, step.content);
+			renderThinkingBlock(container, step.content, step.phase);
 		} else if (step.type === 'action') {
 			// New format: result stored on the action step itself
 			// Old format: paired with the following observation step
@@ -170,13 +170,22 @@ export function updateExecutionTrace(container: HTMLElement, steps: AgentExecuti
 	}
 }
 
-function renderThinkingBlock(container: HTMLElement, content: string): void {
+function formatPhaseLabel(phase?: AgentExecutionStep['phase']): string | null {
+	if (!phase) return null;
+	return phase.charAt(0).toUpperCase() + phase.slice(1);
+}
+
+function renderThinkingBlock(container: HTMLElement, content: string, phase?: AgentExecutionStep['phase']): void {
 	const block = container.createDiv('agent-thinking-block');
 
 	const labelRow = block.createDiv('agent-thinking-block__label-row');
 	labelRow.createSpan().setText('🧠');
 	const label = labelRow.createSpan('agent-thinking-block__label');
 	label.setText(t('chat.toolCall.thinking'));
+	const phaseLabel = formatPhaseLabel(phase);
+	if (phaseLabel) {
+		labelRow.createSpan('agent-phase-badge').setText(phaseLabel);
+	}
 
 	const contentEl = block.createDiv('agent-thinking-block__content');
 	contentEl.setText(content);
@@ -207,7 +216,7 @@ function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionSt
 
 	// Thinking bubble before the card
 	if (actionStep.thinking) {
-		renderThinkingBlock(container, actionStep.thinking);
+		renderThinkingBlock(container, actionStep.thinking, actionStep.phase);
 	}
 
 	const statusClass = isError ? 'is-error' : isPending ? 'is-pending' : 'is-success';
@@ -220,6 +229,10 @@ function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionSt
 	dot.setText(isError ? '✕' : isPending ? '◌' : '✓');
 	const nameEl = titleRow.createSpan('agent-tool-call__name');
 	nameEl.setText(toolName);
+	const phaseLabel = formatPhaseLabel(actionStep.phase);
+	if (phaseLabel) {
+		titleRow.createSpan('agent-phase-badge').setText(phaseLabel);
+	}
 	if (isPending) {
 		const spinner = titleRow.createSpan('agent-tool-call__spinner');
 		spinner.setText(t('chat.toolCall.running'));
