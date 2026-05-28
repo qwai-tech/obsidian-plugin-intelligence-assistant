@@ -12,6 +12,7 @@ import type { MCPServerConfig } from '@/types';
 import type { RegisteredTool } from '@/types/common/tools';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
+import { TestIds } from '@/presentation/utils/test-ids';
 import { MCPInspectorModal, MCPServerModal } from '../modals';
 
 export function displayMCPTab(
@@ -96,6 +97,7 @@ export function displayMCPTab(
 	const addBtn = toolbar.createEl('button', { text: t('settings.mcp.addBtn') });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
+	addBtn.setAttribute('data-testid', TestIds.settings.mcpAddBtn);
 	addBtn.addEventListener('click', () => {
 		const draft: MCPServerConfig = {
 			name: 'New MCP Server',
@@ -158,6 +160,8 @@ export function displayMCPTab(
 	plugin.settings.mcpServers.forEach((server, index) => {
 		const row = tbody.insertRow();
 		row.addClass('ia-table-row');
+		row.setAttribute('data-testid', TestIds.settings.mcpRow);
+		row.setAttribute('data-mcp-name', server.name);
 
 		// Name column
 		const nameCell = row.insertCell();
@@ -301,6 +305,8 @@ export function displayMCPTab(
 		const connectBtn = actionsCell.createEl('button', { text: isConnected ? t('settings.mcp.actions.disconnect') : t('settings.mcp.actions.connect') });
 		connectBtn.addClass('ia-button');
 		connectBtn.addClass(isConnected ? 'ia-button--danger' : 'ia-button--ghost');
+		connectBtn.setAttribute('data-testid', TestIds.settings.mcpConnectBtn);
+		connectBtn.setAttribute('data-mcp-name', server.name);
 		connectBtn.disabled = !server.enabled;
 		connectBtn.addEventListener('click', () => {
 			void (async () => {
@@ -401,6 +407,8 @@ export function displayMCPTab(
 		const deleteBtn = actionsCell.createEl('button', { text: t('settings.mcp.actions.delete') });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
+		deleteBtn.setAttribute('data-testid', TestIds.settings.mcpDeleteBtn);
+		deleteBtn.setAttribute('data-mcp-name', server.name);
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
 				if (await showConfirm(app, t('settings.mcp.confirm.delete', { name: server.name }))) {

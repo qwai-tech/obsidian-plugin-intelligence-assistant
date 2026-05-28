@@ -2,6 +2,7 @@ import { App, Modal, Notice, Setting } from 'obsidian';
 import type { MCPServerConfig } from '@/types';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
 import { t } from '@/i18n';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 export class MCPServerModal extends Modal {
 	private draft: MCPServerConfig;
@@ -42,6 +43,7 @@ export class MCPServerModal extends Modal {
 			label: t('modals.mcpServer.serverName.name'),
 			description: t('modals.mcpServer.serverName.desc')
 		}).addText(text => {
+				text.inputEl.setAttribute('data-testid', TestIds.settings.mcpModalNameInput);
 				text.setPlaceholder('Acme MCP server');
 				text.setValue(this.draft.name ?? '');
 				text.onChange(value => {
@@ -66,6 +68,7 @@ export class MCPServerModal extends Modal {
 			label: t('modals.mcpServer.command.name'),
 			description: t('modals.mcpServer.command.desc')
 		}).addText(text => {
+				text.inputEl.setAttribute('data-testid', TestIds.settings.mcpModalCommandInput);
 				text.setPlaceholder('npx @acme/mcp-server');
 				text.setValue(this.draft.command ?? '');
 				text.onChange(value => {
@@ -78,6 +81,7 @@ export class MCPServerModal extends Modal {
 			label: t('modals.mcpServer.arguments.name'),
 			description: t('modals.mcpServer.arguments.desc')
 		}).addText(text => {
+				text.inputEl.setAttribute('data-testid', TestIds.settings.mcpModalArgsInput);
 				text.setPlaceholder('--port=3000, --config=server.json');
 				text.setValue(this.argsText);
 				text.onChange(value => {
@@ -123,6 +127,7 @@ export class MCPServerModal extends Modal {
 
 		const saveBtn = buttonBar.createEl('button', { text: this.mode === 'edit' ? t('modals.mcpServer.saveEdit') : t('modals.mcpServer.saveAdd') });
 		saveBtn.addClass('ia-modal-btn--primary');
+		saveBtn.setAttribute('data-testid', TestIds.settings.mcpModalSaveBtn);
 		saveBtn.addEventListener('click', () => {
 			void (async () => {
 				const name = (this.draft.name ?? '').trim();

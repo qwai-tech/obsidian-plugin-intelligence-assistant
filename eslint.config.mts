@@ -12,6 +12,7 @@ export default defineConfig([
       "coverage/**",
       "**/__tests__/**",
       "**/*.test.ts",
+      "tests/e2e/support/mock-mcp-server.js",
     ]
   },
 

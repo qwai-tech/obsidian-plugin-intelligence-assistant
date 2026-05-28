@@ -166,6 +166,17 @@ export class VaultFixture {
 		}, PLUGIN_DIR_REL, relativePath);
 	}
 
+	async listRuntimeDataFiles(relativeFolder: string): Promise<string[]> {
+		return browser.execute(async (pluginDirRel, folderPath) => {
+			const app = (window as unknown as {
+				app: { vault: { adapter: { list(path: string): Promise<{ files: string[]; folders: string[] }> } } };
+			}).app;
+			const listing = await app.vault.adapter.list(`${pluginDirRel}/${folderPath}`);
+			const pluginPrefix = `${pluginDirRel}/`;
+			return listing.files.map(file => file.startsWith(pluginPrefix) ? file.slice(pluginPrefix.length) : file);
+		}, PLUGIN_DIR_REL, relativeFolder);
+	}
+
 	async dataFileExists(relativePath: string): Promise<boolean> {
 		return pathExists(path.join(this.pluginDir, relativePath));
 	}

@@ -160,13 +160,13 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-2-agent-mcp-rag.md` (to
 
 ### MCP
 
-- [ ] **`tests/e2e/support/mock-mcp-server.js`** — ~100-line Node
+- [x] **`tests/e2e/support/mock-mcp-server.js`** — ~100-line Node
       stdio JSON-RPC server implementing `initialize` / `tools/list`
       / `tools/call` / `shutdown`. Used by CI so we don't need
-      `npx`/`uvx`/`docker` available.
-- [ ] **`settings/mcp-crud.spec.ts`** — add server, connect,
+      `npx`/`uvx`/`docker` available. (`mock-mcp-server.js`)
+- [x] **`settings/mcp-crud.spec.ts`** — add server, connect,
       `cache/mcp-tools/<name>.json` appears with expected tool names
-      (M1).
+      (M1). (`mcp-crud.spec.ts`)
 - [ ] **`agents/mcp-tool-call.spec.ts`** — agent + MCP-sourced tool
       invoked through the loop (M2).
 

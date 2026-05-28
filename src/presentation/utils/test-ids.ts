@@ -52,5 +52,13 @@ export const TestIds = {
 		agentDeleteBtn: 'ia-agent-delete-btn', // + data-agent-id
 		agentModalNameInput: 'ia-agent-modal-name-input',
 		agentModalSaveBtn: 'ia-agent-modal-save-btn',
+		mcpAddBtn: 'ia-mcp-add-btn',
+		mcpRow: 'ia-mcp-row',                  // + data-mcp-name
+		mcpConnectBtn: 'ia-mcp-connect-btn',   // + data-mcp-name
+		mcpDeleteBtn: 'ia-mcp-delete-btn',     // + data-mcp-name
+		mcpModalNameInput: 'ia-mcp-modal-name-input',
+		mcpModalCommandInput: 'ia-mcp-modal-command-input',
+		mcpModalArgsInput: 'ia-mcp-modal-args-input',
+		mcpModalSaveBtn: 'ia-mcp-modal-save-btn',
 	},
 } as const;
