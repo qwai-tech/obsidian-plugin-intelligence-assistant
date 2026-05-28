@@ -773,7 +773,7 @@ git commit -m "docs: update e2e mock llm status"
 **Files:**
 - No new files.
 
-- [ ] **Step 1: Run fast unit checks**
+- [x] **Step 1: Run fast unit checks**
 
 Run:
 
@@ -783,7 +783,7 @@ npm test -- src/__tests__/e2e-mock-llm-server.test.ts src/__tests__/e2e-vault-fi
 
 Expected: both suites pass.
 
-- [ ] **Step 2: Run full static checks**
+- [x] **Step 2: Run full static checks**
 
 Run:
 
@@ -795,7 +795,7 @@ npm run build
 
 Expected: lint exits 0 with existing sentence-case warnings only; type-check and build pass.
 
-- [ ] **Step 3: Run smoke E2E**
+- [x] **Step 3: Run smoke E2E**
 
 Run:
 
@@ -805,7 +805,7 @@ npm run test:e2e:smoke
 
 Expected: smoke suite passes, including chat round-trip and persistence assertion.
 
-- [ ] **Step 4: Deploy locally**
+- [x] **Step 4: Deploy locally**
 
 Run:
 
@@ -815,7 +815,7 @@ npm run deploy
 
 Expected: deploy verifies `main.js`, `manifest.json`, and `styles.css`.
 
-- [ ] **Step 5: Push**
+- [x] **Step 5: Push**
 
 Run:
 
