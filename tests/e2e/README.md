@@ -33,6 +33,8 @@ tests/e2e/
 │   └── mock-llm.ts     # Admin client for queued replies and request capture
 └── specs/
     ├── 00-smoke.spec.ts
+    ├── chat/
+    │   └── streaming.spec.ts
     └── release/        # Real-API specs (Phase 3)
 ```
 
@@ -83,8 +85,9 @@ await mockLLM.replyWith('pong');
 ```
 
 The server supports normal JSON completions, OpenAI-style SSE streaming
-for `stream: true` requests, CORS preflight, error status responses, and
-request capture through `mockLLM.getCalls()`.
+for `stream: true` requests, optional delayed chunks for incremental UI
+assertions, CORS preflight, error status responses, and request capture
+through `mockLLM.getCalls()`.
 
 ## Release suite
 

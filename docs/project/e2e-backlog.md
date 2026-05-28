@@ -81,8 +81,8 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
 
 - [ ] **`chat/send-receive.spec.ts`** — mocked reply round-trip with
       persistence assertions (C1).
-- [ ] **`chat/streaming.spec.ts`** — SSE chunks render incrementally;
-      assistant text matches concatenated chunks (C1).
+- [x] **`chat/streaming.spec.ts`** (`fee40fc`) — SSE chunks render
+      incrementally; assistant text matches concatenated chunks (C1).
 - [ ] **`chat/stop-generation.spec.ts`** — stop mid-stream; streaming
       flag false; partial content kept (C2).
 - [ ] **`chat/conversation-persistence.spec.ts`** — send → reload
