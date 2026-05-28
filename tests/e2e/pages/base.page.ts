@@ -15,6 +15,21 @@ export abstract class BasePage {
 		await this.$testid(id).waitForDisplayed({ timeout: timeoutMs });
 	}
 
+	async expectVisible(id: string, timeoutMs = 10_000): Promise<void> {
+		await this.$testid(id).waitForDisplayed({
+			timeout: timeoutMs,
+			timeoutMsg: `Expected [data-testid="${id}"] to be visible`,
+		});
+	}
+
+	async expectAbsent(id: string, timeoutMs = 10_000): Promise<void> {
+		await this.$testid(id).waitForExist({
+			timeout: timeoutMs,
+			reverse: true,
+			timeoutMsg: `Expected [data-testid="${id}"] to be absent`,
+		});
+	}
+
 	protected async click(id: string): Promise<void> {
 		await this.waitFor(id);
 		await this.$testid(id).click();

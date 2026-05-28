@@ -76,6 +76,10 @@ export async function resetVaultTemplate(): Promise<void> {
 	}
 }
 
+export function getLivePluginDir(): string {
+	return LIVE_PLUGIN_DIR;
+}
+
 /**
  * For the release suite: overlay real provider credentials onto the seed
  * settings file. Reads .env.test for E2E_TEST_PROVIDER, E2E_TEST_API_KEY,

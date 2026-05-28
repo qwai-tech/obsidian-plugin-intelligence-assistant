@@ -1,8 +1,19 @@
 import * as path from 'path';
 import type { Capabilities, Options } from '@wdio/types';
 import type { ObsidianCapabilityOptions } from 'wdio-obsidian-service';
+import { captureE2EDiagnostics } from './tests/e2e/support/diagnostics';
 
 type TestrunnerConfig = Options.Testrunner & Capabilities.WithRequestedTestrunnerCapabilities;
+
+function formatHookError(error: unknown): string {
+	if (error instanceof Error) return error.message;
+	if (typeof error === 'string') return error;
+	try {
+		return JSON.stringify(error) ?? 'unknown error';
+	} catch {
+		return 'unknown error';
+	}
+}
 
 const cacheDir = path.resolve('.obsidian-cache');
 const obsidianVersion = process.env.OBSIDIAN_VERSION || 'latest';
@@ -40,7 +51,13 @@ export const baseConfig: TestrunnerConfig = {
 
 	services: ['obsidian'],
 
-	reporters: ['spec'],
+	reporters: [
+		'spec',
+		['junit', {
+			outputDir: path.resolve('tests/e2e/reports/junit'),
+			outputFileFormat: ({ cid }: { cid: string }) => `wdio-${cid}.xml`,
+		}],
+	],
 
 	mochaOpts: {
 		ui: 'bdd',
@@ -51,6 +68,16 @@ export const baseConfig: TestrunnerConfig = {
 	waitforTimeout: 10 * 1000,
 
 	logLevel: 'warn',
+
+	async afterTest(test, _context, result) {
+		if (result.passed) return;
+
+		try {
+			await captureE2EDiagnostics(test, result);
+		} catch (error) {
+			console.warn(`Failed to capture E2E diagnostics: ${formatHookError(error)}`);
+		}
+	},
 
 	cacheDir,
 

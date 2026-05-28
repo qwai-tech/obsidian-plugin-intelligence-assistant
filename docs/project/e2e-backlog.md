@@ -238,23 +238,25 @@ Target: ~0.5 days. Plan doc: `2026-05-24-e2e-rebuild-phase-3-release-and-ci.md`.
 
 ## Cross-cutting infrastructure debt
 
-- [ ] **Failure diagnostics.** On spec failure, dump: (a) screenshot
+- [x] **Failure diagnostics.** On spec failure, dump: (a) screenshot
       to `tests/e2e/screenshots/{spec}/{test}.png`, (b) current
       `LIVE_PLUGIN_DIR` file tree, (c) last N captured mock calls.
-      Add via `afterTest` hook.
-- [ ] **Reporters.** Add `junit` reporter for CI consumption + optional
-      `allure` for richer local debugging.
-- [ ] **Assertion-strength ESLint rule.** Forbid trivially-true
+      Added via `afterTest` hook; failure metadata is also written to
+      `tests/e2e/logs/{spec}/{test}.failure.json`.
+- [x] **Reporters.** Added `junit` reporter for CI consumption. XML
+      reports are written to `tests/e2e/reports/junit/`; richer local
+      debugging reporters can still be added later if needed.
+- [x] **Assertion-strength ESLint rule.** Forbid trivially-true
       patterns in spec files:
   - `expect(...).toBeGreaterThanOrEqual(0)`
   - `expect(typeof x).toBe('string')` for `x` known to be a string
   - `expect(Array.isArray($$(...)))`
   Use custom AST selectors in the existing
   `no-restricted-syntax` config for `tests/e2e/specs/**`.
-- [ ] **Spec length cap.** Lint warning if any spec file exceeds 100
+- [x] **Spec length cap.** Lint warning if any spec file exceeds 100
       lines (signal that the `it` blocks are bundling too many
       concerns — split).
-- [ ] **Page-object base helper coverage.** Add `BasePage.expectVisible(id)`
+- [x] **Page-object base helper coverage.** Add `BasePage.expectVisible(id)`
       and `BasePage.expectAbsent(id)` shortcuts that combine the
       wait + assertion with a clearer failure message than the raw
       `isDisplayed()` chain.

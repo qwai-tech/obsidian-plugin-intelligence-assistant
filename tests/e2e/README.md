@@ -37,6 +37,7 @@ tests/e2e/
 ├── support/
 │   ├── testids.ts      # Re-exports src/presentation/utils/test-ids.ts
 │   ├── vault-fixture.ts
+│   ├── diagnostics.ts  # Failure screenshots, plugin tree, mock call capture
 │   ├── plugin-helpers.ts
 │   ├── mock-llm-server.ts # Local OpenAI-compatible stub HTTP server
 │   ├── mock-mcp-server.js # CI stdio MCP server
@@ -66,6 +67,8 @@ tests/e2e/
 - **Assertions:** specific values, not "something exists". Prefer
   `expect(messages).toHaveLength(2)` over
   `expect(count).toBeGreaterThanOrEqual(0)`.
+- **Spec size:** spec files warn over 100 logical lines. Split long flows
+  by user outcome rather than growing a single scenario file.
 - **DOM access in specs:** banned. ESLint blocks raw `$(`/`$$(` in
   `tests/e2e/specs/**`. Add a domain method to the page object instead.
 - **No silent failures:** there is no `safeTest`/`safeClick`/`isVisible`
@@ -141,6 +144,19 @@ GitHub Actions release secrets checklist:
 
 The `e2e-release` workflow runs on pushes to `main` and tag pushes. The
 regular mocked `e2e-ci` workflow runs on every push and pull request.
+
+## Diagnostics
+
+WDIO writes JUnit XML to `tests/e2e/reports/junit/`. On a failed spec it
+also captures:
+
+- `tests/e2e/screenshots/{spec}/{test}.png`
+- `tests/e2e/state-dumps/{spec}/{test}.plugin-tree.txt`
+- `tests/e2e/logs/{spec}/{test}.mock-calls.json`
+- `tests/e2e/logs/{spec}/{test}.failure.json`
+
+GitHub Actions uploads those directories on failure for both CI and
+release E2E jobs.
 
 To verify the release skip path on a machine that already has
 `.env.test`, run with `E2E_TEST_DISABLE_DOTENV=1` and empty

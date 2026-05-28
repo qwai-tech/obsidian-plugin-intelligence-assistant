@@ -165,7 +165,20 @@ export default defineConfig([
           selector: "CallExpression[callee.name='$$']",
           message: "Specs must use Page Objects — do not call $$ directly.",
         },
+        {
+          selector: "CallExpression[callee.property.name='toBeGreaterThanOrEqual'][callee.object.callee.name='expect'][arguments.0.value=0]",
+          message: "Assert a meaningful lower bound or exact value; >= 0 does not prove behavior.",
+        },
+        {
+          selector: "CallExpression[callee.property.name='toBe'][callee.object.callee.name='expect'][callee.object.arguments.0.operator='typeof'][arguments.0.value='string']",
+          message: "Assert the expected string value or visible user text instead of only typeof.",
+        },
+        {
+          selector: "CallExpression[callee.object.callee.name='expect'][callee.object.arguments.0.callee.object.name='Array'][callee.object.arguments.0.callee.property.name='isArray']",
+          message: "Assert a concrete array shape or length instead of Array.isArray(...).",
+        },
       ],
+      "max-lines": ["warn", { max: 100, skipBlankLines: true, skipComments: true }],
     },
   },
 
