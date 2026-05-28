@@ -99,5 +99,4 @@ export const createLogger = (context: string, level?: LogLevel): Logger => {
 export const PluginLogger = new Logger('Plugin');
 export const MCPLogger = new Logger('MCP');
 export const RAGLogger = new Logger('RAG');
-export const WorkflowLogger = new Logger('Workflow');
 export const LLMLogger = new Logger('LLM');

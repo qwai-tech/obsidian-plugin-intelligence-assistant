@@ -120,15 +120,6 @@ export interface OllamaResponse {
 }
 
 /**
- * Workflow execution context with proper typing
- */
-export interface WorkflowExecutionContext {
-	log: (_message: string) => void;
-	vault: VaultAdapter;
-	[key: string]: unknown;
-}
-
-/**
  * Node configuration data
  */
 export interface NodeConfigData {
@@ -136,16 +127,6 @@ export interface NodeConfigData {
 	config: Record<string, unknown>;
 	nodeType: string;
 	label?: string;
-}
-
-/**
- * Workflow node data with proper typing
- */
-export interface WorkflowNodeData {
-	id: string;
-	type: string;
-	data: Record<string, unknown>;
-	position?: { x: number; y: number };
 }
 
 /**

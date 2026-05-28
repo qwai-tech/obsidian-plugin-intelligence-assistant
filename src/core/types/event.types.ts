@@ -6,8 +6,5 @@ export const PluginEvent = {
   ERROR_OCCURRED: 'error:occurred',
   CONVERSATION_CREATED: 'conversation:created',
   CONVERSATION_UPDATED: 'conversation:updated',
-  CONVERSATION_DELETED: 'conversation:deleted',
-  WORKFLOW_STARTED: 'workflow:started',
-  WORKFLOW_COMPLETED: 'workflow:completed',
-  WORKFLOW_ERROR: 'workflow:error'
+  CONVERSATION_DELETED: 'conversation:deleted'
 } as const;

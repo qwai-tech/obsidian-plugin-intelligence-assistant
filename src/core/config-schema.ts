@@ -264,9 +264,7 @@ export class ConfigSchema {
 			'mcpServers[].command',
 			'agents[].id',
 			'agents[].name',
-			'agents[].modelStrategy.strategy',
-			'workflows[].id',
-			'workflows[].name'
+			'agents[].modelStrategy.strategy'
 		];
 
 		return requiredFields.some(field => {

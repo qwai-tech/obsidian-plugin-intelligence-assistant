@@ -218,6 +218,8 @@ describe('ConfigSchema', () => {
 		it('should identify optional fields', () => {
 			expect(ConfigSchema.isRequired('llmConfigs[0].apiKey')).toBe(false);
 			expect(ConfigSchema.isRequired('agents[0].description')).toBe(false);
+			expect(ConfigSchema.isRequired('workflows[0].id')).toBe(false);
+			expect(ConfigSchema.isRequired('workflows[0].name')).toBe(false);
 		});
 	});
 
