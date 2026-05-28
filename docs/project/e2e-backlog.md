@@ -100,16 +100,18 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
 - [x] **`settings/llm-provider-crud.spec.ts`** (`aca6c40`) — full
       Create → Read → Update → Delete loop with both UI list assertion
       AND `llm-providers.json` on-disk assertion at each step (L1).
-- [ ] **`settings/llm-model-refresh.spec.ts`** — refresh provider
-      models → mocked `/v1/models` returns N → `cache/llm_models.json`
-      contains them and `cacheTimestamp` updated (L2).
+- [x] **`settings/llm-model-refresh.spec.ts`** (`fe91009`) — refresh
+      provider models → mocked `/v1/models` returns N →
+      `cache/llm_models.json` contains them and `cacheTimestamp`
+      updated (L2).
 - [ ] **`settings/settings-persistence.spec.ts`** — toggle assorted
       settings → `reloadPlugin()` → settings preserved (S1).
 
 ### Source-side testids needed
 
 - [x] LLM tab: add-provider button, provider rows (with
-      `data-provider-id`), edit/delete per-row buttons (`aca6c40`).
+      `data-provider-id`), edit/refresh/delete per-row buttons
+      (`aca6c40`, `fe91009`).
 - [x] Provider config modal: provider select, `apiKey`, `baseUrl`,
       `modelFilter`, save/cancel controls for CRUD specs (`aca6c40`).
 - [ ] Provider config modal: cached models table and test-connection

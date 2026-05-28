@@ -43,6 +43,7 @@ tests/e2e/
     │   ├── stop-generation.spec.ts
     │   └── streaming.spec.ts
     ├── settings/
+    │   ├── llm-model-refresh.spec.ts
     │   └── llm-provider-crud.spec.ts
     └── release/        # Real-API specs (Phase 3)
 ```
@@ -114,6 +115,6 @@ should self-skip via env checks (Phase 3).
 
 ## Known Limitations
 
-The local mock currently covers `/v1/chat/completions`. Add endpoints
-explicitly as specs need them, for example `/v1/models` for model refresh
-or `/v1/embeddings` for RAG indexing.
+The local mock currently covers `/v1/chat/completions` and `/v1/models`.
+Add endpoints explicitly as specs need them, for example `/v1/embeddings`
+for RAG indexing.
