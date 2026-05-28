@@ -631,6 +631,8 @@ export class ConversationManager extends Events {
 			const renameBtn = actions.createEl('button');
 			renameBtn.addClass('conversation-rename-btn');
 			renameBtn.addClass('ia-clickable');
+			renameBtn.setAttribute('data-testid', TestIds.chat.conversationRenameBtn);
+			renameBtn.setAttribute('data-conv-id', conv.id);
 			setIcon(renameBtn, 'pencil');
 			renameBtn.title = 'Rename';
 			renameBtn.addEventListener('click', (e) => {
@@ -642,6 +644,8 @@ export class ConversationManager extends Events {
 			const deleteBtn = actions.createEl('button');
 			deleteBtn.addClass('conversation-delete-btn');
 			deleteBtn.addClass('ia-clickable');
+			deleteBtn.setAttribute('data-testid', TestIds.chat.conversationDeleteBtn);
+			deleteBtn.setAttribute('data-conv-id', conv.id);
 			setIcon(deleteBtn, 'trash-2');
 			deleteBtn.title = 'Delete';
 			deleteBtn.addEventListener('click', (e) => {

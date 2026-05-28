@@ -83,6 +83,13 @@ export class ProviderConfigModal extends Modal {
 		const buttonBar = contentEl.createDiv('ia-modal-footer');
 		buttonBar.removeClass('ia-hidden');
 
+		const testBtn = buttonBar.createEl('button', { text: t('modals.provider.testConnection') });
+		testBtn.setAttribute('data-testid', TestIds.settings.providerModalTestConnectionBtn);
+		testBtn.addClass('ia-modal-btn');
+		testBtn.addEventListener('click', () => {
+			void this.testConnection(testBtn);
+		});
+
 		const cancelBtn = buttonBar.createEl('button', { text: t('modals.provider.cancel') });
 		cancelBtn.setAttribute('data-testid', TestIds.settings.providerModalCancelBtn);
 		cancelBtn.addClass('ia-modal-btn');
@@ -199,6 +206,60 @@ export class ProviderConfigModal extends Modal {
 							this.draft.baseUrl = value.trim() || undefined;
 						});
 				});
+		}
+
+		this.renderCachedModelsPreview(this.providerContainer);
+	}
+
+	private renderCachedModelsPreview(container: HTMLElement): void {
+		const wrapper = container.createDiv('ia-provider-cached-models');
+		const models = this.draft.cachedModels ?? [];
+		wrapper.createDiv('ia-table-subtext').setText(t('modals.provider.cachedModels', { count: models.length }));
+
+		const table = wrapper.createEl('table');
+		table.addClass('ia-table');
+		table.setAttribute('data-testid', TestIds.settings.providerModalCachedModelsTable);
+
+		const tbody = table.createEl('tbody');
+		if (models.length === 0) {
+			const row = tbody.createEl('tr');
+			const cell = row.createEl('td');
+			cell.setText(t('modals.provider.noCachedModels'));
+			return;
+		}
+
+		models.forEach(model => {
+			const row = tbody.createEl('tr');
+			row.setAttribute('data-testid', TestIds.settings.providerModalCachedModelRow);
+			row.setAttribute('data-model-id', model.id);
+			row.createEl('td').setText(model.name || model.id);
+			row.createEl('td').setText(model.id);
+		});
+	}
+
+	private async testConnection(button: HTMLButtonElement): Promise<void> {
+		const validationError = this.validateConfig();
+		if (validationError) {
+			new Notice(validationError, 5000);
+			return;
+		}
+
+		const originalText = button.textContent ?? t('modals.provider.testConnection');
+		button.textContent = t('modals.provider.testing');
+		button.disabled = true;
+		try {
+			const { ModelManager } = await import('@/infrastructure/llm/model-manager');
+			const models = await ModelManager.getModelsForConfig(this.draft, true);
+			this.draft.cachedModels = models;
+			this.draft.cacheTimestamp = Date.now();
+			this.renderProviderSpecific();
+			new Notice(t('modals.provider.connectionSuccess', { count: models.length }));
+		} catch (error) {
+			console.error('Provider connection test failed:', error);
+			new Notice(t('modals.provider.connectionFailed'));
+		} finally {
+			button.disabled = false;
+			button.textContent = originalText;
 		}
 	}
 

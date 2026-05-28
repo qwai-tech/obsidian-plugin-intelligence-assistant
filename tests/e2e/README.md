@@ -37,6 +37,7 @@ tests/e2e/
 ├── support/
 │   ├── testids.ts      # Re-exports src/presentation/utils/test-ids.ts
 │   ├── vault-fixture.ts
+│   ├── data-fixtures.ts # Provider/agent/MCP factories + reset profiles
 │   ├── diagnostics.ts  # Failure screenshots, plugin tree, mock call capture
 │   ├── plugin-helpers.ts
 │   ├── mock-llm-server.ts # Local OpenAI-compatible stub HTTP server
@@ -64,6 +65,10 @@ tests/e2e/
   rebuilds the plugin's `config/` and `data/` subdirs from the template
   without touching `main.js`/`manifest.json` (which wdio-obsidian-service
   installs once at session start).
+- **Seed profiles:** `vault.reset('with-multi-provider')`,
+  `vault.reset('with-agent')`, and `vault.reset('with-mcp')` overlay
+  deterministic richer settings through the plugin runtime after the
+  template reset.
 - **Assertions:** specific values, not "something exists". Prefer
   `expect(messages).toHaveLength(2)` over
   `expect(count).toBeGreaterThanOrEqual(0)`.

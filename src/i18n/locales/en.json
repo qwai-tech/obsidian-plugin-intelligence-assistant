@@ -1374,6 +1374,12 @@
         "name": "API Key",
         "desc": "Authentication key for the selected provider"
       },
+      "testConnection": "Test connection",
+      "testing": "Testing...",
+      "cachedModels": "Cached models: {{count}}",
+      "noCachedModels": "No cached models",
+      "connectionSuccess": "Connection successful. {{count}} model(s) cached.",
+      "connectionFailed": "Connection test failed. Check provider settings.",
       "cancel": "Cancel",
       "save": "Save",
       "validation": {

@@ -19,6 +19,8 @@ export const TestIds = {
 		conversationToggleBtn: 'ia-chat-conversation-toggle-btn',
 		conversationList: 'ia-chat-conversation-list',
 		conversationItem: 'ia-chat-conversation-item', // + data-conv-id
+		conversationRenameBtn: 'ia-chat-conversation-rename-btn', // + data-conv-id
+		conversationDeleteBtn: 'ia-chat-conversation-delete-btn', // + data-conv-id
 		ragToggleBtn: 'ia-chat-rag-toggle-btn',
 		ragSources: 'ia-chat-rag-sources',
 		ragSourceCard: 'ia-chat-rag-source-card',
@@ -45,6 +47,9 @@ export const TestIds = {
 		providerModalModelFilterInput: 'ia-provider-modal-model-filter-input',
 		providerModalApiKeyInput: 'ia-provider-modal-api-key-input',
 		providerModalBaseUrlInput: 'ia-provider-modal-base-url-input',
+		providerModalTestConnectionBtn: 'ia-provider-modal-test-connection-btn',
+		providerModalCachedModelsTable: 'ia-provider-modal-cached-models-table',
+		providerModalCachedModelRow: 'ia-provider-modal-cached-model-row', // + data-model-id
 		providerModalSaveBtn: 'ia-provider-modal-save-btn',
 		providerModalCancelBtn: 'ia-provider-modal-cancel-btn',
 		confirmModalConfirmBtn: 'ia-confirm-modal-confirm-btn',

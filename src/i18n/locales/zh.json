@@ -1374,6 +1374,12 @@
         "name": "API 密钥",
         "desc": "所选服务商的认证密钥"
       },
+      "testConnection": "测试连接",
+      "testing": "测试中...",
+      "cachedModels": "已缓存模型：{{count}}",
+      "noCachedModels": "暂无缓存模型",
+      "connectionSuccess": "连接成功，已缓存 {{count}} 个模型。",
+      "connectionFailed": "连接测试失败，请检查服务商设置。",
       "cancel": "取消",
       "save": "保存",
       "validation": {

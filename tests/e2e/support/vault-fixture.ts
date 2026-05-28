@@ -1,6 +1,7 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { getReleaseEnv, missingReleaseLLMVars } from './release-env';
+import { createSettingsPatchForProfile, type VaultFixtureProfile } from './data-fixtures';
 
 const REPO_ROOT = path.resolve(__dirname, '../../..');
 const VAULT_ROOT = path.join(REPO_ROOT, 'tests/e2e/test-vault');
@@ -121,8 +122,12 @@ export async function seedReleaseProvider(): Promise<void> {
 export class VaultFixture {
 	constructor(private readonly pluginDir = LIVE_PLUGIN_DIR) {}
 
-	async reset(): Promise<void> {
+	async reset(profile: VaultFixtureProfile = 'default'): Promise<void> {
 		await resetVaultTemplate();
+		const patch = createSettingsPatchForProfile(profile);
+		if (Object.keys(patch).length > 0) {
+			await this.seedSettings(patch);
+		}
 	}
 
 	async seedSettings(settingsPatch: Record<string, unknown>): Promise<void> {

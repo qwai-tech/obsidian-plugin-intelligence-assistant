@@ -115,20 +115,20 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
       (`aca6c40`, `fe91009`).
 - [x] Provider config modal: provider select, `apiKey`, `baseUrl`,
       `modelFilter`, save/cancel controls for CRUD specs (`aca6c40`).
-- [ ] Provider config modal: cached models table and test-connection
+- [x] Provider config modal: cached models table and test-connection
       controls when those workflows get E2E coverage.
 - [x] Conversation list sidebar: items (with `data-conv-id`) for
       switching assertions (`88363b4`).
-- [ ] Conversation list sidebar: delete/rename action testids for
+- [x] Conversation list sidebar: delete/rename action testids for
       future conversation-management specs.
 
 ### Infrastructure
 
-- [ ] `tests/e2e/support/data-fixtures.ts` — factory functions
+- [x] `tests/e2e/support/data-fixtures.ts` — factory functions
       `createProviderConfig({...})`, `createAgentConfig({...})`,
       `createMcpServerConfig({...})` for seeding settings.json
       programmatically.
-- [ ] `VaultFixture.reset('with-multi-provider' | ...)` — named
+- [x] `VaultFixture.reset('with-multi-provider' | ...)` — named
       profiles when specs need richer baseline state than the default
       template.
 - [x] First-class request-capture in `mockLLM.getCalls()`.
