@@ -329,7 +329,29 @@ export class ChatController extends BaseController {
 					},
 					onError: (error: Error) => {
 						new Notice(t('chat.notices.chatError', { message: error.message }));
-						this.finalizeStreamingUI();
+						void (async () => {
+							try {
+								const failedMessage: Message = {
+									role: 'assistant',
+									content: `❌ **Error:** ${error.message}`,
+									model: selectedModel,
+									provider: config.provider ?? undefined,
+								};
+								const index = this.state.messages.indexOf(placeholderAssistant);
+								if (index !== -1) {
+									this.state.messages[index] = failedMessage;
+								} else {
+									this.state.messages.push(failedMessage);
+								}
+								if (contentEl) {
+									renderAssistantMarkdown(contentEl, failedMessage.content);
+								}
+								this.updateTokenSummary();
+								await this.conversationManager.saveCurrentConversation();
+							} finally {
+								this.finalizeStreamingUI();
+							}
+						})();
 					},
 					checkAbort: () => this.state.stopStreamingRequested,
 				}
