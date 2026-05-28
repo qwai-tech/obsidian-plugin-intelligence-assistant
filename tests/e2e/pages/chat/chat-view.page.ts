@@ -43,6 +43,10 @@ export class ChatViewPage extends BasePage {
 		await this.click(TestIds.chat.sendBtn);
 	}
 
+	async stopGeneration(): Promise<void> {
+		await this.click(TestIds.chat.stopBtn);
+	}
+
 	async waitForReplyComplete(timeoutMs = 15_000): Promise<void> {
 		await browser.waitUntil(
 			async () => {
@@ -97,6 +101,7 @@ export class ChatViewPage extends BasePage {
 
 	async isInputVisible(): Promise<boolean> { return this.isVisible(TestIds.chat.input); }
 	async isSendBtnPresent(): Promise<boolean> { return this.$testid(TestIds.chat.sendBtn).isExisting(); }
+	async isStopBtnVisible(): Promise<boolean> { return this.isVisible(TestIds.chat.stopBtn); }
 	async isEmptyStateVisible(): Promise<boolean> { return this.isVisible(TestIds.chat.emptyState); }
 	async isModelSelectPresent(): Promise<boolean> { return this.$testid(TestIds.chat.modelSelect).isExisting(); }
 	async isModeSelectPresent(): Promise<boolean> { return this.$testid(TestIds.chat.modeSelect).isExisting(); }
