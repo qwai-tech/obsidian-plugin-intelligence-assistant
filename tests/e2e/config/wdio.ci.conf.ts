@@ -6,6 +6,9 @@ import * as path from 'path';
 import type { Options } from '@wdio/types';
 import { baseConfig } from '../../../wdio.conf';
 import { resetVaultTemplate } from '../support/vault-fixture';
+import { createMockLLMServer, type MockLLMServer } from '../support/mock-llm-server';
+
+let mockServer: MockLLMServer | null = null;
 
 export const config: Options.Testrunner = {
 	...baseConfig,
@@ -23,6 +26,13 @@ export const config: Options.Testrunner = {
 	},
 
 	async onPrepare() {
+		mockServer = createMockLLMServer();
+		await mockServer.start();
 		await resetVaultTemplate();
+	},
+
+	async onComplete() {
+		await mockServer?.stop();
+		mockServer = null;
 	},
 };

@@ -4,7 +4,7 @@
       {
         "provider": "openai",
         "apiKey": "sk-test-fixture",
-        "baseUrl": "https://api.openai.com/v1",
+        "baseUrl": "http://127.0.0.1:43117/v1",
         "cachedModels": [
           {
             "id": "gpt-4o-mini",
