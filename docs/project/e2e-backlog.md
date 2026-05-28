@@ -34,28 +34,20 @@ Tool system Phase 5 cleanup: `docs/superpowers/plans/2026-05-25-tool-system-refa
 
 These are concrete debts the Phase 0 rebuild took on knowingly.
 
-- [ ] **Replace `browser.mock` with a Bidi-free LLM mocking layer.**
-  `tests/e2e/support/mock-llm.ts` currently uses `browser.mock` which
-  requires WebDriver Bidi; enabling Bidi via `webSocketUrl: true` +
-  `wdio:enforceWebDriverClassic: false` made wdio-obsidian-service fail
-  to launch Obsidian. Without it, no spec can assert on an assistant
-  reply. Two viable strategies:
-  - **Fetch monkey-patch in the renderer** via `browser.execute` inside
-    a `before` hook: replace `window.fetch` and `obsidian.requestUrl`
-    with a stub that returns pre-canned JSON from
-    `tests/e2e/fixtures/responses/`.
-  - **Local stub HTTP server** on `127.0.0.1:<port>` bound by
-    `onPrepare`, with the seeded provider's `baseUrl` pointed at it.
-    Closer to real network behavior, slightly more infra.
-  Whichever wins, the public API of `mockLLM` (`replyWith`, `toolCall`,
-  `errorStatus`, `clearAll`) should stay so specs don't churn.
+- [x] **Replace `browser.mock` with a Bidi-free LLM mocking layer.**
+  (`aed96e9`, `d200806`, `25082a4`, `3290d48`)
+  CI now starts a local OpenAI-compatible HTTP stub server from
+  `wdio.ci.conf.ts`, points the seeded provider at
+  `http://127.0.0.1:43117/v1`, and keeps the public `mockLLM`
+  queueing API. The follow-up `3290d48` added browser CORS preflight
+  support and automatic JSON-to-SSE conversion for `stream: true`
+  requests.
 
-- [ ] **Add the deferred chat round-trip assertion to the smoke spec.**
-  Once the mock layer above works, restore: send "ping" → mock returns
-  "pong" → assert user+assistant messages render → assert
-  `data/conversations/<file>` on disk contains both messages. The
-  `getConversationId()` page-object method and `vault.readDataFile()`
-  helper are already in place.
+- [x] **Add the deferred chat round-trip assertion to the smoke spec.**
+  (`6c899b9`)
+  Smoke now sends "ping", queues "pong", asserts both messages render,
+  reads the persisted runtime conversation through Obsidian's vault
+  adapter, and verifies the main streaming chat request body.
 
 - [x] **Resolve the two pre-existing branch modifications.** (chat-controller
   resolved by Phase 5 Stage C; the test-vault/settings.json runtime-mutation
@@ -131,9 +123,10 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
 - [ ] `VaultFixture.reset('with-multi-provider' | ...)` — named
       profiles when specs need richer baseline state than the default
       template.
-- [ ] First-class request-capture in `mockLLM.getCalls()` (currently
-      stubbed). Specs need to inspect what `model`/`messages` the
-      plugin actually sent.
+- [x] First-class request-capture in `mockLLM.getCalls()`.
+      (`d200806`, exercised by `6c899b9`) Specs can inspect the
+      model, messages, streaming flag, and headers the plugin actually
+      sent.
 
 ---
 

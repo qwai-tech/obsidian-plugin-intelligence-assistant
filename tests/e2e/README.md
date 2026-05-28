@@ -4,14 +4,15 @@ WebdriverIO + wdio-obsidian-service. Three layers:
 
 | Suite | Command | What it does |
 |---|---|---|
-| Smoke | `npm run test:e2e:smoke` | Plugin loads; chat view renders with all anchor testids; vault state resets between specs. Foundation gate. Runs in ~2s. |
+| Smoke | `npm run test:e2e:smoke` | Plugin loads; chat view renders with all anchor testids; vault state resets between specs; mocked chat round-trip renders and persists. Foundation gate. Runs in ~2s. |
 | CI    | `npm run test:e2e:ci`    | Smoke + functional specs (mocked LLM, mocked MCP, real persistence). Target < 5 min. |
 | Release | `npm run test:e2e:release` | Real LLM and MCP. Requires `.env.test`. Target < 15 min. |
 
-Phase 0 (foundation) is done. Phases 1–3 are documented in
+Phase 0 (foundation) is done. The Bidi-free local LLM mock and smoke
+chat round-trip are in place. Phases 1–3 are documented in
 `docs/superpowers/specs/2026-05-24-e2e-rebuild-design.md` and will add
-chat round-trip, LLM/MCP CRUD with persistence verification, the agent
-tool-call loop, RAG, and the release suite.
+LLM/MCP CRUD with persistence verification, the agent tool-call loop,
+RAG, and the release suite.
 
 ## Layout
 
@@ -28,7 +29,8 @@ tests/e2e/
 │   ├── testids.ts      # Re-exports src/presentation/utils/test-ids.ts
 │   ├── vault-fixture.ts
 │   ├── plugin-helpers.ts
-│   └── mock-llm.ts     # Wraps browser.mock; usable once Bidi works (Phase 1)
+│   ├── mock-llm-server.ts # Local OpenAI-compatible stub HTTP server
+│   └── mock-llm.ts     # Admin client for queued replies and request capture
 └── specs/
     ├── 00-smoke.spec.ts
     └── release/        # Real-API specs (Phase 3)
@@ -61,8 +63,28 @@ tests/e2e/
 2. Add a page-object method that exposes a domain action
    (`chatPage.attachFile(path)`), not a raw selector.
 3. Start the spec with `await vault.reset()` in `beforeEach`.
-4. Assert on user-observable behavior AND, where applicable, on-disk
-   state via `vault.readDataFile()`.
+4. Assert on user-observable behavior AND, where applicable, persisted
+   runtime state via `vault.readRuntimeDataFile()`. Use
+   `vault.readDataFile()` only for template/reset assertions on the
+   repository-side fixture files.
+
+## Mock LLM
+
+The CI suite starts `tests/e2e/support/mock-llm-server.ts` in
+`wdio.ci.conf.ts` before Obsidian launches. The seeded OpenAI provider
+in `fixtures/vault-template/.../settings.json` points at
+`http://127.0.0.1:43117/v1`, so the plugin uses its normal network path.
+
+Specs queue responses through `mockLLM`:
+
+```ts
+await mockLLM.clearAll();
+await mockLLM.replyWith('pong');
+```
+
+The server supports normal JSON completions, OpenAI-style SSE streaming
+for `stream: true` requests, CORS preflight, error status responses, and
+request capture through `mockLLM.getCalls()`.
 
 ## Release suite
 
@@ -78,10 +100,8 @@ Missing values → the release `onPrepare` is a no-op and the seeded test
 provider is used instead. Specs that strictly require real credentials
 should self-skip via env checks (Phase 3).
 
-## Known limitation (Phase 0)
+## Known Limitations
 
-`browser.mock` requires WebDriver Bidi, which currently fails to
-initialize under wdio-obsidian-service's launch path. Phase 1 will
-introduce an alternate LLM-mocking layer (fetch monkey-patch in the
-Electron renderer, or a small local stub HTTP server) so the chat
-round-trip assertion can land without depending on Bidi.
+The local mock currently covers `/v1/chat/completions`. Add endpoints
+explicitly as specs need them, for example `/v1/models` for model refresh
+or `/v1/embeddings` for RAG indexing.

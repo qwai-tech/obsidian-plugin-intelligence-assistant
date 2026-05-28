@@ -58,7 +58,7 @@ The fixed port keeps the fixture settings deterministic. If a local process occu
 - Create: `src/__tests__/e2e-mock-llm-server.test.ts`
 - Create later: `tests/e2e/support/mock-llm-server.ts`
 
-- [ ] **Step 1: Write the failing server test**
+- [x] **Step 1: Write the failing server test**
 
 Create `src/__tests__/e2e-mock-llm-server.test.ts`:
 
@@ -146,7 +146,7 @@ describe('mock LLM server', () => {
 });
 ```
 
-- [ ] **Step 2: Run the failing test**
+- [x] **Step 2: Run the failing test**
 
 Run:
 
@@ -156,7 +156,7 @@ npm test -- src/__tests__/e2e-mock-llm-server.test.ts --runInBand
 
 Expected: fail with `Cannot find module '../../tests/e2e/support/mock-llm-server'`.
 
-- [ ] **Step 3: Commit the red test only if working in a shared TDD branch**
+- [x] **Step 3: Commit the red test only if working in a shared TDD branch**
 
 Normally skip this commit; keep the red test local and proceed to Task 2.
 
@@ -168,7 +168,7 @@ Normally skip this commit; keep the red test local and proceed to Task 2.
 - Create: `tests/e2e/support/mock-llm-server.ts`
 - Test: `src/__tests__/e2e-mock-llm-server.test.ts`
 
-- [ ] **Step 1: Add the server implementation**
+- [x] **Step 1: Add the server implementation**
 
 Create `tests/e2e/support/mock-llm-server.ts`:
 
@@ -348,7 +348,7 @@ function cloneJson<T>(value: T): T {
 }
 ```
 
-- [ ] **Step 2: Run the server unit test**
+- [x] **Step 2: Run the server unit test**
 
 Run:
 
@@ -358,7 +358,7 @@ npm test -- src/__tests__/e2e-mock-llm-server.test.ts --runInBand
 
 Expected: pass.
 
-- [ ] **Step 3: Run type-check**
+- [x] **Step 3: Run type-check**
 
 Run:
 
@@ -368,7 +368,7 @@ npm run type-check
 
 Expected: pass.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add tests/e2e/support/mock-llm-server.ts src/__tests__/e2e-mock-llm-server.test.ts
@@ -383,7 +383,7 @@ git commit -m "test: add local llm mock server"
 - Modify: `tests/e2e/support/mock-llm.ts`
 - Test: `src/__tests__/e2e-mock-llm-server.test.ts`
 
-- [ ] **Step 1: Replace `mock-llm.ts` with admin-client implementation**
+- [x] **Step 1: Replace `mock-llm.ts` with admin-client implementation**
 
 Replace `tests/e2e/support/mock-llm.ts`:
 
@@ -514,7 +514,7 @@ export const mockLLM = {
 };
 ```
 
-- [ ] **Step 2: Verify no Bidi API remains**
+- [x] **Step 2: Verify no Bidi API remains**
 
 Run:
 
@@ -524,7 +524,7 @@ rg -n "browser\\.mock|WebDriver Bidi|Bidi" tests/e2e
 
 Expected: only README/spec comments remain until Task 6 removes them; no `browser.mock` in TypeScript code.
 
-- [ ] **Step 3: Run lint and type-check**
+- [x] **Step 3: Run lint and type-check**
 
 Run:
 
@@ -535,7 +535,7 @@ npm run type-check
 
 Expected: lint exits 0 with existing sentence-case warnings only; type-check passes.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add tests/e2e/support/mock-llm.ts
@@ -550,7 +550,7 @@ git commit -m "test: replace browser mock llm client"
 - Modify: `tests/e2e/config/wdio.ci.conf.ts`
 - Modify: `tests/e2e/fixtures/vault-template/.obsidian/plugins/intelligence-assistant/config/user/settings.json`
 
-- [ ] **Step 1: Start and stop the server in CI config**
+- [x] **Step 1: Start and stop the server in CI config**
 
 Modify `tests/e2e/config/wdio.ci.conf.ts`:
 
@@ -595,7 +595,7 @@ export const config: Options.Testrunner = {
 };
 ```
 
-- [ ] **Step 2: Point the seeded provider at the stub**
+- [x] **Step 2: Point the seeded provider at the stub**
 
 Modify `tests/e2e/fixtures/vault-template/.obsidian/plugins/intelligence-assistant/config/user/settings.json` so the seeded OpenAI provider has:
 
@@ -605,7 +605,7 @@ Modify `tests/e2e/fixtures/vault-template/.obsidian/plugins/intelligence-assista
 
 Keep `provider`, `apiKey`, `cachedModels`, `defaultModel`, and `titleSummaryModel` unchanged.
 
-- [ ] **Step 3: Run type-check**
+- [x] **Step 3: Run type-check**
 
 Run:
 
@@ -615,7 +615,7 @@ npm run type-check
 
 Expected: pass.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add tests/e2e/config/wdio.ci.conf.ts tests/e2e/fixtures/vault-template/.obsidian/plugins/intelligence-assistant/config/user/settings.json
@@ -631,7 +631,7 @@ git commit -m "test: run llm mock server in e2e ci"
 - Test indirectly uses: `tests/e2e/pages/chat/chat-view.page.ts`
 - Test indirectly uses: `tests/e2e/support/vault-fixture.ts`
 
-- [ ] **Step 1: Add the failing smoke assertion**
+- [x] **Step 1: Add the failing smoke assertion**
 
 Modify `tests/e2e/specs/00-smoke.spec.ts`:
 
@@ -677,7 +677,7 @@ it('sends a mocked chat round-trip and persists the conversation', async () => {
 });
 ```
 
-- [ ] **Step 2: Run smoke E2E**
+- [x] **Step 2: Run smoke E2E**
 
 Run:
 
@@ -687,7 +687,7 @@ npm run test:e2e:smoke
 
 Expected: it may fail first if the page object cannot resolve `activeConversationId`; if so, proceed to Step 3.
 
-- [ ] **Step 3: Fix conversation id lookup if needed**
+- [x] **Step 3: Fix conversation id lookup if needed**
 
 If `getConversationId()` returns `''`, update `tests/e2e/pages/chat/chat-view.page.ts` to read from plugin settings or DOM-backed state exposed by the plugin. Use this implementation:
 
@@ -705,7 +705,7 @@ async getConversationId(): Promise<string> {
 }
 ```
 
-- [ ] **Step 4: Re-run smoke E2E**
+- [x] **Step 4: Re-run smoke E2E**
 
 Run:
 
@@ -715,7 +715,7 @@ npm run test:e2e:smoke
 
 Expected: all smoke specs pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add tests/e2e/specs/00-smoke.spec.ts tests/e2e/pages/chat/chat-view.page.ts
@@ -730,7 +730,7 @@ git commit -m "test: restore smoke chat round trip"
 - Modify: `tests/e2e/README.md`
 - Modify: `docs/project/e2e-backlog.md`
 
-- [ ] **Step 1: Update README layout and limitation**
+- [x] **Step 1: Update README layout and limitation**
 
 In `tests/e2e/README.md`:
 
@@ -751,7 +751,7 @@ Use `mockLLM.replyWith()`, `mockLLM.streaming()`, `mockLLM.toolCall()`,
 `mockLLM.errorStatus()`, and `mockLLM.getCalls()` from specs.
 ```
 
-- [ ] **Step 2: Mark backlog items done**
+- [x] **Step 2: Mark backlog items done**
 
 In `docs/project/e2e-backlog.md`, after the implementation commits exist:
 
@@ -759,7 +759,7 @@ In `docs/project/e2e-backlog.md`, after the implementation commits exist:
 - Mark `Add the deferred chat round-trip assertion to the smoke spec` done with the commit hash from Task 5.
 - Mark `First-class request-capture in mockLLM.getCalls()` done with the commit hash from Task 3 or Task 5, whichever introduced the final API.
 
-- [ ] **Step 3: Commit docs**
+- [x] **Step 3: Commit docs**
 
 ```bash
 git add tests/e2e/README.md docs/project/e2e-backlog.md
