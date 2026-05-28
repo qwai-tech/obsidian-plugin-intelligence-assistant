@@ -8,6 +8,7 @@ import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
+import { TestIds } from '@/presentation/utils/test-ids';
 import { SystemPromptEditModal } from '../modals';
 
 export function displayPromptsTab(
@@ -32,6 +33,7 @@ export function displayPromptsTab(
 	const addBtn = actionRow.createEl('button', { text: t('settings.prompts.addBtn') });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
+	addBtn.setAttribute('data-testid', TestIds.settings.promptAddBtn);
 	addBtn.addEventListener('click', () => {
 		plugin.settings.systemPrompts.push({
 			id: `prompt-${Date.now()}`,
@@ -65,6 +67,9 @@ export function displayPromptsTab(
 	plugin.settings.systemPrompts.forEach((prompt, index) => {
 		const row = tbody.insertRow();
 		row.addClass('ia-table-row');
+		row.setAttribute('data-testid', TestIds.settings.promptRow);
+		row.setAttribute('data-prompt-id', prompt.id);
+		row.setAttribute('data-prompt-name', prompt.name);
 
 		// Name column
 		const nameCell = row.insertCell();
@@ -110,6 +115,8 @@ export function displayPromptsTab(
 		const editBtn = actionsCell.createEl('button', { text: t('settings.prompts.actions.edit') });
 		editBtn.addClass('ia-button');
 		editBtn.addClass('ia-button--ghost');
+		editBtn.setAttribute('data-testid', TestIds.settings.promptEditBtn);
+		editBtn.setAttribute('data-prompt-id', prompt.id);
 		editBtn.addEventListener('click', () => {
 			// Create a modal for editing the prompt content
 			new SystemPromptEditModal(app, prompt, async (updatedPrompt) => {
@@ -127,6 +134,8 @@ export function displayPromptsTab(
 		const toggleBtn = actionsCell.createEl('button', { text: prompt.enabled ? t('settings.prompts.actions.disable') : t('settings.prompts.actions.enable') });
 		toggleBtn.addClass('ia-button');
 		toggleBtn.addClass('ia-button--ghost');
+		toggleBtn.setAttribute('data-testid', TestIds.settings.promptToggleBtn);
+		toggleBtn.setAttribute('data-prompt-id', prompt.id);
 		toggleBtn.addEventListener('click', () => {
 			void (async () => {
 				prompt.enabled = !prompt.enabled;
@@ -140,6 +149,8 @@ export function displayPromptsTab(
 		const deleteBtn = actionsCell.createEl('button', { text: t('settings.prompts.actions.delete') });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
+		deleteBtn.setAttribute('data-testid', TestIds.settings.promptDeleteBtn);
+		deleteBtn.setAttribute('data-prompt-id', prompt.id);
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
 				if (await showConfirm(app, t('settings.prompts.confirm.delete', { name: prompt.name }))) {

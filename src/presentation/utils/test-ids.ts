@@ -71,5 +71,27 @@ export const TestIds = {
 		toolsBuiltinToggle: 'ia-tools-builtin-toggle', // + data-tool-type
 		toolsOpenApiRow: 'ia-tools-openapi-row',     // + data-openapi-id
 		toolsCliRow: 'ia-tools-cli-row',             // + data-cli-id
+		promptAddBtn: 'ia-prompt-add-btn',
+		promptRow: 'ia-prompt-row',                  // + data-prompt-id, data-prompt-name
+		promptEditBtn: 'ia-prompt-edit-btn',         // + data-prompt-id
+		promptToggleBtn: 'ia-prompt-toggle-btn',     // + data-prompt-id
+		promptDeleteBtn: 'ia-prompt-delete-btn',     // + data-prompt-id
+		promptModalNameInput: 'ia-prompt-modal-name-input',
+		promptModalContentInput: 'ia-prompt-modal-content-input',
+		promptModalEnabledToggle: 'ia-prompt-modal-enabled-toggle',
+		promptModalSaveBtn: 'ia-prompt-modal-save-btn',
+		promptModalCancelBtn: 'ia-prompt-modal-cancel-btn',
+		quickActionPrefixInput: 'ia-quick-action-prefix-input',
+		quickActionAddBtn: 'ia-quick-action-add-btn',
+		quickActionRow: 'ia-quick-action-row',       // + data-action-id, data-action-name
+		quickActionToggle: 'ia-quick-action-toggle', // + data-action-id
+		quickActionEditBtn: 'ia-quick-action-edit-btn', // + data-action-id
+		quickActionDeleteBtn: 'ia-quick-action-delete-btn', // + data-action-id
+		quickActionModalNameInput: 'ia-quick-action-modal-name-input',
+		quickActionModalTypeSelect: 'ia-quick-action-modal-type-select',
+		quickActionModalModelSelect: 'ia-quick-action-modal-model-select',
+		quickActionModalPromptInput: 'ia-quick-action-modal-prompt-input',
+		quickActionModalSaveBtn: 'ia-quick-action-modal-save-btn',
+		quickActionModalCancelBtn: 'ia-quick-action-modal-cancel-btn',
 	},
 } as const;

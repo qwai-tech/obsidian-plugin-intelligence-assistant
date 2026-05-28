@@ -191,11 +191,11 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-2-agent-mcp-rag.md` (to
 
 ### Prompts & Quick Actions
 
-- [ ] **`settings/prompts-crud.spec.ts`** — CRUD on system prompts;
+- [x] **`settings/prompts-crud.spec.ts`** — CRUD on system prompts;
       `data/prompts/{id}.json` verified.
-- [ ] **`settings/quickactions-crud.spec.ts`** — CRUD on quick
+- [x] **`settings/quickactions-crud.spec.ts`** — CRUD on quick
       actions; `settings.quickActions` array updated.
-- [ ] **`editor/quick-action.spec.ts`** — select editor text →
+- [x] **`editor/quick-action.spec.ts`** — select editor text →
       right-click quick action → mocked LLM returns rewritten text →
       editor selection replaced (Q1).
 

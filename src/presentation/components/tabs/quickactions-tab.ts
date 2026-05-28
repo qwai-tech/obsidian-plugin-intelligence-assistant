@@ -10,6 +10,7 @@ import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 export function displayQuickActionsTab(
 	containerEl: HTMLElement,
@@ -28,13 +29,15 @@ export function displayQuickActionsTab(
 	new Setting(containerEl)
 		.setName(t('settings.quickActions.actionPrefix.name'))
 		.setDesc(t('settings.quickActions.actionPrefix.desc'))
-		.addText(text => text
-			.setPlaceholder(t('settings.quickActions.actionPrefix.placeholder'))
-			.setValue(plugin.settings.quickActionPrefix || '⚡')
-			.onChange(async (value) => {
-				plugin.settings.quickActionPrefix = value || '⚡';
-				await plugin.saveSettings();
-			}));
+		.addText(text => {
+			text.inputEl.setAttribute('data-testid', TestIds.settings.quickActionPrefixInput);
+			text.setPlaceholder(t('settings.quickActions.actionPrefix.placeholder'))
+				.setValue(plugin.settings.quickActionPrefix || '⚡')
+				.onChange(async (value) => {
+					plugin.settings.quickActionPrefix = value || '⚡';
+					await plugin.saveSettings();
+				});
+		});
 
 	// Add new quick action button
 	const actionsRow = containerEl.createDiv('ia-section-actions');
@@ -47,6 +50,7 @@ export function displayQuickActionsTab(
 	const addBtn = actionsRow.createEl('button', { text: t('settings.quickActions.addBtn') });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
+	addBtn.setAttribute('data-testid', TestIds.settings.quickActionAddBtn);
 	addBtn.addEventListener('click', () => {
 		const newAction: QuickActionConfig = {
 			id: `action-${Date.now()}`,
@@ -84,6 +88,9 @@ export function displayQuickActionsTab(
 			const action = plugin.settings.quickActions[i];
 			const row = tbody.insertRow();
 			row.addClass('ia-table-row');
+			row.setAttribute('data-testid', TestIds.settings.quickActionRow);
+			row.setAttribute('data-action-id', action.id);
+			row.setAttribute('data-action-name', action.name);
 
 			// Action column with enable/disable toggle
 			const actionCell = row.insertCell();
@@ -93,6 +100,8 @@ export function displayQuickActionsTab(
 			const titleContainer = actionStack.createDiv('ia-action-title-row');
 
 			const enableToggle = titleContainer.createEl('input', { type: 'checkbox' });
+			enableToggle.setAttribute('data-testid', TestIds.settings.quickActionToggle);
+			enableToggle.setAttribute('data-action-id', action.id);
 			enableToggle.checked = action.enabled;
 			enableToggle.addEventListener('change', () => {
 				void (async () => {
@@ -143,6 +152,8 @@ export function displayQuickActionsTab(
 			const editBtn = actionsCell.createEl('button', { text: t('settings.quickActions.editBtn') });
 			editBtn.addClass('ia-button');
 			editBtn.addClass('ia-button--ghost');
+			editBtn.setAttribute('data-testid', TestIds.settings.quickActionEditBtn);
+			editBtn.setAttribute('data-action-id', action.id);
 			editBtn.addEventListener('click', () => {
 				void openQuickActionEditModal(plugin, app, action, i, refreshDisplay);
 			});
@@ -151,6 +162,8 @@ export function displayQuickActionsTab(
 			const deleteBtn = actionsCell.createEl('button', { text: t('settings.quickActions.deleteBtn') });
 			deleteBtn.addClass('ia-button');
 			deleteBtn.addClass('ia-button--danger');
+			deleteBtn.setAttribute('data-testid', TestIds.settings.quickActionDeleteBtn);
+			deleteBtn.setAttribute('data-action-id', action.id);
 			deleteBtn.addEventListener('click', () => {
 				void (async () => {
 						const confirmed = await showConfirm(
@@ -210,26 +223,28 @@ function openQuickActionEditModal(
 			new Setting(contentEl)
 				.setName(t('settings.quickActions.edit.name.name'))
 				.setDesc(t('settings.quickActions.edit.name.desc'))
-				.addText(text => text
-					.setValue(this.action.name)
-					.setPlaceholder('e.g., Make text longer')
-					.onChange(value => {
-						this.action.name = value;
-					})
-				);
+				.addText(text => {
+					text.inputEl.setAttribute('data-testid', TestIds.settings.quickActionModalNameInput);
+					text.setValue(this.action.name)
+						.setPlaceholder('e.g., Make text longer')
+						.onChange(value => {
+							this.action.name = value;
+						});
+				});
 
 			// Action Type
 			new Setting(contentEl)
 				.setName(t('settings.quickActions.edit.actionType.name'))
 				.setDesc(t('settings.quickActions.edit.actionType.desc'))
-				.addDropdown(dropdown => dropdown
-					.addOption('replace', t('settings.quickActions.edit.actionType.replace'))
-					.addOption('explain', t('settings.quickActions.edit.actionType.explain'))
-					.setValue(this.action.actionType)
-					.onChange(value => {
-						this.action.actionType = value as 'replace' | 'explain';
-					})
-				);
+				.addDropdown(dropdown => {
+					dropdown.selectEl.setAttribute('data-testid', TestIds.settings.quickActionModalTypeSelect);
+					dropdown.addOption('replace', t('settings.quickActions.edit.actionType.replace'))
+						.addOption('explain', t('settings.quickActions.edit.actionType.explain'))
+						.setValue(this.action.actionType)
+						.onChange(value => {
+							this.action.actionType = value as 'replace' | 'explain';
+						});
+				});
 
 			// Model
 			void ModelManager.getAllAvailableModels(this.plugin.settings.llmConfigs).then(models => {
@@ -237,6 +252,7 @@ function openQuickActionEditModal(
 					.setName(t('settings.quickActions.edit.model.name'))
 					.setDesc(t('settings.quickActions.edit.model.desc'))
 					.addDropdown(dropdown => {
+						dropdown.selectEl.setAttribute('data-testid', TestIds.settings.quickActionModalModelSelect);
 						dropdown.addOption('', t('settings.quickActions.edit.model.default'));
 						models.forEach(model => {
 							dropdown.addOption(model.id, model.name);
@@ -253,6 +269,7 @@ function openQuickActionEditModal(
 				.setName(t('settings.quickActions.edit.promptTemplate.name'))
 				.setDesc(t('settings.quickActions.edit.promptTemplate.desc'))
 				.addTextArea(text => {
+					text.inputEl.setAttribute('data-testid', TestIds.settings.quickActionModalPromptInput);
 					text.setValue(this.action.prompt);
 					text.setPlaceholder('e.g., Expand and elaborate on the following text...');
 					text.inputEl.rows = 6;
@@ -269,7 +286,8 @@ function openQuickActionEditModal(
 				.setButtonText(t('settings.quickActions.edit.cancel'))
 				.onClick(() => {
 					this.close();
-				});
+				})
+				.buttonEl.setAttribute('data-testid', TestIds.settings.quickActionModalCancelBtn);
 
 			new ButtonComponent(buttonContainer)
 				.setButtonText(t('settings.quickActions.edit.save'))
@@ -281,7 +299,8 @@ function openQuickActionEditModal(
 						this.refreshDisplay();
 						this.close();
 					})();
-				});
+				})
+				.buttonEl.setAttribute('data-testid', TestIds.settings.quickActionModalSaveBtn);
 		}
 
 		onClose(): void {
