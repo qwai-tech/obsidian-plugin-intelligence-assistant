@@ -4,7 +4,7 @@
 export interface HttpResponse {
 	status: number;
 	text: string;
-	json: any;
+	json: unknown;
 	headers: Record<string, string>;
 }
 

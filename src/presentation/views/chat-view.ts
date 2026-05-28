@@ -1,10 +1,8 @@
-import { App, ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, setIcon } from 'obsidian';
+import { ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, setIcon } from 'obsidian';
 import { t } from '@/i18n';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
-import { TextInputModal } from '@/presentation/components/modals/text-input-modal';
 import { SearchableReferenceModal } from '@/presentation/components/modals/searchable-reference-modal';
 import { SearchableImageModal } from '@/presentation/components/modals/searchable-image-modal';
-import { SingleFileSelectionModal } from '@/presentation/components/modals/single-file-selection-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { DEFAULT_AGENT_ID } from '@/constants';
 import type {Message, Conversation, ConversationConfig, Agent} from '@/types';
@@ -22,7 +20,7 @@ import { VaultExportService } from '@/application/services/vault-export-service'
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import { renderMessage, MessageRendererCallbacks } from '@/presentation/components/chat/message-renderer';
-import { updateExecutionTrace, createAgentExecutionTraceContainer, collapseExecutionTrace, hasAgentToolCall, extractFinalContent, reconstructAgentSteps } from '@/presentation/components/chat/handlers/tool-call-handler';
+import { updateExecutionTrace, createAgentExecutionTraceContainer, hasAgentToolCall, extractFinalContent, reconstructAgentSteps } from '@/presentation/components/chat/handlers/tool-call-handler';
 import {
 	MessageController,
 	AgentController,
@@ -102,6 +100,7 @@ export class ChatView extends ItemView {
 		const agentMemoryRepository = this.plugin.getAgentMemoryRepository();
 		const agentMemoryService = agentMemoryRepository ? new AgentMemoryService(agentMemoryRepository) : undefined;
 		const senseService = new AgentSenseService(this.app, this.ragManager, agentMemoryService);
+		const tokenUsageRepo = this.plugin.tokenUsageRepo;
 		const autonomousAgentLoop = new AutonomousAgentLoop({
 			toolRegistry: this.plugin.getToolRegistry(),
 			senseService,
@@ -111,8 +110,8 @@ export class ChatView extends ItemView {
 				const config = ModelManager.findConfigForModelByProvider(modelId, this.plugin.settings.llmConfigs);
 				return config ? { provider: ProviderFactory.createProvider(config), providerId: config.provider } : null;
 			},
-			recordUsage: this.plugin.tokenUsageRepo
-				? (record) => this.plugin.tokenUsageRepo!.recordUsage(record)
+			recordUsage: tokenUsageRepo
+				? (record) => tokenUsageRepo.recordUsage(record)
 				: undefined,
 			defaultModel: this.plugin.settings.defaultModel,
 		});
@@ -215,7 +214,10 @@ export class ChatView extends ItemView {
 			this.state,
 			{
 				onSendMessage: async (text) => await this.sendMessage(text),
-				onAttachImage: async () => await this.attachImage(),
+				onAttachImage: () => {
+					this.attachImage();
+					return Promise.resolve();
+				},
 				onToggleRag: async () => await this.handleQuickActionRag(),
 				onToggleWeb: async () => await this.handleQuickActionWeb(),
 				onShowReferenceMenu: () => this.showReferenceMenu(),

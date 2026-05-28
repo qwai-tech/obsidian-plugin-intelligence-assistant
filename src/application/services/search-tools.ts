@@ -124,7 +124,7 @@ export class CreateNoteTool implements Tool {
 		sideEffects: { vaultWrite: true },
 	});
 
-	async execute(args: Record<string, unknown>): Promise<ToolResult> {
+	execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const title = args.title as string;
 			const content = args.content as string;
@@ -137,13 +137,13 @@ export class CreateNoteTool implements Tool {
 			// Check if file already exists
 			const existing = this._app.vault.getAbstractFileByPath(path);
 			if (existing) {
-				return {
+				return Promise.resolve({
 					success: false,
 					error: `File already exists: ${path}`
-				};
+				});
 			}
 
-			return {
+			return Promise.resolve({
 				success: true,
 				result: createWriteProposal({
 					operation: 'create',
@@ -151,12 +151,12 @@ export class CreateNoteTool implements Tool {
 					content,
 					proposedContent: content,
 				})
-			};
+			});
 		} catch (error: unknown) {
-			return {
+			return Promise.resolve({
 				success: false,
 				error: error instanceof Error ? error.message : 'Unknown error'
-			};
+			});
 		}
 	}
 }

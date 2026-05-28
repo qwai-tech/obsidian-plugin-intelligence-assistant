@@ -61,7 +61,7 @@ export class VectorStore {
 		}
 
 		// Always immediate in test environment to avoid race conditions in E2E
-		const isTest = typeof process !== 'undefined' && (process.env.NODE_ENV === 'test' || (process.env as any).WDIO_WORKER_ID);
+		const isTest = typeof process !== 'undefined' && (process.env.NODE_ENV === 'test' || Boolean(process.env.WDIO_WORKER_ID));
 
 		if (immediate || isTest) {
 			await this.performSave();

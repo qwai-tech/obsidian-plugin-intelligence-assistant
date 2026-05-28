@@ -2,6 +2,20 @@ import type { RAGConfig, LLMConfig } from '@/types';
 import { ProviderFactory } from './llm/provider-factory';
 import { ModelManager } from './llm/model-manager';
 
+interface PluginLookup {
+	settings?: {
+		llmConfigs?: LLMConfig[];
+	};
+}
+
+interface WindowWithObsidianPlugins {
+	app?: {
+		plugins?: {
+			plugins?: Record<string, unknown>;
+		};
+	};
+}
+
 export interface EmbeddingModel {
   id: string;
   name: string;
@@ -48,11 +62,11 @@ export class EmbeddingManager {
     const embeddingModels = [...this.EMBEDDING_MODELS];
 
     try {
-      const configs = llmConfigs ?? (this.getPluginInstance()?.settings?.llmConfigs as LLMConfig[] | undefined);
+      const configs = llmConfigs ?? this.getPluginInstance()?.settings?.llmConfigs;
       if (configs) {
-        configs.forEach((config: any) => {
+        configs.forEach((config) => {
           if (config.cachedModels) {
-            config.cachedModels.forEach((model: any) => {
+            config.cachedModels.forEach((model) => {
               if (model.capabilities?.includes('embedding') && model.enabled !== false) {
                 const exists = embeddingModels.some(m => m.id === model.id);
                 if (!exists) {
@@ -105,7 +119,7 @@ export class EmbeddingManager {
       throw new Error(`Embedding model ${modelId ?? ''} not found`);
     }
 
-    const configs = llmConfigs ?? (this.getPluginInstance()?.settings?.llmConfigs as LLMConfig[] | undefined);
+    const configs = llmConfigs ?? this.getPluginInstance()?.settings?.llmConfigs;
     if (!configs) {
       throw new Error('No LLM configs available for embedding generation');
     }
@@ -123,9 +137,12 @@ export class EmbeddingManager {
     return provider.generateEmbedding(text, model.id);
   }
 
-  private static getPluginInstance(): any {
+  private static getPluginInstance(): PluginLookup | null {
     if (typeof window !== 'undefined') {
-      return (window as any).app?.plugins?.plugins?.['intelligence-assistant'];
+      const plugin = (window as Window & WindowWithObsidianPlugins).app?.plugins?.plugins?.['intelligence-assistant'];
+      if (plugin && typeof plugin === 'object') {
+        return plugin as PluginLookup;
+      }
     }
     return null;
   }

@@ -48,10 +48,10 @@ export class ObsidianFileSystem implements IFileSystem {
 		}
 	}
 
-	async listRecursive(path: string): Promise<string[]> {
+	listRecursive(path: string): Promise<string[]> {
 		const folder = this.app.vault.getAbstractFileByPath(path);
 		if (!(folder instanceof TFolder)) {
-			return [];
+			return Promise.resolve([]);
 		}
 
 		const results: string[] = [];
@@ -68,7 +68,7 @@ export class ObsidianFileSystem implements IFileSystem {
 			}
 		}
 
-		return results;
+		return Promise.resolve(results);
 	}
 
 	getDisplayName(path: string): string {
@@ -77,8 +77,8 @@ export class ObsidianFileSystem implements IFileSystem {
 		return last || path;
 	}
 
-	async isDirectory(path: string): Promise<boolean> {
+	isDirectory(path: string): Promise<boolean> {
 		const file = this.app.vault.getAbstractFileByPath(path);
-		return file instanceof TFolder;
+		return Promise.resolve(file instanceof TFolder);
 	}
 }

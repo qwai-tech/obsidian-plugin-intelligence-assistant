@@ -9,7 +9,6 @@ import type { ModelInfo, ModelCapability } from '@/types';
 import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
 import { getProviderMeta } from '../components/provider-meta';
-import { OllamaModelManagerModal } from '../modals/ollama-model-manager-modal';
 
 export interface ModelFilters {
 	providerFilter: string;

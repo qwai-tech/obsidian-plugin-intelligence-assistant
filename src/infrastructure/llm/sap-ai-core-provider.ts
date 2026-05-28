@@ -1619,7 +1619,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 					if (finishReason) {
 						console.debug(`SAP AI Core streaming finished with reason: ${finishReason}`);
-						onChunk({ content: '', done: true });
+						onChunk({ content: '', done: true, usage });
 						return;
 					}
 				} catch (e) {

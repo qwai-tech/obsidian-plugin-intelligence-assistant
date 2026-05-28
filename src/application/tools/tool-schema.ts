@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { ToolDefinition, ToolParameter } from '@/types/common/tools';
 
-interface CreateToolDefinitionInput extends ToolDefinition {}
+type CreateToolDefinitionInput = ToolDefinition;
 
 export function createToolDefinition(input: CreateToolDefinitionInput): ToolDefinition {
 	return {
@@ -24,11 +24,11 @@ export function validateToolArguments(
 				.join('; '),
 		};
 	}
-	return { success: true, data: result.data as Record<string, unknown> };
+	return { success: true, data: result.data };
 }
 
 export function parametersToZodObject(parameters: ToolParameter[]): z.ZodObject<z.ZodRawShape> {
-	const shape: Record<string, z.ZodTypeAny> = {};
+	const shape: Record<string, z.ZodType> = {};
 	for (const parameter of parameters) {
 		let field = zodForParameter(parameter);
 		if (!parameter.required) {
@@ -36,10 +36,10 @@ export function parametersToZodObject(parameters: ToolParameter[]): z.ZodObject<
 		}
 		shape[parameter.name] = field;
 	}
-	return z.object(shape).passthrough();
+	return z.looseObject(shape);
 }
 
-function zodForParameter(parameter: ToolParameter): z.ZodTypeAny {
+function zodForParameter(parameter: ToolParameter): z.ZodType {
 	if (parameter.enum?.length) {
 		return z.enum(parameter.enum as [string, ...string[]]);
 	}

@@ -19,8 +19,8 @@ export class ObsidianHttpClient implements IHttpClient {
 		return {
 			status: response.status,
 			text: response.text,
-			json: response.json,
-			headers: response.headers as Record<string, string>
+			json: response.json as unknown,
+			headers: response.headers
 		};
 	}
 }

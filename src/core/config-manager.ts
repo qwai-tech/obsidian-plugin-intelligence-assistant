@@ -39,7 +39,7 @@ export class ConfigManager {
     const configFileName = typeof configOrFileName === 'string'
       ? configOrFileName
       : 'intelligence-assistant.json';
-    const configDir = (this.vault as Vault & { configDir?: string }).configDir ?? '.obsidian';
+    const configDir = this.vault.configDir;
     this.configPath = `${configDir}/${configFileName}`;
     this.config = typeof configOrFileName === 'string'
       ? this.getDefaultConfig()
