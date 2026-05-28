@@ -69,3 +69,39 @@ describe('ChatService streaming abort', () => {
 		expect(onChunk).toHaveBeenCalledTimes(2);
 	});
 });
+
+describe('ChatService agent delegation', () => {
+	it('delegates executeAgentLoop to AutonomousAgentLoop when one is configured', async () => {
+		const loop = { execute: jest.fn(async () => undefined) };
+		const service = new ChatService(
+			{} as any,
+			{} as any,
+			{} as any,
+			{} as any,
+			[],
+			undefined,
+			'gpt-4o',
+			loop as any,
+		);
+		const callbacks = {
+			onChunk: jest.fn(),
+			onToolCall: jest.fn(),
+			onToolResult: jest.fn(),
+			onThought: jest.fn(),
+			onComplete: jest.fn(),
+			onError: jest.fn(),
+		};
+
+		await service.executeAgentLoop(
+			[{ role: 'user', content: 'hello' }],
+			{ model: 'gpt-4o', mode: 'agent', references: [{ type: 'file', path: 'A.md', name: 'A.md' }] } as any,
+			callbacks,
+		);
+
+		expect(loop.execute).toHaveBeenCalledWith(
+			[{ role: 'user', content: 'hello' }],
+			expect.objectContaining({ references: [{ type: 'file', path: 'A.md', name: 'A.md' }] }),
+			callbacks,
+		);
+	});
+});

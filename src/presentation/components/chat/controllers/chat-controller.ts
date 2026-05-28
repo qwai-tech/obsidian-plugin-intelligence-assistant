@@ -271,7 +271,8 @@ export class ChatController extends BaseController {
 			if (this.state.mode === 'agent') {
 				await this.runAgentLoop(
 					llmMessages, selectedModel, contextWindow, activeSystemPrompts,
-					placeholderAssistant, assistantMessageEl, contentEl
+					placeholderAssistant, assistantMessageEl, contentEl,
+					targetMessage.references ?? []
 				);
 				return;
 			}
@@ -346,7 +347,8 @@ export class ChatController extends BaseController {
 		activeSystemPrompts: Message[],
 		placeholderAssistant: Message,
 		assistantMessageEl: HTMLElement,
-		contentEl: HTMLElement | null
+		contentEl: HTMLElement | null,
+		references: FileReference[]
 	): Promise<void> {
 		const isGenericAgent = !this.plugin.settings.activeAgentId;
 
@@ -371,6 +373,7 @@ export class ChatController extends BaseController {
 				agents: this.plugin.settings.agents,
 				isGenericAgent,
 				conversationId: this.state.currentConversationId ?? undefined,
+				references,
 			},
 			{
 				onChunk: (chunk) => {
@@ -382,28 +385,31 @@ export class ChatController extends BaseController {
 				onTokenUsage: (_step, cumulativeTokens, budget) => {
 					void cumulativeTokens; void budget;
 				},
-				onToolCall: (toolName, args, thinking) => {
+				onToolCall: (toolName, args, thinking, phase) => {
 					this.state.agentExecutionSteps.push({
 						type: 'action',
 						content: `${toolName}(${JSON.stringify(args)})`,
 						toolName,
 						args,
 						thinking: thinking || undefined,
+						phase,
 						timestamp: Date.now(),
 						status: 'pending',
 					});
 				},
-				onToolResult: (_toolName, success, output) => {
+				onToolResult: (_toolName, success, output, phase) => {
 					const lastAction = [...this.state.agentExecutionSteps].reverse().find(s => s.type === 'action' && s.status === 'pending');
 					if (lastAction) {
 						lastAction.status = success ? 'success' : 'error';
 						lastAction.result = output;
+						lastAction.phase = lastAction.phase ?? phase;
 					}
 				},
-				onThought: (thought) => {
+				onThought: (thought, phase) => {
 					this.state.agentExecutionSteps.push({
 						type: 'thought',
 						content: thought,
+						phase,
 						timestamp: Date.now(),
 					});
 				},

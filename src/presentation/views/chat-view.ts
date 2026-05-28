@@ -12,9 +12,12 @@ import { ModelManager } from '@/infrastructure/llm/model-manager';
 import { marked } from 'marked';
 import {
 	WebSearchService,
-	ChatService
+	ChatService,
+	AgentMemoryService
 } from '@/application/services';
+import { AgentSenseService, AutonomousAgentLoop, HistoryCompactor } from '@/application/agents';
 import { RAGManager } from '@/infrastructure/rag-manager';
+import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { VaultExportService } from '@/application/services/vault-export-service';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
@@ -96,6 +99,23 @@ export class ChatView extends ItemView {
 		this.ragManager = this.plugin.getRAGManager();
 
 		this.webSearchService = new WebSearchService(this.plugin.settings.webSearchConfig, new ObsidianHttpClient());
+		const agentMemoryRepository = this.plugin.getAgentMemoryRepository();
+		const agentMemoryService = agentMemoryRepository ? new AgentMemoryService(agentMemoryRepository) : undefined;
+		const senseService = new AgentSenseService(this.app, this.ragManager, agentMemoryService);
+		const autonomousAgentLoop = new AutonomousAgentLoop({
+			toolRegistry: this.plugin.getToolRegistry(),
+			senseService,
+			historyCompactor: new HistoryCompactor(),
+			webSearchService: this.webSearchService,
+			createProvider: (modelId) => {
+				const config = ModelManager.findConfigForModelByProvider(modelId, this.plugin.settings.llmConfigs);
+				return config ? { provider: ProviderFactory.createProvider(config), providerId: config.provider } : null;
+			},
+			recordUsage: this.plugin.tokenUsageRepo
+				? (record) => this.plugin.tokenUsageRepo!.recordUsage(record)
+				: undefined,
+			defaultModel: this.plugin.settings.defaultModel,
+		});
 		this.chatService = new ChatService(
 			new ObsidianFileSystem(this.app),
 			this.plugin.getToolRegistry(),
@@ -103,7 +123,8 @@ export class ChatView extends ItemView {
 			this.webSearchService,
 			this.plugin.settings.llmConfigs,
 			this.plugin.tokenUsageRepo ?? undefined,
-			this.plugin.settings.defaultModel
+			this.plugin.settings.defaultModel,
+			autonomousAgentLoop
 		);
 		this.vaultExportService = new VaultExportService(this.app);
 		this.ragStatusPanel = new RagStatusPanel(

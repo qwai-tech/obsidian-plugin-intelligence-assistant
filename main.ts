@@ -39,6 +39,7 @@ import { SettingsService } from './src/application/services/settings-service';
 import { initI18n } from './src/i18n';
 import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-system';
 import { PluginDataService } from './src/application/services/plugin-data-service';
+import type { AgentMemoryRepository } from './src/infrastructure/persistence';
 import { EditorQuickActions } from './src/presentation/editor/editor-quick-actions';
 import { TextInputModal } from './src/presentation/components/modals/text-input-modal';
 import { ToolRegistry } from './src/application/tools/tool-registry';
@@ -102,6 +103,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private dataService!: PluginDataService;
 	private editorQuickActions!: EditorQuickActions;
 	public get tokenUsageRepo() { return this.dataService?.tokenUsageRepo ?? null; }
+	public getAgentMemoryRepository(): AgentMemoryRepository | null { return this.dataService?.agentMemoryRepo ?? null; }
 	private _ragManager: RAGManager | null = null;
 	public settingsService!: SettingsService;
 

@@ -18,6 +18,7 @@ import type { ToolRegistry } from '@/application/tools/tool-registry';
 import type { RAGManager } from '@/infrastructure/rag-manager';
 import type { WebSearchService } from './web-search-service';
 import type { StreamChunk } from '@/types/common/llm';
+import type { AutonomousAgentLoop, AgentLoopCallbacks } from '@/application/agents';
 
 export interface ChatOptions {
 	model: string;
@@ -34,17 +35,6 @@ export interface ChatOptions {
 	contextWindow?: number;
 	tokenBudget?: number;
 	conversationId?: string;
-}
-
-export interface AgentLoopCallbacks {
-	onChunk: (chunk: StreamChunk) => void;
-	onToolCall: (toolName: string, args: Record<string, unknown>, thinking?: string) => void;
-	onToolResult: (toolName: string, success: boolean, output: string) => void;
-	onThought: (thought: string) => void;
-	onComplete: (finalMessage: Message) => void;
-	onError: (error: Error) => void;
-	onTokenUsage?: (step: number, cumulativeTokens: number, budget: number) => void;
-	checkAbort?: () => boolean;
 }
 
 export function deduplicateMessages(messages: Message[]): Message[] {
@@ -69,7 +59,8 @@ export class ChatService {
 		private webSearchService: WebSearchService,
 		private llmConfigs: LLMConfig[],
 		private usageRepo?: { recordUsage: (r: {model:string;provider:string;promptTokens:number;completionTokens:number;totalTokens:number;timestamp:number;conversationId?:string}) => Promise<void> },
-		private defaultModel?: string
+		private defaultModel?: string,
+		private autonomousAgentLoop?: AutonomousAgentLoop
 	) {}
 
 	findLLMConfig(modelId: string): LLMConfig | null {
@@ -311,9 +302,15 @@ export class ChatService {
 			agentId?: string;
 			agents?: Agent[];
 			isGenericAgent?: boolean;
+			references?: FileReference[];
 		},
 		callbacks: AgentLoopCallbacks
 	): Promise<void> {
+		if (this.autonomousAgentLoop) {
+			await this.autonomousAgentLoop.execute(messages, { ...options, mode: 'agent' }, callbacks);
+			return;
+		}
+
 		const { model: selectedModel } = options;
 		const config = ModelManager.findConfigForModelByProvider(selectedModel, this.llmConfigs);
 		if (!config) {
