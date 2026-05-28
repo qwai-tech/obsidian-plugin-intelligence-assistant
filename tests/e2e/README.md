@@ -8,11 +8,10 @@ WebdriverIO + wdio-obsidian-service. Three layers:
 | CI    | `npm run test:e2e:ci`    | Smoke + functional specs (mocked LLM, mocked MCP, real persistence). Target < 5 min. |
 | Release | `npm run test:e2e:release` | Real LLM and MCP. Requires `.env.test`. Target < 15 min. |
 
-Phase 0 (foundation) is done. The Bidi-free local LLM mock and smoke
-chat round-trip are in place. Phases 1–3 are documented in
-`docs/superpowers/specs/2026-05-24-e2e-rebuild-design.md` and will add
-LLM/MCP CRUD with persistence verification, the agent tool-call loop,
-RAG, and the release suite.
+Phases 0–2 are done: the Bidi-free local LLM mock, chat, settings,
+Agentic Agent, MCP, RAG, Tools, Prompts, Quick Actions, and editor
+quick-action coverage are in place. Phase 3 adds the real-provider
+release suite and CI wiring.
 
 ## Layout
 
@@ -25,30 +24,32 @@ tests/e2e/
 ├── pages/              # Page Objects (specs touch DOM only via these)
 │   ├── base.page.ts
 │   ├── chat/chat-view.page.ts
+│   ├── editor/editor-page.ts
 │   └── settings/
+│       ├── agents-settings.page.ts
 │       ├── general-settings.page.ts
+│       ├── mcp-settings.page.ts
+│       ├── prompts-settings.page.ts
+│       ├── quick-actions-settings.page.ts
+│       ├── rag-settings.page.ts
+│       ├── tools-settings.page.ts
 │       └── llm-settings.page.ts
 ├── support/
 │   ├── testids.ts      # Re-exports src/presentation/utils/test-ids.ts
 │   ├── vault-fixture.ts
 │   ├── plugin-helpers.ts
 │   ├── mock-llm-server.ts # Local OpenAI-compatible stub HTTP server
+│   ├── mock-mcp-server.js # CI stdio MCP server
+│   ├── release-env.ts  # .env.test loading + release skip helpers
 │   └── mock-llm.ts     # Admin client for queued replies and request capture
 └── specs/
     ├── 00-smoke.spec.ts
+    ├── agents/
+    ├── editor/
+    ├── rag/
     ├── chat/
-    │   ├── conversation-isolation.spec.ts
-    │   ├── conversation-persistence.spec.ts
-    │   ├── error-handling.spec.ts
-    │   ├── model-switch.spec.ts
-    │   ├── send-receive.spec.ts
-    │   ├── stop-generation.spec.ts
-    │   └── streaming.spec.ts
     ├── settings/
-    │   ├── llm-model-refresh.spec.ts
-    │   ├── llm-provider-crud.spec.ts
-    │   └── settings-persistence.spec.ts
-    └── release/        # Real-API specs (Phase 3)
+    └── release/        # Real LLM/MCP specs; skip cleanly without env
 ```
 
 ## Conventions
@@ -109,15 +110,43 @@ Set in `.env.test` at the repo root:
 ```env
 E2E_TEST_PROVIDER=openai
 E2E_TEST_API_KEY=sk-...
-E2E_TEST_MODEL=gpt-4o-mini
+E2E_TEST_MODEL=openai:gpt-4o-mini
+
+# Optional for OpenAI-compatible endpoints.
+E2E_TEST_BASE_URL=https://api.openai.com/v1
+
+# Required only for release/real-mcp.spec.ts.
+E2E_TEST_MCP_NAME=release-mcp
+E2E_TEST_MCP_COMMAND=node
+E2E_TEST_MCP_ARGS=/absolute/path/to/server.js
+E2E_TEST_MCP_TOOL_NAME=vault_echo
+E2E_TEST_MCP_TOOL_ARGS='{"text":"release"}'
+E2E_TEST_MCP_EXPECTED_TEXT=release
 ```
 
-Missing values → the release `onPrepare` is a no-op and the seeded test
-provider is used instead. Specs that strictly require real credentials
-should self-skip via env checks (Phase 3).
+`tests/e2e/support/release-env.ts` loads `.env.test` before seeding the
+release provider. Missing real-provider values make the real LLM specs
+self-skip. Missing MCP values make only `release/real-mcp.spec.ts`
+self-skip.
+
+GitHub Actions release secrets checklist:
+
+- `E2E_TEST_PROVIDER`
+- `E2E_TEST_API_KEY`
+- `E2E_TEST_MODEL`
+- Optional: `E2E_TEST_BASE_URL`
+- For real MCP: `E2E_TEST_MCP_NAME`, `E2E_TEST_MCP_COMMAND`,
+  `E2E_TEST_MCP_ARGS`, `E2E_TEST_MCP_TOOL_NAME`,
+  `E2E_TEST_MCP_TOOL_ARGS`, `E2E_TEST_MCP_EXPECTED_TEXT`
+
+The `e2e-release` workflow runs on pushes to `main` and tag pushes. The
+regular mocked `e2e-ci` workflow runs on every push and pull request.
+
+To verify the release skip path on a machine that already has
+`.env.test`, run with `E2E_TEST_DISABLE_DOTENV=1` and empty
+`E2E_TEST_*` variables.
 
 ## Known Limitations
 
-The local mock currently covers `/v1/chat/completions` and `/v1/models`.
-Add endpoints explicitly as specs need them, for example `/v1/embeddings`
-for RAG indexing.
+The local mock currently covers `/v1/chat/completions`, `/v1/models`,
+and `/v1/embeddings`. Add endpoints explicitly as specs need them.

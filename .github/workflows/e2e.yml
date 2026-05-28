@@ -2,9 +2,7 @@ name: E2E Tests
 
 on:
   pull_request:
-    branches: [main]
   push:
-    branches: [main]
 
 jobs:
   e2e-ci:
@@ -25,16 +23,30 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build plugin
+        run: npm run build
+
       - name: Run CI E2E tests
         run: npm run test:e2e:ci
         env:
           OBSIDIAN_VERSION: latest
 
+      - name: Upload E2E diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-ci-diagnostics
+          path: |
+            tests/e2e/screenshots/
+            tests/e2e/state-dumps/
+            tests/e2e/logs/
+          if-no-files-found: ignore
+
   e2e-release:
     name: E2E Release (Real AI)
     runs-on: macos-latest
     timeout-minutes: 45
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
 
     steps:
       - name: Checkout
@@ -49,9 +61,31 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build plugin
+        run: npm run build
+
       - name: Run Release E2E tests
         run: npm run test:e2e:release
         env:
           OBSIDIAN_VERSION: latest
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          E2E_TEST_PROVIDER: ${{ secrets.E2E_TEST_PROVIDER }}
+          E2E_TEST_API_KEY: ${{ secrets.E2E_TEST_API_KEY }}
+          E2E_TEST_MODEL: ${{ secrets.E2E_TEST_MODEL }}
+          E2E_TEST_BASE_URL: ${{ secrets.E2E_TEST_BASE_URL }}
+          E2E_TEST_MCP_NAME: ${{ secrets.E2E_TEST_MCP_NAME }}
+          E2E_TEST_MCP_COMMAND: ${{ secrets.E2E_TEST_MCP_COMMAND }}
+          E2E_TEST_MCP_ARGS: ${{ secrets.E2E_TEST_MCP_ARGS }}
+          E2E_TEST_MCP_TOOL_NAME: ${{ secrets.E2E_TEST_MCP_TOOL_NAME }}
+          E2E_TEST_MCP_TOOL_ARGS: ${{ secrets.E2E_TEST_MCP_TOOL_ARGS }}
+          E2E_TEST_MCP_EXPECTED_TEXT: ${{ secrets.E2E_TEST_MCP_EXPECTED_TEXT }}
+
+      - name: Upload Release E2E diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-release-diagnostics
+          path: |
+            tests/e2e/screenshots/
+            tests/e2e/state-dumps/
+            tests/e2e/logs/
+          if-no-files-found: ignore

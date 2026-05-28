@@ -203,35 +203,35 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-2-agent-mcp-rag.md` (to
 
 ## Phase 3 — Release suite + CI integration
 
-Target: ~0.5 days. Plan doc: `2026-05-24-e2e-rebuild-phase-3-release-and-ci.md` (to write).
+Target: ~0.5 days. Plan doc: `2026-05-24-e2e-rebuild-phase-3-release-and-ci.md`.
 
 ### Release specs (real API)
 
-- [ ] **`release/real-chat.spec.ts`** — real LLM, single round-trip,
+- [x] **`release/real-chat.spec.ts`** — real LLM, single round-trip,
       assert non-empty reply, log token usage.
-- [ ] **`release/real-agent.spec.ts`** — real LLM, agent mode, ask
+- [x] **`release/real-agent.spec.ts`** — real LLM, agent mode, ask
       something requiring a tool call (e.g. "read README.md and
       summarize"); assert tool was invoked + final reply references
       file content.
-- [ ] **`release/real-mcp.spec.ts`** — real MCP server (e.g. the
+- [x] **`release/real-mcp.spec.ts`** — real MCP server (e.g. the
       Claude Code CLI or `mcp-server-filesystem`); assert
       tools/list response and a successful tool call round-trip.
 
 ### Env handling
 
-- [ ] Release specs self-skip cleanly when `.env.test` env vars are
+- [x] Release specs self-skip cleanly when `.env.test` env vars are
       missing (`describe.skip` or per-spec `this.skip()` after
       `before` env check). Document required env vars in
       `tests/e2e/README.md`.
 
 ### CI workflow
 
-- [ ] **`.github/workflows/e2e.yml`** — two jobs:
+- [x] **`.github/workflows/e2e.yml`** — two jobs:
   - `ci-e2e` on every push/PR: `npm ci && npm run build &&
     npm run test:e2e:ci`. Artifact: screenshots/state-dumps on failure.
   - `release-e2e` on push to `main` and on tag pushes: requires
     `E2E_TEST_*` secrets, runs `npm run test:e2e:release`.
-- [ ] GitHub Actions secret setup checklist documented in
+- [x] GitHub Actions secret setup checklist documented in
       `tests/e2e/README.md`.
 
 ---

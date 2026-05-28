@@ -1,5 +1,6 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
+import { getReleaseEnv, missingReleaseLLMVars } from './release-env';
 
 const REPO_ROOT = path.resolve(__dirname, '../../..');
 const VAULT_ROOT = path.join(REPO_ROOT, 'tests/e2e/test-vault');
@@ -82,25 +83,29 @@ export async function resetVaultTemplate(): Promise<void> {
  * themselves when env detection fails.
  */
 export async function seedReleaseProvider(): Promise<void> {
-	const provider = process.env.E2E_TEST_PROVIDER;
-	const apiKey = process.env.E2E_TEST_API_KEY;
-	const model = process.env.E2E_TEST_MODEL;
-	if (!provider || !apiKey || !model) return;
+	const env = getReleaseEnv();
+	if (missingReleaseLLMVars(env).length > 0) return;
 
 	const settingsPath = path.join(LIVE_PLUGIN_DIR, 'config/user/settings.json');
 	const settings = await readJson<Record<string, unknown>>(settingsPath);
 	const providers = (settings.providers ?? {}) as Record<string, unknown>;
 	const list = Array.isArray(providers.list) ? providers.list : [];
 	list.unshift({
-		provider,
-		apiKey,
-		baseUrl: process.env.E2E_TEST_BASE_URL ?? '',
-		cachedModels: [{ id: model, name: model, provider, capabilities: ['chat', 'streaming'], enabled: true }],
+		provider: env.provider,
+		apiKey: env.apiKey,
+		baseUrl: env.baseUrl ?? '',
+		cachedModels: [{
+			id: env.model,
+			name: env.model,
+			provider: env.provider,
+			capabilities: ['chat', 'streaming', 'function_calling'],
+			enabled: true,
+		}],
 		cacheTimestamp: Date.now(),
 	});
 	providers.list = list;
-	providers.defaultModel = model;
-	providers.titleSummaryModel = model;
+	providers.defaultModel = env.model;
+	providers.titleSummaryModel = env.model;
 	settings.providers = providers;
 	await writeJson(settingsPath, settings);
 }
