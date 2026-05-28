@@ -44,6 +44,7 @@ export class AgentMemoryRepository {
 	}
 
 	private async writeFile(file: AgentMemoryFile): Promise<void> {
+		await ensureFolderExists(this.app.vault.adapter, AGENT_MEMORY_DATA_FOLDER);
 		await this.app.vault.adapter.write(
 			this.filePath,
 			JSON.stringify({ ...file, updatedAt: Date.now() }, null, 2),

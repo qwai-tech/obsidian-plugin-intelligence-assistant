@@ -81,6 +81,7 @@ export class ModelCacheRepository {
 	}
 
 	private async writeCache(cache: ModelCacheFile): Promise<void> {
+		await ensureFolderExists(this._app.vault.adapter, CACHE_DATA_FOLDER);
 		await this._app.vault.adapter.write(LLM_MODEL_CACHE_PATH, JSON.stringify(cache, null, 2));
 	}
 }

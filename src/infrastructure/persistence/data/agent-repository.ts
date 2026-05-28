@@ -67,6 +67,7 @@ export class AgentRepository {
 	async saveAll(agents: Agent[], activeId: string | null): Promise<void> {
 		await this.initialize();
 		const adapter = this._app.vault.adapter;
+		await ensureFolderExists(adapter, this.baseFolder);
 		const keepFiles = new Set<string>();
 
 		for (const agent of agents) {

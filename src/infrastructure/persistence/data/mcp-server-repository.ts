@@ -42,6 +42,7 @@ export class McpServerRepository {
 
 	async saveAll(servers: MCPServerConfig[]): Promise<void> {
 		await this.initialize();
+		await ensureFolderExists(this._app.vault.adapter, DATA_FOLDER);
 		const payload: McpServerFile = {
 			version: FILE_VERSION,
 			updatedAt: Date.now(),

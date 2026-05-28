@@ -46,5 +46,11 @@ export const TestIds = {
 		providerModalCancelBtn: 'ia-provider-modal-cancel-btn',
 		confirmModalConfirmBtn: 'ia-confirm-modal-confirm-btn',
 		confirmModalCancelBtn: 'ia-confirm-modal-cancel-btn',
+		agentAddBtn: 'ia-agent-add-btn',
+		agentRow: 'ia-agent-row',              // + data-agent-id, data-agent-name
+		agentEditBtn: 'ia-agent-edit-btn',     // + data-agent-id
+		agentDeleteBtn: 'ia-agent-delete-btn', // + data-agent-id
+		agentModalNameInput: 'ia-agent-modal-name-input',
+		agentModalSaveBtn: 'ia-agent-modal-save-btn',
 	},
 } as const;

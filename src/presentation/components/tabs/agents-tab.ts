@@ -9,6 +9,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import type { Agent, ModelInfo } from '@/types';
 import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
+import { TestIds } from '@/presentation/utils/test-ids';
 import { AgentEditModal } from '../modals';
 import { DEFAULT_AGENT_ID } from '@/constants';
 
@@ -33,6 +34,7 @@ export function displayAgentsTab(
 	const addBtn = actionsRow.createEl('button', { text: t('settings.agents.addBtn') });
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
+	addBtn.setAttribute('data-testid', TestIds.settings.agentAddBtn);
 	addBtn.addEventListener('click', () => {
 		const enabledTools = plugin.settings.builtInTools
 			.filter(tool => tool.enabled)
@@ -129,6 +131,9 @@ export function displayAgentsTab(
 		agent.toolAccess ??= { sources: {} };
 		const row = tbody.insertRow();
 		row.addClass('ia-table-row');
+		row.setAttribute('data-testid', TestIds.settings.agentRow);
+		row.setAttribute('data-agent-id', agent.id);
+		row.setAttribute('data-agent-name', agent.name);
 
 		// Agent column
 		const agentCell = row.insertCell();
@@ -245,6 +250,8 @@ export function displayAgentsTab(
 		const editBtn = actionsCell.createEl('button', { text: t('settings.agents.actions.edit') });
 		editBtn.addClass('ia-button');
 		editBtn.addClass('ia-button--ghost');
+		editBtn.setAttribute('data-testid', TestIds.settings.agentEditBtn);
+		editBtn.setAttribute('data-agent-id', agent.id);
 		editBtn.addEventListener('click', () => {
 			new AgentEditModal(app, plugin, agent, async (updatedAgent) => {
 				const agentIndex = plugin.settings.agents.findIndex(a => a.id === updatedAgent.id);
@@ -260,6 +267,8 @@ export function displayAgentsTab(
 		const deleteBtn = actionsCell.createEl('button', { text: canDelete ? t('settings.agents.actions.delete') : t('settings.agents.actions.protected') });
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
+		deleteBtn.setAttribute('data-testid', TestIds.settings.agentDeleteBtn);
+		deleteBtn.setAttribute('data-agent-id', agent.id);
 		if (!canDelete) {
 			deleteBtn.setAttr('disabled', 'true');
 		} else {

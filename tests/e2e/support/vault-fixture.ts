@@ -157,6 +157,15 @@ export class VaultFixture {
 		return data as T;
 	}
 
+	async runtimeDataFileExists(relativePath: string): Promise<boolean> {
+		return browser.execute(async (pluginDirRel, dataPath) => {
+			const app = (window as unknown as {
+				app: { vault: { adapter: { exists(path: string): Promise<boolean> } } };
+			}).app;
+			return app.vault.adapter.exists(`${pluginDirRel}/${dataPath}`);
+		}, PLUGIN_DIR_REL, relativePath);
+	}
+
 	async dataFileExists(relativePath: string): Promise<boolean> {
 		return pathExists(path.join(this.pluginDir, relativePath));
 	}

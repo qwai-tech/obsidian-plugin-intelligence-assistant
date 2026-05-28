@@ -25,6 +25,7 @@ export class McpToolCacheRepository {
 
 	async save(serverName: string, tools: CachedMCPTool[], updatedAt?: number): Promise<void> {
 		await this.initialize();
+		await ensureFolderExists(this._app.vault.adapter, this.baseFolder);
 		const filePath = this.getCacheFilePath(serverName);
 		const payload: ToolCacheFile = {
 			version: CACHE_VERSION,

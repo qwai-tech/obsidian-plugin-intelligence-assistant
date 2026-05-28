@@ -137,6 +137,7 @@ export class TokenUsageRepository {
 
 	private async writeFile(file: TokenUsageFile): Promise<void> {
 		file.updatedAt = Date.now();
+		await ensureFolderExists(this._app.vault.adapter, DATA_FOLDER);
 		await this._app.vault.adapter.write(this.filePath, JSON.stringify(file, null, 2));
 	}
 }

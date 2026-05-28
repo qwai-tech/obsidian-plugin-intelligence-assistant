@@ -31,6 +31,7 @@ export class ProviderRepository {
 
 	async saveAll(configs: LLMConfig[]): Promise<void> {
 		await this.initialize();
+		await ensureFolderExists(this._app.vault.adapter, DATA_FOLDER);
 		const payload = {
 			version: 1,
 			updatedAt: Date.now(),

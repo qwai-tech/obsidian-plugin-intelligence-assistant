@@ -67,6 +67,7 @@ export class PromptRepository {
 	async saveAll(prompts: SystemPrompt[], activeId: string | null): Promise<void> {
 		await this.initialize();
 		const adapter = this._app.vault.adapter;
+		await ensureFolderExists(adapter, this.baseFolder);
 		const keepFiles = new Set<string>();
 
 		for (const prompt of prompts) {

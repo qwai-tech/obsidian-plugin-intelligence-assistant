@@ -3,6 +3,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import type {Agent, BuiltInToolConfig, MCPServerConfig, CLIToolConfig} from '@/types';
 import { t } from '@/i18n';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 export class AgentEditModal extends Modal {
 	private agent: Agent;
@@ -50,11 +51,13 @@ export class AgentEditModal extends Modal {
 			path: 'agents[].name',
 			label: t('modals.agentEdit.name.label'),
 			description: t('modals.agentEdit.name.desc')
-		}).addText(text => text
-				.setValue(this.agent.name)
+		}).addText(text => {
+			text.inputEl.setAttribute('data-testid', TestIds.settings.agentModalNameInput);
+			text.setValue(this.agent.name)
 				.onChange(value => {
 					this.agent.name = value;
-				}));
+				});
+		});
 
 		// Description field
 		new Setting(contentEl)
@@ -354,7 +357,7 @@ export class AgentEditModal extends Modal {
 				this.close();
 			});
 
-		new ButtonComponent(buttonContainer)
+		const saveButton = new ButtonComponent(buttonContainer)
 			.setButtonText(t('modals.confirm.confirm'))
 			.setCta()
 			.onClick(() => {
@@ -391,6 +394,7 @@ export class AgentEditModal extends Modal {
 					this.close();
 				})();
 			});
+		saveButton.buttonEl.setAttribute('data-testid', TestIds.settings.agentModalSaveBtn);
 	}
 
 	// ── toolAccess-native helpers ──────────────────────────────────────
