@@ -83,8 +83,8 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
       persistence assertions (C1).
 - [x] **`chat/streaming.spec.ts`** (`fee40fc`) — SSE chunks render
       incrementally; assistant text matches concatenated chunks (C1).
-- [ ] **`chat/stop-generation.spec.ts`** — stop mid-stream; streaming
-      flag false; partial content kept (C2).
+- [x] **`chat/stop-generation.spec.ts`** (`562804d`) — stop
+      mid-stream; streaming flag false; partial content kept (C2).
 - [ ] **`chat/conversation-persistence.spec.ts`** — send → reload
       plugin (`reloadPlugin()`) → conversation still listed and
       re-openable.
