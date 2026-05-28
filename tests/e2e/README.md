@@ -35,6 +35,7 @@ tests/e2e/
     ├── 00-smoke.spec.ts
     ├── chat/
     │   ├── conversation-persistence.spec.ts
+    │   ├── model-switch.spec.ts
     │   ├── stop-generation.spec.ts
     │   └── streaming.spec.ts
     └── release/        # Real-API specs (Phase 3)

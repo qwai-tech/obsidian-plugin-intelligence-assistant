@@ -90,8 +90,8 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
       re-opens with persisted messages.
 - [ ] **`chat/conversation-isolation.spec.ts`** — create conv A; create
       conv B; switching back to A shows only A's history (C3).
-- [ ] **`chat/model-switch.spec.ts`** — change model in selector →
-      next request body has the chosen `model` field (C4).
+- [x] **`chat/model-switch.spec.ts`** (`9050873`) — change model in
+      selector → next request body has the chosen `model` field (C4).
 - [ ] **`chat/error-handling.spec.ts`** — mock 401/429/500 → error
       surface in UI, message marked failed, retryable; no silent
       swallowing.
