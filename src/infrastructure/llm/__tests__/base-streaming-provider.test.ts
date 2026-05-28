@@ -31,9 +31,9 @@ class TestStreamingProvider extends BaseStreamingProvider {
 
 	// Make parseStreamChunk public for testing and allow override
 	public parseStreamChunk(_data: any): ParsedStreamChunk | null {
-		this.parseStreamChunkCalls.push(data);
+		this.parseStreamChunkCalls.push(_data);
 		if (this.mockParseChunkImplementation) {
-			return this.mockParseChunkImplementation(data);
+			return this.mockParseChunkImplementation(_data);
 		}
 		return this.mockParseResult;
 	}
@@ -454,6 +454,7 @@ describe('BaseStreamingProvider', () => {
 			});
 
 			it('should return default URL if config baseUrl not set', () => {
+				provider['config'].baseUrl = undefined;
 				expect(provider['getBaseUrl']('https://default.api.com')).toBe('https://default.api.com');
 			});
 

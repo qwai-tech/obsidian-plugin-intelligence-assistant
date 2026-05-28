@@ -3,15 +3,32 @@
  */
 
 import { ConversationManager } from '../conversation-manager';
-import { ChatViewState } from '../../state/chat-view-state';
+import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { App } from 'obsidian';
-import IntelligenceAssistantPlugin from '../../../../../main';
-import {Conversation} from '../../../../../main';
-import { ConversationStorageService } from '../../../../services/conversation-storage-service';
+import type IntelligenceAssistantPlugin from '@plugin';
+import type { Conversation } from '@/types';
+import { ConversationStorageService } from '@/application/services/conversation-storage-service';
+import { initI18n } from '@/i18n';
 
 // Mock dependencies
 jest.mock('obsidian');
-jest.mock('../../../../services/conversation-storage-service');
+jest.mock('@/application/services/conversation-storage-service');
+jest.mock('@/presentation/components/modals/confirm-modal', () => ({
+	showConfirm: jest.fn(async () => {
+		if (typeof global.confirm === 'function') {
+			return global.confirm('');
+		}
+		return true;
+	}),
+}));
+jest.mock('@/presentation/components/modals/prompt-modal', () => ({
+	showPrompt: jest.fn(async () => {
+		if (typeof global.prompt === 'function') {
+			return global.prompt('');
+		}
+		return null;
+	}),
+}));
 
 describe('ConversationManager', () => {
 	let manager: ConversationManager;
@@ -22,25 +39,30 @@ describe('ConversationManager', () => {
 	let chatContainer: HTMLElement;
 	let modelSelect: HTMLSelectElement;
 	let addMessageToUI: jest.Mock;
+	let renderMessageList: jest.Mock;
 	let updateTokenSummary: jest.Mock;
 
-	beforeEach(() => {
+	beforeAll(() => {
+		initI18n('en');
+	});
+
+	beforeEach(async () => {
 		// Setup mocks
 		mockApp = new App();
 		
 		// Mock storage service
 		mockStorageService = {
-			loadConversation: jest.fn(),
-			updateConversation: jest.fn(),
-			createConversation: jest.fn(),
-			deleteConversation: jest.fn(),
-			getAllConversationsMetadata: jest.fn(),
-			getConversationMetadata: jest.fn(),
-			renameConversation: jest.fn(),
-			getConversationCount: jest.fn(),
-			initialize: jest.fn(),
-			saveIndex: jest.fn(),
-			isInitialized: jest.fn()
+			loadConversation: jest.fn().mockResolvedValue(null),
+			updateConversation: jest.fn().mockResolvedValue(true),
+			createConversation: jest.fn().mockResolvedValue(undefined),
+			deleteConversation: jest.fn().mockResolvedValue(true),
+			getAllConversationsMetadata: jest.fn().mockResolvedValue([]),
+			getConversationMetadata: jest.fn().mockResolvedValue(null),
+			renameConversation: jest.fn().mockResolvedValue(true),
+			getConversationCount: jest.fn().mockResolvedValue(0),
+			initialize: jest.fn().mockResolvedValue(undefined),
+			saveIndex: jest.fn().mockResolvedValue(undefined),
+			isInitialized: jest.fn().mockReturnValue(true)
 		} as any;
 
 		mockPlugin = {
@@ -61,6 +83,9 @@ describe('ConversationManager', () => {
 		chatContainer = document.createElement('div');
 		modelSelect = document.createElement('select');
 		addMessageToUI = jest.fn().mockReturnValue(document.createElement('div'));
+		renderMessageList = jest.fn((messages: Conversation['messages']) => {
+			messages.forEach(message => addMessageToUI(message));
+		});
 		updateTokenSummary = jest.fn();
 
 		manager = new ConversationManager(
@@ -70,12 +95,13 @@ describe('ConversationManager', () => {
 			chatContainer,
 			modelSelect,
 			addMessageToUI,
+			renderMessageList,
 			updateTokenSummary
 		);
 
 		// Initialize container for all tests
 		const conversationListContainer = document.createElement('div');
-		(manager.initializeContainer(conversationListContainer) as Promise<void>).catch(() => {});
+		await manager.initializeContainer(conversationListContainer);
 	});
 
 	afterEach(() => {
@@ -365,7 +391,7 @@ describe('ConversationManager', () => {
 			expect(mockStorageService.updateConversation).toHaveBeenCalled();
 		});
 
-		it('should filter out system messages', async () => {
+		it('should preserve system messages when saving', async () => {
 			const conv: Conversation = {
 				id: '1',
 				title: 'Test',
@@ -387,8 +413,8 @@ describe('ConversationManager', () => {
 			await manager.saveCurrentConversation();
 
 			const callArgs = (mockStorageService.updateConversation as jest.Mock).mock.calls[0][0];
-			// Should only have user and assistant messages (2 total, not 3)
-			expect(callArgs.messages).toHaveLength(2);
+			expect(callArgs.messages).toHaveLength(3);
+			expect(callArgs.messages[0]).toEqual({ role: 'system', content: 'System prompt' });
 		});
 
 		it('should update conversation updatedAt timestamp', async () => {
@@ -783,11 +809,11 @@ describe('ConversationManager', () => {
 			expect(state.conversationListVisible).toBe(false);
 		});
 
-		it('should emit list-toggled event', () => {
+		it('should emit list-toggled event', async () => {
 			state.conversationListVisible = false;
 
 			const triggerSpy = jest.spyOn(manager as any, 'trigger');
-			manager.toggleConversationList();
+			await manager.toggleConversationList();
 
 			expect(triggerSpy).toHaveBeenCalledWith('list-toggled', true);
 		});

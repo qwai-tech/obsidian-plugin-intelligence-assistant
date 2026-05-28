@@ -4,9 +4,10 @@
  */
 
 import { AttachmentHandler } from '../attachment-handler';
-import { ChatViewState } from '../../state/chat-view-state';
+import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { Attachment } from '@/types';
 import { App, TFile, Menu, Notice } from 'obsidian';
+import { initI18n } from '@/i18n';
 
 // Mock files for testing
 const mockMarkdownFile: TFile = {
@@ -57,6 +58,10 @@ describe('AttachmentHandler', () => {
 	let mockApp: App;
 	let container: HTMLElement;
 
+	beforeAll(() => {
+		initI18n('en');
+	});
+
 	beforeEach(() => {
 		mockApp = createMockApp();
 		state = new ChatViewState();
@@ -73,7 +78,7 @@ describe('AttachmentHandler', () => {
 
 			const attachmentPreview = container.querySelector('.attachment-preview');
 			expect(attachmentPreview).toBeTruthy();
-			expect((attachmentPreview as HTMLElement).style.display).toBe('none');
+			expect(attachmentPreview?.classList.contains('ia-hidden')).toBe(true);
 		});
 
 		it('should update preview when attachments change', () => {
@@ -88,7 +93,7 @@ describe('AttachmentHandler', () => {
 			});
 
 			const attachmentPreview = container.querySelector('.attachment-preview') as HTMLElement;
-			expect(attachmentPreview.style.display).not.toBe('none');
+			expect(attachmentPreview.classList.contains('ia-hidden')).toBe(false);
 		});
 	});
 
@@ -186,7 +191,7 @@ describe('AttachmentHandler', () => {
 			state.clearAttachments();
 
 			const preview = container.querySelector('.attachment-preview') as HTMLElement;
-			expect(preview.style.display).toBe('none');
+			expect(preview.classList.contains('ia-hidden')).toBe(true);
 		});
 
 		it('should show preview when attachments exist', () => {
@@ -198,7 +203,8 @@ describe('AttachmentHandler', () => {
 			});
 
 			const preview = container.querySelector('.attachment-preview') as HTMLElement;
-			expect(preview.style.display).toBe('flex');
+			expect(preview.classList.contains('ia-hidden')).toBe(false);
+			expect(preview.classList.contains('ia-attachment-preview-active')).toBe(true);
 		});
 
 		it('should render file attachment preview', () => {
@@ -416,7 +422,7 @@ describe('AttachmentHandler', () => {
 
 			expect(state.currentAttachments).toHaveLength(0);
 			const preview = container.querySelector('.attachment-preview') as HTMLElement;
-			expect(preview.style.display).toBe('none');
+			expect(preview.classList.contains('ia-hidden')).toBe(true);
 		});
 
 		it('should not throw when updatePreview called before initialization', () => {

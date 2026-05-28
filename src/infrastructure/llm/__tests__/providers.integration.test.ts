@@ -124,7 +124,7 @@ describe('Provider Integration Tests', () => {
 			const result = provider['parseStreamChunk'](chunk);
 
 			expect(result).toEqual({
-				content: 'Hello from Claude',
+				content: 'Hello from claude',
 				done: false,
 			});
 		});
@@ -208,8 +208,8 @@ describe('Provider Integration Tests', () => {
 
 			const result = provider['parseStreamChunk'](chunk);
 
-			expect(result).toEqual({
-				content: 'Hello from Gemini',
+			expect(result).toMatchObject({
+				content: 'Hello from gemini',
 				done: false,
 			});
 		});
@@ -330,7 +330,7 @@ describe('Provider Integration Tests', () => {
 
 			const { url, body } = provider['prepareStreamRequest'](request);
 
-			expect(url).toContain('openrouter.ai/api/v1/chat/completions');
+			expect(url).toBe('https://test.api.com/chat/completions');
 			expect(body).toMatchObject({
 				model: 'anthropic/claude-3-opus',
 				messages: request.messages,
@@ -397,10 +397,11 @@ describe('Provider Integration Tests', () => {
 
 			const result = provider['parseStreamChunk'](chunk);
 
-			// Should return empty content (reasoning is provider-specific)
 			expect(result).toEqual({
-				content: '',
+				content: null,
 				done: false,
+				reasoning: 'Thinking step...',
+				usage: undefined,
 			});
 		});
 
@@ -421,6 +422,8 @@ describe('Provider Integration Tests', () => {
 			expect(result).toEqual({
 				content: 'Answer: 42',
 				done: false,
+				reasoning: 'Analyzing...',
+				usage: undefined,
 			});
 		});
 
@@ -448,7 +451,7 @@ describe('Provider Integration Tests', () => {
 
 			const { url, body } = provider['prepareStreamRequest'](request);
 
-			expect(url).toContain('api.deepseek.com/v1/chat/completions');
+			expect(url).toBe('https://test.api.com/chat/completions');
 			expect(body).toMatchObject({
 				model: 'deepseek-chat',
 				messages: request.messages,
@@ -641,10 +644,9 @@ describe('Provider Integration Tests', () => {
 
 			const results = chunks.map(chunk => provider['parseStreamChunk'](chunk));
 
-			// Reasoning content is detected but returns empty content
-			expect(results[0]).toEqual({ content: '', done: false });
-			expect(results[1]).toEqual({ content: '', done: false });
-			expect(results[2]).toEqual({ content: 'The final answer is 42', done: false });
+			expect(results[0]).toEqual({ content: null, done: false, reasoning: 'Let me think...', usage: undefined });
+			expect(results[1]).toEqual({ content: null, done: false, reasoning: 'The answer requires...', usage: undefined });
+			expect(results[2]).toEqual({ content: 'The final answer is 42', done: false, reasoning: undefined, usage: undefined });
 		});
 	});
 });

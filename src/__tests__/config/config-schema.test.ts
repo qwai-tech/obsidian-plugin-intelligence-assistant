@@ -212,7 +212,7 @@ describe('ConfigSchema', () => {
 		it('should identify required fields', () => {
 			expect(ConfigSchema.isRequired('llmConfigs[0].provider')).toBe(true);
 			expect(ConfigSchema.isRequired('agents[0].name')).toBe(true);
-			expect(ConfigSchema.isRequired('agents[0].modelId')).toBe(true);
+			expect(ConfigSchema.isRequired('agents[0].modelStrategy.strategy')).toBe(true);
 		});
 
 		it('should identify optional fields', () => {

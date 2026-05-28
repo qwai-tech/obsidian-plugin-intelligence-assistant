@@ -24,11 +24,26 @@ export class ConfigManager {
   private readonly configPath: string;
   private readonly history: ChangeRecord[] = [];
   private readonly historyLimit = 100;
+  private readonly saveCallback?: () => Promise<void> | void;
+  private readonly vault: Vault;
   private dirty = false;
 
-  constructor(private vault: Vault, configFileName: string = 'intelligence-assistant.json') {
-    this.configPath = `${vault.configDir}/${configFileName}`;
-    this.config = this.getDefaultConfig();
+  constructor(
+    vaultOrApp: Vault | { vault: Vault },
+    configOrFileName: string | PluginSettings = 'intelligence-assistant.json',
+    saveCallback?: () => Promise<void> | void
+  ) {
+    this.vault = 'vault' in vaultOrApp ? vaultOrApp.vault : vaultOrApp;
+    this.saveCallback = saveCallback;
+
+    const configFileName = typeof configOrFileName === 'string'
+      ? configOrFileName
+      : 'intelligence-assistant.json';
+    const configDir = (this.vault as Vault & { configDir?: string }).configDir ?? '.obsidian';
+    this.configPath = `${configDir}/${configFileName}`;
+    this.config = typeof configOrFileName === 'string'
+      ? this.getDefaultConfig()
+      : clone(configOrFileName);
   }
 
 	async load(): Promise<void> {
@@ -57,7 +72,11 @@ export class ConfigManager {
   async save(): Promise<void> {
     if (!this.dirty) return;
     const content = JSON.stringify(this.config, null, 2);
-    await this.vault.adapter.write(this.configPath, content);
+    if (this.saveCallback) {
+      await this.saveCallback();
+    } else {
+      await this.vault.adapter.write(this.configPath, content);
+    }
     this.dirty = false;
   }
 
@@ -67,13 +86,14 @@ export class ConfigManager {
 
 	async set<K extends keyof PluginSettings>(key: K, value: PluginSettings[K], validate = true): Promise<void> {
 		const previous = clone(this.config[key]);
-		this.config[key] = clone(value);
+		const next = clone(value);
 
 		if (validate) {
-			this.assertValid(ConfigSchema.validateSection(key, this.config[key]), `update ${String(key)}`);
+			this.assertValid(ConfigSchema.validateSection(key, next), `update ${String(key)}`);
 		}
 
-    this.recordChange(String(key), previous, this.config[key]);
+    this.config[key] = next;
+    this.recordChange(String(key), previous, next);
     this.dirty = true;
     await this.save();
   }
@@ -93,22 +113,85 @@ export class ConfigManager {
     const last = segments.pop();
     if (!last) return;
 
-    let target: Record<string, unknown> = this.config as unknown as Record<string, unknown>;
+    const candidate = clone(this.config) as unknown as Record<string, unknown>;
+    let target: Record<string, unknown> = candidate;
     for (const segment of segments) {
-      if (!(segment in target)) {
-        target[segment] = {};
+      if (!(segment in target) || target[segment] === null || typeof target[segment] !== 'object') {
+        throw new Error(`Invalid configuration path: ${path}`);
       }
       target = target[segment] as Record<string, unknown>;
     }
 
-		const previous = clone(target[last]);
+		const previous = clone(this.getPath(path));
 		target[last] = clone(value);
 
 		if (validate) {
-			this.assertValid(ConfigSchema.validate(this.config), `update ${path}`);
+			this.assertValid(ConfigSchema.validate(candidate as unknown as PluginSettings), `update ${path}`);
 		}
 
+    this.config = candidate as unknown as PluginSettings;
     this.recordChange(path, previous, value);
+    this.dirty = true;
+    await this.save();
+  }
+
+  async update(partial: Partial<PluginSettings>, validate = true): Promise<void> {
+    const candidate = {
+      ...clone(this.config),
+      ...clone(partial),
+    } as PluginSettings;
+
+    if (validate) {
+      this.assertValid(ConfigSchema.validate(candidate), 'update configuration');
+    }
+
+    Object.entries(partial).forEach(([key, value]) => {
+      this.recordChange(key, (this.config as unknown as Record<string, unknown>)[key], value);
+    });
+    this.config = candidate;
+    this.dirty = true;
+    await this.save();
+  }
+
+  async reset(validate = true): Promise<void> {
+    const next = this.getDefaultConfig();
+    if (validate) {
+      this.assertValid(ConfigSchema.validate(next), 'reset configuration');
+    }
+    const previous = clone(this.config);
+    this.config = next;
+    this.recordChange('*', previous, next);
+    this.dirty = true;
+    await this.save();
+  }
+
+  async resetSection<K extends keyof PluginSettings>(section: K, validate = true): Promise<void> {
+    await this.set(section, clone(DEFAULT_SETTINGS[section]), validate);
+  }
+
+  export(): string {
+    return JSON.stringify(this.config, null, 2);
+  }
+
+  async import(json: string, validate = true): Promise<void> {
+    let parsed: PluginSettings;
+    try {
+      parsed = JSON.parse(json) as PluginSettings;
+    } catch {
+      throw new Error('Invalid JSON format');
+    }
+
+    if (validate) {
+      const result = ConfigSchema.validate(parsed);
+      if (!result.valid) {
+        const details = result.errors.map(error => `${error.path}: ${error.message}`).join('; ');
+        throw new Error(`Imported settings validation failed${details ? `: ${details}` : ''}`);
+      }
+    }
+
+    const previous = clone(this.config);
+    this.config = clone(parsed);
+    this.recordChange('*', previous, this.config);
     this.dirty = true;
     await this.save();
   }
@@ -135,6 +218,15 @@ export class ConfigManager {
 
   getConstraints(path: string): Record<string, unknown> {
     return ConfigSchema.getConstraints(path);
+  }
+
+  getStats(): { agents: number; llmProviders: number; conversations: number; version: number } {
+    return {
+      agents: this.config.agents?.length ?? 0,
+      llmProviders: this.config.llmConfigs?.length ?? 0,
+      conversations: this.config.conversations?.length ?? 0,
+      version: 1,
+    };
   }
 
   private recordChange(path: string, previous: unknown, next: unknown): void {

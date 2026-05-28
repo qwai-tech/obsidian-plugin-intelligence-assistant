@@ -162,27 +162,26 @@ export class Modal {
 	onClose(): void {}
 }
 
-export class Menu {
-	items: any[] = [];
+export const Menu = jest.fn().mockImplementation(() => {
+	const menu = {
+		items: [] as any[],
+		addItem: jest.fn((callback: (item: any) => void) => {
+			const item = {
+				setTitle: jest.fn().mockReturnThis(),
+				setIcon: jest.fn().mockReturnThis(),
+				onClick: jest.fn().mockReturnThis(),
+			};
+			callback(item);
+			menu.items.push(item);
+			return menu;
+		}),
+		showAtMouseEvent: jest.fn(),
+		showAtPosition: jest.fn(),
+	};
+	return menu;
+});
 
-	addItem(callback: (item: any) => void): this {
-		const item = {
-			setTitle: jest.fn().mockReturnThis(),
-			setIcon: jest.fn().mockReturnThis(),
-			onClick: jest.fn().mockReturnThis(),
-		};
-		callback(item);
-		this.items.push(item);
-		return this;
-	}
-
-	showAtMouseEvent(event: MouseEvent): void {}
-	showAtPosition(position: { x: number; y: number }): void {}
-}
-
-export class Notice {
-	constructor(message: string) {}
-}
+export const Notice = jest.fn().mockImplementation((_message: string) => {});
 
 export function setIcon(el: HTMLElement, iconId: string): void {
 	const icon = document.createElement('span');

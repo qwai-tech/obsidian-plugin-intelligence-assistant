@@ -2,7 +2,7 @@
  * Test suite for Conversation Model
  */
 
-import { ConversationModel } from '../../domain/conversation/conversation.model';
+import { ConversationModel } from '../../domain/chat/entities/conversation.model';
 import { createTestConversation } from '../../test-support/test-utils';
 import type { Message } from '@/types';
 
