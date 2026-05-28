@@ -167,8 +167,8 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-2-agent-mcp-rag.md` (to
 - [x] **`settings/mcp-crud.spec.ts`** — add server, connect,
       `cache/mcp-tools/<name>.json` appears with expected tool names
       (M1). (`mcp-crud.spec.ts`)
-- [ ] **`agents/mcp-tool-call.spec.ts`** — agent + MCP-sourced tool
-      invoked through the loop (M2).
+- [x] **`agents/mcp-tool-call.spec.ts`** — agent + MCP-sourced tool
+      invoked through the loop (M2). (`mcp-tool-call.spec.ts`)
 
 ### RAG
 
