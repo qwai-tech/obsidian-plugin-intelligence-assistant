@@ -6,6 +6,7 @@
 import { Setting } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 export function displayGeneralTab(
 	containerEl: HTMLElement,
@@ -29,13 +30,16 @@ export function displayGeneralTab(
 	new Setting(containerEl)
 		.setName(t('settings.general.defaultModel.name'))
 		.setDesc(t('settings.general.defaultModel.desc'))
-		.addText(text => text
-			.setPlaceholder(t('settings.general.defaultModel.placeholder'))
-			.setValue(plugin.settings.defaultModel)
-			.onChange(async (value) => {
-				plugin.settings.defaultModel = value;
-				await plugin.saveSettings();
-			}));
+		.addText(text => {
+			text.inputEl.setAttribute('data-testid', TestIds.settings.generalDefaultModelInput);
+			text
+				.setPlaceholder(t('settings.general.defaultModel.placeholder'))
+				.setValue(plugin.settings.defaultModel)
+				.onChange(async (value) => {
+					plugin.settings.defaultModel = value;
+					await plugin.saveSettings();
+				});
+		});
 
 	// Default Chat Mode
 	new Setting(containerEl)
@@ -54,26 +58,32 @@ export function displayGeneralTab(
 	new Setting(containerEl)
 		.setName(t('settings.general.conversationTitleMode.name'))
 		.setDesc(t('settings.general.conversationTitleMode.desc'))
-		.addDropdown(dropdown => dropdown
-			.addOption('first-message', t('settings.general.conversationTitleMode.firstMessage'))
-			.addOption('auto-summary', t('settings.general.conversationTitleMode.autoSummary'))
-			.addOption('manual', t('settings.general.conversationTitleMode.manual'))
-			.setValue(plugin.settings.conversationTitleMode)
-			.onChange(async (value) => {
-				plugin.settings.conversationTitleMode = value;
-				await plugin.saveSettings();
-			}));
+		.addDropdown(dropdown => {
+			dropdown.selectEl.setAttribute('data-testid', TestIds.settings.generalConversationTitleModeSelect);
+			dropdown
+				.addOption('first-message', t('settings.general.conversationTitleMode.firstMessage'))
+				.addOption('auto-summary', t('settings.general.conversationTitleMode.autoSummary'))
+				.addOption('manual', t('settings.general.conversationTitleMode.manual'))
+				.setValue(plugin.settings.conversationTitleMode)
+				.onChange(async (value) => {
+					plugin.settings.conversationTitleMode = value;
+					await plugin.saveSettings();
+				});
+		});
 
 	// Conversation Icon
 	new Setting(containerEl)
 		.setName(t('settings.general.conversationIcons.name'))
 		.setDesc(t('settings.general.conversationIcons.desc'))
-		.addToggle(toggle => toggle
-			.setValue(plugin.settings.conversationIconEnabled)
-			.onChange(async (value) => {
-				plugin.settings.conversationIconEnabled = value;
-				await plugin.saveSettings();
-			}));
+		.addToggle(toggle => {
+			toggle.toggleEl.setAttribute('data-testid', TestIds.settings.generalConversationIconToggle);
+			toggle
+				.setValue(plugin.settings.conversationIconEnabled)
+				.onChange(async (value) => {
+					plugin.settings.conversationIconEnabled = value;
+					await plugin.saveSettings();
+				});
+		});
 
 	// Configuration Status
 	// Get conversation count from storage service instead of settings array

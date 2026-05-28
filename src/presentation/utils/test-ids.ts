@@ -25,6 +25,9 @@ export const TestIds = {
 	settings: {
 		shell: 'ia-settings-shell',
 		tab: 'ia-settings-tab',                  // + data-tab-id
+		generalDefaultModelInput: 'ia-general-default-model-input',
+		generalConversationTitleModeSelect: 'ia-general-conversation-title-mode-select',
+		generalConversationIconToggle: 'ia-general-conversation-icon-toggle',
 		llmSubTab: 'ia-settings-llm-subtab',     // + data-subtab-id
 		providerAddBtn: 'ia-provider-add-btn',
 		providerRow: 'ia-provider-row',          // + data-provider-id
