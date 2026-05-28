@@ -85,9 +85,9 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
       incrementally; assistant text matches concatenated chunks (C1).
 - [x] **`chat/stop-generation.spec.ts`** (`562804d`) — stop
       mid-stream; streaming flag false; partial content kept (C2).
-- [ ] **`chat/conversation-persistence.spec.ts`** — send → reload
-      plugin (`reloadPlugin()`) → conversation still listed and
-      re-openable.
+- [x] **`chat/conversation-persistence.spec.ts`** (`b82459a`) —
+      send → reload plugin (`reloadPlugin()`) → latest conversation
+      re-opens with persisted messages.
 - [ ] **`chat/conversation-isolation.spec.ts`** — create conv A; create
       conv B; switching back to A shows only A's history (C3).
 - [ ] **`chat/model-switch.spec.ts`** — change model in selector →
