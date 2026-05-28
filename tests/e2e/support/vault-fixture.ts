@@ -5,6 +5,8 @@ const REPO_ROOT = path.resolve(__dirname, '../../..');
 const VAULT_ROOT = path.join(REPO_ROOT, 'tests/e2e/test-vault');
 const PLUGIN_DIR_REL = '.obsidian/plugins/intelligence-assistant';
 const TEMPLATE_ROOT = path.join(REPO_ROOT, 'tests/e2e/fixtures/vault-template');
+const CONVERSATION_INDEX_REL = 'data/conversations/conversation-index.json';
+const CONVERSATIONS_REL = 'data/conversations';
 
 const LIVE_PLUGIN_DIR = path.join(VAULT_ROOT, PLUGIN_DIR_REL);
 const TEMPLATE_PLUGIN_DIR = path.join(TEMPLATE_ROOT, PLUGIN_DIR_REL);
@@ -36,6 +38,17 @@ async function readJson<T>(p: string): Promise<T> {
 
 async function writeJson(p: string, data: unknown): Promise<void> {
 	await fs.writeFile(p, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+interface ConversationIndexFile {
+	conversations?: Array<{
+		id?: string;
+		file?: string;
+	}>;
+}
+
+interface ConversationFile {
+	id?: string;
 }
 
 /**
@@ -96,19 +109,93 @@ export async function seedReleaseProvider(): Promise<void> {
  * `await vault.reset()` in `beforeEach`.
  */
 export class VaultFixture {
+	constructor(private readonly pluginDir = LIVE_PLUGIN_DIR) {}
+
 	async reset(): Promise<void> {
 		await resetVaultTemplate();
 	}
 
 	async readDataFile<T = unknown>(relativePath: string): Promise<T> {
-		return readJson<T>(path.join(LIVE_PLUGIN_DIR, relativePath));
+		return readJson<T>(path.join(this.pluginDir, relativePath));
 	}
 
 	async dataFileExists(relativePath: string): Promise<boolean> {
-		return pathExists(path.join(LIVE_PLUGIN_DIR, relativePath));
+		return pathExists(path.join(this.pluginDir, relativePath));
 	}
 
 	getPluginDir(): string {
-		return LIVE_PLUGIN_DIR;
+		return this.pluginDir;
+	}
+
+	async findConversationFile(conversationId: string): Promise<string> {
+		const indexedPath = await this.findConversationFileFromIndex(conversationId);
+		if (indexedPath) {
+			return indexedPath;
+		}
+
+		const scannedPath = await this.findConversationFileByScan(conversationId);
+		if (scannedPath) {
+			return scannedPath;
+		}
+
+		throw new Error(`Conversation not found: ${conversationId}`);
+	}
+
+	private async findConversationFileFromIndex(conversationId: string): Promise<string | null> {
+		const indexPath = path.join(this.pluginDir, CONVERSATION_INDEX_REL);
+		if (!(await pathExists(indexPath))) {
+			return null;
+		}
+
+		const index = await readJson<ConversationIndexFile>(indexPath);
+		const match = index.conversations?.find((entry) => entry.id === conversationId);
+		if (!match?.file) {
+			return null;
+		}
+
+		const relativePath = this.toPluginRelativePath(match.file);
+		return await this.dataFileExists(relativePath) ? relativePath : null;
+	}
+
+	private async findConversationFileByScan(conversationId: string): Promise<string | null> {
+		const conversationsDir = path.join(this.pluginDir, CONVERSATIONS_REL);
+		if (!(await pathExists(conversationsDir))) {
+			return null;
+		}
+
+		const sanitizedId = this.sanitizeConversationId(conversationId);
+		const candidates = (await fs.readdir(conversationsDir))
+			.filter((file) => file.endsWith(`-${sanitizedId}.json`));
+
+		for (const file of candidates) {
+			const relativePath = `${CONVERSATIONS_REL}/${file}`;
+			try {
+				const conversation = await this.readDataFile<ConversationFile>(relativePath);
+				if (conversation.id === conversationId) {
+					return relativePath;
+				}
+			} catch {
+				// Ignore malformed candidate files and keep scanning.
+			}
+		}
+
+		return null;
+	}
+
+	private toPluginRelativePath(filePath: string): string {
+		if (path.isAbsolute(filePath)) {
+			return path.relative(this.pluginDir, filePath).split(path.sep).join('/');
+		}
+
+		const normalized = filePath.replace(/\\/g, '/');
+		const pluginPrefix = `${PLUGIN_DIR_REL}/`;
+		return normalized.startsWith(pluginPrefix)
+			? normalized.slice(pluginPrefix.length)
+			: normalized;
+	}
+
+	private sanitizeConversationId(value: string): string {
+		if (!value) return 'conversation';
+		return value.replace(/[^a-zA-Z0-9_-]/g, '-');
 	}
 }
