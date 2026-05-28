@@ -182,13 +182,12 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-2-agent-mcp-rag.md` (to
 
 ### Tools
 
-- [ ] **`settings/tools-builtin.spec.ts`** — enable/disable built-in
+- [x] **`settings/tools-builtin.spec.ts`** — enable/disable built-in
       tools; agent-side filtering respects the enable flag.
-- [ ] **`settings/tools-openapi-import.spec.ts`** — paste/upload
-      OpenAPI JSON → tool registered → appears in agent tool picker;
-      `data/openapi-tools/{id}.json` written.
-- [ ] **`settings/tools-cli-config.spec.ts`** — add CLI tool with arg
-      template; persistence verified.
+- [x] **`settings/tools-openapi-import.spec.ts`** — local OpenAPI JSON
+      spec → generated tool registered; config persisted in user settings.
+- [x] **`settings/tools-cli-config.spec.ts`** — add CLI tool with arg
+      template; registry and persistence verified after reload.
 
 ### Prompts & Quick Actions
 

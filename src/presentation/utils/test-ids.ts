@@ -66,5 +66,10 @@ export const TestIds = {
 		ragEnableToggle: 'ia-rag-enable-toggle',
 		ragRebuildBtn: 'ia-rag-rebuild-btn',
 		ragStats: 'ia-rag-stats',
+		toolsSubTab: 'ia-tools-subtab',             // + data-subtab-id
+		toolsBuiltinRow: 'ia-tools-builtin-row',     // + data-tool-type
+		toolsBuiltinToggle: 'ia-tools-builtin-toggle', // + data-tool-type
+		toolsOpenApiRow: 'ia-tools-openapi-row',     // + data-openapi-id
+		toolsCliRow: 'ia-tools-cli-row',             // + data-cli-id
 	},
 } as const;

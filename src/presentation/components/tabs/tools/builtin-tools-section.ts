@@ -5,6 +5,7 @@
 
 import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
+import { TestIds } from '@/presentation/utils/test-ids';
 import type IntelligenceAssistantPlugin from '@plugin';
 
 export function renderBuiltinToolsSection(
@@ -42,6 +43,8 @@ export function renderBuiltinToolsSection(
 
 		const row = tbody.insertRow();
 		row.addClass('ia-table-row');
+		row.setAttribute('data-testid', TestIds.settings.toolsBuiltinRow);
+		row.setAttribute('data-tool-type', tool.type);
 
 		const nameCell = row.insertCell();
 		nameCell.addClass('ia-table-cell');
@@ -69,6 +72,8 @@ export function renderBuiltinToolsSection(
 		enabledCell.addClass('ia-table-cell--center');
 
 		const toggle = enabledCell.createEl('input', { type: 'checkbox' });
+		toggle.setAttribute('data-testid', TestIds.settings.toolsBuiltinToggle);
+		toggle.setAttribute('data-tool-type', tool.type);
 		toggle.checked = tool.enabled;
 		toggle.addEventListener('change', () => {
 			void (async () => {

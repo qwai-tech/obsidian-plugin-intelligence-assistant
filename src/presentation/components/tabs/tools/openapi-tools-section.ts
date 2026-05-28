@@ -6,6 +6,7 @@
 import { Notice, Setting, Modal } from 'obsidian';
 import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
+import { TestIds } from '@/presentation/utils/test-ids';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { OpenApiToolConfig, OpenApiAuthType, OpenApiSourceType } from '@/types';
 
@@ -51,6 +52,8 @@ export function renderOpenapiToolsSection(
 	for (const config of sorted) {
 		const row = tbody.insertRow();
 		row.addClass('ia-table-row');
+		row.setAttribute('data-testid', TestIds.settings.toolsOpenApiRow);
+		row.setAttribute('data-openapi-id', config.id);
 
 		row.insertCell().setText(config.name || t('settings.tools.openapi.unnamed'));
 		const sourceCell = row.insertCell();

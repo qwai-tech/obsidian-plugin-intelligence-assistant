@@ -8,6 +8,7 @@ import type { CachedMCPTool } from '@/types';
 import type { RegisteredTool } from '@/types/common/tools';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
+import { TestIds } from '@/presentation/utils/test-ids';
 import { renderBuiltinToolsSection, renderOpenapiToolsSection, renderCliToolsSection } from './tools';
 
 type ToolsSubTab = 'built-in' | 'mcp' | 'openapi' | 'cli';
@@ -39,6 +40,8 @@ export function displayToolsTab(
 		const btn = tabBar.createEl('button', { text: def.label });
 		btn.className = 'settings-tab';
 		btn.dataset.slug = def.slug;
+		btn.setAttribute('data-testid', TestIds.settings.toolsSubTab);
+		btn.setAttribute('data-subtab-id', def.slug);
 		if (def.slug === toolsSubTab) {
 			btn.addClass('is-active');
 		}

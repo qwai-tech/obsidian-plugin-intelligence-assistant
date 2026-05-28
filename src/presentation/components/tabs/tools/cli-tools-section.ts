@@ -7,6 +7,7 @@
 import { Notice, Setting, Modal } from 'obsidian';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
+import { TestIds } from '@/presentation/utils/test-ids';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { CLIToolConfig } from '@/types';
 import { DEFAULT_CLI_TIMEOUT, CLI_TOOL_DEFAULTS, getAvailablePresets, PRESET_CATEGORIES, CLI_TOOL_PRESETS, type CLIToolPreset } from '@/types/features/cli-tools';
@@ -62,6 +63,8 @@ export function renderCliToolsSection(
 	for (const config of sorted) {
 		const row = tbody.insertRow();
 		row.addClass('ia-table-row');
+		row.setAttribute('data-testid', TestIds.settings.toolsCliRow);
+		row.setAttribute('data-cli-id', config.id);
 
 		const nameCell = row.insertCell();
 		nameCell.addClass('ia-table-cell');
