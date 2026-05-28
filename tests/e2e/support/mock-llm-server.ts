@@ -104,6 +104,18 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 			writeJson(res, 200, { ok: true });
 			return;
 		}
+		if (requestPath === '/v1/models' && req.method === 'GET') {
+			calls.push({
+				method: req.method,
+				path: requestPath,
+				headers: { ...req.headers },
+				body: null,
+				timestamp: Date.now(),
+			});
+			const next = queue.shift() ?? defaultModelsResponse();
+			await writeQueuedResponse(res, next);
+			return;
+		}
 		if (requestPath === '/v1/chat/completions' && req.method === 'POST') {
 			const body = await readJsonBody<unknown>(req);
 			calls.push({
@@ -276,6 +288,19 @@ function defaultResponse(): QueuedLLMResponse {
 				finish_reason: 'stop',
 			}],
 			usage: { prompt_tokens: 1, completion_tokens: 3, total_tokens: 4 },
+		},
+	};
+}
+
+function defaultModelsResponse(): QueuedLLMResponse {
+	return {
+		statusCode: 200,
+		body: {
+			object: 'list',
+			data: [
+				{ id: 'gpt-4o-mini', object: 'model' },
+				{ id: 'gpt-4o', object: 'model' },
+			],
 		},
 	};
 }

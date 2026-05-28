@@ -29,6 +29,7 @@ export const TestIds = {
 		providerAddBtn: 'ia-provider-add-btn',
 		providerRow: 'ia-provider-row',          // + data-provider-id
 		providerEditBtn: 'ia-provider-edit-btn', // + data-provider-id
+		providerRefreshBtn: 'ia-provider-refresh-btn', // + data-provider-id
 		providerDeleteBtn: 'ia-provider-delete-btn', // + data-provider-id
 		providerModalProviderSelect: 'ia-provider-modal-provider-select',
 		providerModalModelFilterInput: 'ia-provider-modal-model-filter-input',

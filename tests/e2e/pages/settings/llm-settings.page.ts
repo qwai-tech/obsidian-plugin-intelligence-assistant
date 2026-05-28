@@ -41,6 +41,10 @@ export class LlmSettingsPage extends BasePage {
 		await this.waitForProviderRow(providerId);
 	}
 
+	async refreshProviderModels(providerId: string): Promise<void> {
+		await this.clickProviderAction(TestIds.settings.providerRefreshBtn, providerId);
+	}
+
 	async deleteProvider(providerId: string): Promise<void> {
 		await this.clickProviderAction(TestIds.settings.providerDeleteBtn, providerId);
 		await this.click(TestIds.settings.confirmModalConfirmBtn);

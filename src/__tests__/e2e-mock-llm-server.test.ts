@@ -152,6 +152,26 @@ describe('mock LLM server', () => {
 		expect(String(response.headers['access-control-allow-methods'])).toContain('POST');
 	});
 
+	it('returns queued OpenAI-compatible model lists and captures requests', async () => {
+		await httpJson('POST', '/__mock__/queue', {
+			statusCode: 200,
+			body: {
+				object: 'list',
+				data: [
+					{ id: 'gpt-4o-refresh-a', object: 'model' },
+					{ id: 'gpt-4o-refresh-b', object: 'model' },
+				],
+			},
+		});
+
+		const response = await httpJson<{ data: Array<{ id: string }> }>('GET', '/v1/models');
+		const calls = await httpJson<Array<{ path: string; method: string }>>('GET', '/__mock__/calls');
+
+		expect(response.data.map(model => model.id)).toEqual(['gpt-4o-refresh-a', 'gpt-4o-refresh-b']);
+		expect(calls).toHaveLength(1);
+		expect(calls[0]).toMatchObject({ method: 'GET', path: '/v1/models' });
+	});
+
 	it('converts queued chat completions into OpenAI SSE for streaming requests', async () => {
 		await httpJson('POST', '/__mock__/queue', {
 			statusCode: 200,

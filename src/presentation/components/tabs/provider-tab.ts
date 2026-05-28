@@ -327,6 +327,8 @@ export function displayProviderTab(
 			});
 		} else {
 		const refreshBtn = actionsCell.createEl('button', { text: t('settings.provider.actions.refreshModels') });
+		refreshBtn.setAttribute('data-testid', TestIds.settings.providerRefreshBtn);
+		refreshBtn.setAttribute('data-provider-id', config.provider);
 		refreshBtn.addClass('ia-button');
 		refreshBtn.addClass('ia-button--ghost');
 		refreshBtn.addEventListener('click', () => {

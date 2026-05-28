@@ -61,9 +61,23 @@ function chatCompletion(content: string): QueuedLLMResponse {
 	};
 }
 
+function modelList(modelIds: string[]): QueuedLLMResponse {
+	return {
+		statusCode: 200,
+		body: {
+			object: 'list',
+			data: modelIds.map(id => ({ id, object: 'model' })),
+		},
+	};
+}
+
 export const mockLLM = {
 	async replyWith(text: string): Promise<void> {
 		await queue(chatCompletion(text));
+	},
+
+	async models(modelIds: string[]): Promise<void> {
+		await queue(modelList(modelIds));
 	},
 
 	async toolCall(name: string, args: Record<string, unknown>, id = 'call_mock_1'): Promise<void> {
