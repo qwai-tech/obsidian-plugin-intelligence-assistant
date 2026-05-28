@@ -55,6 +55,10 @@ import {
 	buildSummarizeCurrentNotePrompt,
 	buildSummarizeFilePrompt,
 } from './src/application/services/obsidian-agent-prompts';
+import {
+	appendObsidianContextSnapshot,
+	buildObsidianContextSnapshot,
+} from './src/application/services/obsidian-context-builder';
 
 // Re-export for backward compatibility
 export type {
@@ -480,7 +484,18 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			new Notice('Unable to open Intelligence Assistant chat view.');
 			return;
 		}
-		await view.startAgentTask({ prompt, references });
+
+		let enrichedPrompt = prompt;
+		if (references.length > 0) {
+			try {
+				const snapshot = await buildObsidianContextSnapshot(this.app, references);
+				enrichedPrompt = appendObsidianContextSnapshot(prompt, snapshot);
+			} catch (error) {
+				console.warn('[ObsidianAgent] Failed to build context snapshot:', error);
+			}
+		}
+
+		await view.startAgentTask({ prompt: enrichedPrompt, references });
 	}
 
 	private getActiveMarkdownFile(): TFile | null {
