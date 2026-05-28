@@ -345,7 +345,6 @@ export class WebSearchService {
 				case 'bing':
 					results = await this.searchBing(optimizedQuery, maxResults);
 					break;
-					break;
 				case 'serpapi':
 					results = await this.searchSerpAPI(optimizedQuery, maxResults);
 					break;
@@ -358,8 +357,6 @@ export class WebSearchService {
 				case 'brave':
 					results = await this.searchBrave(optimizedQuery, maxResults);
 					break;
-					break;
-					break;
 				case 'qwant':
 					results = await this.searchQwant(optimizedQuery, maxResults);
 					break;
@@ -367,7 +364,9 @@ export class WebSearchService {
 					results = await this.searchMojeek(optimizedQuery, maxResults);
 					break;
 				default:
-					console.warn(`[WebSearch] Unknown provider: ${this.config.provider}, defaulting to Google`);
+					console.warn(`[WebSearch] Unknown provider: ${this.config.provider}`);
+					results = [];
+					break;
 			}
 
 			return this.applyDomainFilters(results);

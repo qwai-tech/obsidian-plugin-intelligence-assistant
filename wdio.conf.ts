@@ -1,15 +1,24 @@
 import * as path from 'path';
-import type { Options } from '@wdio/types';
+import type { Capabilities, Options } from '@wdio/types';
+import type { ObsidianCapabilityOptions } from 'wdio-obsidian-service';
+
+type TestrunnerConfig = Options.Testrunner & Capabilities.WithRequestedTestrunnerCapabilities;
 
 const cacheDir = path.resolve('.obsidian-cache');
 const obsidianVersion = process.env.OBSIDIAN_VERSION || 'latest';
+const obsidianOptions: ObsidianCapabilityOptions = {
+	appVersion: obsidianVersion,
+	installerVersion: obsidianVersion,
+	plugins: [path.resolve('.')],
+	vault: path.resolve('tests/e2e/test-vault'),
+};
 
 /**
  * Base WDIO config shared by the CI and Release suites.
  * Per-suite configs supply `specs`, `onPrepare`, `onComplete`, and
  * any suite-specific timeouts.
  */
-export const baseConfig: Options.Testrunner = {
+export const baseConfig: TestrunnerConfig = {
 	runner: 'local',
 	framework: 'mocha',
 
@@ -25,12 +34,7 @@ export const baseConfig: Options.Testrunner = {
 	capabilities: [
 		{
 			browserName: 'obsidian',
-			'wdio:obsidianOptions': {
-				appVersion: obsidianVersion,
-				installerVersion: obsidianVersion,
-				plugins: [path.resolve('.')],
-				vault: path.resolve('tests/e2e/test-vault'),
-			},
+			'wdio:obsidianOptions': obsidianOptions,
 		},
 	],
 
@@ -50,18 +54,12 @@ export const baseConfig: Options.Testrunner = {
 
 	cacheDir,
 
-	autoCompileOpts: {
-		autoCompile: true,
-		tsNodeOpts: {
-			transpileOnly: true,
-			project: 'tsconfig.json',
-		},
-	},
+	tsConfigPath: 'tsconfig.json',
 };
 
 // Default export so `wdio run wdio.conf.ts` fails fast rather than silently
 // picking up the base config and running zero specs.
-export const config: Options.Testrunner = {
+export const config: TestrunnerConfig = {
 	...baseConfig,
 	specs: [],
 	onPrepare() {

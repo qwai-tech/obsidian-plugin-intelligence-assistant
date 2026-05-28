@@ -209,7 +209,7 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 	const providerList = deepClone(source.providers?.list ?? DEFAULT_USER_CONFIG.providers.list);
 	// Phase 4 migration: read from new config.tools.* paths first,
 	// fall back to old config.* paths, then fall back to defaults.
-	const rawSource = source as Record<string, unknown>;
+	const rawSource = source as unknown as Record<string, unknown>;
 	const oldMcp = rawSource?.['mcp'] as
 		{ servers?: MCPServerConfig[]; registries?: MCPRegistry[] } | undefined;
 	const oldTools = rawSource?.['tools'] as

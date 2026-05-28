@@ -1,4 +1,4 @@
-import i18next from 'i18next';
+import i18next, { type Resource, type ResourceLanguage } from 'i18next';
 import en from './locales/en.json';
 import zh from './locales/zh.json';
 
@@ -92,9 +92,9 @@ function loadLocaleFile(lang: string, pluginDir?: string): Record<string, unknow
 	return content;
 }
 
-const BUNDLED: Record<string, Record<string, unknown>> = {
-	en: { translation: en as Record<string, unknown> },
-	zh: { translation: zh as Record<string, unknown> },
+const BUNDLED: Resource = {
+	en: { translation: en as ResourceLanguage['translation'] },
+	zh: { translation: zh as ResourceLanguage['translation'] },
 };
 
 export function initI18n(langOverride?: string, pluginDir?: string): void {
@@ -103,11 +103,11 @@ export function initI18n(langOverride?: string, pluginDir?: string): void {
 	const lang = resolveLocale(raw);
 
 	// Build resources: bundled en/zh always present; dynamic locale loaded from disk
-	const resources: Record<string, Record<string, unknown>> = { ...BUNDLED };
+	const resources: Resource = { ...BUNDLED };
 	if (!BUNDLED_LOCALES.has(lang)) {
 		const data = loadLocaleFile(lang, pluginDir);
 		if (data) {
-			resources[lang] = { translation: data };
+			resources[lang] = { translation: data as ResourceLanguage['translation'] };
 		}
 	}
 
