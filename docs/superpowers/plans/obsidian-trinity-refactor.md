@@ -10,6 +10,31 @@
 
 ---
 
+## Execution Status
+
+Completed on branch `route-c-trinity-refactor`.
+
+- `1355a22` — Trinity runtime types and SPAR trace metadata.
+- `6e90bad` — vault-aware Agent Sense service.
+- `1ff621a` — agent memory service and history compaction.
+- `d74dac7` — extracted `AutonomousAgentLoop`.
+- `6fe79ec` — wired Trinity loop into Chat.
+- `66b1d4a` — Zod tool schemas and proposal-first guard.
+- `303e0e3` — SPAR phase labels in agent traces.
+- `27f20c1` — final legacy agent-loop cleanup.
+- `2dc88bc` — removed remaining unused workflow-named source residue.
+
+Final verification:
+
+- `npm test -- --runInBand`
+- `npm run type-check`
+- `npm run lint` (passes with existing 36 sentence-case warnings)
+- `npm run build`
+- `npm run test:e2e:ci`
+- `npm run deploy`
+
+---
+
 ## Source Design
 
 This plan implements `docs/architecture/trinity-design.md`:
@@ -83,7 +108,7 @@ Modify:
 - Create: `src/application/agents/index.ts`
 - Modify: `src/types/common/reasoning.ts`
 
-- [ ] **Step 1: Write the failing type usage test**
+- [x] **Step 1: Write the failing type usage test**
 
 Create `src/__tests__/application/agents/history-compactor.test.ts` with the first compile-time and runtime assertion for the upcoming types:
 
@@ -111,7 +136,7 @@ describe('agent runtime types', () => {
 });
 ```
 
-- [ ] **Step 2: Run the failing test**
+- [x] **Step 2: Run the failing test**
 
 Run:
 
@@ -121,7 +146,7 @@ npm test -- src/__tests__/application/agents/history-compactor.test.ts --runInBa
 
 Expected: FAIL with `Cannot find module '@/application/agents'`.
 
-- [ ] **Step 3: Add the runtime type file**
+- [x] **Step 3: Add the runtime type file**
 
 Create `src/application/agents/types.ts`:
 
@@ -209,7 +234,7 @@ export interface AgentLoopResult {
 }
 ```
 
-- [ ] **Step 4: Export agent runtime types**
+- [x] **Step 4: Export agent runtime types**
 
 Create `src/application/agents/index.ts`:
 
@@ -217,7 +242,7 @@ Create `src/application/agents/index.ts`:
 export * from './types';
 ```
 
-- [ ] **Step 5: Add SPAR phase metadata to trace steps**
+- [x] **Step 5: Add SPAR phase metadata to trace steps**
 
 Modify `src/types/common/reasoning.ts`:
 
@@ -235,7 +260,7 @@ export interface AgentExecutionStep {
 }
 ```
 
-- [ ] **Step 6: Verify the type scaffold passes**
+- [x] **Step 6: Verify the type scaffold passes**
 
 Run:
 
@@ -246,7 +271,7 @@ npm run type-check
 
 Expected: PASS for the test and type-check.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/application/agents/types.ts src/application/agents/index.ts src/types/common/reasoning.ts src/__tests__/application/agents/history-compactor.test.ts
@@ -262,7 +287,7 @@ git commit -m "feat: add trinity agent runtime types"
 - Modify: `src/application/agents/index.ts`
 - Test: `src/__tests__/application/agents/agent-sense-service.test.ts`
 
-- [ ] **Step 1: Write failing Sense tests**
+- [x] **Step 1: Write failing Sense tests**
 
 Create `src/__tests__/application/agents/agent-sense-service.test.ts`:
 
@@ -338,7 +363,7 @@ describe('AgentSenseService', () => {
 });
 ```
 
-- [ ] **Step 2: Run failing Sense tests**
+- [x] **Step 2: Run failing Sense tests**
 
 Run:
 
@@ -348,7 +373,7 @@ npm test -- src/__tests__/application/agents/agent-sense-service.test.ts --runIn
 
 Expected: FAIL with `AgentSenseService` missing.
 
-- [ ] **Step 3: Implement Sense service**
+- [x] **Step 3: Implement Sense service**
 
 Create `src/application/agents/agent-sense-service.ts`:
 
@@ -500,7 +525,7 @@ export class AgentSenseService {
 }
 ```
 
-- [ ] **Step 4: Export Sense service**
+- [x] **Step 4: Export Sense service**
 
 Modify `src/application/agents/index.ts`:
 
@@ -509,7 +534,7 @@ export * from './types';
 export * from './agent-sense-service';
 ```
 
-- [ ] **Step 5: Verify Sense service**
+- [x] **Step 5: Verify Sense service**
 
 Run:
 
@@ -520,7 +545,7 @@ npm run type-check
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/application/agents/agent-sense-service.ts src/application/agents/index.ts src/__tests__/application/agents/agent-sense-service.test.ts
@@ -542,7 +567,7 @@ git commit -m "feat: add vault-aware agent sense service"
 - Test: `src/__tests__/application/agent-memory-service.test.ts`
 - Test: `src/__tests__/application/agents/history-compactor.test.ts`
 
-- [ ] **Step 1: Replace the scaffold test with compaction tests**
+- [x] **Step 1: Replace the scaffold test with compaction tests**
 
 Replace `src/__tests__/application/agents/history-compactor.test.ts`:
 
@@ -585,7 +610,7 @@ describe('HistoryCompactor', () => {
 });
 ```
 
-- [ ] **Step 2: Write memory service tests**
+- [x] **Step 2: Write memory service tests**
 
 Create `src/__tests__/application/agent-memory-service.test.ts`:
 
@@ -630,7 +655,7 @@ describe('AgentMemoryService', () => {
 });
 ```
 
-- [ ] **Step 3: Run failing tests**
+- [x] **Step 3: Run failing tests**
 
 Run:
 
@@ -640,7 +665,7 @@ npm test -- src/__tests__/application/agents/history-compactor.test.ts src/__tes
 
 Expected: FAIL with missing `HistoryCompactor` and `AgentMemoryService`.
 
-- [ ] **Step 4: Add memory constants**
+- [x] **Step 4: Add memory constants**
 
 Modify `src/constants.ts`:
 
@@ -656,7 +681,7 @@ AGENT_MEMORY_DATA_FOLDER: `${dataFolder}/agent-memory`,
 AGENT_MEMORY_PATH: `${dataFolder}/agent-memory/memory.json`,
 ```
 
-- [ ] **Step 5: Implement memory repository**
+- [x] **Step 5: Implement memory repository**
 
 Create `src/infrastructure/persistence/data/agent-memory-repository.ts`:
 
@@ -711,7 +736,7 @@ export class AgentMemoryRepository {
 }
 ```
 
-- [ ] **Step 6: Implement memory service**
+- [x] **Step 6: Implement memory service**
 
 Create `src/application/services/agent-memory-service.ts`:
 
@@ -773,7 +798,7 @@ export class AgentMemoryService {
 }
 ```
 
-- [ ] **Step 7: Implement history compactor**
+- [x] **Step 7: Implement history compactor**
 
 Create `src/application/agents/history-compactor.ts`:
 
@@ -839,7 +864,7 @@ export class HistoryCompactor {
 }
 ```
 
-- [ ] **Step 8: Export memory and compactor**
+- [x] **Step 8: Export memory and compactor**
 
 Modify `src/infrastructure/persistence/data/index.ts`:
 
@@ -861,7 +886,7 @@ Modify `src/application/services/index.ts`:
 export * from './agent-memory-service';
 ```
 
-- [ ] **Step 9: Wire repository into PluginDataService**
+- [x] **Step 9: Wire repository into PluginDataService**
 
 Modify `src/application/services/plugin-data-service.ts` imports:
 
@@ -896,7 +921,7 @@ Add it to the initialization `Promise.all`:
 this.agentMemoryRepo.initialize(),
 ```
 
-- [ ] **Step 10: Verify memory and compaction**
+- [x] **Step 10: Verify memory and compaction**
 
 Run:
 
@@ -907,7 +932,7 @@ npm run type-check
 
 Expected: PASS.
 
-- [ ] **Step 11: Commit**
+- [x] **Step 11: Commit**
 
 ```bash
 git add src/constants.ts src/infrastructure/persistence/data/agent-memory-repository.ts src/infrastructure/persistence/data/index.ts src/application/services/agent-memory-service.ts src/application/services/plugin-data-service.ts src/application/services/index.ts src/application/agents/history-compactor.ts src/application/agents/index.ts src/__tests__/application/agents/history-compactor.test.ts src/__tests__/application/agent-memory-service.test.ts
@@ -923,7 +948,7 @@ git commit -m "feat: add agent memory and history compaction"
 - Modify: `src/application/agents/index.ts`
 - Test: `src/__tests__/application/agents/autonomous-agent-loop.test.ts`
 
-- [ ] **Step 1: Write failing loop tests**
+- [x] **Step 1: Write failing loop tests**
 
 Create `src/__tests__/application/agents/autonomous-agent-loop.test.ts`:
 
@@ -1035,7 +1060,7 @@ describe('AutonomousAgentLoop', () => {
 });
 ```
 
-- [ ] **Step 2: Run failing loop tests**
+- [x] **Step 2: Run failing loop tests**
 
 Run:
 
@@ -1045,7 +1070,7 @@ npm test -- src/__tests__/application/agents/autonomous-agent-loop.test.ts --run
 
 Expected: FAIL with missing `AutonomousAgentLoop`.
 
-- [ ] **Step 3: Implement `AutonomousAgentLoop`**
+- [x] **Step 3: Implement `AutonomousAgentLoop`**
 
 Create `src/application/agents/autonomous-agent-loop.ts` with the extracted loop:
 
@@ -1283,7 +1308,7 @@ export class AutonomousAgentLoop {
 }
 ```
 
-- [ ] **Step 4: Export loop**
+- [x] **Step 4: Export loop**
 
 Modify `src/application/agents/index.ts`:
 
@@ -1294,7 +1319,7 @@ export * from './history-compactor';
 export * from './autonomous-agent-loop';
 ```
 
-- [ ] **Step 5: Verify autonomous loop**
+- [x] **Step 5: Verify autonomous loop**
 
 Run:
 
@@ -1305,7 +1330,7 @@ npm run type-check
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/application/agents/autonomous-agent-loop.ts src/application/agents/index.ts src/__tests__/application/agents/autonomous-agent-loop.test.ts
@@ -1323,7 +1348,7 @@ git commit -m "feat: extract autonomous agent loop"
 - Test: `src/__tests__/application/chat-service-streaming.test.ts`
 - Test: `src/__tests__/presentation/chat-controller-message.test.ts`
 
-- [ ] **Step 1: Add a ChatService delegation test**
+- [x] **Step 1: Add a ChatService delegation test**
 
 Append to `src/__tests__/application/chat-service-streaming.test.ts`:
 
@@ -1365,7 +1390,7 @@ describe('ChatService agent delegation', () => {
 });
 ```
 
-- [ ] **Step 2: Run failing delegation test**
+- [x] **Step 2: Run failing delegation test**
 
 Run:
 
@@ -1375,7 +1400,7 @@ npm test -- src/__tests__/application/chat-service-streaming.test.ts --runInBand
 
 Expected: FAIL because the `ChatService` constructor does not accept the loop.
 
-- [ ] **Step 3: Modify ChatService constructor and callbacks**
+- [x] **Step 3: Modify ChatService constructor and callbacks**
 
 Modify imports in `src/application/services/chat.service.ts`:
 
@@ -1411,7 +1436,7 @@ if (this.autonomousAgentLoop) {
 
 Keep the existing loop code below as a rollback path until Task 8 final cleanup.
 
-- [ ] **Step 4: Pass references from ChatController into Agent loop**
+- [x] **Step 4: Pass references from ChatController into Agent loop**
 
 Modify the `runAgentLoop` call in `src/presentation/components/chat/controllers/chat-controller.ts`:
 
@@ -1449,7 +1474,7 @@ Add `references` to `executeAgentLoop` options:
 references,
 ```
 
-- [ ] **Step 5: Construct Trinity dependencies in ChatView**
+- [x] **Step 5: Construct Trinity dependencies in ChatView**
 
 Modify imports in `src/presentation/views/chat-view.ts`:
 
@@ -1494,7 +1519,7 @@ this.chatService = new ChatService(
 );
 ```
 
-- [ ] **Step 6: Expose the memory repository from plugin**
+- [x] **Step 6: Expose the memory repository from plugin**
 
 Modify `main.ts`:
 
@@ -1510,7 +1535,7 @@ public getAgentMemoryRepository(): AgentMemoryRepository {
 }
 ```
 
-- [ ] **Step 7: Preserve SPAR phase in UI trace callbacks**
+- [x] **Step 7: Preserve SPAR phase in UI trace callbacks**
 
 Modify `src/presentation/components/chat/controllers/chat-controller.ts` callback implementations:
 
@@ -1545,7 +1570,7 @@ onThought: (thought, phase) => {
 },
 ```
 
-- [ ] **Step 8: Verify chat wiring**
+- [x] **Step 8: Verify chat wiring**
 
 Run:
 
@@ -1556,7 +1581,7 @@ npm run type-check
 
 Expected: PASS.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add main.ts src/application/services/chat.service.ts src/presentation/views/chat-view.ts src/presentation/components/chat/controllers/chat-controller.ts src/__tests__/application/chat-service-streaming.test.ts
@@ -1584,7 +1609,7 @@ git commit -m "feat: wire trinity loop into agent chat"
 - Test: `src/application/tools/__tests__/tool-registry.test.ts`
 - Test: `src/__tests__/application/write-proposal-service.test.ts`
 
-- [ ] **Step 1: Install Zod**
+- [x] **Step 1: Install Zod**
 
 Run:
 
@@ -1594,7 +1619,7 @@ npm install zod
 
 Expected: `package.json` and `package-lock.json` include `zod`.
 
-- [ ] **Step 2: Write schema helper tests**
+- [x] **Step 2: Write schema helper tests**
 
 Create `src/application/tools/__tests__/tool-schema.test.ts`:
 
@@ -1634,7 +1659,7 @@ describe('tool-schema', () => {
 });
 ```
 
-- [ ] **Step 3: Write registry enforcement tests**
+- [x] **Step 3: Write registry enforcement tests**
 
 Append to `src/application/tools/__tests__/tool-registry.test.ts`:
 
@@ -1699,7 +1724,7 @@ import { z } from 'zod';
 import { createToolDefinition } from '@/application/tools/tool-schema';
 ```
 
-- [ ] **Step 4: Run failing tool tests**
+- [x] **Step 4: Run failing tool tests**
 
 Run:
 
@@ -1709,7 +1734,7 @@ npm test -- src/application/tools/__tests__/tool-schema.test.ts src/application/
 
 Expected: FAIL before implementation.
 
-- [ ] **Step 5: Extend tool types**
+- [x] **Step 5: Extend tool types**
 
 Modify `src/types/common/tools.ts`:
 
@@ -1730,7 +1755,7 @@ export interface ToolDefinition {
 }
 ```
 
-- [ ] **Step 6: Remove duplicate service tool types**
+- [x] **Step 6: Remove duplicate service tool types**
 
 Replace `src/application/services/types.ts` with:
 
@@ -1744,7 +1769,7 @@ export type {
 } from '@/types/common/tools';
 ```
 
-- [ ] **Step 7: Implement schema helper**
+- [x] **Step 7: Implement schema helper**
 
 Create `src/application/tools/tool-schema.ts`:
 
@@ -1802,7 +1827,7 @@ function zodForParameter(parameter: ToolParameter): z.ZodTypeAny {
 }
 ```
 
-- [ ] **Step 8: Add write proposal assertion**
+- [x] **Step 8: Add write proposal assertion**
 
 Modify `src/application/services/write-proposal-service.ts`:
 
@@ -1834,7 +1859,7 @@ it('rejects non proposal write results', () => {
 });
 ```
 
-- [ ] **Step 9: Enforce validation and proposal-first in registry**
+- [x] **Step 9: Enforce validation and proposal-first in registry**
 
 Modify `src/application/tools/tool-registry.ts` imports:
 
@@ -1873,7 +1898,7 @@ async executeTool(llmName: string, args: Record<string, unknown>): Promise<ToolR
 }
 ```
 
-- [ ] **Step 10: Convert built-in vault tools**
+- [x] **Step 10: Convert built-in vault tools**
 
 Modify `src/application/services/file-tools.ts` and `src/application/services/search-tools.ts`:
 
@@ -1946,7 +1971,7 @@ inputSchema: z.object({
 }),
 ```
 
-- [ ] **Step 11: Convert dynamic tool wrappers**
+- [x] **Step 11: Convert dynamic tool wrappers**
 
 Modify `src/application/services/cli-tool.ts` constructor:
 
@@ -1979,7 +2004,7 @@ const definition: ToolDefinition = createToolDefinition({
 });
 ```
 
-- [ ] **Step 12: Verify tool schema refactor**
+- [x] **Step 12: Verify tool schema refactor**
 
 Run:
 
@@ -1990,7 +2015,7 @@ npm run type-check
 
 Expected: PASS.
 
-- [ ] **Step 13: Commit**
+- [x] **Step 13: Commit**
 
 ```bash
 git add package.json package-lock.json src/types/common/tools.ts src/application/services/types.ts src/application/tools/tool-schema.ts src/application/tools/tool-registry.ts src/application/services/file-tools.ts src/application/services/search-tools.ts src/application/services/cli-tool.ts src/application/services/mcp-tool-wrapper.ts src/application/tools/sources/openapi-loader-core.ts src/application/services/write-proposal-service.ts src/application/tools/__tests__/tool-schema.test.ts src/application/tools/__tests__/tool-registry.test.ts src/application/tools/sources/__tests__/builtin-tool-source.test.ts src/application/tools/sources/__tests__/cli-tool-source.test.ts src/application/tools/sources/__tests__/mcp-tool-source.test.ts src/application/tools/sources/__tests__/openapi-loader-core.test.ts src/__tests__/application/write-proposal-service.test.ts
@@ -2008,7 +2033,7 @@ git commit -m "feat: standardize tool schemas with proposal guard"
 - Test: `src/presentation/components/chat/__tests__/message-renderer.test.ts`
 - Test: `src/presentation/components/chat/__tests__/message-renderer-write-proposals.test.ts`
 
-- [ ] **Step 1: Add renderer test for SPAR phase labels**
+- [x] **Step 1: Add renderer test for SPAR phase labels**
 
 Append to `src/presentation/components/chat/__tests__/message-renderer.test.ts`:
 
@@ -2031,7 +2056,7 @@ it('renders SPAR phase labels in agent traces', () => {
 });
 ```
 
-- [ ] **Step 2: Run failing renderer tests**
+- [x] **Step 2: Run failing renderer tests**
 
 Run:
 
@@ -2041,7 +2066,7 @@ npm test -- src/presentation/components/chat/__tests__/message-renderer.test.ts 
 
 Expected: phase label assertion fails.
 
-- [ ] **Step 3: Render phase labels in trace handler**
+- [x] **Step 3: Render phase labels in trace handler**
 
 Modify `src/presentation/components/chat/handlers/tool-call-handler.ts`:
 
@@ -2083,7 +2108,7 @@ if (phaseLabel) {
 }
 ```
 
-- [ ] **Step 4: Add CSS for phase badges**
+- [x] **Step 4: Add CSS for phase badges**
 
 Append to `src/presentation/components/chat/settings.css`:
 
@@ -2102,7 +2127,7 @@ Append to `src/presentation/components/chat/settings.css`:
 }
 ```
 
-- [ ] **Step 5: Verify proposal cards still render**
+- [x] **Step 5: Verify proposal cards still render**
 
 Run:
 
@@ -2113,7 +2138,7 @@ npm run type-check
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/presentation/components/chat/handlers/tool-call-handler.ts src/presentation/components/chat/message-renderer.ts src/presentation/components/chat/settings.css src/presentation/components/chat/__tests__/message-renderer.test.ts
@@ -2127,7 +2152,7 @@ git commit -m "feat: show spar phases in agent traces"
 **Files:**
 - Modify: `src/application/services/chat.service.ts`
 
-- [ ] **Step 1: Remove legacy Agent loop fallback**
+- [x] **Step 1: Remove legacy Agent loop fallback**
 
 After Tasks 4-7 are green, remove the old `executeAgentLoop` implementation body from `src/application/services/chat.service.ts` and leave only the delegation path plus an explicit configuration error:
 
@@ -2150,7 +2175,7 @@ async executeAgentLoop(
 }
 ```
 
-- [ ] **Step 2: Remove unused private ChatService helpers**
+- [x] **Step 2: Remove unused private ChatService helpers**
 
 In `src/application/services/chat.service.ts`, remove methods that become unused after the extraction:
 
@@ -2159,7 +2184,7 @@ In `src/application/services/chat.service.ts`, remove methods that become unused
 
 Run `npm run type-check` after removal. If TypeScript reports an unused import, delete that import in the same file.
 
-- [ ] **Step 3: Run targeted verification**
+- [x] **Step 3: Run targeted verification**
 
 Run:
 
@@ -2169,7 +2194,7 @@ npm test -- src/__tests__/application/chat-service-streaming.test.ts src/__tests
 
 Expected: all listed suites pass.
 
-- [ ] **Step 4: Run full verification**
+- [x] **Step 4: Run full verification**
 
 Run:
 
@@ -2181,7 +2206,7 @@ npm run build
 
 Expected: all commands pass.
 
-- [ ] **Step 5: Deploy locally**
+- [x] **Step 5: Deploy locally**
 
 Run:
 
@@ -2191,14 +2216,14 @@ npm run deploy
 
 Expected: deploy script completes and updates the local Obsidian plugin bundle.
 
-- [ ] **Step 6: Commit final cleanup**
+- [x] **Step 6: Commit final cleanup**
 
 ```bash
 git add src/application/services/chat.service.ts
 git commit -m "refactor: complete trinity agent loop migration"
 ```
 
-- [ ] **Step 7: Push**
+- [x] **Step 7: Push**
 
 ```bash
 git push
