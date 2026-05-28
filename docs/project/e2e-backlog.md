@@ -9,18 +9,21 @@ Tool system Phase 5 cleanup: `docs/superpowers/plans/2026-05-25-tool-system-refa
 
 ## Tool system follow-ups (after Phase 5 cleanup)
 
-- [ ] **Agent-edit-modal: native toolAccess editor.** Phase 5 kept the
+- [x] **Agent-edit-modal: native toolAccess editor.** (`23814e8`)
+  Phase 5 kept the
   modal's UI working state on the legacy `enabledBuiltInTools` /
   `enabledMcpServers` / `enabledMcpTools` / `enabledCLITools` /
   `enabledAllCLITools` arrays for minimal-risk reasons; it recomputes
   `toolAccess` on save. Build a real toolAccess editor (per-source
   'all' vs explicit toolId list, with disambiguation visible to the
   user) and drop the legacy arrays from `types/core/agent.ts` entirely.
-- [ ] **Drop the 5 legacy fields from the Agent type.** After the modal
+- [x] **Drop the 5 legacy fields from the Agent type.** (`36c40e3`)
+  After the modal
   rewrite, remove `enabledBuiltInTools?`/`enabledMcpServers?`/
   `enabledMcpTools?`/`enabledCLITools?`/`enabledAllCLITools?` and the
   defensive `??= []` defaulting in `agents-tab.ts` lines 128-129.
-- [ ] **Persist write-side schema unification.** `userConfigToPluginSettings`
+- [x] **Persist write-side schema unification.** (`58541c3`)
+  `userConfigToPluginSettings`
   reads from both old `config.mcp.*` + `config.tools.*` paths but the
   inverse mapper (`pluginSettingsToUserConfig`) should write only the
   new schema. Verify and clean up.
@@ -59,12 +62,15 @@ These are concrete debts the Phase 0 rebuild took on knowingly.
   remains untracked and is normal — it gets reset by VaultFixture on every
   spec run.)
 
-- [ ] **Triage the 32 pre-existing lint errors / 32 warnings on the
-      `tool-system-refactor` branch.** Phase 0 preserved the baseline
+- [x] **Triage the 32 pre-existing lint errors / 32 warnings on the
+      `tool-system-refactor` branch.** (`8a0363d`)
+  Phase 0 preserved the baseline
   but did not fix it. Many are `@typescript-eslint/no-unsafe-*` and
   `@typescript-eslint/no-explicit-any` in plugin source. Decide whether
   to (a) clear them before merging the E2E work, (b) tighten ESLint
-  later in a separate cleanup PR, or (c) accept the noise.
+  later in a separate cleanup PR, or (c) accept the noise. Blocking
+  lint errors are now cleared; remaining sentence-case findings stay at
+  warning level for a focused UI-copy cleanup.
 
 - [ ] **Conversation file lookup helper.** Conversation filenames follow
   `{datePrefix}-{seq:000}-{sanitizedId}.json`. Specs that need to read
