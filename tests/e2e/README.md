@@ -37,6 +37,7 @@ tests/e2e/
     │   ├── conversation-persistence.spec.ts
     │   ├── error-handling.spec.ts
     │   ├── model-switch.spec.ts
+    │   ├── send-receive.spec.ts
     │   ├── stop-generation.spec.ts
     │   └── streaming.spec.ts
     └── release/        # Real-API specs (Phase 3)
