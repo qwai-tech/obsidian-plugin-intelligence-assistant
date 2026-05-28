@@ -1,6 +1,8 @@
 import { TFile } from 'obsidian';
 import {
 	applyWriteProposal,
+	assertWriteProposalResult,
+	createWriteProposal,
 	extractWriteProposalsFromSteps,
 	type WriteProposal,
 } from '../../application/services/write-proposal-service';
@@ -85,5 +87,18 @@ describe('write proposal service', () => {
 
 		expect(app.vault.modify).toHaveBeenCalledWith(file, 'new');
 		expect(app.vault.create).not.toHaveBeenCalled();
+	});
+
+	it('accepts write proposal results', () => {
+		const proposal = createWriteProposal({ operation: 'create', path: 'A.md', content: 'A' });
+		expect(assertWriteProposalResult(proposal)).toEqual({ success: true });
+	});
+
+	it('rejects non proposal write results', () => {
+		const result = assertWriteProposalResult('direct write complete');
+		expect(result.success).toBe(false);
+		if (!result.success) {
+			expect(result.error).toContain('must return a write proposal');
+		}
 	});
 });

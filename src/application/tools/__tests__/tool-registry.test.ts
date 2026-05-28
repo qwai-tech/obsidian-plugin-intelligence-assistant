@@ -1,6 +1,8 @@
 import { ToolRegistry } from '../tool-registry';
 import type { ToolSource } from '../tool-source';
 import type { AgentToolAccess, SourceTool, ToolSourceKind } from '@/types/common/tools';
+import { z } from 'zod';
+import { createToolDefinition } from '@/application/tools/tool-schema';
 
 /** Build a fake tool that returns a fixed result. */
 function fakeTool(name: string): SourceTool {
@@ -240,6 +242,58 @@ describe('ToolRegistry - executeTool', () => {
 		const result = await registry.executeTool('boom', {});
 		expect(result.success).toBe(false);
 		expect(result.error).toContain('kaboom');
+	});
+
+	it('rejects invalid tool arguments before execution', async () => {
+		const registry = new ToolRegistry();
+		const execute = jest.fn(async () => ({ success: true, result: 'ok' }));
+		registry.registerSource({
+			kind: 'builtin',
+			id: 'builtin',
+			label: 'Built-in Tools',
+			load: async () => [{
+				definition: createToolDefinition({
+					name: 'read_file',
+					description: 'Read file',
+					parameters: [{ name: 'path', type: 'string', description: 'Path', required: true }],
+					inputSchema: z.object({ path: z.string().min(1) }),
+				}),
+				execute,
+			}],
+			dispose: async () => undefined,
+		});
+		await registry.reload();
+
+		const result = await registry.executeTool('read_file', { path: '' });
+
+		expect(result.success).toBe(false);
+		expect(result.error).toContain('Invalid arguments');
+		expect(execute).not.toHaveBeenCalled();
+	});
+
+	it('rejects vault-write tools that do not return write proposals', async () => {
+		const registry = new ToolRegistry();
+		registry.registerSource({
+			kind: 'builtin',
+			id: 'builtin',
+			label: 'Built-in Tools',
+			load: async () => [{
+				definition: createToolDefinition({
+					name: 'write_file',
+					description: 'Write file',
+					parameters: [{ name: 'path', type: 'string', description: 'Path', required: true }],
+					sideEffects: { vaultWrite: true },
+				}),
+				execute: async () => ({ success: true, result: 'wrote directly' }),
+			}],
+			dispose: async () => undefined,
+		});
+		await registry.reload();
+
+		const result = await registry.executeTool('write_file', { path: 'A.md' });
+
+		expect(result.success).toBe(false);
+		expect(result.error).toContain('must return a write proposal');
 	});
 });
 

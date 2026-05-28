@@ -1,5 +1,6 @@
 import { Tool, ToolDefinition, ToolParameter, ToolResult } from './types';
 import { MCPClient, MCPTool } from './mcp-client';
+import { createToolDefinition } from '@/application/tools/tool-schema';
 
 /**
  * Wraps an MCP tool to adapt it to our internal Tool interface
@@ -42,11 +43,11 @@ export class MCPToolWrapper implements Tool {
 			}
 		}
 
-		return {
+		return createToolDefinition({
 			name: mcpTool.name,
 			description: mcpTool.description || '',
 			parameters,
-		};
+		});
 	}
 
 	/**

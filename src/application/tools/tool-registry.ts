@@ -12,6 +12,8 @@ import type {
 	ToolSourceKind,
 } from '@/types/common/tools';
 import type { ToolSource } from './tool-source';
+import { validateToolArguments } from './tool-schema';
+import { assertWriteProposalResult } from '@/application/services/write-proposal-service';
 
 /** Max length of an LLM function name (OpenAI / Anthropic limit). */
 const MAX_LLM_NAME_LENGTH = 64;
@@ -140,8 +142,19 @@ export class ToolRegistry {
 		if (!tool) {
 			return { success: false, error: `Tool not found: ${llmName}` };
 		}
+		const validation = validateToolArguments(tool.definition, args);
+		if (!validation.success) {
+			return { success: false, error: `Invalid arguments for ${llmName}: ${validation.error}` };
+		}
 		try {
-			return await tool.execute(args);
+			const result = await tool.execute(validation.data);
+			if (result.success && tool.definition.sideEffects?.vaultWrite) {
+				const proposalCheck = assertWriteProposalResult(result.result);
+				if (!proposalCheck.success) {
+					return { success: false, error: proposalCheck.error };
+				}
+			}
+			return result;
 		} catch (err) {
 			return {
 				success: false,

@@ -2,6 +2,7 @@
  * Tool Common Types
  * Shared types for tool system
  */
+import type { z } from 'zod';
 
 export interface ToolParameter {
 	name: string;
@@ -15,6 +16,13 @@ export interface ToolDefinition {
 	name: string;
 	description: string;
 	parameters: ToolParameter[];
+	inputSchema?: z.ZodObject<z.ZodRawShape>;
+	sideEffects?: ToolSideEffects;
+}
+
+export interface ToolSideEffects {
+	vaultWrite?: boolean;
+	externalWrite?: boolean;
 }
 
 export interface ToolCall {

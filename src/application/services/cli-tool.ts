@@ -7,6 +7,7 @@ import { spawn } from 'child_process';
 import type { Tool, ToolDefinition, ToolResult, ToolParameter } from './types';
 import type { CLIToolConfig, CLIToolParameter } from '@/types/features/cli-tools';
 import { DEFAULT_CLI_TIMEOUT } from '@/types/features/cli-tools';
+import { createToolDefinition } from '@/application/tools/tool-schema';
 
 export class CLITool implements Tool {
 	definition: ToolDefinition;
@@ -14,11 +15,11 @@ export class CLITool implements Tool {
 
 	constructor(private config: CLIToolConfig) {
 		this.provider = `cli:${config.id}`;
-		this.definition = {
+		this.definition = createToolDefinition({
 			name: config.name,
 			description: config.description,
 			parameters: this.convertParameters(config.parameters || [])
-		};
+		});
 	}
 
 	/**

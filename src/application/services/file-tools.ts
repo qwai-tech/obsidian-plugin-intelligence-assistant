@@ -1,11 +1,13 @@
 import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
 import { createWriteProposal } from './write-proposal-service';
+import { createToolDefinition } from '@/application/tools/tool-schema';
+import { z } from 'zod';
 
 export class ReadFileTool implements Tool {
 	constructor(private _app: App) {}
 
-	definition: ToolDefinition = {
+	definition: ToolDefinition = createToolDefinition({
 		name: 'read_file',
 		description: 'Read the contents of a file from the vault',
 		parameters: [
@@ -15,8 +17,9 @@ export class ReadFileTool implements Tool {
 				description: 'Path to the file to read',
 				required: true
 			}
-		]
-	};
+		],
+		inputSchema: z.object({ path: z.string().min(1) }),
+	});
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
@@ -47,7 +50,7 @@ export class ReadFileTool implements Tool {
 export class WriteFileTool implements Tool {
 	constructor(private _app: App) {}
 
-	definition: ToolDefinition = {
+	definition: ToolDefinition = createToolDefinition({
 		name: 'write_file',
 		description: 'Prepare a proposal to write or update a vault file. This does not modify the vault until the user confirms.',
 		parameters: [
@@ -63,8 +66,13 @@ export class WriteFileTool implements Tool {
 				description: 'Content to write to the file',
 				required: true
 			}
-		]
-	};
+		],
+		inputSchema: z.object({
+			path: z.string().min(1),
+			content: z.string(),
+		}),
+		sideEffects: { vaultWrite: true },
+	});
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
@@ -107,7 +115,7 @@ export class WriteFileTool implements Tool {
 export class ListFilesTool implements Tool {
 	constructor(private _app: App) {}
 
-	definition: ToolDefinition = {
+	definition: ToolDefinition = createToolDefinition({
 		name: 'list_files',
 		description: 'List files in the vault or a specific folder',
 		parameters: [
@@ -123,8 +131,12 @@ export class ListFilesTool implements Tool {
 				description: 'Filter by file extension (e.g., "md")',
 				required: false
 			}
-		]
-	};
+		],
+		inputSchema: z.object({
+			folder: z.string().optional(),
+			extension: z.string().optional(),
+		}),
+	});
 
   execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {

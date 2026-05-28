@@ -1,11 +1,13 @@
 import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
 import { createWriteProposal } from './write-proposal-service';
+import { createToolDefinition } from '@/application/tools/tool-schema';
+import { z } from 'zod';
 
 export class SearchFilesTool implements Tool {
 	constructor(private _app: App) {}
 
-	definition: ToolDefinition = {
+	definition: ToolDefinition = createToolDefinition({
 		name: 'search_files',
 		description: 'Search for files by name or content in the vault',
 		parameters: [
@@ -27,8 +29,13 @@ export class SearchFilesTool implements Tool {
 				description: 'Maximum number of results (default: 10)',
 				required: false
 			}
-		]
-	};
+		],
+		inputSchema: z.object({
+			query: z.string().min(1),
+			search_content: z.boolean().optional(),
+			limit: z.number().positive().optional(),
+		}),
+	});
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
@@ -86,7 +93,7 @@ export class SearchFilesTool implements Tool {
 export class CreateNoteTool implements Tool {
 	constructor(private _app: App) {}
 
-	definition: ToolDefinition = {
+	definition: ToolDefinition = createToolDefinition({
 		name: 'create_note',
 		description: 'Prepare a proposal to create a new note. This does not modify the vault until the user confirms.',
 		parameters: [
@@ -108,8 +115,14 @@ export class CreateNoteTool implements Tool {
 				description: 'Folder path to create the note in (optional)',
 				required: false
 			}
-		]
-	};
+		],
+		inputSchema: z.object({
+			title: z.string().min(1),
+			content: z.string(),
+			folder: z.string().optional(),
+		}),
+		sideEffects: { vaultWrite: true },
+	});
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
@@ -151,7 +164,7 @@ export class CreateNoteTool implements Tool {
 export class AppendToNoteTool implements Tool {
 	constructor(private _app: App) {}
 
-	definition: ToolDefinition = {
+	definition: ToolDefinition = createToolDefinition({
 		name: 'append_to_note',
 		description: 'Prepare a proposal to append content to an existing note. This does not modify the vault until the user confirms.',
 		parameters: [
@@ -167,8 +180,13 @@ export class AppendToNoteTool implements Tool {
 				description: 'Content to append',
 				required: true
 			}
-		]
-	};
+		],
+		inputSchema: z.object({
+			path: z.string().min(1),
+			content: z.string(),
+		}),
+		sideEffects: { vaultWrite: true },
+	});
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {

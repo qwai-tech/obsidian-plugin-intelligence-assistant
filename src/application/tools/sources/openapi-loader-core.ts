@@ -2,6 +2,7 @@ import { normalizePath, requestUrl } from 'obsidian';
 import { IFileSystem } from '@/core/interfaces';
 import type { OpenApiToolConfig, OpenApiAuthType } from '@/types';
 import type { Tool, ToolDefinition, ToolParameter, ToolResult } from '@/application/services/types';
+import { createToolDefinition } from '@/application/tools/tool-schema';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options' | 'trace';
 type ParameterLocation = 'path' | 'query' | 'header' | 'body';
@@ -306,11 +307,12 @@ function generateTools(
 			const { parameters, metadata } = buildParameters(pathItem, operationDef);
 			const requestBody = buildRequestBody(operationDef, metadata);
 			const description = buildDescription(operationDef, method, pathKey);
-			const definition: ToolDefinition = {
+			const definition: ToolDefinition = createToolDefinition({
 				name: operationId,
 				description,
-				parameters: [...parameters, ...requestBody]
-			};
+				parameters: [...parameters, ...requestBody],
+				sideEffects: ['post', 'put', 'delete', 'patch'].includes(method) ? { externalWrite: true } : undefined,
+			});
 			const tool = new OpenApiOperationTool(definition, method, pathKey, baseUrl, metadata, providerId, auth);
 			tools.push(tool);
 		}

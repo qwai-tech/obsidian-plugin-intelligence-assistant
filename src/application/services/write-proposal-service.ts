@@ -41,6 +41,13 @@ export function isWriteProposal(value: unknown): value is WriteProposal {
 		&& candidate.applied === false;
 }
 
+export function assertWriteProposalResult(value: unknown): { success: true } | { success: false; error: string } {
+	if (isWriteProposal(value)) {
+		return { success: true };
+	}
+	return { success: false, error: 'Vault write tools must return a write proposal and must not write directly.' };
+}
+
 export function extractWriteProposalsFromSteps(steps: AgentExecutionStep[] | undefined): WriteProposal[] {
 	if (!steps?.length) return [];
 	const proposals: WriteProposal[] = [];
