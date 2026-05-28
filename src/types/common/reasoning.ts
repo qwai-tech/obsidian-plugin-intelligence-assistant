@@ -15,6 +15,7 @@ export interface AgentExecutionStep {
 	content: string;
 	timestamp: number;
 	status?: 'pending' | 'success' | 'error';
+	phase?: 'sense' | 'plan' | 'act' | 'reflect' | 'final';
 	/** Structured tool name (for action steps) */
 	toolName?: string;
 	/** Structured args (for action steps) */
