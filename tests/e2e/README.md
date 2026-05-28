@@ -34,6 +34,7 @@ tests/e2e/
 └── specs/
     ├── 00-smoke.spec.ts
     ├── chat/
+    │   ├── conversation-isolation.spec.ts
     │   ├── conversation-persistence.spec.ts
     │   ├── error-handling.spec.ts
     │   ├── model-switch.spec.ts

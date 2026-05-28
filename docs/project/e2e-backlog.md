@@ -88,8 +88,9 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
 - [x] **`chat/conversation-persistence.spec.ts`** (`b82459a`) —
       send → reload plugin (`reloadPlugin()`) → latest conversation
       re-opens with persisted messages.
-- [ ] **`chat/conversation-isolation.spec.ts`** — create conv A; create
-      conv B; switching back to A shows only A's history (C3).
+- [x] **`chat/conversation-isolation.spec.ts`** (`88363b4`) — create
+      conv A; create conv B; switching back to A shows only A's history
+      (C3).
 - [x] **`chat/model-switch.spec.ts`** (`9050873`) — change model in
       selector → next request body has the chosen `model` field (C4).
 - [x] **`chat/error-handling.spec.ts`** (`d7be052`) — mock 500 →
@@ -111,8 +112,10 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
       `data-provider-id`), edit/delete per-row buttons.
 - [ ] Provider config modal: `name`, `apiKey`, `baseUrl`,
       `cachedModels` table, save/cancel/test-connection.
-- [ ] Conversation list sidebar: items (with `data-conv-id`),
-      delete/rename actions.
+- [x] Conversation list sidebar: items (with `data-conv-id`) for
+      switching assertions (`88363b4`).
+- [ ] Conversation list sidebar: delete/rename action testids for
+      future conversation-management specs.
 
 ### Infrastructure
 
