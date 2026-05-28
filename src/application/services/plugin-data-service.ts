@@ -9,6 +9,7 @@ import {
 	McpServerRepository,
 	McpToolCacheRepository,
 	TokenUsageRepository,
+	AgentMemoryRepository,
 } from '@/infrastructure/persistence';
 
 export interface HydrateResult {
@@ -28,6 +29,7 @@ export class PluginDataService {
 	private mcpServerRepository!: McpServerRepository;
 	private mcpToolCacheRepository!: McpToolCacheRepository;
 	public tokenUsageRepo!: TokenUsageRepository;
+	public agentMemoryRepo!: AgentMemoryRepository;
 
 	constructor(private readonly app: App) {}
 
@@ -39,6 +41,7 @@ export class PluginDataService {
 		this.mcpServerRepository = new McpServerRepository(this.app);
 		this.mcpToolCacheRepository = new McpToolCacheRepository(this.app);
 		this.tokenUsageRepo = new TokenUsageRepository(this.app);
+		this.agentMemoryRepo = new AgentMemoryRepository(this.app);
 
 		await Promise.all([
 			this.promptRepository.initialize(),
@@ -48,6 +51,7 @@ export class PluginDataService {
 			this.mcpServerRepository.initialize(),
 			this.mcpToolCacheRepository.initialize(),
 			this.tokenUsageRepo.initialize(),
+			this.agentMemoryRepo.initialize(),
 		]);
 	}
 

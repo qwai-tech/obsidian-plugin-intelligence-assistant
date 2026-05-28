@@ -1,23 +1,36 @@
-import type { AgentSenseContext, AgentWorkingMessage } from '@/application/agents';
-import { SPAR_PHASES } from '@/application/agents';
+import { HistoryCompactor } from '@/application/agents';
+import type { AgentWorkingMessage } from '@/application/agents';
 
-describe('agent runtime types', () => {
-	it('allows a system research log working message', () => {
-		const context: AgentSenseContext = {
-			userQuery: 'organize this project',
-			activeFilePath: 'Projects/A.md',
-			references: [],
-			sections: [{ title: 'Active note', content: 'A', source: 'active-note' }],
-			ragSources: [],
-			memory: null,
-		};
-		const msg: AgentWorkingMessage = {
-			role: 'system',
-			content: `Research Log:\n${context.sections[0].content}`,
-		};
+describe('HistoryCompactor', () => {
+	it('keeps short histories unchanged', () => {
+		const compactor = new HistoryCompactor({ maxEstimatedTokens: 10000 });
+		const messages: AgentWorkingMessage[] = [
+			{ role: 'user', content: 'small request' },
+			{ role: 'assistant', content: 'small answer' },
+		];
 
-		expect(msg.content).toContain('Research Log');
-		expect(context.sections[0].source).toBe('active-note');
-		expect(SPAR_PHASES).toEqual(['sense', 'plan', 'act', 'reflect', 'final']);
+		const result = compactor.compact(messages);
+
+		expect(result.compacted).toBe(false);
+		expect(result.messages).toEqual(messages);
+	});
+
+	it('replaces middle tool history with a Research Log block', () => {
+		const compactor = new HistoryCompactor({ maxEstimatedTokens: 20, keepLastMessages: 2 });
+		const messages: AgentWorkingMessage[] = [
+			{ role: 'system', content: 'base system' },
+			{ role: 'user', content: 'first question with many many many words' },
+			{ role: 'assistant', content: 'tool analysis with many many many words' },
+			{ role: 'tool', tool_call_id: 'call-1', content: 'tool output with many many many words' },
+			{ role: 'assistant', content: 'latest thought' },
+			{ role: 'user', content: 'latest request' },
+		];
+
+		const result = compactor.compact(messages);
+
+		expect(result.compacted).toBe(true);
+		expect(result.messages.some(message => message.content.includes('Research Log'))).toBe(true);
+		expect(result.messages.at(-1)?.content).toBe('latest request');
+		expect(result.summary).toContain('first question');
 	});
 });

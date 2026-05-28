@@ -17,6 +17,8 @@ export const DATA_FOLDER = `${PLUGIN_BASE_FOLDER}/data`;
 export const CONVERSATIONS_DATA_FOLDER = `${DATA_FOLDER}/conversations`;
 export const PROMPTS_DATA_FOLDER = `${DATA_FOLDER}/prompts`;
 export const AGENTS_DATA_FOLDER = `${DATA_FOLDER}/agents`;
+export const AGENT_MEMORY_DATA_FOLDER = `${DATA_FOLDER}/agent-memory`;
+export const AGENT_MEMORY_PATH = `${AGENT_MEMORY_DATA_FOLDER}/memory.json`;
 export const VECTOR_STORE_FOLDER = `${DATA_FOLDER}/vector_store`;
 export const VECTOR_STORE_NOTES_PATH = `${VECTOR_STORE_FOLDER}/notes.json`;
 export const CACHE_DATA_FOLDER = `${DATA_FOLDER}/cache`;
@@ -44,6 +46,8 @@ export function getPluginPaths(configDir: string) {
 		CONVERSATIONS_DATA_FOLDER: `${dataFolder}/conversations`,
 		PROMPTS_DATA_FOLDER: `${dataFolder}/prompts`,
 		AGENTS_DATA_FOLDER: `${dataFolder}/agents`,
+		AGENT_MEMORY_DATA_FOLDER: `${dataFolder}/agent-memory`,
+		AGENT_MEMORY_PATH: `${dataFolder}/agent-memory/memory.json`,
 		VECTOR_STORE_FOLDER: `${dataFolder}/vector_store`,
 		VECTOR_STORE_NOTES_PATH: `${dataFolder}/vector_store/notes.json`,
 		CACHE_DATA_FOLDER: cacheFolder,
