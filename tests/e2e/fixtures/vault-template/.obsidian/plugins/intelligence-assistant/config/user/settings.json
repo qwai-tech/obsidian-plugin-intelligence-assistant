@@ -12,6 +12,13 @@
             "provider": "openai",
             "capabilities": ["chat", "streaming"],
             "enabled": true
+          },
+          {
+            "id": "gpt-4o-mini-alt",
+            "name": "GPT-4o Mini Alt",
+            "provider": "openai",
+            "capabilities": ["chat", "streaming"],
+            "enabled": true
           }
         ],
         "cacheTimestamp": 0

@@ -43,6 +43,29 @@ export class ChatViewPage extends BasePage {
 		await this.click(TestIds.chat.sendBtn);
 	}
 
+	async selectModel(modelId: string): Promise<void> {
+		await this.waitFor(TestIds.chat.modelSelect);
+		await browser.execute((testId, value) => {
+			const select = document.querySelector(`[data-testid="${testId}"]`);
+			if (!(select instanceof HTMLSelectElement)) {
+				throw new Error(`Model select not found: ${testId}`);
+			}
+			select.value = value;
+			select.dispatchEvent(new Event('change', { bubbles: true }));
+		}, TestIds.chat.modelSelect, modelId);
+	}
+
+	async getSelectedModel(): Promise<string> {
+		await this.waitFor(TestIds.chat.modelSelect);
+		return browser.execute((testId) => {
+			const select = document.querySelector(`[data-testid="${testId}"]`);
+			if (!(select instanceof HTMLSelectElement)) {
+				return '';
+			}
+			return select.value;
+		}, TestIds.chat.modelSelect);
+	}
+
 	async stopGeneration(): Promise<void> {
 		await this.click(TestIds.chat.stopBtn);
 	}
