@@ -72,7 +72,8 @@ These are concrete debts the Phase 0 rebuild took on knowingly.
   lint errors are now cleared; remaining sentence-case findings stay at
   warning level for a focused UI-copy cleanup.
 
-- [ ] **Conversation file lookup helper.** Conversation filenames follow
+- [x] **Conversation file lookup helper.** (`04d9cf3`)
+  Conversation filenames follow
   `{datePrefix}-{seq:000}-{sanitizedId}.json`. Specs that need to read
   a conversation by id currently have to walk the index first. Add
   `VaultFixture.findConversationFile(id)` → file path, so Phase 1+
