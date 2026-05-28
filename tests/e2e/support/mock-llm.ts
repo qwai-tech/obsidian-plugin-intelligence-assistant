@@ -1,61 +1,125 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import { request } from 'node:http';
+import {
+	DEFAULT_MOCK_LLM_PORT,
+	type CapturedLLMCall,
+	type QueuedLLMResponse,
+} from './mock-llm-server';
 
-const FIXTURES = path.resolve(__dirname, '../fixtures/responses');
-
-interface MockState {
-	mocks: WebdriverIO.Mock[];
-}
-
-const state: MockState = { mocks: [] };
-
-function readFixture(name: string): string {
-	return fs.readFileSync(path.join(FIXTURES, name), 'utf-8');
-}
-
-async function installChatMock(payload: { statusCode: number; body: string; contentType?: string }): Promise<void> {
-	const mock = await browser.mock('**/v1/chat/completions');
-	mock.respond(payload.body, {
-		statusCode: payload.statusCode,
-		headers: { 'content-type': payload.contentType ?? 'application/json' },
+function adminJson<T>(method: string, route: string, body?: unknown): Promise<T> {
+	return new Promise((resolve, reject) => {
+		const payload = body === undefined ? undefined : JSON.stringify(body);
+		const req = request(
+			{
+				hostname: '127.0.0.1',
+				port: DEFAULT_MOCK_LLM_PORT,
+				path: route,
+				method,
+				headers: payload
+					? { 'content-type': 'application/json', 'content-length': Buffer.byteLength(payload) }
+					: undefined,
+			},
+			(res) => {
+				let raw = '';
+				res.setEncoding('utf8');
+				res.on('data', (chunk) => { raw += chunk; });
+				res.on('end', () => {
+					const statusCode = res.statusCode ?? 500;
+					if (statusCode >= 400) {
+						reject(new Error(`Mock LLM admin ${method} ${route} failed: ${statusCode} ${raw}`));
+						return;
+					}
+					resolve(raw ? JSON.parse(raw) as T : undefined as T);
+				});
+			}
+		);
+		req.on('error', reject);
+		if (payload) req.write(payload);
+		req.end();
 	});
-	state.mocks.push(mock);
 }
 
-export const mockLLM = {
-	/** Mock a single text reply. */
-	async replyWith(text: string): Promise<void> {
-		const body = JSON.stringify({
+function queue(response: QueuedLLMResponse): Promise<void> {
+	return adminJson<void>('POST', '/__mock__/queue', response);
+}
+
+function chatCompletion(content: string): QueuedLLMResponse {
+	return {
+		statusCode: 200,
+		body: {
 			id: 'cmpl_mock',
 			object: 'chat.completion',
 			created: Math.floor(Date.now() / 1000),
 			model: 'gpt-4o-mini',
 			choices: [{
 				index: 0,
-				message: { role: 'assistant', content: text },
+				message: { role: 'assistant', content },
 				finish_reason: 'stop',
 			}],
-			usage: { prompt_tokens: 1, completion_tokens: text.length, total_tokens: text.length + 1 },
+			usage: { prompt_tokens: 1, completion_tokens: content.length, total_tokens: content.length + 1 },
+		},
+	};
+}
+
+export const mockLLM = {
+	async replyWith(text: string): Promise<void> {
+		await queue(chatCompletion(text));
+	},
+
+	async toolCall(name: string, args: Record<string, unknown>, id = 'call_mock_1'): Promise<void> {
+		await queue({
+			statusCode: 200,
+			body: {
+				id: 'cmpl_tool_mock',
+				object: 'chat.completion',
+				created: Math.floor(Date.now() / 1000),
+				model: 'gpt-4o-mini',
+				choices: [{
+					index: 0,
+					message: {
+						role: 'assistant',
+						content: '',
+						tool_calls: [{
+							id,
+							type: 'function',
+							function: { name, arguments: JSON.stringify(args) },
+						}],
+					},
+					finish_reason: 'tool_calls',
+				}],
+			},
 		});
-		await installChatMock({ statusCode: 200, body });
 	},
 
-	/** Mock an error response. */
+	async streaming(chunks: string[]): Promise<void> {
+		await queue({
+			statusCode: 200,
+			body: null,
+			streamChunks: chunks.map((chunk, index) => JSON.stringify({
+				id: 'cmpl_stream_mock',
+				object: 'chat.completion.chunk',
+				created: Math.floor(Date.now() / 1000),
+				model: 'gpt-4o-mini',
+				choices: [{
+					index: 0,
+					delta: { content: chunk },
+					finish_reason: index === chunks.length - 1 ? 'stop' : null,
+				}],
+			})),
+		});
+	},
+
 	async errorStatus(code: 401 | 429 | 500): Promise<void> {
-		const fixtureMap: Record<number, string> = {
-			401: 'chat-error-500.json',
-			429: 'chat-error-429.json',
-			500: 'chat-error-500.json',
-		};
-		const body = readFixture(fixtureMap[code]);
-		await installChatMock({ statusCode: code, body });
+		await queue({
+			statusCode: code,
+			body: { error: { message: `Mock LLM error ${code}`, type: 'mock_error', code } },
+		});
 	},
 
-	/** Tear down all installed mocks; call in afterEach. */
+	async getCalls(): Promise<CapturedLLMCall[]> {
+		return adminJson<CapturedLLMCall[]>('GET', '/__mock__/calls');
+	},
+
 	async clearAll(): Promise<void> {
-		for (const mock of state.mocks) {
-			await mock.restore();
-		}
-		state.mocks.length = 0;
+		await adminJson<void>('POST', '/__mock__/reset');
 	},
 };
