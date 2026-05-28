@@ -14,6 +14,7 @@ import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { ConversationStorageService } from '@/application/services/conversation-storage-service';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 /**
  * Events emitted by ConversationManager
@@ -553,6 +554,8 @@ export class ConversationManager extends Events {
 
 			group.conversations.forEach(conv => {
 			const convItem = groupEl.createDiv('conversation-item');
+			convItem.setAttribute('data-testid', TestIds.chat.conversationItem);
+			convItem.setAttribute('data-conv-id', conv.id);
 			convItem.addClass('ia-clickable');
 
 			if (conv.id === this.state.currentConversationId) {

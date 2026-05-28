@@ -38,6 +38,42 @@ export class ChatViewPage extends BasePage {
 		await this.waitFor(TestIds.chat.emptyState);
 	}
 
+	async openConversationList(): Promise<void> {
+		await this.click(TestIds.chat.conversationToggleBtn);
+		await browser.waitUntil(
+			async () => browser.execute((testId) => {
+				const list = document.querySelector(`[data-testid="${testId}"]`);
+				return list instanceof HTMLElement
+					&& list.classList.contains('is-open')
+					&& !list.classList.contains('is-collapsed');
+			}, TestIds.chat.conversationList),
+			{ timeout: 10_000, timeoutMsg: 'Conversation list did not open' }
+		);
+	}
+
+	async switchConversation(conversationId: string): Promise<void> {
+		await this.openConversationList();
+		await browser.waitUntil(
+			async () => browser.execute((testId, id) => {
+				return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+					.some(item => item instanceof HTMLElement && item.getAttribute('data-conv-id') === id);
+			}, TestIds.chat.conversationItem, conversationId),
+			{ timeout: 10_000, timeoutMsg: `Conversation item not found: ${conversationId}` }
+		);
+		await browser.execute((testId, id) => {
+			const item = Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+				.find(candidate => candidate instanceof HTMLElement && candidate.getAttribute('data-conv-id') === id);
+			if (!(item instanceof HTMLElement)) {
+				throw new Error(`Conversation item not found: ${id}`);
+			}
+			item.click();
+		}, TestIds.chat.conversationItem, conversationId);
+		await browser.waitUntil(
+			async () => (await this.getConversationId()) === conversationId,
+			{ timeout: 10_000, timeoutMsg: `Conversation did not switch to ${conversationId}` }
+		);
+	}
+
 	async sendMessage(text: string): Promise<void> {
 		await this.type(TestIds.chat.input, text);
 		await this.click(TestIds.chat.sendBtn);

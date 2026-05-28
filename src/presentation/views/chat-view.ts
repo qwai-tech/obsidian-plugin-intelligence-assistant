@@ -176,6 +176,7 @@ export class ChatView extends ItemView {
 
 		// Floating conversation list sidebar (hidden by default)
 		this.conversationListContainer = mainLayout.createDiv('conversation-list-floating');
+		this.conversationListContainer.setAttribute('data-testid', TestIds.chat.conversationList);
 		this.conversationListContainer.addClass('is-collapsed');
 
 		// Initialize Chat Header Component

@@ -35,6 +35,7 @@ export class ChatHeaderComponent {
 		};
 
 		const historyBtn = createIconButton('list', t('chat.toggleConversationsTitle'));
+		historyBtn.setAttribute('data-testid', TestIds.chat.conversationToggleBtn);
 		historyBtn.addEventListener('click', (e) => {
 			e.preventDefault();
 			e.stopPropagation();

@@ -16,6 +16,9 @@ export const TestIds = {
 		message: 'ia-chat-msg',                  // + data-role, data-msg-id
 		modelSelect: 'ia-chat-model-select',
 		modeSelect: 'ia-chat-mode-select',
+		conversationToggleBtn: 'ia-chat-conversation-toggle-btn',
+		conversationList: 'ia-chat-conversation-list',
+		conversationItem: 'ia-chat-conversation-item', // + data-conv-id
 	},
 
 	// Settings shell
