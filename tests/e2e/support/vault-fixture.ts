@@ -4,6 +4,7 @@ import * as path from 'node:path';
 const REPO_ROOT = path.resolve(__dirname, '../../..');
 const VAULT_ROOT = path.join(REPO_ROOT, 'tests/e2e/test-vault');
 const PLUGIN_DIR_REL = '.obsidian/plugins/intelligence-assistant';
+const PLUGIN_ID = 'intelligence-assistant';
 const TEMPLATE_ROOT = path.join(REPO_ROOT, 'tests/e2e/fixtures/vault-template');
 const CONVERSATION_INDEX_REL = 'data/conversations/conversation-index.json';
 const CONVERSATIONS_REL = 'data/conversations';
@@ -113,6 +114,32 @@ export class VaultFixture {
 
 	async reset(): Promise<void> {
 		await resetVaultTemplate();
+	}
+
+	async seedSettings(settingsPatch: Record<string, unknown>): Promise<void> {
+		await browser.execute(async (pluginId, patch) => {
+			const plugin = (window as unknown as {
+				app: {
+					plugins: {
+						plugins: Record<string, {
+							settings?: Record<string, unknown>;
+							saveSettings?: () => Promise<void>;
+							getToolRegistry?: () => { reload?: () => Promise<void> };
+						}>;
+					};
+				};
+			}).app.plugins.plugins[pluginId];
+			if (!plugin?.settings || typeof plugin.saveSettings !== 'function') {
+				throw new Error(`Plugin settings not available: ${pluginId}`);
+			}
+
+			Object.assign(plugin.settings, patch);
+			await plugin.saveSettings();
+			const registry = typeof plugin.getToolRegistry === 'function' ? plugin.getToolRegistry() : null;
+			if (registry && typeof registry.reload === 'function') {
+				await registry.reload();
+			}
+		}, PLUGIN_ID, settingsPatch);
 	}
 
 	async readDataFile<T = unknown>(relativePath: string): Promise<T> {

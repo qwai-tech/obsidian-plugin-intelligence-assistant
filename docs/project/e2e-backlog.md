@@ -149,9 +149,9 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-2-agent-mcp-rag.md` (to
       tool invocation + result, final reply contains the tool's
       sentinel value, second LLM call body contains the tool result
       message (A2). (`tool-call-loop.spec.ts`)
-- [ ] **`agents/tool-permission-isolation.spec.ts`** — agent whitelists
+- [x] **`agents/tool-permission-isolation.spec.ts`** — agent whitelists
       tool X only; LLM tries to call tool Y; registry blocks → trace
-      shows rejection, not "UI didn't crash" (A3).
+      shows rejection, not "UI didn't crash" (A3). (`tool-permission-isolation.spec.ts`)
 - [ ] **`agents/max-steps.spec.ts`** — agent with maxSteps=2 →
       infinite-loop mock → execution halts at step 2, user is notified.
 - [ ] **`settings/agents-crud.spec.ts`** — create/read/update/delete
