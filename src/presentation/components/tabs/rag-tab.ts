@@ -7,6 +7,7 @@ import { Setting, Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
 import { applyConfigFieldMetadata, type ConfigFieldMetadataOptions } from '@/presentation/utils/config-field-metadata';
+import { TestIds } from '@/presentation/utils/test-ids';
 import { displayWebSearchTab } from './websearch-tab';
 
 export function displayRAGTab(
@@ -115,12 +116,15 @@ function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 		path: 'ragConfig.enabled',
 		label: t('settings.rag.general.enableRag.name'),
 		description: t('settings.rag.general.enableRag.desc')
-	}).addToggle(toggle => toggle
-			.setValue(plugin.settings.ragConfig.enabled)
+	}).addToggle(toggle => {
+		toggle.toggleEl.setAttribute('data-testid', TestIds.settings.ragEnableToggle);
+		toggle.setValue(plugin.settings.ragConfig.enabled)
 			.onChange(async (value) => {
 				plugin.settings.ragConfig.enabled = value;
+				plugin.getRAGManager().updateConfig(plugin.settings.ragConfig, plugin.settings.llmConfigs);
 				await plugin.saveSettings();
-			}));
+			});
+	});
 
 	createSetting({
 		path: 'ragConfig.vectorStore',
@@ -172,6 +176,7 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 
 	// Create a stats container that will be updated
 	const statsContainer = section.createDiv('ia-rag-stats');
+	statsContainer.setAttribute('data-testid', TestIds.settings.ragStats);
 
 	// Function to update stats display
 	const updateStats = async () => {
@@ -237,8 +242,9 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 	new Setting(section)
 		.setName(t('settings.rag.indexMgmt.rebuild.name'))
 		.setDesc(t('settings.rag.indexMgmt.rebuild.desc'))
-		.addButton(button => button
-			.setButtonText(t('settings.rag.indexMgmt.rebuild.btn'))
+		.addButton(button => {
+			button.buttonEl.setAttribute('data-testid', TestIds.settings.ragRebuildBtn);
+			button.setButtonText(t('settings.rag.indexMgmt.rebuild.btn'))
 			.setWarning()
 			.onClick(async () => {
 				button.setDisabled(true);
@@ -246,6 +252,7 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 
 				try {
 					const ragManager = plugin.getRAGManager();
+					ragManager.updateConfig(plugin.settings.ragConfig, plugin.settings.llmConfigs);
 					await ragManager.clearIndex();
 					await ragManager.indexVault();
 					await updateStats();
@@ -257,7 +264,8 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 					button.setDisabled(false);
 					button.setButtonText(t('settings.rag.indexMgmt.rebuild.btn'));
 				}
-			}));
+			});
+		});
 
 	// Refresh Index button
 	new Setting(section)

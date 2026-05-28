@@ -3,6 +3,7 @@ import { t } from '@/i18n';
 import type { RAGManager } from '@/infrastructure/rag-manager';
 import type { RAGConfig } from '@/types';
 import type { RAGSource } from '@/types';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 type RagIndexStats = {
 	chunkCount: number;
@@ -82,12 +83,14 @@ export class RagStatusPanel {
 		if (existingContainer) existingContainer.remove();
 
 		const container = messageBody.createDiv('rag-sources-container');
+		container.setAttribute('data-testid', TestIds.chat.ragSources);
 		const header = container.createDiv('rag-sources-header');
 		header.setText(t(ragSources.length === 1 ? 'chat.ragStats.retrieved' : 'chat.ragStats.retrieved_plural', { count: ragSources.length }));
 
 		const grid = container.createDiv('rag-sources-grid');
 		ragSources.forEach((source) => {
 			const card = grid.createDiv('rag-source-card');
+			card.setAttribute('data-testid', TestIds.chat.ragSourceCard);
 			const srcHeader = card.createDiv('rag-source-header');
 			srcHeader.createDiv('rag-source-title').setText(source.title || source.path.split('/').pop() || source.path);
 			const simEl = srcHeader.createDiv('rag-source-similarity');

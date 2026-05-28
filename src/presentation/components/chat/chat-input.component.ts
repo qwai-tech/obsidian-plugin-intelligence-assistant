@@ -145,6 +145,7 @@ export class ChatInputComponent {
 		// RAG (always created; hidden until enabled in settings)
 		const ragBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
 		ragBtn.type = 'button';
+		ragBtn.setAttribute('data-testid', TestIds.chat.ragToggleBtn);
 		this.ragActionItem = ragBtn;
 		this.ragActionItem.setAttr('title', t('chat.ragTooltipLabel'));
 		setIcon(this.ragActionItem.createSpan({ cls: 'header-action-icon' }), 'book-open');

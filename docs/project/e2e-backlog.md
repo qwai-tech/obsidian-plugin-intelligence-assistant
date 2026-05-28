@@ -172,13 +172,13 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-2-agent-mcp-rag.md` (to
 
 ### RAG
 
-- [ ] **`rag/indexing.spec.ts`** — point RAG at a 3-note mini-vault
+- [x] **`rag/indexing.spec.ts`** — point RAG at a 3-note mini-vault
       under `fixtures/vault-template/`, trigger reindex, mocked
       `/v1/embeddings` returns deterministic vectors,
-      `data/vector_store/notes.json` exists and contains chunks (R1).
-- [ ] **`rag/retrieval-context.spec.ts`** — enable RAG, send query,
+      `data/vector_store/notes.json` exists and contains chunks (R1). (`indexing.spec.ts`)
+- [x] **`rag/retrieval-context.spec.ts`** — enable RAG, send query,
       assert `message.ragSources[]` populated and the cited paths
-      match the indexed files (R2).
+      match the indexed files (R2). (`retrieval-context.spec.ts`)
 
 ### Tools
 

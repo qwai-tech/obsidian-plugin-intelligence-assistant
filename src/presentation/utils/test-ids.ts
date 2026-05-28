@@ -19,6 +19,9 @@ export const TestIds = {
 		conversationToggleBtn: 'ia-chat-conversation-toggle-btn',
 		conversationList: 'ia-chat-conversation-list',
 		conversationItem: 'ia-chat-conversation-item', // + data-conv-id
+		ragToggleBtn: 'ia-chat-rag-toggle-btn',
+		ragSources: 'ia-chat-rag-sources',
+		ragSourceCard: 'ia-chat-rag-source-card',
 		agentTrace: 'ia-chat-agent-trace',
 		agentTraceToolCard: 'ia-chat-agent-trace-tool-card',
 		agentTraceToolName: 'ia-chat-agent-trace-tool-name',
@@ -60,5 +63,8 @@ export const TestIds = {
 		mcpModalCommandInput: 'ia-mcp-modal-command-input',
 		mcpModalArgsInput: 'ia-mcp-modal-args-input',
 		mcpModalSaveBtn: 'ia-mcp-modal-save-btn',
+		ragEnableToggle: 'ia-rag-enable-toggle',
+		ragRebuildBtn: 'ia-rag-rebuild-btn',
+		ragStats: 'ia-rag-stats',
 	},
 } as const;

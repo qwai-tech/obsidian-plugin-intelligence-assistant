@@ -12,6 +12,13 @@ export interface QueuedLLMResponse {
 	streamChunkDelayMs?: number;
 }
 
+export interface QueuedEmbeddingResponse {
+	statusCode: number;
+	vectors?: number[][];
+	body?: unknown;
+	headers?: Record<string, string>;
+}
+
 export interface CapturedLLMCall {
 	method: string;
 	path: string;
@@ -31,11 +38,13 @@ export interface MockLLMServer {
 export function createMockLLMServer(options: { port?: number } = {}): MockLLMServer {
 	const port = options.port ?? DEFAULT_MOCK_LLM_PORT;
 	const queue: QueuedLLMResponse[] = [];
+	const embeddingQueue: QueuedEmbeddingResponse[] = [];
 	const calls: CapturedLLMCall[] = [];
 	let server: Server | null = null;
 
 	function reset(): void {
 		queue.length = 0;
+		embeddingQueue.length = 0;
 		calls.length = 0;
 	}
 
@@ -96,6 +105,11 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 			writeJson(res, 200, { ok: true });
 			return;
 		}
+		if (requestPath === '/__mock__/embeddings' && req.method === 'POST') {
+			embeddingQueue.push(await readJsonBody<QueuedEmbeddingResponse>(req));
+			writeJson(res, 200, { ok: true });
+			return;
+		}
 		if (requestPath === '/__mock__/calls' && req.method === 'GET') {
 			writeJson(res, 200, getCalls());
 			return;
@@ -127,6 +141,27 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 			});
 			const next = queue.shift() ?? defaultResponse();
 			await writeQueuedResponse(res, next, body);
+			return;
+		}
+		if (requestPath === '/v1/embeddings' && req.method === 'POST') {
+			const body = await readJsonBody<unknown>(req);
+			calls.push({
+				method: req.method,
+				path: requestPath,
+				headers: { ...req.headers },
+				body,
+				timestamp: Date.now(),
+			});
+			const next = embeddingQueue.shift();
+			if (next) {
+				if (next.body !== undefined) {
+					writeJson(res, next.statusCode, next.body, next.headers);
+				} else {
+					writeJson(res, next.statusCode, embeddingResponse(next.vectors ?? [], body), next.headers);
+				}
+				return;
+			}
+			writeJson(res, 200, defaultEmbeddingResponse(body));
 			return;
 		}
 		writeJson(res, 404, { error: { message: `No mock route for ${req.method ?? 'GET'} ${requestPath}` } });
@@ -303,6 +338,49 @@ function defaultModelsResponse(): QueuedLLMResponse {
 			],
 		},
 	};
+}
+
+function defaultEmbeddingResponse(requestBody: unknown): unknown {
+	const inputs = embeddingInputs(requestBody);
+	const vectors = inputs.map(input => deterministicEmbedding(input));
+	return embeddingResponse(vectors, requestBody);
+}
+
+function embeddingResponse(vectors: number[][], requestBody: unknown): unknown {
+	const model = isRecord(requestBody) && typeof requestBody.model === 'string'
+		? requestBody.model
+		: 'text-embedding-3-small';
+	return {
+		object: 'list',
+		data: vectors.map((embedding, index) => ({
+			object: 'embedding',
+			index,
+			embedding,
+		})),
+		model,
+		usage: { prompt_tokens: vectors.length, total_tokens: vectors.length },
+	};
+}
+
+function embeddingInputs(requestBody: unknown): string[] {
+	if (!isRecord(requestBody)) return [''];
+	const input = requestBody.input;
+	if (Array.isArray(input)) {
+		return input.map(item => typeof item === 'string' ? item : JSON.stringify(item));
+	}
+	return [typeof input === 'string' ? input : JSON.stringify(input ?? '')];
+}
+
+function deterministicEmbedding(input: string): number[] {
+	let hash = 2166136261;
+	for (let i = 0; i < input.length; i++) {
+		hash ^= input.charCodeAt(i);
+		hash = Math.imul(hash, 16777619);
+	}
+	return [0, 1, 2, 3].map((offset) => {
+		const byte = (hash >>> (offset * 8)) & 0xff;
+		return (byte + 1) / 256;
+	});
 }
 
 function cloneJson<T>(value: T): T {

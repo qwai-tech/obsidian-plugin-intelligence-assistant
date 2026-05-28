@@ -114,6 +114,31 @@ export class ChatViewPage extends BasePage {
 		);
 	}
 
+	async enableRag(): Promise<void> {
+		await this.waitFor(TestIds.chat.ragToggleBtn);
+		await browser.waitUntil(
+			async () => browser.execute((testId) => {
+				const button = document.querySelector(`[data-testid="${testId}"]`);
+				return button instanceof HTMLElement && !button.classList.contains('ia-hidden');
+			}, TestIds.chat.ragToggleBtn),
+			{ timeout: 10_000, timeoutMsg: 'RAG toggle was not visible' }
+		);
+		const active = await browser.execute((testId) => {
+			const button = document.querySelector(`[data-testid="${testId}"]`);
+			return button instanceof HTMLElement && button.classList.contains('is-active');
+		}, TestIds.chat.ragToggleBtn);
+		if (!active) {
+			await this.click(TestIds.chat.ragToggleBtn);
+		}
+		await browser.waitUntil(
+			async () => browser.execute((testId) => {
+				const button = document.querySelector(`[data-testid="${testId}"]`);
+				return button instanceof HTMLElement && button.classList.contains('is-active');
+			}, TestIds.chat.ragToggleBtn),
+			{ timeout: 10_000, timeoutMsg: 'RAG toggle did not become active' }
+		);
+	}
+
 	async getSelectedModel(): Promise<string> {
 		await this.waitFor(TestIds.chat.modelSelect);
 		return browser.execute((testId) => {
@@ -175,6 +200,14 @@ export class ChatViewPage extends BasePage {
 			const trace = document.querySelector(`[data-testid="${testId}"]`);
 			return trace instanceof HTMLElement ? (trace.textContent || '').trim() : '';
 		}, TestIds.chat.agentTrace);
+	}
+
+	async getRagSourceText(): Promise<string> {
+		await this.$testid(TestIds.chat.ragSources).waitForExist({ timeout: 10_000 });
+		return browser.execute((testId) => {
+			const sourceList = document.querySelector(`[data-testid="${testId}"]`);
+			return sourceList instanceof HTMLElement ? (sourceList.innerText || sourceList.textContent || '').trim() : '';
+		}, TestIds.chat.ragSources);
 	}
 
 	async getConversationId(): Promise<string> {

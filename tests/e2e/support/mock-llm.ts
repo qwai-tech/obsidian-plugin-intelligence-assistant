@@ -2,6 +2,7 @@ import { request } from 'node:http';
 import {
 	DEFAULT_MOCK_LLM_PORT,
 	type CapturedLLMCall,
+	type QueuedEmbeddingResponse,
 	type QueuedLLMResponse,
 } from './mock-llm-server';
 
@@ -43,6 +44,10 @@ function queue(response: QueuedLLMResponse): Promise<void> {
 	return adminJson<void>('POST', '/__mock__/queue', response);
 }
 
+function queueEmbedding(response: QueuedEmbeddingResponse): Promise<void> {
+	return adminJson<void>('POST', '/__mock__/embeddings', response);
+}
+
 function chatCompletion(content: string): QueuedLLMResponse {
 	return {
 		statusCode: 200,
@@ -78,6 +83,12 @@ export const mockLLM = {
 
 	async models(modelIds: string[]): Promise<void> {
 		await queue(modelList(modelIds));
+	},
+
+	async embeddings(vectors: number[][]): Promise<void> {
+		for (const vector of vectors) {
+			await queueEmbedding({ statusCode: 200, vectors: [vector] });
+		}
 	},
 
 	async toolCall(name: string, args: Record<string, unknown>, id = 'call_mock_1'): Promise<void> {
