@@ -24,7 +24,8 @@ tests/e2e/
 │   └── vault-template/ # Fresh vault state copied per spec
 ├── pages/              # Page Objects (specs touch DOM only via these)
 │   ├── base.page.ts
-│   └── chat/chat-view.page.ts
+│   ├── chat/chat-view.page.ts
+│   └── settings/llm-settings.page.ts
 ├── support/
 │   ├── testids.ts      # Re-exports src/presentation/utils/test-ids.ts
 │   ├── vault-fixture.ts
@@ -41,6 +42,8 @@ tests/e2e/
     │   ├── send-receive.spec.ts
     │   ├── stop-generation.spec.ts
     │   └── streaming.spec.ts
+    ├── settings/
+    │   └── llm-provider-crud.spec.ts
     └── release/        # Real-API specs (Phase 3)
 ```
 

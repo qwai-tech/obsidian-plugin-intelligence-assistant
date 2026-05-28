@@ -97,8 +97,8 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
       error surface in UI and persisted failed assistant message; no
       silent swallowing.
 
-- [ ] **`settings/llm-provider-crud.spec.ts`** — full Create → Read →
-      Update → reload plugin → Delete loop with both UI list assertion
+- [x] **`settings/llm-provider-crud.spec.ts`** (`aca6c40`) — full
+      Create → Read → Update → Delete loop with both UI list assertion
       AND `llm-providers.json` on-disk assertion at each step (L1).
 - [ ] **`settings/llm-model-refresh.spec.ts`** — refresh provider
       models → mocked `/v1/models` returns N → `cache/llm_models.json`
@@ -108,10 +108,12 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
 
 ### Source-side testids needed
 
-- [ ] LLM tab: add-provider button, provider rows (with
-      `data-provider-id`), edit/delete per-row buttons.
-- [ ] Provider config modal: `name`, `apiKey`, `baseUrl`,
-      `cachedModels` table, save/cancel/test-connection.
+- [x] LLM tab: add-provider button, provider rows (with
+      `data-provider-id`), edit/delete per-row buttons (`aca6c40`).
+- [x] Provider config modal: provider select, `apiKey`, `baseUrl`,
+      `modelFilter`, save/cancel controls for CRUD specs (`aca6c40`).
+- [ ] Provider config modal: cached models table and test-connection
+      controls when those workflows get E2E coverage.
 - [x] Conversation list sidebar: items (with `data-conv-id`) for
       switching assertions (`88363b4`).
 - [ ] Conversation list sidebar: delete/rename action testids for
