@@ -14,6 +14,7 @@ function httpJson<T>(method: string, path: string, body?: unknown): Promise<T> {
 				port: DEFAULT_MOCK_LLM_PORT,
 				path,
 				method,
+				agent: false,
 				headers: payload
 					? { 'content-type': 'application/json', 'content-length': Buffer.byteLength(payload) }
 					: undefined,
@@ -31,8 +32,65 @@ function httpJson<T>(method: string, path: string, body?: unknown): Promise<T> {
 				});
 			}
 		);
-		req.on('error', reject);
+		req.on('error', (error) => reject(new Error(`${method} ${path}: ${error.message}`)));
 		if (payload) req.write(payload);
+		req.end();
+	});
+}
+
+function httpText(method: string, path: string, body?: unknown): Promise<{ headers: Record<string, string | string[] | undefined>; text: string }> {
+	return new Promise((resolve, reject) => {
+		const payload = body === undefined ? undefined : JSON.stringify(body);
+		const req = request(
+			{
+				hostname: '127.0.0.1',
+				port: DEFAULT_MOCK_LLM_PORT,
+				path,
+				method,
+				agent: false,
+				headers: payload
+					? { 'content-type': 'application/json', 'content-length': Buffer.byteLength(payload) }
+					: undefined,
+			},
+			(res) => {
+				let raw = '';
+				res.setEncoding('utf8');
+				res.on('data', (chunk) => { raw += chunk; });
+				res.on('end', () => {
+					if ((res.statusCode ?? 500) >= 400) {
+						reject(new Error(`HTTP ${res.statusCode}: ${raw}`));
+						return;
+					}
+					resolve({ headers: res.headers, text: raw });
+				});
+			}
+		);
+		req.on('error', (error) => reject(new Error(`${method} ${path}: ${error.message}`)));
+		if (payload) req.write(payload);
+		req.end();
+	});
+}
+
+function httpRaw(method: string, path: string): Promise<{ statusCode: number; headers: Record<string, string | string[] | undefined>; text: string }> {
+	return new Promise((resolve, reject) => {
+		const req = request(
+			{
+				hostname: '127.0.0.1',
+				port: DEFAULT_MOCK_LLM_PORT,
+				path,
+				method,
+				agent: false,
+			},
+			(res) => {
+				let raw = '';
+				res.setEncoding('utf8');
+				res.on('data', (chunk) => { raw += chunk; });
+				res.on('end', () => {
+					resolve({ statusCode: res.statusCode ?? 0, headers: res.headers, text: raw });
+				});
+			}
+		);
+		req.on('error', (error) => reject(new Error(`${method} ${path}: ${error.message}`)));
 		req.end();
 	});
 }
@@ -78,4 +136,50 @@ describe('mock LLM server', () => {
 		expect(calls[0].path).toBe('/v1/chat/completions');
 		expect(calls[0].body.model).toBe('gpt-4o-mini');
 	});
+
+	it('allows browser CORS preflight for chat completions', async () => {
+		const response = await httpRaw('OPTIONS', '/v1/chat/completions');
+
+		expect(response.statusCode).toBe(204);
+		expect(response.headers['access-control-allow-origin']).toBe('*');
+		expect(String(response.headers['access-control-allow-headers'])).toContain('authorization');
+		expect(String(response.headers['access-control-allow-methods'])).toContain('POST');
+	});
+
+	it('converts queued chat completions into OpenAI SSE for streaming requests', async () => {
+		await httpJson('POST', '/__mock__/queue', {
+			statusCode: 200,
+			body: {
+				id: 'cmpl_mock_stream',
+				object: 'chat.completion',
+				created: 1,
+				model: 'gpt-4o-mini',
+				choices: [{
+					index: 0,
+					message: { role: 'assistant', content: 'pong' },
+					finish_reason: 'stop',
+				}],
+				usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
+			},
+		});
+
+		const response = await httpText(
+			'POST',
+			'/v1/chat/completions',
+			{ model: 'gpt-4o-mini', messages: [{ role: 'user', content: 'ping' }], stream: true }
+		);
+		const events = response.text
+			.split('\n')
+			.filter((line) => line.startsWith('data: '))
+			.map((line) => line.slice('data: '.length));
+		const chunks = events
+			.filter((line) => line !== '[DONE]')
+			.map((line) => JSON.parse(line) as { choices?: Array<{ delta?: { content?: string }; finish_reason?: string }>; usage?: { total_tokens?: number } });
+
+		expect(String(response.headers['content-type'])).toContain('text/event-stream');
+		expect(chunks[0].choices?.[0].delta?.content).toBe('pong');
+		expect(chunks.some((chunk) => chunk.usage?.total_tokens === 2)).toBe(true);
+		expect(events.at(-1)).toBe('[DONE]');
+	});
+
 });

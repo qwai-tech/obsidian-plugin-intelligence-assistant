@@ -53,7 +53,13 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 	async function start(): Promise<void> {
 		if (server) return;
 		server = createServer((req, res) => {
-			void handleRequest(req, res);
+			void handleRequest(req, res).catch((error) => {
+				if (!res.headersSent) {
+					writeJson(res, 500, { error: { message: error instanceof Error ? error.message : String(error) } });
+					return;
+				}
+				res.destroy(error instanceof Error ? error : new Error(String(error)));
+			});
 		});
 		await new Promise<void>((resolve, reject) => {
 			server!.once('error', reject);
@@ -75,6 +81,10 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 
 	async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise<void> {
 		const requestPath = req.url ?? '/';
+		if (req.method === 'OPTIONS') {
+			writeNoContent(res);
+			return;
+		}
 		if (requestPath === '/__mock__/reset' && req.method === 'POST') {
 			reset();
 			writeJson(res, 200, { ok: true });
@@ -103,7 +113,7 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 				timestamp: Date.now(),
 			});
 			const next = queue.shift() ?? defaultResponse();
-			writeQueuedResponse(res, next);
+			writeQueuedResponse(res, next, body);
 			return;
 		}
 		writeJson(res, 404, { error: { message: `No mock route for ${req.method ?? 'GET'} ${requestPath}` } });
@@ -127,27 +137,119 @@ async function readJsonBody<T>(req: IncomingMessage): Promise<T> {
 	return raw ? JSON.parse(raw) as T : undefined as T;
 }
 
-function writeQueuedResponse(res: ServerResponse, response: QueuedLLMResponse): void {
-	if (response.streamChunks) {
-		res.writeHead(response.statusCode, {
-			'content-type': 'text/event-stream',
-			'cache-control': 'no-cache',
-			...(response.headers ?? {}),
-		});
-		for (const chunk of response.streamChunks) {
-			res.write(`data: ${chunk}\n\n`);
-		}
-		res.write('data: [DONE]\n\n');
-		res.end();
+function writeQueuedResponse(res: ServerResponse, response: QueuedLLMResponse, requestBody?: unknown): void {
+	const streamChunks = response.streamChunks ?? streamChunksFromQueuedResponse(response, requestBody);
+	if (streamChunks) {
+		writeEventStream(res, response.statusCode, streamChunks, response.headers);
 		return;
 	}
 
 	writeJson(res, response.statusCode, response.body, response.headers);
 }
 
+function writeEventStream(
+	res: ServerResponse,
+	statusCode: number,
+	streamChunks: string[],
+	headers: Record<string, string> = {}
+): void {
+	res.writeHead(statusCode, {
+		'content-type': 'text/event-stream',
+		'cache-control': 'no-cache',
+		...corsHeaders(),
+		...headers,
+	});
+	for (const chunk of streamChunks) {
+		res.write(`data: ${chunk}\n\n`);
+	}
+	res.write('data: [DONE]\n\n');
+	res.end();
+}
+
+function streamChunksFromQueuedResponse(response: QueuedLLMResponse, requestBody?: unknown): string[] | null {
+	if (!isSuccessful(response.statusCode) || !isStreamingRequest(requestBody)) {
+		return null;
+	}
+	return openAIStreamChunksFromChatCompletion(response.body);
+}
+
+function openAIStreamChunksFromChatCompletion(body: unknown): string[] | null {
+	if (!isRecord(body)) return null;
+	const choices = Array.isArray(body.choices) ? body.choices : [];
+	const choice = choices[0];
+	if (!isRecord(choice)) return null;
+	const message = isRecord(choice.message) ? choice.message : null;
+	if (!message) return null;
+
+	const now = Math.floor(Date.now() / 1000);
+	const base = {
+		id: typeof body.id === 'string' ? body.id : 'cmpl_mock',
+		object: 'chat.completion.chunk',
+		created: typeof body.created === 'number' ? body.created : now,
+		model: typeof body.model === 'string' ? body.model : 'gpt-4o-mini',
+	};
+	const index = typeof choice.index === 'number' ? choice.index : 0;
+	const chunks: string[] = [];
+	const content = typeof message.content === 'string' ? message.content : '';
+	const toolCalls = Array.isArray(message.tool_calls) ? message.tool_calls : null;
+
+	if (content) {
+		chunks.push(JSON.stringify({
+			...base,
+			choices: [{ index, delta: { content }, finish_reason: null }],
+		}));
+	}
+	if (toolCalls) {
+		chunks.push(JSON.stringify({
+			...base,
+			choices: [{ index, delta: { tool_calls: toolCalls }, finish_reason: null }],
+		}));
+		chunks.push(JSON.stringify({
+			...base,
+			choices: [{ index, delta: {}, finish_reason: 'tool_calls' }],
+		}));
+	} else {
+		chunks.push(JSON.stringify({
+			...base,
+			choices: [{ index, delta: {}, finish_reason: typeof choice.finish_reason === 'string' ? choice.finish_reason : 'stop' }],
+		}));
+	}
+	if (isRecord(body.usage)) {
+		chunks.push(JSON.stringify({
+			...base,
+			choices: [],
+			usage: body.usage,
+		}));
+	}
+
+	return chunks;
+}
+
+function isSuccessful(statusCode: number): boolean {
+	return statusCode >= 200 && statusCode < 300;
+}
+
+function isStreamingRequest(body: unknown): boolean {
+	return isRecord(body) && body.stream === true;
+}
+
 function writeJson(res: ServerResponse, statusCode: number, body: unknown, headers: Record<string, string> = {}): void {
-	res.writeHead(statusCode, { 'content-type': 'application/json', ...headers });
+	res.writeHead(statusCode, { 'content-type': 'application/json', ...corsHeaders(), ...headers });
 	res.end(JSON.stringify(body));
+}
+
+function writeNoContent(res: ServerResponse): void {
+	res.writeHead(204, corsHeaders());
+	res.end();
+}
+
+function corsHeaders(): Record<string, string> {
+	return {
+		'access-control-allow-origin': '*',
+		'access-control-allow-methods': 'GET, POST, OPTIONS',
+		'access-control-allow-headers': 'authorization, content-type',
+		'access-control-allow-private-network': 'true',
+	};
 }
 
 function defaultResponse(): QueuedLLMResponse {
@@ -170,4 +272,8 @@ function defaultResponse(): QueuedLLMResponse {
 
 function cloneJson<T>(value: T): T {
 	return value === undefined ? value : JSON.parse(JSON.stringify(value)) as T;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === 'object' && value !== null;
 }

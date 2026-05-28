@@ -14,6 +14,7 @@ function adminJson<T>(method: string, route: string, body?: unknown): Promise<T>
 				port: DEFAULT_MOCK_LLM_PORT,
 				path: route,
 				method,
+				agent: false,
 				headers: payload
 					? { 'content-type': 'application/json', 'content-length': Buffer.byteLength(payload) }
 					: undefined,
