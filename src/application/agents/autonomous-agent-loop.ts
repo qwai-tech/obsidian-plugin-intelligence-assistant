@@ -74,6 +74,7 @@ export class AutonomousAgentLoop {
 			let lastContent = '';
 			let lastReasoning = '';
 			let lastStepUsage: { promptTokens: number; completionTokens: number; totalTokens: number } | null = null;
+			let reachedStepLimit = false;
 
 			for (let step = 0; step < maxSteps; step++) {
 				if (callbacks.checkAbort?.()) break;
@@ -140,11 +141,22 @@ export class AutonomousAgentLoop {
 					workingMessages.push(result);
 				}
 				callbacks.onThought(`Reflected on ${pendingToolCalls.length} tool result(s).`, 'reflect');
+				if (step === maxSteps - 1) {
+					reachedStepLimit = true;
+					callbacks.onThought(`Reached the agent step limit of ${maxSteps}.`, 'reflect');
+				}
 			}
+
+			const finalContent = reachedStepLimit
+				? [
+					lastContent.trim(),
+					`Reached the agent step limit of ${maxSteps}. Review the tool results above or increase this agent's max steps to continue.`,
+				].filter(Boolean).join('\n\n')
+				: lastContent;
 
 			callbacks.onComplete({
 				role: 'assistant',
-				content: lastContent,
+				content: finalContent,
 				model: options.model,
 				ragSources: ragSources.length > 0 ? ragSources : undefined,
 				webSearchResults: webResults.length > 0 ? webResults : undefined,
