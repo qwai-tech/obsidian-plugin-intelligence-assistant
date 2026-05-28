@@ -104,8 +104,9 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
       provider models → mocked `/v1/models` returns N →
       `cache/llm_models.json` contains them and `cacheTimestamp`
       updated (L2).
-- [ ] **`settings/settings-persistence.spec.ts`** — toggle assorted
-      settings → `reloadPlugin()` → settings preserved (S1).
+- [x] **`settings/settings-persistence.spec.ts`** (`bd07707`) —
+      change assorted General settings → `reloadPlugin()` → UI and
+      `config/user/settings.json` values preserved (S1).
 
 ### Source-side testids needed
 

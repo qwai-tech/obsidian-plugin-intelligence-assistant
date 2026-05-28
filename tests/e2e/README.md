@@ -25,7 +25,9 @@ tests/e2e/
 ├── pages/              # Page Objects (specs touch DOM only via these)
 │   ├── base.page.ts
 │   ├── chat/chat-view.page.ts
-│   └── settings/llm-settings.page.ts
+│   └── settings/
+│       ├── general-settings.page.ts
+│       └── llm-settings.page.ts
 ├── support/
 │   ├── testids.ts      # Re-exports src/presentation/utils/test-ids.ts
 │   ├── vault-fixture.ts
@@ -44,7 +46,8 @@ tests/e2e/
     │   └── streaming.spec.ts
     ├── settings/
     │   ├── llm-model-refresh.spec.ts
-    │   └── llm-provider-crud.spec.ts
+    │   ├── llm-provider-crud.spec.ts
+    │   └── settings-persistence.spec.ts
     └── release/        # Real-API specs (Phase 3)
 ```
 
