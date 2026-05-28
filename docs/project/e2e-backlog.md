@@ -92,9 +92,9 @@ Target: ~2 days. Plan doc: `2026-05-24-e2e-rebuild-phase-1-chat-and-llm.md` (to 
       conv B; switching back to A shows only A's history (C3).
 - [x] **`chat/model-switch.spec.ts`** (`9050873`) — change model in
       selector → next request body has the chosen `model` field (C4).
-- [ ] **`chat/error-handling.spec.ts`** — mock 401/429/500 → error
-      surface in UI, message marked failed, retryable; no silent
-      swallowing.
+- [x] **`chat/error-handling.spec.ts`** (`d7be052`) — mock 500 →
+      error surface in UI and persisted failed assistant message; no
+      silent swallowing.
 
 - [ ] **`settings/llm-provider-crud.spec.ts`** — full Create → Read →
       Update → reload plugin → Delete loop with both UI list assertion
