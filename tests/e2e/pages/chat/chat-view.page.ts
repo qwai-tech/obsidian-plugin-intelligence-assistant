@@ -55,6 +55,13 @@ export class ChatViewPage extends BasePage {
 		);
 	}
 
+	async waitForAssistantText(text: string, timeoutMs = 10_000): Promise<void> {
+		await browser.waitUntil(
+			async () => (await this.getLastAssistantText()).includes(text),
+			{ timeout: timeoutMs, timeoutMsg: `Assistant text did not contain "${text}"` }
+		);
+	}
+
 	async getMessages(): Promise<ChatMessage[]> {
 		const out: ChatMessage[] = [];
 		const elems = await this.$$testid(TestIds.chat.message).getElements();
@@ -69,6 +76,11 @@ export class ChatViewPage extends BasePage {
 			out.push({ role, text });
 		}
 		return out;
+	}
+
+	async getLastAssistantText(): Promise<string> {
+		const assistants = (await this.getMessages()).filter((message) => message.role === 'assistant');
+		return assistants[assistants.length - 1]?.text ?? '';
 	}
 
 	async getConversationId(): Promise<string> {

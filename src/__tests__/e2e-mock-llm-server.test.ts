@@ -71,6 +71,12 @@ function httpText(method: string, path: string, body?: unknown): Promise<{ heade
 	});
 }
 
+async function timedHttpText(method: string, path: string, body?: unknown): Promise<{ elapsedMs: number; text: string }> {
+	const startedAt = Date.now();
+	const response = await httpText(method, path, body);
+	return { elapsedMs: Date.now() - startedAt, text: response.text };
+}
+
 function httpRaw(method: string, path: string): Promise<{ statusCode: number; headers: Record<string, string | string[] | undefined>; text: string }> {
 	return new Promise((resolve, reject) => {
 		const req = request(
@@ -180,6 +186,26 @@ describe('mock LLM server', () => {
 		expect(chunks[0].choices?.[0].delta?.content).toBe('pong');
 		expect(chunks.some((chunk) => chunk.usage?.total_tokens === 2)).toBe(true);
 		expect(events.at(-1)).toBe('[DONE]');
+	});
+
+	it('supports delayed explicit streaming chunks', async () => {
+		await httpJson('POST', '/__mock__/queue', {
+			statusCode: 200,
+			body: null,
+			streamChunkDelayMs: 40,
+			streamChunks: ['one', 'two'],
+		});
+
+		const response = await timedHttpText(
+			'POST',
+			'/v1/chat/completions',
+			{ model: 'gpt-4o-mini', messages: [{ role: 'user', content: 'ping' }], stream: true }
+		);
+
+		expect(response.elapsedMs).toBeGreaterThanOrEqual(35);
+		expect(response.text).toContain('data: one');
+		expect(response.text).toContain('data: two');
+		expect(response.text).toContain('data: [DONE]');
 	});
 
 });

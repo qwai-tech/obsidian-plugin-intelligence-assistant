@@ -9,6 +9,7 @@ export interface QueuedLLMResponse {
 	body: unknown;
 	headers?: Record<string, string>;
 	streamChunks?: string[];
+	streamChunkDelayMs?: number;
 }
 
 export interface CapturedLLMCall {
@@ -113,7 +114,7 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 				timestamp: Date.now(),
 			});
 			const next = queue.shift() ?? defaultResponse();
-			writeQueuedResponse(res, next, body);
+			await writeQueuedResponse(res, next, body);
 			return;
 		}
 		writeJson(res, 404, { error: { message: `No mock route for ${req.method ?? 'GET'} ${requestPath}` } });
@@ -137,10 +138,10 @@ async function readJsonBody<T>(req: IncomingMessage): Promise<T> {
 	return raw ? JSON.parse(raw) as T : undefined as T;
 }
 
-function writeQueuedResponse(res: ServerResponse, response: QueuedLLMResponse, requestBody?: unknown): void {
+async function writeQueuedResponse(res: ServerResponse, response: QueuedLLMResponse, requestBody?: unknown): Promise<void> {
 	const streamChunks = response.streamChunks ?? streamChunksFromQueuedResponse(response, requestBody);
 	if (streamChunks) {
-		writeEventStream(res, response.statusCode, streamChunks, response.headers);
+		await writeEventStream(res, response.statusCode, streamChunks, response.headers, response.streamChunkDelayMs);
 		return;
 	}
 
@@ -151,16 +152,25 @@ function writeEventStream(
 	res: ServerResponse,
 	statusCode: number,
 	streamChunks: string[],
-	headers: Record<string, string> = {}
-): void {
+	headers: Record<string, string> = {},
+	streamChunkDelayMs = 0
+): Promise<void> {
 	res.writeHead(statusCode, {
 		'content-type': 'text/event-stream',
 		'cache-control': 'no-cache',
 		...corsHeaders(),
 		...headers,
 	});
-	for (const chunk of streamChunks) {
+	return writeStreamChunks(res, streamChunks, Math.max(0, streamChunkDelayMs));
+}
+
+async function writeStreamChunks(res: ServerResponse, streamChunks: string[], delayMs: number): Promise<void> {
+	for (let index = 0; index < streamChunks.length; index++) {
+		const chunk = streamChunks[index];
 		res.write(`data: ${chunk}\n\n`);
+		if (delayMs > 0 && index < streamChunks.length - 1) {
+			await sleep(delayMs);
+		}
 	}
 	res.write('data: [DONE]\n\n');
 	res.end();
@@ -276,4 +286,8 @@ function cloneJson<T>(value: T): T {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === 'object' && value !== null;
+}
+
+function sleep(ms: number): Promise<void> {
+	return new Promise(resolve => setTimeout(resolve, ms));
 }

@@ -91,11 +91,12 @@ export const mockLLM = {
 		});
 	},
 
-	async streaming(chunks: string[]): Promise<void> {
+	async streaming(chunks: string[], options: { chunkDelayMs?: number } = {}): Promise<void> {
 		await queue({
 			statusCode: 200,
 			body: null,
-			streamChunks: chunks.map((chunk, index) => JSON.stringify({
+			streamChunkDelayMs: options.chunkDelayMs,
+			streamChunks: chunks.map((chunk) => JSON.stringify({
 				id: 'cmpl_stream_mock',
 				object: 'chat.completion.chunk',
 				created: Math.floor(Date.now() / 1000),
@@ -103,7 +104,7 @@ export const mockLLM = {
 				choices: [{
 					index: 0,
 					delta: { content: chunk },
-					finish_reason: index === chunks.length - 1 ? 'stop' : null,
+					finish_reason: null,
 				}],
 			})),
 		});
