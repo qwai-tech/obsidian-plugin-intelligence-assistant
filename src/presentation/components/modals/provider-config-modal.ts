@@ -3,6 +3,7 @@ import type { LLMConfig } from '@/types';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
 import { OllamaModelManagerModal } from './ollama-model-manager-modal';
 import { t } from '@/i18n';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 export const LLM_PROVIDER_OPTIONS: Array<{ value: string; labelKey: string }> = [
 	{ value: 'openai', labelKey: 'modals.provider.providers.openai' },
@@ -36,6 +37,7 @@ export class ProviderConfigModal extends Modal {
 			label: t('modals.provider.selectProvider.name'),
 			description: t('modals.provider.selectProvider.desc')
 		}).addDropdown(dropdown => {
+			dropdown.selectEl.setAttribute('data-testid', TestIds.settings.providerModalProviderSelect);
 			dropdown.addOption('', t('modals.provider.selectProvider.placeholder'));
 			LLM_PROVIDER_OPTIONS.forEach(option => {
 				dropdown.addOption(option.value, t(option.labelKey));
@@ -52,12 +54,15 @@ export class ProviderConfigModal extends Modal {
 			path: 'llmConfigs[].modelFilter',
 			label: t('modals.provider.modelFilter.name'),
 			description: t('modals.provider.modelFilter.desc')
-		}).addText(text => text
-				.setPlaceholder('Gpt-4|claude-')
-				.setValue(this.draft.modelFilter || '')
-				.onChange(value => {
-					this.draft.modelFilter = value.trim() || undefined;
-				}));
+		}).addText(text => {
+				text.inputEl.setAttribute('data-testid', TestIds.settings.providerModalModelFilterInput);
+				text
+					.setPlaceholder('Gpt-4|claude-')
+					.setValue(this.draft.modelFilter || '')
+					.onChange(value => {
+						this.draft.modelFilter = value.trim() || undefined;
+					});
+			});
 
 		if (this.draft.provider === 'sap-ai-core') {
 			applyConfigFieldMetadata(new Setting(contentEl), {
@@ -79,10 +84,12 @@ export class ProviderConfigModal extends Modal {
 		buttonBar.removeClass('ia-hidden');
 
 		const cancelBtn = buttonBar.createEl('button', { text: t('modals.provider.cancel') });
+		cancelBtn.setAttribute('data-testid', TestIds.settings.providerModalCancelBtn);
 		cancelBtn.addClass('ia-modal-btn');
 		cancelBtn.addEventListener('click', () => this.close());
 
 		const saveBtn = buttonBar.createEl('button', { text: t('modals.provider.save') });
+		saveBtn.setAttribute('data-testid', TestIds.settings.providerModalSaveBtn);
 		saveBtn.addClass('ia-modal-btn--primary');
 		saveBtn.addEventListener('click', () => {
 			void (async () => {
@@ -140,12 +147,15 @@ export class ProviderConfigModal extends Modal {
 				path: 'llmConfigs[].baseUrl',
 				label: t('modals.provider.baseUrl.name'),
 				description: t('modals.provider.baseUrl.ollamaDesc')
-			}).addText(text => text
-					.setPlaceholder('http://localhost:11434')
-					.setValue(this.draft.baseUrl || 'http://localhost:11434')
-					.onChange(value => {
-						this.draft.baseUrl = value.trim() || undefined;
-					}));
+			}).addText(text => {
+					text.inputEl.setAttribute('data-testid', TestIds.settings.providerModalBaseUrlInput);
+					text
+						.setPlaceholder('http://localhost:11434')
+						.setValue(this.draft.baseUrl || 'http://localhost:11434')
+						.onChange(value => {
+							this.draft.baseUrl = value.trim() || undefined;
+						});
+				});
 
 			new Setting(this.providerContainer)
 				.setName(t('modals.provider.manageModels.name'))
@@ -164,6 +174,7 @@ export class ProviderConfigModal extends Modal {
 				description: t('modals.provider.apiKey.desc')
 			}).addText(text => {
 					text.setPlaceholder('Sk-...');
+					text.inputEl.setAttribute('data-testid', TestIds.settings.providerModalApiKeyInput);
 					text.inputEl.type = 'password';
 					text.setValue(this.draft.apiKey || '');
 					text.onChange(value => {
@@ -179,12 +190,15 @@ export class ProviderConfigModal extends Modal {
 				path: 'llmConfigs[].baseUrl',
 				label: t('modals.provider.baseUrl.name'),
 				description: baseUrlDesc
-			}).addText(text => text
-					.setPlaceholder(this.getDefaultBaseUrl(this.draft.provider))
-					.setValue(this.draft.baseUrl || '')
-					.onChange(value => {
-						this.draft.baseUrl = value.trim() || undefined;
-					}));
+			}).addText(text => {
+					text.inputEl.setAttribute('data-testid', TestIds.settings.providerModalBaseUrlInput);
+					text
+						.setPlaceholder(this.getDefaultBaseUrl(this.draft.provider))
+						.setValue(this.draft.baseUrl || '')
+						.onChange(value => {
+							this.draft.baseUrl = value.trim() || undefined;
+						});
+				});
 		}
 	}
 

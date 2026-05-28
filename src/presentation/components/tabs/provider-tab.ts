@@ -11,6 +11,7 @@ import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
 import { ProviderConfigModal, OllamaModelManagerModal } from '../modals';
 import { getProviderMeta } from '../components/provider-meta';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 /**
  * Check Ollama server status
@@ -70,6 +71,7 @@ export function displayProviderTab(
 	summary.createSpan({ text: t('settings.provider.count', { count: plugin.settings.llmConfigs.length }) });
 
 	const addBtn = actionsRow.createEl('button', { text: t('settings.provider.addBtn') });
+	addBtn.setAttribute('data-testid', TestIds.settings.providerAddBtn);
 	addBtn.addClass('ia-button');
 	addBtn.addClass('ia-button--primary');
 	addBtn.addEventListener('click', () => {
@@ -105,6 +107,8 @@ export function displayProviderTab(
 		const row = tbody.insertRow();
 		row.addClass('ia-table-row');
 		row.addClass('provider-row'); // Add for test compatibility
+		row.setAttribute('data-testid', TestIds.settings.providerRow);
+		row.setAttribute('data-provider-id', config.provider);
 
 		const providerCell = row.insertCell();
 		providerCell.addClass('ia-table-cell');
@@ -293,6 +297,8 @@ export function displayProviderTab(
 		actionsCell.addClass('ia-table-actions');
 
 		const editBtn = actionsCell.createEl('button', { text: t('settings.provider.actions.edit') });
+		editBtn.setAttribute('data-testid', TestIds.settings.providerEditBtn);
+		editBtn.setAttribute('data-provider-id', config.provider);
 		editBtn.addClass('ia-button');
 		editBtn.addClass('ia-button--ghost');
 		editBtn.addEventListener('click', () => {
@@ -348,6 +354,8 @@ export function displayProviderTab(
 		}
 
 		const deleteBtn = actionsCell.createEl('button', { text: t('settings.provider.actions.delete') });
+		deleteBtn.setAttribute('data-testid', TestIds.settings.providerDeleteBtn);
+		deleteBtn.setAttribute('data-provider-id', config.provider);
 		deleteBtn.addClass('ia-button');
 		deleteBtn.addClass('ia-button--danger');
 		deleteBtn.addEventListener('click', () => {

@@ -25,5 +25,18 @@ export const TestIds = {
 	settings: {
 		shell: 'ia-settings-shell',
 		tab: 'ia-settings-tab',                  // + data-tab-id
+		llmSubTab: 'ia-settings-llm-subtab',     // + data-subtab-id
+		providerAddBtn: 'ia-provider-add-btn',
+		providerRow: 'ia-provider-row',          // + data-provider-id
+		providerEditBtn: 'ia-provider-edit-btn', // + data-provider-id
+		providerDeleteBtn: 'ia-provider-delete-btn', // + data-provider-id
+		providerModalProviderSelect: 'ia-provider-modal-provider-select',
+		providerModalModelFilterInput: 'ia-provider-modal-model-filter-input',
+		providerModalApiKeyInput: 'ia-provider-modal-api-key-input',
+		providerModalBaseUrlInput: 'ia-provider-modal-base-url-input',
+		providerModalSaveBtn: 'ia-provider-modal-save-btn',
+		providerModalCancelBtn: 'ia-provider-modal-cancel-btn',
+		confirmModalConfirmBtn: 'ia-confirm-modal-confirm-btn',
+		confirmModalCancelBtn: 'ia-confirm-modal-cancel-btn',
 	},
 } as const;

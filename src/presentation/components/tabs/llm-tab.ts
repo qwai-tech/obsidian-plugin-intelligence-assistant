@@ -8,6 +8,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
 import { displayProviderTab } from './provider-tab';
 import { displayModelsTab, type ModelFilters } from './models-tab';
+import { TestIds } from '@/presentation/utils/test-ids';
 
 export function displayLLMTab(
 	containerEl: HTMLElement,
@@ -58,6 +59,8 @@ export function displayLLMTab(
 			text: `${tab.icon} ${tab.label}`,
 			cls: 'ia-llm-subtab-btn'
 		});
+		tabBtn.setAttribute('data-testid', TestIds.settings.llmSubTab);
+		tabBtn.setAttribute('data-subtab-id', tab.id);
 
 		tabBtn.toggleClass('ia-llm-subtab-btn--active', activeTab === tab.id);
 		tabBtn.addClass('ia-clickable');
