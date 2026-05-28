@@ -64,16 +64,16 @@ describe('Smoke — plugin loads, chat view + settings shell render', () => {
 		await chat.waitForReplyComplete();
 
 		const messages = await chat.getMessages();
-		expect(messages).toEqual([
+		await expect(messages).toEqual([
 			expect.objectContaining({ role: 'user', text: expect.stringContaining('ping') }),
 			expect.objectContaining({ role: 'assistant', text: expect.stringContaining('pong') }),
 		]);
 
 		const conversationId = await chat.getConversationId();
-		expect(conversationId).not.toBe('');
+		await expect(conversationId).not.toBe('');
 		const conversationPath = await vault.findRuntimeConversationFile(conversationId);
 		const conversation = await vault.readRuntimeDataFile<{ messages: Array<{ role: string; content: string }> }>(conversationPath);
-		expect(conversation.messages).toEqual([
+		await expect(conversation.messages).toEqual([
 			expect.objectContaining({ role: 'user', content: expect.stringContaining('ping') }),
 			expect.objectContaining({ role: 'assistant', content: expect.stringContaining('pong') }),
 		]);
@@ -83,7 +83,7 @@ describe('Smoke — plugin loads, chat view + settings shell render', () => {
 			const body = call.body as { stream?: boolean } | null;
 			return body?.stream === true;
 		});
-		expect(chatCalls).toHaveLength(1);
-		expect(chatCalls[0].body).toMatchObject({ model: 'gpt-4o-mini' });
+		await expect(chatCalls).toHaveLength(1);
+		await expect(chatCalls[0].body).toMatchObject({ model: 'gpt-4o-mini' });
 	});
 });

@@ -61,8 +61,8 @@ export class ChatViewPage extends BasePage {
 		for (const el of elems) {
 			const role = (await el.getAttribute('data-role')) as 'user' | 'assistant';
 			let text = await browser.execute((node: HTMLElement) => {
-				const content = node.querySelector('[data-message-content]') as HTMLElement | null;
-				const source = content ?? node;
+				const content = node.querySelector('[data-message-content]');
+				const source = content instanceof HTMLElement ? content : node;
 				return (source.innerText || source.textContent || '').trim();
 			}, el);
 			if (!text) text = (await el.getText()).trim();
