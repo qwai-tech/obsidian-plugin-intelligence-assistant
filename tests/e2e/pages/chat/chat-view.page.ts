@@ -60,7 +60,12 @@ export class ChatViewPage extends BasePage {
 		const elems = await this.$$testid(TestIds.chat.message).getElements();
 		for (const el of elems) {
 			const role = (await el.getAttribute('data-role')) as 'user' | 'assistant';
-			const text = (await el.getText()).trim();
+			let text = await browser.execute((node: HTMLElement) => {
+				const content = node.querySelector('[data-message-content]') as HTMLElement | null;
+				const source = content ?? node;
+				return (source.innerText || source.textContent || '').trim();
+			}, el);
+			if (!text) text = (await el.getText()).trim();
 			out.push({ role, text });
 		}
 		return out;
@@ -70,11 +75,11 @@ export class ChatViewPage extends BasePage {
 		return browser.execute(() => {
 			const app = (window as unknown as {
 				app: { plugins: { plugins: Record<string, {
-					conversationManager?: { activeConversationId?: string };
+					settings?: { activeConversationId?: string | null };
 				}> } };
 			}).app;
 			const plugin = app.plugins.plugins['intelligence-assistant'];
-			return plugin?.conversationManager?.activeConversationId ?? '';
+			return plugin?.settings?.activeConversationId ?? '';
 		});
 	}
 

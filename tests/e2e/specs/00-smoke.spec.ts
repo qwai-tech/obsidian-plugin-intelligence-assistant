@@ -10,16 +10,13 @@
  *     (container/input/send/empty-state/model-select/mode-select)
  *     are missing from the source
  *
- * What this spec deliberately does NOT cover yet:
- *   - Sending a message and asserting on an assistant reply. browser.mock
- *     requires WebDriver Bidi, which is currently incompatible with
- *     wdio-obsidian-service. LLM-mocked round-trip tests land in Phase 1
- *     via a different strategy (fetch monkey-patch or a local stub HTTP
- *     server). The Release suite covers the real-API round-trip.
+ * This spec also covers the minimal mocked chat round-trip so the
+ * CI foundation catches broken LLM request, render, and persistence paths.
  */
 import { ChatViewPage } from '../pages/chat/chat-view.page';
 import { VaultFixture } from '../support/vault-fixture';
 import { waitForPluginReady } from '../support/plugin-helpers';
+import { mockLLM } from '../support/mock-llm';
 
 interface SeededSettings {
 	providers: {
@@ -34,6 +31,7 @@ describe('Smoke — plugin loads, chat view + settings shell render', () => {
 
 	beforeEach(async () => {
 		await vault.reset();
+		await mockLLM.clearAll();
 		await waitForPluginReady();
 	});
 
@@ -55,5 +53,37 @@ describe('Smoke — plugin loads, chat view + settings shell render', () => {
 		await expect(settings.providers.list).toHaveLength(1);
 		await expect(settings.providers.list[0].provider).toBe('openai');
 		await expect(settings.providers.list[0].apiKey).toBe('sk-test-fixture');
+	});
+
+	it('sends a mocked chat round-trip and persists the conversation', async () => {
+		await chat.open();
+		await chat.newChat();
+		await mockLLM.replyWith('pong');
+
+		await chat.sendMessage('ping');
+		await chat.waitForReplyComplete();
+
+		const messages = await chat.getMessages();
+		expect(messages).toEqual([
+			expect.objectContaining({ role: 'user', text: expect.stringContaining('ping') }),
+			expect.objectContaining({ role: 'assistant', text: expect.stringContaining('pong') }),
+		]);
+
+		const conversationId = await chat.getConversationId();
+		expect(conversationId).not.toBe('');
+		const conversationPath = await vault.findRuntimeConversationFile(conversationId);
+		const conversation = await vault.readRuntimeDataFile<{ messages: Array<{ role: string; content: string }> }>(conversationPath);
+		expect(conversation.messages).toEqual([
+			expect.objectContaining({ role: 'user', content: expect.stringContaining('ping') }),
+			expect.objectContaining({ role: 'assistant', content: expect.stringContaining('pong') }),
+		]);
+
+		const calls = await mockLLM.getCalls();
+		const chatCalls = calls.filter((call) => {
+			const body = call.body as { stream?: boolean } | null;
+			return body?.stream === true;
+		});
+		expect(chatCalls).toHaveLength(1);
+		expect(chatCalls[0].body).toMatchObject({ model: 'gpt-4o-mini' });
 	});
 });

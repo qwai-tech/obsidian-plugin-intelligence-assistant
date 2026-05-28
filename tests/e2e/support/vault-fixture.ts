@@ -119,6 +119,17 @@ export class VaultFixture {
 		return readJson<T>(path.join(this.pluginDir, relativePath));
 	}
 
+	async readRuntimeDataFile<T = unknown>(relativePath: string): Promise<T> {
+		const data = await browser.execute(async (pluginDirRel, dataPath) => {
+			const app = (window as unknown as {
+				app: { vault: { adapter: { read(path: string): Promise<string> } } };
+			}).app;
+			const raw = await app.vault.adapter.read(`${pluginDirRel}/${dataPath}`);
+			return JSON.parse(raw) as unknown;
+		}, PLUGIN_DIR_REL, relativePath);
+		return data as T;
+	}
+
 	async dataFileExists(relativePath: string): Promise<boolean> {
 		return pathExists(path.join(this.pluginDir, relativePath));
 	}
@@ -139,6 +150,81 @@ export class VaultFixture {
 		}
 
 		throw new Error(`Conversation not found: ${conversationId}`);
+	}
+
+	async findRuntimeConversationFile(conversationId: string, timeoutMs = 5_000): Promise<string> {
+		let foundPath = '';
+		await browser.waitUntil(
+			async () => {
+				foundPath = await this.findRuntimeConversationFileOnce(conversationId) ?? '';
+				return foundPath !== '';
+			},
+			{ timeout: timeoutMs, timeoutMsg: `Conversation not found: ${conversationId}` }
+		);
+		return foundPath;
+	}
+
+	private async findRuntimeConversationFileOnce(conversationId: string): Promise<string | null> {
+		return browser.execute(
+			async (pluginDirRel, indexRel, conversationsRel, id) => {
+				const app = (window as unknown as {
+					app: {
+						vault: {
+							adapter: {
+								exists(path: string): Promise<boolean>;
+								list(path: string): Promise<{ files: string[]; folders: string[] }>;
+								read(path: string): Promise<string>;
+							};
+						};
+					};
+				}).app;
+				const adapter = app.vault.adapter;
+				const toPluginRelativePath = (filePath: string): string => {
+					const normalized = filePath.replace(/\\/g, '/');
+					const pluginPrefix = `${pluginDirRel}/`;
+					return normalized.startsWith(pluginPrefix)
+						? normalized.slice(pluginPrefix.length)
+						: normalized;
+				};
+				const pluginPath = (relativePath: string): string => `${pluginDirRel}/${relativePath}`;
+
+				const indexPath = pluginPath(indexRel);
+				if (await adapter.exists(indexPath)) {
+					const index = JSON.parse(await adapter.read(indexPath)) as ConversationIndexFile;
+					const match = index.conversations?.find((entry) => entry.id === id);
+					if (match?.file) {
+						const relativePath = toPluginRelativePath(match.file);
+						if (await adapter.exists(pluginPath(relativePath))) {
+							return relativePath;
+						}
+					}
+				}
+
+				const conversationsPath = pluginPath(conversationsRel);
+				if (!(await adapter.exists(conversationsPath))) {
+					return null;
+				}
+
+				const sanitizedId = id ? id.replace(/[^a-zA-Z0-9_-]/g, '-') : 'conversation';
+				const listing = await adapter.list(conversationsPath);
+				for (const filePath of listing.files) {
+					const fileName = filePath.split('/').pop() ?? '';
+					if (!fileName.endsWith(`-${sanitizedId}.json`)) {
+						continue;
+					}
+					const conversation = JSON.parse(await adapter.read(filePath)) as ConversationFile;
+					if (conversation.id === id) {
+						return toPluginRelativePath(filePath);
+					}
+				}
+
+				return null;
+			},
+			PLUGIN_DIR_REL,
+			CONVERSATION_INDEX_REL,
+			CONVERSATIONS_REL,
+			conversationId
+		);
 	}
 
 	private async findConversationFileFromIndex(conversationId: string): Promise<string | null> {
