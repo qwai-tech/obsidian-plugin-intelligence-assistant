@@ -3170,12 +3170,13 @@
 	overflow: visible;
 }
 
-/* display:contents removes the .message-meta wrapper from layout,
-   making its children (.ia-chat-message__badges, .message-timestamp)
-   direct flex children of .message-body so we can use order on them */
 .message-assistant .message-meta,
 .ia-chat-message--assistant .message-meta {
-	display: contents;
+	order: 10;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	max-width: 100%;
 }
 
 .message-assistant .message-name,
