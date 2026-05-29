@@ -12,6 +12,27 @@ interface UserSettingsFile {
 	};
 }
 
+async function waitForUserSettings(
+	vault: VaultFixture,
+	matches: (settings: UserSettingsFile) => boolean
+): Promise<UserSettingsFile> {
+	let lastSettings: UserSettingsFile | null = null;
+	await browser.waitUntil(
+		async () => {
+			lastSettings = await vault.readRuntimeDataFile<UserSettingsFile>('config/user/settings.json');
+			return matches(lastSettings);
+		},
+		{
+			timeout: 10_000,
+			timeoutMsg: 'settings.json did not reach expected state',
+		}
+	);
+	if (!lastSettings) {
+		throw new Error('settings.json was not read');
+	}
+	return lastSettings;
+}
+
 describe('Settings persistence', () => {
 	const settings = new GeneralSettingsPage();
 	const vault = new VaultFixture();
@@ -27,7 +48,11 @@ describe('Settings persistence', () => {
 		await settings.setConversationTitleMode('manual');
 		await settings.setConversationIconsEnabled(false);
 
-		let userSettings = await vault.readRuntimeDataFile<UserSettingsFile>('config/user/settings.json');
+		let userSettings = await waitForUserSettings(vault, candidate =>
+			candidate.providers?.defaultModel === 'openai:gpt-4o-persisted' &&
+			candidate.conversations?.title?.mode === 'manual' &&
+			candidate.conversations?.icon?.enabled === false
+		);
 		await expect(userSettings.providers?.defaultModel).toBe('openai:gpt-4o-persisted');
 		await expect(userSettings.conversations?.title?.mode).toBe('manual');
 		await expect(userSettings.conversations?.icon?.enabled).toBe(false);
@@ -39,7 +64,11 @@ describe('Settings persistence', () => {
 		await expect(await settings.getConversationTitleMode()).toBe('manual');
 		await expect(await settings.getConversationIconsEnabled()).toBe(false);
 
-		userSettings = await vault.readRuntimeDataFile<UserSettingsFile>('config/user/settings.json');
+		userSettings = await waitForUserSettings(vault, candidate =>
+			candidate.providers?.defaultModel === 'openai:gpt-4o-persisted' &&
+			candidate.conversations?.title?.mode === 'manual' &&
+			candidate.conversations?.icon?.enabled === false
+		);
 		await expect(userSettings.providers?.defaultModel).toBe('openai:gpt-4o-persisted');
 		await expect(userSettings.conversations?.title?.mode).toBe('manual');
 		await expect(userSettings.conversations?.icon?.enabled).toBe(false);

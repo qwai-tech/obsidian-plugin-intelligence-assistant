@@ -21,7 +21,7 @@ export class GeneralSettingsPage extends BasePage {
 	}
 
 	async setDefaultModel(modelId: string): Promise<void> {
-		await this.type(TestIds.settings.generalDefaultModelInput, modelId);
+		await this.setTextInputValue(TestIds.settings.generalDefaultModelInput, modelId);
 		await this.waitForPluginSetting('defaultModel', modelId);
 	}
 
@@ -85,6 +85,19 @@ export class GeneralSettingsPage extends BasePage {
 			}
 			select.value = selected;
 			select.dispatchEvent(new Event('change', { bubbles: true }));
+		}, testId, value);
+	}
+
+	private async setTextInputValue(testId: string, value: string): Promise<void> {
+		await this.waitFor(testId);
+		await browser.execute((id, selected) => {
+			const input = document.querySelector(`[data-testid="${id}"]`);
+			if (!(input instanceof HTMLInputElement)) {
+				throw new Error(`Text input not found: ${id}`);
+			}
+			input.value = selected;
+			input.dispatchEvent(new Event('input', { bubbles: true }));
+			input.dispatchEvent(new Event('change', { bubbles: true }));
 		}, testId, value);
 	}
 
