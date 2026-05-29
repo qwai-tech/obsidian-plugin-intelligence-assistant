@@ -1,7 +1,7 @@
 {
 	"id": "intelligence-assistant",
 	"name": "Intelligence Assistant",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"minAppVersion": "1.7.2",
 	"description": "Agent for asking, organizing, writing, and researching with your notes.",
 	"author": "QWAI",
