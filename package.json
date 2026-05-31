@@ -1,7 +1,7 @@
 {
 	"name": "obsidian-plugin-intelligence-assistant",
-	"version": "0.0.12",
-	"description": "Agentic note assistant plugin",
+	"version": "0.0.13",
+	"description": "Full autonomous Agentic workspace",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node scripts/dev.js",

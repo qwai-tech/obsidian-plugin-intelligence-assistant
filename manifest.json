@@ -1,9 +1,9 @@
 {
 	"id": "intelligence-assistant",
 	"name": "Intelligence Assistant",
-	"version": "0.0.12",
+	"version": "0.0.13",
 	"minAppVersion": "1.7.2",
-	"description": "Agent for asking, organizing, writing, and researching with your notes.",
+	"description": "Full autonomous Agentic workspace. Understands notes, links, and canvas to plan and execute complex vault tasks.",
 	"author": "QWAI",
 	"authorUrl": "https://github.com/qwai-tech",
 	"isDesktopOnly": true
