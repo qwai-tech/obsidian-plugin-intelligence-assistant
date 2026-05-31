@@ -1,0 +1,141 @@
+<h2>Chat UI — 整体设计方向</h2>
+<p class="subtitle">当前界面存在几个问题：头部控制栏视觉过重、禁用按钮占用过多空间、嵌套卡片感太强。以下是三种重设计方向，选择最符合你期望风格的。</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="minimal" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px;background:#f8f9fa;border-radius:8px;">
+      <!-- Minimal Chrome mockup -->
+      <div style="font-family:system-ui;font-size:12px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+        <!-- Top bar: minimal, no card -->
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid #f0f0f0;">
+          <span style="font-size:11px;color:#999;">💬 历史</span>
+          <span style="color:#ccc;">/</span>
+          <span style="font-size:11px;font-weight:600;color:#333;">新对话</span>
+          <div style="margin-left:auto;display:flex;gap:4px;">
+            <span style="font-size:11px;color:#999;padding:2px 6px;border-radius:4px;background:#f5f5f5;">对话</span>
+            <span style="font-size:11px;color:#999;padding:2px 6px;border-radius:4px;background:#f5f5f5;">GPT-4o</span>
+            <span style="font-size:11px;color:#999;">⚙</span>
+          </div>
+        </div>
+        <!-- Messages -->
+        <div style="padding:16px;min-height:80px;display:flex;flex-direction:column;gap:8px;">
+          <div style="align-self:flex-end;max-width:60%;background:#3b82f6;color:#fff;padding:6px 10px;border-radius:12px 12px 2px 12px;font-size:11px;">你好，帮我分析这份文件</div>
+          <div style="max-width:80%;background:#f3f4f6;padding:6px 10px;border-radius:2px 12px 12px 12px;font-size:11px;color:#333;">好的，请分享文件内容...</div>
+        </div>
+        <!-- Input: flat, no nested card -->
+        <div style="padding:8px 12px;border-top:1px solid #f0f0f0;">
+          <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;border:1.5px solid #e5e7eb;border-radius:10px;background:#fafafa;">
+            <span style="color:#ccc;font-size:14px;">📎</span>
+            <span style="flex:1;font-size:11px;color:#999;">输入消息…</span>
+            <div style="display:flex;gap:4px;align-items:center;">
+              <span style="font-size:10px;color:#ccc;">📖</span>
+              <span style="font-size:10px;color:#ccc;">🔍</span>
+              <button style="width:22px;height:22px;background:#3b82f6;border:none;border-radius:6px;color:#fff;font-size:12px;">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A · 极简主义</h3>
+      <p>移除所有卡片边框，用留白区分层次。头部一行内展示所有控制，输入框完全扁平化。禁用功能仅以图标形式存在，不显示文字标签。参考：Linear、Notion、Claude.ai</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="sidebar" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px;background:#f8f9fa;border-radius:8px;">
+      <!-- Sidebar layout mockup -->
+      <div style="font-family:system-ui;font-size:12px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);display:flex;">
+        <!-- Left config panel -->
+        <div style="width:90px;background:#f9fafb;border-right:1px solid #f0f0f0;padding:8px;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:9px;color:#999;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;">配置</div>
+          <div style="padding:4px 6px;background:#eff6ff;border-radius:4px;font-size:9px;color:#3b82f6;font-weight:600;">对话模式</div>
+          <div style="padding:4px 6px;border-radius:4px;font-size:9px;color:#666;">GPT-4o</div>
+          <div style="height:1px;background:#f0f0f0;margin:2px 0;"></div>
+          <div style="padding:4px 6px;border-radius:4px;font-size:9px;color:#999;">📖 知识库 off</div>
+          <div style="padding:4px 6px;border-radius:4px;font-size:9px;color:#999;">🔍 网搜 off</div>
+          <div style="padding:4px 6px;border-radius:4px;font-size:9px;color:#ccc;">🖼 图片 —</div>
+        </div>
+        <!-- Main chat -->
+        <div style="flex:1;display:flex;flex-direction:column;">
+          <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;border-bottom:1px solid #f0f0f0;">
+            <span style="font-size:10px;color:#999;">💬 历史</span>
+            <span style="color:#ddd;">/</span>
+            <span style="font-size:10px;font-weight:600;">新对话</span>
+            <span style="margin-left:auto;font-size:10px;color:#ccc;">+ 新建</span>
+          </div>
+          <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:6px;">
+            <div style="align-self:flex-end;max-width:60%;background:#3b82f6;color:#fff;padding:5px 8px;border-radius:10px 10px 2px 10px;font-size:10px;">你好！</div>
+            <div style="max-width:80%;background:#f3f4f6;padding:5px 8px;border-radius:2px 10px 10px 10px;font-size:10px;color:#333;">你好，有什么可以帮你的？</div>
+          </div>
+          <div style="padding:6px 8px;border-top:1px solid #f0f0f0;">
+            <div style="display:flex;align-items:center;gap:4px;padding:5px 8px;border:1px solid #e5e7eb;border-radius:8px;">
+              <span style="flex:1;font-size:10px;color:#999;">输入消息…</span>
+              <button style="width:18px;height:18px;background:#3b82f6;border:none;border-radius:4px;color:#fff;font-size:10px;">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B · 侧边栏配置</h3>
+      <p>将模式/模型/RAG/网搜等控制移到左侧固定面板，聊天区域独占右侧全部空间。侧边栏可折叠。像 VS Code 的 Activity Bar 一样，配置与对话完全分离。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="refined" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px;background:#f8f9fa;border-radius:8px;">
+      <!-- Refined current mockup -->
+      <div style="font-family:system-ui;font-size:12px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+        <!-- Compact single header row -->
+        <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:#f9fafb;border-bottom:1px solid #f0f0f0;">
+          <span style="font-size:10px;color:#3b82f6;font-weight:600;">💬</span>
+          <span style="font-size:10px;color:#999;">/</span>
+          <span style="font-size:10px;font-weight:600;">新对话</span>
+          <div style="height:12px;width:1px;background:#e5e7eb;margin:0 4px;"></div>
+          <select style="font-size:10px;border:1px solid #e5e7eb;border-radius:4px;padding:2px 4px;color:#555;background:#fff;">
+            <option>对话</option>
+          </select>
+          <select style="font-size:10px;border:1px solid #e5e7eb;border-radius:4px;padding:2px 4px;color:#555;background:#fff;max-width:80px;">
+            <option>GPT-4o</option>
+          </select>
+          <div style="margin-left:auto;display:flex;gap:3px;align-items:center;">
+            <span style="font-size:9px;color:#ccc;padding:2px 6px;border-radius:10px;border:1px solid #e5e7eb;">tokens: 0</span>
+            <span style="font-size:11px;color:#999;cursor:pointer;">⊞</span>
+          </div>
+        </div>
+        <!-- Messages -->
+        <div style="padding:10px;min-height:80px;display:flex;flex-direction:column;gap:6px;">
+          <div style="align-self:flex-end;max-width:65%;background:#3b82f6;color:#fff;padding:6px 10px;border-radius:12px 12px 2px 12px;font-size:10px;">帮我总结一下这篇文章</div>
+          <div style="max-width:80%;background:#f3f4f6;padding:6px 10px;border-radius:2px 12px 12px 12px;font-size:10px;color:#333;">好的，这篇文章主要讲述了…</div>
+        </div>
+        <!-- Input: borderless inner, actions as icons only -->
+        <div style="padding:6px 10px 8px;border-top:1px solid #f0f0f0;">
+          <div style="border:1.5px solid #d1d5db;border-radius:10px;background:#fff;overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:4px;padding:4px 8px;border-bottom:1px solid #f5f5f5;">
+              <button style="background:none;border:none;padding:2px 6px;border-radius:4px;font-size:10px;color:#999;cursor:pointer;display:flex;align-items:center;gap:3px;">📎 引用</button>
+              <div style="margin-left:auto;display:flex;gap:2px;">
+                <button style="background:none;border:none;padding:2px 4px;border-radius:4px;font-size:10px;color:#bbb;cursor:pointer;" title="知识库（已禁用）">📖</button>
+                <button style="background:#eff6ff;border:none;padding:2px 6px;border-radius:4px;font-size:10px;color:#3b82f6;cursor:pointer;font-weight:600;">🔍 on</button>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;padding:6px 8px;">
+              <span style="flex:1;font-size:11px;color:#bbb;">输入消息…</span>
+              <button style="width:24px;height:24px;background:#3b82f6;border:none;border-radius:7px;color:#fff;font-size:13px;cursor:pointer;">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C · 精炼现有</h3>
+      <p>保留现有整体结构，针对性优化：头部压缩为单行、移除多余边框、输入框功能区紧凑化、禁用项改为纯图标+tooltip（无文字标签）、启用项以高亮区分。改动量最小，风险最低。</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="section" style="margin-top:8px;">
+  <p class="subtitle" style="font-size:12px;">💡 提示：点击卡片选择，也可以在终端里描述你的想法或者说"混合A和C"之类的。</p>
+</div>

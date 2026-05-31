@@ -1,0 +1,149 @@
+<h2>极简方案 — 头部控制栏形态</h2>
+<p class="subtitle">Obsidian 侧边栏宽度约 320-400px。头部需要放：历史入口、模式切换、模型选择、新建、设置。以下是三种布局方案。</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="inline-pills" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:12px;background:#f8f9fa;border-radius:8px;">
+      <div style="font-family:system-ui;font-size:12px;width:320px;margin:0 auto;">
+        <div style="display:flex;align-items:center;gap:6px;padding:7px 10px;border-bottom:1px solid #e5e7eb;background:#fff;">
+          <!-- History icon -->
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;cursor:pointer;display:flex;align-items:center;">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </button>
+          <!-- Mode pill -->
+          <button style="background:#eff6ff;border:none;padding:2px 8px;border-radius:10px;font-size:10px;color:#3b82f6;font-weight:600;cursor:pointer;white-space:nowrap;">对话</button>
+          <!-- Model pill -->
+          <button style="background:#f3f4f6;border:none;padding:2px 8px;border-radius:10px;font-size:10px;color:#4b5563;cursor:pointer;white-space:nowrap;max-width:110px;overflow:hidden;text-overflow:ellipsis;">GPT-4o ▾</button>
+          <!-- Spacer -->
+          <div style="flex:1;"></div>
+          <!-- Actions -->
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;cursor:pointer;" title="新建对话">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;cursor:pointer;" title="设置">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          </button>
+        </div>
+        <!-- Messages preview -->
+        <div style="padding:12px 10px;background:#fff;display:flex;flex-direction:column;gap:7px;min-height:70px;">
+          <div style="align-self:flex-end;max-width:70%;background:#3b82f6;color:#fff;padding:6px 10px;border-radius:12px 12px 2px 12px;font-size:11px;line-height:1.4;">帮我总结一下这个笔记</div>
+          <div style="max-width:85%;background:#f3f4f6;padding:6px 10px;border-radius:2px 12px 12px 12px;font-size:11px;color:#374151;line-height:1.4;">这份笔记主要涵盖了三个核心主题…</div>
+        </div>
+        <!-- Input -->
+        <div style="padding:8px;background:#fff;border-top:1px solid #f3f4f6;">
+          <div style="display:flex;align-items:center;gap:4px;padding:4px 6px 4px 10px;border:1.5px solid #e5e7eb;border-radius:10px;">
+            <span style="flex:1;font-size:11px;color:#9ca3af;">输入消息…</span>
+            <button style="background:none;border:none;padding:2px 4px;color:#9ca3af;font-size:11px;" title="引用文件">📎</button>
+            <button style="background:none;border:none;padding:2px 4px;color:#9ca3af;font-size:11px;" title="知识库（未配置）">📖</button>
+            <button style="width:24px;height:24px;background:#e5e7eb;border:none;border-radius:7px;color:#9ca3af;display:flex;align-items:center;justify-content:center;cursor:not-allowed;">↑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A1 · Pill 标签行</h3>
+      <p>模式和模型作为圆角 pill 标签内联在顶部单行。点击直接切换/弹出下拉。最紧凑，一眼看出当前配置。仿照 Perplexity / Arc 浏览器风格。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="title-bar" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:12px;background:#f8f9fa;border-radius:8px;">
+      <div style="font-family:system-ui;font-size:12px;width:320px;margin:0 auto;">
+        <!-- Two-row minimal header -->
+        <div style="background:#fff;border-bottom:1px solid #e5e7eb;">
+          <div style="display:flex;align-items:center;padding:6px 10px;">
+            <span style="font-size:11px;font-weight:600;color:#111;flex:1;">新对话</span>
+            <button style="background:none;border:none;padding:2px;color:#9ca3af;" title="历史">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            </button>
+            <button style="background:none;border:none;padding:2px;color:#9ca3af;margin-left:4px;" title="新建">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+          <!-- Sub-row: mode + model -->
+          <div style="display:flex;align-items:center;gap:6px;padding:0 10px 6px;">
+            <select style="font-size:10px;border:none;padding:0;color:#6b7280;background:transparent;cursor:pointer;font-weight:500;">
+              <option>对话模式</option>
+            </select>
+            <span style="color:#d1d5db;">·</span>
+            <select style="font-size:10px;border:none;padding:0;color:#6b7280;background:transparent;cursor:pointer;flex:1;overflow:hidden;text-overflow:ellipsis;">
+              <option>gpt-4o-mini</option>
+            </select>
+            <button style="background:none;border:none;padding:1px 4px;font-size:10px;color:#9ca3af;">⚙</button>
+          </div>
+        </div>
+        <!-- Messages -->
+        <div style="padding:12px 10px;background:#fff;display:flex;flex-direction:column;gap:7px;min-height:70px;">
+          <div style="align-self:flex-end;max-width:70%;background:#3b82f6;color:#fff;padding:6px 10px;border-radius:12px 12px 2px 12px;font-size:11px;">帮我写一个 Python 爬虫</div>
+          <div style="max-width:85%;background:#f3f4f6;padding:6px 10px;border-radius:2px 12px 12px 12px;font-size:11px;color:#374151;">好的，以下是一个基础示例…</div>
+        </div>
+        <!-- Input -->
+        <div style="padding:8px;background:#fff;border-top:1px solid #f3f4f6;">
+          <div style="display:flex;align-items:center;gap:4px;padding:4px 6px 4px 10px;border:1.5px solid #e5e7eb;border-radius:10px;">
+            <span style="flex:1;font-size:11px;color:#9ca3af;">输入消息…</span>
+            <button style="background:none;border:none;padding:2px 5px;color:#9ca3af;font-size:11px;">📎</button>
+            <button style="width:24px;height:24px;background:#3b82f6;border:none;border-radius:7px;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;">↑</button>
+          </div>
+          <div style="display:flex;justify-content:center;gap:8px;margin-top:5px;">
+            <span style="font-size:9px;color:#9ca3af;cursor:pointer;">📖 知识库</span>
+            <span style="font-size:9px;color:#9ca3af;">·</span>
+            <span style="font-size:9px;color:#3b82f6;cursor:pointer;font-weight:600;">🔍 网搜 开</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A2 · 标题栏 + 子行</h3>
+      <p>对话标题占主行，模式/模型作为无边框 select 在第二行低调呈现。切换功能放到输入框下方的 contextual 区域。两行头部，但每行都轻盈。仿照 iMessage / Bear App 风格。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="icon-only" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:12px;background:#f8f9fa;border-radius:8px;">
+      <div style="font-family:system-ui;font-size:12px;width:320px;margin:0 auto;">
+        <div style="background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;padding:6px 10px;gap:6px;">
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </button>
+          <span style="font-size:11px;font-weight:600;flex:1;color:#111;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">新对话</span>
+          <!-- Right: contextual status chip + actions -->
+          <span style="font-size:9px;background:#f3f4f6;padding:2px 6px;border-radius:8px;color:#6b7280;white-space:nowrap;">GPT-4o · 对话</span>
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+        <!-- Messages -->
+        <div style="padding:12px 10px;background:#fff;display:flex;flex-direction:column;gap:7px;min-height:70px;">
+          <div style="align-self:flex-end;max-width:70%;background:#3b82f6;color:#fff;padding:6px 10px;border-radius:12px 12px 2px 12px;font-size:11px;">分析这份周报</div>
+          <div style="max-width:85%;background:#f3f4f6;padding:6px 10px;border-radius:2px 12px 12px 12px;font-size:11px;color:#374151;">本周报告重点涉及以下几个方面…</div>
+        </div>
+        <!-- Input: all controls inside box -->
+        <div style="padding:8px;background:#fff;border-top:1px solid #f3f4f6;">
+          <div style="border:1.5px solid #e5e7eb;border-radius:12px;overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:3px;padding:5px 8px;border-bottom:1px solid #f5f5f5;">
+              <!-- Mode/model inside input box -->
+              <span style="font-size:9px;background:#eff6ff;color:#3b82f6;padding:1px 6px;border-radius:8px;font-weight:600;cursor:pointer;">对话</span>
+              <span style="font-size:9px;color:#9ca3af;padding:1px 6px;border-radius:8px;cursor:pointer;">GPT-4o ▾</span>
+              <div style="flex:1;"></div>
+              <button style="background:none;border:none;padding:1px 3px;font-size:11px;color:#9ca3af;" title="引用">📎</button>
+              <button style="background:none;border:none;padding:1px 3px;font-size:11px;color:#d1d5db;" title="知识库（未配置）">📖</button>
+              <button style="background:none;border:none;padding:1px 3px;font-size:11px;color:#9ca3af;font-weight:600;color:#3b82f6;" title="网搜已开启">🔍</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;padding:7px 8px 6px;">
+              <span style="flex:1;font-size:11px;color:#9ca3af;">输入消息…</span>
+              <button style="width:26px;height:26px;background:#3b82f6;border:none;border-radius:8px;color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A3 · 输入框全能模式</h3>
+      <p>头部极度简化为单行（标题 + 状态小标签 + 2个图标）。模式切换、模型选择、功能开关全部移入输入框顶部工具栏。仿照 Notion AI / ChatGPT 输入框风格。头部彻底"消失"。</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:12px;font-size:11px;">三种方案都是极简风格，差异在于控制项放在哪里：顶部行内(A1)、两行头部(A2)、还是全进输入框(A3)。</p>

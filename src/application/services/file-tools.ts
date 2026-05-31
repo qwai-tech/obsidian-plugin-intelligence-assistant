@@ -138,7 +138,7 @@ export class ListFilesTool implements Tool {
 		}),
 	});
 
-  execute(args: Record<string, unknown>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const folderPath = args.folder as string || '';
 			const extension = args.extension as string;
@@ -161,15 +161,110 @@ export class ListFilesTool implements Tool {
 				extension: f.extension
 			}));
 
-			return Promise.resolve({
+			return {
 				success: true,
 				result: fileList
-			});
+			};
 		} catch (error) {
-			return Promise.resolve({
+			return {
 				success: false,
 				error: error instanceof Error ? error.message : String(error)
-			});
+			};
 		}
 	}
 }
+
+export class UpdatePropertiesTool implements Tool {
+	constructor(private _app: App) {}
+
+	definition: ToolDefinition = createToolDefinition({
+		name: 'update_properties',
+		description: 'Update the YAML Frontmatter (Properties) of a note. Supports adding, updating, or removing tags and keys.',
+		parameters: [
+			{
+				name: 'path',
+				type: 'string',
+				description: 'Path to the note to update',
+				required: true
+			},
+			{
+				name: 'updates',
+				type: 'object',
+				description: 'Properties to update (key-value pairs)',
+				required: true
+			},
+			{
+				name: 'deleteKeys',
+				type: 'array',
+				description: 'List of keys to delete from Properties',
+				required: false
+			}
+		],
+		inputSchema: z.object({
+			path: z.string().min(1),
+			updates: z.record(z.string(), z.any()),
+			deleteKeys: z.array(z.string()).optional(),
+		}),
+		sideEffects: { vaultWrite: true },
+	});
+
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
+		try {
+			const path = args.path as string;
+			const updates = args.updates as Record<string, any>;
+			const deleteKeys = (args.deleteKeys as string[]) || [];
+			const file = this._app.vault.getAbstractFileByPath(path);
+
+			if (!file || !(file instanceof TFile)) {
+				return { success: false, error: `File not found: ${path}` };
+			}
+
+			const content = await this._app.vault.read(file);
+			const metadata = this._app.metadataCache.getFileCache(file)?.frontmatter || {};
+			
+			const newMetadata = { ...metadata };
+			// Apply updates
+			for (const [key, value] of Object.entries(updates)) {
+				newMetadata[key] = value;
+			}
+			// Apply deletions
+			for (const key of deleteKeys) {
+				delete newMetadata[key];
+			}
+			// Remove the automatically added 'position' key if it exists
+			delete newMetadata.position;
+
+			const body = content.replace(/^---[\s\S]*?---\n?/, '');
+			let newFrontmatter = '---\n';
+			for (const [key, value] of Object.entries(newMetadata)) {
+				if (Array.isArray(value)) {
+					newFrontmatter += `${key}:\n${value.map(v => `  - ${v}`).join('\n')}\n`;
+				} else if (typeof value === 'object' && value !== null) {
+					newFrontmatter += `${key}: ${JSON.stringify(value)}\n`;
+				} else {
+					newFrontmatter += `${key}: ${value}\n`;
+				}
+			}
+			newFrontmatter += '---\n';
+
+			const proposedContent = newFrontmatter + body;
+
+			return {
+				success: true,
+				result: createWriteProposal({
+					operation: 'update',
+					path,
+					proposedContent,
+					previousContent: content,
+					reason: `Update properties for ${path}: ${Object.keys(updates).join(', ')}`
+				})
+			};
+		} catch (error) {
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : String(error)
+			};
+		}
+	}
+}
+

@@ -10,6 +10,7 @@ export default defineConfig([
       "dist/**",
       "build/**",
       "coverage/**",
+      "src/vendor/**",
       "**/__tests__/**",
       "**/*.test.ts",
       "tests/e2e/support/mock-mcp-server.js",

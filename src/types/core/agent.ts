@@ -10,6 +10,7 @@ export interface SystemPrompt {
 	name: string;
 	content: string;
 	enabled: boolean;
+	readonly?: boolean;
 	createdAt: number;
 	updatedAt: number;
 }

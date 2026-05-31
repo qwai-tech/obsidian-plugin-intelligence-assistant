@@ -100,10 +100,12 @@ export class ChatInputComponent {
 			}
 		});
 		this.sendBtn.addEventListener('click', () => void handleSend());
+
+		this.updateModeSelector(this.state.mode);
 	}
 
 	private buildToolbar(toolbar: HTMLElement) {
-		// Left: mode + model pills (visible in chat mode)
+		// Left: mode + model pills
 		this.modePillGroup = toolbar.createDiv('chat-input-pill-group');
 
 		this.modeSelector = this.modePillGroup.createEl('select', { cls: 'chat-input-mode-pill' });
@@ -160,6 +162,7 @@ export class ChatInputComponent {
 		const webBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
 		webBtn.type = 'button';
 		this.webActionItem = webBtn;
+		this.webActionItem.setAttribute('data-testid', TestIds.chat.webSearchToggleBtn);
 		this.webActionItem.setAttr('title', t('chat.webSearchTooltipLabel'));
 		setIcon(this.webActionItem.createSpan({ cls: 'header-action-icon' }), 'search');
 		this.webActionItem.createSpan({ cls: 'header-action-label', text: t('chat.webSearchLabel') });
@@ -184,10 +187,31 @@ export class ChatInputComponent {
 
 	public updateModeSelector(mode: 'chat' | 'agent') {
 		if (this.modeSelector) this.modeSelector.value = mode;
-		if (this.modelSelect) this.modelSelect.toggleClass('ia-hidden', mode === 'agent');
+
+		// Model selection visibility logic:
+		// 1. In 'chat' mode, always show.
+		// 2. In 'agent' mode, only show if the active agent uses 'chat-view' model strategy.
+		let showModelSelect = mode === 'chat';
+		if (mode === 'agent') {
+			const activeId = this.plugin.settings.activeAgentId;
+			const agent = this.plugin.settings.agents.find(a => a.id === activeId);
+			if (agent?.modelStrategy?.strategy === 'chat-view') {
+				showModelSelect = true;
+			}
+		}
+		if (this.modelSelect) this.modelSelect.toggleClass('ia-hidden', !showModelSelect);
+		
 		if (this.agentPillGroup) this.agentPillGroup.toggleClass('ia-hidden', mode !== 'agent');
-		if (this.ragActionItem) this.ragActionItem.toggleClass('ia-hidden', !this.plugin.settings.ragConfig.enabled);
-		if (this.webActionItem) this.webActionItem.toggleClass('ia-hidden', !this.plugin.settings.webSearchConfig.enabled);
+		
+		// RAG and Web toggles should ONLY be visible in 'chat' mode.
+		// In 'agent' mode, the agent's internal config handles these.
+		const showToolToggles = mode === 'chat';
+		if (this.ragActionItem) {
+			this.ragActionItem.toggleClass('ia-hidden', !showToolToggles || !this.plugin.settings.ragConfig.enabled);
+		}
+		if (this.webActionItem) {
+			this.webActionItem.toggleClass('ia-hidden', !showToolToggles || !this.plugin.settings.webSearchConfig.enabled);
+		}
 	}
 
 	public refreshAgentSelect(preferredId?: string): string | null {
@@ -285,7 +309,8 @@ export class ChatInputComponent {
 		active: boolean,
 		_statusText: string
 	) {
-		item.toggleClass('ia-hidden', !enabled);
+		const visible = enabled && this.state.mode === 'chat';
+		item.toggleClass('ia-hidden', !visible);
 		if (enabled) {
 			item.toggleClass('is-active', active);
 		}
@@ -306,10 +331,14 @@ export class ChatInputComponent {
 
 		this.referenceContainer.removeClass('ia-hidden');
 
-		this.state.referencedFiles.forEach((item, index) => {
+		const summary = referenceList.createDiv('reference-summary');
+		setIcon(summary.createSpan('reference-summary-icon'), 'paperclip');
+		summary.createSpan({ text: 'Using context', cls: 'reference-summary-label' });
+
+		this.state.referencedFiles.slice(0, 4).forEach((item, index) => {
 			const refItem = referenceList.createDiv('reference-item');
 			const icon = refItem.createSpan('reference-icon');
-			icon.setText(item instanceof TFolder ? '📁' : '📄');
+			setIcon(icon, item instanceof TFolder ? 'folder' : 'file-text');
 			refItem.createSpan('reference-path').setText(item.path);
 			refItem.addClass('ia-clickable');
 			refItem.addEventListener('click', () => {
@@ -317,13 +346,24 @@ export class ChatInputComponent {
 					void this.app.workspace.getLeaf().openFile(item);
 				}
 			});
-			const removeBtn = refItem.createEl('button', { text: '×', cls: 'reference-remove' });
+			const removeBtn = refItem.createEl('button', { cls: 'reference-remove' });
+			removeBtn.type = 'button';
+			removeBtn.setAttribute('aria-label', `Remove ${item.path}`);
+			setIcon(removeBtn, 'x');
 			removeBtn.addEventListener('click', (e) => {
 				e.stopPropagation();
 				this.state.referencedFiles.splice(index, 1);
 				this.updateReferenceDisplay();
 			});
 		});
+
+		const hiddenCount = this.state.referencedFiles.length - 4;
+		if (hiddenCount > 0) {
+			referenceList.createSpan({
+				text: `+${hiddenCount} more`,
+				cls: 'reference-count',
+			});
+		}
 	}
 
 	public updateAttachmentPreview() {

@@ -41,6 +41,18 @@
       {
         "type": "append_to_note",
         "enabled": true
+      },
+      {
+        "type": "update_properties",
+        "enabled": true
+      },
+      {
+        "type": "read_canvas",
+        "enabled": true
+      },
+      {
+        "type": "update_canvas",
+        "enabled": true
       }
     ],
     "mcp": {

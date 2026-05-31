@@ -13,7 +13,7 @@ describe('BuiltinToolSource', () => {
 		expect(source.label).toBe('Built-in Tools');
 	});
 
-	it('loads exactly the six builtin tools', async () => {
+	it('loads exactly the builtin tools', async () => {
 		const tools = await makeSource().load();
 		const names = tools.map((t) => t.definition.name).sort();
 		expect(names).toEqual(
@@ -21,8 +21,11 @@ describe('BuiltinToolSource', () => {
 				'append_to_note',
 				'create_note',
 				'list_files',
+				'read_canvas',
 				'read_file',
 				'search_files',
+				'update_canvas',
+				'update_properties',
 				'write_file',
 			].sort(),
 		);
@@ -30,7 +33,7 @@ describe('BuiltinToolSource', () => {
 
 	it('returns tools that each have a definition and an execute function', async () => {
 		const tools = await makeSource().load();
-		expect(tools).toHaveLength(6);
+		expect(tools).toHaveLength(9);
 		for (const tool of tools) {
 			expect(typeof tool.definition.name).toBe('string');
 			expect(typeof tool.execute).toBe('function');
@@ -71,7 +74,7 @@ describe('BuiltinToolSource', () => {
 	it('treats a null return from getEnabledTypes as "load all"', async () => {
 		const source = new BuiltinToolSource(new App(), () => null);
 		const tools = await source.load();
-		expect(tools).toHaveLength(6);
+		expect(tools).toHaveLength(9);
 	});
 
 	it('returns no tools when getEnabledTypes returns an empty iterable', async () => {

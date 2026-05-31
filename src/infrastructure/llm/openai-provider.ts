@@ -33,9 +33,24 @@ export class OpenAIProvider extends BaseStreamingProvider {
 
 		const maxTokensValue = request.maxTokens ?? 2000;
 		const modelName = this.extractModelName(request.model);
+
+		// Phase D1: Multi-modal Support (Vision)
+		const messages = request.messages.map(msg => {
+			if (msg.role !== 'user' || !msg.attachments?.some(a => a.type === 'image')) {
+				return msg;
+			}
+			const content: any[] = [{ type: 'text', text: msg.content }];
+			for (const att of msg.attachments) {
+				if (att.type === 'image' && att.content) {
+					content.push({ type: 'image_url', image_url: { url: att.content } });
+				}
+			}
+			return { ...msg, content };
+		});
+
 		const body: Record<string, unknown> = {
 			model: modelName,
-			messages: request.messages,
+			messages,
 			temperature: request.temperature ?? 0.7,
 			stream: false,
 		};
@@ -71,9 +86,28 @@ export class OpenAIProvider extends BaseStreamingProvider {
 
 		const maxTokensValue = request.maxTokens ?? 2000;
 		const modelName = this.extractModelName(request.model);
+		
+		// Phase D1: Multi-modal Support (Vision)
+		const messages = request.messages.map(msg => {
+			if (msg.role !== 'user' || !msg.attachments?.some(a => a.type === 'image')) {
+				return msg;
+			}
+
+			const content: any[] = [{ type: 'text', text: msg.content }];
+			for (const att of msg.attachments) {
+				if (att.type === 'image' && att.content) {
+					content.push({
+						type: 'image_url',
+						image_url: { url: att.content } // att.content is expected to be data:image/...;base64,...
+					});
+				}
+			}
+			return { ...msg, content };
+		});
+
 		const body: Record<string, unknown> = {
 			model: modelName,
-			messages: request.messages,
+			messages,
 			temperature: request.temperature ?? 0.7,
 			stream: true,
 				stream_options: { include_usage: true },

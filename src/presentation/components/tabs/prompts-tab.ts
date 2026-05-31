@@ -75,7 +75,11 @@ export function displayPromptsTab(
 		const nameCell = row.insertCell();
 		nameCell.addClass('ia-table-cell');
 		const nameStack = nameCell.createDiv('ia-table-stack');
-		nameStack.createDiv('ia-table-title').setText(prompt.name);
+		const nameRow = nameStack.createDiv('ia-table-title-row');
+		nameRow.createDiv('ia-table-title').setText(prompt.name);
+		if (prompt.readonly) {
+			nameRow.createSpan('ia-badge ia-badge--info').setText('Built-in');
+		}
 		if (prompt.id) {
 			nameStack.createDiv('ia-table-subtext').setText(prompt.id);
 		}
@@ -112,14 +116,15 @@ export function displayPromptsTab(
 		actionsCell.addClass('ia-table-actions');
 
 		// Edit button (opens modal for full content review)
-		const editBtn = actionsCell.createEl('button', { text: t('settings.prompts.actions.edit') });
+		const editBtn = actionsCell.createEl('button', { text: prompt.readonly ? 'View' : t('settings.prompts.actions.edit') });
 		editBtn.addClass('ia-button');
 		editBtn.addClass('ia-button--ghost');
 		editBtn.setAttribute('data-testid', TestIds.settings.promptEditBtn);
 		editBtn.setAttribute('data-prompt-id', prompt.id);
 		editBtn.addEventListener('click', () => {
-			// Create a modal for editing the prompt content
+			// Create a modal for viewing/editing the prompt content
 			new SystemPromptEditModal(app, prompt, async (updatedPrompt) => {
+				if (prompt.readonly) return;
 				// Find and update the prompt in settings
 				const promptIndex = plugin.settings.systemPrompts.findIndex(p => p.id === updatedPrompt.id);
 				if (promptIndex !== -1) {
@@ -146,19 +151,21 @@ export function displayPromptsTab(
 		});
 
 		// Delete button
-		const deleteBtn = actionsCell.createEl('button', { text: t('settings.prompts.actions.delete') });
-		deleteBtn.addClass('ia-button');
-		deleteBtn.addClass('ia-button--danger');
-		deleteBtn.setAttribute('data-testid', TestIds.settings.promptDeleteBtn);
-		deleteBtn.setAttribute('data-prompt-id', prompt.id);
-		deleteBtn.addEventListener('click', () => {
-			void (async () => {
-				if (await showConfirm(app, t('settings.prompts.confirm.delete', { name: prompt.name }))) {
-					plugin.settings.systemPrompts.splice(index, 1);
-					await plugin.saveSettings();
-					refreshDisplay();
-				}
-			})();
-		});
+		if (!prompt.readonly) {
+			const deleteBtn = actionsCell.createEl('button', { text: t('settings.prompts.actions.delete') });
+			deleteBtn.addClass('ia-button');
+			deleteBtn.addClass('ia-button--danger');
+			deleteBtn.setAttribute('data-testid', TestIds.settings.promptDeleteBtn);
+			deleteBtn.setAttribute('data-prompt-id', prompt.id);
+			deleteBtn.addEventListener('click', () => {
+				void (async () => {
+					if (await showConfirm(app, t('settings.prompts.confirm.delete', { name: prompt.name }))) {
+						plugin.settings.systemPrompts.splice(index, 1);
+						await plugin.saveSettings();
+						refreshDisplay();
+					}
+				})();
+			});
+		}
 	});
 }

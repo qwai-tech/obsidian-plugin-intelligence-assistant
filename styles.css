@@ -2313,116 +2313,143 @@
 }
 
 .agent-execution-trace-content {
-	padding: 12px;
+	padding: 16px;
 	background: var(--background-primary);
 	display: flex;
-	flex-direction: column;
-	gap: 8px;
+	flex-wrap: wrap; /* Allow wrapping */
+	gap: 12px;
 	max-height: 600px;
 	overflow-y: auto;
+	position: relative;
+	align-items: flex-start;
 }
 
-/* Thinking block */
+/* Single Unified Vertical Timeline Line - Fixed on the left */
+.agent-execution-trace-content::before {
+	content: '';
+	position: absolute;
+	left: 20px; /* Aligned with avatar/icons */
+	top: 16px;
+	bottom: 16px;
+	width: 2px;
+	background: var(--background-modifier-border);
+	z-index: 0;
+	opacity: 0.5;
+}
+
 .agent-thinking-block {
-	border-left: 3px solid var(--color-accent);
-	padding: 8px 12px;
-	margin-bottom: 10px;
-	border-radius: 0 6px 6px 0;
-	background: var(--background-secondary);
-	flex-shrink: 0;
-}
-
-.agent-thinking-block__label-row {
-	display: flex;
-	align-items: center;
-	gap: 4px;
+	width: 100%; /* Forces thinking blocks to their own row */
+	position: relative;
+	padding-left: 24px;
+	z-index: 1;
 	margin-bottom: 4px;
 }
 
-.agent-thinking-block__label {
-	color: var(--color-accent);
-	font-weight: 500;
-	font-size: 0.85em;
-}
-
-.agent-phase-badge {
-	display: inline-flex;
-	align-items: center;
-	height: 18px;
-	padding: 0 6px;
-	border-radius: 6px;
-	background: var(--background-modifier-border);
-	color: var(--text-muted);
-	font-size: 11px;
-	font-weight: 600;
-	line-height: 1;
-}
-
-.agent-thinking-block__content {
-	font-style: italic;
-	color: var(--text-muted);
-	line-height: 1.5;
-}
-
-/* Tool call card */
-/* Tool call card */
 .agent-tool-call-card {
+	position: relative;
+	padding-left: 0; /* No individual indent needed if we use absolute icons */
+	z-index: 1;
+	margin-left: 24px; /* Space for the timeline dot */
+}
+
+/* Phase/Status Icons */
+.agent-thinking-block__label-row::before,
+.agent-tool-call__status-dot {
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: var(--background-primary);
+	border: 2px solid var(--background-modifier-border);
+	font-size: 10px;
+	position: absolute;
+	z-index: 2;
+}
+
+.agent-thinking-block__label-row::before {
+	content: '🧠';
+	left: -24px; /* Relative to thinking block padding */
+	top: 0;
+}
+
+.agent-tool-call__status-dot {
+	left: -32px; /* Relative to tool call card margin */
+	top: 6px;
+}
+
+
+.agent-tool-call-card.is-success .agent-tool-call__status-dot {
+	background: rgba(34, 197, 94, 0.1);
+	border-color: rgba(34, 197, 94, 0.4);
+	color: rgb(34, 197, 94);
+}
+
+.agent-tool-call-card.is-error .agent-tool-call__status-dot {
+	background: rgba(239, 68, 68, 0.1);
+	border-color: rgba(239, 68, 68, 0.4);
+	color: rgb(239, 68, 68);
+}
+
+/* Card Styling - Compact and Clean */
+.agent-thinking-block__content {
+	font-size: var(--ia-font-size-m);
+	line-height: 1.6;
+	color: var(--text-muted);
+	background: var(--background-secondary);
+	padding: 10px 14px;
+	border-radius: 8px;
 	border: 1px solid var(--background-modifier-border);
-	border-radius: var(--ia-radius-base);
-	overflow: hidden;
-	margin-bottom: 10px;
-	border-left: 3px solid var(--text-accent);
-	flex-shrink: 0;
+	white-space: pre-wrap;
+	width: 100%;
 }
 
-.agent-tool-call-card.is-error {
-	border-left-color: var(--text-error);
+.agent-tool-call-card {
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border) !important;
+	border-radius: 20px;
+	padding: 4px 14px;
+	cursor: pointer;
+	transition: all var(--ia-transition-fast);
+	display: inline-flex;
+	width: fit-content;
+	align-items: center;
+	min-height: 32px;
 }
 
-.agent-tool-call-card.is-pending {
-	border-left-color: var(--text-muted);
+.agent-tool-call-card.is-expanded {
+	border-radius: 8px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 12px;
+	align-items: flex-start;
 }
 
-.agent-tool-call-card.is-success {
-	border-left-color: var(--color-green, var(--text-accent));
-}
-
-/* Part 1: Title row — tool name + status */
 .agent-tool-call__title {
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	padding: 8px 12px;
-	font-weight: 600;
-	font-size: var(--ia-font-size-s);
-}
-
-.agent-tool-call__status-dot {
-	font-size: 8px;
-	line-height: 1;
-}
-
-.is-success .agent-tool-call__status-dot {
-	color: var(--color-green, var(--text-accent));
-}
-
-.is-error .agent-tool-call__status-dot {
-	color: var(--text-error);
-}
-
-.is-pending .agent-tool-call__status-dot {
-	color: var(--text-muted);
 }
 
 .agent-tool-call__name {
 	font-family: var(--font-monospace);
 	font-weight: 600;
+	font-size: var(--ia-font-size-s);
 }
 
-.agent-tool-call__spinner {
-	color: var(--text-muted);
-	animation: ia-blink 1s infinite;
+.agent-tool-call__details {
+	width: 100%;
+	margin-top: 10px;
+	display: none;
 }
+
+.agent-tool-call-card.is-expanded .agent-tool-call__details {
+	display: block;
+}
+
+
 
 @keyframes ia-blink {
 	0%, 100% { opacity: 1; }
@@ -3186,10 +3213,10 @@
 	display: none;
 }
 
-/* Content IS the visual bubble (order:1, appears first) */
+/* Content IS the visual bubble (order:3, appears after trace and reasoning) */
 .message-assistant .message-content,
 .ia-chat-message--assistant .message-content {
-	order: 1;
+	order: 3;
 	background: var(--background-secondary);
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 4px 16px 16px 16px;
@@ -3197,20 +3224,34 @@
 	color: var(--text-normal);
 }
 
-/* Reasoning traces and section blocks stay between content and actions */
+/* Trace and reasoning traces stay at the top */
 .message-assistant .agent-execution-trace-container,
 .message-assistant .ia-agent-trace-container,
-.message-assistant .ia-chat-message__section,
 .ia-chat-message--assistant .agent-execution-trace-container,
-.ia-chat-message--assistant .ia-agent-trace-container,
-.ia-chat-message--assistant .ia-chat-message__section {
+.ia-chat-message--assistant .ia-agent-trace-container {
+	order: 1;
+}
+
+/* Reasoning and sections stay between trace and content */
+.message-assistant .ia-chat-message__reasoning-section,
+.ia-chat-message--assistant .ia-chat-message__reasoning-section {
 	order: 2;
 }
 
-/* Action bar — below content, hover reveal, order:3 */
+.message-assistant .ia-chat-message__section,
+.ia-chat-message--assistant .ia-chat-message__section {
+	order: 4;
+}
+
+.message-assistant .ia-write-proposals,
+.ia-chat-message--assistant .ia-write-proposals {
+	order: 5;
+}
+
+/* Action bar — below content, hover reveal, order:20 */
 .message-assistant .message-actions,
 .ia-chat-message--assistant .message-actions {
-	order: 3;
+	order: 20;
 	display: flex;
 	gap: 2px;
 	max-height: 0;
@@ -4205,16 +4246,17 @@
 }
 
 .input-reference-area {
-	flex: 1;
+	flex: 0 0 auto;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px;
 	min-height: 28px;
-	padding: 4px 6px;
+	padding: 8px 12px;
 	background: var(--background-primary);
-	border: 1px dashed var(--background-modifier-border);
+	border: 1px solid var(--background-modifier-border);
 	border-radius: 8px;
 	transition: border-color 0.2s ease;
+	margin: 8px 10px 0 10px;
 }
 
 .reference-list {
@@ -5131,4 +5173,154 @@
 /* ── Margin-right utilities ──────────────────────────────────────────────── */
 .ia-mr-10 {
 	margin-right: 10px;
+}
+
+/* ========================================
+ * Reasoning Block Redesign
+ * ======================================== */
+
+.ia-chat-message__reasoning-section {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.ia-chat-message__summary {
+	cursor: pointer;
+	font-size: var(--ia-font-size-xs);
+	font-weight: 600;
+	color: var(--text-muted);
+	margin-bottom: 4px;
+	list-style: none;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	user-select: none;
+}
+
+.ia-chat-message__summary::-webkit-details-marker {
+	display: none;
+}
+
+.ia-chat-message__summary::before {
+	content: '▶';
+	font-size: 8px;
+	transition: transform 0.2s ease;
+	color: var(--text-faint);
+}
+
+details[open] .ia-chat-message__summary::before {
+	transform: rotate(90deg);
+}
+
+.ia-chat-message__reasoning {
+	background: var(--background-secondary-alt);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	padding: 10px 14px;
+	font-size: var(--ia-font-size-m);
+	line-height: 1.7;
+	color: var(--text-muted);
+	margin-bottom: 8px;
+}
+
+.ia-chat-message__reasoning p {
+	margin-bottom: 0.8em;
+}
+
+.ia-chat-message__reasoning p:last-child {
+	margin-bottom: 0;
+}
+
+.ia-chat-message__reasoning-step {
+	margin-bottom: 12px;
+	padding-bottom: 12px;
+	border-bottom: 1px dashed var(--background-modifier-border);
+}
+
+.ia-chat-message__reasoning-step:last-child {
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom: none;
+}
+
+.ia-chat-message__reasoning-step strong {
+	display: block;
+	margin-bottom: 4px;
+	color: var(--text-normal);
+	font-size: var(--ia-font-size-xs);
+}
+
+/* Batch Proposals */
+.ia-write-proposal-card.is-batch {
+	border-left: 4px solid var(--interactive-accent);
+}
+
+.ia-write-proposal-card__batch-list {
+	margin-top: 10px;
+	padding: 8px;
+	background: var(--background-primary);
+	border-radius: 4px;
+	font-size: var(--ia-font-size-2xs);
+}
+
+.ia-write-proposal-card__batch-item {
+	display: flex;
+	gap: 8px;
+}
+
+.ia-write-proposal-card__batch-op {
+	font-weight: bold;
+	color: var(--text-accent);
+	text-transform: uppercase;
+}
+
+
+/* Agent task launcher */
+.ia-agent-task-modal {
+	width: 600px;
+	max-width: 100%;
+	margin: 0 auto;
+	overflow-x: hidden;
+}
+
+.ia-agent-task-modal__field {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: 14px;
+}
+
+.ia-agent-task-modal__label {
+	color: var(--text-normal);
+	font-weight: var(--font-semibold);
+}
+
+.ia-agent-task-modal__textarea {
+	width: 100%;
+	box-sizing: border-box;
+	min-height: 10rem;
+	max-height: 42vh;
+	padding: 10px 12px;
+	line-height: 1.5;
+	resize: vertical;
+}
+
+.ia-agent-task-modal__footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+	margin-top: 24px;
+	padding-top: 16px;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.chat-header-token-summary {
+	font-size: var(--ia-font-size-3xs);
+	color: var(--text-faint);
+	padding: 2px 8px;
+	background: var(--background-secondary-alt);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--ia-radius-full);
+	margin-left: 8px;
+	white-space: nowrap;
 }

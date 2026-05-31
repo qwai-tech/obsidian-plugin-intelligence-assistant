@@ -106,6 +106,7 @@ const normalizeOpenApiConfigs = (value: unknown): OpenApiToolConfig[] => {
 
 export interface UserConfig {
 	version: number;
+	lastVersion?: string;
 	providers: {
 		list: LLMConfig[];
 		defaultModel: string;
@@ -258,6 +259,7 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 	const reranking = rag.reranking ?? DEFAULT_USER_CONFIG.rag.reranking ?? { enabled: false, model: 'cross-encoder' };
 
 	return {
+		lastVersion: source.lastVersion ?? '0.0.0',
 		llmConfigs: providerList,
 		defaultModel: source.providers?.defaultModel ?? DEFAULT_USER_CONFIG.providers.defaultModel,
 		titleSummaryModel: source.providers?.titleSummaryModel ?? DEFAULT_USER_CONFIG.providers.titleSummaryModel ?? '',
@@ -322,6 +324,7 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig {
 	return {
 		version: DEFAULT_USER_CONFIG.version,
+		lastVersion: settings.lastVersion,
 		providers: {
 			defaultModel: settings.defaultModel,
 			titleSummaryModel: settings.titleSummaryModel,
@@ -419,6 +422,9 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 }
 
 export interface PluginSettings {
+	// Versioning
+	lastVersion: string;
+
 	// LLM Configuration
 	llmConfigs: LLMConfig[];
 	defaultModel: string;

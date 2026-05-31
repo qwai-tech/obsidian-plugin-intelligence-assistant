@@ -1,6 +1,5 @@
 import type { RAGConfig, LLMConfig } from '@/types';
 import { ProviderFactory } from './llm/provider-factory';
-import { ModelManager } from './llm/model-manager';
 
 interface PluginLookup {
 	settings?: {
@@ -26,6 +25,7 @@ export interface EmbeddingModel {
 
 export class EmbeddingManager {
   private static readonly DEFAULT_EMBEDDING_MODEL = 'all-MiniLM-L6-v2';
+  private static readonly EMBEDDING_CAPABLE_PROVIDERS = new Set(['openai', 'google', 'ollama', 'openrouter', 'custom']);
 
   private static readonly EMBEDDING_MODELS: EmbeddingModel[] = [
     {
@@ -90,13 +90,13 @@ export class EmbeddingManager {
     return embeddingModels;
   }
 
-  static getEmbeddingModelById(id: string): EmbeddingModel | undefined {
+  static getEmbeddingModelById(id: string, llmConfigs?: LLMConfig[]): EmbeddingModel | undefined {
     const builtInModel = this.EMBEDDING_MODELS.find(m => m.id === id);
     if (builtInModel) {
       return builtInModel;
     }
 
-    const allModels = this.getAllEmbeddingModels();
+    const allModels = this.getAllEmbeddingModels(llmConfigs);
     return allModels.find(m => m.id === id);
   }
 
@@ -112,7 +112,7 @@ export class EmbeddingManager {
 
   static async generateEmbedding(text: string, modelId?: string, llmConfigs?: LLMConfig[]): Promise<number[]> {
     const model = modelId
-      ? this.getEmbeddingModelById(modelId)
+      ? this.getEmbeddingModelById(modelId, llmConfigs)
       : this.getDefaultEmbeddingModel();
 
     if (!model) {
@@ -124,9 +124,13 @@ export class EmbeddingManager {
       throw new Error('No LLM configs available for embedding generation');
     }
 
-    const config = ModelManager.findConfigForModelByProvider(model.id, configs);
+    const config = this.findConfigForEmbeddingModel(model, configs);
     if (!config) {
-      throw new Error(`No provider configuration found for embedding model: ${model.id}`);
+      throw new Error(`Embedding model ${model.id} does not have a configured embedding provider (${model.provider})`);
+    }
+
+    if (!this.EMBEDDING_CAPABLE_PROVIDERS.has(config.provider)) {
+      throw new Error(`Provider ${config.provider} does not support embeddings. Choose an OpenAI, Google, Ollama, OpenRouter, or custom embedding model in RAG settings.`);
     }
 
     const provider = ProviderFactory.createProvider(config);
@@ -135,6 +139,21 @@ export class EmbeddingManager {
     }
 
     return provider.generateEmbedding(text, model.id);
+  }
+
+  private static findConfigForEmbeddingModel(model: EmbeddingModel, configs: LLMConfig[]): LLMConfig | null {
+    const cachedOwner = configs.find(config =>
+      config.cachedModels?.some(cachedModel =>
+        cachedModel.id === model.id &&
+        cachedModel.enabled !== false &&
+        cachedModel.capabilities?.includes('embedding')
+      )
+    );
+    if (cachedOwner) {
+      return cachedOwner;
+    }
+
+    return configs.find(config => config.provider === model.provider) ?? null;
   }
 
   private static getPluginInstance(): PluginLookup | null {

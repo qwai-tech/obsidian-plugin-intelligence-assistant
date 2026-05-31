@@ -113,7 +113,7 @@ export class ConversationManager extends Events {
 			messages: [],
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
-			mode: 'chat',
+			mode: this.plugin.settings.defaultChatMode ?? 'agent',
 			config: defaultConfig
 		};
 
@@ -145,6 +145,7 @@ export class ConversationManager extends Events {
 		if (conv.mode) {
 			this.state.mode = conv.mode;
 		}
+		const mode = conv.mode ?? this.state.mode;
 		if (conv.config) {
 			if (typeof conv.config.temperature === 'number') {
 				this.state.temperature = conv.config.temperature;
@@ -161,10 +162,10 @@ export class ConversationManager extends Events {
 			if (typeof conv.config.presencePenalty === 'number') {
 				this.state.presencePenalty = conv.config.presencePenalty;
 			}
-			if (typeof conv.config.ragEnabled === 'boolean') {
+			if (mode !== 'agent' && typeof conv.config.ragEnabled === 'boolean') {
 				this.state.enableRAG = conv.config.ragEnabled;
 			}
-			if (typeof conv.config.webSearchEnabled === 'boolean') {
+			if (mode !== 'agent' && typeof conv.config.webSearchEnabled === 'boolean') {
 				this.state.enableWebSearch = conv.config.webSearchEnabled;
 			}
 		}

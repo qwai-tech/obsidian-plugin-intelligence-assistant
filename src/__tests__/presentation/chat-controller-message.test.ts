@@ -32,7 +32,7 @@ function makeChatService(overrides: Partial<{
 	} as any;
 }
 
-function makePlugin(overrides: Partial<{ settings: Partial<{ llmConfigs: unknown[]; defaultModel: string; activeAgentId: string | null; agents: unknown[]; activeSystemPromptId: string | null; systemPrompts: unknown[] }> }> = {}) {
+function makePlugin(overrides: Partial<{ settings: Partial<{ llmConfigs: unknown[]; defaultModel: string; activeAgentId: string | null; agents: unknown[]; activeSystemPromptId: string | null; systemPrompts: unknown[]; ragConfig: unknown; webSearchConfig: unknown }> }> = {}) {
 	return {
 		settings: {
 			llmConfigs: [{ id: 'p1', provider: 'openai', apiKey: 'k', modelId: 'gpt-4o' }],
@@ -124,12 +124,37 @@ describe('ChatController (upgraded message pipeline)', () => {
 		expect(chatService.streamResponse).not.toHaveBeenCalled();
 	});
 
-	it('passes agent RAG and web search state into executeAgentLoop', async () => {
+	it('keeps the visible user message while sending an internal agent prompt override', async () => {
 		state.mode = 'agent';
-		state.enableRAG = true;
-		state.enableWebSearch = true;
+		const chatService = makeChatService();
+		controller.configure(makeOptions(chatService));
+
+		await controller.sendMessage('Create research brief: synthesis', {
+			llmContentOverride: 'internal agent instructions',
+		});
+
+		expect(state.messages.some(m => m.role === 'user' && m.content === 'Create research brief: synthesis')).toBe(true);
+		expect(chatService.prepareLlmMessages).toHaveBeenCalledWith(
+			expect.any(Array),
+			expect.objectContaining({ content: 'Create research brief: synthesis' }),
+			'internal agent instructions',
+			expect.any(Number),
+		);
+	});
+
+	it('passes active agent RAG and web search settings into executeAgentLoop', async () => {
+		state.mode = 'agent';
 		const plugin = makePlugin({
 			settings: {
+				activeAgentId: 'agent-1',
+				agents: [{
+					id: 'agent-1',
+					name: 'Agent One',
+					ragEnabled: true,
+					webSearchEnabled: true,
+					contextWindow: 20,
+					modelStrategy: { strategy: 'default' },
+				}],
 				ragConfig: { enabled: true } as any,
 				webSearchConfig: { enabled: true } as any,
 			} as any,
@@ -144,5 +169,88 @@ describe('ChatController (upgraded message pipeline)', () => {
 		const options = chatService.executeAgentLoop.mock.calls[0][1];
 		expect(options.enableRAG).toBe(true);
 		expect(options.enableWebSearch).toBe(true);
+	});
+
+	it('ignores manual RAG and web search state in agent mode', async () => {
+		state.mode = 'agent';
+		state.enableRAG = true;
+		state.enableWebSearch = true;
+		const plugin = makePlugin({
+			settings: {
+				activeAgentId: 'agent-1',
+				agents: [{
+					id: 'agent-1',
+					name: 'Agent One',
+					ragEnabled: false,
+					webSearchEnabled: false,
+					contextWindow: 20,
+					modelStrategy: { strategy: 'default' },
+				}],
+				ragConfig: { enabled: true } as any,
+				webSearchConfig: { enabled: true } as any,
+			} as any,
+		});
+		const localController = new ChatController({} as any, plugin, state);
+		const chatService = makeChatService();
+		localController.configure(makeOptions(chatService));
+
+		await localController.sendMessage('manual toggles should not control the agent');
+
+		expect(chatService.executeAgentLoop).toHaveBeenCalledTimes(1);
+		const options = chatService.executeAgentLoop.mock.calls[0][1];
+		expect(options.enableRAG).toBe(false);
+		expect(options.enableWebSearch).toBe(false);
+	});
+
+	it('re-renders completed agent messages with execution steps for write proposal cards', async () => {
+		state.mode = 'agent';
+		const proposal = {
+			type: 'write_proposal',
+			operation: 'create',
+			path: 'Research/Research brief.md',
+			content: 'brief',
+			proposedContent: 'brief',
+			applied: false,
+			reason: 'review first',
+		};
+		const chatService = makeChatService({
+			executeAgentLoop: jest.fn(async (_messages, _options, callbacks) => {
+				callbacks.onToolCall('create_note', { title: 'Research brief' }, undefined, 'act');
+				callbacks.onToolResult('create_note', true, JSON.stringify(proposal), 'act');
+				callbacks.onComplete({ role: 'assistant', content: 'Prepared a research brief proposal.' });
+				await Promise.resolve();
+			}),
+		});
+		const chatContainer = document.createElement('div');
+		document.body.appendChild(chatContainer);
+		const addMessageToUI = jest.fn((message) => {
+			const el = document.createElement('div');
+			chatContainer.appendChild(el);
+			return el;
+		});
+		controller.configure(makeOptions(chatService, { chatContainer, addMessageToUI }));
+
+		await controller.sendMessage('Create research brief');
+		await Promise.resolve();
+		await Promise.resolve();
+
+		const assistantMessages = addMessageToUI.mock.calls
+			.map(call => call[0])
+			.filter(message => message.role === 'assistant');
+		expect(assistantMessages[assistantMessages.length - 1]).toEqual(expect.objectContaining({
+			content: 'Prepared a research brief proposal.',
+			agentExecutionSteps: expect.arrayContaining([
+				expect.objectContaining({
+					toolName: 'create_note',
+					result: JSON.stringify(proposal),
+					status: 'success',
+				}),
+			]),
+		}));
+		expect(state.messages[state.messages.length - 1]).toEqual(expect.objectContaining({
+			content: 'Prepared a research brief proposal.',
+			agentExecutionSteps: expect.any(Array),
+		}));
+		chatContainer.remove();
 	});
 });

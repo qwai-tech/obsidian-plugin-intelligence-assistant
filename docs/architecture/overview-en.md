@@ -19,7 +19,7 @@ Intelligence Assistant follows a **layered hexagonal architecture** (Ports and A
                          │
 ┌────────────────────────▼────────────────────────────┐
 │                 Infrastructure                       │
-│   LLM providers · CLI agent SDK bridge · Persistence │
+│   LLM providers · Persistence                        │
 │   RAG / vector store · Embedding · Document grader   │
 └────────────────────────┬────────────────────────────┘
                          │
@@ -94,31 +94,6 @@ Adapters to external systems:
 
 All providers extend `base-streaming-provider.ts`, which handles chunked streaming, tool-call accumulation, and error normalization. Every provider implements `base-provider.interface.ts`.
 
-**CLI agent bridge** (`infrastructure/cli-agent/`):
-
-```
-┌─────────────────────────────────────┐
-│  Plugin process (Electron renderer)  │
-│  cli-agent-service.ts               │
-│  → spawn Node.js child process      │
-└────────────────┬────────────────────┘
-                 │ stdin (JSON input)
-                 │ stdout (JSON lines)
-┌────────────────▼────────────────────┐
-│  sdk-bridge.mjs  (plain Node.js)    │
-│  → import('@anthropic-ai/claude-...')│
-│  → import('@openai/codex-sdk')      │
-│  → import('@qwen-code/sdk')         │
-└─────────────────────────────────────┘
-```
-
-Electron's renderer cannot `import()` ESM bare specifiers or `require()` `.mjs` files. The bridge runs in a plain Node.js child process where dynamic `import()` works normally. The plugin writes `sdk-bridge.mjs` to the plugin directory on startup and spawns it via `node` (without `shell: true` to avoid path-with-spaces issues on macOS iCloud vaults).
-
-- **`cli-agent-service.ts`** — Builds SDK input objects and streams events back to the plugin.
-- **`sdk-bridge.ts`** — Template for `sdk-bridge.mjs`; auto-written if missing or stale.
-- **`sdk-installer.ts`** — On-demand `npm install --prefix <plugin-dir>` for each CLI SDK.
-- **`shell-env.ts`** — Sources the user's login shell to get a complete `PATH` (handles nvm, Homebrew, etc.).
-
 **Persistence** (`infrastructure/persistence/`):
 
 - `data/` repositories — JSON-file storage for agents, prompts, providers, MCP servers, model cache, and MCP tool cache.
@@ -148,11 +123,11 @@ All UI code. Follows an MVC pattern inside the chat view.
 
 **Settings tabs** (`presentation/components/tabs/`):
 
-`GeneralTab`, `LLMTab`, `ModelsTab`, `ProvidersTab`, `AgentsTab`, `CLIAgentsTab`, `PromptsTab`, `ToolsTab`, `MCPTab`, `RAGTab`, `WebSearchTab`, `QuickActionsTab`
+`GeneralTab`, `LLMTab`, `ModelsTab`, `ProvidersTab`, `AgentsTab`, `PromptsTab`, `ToolsTab`, `MCPTab`, `RAGTab`, `WebSearchTab`, `QuickActionsTab`
 
 **Modals** (`presentation/components/modals/`):
 
-`CLIAgentEditModal`, `AgentEditModal`, `MCPServerModal`, `MCPInspectorModal`, `ProviderConfigModal`, `SDKInstallModal`, `OllamaModelManagerModal`, `PromptModal`, `SystemPromptEditModal`, `ConfirmModal`, `ExplainTextModal`
+`AgentEditModal`, `MCPServerModal`, `MCPInspectorModal`, `ProviderConfigModal`, `OllamaModelManagerModal`, `PromptModal`, `SystemPromptEditModal`, `ConfirmModal`, `ExplainTextModal`
 
 **State** (`presentation/state/`):
 
@@ -164,7 +139,7 @@ All TypeScript type definitions, exported from a single `index.ts`:
 
 ```
 types/
-├── core/          agent.ts · cli-agent.ts · conversation.ts · model.ts
+├── core/          agent.ts · conversation.ts · model.ts
 ├── features/      mcp.ts · rag.ts · web-search.ts · memory.ts · think.ts · cli-tools.ts · openapi-tools.ts
 ├── common/        llm.ts · tools.ts · attachments.ts · reasoning.ts
 └── settings.ts    PluginSettings — the root settings schema persisted to data.json
@@ -172,14 +147,10 @@ types/
 
 ## Key design decisions
 
-### Thin CLI bridge
-
-CLI agents (Claude Code, Codex, Qwen Code) each have a rich native configuration ecosystem (`CLAUDE.md`, `.claude/settings.json`, `AGENTS.md`, `.codex/config.toml`, `QWEN.md`, `.qwen/settings.json`). Rather than duplicating these settings in the plugin, `CLIAgentConfig` stores only orchestration-level fields (provider, model, permission mode, working directory, auth override, budget cap). When `useProjectSettings` is `true` (default), Claude Code SDK receives `settingSources: ["project"]`, enabling it to load its native config automatically. Codex and Qwen Code read their project configs by default.
-
 ### Settings schema and migration
 
-`types/settings.ts` defines `PluginSettings` as the single source of truth for all persisted state. `settings-tab.ts` holds migration logic (`userConfigToPluginSettings`) that upgrades data from previous formats (e.g., the old two-tier `CLIProviderConfig` + `CLIAgentConfig` structure).
+`types/settings.ts` defines `PluginSettings` as the single source of truth for all persisted state. `settings-tab.ts` holds migration logic (`userConfigToPluginSettings`) that upgrades data from previous formats.
 
 ### No dynamic imports in Electron renderer
 
-Electron's Chromium-based renderer rejects `import()` with bare module specifiers and blocks `file://` URLs for local ESM. The SDK bridge pattern (child process + stdin/stdout JSON) is the workaround. All three CLI SDKs are ESM-only packages and must be loaded this way.
+Electron's Chromium-based renderer rejects `import()` with bare module specifiers and blocks `file://` URLs for local ESM. This is why some modern ESM-only packages might require workarounds if they need to be loaded in the plugin process.

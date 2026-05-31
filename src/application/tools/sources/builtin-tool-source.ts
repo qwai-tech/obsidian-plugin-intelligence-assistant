@@ -11,12 +11,17 @@ import {
 	ListFilesTool,
 	ReadFileTool,
 	WriteFileTool,
+	UpdatePropertiesTool,
 } from '@/application/services/file-tools';
 import {
 	AppendToNoteTool,
 	CreateNoteTool,
 	SearchFilesTool,
 } from '@/application/services/search-tools';
+import {
+	ReadCanvasTool,
+	UpdateCanvasTool,
+} from '@/application/services/canvas-tools';
 
 /**
  * Factory for one of the six builtin tools, keyed by its definition.name.
@@ -30,6 +35,9 @@ const BUILTIN_TOOL_FACTORIES: Record<string, BuiltinToolFactory> = {
 	search_files: (app) => new SearchFilesTool(app),
 	create_note: (app) => new CreateNoteTool(app),
 	append_to_note: (app) => new AppendToNoteTool(app),
+	update_properties: (app) => new UpdatePropertiesTool(app),
+	read_canvas: (app) => new ReadCanvasTool(app),
+	update_canvas: (app) => new UpdateCanvasTool(app),
 };
 
 /** All builtin tool types in their canonical registration order. */

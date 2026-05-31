@@ -10,7 +10,6 @@ import { AgentController } from './agent-controller';
 import type { Message, LLMConfig, ModelInfo, FileReference } from '@/types';
 import type { ChatService } from '@/application/services/chat.service';
 import { renderAssistantMarkdown, appendTokenUsageToMessage } from '@/presentation/components/chat/message-renderer';
-import { createAgentExecutionTraceContainer, updateExecutionTrace, collapseExecutionTrace } from '@/presentation/components/chat/handlers/tool-call-handler';
 import type { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import type { RagStatusPanel } from '@/presentation/components/chat/rag-status-panel';
 import type { StreamChunk } from '@/types/common/llm';
@@ -82,7 +81,7 @@ export class ChatController extends BaseController {
 		this.onStreamingStateChange = options.onStreamingStateChange;
 	}
 
-	async sendMessage(text: string): Promise<void> {
+	async sendMessage(text: string, options?: { llmContentOverride?: string }): Promise<void> {
 		if (this.state.isStreaming) {
 			new Notice(t('chat.notices.waitForResponse'));
 			return;
@@ -111,7 +110,9 @@ export class ChatController extends BaseController {
 			name: item.name,
 		}));
 
-		const { llmContent, references } = await this.chatService.buildReferenceContext(text, referenceInputs);
+		const { llmContent, references } = options?.llmContentOverride
+			? { llmContent: options.llmContentOverride, references: referenceInputs }
+			: await this.chatService.buildReferenceContext(text, referenceInputs);
 
 		this.state.currentAttachments = [];
 		this.state.referencedFiles = [];
@@ -120,7 +121,7 @@ export class ChatController extends BaseController {
 		const userMessage: Message = {
 			role: 'user',
 			content: text,
-			attachments: undefined,
+			attachments: this.state.currentAttachments.length > 0 ? [...this.state.currentAttachments] : undefined,
 			references: references.length > 0 ? references : undefined,
 		};
 		this.state.messages.push(userMessage);
@@ -288,7 +289,7 @@ export class ChatController extends BaseController {
 					frequencyPenalty: this.state.frequencyPenalty,
 					presencePenalty: this.state.presencePenalty,
 					enableRAG: this.state.enableRAG && this.plugin.settings.ragConfig.enabled,
-					enableWebSearch: this.state.enableWebSearch,
+					enableWebSearch: this.state.enableWebSearch && this.plugin.settings.webSearchConfig.enabled,
 					activeSystemPrompts,
 					conversationId: this.state.currentConversationId ?? undefined,
 				},
@@ -373,6 +374,7 @@ export class ChatController extends BaseController {
 		references: FileReference[]
 	): Promise<void> {
 		const isGenericAgent = !this.plugin.settings.activeAgentId;
+		const activeAgent = this.getActiveAgent();
 
 		// Reset execution steps from previous turns to avoid state accumulation
 		this.state.agentExecutionSteps = [];
@@ -387,8 +389,8 @@ export class ChatController extends BaseController {
 				topP: this.state.topP,
 				frequencyPenalty: this.state.frequencyPenalty,
 				presencePenalty: this.state.presencePenalty,
-				enableRAG: this.state.enableRAG && this.plugin.settings.ragConfig.enabled,
-				enableWebSearch: this.state.enableWebSearch && this.plugin.settings.webSearchConfig.enabled,
+				enableRAG: Boolean(activeAgent?.ragEnabled && this.plugin.settings.ragConfig.enabled),
+				enableWebSearch: Boolean(activeAgent?.webSearchEnabled && this.plugin.settings.webSearchConfig.enabled),
 				activeSystemPrompts,
 				contextWindow,
 				agentId: this.plugin.settings.activeAgentId ?? undefined,
@@ -438,37 +440,29 @@ export class ChatController extends BaseController {
 				onComplete: (finalMessage) => {
 					void (async () => {
 						try {
-						if (this.state.agentExecutionSteps.length > 0) {
-							finalMessage.agentExecutionSteps = [...this.state.agentExecutionSteps];
-						}
-						const index = this.state.messages.indexOf(placeholderAssistant);
-						if (index !== -1) {
-							this.state.messages[index] = finalMessage;
-						} else {
-							this.state.messages.push(finalMessage);
-						}
-						if (contentEl && finalMessage.content?.trim()) {
-							renderAssistantMarkdown(contentEl, finalMessage.content);
-						}
-						if (this.state.agentExecutionSteps.length > 0 && assistantMessageEl) {
-							const messageBody = this.findMessageBodyElement(assistantMessageEl);
-							if (messageBody) {
-								const traceContent = createAgentExecutionTraceContainer(messageBody, this.state.agentExecutionSteps.length);
-								updateExecutionTrace(traceContent, this.state.agentExecutionSteps);
-								if (finalMessage.content?.trim()) {
-									collapseExecutionTrace(traceContent);
-								}
+							if (this.state.agentExecutionSteps.length > 0) {
+								finalMessage.agentExecutionSteps = [...this.state.agentExecutionSteps];
 							}
-						}
-						if (assistantMessageEl && finalMessage.tokenUsage) {
-							appendTokenUsageToMessage(assistantMessageEl, finalMessage.tokenUsage);
-						}
-						this.updateTokenSummary();
-						if (finalMessage.ragSources?.length && assistantMessageEl) {
-							const messageBody = this.findMessageBodyElement(assistantMessageEl);
-							if (messageBody) this.ragStatusPanel.displaySources(messageBody, finalMessage.ragSources);
-						}
-						await this.conversationManager.saveCurrentConversation();
+							const index = this.state.messages.indexOf(placeholderAssistant);
+							if (index !== -1) {
+								this.state.messages[index] = finalMessage;
+							} else {
+								this.state.messages.push(finalMessage);
+							}
+
+							if (assistantMessageEl.isConnected) {
+								assistantMessageEl.remove();
+							}
+							const finalMessageEl = this.addMessageToUI(finalMessage);
+							if (finalMessage.tokenUsage) {
+								appendTokenUsageToMessage(finalMessageEl, finalMessage.tokenUsage);
+							}
+							this.updateTokenSummary();
+							if (finalMessage.ragSources?.length) {
+								const messageBody = this.findMessageBodyElement(finalMessageEl);
+								if (messageBody) this.ragStatusPanel.displaySources(messageBody, finalMessage.ragSources);
+							}
+							await this.conversationManager.saveCurrentConversation();
 						} finally {
 							this.finalizeStreamingUI();
 						}

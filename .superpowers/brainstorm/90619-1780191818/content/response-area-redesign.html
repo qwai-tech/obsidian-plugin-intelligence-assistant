@@ -1,0 +1,99 @@
+<h2>Redesigning the Assistant Response Area</h2>
+<p class="subtitle">Select the design direction that feels most natural for an "Obsidian Agentic Agent".</p>
+
+<div class="options">
+  <!-- Option A: Dual-Pane Inspector -->
+  <div class="option" data-choice="dual-pane" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Dual-Pane Inspector</h3>
+      <p>Clean separation of "Answer" and "Process".</p>
+      <div class="mockup" style="margin-top: 10px;">
+        <div style="display: flex; height: 200px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden;">
+          <div style="flex: 2; padding: 10px; background: white; border-right: 1px solid #eee;">
+            <div style="font-weight: bold; margin-bottom: 5px;">Response</div>
+            <div style="height: 10px; width: 80%; background: #eee; margin-bottom: 5px;"></div>
+            <div style="height: 10px; width: 90%; background: #eee; margin-bottom: 5px;"></div>
+            <div style="height: 10px; width: 60%; background: #eee;"></div>
+          </div>
+          <div style="flex: 1; padding: 10px; background: #fafafa; font-size: 10px;">
+            <div style="color: #999; margin-bottom: 5px; text-transform: uppercase;">Agent Trace</div>
+            <div style="display: flex; gap: 5px; align-items: center; margin-bottom: 5px;">
+              <span style="width: 8px; height: 8px; background: #4285f4; border-radius: 50%;"></span>
+              <span>Sensing...</span>
+            </div>
+            <div style="display: flex; gap: 5px; align-items: center; margin-bottom: 5px;">
+              <span style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%;"></span>
+              <span>read_file ✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top: 10px;">
+        <div class="pros"><ul><li>Zero clutter in reading path</li><li>Pro audit-trail feel</li></ul></div>
+        <div class="cons"><ul><li>Harder to implement in narrow sidebars</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option B: Stepped Document Flow -->
+  <div class="option" data-choice="document-flow" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Stepped Document Flow</h3>
+      <p>A narrative, top-down sequence that builds like a report.</p>
+      <div class="mockup" style="margin-top: 10px;">
+        <div style="padding: 15px; background: white; border: 1px solid #ccc; border-radius: 4px; height: 200px; overflow-y: auto;">
+          <div style="font-size: 10px; color: #aaa; margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px;">
+            STEP 1: VAULT CONTEXT SENSING...
+          </div>
+          <div style="background: #f0f7ff; padding: 8px; border-radius: 4px; margin-bottom: 15px; font-size: 11px; color: #3b82f6;">
+            🧠 Reasoning: Checking files for metadata consistency.
+          </div>
+          <div style="font-weight: bold; font-size: 14px; margin-bottom: 8px;">Analysis Result</div>
+          <div style="height: 10px; width: 100%; background: #eee; margin-bottom: 5px;"></div>
+          <div style="height: 10px; width: 95%; background: #eee; margin-bottom: 5px;"></div>
+          <div style="height: 10px; width: 40%; background: #eee; margin-bottom: 15px;"></div>
+          <div style="display: flex; gap: 10px;">
+             <span style="background: #eee; padding: 2px 8px; border-radius: 10px; font-size: 9px;">📄 Note A</span>
+             <span style="background: #eee; padding: 2px 8px; border-radius: 10px; font-size: 9px;">📄 Note B</span>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top: 10px;">
+        <div class="pros"><ul><li>Intuitive logical flow</li><li>Excellent for long tasks</li></ul></div>
+        <div class="cons"><ul><li>Can become very long vertically</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option C: Immersive Context Card -->
+  <div class="option" data-choice="immersive-card" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Immersive Context Card</h3>
+      <p>A focused, layered "active" workspace for each response.</p>
+      <div class="mockup" style="margin-top: 10px;">
+        <div style="position: relative; height: 200px; background: #eee; padding: 20px; border-radius: 4px;">
+           <div style="position: absolute; top: 10px; left: 10px; right: 10px; height: 50px; background: rgba(0,0,0,0.05); border-radius: 8px;"></div>
+           <div style="position: relative; background: white; border: 1px solid #bbb; border-radius: 12px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); height: 140px; z-index: 10;">
+             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+               <span style="font-size: 10px; font-weight: bold; color: #7c3aed;">AGENT ACTIVE</span>
+               <span style="font-size: 10px; color: #999;">3s ago</span>
+             </div>
+             <div style="height: 10px; width: 80%; background: #f5f5f5; margin-bottom: 5px;"></div>
+             <div style="height: 10px; width: 90%; background: #f5f5f5; margin-bottom: 15px;"></div>
+             <div style="display: flex; gap: 5px;">
+               <span style="width: 20px; height: 12px; background: #22c55e; border-radius: 10px;"></span>
+               <span style="width: 20px; height: 12px; background: #22c55e; border-radius: 10px;"></span>
+             </div>
+           </div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top: 10px;">
+        <div class="pros"><ul><li>High-end aesthetic</li><li>Focuses user on current task</li></ul></div>
+        <div class="cons"><ul><li>May hide previous context too much</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>

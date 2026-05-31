@@ -1,0 +1,91 @@
+<h2>Hybrid "Agentic Workspace" Redesign</h2>
+<p class="subtitle">Merging the logic of <b>Stepped Flow (B)</b> with the focus of <b>Immersive Cards (C)</b>.</p>
+
+<div class="mockup">
+  <div class="mockup-header">Preview: Agentic Workspace Design</div>
+  <div class="mockup-body" style="background: var(--background-primary); padding: 30px 20px; display: flex; flex-direction: column; gap: 20px; font-family: sans-serif;">
+    
+    <!-- User Message (Small and simple) -->
+    <div style="align-self: flex-end; background: #7c3aed; color: white; padding: 8px 16px; border-radius: 18px 18px 4px 18px; font-size: 14px; max-width: 70%;">
+      Help me organize my research on Neural Networks into a MOC.
+    </div>
+
+    <!-- Assistant Workspace Card -->
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden; position: relative;">
+      
+      <!-- Card Header: Dynamic Status -->
+      <div style="background: #f9fafb; padding: 12px 20px; border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 24px; height: 24px; background: #7c3aed; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">🤖</div>
+          <span style="font-size: 12px; font-weight: 700; color: #374151; letter-spacing: 0.05em; text-transform: uppercase;">Librarian Active</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <span style="font-size: 10px; background: #eef2ff; color: #6366f1; padding: 2px 8px; border-radius: 10px; font-weight: 600;">GPT-4o</span>
+          <span style="font-size: 10px; color: #9ca3af;">2:45 AM</span>
+        </div>
+      </div>
+
+      <!-- Card Content: Stepped Sections -->
+      <div style="padding: 20px;">
+        
+        <!-- Step 1: Sensing -->
+        <div style="margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: #9ca3af; font-weight: 600; margin-bottom: 8px;">
+            <span style="width: 6px; height: 6px; background: #3b82f6; border-radius: 50%;"></span>
+            SENSING VAULT CONTEXT
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-left: 14px;">
+            <span style="background: #f3f4f6; color: #4b5563; padding: 2px 8px; border-radius: 4px; font-size: 10px; border: 1px solid #e5e7eb;">📄 NN_Basics.md</span>
+            <span style="background: #f3f4f6; color: #4b5563; padding: 2px 8px; border-radius: 4px; font-size: 10px; border: 1px solid #e5e7eb;">📄 Backprop.md</span>
+          </div>
+        </div>
+
+        <!-- Step 2: Reasoning (The "Thinking" card) -->
+        <div style="background: #fdfaff; border: 1px solid #f3e8ff; border-radius: 8px; padding: 12px; margin-bottom: 20px;">
+          <div style="font-size: 11px; color: #7c3aed; font-weight: 700; margin-bottom: 6px;">🧠 STRATEGY</div>
+          <div style="font-size: 13px; color: #6b21a8; line-height: 1.5; font-style: italic;">
+            "I'll first identify the hierarchy of concepts, then use <b>update_properties</b> to add metadata, and finally generate a central MOC note."
+          </div>
+        </div>
+
+        <!-- Step 3: Tools (Our Pills) -->
+        <div style="margin-bottom: 20px;">
+           <div style="font-size: 11px; color: #9ca3af; font-weight: 600; margin-bottom: 8px;">EXECUTION TRACE</div>
+           <div style="display: flex; gap: 8px;">
+             <div style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">✓ list_files</div>
+             <div style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">✓ update_properties</div>
+           </div>
+        </div>
+
+        <!-- Main Body: The Answer -->
+        <div style="border-top: 1px solid #f3f4f6; padding-top: 20px;">
+          <h3 style="margin-top: 0; color: #111827;">Neural Networks MOC</h3>
+          <p style="font-size: 14px; line-height: 1.6; color: #374151;">
+            I have organized your research into a hierarchical structure. Below is the suggested layout for your new Map of Content:
+          </p>
+          <ul style="font-size: 14px; color: #374151;">
+            <li><b>Foundations</b>: [[Basics]], [[Math]]</li>
+            <li><b>Architectures</b>: [[CNN]], [[RNN]]</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Card Footer: Metadata -->
+      <div style="background: #f9fafb; padding: 8px 20px; border-top: 1px solid #f3f4f6; display: flex; gap: 12px; font-size: 10px; color: #9ca3af;">
+        <span>342 tokens</span>
+        <span>•</span>
+        <span>4 sources used</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="hybrid-approve" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>Approve Hybrid Design</h3>
+      <p>This merges the logical flow of B with the elevated, focused look of C.</p>
+    </div>
+  </div>
+</div>

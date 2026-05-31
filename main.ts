@@ -1,4 +1,5 @@
 import { Editor, MarkdownView, Notice, Plugin, TFile, TFolder, WorkspaceLeaf } from 'obsidian';
+import { t } from './src/i18n';
 import './src/presentation/components/chat/settings.css';
 import './src/presentation/components/modals/explain-text-modal.css';
 import type {
@@ -41,7 +42,7 @@ import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-
 import { PluginDataService } from './src/application/services/plugin-data-service';
 import type { AgentMemoryRepository } from './src/infrastructure/persistence';
 import { EditorQuickActions } from './src/presentation/editor/editor-quick-actions';
-import { TextInputModal } from './src/presentation/components/modals/text-input-modal';
+import { showAgentTaskLaunchModal } from './src/presentation/components/modals/agent-task-launch-modal';
 import { ToolRegistry } from './src/application/tools/tool-registry';
 import { BuiltinToolSource } from './src/application/tools/sources/builtin-tool-source';
 import { McpToolSource } from './src/application/tools/sources/mcp-tool-source';
@@ -50,16 +51,21 @@ import { CliToolSource } from './src/application/tools/sources/cli-tool-source';
 import { migrateAllAgents } from './src/application/tools/tool-migrations';
 import {
 	buildAskCurrentNotePrompt,
+	buildBacklinkTagDoctorPrompt,
+	buildDuplicateMergePrompt,
 	buildImproveSelectionPrompt,
 	buildOrganizeCurrentNotePrompt,
 	buildOrganizeFolderPrompt,
+	buildProjectBriefPrompt,
+	buildRelatedNotesPrompt,
+	buildResearchBriefPrompt,
+	buildSourceGroundedQuestionPrompt,
 	buildSummarizeCurrentNotePrompt,
 	buildSummarizeFilePrompt,
+	buildVaultDiagnosisPrompt,
+	buildWeeklyReviewPrompt,
+	buildWritingDraftPrompt,
 } from './src/application/services/obsidian-agent-prompts';
-import {
-	appendObsidianContextSnapshot,
-	buildObsidianContextSnapshot,
-} from './src/application/services/obsidian-context-builder';
 
 // Re-export for backward compatibility
 export type {
@@ -89,6 +95,8 @@ interface OpenApiReloadOptions {
 	forceRefetch?: boolean;
 	persistCacheMetadata?: boolean;
 }
+
+import { ChangelogModal } from './src/presentation/components/modals/changelog-modal';
 
 export default class IntelligenceAssistantPlugin extends Plugin {
 	settings: PluginSettings;
@@ -123,7 +131,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		// Add command to open chat in right sidebar
 		this.addCommand({
 			id: "open-chat-sidebar",
-			name: "Open AI chat in sidebar",
+			name: t("commands.openChatSidebar"),
 			callback: async () => {
 				await this.openChatViewInRightSidebar();
 			}
@@ -132,7 +140,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		// Add command to open chat in main editor area
 		this.addCommand({
 			id: "open-chat-main",
-			name: "Open AI chat in main area",
+			name: t("commands.openChatMain"),
 			callback: async () => {
 				await this.openChatViewInMainArea();
 			}
@@ -141,7 +149,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		this.registerObsidianAgentEntryPoints();
 
 		// Add ribbon icon for quick chat access
-		this.chatRibbonIconEl = this.addRibbonIcon("message-circle", "Open AI chat", async () => {
+		this.chatRibbonIconEl = this.addRibbonIcon("message-circle", t("ribbon.openChat"), async () => {
 			await this.openChatViewInRightSidebar();
 		});
 		this.chatRibbonIconEl?.addClass("ia-ribbon-chat-icon");
@@ -192,6 +200,19 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	 * Runs in background without blocking plugin startup
 	 */
 	private async deferredInitialization(): Promise<void> {
+		// Version check for Changelog
+		this.app.workspace.onLayoutReady(async () => {
+			const currentVersion = this.manifest.version;
+			const lastVersion = this.settings.lastVersion || '0.0.0';
+
+			if (currentVersion !== lastVersion) {
+				const isChinese = (window as any).localStorage.getItem('language') === 'zh' || navigator.language.startsWith('zh');
+				new ChangelogModal(this.app, currentVersion, isChinese).open();
+				this.settings.lastVersion = currentVersion;
+				await this.saveSettings();
+			}
+		});
+
 		try {
 			const deferredStart = Date.now();
 			console.debug('[Plugin] Starting deferred initialization...');
@@ -480,24 +501,87 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		return leaf?.view instanceof ChatView ? leaf.view : null;
 	}
 
-	private async openAgentTask(prompt: string, references: Array<TFile | TFolder> = []): Promise<void> {
+	private async openAgentTask(prompt: string, references: Array<TFile | TFolder> = [], displayText?: string): Promise<void> {
+		const defaultTask = this.buildAgentTaskLaunchText(prompt, displayText);
+		const launch = await showAgentTaskLaunchModal(this.app, 'Start agent task', defaultTask, true);
+		if (launch === null) {
+			return;
+		}
+		const visibleTask = launch.taskInput.trim() || defaultTask;
 		const view = await this.openChatViewInRightSidebar();
 		if (!view) {
-			new Notice('Unable to open Intelligence Assistant chat view.');
+			new Notice('Unable to open intelligence assistant chat view.');
 			return;
 		}
 
-		let enrichedPrompt = prompt;
-		if (references.length > 0) {
-			try {
-				const snapshot = await buildObsidianContextSnapshot(this.app, references);
-				enrichedPrompt = appendObsidianContextSnapshot(prompt, snapshot);
-			} catch (error) {
-				console.warn('[ObsidianAgent] Failed to build context snapshot:', error);
-			}
-		}
+		await view.startAgentTask({
+			prompt: this.withUserTaskInput(prompt, visibleTask),
+			displayText: visibleTask,
+			references,
+			newConversation: launch.newConversation,
+			sendImmediately: true,
+		});
+	}
 
-		await view.startAgentTask({ prompt: enrichedPrompt, references });
+	private withUserTaskInput(prompt: string, taskInput: string): string {
+		const trimmed = taskInput.trim();
+		if (!trimmed) return prompt;
+		return [
+			prompt,
+			'',
+			'User task input from the launch dialog:',
+			trimmed,
+			'If this input conflicts with an earlier default topic, scope, or question, follow this user task input.',
+		].join('\n');
+	}
+
+	private buildAgentTaskLaunchText(prompt: string, displayText?: string): string {
+		const summary = this.summarizeAgentTaskPrompt(prompt);
+		const label = displayText?.trim();
+		if (!label) {
+			return summary;
+		}
+		if (summary.toLocaleLowerCase().startsWith(label.toLocaleLowerCase())) {
+			return summary;
+		}
+		if (summary && summary !== label) {
+			return `${label}\n${summary}`;
+		}
+		return label;
+	}
+
+	private summarizeAgentTaskPrompt(prompt: string): string {
+		const lines = prompt
+			.split('\n')
+			.map(line => line.trim())
+			.filter(Boolean);
+		const projectBrief = lines.find(line => /^Create a project brief for:/i.test(line));
+		if (projectBrief) {
+			return this.truncateAgentTaskSummary(projectBrief);
+		}
+		const researchCorpus = lines.find(line => /^Research corpus:/i.test(line));
+		const researchQuestion = lines.find(line => /^Research question or topic:/i.test(line));
+		if (researchCorpus || researchQuestion) {
+			return this.truncateAgentTaskSummary(
+				['Create research brief', researchCorpus, researchQuestion].filter(Boolean).join('\n')
+			);
+		}
+		const writingContext = lines.find(line => /^Source context:/i.test(line));
+		const writingGoal = lines.find(line => /^Writing goal:/i.test(line));
+		if (writingContext || writingGoal) {
+			return this.truncateAgentTaskSummary(
+				['Draft from note', writingContext, writingGoal].filter(Boolean).join('\n')
+			);
+		}
+		const preferred = lines.find(line =>
+			/^(question|scope|target|note|create|find|summarize|run|inspect|diagnose|improve)/i.test(line)
+		);
+		const summary = preferred ?? lines[0] ?? 'Start agent task';
+		return this.truncateAgentTaskSummary(summary);
+	}
+
+	private truncateAgentTaskSummary(summary: string): string {
+		return summary.length > 360 ? `${summary.slice(0, 357)}...` : summary;
 	}
 
 	private getActiveMarkdownFile(): TFile | null {
@@ -508,32 +592,28 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private registerObsidianAgentEntryPoints(): void {
 		this.addCommand({
 			id: 'ask-agent-current-note',
-			name: 'Ask Agent about current note',
-			callback: () => {
+			name: t('commands.askAgentCurrentNote'),
+			callback: async () => {
 				const file = this.getActiveMarkdownFile();
 				if (!file) {
-					new Notice('Open a note before asking the Agent.');
+					new Notice('Open a note before asking the agent.');
 					return;
 				}
-				new TextInputModal(
-					this.app,
-					'Ask Agent about current note',
-					'What do you want to know?',
-					'What should I understand or do next?',
-					(question) => {
-						void this.openAgentTask(buildAskCurrentNotePrompt(file.path, question), [file]);
-					}
-				).open();
+				await this.openAgentTask(
+					buildAskCurrentNotePrompt(file.path, 'What should I understand or do next?'),
+					[file],
+					t('chat.modals.agentTask.title')
+				);
 			}
 		});
 
 		this.addCommand({
 			id: 'summarize-current-note-agent',
-			name: 'Summarize current note with Agent',
+			name: t('commands.summarizeCurrentNote'),
 			callback: async () => {
 				const file = this.getActiveMarkdownFile();
 				if (!file) {
-					new Notice('Open a note before summarizing with the Agent.');
+					new Notice('Open a note before summarizing with the agent.');
 					return;
 				}
 				await this.openAgentTask(buildSummarizeCurrentNotePrompt(file.path), [file]);
@@ -542,11 +622,11 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'organize-current-note-agent',
-			name: 'Organize current note with Agent',
+			name: t('commands.organizeCurrentNote'),
 			callback: async () => {
 				const file = this.getActiveMarkdownFile();
 				if (!file) {
-					new Notice('Open a note before organizing with the Agent.');
+					new Notice('Open a note before organizing with the agent.');
 					return;
 				}
 				await this.openAgentTask(buildOrganizeCurrentNotePrompt(file.path), [file]);
@@ -554,12 +634,126 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		});
 
 		this.addCommand({
+			id: 'source-grounded-question-agent',
+			name: t('commands.sourceGroundedQuestion'),
+			callback: async () => {
+				const file = this.getActiveMarkdownFile();
+				await this.openAgentTask(
+					buildSourceGroundedQuestionPrompt('What do my notes say about this?', file?.path),
+					file ? [file] : [],
+					t('commands.sourceGroundedQuestion')
+				);
+			}
+		});
+
+		this.addCommand({
+			id: 'create-project-brief-agent',
+			name: t('commands.createProjectBrief'),
+			callback: async () => {
+				const file = this.getActiveMarkdownFile();
+				if (!file) {
+					new Notice('Open a project note before creating a project brief.');
+					return;
+				}
+				await this.openAgentTask(buildProjectBriefPrompt(file.path), [file]);
+			}
+		});
+
+		this.addCommand({
+			id: 'create-research-brief-agent',
+			name: t('commands.createResearchBrief'),
+			callback: async () => {
+				const file = this.getActiveMarkdownFile();
+				if (!file) {
+					new Notice('Open a note before creating a research brief.');
+					return;
+				}
+				await this.openAgentTask(
+					buildResearchBriefPrompt(file.path, 'What are the key conclusions and open questions?'),
+					[file],
+					t('commands.createResearchBrief')
+				);
+			}
+		});
+
+		this.addCommand({
+			id: 'generate-weekly-review-agent',
+			name: t('commands.generateWeeklyReview'),
+			callback: async () => {
+				await this.openAgentTask(
+					buildWeeklyReviewPrompt('this week'),
+					[],
+					t('commands.generateWeeklyReview')
+				);
+			}
+		});
+
+		this.addCommand({
+			id: 'find-related-notes-agent',
+			name: t('commands.findRelatedNotes'),
+			callback: async () => {
+				const file = this.getActiveMarkdownFile();
+				if (!file) {
+					new Notice('Open a note before finding related notes.');
+					return;
+				}
+				await this.openAgentTask(buildRelatedNotesPrompt(file.path), [file]);
+			}
+		});
+
+		this.addCommand({
+			id: 'find-duplicate-notes-agent',
+			name: t('commands.findDuplicateNotes'),
+			callback: async () => {
+				await this.openAgentTask(buildDuplicateMergePrompt());
+			}
+		});
+
+		this.addCommand({
+			id: 'doctor-links-tags-agent',
+			name: t('commands.doctorLinksTags'),
+			callback: async () => {
+				const file = this.getActiveMarkdownFile();
+				if (!file) {
+					new Notice('Open a note before improving links, tags, and properties.');
+					return;
+				}
+				await this.openAgentTask(buildBacklinkTagDoctorPrompt(file.path), [file]);
+			}
+		});
+
+		this.addCommand({
+			id: 'draft-from-note-agent',
+			name: t('commands.draftFromNote'),
+			callback: async () => {
+				const file = this.getActiveMarkdownFile();
+				if (!file) {
+					new Notice('Open a note before drafting with the agent.');
+					return;
+				}
+				await this.openAgentTask(
+					buildWritingDraftPrompt(file.path, 'Write a clear draft for a knowledgeable reader.'),
+					[file],
+					t('commands.draftFromNote')
+				);
+			}
+		});
+
+		this.addCommand({
+			id: 'diagnose-vault-agent',
+			name: t('commands.diagnoseVault'),
+			callback: async () => {
+				await this.openAgentTask(buildVaultDiagnosisPrompt());
+			}
+		});
+
+		this.addCommand({
 			id: 'improve-selection-agent',
-			name: 'Improve selection with Agent',
+			name: t('commands.improveSelection'),
 			editorCallback: async (editor: Editor, view: MarkdownView) => {
 				const selection = editor.getSelection();
 				if (!selection.trim()) {
-					new Notice('Select text before asking the Agent to improve it.');
+					new Notice('Select text before asking the agent to improve it.');
 					return;
 				}
 				const file = view.file ?? this.getActiveMarkdownFile();
@@ -575,24 +769,58 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				if (file instanceof TFile) {
 					menu.addSeparator();
 					menu.addItem(item => item
-						.setTitle('Ask Agent about this file')
+						.setTitle(t('contextMenu.askAgent'))
 						.setIcon('bot')
 						.onClick(() => {
-							new TextInputModal(
-								this.app,
-								'Ask Agent about file',
-								'What do you want to know?',
-								'What should I understand or do next?',
-								(question) => {
-									void this.openAgentTask(buildAskCurrentNotePrompt(file.path, question), [file]);
-								}
-							).open();
+							void this.openAgentTask(
+								buildAskCurrentNotePrompt(file.path, 'What should I understand or do next?'),
+								[file],
+								t('contextMenu.askAgent')
+							);
 						}));
 					menu.addItem(item => item
-						.setTitle('Summarize with Agent')
+						.setTitle(t('contextMenu.summarize'))
 						.setIcon('list-collapse')
 						.onClick(() => {
 							void this.openAgentTask(buildSummarizeFilePrompt(file.path), [file]);
+						}));
+					menu.addItem(item => item
+						.setTitle(t('contextMenu.createProjectBrief'))
+						.setIcon('clipboard-list')
+						.onClick(() => {
+							void this.openAgentTask(buildProjectBriefPrompt(file.path), [file]);
+						}));
+					menu.addItem(item => item
+						.setTitle(t('contextMenu.createResearchBrief'))
+						.setIcon('book-open-text')
+						.onClick(() => {
+							void this.openAgentTask(
+								buildResearchBriefPrompt(file.path, 'What are the key conclusions and open questions?'),
+								[file],
+								t('contextMenu.createResearchBrief')
+							);
+						}));
+					menu.addItem(item => item
+						.setTitle(t('contextMenu.findRelatedNotes'))
+						.setIcon('network')
+						.onClick(() => {
+							void this.openAgentTask(buildRelatedNotesPrompt(file.path), [file]);
+						}));
+					menu.addItem(item => item
+						.setTitle(t('contextMenu.doctorLinksTags'))
+						.setIcon('tags')
+						.onClick(() => {
+							void this.openAgentTask(buildBacklinkTagDoctorPrompt(file.path), [file]);
+						}));
+					menu.addItem(item => item
+						.setTitle(t('contextMenu.draftFromFile'))
+						.setIcon('pen-line')
+						.onClick(() => {
+							void this.openAgentTask(
+								buildWritingDraftPrompt(file.path, 'Write a clear draft for a knowledgeable reader.'),
+								[file],
+								t('contextMenu.draftFromFile')
+							);
 						}));
 					return;
 				}
@@ -600,10 +828,38 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				if (file instanceof TFolder) {
 					menu.addSeparator();
 					menu.addItem(item => item
-						.setTitle('Organize folder with Agent')
+						.setTitle(t('contextMenu.organizeFolder'))
 						.setIcon('folder-tree')
 						.onClick(() => {
 							void this.openAgentTask(buildOrganizeFolderPrompt(file.path), [file]);
+						}));
+					menu.addItem(item => item
+						.setTitle(t('contextMenu.createProjectBrief'))
+						.setIcon('clipboard-list')
+						.onClick(() => {
+							void this.openAgentTask(buildProjectBriefPrompt(file.path), [file]);
+						}));
+					menu.addItem(item => item
+						.setTitle(t('contextMenu.createResearchBrief'))
+						.setIcon('book-open-text')
+						.onClick(() => {
+							void this.openAgentTask(
+								buildResearchBriefPrompt(file.path, 'What are the key conclusions and open questions?'),
+								[file],
+								t('contextMenu.createResearchBrief')
+							);
+						}));
+					menu.addItem(item => item
+						.setTitle(t('contextMenu.findDuplicates'))
+						.setIcon('git-merge')
+						.onClick(() => {
+							void this.openAgentTask(buildDuplicateMergePrompt(file.path), [file]);
+						}));
+					menu.addItem(item => item
+						.setTitle(t('contextMenu.improveFolder'))
+						.setIcon('tags')
+						.onClick(() => {
+							void this.openAgentTask(buildBacklinkTagDoctorPrompt(file.path), [file]);
 						}));
 				}
 			})

@@ -32,7 +32,7 @@ export class ChatViewState extends Events {
 	private _topP: number = 1.0;
 	private _frequencyPenalty: number = 0;
 	private _presencePenalty: number = 0;
-	private _mode: 'chat' | 'agent' = 'chat';
+	private _mode: 'chat' | 'agent' = 'agent';
 
 	// Feature flags
 	private _enableRAG: boolean = false;
@@ -357,7 +357,7 @@ export class ChatViewState extends Events {
 		this.topP = 1.0;
 		this.frequencyPenalty = 0;
 		this.presencePenalty = 0;
-		this.mode = 'chat';
+		this.mode = 'agent';
 		this.enableRAG = false;
 		this.enableWebSearch = false;
 		this.conversationListVisible = false;

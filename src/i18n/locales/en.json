@@ -1223,6 +1223,15 @@
         "insert": "Insert to selected note",
         "createNew": "Create new note",
         "noResults": "No matching notes found."
+      },
+      "agentTask": {
+        "title": "Start agent task",
+        "fieldLabel": "Task",
+        "placeholder": "Enter your task here...",
+        "newConversation": "Start in new conversation",
+        "newConversationDesc": "Keep this agent run separate from the current chat.",
+        "cancel": "Cancel",
+        "start": "Start"
       }
     }
   },
@@ -1592,5 +1601,37 @@
     "processing": "Processing...",
     "textUpdated": "Text updated successfully",
     "error": "Error: {{message}}"
+  },
+  "commands": {
+    "openChatSidebar": "Open AI chat in sidebar",
+    "openChatMain": "Open AI chat in main area",
+    "askAgentCurrentNote": "Agent task: ask about current note",
+    "summarizeCurrentNote": "Agent task: summarize current note",
+    "organizeCurrentNote": "Agent task: organize current note",
+    "sourceGroundedQuestion": "Agent task: ask source-grounded question",
+    "createProjectBrief": "Agent task: create project brief",
+    "createResearchBrief": "Agent task: create research brief",
+    "generateWeeklyReview": "Agent task: generate weekly review",
+    "findRelatedNotes": "Agent task: find related notes",
+    "findDuplicateNotes": "Agent task: find duplicate and merge candidates",
+    "doctorLinksTags": "Agent task: improve links, tags, and properties",
+    "draftFromNote": "Agent task: draft from current note",
+    "diagnoseVault": "Agent task: diagnose vault",
+    "improveSelection": "Agent task: improve selection"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: ask agent about this file",
+    "summarize": "Intelligence assistant: summarize with agent",
+    "createProjectBrief": "Intelligence assistant: create project brief with agent",
+    "createResearchBrief": "Intelligence assistant: create research brief with agent",
+    "findRelatedNotes": "Intelligence assistant: find related notes with agent",
+    "doctorLinksTags": "Intelligence assistant: improve links, tags, and properties with agent",
+    "draftFromFile": "Intelligence assistant: draft from this file with agent",
+    "organizeFolder": "Intelligence assistant: organize folder with agent",
+    "findDuplicates": "Intelligence assistant: find duplicate and merge candidates with agent",
+    "improveFolder": "Intelligence assistant: improve folder links, tags, and properties with agent"
+  },
+  "ribbon": {
+    "openChat": "Open AI chat"
   }
 }

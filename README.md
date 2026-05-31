@@ -1,22 +1,28 @@
 # Intelligence Assistant for Obsidian
 
-Turn your vault into an Obsidian-native Agent workspace. Intelligence Assistant understands current notes, selections, files, folders, and vault references so it can help you ask, organize, write, and research without leaving Obsidian.
+Turn your vault into an **Obsidian-Native Agentic Workspace**. Intelligence Assistant is an autonomous AI agent that deeply understands your vault's structure, links, and canvas. It can independently plan and execute complex knowledge tasks—from organizing folders to building mind maps—all while ensuring safety through a **Proposal-First** execution model.
 
 > Desktop only. Requires Obsidian v1.7.2+.
 
+## 🚀 The Agentic Evolution
+
+This plugin has evolved beyond a simple chat interface into a full **SPAR (Sense-Plan-Act-Reflect)** autonomous loop:
+
+- **📡 Sense**: The Agent perceives your active note, graph neighbors, directory structure, RAG snippets, and its own long-term memories.
+- **🧠 Plan**: Using advanced reasoning (Chain-of-Thought), the Agent formulates a multi-step strategy and provides a transparent **Task Checklist**.
+- **🛠️ Act**: It independently executes tools (Vault, Canvas, MCP, Web, CLI) to gather information or prepare modifications.
+- **🔄 Reflect**: It evaluates results and refines its approach. Any vault changes are presented as **Batch Write Proposals** for your one-click approval.
+
 ## ✨ Feature Highlights
 
-- **Obsidian-Native Agent** — Command Palette, editor selection, and file/folder menu entry points hand note tasks directly into Agent mode with the right vault context attached.
-- **Modern Chat View** — Streaming chat with provider/model badges, token usage display, tool-call visualization, and an Agent mode that runs multi-step agentic loops with native function calling.
-- **Multiple LLM Providers** — OpenAI, Anthropic, Google Gemini, DeepSeek, Ollama (local), OpenRouter, and SAP AI Core. Add your own credentials per provider.
-- **Configurable Agents** — Define reusable agents with custom prompts, tool permissions, model strategy (default/chat-view/fixed), RAG/Web/ReAct toggles, and MCP server access. Safe note tasks are phrased as proposals before any file-changing action.
-- **MCP Integration** — Connect any Model Context Protocol server. Tool catalogs are cached for instant reuse. Includes a built-in MCP inspector for live testing.
-- **RAG** — Index your vault with a local vector store and inject relevant notes as context on every query. Uses real embedding APIs (OpenAI, Google, Ollama, DeepSeek, OpenRouter).
-- **Web Search** — Google CSE, Bing, Brave, SerpAPI, Tavily, SearXNG, Qwant, and Mojeek. Configurable locale, freshness, and domain filters.
-- **HTTP / OpenAPI Tools** — Point the plugin at any OpenAPI spec (local or remote); every path/verb pair becomes an agent tool automatically.
-- **CLI Tools** — Define custom shell commands as agent-callable tools with parameter templates, env vars, and platform presets.
-- **Quick Actions** — Pre-configured editor context menu actions (summarize, explain, fix grammar, improve writing, expand text).
-- **Context Attachments** — Attach files, images, or vault references to any message.
+- **Built-in Expert Team** — Get started instantly with pre-configured personas: **Librarian** (Organization), **Architect** (Canvas & Mapping), **Researcher** (Synthesis), and **Scribe** (Writing & Vision).
+- **Spatial & Visual Intelligence** — Independent read/write access to **Obsidian Canvas** (.canvas) files. Use Multi-modal Vision to turn sketches or screenshots into notes.
+- **Cognitive Memory System** — Long-term associative memory via a local vector store. The Agent remembers your preferences and key research findings across conversations.
+- **Modern Logical UI** — A redesigned **Execution Timeline** that merges reasoning and actions into a single flow. Compact tool pills save space while remaining fully inspectable.
+- **Vault-Native Tools** — Specialized tools for **Properties (YAML)** management, batch file operations (move, create, delete), and directory-tree awareness.
+- **Multiple LLM Providers** — OpenAI, Anthropic (Claude 3.5), Google Gemini, DeepSeek, Ollama (local), OpenRouter, and SAP AI Core.
+- **MCP & OpenAPI Integration** — Seamlessly connect Model Context Protocol servers or any OpenAPI-spec service to expand your Agent's toolset.
+- **Privacy First** — Your notes stay local. Indexing (RAG) uses a local vector store with configurable embedding providers.
 
 ## 🚀 Quick Start
 
@@ -26,66 +32,51 @@ Turn your vault into an Obsidian-native Agent workspace. Intelligence Assistant 
 2. Browse for **"Intelligence Assistant"** and install.
 3. Enable the plugin, then open **Settings → Intelligence Assistant** to configure providers.
 
-### 🔧 Manual Install
-
-1. Download the latest release.
-2. Extract into `<vault>/.obsidian/plugins/intelligence-assistant/`.
-3. Reload Obsidian and enable the plugin.
-
 ### 📋 Requirements
 
 | Requirement | Details |
 |---|---|
 | Obsidian | v1.7.2 or later (desktop only) |
-| Node.js | 18+ with npm (for building from source) |
-| LLM API key | Per provider (OpenAI, Anthropic, Google, DeepSeek, OpenRouter, etc.) |
-
-## 💬 Chat Experience
-
-1. Open the chat via the ribbon icon or **Command Palette → Open AI chat in sidebar**.
-2. Choose **Chat** or **Agent** mode in the toolbar. Agent mode runs the model in an agentic loop with native function calling and tool execution.
-3. Pick a provider, model, temperature, and token cap from the header controls.
-4. Toggle **RAG** (vault context) or **Web search** in the input bar.
-5. Attach files or vault references with `@filename`.
-6. Every response shows the provider, model, and token usage. Use **Insert to Notes** to drop a reply into the active file.
+| LLM API key | OpenAI, Anthropic, Google, DeepSeek, etc. |
 
 ## 🤖 Agents
 
 Defined under **Settings → Agents**. Each agent has:
 
 - System prompt, tool permissions, MCP server access
-- Model strategy: `default` (use settings default), `chat-view` (follow chat selector), or `fixed` (specific model)
-- Capabilities: RAG, Web Search, agentic tool-call loops with configurable max steps
+- Model strategy: `default`, `chat-view` (follow chat selector), or `fixed`
+- Capabilities: RAG, Web Search, Long-term Memory
 - Custom icon and display name
 
 Agent mode uses **native function calling** (OpenAI) with automatic fallback to text-based tool parsing for other providers.
 
-## 🔌 MCP Tools
+## 🧭 Agentic Scenarios
 
-Connect MCP servers under **Settings → MCP**. The plugin:
-- Connects at startup and caches the tool manifest
-- Injects MCP tools into agent loops automatically
-- Provides a live **MCP Inspector** for testing tools interactively
-- Supports stdio transport
+Command Palette (`Cmd+P`) and context menus expose task-oriented Agent entry points:
 
-## 🌐 Web Search
+- **Folder Organizer** — proposes folder cleanup, moves, and index/MOC candidates.
+- **Project Brief** — summarizes project status and next actions from a note or folder.
+- **Weekly Review** — scans daily/project context to draft accomplishments and next-week plans.
+- **Research Brief** — turns notes into a sourced research summary with a reading queue.
+- **Link/Tag Doctor** — diagnoses inconsistent tags and orphaned concepts.
+- **Writing Scribe** — creates drafts from source material and understands image sketches.
 
-Configure under **Settings → Web Search**. Pick one of 8 supported providers (Google, Bing, Brave, SerpAPI, Tavily, SearXNG, Qwant, Mojeek) and set locale, result freshness, and domain filters. Credentials are stored per vault.
+## 🔌 Tooling & Integration
 
-## 📡 HTTP / OpenAPI Tools
+### 📁 Vault Mastery
+- **Batch Proposals**: Confirm multiple file moves or edits in a single click.
+- **Property Doctor**: Automatically standardize tags, dates, and custom fields.
 
-Add OpenAPI specs under **Settings → Tools → HTTP / OpenAPI**. For each source:
-- Point at a local `.json` file or a remote URL (cached locally)
-- Override the base server URL and inject auth headers or query params
-- Enable/disable the source; reload tool definitions on demand
+### 🎨 Canvas Support
+- Independent access to `.canvas` JSON. The Agent can place cards, link files, and organize your visual workspace.
 
-## ⌨️ CLI Tools
-
-Define custom shell commands under **Settings → Tools → CLI Tools**. Each tool supports parameter templates (`{{param}}`), argument/env insertion modes, working directory, timeout, and platform-specific presets (25+ built-in presets for file, search, network, code, data, and system operations).
+### 🌐 Beyond the Vault
+- **Web Search**: 8 supported providers for real-time external grounding.
+- **MCP & OpenAPI**: Connect external data sources and automation scripts.
 
 ## 🌐 Internationalization
 
-The plugin supports all 46 Obsidian languages. Locale is detected automatically from your Obsidian language setting. Translations are community-driven — feel free to improve them via PR.
+Supports all 46 Obsidian languages, including full localization for the **Command Palette** and **Context Menus**.
 
 [中文文档](README-zh.md) | [English](README.md)
 
@@ -94,17 +85,10 @@ The plugin supports all 46 Obsidian languages. Locale is detected automatically 
 ```bash
 npm install          # install dependencies
 npm run dev          # development build + file watcher
-npm run lint         # ESLint (src/ + main.ts)
-npm run type-check   # TypeScript type check (no emit)
+npm run lint         # ESLint check
 npm run test         # Jest test suite
 npm run build        # production bundle
 ```
-
-Additional scripts: `npm run dev:deploy` (build + deploy to local vault), `npm run deploy:local`.
-
-### ✅ Post-task rule
-
-After every change, run `npm run lint && npm run build`. Both must succeed before the work is considered done.
 
 ## 📖 Documentation
 
@@ -112,10 +96,8 @@ After every change, run `npm run lint && npm run build`. Both must succeed befor
 |---|---|
 | [README-zh.md](README-zh.md) | Chinese README (中文说明) |
 | [docs/README.md](docs/README.md) | Documentation index |
-| [docs/architecture/overview-en.md](docs/architecture/overview-en.md) | Architecture overview (English) |
-| [docs/architecture/overview-zh.md](docs/architecture/overview-zh.md) | Architecture overview (Chinese) |
-| [docs/project/project-guide-en.md](docs/project/project-guide-en.md) | Developer-oriented project guide (English) |
-| [docs/project/project-guide-zh.md](docs/project/project-guide-zh.md) | Developer-oriented project guide (Chinese) |
+| [docs/architecture/overview-en.md](docs/architecture/overview-en.md) | Architecture overview |
+| [docs/project/project-guide-en.md](docs/project/project-guide-en.md) | Developer project guide |
 | [docs/reference/project-structure.md](docs/reference/project-structure.md) | Full source tree reference |
 
 Contributions, issues, and feature requests are welcome — open a PR or discussion.

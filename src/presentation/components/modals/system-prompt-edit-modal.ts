@@ -27,6 +27,7 @@ export class SystemPromptEditModal extends Modal {
 				text.setValue(this.prompt.name).onChange(value => {
 					this.prompt.name = value;
 				});
+				if (this.prompt.readonly) text.setDisabled(true);
 			});
 
 		new Setting(contentEl)
@@ -40,6 +41,7 @@ export class SystemPromptEditModal extends Modal {
 				text.onChange(value => {
 					this.prompt.content = value;
 				});
+				if (this.prompt.readonly) text.setDisabled(true);
 			});
 
 		new Setting(contentEl)
@@ -50,27 +52,30 @@ export class SystemPromptEditModal extends Modal {
 				toggle.setValue(this.prompt.enabled).onChange(value => {
 					this.prompt.enabled = value;
 				});
+				if (this.prompt.readonly) toggle.setDisabled(true);
 			});
 
 		const buttonContainer = contentEl.createDiv('ia-modal-footer');
 		buttonContainer.removeClass('ia-hidden');
 
 		new ButtonComponent(buttonContainer)
-			.setButtonText(t('modals.promptEdit.cancel'))
+			.setButtonText(this.prompt.readonly ? 'Close' : t('modals.promptEdit.cancel'))
 			.onClick(() => {
 				this.close();
 			})
 			.buttonEl.setAttribute('data-testid', TestIds.settings.promptModalCancelBtn);
 
-		new ButtonComponent(buttonContainer)
-			.setButtonText(t('modals.promptEdit.save'))
-			.setCta()
-			.onClick(async () => {
-				this.prompt.updatedAt = Date.now();
-				await this.onSaveCallback(this.prompt);
-				this.close();
-			})
-			.buttonEl.setAttribute('data-testid', TestIds.settings.promptModalSaveBtn);
+		if (!this.prompt.readonly) {
+			new ButtonComponent(buttonContainer)
+				.setButtonText(t('modals.promptEdit.save'))
+				.setCta()
+				.onClick(async () => {
+					this.prompt.updatedAt = Date.now();
+					await this.onSaveCallback(this.prompt);
+					this.close();
+				})
+				.buttonEl.setAttribute('data-testid', TestIds.settings.promptModalSaveBtn);
+		}
 	}
 
 	onClose() {

@@ -3,9 +3,16 @@ import { t } from '@/i18n';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import { SearchableReferenceModal } from '@/presentation/components/modals/searchable-reference-modal';
 import { SearchableImageModal } from '@/presentation/components/modals/searchable-image-modal';
+import { AgentCapabilityModal } from '@/presentation/components/modals/agent-capability-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { DEFAULT_AGENT_ID } from '@/constants';
 import type {Message, Conversation, ConversationConfig, Agent} from '@/types';
+import {
+	buildAgentCapabilitySummary,
+	resolveAgentToolsForAgent,
+	type AgentCapabilitySummary,
+	type CapabilityReference,
+} from '@/application/agents/agent-capability-summary';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
 import { marked } from 'marked';
 import {
@@ -13,7 +20,7 @@ import {
 	ChatService,
 	AgentMemoryService
 } from '@/application/services';
-import { AgentSenseService, AutonomousAgentLoop, HistoryCompactor } from '@/application/agents';
+import { AgentEngineLoop, AgentSenseService, HistoryCompactor, ObsidianAgentRunStateStore } from '@/application/agents';
 import { RAGManager } from '@/infrastructure/rag-manager';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { VaultExportService } from '@/application/services/vault-export-service';
@@ -71,6 +78,7 @@ export class ChatView extends ItemView {
 	private ragActionItem: HTMLElement | null = null;
 	private webActionItem: HTMLElement | null = null;
 	private imageActionItem: HTMLElement | null = null;
+	private pendingAgentTask: { prompt: string; displayText: string } | null = null;
 
 	// Services
 	private ragManager: RAGManager;
@@ -101,11 +109,13 @@ export class ChatView extends ItemView {
 		const agentMemoryService = agentMemoryRepository ? new AgentMemoryService(agentMemoryRepository) : undefined;
 		const senseService = new AgentSenseService(this.app, this.ragManager, agentMemoryService);
 		const tokenUsageRepo = this.plugin.tokenUsageRepo;
-		const autonomousAgentLoop = new AutonomousAgentLoop({
+		const agentEngineLoop = new AgentEngineLoop({
 			toolRegistry: this.plugin.getToolRegistry(),
 			senseService,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: this.webSearchService,
+			ragManager: this.ragManager,
+			agentRunStateStore: new ObsidianAgentRunStateStore(this.app),
 			createProvider: (modelId) => {
 				const config = ModelManager.findConfigForModelByProvider(modelId, this.plugin.settings.llmConfigs);
 				return config ? { provider: ProviderFactory.createProvider(config), providerId: config.provider } : null;
@@ -123,7 +133,7 @@ export class ChatView extends ItemView {
 			this.plugin.settings.llmConfigs,
 			this.plugin.tokenUsageRepo ?? undefined,
 			this.plugin.settings.defaultModel,
-			autonomousAgentLoop
+			agentEngineLoop
 		);
 		this.vaultExportService = new VaultExportService(this.app);
 		this.ragStatusPanel = new RagStatusPanel(
@@ -186,6 +196,7 @@ export class ChatView extends ItemView {
 			this.state,
 			{
 				onToggleConversations: () => this.toggleConversationListVisibility(),
+				onShowCapabilities: () => this.showAgentCapabilities(),
 				onNewChat: async () => {
 					await this.resetToDefaultChatConfiguration();
 					await this.conversationManager.createNewConversation();
@@ -326,7 +337,9 @@ export class ChatView extends ItemView {
 			ragStatusPanel: this.ragStatusPanel,
 			getSelectedModel: () => this.modelSelect?.value ?? '',
 			clearInputUI: () => {
+				this.inputController.clearInput();
 				if (this.chatInput) {
+					this.chatInput.textarea.dispatchEvent(new Event('input', { bubbles: true }));
 					this.chatInput.updateAttachmentPreview();
 					this.chatInput.updateReferenceDisplay();
 				}
@@ -409,7 +422,7 @@ export class ChatView extends ItemView {
 	private async updateImageButtonVisibility() {
 		const selectedModel = this.modelSelect?.value || '';
 		const supportsVision = selectedModel && await this.modelSupportsVision(selectedModel);
-		const available = this.state.mode === 'chat' && !!supportsVision;
+		const available = !!supportsVision;
 		this.chatInput.setImageButtonVisible(available);
 	}
 
@@ -422,16 +435,32 @@ export class ChatView extends ItemView {
 	}
 
 	private async sendMessage(text: string) {
-		await this.chatController.sendMessage(text);
+		const pendingTask = this.pendingAgentTask;
+		const trimmedText = text.trim();
+		const shouldUsePendingTask = pendingTask !== null &&
+			this.state.mode === 'agent' &&
+			trimmedText === pendingTask.displayText.trim();
+		this.pendingAgentTask = null;
+		await this.chatController.sendMessage(
+			text,
+			shouldUsePendingTask ? { llmContentOverride: pendingTask.prompt } : undefined
+		);
 	}
 
 	public async startAgentTask(options: {
 		prompt: string;
+		displayText?: string;
 		references?: Array<TFile | TFolder>;
+		newConversation?: boolean;
 		sendImmediately?: boolean;
 	}): Promise<void> {
 		const prompt = options.prompt.trim();
 		if (!prompt) return;
+		const displayText = (options.displayText?.trim() || prompt).trim();
+
+		if (options.newConversation) {
+			await this.conversationManager.createNewConversation();
+		}
 
 		if (this.state.mode !== 'agent') {
 			await this.handleModeChange('agent');
@@ -444,12 +473,14 @@ export class ChatView extends ItemView {
 		}
 		this.updateReferenceDisplay();
 
-		this.inputController.setInputValue(prompt);
+		this.pendingAgentTask = { prompt, displayText };
+		this.inputController.setInputValue(displayText);
 		this.chatInput.textarea.dispatchEvent(new Event('input', { bubbles: true }));
 		this.chatInput.textarea.focus();
 
 		if (options.sendImmediately) {
-			await this.sendMessage(prompt);
+			this.renderAgentTaskPreflight(displayText, options.references ?? []);
+			await this.sendMessage(displayText);
 		}
 	}
 
@@ -774,7 +805,13 @@ export class ChatView extends ItemView {
 	 * Calculate and update the total token usage summary for the conversation
 	 */
 	private updateTokenSummary() {
-		// Token counts are no longer displayed in the chat UI (moved to Settings)
+		let total = 0;
+		for (const msg of this.state.messages) {
+			if (msg.role === 'assistant' && msg.tokenUsage) {
+				total += msg.tokenUsage.totalTokens || 0;
+			}
+		}
+		this.chatHeader.updateTokenSummary(total);
 	}
 
 	private async updateOptionsDisplay() {
@@ -786,6 +823,64 @@ export class ChatView extends ItemView {
 		const activeId = this.plugin.settings.activeAgentId;
 		if (!activeId) return null;
 		return this.plugin.settings.agents.find(agent => agent.id === activeId) || null;
+	}
+
+	private showAgentCapabilities(): void {
+		new AgentCapabilityModal(this.app, this.buildCurrentCapabilitySummary()).open();
+	}
+
+	private buildCurrentCapabilitySummary(references: Array<TFile | TFolder> = this.state.referencedFiles): AgentCapabilitySummary {
+		const activeAgent = this.getActiveAgent();
+		const tools = resolveAgentToolsForAgent(this.plugin.getToolRegistry(), activeAgent);
+		return buildAgentCapabilitySummary({
+			mode: this.state.mode,
+			agent: activeAgent,
+			tools,
+			ragConfigured: this.plugin.settings.ragConfig.enabled,
+			ragActive: this.getEffectiveRagEnabled(),
+			webSearchConfigured: this.plugin.settings.webSearchConfig.enabled,
+			webSearchActive: this.getEffectiveWebSearchEnabled(),
+			references: references.map(ref => this.toCapabilityReference(ref)),
+		});
+	}
+
+	private getEffectiveRagEnabled(): boolean {
+		if (this.state.mode === 'agent') {
+			return Boolean(this.getActiveAgent()?.ragEnabled && this.plugin.settings.ragConfig.enabled);
+		}
+		return this.state.enableRAG && this.plugin.settings.ragConfig.enabled;
+	}
+
+	private getEffectiveWebSearchEnabled(): boolean {
+		if (this.state.mode === 'agent') {
+			return Boolean(this.getActiveAgent()?.webSearchEnabled && this.plugin.settings.webSearchConfig.enabled);
+		}
+		return this.state.enableWebSearch && this.plugin.settings.webSearchConfig.enabled;
+	}
+
+	private toCapabilityReference(reference: TFile | TFolder): CapabilityReference {
+		return {
+			type: reference instanceof TFile ? 'file' : 'folder',
+			path: reference.path,
+			name: reference.name,
+		};
+	}
+
+	private renderAgentTaskPreflight(taskTitle: string, references: Array<TFile | TFolder>): void {
+		if (!this.chatContainer) return;
+
+		const emptyState = this.chatContainer.querySelector('.ia-chat-empty-state');
+		if (emptyState) emptyState.remove();
+
+		const summary = this.buildCurrentCapabilitySummary(references);
+		const card = this.chatContainer.createDiv('ia-agent-preflight-card');
+		card.createDiv({ cls: 'ia-agent-preflight-card__eyebrow', text: 'Agent task preflight' });
+		card.createDiv({ cls: 'ia-agent-preflight-card__title', text: taskTitle });
+		const list = card.createDiv('ia-agent-preflight-card__items');
+		for (const item of summary.preflightItems) {
+			list.createSpan({ cls: 'ia-agent-preflight-card__item', text: item });
+		}
+		this.chatContainer.scrollTo({ top: this.chatContainer.scrollHeight, behavior: 'smooth' });
 	}
 
 
@@ -896,11 +991,13 @@ export class ChatView extends ItemView {
 				desiredAgentId = this.ensureDefaultAgentSelection();
 			}
 
-			if (desiredAgentId && this.plugin.settings.activeAgentId !== desiredAgentId) {
-				this.plugin.settings.activeAgentId = desiredAgentId;
-				settingsDirty = true;
+			if (desiredAgentId) {
+				if (this.plugin.settings.activeAgentId !== desiredAgentId) {
+					this.plugin.settings.activeAgentId = desiredAgentId;
+					settingsDirty = true;
+				}
 				await this.applyAgentConfig(desiredAgentId, { silent: true });
-			} else if (!desiredAgentId && this.plugin.settings.activeAgentId) {
+			} else if (this.plugin.settings.activeAgentId) {
 				this.plugin.settings.activeAgentId = null;
 				settingsDirty = true;
 			}
@@ -954,10 +1051,10 @@ export class ChatView extends ItemView {
 		if (typeof config.presencePenalty === 'number') {
 			this.state.presencePenalty = config.presencePenalty;
 		}
-		if (typeof config.ragEnabled === 'boolean') {
+		if (this.state.mode !== 'agent' && typeof config.ragEnabled === 'boolean') {
 			this.state.enableRAG = config.ragEnabled;
 		}
-		if (typeof config.webSearchEnabled === 'boolean') {
+		if (this.state.mode !== 'agent' && typeof config.webSearchEnabled === 'boolean') {
 			this.state.enableWebSearch = config.webSearchEnabled;
 		}
 	}
@@ -1068,6 +1165,9 @@ export class ChatView extends ItemView {
 	}
 
 	private async handleQuickActionRag() {
+		if (this.state.mode === 'agent') {
+			return;
+		}
 		if (!this.plugin.settings.ragConfig.enabled) {
 			new Notice(t('chat.notices.ragDisabled'));
 			return;
@@ -1078,6 +1178,9 @@ export class ChatView extends ItemView {
 	}
 
 	private async handleQuickActionWeb() {
+		if (this.state.mode === 'agent') {
+			return;
+		}
 		if (!this.plugin.settings.webSearchConfig.enabled) {
 			new Notice(t('chat.notices.webSearchDisabled'));
 			return;

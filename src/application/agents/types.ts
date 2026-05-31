@@ -3,6 +3,8 @@ import type { Message, RAGSource, Agent, FileReference } from '@/types';
 import type { StreamChunk, ILLMProvider } from '@/types/common/llm';
 import type { AgentExecutionStep } from '@/types/common/reasoning';
 
+import type { RAGManager } from '@/infrastructure/rag-manager';
+
 export const SPAR_PHASES = ['sense', 'plan', 'act', 'reflect', 'final'] as const;
 export type SparPhase = typeof SPAR_PHASES[number];
 
@@ -72,6 +74,7 @@ export type AgentWorkingMessage = Message | ToolResultEntry | AssistantWithCalls
 export interface AgentLoopDependencies {
 	app: App;
 	createProvider: (modelId: string) => { provider: ILLMProvider; providerId: string } | null;
+	ragManager?: RAGManager;
 	recordUsage?: (record: {
 		model: string;
 		provider: string;

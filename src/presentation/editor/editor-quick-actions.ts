@@ -93,7 +93,7 @@ export class EditorQuickActions {
 
 			let modal: ExplainTextModal | null = null;
 			if (actionType === 'explain') {
-				modal = new ExplainTextModal(this.app, 'Explanation');
+				modal = new ExplainTextModal(this.app, t('chat.modals.agentTask.title'));
 				modal.open();
 			}
 
@@ -114,7 +114,7 @@ export class EditorQuickActions {
 				editor.replaceSelection(result.trim());
 				new Notice(t('notices.textUpdated'));
 			} else if (actionType === 'explain' && !result) {
-				modal?.showError('No explanation generated');
+				modal?.showError(t('chat.notices.chatError', { message: 'No explanation generated' }));
 			}
 		} catch (error) {
 			loadingNotice.hide();

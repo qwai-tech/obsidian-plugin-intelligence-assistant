@@ -300,6 +300,49 @@ describe('ConversationManager', () => {
 
 			expect(triggerSpy).toHaveBeenCalledWith('conversation-loaded', conv);
 		});
+
+		it('should restore manual RAG and web search flags only for chat conversations', () => {
+			const conv: Conversation = {
+				id: '1',
+				title: 'Chat',
+				mode: 'chat',
+				messages: [],
+				createdAt: Date.now(),
+				updatedAt: Date.now(),
+				config: {
+					ragEnabled: true,
+					webSearchEnabled: true,
+				},
+			};
+
+			manager.loadConversation(conv);
+
+			expect(state.enableRAG).toBe(true);
+			expect(state.enableWebSearch).toBe(true);
+		});
+
+		it('should not restore manual RAG and web search flags for agent conversations', () => {
+			state.enableRAG = false;
+			state.enableWebSearch = false;
+			const conv: Conversation = {
+				id: '1',
+				title: 'Agent',
+				mode: 'agent',
+				messages: [],
+				createdAt: Date.now(),
+				updatedAt: Date.now(),
+				config: {
+					agentId: 'agent-1',
+					ragEnabled: true,
+					webSearchEnabled: true,
+				},
+			};
+
+			manager.loadConversation(conv);
+
+			expect(state.enableRAG).toBe(false);
+			expect(state.enableWebSearch).toBe(false);
+		});
 	});
 
 	describe('Switch Conversation', () => {

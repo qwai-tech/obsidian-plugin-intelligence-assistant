@@ -1,4 +1,5 @@
 export * from './types';
 export * from './agent-sense-service';
 export * from './history-compactor';
-export * from './autonomous-agent-loop';
+export * from './agent-engine-loop';
+export * from './kernel/obsidian-agent-run-state-store';

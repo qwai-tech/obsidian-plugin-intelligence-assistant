@@ -11,6 +11,10 @@ import {
 	DEFAULT_MEMORY_CONFIG,
 	DEFAULT_MAX_STEPS
 } from '@/constants';
+import { BUILTIN_AGENT_PRESETS } from '@/application/agents/presets/builtin-agents';
+import { BUILTIN_PROMPT_PRESETS } from '@/application/agents/presets/builtin-prompts';
+
+const LEGACY_DEFAULT_AGENT_MAX_TOKENS = 2000;
 
 /** Build a toolAccess that grants the given builtin tool names. */
 function builtinAccess(toolNames: string[]): AgentToolAccess {
@@ -32,6 +36,40 @@ export async function ensureDefaultAgent(
 	settings: PluginSettings,
 	saveSettings: () => Promise<void>
 ): Promise<void> {
+	let settingsDirty = false;
+	const assistantPromptId = 'builtin-intelligence-assistant';
+
+	// Phase E: Enforce Agent Mode for all users
+	settings.defaultChatMode = 'agent';
+	settingsDirty = true;
+
+	// Phase F: Ensure all builtin prompts are present and up-to-date (readonly)
+	for (const preset of BUILTIN_PROMPT_PRESETS) {
+		const existing = settings.systemPrompts.find(p => p.id === preset.id);
+		if (!existing) {
+			settings.systemPrompts.push({ ...preset });
+			settingsDirty = true;
+		} else if (preset.readonly) {
+			// Force update content and metadata for readonly builtins
+			if (existing.content !== preset.content || existing.name !== preset.name || !existing.readonly) {
+				existing.content = preset.content;
+				existing.name = preset.name;
+				existing.readonly = true;
+				existing.updatedAt = Date.now();
+				settingsDirty = true;
+			}
+		}
+	}
+
+	// Also force-update the legacy 'default' prompt if it exists and is old
+	const legacyPrompt = settings.systemPrompts.find(p => p.id === 'default');
+	if (legacyPrompt && legacyPrompt.content.includes('helpful AI assistant')) {
+		const assistantPreset = BUILTIN_PROMPT_PRESETS.find(p => p.id === 'builtin-intelligence-assistant')!;
+		legacyPrompt.content = assistantPreset.content;
+		legacyPrompt.name = 'Default Assistant (Optimized)';
+		settingsDirty = true;
+	}
+
 	// Ensure all agents have required fields and migrate legacy fields.
 	// Per-source enable lists (enabledBuiltInTools etc.) are no longer touched
 	// here — userConfigToPluginSettings already migrated them into toolAccess
@@ -62,23 +100,48 @@ export async function ensureDefaultAgent(
 			.find(model => model.capabilities?.includes('chat'))?.id
 		|| 'gpt-4o';
 
-	let settingsDirty = false;
+	// Ensure all builtin prompts are present
+	for (const prompt of BUILTIN_PROMPT_PRESETS) {
+		if (!settings.systemPrompts.some(p => p.id === prompt.id)) {
+			settings.systemPrompts.push({ ...prompt });
+			settingsDirty = true;
+		}
+	}
+
 	let defaultAgent = settings.agents.find(agent => agent.id === DEFAULT_AGENT_ID);
 
-	if (!defaultAgent) {
+	if (defaultAgent) {
+		// Force update existing default agent to use the new optimized prompt and settings
+		if (defaultAgent.systemPromptId !== assistantPromptId) {
+			defaultAgent.systemPromptId = assistantPromptId;
+			settingsDirty = true;
+		}
+		if (defaultAgent.temperature !== 0.5) {
+			defaultAgent.temperature = 0.5;
+			settingsDirty = true;
+		}
+		const newDesc = 'Advanced Obsidian Agent specializing in multi-step vault operations, spatial thinking, and long-term knowledge management.';
+		if (defaultAgent.description !== newDesc) {
+			defaultAgent.description = newDesc;
+			settingsDirty = true;
+		}
+	}
+
+	if (settings.agents.length === 0 || !settings.agents.some(a => a.id === DEFAULT_AGENT_ID)) {
 		const timestamp = Date.now();
+
 		defaultAgent = {
 			id: DEFAULT_AGENT_ID,
 			name: 'Intelligence Assistant',
-			description: 'Safe Obsidian knowledge agent for notes, links, properties, writing, and vault organization.',
+			description: 'Advanced Obsidian Agent specializing in multi-step vault operations, spatial thinking, and long-term knowledge management.',
 			icon: '✨',
 			modelStrategy: {
 				strategy: 'default',
 				modelId: fallbackModel
 			},
-			temperature: DEFAULT_MODEL_CONFIG.TEMPERATURE,
+			temperature: 0.5,
 			maxTokens: DEFAULT_MODEL_CONFIG.MAX_TOKENS,
-			systemPromptId: defaultPromptId,
+			systemPromptId: assistantPromptId,
 			contextWindow: DEFAULT_MODEL_CONFIG.CONTEXT_WINDOW,
 			toolAccess: builtinAccess(enabledBuiltInTools),
 			memoryType: 'none',
@@ -96,7 +159,15 @@ export async function ensureDefaultAgent(
 		settingsDirty = true;
 	}
 
-	const ensuredAgent = defaultAgent;
+	// Ensure all builtin expert agents are present
+	for (const preset of BUILTIN_AGENT_PRESETS) {
+		if (!settings.agents.some(a => a.id === preset.id)) {
+			settings.agents.push({ ...preset });
+			settingsDirty = true;
+		}
+	}
+
+	const ensuredAgent = defaultAgent ?? settings.agents.find(a => a.id === DEFAULT_AGENT_ID)!;
 	ensuredAgent.toolAccess = ensuredAgent.toolAccess ?? { sources: {} };
 
 	// Migrate old agents that still have modelId to use new modelStrategy
@@ -118,6 +189,12 @@ export async function ensureDefaultAgent(
 			strategy: 'default',
 			modelId: fallbackModel
 		};
+		settingsDirty = true;
+	}
+
+	if (ensuredAgent.maxTokens === LEGACY_DEFAULT_AGENT_MAX_TOKENS) {
+		ensuredAgent.maxTokens = DEFAULT_MODEL_CONFIG.MAX_TOKENS;
+		ensuredAgent.updatedAt = Date.now();
 		settingsDirty = true;
 	}
 

@@ -7,7 +7,7 @@ This document is a developer-oriented guide to the `obsidian-plugin-intelligence
 Intelligence Assistant turns an Obsidian vault into a local AI workspace. The plugin combines:
 
 - Multi-provider LLM chat with streaming responses
-- Reusable custom agents and CLI-backed coding agents
+- Reusable custom agents
 - MCP tool integration
 - RAG over vault content with local vector storage
 - Web search and OpenAPI-derived tools
@@ -23,7 +23,7 @@ The repository broadly follows a layered design:
 - `src/core`: container, config schema/manager, event bus, error handling, shared primitives
 - `src/domain`: conversation and agent domain models
 - `src/application/services`: orchestration logic for chat, tools, MCP, RAG, storage, memory, OpenAPI, web search
-- `src/infrastructure`: adapters for LLM providers, CLI SDK bridge, persistence, RAG/vector store internals
+- `src/infrastructure`: adapters for LLM providers, persistence, RAG/vector store internals
 - `src/presentation`: chat view, settings tabs, modals, controllers, handlers, state objects
 - `src/types`: shared plugin settings and feature types
 
@@ -50,7 +50,7 @@ The production chat flow centers on [`src/presentation/views/chat-view.ts`](../.
 - Collect message text, attachments, and vault references
 - Resolve active model, prompt, agent, and feature flags
 - Optionally add RAG context and web search results
-- Route the request through the selected provider or CLI bridge
+- Route the request through the selected provider
 - Stream partial output back into the chat UI
 - Persist the updated conversation and messages
 
@@ -96,14 +96,13 @@ If you are new to the repository, read these files in order:
 3. [`src/presentation/views/chat-view.ts`](../../src/presentation/views/chat-view.ts)
 4. [`src/application/services/tool-manager.ts`](../../src/application/services/tool-manager.ts)
 5. [`src/infrastructure/llm/model-manager.ts`](../../src/infrastructure/llm/model-manager.ts)
-6. [`src/infrastructure/cli-agent/cli-agent-service.ts`](../../src/infrastructure/cli-agent/cli-agent-service.ts)
-7. [`src/infrastructure/rag-manager.ts`](../../src/infrastructure/rag-manager.ts)
+6. [`src/infrastructure/rag-manager.ts`](../../src/infrastructure/rag-manager.ts)
 
 ## Known Engineering Hotspots
 
 - The codebase contains parallel implementations from an architecture migration; not every controller/service is production-critical.
 - Settings persistence spans multiple stores, so migrations must be checked carefully.
-- MCP, OpenAPI, CLI agents, and RAG all add asynchronous startup work; regressions often appear as initialization-order bugs.
+- MCP, OpenAPI, and RAG all add asynchronous startup work; regressions often appear as initialization-order bugs.
 - Some UI modules are very large and mix rendering, state mutation, and side effects.
 
 ## Suggested Development Workflow

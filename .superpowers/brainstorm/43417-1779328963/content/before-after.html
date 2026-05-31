@@ -1,0 +1,146 @@
+<h2>Before → After 完整对比</h2>
+<p class="subtitle">同一个侧边栏宽度（320px）下，重设计前后的视觉效果对比。</p>
+
+<div class="split">
+
+  <!-- BEFORE -->
+  <div class="mockup">
+    <div class="mockup-header" style="background:#fee2e2;color:#991b1b;">⚠ 现在（Before）</div>
+    <div class="mockup-body" style="padding:0;">
+      <div style="font-family:system-ui;font-size:11px;display:flex;flex-direction:column;height:480px;background:#fff;overflow:hidden;">
+
+        <!-- Current: Action row -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;border-bottom:1px solid #e5e7eb;background:#f9fafb;">
+          <div style="display:flex;align-items:center;gap:4px;color:#6b7280;">
+            <span style="color:#3b82f6;font-weight:600;font-size:10px;">💬 历史</span>
+            <span style="color:#d1d5db;">/</span>
+            <span style="font-size:10px;font-weight:600;">新对话</span>
+          </div>
+          <div style="display:flex;gap:4px;font-size:10px;color:#6b7280;">
+            <span style="padding:2px 6px;border-radius:4px;background:#f3f4f6;">+ 新建</span>
+            <span style="padding:2px 6px;border-radius:4px;background:#f3f4f6;">⚙ 设置</span>
+          </div>
+        </div>
+
+        <!-- Current: Toolbar B (card with border) -->
+        <div style="margin:6px;padding:6px 8px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;display:flex;flex-direction:column;gap:5px;">
+          <!-- Row 1: mode + prompt + token -->
+          <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+            <span style="font-size:9px;color:#9ca3af;font-weight:600;">模式</span>
+            <select style="font-size:9px;border:1px solid #e5e7eb;border-radius:10px;padding:1px 4px;">
+              <option>对话</option>
+            </select>
+            <span style="font-size:9px;color:#9ca3af;font-weight:600;">提示词</span>
+            <select style="font-size:9px;border:1px solid #e5e7eb;border-radius:10px;padding:1px 4px;">
+              <option>无</option>
+            </select>
+          </div>
+          <!-- Row 2: model + slider toggle -->
+          <div style="display:flex;align-items:center;gap:4px;">
+            <span style="font-size:9px;color:#9ca3af;font-weight:600;">模型</span>
+            <select style="font-size:9px;border:1px solid #e5e7eb;border-radius:6px;padding:1px 4px;max-width:100px;overflow:hidden;text-overflow:ellipsis;">
+              <option>gpt-4o-mini</option>
+            </select>
+            <button style="background:#f3f4f6;border:none;padding:2px 5px;border-radius:4px;font-size:9px;color:#6b7280;">≡ 参数</button>
+          </div>
+          <!-- Row 3: token chips -->
+          <div style="display:flex;gap:4px;">
+            <span style="font-size:9px;color:#9ca3af;background:#f3f4f6;padding:1px 6px;border-radius:8px;">3 模型</span>
+            <span style="font-size:9px;color:#9ca3af;background:#f3f4f6;padding:1px 6px;border-radius:8px;">0 tokens</span>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div style="flex:1;padding:8px;display:flex;flex-direction:column;gap:6px;overflow:hidden;">
+          <div style="align-self:flex-end;max-width:70%;background:#3b82f6;color:#fff;padding:5px 8px;border-radius:10px 10px 2px 10px;font-size:10px;">帮我总结这份文档</div>
+          <div style="max-width:80%;background:#f3f4f6;padding:5px 8px;border-radius:2px 10px 10px 10px;font-size:10px;color:#374151;">这份文档主要包含三个部分…</div>
+        </div>
+
+        <!-- Current: Input container (nested card) -->
+        <div style="margin:6px;padding:8px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;display:flex;flex-direction:column;gap:6px;">
+          <!-- Action buttons: all showing including disabled -->
+          <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+            <button style="display:flex;align-items:center;gap:3px;padding:2px 7px;border:1px dashed #e5e7eb;border-radius:10px;background:transparent;font-size:9px;color:#374151;cursor:pointer;">📎 引用</button>
+            <button style="display:flex;align-items:center;gap:3px;padding:2px 7px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-size:9px;color:#9ca3af;opacity:0.5;">🖼 图片 不可用</button>
+            <button style="display:flex;align-items:center;gap:3px;padding:2px 7px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-size:9px;color:#9ca3af;opacity:0.5;">📖 知识库 已禁用</button>
+            <button style="display:flex;align-items:center;gap:3px;padding:2px 7px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-size:9px;color:#9ca3af;opacity:0.5;">🔍 网搜 已禁用</button>
+          </div>
+          <!-- Inner card: textarea + send -->
+          <div style="display:flex;align-items:flex-end;gap:4px;padding:6px 8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff;">
+            <span style="flex:1;font-size:10px;color:#9ca3af;line-height:1.5;">输入消息…</span>
+            <button style="width:22px;height:22px;background:#e5e7eb;border:none;border-radius:6px;color:#9ca3af;font-size:12px;">↑</button>
+          </div>
+          <!-- Send hint -->
+          <div style="display:flex;justify-content:flex-end;">
+            <span style="font-size:9px;color:#9ca3af;">按 Enter 发送</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- AFTER -->
+  <div class="mockup">
+    <div class="mockup-header" style="background:#dcfce7;color:#15803d;">✓ 重设计（After）</div>
+    <div class="mockup-body" style="padding:0;">
+      <div style="font-family:system-ui;font-size:11px;display:flex;flex-direction:column;height:480px;background:#fff;overflow:hidden;">
+
+        <!-- New: Single header row, no card -->
+        <div style="display:flex;align-items:center;gap:6px;padding:7px 10px;border-bottom:1px solid #f3f4f6;">
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;cursor:pointer;display:flex;">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </button>
+          <span style="font-size:11px;font-weight:600;flex:1;color:#111;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">新对话</span>
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;cursor:pointer;display:flex;">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+
+        <!-- Messages — much more room now -->
+        <div style="flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:8px;overflow:hidden;">
+          <div style="align-self:flex-end;max-width:72%;background:#3b82f6;color:#fff;padding:7px 11px;border-radius:12px 12px 3px 12px;font-size:11px;line-height:1.5;">帮我总结这份文档</div>
+          <div style="max-width:85%;background:#f3f4f6;padding:7px 11px;border-radius:3px 12px 12px 12px;font-size:11px;color:#374151;line-height:1.5;">这份文档主要包含三个部分…</div>
+          <!-- More space for messages visible -->
+          <div style="align-self:flex-end;max-width:72%;background:#3b82f6;color:#fff;padding:7px 11px;border-radius:12px 12px 3px 12px;font-size:11px;line-height:1.5;">第二部分讲什么？</div>
+          <div style="max-width:85%;background:#f3f4f6;padding:7px 11px;border-radius:3px 12px 12px 12px;font-size:11px;color:#374151;line-height:1.5;">第二部分主要讨论实现细节…</div>
+        </div>
+
+        <!-- New: Flat input box with everything inside -->
+        <div style="padding:8px 10px 10px;">
+          <div style="border:1.5px solid #e5e7eb;border-radius:12px;overflow:hidden;background:#fff;">
+            <!-- Toolbar: mode + model + active features only -->
+            <div style="display:flex;align-items:center;gap:4px;padding:6px 8px;border-bottom:1px solid #f5f5f5;">
+              <button style="background:#eff6ff;border:none;padding:2px 8px;border-radius:8px;font-size:9px;color:#3b82f6;font-weight:600;cursor:pointer;">对话 ▾</button>
+              <button style="background:#f3f4f6;border:none;padding:2px 8px;border-radius:8px;font-size:9px;color:#4b5563;cursor:pointer;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">GPT-4o ▾</button>
+              <div style="flex:1;"></div>
+              <!-- Only enabled features shown -->
+              <button style="background:none;border:none;padding:2px 5px;font-size:11px;color:#6b7280;cursor:pointer;display:flex;align-items:center;gap:2px;border-radius:6px;background:#f3f4f6;" title="引用文件">📎</button>
+              <button style="background:#dcfce7;border:none;padding:2px 6px;border-radius:6px;font-size:10px;color:#15803d;font-weight:600;cursor:pointer;" title="知识库已开启">📖</button>
+              <!-- 图片不支持 → 不显示；网搜未配置 → 不显示 -->
+            </div>
+            <!-- Textarea + send -->
+            <div style="display:flex;align-items:flex-end;gap:6px;padding:8px 10px 8px;">
+              <span style="flex:1;font-size:11px;color:#9ca3af;line-height:1.6;min-height:32px;">输入消息…</span>
+              <button style="flex-shrink:0;width:28px;height:28px;background:#e5e7eb;border:none;border-radius:8px;color:#9ca3af;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:not-allowed;">↑</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="section" style="margin-top:16px;">
+  <h3>关键变化汇总</h3>
+  <ul style="line-height:1.9;font-size:13px;color:var(--text-muted,#555);">
+    <li>头部从 <strong>3行+卡片边框</strong> → <strong>1行无边框</strong>（节省约 70px 垂直空间）</li>
+    <li>输入区从 <strong>嵌套双层卡片</strong> → <strong>单一圆角框</strong>，无外层背景色</li>
+    <li>模式/模型/功能 <strong>内联进输入框工具栏</strong>，不再占用独立区域</li>
+    <li>禁用功能（图片不支持、网搜未配置）<strong>完全不渲染</strong></li>
+    <li>Agent 参数（温度、Token）<strong>移至 Settings 页</strong>，对话时完全消失</li>
+    <li>消息区域获得约 <strong>+30% 可见高度</strong></li>
+  </ul>
+</div>

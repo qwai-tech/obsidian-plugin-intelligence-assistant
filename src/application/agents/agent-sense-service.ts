@@ -30,7 +30,7 @@ export class AgentSenseService {
 	constructor(
 		private readonly app: App,
 		private readonly ragManager: RAGManager,
-		private readonly memoryService?: AgentMemoryReader,
+		public readonly memoryService?: AgentMemoryReader,
 	) {}
 
 	async sense(input: SenseInput): Promise<AgentSenseContext> {
@@ -42,6 +42,13 @@ export class AgentSenseService {
 			const activeSnapshot = await buildObsidianContextSnapshot(this.app, [activeFile], { maxFileChars: 12000 });
 			if (activeSnapshot.trim()) {
 				sections.push({ title: 'Active note', content: activeSnapshot, source: 'active-note', path: activeFile.path });
+			}
+
+			// Add folder structure awareness
+			const folder = activeFile.parent;
+			if (folder instanceof TFolder) {
+				const folderStructure = this.formatFolderStructure(folder);
+				sections.push({ title: `Folder structure: ${folder.path}`, content: folderStructure, source: 'active-note' });
 			}
 
 			const graphNeighbors = this.getGraphNeighbors(activeFile);
@@ -63,11 +70,24 @@ export class AgentSenseService {
 
 		const ragSources = await this.queryRag(input);
 		if (ragSources.length > 0) {
-			sections.push({
-				title: 'RAG context',
-				content: ragSources.map(source => `Document: ${source.path}\nContent: ${source.content}`).join('\n\n'),
-				source: 'rag',
-			});
+			const noteSources = ragSources.filter(s => !s.path.startsWith('memory://'));
+			const memorySources = ragSources.filter(s => s.path.startsWith('memory://'));
+
+			if (noteSources.length > 0) {
+				sections.push({
+					title: 'RAG context (Notes)',
+					content: noteSources.map(source => `Document: ${source.path}\nContent: ${source.content}`).join('\n\n'),
+					source: 'rag',
+				});
+			}
+
+			if (memorySources.length > 0) {
+				sections.push({
+					title: 'Retrieved Agent Memories',
+					content: memorySources.map(source => `- ${source.content}`).join('\n'),
+					source: 'memory',
+				});
+			}
 		}
 
 		const memory = input.agentId && this.memoryService
@@ -106,6 +126,32 @@ export class AgentSenseService {
 			'',
 			...context.sections.map(section => `### ${section.title}\n${section.content}`),
 		].join('\n');
+	}
+
+	private formatFolderStructure(folder: TFolder): string {
+		const items: string[] = [];
+		const MAX_ITEMS = 50;
+		let count = 0;
+
+		const traverse = (current: TFolder, indent: string) => {
+			if (count >= MAX_ITEMS) return;
+			for (const child of current.children) {
+				if (count >= MAX_ITEMS) break;
+				count++;
+				if (child instanceof TFolder) {
+					items.push(`${indent}📁 ${child.name}/`);
+					traverse(child, indent + '  ');
+				} else {
+					items.push(`${indent}📄 ${child.name}`);
+				}
+			}
+		};
+
+		traverse(folder, '');
+		if (count >= MAX_ITEMS) {
+			items.push('... (truncated)');
+		}
+		return items.join('\n') || '(empty folder)';
 	}
 
 	private async queryRag(input: SenseInput): Promise<RAGSource[]> {

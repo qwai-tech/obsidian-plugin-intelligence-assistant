@@ -12,3 +12,4 @@ global.TextDecoder = TextDecoder;
 global.ReadableStream = global.ReadableStream || ReadableStream;
 global.TransformStream = global.TransformStream || TransformStream;
 global.WritableStream = global.WritableStream || WritableStream;
+global.structuredClone = global.structuredClone || ((value) => JSON.parse(JSON.stringify(value)));

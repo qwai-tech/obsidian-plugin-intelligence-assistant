@@ -7,12 +7,14 @@ import { TestIds } from '@/presentation/utils/test-ids';
 
 export interface ChatHeaderCallbacks {
 	onToggleConversations: () => Promise<void>;
+	onShowCapabilities: () => void;
 	onNewChat: () => Promise<void>;
 }
 
 export class ChatHeaderComponent {
 	public conversationTitleEl: HTMLElement;
 	private agentHeaderBadgeEl: HTMLElement;
+	private tokenSummaryEl: HTMLElement;
 
 	constructor(
 		private parent: HTMLElement,
@@ -49,6 +51,16 @@ export class ChatHeaderComponent {
 
 		this.agentHeaderBadgeEl = header.createEl('span', { cls: 'chat-agent-header-badge ia-hidden' });
 
+		this.tokenSummaryEl = header.createEl('span', { cls: 'chat-header-token-summary ia-hidden' });
+
+		const capabilitiesBtn = createIconButton('shield-check', 'Tools & permissions');
+		capabilitiesBtn.setAttribute('data-testid', TestIds.chat.agentCapabilitiesBtn);
+		capabilitiesBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			this.callbacks.onShowCapabilities();
+		});
+
 		const newChatBtn = createIconButton('plus', t('chat.new'));
 		newChatBtn.setAttribute('data-testid', TestIds.chat.newBtn);
 		newChatBtn.addEventListener('click', (e) => {
@@ -81,6 +93,19 @@ export class ChatHeaderComponent {
 			this.agentHeaderBadgeEl.removeClass('ia-hidden');
 		} else {
 			this.agentHeaderBadgeEl.addClass('ia-hidden');
+		}
+	}
+
+	public updateTokenSummary(totalTokens: number) {
+		if (!this.tokenSummaryEl) return;
+		if (totalTokens > 0) {
+			const text = totalTokens > 1000 
+				? `${(totalTokens / 1000).toFixed(1)}k tokens`
+				: `${totalTokens} tokens`;
+			this.tokenSummaryEl.setText(text);
+			this.tokenSummaryEl.removeClass('ia-hidden');
+		} else {
+			this.tokenSummaryEl.addClass('ia-hidden');
 		}
 	}
 }

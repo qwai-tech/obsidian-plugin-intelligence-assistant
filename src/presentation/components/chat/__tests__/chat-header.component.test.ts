@@ -23,16 +23,45 @@ describe('ChatHeaderComponent', () => {
 			new ChatViewState(),
 			{
 				onToggleConversations: jest.fn(),
+				onShowCapabilities: jest.fn(),
 				onNewChat: jest.fn(),
 			}
 		);
 
 		const buttons = Array.from(parent.querySelectorAll('.chat-header-icon-btn'));
-		expect(buttons).toHaveLength(3);
+		expect(buttons).toHaveLength(4);
 
 		for (const button of buttons) {
 			expect(button.querySelectorAll('.chat-header-icon-btn__icon')).toHaveLength(1);
 			expect(button.children).toHaveLength(1);
 		}
+	});
+
+	it('opens the capability panel from the header button', () => {
+		const parent = document.createElement('div');
+		const onShowCapabilities = jest.fn();
+
+		new ChatHeaderComponent(
+			parent,
+			{
+				app: {
+					setting: {
+						open: jest.fn(),
+						openTabById: jest.fn(),
+					},
+				},
+			} as never,
+			new ChatViewState(),
+			{
+				onToggleConversations: jest.fn(),
+				onShowCapabilities,
+				onNewChat: jest.fn(),
+			}
+		);
+
+		const button = parent.querySelector('[data-testid="ia-chat-agent-capabilities-btn"]') as HTMLButtonElement;
+		button.click();
+
+		expect(onShowCapabilities).toHaveBeenCalledTimes(1);
 	});
 });

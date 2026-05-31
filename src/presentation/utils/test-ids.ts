@@ -17,11 +17,13 @@ export const TestIds = {
 		modelSelect: 'ia-chat-model-select',
 		modeSelect: 'ia-chat-mode-select',
 		conversationToggleBtn: 'ia-chat-conversation-toggle-btn',
+		agentCapabilitiesBtn: 'ia-chat-agent-capabilities-btn',
 		conversationList: 'ia-chat-conversation-list',
 		conversationItem: 'ia-chat-conversation-item', // + data-conv-id
 		conversationRenameBtn: 'ia-chat-conversation-rename-btn', // + data-conv-id
 		conversationDeleteBtn: 'ia-chat-conversation-delete-btn', // + data-conv-id
 		ragToggleBtn: 'ia-chat-rag-toggle-btn',
+		webSearchToggleBtn: 'ia-chat-web-search-toggle-btn',
 		ragSources: 'ia-chat-rag-sources',
 		ragSourceCard: 'ia-chat-rag-source-card',
 		agentTrace: 'ia-chat-agent-trace',

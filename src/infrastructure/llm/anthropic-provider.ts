@@ -30,10 +30,30 @@ export class AnthropicProvider extends BaseStreamingProvider {
 
 		return {
 			system: systemMessage?.content,
-			messages: nonSystemMessages.map(m => ({
-				role: m.role,
-				content: m.content,
-			})),
+			messages: nonSystemMessages.map(m => {
+				if (m.role !== 'user' || !m.attachments?.some(a => a.type === 'image')) {
+					return { role: m.role, content: m.content };
+				}
+
+				const content: any[] = [{ type: 'text', text: m.content }];
+				for (const att of m.attachments) {
+					if (att.type === 'image' && att.content) {
+						// att.content is "data:image/png;base64,..."
+						const match = att.content.match(/^data:([^;]+);base64,(.+)$/);
+						if (match) {
+							content.push({
+								type: 'image',
+								source: {
+									type: 'base64',
+									media_type: match[1],
+									data: match[2],
+								},
+							});
+						}
+					}
+				}
+				return { role: m.role, content };
+			}),
 		};
 	}
 

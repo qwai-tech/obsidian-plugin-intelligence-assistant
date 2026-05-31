@@ -2,6 +2,7 @@ import { App } from 'obsidian';
 import type { Agent } from '@/types';
 import { AGENTS_DATA_FOLDER } from '@/constants';
 import { ensureFolderExists, buildSafeName } from '@/utils/file-system';
+import { BUILTIN_AGENT_PRESETS } from '@/application/agents/presets/builtin-agents';
 
 interface AgentIndexEntry {
 	id: string;
@@ -30,13 +31,11 @@ export class AgentRepository {
 	async initialize(): Promise<void> {
 		if (this.initialized) return;
 		await ensureFolderExists(this._app.vault.adapter, this.baseFolder);
-		if (!(await this._app.vault.adapter.exists(this.indexPath))) {
-			await this.writeIndex({
-				version: INDEX_VERSION,
-				updatedAt: Date.now(),
-				activeId: null,
-				agents: []
-			});
+		
+		const indexExists = await this._app.vault.adapter.exists(this.indexPath);
+		if (!indexExists) {
+			// Auto-initialize with builtin presets
+			await this.saveAll(BUILTIN_AGENT_PRESETS, null);
 		}
 		this.initialized = true;
 	}
@@ -54,11 +53,9 @@ export class AgentRepository {
 		}
 
 		if (agents.length === 0) {
-			const discovered = await this.loadAgentsFromFolder();
-			if (discovered.length > 0) {
-				await this.saveAll(discovered, index.activeId ?? null);
-				return { agents: discovered, activeId: index.activeId ?? null };
-			}
+			// Try presets as a fallback if nothing loaded
+			await this.saveAll(BUILTIN_AGENT_PRESETS, index.activeId ?? null);
+			return { agents: BUILTIN_AGENT_PRESETS, activeId: index.activeId ?? null };
 		}
 
 		return { agents, activeId: index.activeId ?? null };

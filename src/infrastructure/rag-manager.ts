@@ -99,6 +99,19 @@ export class RAGManager {
     await this.vectorStore.addFile(file, this.config);
   }
 
+  async indexMemory(agentId: string, content: string): Promise<void> {
+    if (!this.config.enabled) {
+      return;
+    }
+    
+    await this.vectorStore.addContent(content, {
+      type: 'agent-memory',
+      agentId,
+      path: `memory://${agentId}`,
+      title: `Memory: ${agentId}`
+    }, this.config);
+  }
+
   async indexContent(content: string, metadata: unknown): Promise<void> {
     if (!this.config.enabled) {
       return;

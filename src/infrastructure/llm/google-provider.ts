@@ -18,10 +18,30 @@ export class GoogleProvider extends BaseStreamingProvider {
 
 	private transformMessages(messages: Message[]): unknown {
 		// Gemini uses a "contents" array with role "user" or "model"
-		return messages.map(msg => ({
-			role: msg.role === 'assistant' ? 'model' : 'user',
-			parts: [{ text: msg.content }]
-		}));
+		return messages.map(msg => {
+			const role = msg.role === 'assistant' ? 'model' : 'user';
+			
+			if (msg.role !== 'user' || !msg.attachments?.some(a => a.type === 'image')) {
+				return { role, parts: [{ text: msg.content }] };
+			}
+
+			const parts: any[] = [{ text: msg.content }];
+			for (const att of msg.attachments) {
+				if (att.type === 'image' && att.content) {
+					// att.content is "data:image/png;base64,..."
+					const match = att.content.match(/^data:([^;]+);base64,(.+)$/);
+					if (match) {
+						parts.push({
+							inline_data: {
+								mime_type: match[1],
+								data: match[2],
+							},
+						});
+					}
+				}
+			}
+			return { role, parts };
+		});
 	}
 
 	async chat(request: ChatRequest): Promise<ChatResponse> {

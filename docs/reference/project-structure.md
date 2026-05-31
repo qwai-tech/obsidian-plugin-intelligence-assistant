@@ -99,12 +99,6 @@ infrastructure/
 │   ├── sap-ai-core-provider.ts
 │   └── types.ts
 │
-├── cli-agent/
-│   ├── cli-agent-service.ts         # Build SDK inputs; spawn bridge process
-│   ├── sdk-bridge.ts                # Template → sdk-bridge.mjs (auto-written)
-│   ├── sdk-installer.ts             # On-demand npm install for CLI SDKs
-│   └── shell-env.ts                 # Source login shell PATH (nvm, Homebrew)
-│
 ├── persistence/
 │   ├── data/                        # JSON-file repositories
 │   │   ├── agent-repository.ts
@@ -159,7 +153,6 @@ presentation/
 │   │   ├── models-tab.ts
 │   │   ├── provider-tab.ts
 │   │   ├── agents-tab.ts
-│   │   ├── cli-agents-tab.ts        # CLI agent management + auto-detection panel
 │   │   ├── prompts-tab.ts
 │   │   ├── tools-tab.ts
 │   │   ├── mcp-tab.ts
@@ -169,12 +162,10 @@ presentation/
 │   │   └── base-tab.ts
 │   │
 │   ├── modals/
-│   │   ├── cli-agent-edit-modal.ts  # Thin-bridge CLI agent config modal
 │   │   ├── agent-edit-modal.ts
 │   │   ├── mcp-server-modal.ts
 │   │   ├── mcp-inspector-modal.ts   # Live MCP tool tester
 │   │   ├── provider-config-modal.ts
-│   │   ├── sdk-install-modal.ts     # CLI SDK install progress UI
 │   │   ├── ollama-model-manager-modal.ts
 │   │   ├── prompt-modal.ts
 │   │   ├── system-prompt-edit-modal.ts
@@ -209,7 +200,6 @@ types/
 ├── augmentations.d.ts        # Global augmentations
 ├── core/
 │   ├── agent.ts              # Agent, AgentConfig
-│   ├── cli-agent.ts          # CLIAgentConfig, CLIAgentProvider, migration helpers
 │   ├── conversation.ts       # Conversation, Message
 │   └── model.ts              # ModelInfo, LLMConfig
 ├── features/

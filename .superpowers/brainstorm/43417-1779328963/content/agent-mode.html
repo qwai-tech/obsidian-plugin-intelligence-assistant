@@ -1,0 +1,170 @@
+<h2>A3 方案 — Agent 模式下配置如何呈现？</h2>
+<p class="subtitle">当前 Agent 模式的配置面板（温度、Token、RAG、网搜等）占据 ~35% 屏幕高度。在 A3 框架下，这些配置怎么收纳？</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="gear-popup" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:12px;background:#f8f9fa;border-radius:8px;">
+      <div style="font-family:system-ui;font-size:12px;width:320px;margin:0 auto;">
+        <!-- Minimal header -->
+        <div style="background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;padding:6px 10px;gap:6px;">
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </button>
+          <span style="font-size:11px;font-weight:600;flex:1;color:#111;">新对话</span>
+          <span style="font-size:9px;background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:8px;font-weight:600;">🤖 研究助手</span>
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;margin-left:4px;">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+        <!-- Messages -->
+        <div style="padding:12px 10px;background:#fff;display:flex;flex-direction:column;gap:7px;min-height:60px;">
+          <div style="max-width:85%;background:#f3f4f6;padding:6px 10px;border-radius:2px 12px 12px 12px;font-size:11px;color:#374151;">我是研究助手，请告诉我你想调查什么…</div>
+        </div>
+        <!-- Input box with agent controls -->
+        <div style="padding:8px;background:#fff;border-top:1px solid #f3f4f6;">
+          <div style="border:1.5px solid #e5e7eb;border-radius:12px;overflow:hidden;">
+            <!-- Toolbar: agent name + gear -->
+            <div style="display:flex;align-items:center;gap:4px;padding:5px 8px;border-bottom:1px solid #f5f5f5;background:#fafafa;">
+              <span style="font-size:9px;background:#dcfce7;color:#15803d;padding:1px 8px;border-radius:8px;font-weight:600;cursor:pointer;">🤖 研究助手 ▾</span>
+              <div style="flex:1;"></div>
+              <button style="background:none;border:none;padding:1px 4px;font-size:10px;color:#9ca3af;" title="引用文件">📎</button>
+              <!-- Gear opens popup -->
+              <button style="background:#f3f4f6;border:none;padding:2px 6px;border-radius:6px;font-size:10px;color:#6b7280;font-weight:600;cursor:pointer;" title="配置参数">⚙ 参数</button>
+            </div>
+            <!-- Config popup (shown floating above) -->
+            <div style="position:relative;">
+              <div style="position:absolute;bottom:100%;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:10px;width:200px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:10;margin-bottom:4px;">
+                <div style="font-size:9px;font-weight:700;text-transform:uppercase;color:#9ca3af;letter-spacing:0.05em;margin-bottom:8px;">参数配置</div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+                  <span style="font-size:10px;color:#6b7280;flex:1;">温度</span>
+                  <input type="range" style="width:60px;" min="0" max="2" step="0.1" value="0.7" />
+                  <span style="font-size:10px;font-weight:600;color:#3b82f6;width:24px;">0.7</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                  <span style="font-size:10px;color:#6b7280;flex:1;">Max Tokens</span>
+                  <input type="number" style="width:60px;font-size:10px;border:1px solid #e5e7eb;border-radius:4px;padding:2px 4px;" value="4096" />
+                </div>
+                <div style="border-top:1px solid #f0f0f0;padding-top:8px;display:flex;flex-direction:column;gap:4px;">
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:10px;color:#6b7280;flex:1;">📖 知识库</span>
+                    <span style="font-size:9px;background:#dcfce7;color:#15803d;padding:1px 6px;border-radius:8px;">开</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:10px;color:#6b7280;flex:1;">🔍 网络搜索</span>
+                    <span style="font-size:9px;background:#f3f4f6;color:#9ca3af;padding:1px 6px;border-radius:8px;">关</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Textarea -->
+            <div style="display:flex;align-items:center;gap:4px;padding:7px 8px 6px;">
+              <span style="flex:1;font-size:11px;color:#9ca3af;">告诉 研究助手 你想要什么…</span>
+              <button style="width:26px;height:26px;background:#e5e7eb;border:none;border-radius:8px;color:#9ca3af;font-size:14px;display:flex;align-items:center;justify-content:center;">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>X1 · ⚙ 浮动面板</h3>
+      <p>点击输入框工具栏的"⚙ 参数"按钮，弹出小型浮动配置面板（温度、Token、RAG、网搜）。不占用任何垂直空间，用时才展开。平时只有一个 badge 显示当前 Agent 名称。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="inline-row" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:12px;background:#f8f9fa;border-radius:8px;">
+      <div style="font-family:system-ui;font-size:12px;width:320px;margin:0 auto;">
+        <!-- Minimal header -->
+        <div style="background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;padding:6px 10px;gap:6px;">
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </button>
+          <span style="font-size:11px;font-weight:600;flex:1;color:#111;">新对话</span>
+          <span style="font-size:9px;background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:8px;font-weight:600;">🤖 研究助手</span>
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;margin-left:4px;">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+        <!-- Messages -->
+        <div style="padding:10px;background:#fff;display:flex;flex-direction:column;gap:6px;min-height:50px;">
+          <div style="max-width:85%;background:#f3f4f6;padding:5px 8px;border-radius:2px 10px 10px 10px;font-size:10px;color:#374151;">我是研究助手，有什么可以帮你？</div>
+        </div>
+        <!-- Config ribbon above input -->
+        <div style="padding:0 8px;background:#fff;">
+          <div style="display:flex;align-items:center;gap:4px;padding:4px 8px;background:#f9fafb;border-radius:8px 8px 0 0;border:1px solid #e5e7eb;border-bottom:none;overflow-x:auto;">
+            <span style="font-size:9px;color:#9ca3af;flex-shrink:0;">T:</span>
+            <span style="font-size:9px;font-weight:600;color:#374151;flex-shrink:0;">0.7</span>
+            <span style="color:#e5e7eb;flex-shrink:0;">|</span>
+            <span style="font-size:9px;color:#9ca3af;flex-shrink:0;">Max:</span>
+            <span style="font-size:9px;font-weight:600;color:#374151;flex-shrink:0;">4k</span>
+            <span style="color:#e5e7eb;flex-shrink:0;">|</span>
+            <span style="font-size:9px;background:#dcfce7;color:#15803d;padding:1px 5px;border-radius:6px;font-weight:600;flex-shrink:0;">📖 知识库</span>
+            <span style="font-size:9px;background:#f3f4f6;color:#9ca3af;padding:1px 5px;border-radius:6px;flex-shrink:0;">🔍 关</span>
+            <button style="background:none;border:none;font-size:9px;color:#9ca3af;padding:0 2px;flex-shrink:0;margin-left:2px;">✎</button>
+          </div>
+          <!-- Input box flush below ribbon -->
+          <div style="border:1.5px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px;overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:4px;padding:5px 8px;border-bottom:1px solid #f5f5f5;">
+              <span style="font-size:9px;background:#dcfce7;color:#15803d;padding:1px 8px;border-radius:8px;font-weight:600;">🤖 研究助手 ▾</span>
+              <div style="flex:1;"></div>
+              <button style="background:none;border:none;padding:1px 3px;font-size:10px;color:#9ca3af;">📎</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;padding:6px 8px 5px;">
+              <span style="flex:1;font-size:10px;color:#9ca3af;">输入消息…</span>
+              <button style="width:22px;height:22px;background:#e5e7eb;border:none;border-radius:6px;color:#9ca3af;font-size:12px;display:flex;align-items:center;justify-content:center;">↑</button>
+            </div>
+          </div>
+        </div>
+        <div style="height:8px;background:#fff;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>X2 · 配置彩带</h3>
+      <p>输入框上方贴合一条紧凑参数条（温度、Token、RAG、网搜状态），始终可见但极度紧凑。点击铅笔图标展开编辑。Agent 模式下自动显示，对话模式下隐藏。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="no-config" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:12px;background:#f8f9fa;border-radius:8px;">
+      <div style="font-family:system-ui;font-size:12px;width:320px;margin:0 auto;">
+        <!-- Minimal header -->
+        <div style="background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;padding:6px 10px;gap:6px;">
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </button>
+          <span style="font-size:11px;font-weight:600;flex:1;color:#111;">新对话</span>
+          <span style="font-size:9px;background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:8px;font-weight:600;">🤖 研究助手</span>
+          <button style="background:none;border:none;padding:2px;color:#9ca3af;">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+        <!-- Messages -->
+        <div style="padding:12px 10px;background:#fff;display:flex;flex-direction:column;gap:7px;min-height:70px;">
+          <div style="max-width:85%;background:#f3f4f6;padding:6px 10px;border-radius:2px 12px 12px 12px;font-size:11px;color:#374151;">我是研究助手，有什么可以帮你？</div>
+        </div>
+        <!-- Minimal input, no config visible -->
+        <div style="padding:8px;background:#fff;border-top:1px solid #f3f4f6;">
+          <div style="border:1.5px solid #e5e7eb;border-radius:12px;overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:4px;padding:5px 8px;border-bottom:1px solid #f5f5f5;">
+              <span style="font-size:9px;background:#dcfce7;color:#15803d;padding:1px 8px;border-radius:8px;font-weight:600;cursor:pointer;">🤖 研究助手 ▾</span>
+              <div style="flex:1;"></div>
+              <button style="background:none;border:none;padding:1px 3px;font-size:11px;color:#9ca3af;" title="引用文件">📎</button>
+              <button style="background:none;border:none;padding:1px 3px;font-size:11px;color:#d1d5db;" title="知识库（Agent 自动决定）">📖</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;padding:7px 8px 6px;">
+              <span style="flex:1;font-size:11px;color:#9ca3af;">告诉 研究助手 你想要什么…</span>
+              <button style="width:26px;height:26px;background:#e5e7eb;border:none;border-radius:8px;color:#9ca3af;font-size:14px;display:flex;align-items:center;justify-content:center;">↑</button>
+            </div>
+          </div>
+          <p style="font-size:9px;color:#9ca3af;text-align:center;margin:5px 0 0;line-height:1.4;">温度·Token·RAG 等参数在 Agent 设置页配置，对话时不再显示</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>X3 · 对话时无配置</h3>
+      <p>Agent 的参数（温度、Token 等）完全从聊天界面移除，只在 Settings 页面的 Agent 编辑器里配置。聊天时只选 Agent，其余参数对话时不可见，也不需要可见。</p>
+    </div>
+  </div>
+
+</div>

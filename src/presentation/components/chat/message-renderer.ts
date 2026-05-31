@@ -11,7 +11,10 @@ import type { AgentExecutionStep as TraceStep } from '@/presentation/state/chat-
 import { TestIds } from '@/presentation/utils/test-ids';
 import {
 	extractWriteProposalsFromSteps,
+	isBatchWriteProposal,
+	isWriteProposal,
 	type WriteProposal,
+	type BatchWriteProposal,
 } from '@/application/services/write-proposal-service';
 
 export interface MessageRendererContext {
@@ -29,7 +32,7 @@ export interface MessageRendererCallbacks {
 	displayRagSources?: (container: HTMLElement, message: Message) => void;
 	getProviderAvatar?: (message: Message) => string;
 	getProviderColor?: (message: Message) => string;
-	applyWriteProposal?: (proposal: WriteProposal) => Promise<void>;
+	applyWriteProposal?: (proposal: WriteProposal | BatchWriteProposal) => Promise<void>;
 }
 
 interface AssistantMeta {
@@ -107,8 +110,12 @@ export function renderMessage(
 	timestamp.addClass('message-timestamp');
 	timestamp.setText(new Date(timestampValue).toLocaleTimeString());
 
-	if (message.agentExecutionSteps?.length) {
-		renderExecutionTrace(body, message.agentExecutionSteps);
+	if (message.agentExecutionSteps?.length || message.reasoningContent || message.reasoningSteps?.length) {
+		if (_context.mode === 'agent') {
+			renderExecutionTrace(body, message.agentExecutionSteps, message.reasoningContent, message.reasoningSteps);
+		} else {
+			renderReasoning(body, message);
+		}
 		renderWriteProposalCards(body, message.agentExecutionSteps, callbacks);
 	}
 
@@ -143,10 +150,6 @@ export function renderMessage(
 			item.createDiv({ text: result.snippet });
 			item.createDiv({ text: result.url, cls: 'ia-chat-message__muted' });
 		});
-	}
-
-	if (message.reasoningSteps?.length || message.reasoningContent) {
-		renderReasoning(body, message);
 	}
 
 	const actions = body.createDiv('ia-chat-message__actions');
@@ -364,27 +367,57 @@ function renderListSection<T>(root: HTMLElement, title: string, items: T[], form
 }
 
 function renderReasoning(container: HTMLElement, message: Message) {
-	const section = container.createDiv('ia-chat-message__section');
+	const section = container.createDiv('ia-chat-message__section ia-chat-message__reasoning-section');
 	const details = section.createEl('details');
 	const summary = details.createEl('summary', { text: t('chat.message.reasoning') });
 	summary.addClass('ia-chat-message__summary');
 	const content = details.createDiv('ia-chat-message__reasoning');
 
 	if (message.reasoningContent) {
-		content.createEl('p', { text: message.reasoningContent });
+		renderAssistantMarkdown(content, message.reasoningContent);
 	}
 
 	ensureArray(message.reasoningSteps).forEach(step => {
 		const stepEl = content.createDiv('ia-chat-message__reasoning-step');
 		stepEl.createEl('strong', { text: `${step.step}. ${step.description}` });
-		stepEl.createDiv({ text: step.content });
+		const stepBody = stepEl.createDiv();
+		renderAssistantMarkdown(stepBody, step.content);
 	});
 }
 
-function renderExecutionTrace(container: HTMLElement, steps: Message['agentExecutionSteps']) {
-	if (!steps || steps.length === 0) return;
-	const traceContentEl = createAgentExecutionTraceContainer(container, steps.length);
-	updateExecutionTrace(traceContentEl, steps as unknown as TraceStep[]);
+function renderExecutionTrace(
+	container: HTMLElement,
+	steps: Message['agentExecutionSteps'],
+	reasoningContent?: string,
+	reasoningSteps?: Message['reasoningSteps']
+) {
+	const allSteps: TraceStep[] = [...(steps as unknown as TraceStep[] || [])];
+
+	// Append reasoning as a final thought step if present
+	if (reasoningContent) {
+		allSteps.push({
+			type: 'thought',
+			content: reasoningContent,
+			timestamp: Date.now(),
+			phase: 'final'
+		});
+	}
+
+	if (reasoningSteps?.length) {
+		reasoningSteps.forEach(step => {
+			allSteps.push({
+				type: 'thought',
+				content: `${step.description}\n\n${step.content}`,
+				timestamp: Date.now(),
+				phase: 'final'
+			});
+		});
+	}
+
+	if (allSteps.length === 0) return;
+
+	const traceContentEl = createAgentExecutionTraceContainer(container, allSteps.length);
+	updateExecutionTrace(traceContentEl, allSteps);
 	collapseExecutionTrace(traceContentEl);
 }
 
@@ -400,45 +433,98 @@ function renderWriteProposalCards(
 	section.createEl('h5', { text: 'Write proposals' });
 
 	for (const proposal of proposals) {
-		const card = section.createDiv('ia-write-proposal-card');
-		const header = card.createDiv('ia-write-proposal-card__header');
-		header.createSpan({
-			cls: 'ia-write-proposal-card__operation',
-			text: proposal.operation,
-		});
-		header.createSpan({
-			cls: 'ia-write-proposal-card__path',
-			text: proposal.path,
-		});
+		if (isBatchWriteProposal(proposal)) {
+			renderBatchProposalCard(section, proposal, callbacks);
+		} else if (isWriteProposal(proposal)) {
+			renderSingleWriteProposalCard(section, proposal, callbacks);
+		}
+	}
+}
 
-		card.createDiv({
-			cls: 'ia-write-proposal-card__note',
-			text: proposal.reason,
-		});
+function renderBatchProposalCard(
+	parent: HTMLElement,
+	proposal: BatchWriteProposal,
+	callbacks?: MessageRendererCallbacks
+) {
+	const card = parent.createDiv('ia-write-proposal-card is-batch');
+	const header = card.createDiv('ia-write-proposal-card__header');
+	header.createSpan({ cls: 'ia-write-proposal-card__operation', text: 'batch' });
+	header.createSpan({ cls: 'ia-write-proposal-card__path', text: `${proposal.proposals.length} changes` });
 
+	card.createDiv({ cls: 'ia-write-proposal-card__note', text: proposal.reason });
+
+	const list = card.createDiv('ia-write-proposal-card__batch-list');
+	for (const sub of proposal.proposals) {
+		const item = list.createDiv('ia-write-proposal-card__batch-item');
+		item.createSpan({ cls: 'ia-write-proposal-card__batch-op', text: sub.operation });
+		item.createSpan({ cls: 'ia-write-proposal-card__batch-path', text: sub.path });
+	}
+
+	const actions = card.createDiv('ia-write-proposal-card__actions');
+	const applyBtn = actions.createEl('button', { text: 'Apply All' });
+	applyBtn.disabled = typeof callbacks?.applyWriteProposal !== 'function';
+	applyBtn.addEventListener('click', () => {
+		void (async () => {
+			if (!callbacks?.applyWriteProposal) return;
+			applyBtn.disabled = true;
+			try {
+				await callbacks.applyWriteProposal(proposal);
+				applyBtn.setText('Applied');
+				applyBtn.addClass('is-applied');
+			} catch (error) {
+				console.error('[MessageRenderer] Failed to apply batch proposal', error);
+				new Notice(error instanceof Error ? error.message : String(error));
+				applyBtn.disabled = false;
+			}
+		})();
+	});
+}
+
+function renderSingleWriteProposalCard(
+	parent: HTMLElement,
+	proposal: WriteProposal,
+	callbacks?: MessageRendererCallbacks
+) {
+	const card = parent.createDiv('ia-write-proposal-card');
+	const header = card.createDiv('ia-write-proposal-card__header');
+	header.createSpan({
+		cls: 'ia-write-proposal-card__operation',
+		text: proposal.operation,
+	});
+	header.createSpan({
+		cls: 'ia-write-proposal-card__path',
+		text: proposal.path,
+	});
+
+	card.createDiv({
+		cls: 'ia-write-proposal-card__note',
+		text: proposal.reason,
+	});
+
+	if (proposal.proposedContent) {
 		const details = card.createEl('details', { cls: 'ia-write-proposal-card__preview' });
 		details.createEl('summary', { text: 'Preview proposed content' });
 		details.createEl('pre', { text: proposal.proposedContent });
-
-		const actions = card.createDiv('ia-write-proposal-card__actions');
-		const applyBtn = actions.createEl('button', { text: 'Apply' });
-		applyBtn.disabled = typeof callbacks?.applyWriteProposal !== 'function';
-		applyBtn.addEventListener('click', () => {
-			void (async () => {
-				if (!callbacks?.applyWriteProposal) return;
-				applyBtn.disabled = true;
-				try {
-					await callbacks.applyWriteProposal(proposal);
-					applyBtn.setText('Applied');
-					applyBtn.addClass('is-applied');
-				} catch (error) {
-					console.error('[MessageRenderer] Failed to apply write proposal', error);
-					new Notice(error instanceof Error ? error.message : String(error));
-					applyBtn.disabled = false;
-				}
-			})();
-		});
 	}
+
+	const actions = card.createDiv('ia-write-proposal-card__actions');
+	const applyBtn = actions.createEl('button', { text: 'Apply' });
+	applyBtn.disabled = typeof callbacks?.applyWriteProposal !== 'function';
+	applyBtn.addEventListener('click', () => {
+		void (async () => {
+			if (!callbacks?.applyWriteProposal) return;
+			applyBtn.disabled = true;
+			try {
+				await callbacks.applyWriteProposal(proposal);
+				applyBtn.setText('Applied');
+				applyBtn.addClass('is-applied');
+			} catch (error) {
+				console.error('[MessageRenderer] Failed to apply write proposal', error);
+				new Notice(error instanceof Error ? error.message : String(error));
+				applyBtn.disabled = false;
+			}
+		})();
+	});
 }
 
 function hasActionCallbacks(callbacks?: MessageRendererCallbacks): boolean {
@@ -499,9 +585,9 @@ export function appendTokenUsageToMessage(messageEl: HTMLElement, usage: Message
 function renderTokenUsageFooter(container: HTMLElement, usage?: Message['tokenUsage']) {
 	if (!usage) return;
 	const summary: string[] = [];
-	if (usage.promptTokens) summary.push(`${t('chat.message.tokenUsagePrompt')}: ${usage.promptTokens}`);
-	if (usage.completionTokens) summary.push(`${t('chat.message.tokenUsageCompletion')}: ${usage.completionTokens}`);
-	if (usage.totalTokens) summary.push(`${t('chat.message.tokenUsageTotal')}: ${usage.totalTokens}`);
+	if (usage.promptTokens !== undefined) summary.push(`${t('chat.message.tokenUsagePrompt')}: ${usage.promptTokens}`);
+	if (usage.completionTokens !== undefined) summary.push(`${t('chat.message.tokenUsageCompletion')}: ${usage.completionTokens}`);
+	if (usage.totalTokens !== undefined) summary.push(`${t('chat.message.tokenUsageTotal')}: ${usage.totalTokens}`);
 	if (summary.length === 0) return;
 
 	const footer = container.createDiv('ia-chat-message__footer');

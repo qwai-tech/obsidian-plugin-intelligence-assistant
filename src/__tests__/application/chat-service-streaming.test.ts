@@ -71,7 +71,7 @@ describe('ChatService streaming abort', () => {
 });
 
 describe('ChatService agent delegation', () => {
-	it('delegates executeAgentLoop to AutonomousAgentLoop when one is configured', async () => {
+	it('delegates executeAgentLoop to AgentEngineLoop when one is configured', async () => {
 		const loop = { execute: jest.fn(async () => undefined) };
 		const service = new ChatService(
 			{} as any,

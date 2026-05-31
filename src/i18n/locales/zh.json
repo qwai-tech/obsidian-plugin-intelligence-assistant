@@ -1223,6 +1223,15 @@
         "insert": "插入到所选笔记",
         "createNew": "创建新笔记",
         "noResults": "未找到匹配笔记。"
+      },
+      "agentTask": {
+        "title": "开启智能体任务",
+        "fieldLabel": "任务内容",
+        "placeholder": "在此输入您的任务...",
+        "newConversation": "在新对话中开始",
+        "newConversationDesc": "让此智能体任务与当前对话保持独立。",
+        "cancel": "取消",
+        "start": "开始"
       }
     }
   },
@@ -1592,5 +1601,37 @@
     "processing": "处理中...",
     "textUpdated": "文本更新成功",
     "error": "错误：{{message}}"
+  },
+  "commands": {
+    "openChatSidebar": "在侧边栏打开 AI 聊天",
+    "openChatMain": "在主编辑区打开 AI 聊天",
+    "askAgentCurrentNote": "智能体任务：询问当前笔记",
+    "summarizeCurrentNote": "智能体任务：总结当前笔记",
+    "organizeCurrentNote": "智能体任务：整理当前笔记",
+    "sourceGroundedQuestion": "智能体任务：基于笔记提问",
+    "createProjectBrief": "智能体任务：创建项目简介",
+    "createResearchBrief": "智能体任务：创建研究简报",
+    "generateWeeklyReview": "智能体任务：生成周报",
+    "findRelatedNotes": "智能体任务：查找相关笔记",
+    "findDuplicateNotes": "智能体任务：查找重复并合并笔记",
+    "doctorLinksTags": "智能体任务：优化链接、标签和属性",
+    "draftFromNote": "智能体任务：基于当前笔记起草",
+    "diagnoseVault": "智能体任务：诊断库健康状况",
+    "improveSelection": "智能体任务：优化选中文本"
+  },
+  "contextMenu": {
+    "askAgent": "智能助手：询问智能体关于此文件",
+    "summarize": "智能助手：使用智能体进行总结",
+    "createProjectBrief": "智能助手：使用智能体创建项目简介",
+    "createResearchBrief": "智能助手：使用智能体创建研究简报",
+    "findRelatedNotes": "智能助手：使用智能体查找相关笔记",
+    "doctorLinksTags": "智能助手：使用智能体优化链接、标签和属性",
+    "draftFromFile": "智能助手：使用智能体起草文件内容",
+    "organizeFolder": "智能助手：使用智能体整理文件夹",
+    "findDuplicates": "智能助手：使用智能体查找重复并合并笔记",
+    "improveFolder": "智能助手：使用智能体优化文件夹内的链接、标签和属性"
+  },
+  "ribbon": {
+    "openChat": "打开 AI 聊天"
   }
 }

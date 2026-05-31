@@ -18,7 +18,7 @@ import type { ToolRegistry } from '@/application/tools/tool-registry';
 import type { RAGManager } from '@/infrastructure/rag-manager';
 import type { WebSearchService } from './web-search-service';
 import type { StreamChunk } from '@/types/common/llm';
-import type { AutonomousAgentLoop, AgentLoopCallbacks } from '@/application/agents';
+import type { AgentEngineLoop, AgentLoopCallbacks } from '@/application/agents';
 
 export interface ChatOptions {
 	model: string;
@@ -60,7 +60,7 @@ export class ChatService {
 		private llmConfigs: LLMConfig[],
 		private usageRepo?: { recordUsage: (r: {model:string;provider:string;promptTokens:number;completionTokens:number;totalTokens:number;timestamp:number;conversationId?:string}) => Promise<void> },
 		private defaultModel?: string,
-		private autonomousAgentLoop?: AutonomousAgentLoop
+		private agentEngineLoop?: AgentEngineLoop
 	) {}
 
 	findLLMConfig(modelId: string): LLMConfig | null {
@@ -306,11 +306,11 @@ export class ChatService {
 		},
 		callbacks: AgentLoopCallbacks
 	): Promise<void> {
-		if (!this.autonomousAgentLoop) {
-			callbacks.onError(new Error('AutonomousAgentLoop is not configured'));
+		if (!this.agentEngineLoop) {
+			callbacks.onError(new Error('AgentEngineLoop is not configured'));
 			return;
 		}
-		await this.autonomousAgentLoop.execute(messages, { ...options, mode: 'agent' }, callbacks);
+		await this.agentEngineLoop.execute(messages, { ...options, mode: 'agent' }, callbacks);
 	}
 
 	async generateConversationTitle(

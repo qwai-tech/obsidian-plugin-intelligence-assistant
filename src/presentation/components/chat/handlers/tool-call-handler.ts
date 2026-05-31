@@ -178,9 +178,11 @@ function formatPhaseLabel(phase?: AgentExecutionStep['phase']): string | null {
 
 function renderThinkingBlock(container: HTMLElement, content: string, phase?: AgentExecutionStep['phase']): void {
 	const block = container.createDiv('agent-thinking-block');
+	if (phase) {
+		block.setAttr('data-phase', phase);
+	}
 
 	const labelRow = block.createDiv('agent-thinking-block__label-row');
-	labelRow.createSpan().setText('🧠');
 	const label = labelRow.createSpan('agent-thinking-block__label');
 	label.setText(t('chat.toolCall.thinking'));
 	const phaseLabel = formatPhaseLabel(phase);
@@ -223,33 +225,55 @@ function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionSt
 	const statusClass = isError ? 'is-error' : isPending ? 'is-pending' : 'is-success';
 	const card = container.createDiv('agent-tool-call-card');
 	card.addClass(statusClass);
+	if (actionStep.phase) {
+		card.setAttr('data-phase', actionStep.phase);
+	}
 	card.setAttribute('data-testid', TestIds.chat.agentTraceToolCard);
 
 	// Title row: status dot + tool name + status text
 	const titleRow = card.createDiv('agent-tool-call__title');
 	const dot = titleRow.createSpan('agent-tool-call__status-dot');
 	dot.setText(isError ? '✕' : isPending ? '◌' : '✓');
+	
 	const nameEl = titleRow.createSpan('agent-tool-call__name');
 	nameEl.setText(toolName);
 	nameEl.setAttribute('data-testid', TestIds.chat.agentTraceToolName);
+	
 	const phaseLabel = formatPhaseLabel(actionStep.phase);
 	if (phaseLabel) {
 		titleRow.createSpan('agent-phase-badge').setText(phaseLabel);
 	}
+
 	if (isPending) {
 		const spinner = titleRow.createSpan('agent-tool-call__spinner');
 		spinner.setText(t('chat.toolCall.running'));
 	}
 
-	// Input section — collapsible, collapsed by default
+	// Expand/Collapse Chevron
+	const chevron = titleRow.createSpan('agent-tool-call__chevron');
+	chevron.setText('▼');
+
+	// Details container (hidden by default)
+	const details = card.createDiv('agent-tool-call__details');
+
+	// Input section — collapsible
 	if (argsStr && argsStr !== '{}') {
-		renderCollapsibleSection(card, t('chat.toolCall.input'), argsStr, false, false);
+		renderCollapsibleSection(details, t('chat.toolCall.input'), argsStr, false, false);
 	}
 
-	// Output section — collapsible, expanded by default on error, collapsed on success
+	// Output section — collapsible
 	if (resultContent !== null) {
-		renderCollapsibleSection(card, t('chat.toolCall.output'), resultContent, isError, isError, TestIds.chat.agentTraceToolOutput);
+		renderCollapsibleSection(details, t('chat.toolCall.output'), resultContent, isError, isError, TestIds.chat.agentTraceToolOutput);
 	}
+
+	// Click to toggle expansion
+	card.addEventListener('click', (e) => {
+		// Don't toggle if clicking inside an already expanded section or its headers
+		if ((e.target as HTMLElement).closest('.agent-collapsible-section')) {
+			return;
+		}
+		card.classList.toggle('is-expanded');
+	});
 }
 
 function renderCollapsibleSection(

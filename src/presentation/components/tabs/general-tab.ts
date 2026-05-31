@@ -41,19 +41,6 @@ export function displayGeneralTab(
 				});
 		});
 
-	// Default Chat Mode
-	new Setting(containerEl)
-		.setName(t('settings.general.defaultChatMode.name'))
-		.setDesc(t('settings.general.defaultChatMode.desc'))
-		.addDropdown(dropdown => dropdown
-			.addOption('Chat', t('settings.general.defaultChatMode.chat'))
-			.addOption('Agent', t('settings.general.defaultChatMode.agent'))
-			.setValue(plugin.settings.defaultChatMode ?? 'chat')
-			.onChange(async (value) => {
-				plugin.settings.defaultChatMode = (value as 'chat' | 'agent');
-				await plugin.saveSettings();
-			}));
-
 	// Conversation Title Mode
 	new Setting(containerEl)
 		.setName(t('settings.general.conversationTitleMode.name'))
