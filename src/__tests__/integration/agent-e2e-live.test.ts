@@ -5,11 +5,12 @@
  * ToolRegistry + real builtin tools against an in-memory vault.
  *
  * This is the seam the probe and the deterministic tool test each covered only
- * half of. It makes REAL network calls and is therefore gated on
- * DEEPSEEK_API_KEY — it SKIPS automatically when the key is absent, so it is
- * safe to keep in the suite and never runs in normal CI.
+ * half of. It makes REAL network calls and is therefore OPT-IN: it runs only
+ * when RUN_LIVE_AGENT_E2E=1 AND a key is present, so a globally-exported
+ * DEEPSEEK_API_KEY can never trigger real calls during a normal `npm test`.
+ * It SKIPS otherwise, so it is safe to keep in the suite / CI.
  *
- * Run:  DEEPSEEK_API_KEY=sk-... npx jest agent-e2e-live
+ * Run:  RUN_LIVE_AGENT_E2E=1 DEEPSEEK_API_KEY=sk-... npx jest agent-e2e-live
  */
 import { App, TFile } from 'obsidian';
 import { ToolRegistry } from '@/application/tools/tool-registry';
@@ -20,7 +21,11 @@ import { DeepSeekProvider } from '@/infrastructure/llm/deepseek-provider';
 import type { Message } from '@/types';
 
 const KEY = process.env.DEEPSEEK_API_KEY;
-const describeLive = KEY ? describe : describe.skip;
+// Opt-in only: BOTH an explicit flag and a key are required, so an ambient
+// DEEPSEEK_API_KEY (commonly exported for dev) never causes `npm test` to make
+// real network calls.
+const LIVE = process.env.RUN_LIVE_AGENT_E2E === '1' && !!KEY;
+const describeLive = LIVE ? describe : describe.skip;
 
 function makeFile(path: string, size: number): TFile {
 	const f = new TFile();
