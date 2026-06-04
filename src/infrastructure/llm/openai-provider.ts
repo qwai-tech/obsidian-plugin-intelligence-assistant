@@ -55,6 +55,10 @@ export class OpenAIProvider extends BaseStreamingProvider {
 			stream: false,
 		};
 
+		if (request.responseFormat !== undefined) {
+			body.response_format = request.responseFormat;
+		}
+
 		// Use max_completion_tokens for newer models (gpt-4o, gpt-4-turbo, etc.)
 		// Use max_tokens for older models (gpt-4, gpt-3.5-turbo)
 		if (this.shouldUseMaxCompletionTokens(modelName)) {
@@ -112,6 +116,10 @@ export class OpenAIProvider extends BaseStreamingProvider {
 			stream: true,
 				stream_options: { include_usage: true },
 		};
+
+		if (request.responseFormat !== undefined) {
+			body.response_format = request.responseFormat;
+		}
 
 		// Use max_completion_tokens for newer models
 		if (this.shouldUseMaxCompletionTokens(modelName)) {

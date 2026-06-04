@@ -114,6 +114,7 @@ export class ChatController extends BaseController {
 			? { llmContent: options.llmContentOverride, references: referenceInputs }
 			: await this.chatService.buildReferenceContext(text, referenceInputs);
 
+		const attachments = [...this.state.currentAttachments];
 		this.state.currentAttachments = [];
 		this.state.referencedFiles = [];
 		this.clearInputUI();
@@ -121,7 +122,7 @@ export class ChatController extends BaseController {
 		const userMessage: Message = {
 			role: 'user',
 			content: text,
-			attachments: this.state.currentAttachments.length > 0 ? [...this.state.currentAttachments] : undefined,
+			attachments: attachments.length > 0 ? attachments : undefined,
 			references: references.length > 0 ? references : undefined,
 		};
 		this.state.messages.push(userMessage);

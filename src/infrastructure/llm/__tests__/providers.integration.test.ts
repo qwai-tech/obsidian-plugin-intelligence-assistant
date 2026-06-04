@@ -10,6 +10,7 @@ import { OpenRouterProvider } from '../openrouter-provider';
 import { DeepSeekProvider } from '../deepseek-provider';
 import { LLMConfig } from '@/types';
 import { ChatRequest } from '@/types';
+import { requestUrl } from 'obsidian';
 
 // Mock global fetch
 global.fetch = jest.fn();
@@ -87,6 +88,7 @@ describe('Provider Integration Tests', () => {
 				messages: [{ role: 'user', content: 'Test' }],
 				temperature: 0.8,
 				maxTokens: 1500,
+				responseFormat: { type: 'json_object' },
 			};
 
 			const { url, body } = provider['prepareStreamRequest'](request);
@@ -97,12 +99,32 @@ describe('Provider Integration Tests', () => {
 				messages: request.messages,
 				temperature: 0.8,
 				stream: true,
+				response_format: { type: 'json_object' },
 			});
 		});
 
 		it('should extract model name from provider prefix', () => {
 			const modelName = provider['extractModelName']('openai:gpt-4-turbo');
 			expect(modelName).toBe('gpt-4-turbo');
+		});
+
+		it('should forward response format for non-streaming chat requests', async () => {
+			(requestUrl as jest.Mock).mockResolvedValueOnce({
+				status: 200,
+				json: {
+					choices: [{ message: { content: '{"ok":true}' } }],
+					usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
+				},
+			});
+
+			await provider.chat({
+				model: 'openai:gpt-4o-mini',
+				messages: [{ role: 'user', content: 'JSON only' }],
+				responseFormat: { type: 'json_object' },
+			});
+
+			const body = JSON.parse((requestUrl as jest.Mock).mock.calls[0][0].body);
+			expect(body.response_format).toEqual({ type: 'json_object' });
 		});
 	});
 
@@ -169,6 +191,7 @@ describe('Provider Integration Tests', () => {
 				messages: [{ role: 'user', content: 'Test' }],
 				temperature: 0.7,
 				maxTokens: 2000,
+				responseFormat: { type: 'json_object' },
 			};
 
 			const { url, body } = provider['prepareStreamRequest'](request);
@@ -181,6 +204,26 @@ describe('Provider Integration Tests', () => {
 				max_tokens: 2000,
 				stream: true,
 			});
+			expect(body.system).toContain('JSON');
+		});
+
+		it('should forward JSON response format for non-streaming chat requests', async () => {
+			(requestUrl as jest.Mock).mockResolvedValueOnce({
+				status: 200,
+				json: {
+					content: [{ text: '{"ok":true}' }],
+					usage: { input_tokens: 1, output_tokens: 1 },
+				},
+			});
+
+			await provider.chat({
+				model: 'anthropic:claude-3-5-haiku-20241022',
+				messages: [{ role: 'user', content: 'JSON only' }],
+				responseFormat: { type: 'json_object' },
+			});
+
+			const body = JSON.parse((requestUrl as jest.Mock).mock.calls[0][0].body);
+			expect(body.system).toContain('JSON');
 		});
 	});
 
@@ -243,6 +286,7 @@ describe('Provider Integration Tests', () => {
 				messages: [{ role: 'user', content: 'Test' }],
 				temperature: 0.9,
 				maxTokens: 1000,
+				responseFormat: { type: 'json_object' },
 			};
 
 			const { url, body } = provider['prepareStreamRequest'](request);
@@ -253,6 +297,7 @@ describe('Provider Integration Tests', () => {
 			expect(body.generationConfig).toMatchObject({
 				temperature: 0.9,
 				maxOutputTokens: 1000,
+				responseMimeType: 'application/json',
 			});
 		});
 
@@ -268,6 +313,25 @@ describe('Provider Integration Tests', () => {
 				{ role: 'user', parts: [{ text: 'Hello' }] },
 				{ role: 'model', parts: [{ text: 'Hi there' }] },
 			]);
+		});
+
+		it('should forward JSON response format for non-streaming chat requests', async () => {
+			(requestUrl as jest.Mock).mockResolvedValueOnce({
+				status: 200,
+				json: {
+					candidates: [{ content: { parts: [{ text: '{"ok":true}' }] } }],
+					usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1, totalTokenCount: 2 },
+				},
+			});
+
+			await provider.chat({
+				model: 'google:gemini-pro',
+				messages: [{ role: 'user', content: 'JSON only' }],
+				responseFormat: { type: 'json_object' },
+			});
+
+			const body = JSON.parse((requestUrl as jest.Mock).mock.calls[0][0].body);
+			expect(body.generationConfig.responseMimeType).toBe('application/json');
 		});
 	});
 
@@ -326,6 +390,7 @@ describe('Provider Integration Tests', () => {
 				messages: [{ role: 'user', content: 'Test' }],
 				temperature: 0.7,
 				maxTokens: 2000,
+				responseFormat: { type: 'json_object' },
 			};
 
 			const { url, body } = provider['prepareStreamRequest'](request);
@@ -337,6 +402,7 @@ describe('Provider Integration Tests', () => {
 				temperature: 0.7,
 				max_tokens: 2000,
 				stream: true,
+				response_format: { type: 'json_object' },
 			});
 		});
 
@@ -345,6 +411,25 @@ describe('Provider Integration Tests', () => {
 
 			expect(headers).toHaveProperty('HTTP-Referer', 'https://obsidian.md');
 			expect(headers).toHaveProperty('X-Title', 'Obsidian Intelligence Assistant');
+		});
+
+		it('should forward response format for non-streaming chat requests', async () => {
+			(requestUrl as jest.Mock).mockResolvedValueOnce({
+				status: 200,
+				json: {
+					choices: [{ message: { content: '{"ok":true}' } }],
+					usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
+				},
+			});
+
+			await provider.chat({
+				model: 'openrouter:openai/gpt-4o-mini',
+				messages: [{ role: 'user', content: 'JSON only' }],
+				responseFormat: { type: 'json_object' },
+			});
+
+			const body = JSON.parse((requestUrl as jest.Mock).mock.calls[0][0].body);
+			expect(body.response_format).toEqual({ type: 'json_object' });
 		});
 	});
 
@@ -447,6 +532,7 @@ describe('Provider Integration Tests', () => {
 				messages: [{ role: 'user', content: 'Test' }],
 				temperature: 0.7,
 				maxTokens: 2000,
+				responseFormat: { type: 'json_object' },
 			};
 
 			const { url, body } = provider['prepareStreamRequest'](request);
@@ -458,7 +544,27 @@ describe('Provider Integration Tests', () => {
 				temperature: 0.7,
 				max_tokens: 2000,
 				stream: true,
+				response_format: { type: 'json_object' },
 			});
+		});
+
+		it('should forward response format for non-streaming chat requests', async () => {
+			(requestUrl as jest.Mock).mockResolvedValueOnce({
+				status: 200,
+				json: {
+					choices: [{ message: { content: '{"ok":true}' } }],
+					usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
+				},
+			});
+
+			await provider.chat({
+				model: 'deepseek:deepseek-chat',
+				messages: [{ role: 'user', content: 'JSON only' }],
+				responseFormat: { type: 'json_object' },
+			});
+
+			const body = JSON.parse((requestUrl as jest.Mock).mock.calls[0][0].body);
+			expect(body.response_format).toEqual({ type: 'json_object' });
 		});
 	});
 

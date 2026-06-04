@@ -49,12 +49,20 @@ export class GoogleProvider extends BaseStreamingProvider {
 		const model = this.extractModelName(request.model);
 		const url = `${baseUrl ?? ''}/models/${model ?? ''}:generateContent?key=${this.config.apiKey ?? ''}`;
 
+		const generationConfig: Record<string, unknown> = {
+			temperature: request.temperature ?? 0.7,
+			maxOutputTokens: request.maxTokens ?? 2000,
+		};
+		if (request.responseFormat?.type === 'json_object') {
+			generationConfig.responseMimeType = 'application/json';
+		} else if (request.responseFormat?.type === 'json_schema' && request.responseFormat.json_schema) {
+			generationConfig.responseMimeType = 'application/json';
+			generationConfig.responseSchema = request.responseFormat.json_schema.schema;
+		}
+
 		const body = {
 			contents: this.transformMessages(request.messages),
-			generationConfig: {
-				temperature: request.temperature ?? 0.7,
-				maxOutputTokens: request.maxTokens ?? 2000,
-			}
+			generationConfig
 		};
 
 		const response = await this.makeRequest(url, body) as {
@@ -102,12 +110,20 @@ export class GoogleProvider extends BaseStreamingProvider {
 		const model = this.extractModelName(request.model);
 		const url = `${baseUrl ?? ''}/models/${model ?? ''}:streamGenerateContent?key=${this.config.apiKey ?? ''}&alt=sse`;
 
+		const generationConfig: Record<string, unknown> = {
+			temperature: request.temperature ?? 0.7,
+			maxOutputTokens: request.maxTokens ?? 2000,
+		};
+		if (request.responseFormat?.type === 'json_object') {
+			generationConfig.responseMimeType = 'application/json';
+		} else if (request.responseFormat?.type === 'json_schema' && request.responseFormat.json_schema) {
+			generationConfig.responseMimeType = 'application/json';
+			generationConfig.responseSchema = request.responseFormat.json_schema.schema;
+		}
+
 		const body = {
 			contents: this.transformMessages(request.messages),
-			generationConfig: {
-				temperature: request.temperature ?? 0.7,
-				maxOutputTokens: request.maxTokens ?? 2000,
-			}
+			generationConfig
 		};
 
 		return { url, body };

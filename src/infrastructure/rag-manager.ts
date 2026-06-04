@@ -298,10 +298,6 @@ export class RAGManager {
     }
     this.documentGrader = new DocumentGrader(this.config, this.llmConfigs);
 
-    if (!config.enabled) {
-      this.vectorStore.clear();
-    }
-
     if (config.embedChangedFiles && !wasEmbeddingChangedFiles) {
       this.setupFileChangeListener();
     } else if (!config.embedChangedFiles && wasEmbeddingChangedFiles) {

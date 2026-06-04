@@ -127,7 +127,6 @@ export class ChatView extends ItemView {
 		});
 		this.chatService = new ChatService(
 			new ObsidianFileSystem(this.app),
-			this.plugin.getToolRegistry(),
 			this.ragManager,
 			this.webSearchService,
 			this.plugin.settings.llmConfigs,

@@ -71,8 +71,21 @@ export class AnthropicProvider extends BaseStreamingProvider {
 			stream: false,
 		};
 
-		if (system) {
-			body.system = system;
+		let systemPrompt = system;
+		if (request.responseFormat?.type === 'json_object') {
+			systemPrompt = [systemPrompt, 'Respond with a valid JSON object only. Do not include markdown fences or explanatory text.']
+				.filter(Boolean)
+				.join('\n\n');
+		} else if (request.responseFormat?.type === 'json_schema' && request.responseFormat.json_schema) {
+			systemPrompt = [
+				systemPrompt,
+				'Respond with valid JSON only. Do not include markdown fences or explanatory text.',
+				`JSON schema: ${JSON.stringify(request.responseFormat.json_schema.schema)}`,
+			].filter(Boolean).join('\n\n');
+		}
+
+		if (systemPrompt) {
+			body.system = systemPrompt;
 		}
 
 		const response = await this.makeRequest(url, body) as { json: {
@@ -105,8 +118,21 @@ export class AnthropicProvider extends BaseStreamingProvider {
 			stream: true,
 		};
 
-		if (system) {
-			body.system = system;
+		let systemPrompt = system;
+		if (request.responseFormat?.type === 'json_object') {
+			systemPrompt = [systemPrompt, 'Respond with a valid JSON object only. Do not include markdown fences or explanatory text.']
+				.filter(Boolean)
+				.join('\n\n');
+		} else if (request.responseFormat?.type === 'json_schema' && request.responseFormat.json_schema) {
+			systemPrompt = [
+				systemPrompt,
+				'Respond with valid JSON only. Do not include markdown fences or explanatory text.',
+				`JSON schema: ${JSON.stringify(request.responseFormat.json_schema.schema)}`,
+			].filter(Boolean).join('\n\n');
+		}
+
+		if (systemPrompt) {
+			body.system = systemPrompt;
 		}
 
 		return { url, body };

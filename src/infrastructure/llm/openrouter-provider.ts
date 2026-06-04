@@ -25,13 +25,17 @@ export class OpenRouterProvider extends BaseStreamingProvider {
 		const url = this.getBaseUrl('https://openrouter.ai/api/v1') + '/chat/completions';
 		const modelName = this.extractModelName(request.model);
 
-		const body = {
+		const body: Record<string, unknown> = {
 			model: modelName,
 			messages: request.messages,
 			temperature: request.temperature ?? 0.7,
 			max_tokens: request.maxTokens ?? 2000,
 			stream: false,
 		};
+
+		if (request.responseFormat !== undefined) {
+			body.response_format = request.responseFormat;
+		}
 
 		const response = await this.makeRequest(url, body) as {
 			json: {
@@ -62,6 +66,10 @@ export class OpenRouterProvider extends BaseStreamingProvider {
 			max_tokens: request.maxTokens ?? 2000,
 			stream: true,
 		};
+
+		if (request.responseFormat !== undefined) {
+			body.response_format = request.responseFormat;
+		}
 
 		if (request.tools && request.tools.length > 0) {
 			body.tools = request.tools;

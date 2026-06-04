@@ -110,8 +110,8 @@ describe('ChatViewState', () => {
 			expect(state.maxTokens).toBe(2000);
 		});
 
-		it('should initialize with chat mode', () => {
-			expect(state.mode).toBe('chat');
+		it('should initialize with agent mode', () => {
+			expect(state.mode).toBe('agent');
 		});
 
 		it('should switch to agent mode', () => {
@@ -293,7 +293,7 @@ describe('ChatViewState', () => {
 			expect(state.currentConversationId).toBeNull();
 			expect(state.temperature).toBe(0.7);
 			expect(state.maxTokens).toBe(4000);
-			expect(state.mode).toBe('chat');
+			expect(state.mode).toBe('agent');
 			expect(state.enableRAG).toBe(false);
 			expect(state.enableWebSearch).toBe(false);
 			expect(state.conversationListVisible).toBe(false);

@@ -60,6 +60,14 @@ export interface AgentLoopOptions {
 	agents?: Agent[];
 	isGenericAgent?: boolean;
 	references?: FileReference[];
+	/**
+	 * Structured signal that this task is expected to produce a vault write
+	 * proposal (create_note / write_file). When set, the planner uses it instead
+	 * of language-dependent prompt string matching to decide whether to force a
+	 * write-proposal tool call when the model ends a turn without one.
+	 * Leave undefined to fall back to marker detection (legacy behaviour).
+	 */
+	expectsWriteProposal?: boolean;
 }
 
 export type ToolResultEntry = { role: 'tool'; content: string; tool_call_id: string };

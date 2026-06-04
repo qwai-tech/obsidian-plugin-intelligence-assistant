@@ -677,11 +677,11 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 					label: t('settings.rag.grading.minRelevance.name'),
 					description: t('settings.rag.grading.minRelevance.desc')
 				}).addText(text => text
-						.setPlaceholder('0.5')
-						.setValue(plugin.settings.ragConfig.minRelevanceScore?.toString() || '0.5')
+						.setPlaceholder('5')
+						.setValue(plugin.settings.ragConfig.minRelevanceScore?.toString() || '5')
 						.onChange(async (value) => {
 							const num = parseFloat(value);
-							if (!isNaN(num) && num >= 0 && num <= 1) {
+							if (!isNaN(num) && num >= 0 && num <= 10) {
 								plugin.settings.ragConfig.minRelevanceScore = num;
 								await plugin.saveSettings();
 							}
@@ -694,11 +694,11 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 					label: t('settings.rag.grading.minAccuracy.name'),
 					description: t('settings.rag.grading.minAccuracy.desc')
 				}).addText(text => text
-						.setPlaceholder('0.5')
-						.setValue(plugin.settings.ragConfig.minAccuracyScore?.toString() || '0.5')
+						.setPlaceholder('7')
+						.setValue(plugin.settings.ragConfig.minAccuracyScore?.toString() || '7')
 						.onChange(async (value) => {
 							const num = parseFloat(value);
-							if (!isNaN(num) && num >= 0 && num <= 1) {
+							if (!isNaN(num) && num >= 0 && num <= 10) {
 								plugin.settings.ragConfig.minAccuracyScore = num;
 								await plugin.saveSettings();
 							}
@@ -711,11 +711,11 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 					label: t('settings.rag.grading.minSupport.name'),
 					description: t('settings.rag.grading.minSupport.desc')
 				}).addText(text => text
-						.setPlaceholder('0.5')
-						.setValue(plugin.settings.ragConfig.minSupportQualityScore?.toString() || '0.5')
+						.setPlaceholder('6')
+						.setValue(plugin.settings.ragConfig.minSupportQualityScore?.toString() || '6')
 						.onChange(async (value) => {
 							const num = parseFloat(value);
-							if (!isNaN(num) && num >= 0 && num <= 1) {
+							if (!isNaN(num) && num >= 0 && num <= 10) {
 								plugin.settings.ragConfig.minSupportQualityScore = num;
 								await plugin.saveSettings();
 							}

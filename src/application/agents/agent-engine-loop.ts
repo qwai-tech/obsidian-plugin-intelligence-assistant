@@ -150,7 +150,7 @@ export class AgentEngineLoop {
 			});
 
 			// Phase B2: Memory Consolidation Reflection
-			if (activeAgent?.id && this.deps.recordUsage) {
+			if (activeAgent?.id && this.deps.senseService.memoryService) {
 				void this.consolidateMemory(activeAgent.id, messages, finalContent, options);
 			}
 			} catch (error) {
@@ -182,14 +182,14 @@ ${history.slice(-4).map(m => `${m.role}: ${m.content}`).join('\n')}
 assistant: ${finalOutput}
 `.trim();
 
-			let reflectionResponse = '';
-			await providerBundle.provider.streamChat({
+			const response = await providerBundle.provider.chat({
 				model: options.model,
 				messages: [{ role: 'user', content: reflectionPrompt }],
 				temperature: 0.1,
-			}, (chunk) => {
-				if (chunk.content) reflectionResponse += chunk.content;
+				maxTokens: 1000,
+				responseFormat: { type: 'json_object' },
 			});
+			const reflectionResponse = response.content;
 
 			// Simple JSON extraction from response (it might be wrapped in markdown)
 			const jsonMatch = reflectionResponse.match(/\{[\s\S]*\}/);

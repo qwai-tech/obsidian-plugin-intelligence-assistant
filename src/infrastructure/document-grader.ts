@@ -64,8 +64,22 @@ export class DocumentGrader {
         ],
         model: graderModel,
         temperature: 0.3,
-        maxTokens: 500
+        maxTokens: 2000,
+        responseFormat: { type: 'json_object' }
       });
+
+      if (!response.content?.trim()) {
+        console.warn('[DocumentGrader] Grader model returned empty response; using neutral fallback grade');
+        return {
+          relevance: 5,
+          accuracy: 5,
+          supportQuality: 5,
+          shouldUse: true,
+          explanation: 'Grader model returned empty response; using neutral fallback grade',
+          chunkId: request.chunkId,
+          documentPath: request.document.path
+        };
+      }
 
       const gradeResult = this.parseResponse(response.content);
       const grade = this.createGrade(gradeResult, request);
@@ -240,7 +254,7 @@ Respond with a JSON object in this exact format:
         if (defaultModel?.trim()) {
           return defaultModel.trim();
         }
-        return await this.getFirstAvailableReasoningModel();
+        return await this.getFirstAvailableGraderModel();
       }
 
       case 'default': {
@@ -249,10 +263,11 @@ Respond with a JSON object in this exact format:
           return defaultModel.trim();
         }
         console.warn('[DocumentGrader] No default model configured in settings');
-        return await this.getFirstAvailableReasoningModel();
+        return await this.getFirstAvailableGraderModel();
       }
 
-      case 'specific': {
+      case 'specific':
+      case 'custom': {
         if (this.config.graderModel?.trim()) {
           try {
             const availableModels = await ModelManager.getAllAvailableModels(this.llmConfigs);
@@ -263,11 +278,11 @@ Respond with a JSON object in this exact format:
             }
             console.warn('[DocumentGrader] Configured grader model not found:', this.config.graderModel);
             if (defaultModel?.trim()) return defaultModel.trim();
-            return await this.getFirstAvailableReasoningModel();
+            return await this.getFirstAvailableGraderModel();
           } catch (error) {
             console.error('[DocumentGrader] Error validating configured grader model:', error);
             if (defaultModel?.trim()) return defaultModel.trim();
-            return await this.getFirstAvailableReasoningModel();
+            return await this.getFirstAvailableGraderModel();
           }
         } else {
           console.warn('[DocumentGrader] Specific model source selected but no model configured');
@@ -275,7 +290,7 @@ Respond with a JSON object in this exact format:
             console.debug('[DocumentGrader] Using default model as fallback:', defaultModel);
             return defaultModel.trim();
           }
-          return await this.getFirstAvailableReasoningModel();
+          return await this.getFirstAvailableGraderModel();
         }
       }
 
@@ -285,28 +300,45 @@ Respond with a JSON object in this exact format:
           console.debug('[DocumentGrader] Using default model for unknown source:', defaultModel);
           return defaultModel.trim();
         }
-        return await this.getFirstAvailableReasoningModel();
+        return await this.getFirstAvailableGraderModel();
       }
     }
   }
 
-  // Helper method to get the first available reasoning model as a fallback
-  private async getFirstAvailableReasoningModel(): Promise<string | null> {
+  // Helper method to get the first available model suitable for short JSON grading.
+  private async getFirstAvailableGraderModel(): Promise<string | null> {
     try {
       const allModels = await ModelManager.getAllAvailableModels(this.llmConfigs);
+
+      // Prefer non-reasoning JSON chat models. Reasoning models can spend small
+      // completion budgets internally and return empty content for this task.
+      const jsonChatModel = allModels.find(m =>
+        m.enabled !== false &&
+        m.capabilities?.includes('chat') &&
+        m.capabilities?.includes('json_mode') &&
+        !m.capabilities?.includes('reasoning')
+      );
+      if (jsonChatModel) {
+        console.debug('[DocumentGrader] Using first available JSON chat model:', jsonChatModel.id);
+        return jsonChatModel.id;
+      }
       
-      // Look for reasoning-capable models first
+      // Fallback to any non-reasoning chat model.
+      const chatModel = allModels.find(m =>
+        m.enabled !== false &&
+        m.capabilities?.includes('chat') &&
+        !m.capabilities?.includes('reasoning')
+      );
+      if (chatModel) {
+        console.debug('[DocumentGrader] Using first available chat model:', chatModel.id);
+        return chatModel.id;
+      }
+
+      // Reasoning models are a last resort for grading.
       const reasoningGraderModel = allModels.find(m => m.capabilities?.includes('reasoning') && m.enabled !== false);
       if (reasoningGraderModel) {
         console.debug('[DocumentGrader] Using first available reasoning model:', reasoningGraderModel.id);
         return reasoningGraderModel.id;
-      }
-      
-      // Fallback to chat models
-      const chatModel = allModels.find(m => m.capabilities?.includes('chat') && m.enabled !== false);
-      if (chatModel) {
-        console.debug('[DocumentGrader] Using first available chat model:', chatModel.id);
-        return chatModel.id;
       }
       
       // Last resort: use any available model

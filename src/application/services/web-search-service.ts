@@ -372,8 +372,7 @@ export class WebSearchService {
 			return this.applyDomainFilters(results);
 		} catch (error) {
 			console.error('[WebSearch] Error:', error);
-			// Return mock results for demonstration when actual search fails
-			return this.getMockResults(userInput);
+			return [];
 		}
 	}
 
@@ -895,20 +894,6 @@ export class WebSearchService {
 			.replace(/&gt;/g, '>')
 			.replace(/&quot;/g, '"')
 			.replace(/&#39;/g, "'");
-	}
-
-	/**
-	 * Get mock results for demonstration when actual search fails
-	 */
-	private getMockResults(originalQuery: string): WebSearchResult[] {
-		return [
-			{
-				title: `Search results for "${originalQuery}"`,
-				url: `https://google.com/?q=${encodeURIComponent(originalQuery)}`,
-				snippet: 'Web search is enabled but results could not be fetched. This is a placeholder result. Click to open Google search.',
-				source: 'google.com'
-			}
-		];
 	}
 
 	private applyDomainFilters(results: WebSearchResult[]): WebSearchResult[] {

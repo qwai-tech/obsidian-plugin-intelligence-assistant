@@ -211,6 +211,15 @@ export class ProviderKernelPlanner implements Planner {
 	}
 
 	private requiresWriteProposal(context: AgentContext): boolean {
+		// Prefer the structured, language-independent signal when the caller set it.
+		// This avoids depending on specific English phrases appearing in the prompt,
+		// which breaks for localized or rephrased instructions.
+		const explicit = this.plannerOptions.options.expectsWriteProposal;
+		if (explicit !== undefined) {
+			return explicit;
+		}
+
+		// Fallback: legacy marker detection over the task input and user/system prompts.
 		const haystack = [
 			context.task.input,
 			...this.workingMessages

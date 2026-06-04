@@ -146,7 +146,7 @@ Files updated:
   - package.json (version field)
 
 Note:
-  This tool automatically commits the changes if git is available.
+  This tool updates version files only; commit the changes separately.
         `);
     }
 }

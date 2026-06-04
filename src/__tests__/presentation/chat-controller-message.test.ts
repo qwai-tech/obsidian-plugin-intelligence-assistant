@@ -85,6 +85,7 @@ describe('ChatController (upgraded message pipeline)', () => {
 
 	beforeEach(() => {
 		state = new ChatViewState();
+		state.mode = 'chat';
 		const plugin = makePlugin();
 		controller = new ChatController({} as any, plugin, state);
 		controller.configure(makeDefaultOptions(makeChatService()));
@@ -113,6 +114,33 @@ describe('ChatController (upgraded message pipeline)', () => {
 		await controller.sendMessage('hello world');
 		expect(state.messages.some(m => m.role === 'user' && m.content === 'hello world')).toBe(true);
 		expect(chatService.streamResponse).toHaveBeenCalledTimes(1);
+	});
+
+	it('preserves attachments on the user message sent to the provider pipeline', async () => {
+		const chatService = makeChatService();
+		controller.configure(makeOptions(chatService));
+		state.currentAttachments = [{
+			type: 'image',
+			name: 'diagram.png',
+			path: 'diagram.png',
+			content: 'data:image/png;base64,abc',
+		} as any];
+
+		await controller.sendMessage('describe this image');
+
+		const userMessage = state.messages.find(m => m.role === 'user' && m.content === 'describe this image');
+		expect(userMessage?.attachments).toEqual([
+			expect.objectContaining({ name: 'diagram.png', type: 'image' }),
+		]);
+		expect(chatService.prepareLlmMessages).toHaveBeenCalledWith(
+			expect.any(Array),
+			expect.objectContaining({
+				content: 'describe this image',
+				attachments: [expect.objectContaining({ name: 'diagram.png', type: 'image' })],
+			}),
+			expect.any(String),
+			expect.any(Number),
+		);
 	});
 
 	it('calls executeAgentLoop in agent mode', async () => {

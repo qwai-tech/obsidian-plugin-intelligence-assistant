@@ -398,4 +398,73 @@ describe('AgentEngineLoop', () => {
 			'task_completed',
 		]));
 	});
+
+	it('uses structured non-streaming JSON for memory consolidation', async () => {
+		const provider = {
+			streamChat: jest.fn(async (_request, onChunk) => {
+				onChunk({ content: 'remember this answer' });
+			}),
+			chat: jest.fn(async () => ({
+				content: JSON.stringify({
+					preferences: { tone: 'concise' },
+					newResearchEntries: ['Finding A'],
+				}),
+			})),
+		};
+		const memoryService = {
+			getSnapshot: jest.fn(async () => ({
+				agentId: 'agent-1',
+				workingNotes: [],
+				researchLog: '',
+				preferences: {},
+				updatedAt: Date.now(),
+			})),
+			setPreference: jest.fn(async () => undefined),
+			appendResearchLog: jest.fn(async () => undefined),
+		};
+		const senseService = {
+			memoryService,
+			sense: jest.fn(async () => ({ userQuery: 'remember', activeFilePath: null, references: [], sections: [], ragSources: [], memory: null })),
+			formatSenseContext: jest.fn(() => 'sense context'),
+		};
+		const ragManager = { indexMemory: jest.fn(async () => undefined) };
+		const loop = new AgentEngineLoop({
+			toolRegistry: {
+				resolveForAgent: jest.fn(() => []),
+				toOpenAIFunctions: jest.fn(() => []),
+				executeTool: jest.fn(),
+			} as any,
+			senseService: senseService as any,
+			historyCompactor: new HistoryCompactor(),
+			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
+			ragManager: ragManager as any,
+			agentRunStateStore: createAgentRunStateStore(),
+			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
+			recordUsage: jest.fn(async () => undefined),
+		});
+
+		await loop.execute(
+			[{ role: 'user', content: 'remember' }],
+			{ model: 'gpt-4o', mode: 'agent', agentId: 'agent-1', agents: [{ id: 'agent-1', maxSteps: 2, contextWindow: 20, toolAccess: { sources: {} } } as any] },
+			{
+				onChunk: jest.fn(),
+				onToolCall: jest.fn(),
+				onToolResult: jest.fn(),
+				onThought: jest.fn(),
+				onComplete: jest.fn(),
+				onError: error => { throw error; },
+			},
+		);
+		await Promise.resolve();
+		await Promise.resolve();
+
+		expect(provider.chat).toHaveBeenCalledWith(expect.objectContaining({
+			model: 'gpt-4o',
+			responseFormat: { type: 'json_object' },
+		}));
+		expect(provider.streamChat).toHaveBeenCalledTimes(1);
+		expect(memoryService.setPreference).toHaveBeenCalledWith('agent-1', 'tone', 'concise');
+		expect(memoryService.appendResearchLog).toHaveBeenCalledWith('agent-1', 'Finding A');
+		expect(ragManager.indexMemory).toHaveBeenCalledWith('agent-1', 'Finding A');
+	});
 });

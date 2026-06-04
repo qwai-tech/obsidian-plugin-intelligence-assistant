@@ -225,7 +225,7 @@ describe('renderMessage', () => {
 				],
 			};
 
-			const messageEl = renderMessage(container, message, mockContext);
+			const messageEl = renderMessage(container, message, { ...mockContext, mode: 'agent' });
 
 			expect(messageEl.textContent).toContain('Sense');
 			expect(messageEl.textContent).toContain('Act');

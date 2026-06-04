@@ -14,7 +14,6 @@ import type {
 import { IFileSystem } from '@/core/interfaces';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { ModelManager } from '@/infrastructure/llm/model-manager';
-import type { ToolRegistry } from '@/application/tools/tool-registry';
 import type { RAGManager } from '@/infrastructure/rag-manager';
 import type { WebSearchService } from './web-search-service';
 import type { StreamChunk } from '@/types/common/llm';
@@ -54,7 +53,6 @@ export function deduplicateMessages(messages: Message[]): Message[] {
 export class ChatService {
 	constructor(
 		private fileSystem: IFileSystem,
-		private toolRegistry: ToolRegistry,
 		private ragManager: RAGManager,
 		private webSearchService: WebSearchService,
 		private llmConfigs: LLMConfig[],
@@ -175,19 +173,11 @@ export class ChatService {
 			const systemMessages: Message[] = [...(options.activeSystemPrompts || [])];
 			const userQuery = messages[messages.length - 1]?.content || '';
 
-			// 1. Agent Mode: Tools system prompt
-			if (options.mode === 'agent') {
-				const toolsList = this.toolRegistry.getTools().map(t =>
-					`- ${t.llmName}: ${t.definition.description}`
-				).join('\n');
+			// Note: streamResponse only ever runs in 'chat' mode. Agent mode is
+			// routed to executeAgentLoop() by the controller before reaching here,
+			// so there is no tool-calling system prompt to inject in this path.
 
-				systemMessages.push({
-					role: 'system',
-					content: `You are an AI agent with access to tools.\n\nAvailable tools:\n${toolsList}\n\nTo call a tool, use JSON block format.`
-				});
-			}
-
-			// 2. Handle RAG
+			// Handle RAG
 			let ragSources: RAGSource[] = [];
 			if (options.enableRAG) {
 				const searchResults = await this.ragManager.query(userQuery, selectedModel, this.defaultModel);

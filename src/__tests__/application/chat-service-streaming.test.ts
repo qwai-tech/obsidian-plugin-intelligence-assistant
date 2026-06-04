@@ -74,14 +74,13 @@ describe('ChatService agent delegation', () => {
 	it('delegates executeAgentLoop to AgentEngineLoop when one is configured', async () => {
 		const loop = { execute: jest.fn(async () => undefined) };
 		const service = new ChatService(
-			{} as any,
-			{} as any,
-			{} as any,
-			{} as any,
-			[],
-			undefined,
-			'gpt-4o',
-			loop as any,
+			{} as any, // fileSystem
+			{} as any, // ragManager
+			{} as any, // webSearchService
+			[], // llmConfigs
+			undefined, // usageRepo
+			'gpt-4o', // defaultModel
+			loop as any, // agentEngineLoop
 		);
 		const callbacks = {
 			onChunk: jest.fn(),

@@ -32,6 +32,14 @@ export class VectorStore {
 	private app: App;
 	private dataPath = VECTOR_STORE_NOTES_PATH;
 	private llmConfigs?: LLMConfig[];
+	/**
+	 * Cache of each chunk's embedding vector L2 norm, keyed by chunk id.
+	 * Chunk embeddings never change once created (re-indexing pushes new ids
+	 * or clears the cache), so the norm can be computed once and reused across
+	 * queries instead of recomputing sqrt(sum(v^2)) for every chunk per search.
+	 * Invalidated wholesale on load/clear/addFile/addContent.
+	 */
+	private chunkNorms = new Map<string, number>();
 
   constructor(app: App, llmConfigs?: LLMConfig[]) {
     this.app = app;
@@ -39,6 +47,7 @@ export class VectorStore {
   }
 
 	async load(): Promise<void> {
+		this.chunkNorms.clear();
 		await this.ensureDataFolder();
 		try {
 			const data = await this.app.vault.adapter.read(this.dataPath);
@@ -93,6 +102,8 @@ export class VectorStore {
 	}
 
   async addFile(file: TFile, config: RAGConfig): Promise<void> {
+    // Embeddings (and therefore norms) are about to change; drop the norm cache.
+    this.chunkNorms.clear();
     // Read file content
     const content = await this.app.vault.read(file);
     
@@ -102,15 +113,11 @@ export class VectorStore {
     // Remove existing _chunks for this file
     this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(`${file.path ?? 'unknown'}-`));
 
-    // Process _chunks in batches to avoid blocking the UI
-    const processBatches = async (): Promise<void> => {
-      const batchSize = 10; // Process 10 _chunks at a time
-      let currentIndex = 0;
+    const batchSize = 10; // Process 10 _chunks at a time
+    for (let currentIndex = 0; currentIndex < _chunks.length; currentIndex += batchSize) {
+      const batchEnd = Math.min(currentIndex + batchSize, _chunks.length);
 
-      const processChunkBatch = async () => {
-        const batchEnd = Math.min(currentIndex + batchSize, _chunks.length);
-
-        for (let i = currentIndex; i < batchEnd; i++) {
+      for (let i = currentIndex; i < batchEnd; i++) {
           const chunkId = `${file.path}-${String(i)}`;
 
           // Generate embedding for the chunk content
@@ -147,26 +154,19 @@ export class VectorStore {
           };
 
           this._chunks.push(chunk);
-          currentIndex++;
-        }
+      }
 
-        if (currentIndex < _chunks.length) {
-          // Schedule next batch after a short delay to allow UI to update
-          activeWindow.setTimeout(() => void processChunkBatch(), 1); // 1ms delay allows UI to remain responsive
-        } else {
-          // All _chunks processed, save to persistent storage
-          await this.save();
-        }
-      };
+      if (batchEnd < _chunks.length) {
+        await this.yieldToUi(1);
+      }
+    }
 
-      // Start the first batch
-      await processChunkBatch();
-    };
-
-    return processBatches();
+    await this.save();
   }
 
   async addContent(content: string, metadata: unknown, config: RAGConfig): Promise<void> {
+    // Embeddings (and therefore norms) are about to change; drop the norm cache.
+    this.chunkNorms.clear();
     // Split content into _chunks
     const _chunks = this.chunkContent(content, config);
 
@@ -175,15 +175,11 @@ export class VectorStore {
       this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(`${(metadata as { id?: string }).id ?? ''}-`));
     }
 
-    // Process _chunks in batches to avoid blocking the UI
-    const processBatches = async (): Promise<void> => {
-      const batchSize = 10; // Process 10 _chunks at a time
-      let currentIndex = 0;
+    const batchSize = 10; // Process 10 _chunks at a time
+    for (let currentIndex = 0; currentIndex < _chunks.length; currentIndex += batchSize) {
+      const batchEnd = Math.min(currentIndex + batchSize, _chunks.length);
 
-      const processChunkBatch = async () => {
-        const batchEnd = Math.min(currentIndex + batchSize, _chunks.length);
-
-        for (let i = currentIndex; i < batchEnd; i++) {
+      for (let i = currentIndex; i < batchEnd; i++) {
           const chunkId = `${(metadata as { id?: string }).id ?? 'content'}-${String(i)}`;
 
           // Generate embedding for the chunk content
@@ -218,23 +214,19 @@ export class VectorStore {
           };
 
           this._chunks.push(chunk);
-          currentIndex++;
-        }
+      }
 
-        if (currentIndex < _chunks.length) {
-          // Schedule next batch after a short delay to allow UI to update
-          activeWindow.setTimeout(() => void processChunkBatch(), 1); // 1ms delay allows UI to remain responsive
-        } else {
-          // All _chunks processed, save to persistent storage
-          await this.save();
-        }
-      };
+      if (batchEnd < _chunks.length) {
+        await this.yieldToUi(1);
+      }
+    }
 
-      // Start the first batch
-      await processChunkBatch();
-    };
+    await this.save();
+  }
 
-    return processBatches();
+  private async yieldToUi(delayMs: number): Promise<void> {
+    const timerHost = typeof activeWindow !== 'undefined' ? activeWindow : globalThis;
+    await new Promise<void>(resolve => timerHost.setTimeout(resolve, delayMs));
   }
 
   async search(query: string, config: RAGConfig, embeddingModel?: string): Promise<SearchResult[]> {
@@ -252,18 +244,27 @@ export class VectorStore {
       return this.simpleSearch(query, config);
     }
 
+    // Precompute the query norm once; chunk norms are cached across queries.
+    const queryNorm = Math.sqrt(queryEmbedding.reduce((sum, value) => sum + value * value, 0));
+
     // Calculate similarity with all _chunks
+    let unembeddedCount = 0;
     let similarities: SearchResult[] = this._chunks.map(chunk => {
       const chunkEmbedding = chunk.embedding;
 
       if (!chunkEmbedding) {
-        // If chunk doesn't have embedding, generate it on-demand
+        // This chunk has no embedding (both embedding attempts failed at index
+        // time, e.g. no embedding model configured or a transient provider
+        // error). It cannot be scored semantically, so it ranks last with 0
+        // similarity and is dropped by any positive similarityThreshold.
+        // Re-indexing the file restores its embedding.
+        unembeddedCount++;
         return { chunk, similarity: 0 };
       }
 
-      // Calculate content similarity
-      const contentSimilarity = this.cosineSimilarity(queryEmbedding, chunkEmbedding);
-      
+      // Calculate content similarity (reuses cached chunk norm).
+      const contentSimilarity = this.cosineSimilarityCached(queryEmbedding, queryNorm, chunk);
+
       // Calculate path/title similarity for boosting
       const lowerPath = chunk.metadata.path.toLowerCase();
       const lowerTitle = (chunk.metadata.title || '').toLowerCase();
@@ -286,6 +287,13 @@ export class VectorStore {
 
       return { chunk, similarity: finalSimilarity };
     });
+
+    if (unembeddedCount > 0) {
+      console.warn(
+        `[VectorStore] ${unembeddedCount}/${this._chunks.length} chunks have no embedding and were scored 0 ` +
+        '(semantic recall degraded). Re-index the affected files to restore them.'
+      );
+    }
 
     console.debug('[VectorStore] Calculated similarities for', similarities.length, '_chunks');
     console.debug('[VectorStore] Similarity threshold:', config.similarityThreshold);
@@ -697,6 +705,40 @@ export class VectorStore {
     return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
   }
 
+  /**
+   * Cosine similarity between a query vector (norm precomputed once by the
+   * caller) and a chunk's embedding (norm cached across queries). Equivalent to
+   * {@link cosineSimilarity} but avoids recomputing the chunk's norm on every
+   * search over a stable index.
+   */
+  private cosineSimilarityCached(query: number[], queryNorm: number, chunk: DocumentChunk): number {
+    const vec = chunk.embedding;
+    if (!vec || vec.length !== query.length) {
+      return 0;
+    }
+
+    let chunkNorm = this.chunkNorms.get(chunk.id);
+    if (chunkNorm === undefined) {
+      let sumSquares = 0;
+      for (let i = 0; i < vec.length; i++) {
+        sumSquares += vec[i] ** 2;
+      }
+      chunkNorm = Math.sqrt(sumSquares);
+      this.chunkNorms.set(chunk.id, chunkNorm);
+    }
+
+    if (queryNorm === 0 || chunkNorm === 0) {
+      return 0;
+    }
+
+    let dotProduct = 0;
+    for (let i = 0; i < vec.length; i++) {
+      dotProduct += query[i] * vec[i];
+    }
+
+    return dotProduct / (queryNorm * chunkNorm);
+  }
+
   private async simpleSearch(query: string, config: RAGConfig): Promise<SearchResult[]> {
     // Simple keyword-based search as fallback - enhanced to include path and filename
     let results: SearchResult[] = this._chunks.map(chunk => {
@@ -779,6 +821,7 @@ export class VectorStore {
 
   clear(): void {
     this._chunks = [];
+    this.chunkNorms.clear();
     this.save(true).catch(error => console.error('Failed to persist cleared vector store', error));
   }
 
@@ -795,16 +838,19 @@ export class VectorStore {
     fileCount: number;
     totalSize: number;
     indexedFiles: string[];
+    unembeddedChunkCount: number;
   } {
     const _chunks = this.getStoredChunks();
     const indexedFiles = [...new Set(_chunks.map(chunk => chunk.metadata.path))];
     const totalSize = _chunks.reduce((sum, chunk) => sum + chunk.content.length, 0);
+    const unembeddedChunkCount = _chunks.reduce((count, chunk) => count + (chunk.embedding ? 0 : 1), 0);
 
     return {
       chunkCount: _chunks.length,
       fileCount: indexedFiles.length,
       totalSize,
       indexedFiles,
+      unembeddedChunkCount,
     };
   }
 }
