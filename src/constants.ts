@@ -84,7 +84,11 @@ export const DEFAULT_MEMORY_CONFIG = {
 	MAX_MEMORIES: 50,
 } as const;
 
+/** Fallback step budget when the agent does not declare an estimate. */
 export const DEFAULT_MAX_STEPS = 25;
+
+/** Hard ceiling on agent steps — a runaway/cost backstop the agent can never exceed. */
+export const MAX_STEPS_CEILING = 50;
 
 // UI Constants
 export const UI_CONSTANTS = {

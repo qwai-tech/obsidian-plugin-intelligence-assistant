@@ -1,5 +1,5 @@
 import type { Message, RAGSource, WebSearchResult, Agent as AppAgent } from '@/types';
-import { DEFAULT_MAX_STEPS } from '@/constants';
+import { DEFAULT_MAX_STEPS, MAX_STEPS_CEILING } from '@/constants';
 import type { ToolRegistry as AppToolRegistry } from '@/application/tools/tool-registry';
 import type { WebSearchService } from '@/application/services/web-search-service';
 import type { RAGManager } from '@/infrastructure/rag-manager';
@@ -53,7 +53,11 @@ export class AgentEngineLoop {
 
 			const activeAgent = this.getActiveAgent(options);
 			const contextWindow = options.contextWindow ?? activeAgent?.contextWindow ?? 20;
-			const maxSteps = activeAgent?.maxSteps ?? DEFAULT_MAX_STEPS;
+			// Budget the agent estimates for itself on its first turn; the ceiling is the
+			// hard runaway/cost backstop it can never exceed. fallbackBudget applies until
+			// (and if) the agent declares an estimate.
+			const fallbackBudget = activeAgent?.maxSteps ?? DEFAULT_MAX_STEPS;
+			const stepCeiling = Math.max(MAX_STEPS_CEILING, fallbackBudget);
 			const userQuery = messages[messages.length - 1]?.content ?? '';
 			const sense = await this.deps.senseService.sense({
 				userQuery,
@@ -63,8 +67,6 @@ export class AgentEngineLoop {
 				agentId: activeAgent?.id,
 				references: options.references,
 			});
-
-			callbacks.onThought('Sensed active note, graph neighbors, references, RAG context, and memory.', 'sense');
 
 			const ragSources: RAGSource[] = [...sense.ragSources];
 			const webResults = await this.loadWebResults(userQuery, options);
@@ -91,6 +93,8 @@ export class AgentEngineLoop {
 				baseSystemMessages,
 				nativeTools,
 				contextWindow,
+				fallbackBudget,
+				maxBudgetCeiling: stepCeiling,
 			});
 			const kernelTools = createKernelToolRegistry(
 				this.deps.toolRegistry,
@@ -106,13 +110,13 @@ export class AgentEngineLoop {
 				toolRegistry: kernelTools,
 				stateStore: this.deps.agentRunStateStore,
 				policy: new BasicPolicy({
-					maxSteps,
+					maxSteps: stepCeiling,
 					maxFailures: MAX_CONSECUTIVE_FAILURES,
 					allowedTools: knownNativeTools.map(tool => tool.function.name),
 				}),
 			});
 			const result = await engine.run({
-				agent: this.toKernelAgent(activeAgent, options, resolvedTools, maxSteps),
+				agent: this.toKernelAgent(activeAgent, options, resolvedTools, stepCeiling),
 				task: this.toKernelTask(userQuery),
 				host: this.toKernelHost(options),
 			});
@@ -128,7 +132,7 @@ export class AgentEngineLoop {
 			}
 
 			if (result.status === 'stopped' && result.reason === 'max_steps_reached') {
-				callbacks.onThought(`Reached the agent step limit of ${maxSteps}.`, 'reflect');
+				callbacks.onThought(`Reached the agent step budget of ${planner.effectiveBudget}.`, 'reflect');
 			}
 
 			const finalContent = result.status === 'completed'
@@ -136,7 +140,7 @@ export class AgentEngineLoop {
 				: [
 					planner.lastContent.trim(),
 					result.status === 'stopped' && result.reason === 'max_steps_reached'
-						? `Reached the agent step limit of ${maxSteps}. Review the tool results above or increase this agent's max steps to continue.`
+						? `Reached the agent step budget of ${planner.effectiveBudget}. Review the tool results above, or ask me to continue / raise this agent's max steps.`
 						: '',
 				].filter(Boolean).join('\n\n');
 
@@ -257,6 +261,7 @@ assistant: ${finalOutput}
 			`You are ${agentName}.`,
 			'Run a Sense-Plan-Act-Reflect loop for Obsidian knowledge work.',
 			'In your first "Plan" phase for a complex task, start by providing a "Task Checklist" using markdown checkboxes (- [ ]). This helps the user understand your intended steps.',
+			'On your first turn, after the Task Checklist, output an HTML comment of the exact form `<!-- ESTIMATED_STEPS: N -->` where N is your realistic estimate of how many tool-using steps the whole task needs (e.g. roughly one or two steps per note you will create or edit). This sets your working step budget, so estimate generously enough to finish.',
 			'Use vault context before external context.',
 			'Never claim a vault write was applied unless the user approved a write proposal.',
 			'When your plan calls for creating or changing notes, you MUST call the matching tool (such as create_note or write_file) in that same turn so a write proposal is generated. Do NOT end your turn by only describing notes you intend to create — describing without calling the tool produces nothing for the user. If several notes are needed, create them one tool call per note across successive turns until the task is complete.',

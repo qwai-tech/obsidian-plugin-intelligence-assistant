@@ -41,6 +41,12 @@ const WRITE_PROPOSAL_MARKERS = [
 ];
 const WRITE_PROPOSAL_TOOL_PRIORITY = ['create_note', 'write_file', 'append_to_note'];
 
+/** Floor for an agent-estimated step budget, and the slack added to its estimate. */
+const MIN_ESTIMATED_BUDGET = 10;
+const ESTIMATE_BUFFER = 3;
+/** Matches the agent's first-turn budget marker, e.g. `<!-- ESTIMATED_STEPS: 12 -->`. */
+const ESTIMATED_STEPS_RE = /<!--\s*ESTIMATED_STEPS:\s*(\d+)\s*-->/i;
+
 export interface ProviderKernelPlannerOptions {
 	messages: AgentWorkingMessage[];
 	options: AgentLoopOptions;
@@ -52,6 +58,10 @@ export interface ProviderKernelPlannerOptions {
 	baseSystemMessages: Message[];
 	nativeTools: NativeToolDefinition[];
 	contextWindow: number;
+	/** Step budget used until (and if) the agent declares its own estimate. */
+	fallbackBudget: number;
+	/** Hard ceiling the agent's estimate can never exceed. */
+	maxBudgetCeiling: number;
 }
 
 export class ProviderKernelPlanner implements Planner {
@@ -68,9 +78,18 @@ export class ProviderKernelPlanner implements Planner {
 	private pendingGroup: PendingToolGroup | null = null;
 	private actionSequence = 0;
 	private writeProposalRetryCount = 0;
+	/** Effective step budget: starts at the fallback, updated once from the agent's estimate. */
+	private softBudget: number;
+	private budgetEstimated = false;
 
 	constructor(private readonly plannerOptions: ProviderKernelPlannerOptions) {
 		this.workingMessages = [...plannerOptions.messages];
+		this.softBudget = plannerOptions.fallbackBudget;
+	}
+
+	/** The step budget currently in effect (agent estimate if declared, else fallback). */
+	get effectiveBudget(): number {
+		return this.softBudget;
 	}
 
 	async plan(context: AgentContext): Promise<Action> {
@@ -82,7 +101,7 @@ export class ProviderKernelPlanner implements Planner {
 			return this.stopAction(this.fatalStopReason);
 		}
 
-		if (context.budgets.remainingSteps <= 0) {
+		if (context.state.step >= this.softBudget) {
 			return this.stopAction('max_steps_reached');
 		}
 
@@ -95,7 +114,6 @@ export class ProviderKernelPlanner implements Planner {
 		let forceWriteProposalTool = false;
 
 		for (;;) {
-			this.plannerOptions.callbacks.onThought(`Planning step ${context.state.step + 1}.`, 'plan');
 			const request = this.buildChatRequest({ forceWriteProposalTool });
 			const pendingToolCalls: PendingToolCall[] = [];
 			const stepCapture: { usage: { promptTokens: number; completionTokens: number; totalTokens: number } | null } = { usage: null };
@@ -138,6 +156,11 @@ export class ProviderKernelPlanner implements Planner {
 						conversationId: this.plannerOptions.options.conversationId,
 					});
 				}
+			}
+
+			if (!this.budgetEstimated) {
+				this.applyEstimatedBudget();
+				this.budgetEstimated = true;
 			}
 
 			if (pendingToolCalls.length === 0) {
@@ -280,8 +303,29 @@ export class ProviderKernelPlanner implements Planner {
 				tool_call_id: toolCall.id,
 			});
 		}
-		this.plannerOptions.callbacks.onThought(`Reflected on ${this.pendingGroup.toolCalls.length} tool result(s).`, 'reflect');
 		this.pendingGroup = null;
+	}
+
+	/**
+	 * Parse the agent's first-turn `<!-- ESTIMATED_STEPS: N -->` marker and set the
+	 * working step budget to clamp(N + buffer, floor, ceiling). The marker is an
+	 * HTML comment so it stays invisible in rendered markdown; we also strip it
+	 * from lastContent so it never leaks into history or the final answer. If no
+	 * marker is present the fallback budget is kept.
+	 */
+	private applyEstimatedBudget(): void {
+		const match = this.lastContent.match(ESTIMATED_STEPS_RE);
+		if (!match) {
+			return;
+		}
+		const estimate = parseInt(match[1], 10);
+		if (Number.isFinite(estimate) && estimate > 0) {
+			this.softBudget = Math.max(
+				MIN_ESTIMATED_BUDGET,
+				Math.min(estimate + ESTIMATE_BUFFER, this.plannerOptions.maxBudgetCeiling),
+			);
+		}
+		this.lastContent = this.lastContent.replace(new RegExp(ESTIMATED_STEPS_RE.source, 'ig'), '').trimEnd();
 	}
 
 	private createAssistantWithCalls(
