@@ -39,7 +39,7 @@ export class OpenAIProvider extends BaseStreamingProvider {
 			if (msg.role !== 'user' || !msg.attachments?.some(a => a.type === 'image')) {
 				return msg;
 			}
-			const content: any[] = [{ type: 'text', text: msg.content }];
+			const content: Record<string, unknown>[] = [{ type: 'text', text: msg.content }];
 			for (const att of msg.attachments) {
 				if (att.type === 'image' && att.content) {
 					content.push({ type: 'image_url', image_url: { url: att.content } });
@@ -97,7 +97,7 @@ export class OpenAIProvider extends BaseStreamingProvider {
 				return msg;
 			}
 
-			const content: any[] = [{ type: 'text', text: msg.content }];
+			const content: Record<string, unknown>[] = [{ type: 'text', text: msg.content }];
 			for (const att of msg.attachments) {
 				if (att.type === 'image' && att.content) {
 					content.push({

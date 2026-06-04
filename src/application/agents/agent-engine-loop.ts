@@ -194,15 +194,22 @@ assistant: ${finalOutput}
 			// Simple JSON extraction from response (it might be wrapped in markdown)
 			const jsonMatch = reflectionResponse.match(/\{[\s\S]*\}/);
 			if (jsonMatch) {
-				const data = JSON.parse(jsonMatch[0]);
+				const data = JSON.parse(jsonMatch[0]) as {
+					preferences?: Record<string, unknown>;
+					newResearchEntries?: string[];
+				};
+				const writer = memoryService as unknown as {
+					setPreference(agentId: string, key: string, value: string): Promise<void>;
+					appendResearchLog(agentId: string, entry: string): Promise<void>;
+				};
 				if (data.preferences) {
 					for (const [key, value] of Object.entries(data.preferences)) {
-						await (memoryService as any).setPreference(agentId, key, String(value));
+						await writer.setPreference(agentId, key, String(value));
 					}
 				}
 				if (data.newResearchEntries) {
 					for (const entry of data.newResearchEntries) {
-						await (memoryService as any).appendResearchLog(agentId, entry);
+						await writer.appendResearchLog(agentId, entry);
 						// Index new memory entry in RAG
 						if (this.deps.ragManager) {
 							await this.deps.ragManager.indexMemory(agentId, entry);

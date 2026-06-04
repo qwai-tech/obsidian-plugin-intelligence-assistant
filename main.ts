@@ -206,7 +206,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			const lastVersion = this.settings.lastVersion || '0.0.0';
 
 			if (currentVersion !== lastVersion) {
-				const isChinese = (window as any).localStorage.getItem('language') === 'zh' || navigator.language.startsWith('zh');
+				const isChinese = window.localStorage.getItem('language') === 'zh' || navigator.language.startsWith('zh');
 				new ChangelogModal(this.app, currentVersion, isChinese).open();
 				this.settings.lastVersion = currentVersion;
 				await this.saveSettings();

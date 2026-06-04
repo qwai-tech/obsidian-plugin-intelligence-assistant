@@ -25,7 +25,7 @@ export class GoogleProvider extends BaseStreamingProvider {
 				return { role, parts: [{ text: msg.content }] };
 			}
 
-			const parts: any[] = [{ text: msg.content }];
+			const parts: Record<string, unknown>[] = [{ text: msg.content }];
 			for (const att of msg.attachments) {
 				if (att.type === 'image' && att.content) {
 					// att.content is "data:image/png;base64,..."

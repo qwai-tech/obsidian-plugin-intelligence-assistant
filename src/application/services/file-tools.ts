@@ -138,7 +138,7 @@ export class ListFilesTool implements Tool {
 		}),
 	});
 
-	async execute(args: Record<string, unknown>): Promise<ToolResult> {
+	execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const folderPath = args.folder as string || '';
 			const extension = args.extension as string;
@@ -161,15 +161,15 @@ export class ListFilesTool implements Tool {
 				extension: f.extension
 			}));
 
-			return {
+			return Promise.resolve({
 				success: true,
 				result: fileList
-			};
+			});
 		} catch (error) {
-			return {
+			return Promise.resolve({
 				success: false,
 				error: error instanceof Error ? error.message : String(error)
-			};
+			});
 		}
 	}
 }
@@ -211,7 +211,7 @@ export class UpdatePropertiesTool implements Tool {
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const path = args.path as string;
-			const updates = args.updates as Record<string, any>;
+			const updates = args.updates as Record<string, unknown>;
 			const deleteKeys = (args.deleteKeys as string[]) || [];
 			const file = this._app.vault.getAbstractFileByPath(path);
 
@@ -222,7 +222,7 @@ export class UpdatePropertiesTool implements Tool {
 			const content = await this._app.vault.read(file);
 			const metadata = this._app.metadataCache.getFileCache(file)?.frontmatter || {};
 			
-			const newMetadata = { ...metadata };
+			const newMetadata: Record<string, unknown> = { ...metadata };
 			// Apply updates
 			for (const [key, value] of Object.entries(updates)) {
 				newMetadata[key] = value;
@@ -238,11 +238,12 @@ export class UpdatePropertiesTool implements Tool {
 			let newFrontmatter = '---\n';
 			for (const [key, value] of Object.entries(newMetadata)) {
 				if (Array.isArray(value)) {
-					newFrontmatter += `${key}:\n${value.map(v => `  - ${v}`).join('\n')}\n`;
+					const items = (value as unknown[]).map(v => `  - ${String(v)}`).join('\n');
+					newFrontmatter += `${key}:\n${items}\n`;
 				} else if (typeof value === 'object' && value !== null) {
 					newFrontmatter += `${key}: ${JSON.stringify(value)}\n`;
 				} else {
-					newFrontmatter += `${key}: ${value}\n`;
+					newFrontmatter += `${key}: ${String(value)}\n`;
 				}
 			}
 			newFrontmatter += '---\n';

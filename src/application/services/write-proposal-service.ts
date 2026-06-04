@@ -109,7 +109,7 @@ export async function applyWriteProposal(app: App, proposal: WriteProposal | Bat
 		}
 		return;
 	}
-	await applySingleProposal(app, proposal as WriteProposal);
+	await applySingleProposal(app, proposal);
 }
 
 async function applySingleProposal(app: App, proposal: WriteProposal): Promise<void> {
@@ -125,7 +125,8 @@ async function applySingleProposal(app: App, proposal: WriteProposal): Promise<v
 	if (proposal.operation === 'delete') {
 		const file = app.vault.getAbstractFileByPath(proposal.path);
 		if (file) {
-			await app.vault.trash(file, true);
+			// Respect the user's deletion preference (system trash vs .trash vs permanent).
+			await app.fileManager.trashFile(file);
 		}
 		return;
 	}

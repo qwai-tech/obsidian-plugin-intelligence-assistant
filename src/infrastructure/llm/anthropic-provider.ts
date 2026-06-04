@@ -35,7 +35,7 @@ export class AnthropicProvider extends BaseStreamingProvider {
 					return { role: m.role, content: m.content };
 				}
 
-				const content: any[] = [{ type: 'text', text: m.content }];
+				const content: Record<string, unknown>[] = [{ type: 'text', text: m.content }];
 				for (const att of m.attachments) {
 					if (att.type === 'image' && att.content) {
 						// att.content is "data:image/png;base64,..."

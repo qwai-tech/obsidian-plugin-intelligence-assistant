@@ -31,13 +31,17 @@ export class AgentRepository {
 	async initialize(): Promise<void> {
 		if (this.initialized) return;
 		await ensureFolderExists(this._app.vault.adapter, this.baseFolder);
-		
+
 		const indexExists = await this._app.vault.adapter.exists(this.indexPath);
+		// Mark initialized BEFORE seeding. saveAll() re-enters initialize(); if the
+		// flag is only set afterwards the guard never trips and the two methods
+		// recurse infinitely on a fresh vault (no agents/index.json yet), which
+		// exhausts the heap. Setting it here makes the re-entrant call a no-op.
+		this.initialized = true;
 		if (!indexExists) {
 			// Auto-initialize with builtin presets
 			await this.saveAll(BUILTIN_AGENT_PRESETS, null);
 		}
-		this.initialized = true;
 	}
 
 	async loadAll(): Promise<{ agents: Agent[]; activeId: string | null }> {

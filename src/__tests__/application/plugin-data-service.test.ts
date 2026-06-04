@@ -58,12 +58,17 @@ describe('PluginDataService', () => {
 	});
 
 	describe('hydrateAll', () => {
-		it('returns empty result when repos are empty and settings have no data', async () => {
+		it('returns only seeded builtin agents when repos are otherwise empty and settings have no data', async () => {
 			const { app } = makeApp();
 			const svc = new PluginDataService(app);
 			await svc.initialize();
 			const result = await svc.hydrateAll(makeSettings());
-			expect(result).toEqual({});
+			// AgentRepository self-seeds builtin presets on init, so agents are
+			// always present; every other repo is genuinely empty here.
+			expect(result.agents?.length ?? 0).toBeGreaterThan(0);
+			expect(result.llmConfigs).toBeUndefined();
+			expect(result.systemPrompts).toBeUndefined();
+			expect(result.mcpServers).toBeUndefined();
 		});
 
 		it('saves settings llmConfigs to repo when repo is empty and settings has data', async () => {
