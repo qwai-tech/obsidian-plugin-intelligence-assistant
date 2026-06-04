@@ -1,5 +1,16 @@
+import { App } from 'obsidian';
 import type { Message, RAGSource, WebSearchResult, Agent as AppAgent } from '@/types';
 import { DEFAULT_MAX_STEPS, MAX_STEPS_CEILING } from '@/constants';
+
+/**
+ * Heuristic: did the user's message explicitly grant autonomous write authority
+ * for this run (e.g. "自主完成 / 不需要确认 / autonomously / without confirmation")?
+ * This is a convenience layer on top of the deterministic per-agent toggle.
+ */
+const AUTONOMY_INTENT_RE = /(自主完成|自动完成|自动应用|自动创建|不需要(我)?确认|不用确认|无需确认|直接(创建|写入|保存)|don['’]?t ask|without (your )?confirmation|no confirmation|autonomous(ly)?|auto[-\s]?apply|just (create|do it|save))/i;
+function detectAutonomyIntent(text: string): boolean {
+	return AUTONOMY_INTENT_RE.test(text ?? '');
+}
 import type { ToolRegistry as AppToolRegistry } from '@/application/tools/tool-registry';
 import type { WebSearchService } from '@/application/services/web-search-service';
 import type { RAGManager } from '@/infrastructure/rag-manager';
@@ -27,6 +38,7 @@ import type { AgentUsageRecorder } from './kernel/provider-kernel-planner';
 import { createKernelToolRegistry } from './kernel/kernel-tool-registry-adapter';
 
 interface AgentEngineLoopDeps {
+	app?: App;
 	toolRegistry: AppToolRegistry;
 	senseService: AgentSenseService;
 	historyCompactor: HistoryCompactor;
@@ -82,6 +94,8 @@ export class AgentEngineLoop {
 			const nativeTools = this.deps.toolRegistry.toOpenAIFunctions(resolvedTools);
 			const knownNativeTools = this.deps.toolRegistry.toOpenAIFunctions(allRegisteredTools);
 			const consecutiveFailures = new Map<string, number>();
+			// Autonomous writes: agent toggle OR an explicit per-task grant in the message.
+			const autoApplyWrites = Boolean(activeAgent?.autonomousWrite) || detectAutonomyIntent(userQuery);
 			const planner = new ProviderKernelPlanner({
 				messages: workingMessages,
 				options,
@@ -104,6 +118,8 @@ export class AgentEngineLoop {
 				consecutiveFailures,
 				callbacks,
 				planner,
+				autoApplyWrites,
+				this.deps.app,
 			);
 			const engine = createAgentEngine({
 				planner,

@@ -259,6 +259,16 @@ export class AgentEditModal extends Modal {
 					this.agent.webSearchEnabled = value;
 				}));
 
+		applyConfigFieldMetadata(new Setting(contentEl), {
+			path: 'agents[].autonomousWrite',
+			label: '自主写入 / Autonomous write',
+			description: '允许此 agent 直接应用写提案，跳过逐个 Apply 确认（删除操作仍需确认）。也可在消息中说"自主完成/不需要确认"按单次任务临时开启。'
+		}).addToggle(toggle => toggle
+				.setValue(this.agent.autonomousWrite ?? false)
+				.onChange(value => {
+					this.agent.autonomousWrite = value;
+				}));
+
 		// Memory settings placeholder (temporarily disabled)
 		contentEl.createEl('h3', { text: t('modals.agentEdit.memory.title') });
 		const memoryNotice = contentEl.createEl('p', {
@@ -274,7 +284,7 @@ export class AgentEditModal extends Modal {
 			label: t('modals.agentEdit.maxSteps.name'),
 			description: t('modals.agentEdit.maxSteps.desc')
 		}).addSlider(slider => slider
-				.setLimits(1, 20, 1)
+				.setLimits(1, 50, 1)
 				.setValue(this.agent.maxSteps)
 				.setDynamicTooltip()
 				.onChange(value => {

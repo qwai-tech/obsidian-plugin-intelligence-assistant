@@ -46,6 +46,13 @@ export interface Agent {
 	ragEnabled: boolean;
 	webSearchEnabled: boolean;
 	maxSteps: number;
+	/**
+	 * When true, this agent applies its write proposals to the vault directly
+	 * instead of producing Apply-gated cards. Default false (proposal-gated).
+	 * A per-task autonomy grant in the user's message can also enable it for a
+	 * single run. Destructive ops (delete) are never auto-applied.
+	 */
+	autonomousWrite?: boolean;
 	createdAt: number;
 	updatedAt: number;
 }

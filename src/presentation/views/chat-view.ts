@@ -110,6 +110,7 @@ export class ChatView extends ItemView {
 		const senseService = new AgentSenseService(this.app, this.ragManager, agentMemoryService);
 		const tokenUsageRepo = this.plugin.tokenUsageRepo;
 		const agentEngineLoop = new AgentEngineLoop({
+			app: this.app,
 			toolRegistry: this.plugin.getToolRegistry(),
 			senseService,
 			historyCompactor: new HistoryCompactor(),
