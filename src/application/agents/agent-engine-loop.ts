@@ -258,6 +258,7 @@ assistant: ${finalOutput}
 			'In your first "Plan" phase for a complex task, start by providing a "Task Checklist" using markdown checkboxes (- [ ]). This helps the user understand your intended steps.',
 			'Use vault context before external context.',
 			'Never claim a vault write was applied unless the user approved a write proposal.',
+			'When your plan calls for creating or changing notes, you MUST call the matching tool (such as create_note or write_file) in that same turn so a write proposal is generated. Do NOT end your turn by only describing notes you intend to create — describing without calling the tool produces nothing for the user. If several notes are needed, create them one tool call per note across successive turns until the task is complete.',
 			toolDescriptions ? `Available tools:\n${toolDescriptions}` : 'No tools are enabled for this agent.',
 		].join('\n\n');
 	}
