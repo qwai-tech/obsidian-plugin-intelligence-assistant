@@ -11,7 +11,7 @@ import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
 import { TestIds } from '@/presentation/utils/test-ids';
 import { AgentEditModal } from '../modals';
-import { DEFAULT_AGENT_ID } from '@/constants';
+import { DEFAULT_AGENT_ID, DEFAULT_MAX_STEPS } from '@/constants';
 
 export function displayAgentsTab(
 	containerEl: HTMLElement,
@@ -62,7 +62,7 @@ export function displayAgentsTab(
 			},
 			ragEnabled: false,
 			webSearchEnabled: false,
-			maxSteps: 10,
+			maxSteps: DEFAULT_MAX_STEPS,
 			createdAt: Date.now(),
 			updatedAt: Date.now()
 		};

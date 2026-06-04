@@ -1,4 +1,5 @@
 import type { Message, RAGSource, WebSearchResult, Agent as AppAgent } from '@/types';
+import { DEFAULT_MAX_STEPS } from '@/constants';
 import type { ToolRegistry as AppToolRegistry } from '@/application/tools/tool-registry';
 import type { WebSearchService } from '@/application/services/web-search-service';
 import type { RAGManager } from '@/infrastructure/rag-manager';
@@ -52,7 +53,7 @@ export class AgentEngineLoop {
 
 			const activeAgent = this.getActiveAgent(options);
 			const contextWindow = options.contextWindow ?? activeAgent?.contextWindow ?? 20;
-			const maxSteps = activeAgent?.maxSteps ?? 10;
+			const maxSteps = activeAgent?.maxSteps ?? DEFAULT_MAX_STEPS;
 			const userQuery = messages[messages.length - 1]?.content ?? '';
 			const sense = await this.deps.senseService.sense({
 				userQuery,

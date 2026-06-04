@@ -84,7 +84,7 @@ export const DEFAULT_MEMORY_CONFIG = {
 	MAX_MEMORIES: 50,
 } as const;
 
-export const DEFAULT_MAX_STEPS = 10;
+export const DEFAULT_MAX_STEPS = 25;
 
 // UI Constants
 export const UI_CONSTANTS = {
