@@ -214,7 +214,7 @@ describe('renderMessage', () => {
 			expect(messageEl.textContent).toContain('Final response');
 		});
 
-		it('renders SPAR phase labels in agent traces', () => {
+		it('renders agent trace content (thought + tool card) without phase-label chrome', () => {
 			const container = document.createElement('div');
 			const message: Message = {
 				role: 'assistant',
@@ -227,8 +227,8 @@ describe('renderMessage', () => {
 
 			const messageEl = renderMessage(container, message, { ...mockContext, mode: 'agent' });
 
-			expect(messageEl.textContent).toContain('Sense');
-			expect(messageEl.textContent).toContain('Act');
+			expect(messageEl.textContent).toContain('Sensed active note');
+			expect(messageEl.textContent).toContain('read_file');
 		});
 
 		it('renders assistant action buttons and invokes callbacks', () => {

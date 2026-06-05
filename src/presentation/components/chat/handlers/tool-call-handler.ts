@@ -171,25 +171,13 @@ export function updateExecutionTrace(container: HTMLElement, steps: AgentExecuti
 	}
 }
 
-function formatPhaseLabel(phase?: AgentExecutionStep['phase']): string | null {
-	if (!phase) return null;
-	return phase.charAt(0).toUpperCase() + phase.slice(1);
-}
-
 function renderThinkingBlock(container: HTMLElement, content: string, phase?: AgentExecutionStep['phase']): void {
 	const block = container.createDiv('agent-thinking-block');
 	if (phase) {
 		block.setAttr('data-phase', phase);
 	}
-
-	const labelRow = block.createDiv('agent-thinking-block__label-row');
-	const label = labelRow.createSpan('agent-thinking-block__label');
-	label.setText(t('chat.toolCall.thinking'));
-	const phaseLabel = formatPhaseLabel(phase);
-	if (phaseLabel) {
-		labelRow.createSpan('agent-phase-badge').setText(phaseLabel);
-	}
-
+	// No icon / "Thinking<Phase>" label — render the model's reasoning as a plain
+	// muted block. The chrome (brain badge + phase tag) was visual noise.
 	const contentEl = block.createDiv('agent-thinking-block__content');
 	contentEl.setText(content);
 }
@@ -239,7 +227,7 @@ function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionSt
 	nameEl.setText(toolName);
 	nameEl.setAttribute('data-testid', TestIds.chat.agentTraceToolName);
 	
-	const phaseLabel = formatPhaseLabel(actionStep.phase);
+	const phaseLabel: string | null = null; // phase tag removed (visual noise)
 	if (phaseLabel) {
 		titleRow.createSpan('agent-phase-badge').setText(phaseLabel);
 	}

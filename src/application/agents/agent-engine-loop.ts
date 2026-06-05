@@ -281,6 +281,7 @@ assistant: ${finalOutput}
 			'Use vault context before external context.',
 			'Never claim a vault write was applied unless the user approved a write proposal.',
 			'When your plan calls for creating or changing notes, you MUST call the matching tool (such as create_note or write_file) in that same turn so a write proposal is generated. Do NOT end your turn by only describing notes you intend to create — describing without calling the tool produces nothing for the user. If several notes are needed, create them one tool call per note across successive turns until the task is complete.',
+			'Do NOT stop mid-task to narrate progress. After each tool result, immediately call the tool for the NEXT item in your Task Checklist — never reply with text like "now I will create…" or "继续创建…" without an actual tool call. Only write your final summary once EVERY planned note has been created.',
 			toolDescriptions ? `Available tools:\n${toolDescriptions}` : 'No tools are enabled for this agent.',
 		].join('\n\n');
 	}
