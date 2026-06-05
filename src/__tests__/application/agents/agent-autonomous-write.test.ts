@@ -11,6 +11,7 @@ function makeApp() {
 		vault: {
 			getAbstractFileByPath: jest.fn(() => null),
 			create: jest.fn(async () => undefined),
+			createFolder: jest.fn(async () => undefined),
 		},
 		fileManager: { trashFile: jest.fn(async () => undefined) },
 	} as any;

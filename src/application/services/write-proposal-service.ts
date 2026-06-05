@@ -112,12 +112,35 @@ export async function applyWriteProposal(app: App, proposal: WriteProposal | Bat
 	await applySingleProposal(app, proposal);
 }
 
+/**
+ * Ensure the parent folder of a vault-relative file path exists, creating each
+ * missing ancestor segment. vault.create() does NOT create parent folders, so
+ * writing "Folder/Note.md" into a non-existent "Folder" fails with ENOENT.
+ */
+async function ensureParentFolder(app: App, filePath: string): Promise<void> {
+	const slash = filePath.lastIndexOf('/');
+	if (slash <= 0) return; // root-level file — no parent folder to create
+	const folder = filePath.slice(0, slash);
+	if (app.vault.getAbstractFileByPath(folder)) return;
+	let current = '';
+	for (const segment of folder.split('/')) {
+		current = current ? `${current}/${segment}` : segment;
+		if (app.vault.getAbstractFileByPath(current)) continue;
+		try {
+			await app.vault.createFolder(current);
+		} catch {
+			// Ignore "already exists" races; a genuine failure surfaces at create time.
+		}
+	}
+}
+
 async function applySingleProposal(app: App, proposal: WriteProposal): Promise<void> {
 	if (proposal.operation === 'create') {
 		const existing = app.vault.getAbstractFileByPath(proposal.path);
 		if (existing) {
 			throw new Error(`File already exists: ${proposal.path}`);
 		}
+		await ensureParentFolder(app, proposal.path);
 		await app.vault.create(proposal.path, proposal.proposedContent || '');
 		return;
 	}
@@ -134,6 +157,7 @@ async function applySingleProposal(app: App, proposal: WriteProposal): Promise<v
 	if (proposal.operation === 'move') {
 		const file = app.vault.getAbstractFileByPath(proposal.path);
 		if (file && proposal.newPath) {
+			await ensureParentFolder(app, proposal.newPath);
 			await app.fileManager.renameFile(file, proposal.newPath);
 		}
 		return;
