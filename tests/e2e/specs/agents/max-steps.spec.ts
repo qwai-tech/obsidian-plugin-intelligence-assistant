@@ -38,7 +38,7 @@ describe('Agent max steps', () => {
 		await chat.waitForReplyComplete(20_000);
 
 		const assistantText = await chat.getLastAssistantText();
-		await expect(assistantText).toContain('Reached the agent step limit of 2');
+		await expect(assistantText).toContain('Reached the agent step budget of 2');
 
 		const traceText = await chat.getToolTraceText();
 		await expect((traceText.match(/read_file/g) ?? [])).toHaveLength(2);
