@@ -205,7 +205,13 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			const currentVersion = this.manifest.version;
 			const lastVersion = this.settings.lastVersion || '0.0.0';
 
-			if (currentVersion !== lastVersion) {
+			// Never pop the changelog under automated tests — its modal overlay
+			// intercepts clicks and blocks every E2E spec (same detection the
+			// vector store uses for E2E-safe behavior).
+			const isAutomatedTest = typeof process !== 'undefined'
+				&& (process.env.NODE_ENV === 'test' || Boolean(process.env.WDIO_WORKER_ID));
+
+			if (currentVersion !== lastVersion && !isAutomatedTest) {
 				const isChinese = window.localStorage.getItem('language') === 'zh' || navigator.language.startsWith('zh');
 				new ChangelogModal(this.app, currentVersion, isChinese).open();
 				this.settings.lastVersion = currentVersion;
