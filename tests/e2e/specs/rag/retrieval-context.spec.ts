@@ -41,6 +41,8 @@ describe('RAG retrieval context', () => {
 		await mockLLM.replyWith('PKM keeps projects, areas, resources, and archives distinct.');
 		await chat.open();
 		await chat.newChat();
+		// The RAG toggle is a chat-mode control; default mode is now agent.
+		await chat.selectMode('chat');
 		await chat.enableRag();
 		await chat.sendMessage('What does PKM say about resources?');
 		await chat.waitForReplyComplete(20_000);

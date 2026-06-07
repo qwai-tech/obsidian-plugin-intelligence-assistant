@@ -13,6 +13,8 @@ describe('Chat model switch', () => {
 		await waitForPluginReady();
 		await chat.open();
 		await chat.newChat();
+		// The model selector is a chat-mode control; default mode is now agent.
+		await chat.selectMode('chat');
 	});
 
 	it('uses the selected model for the next chat request', async () => {

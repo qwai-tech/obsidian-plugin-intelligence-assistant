@@ -13,6 +13,9 @@ describe('Chat error handling', () => {
 		await waitForPluginReady();
 		await chat.open();
 		await chat.newChat();
+		// Use chat mode so a single LLM call consumes the queued error response
+		// (agent mode makes extra calls that would consume it first).
+		await chat.selectMode('chat');
 	});
 
 	it('renders and persists a failed assistant message for API errors', async () => {
