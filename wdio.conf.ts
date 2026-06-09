@@ -42,6 +42,13 @@ export const baseConfig: TestrunnerConfig = {
 
 	maxInstances: 1,
 
+	// The wdio/Obsidian/chromedriver setup is intermittently flaky (dropped
+	// clicks, "Browser.getWindowForTarget" hiccups, post-mode-switch control
+	// visibility races). Retry a failed spec file in a fresh session, deferred to
+	// the end of the run, before marking it failed.
+	specFileRetries: 2,
+	specFileRetriesDeferred: true,
+
 	capabilities: [
 		{
 			browserName: 'obsidian',

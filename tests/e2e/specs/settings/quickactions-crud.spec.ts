@@ -34,6 +34,15 @@ describe('Quick action settings', () => {
 		});
 		await quickActions.setActionEnabled('E2E Refine Selection', false);
 
+		// Saves persist asynchronously after the toggle flips the DOM, so poll the
+		// file until the disabled state lands before asserting.
+		await browser.waitUntil(
+			async () => {
+				const s = await vault.readRuntimeDataFile<UserSettings>('config/user/settings.json');
+				return s.quickActions?.list?.find(item => item.name === 'E2E Refine Selection')?.enabled === false;
+			},
+			{ timeout: 10_000, timeoutMsg: 'Quick action did not persist enabled=false' }
+		);
 		let settings = await vault.readRuntimeDataFile<UserSettings>('config/user/settings.json');
 		let action = settings.quickActions?.list?.find(item => item.name === 'E2E Refine Selection');
 		await expect(settings.quickActions?.prefix).toBe('QA');
