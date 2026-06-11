@@ -181,6 +181,7 @@ class OpenApiConfigModal extends Modal {
 			.setName(t('settings.tools.openapi.modal.displayName.name'))
 			.setDesc(t('settings.tools.openapi.modal.displayName.desc'))
 			.addText(text => {
+				// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
 				text.setPlaceholder('HTTP Source')
 					.setValue(this.config.name ?? '')
 					.onChange(value => {
@@ -288,6 +289,7 @@ class OpenApiConfigModal extends Modal {
 		new Setting(contentEl)
 			.setName(t('settings.tools.openapi.modal.credValue.name'))
 			.addText(text => {
+				// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
 				text.setPlaceholder('sk-your-token')
 					.setValue(this.config.authValue ?? '')
 					.onChange(value => {

@@ -98,6 +98,7 @@ export class OllamaModelManagerModal extends Modal {
 			.setDesc(t('modals.ollamaManager.modelName.example'))
 			.addText(text => {
 				modelNameInput = text.inputEl;
+				// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
 				text.setPlaceholder('llama2')
 					.inputEl.addClass('ia-full-width');
 			})

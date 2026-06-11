@@ -523,6 +523,7 @@ function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssista
 		description: t('settings.rag.filters.excludeTypes.desc'),
 		includeDefaultForArrays: true
 	}).addTextArea(text => text
+			// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
 			.setPlaceholder('canvas, excalidraw')
 			.setValue(plugin.settings.ragConfig.excludeFileTypes.join(', '))
 			.onChange(async (value) => {

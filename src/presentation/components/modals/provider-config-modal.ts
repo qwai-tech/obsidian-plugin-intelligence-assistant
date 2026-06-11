@@ -157,6 +157,7 @@ export class ProviderConfigModal extends Modal {
 			}).addText(text => {
 					text.inputEl.setAttribute('data-testid', TestIds.settings.providerModalBaseUrlInput);
 					text
+						// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
 						.setPlaceholder('http://localhost:11434')
 						.setValue(this.draft.baseUrl || 'http://localhost:11434')
 						.onChange(value => {

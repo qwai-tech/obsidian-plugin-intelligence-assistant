@@ -176,6 +176,7 @@ class CLIToolConfigModal extends Modal {
 			.setName(t('settings.tools.cli.modal.toolName.name'))
 			.setDesc(t('settings.tools.cli.modal.toolName.desc'))
 			.addText(text => {
+				// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
 				text.setPlaceholder('my_tool')
 					.setValue(this.config.name ?? '')
 					.onChange(value => {
@@ -213,6 +214,7 @@ class CLIToolConfigModal extends Modal {
 			.setName(t('settings.tools.cli.modal.command.name'))
 			.setDesc(t('settings.tools.cli.modal.command.desc'))
 			.addText(text => {
+				// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
 				text.setPlaceholder('python')
 					.setValue(this.config.command ?? '')
 					.onChange(value => {
@@ -307,6 +309,7 @@ class CLIToolConfigModal extends Modal {
 				const envStr = this.config.env
 					? Object.entries(this.config.env).map(([k, v]) => `${k}=${v}`).join('\n')
 					: '';
+				// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
 				text.setPlaceholder('MY_VAR=value\nANOTHER=value2')
 					.setValue(envStr)
 					.onChange(value => {

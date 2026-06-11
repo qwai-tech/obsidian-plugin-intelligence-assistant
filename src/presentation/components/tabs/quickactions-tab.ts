@@ -226,6 +226,7 @@ function openQuickActionEditModal(
 				.addText(text => {
 					text.inputEl.setAttribute('data-testid', TestIds.settings.quickActionModalNameInput);
 					text.setValue(this.action.name)
+						// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
 						.setPlaceholder('e.g., Make text longer')
 						.onChange(value => {
 							this.action.name = value;
@@ -271,6 +272,7 @@ function openQuickActionEditModal(
 				.addTextArea(text => {
 					text.inputEl.setAttribute('data-testid', TestIds.settings.quickActionModalPromptInput);
 					text.setValue(this.action.prompt);
+					// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
 					text.setPlaceholder('e.g., Expand and elaborate on the following text...');
 					text.inputEl.rows = 6;
 					text.onChange(value => {

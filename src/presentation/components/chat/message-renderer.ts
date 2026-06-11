@@ -459,6 +459,7 @@ function renderBatchProposalCard(
 	}
 
 	const actions = card.createDiv('ia-write-proposal-card__actions');
+	// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
 	const applyBtn = actions.createEl('button', { text: 'Apply All' });
 	applyBtn.disabled = typeof callbacks?.applyWriteProposal !== 'function';
 	applyBtn.addEventListener('click', () => {
