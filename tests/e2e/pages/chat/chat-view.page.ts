@@ -42,7 +42,7 @@ export class ChatViewPage extends BasePage {
 		await this.click(TestIds.chat.conversationToggleBtn);
 		await browser.waitUntil(
 			async () => browser.execute((testId) => {
-				const list = document.querySelector(`[data-testid="${testId}"]`);
+				const list = activeDocument.querySelector(`[data-testid="${testId}"]`);
 				return list instanceof HTMLElement
 					&& list.classList.contains('is-open')
 					&& !list.classList.contains('is-collapsed');
@@ -55,13 +55,13 @@ export class ChatViewPage extends BasePage {
 		await this.openConversationList();
 		await browser.waitUntil(
 			async () => browser.execute((testId, id) => {
-				return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+				return Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
 					.some(item => item.instanceOf(HTMLElement) && item.getAttribute('data-conv-id') === id);
 			}, TestIds.chat.conversationItem, conversationId),
 			{ timeout: 10_000, timeoutMsg: `Conversation item not found: ${conversationId}` }
 		);
 		await browser.execute((testId, id) => {
-			const item = Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+			const item = Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
 				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-conv-id') === id);
 			if (!(item instanceof HTMLElement)) {
 				throw new Error(`Conversation item not found: ${id}`);
@@ -82,7 +82,7 @@ export class ChatViewPage extends BasePage {
 	async selectModel(modelId: string): Promise<void> {
 		await this.waitFor(TestIds.chat.modelSelect);
 		await browser.execute((testId, value) => {
-			const select = document.querySelector(`[data-testid="${testId}"]`);
+			const select = activeDocument.querySelector(`[data-testid="${testId}"]`);
 			if (!(select instanceof HTMLSelectElement)) {
 				throw new Error(`Model select not found: ${testId}`);
 			}
@@ -94,7 +94,7 @@ export class ChatViewPage extends BasePage {
 	async selectMode(mode: 'chat' | 'agent'): Promise<void> {
 		await this.waitFor(TestIds.chat.modeSelect);
 		await browser.execute((testId, value) => {
-			const select = document.querySelector(`[data-testid="${testId}"]`);
+			const select = activeDocument.querySelector(`[data-testid="${testId}"]`);
 			if (!(select instanceof HTMLSelectElement)) {
 				throw new Error(`Mode select not found: ${testId}`);
 			}
@@ -103,7 +103,7 @@ export class ChatViewPage extends BasePage {
 		}, TestIds.chat.modeSelect, mode);
 		await browser.waitUntil(
 			async () => browser.execute((testId, expectedMode) => {
-				const select = document.querySelector(`[data-testid="${testId}"]`);
+				const select = activeDocument.querySelector(`[data-testid="${testId}"]`);
 				if (!(select instanceof HTMLSelectElement) || select.value !== expectedMode) return false;
 				const plugin = (window as unknown as {
 					app: { plugins: { plugins: Record<string, { settings?: { activeAgentId?: string | null } }> } };
@@ -118,13 +118,13 @@ export class ChatViewPage extends BasePage {
 		await this.waitFor(TestIds.chat.ragToggleBtn);
 		await browser.waitUntil(
 			async () => browser.execute((testId) => {
-				const button = document.querySelector(`[data-testid="${testId}"]`);
+				const button = activeDocument.querySelector(`[data-testid="${testId}"]`);
 				return button instanceof HTMLElement && !button.classList.contains('ia-hidden');
 			}, TestIds.chat.ragToggleBtn),
 			{ timeout: 10_000, timeoutMsg: 'RAG toggle was not visible' }
 		);
 		const active = await browser.execute((testId) => {
-			const button = document.querySelector(`[data-testid="${testId}"]`);
+			const button = activeDocument.querySelector(`[data-testid="${testId}"]`);
 			return button instanceof HTMLElement && button.classList.contains('is-active');
 		}, TestIds.chat.ragToggleBtn);
 		if (!active) {
@@ -132,7 +132,7 @@ export class ChatViewPage extends BasePage {
 		}
 		await browser.waitUntil(
 			async () => browser.execute((testId) => {
-				const button = document.querySelector(`[data-testid="${testId}"]`);
+				const button = activeDocument.querySelector(`[data-testid="${testId}"]`);
 				return button instanceof HTMLElement && button.classList.contains('is-active');
 			}, TestIds.chat.ragToggleBtn),
 			{ timeout: 10_000, timeoutMsg: 'RAG toggle did not become active' }
@@ -142,7 +142,7 @@ export class ChatViewPage extends BasePage {
 	async getSelectedModel(): Promise<string> {
 		await this.waitFor(TestIds.chat.modelSelect);
 		return browser.execute((testId) => {
-			const select = document.querySelector(`[data-testid="${testId}"]`);
+			const select = activeDocument.querySelector(`[data-testid="${testId}"]`);
 			if (!(select instanceof HTMLSelectElement)) {
 				return '';
 			}
@@ -197,7 +197,7 @@ export class ChatViewPage extends BasePage {
 	async getToolTraceText(): Promise<string> {
 		await this.$testid(TestIds.chat.agentTrace).waitForExist({ timeout: 10_000 });
 		return browser.execute((testId) => {
-			const trace = document.querySelector(`[data-testid="${testId}"]`);
+			const trace = activeDocument.querySelector(`[data-testid="${testId}"]`);
 			return trace instanceof HTMLElement ? (trace.textContent || '').trim() : '';
 		}, TestIds.chat.agentTrace);
 	}
@@ -205,7 +205,7 @@ export class ChatViewPage extends BasePage {
 	async getRagSourceText(): Promise<string> {
 		await this.$testid(TestIds.chat.ragSources).waitForExist({ timeout: 10_000 });
 		return browser.execute((testId) => {
-			const sourceList = document.querySelector(`[data-testid="${testId}"]`);
+			const sourceList = activeDocument.querySelector(`[data-testid="${testId}"]`);
 			return sourceList instanceof HTMLElement ? (sourceList.innerText || sourceList.textContent || '').trim() : '';
 		}, TestIds.chat.ragSources);
 	}

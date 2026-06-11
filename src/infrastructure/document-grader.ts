@@ -14,6 +14,7 @@ export interface DocumentGrade {
 
 export interface GradeRequest {
   query: string;
+  // eslint-disable-next-line obsidianmd/prefer-active-doc -- This is an interface property name, not the global DOM `document` object.
   document: {
     content: string;
     path: string;

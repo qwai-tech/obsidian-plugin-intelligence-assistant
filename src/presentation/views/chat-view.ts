@@ -270,7 +270,7 @@ export class ChatView extends ItemView {
 		await this.updateOptionsDisplay();
 
 		// Add click-outside handler to hide conversation list
-		this.registerDomEvent(document, 'click', (e: MouseEvent) => {
+		this.registerDomEvent(activeDocument, 'click', (e: MouseEvent) => {
 			// Only hide if not pinned and currently visible
 			if (!this.state.conversationListPinned && this.state.conversationListVisible) {
 				const target = e.target as HTMLElement;

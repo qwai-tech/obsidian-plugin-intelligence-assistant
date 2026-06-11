@@ -43,7 +43,7 @@ export class AgentsSettingsPage extends BasePage {
 
 	async hasAgentNamed(name: string): Promise<boolean> {
 		return browser.execute((testId, agentName) => {
-			return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+			return Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
 				.some(row => row.instanceOf(HTMLElement) && row.getAttribute('data-agent-name') === agentName);
 		}, TestIds.settings.agentRow, name);
 	}
@@ -65,7 +65,7 @@ export class AgentsSettingsPage extends BasePage {
 	private async getAgentIdByName(name: string): Promise<string> {
 		await this.waitForAgentNamed(name);
 		const agentId = await browser.execute((testId, agentName) => {
-			const row = Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+			const row = Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
 				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-agent-name') === agentName);
 			return row instanceof HTMLElement ? row.getAttribute('data-agent-id') ?? '' : '';
 		}, TestIds.settings.agentRow, name);
@@ -77,7 +77,7 @@ export class AgentsSettingsPage extends BasePage {
 
 	private async agentRowExists(agentId: string): Promise<boolean> {
 		return browser.execute((testId, id) => {
-			return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+			return Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
 				.some(row => row.instanceOf(HTMLElement) && row.getAttribute('data-agent-id') === id);
 		}, TestIds.settings.agentRow, agentId);
 	}
@@ -85,13 +85,13 @@ export class AgentsSettingsPage extends BasePage {
 	private async clickAgentAction(testId: string, agentId: string): Promise<void> {
 		await browser.waitUntil(
 			async () => browser.execute((selectorTestId, id) => {
-				return Array.from(document.querySelectorAll(`[data-testid="${selectorTestId}"]`))
+				return Array.from(activeDocument.querySelectorAll(`[data-testid="${selectorTestId}"]`))
 					.some(button => button.instanceOf(HTMLElement) && button.getAttribute('data-agent-id') === id);
 			}, testId, agentId),
 			{ timeout: 10_000, timeoutMsg: `Agent action not found: ${agentId}` }
 		);
 		await browser.execute((selectorTestId, id) => {
-			const button = Array.from(document.querySelectorAll(`[data-testid="${selectorTestId}"]`))
+			const button = Array.from(activeDocument.querySelectorAll(`[data-testid="${selectorTestId}"]`))
 				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-agent-id') === id);
 			if (!(button instanceof HTMLElement)) {
 				throw new Error(`Agent action not found: ${id}`);
@@ -103,13 +103,13 @@ export class AgentsSettingsPage extends BasePage {
 	private async clickSettingsTab(tabId: string): Promise<void> {
 		await browser.waitUntil(
 			async () => browser.execute((testId, id) => {
-				return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+				return Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
 					.some(tab => tab.instanceOf(HTMLElement) && tab.getAttribute('data-tab-id') === id);
 			}, TestIds.settings.tab, tabId),
 			{ timeout: 10_000, timeoutMsg: `Settings tab not found: ${tabId}` }
 		);
 		await browser.execute((testId, id) => {
-			const tab = Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+			const tab = Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
 				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-tab-id') === id);
 			if (!(tab instanceof HTMLElement)) {
 				throw new Error(`Settings tab not found: ${id}`);

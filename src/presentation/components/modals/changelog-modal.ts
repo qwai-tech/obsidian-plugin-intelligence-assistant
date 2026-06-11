@@ -1,5 +1,4 @@
 import { App, Modal, ButtonComponent } from 'obsidian';
-import { t } from '@/i18n';
 import { renderAssistantMarkdown } from '@/presentation/components/chat/message-renderer';
 
 export class ChangelogModal extends Modal {

@@ -68,13 +68,13 @@ export class LlmSettingsPage extends BasePage {
 	private async clickSettingsTab(tabId: string): Promise<void> {
 		await browser.waitUntil(
 			async () => browser.execute((testId, id) => {
-				return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+				return Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
 					.some(tab => tab.instanceOf(HTMLElement) && tab.getAttribute('data-tab-id') === id);
 			}, TestIds.settings.tab, tabId),
 			{ timeout: 10_000, timeoutMsg: `Settings tab not found: ${tabId}` }
 		);
 		await browser.execute((testId, id) => {
-			const tab = Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+			const tab = Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
 				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-tab-id') === id);
 			if (!(tab instanceof HTMLElement)) {
 				throw new Error(`Settings tab not found: ${id}`);
@@ -101,13 +101,13 @@ export class LlmSettingsPage extends BasePage {
 	private async clickProviderAction(testId: string, providerId: string): Promise<void> {
 		await browser.waitUntil(
 			async () => browser.execute((selectorTestId, id) => {
-				return Array.from(document.querySelectorAll(`[data-testid="${selectorTestId}"]`))
+				return Array.from(activeDocument.querySelectorAll(`[data-testid="${selectorTestId}"]`))
 					.some(button => button.instanceOf(HTMLElement) && button.getAttribute('data-provider-id') === id);
 			}, testId, providerId),
 			{ timeout: 10_000, timeoutMsg: `Provider action not found: ${providerId}` }
 		);
 		await browser.execute((selectorTestId, id) => {
-			const button = Array.from(document.querySelectorAll(`[data-testid="${selectorTestId}"]`))
+			const button = Array.from(activeDocument.querySelectorAll(`[data-testid="${selectorTestId}"]`))
 				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-provider-id') === id);
 			if (!(button instanceof HTMLElement)) {
 				throw new Error(`Provider action not found: ${id}`);
@@ -118,7 +118,7 @@ export class LlmSettingsPage extends BasePage {
 
 	private async providerRowExists(providerId: string): Promise<boolean> {
 		return browser.execute((testId, id) => {
-			return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
+			return Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
 				.some(row => row.instanceOf(HTMLElement) && row.getAttribute('data-provider-id') === id);
 		}, TestIds.settings.providerRow, providerId);
 	}
@@ -126,7 +126,7 @@ export class LlmSettingsPage extends BasePage {
 	private async setSelectValue(testId: string, value: string): Promise<void> {
 		await this.waitFor(testId);
 		await browser.execute((id, selected) => {
-			const select = document.querySelector(`[data-testid="${id}"]`);
+			const select = activeDocument.querySelector(`[data-testid="${id}"]`);
 			if (!(select instanceof HTMLSelectElement)) {
 				throw new Error(`Select not found: ${id}`);
 			}
