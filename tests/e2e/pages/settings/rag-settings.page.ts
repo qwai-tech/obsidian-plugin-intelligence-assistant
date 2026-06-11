@@ -128,13 +128,13 @@ export class RagSettingsPage extends BasePage {
 		await browser.waitUntil(
 			async () => browser.execute((testId, id) => {
 				return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-					.some(tab => tab instanceof HTMLElement && tab.getAttribute('data-tab-id') === id);
+					.some(tab => tab.instanceOf(HTMLElement) && tab.getAttribute('data-tab-id') === id);
 			}, TestIds.settings.tab, tabId),
 			{ timeout: 10_000, timeoutMsg: `Settings tab not found: ${tabId}` }
 		);
 		await browser.execute((testId, id) => {
 			const tab = Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-				.find(candidate => candidate instanceof HTMLElement && candidate.getAttribute('data-tab-id') === id);
+				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-tab-id') === id);
 			if (!(tab instanceof HTMLElement)) {
 				throw new Error(`Settings tab not found: ${id}`);
 			}

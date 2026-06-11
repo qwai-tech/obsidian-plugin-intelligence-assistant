@@ -120,7 +120,7 @@ export function displayProviderTab(
 			const parser = new DOMParser();
 			const svgDoc = parser.parseFromString(providerMeta.iconSvg, 'image/svg+xml');
 			const svgElement = svgDoc.documentElement;
-			if (svgElement instanceof SVGElement) {
+			if (svgElement.instanceOf(SVGElement)) {
 				iconContainer.appendChild(svgElement);
 			}
 		}

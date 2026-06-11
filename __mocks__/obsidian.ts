@@ -7,6 +7,13 @@ import { jest } from '@jest/globals';
 
 // Add Obsidian HTMLElement extensions
 if (typeof HTMLElement !== 'undefined') {
+	// Obsidian augments Node with a cross-window-safe instanceOf(); mirror it so
+	// code using `el.instanceOf(SVGElement)` works under jsdom (single window).
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	(Node.prototype as any).instanceOf = function (type: new (...args: any[]) => unknown): boolean {
+		return this instanceof type;
+	};
+
 	HTMLElement.prototype.empty = function() {
 		this.innerHTML = '';
 	};

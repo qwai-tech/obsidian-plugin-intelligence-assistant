@@ -244,7 +244,7 @@ function applyAvatarAndLabel(
 		const parser = new DOMParser();
 		const svgDoc = parser.parseFromString(providerMeta.iconSvg, 'image/svg+xml');
 		const svgElement = svgDoc.documentElement;
-		if (svgElement instanceof SVGElement) {
+		if (svgElement.instanceOf(SVGElement)) {
 			avatar.appendChild(svgElement);
 		} else {
 			avatar.setText(fallbackAvatar);
@@ -343,7 +343,7 @@ function renderMessageContent(target: HTMLElement, message: Message) {
 				void navigator.clipboard.writeText(text).then(() => {
 					copyBtn.textContent = t('chat.message.copied');
 					copyBtn.classList.add('is-copied');
-					activeWindow.setTimeout(() => {
+					window.setTimeout(() => {
 						copyBtn.textContent = t('chat.message.copy');
 						copyBtn.classList.remove('is-copied');
 					}, 1500);

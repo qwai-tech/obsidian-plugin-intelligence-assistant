@@ -140,7 +140,7 @@ export async function processToolCalls(
 	// If any tools were executed, continue the agent conversation with the new context
 	if (toolsExecuted && onContinue) {
 		// Add a small delay to allow UI to update
-		await new Promise(resolve => activeWindow.setTimeout(resolve, 100));
+		await new Promise(resolve => window.setTimeout(resolve, 100));
 		await onContinue();
 	}
 

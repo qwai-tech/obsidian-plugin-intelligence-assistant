@@ -570,9 +570,9 @@ export class MCPInspectorModal extends Modal {
 				if (!paramName) continue;
 
 					let value: string | boolean | undefined;
-					if (input instanceof HTMLInputElement && input.type === 'checkbox') {
+					if (input.instanceOf(HTMLInputElement) && input.type === 'checkbox') {
 						value = input.checked;
-					} else if (input instanceof HTMLTextAreaElement || input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
+					} else if (input.instanceOf(HTMLTextAreaElement) || input.instanceOf(HTMLInputElement) || input.instanceOf(HTMLSelectElement)) {
 						value = input.value;
 				}
 

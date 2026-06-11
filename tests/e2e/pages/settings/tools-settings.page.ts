@@ -57,7 +57,7 @@ export class ToolsSettingsPage extends BasePage {
 		);
 		await browser.execute((testId, id) => {
 			const tab = Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-				.find(candidate => candidate instanceof HTMLElement && candidate.getAttribute('data-subtab-id') === id);
+				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-subtab-id') === id);
 			if (!(tab instanceof HTMLElement)) {
 				throw new Error(`Tools sub-tab not found: ${id}`);
 			}
@@ -73,7 +73,7 @@ export class ToolsSettingsPage extends BasePage {
 		);
 		await browser.execute((testId, type, target) => {
 			const toggle = Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-				.find(candidate => candidate instanceof HTMLInputElement && candidate.getAttribute('data-tool-type') === type);
+				.find(candidate => candidate.instanceOf(HTMLInputElement) && candidate.getAttribute('data-tool-type') === type);
 			if (!(toggle instanceof HTMLInputElement)) {
 				throw new Error(`Built-in tool toggle not found: ${type}`);
 			}
@@ -222,21 +222,21 @@ export class ToolsSettingsPage extends BasePage {
 	private async subTabExists(subTab: ToolsSubTab): Promise<boolean> {
 		return browser.execute((testId, id) => {
 			return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-				.some(tab => tab instanceof HTMLElement && tab.getAttribute('data-subtab-id') === id);
+				.some(tab => tab.instanceOf(HTMLElement) && tab.getAttribute('data-subtab-id') === id);
 		}, TestIds.settings.toolsSubTab, subTab);
 	}
 
 	private async builtinToggleExists(toolType: string): Promise<boolean> {
 		return browser.execute((testId, type) => {
 			return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-				.some(toggle => toggle instanceof HTMLInputElement && toggle.getAttribute('data-tool-type') === type);
+				.some(toggle => toggle.instanceOf(HTMLInputElement) && toggle.getAttribute('data-tool-type') === type);
 		}, TestIds.settings.toolsBuiltinToggle, toolType);
 	}
 
 	private async rowExists(testId: string, attr: string, value: string): Promise<boolean> {
 		return browser.execute((rowTestId, rowAttr, rowValue) => {
 			return Array.from(document.querySelectorAll(`[data-testid="${rowTestId}"]`))
-				.some(row => row instanceof HTMLElement && row.getAttribute(rowAttr) === rowValue);
+				.some(row => row.instanceOf(HTMLElement) && row.getAttribute(rowAttr) === rowValue);
 		}, testId, attr, value);
 	}
 
@@ -244,13 +244,13 @@ export class ToolsSettingsPage extends BasePage {
 		await browser.waitUntil(
 			async () => browser.execute((testId, id) => {
 				return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-					.some(tab => tab instanceof HTMLElement && tab.getAttribute('data-tab-id') === id);
+					.some(tab => tab.instanceOf(HTMLElement) && tab.getAttribute('data-tab-id') === id);
 			}, TestIds.settings.tab, tabId),
 			{ timeout: 10_000, timeoutMsg: `Settings tab not found: ${tabId}` }
 		);
 		await browser.execute((testId, id) => {
 			const tab = Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-				.find(candidate => candidate instanceof HTMLElement && candidate.getAttribute('data-tab-id') === id);
+				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-tab-id') === id);
 			if (!(tab instanceof HTMLElement)) {
 				throw new Error(`Settings tab not found: ${id}`);
 			}

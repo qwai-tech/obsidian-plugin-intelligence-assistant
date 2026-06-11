@@ -57,7 +57,7 @@ export class QuickActionsSettingsPage extends BasePage {
 		await this.waitForActionRow(name);
 		await browser.execute((rowTestId, toggleTestId, actionName, target) => {
 			const row = Array.from(document.querySelectorAll(`[data-testid="${rowTestId}"]`))
-				.find(candidate => candidate instanceof HTMLElement && candidate.getAttribute('data-action-name') === actionName);
+				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-action-name') === actionName);
 			if (!(row instanceof HTMLElement)) {
 				throw new Error(`Quick action row not found: ${actionName}`);
 			}
@@ -95,14 +95,14 @@ export class QuickActionsSettingsPage extends BasePage {
 	private async actionRowExists(name: string): Promise<boolean> {
 		return browser.execute((testId, actionName) => {
 			return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-				.some(row => row instanceof HTMLElement && row.getAttribute('data-action-name') === actionName);
+				.some(row => row.instanceOf(HTMLElement) && row.getAttribute('data-action-name') === actionName);
 		}, TestIds.settings.quickActionRow, name);
 	}
 
 	private async getActionEnabled(name: string): Promise<boolean> {
 		return browser.execute((rowTestId, toggleTestId, actionName) => {
 			const row = Array.from(document.querySelectorAll(`[data-testid="${rowTestId}"]`))
-				.find(candidate => candidate instanceof HTMLElement && candidate.getAttribute('data-action-name') === actionName);
+				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-action-name') === actionName);
 			const toggle = row instanceof HTMLElement
 				? row.querySelector(`[data-testid="${toggleTestId}"]`)
 				: null;
@@ -114,7 +114,7 @@ export class QuickActionsSettingsPage extends BasePage {
 		await this.waitForActionRow(actionName);
 		await browser.execute((rowTestId, testId, name) => {
 			const row = Array.from(document.querySelectorAll(`[data-testid="${rowTestId}"]`))
-				.find(candidate => candidate instanceof HTMLElement && candidate.getAttribute('data-action-name') === name);
+				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-action-name') === name);
 			if (!(row instanceof HTMLElement)) {
 				throw new Error(`Quick action row not found: ${name}`);
 			}
@@ -130,13 +130,13 @@ export class QuickActionsSettingsPage extends BasePage {
 		await browser.waitUntil(
 			async () => browser.execute((testId, id) => {
 				return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-					.some(tab => tab instanceof HTMLElement && tab.getAttribute('data-tab-id') === id);
+					.some(tab => tab.instanceOf(HTMLElement) && tab.getAttribute('data-tab-id') === id);
 			}, TestIds.settings.tab, tabId),
 			{ timeout: 10_000, timeoutMsg: `Settings tab not found: ${tabId}` }
 		);
 		await browser.execute((testId, id) => {
 			const tab = Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-				.find(candidate => candidate instanceof HTMLElement && candidate.getAttribute('data-tab-id') === id);
+				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-tab-id') === id);
 			if (!(tab instanceof HTMLElement)) {
 				throw new Error(`Settings tab not found: ${id}`);
 			}

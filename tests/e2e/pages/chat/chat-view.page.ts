@@ -56,13 +56,13 @@ export class ChatViewPage extends BasePage {
 		await browser.waitUntil(
 			async () => browser.execute((testId, id) => {
 				return Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-					.some(item => item instanceof HTMLElement && item.getAttribute('data-conv-id') === id);
+					.some(item => item.instanceOf(HTMLElement) && item.getAttribute('data-conv-id') === id);
 			}, TestIds.chat.conversationItem, conversationId),
 			{ timeout: 10_000, timeoutMsg: `Conversation item not found: ${conversationId}` }
 		);
 		await browser.execute((testId, id) => {
 			const item = Array.from(document.querySelectorAll(`[data-testid="${testId}"]`))
-				.find(candidate => candidate instanceof HTMLElement && candidate.getAttribute('data-conv-id') === id);
+				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-conv-id') === id);
 			if (!(item instanceof HTMLElement)) {
 				throw new Error(`Conversation item not found: ${id}`);
 			}

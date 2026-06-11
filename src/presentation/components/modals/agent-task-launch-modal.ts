@@ -79,7 +79,7 @@ export class AgentTaskLaunchModal extends Modal {
 		});
 		startBtn.addEventListener('click', () => this.submit());
 
-		activeWindow.setTimeout(() => {
+		window.setTimeout(() => {
 			this.taskInputEl?.focus();
 			this.taskInputEl?.select();
 		}, 10);

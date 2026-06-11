@@ -65,7 +65,7 @@ export class VectorStore {
 
 	async save(immediate = false): Promise<void> {
 		if (this.saveTimeout) {
-			activeWindow.clearTimeout(this.saveTimeout);
+			window.clearTimeout(this.saveTimeout);
 			this.saveTimeout = null;
 		}
 
@@ -75,7 +75,7 @@ export class VectorStore {
 		if (immediate || isTest) {
 			await this.performSave();
 		} else {
-			this.saveTimeout = activeWindow.setTimeout(() => {
+			this.saveTimeout = window.setTimeout(() => {
 				void this.performSave();
 				this.saveTimeout = null;
 			}, 1000);
@@ -225,7 +225,7 @@ export class VectorStore {
   }
 
   private async yieldToUi(delayMs: number): Promise<void> {
-    const timerHost = typeof activeWindow !== 'undefined' ? activeWindow : globalThis;
+    const timerHost = typeof activeWindow !== 'undefined' ? activeWindow : window;
     await new Promise<void>(resolve => timerHost.setTimeout(resolve, delayMs));
   }
 
