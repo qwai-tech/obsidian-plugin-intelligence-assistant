@@ -43,6 +43,6 @@ describe('Release real chat', () => {
 		const conversation = await vault.readRuntimeDataFile<PersistedConversation>(conversationPath);
 		const assistantMessages = conversation.messages.filter(message => message.role === 'assistant');
 		const assistant = assistantMessages[assistantMessages.length - 1];
-		console.log('[release-e2e] real-chat token usage:', assistant?.tokenUsage ?? 'not reported by provider');
+		void assistant;
 	});
 });

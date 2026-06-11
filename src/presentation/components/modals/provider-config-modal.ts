@@ -142,10 +142,10 @@ export class ProviderConfigModal extends Modal {
 								JSON.parse(newValue);
 								this.draft.serviceKey = newValue;
 							}
-							text.inputEl.setCssProps({ 'border-color': 'var(--background-modifier-border)' });
+							text.inputEl.removeClass('ia-input-error');
 						} catch (error) {
 							console.error('Invalid service key JSON:', error);
-							text.inputEl.setCssProps({ 'border-color': 'var(--text-error)' });
+							text.inputEl.addClass('ia-input-error');
 						}
 					});
 				});

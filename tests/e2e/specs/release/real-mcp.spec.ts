@@ -82,6 +82,5 @@ describe('Release real MCP', () => {
 		if (env.mcpExpectedText) {
 			await expect(probe.text).toContain(env.mcpExpectedText);
 		}
-		console.log('[release-e2e] real-mcp tool result:', probe.text);
 	});
 });

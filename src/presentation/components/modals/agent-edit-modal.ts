@@ -700,7 +700,7 @@ export class AgentEditModal extends Modal {
 
 	private toggleCustomPromptSection(show: boolean) {
 		if (this.customPromptSection) {
-			this.customPromptSection.setCssProps({ 'display': show ? 'block' : 'none' });
+			this.customPromptSection.toggleClass('ia-hidden', !show);
 		}
 	}
 

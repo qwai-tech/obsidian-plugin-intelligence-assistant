@@ -101,7 +101,7 @@ export class MCPServerModal extends Modal {
 				text.onChange(value => {
 					this.envText = value;
 					if (this.envInputEl) {
-						this.envInputEl.setCssProps({ 'border-color': '' });
+						this.envInputEl.removeClass('ia-input-error');
 					}
 				});
 				this.envInputEl = text.inputEl;
@@ -148,11 +148,11 @@ export class MCPServerModal extends Modal {
 				try {
 					parsedEnv = this.parseEnv(this.envText);
 					if (this.envInputEl) {
-						this.envInputEl.setCssProps({ 'border-color': '' });
+						this.envInputEl.removeClass('ia-input-error');
 					}
 				} catch (error) {
 					if (this.envInputEl) {
-						this.envInputEl.setCssProps({ 'border-color': 'var(--text-error)' });
+						this.envInputEl.addClass('ia-input-error');
 					}
 					const message = error instanceof Error ? error.message : 'Invalid environment variable entry';
 					new Notice(message);

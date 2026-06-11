@@ -1,4 +1,4 @@
-import { Editor, MarkdownView, Notice, Plugin, TFile, TFolder, WorkspaceLeaf } from 'obsidian';
+import { Editor, getLanguage, MarkdownView, Notice, Plugin, TFile, TFolder, WorkspaceLeaf } from 'obsidian';
 import { t } from './src/i18n';
 import './src/presentation/components/chat/settings.css';
 import './src/presentation/components/modals/explain-text-modal.css';
@@ -212,7 +212,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				&& (process.env.NODE_ENV === 'test' || Boolean(process.env.WDIO_WORKER_ID));
 
 			if (currentVersion !== lastVersion && !isAutomatedTest) {
-				const isChinese = window.localStorage.getItem('language') === 'zh' || navigator.language.startsWith('zh');
+				const isChinese = getLanguage().startsWith('zh');
 				new ChangelogModal(this.app, currentVersion, isChinese).open();
 				this.settings.lastVersion = currentVersion;
 				await this.saveSettings();

@@ -229,6 +229,10 @@ export function normalizePath(path: string): string {
 	return path.replace(/\\/g, '/').replace(/\/+/g, '/').replace(/^\//, '');
 }
 
+export function getLanguage(): string {
+	return 'en';
+}
+
 // Export additional mocks as needed
 export const Platform = {
 	isMobile: false,

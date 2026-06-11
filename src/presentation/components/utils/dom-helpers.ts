@@ -23,7 +23,7 @@ export function addClickHandler(el: HTMLElement, handler: (e: MouseEvent) => voi
 }
 
 export function showElement(el: HTMLElement): void {
-  el.setCssProps({ 'display': '' });
+  el.removeClass('ia-hidden');
 }
 
 export function hideElement(el: HTMLElement): void {

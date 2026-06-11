@@ -143,7 +143,6 @@ export function displayAgentsTab(
 		const iconSpan = titleEl.createSpan();
 		iconSpan.addClass('ia-agent-icon');
 		iconSpan.setText(agent.icon || '🤖');
-		iconSpan.setCssProps({ 'margin-right': '6px' });
 		titleEl.appendText(agent.name);
 
 		if (agent.id === DEFAULT_AGENT_ID) {

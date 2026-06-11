@@ -74,8 +74,14 @@ export function createSelect(
 	select.addClass('ia-dom-select');
 	select.addClass('ia-clickable');
 
-	if (options.styles?.flex) select.setCssProps({ 'flex': options.styles.flex });
-	if (options.styles?.width) select.setCssProps({ 'width': options.styles.width });
+	if (options.styles?.flex) {
+		select.setCssProps({ '--ia-flex': options.styles.flex });
+		select.addClass('ia-dom-select--flex');
+	}
+	if (options.styles?.width) {
+		select.setCssProps({ '--ia-width': options.styles.width });
+		select.addClass('ia-dom-select--width');
+	}
 
 	if (options.onChange) {
 		select.addEventListener('change', (e) => {
@@ -103,9 +109,16 @@ export function createControlContainer(
 
 	container.removeClass('ia-hidden');
 	container.toggleClass('ia-flex-col', options?.direction === 'column');
-	container.setCssProps({ 'gap': options?.gap || '8px' });
-	if (options?.align) container.setCssProps({ 'align-items': options.align });
-	if (options?.flex) container.setCssProps({ 'flex': options.flex });
+	container.addClass('ia-dom-control-container');
+	container.setCssProps({ '--ia-gap': options?.gap || '8px' });
+	if (options?.align) {
+		container.setCssProps({ '--ia-align': options.align });
+		container.addClass('ia-dom-control-container--align');
+	}
+	if (options?.flex) {
+		container.setCssProps({ '--ia-flex': options.flex });
+		container.addClass('ia-dom-control-container--flex');
+	}
 
 	return container;
 }
@@ -125,7 +138,8 @@ export function createLabel(
 
 	label.addClass('ia-dom-label');
 	if (options?.weight && options.weight !== '500') {
-		label.setCssProps({ 'font-weight': options.weight });
+		label.setCssProps({ '--ia-font-weight': options.weight });
+		label.addClass('ia-dom-label--weight');
 	}
 
 	switch (options?.variant) {

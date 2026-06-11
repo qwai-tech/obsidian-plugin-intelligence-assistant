@@ -5324,3 +5324,247 @@ details[open] .ia-chat-message__summary::before {
 	margin-left: 8px;
 	white-space: nowrap;
 }
+
+/* === marketplace-compliance: extracted inline styles ====================== */
+
+/* ── chat-input / input-controller: textarea auto-resize ─────────────────── */
+.ia-autoresize-textarea {
+	height: var(--ia-textarea-height, auto);
+}
+
+/* ── chat message-renderer: provider avatar background ───────────────────── */
+.ia-chat-avatar--default-bg {
+	background: var(--background-modifier-border);
+}
+.ia-chat-avatar--provider-bg {
+	background: var(--ia-avatar-bg);
+}
+
+/* ── utils/dom-helpers: control container with dynamic flex/gap/align ────── */
+.ia-dom-control-container {
+	gap: var(--ia-gap, 8px);
+}
+.ia-dom-control-container--align {
+	align-items: var(--ia-align);
+}
+.ia-dom-control-container--flex {
+	flex: var(--ia-flex);
+}
+.ia-dom-select--flex {
+	flex: var(--ia-flex);
+}
+.ia-dom-select--width {
+	width: var(--ia-width);
+}
+.ia-dom-label--weight {
+	font-weight: var(--ia-font-weight);
+}
+
+/* ── models-tab: capability badge dynamic background ─────────────────────── */
+.ia-tag--dyn-bg {
+	background: var(--ia-badge-bg);
+}
+
+/* ── agents-tab: agent icon spacing ──────────────────────────────────────── */
+.ia-agent-icon {
+	margin-right: 6px;
+}
+
+/* ── provider-config-modal / mcp-server-modal: input validation border ───── */
+.ia-input-error {
+	border-color: var(--text-error);
+}
+
+/* ── cli-tools-section ───────────────────────────────────────────────────── */
+.ia-cli-tools-toolbar {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 16px;
+}
+.ia-cli-tools-param-item {
+	margin-bottom: 1em;
+	padding: 0.5em;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+}
+.ia-cli-tools-param-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.5em;
+}
+.ia-cli-tools-param-remove {
+	padding: 2px 6px;
+}
+.ia-cli-tools-preset-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px 12px;
+	margin-bottom: 4px;
+	background: var(--background-secondary);
+	border-radius: 4px;
+}
+.ia-cli-tools-preset-command {
+	font-size: 11px;
+	color: var(--text-muted);
+}
+.ia-cli-tools-preset-add--disabled {
+	opacity: 0.5;
+}
+.ia-cli-tools-preset-footer {
+	margin-top: 16px;
+	text-align: right;
+}
+
+/* ── mcp-inspector-modal ─────────────────────────────────────────────────── */
+.ia-mcpi-desc {
+	color: var(--text-muted);
+}
+.ia-mcpi-tabbar {
+	margin-bottom: 16px;
+}
+.ia-mcpi-tab {
+	flex: 1;
+	padding: 8px;
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-primary);
+	color: var(--text-normal);
+}
+.ia-mcpi-tab--no-left-border {
+	border-left: none;
+}
+.ia-mcpi-tab--first {
+	border-radius: 4px 0 0 4px;
+}
+.ia-mcpi-tab--last {
+	border-radius: 0 4px 4px 0;
+}
+.ia-mcpi-tab.ia-mcpi-tab--active {
+	background: var(--interactive-accent);
+	color: white;
+}
+.ia-mcpi-content {
+	min-height: 300px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 0 4px 4px 4px;
+	padding: 16px;
+}
+.ia-mcpi-refresh-btn {
+	margin-top: 16px;
+	padding: 6px 12px;
+	background: var(--interactive-accent);
+	color: white;
+	border: none;
+	border-radius: 4px;
+}
+.ia-mcpi-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+.ia-mcpi-status--muted {
+	color: var(--text-muted);
+}
+.ia-mcpi-status--success {
+	color: var(--text-success);
+}
+.ia-mcpi-status--error {
+	color: var(--text-error);
+}
+.ia-mcpi-action-btn {
+	padding: 4px 8px;
+	font-size: 12px;
+	color: white;
+}
+.ia-mcpi-action-btn--connect {
+	background: var(--interactive-accent);
+}
+.ia-mcpi-action-btn--disconnect {
+	background: var(--background-modifier-error);
+}
+.ia-mcpi-params-list {
+	margin: 0;
+	padding-left: 16px;
+}
+.ia-mcpi-log-container {
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	padding: 8px;
+	height: 200px;
+	overflow-y: auto;
+	background: var(--background-primary);
+	font-family: monospace;
+	font-size: 12px;
+}
+.ia-mcpi-test-section {
+	margin-top: 16px;
+}
+.ia-mcpi-selection-row {
+	gap: 8px;
+	margin-bottom: 12px;
+	align-items: center;
+}
+.ia-mcpi-select--flex {
+	flex: 1;
+}
+.ia-mcpi-params-box {
+	margin-bottom: 12px;
+	padding: 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background: var(--background-secondary);
+}
+.ia-mcpi-param-row {
+	margin-bottom: 8px;
+}
+.ia-mcpi-param-label {
+	margin-bottom: 4px;
+	font-weight: 600;
+}
+.ia-mcpi-param-desc {
+	font-size: 0.9em;
+	color: var(--text-muted);
+	margin-bottom: 4px;
+}
+.ia-mcpi-param-input {
+	width: 100%;
+}
+.ia-mcpi-buttons-row {
+	gap: 8px;
+	margin-bottom: 12px;
+}
+.ia-mcpi-result-container {
+	margin-top: 12px;
+	padding: 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background: var(--background-primary);
+	font-family: monospace;
+	font-size: 12px;
+	max-height: 300px;
+	overflow-y: auto;
+}
+.ia-mcpi-result-header {
+	margin-bottom: 8px;
+	font-weight: 600;
+}
+.ia-mcpi-result-header--success {
+	color: var(--text-success);
+}
+.ia-mcpi-result-header--error {
+	color: var(--text-error);
+}
+.ia-mcpi-result-error {
+	color: var(--text-error);
+	margin-bottom: 8px;
+}
+.ia-mcpi-result-pre {
+	white-space: pre-wrap;
+	word-break: break-word;
+	margin: 0;
+}
+.ia-mcpi-error-header {
+	color: var(--text-error);
+	font-weight: 600;
+	margin-bottom: 8px;
+}

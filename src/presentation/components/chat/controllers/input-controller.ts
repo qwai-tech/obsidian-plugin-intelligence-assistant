@@ -35,6 +35,7 @@ export class InputController extends BaseController {
 	 */
 	setInputElement(element: HTMLTextAreaElement): void {
 		this.inputElement = element;
+		this.inputElement.addClass('ia-autoresize-textarea');
 		this.setupInputHandlers();
 	}
 
@@ -102,8 +103,8 @@ export class InputController extends BaseController {
 	private autoResizeInput(): void {
 		if (!this.inputElement) return;
 
-		this.inputElement.setCssProps({ 'height': 'auto' });
-		this.inputElement.setCssProps({ 'height': `${Math.min(this.inputElement.scrollHeight, 200)}px` });
+		this.inputElement.setCssProps({ '--ia-textarea-height': 'auto' });
+		this.inputElement.setCssProps({ '--ia-textarea-height': `${Math.min(this.inputElement.scrollHeight, 200)}px` });
 	}
 
 	/**

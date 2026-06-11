@@ -217,9 +217,8 @@ function applyAvatarAndLabel(
 
 	const setDefaultAvatar = (emoji: string, label: string) => {
 		avatar.setText(emoji);
-		avatar.setCssProps({
-			'background': 'var(--background-modifier-border)'
-		});
+		avatar.removeClass('ia-chat-avatar--provider-bg');
+		avatar.addClass('ia-chat-avatar--default-bg');
 		labelElement.setText(label);
 	};
 
@@ -252,9 +251,8 @@ function applyAvatarAndLabel(
 	} else {
 		avatar.setText(fallbackAvatar);
 	}
-	avatar.setCssProps({
-		'background': fallbackColor
-	});
+	avatar.setCssProps({ '--ia-avatar-bg': fallbackColor });
+	avatar.addClass('ia-chat-avatar--provider-bg');
 	avatar.setAttr('title', providerLabel);
 
 	labelElement.addClass('ia-chat-message__model-label');

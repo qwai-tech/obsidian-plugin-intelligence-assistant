@@ -48,12 +48,12 @@ export class MCPInspectorModal extends Modal {
 		const descEl = contentEl.createEl('p', {
 			text: t('modals.mcpInspector.desc')
 		});
-		descEl.setCssProps({ 'color': 'var(--text-muted)' });
+		descEl.addClass('ia-mcpi-desc');
 
 		// Create tabs for different views
 		const tabContainer = contentEl.createDiv();
 		tabContainer.removeClass('ia-hidden');
-		tabContainer.setCssProps({ 'margin-bottom': '16px' });
+		tabContainer.addClass('ia-mcpi-tabbar');
 
 		const connectionsTab = tabContainer.createEl('button', { text: t('modals.mcpInspector.tabs.connections') });
 		const toolsTab = tabContainer.createEl('button', { text: t('modals.mcpInspector.tabs.tools') });
@@ -61,37 +61,31 @@ export class MCPInspectorModal extends Modal {
 
 		// Style tabs
 		const tabs = [connectionsTab, toolsTab, logsTab];
+		const setActiveTab = (activeIndex: number) => {
+			tabs.forEach((tab, index) => {
+				tab.toggleClass('ia-mcpi-tab--active', index === activeIndex);
+			});
+		};
 		tabs.forEach((tab, index) => {
-			tab.setCssProps({ 'flex': '1' });
-			tab.setCssProps({ 'padding': '8px' });
+			tab.addClass('ia-mcpi-tab');
 			tab.addClass('ia-clickable');
-			tab.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
-			tab.setCssProps({ 'background': 'var(--background-primary)' });
-			tab.setCssProps({ 'color': 'var(--text-normal)' });
-
-			if (index === 0) {
-				tab.setCssProps({ 'background': 'var(--interactive-accent)' });
-				tab.setCssProps({ 'color': 'white' });
-			}
 
 			// Remove border on selected side
 			if (index > 0) {
-				tab.setCssProps({ 'border-left': 'none' });
+				tab.addClass('ia-mcpi-tab--no-left-border');
 			}
 
 			if (index === tabs.length - 1) {
-				tab.setCssProps({ 'border-radius': '0 4px 4px 0' });
+				tab.addClass('ia-mcpi-tab--last');
 			} else if (index === 0) {
-				tab.setCssProps({ 'border-radius': '4px 0 0 4px' });
+				tab.addClass('ia-mcpi-tab--first');
 			}
 		});
+		setActiveTab(0);
 
 		// Content area
 		const contentContainer = contentEl.createDiv();
-		contentContainer.setCssProps({ 'min-height': '300px' });
-		contentContainer.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
-		contentContainer.setCssProps({ 'border-radius': '0 4px 4px 4px' });
-		contentContainer.setCssProps({ 'padding': '16px' });
+		contentContainer.addClass('ia-mcpi-content');
 
 		// Create content for each tab
 		const connectionsContent = contentContainer.createDiv();
@@ -111,16 +105,7 @@ export class MCPInspectorModal extends Modal {
 			toolsContent.addClass('ia-hidden');
 			logsContent.addClass('ia-hidden');
 
-			// Update active tab styles
-			tabs.forEach((tab, index) => {
-				if (index === 0) {
-					tab.setCssProps({ 'background': 'var(--interactive-accent)' });
-					tab.setCssProps({ 'color': 'white' });
-				} else {
-					tab.setCssProps({ 'background': 'var(--background-primary)' });
-					tab.setCssProps({ 'color': 'var(--text-normal)' });
-				}
-			});
+			setActiveTab(0);
 		});
 
 		toolsTab.addEventListener('click', () => {
@@ -128,16 +113,7 @@ export class MCPInspectorModal extends Modal {
 			toolsContent.removeClass('ia-hidden');
 			logsContent.addClass('ia-hidden');
 
-			// Update active tab styles
-			tabs.forEach((tab, index) => {
-				if (index === 1) {
-					tab.setCssProps({ 'background': 'var(--interactive-accent)' });
-					tab.setCssProps({ 'color': 'white' });
-				} else {
-					tab.setCssProps({ 'background': 'var(--background-primary)' });
-					tab.setCssProps({ 'color': 'var(--text-normal)' });
-				}
-			});
+			setActiveTab(1);
 		});
 
 		logsTab.addEventListener('click', () => {
@@ -145,26 +121,12 @@ export class MCPInspectorModal extends Modal {
 			toolsContent.addClass('ia-hidden');
 			logsContent.removeClass('ia-hidden');
 
-			// Update active tab styles
-			tabs.forEach((tab, index) => {
-				if (index === 2) {
-					tab.setCssProps({ 'background': 'var(--interactive-accent)' });
-					tab.setCssProps({ 'color': 'white' });
-				} else {
-					tab.setCssProps({ 'background': 'var(--background-primary)' });
-					tab.setCssProps({ 'color': 'var(--text-normal)' });
-				}
-			});
+			setActiveTab(2);
 		});
 
 		// Refresh button
 		const refreshBtn = contentEl.createEl('button', { text: t('modals.mcpInspector.refreshBtn') });
-		refreshBtn.setCssProps({ 'margin-top': '16px' });
-		refreshBtn.setCssProps({ 'padding': '6px 12px' });
-		refreshBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
-		refreshBtn.setCssProps({ 'color': 'white' });
-		refreshBtn.setCssProps({ 'border': 'none' });
-		refreshBtn.setCssProps({ 'border-radius': '4px' });
+		refreshBtn.addClass('ia-mcpi-refresh-btn');
 		refreshBtn.addClass('ia-clickable');
 
 		refreshBtn.addEventListener('click', () => {
@@ -195,8 +157,7 @@ export class MCPInspectorModal extends Modal {
 		}
 
 		const table = container.createEl('table');
-		table.setCssProps({ 'width': '100%' });
-		table.setCssProps({ 'border-collapse': 'collapse' });
+		table.addClass('ia-mcpi-table');
 
 		const headerRow = table.createEl('tr');
 		headerRow.createEl('th', { text: t('modals.mcpInspector.connections.headers.server') });
@@ -217,13 +178,13 @@ export class MCPInspectorModal extends Modal {
 
 			if (!isEnabled) {
 				statusCell.setText(t('modals.mcpInspector.connections.statusDisabled'));
-				statusCell.setCssProps({ 'color': 'var(--text-muted)' });
+				statusCell.addClass('ia-mcpi-status--muted');
 			} else if (isConnected) {
 				statusCell.setText(t('modals.mcpInspector.connections.statusConnected'));
-				statusCell.setCssProps({ 'color': 'var(--text-success)' });
+				statusCell.addClass('ia-mcpi-status--success');
 			} else {
 				statusCell.setText(t('modals.mcpInspector.connections.statusDisconnected'));
-				statusCell.setCssProps({ 'color': 'var(--text-error)' });
+				statusCell.addClass('ia-mcpi-status--error');
 			}
 
 			// Tools count
@@ -242,17 +203,10 @@ export class MCPInspectorModal extends Modal {
 			// Actions
 			const actionsCell = row.createEl('td');
 			const actionBtn = actionsCell.createEl('button', { text: isConnected ? t('modals.mcpInspector.connections.disconnectBtn') : t('modals.mcpInspector.connections.connectBtn') });
-			actionBtn.setCssProps({ 'padding': '4px 8px' });
-			actionBtn.setCssProps({ 'font-size': '12px' });
+			actionBtn.addClass('ia-mcpi-action-btn');
 			actionBtn.addClass('ia-clickable');
-
-			if (isConnected) {
-				actionBtn.setCssProps({ 'background': 'var(--background-modifier-error)' });
-				actionBtn.setCssProps({ 'color': 'white' });
-			} else {
-				actionBtn.setCssProps({ 'background': 'var(--interactive-accent)' });
-				actionBtn.setCssProps({ 'color': 'white' });
-			}
+			actionBtn.toggleClass('ia-mcpi-action-btn--disconnect', isConnected);
+			actionBtn.toggleClass('ia-mcpi-action-btn--connect', !isConnected);
 
 			actionBtn.disabled = !isEnabled;
 			actionBtn.addEventListener('click', () => {
@@ -328,8 +282,7 @@ export class MCPInspectorModal extends Modal {
 			}
 
 			const toolsTable = serverSection.createEl('table');
-			toolsTable.setCssProps({ 'width': '100%' });
-			toolsTable.setCssProps({ 'border-collapse': 'collapse' });
+			toolsTable.addClass('ia-mcpi-table');
 
 			const headerRow = toolsTable.createEl('tr');
 			headerRow.createEl('th', { text: t('modals.mcpInspector.tools.headers.tool') });
@@ -346,8 +299,7 @@ export class MCPInspectorModal extends Modal {
 				const paramsCell = row.createEl('td');
 				if (def.parameters && def.parameters.length > 0) {
 					const paramsList = paramsCell.createEl('ul');
-					paramsList.setCssProps({ 'margin': '0' });
-					paramsList.setCssProps({ 'padding-left': '16px' });
+					paramsList.addClass('ia-mcpi-params-list');
 					for (const param of def.parameters) {
 						const paramItem = paramsList.createEl('li');
 						paramItem.setText(`${param.name} (${param.type}): ${param.description || ''}`);
@@ -365,14 +317,7 @@ export class MCPInspectorModal extends Modal {
 
 		// Display any stored logs or debugging information
 		const logContainer = container.createDiv();
-		logContainer.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
-		logContainer.setCssProps({ 'border-radius': '4px' });
-		logContainer.setCssProps({ 'padding': '8px' });
-		logContainer.setCssProps({ 'height': '200px' });
-		logContainer.setCssProps({ 'overflow-y': 'auto' });
-		logContainer.setCssProps({ 'background': 'var(--background-primary)' });
-		logContainer.setCssProps({ 'font-family': 'monospace' });
-		logContainer.setCssProps({ 'font-size': '12px' });
+		logContainer.addClass('ia-mcpi-log-container');
 
 		logContainer.createEl('p', {
 			text: t('modals.mcpInspector.logs.placeholder')
@@ -396,18 +341,16 @@ export class MCPInspectorModal extends Modal {
 
 		// Add a test tool execution section
 		const testSection = container.createDiv();
-		testSection.setCssProps({ 'margin-top': '16px' });
+		testSection.addClass('ia-mcpi-test-section');
 
 		testSection.createEl('h4', { text: t('modals.mcpInspector.logs.testTitle') });
 
 		const selectionRow = testSection.createDiv();
 		selectionRow.removeClass('ia-hidden');
-		selectionRow.setCssProps({ 'gap': '8px' });
-		selectionRow.setCssProps({ 'margin-bottom': '12px' });
-		selectionRow.setCssProps({ 'align-items': 'center' });
+		selectionRow.addClass('ia-mcpi-selection-row');
 
 		const serverSelect = selectionRow.createEl('select');
-		serverSelect.setCssProps({ 'flex': '1' });
+		serverSelect.addClass('ia-mcpi-select--flex');
 		const inspectorRegistry = this.plugin.getToolRegistry();
 		const connectedServers = getConnectedMcpServers(inspectorRegistry);
 
@@ -417,18 +360,14 @@ export class MCPInspectorModal extends Modal {
 		}
 
 		const toolSelect = selectionRow.createEl('select');
-		toolSelect.setCssProps({ 'flex': '1' });
+		toolSelect.addClass('ia-mcpi-select--flex');
 		toolSelect.disabled = true;
 		toolSelect.createEl('option', { text: t('modals.mcpInspector.logs.selectTool'), value: '' });
 
 		// Container for dynamic parameter inputs
 		const paramsContainer = testSection.createDiv();
 		paramsContainer.addClass('ia-hidden');
-		paramsContainer.setCssProps({ 'margin-bottom': '12px' });
-		paramsContainer.setCssProps({ 'padding': '12px' });
-		paramsContainer.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
-		paramsContainer.setCssProps({ 'border-radius': '4px' });
-		paramsContainer.setCssProps({ 'background': 'var(--background-secondary)' });
+		paramsContainer.addClass('ia-mcpi-params-box');
 
 		// Update tools when server is selected
 		serverSelect.addEventListener('change', () => {
@@ -470,19 +409,16 @@ export class MCPInspectorModal extends Modal {
 
 			for (const param of tool.definition.parameters) {
 				const paramRow = paramsContainer.createDiv();
-				paramRow.setCssProps({ 'margin-bottom': '8px' });
+				paramRow.addClass('ia-mcpi-param-row');
 
 				const label = paramRow.createEl('label');
 				label.removeClass('ia-hidden');
-				label.setCssProps({ 'margin-bottom': '4px' });
-				label.setCssProps({ 'font-weight': '600' });
+				label.addClass('ia-mcpi-param-label');
 				label.setText(`${param.name}${param.required ? ' *' : ''}`);
 
 				if (param.description) {
 					const desc = paramRow.createEl('div');
-					desc.setCssProps({ 'font-size': '0.9em' });
-					desc.setCssProps({ 'color': 'var(--text-muted)' });
-					desc.setCssProps({ 'margin-bottom': '4px' });
+					desc.addClass('ia-mcpi-param-desc');
 					desc.setText(param.description);
 				}
 
@@ -512,7 +448,7 @@ export class MCPInspectorModal extends Modal {
 					input = paramRow.createEl('input', { type: 'text' });
 				}
 
-				input.setCssProps({ 'width': '100%' });
+				input.addClass('ia-mcpi-param-input');
 				input.dataset.paramName = param.name;
 				input.dataset.paramType = param.type;
 				input.dataset.required = param.required ? 'true' : 'false';
@@ -522,8 +458,7 @@ export class MCPInspectorModal extends Modal {
 		// Buttons row
 		const buttonsRow = testSection.createDiv();
 		buttonsRow.removeClass('ia-hidden');
-		buttonsRow.setCssProps({ 'gap': '8px' });
-		buttonsRow.setCssProps({ 'margin-bottom': '12px' });
+		buttonsRow.addClass('ia-mcpi-buttons-row');
 
 		// Test execution button
 		const testBtn = buttonsRow.createEl('button', { text: t('modals.mcpInspector.logs.performBtn') });
@@ -543,15 +478,7 @@ export class MCPInspectorModal extends Modal {
 		// Result display area
 		const resultContainer = testSection.createDiv();
 		resultContainer.addClass('ia-hidden');
-		resultContainer.setCssProps({ 'margin-top': '12px' });
-		resultContainer.setCssProps({ 'padding': '12px' });
-		resultContainer.setCssProps({ 'border': '1px solid var(--background-modifier-border)' });
-		resultContainer.setCssProps({ 'border-radius': '4px' });
-		resultContainer.setCssProps({ 'background': 'var(--background-primary)' });
-		resultContainer.setCssProps({ 'font-family': 'monospace' });
-		resultContainer.setCssProps({ 'font-size': '12px' });
-		resultContainer.setCssProps({ 'max-height': '300px' });
-		resultContainer.setCssProps({ 'overflow-y': 'auto' });
+		resultContainer.addClass('ia-mcpi-result-container');
 
 		testBtn.addEventListener('click', () => {
 			void (async () => {
@@ -636,29 +563,25 @@ export class MCPInspectorModal extends Modal {
 				resultContainer.removeClass('ia-hidden');
 
 				const header = resultContainer.createEl('div');
-				header.setCssProps({ 'margin-bottom': '8px' });
-				header.setCssProps({ 'font-weight': '600' });
+				header.addClass('ia-mcpi-result-header');
 
 				if (result.success) {
-					header.setCssProps({ 'color': 'var(--text-success)' });
+					header.addClass('ia-mcpi-result-header--success');
 					header.setText(t('modals.mcpInspector.logs.success'));
 				} else {
-					header.setCssProps({ 'color': 'var(--text-error)' });
+					header.addClass('ia-mcpi-result-header--error');
 					header.setText(t('modals.mcpInspector.logs.failed'));
 				}
 
 				if (result.error) {
 					const errorDiv = resultContainer.createEl('div');
-					errorDiv.setCssProps({ 'color': 'var(--text-error)' });
-					errorDiv.setCssProps({ 'margin-bottom': '8px' });
+					errorDiv.addClass('ia-mcpi-result-error');
 					errorDiv.setText(t('modals.mcpInspector.logs.errorLabel', { message: result.error }));
 				}
 
 				if (result.result !== undefined) {
 					const resultDiv = resultContainer.createEl('pre');
-					resultDiv.setCssProps({ 'white-space': 'pre-wrap' });
-					resultDiv.setCssProps({ 'word-break': 'break-word' });
-					resultDiv.setCssProps({ 'margin': '0' });
+					resultDiv.addClass('ia-mcpi-result-pre');
 					resultDiv.setText(typeof result.result === 'string'
 						? result.result
 						: JSON.stringify(result.result, null, 2));
@@ -670,9 +593,7 @@ export class MCPInspectorModal extends Modal {
 				resultContainer.removeClass('ia-hidden');
 
 				const header = resultContainer.createEl('div');
-				header.setCssProps({ 'color': 'var(--text-error)' });
-				header.setCssProps({ 'font-weight': '600' });
-				header.setCssProps({ 'margin-bottom': '8px' });
+				header.addClass('ia-mcpi-error-header');
 				header.setText(t('modals.mcpInspector.logs.errorTitle'));
 
 				const errorDiv = resultContainer.createEl('div');

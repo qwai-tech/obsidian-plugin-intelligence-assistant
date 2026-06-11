@@ -27,7 +27,7 @@ export function renderCliToolsSection(
 	}).addClass('ia-table-subtext');
 
 	const buttonContainer = content.createDiv();
-	buttonContainer.setCssProps({ 'display': 'flex', 'gap': '8px', 'margin-bottom': '16px' });
+	buttonContainer.addClass('ia-cli-tools-toolbar');
 
 	const addButton = buttonContainer.createEl('button', { text: t('settings.tools.cli.addBtn') });
 	addButton.addClass('mod-cta');
@@ -336,25 +336,15 @@ class CLIToolConfigModal extends Modal {
 		for (let i = 0; i < params.length; i++) {
 			const param = params[i];
 			const paramDiv = container.createDiv('cli-param-item');
-			paramDiv.setCssProps({
-				'margin-bottom': '1em',
-				'padding': '0.5em',
-				'border': '1px solid var(--background-modifier-border)',
-				'border-radius': '4px'
-			});
+			paramDiv.addClass('ia-cli-tools-param-item');
 
 			const headerDiv = paramDiv.createDiv();
-			headerDiv.setCssProps({
-				'display': 'flex',
-				'justify-content': 'space-between',
-				'align-items': 'center',
-				'margin-bottom': '0.5em'
-			});
+			headerDiv.addClass('ia-cli-tools-param-header');
 
 			headerDiv.createEl('strong', { text: t('settings.tools.cli.modal.paramN', { n: i + 1 }) });
 
 			const removeBtn = headerDiv.createEl('button', { text: '✕' });
-			removeBtn.setCssProps({ 'padding': '2px 6px' });
+			removeBtn.addClass('ia-cli-tools-param-remove');
 			removeBtn.addEventListener('click', () => {
 				params.splice(i, 1);
 				this.renderParameters(container, persist);
@@ -479,15 +469,7 @@ class CLIToolPresetModal extends Modal {
 				const isAlreadyAdded = existingNames.has(preset.config.name);
 
 				const presetDiv = categoryContainer.createDiv('cli-preset-item');
-				presetDiv.setCssProps({
-					'display': 'flex',
-					'justify-content': 'space-between',
-					'align-items': 'center',
-					'padding': '8px 12px',
-					'margin-bottom': '4px',
-					'background': 'var(--background-secondary)',
-					'border-radius': '4px'
-				});
+				presetDiv.addClass('ia-cli-tools-preset-item');
 
 				const infoDiv = presetDiv.createDiv();
 				infoDiv.createEl('strong', { text: t(`settings.tools.cli.presets.names.${preset.id}`, { defaultValue: preset.name }) });
@@ -498,14 +480,14 @@ class CLIToolPresetModal extends Modal {
 				const commandDiv = infoDiv.createEl('code', {
 					text: `${preset.config.command} ${(preset.config.args ?? []).join(' ')}`.trim()
 				});
-				commandDiv.setCssProps({ 'font-size': '11px', 'color': 'var(--text-muted)' });
+				commandDiv.addClass('ia-cli-tools-preset-command');
 
 				const addBtn = presetDiv.createEl('button', {
 					text: isAlreadyAdded ? t('settings.tools.cli.presets.addedBtn') : t('settings.tools.cli.presets.addBtn')
 				});
 				if (isAlreadyAdded) {
 					addBtn.disabled = true;
-					addBtn.setCssProps({ 'opacity': '0.5' });
+					addBtn.addClass('ia-cli-tools-preset-add--disabled');
 				} else {
 					addBtn.addClass('mod-cta');
 					addBtn.addEventListener('click', () => {
@@ -517,7 +499,7 @@ class CLIToolPresetModal extends Modal {
 
 		// Add close button
 		const footer = contentEl.createDiv();
-		footer.setCssProps({ 'margin-top': '16px', 'text-align': 'right' });
+		footer.addClass('ia-cli-tools-preset-footer');
 		const closeBtn = footer.createEl('button', { text: t('settings.tools.cli.presets.closeBtn') });
 		closeBtn.addEventListener('click', () => this.close());
 	}
@@ -546,7 +528,7 @@ class CLIToolPresetModal extends Modal {
 		button.textContent = t('settings.tools.cli.presets.addedBtn');
 		button.disabled = true;
 		button.removeClass('mod-cta');
-		button.setCssProps({ 'opacity': '0.5' });
+		button.addClass('ia-cli-tools-preset-add--disabled');
 
 		new Notice(t('settings.tools.cli.presets.notices.added', { name: preset.name }));
 	}

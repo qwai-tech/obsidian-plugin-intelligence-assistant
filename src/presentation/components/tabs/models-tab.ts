@@ -176,7 +176,8 @@ export function displayModelsTab(
 		(model.capabilities ?? []).forEach(cap => {
 			const badge = capsDiv.createEl('span', { text: cap });
 			badge.addClass('ia-tag');
-			badge.setCssProps({ 'background': capabilityColors[cap] || 'var(--background-modifier-border)' });
+			badge.addClass('ia-tag--dyn-bg');
+			badge.setCssProps({ '--ia-badge-bg': capabilityColors[cap] || 'var(--background-modifier-border)' });
 		});
 
 		const statusCell = row.insertCell();

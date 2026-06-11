@@ -78,9 +78,10 @@ export class ChatInputComponent {
 		this.stopBtn.addClass('ia-hidden');
 		this.stopBtn.addEventListener('click', () => this.callbacks.onStopStreaming());
 
+		this.textarea.addClass('ia-autoresize-textarea');
 		this.textarea.addEventListener('input', () => {
-			this.textarea.setCssProps({ 'height': 'auto' });
-			this.textarea.setCssProps({ 'height': Math.min(this.textarea.scrollHeight, 200) + 'px' });
+			this.textarea.setCssProps({ '--ia-textarea-height': 'auto' });
+			this.textarea.setCssProps({ '--ia-textarea-height': Math.min(this.textarea.scrollHeight, 200) + 'px' });
 			this.sendBtn.toggleClass('is-active', this.textarea.value.trim().length > 0);
 		});
 
@@ -88,7 +89,7 @@ export class ChatInputComponent {
 			const text = this.textarea.value.trim();
 			if (!text && this.state.currentAttachments.length === 0 && this.state.referencedFiles.length === 0) return;
 			this.textarea.value = '';
-			this.textarea.setCssProps({ 'height': 'auto' });
+			this.textarea.setCssProps({ '--ia-textarea-height': 'auto' });
 			this.sendBtn.removeClass('is-active');
 			await this.callbacks.onSendMessage(text);
 		};
