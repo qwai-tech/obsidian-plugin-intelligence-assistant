@@ -392,5 +392,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function sleep(ms: number): Promise<void> {
-	return new Promise(resolve => window.setTimeout(resolve, ms));
+	// Runs in the Node (wdio) process — no `window`, use the Node global timer.
+	return new Promise(resolve => setTimeout(resolve, ms));
 }

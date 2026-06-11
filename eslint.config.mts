@@ -144,6 +144,9 @@ export default defineConfig([
       "@typescript-eslint/require-await": "off",
       "obsidianmd/hardcoded-config-path": "off",
       "obsidianmd/prefer-file-manager-trash-file": "off",
+      // E2E support code runs in the Node (wdio) process, not the Obsidian
+      // renderer, so `window` timers do not exist here — use the Node globals.
+      "obsidianmd/prefer-window-timers": "off",
       "no-console": "off",
     },
   },
