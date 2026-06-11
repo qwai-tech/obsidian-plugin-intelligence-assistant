@@ -13,6 +13,7 @@ describe('Chat stop generation', () => {
 		await waitForPluginReady();
 		await chat.open();
 		await chat.newChat();
+		await chat.selectMode('chat');
 	});
 
 	it('keeps partial content and ignores later chunks after stop', async () => {

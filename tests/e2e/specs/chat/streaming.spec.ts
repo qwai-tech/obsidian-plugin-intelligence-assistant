@@ -13,6 +13,7 @@ describe('Chat streaming', () => {
 		await waitForPluginReady();
 		await chat.open();
 		await chat.newChat();
+		await chat.selectMode('chat');
 	});
 
 	it('renders partial chunks before the stream completes', async () => {
