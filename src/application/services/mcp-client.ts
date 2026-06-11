@@ -4,6 +4,7 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import { promises as fs, constants as fsConstants } from 'fs';
 import type { MCPServerConfig } from '@/types';
+import { buildSubprocessEnv } from '@/application/services/subprocess-env';
 
 export interface MCPTool {
 	name: string;
@@ -44,14 +45,9 @@ export class MCPClient {
 				command = await this.resolveCommandPath(command);
 			}
 
-			// Create stdio transport
-			const mergedEnv = { ...process.env, ...this._config.env };
-			const env: Record<string, string> = {};
-			for (const [key, value] of Object.entries(mergedEnv)) {
-				if (value !== undefined) {
-					env[key] = value;
-				}
-			}
+			// Create stdio transport with an allowlisted environment (avoids
+			// leaking unrelated parent-process secrets into the MCP subprocess).
+			const env = buildSubprocessEnv(this._config.env);
 			this.transport = new StdioClientTransport({
 				command,
 				args: this._config.args || [],

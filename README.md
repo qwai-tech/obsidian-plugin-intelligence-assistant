@@ -74,6 +74,21 @@ Command Palette (`Cmd+P`) and context menus expose task-oriented Agent entry poi
 - **Web Search**: 8 supported providers for real-time external grounding.
 - **MCP & OpenAPI**: Connect external data sources and automation scripts.
 
+## 🔐 Capabilities & Data Access
+
+This is an *agentic* plugin, so it deliberately uses a few capabilities beyond the standard vault API. Each is opt-in and used only for the feature listed. Nothing is collected or transmitted by the plugin itself — network traffic only goes to the LLM/search providers and MCP/OpenAPI endpoints **you** configure.
+
+| Capability | Why it's needed | Scope / safeguards |
+| --- | --- | --- |
+| **Shell execution** (`child_process`) | Running **CLI tools** and **MCP stdio servers** that you add | Only commands you configure are run; nothing executes without an explicit tool/server definition |
+| **Direct filesystem access** (`fs`) | Locating and probing external executables (e.g. `npx`, `python`) when launching MCP servers | Read-only `access()` checks for resolving command paths; all *vault* content is read/written exclusively through the Obsidian API |
+| **Environment variables** | Spawned tools/servers need a working environment (PATH, HOME, locale, proxy, language toolchains) | An **allowlist** is forwarded — unrelated secrets and identity variables are **not** passed through. Anything extra a tool needs is set explicitly in that tool's own `env` config |
+| **Vault enumeration** (`getMarkdownFiles`) | Building the local **RAG** index | Runs only when you trigger indexing; respects your include/exclude settings |
+| **Clipboard** (`navigator.clipboard`) | "Copy" buttons in chat, plus optional `pbcopy`/`pbpaste` CLI presets | Write-on-click only; presets are off unless you add them |
+| **JSON-schema validation** (`ajv`) | Validating tool/agent argument schemas (also used internally by the MCP SDK) | Compiles schemas to validators in-memory; processes only your tool definitions |
+
+> Vault files are read and written **only** through the official Obsidian API (`vault.read`/`cachedRead`/`modify`/`create`). The capabilities above never touch vault content directly.
+
 ## 🌐 Internationalization
 
 Supports all 46 Obsidian languages, including full localization for the **Command Palette** and **Context Menus**.

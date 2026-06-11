@@ -4,6 +4,7 @@
  */
 
 import { spawn } from 'child_process';
+import { buildSubprocessEnv } from '@/application/services/subprocess-env';
 import type { Tool, ToolDefinition, ToolResult, ToolParameter } from './types';
 import type { CLIToolConfig, CLIToolParameter } from '@/types/features/cli-tools';
 import { DEFAULT_CLI_TIMEOUT } from '@/types/features/cli-tools';
@@ -144,7 +145,7 @@ export class CLITool implements Tool {
 			const proc = spawn(command, args, {
 				shell: useShell,
 				cwd,
-				env: { ...process.env, ...env },
+				env: buildSubprocessEnv(env),
 				timeout
 			});
 
