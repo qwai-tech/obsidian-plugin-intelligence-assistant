@@ -245,7 +245,7 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 		.addButton(button => {
 			button.buttonEl.setAttribute('data-testid', TestIds.settings.ragRebuildBtn);
 			button.setButtonText(t('settings.rag.indexMgmt.rebuild.btn'))
-			.setWarning()
+			.setDestructive()
 			.onClick(async () => {
 				button.setDisabled(true);
 				button.setButtonText(t('settings.rag.indexMgmt.rebuild.rebuilding'));
@@ -297,7 +297,7 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 		.setDesc(t('settings.rag.indexMgmt.clear.desc'))
 		.addButton(button => button
 			.setButtonText(t('settings.rag.indexMgmt.clear.btn'))
-			.setWarning()
+			.setDestructive()
 			.onClick(async () => {
 				button.setDisabled(true);
 				button.setButtonText(t('settings.rag.indexMgmt.clear.clearing'));

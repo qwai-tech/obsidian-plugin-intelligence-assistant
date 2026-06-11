@@ -41,6 +41,14 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
+		// Obsidian's imperative-render entry point. The declarative
+		// getSettingDefinitions() API (1.13.0) is intentionally not used for this
+		// multi-tab settings UI; delegate so internal re-renders don't call the
+		// deprecated display() method directly.
+		this.renderSettings();
+	}
+
+	private renderSettings(): void {
 		const {containerEl} = this;
 
 		containerEl.empty();
@@ -147,7 +155,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			this.app,
 			filters,
 			onFilterChange,
-			() => this.display(),
+			() => this.renderSettings(),
 			this.llmSubTab,
 			(tab) => { this.llmSubTab = tab; }
 		);
@@ -160,7 +168,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			this.plugin,
 			this.app,
 			() => this.testAllMCPConnections(),
-			() => this.display()
+			() => this.renderSettings()
 		);
 	}
 
@@ -170,16 +178,16 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			this.plugin,
 			this.toolsSubTab,
 			(tab) => { this.toolsSubTab = tab; },
-			() => this.display(),
+			() => this.renderSettings(),
 			() => {
 				this.activeTab = 'mcp';
-				this.display();
+				this.renderSettings();
 			}
 		);
 	}
 
 	private displayPromptsTab(containerEl: HTMLElement) {
-		displayPromptsTab(containerEl, this.plugin, this.app, () => this.display());
+		displayPromptsTab(containerEl, this.plugin, this.app, () => this.renderSettings());
 	}
 
 	private displayRAGTab(containerEl: HTMLElement) {
@@ -187,15 +195,15 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 	}
 
 	private displayAgentsTab(containerEl: HTMLElement) {
-		displayAgentsTab(containerEl, this.plugin, this.app, () => this.display());
+		displayAgentsTab(containerEl, this.plugin, this.app, () => this.renderSettings());
 	}
 
 	private displayUsageTab(containerEl: HTMLElement) {
-		void displayUsageTab(containerEl, this.plugin, this.app, () => this.display());
+		void displayUsageTab(containerEl, this.plugin, this.app, () => this.renderSettings());
 	}
 
 	private displayQuickActionsTab(containerEl: HTMLElement) {
-		displayQuickActionsTab(containerEl, this.plugin, this.app, () => this.display());
+		displayQuickActionsTab(containerEl, this.plugin, this.app, () => this.renderSettings());
 	}
 
 	private async testAllMCPConnections() {
@@ -270,7 +278,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			}
 		}
 
-		void this.display();
+		void this.renderSettings();
 	}
 
 }
