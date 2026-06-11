@@ -52,7 +52,7 @@ export default defineConfig([
     rules: {
       // Allow brand names, acronyms, and technical identifiers in UI text
       "obsidianmd/ui/sentence-case": ["warn", {
-        "acronyms": ["AI", "RAG", "MVC", "LLM", "API", "MCP", "URL", "JSON", "CSS", "HTML"],
+        "acronyms": ["AI", "RAG", "MVC", "LLM", "API", "MCP", "URL", "HTTP", "HTTPS", "JSON", "CSS", "HTML"],
         "brands": ["Ollama", "OpenAI", "DuckDuckGo", "DeepSeek", "Gemini", "Anthropic", "Google", "OpenRouter", "SAP"],
         "ignoreWords": ["Markdown", "llama2", "mistral", "codellama", "Cross-encoder"]
       }],

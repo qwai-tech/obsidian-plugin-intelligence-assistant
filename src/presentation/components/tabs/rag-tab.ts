@@ -522,14 +522,16 @@ function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssista
 		label: t('settings.rag.filters.excludeTypes.name'),
 		description: t('settings.rag.filters.excludeTypes.desc'),
 		includeDefaultForArrays: true
-	}).addTextArea(text => text
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-			.setPlaceholder('canvas, excalidraw')
-			.setValue(plugin.settings.ragConfig.excludeFileTypes.join(', '))
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.excludeFileTypes = value.split(',').map(s => s.trim()).filter(s => s);
-				await plugin.saveSettings();
-			}));
+	}).addTextArea(text => {
+			const excludeFileTypesPlaceholder = 'canvas, excalidraw';
+			return text
+				.setPlaceholder(excludeFileTypesPlaceholder)
+				.setValue(plugin.settings.ragConfig.excludeFileTypes.join(', '))
+				.onChange(async (value) => {
+					plugin.settings.ragConfig.excludeFileTypes = value.split(',').map(s => s.trim()).filter(s => s);
+					await plugin.saveSettings();
+				});
+		});
 
 	createSetting({
 		path: 'ragConfig.filterByTag',

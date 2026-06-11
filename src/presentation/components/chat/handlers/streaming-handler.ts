@@ -134,8 +134,7 @@ export async function handleStreamingChat(
 							reasoningContainer = messageEl.querySelector('.message-body')?.createDiv('reasoning-container') || null;
 							if (reasoningContainer) {
 								const reasoningHeader = reasoningContainer.createDiv('reasoning-header');
-								// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-								reasoningHeader.setText('💭 reasoning process');
+								reasoningHeader.setText('💭 Reasoning process');
 								reasoningHeader.addClass('ia-clickable');
 
 								const reasoningContent = reasoningContainer.createDiv('reasoning-content');
@@ -147,12 +146,10 @@ export async function handleStreamingChat(
 									isExpanded = !isExpanded;
 									if (isExpanded) {
 										reasoningContent.removeClass('ia-hidden');
-										// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-										reasoningHeader.setText('💭 reasoning process');
+										reasoningHeader.setText('💭 Reasoning process');
 									} else {
 										reasoningContent.addClass('ia-hidden');
-										// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-										reasoningHeader.setText('💭 reasoning process (click to expand)');
+										reasoningHeader.setText('💭 Reasoning process (click to expand)');
 									}
 								});
 							}

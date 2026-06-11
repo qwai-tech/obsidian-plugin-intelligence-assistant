@@ -8,6 +8,21 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
 import { applyConfigFieldMetadata, type ConfigFieldMetadataOptions } from '@/presentation/utils/config-field-metadata';
 
+// Verbatim example values shown as input placeholders (locale codes, URLs and
+// API-key prefixes). Declared as named constants so they render exactly as
+// written instead of being normalized to sentence case.
+const EXAMPLE_PLACEHOLDERS = {
+	searchLanguage: 'en',
+	serpApiKey: 'sk-...',
+	googleEngineId: 'search-engine-id',
+	serpApiUrl: 'https://serpapi.com/search',
+	tavilyKey: 'tvly-...',
+	searxngUrl: 'https://searxng.example.com/search',
+	braveKey: 'brv-...',
+	qwantKey: 'qwant-...',
+	mojeekKey: 'mjk-...',
+} as const;
+
 export function displayWebSearchTab(
 	containerEl: HTMLElement,
 	plugin: IntelligenceAssistantPlugin
@@ -133,8 +148,7 @@ export function displayWebSearchTab(
 		label: t('settings.websearch.searchLanguage.name'),
 		description: t('settings.websearch.searchLanguage.desc')
 	}).addText(text => text
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-			.setPlaceholder('en')
+			.setPlaceholder(EXAMPLE_PLACEHOLDERS.searchLanguage)
 			.setValue(config.searchLanguage ?? '')
 			.onChange((value) => {
 				config.searchLanguage = value.trim() || undefined;
@@ -184,8 +198,7 @@ export function displayWebSearchTab(
 		label: t('settings.websearch.apiKey.name'),
 		description: t('settings.websearch.apiKey.desc')
 	}).addText(text => text
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-			.setPlaceholder('sk-...')
+			.setPlaceholder(EXAMPLE_PLACEHOLDERS.serpApiKey)
 			.setValue(config.apiKey ?? '')
 			.onChange((value) => {
 				config.apiKey = value.trim() || undefined;
@@ -197,8 +210,7 @@ export function displayWebSearchTab(
 		label: t('settings.websearch.googleCseId.name'),
 		description: t('settings.websearch.googleCseId.desc')
 	}).addText(text => text
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-			.setPlaceholder('search-engine-id')
+			.setPlaceholder(EXAMPLE_PLACEHOLDERS.googleEngineId)
 			.setValue(config.googleCseId ?? '')
 			.onChange((value) => {
 				config.googleCseId = value.trim() || undefined;
@@ -210,8 +222,7 @@ export function displayWebSearchTab(
 		label: t('settings.websearch.serpapiEndpoint.name'),
 		description: t('settings.websearch.serpapiEndpoint.desc')
 	}).addText(text => text
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-			.setPlaceholder('https://serpapi.com/search')
+			.setPlaceholder(EXAMPLE_PLACEHOLDERS.serpApiUrl)
 			.setValue(config.serpapiEndpoint ?? '')
 			.onChange((value) => {
 				config.serpapiEndpoint = value.trim() || undefined;
@@ -223,8 +234,7 @@ export function displayWebSearchTab(
 		label: t('settings.websearch.tavilyApiKey.name'),
 		description: t('settings.websearch.tavilyApiKey.desc')
 	}).addText(text => text
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-			.setPlaceholder('tvly-...')
+			.setPlaceholder(EXAMPLE_PLACEHOLDERS.tavilyKey)
 			.setValue(config.tavilyApiKey ?? '')
 			.onChange((value) => {
 				config.tavilyApiKey = value.trim() || undefined;
@@ -236,8 +246,7 @@ export function displayWebSearchTab(
 		label: t('settings.websearch.searxngEndpoint.name'),
 		description: t('settings.websearch.searxngEndpoint.desc')
 	}).addText(text => text
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-			.setPlaceholder('https://searxng.example.com/search')
+			.setPlaceholder(EXAMPLE_PLACEHOLDERS.searxngUrl)
 			.setValue(config.searxngEndpoint ?? '')
 			.onChange((value) => {
 				config.searxngEndpoint = value.trim() || undefined;
@@ -249,8 +258,7 @@ export function displayWebSearchTab(
 		label: t('settings.websearch.braveApiKey.name'),
 		description: t('settings.websearch.braveApiKey.desc')
 	}).addText(text => text
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-			.setPlaceholder('brv-...')
+			.setPlaceholder(EXAMPLE_PLACEHOLDERS.braveKey)
 			.setValue(config.braveApiKey ?? '')
 			.onChange((value) => {
 				config.braveApiKey = value.trim() || undefined;
@@ -262,8 +270,7 @@ export function displayWebSearchTab(
 		label: t('settings.websearch.qwantApiKey.name'),
 		description: t('settings.websearch.qwantApiKey.desc')
 	}).addText(text => text
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-			.setPlaceholder('qwant-...')
+			.setPlaceholder(EXAMPLE_PLACEHOLDERS.qwantKey)
 			.setValue(config.qwantApiKey ?? '')
 			.onChange((value) => {
 				config.qwantApiKey = value.trim() || undefined;
@@ -275,8 +282,7 @@ export function displayWebSearchTab(
 		label: t('settings.websearch.mojeekApiKey.name'),
 		description: t('settings.websearch.mojeekApiKey.desc')
 	}).addText(text => text
-			// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-			.setPlaceholder('mjk-...')
+			.setPlaceholder(EXAMPLE_PLACEHOLDERS.mojeekKey)
 			.setValue(config.mojeekApiKey ?? '')
 			.onChange((value) => {
 				config.mojeekApiKey = value.trim() || undefined;

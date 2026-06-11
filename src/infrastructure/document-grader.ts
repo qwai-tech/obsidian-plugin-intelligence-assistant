@@ -14,8 +14,7 @@ export interface DocumentGrade {
 
 export interface GradeRequest {
   query: string;
-  // eslint-disable-next-line obsidianmd/prefer-active-doc -- This is an interface property name, not the global DOM `document` object.
-  document: {
+  doc: {
     content: string;
     path: string;
     metadata?: Record<string, unknown>;
@@ -78,7 +77,7 @@ export class DocumentGrader {
           shouldUse: true,
           explanation: 'Grader model returned empty response; using neutral fallback grade',
           chunkId: request.chunkId,
-          documentPath: request.document.path
+          documentPath: request.doc.path
         };
       }
 
@@ -101,7 +100,7 @@ export class DocumentGrader {
         shouldUse: true,
         explanation: `Error during grading: ${err.message}`,
         chunkId: request.chunkId,
-        documentPath: request.document.path
+        documentPath: request.doc.path
       };
     }
   }
@@ -151,7 +150,7 @@ export class DocumentGrader {
       shouldUse: true,
       explanation: 'Grading disabled, using default quality',
       chunkId: request.chunkId,
-      documentPath: request.document.path
+      documentPath: request.doc.path
     };
   }
 
@@ -159,8 +158,8 @@ export class DocumentGrader {
     const template = this.config.graderPromptTemplate || this.getDefaultPromptTemplate();
     return template
       .replace('{query}', request.query)
-      .replace('{document}', request.document.content)
-      .replace('{path}', request.document.path || 'unknown');
+      .replace('{document}', request.doc.content)
+      .replace('{path}', request.doc.path || 'unknown');
   }
 
   private parseResponse(content: string): unknown {
@@ -189,7 +188,7 @@ export class DocumentGrader {
       shouldUse: typeof result.shouldUse === 'boolean' ? result.shouldUse : true,
       explanation: typeof result.explanation === 'string' ? result.explanation : 'No explanation provided',
       chunkId: request.chunkId,
-      documentPath: request.document.path
+      documentPath: request.doc.path
     };
   }
 

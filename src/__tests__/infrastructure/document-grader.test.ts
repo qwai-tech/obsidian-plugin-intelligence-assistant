@@ -50,7 +50,7 @@ const baseConfig: RAGConfig = {
 
 const request = {
 	query: 'How does grading work?',
-	document: {
+	doc: {
 		content: 'The grader scores document relevance.',
 		path: 'notes/grading.md',
 	},

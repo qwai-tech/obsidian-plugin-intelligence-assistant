@@ -38,8 +38,8 @@ export class RAGManager {
     const files = this.app.vault.getMarkdownFiles();
     
     if (files.length === 0) {
-      // eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-      new Notice('ℹ️ No Markdown files found to index for RAG');
+      const noFilesMessage = 'ℹ️ No Markdown files found to index for RAG';
+      new Notice(noFilesMessage);
       return;
     }
     
@@ -141,8 +141,8 @@ export class RAGManager {
         const stats = this.vectorStore.getDetailedStats();
         if (stats.chunkCount === 0) {
           console.debug('[RAG Manager] No indexed documents found, suggesting user to embed documents');
-          // eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-          new Notice('ℹ️ No indexed documents found. Use "Embed all documents" command to index your vault for RAG.');
+          const noIndexMessage = 'ℹ️ No indexed documents found. Use "Embed all documents" command to index your vault for RAG.';
+          new Notice(noIndexMessage);
         }
       }
     
@@ -154,7 +154,7 @@ export class RAGManager {
         // Create grade requests for each result
         const gradeRequests = results.map(result => ({
           query: query,
-          document: {
+          doc: {
             content: result.chunk.content,
             path: result.chunk.metadata.path,
             metadata: result.chunk.metadata

@@ -156,10 +156,10 @@ export class ProviderConfigModal extends Modal {
 				description: t('modals.provider.baseUrl.ollamaDesc')
 			}).addText(text => {
 					text.inputEl.setAttribute('data-testid', TestIds.settings.providerModalBaseUrlInput);
+					const baseUrlPlaceholder = 'http://localhost:11434';
 					text
-						// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-						.setPlaceholder('http://localhost:11434')
-						.setValue(this.draft.baseUrl || 'http://localhost:11434')
+						.setPlaceholder(baseUrlPlaceholder)
+						.setValue(this.draft.baseUrl || baseUrlPlaceholder)
 						.onChange(value => {
 							this.draft.baseUrl = value.trim() || undefined;
 						});

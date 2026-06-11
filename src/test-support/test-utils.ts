@@ -83,8 +83,7 @@ export function createTestSettings(overrides: Partial<PluginSettings> = {}): Plu
 	};
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- test stub returns any
-const fn = (): any => undefined;
+const fn = () => undefined;
 
 export function createMockApp() {
 	return {

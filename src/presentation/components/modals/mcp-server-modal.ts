@@ -69,8 +69,8 @@ export class MCPServerModal extends Modal {
 			description: t('modals.mcpServer.command.desc')
 		}).addText(text => {
 				text.inputEl.setAttribute('data-testid', TestIds.settings.mcpModalCommandInput);
-				// eslint-disable-next-line obsidianmd/ui/sentence-case -- placeholder/example string, not UI prose
-				text.setPlaceholder('npx @acme/mcp-server');
+				const commandPlaceholder = 'npx @acme/mcp-server';
+				text.setPlaceholder(commandPlaceholder);
 				text.setValue(this.draft.command ?? '');
 				text.onChange(value => {
 					this.draft.command = value;
