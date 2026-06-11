@@ -1,7 +1,7 @@
 {
 	"id": "intelligence-assistant",
 	"name": "Intelligence Assistant",
-	"version": "0.0.18",
+	"version": "0.0.19",
 	"minAppVersion": "1.8.7",
 	"description": "Full autonomous Agentic workspace. Understands notes, links, and canvas to plan and execute complex vault tasks.",
 	"author": "QWAI",
