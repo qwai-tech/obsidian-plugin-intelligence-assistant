@@ -286,7 +286,6 @@ export class AgentEditModal extends Modal {
 		}).addSlider(slider => slider
 				.setLimits(1, 50, 1)
 				.setValue(this.agent.maxSteps)
-				.setDynamicTooltip()
 				.onChange(value => {
 					this.agent.maxSteps = value;
 				}));

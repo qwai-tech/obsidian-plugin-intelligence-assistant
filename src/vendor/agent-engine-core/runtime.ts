@@ -779,7 +779,10 @@ export class AgentEngine {
       return;
     }
 
+    // Strip the internal envelope fields before emitting to observers.
     const { schemaVersion: _schemaVersion, sequence: _sequence, ...event } = entry;
+    void _schemaVersion;
+    void _sequence;
     await this.#emitObserver(event);
   }
 

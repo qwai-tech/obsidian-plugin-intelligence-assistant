@@ -2355,7 +2355,7 @@
 /* Phase/Status Icons */
 .agent-thinking-block__label-row::before,
 .agent-tool-call__status-dot {
-	display: flex !important;
+	display: flex;
 	align-items: center;
 	justify-content: center;
 	width: 20px;
@@ -2407,7 +2407,7 @@
 
 .agent-tool-call-card {
 	background: var(--background-secondary);
-	border: 1px solid var(--background-modifier-border) !important;
+	border: 1px solid var(--background-modifier-border);
 	border-radius: 20px;
 	padding: 4px 14px;
 	cursor: pointer;

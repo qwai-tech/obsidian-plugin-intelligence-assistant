@@ -211,9 +211,9 @@ export type MemoryItem = {
   sourceTaskId?: string;
   sourceObservationId?: string;
   sourceEventIds?: string[];
-  visibility?: "private" | "project" | "team" | string;
+  visibility?: "private" | "project" | "team" | (string & {});
   confidence?: number;
-  writePolicy?: "read_only" | "proposal_only" | "agent_write" | "human_approved" | string;
+  writePolicy?: "read_only" | "proposal_only" | "agent_write" | "human_approved" | (string & {});
   embeddingRef?: string;
   supersedes?: string;
   createdAt: string;
@@ -370,7 +370,7 @@ export type CapabilityKind =
   | "observer"
   | "environment"
   | "scheduler"
-  | string;
+  | (string & {});
 
 export type CapabilityDescriptor = {
   id: string;

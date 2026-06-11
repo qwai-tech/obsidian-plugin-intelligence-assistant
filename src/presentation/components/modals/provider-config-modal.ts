@@ -294,7 +294,7 @@ export class ProviderConfigModal extends Modal {
 		if (this.draft.baseUrl && this.draft.baseUrl.trim() !== '') {
 			try {
 				new URL(this.draft.baseUrl);
-			} catch (_e) {
+			} catch {
 				return t('modals.provider.validation.invalidUrl');
 			}
 		}

@@ -183,7 +183,7 @@ class OpenApiOperationTool implements Tool {
 		}
 		try {
 			return JSON.stringify(value);
-		} catch (_error) {
+		} catch {
 			return '[unserializable-value]';
 		}
 	}
@@ -484,7 +484,7 @@ export async function loadOpenApiTools(
 	let parsedSpec: OpenApiDocumentLike;
 	try {
 		parsedSpec = JSON.parse(specContent) as OpenApiDocumentLike;
-	} catch (_error) {
+	} catch {
 		throw new Error('Failed to parse OpenAPI JSON specification');
 	}
 

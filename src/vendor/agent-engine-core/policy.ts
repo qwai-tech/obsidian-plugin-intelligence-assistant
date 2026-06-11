@@ -60,7 +60,7 @@ export class PolicyPipeline implements PolicyManager {
 
     const selected = [...decisions].sort(
       (a, b) => decisionRank(b.decision) - decisionRank(a.decision)
-    )[0]!;
+    )[0];
     return withPolicyMetadata(
       selected.decision,
       selected.rule,

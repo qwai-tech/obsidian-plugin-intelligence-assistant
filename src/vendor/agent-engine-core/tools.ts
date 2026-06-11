@@ -266,7 +266,7 @@ export class ToolExecutor {
       runtimeSignal?.addEventListener("abort", abortFromRuntime, { once: true });
     }
 
-    let timeout: ReturnType<typeof setTimeout> | undefined;
+    let timeout: number | undefined;
     let timedOut = false;
     const toolPromise = Promise.resolve().then(() =>
       tool.execute(args, {
@@ -275,7 +275,7 @@ export class ToolExecutor {
       })
     );
     const timeoutPromise = new Promise<JsonValue>((_resolve, reject) => {
-      timeout = setTimeout(() => {
+      timeout = window.setTimeout(() => {
         timedOut = true;
         abortController.abort();
         reject(new Error(`Tool timed out after ${timeoutMs}ms`));
@@ -286,7 +286,7 @@ export class ToolExecutor {
       return await Promise.race([toolPromise, timeoutPromise]);
     } finally {
       if (timeout !== undefined) {
-        clearTimeout(timeout);
+        window.clearTimeout(timeout);
       }
       runtimeSignal?.removeEventListener("abort", abortFromRuntime);
       if (timedOut) {
@@ -370,7 +370,7 @@ export class ToolScheduler {
   }
 
   async execute(inputs: ToolExecutorInput[]): Promise<Observation[]> {
-    const observations: Array<Observation | undefined> = new Array(inputs.length);
+    const observations: Array<Observation | undefined> = new Array<Observation | undefined>(inputs.length);
     const safeBatch: Array<{ input: ToolExecutorInput; index: number }> = [];
 
     const flushSafeBatch = async () => {
@@ -383,7 +383,7 @@ export class ToolScheduler {
         current.map(({ input }) => this.#executor.execute(input))
       );
       results.forEach((observation, index) => {
-        observations[current[index]!.index] = observation;
+        observations[current[index].index] = observation;
       });
     };
 
@@ -408,14 +408,6 @@ export class ToolScheduler {
       return observation;
     });
   }
-}
-
-function errorMessage(error: unknown): string {
-  if (error instanceof Error) {
-    return error.message;
-  }
-
-  return String(error);
 }
 
 function toError(error: unknown): Error {
@@ -473,7 +465,7 @@ function isJsonValue(value: unknown): value is JsonValue {
 }
 
 function isPlainObject(value: object): value is Record<string, unknown> {
-  const prototype = Object.getPrototypeOf(value);
+  const prototype: unknown = Object.getPrototypeOf(value);
 
   return prototype === Object.prototype || prototype === null;
 }

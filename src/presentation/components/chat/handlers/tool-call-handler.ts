@@ -197,7 +197,7 @@ function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionSt
 		try {
 			const parsed: unknown = JSON.parse(argsStr);
 			argsStr = JSON.stringify(parsed, null, 2);
-		} catch (_e) { /* keep as-is */ }
+		} catch { /* keep as-is */ }
 	}
 
 	// Resolve result — prefer inline, fall back to legacy observation
