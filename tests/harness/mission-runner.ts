@@ -9,6 +9,7 @@ import { createTestAgent } from '@/test-support/test-utils';
 import type { Message } from '@/types/core/conversation';
 import type { AgentLoopOptions, AgentLoopCallbacks } from '@/application/agents/types';
 import { buildHarnessToolRegistry } from './build-tool-registry';
+import { createFakeRagManager } from './fake-rag';
 import { DEFAULT_MOCK_LLM_PORT, mockLLM } from './mock-llm-harness';
 
 const MOCK_MODEL = 'mock-model';
@@ -47,6 +48,12 @@ export interface RunMissionInput {
   autonomousWrite?: boolean;
   enabledTools?: string[];
   timeoutMs?: number;
+  toolAccess?: { sources: Record<string, 'all' | string[]> };
+  abortAfterToolCalls?: number;
+  enableRAG?: boolean;
+  ragResults?: import('./fake-rag').FakeRagResult[];
+  extraToolSources?: import('@/application/tools/tool-source').ToolSource[];
+  maxSteps?: number;
 }
 
 /**
@@ -77,8 +84,8 @@ function stubHttpClient(): unknown {
 
 export async function runAgentMission(input: RunMissionInput): Promise<MissionOutcome> {
   const { app, userMessage, autonomousWrite = false, enabledTools, timeoutMs = 15_000 } = input;
-  const toolRegistry = await buildHarnessToolRegistry(app, enabledTools);
-  const ragManager = stubRagManager() as never;
+  const toolRegistry = await buildHarnessToolRegistry(app, enabledTools, input.extraToolSources);
+  const ragManager = (input.ragResults ? createFakeRagManager(input.ragResults) : stubRagManager()) as never;
 
   const loop = new AgentEngineLoop({
     app,
@@ -103,15 +110,16 @@ export async function runAgentMission(input: RunMissionInput): Promise<MissionOu
       createTestAgent({
         id: 'harness-agent',
         name: 'Harness Agent',
-        maxSteps: 25,
+        maxSteps: input.maxSteps ?? 25,
         autonomousWrite,
         // Grant the agent the full builtin tool source so resolveForAgent
         // surfaces every loaded builtin (e.g. read_file) to the LLM request.
         // The builtin source registers under key `${kind}:${id}` = 'builtin:builtin'.
-        toolAccess: { sources: { 'builtin:builtin': 'all' } },
+        toolAccess: input.toolAccess ?? { sources: { 'builtin:builtin': 'all' } },
       }),
     ],
     agentId: 'harness-agent',
+    enableRAG: input.enableRAG ?? false,
   } as AgentLoopOptions;
   const messages: Message[] = [{ role: 'user', content: userMessage }];
 
@@ -121,6 +129,10 @@ export async function runAgentMission(input: RunMissionInput): Promise<MissionOu
       resolve();
     }, timeoutMs);
     const callbacks: AgentLoopCallbacks = {
+      checkAbort:
+        input.abortAfterToolCalls === undefined
+          ? undefined
+          : () => outcome.toolCallCount >= (input.abortAfterToolCalls as number),
       onChunk: () => undefined,
       onToolCall: (toolName, args) => {
         outcome.toolCallCount += 1;

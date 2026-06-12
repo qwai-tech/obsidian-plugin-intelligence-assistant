@@ -1,6 +1,7 @@
 import type { App } from 'obsidian';
 import { ToolRegistry } from '@/application/tools/tool-registry';
 import { BuiltinToolSource } from '@/application/tools/sources/builtin-tool-source';
+import type { ToolSource } from '@/application/tools/tool-source';
 
 /**
  * Build a real ToolRegistry over the headless harness app.
@@ -15,11 +16,15 @@ import { BuiltinToolSource } from '@/application/tools/sources/builtin-tool-sour
 export async function buildHarnessToolRegistry(
   app: App,
   enabledTypes?: string[],
+  extraSources: ToolSource[] = [],
 ): Promise<ToolRegistry> {
   // () => null tells BuiltinToolSource to load all registered builtins.
   const getEnabled = enabledTypes ? () => enabledTypes : () => null;
   const registry = new ToolRegistry();
   registry.registerSource(new BuiltinToolSource(app, getEnabled));
+  for (const source of extraSources) {
+    registry.registerSource(source);
+  }
   await registry.reload();
   return registry;
 }
