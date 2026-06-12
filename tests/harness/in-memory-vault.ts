@@ -38,7 +38,24 @@ export class InMemoryVault {
   }
 
   async modify(file: TFile, content: string): Promise<void> {
+    if (!this.files.has(file.path)) throw new Error(`File not found: ${file.path}`);
     this.files.set(file.path, content);
+  }
+
+  async delete(path: string): Promise<void> {
+    this.files.delete(path);
+  }
+
+  async rename(oldPath: string, newPath: string): Promise<void> {
+    const content = this.files.get(oldPath);
+    if (content === undefined) throw new Error(`File not found: ${oldPath}`);
+    this.files.delete(oldPath);
+    this.files.set(newPath, content);
+  }
+
+  /** Folders are not tracked; a no-op keeps proposal-apply code happy. */
+  async createFolder(_path: string): Promise<void> {
+    return undefined;
   }
 
   getMarkdownFiles(): TFile[] {
@@ -68,6 +85,9 @@ export class InMemoryVault {
       const files = [...this.files.keys()].filter((p) => p.startsWith(prefix));
       return { files, folders: [] };
     },
+    remove: async (path: string): Promise<void> => {
+      this.files.delete(path);
+    },
   };
 
   /** Test-only inspector for the side-effect oracle. */
@@ -78,6 +98,10 @@ export class InMemoryVault {
 
 export interface HarnessApp extends App {
   __vault: InMemoryVault;
+  fileManager: {
+    trashFile: (file: { path: string }) => Promise<void>;
+    renameFile: (file: { path: string }, newPath: string) => Promise<void>;
+  };
 }
 
 /** Build an `App`-shaped object the real tools and services can use headless. */
@@ -92,6 +116,11 @@ export function createHarnessApp(seed: Record<string, string> = {}): HarnessApp 
       getActiveFile: () => null,
       getLeavesOfType: () => [],
       onLayoutReady: (cb: () => void) => cb(),
+    },
+    fileManager: {
+      trashFile: async (file: { path: string }): Promise<void> => vault.delete(file.path),
+      renameFile: async (file: { path: string }, newPath: string): Promise<void> =>
+        vault.rename(file.path, newPath),
     },
   } as unknown as HarnessApp;
   app.__vault = vault;
