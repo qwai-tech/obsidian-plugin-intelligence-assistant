@@ -1,0 +1,14 @@
+{
+  "single-read": {
+    "steps": 2,
+    "toolCalls": 1
+  },
+  "read-then-write": {
+    "steps": 3,
+    "toolCalls": 2
+  },
+  "batch-five-writes": {
+    "steps": 6,
+    "toolCalls": 5
+  }
+}

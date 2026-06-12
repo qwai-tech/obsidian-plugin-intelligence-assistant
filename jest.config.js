@@ -2,7 +2,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  roots: ['<rootDir>/src', '<rootDir>/tests/harness', '<rootDir>/tests/missions'],
+  roots: ['<rootDir>/src', '<rootDir>/tests/harness', '<rootDir>/tests/missions', '<rootDir>/tests/perf'],
   testMatch: [
     '**/__tests__/**/*.{j,t}s?(x)',
     '**/?(*.)+(spec|test).{j,t}s?(x)'

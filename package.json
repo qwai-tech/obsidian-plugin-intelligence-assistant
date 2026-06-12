@@ -28,6 +28,7 @@
 		"test:e2e:release": "wdio run tests/e2e/config/wdio.release.conf.ts",
 		"test:e2e:smoke": "wdio run tests/e2e/config/wdio.ci.conf.ts --spec='tests/e2e/specs/00-smoke.spec.ts'",
 		"test:missions": "jest tests/harness tests/missions",
+		"test:perf": "jest tests/perf",
 		"test:mutation": "stryker run",
 		"test:flake-soak": "node scripts/flake-soak.js",
 		"version": "node scripts/version.js",
