@@ -182,3 +182,7 @@ tests/e2e/logs/
 tests/e2e/reports/
 .envrc
 locales/
+
+# Mutation testing (Stryker)
+.stryker-tmp/
+tests/mutation/mutation-report.json
