@@ -22,3 +22,72 @@ if (typeof document !== 'undefined') {
 if (typeof window !== 'undefined') {
 	global.activeWindow = global.activeWindow || global.window;
 }
+
+// jsdom does not expose a `fetch` implementation. The LLM providers' streaming
+// path (BaseStreamingProvider.streamChat) calls global `fetch` directly (NOT
+// Obsidian's `requestUrl`), so the headless agent harness needs a real `fetch`
+// to reach the in-process mock LLM server over HTTP. Bridging undici into jsdom
+// fails because undici fights jsdom's timer shims (`this.timeout.unref is not a
+// function`). Instead we provide a minimal real-HTTP `fetch` over Node's `http`
+// module, exposing exactly the surface the provider consumes: `.ok`, `.status`,
+// `.text()`, and a streamed `.body` that is a real web ReadableStream<Uint8Array>
+// (the SSE chunks the provider's reader pulls from). Scoped to the headless test
+// scenario only; production runtime (Electron) provides its own global `fetch`.
+if (typeof global.fetch === 'undefined') {
+	const http = require('http');
+	const { URL } = require('url');
+
+	global.fetch = (input, init = {}) =>
+		new Promise((resolve, reject) => {
+			const url = new URL(typeof input === 'string' ? input : String(input));
+			const req = http.request(
+				{
+					protocol: url.protocol,
+					hostname: url.hostname,
+					port: url.port,
+					path: `${url.pathname}${url.search}`,
+					method: init.method || 'GET',
+					headers: init.headers || {},
+				},
+				(res) => {
+					const status = res.statusCode || 0;
+					const body = new global.ReadableStream({
+						start(controller) {
+							res.on('data', (chunk) => controller.enqueue(new Uint8Array(chunk)));
+							res.on('end', () => controller.close());
+							res.on('error', (err) => controller.error(err));
+						},
+						cancel() {
+							res.destroy();
+						},
+					});
+					resolve({
+						ok: status >= 200 && status < 300,
+						status,
+						headers: res.headers,
+						body,
+						async text() {
+							const reader = body.getReader();
+							const decoder = new global.TextDecoder();
+							let out = '';
+							// eslint-disable-next-line no-constant-condition
+							while (true) {
+								const { done, value } = await reader.read();
+								if (done) break;
+								out += decoder.decode(value, { stream: true });
+							}
+							return out;
+						},
+						async json() {
+							return JSON.parse(await this.text());
+						},
+					});
+				},
+			);
+			req.on('error', reject);
+			if (init.body != null) {
+				req.write(init.body);
+			}
+			req.end();
+		});
+}
