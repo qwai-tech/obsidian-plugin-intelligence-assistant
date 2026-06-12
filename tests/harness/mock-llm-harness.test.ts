@@ -1,6 +1,5 @@
 import { request } from 'node:http';
-import { DEFAULT_MOCK_LLM_PORT } from '../e2e/support/mock-llm-server';
-import { startMockLLM, stopMockLLM, mockLLM } from './mock-llm-harness';
+import { startMockLLM, stopMockLLM, mockLLM, DEFAULT_MOCK_LLM_PORT } from './mock-llm-harness';
 
 function postChat(body: unknown): Promise<string> {
   return new Promise((resolve, reject) => {
