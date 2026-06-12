@@ -14,6 +14,11 @@ export interface MissionDefinition {
   seed: Record<string, string>;
   autonomousWrite?: boolean;
   enabledTools?: string[];
+  /**
+   * The scripted golden trajectory (LLM turns) to queue for this mission.
+   * Declarative: the test queues these via mockLLM; the oracle helpers do not
+   * read this field directly.
+   */
   trajectory: Array<
     | { type: 'tool'; name: string; args: Record<string, unknown> }
     | { type: 'final'; text: string }
@@ -47,4 +52,6 @@ export function assertWithinBudget(outcome: MissionOutcome, budget: MissionBudge
   if (budget.steps !== undefined && outcome.steps > budget.steps) {
     throw new Error(`step budget exceeded: ${outcome.steps} > ${budget.steps}`);
   }
+  // TODO(plan-2): enforce budget.tokens once the runner records a real token count on MissionOutcome.
+  // TODO(plan-2): enforce budget.wallMs once the runner records wall-clock duration on MissionOutcome.
 }

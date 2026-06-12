@@ -22,6 +22,11 @@ describe('mission oracle helpers', () => {
     expect(() => assertToolSequence(o, ['write_file'])).toThrow(/expected tool sequence/i);
   });
 
+  it('assertToolSequence throws on a length mismatch', () => {
+    const o = outcome({ toolCalls: [{ toolName: 'read_file', args: {} }] });
+    expect(() => assertToolSequence(o, ['read_file', 'write_file'])).toThrow(/expected tool sequence/i);
+  });
+
   it('assertVaultFileContains reads the real in-memory side effect', () => {
     const app = createHarnessApp({ 'out.md': 'final content' });
     expect(() => assertVaultFileContains(app, 'out.md', 'final')).not.toThrow();
