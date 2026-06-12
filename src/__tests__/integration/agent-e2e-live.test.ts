@@ -53,11 +53,12 @@ describeLive('LIVE agent end-to-end (real DeepSeek + real tools + in-memory vaul
 	jest.setTimeout(90000);
 
 	beforeAll(() => {
-		// jsdom test env has no global fetch; the real provider needs it. Use
-		// Node's undici (already a transitive dep) so streamChat can reach the API.
-		if (typeof (global as any).fetch === 'undefined') {
-			(global as any).fetch = require('undici').fetch;
-		}
+		// The jest.setup.js shim is loopback-only; live runs need a real fetch.
+		// Assign unconditionally: the shim always defines global.fetch now, so a
+		// guard would never fire and live https traffic would hit the loopback
+		// block. This beforeAll only runs when LIVE is set (describeLive), so it
+		// never overrides the loopback shim during a normal `npm test`.
+		(global as any).fetch = require('undici').fetch;
 	});
 
 	it('reads a real note and produces a real create_note write proposal', async () => {

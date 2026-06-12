@@ -40,6 +40,14 @@ if (typeof global.fetch === 'undefined') {
 	global.fetch = (input, init = {}) =>
 		new Promise((resolve, reject) => {
 			const url = new URL(typeof input === 'string' ? input : String(input));
+			// This shim does a real Node HTTP round-trip. Restrict it to loopback so a
+			// future test that passes a non-local host fails LOUDLY here instead of
+			// silently making a real network request (silent flake/hang). Live provider
+			// traffic must supply its own real `fetch` (see agent-e2e-live.test.ts).
+			const host = url.hostname;
+			if (host !== '127.0.0.1' && host !== 'localhost' && host !== '::1') {
+				throw new Error(`Blocked non-loopback fetch in tests: ${url.host}. The jest fetch shim only round-trips to the local mock server.`);
+			}
 			const req = http.request(
 				{
 					protocol: url.protocol,
@@ -61,6 +69,10 @@ if (typeof global.fetch === 'undefined') {
 							res.destroy();
 						},
 					});
+					// NOTE: `.body` and `.text()` consume the SAME underlying stream, so
+					// they are mutually exclusive — never read both or the second read
+					// hits a locked/exhausted stream. The provider reads `.text()` only
+					// on the error path and `.body` only on success, so this is safe.
 					resolve({
 						ok: status >= 200 && status < 300,
 						status,

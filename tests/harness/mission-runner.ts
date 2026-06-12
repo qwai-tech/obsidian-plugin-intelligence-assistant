@@ -9,7 +9,7 @@ import { createTestAgent } from '@/test-support/test-utils';
 import type { Message } from '@/types/core/conversation';
 import type { AgentLoopOptions, AgentLoopCallbacks } from '@/application/agents/types';
 import { buildHarnessToolRegistry } from './build-tool-registry';
-import { DEFAULT_MOCK_LLM_PORT } from './mock-llm-harness';
+import { DEFAULT_MOCK_LLM_PORT, mockLLM } from './mock-llm-harness';
 
 const MOCK_MODEL = 'mock-model';
 const MOCK_BASE_URL = `http://127.0.0.1:${DEFAULT_MOCK_LLM_PORT}/v1`;
@@ -30,7 +30,15 @@ export interface MissionOutcome {
   toolResults: ToolResultRecord[];
   finalMessage?: Message;
   error?: Error;
+  /**
+   * Number of LLM turns (agent iterations) — the count of streaming chat
+   * completion requests the agent actually made to the model. This is the
+   * efficiency signal the budget oracle (assertWithinBudget) reasons about.
+   * A one-tool trajectory = 2 turns (tool turn + final turn).
+   */
   steps: number;
+  /** Number of tool invocations the agent made (distinct from agent turns). */
+  toolCallCount: number;
 }
 
 export interface RunMissionInput {
@@ -87,7 +95,7 @@ export async function runAgentMission(input: RunMissionInput): Promise<MissionOu
     defaultModel: MOCK_MODEL,
   });
 
-  const outcome: MissionOutcome = { toolCalls: [], toolResults: [], steps: 0 };
+  const outcome: MissionOutcome = { toolCalls: [], toolResults: [], steps: 0, toolCallCount: 0 };
   const options: AgentLoopOptions = {
     model: MOCK_MODEL,
     mode: 'agent',
@@ -115,7 +123,7 @@ export async function runAgentMission(input: RunMissionInput): Promise<MissionOu
     const callbacks: AgentLoopCallbacks = {
       onChunk: () => undefined,
       onToolCall: (toolName, args) => {
-        outcome.steps += 1;
+        outcome.toolCallCount += 1;
         outcome.toolCalls.push({ toolName, args });
       },
       onToolResult: (toolName, success, output) => {
@@ -135,5 +143,19 @@ export async function runAgentMission(input: RunMissionInput): Promise<MissionOu
     };
     void loop.execute(messages, options, callbacks);
   });
+
+  // Derive the real agent-turn count from the mock call log: count the streaming
+  // chat-completion requests the agent actually issued (one per LLM turn). This
+  // mirrors the filter the harness tests use. Robust to an empty/absent log.
+  try {
+    const CHAT_COMPLETIONS_PATH = '/v1/chat/completions';
+    const calls = await mockLLM.getCalls();
+    outcome.steps = calls.filter(
+      (c) => c.path === CHAT_COMPLETIONS_PATH && (c.body as { stream?: boolean } | null)?.stream === true,
+    ).length;
+  } catch {
+    // Leave steps at 0 if the call log is unavailable.
+  }
+
   return outcome;
 }
