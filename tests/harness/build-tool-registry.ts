@@ -2,20 +2,24 @@ import type { App } from 'obsidian';
 import { ToolRegistry } from '@/application/tools/tool-registry';
 import { BuiltinToolSource } from '@/application/tools/sources/builtin-tool-source';
 
-/** Builtin tools enabled in the harness by default. */
-const DEFAULT_ENABLED_BUILTINS = [
-  'read_file',
-  'write_file',
-  'search_files',
-  'create_note',
-];
-
+/**
+ * Build a real ToolRegistry over the headless harness app.
+ * Defaults to loading ALL builtin tools by passing `() => null` to
+ * BuiltinToolSource — matching the existing integration tests and avoiding
+ * "Tool not found" errors for missions that use any builtin.
+ * Pass `enabledTypes` to restrict the set (e.g. for targeted unit tests).
+ *
+ * Note: production code reads the enabled list from plugin settings; the
+ * harness bypasses that and either loads all or an explicit list.
+ */
 export async function buildHarnessToolRegistry(
   app: App,
-  enabledTypes: string[] = DEFAULT_ENABLED_BUILTINS,
+  enabledTypes?: string[],
 ): Promise<ToolRegistry> {
+  // () => null tells BuiltinToolSource to load all registered builtins.
+  const getEnabled = enabledTypes ? () => enabledTypes : () => null;
   const registry = new ToolRegistry();
-  registry.registerSource(new BuiltinToolSource(app, () => enabledTypes));
+  registry.registerSource(new BuiltinToolSource(app, getEnabled));
   await registry.reload();
   return registry;
 }
