@@ -26,5 +26,6 @@ module.exports = {
     '/node_modules/',
     '/src/test-support/',
     '/tests/e2e/'
-  ]
+  ],
+  maxWorkers: 1
 };
