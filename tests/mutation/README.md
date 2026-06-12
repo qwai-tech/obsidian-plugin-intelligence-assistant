@@ -63,33 +63,69 @@ Stryker v9.6.1 (`@stryker-mutator/core` + `@stryker-mutator/jest-runner`).
 
 Runs serially in ~4 minutes.
 
+## Current result (2026-06-13)
+
+Added a focused unit suite,
+`src/__tests__/application/agents/kernel/kernel-tool-registry-adapter.test.ts`
+(28 tests), targeting the high-value survivor clusters: side-effect
+classification, the registered-tool definition fields, the success/failure
+callback phases, the failure message + consecutive-failure circuit-breaker
+boundary, the disabled-tool deny-stub, the autonomous write auto-apply
+(single/batch/delete-skip/catch-fallback), and the reasoning optional-chaining.
+
+| Metric          | Value          |
+| --------------- | -------------- |
+| Mutants total   | 92             |
+| Killed          | 87             |
+| Survived        | 5              |
+| Timeout         | 0              |
+| No coverage     | 0              |
+| Runtime errors  | 0              |
+| **Score**       | **94.57 %**    |
+
 ### Break threshold
 
-`thresholds.break = 40`. Set just below the achieved 42.39 % so the gate is
-**green** on this baseline (Stryker exits 0 when score >= break) but fails on any
-regression that kills fewer mutants. As survivors are killed by future tests,
-raise this floor. (`high: 80`, `low: 50` only affect report colouring.)
+`thresholds.break = 90` (raised from 40). Set just below the achieved 94.57 % so
+the gate stays **green** (Stryker exits 0 when score >= break) while the 5
+remaining survivors — all equivalent mutants (below) — keep it off 100 %. Any
+regression that kills fewer than ~83/92 mutants now fails the gate.
+(`high: 90`, `low: 70` only affect report colouring.)
 
 ## Survivor triage
 
-53 mutants survive. They cluster into a few real test gaps — none are believed
-equivalent/untestable; the scoped suite simply does not assert on these paths
-strongly enough yet. **No tests were added in this change — documentation only.**
+**5 survivors remain, all equivalent mutants** — no test can distinguish them
+without changing production behaviour.
 
-| Lines           | Area                                              | Classification | Notes |
-| --------------- | ------------------------------------------------- | -------------- | ----- |
-| 28–41           | `autoApplyProposal` (batch + single write-apply)  | (a) real gap   | `agent-autonomous-write.test.ts` asserts `vault.create` was called and that a result message contains `applied`, but does not pin the `status`/`operation`/`path` fields or the exact message text, nor the delete-skip guard, the batch path, or the catch/fallback. String, object-literal, conditional and equality mutants here all survive. |
-| 56:59           | `requiredScopes: []` array                        | (a) real gap   | No assertion observes `requiredScopes`; emptying it is undetectable by the scoped suite. |
-| 64, 102 (schema)| `inputSchema` fallback `?? { type:'object', ... }`| (a) real gap   | Tests don't assert the generated input schema, so the fallback default and its optional-chaining/logical mutants survive. |
-| 68, 106 (`context?.action?.reasoning`) | reasoning extraction         | (a) real gap (low value) | No test drives a `context` without `action`; the optional-chaining mutants survive. Cheap to kill with one explicit case. |
-| 69:57, 108, 109 (`'act'` phase literal) | callback phase argument     | (a) real gap   | No test asserts the phase string passed to `onToolCall`/`onToolResult`, so replacing `'act'` with `""` survives. |
-| 77 (`applied !== null`) | auto-apply result substitution           | (a) real gap   | The substitution branch isn't asserted distinctly from the non-substituted path. |
-| 84:70 (failure message) | failure-output string                    | (a) real gap   | m7 asserts a failure occurs but not the exact `Tool "x" failed: ...` text. |
-| 86 / 88 (`+ 1`, `>=`, counter)| consecutive-failure circuit breaker      | (a) real gap (boundary) | m7 exercises recovery but does not assert the exact failure count or the `>= MAX_CONSECUTIVE_FAILURES` boundary, so the arithmetic/equality/block mutants survive. |
-| 117–121 (`toKernelSideEffectLevel`) | write-vs-read classification     | (a) real gap   | No mission/unit test asserts the side-effect level assigned to a registered tool, so the whole function (block, conditionals, logical-OR, both return literals) survives. High-value to cover: this drives the permission model. |
+| Lines        | Mutant(s)                                              | Classification | Why it survives |
+| ------------ | ------------------------------------------------------ | -------------- | --------------- |
+| 33           | `if (isWriteProposal(value))` → `if (true)`            | (b) equivalent | Reached only after the batch branch returns; for any single write proposal the guard is already true, and a non-proposal value reaches this line only when the batch branch was false — but the function returns `null` either way after both branches, so forcing `true` changes nothing observable for the inputs that get here. |
+| 34           | `value.operation === 'delete'` → `if (false)`          | (b) equivalent | `isWriteProposal` (write-proposal-service) only returns true for `create`/`update`/`append` — **never** `delete`. So inside this block `operation === 'delete'` is *always false*; the early `return null` is dead code. |
+| 34           | `value.operation === 'delete'` → `=== ""`              | (b) equivalent | Same dead branch: no single write proposal has operation `''` either, so both comparisons are always false here. |
+| 38           | catch `BlockStatement` → `{}`                          | (b) equivalent | The catch body is a diagnostic `console.error` only; control flow falls through to `return null` regardless, so emptying the block has no observable effect. |
+| 39           | `console.error('[AutoApply] …')` → `console.error("")` | (b) equivalent | Log-string-only mutant; the message text is never asserted (and asserting console output would be a brittle anti-test). |
 
-All survivors are **category (a) real test gaps**, addressed in a later plan
-(do not add tests here).
+### Killed this change (previously-surviving clusters now covered)
+
+- `toKernelSideEffectLevel` (117–121) — write/externalWrite → `write`, else
+  `read`; all conditional/logical/return-literal mutants killed by asserting
+  `registry.get(name).sideEffectLevel`.
+- `requiredScopes: []` (66), `inputSchema` fallback (64/102), tool `description`
+  (63) — asserted on the registered tool definition.
+- `'act'` phase literals (69/80/108/109) — asserted as the exact 4th arg to
+  `onToolCall`/`onToolResult` on both the success and deny paths.
+- Failure message (84) + `Unknown error` fallback, counter `+ 1` (86) and the
+  `>= MAX_CONSECUTIVE_FAILURES` boundary (88) — boundary tests at 2 (no
+  `fatalStopReason`) and exactly 3 (set) failures.
+- Disabled-tool deny-stub (95–113) — exact `Tool "X" is not enabled for this
+  agent` message + `success=false` + `'act'` phase, and the deny-stub schema
+  fallback.
+- `autoApplyProposal` (28–41) — exact single-create applied record
+  (`status`/`operation`/`path`/`message`), batch applied record, delete-skip
+  guard (batch with a delete → original proposal passes through), catch fallback
+  (apply throws → manual proposal), and the `applied !== null` substitution
+  branch (asserted via the serialized `onToolResult` output).
+- `context?.action?.reasoning` (68/106) — covered with context undefined and
+  context defined-but-action-undefined, killing both optional-chaining mutants.
 
 ## Widening the mutate glob later
 
