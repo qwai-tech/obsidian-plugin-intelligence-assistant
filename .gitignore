@@ -186,3 +186,4 @@ locales/
 # Mutation testing (Stryker)
 .stryker-tmp/
 tests/mutation/mutation-report.json
+tests/perf/timing-report.json
