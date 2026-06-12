@@ -1,0 +1,53 @@
+name: Verification Gate
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: Deterministic Verification Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit + mission + perf suite
+        run: npm test
+
+      - name: Flake-soak (determinism)
+        run: npm run test:flake-soak
+
+      - name: Memory-leak guard (forced GC)
+        run: npm run test:perf:mem
+
+      - name: Mutation gate (agent orchestration core)
+        run: npm run test:mutation
+
+      - name: Upload mutation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-report
+          path: tests/mutation/mutation-report.json
+          if-no-files-found: ignore
