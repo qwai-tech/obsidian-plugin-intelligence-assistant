@@ -60,13 +60,15 @@ describe('in-memory harness vault', () => {
 
   it('fileManager.trashFile removes the file from the vault', async () => {
     const app = createHarnessApp({ 'notes/a.md': 'hello' });
-    await app.fileManager.trashFile({ path: 'notes/a.md' });
+    const file = Object.assign(new TFile(), { path: 'notes/a.md' });
+    await app.fileManager.trashFile(file);
     expect(app.__vault.snapshot()).not.toHaveProperty('notes/a.md');
   });
 
   it('fileManager.renameFile moves the file in the vault', async () => {
     const app = createHarnessApp({ 'notes/old.md': 'content' });
-    await app.fileManager.renameFile({ path: 'notes/old.md' }, 'notes/new.md');
+    const file = Object.assign(new TFile(), { path: 'notes/old.md' });
+    await app.fileManager.renameFile(file, 'notes/new.md');
     const snap = app.__vault.snapshot();
     expect(snap).not.toHaveProperty('notes/old.md');
     expect(snap['notes/new.md']).toBe('content');

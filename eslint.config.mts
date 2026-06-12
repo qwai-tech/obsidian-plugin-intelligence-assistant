@@ -197,5 +197,25 @@ export default defineConfig([
         },
       ],
     },
-  }
+  },
+
+  // Headless harness / mission / perf helpers: relax strict TS rules that target
+  // plugin source. These are Node-side test utilities (deliberate stubs, casts,
+  // and console logging), mirroring the tests/e2e relaxation.
+  {
+    files: ["tests/harness/**/*.ts", "tests/missions/**/*.ts", "tests/perf/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/require-await": "off",
+      "obsidianmd/prefer-file-manager-trash-file": "off",
+      "obsidianmd/prefer-window-timers": "off",
+      "no-console": "off",
+      "no-restricted-globals": "off",
+    },
+  },
 ]);

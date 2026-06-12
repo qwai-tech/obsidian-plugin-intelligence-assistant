@@ -98,10 +98,6 @@ export class InMemoryVault {
 
 export interface HarnessApp extends App {
   __vault: InMemoryVault;
-  fileManager: {
-    trashFile: (file: { path: string }) => Promise<void>;
-    renameFile: (file: { path: string }, newPath: string) => Promise<void>;
-  };
 }
 
 /** Build an `App`-shaped object the real tools and services can use headless. */
