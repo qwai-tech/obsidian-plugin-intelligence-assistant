@@ -49,7 +49,7 @@ export function displayAgentsTab(
 				modelId: plugin.settings.defaultModel || 'gpt-4o'
 			},
 			temperature: 0.7,
-			maxTokens: 2000,
+			maxTokens: 4000,
 			systemPromptId: plugin.settings.systemPrompts[0]?.id || 'default',
 			contextWindow: 20,
 			toolAccess: enabledTools.length > 0

@@ -35,8 +35,10 @@ export class ModelManager {
 			{ id: 'google:text-embedding-004', name: 'Text Embedding 004', provider: 'google', capabilities: ['embedding'], enabled: true },
 		],
 		deepseek: [
-			{ id: 'deepseek:deepseek-chat', name: 'DeepSeek Chat', provider: 'deepseek', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			{ id: 'deepseek:deepseek-reasoner', name: 'DeepSeek Reasoner', provider: 'deepseek', capabilities: ['chat', 'reasoning', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'deepseek:deepseek-v4-pro', name: 'DeepSeek V4 Pro', provider: 'deepseek', capabilities: ['chat', 'function_calling', 'reasoning', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'deepseek:deepseek-v4-flash', name: 'DeepSeek V4 Flash', provider: 'deepseek', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'deepseek:deepseek-chat', name: 'DeepSeek Chat (deprecated 2026-07-24)', provider: 'deepseek', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
+			{ id: 'deepseek:deepseek-reasoner', name: 'DeepSeek Reasoner (deprecated 2026-07-24)', provider: 'deepseek', capabilities: ['chat', 'reasoning', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'deepseek:deepseek-coder', name: 'DeepSeek Coder', provider: 'deepseek', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 		],
 		openrouter: [

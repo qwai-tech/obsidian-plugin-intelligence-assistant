@@ -39,7 +39,7 @@ export function createAgentConfig(overrides: Partial<Agent> = {}): Agent {
 		icon: 'bot',
 		modelStrategy: { strategy: 'default' },
 		temperature: 0.2,
-		maxTokens: 1_000,
+		maxTokens: 4_000,
 		systemPromptId: '',
 		contextWindow: 20,
 		toolAccess: { sources: { 'builtin:builtin': 'all' } },
