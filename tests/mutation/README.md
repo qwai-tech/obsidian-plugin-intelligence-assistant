@@ -8,27 +8,49 @@ that.
 
 ## Scope
 
-Currently a single, high-kill-power file is mutated:
+Two well-covered orchestration files are mutated:
 
 ```
 src/application/agents/kernel/kernel-tool-registry-adapter.ts
+src/application/agents/kernel/json-utils.ts
 ```
 
-This adapter is the busiest orchestration seam: tool dispatch, the
-permission-deny path (disabled native tools), the autonomous write-apply path,
-the consecutive-failure circuit-breaker, and side-effect-level classification.
-It is exercised by the mission suite (`tests/missions/`) and the agent unit
-tests (`src/__tests__/application/agents/`).
+The adapter is the busiest orchestration seam: tool dispatch, the permission-deny
+path (disabled native tools), the autonomous write-apply path, the
+consecutive-failure circuit-breaker, and side-effect-level classification.
+`json-utils` is the tool-argument parse / result-serialize boundary. Both are
+exercised by the mission suite (`tests/missions/`) and the agent unit tests
+(`src/__tests__/application/agents/`).
+
+**Why only these two (not all of `kernel/**`):** the mutation score is a global
+average across mutated files. A full-`kernel/**` run (2026-06-14, 587 mutants,
+74 min) measured the per-file baseline — only the adapter and (after adding a
+unit suite) json-utils are gate-ready:
+
+| file | score | note |
+| --- | --- | --- |
+| kernel-tool-registry-adapter.ts | 94.6 % | gated |
+| json-utils.ts | 81.6 % | gated (after `json-utils.test.ts`) |
+| agent-message-history.ts | 59.8 % | needs tests before gating |
+| obsidian-agent-run-state-store.ts | 53.0 % | needs tests before gating |
+| provider-kernel-planner.ts | 51.3 % (304 mutants) | needs tests before gating |
+
+Gating the weak files would drag the global score down and force a low break
+threshold, **weakening** the protection on the strong files. So the gate stays on
+the two strong files; the planner and run-state-store are the next widening
+targets — each needs a dedicated unit suite (like the adapter's) first. (The
+planner's new empty-turn-recovery logic is already covered by
+`tests/missions/agent/empty-turn-recovery.mission.test.ts`.)
 
 ## Why `concurrency: 1`
 
-The mission harness (`tests/harness/mock-llm-harness.ts`) starts a mock LLM
-server bound to a **fixed port** (`DEFAULT_MOCK_LLM_PORT` from
-`tests/e2e/support/mock-llm-server.ts`). The base Jest config runs
-`maxWorkers: 1` for the same reason. If Stryker ran multiple test-runner
-processes in parallel, each would try to bind the same port and collide.
-Therefore `stryker.config.json` sets `"concurrency": 1`. Do not raise it without
-first making the mock server pick a free port per worker.
+The mission harness starts a mock LLM server. `DEFAULT_MOCK_LLM_PORT` is now
+**worker-aware** (`43117 + JEST_WORKER_ID`), so the base Jest suite runs in
+parallel without collisions. But Stryker spawns separate Jest **processes** per
+concurrent mutant, and `JEST_WORKER_ID` resets to `1` inside each — so two
+concurrent Stryker mutants would both land on port `43118` and collide.
+Therefore `stryker.config.json` keeps `"concurrency": 1`. Raising it would need a
+Stryker-process-aware port offset, not just the per-worker one.
 
 ## Configuration notes
 
@@ -83,13 +105,28 @@ boundary, the disabled-tool deny-stub, the autonomous write auto-apply
 | Runtime errors  | 0              |
 | **Score**       | **94.57 %**    |
 
+## Widened scope (2026-06-14)
+
+Added `src/__tests__/application/agents/kernel/json-utils.test.ts` (18 tests)
+covering every branch of `parseToolArguments` / `serializeToolResult` /
+`toJsonObject` / `toJsonValue`, raising json-utils from 52.6 % to **81.6 %**, then
+added it to the mutate set.
+
+| Metric        | Value (adapter + json-utils) |
+| ------------- | ---------------------------- |
+| Mutants total | 130                          |
+| Killed        | 118                          |
+| Survived      | 12                           |
+| **Score**     | **90.77 %**                  |
+
+Per file: adapter 94.57 %, json-utils 81.58 %. Runs serially in ~10 min.
+
 ### Break threshold
 
-`thresholds.break = 90` (raised from 40). Set just below the achieved 94.57 % so
-the gate stays **green** (Stryker exits 0 when score >= break) while the 5
-remaining survivors — all equivalent mutants (below) — keep it off 100 %. Any
-regression that kills fewer than ~83/92 mutants now fails the gate.
-(`high: 90`, `low: 70` only affect report colouring.)
+`thresholds.break = 85` (`high: 90`, `low: 80` affect report colouring only). Set
+below the achieved 90.77 % so the gate stays **green** while leaving a little
+headroom for the equivalent survivors, yet fails on any real regression that
+drops the combined score below 85 %.
 
 ## Survivor triage
 

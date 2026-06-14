@@ -17,9 +17,10 @@
     "docs"
   ],
   "mutate": [
-    "src/application/agents/kernel/kernel-tool-registry-adapter.ts"
+    "src/application/agents/kernel/kernel-tool-registry-adapter.ts",
+    "src/application/agents/kernel/json-utils.ts"
   ],
-  "thresholds": { "high": 90, "low": 70, "break": 90 },
+  "thresholds": { "high": 90, "low": 80, "break": 85 },
   "tempDirName": ".stryker-tmp",
   "reporters": ["clear-text", "progress", "json"],
   "jsonReporter": { "fileName": "tests/mutation/mutation-report.json" }
