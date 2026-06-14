@@ -15,6 +15,9 @@ export const config: Options.Testrunner = {
 	specFileRetries: 0,
 	mochaOpts: {
 		ui: 'bdd',
-		timeout: 30 * 60 * 1000,
+		// Must exceed the spec's own deadline (LONG_TASK_TARGET_MIN + ~28). A slower
+		// model (e.g. deepseek-v4-pro at ~80s/long-note) can push a 24-note run past
+		// 30 min, so give generous headroom rather than cutting a healthy run off.
+		timeout: 50 * 60 * 1000,
 	},
 };
