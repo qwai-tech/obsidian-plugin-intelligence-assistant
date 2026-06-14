@@ -1,6 +1,9 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 
-export const DEFAULT_MOCK_LLM_PORT = 43117;
+// Worker-aware so parallel jest workers (JEST_WORKER_ID 1,2,3…) bind distinct
+// ports and never collide — which lets the suite drop the global maxWorkers:1.
+// Outside jest (e.g. the wdio runner), JEST_WORKER_ID is unset → the base port.
+export const DEFAULT_MOCK_LLM_PORT = 43117 + (Number(process.env.JEST_WORKER_ID) || 0);
 export const MOCK_LLM_BASE_URL = `http://127.0.0.1:${DEFAULT_MOCK_LLM_PORT}`;
 export const MOCK_LLM_OPENAI_BASE_URL = `${MOCK_LLM_BASE_URL}/v1`;
 

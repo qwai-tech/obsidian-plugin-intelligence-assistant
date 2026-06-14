@@ -29,7 +29,10 @@ jobs:
       - name: Run CI E2E tests
         run: npm run test:e2e:ci
         env:
-          OBSIDIAN_VERSION: latest
+          # Pinned for determinism (was `latest`, a non-deterministic input that
+          # caused version-drift breakage — cf. the 1.13.0 rollback). 1.12.7 is a
+          # verified-good release >= manifest minAppVersion (1.8.7). Bump deliberately.
+          OBSIDIAN_VERSION: '1.12.7'
 
       - name: Upload E2E diagnostics
         if: failure()
@@ -68,7 +71,10 @@ jobs:
       - name: Run Release E2E tests
         run: npm run test:e2e:release
         env:
-          OBSIDIAN_VERSION: latest
+          # Pinned for determinism (was `latest`, a non-deterministic input that
+          # caused version-drift breakage — cf. the 1.13.0 rollback). 1.12.7 is a
+          # verified-good release >= manifest minAppVersion (1.8.7). Bump deliberately.
+          OBSIDIAN_VERSION: '1.12.7'
           E2E_TEST_PROVIDER: ${{ secrets.E2E_TEST_PROVIDER }}
           E2E_TEST_API_KEY: ${{ secrets.E2E_TEST_API_KEY }}
           E2E_TEST_MODEL: ${{ secrets.E2E_TEST_MODEL }}
