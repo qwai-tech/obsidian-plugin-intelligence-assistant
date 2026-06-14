@@ -41,6 +41,18 @@ const WRITE_PROPOSAL_MARKERS = [
 ];
 const WRITE_PROPOSAL_TOOL_PRIORITY = ['create_note', 'write_file', 'append_to_note'];
 
+/**
+ * An empty turn (no content AND no tool call) is almost always a truncated tool
+ * call (output exceeded maxTokens) or an empty model response — not a real
+ * completion. Retry with guidance up to this many times before giving up, so the
+ * agent never silently finishes having done nothing.
+ */
+const MAX_EMPTY_RESPONSE_RETRIES = 2;
+const EMPTY_RESPONSE_CORRECTION =
+	'Your previous response was empty. This usually means the output token limit truncated a large tool call, or you returned no tool call. Continue the task now by calling the next required tool. If a single item is too large to write in one tool call, write shorter content or split it across several tool calls.';
+const EMPTY_RESPONSE_FINAL_MESSAGE =
+	'The model repeatedly returned empty responses, likely because the output token limit truncated a large tool call. Try increasing the agent\'s Max Tokens, or split the work into smaller steps with shorter content per tool call.';
+
 /** Floor for an agent-estimated step budget, and the slack added to its estimate. */
 const MIN_ESTIMATED_BUDGET = 10;
 const ESTIMATE_BUFFER = 3;
@@ -78,6 +90,7 @@ export class ProviderKernelPlanner implements Planner {
 	private pendingGroup: PendingToolGroup | null = null;
 	private actionSequence = 0;
 	private writeProposalRetryCount = 0;
+	private emptyResponseRetryCount = 0;
 	/** Effective step budget: starts at the fallback, updated once from the agent's estimate. */
 	private softBudget: number;
 	private budgetEstimated = false;
@@ -183,10 +196,33 @@ export class ProviderKernelPlanner implements Planner {
 					continue;
 				}
 
+				// Empty turn (no content, no tool call): almost always a truncated/dropped
+				// tool call or an empty model response — not a real completion. Retry with
+				// guidance before giving up so the agent never silently finishes empty.
+				if (this.lastContent.trim() === '' && this.emptyResponseRetryCount < MAX_EMPTY_RESPONSE_RETRIES) {
+					this.emptyResponseRetryCount += 1;
+					this.workingMessages.push({
+						role: 'assistant',
+						content: '(empty response)',
+						model: this.plannerOptions.options.model,
+					});
+					this.workingMessages.push({
+						role: 'user',
+						content: EMPTY_RESPONSE_CORRECTION,
+					});
+					this.plannerOptions.callbacks.onThought(
+						'Model returned an empty response (likely a truncated tool call or empty output); retrying with guidance.',
+						'reflect',
+					);
+					continue;
+				}
+
+				const exhaustedEmpty = this.lastContent.trim() === ''
+					&& this.emptyResponseRetryCount >= MAX_EMPTY_RESPONSE_RETRIES;
 				return {
 					id: this.nextActionId(),
 					type: 'final_answer',
-					content: this.lastContent,
+					content: exhaustedEmpty ? EMPTY_RESPONSE_FINAL_MESSAGE : this.lastContent,
 					createdAt: new Date().toISOString(),
 				};
 			}
