@@ -59,6 +59,13 @@ export const CAPABILITY_MANIFEST: Capability[] = [
 	{ api: 'loadPdfJs (read_pdf agent tool)', probe: 'loadPdfJs', status: 'used', test: 'src/__tests__/application/pdf-tag-link-tools.test.ts' },
 	{ api: 'getAllTags / parseFrontMatter* / resolveSubpath / parseLinktext', probe: 'getAllTags', status: 'used', test: 'src/__tests__/application/pdf-tag-link-tools.test.ts' },
 
+	// Foundational Obsidian types & micro-utilities used pervasively across src.
+	// Not standalone "capabilities" (they back the capabilities above — e.g.
+	// TFile/TFolder back Vault usage, RequestUrlParam/Response back requestUrl),
+	// but tracked here so the drift audit stays free of UNCLASSIFIED noise.
+	{ api: 'Foundational types (App, TFile, TFolder, TAbstractFile, WorkspaceLeaf, Events, Reference, Tasks, Scope, Instruction, SearchResult, MarkdownPostProcessor, MarkdownRenderChild, ObsidianProtocolData, RequestUrlParam, RequestUrlResponse, DataAdapter)', probe: 'TFile', status: 'used' },
+	{ api: 'Utilities (debounce, moment, getLanguage, getIcon, setTooltip, arrayBufferToBase64, editorInfoField)', probe: 'debounce', status: 'used' },
+
 	// ---- Planned (high-value opportunities) ----
 	{ api: 'Vault/MetadataCache events -> incremental RAG indexing', probe: 'metadataCache.on(', status: 'used', test: 'src/__tests__/infrastructure/incremental-indexer.test.ts' },
 	{ api: 'fileManager.processFrontMatter (safe frontmatter edits)', probe: 'processFrontMatter', status: 'na', reason: 'Writes directly, bypassing the proposal/approval + autonomousWrite model. Safe frontmatter serialization is instead achieved via stringifyYaml while keeping the proposal model.' },
