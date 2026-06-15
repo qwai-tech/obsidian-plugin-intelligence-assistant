@@ -1,4 +1,5 @@
 import { Editor, getLanguage, MarkdownView, Notice, Plugin, TFile, TFolder, WorkspaceLeaf } from 'obsidian';
+import type { ObsidianProtocolData } from 'obsidian';
 import { t } from './src/i18n';
 import './src/presentation/components/chat/settings.css';
 import './src/presentation/components/modals/explain-text-modal.css';
@@ -36,6 +37,7 @@ import { ConversationStorageService } from './src/application/services/conversat
 import { ConversationMigrationService } from './src/application/services/conversation-migration-service';
 import { RAGManager } from './src/infrastructure/rag-manager';
 import { SettingsService } from './src/application/services/settings-service';
+import { reloadSettingsFromDisk as runSettingsReload } from './src/application/services/settings-reload';
 
 import { initI18n } from './src/i18n';
 import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-system';
@@ -107,6 +109,8 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private sharedToolRegistry: ToolRegistry | null = null;
 	private pluginDataPath = '';
 	private chatRibbonIconEl: HTMLElement | null = null;
+	private statusBarItemEl: HTMLElement | null = null;
+	private agentRunningCount = 0;
 	private legacyConversations: Conversation[] = [];
 	private dataService!: PluginDataService;
 	private editorQuickActions!: EditorQuickActions;
@@ -156,6 +160,17 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new IntelligenceAssistantSettingTab(this.app, this));
+
+		// Status bar: surface agent running state + cumulative token usage.
+		this.statusBarItemEl = this.addStatusBarItem();
+		this.statusBarItemEl.addClass('ia-status-bar-item');
+		this.refreshStatusBar();
+
+		// Deep links: obsidian://intelligence-assistant?task=... opens the chat
+		// view and (if a task/prompt is supplied) starts an agent task.
+		this.registerObsidianProtocolHandler('intelligence-assistant', (params) => {
+			void this.handleProtocolDeepLink(params);
+		});
 
 		// ── Data initialization: wrapped so failures never break the UI ──
 
@@ -256,6 +271,117 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			this.sharedToolRegistry = null;
 		}
 		this.chatRibbonIconEl = null;
+		this.statusBarItemEl = null;
+	}
+
+	/**
+	 * Lifecycle hook (Obsidian 1.7.2+): fired when the user explicitly enables
+	 * the plugin from the community-plugins UI. Safe to open views here. We
+	 * keep startup non-eager elsewhere, so this is where we proactively reveal
+	 * the chat view for a user who just turned the plugin on.
+	 */
+	onUserEnable(): void {
+		try {
+			// Refresh the status bar immediately so the user sees live state the
+			// moment they enable the plugin (onload may have run before data was ready).
+			this.refreshStatusBar();
+			void this.openChatViewInRightSidebar();
+		} catch (error) {
+			console.error('[Plugin] onUserEnable failed:', error);
+		}
+	}
+
+	/**
+	 * Lifecycle hook: fired when data.json changes on disk outside this
+	 * process (Obsidian Sync, an external editor, another device). Re-read the
+	 * persisted settings and refresh in-memory state + open chat views.
+	 */
+	async onExternalSettingsChange(): Promise<void> {
+		try {
+			await this.reloadSettingsFromDisk();
+		} catch (error) {
+			console.error('[Plugin] onExternalSettingsChange failed:', error);
+		}
+	}
+
+	/**
+	 * Reload settings from disk (the same load path used during onload) and
+	 * propagate the refreshed config to dependent runtime state. Extracted so it
+	 * is unit-testable without a full Plugin instance.
+	 */
+	public async reloadSettingsFromDisk(): Promise<void> {
+		if (!this.dataService) return;
+		await runSettingsReload({
+			loadSettings: () => this.loadSettings(),
+			// RAG config may have changed; drop the cached manager so it rebuilds lazily.
+			invalidateDerivedState: () => { this._ragManager = null; },
+			refreshChatViewsModels: () => this.refreshChatViewsModels(),
+			refreshStatusBar: () => this.refreshStatusBar(),
+		});
+	}
+
+	/** Mark an agent run as started/finished and refresh the status bar. */
+	public setAgentRunning(running: boolean): void {
+		this.agentRunningCount = Math.max(0, this.agentRunningCount + (running ? 1 : -1));
+		this.refreshStatusBar();
+	}
+
+	/** Update the status bar item with running state + cumulative token usage. */
+	public refreshStatusBar(): void {
+		const el = this.statusBarItemEl;
+		if (!el) return;
+		const running = this.agentRunningCount > 0;
+		const repo = this.tokenUsageRepo;
+		const render = (totalTokens: number): void => {
+			const tokensLabel = totalTokens >= 1000
+				? `${(totalTokens / 1000).toFixed(1)}k`
+				: `${totalTokens}`;
+			el.setText(running
+				? `IA: running · ${tokensLabel} tokens`
+				: `IA: idle · ${tokensLabel} tokens`);
+			el.setAttr('aria-label', `Intelligence Assistant — ${running ? 'agent running' : 'idle'}, ${totalTokens} tokens used`);
+		};
+		if (repo) {
+			repo.getGrandTotal()
+				.then(summary => render(summary.totalTokens))
+				.catch(() => render(0));
+		} else {
+			render(0);
+		}
+	}
+
+	/**
+	 * Handle an obsidian://intelligence-assistant?... deep link. Opens the chat
+	 * view and, when a `task`/`prompt` param is present, starts an agent task
+	 * (or prefills the chat input when sendImmediately is suppressed).
+	 */
+	private async handleProtocolDeepLink(params: ObsidianProtocolData): Promise<void> {
+		try {
+			const view = await this.openChatViewInRightSidebar();
+			if (!view) {
+				new Notice('Unable to open intelligence assistant chat view.');
+				return;
+			}
+			const task = (params.task ?? params.prompt ?? '').trim();
+			if (!task) return;
+			const references: TFile[] = [];
+			const filePath = (params.file ?? '').trim();
+			if (filePath) {
+				const file = this.app.vault.getAbstractFileByPath(filePath);
+				if (file instanceof TFile) references.push(file);
+			}
+			const sendImmediately = params.send !== 'false';
+			await view.startAgentTask({
+				prompt: task,
+				displayText: task,
+				references,
+				newConversation: params.new === 'true',
+				sendImmediately,
+			});
+		} catch (error) {
+			console.error('[Plugin] Protocol deep link failed:', error);
+			new Notice('Failed to handle intelligence-assistant deep link.');
+		}
 	}
 
 

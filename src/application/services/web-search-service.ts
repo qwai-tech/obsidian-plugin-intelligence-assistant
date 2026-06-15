@@ -1,5 +1,25 @@
+import { htmlToMarkdown } from 'obsidian';
 import { IHttpClient } from '@/core/interfaces';
 import type { WebSearchConfig } from '@/types';
+
+/** True when the string looks like it contains HTML markup worth converting. */
+function looksLikeHtml(text: string): boolean {
+	return /<[a-z!/][^>]*>|&[a-z#0-9]+;/i.test(text);
+}
+
+/**
+ * Convert a possibly-HTML search snippet into clean markdown. Many providers
+ * (Bing, SerpAPI, Brave, Google) return snippets with <b>/<strong> highlight
+ * tags and HTML entities; Obsidian's htmlToMarkdown gives us a faithful,
+ * reader-friendly conversion instead of leaving raw tags in the agent context.
+ */
+export function snippetToMarkdown(snippet: string): string {
+	if (!snippet) return snippet;
+	if (!looksLikeHtml(snippet)) return snippet;
+	const md = htmlToMarkdown(snippet);
+	const trimmed = md.trim();
+	return trimmed.length > 0 ? trimmed : snippet;
+}
 
 export interface WebSearchResult {
 	title: string;
@@ -369,7 +389,7 @@ export class WebSearchService {
 					break;
 			}
 
-			return this.applyDomainFilters(results);
+			return this.applyDomainFilters(this.cleanResultSnippets(results));
 		} catch (error) {
 			console.error('[WebSearch] Error:', error);
 			return [];
@@ -894,6 +914,18 @@ export class WebSearchService {
 			.replace(/&gt;/g, '>')
 			.replace(/&quot;/g, '"')
 			.replace(/&#39;/g, "'");
+	}
+
+	/**
+	 * Normalize each result's snippet from provider HTML to clean markdown via
+	 * Obsidian's htmlToMarkdown, so HTML highlight tags / entities never reach
+	 * the agent context. Plain-text snippets pass through untouched.
+	 */
+	private cleanResultSnippets(results: WebSearchResult[]): WebSearchResult[] {
+		return results.map(result => {
+			const snippet = snippetToMarkdown(result.snippet);
+			return snippet === result.snippet ? result : { ...result, snippet };
+		});
 	}
 
 	private applyDomainFilters(results: WebSearchResult[]): WebSearchResult[] {

@@ -64,14 +64,14 @@ export const CAPABILITY_MANIFEST: Capability[] = [
 	{ api: 'fileManager.processFrontMatter (safe frontmatter edits)', probe: 'processFrontMatter', status: 'na', reason: 'Writes directly, bypassing the proposal/approval + autonomousWrite model. Safe frontmatter serialization is instead achieved via stringifyYaml while keeping the proposal model.' },
 	{ api: 'registerMarkdownCodeBlockProcessor (inline AI widgets)', probe: 'registerMarkdownCodeBlockProcessor', status: 'planned', tier: 1, reason: 'Render live AI results inside notes via a fenced ai-* code block.' },
 	{ api: 'EditorSuggest / AbstractInputSuggest (@-mentions)', probe: 'EditorSuggest', status: 'planned', tier: 1, reason: 'File/heading/block autocomplete + slash commands in the chat input.' },
-	{ api: 'registerObsidianProtocolHandler (deep links)', probe: 'registerObsidianProtocolHandler', status: 'planned', tier: 2, reason: 'obsidian:// links to trigger an agent task from outside Obsidian.' },
-	{ api: 'addStatusBarItem (agent status / token usage)', probe: 'addStatusBarItem', status: 'planned', tier: 2, reason: 'Surface running status / token usage / cost in the status bar.' },
-	{ api: 'htmlToMarkdown (web content -> markdown)', probe: 'htmlToMarkdown', status: 'planned', tier: 2, reason: 'Clean conversion for web search results and clipping.' },
+	{ api: 'registerObsidianProtocolHandler (deep links)', probe: 'registerObsidianProtocolHandler', status: 'used' },
+	{ api: 'addStatusBarItem (agent status / token usage)', probe: 'addStatusBarItem', status: 'used' },
+	{ api: 'htmlToMarkdown (web content -> markdown)', probe: 'htmlToMarkdown', status: 'used', test: 'src/__tests__/application/web-search-service.test.ts' },
 	{ api: 'registerHoverLinkSource / HoverPopover (hover previews)', probe: 'registerHoverLinkSource', status: 'planned', tier: 3, reason: 'Hover previews for note references in chat.' },
 	{ api: 'registerEditorExtension (CodeMirror inline AI)', probe: 'registerEditorExtension', status: 'planned', tier: 3, reason: 'Inline completions/decorations in the editor.' },
 	{ api: 'loadMermaid / loadMathJax / loadPrism (rich chat rendering)', probe: 'loadMermaid', status: 'planned', tier: 3, reason: 'Render diagrams/math/code natively in chat replies.' },
 	{ api: 'SuggestModal / FuzzySuggestModal (quick pickers)', probe: 'FuzzySuggestModal', status: 'planned', tier: 3, reason: 'Fuzzy agent/model/prompt switcher.' },
-	{ api: 'onExternalSettingsChange + onUserEnable (lifecycle hooks)', probe: 'onExternalSettingsChange', status: 'planned', tier: 3, reason: 'External settings sync + correct UI-startup hook.' },
+	{ api: 'onExternalSettingsChange + onUserEnable (lifecycle hooks)', probe: 'onExternalSettingsChange', status: 'used', test: 'src/__tests__/lifecycle-hooks.test.ts' },
 
 	// ---- N/A (intentionally not applicable) ----
 	{ api: 'Bases* (BasesView/BasesEntry/Value classes)', probe: 'BasesView', status: 'na', reason: 'Bases plugin view/formula API — out of scope for an agent/chat plugin.' },

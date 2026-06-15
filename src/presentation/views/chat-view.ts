@@ -122,7 +122,11 @@ export class ChatView extends ItemView {
 				return config ? { provider: ProviderFactory.createProvider(config), providerId: config.provider } : null;
 			},
 			recordUsage: tokenUsageRepo
-				? (record) => tokenUsageRepo.recordUsage(record)
+				? async (record) => {
+					await tokenUsageRepo.recordUsage(record);
+					// Refresh the status bar so cumulative token usage stays live.
+					this.plugin.refreshStatusBar();
+				}
 				: undefined,
 			defaultModel: this.plugin.settings.defaultModel,
 		});
@@ -354,6 +358,8 @@ export class ChatView extends ItemView {
 				} else {
 					if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
 				}
+				// Reflect running state in the status bar item.
+				this.plugin.setAgentRunning(isStreaming);
 			},
 		});
 		this.conversationManager.on('conversation-loaded', (conv: Conversation) => {

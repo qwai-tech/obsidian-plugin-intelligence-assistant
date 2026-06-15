@@ -15,6 +15,35 @@ export function parseYaml(raw: string): unknown {
 	return YAML.parse(raw);
 }
 
+/**
+ * Faithful-enough stand-in for Obsidian's htmlToMarkdown: converts the common
+ * inline/block tags real search snippets use (<b>/<strong>, <i>/<em>, <a>,
+ * <h1-3>, <br>, <p>) to markdown, strips any remaining tags, and decodes the
+ * handful of HTML entities providers emit. Accepts a string (the only form the
+ * web-search service passes).
+ */
+export function htmlToMarkdown(html: string | HTMLElement | Document | DocumentFragment): string {
+	let s = typeof html === 'string' ? html : (html as HTMLElement).innerHTML ?? '';
+	s = s
+		.replace(/<\s*(b|strong)\s*>(.*?)<\s*\/\s*\1\s*>/gis, '**$2**')
+		.replace(/<\s*(i|em)\s*>(.*?)<\s*\/\s*\1\s*>/gis, '*$2*')
+		.replace(/<\s*a\b[^>]*\bhref\s*=\s*["']([^"']*)["'][^>]*>(.*?)<\s*\/\s*a\s*>/gis, '[$2]($1)')
+		.replace(/<\s*h1\s*>(.*?)<\s*\/\s*h1\s*>/gis, '# $1\n')
+		.replace(/<\s*h2\s*>(.*?)<\s*\/\s*h2\s*>/gis, '## $1\n')
+		.replace(/<\s*h3\s*>(.*?)<\s*\/\s*h3\s*>/gis, '### $1\n')
+		.replace(/<\s*br\s*\/?\s*>/gi, '\n')
+		.replace(/<\s*\/?\s*p\s*>/gi, '\n')
+		.replace(/<[^>]+>/g, '');
+	s = s
+		.replace(/&nbsp;/g, ' ')
+		.replace(/&amp;/g, '&')
+		.replace(/&lt;/g, '<')
+		.replace(/&gt;/g, '>')
+		.replace(/&quot;/g, '"')
+		.replace(/&#39;/g, "'");
+	return s.replace(/\n{3,}/g, '\n\n').trim();
+}
+
 // Add Obsidian HTMLElement extensions
 if (typeof HTMLElement !== 'undefined') {
 	// Obsidian augments Node with a cross-window-safe instanceOf(); mirror it so
