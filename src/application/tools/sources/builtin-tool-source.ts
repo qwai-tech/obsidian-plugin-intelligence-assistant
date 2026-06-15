@@ -22,6 +22,12 @@ import {
 	ReadCanvasTool,
 	UpdateCanvasTool,
 } from '@/application/services/canvas-tools';
+import { ReadPdfTool } from '@/application/services/pdf-tools';
+import {
+	FindNotesByTagTool,
+	ResolveLinkTool,
+} from '@/application/services/tag-tools';
+import { MakeLinkTool } from '@/application/services/link-tools';
 
 /**
  * Factory for one of the six builtin tools, keyed by its definition.name.
@@ -38,6 +44,10 @@ const BUILTIN_TOOL_FACTORIES: Record<string, BuiltinToolFactory> = {
 	update_properties: (app) => new UpdatePropertiesTool(app),
 	read_canvas: (app) => new ReadCanvasTool(app),
 	update_canvas: (app) => new UpdateCanvasTool(app),
+	read_pdf: (app) => new ReadPdfTool(app),
+	find_notes_by_tag: (app) => new FindNotesByTagTool(app),
+	resolve_link: (app) => new ResolveLinkTool(app),
+	make_link: (app) => new MakeLinkTool(app),
 };
 
 /** All builtin tool types in their canonical registration order. */

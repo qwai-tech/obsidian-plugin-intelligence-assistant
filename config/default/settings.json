@@ -53,6 +53,22 @@
       {
         "type": "update_canvas",
         "enabled": true
+      },
+      {
+        "type": "read_pdf",
+        "enabled": true
+      },
+      {
+        "type": "find_notes_by_tag",
+        "enabled": true
+      },
+      {
+        "type": "resolve_link",
+        "enabled": true
+      },
+      {
+        "type": "make_link",
+        "enabled": true
       }
     ],
     "mcp": {

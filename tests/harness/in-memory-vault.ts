@@ -107,6 +107,8 @@ export function createHarnessApp(seed: Record<string, string> = {}): HarnessApp 
     vault,
     metadataCache: {
       getFileCache: () => null,
+      getFirstLinkpathDest: (linkpath: string): TFile | null =>
+        vault.getAbstractFileByPath(linkpath.endsWith('.md') ? linkpath : `${linkpath}.md`),
     },
     workspace: {
       getActiveFile: () => null,
@@ -117,6 +119,18 @@ export function createHarnessApp(seed: Record<string, string> = {}): HarnessApp 
       trashFile: async (file: { path: string }): Promise<void> => vault.delete(file.path),
       renameFile: async (file: { path: string }, newPath: string): Promise<void> =>
         vault.rename(file.path, newPath),
+      // Vault-correct link generator: wikilink by basename, with optional
+      // #subpath and |alias. Mirrors the obsidian mock's behaviour.
+      generateMarkdownLink: (
+        file: TFile,
+        _sourcePath: string,
+        subpath?: string,
+        alias?: string,
+      ): string => {
+        const base = file.basename || file.name;
+        const target = subpath ? `${base}${subpath}` : base;
+        return alias ? `[[${target}|${alias}]]` : `[[${target}]]`;
+      },
     },
   } as unknown as HarnessApp;
   app.__vault = vault;

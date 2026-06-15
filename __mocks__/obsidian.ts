@@ -159,9 +159,95 @@ export class App {
 		})),
 	};
 
+	metadataCache = {
+		getFileCache: jest.fn((_file: any) => null as any),
+		getFirstLinkpathDest: jest.fn((_linkpath: string, _sourcePath: string) => null as any),
+	};
+
 	fileManager = {
 		trashFile: jest.fn(async (_file: any) => {}),
+		// Faithful-enough stand-in for Obsidian's link generator: defaults to a
+		// wikilink, appends a #subpath and |alias when provided.
+		generateMarkdownLink: jest.fn(
+			(file: any, _sourcePath: string, subpath?: string, alias?: string) => {
+				const base = file?.basename ?? file?.name ?? '';
+				const target = subpath ? `${base}${subpath}` : base;
+				return alias ? `[[${target}|${alias}]]` : `[[${target}]]`;
+			},
+		),
 	};
+}
+
+/**
+ * Minimal faithful stand-in for Obsidian's loadPdfJs(): returns a pdf.js-shaped
+ * module whose getDocument(...).promise resolves to a doc with numPages /
+ * getPage / getTextContent().items[].str. Backed by the ArrayBuffer's bytes so
+ * tests can encode known text.
+ */
+export const loadPdfJs = jest.fn(async () => {
+	return {
+		getDocument({ data }: { data: ArrayBuffer | Uint8Array }) {
+			const bytes = data instanceof Uint8Array ? data : new Uint8Array(data);
+			const decoded = new TextDecoder().decode(bytes);
+			// Test fixtures encode pages as text separated by the form-feed char.
+			const pages = decoded.length ? decoded.split('\f') : [''];
+			return {
+				promise: Promise.resolve({
+					numPages: pages.length,
+					async getPage(pageNum: number) {
+						const text = pages[pageNum - 1] ?? '';
+						return {
+							async getTextContent() {
+								return {
+									items: text
+										.split(' ')
+										.filter((s) => s.length > 0)
+										.map((str) => ({ str })),
+								};
+							},
+						};
+					},
+				}),
+			};
+		},
+	};
+});
+
+/** Faithful getAllTags: collects #frontmatter tags + inline cache.tags[].tag. */
+export function getAllTags(cache: any): string[] | null {
+	if (!cache) return null;
+	const out = new Set<string>();
+	const fmTags = cache.frontmatter?.tags;
+	const fmList = Array.isArray(fmTags) ? fmTags : fmTags ? [fmTags] : [];
+	for (const t of fmList) {
+		const s = String(t);
+		out.add(s.startsWith('#') ? s : `#${s}`);
+	}
+	for (const entry of cache.tags ?? []) {
+		if (entry?.tag) out.add(entry.tag.startsWith('#') ? entry.tag : `#${entry.tag}`);
+	}
+	return [...out];
+}
+
+/** Faithful parseLinktext: splits a wikilink into path + (#)subpath. */
+export function parseLinktext(linktext: string): { path: string; subpath: string } {
+	const hash = linktext.indexOf('#');
+	if (hash < 0) return { path: linktext, subpath: '' };
+	return { path: linktext.slice(0, hash), subpath: linktext.slice(hash) };
+}
+
+/**
+ * Faithful-enough resolveSubpath: finds a matching heading in cache.headings
+ * and returns its start/end offsets (end = next heading's start, or null).
+ */
+export function resolveSubpath(cache: any, subpath: string): any {
+	const name = subpath.replace(/^#+/, '').trim();
+	const headings = cache?.headings ?? [];
+	const idx = headings.findIndex((h: any) => h.heading === name);
+	if (idx < 0) return null;
+	const start = headings[idx].position?.start ?? { offset: 0 };
+	const end = headings[idx + 1]?.position?.start ?? null;
+	return { start, end };
 }
 
 export class Modal {
