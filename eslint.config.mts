@@ -69,6 +69,17 @@ export default defineConfig([
         { name: "event", message: "The global event object is deprecated." }
       ],
 
+      // Steer toward leak-safe Obsidian APIs (auto-detached on unload). A
+      // listener on document/window/activeWindow/activeDocument outlives the
+      // plugin unless removed by hand — use this.registerDomEvent(...) instead.
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "CallExpression[callee.object.name=/^(document|window|activeWindow|activeDocument)$/][callee.property.name='addEventListener']",
+          message: "Use this.registerDomEvent(target, type, handler) so the listener is detached on unload, instead of document/window addEventListener."
+        }
+      ],
+
       "no-implied-eval": "error",
       "no-new-func": "error",
       "no-extra-boolean-cast": "error",

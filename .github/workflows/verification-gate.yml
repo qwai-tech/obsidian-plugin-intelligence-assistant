@@ -32,6 +32,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Obsidian API capability audit (no regressions)
+        run: npm run audit:obsidian-api
+
       - name: Unit + mission + perf suite
         run: npm test
 
