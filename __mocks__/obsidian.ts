@@ -279,6 +279,73 @@ export function resolveSubpath(cache: any, subpath: string): any {
 	return { start, end };
 }
 
+/**
+ * Faithful-enough base for AbstractInputSuggest used by the chat @-mention
+ * suggester. Stores app + the bound input element, exposes value get/set against
+ * that element, and provides a no-op close()/onSelect() so the suggester can be
+ * instantiated and exercised in unit tests.
+ */
+export abstract class PopoverSuggest<T> {
+	app: App;
+	constructor(app: App) {
+		this.app = app;
+	}
+	abstract renderSuggestion(value: T, el: HTMLElement): void;
+	abstract selectSuggestion(value: T, evt: any): void;
+	open(): void {}
+	close(): void {}
+}
+
+export abstract class AbstractInputSuggest<T> extends PopoverSuggest<T> {
+	limit = 100;
+	protected textInputEl: HTMLInputElement | HTMLDivElement;
+	private selectCb: ((value: T, evt: any) => void) | null = null;
+
+	constructor(app: App, textInputEl: HTMLInputElement | HTMLDivElement) {
+		super(app);
+		this.textInputEl = textInputEl;
+	}
+
+	protected abstract getSuggestions(query: string): T[] | Promise<T[]>;
+
+	setValue(value: string): void {
+		(this.textInputEl as HTMLInputElement).value = value;
+	}
+
+	getValue(): string {
+		return (this.textInputEl as HTMLInputElement).value ?? '';
+	}
+
+	onSelect(cb: (value: T, evt: any) => void): this {
+		this.selectCb = cb;
+		return this;
+	}
+
+	// Test helper: surface the protected getSuggestions through a public path.
+	async _getSuggestionsForTest(query: string): Promise<T[]> {
+		return await this.getSuggestions(query);
+	}
+}
+
+export class Component {
+	registerEvent(): void {}
+	register(): void {}
+	load(): void {}
+	unload(): void {}
+	onload(): void {}
+	onunload(): void {}
+	addChild<T extends Component>(child: T): T { return child; }
+	removeChild<T extends Component>(child: T): T { return child; }
+}
+
+export class MarkdownRenderChild extends Component {
+	containerEl: HTMLElement;
+	constructor(containerEl: HTMLElement) {
+		super();
+		this.containerEl = containerEl;
+	}
+}
+
 export class Modal {
 	app: App;
 	contentEl: HTMLElement;

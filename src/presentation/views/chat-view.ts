@@ -36,6 +36,7 @@ import {
 } from '@/presentation/components/chat/controllers';
 import { ChatHeaderComponent } from '@/presentation/components/chat/chat-header.component';
 import { ChatInputComponent } from '@/presentation/components/chat/chat-input.component';
+import { MentionSuggest } from '@/presentation/suggest/mention-suggest';
 import { RagStatusPanel } from '@/presentation/components/chat/rag-status-panel';
 import { resolveMessageProviderId } from '@/presentation/components/chat/utils';
 import { ObsidianFileSystem } from '@/infrastructure/obsidian/obsidian-file-system';
@@ -58,6 +59,7 @@ export class ChatView extends ItemView {
 	private conversationManager: ConversationManager;
 	private chatHeader: ChatHeaderComponent;
 	private chatInput: ChatInputComponent;
+	private mentionSuggest: MentionSuggest | null = null;
 
 	// Controllers
 	private messageController: MessageController;
@@ -257,6 +259,9 @@ export class ChatView extends ItemView {
 		this.imageActionItem = this.chatInput.imageActionItem;
 		this.stopBtn = this.chatInput.stopBtn;
 		this.modelSelect = this.chatInput.modelSelect;
+
+		// @-mention / [[wikilink autocomplete on the chat input.
+		this.mentionSuggest = new MentionSuggest(this.app, this.chatInput.textarea);
 
 		await this.refreshModels();
 

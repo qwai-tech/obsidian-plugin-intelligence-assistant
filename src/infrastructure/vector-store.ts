@@ -164,6 +164,45 @@ export class VectorStore {
     await this.save();
   }
 
+  /**
+   * Remove every chunk belonging to a file path from the in-memory index and
+   * persist. Chunk ids are keyed as `${path}-${i}`, so we match on that prefix.
+   * Returns the number of chunks removed.
+   */
+  async removeFile(path: string): Promise<number> {
+    const prefix = `${path}-`;
+    const before = this._chunks.length;
+    this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(prefix));
+    const removed = before - this._chunks.length;
+    if (removed > 0) {
+      this.chunkNorms.clear();
+      await this.save();
+    }
+    return removed;
+  }
+
+  /**
+   * Re-key a file's chunks from `oldPath` to `newPath` without recomputing
+   * embeddings (the embedding vectors are unchanged by a rename — only the id /
+   * metadata path move). Returns the number of chunks re-keyed.
+   */
+  async renameFile(oldPath: string, newPath: string): Promise<number> {
+    const prefix = `${oldPath}-`;
+    let renamed = 0;
+    for (const chunk of this._chunks) {
+      if (chunk.id.startsWith(prefix)) {
+        chunk.id = `${newPath}${chunk.id.slice(oldPath.length)}`;
+        chunk.metadata.path = newPath;
+        renamed++;
+      }
+    }
+    if (renamed > 0) {
+      this.chunkNorms.clear();
+      await this.save();
+    }
+    return renamed;
+  }
+
   async addContent(content: string, metadata: unknown, config: RAGConfig): Promise<void> {
     // Embeddings (and therefore norms) are about to change; drop the norm cache.
     this.chunkNorms.clear();

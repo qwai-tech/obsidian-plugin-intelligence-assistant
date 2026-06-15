@@ -60,10 +60,10 @@ export const CAPABILITY_MANIFEST: Capability[] = [
 	{ api: 'getAllTags / parseFrontMatter* / resolveSubpath / parseLinktext', probe: 'getAllTags', status: 'used', test: 'src/__tests__/application/pdf-tag-link-tools.test.ts' },
 
 	// ---- Planned (high-value opportunities) ----
-	{ api: 'Vault/MetadataCache events -> incremental RAG indexing', probe: 'metadataCache.on(', status: 'planned', tier: 1, reason: 'Only one generic vault listener today; wire create/modify/delete/rename + metadataCache changed/resolved to incrementally refresh the RAG index instead of full reindex.' },
+	{ api: 'Vault/MetadataCache events -> incremental RAG indexing', probe: 'metadataCache.on(', status: 'used', test: 'src/__tests__/infrastructure/incremental-indexer.test.ts' },
 	{ api: 'fileManager.processFrontMatter (safe frontmatter edits)', probe: 'processFrontMatter', status: 'na', reason: 'Writes directly, bypassing the proposal/approval + autonomousWrite model. Safe frontmatter serialization is instead achieved via stringifyYaml while keeping the proposal model.' },
-	{ api: 'registerMarkdownCodeBlockProcessor (inline AI widgets)', probe: 'registerMarkdownCodeBlockProcessor', status: 'planned', tier: 1, reason: 'Render live AI results inside notes via a fenced ai-* code block.' },
-	{ api: 'EditorSuggest / AbstractInputSuggest (@-mentions)', probe: 'EditorSuggest', status: 'planned', tier: 1, reason: 'File/heading/block autocomplete + slash commands in the chat input.' },
+	{ api: 'registerMarkdownCodeBlockProcessor (inline AI widgets)', probe: 'registerMarkdownCodeBlockProcessor', status: 'used', test: 'src/__tests__/presentation/ai-code-block.test.ts' },
+	{ api: 'EditorSuggest / AbstractInputSuggest (@-mentions)', probe: 'AbstractInputSuggest', status: 'used', test: 'src/__tests__/presentation/mention-suggest.test.ts' },
 	{ api: 'registerObsidianProtocolHandler (deep links)', probe: 'registerObsidianProtocolHandler', status: 'used' },
 	{ api: 'addStatusBarItem (agent status / token usage)', probe: 'addStatusBarItem', status: 'used' },
 	{ api: 'htmlToMarkdown (web content -> markdown)', probe: 'htmlToMarkdown', status: 'used', test: 'src/__tests__/application/web-search-service.test.ts' },

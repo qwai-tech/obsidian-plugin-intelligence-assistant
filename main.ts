@@ -1,4 +1,4 @@
-import { Editor, getLanguage, MarkdownView, Notice, Plugin, TFile, TFolder, WorkspaceLeaf } from 'obsidian';
+import { Editor, getLanguage, MarkdownRenderChild, MarkdownView, Notice, Plugin, TFile, TFolder, WorkspaceLeaf } from 'obsidian';
 import type { ObsidianProtocolData } from 'obsidian';
 import { t } from './src/i18n';
 import './src/presentation/components/chat/settings.css';
@@ -36,6 +36,8 @@ import { ensureDefaultAgent as ensureDefaultAgentService } from './src/applicati
 import { ConversationStorageService } from './src/application/services/conversation-storage-service';
 import { ConversationMigrationService } from './src/application/services/conversation-migration-service';
 import { RAGManager } from './src/infrastructure/rag-manager';
+import { createIncrementalIndexHandlers } from './src/infrastructure/rag/incremental-indexer';
+import { parseAiBlock, buildAiWidget } from './src/presentation/markdown/ai-code-block';
 import { SettingsService } from './src/application/services/settings-service';
 import { reloadSettingsFromDisk as runSettingsReload } from './src/application/services/settings-reload';
 
@@ -151,6 +153,14 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		});
 
 		this.registerObsidianAgentEntryPoints();
+
+		// Fine-grained, incremental RAG indexing wired to Vault + MetadataCache
+		// events (create/modify/delete/rename + metadataCache changed) so a single
+		// file change updates just that file's chunks instead of a full reindex.
+		this.registerIncrementalRagIndexing();
+
+		// Inline AI widgets: ```ai fenced blocks render a runnable prompt widget.
+		this.registerInlineAiCodeBlock();
 
 		// Add ribbon icon for quick chat access
 		this.chatRibbonIconEl = this.addRibbonIcon("message-circle", t("ribbon.openChat"), async () => {
@@ -394,6 +404,98 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			);
 		}
 		return this._ragManager;
+	}
+
+	/**
+	 * Register Vault + MetadataCache event listeners that incrementally update
+	 * the RAG index for a single file on each change, instead of the old coarse
+	 * full-reindex. The RAG manager is resolved lazily per event so listeners can
+	 * be registered eagerly at onload before the manager is built.
+	 */
+	private registerIncrementalRagIndexing(): void {
+		const handlers = createIncrementalIndexHandlers(
+			{
+				indexFile: async (file) => {
+					const tfile = this.app.vault.getAbstractFileByPath(file.path);
+					if (tfile instanceof TFile) {
+						await this.getRAGManager().indexFile(tfile);
+					}
+				},
+				removeFile: async (path) => await this.getRAGManager().removeFile(path),
+				renameFile: async (oldPath, newPath) => await this.getRAGManager().renameFile(oldPath, newPath),
+			},
+			() => ({
+				enabled: this.settings?.ragConfig?.enabled ?? false,
+				embedChangedFiles: this.settings?.ragConfig?.embedChangedFiles ?? false,
+			}),
+			{
+				setTimeoutFn: (fn, ms) => window.setTimeout(fn, ms),
+				clearTimeoutFn: (h) => window.clearTimeout(h as number),
+			},
+		);
+
+		this.registerEvent(this.app.vault.on('create', (file) => {
+			if (file instanceof TFile) handlers.onCreate(file);
+		}));
+		this.registerEvent(this.app.vault.on('modify', (file) => {
+			if (file instanceof TFile) handlers.onModify(file);
+		}));
+		this.registerEvent(this.app.vault.on('delete', (file) => {
+			if (file instanceof TFile) handlers.onDelete(file);
+		}));
+		this.registerEvent(this.app.vault.on('rename', (file, oldPath) => {
+			if (file instanceof TFile) handlers.onRename(file, oldPath);
+		}));
+		this.registerEvent(this.app.metadataCache.on('changed', (file) => {
+			if (file instanceof TFile) handlers.onMetadataChanged(file);
+		}));
+	}
+
+	/**
+	 * Register the ```ai fenced code-block processor. Each block renders an
+	 * inline widget (prompt + result area + Run button). Running hands the prompt
+	 * to the existing agent path (opens the chat view and starts an agent task),
+	 * so it produces a real result rather than a stub. We don't auto-run on every
+	 * preview render — only when the user clicks Run (or the block opts in via
+	 * `autorun: true`).
+	 */
+	private registerInlineAiCodeBlock(): void {
+		this.registerMarkdownCodeBlockProcessor('ai', (source, el, ctx) => {
+			const directive = parseAiBlock(source);
+			// MarkdownRenderChild gives the widget a lifecycle tied to the preview
+			// so its listeners are cleaned up when the block is re-rendered/removed.
+			const child = new MarkdownRenderChild(el);
+			ctx.addChild(child);
+			const handle = buildAiWidget(el, directive, (prompt) => {
+				handle.setRunning(true);
+				void this.runInlineAiPrompt(prompt, directive.title)
+					.finally(() => handle.setRunning(false));
+			});
+		});
+	}
+
+	/**
+	 * Drive an inline-ai-block prompt through the agent path. Opens the chat view
+	 * and starts an agent task seeded with the block's prompt.
+	 */
+	private async runInlineAiPrompt(prompt: string, title?: string): Promise<void> {
+		try {
+			const view = await this.openChatViewInRightSidebar();
+			if (!view) {
+				new Notice('Unable to open intelligence assistant chat view.');
+				return;
+			}
+			await view.startAgentTask({
+				prompt,
+				displayText: title ? `${title}: ${prompt}` : prompt,
+				references: [],
+				newConversation: false,
+				sendImmediately: true,
+			});
+		} catch (error) {
+			console.error('[Plugin] Inline ai block run failed:', error);
+			new Notice('Failed to run inline AI block.');
+		}
 	}
 
 	public getToolRegistry(): ToolRegistry {

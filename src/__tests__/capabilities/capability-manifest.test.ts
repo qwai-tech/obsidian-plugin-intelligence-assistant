@@ -73,8 +73,15 @@ describe('Obsidian capability manifest', () => {
 		expect(bad).toEqual([]);
 	});
 
-	it('tracks at least the Tier-1 opportunities so they cannot be silently forgotten', () => {
-		const tier1 = CAPABILITY_MANIFEST.filter((c) => c.status === 'planned' && c.tier === 1);
-		expect(tier1.length).toBeGreaterThanOrEqual(3);
+	// Full adoption reached: every Tier-1 opportunity has been implemented, so the
+	// former "at least 3 Tier-1 planned" floor (an ambition guard) is now obsolete.
+	// We keep the weaker invariant that any *remaining* planned entry is still
+	// well-formed (valid tier 1-3 + non-empty reason).
+	it('every remaining planned entry stays well-formed (valid tier + reason)', () => {
+		const bad = CAPABILITY_MANIFEST
+			.filter((c) => c.status === 'planned')
+			.filter((c) => !c.reason || !c.reason.trim() || ![1, 2, 3].includes(c.tier as number))
+			.map((c) => c.api);
+		expect(bad).toEqual([]);
 	});
 });

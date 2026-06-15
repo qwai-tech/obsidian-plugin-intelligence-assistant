@@ -100,6 +100,28 @@ export class RAGManager {
     await this.vectorStore.addFile(file, this.config);
   }
 
+  /**
+   * Incrementally drop a single deleted file from the index. No-op when RAG is
+   * disabled. Returns the number of chunks removed.
+   */
+  async removeFile(path: string): Promise<number> {
+    if (!this.config.enabled) {
+      return 0;
+    }
+    return await this.vectorStore.removeFile(path);
+  }
+
+  /**
+   * Incrementally re-key a renamed/moved file's chunks instead of re-embedding.
+   * No-op when RAG is disabled. Returns the number of chunks re-keyed.
+   */
+  async renameFile(oldPath: string, newPath: string): Promise<number> {
+    if (!this.config.enabled) {
+      return 0;
+    }
+    return await this.vectorStore.renameFile(oldPath, newPath);
+  }
+
   async indexMemory(agentId: string, content: string): Promise<void> {
     if (!this.config.enabled) {
       return;
