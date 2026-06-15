@@ -44,6 +44,7 @@ export const CAPABILITY_MANIFEST: Capability[] = [
 	{ api: 'fileManager.trashFile/renameFile', probe: 'fileManager', status: 'used' },
 	{ api: 'metadataCache.getFileCache (frontmatter/headings)', probe: 'getFileCache', status: 'used' },
 	{ api: 'metadataCache.resolvedLinks / backlinks (link graph)', probe: 'resolvedLinks', status: 'used' },
+	{ api: 'stringifyYaml (safe frontmatter serialization)', probe: 'stringifyYaml', status: 'used', test: 'src/__tests__/application/update-properties-tool.test.ts' },
 	{ api: 'MarkdownRenderer', probe: 'MarkdownRenderer', status: 'used' },
 	{ api: 'Menu (context menus)', probe: 'new Menu', status: 'used' },
 	{ api: 'Notice', probe: 'new Notice', status: 'used' },
@@ -57,7 +58,7 @@ export const CAPABILITY_MANIFEST: Capability[] = [
 
 	// ---- Planned (high-value opportunities) ----
 	{ api: 'Vault/MetadataCache events -> incremental RAG indexing', probe: 'metadataCache.on(', status: 'planned', tier: 1, reason: 'Only one generic vault listener today; wire create/modify/delete/rename + metadataCache changed/resolved to incrementally refresh the RAG index instead of full reindex.' },
-	{ api: 'fileManager.processFrontMatter (safe frontmatter edits)', probe: 'processFrontMatter', status: 'planned', tier: 1, reason: 'update_properties tool edits frontmatter by hand; use the safe API to avoid YAML corruption.' },
+	{ api: 'fileManager.processFrontMatter (safe frontmatter edits)', probe: 'processFrontMatter', status: 'na', reason: 'Writes directly, bypassing the proposal/approval + autonomousWrite model. Safe frontmatter serialization is instead achieved via stringifyYaml while keeping the proposal model.' },
 	{ api: 'fileManager.generateMarkdownLink (vault-correct links)', probe: 'generateMarkdownLink', status: 'planned', tier: 1, reason: 'Honor the user link settings when the agent writes [[links]].' },
 	{ api: 'loadPdfJs (read_pdf agent tool)', probe: 'loadPdfJs', status: 'planned', tier: 1, reason: 'Let the agent read PDFs in the vault, not just markdown.' },
 	{ api: 'getAllTags / parseFrontMatter* / resolveSubpath / parseLinktext', probe: 'getAllTags', status: 'planned', tier: 1, reason: 'Tag- and link-aware agent tools instead of raw text scans.' },

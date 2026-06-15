@@ -4,6 +4,16 @@
  */
 
 import { jest } from '@jest/globals';
+import * as YAML from 'yaml';
+
+// Obsidian's stringifyYaml/parseYaml wrap the `yaml` package; mirror that here.
+export function stringifyYaml(obj: unknown): string {
+	return YAML.stringify(obj);
+}
+
+export function parseYaml(raw: string): unknown {
+	return YAML.parse(raw);
+}
 
 // Add Obsidian HTMLElement extensions
 if (typeof HTMLElement !== 'undefined') {

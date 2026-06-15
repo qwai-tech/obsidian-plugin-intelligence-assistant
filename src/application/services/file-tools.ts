@@ -1,4 +1,4 @@
-import { App, TFile } from 'obsidian';
+import { App, TFile, stringifyYaml } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
 import { createWriteProposal } from './write-proposal-service';
 import { createToolDefinition } from '@/application/tools/tool-schema';
@@ -235,20 +235,12 @@ export class UpdatePropertiesTool implements Tool {
 			delete newMetadata.position;
 
 			const body = content.replace(/^---[\s\S]*?---\n?/, '');
-			let newFrontmatter = '---\n';
-			for (const [key, value] of Object.entries(newMetadata)) {
-				if (Array.isArray(value)) {
-					const items = (value as unknown[]).map(v => `  - ${String(v)}`).join('\n');
-					newFrontmatter += `${key}:\n${items}\n`;
-				} else if (typeof value === 'object' && value !== null) {
-					newFrontmatter += `${key}: ${JSON.stringify(value)}\n`;
-				} else {
-					newFrontmatter += `${key}: ${String(value)}\n`;
-				}
-			}
-			newFrontmatter += '---\n';
-
-			const proposedContent = newFrontmatter + body;
+			// Serialize with Obsidian's YAML serializer (handles escaping, arrays,
+			// nesting, multiline) instead of hand-rolled string concatenation. If all
+			// properties were removed, emit no frontmatter block at all.
+			const proposedContent = Object.keys(newMetadata).length > 0
+				? `---\n${stringifyYaml(newMetadata)}---\n${body}`
+				: body;
 
 			return {
 				success: true,
