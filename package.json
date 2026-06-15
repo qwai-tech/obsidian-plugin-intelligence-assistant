@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-plugin-intelligence-assistant",
-	"version": "0.0.20",
+	"version": "0.0.21",
 	"description": "Full autonomous Agentic workspace",
 	"main": "main.js",
 	"scripts": {
