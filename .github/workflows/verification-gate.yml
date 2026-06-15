@@ -13,7 +13,7 @@ jobs:
   gate:
     name: Deterministic Verification Gate
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -41,7 +41,29 @@ jobs:
       - name: Memory-leak guard (forced GC)
         run: npm run test:perf:mem
 
-      - name: Mutation gate (agent orchestration core)
+  # Mutation testing runs serially (Stryker concurrency:1, fixed mock-LLM port)
+  # and is much slower than the deterministic checks — kept in its own job with a
+  # generous timeout so it never cancels the fast gate.
+  mutation:
+    name: Mutation Gate (agent orchestration core)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Mutation gate
         run: npm run test:mutation
 
       - name: Upload mutation report
