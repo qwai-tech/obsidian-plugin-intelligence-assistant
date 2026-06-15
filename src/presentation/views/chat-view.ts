@@ -37,6 +37,7 @@ import {
 import { ChatHeaderComponent } from '@/presentation/components/chat/chat-header.component';
 import { ChatInputComponent } from '@/presentation/components/chat/chat-input.component';
 import { MentionSuggest } from '@/presentation/suggest/mention-suggest';
+import { internalLinktextFromEvent, triggerHoverLink } from '@/presentation/chat/hover-link';
 import { RagStatusPanel } from '@/presentation/components/chat/rag-status-panel';
 import { resolveMessageProviderId } from '@/presentation/components/chat/utils';
 import { ObsidianFileSystem } from '@/infrastructure/obsidian/obsidian-file-system';
@@ -290,6 +291,22 @@ export class ChatView extends ItemView {
 					this.conversationListContainer.addClass('is-collapsed');
 				}
 			}
+		});
+
+		// Hover previews for internal links in chat replies: on mouseover of an
+		// `a.internal-link`, fire the workspace `hover-link` trigger so Obsidian
+		// renders its native HoverPopover (we registered as a hover-link source in
+		// the plugin onload). Delegated so it covers links added by future renders.
+		this.registerDomEvent(this.chatContainer, 'mouseover', (event: MouseEvent) => {
+			const hit = internalLinktextFromEvent(event.target);
+			if (!hit) return;
+			triggerHoverLink(this.app.workspace, {
+				event,
+				hoverParent: this,
+				targetEl: hit.el,
+				linktext: hit.linktext,
+				sourcePath: this.app.workspace.getActiveFile()?.path ?? '',
+			});
 		});
 
 		// Always initialize RAG manager to load existing data from storage for status display

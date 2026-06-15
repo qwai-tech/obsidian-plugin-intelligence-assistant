@@ -361,6 +361,104 @@ export class Modal {
 	onClose(): void {}
 }
 
+/**
+ * Faithful-enough base for Obsidian's SuggestModal<T>: stores app, exposes an
+ * inputEl + resultContainerEl, open/close, setPlaceholder/setInstructions, and a
+ * test-friendly close() that records the open state.
+ */
+export abstract class SuggestModal<T> extends Modal {
+	limit = 50;
+	emptyStateText = 'No results.';
+	inputEl: HTMLInputElement;
+	resultContainerEl: HTMLElement;
+	isOpen = false;
+
+	constructor(app: App) {
+		super(app);
+		this.inputEl = document.createElement('input');
+		this.resultContainerEl = document.createElement('div');
+	}
+
+	setPlaceholder(placeholder: string): void {
+		this.inputEl.placeholder = placeholder;
+	}
+	setInstructions(_instructions: unknown[]): void {}
+	onNoSuggestion(): void {}
+	selectSuggestion(_value: T, _evt: MouseEvent | KeyboardEvent): void {}
+	selectActiveSuggestion(_evt: MouseEvent | KeyboardEvent): void {}
+
+	abstract getSuggestions(query: string): T[] | Promise<T[]>;
+	abstract renderSuggestion(value: T, el: HTMLElement): void;
+	abstract onChooseSuggestion(item: T, evt: MouseEvent | KeyboardEvent): void;
+
+	open(): void {
+		this.isOpen = true;
+	}
+	close(): void {
+		this.isOpen = false;
+	}
+}
+
+/**
+ * Faithful-enough base for Obsidian's FuzzySuggestModal<T>. getSuggestions wraps
+ * each item from getItems() (substring-filtered by query) into a FuzzyMatch, and
+ * onChooseSuggestion delegates to onChooseItem — so a test can call getItems(),
+ * getItemText(), and onChooseItem() directly, or drive selection through
+ * getSuggestions()+onChooseSuggestion() exactly as Obsidian does.
+ */
+export abstract class FuzzySuggestModal<T> extends SuggestModal<{ item: T; match: { score: number; matches: unknown[] } }> {
+	abstract getItems(): T[];
+	abstract getItemText(item: T): string;
+	abstract onChooseItem(item: T, evt: MouseEvent | KeyboardEvent): void;
+
+	getSuggestions(query: string): Array<{ item: T; match: { score: number; matches: unknown[] } }> {
+		const q = query.toLowerCase();
+		return this.getItems()
+			.filter((item) => this.getItemText(item).toLowerCase().includes(q))
+			.map((item) => ({ item, match: { score: 0, matches: [] } }));
+	}
+
+	renderSuggestion(item: { item: T }, el: HTMLElement): void {
+		el.setText(this.getItemText(item.item));
+	}
+
+	onChooseSuggestion(item: { item: T }, evt: MouseEvent | KeyboardEvent): void {
+		this.onChooseItem(item.item, evt);
+	}
+}
+
+/**
+ * Faithful-enough stand-in for Obsidian's loadMermaid(): resolves a mermaid-shaped
+ * module whose render(id, code) resolves to { svg } containing a real <svg> string
+ * that embeds the source so tests can assert the diagram was produced.
+ */
+export const loadMermaid = jest.fn(async () => {
+	return {
+		initialize: jest.fn(),
+		render: jest.fn(async (id: string, code: string) => ({
+			svg: `<svg data-mermaid-id="${id}" xmlns="http://www.w3.org/2000/svg"><text>${code}</text></svg>`,
+		})),
+	};
+});
+
+/** Stand-in for Obsidian's loadMathJax(): resolves a truthy module. */
+export const loadMathJax = jest.fn(async () => ({ tex2chtml: jest.fn() }));
+
+/** Stand-in for Obsidian's loadPrism(): resolves a truthy Prism module. */
+export const loadPrism = jest.fn(async () => ({
+	highlightAll: jest.fn(),
+	highlightElement: jest.fn(),
+	languages: {} as Record<string, unknown>,
+}));
+
+export class HoverPopover extends Component {
+	hoverEl: HTMLElement;
+	constructor(_parent: unknown, _targetEl: HTMLElement | null) {
+		super();
+		this.hoverEl = document.createElement('div');
+	}
+}
+
 export const Menu = jest.fn().mockImplementation(() => {
 	const menu = {
 		items: [] as any[],

@@ -67,10 +67,10 @@ export const CAPABILITY_MANIFEST: Capability[] = [
 	{ api: 'registerObsidianProtocolHandler (deep links)', probe: 'registerObsidianProtocolHandler', status: 'used' },
 	{ api: 'addStatusBarItem (agent status / token usage)', probe: 'addStatusBarItem', status: 'used' },
 	{ api: 'htmlToMarkdown (web content -> markdown)', probe: 'htmlToMarkdown', status: 'used', test: 'src/__tests__/application/web-search-service.test.ts' },
-	{ api: 'registerHoverLinkSource / HoverPopover (hover previews)', probe: 'registerHoverLinkSource', status: 'planned', tier: 3, reason: 'Hover previews for note references in chat.' },
-	{ api: 'registerEditorExtension (CodeMirror inline AI)', probe: 'registerEditorExtension', status: 'planned', tier: 3, reason: 'Inline completions/decorations in the editor.' },
-	{ api: 'loadMermaid / loadMathJax / loadPrism (rich chat rendering)', probe: 'loadMermaid', status: 'planned', tier: 3, reason: 'Render diagrams/math/code natively in chat replies.' },
-	{ api: 'SuggestModal / FuzzySuggestModal (quick pickers)', probe: 'FuzzySuggestModal', status: 'planned', tier: 3, reason: 'Fuzzy agent/model/prompt switcher.' },
+	{ api: 'registerHoverLinkSource / HoverPopover (hover previews)', probe: 'registerHoverLinkSource', status: 'used', test: 'src/__tests__/presentation/hover-link.test.ts' },
+	{ api: 'registerEditorExtension (CodeMirror inline AI)', probe: 'registerEditorExtension', status: 'used', test: 'src/__tests__/presentation/ai-selection-extension.test.ts' },
+	{ api: 'loadMermaid / loadMathJax / loadPrism (rich chat rendering)', probe: 'loadMermaid', status: 'used', test: 'src/__tests__/presentation/rich-markdown.test.ts' },
+	{ api: 'SuggestModal / FuzzySuggestModal (quick pickers)', probe: 'FuzzySuggestModal', status: 'used', test: 'src/__tests__/presentation/model-switcher-modal.test.ts' },
 	{ api: 'onExternalSettingsChange + onUserEnable (lifecycle hooks)', probe: 'onExternalSettingsChange', status: 'used', test: 'src/__tests__/lifecycle-hooks.test.ts' },
 
 	// ---- N/A (intentionally not applicable) ----

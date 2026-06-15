@@ -101,6 +101,10 @@ interface OpenApiReloadOptions {
 }
 
 import { ChangelogModal } from './src/presentation/components/modals/changelog-modal';
+import { openModelSwitcher } from './src/presentation/modals/model-switcher-modal';
+import { ModelManager } from './src/infrastructure/llm/model-manager';
+import { registerChatHoverLinkSource } from './src/presentation/chat/hover-link';
+import { aiSelectionEditorExtension } from './src/presentation/editor/ai-selection-extension';
 
 export default class IntelligenceAssistantPlugin extends Plugin {
 	settings: PluginSettings;
@@ -153,6 +157,25 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		});
 
 		this.registerObsidianAgentEntryPoints();
+
+		// Fuzzy quick-picker: "Switch model" command opens a command-palette-style
+		// FuzzySuggestModal that sets the active (default) model and refreshes views.
+		this.registerQuickPickers();
+
+		// Hover previews: register this plugin as a hover-link source so internal
+		// links rendered in chat trigger Obsidian's native page preview on hover.
+		registerChatHoverLinkSource(this);
+
+		// CodeMirror inline AI: register an editor extension (keymap) so the user can
+		// send the current selection to the agent without leaving the editor.
+		this.registerEditorExtension([
+			aiSelectionEditorExtension((selection, sourcePath) => {
+				void this.openAgentTask(
+					buildImproveSelectionPrompt(selection, sourcePath),
+					[],
+				);
+			}),
+		]);
 
 		// Fine-grained, incremental RAG indexing wired to Vault + MetadataCache
 		// events (create/modify/delete/rename + metadataCache changed) so a single
@@ -821,6 +844,28 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private getActiveMarkdownFile(): TFile | null {
 		const file = this.app.workspace.getActiveFile();
 		return file instanceof TFile ? file : null;
+	}
+
+	/**
+	 * Register the fuzzy quick-picker commands. "Switch model" opens a
+	 * FuzzySuggestModal listing every configured model; choosing one persists it
+	 * as the default model and refreshes open chat views so the change is live.
+	 */
+	private registerQuickPickers(): void {
+		this.addCommand({
+			id: 'switch-model',
+			name: t('commands.switchModel'),
+			callback: () => {
+				void openModelSwitcher(this.app, {
+					getModels: () => ModelManager.getAllAvailableModels(this.settings.llmConfigs),
+					getCurrentModelId: () => this.settings.defaultModel,
+					applyModel: async (modelId: string) => {
+						await this.settingsService.setDefaultModel(modelId);
+						await this.refreshChatViewsModels();
+					},
+				});
+			},
+		});
 	}
 
 	private registerObsidianAgentEntryPoints(): void {

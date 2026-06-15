@@ -1617,7 +1617,9 @@
     "doctorLinksTags": "Agent task: improve links, tags, and properties",
     "draftFromNote": "Agent task: draft from current note",
     "diagnoseVault": "Agent task: diagnose vault",
-    "improveSelection": "Agent task: improve selection"
+    "improveSelection": "Agent task: improve selection",
+    "switchModel": "Switch model",
+    "improveSelectionEditor": "Agent: improve selection (inline)"
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: ask agent about this file",

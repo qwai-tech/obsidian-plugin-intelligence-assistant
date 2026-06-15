@@ -1617,7 +1617,9 @@
     "doctorLinksTags": "智能体任务：优化链接、标签和属性",
     "draftFromNote": "智能体任务：基于当前笔记起草",
     "diagnoseVault": "智能体任务：诊断库健康状况",
-    "improveSelection": "智能体任务：优化选中文本"
+    "improveSelection": "智能体任务：优化选中文本",
+    "switchModel": "切换模型",
+    "improveSelectionEditor": "智能体：优化选中文本（行内）"
   },
   "contextMenu": {
     "askAgent": "智能助手：询问智能体关于此文件",

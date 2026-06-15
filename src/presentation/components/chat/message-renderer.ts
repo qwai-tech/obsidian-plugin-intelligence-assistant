@@ -4,6 +4,7 @@ import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Message } from '@/types';
 import { marked } from 'marked';
+import { enhanceRichMarkdown } from '@/presentation/chat/rich-markdown';
 import { getProviderMeta } from '@/presentation/components/components/provider-meta';
 import { getModelDisplayName, resolveMessageProviderId } from '@/presentation/components/chat/utils';
 import { createAgentExecutionTraceContainer, updateExecutionTrace, collapseExecutionTrace } from '@/presentation/components/chat/handlers/tool-call-handler';
@@ -287,6 +288,7 @@ export function renderAssistantMarkdown(target: HTMLElement, content: string): v
 		Array.from(doc.body.childNodes).forEach(node => {
 			target.appendChild(node.cloneNode(true));
 		});
+		void enhanceRichMarkdown(target);
 	} catch (error) {
 		console.error('[MessageRenderer] Markdown render error', error);
 		target.setText(content);
@@ -309,10 +311,19 @@ function renderMessageContent(target: HTMLElement, message: Message) {
 			target.appendChild(node.cloneNode(true));
 		});
 
+		// Rich rendering: linkify wikilinks (hover previews), render ```mermaid
+		// diagrams via loadMermaid(), pre-warm MathJax, and Prism-highlight code.
+		// Fire-and-forget — mermaid replaces its own <pre> before this code-block
+		// decoration runs, so the loop below only decorates the remaining blocks.
+		void enhanceRichMarkdown(target);
+
 		// Post-process code blocks: add language label + copy button
 		target.querySelectorAll('pre').forEach(pre => {
 			const code = pre.querySelector('code');
 			if (!code) return;
+			// Mermaid blocks are rendered into SVG by enhanceRichMarkdown; don't
+			// wrap them with the code-block header/copy chrome.
+			if (code.classList.contains('language-mermaid')) return;
 
 			// Extract language from class (e.g. "language-typescript")
 			const langClass = Array.from(code.classList).find(c => c.startsWith('language-'));
