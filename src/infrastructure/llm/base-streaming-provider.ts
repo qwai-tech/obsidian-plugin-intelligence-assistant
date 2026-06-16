@@ -82,6 +82,11 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 		const { url, body: requestBody } = this.prepareStreamRequest(request);
 
 		try {
+			// NOTE: `fetch` is used deliberately here — Obsidian's `requestUrl`
+			// buffers the entire response and cannot expose a `ReadableStream`, so it
+			// is incompatible with token-by-token SSE streaming (`response.body` below).
+			// This is the only `fetch` in the plugin and is intentionally whitelisted
+			// for this file in eslint.config.mts. Non-streaming requests use requestUrl.
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: this.getHeaders(),
