@@ -51,8 +51,8 @@ function makeCallbacks(): AgentLoopCallbacks & {
 	} as any;
 }
 
-function makePlanner(): { fatalStopReason: string | null } {
-	return { fatalStopReason: null };
+function makePlanner(): { fatalStopReason: string | null; currentActionReason: string | undefined } {
+	return { fatalStopReason: null, currentActionReason: undefined };
 }
 
 function makeAppRegistry(executeTool: (name: string, args: Record<string, unknown>) => Promise<ExecResult>): AppToolRegistry {
@@ -170,12 +170,15 @@ describe('createKernelToolRegistry — registered tool definition fields', () =>
 describe('createKernelToolRegistry — execute success path & phase literals', () => {
 	it('fires onToolCall and onToolResult with the exact "act" phase on success', async () => {
 		const tool = makeRegisteredTool({ llmName: 'echo' });
-		const { registry, callbacks } = build({
+		const { registry, callbacks, planner } = build({
 			resolved: [tool],
 			executeTool: async () => ({ success: true, result: { ok: 1 } }),
 		});
 		const def = registry.get('echo')!;
-		const out = await def.execute({ a: 1 } as any, { action: { reasoning: 'because' } } as any);
+		// Reasoning now comes from the planner's current tool-call batch, not the
+		// (removed) ToolContext.action — see ProviderKernelPlanner.currentActionReason.
+		planner.currentActionReason = 'because';
+		const out = await def.execute({ a: 1 } as any, NO_CONTEXT);
 
 		expect(callbacks.onToolCall).toHaveBeenCalledTimes(1);
 		expect(callbacks.onToolCall).toHaveBeenCalledWith('echo', { a: 1 }, 'because', 'act');
@@ -184,25 +187,30 @@ describe('createKernelToolRegistry — execute success path & phase literals', (
 		expect(out).toEqual({ ok: 1 });
 	});
 
-	it('passes reasoning=undefined when context itself is undefined (outer optional chaining)', async () => {
+	it('passes reasoning=undefined when the planner has no current reason', async () => {
 		const tool = makeRegisteredTool({ llmName: 'echo' });
 		const { registry, callbacks } = build({
 			resolved: [tool],
 			executeTool: async () => ({ success: true, result: 'r' }),
 		});
+		// planner.currentActionReason defaults to undefined.
 		await registry.get('echo')!.execute({} as any, NO_CONTEXT);
 		expect(callbacks.onToolCall).toHaveBeenCalledWith('echo', {}, undefined, 'act');
 	});
 
-	it('passes reasoning=undefined when context is defined but has no action (inner optional chaining)', async () => {
+	it('reads the planner reason at call time, reflecting the current batch', async () => {
 		const tool = makeRegisteredTool({ llmName: 'echo' });
-		const { registry, callbacks } = build({
+		const { registry, callbacks, planner } = build({
 			resolved: [tool],
 			executeTool: async () => ({ success: true, result: 'r' }),
 		});
-		// context truthy, action undefined — `context?.action.reasoning` would throw.
-		await registry.get('echo')!.execute({} as any, {} as any);
-		expect(callbacks.onToolCall).toHaveBeenCalledWith('echo', {}, undefined, 'act');
+		const def = registry.get('echo')!;
+		planner.currentActionReason = 'first';
+		await def.execute({} as any, NO_CONTEXT);
+		planner.currentActionReason = 'second';
+		await def.execute({} as any, NO_CONTEXT);
+		expect(callbacks.onToolCall).toHaveBeenNthCalledWith(1, 'echo', {}, 'first', 'act');
+		expect(callbacks.onToolCall).toHaveBeenNthCalledWith(2, 'echo', {}, 'second', 'act');
 	});
 
 	it('clears the consecutive-failure counter on success', async () => {
@@ -272,10 +280,11 @@ describe('createKernelToolRegistry — failure path, message & circuit breaker',
 describe('createKernelToolRegistry — disabled native tool deny-stub', () => {
 	it('throws the exact "not enabled" message and reports failure on the act phase', async () => {
 		const known = makeNativeTool('forbidden');
-		const { registry, callbacks } = build({ resolved: [], knownNative: [known] });
+		const { registry, callbacks, planner } = build({ resolved: [], knownNative: [known] });
 		const def = registry.get('forbidden')!;
 		expect(def.sideEffectLevel).toBe('none');
-		expect(() => def.execute({ q: 1 } as any, { action: { reasoning: 'why' } } as any)).toThrow(
+		planner.currentActionReason = 'why';
+		expect(() => def.execute({ q: 1 } as any, NO_CONTEXT)).toThrow(
 			'Tool "forbidden" is not enabled for this agent',
 		);
 		expect(callbacks.onToolCall).toHaveBeenCalledWith('forbidden', { q: 1 }, 'why', 'act');
@@ -287,19 +296,10 @@ describe('createKernelToolRegistry — disabled native tool deny-stub', () => {
 		);
 	});
 
-	it('deny-stub passes reasoning=undefined when context has no action (inner optional chaining)', () => {
+	it('deny-stub passes reasoning=undefined when the planner has no current reason', () => {
 		const known = makeNativeTool('forbidden');
 		const { registry, callbacks } = build({ resolved: [], knownNative: [known] });
-		// context truthy, action undefined — `context?.action.reasoning` would throw.
-		expect(() => registry.get('forbidden')!.execute({ q: 1 } as any, {} as any)).toThrow(
-			'Tool "forbidden" is not enabled for this agent',
-		);
-		expect(callbacks.onToolCall).toHaveBeenCalledWith('forbidden', { q: 1 }, undefined, 'act');
-	});
-
-	it('deny-stub passes reasoning=undefined when context itself is undefined (outer optional chaining)', () => {
-		const known = makeNativeTool('forbidden');
-		const { registry, callbacks } = build({ resolved: [], knownNative: [known] });
+		// planner.currentActionReason defaults to undefined.
 		expect(() => registry.get('forbidden')!.execute({ q: 1 } as any, NO_CONTEXT)).toThrow(
 			'Tool "forbidden" is not enabled for this agent',
 		);

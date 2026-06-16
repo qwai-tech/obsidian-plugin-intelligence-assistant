@@ -1,7 +1,8 @@
 /**
- * Internal import boundary for the vendored AgentEngine core.
+ * Internal import boundary for the AgentEngine kernel.
  *
- * When @agent-engine/core is published, this file should become:
- * export * from '@agent-engine/core';
+ * Consumes the public npm package @agentic-kernel/core (Apache-2.0), which
+ * superseded the in-repo vendored snapshot. Keeping the boundary as a one-line
+ * re-export means call sites keep importing from a stable local path.
  */
-export * from '@/vendor/agent-engine-core';
+export * from '@agentic-kernel/core';

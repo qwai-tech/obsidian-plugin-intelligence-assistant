@@ -88,6 +88,18 @@ export class ProviderKernelPlanner implements Planner {
 	fatalStopReason: string | null = null;
 	private readonly workingMessages: AgentWorkingMessage[];
 	private pendingGroup: PendingToolGroup | null = null;
+
+	/**
+	 * Reasoning attached to the tool-call batch currently being executed.
+	 *
+	 * The kernel's `ToolContext` no longer carries the triggering action (that
+	 * coupling was removed in @agentic-kernel/core), so the tool-registry adapter
+	 * reads the reasoning from here instead. All tool calls in a batch share the
+	 * one assistant `reasoning_content`, which is exactly this value.
+	 */
+	get currentActionReason(): string | undefined {
+		return this.pendingGroup?.assistant.reasoning_content;
+	}
 	private actionSequence = 0;
 	private writeProposalRetryCount = 0;
 	private emptyResponseRetryCount = 0;
@@ -320,7 +332,7 @@ export class ProviderKernelPlanner implements Planner {
 			type: 'tool_call',
 			toolName: toolCall.name,
 			arguments: toolCall.arguments,
-			reasoning: isFirstInBatch ? this.pendingGroup.assistant.reasoning_content : undefined,
+			reason: isFirstInBatch ? this.pendingGroup.assistant.reasoning_content : undefined,
 			createdAt: new Date().toISOString(),
 		};
 	}

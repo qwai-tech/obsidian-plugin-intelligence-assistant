@@ -3,7 +3,7 @@ import { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
 import { HistoryCompactor } from '@/application/agents/history-compactor';
 import { AgentSenseService } from '@/application/agents/agent-sense-service';
 import { WebSearchService } from '@/application/services/web-search-service';
-import { InMemoryStateStore } from '@/vendor/agent-engine-core/state';
+import { InMemoryStateStore } from '@/application/agents/kernel/agent-engine-core';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import { createTestAgent } from '@/test-support/test-utils';
 import type { Message } from '@/types/core/conversation';

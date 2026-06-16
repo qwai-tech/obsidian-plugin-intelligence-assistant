@@ -10,6 +10,7 @@ import type {
 	AppendLogInput,
 	CreateStateInput,
 	ExecutionLogEntry,
+	LogFilter,
 	StateStore,
 } from './agent-engine-core';
 
@@ -61,6 +62,7 @@ export class ObsidianAgentRunStateStore implements StateStore {
 			variables: {},
 			failureCount: 0,
 			toolCallCount: 0,
+			schemaVersion: AGENT_KERNEL_SCHEMA_VERSION,
 			createdAt: now,
 			updatedAt: now,
 			version: 1,
@@ -143,6 +145,23 @@ export class ObsidianAgentRunStateStore implements StateStore {
 	async listLog(runId: string): Promise<ExecutionLogEntry[]> {
 		const file = await this.readRunFile(runId);
 		return file.logs.map(cloneLogEntry);
+	}
+
+	async queryLogs(runId: string, filter: LogFilter): Promise<ExecutionLogEntry[]> {
+		const file = await this.readRunFile(runId);
+		let results = [...file.logs];
+		if (filter.types !== undefined && filter.types.length > 0) {
+			const typeSet = new Set(filter.types);
+			results = results.filter(entry => typeSet.has(entry.type));
+		}
+		if (filter.afterSequence !== undefined) {
+			const after = filter.afterSequence;
+			results = results.filter(entry => entry.sequence > after);
+		}
+		const offset = filter.offset ?? 0;
+		const limit = filter.limit;
+		results = results.slice(offset, limit !== undefined ? offset + limit : undefined);
+		return results.map(cloneLogEntry);
 	}
 
 	private async initialize(): Promise<void> {

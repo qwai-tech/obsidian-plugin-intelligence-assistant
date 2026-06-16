@@ -64,8 +64,8 @@ export function createKernelToolRegistry(
 			inputSchema: toJsonObject(nativeTool?.function.parameters ?? { type: 'object', properties: {} }),
 			sideEffectLevel: toKernelSideEffectLevel(tool),
 			requiredScopes: [],
-			execute: async (args, context) => {
-				const reasoning = context?.action?.reasoning;
+			execute: async (args) => {
+				const reasoning = planner.currentActionReason;
 				callbacks.onToolCall(tool.llmName, args, reasoning, 'act');
 				const result = await appToolRegistry.executeTool(tool.llmName, args);
 
@@ -102,8 +102,8 @@ export function createKernelToolRegistry(
 			inputSchema: toJsonObject(nativeTool.function.parameters ?? { type: 'object', properties: {} }),
 			sideEffectLevel: 'none',
 			requiredScopes: [],
-			execute: (args, context) => {
-				const reasoning = context?.action?.reasoning;
+			execute: (args) => {
+				const reasoning = planner.currentActionReason;
 				const message = `Tool "${name}" is not enabled for this agent`;
 				callbacks.onToolCall(name, args, reasoning, 'act');
 				callbacks.onToolResult(name, false, message, 'act');
