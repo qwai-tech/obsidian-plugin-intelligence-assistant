@@ -59,7 +59,7 @@ export class ObsidianAgentRunStateStore implements StateStore {
 			messages: [],
 			actions: [],
 			observations: [],
-			variables: {},
+			variables: structuredClone(input.task.initialVariables ?? {}),
 			failureCount: 0,
 			toolCallCount: 0,
 			schemaVersion: AGENT_KERNEL_SCHEMA_VERSION,
@@ -102,6 +102,17 @@ export class ObsidianAgentRunStateStore implements StateStore {
 
 	async save(state: AgentState): Promise<AgentState> {
 		const file = await this.readRunFile(state.runId);
+		if (state.schemaVersion !== AGENT_KERNEL_SCHEMA_VERSION) {
+			throw new AgentKernelError(
+				'STATE_SCHEMA_MISMATCH',
+				`State schema version mismatch for run: ${state.runId}`,
+				{
+					runId: state.runId,
+					expected: AGENT_KERNEL_SCHEMA_VERSION,
+					received: state.schemaVersion,
+				},
+			);
+		}
 		if (state.version !== file.state.version) {
 			throw new AgentKernelError(
 				'STATE_VERSION_CONFLICT',

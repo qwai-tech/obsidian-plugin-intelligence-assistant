@@ -535,7 +535,7 @@ import { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
 import { HistoryCompactor } from '@/application/agents/history-compactor';
 import { AgentSenseService } from '@/application/agents/agent-sense-service';
 import { WebSearchService } from '@/application/services/web-search-service';
-import { InMemoryStateStore } from '@/vendor/agent-engine-core/state';
+import { InMemoryStateStore } from '@/application/agents/kernel/agent-engine-core';
 import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
 import type { Message } from '@/types/core/conversation';
 import type { AgentLoopOptions, AgentLoopCallbacks } from '@/application/agents/types';
@@ -674,7 +674,7 @@ Expected after the seams below are closed: PASS.
 
 Work through failures in order — each has an exact resolution:
 
-1. **`AgentEngineLoop` / `AgentSenseService` / type-only import names.** If any import path or class name differs, open the file listed in the spec reference table and use the real export. (`agent-engine-loop.ts`, `agent-sense-service.ts`, `web-search-service.ts`, `vendor/agent-engine-core/state.ts`, `provider-factory.ts`.)
+1. **`AgentEngineLoop` / `AgentSenseService` / type-only import names.** If any import path or class name differs, open the file listed in the spec reference table and use the real export. (`agent-engine-loop.ts`, `agent-sense-service.ts`, `web-search-service.ts`, `application/agents/kernel/agent-engine-core.ts`, `provider-factory.ts`.)
 
 2. **Provider does not reach the mock server (no captured calls / timeout).** The `custom` provider is `OpenAIProvider` (`provider-factory.ts:30`). Determine its HTTP mechanism in `src/infrastructure/llm/` (grep the provider for `requestUrl` vs `fetch`):
    - If it uses **global `fetch`** — it already reaches `127.0.0.1`; no change needed.

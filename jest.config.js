@@ -19,6 +19,9 @@ module.exports = {
     // `main`), so point directly at the ESM dist entry; its relative .js imports
     // resolve normally and get transformed via the transformIgnorePatterns allowlist.
     '^@agentic-kernel/core$': '<rootDir>/node_modules/@agentic-kernel/core/dist/index.js',
+    '^@agentic-kernel/conformance$': '<rootDir>/node_modules/@agentic-kernel/conformance/dist/index.js',
+    // The conformance suites import test primitives from vitest; bridge to jest.
+    '^vitest$': '<rootDir>/__mocks__/vitest.ts',
     '^obsidian$': '<rootDir>/__mocks__/obsidian.ts',
     '^marked$': '<rootDir>/__mocks__/marked.ts',
     '^@/(.*)$': '<rootDir>/src/$1',

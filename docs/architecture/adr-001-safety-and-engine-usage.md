@@ -1,6 +1,12 @@
-# ADR-001: Safety model & vendored agent-engine-core usage
+# ADR-001: Safety model & agent-engine kernel usage
 
-Status: Accepted · Scope: `src/vendor/agent-engine-core`, `src/application/agents`, `src/application/tools`
+Status: Accepted · Scope: `@agentic-kernel/core` (consumed via `src/application/agents/kernel/agent-engine-core.ts`), `src/application/agents`, `src/application/tools`
+
+> **Update (2026-06):** the kernel was migrated from the in-repo `src/vendor/agent-engine-core`
+> snapshot to the public npm package `@agentic-kernel/core`. The single import boundary is
+> `src/application/agents/kernel/agent-engine-core.ts`, which re-exports the package. The
+> Obsidian-backed `StateStore` is verified against `@agentic-kernel/conformance`. References
+> to `src/vendor/agent-engine-core` below are historical.
 
 This record exists to remove a recurring ambiguity: a large, generic agent
 kernel is wired in, but the host (a single-user, local Obsidian plugin) only
