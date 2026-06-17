@@ -44,13 +44,13 @@ describe('filterFilesByQuery', () => {
 });
 
 describe('MentionSuggest', () => {
-	function setup(textValue: string, caret: number, files: TFile[]) {
+	function setup(textValue: string, caret: number, files: TFile[], onAttach?: (f: TFile) => void) {
 		const app = new App() as unknown as App;
 		(app.vault.getMarkdownFiles as jest.Mock).mockReturnValue(files);
 		const textarea = document.createElement('textarea');
 		textarea.value = textValue;
 		textarea.setSelectionRange(caret, caret);
-		const suggest = new MentionSuggest(app, textarea);
+		const suggest = new MentionSuggest(app, textarea, onAttach);
 		return { app, textarea, suggest };
 	}
 
@@ -79,5 +79,14 @@ describe('MentionSuggest', () => {
 		const { textarea, suggest } = setup('see [[foo', 9, [target]);
 		suggest.selectSuggestion(target, new MouseEvent('click'));
 		expect(textarea.value).toBe('see [[Foobar]] ');
+	});
+
+	it('selectSuggestion attaches the picked note so the agent receives its content', () => {
+		const target = file('Notes/Foobar.md');
+		const attached: TFile[] = [];
+		const { suggest } = setup('hello @foo', 10, [target], (f) => attached.push(f));
+		suggest.selectSuggestion(target, new MouseEvent('click'));
+		// Without this, the agent only sees an opaque `[[Foobar]]` and cannot read it.
+		expect(attached).toEqual([target]);
 	});
 });

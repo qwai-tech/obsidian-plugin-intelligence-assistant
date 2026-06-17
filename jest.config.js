@@ -5,7 +5,7 @@ module.exports = {
   // so the CommonJS Jest runtime can load it. Production bundles it via esbuild.
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
-    '^.+\\.jsx?$': ['ts-jest', { isolatedModules: true, tsconfig: { allowJs: true, checkJs: false } }],
+    '^.+\\.jsx?$': ['ts-jest', { tsconfig: { allowJs: true, checkJs: false, isolatedModules: true } }],
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   roots: ['<rootDir>/src', '<rootDir>/tests/harness', '<rootDir>/tests/missions', '<rootDir>/tests/perf'],

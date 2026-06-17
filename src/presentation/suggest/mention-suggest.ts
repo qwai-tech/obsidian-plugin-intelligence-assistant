@@ -80,6 +80,12 @@ export class MentionSuggest extends AbstractInputSuggest<TFile> {
 	constructor(
 		app: App,
 		private textarea: HTMLTextAreaElement,
+		/**
+		 * Called when a note is picked. The host attaches the note as a chat
+		 * reference so its CONTENT is sent to the model — without this, the inserted
+		 * `[[link]]` is just text the agent can't resolve on its own.
+		 */
+		private onAttach?: (file: TFile) => void,
 	) {
 		// AbstractInputSuggest types its el as input|div; the textarea exposes the
 		// same `.value` surface the base relies on.
@@ -119,6 +125,10 @@ export class MentionSuggest extends AbstractInputSuggest<TFile> {
 		} else {
 			this.textarea.value = `${value}${link} `;
 		}
+
+		// Attach the note as a reference so the agent actually receives its content
+		// (the inserted `[[link]]` alone is opaque text the model can't resolve).
+		this.onAttach?.(file);
 
 		// Notify listeners (autoresize, send-button enable) and close the popup.
 		this.textarea.dispatchEvent(new Event('input', { bubbles: true }));

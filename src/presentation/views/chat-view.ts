@@ -261,8 +261,15 @@ export class ChatView extends ItemView {
 		this.stopBtn = this.chatInput.stopBtn;
 		this.modelSelect = this.chatInput.modelSelect;
 
-		// @-mention / [[wikilink autocomplete on the chat input.
-		this.mentionSuggest = new MentionSuggest(this.app, this.chatInput.textarea);
+		// @-mention / [[wikilink autocomplete on the chat input. Picking a note also
+		// attaches it as a reference so the agent receives the note's content, not
+		// just an opaque `[[link]]`.
+		this.mentionSuggest = new MentionSuggest(this.app, this.chatInput.textarea, (file) => {
+			if (!this.state.referencedFiles.some(item => item.path === file.path)) {
+				this.state.addReferencedFile(file);
+				this.updateReferenceDisplay();
+			}
+		});
 
 		await this.refreshModels();
 

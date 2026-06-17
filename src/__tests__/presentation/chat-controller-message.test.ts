@@ -230,6 +230,36 @@ describe('ChatController (upgraded message pipeline)', () => {
 		expect(options.enableWebSearch).toBe(false);
 	});
 
+	it('REPRO: forwards attached references to the agent in agent mode', async () => {
+		state.mode = 'agent';
+		// buildReferenceContext echoes references back like the real implementation,
+		// embedding their content into llmContent.
+		const chatService = makeChatService({
+			buildReferenceContext: jest.fn(async (text: string, refs: any[]) => ({
+				llmContent: `${text}\n\n---\n**Referenced Files/Folders:**\n${refs.map(r => `### ${r.path}\nFILE_BODY_OF_${r.name}`).join('\n')}`,
+				references: refs,
+			})),
+		});
+		controller.configure(makeOptions(chatService));
+		// A note attached as a reference chip (plain object => not a TFolder => 'file').
+		state.referencedFiles = [{ path: 'Notes/A.md', name: 'A.md' } as any];
+
+		await controller.sendMessage('summarize the attached note');
+
+		// 1. The reference must reach the agent loop options.
+		const agentOptions = chatService.executeAgentLoop.mock.calls[0]?.[1];
+		expect(agentOptions?.references).toEqual([
+			expect.objectContaining({ path: 'Notes/A.md', type: 'file' }),
+		]);
+		// 2. The expanded content (with the file body) must be the llmContent fed to prepareLlmMessages.
+		expect(chatService.prepareLlmMessages).toHaveBeenCalledWith(
+			expect.any(Array),
+			expect.objectContaining({ content: 'summarize the attached note' }),
+			expect.stringContaining('FILE_BODY_OF_A.md'),
+			expect.any(Number),
+		);
+	});
+
 	it('re-renders completed agent messages with execution steps for write proposal cards', async () => {
 		state.mode = 'agent';
 		const proposal = {
