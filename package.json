@@ -43,7 +43,7 @@
 	"author": "",
 	"license": "MIT",
 	"devDependencies": {
-		"@agentic-kernel/conformance": "^0.5.1",
+		"@agentic-kernel/conformance": "^0.6.0",
 		"@codemirror/state": "^6.5.0",
 		"@codemirror/view": "^6.38.1",
 		"@eslint-community/eslint-plugin-eslint-comments": "^4.7.1",
@@ -81,7 +81,7 @@
 		"serialize-javascript": "^7.0.5"
 	},
 	"dependencies": {
-		"@agentic-kernel/core": "^0.5.1",
+		"@agentic-kernel/core": "^0.6.0",
 		"@modelcontextprotocol/sdk": "^1.21.1",
 		"@sap-ai-sdk/ai-api": "^2.1.0",
 		"@sap-ai-sdk/orchestration": "^2.1.0",
