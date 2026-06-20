@@ -230,13 +230,15 @@ describe('ChatController (upgraded message pipeline)', () => {
 		expect(options.enableWebSearch).toBe(false);
 	});
 
-	it('REPRO: forwards attached references to the agent in agent mode', async () => {
+	it('forwards references via the sense path and does NOT double-embed them in agent mode', async () => {
 		state.mode = 'agent';
-		// buildReferenceContext echoes references back like the real implementation,
-		// embedding their content into llmContent.
+		// Mock honors embedContent like the real implementation: when false, the
+		// message keeps only the user text (content comes from the sense path).
 		const chatService = makeChatService({
-			buildReferenceContext: jest.fn(async (text: string, refs: any[]) => ({
-				llmContent: `${text}\n\n---\n**Referenced Files/Folders:**\n${refs.map(r => `### ${r.path}\nFILE_BODY_OF_${r.name}`).join('\n')}`,
+			buildReferenceContext: jest.fn(async (text: string, refs: any[], opts?: { embedContent?: boolean }) => ({
+				llmContent: opts?.embedContent === false
+					? text
+					: `${text}\n${refs.map(r => `FILE_BODY_OF_${r.name}`).join('\n')}`,
 				references: refs,
 			})),
 		});
@@ -246,17 +248,43 @@ describe('ChatController (upgraded message pipeline)', () => {
 
 		await controller.sendMessage('summarize the attached note');
 
-		// 1. The reference must reach the agent loop options.
+		// 1. Agent mode must request NO message-embed (dedup with the sense path).
+		expect(chatService.buildReferenceContext).toHaveBeenCalledWith(
+			'summarize the attached note',
+			[expect.objectContaining({ path: 'Notes/A.md', type: 'file' })],
+			{ embedContent: false },
+		);
+		// 2. References still reach the agent via options — the sense path expands them once.
 		const agentOptions = chatService.executeAgentLoop.mock.calls[0]?.[1];
 		expect(agentOptions?.references).toEqual([
 			expect.objectContaining({ path: 'Notes/A.md', type: 'file' }),
 		]);
-		// 2. The expanded content (with the file body) must be the llmContent fed to prepareLlmMessages.
+		// 3. The message content is NOT double-embedded (no inlined file body).
 		expect(chatService.prepareLlmMessages).toHaveBeenCalledWith(
 			expect.any(Array),
 			expect.objectContaining({ content: 'summarize the attached note' }),
-			expect.stringContaining('FILE_BODY_OF_A.md'),
+			'summarize the attached note',
 			expect.any(Number),
+		);
+	});
+
+	it('embeds reference content in the message in chat mode (no sense path there)', async () => {
+		state.mode = 'chat';
+		const chatService = makeChatService({
+			buildReferenceContext: jest.fn(async (text: string, refs: any[], opts?: { embedContent?: boolean }) => ({
+				llmContent: opts?.embedContent === false ? text : `${text}\nFILE_BODY`,
+				references: refs,
+			})),
+		});
+		controller.configure(makeOptions(chatService));
+		state.referencedFiles = [{ path: 'Notes/A.md', name: 'A.md' } as any];
+
+		await controller.sendMessage('summarize the attached note');
+
+		expect(chatService.buildReferenceContext).toHaveBeenCalledWith(
+			'summarize the attached note',
+			[expect.objectContaining({ path: 'Notes/A.md', type: 'file' })],
+			{ embedContent: true },
 		);
 	});
 

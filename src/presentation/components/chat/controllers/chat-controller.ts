@@ -110,9 +110,13 @@ export class ChatController extends BaseController {
 			name: item.name,
 		}));
 
+		// In agent mode the sense service inlines reference content once ("Explicit
+		// references"), so don't also embed it in the message — that would double the
+		// per-turn token cost. Chat mode has no sense pass, so it keeps the embed.
+		const embedReferenceContent = this.state.mode !== 'agent';
 		const { llmContent, references } = options?.llmContentOverride
 			? { llmContent: options.llmContentOverride, references: referenceInputs }
-			: await this.chatService.buildReferenceContext(text, referenceInputs);
+			: await this.chatService.buildReferenceContext(text, referenceInputs, { embedContent: embedReferenceContent });
 
 		const attachments = [...this.state.currentAttachments];
 		this.state.currentAttachments = [];

@@ -134,10 +134,20 @@ export class ChatService {
 	 */
 	async buildReferenceContext(
 		text: string,
-		references: FileReference[] = []
+		references: FileReference[] = [],
+		options: { embedContent?: boolean } = {}
 	): Promise<{ llmContent: string; references: FileReference[] }> {
+		const { embedContent = true } = options;
 		if (!references || references.length === 0) {
 			return { llmContent: text, references: [] };
+		}
+
+		// Agent mode expands reference CONTENT once via the sense service
+		// ("Explicit references"); embedding it again in the message would double
+		// the per-turn token cost. There, keep only the user text and pass the
+		// references through for the sense path to inline.
+		if (!embedContent) {
+			return { llmContent: text, references };
 		}
 
 		let llmContent = text + '\n\n---\n**Referenced Files/Folders:**\n\n';
