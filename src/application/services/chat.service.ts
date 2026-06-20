@@ -19,6 +19,16 @@ import type { WebSearchService } from './web-search-service';
 import type { StreamChunk } from '@/types/common/llm';
 import type { AgentEngineLoop, AgentLoopCallbacks } from '@/application/agents';
 
+/**
+ * Reference-content budget. Referenced notes are inlined into the prompt and
+ * re-sent on every turn, so unbounded content (a few large @-mentioned notes)
+ * silently inflates token cost each step. Cap per-file (matching the agent
+ * sense service's 8000-char reference snapshot) and overall; on truncation the
+ * agent is told it can read_file the full note on demand.
+ */
+export const MAX_REFERENCE_CHARS_PER_FILE = 8000;
+export const MAX_REFERENCE_TOTAL_CHARS = 24000;
+
 export interface ChatOptions {
 	model: string;
 	mode: 'chat' | 'agent';
@@ -131,11 +141,23 @@ export class ChatService {
 		}
 
 		let llmContent = text + '\n\n---\n**Referenced Files/Folders:**\n\n';
+		let totalChars = 0;
 		for (const ref of references) {
 			if (ref.type === 'file') {
 				try {
 					const content = await this.fileSystem.read(ref.path);
-					llmContent += `\n### 📄 ${ref.path}\n\`\`\`\n${content}\n\`\`\`\n`;
+					const remaining = MAX_REFERENCE_TOTAL_CHARS - totalChars;
+					if (remaining <= 0) {
+						llmContent += `\n### 📄 ${ref.path}\n*(omitted to stay within the reference budget — call read_file("${ref.path}") if you need it)*\n`;
+						continue;
+					}
+					const cap = Math.min(MAX_REFERENCE_CHARS_PER_FILE, remaining);
+					let body = content;
+					if (content.length > cap) {
+						body = `${content.slice(0, cap)}\n…[truncated ${content.length - cap} chars — call read_file("${ref.path}") for the full note]`;
+					}
+					totalChars += Math.min(content.length, cap);
+					llmContent += `\n### 📄 ${ref.path}\n\`\`\`\n${body}\n\`\`\`\n`;
 				} catch (error) {
 					llmContent += `\n### 📄 ${ref.path}\n*Error reading file: ${String(error)}*\n`;
 				}
