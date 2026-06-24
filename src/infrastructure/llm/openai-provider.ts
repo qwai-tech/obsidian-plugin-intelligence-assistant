@@ -1,5 +1,6 @@
 import { BaseStreamingProvider, ParsedStreamChunk } from './base-streaming-provider';
 import { ChatRequest, ChatResponse } from './types';
+import { toOpenAiWireMessages } from './openai-message';
 
 export class OpenAIProvider extends BaseStreamingProvider {
 	private toolCallAccumulator: Map<number, { id: string; name: string; arguments: string }> = new Map();
@@ -34,19 +35,9 @@ export class OpenAIProvider extends BaseStreamingProvider {
 		const maxTokensValue = request.maxTokens ?? 2000;
 		const modelName = this.extractModelName(request.model);
 
-		// Phase D1: Multi-modal Support (Vision)
-		const messages = request.messages.map(msg => {
-			if (msg.role !== 'user' || !msg.attachments?.some(a => a.type === 'image')) {
-				return msg;
-			}
-			const content: Record<string, unknown>[] = [{ type: 'text', text: msg.content }];
-			for (const att of msg.attachments) {
-				if (att.type === 'image' && att.content) {
-					content.push({ type: 'image_url', image_url: { url: att.content } });
-				}
-			}
-			return { ...msg, content };
-		});
+		// Strip internal bookkeeping fields (model/reasoning_content/…) and expand
+		// image attachments — strict OpenAI servers reject unknown message keys.
+		const messages = toOpenAiWireMessages(request.messages);
 
 		const body: Record<string, unknown> = {
 			model: modelName,
@@ -91,23 +82,9 @@ export class OpenAIProvider extends BaseStreamingProvider {
 		const maxTokensValue = request.maxTokens ?? 2000;
 		const modelName = this.extractModelName(request.model);
 		
-		// Phase D1: Multi-modal Support (Vision)
-		const messages = request.messages.map(msg => {
-			if (msg.role !== 'user' || !msg.attachments?.some(a => a.type === 'image')) {
-				return msg;
-			}
-
-			const content: Record<string, unknown>[] = [{ type: 'text', text: msg.content }];
-			for (const att of msg.attachments) {
-				if (att.type === 'image' && att.content) {
-					content.push({
-						type: 'image_url',
-						image_url: { url: att.content } // att.content is expected to be data:image/...;base64,...
-					});
-				}
-			}
-			return { ...msg, content };
-		});
+		// Strip internal bookkeeping fields (model/reasoning_content/…) and expand
+		// image attachments — strict OpenAI servers reject unknown message keys.
+		const messages = toOpenAiWireMessages(request.messages);
 
 		const body: Record<string, unknown> = {
 			model: modelName,

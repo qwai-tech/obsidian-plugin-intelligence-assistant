@@ -15,6 +15,22 @@ import { DEFAULT_MOCK_LLM_PORT, mockLLM } from './mock-llm-harness';
 const MOCK_MODEL = 'mock-model';
 const MOCK_BASE_URL = `http://127.0.0.1:${DEFAULT_MOCK_LLM_PORT}/v1`;
 
+/**
+ * Mission LLM config. Defaults to the in-process mock (deterministic — what the
+ * flake-soak/CI suites use). When MISSION_LLM_BASE_URL/_API_KEY/_MODEL are set,
+ * the harness drives a REAL provider instead (node `fetch`, no browser CORS), so
+ * a real-LLM mission can validate the agent loop end-to-end. No env => mock.
+ */
+function resolveMissionLLM(): { provider: 'custom'; baseUrl: string; apiKey: string; model: string } {
+  const baseUrl = process.env.MISSION_LLM_BASE_URL;
+  const apiKey = process.env.MISSION_LLM_API_KEY;
+  const model = process.env.MISSION_LLM_MODEL;
+  if (baseUrl && apiKey && model) {
+    return { provider: 'custom', baseUrl, apiKey, model };
+  }
+  return { provider: 'custom', baseUrl: MOCK_BASE_URL, apiKey: 'test-key', model: MOCK_MODEL };
+}
+
 export interface ToolCallRecord {
   toolName: string;
   args: Record<string, unknown>;
@@ -86,6 +102,7 @@ export async function runAgentMission(input: RunMissionInput): Promise<MissionOu
   const { app, userMessage, autonomousWrite = false, enabledTools, timeoutMs = 15_000 } = input;
   const toolRegistry = await buildHarnessToolRegistry(app, enabledTools, input.extraToolSources);
   const ragManager = (input.ragResults ? createFakeRagManager(input.ragResults) : stubRagManager()) as never;
+  const llm = resolveMissionLLM();
 
   const loop = new AgentEngineLoop({
     app,
@@ -96,15 +113,15 @@ export async function runAgentMission(input: RunMissionInput): Promise<MissionOu
     ragManager,
     agentRunStateStore: new InMemoryStateStore(),
     createProvider: () => {
-      const config = { provider: 'custom' as const, apiKey: 'test-key', baseUrl: MOCK_BASE_URL };
-      return { provider: ProviderFactory.createProvider(config as never), providerId: 'custom' };
+      const config = { provider: llm.provider, apiKey: llm.apiKey, baseUrl: llm.baseUrl };
+      return { provider: ProviderFactory.createProvider(config as never), providerId: llm.provider };
     },
-    defaultModel: MOCK_MODEL,
+    defaultModel: llm.model,
   });
 
   const outcome: MissionOutcome = { toolCalls: [], toolResults: [], steps: 0, toolCallCount: 0 };
   const options: AgentLoopOptions = {
-    model: MOCK_MODEL,
+    model: llm.model,
     mode: 'agent',
     agents: [
       createTestAgent({

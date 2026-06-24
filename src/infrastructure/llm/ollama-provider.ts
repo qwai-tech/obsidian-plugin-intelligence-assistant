@@ -1,5 +1,6 @@
 import { BaseLLMProvider } from './base-provider';
 import { ChatRequest, ChatResponse, StreamChunk } from './types';
+import { toOpenAiWireMessages } from './openai-message';
 import type { ModelCapability, ModelInfo } from '@/types';
 import { requestUrl } from 'obsidian';
 
@@ -41,7 +42,7 @@ export class OllamaProvider extends BaseLLMProvider {
 
 		const body = {
 			model: modelName,
-			messages: request.messages,
+			messages: toOpenAiWireMessages(request.messages),
 			stream: false,
 			options: {
 				temperature: request.temperature ?? 0.7,
@@ -100,7 +101,7 @@ export class OllamaProvider extends BaseLLMProvider {
 
 		const requestBody = {
 			model: modelName,
-			messages: request.messages,
+			messages: toOpenAiWireMessages(request.messages),
 			stream: true,
 			options: {
 				temperature: request.temperature ?? 0.7,

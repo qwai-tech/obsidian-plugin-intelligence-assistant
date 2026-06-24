@@ -1,5 +1,6 @@
 import { BaseStreamingProvider, ParsedStreamChunk } from './base-streaming-provider';
 import { ChatRequest, ChatResponse } from './types';
+import { toOpenAiWireMessages } from './openai-message';
 
 export class OpenRouterProvider extends BaseStreamingProvider {
 	private toolCallAccumulator: Map<number, { id: string; name: string; arguments: string }> = new Map();
@@ -27,7 +28,7 @@ export class OpenRouterProvider extends BaseStreamingProvider {
 
 		const body: Record<string, unknown> = {
 			model: modelName,
-			messages: request.messages,
+			messages: toOpenAiWireMessages(request.messages),
 			temperature: request.temperature ?? 0.7,
 			max_tokens: request.maxTokens ?? 2000,
 			stream: false,
@@ -61,7 +62,7 @@ export class OpenRouterProvider extends BaseStreamingProvider {
 
 		const body: Record<string, unknown> = {
 			model: modelName,
-			messages: request.messages,
+			messages: toOpenAiWireMessages(request.messages),
 			temperature: request.temperature ?? 0.7,
 			max_tokens: request.maxTokens ?? 2000,
 			stream: true,
