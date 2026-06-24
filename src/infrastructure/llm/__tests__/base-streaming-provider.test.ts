@@ -6,6 +6,7 @@
 import { BaseStreamingProvider, ParsedStreamChunk } from '../base-streaming-provider';
 import { ChatRequest, ChatResponse, StreamChunk } from '@/types';
 import { LLMConfig } from '@/types';
+import { requestUrl } from 'obsidian';
 
 /**
  * Concrete test implementation of BaseStreamingProvider
@@ -96,6 +97,46 @@ describe('BaseStreamingProvider', () => {
 		provider.prepareStreamRequestCalls = [];
 
 		jest.clearAllMocks();
+	});
+
+	describe('streamChat — requestUrl fallback for non-CORS gateways', () => {
+		const request: ChatRequest = { model: 'test:m', messages: [{ role: 'user', content: 'hi' }] };
+
+		it('falls back to non-streaming requestUrl on a fetch TypeError and emits content + tool_calls + usage', async () => {
+			(global.fetch as jest.Mock).mockRejectedValue(new TypeError('Failed to fetch'));
+			(requestUrl as jest.Mock).mockResolvedValueOnce({
+				status: 200,
+				json: {
+					choices: [{
+						message: {
+							content: 'done',
+							tool_calls: [{ id: 'c1', type: 'function', function: { name: 'read_file', arguments: '{"path":"a.md"}' } }],
+						},
+					}],
+					usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
+				},
+			});
+
+			const chunks: StreamChunk[] = [];
+			await provider.streamChat(request, (c) => chunks.push(c));
+
+			// Retried non-streaming via requestUrl with stream:false.
+			expect(requestUrl).toHaveBeenCalledTimes(1);
+			const sentBody = JSON.parse((requestUrl as jest.Mock).mock.calls[0][0].body);
+			expect(sentBody.stream).toBe(false);
+			// Synthetic chunks match the streaming protocol the planner consumes.
+			expect(chunks.some((c) => c.content === 'done')).toBe(true);
+			const toolChunk = chunks.find((c) => c.toolCalls && c.toolCalls.length > 0);
+			expect(toolChunk?.toolCalls?.[0].function?.name).toBe('read_file');
+			const doneChunk = chunks.find((c) => c.done);
+			expect(doneChunk?.usage).toEqual({ promptTokens: 1, completionTokens: 2, totalTokens: 3 });
+		});
+
+		it('does NOT fall back on an HTTP error response (4xx/5xx) — rethrows', async () => {
+			(global.fetch as jest.Mock).mockResolvedValue({ ok: false, status: 401, text: async () => 'unauthorized' });
+			await expect(provider.streamChat(request, jest.fn())).rejects.toThrow('API request failed: 401');
+			expect(requestUrl).not.toHaveBeenCalled();
+		});
 	});
 
 	describe('streamChat', () => {

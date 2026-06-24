@@ -81,18 +81,40 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 	async streamChat(request: ChatRequest, onChunk: (_chunk: StreamChunk) => void): Promise<void> {
 		const { url, body: requestBody } = this.prepareStreamRequest(request);
 
+		// NOTE: `fetch` is used deliberately here — Obsidian's `requestUrl` buffers
+		// the entire response and cannot expose a `ReadableStream`, so it is
+		// incompatible with token-by-token SSE streaming (`response.body` below).
+		// This is the only `fetch` in the plugin and is intentionally whitelisted
+		// for this file in eslint.config.mts. Non-streaming requests use requestUrl.
+		let response: Response;
 		try {
-			// NOTE: `fetch` is used deliberately here — Obsidian's `requestUrl`
-			// buffers the entire response and cannot expose a `ReadableStream`, so it
-			// is incompatible with token-by-token SSE streaming (`response.body` below).
-			// This is the only `fetch` in the plugin and is intentionally whitelisted
-			// for this file in eslint.config.mts. Non-streaming requests use requestUrl.
-			const response = await fetch(url, {
+			response = await fetch(url, {
 				method: 'POST',
 				headers: this.getHeaders(),
 				body: JSON.stringify(requestBody),
 			});
+		} catch (error: unknown) {
+			// A CORS/network failure throws a TypeError *before* any response (an
+			// OpenAI-compatible gateway that doesn't send CORS headers — e.g. a local
+			// hub — blocks the browser `fetch`). Obsidian's `requestUrl` runs in the
+			// main process and bypasses CORS, so retry the request non-streaming there
+			// and synthesize the chunks. This only covers connection failures; HTTP
+			// errors below are not retried (requestUrl would hit the same status).
+			if (error instanceof TypeError) {
+				try {
+					await this.completeViaRequestUrl(requestBody as Record<string, unknown>, url, onChunk);
+					return;
+				} catch (fallbackError: unknown) {
+					console.error(`[${this.getProviderName()}] requestUrl fallback failed:`, fallbackError);
+					throw fallbackError instanceof Error ? fallbackError : new Error(String(fallbackError));
+				}
+			}
+			const err = error instanceof Error ? error : new Error(String(error));
+			console.error(`[${this.getProviderName()}] Stream error:`, err);
+			throw err;
+		}
 
+		try {
 			if (!response.ok) {
 				const errorText = await response.text();
 				throw new Error(`API request failed: ${response.status} ${errorText || 'Unknown error'}`);
@@ -107,15 +129,54 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 			await this.processStream(response.body, onChunk);
 
 		} catch (error: unknown) {
-			let err: Error;
-			if (error instanceof Error) {
-				err = error;
-			} else {
-				err = new Error(String(error));
-			}
+			const err = error instanceof Error ? error : new Error(String(error));
 			console.error(`[${this.getProviderName()}] Stream error:`, err);
 			throw err;
 		}
+	}
+
+	/**
+	 * Non-streaming fallback for endpoints the browser `fetch` can't reach (no CORS
+	 * headers). Re-POSTs the same body with `stream:false` via `requestUrl` (main
+	 * process, CORS-exempt), then emits the full response through `onChunk` as
+	 * synthetic chunks — content, reasoning, and tool_calls — matching the shape the
+	 * streaming path produces, so agent mode (tool calls) works unchanged.
+	 */
+	private async completeViaRequestUrl(
+		streamBody: Record<string, unknown>,
+		url: string,
+		onChunk: (_chunk: StreamChunk) => void,
+	): Promise<void> {
+		const body: Record<string, unknown> = { ...streamBody, stream: false };
+		delete body.stream_options;
+
+		const response = (await this.makeRequest(url, body)) as {
+			json?: {
+				choices?: Array<{ message?: { content?: string | null; reasoning_content?: string; tool_calls?: ParsedStreamChunk['toolCalls'] } }>;
+				usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
+			};
+		};
+
+		const message = response.json?.choices?.[0]?.message ?? {};
+		const rawUsage = response.json?.usage;
+		const usage = rawUsage
+			? {
+				promptTokens: rawUsage.prompt_tokens ?? 0,
+				completionTokens: rawUsage.completion_tokens ?? 0,
+				totalTokens: rawUsage.total_tokens ?? 0,
+			}
+			: undefined;
+
+		if (message.reasoning_content) {
+			onChunk({ content: '', done: false, reasoning: message.reasoning_content });
+		}
+		if (message.content) {
+			onChunk({ content: message.content, done: false });
+		}
+		if (Array.isArray(message.tool_calls) && message.tool_calls.length > 0) {
+			onChunk({ content: '', done: false, toolCalls: message.tool_calls });
+		}
+		onChunk({ content: '', done: true, usage });
 	}
 
 	/**
