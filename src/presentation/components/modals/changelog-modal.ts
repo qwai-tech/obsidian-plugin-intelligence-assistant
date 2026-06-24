@@ -20,65 +20,43 @@ export class ChangelogModal extends Modal {
 		const body = contentEl.createDiv('ia-changelog-body');
 		
 		const changelogContent = this.isChinese ? `
-### 🚀 深度融入 Obsidian
+### 🔌 更广的模型兼容 & 更省的 Token
 
-本次更新让 Intelligence Assistant 与 Obsidian 原生能力深度结合，Agent 更聪明、更快、更贴手。
+本次更新让 Agent 能接入更多 LLM 网关，并显著降低引用笔记的 Token 开销。
 
-#### 1. 更强的 Agent 工具
-- **读取 PDF**：Agent 可直接读取并理解库内 PDF 文件的内容。
-- **标签与链接感知**：按标签查找笔记、解析 \`[[链接]]\` 与标题锚点；写入链接时自动生成符合库规范的正确 Wiki 链接。
-- **网页转 Markdown**：联网检索结果会自动清洗为干净的 Markdown，去除网页杂质。
+#### 1. 兼容更多 LLM 网关
+- **严格网关支持**：修复了发送给模型的消息夹带内部字段的问题，现在可对接校验更严格的 OpenAI 兼容网关。
+- **本地网关（无 CORS）也能用 Agent**：当流式请求被 CORS 拦截时，自动改用 Obsidian 的 \`requestUrl\` 非流式重试，本地模型中枢（如 Manifold）下 Agent 模式也能正常工作。
 
-#### 2. 更快、更智能
-- **增量索引**：单个笔记的新增/修改/删除/重命名会被增量更新到 RAG 索引，告别整库重建，记忆刷新更即时。
-- **状态栏用量**：状态栏实时显示 Agent 运行状态与累计 Token 用量。
-- **设置同步感知**：通过 Obsidian Sync 在其它设备改动配置时，本端会自动重新载入。
+#### 2. 更省 Token 的引用
+- **引用内容封顶**：被引用/“@ 提及”的笔记按单文件与总量上限注入，超出部分提示 Agent 按需 \`read_file\` 读取，避免大笔记撑爆每轮上下文。
+- **Agent 模式不再重复注入**：引用内容只经感知层注入一次，去除重复，单轮引用 Token 约减半。
+- **@ 提及真正生效**：选择 \`@\`/\`[[\` 笔记时会把其内容作为引用附上，Agent 不再只看到一个空链接。
 
-#### 3. 笔记与编辑器内的 AI
-- **@ 提及补全**：聊天输入框中输入 \`@\` 或 \`[[\` 即可快速插入笔记引用。
-- **行内 AI 代码块**：在笔记中用 \`\`\`ai 代码块直接嵌入并运行 AI 小部件。
-- **悬停预览**：聊天中的笔记链接支持原生悬停预览。
-- **选区快捷指令**：编辑器中选中文本，一键 \`Mod-Shift-I\` 交给 Agent 处理。
-- **模糊快速切换**：命令面板一键模糊搜索切换模型。
-
-#### 4. 更丰富的对话渲染
-- **图表 / 公式 / 代码**：聊天回复原生渲染 Mermaid 图表、数学公式与语法高亮。
-
-#### 5. 深度链接
-- **协议跳转**：支持 \`obsidian://intelligence-assistant?task=...\` 深度链接，从外部直接唤起并下达任务。
+#### 3. 引擎升级
+- **改用公开的 Agentic Kernel SDK**：内核迁移至公网 \`@agentic-kernel/core\` 并升级至 0.6.0，状态存储通过官方一致性契约校验，升级更稳。
 
 ---
-*全部 14 项新能力均通过自动化验证（单元 / 任务 / 性能 / 变异测试）。开启新对话，立即体验！*
+*全部改动经自动化验证（类型 / 单元 / 任务 / 真实模型端到端）。开启新对话即可体验。*
 ` : `
-### 🚀 Deeper Obsidian Integration
+### 🔌 Broader Model Compatibility & Leaner Tokens
 
-This release wires Intelligence Assistant into Obsidian's native capabilities — a smarter, faster, more tactile Agent.
+This release lets the Agent talk to more LLM gateways and meaningfully cuts the token cost of referenced notes.
 
-#### 1. More Capable Agent Tools
-- **Read PDFs**: The Agent can now read and reason over PDF files in your vault.
-- **Tag & Link Aware**: Find notes by tag, resolve \`[[links]]\` and heading anchors, and auto-generate vault-correct wikilinks when writing links.
-- **Web → Markdown**: Web search results are cleaned into tidy Markdown, stripping page cruft.
+#### 1. Works With More LLM Gateways
+- **Strict gateways**: Fixed internal bookkeeping fields leaking into the messages sent to the model, so the Agent now works with stricter OpenAI-compatible gateways.
+- **Local (non-CORS) gateways now work in agent mode**: When a streaming request is blocked by CORS, the Agent automatically retries non-streaming via Obsidian's \`requestUrl\`, so local model hubs (e.g. Manifold) work for agent mode too.
 
-#### 2. Faster & Smarter
-- **Incremental Indexing**: Creating/modifying/deleting/renaming a single note updates just that file in the RAG index — no more full reindexes, so memory stays fresh instantly.
-- **Status Bar Usage**: The status bar now shows live Agent state and cumulative token usage.
-- **Settings Sync Aware**: Config changed on another device via Obsidian Sync is reloaded automatically.
+#### 2. Leaner Reference Tokens
+- **Reference content is capped**: Referenced / @-mentioned notes are injected up to a per-file and total limit; beyond that the Agent is told to \`read_file\` on demand — large notes no longer blow up every turn.
+- **No more double-injection in agent mode**: Reference content is inlined once (via the sense layer), roughly halving per-turn reference tokens.
+- **@-mentions actually work**: Picking an \`@\` / \`[[\` note now attaches its content as a reference — the Agent no longer sees just an opaque link.
 
-#### 3. AI Inside Notes & the Editor
-- **@-Mention Autocomplete**: Type \`@\` or \`[[\` in the chat input to quickly insert note references.
-- **Inline AI Code Blocks**: Embed and run an AI widget right inside a note with an \`\`\`ai code block.
-- **Hover Previews**: Note links in chat support Obsidian's native hover preview.
-- **Selection Shortcut**: Select text in the editor and hand it to the Agent with \`Mod-Shift-I\`.
-- **Fuzzy Quick-Switch**: Fuzzy-search and switch models straight from the command palette.
-
-#### 4. Richer Chat Rendering
-- **Diagrams / Math / Code**: Chat replies natively render Mermaid diagrams, math, and syntax highlighting.
-
-#### 5. Deep Links
-- **Protocol Handler**: \`obsidian://intelligence-assistant?task=...\` deep links launch the Agent and kick off a task from anywhere.
+#### 3. Engine Upgrade
+- **Now on the public Agentic Kernel SDK**: The core migrated to \`@agentic-kernel/core\` (upgraded to 0.6.0); the state store is verified against the official conformance contract for safer upgrades.
 
 ---
-*All 14 new capabilities ship verified by automated tests (unit / mission / perf / mutation). Start a new chat to try them!*
+*All changes verified by automated tests (types / unit / mission / real-model end-to-end). Start a new chat to try them.*
 `;
 
 		renderAssistantMarkdown(body, changelogContent.trim());
