@@ -15,6 +15,42 @@ export function parseYaml(raw: string): unknown {
 	return YAML.parse(raw);
 }
 
+/** The handful of entities real search snippets emit, decoded in one pass. */
+const HTML_ENTITIES: Record<string, string> = {
+	'&nbsp;': ' ',
+	'&amp;': '&',
+	'&lt;': '<',
+	'&gt;': '>',
+	'&quot;': '"',
+	'&#39;': "'",
+};
+
+/**
+ * Decode entities with a SINGLE regex pass over the input. Chaining per-entity
+ * `.replace()` calls would re-scan text produced by an earlier call, so
+ * `&amp;lt;` would decode to `&` then to `<` — turning escaped markup back into
+ * live markup. One pass leaves it as the literal `&lt;` the author wrote.
+ */
+function decodeEntities(text: string): string {
+	return text.replace(/&(?:nbsp|amp|lt|gt|quot|#39);/g, entity => HTML_ENTITIES[entity]);
+}
+
+/**
+ * Strip any tag-like markup, repeating until the string stops changing. A single
+ * pass is incomplete: removing the inner match of `<<b>script>` leaves `<script>`
+ * behind. Real htmlToMarkdown parses a DOM and has no such gap; the loop keeps
+ * this stand-in from disagreeing with it on malformed input.
+ */
+function stripTags(text: string): string {
+	let previous: string;
+	let current = text;
+	do {
+		previous = current;
+		current = current.replace(/<[^>]+>/g, '');
+	} while (current !== previous);
+	return current;
+}
+
 /**
  * Faithful-enough stand-in for Obsidian's htmlToMarkdown: converts the common
  * inline/block tags real search snippets use (<b>/<strong>, <i>/<em>, <a>,
@@ -23,8 +59,8 @@ export function parseYaml(raw: string): unknown {
  * web-search service passes).
  */
 export function htmlToMarkdown(html: string | HTMLElement | Document | DocumentFragment): string {
-	let s = typeof html === 'string' ? html : (html as HTMLElement).innerHTML ?? '';
-	s = s
+	const raw = typeof html === 'string' ? html : (html as HTMLElement).innerHTML ?? '';
+	const s = decodeEntities(stripTags(raw
 		.replace(/<\s*(b|strong)\s*>(.*?)<\s*\/\s*\1\s*>/gis, '**$2**')
 		.replace(/<\s*(i|em)\s*>(.*?)<\s*\/\s*\1\s*>/gis, '*$2*')
 		.replace(/<\s*a\b[^>]*\bhref\s*=\s*["']([^"']*)["'][^>]*>(.*?)<\s*\/\s*a\s*>/gis, '[$2]($1)')
@@ -32,15 +68,7 @@ export function htmlToMarkdown(html: string | HTMLElement | Document | DocumentF
 		.replace(/<\s*h2\s*>(.*?)<\s*\/\s*h2\s*>/gis, '## $1\n')
 		.replace(/<\s*h3\s*>(.*?)<\s*\/\s*h3\s*>/gis, '### $1\n')
 		.replace(/<\s*br\s*\/?\s*>/gi, '\n')
-		.replace(/<\s*\/?\s*p\s*>/gi, '\n')
-		.replace(/<[^>]+>/g, '');
-	s = s
-		.replace(/&nbsp;/g, ' ')
-		.replace(/&amp;/g, '&')
-		.replace(/&lt;/g, '<')
-		.replace(/&gt;/g, '>')
-		.replace(/&quot;/g, '"')
-		.replace(/&#39;/g, "'");
+		.replace(/<\s*\/?\s*p\s*>/gi, '\n')));
 	return s.replace(/\n{3,}/g, '\n\n').trim();
 }
 

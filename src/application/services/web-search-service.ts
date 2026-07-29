@@ -890,33 +890,6 @@ export class WebSearchService {
 	}
 
 	/**
-	 * Strip HTML tags from string
-	 */
-	private stripHTML(html: string): string {
-		return html
-			.replace(/<[^>]*>/g, '')
-			.replace(/&nbsp;/g, ' ')
-			.replace(/&amp;/g, '&')
-			.replace(/&lt;/g, '<')
-			.replace(/&gt;/g, '>')
-			.replace(/&quot;/g, '"')
-			.replace(/&#39;/g, "'")
-			.trim();
-	}
-
-	/**
-	 * Decode HTML entities
-	 */
-	private decodeHTMLEntities(text: string): string {
-		return text
-			.replace(/&amp;/g, '&')
-			.replace(/&lt;/g, '<')
-			.replace(/&gt;/g, '>')
-			.replace(/&quot;/g, '"')
-			.replace(/&#39;/g, "'");
-	}
-
-	/**
 	 * Normalize each result's snippet from provider HTML to clean markdown via
 	 * Obsidian's htmlToMarkdown, so HTML highlight tags / entities never reach
 	 * the agent context. Plain-text snippets pass through untouched.

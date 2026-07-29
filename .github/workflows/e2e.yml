@@ -4,6 +4,11 @@ on:
   pull_request:
   push:
 
+# Least privilege: both jobs only check out the repo and upload artifacts, so the
+# default write-all token is never needed.
+permissions:
+  contents: read
+
 jobs:
   e2e-ci:
     name: E2E CI (Mock AI)

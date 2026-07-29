@@ -394,7 +394,15 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === 'object' && value !== null;
 }
 
+/**
+ * Upper bound on any single inter-chunk pause. Delays reach here from queued
+ * fixtures, so a typo (or a value read off a request) must not be able to pin a
+ * connection open indefinitely and stall the suite.
+ */
+const MAX_SLEEP_MS = 30_000;
+
 function sleep(ms: number): Promise<void> {
+	const clamped = Number.isFinite(ms) ? Math.min(Math.max(ms, 0), MAX_SLEEP_MS) : 0;
 	// Runs in the Node (wdio) process — no `window`, use the Node global timer.
-	return new Promise(resolve => setTimeout(resolve, ms));
+	return new Promise(resolve => setTimeout(resolve, clamped));
 }
