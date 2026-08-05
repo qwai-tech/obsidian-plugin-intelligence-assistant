@@ -48,6 +48,13 @@ import type { AgentMemoryRepository } from './src/infrastructure/persistence';
 import { EditorQuickActions } from './src/presentation/editor/editor-quick-actions';
 import { showAgentTaskLaunchModal } from './src/presentation/components/modals/agent-task-launch-modal';
 import { ToolRegistry } from './src/application/tools/tool-registry';
+import {
+	createObsidianHttpPort,
+	setDefaultHttpPort,
+	setDiagnosticsSink,
+	type LLMHub,
+} from '@qwai/obsidian-llm';
+import { LLMHubService } from './src/application/services/llm-hub-service';
 import { BuiltinToolSource } from './src/application/tools/sources/builtin-tool-source';
 import { McpToolSource } from './src/application/tools/sources/mcp-tool-source';
 import { OpenApiToolSource } from './src/application/tools/sources/openapi-tool-source';
@@ -102,7 +109,7 @@ interface OpenApiReloadOptions {
 
 import { ChangelogModal } from './src/presentation/components/modals/changelog-modal';
 import { openModelSwitcher } from './src/presentation/modals/model-switcher-modal';
-import { ModelManager } from './src/infrastructure/llm/model-manager';
+import { ModelManager } from '@qwai/obsidian-llm';
 import { registerChatHoverLinkSource } from './src/presentation/chat/hover-link';
 import { aiSelectionEditorExtension } from './src/presentation/editor/ai-selection-extension';
 
@@ -125,10 +132,33 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private _ragManager: RAGManager | null = null;
 	public settingsService!: SettingsService;
 
+	/**
+	 * Cross-plugin LLM access point. Other plugins reach this as
+	 * `app.plugins.plugins['intelligence-assistant'].llmHub` -- see
+	 * `resolveLLM()` in @qwai/obsidian-llm -- so they can use the providers and
+	 * keys the user configured here instead of asking for their own. It hands out
+	 * capability only: no method on it returns an API key.
+	 */
+	public llmHub!: LLMHub;
+
 	async onload() {
 		const pluginDir = `${this.app.vault.configDir}/plugins/${this.manifest.id}`;
 		initI18n(undefined, pluginDir);
 		const loadStart = Date.now();
+
+		// The LLM package carries no environment assumptions, so the host wires in
+		// how HTTP happens and how warnings surface. Must run before anything can
+		// construct a provider.
+		setDefaultHttpPort(createObsidianHttpPort());
+		setDiagnosticsSink(({ message }) => { new Notice(message); });
+
+		// Published immediately rather than after settings load: Obsidian gives no
+		// load-order guarantee between plugins, so a consumer that starts first must
+		// still find the hub. It reads settings lazily on each call.
+		this.llmHub = new LLMHubService({
+			getLLMConfigs: () => this.settings?.llmConfigs ?? [],
+			getDefaultModelId: () => this.settings?.defaultModel ?? null,
+		});
 
 		// ── UI registration: must complete even if data loading fails ──
 
