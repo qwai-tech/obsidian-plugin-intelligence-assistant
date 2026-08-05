@@ -1,12 +1,9 @@
-// LLM Infrastructure
-export * from './anthropic-provider';
-export * from './base-provider';
-export * from './base-streaming-provider';
-export * from './deepseek-provider';
-export * from './google-provider';
-export * from './model-manager';
-export * from './ollama-provider';
-export * from './openai-provider';
-export * from './openrouter-provider';
-export * from './provider-factory';
-export * from './sap-ai-core-provider';
+/**
+ * LLM Infrastructure -- now a thin re-export of the extracted package.
+ *
+ * The providers, factory and model catalog moved to `@qwai/obsidian-llm` so other
+ * plugins can use them without vendoring a copy. This file stays so the existing
+ * in-plugin import sites keep working unchanged; new code should import from
+ * `@qwai/obsidian-llm` directly.
+ */
+export * from '@qwai/obsidian-llm';

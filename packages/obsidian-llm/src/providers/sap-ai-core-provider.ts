@@ -1,7 +1,7 @@
-import { BaseLLMProvider } from './base-provider';
-import { ChatRequest, ChatResponse, StreamChunk } from './types';
-import type { ModelInfo, ModelCapability, LLMConfig } from '@/types';
-import { requestUrl } from 'obsidian';
+import { BaseLLMProvider } from '../base-provider';
+import { type HttpPort, getDefaultHttpPort } from '../http';
+import { ChatRequest, ChatResponse, StreamChunk } from '../types';
+import type { ModelInfo, ModelCapability, LLMConfig } from '../types';
 
 /**
  * SAP AI Core Provider for Foundation Models
@@ -72,8 +72,8 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	// Cache for deployment IDs keyed by model name, with 5-minute TTL (matching SAP AI SDK default)
 	private deploymentCache = new Map<string, { deployment: DeploymentInfo; expiry: number }>();
 
-	constructor(config: unknown) {
-		super(config as LLMConfig);
+	constructor(config: unknown, http?: HttpPort) {
+		super(config as LLMConfig, http ?? getDefaultHttpPort());
 		this.parseServiceKey();
 	}
 
@@ -154,7 +154,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 		try {
 			console.debug('Requesting OAuth2 token from SAP AI Core...');
-			const response = await requestUrl({
+			const response = await this.http.request({
 				url: tokenUrl,
 				method: 'POST',
 				headers: {
@@ -523,8 +523,8 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		const configurationsUrl = `${baseUrl}/v2/lm/configurations`;
 
 		const [deploymentsResponse, configurationsResponse] = await Promise.all([
-			requestUrl({ url: deploymentsUrl, method: 'GET', headers }),
-			requestUrl({ url: configurationsUrl, method: 'GET', headers }).catch(() => null)
+			this.http.request({ url: deploymentsUrl, method: 'GET', headers }),
+			this.http.request({ url: configurationsUrl, method: 'GET', headers }).catch(() => null)
 		]);
 
 		if (deploymentsResponse.status !== 200) {
@@ -664,7 +664,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 			const url = `${baseUrl}/v2/lm/deployments/${deploymentId}`;
 
-			const response = await requestUrl({
+			const response = await this.http.request({
 				url,
 				method: 'GET',
 				headers,
@@ -771,7 +771,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				url += `?$filter=status eq '${statusFilter}'`;
 			}
 
-			const response = await requestUrl({
+			const response = await this.http.request({
 				url,
 				method: 'GET',
 				headers,
@@ -1097,12 +1097,11 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 		let response;
 		try {
-			response = await requestUrl({
+			response = await this.http.request({
 				url,
 				method: 'POST',
 				headers,
 				body: JSON.stringify(body),
-				throw: false
 			});
 		} catch (error) {
 			console.error(`SAP AI Core request failed to URL: ${url}`, error);
@@ -1502,12 +1501,11 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 		let response;
 		try {
-			response = await requestUrl({
+			response = await this.http.request({
 				url,
 				method: 'POST',
 				headers,
 				body: JSON.stringify(body),
-				throw: false,
 			});
 		} catch (error) {
 			console.error(`SAP AI Core streaming request failed to URL: ${url}`, error);
@@ -1558,7 +1556,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			console.warn(`SAP AI Core streaming failed (status ${response.status}), falling back to non-streaming`, errorText);
 
 			// Fallback to non-streaming
-			const fallbackResponse = await requestUrl({
+			const fallbackResponse = await this.http.request({
 				url,
 				method: 'POST',
 				headers: { ...headers, Accept: 'application/json' },
@@ -1659,12 +1657,11 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 		let response;
 		try {
-			response = await requestUrl({
+			response = await this.http.request({
 				url,
 				method: 'POST',
 				headers,
 				body: JSON.stringify(body),
-				throw: false,
 			});
 		} catch (error) {
 			console.error(`SAP AI Core Vertex AI streaming request failed to URL: ${url}`, error);
@@ -1680,7 +1677,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 			// Fallback to non-streaming
 			const fallbackUrl = url.replace(':streamGenerateContent', ':generateContent');
-			const fallbackResponse = await requestUrl({
+			const fallbackResponse = await this.http.request({
 				url: fallbackUrl,
 				method: 'POST',
 				headers: { ...headers, Accept: 'application/json' },
@@ -1809,12 +1806,11 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 		let response;
 		try {
-			response = await requestUrl({
+			response = await this.http.request({
 				url,
 				method: 'POST',
 				headers,
 				body: JSON.stringify(body),
-				throw: false,
 			});
 		} catch (error) {
 			console.error(`SAP AI Core Bedrock streaming request failed to URL: ${url}`, error);
@@ -1829,7 +1825,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			console.warn(`SAP AI Core Bedrock streaming failed (status ${response.status}), falling back to non-streaming`, errorText);
 
 			// Fallback to non-streaming for Titan or if streaming fails
-			const fallbackResponse = await requestUrl({
+			const fallbackResponse = await this.http.request({
 				url: url.replace('/invoke-with-response-stream', '/invoke').replace('/converse-stream', '/converse'),
 				method: 'POST',
 				headers: { ...headers, Accept: 'application/json' },
@@ -1933,8 +1929,8 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			const configurationsUrl = `${baseUrl}/v2/lm/configurations`;
 
 			const [deploymentsResponse, configurationsResponse] = await Promise.all([
-				requestUrl({ url: deploymentsUrl, method: 'GET', headers }),
-				requestUrl({ url: configurationsUrl, method: 'GET', headers })
+				this.http.request({ url: deploymentsUrl, method: 'GET', headers }),
+				this.http.request({ url: configurationsUrl, method: 'GET', headers })
 			]);
 
 			if (deploymentsResponse.status !== 200) {

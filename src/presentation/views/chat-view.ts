@@ -13,7 +13,7 @@ import {
 	type AgentCapabilitySummary,
 	type CapabilityReference,
 } from '@/application/agents/agent-capability-summary';
-import { ModelManager } from '@/infrastructure/llm/model-manager';
+import { ModelManager } from '@qwai/obsidian-llm';
 import { marked } from 'marked';
 import {
 	WebSearchService,
@@ -22,7 +22,7 @@ import {
 } from '@/application/services';
 import { AgentEngineLoop, AgentSenseService, HistoryCompactor, ObsidianAgentRunStateStore } from '@/application/agents';
 import { RAGManager } from '@/infrastructure/rag-manager';
-import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
+import { ProviderFactory } from '@qwai/obsidian-llm';
 import { VaultExportService } from '@/application/services/vault-export-service';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';

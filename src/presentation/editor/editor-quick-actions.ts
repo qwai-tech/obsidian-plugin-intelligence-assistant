@@ -2,8 +2,8 @@
 import { App, Menu, Editor, MarkdownView, Notice } from 'obsidian';
 import { t } from '@/i18n';
 import { ExplainTextModal } from '@/presentation/components/modals/explain-text-modal';
-import { ModelManager } from '@/infrastructure/llm/model-manager';
-import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
+import { ModelManager } from '@qwai/obsidian-llm';
+import { ProviderFactory } from '@qwai/obsidian-llm';
 import type { LLMConfig } from '@/types';
 import type { QuickActionConfig } from '@/types/settings';
 

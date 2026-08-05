@@ -336,7 +336,7 @@ export function displayProviderTab(
 				refreshBtn.textContent = t('settings.provider.actions.refreshing');
 				refreshBtn.disabled = true;
 				try {
-					const { ModelManager } = await import('@/infrastructure/llm/model-manager');
+					const { ModelManager } = await import('@qwai/obsidian-llm');
 					const models = await ModelManager.getModelsForConfig(config, true);
 					config.cachedModels = models;
 					config.cacheTimestamp = Date.now();

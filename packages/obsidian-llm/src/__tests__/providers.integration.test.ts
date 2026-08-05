@@ -3,13 +3,14 @@
  * Tests for all streaming providers using BaseStreamingProvider
  */
 
-import { OpenAIProvider } from '../openai-provider';
-import { AnthropicProvider } from '../anthropic-provider';
-import { GoogleProvider } from '../google-provider';
-import { OpenRouterProvider } from '../openrouter-provider';
-import { DeepSeekProvider } from '../deepseek-provider';
-import { LLMConfig } from '@/types';
-import { ChatRequest } from '@/types';
+import { OpenAIProvider } from '../providers/openai-provider';
+import { AnthropicProvider } from '../providers/anthropic-provider';
+import { GoogleProvider } from '../providers/google-provider';
+import { OpenRouterProvider } from '../providers/openrouter-provider';
+import { DeepSeekProvider } from '../providers/deepseek-provider';
+import { LLMConfig, ChatRequest } from '../types';
+import { createObsidianHttpPort } from '../obsidian-http';
+import { setDefaultHttpPort } from '../http';
 import { requestUrl } from 'obsidian';
 
 // Mock global fetch
@@ -24,6 +25,8 @@ describe('Provider Integration Tests', () => {
 
 	beforeEach(() => {
 		jest.clearAllMocks();
+		// Providers resolve their transport at construction; register it first.
+		setDefaultHttpPort(createObsidianHttpPort());
 	});
 
 	describe('OpenAIProvider', () => {

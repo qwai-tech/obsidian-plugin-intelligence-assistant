@@ -12,8 +12,8 @@ import type {
 	Agent
 } from '@/types';
 import { IFileSystem } from '@/core/interfaces';
-import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
-import { ModelManager } from '@/infrastructure/llm/model-manager';
+import { ProviderFactory } from '@qwai/obsidian-llm';
+import { ModelManager } from '@qwai/obsidian-llm';
 import type { RAGManager } from '@/infrastructure/rag-manager';
 import type { WebSearchService } from './web-search-service';
 import type { StreamChunk } from '@/types/common/llm';

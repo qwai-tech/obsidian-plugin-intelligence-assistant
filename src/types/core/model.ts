@@ -1,51 +1,11 @@
 /**
  * Model Core Types
- * Domain types for LLM models and configurations
+ * Domain types for LLM models and configurations.
+ *
+ * These now live in `@qwai/obsidian-llm` and are re-exported here. Keeping a
+ * second copy in the app would let the two definitions drift, and since
+ * `ModelManager` (in the package) produces `ModelInfo` values that the app stores
+ * in its settings, any drift would surface as a confusing structural type error
+ * far from its cause.
  */
-
-export type ModelCapability =
-	| 'chat'
-	| 'vision'
-	| 'audio'
-	| 'video'
-	| 'function_calling'
-	| 'streaming'
-	| 'json_mode'
-	| 'reasoning'
-	| 'embedding'
-	| 'computer_use'
-	| 'multimodal_output'
-	| 'code_execution';
-
-export interface ModelInfo {
-	id: string;
-	name: string;
-	provider: string;
-	capabilities: ModelCapability[];
-	enabled: boolean;
-	// SAP AI Core specific fields
-	deploymentId?: string;
-	deploymentUrl?: string;
-	configurationId?: string;
-	configurationName?: string;
-	scenarioId?: string;
-	executableId?: string;
-	status?: string;
-	targetStatus?: string;
-	createdAt?: string;
-	modifiedAt?: string;
-	submissionTime?: string;
-	startTime?: string;
-	completionTime?: string;
-}
-
-export interface LLMConfig {
-	provider: string;
-	apiKey?: string;  // Optional for Ollama
-	baseUrl?: string;
-	modelFilter?: string;
-	serviceKey?: string | Record<string, unknown>;  // For SAP AI Core
-	resourceGroup?: string;  // For SAP AI Core
-	cachedModels?: ModelInfo[];
-	cacheTimestamp?: number;
-}
+export type { ModelCapability, ModelInfo, LLMConfig } from '@qwai/obsidian-llm';

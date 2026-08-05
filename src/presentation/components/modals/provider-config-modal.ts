@@ -249,7 +249,7 @@ export class ProviderConfigModal extends Modal {
 		button.textContent = t('modals.provider.testing');
 		button.disabled = true;
 		try {
-			const { ModelManager } = await import('@/infrastructure/llm/model-manager');
+			const { ModelManager } = await import('@qwai/obsidian-llm');
 			const models = await ModelManager.getModelsForConfig(this.draft, true);
 			this.draft.cachedModels = models;
 			this.draft.cacheTimestamp = Date.now();

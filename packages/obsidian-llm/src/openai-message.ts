@@ -9,7 +9,7 @@
  * (role, content, name, tool_calls, tool_call_id) and expands image attachments
  * into the multimodal `content` array.
  */
-import type { Message } from '@/types';
+import type { LLMMessage } from './types';
 
 export interface OpenAiWireMessage {
 	role: string;
@@ -19,7 +19,7 @@ export interface OpenAiWireMessage {
 	tool_call_id?: string;
 }
 
-export function toOpenAiWireMessage(msg: Message): OpenAiWireMessage {
+export function toOpenAiWireMessage(msg: LLMMessage): OpenAiWireMessage {
 	const raw = msg as unknown as Record<string, unknown>;
 	const wire: OpenAiWireMessage = { role: msg.role, content: msg.content };
 
@@ -41,6 +41,6 @@ export function toOpenAiWireMessage(msg: Message): OpenAiWireMessage {
 	return wire;
 }
 
-export function toOpenAiWireMessages(messages: Message[]): OpenAiWireMessage[] {
+export function toOpenAiWireMessages(messages: LLMMessage[]): OpenAiWireMessage[] {
 	return messages.map(toOpenAiWireMessage);
 }

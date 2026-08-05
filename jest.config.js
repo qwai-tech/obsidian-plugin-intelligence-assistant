@@ -8,7 +8,7 @@ module.exports = {
     '^.+\\.jsx?$': ['ts-jest', { tsconfig: { allowJs: true, checkJs: false, isolatedModules: true } }],
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  roots: ['<rootDir>/src', '<rootDir>/tests/harness', '<rootDir>/tests/missions', '<rootDir>/tests/perf'],
+  roots: ['<rootDir>/src', '<rootDir>/packages', '<rootDir>/tests/harness', '<rootDir>/tests/missions', '<rootDir>/tests/perf'],
   testMatch: [
     '**/__tests__/**/*.{j,t}s?(x)',
     '**/?(*.)+(spec|test).{j,t}s?(x)'
@@ -24,6 +24,7 @@ module.exports = {
     '^vitest$': '<rootDir>/__mocks__/vitest.ts',
     '^obsidian$': '<rootDir>/__mocks__/obsidian.ts',
     '^marked$': '<rootDir>/__mocks__/marked.ts',
+    '^@qwai/obsidian-llm$': '<rootDir>/packages/obsidian-llm/src/index.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@plugin$': '<rootDir>/main.ts'
   },

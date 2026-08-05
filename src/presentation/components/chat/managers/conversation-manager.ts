@@ -11,8 +11,8 @@ import { Events } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Conversation, Message } from '@/types';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
-import { ModelManager } from '@/infrastructure/llm/model-manager';
-import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
+import { ModelManager } from '@qwai/obsidian-llm';
+import { ProviderFactory } from '@qwai/obsidian-llm';
 import { ConversationStorageService } from '@/application/services/conversation-storage-service';
 import { TestIds } from '@/presentation/utils/test-ids';
 

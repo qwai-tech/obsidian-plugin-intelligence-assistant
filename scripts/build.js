@@ -192,6 +192,15 @@ if you want to view the source, please visit the github repository of this plugi
                     namespace: 'file'
                 }));
 
+                // Bundle the shared LLM package straight from source. Resolving it
+                // via node_modules would need its `dist/` built first, adding a
+                // build-order dependency for no benefit -- esbuild compiles the TS
+                // here either way.
+                build.onResolve({ filter: /^@qwai\/obsidian-llm$/ }, () => ({
+                    path: join(sourceDir, 'packages', 'obsidian-llm', 'src', 'index.ts'),
+                    namespace: 'file'
+                }));
+
                 build.onResolve({ filter: /^@\// }, (args) => {
                     const relativePath = args.path.slice(2); // remove '@/'
                     return {

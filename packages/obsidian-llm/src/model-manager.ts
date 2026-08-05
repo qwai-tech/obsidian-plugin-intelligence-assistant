@@ -1,5 +1,6 @@
-import type { LLMConfig, ModelInfo, ModelCapability } from '@/types';
-import { Notice, requestUrl } from 'obsidian';
+import type { LLMConfig, ModelInfo, ModelCapability } from './types';
+import { getDefaultHttpPort } from './http';
+import { reportDiagnostic } from './diagnostics';
 
 export class ModelManager {
 	private static modelCache = new Map<string, Promise<ModelInfo[]>>();
@@ -114,8 +115,9 @@ export class ModelManager {
 				? `${baseUrl}/models`
 				: 'https://api.openai.com/v1/models';
 
-			const response = await requestUrl({
+			const response = await getDefaultHttpPort().request({
 				url,
+				method: 'GET',
 				headers: {
 					'Authorization': `Bearer ${apiKey}`,
 					'Content-Type': 'application/json',
@@ -148,7 +150,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch OpenAI models:', error);
-			new Notice('Failed to fetch OpenAI models, using default list');
+			reportDiagnostic({ level: 'warn', message: 'Failed to fetch OpenAI models, using default list' });
 			return this.DEFAULT_MODELS.openai;
 		}
 	}
@@ -202,7 +204,7 @@ export class ModelManager {
 				? `${baseUrl}/models?key=${apiKey}`
 				: `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
 
-			const response = await requestUrl({ url, method: "GET" });
+			const response = await getDefaultHttpPort().request({ url, method: 'GET' });
 
 			if (response.status !== 200) {
 				throw new Error(`Failed to fetch models: ${response.status}`);
@@ -236,7 +238,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch Google models:', error);
-			new Notice('Failed to fetch Google models, using default list');
+			reportDiagnostic({ level: 'warn', message: 'Failed to fetch Google models, using default list' });
 			return this.DEFAULT_MODELS.google;
 		}
 	}
@@ -270,8 +272,9 @@ export class ModelManager {
 				? `${baseUrl}/models`
 				: 'https://api.deepseek.com/v1/models';
 
-			const response = await requestUrl({
+			const response = await getDefaultHttpPort().request({
 				url,
+				method: 'GET',
 				headers: {
 					'Authorization': `Bearer ${apiKey}`,
 					'Content-Type': 'application/json',
@@ -302,7 +305,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch DeepSeek models:', error);
-			new Notice('Failed to fetch DeepSeek models, using default list');
+			reportDiagnostic({ level: 'warn', message: 'Failed to fetch DeepSeek models, using default list' });
 			return this.DEFAULT_MODELS.deepseek;
 		}
 	}
@@ -316,8 +319,9 @@ export class ModelManager {
 				? `${baseUrl}/models`
 				: 'https://openrouter.ai/api/v1/models';
 
-			const response = await requestUrl({
+			const response = await getDefaultHttpPort().request({
 				url,
+				method: 'GET',
 				headers: {
 					'Authorization': `Bearer ${apiKey}`,
 					'Content-Type': 'application/json',
@@ -411,7 +415,7 @@ export class ModelManager {
 				.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
 		} catch (error) {
 			console.error('Failed to fetch OpenRouter models:', error);
-			new Notice('Failed to fetch OpenRouter models, using default list');
+			reportDiagnostic({ level: 'warn', message: 'Failed to fetch OpenRouter models, using default list' });
 			return this.DEFAULT_MODELS.openrouter;
 		}
 	}
@@ -429,7 +433,7 @@ export class ModelManager {
 			return models.filter(model => regex.test(model.id) || regex.test(model.name));
 		} catch (error) {
 			console.error('Invalid model filter regex:', error);
-			new Notice('Invalid model filter pattern, showing all models');
+			reportDiagnostic({ level: 'warn', message: 'Invalid model filter pattern, showing all models' });
 			return models;
 		}
 	}
@@ -450,7 +454,7 @@ export class ModelManager {
 			if (config.provider === 'ollama') {
 				try {
 					console.debug('[ModelManager] Fetching Ollama models (live list)...');
-					const { OllamaProvider } = await import('./ollama-provider');
+					const { OllamaProvider } = await import('./providers/ollama-provider');
 					const ollamaProvider = new OllamaProvider(config);
 					const models = await ollamaProvider.fetchModels();
 					// Update cached models in memory for downstream consumers
@@ -474,14 +478,14 @@ export class ModelManager {
 			// Special handling for providers that don't require API keys
 			if (config.provider === 'ollama') {
 				console.debug('[ModelManager] Fetching Ollama models (no API key required)...');
-				const { OllamaProvider } = await import('./ollama-provider');
+				const { OllamaProvider } = await import('./providers/ollama-provider');
 				const ollamaProvider = new OllamaProvider(config);
 				models = await ollamaProvider.fetchModels();
 			} else if (config.provider === 'sap-ai-core') {
 				console.debug('[ModelManager] Fetching SAP AI Core models...');
 				// Try to fetch from SAP AI Core provider
 				try {
-					const { SAPAICoreProvider } = await import('./sap-ai-core-provider');
+					const { SAPAICoreProvider } = await import('./providers/sap-ai-core-provider');
 					const sapProvider = new SAPAICoreProvider(config);
 					models = await sapProvider.fetchModels();
 				} catch (error) {

@@ -5,6 +5,7 @@
 
 import { BaseLLMProvider } from './base-provider';
 import { ChatRequest, StreamChunk } from './types';
+import { StreamTransportUnavailableError } from './http';
 
 /**
  * Result of parsing a streaming chunk
@@ -81,31 +82,31 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 	async streamChat(request: ChatRequest, onChunk: (_chunk: StreamChunk) => void): Promise<void> {
 		const { url, body: requestBody } = this.prepareStreamRequest(request);
 
-		// NOTE: `fetch` is used deliberately here — Obsidian's `requestUrl` buffers
-		// the entire response and cannot expose a `ReadableStream`, so it is
-		// incompatible with token-by-token SSE streaming (`response.body` below).
-		// This is the only `fetch` in the plugin and is intentionally whitelisted
-		// for this file in eslint.config.mts. Non-streaming requests use requestUrl.
-		let response: Response;
+		// The streaming transport is separate from the buffered one because only it
+		// can expose a live `ReadableStream` (`response.body` below); a buffering
+		// transport cannot stream token-by-token by construction.
+		let response: Awaited<ReturnType<typeof this.http.stream>>;
 		try {
-			response = await fetch(url, {
+			response = await this.http.stream({
+				url,
 				method: 'POST',
 				headers: this.getHeaders(),
 				body: JSON.stringify(requestBody),
 			});
 		} catch (error: unknown) {
-			// A CORS/network failure throws a TypeError *before* any response (an
-			// OpenAI-compatible gateway that doesn't send CORS headers — e.g. a local
-			// hub — blocks the browser `fetch`). Obsidian's `requestUrl` runs in the
-			// main process and bypasses CORS, so retry the request non-streaming there
-			// and synthesize the chunks. This only covers connection failures; HTTP
-			// errors below are not retried (requestUrl would hit the same status).
-			if (error instanceof TypeError) {
+			// The endpoint was unreachable over the streaming transport at all --
+			// typically an OpenAI-compatible gateway that sends no CORS headers, so a
+			// renderer-side request is blocked before any response exists. The
+			// buffered transport bypasses CORS, so retry there non-streaming and
+			// synthesize the chunks. Only transport failures qualify; HTTP status
+			// errors below are not retried, since the buffered path would hit the
+			// identical status.
+			if (error instanceof StreamTransportUnavailableError) {
 				try {
-					await this.completeViaRequestUrl(requestBody as Record<string, unknown>, url, onChunk);
+					await this.completeViaBufferedRequest(requestBody as Record<string, unknown>, url, onChunk);
 					return;
 				} catch (fallbackError: unknown) {
-					console.error(`[${this.getProviderName()}] requestUrl fallback failed:`, fallbackError);
+					console.error(`[${this.getProviderName()}] buffered fallback failed:`, fallbackError);
 					throw fallbackError instanceof Error ? fallbackError : new Error(String(fallbackError));
 				}
 			}
@@ -136,13 +137,13 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 	}
 
 	/**
-	 * Non-streaming fallback for endpoints the browser `fetch` can't reach (no CORS
-	 * headers). Re-POSTs the same body with `stream:false` via `requestUrl` (main
-	 * process, CORS-exempt), then emits the full response through `onChunk` as
+	 * Non-streaming fallback for endpoints the streaming transport can't reach (no
+	 * CORS headers). Re-POSTs the same body with `stream:false` over the buffered,
+	 * CORS-exempt transport, then emits the full response through `onChunk` as
 	 * synthetic chunks — content, reasoning, and tool_calls — matching the shape the
 	 * streaming path produces, so agent mode (tool calls) works unchanged.
 	 */
-	private async completeViaRequestUrl(
+	private async completeViaBufferedRequest(
 		streamBody: Record<string, unknown>,
 		url: string,
 		onChunk: (_chunk: StreamChunk) => void,

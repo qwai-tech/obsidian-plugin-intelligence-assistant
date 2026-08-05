@@ -1,5 +1,5 @@
-import { BaseStreamingProvider, ParsedStreamChunk } from './base-streaming-provider';
-import { ChatRequest, ChatResponse, Message } from './types';
+import { BaseStreamingProvider, ParsedStreamChunk } from '../base-streaming-provider';
+import { ChatRequest, ChatResponse, LLMMessage } from '../types';
 
 export class GoogleProvider extends BaseStreamingProvider {
 	get name(): string {
@@ -16,7 +16,7 @@ export class GoogleProvider extends BaseStreamingProvider {
 		};
 	}
 
-	private transformMessages(messages: Message[]): unknown {
+	private transformMessages(messages: LLMMessage[]): unknown {
 		// Gemini uses a "contents" array with role "user" or "model"
 		return messages.map(msg => {
 			const role = msg.role === 'assistant' ? 'model' : 'user';

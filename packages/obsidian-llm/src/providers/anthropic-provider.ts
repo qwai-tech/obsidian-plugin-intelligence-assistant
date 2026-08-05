@@ -1,5 +1,5 @@
-import { BaseStreamingProvider, ParsedStreamChunk } from './base-streaming-provider';
-import { ChatRequest, ChatResponse, Message } from './types';
+import { BaseStreamingProvider, ParsedStreamChunk } from '../base-streaming-provider';
+import { ChatRequest, ChatResponse, LLMMessage } from '../types';
 
 export class AnthropicProvider extends BaseStreamingProvider {
 	private _inputTokens = 0;
@@ -24,7 +24,7 @@ export class AnthropicProvider extends BaseStreamingProvider {
 		};
 	}
 
-	private convertMessages(messages: Message[]): { system?: string; messages: unknown[] } {
+	private convertMessages(messages: LLMMessage[]): { system?: string; messages: unknown[] } {
 		const systemMessage = messages.find(m => m.role === 'system');
 		const nonSystemMessages = messages.filter(m => m.role !== 'system');
 

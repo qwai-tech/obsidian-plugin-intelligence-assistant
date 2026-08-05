@@ -1,6 +1,6 @@
-import { BaseStreamingProvider, ParsedStreamChunk } from './base-streaming-provider';
-import { ChatRequest, ChatResponse } from './types';
-import { toOpenAiWireMessages } from './openai-message';
+import { BaseStreamingProvider, ParsedStreamChunk } from '../base-streaming-provider';
+import { ChatRequest, ChatResponse } from '../types';
+import { toOpenAiWireMessages } from '../openai-message';
 
 export class DeepSeekProvider extends BaseStreamingProvider {
 	private toolCallAccumulator: Map<number, { id: string; name: string; arguments: string }> = new Map();

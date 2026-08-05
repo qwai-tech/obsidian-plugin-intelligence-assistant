@@ -1,12 +1,19 @@
 import { ILLMProvider, ChatRequest, ChatResponse, StreamChunk } from './types';
-import type { LLMConfig } from '@/types';
-import { requestUrl } from 'obsidian';
+import type { LLMConfig } from './types';
+import { type HttpPort, getDefaultHttpPort } from './http';
 
 export abstract class BaseLLMProvider implements ILLMProvider {
 	protected config: LLMConfig;
+	/**
+	 * How this provider reaches the network. Injected rather than imported so the
+	 * provider carries no environment assumptions -- Obsidian supplies a
+	 * CORS-exempt port, tests supply a fake, Node supplies plain fetch.
+	 */
+	protected http: HttpPort;
 
-	constructor(config: LLMConfig) {
+	constructor(config: LLMConfig, http: HttpPort = getDefaultHttpPort()) {
 		this.config = config;
+		this.http = http;
 	}
 
 	abstract get name(): string;
@@ -24,7 +31,7 @@ export abstract class BaseLLMProvider implements ILLMProvider {
 	}
 
 	protected async makeRequest(url: string, body: unknown): Promise<unknown> {
-		const response = await requestUrl({
+		const response = await this.http.request({
 			url,
 			method: 'POST',
 			headers: this.getHeaders(),
@@ -32,8 +39,7 @@ export abstract class BaseLLMProvider implements ILLMProvider {
 		});
 
 		if (response.status !== 200) {
-			const error = typeof response.text === 'string' ? response.text : JSON.stringify(response.text);
-			throw new Error(`API request failed: ${response.status} ${error}`);
+			throw new Error(`API request failed: ${response.status} ${response.text}`);
 		}
 
 		return response;

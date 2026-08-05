@@ -1,5 +1,5 @@
 import type { RAGConfig, LLMConfig } from '@/types';
-import { ProviderFactory } from './llm/provider-factory';
+import { ProviderFactory } from'@qwai/obsidian-llm';
 
 interface PluginLookup {
 	settings?: {

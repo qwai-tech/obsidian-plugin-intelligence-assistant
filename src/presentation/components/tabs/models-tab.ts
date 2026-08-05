@@ -46,7 +46,7 @@ export function displayModelsTab(
 			refreshAllBtn.disabled = true;
 
 			try {
-			const { ModelManager } = await import('@/infrastructure/llm/model-manager');
+			const { ModelManager } = await import('@qwai/obsidian-llm');
 
 			for (const config of plugin.settings.llmConfigs) {
 				try {

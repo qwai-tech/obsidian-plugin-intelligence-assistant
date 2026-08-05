@@ -41,6 +41,9 @@
       ],
       "@plugin": [
         "main.ts"
+      ],
+      "@qwai/obsidian-llm": [
+        "packages/obsidian-llm/src/index.ts"
       ]
     },
     "esModuleInterop": true,
@@ -55,6 +58,7 @@
   "include": [
     "main.ts",
     "src/**/*.ts",
+    "packages/obsidian-llm/src/**/*.ts",
     "src/**/*.d.ts",
     "scripts/**/*.ts",
     "__mocks__/**/*.ts",

@@ -4,8 +4,9 @@
  */
 
 import { BaseStreamingProvider, ParsedStreamChunk } from '../base-streaming-provider';
-import { ChatRequest, ChatResponse, StreamChunk } from '@/types';
-import { LLMConfig } from '@/types';
+import { ChatRequest, ChatResponse, StreamChunk, LLMConfig } from '../types';
+import { createObsidianHttpPort } from '../obsidian-http';
+import { setDefaultHttpPort } from '../http';
 import { requestUrl } from 'obsidian';
 
 /**
@@ -92,6 +93,10 @@ describe('BaseStreamingProvider', () => {
 			baseUrl: 'https://test.api.com',
 		};
 
+		// The provider takes its transport from the registered default at
+		// construction time, so install it first. The Obsidian port is what
+		// production uses; its `requestUrl`/`fetch` are both mocked here.
+		setDefaultHttpPort(createObsidianHttpPort());
 		provider = new TestStreamingProvider(mockConfig);
 		provider.parseStreamChunkCalls = [];
 		provider.prepareStreamRequestCalls = [];

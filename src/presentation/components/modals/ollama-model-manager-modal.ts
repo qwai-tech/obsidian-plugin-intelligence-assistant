@@ -279,7 +279,7 @@ export class OllamaModelManagerModal extends Modal {
 		}
 
 		try {
-			const { ModelManager } = await import('@/infrastructure/llm/model-manager');
+			const { ModelManager } = await import('@qwai/obsidian-llm');
 			const models = await ModelManager.getModelsForConfig(this.config, true);
 			this.config.cachedModels = models;
 			this.config.cacheTimestamp = Date.now();

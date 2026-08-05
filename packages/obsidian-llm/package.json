@@ -1,0 +1,50 @@
+{
+	"name": "@qwai/obsidian-llm",
+	"version": "0.1.0",
+	"description": "Multi-provider LLM client for Obsidian plugins, plus a hub contract so plugins can share one provider configuration instead of each shipping their own.",
+	"license": "MIT",
+	"author": "QWAI",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant.git",
+		"directory": "packages/obsidian-llm"
+	},
+	"keywords": [
+		"obsidian",
+		"obsidian-plugin",
+		"llm",
+		"openai",
+		"anthropic"
+	],
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"clean": "rm -rf dist"
+	},
+	"peerDependencies": {
+		"obsidian": ">=1.8.7"
+	},
+	"peerDependenciesMeta": {
+		"obsidian": {
+			"optional": true
+		}
+	},
+	"devDependencies": {
+		"typescript": "^5.9.3"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

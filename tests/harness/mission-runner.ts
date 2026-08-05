@@ -4,7 +4,7 @@ import { HistoryCompactor } from '@/application/agents/history-compactor';
 import { AgentSenseService } from '@/application/agents/agent-sense-service';
 import { WebSearchService } from '@/application/services/web-search-service';
 import { InMemoryStateStore } from '@/application/agents/kernel/agent-engine-core';
-import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
+import { ProviderFactory, createFetchHttpPort } from '@qwai/obsidian-llm';
 import { createTestAgent } from '@/test-support/test-utils';
 import type { Message } from '@/types/core/conversation';
 import type { AgentLoopOptions, AgentLoopCallbacks } from '@/application/agents/types';
@@ -13,6 +13,12 @@ import { createFakeRagManager } from './fake-rag';
 import { DEFAULT_MOCK_LLM_PORT, mockLLM } from './mock-llm-harness';
 
 const MOCK_MODEL = 'mock-model';
+
+// Missions drive a real mock LLM server over loopback HTTP. Plain `fetch` reaches
+// it directly -- there is no CORS to bypass here -- so the harness passes this
+// port explicitly rather than relying on whatever global a previous test left
+// registered.
+const harnessHttpPort = createFetchHttpPort();
 const MOCK_BASE_URL = `http://127.0.0.1:${DEFAULT_MOCK_LLM_PORT}/v1`;
 
 /**
@@ -114,7 +120,7 @@ export async function runAgentMission(input: RunMissionInput): Promise<MissionOu
     agentRunStateStore: new InMemoryStateStore(),
     createProvider: () => {
       const config = { provider: llm.provider, apiKey: llm.apiKey, baseUrl: llm.baseUrl };
-      return { provider: ProviderFactory.createProvider(config as never), providerId: llm.provider };
+      return { provider: ProviderFactory.createProvider(config as never, harnessHttpPort), providerId: llm.provider };
     },
     defaultModel: llm.model,
   });

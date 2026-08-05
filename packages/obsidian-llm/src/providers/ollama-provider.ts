@@ -1,8 +1,7 @@
-import { BaseLLMProvider } from './base-provider';
-import { ChatRequest, ChatResponse, StreamChunk } from './types';
-import { toOpenAiWireMessages } from './openai-message';
-import type { ModelCapability, ModelInfo } from '@/types';
-import { requestUrl } from 'obsidian';
+import { BaseLLMProvider } from '../base-provider';
+import { ChatRequest, ChatResponse, StreamChunk } from '../types';
+import { toOpenAiWireMessages } from '../openai-message';
+import type { ModelCapability, ModelInfo } from '../types';
 
 interface OllamaChatApiResponse {
 	message?: { content?: string };
@@ -50,7 +49,7 @@ export class OllamaProvider extends BaseLLMProvider {
 			},
 		};
 
-		const response = await requestUrl({
+		const response = await this.http.request({
 			url: url,
 			method: 'POST',
 			headers: this.getHeaders(),
@@ -77,7 +76,7 @@ export class OllamaProvider extends BaseLLMProvider {
 	async generateEmbedding(text: string, model: string): Promise<number[]> {
 		const url = `${this.getBaseUrl()}/api/embed`;
 		const modelName = model.includes(':') ? model.split(':').slice(1).join(':') : model;
-		const response = await requestUrl({
+		const response = await this.http.request({
 			url,
 			method: 'POST',
 			headers: this.getHeaders(),
@@ -110,7 +109,7 @@ export class OllamaProvider extends BaseLLMProvider {
 		};
 
 		try {
-			const response = await requestUrl({
+			const response = await this.http.request({
 				url: url,
 				method: 'POST',
 				headers: this.getHeaders(),
@@ -127,7 +126,7 @@ export class OllamaProvider extends BaseLLMProvider {
 		if (!bodyUnknown) {
 			// Some environments don't expose streaming bodies via requestUrl. Fallback to non-streaming request.
 			console.warn('[Ollama] Streaming body missing, falling back to non-streaming request');
-			const fallback = await requestUrl({
+			const fallback = await this.http.request({
 				url: url,
 				method: 'POST',
 				headers: this.getHeaders(),
@@ -214,7 +213,7 @@ export class OllamaProvider extends BaseLLMProvider {
 			const url = `${baseUrl ?? 'unknown'}/api/tags`;
 
 			console.debug('[Ollama] Making request to Ollama API...');
-			const response = await requestUrl({
+			const response = await this.http.request({
 				url: url,
 				method: 'GET',
 				headers: this.getHeaders(),
@@ -324,7 +323,7 @@ export class OllamaProvider extends BaseLLMProvider {
 		};
 
 		try {
-			const response = await requestUrl({
+			const response = await this.http.request({
 				url: url,
 				method: 'POST',
 				headers: this.getHeaders(),
@@ -427,7 +426,7 @@ export class OllamaProvider extends BaseLLMProvider {
 		};
 
 		try {
-			const response = await requestUrl({
+			const response = await this.http.request({
 				url: url,
 				method: 'DELETE',
 				headers: this.getHeaders(),

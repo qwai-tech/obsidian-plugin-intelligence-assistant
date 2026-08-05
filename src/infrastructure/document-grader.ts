@@ -1,6 +1,6 @@
 import type { LLMConfig, RAGConfig } from '@/types';
-import { ModelManager } from '@/infrastructure/llm/model-manager';
-import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
+import { ModelManager } from '@qwai/obsidian-llm';
+import { ProviderFactory } from '@qwai/obsidian-llm';
 
 export interface DocumentGrade {
   relevance: number; // 0-10 scale

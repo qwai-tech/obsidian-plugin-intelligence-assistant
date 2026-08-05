@@ -129,7 +129,14 @@ export default defineConfig([
   },
 
   {
-    files: ["**/base-streaming-provider.ts"],
+    // The HTTP adapters are the only place `fetch` is allowed: it is the sole way
+    // to obtain a live ReadableStream for SSE, which requestUrl cannot do. Every
+    // provider now reaches the network through these adapters, so the exception
+    // lives here instead of being spread across provider files.
+    files: [
+      "packages/obsidian-llm/src/http.ts",
+      "packages/obsidian-llm/src/obsidian-http.ts"
+    ],
     rules: {
       "no-restricted-globals": [
         "error",

@@ -1,15 +1,13 @@
 import { DocumentGrader } from '@/infrastructure/document-grader';
-import { ModelManager } from '@/infrastructure/llm/model-manager';
-import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
+import { ModelManager, ProviderFactory } from '@qwai/obsidian-llm';
 import type { RAGConfig } from '@/types';
 
-jest.mock('@/infrastructure/llm/provider-factory', () => ({
+// ProviderFactory and ModelManager now ship from the same package, so they mock
+// through one factory rather than one call per module.
+jest.mock('@qwai/obsidian-llm', () => ({
 	ProviderFactory: {
 		createProvider: jest.fn(),
 	},
-}));
-
-jest.mock('@/infrastructure/llm/model-manager', () => ({
 	ModelManager: {
 		findConfigForModelByProvider: jest.fn(),
 		getAllAvailableModels: jest.fn(),

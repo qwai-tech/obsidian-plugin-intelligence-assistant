@@ -1,4 +1,4 @@
-import { toOpenAiWireMessage, toOpenAiWireMessages } from '@/infrastructure/llm/openai-message';
+import { toOpenAiWireMessage, toOpenAiWireMessages } from '@qwai/obsidian-llm';
 import type { Message } from '@/types';
 
 describe('toOpenAiWireMessage — wire sanitization', () => {

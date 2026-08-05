@@ -22,7 +22,9 @@ jest.mock('../../i18n', () => ({
 	t: (key: string) => key,
 }));
 
-jest.mock('../../infrastructure/llm/model-manager', () => ({
+// ModelManager and ProviderFactory now ship from the same package, so they mock
+// through one factory rather than one call per module.
+jest.mock('@qwai/obsidian-llm', () => ({
 	ModelManager: {
 		findConfigForModelByProvider: jest.fn().mockReturnValue({
 			provider: 'openai',
@@ -30,9 +32,6 @@ jest.mock('../../infrastructure/llm/model-manager', () => ({
 			modelId: 'gpt-4o',
 		}),
 	},
-}));
-
-jest.mock('../../infrastructure/llm/provider-factory', () => ({
 	ProviderFactory: {
 		createProvider: jest.fn().mockReturnValue({
 			streamChat: jest.fn(async (_req: unknown, onChunk: (c: { done: boolean; content?: string }) => void) => {

@@ -9,7 +9,7 @@ import type { QuickActionConfig } from '@/types';
 import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
-import { ModelManager } from '@/infrastructure/llm/model-manager';
+import { ModelManager } from '@qwai/obsidian-llm';
 import { TestIds } from '@/presentation/utils/test-ids';
 
 export function displayQuickActionsTab(

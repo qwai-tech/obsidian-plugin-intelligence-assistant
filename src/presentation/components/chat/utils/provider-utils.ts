@@ -1,5 +1,5 @@
 import type IntelligenceAssistantPlugin from '@plugin';
-import { ModelManager } from '@/infrastructure/llm/model-manager';
+import { ModelManager } from '@qwai/obsidian-llm';
 import type { Message } from '@/types';
 
 export function resolveMessageProviderId(

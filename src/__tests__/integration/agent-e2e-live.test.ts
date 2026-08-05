@@ -17,7 +17,7 @@ import { ToolRegistry } from '@/application/tools/tool-registry';
 import { BuiltinToolSource } from '@/application/tools/sources/builtin-tool-source';
 import { AgentEngineLoop, HistoryCompactor } from '@/application/agents';
 import { InMemoryStateStore } from '@/application/agents/kernel/agent-engine-core';
-import { DeepSeekProvider } from '@/infrastructure/llm/deepseek-provider';
+import { DeepSeekProvider } from '@qwai/obsidian-llm';
 import type { Message } from '@/types';
 
 const KEY = process.env.DEEPSEEK_API_KEY;

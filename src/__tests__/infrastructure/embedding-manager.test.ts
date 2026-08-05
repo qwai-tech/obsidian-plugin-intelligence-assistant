@@ -1,7 +1,7 @@
 import { EmbeddingManager } from '@/infrastructure/embedding-manager';
-import { ProviderFactory } from '@/infrastructure/llm/provider-factory';
+import { ProviderFactory } from '@qwai/obsidian-llm';
 
-jest.mock('@/infrastructure/llm/provider-factory', () => ({
+jest.mock('@qwai/obsidian-llm', () => ({
 	ProviderFactory: {
 		createProvider: jest.fn(),
 	},
