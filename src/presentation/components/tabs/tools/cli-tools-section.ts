@@ -10,7 +10,8 @@ import { createTable, createStatusIndicator } from '@/presentation/utils/ui-help
 import { TestIds } from '@/presentation/utils/test-ids';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { CLIToolConfig } from '@/types';
-import { DEFAULT_CLI_TIMEOUT, CLI_TOOL_DEFAULTS, getAvailablePresets, PRESET_CATEGORIES, CLI_TOOL_PRESETS, type CLIToolPreset } from '@/types/features/cli-tools';
+import { DEFAULT_CLI_TIMEOUT } from '@/types/features/cli-tools';
+import { CLI_TOOL_DEFAULTS, availablePresets, PRESET_CATEGORIES, CLI_TOOL_PRESETS, type CLIToolPreset } from '@/application/tools/cli-tool-presets';
 
 export function renderCliToolsSection(
 	content: HTMLElement,
@@ -448,7 +449,7 @@ class CLIToolPresetModal extends Modal {
 			cls: 'ia-table-subtext'
 		});
 
-		const presets = getAvailablePresets();
+		const presets = availablePresets(process.platform);
 		const existingNames = new Set(this.plugin.settings.cliTools?.map(tool => tool.name) ?? []);
 
 		// Group presets by category
