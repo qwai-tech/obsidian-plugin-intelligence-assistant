@@ -1,13 +1,7 @@
 import type { App } from 'obsidian';
-import type { AgentMemorySnapshot } from '@/types/features/memory';
+import type { AgentMemoryFile } from '@/types/features/memory';
 import { pluginPaths } from '@/core/plugin-paths';
 import { JsonFile } from '@/infrastructure/persistence/json-file';
-
-export interface AgentMemoryFile {
-	version: 1;
-	updatedAt: number;
-	agents: Record<string, AgentMemorySnapshot>;
-}
 
 export class AgentMemoryRepository {
 	private readonly file: JsonFile<Partial<AgentMemoryFile>>;

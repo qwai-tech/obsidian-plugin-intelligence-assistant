@@ -31,3 +31,9 @@ export interface AgentMemorySnapshot {
 	preferences: Record<string, string>;
 	updatedAt: number;
 }
+
+export interface AgentMemoryFile {
+	version: 1;
+	updatedAt: number;
+	agents: Record<string, AgentMemorySnapshot>;
+}

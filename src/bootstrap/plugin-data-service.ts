@@ -1,4 +1,3 @@
-// src/application/services/plugin-data-service.ts
 import { App } from 'obsidian';
 import type { PersistUnit } from '@/application/settings/settings-store';
 import type { PluginSettings, LLMConfig, SystemPrompt, Agent, MCPServerConfig } from '@/types';

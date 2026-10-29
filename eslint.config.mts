@@ -21,14 +21,6 @@ const layer = (forbidden: string[], message: string) => [
   },
 ];
 
-const LAYER_EXEMPTIONS = [
-  "src/application/services/plugin-data-service.ts",
-  "src/application/services/agent-memory-service.ts",
-  "src/application/services/chat.service.ts",
-  "src/application/agents/agent-engine-loop.ts",
-  "src/application/agents/agent-sense-service.ts",
-];
-
 export default defineConfig([
   {
     ignores: [
@@ -194,12 +186,6 @@ export default defineConfig([
     files: ["packages/obsidian-llm/**/*.ts"],
     rules: {
       "no-restricted-imports": ["error", { paths: OBSIDIAN_RESTRICTED_PATHS, patterns: [{ group: ["@/*"], message: "The LLM package must not depend on the plugin." }] }],
-    },
-  },
-  {
-    files: LAYER_EXEMPTIONS,
-    rules: {
-      "no-restricted-imports": ["error", { paths: OBSIDIAN_RESTRICTED_PATHS }],
     },
   },
 

@@ -1,5 +1,5 @@
 import {App, TFile, Notice} from 'obsidian';
-import type { RAGConfig, LLMConfig } from '@/types';
+import type { RAGConfig, LLMConfig, RAGSource } from '@/types';
 import { VectorStore, SearchResult } from './vector-store';
 import { EmbeddingManager } from './embedding-manager';
 import { DocumentGrader } from './document-grader';
@@ -125,15 +125,17 @@ export class RAGManager {
     }, this.config);
   }
 
-  async indexContent(content: string, metadata: unknown): Promise<void> {
-    if (!this.config.enabled) {
-      return;
-    }
-    
-    await this.vectorStore.addContent(content, metadata, this.config);
+  async search(query: string, chatModel?: string, defaultModel?: string): Promise<RAGSource[]> {
+    const results = await this.query(query, chatModel, defaultModel);
+    return results.map(result => ({
+      path: result.chunk.metadata.path,
+      content: result.chunk.content,
+      similarity: result.similarity,
+      title: result.chunk.metadata.title,
+    }));
   }
 
-  async query(query: string, chatModel?: string, defaultModel?: string): Promise<SearchResult[]> {
+  private async query(query: string, chatModel?: string, defaultModel?: string): Promise<SearchResult[]> {
     console.debug('[RAG Manager] Query called with:', query);
     console.debug('[RAG Manager] Config enabled:', this.config.enabled);
     if (!this.config.enabled) {
@@ -193,40 +195,6 @@ export class RAGManager {
     }
     
     return results;
-  }
-
-  async getRelevantContext(query: string, maxChars?: number, chatModel?: string, defaultModel?: string): Promise<string> {
-    if (!this.config.enabled) {
-      return '';
-    }
-
-    const results = await this.query(query, chatModel, defaultModel);
-    
-    if (results.length === 0) {
-      return '';
-    }
-
-    // Use the configured context window limit if maxChars is not provided
-    const contextLimit = maxChars ?? this.config.contextWindowLimit ?? 2000;
-
-    // Combine the most relevant chunks up to the context limit
-    let context = '';
-    for (const result of results) {
-      const chunkText = `Document: ${result.chunk.metadata.path}\nContent: ${result.chunk.content}\n\n`;
-      
-      if (context.length + chunkText.length > contextLimit) {
-        // Add as much as possible without exceeding the limit
-        const remainingChars = contextLimit - context.length;
-        if (remainingChars > 0) {
-          context += chunkText.substring(0, remainingChars);
-        }
-        break;
-      } else {
-        context += chunkText;
-      }
-    }
-    
-    return context;
   }
 
   async refreshIndex(): Promise<void> {

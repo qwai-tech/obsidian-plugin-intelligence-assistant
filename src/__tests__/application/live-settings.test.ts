@@ -7,7 +7,7 @@ describe('services read settings at call time', () => {
 		const settings = { llmConfigs: [] as LLMConfig[], defaultModel: undefined as string | undefined };
 		const service = new ChatService({
 			fileSystem: {} as never,
-			ragManager: {} as never,
+			knowledge: {} as never,
 			webSearchService: {} as never,
 			settings: () => settings,
 		});

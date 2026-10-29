@@ -1,6 +1,5 @@
-// src/__tests__/application/plugin-data-service.test.ts
-import { PluginDataService } from '../../application/services/plugin-data-service';
-import type { PluginSettings } from '../../types';
+import { PluginDataService } from '@/bootstrap/plugin-data-service';
+import type { PluginSettings } from '@/types';
 
 function makeApp(files: Record<string, string> = {}) {
 	const store: Record<string, string> = { ...files };

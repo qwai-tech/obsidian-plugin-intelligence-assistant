@@ -1,5 +1,9 @@
-import type { AgentMemorySnapshot } from '@/types/features/memory';
-import type { AgentMemoryFile, AgentMemoryRepository } from '@/infrastructure/persistence/data/agent-memory-repository';
+import type { AgentMemoryFile, AgentMemorySnapshot } from '@/types/features/memory';
+
+export interface AgentMemoryStore {
+	load(): Promise<AgentMemoryFile>;
+	save(memory: AgentMemoryFile): Promise<void>;
+}
 
 function emptySnapshot(agentId: string): AgentMemorySnapshot {
 	return {
@@ -22,7 +26,7 @@ function cloneSnapshot(snapshot: AgentMemorySnapshot): AgentMemorySnapshot {
 export class AgentMemoryService {
 	private cache: AgentMemoryFile | null = null;
 
-	constructor(private readonly repository: Pick<AgentMemoryRepository, 'load' | 'save'>) {}
+	constructor(private readonly repository: AgentMemoryStore) {}
 
 	async getSnapshot(agentId: string): Promise<AgentMemorySnapshot> {
 		const file = await this.getFile();

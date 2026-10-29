@@ -2,7 +2,7 @@ import type { Plugin } from 'obsidian';
 import type { PluginSettings, UserConfig } from '@/types';
 import type { PersistUnit, SettingsPersistence, StoredSettings } from '@/application/settings/settings-store';
 import { pluginSettingsToUserConfig } from '@/application/settings/settings-codec';
-import type { PluginDataService } from '@/application/services/plugin-data-service';
+import type { PluginDataService } from '@/bootstrap/plugin-data-service';
 import { JsonFile } from '@/infrastructure/persistence/json-file';
 
 export class ObsidianSettingsPersistence implements SettingsPersistence {

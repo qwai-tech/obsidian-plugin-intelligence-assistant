@@ -20,7 +20,7 @@ import { RunActivity } from '@/application/services/run-activity';
 import { OllamaAdmin } from '@/application/services/ollama-admin';
 import { ConversationNamer } from '@/application/services/conversation-namer';
 import type { ConversationStorageService } from '@/infrastructure/persistence/conversation-storage-service';
-import type { PluginDataService } from '@/application/services/plugin-data-service';
+import type { PluginDataService } from '@/bootstrap/plugin-data-service';
 import { ModalExportTargetPicker } from '@/presentation/components/modals/modal-export-target-picker';
 import { createToolSourceFactory } from './tool-source-factory';
 
@@ -54,7 +54,7 @@ export function createServices(host: ServiceHost): OwnedServices {
 		senseService: new AgentSenseService(app, rag, new AgentMemoryService(data.agentMemoryRepo)),
 		historyCompactor: new HistoryCompactor(),
 		webSearchService: webSearch,
-		ragManager: rag,
+		memoryIndex: rag,
 		journal: new JsonlRunJournal(app.vault.adapter, pluginPaths(app.vault.configDir).agentRuns),
 		createProvider: (modelId) => {
 			const config = ModelManager.findConfigForModelByProvider(modelId, settings().llmConfigs);
@@ -65,7 +65,7 @@ export function createServices(host: ServiceHost): OwnedServices {
 	});
 	const chat = new ChatService({
 		fileSystem: new ObsidianFileSystem(app),
-		ragManager: rag,
+		knowledge: rag,
 		webSearchService: webSearch,
 		settings,
 		usageRepo: { recordUsage },

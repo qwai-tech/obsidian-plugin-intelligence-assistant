@@ -34,12 +34,9 @@ describe('AgentSenseService', () => {
 			},
 		} as any;
 
-		const ragManager = {
-			query: jest.fn(async () => [{
-				chunk: { content: 'retrieved context', metadata: { path: 'Research/RAG.md', title: 'RAG' } },
-				similarity: 0.92,
-			}]),
-		} as any;
+		const knowledge = {
+			search: jest.fn(async () => [{ path: 'Research/RAG.md', content: 'retrieved context', similarity: 0.92, title: 'RAG' }]),
+		};
 
 		const memoryService = {
 			getSnapshot: jest.fn(async () => ({
@@ -51,7 +48,7 @@ describe('AgentSenseService', () => {
 			})),
 		};
 
-		const service = new AgentSenseService(app, ragManager, memoryService as any);
+		const service = new AgentSenseService(app, knowledge, memoryService as any);
 		const context = await service.sense({
 			userQuery: 'organize this project',
 			model: 'gpt-4o',

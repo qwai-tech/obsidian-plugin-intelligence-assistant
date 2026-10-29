@@ -12,7 +12,7 @@ import type { FileReference } from '@/types';
  */
 function serviceWithFiles(files: Record<string, string>): ChatService {
 	const fileSystem = { read: async (path: string) => files[path] ?? '' } as any;
-	return new ChatService({ fileSystem, ragManager: {} as any, webSearchService: {} as any, settings: () => ({ llmConfigs: [], defaultModel: 'gpt-4o' }) });
+	return new ChatService({ fileSystem, knowledge: {} as any, webSearchService: {} as any, settings: () => ({ llmConfigs: [], defaultModel: 'gpt-4o' }) });
 }
 
 const fileRef = (path: string): FileReference => ({ type: 'file', path, name: path });

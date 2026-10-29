@@ -8,7 +8,8 @@ import { createTestAgent } from '@/test-support/test-utils';
 import type { Message } from '@/types/core/conversation';
 import type { AgentLoopOptions, AgentLoopCallbacks } from '@/application/agents/types';
 import { buildHarnessToolRegistry } from './build-tool-registry';
-import { createFakeRagManager } from './fake-rag';
+import { createFakeKnowledgeBase } from './fake-rag';
+import type { KnowledgeBase } from '@/application/services/knowledge-base';
 import { DEFAULT_MOCK_LLM_PORT, mockLLM } from './mock-llm-harness';
 
 const MOCK_MODEL = 'mock-model';
@@ -77,18 +78,8 @@ export interface RunMissionInput {
   maxSteps?: number;
 }
 
-/**
- * Stub RAGManager: RAG is disabled for harness missions (enableRAG unset), so
- * AgentSenseService never reaches `query`. The methods below are a safe,
- * empty-result surface in case anything probes readiness.
- */
-function stubRagManager(): unknown {
-  return {
-    isReady: () => false,
-    query: async () => [],
-    search: async () => [],
-    getRelevantContext: async () => '',
-  };
+function emptyKnowledgeBase(): KnowledgeBase {
+  return { search: async () => [] };
 }
 
 /**
@@ -106,16 +97,15 @@ function stubHttpClient(): unknown {
 export async function runAgentMission(input: RunMissionInput): Promise<MissionOutcome> {
   const { app, userMessage, autonomousWrite = false, enabledTools, timeoutMs = 15_000 } = input;
   const toolRegistry = await buildHarnessToolRegistry(app, enabledTools, input.extraToolSources);
-  const ragManager = (input.ragResults ? createFakeRagManager(input.ragResults) : stubRagManager()) as never;
+  const knowledge = input.ragResults ? createFakeKnowledgeBase(input.ragResults) : emptyKnowledgeBase();
   const llm = resolveMissionLLM();
 
   const loop = new AgentEngineLoop({
     app,
     toolRegistry: toolRegistry as never,
-    senseService: new AgentSenseService(app, ragManager),
+    senseService: new AgentSenseService(app, knowledge),
     historyCompactor: new HistoryCompactor(),
     webSearchService: new WebSearchService(() => ({ enabled: false }) as never, stubHttpClient() as never),
-    ragManager,
     createProvider: () => {
       const config = { provider: llm.provider, apiKey: llm.apiKey, baseUrl: llm.baseUrl };
       return { provider: ProviderFactory.createProvider(config as never, harnessHttpPort), providerId: llm.provider };

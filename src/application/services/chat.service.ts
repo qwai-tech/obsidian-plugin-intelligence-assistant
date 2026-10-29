@@ -14,7 +14,7 @@ import type {
 import { IFileSystem } from '@/core/interfaces/file-system.interface';
 import { ProviderFactory } from '@qwai/obsidian-llm';
 import { ModelManager } from '@qwai/obsidian-llm';
-import type { RAGManager } from '@/infrastructure/rag-manager';
+import type { KnowledgeBase } from './knowledge-base';
 import type { WebSearchService } from './web-search-service';
 import type { StreamChunk } from '@/types/common/llm';
 import type { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
@@ -59,7 +59,7 @@ export interface UsageRecorder {
 
 export interface ChatServiceDependencies {
 	fileSystem: IFileSystem;
-	ragManager: RAGManager;
+	knowledge: KnowledgeBase;
 	webSearchService: WebSearchService;
 	settings: () => ModelSettings;
 	usageRepo?: UsageRecorder;
@@ -68,7 +68,7 @@ export interface ChatServiceDependencies {
 
 export class ChatService {
 	private readonly fileSystem: IFileSystem;
-	private readonly ragManager: RAGManager;
+	private readonly knowledge: KnowledgeBase;
 	private readonly webSearchService: WebSearchService;
 	private readonly settings: () => ModelSettings;
 	private readonly usageRepo?: UsageRecorder;
@@ -76,7 +76,7 @@ export class ChatService {
 
 	constructor(dependencies: ChatServiceDependencies) {
 		this.fileSystem = dependencies.fileSystem;
-		this.ragManager = dependencies.ragManager;
+		this.knowledge = dependencies.knowledge;
 		this.webSearchService = dependencies.webSearchService;
 		this.settings = dependencies.settings;
 		this.usageRepo = dependencies.usageRepo;
@@ -224,14 +224,8 @@ export class ChatService {
 			// Handle RAG
 			let ragSources: RAGSource[] = [];
 			if (options.enableRAG) {
-				const searchResults = await this.ragManager.query(userQuery, selectedModel, this.settings().defaultModel);
-				if (searchResults && searchResults.length > 0) {
-					ragSources = searchResults.map(r => ({
-						path: r.chunk.metadata.path,
-						content: r.chunk.content,
-						similarity: r.similarity,
-						title: r.chunk.metadata.title
-					}));
+				ragSources = await this.knowledge.search(userQuery, selectedModel, this.settings().defaultModel);
+				if (ragSources.length > 0) {
 					
 					const ragContext = ragSources
 						.map(s => `Document: ${s.path}\nContent: ${s.content}`)

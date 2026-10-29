@@ -221,6 +221,23 @@ describe('VectorStore change detection', () => {
 });
 
 describe('RAGManager', () => {
+	it('search returns knowledge sources mapped from matching chunks', async () => {
+		const manager = new RAGManager(makeApp() as any, makeConfig(), [{ provider: 'openai', apiKey: 'k' }] as any);
+		(manager as any).vectorStore.search = jest.fn(async () => [
+			{ chunk: { id: 'c1', content: 'Body', metadata: { path: 'notes/a.md', title: 'A', source: 'vault', timestamp: 1 } }, similarity: 0.8 },
+		]);
+
+		expect(await manager.search('query')).toEqual([{ path: 'notes/a.md', content: 'Body', similarity: 0.8, title: 'A' }]);
+	});
+
+	it('search returns nothing when RAG is disabled', async () => {
+		const manager = new RAGManager(makeApp() as any, makeConfig({ enabled: false }), [{ provider: 'openai', apiKey: 'k' }] as any);
+		(manager as any).vectorStore.search = jest.fn();
+
+		expect(await manager.search('query')).toEqual([]);
+		expect((manager as any).vectorStore.search).not.toHaveBeenCalled();
+	});
+
 	it('does not clear the existing vector store when RAG is disabled through config', async () => {
 		const manager = new RAGManager(makeApp() as any, makeConfig(), [{ provider: 'openai', apiKey: 'k' }] as any);
 		const vectorStore = (manager as any).vectorStore;

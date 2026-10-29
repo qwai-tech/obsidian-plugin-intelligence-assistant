@@ -1,7 +1,7 @@
 import type { App, TAbstractFile } from 'obsidian';
 import { TFile, TFolder } from 'obsidian';
 import type { FileReference, RAGSource } from '@/types';
-import type { RAGManager } from '@/infrastructure/rag-manager';
+import type { KnowledgeBase } from '@/application/services/knowledge-base';
 import { buildObsidianContextSnapshot } from '@/application/services/obsidian-context-builder';
 import type { AgentContextSection, AgentSenseContext } from './types';
 import type { AgentMemorySnapshot } from '@/types/features/memory';
@@ -30,7 +30,7 @@ const MAX_GRAPH_NEIGHBORS = 8;
 export class AgentSenseService {
 	constructor(
 		private readonly app: App,
-		private readonly ragManager: RAGManager,
+		private readonly knowledge: KnowledgeBase,
 		public readonly memoryService?: AgentMemoryReader,
 	) {}
 
@@ -157,13 +157,7 @@ export class AgentSenseService {
 
 	private async queryRag(input: SenseInput): Promise<RAGSource[]> {
 		if (!input.enableRAG) return [];
-		const results = await this.ragManager.query(input.userQuery, input.model, input.defaultModel);
-		return results.map(result => ({
-			path: result.chunk.metadata.path,
-			content: result.chunk.content,
-			similarity: result.similarity,
-			title: result.chunk.metadata.title,
-		}));
+		return this.knowledge.search(input.userQuery, input.model, input.defaultModel);
 	}
 
 	private resolveReferences(references: FileReference[]): Array<TFile | TFolder> {

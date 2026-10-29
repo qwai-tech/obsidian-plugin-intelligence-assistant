@@ -13,7 +13,7 @@ jest.mock('@qwai/obsidian-llm', () => ({
 
 const chatService = () => new ChatService({
 	fileSystem: {} as never,
-	ragManager: {} as never,
+	knowledge: {} as never,
 	webSearchService: {} as never,
 	settings: () => ({ llmConfigs: [], defaultModel: 'gpt-4o' }),
 });
@@ -75,7 +75,7 @@ describe('ChatService agent delegation', () => {
 		const loop = { execute: jest.fn(async () => undefined) };
 		const service = new ChatService({
 			fileSystem: {} as any,
-			ragManager: {} as any,
+			knowledge: {} as any,
 			webSearchService: {} as any,
 			settings: () => ({ llmConfigs: [], defaultModel: 'gpt-4o' }),
 			agentEngineLoop: loop as any,

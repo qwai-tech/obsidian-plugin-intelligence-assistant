@@ -398,7 +398,7 @@ describe('AgentEngineLoop', () => {
 			sense: jest.fn(async () => ({ userQuery: 'remember', activeFilePath: null, references: [], sections: [], ragSources: [], memory: null })),
 			formatSenseContext: jest.fn(() => 'sense context'),
 		};
-		const ragManager = { indexMemory: jest.fn(async () => undefined) };
+		const memoryIndex = { indexMemory: jest.fn(async () => undefined) };
 		const loop = new AgentEngineLoop({
 			toolRegistry: {
 				resolveForAgent: jest.fn(() => []),
@@ -408,7 +408,7 @@ describe('AgentEngineLoop', () => {
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-			ragManager: ragManager as any,
+			memoryIndex,
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
 			recordUsage: jest.fn(async () => undefined),
 		});
@@ -435,6 +435,6 @@ describe('AgentEngineLoop', () => {
 		expect(provider.streamChat).toHaveBeenCalledTimes(1);
 		expect(memoryService.setPreference).toHaveBeenCalledWith('agent-1', 'tone', 'concise');
 		expect(memoryService.appendResearchLog).toHaveBeenCalledWith('agent-1', 'Finding A');
-		expect(ragManager.indexMemory).toHaveBeenCalledWith('agent-1', 'Finding A');
+		expect(memoryIndex.indexMemory).toHaveBeenCalledWith('agent-1', 'Finding A');
 	});
 });

@@ -3,7 +3,7 @@ import type { Message, RAGSource, WebSearchResult, Agent as AppAgent } from '@/t
 import { DEFAULT_MAX_STEPS, MAX_STEPS_CEILING } from '@/constants';
 import type { ToolRegistry as AppToolRegistry } from '@/application/tools/tool-registry';
 import type { WebSearchService } from '@/application/services/web-search-service';
-import type { RAGManager } from '@/infrastructure/rag-manager';
+import type { MemoryIndex } from '@/application/services/knowledge-base';
 import type { RegisteredTool } from '@/types/common/tools';
 import type { ILLMProvider } from '@/types/common/llm';
 import type { FinishReason, KernelEvent, RunJournal, TokenUsage } from '@/types/features/agent-run';
@@ -28,7 +28,7 @@ interface AgentEngineLoopDeps {
 	senseService: AgentSenseService;
 	historyCompactor: HistoryCompactor;
 	webSearchService: WebSearchService;
-	ragManager?: RAGManager;
+	memoryIndex?: MemoryIndex;
 	journal?: RunJournal;
 	createProvider: (modelId: string) => { provider: ILLMProvider; providerId: string } | null;
 	recordUsage?: AgentUsageRecorder;
@@ -199,8 +199,8 @@ assistant: ${finalOutput}
 					for (const entry of data.newResearchEntries) {
 						await writer.appendResearchLog(agentId, entry);
 						// Index new memory entry in RAG
-						if (this.deps.ragManager) {
-							await this.deps.ragManager.indexMemory(agentId, entry);
+						if (this.deps.memoryIndex) {
+							await this.deps.memoryIndex.indexMemory(agentId, entry);
 						}
 					}
 				}

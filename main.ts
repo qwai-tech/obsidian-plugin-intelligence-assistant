@@ -13,7 +13,7 @@ import { ensureDefaultAgent as ensureDefaultAgentService } from './src/applicati
 import { ConversationStorageService } from './src/infrastructure/persistence/conversation-storage-service';
 import { ConversationMigrationService } from './src/infrastructure/persistence/conversation-migration-service';
 import { reloadSettingsFromDisk as runSettingsReload } from './src/application/services/settings-reload';
-import { PluginDataService } from './src/application/services/plugin-data-service';
+import { PluginDataService } from './src/bootstrap/plugin-data-service';
 import { LLMHubService } from './src/application/services/llm-hub-service';
 import { ChatView, CHAT_VIEW_TYPE } from './src/presentation/views/chat-view';
 import { ChatWorkspace } from './src/presentation/views/chat-workspace';
