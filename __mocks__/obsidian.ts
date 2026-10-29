@@ -106,19 +106,21 @@ if (typeof HTMLElement !== 'undefined') {
 		return div;
 	};
 
-	HTMLElement.prototype.createEl = function(tag: string, o?: string | { cls?: string; text?: string; attr?: Record<string, string> }) {
+	HTMLElement.prototype.createEl = function(tag: string, o?: string | { cls?: string | string[]; text?: string; attr?: Record<string, string>; type?: string; value?: string }) {
 		const impl = function<K extends keyof HTMLElementTagNameMap>(
 			this: HTMLElement,
 			tagName: K,
-			info?: string | { cls?: string; text?: string; attr?: Record<string, string> },
+			info?: string | { cls?: string | string[]; text?: string; attr?: Record<string, string>; type?: string; value?: string },
 			callback?: (el: HTMLElementTagNameMap[K]) => void
 		): HTMLElementTagNameMap[K] {
 			const element = document.createElement(tagName) as HTMLElementTagNameMap[K];
 			if (typeof info === 'string') {
 				element.className = info;
 			} else if (info && typeof info === 'object') {
-				if (info.cls) element.className = info.cls;
+				if (info.cls) element.className = Array.isArray(info.cls) ? info.cls.join(' ') : info.cls;
 				if (info.text) element.textContent = info.text;
+				if (info.type) element.setAttribute('type', info.type);
+				if (info.value !== undefined) (element as unknown as { value: string }).value = info.value;
 				if (info.attr) {
 					Object.entries(info.attr).forEach(([key, value]) => {
 						element.setAttribute(key, value);
