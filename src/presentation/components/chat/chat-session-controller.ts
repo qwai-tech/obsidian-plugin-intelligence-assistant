@@ -1,4 +1,4 @@
-import { Notice } from 'obsidian';
+import { Notice, TFile, type TFolder } from 'obsidian';
 import { ModelManager } from '@qwai/obsidian-llm';
 import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
@@ -11,6 +11,8 @@ import {
 	type ChatMode,
 	type SessionSelection,
 } from '@/application/services/chat-session-policy';
+import { buildAgentCapabilitySummary, resolveAgentToolsForAgent, type AgentCapabilitySummary } from '@/application/agents/agent-capability-summary';
+import type { ToolRegistry } from '@/application/tools/tool-registry';
 import type { ChatViewState } from '@/presentation/state/chat-view-state';
 import type { ChatInputComponent } from './chat-input.component';
 import type { ChatHeaderComponent } from './chat-header.component';
@@ -47,6 +49,24 @@ export class ChatSessionController {
 	webSearchActive(): boolean {
 		const enabled = this.state.mode === 'agent' ? this.activeAgent()?.webSearchEnabled : this.state.enableWebSearch;
 		return Boolean(enabled && this.settings.webSearchConfig.enabled);
+	}
+
+	capabilitySummary(registry: ToolRegistry, references: Array<TFile | TFolder>): AgentCapabilitySummary {
+		const agent = this.activeAgent();
+		return buildAgentCapabilitySummary({
+			mode: this.state.mode,
+			agent,
+			tools: resolveAgentToolsForAgent(registry, agent),
+			ragConfigured: this.settings.ragConfig.enabled,
+			ragActive: this.ragActive(),
+			webSearchConfigured: this.settings.webSearchConfig.enabled,
+			webSearchActive: this.webSearchActive(),
+			references: references.map(reference => ({
+				type: reference instanceof TFile ? 'file' : 'folder',
+				path: reference.path,
+				name: reference.name,
+			})),
+		});
 	}
 
 	async changeMode(mode: ChatMode): Promise<void> {
