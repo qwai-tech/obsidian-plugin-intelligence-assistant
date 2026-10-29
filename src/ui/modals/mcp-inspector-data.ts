@@ -1,5 +1,4 @@
-import type { ToolRegistry } from '@/features/tools/tool-registry';
-import type { RegisteredTool } from '@/features/tools/types/tools';
+import type { ToolRegistry, RegisteredTool } from '@/features/tools';
 
 /** Names of MCP servers that currently have tools loaded in the registry. */
 export function getConnectedMcpServers(registry: ToolRegistry): string[] {

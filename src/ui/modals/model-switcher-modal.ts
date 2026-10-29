@@ -1,6 +1,6 @@
 import { FuzzySuggestModal, Notice } from 'obsidian';
 import type { App } from 'obsidian';
-import type { ModelInfo } from '@/features/llm/types/model';
+import type { ModelInfo } from '@/features/llm';
 import { getModelDisplayName } from '@/ui/chat/utils/provider-utils';
 
 /**

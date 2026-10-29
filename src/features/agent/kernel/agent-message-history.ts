@@ -1,4 +1,4 @@
-import type { Message } from '@/features/conversations/types/conversation';
+import type { Message } from '@/features/conversations';
 import type {
 	AgentWorkingMessage,
 	AssistantWithCalls,

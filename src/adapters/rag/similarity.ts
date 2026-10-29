@@ -1,4 +1,4 @@
-import type { RAGConfig } from '@/features/knowledge/types/rag';
+import type { RAGConfig } from '@/features/knowledge';
 import type { DocumentChunk, SearchResult } from './rag-types';
 
 const PATH_BOOST = 0.3;

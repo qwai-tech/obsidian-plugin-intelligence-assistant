@@ -1,6 +1,6 @@
 import type IntelligenceAssistantPlugin from '@plugin';
 import { ModelManager } from '@qwai/obsidian-llm';
-import type { Message } from '@/features/conversations/types/conversation';
+import type { Message } from '@/features/conversations';
 
 export function resolveMessageProviderId(
 	message: Message,

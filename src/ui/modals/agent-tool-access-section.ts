@@ -1,10 +1,8 @@
 import { Setting, type ToggleComponent } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { BuiltInToolConfig } from '@/features/tools/types/tools';
-import type { CLIToolConfig } from '@/features/tools/types/cli-tools';
-import type { MCPServerConfig } from '@/features/tools/types/mcp';
+import type { BuiltInToolConfig, CLIToolConfig, MCPServerConfig } from '@/features/tools';
 import { t } from '@/i18n';
-import type { ToolAccessEditor } from '@/features/agent/tool-access-editor';
+import type { ToolAccessEditor } from '@/features/agent';
 
 export class AgentToolAccessSection {
 	constructor(

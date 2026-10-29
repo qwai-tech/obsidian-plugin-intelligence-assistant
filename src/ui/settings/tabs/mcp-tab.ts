@@ -6,8 +6,7 @@
 import { App, Notice } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { MCPServerConfig } from '@/features/tools/types/mcp';
-import type { RegisteredTool } from '@/features/tools/types/tools';
+import type { MCPServerConfig, RegisteredTool } from '@/features/tools';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';

@@ -1,5 +1,5 @@
 import type { App } from 'obsidian';
-import type { ToolRegistry } from '@/features/tools/tool-registry';
+import type { ToolRegistry } from '@/features/tools';
 import { applyWriteProposal, isBatchWriteProposal, isWriteProposal } from '@/features/agent/write-proposal-service';
 import type { ToolCallRequest } from '@/features/agent/types/agent-run';
 import type { ToolOutcome, ToolRunner } from './turn-kernel';

@@ -1,5 +1,5 @@
 import type { App } from 'obsidian';
-import type { LLMConfig } from '@/features/llm/types/model';
+import type { LLMConfig } from '@/features/llm';
 import { pluginPaths } from '@/core/plugin-paths';
 import { JsonFile } from '@/adapters/persistence/json-file';
 

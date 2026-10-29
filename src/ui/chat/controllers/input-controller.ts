@@ -5,7 +5,7 @@
 
 import { Notice, Menu, TFile, TFolder } from 'obsidian';
 import { BaseController } from './base-controller';
-import type { Attachment } from '@/features/chat/types/attachments';
+import type { Attachment } from '@/features/chat';
 import { t } from '@/i18n';
 
 export class InputController extends BaseController {

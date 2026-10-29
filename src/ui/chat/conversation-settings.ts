@@ -1,4 +1,4 @@
-import type { ConversationConfig } from '@/features/conversations/types/conversation';
+import type { ConversationConfig } from '@/features/conversations';
 import type { ChatViewState } from '@/ui/state/chat-view-state';
 
 const SAMPLING_KEYS = ['temperature', 'maxTokens', 'topP', 'frequencyPenalty', 'presencePenalty'] as const;

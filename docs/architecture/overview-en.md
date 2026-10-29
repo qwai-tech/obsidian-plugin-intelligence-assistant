@@ -30,16 +30,16 @@ Intelligence Assistant is a ports-and-adapters plugin organised by feature. `mai
 └───────────────────────────────────────────────────────────────┘
 ```
 
-Each feature keeps its types next to its code in `features/<name>/types/`; there is no shared `types/` folder.
+Each feature keeps its types next to its code in `features/<name>/types/`; there is no shared `types/` folder. Each feature exposes one `index.ts` with explicit named exports (no `export *`); code outside the feature imports only from `@/features/<name>`.
 
 The import rules are enforced in `eslint.config.mts`, with no exemptions:
 
 | Folder | May not import |
 |--------|----------------|
 | `core/`, `i18n/` | features, adapters, ui, bootstrap |
-| `features/` | adapters, ui, bootstrap |
-| `adapters/` | ui, bootstrap, and anything in a feature except its `types/` |
-| `ui/` | bootstrap; adapters only as `import type` |
+| `features/<name>/` | adapters, ui, bootstrap, and other features' internals (use their index) |
+| `adapters/` | ui, bootstrap; features only as `import type` from their index |
+| `ui/` | bootstrap; adapters only as `import type`; features only through their index |
 | `packages/obsidian-llm` | anything from the plugin (`@/*`) |
 
 `bootstrap/` and `main.ts` are the only places that see every folder.

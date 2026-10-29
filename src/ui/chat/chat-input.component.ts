@@ -2,7 +2,7 @@ import { App, setIcon, TFile, TFolder } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { ChatViewState } from '@/ui/state/chat-view-state';
 import { t } from '@/i18n';
-import type { ModelInfo } from '@/features/llm/types/model';
+import type { ModelInfo } from '@/features/llm';
 import { TestIds } from '@/ui/utils/test-ids';
 
 export interface ChatInputCallbacks {

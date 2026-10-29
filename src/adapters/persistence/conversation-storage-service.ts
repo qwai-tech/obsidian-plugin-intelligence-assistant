@@ -1,5 +1,5 @@
 import { App, Vault } from 'obsidian';
-import type { Conversation } from '@/features/conversations/types/conversation';
+import type { Conversation } from '@/features/conversations';
 import { pluginPaths, type PluginPaths } from '@/core/plugin-paths';
 import { ensureFolderExists } from '@/core/utils/file-system';
 import { JsonFile } from './json-file';

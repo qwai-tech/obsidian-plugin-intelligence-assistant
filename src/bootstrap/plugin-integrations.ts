@@ -1,5 +1,5 @@
 import { MarkdownRenderChild, Notice, TFile, type ObsidianProtocolData, type Plugin } from 'obsidian';
-import type { RAGConfig } from '@/features/knowledge/types/rag';
+import type { RAGConfig } from '@/features/knowledge';
 import type { RAGManager } from '@/adapters/rag/rag-manager';
 import { createIncrementalIndexHandlers } from '@/adapters/rag/incremental-indexer';
 import { parseAiBlock, buildAiWidget } from '@/ui/markdown/ai-code-block';

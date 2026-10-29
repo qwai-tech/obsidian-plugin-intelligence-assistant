@@ -1,5 +1,5 @@
 import type { App } from 'obsidian';
-import type { AgentMemoryFile } from '@/features/agent/types/memory';
+import type { AgentMemoryFile } from '@/features/agent';
 import { pluginPaths } from '@/core/plugin-paths';
 import { JsonFile } from '@/adapters/persistence/json-file';
 

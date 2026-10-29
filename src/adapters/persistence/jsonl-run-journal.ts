@@ -1,6 +1,5 @@
 import type { DataAdapter } from 'obsidian';
-import type { KernelEvent } from '@/features/agent/types/agent-run';
-import type { RunJournal } from '@/features/agent/types/agent-run';
+import type { KernelEvent, RunJournal } from '@/features/agent';
 import { ensureFolderExists } from '@/core/utils/file-system';
 
 export class JsonlRunJournal implements RunJournal {

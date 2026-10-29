@@ -1,6 +1,5 @@
 import type { Agent } from '@/features/agent/types/agent';
-import type { RegisteredTool } from '@/features/tools/types/tools';
-import type { ToolRegistry } from '@/features/tools/tool-registry';
+import type { RegisteredTool, ToolRegistry } from '@/features/tools';
 
 export interface CapabilityReference {
 	type: 'file' | 'folder';

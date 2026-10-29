@@ -1,4 +1,4 @@
-import type { Message } from '@/features/conversations/types/conversation';
+import type { Message } from '@/features/conversations';
 import type { AgentExecutionStep } from '@/ui/state/chat-view-state';
 import { createAgentExecutionTraceContainer, updateExecutionTrace, collapseExecutionTrace } from '@/ui/chat/handlers/tool-call-handler';
 

@@ -1,10 +1,9 @@
 import {App, Modal, Notice, Setting} from 'obsidian';
-import type { LLMConfig } from '@/features/llm/types/model';
+import type { LLMConfig, OllamaAdmin } from '@/features/llm';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
 import { OllamaModelManagerModal } from './ollama-model-manager-modal';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
-import type { OllamaAdmin } from '@/features/llm/ollama-admin';
 
 export const LLM_PROVIDER_OPTIONS: Array<{ value: string; labelKey: string }> = [
 	{ value: 'openai', labelKey: 'modals.provider.providers.openai' },

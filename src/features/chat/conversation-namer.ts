@@ -1,7 +1,6 @@
 import { ModelManager, ProviderFactory } from '@qwai/obsidian-llm';
-import type { LLMConfig } from '@/features/llm/types/model';
-import type { Message } from '@/features/conversations/types/conversation';
-import type { ILLMProvider } from '@/features/llm/types/llm';
+import type { LLMConfig, ILLMProvider } from '@/features/llm';
+import type { Message } from '@/features/conversations';
 
 const DEFAULT_TITLE_PROMPT = 'Generate a short, descriptive title (max 6 words) for this conversation:\n\n{conversation}\n\nTitle:';
 const FIRST_MESSAGE_TITLE_LENGTH = 50;

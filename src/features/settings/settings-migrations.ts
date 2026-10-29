@@ -1,6 +1,6 @@
-import type { Agent } from '@/features/agent/types/agent';
+import type { Agent } from '@/features/agent';
 import type { PluginSettings } from '@/features/settings/types/settings';
-import { migrateAllAgents } from '@/features/tools/tool-migrations';
+import { migrateAllAgents } from '@/features/tools';
 
 type LegacyAgent = Agent & { modelId?: unknown };
 

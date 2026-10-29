@@ -1,8 +1,7 @@
 import { App, Modal, Notice, TFile } from 'obsidian';
 import { t } from '@/i18n';
 import type { RAGManager } from '@/adapters/rag/rag-manager';
-import type { RAGConfig } from '@/features/knowledge/types/rag';
-import type { RAGSource } from '@/features/knowledge/types/rag';
+import type { RAGConfig, RAGSource } from '@/features/knowledge';
 import { TestIds } from '@/ui/utils/test-ids';
 import { errorMessage } from '@/core/utils/errors';
 

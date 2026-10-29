@@ -1,9 +1,9 @@
 import { App, ButtonComponent, Modal, Notice, Setting } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { Agent } from '@/features/agent/types/agent';
+import type { Agent } from '@/features/agent';
 import { t } from '@/i18n';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
-import { ToolAccessEditor } from '@/features/agent/tool-access-editor';
+import { ToolAccessEditor } from '@/features/agent';
 import { AgentToolAccessSection } from './agent-tool-access-section';
 import { initialModelSelection, modelCatalog, uniquePromptId } from './agent-model-options';
 import { TestIds } from '@/ui/utils/test-ids';

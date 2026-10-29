@@ -1,7 +1,4 @@
-import type { MCPServerConfig, MCPRegistry } from '@/features/tools/types/mcp';
-import type { BuiltInToolConfig } from '@/features/tools/types/tools';
-import type { OpenApiToolConfig } from '@/features/tools/types/openapi-tools';
-import type { CLIToolConfig } from '@/features/tools/types/cli-tools';
+import type { MCPServerConfig, MCPRegistry, BuiltInToolConfig, OpenApiToolConfig, CLIToolConfig } from '@/features/tools';
 import type { PluginSettings, QuickActionConfig, UserConfig } from '@/features/settings/types/settings';
 import * as defaultUserConfigJson from '../../../config/default/settings.json';
 import { deepClone } from '@/core/utils/type-guards';

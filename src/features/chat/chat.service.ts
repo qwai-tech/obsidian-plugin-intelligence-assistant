@@ -3,21 +3,16 @@
  * Core business logic for AI chat, coordinating RAG, Web Search, and LLM Providers.
  */
 
-import type { Message } from '@/features/conversations/types/conversation';
-import type { LLMConfig } from '@/features/llm/types/model';
-import type { RAGSource } from '@/features/knowledge/types/rag';
-import type { WebSearchResult } from '@/features/web-search/types/web-search';
+import type { Message } from '@/features/conversations';
+import type { LLMConfig, StreamChunk } from '@/features/llm';
+import type { RAGSource, KnowledgeBase } from '@/features/knowledge';
+import type { WebSearchResult, WebSearchService } from '@/features/web-search';
 import type { FileReference } from '@/features/chat/types/attachments';
-import type { Agent } from '@/features/agent/types/agent';
+import type { Agent, AgentEngineLoop, AgentLoopCallbacks } from '@/features/agent';
 import { IFileSystem } from '@/core/interfaces/file-system.interface';
 import { ProviderFactory } from '@qwai/obsidian-llm';
 import { ModelManager } from '@qwai/obsidian-llm';
-import type { KnowledgeBase } from '@/features/knowledge/knowledge-base';
-import type { WebSearchService } from '@/features/web-search/web-search-service';
-import type { StreamChunk } from '@/features/llm/types/llm';
-import type { AgentEngineLoop } from '@/features/agent/agent-engine-loop';
-import type { AgentLoopCallbacks } from '@/features/agent/types';
-import type { UsageRecord } from '@/features/usage/types/usage';
+import type { UsageRecord } from '@/features/usage';
 
 /**
  * Reference-content budget. Referenced notes are inlined into the prompt and

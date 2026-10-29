@@ -4,8 +4,7 @@
  */
 
 import { App, Modal, Notice, Setting } from 'obsidian';
-import type { OllamaAdmin } from '@/features/llm/ollama-admin';
-import type { LLMConfig, ModelInfo } from '@/features/llm/types/model';
+import type { OllamaAdmin, LLMConfig, ModelInfo } from '@/features/llm';
 import { t } from '@/i18n';
 import { errorMessage } from '@/core/utils/errors';
 

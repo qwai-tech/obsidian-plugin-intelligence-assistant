@@ -1,4 +1,4 @@
-import type { Conversation, ConversationConfig } from '@/features/conversations/types/conversation';
+import type { Conversation, ConversationConfig } from '@/features/conversations';
 
 export type ConversationMode = 'chat' | 'agent';
 

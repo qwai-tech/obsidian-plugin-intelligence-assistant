@@ -1,0 +1,18 @@
+export { buildAgentCapabilitySummary, resolveAgentToolsForAgent } from './agent-capability-summary';
+export type { AgentCapabilitySummary, CapabilityPermissionRow } from './agent-capability-summary';
+export { AgentEngineLoop } from './agent-engine-loop';
+export { AgentMemoryService } from './agent-memory-service';
+export { AgentSenseService } from './agent-sense-service';
+export { ensureDefaultAgent } from './agent-service';
+export { agentTaskLaunchText, withUserTaskInput } from './agent-task-text';
+export { HistoryCompactor } from './history-compactor';
+export { buildAskCurrentNotePrompt, buildBacklinkTagDoctorPrompt, buildDuplicateMergePrompt, buildImproveSelectionPrompt, buildOrganizeCurrentNotePrompt, buildOrganizeFolderPrompt, buildProjectBriefPrompt, buildRelatedNotesPrompt, buildResearchBriefPrompt, buildSourceGroundedQuestionPrompt, buildSummarizeCurrentNotePrompt, buildSummarizeFilePrompt, buildVaultDiagnosisPrompt, buildWeeklyReviewPrompt, buildWritingDraftPrompt } from './obsidian-agent-prompts';
+export { BUILTIN_AGENT_PRESETS } from './presets/builtin-agents';
+export { RunActivity } from './run-activity';
+export { ToolAccessEditor } from './tool-access-editor';
+export type { AgentLoopCallbacks } from './types';
+export type { KernelEvent, RunJournal } from './types/agent-run';
+export type { Agent, AgentModelStrategy, SystemPrompt } from './types/agent';
+export type { AgentMemory, AgentMemoryFile } from './types/memory';
+export { applyWriteProposal, assertWriteProposalResult, createWriteProposal, extractWriteProposalsFromSteps, isBatchWriteProposal, isWriteProposal } from './write-proposal-service';
+export type { BatchWriteProposal, WriteProposal } from './write-proposal-service';

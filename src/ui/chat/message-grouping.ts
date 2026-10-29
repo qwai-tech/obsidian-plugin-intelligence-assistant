@@ -1,4 +1,4 @@
-import type { Message } from '@/features/conversations/types/conversation';
+import type { Message } from '@/features/conversations';
 import { extractFinalContent, hasAgentToolCall, reconstructAgentSteps } from './handlers/tool-call-handler';
 
 const isToolResult = (message: Message) => message.role === 'system' && message.content.startsWith('Tool ');

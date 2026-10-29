@@ -1,5 +1,5 @@
 import type { App } from 'obsidian';
-import type { ExportTargetPicker, NoteChoice } from '@/features/chat/vault-export-service';
+import type { ExportTargetPicker, NoteChoice } from '@/features/chat';
 import { TextInputModal } from './text-input-modal';
 import { SingleFileSelectionModal } from './single-file-selection-modal';
 

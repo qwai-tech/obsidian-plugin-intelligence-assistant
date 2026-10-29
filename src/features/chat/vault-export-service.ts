@@ -1,6 +1,6 @@
 import { App, Notice, TFile } from 'obsidian';
 import { t } from '@/i18n';
-import type { Message } from '@/features/conversations/types/conversation';
+import type { Message } from '@/features/conversations';
 import { errorMessage } from '@/core/utils/errors';
 
 export type NoteChoice = TFile | 'new' | null;

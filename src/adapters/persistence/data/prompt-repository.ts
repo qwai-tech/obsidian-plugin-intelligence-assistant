@@ -1,5 +1,5 @@
 import type { App } from 'obsidian';
-import type { SystemPrompt } from '@/features/agent/types/agent';
+import type { SystemPrompt } from '@/features/agent';
 import { pluginPaths } from '@/core/plugin-paths';
 import { JsonCollection } from '@/adapters/persistence/json-collection';
 

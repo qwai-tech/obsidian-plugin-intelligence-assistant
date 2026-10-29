@@ -1,5 +1,5 @@
 import { App, Modal } from 'obsidian';
-import type { AgentCapabilitySummary, CapabilityPermissionRow } from '@/features/agent/agent-capability-summary';
+import type { AgentCapabilitySummary, CapabilityPermissionRow } from '@/features/agent';
 
 export class AgentCapabilityModal extends Modal {
 	constructor(

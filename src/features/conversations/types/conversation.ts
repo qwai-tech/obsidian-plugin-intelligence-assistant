@@ -3,10 +3,10 @@
  * Domain types for conversations and messages
  */
 
-import type { Attachment, FileReference } from '@/features/chat/types/attachments';
-import type { RAGSource } from '@/features/knowledge/types/rag';
-import type { WebSearchResult } from '@/features/web-search/types/web-search';
-import type { ReasoningStep, AgentExecutionStep } from '@/features/llm/types/reasoning';
+import type { Attachment, FileReference } from '@/features/chat';
+import type { RAGSource } from '@/features/knowledge';
+import type { WebSearchResult } from '@/features/web-search';
+import type { ReasoningStep, AgentExecutionStep } from '@/features/llm';
 
 export interface Message {
 	role: 'user' | 'assistant' | 'system';

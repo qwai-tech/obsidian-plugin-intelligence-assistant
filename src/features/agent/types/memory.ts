@@ -3,7 +3,7 @@
  * Types for agent memory and embeddings
  */
 
-import type { ConversationSummary } from '@/features/conversations/types/conversation';
+import type { ConversationSummary } from '@/features/conversations';
 
 export interface MemoryEmbeddingMetadata {
 	conversationId: string;

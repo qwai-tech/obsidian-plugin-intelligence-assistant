@@ -3,7 +3,7 @@
  * Handles migration from old array-based storage to new file-based storage
  */
 
-import { Conversation } from '@/features/conversations/types/conversation';
+import type { Conversation } from '@/features/conversations';
 import { ConversationStorageService } from './conversation-storage-service';
 
 export class ConversationMigrationService {

@@ -1,13 +1,9 @@
-import type { LLMConfig } from '@/features/llm/types/model';
-import type { Conversation } from '@/features/conversations/types/conversation';
-import type { MCPServerConfig, MCPRegistry } from '@/features/tools/types/mcp';
-import type { BuiltInToolConfig } from '@/features/tools/types/tools';
-import type { RAGConfig } from '@/features/knowledge/types/rag';
-import type { WebSearchConfig } from '@/features/web-search/types/web-search';
-import type { OpenApiToolConfig } from '@/features/tools/types/openapi-tools';
-import type { CLIToolConfig } from '@/features/tools/types/cli-tools';
-import type { SystemPrompt, Agent } from '@/features/agent/types/agent';
-import type { AgentMemory } from '@/features/agent/types/memory';
+import type { LLMConfig } from '@/features/llm';
+import type { Conversation } from '@/features/conversations';
+import type { MCPServerConfig, MCPRegistry, BuiltInToolConfig, OpenApiToolConfig, CLIToolConfig } from '@/features/tools';
+import type { RAGConfig } from '@/features/knowledge';
+import type { WebSearchConfig } from '@/features/web-search';
+import type { SystemPrompt, Agent, AgentMemory } from '@/features/agent';
 
 export interface QuickActionConfig {
 	id: string;

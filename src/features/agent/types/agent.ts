@@ -3,7 +3,7 @@
  * Domain types for AI agents and system prompts
  */
 
-import type { AgentToolAccess } from '@/features/tools/types/tools';
+import type { AgentToolAccess } from '@/features/tools';
 
 export interface SystemPrompt {
 	id: string;

@@ -3,8 +3,8 @@
  * Validation schema for plugin settings
  */
 
-import type { PluginSettings } from '@/features/settings/types/settings';
-import { DEFAULT_SETTINGS } from '@/features/settings/settings-codec';
+import type { PluginSettings } from '@/features/settings';
+import { DEFAULT_SETTINGS } from '@/features/settings';
 
 export interface ValidationResult {
 	valid: boolean;

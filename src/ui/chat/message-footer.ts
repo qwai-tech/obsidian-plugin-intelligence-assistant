@@ -1,6 +1,6 @@
 import { Notice } from 'obsidian';
 import { t } from '@/i18n';
-import type { Message } from '@/features/conversations/types/conversation';
+import type { Message } from '@/features/conversations';
 
 export function renderCopyButton(actions: HTMLElement, contentEl: HTMLElement | null) {
 	const copyGroup = actions.createDiv('ia-chat-message__copy-group');

@@ -1,6 +1,6 @@
-import type { Message } from '@/features/conversations/types/conversation';
-import type { ChatRequest } from '@/features/llm/types/llm';
-import type { ToolRegistry } from '@/features/tools/tool-registry';
+import type { Message } from '@/features/conversations';
+import type { ChatRequest } from '@/features/llm';
+import type { ToolRegistry } from '@/features/tools';
 import type { AgentLoopOptions, AgentWorkingMessage } from '../types';
 import type { HistoryCompactor } from '../history-compactor';
 import type { ContextAssembler } from './turn-kernel';

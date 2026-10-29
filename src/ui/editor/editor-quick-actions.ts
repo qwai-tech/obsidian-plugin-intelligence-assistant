@@ -3,8 +3,8 @@ import { t } from '@/i18n';
 import { ExplainTextModal } from '@/ui/modals/explain-text-modal';
 import { ModelManager } from '@qwai/obsidian-llm';
 import { ProviderFactory } from '@qwai/obsidian-llm';
-import type { LLMConfig } from '@/features/llm/types/model';
-import type { QuickActionConfig } from '@/features/settings/types/settings';
+import type { LLMConfig } from '@/features/llm';
+import type { QuickActionConfig } from '@/features/settings';
 import { errorMessage } from '@/core/utils/errors';
 
 export interface EditorQuickActionsConfig {

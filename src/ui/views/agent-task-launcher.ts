@@ -1,5 +1,5 @@
 import { Notice, type App, type TFile, type TFolder } from 'obsidian';
-import { agentTaskLaunchText, withUserTaskInput } from '@/features/agent/agent-task-text';
+import { agentTaskLaunchText, withUserTaskInput } from '@/features/agent';
 import { showAgentTaskLaunchModal } from '@/ui/modals/agent-task-launch-modal';
 import type { ChatWorkspace } from './chat-workspace';
 import type { ChatView } from './chat-view';

@@ -8,7 +8,7 @@ import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { OpenApiToolConfig, OpenApiAuthType, OpenApiSourceType } from '@/features/tools/types/openapi-tools';
+import type { OpenApiToolConfig, OpenApiAuthType, OpenApiSourceType } from '@/features/tools';
 
 export function renderOpenapiToolsSection(
 	content: HTMLElement,

@@ -3,8 +3,8 @@
  * Manages agent initialization and configuration
  */
 
-import type { PluginSettings } from '@/features/settings/types/settings';
-import type { AgentToolAccess } from '@/features/tools/types/tools';
+import type { PluginSettings } from '@/features/settings';
+import type { AgentToolAccess } from '@/features/tools';
 import {
 	DEFAULT_AGENT_ID,
 	DEFAULT_MODEL_CONFIG,

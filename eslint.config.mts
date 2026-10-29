@@ -1,3 +1,4 @@
+import { readdirSync } from "node:fs";
 import { defineConfig } from "eslint/config";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsparser from "@typescript-eslint/parser";
@@ -12,6 +13,9 @@ const OBSIDIAN_RESTRICTED_PATHS = [
   })),
   { name: "moment", message: "The 'moment' package is bundled with Obsidian. Please import it from 'obsidian' instead." },
 ];
+
+const FEATURES = readdirSync("src/features", { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+const FEATURE_INDEX_MESSAGE = "Import another feature through its index (@/features/<name>), not its internals.";
 
 const layer = (forbidden: string[], message: string) => [
   "error",
@@ -170,12 +174,18 @@ export default defineConfig([
       "no-restricted-imports": layer(["features", "adapters", "ui", "bootstrap"], "Core code depends on nothing above it."),
     },
   },
-  {
-    files: ["src/features/**/*.ts"],
+  ...FEATURES.map((feature) => ({
+    files: [`src/features/${feature}/**/*.ts`],
     rules: {
-      "no-restricted-imports": layer(["adapters", "ui", "bootstrap"], "Features reach adapters through ports, never the UI."),
+      "no-restricted-imports": ["error", {
+        paths: OBSIDIAN_RESTRICTED_PATHS,
+        patterns: [
+          { group: ["@/adapters/*", "**/adapters/*", "@/ui/*", "**/ui/*", "@/bootstrap/*", "**/bootstrap/*"], message: "Features reach adapters through ports, never the UI." },
+          { group: ["@/features/*/*", `!@/features/${feature}/*`], message: FEATURE_INDEX_MESSAGE },
+        ],
+      }],
     },
-  },
+  })),
   {
     files: ["src/adapters/**/*.ts"],
     rules: {
@@ -183,20 +193,35 @@ export default defineConfig([
         paths: OBSIDIAN_RESTRICTED_PATHS,
         patterns: [
           { group: ["@/ui/*", "**/ui/*", "@/bootstrap/*", "**/bootstrap/*"], message: "Adapters never import the UI or the composition root." },
-          { group: ["@/features/*/*", "!@/features/*/types"], message: "Adapters may only use a feature's types/." },
+          { group: ["@/features/*/*"], message: FEATURE_INDEX_MESSAGE },
         ],
+      }],
+      "@typescript-eslint/no-restricted-imports": ["error", {
+        patterns: [{ group: ["@/features/*"], allowTypeImports: true, message: "Adapters use features only as types." }],
       }],
     },
   },
   {
     files: ["src/ui/**/*.ts"],
     rules: {
-      "no-restricted-imports": ["error", { paths: OBSIDIAN_RESTRICTED_PATHS }],
+      "no-restricted-imports": ["error", {
+        paths: OBSIDIAN_RESTRICTED_PATHS,
+        patterns: [{ group: ["@/features/*/*"], message: FEATURE_INDEX_MESSAGE }],
+      }],
       "@typescript-eslint/no-restricted-imports": ["error", {
         patterns: [
           { group: ["@/bootstrap/*", "**/bootstrap/*"], message: "The UI never imports the composition root." },
           { group: ["@/adapters/*", "**/adapters/*"], allowTypeImports: true, message: "The UI sees adapters only as types; services arrive through AppServices." },
         ],
+      }],
+    },
+  },
+  {
+    files: ["src/bootstrap/**/*.ts", "main.ts"],
+    rules: {
+      "no-restricted-imports": ["error", {
+        paths: OBSIDIAN_RESTRICTED_PATHS,
+        patterns: [{ group: ["@/features/*/*", "**/src/features/*/*"], message: FEATURE_INDEX_MESSAGE }],
       }],
     },
   },

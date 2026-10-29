@@ -1,5 +1,5 @@
 import { App, Modal, Notice, Setting } from 'obsidian';
-import type { MCPServerConfig } from '@/features/tools/types/mcp';
+import type { MCPServerConfig } from '@/features/tools';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';

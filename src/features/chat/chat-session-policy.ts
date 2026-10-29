@@ -1,6 +1,6 @@
 import { DEFAULT_AGENT_ID } from '@/core/constants';
-import type { Agent, SystemPrompt } from '@/features/agent/types/agent';
-import type { ConversationConfig } from '@/features/conversations/types/conversation';
+import type { Agent, SystemPrompt } from '@/features/agent';
+import type { ConversationConfig } from '@/features/conversations';
 
 export type ChatMode = 'chat' | 'agent';
 

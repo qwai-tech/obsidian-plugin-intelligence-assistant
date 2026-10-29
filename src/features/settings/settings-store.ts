@@ -1,4 +1,4 @@
-import type { Conversation } from '@/features/conversations/types/conversation';
+import type { Conversation } from '@/features/conversations';
 import type { PluginSettings, UserConfig } from '@/features/settings/types/settings';
 import { pluginSettingsToUserConfig, userConfigToPluginSettings } from './settings-codec';
 import { migrateSettings } from './settings-migrations';

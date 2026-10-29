@@ -5,7 +5,7 @@
 
 import { Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { ModelInfo, ModelCapability } from '@/features/llm/types/model';
+import type { ModelInfo, ModelCapability } from '@/features/llm';
 import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { getProviderMeta } from '@/ui/provider-meta';

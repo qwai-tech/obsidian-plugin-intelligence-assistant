@@ -1,5 +1,5 @@
 import type { App } from 'obsidian';
-import type { UsageRecord } from '@/features/usage/types/usage';
+import type { UsageRecord } from '@/features/usage';
 import { pluginPaths } from '@/core/plugin-paths';
 import { JsonFile } from '@/adapters/persistence/json-file';
 

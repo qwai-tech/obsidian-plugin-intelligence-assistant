@@ -1,5 +1,5 @@
 import { App, TFile } from 'obsidian';
-import type { AgentExecutionStep } from '@/features/llm/types/reasoning';
+import type { AgentExecutionStep } from '@/features/llm';
 
 export interface WriteProposal {
 	type: 'write_proposal';

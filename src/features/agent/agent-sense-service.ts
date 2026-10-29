@@ -1,8 +1,7 @@
 import type { App, TAbstractFile } from 'obsidian';
 import { TFile, TFolder } from 'obsidian';
-import type { FileReference } from '@/features/chat/types/attachments';
-import type { RAGSource } from '@/features/knowledge/types/rag';
-import type { KnowledgeBase } from '@/features/knowledge/knowledge-base';
+import type { FileReference } from '@/features/chat';
+import type { RAGSource, KnowledgeBase } from '@/features/knowledge';
 import { buildObsidianContextSnapshot } from '@/features/agent/obsidian-context-builder';
 import type { AgentContextSection, AgentSenseContext } from './types';
 import type { AgentMemorySnapshot } from '@/features/agent/types/memory';

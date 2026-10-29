@@ -1,4 +1,4 @@
-import type { ChatRequest, ILLMProvider } from '@/features/llm/types/llm';
+import type { ChatRequest, ILLMProvider } from '@/features/llm';
 import type { KernelEvent } from '@/features/agent/types/agent-run';
 import type { ModelPort, ModelTurn } from './turn-kernel';
 import { parseToolArguments } from './json-utils';

@@ -14,7 +14,7 @@
  * unchanged.
  */
 
-import type { Message } from '@/features/conversations/types/conversation';
+import type { Message } from '@/features/conversations';
 import type { ChatRequest as WireChatRequest } from '@qwai/obsidian-llm';
 
 export interface ChatRequest extends Omit<WireChatRequest, 'messages'> {

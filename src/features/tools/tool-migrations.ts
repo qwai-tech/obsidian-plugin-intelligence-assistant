@@ -5,7 +5,7 @@
  * this module reads them off `unknown`-shaped JSON via a narrow LegacyAgent
  * accessor so the rest of the codebase doesn't need to know they ever existed.
  */
-import type { Agent } from '@/features/agent/types/agent';
+import type { Agent } from '@/features/agent';
 
 /**
  * The legacy fields the migration consumes. Lives only here because the

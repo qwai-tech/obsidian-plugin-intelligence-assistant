@@ -5,7 +5,7 @@
 
 import { App, ButtonComponent, Modal, Setting } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { QuickActionConfig } from '@/features/settings/types/settings';
+import type { QuickActionConfig } from '@/features/settings';
 import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { showConfirm } from '@/ui/modals/confirm-modal';

@@ -1,5 +1,5 @@
-import type { AgentModelStrategy } from '@/features/agent/types/agent';
-import type { LLMConfig } from '@/features/llm/types/model';
+import type { AgentModelStrategy } from '@/features/agent';
+import type { LLMConfig } from '@/features/llm';
 
 export interface ModelOption {
 	id: string;

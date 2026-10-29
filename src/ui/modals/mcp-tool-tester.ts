@@ -1,7 +1,6 @@
 import { Notice } from 'obsidian';
 import { t } from '@/i18n';
-import type { ToolRegistry } from '@/features/tools/tool-registry';
-import type { ToolParameter } from '@/features/tools/types/tools';
+import type { ToolRegistry, ToolParameter } from '@/features/tools';
 import { errorMessage } from '@/core/utils/errors';
 import { getConnectedMcpServers, getToolsByProviderKey } from './mcp-inspector-data';
 import { parseToolArguments, type ArgumentField } from './mcp-tool-arguments';

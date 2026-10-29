@@ -4,8 +4,7 @@
  */
 
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { CachedMCPTool } from '@/features/tools/types/mcp';
-import type { RegisteredTool } from '@/features/tools/types/tools';
+import type { CachedMCPTool, RegisteredTool } from '@/features/tools';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';

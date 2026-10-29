@@ -6,8 +6,8 @@
 import { App } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { Agent } from '@/features/agent/types/agent';
-import type { ModelInfo } from '@/features/llm/types/model';
+import type { Agent } from '@/features/agent';
+import type { ModelInfo } from '@/features/llm';
 import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';

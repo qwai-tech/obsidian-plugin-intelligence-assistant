@@ -1,4 +1,4 @@
-import type { RunActivity } from '@/features/agent/run-activity';
+import type { RunActivity } from '@/features/agent';
 
 export interface UsageTotals {
 	getGrandTotal(): Promise<{ totalTokens: number }>;

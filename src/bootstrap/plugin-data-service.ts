@@ -1,11 +1,10 @@
 import { App } from 'obsidian';
-import type { PersistUnit } from '@/features/settings/settings-store';
-import type { PluginSettings } from '@/features/settings/types/settings';
-import type { LLMConfig } from '@/features/llm/types/model';
-import type { SystemPrompt, Agent } from '@/features/agent/types/agent';
-import type { MCPServerConfig } from '@/features/tools/types/mcp';
+import type { PersistUnit, PluginSettings } from '@/features/settings';
+import type { LLMConfig } from '@/features/llm';
+import type { SystemPrompt, Agent } from '@/features/agent';
+import type { MCPServerConfig } from '@/features/tools';
 import { AgentRepository } from '@/adapters/persistence/data/agent-repository';
-import { BUILTIN_AGENT_PRESETS } from '@/features/agent/presets/builtin-agents';
+import { BUILTIN_AGENT_PRESETS } from '@/features/agent';
 import { PromptRepository } from '@/adapters/persistence/data/prompt-repository';
 import { ModelCacheRepository } from '@/adapters/persistence/data/model-cache-repository';
 import { ProviderRepository } from '@/adapters/persistence/data/provider-repository';

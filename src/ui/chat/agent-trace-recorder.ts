@@ -1,4 +1,4 @@
-import type { AgentExecutionStep } from '@/features/llm/types/reasoning';
+import type { AgentExecutionStep } from '@/features/llm';
 
 type Phase = AgentExecutionStep['phase'];
 

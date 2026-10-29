@@ -3,10 +3,9 @@
  * Centralized state container for chat view data and configuration
  */
 
-import type { Message } from '@/features/conversations/types/conversation';
-import type { Attachment, FileReference } from '@/features/chat/types/attachments';
-import type { ModelInfo } from '@/features/llm/types/model';
-import type { AgentExecutionStep } from '@/features/llm/types/reasoning';
+import type { Message } from '@/features/conversations';
+import type { Attachment, FileReference } from '@/features/chat';
+import type { ModelInfo, AgentExecutionStep } from '@/features/llm';
 import { TFile, TFolder } from 'obsidian';
 import { Events } from 'obsidian';
 

@@ -1,6 +1,6 @@
 import {App, TFile} from 'obsidian';
-import type { RAGConfig } from '@/features/knowledge/types/rag';
-import type { LLMConfig } from '@/features/llm/types/model';
+import type { RAGConfig } from '@/features/knowledge';
+import type { LLMConfig } from '@/features/llm';
 import { pluginPaths } from '@/core/plugin-paths';
 import { JsonFile } from '@/adapters/persistence/json-file';
 import { EmbeddingManager } from './embedding-manager';

@@ -1,7 +1,6 @@
 import type { Plugin } from 'obsidian';
-import type { PluginSettings, UserConfig } from '@/features/settings/types/settings';
-import type { PersistUnit, SettingsPersistence, StoredSettings } from '@/features/settings/settings-store';
-import { pluginSettingsToUserConfig } from '@/features/settings/settings-codec';
+import type { PluginSettings, UserConfig, PersistUnit, SettingsPersistence, StoredSettings } from '@/features/settings';
+import { pluginSettingsToUserConfig } from '@/features/settings';
 import type { PluginDataService } from '@/bootstrap/plugin-data-service';
 import { JsonFile } from '@/adapters/persistence/json-file';
 

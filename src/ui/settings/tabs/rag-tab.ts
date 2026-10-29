@@ -5,7 +5,7 @@
 
 import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
-import type { RAGConfig } from '@/features/knowledge/types/rag';
+import type { RAGConfig } from '@/features/knowledge';
 import { SettingsForm } from '@/ui/settings/settings-form';
 import { renderIndexManagement } from './rag-index-panel';
 import { TestIds } from '@/ui/utils/test-ids';

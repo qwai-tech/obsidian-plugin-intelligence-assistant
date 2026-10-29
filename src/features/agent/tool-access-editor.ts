@@ -1,4 +1,4 @@
-import type { AgentToolAccess } from '@/features/tools/types/tools';
+import type { AgentToolAccess } from '@/features/tools';
 
 export class ToolAccessEditor {
 	constructor(private readonly access: AgentToolAccess) {}

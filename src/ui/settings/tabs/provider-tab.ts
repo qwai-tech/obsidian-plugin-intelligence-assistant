@@ -6,7 +6,7 @@
 import { App, Notice } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { LLMConfig } from '@/features/llm/types/model';
+import type { LLMConfig } from '@/features/llm';
 import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { ProviderConfigModal } from '@/ui/modals/provider-config-modal';

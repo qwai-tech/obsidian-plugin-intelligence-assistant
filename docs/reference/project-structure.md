@@ -34,16 +34,19 @@ src/
 │   │   │   ├── provider-repository.ts
 │   │   │   └── token-usage-repository.ts
 │   │   ├── conversation-migration-service.ts
+│   │   ├── conversation-records.ts
 │   │   ├── conversation-storage-service.ts
 │   │   ├── json-collection.ts
 │   │   ├── json-file.ts
 │   │   └── jsonl-run-journal.ts
-│   └── rag/  # RAG manager, vector store, chunker, embeddings, grader
+│   └── rag/  # RAG manager, vector store, similarity, chunker, embeddings
 │       ├── chunker.ts
 │       ├── document-grader.ts
 │       ├── embedding-manager.ts
 │       ├── incremental-indexer.ts
 │       ├── rag-manager.ts
+│       ├── rag-types.ts
+│       ├── similarity.ts
 │       └── vector-store.ts
 ├── bootstrap/  # Composition root: builds and wires services
 │   ├── agent-entry-points.ts
@@ -64,7 +67,7 @@ src/
 │   ├── augmentations.d.ts
 │   ├── constants.ts
 │   └── plugin-paths.ts
-├── features/  # Use cases, ports and types, one folder per feature
+├── features/  # Use cases, ports and types; one index.ts per feature
 │   ├── agent/  # Agent engine, sensing, memory, tool access
 │   │   ├── kernel/  # Turn kernel, budget, guards, model/tool ports
 │   │   │   ├── agent-message-history.ts
@@ -89,6 +92,7 @@ src/
 │   │   ├── agent-service.ts
 │   │   ├── agent-task-text.ts
 │   │   ├── history-compactor.ts
+│   │   ├── index.ts
 │   │   ├── obsidian-agent-prompts.ts
 │   │   ├── obsidian-context-builder.ts
 │   │   ├── run-activity.ts
@@ -101,34 +105,49 @@ src/
 │   │   ├── chat-session-policy.ts
 │   │   ├── chat.service.ts
 │   │   ├── conversation-namer.ts
+│   │   ├── index.ts
 │   │   └── vault-export-service.ts
 │   ├── conversations/  # Conversation types
-│   │   └── types/
-│   │       └── conversation.ts
+│   │   ├── types/
+│   │   │   └── conversation.ts
+│   │   └── index.ts
 │   ├── knowledge/  # KnowledgeBase and MemoryIndex ports, RAG types
 │   │   ├── types/
 │   │   │   └── rag.ts
+│   │   ├── index.ts
 │   │   └── knowledge-base.ts
 │   ├── llm/  # LLM hub, Ollama admin, LLM and model types
 │   │   ├── types/
 │   │   │   ├── llm.ts
 │   │   │   ├── model.ts
 │   │   │   └── reasoning.ts
+│   │   ├── index.ts
 │   │   ├── llm-hub-service.ts
 │   │   └── ollama-admin.ts
 │   ├── settings/  # Settings store, codec and migrations
 │   │   ├── types/
 │   │   │   └── settings.ts
+│   │   ├── index.ts
 │   │   ├── settings-codec.ts
 │   │   ├── settings-migrations.ts
 │   │   ├── settings-reload.ts
 │   │   └── settings-store.ts
 │   ├── tools/  # Tool registry, sources, built-in tools, presets
+│   │   ├── cli-presets/  # CLI tool presets by category
+│   │   │   ├── code.ts
+│   │   │   ├── data.ts
+│   │   │   ├── files.ts
+│   │   │   ├── macos-apps.ts
+│   │   │   ├── network.ts
+│   │   │   ├── search.ts
+│   │   │   └── system.ts
 │   │   ├── sources/  # Built-in, CLI, MCP and OpenAPI tool sources
 │   │   │   ├── builtin-tool-source.ts
 │   │   │   ├── cli-tool-source.ts
 │   │   │   ├── mcp-tool-source.ts
 │   │   │   ├── openapi-loader-core.ts
+│   │   │   ├── openapi-operation-tool.ts
+│   │   │   ├── openapi-spec-loader.ts
 │   │   │   └── openapi-tool-source.ts
 │   │   ├── types/
 │   │   │   ├── cli-tools.ts
@@ -139,6 +158,7 @@ src/
 │   │   ├── cli-tool-presets.ts
 │   │   ├── cli-tool.ts
 │   │   ├── file-tools.ts
+│   │   ├── index.ts
 │   │   ├── link-tools.ts
 │   │   ├── mcp-client.ts
 │   │   ├── mcp-helpers.ts
@@ -153,12 +173,24 @@ src/
 │   │   ├── tool-source-manager.ts
 │   │   └── tool-source.ts
 │   ├── usage/  # Token usage types
-│   │   └── types/
-│   │       └── usage.ts
-│   └── web-search/  # Search service, backends and query heuristics
+│   │   ├── types/
+│   │   │   └── usage.ts
+│   │   └── index.ts
+│   └── web-search/  # Search service and query heuristics
+│       ├── backends/  # One file per search backend
+│       │   ├── backend.ts
+│       │   ├── bing.ts
+│       │   ├── brave.ts
+│       │   ├── google.ts
+│       │   ├── mojeek.ts
+│       │   ├── qwant.ts
+│       │   ├── searxng.ts
+│       │   ├── serpapi.ts
+│       │   └── tavily.ts
 │       ├── types/
 │       │   └── web-search.ts
 │       ├── backends.ts
+│       ├── index.ts
 │       ├── query-heuristics.ts
 │       └── web-search-service.ts
 ├── i18n/  # Translations
@@ -175,6 +207,7 @@ src/
     │   │   └── conversation-manager.ts
     │   ├── utils/
     │   │   └── provider-utils.ts
+    │   ├── agent-trace-recorder.ts
     │   ├── agent-trace-view.ts
     │   ├── chat-header.component.ts
     │   ├── chat-input.component.ts
@@ -182,7 +215,9 @@ src/
     │   ├── chat-pickers.ts
     │   ├── chat-session-controller.ts
     │   ├── conversation-list-view.ts
+    │   ├── conversation-settings.ts
     │   ├── hover-link.ts
+    │   ├── message-footer.ts
     │   ├── message-grouping.ts
     │   ├── message-renderer.ts
     │   ├── rag-status-panel.ts
@@ -196,6 +231,7 @@ src/
     ├── modals/  # Dialogs
     │   ├── agent-capability-modal.ts
     │   ├── agent-edit-modal.ts
+    │   ├── agent-model-options.ts
     │   ├── agent-task-launch-modal.ts
     │   ├── agent-tool-access-section.ts
     │   ├── changelog-modal.ts
@@ -232,6 +268,7 @@ src/
     │   │   ├── prompts-tab.ts
     │   │   ├── provider-tab.ts
     │   │   ├── quickactions-tab.ts
+    │   │   ├── rag-index-panel.ts
     │   │   ├── rag-tab.ts
     │   │   ├── tools-tab.ts
     │   │   ├── usage-tab.ts
@@ -275,6 +312,8 @@ packages/obsidian-llm/src/
 ├── http.ts
 ├── hub.ts
 ├── index.ts
+├── model-catalog.ts
+├── model-fetchers.ts
 ├── model-manager.ts
 ├── obsidian-http.ts
 ├── openai-message.ts

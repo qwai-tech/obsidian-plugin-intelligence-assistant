@@ -13,7 +13,7 @@ import type {
 } from '@/features/tools/types/tools';
 import type { ToolSource } from './tool-source';
 import { validateToolArguments } from './tool-schema';
-import { assertWriteProposalResult } from '@/features/agent/write-proposal-service';
+import { assertWriteProposalResult } from '@/features/agent';
 
 /** Max length of an LLM function name (OpenAI / Anthropic limit). */
 const MAX_LLM_NAME_LENGTH = 64;

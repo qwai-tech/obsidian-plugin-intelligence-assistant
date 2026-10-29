@@ -16,7 +16,7 @@ import {
 	buildVaultDiagnosisPrompt,
 	buildWeeklyReviewPrompt,
 	buildWritingDraftPrompt,
-} from '@/features/agent/obsidian-agent-prompts';
+} from '@/features/agent';
 import type { AgentTaskLauncher } from '@/ui/views/agent-task-launcher';
 
 export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLauncher): void {

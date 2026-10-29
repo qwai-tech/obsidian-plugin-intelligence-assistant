@@ -30,16 +30,16 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 └───────────────────────────────────────────────────────────────┘
 ```
 
-每个功能的类型都放在自己代码旁边的 `features/<名称>/types/` 中，不再有共享的 `types/` 目录。
+每个功能的类型都放在自己代码旁边的 `features/<名称>/types/` 中，不再有共享的 `types/` 目录。每个功能只暴露一个 `index.ts`，使用显式的具名导出（不用 `export *`）；功能外部的代码只能从 `@/features/<名称>` 导入。
 
 导入规则由 `eslint.config.mts` 强制执行，没有任何豁免：
 
 | 目录 | 禁止导入 |
 |------|---------|
 | `core/`、`i18n/` | features、adapters、ui、bootstrap |
-| `features/` | adapters、ui、bootstrap |
-| `adapters/` | ui、bootstrap，以及功能中除 `types/` 以外的任何内容 |
-| `ui/` | bootstrap；adapters 只能用 `import type` |
+| `features/<名称>/` | adapters、ui、bootstrap，以及其他功能的内部模块（应使用其 index） |
+| `adapters/` | ui、bootstrap；功能只能通过其 index 以 `import type` 使用 |
+| `ui/` | bootstrap；adapters 只能用 `import type`；功能只能通过其 index 导入 |
 | `packages/obsidian-llm` | 插件中的任何代码（`@/*`） |
 
 只有 `bootstrap/` 和 `main.ts` 可以看到所有目录。

@@ -1,6 +1,6 @@
 import { App, Modal, Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { RegisteredTool } from '@/features/tools/types/tools';
+import type { RegisteredTool } from '@/features/tools';
 import { getConnectedMcpServers, getToolsByProviderKey } from './mcp-inspector-data';
 import { renderMcpToolTester } from './mcp-tool-tester';
 import { t } from '@/i18n';

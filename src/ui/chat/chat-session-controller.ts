@@ -2,9 +2,9 @@ import { Notice, TFile, type TFolder } from 'obsidian';
 import { ModelManager } from '@qwai/obsidian-llm';
 import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { Agent } from '@/features/agent/types/agent';
-import type { Conversation, ConversationConfig } from '@/features/conversations/types/conversation';
-import type { PluginSettings } from '@/features/settings/types/settings';
+import type { Agent } from '@/features/agent';
+import type { Conversation, ConversationConfig } from '@/features/conversations';
+import type { PluginSettings } from '@/features/settings';
 import {
 	agentModelId,
 	pickAgentId,
@@ -12,9 +12,9 @@ import {
 	selectionForNewChat,
 	type ChatMode,
 	type SessionSelection,
-} from '@/features/chat/chat-session-policy';
-import { buildAgentCapabilitySummary, resolveAgentToolsForAgent, type AgentCapabilitySummary } from '@/features/agent/agent-capability-summary';
-import type { ToolRegistry } from '@/features/tools/tool-registry';
+} from '@/features/chat';
+import { buildAgentCapabilitySummary, resolveAgentToolsForAgent, type AgentCapabilitySummary } from '@/features/agent';
+import type { ToolRegistry } from '@/features/tools';
 import type { ChatViewState } from '@/ui/state/chat-view-state';
 import type { ChatInputComponent } from './chat-input.component';
 import { applyConversationSettings } from './conversation-settings';

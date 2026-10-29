@@ -1,4 +1,4 @@
-import type { ChatRequest } from '@/features/llm/types/llm';
+import type { ChatRequest } from '@/features/llm';
 import type { AgentWorkingMessage, AssistantWithCalls } from '../types';
 import type { Budget } from './budget';
 import type { FinishReason, KernelEvent, TokenUsage, ToolCallRequest } from '@/features/agent/types/agent-run';

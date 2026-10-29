@@ -1,5 +1,5 @@
 import { App } from 'obsidian';
-import type { CachedMCPTool } from '@/features/tools/types/mcp';
+import type { CachedMCPTool } from '@/features/tools';
 import { buildSafeName } from '@/core/utils/file-system';
 import { pluginPaths } from '@/core/plugin-paths';
 import { JsonFile } from '@/adapters/persistence/json-file';

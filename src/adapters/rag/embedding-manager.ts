@@ -1,5 +1,5 @@
-import type { RAGConfig } from '@/features/knowledge/types/rag';
-import type { LLMConfig } from '@/features/llm/types/model';
+import type { RAGConfig } from '@/features/knowledge';
+import type { LLMConfig } from '@/features/llm';
 import { ProviderFactory } from'@qwai/obsidian-llm';
 
 interface PluginLookup {

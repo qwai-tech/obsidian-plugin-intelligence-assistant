@@ -1,4 +1,4 @@
-import type { RAGConfig } from '@/features/knowledge/types/rag';
+import type { RAGConfig } from '@/features/knowledge';
 
 export function chunkText(content: string, config: RAGConfig): string[] {
   // Protect against extremely large content that could cause memory issues

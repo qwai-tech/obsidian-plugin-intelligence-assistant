@@ -1,7 +1,7 @@
 import type { App } from 'obsidian';
 import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { Message } from '@/features/conversations/types/conversation';
+import type { Message } from '@/features/conversations';
 import { marked } from 'marked';
 import { enhanceRichMarkdown } from '@/ui/chat/rich-markdown';
 import { getProviderMeta } from '@/ui/provider-meta';
@@ -10,7 +10,7 @@ import { renderExecutionTrace } from '@/ui/chat/agent-trace-view';
 import { renderWriteProposalCards } from '@/ui/chat/write-proposal-cards';
 import { renderCopyButton, renderTokenUsageFooter } from '@/ui/chat/message-footer';
 import { TestIds } from '@/ui/utils/test-ids';
-import type { WriteProposal, BatchWriteProposal } from '@/features/agent/write-proposal-service';
+import type { WriteProposal, BatchWriteProposal } from '@/features/agent';
 
 export interface MessageRendererContext {
 	app: App;

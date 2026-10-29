@@ -1,12 +1,12 @@
 import { Notice } from 'obsidian';
-import type { Message } from '@/features/conversations/types/conversation';
+import type { Message } from '@/features/conversations';
 import {
 	extractWriteProposalsFromSteps,
 	isBatchWriteProposal,
 	isWriteProposal,
 	type BatchWriteProposal,
 	type WriteProposal,
-} from '@/features/agent/write-proposal-service';
+} from '@/features/agent';
 import { errorMessage } from '@/core/utils/errors';
 
 export type ApplyProposal = (proposal: WriteProposal | BatchWriteProposal) => Promise<void>;

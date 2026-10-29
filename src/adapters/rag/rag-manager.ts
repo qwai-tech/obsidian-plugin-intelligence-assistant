@@ -1,6 +1,6 @@
 import {App, TFile, Notice} from 'obsidian';
-import type { RAGConfig, RAGSource } from '@/features/knowledge/types/rag';
-import type { LLMConfig } from '@/features/llm/types/model';
+import type { RAGConfig, RAGSource } from '@/features/knowledge';
+import type { LLMConfig } from '@/features/llm';
 import { VectorStore } from './vector-store';
 import type { SearchResult } from './rag-types';
 import { EmbeddingManager } from './embedding-manager';

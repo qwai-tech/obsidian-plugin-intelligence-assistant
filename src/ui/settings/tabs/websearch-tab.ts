@@ -5,7 +5,7 @@
 
 import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
-import type { WebSearchConfig } from '@/features/web-search/types/web-search';
+import type { WebSearchConfig } from '@/features/web-search';
 import { SettingsForm } from '@/ui/settings/settings-form';
 
 // Verbatim example values shown as input placeholders (locale codes, URLs and

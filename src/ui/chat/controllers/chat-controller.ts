@@ -1,18 +1,16 @@
 import { Notice, TFolder } from 'obsidian';
 import { BaseController } from './base-controller';
 import { t } from '@/i18n';
-import type { Message } from '@/features/conversations/types/conversation';
-import type { LLMConfig } from '@/features/llm/types/model';
-import type { FileReference } from '@/features/chat/types/attachments';
-import type { ChatService } from '@/features/chat/chat.service';
+import type { Message } from '@/features/conversations';
+import type { LLMConfig, StreamChunk } from '@/features/llm';
+import type { FileReference, ChatService } from '@/features/chat';
 import { renderAssistantMarkdown } from '@/ui/chat/message-renderer';
 import { appendTokenUsageToMessage } from '@/ui/chat/message-footer';
 import { renderLiveTrace } from '@/ui/chat/agent-trace-view';
 import { AgentTraceRecorder } from '@/ui/chat/agent-trace-recorder';
 import type { ConversationManager } from '@/ui/chat/managers/conversation-manager';
 import type { RagStatusPanel } from '@/ui/chat/rag-status-panel';
-import type { StreamChunk } from '@/features/llm/types/llm';
-import type { RAGSource } from '@/features/knowledge/types/rag';
+import type { RAGSource } from '@/features/knowledge';
 import { errorMessage } from '@/core/utils/errors';
 
 export interface ChatControllerOptions {

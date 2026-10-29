@@ -1,8 +1,8 @@
-import type { Message } from '@/features/conversations/types/conversation';
-import type { RAGSource } from '@/features/knowledge/types/rag';
+import type { Message } from '@/features/conversations';
+import type { RAGSource } from '@/features/knowledge';
 import type { Agent } from '@/features/agent/types/agent';
-import type { FileReference } from '@/features/chat/types/attachments';
-import type { StreamChunk } from '@/features/llm/types/llm';
+import type { FileReference } from '@/features/chat';
+import type { StreamChunk } from '@/features/llm';
 import type { AgentMemorySnapshot } from '@/features/agent/types/memory';
 
 export const SPAR_PHASES = ['sense', 'plan', 'act', 'reflect', 'final'] as const;
