@@ -7,17 +7,10 @@ import { marked } from 'marked';
 import { enhanceRichMarkdown } from '@/presentation/chat/rich-markdown';
 import { getProviderMeta } from '@/presentation/components/provider-meta';
 import { getModelDisplayName, resolveMessageProviderId } from '@/presentation/components/chat/utils/provider-utils';
-import { createAgentExecutionTraceContainer, updateExecutionTrace, collapseExecutionTrace } from '@/presentation/components/chat/handlers/tool-call-handler';
-import type { AgentExecutionStep as TraceStep } from '@/presentation/state/chat-view-state';
+import { renderExecutionTrace } from '@/presentation/components/chat/agent-trace-view';
+import { renderWriteProposalCards } from '@/presentation/components/chat/write-proposal-cards';
 import { TestIds } from '@/presentation/utils/test-ids';
-import {
-	extractWriteProposalsFromSteps,
-	isBatchWriteProposal,
-	isWriteProposal,
-	type WriteProposal,
-	type BatchWriteProposal,
-} from '@/application/services/write-proposal-service';
-import { errorMessage } from '@/utils/errors';
+import type { WriteProposal, BatchWriteProposal } from '@/application/services/write-proposal-service';
 
 export interface MessageRendererContext {
 	app: App;
@@ -118,7 +111,7 @@ export function renderMessage(
 		} else {
 			renderReasoning(body, message);
 		}
-		renderWriteProposalCards(body, message.agentExecutionSteps, callbacks);
+		renderWriteProposalCards(body, message.agentExecutionSteps, callbacks?.applyWriteProposal);
 	}
 
 	const content = body.createDiv('ia-chat-message__content');
@@ -392,153 +385,6 @@ function renderReasoning(container: HTMLElement, message: Message) {
 		stepEl.createEl('strong', { text: `${step.step}. ${step.description}` });
 		const stepBody = stepEl.createDiv();
 		renderAssistantMarkdown(stepBody, step.content);
-	});
-}
-
-export function renderLiveTrace(container: HTMLElement, steps: Message['agentExecutionSteps']): void {
-	container.empty();
-	renderExecutionTrace(container, steps);
-}
-
-function renderExecutionTrace(
-	container: HTMLElement,
-	steps: Message['agentExecutionSteps'],
-	reasoningContent?: string,
-	reasoningSteps?: Message['reasoningSteps']
-) {
-	const allSteps: TraceStep[] = [...(steps as unknown as TraceStep[] || [])];
-
-	// Append reasoning as a final thought step if present
-	if (reasoningContent) {
-		allSteps.push({
-			type: 'thought',
-			content: reasoningContent,
-			timestamp: Date.now(),
-			phase: 'final'
-		});
-	}
-
-	if (reasoningSteps?.length) {
-		reasoningSteps.forEach(step => {
-			allSteps.push({
-				type: 'thought',
-				content: `${step.description}\n\n${step.content}`,
-				timestamp: Date.now(),
-				phase: 'final'
-			});
-		});
-	}
-
-	if (allSteps.length === 0) return;
-
-	const traceContentEl = createAgentExecutionTraceContainer(container, allSteps.length);
-	updateExecutionTrace(traceContentEl, allSteps);
-	collapseExecutionTrace(traceContentEl);
-}
-
-function renderWriteProposalCards(
-	container: HTMLElement,
-	steps: Message['agentExecutionSteps'],
-	callbacks?: MessageRendererCallbacks
-) {
-	const proposals = extractWriteProposalsFromSteps(steps);
-	if (proposals.length === 0) return;
-
-	const section = container.createDiv('ia-write-proposals');
-	section.createEl('h5', { text: 'Write proposals' });
-
-	for (const proposal of proposals) {
-		if (isBatchWriteProposal(proposal)) {
-			renderBatchProposalCard(section, proposal, callbacks);
-		} else if (isWriteProposal(proposal)) {
-			renderSingleWriteProposalCard(section, proposal, callbacks);
-		}
-	}
-}
-
-function renderBatchProposalCard(
-	parent: HTMLElement,
-	proposal: BatchWriteProposal,
-	callbacks?: MessageRendererCallbacks
-) {
-	const card = parent.createDiv('ia-write-proposal-card is-batch');
-	const header = card.createDiv('ia-write-proposal-card__header');
-	header.createSpan({ cls: 'ia-write-proposal-card__operation', text: 'batch' });
-	header.createSpan({ cls: 'ia-write-proposal-card__path', text: `${proposal.proposals.length} changes` });
-
-	card.createDiv({ cls: 'ia-write-proposal-card__note', text: proposal.reason });
-
-	const list = card.createDiv('ia-write-proposal-card__batch-list');
-	for (const sub of proposal.proposals) {
-		const item = list.createDiv('ia-write-proposal-card__batch-item');
-		item.createSpan({ cls: 'ia-write-proposal-card__batch-op', text: sub.operation });
-		item.createSpan({ cls: 'ia-write-proposal-card__batch-path', text: sub.path });
-	}
-
-	const actions = card.createDiv('ia-write-proposal-card__actions');
-	const applyBtn = actions.createEl('button', { text: 'Apply all' });
-	applyBtn.disabled = typeof callbacks?.applyWriteProposal !== 'function';
-	applyBtn.addEventListener('click', () => {
-		void (async () => {
-			if (!callbacks?.applyWriteProposal) return;
-			applyBtn.disabled = true;
-			try {
-				await callbacks.applyWriteProposal(proposal);
-				applyBtn.setText('Applied');
-				applyBtn.addClass('is-applied');
-			} catch (error) {
-				console.error('[MessageRenderer] Failed to apply batch proposal', error);
-				new Notice(errorMessage(error));
-				applyBtn.disabled = false;
-			}
-		})();
-	});
-}
-
-function renderSingleWriteProposalCard(
-	parent: HTMLElement,
-	proposal: WriteProposal,
-	callbacks?: MessageRendererCallbacks
-) {
-	const card = parent.createDiv('ia-write-proposal-card');
-	const header = card.createDiv('ia-write-proposal-card__header');
-	header.createSpan({
-		cls: 'ia-write-proposal-card__operation',
-		text: proposal.operation,
-	});
-	header.createSpan({
-		cls: 'ia-write-proposal-card__path',
-		text: proposal.path,
-	});
-
-	card.createDiv({
-		cls: 'ia-write-proposal-card__note',
-		text: proposal.reason,
-	});
-
-	if (proposal.proposedContent) {
-		const details = card.createEl('details', { cls: 'ia-write-proposal-card__preview' });
-		details.createEl('summary', { text: 'Preview proposed content' });
-		details.createEl('pre', { text: proposal.proposedContent });
-	}
-
-	const actions = card.createDiv('ia-write-proposal-card__actions');
-	const applyBtn = actions.createEl('button', { text: 'Apply' });
-	applyBtn.disabled = typeof callbacks?.applyWriteProposal !== 'function';
-	applyBtn.addEventListener('click', () => {
-		void (async () => {
-			if (!callbacks?.applyWriteProposal) return;
-			applyBtn.disabled = true;
-			try {
-				await callbacks.applyWriteProposal(proposal);
-				applyBtn.setText('Applied');
-				applyBtn.addClass('is-applied');
-			} catch (error) {
-				console.error('[MessageRenderer] Failed to apply write proposal', error);
-				new Notice(errorMessage(error));
-				applyBtn.disabled = false;
-			}
-		})();
 	});
 }
 
