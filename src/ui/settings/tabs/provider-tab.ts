@@ -57,8 +57,9 @@ export function displayProviderTab(
 			cachedModels: []
 		};
 		new ProviderConfigModal(app, plugin.services.ollama, draft, async (updated) => {
-			plugin.settings.llmConfigs.push(updated);
-			await plugin.saveSettings();
+			await plugin.updateSettings((settings) => {
+				settings.llmConfigs.push(updated);
+			});
 			refreshDisplay();
 		}).open();
 	});
@@ -274,8 +275,9 @@ export function displayProviderTab(
 		editBtn.addEventListener('click', () => {
 			const draft = JSON.parse(JSON.stringify(config)) as LLMConfig;
 			new ProviderConfigModal(app, plugin.services.ollama, draft, async (updated) => {
-				plugin.settings.llmConfigs[index] = updated;
-				await plugin.saveSettings();
+				await plugin.updateSettings((settings) => {
+					settings.llmConfigs[index] = updated;
+				});
 				refreshDisplay();
 			}).open();
 		});
@@ -306,9 +308,10 @@ export function displayProviderTab(
 				try {
 					const { ModelManager } = await import('@qwai/obsidian-llm');
 					const models = await ModelManager.getModelsForConfig(config, true);
-					config.cachedModels = models;
-					config.cacheTimestamp = Date.now();
-					await plugin.saveSettings();
+					await plugin.updateSettings(() => {
+						config.cachedModels = models;
+						config.cacheTimestamp = Date.now();
+					});
 					new Notice(t('settings.provider.notices.refreshed', { provider: config.provider }));
 					refreshDisplay();
 				} catch (_error) {
@@ -330,8 +333,9 @@ export function displayProviderTab(
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
 				if (await showConfirm(app, t('settings.provider.confirm.delete', { provider: config.provider }))) {
-					plugin.settings.llmConfigs.splice(index, 1);
-					await plugin.saveSettings();
+					await plugin.updateSettings((settings) => {
+						settings.llmConfigs.splice(index, 1);
+					});
 					refreshDisplay();
 				}
 			})();

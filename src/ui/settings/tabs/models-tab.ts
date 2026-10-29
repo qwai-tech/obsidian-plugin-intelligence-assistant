@@ -209,8 +209,9 @@ export function displayModelsTab(
 		toggleBtn.addClass(model.enabled ? 'ia-button--ghost' : 'ia-button--primary');
 		toggleBtn.addEventListener('click', () => {
 			void (async () => {
-				model.enabled = !model.enabled;
-				await plugin.saveSettings();
+				await plugin.updateSettings(() => {
+					model.enabled = !model.enabled;
+				});
 				refreshDisplay();
 			})();
 		});
@@ -224,8 +225,9 @@ export function displayModelsTab(
 			} else {
 				chatBtn.addEventListener('click', () => {
 					void (async () => {
-						plugin.settings.defaultModel = model.id;
-						await plugin.saveSettings();
+						await plugin.updateSettings((settings) => {
+							settings.defaultModel = model.id;
+						});
 						new Notice(t('settings.models.notices.defaultChatSet', { name: model.name }));
 						refreshDisplay();
 					})();
@@ -242,8 +244,9 @@ export function displayModelsTab(
 			} else {
 				embeddingBtn.addEventListener('click', () => {
 					void (async () => {
-						plugin.settings.ragConfig.embeddingModel = model.id;
-						await plugin.saveSettings();
+						await plugin.updateSettings((settings) => {
+							settings.ragConfig.embeddingModel = model.id;
+						});
 						new Notice(t('settings.models.notices.defaultEmbeddingSet', { name: model.name }));
 						refreshDisplay();
 					})();

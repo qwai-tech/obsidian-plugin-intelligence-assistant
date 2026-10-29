@@ -79,6 +79,11 @@ export class SettingsStore {
 		}
 	}
 
+	async update(change: (settings: PluginSettings) => void): Promise<void> {
+		change(this.current);
+		await this.save();
+	}
+
 	onChange(listener: (units: ReadonlySet<PersistUnit>) => void): () => void {
 		this.listeners.add(listener);
 		return () => this.listeners.delete(listener);

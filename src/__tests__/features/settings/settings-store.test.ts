@@ -81,6 +81,20 @@ describe('SettingsStore', () => {
 		expect(listener).toHaveBeenCalledWith(new Set(['providers', 'config']));
 	});
 
+	it('applies a change and saves only the units it touched', async () => {
+		const { persistence, writes } = fakePersistence({ userConfig: currentConfig(), legacyData: null });
+		const store = new SettingsStore(persistence);
+		await store.load();
+		const listener = jest.fn();
+		store.onChange(listener);
+
+		await store.update(settings => { settings.defaultModel = 'changed'; });
+
+		expect(store.current.defaultModel).toBe('changed');
+		expect(writes.at(-1)).toEqual(new Set(['config']));
+		expect(listener).toHaveBeenCalledWith(new Set(['config']));
+	});
+
 	it('never shares nested objects with the defaults', async () => {
 		const { persistence } = fakePersistence({ userConfig: null, legacyData: null });
 		const store = new SettingsStore(persistence);

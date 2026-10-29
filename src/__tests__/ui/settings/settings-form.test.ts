@@ -16,7 +16,7 @@ type Control = { value: unknown; placeholder: string; options: Record<string, st
 const control = (setting: Setting): Control => (setting as unknown as { components: Control[] }).components[0];
 
 const makeForm = (section: Section) => {
-	const save = jest.fn(async () => undefined);
+	const save = jest.fn(async (change: () => void) => change());
 	const form = new SettingsForm(document.createElement('div'), () => section, save, 'testConfig');
 	return { form, save };
 };

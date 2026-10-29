@@ -36,8 +36,9 @@ export function displayGeneralTab(
 				.setPlaceholder(t('settings.general.defaultModel.placeholder'))
 				.setValue(plugin.settings.defaultModel)
 				.onChange(async (value) => {
-					plugin.settings.defaultModel = value;
-					await plugin.saveSettings();
+					await plugin.updateSettings((settings) => {
+						settings.defaultModel = value;
+					});
 				});
 		});
 
@@ -53,8 +54,9 @@ export function displayGeneralTab(
 				.addOption('manual', t('settings.general.conversationTitleMode.manual'))
 				.setValue(plugin.settings.conversationTitleMode)
 				.onChange(async (value) => {
-					plugin.settings.conversationTitleMode = value;
-					await plugin.saveSettings();
+					await plugin.updateSettings((settings) => {
+						settings.conversationTitleMode = value;
+					});
 				});
 		});
 
@@ -67,8 +69,9 @@ export function displayGeneralTab(
 			toggle
 				.setValue(plugin.settings.conversationIconEnabled)
 				.onChange(async (value) => {
-					plugin.settings.conversationIconEnabled = value;
-					await plugin.saveSettings();
+					await plugin.updateSettings((settings) => {
+						settings.conversationIconEnabled = value;
+					});
 				});
 		});
 

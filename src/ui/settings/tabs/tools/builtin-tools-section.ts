@@ -77,8 +77,9 @@ export function renderBuiltinToolsSection(
 		toggle.checked = tool.enabled;
 		toggle.addEventListener('change', () => {
 			void (async () => {
-				tool.enabled = toggle.checked;
-				await plugin.saveSettings();
+				await plugin.updateSettings(() => {
+					tool.enabled = toggle.checked;
+				});
 				// Re-load the builtin source so the registry reflects the new
 				// enabled set; otherwise the toggle is purely cosmetic until
 				// the plugin reloads.

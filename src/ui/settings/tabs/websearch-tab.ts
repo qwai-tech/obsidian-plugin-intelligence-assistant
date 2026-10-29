@@ -34,7 +34,7 @@ export function displayWebSearchTab(
 	containerEl.createEl('h3', { text: t('settings.websearch.title') });
 	containerEl.createEl('p', { text: t('settings.websearch.desc'), cls: ['ia-section-description', 'ia-section-description--spaced'] });
 
-	const form = new SettingsForm<WebSearchConfig>(containerEl, () => plugin.settings.webSearchConfig, () => plugin.saveSettings(), 'webSearchConfig');
+	const form = new SettingsForm<WebSearchConfig>(containerEl, () => plugin.settings.webSearchConfig, (change) => plugin.updateSettings(change), 'webSearchConfig');
 	const field = (name: string) => ({
 		label: t(`settings.websearch.${name}.name`),
 		description: t(`settings.websearch.${name}.desc`),

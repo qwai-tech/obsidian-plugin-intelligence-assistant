@@ -249,8 +249,9 @@ export class ChatSessionController {
 	}
 
 	private async select(selection: SessionSelection): Promise<void> {
-		this.settings.activeAgentId = selection.activeAgentId;
-		this.settings.activeSystemPromptId = selection.activeSystemPromptId;
-		await this.plugin.saveSettings();
+		await this.plugin.updateSettings(settings => {
+			settings.activeAgentId = selection.activeAgentId;
+			settings.activeSystemPromptId = selection.activeSystemPromptId;
+		});
 	}
 }

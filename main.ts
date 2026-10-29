@@ -232,6 +232,10 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		this.settings = this.store.current;
 	}
 
+	async updateSettings(change: (settings: PluginSettings) => void): Promise<void> {
+		await this.store.update(change);
+	}
+
 	async saveSettings(): Promise<void> {
 		await this.store.save();
 	}

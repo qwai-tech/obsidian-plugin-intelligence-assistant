@@ -84,8 +84,9 @@ export function displayMCPTab(
 			cachedTools: []
 		};
 		new MCPServerModal(app, draft, 'create', async (created) => {
-			plugin.settings.mcpServers.push(created);
-			await plugin.saveSettings();
+			await plugin.updateSettings((settings) => {
+				settings.mcpServers.push(created);
+			});
 			await plugin.services.tools.connectAutoMcpServers();
 			refreshDisplay();
 		}).open();
@@ -235,8 +236,9 @@ export function displayMCPTab(
 		editBtn.addEventListener('click', () => {
 			const draft = JSON.parse(JSON.stringify(server)) as MCPServerConfig;
 			new MCPServerModal(app, draft, 'edit', async (updated) => {
-				plugin.settings.mcpServers[index] = updated;
-				await plugin.saveSettings();
+				await plugin.updateSettings((settings) => {
+					settings.mcpServers[index] = updated;
+				});
 				await plugin.services.tools.connectAutoMcpServers();
 				refreshDisplay();
 			}).open();
@@ -328,11 +330,13 @@ export function displayMCPTab(
 				testBtn.disabled = true;
 
 				try {
-					server.cachedTools = await plugin.services.tools.probeMcp(server);
-					server.cacheTimestamp = Date.now();
-					await plugin.saveSettings();
+					const tools = await plugin.services.tools.probeMcp(server);
+					await plugin.updateSettings(() => {
+						server.cachedTools = tools;
+						server.cacheTimestamp = Date.now();
+					});
 
-					new Notice(t('settings.mcp.notices.testSuccess', { count: server.cachedTools.length }));
+					new Notice(t('settings.mcp.notices.testSuccess', { count: tools.length }));
 					refreshDisplay(); // Refresh the entire view to update status indicators
 				} catch (error) {
 					console.error('[MCP] Test connection failed:', error);
@@ -365,8 +369,9 @@ export function displayMCPTab(
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
 				if (await showConfirm(app, t('settings.mcp.confirm.delete', { name: server.name }))) {
-					plugin.settings.mcpServers.splice(index, 1);
-					await plugin.saveSettings();
+					await plugin.updateSettings((settings) => {
+						settings.mcpServers.splice(index, 1);
+					});
 					refreshDisplay();
 				}
 			})();

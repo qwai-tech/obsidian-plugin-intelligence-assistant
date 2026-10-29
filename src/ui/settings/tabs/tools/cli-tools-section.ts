@@ -30,8 +30,9 @@ export function renderCliToolsSection(
 	addButton.addEventListener('click', () => {
 		void (async () => {
 			const newConfig = createDefaultCLIToolConfig();
-			plugin.settings.cliTools.push(newConfig);
-			await plugin.saveSettings();
+			await plugin.updateSettings((settings) => {
+				settings.cliTools.push(newConfig);
+			});
 			new CLIToolConfigModal(plugin, newConfig, refreshDisplay).open();
 		})();
 	});
@@ -100,8 +101,9 @@ export function renderCliToolsSection(
 		const toggleBtn = actionsCell.createEl('button', { text: config.enabled ? t('settings.tools.cli.actions.disable') : t('settings.tools.cli.actions.enable') });
 		toggleBtn.addEventListener('click', () => {
 			void (async () => {
-				config.enabled = !config.enabled;
-				await plugin.saveSettings();
+				await plugin.updateSettings(() => {
+					config.enabled = !config.enabled;
+				});
 				await plugin.services.tools.reloadCli();
 				refreshDisplay();
 			})();
@@ -114,8 +116,9 @@ export function renderCliToolsSection(
 				const list = plugin.settings.cliTools;
 				const index = list.findIndex(entry => entry.id === config.id);
 				if (index !== -1) {
-					list.splice(index, 1);
-					await plugin.saveSettings();
+					await plugin.updateSettings(() => {
+						list.splice(index, 1);
+					});
 					await plugin.services.tools.reloadCli();
 					refreshDisplay();
 					new Notice(t('settings.tools.cli.notices.removed'));

@@ -35,15 +35,16 @@ export function displayPromptsTab(
 	addBtn.addClass('ia-button--primary');
 	addBtn.setAttribute('data-testid', TestIds.settings.promptAddBtn);
 	addBtn.addEventListener('click', () => {
-		plugin.settings.systemPrompts.push({
-			id: `prompt-${Date.now()}`,
-			name: 'New Prompt',
-			content: 'You are a helpful assistant.',
-			enabled: true,
-			createdAt: Date.now(),
-			updatedAt: Date.now()
+		void plugin.updateSettings(settings => {
+			settings.systemPrompts.push({
+				id: `prompt-${Date.now()}`,
+				name: 'New Prompt',
+				content: 'You are a helpful assistant.',
+				enabled: true,
+				createdAt: Date.now(),
+				updatedAt: Date.now()
+			});
 		});
-		void plugin.saveSettings();
 		refreshDisplay();
 	});
 
@@ -128,8 +129,9 @@ export function displayPromptsTab(
 				// Find and update the prompt in settings
 				const promptIndex = plugin.settings.systemPrompts.findIndex(p => p.id === updatedPrompt.id);
 				if (promptIndex !== -1) {
-					plugin.settings.systemPrompts[promptIndex] = updatedPrompt;
-					await plugin.saveSettings();
+					await plugin.updateSettings((settings) => {
+						settings.systemPrompts[promptIndex] = updatedPrompt;
+					});
 					refreshDisplay();
 				}
 			}).open();
@@ -143,9 +145,10 @@ export function displayPromptsTab(
 		toggleBtn.setAttribute('data-prompt-id', prompt.id);
 		toggleBtn.addEventListener('click', () => {
 			void (async () => {
-				prompt.enabled = !prompt.enabled;
-				prompt.updatedAt = Date.now();
-				await plugin.saveSettings();
+				await plugin.updateSettings(() => {
+					prompt.enabled = !prompt.enabled;
+					prompt.updatedAt = Date.now();
+				});
 				refreshDisplay();
 			})();
 		});
@@ -160,8 +163,9 @@ export function displayPromptsTab(
 			deleteBtn.addEventListener('click', () => {
 				void (async () => {
 					if (await showConfirm(app, t('settings.prompts.confirm.delete', { name: prompt.name }))) {
-						plugin.settings.systemPrompts.splice(index, 1);
-						await plugin.saveSettings();
+						await plugin.updateSettings((settings) => {
+							settings.systemPrompts.splice(index, 1);
+						});
 						refreshDisplay();
 					}
 				})();

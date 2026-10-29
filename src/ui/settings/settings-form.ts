@@ -43,7 +43,7 @@ export class SettingsForm<T extends object> {
 	constructor(
 		private readonly container: HTMLElement,
 		private readonly section: () => T,
-		private readonly save: () => Promise<void>,
+		private readonly update: (change: () => void) => Promise<void>,
 		private readonly pathPrefix: string,
 	) {}
 
@@ -115,8 +115,9 @@ export class SettingsForm<T extends object> {
 	}
 
 	private async write(key: keyof T, value: unknown, then?: () => void): Promise<void> {
-		this.section()[key] = value as T[keyof T];
-		await this.save();
+		await this.update(() => {
+			this.section()[key] = value as T[keyof T];
+		});
 		then?.();
 	}
 

@@ -295,5 +295,5 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 }
 
 function ragForm(container: HTMLElement, plugin: IntelligenceAssistantPlugin): SettingsForm<RAGConfig> {
-	return new SettingsForm(container, () => plugin.settings.ragConfig, () => plugin.saveSettings(), 'ragConfig');
+	return new SettingsForm(container, () => plugin.settings.ragConfig, (change) => plugin.updateSettings(change), 'ragConfig');
 }

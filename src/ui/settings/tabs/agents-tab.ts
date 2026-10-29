@@ -67,8 +67,9 @@ export function displayAgentsTab(
 			createdAt: Date.now(),
 			updatedAt: Date.now()
 		};
-		plugin.settings.agents.push(newAgent);
-		void plugin.saveSettings();
+		void plugin.updateSettings((settings) => {
+			settings.agents.push(newAgent);
+		});
 		refreshDisplay();
 	});
 
@@ -256,8 +257,9 @@ export function displayAgentsTab(
 			new AgentEditModal(app, plugin, agent, async (updatedAgent) => {
 				const agentIndex = plugin.settings.agents.findIndex(a => a.id === updatedAgent.id);
 				if (agentIndex !== -1) {
-					plugin.settings.agents[agentIndex] = updatedAgent;
-					await plugin.saveSettings();
+					await plugin.updateSettings((settings) => {
+						settings.agents[agentIndex] = updatedAgent;
+					});
 					refreshDisplay();
 				}
 			}).open();
@@ -277,8 +279,9 @@ export function displayAgentsTab(
 					if (await showConfirm(app, t('settings.agents.confirm.delete', { name: agent.name }))) {
 					const agentIndex = plugin.settings.agents.findIndex(a => a.id === agent.id);
 					if (agentIndex !== -1) {
-						plugin.settings.agents.splice(agentIndex, 1);
-						await plugin.saveSettings();
+						await plugin.updateSettings((settings) => {
+							settings.agents.splice(agentIndex, 1);
+						});
 						refreshDisplay();
 					}
 					}

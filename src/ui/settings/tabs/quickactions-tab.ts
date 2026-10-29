@@ -34,8 +34,9 @@ export function displayQuickActionsTab(
 			text.setPlaceholder(t('settings.quickActions.actionPrefix.placeholder'))
 				.setValue(plugin.settings.quickActionPrefix || '⚡')
 				.onChange(async (value) => {
-					plugin.settings.quickActionPrefix = value || '⚡';
-					await plugin.saveSettings();
+					await plugin.updateSettings((settings) => {
+						settings.quickActionPrefix = value || '⚡';
+					});
 				});
 		});
 
@@ -59,8 +60,9 @@ export function displayQuickActionsTab(
 			prompt: 'Process the following text:\n\n',
 			actionType: 'replace'
 		};
-		plugin.settings.quickActions.push(newAction);
-		void plugin.saveSettings();
+		void plugin.updateSettings((settings) => {
+			settings.quickActions.push(newAction);
+		});
 		refreshDisplay();
 	});
 
@@ -105,8 +107,9 @@ export function displayQuickActionsTab(
 			enableToggle.checked = action.enabled;
 			enableToggle.addEventListener('change', () => {
 				void (async () => {
-					plugin.settings.quickActions[i].enabled = enableToggle.checked;
-					await plugin.saveSettings();
+					await plugin.updateSettings((settings) => {
+						settings.quickActions[i].enabled = enableToggle.checked;
+					});
 					refreshDisplay();
 				})();
 			});
@@ -171,8 +174,9 @@ export function displayQuickActionsTab(
 							t('settings.quickActions.confirm.delete', { name: action.name })
 						);
 					if (confirmed) {
-						plugin.settings.quickActions.splice(i, 1);
-						await plugin.saveSettings();
+						await plugin.updateSettings((settings) => {
+							settings.quickActions.splice(i, 1);
+						});
 						refreshDisplay();
 					}
 				})();
@@ -294,8 +298,9 @@ function openQuickActionEditModal(
 				.setCta()
 				.onClick(() => {
 					void (async () => {
-						this.plugin.settings.quickActions[this.index] = this.action;
-						await this.plugin.saveSettings();
+						await this.plugin.updateSettings((settings) => {
+							settings.quickActions[this.index] = this.action;
+						});
 						this.refreshDisplay();
 						this.close();
 					})();

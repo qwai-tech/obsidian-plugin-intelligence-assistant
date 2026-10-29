@@ -29,8 +29,9 @@ export function renderOpenapiToolsSection(
 	addButton.addEventListener('click', () => {
 		void (async () => {
 			const newConfig = createDefaultOpenApiConfig();
-			plugin.settings.openApiTools.push(newConfig);
-			await plugin.saveSettings();
+			await plugin.updateSettings((settings) => {
+				settings.openApiTools.push(newConfig);
+			});
 			new OpenApiConfigModal(plugin, newConfig, refreshDisplay).open();
 		})();
 	});
@@ -88,8 +89,9 @@ export function renderOpenapiToolsSection(
 				const list = plugin.settings.openApiTools;
 				const index = list.findIndex(entry => entry.id === config.id);
 				if (index !== -1) {
-					list.splice(index, 1);
-					await plugin.saveSettings();
+					await plugin.updateSettings(() => {
+						list.splice(index, 1);
+					});
 					await plugin.services.tools.removeOpenApi(config.id);
 					refreshDisplay();
 					new Notice(t('settings.tools.openapi.notices.removed'));
@@ -317,8 +319,9 @@ class OpenApiConfigModal extends Modal {
 						const list = this.plugin.settings.openApiTools;
 						const index = list.findIndex(entry => entry.id === this.config.id);
 						if (index !== -1) {
-							list.splice(index, 1);
-							await this.plugin.saveSettings();
+							await this.plugin.updateSettings(() => {
+								list.splice(index, 1);
+							});
 							await this.plugin.services.tools.removeOpenApi(this.config.id);
 							this.onChange();
 							this.close();

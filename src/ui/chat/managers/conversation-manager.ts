@@ -78,8 +78,9 @@ export class ConversationManager extends Events {
 			config: { ...NEW_CONVERSATION_CONFIG, modelId: this.plugin.settings.defaultModel || this.modelSelect?.value || undefined },
 		};
 		await this.storage.createConversation(conversation);
-		this.plugin.settings.activeConversationId = conversation.id;
-		await this.plugin.saveSettings();
+		await this.plugin.updateSettings((settings) => {
+			settings.activeConversationId = conversation.id;
+		});
 
 		this.loadConversation(conversation);
 		void this.renderConversationList();

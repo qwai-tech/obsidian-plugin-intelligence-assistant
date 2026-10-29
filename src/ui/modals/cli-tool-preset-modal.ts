@@ -96,8 +96,9 @@ export class CLIToolPresetModal extends Modal {
 		if (!this.plugin.settings.cliTools) {
 			this.plugin.settings.cliTools = [];
 		}
-		this.plugin.settings.cliTools.push(newConfig);
-		await this.plugin.saveSettings();
+		await this.plugin.updateSettings((settings) => {
+			settings.cliTools.push(newConfig);
+		});
 		await this.plugin.services.tools.reloadCli();
 		this.onChange();
 

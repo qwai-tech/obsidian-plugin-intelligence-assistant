@@ -76,6 +76,10 @@ describe('ConversationManager', () => {
 				llmConfigs: [],
 			},
 			saveSettings: jest.fn().mockResolvedValue(undefined),
+			async updateSettings(change: (settings: unknown) => void) {
+				change(this.settings);
+				await this.saveSettings();
+			},
 		} as any;
 
 		state = new ChatViewState();

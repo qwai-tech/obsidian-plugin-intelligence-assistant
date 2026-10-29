@@ -76,9 +76,10 @@ export class ChatView extends ItemView {
 		container.setAttribute('data-testid', TestIds.chat.container);
 
 		const opening = openingSession(this.plugin.settings, this.plugin.settings.defaultChatMode);
-		this.state.mode = opening.mode;
-		this.plugin.settings.activeAgentId = opening.activeAgentId;
-		await this.plugin.saveSettings();
+		await this.plugin.updateSettings((settings) => {
+			this.state.mode = opening.mode;
+			settings.activeAgentId = opening.activeAgentId;
+		});
 
 		const mainLayout = container.createDiv('chat-main-layout');
 		const mainChatContainer = mainLayout.createDiv('main-chat-area');
