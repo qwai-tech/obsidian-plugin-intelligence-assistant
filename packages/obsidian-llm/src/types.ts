@@ -29,6 +29,7 @@ export interface LLMMessage {
 export interface ChatRequest {
 	messages: LLMMessage[];
 	model: string;
+	signal?: AbortSignal;
 	temperature?: number;
 	maxTokens?: number;
 	stream?: boolean;

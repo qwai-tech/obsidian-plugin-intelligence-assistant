@@ -10,12 +10,6 @@ import { Events } from 'obsidian';
 
 export type { AgentExecutionStep };
 
-export interface StateChangeEvent {
-	field: string;
-	oldValue: unknown;
-	newValue: unknown;
-}
-
 /**
  * Manages all state for ChatView
  * Emits events when state changes to allow reactive updates
@@ -48,7 +42,7 @@ export class ChatViewState extends Events {
 
 	// Streaming state
 	private _isStreaming: boolean = false;
-	private _stopStreamingRequested: boolean = false;
+	private runAbort: AbortController | null = null;
 
 	// Agent execution
 	private _agentExecutionSteps: AgentExecutionStep[] = [];
@@ -310,13 +304,20 @@ export class ChatViewState extends Events {
 	}
 
 	get stopStreamingRequested(): boolean {
-		return this._stopStreamingRequested;
+		return this.runAbort?.signal.aborted ?? false;
 	}
 
-	set stopStreamingRequested(value: boolean) {
-		const oldValue = this._stopStreamingRequested;
-		this._stopStreamingRequested = value;
-		this.trigger('state-change', { field: 'stopStreamingRequested', oldValue, newValue: value });
+	startRun(): AbortSignal {
+		this.runAbort = new AbortController();
+		return this.runAbort.signal;
+	}
+
+	stopRun(): void {
+		this.runAbort?.abort();
+	}
+
+	endRun(): void {
+		this.runAbort = null;
 	}
 
 	// Agent execution steps
@@ -365,7 +366,7 @@ export class ChatViewState extends Events {
 		this.clearAttachments();
 		this.clearReferencedFiles();
 		this.isStreaming = false;
-		this.stopStreamingRequested = false;
+		this.endRun();
 		this.clearAgentExecutionSteps();
 	}
 
@@ -390,7 +391,7 @@ export class ChatViewState extends Events {
 			currentAttachmentsCount: this._currentAttachments.length,
 			referencedFilesCount: this._referencedFiles.length,
 			isStreaming: this._isStreaming,
-			stopStreamingRequested: this._stopStreamingRequested,
+			stopStreamingRequested: this.stopStreamingRequested,
 			agentExecutionStepsCount: this._agentExecutionSteps.length
 		};
 	}

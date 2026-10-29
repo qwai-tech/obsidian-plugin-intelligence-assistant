@@ -10,6 +10,8 @@ import { StreamTransportUnavailableError } from './http';
 /**
  * Result of parsing a streaming chunk
  */
+export type ChunkParser = (data: unknown) => ParsedStreamChunk | null;
+
 export interface ParsedStreamChunk {
 	/** Text content extracted from the chunk */
 	content: string | null;
@@ -35,34 +37,10 @@ export interface ParsedStreamChunk {
  */
 export abstract class BaseStreamingProvider extends BaseLLMProvider {
 	/**
-	 * Parse a JSON chunk from the stream
-	 * Each provider has different JSON structure, so this must be implemented
-	 *
-	 * @param data The parsed JSON object from the stream
-	 * @returns Parsed content and done status, or null if chunk should be ignored
-	 *
-	 * @example OpenAI
-	 * ```ts
-	 * protected parseStreamChunk(_data: unknown): ParsedStreamChunk | null {
-	 *   if (_data === '[DONE]') return { content: null, done: true };
-	 *   const content = _data.choices[0]?.delta?.content;
-	 *   return content ? { content, done: false } : null;
-	 * }
-	 * ```
-	 *
-	 * @example Anthropic
-	 * ```ts
-	 * protected parseStreamChunk(_data: unknown): ParsedStreamChunk | null {
-	 *   if (_data.type === 'message_stop') return { content: null, done: true };
-	 *   if (_data.type === 'content_block_delta') {
-	 *     const content = _data.delta?.text;
-	 *     return content ? { content, done: false } : null;
-	 *   }
-	 *   return null;
-	 * }
-	 * ```
+	 * A parser for one stream. Called once per request, so any state a parser
+	 * accumulates (partial tool calls) belongs to that stream alone.
 	 */
-	protected abstract parseStreamChunk(_data: unknown): ParsedStreamChunk | null;
+	protected abstract createChunkParser(): ChunkParser;
 
 	/**
 	 * Get the provider name for logging
@@ -92,6 +70,7 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 				method: 'POST',
 				headers: this.getHeaders(),
 				body: JSON.stringify(requestBody),
+				signal: request.signal,
 			});
 		} catch (error: unknown) {
 			// The endpoint was unreachable over the streaming transport at all --
@@ -103,7 +82,7 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 			// identical status.
 			if (error instanceof StreamTransportUnavailableError) {
 				try {
-					await this.completeViaBufferedRequest(requestBody as Record<string, unknown>, url, onChunk);
+					await this.completeViaBufferedRequest(requestBody as Record<string, unknown>, url, onChunk, request.signal);
 					return;
 				} catch (fallbackError: unknown) {
 					console.error(`[${this.getProviderName()}] buffered fallback failed:`, fallbackError);
@@ -127,7 +106,7 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 			}
 
 			// Process the stream
-			await this.processStream(response.body, onChunk);
+			await this.processStream(response.body, onChunk, request.signal);
 
 		} catch (error: unknown) {
 			const err = error instanceof Error ? error : new Error(String(error));
@@ -147,11 +126,12 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 		streamBody: Record<string, unknown>,
 		url: string,
 		onChunk: (_chunk: StreamChunk) => void,
+		signal?: AbortSignal,
 	): Promise<void> {
 		const body: Record<string, unknown> = { ...streamBody, stream: false };
 		delete body.stream_options;
 
-		const response = (await this.makeRequest(url, body)) as {
+		const response = (await this.makeRequest(url, body, signal)) as {
 			json?: {
 				choices?: Array<{ message?: { content?: string | null; reasoning_content?: string; tool_calls?: ParsedStreamChunk['toolCalls'] } }>;
 				usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
@@ -192,14 +172,20 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 	 */
 	private async processStream(
 		body: ReadableStream<Uint8Array>,
-		onChunk: (_chunk: StreamChunk) => void
+		onChunk: (_chunk: StreamChunk) => void,
+		signal?: AbortSignal,
 	): Promise<void> {
 		const reader = body.getReader();
 		const decoder = new TextDecoder();
+		const parse = this.createChunkParser();
 		let buffer = '';
+		const cancel = () => {
+			reader.cancel().catch(() => undefined);
+		};
+		signal?.addEventListener('abort', cancel, { once: true });
 
 		try {
-			while (true) {
+			while (!signal?.aborted) {
 				const { done, value } = await reader.read();
 				if (done) break;
 
@@ -212,8 +198,8 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 				// Keep the last incomplete line in the buffer
 				buffer = lines.pop() || '';
 
-				// Process each complete line
 				for (const line of lines) {
+					if (signal?.aborted) break;
 					if (line.startsWith('data: ')) {
 						const data = line.slice(6); // Remove 'data: ' prefix
 
@@ -226,7 +212,7 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 						// Try to parse and process the JSON
 						try {
 							const parsed = JSON.parse(data) as Record<string, unknown>;
-							const result = this.parseStreamChunk(parsed);
+							const result = parse(parsed);
 
 							if (result) {
 								if (result.done) {
@@ -255,6 +241,7 @@ export abstract class BaseStreamingProvider extends BaseLLMProvider {
 			onChunk({ content: '', done: true });
 
 		} finally {
+			signal?.removeEventListener('abort', cancel);
 			reader.releaseLock();
 		}
 	}

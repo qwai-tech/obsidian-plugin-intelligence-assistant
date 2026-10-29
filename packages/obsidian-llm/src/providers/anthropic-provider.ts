@@ -1,9 +1,32 @@
-import { BaseStreamingProvider, ParsedStreamChunk } from '../base-streaming-provider';
-import { ChatRequest, ChatResponse, LLMMessage } from '../types';
+import { BaseStreamingProvider, type ChunkParser, type ParsedStreamChunk } from '../base-streaming-provider';
+import type { ChatRequest, ChatResponse, LLMMessage } from '../types';
+
+type ContentBlock = Record<string, unknown>;
+
+interface AnthropicMessage {
+	role: 'user' | 'assistant';
+	content: string | ContentBlock[];
+}
+
+interface WireToolCall {
+	id: string;
+	function: { name: string; arguments: string };
+}
+
+type WireMessage = Omit<LLMMessage, 'role' | 'tool_calls'> & { role: LLMMessage['role'] | 'tool'; tool_calls?: WireToolCall[] };
+
+interface StreamEvent {
+	type: string;
+	index?: number;
+	message?: { usage?: { input_tokens?: number } };
+	content_block?: { type: string; id?: string; name?: string };
+	delta?: { type?: string; text?: string; partial_json?: string; stop_reason?: string };
+	usage?: { output_tokens?: number };
+}
+
+const JSON_ONLY = 'Respond with a valid JSON object only. Do not include markdown fences or explanatory text.';
 
 export class AnthropicProvider extends BaseStreamingProvider {
-	private _inputTokens = 0;
-
 	get name(): string {
 		return 'Anthropic';
 	}
@@ -16,7 +39,6 @@ export class AnthropicProvider extends BaseStreamingProvider {
 		if (!this.config.apiKey) {
 			throw new Error('Anthropic API key is required');
 		}
-
 		return {
 			...super.getHeaders(),
 			'x-api-key': this.config.apiKey,
@@ -24,161 +46,184 @@ export class AnthropicProvider extends BaseStreamingProvider {
 		};
 	}
 
-	private convertMessages(messages: LLMMessage[]): { system?: string; messages: unknown[] } {
-		const systemMessage = messages.find(m => m.role === 'system');
-		const nonSystemMessages = messages.filter(m => m.role !== 'system');
-
-		return {
-			system: systemMessage?.content,
-			messages: nonSystemMessages.map(m => {
-				if (m.role !== 'user' || !m.attachments?.some(a => a.type === 'image')) {
-					return { role: m.role, content: m.content };
-				}
-
-				const content: Record<string, unknown>[] = [{ type: 'text', text: m.content }];
-				for (const att of m.attachments) {
-					if (att.type === 'image' && att.content) {
-						// att.content is "data:image/png;base64,..."
-						const match = att.content.match(/^data:([^;]+);base64,(.+)$/);
-						if (match) {
-							content.push({
-								type: 'image',
-								source: {
-									type: 'base64',
-									media_type: match[1],
-									data: match[2],
-								},
-							});
-						}
-					}
-				}
-				return { role: m.role, content };
-			}),
-		};
+	private get messagesUrl(): string {
+		return `${this.getBaseUrl('https://api.anthropic.com/v1')}/messages`;
 	}
 
 	async chat(request: ChatRequest): Promise<ChatResponse> {
-		const url = this.getBaseUrl('https://api.anthropic.com/v1') + '/messages';
-
-		const { system, messages } = this.convertMessages(request.messages);
-		const modelName = this.extractModelName(request.model);
-
-		const body: Record<string, unknown> = {
-			model: modelName,
-			messages,
-			max_tokens: request.maxTokens ?? 4096,
-			temperature: request.temperature ?? 0.7,
-			stream: false,
+		const response = await this.makeRequest(this.messagesUrl, this.buildBody(request, false), request.signal) as {
+			json: { content: Array<{ type: string; text?: string }>; usage: { input_tokens: number; output_tokens: number } };
 		};
-
-		let systemPrompt = system;
-		if (request.responseFormat?.type === 'json_object') {
-			systemPrompt = [systemPrompt, 'Respond with a valid JSON object only. Do not include markdown fences or explanatory text.']
-				.filter(Boolean)
-				.join('\n\n');
-		} else if (request.responseFormat?.type === 'json_schema' && request.responseFormat.json_schema) {
-			systemPrompt = [
-				systemPrompt,
-				'Respond with valid JSON only. Do not include markdown fences or explanatory text.',
-				`JSON schema: ${JSON.stringify(request.responseFormat.json_schema.schema)}`,
-			].filter(Boolean).join('\n\n');
-		}
-
-		if (systemPrompt) {
-			body.system = systemPrompt;
-		}
-
-		const response = await this.makeRequest(url, body) as { json: {
-			content: Array<{ text: string }>;
-			usage: { input_tokens: number; output_tokens: number };
-		}};
-		const data = response.json;
-
+		const { content, usage } = response.json;
 		return {
-			content: data.content[0].text,
+			content: content.filter((block) => block.type === 'text').map((block) => block.text ?? '').join(''),
 			usage: {
-				promptTokens: data.usage.input_tokens,
-				completionTokens: data.usage.output_tokens,
-				totalTokens: data.usage.input_tokens + data.usage.output_tokens,
+				promptTokens: usage.input_tokens,
+				completionTokens: usage.output_tokens,
+				totalTokens: usage.input_tokens + usage.output_tokens,
 			},
 		};
 	}
 
 	protected prepareStreamRequest(request: ChatRequest): { url: string; body: unknown } {
-		const url = this.getBaseUrl('https://api.anthropic.com/v1') + '/messages';
+		return { url: this.messagesUrl, body: this.buildBody(request, true) };
+	}
 
-		const { system, messages } = this.convertMessages(request.messages);
-		const modelName = this.extractModelName(request.model);
+	protected createChunkParser(): ChunkParser {
+		let inputTokens = 0;
+		const toolBlocks = new Map<number, { id: string; name: string; arguments: string }>();
+		return (data) => {
+			if (typeof data !== 'object' || data === null || !('type' in data)) {
+				return null;
+			}
+			const event = data as StreamEvent;
+			switch (event.type) {
+				case 'message_start':
+					inputTokens = event.message?.usage?.input_tokens ?? 0;
+					return null;
+				case 'content_block_start':
+					if (event.content_block?.type === 'tool_use') {
+						toolBlocks.set(event.index ?? 0, { id: event.content_block.id ?? '', name: event.content_block.name ?? '', arguments: '' });
+					}
+					return null;
+				case 'content_block_delta':
+					return this.applyDelta(event, toolBlocks);
+				case 'message_delta':
+					return this.finishMessage(event, inputTokens, toolBlocks);
+				case 'message_stop':
+					return { content: null, done: true };
+				default:
+					return null;
+			}
+		};
+	}
 
+	private applyDelta(event: StreamEvent, toolBlocks: Map<number, { arguments: string }>): ParsedStreamChunk | null {
+		if (event.delta?.type === 'input_json_delta') {
+			const block = toolBlocks.get(event.index ?? 0);
+			if (block) {
+				block.arguments += event.delta.partial_json ?? '';
+			}
+			return null;
+		}
+		return event.delta?.text ? { content: event.delta.text, done: false } : null;
+	}
+
+	private finishMessage(
+		event: StreamEvent,
+		inputTokens: number,
+		toolBlocks: Map<number, { id: string; name: string; arguments: string }>,
+	): ParsedStreamChunk {
+		const outputTokens = event.usage?.output_tokens ?? 0;
+		const usage = { promptTokens: inputTokens, completionTokens: outputTokens, totalTokens: inputTokens + outputTokens };
+		if (toolBlocks.size === 0) {
+			return { content: null, done: false, usage };
+		}
+		const toolCalls = [...toolBlocks.values()].map((block) => ({
+			id: block.id,
+			type: 'function' as const,
+			function: { name: block.name, arguments: block.arguments || '{}' },
+		}));
+		toolBlocks.clear();
+		return { content: null, done: false, usage, toolCalls };
+	}
+
+	private buildBody(request: ChatRequest, stream: boolean): Record<string, unknown> {
+		const { system, messages } = convertMessages(request.messages as WireMessage[]);
 		const body: Record<string, unknown> = {
-			model: modelName,
+			model: this.extractModelName(request.model),
 			messages,
 			max_tokens: request.maxTokens ?? 4096,
 			temperature: request.temperature ?? 0.7,
-			stream: true,
+			stream,
 		};
-
-		let systemPrompt = system;
-		if (request.responseFormat?.type === 'json_object') {
-			systemPrompt = [systemPrompt, 'Respond with a valid JSON object only. Do not include markdown fences or explanatory text.']
-				.filter(Boolean)
-				.join('\n\n');
-		} else if (request.responseFormat?.type === 'json_schema' && request.responseFormat.json_schema) {
-			systemPrompt = [
-				systemPrompt,
-				'Respond with valid JSON only. Do not include markdown fences or explanatory text.',
-				`JSON schema: ${JSON.stringify(request.responseFormat.json_schema.schema)}`,
-			].filter(Boolean).join('\n\n');
-		}
-
+		const systemPrompt = withResponseFormat(system, request.responseFormat);
 		if (systemPrompt) {
 			body.system = systemPrompt;
 		}
-
-		return { url, body };
+		if (request.tools && request.tools.length > 0) {
+			body.tools = request.tools.map((tool) => ({
+				name: tool.function.name,
+				description: tool.function.description,
+				input_schema: tool.function.parameters ?? { type: 'object', properties: {} },
+			}));
+			const choice = toolChoiceOf(request.toolChoice);
+			if (choice) {
+				body.tool_choice = choice;
+			}
+		}
+		return body;
 	}
+}
 
-	protected parseStreamChunk(data: unknown): ParsedStreamChunk | null {
-		const hasType = (obj: unknown): obj is { type: string } => {
-			return typeof obj === 'object' && obj !== null && 'type' in obj;
-		};
-
-		if (!hasType(data)) return null;
-
-		// Capture input tokens from message_start
-		if (data.type === 'message_start') {
-			const d = data as { message?: { usage?: { input_tokens?: number } } };
-			this._inputTokens = d.message?.usage?.input_tokens ?? 0;
-			return null;
+function convertMessages(messages: WireMessage[]): { system?: string; messages: AnthropicMessage[] } {
+	const system = messages.filter((m) => m.role === 'system').map((m) => m.content).join('\n\n') || undefined;
+	const converted: AnthropicMessage[] = [];
+	for (const message of messages) {
+		if (message.role === 'system') {
+			continue;
 		}
-
-		// Extract finalized output tokens from message_delta
-		if (data.type === 'message_delta') {
-			const d = data as { usage?: { output_tokens?: number } };
-			const outputTokens = d.usage?.output_tokens ?? 0;
-			return {
-				content: null,
-				done: false,
-				usage: {
-					promptTokens: this._inputTokens,
-					completionTokens: outputTokens,
-					totalTokens: this._inputTokens + outputTokens,
-				},
-			};
+		if (message.role === 'tool') {
+			const result = { type: 'tool_result', tool_use_id: message.tool_call_id, content: message.content };
+			const previous = converted[converted.length - 1];
+			if (previous?.role === 'user' && Array.isArray(previous.content) && previous.content.every((block) => block.type === 'tool_result')) {
+				previous.content.push(result);
+			} else {
+				converted.push({ role: 'user', content: [result] });
+			}
+			continue;
 		}
-
-		// message_stop signals end of stream (usage already emitted in message_delta)
-		if (data.type === 'message_stop') {
-			return { content: null, done: true };
+		if (message.role === 'assistant' && Array.isArray(message.tool_calls) && message.tool_calls.length > 0) {
+			const blocks: ContentBlock[] = message.content ? [{ type: 'text', text: message.content }] : [];
+			for (const call of message.tool_calls) {
+				blocks.push({ type: 'tool_use', id: call.id, name: call.function.name, input: parseArguments(call.function.arguments) });
+			}
+			converted.push({ role: 'assistant', content: blocks });
+			continue;
 		}
-
-		// Extract text content from content_block_delta
-		if (data.type === 'content_block_delta') {
-			const delta = (data as { delta?: { text?: string } }).delta;
-			const content = delta?.text;
-			if (content) return { content, done: false };
-		}
-
-		return null;
+		converted.push({ role: message.role, content: userContent(message) });
 	}
+	return { system, messages: converted };
+}
+
+function userContent(message: WireMessage): string | ContentBlock[] {
+	const images = (message.attachments ?? [])
+		.filter((attachment) => attachment.type === 'image' && attachment.content)
+		.map((attachment) => attachment.content?.match(/^data:([^;]+);base64,(.+)$/))
+		.filter((match): match is RegExpMatchArray => Boolean(match));
+	if (message.role !== 'user' || images.length === 0) {
+		return message.content;
+	}
+	return [
+		{ type: 'text', text: message.content },
+		...images.map((match) => ({ type: 'image', source: { type: 'base64', media_type: match[1], data: match[2] } })),
+	];
+}
+
+function parseArguments(raw: string): unknown {
+	try {
+		return JSON.parse(raw || '{}');
+	} catch {
+		return {};
+	}
+}
+
+function toolChoiceOf(choice: ChatRequest['toolChoice']): Record<string, string> | undefined {
+	if (!choice) return undefined;
+	if (choice === 'auto') return { type: 'auto' };
+	if (choice === 'required') return { type: 'any' };
+	if (choice === 'none') return { type: 'none' };
+	return { type: 'tool', name: choice.function.name };
+}
+
+function withResponseFormat(system: string | undefined, format: ChatRequest['responseFormat']): string | undefined {
+	if (format?.type === 'json_object') {
+		return [system, JSON_ONLY].filter(Boolean).join('\n\n');
+	}
+	if (format?.type === 'json_schema' && format.json_schema) {
+		return [system, 'Respond with valid JSON only. Do not include markdown fences or explanatory text.', `JSON schema: ${JSON.stringify(format.json_schema.schema)}`]
+			.filter(Boolean)
+			.join('\n\n');
+	}
+	return system;
 }

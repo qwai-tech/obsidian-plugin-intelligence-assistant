@@ -28,13 +28,6 @@ interface OpenAIFunction {
 	};
 }
 
-/** Anthropic tools format. */
-interface AnthropicTool {
-	name: string;
-	description: string;
-	input_schema: Record<string, unknown>;
-}
-
 export class ToolRegistry {
 	/** key = `${kind}:${id}`, iterated in registration order (drives disambiguation priority). */
 	private sources = new Map<string, ToolSource>();
@@ -227,15 +220,6 @@ export class ToolRegistry {
 				description: tool.definition.description,
 				parameters: toJsonSchema(tool),
 			},
-		}));
-	}
-
-	/** Convert a tool list to Anthropic tools format (tool name uses llmName). */
-	toAnthropicTools(tools: RegisteredTool[]): AnthropicTool[] {
-		return tools.map((tool) => ({
-			name: tool.llmName,
-			description: tool.definition.description,
-			input_schema: toJsonSchema(tool),
 		}));
 	}
 

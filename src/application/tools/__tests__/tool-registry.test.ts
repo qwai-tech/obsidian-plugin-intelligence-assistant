@@ -441,25 +441,6 @@ describe('ToolRegistry - LLM format conversion', () => {
 		]);
 	});
 
-	it('converts tools to Anthropic tool format using the llm name', async () => {
-		const registry = await registryWithParamTool();
-		const tools = registry.toAnthropicTools(registry.getTools());
-		expect(tools).toEqual([
-			{
-				name: 'search',
-				description: 'Search the vault',
-				input_schema: {
-					type: 'object',
-					properties: {
-						query: { type: 'string', description: 'Search query' },
-						scope: { type: 'string', description: 'Where to search', enum: ['notes', 'all'] },
-					},
-					required: ['query'],
-				},
-			},
-		]);
-	});
-
 	it('uses disambiguated names in converted output', async () => {
 		const registry = new ToolRegistry();
 		registry.registerSource(fakeSource('mcp', 'alpha', [fakeTool('search')]));

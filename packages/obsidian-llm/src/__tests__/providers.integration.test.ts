@@ -47,7 +47,7 @@ describe('Provider Integration Tests', () => {
 				],
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toEqual({
 				content: 'Hello world',
@@ -56,7 +56,7 @@ describe('Provider Integration Tests', () => {
 		});
 
 		it('should handle [DONE] marker', () => {
-			const result = provider['parseStreamChunk']('[DONE]');
+			const result = provider['createChunkParser']()('[DONE]');
 
 			expect(result).toEqual({
 				content: null,
@@ -73,14 +73,14 @@ describe('Provider Integration Tests', () => {
 				],
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toBeNull();
 		});
 
 		it('should handle missing choices array', () => {
 			const chunk = {};
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toBeNull();
 		});
@@ -146,7 +146,7 @@ describe('Provider Integration Tests', () => {
 				},
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toEqual({
 				content: 'Hello from claude',
@@ -159,7 +159,7 @@ describe('Provider Integration Tests', () => {
 				type: 'message_stop',
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toEqual({
 				content: null,
@@ -172,7 +172,7 @@ describe('Provider Integration Tests', () => {
 				type: 'message_start',
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toBeNull();
 		});
@@ -183,7 +183,7 @@ describe('Provider Integration Tests', () => {
 				delta: {},
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toBeNull();
 		});
@@ -252,7 +252,7 @@ describe('Provider Integration Tests', () => {
 				],
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toMatchObject({
 				content: 'Hello from gemini',
@@ -271,14 +271,14 @@ describe('Provider Integration Tests', () => {
 				],
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toBeNull();
 		});
 
 		it('should handle missing candidates', () => {
 			const chunk = {};
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toBeNull();
 		});
@@ -310,9 +310,9 @@ describe('Provider Integration Tests', () => {
 				{ role: 'assistant', content: 'Hi there' },
 			];
 
-			const transformed = (provider as any)['transformMessages'](messages);
+			const { body } = (provider as any)['prepareStreamRequest']({ model: 'gemini-pro', messages });
 
-			expect(transformed).toEqual([
+			expect(body.contents).toEqual([
 				{ role: 'user', parts: [{ text: 'Hello' }] },
 				{ role: 'model', parts: [{ text: 'Hi there' }] },
 			]);
@@ -356,7 +356,7 @@ describe('Provider Integration Tests', () => {
 				],
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toEqual({
 				content: 'Response from OpenRouter',
@@ -365,7 +365,7 @@ describe('Provider Integration Tests', () => {
 		});
 
 		it('should handle [DONE] marker', () => {
-			const result = provider['parseStreamChunk']('[DONE]');
+			const result = provider['createChunkParser']()('[DONE]');
 
 			expect(result).toEqual({
 				content: null,
@@ -382,7 +382,7 @@ describe('Provider Integration Tests', () => {
 				],
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toBeNull();
 		});
@@ -454,7 +454,7 @@ describe('Provider Integration Tests', () => {
 				],
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toEqual({
 				content: 'Response from DeepSeek',
@@ -463,7 +463,7 @@ describe('Provider Integration Tests', () => {
 		});
 
 		it('should handle [DONE] marker', () => {
-			const result = provider['parseStreamChunk']('[DONE]');
+			const result = provider['createChunkParser']()('[DONE]');
 
 			expect(result).toEqual({
 				content: null,
@@ -483,7 +483,7 @@ describe('Provider Integration Tests', () => {
 				],
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toEqual({
 				content: null,
@@ -505,7 +505,7 @@ describe('Provider Integration Tests', () => {
 				],
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toEqual({
 				content: 'Answer: 42',
@@ -524,7 +524,7 @@ describe('Provider Integration Tests', () => {
 				],
 			};
 
-			const result = provider['parseStreamChunk'](chunk);
+			const result = provider['createChunkParser']()(chunk);
 
 			expect(result).toBeNull();
 		});
@@ -587,7 +587,7 @@ describe('Provider Integration Tests', () => {
 			});
 		});
 
-		it('all providers should implement parseStreamChunk', () => {
+		it('all providers should create a chunk parser', () => {
 			const providers = [
 				new OpenAIProvider(mockConfig),
 				new AnthropicProvider(mockConfig),
@@ -597,8 +597,7 @@ describe('Provider Integration Tests', () => {
 			];
 
 			providers.forEach((provider) => {
-				expect((provider as any)['parseStreamChunk']).toBeDefined();
-				expect(typeof (provider as any)['parseStreamChunk']).toBe('function');
+				expect(typeof (provider as any)['createChunkParser']()).toBe('function');
 			});
 		});
 
@@ -681,8 +680,8 @@ describe('Provider Integration Tests', () => {
 
 			providers.forEach((provider) => {
 				// Should not throw, just return null
-				expect(() => (provider as any)['parseStreamChunk'](malformedChunk)).not.toThrow();
-				expect((provider as any)['parseStreamChunk'](malformedChunk)).toBeNull();
+				expect(() => (provider as any)['createChunkParser']()(malformedChunk)).not.toThrow();
+				expect((provider as any)['createChunkParser']()(malformedChunk)).toBeNull();
 			});
 		});
 
@@ -696,8 +695,8 @@ describe('Provider Integration Tests', () => {
 			];
 
 			providers.forEach((provider) => {
-				expect(() => (provider as any)['parseStreamChunk'](null)).not.toThrow();
-				expect(() => (provider as any)['parseStreamChunk'](undefined)).not.toThrow();
+				expect(() => (provider as any)['createChunkParser']()(null)).not.toThrow();
+				expect(() => (provider as any)['createChunkParser']()(undefined)).not.toThrow();
 			});
 		});
 	});
@@ -713,7 +712,7 @@ describe('Provider Integration Tests', () => {
 				{ choices: [{ delta: {} }] }, // Empty delta (role or finish_reason)
 			];
 
-			const results = chunks.map(chunk => provider['parseStreamChunk'](chunk));
+			const results = chunks.map(chunk => provider['createChunkParser']()(chunk));
 
 			expect(results[0]).toEqual({ content: 'The', done: false });
 			expect(results[1]).toEqual({ content: ' answer', done: false });
@@ -733,7 +732,7 @@ describe('Provider Integration Tests', () => {
 				{ type: 'message_stop' },
 			];
 
-			const results = chunks.map(chunk => provider['parseStreamChunk'](chunk));
+			const results = chunks.map(chunk => provider['createChunkParser']()(chunk));
 
 			expect(results[0]).toBeNull(); // message_start
 			expect(results[1]).toBeNull(); // content_block_start
@@ -751,7 +750,7 @@ describe('Provider Integration Tests', () => {
 				{ choices: [{ delta: { content: 'The final answer is 42' } }] },
 			];
 
-			const results = chunks.map(chunk => provider['parseStreamChunk'](chunk));
+			const results = chunks.map(chunk => provider['createChunkParser']()(chunk));
 
 			expect(results[0]).toEqual({ content: null, done: false, reasoning: 'Let me think...', usage: undefined });
 			expect(results[1]).toEqual({ content: null, done: false, reasoning: 'The answer requires...', usage: undefined });

@@ -1,13 +1,25 @@
 import { BaseLLMProvider } from '../base-provider';
-import { ChatRequest, ChatResponse, StreamChunk } from '../types';
-import { toOpenAiWireMessages } from '../openai-message';
+import { StreamTransportUnavailableError } from '../http';
+import type { ChatRequest, ChatResponse, LLMMessage, StreamChunk } from '../types';
 import type { ModelCapability, ModelInfo } from '../types';
 
+interface OllamaToolCall {
+	function: { name: string; arguments?: unknown };
+}
+
 interface OllamaChatApiResponse {
-	message?: { content?: string };
+	message?: { content?: string; tool_calls?: OllamaToolCall[] };
+	done?: boolean;
 	prompt_eval_count?: number;
 	eval_count?: number;
 }
+
+interface WireToolCall {
+	id?: string;
+	function: { name: string; arguments: string };
+}
+
+type WireMessage = Omit<LLMMessage, 'role' | 'tool_calls'> & { role: LLMMessage['role'] | 'tool'; tool_calls?: WireToolCall[] };
 
 interface OllamaModelsResponse {
 	models?: Array<{ name: string; [key: string]: unknown }>;
@@ -34,43 +46,8 @@ export class OllamaProvider extends BaseLLMProvider {
 	}
 
 	async chat(request: ChatRequest): Promise<ChatResponse> {
-		const url = `${this.getBaseUrl()}/api/chat`;
-
-		// Extract model name from provider-prefixed ID (ollama:model-name -> model-name)
-		const modelName = request.model.includes(':') ? request.model.split(':').slice(1).join(':') : request.model;
-
-		const body = {
-			model: modelName,
-			messages: toOpenAiWireMessages(request.messages),
-			stream: false,
-			options: {
-				temperature: request.temperature ?? 0.7,
-				num_predict: request.maxTokens ?? 2000,
-			},
-		};
-
-		const response = await this.http.request({
-			url: url,
-			method: 'POST',
-			headers: this.getHeaders(),
-			body: JSON.stringify(body),
-		});
-
-		if (response.status < 200 || response.status >= 300) {
-			const errorText = String(response.text);
-			throw new Error(`Ollama API request failed: ${String(response.status)} ${errorText}`);
-		}
-
-		const data = response.json as OllamaChatApiResponse;
-
-		return {
-			content: data.message?.content ?? '',
-			usage: {
-				promptTokens: data.prompt_eval_count ?? 0,
-				completionTokens: data.eval_count ?? 0,
-				totalTokens: (data.prompt_eval_count ?? 0) + (data.eval_count ?? 0),
-			},
-		};
+		const data = await this.requestCompletion(request);
+		return { content: data.message?.content ?? '', usage: usageOf(data) };
 	}
 
 	async generateEmbedding(text: string, model: string): Promise<number[]> {
@@ -93,112 +70,96 @@ export class OllamaProvider extends BaseLLMProvider {
 	}
 
 	async streamChat(request: ChatRequest, onChunk: (_chunk: StreamChunk) => void): Promise<void> {
-		const url = `${this.getBaseUrl()}/api/chat`;
+		let response: Awaited<ReturnType<typeof this.http.stream>>;
+		try {
+			response = await this.http.stream({
+				url: this.chatUrl,
+				method: 'POST',
+				headers: this.getHeaders(),
+				body: JSON.stringify(this.buildBody(request, true)),
+				signal: request.signal,
+			});
+		} catch (error) {
+			if (!(error instanceof StreamTransportUnavailableError)) {
+				throw error;
+			}
+			const data = await this.requestCompletion(request);
+			const calls = new ToolCallIds();
+			emit(data, calls, onChunk);
+			onChunk({ content: '', done: true, usage: usageOf(data) });
+			return;
+		}
+		if (!response.ok || !response.body) {
+			throw new Error(`Ollama API request failed: ${response.status} ${await response.text()}`);
+		}
+		await this.readLines(response.body, onChunk, request.signal);
+	}
 
-		// Extract model name from provider-prefixed ID (ollama:model-name -> model-name)
-		const modelName = request.model.includes(':') ? request.model.split(':').slice(1).join(':') : request.model;
+	private get chatUrl(): string {
+		return `${this.getBaseUrl()}/api/chat`;
+	}
 
-		const requestBody = {
-			model: modelName,
-			messages: toOpenAiWireMessages(request.messages),
-			stream: true,
+	private async requestCompletion(request: ChatRequest): Promise<OllamaChatApiResponse> {
+		const response = await this.http.request({
+			url: this.chatUrl,
+			method: 'POST',
+			headers: this.getHeaders(),
+			body: JSON.stringify(this.buildBody(request, false)),
+			signal: request.signal,
+		});
+		if (!response.ok) {
+			throw new Error(`Ollama API request failed: ${response.status} ${response.text}`);
+		}
+		return response.json as OllamaChatApiResponse;
+	}
+
+	private async readLines(body: ReadableStream<Uint8Array>, onChunk: (_chunk: StreamChunk) => void, signal?: AbortSignal): Promise<void> {
+		const reader = body.getReader();
+		const decoder = new TextDecoder();
+		const calls = new ToolCallIds();
+		const cancel = () => {
+			reader.cancel().catch(() => undefined);
+		};
+		signal?.addEventListener('abort', cancel, { once: true });
+		let buffer = '';
+		try {
+			while (!signal?.aborted) {
+				const { done, value } = await reader.read();
+				if (done) break;
+				buffer += decoder.decode(value, { stream: true });
+				const lines = buffer.split('\n');
+				buffer = lines.pop() ?? '';
+				for (const line of lines.filter((l) => l.trim())) {
+					const data = parseLine(line);
+					if (!data) continue;
+					emit(data, calls, onChunk);
+					if (data.done) {
+						onChunk({ content: '', done: true, usage: usageOf(data) });
+						return;
+					}
+				}
+			}
+			onChunk({ content: '', done: true });
+		} finally {
+			signal?.removeEventListener('abort', cancel);
+			reader.releaseLock();
+		}
+	}
+
+	private buildBody(request: ChatRequest, stream: boolean): Record<string, unknown> {
+		const body: Record<string, unknown> = {
+			model: request.model.includes(':') ? request.model.split(':').slice(1).join(':') : request.model,
+			messages: (request.messages as WireMessage[]).map(toOllamaMessage),
+			stream,
 			options: {
 				temperature: request.temperature ?? 0.7,
 				num_predict: request.maxTokens ?? 2000,
 			},
 		};
-
-		try {
-			const response = await this.http.request({
-				url: url,
-				method: 'POST',
-				headers: this.getHeaders(),
-				body: JSON.stringify(requestBody),
-			});
-
-		if (response.status < 200 || response.status >= 300) {
-			const errorText = response.text;
-			throw new Error(`Ollama API request failed: ${String(response.status)} ${String(errorText)}`);
+		if (request.tools && request.tools.length > 0) {
+			body.tools = request.tools;
 		}
-
-		// Type guard for response body (Obsidian RequestUrlResponse may not declare 'body')
-		const bodyUnknown: ReadableStream<Uint8Array> | undefined = (response as { body?: ReadableStream<Uint8Array> }).body;
-		if (!bodyUnknown) {
-			// Some environments don't expose streaming bodies via requestUrl. Fallback to non-streaming request.
-			console.warn('[Ollama] Streaming body missing, falling back to non-streaming request');
-			const fallback = await this.http.request({
-				url: url,
-				method: 'POST',
-				headers: this.getHeaders(),
-				body: JSON.stringify({ ...requestBody, stream: false })
-			});
-			if (fallback.status < 200 || fallback.status >= 300) {
-				const errorText = fallback.text;
-				throw new Error(`Ollama API request failed (fallback): ${String(fallback.status)} ${String(errorText)}`);
-			}
-			const data = fallback.json as OllamaChatApiResponse;
-			if (data.message?.content) {
-				onChunk({ content: data.message.content, done: false });
-			}
-			onChunk({ content: '', done: true });
-			return;
-		}
-		if (!(bodyUnknown instanceof ReadableStream)) {
-			throw new Error('Response body is not a ReadableStream');
-		}
-
-		const reader = bodyUnknown.getReader();
-		const decoder = new TextDecoder();
-		let buffer = '';
-
-			while (true) {
-				const { done, value } = await reader.read();
-				if (done) break;
-
-					if (value) {
-						buffer += decoder.decode(value, { stream: true });
-					}
-				const lines = buffer.split('\n');
-				buffer = lines.pop() || '';
-
-				for (const line of lines) {
-					if (line.trim()) {
-						try {
-							const parsed = JSON.parse(line) as {
-								message?: { content?: string };
-								done?: boolean;
-								prompt_eval_count?: number;
-								eval_count?: number;
-							};
-
-							// Ollama sends content in message.content field
-							const content = parsed.message?.content;
-							if (content) {
-								onChunk({ content, done: false });
-							}
-
-							// Check if streaming is done
-							if (parsed.done === true) {
-								const usage = (parsed.prompt_eval_count ?? parsed.eval_count) ? {
-									promptTokens: parsed.prompt_eval_count ?? 0,
-									completionTokens: parsed.eval_count ?? 0,
-									totalTokens: (parsed.prompt_eval_count ?? 0) + (parsed.eval_count ?? 0),
-								} : undefined;
-								onChunk({ content: '', done: true, usage });
-								return;
-							}
-						} catch (e) {
-							console.error('[Ollama] Failed to parse JSON line:', e);
-						}
-					}
-				}
-			}
-
-			onChunk({ content: '', done: true });
-		} catch (error) {
-			console.error('[Ollama] Stream error:', error);
-			throw error;
-		}
+		return body;
 	}
 
 	/**
@@ -309,152 +270,66 @@ export class OllamaProvider extends BaseLLMProvider {
 
 		return capabilities;
 	}
+}
 
-	/**
-	 * Pull a model from Ollama registry
-	 * API Documentation: https://github.com/ollama/ollama/blob/main/docs/api.md#pull-a-model
-	 */
-	async pullModel(modelName: string, onProgress?: (_progress: { status: string; completed: number; total: number; percentage: number; }) => void): Promise<void> {
-		const url = `${this.getBaseUrl()}/api/pull`;
+class ToolCallIds {
+	private count = 0;
 
-		const requestBody = {
-			name: modelName,
-			stream: true // Enable streaming to get progress updates
-		};
-
-		try {
-			const response = await this.http.request({
-				url: url,
-				method: 'POST',
-				headers: this.getHeaders(),
-				body: JSON.stringify(requestBody),
-			});
-
-		if (response.status < 200 || response.status >= 300) {
-			const errorText = response.text;
-			throw new Error(`Failed to pull model: ${String(response.status)} ${String(errorText)}`);
-		}
-
-		// Type guard for response body (Obsidian RequestUrlResponse may not declare 'body')
-		const bodyUnknown: ReadableStream<Uint8Array> | undefined = (response as { body?: ReadableStream<Uint8Array> }).body;
-		if (!bodyUnknown) {
-			throw new Error('Response body is null');
-		}
-		if (!(bodyUnknown instanceof ReadableStream)) {
-			throw new Error('Response body is not a ReadableStream');
-		}
-
-		// Handle streaming response for progress updates
-		const reader = bodyUnknown.getReader();
-		const decoder = new TextDecoder();
-		let buffer = '';
-
-			while (true) {
-				const { done, value } = await reader.read();
-				if (done) break;
-
-					if (value) {
-						buffer += decoder.decode(value, { stream: true });
-					}
-				const lines = buffer.split('\n');
-				buffer = lines.pop() || '';
-
-				for (const line of lines) {
-					if (line.trim()) {
-						try {
-							const parsed = JSON.parse(line) as {
-								status?: string;
-								completed?: number;
-								total?: number;
-							};
-
-							// Handle different response formats
-							if (parsed.status) {
-								let completed = 0;
-								let total = 100; // Default assumption
-
-								// Calculate progress based on status message
-								if (parsed.completed && parsed.total) {
-									completed = parsed.completed;
-									total = parsed.total;
-								} else if (parsed.status.includes('pulling')) {
-									// Estimate progress based on status
-									if (parsed.status.includes('pulling')) {
-										completed = 20;
-									} else if (parsed.status.includes('verifying')) {
-										completed = 50;
-									} else if (parsed.status.includes('extracting')) {
-										completed = 80;
-									} else if (parsed.status.includes('success') || parsed.status.includes('complete')) {
-										completed = 100;
-									}
-								}
-
-								const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-
-								onProgress?.({
-									status: parsed.status,
-									completed,
-									total,
-									percentage
-								});
-							}
-						} catch (e) {
-							console.error('[Ollama] Failed to parse JSON line during pull:', e);
-							console.error('[Ollama] Problematic line:', line);
-						}
-					}
-				}
-			}
-			
-			console.debug(`[Ollama] Successfully pulled model: ${modelName ?? 'unknown'}`);
-		} catch (error) {
-			console.error(`[Ollama] Failed to pull model ${modelName ?? 'unknown'}:`, error);
-			throw error;
-		}
+	next(): string {
+		return `ollama-call-${++this.count}`;
 	}
+}
 
-	/**
-	 * Remove/delete a model from Ollama
-	 * API Documentation: https://github.com/ollama/ollama/blob/main/docs/api.md#delete-a-model
-	 */
-	async removeModel(modelName: string): Promise<void> {
-		const url = `${this.getBaseUrl()}/api/delete`;
-		
-		const body = {
-			name: modelName
-		};
-
-		try {
-			const response = await this.http.request({
-				url: url,
-				method: 'DELETE',
-				headers: this.getHeaders(),
-				body: JSON.stringify(body),
-			});
-
-			if (response.status < 200 || response.status >= 300) {
-				const errorText = response.text;
-				throw new Error(`Failed to remove model: ${String(response.status)} ${String(errorText)}`);
-			}
-
-			console.debug(`[Ollama] Successfully removed model: ${modelName ?? 'unknown'}`);
-		} catch (error) {
-			console.error(`[Ollama] Failed to remove model ${modelName ?? 'unknown'}:`, error);
-			throw error;
-		}
+function emit(data: OllamaChatApiResponse, calls: ToolCallIds, onChunk: (_chunk: StreamChunk) => void): void {
+	if (data.message?.content) {
+		onChunk({ content: data.message.content, done: false });
 	}
+	const toolCalls = (data.message?.tool_calls ?? []).map((call) => ({
+		id: calls.next(),
+		type: 'function' as const,
+		function: { name: call.function.name, arguments: JSON.stringify(call.function.arguments ?? {}) },
+	}));
+	if (toolCalls.length > 0) {
+		onChunk({ content: '', done: false, toolCalls });
+	}
+}
 
-	/**
-	 * Check if a model exists in Ollama
-	 */
-	async modelExists(modelName: string): Promise<boolean> {
-		try {
-			const models = await this.fetchModels();
-			return models.some(model => model.id === modelName);
-		} catch (error) {
-			console.error(`[Ollama] Failed to check if model exists ${modelName ?? 'unknown'}:`, error);
-			return false;
-		}
+function usageOf(data: OllamaChatApiResponse): StreamChunk['usage'] {
+	if (data.prompt_eval_count === undefined && data.eval_count === undefined) {
+		return undefined;
+	}
+	const promptTokens = data.prompt_eval_count ?? 0;
+	const completionTokens = data.eval_count ?? 0;
+	return { promptTokens, completionTokens, totalTokens: promptTokens + completionTokens };
+}
+
+function parseLine(line: string): OllamaChatApiResponse | null {
+	try {
+		return JSON.parse(line) as OllamaChatApiResponse;
+	} catch (error) {
+		console.error('[Ollama] Failed to parse JSON line:', error);
+		return null;
+	}
+}
+
+function toOllamaMessage(message: WireMessage): Record<string, unknown> {
+	const wire: Record<string, unknown> = { role: message.role, content: message.content };
+	const images = (message.attachments ?? [])
+		.map((attachment) => attachment.type === 'image' ? attachment.content?.match(/^data:[^;]+;base64,(.+)$/)?.[1] : undefined)
+		.filter((data): data is string => Boolean(data));
+	if (images.length > 0) {
+		wire.images = images;
+	}
+	if (message.tool_calls && message.tool_calls.length > 0) {
+		wire.tool_calls = message.tool_calls.map((call) => ({ function: { name: call.function.name, arguments: parseArguments(call.function.arguments) } }));
+	}
+	return wire;
+}
+
+function parseArguments(raw: string): unknown {
+	try {
+		return JSON.parse(raw || '{}');
+	} catch {
+		return {};
 	}
 }

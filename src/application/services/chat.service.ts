@@ -11,13 +11,15 @@ import type {
 	FileReference,
 	Agent
 } from '@/types';
-import { IFileSystem } from '@/core/interfaces';
+import { IFileSystem } from '@/core/interfaces/file-system.interface';
 import { ProviderFactory } from '@qwai/obsidian-llm';
 import { ModelManager } from '@qwai/obsidian-llm';
 import type { RAGManager } from '@/infrastructure/rag-manager';
 import type { WebSearchService } from './web-search-service';
 import type { StreamChunk } from '@/types/common/llm';
-import type { AgentEngineLoop, AgentLoopCallbacks } from '@/application/agents';
+import type { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
+import type { AgentLoopCallbacks } from '@/application/agents/types';
+import type { UsageRecord } from '@/types/features/usage';
 
 /**
  * Reference-content budget. Referenced notes are inlined into the prompt and
@@ -46,33 +48,43 @@ export interface ChatOptions {
 	conversationId?: string;
 }
 
-export function deduplicateMessages(messages: Message[]): Message[] {
-	if (messages.length <= 1) return messages;
-	const result: Message[] = [messages[0]];
-	for (let i = 1; i < messages.length; i++) {
-		const prev = messages[i - 1];
-		const cur = messages[i];
-		if (cur.role === prev.role && cur.content === prev.content) {
-			continue;
-		}
-		result.push(cur);
-	}
-	return result;
+export interface ModelSettings {
+	llmConfigs: LLMConfig[];
+	defaultModel?: string;
+}
+
+export interface UsageRecorder {
+	recordUsage(record: UsageRecord): Promise<void>;
+}
+
+export interface ChatServiceDependencies {
+	fileSystem: IFileSystem;
+	ragManager: RAGManager;
+	webSearchService: WebSearchService;
+	settings: () => ModelSettings;
+	usageRepo?: UsageRecorder;
+	agentEngineLoop?: AgentEngineLoop;
 }
 
 export class ChatService {
-	constructor(
-		private fileSystem: IFileSystem,
-		private ragManager: RAGManager,
-		private webSearchService: WebSearchService,
-		private llmConfigs: LLMConfig[],
-		private usageRepo?: { recordUsage: (r: {model:string;provider:string;promptTokens:number;completionTokens:number;totalTokens:number;timestamp:number;conversationId?:string}) => Promise<void> },
-		private defaultModel?: string,
-		private agentEngineLoop?: AgentEngineLoop
-	) {}
+	private readonly fileSystem: IFileSystem;
+	private readonly ragManager: RAGManager;
+	private readonly webSearchService: WebSearchService;
+	private readonly settings: () => ModelSettings;
+	private readonly usageRepo?: UsageRecorder;
+	private readonly agentEngineLoop?: AgentEngineLoop;
+
+	constructor(dependencies: ChatServiceDependencies) {
+		this.fileSystem = dependencies.fileSystem;
+		this.ragManager = dependencies.ragManager;
+		this.webSearchService = dependencies.webSearchService;
+		this.settings = dependencies.settings;
+		this.usageRepo = dependencies.usageRepo;
+		this.agentEngineLoop = dependencies.agentEngineLoop;
+	}
 
 	findLLMConfig(modelId: string): LLMConfig | null {
-		return ModelManager.findConfigForModelByProvider(modelId, this.llmConfigs);
+		return ModelManager.findConfigForModelByProvider(modelId, this.settings().llmConfigs);
 	}
 
 	/**
@@ -191,12 +203,12 @@ export class ChatService {
 			onError: (error: Error) => void;
 			onRAGSources?: (sources: RAGSource[]) => void;
 			onWebSearch?: (results: WebSearchResult[]) => void;
-			checkAbort?: () => boolean;
+			signal?: AbortSignal;
 		}
 	): Promise<void> {
 		try {
 			const { model: selectedModel } = options;
-			const config = ModelManager.findConfigForModelByProvider(selectedModel, this.llmConfigs);
+			const config = ModelManager.findConfigForModelByProvider(selectedModel, this.settings().llmConfigs);
 			
 			if (!config) throw new Error(`No provider configuration found for model: ${selectedModel}`);
 
@@ -212,7 +224,7 @@ export class ChatService {
 			// Handle RAG
 			let ragSources: RAGSource[] = [];
 			if (options.enableRAG) {
-				const searchResults = await this.ragManager.query(userQuery, selectedModel, this.defaultModel);
+				const searchResults = await this.ragManager.query(userQuery, selectedModel, this.settings().defaultModel);
 				if (searchResults && searchResults.length > 0) {
 					ragSources = searchResults.map(r => ({
 						path: r.chunk.metadata.path,
@@ -255,32 +267,37 @@ export class ChatService {
 			let fullReasoning = '';
 			const streamState = { usage: null as { promptTokens: number; completionTokens: number; totalTokens: number } | null };
 
-			await provider.streamChat(
-				{
-					messages: finalMessages,
-					model: selectedModel,
-					temperature: options.temperature,
-					maxTokens: options.maxTokens,
-					topP: options.topP,
-					frequencyPenalty: options.frequencyPenalty,
-					presencePenalty: options.presencePenalty
-				},
-				(chunk) => {
-					if (callbacks.checkAbort && callbacks.checkAbort()) return;
-
-					if (chunk.content) {
-						fullContent += chunk.content;
-						callbacks.onChunk(chunk);
-					}
-					if (chunk.usage) {
-						streamState.usage = chunk.usage;
-					}
-					if (chunk.reasoning) {
-						fullReasoning += chunk.reasoning;
-						callbacks.onChunk(chunk);
-					}
+			try {
+				await provider.streamChat(
+					{
+						messages: finalMessages,
+						model: selectedModel,
+						temperature: options.temperature,
+						maxTokens: options.maxTokens,
+						topP: options.topP,
+						frequencyPenalty: options.frequencyPenalty,
+						presencePenalty: options.presencePenalty,
+						signal: callbacks.signal,
+					},
+					(chunk) => {
+						if (chunk.content) {
+							fullContent += chunk.content;
+							callbacks.onChunk(chunk);
+						}
+						if (chunk.usage) {
+							streamState.usage = chunk.usage;
+						}
+						if (chunk.reasoning) {
+							fullReasoning += chunk.reasoning;
+							callbacks.onChunk(chunk);
+						}
+					},
+				);
+			} catch (error) {
+				if (!callbacks.signal?.aborted) {
+					throw error;
 				}
-			);
+			}
 
 			const streamUsage = streamState.usage;
 

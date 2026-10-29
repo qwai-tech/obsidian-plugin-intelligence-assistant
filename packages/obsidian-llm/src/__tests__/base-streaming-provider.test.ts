@@ -31,7 +31,10 @@ class TestStreamingProvider extends BaseStreamingProvider {
 		return 'TestProvider';
 	}
 
-	// Make parseStreamChunk public for testing and allow override
+	protected createChunkParser() {
+		return (data: unknown) => this.parseStreamChunk(data);
+	}
+
 	public parseStreamChunk(_data: any): ParsedStreamChunk | null {
 		this.parseStreamChunkCalls.push(_data);
 		if (this.mockParseChunkImplementation) {

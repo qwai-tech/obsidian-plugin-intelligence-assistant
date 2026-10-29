@@ -30,12 +30,13 @@ export abstract class BaseLLMProvider implements ILLMProvider {
 		};
 	}
 
-	protected async makeRequest(url: string, body: unknown): Promise<unknown> {
+	protected async makeRequest(url: string, body: unknown, signal?: AbortSignal): Promise<unknown> {
 		const response = await this.http.request({
 			url,
 			method: 'POST',
 			headers: this.getHeaders(),
 			body: JSON.stringify(body),
+			signal,
 		});
 
 		if (response.status !== 200) {

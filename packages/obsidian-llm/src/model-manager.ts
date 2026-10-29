@@ -3,7 +3,7 @@ import { getDefaultHttpPort } from './http';
 import { reportDiagnostic } from './diagnostics';
 
 export class ModelManager {
-	private static modelCache = new Map<string, Promise<ModelInfo[]>>();
+	private static readonly inFlight = new Map<string, Promise<ModelInfo[]>>();
 	// Default model lists for each provider
 	private static readonly DEFAULT_MODELS: Record<string, ModelInfo[]> = {
 		openai: [
@@ -438,103 +438,79 @@ export class ModelManager {
 		}
 	}
 
-	/**
-	 * Get models for a specific config
-	 */
 	static async getModelsForConfig(config: LLMConfig, forceRefresh: boolean = false): Promise<ModelInfo[]> {
-		const cacheKey = `${config.provider ?? ''}:${config.apiKey ?? ''}:${config.baseUrl ?? ''}`;
-
-		if (!forceRefresh && this.modelCache.has(cacheKey)) {
-			console.debug(`Using cached models for ${config.provider}`);
-			return this.filterModels(await this.modelCache.get(cacheKey)!, config.modelFilter);
+		const stored = config.cachedModels ?? [];
+		if (!forceRefresh && config.provider !== 'ollama' && stored.length > 0) {
+			return this.filterModels(stored, config.modelFilter);
 		}
-
-		const fetchPromise = (async () => {
-			// Ollama: always query live models to ensure we only show installed ones
-			if (config.provider === 'ollama') {
-				try {
-					console.debug('[ModelManager] Fetching Ollama models (live list)...');
-					const { OllamaProvider } = await import('./providers/ollama-provider');
-					const ollamaProvider = new OllamaProvider(config);
-					const models = await ollamaProvider.fetchModels();
-					// Update cached models in memory for downstream consumers
-					config.cachedModels = models;
-					config.cacheTimestamp = Date.now();
-					return models;
-				} catch (error) {
-					console.error('[ModelManager] Failed to fetch Ollama models:', error);
-				}
-			}
-
-			// Use stored models if available (persistent storage, no expiration)
-			if (!forceRefresh && config.cachedModels && config.cachedModels.length > 0) {
-				console.debug(`Using stored models for ${config.provider} (${config.cachedModels.length} models)`);
-				return config.cachedModels;
-			}
-
-			// No stored models or force refresh, fetch fresh models
-			let models: ModelInfo[] = [];
-
-			// Special handling for providers that don't require API keys
-			if (config.provider === 'ollama') {
-				console.debug('[ModelManager] Fetching Ollama models (no API key required)...');
-				const { OllamaProvider } = await import('./providers/ollama-provider');
-				const ollamaProvider = new OllamaProvider(config);
-				models = await ollamaProvider.fetchModels();
-			} else if (config.provider === 'sap-ai-core') {
-				console.debug('[ModelManager] Fetching SAP AI Core models...');
-				// Try to fetch from SAP AI Core provider
-				try {
-					const { SAPAICoreProvider } = await import('./providers/sap-ai-core-provider');
-					const sapProvider = new SAPAICoreProvider(config);
-					models = await sapProvider.fetchModels();
-				} catch (error) {
-					console.error('[ModelManager] Failed to fetch SAP AI Core models:', error);
-					models = this.DEFAULT_MODELS['sap-ai-core'];
-				}
-			} else if (!config.apiKey) {
-				console.debug(`[ModelManager] No API key for ${config.provider}, using default models`);
-				models = this.getDefaultModels(config.provider);
-			} else {
-				switch (config.provider) {
-					case 'openai':
-						models = await this.fetchOpenAIModels(config.apiKey, config.baseUrl);
-						break;
-					case 'anthropic':
-						// Anthropic doesn't have a models API, use default list
-						models = this.DEFAULT_MODELS.anthropic;
-						break;
-					case 'google':
-						models = await this.fetchGoogleModels(config.apiKey, config.baseUrl);
-						break;
-					case 'deepseek':
-						models = await this.fetchDeepSeekModels(config.apiKey, config.baseUrl);
-						break;
-					case 'openrouter':
-						models = await this.fetchOpenRouterModels(config.apiKey, config.baseUrl);
-						break;
-					case 'custom':
-						// For custom providers, try to fetch models if it's OpenAI-compatible
-						try {
-							models = await this.fetchOpenAIModels(config.apiKey, config.baseUrl);
-						} catch (error) {
-							console.error('Failed to fetch models from custom provider:', error);
-							models = [];
-						}
-						break;
-					default:
-						models = [];
-				}
-			}
-			return models;
-		})();
-
-		this.modelCache.set(cacheKey, fetchPromise);
-
-		const models = await fetchPromise;
-
-		// Apply filter if specified
+		const models = await this.fetchOnce(config);
+		config.cachedModels = models;
+		config.cacheTimestamp = Date.now();
 		return this.filterModels(models, config.modelFilter);
+	}
+
+	private static fetchOnce(config: LLMConfig): Promise<ModelInfo[]> {
+		const key = `${config.provider ?? ''}:${config.apiKey ?? ''}:${config.baseUrl ?? ''}`;
+		const pending = this.inFlight.get(key);
+		if (pending) {
+			return pending;
+		}
+		const request = this.fetchModels(config).finally(() => this.inFlight.delete(key));
+		this.inFlight.set(key, request);
+		return request;
+	}
+
+	private static async fetchModels(config: LLMConfig): Promise<ModelInfo[]> {
+		switch (config.provider) {
+			case 'ollama':
+				return await this.fetchOllamaModels(config);
+			case 'sap-ai-core':
+				return await this.fetchSapModels(config);
+			case 'anthropic':
+				return this.DEFAULT_MODELS.anthropic;
+		}
+		if (!config.apiKey) {
+			return this.getDefaultModels(config.provider);
+		}
+		switch (config.provider) {
+			case 'openai':
+				return await this.fetchOpenAIModels(config.apiKey, config.baseUrl);
+			case 'google':
+				return await this.fetchGoogleModels(config.apiKey, config.baseUrl);
+			case 'deepseek':
+				return await this.fetchDeepSeekModels(config.apiKey, config.baseUrl);
+			case 'openrouter':
+				return await this.fetchOpenRouterModels(config.apiKey, config.baseUrl);
+			case 'custom':
+				try {
+					return await this.fetchOpenAIModels(config.apiKey, config.baseUrl);
+				} catch (error) {
+					console.error('Failed to fetch models from custom provider:', error);
+					return [];
+				}
+			default:
+				return [];
+		}
+	}
+
+	private static async fetchOllamaModels(config: LLMConfig): Promise<ModelInfo[]> {
+		try {
+			const { OllamaProvider } = await import('./providers/ollama-provider');
+			return await new OllamaProvider(config).fetchModels();
+		} catch (error) {
+			console.error('[ModelManager] Failed to fetch Ollama models:', error);
+			return config.cachedModels ?? [];
+		}
+	}
+
+	private static async fetchSapModels(config: LLMConfig): Promise<ModelInfo[]> {
+		try {
+			const { SAPAICoreProvider } = await import('./providers/sap-ai-core-provider');
+			return await new SAPAICoreProvider(config).fetchModels();
+		} catch (error) {
+			console.error('[ModelManager] Failed to fetch SAP AI Core models:', error);
+			return this.DEFAULT_MODELS['sap-ai-core'];
+		}
 	}
 
 	/**

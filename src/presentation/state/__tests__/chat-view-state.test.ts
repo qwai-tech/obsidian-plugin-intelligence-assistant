@@ -5,7 +5,6 @@
 
 import { ChatViewState } from '../chat-view-state';
 import { Message, Attachment } from '@/types';
-import {} from 'obsidian';
 
 describe('ChatViewState', () => {
 	let state: ChatViewState;
@@ -231,10 +230,25 @@ describe('ChatViewState', () => {
 			expect(state.stopStreamingRequested).toBe(false);
 		});
 
-		it('should request stop streaming', () => {
-			state.stopStreamingRequested = true;
+		it('aborts the signal of the current run when a stop is requested', () => {
+			const signal = state.startRun();
 
+			state.stopRun();
+
+			expect(signal.aborted).toBe(true);
 			expect(state.stopStreamingRequested).toBe(true);
+		});
+
+		it('gives each run a fresh signal', () => {
+			const first = state.startRun();
+			state.stopRun();
+			state.endRun();
+
+			const second = state.startRun();
+
+			expect(first.aborted).toBe(true);
+			expect(second.aborted).toBe(false);
+			expect(state.stopStreamingRequested).toBe(false);
 		});
 	});
 
@@ -282,7 +296,8 @@ describe('ChatViewState', () => {
 			state.conversationListPinned = true;
 			state.addAttachment({ type: 'file', name: 'test.md', path: '/test.md', content: 'Test' });
 			state.isStreaming = true;
-			state.stopStreamingRequested = true;
+			state.startRun();
+			state.stopRun();
 			state.addAgentExecutionStep({ type: 'thought', content: 'Test', timestamp: Date.now() });
 
 			// Reset

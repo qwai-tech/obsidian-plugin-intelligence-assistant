@@ -2,6 +2,7 @@ import { BaseLLMProvider } from '../base-provider';
 import { type HttpPort, getDefaultHttpPort } from '../http';
 import { ChatRequest, ChatResponse, StreamChunk } from '../types';
 import type { ModelInfo, ModelCapability, LLMConfig } from '../types';
+import { completionText, emitBufferedSse, emitCompletion, sapLineParser } from './sap-sse';
 
 /**
  * SAP AI Core Provider for Foundation Models
@@ -64,6 +65,20 @@ interface DeploymentInfo {
 	isHealthy?: boolean;
 }
 
+interface SapConfiguration {
+	id: string;
+	executableId?: string;
+	parameterBindings?: Array<{ key: string; value: string }>;
+}
+
+function listOf(json: unknown): unknown[] {
+	if (Array.isArray(json)) return json;
+	const container = json as { resources?: unknown; value?: unknown } | null;
+	if (Array.isArray(container?.resources)) return container.resources;
+	if (Array.isArray(container?.value)) return container.value;
+	return [];
+}
+
 export class SAPAICoreProvider extends BaseLLMProvider {
 	private accessToken: string | null = null;
 	private tokenExpiry: number = 0;
@@ -84,6 +99,32 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	/**
 	 * Parse SAP service key from config
 	 */
+	private get apiBaseUrl(): string {
+		return this.serviceKey?.serviceurls?.AI_API_URL || this.config.baseUrl || 'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
+	}
+
+	private async fetchRunningDeployments(): Promise<{ deployments: unknown[]; configurations: Map<string, SapConfiguration> } | null> {
+		const headers = await this.getAuthHeaders();
+		const [deploymentsResponse, configurationsResponse] = await Promise.all([
+			this.http.request({ url: `${this.apiBaseUrl}/v2/lm/deployments?$filter=status eq 'RUNNING'`, method: 'GET', headers }),
+			this.http.request({ url: `${this.apiBaseUrl}/v2/lm/configurations`, method: 'GET', headers }).catch(() => null),
+		]);
+		if (deploymentsResponse.status !== 200) {
+			console.warn(`[SAP AI Core] Deployment listing failed: ${deploymentsResponse.status} ${deploymentsResponse.text}`);
+			return null;
+		}
+		const configurations = new Map<string, SapConfiguration>();
+		if (configurationsResponse?.status === 200) {
+			for (const config of listOf(configurationsResponse.json)) {
+				const typed = config as SapConfiguration;
+				if (typed?.id) {
+					configurations.set(typed.id, typed);
+				}
+			}
+		}
+		return { deployments: listOf(deploymentsResponse.json), configurations };
+	}
+
 	private parseServiceKey() {
 		if (this.config.serviceKey) {
 			try {
@@ -513,48 +554,12 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	 * Returns complete deployment info including the deployment URL and all metadata
 	 */
 	private async fetchDeploymentId(modelName: string, modelVersion?: string): Promise<DeploymentInfo> {
-		const headers = await this.getAuthHeaders();
-		const baseUrl = this.serviceKey?.serviceurls?.AI_API_URL ||
-					   this.config.baseUrl ||
-					   'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
-
-		// Fetch both deployments and configurations to get executableId
-		const deploymentsUrl = `${baseUrl}/v2/lm/deployments?$filter=status eq 'RUNNING'`;
-		const configurationsUrl = `${baseUrl}/v2/lm/configurations`;
-
-		const [deploymentsResponse, configurationsResponse] = await Promise.all([
-			this.http.request({ url: deploymentsUrl, method: 'GET', headers }),
-			this.http.request({ url: configurationsUrl, method: 'GET', headers }).catch(() => null)
-		]);
-
-		if (deploymentsResponse.status !== 200) {
-			throw new Error(`Failed to fetch deployments for model ${modelName}: ${deploymentsResponse.status} - ${deploymentsResponse.text || 'Unknown error'}`);
+		const running = await this.fetchRunningDeployments();
+		if (!running) {
+			throw new Error(`Failed to fetch deployments for model ${modelName}`);
 		}
-
-		// Build configuration map for executableId lookup
-		const configMap = new Map<string, { executableId?: string }>();
-		if (configurationsResponse && configurationsResponse.status === 200) {
-			const configurationsData = configurationsResponse.json as {
-				resources?: unknown[];
-				value?: unknown[];
-			};
-			const configs = configurationsData.resources || configurationsData.value || [];
-			for (const config of configs) {
-				if (Array.isArray(config)) continue;
-				const typedConfig = config as { id: string; executableId?: string };
-				if (typedConfig.id) {
-					configMap.set(typedConfig.id, { executableId: typedConfig.executableId });
-				}
-			}
-		}
-
-		const data = deploymentsResponse.json as {
-			resources?: unknown[];
-			value?: unknown[];
-		};
-		let deployments = Array.isArray(data.resources) ? data.resources :
-						Array.isArray(data.value) ? data.value :
-						Array.isArray(data) ? data : [];
+		const configMap = running.configurations;
+		let deployments = running.deployments;
 
 		// Filter deployments by model name
 		deployments = deployments.filter((deployment: unknown) => {
@@ -658,9 +663,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	async getDeploymentDetails(deploymentId: string): Promise<DeploymentInfo | null> {
 		try {
 			const headers = await this.getAuthHeaders();
-			const baseUrl = this.serviceKey?.serviceurls?.AI_API_URL ||
-						   this.config.baseUrl ||
-						   'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
+			const baseUrl = this.apiBaseUrl;
 
 			const url = `${baseUrl}/v2/lm/deployments/${deploymentId}`;
 
@@ -761,9 +764,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	async listDeployments(statusFilter?: string): Promise<DeploymentInfo[]> {
 		try {
 			const headers = await this.getAuthHeaders();
-			const baseUrl = this.serviceKey?.serviceurls?.AI_API_URL ||
-						   this.config.baseUrl ||
-						   'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
+			const baseUrl = this.apiBaseUrl;
 
 			// Build URL with optional status filter
 			let url = `${baseUrl}/v2/lm/deployments`;
@@ -900,9 +901,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 		// Use deploymentUrl if available, otherwise construct from baseUrl
 		const baseUrl = deploymentUrl ||
-						this.serviceKey?.serviceurls?.AI_API_URL ||
-						this.config.baseUrl ||
-						'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
+						this.apiBaseUrl;
 
 		// Determine endpoint and request format based on executableId
 		let url: string;
@@ -1098,6 +1097,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		let response;
 		try {
 			response = await this.http.request({
+				signal: request.signal,
 				url,
 				method: 'POST',
 				headers,
@@ -1325,9 +1325,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 		// Use deploymentUrl if available, otherwise construct from baseUrl
 		const baseUrl = deploymentUrl ||
-						this.serviceKey?.serviceurls?.AI_API_URL ||
-						this.config.baseUrl ||
-						'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
+						this.apiBaseUrl;
 
 		// Handle AWS Bedrock streaming separately
 		if (executableId === 'aws-bedrock') {
@@ -1502,6 +1500,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		let response;
 		try {
 			response = await this.http.request({
+				signal: request.signal,
 				url,
 				method: 'POST',
 				headers,
@@ -1557,6 +1556,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 			// Fallback to non-streaming
 			const fallbackResponse = await this.http.request({
+				signal: request.signal,
 				url,
 				method: 'POST',
 				headers: { ...headers, Accept: 'application/json' },
@@ -1567,67 +1567,12 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				throw new Error(`SAP AI Core API request failed: ${fallbackResponse.status} - ${fallbackResponse.text}`);
 			}
 
-			const data = fallbackResponse.json as { choices?: Array<{ message?: { content?: string } }> };
-			const content = data.choices?.[0]?.message?.content || '';
-			if (content) {
-				onChunk({ content, done: false });
-			}
-			onChunk({ content: '', done: true });
+			emitCompletion(completionText('openai', fallbackResponse.json), onChunk);
 			return;
 		}
 
-		// Parse SSE stream
 		const text = typeof response.text === 'string' ? response.text : String(response.text);
-		const lines = text.split('\n');
-
-		for (const line of lines) {
-			if (line.trim() === '') continue;
-
-			if (line.startsWith('data: ')) {
-				const data = line.slice(6).trim();
-
-				if (data === '[DONE]') {
-					console.debug('SAP AI Core streaming completed');
-					onChunk({ content: '', done: true });
-					return;
-				}
-
-				try {
-					const parsed = JSON.parse(data) as {
-						choices?: Array<{
-							delta?: { content?: string };
-							finish_reason?: string;
-						}>;
-						usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
-					};
-
-					// Handle OpenAI-compatible SSE response format from SAP AI Core
-					const content = parsed.choices?.[0]?.delta?.content;
-					const finishReason = parsed.choices?.[0]?.finish_reason;
-
-					const usage = parsed.usage ? {
-						promptTokens: parsed.usage.prompt_tokens ?? 0,
-						completionTokens: parsed.usage.completion_tokens ?? 0,
-						totalTokens: parsed.usage.total_tokens ?? 0,
-					} : undefined;
-
-					if (content) {
-						onChunk({ content, done: false });
-					}
-
-					if (finishReason) {
-						console.debug(`SAP AI Core streaming finished with reason: ${finishReason}`);
-						onChunk({ content: '', done: true, usage });
-						return;
-					}
-				} catch (e) {
-					console.error('Failed to parse SSE chunk:', e, 'Data:', data);
-				}
-			}
-		}
-
-		console.debug('SAP AI Core streaming ended');
-		onChunk({ content: '', done: true });
+		emitBufferedSse(text, sapLineParser('openai'), onChunk);
 	}
 
 	/**
@@ -1658,6 +1603,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		let response;
 		try {
 			response = await this.http.request({
+				signal: request.signal,
 				url,
 				method: 'POST',
 				headers,
@@ -1678,6 +1624,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 			// Fallback to non-streaming
 			const fallbackUrl = url.replace(':streamGenerateContent', ':generateContent');
 			const fallbackResponse = await this.http.request({
+				signal: request.signal,
 				url: fallbackUrl,
 				method: 'POST',
 				headers: { ...headers, Accept: 'application/json' },
@@ -1688,68 +1635,12 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				throw new Error(`SAP AI Core Vertex AI API request failed: ${fallbackResponse.status} - ${fallbackResponse.text}`);
 			}
 
-			// Parse non-streaming response
-			const data = fallbackResponse.json as {
-				candidates?: Array<{
-					content?: {
-						parts?: Array<{ text?: string }>;
-					};
-				}>;
-			};
-			const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-			if (content) onChunk({ content, done: false });
-			onChunk({ content: '', done: true });
+			emitCompletion(completionText('vertex', fallbackResponse.json), onChunk);
 			return;
 		}
 
-		// Parse SSE stream for Vertex AI
 		const text = typeof response.text === 'string' ? response.text : String(response.text);
-		const lines = text.split('\n');
-
-		for (const line of lines) {
-			if (line.trim() === '') continue;
-
-			if (line.startsWith('data: ')) {
-				const data = line.slice(6).trim();
-
-				if (data === '[DONE]') {
-					console.debug('SAP AI Core Vertex AI streaming completed');
-					onChunk({ content: '', done: true });
-					return;
-				}
-
-				try {
-					const parsed = JSON.parse(data) as {
-						candidates?: Array<{
-							content?: {
-								parts?: Array<{ text?: string }>;
-							};
-							finishReason?: string;
-						}>;
-					};
-
-					// Extract text from candidates
-					const content = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
-					if (content) {
-						onChunk({ content, done: false });
-					}
-
-					const finishReason = parsed.candidates?.[0]?.finishReason;
-					if (finishReason && finishReason !== 'STOP') {
-						console.debug(`SAP AI Core Vertex AI streaming finished with reason: ${finishReason}`);
-					}
-					if (finishReason) {
-						onChunk({ content: '', done: true });
-						return;
-					}
-				} catch (e) {
-					console.error('Failed to parse Vertex AI SSE chunk:', e, 'Data:', data);
-				}
-			}
-		}
-
-		console.debug('SAP AI Core Vertex AI streaming ended');
-		onChunk({ content: '', done: true });
+		emitBufferedSse(text, sapLineParser('vertex'), onChunk);
 	}
 
 	/**
@@ -1807,6 +1698,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 		let response;
 		try {
 			response = await this.http.request({
+				signal: request.signal,
 				url,
 				method: 'POST',
 				headers,
@@ -1826,6 +1718,7 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 
 			// Fallback to non-streaming for Titan or if streaming fails
 			const fallbackResponse = await this.http.request({
+				signal: request.signal,
 				url: url.replace('/invoke-with-response-stream', '/invoke').replace('/converse-stream', '/converse'),
 				method: 'POST',
 				headers: { ...headers, Accept: 'application/json' },
@@ -1836,78 +1729,14 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 				throw new Error(`SAP AI Core Bedrock API request failed: ${fallbackResponse.status} - ${fallbackResponse.text}`);
 			}
 
-			// Parse non-streaming response
-			if (modelName.toLowerCase().includes('claude')) {
-				const data = fallbackResponse.json as { content?: Array<{ text?: string }> };
-				const content = data.content?.[0]?.text || '';
-				if (content) onChunk({ content, done: false });
-			} else if (modelName.toLowerCase().includes('titan')) {
-				const data = fallbackResponse.json as { results?: Array<{ outputText?: string }> };
-				const content = data.results?.[0]?.outputText || '';
-				if (content) onChunk({ content, done: false });
-			} else {
-				const data = fallbackResponse.json as { output?: { message?: { content?: Array<{ text?: string }> } } };
-				const content = data.output?.message?.content?.[0]?.text || '';
-				if (content) onChunk({ content, done: false });
-			}
-			onChunk({ content: '', done: true });
+			const lowerModel = modelName.toLowerCase();
+			const protocol = lowerModel.includes('claude') ? 'bedrock-claude' : lowerModel.includes('titan') ? 'bedrock-titan' : 'bedrock-converse';
+			emitCompletion(completionText(protocol, fallbackResponse.json), onChunk);
 			return;
 		}
 
-		// Parse SSE stream for Bedrock
 		const text = typeof response.text === 'string' ? response.text : String(response.text);
-		const lines = text.split('\n');
-
-		for (const line of lines) {
-			if (line.trim() === '') continue;
-
-			if (line.startsWith('data: ')) {
-				const data = line.slice(6).trim();
-
-				if (data === '[DONE]') {
-					console.debug('SAP AI Core Bedrock streaming completed');
-					onChunk({ content: '', done: true });
-					return;
-				}
-
-				try {
-					// Handle different Bedrock streaming response formats
-					if (modelName.toLowerCase().includes('claude')) {
-						// Anthropic Claude streaming format
-						const chunk = JSON.parse(data) as { type?: string; delta?: { text?: string }; content_block?: { text?: string } };
-						const content = chunk.delta?.text || chunk.content_block?.text;
-						if (content) {
-							onChunk({ content, done: false });
-						}
-						if (chunk.type === 'message_stop' || chunk.type === 'content_block_stop') {
-							console.debug('SAP AI Core Claude streaming finished');
-							onChunk({ content: '', done: true });
-							return;
-						}
-					} else {
-						// Bedrock Converse streaming format
-						const chunk = JSON.parse(data) as {
-							contentBlockDelta?: { delta?: { text?: string } };
-							messageStop?: unknown;
-						};
-						const content = chunk.contentBlockDelta?.delta?.text;
-						if (content) {
-							onChunk({ content, done: false });
-						}
-						if (chunk.messageStop) {
-							console.debug('SAP AI Core Bedrock streaming finished');
-							onChunk({ content: '', done: true });
-							return;
-						}
-					}
-				} catch (e) {
-					console.error('Failed to parse Bedrock SSE chunk:', e, 'Data:', data);
-				}
-			}
-		}
-
-		console.debug('SAP AI Core Bedrock streaming ended');
-		onChunk({ content: '', done: true });
+		emitBufferedSse(text, sapLineParser(modelName.toLowerCase().includes('claude') ? 'bedrock-claude' : 'bedrock-converse'), onChunk);
 	}
 
 	/**
@@ -1918,57 +1747,14 @@ export class SAPAICoreProvider extends BaseLLMProvider {
 	 */
 	async fetchModels(): Promise<ModelInfo[]> {
 		try {
-			const headers = await this.getAuthHeaders();
-			const baseUrl = this.serviceKey?.serviceurls?.AI_API_URL ||
-						   this.config.baseUrl ||
-						   'https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com';
-
-	
-			// Fetch both deployments and configurations
-			const deploymentsUrl = `${baseUrl}/v2/lm/deployments?$filter=status eq 'RUNNING'`;
-			const configurationsUrl = `${baseUrl}/v2/lm/configurations`;
-
-			const [deploymentsResponse, configurationsResponse] = await Promise.all([
-				this.http.request({ url: deploymentsUrl, method: 'GET', headers }),
-				this.http.request({ url: configurationsUrl, method: 'GET', headers })
-			]);
-
-			if (deploymentsResponse.status !== 200) {
-				console.warn(`Failed to fetch deployments (status ${deploymentsResponse.status}), using default models`);
+			const running = await this.fetchRunningDeployments();
+			if (!running) {
+				console.warn('Failed to fetch deployments, using default models');
 				return this.getDefaultModels();
 			}
-
-			const deploymentsData = deploymentsResponse.json as {
-				resources?: unknown[];
-				value?: unknown[];
-			};
-			const configurationsData = configurationsResponse.status === 200 ? configurationsResponse.json as {
-				resources?: unknown[];
-				value?: unknown[];
-			} : null;
-
-			// Build a map of configurationId -> configuration for quick lookup
-			const configMap = new Map<string, { id: string; executableId?: string; parameterBindings?: Array<{ key: string; value: string }> }>();
-			if (configurationsData) {
-				const configs = configurationsData.resources || configurationsData.value || [];
-				for (const config of configs) {
-					if (Array.isArray(config)) continue;
-					const typedConfig = config as { id: string; executableId?: string; parameterBindings?: Array<{ key: string; value: string }> };
-					configMap.set(typedConfig.id, typedConfig);
-				}
-			}
-
+			const configMap = running.configurations;
+			const deployments = running.deployments;
 			const models: ModelInfo[] = [];
-
-			// Handle different possible response formats
-			let deployments: unknown[] = [];
-			if (deploymentsData.resources) {
-				deployments = deploymentsData.resources;
-			} else if (Array.isArray(deploymentsData)) {
-				deployments = deploymentsData;
-			} else if (deploymentsData.value && Array.isArray(deploymentsData.value)) {
-				deployments = deploymentsData.value;
-			}
 
 			for (const deployment of deployments) {
 				// Type guard for deployment structure

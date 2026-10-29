@@ -1,87 +1,85 @@
-/**
- * ChatService streaming abort tests
- */
+import { ChatService } from '@/application/services/chat.service';
+import type { StreamChunk } from '@/types/common/llm';
 
-import { ChatService } from '../../application/services/chat.service';
-import type { Message } from '../../types/core/conversation';
+const provider = {
+	streamChat: jest.fn(),
+	chat: jest.fn(),
+};
 
-function makeMinimalChatService() {
-	const mockProvider = {
-		streamChat: jest.fn(),
-		chat: jest.fn(),
-	};
+jest.mock('@qwai/obsidian-llm', () => ({
+	ModelManager: { findConfigForModelByProvider: jest.fn(() => ({ provider: 'openai' })) },
+	ProviderFactory: { createProvider: jest.fn(() => provider) },
+}));
 
-	const mockProviderFactory = {
-		create: jest.fn(() => mockProvider),
-	};
+const chatService = () => new ChatService({
+	fileSystem: {} as never,
+	ragManager: {} as never,
+	webSearchService: {} as never,
+	settings: () => ({ llmConfigs: [], defaultModel: 'gpt-4o' }),
+});
 
-	// Mock ModelManager and ProviderFactory at the module level is complex;
-	// we test the abort callback behaviour directly via mockProvider.streamChat.
-	return { mockProvider };
-}
+const callbacks = (signal?: AbortSignal) => ({
+	onChunk: jest.fn(),
+	onComplete: jest.fn(),
+	onError: jest.fn(),
+	signal,
+});
 
-describe('ChatService streaming abort', () => {
-	it('checkAbort returning true prevents onChunk from being called for subsequent chunks', async () => {
-		const chunks = [
-			{ content: 'Hello', done: false },
-			{ content: ' World', done: false },
-			{ content: '!', done: false },
-			{ content: '', done: true },
-		];
+describe('ChatService streaming cancellation', () => {
+	beforeEach(() => provider.streamChat.mockReset());
 
-		// The abort fires after the first chunk
-		let chunkIndex = 0;
-		const checkAbort = jest.fn(() => chunkIndex >= 1);
-		const onChunk = jest.fn();
-		const onComplete = jest.fn();
+	it('hands the run signal to the provider request', async () => {
+		provider.streamChat.mockImplementation(async (_request: unknown, onChunk: (chunk: StreamChunk) => void) => {
+			onChunk({ content: '', done: true });
+		});
+		const controller = new AbortController();
 
-		// Simulate the checkAbort guard inline as ChatService does it
-		for (const chunk of chunks) {
-			if (checkAbort()) break;
-			chunkIndex++;
-			if (chunk.content) onChunk(chunk);
-		}
+		await chatService().streamResponse([{ role: 'user', content: 'hi' }], { model: 'gpt-4o', mode: 'chat' }, callbacks(controller.signal));
 
-		// First chunk was processed before abort fired
-		expect(onChunk).toHaveBeenCalledTimes(1);
-		expect(onChunk).toHaveBeenCalledWith(chunks[0]);
-		// checkAbort was called and returned true on the second iteration
-		expect(checkAbort).toHaveBeenCalledTimes(2);
-		// onComplete not called because we broke out
-		expect(onComplete).not.toHaveBeenCalled();
+		expect(provider.streamChat.mock.calls[0][0]).toMatchObject({ signal: controller.signal });
 	});
 
-	it('checkAbort returning false allows all chunks through', () => {
-		const chunks = [
-			{ content: 'a', done: false },
-			{ content: 'b', done: false },
-			{ content: '', done: true },
-		];
+	it('completes with the text received before the user stopped', async () => {
+		const controller = new AbortController();
+		provider.streamChat.mockImplementation(async (_request: unknown, onChunk: (chunk: StreamChunk) => void) => {
+			onChunk({ content: 'partial ', done: false });
+			controller.abort();
+			onChunk({ content: '', done: true });
+		});
+		const ui = callbacks(controller.signal);
 
-		const checkAbort = jest.fn(() => false);
-		const onChunk = jest.fn();
+		await chatService().streamResponse([{ role: 'user', content: 'hi' }], { model: 'gpt-4o', mode: 'chat' }, ui);
 
-		for (const chunk of chunks) {
-			if (checkAbort()) break;
-			if (chunk.content) onChunk(chunk);
-		}
+		expect(ui.onError).not.toHaveBeenCalled();
+		expect(ui.onComplete).toHaveBeenCalledWith(expect.objectContaining({ content: 'partial ' }));
+	});
 
-		expect(onChunk).toHaveBeenCalledTimes(2);
+	it('treats a transport abort error as a stop, not a failure', async () => {
+		const controller = new AbortController();
+		provider.streamChat.mockImplementation(async (_request: unknown, onChunk: (chunk: StreamChunk) => void) => {
+			onChunk({ content: 'so far', done: false });
+			controller.abort();
+			throw new Error('Request was aborted');
+		});
+		const ui = callbacks(controller.signal);
+
+		await chatService().streamResponse([{ role: 'user', content: 'hi' }], { model: 'gpt-4o', mode: 'chat' }, ui);
+
+		expect(ui.onError).not.toHaveBeenCalled();
+		expect(ui.onComplete).toHaveBeenCalledWith(expect.objectContaining({ content: 'so far' }));
 	});
 });
 
 describe('ChatService agent delegation', () => {
 	it('delegates executeAgentLoop to AgentEngineLoop when one is configured', async () => {
 		const loop = { execute: jest.fn(async () => undefined) };
-		const service = new ChatService(
-			{} as any, // fileSystem
-			{} as any, // ragManager
-			{} as any, // webSearchService
-			[], // llmConfigs
-			undefined, // usageRepo
-			'gpt-4o', // defaultModel
-			loop as any, // agentEngineLoop
-		);
+		const service = new ChatService({
+			fileSystem: {} as any,
+			ragManager: {} as any,
+			webSearchService: {} as any,
+			settings: () => ({ llmConfigs: [], defaultModel: 'gpt-4o' }),
+			agentEngineLoop: loop as any,
+		});
 		const callbacks = {
 			onChunk: jest.fn(),
 			onToolCall: jest.fn(),
