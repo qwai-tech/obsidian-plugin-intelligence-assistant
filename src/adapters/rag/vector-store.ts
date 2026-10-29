@@ -6,25 +6,8 @@ import { JsonFile } from '@/adapters/persistence/json-file';
 import { EmbeddingManager } from './embedding-manager';
 import { stableHash } from '@/core/utils/file-system';
 import { chunkText } from './chunker';
-
-export interface DocumentChunk {
-  id: string;
-  content: string;
-  embedding?: number[];
-  metadata: {
-    source: string;
-    path: string;
-    title?: string;
-    timestamp: number;
-    contentHash?: string;
-    embeddingModel?: string;
-  };
-}
-
-export interface SearchResult {
-  chunk: DocumentChunk;
-  similarity: number;
-}
+import { boostByPath, cosine, keywordSimilarity, rankResults, vectorNorm } from './similarity';
+import type { DocumentChunk, SearchResult } from './rag-types';
 
 export interface VectorStoreData {
   _chunks: DocumentChunk[];
@@ -287,178 +270,38 @@ export class VectorStore {
 
   async search(query: string, config: RAGConfig, embeddingModel?: string): Promise<SearchResult[]> {
     await this.load();
-    console.debug('[VectorStore] Search called with query:', query);
-    console.debug('[VectorStore] Total _chunks available:', this._chunks.length);
-    console.debug('[VectorStore] Embedding model:', embeddingModel);
-
-    // Generate embedding for the query
     const queryEmbedding = await this.generateEmbedding(query, embeddingModel);
-    console.debug('[VectorStore] Query embedding generated:', queryEmbedding ? 'Yes' : 'No');
-
     if (!queryEmbedding) {
-      // Fallback to simple similarity search if embeddings are not available
-      console.debug('[VectorStore] Falling back to simple search');
-      return this.simpleSearch(query, config);
+      return rankResults(this._chunks.map(chunk => ({ chunk, similarity: keywordSimilarity(query, chunk) })), config);
     }
 
-    // Precompute the query norm once; chunk norms are cached across queries.
-    const queryNorm = Math.sqrt(queryEmbedding.reduce((sum, value) => sum + value * value, 0));
-
-    // Calculate similarity with all _chunks
+    const queryNorm = vectorNorm(queryEmbedding);
     const comparable = this._chunks.filter(chunk => chunk.metadata.embeddingModel
       ? chunk.metadata.embeddingModel === embeddingModel
       : !chunk.embedding || chunk.embedding.length === queryEmbedding.length);
-    let unembeddedCount = 0;
-    let similarities: SearchResult[] = comparable.map(chunk => {
-      const chunkEmbedding = chunk.embedding;
-
-      if (!chunkEmbedding) {
-        // This chunk has no embedding (both embedding attempts failed at index
-        // time, e.g. no embedding model configured or a transient provider
-        // error). It cannot be scored semantically, so it ranks last with 0
-        // similarity and is dropped by any positive similarityThreshold.
-        // Re-indexing the file restores its embedding.
-        unembeddedCount++;
-        return { chunk, similarity: 0 };
-      }
-
-      // Calculate content similarity (reuses cached chunk norm).
-      const contentSimilarity = this.cosineSimilarityCached(queryEmbedding, queryNorm, chunk);
-
-      // Calculate path/title similarity for boosting
-      const lowerPath = chunk.metadata.path.toLowerCase();
-      const lowerTitle = (chunk.metadata.title || '').toLowerCase();
-      const lowerQuery = query.toLowerCase();
-      const queryWords = lowerQuery.split(/\s+/).filter(word => word.length > 0);
-      
-      let pathMatches = 0;
-      for (const word of queryWords) {
-        if (lowerPath.includes(word) || lowerTitle.includes(word)) {
-          pathMatches++;
-        }
-      }
-      
-      // Boost similarity if there are path/title matches
-      let finalSimilarity = contentSimilarity;
-      if (pathMatches > 0) {
-        // Apply a boost factor for documents where path/title matches the query
-        finalSimilarity = Math.min(contentSimilarity + (pathMatches / queryWords.length) * 0.3, 1.0);
-      }
-
-      return { chunk, similarity: finalSimilarity };
-    });
-
-    if (unembeddedCount > 0) {
+    const unembedded = comparable.filter(chunk => !chunk.embedding).length;
+    if (unembedded > 0) {
       console.warn(
-        `[VectorStore] ${unembeddedCount}/${this._chunks.length} chunks have no embedding and were scored 0 ` +
+        `[VectorStore] ${unembedded}/${this._chunks.length} chunks have no embedding and were scored 0 ` +
         '(semantic recall degraded). Re-index the affected files to restore them.'
       );
     }
 
-    console.debug('[VectorStore] Calculated similarities for', similarities.length, '_chunks');
-    console.debug('[VectorStore] Similarity threshold:', config.similarityThreshold);
-
-    // Apply similarity threshold filter if configured
-    if (config.similarityThreshold !== undefined && config.similarityThreshold > 0) {
-      similarities = similarities.filter(result => result.similarity >= config.similarityThreshold);
-      console.debug('[VectorStore] After threshold filter:', similarities.length, '_chunks');
-    }
-
-    // Sort by similarity descending
-    similarities.sort((a, b) => b.similarity - a.similarity);
-    
-    // Apply top K limit
-    similarities = similarities.slice(0, config.topK);
-    
-    
-    return similarities;
-  }
-  
-
-  private cosineSimilarityCached(query: number[], queryNorm: number, chunk: DocumentChunk): number {
-    const vec = chunk.embedding;
-    if (!vec || vec.length !== query.length) {
-      return 0;
-    }
-
-    let chunkNorm = this.chunkNorms.get(chunk.id);
-    if (chunkNorm === undefined) {
-      let sumSquares = 0;
-      for (let i = 0; i < vec.length; i++) {
-        sumSquares += vec[i] ** 2;
-      }
-      chunkNorm = Math.sqrt(sumSquares);
-      this.chunkNorms.set(chunk.id, chunkNorm);
-    }
-
-    if (queryNorm === 0 || chunkNorm === 0) {
-      return 0;
-    }
-
-    let dotProduct = 0;
-    for (let i = 0; i < vec.length; i++) {
-      dotProduct += query[i] * vec[i];
-    }
-
-    return dotProduct / (queryNorm * chunkNorm);
+    return rankResults(comparable.map(chunk => ({
+      chunk,
+      similarity: chunk.embedding
+        ? boostByPath(cosine(queryEmbedding, queryNorm, chunk.embedding, this.normOf(chunk, chunk.embedding)), query, chunk)
+        : 0,
+    })), config);
   }
 
-  private async simpleSearch(query: string, config: RAGConfig): Promise<SearchResult[]> {
-    // Simple keyword-based search as fallback - enhanced to include path and filename
-    let results: SearchResult[] = this._chunks.map(chunk => {
-      // Calculate a basic similarity score based on keyword matches in content, path, and title
-      const lowerContent = chunk.content.toLowerCase();
-      const lowerPath = chunk.metadata.path.toLowerCase();
-      const lowerTitle = (chunk.metadata.title || '').toLowerCase();
-      const lowerQuery = query.toLowerCase();
-      const words = lowerQuery.split(/\s+/).filter(word => word.length > 0);
-      
-      let contentMatches = 0;
-      let pathMatches = 0;
-      
-      for (const word of words) {
-        // Count matches in content
-        if (lowerContent.includes(word)) {
-          contentMatches++;
-        }
-        // Count matches in path
-        if (lowerPath.includes(word)) {
-          pathMatches++;
-        }
-        // Count matches in title
-        if (lowerTitle.includes(word)) {
-          pathMatches++; // Give title matches same weight as path matches
-        }
-      }
-      
-      // Calculate similarity score with higher weight for path/title matches
-      let similarity = 0;
-      if (pathMatches > 0) {
-        // If path/title matches, give higher score
-        similarity = pathMatches / words.length + 0.5; // Boost for path matches
-      } else {
-        // Only content matches
-        similarity = contentMatches / words.length;
-      }
-      
-      // Ensure similarity doesn't exceed 1
-      similarity = Math.min(similarity, 1.0);
-
-      return {
-        chunk,
-        similarity
-      };
-    }).sort((a, b) => b.similarity - a.similarity);
-    
-    // Apply similarity threshold filter if configured
-    if (config.similarityThreshold !== undefined && config.similarityThreshold > 0) {
-      results = results.filter(result => result.similarity >= config.similarityThreshold);
+  private normOf(chunk: DocumentChunk, embedding: number[]): number {
+    let norm = this.chunkNorms.get(chunk.id);
+    if (norm === undefined) {
+      norm = vectorNorm(embedding);
+      this.chunkNorms.set(chunk.id, norm);
     }
-    
-    // Apply top K limit
-    results = results.slice(0, config.topK);
-    
-    return Promise.resolve(results);
+    return norm;
   }
 
   private async generateEmbedding(text: string, embeddingModel?: string): Promise<number[] | undefined> {

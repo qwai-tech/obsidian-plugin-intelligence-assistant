@@ -1,7 +1,8 @@
 import {App, TFile, Notice} from 'obsidian';
 import type { RAGConfig, RAGSource } from '@/features/knowledge/types/rag';
 import type { LLMConfig } from '@/features/llm/types/model';
-import { VectorStore, SearchResult } from './vector-store';
+import { VectorStore } from './vector-store';
+import type { SearchResult } from './rag-types';
 import { EmbeddingManager } from './embedding-manager';
 import { DocumentGrader } from './document-grader';
 import { errorMessage } from '@/core/utils/errors';

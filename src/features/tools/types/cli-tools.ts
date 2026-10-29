@@ -60,3 +60,11 @@ export interface CLIToolParameter {
  * Default timeout for CLI tool execution (30 seconds)
  */
 export const DEFAULT_CLI_TIMEOUT = 30000;
+
+export interface CLIToolPreset {
+	id: string;
+	name: string;
+	category: 'file' | 'search' | 'network' | 'code' | 'system' | 'data' | 'apps';
+	config: Omit<CLIToolConfig, 'id' | 'enabled'>;
+	platforms: Array<'darwin' | 'linux' | 'win32'>;
+}

@@ -1,38 +1,15 @@
-/**
- * Conversation Storage Service
- * Stores each conversation as an individual JSON file with a metadata index
- */
-
 import { App, Vault } from 'obsidian';
-import type { Conversation, ConversationConfig } from '@/features/conversations/types/conversation';
+import type { Conversation } from '@/features/conversations/types/conversation';
 import { pluginPaths, type PluginPaths } from '@/core/plugin-paths';
 import { ensureFolderExists } from '@/core/utils/file-system';
 import { JsonFile } from './json-file';
+import { buildMetadata, conversationFileName, hasMetadataChanged, normalizeConversation, type ConversationIndex, type ConversationMetadata } from './conversation-records';
 
 const INDEX_FILE_NAME = 'conversation-index.json';
 const INDEX_FILE_VERSION = '2.0';
 const LEGACY_ROOT_FOLDER = '.conversations';
 const LEGACY_ROOT_INDEX_PATH = `${LEGACY_ROOT_FOLDER}/index.json`;
 
-export type ConversationMode = 'chat' | 'agent';
-
-interface ConversationMetadata {
-  id: string;
-  title: string;
-  file: string;
-  createdAt: number;
-  updatedAt: number;
-  messageCount: number;
-  model?: string;
-  mode: ConversationMode;
-  icon?: string;
-  agentId?: string;
-}
-
-interface ConversationIndex {
-  version: string;
-  conversations: ConversationMetadata[];
-}
 
 interface LegacyConversationMetadata {
   id: string;
@@ -97,12 +74,12 @@ export class ConversationStorageService {
     await this.ensureInitialized();
     await this._withWriteLock(async () => {
       const index = await this.loadIndex();
-      const normalizedConversation = this.normalizeConversation(conversation);
-      const filePath = this.generateConversationFilePath(normalizedConversation, index);
+      const normalizedConversation = normalizeConversation(conversation);
+      const filePath = `${this.conversationsFolder}/${conversationFileName(normalizedConversation, index)}`;
 
       await this.writeConversationFile(filePath, normalizedConversation);
 
-      const metadata = this.buildMetadata(normalizedConversation, filePath);
+      const metadata = buildMetadata(normalizedConversation, filePath);
       const updatedIndex: ConversationIndex = {
         version: INDEX_FILE_VERSION,
         conversations: [...index.conversations, metadata].sort((a, b) => b.updatedAt - a.updatedAt)
@@ -126,10 +103,10 @@ export class ConversationStorageService {
 
     try {
       const conversationFile = await this.vault.adapter.read(metadata.file);
-      const conversation = this.normalizeConversation(JSON.parse(conversationFile) as Conversation);
+      const conversation = normalizeConversation(JSON.parse(conversationFile) as Conversation);
 
-      const refreshedMetadata = this.buildMetadata(conversation, metadata.file);
-      const metadataChanged = this.hasMetadataChanged(metadata, refreshedMetadata);
+      const refreshedMetadata = buildMetadata(conversation, metadata.file);
+      const metadataChanged = hasMetadataChanged(metadata, refreshedMetadata);
 
       if (metadataChanged) {
         const updatedIndex = {
@@ -161,10 +138,10 @@ export class ConversationStorageService {
         throw new Error(`Conversation ${conversation.id} not found in index`);
       }
 
-      const normalizedConversation = this.normalizeConversation(conversation);
+      const normalizedConversation = normalizeConversation(conversation);
       await this.writeConversationFile(metadata.file, normalizedConversation);
 
-      const refreshedMetadata = this.buildMetadata(normalizedConversation, metadata.file);
+      const refreshedMetadata = buildMetadata(normalizedConversation, metadata.file);
       const updatedIndex = {
         version: INDEX_FILE_VERSION,
         conversations: index.conversations
@@ -309,116 +286,8 @@ export class ConversationStorageService {
     await this.indexFile.write(index);
   }
 
-  private normalizeConversation(conv: Conversation): Conversation {
-    return {
-      id: conv.id,
-      title: conv.title || 'Untitled Conversation',
-      messages: conv.messages ?? [],
-      createdAt: conv.createdAt ?? Date.now(),
-      updatedAt: conv.updatedAt ?? Date.now(),
-      icon: conv.icon,
-      mode: conv.mode ?? 'chat',
-      config: this.normalizeConversationConfig(conv.config)
-    };
-  }
-
-  private normalizeConversationConfig(config?: ConversationConfig): ConversationConfig | undefined {
-    if (!config) return undefined;
-    const normalizeId = (value?: string | null) => {
-      if (value === null) return null;
-      if (!value) return undefined;
-      return value;
-    };
-
-    return {
-      modelId: config.modelId || undefined,
-      promptId: normalizeId(config.promptId),
-      agentId: normalizeId(config.agentId),
-      temperature: typeof config.temperature === 'number' ? config.temperature : undefined,
-      maxTokens: typeof config.maxTokens === 'number' ? config.maxTokens : undefined,
-      ragEnabled: typeof config.ragEnabled === 'boolean' ? config.ragEnabled : undefined,
-      webSearchEnabled: typeof config.webSearchEnabled === 'boolean' ? config.webSearchEnabled : undefined
-    };
-  }
-
-  private buildMetadata(conversation: Conversation, file: string): ConversationMetadata {
-    return {
-      id: conversation.id,
-      title: conversation.title,
-      file,
-      createdAt: conversation.createdAt,
-      updatedAt: conversation.updatedAt,
-      messageCount: conversation.messages.length,
-      model: conversation.config?.modelId || this.extractPrimaryModel(conversation) || undefined,
-      mode: conversation.mode ?? 'chat',
-      icon: conversation.icon,
-      agentId: conversation.config?.agentId ?? undefined
-    };
-  }
-
-  private hasMetadataChanged(a: ConversationMetadata, b: ConversationMetadata): boolean {
-    return (
-      a.title !== b.title ||
-      a.file !== b.file ||
-      a.updatedAt !== b.updatedAt ||
-      a.messageCount !== b.messageCount ||
-      a.model !== b.model ||
-      a.icon !== b.icon ||
-      a.mode !== b.mode ||
-      a.agentId !== b.agentId
-    );
-  }
-
   private async writeConversationFile(filePath: string, conversation: Conversation): Promise<void> {
     await new JsonFile<Conversation>(this.vault.adapter, filePath, () => conversation).write(conversation);
-  }
-
-  private generateConversationFilePath(conversation: Conversation, index: ConversationIndex): string {
-    const date = new Date(conversation.createdAt ?? Date.now());
-    const datePrefix = this.formatDate(date);
-    const sequence = this.getNextSequenceForDate(index, datePrefix);
-    const sanitizedId = this.sanitizeId(conversation.id);
-    const fileName = `${datePrefix}-${sequence.toString().padStart(3, '0')}-${sanitizedId}.json`;
-    return `${this.conversationsFolder}/${fileName}`;
-  }
-
-  private getNextSequenceForDate(index: ConversationIndex, datePrefix: string): number {
-    let maxSequence = 0;
-    const regex = new RegExp(`${datePrefix}-(\\d+)-`);
-
-    for (const meta of index.conversations) {
-      const match = meta.file.match(regex);
-      if (match) {
-        const seq = parseInt(match[1], 10);
-        if (!Number.isNaN(seq)) {
-          maxSequence = Math.max(maxSequence, seq);
-        }
-      }
-    }
-
-    return maxSequence + 1;
-  }
-
-  private formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = `${date.getMonth() + 1}`.padStart(2, '0');
-    const day = `${date.getDate()}`.padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  private sanitizeId(value: string): string {
-    if (!value) return 'conversation';
-    return value.replace(/[^a-zA-Z0-9_-]/g, '-');
-  }
-
-  private extractPrimaryModel(conversation: Conversation): string | null {
-    for (let i = conversation.messages.length - 1; i >= 0; i--) {
-      const message = conversation.messages[i];
-      if (message.role === 'assistant' && message.model) {
-        return message.model;
-      }
-    }
-    return null;
   }
 
   private async tryMigrations(): Promise<boolean> {
@@ -446,10 +315,10 @@ export class ConversationStorageService {
         try {
           if (!(await adapter.exists(entry.file))) continue;
           const fileContent = await adapter.read(entry.file);
-          const conversation = this.normalizeConversation(JSON.parse(fileContent) as Conversation);
-          const filePath = this.generateConversationFilePath(conversation, migratedIndex);
+          const conversation = normalizeConversation(JSON.parse(fileContent) as Conversation);
+          const filePath = `${this.conversationsFolder}/${conversationFileName(conversation, migratedIndex)}`;
           await this.writeConversationFile(filePath, conversation);
-          migratedIndex.conversations.push(this.buildMetadata(conversation, filePath));
+          migratedIndex.conversations.push(buildMetadata(conversation, filePath));
         } catch (error) {
           console.error(`Failed to migrate conversation ${entry.id}:`, error);
         }
@@ -478,10 +347,10 @@ export class ConversationStorageService {
       for (const entry of legacyIndex.conversations || []) {
         try {
           const fileContent = await adapter.read(entry.path);
-          const conversation = this.normalizeConversation(JSON.parse(fileContent) as Conversation);
-          const filePath = this.generateConversationFilePath(conversation, migratedIndex);
+          const conversation = normalizeConversation(JSON.parse(fileContent) as Conversation);
+          const filePath = `${this.conversationsFolder}/${conversationFileName(conversation, migratedIndex)}`;
           await this.writeConversationFile(filePath, conversation);
-          migratedIndex.conversations.push(this.buildMetadata(conversation, filePath));
+          migratedIndex.conversations.push(buildMetadata(conversation, filePath));
         } catch (error) {
           console.error(`Failed to migrate conversation ${entry.id}:`, error);
         }

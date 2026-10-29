@@ -1,4 +1,5 @@
-import { loadOpenApiTools, type OpenApiLoadContext } from '../openapi-loader-core';
+import { loadOpenApiTools } from '../openapi-loader-core';
+import type { OpenApiLoadContext } from '../openapi-spec-loader';
 import type { HttpPort, HttpRequest } from '@qwai/obsidian-llm';
 import type { IFileSystem } from '@/core/interfaces/file-system.interface';
 import type { OpenApiToolConfig } from '@/features/tools/types/openapi-tools';

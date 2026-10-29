@@ -6,7 +6,8 @@
 import type { ToolSource } from '../tool-source';
 import type { SourceTool, ToolSourceKind } from '@/features/tools/types/tools';
 import type { OpenApiToolConfig } from '@/features/tools/types/openapi-tools';
-import { loadOpenApiTools, type OpenApiLoadContext } from './openapi-loader-core';
+import { loadOpenApiTools } from './openapi-loader-core';
+import type { OpenApiLoadContext } from './openapi-spec-loader';
 
 export class OpenApiToolSource implements ToolSource {
 	readonly kind: ToolSourceKind = 'openapi';
