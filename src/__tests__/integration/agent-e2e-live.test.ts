@@ -15,8 +15,8 @@
 import { App, TFile } from 'obsidian';
 import { ToolRegistry } from '@/application/tools/tool-registry';
 import { BuiltinToolSource } from '@/application/tools/sources/builtin-tool-source';
-import { AgentEngineLoop, HistoryCompactor } from '@/application/agents';
-import { InMemoryStateStore } from '@/application/agents/kernel/agent-engine-core';
+import { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
+import { HistoryCompactor } from '@/application/agents/history-compactor';
 import { DeepSeekProvider } from '@qwai/obsidian-llm';
 import type { Message } from '@/types';
 
@@ -81,7 +81,6 @@ describeLive('LIVE agent end-to-end (real DeepSeek + real tools + in-memory vaul
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: async () => [], formatResultsAsContext: () => '' } as any,
-			agentRunStateStore: new InMemoryStateStore(),
 			createProvider: () => ({
 				provider: new DeepSeekProvider({ provider: 'deepseek', apiKey: KEY!, baseUrl: 'https://api.deepseek.com/v1' }),
 				providerId: 'deepseek',

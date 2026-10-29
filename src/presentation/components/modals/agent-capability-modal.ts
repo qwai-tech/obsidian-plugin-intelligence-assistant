@@ -79,6 +79,8 @@ export class AgentCapabilityModal extends Modal {
 					title.createSpan({ cls: 'ia-agent-capability-tool__tag is-warn', text: 'Apply required' });
 				} else if (tool.sideEffect === 'external-write') {
 					title.createSpan({ cls: 'ia-agent-capability-tool__tag is-danger', text: 'External write' });
+				} else if (tool.sideEffect === 'local-process') {
+					title.createSpan({ cls: 'ia-agent-capability-tool__tag is-danger', text: 'Runs a local process' });
 				}
 				toolEl.createDiv({ cls: 'ia-agent-capability-tool__description', text: tool.description });
 			}

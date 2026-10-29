@@ -3,7 +3,6 @@ import { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
 import { HistoryCompactor } from '@/application/agents/history-compactor';
 import { AgentSenseService } from '@/application/agents/agent-sense-service';
 import { WebSearchService } from '@/application/services/web-search-service';
-import { InMemoryStateStore } from '@/application/agents/kernel/agent-engine-core';
 import { ProviderFactory, createFetchHttpPort } from '@qwai/obsidian-llm';
 import { createTestAgent } from '@/test-support/test-utils';
 import type { Message } from '@/types/core/conversation';
@@ -115,14 +114,13 @@ export async function runAgentMission(input: RunMissionInput): Promise<MissionOu
     toolRegistry: toolRegistry as never,
     senseService: new AgentSenseService(app, ragManager),
     historyCompactor: new HistoryCompactor(),
-    webSearchService: new WebSearchService({ enabled: false } as never, stubHttpClient() as never),
+    webSearchService: new WebSearchService(() => ({ enabled: false }) as never, stubHttpClient() as never),
     ragManager,
-    agentRunStateStore: new InMemoryStateStore(),
     createProvider: () => {
       const config = { provider: llm.provider, apiKey: llm.apiKey, baseUrl: llm.baseUrl };
       return { provider: ProviderFactory.createProvider(config as never, harnessHttpPort), providerId: llm.provider };
     },
-    defaultModel: llm.model,
+    defaultModel: () => llm.model,
   });
 
   const outcome: MissionOutcome = { toolCalls: [], toolResults: [], steps: 0, toolCallCount: 0 };
@@ -151,15 +149,16 @@ export async function runAgentMission(input: RunMissionInput): Promise<MissionOu
       outcome.error = outcome.error ?? new Error(`Mission timed out after ${timeoutMs}ms`);
       resolve();
     }, timeoutMs);
+    const stop = new AbortController();
     const callbacks: AgentLoopCallbacks = {
-      checkAbort:
-        input.abortAfterToolCalls === undefined
-          ? undefined
-          : () => outcome.toolCallCount >= (input.abortAfterToolCalls as number),
+      signal: input.abortAfterToolCalls === undefined ? undefined : stop.signal,
       onChunk: () => undefined,
       onToolCall: (toolName, args) => {
         outcome.toolCallCount += 1;
         outcome.toolCalls.push({ toolName, args });
+        if (input.abortAfterToolCalls !== undefined && outcome.toolCallCount >= input.abortAfterToolCalls) {
+          stop.abort();
+        }
       },
       onToolResult: (toolName, success, output) => {
         outcome.toolResults.push({ toolName, success, output });

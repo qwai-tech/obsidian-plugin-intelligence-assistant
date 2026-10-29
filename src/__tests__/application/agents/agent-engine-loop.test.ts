@@ -1,26 +1,8 @@
-import { AgentEngineLoop, HistoryCompactor, ObsidianAgentRunStateStore } from '@/application/agents';
-import { InMemoryStateStore } from '@/application/agents/kernel/agent-engine-core';
+import { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
+import { HistoryCompactor } from '@/application/agents/history-compactor';
+import type { KernelEvent } from '@/types/features/agent-run';
 import type { Message } from '@/types';
 
-const createAgentRunStateStore = () => new InMemoryStateStore();
-
-class MemoryAdapter {
-	files = new Map<string, string>();
-	folders = new Set<string>();
-
-	exists = jest.fn(async (path: string) => this.files.has(path) || this.folders.has(path));
-	mkdir = jest.fn(async (path: string) => {
-		this.folders.add(path);
-	});
-	write = jest.fn(async (path: string, content: string) => {
-		this.files.set(path, content);
-	});
-	read = jest.fn(async (path: string) => {
-		const content = this.files.get(path);
-		if (content === undefined) throw new Error(`Missing file: ${path}`);
-		return content;
-	});
-}
 
 describe('AgentEngineLoop', () => {
 	it('injects sense context and completes when no tools are requested', async () => {
@@ -51,7 +33,6 @@ describe('AgentEngineLoop', () => {
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-			agentRunStateStore: createAgentRunStateStore(),
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
 		});
 
@@ -104,7 +85,6 @@ describe('AgentEngineLoop', () => {
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-			agentRunStateStore: createAgentRunStateStore(),
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
 		});
 
@@ -173,7 +153,6 @@ describe('AgentEngineLoop', () => {
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-			agentRunStateStore: createAgentRunStateStore(),
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
 		});
 
@@ -260,7 +239,6 @@ describe('AgentEngineLoop', () => {
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-			agentRunStateStore: createAgentRunStateStore(),
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'deepseek' })),
 		});
 
@@ -316,7 +294,6 @@ describe('AgentEngineLoop', () => {
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-			agentRunStateStore: createAgentRunStateStore(),
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'deepseek' })),
 		});
 
@@ -350,7 +327,7 @@ describe('AgentEngineLoop', () => {
 		expect(sentMessages.some(message => message.role === 'tool')).toBe(false);
 	});
 
-	it('persists kernel run state and logs through the configured StateStore', async () => {
+	it('journals every kernel event of the run, ending with run_finished', async () => {
 		const provider = {
 			streamChat: jest.fn(async (_request, onChunk) => {
 				onChunk({ content: 'persistent answer' });
@@ -365,13 +342,13 @@ describe('AgentEngineLoop', () => {
 			sense: jest.fn(async () => ({ userQuery: 'persist', activeFilePath: null, references: [], sections: [], ragSources: [], memory: null })),
 			formatSenseContext: jest.fn(() => 'sense context'),
 		};
-		const adapter = new MemoryAdapter();
+		const journaled: Array<{ runId: string; event: KernelEvent }> = [];
 		const loop = new AgentEngineLoop({
 			toolRegistry: registry as any,
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-			agentRunStateStore: new ObsidianAgentRunStateStore({ vault: { adapter } } as any, '.obsidian/test/agent-runs'),
+			journal: { append: async (runId, event) => { journaled.push({ runId, event }); } },
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
 		});
 
@@ -388,15 +365,9 @@ describe('AgentEngineLoop', () => {
 			},
 		);
 
-		expect(adapter.files.size).toBe(1);
-		const runFile = JSON.parse([...adapter.files.values()][0]);
-		expect(runFile.state.status).toBe('completed');
-		expect(runFile.logs.map((log: any) => log.type)).toEqual(expect.arrayContaining([
-			'task_started',
-			'context_built',
-			'action_selected',
-			'task_completed',
-		]));
+		expect(new Set(journaled.map((entry) => entry.runId)).size).toBe(1);
+		expect(journaled.map((entry) => entry.event.type)).toEqual(['run_started', 'turn_started', 'text_delta', 'run_finished']);
+		expect(journaled[journaled.length - 1].event).toEqual({ type: 'run_finished', reason: { kind: 'answered' }, answer: 'persistent answer' });
 	});
 
 	it('uses structured non-streaming JSON for memory consolidation', async () => {
@@ -438,7 +409,6 @@ describe('AgentEngineLoop', () => {
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
 			ragManager: ragManager as any,
-			agentRunStateStore: createAgentRunStateStore(),
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
 			recordUsage: jest.fn(async () => undefined),
 		});

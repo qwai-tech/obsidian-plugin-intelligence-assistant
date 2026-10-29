@@ -1,41 +1,26 @@
 import { App } from 'obsidian';
 import type { Message, RAGSource, WebSearchResult, Agent as AppAgent } from '@/types';
 import { DEFAULT_MAX_STEPS, MAX_STEPS_CEILING } from '@/constants';
-
-/**
- * Heuristic: did the user's message explicitly grant autonomous write authority
- * for this run (e.g. "自主完成 / 不需要确认 / autonomously / without confirmation")?
- * This is a convenience layer on top of the deterministic per-agent toggle.
- */
-const AUTONOMY_INTENT_RE = /(自主完成|自动完成|自动应用|自动创建|不需要(我)?确认|不用确认|无需确认|直接(创建|写入|保存)|don['’]?t ask|without (your )?confirmation|no confirmation|autonomous(ly)?|auto[-\s]?apply|just (create|do it|save))/i;
-function detectAutonomyIntent(text: string): boolean {
-	return AUTONOMY_INTENT_RE.test(text ?? '');
-}
 import type { ToolRegistry as AppToolRegistry } from '@/application/tools/tool-registry';
 import type { WebSearchService } from '@/application/services/web-search-service';
 import type { RAGManager } from '@/infrastructure/rag-manager';
 import type { RegisteredTool } from '@/types/common/tools';
 import type { ILLMProvider } from '@/types/common/llm';
-import type {
-	AgentLoopCallbacks,
-	AgentLoopOptions,
-	AgentWorkingMessage,
-} from './types';
+import type { FinishReason, KernelEvent, RunJournal, TokenUsage } from '@/types/features/agent-run';
+import type { UsageRecord } from '@/types/features/usage';
+import type { AgentLoopCallbacks, AgentLoopOptions } from './types';
 import { HistoryCompactor } from './history-compactor';
 import type { AgentSenseService } from './agent-sense-service';
-import {
-	BasicPolicy,
-	createAgentEngine,
-} from './kernel/agent-engine-core';
-import type {
-	Agent as KernelAgent,
-	HostContext,
-	StateStore,
-	Task as KernelTask,
-} from './kernel/agent-engine-core';
-import { ProviderKernelPlanner } from './kernel/provider-kernel-planner';
-import type { AgentUsageRecorder } from './kernel/provider-kernel-planner';
-import { createKernelToolRegistry } from './kernel/kernel-tool-registry-adapter';
+import { TurnKernel } from './kernel/turn-kernel';
+import { Budget } from './kernel/budget';
+import { AgentContextAssembler } from './kernel/context-assembler';
+import { ProviderModelPort } from './kernel/provider-model-port';
+import { RegistryToolRunner } from './kernel/registry-tool-runner';
+import { EmptyTurnGuard, MissingProposalGuard, requiresWriteProposal, selectWriteTool } from './kernel/turn-guards';
+
+const AUTONOMY_INTENT_RE = /(自主完成|自动完成|自动应用|自动创建|不需要(我)?确认|不用确认|无需确认|直接(创建|写入|保存)|don['’]?t ask|without (your )?confirmation|no confirmation|autonomous(ly)?|auto[-\s]?apply|just (create|do it|save))/i;
+
+export type AgentUsageRecorder = (record: UsageRecord) => Promise<void>;
 
 interface AgentEngineLoopDeps {
 	app?: App;
@@ -44,13 +29,13 @@ interface AgentEngineLoopDeps {
 	historyCompactor: HistoryCompactor;
 	webSearchService: WebSearchService;
 	ragManager?: RAGManager;
-	agentRunStateStore: StateStore;
+	journal?: RunJournal;
 	createProvider: (modelId: string) => { provider: ILLMProvider; providerId: string } | null;
 	recordUsage?: AgentUsageRecorder;
-	defaultModel?: string;
+	defaultModel?: () => string | undefined;
 }
 
-const MAX_CONSECUTIVE_FAILURES = 3;
+const MAX_FAILURES = 3;
 
 export class AgentEngineLoop {
 	constructor(private readonly deps: AgentEngineLoopDeps) {}
@@ -64,101 +49,66 @@ export class AgentEngineLoop {
 			}
 
 			const activeAgent = this.getActiveAgent(options);
-			const contextWindow = options.contextWindow ?? activeAgent?.contextWindow ?? 20;
-			// Budget the agent estimates for itself on its first turn; the ceiling is the
-			// hard runaway/cost backstop it can never exceed. fallbackBudget applies until
-			// (and if) the agent declares an estimate.
-			const fallbackBudget = activeAgent?.maxSteps ?? DEFAULT_MAX_STEPS;
-			const stepCeiling = Math.max(MAX_STEPS_CEILING, fallbackBudget);
+			const fallbackSteps = activeAgent?.maxSteps ?? DEFAULT_MAX_STEPS;
 			const userQuery = messages[messages.length - 1]?.content ?? '';
 			const sense = await this.deps.senseService.sense({
 				userQuery,
 				model: options.model,
-				defaultModel: this.deps.defaultModel,
+				defaultModel: this.deps.defaultModel?.(),
 				enableRAG: options.enableRAG,
 				agentId: activeAgent?.id,
 				references: options.references,
 			});
-
 			const ragSources: RAGSource[] = [...sense.ragSources];
 			const webResults = await this.loadWebResults(userQuery, options);
-			const baseSystemMessages = this.buildBaseSystemMessages(
-				options,
-				activeAgent,
-				this.deps.senseService.formatSenseContext(sense),
-				webResults,
-			);
-			const workingMessages: AgentWorkingMessage[] = [...messages];
+			const systemMessages = this.buildBaseSystemMessages(options, activeAgent, this.deps.senseService.formatSenseContext(sense), webResults);
 			const resolvedTools = this.deps.toolRegistry.resolveForAgent(activeAgent?.toolAccess ?? { sources: {} });
-			const allRegisteredTools = this.getAllRegisteredTools(resolvedTools);
 			const nativeTools = this.deps.toolRegistry.toOpenAIFunctions(resolvedTools);
-			const knownNativeTools = this.deps.toolRegistry.toOpenAIFunctions(allRegisteredTools);
-			const consecutiveFailures = new Map<string, number>();
-			// Autonomous writes: agent toggle OR an explicit per-task grant in the message.
-			const autoApplyWrites = Boolean(activeAgent?.autonomousWrite) || detectAutonomyIntent(userQuery);
-			const planner = new ProviderKernelPlanner({
-				messages: workingMessages,
-				options,
-				callbacks,
-				provider: providerBundle.provider,
-				providerId: providerBundle.providerId,
-				recordUsage: this.deps.recordUsage,
-				historyCompactor: this.deps.historyCompactor,
-				baseSystemMessages,
-				nativeTools,
-				contextWindow,
-				fallbackBudget,
-				maxBudgetCeiling: stepCeiling,
-			});
-			const kernelTools = createKernelToolRegistry(
-				this.deps.toolRegistry,
-				resolvedTools,
-				nativeTools,
-				knownNativeTools,
-				consecutiveFailures,
-				callbacks,
-				planner,
-				autoApplyWrites,
-				this.deps.app,
-			);
-			const engine = createAgentEngine({
-				planner,
-				toolRegistry: kernelTools,
-				stateStore: this.deps.agentRunStateStore,
-				policy: new BasicPolicy({
-					maxSteps: stepCeiling,
-					maxFailures: MAX_CONSECUTIVE_FAILURES,
-					allowedTools: knownNativeTools.map(tool => tool.function.name),
+			const enabledNames = nativeTools.map((tool) => tool.function.name);
+			const writeRequired = requiresWriteProposal(options.expectsWriteProposal, [
+				userQuery,
+				...messages.filter((m) => m.role === 'user' || m.role === 'system').map((m) => m.content),
+			]);
+
+			const kernel = new TurnKernel({
+				context: new AgentContextAssembler({
+					options,
+					historyCompactor: this.deps.historyCompactor,
+					systemMessages,
+					tools: nativeTools,
+					contextWindow: options.contextWindow ?? activeAgent?.contextWindow ?? 20,
 				}),
-			});
-			const result = await engine.run({
-				agent: this.toKernelAgent(activeAgent, options, resolvedTools, stepCeiling),
-				task: this.toKernelTask(userQuery),
-				host: this.toKernelHost(options),
+				model: new ProviderModelPort(providerBundle.provider),
+				tools: new RegistryToolRunner({
+					registry: this.deps.toolRegistry,
+					enabled: new Set(enabledNames),
+					known: new Set(this.getAllRegisteredTools(resolvedTools).map((tool) => tool.llmName)),
+					autonomous: Boolean(activeAgent?.autonomousWrite) || AUTONOMY_INTENT_RE.test(userQuery),
+					app: this.deps.app as App,
+				}),
+				guards: [new MissingProposalGuard({ required: writeRequired, writeTool: selectWriteTool(enabledNames) }), new EmptyTurnGuard()],
+				budget: new Budget({ fallbackSteps, ceiling: Math.max(MAX_STEPS_CEILING, fallbackSteps), maxFailures: MAX_FAILURES }),
 			});
 
-			if (result.status === 'failed') {
-				callbacks.onError(new Error(result.error));
+			const runId = `run-${Date.now()}`;
+			const run = new RunRecorder(callbacks, (usage) => this.recordUsage(usage, providerBundle.providerId, options));
+			const outcome = await kernel.run(
+				{ runId, history: [...messages] },
+				callbacks.signal ?? new AbortController().signal,
+				(event) => {
+					run.handle(event);
+					void this.deps.journal?.append(runId, event);
+				},
+			);
+
+			const failure = failureMessage(outcome.reason);
+			if (failure) {
+				callbacks.onError(new Error(failure));
 				return;
 			}
-
-			if (result.status === 'stopped' && result.reason !== 'aborted' && result.reason !== 'max_steps_reached') {
-				callbacks.onError(new Error(result.reason));
-				return;
-			}
-
-			if (result.status === 'stopped' && result.reason === 'max_steps_reached') {
-				callbacks.onThought(`Reached the agent step budget of ${planner.effectiveBudget}.`, 'reflect');
-			}
-
-			const finalContent = result.status === 'completed'
-				? result.output
-				: [
-					planner.lastContent.trim(),
-					result.status === 'stopped' && result.reason === 'max_steps_reached'
-						? `Reached the agent step budget of ${planner.effectiveBudget}. Review the tool results above, or ask me to continue / raise this agent's max steps.`
-						: '',
-				].filter(Boolean).join('\n\n');
+			const finalContent = outcome.reason.kind === 'budget' && outcome.reason.limit === 'steps'
+				? this.reportBudgetStop(callbacks, outcome.answer, outcome.reason.steps)
+				: outcome.answer;
 
 			callbacks.onComplete({
 				role: 'assistant',
@@ -166,17 +116,34 @@ export class AgentEngineLoop {
 				model: options.model,
 				ragSources: ragSources.length > 0 ? ragSources : undefined,
 				webSearchResults: webResults.length > 0 ? webResults : undefined,
-				tokenUsage: planner.cumulativeUsage,
-				reasoningContent: planner.lastReasoning || undefined,
+				tokenUsage: run.usage,
+				reasoningContent: run.reasoning || undefined,
 			});
 
-			// Phase B2: Memory Consolidation Reflection
 			if (activeAgent?.id && this.deps.senseService.memoryService) {
 				void this.consolidateMemory(activeAgent.id, messages, finalContent, options);
 			}
-			} catch (error) {
+		} catch (error) {
 			callbacks.onError(error instanceof Error ? error : new Error(String(error)));
 		}
+	}
+
+	private reportBudgetStop(callbacks: AgentLoopCallbacks, partial: string, steps: number): string {
+		callbacks.onThought(`Reached the agent step budget of ${steps}.`, 'reflect');
+		return [
+			partial.trim(),
+			`Reached the agent step budget of ${steps}. Review the tool results above, or ask me to continue / raise this agent's max steps.`,
+		].filter(Boolean).join('\n\n');
+	}
+
+	private recordUsage(usage: TokenUsage, providerId: string, options: AgentLoopOptions): void {
+		void this.deps.recordUsage?.({
+			model: options.model,
+			provider: providerId,
+			...usage,
+			timestamp: Date.now(),
+			conversationId: options.conversationId,
+		});
 	}
 
 	private async consolidateMemory(agentId: string, history: Message[], finalOutput: string, options: AgentLoopOptions): Promise<void> {
@@ -290,42 +257,53 @@ assistant: ${finalOutput}
 		if (!options.enableWebSearch) return [];
 		return await this.deps.webSearchService.search(userQuery);
 	}
+}
 
-	private toKernelAgent(
-		activeAgent: AppAgent | undefined,
-		options: AgentLoopOptions,
-		resolvedTools: RegisteredTool[],
-		maxSteps: number,
-	): KernelAgent {
-		return {
-			id: activeAgent?.id ?? 'default-agent',
-			name: activeAgent?.name ?? 'Intelligence Assistant',
-			role: 'obsidian-knowledge-agent',
-			goal: 'Help with Obsidian knowledge work using the configured vault tools.',
-			instructions: this.buildAgentInstruction(options.isGenericAgent ?? !options.agentId, activeAgent),
-			tools: resolvedTools.map(tool => tool.llmName),
-			maxSteps,
-		};
-	}
+class RunRecorder {
+	readonly usage: TokenUsage = { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
+	reasoning = '';
 
-	private toKernelTask(userQuery: string): KernelTask {
-		return {
-			id: `task-${Date.now()}`,
-			input: userQuery,
-			createdAt: new Date().toISOString(),
-		};
-	}
+	constructor(private readonly callbacks: AgentLoopCallbacks, private readonly onUsage: (usage: TokenUsage) => void) {}
 
-	private toKernelHost(options: AgentLoopOptions): HostContext {
-		return {
-			tenantId: 'local',
-			workspaceId: options.conversationId ?? 'obsidian-vault',
-			principal: {
-				id: 'local-user',
-				type: 'user',
-				tenantId: 'local',
-			},
-			effectiveScopes: [],
-		};
+	handle(event: KernelEvent): void {
+		switch (event.type) {
+			case 'turn_started':
+				this.reasoning = '';
+				break;
+			case 'reasoning_delta':
+				this.reasoning += event.text;
+				break;
+			case 'text_delta':
+				this.callbacks.onChunk({ content: event.text, done: false });
+				break;
+			case 'tool_started':
+				this.callbacks.onToolCall(event.call.name, event.call.arguments, event.reasoning, 'act');
+				break;
+			case 'tool_finished':
+				this.callbacks.onToolResult(event.call.name, event.ok, event.output, 'act');
+				break;
+			case 'guard_triggered':
+				this.callbacks.onThought(event.message, 'reflect');
+				break;
+			case 'usage':
+				this.usage.promptTokens += event.usage.promptTokens;
+				this.usage.completionTokens += event.usage.completionTokens;
+				this.usage.totalTokens += event.usage.totalTokens;
+				this.onUsage(event.usage);
+				break;
+		}
 	}
 }
+
+function failureMessage(reason: FinishReason): string | null {
+	if (reason.kind === 'fatal') {
+		return reason.error;
+	}
+	if (reason.kind === 'budget' && reason.limit === 'failures') {
+		return reason.consecutive
+			? `Tool "${reason.tool}" failed ${reason.failures} consecutive times.`
+			: `Stopped after ${reason.failures} failed tool calls.`;
+	}
+	return null;
+}
+

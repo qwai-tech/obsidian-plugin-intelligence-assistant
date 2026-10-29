@@ -12,7 +12,7 @@ export interface CapabilityToolSummary {
 	name: string;
 	description: string;
 	source: string;
-	sideEffect: 'none' | 'vault-write-proposal' | 'external-write';
+	sideEffect: 'none' | 'vault-write-proposal' | 'external-write' | 'local-process';
 }
 
 export interface CapabilityToolGroup {
@@ -145,12 +145,16 @@ function toCapabilityToolSummary(tool: RegisteredTool): CapabilityToolSummary {
 		name: tool.llmName,
 		description: tool.definition.description || 'No description',
 		source: formatToolSource(tool),
-		sideEffect: tool.definition.sideEffects?.externalWrite
-			? 'external-write'
-			: tool.definition.sideEffects?.vaultWrite
-				? 'vault-write-proposal'
-				: 'none',
+		sideEffect: sideEffectOf(tool),
 	};
+}
+
+function sideEffectOf(tool: RegisteredTool): CapabilityToolSummary['sideEffect'] {
+	const effects = tool.definition.sideEffects;
+	if (effects?.externalWrite) return 'external-write';
+	if (effects?.process) return 'local-process';
+	if (effects?.vaultWrite) return 'vault-write-proposal';
+	return 'none';
 }
 
 function isBuiltinReadTool(tool: RegisteredTool): boolean {

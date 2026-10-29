@@ -1,6 +1,6 @@
 # ADR-002: Agent self-estimated step budget & trimmed execution trace
 
-Status: Accepted · Scope: `src/application/agents` (loop + planner), `src/constants.ts`
+Status: Accepted · Scope: `src/application/agents` (loop + turn kernel `Budget`), `src/constants.ts`
 
 Two related changes driven by the principle "trust a capable agentic model; remove
 fixed scaffolding."
@@ -15,13 +15,13 @@ remains as a non-negotiable backstop.
 
 - On its first turn the agent emits an HTML comment `<!-- ESTIMATED_STEPS: N -->`
   (instructed in the system prompt). It is an HTML comment so it is invisible in
-  rendered markdown; the planner also strips it from `lastContent` so it never
+  rendered markdown; `Budget.estimate` also strips it from the turn text so it never
   reaches history or the final answer.
-- The planner sets its working budget to `clamp(N + 3, 10, ceiling)`. If the agent
+- `Budget` sets the working step limit to `clamp(N + 3, 10, ceiling)`. If the agent
   declares no estimate, the budget is the fallback (`agent.maxSteps ?? 25`).
 - `MAX_STEPS_CEILING = 50` (raised per-agent if the user configures a higher
-  `maxSteps`) is the hard cap, enforced by `BasicPolicy` and the kernel agent's
-  `maxSteps`. The agent can never exceed it.
+  `maxSteps`) is the hard cap, enforced by the kernel's `Budget`. The agent can never
+  exceed it.
 
 **Why a ceiling is mandatory:** the moment a budget matters most is when the agent
 is confused and looping — exactly when it will not stop itself ("just one more

@@ -47,6 +47,7 @@ export class MCPToolWrapper implements Tool {
 			name: mcpTool.name,
 			description: mcpTool.description || '',
 			parameters,
+			sideEffects: { process: true },
 		});
 	}
 

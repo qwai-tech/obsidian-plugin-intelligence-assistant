@@ -10,8 +10,8 @@
  * Model-quality reliability (does a real LLM pick the right tools) is out of
  * scope here — that needs real API calls.
  */
-import { AgentEngineLoop, HistoryCompactor } from '@/application/agents';
-import { InMemoryStateStore } from '@/application/agents/kernel/agent-engine-core';
+import { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
+import { HistoryCompactor } from '@/application/agents/history-compactor';
 
 const senseStub = () => ({
 	sense: jest.fn(async () => ({ userQuery: 'x', activeFilePath: null, references: [], sections: [], ragSources: [], memory: null })),
@@ -44,7 +44,6 @@ describe('Agent loop reliability under adverse conditions', () => {
 			toolRegistry: registry as any, senseService: senseStub() as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-			agentRunStateStore: new InMemoryStateStore(),
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
 		});
 
@@ -72,7 +71,6 @@ describe('Agent loop reliability under adverse conditions', () => {
 			toolRegistry: registry as any, senseService: senseStub() as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-			agentRunStateStore: new InMemoryStateStore(),
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
 		});
 
@@ -97,16 +95,44 @@ describe('Agent loop reliability under adverse conditions', () => {
 			toolRegistry: registry as any, senseService: senseStub() as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-			agentRunStateStore: new InMemoryStateStore(),
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
 		});
 
 		await loop.execute([{ role: 'user', content: 'go' }],
 			{ model: 'gpt-4o', mode: 'agent', agentId: 'agent-1', agents: agentWith(10) },
-			{ ...baseCallbacks(), onComplete, onError, checkAbort: () => true });
+			{ ...baseCallbacks(), onComplete, onError, signal: AbortSignal.abort() });
 
 		expect(registry.executeTool).not.toHaveBeenCalled();
 		expect(onError).not.toHaveBeenCalled(); // abort is not an error
+		expect(onComplete).toHaveBeenCalledTimes(1);
+	});
+
+	it('S3b — a stop during a model turn reaches the provider and skips the pending tool calls', async () => {
+		const controller = new AbortController();
+		const provider = {
+			streamChat: jest.fn(async (_req: any, onChunk: any) => {
+				onChunk({ toolCalls: [{ id: 'call-1', function: { name: 'do_thing', arguments: '{}' } }] });
+				controller.abort();
+				throw new Error('Request was aborted');
+			}),
+		};
+		const registry = { ...oneTool(), executeTool: jest.fn() };
+		const onComplete = jest.fn();
+		const onError = jest.fn();
+		const loop = new AgentEngineLoop({
+			toolRegistry: registry as any, senseService: senseStub() as any,
+			historyCompactor: new HistoryCompactor(),
+			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
+			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
+		});
+
+		await loop.execute([{ role: 'user', content: 'go' }],
+			{ model: 'gpt-4o', mode: 'agent', agentId: 'agent-1', agents: agentWith(10) },
+			{ ...baseCallbacks(), onComplete, onError, signal: controller.signal });
+
+		expect(provider.streamChat.mock.calls[0][0].signal).toBe(controller.signal);
+		expect(registry.executeTool).not.toHaveBeenCalled();
+		expect(onError).not.toHaveBeenCalled();
 		expect(onComplete).toHaveBeenCalledTimes(1);
 	});
 
@@ -127,7 +153,6 @@ describe('Agent loop reliability under adverse conditions', () => {
 			toolRegistry: registry as any, senseService: senseStub() as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-			agentRunStateStore: new InMemoryStateStore(),
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
 		});
 

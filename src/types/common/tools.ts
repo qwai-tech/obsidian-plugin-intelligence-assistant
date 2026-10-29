@@ -23,6 +23,7 @@ export interface ToolDefinition {
 export interface ToolSideEffects {
 	vaultWrite?: boolean;
 	externalWrite?: boolean;
+	process?: boolean;
 }
 
 export interface ToolCall {

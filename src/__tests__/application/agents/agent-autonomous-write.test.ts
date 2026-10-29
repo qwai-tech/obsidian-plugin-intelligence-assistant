@@ -3,8 +3,8 @@
  * user's message), the agent applies its write proposals to the vault directly
  * instead of leaving Apply-gated cards. Without a grant, proposals are NOT applied.
  */
-import { AgentEngineLoop, HistoryCompactor } from '@/application/agents';
-import { InMemoryStateStore } from '@/application/agents/kernel/agent-engine-core';
+import { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
+import { HistoryCompactor } from '@/application/agents/history-compactor';
 
 function makeApp() {
 	const app = {
@@ -40,7 +40,6 @@ const makeLoop = (app: any, reg: any, prov: any) => new AgentEngineLoop({
 	senseService: sense() as any,
 	historyCompactor: new HistoryCompactor(),
 	webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-	agentRunStateStore: new InMemoryStateStore(),
 	createProvider: jest.fn(() => ({ provider: prov, providerId: 'openai' })),
 });
 

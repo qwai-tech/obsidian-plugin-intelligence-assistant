@@ -1,19 +1,18 @@
 # ADR-001: Safety model & agent-engine kernel usage
 
-Status: Accepted · Scope: `@agentic-kernel/core` (consumed via `src/application/agents/kernel/agent-engine-core.ts`), `src/application/agents`, `src/application/tools`
+Status: Accepted · Scope: `src/application/agents` (kernel: `src/application/agents/kernel/turn-kernel.ts`), `src/application/tools`
 
-> **Update (2026-06):** the kernel was migrated from the in-repo `src/vendor/agent-engine-core`
-> snapshot to the public npm package `@agentic-kernel/core`. The single import boundary is
-> `src/application/agents/kernel/agent-engine-core.ts`, which re-exports the package. The
-> Obsidian-backed `StateStore` is verified against `@agentic-kernel/conformance`. References
-> to `src/vendor/agent-engine-core` below are historical.
+> **Update (2026-10, kernel v2):** the run loop is the **turn kernel**
+> (`turn-kernel.ts`). One model turn yields text, reasoning and a batch of tool
+> calls; every call in the batch runs before the next turn. Limits live in one
+> `Budget` (steps and failures); stops are typed `FinishReason`s, never raw
+> strings in the UI. Recovery retries are named `TurnGuard`s (`emptyTurn`,
+> `missingProposal`) that emit `guard_triggered`. The kernel reports only through
+> `KernelEvent`s; `AgentEngineLoop` maps them to the chat callbacks and appends
+> them to a JSONL run journal. `@agentic-kernel/core` is not used.
 
-This record exists to remove a recurring ambiguity: a large, generic agent
-kernel is wired in, but the host (a single-user, local Obsidian plugin) only
-uses a fraction of it. Without this note, that gap reads as a defect. It is a
-deliberate trade-off. The points below state what is intentional, what is
-reserved, and what is the actual safety boundary — so future changes don't
-"fix" the wrong thing.
+This record states what is intentional, what was dropped, and what is the actual
+safety boundary, so future changes don't "fix" the wrong thing.
 
 ## 1. Two safety layers, with different jobs (not redundant)
 
@@ -26,69 +25,53 @@ Vault safety is enforced at the **tool-execution layer**, not the engine policy:
   UI** (`write-proposal-service.ts` + the chat write-proposal card). The agent
   loop never writes to the vault directly.
 
-The engine `PolicyManager` is a **separate, orthogonal** layer. It guards the
-*control loop* (step budget, failure budget, allowed-tool set), not file safety.
-The two protect different failure modes:
+The kernel `Budget` is a **separate, orthogonal** layer. It guards the
+*control loop* (step budget, failure budget), not file safety. The two protect
+different failure modes:
 
 | Layer | Protects against | Mechanism |
 |-------|------------------|-----------|
 | Write-proposal gate (tool layer) | Accidental / unapproved vault mutation | Proposal + user confirmation |
-| Policy (`BasicPolicy`) | Runaway loops, tool-name hallucination | `maxSteps`, `maxFailures`, `allowedTools` |
+| `Budget` (kernel) | Runaway loops, repeated tool failure | step limit, failure limit |
 
 Removing either because "the other already covers it" would be a regression.
 
-## 2. Why the engine policy is intentionally permissive
+## 2. Unknown and disabled tools are recoverable
 
-`AgentEngineLoop` configures `BasicPolicy` with `allowedTools` = **all known
-tools** and **no** `requireApprovalForTools`
-(`src/application/agents/agent-engine-loop.ts`). This is deliberate:
+`RegistryToolRunner` runs only the tools resolved for the agent. A call to a known
+tool the agent may not use returns `Tool "x" is not enabled for this agent`; a call
+to a tool that does not exist returns `Tool "x" does not exist`. Both are failed
+results fed back to the model so it can adjust, and both count toward the failure
+limit. The kernel never fails a whole run because of a hallucinated tool name.
 
-- **Single principal, single tenant.** `host` is hardcoded `tenantId: 'local'`,
-  one `local-user`, `effectiveScopes: []`. There is no multi-tenant access
-  surface to gate.
-- **`require_approval` would break turns.** No `ApprovalProvider` is wired and
-  there is no approval-resolution UI. If the policy returned `require_approval`,
-  `engine.run()` would return `waiting_for_approval` and the turn would end
-  without executing the tool or surfacing a prompt. Until an approval UI exists,
-  approval must stay off.
-- **"Allow all known tools" is the better failure mode, on purpose.** If the
-  model calls a tool the agent does not have, the kernel tool adapter returns a
-  *recoverable* "Tool not enabled" error (the model can adjust). If instead the
-  policy *denied* it, `engine.#failState` would kill the whole turn. Allowing at
-  the policy layer and rejecting at the adapter layer is the intended design —
-  do not "tighten" `allowedTools` to the resolved set.
+The real safety boundary for writes is layer 1, above.
 
-The real safety boundary for writes is layer 1, above. The policy's live job is
-purely the step/failure budget.
+## 3. What was dropped with the external kernel
 
-## 3. What is reserved (kept, not dead)
+`@agentic-kernel/core` shipped capabilities the host never exercised:
+multi-tenancy (`Principal`/`HostContext`), delegation / sub-agents, a
+`CapabilityRegistry`, approvals, memory governance, an engine-level context
+compactor, parallel tool batches, kernel-side JSON-schema validation, and replay.
+These were **dropped deliberately** (2026-10) rather than kept as option value:
 
-The kernel ships capabilities the host does not currently exercise:
-multi-tenancy (`Principal`/`HostContext`), delegation / sub-agents,
-`CapabilityRegistry`, `ApprovalProvider/Store`, `MemoryManager` governance,
-`ContextCompactor`, and full replay. These are **retained as option value**:
-they sit behind stable contracts and can be enabled by passing an option to
-`createAgentEngine`, not by re-architecting. They are not to be deleted as
-"unused" without a decision to drop the capability itself.
+- Argument validation already happens in `ToolRegistry.executeTool` (zod).
+- Context compaction lives in the context assembler (`HistoryCompactor`).
+- Long-term memory lives in `AgentMemoryService`, outside the loop.
+- Every kernel event is appended to `<plugin>/data/agent-runs/<runId>.jsonl`, so a
+  run remains inspectable after the fact without rewriting a file per event.
 
-When enabling one of these, the work is: (a) provide the dependency to
-`createAgentEngine`, and (b) for `approval`, also build the resolution UI (see
-§2). Context compaction is currently done at the planner level
-(`HistoryCompactor`), not via the engine `compactor` — pick one if both are ever
-wired.
+Add any of these back to the turn kernel when a feature needs it, not
+speculatively.
 
 ## 4. DI container
 
-`src/core/container.ts` is a working IoC container with its own tests but is not
-used by production wiring (services are constructed explicitly in `main.ts` /
-`ChatView`). It is **kept** as tested option-value infrastructure. It is not a
-signal that services *should* be resolved through it today; explicit
-construction remains the convention.
+The unused `src/core/container.ts` was deleted in the global refactor (phase 1).
+Services are constructed explicitly in one composition root; see the refactor
+roadmap, phase 2.
 
 ## 5. Consequences
 
 - New write-capable tools MUST go through the proposal gate; do not add a
   direct-write tool path.
-- Do not enable `require_approval` in policy until an approval UI exists.
-- Do not delete reserved kernel capabilities as "dead code"; deletion requires
-  dropping the capability deliberately.
+- Do not add a policy approval step without the UI to resolve it.
+- Keep the kernel small: it owns the loop, not vault safety, memory or context.

@@ -1,4 +1,4 @@
-import type { JsonObject, JsonValue } from './agent-engine-core';
+import type { JsonObject, JsonValue } from '@/types/features/agent-run';
 
 export function parseToolArguments(raw: string): JsonObject {
 	try {

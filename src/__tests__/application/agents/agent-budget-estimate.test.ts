@@ -3,8 +3,8 @@
  * on its first turn, which sets the working budget (clamped to [floor, ceiling]).
  * The marker is an invisible HTML comment and must be stripped from the answer.
  */
-import { AgentEngineLoop, HistoryCompactor } from '@/application/agents';
-import { InMemoryStateStore } from '@/application/agents/kernel/agent-engine-core';
+import { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
+import { HistoryCompactor } from '@/application/agents/history-compactor';
 import type { Message } from '@/types';
 
 const senseStub = () => ({
@@ -23,7 +23,6 @@ const makeLoop = (provider: any, registry: any) => new AgentEngineLoop({
 	senseService: senseStub() as any,
 	historyCompactor: new HistoryCompactor(),
 	webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
-	agentRunStateStore: new InMemoryStateStore(),
 	createProvider: jest.fn(() => ({ provider, providerId: 'openai' })),
 });
 
