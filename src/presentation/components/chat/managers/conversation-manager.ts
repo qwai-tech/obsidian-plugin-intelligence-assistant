@@ -1,9 +1,4 @@
-/**
- * Conversation Manager
- * Handles conversation lifecycle, UI rendering, and persistence
- */
-
-import {App, Menu, setIcon} from 'obsidian';
+import { App } from 'obsidian';
 import { t } from '@/i18n';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import { showPrompt } from '@/presentation/components/modals/prompt-modal';
@@ -11,52 +6,26 @@ import { Events } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Conversation, Message } from '@/types';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
-import { ModelManager } from '@qwai/obsidian-llm';
-import { ProviderFactory } from '@qwai/obsidian-llm';
-import { ConversationStorageService } from '@/application/services/conversation-storage-service';
-import { TestIds } from '@/presentation/utils/test-ids';
-
-/**
- * Events emitted by ConversationManager
- */
-export interface ConversationManagerEvents {
-	'conversation-loaded': (_conversation: Conversation) => void;
-	'conversation-created': (_conversation: Conversation) => void;
-	'conversation-updated': (_conversation: Conversation) => void;
-	'conversation-deleted': (_conversationId: string) => void;
-	'list-toggled': (_visible: boolean) => void;
-}
+import type { ConversationNamer } from '@/application/services/conversation-namer';
+import { ConversationListView } from '@/presentation/components/chat/conversation-list-view';
+import type { ConversationStorageService } from '@/infrastructure/persistence/conversation-storage-service';
 
 export class ConversationManager extends Events {
 	private conversationListContainer: HTMLElement;
-	private storageService: ConversationStorageService | null = null;
-	private storageReadyPromise: Promise<void> | null = null;
-	private searchQuery: string = '';
+	private listView: ConversationListView | null = null;
 
 	constructor(
 		private app: App,
 		private plugin: IntelligenceAssistantPlugin,
+		private readonly storage: ConversationStorageService,
+		private readonly namer: ConversationNamer,
 		private state: ChatViewState,
 		private chatContainer: HTMLElement,
 		private modelSelect: HTMLSelectElement,
-		private addMessageToUI: (_message: Message) => HTMLElement,
 		private renderMessageList: (_messages: Message[]) => void,
 		private updateTokenSummary: () => void
 	) {
 		super();
-		this.storageReadyPromise = this.initializeStorageService();
-	}
-
-	private async initializeStorageService(): Promise<void> {
-		this.storageService = await this.plugin.getConversationStorageService();
-	}
-
-	private async ensureStorageReady(): Promise<void> {
-		if (this.storageService) return;
-		if (!this.storageReadyPromise) {
-			this.storageReadyPromise = this.initializeStorageService();
-		}
-		await this.storageReadyPromise;
 	}
 
 	/**
@@ -64,16 +33,25 @@ export class ConversationManager extends Events {
 	 */
 	async initializeContainer(container: HTMLElement): Promise<void> {
 		this.conversationListContainer = container;
-		await this.ensureStorageReady();
+		this.listView = new ConversationListView(container, this.storage, this.state, this.plugin, {
+			create: () => this.createNewConversation(),
+			switchTo: (id) => this.switchConversation(id),
+			remove: (id) => this.deleteConversation(id),
+			rename: (id) => this.renameConversation(id),
+			togglePin: () => this.togglePinConversationList(),
+		});
 		await this.renderConversationList();
+	}
+
+	async renderConversationList(): Promise<void> {
+		await this.listView?.render();
 	}
 
 	/**
 	 * Load or create initial conversation
 	 */
 	async loadOrCreateConversation(): Promise<void> {
-		await this.ensureStorageReady();
-		const storage = this.storageService!;
+		const storage = this.storage;
 		// Try to load active conversation
 		if (this.plugin.settings.activeConversationId) {
 			const conv = await storage.loadConversation(this.plugin.settings.activeConversationId);
@@ -103,8 +81,7 @@ export class ConversationManager extends Events {
 	 * Create a new conversation
 	 */
 	async createNewConversation(): Promise<void> {
-		await this.ensureStorageReady();
-		const storage = this.storageService!;
+		const storage = this.storage;
 		// Always start new conversations from default chat settings
 		const defaultConfig = this.buildDefaultConversationConfig();
 		const newConv: Conversation = {
@@ -214,7 +191,6 @@ export class ConversationManager extends Events {
 	 * Switch to a different conversation
 	 */
 	async switchConversation(convId: string): Promise<void> {
-		await this.ensureStorageReady();
 
 		// If clicking on the same conversation, just close the list
 		if (this.state.currentConversationId === convId) {
@@ -230,7 +206,7 @@ export class ConversationManager extends Events {
 		// Save current conversation before switching (skip re-render to avoid double render)
 		await this.saveCurrentConversation(true);
 
-		const storage = this.storageService!;
+		const storage = this.storage;
 		const conv = await storage.loadConversation(convId);
 		if (conv) {
 			this.loadConversation(conv);
@@ -249,8 +225,7 @@ export class ConversationManager extends Events {
 	 */
 	async saveCurrentConversation(skipRender: boolean = false): Promise<void> {
 		if (!this.state.currentConversationId) return;
-		await this.ensureStorageReady();
-		const storage = this.storageService!;
+		const storage = this.storage;
 
 		// Get the existing conversation to preserve metadata
 		let existingConv = await storage.loadConversation(this.state.currentConversationId);
@@ -279,11 +254,11 @@ export class ConversationManager extends Events {
 		// Auto-generate/update title based on settings (only once for new conversations)
 		const shouldUpdateTitle = this.shouldUpdateConversationTitle(conv);
 		if (shouldUpdateTitle) {
-			const newTitle = await this.generateConversationTitle(conv);
+			const newTitle = await this.namer.title(this.state.messages, this.modelSelect.value);
 			if (newTitle) {
 				conv.title = newTitle;
 				if (this.plugin.settings.conversationIconEnabled && !conv.icon) {
-					const newIcon = await this.generateConversationIcon(newTitle);
+					const newIcon = await this.namer.icon(newTitle, this.modelSelect.value);
 					if (newIcon) {
 						conv.icon = newIcon;
 					}
@@ -358,8 +333,7 @@ export class ConversationManager extends Events {
 	 * Delete a conversation
 	 */
 	async deleteConversation(convId: string): Promise<void> {
-		await this.ensureStorageReady();
-		const storage = this.storageService!;
+		const storage = this.storage;
 		const conv = await storage.getConversationMetadata(convId);
 		if (!conv) return;
 
@@ -400,8 +374,7 @@ export class ConversationManager extends Events {
 	 * Rename a conversation
 	 */
 	async renameConversation(convId: string): Promise<void> {
-		await this.ensureStorageReady();
-		const storage = this.storageService!;
+		const storage = this.storage;
 		const conv = await storage.getConversationMetadata(convId);
 		if (!conv) return;
 
@@ -476,254 +449,6 @@ export class ConversationManager extends Events {
 	}
 
 	/**
-	 * Render the conversation list UI
-	 */
-	async renderConversationList(): Promise<void> {
-		await this.ensureStorageReady();
-		const storage = this.storageService!;
-		this.conversationListContainer.empty();
-
-		// Header with new conversation button and pin button
-		const listHeader = this.conversationListContainer.createDiv('conversation-list-header');
-		listHeader.createEl('h3', { text: t('chat.conversations') });
-
-		const headerButtons = listHeader.createDiv('conversation-header-buttons');
-
-		// Pin/Unpin button
-		const pinBtn = headerButtons.createDiv({ cls: 'clickable-icon pin-conversation-btn' });
-		setIcon(pinBtn, this.state.conversationListPinned ? 'pin-off' : 'pin');
-		pinBtn.setAttribute('aria-label', this.state.conversationListPinned ? 'Unpin' : 'Pin to sidebar');
-		pinBtn.addEventListener('click', () => {
-			void this.togglePinConversationList();
-		});
-
-		const newConvBtn = headerButtons.createDiv({ cls: 'clickable-icon new-conversation-btn' });
-		setIcon(newConvBtn, 'plus');
-		newConvBtn.setAttribute('aria-label', 'New conversation');
-		newConvBtn.addEventListener('click', () => {
-			void this.createNewConversation();
-		});
-
-		// Search input
-		const searchContainer = this.conversationListContainer.createDiv('conversation-search');
-		const searchInput = searchContainer.createEl('input', {
-			attr: { type: 'text', placeholder: t('chat.searchConversations') }
-		});
-		searchInput.addClass('conversation-search-input');
-		searchInput.value = this.searchQuery;
-		const searchIconEl = searchContainer.createDiv('conversation-search-icon');
-		setIcon(searchIconEl, 'search');
-
-		searchInput.addEventListener('input', () => {
-			this.searchQuery = searchInput.value;
-			const items = listContent.querySelectorAll('.conversation-item');
-			const groups = listContent.querySelectorAll('.conversation-date-group');
-			const query = this.searchQuery.toLowerCase();
-
-			items.forEach(item => {
-				const title = (item as HTMLElement).querySelector('.conversation-title')?.textContent?.toLowerCase() || '';
-				(item as HTMLElement).toggleClass('ia-hidden', !title.includes(query));
-			});
-
-			// Hide empty date groups
-			groups.forEach(group => {
-				const visibleItems = (group as HTMLElement).querySelectorAll('.conversation-item:not(.ia-hidden)');
-				(group as HTMLElement).toggleClass('ia-hidden', visibleItems.length === 0);
-			});
-		});
-
-		// Conversation list
-		const listContent = this.conversationListContainer.createDiv('conversation-list-content');
-
-		// Get all conversations metadata instead of the array from settings
-		const conversationsMetadata = await storage.getAllConversationsMetadata();
-
-		if (conversationsMetadata.length === 0) {
-			listContent.createDiv('empty-state').setText('No conversations yet');
-			return;
-		}
-
-		// Sort by updatedAt (most recent first)
-		const sortedConversations = conversationsMetadata.sort((a, b) => b.updatedAt - a.updatedAt);
-
-		// Group by date
-		const groups = this.groupConversationsByDate(sortedConversations);
-
-		for (const group of groups) {
-			const groupEl = listContent.createDiv('conversation-date-group');
-			groupEl.createDiv({ text: group.label, cls: 'conversation-date-label' });
-
-			group.conversations.forEach(conv => {
-			const convItem = groupEl.createDiv('conversation-item');
-			convItem.setAttribute('data-testid', TestIds.chat.conversationItem);
-			convItem.setAttribute('data-conv-id', conv.id);
-			convItem.addClass('ia-clickable');
-
-			if (conv.id === this.state.currentConversationId) {
-				convItem.addClass('active');
-			}
-
-			// Single click on item to switch conversation
-			convItem.addEventListener('click', (e) => {
-				// Don't switch if clicking on action buttons
-				const target = e.target as HTMLElement;
-				if (target.closest('.conversation-actions') || target.closest('button')) {
-					return;
-				}
-				e.stopPropagation();
-				void this.switchConversation(conv.id);
-			});
-
-			const convContent = convItem.createDiv('conversation-content');
-
-			const convTitle = convContent.createDiv('conversation-title');
-
-			// Add icon if enabled and available
-			if (this.plugin.settings.conversationIconEnabled && conv.icon) {
-				const icon = convTitle.createSpan('conversation-icon');
-				icon.setText(conv.icon + ' ');
-			}
-
-			convTitle.createSpan().setText(conv.title);
-
-			// Mode & model/agent info line
-			const convInfo = convContent.createDiv('conversation-info');
-			const isAgent = conv.mode === 'agent';
-
-			const modeBadge = convInfo.createSpan('conversation-info__mode');
-			if (isAgent) {
-				modeBadge.setText('Agent');
-				modeBadge.addClass('is-agent');
-			} else {
-				modeBadge.setText('Chat');
-				modeBadge.addClass('is-chat');
-			}
-
-			if (isAgent) {
-				const agentInfo = this.resolveConversationAgentInfo(conv);
-				if (agentInfo) {
-					convInfo.createSpan('conversation-info__sep').setText('|');
-					convInfo.createSpan('conversation-info__agent').setText(agentInfo.name);
-				}
-				if (conv.model) {
-					convInfo.createSpan('conversation-info__sep').setText('|');
-					convInfo.createSpan('conversation-info__model').setText(conv.model);
-				}
-			} else if (conv.model) {
-				convInfo.createSpan('conversation-info__sep').setText('|');
-				convInfo.createSpan('conversation-info__model').setText(conv.model);
-			}
-
-			// Add timestamps below title
-			const convMeta = convContent.createDiv('conversation-meta');
-
-			const formatDate = (timestamp: number) => {
-				const date = new Date(timestamp);
-				return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
-					' ' + date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-			};
-
-			convMeta.setText(`${formatDate(conv.createdAt)} | ${formatDate(conv.updatedAt)}`);
-
-			// Actions container (hover visibility handled by CSS)
-			const actions = convItem.createDiv('conversation-actions');
-
-			// Rename button
-			const renameBtn = actions.createEl('button');
-			renameBtn.addClass('conversation-rename-btn');
-			renameBtn.addClass('ia-clickable');
-			renameBtn.setAttribute('data-testid', TestIds.chat.conversationRenameBtn);
-			renameBtn.setAttribute('data-conv-id', conv.id);
-			setIcon(renameBtn, 'pencil');
-			renameBtn.title = 'Rename';
-			renameBtn.addEventListener('click', (e) => {
-				e.stopPropagation();
-				void this.renameConversation(conv.id);
-			});
-
-			// Delete button
-			const deleteBtn = actions.createEl('button');
-			deleteBtn.addClass('conversation-delete-btn');
-			deleteBtn.addClass('ia-clickable');
-			deleteBtn.setAttribute('data-testid', TestIds.chat.conversationDeleteBtn);
-			deleteBtn.setAttribute('data-conv-id', conv.id);
-			setIcon(deleteBtn, 'trash-2');
-			deleteBtn.title = 'Delete';
-			deleteBtn.addEventListener('click', (e) => {
-				e.stopPropagation();
-				void this.deleteConversation(conv.id);
-			});
-
-			// Context menu for additional options
-			convItem.addEventListener('contextmenu', (e) => {
-				e.preventDefault();
-				const menu = new Menu();
-
-				menu.addItem((item) => {
-					item.setTitle('Rename')
-						.setIcon('pencil')
-						.onClick(() => {
-							void this.renameConversation(conv.id);
-						});
-				});
-
-				menu.addItem((item) => {
-					item.setTitle('Delete')
-						.setIcon('trash')
-						.onClick(() => {
-							void this.deleteConversation(conv.id);
-						});
-				});
-
-				menu.showAtMouseEvent(e);
-			});
-		});
-		}
-	}
-
-	/** Resolve agent name for a conversation metadata entry */
-	private resolveConversationAgentInfo(conv: { agentId?: string }): { name: string } | null {
-		if (conv.agentId) {
-			const agent = (this.plugin.settings.agents ?? []).find(a => a.id === conv.agentId);
-			return agent ? { name: agent.name } : null;
-		}
-		return null;
-	}
-
-	/**
-	 * Group conversations by date categories
-	 */
-	private groupConversationsByDate(conversations: Array<{ id: string; title: string; createdAt: number; updatedAt: number; icon?: string; model?: string; mode?: string; agentId?: string }>): Array<{ label: string; conversations: typeof conversations }> {
-		const now = new Date();
-		const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-		const yesterdayStart = todayStart - 86400000;
-		const weekStart = todayStart - (now.getDay() * 86400000);
-
-		const groups: Record<string, typeof conversations> = {
-			'Today': [],
-			'Yesterday': [],
-			'This week': [],
-			'Older': []
-		};
-
-		for (const conv of conversations) {
-			if (conv.updatedAt >= todayStart) {
-				groups['Today'].push(conv);
-			} else if (conv.updatedAt >= yesterdayStart) {
-				groups['Yesterday'].push(conv);
-			} else if (conv.updatedAt >= weekStart) {
-				groups['This week'].push(conv);
-			} else {
-				groups['Older'].push(conv);
-			}
-		}
-
-		return Object.entries(groups)
-			.filter(([, convs]) => convs.length > 0)
-			.map(([label, convs]) => ({ label, conversations: convs }));
-	}
-
-	/**
 	 * Check if conversation title should be auto-updated
 	 */
 	private shouldUpdateConversationTitle(conv: Conversation): boolean {
@@ -737,70 +462,6 @@ export class ConversationManager extends Events {
 	}
 
 	/**
-	 * Generate a title for a conversation using LLM or first message
-	 */
-	private async generateConversationTitle(_conv: Conversation): Promise<string | null> {
-		const mode = this.plugin.settings.conversationTitleMode;
-
-		if (mode === 'first-message') {
-			const firstUserMsg = this.state.messages.find(m => m.role === 'user');
-			if (firstUserMsg) {
-				return firstUserMsg.content.substring(0, 50) + (firstUserMsg.content.length > 50 ? '...' : '');
-			}
-		} else if (mode === 'llm-summary') {
-			try {
-				const titleModel = this.plugin.settings.titleSummaryModel || this.modelSelect.value;
-				if (!titleModel) return null;
-
-				const config = ModelManager.findConfigForModelByProvider(titleModel, this.plugin.settings.llmConfigs);
-				if (!config) return null;
-
-				let contextMessages: Message[];
-				if (this.state.messages.length <= 4) {
-					contextMessages = this.state.messages.slice(0, 4);
-				} else {
-					const first = this.state.messages.slice(0, 2);
-					const last = this.state.messages.slice(-2);
-					contextMessages = [...first, ...last];
-				}
-
-				const conversationText = contextMessages
-					.map(m => `${m.role}: ${m.content.substring(0, 200)}`)
-					.join('\n\n');
-
-				const promptTemplate = this.plugin.settings.titleSummaryPrompt ||
-					'Generate a short, descriptive title (max 6 words) for this conversation:\n\n{conversation}\n\nTitle:';
-				const prompt = promptTemplate.replace('{conversation}', conversationText);
-
-				const modelConfig = { ...config, model: titleModel, temperature: 0.3 };
-				const provider = ProviderFactory.createProvider(modelConfig);
-
-				const response = await provider.chat({
-					messages: [{ role: 'user', content: prompt }],
-					model: titleModel,
-					temperature: 0.3
-				});
-
-				let title = response.content.trim().replace(/^["']|["']$/g, '').replace(/^Title:\s*/i, '');
-
-				if (title.length > 0 && title.length <= 100) {
-					return title;
-				}
-			} catch (error) {
-				console.error('Failed to generate LLM title:', error);
-			}
-		}
-
-		// Fallback to first message if LLM summary fails or is not enabled
-		const firstUserMsg = this.state.messages.find(m => m.role === 'user');
-		if (firstUserMsg) {
-			return firstUserMsg.content.substring(0, 50) + (firstUserMsg.content.length > 50 ? '...' : '');
-		}
-
-		return 'New Conversation'; // Should not happen if there are messages
-	}
-
-	/**
 	 * Get the most recently used model from the conversation
 	 */
 	private getLastUsedModel(conv: Conversation): string | null {
@@ -811,41 +472,6 @@ export class ConversationManager extends Events {
 			if (msg.role === 'assistant' && msg.model) {
 				return msg.model;
 			}
-		}
-		return null;
-	}
-
-	/**
-	 * Generate an emoji icon for a conversation
-	 */
-	private async generateConversationIcon(title: string): Promise<string | null> {
-		try {
-			const modelId = this.plugin.settings.titleSummaryModel || this.modelSelect.value;
-			if (!modelId) return null;
-
-			const config = ModelManager.findConfigForModelByProvider(modelId, this.plugin.settings.llmConfigs);
-			if (!config) return null;
-
-			const modelConfig = { ...config, model: modelId, temperature: 0.5 };
-			const provider = ProviderFactory.createProvider(modelConfig);
-
-			const response = await provider.chat({
-				messages: [
-					{
-						role: 'user',
-						content: `Suggest a single emoji icon that represents this conversation: "${title}". Reply with only the emoji, no text.`
-					}
-				],
-				model: modelId,
-				temperature: 0.5
-			});
-
-			const icon = response.content.trim().match(/[\p{Emoji}]/u)?.[0];
-			if (icon) {
-				return icon;
-			}
-		} catch (error) {
-			console.error('Failed to generate icon:', error);
 		}
 		return null;
 	}

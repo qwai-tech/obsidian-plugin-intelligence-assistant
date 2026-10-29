@@ -2,16 +2,7 @@
 import { ChatController } from '../../presentation/components/chat/controllers/chat-controller';
 import { ChatViewState } from '../../presentation/state/chat-view-state';
 
-jest.mock('obsidian', () => ({
-	Notice: jest.fn(),
-	TFolder: class TFolder { path = ''; name = ''; },
-	Events: class Events {
-		on() {}
-		off() {}
-		trigger() {}
-		offref() {}
-	},
-}));
+import 'obsidian';
 
 jest.mock('../../i18n', () => ({ t: (key: string) => key }));
 

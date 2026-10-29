@@ -7,12 +7,12 @@ import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { App } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Conversation } from '@/types';
-import { ConversationStorageService } from '@/application/services/conversation-storage-service';
+import { ConversationStorageService } from '@/infrastructure/persistence/conversation-storage-service';
 import { initI18n } from '@/i18n';
 
 // Mock dependencies
 jest.mock('obsidian');
-jest.mock('@/application/services/conversation-storage-service');
+jest.mock('@/infrastructure/persistence/conversation-storage-service');
 jest.mock('@/presentation/components/modals/confirm-modal', () => ({
 	showConfirm: jest.fn(async () => {
 		if (typeof global.confirm === 'function') {
@@ -76,7 +76,6 @@ describe('ConversationManager', () => {
 				llmConfigs: [],
 			},
 			saveSettings: jest.fn().mockResolvedValue(undefined),
-			getConversationStorageService: jest.fn().mockResolvedValue(mockStorageService)
 		} as any;
 
 		state = new ChatViewState();
@@ -91,10 +90,11 @@ describe('ConversationManager', () => {
 		manager = new ConversationManager(
 			mockApp,
 			mockPlugin,
+			mockStorageService,
+			{ title: jest.fn(async () => 'Generated title'), icon: jest.fn(async () => null) } as any,
 			state,
 			chatContainer,
 			modelSelect,
-			addMessageToUI,
 			renderMessageList,
 			updateTokenSummary
 		);
@@ -114,10 +114,6 @@ describe('ConversationManager', () => {
 			await manager.initializeContainer(container);
 			// Container should be initialized (check by attempting to render)
 			await expect(manager.renderConversationList()).resolves.not.toThrow();
-		});
-
-		it('should initialize storage service', () => {
-			expect(mockPlugin.getConversationStorageService).toHaveBeenCalled();
 		});
 	});
 

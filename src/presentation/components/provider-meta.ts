@@ -1,8 +1,3 @@
-/**
- * Provider Metadata Helper
- * Provides branding information (labels, icons) for LLM providers
- */
-
 export function getProviderMeta(providerId: string): { label: string; iconSvg: string | null } {
 	const normalized = providerId?.toLowerCase?.() ?? '';
 	const metaMap: Record<string, { label: string; iconSvg: string }> = {
@@ -69,4 +64,47 @@ export function getProviderMeta(providerId: string): { label: string; iconSvg: s
 		label: humanized,
 		iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8 8.009 8.009 0 0 1-8 8Z"/><path d="M12 7a5 5 0 1 0 5 5h-2a3 3 0 1 1-3-3V7Z"/></svg>`
 	};
+}
+
+const AVATARS: Record<string, string> = {
+	openai: '🤖',
+	anthropic: '🧠',
+	google: '🔍',
+	ollama: '🦙',
+	deepseek: '🌊',
+	openrouter: '🔀',
+	'sap-ai-core': '💼',
+	groq: '⚡',
+	mistral: '🌬️',
+	togetherai: '🤝',
+	perplexity: '❓',
+	cohere: '🌐',
+	huggingface: '😊',
+	azure: '☁️',
+	bedrock: '🪨',
+	vertex: '🔺',
+	fireworks: '🎆',
+	lepton: '⚛️',
+	xai: '❌',
+};
+
+const COLORS: Record<string, string> = {
+	openai: '#10a37f',
+	anthropic: '#191919',
+	google: '#4285f4',
+	ollama: '#000000',
+	deepseek: '#0066cc',
+	openrouter: '#6366f1',
+	'sap-ai-core': '#0070f2',
+	groq: '#f97316',
+	mistral: '#0d9488',
+	togetherai: '#ec4899',
+};
+
+export function providerAvatar(providerId: string | null | undefined): string {
+	return (providerId && AVATARS[providerId]) || '🤖';
+}
+
+export function providerColor(providerId: string | null | undefined): string {
+	return (providerId && COLORS[providerId]) || '#666666';
 }

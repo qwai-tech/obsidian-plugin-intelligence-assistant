@@ -1,364 +1,122 @@
-import { Editor, getLanguage, MarkdownRenderChild, MarkdownView, Notice, Plugin, TFile, TFolder, WorkspaceLeaf } from 'obsidian';
-import type { ObsidianProtocolData } from 'obsidian';
-import { t } from './src/i18n';
+import { getLanguage, Notice, Plugin, type WorkspaceLeaf } from 'obsidian';
+import { t, initI18n } from './src/i18n';
 import './src/presentation/components/chat/settings.css';
 import './src/presentation/components/modals/explain-text-modal.css';
-import type {
-	PluginSettings,
-	MCPServerConfig,
-	CachedMCPTool,
-	SystemPrompt,
-	Agent,
-	LLMConfig,
-	ModelCapability,
-	ModelInfo,
-	RAGConfig,
-	WebSearchConfig,
-	Conversation,
-	ConversationSummary,
-	AgentMemory,
-	MemoryEmbedding,
-	MemoryEmbeddingMetadata,
-	BuiltInToolConfig,
-	MCPRegistry,
-	Message,
-	UserConfig
-} from './src/types';
-import { DEFAULT_SETTINGS, pluginSettingsToUserConfig, userConfigToPluginSettings } from './src/types';
-import { ChatView, CHAT_VIEW_TYPE } from './src/presentation/views/chat-view';
-import { IntelligenceAssistantSettingTab } from './src/presentation/components/settings-tab';
-import {
-	USER_CONFIG_FOLDER,
-	USER_CONFIG_PATH
-} from './src/constants';
-
+import type { PluginSettings } from './src/types';
+import { pluginPaths } from './src/core/plugin-paths';
+import { ensureFolderExists } from './src/utils/file-system';
+import { ModelManager, createObsidianHttpPort, setDefaultHttpPort, setDiagnosticsSink, withResilience, type LLMHub } from '@qwai/obsidian-llm';
+import { SettingsStore } from './src/application/settings/settings-store';
+import { ObsidianSettingsPersistence } from './src/bootstrap/obsidian-settings-persistence';
+import { buildImproveSelectionPrompt } from './src/application/services/obsidian-agent-prompts';
 import { ensureDefaultAgent as ensureDefaultAgentService } from './src/application/services/agent-service';
-import { ConversationStorageService } from './src/application/services/conversation-storage-service';
-import { ConversationMigrationService } from './src/application/services/conversation-migration-service';
-import { RAGManager } from './src/infrastructure/rag-manager';
-import { createIncrementalIndexHandlers } from './src/infrastructure/rag/incremental-indexer';
-import { parseAiBlock, buildAiWidget } from './src/presentation/markdown/ai-code-block';
-import { SettingsService } from './src/application/services/settings-service';
+import { ConversationStorageService } from './src/infrastructure/persistence/conversation-storage-service';
+import { ConversationMigrationService } from './src/infrastructure/persistence/conversation-migration-service';
 import { reloadSettingsFromDisk as runSettingsReload } from './src/application/services/settings-reload';
-
-import { initI18n } from './src/i18n';
-import { ObsidianFileSystem } from './src/infrastructure/obsidian/obsidian-file-system';
 import { PluginDataService } from './src/application/services/plugin-data-service';
-import type { AgentMemoryRepository } from './src/infrastructure/persistence';
-import { EditorQuickActions } from './src/presentation/editor/editor-quick-actions';
-import { showAgentTaskLaunchModal } from './src/presentation/components/modals/agent-task-launch-modal';
-import { ToolRegistry } from './src/application/tools/tool-registry';
-import {
-	createObsidianHttpPort,
-	setDefaultHttpPort,
-	setDiagnosticsSink,
-	type LLMHub,
-} from '@qwai/obsidian-llm';
 import { LLMHubService } from './src/application/services/llm-hub-service';
-import { BuiltinToolSource } from './src/application/tools/sources/builtin-tool-source';
-import { McpToolSource } from './src/application/tools/sources/mcp-tool-source';
-import { OpenApiToolSource } from './src/application/tools/sources/openapi-tool-source';
-import { CliToolSource } from './src/application/tools/sources/cli-tool-source';
-import { migrateAllAgents } from './src/application/tools/tool-migrations';
-import {
-	buildAskCurrentNotePrompt,
-	buildBacklinkTagDoctorPrompt,
-	buildDuplicateMergePrompt,
-	buildImproveSelectionPrompt,
-	buildOrganizeCurrentNotePrompt,
-	buildOrganizeFolderPrompt,
-	buildProjectBriefPrompt,
-	buildRelatedNotesPrompt,
-	buildResearchBriefPrompt,
-	buildSourceGroundedQuestionPrompt,
-	buildSummarizeCurrentNotePrompt,
-	buildSummarizeFilePrompt,
-	buildVaultDiagnosisPrompt,
-	buildWeeklyReviewPrompt,
-	buildWritingDraftPrompt,
-} from './src/application/services/obsidian-agent-prompts';
-
-// Re-export for backward compatibility
-export type {
-	MCPServerConfig,
-	SystemPrompt,
-	Agent,
-	LLMConfig,
-	ModelCapability,
-	ModelInfo,
-	RAGConfig,
-	WebSearchConfig,
-	Conversation,
-	ConversationSummary,
-	AgentMemory,
-	MemoryEmbedding,
-	MemoryEmbeddingMetadata,
-	BuiltInToolConfig,
-	MCPRegistry,
-	Message,
-	CachedMCPTool
-};
-
-// Re-export the snapshot helper (used by some legacy tests/UI imports of @plugin).
-export { snapshotMcpTools } from './src/application/tools/mcp-helpers';
-
-interface OpenApiReloadOptions {
-	forceRefetch?: boolean;
-	persistCacheMetadata?: boolean;
-}
-
+import { ChatView, CHAT_VIEW_TYPE } from './src/presentation/views/chat-view';
+import { ChatWorkspace } from './src/presentation/views/chat-workspace';
+import { AgentTaskLauncher } from './src/presentation/views/agent-task-launcher';
+import { IntelligenceAssistantSettingTab } from './src/presentation/components/settings-tab';
 import { ChangelogModal } from './src/presentation/components/modals/changelog-modal';
 import { openModelSwitcher } from './src/presentation/modals/model-switcher-modal';
-import { ModelManager } from '@qwai/obsidian-llm';
-import { registerChatHoverLinkSource } from './src/presentation/chat/hover-link';
+import { EditorQuickActions } from './src/presentation/editor/editor-quick-actions';
 import { aiSelectionEditorExtension } from './src/presentation/editor/ai-selection-extension';
+import { registerChatHoverLinkSource } from './src/presentation/chat/hover-link';
+import { AgentStatusBar } from './src/presentation/status/agent-status-bar';
+import type { AppServices } from './src/presentation/app-services';
+import { createServices, type OwnedServices } from './src/bootstrap/create-services';
+import { registerAgentEntryPoints } from './src/bootstrap/agent-entry-points';
+import { registerDeepLinks, registerIncrementalRagIndexing, registerInlineAiBlocks } from './src/bootstrap/plugin-integrations';
 
 export default class IntelligenceAssistantPlugin extends Plugin {
-	settings: PluginSettings;
-	
-	// Architecture components
-	private conversationStorageService: ConversationStorageService | null = null;
-	private conversationMigrationService: ConversationMigrationService | null = null;
-	private sharedToolRegistry: ToolRegistry | null = null;
-	private pluginDataPath = '';
-	private chatRibbonIconEl: HTMLElement | null = null;
-	private statusBarItemEl: HTMLElement | null = null;
-	private agentRunningCount = 0;
-	private legacyConversations: Conversation[] = [];
-	private dataService!: PluginDataService;
-	private editorQuickActions!: EditorQuickActions;
-	public get tokenUsageRepo() { return this.dataService?.tokenUsageRepo ?? null; }
-	public getAgentMemoryRepository(): AgentMemoryRepository | null { return this.dataService?.agentMemoryRepo ?? null; }
-	private _ragManager: RAGManager | null = null;
-	public settingsService!: SettingsService;
+	editorQuickActions!: EditorQuickActions;
+	llmHub!: LLMHub;
 
-	/**
-	 * Cross-plugin LLM access point. Other plugins reach this as
-	 * `app.plugins.plugins['intelligence-assistant'].llmHub` -- see
-	 * `resolveLLM()` in @qwai/obsidian-llm -- so they can use the providers and
-	 * keys the user configured here instead of asking for their own. It hands out
-	 * capability only: no method on it returns an API key.
-	 */
-	public llmHub!: LLMHub;
+	private dataService!: PluginDataService;
+	private conversations!: ConversationStorageService;
+	private owned: OwnedServices | null = null;
+	private resolveServices!: (services: AppServices) => void;
+	private rejectServices!: (error: unknown) => void;
+	private readonly servicesReady = new Promise<AppServices>((resolve, reject) => {
+		this.resolveServices = resolve;
+		this.rejectServices = reject;
+	});
+	private chatWorkspace!: ChatWorkspace;
+	private launcher!: AgentTaskLauncher;
+	private statusBar: AgentStatusBar | null = null;
+	private statusBarEl!: HTMLElement;
+	settings!: PluginSettings;
+	private store!: SettingsStore;
+
+	get services(): AppServices {
+		if (!this.owned) {
+			throw new Error('Intelligence Assistant services are not ready');
+		}
+		return this.owned;
+	}
+
+	whenServicesReady(): Promise<AppServices> {
+		return this.servicesReady;
+	}
 
 	async onload() {
 		const pluginDir = `${this.app.vault.configDir}/plugins/${this.manifest.id}`;
 		initI18n(undefined, pluginDir);
-		const loadStart = Date.now();
-
-		// The LLM package carries no environment assumptions, so the host wires in
-		// how HTTP happens and how warnings surface. Must run before anything can
-		// construct a provider.
-		setDefaultHttpPort(createObsidianHttpPort());
+		setDefaultHttpPort(withResilience(createObsidianHttpPort()));
 		setDiagnosticsSink(({ message }) => { new Notice(message); });
-
-		// Published immediately rather than after settings load: Obsidian gives no
-		// load-order guarantee between plugins, so a consumer that starts first must
-		// still find the hub. It reads settings lazily on each call.
 		this.llmHub = new LLMHubService({
-			getLLMConfigs: () => this.settings?.llmConfigs ?? [],
-			getDefaultModelId: () => this.settings?.defaultModel ?? null,
+			getLLMConfigs: () => this.store?.peek()?.llmConfigs ?? [],
+			getDefaultModelId: () => this.store?.peek()?.defaultModel ?? null,
 		});
 
-		// ── UI registration: must complete even if data loading fails ──
-
-		// Register the chat view
-		this.registerView(
-			CHAT_VIEW_TYPE,
-			(leaf: WorkspaceLeaf) => new ChatView(leaf, this)
-		);
-
-		// Add command to open chat in right sidebar
-		this.addCommand({
-			id: "open-chat-sidebar",
-			name: t("commands.openChatSidebar"),
-			callback: async () => {
-				await this.openChatViewInRightSidebar();
-			}
-		});
-
-		// Add command to open chat in main editor area
-		this.addCommand({
-			id: "open-chat-main",
-			name: t("commands.openChatMain"),
-			callback: async () => {
-				await this.openChatViewInMainArea();
-			}
-		});
-
-		this.registerObsidianAgentEntryPoints();
-
-		// Fuzzy quick-picker: "Switch model" command opens a command-palette-style
-		// FuzzySuggestModal that sets the active (default) model and refreshes views.
-		this.registerQuickPickers();
-
-		// Hover previews: register this plugin as a hover-link source so internal
-		// links rendered in chat trigger Obsidian's native page preview on hover.
+		this.chatWorkspace = new ChatWorkspace(this.app);
+		this.launcher = new AgentTaskLauncher(this.app, this.chatWorkspace);
+		this.registerView(CHAT_VIEW_TYPE, (leaf: WorkspaceLeaf) => new ChatView(leaf, this));
+		this.registerChatCommands();
+		registerAgentEntryPoints(this, this.launcher);
 		registerChatHoverLinkSource(this);
-
-		// CodeMirror inline AI: register an editor extension (keymap) so the user can
-		// send the current selection to the agent without leaving the editor.
 		this.registerEditorExtension([
 			aiSelectionEditorExtension((selection, sourcePath) => {
-				void this.openAgentTask(
-					buildImproveSelectionPrompt(selection, sourcePath),
-					[],
-				);
+				void this.launcher.launch(buildImproveSelectionPrompt(selection, sourcePath), []);
 			}),
 		]);
-
-		// Fine-grained, incremental RAG indexing wired to Vault + MetadataCache
-		// events (create/modify/delete/rename + metadataCache changed) so a single
-		// file change updates just that file's chunks instead of a full reindex.
-		this.registerIncrementalRagIndexing();
-
-		// Inline AI widgets: ```ai fenced blocks render a runnable prompt widget.
-		this.registerInlineAiCodeBlock();
-
-		// Add ribbon icon for quick chat access
-		this.chatRibbonIconEl = this.addRibbonIcon("message-circle", t("ribbon.openChat"), async () => {
-			await this.openChatViewInRightSidebar();
-		});
-		this.chatRibbonIconEl?.addClass("ia-ribbon-chat-icon");
-
-		// This adds a settings tab so the user can configure various aspects of the plugin
+		registerIncrementalRagIndexing(this, () => this.owned?.rag ?? null, () => this.store?.peek()?.ragConfig);
+		registerInlineAiBlocks(this, this.launcher);
+		registerDeepLinks(this, this.launcher);
+		this.addRibbonIcon('message-circle', t('ribbon.openChat'), async () => {
+			await this.chatWorkspace.openInSidebar();
+		})?.addClass('ia-ribbon-chat-icon');
 		this.addSettingTab(new IntelligenceAssistantSettingTab(this.app, this));
-
-		// Status bar: surface agent running state + cumulative token usage.
-		this.statusBarItemEl = this.addStatusBarItem();
-		this.statusBarItemEl.addClass('ia-status-bar-item');
-		this.refreshStatusBar();
-
-		// Deep links: obsidian://intelligence-assistant?task=... opens the chat
-		// view and (if a task/prompt is supplied) starts an agent task.
-		this.registerObsidianProtocolHandler('intelligence-assistant', (params) => {
-			void this.handleProtocolDeepLink(params);
-		});
-
-		// ── Data initialization: wrapped so failures never break the UI ──
+		this.statusBarEl = this.addStatusBarItem();
+		this.statusBarEl.addClass('ia-status-bar-item');
 
 		try {
-			this.settingsService = new SettingsService(
-				() => this.settings,
-				() => this.saveSettings()
-			);
-
-			this.pluginDataPath = `${this.app.vault.configDir}/plugins/${this.manifest.id}/data`;
-			await this.ensureFolderExists(this.pluginDataPath);
-
-			this.conversationStorageService = new ConversationStorageService(this.app);
-			await this.conversationStorageService.initialize();
-
-			this.dataService = new PluginDataService(this.app);
-			await this.dataService.initialize();
-			this.editorQuickActions = new EditorQuickActions(this.app, () => ({
-				quickActions: this.settings.quickActions,
-				quickActionPrefix: this.settings.quickActionPrefix || "⚡",
-				llmConfigs: this.settings.llmConfigs,
-				defaultModel: this.settings.defaultModel,
-			}));
-
+			await this.loadStorage(pluginDir);
 			await this.loadSettings();
-
-			// Register editor context menu actions
 			this.editorQuickActions.register(this);
+			this.startServices(pluginDir);
 		} catch (error) {
-			console.error("[Plugin] Data initialization failed:", error);
+			console.error('[Plugin] Initialization failed:', error);
+			this.rejectServices(error);
 		}
 
-		// Defer non-critical initialization to background
 		void this.deferredInitialization();
-
-		const loadTime = Date.now() - loadStart;
-		console.debug(`[Plugin] Load time: ${loadTime}ms`);
 	}
 
-	/**
-	 * Deferred initialization for non-critical features
-	 * Runs in background without blocking plugin startup
-	 */
-	private async deferredInitialization(): Promise<void> {
-		// Version check for Changelog
-		this.app.workspace.onLayoutReady(async () => {
-			const currentVersion = this.manifest.version;
-			const lastVersion = this.settings.lastVersion || '0.0.0';
-
-			// Never pop the changelog under automated tests — its modal overlay
-			// intercepts clicks and blocks every E2E spec (same detection the
-			// vector store uses for E2E-safe behavior).
-			const isAutomatedTest = typeof process !== 'undefined'
-				&& (process.env.NODE_ENV === 'test' || Boolean(process.env.WDIO_WORKER_ID));
-
-			if (currentVersion !== lastVersion && !isAutomatedTest) {
-				const isChinese = getLanguage().startsWith('zh');
-				new ChangelogModal(this.app, currentVersion, isChinese).open();
-				this.settings.lastVersion = currentVersion;
-				await this.saveSettings();
-			}
-		});
-
-		try {
-			const deferredStart = Date.now();
-			console.debug('[Plugin] Starting deferred initialization...');
-
-			// Run these in parallel for faster completion. initToolRegistry()
-			// now handles both source loading AND MCP cachedTools writeback,
-			// so the separate ensureAutoConnectedMcpServers call that used to
-			// live here is gone — it only runs on user-driven add/edit from
-			// mcp-tab now.
-			await Promise.all([
-				this.migrateConversationsIfNeeded().catch(error =>
-					console.error('[Plugin] Conversation migration failed:', error)
-				),
-				this.ensureDefaultAgent().catch(error =>
-					console.error('[Plugin] Ensure default agent failed:', error)
-				),
-				this.initToolRegistry().catch(error =>
-					console.error('[Plugin] ToolRegistry init failed:', error)
-				),
-			]);
-
-			const deferredTime = Date.now() - deferredStart;
-			console.debug(`[Plugin] Deferred initialization complete (${deferredTime}ms)`);
-		} catch (error) {
-			console.error('[Plugin] Deferred initialization error:', error);
-		}
+	onunload() {
+		this.statusBar?.dispose();
+		this.statusBar = null;
+		this.owned?.dispose().catch((error) => console.error('[Plugin] Service dispose failed:', error));
+		this.owned = null;
 	}
 
-		onunload() {
-		// Don't detach leaves on unload — preserves the user's open chat tabs.
-		if (this.sharedToolRegistry) {
-			this.sharedToolRegistry.dispose().catch(error =>
-				console.error('[Plugin] ToolRegistry dispose failed:', error)
-			);
-			this.sharedToolRegistry = null;
-		}
-		this.chatRibbonIconEl = null;
-		this.statusBarItemEl = null;
-	}
-
-	/**
-	 * Lifecycle hook (Obsidian 1.7.2+): fired when the user explicitly enables
-	 * the plugin from the community-plugins UI. Safe to open views here. We
-	 * keep startup non-eager elsewhere, so this is where we proactively reveal
-	 * the chat view for a user who just turned the plugin on.
-	 */
 	onUserEnable(): void {
-		try {
-			// Refresh the status bar immediately so the user sees live state the
-			// moment they enable the plugin (onload may have run before data was ready).
-			this.refreshStatusBar();
-			void this.openChatViewInRightSidebar();
-		} catch (error) {
-			console.error('[Plugin] onUserEnable failed:', error);
-		}
+		this.statusBar?.render();
+		void this.chatWorkspace.openInSidebar();
 	}
 
-	/**
-	 * Lifecycle hook: fired when data.json changes on disk outside this
-	 * process (Obsidian Sync, an external editor, another device). Re-read the
-	 * persisted settings and refresh in-memory state + open chat views.
-	 */
 	async onExternalSettingsChange(): Promise<void> {
 		try {
 			await this.reloadSettingsFromDisk();
@@ -367,521 +125,71 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		}
 	}
 
-	/**
-	 * Reload settings from disk (the same load path used during onload) and
-	 * propagate the refreshed config to dependent runtime state. Extracted so it
-	 * is unit-testable without a full Plugin instance.
-	 */
-	public async reloadSettingsFromDisk(): Promise<void> {
+	async reloadSettingsFromDisk(): Promise<void> {
 		if (!this.dataService) return;
 		await runSettingsReload({
 			loadSettings: () => this.loadSettings(),
-			// RAG config may have changed; drop the cached manager so it rebuilds lazily.
-			invalidateDerivedState: () => { this._ragManager = null; },
-			refreshChatViewsModels: () => this.refreshChatViewsModels(),
-			refreshStatusBar: () => this.refreshStatusBar(),
+			invalidateDerivedState: () => { this.owned?.rag.updateConfig(this.settings.ragConfig, this.settings.llmConfigs); },
+			refreshChatViewsModels: () => this.chatWorkspace.refreshModels(),
+			refreshStatusBar: () => this.statusBar?.render(),
 		});
 	}
 
-	/** Mark an agent run as started/finished and refresh the status bar. */
-	public setAgentRunning(running: boolean): void {
-		this.agentRunningCount = Math.max(0, this.agentRunningCount + (running ? 1 : -1));
-		this.refreshStatusBar();
-	}
-
-	/** Update the status bar item with running state + cumulative token usage. */
-	public refreshStatusBar(): void {
-		const el = this.statusBarItemEl;
-		if (!el) return;
-		const running = this.agentRunningCount > 0;
-		const repo = this.tokenUsageRepo;
-		const render = (totalTokens: number): void => {
-			const tokensLabel = totalTokens >= 1000
-				? `${(totalTokens / 1000).toFixed(1)}k`
-				: `${totalTokens}`;
-			el.setText(running
-				? `IA: running · ${tokensLabel} tokens`
-				: `IA: idle · ${tokensLabel} tokens`);
-			el.setAttr('aria-label', `Intelligence Assistant — ${running ? 'agent running' : 'idle'}, ${totalTokens} tokens used`);
-		};
-		if (repo) {
-			repo.getGrandTotal()
-				.then(summary => render(summary.totalTokens))
-				.catch(() => render(0));
-		} else {
-			render(0);
-		}
-	}
-
-	/**
-	 * Handle an obsidian://intelligence-assistant?... deep link. Opens the chat
-	 * view and, when a `task`/`prompt` param is present, starts an agent task
-	 * (or prefills the chat input when sendImmediately is suppressed).
-	 */
-	private async handleProtocolDeepLink(params: ObsidianProtocolData): Promise<void> {
-		try {
-			const view = await this.openChatViewInRightSidebar();
-			if (!view) {
-				new Notice('Unable to open intelligence assistant chat view.');
-				return;
-			}
-			const task = (params.task ?? params.prompt ?? '').trim();
-			if (!task) return;
-			const references: TFile[] = [];
-			const filePath = (params.file ?? '').trim();
-			if (filePath) {
-				const file = this.app.vault.getAbstractFileByPath(filePath);
-				if (file instanceof TFile) references.push(file);
-			}
-			const sendImmediately = params.send !== 'false';
-			await view.startAgentTask({
-				prompt: task,
-				displayText: task,
-				references,
-				newConversation: params.new === 'true',
-				sendImmediately,
-			});
-		} catch (error) {
-			console.error('[Plugin] Protocol deep link failed:', error);
-			new Notice('Failed to handle intelligence-assistant deep link.');
-		}
-	}
-
-
-	public getRAGManager(): RAGManager {
-		if (!this._ragManager) {
-			this._ragManager = new RAGManager(
-				this.app,
-				this.settings.ragConfig,
-				this.settings.llmConfigs
-			);
-		}
-		return this._ragManager;
-	}
-
-	/**
-	 * Register Vault + MetadataCache event listeners that incrementally update
-	 * the RAG index for a single file on each change, instead of the old coarse
-	 * full-reindex. The RAG manager is resolved lazily per event so listeners can
-	 * be registered eagerly at onload before the manager is built.
-	 */
-	private registerIncrementalRagIndexing(): void {
-		const handlers = createIncrementalIndexHandlers(
-			{
-				indexFile: async (file) => {
-					const tfile = this.app.vault.getAbstractFileByPath(file.path);
-					if (tfile instanceof TFile) {
-						await this.getRAGManager().indexFile(tfile);
-					}
-				},
-				removeFile: async (path) => await this.getRAGManager().removeFile(path),
-				renameFile: async (oldPath, newPath) => await this.getRAGManager().renameFile(oldPath, newPath),
-			},
-			() => ({
-				enabled: this.settings?.ragConfig?.enabled ?? false,
-				embedChangedFiles: this.settings?.ragConfig?.embedChangedFiles ?? false,
-			}),
-			{
-				setTimeoutFn: (fn, ms) => window.setTimeout(fn, ms),
-				clearTimeoutFn: (h) => window.clearTimeout(h as number),
-			},
-		);
-
-		this.registerEvent(this.app.vault.on('create', (file) => {
-			if (file instanceof TFile) handlers.onCreate(file);
-		}));
-		this.registerEvent(this.app.vault.on('modify', (file) => {
-			if (file instanceof TFile) handlers.onModify(file);
-		}));
-		this.registerEvent(this.app.vault.on('delete', (file) => {
-			if (file instanceof TFile) handlers.onDelete(file);
-		}));
-		this.registerEvent(this.app.vault.on('rename', (file, oldPath) => {
-			if (file instanceof TFile) handlers.onRename(file, oldPath);
-		}));
-		this.registerEvent(this.app.metadataCache.on('changed', (file) => {
-			if (file instanceof TFile) handlers.onMetadataChanged(file);
-		}));
-	}
-
-	/**
-	 * Register the ```ai fenced code-block processor. Each block renders an
-	 * inline widget (prompt + result area + Run button). Running hands the prompt
-	 * to the existing agent path (opens the chat view and starts an agent task),
-	 * so it produces a real result rather than a stub. We don't auto-run on every
-	 * preview render — only when the user clicks Run (or the block opts in via
-	 * `autorun: true`).
-	 */
-	private registerInlineAiCodeBlock(): void {
-		this.registerMarkdownCodeBlockProcessor('ai', (source, el, ctx) => {
-			const directive = parseAiBlock(source);
-			// MarkdownRenderChild gives the widget a lifecycle tied to the preview
-			// so its listeners are cleaned up when the block is re-rendered/removed.
-			const child = new MarkdownRenderChild(el);
-			ctx.addChild(child);
-			const handle = buildAiWidget(el, directive, (prompt) => {
-				handle.setRunning(true);
-				void this.runInlineAiPrompt(prompt, directive.title)
-					.finally(() => handle.setRunning(false));
-			});
-		});
-	}
-
-	/**
-	 * Drive an inline-ai-block prompt through the agent path. Opens the chat view
-	 * and starts an agent task seeded with the block's prompt.
-	 */
-	private async runInlineAiPrompt(prompt: string, title?: string): Promise<void> {
-		try {
-			const view = await this.openChatViewInRightSidebar();
-			if (!view) {
-				new Notice('Unable to open intelligence assistant chat view.');
-				return;
-			}
-			await view.startAgentTask({
-				prompt,
-				displayText: title ? `${title}: ${prompt}` : prompt,
-				references: [],
-				newConversation: false,
-				sendImmediately: true,
-			});
-		} catch (error) {
-			console.error('[Plugin] Inline ai block run failed:', error);
-			new Notice('Failed to run inline AI block.');
-		}
-	}
-
-	public getToolRegistry(): ToolRegistry {
-		if (!this.sharedToolRegistry) {
-			this.sharedToolRegistry = new ToolRegistry();
-		}
-		return this.sharedToolRegistry;
-	}
-
-	/**
-	 * Initialize the ToolRegistry from current settings.
-	 * Creates sources for every enabled config entry and reloads.
-	 */
-	public async initToolRegistry(): Promise<void> {
-		const registry = this.getToolRegistry();
-
-		// Builtin: always register, gated by per-tool enabled flags.
-		// The callback runs on every load() so toggling a builtin tool in
-		// settings and calling reloadBuiltinTools picks up the change.
-		registry.registerSource(new BuiltinToolSource(this.app, () =>
-			(this.settings.builtInTools ?? [])
-				.filter((t) => t.enabled)
-				.map((t) => t.type),
-		));
-
-		// MCP servers: register every enabled server. Auto-mode servers are
-		// loaded eagerly (the registry's reload below) and their cachedTools
-		// gets written back here in one pass. Manual-mode servers are
-		// registered but their load is deferred to user-triggered "connect".
-		for (const server of (this.settings.mcpServers ?? [])) {
-			if (server.enabled) {
-				registry.registerSource(new McpToolSource(server));
-			}
-		}
-
-		// OpenAPI: one source per enabled config
-		const fs = new ObsidianFileSystem(this.app);
-		for (const config of (this.settings.openApiTools ?? [])) {
-			if (config.enabled) {
-				registry.registerSource(
-					new OpenApiToolSource(config, fs, this.pluginDataPath),
-				);
-			}
-		}
-
-		// CLI: one source per enabled config
-		for (const config of (this.settings.cliTools ?? [])) {
-			if (config.enabled) {
-				registry.registerSource(new CliToolSource(config));
-			}
-		}
-
-		await registry.reload();
-
-		// MCP cache writeback: now that the registry has loaded what it can,
-		// snapshot each enabled MCP server's live tools into its cachedTools
-		// so the disconnected UI shows up-to-date state on next launch.
-		const { snapshotMcpTools } = await import('./src/application/tools/mcp-helpers');
-		let mcpCacheDirty = false;
-		for (const server of (this.settings.mcpServers ?? [])) {
-			if (!server.enabled) continue;
-			const serverTools = registry.getTools().filter(
-				(t) => t.origin.kind === 'mcp' && t.origin.sourceId === server.name,
-			);
-			if (serverTools.length > 0) {
-				const fresh = snapshotMcpTools(serverTools);
-				server.cachedTools = fresh;
-				server.cacheTimestamp = Date.now();
-				mcpCacheDirty = true;
-			}
-		}
-		if (mcpCacheDirty) {
-			await this.saveSettings();
-		}
-
-		console.debug('[Plugin] ToolRegistry initialized');
-	}
-
-	/** Reload every enabled OpenAPI spec into the registry, returning per-id tool counts. */
-	public async reloadOpenApiTools(_options?: OpenApiReloadOptions): Promise<Map<string, number>> {
-		const registry = this.getToolRegistry();
-		const fs = new ObsidianFileSystem(this.app);
-		const results = new Map<string, number>();
-		const seenIds = new Set<string>();
-
-		for (const config of this.settings.openApiTools ?? []) {
-			if (!config.id) continue;
-			seenIds.add(config.id);
-			await registry.unregisterSource('openapi', config.id);
-			if (!config.enabled) {
-				results.set(config.id, 0);
-				continue;
-			}
-			registry.registerSource(new OpenApiToolSource(config, fs, this.pluginDataPath));
-			try {
-				const tools = await registry.reloadSource('openapi', config.id);
-				results.set(config.id, tools.length);
-			} catch (err) {
-				console.error(`[OpenAPI] reload failed for ${config.id}:`, err);
-				results.set(config.id, 0);
-			}
-		}
-
-		// Drop any registered openapi source whose config has been removed.
-		for (const tool of registry.getTools()) {
-			if (tool.origin.kind === 'openapi' && !seenIds.has(tool.origin.sourceId)) {
-				await registry.unregisterSource('openapi', tool.origin.sourceId);
-			}
-		}
-		return results;
-	}
-
-	/** Reload a single OpenAPI config; returns the number of tools it produced. */
-	public async reloadOpenApiConfig(configId: string, _options?: OpenApiReloadOptions): Promise<number> {
-		const config = this.settings.openApiTools?.find(tool => tool.id === configId);
-		if (!config) return 0;
-
-		const registry = this.getToolRegistry();
-		await registry.unregisterSource('openapi', configId);
-		if (!config.enabled) return 0;
-
-		const fs = new ObsidianFileSystem(this.app);
-		registry.registerSource(new OpenApiToolSource(config, fs, this.pluginDataPath));
-		try {
-			const tools = await registry.reloadSource('openapi', configId);
-			return tools.length;
-		} catch (err) {
-			console.error(`[OpenAPI] reload failed for ${configId}:`, err);
-			return 0;
-		}
-	}
-
-	/** Remove an OpenAPI config's source from the registry. */
-	public async removeOpenApiConfig(configId: string): Promise<void> {
-		await this.getToolRegistry().unregisterSource('openapi', configId);
-	}
-
-	/** Refresh the builtin source after settings.builtInTools[].enabled changed. */
-	public async reloadBuiltinTools(): Promise<void> {
-		const registry = this.getToolRegistry();
-		if (registry.hasSource('builtin', 'builtin')) {
-			await registry.reloadSource('builtin', 'builtin');
-		}
-	}
-
-	/**
-	 * Refresh CLI sources in the registry from settings. Returns a Promise
-	 * so the caller (cli-tools-section) can await before re-rendering;
-	 * the registry's own mutex also serializes concurrent calls.
-	 */
-	public async reloadCLITools(): Promise<void> {
-		const registry = this.getToolRegistry();
-		// Snapshot current cli source ids so we can unregister stale ones.
-		const liveCliIds = new Set<string>(
-			registry.getTools()
-				.filter((t) => t.origin.kind === 'cli')
-				.map((t) => t.origin.sourceId),
-		);
-		for (const id of liveCliIds) {
-			await registry.unregisterSource('cli', id);
-		}
-		for (const config of this.settings.cliTools ?? []) {
-			if (!config.enabled) continue;
-			registry.registerSource(new CliToolSource(config));
-			try {
-				await registry.reloadSource('cli', config.id);
-			} catch (err) {
-				console.error(`[CLI] reload failed for ${config.id}:`, err);
-			}
-		}
-	}
-
-	public async ensureAutoConnectedMcpServers(): Promise<boolean> {
-		const { ensureAutoConnectedMcpServers: initMCP } = await import('./src/application/tools/mcp-helpers');
-		return await initMCP(
-			this.settings.mcpServers,
-			this.getToolRegistry(),
-			async () => await this.saveSettings()
-		);
-	}
-
-	public async ensureDefaultAgent(): Promise<void> {
+	async ensureDefaultAgent(): Promise<void> {
 		await ensureDefaultAgentService(this.settings, async () => await this.saveSettings());
 	}
 
-	public async refreshChatViewsModels(): Promise<void> {
-		const leaves = this.app.workspace.getLeavesOfType(CHAT_VIEW_TYPE);
-		for (const leaf of leaves) {
-			const view = leaf.view;
-			if (view instanceof ChatView) {
-				await view.refreshModels();
-			}
-		}
+	private async loadStorage(pluginDir: string): Promise<void> {
+		await ensureFolderExists(this.app.vault.adapter, `${pluginDir}/data`);
+		this.conversations = new ConversationStorageService(this.app);
+		await this.conversations.initialize();
+		this.dataService = new PluginDataService(this.app);
+		await this.dataService.initialize();
+		this.store = new SettingsStore(new ObsidianSettingsPersistence(this, this.dataService, pluginPaths(this.app.vault.configDir).userConfig));
+		this.editorQuickActions = new EditorQuickActions(this.app, () => ({
+			quickActions: this.settings.quickActions,
+			quickActionPrefix: this.settings.quickActionPrefix || '⚡',
+			llmConfigs: this.settings.llmConfigs,
+			defaultModel: this.settings.defaultModel,
+		}));
 	}
 
-	async openChatViewInMainArea(): Promise<ChatView | null> {
-		// Try to find an existing chat view in the main area (root split)
-		const existing = this.app.workspace.getLeavesOfType(CHAT_VIEW_TYPE);
-		const mainLeaf = existing.find(leaf => leaf.getRoot() === this.app.workspace.rootSplit);
-		if (mainLeaf) {
-			await this.app.workspace.revealLeaf(mainLeaf);
-			return this.asChatView(mainLeaf);
-		}
-
-		// Create a new tab in the main editor area
-		const leaf = this.app.workspace.getLeaf('tab');
-		await leaf.setViewState({ type: CHAT_VIEW_TYPE, active: true });
-		await this.app.workspace.revealLeaf(leaf);
-		return this.asChatView(leaf);
-	}
-
-	async openChatViewInRightSidebar(): Promise<ChatView | null> {
-		// Try to find an existing chat view
-		const existing = this.app.workspace.getLeavesOfType(CHAT_VIEW_TYPE);
-		if (existing.length > 0) {
-			// If exists, just show it
-			await this.app.workspace.revealLeaf(existing[0]);
-			return this.asChatView(existing[0]);
-		}
-
-		// Create a new leaf in the right sidebar
-		const leaf = this.app.workspace.getRightLeaf(false);
-		if (leaf) {
-			await leaf.setViewState({ type: CHAT_VIEW_TYPE, active: true });
-			// Focus on the new view
-			await this.app.workspace.revealLeaf(leaf);
-			return this.asChatView(leaf);
-		} else {
-			// Fallback: create in any available leaf
-			const newLeaf = this.app.workspace.getLeaf(true);
-			await newLeaf.setViewState({ type: CHAT_VIEW_TYPE, active: true });
-			return this.asChatView(newLeaf);
-		}
-	}
-
-	private asChatView(leaf: WorkspaceLeaf | null | undefined): ChatView | null {
-		return leaf?.view instanceof ChatView ? leaf.view : null;
-	}
-
-	private async openAgentTask(prompt: string, references: Array<TFile | TFolder> = [], displayText?: string): Promise<void> {
-		const defaultTask = this.buildAgentTaskLaunchText(prompt, displayText);
-		const launch = await showAgentTaskLaunchModal(this.app, 'Start agent task', defaultTask, true);
-		if (launch === null) {
-			return;
-		}
-		const visibleTask = launch.taskInput.trim() || defaultTask;
-		const view = await this.openChatViewInRightSidebar();
-		if (!view) {
-			new Notice('Unable to open intelligence assistant chat view.');
-			return;
-		}
-
-		await view.startAgentTask({
-			prompt: this.withUserTaskInput(prompt, visibleTask),
-			displayText: visibleTask,
-			references,
-			newConversation: launch.newConversation,
-			sendImmediately: true,
+	private startServices(pluginDir: string): void {
+		this.owned = createServices({
+			app: this.app,
+			settings: () => this.settings,
+			saveSettings: () => this.saveSettings(),
+			pluginDataPath: `${pluginDir}/data`,
+			data: this.dataService,
+			conversations: this.conversations,
 		});
+		const services = this.owned;
+		this.register(this.store.onChange((units) => {
+			if (units.has('providers') || units.has('config')) {
+				services.rag.updateConfig(this.settings.ragConfig, this.settings.llmConfigs);
+				void this.chatWorkspace.refreshModels();
+			}
+		}));
+		this.statusBar = new AgentStatusBar(this.statusBarEl, this.owned.activity, this.owned.usage);
+		this.statusBar.render();
+		this.resolveServices(this.owned);
 	}
 
-	private withUserTaskInput(prompt: string, taskInput: string): string {
-		const trimmed = taskInput.trim();
-		if (!trimmed) return prompt;
-		return [
-			prompt,
-			'',
-			'User task input from the launch dialog:',
-			trimmed,
-			'If this input conflicts with an earlier default topic, scope, or question, follow this user task input.',
-		].join('\n');
-	}
-
-	private buildAgentTaskLaunchText(prompt: string, displayText?: string): string {
-		const summary = this.summarizeAgentTaskPrompt(prompt);
-		const label = displayText?.trim();
-		if (!label) {
-			return summary;
-		}
-		if (summary.toLocaleLowerCase().startsWith(label.toLocaleLowerCase())) {
-			return summary;
-		}
-		if (summary && summary !== label) {
-			return `${label}\n${summary}`;
-		}
-		return label;
-	}
-
-	private summarizeAgentTaskPrompt(prompt: string): string {
-		const lines = prompt
-			.split('\n')
-			.map(line => line.trim())
-			.filter(Boolean);
-		const projectBrief = lines.find(line => /^Create a project brief for:/i.test(line));
-		if (projectBrief) {
-			return this.truncateAgentTaskSummary(projectBrief);
-		}
-		const researchCorpus = lines.find(line => /^Research corpus:/i.test(line));
-		const researchQuestion = lines.find(line => /^Research question or topic:/i.test(line));
-		if (researchCorpus || researchQuestion) {
-			return this.truncateAgentTaskSummary(
-				['Create research brief', researchCorpus, researchQuestion].filter(Boolean).join('\n')
-			);
-		}
-		const writingContext = lines.find(line => /^Source context:/i.test(line));
-		const writingGoal = lines.find(line => /^Writing goal:/i.test(line));
-		if (writingContext || writingGoal) {
-			return this.truncateAgentTaskSummary(
-				['Draft from note', writingContext, writingGoal].filter(Boolean).join('\n')
-			);
-		}
-		const preferred = lines.find(line =>
-			/^(question|scope|target|note|create|find|summarize|run|inspect|diagnose|improve)/i.test(line)
-		);
-		const summary = preferred ?? lines[0] ?? 'Start agent task';
-		return this.truncateAgentTaskSummary(summary);
-	}
-
-	private truncateAgentTaskSummary(summary: string): string {
-		return summary.length > 360 ? `${summary.slice(0, 357)}...` : summary;
-	}
-
-	private getActiveMarkdownFile(): TFile | null {
-		const file = this.app.workspace.getActiveFile();
-		return file instanceof TFile ? file : null;
-	}
-
-	/**
-	 * Register the fuzzy quick-picker commands. "Switch model" opens a
-	 * FuzzySuggestModal listing every configured model; choosing one persists it
-	 * as the default model and refreshes open chat views so the change is live.
-	 */
-	private registerQuickPickers(): void {
+	private registerChatCommands(): void {
+		this.addCommand({
+			id: 'open-chat-sidebar',
+			name: t('commands.openChatSidebar'),
+			callback: async () => {
+				await this.chatWorkspace.openInSidebar();
+			},
+		});
+		this.addCommand({
+			id: 'open-chat-main',
+			name: t('commands.openChatMain'),
+			callback: async () => {
+				await this.chatWorkspace.openInMainArea();
+			},
+		});
 		this.addCommand({
 			id: 'switch-model',
 			name: t('commands.switchModel'),
@@ -890,427 +198,57 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 					getModels: () => ModelManager.getAllAvailableModels(this.settings.llmConfigs),
 					getCurrentModelId: () => this.settings.defaultModel,
 					applyModel: async (modelId: string) => {
-						await this.settingsService.setDefaultModel(modelId);
-						await this.refreshChatViewsModels();
+						this.settings.defaultModel = modelId;
+						await this.saveSettings();
 					},
 				});
 			},
 		});
 	}
 
-	private registerObsidianAgentEntryPoints(): void {
-		this.addCommand({
-			id: 'ask-agent-current-note',
-			name: t('commands.askAgentCurrentNote'),
-			callback: async () => {
-				const file = this.getActiveMarkdownFile();
-				if (!file) {
-					new Notice('Open a note before asking the agent.');
-					return;
-				}
-				await this.openAgentTask(
-					buildAskCurrentNotePrompt(file.path, 'What should I understand or do next?'),
-					[file],
-					t('chat.modals.agentTask.title')
-				);
+	private async deferredInitialization(): Promise<void> {
+		this.app.workspace.onLayoutReady(async () => {
+			const currentVersion = this.manifest.version;
+			const isAutomatedTest = typeof process !== 'undefined'
+				&& (process.env.NODE_ENV === 'test' || Boolean(process.env.WDIO_WORKER_ID));
+			if (this.store?.peek() && currentVersion !== (this.settings.lastVersion || '0.0.0') && !isAutomatedTest) {
+				new ChangelogModal(this.app, currentVersion, getLanguage().startsWith('zh')).open();
+				this.settings.lastVersion = currentVersion;
+				await this.saveSettings();
 			}
 		});
 
-		this.addCommand({
-			id: 'summarize-current-note-agent',
-			name: t('commands.summarizeCurrentNote'),
-			callback: async () => {
-				const file = this.getActiveMarkdownFile();
-				if (!file) {
-					new Notice('Open a note before summarizing with the agent.');
-					return;
-				}
-				await this.openAgentTask(buildSummarizeCurrentNotePrompt(file.path), [file]);
-			}
-		});
-
-		this.addCommand({
-			id: 'organize-current-note-agent',
-			name: t('commands.organizeCurrentNote'),
-			callback: async () => {
-				const file = this.getActiveMarkdownFile();
-				if (!file) {
-					new Notice('Open a note before organizing with the agent.');
-					return;
-				}
-				await this.openAgentTask(buildOrganizeCurrentNotePrompt(file.path), [file]);
-			}
-		});
-
-		this.addCommand({
-			id: 'source-grounded-question-agent',
-			name: t('commands.sourceGroundedQuestion'),
-			callback: async () => {
-				const file = this.getActiveMarkdownFile();
-				await this.openAgentTask(
-					buildSourceGroundedQuestionPrompt('What do my notes say about this?', file?.path),
-					file ? [file] : [],
-					t('commands.sourceGroundedQuestion')
-				);
-			}
-		});
-
-		this.addCommand({
-			id: 'create-project-brief-agent',
-			name: t('commands.createProjectBrief'),
-			callback: async () => {
-				const file = this.getActiveMarkdownFile();
-				if (!file) {
-					new Notice('Open a project note before creating a project brief.');
-					return;
-				}
-				await this.openAgentTask(buildProjectBriefPrompt(file.path), [file]);
-			}
-		});
-
-		this.addCommand({
-			id: 'create-research-brief-agent',
-			name: t('commands.createResearchBrief'),
-			callback: async () => {
-				const file = this.getActiveMarkdownFile();
-				if (!file) {
-					new Notice('Open a note before creating a research brief.');
-					return;
-				}
-				await this.openAgentTask(
-					buildResearchBriefPrompt(file.path, 'What are the key conclusions and open questions?'),
-					[file],
-					t('commands.createResearchBrief')
-				);
-			}
-		});
-
-		this.addCommand({
-			id: 'generate-weekly-review-agent',
-			name: t('commands.generateWeeklyReview'),
-			callback: async () => {
-				await this.openAgentTask(
-					buildWeeklyReviewPrompt('this week'),
-					[],
-					t('commands.generateWeeklyReview')
-				);
-			}
-		});
-
-		this.addCommand({
-			id: 'find-related-notes-agent',
-			name: t('commands.findRelatedNotes'),
-			callback: async () => {
-				const file = this.getActiveMarkdownFile();
-				if (!file) {
-					new Notice('Open a note before finding related notes.');
-					return;
-				}
-				await this.openAgentTask(buildRelatedNotesPrompt(file.path), [file]);
-			}
-		});
-
-		this.addCommand({
-			id: 'find-duplicate-notes-agent',
-			name: t('commands.findDuplicateNotes'),
-			callback: async () => {
-				await this.openAgentTask(buildDuplicateMergePrompt());
-			}
-		});
-
-		this.addCommand({
-			id: 'doctor-links-tags-agent',
-			name: t('commands.doctorLinksTags'),
-			callback: async () => {
-				const file = this.getActiveMarkdownFile();
-				if (!file) {
-					new Notice('Open a note before improving links, tags, and properties.');
-					return;
-				}
-				await this.openAgentTask(buildBacklinkTagDoctorPrompt(file.path), [file]);
-			}
-		});
-
-		this.addCommand({
-			id: 'draft-from-note-agent',
-			name: t('commands.draftFromNote'),
-			callback: async () => {
-				const file = this.getActiveMarkdownFile();
-				if (!file) {
-					new Notice('Open a note before drafting with the agent.');
-					return;
-				}
-				await this.openAgentTask(
-					buildWritingDraftPrompt(file.path, 'Write a clear draft for a knowledgeable reader.'),
-					[file],
-					t('commands.draftFromNote')
-				);
-			}
-		});
-
-		this.addCommand({
-			id: 'diagnose-vault-agent',
-			name: t('commands.diagnoseVault'),
-			callback: async () => {
-				await this.openAgentTask(buildVaultDiagnosisPrompt());
-			}
-		});
-
-		this.addCommand({
-			id: 'improve-selection-agent',
-			name: t('commands.improveSelection'),
-			editorCallback: async (editor: Editor, view: MarkdownView) => {
-				const selection = editor.getSelection();
-				if (!selection.trim()) {
-					new Notice('Select text before asking the agent to improve it.');
-					return;
-				}
-				const file = view.file ?? this.getActiveMarkdownFile();
-				await this.openAgentTask(
-					buildImproveSelectionPrompt(selection, file?.path),
-					file ? [file] : []
-				);
-			}
-		});
-
-		this.registerEvent(
-			this.app.workspace.on('file-menu', (menu, file) => {
-				if (file instanceof TFile) {
-					menu.addSeparator();
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.askAgent'))
-						.setIcon('bot')
-						.onClick(() => {
-							void this.openAgentTask(
-								buildAskCurrentNotePrompt(file.path, 'What should I understand or do next?'),
-								[file],
-								t('contextMenu.askAgent')
-							);
-						}));
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.summarize'))
-						.setIcon('list-collapse')
-						.onClick(() => {
-							void this.openAgentTask(buildSummarizeFilePrompt(file.path), [file]);
-						}));
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.createProjectBrief'))
-						.setIcon('clipboard-list')
-						.onClick(() => {
-							void this.openAgentTask(buildProjectBriefPrompt(file.path), [file]);
-						}));
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.createResearchBrief'))
-						.setIcon('book-open-text')
-						.onClick(() => {
-							void this.openAgentTask(
-								buildResearchBriefPrompt(file.path, 'What are the key conclusions and open questions?'),
-								[file],
-								t('contextMenu.createResearchBrief')
-							);
-						}));
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.findRelatedNotes'))
-						.setIcon('network')
-						.onClick(() => {
-							void this.openAgentTask(buildRelatedNotesPrompt(file.path), [file]);
-						}));
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.doctorLinksTags'))
-						.setIcon('tags')
-						.onClick(() => {
-							void this.openAgentTask(buildBacklinkTagDoctorPrompt(file.path), [file]);
-						}));
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.draftFromFile'))
-						.setIcon('pen-line')
-						.onClick(() => {
-							void this.openAgentTask(
-								buildWritingDraftPrompt(file.path, 'Write a clear draft for a knowledgeable reader.'),
-								[file],
-								t('contextMenu.draftFromFile')
-							);
-						}));
-					return;
-				}
-
-				if (file instanceof TFolder) {
-					menu.addSeparator();
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.organizeFolder'))
-						.setIcon('folder-tree')
-						.onClick(() => {
-							void this.openAgentTask(buildOrganizeFolderPrompt(file.path), [file]);
-						}));
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.createProjectBrief'))
-						.setIcon('clipboard-list')
-						.onClick(() => {
-							void this.openAgentTask(buildProjectBriefPrompt(file.path), [file]);
-						}));
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.createResearchBrief'))
-						.setIcon('book-open-text')
-						.onClick(() => {
-							void this.openAgentTask(
-								buildResearchBriefPrompt(file.path, 'What are the key conclusions and open questions?'),
-								[file],
-								t('contextMenu.createResearchBrief')
-							);
-						}));
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.findDuplicates'))
-						.setIcon('git-merge')
-						.onClick(() => {
-							void this.openAgentTask(buildDuplicateMergePrompt(file.path), [file]);
-						}));
-					menu.addItem(item => item
-						.setTitle(t('contextMenu.improveFolder'))
-						.setIcon('tags')
-						.onClick(() => {
-							void this.openAgentTask(buildBacklinkTagDoctorPrompt(file.path), [file]);
-						}));
-				}
-			})
-		);
+		const services = await this.servicesReady.catch(() => null);
+		if (!services) return;
+		await Promise.all([
+			this.migrateConversationsIfNeeded().catch((error) => console.error('[Plugin] Conversation migration failed:', error)),
+			this.ensureDefaultAgent().catch((error) => console.error('[Plugin] Ensure default agent failed:', error)),
+			services.tools.initialize().catch((error) => console.error('[Plugin] Tool sources failed to load:', error)),
+		]);
 	}
 
-	async loadSettings() {
-		const totalStart = Date.now();
-
-		// dataService already initialized in onload() before this call
-		console.debug(`[Settings] Repositories ready: ${Date.now() - totalStart}ms`);
-
-		const configStart = Date.now();
-		const userConfigExists = await this.userConfigExists();
-		const userConfig = userConfigExists ? await this.readUserConfigFile() : null;
-		let legacyConversations: Conversation[] = [];
-		let legacyData: unknown = null;
-
-		try {
-			legacyData = await this.loadData();
-		} catch (error) {
-			console.debug('No legacy data found', error);
-		}
-
-		let storedSettings: PluginSettings | null = null;
-		if (userConfig) {
-			storedSettings = userConfigToPluginSettings(userConfig);
-		} else if (legacyData && typeof legacyData === 'object') {
-			storedSettings = legacyData as PluginSettings;
-			const dataObj = legacyData as Record<string, unknown>;
-			if (Array.isArray(dataObj.conversations)) {
-				legacyConversations = dataObj.conversations as Conversation[];
-			}
-		}
-
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, storedSettings ?? {});
-		this.legacyConversations = legacyConversations;
-		console.debug(`[Settings] Read config files: ${Date.now() - configStart}ms`);
-
-		const hydrateStart = Date.now();
-		const hydrated = await this.dataService.hydrateAll(this.settings);
-		Object.assign(this.settings, hydrated);
-		console.debug(`[Settings] Hydrate all: ${Date.now() - hydrateStart}ms`);
-
-		// Migrate old agents: modelId → modelStrategy
-		let settingsMutated = false;
-		for (const agent of this.settings.agents) {
-			const agentWithOldModel = agent as Agent & { modelId?: string };
-			if ('modelId' in agent && typeof agentWithOldModel.modelId === 'string') {
-				agent.modelStrategy = { strategy: 'fixed', modelId: agentWithOldModel.modelId };
-				delete agentWithOldModel.modelId;
-				settingsMutated = true;
-			}
-			if (!agent.modelStrategy) {
-				agent.modelStrategy = { strategy: 'default', modelId: this.settings.defaultModel || 'gpt-4o' };
-				settingsMutated = true;
-			}
-		}
-
-		// Migrate legacy per-source enable lists into toolAccess. This handles
-		// agents loaded via `agentRepository.loadAll()` (the dominant path
-		// once a user has saved agents to data/agents/*.json) — those bypass
-		// `userConfigToPluginSettings`'s Stage A migration entirely.
-		// The function is idempotent, so re-running on already-migrated agents
-		// is a no-op.
-		const cliIds = (this.settings.cliTools ?? []).map((c) => c.id);
-		const agentChanged = migrateAllAgents(this.settings.agents, cliIds);
-		if (agentChanged.size > 0) {
-			settingsMutated = true;
-			console.debug(`[Settings] Migrated toolAccess for ${agentChanged.size} agent(s)`);
-		}
-
-		if (!userConfig || settingsMutated) {
-			await this.writeUserSettingsFile(this.settings);
-		}
-
-		console.debug(`[Settings] Total load time: ${Date.now() - totalStart}ms`);
+	async loadSettings(): Promise<void> {
+		await this.store.load();
+		this.settings = this.store.current;
 	}
 
-	async saveSettings() {
-		await this.dataService.persistAll(this.settings);
-		await this.writeUserSettingsFile(this.settings);
-	}
-
-	private async readUserConfigFile(): Promise<UserConfig | null> {
-		const adapter = this.app.vault.adapter;
-		if (!(await adapter.exists(USER_CONFIG_PATH))) {
-			return null;
-		}
-		try {
-			const raw = await adapter.read(USER_CONFIG_PATH);
-			return JSON.parse(raw) as UserConfig;
-		} catch (error) {
-			console.error('Failed to read user config:', error);
-			return null;
-		}
-	}
-
-	private async writeUserSettingsFile(settings: PluginSettings): Promise<void> {
-		await this.ensureFolderExists(USER_CONFIG_FOLDER);
-		const payload = pluginSettingsToUserConfig(settings);
-		await this.app.vault.adapter.write(USER_CONFIG_PATH, JSON.stringify(payload, null, 2));
-	}
-
-	private async userConfigExists(): Promise<boolean> {
-		return await this.app.vault.adapter.exists(USER_CONFIG_PATH);
-	}
-
-	private async ensureFolderExists(folder: string): Promise<void> {
-		if (await this.app.vault.adapter.exists(folder)) {
-			return;
-		}
-
-		const segments = folder.split('/');
-		let current = '';
-		for (const segment of segments) {
-			current = current ? `${current}/${segment}` : segment;
-			if (!(await this.app.vault.adapter.exists(current))) {
-				await this.app.vault.createFolder(current);
-			}
-		}
+	async saveSettings(): Promise<void> {
+		await this.store.save();
 	}
 
 	private async migrateConversationsIfNeeded() {
-		if (!this.conversationStorageService) {
-			console.error('Conversation storage service not initialized');
-			return;
-		}
-
-		this.conversationMigrationService = new ConversationMigrationService(this.conversationStorageService);
-		
-		const needsMigration = await this.conversationMigrationService.isMigrationNeeded();
-		const legacyConversations = this.legacyConversations ?? [];
+		const migration = new ConversationMigrationService(this.conversations);
+		const needsMigration = await migration.isMigrationNeeded();
+		const legacyConversations = this.store.legacyConversations;
 		
 		if (needsMigration && legacyConversations.length > 0) {
 			console.debug('Starting conversation migration...');
 			
-			const success = await this.conversationMigrationService.migrateFromOldFormat(legacyConversations);
+			const success = await migration.migrateFromOldFormat(legacyConversations);
 			
 			if (success) {
 				console.debug('Conversation migration completed successfully');
-				this.legacyConversations = [];
+				legacyConversations.length = 0;
 				this.settings.conversations = [];
 				await this.saveSettings();
 			} else {
@@ -1318,13 +256,4 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			}
 		}
 	}
-
-	public async getConversationStorageService(): Promise<ConversationStorageService> {
-		if (!this.conversationStorageService) {
-			this.conversationStorageService = new ConversationStorageService(this.app);
-			await this.conversationStorageService.initialize();
-		}
-		return this.conversationStorageService;
-	}
-
 }

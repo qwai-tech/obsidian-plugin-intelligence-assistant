@@ -1,4 +1,4 @@
-import { ItemView, WorkspaceLeaf, Notice, Menu, TFile, TFolder, setIcon } from 'obsidian';
+import { ItemView, WorkspaceLeaf, Notice, TFile, TFolder, setIcon } from 'obsidian';
 import { t } from '@/i18n';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import { SearchableReferenceModal } from '@/presentation/components/modals/searchable-reference-modal';
@@ -14,43 +14,28 @@ import {
 	type CapabilityReference,
 } from '@/application/agents/agent-capability-summary';
 import { ModelManager } from '@qwai/obsidian-llm';
-import { marked } from 'marked';
-import {
-	WebSearchService,
-	ChatService,
-	AgentMemoryService
-} from '@/application/services';
-import { AgentEngineLoop, AgentSenseService, HistoryCompactor, ObsidianAgentRunStateStore } from '@/application/agents';
-import { RAGManager } from '@/infrastructure/rag-manager';
-import { ProviderFactory } from '@qwai/obsidian-llm';
-import { VaultExportService } from '@/application/services/vault-export-service';
 import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import { renderMessage, MessageRendererCallbacks } from '@/presentation/components/chat/message-renderer';
-import { updateExecutionTrace, createAgentExecutionTraceContainer, hasAgentToolCall, extractFinalContent, reconstructAgentSteps } from '@/presentation/components/chat/handlers/tool-call-handler';
-import {
-	MessageController,
-	AgentController,
-	InputController,
-	ChatController
-} from '@/presentation/components/chat/controllers';
+import { hasAgentToolCall, extractFinalContent, reconstructAgentSteps } from '@/presentation/components/chat/handlers/tool-call-handler';
+import { InputController } from '@/presentation/components/chat/controllers/input-controller';
+import { ChatController } from '@/presentation/components/chat/controllers/chat-controller';
 import { ChatHeaderComponent } from '@/presentation/components/chat/chat-header.component';
 import { ChatInputComponent } from '@/presentation/components/chat/chat-input.component';
 import { MentionSuggest } from '@/presentation/suggest/mention-suggest';
 import { internalLinktextFromEvent, triggerHoverLink } from '@/presentation/chat/hover-link';
 import { RagStatusPanel } from '@/presentation/components/chat/rag-status-panel';
-import { resolveMessageProviderId } from '@/presentation/components/chat/utils';
-import { ObsidianFileSystem } from '@/infrastructure/obsidian/obsidian-file-system';
-import { ObsidianHttpClient } from '@/infrastructure/obsidian/obsidian-http-client';
+import { resolveMessageProviderId } from '@/presentation/components/chat/utils/provider-utils';
+import { providerAvatar, providerColor } from '@/presentation/components/provider-meta';
 import { TestIds } from '@/presentation/utils/test-ids';
-import { } from '@/presentation/components/utils/dom-helpers';
+import type { AppServices } from '@/presentation/app-services';
 import {
 	applyWriteProposal as applyWriteProposalToVault,
 	type WriteProposal,
 } from '@/application/services/write-proposal-service';
+import { errorMessage } from '@/utils/errors';
 
 export const CHAT_VIEW_TYPE = 'intelligence-assistant-chat';
-
 
 export class ChatView extends ItemView {
 	// Centralized state management
@@ -63,31 +48,22 @@ export class ChatView extends ItemView {
 	private mentionSuggest: MentionSuggest | null = null;
 
 	// Controllers
-	private messageController: MessageController;
-	private agentController: AgentController;
 	private inputController: InputController;
 	private chatController: ChatController;
 
 	private plugin: IntelligenceAssistantPlugin;
 	private chatContainer: HTMLElement;
 	private scrollToBottomBtn: HTMLElement;
-	private inputContainer: HTMLElement;
 	public modelSelect: HTMLSelectElement; // Public so it can be accessed by DocumentGrader
 
 	private conversationListContainer: HTMLElement;
 	private mainChatContainer: HTMLElement;
 	private attachmentContainer: HTMLElement | null = null;
-	private referenceContainer: HTMLElement | null = null;
 	private ragActionItem: HTMLElement | null = null;
 	private webActionItem: HTMLElement | null = null;
-	private imageActionItem: HTMLElement | null = null;
 	private pendingAgentTask: { prompt: string; displayText: string } | null = null;
 
-	// Services
-	private ragManager: RAGManager;
-	private webSearchService: WebSearchService;
-	private chatService: ChatService;
-	private vaultExportService: VaultExportService;
+	private services: AppServices;
 	private ragStatusPanel: RagStatusPanel;
 
 	// UI elements
@@ -100,56 +76,9 @@ export class ChatView extends ItemView {
 		this.state = new ChatViewState();
 
 		// Initialize controllers
-		this.messageController = new MessageController(this.app, this.plugin, this.state);
-		this.agentController = new AgentController(this.app, this.plugin, this.state);
 		this.inputController = new InputController(this.app, this.plugin, this.state);
 		this.chatController = new ChatController(this.app, this.plugin, this.state);
 
-		this.ragManager = this.plugin.getRAGManager();
-
-		this.webSearchService = new WebSearchService(this.plugin.settings.webSearchConfig, new ObsidianHttpClient());
-		const agentMemoryRepository = this.plugin.getAgentMemoryRepository();
-		const agentMemoryService = agentMemoryRepository ? new AgentMemoryService(agentMemoryRepository) : undefined;
-		const senseService = new AgentSenseService(this.app, this.ragManager, agentMemoryService);
-		const tokenUsageRepo = this.plugin.tokenUsageRepo;
-		const agentEngineLoop = new AgentEngineLoop({
-			app: this.app,
-			toolRegistry: this.plugin.getToolRegistry(),
-			senseService,
-			historyCompactor: new HistoryCompactor(),
-			webSearchService: this.webSearchService,
-			ragManager: this.ragManager,
-			agentRunStateStore: new ObsidianAgentRunStateStore(this.app),
-			createProvider: (modelId) => {
-				const config = ModelManager.findConfigForModelByProvider(modelId, this.plugin.settings.llmConfigs);
-				return config ? { provider: ProviderFactory.createProvider(config), providerId: config.provider } : null;
-			},
-			recordUsage: tokenUsageRepo
-				? async (record) => {
-					await tokenUsageRepo.recordUsage(record);
-					// Refresh the status bar so cumulative token usage stays live.
-					this.plugin.refreshStatusBar();
-				}
-				: undefined,
-			defaultModel: this.plugin.settings.defaultModel,
-		});
-		this.chatService = new ChatService(
-			new ObsidianFileSystem(this.app),
-			this.ragManager,
-			this.webSearchService,
-			this.plugin.settings.llmConfigs,
-			this.plugin.tokenUsageRepo ?? undefined,
-			this.plugin.settings.defaultModel,
-			agentEngineLoop
-		);
-		this.vaultExportService = new VaultExportService(this.app);
-		this.ragStatusPanel = new RagStatusPanel(
-			this.app,
-			this.ragManager,
-			() => this.state.enableRAG,
-			() => this.state.mode,
-			() => this.plugin.settings.ragConfig
-		);
 	}
 
 	getViewType(): string {
@@ -165,6 +94,14 @@ export class ChatView extends ItemView {
 	}
 
 	async onOpen() {
+		this.services = await this.plugin.whenServicesReady();
+		this.ragStatusPanel = new RagStatusPanel(
+			this.app,
+			this.services.rag,
+			() => this.state.enableRAG,
+			() => this.state.mode,
+			() => this.plugin.settings.ragConfig
+		);
 		const container = this.containerEl.children[1] as HTMLElement;
 		container.empty();
 		container.addClass('intelligence-assistant-chat-container');
@@ -200,7 +137,6 @@ export class ChatView extends ItemView {
 		this.chatHeader = new ChatHeaderComponent(
 			this.mainChatContainer,
 			this.plugin,
-			this.state,
 			{
 				onToggleConversations: () => this.toggleConversationListVisibility(),
 				onShowCapabilities: () => this.showAgentCapabilities(),
@@ -241,7 +177,7 @@ export class ChatView extends ItemView {
 				onToggleWeb: async () => await this.handleQuickActionWeb(),
 				onShowReferenceMenu: () => this.showReferenceMenu(),
 				onStopStreaming: () => {
-					this.state.stopStreamingRequested = true;
+					this.state.stopRun();
 					if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
 					new Notice(t('chat.notices.stopping'));
 				},
@@ -252,12 +188,9 @@ export class ChatView extends ItemView {
 		);
 
 		// Redirect property references
-		this.inputContainer = this.chatInput.inputContainer;
-		this.referenceContainer = this.chatInput.referenceContainer;
 		this.attachmentContainer = this.chatInput.attachmentContainer;
 		this.ragActionItem = this.chatInput.ragActionItem;
 		this.webActionItem = this.chatInput.webActionItem;
-		this.imageActionItem = this.chatInput.imageActionItem;
 		this.stopBtn = this.chatInput.stopBtn;
 		this.modelSelect = this.chatInput.modelSelect;
 
@@ -282,7 +215,6 @@ export class ChatView extends ItemView {
 		await this.updateImageButtonVisibility();
 
 		// Initialize MCP servers
-		this.initializeMCPServers();
 
 		await this.updateOptionsDisplay();
 
@@ -316,13 +248,7 @@ export class ChatView extends ItemView {
 			});
 		});
 
-		// Always initialize RAG manager to load existing data from storage for status display
-		// This ensures the status shows correctly even when RAG is not enabled for search
 		try {
-			this.ragManager.updateConfig(this.plugin.settings.ragConfig);
-			await this.ragManager.initialize();
-			
-			// Update RAG status after initialization completes
 			await this.updateRagStatus();
 		} catch (_error) {
 			const err = _error instanceof Error ? _error : new Error(String(_error));
@@ -330,19 +256,9 @@ export class ChatView extends ItemView {
 			new Notice(t('chat.notices.ragInitError', { message: err.message }));
 		}
 
-		// Initialize RAG if enabled for actual search functionality
-		if (this.state.enableRAG && this.plugin.settings.ragConfig.enabled) {
-			// RAG manager is already initialized above, so we can proceed with search functionality
-		}
-
-		// Initialize controllers
-		void this.messageController.initialize();
-		void this.agentController.initialize();
 		void this.inputController.initialize();
 		void this.chatController.initialize();
 
-		// Configure controllers with UI elements
-		this.messageController.setContainer(this.chatContainer);
 		this.inputController.setInputElement(this.chatInput.textarea);
 		this.inputController.setAttachmentPreviewElement(this.attachmentContainer);
 
@@ -350,10 +266,11 @@ export class ChatView extends ItemView {
 		this.conversationManager = new ConversationManager(
 			this.app,
 			this.plugin,
+			this.services.conversations,
+			this.services.namer,
 			this.state,
 			this.chatContainer,
 			this.modelSelect,
-			(message: Message) => this.addMessageToUI(message),
 			(messages: Message[]) => this.renderMessageList(messages),
 			() => this.updateTokenSummary()
 		);
@@ -361,11 +278,8 @@ export class ChatView extends ItemView {
 
 		// Configure chat controller with full pipeline options (after conversationManager is set up)
 		this.chatController.configure({
-			messagesContainer: this.chatContainer,
 			chatContainer: this.chatContainer,
-			messageController: this.messageController,
-			agentController: this.agentController,
-			chatService: this.chatService,
+			chatService: this.services.chat,
 			conversationManager: this.conversationManager,
 			ragStatusPanel: this.ragStatusPanel,
 			getSelectedModel: () => this.modelSelect?.value ?? '',
@@ -387,8 +301,11 @@ export class ChatView extends ItemView {
 				} else {
 					if (this.stopBtn) this.stopBtn.addClass('ia-hidden');
 				}
-				// Reflect running state in the status bar item.
-				this.plugin.setAgentRunning(isStreaming);
+				if (isStreaming) {
+					this.services.activity.begin();
+				} else {
+					this.services.activity.end();
+				}
 			},
 		});
 		this.conversationManager.on('conversation-loaded', (conv: Conversation) => {
@@ -410,7 +327,6 @@ export class ChatView extends ItemView {
 		// Load or create initial conversation
 		await this.conversationManager.loadOrCreateConversation();
 	}
-
 
 	public async refreshModels(showNotice: boolean = false) {
 		try {
@@ -519,25 +435,14 @@ export class ChatView extends ItemView {
 		}
 	}
 
-
-	/**
-	 * Determines if web search should be automatically triggered based on the user's query
-	 */
-	private shouldAutoTriggerWebSearch(query: string): boolean {
-		if (!this.plugin.settings.webSearchConfig.autoTrigger) {
-			return false;
-		}
-		return this.webSearchService.shouldSearch(query);
-	}
-
 	private addMessageToUI(message: Message): HTMLElement {
 		const callbacks: MessageRendererCallbacks = {
 					saveMessageToNewNote: this.saveMessageToNewNote.bind(this) as (message: Message) => Promise<void>,
 					insertMessageToNote: this.insertMessageToNote.bind(this) as (message: Message) => Promise<void>,
 					regenerateMessage: this.regenerateMessage.bind(this) as (message: Message, element: HTMLElement) => Promise<void>,
 					displayRagSources: (container: HTMLElement, message: Message) => this.displayRagSources(container, message.ragSources ?? []),
-					getProviderAvatar: this.getProviderAvatar.bind(this) as (message: Message) => string,
-					getProviderColor: this.getProviderColor.bind(this) as (message: Message) => string,
+					getProviderAvatar: (message: Message) => message.role === 'user' ? '🧑' : providerAvatar(resolveMessageProviderId(message, this.plugin)),
+					getProviderColor: (message: Message) => providerColor(resolveMessageProviderId(message, this.plugin)),
 					applyWriteProposal: (proposal: WriteProposal) => this.applyWriteProposal(proposal)
 		};
 
@@ -553,18 +458,6 @@ export class ChatView extends ItemView {
 		if (emptyState) emptyState.remove();
 
 		return renderMessage(this.chatContainer, message, options, callbacks, { animate: true });
-	}
-
-	/** Render markdown content into a target element (used after CLI streaming completes) */
-	private renderMarkdownContent(target: HTMLElement, content: string): void {
-		const cleaned = content.replace(/\n{3,}/g, '\n\n');
-		const html = marked.parse(cleaned) as string;
-		const parser = new DOMParser();
-		const doc = parser.parseFromString(html, 'text/html');
-		target.empty();
-		Array.from(doc.body.childNodes).forEach(node => {
-			target.appendChild(node.cloneNode(true));
-		});
 	}
 
 	private renderEmptyState(): void {
@@ -649,11 +542,6 @@ export class ChatView extends ItemView {
 		}
 	}
 
-	private styleActionButton(btn: HTMLButtonElement) {
-		btn.addClass('ia-action-btn');
-		btn.addClass('ia-clickable');
-	}
-
 	private showReferenceMenu() {
 		new SearchableReferenceModal(this.app, (selectedItems: (TFile | TFolder)[]) => {
 			selectedItems.forEach(item => {
@@ -681,11 +569,11 @@ export class ChatView extends ItemView {
 	}
 
 	private saveMessageToNewNote(message: Message) {
-		this.vaultExportService.saveToNewNote(message);
+		void this.services.vaultExport.saveToNewNote(message);
 	}
 
 	private insertMessageToNote(message: Message) {
-		this.vaultExportService.insertIntoNote(message);
+		void this.services.vaultExport.insertIntoNote(message);
 	}
 
 	private async applyWriteProposal(proposal: WriteProposal): Promise<void> {
@@ -699,141 +587,12 @@ export class ChatView extends ItemView {
 		new Notice(`Applied proposal: ${proposal.path}`);
 	}
 
-
 	private displayRagSources(messageBody: HTMLElement, ragSources: import('@/types').RAGSource[]): void {
 		this.ragStatusPanel.displaySources(messageBody, ragSources);
-	}
-
-	private createCheckbox(container: HTMLElement, label: string, checked: boolean, onChange: (checked: boolean) => void): HTMLInputElement {
-		const checkboxContainer = container.createDiv('checkbox-container');
-		const checkbox = checkboxContainer.createEl('input', { type: 'checkbox' });
-		checkbox.checked = checked;
-		checkbox.addEventListener('change', () => onChange(checkbox.checked));
-
-		const labelEl = checkboxContainer.createEl('label');
-		labelEl.setText(label);
-		labelEl.addClass('ia-checkbox-label');
-		labelEl.addClass('ia-clickable');
-		labelEl.addEventListener('click', () => {
-			checkbox.checked = !checkbox.checked;
-			onChange(checkbox.checked);
-		});
-
-		return checkbox;
-	}
-
-	private createToggleButton(
-		container: HTMLElement,
-		options: { icon: string; label: string; active: boolean; disabled?: boolean; disabledMessage?: string; onChange: (active: boolean) => void; statusText?: string }
-	): HTMLElement {
-		const toggleBtn = container.createEl('button');
-		toggleBtn.addClass('toggle-btn');
-		if (options.active) {
-			toggleBtn.addClass('active');
-		}
-		if (options.disabled) {
-			toggleBtn.addClass('disabled');
-			toggleBtn.disabled = true;
-			if (options.disabledMessage) {
-				toggleBtn.title = options.disabledMessage;
-			}
-		}
-
-		const iconSpan = toggleBtn.createEl('span', { cls: 'toggle-icon' });
-		iconSpan.setText(options.icon);
-
-		const labelSpan = toggleBtn.createEl('span', { cls: 'toggle-label' });
-		labelSpan.setText(options.label);
-
-		// Add status text if provided
-		if (options.statusText) {
-			const statusSpan = toggleBtn.createEl('span', { cls: 'toggle-status ia-toggle-status' });
-			statusSpan.setText(` (${options.statusText ?? ''})`);
-		}
-
-		toggleBtn.addEventListener('click', (e) => {
-			e.preventDefault();
-			if (options.disabled) {
-				if (options.disabledMessage) {
-					new Notice(options.disabledMessage);
-				}
-				return;
-			}
-			const newActive = !toggleBtn.hasClass('active');
-			if (newActive) {
-				toggleBtn.addClass('active');
-			} else {
-				toggleBtn.removeClass('active');
-			}
-			options.onChange(newActive);
-		});
-
-		return toggleBtn;
 	}
 	
 	private async updateRagStatus(target?: HTMLElement | null) {
 		await this.ragStatusPanel.updateStatus(target ?? this.ragActionItem);
-	}
-
-	private getProviderAvatar(message: Message): string {
-		if (message.role === 'user') {
-			return '🧑';
-		}
-
-		const provider = resolveMessageProviderId(message, this.plugin);
-		const avatars: Record<string, string> = {
-			'openai': '🤖',
-			'anthropic': '🧠',
-			'google': '🔍',
-			'ollama': '🦙',
-			'deepseek': '🌊',
-			'openrouter': '🔀',
-			'sap-ai-core': '💼',
-			'groq': '⚡',
-			'mistral': '🌬️',
-			'togetherai': '🤝',
-			'perplexity': '❓',
-			'cohere': '🌐',
-			'huggingface': '😊',
-			'azure': '☁️',
-			'bedrock': '🪨',
-			'vertex': '🔺',
-			'fireworks': '🎆',
-			'lepton': '⚛️',
-			'xai': '❌'
-		};
-
-		return provider ? (avatars[provider] || '🤖') : '🤖';
-	}
-
-	private getProviderColor(message: Message): string {
-		const provider = resolveMessageProviderId(message, this.plugin);
-		const colors: Record<string, string> = {
-			'openai': '#10a37f',
-			'anthropic': '#191919',
-			'google': '#4285f4',
-			'ollama': '#000000',
-			'deepseek': '#0066cc',
-			'openrouter': '#6366f1',
-			'sap-ai-core': '#0070f2',
-			'groq': '#f97316',
-			'mistral': '#0d9488',
-			'togetherai': '#ec4899'
-		};
-		return provider ? (colors[provider] || '#666666') : '#666666';
-	}
-
-	/**
-	 * Estimate token count from text content
-	 * Uses a simple approximation: ~1 token = 4 characters for English text
-	 * This is a rough estimate; actual tokenizers may differ
-	 */
-	private estimateTokens(text: string): number {
-		if (!text || typeof text !== 'string') return 0;
-		
-		// Simple estimation: 1 token ≈ 4 characters for English text
-		// More accurate would be to use a tokenizer, but this is a good approximation
-		return Math.ceil(text.length / 4);
 	}
 
 	/**
@@ -866,7 +625,7 @@ export class ChatView extends ItemView {
 
 	private buildCurrentCapabilitySummary(references: Array<TFile | TFolder> = this.state.referencedFiles): AgentCapabilitySummary {
 		const activeAgent = this.getActiveAgent();
-		const tools = resolveAgentToolsForAgent(this.plugin.getToolRegistry(), activeAgent);
+		const tools = resolveAgentToolsForAgent(this.services.tools.registry, activeAgent);
 		return buildAgentCapabilitySummary({
 			mode: this.state.mode,
 			agent: activeAgent,
@@ -917,11 +676,6 @@ export class ChatView extends ItemView {
 		}
 		this.chatContainer.scrollTo({ top: this.chatContainer.scrollHeight, behavior: 'smooth' });
 	}
-
-
-
-
-
 
 	private async handleModeChange(mode: 'chat' | 'agent') {
 		this.state.mode = mode;
@@ -1243,7 +997,6 @@ export class ChatView extends ItemView {
 		return this.chatInput.refreshAgentSelect(preferredAgentId);
 	}
 
-
 	private async applyAgentConfig(agentId: string, options?: { silent?: boolean }) {
 		const agent = this.plugin.settings.agents.find(a => a.id === agentId);
 		if (!agent) return;
@@ -1289,15 +1042,10 @@ export class ChatView extends ItemView {
 		this.state.enableRAG = agent.ragEnabled;
 		this.state.enableWebSearch = agent.webSearchEnabled;
 
-		// Update RAG manager with agent configuration
 		try {
-			this.ragManager.updateConfig(this.plugin.settings.ragConfig);
-			await this.ragManager.initialize();
-			
-			// Update RAG status
-				await this.updateRagStatus();
+			await this.updateRagStatus();
 		} catch (_error) {
-			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			const errMsg = errorMessage(_error);
 			console.error('Error updating RAG with agent config:', errMsg);
 		}
 
@@ -1306,63 +1054,6 @@ export class ChatView extends ItemView {
 
 		if (!options?.silent) {
 			new Notice(t('chat.notices.agentConfigApplied', { name: `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}` }));
-		}
-	}
-
-	private agentExecutionTraceEl: HTMLElement | null = null;
-
-	private updateExecutionTrace(container: HTMLElement) {
-		updateExecutionTrace(container, this.state.agentExecutionSteps);
-	}
-
-	private createAgentExecutionTraceContainer(messageBody: HTMLElement): HTMLElement {
-		return createAgentExecutionTraceContainer(messageBody, this.state.agentExecutionSteps.length);
-	}
-
-	private displayAgentFinalAnswer(contentEl?: HTMLElement) {
-		if (!contentEl) {
-			return;
-		}
-		if (this.state.agentExecutionSteps.length === 0) {
-			return;
-		}
-
-		const lastMessage = this.state.messages[this.state.messages.length - 1];
-		if (!lastMessage || lastMessage.role !== 'assistant') {
-			return;
-		}
-
-		const hasToolCall = lastMessage.content.includes('```json') &&
-			lastMessage.content.match(/```json\s*\n([\s\S]*?)\n```/);
-
-		if (!hasToolCall) {
-			let finalAnswer = lastMessage.content;
-			finalAnswer = finalAnswer.replace(/```json[\s\S]*?```/g, '').trim();
-			finalAnswer = finalAnswer.replace(/^Thought:\s*/i, '').trim();
-			finalAnswer = finalAnswer.replace(/^Observation:\s*/i, '').trim();
-			const actionIndex = finalAnswer.toLowerCase().indexOf('action:');
-			if (actionIndex !== -1) {
-				finalAnswer = finalAnswer.substring(0, actionIndex).trim();
-			}
-
-			if (finalAnswer) {
-				contentEl.empty();
-				const finalAnswerEl = contentEl.createDiv('agent-final-answer');
-				try {
-					const html = marked.parse(finalAnswer) as string;
-					// Use DOMParser to safely parse HTML
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(html, 'text/html');
-					Array.from(doc.body.childNodes).forEach(node => {
-						finalAnswerEl.appendChild(node.cloneNode(true));
-					});
-				} catch (error) {
-					console.debug('Failed to render agent final answer as markdown, falling back to text.', error);
-					finalAnswerEl.createDiv().setText(finalAnswer);
-				}
-
-							(lastMessage as { agentExecutionSteps?: unknown[] }).agentExecutionSteps = [...this.state.agentExecutionSteps];
-			}
 		}
 	}
 
@@ -1382,53 +1073,6 @@ export class ChatView extends ItemView {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Continue the agent conversation after tool execution
-	 */
-	// continueAgentConversation removed — agent loop is now in ChatService.executeAgentLoop()
-
-	private async clearchat() {
-		if (!await showConfirm(this.app, 'Clear all messages in this conversation?')) return;
-
-		this.state.messages = [];
-		this.chatContainer.empty();
-		await this.conversationManager.saveCurrentConversation();
-	}
-
-	private attachFile() {
-		// Get all markdown files in vault
-		const files = this.app.vault.getMarkdownFiles();
-
-		if (files.length === 0) {
-			new Notice(t('chat.notices.noFilesInVault'));
-			return;
-		}
-
-		// Create a simple file picker menu
-		const menu = new Menu();
-		files.slice(0, 20).forEach(file => {
-			menu.addItem((item) => {
-				item.setTitle(file.path)
-					.setIcon('document')
-					.onClick(() => {
-						void (async () => {
-							const content = await this.app.vault.read(file);
-							this.state.currentAttachments.push({
-								type: 'file',
-								name: file.name,
-								path: file.path,
-								content: content
-							});
-							this.updateAttachmentPreview();
-							new Notice(t('chat.notices.attached', { name: file.name ?? 'unknown' }));
-						})();
-					});
-			});
-		});
-
-		menu.showAtPosition({ x: 0, y: 0 });
 	}
 
 	private attachImage() {
@@ -1463,30 +1107,11 @@ export class ChatView extends ItemView {
 		return window.btoa(binary);
 	}
 
-	initializeMCPServers() {
-		const registry = this.plugin.getToolRegistry();
-		const mcpCount = registry.getTools().filter(t => t.origin.kind === 'mcp').length;
-		if (mcpCount === 0) {
-			console.debug('[MCP] No MCP tools available');
-		}
-	}
-
 	async onClose() {
-		// Cleanup controllers
-		void this.messageController?.cleanup();
-		void this.agentController?.cleanup();
+		this.mentionSuggest?.close();
 		void this.inputController?.cleanup();
 		void this.chatController?.cleanup();
-		// Explicitly ignore returned Promise from save to avoid floating promises on shutdown
-
-		// Cleanup RAG
-		if (this.ragManager) {
-			await this.ragManager.destroy();
-		}
-		// Persist any pending settings safely without awaiting here
-		void this.plugin.saveSettings();
-
-		// Shared tool manager stays active for background MCP access
+		await this.plugin.saveSettings();
 	}
 }
 	

@@ -5,30 +5,17 @@
 import { Notice, TFolder } from 'obsidian';
 import { BaseController } from './base-controller';
 import { t } from '@/i18n';
-import { MessageController } from './message-controller';
-import { AgentController } from './agent-controller';
-import type { Message, LLMConfig, ModelInfo, FileReference } from '@/types';
+import type { Message, LLMConfig, FileReference } from '@/types';
 import type { ChatService } from '@/application/services/chat.service';
-import { renderAssistantMarkdown, appendTokenUsageToMessage } from '@/presentation/components/chat/message-renderer';
+import { renderAssistantMarkdown, appendTokenUsageToMessage, renderLiveTrace } from '@/presentation/components/chat/message-renderer';
 import type { ConversationManager } from '@/presentation/components/chat/managers/conversation-manager';
 import type { RagStatusPanel } from '@/presentation/components/chat/rag-status-panel';
 import type { StreamChunk } from '@/types/common/llm';
 import type { RAGSource } from '@/types';
-
-export interface ChatUICallbacks {
-	onChunk: (chunk: StreamChunk) => void;
-	onComplete: (message: Message) => void;
-	onError: (error: Error) => void;
-	onRagSources?: (sources: unknown[]) => void;
-	onWebSearch?: (results: unknown[]) => void;
-	checkAbort?: () => boolean;
-}
+import { errorMessage } from '@/utils/errors';
 
 export interface ChatControllerOptions {
-	messagesContainer: HTMLElement;
 	chatContainer: HTMLElement;
-	messageController: MessageController;
-	agentController: AgentController;
 	chatService: ChatService;
 	conversationManager: ConversationManager;
 	ragStatusPanel: RagStatusPanel;
@@ -39,14 +26,10 @@ export interface ChatControllerOptions {
 	findMessageContentElement: (el: HTMLElement) => HTMLElement | null;
 	findMessageBodyElement: (el: HTMLElement) => HTMLElement | null;
 	onStreamingStateChange: (isStreaming: boolean) => void;
-	uiCallbacks?: ChatUICallbacks;
 }
 
 export class ChatController extends BaseController {
-	private messagesContainer!: HTMLElement;
 	private chatContainer!: HTMLElement;
-	private messageController!: MessageController;
-	private agentController!: AgentController;
 	private chatService!: ChatService;
 	private conversationManager!: ConversationManager;
 	private ragStatusPanel!: RagStatusPanel;
@@ -65,10 +48,7 @@ export class ChatController extends BaseController {
 	cleanup(): void { this.state.isStreaming = false; }
 
 	configure(options: ChatControllerOptions): void {
-		this.messagesContainer = options.messagesContainer;
 		this.chatContainer = options.chatContainer;
-		this.messageController = options.messageController;
-		this.agentController = options.agentController;
 		this.chatService = options.chatService;
 		this.conversationManager = options.conversationManager;
 		this.ragStatusPanel = options.ragStatusPanel;
@@ -135,16 +115,16 @@ export class ChatController extends BaseController {
 		try {
 			await this.handleAssistantResponse({ text, selectedModel, config, llmContent, targetMessage: userMessage });
 		} catch (_error) {
-			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			const errMsg = errorMessage(_error);
 			new Notice(t('chat.notices.chatError', { message: errMsg }));
-			const errorMessage: Message = {
+			const failureMessage: Message = {
 				role: 'assistant',
 				content: `❌ **Error:** ${errMsg}`,
 				model: selectedModel,
 			};
-			(errorMessage as { provider?: string | null }).provider = config.provider ?? null;
-			this.state.messages.push(errorMessage);
-			this.addMessageToUI(errorMessage);
+			(failureMessage as { provider?: string | null }).provider = config.provider ?? null;
+			this.state.messages.push(failureMessage);
+			this.addMessageToUI(failureMessage);
 			await this.conversationManager.saveCurrentConversation();
 		}
 	}
@@ -203,7 +183,7 @@ export class ChatController extends BaseController {
 			});
 			new Notice(t('chat.notices.regenerated'));
 		} catch (_error) {
-			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			const errMsg = errorMessage(_error);
 			new Notice(t('chat.notices.regenerateFailed', { message: errMsg }));
 			this.state.messages.push(originalAssistant);
 			this.addMessageToUI(originalAssistant);
@@ -211,7 +191,7 @@ export class ChatController extends BaseController {
 	}
 
 	stopGeneration(): void {
-		this.state.stopStreamingRequested = true;
+		this.state.stopRun();
 		new Notice(t('chat.notices.generationStopped'));
 	}
 
@@ -230,7 +210,7 @@ export class ChatController extends BaseController {
 
 	private finalizeStreamingUI(): void {
 		this.state.isStreaming = false;
-		this.state.stopStreamingRequested = false;
+		this.state.endRun();
 		this.onStreamingStateChange(false);
 	}
 
@@ -268,7 +248,7 @@ export class ChatController extends BaseController {
 		const contentEl = this.findMessageContentElement(assistantMessageEl);
 
 		this.state.isStreaming = true;
-		this.state.stopStreamingRequested = false;
+		const signal = this.state.startRun();
 		this.onStreamingStateChange(true);
 
 		let currentRagSources: RAGSource[] = [];
@@ -278,7 +258,7 @@ export class ChatController extends BaseController {
 				await this.runAgentLoop(
 					llmMessages, selectedModel, contextWindow, activeSystemPrompts,
 					placeholderAssistant, assistantMessageEl, contentEl,
-					targetMessage.references ?? []
+					targetMessage.references ?? [], signal
 				);
 				return;
 			}
@@ -359,13 +339,25 @@ export class ChatController extends BaseController {
 							}
 						})();
 					},
-					checkAbort: () => this.state.stopStreamingRequested,
+					signal,
 				}
 			);
 		} catch (error) {
 			this.finalizeStreamingUI();
 			throw error;
 		}
+	}
+
+	private createLiveTrace(messageEl: HTMLElement, contentEl: HTMLElement | null): () => void {
+		const body = this.findMessageBodyElement(messageEl);
+		if (!body) {
+			return () => undefined;
+		}
+		const trace = body.createDiv('ia-live-trace');
+		if (contentEl?.parentElement === body) {
+			body.insertBefore(trace, contentEl);
+		}
+		return () => renderLiveTrace(trace, this.state.agentExecutionSteps);
 	}
 
 	private async runAgentLoop(
@@ -376,13 +368,14 @@ export class ChatController extends BaseController {
 		placeholderAssistant: Message,
 		assistantMessageEl: HTMLElement,
 		contentEl: HTMLElement | null,
-		references: FileReference[]
+		references: FileReference[],
+		signal: AbortSignal,
 	): Promise<void> {
 		const isGenericAgent = !this.plugin.settings.activeAgentId;
 		const activeAgent = this.getActiveAgent();
 
-		// Reset execution steps from previous turns to avoid state accumulation
 		this.state.agentExecutionSteps = [];
+		const refreshTrace = this.createLiveTrace(assistantMessageEl, contentEl);
 
 		await this.chatService.executeAgentLoop(
 			llmMessages,
@@ -425,6 +418,7 @@ export class ChatController extends BaseController {
 						timestamp: Date.now(),
 						status: 'pending',
 					});
+					refreshTrace();
 				},
 				onToolResult: (_toolName, success, output, phase) => {
 					const lastAction = [...this.state.agentExecutionSteps].reverse().find(s => s.type === 'action' && s.status === 'pending');
@@ -433,6 +427,7 @@ export class ChatController extends BaseController {
 						lastAction.result = output;
 						lastAction.phase = lastAction.phase ?? phase;
 					}
+					refreshTrace();
 				},
 				onThought: (thought, phase) => {
 					this.state.agentExecutionSteps.push({
@@ -441,6 +436,7 @@ export class ChatController extends BaseController {
 						phase,
 						timestamp: Date.now(),
 					});
+					refreshTrace();
 				},
 				onComplete: (finalMessage) => {
 					void (async () => {
@@ -477,7 +473,7 @@ export class ChatController extends BaseController {
 					new Notice(t('chat.notices.chatError', { message: error.message }));
 					this.finalizeStreamingUI();
 				},
-				checkAbort: () => this.state.stopStreamingRequested,
+				signal,
 			}
 		);
 	}
@@ -494,28 +490,5 @@ export class ChatController extends BaseController {
 		const activeId = this.plugin.settings.activeAgentId;
 		if (!activeId) return null;
 		return this.plugin.settings.agents.find((a: { id: string }) => a.id === activeId) || null;
-	}
-
-	private getModelConfig(agent: { modelStrategy: { strategy: string; modelId?: string } }, currentModel?: string): LLMConfig | null {
-		const effectiveModelId = this.getAgentModelId(agent, currentModel);
-		const model = this.getModelInfo(effectiveModelId);
-		if (!model) return null;
-		return this.plugin.settings.llmConfigs.find((c: LLMConfig) => c.provider === model.provider) || null;
-	}
-
-	private getAgentModelId(agent: { modelStrategy: { strategy: string; modelId?: string } }, currentModel?: string): string {
-		switch (agent.modelStrategy.strategy) {
-			case 'fixed': return agent.modelStrategy.modelId || this.plugin.settings.defaultModel || '';
-			case 'chat-view': return currentModel || this.plugin.settings.defaultModel || '';
-			default: return this.plugin.settings.defaultModel || '';
-		}
-	}
-
-	private getModelInfo(modelId: string): ModelInfo | null {
-		for (const config of this.plugin.settings.llmConfigs) {
-			const model = config.cachedModels?.find((m: ModelInfo) => m.id === modelId);
-			if (model) return model;
-		}
-		return null;
 	}
 }

@@ -5,8 +5,8 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import type { Message } from '@/types';
 import { marked } from 'marked';
 import { enhanceRichMarkdown } from '@/presentation/chat/rich-markdown';
-import { getProviderMeta } from '@/presentation/components/components/provider-meta';
-import { getModelDisplayName, resolveMessageProviderId } from '@/presentation/components/chat/utils';
+import { getProviderMeta } from '@/presentation/components/provider-meta';
+import { getModelDisplayName, resolveMessageProviderId } from '@/presentation/components/chat/utils/provider-utils';
 import { createAgentExecutionTraceContainer, updateExecutionTrace, collapseExecutionTrace } from '@/presentation/components/chat/handlers/tool-call-handler';
 import type { AgentExecutionStep as TraceStep } from '@/presentation/state/chat-view-state';
 import { TestIds } from '@/presentation/utils/test-ids';
@@ -17,6 +17,7 @@ import {
 	type WriteProposal,
 	type BatchWriteProposal,
 } from '@/application/services/write-proposal-service';
+import { errorMessage } from '@/utils/errors';
 
 export interface MessageRendererContext {
 	app: App;
@@ -394,6 +395,11 @@ function renderReasoning(container: HTMLElement, message: Message) {
 	});
 }
 
+export function renderLiveTrace(container: HTMLElement, steps: Message['agentExecutionSteps']): void {
+	container.empty();
+	renderExecutionTrace(container, steps);
+}
+
 function renderExecutionTrace(
 	container: HTMLElement,
 	steps: Message['agentExecutionSteps'],
@@ -482,7 +488,7 @@ function renderBatchProposalCard(
 				applyBtn.addClass('is-applied');
 			} catch (error) {
 				console.error('[MessageRenderer] Failed to apply batch proposal', error);
-				new Notice(error instanceof Error ? error.message : String(error));
+				new Notice(errorMessage(error));
 				applyBtn.disabled = false;
 			}
 		})();
@@ -529,7 +535,7 @@ function renderSingleWriteProposalCard(
 				applyBtn.addClass('is-applied');
 			} catch (error) {
 				console.error('[MessageRenderer] Failed to apply write proposal', error);
-				new Notice(error instanceof Error ? error.message : String(error));
+				new Notice(errorMessage(error));
 				applyBtn.disabled = false;
 			}
 		})();
