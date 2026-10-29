@@ -88,7 +88,7 @@ export const baseConfig: TestrunnerConfig = {
 
 	cacheDir,
 
-	tsConfigPath: 'tsconfig.json',
+	tsConfigPath: path.resolve('tsconfig.json'),
 };
 
 // Default export so `wdio run wdio.conf.ts` fails fast rather than silently
