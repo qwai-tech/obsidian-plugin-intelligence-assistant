@@ -34,5 +34,4 @@ export * from './providers/google-provider';
 export * from './providers/deepseek-provider';
 export * from './providers/openrouter-provider';
 export * from './providers/ollama-provider';
-export * from './providers/sap-ai-core-provider';
 export * from './resilient-http';

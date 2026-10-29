@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "ต้องใช้ CLI ในเครื่อง",
-        "provideServiceKey": "ระบุคีย์บริการ",
         "configureBaseUrl": "กำหนดค่า Base URL",
         "addApiKey": "เพิ่มคีย์ API"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (ในเครื่อง)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "กำหนดเอง (เข้ากันได้กับ OpenAI)"
       },
       "modelFilter": {
         "name": "ตัวกรองโมเดล",
         "desc": "รูปแบบ regex ไม่บังคับเพื่อจำกัดโมเดลที่มีอยู่"
-      },
-      "resourceGroup": {
-        "name": "กลุ่มทรัพยากร",
-        "desc": "กลุ่มทรัพยากร SAP AI Core (ไม่บังคับ)"
-      },
-      "serviceKey": {
-        "name": "คีย์บริการ",
-        "desc": "คีย์บริการ SAP AI Core (สตริง JSON)"
       },
       "baseUrl": {
         "name": "Base URL",

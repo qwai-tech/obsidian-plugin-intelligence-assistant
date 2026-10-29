@@ -4,7 +4,7 @@ Multi-provider LLM client for Obsidian plugins — plus a hub contract so plugin
 can share one provider configuration instead of each shipping their own.
 
 Providers: OpenAI (and any OpenAI-compatible gateway), Anthropic, Google,
-DeepSeek, OpenRouter, Ollama, SAP AI Core.
+DeepSeek, OpenRouter, Ollama.
 
 ## Two problems, two mechanisms
 
@@ -95,7 +95,7 @@ you degrade to your own configuration instead of crashing.
 
 Obsidian has no permission model — anything a plugin exposes is reachable by
 every other enabled plugin, including ones the user doesn't trust. So `LLMHub`
-has no method that returns an `LLMConfig`, an `apiKey`, or a `serviceKey`.
+has no method that returns an `LLMConfig` or an `apiKey`.
 Callers get an `ILLMProvider`: they can spend the user's quota (unavoidable, and
 consented to by installing the plugin) but cannot walk off with the key.
 

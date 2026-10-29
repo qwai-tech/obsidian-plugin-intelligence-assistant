@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Vyžaduje lokálne CLI",
-        "provideServiceKey": "Zadajte servisný kľúč",
         "configureBaseUrl": "Konfigurovať základnú URL",
         "addApiKey": "Pridať API kľúč"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (lokálne)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Vlastné (kompatibilné s OpenAI)"
       },
       "modelFilter": {
         "name": "Filter modelov",
         "desc": "Voliteľný vzor regex na obmedzenie dostupných modelov"
-      },
-      "resourceGroup": {
-        "name": "Skupina zdrojov",
-        "desc": "Voliteľná skupina zdrojov SAP AI Core"
-      },
-      "serviceKey": {
-        "name": "Servisný kľúč",
-        "desc": "Servisný kľúč SAP AI Core (JSON reťazec)"
       },
       "baseUrl": {
         "name": "Základná URL",

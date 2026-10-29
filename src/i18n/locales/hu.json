@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Helyi CLI szükséges",
-        "provideServiceKey": "Adja meg a szolgáltatáskulcsot",
         "configureBaseUrl": "Konfigurálja az alap URL-t",
         "addApiKey": "Adjon hozzá API-kulcsot"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (helyi)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Egyéni (OpenAI-kompatibilis)"
       },
       "modelFilter": {
         "name": "Modellszűrő",
         "desc": "Opcionális regex minta az elérhető modellek korlátozásához"
-      },
-      "resourceGroup": {
-        "name": "Erőforráscsoport",
-        "desc": "Opcionális SAP AI Core erőforráscsoport"
-      },
-      "serviceKey": {
-        "name": "Szolgáltatáskulcs",
-        "desc": "SAP AI Core szolgáltatáskulcs (JSON karakterlánc)"
       },
       "baseUrl": {
         "name": "Alap URL",

@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "உள்ளூர் CLI தேவை",
-        "provideServiceKey": "சேவை விசையை வழங்கவும்",
         "configureBaseUrl": "அடிப்படை URL ஐ உள்ளமைக்கவும்",
         "addApiKey": "API விசையைச் சேர்க்கவும்"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (உள்ளூர்)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "தனிப்பயன் (OpenAI இணக்கமானது)"
       },
       "modelFilter": {
         "name": "மாதிரி வடிப்பான்",
         "desc": "கிடைக்கக்கூடிய மாதிரிகளைக் கட்டுப்படுத்த விருப்ப regex முறை"
-      },
-      "resourceGroup": {
-        "name": "வளக் குழு",
-        "desc": "விருப்ப SAP AI Core வளக் குழு"
-      },
-      "serviceKey": {
-        "name": "சேவை விசை",
-        "desc": "SAP AI Core சேவை விசை (JSON சரம்)"
       },
       "baseUrl": {
         "name": "அடிப்படை URL",

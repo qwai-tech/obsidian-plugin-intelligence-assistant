@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Necesită CLI local",
-        "provideServiceKey": "Furnizați cheia de serviciu",
         "configureBaseUrl": "Configurați URL de bază",
         "addApiKey": "Adăugați cheie API"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (local)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Personalizat (compatibil OpenAI)"
       },
       "modelFilter": {
         "name": "Filtru modele",
         "desc": "Model regex opțional pentru limitarea modelelor disponibile"
-      },
-      "resourceGroup": {
-        "name": "Grup de resurse",
-        "desc": "Grup de resurse SAP AI Core opțional"
-      },
-      "serviceKey": {
-        "name": "Cheie de serviciu",
-        "desc": "Cheia de serviciu SAP AI Core (șir JSON)"
       },
       "baseUrl": {
         "name": "URL de bază",

@@ -83,7 +83,6 @@ Intelligence Assistant 把 Obsidian 库变成本地 AI 工作区，包含：
 ## 已知工程热点
 
 - 仍有几个较大的界面模块（`agent-edit-modal.ts`、`mcp-inspector`、`message-renderer.ts`、`cli-tools-section.ts`）。
-- SAP AI Core 提供商是缓冲而非流式输出，且不支持工具调用。
 - MCP、OpenAPI 和 RAG 都会增加异步启动工作，回归问题常表现为初始化顺序错误。
 
 ## 建议的开发流程

@@ -128,10 +128,6 @@ export function displayProviderTab(
 		let guidance = '';
 
 		switch (config.provider) {
-			case 'sap-ai-core':
-				hasCredentials = Boolean(config.serviceKey);
-				guidance = t('settings.provider.guidance.provideServiceKey');
-				break;
 			case 'ollama':
 				hasCredentials = Boolean(ollamaBaseUrl);
 				guidance = t('settings.provider.guidance.configureBaseUrl');

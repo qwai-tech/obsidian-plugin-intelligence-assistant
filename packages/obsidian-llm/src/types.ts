@@ -150,20 +150,6 @@ export interface ModelInfo {
 	provider: string;
 	capabilities: ModelCapability[];
 	enabled: boolean;
-	// SAP AI Core specific fields
-	deploymentId?: string;
-	deploymentUrl?: string;
-	configurationId?: string;
-	configurationName?: string;
-	scenarioId?: string;
-	executableId?: string;
-	status?: string;
-	targetStatus?: string;
-	createdAt?: string;
-	modifiedAt?: string;
-	submissionTime?: string;
-	startTime?: string;
-	completionTime?: string;
 }
 
 export interface ProviderCapabilities {
@@ -194,10 +180,6 @@ export interface LLMConfig {
 	apiKey?: string;
 	baseUrl?: string;
 	modelFilter?: string;
-	/** SAP AI Core service key (JSON blob or already-parsed object). */
-	serviceKey?: string | Record<string, unknown>;
-	/** SAP AI Core resource group. */
-	resourceGroup?: string;
 	cachedModels?: ModelInfo[];
 	cacheTimestamp?: number;
 }

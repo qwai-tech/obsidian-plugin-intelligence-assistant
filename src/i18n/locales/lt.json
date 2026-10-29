@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Reikalingas vietinis CLI",
-        "provideServiceKey": "Pateikti paslaugos raktą",
         "configureBaseUrl": "Sukonfigūruoti bazinį URL",
         "addApiKey": "Pridėti API raktą"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (vietinis)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Pasirinktinis (OpenAI suderinamas)"
       },
       "modelFilter": {
         "name": "Modelio filtras",
         "desc": "Neprivalomas reguliariųjų reiškinių šablonas galimų modelių ribojimui"
-      },
-      "resourceGroup": {
-        "name": "Išteklių grupė",
-        "desc": "Neprivaloma SAP AI Core išteklių grupė"
-      },
-      "serviceKey": {
-        "name": "Paslaugos raktas",
-        "desc": "SAP AI Core paslaugos raktas (JSON eilutė)"
       },
       "baseUrl": {
         "name": "Bazinis URL",

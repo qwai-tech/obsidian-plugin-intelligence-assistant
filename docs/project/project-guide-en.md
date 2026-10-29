@@ -83,7 +83,6 @@ All paths come from [`pluginPaths(configDir)`](../../src/core/plugin-paths.ts). 
 ## Known Engineering Hotspots
 
 - Several UI modules are still large (`agent-edit-modal.ts`, `mcp-inspector`, `message-renderer.ts`, `cli-tools-section.ts`).
-- The SAP AI Core provider is buffered rather than streamed and does not support tool calls.
 - MCP, OpenAPI and RAG all add asynchronous startup work; regressions often appear as initialization-order bugs.
 
 ## Suggested Development Workflow

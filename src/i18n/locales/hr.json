@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Zahtijeva lokalni CLI",
-        "provideServiceKey": "Unesite servisni ključ",
         "configureBaseUrl": "Konfiguriraj osnovni URL",
         "addApiKey": "Dodaj API ključ"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (lokalno)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Prilagođeno (kompatibilno s OpenAI)"
       },
       "modelFilter": {
         "name": "Filter modela",
         "desc": "Neobavezni regex uzorak za ograničavanje dostupnih modela"
-      },
-      "resourceGroup": {
-        "name": "Grupa resursa",
-        "desc": "Neobavezna SAP AI Core grupa resursa"
-      },
-      "serviceKey": {
-        "name": "Servisni ključ",
-        "desc": "SAP AI Core servisni ključ (JSON niz)"
       },
       "baseUrl": {
         "name": "Osnovni URL",

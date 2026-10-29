@@ -83,7 +83,7 @@ Intelligence Assistant 采用分层的端口与适配器架构。`main.ts` 是�
 
 - `http.ts` / `obsidian-http.ts` — `HttpPort`；`resilient-http.ts` 增加超时、对 429/502/503/504 及传输错误的重试，以及 `AbortSignal` 取消。
 - `base-streaming-provider.ts` — SSE 流式处理，每个流使用独立的分块解析器。
-- `providers/openai-compatible-provider.ts` — OpenAI、DeepSeek 和 OpenRouter 的共享基类。Anthropic、Gemini 和 Ollama 原生实现工具调用。SAP AI Core 使用 `sap-sse.ts` 中的缓冲 SSE 辅助函数。
+- `providers/openai-compatible-provider.ts` — OpenAI、DeepSeek 和 OpenRouter 的共享基类。Anthropic、Gemini 和 Ollama 原生实现工具调用。
 - `model-manager.ts` — 每个提供商配置一份模型缓存，并合并进行中的重复请求。
 - `hub.ts` — 跨插件 LLM Hub，出借模型能力而不暴露密钥。
 

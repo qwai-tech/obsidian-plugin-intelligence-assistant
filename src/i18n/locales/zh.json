@@ -122,7 +122,6 @@
         "serverError": "服务器错误"
       },
       "guidance": {
-        "provideServiceKey": "提供服务密钥",
         "configureBaseUrl": "配置基础 URL",
         "addApiKey": "添加 API 密钥"
       },
@@ -1352,20 +1351,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama（本地）",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "自定义（OpenAI 兼容）"
       },
       "modelFilter": {
         "name": "模型过滤器",
         "desc": "可选的正则表达式，用于限制可用模型"
-      },
-      "resourceGroup": {
-        "name": "资源组",
-        "desc": "可选的 SAP AI Core 资源组"
-      },
-      "serviceKey": {
-        "name": "服务密钥",
-        "desc": "SAP AI Core 服务密钥（JSON 字符串）"
       },
       "baseUrl": {
         "name": "Base URL",

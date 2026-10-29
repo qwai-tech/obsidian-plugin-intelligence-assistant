@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "需要本地端 CLI",
-        "provideServiceKey": "提供服務金鑰",
         "configureBaseUrl": "設定基礎 URL",
         "addApiKey": "新增 API 金鑰"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama（本機）",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "自訂（相容 OpenAI）"
       },
       "modelFilter": {
         "name": "模型篩選器",
         "desc": "用於限制可用模型的選填正規表示式模式"
-      },
-      "resourceGroup": {
-        "name": "資源群組",
-        "desc": "選填的 SAP AI Core 資源群組"
-      },
-      "serviceKey": {
-        "name": "服務金鑰",
-        "desc": "SAP AI Core 服務金鑰（JSON 字串）"
       },
       "baseUrl": {
         "name": "基礎 URL",

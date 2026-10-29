@@ -122,7 +122,6 @@
         "serverError": "Server error"
       },
       "guidance": {
-        "provideServiceKey": "Provide service key",
         "configureBaseUrl": "Configure base URL",
         "addApiKey": "Add API key"
       },
@@ -1352,20 +1351,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (local)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Custom (OpenAI compatible)"
       },
       "modelFilter": {
         "name": "Model filter",
         "desc": "Optional regex pattern to limit available models"
-      },
-      "resourceGroup": {
-        "name": "Resource group",
-        "desc": "Optional SAP AI Core resource group"
-      },
-      "serviceKey": {
-        "name": "Service key",
-        "desc": "SAP AI Core service key (JSON string)"
       },
       "baseUrl": {
         "name": "Base URL",

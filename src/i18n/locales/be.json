@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Патрабуецца лакальны CLI",
-        "provideServiceKey": "Прадаставіць ключ службы",
         "configureBaseUrl": "Наладзіць базавы URL",
         "addApiKey": "Дадаць ключ API"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (лакальны)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Карыстальніцкі (сумяшчальны з OpenAI)"
       },
       "modelFilter": {
         "name": "Фільтр мадэляў",
         "desc": "Неабавязковы шаблон рэгулярнага выразу для абмежавання даступных мадэляў"
-      },
-      "resourceGroup": {
-        "name": "Група рэсурсаў",
-        "desc": "Неабавязковая група рэсурсаў SAP AI Core"
-      },
-      "serviceKey": {
-        "name": "Ключ службы",
-        "desc": "Ключ службы SAP AI Core (радок JSON)"
       },
       "baseUrl": {
         "name": "Базавы URL",

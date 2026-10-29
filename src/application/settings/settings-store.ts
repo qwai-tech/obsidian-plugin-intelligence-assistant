@@ -58,7 +58,7 @@ export class SettingsStore {
 		this.snapshots = this.snapshot(settings);
 		const pending = new Set<PersistUnit>();
 		if (!userConfig) pending.add('config');
-		if (migrated) pending.add('agents').add('config');
+		if (migrated) pending.add('agents').add('config').add('providers');
 		if (pending.size > 0) {
 			await this.persistence.write(settings, pending);
 		}

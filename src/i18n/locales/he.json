@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "דורש CLI מקומי",
-        "provideServiceKey": "ספק מפתח שירות",
         "configureBaseUrl": "הגדר כתובת URL בסיסית",
         "addApiKey": "הוסף מפתח API"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (מקומי)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "מותאם אישית (תואם OpenAI)"
       },
       "modelFilter": {
         "name": "מסנן מודלים",
         "desc": "תבנית regex אופציונלית להגבלת מודלים זמינים"
-      },
-      "resourceGroup": {
-        "name": "קבוצת משאבים",
-        "desc": "קבוצת משאבים אופציונלית של SAP AI Core"
-      },
-      "serviceKey": {
-        "name": "מפתח שירות",
-        "desc": "מפתח שירות SAP AI Core (מחרוזת JSON)"
       },
       "baseUrl": {
         "name": "כתובת URL בסיסית",

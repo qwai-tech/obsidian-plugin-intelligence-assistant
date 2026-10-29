@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Vereist lokale CLI",
-        "provideServiceKey": "Geef servicesleutel op",
         "configureBaseUrl": "Configureer basis-URL",
         "addApiKey": "API-sleutel toevoegen"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (lokaal)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Aangepast (OpenAI compatibel)"
       },
       "modelFilter": {
         "name": "Modelfilter",
         "desc": "Optioneel regex-patroon om beschikbare modellen te beperken"
-      },
-      "resourceGroup": {
-        "name": "Resourcegroep",
-        "desc": "Optionele SAP AI Core resourcegroep"
-      },
-      "serviceKey": {
-        "name": "Servicesleutel",
-        "desc": "SAP AI Core servicesleutel (JSON string)"
       },
       "baseUrl": {
         "name": "Basis-URL",

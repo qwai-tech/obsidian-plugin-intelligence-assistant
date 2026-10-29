@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "نیاز به CLI محلی",
-        "provideServiceKey": "کلید سرویس ارائه دهید",
         "configureBaseUrl": "آدرس پایه را پیکربندی کنید",
         "addApiKey": "کلید API اضافه کنید"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (محلی)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "سفارشی (سازگار با OpenAI)"
       },
       "modelFilter": {
         "name": "فیلتر مدل",
         "desc": "الگوی regex اختیاری برای محدود کردن مدل‌های موجود"
-      },
-      "resourceGroup": {
-        "name": "گروه منابع",
-        "desc": "گروه منابع اختیاری SAP AI Core"
-      },
-      "serviceKey": {
-        "name": "کلید سرویس",
-        "desc": "کلید سرویس SAP AI Core (رشته JSON)"
       },
       "baseUrl": {
         "name": "آدرس پایه",

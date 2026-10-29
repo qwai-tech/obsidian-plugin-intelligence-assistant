@@ -196,7 +196,6 @@ function applyAvatarAndLabel(
 		'ollama': '#000000',
 		'deepseek': '#0066cc',
 		'openrouter': '#6366f1',
-		'sap-ai-core': '#0070f2',
 		'groq': '#f97316',
 		'mistral': '#0d9488',
 		'togetherai': '#ec4899'

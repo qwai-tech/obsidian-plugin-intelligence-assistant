@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Nepieciešams lokāls CLI",
-        "provideServiceKey": "Norādiet pakalpojuma atslēgu",
         "configureBaseUrl": "Konfigurēt bāzes URL",
         "addApiKey": "Pievienot API atslēgu"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (lokāls)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Pielāgots (OpenAI saderīgs)"
       },
       "modelFilter": {
         "name": "Modeļa filtrs",
         "desc": "Neobligāts regulārās izteiksmes raksts pieejamo modeļu ierobežošanai"
-      },
-      "resourceGroup": {
-        "name": "Resursu grupa",
-        "desc": "Neobligāta SAP AI Core resursu grupa"
-      },
-      "serviceKey": {
-        "name": "Pakalpojuma atslēga",
-        "desc": "SAP AI Core pakalpojuma atslēga (JSON virkne)"
       },
       "baseUrl": {
         "name": "Bāzes URL",

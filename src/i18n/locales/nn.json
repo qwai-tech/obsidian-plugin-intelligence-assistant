@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Krev lokal CLI",
-        "provideServiceKey": "Oppgje tenastenøkkel",
         "configureBaseUrl": "Konfigurer basis-URL",
         "addApiKey": "Legg til API-nøkkel"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (lokal)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Eigendefinert (OpenAI-kompatibel)"
       },
       "modelFilter": {
         "name": "Modellfilter",
         "desc": "Valfritt regex-mønster for å avgrense tilgjengelege modellar"
-      },
-      "resourceGroup": {
-        "name": "Ressursgruppe",
-        "desc": "Valfri SAP AI Core-ressursgruppe"
-      },
-      "serviceKey": {
-        "name": "Tenastenøkkel",
-        "desc": "SAP AI Core-tenastenøkkel (JSON-streng)"
       },
       "baseUrl": {
         "name": "Basis-URL",

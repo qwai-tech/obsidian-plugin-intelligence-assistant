@@ -49,14 +49,6 @@ export class ModelManager {
 			{ id: 'openrouter:google/gemini-pro-1.5', name: 'Gemini 1.5 Pro', provider: 'openrouter', capabilities: ['chat', 'vision', 'audio', 'video', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 			{ id: 'openrouter:meta-llama/llama-3.1-70b-instruct', name: 'Llama 3.1 70B', provider: 'openrouter', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
 		],
-		'sap-ai-core': [
-			{ id: 'sap-ai-core:gpt-4o', name: 'GPT-4o', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'audio', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			{ id: 'sap-ai-core:gpt-4o-mini', name: 'GPT-4o Mini', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'audio', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			{ id: 'sap-ai-core:gpt-4-turbo', name: 'GPT-4 Turbo', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			{ id: 'sap-ai-core:gpt-35-turbo', name: 'GPT-3.5 Turbo', provider: 'sap-ai-core', capabilities: ['chat', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			{ id: 'sap-ai-core:anthropic--claude-4-sonnet', name: 'Claude 4 Sonnet', provider: 'sap-ai-core', capabilities: ['chat', 'vision', 'function_calling', 'streaming', 'json_mode'], enabled: true },
-			{ id: 'sap-ai-core:text-embedding-ada-002', name: 'Text Embedding Ada', provider: 'sap-ai-core', capabilities: ['chat'], enabled: false },
-		],
 	};
 
 	/**
@@ -464,8 +456,6 @@ export class ModelManager {
 		switch (config.provider) {
 			case 'ollama':
 				return await this.fetchOllamaModels(config);
-			case 'sap-ai-core':
-				return await this.fetchSapModels(config);
 			case 'anthropic':
 				return this.DEFAULT_MODELS.anthropic;
 		}
@@ -500,16 +490,6 @@ export class ModelManager {
 		} catch (error) {
 			console.error('[ModelManager] Failed to fetch Ollama models:', error);
 			return config.cachedModels ?? [];
-		}
-	}
-
-	private static async fetchSapModels(config: LLMConfig): Promise<ModelInfo[]> {
-		try {
-			const { SAPAICoreProvider } = await import('./providers/sap-ai-core-provider');
-			return await new SAPAICoreProvider(config).fetchModels();
-		} catch (error) {
-			console.error('[ModelManager] Failed to fetch SAP AI Core models:', error);
-			return this.DEFAULT_MODELS['sap-ai-core'];
 		}
 	}
 

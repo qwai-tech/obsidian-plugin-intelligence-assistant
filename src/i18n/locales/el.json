@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Απαιτεί τοπικό CLI",
-        "provideServiceKey": "Παροχή κλειδιού υπηρεσίας",
         "configureBaseUrl": "Διαμόρφωση βασικής διεύθυνσης URL",
         "addApiKey": "Προσθήκη κλειδιού API"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (τοπικό)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Προσαρμοσμένο (συμβατό με OpenAI)"
       },
       "modelFilter": {
         "name": "Φίλτρο μοντέλων",
         "desc": "Προαιρετικό πρότυπο regex για περιορισμό των διαθέσιμων μοντέλων"
-      },
-      "resourceGroup": {
-        "name": "Ομάδα πόρων",
-        "desc": "Προαιρετική ομάδα πόρων SAP AI Core"
-      },
-      "serviceKey": {
-        "name": "Κλειδί υπηρεσίας",
-        "desc": "Κλειδί υπηρεσίας SAP AI Core (συμβολοσειρά JSON)"
       },
       "baseUrl": {
         "name": "Βασική διεύθυνση URL",

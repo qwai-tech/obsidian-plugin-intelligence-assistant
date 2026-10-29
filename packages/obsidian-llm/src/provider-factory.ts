@@ -6,7 +6,6 @@ import { AnthropicProvider } from './providers/anthropic-provider';
 import { GoogleProvider } from './providers/google-provider';
 import { DeepSeekProvider } from './providers/deepseek-provider';
 import { OpenRouterProvider } from './providers/openrouter-provider';
-import { SAPAICoreProvider } from './providers/sap-ai-core-provider';
 import { OllamaProvider } from './providers/ollama-provider';
 
 export class ProviderFactory {
@@ -28,8 +27,6 @@ export class ProviderFactory {
 				return new DeepSeekProvider(config, http);
 			case 'openrouter':
 				return new OpenRouterProvider(config, http);
-			case 'sap-ai-core':
-				return new SAPAICoreProvider(config, http);
 			case 'ollama':
 				return new OllamaProvider(config, http);
 			case 'custom':

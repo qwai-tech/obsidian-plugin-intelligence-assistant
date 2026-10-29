@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Yêu cầu CLI cục bộ",
-        "provideServiceKey": "Cung cấp khóa dịch vụ",
         "configureBaseUrl": "Cấu hình URL cơ sở",
         "addApiKey": "Thêm khóa API"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (cục bộ)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Tùy chỉnh (tương thích OpenAI)"
       },
       "modelFilter": {
         "name": "Bộ lọc mô hình",
         "desc": "Mẫu regex tùy chọn để giới hạn các mô hình khả dụng"
-      },
-      "resourceGroup": {
-        "name": "Nhóm tài nguyên",
-        "desc": "Nhóm tài nguyên SAP AI Core tùy chọn"
-      },
-      "serviceKey": {
-        "name": "Khóa dịch vụ",
-        "desc": "Khóa dịch vụ SAP AI Core (chuỗi JSON)"
       },
       "baseUrl": {
         "name": "URL cơ sở",

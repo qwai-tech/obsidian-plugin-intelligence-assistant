@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Vaatii paikallisen CLI:n",
-        "provideServiceKey": "Anna palveluavain",
         "configureBaseUrl": "Määritä perus-URL",
         "addApiKey": "Lisää API-avain"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (paikallinen)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Mukautettu (OpenAI-yhteensopiva)"
       },
       "modelFilter": {
         "name": "Mallisuodatin",
         "desc": "Valinnainen regex-malli saatavilla olevien mallien rajoittamiseen"
-      },
-      "resourceGroup": {
-        "name": "Resurssiryhmä",
-        "desc": "Valinnainen SAP AI Core -resurssiryhmä"
-      },
-      "serviceKey": {
-        "name": "Palveluavain",
-        "desc": "SAP AI Core -palveluavain (JSON-merkkijono)"
       },
       "baseUrl": {
         "name": "Perus-URL",

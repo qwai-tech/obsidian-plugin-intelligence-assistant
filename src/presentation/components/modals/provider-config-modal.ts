@@ -13,7 +13,6 @@ export const LLM_PROVIDER_OPTIONS: Array<{ value: string; labelKey: string }> = 
 	{ value: 'deepseek', labelKey: 'modals.provider.providers.deepseek' },
 	{ value: 'ollama', labelKey: 'modals.provider.providers.ollama' },
 	{ value: 'openrouter', labelKey: 'modals.provider.providers.openrouter' },
-	{ value: 'sap-ai-core', labelKey: 'modals.provider.providers.sapAiCore' },
 	{ value: 'custom', labelKey: 'modals.provider.providers.custom' },
 ];
 
@@ -65,19 +64,6 @@ export class ProviderConfigModal extends Modal {
 					});
 			});
 
-		if (this.draft.provider === 'sap-ai-core') {
-			applyConfigFieldMetadata(new Setting(contentEl), {
-				path: 'llmConfigs[].resourceGroup',
-				label: t('modals.provider.resourceGroup.name'),
-				description: t('modals.provider.resourceGroup.desc')
-			}).addText(text => text
-					.setPlaceholder('Default')
-					.setValue(this.draft.resourceGroup || '')
-					.onChange(value => {
-						this.draft.resourceGroup = value.trim() || undefined;
-					}));
-		}
-
 		this.providerContainer = contentEl.createDiv();
 		this.renderProviderSpecific();
 
@@ -122,35 +108,7 @@ export class ProviderConfigModal extends Modal {
 
 		this.providerContainer.empty();
 
-		if (this.draft.provider === 'sap-ai-core') {
-			applyConfigFieldMetadata(new Setting(this.providerContainer), {
-				path: 'llmConfigs[].serviceKey',
-				label: t('modals.provider.serviceKey.name'),
-				description: t('modals.provider.serviceKey.desc')
-			}).addTextArea(text => {
-					const value = typeof this.draft.serviceKey === 'string'
-						? this.draft.serviceKey
-						: JSON.stringify(this.draft.serviceKey ?? {}, null, 2);
-					text.setValue(value || '');
-					text.setPlaceholder('{"clientid": "..."}');
-					text.inputEl.rows = 8;
-					text.inputEl.addClass('ia-textarea--code');
-					text.onChange((newValue) => {
-						try {
-							if (!newValue.trim()) {
-								this.draft.serviceKey = undefined;
-							} else {
-								JSON.parse(newValue);
-								this.draft.serviceKey = newValue;
-							}
-							text.inputEl.removeClass('ia-input-error');
-						} catch (error) {
-							console.error('Invalid service key JSON:', error);
-							text.inputEl.addClass('ia-input-error');
-						}
-					});
-				});
-		} else if (this.draft.provider === 'ollama') {
+		if (this.draft.provider === 'ollama') {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].baseUrl',
 				label: t('modals.provider.baseUrl.name'),

@@ -8,7 +8,31 @@ export function migrateSettings(settings: PluginSettings): boolean {
 	const strategyChanged = settings.agents.filter((agent) => migrateModelStrategy(agent, settings.defaultModel)).length > 0;
 	const cliToolIds = (settings.cliTools ?? []).map((tool) => tool.id);
 	const toolAccessChanged = migrateAllAgents(settings.agents, cliToolIds).size > 0;
-	return strategyChanged || toolAccessChanged;
+	const removedProviderDropped = dropRemovedProviders(settings);
+	return strategyChanged || toolAccessChanged || removedProviderDropped;
+}
+
+const REMOVED_PROVIDERS = ['sap-ai-core'];
+
+function dropRemovedProviders(settings: PluginSettings): boolean {
+	const isRemovedModel = (modelId: string | undefined) => REMOVED_PROVIDERS.some(provider => modelId?.startsWith(`${provider}:`));
+	let changed = false;
+	const kept = settings.llmConfigs.filter(config => !REMOVED_PROVIDERS.includes(config.provider));
+	if (kept.length !== settings.llmConfigs.length) {
+		settings.llmConfigs = kept;
+		changed = true;
+	}
+	if (isRemovedModel(settings.defaultModel)) {
+		settings.defaultModel = '';
+		changed = true;
+	}
+	for (const agent of settings.agents) {
+		if (agent.modelStrategy?.strategy === 'fixed' && isRemovedModel(agent.modelStrategy.modelId)) {
+			agent.modelStrategy = { strategy: 'default' };
+			changed = true;
+		}
+	}
+	return changed;
 }
 
 function migrateModelStrategy(agent: LegacyAgent, defaultModel: string): boolean {

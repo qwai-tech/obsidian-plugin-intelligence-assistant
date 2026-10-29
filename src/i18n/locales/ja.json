@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "ローカル CLI が必要",
-        "provideServiceKey": "サービスキーを提供",
         "configureBaseUrl": "ベース URL を設定",
         "addApiKey": "API キーを追加"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama（ローカル）",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "カスタム（OpenAI 互換）"
       },
       "modelFilter": {
         "name": "モデルフィルター",
         "desc": "利用可能なモデルを制限するオプションの正規表現パターン"
-      },
-      "resourceGroup": {
-        "name": "リソースグループ",
-        "desc": "オプションの SAP AI Core リソースグループ"
-      },
-      "serviceKey": {
-        "name": "サービスキー",
-        "desc": "SAP AI Core サービスキー（JSON 文字列）"
       },
       "baseUrl": {
         "name": "ベース URL",

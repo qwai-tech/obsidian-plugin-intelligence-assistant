@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Требуется локальный CLI",
-        "provideServiceKey": "Предоставьте ключ сервиса",
         "configureBaseUrl": "Настройте базовый URL",
         "addApiKey": "Добавьте API-ключ"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (локальный)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Пользовательский (совместимый с OpenAI)"
       },
       "modelFilter": {
         "name": "Фильтр моделей",
         "desc": "Необязательный шаблон regex для ограничения доступных моделей"
-      },
-      "resourceGroup": {
-        "name": "Группа ресурсов",
-        "desc": "Необязательная группа ресурсов SAP AI Core"
-      },
-      "serviceKey": {
-        "name": "Ключ сервиса",
-        "desc": "Ключ сервиса SAP AI Core (строка JSON)"
       },
       "baseUrl": {
         "name": "Базовый URL",

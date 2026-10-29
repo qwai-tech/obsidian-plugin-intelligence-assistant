@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "يتطلب CLI محليًا",
-        "provideServiceKey": "قدّم مفتاح الخدمة",
         "configureBaseUrl": "هيّئ عنوان URL الأساسي",
         "addApiKey": "أضف مفتاح API"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (محلي)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "مخصص (متوافق مع OpenAI)"
       },
       "modelFilter": {
         "name": "فلتر النموذج",
         "desc": "نمط تعبير نمطي اختياري للحد من النماذج المتاحة"
-      },
-      "resourceGroup": {
-        "name": "مجموعة الموارد",
-        "desc": "مجموعة موارد SAP AI Core الاختيارية"
-      },
-      "serviceKey": {
-        "name": "مفتاح الخدمة",
-        "desc": "مفتاح خدمة SAP AI Core (سلسلة JSON)"
       },
       "baseUrl": {
         "name": "URL الأساسي",

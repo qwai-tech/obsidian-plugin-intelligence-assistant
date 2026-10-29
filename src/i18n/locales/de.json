@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Erfordert lokale CLI",
-        "provideServiceKey": "Dienstschlüssel angeben",
         "configureBaseUrl": "Basis-URL konfigurieren",
         "addApiKey": "API-Schlüssel hinzufügen"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (lokal)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Benutzerdefiniert (OpenAI-kompatibel)"
       },
       "modelFilter": {
         "name": "Modellfilter",
         "desc": "Optionales Regex-Muster zur Einschränkung verfügbarer Modelle"
-      },
-      "resourceGroup": {
-        "name": "Ressourcengruppe",
-        "desc": "Optionale SAP AI Core Ressourcengruppe"
-      },
-      "serviceKey": {
-        "name": "Dienstschlüssel",
-        "desc": "SAP AI Core Dienstschlüssel (JSON-Zeichenkette)"
       },
       "baseUrl": {
         "name": "Basis-URL",

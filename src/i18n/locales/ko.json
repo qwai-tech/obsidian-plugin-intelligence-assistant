@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "로컬 CLI 필요",
-        "provideServiceKey": "서비스 키 제공",
         "configureBaseUrl": "기본 URL 구성",
         "addApiKey": "API 키 추가"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (로컬)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "사용자 정의 (OpenAI 호환)"
       },
       "modelFilter": {
         "name": "모델 필터",
         "desc": "사용 가능한 모델을 제한하는 선택적 정규식 패턴"
-      },
-      "resourceGroup": {
-        "name": "리소스 그룹",
-        "desc": "선택적 SAP AI Core 리소스 그룹"
-      },
-      "serviceKey": {
-        "name": "서비스 키",
-        "desc": "SAP AI Core 서비스 키 (JSON 문자열)"
       },
       "baseUrl": {
         "name": "기본 URL",

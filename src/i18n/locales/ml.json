@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "പ്രാദേശിക CLI ആവശ്യമാണ്",
-        "provideServiceKey": "സേവന കീ നൽകുക",
         "configureBaseUrl": "ബേസ് URL കോൺഫിഗർ ചെയ്യുക",
         "addApiKey": "API കീ ചേർക്കുക"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (ലോക്കൽ)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "ഇഷ്ടാനുസൃതം (OpenAPI അനുയോജ്യം)"
       },
       "modelFilter": {
         "name": "മോഡൽ ഫിൽറ്റർ",
         "desc": "ലഭ്യമായ മോഡലുകൾ പരിമിതപ്പെടുത്തുന്നതിനുള്ള ഓപ്ഷണൽ റീജെക്സ് പാറ്റേൺ"
-      },
-      "resourceGroup": {
-        "name": "റിസോഴ്സ് ഗ്രൂപ്പ്",
-        "desc": "ഓപ്ഷണൽ SAP AI Core റിസോഴ്സ് ഗ്രൂപ്പ്"
-      },
-      "serviceKey": {
-        "name": "സേവന കീ",
-        "desc": "SAP AI Core സേവന കീ (JSON സ്ട്രിംഗ്)"
       },
       "baseUrl": {
         "name": "ബേസ് URL",

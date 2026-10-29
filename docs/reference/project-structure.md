@@ -255,9 +255,7 @@ packages/obsidian-llm/src/
 │   ├── ollama-provider.ts
 │   ├── openai-compatible-provider.ts
 │   ├── openai-provider.ts
-│   ├── openrouter-provider.ts
-│   ├── sap-ai-core-provider.ts
-│   └── sap-sse.ts
+│   └── openrouter-provider.ts
 ├── base-provider.ts
 ├── base-streaming-provider.ts
 ├── diagnostics.ts

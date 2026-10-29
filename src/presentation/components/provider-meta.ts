@@ -25,10 +25,6 @@ export function getProviderMeta(providerId: string): { label: string; iconSvg: s
 			label: 'OpenRouter',
 			iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 1 21h22L12 2zm0 5 7 12H5l7-12z"/></svg>`
 		},
-		'sap-ai-core': {
-			label: 'SAP AI Core',
-			iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3v18h18V3H3zm8 14H7v-2h4v2zm0-4H7v-2h4v2zm0-4H7V7h4v2zm6 8h-4v-2h4v2zm0-4h-4v-2h4v2zm0-4h-4V7h4v2z"/></svg>`
-		},
 		'groq': {
 			label: 'Groq',
 			iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>`
@@ -73,7 +69,6 @@ const AVATARS: Record<string, string> = {
 	ollama: '🦙',
 	deepseek: '🌊',
 	openrouter: '🔀',
-	'sap-ai-core': '💼',
 	groq: '⚡',
 	mistral: '🌬️',
 	togetherai: '🤝',
@@ -95,7 +90,6 @@ const COLORS: Record<string, string> = {
 	ollama: '#000000',
 	deepseek: '#0066cc',
 	openrouter: '#6366f1',
-	'sap-ai-core': '#0070f2',
 	groq: '#f97316',
 	mistral: '#0d9488',
 	togetherai: '#ec4899',

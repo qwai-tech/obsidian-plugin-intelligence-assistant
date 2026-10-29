@@ -118,3 +118,34 @@ describe('migrateSettings — agent model strategy', () => {
 		expect(migrateSettings(settings)).toBe(false);
 	});
 });
+
+describe('migrateSettings — removed SAP AI Core provider', () => {
+	const sapSettings = () => {
+		const settings = userConfigToPluginSettings(null);
+		settings.llmConfigs = [
+			{ provider: 'sap-ai-core', serviceKey: '{}' } as never,
+			{ provider: 'openai', apiKey: 'k' },
+		];
+		settings.defaultModel = 'sap-ai-core:gpt-4o';
+		settings.agents = [makeLegacyAgent({ id: 'a', modelStrategy: { strategy: 'fixed', modelId: 'sap-ai-core:gpt-4o' } })];
+		return settings;
+	};
+
+	it('drops SAP provider configs and models that point at them', () => {
+		const settings = sapSettings();
+
+		expect(migrateSettings(settings)).toBe(true);
+
+		expect(settings.llmConfigs.map(config => config.provider)).toEqual(['openai']);
+		expect(settings.defaultModel).toBe('');
+		expect(settings.agents[0].modelStrategy).toEqual({ strategy: 'default' });
+	});
+
+	it('reports no change when no SAP config is present', () => {
+		const settings = userConfigToPluginSettings(null);
+		settings.llmConfigs = [{ provider: 'openai', apiKey: 'k' }];
+		settings.agents = [];
+
+		expect(migrateSettings(settings)).toBe(false);
+	});
+});

@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Memerlukan CLI lokal",
-        "provideServiceKey": "Berikan kunci layanan",
         "configureBaseUrl": "Konfigurasikan URL dasar",
         "addApiKey": "Tambah kunci API"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (lokal)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Kustom (kompatibel OpenAI)"
       },
       "modelFilter": {
         "name": "Filter model",
         "desc": "Pola regex opsional untuk membatasi model yang tersedia"
-      },
-      "resourceGroup": {
-        "name": "Grup sumber daya",
-        "desc": "Grup sumber daya SAP AI Core opsional"
-      },
-      "serviceKey": {
-        "name": "Kunci layanan",
-        "desc": "Kunci layanan SAP AI Core (string JSON)"
       },
       "baseUrl": {
         "name": "URL dasar",

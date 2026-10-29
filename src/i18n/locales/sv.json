@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Kräver lokal CLI",
-        "provideServiceKey": "Ange tjänstnyckel",
         "configureBaseUrl": "Konfigurera bas-URL",
         "addApiKey": "Lägg till API-nyckel"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (lokal)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Anpassad (OpenAI-kompatibel)"
       },
       "modelFilter": {
         "name": "Modellfilter",
         "desc": "Valfritt regex-mönster för att begränsa tillgängliga modeller"
-      },
-      "resourceGroup": {
-        "name": "Resursgrupp",
-        "desc": "Valfri SAP AI Core-resursgrupp"
-      },
-      "serviceKey": {
-        "name": "Tjänstnyckel",
-        "desc": "SAP AI Core-tjänstnyckel (JSON-sträng)"
       },
       "baseUrl": {
         "name": "Bas-URL",

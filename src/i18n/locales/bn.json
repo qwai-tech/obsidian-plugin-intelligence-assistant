@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "স্থানীয় CLI প্রয়োজন",
-        "provideServiceKey": "সার্ভিস কী প্রদান করুন",
         "configureBaseUrl": "বেস URL কনফিগার করুন",
         "addApiKey": "API কী যোগ করুন"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (স্থানীয়)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "কাস্টম (OpenAI সামঞ্জস্যপূর্ণ)"
       },
       "modelFilter": {
         "name": "মডেল ফিল্টার",
         "desc": "উপলব্ধ মডেল সীমিত করতে ঐচ্ছিক রেজেক্স প্যাটার্ন"
-      },
-      "resourceGroup": {
-        "name": "রিসোর্স গ্রুপ",
-        "desc": "ঐচ্ছিক SAP AI Core রিসোর্স গ্রুপ"
-      },
-      "serviceKey": {
-        "name": "সার্ভিস কী",
-        "desc": "SAP AI Core সার্ভিস কী (JSON স্ট্রিং)"
       },
       "baseUrl": {
         "name": "বেস URL",

@@ -20,7 +20,7 @@ This plugin has evolved beyond a simple chat interface into a full **SPAR (Sense
 - **Cognitive Memory System** — Long-term associative memory via a local vector store. The Agent remembers your preferences and key research findings across conversations.
 - **Modern Logical UI** — A redesigned **Execution Timeline** that merges reasoning and actions into a single flow. Compact tool pills save space while remaining fully inspectable.
 - **Vault-Native Tools** — Specialized tools for **Properties (YAML)** management, batch file operations (move, create, delete), and directory-tree awareness.
-- **Multiple LLM Providers** — OpenAI, Anthropic (Claude 3.5), Google Gemini, DeepSeek, Ollama (local), OpenRouter, and SAP AI Core.
+- **Multiple LLM Providers** — OpenAI, Anthropic (Claude 3.5), Google Gemini, DeepSeek, Ollama (local), and OpenRouter.
 - **MCP & OpenAPI Integration** — Seamlessly connect Model Context Protocol servers or any OpenAPI-spec service to expand your Agent's toolset.
 - **Privacy First** — Your notes stay local. Indexing (RAG) uses a local vector store with configurable embedding providers.
 

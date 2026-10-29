@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "CLI lokala behar du",
-        "provideServiceKey": "Eman zerbitzu-giltza",
         "configureBaseUrl": "Konfiguratu oinarrizko URLa",
         "addApiKey": "Gehitu API giltza"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (lokala)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Pertsonalizatua (OpenAI-ekin bateragarria)"
       },
       "modelFilter": {
         "name": "Modelo-iragazkia",
         "desc": "Nahi izanez gero, regex patroia eskuragarri dauden modeloak mugatzeko"
-      },
-      "resourceGroup": {
-        "name": "Baliabide-taldea",
-        "desc": "Nahi izanez gero, SAP AI Core baliabide-taldea"
-      },
-      "serviceKey": {
-        "name": "Zerbitzu-giltza",
-        "desc": "SAP AI Core zerbitzu-giltza (JSON katea)"
       },
       "baseUrl": {
         "name": "Oinarrizko URLa",

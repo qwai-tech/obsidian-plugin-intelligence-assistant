@@ -123,7 +123,6 @@
       },
       "guidance": {
         "requiresCli": "Requereix CLI local",
-        "provideServiceKey": "Proporcioneu la clau de servei",
         "configureBaseUrl": "Configureu la URL base",
         "addApiKey": "Afegeix clau API"
       },
@@ -1343,20 +1342,11 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (local)",
         "openrouter": "OpenRouter",
-        "sapAiCore": "SAP AI Core",
         "custom": "Personalitzat (compatible amb OpenAI)"
       },
       "modelFilter": {
         "name": "Filtre de model",
         "desc": "Patró regex opcional per limitar els models disponibles"
-      },
-      "resourceGroup": {
-        "name": "Grup de recursos",
-        "desc": "Grup de recursos SAP AI Core opcional"
-      },
-      "serviceKey": {
-        "name": "Clau de servei",
-        "desc": "Clau de servei SAP AI Core (cadena JSON)"
       },
       "baseUrl": {
         "name": "URL base",

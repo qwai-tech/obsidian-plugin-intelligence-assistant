@@ -83,7 +83,7 @@ All plugin paths come from `core/plugin-paths.ts` (`pluginPaths(configDir)`), so
 
 - `http.ts` / `obsidian-http.ts` — the `HttpPort`; `resilient-http.ts` adds timeout, retries on 429/502/503/504 and transport errors, and `AbortSignal` cancellation.
 - `base-streaming-provider.ts` — SSE streaming with a fresh chunk parser per stream.
-- `providers/openai-compatible-provider.ts` — shared base for OpenAI, DeepSeek and OpenRouter. Anthropic, Gemini and Ollama implement tool calling natively. SAP AI Core uses buffered SSE helpers in `sap-sse.ts`.
+- `providers/openai-compatible-provider.ts` — shared base for OpenAI, DeepSeek and OpenRouter. Anthropic, Gemini and Ollama implement tool calling natively.
 - `model-manager.ts` — one model cache per provider config, with de-duplicated in-flight requests.
 - `hub.ts` — the cross-plugin LLM hub, which lends model access without exposing keys.
 
