@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService não configurado. Usando fallback de ChatView.",
       "noModelSelected": "Nenhum modelo selecionado",
       "noProviderConfig": "Nenhuma configuração de provedor encontrada",
-      "generationStopped": "Geração parada",
       "noResponseToRegenerate": "Nenhuma resposta para regenerar",
       "agentNotFound": "Agente não encontrado",
       "unableToLoadRag": "Não é possível carregar as estatísticas RAG.",

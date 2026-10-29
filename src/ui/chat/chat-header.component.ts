@@ -1,7 +1,7 @@
 import { setIcon } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { hasSettings } from '@/core/utils/type-guards';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 
 export interface ChatHeaderCallbacks {

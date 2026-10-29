@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService inte konfigurerad. Använder ChatView-reserv.",
       "noModelSelected": "Ingen modell vald",
       "noProviderConfig": "Ingen leverantörskonfiguration hittades",
-      "generationStopped": "Generering stoppad",
       "noResponseToRegenerate": "Inget svar att regenerera",
       "agentNotFound": "Agent hittades inte",
       "unableToLoadRag": "Kan inte ladda RAG-statistik.",

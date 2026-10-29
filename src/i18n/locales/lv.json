@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService nav konfigurēts. Izmanto ChatView rezerves variantu.",
       "noModelSelected": "Nav atlasīts modelis",
       "noProviderConfig": "Nav atrasta pakalpojumu sniedzēja konfigurācija",
-      "generationStopped": "Ģenerēšana apturēta",
       "noResponseToRegenerate": "Nav atbildes, ko reģenerēt",
       "agentNotFound": "Aģents nav atrasts",
       "unableToLoadRag": "Nevar ielādēt RAG statistiku.",

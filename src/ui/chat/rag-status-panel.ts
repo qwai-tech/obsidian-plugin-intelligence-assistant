@@ -1,5 +1,5 @@
 import { App, Modal, Notice, TFile } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type { RAGManager } from '@/adapters/rag/rag-manager';
 import type { RAGConfig } from '@/features/knowledge/types/rag';
 import type { RAGSource } from '@/features/knowledge/types/rag';

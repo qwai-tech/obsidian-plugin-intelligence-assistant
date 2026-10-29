@@ -1,6 +1,6 @@
 import { ChatInputComponent } from '../chat-input.component';
 import { ChatViewState } from '@/ui/state/chat-view-state';
-import { initI18n } from '@/i18n/index';
+import { initI18n } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 
 function makePlugin() {

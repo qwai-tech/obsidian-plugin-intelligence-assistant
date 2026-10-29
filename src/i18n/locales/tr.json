@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService yapılandırılmadı. ChatView yedek kullanılıyor.",
       "noModelSelected": "Model seçilmedi",
       "noProviderConfig": "Sağlayıcı yapılandırması bulunamadı",
-      "generationStopped": "Oluşturma durduruldu",
       "noResponseToRegenerate": "Yeniden oluşturulacak yanıt yok",
       "agentNotFound": "Ajan bulunamadı",
       "unableToLoadRag": "RAG istatistikleri yüklenemiyor.",

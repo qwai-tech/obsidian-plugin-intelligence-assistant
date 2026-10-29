@@ -8,7 +8,7 @@ import { App } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Conversation } from '@/features/conversations/types/conversation';
 import { ConversationStorageService } from '@/adapters/persistence/conversation-storage-service';
-import { initI18n } from '@/i18n/index';
+import { initI18n } from '@/i18n';
 
 // Mock dependencies
 jest.mock('obsidian');

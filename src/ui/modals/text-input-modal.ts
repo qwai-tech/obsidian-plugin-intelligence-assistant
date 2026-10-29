@@ -1,5 +1,5 @@
 import { App, Modal, Setting } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 
 export class TextInputModal extends Modal {
 	result: string;

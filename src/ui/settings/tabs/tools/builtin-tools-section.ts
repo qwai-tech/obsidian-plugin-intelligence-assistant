@@ -3,7 +3,7 @@
  * Renders the built-in tools table for the tools settings tab
  */
 
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import type IntelligenceAssistantPlugin from '@plugin';

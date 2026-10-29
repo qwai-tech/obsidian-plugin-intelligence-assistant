@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ไม่ได้กำหนดค่า ChatService ใช้ ChatView แทน",
       "noModelSelected": "ไม่ได้เลือกโมเดล",
       "noProviderConfig": "ไม่พบการกำหนดค่าผู้ให้บริการ",
-      "generationStopped": "หยุดการสร้างแล้ว",
       "noResponseToRegenerate": "ไม่มีการตอบสนองที่จะสร้างใหม่",
       "agentNotFound": "ไม่พบเอเจนต์",
       "unableToLoadRag": "ไม่สามารถโหลดสถิติ RAG",

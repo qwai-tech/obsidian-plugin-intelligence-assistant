@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService не е конфигуриран. Използва се резервен вариант на ChatView.",
       "noModelSelected": "Не е избран модел",
       "noProviderConfig": "Не е намерена конфигурация на доставчик",
-      "generationStopped": "Генерирането е спряно",
       "noResponseToRegenerate": "Няма отговор за регенериране",
       "agentNotFound": "Агентът не е намерен",
       "unableToLoadRag": "Невъзможно зареждане на RAG статистиките.",

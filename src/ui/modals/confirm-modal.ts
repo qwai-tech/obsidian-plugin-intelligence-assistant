@@ -1,5 +1,5 @@
 import { Modal, App } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 
 /**

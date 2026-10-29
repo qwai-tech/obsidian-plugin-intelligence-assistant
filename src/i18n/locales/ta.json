@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService உள்ளமைக்கப்படவில்லை. ChatView மாற்று வழியைப் பயன்படுத்துகிறது.",
       "noModelSelected": "மாதிரி எதுவும் தேர்ந்தெடுக்கப்படவில்லை",
       "noProviderConfig": "வழங்குநர் உள்ளமைவு எதுவும் காணப்படவில்லை",
-      "generationStopped": "உருவாக்கம் நிறுத்தப்பட்டது",
       "noResponseToRegenerate": "மீண்டும் உருவாக்க எந்த பதிலும் இல்லை",
       "agentNotFound": "முகவர் காணப்படவில்லை",
       "unableToLoadRag": "RAG புள்ளிவிவரங்களை ஏற்ற முடியவில்லை.",

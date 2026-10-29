@@ -1,10 +1,10 @@
+import { appendTokenUsageToMessage } from '../message-footer';
 import {
-	appendTokenUsageToMessage,
 	renderAssistantMarkdown,
 	renderMessage,
 	type MessageRendererContext,
 } from '../message-renderer';
-import { initI18n } from '@/i18n/index';
+import { initI18n } from '@/i18n';
 import type { Message } from '@/features/conversations/types/conversation';
 import type { RAGSource } from '@/features/knowledge/types/rag';
 import type { WebSearchResult } from '@/features/web-search/types/web-search';

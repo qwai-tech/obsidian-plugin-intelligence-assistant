@@ -1,6 +1,6 @@
 import { App, TFile, Modal } from 'obsidian';
 import type { NoteChoice } from '@/features/chat/vault-export-service';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 
 export class SingleFileSelectionModal extends Modal {
 	private onChooseFile: (choice: NoteChoice) => void;

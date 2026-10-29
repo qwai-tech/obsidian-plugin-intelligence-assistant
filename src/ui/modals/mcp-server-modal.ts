@@ -1,7 +1,7 @@
 import { App, Modal, Notice, Setting } from 'obsidian';
 import type { MCPServerConfig } from '@/features/tools/types/mcp';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 
 export class MCPServerModal extends Modal {

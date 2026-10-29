@@ -1,5 +1,5 @@
 import { App, TFile, Modal } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 
 export class SearchableImageModal extends Modal {
 	private onChooseFiles: (files: TFile[]) => void;

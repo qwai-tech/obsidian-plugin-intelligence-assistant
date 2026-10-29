@@ -1,5 +1,5 @@
 import { setIcon, type App } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Message } from '@/features/conversations/types/conversation';
 import type { ChatViewState } from '@/ui/state/chat-view-state';

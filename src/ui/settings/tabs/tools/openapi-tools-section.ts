@@ -4,7 +4,7 @@
  */
 
 import { Notice, Setting, Modal } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import type IntelligenceAssistantPlugin from '@plugin';

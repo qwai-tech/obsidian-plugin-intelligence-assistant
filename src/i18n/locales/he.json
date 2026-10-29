@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService לא מוגדר. משתמש בגיבוי ChatView.",
       "noModelSelected": "לא נבחר מודל",
       "noProviderConfig": "לא נמצאה הגדרת ספק",
-      "generationStopped": "יצירה נעצרה",
       "noResponseToRegenerate": "אין תגובה ליצירה מחדש",
       "agentNotFound": "סוכן לא נמצא",
       "unableToLoadRag": "לא ניתן לטעון סטטיסטיקות RAG.",

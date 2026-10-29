@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService কনফিগার করা হয়নি। ChatView ফallback ব্যবহার করা হচ্ছে।",
       "noModelSelected": "কোনো মডেল নির্বাচিত হয়নি",
       "noProviderConfig": "কোনো প্রদানকারী কনফিগারেশন পাওয়া যায়নি",
-      "generationStopped": "জেনারেশন বন্ধ করা হয়েছে",
       "noResponseToRegenerate": "পুনরায় তৈরি করার মতো কোনো প্রতিক্রিয়া নেই",
       "agentNotFound": "এজেন্ট পাওয়া যায়নি",
       "unableToLoadRag": "RAG পরিসংখ্যান লোড করতে অক্ষম।",

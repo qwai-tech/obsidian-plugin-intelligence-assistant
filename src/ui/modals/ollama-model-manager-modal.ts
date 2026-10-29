@@ -6,7 +6,7 @@
 import { App, Modal, Notice, Setting } from 'obsidian';
 import type { OllamaAdmin } from '@/features/llm/ollama-admin';
 import type { LLMConfig, ModelInfo } from '@/features/llm/types/model';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { errorMessage } from '@/core/utils/errors';
 
 export class OllamaModelManagerModal extends Modal {

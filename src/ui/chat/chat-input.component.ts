@@ -1,7 +1,7 @@
 import { App, setIcon, TFile, TFolder } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { ChatViewState } from '@/ui/state/chat-view-state';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type { ModelInfo } from '@/features/llm/types/model';
 import { TestIds } from '@/ui/utils/test-ids';
 
@@ -106,7 +106,6 @@ export class ChatInputComponent {
 	}
 
 	private buildToolbar(toolbar: HTMLElement) {
-		// Left: mode + model pills
 		this.modePillGroup = toolbar.createDiv('chat-input-pill-group');
 
 		this.modeSelector = this.modePillGroup.createEl('select', { cls: 'chat-input-mode-pill' });
@@ -122,7 +121,6 @@ export class ChatInputComponent {
 		this.modelSelect.setAttribute('data-testid', TestIds.chat.modelSelect);
 		this.modelSelect.addEventListener('change', () => void this.callbacks.onModelChange());
 
-		// Left: agent pill (visible in agent mode)
 		this.agentPillGroup = toolbar.createDiv('chat-input-pill-group');
 		if (this.state.mode !== 'agent') this.agentPillGroup.addClass('ia-hidden');
 
@@ -132,10 +130,8 @@ export class ChatInputComponent {
 		});
 		this.refreshAgentSelect();
 
-		// Spacer
 		toolbar.createDiv('chat-input-toolbar-spacer');
 
-		// Right: paperclip (always shown)
 		const referenceBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn is-link' });
 		referenceBtn.type = 'button';
 		referenceBtn.setAttr('title', t('chat.addReferenceTooltip'));
@@ -145,7 +141,6 @@ export class ChatInputComponent {
 			this.callbacks.onShowReferenceMenu();
 		});
 
-		// RAG (always created; hidden until enabled in settings)
 		const ragBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
 		ragBtn.type = 'button';
 		ragBtn.setAttribute('data-testid', TestIds.chat.ragToggleBtn);
@@ -159,7 +154,6 @@ export class ChatInputComponent {
 		});
 		if (!this.plugin.settings.ragConfig.enabled) this.ragActionItem.addClass('ia-hidden');
 
-		// Web search (always created; hidden until enabled in settings)
 		const webBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn' });
 		webBtn.type = 'button';
 		this.webActionItem = webBtn;
@@ -173,7 +167,6 @@ export class ChatInputComponent {
 		});
 		if (!this.plugin.settings.webSearchConfig.enabled) this.webActionItem.addClass('ia-hidden');
 
-		// Image (created hidden; shown/hidden by setImageButtonVisible)
 		const imageBtn = toolbar.createEl('button', { cls: 'chat-input-toolbar-btn ia-hidden' });
 		imageBtn.type = 'button';
 		this.imageActionItem = imageBtn;
@@ -189,9 +182,6 @@ export class ChatInputComponent {
 	public updateModeSelector(mode: 'chat' | 'agent') {
 		if (this.modeSelector) this.modeSelector.value = mode;
 
-		// Model selection visibility logic:
-		// 1. In 'chat' mode, always show.
-		// 2. In 'agent' mode, only show if the active agent uses 'chat-view' model strategy.
 		let showModelSelect = mode === 'chat';
 		if (mode === 'agent') {
 			const activeId = this.plugin.settings.activeAgentId;
@@ -204,8 +194,6 @@ export class ChatInputComponent {
 		
 		if (this.agentPillGroup) this.agentPillGroup.toggleClass('ia-hidden', mode !== 'agent');
 		
-		// RAG and Web toggles should ONLY be visible in 'chat' mode.
-		// In 'agent' mode, the agent's internal config handles these.
 		const showToolToggles = mode === 'chat';
 		if (this.ragActionItem) {
 			this.ragActionItem.toggleClass('ia-hidden', !showToolToggles || !this.plugin.settings.ragConfig.enabled);

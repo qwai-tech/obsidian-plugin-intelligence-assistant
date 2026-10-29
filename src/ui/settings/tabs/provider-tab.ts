@@ -7,7 +7,7 @@ import { App, Notice } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { LLMConfig } from '@/features/llm/types/model';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { ProviderConfigModal } from '@/ui/modals/provider-config-modal';
 import { OllamaModelManagerModal } from '@/ui/modals/ollama-model-manager-modal';

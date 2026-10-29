@@ -6,7 +6,7 @@
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { CachedMCPTool } from '@/features/tools/types/mcp';
 import type { RegisteredTool } from '@/features/tools/types/tools';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import { renderBuiltinToolsSection } from '@/ui/settings/tabs/tools/builtin-tools-section';

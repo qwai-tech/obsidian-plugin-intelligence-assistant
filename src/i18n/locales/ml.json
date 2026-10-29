@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService കോൺഫിഗർ ചെയ്തിട്ടില്ല. ChatView ഫാൾബാക്ക് ഉപയോഗിക്കുന്നു.",
       "noModelSelected": "മോഡലൊന്നും തിരഞ്ഞെടുത്തിട്ടില്ല",
       "noProviderConfig": "ദാതാവ് കോൺഫിഗറേഷൻ കണ്ടെത്തിയില്ല",
-      "generationStopped": "ജനറേഷൻ നിർത്തി",
       "noResponseToRegenerate": "പുനർജനറേറ്റ് ചെയ്യാൻ പ്രതികരണമില്ല",
       "agentNotFound": "ഏജന്റ് കണ്ടെത്തിയില്ല",
       "unableToLoadRag": "RAG സ്ഥിതിവിവരക്കണക്കുകൾ ലോഡ് ചെയ്യാൻ കഴിയുന്നില്ല.",

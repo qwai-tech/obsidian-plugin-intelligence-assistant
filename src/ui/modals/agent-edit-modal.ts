@@ -1,10 +1,11 @@
 import { App, ButtonComponent, Modal, Notice, Setting } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Agent } from '@/features/agent/types/agent';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
 import { ToolAccessEditor } from '@/features/agent/tool-access-editor';
 import { AgentToolAccessSection } from './agent-tool-access-section';
+import { initialModelSelection, modelCatalog, uniquePromptId } from './agent-model-options';
 import { TestIds } from '@/ui/utils/test-ids';
 
 export class AgentEditModal extends Modal {
@@ -15,7 +16,6 @@ export class AgentEditModal extends Modal {
 	private customPromptName: string = '';
 	private customPromptContent: string = '';
 	private customPromptSection: HTMLElement | null = null;
-	private modelAliasMap: Map<string, string> = new Map();
 	private fixedModelSetting: Setting | null = null;
 	private readonly access: ToolAccessEditor;
 
@@ -76,7 +76,8 @@ export class AgentEditModal extends Modal {
 			});
 
 		// Model Strategy Selection
-		const modelOptions = this.buildModelOptions();
+		const catalog = modelCatalog(this.plugin.settings.llmConfigs);
+		const modelOptions = catalog.options;
 		const hasCachedModels = modelOptions.length > 0;
 		
 		applyConfigFieldMetadata(new Setting(contentEl), {
@@ -122,7 +123,7 @@ export class AgentEditModal extends Modal {
 			}
 				
 				// Set the initial value based on the current modelId
-				const initialModelId = this.getInitialModelSelectionForStrategy(modelOptions);
+				const initialModelId = initialModelSelection(catalog, this.agent.modelStrategy);
 				dropdown.setValue(initialModelId);
 				if (!this.agent.modelStrategy.modelId) {
 					this.agent.modelStrategy.modelId = initialModelId;
@@ -320,7 +321,7 @@ export class AgentEditModal extends Modal {
 						}
 
 						const timestamp = Date.now();
-						const newPromptId = this.generateUniquePromptId(name);
+						const newPromptId = uniquePromptId(name, this.plugin.settings.systemPrompts.map(prompt => prompt.id));
 
 						this.plugin.settings.systemPrompts.push({
 							id: newPromptId,
@@ -346,44 +347,6 @@ export class AgentEditModal extends Modal {
 		saveButton.buttonEl.setAttribute('data-testid', TestIds.settings.agentModalSaveBtn);
 	}
 
-	private buildModelOptions(): Array<{ id: string; label: string }> {
-		const options: Array<{ id: string; label: string }> = [];
-		const seen = new Set<string>();
-		this.modelAliasMap.clear();
-
-		for (const config of this.plugin.settings.llmConfigs) {
-			const models = config.cachedModels ?? [];
-			for (const model of models) {
-				if (!seen.has(model.id)) {
-					const providerLabel = this.formatLabel(model.provider || config.provider);
-					options.push({ id: model.id, label: `${model.name} • ${providerLabel}` });
-					seen.add(model.id);
-				}
-
-				const alias = this.normalizeModelId(model.id);
-				if (alias && alias !== model.id) {
-					this.modelAliasMap.set(alias, model.id);
-				}
-			}
-		}
-
-		options.sort((a, b) => a.label.localeCompare(b.label));
-		return options;
-	}
-
-	private normalizeModelId(modelId: string): string | null {
-		if (!modelId) return null;
-		return modelId.includes(':') ? modelId.split(':').slice(1).join(':') : modelId;
-	}
-
-	private formatLabel(value: string): string {
-		return value.split(/[-_]/g).map(word => {
-			if (!word) return word;
-			if (word.length <= 2) return word.toUpperCase();
-			return word.charAt(0).toUpperCase() + word.slice(1);
-		}).join(' ');
-	}
-
 	private ensureCustomPromptDefaults() {
 		if (!this.customPromptName || this.customPromptName.trim().length === 0) {
 			this.customPromptName = `${this.agent.name} Prompt`;
@@ -399,21 +362,6 @@ export class AgentEditModal extends Modal {
 		}
 	}
 
-	private generateUniquePromptId(base: string): string {
-		const slug = (base || 'agent-prompt')
-			.toLowerCase()
-			.replace(/[^a-z0-9]+/g, '-')
-			.replace(/^-+|-+$/g, '');
-		const prefix = slug ? `agent-${slug}` : 'agent-prompt';
-		let candidate = prefix;
-		let counter = 1;
-		const existing = new Set(this.plugin.settings.systemPrompts.map(prompt => prompt.id));
-		while (existing.has(candidate)) {
-			candidate = `${prefix}-${counter++}`;
-		}
-		return candidate;
-	}
-
 	private updateModelControls() {
 		if (this.fixedModelSetting) {
 			if (this.agent.modelStrategy.strategy === 'fixed') {
@@ -422,29 +370,6 @@ export class AgentEditModal extends Modal {
 				this.fixedModelSetting.settingEl.hide();
 			}
 		}
-	}
-
-	private getInitialModelSelectionForStrategy(options: Array<{ id: string; label: string }>): string {
-		if (options.length === 0) {
-			return this.agent.modelStrategy.modelId || '';
-		}
-
-		// If the agent already has a fixed model, try to find it in the options
-		if (this.agent.modelStrategy.strategy === 'fixed' && this.agent.modelStrategy.modelId) {
-			const current = this.agent.modelStrategy.modelId;
-			if (options.some(option => option.id === current)) {
-				return current;
-			}
-
-			// Check if there's an alias
-			const alias = this.modelAliasMap.get(current);
-			if (alias && options.some(option => option.id === alias)) {
-				return alias;
-			}
-		}
-
-		// Default to the first option
-		return options[0].id;
 	}
 
 	onClose() {

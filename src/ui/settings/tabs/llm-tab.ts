@@ -5,7 +5,7 @@
 
 import type { App } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { displayProviderTab } from './provider-tab';
 import { displayModelsTab, type ModelFilters } from './models-tab';
 import { TestIds } from '@/ui/utils/test-ids';

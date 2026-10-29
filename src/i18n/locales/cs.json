@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService není nakonfigurován. Používám záložní ChatView.",
       "noModelSelected": "Žádný model není vybrán",
       "noProviderConfig": "Konfigurace poskytovatele nenalezena",
-      "generationStopped": "Generování zastaveno",
       "noResponseToRegenerate": "Žádná odpověď k regeneraci",
       "agentNotFound": "Agent nenalezen",
       "unableToLoadRag": "Nelze načíst statistiky RAG.",

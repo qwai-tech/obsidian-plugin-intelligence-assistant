@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService が設定されていません。ChatView フォールバックを使用します。",
       "noModelSelected": "モデルが選択されていません",
       "noProviderConfig": "プロバイダー設定が見つかりません",
-      "generationStopped": "生成を停止しました",
       "noResponseToRegenerate": "再生成する応答がありません",
       "agentNotFound": "エージェントが見つかりません",
       "unableToLoadRag": "RAG 統計を読み込めません。",

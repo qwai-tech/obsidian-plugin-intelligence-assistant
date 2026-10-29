@@ -1,5 +1,5 @@
 import {App, Notice, PluginSettingTab} from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 
 import { displayGeneralTab } from './tabs/general-tab';

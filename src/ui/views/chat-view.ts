@@ -1,5 +1,5 @@
 import { ItemView, WorkspaceLeaf, Notice, TFile, TFolder, setIcon } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import { AgentCapabilityModal } from '@/ui/modals/agent-capability-modal';
 import type IntelligenceAssistantPlugin from '@plugin';

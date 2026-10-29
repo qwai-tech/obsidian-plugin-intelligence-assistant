@@ -1,6 +1,6 @@
 import { Notice, TFile, type TFolder } from 'obsidian';
 import { ModelManager } from '@qwai/obsidian-llm';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Agent } from '@/features/agent/types/agent';
 import type { Conversation, ConversationConfig } from '@/features/conversations/types/conversation';
@@ -17,6 +17,7 @@ import { buildAgentCapabilitySummary, resolveAgentToolsForAgent, type AgentCapab
 import type { ToolRegistry } from '@/features/tools/tool-registry';
 import type { ChatViewState } from '@/ui/state/chat-view-state';
 import type { ChatInputComponent } from './chat-input.component';
+import { applyConversationSettings } from './conversation-settings';
 import type { ChatHeaderComponent } from './chat-header.component';
 
 const NEW_CHAT_SAMPLING = { temperature: 0.7, maxTokens: 4000, topP: 1.0, frequencyPenalty: 0, presencePenalty: 0 };
@@ -244,16 +245,7 @@ export class ChatSessionController {
 
 	private applyStoredConfig(config: ConversationConfig): void {
 		this.selectModel(config.modelId);
-		for (const key of ['temperature', 'maxTokens', 'topP', 'frequencyPenalty', 'presencePenalty'] as const) {
-			const value = config[key];
-			if (typeof value === 'number') {
-				this.state[key] = value;
-			}
-		}
-		if (this.state.mode !== 'agent') {
-			if (typeof config.ragEnabled === 'boolean') this.state.enableRAG = config.ragEnabled;
-			if (typeof config.webSearchEnabled === 'boolean') this.state.enableWebSearch = config.webSearchEnabled;
-		}
+		applyConversationSettings(this.state, config, this.state.mode);
 	}
 
 	private async select(selection: SessionSelection): Promise<void> {

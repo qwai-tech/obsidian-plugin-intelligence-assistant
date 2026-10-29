@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService کنفیگر نہیں۔ ChatView فال بیک استعمال ہو رہا ہے۔",
       "noModelSelected": "کوئی ماڈل منتخب نہیں",
       "noProviderConfig": "کوئی فراہم کنندہ کنفیگریشن نہیں ملی",
-      "generationStopped": "جنریشن رک گئی",
       "noResponseToRegenerate": "دوبارہ بنانے کے لیے کوئی جواب نہیں",
       "agentNotFound": "ایجنٹ نہیں ملا",
       "unableToLoadRag": "RAG کے اعداد و شمار لوڈ نہیں ہو سکے۔",

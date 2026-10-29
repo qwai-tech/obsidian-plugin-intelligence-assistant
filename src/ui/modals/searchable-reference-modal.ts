@@ -1,5 +1,5 @@
 import { App, TFile, TFolder, Modal } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 
 export class SearchableReferenceModal extends Modal {
 	private onChooseItems: (items: (TFile | TFolder)[]) => void;

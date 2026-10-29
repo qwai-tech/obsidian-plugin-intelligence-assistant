@@ -1,5 +1,5 @@
 import { Setting, Modal } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { CLIToolConfig } from '@/features/tools/types/cli-tools';
 import { DEFAULT_CLI_TIMEOUT } from '@/features/tools/types/cli-tools';

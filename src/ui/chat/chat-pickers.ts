@@ -1,5 +1,5 @@
 import { Notice, type App, type TFile, type TFolder } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type { ChatViewState } from '@/ui/state/chat-view-state';
 import { SearchableReferenceModal } from '@/ui/modals/searchable-reference-modal';
 import { SearchableImageModal } from '@/ui/modals/searchable-image-modal';

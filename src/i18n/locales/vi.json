@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService chưa được cấu hình. Đang dùng ChatView dự phòng.",
       "noModelSelected": "Chưa chọn mô hình",
       "noProviderConfig": "Không tìm thấy cấu hình nhà cung cấp",
-      "generationStopped": "Đã dừng tạo sinh",
       "noResponseToRegenerate": "Không có phản hồi để tạo lại",
       "agentNotFound": "Không tìm thấy tác nhân",
       "unableToLoadRag": "Không thể tải thống kê RAG.",

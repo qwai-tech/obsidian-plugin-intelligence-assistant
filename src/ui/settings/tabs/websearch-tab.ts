@@ -4,7 +4,7 @@
  */
 
 import type IntelligenceAssistantPlugin from '@plugin';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type { WebSearchConfig } from '@/features/web-search/types/web-search';
 import { SettingsForm } from '@/ui/settings/settings-form';
 

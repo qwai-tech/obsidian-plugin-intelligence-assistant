@@ -1,5 +1,5 @@
 import { Notice } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type { ToolRegistry } from '@/features/tools/tool-registry';
 import type { ToolParameter } from '@/features/tools/types/tools';
 import { errorMessage } from '@/core/utils/errors';

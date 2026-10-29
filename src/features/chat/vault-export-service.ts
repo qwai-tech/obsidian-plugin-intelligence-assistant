@@ -1,5 +1,5 @@
 import { App, Notice, TFile } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type { Message } from '@/features/conversations/types/conversation';
 import { errorMessage } from '@/core/utils/errors';
 

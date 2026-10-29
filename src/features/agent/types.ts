@@ -31,7 +31,6 @@ export interface AgentLoopCallbacks {
 	onThought: (thought: string, phase?: SparPhase) => void;
 	onComplete: (finalMessage: Message) => void;
 	onError: (error: Error) => void;
-	onTokenUsage?: (step: number, cumulativeTokens: number, budget: number) => void;
 	signal?: AbortSignal;
 }
 

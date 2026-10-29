@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService ei ole määritetty. Käytetään ChatView-varavaihtoehtoa.",
       "noModelSelected": "Ei mallia valittuna",
       "noProviderConfig": "Palveluntarjoajan konfiguraatiota ei löydy",
-      "generationStopped": "Generointi pysäytetty",
       "noResponseToRegenerate": "Ei vastausta regeneroitavaksi",
       "agentNotFound": "Agenttia ei löydy",
       "unableToLoadRag": "RAG-tilastojen lataaminen epäonnistui.",

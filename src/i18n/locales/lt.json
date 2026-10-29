@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService nesukonfigūruotas. Naudojamas ChatView atsarginis variantas.",
       "noModelSelected": "Nepasirinktas modelis",
       "noProviderConfig": "Nerasta tiekėjo konfigūracija",
-      "generationStopped": "Generavimas sustabdytas",
       "noResponseToRegenerate": "Nėra atsakymo, kurį regeneruoti",
       "agentNotFound": "Agentas nerastas",
       "unableToLoadRag": "Nepavyko įkelti RAG statistikos.",

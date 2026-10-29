@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "لم يتم تهيئة ChatService. استخدام ChatView الاحتياطي.",
       "noModelSelected": "لم يتم تحديد نموذج",
       "noProviderConfig": "لم يتم العثور على تهيئة المزود",
-      "generationStopped": "تم إيقاف التوليد",
       "noResponseToRegenerate": "لا توجد استجابة لإعادة التوليد",
       "agentNotFound": "لم يتم العثور على الوكيل",
       "unableToLoadRag": "تعذّر تحميل إحصائيات RAG.",

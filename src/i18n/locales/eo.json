@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService ne agordita. Uzante ChatView-ŝtopfunkciaĵon.",
       "noModelSelected": "Neniu modelo elektita",
       "noProviderConfig": "Neniu provizantagordo trovita",
-      "generationStopped": "Generado haltita",
       "noResponseToRegenerate": "Neniu respondo por regeneri",
       "agentNotFound": "Agento ne trovita",
       "unableToLoadRag": "Ne eblas ŝargi RAG-statistikojn.",

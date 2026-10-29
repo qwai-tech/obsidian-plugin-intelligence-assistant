@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "A ChatService nincs konfigurálva. A ChatView tartalék változat kerül használatba.",
       "noModelSelected": "Nincs kiválasztott modell",
       "noProviderConfig": "Nem található szolgáltatókonfiguráció",
-      "generationStopped": "Generálás leállítva",
       "noResponseToRegenerate": "Nincs újragenerálandó válasz",
       "agentNotFound": "Az ügynök nem található",
       "unableToLoadRag": "Nem sikerült betölteni a RAG statisztikákat.",

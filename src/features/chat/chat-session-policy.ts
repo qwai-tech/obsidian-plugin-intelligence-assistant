@@ -25,13 +25,13 @@ export function pickAgentId(settings: Pick<SessionSettings, 'agents' | 'activeAg
 }
 
 export function agentModelId(agent: Agent, selectedModel: string, defaultModel: string): string {
-	switch (agent.modelStrategy.strategy) {
+	switch (agent.modelStrategy?.strategy) {
 		case 'chat-view':
 			return selectedModel || defaultModel;
 		case 'default':
 			return defaultModel;
 		default:
-			return agent.modelStrategy.modelId || defaultModel;
+			return agent.modelStrategy?.modelId || defaultModel;
 	}
 }
 

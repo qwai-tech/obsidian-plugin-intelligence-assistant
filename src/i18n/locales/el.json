@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "Το ChatService δεν έχει ρυθμιστεί. Χρήση εναλλακτικής ChatView.",
       "noModelSelected": "Δεν έχει επιλεγεί μοντέλο",
       "noProviderConfig": "Δεν βρέθηκε ρύθμιση παρόχου",
-      "generationStopped": "Η δημιουργία διακόπηκε",
       "noResponseToRegenerate": "Καμία απόκριση για αναδημιουργία",
       "agentNotFound": "Ο πράκτορας δεν βρέθηκε",
       "unableToLoadRag": "Αδυναμία φόρτωσης στατιστικών RAG.",

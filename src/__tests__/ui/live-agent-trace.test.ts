@@ -3,7 +3,7 @@ import { ChatController } from '@/ui/chat/controllers/chat-controller';
 import { ChatViewState } from '@/ui/state/chat-view-state';
 import type { AgentLoopCallbacks } from '@/features/agent/types';
 
-jest.mock('@/i18n/index', () => ({ t: (key: string) => key }));
+jest.mock('@/i18n', () => ({ t: (key: string) => key }));
 
 describe('live agent trace', () => {
 	it('shows each tool call and its result while the run is still going', async () => {

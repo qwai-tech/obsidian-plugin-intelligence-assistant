@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService پیکربندی نشده. از ChatView جایگزین استفاده می‌شود.",
       "noModelSelected": "مدلی انتخاب نشده",
       "noProviderConfig": "پیکربندی ارائه‌دهنده پیدا نشد",
-      "generationStopped": "تولید متوقف شد",
       "noResponseToRegenerate": "هیچ پاسخی برای بازتولید وجود ندارد",
       "agentNotFound": "عامل پیدا نشد",
       "unableToLoadRag": "بارگذاری آمار RAG ناموفق بود.",

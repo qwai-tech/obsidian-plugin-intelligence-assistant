@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService tidak dikonfigurasi. Menggunakan fallback ChatView.",
       "noModelSelected": "Tidak ada model yang dipilih",
       "noProviderConfig": "Tidak ada konfigurasi penyedia yang ditemukan",
-      "generationStopped": "Pembuatan dihentikan",
       "noResponseToRegenerate": "Tidak ada respons untuk diregenerasi",
       "agentNotFound": "Agen tidak ditemukan",
       "unableToLoadRag": "Tidak dapat memuat statistik RAG.",

@@ -1,4 +1,4 @@
-import { initI18n } from '@/i18n/index';
+import { initI18n } from '@/i18n';
 import { displayToolsTab } from '../tools-tab';
 
 describe('displayToolsTab', () => {

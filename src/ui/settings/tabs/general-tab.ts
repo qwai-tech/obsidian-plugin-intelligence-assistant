@@ -5,7 +5,7 @@
 
 import { Setting } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 
 export function displayGeneralTab(

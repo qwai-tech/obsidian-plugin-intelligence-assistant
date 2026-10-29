@@ -2,7 +2,7 @@ import {App, Modal, Notice, Setting} from 'obsidian';
 import type { LLMConfig } from '@/features/llm/types/model';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
 import { OllamaModelManagerModal } from './ollama-model-manager-modal';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 import type { OllamaAdmin } from '@/features/llm/ollama-admin';
 

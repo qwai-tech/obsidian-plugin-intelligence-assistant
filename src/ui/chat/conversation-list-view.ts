@@ -1,5 +1,5 @@
 import { Menu, setIcon } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { ChatViewState } from '@/ui/state/chat-view-state';
 import type { ConversationStorageService } from '@/adapters/persistence/conversation-storage-service';

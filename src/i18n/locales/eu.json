@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService ez dago konfiguratuta. ChatView atzeralpena erabiltzen.",
       "noModelSelected": "Ez da modelorik hautatu",
       "noProviderConfig": "Ez da hornitzaile-konfiguraziorik aurkitu",
-      "generationStopped": "Sorkuntza gelditu da",
       "noResponseToRegenerate": "Ez dago birsortzeko erantzunik",
       "agentNotFound": "Agentea ez da aurkitu",
       "unableToLoadRag": "Ezin dira RAG estatistikak kargatu.",

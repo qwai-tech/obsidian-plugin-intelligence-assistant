@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Modal, Setting } from 'obsidian';
 import type { SystemPrompt } from '@/features/agent/types/agent';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 
 export class SystemPromptEditModal extends Modal {

@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService no configurat. S'usa el fallback de ChatView.",
       "noModelSelected": "Cap model seleccionat",
       "noProviderConfig": "No s'ha trobat la configuració del proveïdor",
-      "generationStopped": "Generació aturada",
       "noResponseToRegenerate": "Cap resposta per regenerar",
       "agentNotFound": "Agent no trobat",
       "unableToLoadRag": "No es poden carregar les estadístiques RAG.",

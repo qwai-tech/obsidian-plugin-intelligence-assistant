@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService nie gekonfigureer nie. ChatView-terugval gebruik.",
       "noModelSelected": "Geen model gekies nie",
       "noProviderConfig": "Geen verskafferkonfigurasie gevind nie",
-      "generationStopped": "Generasie gestop",
       "noResponseToRegenerate": "Geen antwoord om te hergenereer nie",
       "agentNotFound": "Agent nie gevind nie",
       "unableToLoadRag": "Kan nie RAG-statistieke laai nie.",

@@ -6,7 +6,7 @@
 import {App} from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import { SystemPromptEditModal } from '@/ui/modals/system-prompt-edit-modal';

@@ -1,5 +1,5 @@
 import { Modal, App } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 
 /**
  * Prompt modal to replace window.prompt()

@@ -8,7 +8,7 @@ import { showConfirm } from '@/ui/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Agent } from '@/features/agent/types/agent';
 import type { ModelInfo } from '@/features/llm/types/model';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import { AgentEditModal } from '@/ui/modals/agent-edit-modal';

@@ -6,7 +6,7 @@
 import type { App } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import { createTable } from '@/ui/utils/ui-helpers';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 
 export async function displayUsageTab(

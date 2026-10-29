@@ -1,5 +1,5 @@
 import { Modal, App, MarkdownRenderer, Component } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 
 /**
  * Modal to display text explanation results with markdown rendering

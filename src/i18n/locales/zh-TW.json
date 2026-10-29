@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService 未設定。使用 ChatView 備援方案。",
       "noModelSelected": "未選擇任何模型",
       "noProviderConfig": "找不到提供者設定",
-      "generationStopped": "生成已停止",
       "noResponseToRegenerate": "沒有可重新生成的回應",
       "agentNotFound": "找不到代理",
       "unableToLoadRag": "無法載入 RAG 統計資料。",

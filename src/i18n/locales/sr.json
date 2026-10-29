@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService није конфигурисан. Употреба ChatView резервне варијанте.",
       "noModelSelected": "Није изабран модел",
       "noProviderConfig": "Конфигурација провајдера није пронађена",
-      "generationStopped": "Генерисање заустављено",
       "noResponseToRegenerate": "Нема одговора за регенерацију",
       "agentNotFound": "Агент није пронађен",
       "unableToLoadRag": "Није могуће учитати RAG статистику.",

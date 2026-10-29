@@ -1,5 +1,5 @@
 import { Notice, Modal } from 'obsidian';
-import { t } from '@/i18n/index';
+import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { CLIToolConfig } from '@/features/tools/types/cli-tools';
 import { CLI_TOOL_DEFAULTS, availablePresets, PRESET_CATEGORIES, type CLIToolPreset } from '@/features/tools/cli-tool-presets';

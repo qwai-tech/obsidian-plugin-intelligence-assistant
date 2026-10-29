@@ -2,7 +2,7 @@ import { TFile } from 'obsidian';
 import { VaultExportService, type ExportTargetPicker, type NoteChoice } from '@/features/chat/vault-export-service';
 import type { Message } from '@/features/conversations/types/conversation';
 
-jest.mock('@/i18n/index', () => ({ t: (key: string, args?: Record<string, unknown>) => args ? `${key}:${JSON.stringify(args)}` : key }));
+jest.mock('@/i18n', () => ({ t: (key: string, args?: Record<string, unknown>) => args ? `${key}:${JSON.stringify(args)}` : key }));
 
 const assistantMessage = (overrides: Partial<Message> = {}): Message => ({ role: 'assistant', content: 'Hello world', model: 'gpt-4o', ...overrides });
 

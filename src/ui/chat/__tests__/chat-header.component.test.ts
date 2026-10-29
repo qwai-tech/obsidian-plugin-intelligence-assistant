@@ -1,5 +1,5 @@
 import { ChatHeaderComponent } from '../chat-header.component';
-import { initI18n } from '@/i18n/index';
+import { initI18n } from '@/i18n';
 
 describe('ChatHeaderComponent', () => {
 	beforeEach(() => {

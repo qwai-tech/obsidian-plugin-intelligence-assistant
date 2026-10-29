@@ -1078,7 +1078,6 @@
       "chatServiceFallback": "ChatService nu este configurat. Se folosește fallback-ul ChatView.",
       "noModelSelected": "Niciun model selectat",
       "noProviderConfig": "Configurația furnizorului nu a fost găsită",
-      "generationStopped": "Generarea oprită",
       "noResponseToRegenerate": "Niciun răspuns de regenerat",
       "agentNotFound": "Agentul nu a fost găsit",
       "unableToLoadRag": "Nu se pot încărca statisticile RAG.",
