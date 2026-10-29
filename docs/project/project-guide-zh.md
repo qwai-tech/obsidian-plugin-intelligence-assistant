@@ -1,123 +1,102 @@
 # 项目指南
 
-本文档面向开发者，用于快速理解 `obsidian-plugin-intelligence-assistant` 仓库。它补充根目录 [README](../../README.md) 的用户说明，以及 `docs/architecture/` 下的架构总览。
+本文是面向开发者的 `obsidian-plugin-intelligence-assistant` 仓库指南，补充面向用户的 [README](../../README.md) 和 `docs/architecture/` 下的架构说明——建议先阅读[架构总览](../architecture/overview-zh.md)。
 
-## 这个插件在做什么
+## 插件做什么
 
-Intelligence Assistant 的目标，是把 Obsidian vault 变成一个本地 AI 工作区。当前能力主要包括：
+Intelligence Assistant 把 Obsidian 库变成本地 AI 工作区，包含：
 
-- 多模型提供商的流式聊天
-- 可复用的自定义 Agent
-- MCP 工具集成
-- 基于 vault 内容的 RAG
-- Web 搜索与 OpenAPI 自动生成工具
-- 快捷动作与编辑器侧 AI 能力
+- 支持流式输出的多提供商 LLM 聊天
+- 可复用的自定义智能体，按回合调用工具
+- MCP、OpenAPI 和 CLI 工具集成
+- 基于本地向量存储的库内容 RAG
+- Web 搜索
+- 快捷操作和编辑器内的 AI 辅助
 
-仓库体量较大，因为它同时承载了 UI、提供商接入、持久化、RAG 管线，以及一部分仍在推进中的架构重构。
+## 代码结构
 
-## 当前代码库结构
+- `main.ts`：Obsidian `Plugin`——加载设置、注册视图和设置页，然后调用组合根
+- `src/bootstrap`：组合根，只构建一次所有服务
+- `src/application`：用例及其拥有的端口——智能体（回合内核）、聊天、设置存储、工具、Web 搜索
+- `src/infrastructure`：适配器——JSON/JSONL 持久化、RAG、向量库、嵌入、Obsidian 文件系统
+- `src/presentation`：聊天视图、设置选项卡、对话框、控制器、状态
+- `src/core`、`src/types`、`src/utils`：插件路径、共享接口与数据结构、小工具函数
+- `packages/obsidian-llm`：LLM 提供商、HTTP 端口和模型管理（`@qwai/obsidian-llm`）
 
-仓库总体遵循分层设计：
+分层边界由 lint 强制执行（`eslint.config.mts` 中的 `no-restricted-imports`）。
 
-- `main.ts`：插件启动、设置加载与保存、视图注册、延迟初始化
-- `src/core`：容器、配置 schema/manager、事件总线、错误处理、基础设施能力
-- `src/domain`：会话与 agent 领域模型
-- `src/application/services`：聊天、工具、MCP、RAG、存储、记忆、OpenAPI、Web 搜索等编排服务
-- `src/infrastructure`：LLM 提供商、持久化、RAG/向量库实现
-- `src/presentation`：聊天视图、设置页、模态框、控制器、处理器、状态对象
-- `src/types`：插件设置与各功能域的共享类型
+## 主要运行流程
 
-需要特别注意的一点：仓库里同时存在“生产中的聊天实现”和“尚未完全接线完成的 MVC 子树”。真正在线上路径里承担核心行为的是 [`chat-view.ts`](../../src/presentation/views/chat-view.ts)，而 `src/presentation/components/chat/` 下的一些 controller/component 更像重构中的过渡层。
+### 启动
 
-## 关键运行链路
+加载时插件会：
 
-### 启动流程
+1. 注册聊天视图、命令、功能区图标和设置页
+2. 通过 `SettingsStore` 加载设置（用户配置、仓库文件、迁移）
+3. 在 [`src/bootstrap/create-services.ts`](../../src/bootstrap/create-services.ts) 中构建服务，并完成 `whenServicesReady()`
+4. 执行延迟任务：会话迁移、默认智能体初始化、加载工具源（内置、CLI、OpenAPI、MCP 自动连接）
 
-插件加载时会依次完成：
+### 聊天请求生命周期
 
-1. 初始化 repository 与存储服务
-2. 从用户配置和旧版插件数据中恢复 settings
-3. 回填 prompts、agents、providers、model cache、MCP 元数据
-4. 注册聊天视图、命令、ribbon 图标和设置面板
-5. 异步执行延迟任务，包括会话迁移、默认 agent 初始化、MCP 自动连接、OpenAPI 工具重载、CLI 工具重载
+[`chat-view.ts`](../../src/presentation/views/chat-view.ts) 收集文本、附件和引用，由 [`ChatController`](../../src/presentation/components/chat/controllers/chat-controller.ts) 发送：
 
-这条主链路集中在 [`main.ts`](../../main.ts)。
+- 聊天模式：[`ChatService`](../../src/application/services/chat.service.ts) 加入 RAG 和 Web 搜索上下文并流式输出回复
+- 智能体模式：[`AgentEngineLoop`](../../src/application/agents/agent-engine-loop.ts) 运行 [`TurnKernel`](../../src/application/agents/kernel/turn-kernel.ts)，工具调用实时显示在聊天中
+- 停止按钮通过 `AbortSignal` 取消请求
+- 回复完成后保存会话
 
-### 聊天请求链路
+### 工具流水线
 
-生产环境下的聊天行为主要由 [`src/presentation/views/chat-view.ts`](../../src/presentation/views/chat-view.ts) 驱动：
+[`ToolSourceManager`](../../src/application/tools/tool-source-manager.ts) 把工具源加载到 [`ToolRegistry`](../../src/application/tools/tool-registry.ts)：
 
-- 收集输入文本、附件和 vault 引用
-- 解析当前模型、prompt、agent 与功能开关
-- 按需注入 RAG 上下文与 Web 搜索结果
-- 调用目标 provider
-- 将流式输出持续回填到 UI
-- 持久化更新后的会话和消息
+- 内置库工具（[`builtin-tool-source.ts`](../../src/application/tools/sources/builtin-tool-source.ts)）
+- MCP 服务器，包装为工具
+- 由 OpenAPI 规范转换的工具
+- 来自预设或用户配置的 CLI 工具
 
-### 工具调用链路
+每个工具都声明其副作用；智能体只能看到 `toolAccess` 授权的工具。
 
-工具统一由 [`src/application/services/tool-manager.ts`](../../src/application/services/tool-manager.ts) 管理：
+### RAG 流水线
 
-- 启动时注册内置工具
-- 动态接入 MCP 工具
-- 将 OpenAPI spec 转换为可执行工具
-- 视配置加载 CLI 相关工具
+[`RAGManager`](../../src/infrastructure/rag-manager.ts) 把库中笔记索引到 [`VectorStore`](../../src/infrastructure/vector-store.ts)：笔记 → 分块（[`chunker.ts`](../../src/infrastructure/rag/chunker.ts)）→ 嵌入 → 本地索引 → 相似度检索 → 可选评分。未修改的笔记按内容哈希跳过。聊天和智能体通过 `KnowledgeBase` 端口访问它。
 
-如果要扩展工具系统，这里是第一入口。
+## 持久化模型
 
-### RAG 管线
+- 用户配置文件：规范化后的设置（`SettingsStore`、`settings-codec.ts`）
+- 仓库 JSON 文件：提供商、提示词、智能体、模型缓存、MCP 服务器及工具缓存、Token 用量、智能体记忆
+- 会话：每个会话一个 JSON 文件
+- 智能体运行：每次运行一个 JSONL 日志
+- 向量索引：RAG 分块和嵌入
 
-RAG 主要分布在：
+所有路径都来自 [`pluginPaths(configDir)`](../../src/core/plugin-paths.ts)。写入是原子的（先写临时文件再重命名）。
 
-- [`src/infrastructure/rag-manager.ts`](../../src/infrastructure/rag-manager.ts)
-- [`src/infrastructure/vector-store.ts`](../../src/infrastructure/vector-store.ts)
-- [`src/infrastructure/embedding-manager.ts`](../../src/infrastructure/embedding-manager.ts)
-- [`src/infrastructure/document-grader.ts`](../../src/infrastructure/document-grader.ts)
-
-整体流程是：读取 vault 文件 -> 分块 -> 生成 embedding -> 写入本地向量索引 -> 相似度检索 -> 可选文档评分 -> 注入 prompt。
-
-## 数据持久化模型
-
-这个插件不是单一存储层，至少涉及以下几类数据：
-
-- 用户配置文件：通过 `src/constants.ts` 中的路径写入规范化配置
-- repository 管理的 JSON 数据：prompts、providers、agents、model cache、MCP 元数据
-- Obsidian vault 内存储：会话与消息
-- 本地向量存储：RAG 分块与 embedding 数据
-
-因此，任何 settings 迁移、字段新增、结构调整，都要同时检查“用户配置文件”和“repository-backed 数据”是否保持一致。
-
-## 建议优先阅读的文件
-
-第一次进入仓库，建议按这个顺序看：
+## 建议优先阅读的模块
 
 1. [`main.ts`](../../main.ts)
-2. [`src/types/settings.ts`](../../src/types/settings.ts)
-3. [`src/presentation/views/chat-view.ts`](../../src/presentation/views/chat-view.ts)
-4. [`src/application/services/tool-manager.ts`](../../src/application/services/tool-manager.ts)
-5. [`src/infrastructure/llm/model-manager.ts`](../../src/infrastructure/llm/model-manager.ts)
-6. [`src/infrastructure/rag-manager.ts`](../../src/infrastructure/rag-manager.ts)
+2. [`src/bootstrap/create-services.ts`](../../src/bootstrap/create-services.ts)
+3. [`src/application/settings/settings-store.ts`](../../src/application/settings/settings-store.ts)
+4. [`src/presentation/views/chat-view.ts`](../../src/presentation/views/chat-view.ts)
+5. [`src/application/agents/kernel/turn-kernel.ts`](../../src/application/agents/kernel/turn-kernel.ts)
+6. [`src/application/tools/tool-source-manager.ts`](../../src/application/tools/tool-source-manager.ts)
+7. [`packages/obsidian-llm/src/model-manager.ts`](../../packages/obsidian-llm/src/model-manager.ts)
 
-## 当前工程热点
+## 已知工程热点
 
-- 架构重构尚未完全收束，存在并行实现与历史残留。
-- settings 落盘分散在多处，迁移最容易出隐性问题。
-- MCP、OpenAPI、RAG 都会引入异步初始化，启动顺序相关 bug 比较常见。
-- 一些 UI 文件很大，渲染、状态更新和副作用逻辑耦合较深。
+- 仍有几个较大的界面模块（`agent-edit-modal.ts`、`mcp-inspector`、`message-renderer.ts`、`cli-tools-section.ts`）。
+- SAP AI Core 提供商是缓冲而非流式输出，且不支持工具调用。
+- MCP、OpenAPI 和 RAG 都会增加异步启动工作，回归问题常表现为初始化顺序错误。
 
-## 建议开发流程
+## 建议的开发流程
 
-日常开发建议至少走完：
+1. 阅读相关的运行时路径。
+2. 先写或更新测试（`npx jest`，以及 `tests/missions` 中的任务测试）。
+3. 运行 `npm run lint`。
+4. 运行 `npm run build` 和 `node scripts/deploy.js --local`。
+5. 涉及界面或存储的修改，运行 `npm run test:e2e`。
 
-1. 先确认自己改的是实际运行路径，而不是只改到重构中的占位代码。
-2. 如果目标模块已有测试，补齐或更新对应测试。
-3. 运行 `npm run type-check`。
-4. 运行 `npm run lint`。
-5. 在结束前运行 `npm run build`。
+## 扩展指南
 
-## 扩展建议
-
-- 新增 LLM provider，通常要改 `src/infrastructure/llm/` 和模型解析逻辑。
-- 新增内置工具，通常落在 `src/application/services/`，并由 `ToolManager` 注册。
-- 新增 settings 字段，需要同时改类型、配置转换、设置 UI 和持久化链路。
-- 新增聊天能力时，要优先验证 `chat-view.ts` 的生产路径，不要只改 controller 子树。
+- 新的 LLM 提供商放在 `packages/obsidian-llm/src/providers/`；兼容 OpenAI 的 API 可以继承 `OpenAICompatibleProvider`。
+- 新的内置工具在 `src/application/services/*-tools.ts` 中实现，在 `builtin-tool-source.ts` 中注册，并且必须声明副作用。
+- 新设置需要更新类型、编解码和迁移，并在对应选项卡中添加字段（简单字段用 `SettingsForm`）。
+- 新端口属于使用它的那一层；适配器以结构类型的方式实现它。

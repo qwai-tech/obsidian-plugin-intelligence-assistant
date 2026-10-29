@@ -1,33 +1,29 @@
 # Project Guide
 
-This document is a developer-oriented guide to the `obsidian-plugin-intelligence-assistant` repository. It complements the user-facing [README](../../README.md) and the high-level architecture notes under `docs/architecture/`.
+This document is a developer-oriented guide to the `obsidian-plugin-intelligence-assistant` repository. It complements the user-facing [README](../../README.md) and the architecture notes under `docs/architecture/` — start with the [architecture overview](../architecture/overview-en.md).
 
 ## What This Plugin Does
 
 Intelligence Assistant turns an Obsidian vault into a local AI workspace. The plugin combines:
 
 - Multi-provider LLM chat with streaming responses
-- Reusable custom agents
-- MCP tool integration
+- Reusable custom agents that work in turns with tools
+- MCP, OpenAPI and CLI tool integration
 - RAG over vault content with local vector storage
-- Web search and OpenAPI-derived tools
+- Web search
 - Quick actions and editor-side AI helpers
 
-The codebase is large because it mixes product UI, provider integrations, persistence, and several ongoing refactors.
+## Codebase Shape
 
-## Current Codebase Shape
+- `main.ts`: the Obsidian `Plugin` — loads settings, registers views and the settings tab, then calls the composition root
+- `src/bootstrap`: composition root; builds every service once
+- `src/application`: use cases and the ports they own — agents (turn kernel), chat, settings store, tools, web search
+- `src/infrastructure`: adapters — JSON/JSONL persistence, RAG, vector store, embeddings, Obsidian file system
+- `src/presentation`: chat view, settings tabs, modals, controllers, state
+- `src/core`, `src/types`, `src/utils`: plugin paths, shared interfaces and data shapes, small helpers
+- `packages/obsidian-llm`: LLM providers, the HTTP port and the model manager (`@qwai/obsidian-llm`)
 
-The repository broadly follows a layered design:
-
-- `main.ts`: plugin bootstrap, settings load/save, view registration, deferred startup tasks
-- `src/core`: container, config schema/manager, event bus, error handling, shared primitives
-- `src/domain`: conversation and agent domain models
-- `src/application/services`: orchestration logic for chat, tools, MCP, RAG, storage, memory, OpenAPI, web search
-- `src/infrastructure`: adapters for LLM providers, persistence, RAG/vector store internals
-- `src/presentation`: chat view, settings tabs, modals, controllers, handlers, state objects
-- `src/types`: shared plugin settings and feature types
-
-One important reality: the repository contains both the production chat implementation in [`chat-view.ts`](../../src/presentation/views/chat-view.ts) and an incomplete MVC-style subtree under `src/presentation/components/chat/`. That subtree is useful context, but not every class there is fully wired into runtime behavior.
+Layer boundaries are enforced by lint (`no-restricted-imports` in `eslint.config.mts`).
 
 ## Main Runtime Flows
 
@@ -35,89 +31,72 @@ One important reality: the repository contains both the production chat implemen
 
 On load, the plugin:
 
-1. Initializes repositories and storage services
-2. Loads settings from the user config and legacy plugin data
-3. Hydrates prompts, agents, providers, model caches, and MCP server data
-4. Registers the chat view, commands, ribbon icon, and settings tab
-5. Runs deferred tasks such as conversation migration, default-agent seeding, MCP auto-connect, OpenAPI reload, and CLI tool reload
-
-The main coordination logic lives in [`main.ts`](../../main.ts).
+1. Registers the chat view, commands, ribbon icon and settings tab
+2. Loads settings through `SettingsStore` (user config, repository files, migrations)
+3. Builds services in [`src/bootstrap/create-services.ts`](../../src/bootstrap/create-services.ts) and resolves `whenServicesReady()`
+4. Runs deferred work: conversation migration, default-agent seeding, tool source loading (built-in, CLI, OpenAPI, MCP auto-connect)
 
 ### Chat Request Lifecycle
 
-The production chat flow centers on [`src/presentation/views/chat-view.ts`](../../src/presentation/views/chat-view.ts):
+[`chat-view.ts`](../../src/presentation/views/chat-view.ts) collects text, attachments and references; [`ChatController`](../../src/presentation/components/chat/controllers/chat-controller.ts) sends them:
 
-- Collect message text, attachments, and vault references
-- Resolve active model, prompt, agent, and feature flags
-- Optionally add RAG context and web search results
-- Route the request through the selected provider
-- Stream partial output back into the chat UI
-- Persist the updated conversation and messages
+- Chat mode: [`ChatService`](../../src/application/services/chat.service.ts) adds RAG and web search context and streams the reply
+- Agent mode: [`AgentEngineLoop`](../../src/application/agents/agent-engine-loop.ts) runs the [`TurnKernel`](../../src/application/agents/kernel/turn-kernel.ts); tool calls appear live in the chat
+- Stop cancels the request through an `AbortSignal`
+- The conversation is saved after the reply
 
 ### Tooling Pipeline
 
-Tool execution is unified through [`src/application/services/tool-manager.ts`](../../src/application/services/tool-manager.ts):
+[`ToolSourceManager`](../../src/application/tools/tool-source-manager.ts) loads tool sources into the [`ToolRegistry`](../../src/application/tools/tool-registry.ts):
 
-- Built-in tools are registered at startup
-- MCP tools are wrapped and inserted dynamically
-- OpenAPI specs are converted into executable tools
-- CLI-specific tools can be loaded separately
+- Built-in vault tools ([`builtin-tool-source.ts`](../../src/application/tools/sources/builtin-tool-source.ts))
+- MCP servers, wrapped as tools
+- OpenAPI specs converted into tools
+- CLI tools from presets or user config
 
-This is the main extensibility seam for adding new tool classes.
+Each tool declares its side effects; agents only see the tools their `toolAccess` grants.
 
 ### RAG Pipeline
 
-RAG is implemented through:
-
-- [`src/infrastructure/rag-manager.ts`](../../src/infrastructure/rag-manager.ts)
-- [`src/infrastructure/vector-store.ts`](../../src/infrastructure/vector-store.ts)
-- [`src/infrastructure/embedding-manager.ts`](../../src/infrastructure/embedding-manager.ts)
-- [`src/infrastructure/document-grader.ts`](../../src/infrastructure/document-grader.ts)
-
-The flow is: vault files -> chunking -> embeddings -> local vector index -> similarity search -> optional grading -> prompt injection.
+[`RAGManager`](../../src/infrastructure/rag-manager.ts) indexes vault notes into the [`VectorStore`](../../src/infrastructure/vector-store.ts): notes → chunks ([`chunker.ts`](../../src/infrastructure/rag/chunker.ts)) → embeddings → local index → similarity search → optional grading. Unchanged notes are skipped by content hash. Chat and agents reach it through the `KnowledgeBase` port.
 
 ## Persistence Model
 
-The plugin persists data in more than one place:
+- User config file: normalized settings (`SettingsStore`, `settings-codec.ts`)
+- Repository JSON files: providers, prompts, agents, model caches, MCP servers and tool caches, token usage, agent memory
+- Conversations: one JSON file per conversation
+- Agent runs: one JSONL journal per run
+- Vector index: RAG chunks and embeddings
 
-- User settings file: normalized config written through the constants in `src/constants.ts`
-- Repository-backed JSON data: prompts, providers, agents, model caches, MCP metadata
-- Obsidian-vault storage: conversations and messages
-- Local vector store: RAG chunk/embedding data
-
-When changing settings or migrations, check both the normalized user config path and the repository-backed files. A bug in only one layer can produce silent drift.
+All paths come from [`pluginPaths(configDir)`](../../src/core/plugin-paths.ts). Writes are atomic (temp file, then rename).
 
 ## Important Modules To Read First
 
-If you are new to the repository, read these files in order:
-
 1. [`main.ts`](../../main.ts)
-2. [`src/types/settings.ts`](../../src/types/settings.ts)
-3. [`src/presentation/views/chat-view.ts`](../../src/presentation/views/chat-view.ts)
-4. [`src/application/services/tool-manager.ts`](../../src/application/services/tool-manager.ts)
-5. [`src/infrastructure/llm/model-manager.ts`](../../src/infrastructure/llm/model-manager.ts)
-6. [`src/infrastructure/rag-manager.ts`](../../src/infrastructure/rag-manager.ts)
+2. [`src/bootstrap/create-services.ts`](../../src/bootstrap/create-services.ts)
+3. [`src/application/settings/settings-store.ts`](../../src/application/settings/settings-store.ts)
+4. [`src/presentation/views/chat-view.ts`](../../src/presentation/views/chat-view.ts)
+5. [`src/application/agents/kernel/turn-kernel.ts`](../../src/application/agents/kernel/turn-kernel.ts)
+6. [`src/application/tools/tool-source-manager.ts`](../../src/application/tools/tool-source-manager.ts)
+7. [`packages/obsidian-llm/src/model-manager.ts`](../../packages/obsidian-llm/src/model-manager.ts)
 
 ## Known Engineering Hotspots
 
-- The codebase contains parallel implementations from an architecture migration; not every controller/service is production-critical.
-- Settings persistence spans multiple stores, so migrations must be checked carefully.
-- MCP, OpenAPI, and RAG all add asynchronous startup work; regressions often appear as initialization-order bugs.
-- Some UI modules are very large and mix rendering, state mutation, and side effects.
+- Several UI modules are still large (`agent-edit-modal.ts`, `mcp-inspector`, `message-renderer.ts`, `cli-tools-section.ts`).
+- The SAP AI Core provider is buffered rather than streamed and does not support tool calls.
+- MCP, OpenAPI and RAG all add asynchronous startup work; regressions often appear as initialization-order bugs.
 
 ## Suggested Development Workflow
 
-Use this sequence for routine work:
-
-1. Read the relevant runtime path, not just the architecture folder.
-2. Update or add tests if the touched module already has coverage.
-3. Run `npm run type-check`.
-4. Run `npm run lint`.
-5. Run `npm run build` before considering the change complete.
+1. Read the relevant runtime path.
+2. Write or update the test first (`npx jest`, missions in `tests/missions`).
+3. Run `npm run lint`.
+4. Run `npm run build` and `node scripts/deploy.js --local`.
+5. For UI or storage changes, run `npm run test:e2e`.
 
 ## Extension Guidance
 
-- New LLM providers usually belong under `src/infrastructure/llm/` plus model-resolution updates.
-- New built-in tools belong under `src/application/services/` and must be registered by `ToolManager`.
-- New settings require updates to type definitions, config transforms, UI tabs, and persistence behavior.
-- New chat-view features should be validated against the production `chat-view.ts` path, not only the controller subtree.
+- New LLM providers belong in `packages/obsidian-llm/src/providers/`; OpenAI-compatible APIs can subclass `OpenAICompatibleProvider`.
+- New built-in tools are implemented in `src/application/services/*-tools.ts`, registered in `builtin-tool-source.ts`, and must declare their side effects.
+- New settings need the type, codec and migration updates, plus a field in the relevant tab (`SettingsForm` for simple fields).
+- New ports belong to the layer that consumes them; adapters implement them structurally.

@@ -1,156 +1,113 @@
 # Architecture Overview
 
-Intelligence Assistant follows a **layered hexagonal architecture** (Ports and Adapters) with six top-level namespaces inside `src/`. Dependencies flow strictly from outer layers inward; inner layers never reference outer ones.
+Intelligence Assistant is a layered, ports-and-adapters plugin. `main.ts` is a thin Obsidian `Plugin` that loads settings and hands off to the composition root in `src/bootstrap/`. LLM providers live in a separate package, `packages/obsidian-llm` (`@qwai/obsidian-llm`).
 
-## Layer diagram
-
-```
-┌─────────────────────────────────────────────────────┐
-│                  Presentation                        │
-│   Views · Components · Controllers · Handlers        │
-│   Settings tabs · Modals · State                     │
-└────────────────────────┬────────────────────────────┘
-                         │
-┌────────────────────────▼────────────────────────────┐
-│                  Application                         │
-│   Services (chat, LLM, MCP, RAG, agents, tools,     │
-│   web search, conversation storage, memory)          │
-└────────────────────────┬────────────────────────────┘
-                         │
-┌────────────────────────▼────────────────────────────┐
-│                 Infrastructure                       │
-│   LLM providers · Persistence                        │
-│   RAG / vector store · Embedding · Document grader   │
-└────────────────────────┬────────────────────────────┘
-                         │
-┌────────────────────────▼────────────────────────────┐
-│                    Domain                            │
-│   Agent model · Conversation model · Message entity  │
-└────────────────────────┬────────────────────────────┘
-                         │
-┌────────────────────────▼────────────────────────────┐
-│                     Core                             │
-│   DI Container · Event bus · Error handling          │
-│   Config manager · Performance monitor               │
-└─────────────────────────────────────────────────────┘
-```
-
-## Namespaces
-
-### `src/core/`
-
-Fundamental cross-cutting infrastructure:
-
-- **`container.ts`** — Dependency injection. Supports singleton and transient registration. All application services are resolved through the container.
-- **`event-bus.ts`** — Async/sync event communication. 30+ named events across messages, conversations, agents, tools, RAG, MCP, and system lifecycle.
-- **`error-handler.ts`** / **`errors.ts`** — Custom error hierarchy (`PluginError`, `ConfigurationError`, `NetworkError`, `StorageError`, `ToolError`, `ValidationError`) plus centralized error processing.
-- **`config-manager.ts`** / **`config-schema.ts`** — Centralized settings CRUD with schema validation, migration support, path-based nested access, and change tracking.
-- **`performance-monitor.ts`** — Lightweight operation timing.
-
-### `src/domain/`
-
-Pure business models with no framework dependencies:
-
-- **`domain/agent/agent.model.ts`** — Agent configuration model: validation, serialization, factory methods.
-- **`domain/chat/entities/conversation.model.ts`** — Conversation aggregate with message list, token counting, and summary generation.
-- **`domain/chat/entities/message.entity.ts`** — Message value object.
-
-### `src/application/`
-
-Orchestration services that coordinate domain models and infrastructure:
-
-| Service | Responsibility |
-|---------|---------------|
-| `chat.service.ts` | Message routing, streaming, tool call execution |
-| `llm-service.ts` | Provider selection, model resolution |
-| `agent-service.ts` | Agent CRUD and selection |
-| `mcp-service.ts` / `mcp-client.ts` | MCP server lifecycle, tool catalog |
-| `mcp-tool-wrapper.ts` | Adapt MCP tools to agent tool interface |
-| `rag-service.ts` | Vault indexing orchestration |
-| `web-search-service.ts` | Provider-agnostic web search |
-| `tool-manager.ts` | Register and route all tool types |
-| `conversation-storage-service.ts` | Persist / restore conversations |
-| `conversation-migration-service.ts` | Migrate old conversation formats |
-| `memory-service.ts` | Agent memory read/write |
-| `cli-tool.ts` / `cli-tool-loader.ts` | Native CLI tool definitions |
-| `openapi-tool-loader.ts` | Parse OpenAPI specs into agent tools |
-| `file-tools.ts` / `search-tools.ts` | Built-in file and search tools |
-
-### `src/infrastructure/`
-
-Adapters to external systems:
-
-**LLM providers** (`infrastructure/llm/`):
-
-| Provider | File |
-|----------|------|
-| OpenAI | `openai-provider.ts` |
-| Anthropic | `anthropic-provider.ts` |
-| Google Gemini | `google-provider.ts` |
-| DeepSeek | `deepseek-provider.ts` |
-| Ollama | `ollama-provider.ts` |
-| OpenRouter | `openrouter-provider.ts` |
-| SAP AI Core | `sap-ai-core-provider.ts` |
-
-All providers extend `base-streaming-provider.ts`, which handles chunked streaming, tool-call accumulation, and error normalization. Every provider implements `base-provider.interface.ts`.
-
-**Persistence** (`infrastructure/persistence/`):
-
-- `data/` repositories — JSON-file storage for agents, prompts, providers, MCP servers, model cache, and MCP tool cache.
-- `obsidian/` repositories — Obsidian vault-based storage for conversations and messages.
-
-**RAG** (`infrastructure/rag-manager.ts`, `vector-store.ts`, `embedding-manager.ts`, `embedding-worker.ts`, `document-grader.ts`):
-
-Vault indexing pipeline: load → chunk → embed → store in a local JSON vector index. Retrieval uses cosine-similarity nearest-neighbour search. A document grader filters chunks by relevance before injection into context.
-
-### `src/presentation/`
-
-All UI code. Follows an MVC pattern inside the chat view.
-
-**Views** (`presentation/views/`):
-
-- `chat-view.ts` — Main `ItemView`. Owns the root DOM, delegates to controllers and handlers.
-
-**Chat component subtree** (`presentation/components/chat/`):
-
-| Folder | Responsibility |
-|--------|---------------|
-| `controllers/` | `ChatController`, `MessageController`, `AgentController`, `InputController`, `BaseController` |
-| `handlers/` | `StreamingHandler` (streaming + auto-scroll), `ToolCallHandler` (tool-call UI), `AttachmentHandler` (file/image input) |
-| `managers/` | `ConversationManager` (conversation CRUD, history, persistence) |
-| `message-renderer.ts` | Markdown → DOM, code blocks, tool results |
-| `chat-header.ts` | Top toolbar (mode, agent/prompt picker, model, controls) |
-
-**Settings tabs** (`presentation/components/tabs/`):
-
-`GeneralTab`, `LLMTab`, `ModelsTab`, `ProvidersTab`, `AgentsTab`, `PromptsTab`, `ToolsTab`, `MCPTab`, `RAGTab`, `WebSearchTab`, `QuickActionsTab`
-
-**Modals** (`presentation/components/modals/`):
-
-`AgentEditModal`, `MCPServerModal`, `MCPInspectorModal`, `ProviderConfigModal`, `OllamaModelManagerModal`, `PromptModal`, `SystemPromptEditModal`, `ConfirmModal`, `ExplainTextModal`
-
-**State** (`presentation/state/`):
-
-`ChatViewState` — reactive state container for the chat view (current conversation, agent, mode, streaming flags, etc.).
-
-### `src/types/`
-
-All TypeScript type definitions, exported from a single `index.ts`:
+## Layers
 
 ```
-types/
-├── core/          agent.ts · conversation.ts · model.ts
-├── features/      mcp.ts · rag.ts · web-search.ts · memory.ts · think.ts · cli-tools.ts · openapi-tools.ts
-├── common/        llm.ts · tools.ts · attachments.ts · reasoning.ts
-└── settings.ts    PluginSettings — the root settings schema persisted to data.json
+┌───────────────────────────────────────────────────────────────┐
+│ main.ts → src/bootstrap/   composition root (builds everything)│
+└───────────────┬───────────────────────────────────────────────┘
+                │ wires
+┌───────────────▼───────────────┐   ┌───────────────────────────┐
+│ presentation/                 │   │ packages/obsidian-llm      │
+│ views · components · modals   │   │ providers · HTTP port ·    │
+│ settings tabs · state         │   │ model manager · LLM hub    │
+└───────────────┬───────────────┘   └─────────────▲─────────────┘
+                │ calls                           │ used by
+┌───────────────▼─────────────────────────────────┴─────────────┐
+│ application/   use cases + the ports they own                  │
+│ agents (turn kernel) · chat · settings store · tools · search  │
+└───────────────┬───────────────────────────────────────────────┘
+                │ ports implemented by
+┌───────────────▼───────────────────────────────────────────────┐
+│ infrastructure/  adapters: JSON/JSONL persistence, RAG,        │
+│ vector store, embeddings, Obsidian file system                 │
+└───────────────┬───────────────────────────────────────────────┘
+                │
+┌───────────────▼───────────────────────────────────────────────┐
+│ core/ · types/ · utils/ · constants   no outward dependencies  │
+└───────────────────────────────────────────────────────────────┘
 ```
 
-## Key design decisions
+The import rules are enforced by `no-restricted-imports` blocks in `eslint.config.mts`, with no exemptions:
 
-### Settings schema and migration
+| Layer | May not import |
+|-------|----------------|
+| `core/`, `types/`, `utils/`, `constants.ts`, `i18n/` | application, infrastructure, presentation |
+| `application/` | infrastructure, presentation |
+| `infrastructure/` | application, presentation |
+| `packages/obsidian-llm` | anything from the plugin (`@/*`) |
 
-`types/settings.ts` defines `PluginSettings` as the single source of truth for all persisted state. `settings-tab.ts` holds migration logic (`userConfigToPluginSettings`) that upgrades data from previous formats.
+`bootstrap/` and `main.ts` are the only places that see every layer.
 
-### No dynamic imports in Electron renderer
+## Composition root — `src/bootstrap/`
 
-Electron's Chromium-based renderer rejects `import()` with bare module specifiers and blocks `file://` URLs for local ESM. This is why some modern ESM-only packages might require workarounds if they need to be loaded in the plugin process.
+- `create-services.ts` builds every service once and returns `OwnedServices`; the UI receives the narrower `AppServices` interface (`presentation/app-services.ts`).
+- `obsidian-settings-persistence.ts` and `plugin-data-service.ts` adapt the settings store to the plugin's JSON files.
+- `tool-source-factory.ts` creates built-in, CLI, OpenAPI and MCP tool sources.
+- `agent-entry-points.ts` and `plugin-integrations.ts` register commands, the inline AI block, deep links and RAG indexing on vault events.
+
+`ChatView.onOpen` awaits `plugin.whenServicesReady()`, so views never construct services.
+
+## Application — `src/application/`
+
+**Settings** (`settings/`): `SettingsStore` loads, migrates (`settings-migrations.ts`) and saves settings. A save writes only the units that changed (`config`, `providers`, `prompts`, `agents`, `mcp`) and notifies `onChange` subscribers; the plugin uses that to refresh RAG and the chat model list.
+
+**Agents** (`agents/`):
+
+- `kernel/turn-kernel.ts` — the agent loop. A turn is one model call plus its whole batch of tool calls. Ports: `ContextAssembler`, `ModelPort`, `ToolRunner`, `TurnGuard`.
+- `kernel/budget.ts` — step and failure budget; the agent may raise its step budget with an `ESTIMATED_STEPS` marker on the first turn. Runs end with a typed `FinishReason`.
+- `kernel/turn-guards.ts` — named retry rules (empty turn, missing write proposal) that appear in the trace.
+- `agent-engine-loop.ts` — maps kernel events to chat callbacks and writes the run journal.
+- `agent-sense-service.ts` — gathers the active note, references, graph neighbours, RAG hits and agent memory.
+
+Contracts shared with infrastructure (`KernelEvent`, `FinishReason`, `RunJournal`) live in `types/features/agent-run.ts`. See ADR-001 and ADR-002.
+
+**Chat and search** (`services/`): `chat.service.ts` streams chat-mode replies and routes agent mode to the engine loop. `chat-session-policy.ts` decides the active mode, agent, prompt and agent model. `web-search-service.ts` dispatches to the backends in `web-search/backends.ts`. `conversation-namer.ts` generates titles and icons.
+
+**Tools** (`tools/`): `ToolRegistry` holds every tool; `ToolSourceManager` loads and reloads the built-in, CLI, OpenAPI and MCP sources. Tools declare side effects (`ToolSideEffects`, including `process` for CLI and MCP tools), which drive the capability summary and the autonomy rules.
+
+**Ports owned here**: `KnowledgeBase` and `MemoryIndex` (`services/knowledge-base.ts`), `AgentMemoryStore`, `ExportTargetPicker`, `SettingsPersistence`, and the kernel ports above.
+
+## Infrastructure — `src/infrastructure/`
+
+- `persistence/json-file.ts` — atomic JSON writes (temp file, then rename) with recovery of a leftover temp file; `json-collection.ts` stores an index plus one file per item. Every repository in `persistence/data/` is built on these.
+- `persistence/jsonl-run-journal.ts` — appends one JSON line per agent event.
+- `persistence/conversation-storage-service.ts` — conversations as per-file JSON.
+- `rag-manager.ts`, `vector-store.ts`, `rag/chunker.ts`, `embedding-manager.ts`, `document-grader.ts` — vault indexing and retrieval. Chunks record a content hash and the embedding model, so unchanged notes are not re-embedded and searches only compare vectors from the same model. `RAGManager` implements `KnowledgeBase` and `MemoryIndex`.
+
+All plugin paths come from `core/plugin-paths.ts` (`pluginPaths(configDir)`), so the vault's real config folder is used.
+
+## LLM package — `packages/obsidian-llm`
+
+- `http.ts` / `obsidian-http.ts` — the `HttpPort`; `resilient-http.ts` adds timeout, retries on 429/502/503/504 and transport errors, and `AbortSignal` cancellation.
+- `base-streaming-provider.ts` — SSE streaming with a fresh chunk parser per stream.
+- `providers/openai-compatible-provider.ts` — shared base for OpenAI, DeepSeek and OpenRouter. Anthropic, Gemini and Ollama implement tool calling natively. SAP AI Core uses buffered SSE helpers in `sap-sse.ts`.
+- `model-manager.ts` — one model cache per provider config, with de-duplicated in-flight requests.
+- `hub.ts` — the cross-plugin LLM hub, which lends model access without exposing keys.
+
+## Presentation — `src/presentation/`
+
+- `views/chat-view.ts` — the chat `ItemView`; it composes the header, input, message list and conversation sidebar. `views/chat-workspace.ts` opens and finds chat leaves; `views/agent-task-launcher.ts` starts agent tasks from commands.
+- `components/chat/chat-session-controller.ts` — applies mode, agent, conversation config and quick toggles to the view.
+- `components/chat/controllers/` — `ChatController` (send, stream, live agent trace) and `InputController`.
+- `components/chat/managers/conversation-manager.ts` and `conversation-list-view.ts` — the conversation sidebar.
+- `components/settings/settings-form.ts` — `SettingsForm` binds a settings section to toggle, dropdown, text, number and list fields with one save path.
+- `components/tabs/` — settings tabs; `components/modals/` — dialogs.
+- `state/chat-view-state.ts` — per-view state, including the `AbortController` for the running request.
+
+## Types — `src/types/`
+
+Interfaces and plain data shapes only: `core/` (agent, conversation, model), `common/` (LLM, tools, attachments, reasoning), `features/` (agent-run, cli-tools, mcp, memory, openapi-tools, rag, usage, web-search) and `settings.ts` (`PluginSettings`). Behaviour lives in the layers above.
+
+## Testing
+
+- `npx jest` — unit tests (jsdom, Obsidian mock in `__mocks__/obsidian.ts`).
+- `npx jest tests/harness tests/missions --runInBand` — agent missions against a mock LLM and an in-memory vault.
+- `npm run test:e2e` — WebdriverIO against a real Obsidian build.
+
+## Design notes
+
+- **No dynamic imports in the Electron renderer.** Chromium rejects `import()` with bare specifiers and blocks `file://` ESM, so ESM-only packages need bundling.
+- **Settings are diffed, not rewritten.** Callers mutate `plugin.settings` and call `saveSettings()`; the store writes only changed units, so redundant saves are cheap.
