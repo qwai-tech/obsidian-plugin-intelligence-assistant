@@ -13,6 +13,8 @@ describe('ToolAccessEditor', () => {
 		expect(editor.hasTool('mcp:files', 'mcp:files:search')).toBe(true);
 		expect(editor.hasTool('builtin:builtin', 'builtin:builtin:read')).toBe(true);
 		expect(editor.hasTool('builtin:builtin', 'builtin:builtin:write')).toBe(false);
+		expect(editor.rule('builtin:builtin')).toEqual(['builtin:builtin:read']);
+		expect(editor.rule('cli:git')).toBeUndefined();
 	});
 
 	it('expands a whole source to its tools before removing one', () => {

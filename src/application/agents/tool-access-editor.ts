@@ -20,6 +20,10 @@ export class ToolAccessEditor {
 		}
 	}
 
+	rule(source: string): 'all' | string[] | undefined {
+		return this.access.sources[source];
+	}
+
 	grantsWholeSource(source: string): boolean {
 		return this.access.sources[source] === 'all';
 	}
