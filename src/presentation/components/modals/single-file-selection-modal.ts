@@ -1,14 +1,16 @@
 import { App, TFile, Modal } from 'obsidian';
+import type { NoteChoice } from '@/application/services/vault-export-service';
 import { t } from '@/i18n';
 
 export class SingleFileSelectionModal extends Modal {
-	private onChooseFile: (file: TFile | null) => void;
+	private onChooseFile: (choice: NoteChoice) => void;
+	private chosen = false;
 	private searchInput: HTMLInputElement;
 	private resultsContainer: HTMLElement;
 	private allFiles: TFile[];
 	private selectedFile: TFile | null = null;
 
-	constructor(app: App, onChooseFile: (file: TFile | null) => void) {
+	constructor(app: App, onChooseFile: (choice: NoteChoice) => void) {
 		super(app);
 		this.onChooseFile = onChooseFile;
 
@@ -42,8 +44,7 @@ export class SingleFileSelectionModal extends Modal {
 
 		this.searchInput.addEventListener("keydown", (e) => {
 			if (e.key === "Enter" && this.selectedFile) {
-				this.close();
-				this.onChooseFile(this.selectedFile);
+				this.choose(this.selectedFile);
 			}
 		});
 
@@ -52,15 +53,13 @@ export class SingleFileSelectionModal extends Modal {
 		const insertButton = buttonContainer.createEl("button", { text: t('chat.modals.insertNote.insert') });
 		insertButton.addClass("mod-cta");
 		insertButton.addEventListener("click", () => {
-			this.close();
-			this.onChooseFile(this.selectedFile);
+			this.choose(this.selectedFile ?? 'new');
 		});
 
 		const newNoteButton = buttonContainer.createEl("button", { text: t('chat.modals.insertNote.createNew') });
 		newNoteButton.addClass('ia-mr-10');
 		newNoteButton.addEventListener("click", () => {
-			this.close();
-			this.onChooseFile(null);
+			this.choose('new');
 		});
 	}
 
@@ -102,7 +101,15 @@ export class SingleFileSelectionModal extends Modal {
 	}
 
 	onClose() {
-		const { contentEl } = this;
-		contentEl.empty();
+		this.contentEl.empty();
+		if (!this.chosen) {
+			this.onChooseFile(null);
+		}
+	}
+
+	private choose(choice: NoteChoice) {
+		this.chosen = true;
+		this.close();
+		this.onChooseFile(choice);
 	}
 }

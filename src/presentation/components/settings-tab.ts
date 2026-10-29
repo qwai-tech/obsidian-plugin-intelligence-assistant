@@ -1,12 +1,7 @@
 import {App, Notice, PluginSettingTab} from 'obsidian';
 import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { } from './types';
-import type {  } from '@/application/services/types';
 
-import { } from '../views/chat-view';
-import { } from '@/constants';
-import { } from '../utils/ui-helpers';
 import { displayGeneralTab } from './tabs/general-tab';
 import { displayPromptsTab } from './tabs/prompts-tab';
 import { displayToolsTab } from './tabs/tools-tab';
@@ -19,7 +14,6 @@ import { displayUsageTab } from './tabs/usage-tab';
 import type { ModelFilters } from './tabs/models-tab';
 import { TestIds } from '@/presentation/utils/test-ids';
 
-
 export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 	plugin: IntelligenceAssistantPlugin;
 	private activeTab: string = 'general';
@@ -28,12 +22,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 	private modelEnabledFilter: 'all' | 'enabled' | 'disabled' = 'all';
 	private modelSearchTerm: string = '';
 	private llmSubTab: 'provider' | 'models' = 'provider';
-	private mcpToolsServerFilter: string = 'all';
-	private mcpToolsSearchTerm: string = '';
 	private toolsSubTab: 'built-in' | 'mcp' | 'openapi' | 'cli' = 'built-in';
-	private ragSubTab: 'general' | 'vector' | 'grader' = 'general';
-	private ragIndexModePill?: HTMLElement;
-	private ragIndexModeMetric?: HTMLElement;
 
 	constructor(app: App, plugin: IntelligenceAssistantPlugin) {
 		super(app, plugin);
@@ -161,7 +150,6 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		);
 	}
 
-
 	private displayMCPTab(containerEl: HTMLElement) {
 		displayMCPTab(
 			containerEl,
@@ -226,18 +214,8 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			}
 
 			try {
-				// Probe via a throw-away McpToolSource so the cached shape stays
-				// consistent with the registry-produced cache. Not registered with
-				// the live registry — pure connection test.
-				const { McpToolSource } = await import('@/application/tools/sources/mcp-tool-source');
-				const probeSource = new McpToolSource(server);
-				const tools = await probeSource.load();
-				await probeSource.dispose();
-
-				server.cachedTools = tools.map((t) => ({
-					name: t.definition.name,
-					description: t.definition.description,
-				}));
+				const tools = await this.plugin.services.tools.probeMcp(server);
+				server.cachedTools = tools;
 				server.cacheTimestamp = Date.now();
 				settingsDirty = true;
 

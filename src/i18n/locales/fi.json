@@ -982,7 +982,6 @@
     "usage": {
       "title": "Tokenien käyttö",
       "desc": "Seuraa tokenien kulutusta palveluntarjoajien ja mallien välillä. Tiedot kertyy kaikista keskusteluista.",
-      "notAvailable": "Tokenien käytön seuranta ei ole saatavilla.",
       "ranges": {
         "today": "Tänään",
         "week": "Tällä viikolla",

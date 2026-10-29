@@ -982,7 +982,6 @@
     "usage": {
       "title": "Penggunaan token",
       "desc": "Lacak konsumsi token di seluruh penyedia dan model. Data diakumulasikan di semua percakapan.",
-      "notAvailable": "Pelacakan penggunaan token tidak tersedia.",
       "ranges": {
         "today": "Hari ini",
         "week": "Minggu ini",

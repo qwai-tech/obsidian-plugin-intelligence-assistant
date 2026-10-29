@@ -22,11 +22,7 @@ export async function displayUsageTab(
 	});
 	desc.addClass('ia-section-description');
 
-	const repo = plugin.tokenUsageRepo;
-	if (!repo) {
-		containerEl.createEl('p', { text: t('settings.usage.notAvailable') });
-		return;
-	}
+	const repo = plugin.services.usage;
 
 	// ---- Tab bar ----
 	const tabBar = containerEl.createDiv('ia-tab-bar');

@@ -982,7 +982,6 @@
     "usage": {
       "title": "Využitie tokenov",
       "desc": "Sledujte spotrebu tokenov u poskytovateľov a modelov. Dáta sú akumulované naprieč všetkými konverzáciami.",
-      "notAvailable": "Sledovanie využitia tokenov nie je k dispozícii.",
       "ranges": {
         "today": "Dnes",
         "week": "Tento týždeň",

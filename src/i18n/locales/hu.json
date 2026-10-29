@@ -982,7 +982,6 @@
     "usage": {
       "title": "Token használat",
       "desc": "Token-felhasználás nyomon követése szolgáltatók és modellek szerint. Az adatok az összes beszélgetésből halmozódnak fel.",
-      "notAvailable": "A token-felhasználás követése nem érhető el.",
       "ranges": {
         "today": "Ma",
         "week": "Ezen a héten",

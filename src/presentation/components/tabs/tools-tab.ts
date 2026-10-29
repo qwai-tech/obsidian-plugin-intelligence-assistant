@@ -9,7 +9,9 @@ import type { RegisteredTool } from '@/types/common/tools';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
 import { TestIds } from '@/presentation/utils/test-ids';
-import { renderBuiltinToolsSection, renderOpenapiToolsSection, renderCliToolsSection } from './tools';
+import { renderBuiltinToolsSection } from '@/presentation/components/tabs/tools/builtin-tools-section';
+import { renderOpenapiToolsSection } from '@/presentation/components/tabs/tools/openapi-tools-section';
+import { renderCliToolsSection } from '@/presentation/components/tabs/tools/cli-tools-section';
 
 type ToolsSubTab = 'built-in' | 'mcp' | 'openapi' | 'cli';
 
@@ -93,7 +95,7 @@ function renderMcpTools(
 	_refreshDisplay: () => void,
 	openMcpManagement?: () => void
 ): void {
-	const registry = plugin.getToolRegistry();
+	const registry = plugin.services.tools.registry;
 	const allTools = registry.getTools();
 
 	// Group by origin key

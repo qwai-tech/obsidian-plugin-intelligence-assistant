@@ -982,7 +982,6 @@
     "usage": {
       "title": "Pilnvaru lietojums",
       "desc": "Izsekot pilnvaru patēriņam dažādiem pakalpojumu sniedzējiem un modeļiem. Dati tiek uzkrāti visās sarunās.",
-      "notAvailable": "Pilnvaru lietojuma izsekošana nav pieejama.",
       "ranges": {
         "today": "Šodien",
         "week": "Šonedēļ",

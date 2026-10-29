@@ -982,7 +982,6 @@
     "usage": {
       "title": "Użycie tokenów",
       "desc": "Śledź zużycie tokenów u dostawców i modeli. Dane są gromadzone we wszystkich rozmowach.",
-      "notAvailable": "Śledzenie użycia tokenów jest niedostępne.",
       "ranges": {
         "today": "Dzisiaj",
         "week": "Ten tydzień",

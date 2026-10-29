@@ -36,8 +36,8 @@ export class RagSettingsPage extends BasePage {
 								ragConfig: Record<string, unknown>;
 							};
 							saveSettings(): Promise<void>;
-							getRAGManager(): {
-								updateConfig(config: unknown, llmConfigs?: unknown[]): void;
+							services: {
+								rag: { updateConfig(config: unknown, llmConfigs?: unknown[]): void };
 							};
 						}>;
 					};
@@ -108,7 +108,7 @@ export class RagSettingsPage extends BasePage {
 				minAccuracyScore: 0,
 				minSupportQualityScore: 0,
 			};
-			plugin.getRAGManager().updateConfig(plugin.settings.ragConfig, plugin.settings.llmConfigs);
+			plugin.services.rag.updateConfig(plugin.settings.ragConfig, plugin.settings.llmConfigs);
 			await plugin.saveSettings();
 		}, PLUGIN_ID, MOCK_LLM_BASE_URL);
 	}

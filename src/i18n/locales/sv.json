@@ -982,7 +982,6 @@
     "usage": {
       "title": "Tokenanvändning",
       "desc": "Spåra tokenkonsumtion för leverantörer och modeller. Data ackumuleras över alla konversationer.",
-      "notAvailable": "Tokenanvändningsspårning är inte tillgänglig.",
       "ranges": {
         "today": "Idag",
         "week": "Den här veckan",

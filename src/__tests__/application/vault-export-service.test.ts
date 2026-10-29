@@ -1,60 +1,78 @@
-// src/__tests__/application/vault-export-service.test.ts
-import { VaultExportService } from '../../application/services/vault-export-service';
-import type { Message } from '../../types';
+import { TFile } from 'obsidian';
+import { VaultExportService, type ExportTargetPicker, type NoteChoice } from '@/application/services/vault-export-service';
+import type { Message } from '@/types';
 
-jest.mock('obsidian', () => ({
-	Notice: jest.fn(),
-	TFile: class TFile {},
-}));
+jest.mock('@/i18n', () => ({ t: (key: string, args?: Record<string, unknown>) => args ? `${key}:${JSON.stringify(args)}` : key }));
 
-jest.mock('../../i18n', () => ({ t: (key: string, args?: Record<string,unknown>) => args ? `${key}:${JSON.stringify(args)}` : key }));
+const assistantMessage = (overrides: Partial<Message> = {}): Message => ({ role: 'assistant', content: 'Hello world', model: 'gpt-4o', ...overrides });
 
-jest.mock('../../presentation/components/modals/text-input-modal', () => ({
-	TextInputModal: jest.fn().mockImplementation((_app: unknown, _title: unknown, _placeholder: unknown, _default: unknown, cb: (v: string) => void) => ({
-		open: () => cb('My Note'),
-	})),
-}));
+const makeApp = () => ({
+	vault: {
+		create: jest.fn(async () => undefined),
+		read: jest.fn(async () => 'existing'),
+		modify: jest.fn(async () => undefined),
+		getAbstractFileByPath: jest.fn(() => null),
+	},
+	workspace: { getLeaf: jest.fn(() => ({ openFile: jest.fn(async () => undefined) })) },
+});
 
-jest.mock('../../presentation/components/modals/single-file-selection-modal', () => ({
-	SingleFileSelectionModal: jest.fn().mockImplementation((_app: unknown, cb: (f: unknown) => void) => ({
-		open: () => cb(null),
-	})),
-}));
-
-function makeAssistantMessage(overrides: Partial<Message> = {}): Message {
-	return { role: 'assistant', content: 'Hello world', model: 'gpt-4o', ...overrides };
-}
+const picker = (noteName: string | null, note: NoteChoice): ExportTargetPicker => ({
+	askNoteName: jest.fn(async () => noteName),
+	pickNote: jest.fn(async () => note),
+});
 
 describe('VaultExportService', () => {
-	describe('saveToNewNote', () => {
-		it('creates a vault file when user provides a note name', async () => {
-			const createFn = jest.fn().mockResolvedValue(undefined);
-			const getAbstractFileByPath = jest.fn().mockReturnValue(null);
-			const app = {
-				vault: { create: createFn, getAbstractFileByPath },
-				workspace: { getLeaf: jest.fn().mockReturnValue({ openFile: jest.fn() }) },
-			} as any;
-			const svc = new VaultExportService(app);
-			svc.saveToNewNote(makeAssistantMessage());
-			// modal callback fires synchronously via mock
-			await new Promise(r => setTimeout(r, 0)); // flush promises
-			expect(createFn).toHaveBeenCalledTimes(1);
-			const [fileName, content] = createFn.mock.calls[0];
-			expect(fileName).toContain('My Note');
-			expect(content).toContain('Hello world');
-		});
+	it('creates a note named by the user', async () => {
+		const app = makeApp();
+		const service = new VaultExportService(app as never, picker('My Note', null));
+
+		await service.saveToNewNote(assistantMessage());
+
+		const [fileName, content] = app.vault.create.mock.calls[0] as unknown as [string, string];
+		expect(fileName).toBe('My Note.md');
+		expect(content).toContain('Hello world');
 	});
 
-	describe('insertIntoNote', () => {
-		it('falls back to saveToNewNote when no file is selected (null)', () => {
-			const app = {
-				vault: { create: jest.fn().mockResolvedValue(undefined), getAbstractFileByPath: jest.fn().mockReturnValue(null) },
-				workspace: { getLeaf: jest.fn().mockReturnValue({ openFile: jest.fn() }) },
-			} as any;
-			const svc = new VaultExportService(app);
-			const saveToNewNoteSpy = jest.spyOn(svc, 'saveToNewNote');
-			svc.insertIntoNote(makeAssistantMessage());
-			expect(saveToNewNoteSpy).toHaveBeenCalledWith(makeAssistantMessage());
-		});
+	it('creates nothing when the user cancels the name prompt', async () => {
+		const app = makeApp();
+		const service = new VaultExportService(app as never, picker(null, null));
+
+		await service.saveToNewNote(assistantMessage());
+
+		expect(app.vault.create).not.toHaveBeenCalled();
+	});
+
+	it('appends the message to the note the user picks', async () => {
+		const app = makeApp();
+		const note = Object.assign(new TFile(), { path: 'Notes/a.md' });
+		const service = new VaultExportService(app as never, picker(null, note));
+
+		await service.insertIntoNote(assistantMessage());
+
+		const [file, content] = app.vault.modify.mock.calls[0] as unknown as [TFile, string];
+		expect(file).toBe(note);
+		expect(content).toContain('existing');
+		expect(content).toContain('Hello world');
+	});
+
+	it('creates a new note when the user asks for one instead of picking', async () => {
+		const app = makeApp();
+		const service = new VaultExportService(app as never, picker('Fallback', 'new'));
+
+		await service.insertIntoNote(assistantMessage());
+
+		expect(app.vault.modify).not.toHaveBeenCalled();
+		expect((app.vault.create.mock.calls[0] as unknown as [string])[0]).toBe('Fallback.md');
+	});
+
+	it('does nothing when the user dismisses the note picker', async () => {
+		const app = makeApp();
+		const names = picker('Unused', null);
+		const service = new VaultExportService(app as never, names);
+
+		await service.insertIntoNote(assistantMessage());
+
+		expect(app.vault.modify).not.toHaveBeenCalled();
+		expect(names.askNoteName).not.toHaveBeenCalled();
 	});
 });

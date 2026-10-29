@@ -982,7 +982,6 @@
     "usage": {
       "title": "Token kullanımı",
       "desc": "Sağlayıcılar ve modeller arasındaki token tüketimini takip edin. Veriler tüm konuşmalar boyunca biriktirilir.",
-      "notAvailable": "Token kullanım takibi mevcut değil.",
       "ranges": {
         "today": "Bugün",
         "week": "Bu hafta",

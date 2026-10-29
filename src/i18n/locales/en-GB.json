@@ -982,7 +982,6 @@
     "usage": {
       "title": "Token usage",
       "desc": "Track token consumption across providers and models. Data is accumulated across all conversations.",
-      "notAvailable": "Token usage tracking is not available.",
       "ranges": {
         "today": "Today",
         "week": "This week",

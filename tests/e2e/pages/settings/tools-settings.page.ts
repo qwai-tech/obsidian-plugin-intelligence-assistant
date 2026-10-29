@@ -111,7 +111,7 @@ export class ToolsSettingsPage extends BasePage {
 						plugins: Record<string, {
 							settings: { openApiTools?: OpenApiToolConfig[] };
 							saveSettings(): Promise<void>;
-							reloadOpenApiConfig(id: string): Promise<number>;
+							services: { tools: { reloadOpenApi(id: string): Promise<number> } };
 						}>;
 					};
 				};
@@ -143,7 +143,7 @@ export class ToolsSettingsPage extends BasePage {
 				toolConfig,
 			];
 			await plugin.saveSettings();
-			const loaded = await plugin.reloadOpenApiConfig(toolConfig.id);
+			const loaded = await plugin.services.tools.reloadOpenApi(toolConfig.id);
 			if (loaded < 1) {
 				throw new Error(`OpenAPI tool did not load: ${toolConfig.id}`);
 			}
@@ -160,7 +160,7 @@ export class ToolsSettingsPage extends BasePage {
 						plugins: Record<string, {
 							settings: { cliTools?: CliToolConfig[] };
 							saveSettings(): Promise<void>;
-							reloadCLITools(): Promise<void>;
+							services: { tools: { reloadCli(): Promise<void> } };
 						}>;
 					};
 				};
@@ -170,7 +170,7 @@ export class ToolsSettingsPage extends BasePage {
 				toolConfig,
 			];
 			await plugin.saveSettings();
-			await plugin.reloadCLITools();
+			await plugin.services.tools.reloadCli();
 		}, PLUGIN_ID, config);
 		await this.open('cli');
 		await this.waitForCliRow(config.id);
@@ -205,14 +205,18 @@ export class ToolsSettingsPage extends BasePage {
 				app: {
 					plugins: {
 						plugins: Record<string, {
-							getToolRegistry(): {
-								getTools(): Array<{ llmName: string; origin: { kind: string; sourceId: string } }>;
+							services: {
+								tools: {
+									registry: {
+										getTools(): Array<{ llmName: string; origin: { kind: string; sourceId: string } }>;
+									};
+								};
 							};
 						}>;
 					};
 				};
 			}).app.plugins.plugins[pluginId];
-			return plugin.getToolRegistry().getTools()
+			return plugin.services.tools.registry.getTools()
 				.filter(tool => sourceKind === undefined || tool.origin.kind === sourceKind)
 				.filter(tool => source === undefined || tool.origin.sourceId === source)
 				.map(tool => tool.llmName);

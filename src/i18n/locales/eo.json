@@ -982,7 +982,6 @@
     "usage": {
       "title": "Ĵetona uzado",
       "desc": "Spuri ĵetonan konsumon tra provizantoj kaj modeloj. Datumoj estas amasigataj tra ĉiuj konversacioj.",
-      "notAvailable": "Ĵetona uzadospurado ne estas disponebla.",
       "ranges": {
         "today": "Hodiaŭ",
         "week": "Ĉi-semajne",

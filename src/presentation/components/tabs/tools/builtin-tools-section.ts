@@ -82,7 +82,7 @@ export function renderBuiltinToolsSection(
 				// Re-load the builtin source so the registry reflects the new
 				// enabled set; otherwise the toggle is purely cosmetic until
 				// the plugin reloads.
-				await plugin.reloadBuiltinTools();
+				await plugin.services.tools.reloadBuiltin();
 			})();
 		});
 	});

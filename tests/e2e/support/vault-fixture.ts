@@ -138,7 +138,7 @@ export class VaultFixture {
 						plugins: Record<string, {
 							settings?: Record<string, unknown>;
 							saveSettings?: () => Promise<void>;
-							getToolRegistry?: () => { reload?: () => Promise<void> };
+							services?: { tools: { registry: { reload(): Promise<void> } } };
 						}>;
 					};
 				};
@@ -149,10 +149,7 @@ export class VaultFixture {
 
 			Object.assign(plugin.settings, patch);
 			await plugin.saveSettings();
-			const registry = typeof plugin.getToolRegistry === 'function' ? plugin.getToolRegistry() : null;
-			if (registry && typeof registry.reload === 'function') {
-				await registry.reload();
-			}
+			await plugin.services?.tools.registry.reload();
 		}, PLUGIN_ID, settingsPatch);
 	}
 

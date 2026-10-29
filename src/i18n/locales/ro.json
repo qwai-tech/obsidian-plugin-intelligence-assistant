@@ -982,7 +982,6 @@
     "usage": {
       "title": "Utilizare tokeni",
       "desc": "Urmăriți consumul de tokeni pe furnizori și modele. Datele sunt acumulate în toate conversațiile.",
-      "notAvailable": "Urmărirea utilizării tokenilor nu este disponibilă.",
       "ranges": {
         "today": "Astăzi",
         "week": "Această săptămână",

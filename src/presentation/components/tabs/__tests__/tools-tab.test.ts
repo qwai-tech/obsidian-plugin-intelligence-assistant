@@ -11,9 +11,9 @@ describe('displayToolsTab', () => {
 			settings: {
 				mcpServers: [],
 			},
-			getToolRegistry: () => ({
-				getTools: () => [],
-			}),
+			services: {
+				tools: { registry: { getTools: () => [] } },
+			},
 		};
 	}
 

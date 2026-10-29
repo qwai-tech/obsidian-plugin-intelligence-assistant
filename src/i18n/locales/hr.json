@@ -982,7 +982,6 @@
     "usage": {
       "title": "Korištenje tokena",
       "desc": "Pratite potrošnju tokena po pružateljima i modelima. Podaci se akumuliraju kroz sve razgovore.",
-      "notAvailable": "Praćenje korištenja tokena nije dostupno.",
       "ranges": {
         "today": "Danas",
         "week": "Ovaj tjedan",

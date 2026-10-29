@@ -982,7 +982,6 @@
     "usage": {
       "title": "Penggunaan token",
       "desc": "Jejak penggunaan token merentasi pembekal dan model. Data dikumpul merentasi semua perbualan.",
-      "notAvailable": "Penjejakan penggunaan token tidak tersedia.",
       "ranges": {
         "today": "Hari ini",
         "week": "Minggu ini",

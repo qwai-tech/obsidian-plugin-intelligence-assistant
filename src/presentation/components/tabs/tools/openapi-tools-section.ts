@@ -90,7 +90,7 @@ export function renderOpenapiToolsSection(
 				if (index !== -1) {
 					list.splice(index, 1);
 					await plugin.saveSettings();
-					await plugin.removeOpenApiConfig(config.id);
+					await plugin.services.tools.removeOpenApi(config.id);
 					refreshDisplay();
 					new Notice(t('settings.tools.openapi.notices.removed'));
 				}
@@ -123,10 +123,7 @@ async function reloadConfig(
 	refreshDisplay: () => void
 ): Promise<void> {
 	try {
-		const loaded = await plugin.reloadOpenApiConfig(configId, {
-			forceRefetch,
-			persistCacheMetadata: forceRefetch,
-		});
+		const loaded = await plugin.services.tools.reloadOpenApi(configId, { refetch: forceRefetch });
 		await plugin.saveSettings();
 		refreshDisplay();
 		new Notice(t('settings.tools.openapi.notices.reloaded', { count: loaded }));
@@ -322,7 +319,7 @@ class OpenApiConfigModal extends Modal {
 						if (index !== -1) {
 							list.splice(index, 1);
 							await this.plugin.saveSettings();
-							await this.plugin.removeOpenApiConfig(this.config.id);
+							await this.plugin.services.tools.removeOpenApi(this.config.id);
 							this.onChange();
 							this.close();
 						}

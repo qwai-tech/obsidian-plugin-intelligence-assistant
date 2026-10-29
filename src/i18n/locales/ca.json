@@ -982,7 +982,6 @@
     "usage": {
       "title": "Ús de tokens",
       "desc": "Seguiu el consum de tokens per proveïdors i models. Les dades s'acumulen en totes les converses.",
-      "notAvailable": "El seguiment de l'ús de tokens no està disponible.",
       "ranges": {
         "today": "Avui",
         "week": "Aquesta setmana",

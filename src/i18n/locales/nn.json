@@ -982,7 +982,6 @@
     "usage": {
       "title": "Token-bruk",
       "desc": "Spor tokenforbruk på tvers av leverandørar og modellar. Data vert akkumulert over alle samtalar.",
-      "notAvailable": "Token-brukssporing er ikkje tilgjengeleg.",
       "ranges": {
         "today": "I dag",
         "week": "Denne veka",

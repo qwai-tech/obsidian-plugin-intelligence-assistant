@@ -72,20 +72,16 @@ export function displayGeneralTab(
 				});
 		});
 
-	// Configuration Status
-	// Get conversation count from storage service instead of settings array
-	void plugin.getConversationStorageService().then(storageService => {
-		void storageService.getConversationCount().then(conversationCount => {
-			const statusValue = plugin.settings.llmConfigs.length > 0 && plugin.settings.defaultModel
-				? t('settings.general.configStatus.ok', { providers: plugin.settings.llmConfigs.length, conversations: conversationCount })
-				: t('settings.general.configStatus.incomplete');
+	void plugin.services.conversations.getConversationCount().then(conversationCount => {
+		const statusValue = plugin.settings.llmConfigs.length > 0 && plugin.settings.defaultModel
+			? t('settings.general.configStatus.ok', { providers: plugin.settings.llmConfigs.length, conversations: conversationCount })
+			: t('settings.general.configStatus.incomplete');
 
-			new Setting(containerEl)
-				.setName(t('settings.general.configStatus.name'))
-				.setDesc(t('settings.general.configStatus.desc'))
-				.addText(text => text
-					.setValue(statusValue)
-					.setDisabled(true));
-		});
+		new Setting(containerEl)
+			.setName(t('settings.general.configStatus.name'))
+			.setDesc(t('settings.general.configStatus.desc'))
+			.addText(text => text
+				.setValue(statusValue)
+				.setDisabled(true));
 	});
 }

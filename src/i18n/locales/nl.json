@@ -982,7 +982,6 @@
     "usage": {
       "title": "Tokengebruik",
       "desc": "Volg tokenconsumptie over providers en modellen. Gegevens worden opgebouwd over alle gesprekken.",
-      "notAvailable": "Tokengebruikstracking is niet beschikbaar.",
       "ranges": {
         "today": "Vandaag",
         "week": "Deze week",

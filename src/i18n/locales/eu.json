@@ -982,7 +982,6 @@
     "usage": {
       "title": "Tokenen erabilera",
       "desc": "Jarraitu tokenen kontsumoa hornitzaile eta modelo guztietan. Datuak elkarrizketa guztietan metatzen dira.",
-      "notAvailable": "Tokenen erabileraren jarraipena ez dago erabilgarri.",
       "ranges": {
         "today": "Gaur",
         "week": "Aste honetan",

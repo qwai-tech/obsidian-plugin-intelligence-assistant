@@ -982,7 +982,6 @@
     "usage": {
       "title": "Sử dụng token",
       "desc": "Theo dõi mức tiêu thụ token trên các nhà cung cấp và mô hình. Dữ liệu được tích lũy qua tất cả hội thoại.",
-      "notAvailable": "Theo dõi sử dụng token không khả dụng.",
       "ranges": {
         "today": "Hôm nay",
         "week": "Tuần này",

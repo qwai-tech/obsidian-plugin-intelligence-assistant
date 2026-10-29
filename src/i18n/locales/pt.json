@@ -982,7 +982,6 @@
     "usage": {
       "title": "Utilização de tokens",
       "desc": "Acompanhe o consumo de tokens entre fornecedores e modelos. Os dados são acumulados em todas as conversas.",
-      "notAvailable": "O acompanhamento de utilização de tokens não está disponível.",
       "ranges": {
         "today": "Hoje",
         "week": "Esta semana",

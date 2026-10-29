@@ -1,7 +1,5 @@
 import { App, Modal, Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
-import { snapshotMcpTools } from '@/application/tools/mcp-helpers';
-import { McpToolSource } from '@/application/tools/sources/mcp-tool-source';
 import type { ToolRegistry } from '@/application/tools/tool-registry';
 import type { RegisteredTool } from '@/types/common/tools';
 import { t } from '@/i18n';
@@ -146,7 +144,7 @@ export class MCPInspectorModal extends Modal {
 		container.createEl('h3', { text: t('modals.mcpInspector.connections.title') });
 
 		// Check for active connections
-		const registry = this.plugin.getToolRegistry();
+		const registry = this.plugin.services.tools.registry;
 		const connectedServers = getConnectedMcpServers(registry);
 		const toolsByProvider = getToolsByProviderKey(registry);
 
@@ -211,25 +209,21 @@ export class MCPInspectorModal extends Modal {
 			actionBtn.disabled = !isEnabled;
 			actionBtn.addEventListener('click', () => {
 				void (async () => {
-					const currentlyConnected = registry.hasSource('mcp', server.name);
+					const currentlyConnected = this.plugin.services.tools.isMcpConnected(server.name);
 					actionBtn.disabled = true;
 					const originalText = actionBtn.textContent ?? '';
 					actionBtn.textContent = currentlyConnected ? t('modals.mcpInspector.connections.disconnecting') : t('modals.mcpInspector.connections.connecting');
 
 					try {
 						if (currentlyConnected) {
-							await registry.unregisterSource('mcp', server.name);
+							await this.plugin.services.tools.disconnectMcp(server.name);
 							new Notice(t('modals.mcpInspector.connections.notices.disconnected', { name: server.name }));
 						} else {
 							if (!server.enabled) {
 								new Notice(t('modals.mcpInspector.connections.notices.enableFirst'));
 								return;
 							}
-							registry.registerSource(new McpToolSource(server));
-							const tools = await registry.reloadSource('mcp', server.name);
-							server.cachedTools = snapshotMcpTools(tools);
-							server.cacheTimestamp = Date.now();
-							await this.plugin.saveSettings();
+							await this.plugin.services.tools.connectMcp(server);
 							new Notice(t('modals.mcpInspector.connections.notices.connected', { name: server.name }));
 						}
 					} catch (_error) {
@@ -253,7 +247,7 @@ export class MCPInspectorModal extends Modal {
 		container.createEl('h3', { text: t('modals.mcpInspector.tools.title') });
 
 		// Check for active connections
-		const toolsRegistry = this.plugin.getToolRegistry();
+		const toolsRegistry = this.plugin.services.tools.registry;
 		const toolsByProvider = getToolsByProviderKey(toolsRegistry);
 
 		// Filter to only MCP tools
@@ -351,7 +345,7 @@ export class MCPInspectorModal extends Modal {
 
 		const serverSelect = selectionRow.createEl('select');
 		serverSelect.addClass('ia-mcpi-select--flex');
-		const inspectorRegistry = this.plugin.getToolRegistry();
+		const inspectorRegistry = this.plugin.services.tools.registry;
 		const connectedServers = getConnectedMcpServers(inspectorRegistry);
 
 		serverSelect.createEl('option', { text: t('modals.mcpInspector.logs.selectServer'), value: '' });
@@ -611,77 +605,6 @@ export class MCPInspectorModal extends Modal {
 			resultContainer.empty();
 			resultContainer.addClass('ia-hidden');
 		});
-	}
-
-	private async testAllMCPConnections() {
-		const mcpServers = this.plugin.settings.mcpServers;
-
-		if (mcpServers.length === 0) {
-			new Notice(t('modals.mcpInspector.testAll.noServers'));
-			return;
-		}
-
-		new Notice(t('modals.mcpInspector.testAll.testing', { count: mcpServers.length }));
-
-		const results: {name: string, success: boolean, error?: string}[] = [];
-		let settingsDirty = false;
-
-		for (const server of mcpServers) {
-			if (!server.enabled) {
-				results.push({ name: server.name, success: false, error: 'Server disabled' });
-				continue;
-			}
-
-			try {
-				// Probe via a throw-away McpToolSource so the cache shape stays
-				// consistent with what the registry would produce. Not registered.
-				const probeSource = new McpToolSource(server);
-				const tools = await probeSource.load();
-				await probeSource.dispose();
-
-				server.cachedTools = tools.map((t) => ({
-					name: t.definition.name,
-					description: t.definition.description,
-				}));
-				server.cacheTimestamp = Date.now();
-				settingsDirty = true;
-
-				results.push({
-					name: server.name,
-					success: true,
-					error: undefined
-				});
-
-				console.debug(`[MCP] ${server.name} connection test: ${tools.length} tools available`);
-			} catch (error: unknown) {
-				console.error(`[MCP] ${server.name} connection test failed:`, error);
-				results.push({
-					name: server.name,
-					success: false,
-					error: error instanceof Error ? error.message : 'Connection failed'
-				});
-			}
-		}
-
-		if (settingsDirty) {
-			await this.plugin.saveSettings();
-		}
-
-		// Show results
-		const successful = results.filter(r => r.success).length;
-		const failed = results.filter(r => !r.success).length;
-
-		if (failed === 0) {
-			new Notice(t('modals.mcpInspector.testAll.allSuccess', { count: successful }));
-		} else {
-			new Notice(t('modals.mcpInspector.testAll.partial', { success: successful, failed }));
-
-			// Show detailed results in console
-			console.debug('[MCP] Connection test results:');
-			for (const result of results) {
-				console.debug(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'connected'}`);
-			}
-		}
 	}
 
 	onClose() {

@@ -3,12 +3,13 @@ import { t } from '@/i18n';
 
 export class TextInputModal extends Modal {
 	result: string;
-	onSubmit: (result: string) => void;
+	onSubmit: (result: string | null) => void;
+	private submitted = false;
 	placeholder: string;
 	defaultValue: string;
 	title: string;
 
-	constructor(app: App, title: string, placeholder: string, defaultValue: string, onSubmit: (result: string) => void) {
+	constructor(app: App, title: string, placeholder: string, defaultValue: string, onSubmit: (result: string | null) => void) {
 		super(app);
 		this.title = title;
 		this.placeholder = placeholder;
@@ -34,8 +35,7 @@ export class TextInputModal extends Modal {
 				text.inputEl.addEventListener('keydown', (e) => {
 					if (e.key === 'Enter') {
 						e.preventDefault();
-						this.close();
-						this.onSubmit(this.result || this.defaultValue);
+						this.submit();
 					}
 				});
 			});
@@ -45,8 +45,7 @@ export class TextInputModal extends Modal {
 				.setButtonText(t('modals.textInput.create'))
 				.setCta()
 				.onClick(() => {
-					this.close();
-					this.onSubmit(this.result || this.defaultValue);
+					this.submit();
 				}))
 			.addButton(btn => btn
 				.setButtonText(t('modals.textInput.cancel'))
@@ -56,7 +55,15 @@ export class TextInputModal extends Modal {
 	}
 
 	onClose() {
-		const { contentEl } = this;
-		contentEl.empty();
+		this.contentEl.empty();
+		if (!this.submitted) {
+			this.onSubmit(null);
+		}
+	}
+
+	private submit() {
+		this.submitted = true;
+		this.close();
+		this.onSubmit(this.result || this.defaultValue);
 	}
 }

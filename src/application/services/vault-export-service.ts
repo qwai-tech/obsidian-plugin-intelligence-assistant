@@ -1,34 +1,30 @@
-// src/application/services/vault-export-service.ts
 import { App, Notice, TFile } from 'obsidian';
 import { t } from '@/i18n';
-import { TextInputModal } from '@/presentation/components/modals/text-input-modal';
-import { SingleFileSelectionModal } from '@/presentation/components/modals/single-file-selection-modal';
 import type { Message } from '@/types';
+import { errorMessage } from '@/utils/errors';
+
+export type NoteChoice = TFile | 'new' | null;
+
+export interface ExportTargetPicker {
+	askNoteName(defaultName: string): Promise<string | null>;
+	pickNote(): Promise<NoteChoice>;
+}
 
 export class VaultExportService {
-	constructor(private readonly app: App) {}
+	constructor(private readonly app: App, private readonly picker: ExportTargetPicker) {}
 
-	saveToNewNote(message: Message): void {
-		const defaultName = `Chat Message ${new Date().toLocaleDateString()}`;
-		new TextInputModal(
-			this.app,
-			'Create New Note',
-			'Enter note name',
-			defaultName,
-			(noteName) => {
-				void this.doSaveToNewNote(noteName, message);
-			}
-		).open();
+	async saveToNewNote(message: Message): Promise<void> {
+		const noteName = await this.picker.askNoteName(`Chat Message ${new Date().toLocaleDateString()}`);
+		await this.doSaveToNewNote(noteName, message);
 	}
 
-	insertIntoNote(message: Message): void {
-		new SingleFileSelectionModal(this.app, (selectedFile) => {
-			if (selectedFile instanceof TFile) {
-				void this.doInsertIntoNote(selectedFile, message);
-			} else {
-				this.saveToNewNote(message);
-			}
-		}).open();
+	async insertIntoNote(message: Message): Promise<void> {
+		const choice = await this.picker.pickNote();
+		if (choice === 'new') {
+			await this.saveToNewNote(message);
+		} else if (choice) {
+			await this.doInsertIntoNote(choice, message);
+		}
 	}
 
 	private async doSaveToNewNote(noteName: string | null, message: Message): Promise<void> {
@@ -51,7 +47,7 @@ export class VaultExportService {
 				await this.app.workspace.getLeaf(false).openFile(file);
 			}
 		} catch (_error) {
-			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			const errMsg = errorMessage(_error);
 			console.error('Error creating note:', errMsg);
 			new Notice(t('chat.notices.noteCreateFailed', { message: errMsg }));
 		}
@@ -72,7 +68,7 @@ export class VaultExportService {
 			new Notice(t('chat.notices.messageInserted', { path: selectedFile.path }));
 			await this.app.workspace.getLeaf(false).openFile(selectedFile);
 		} catch (_error) {
-			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			const errMsg = errorMessage(_error);
 			console.error('Error inserting to note:', errMsg);
 			new Notice(t('chat.notices.messageInsertFailed', { message: errMsg }));
 		}

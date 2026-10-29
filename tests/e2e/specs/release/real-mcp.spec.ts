@@ -57,15 +57,19 @@ describe('Release real MCP', () => {
 				app: {
 					plugins: {
 						plugins: Record<string, {
-							getToolRegistry(): {
-								getTools(): Array<{ llmName: string; origin: { kind: string } }>;
-								executeTool(name: string, args: Record<string, unknown>): Promise<{ success: boolean; result?: unknown; error?: string }>;
+							services: {
+								tools: {
+									registry: {
+										getTools(): Array<{ llmName: string; origin: { kind: string } }>;
+										executeTool(name: string, args: Record<string, unknown>): Promise<{ success: boolean; result?: unknown; error?: string }>;
+									};
+								};
 							};
 						}>;
 					};
 				};
 			}).app.plugins.plugins['intelligence-assistant'];
-			const registry = plugin.getToolRegistry();
+			const registry = plugin.services.tools.registry;
 			const names = registry.getTools()
 				.filter(tool => tool.origin.kind === 'mcp')
 				.map(tool => tool.llmName);
@@ -77,10 +81,10 @@ describe('Release real MCP', () => {
 			};
 		}, toolName, env.mcpToolArgs) as ToolExecutionProbe;
 
-		await expect(probe.names).toContain(toolName);
-		await expect(probe.success).toBe(true);
+		expect(probe.names).toContain(toolName);
+		expect(probe.success).toBe(true);
 		if (env.mcpExpectedText) {
-			await expect(probe.text).toContain(env.mcpExpectedText);
+			expect(probe.text).toContain(env.mcpExpectedText);
 		}
 	});
 });

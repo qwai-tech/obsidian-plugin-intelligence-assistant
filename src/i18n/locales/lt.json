@@ -982,7 +982,6 @@
     "usage": {
       "title": "Žetonų naudojimas",
       "desc": "Stebėti žetonų suvartojimą įvairių tiekėjų ir modelių. Duomenys kaupiami visuose pokalbiuose.",
-      "notAvailable": "Žetonų naudojimo stebėjimas nepasiekiamas.",
       "ranges": {
         "today": "Šiandien",
         "week": "Šią savaitę",

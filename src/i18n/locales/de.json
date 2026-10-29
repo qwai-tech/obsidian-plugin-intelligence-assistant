@@ -982,7 +982,6 @@
     "usage": {
       "title": "Token-Nutzung",
       "desc": "Token-Verbrauch über Anbieter und Modelle verfolgen. Daten werden über alle Konversationen hinweg angesammelt.",
-      "notAvailable": "Token-Nutzungsverfolgung ist nicht verfügbar.",
       "ranges": {
         "today": "Heute",
         "week": "Diese Woche",

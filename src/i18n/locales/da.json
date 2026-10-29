@@ -982,7 +982,6 @@
     "usage": {
       "title": "Token-forbrug",
       "desc": "Spor tokenforbrug på tværs af udbydere og modeller. Data akkumuleres på tværs af alle samtaler.",
-      "notAvailable": "Token-forbrugssporing er ikke tilgængelig.",
       "ranges": {
         "today": "I dag",
         "week": "Denne uge",

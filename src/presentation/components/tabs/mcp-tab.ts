@@ -6,14 +6,14 @@
 import { App, Notice } from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
-import { snapshotMcpTools } from '@/application/tools/mcp-helpers';
-import { McpToolSource } from '@/application/tools/sources/mcp-tool-source';
 import type { MCPServerConfig } from '@/types';
 import type { RegisteredTool } from '@/types/common/tools';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
 import { TestIds } from '@/presentation/utils/test-ids';
-import { MCPInspectorModal, MCPServerModal } from '../modals';
+import { MCPInspectorModal } from '@/presentation/components/modals/mcp-inspector-modal';
+import { MCPServerModal } from '@/presentation/components/modals/mcp-server-modal';
+import { errorMessage } from '@/utils/errors';
 
 export function displayMCPTab(
 	containerEl: HTMLElement,
@@ -55,36 +55,11 @@ export function displayMCPTab(
 	refreshAllBtn.addClass('ia-button--ghost');
 	refreshAllBtn.addEventListener('click', () => {
 		void (async () => {
-			const registry = plugin.getToolRegistry();
-			const results = [];
-
-			for (const server of plugin.settings.mcpServers) {
-				if (!server.enabled) {
-					continue; // Skip disabled servers
-				}
-
-				try {
-					if (!registry.hasSource('mcp', server.name)) {
-						registry.registerSource(new McpToolSource(server));
-					}
-					const tools = await registry.reloadSource('mcp', server.name);
-					server.cachedTools = snapshotMcpTools(tools);
-					server.cacheTimestamp = Date.now();
-					results.push({ server: server.name, tools: tools.length, success: true });
-					console.debug(`[MCP] Refreshed tools for ${server.name}: ${tools.length} tools`);
-				} catch (error) {
-					console.error(`[MCP] Failed to refresh tools for ${server.name}:`, error);
-					const errorMsg = error instanceof Error ? error.message : String(error);
-					results.push({ server: server.name, tools: 0, success: false, error: errorMsg });
-				}
-			}
-
-			await plugin.saveSettings();
+			const results = await plugin.services.tools.refreshMcpServers();
 			refreshDisplay();
-			
-			// Show summary of results
-			const successful = results.filter(r => r.success).length;
-			const failed = results.filter(r => !r.success).length;
+
+			const failed = results.filter(r => r.error).length;
+			const successful = results.length - failed;
 			if (failed === 0) {
 				new Notice(t('settings.mcp.notices.refreshedAll', { count: successful }));
 			} else {
@@ -111,7 +86,7 @@ export function displayMCPTab(
 		new MCPServerModal(app, draft, 'create', async (created) => {
 			plugin.settings.mcpServers.push(created);
 			await plugin.saveSettings();
-			await plugin.ensureAutoConnectedMcpServers();
+			await plugin.services.tools.connectAutoMcpServers();
 			refreshDisplay();
 		}).open();
 	});
@@ -133,14 +108,14 @@ export function displayMCPTab(
 	]);
 	const tbody = table.tBodies[0];
 	const cacheFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
-	plugin.ensureAutoConnectedMcpServers()
+	plugin.services.tools.connectAutoMcpServers()
 		.then(changed => {
 			if (changed) {
 				refreshDisplay();
 			}
 		})
 		.catch(error => console.error('[MCP] Auto-connect check failed', error));
-	const registry = plugin.getToolRegistry();
+	const registry = plugin.services.tools.registry;
 	const allTools = registry.getTools();
 
 	const toolsByProviderSnapshot = new Map<string, RegisteredTool[]>();
@@ -262,7 +237,7 @@ export function displayMCPTab(
 			new MCPServerModal(app, draft, 'edit', async (updated) => {
 				plugin.settings.mcpServers[index] = updated;
 				await plugin.saveSettings();
-				await plugin.ensureAutoConnectedMcpServers();
+				await plugin.services.tools.connectAutoMcpServers();
 				refreshDisplay();
 			}).open();
 		});
@@ -279,17 +254,12 @@ export function displayMCPTab(
 				server.enabled = !server.enabled;
 				try {
 					if (!server.enabled && wasEnabled && isConnected) {
-						await registry.unregisterSource('mcp', server.name);
+						await plugin.services.tools.disconnectMcp(server.name);
 					}
 
 					if (server.enabled && connectionMode === 'auto') {
 						try {
-							if (!registry.hasSource('mcp', server.name)) {
-								registry.registerSource(new McpToolSource(server));
-							}
-							const tools = await registry.reloadSource('mcp', server.name);
-							server.cachedTools = snapshotMcpTools(tools);
-							server.cacheTimestamp = Date.now();
+							await plugin.services.tools.connectMcp(server);
 						} catch (error) {
 							console.error(`[MCP] Failed to auto-connect ${server.name}:`, error);
 							new Notice(t('settings.mcp.notices.autoConnectFailed', { name: server.name }));
@@ -310,25 +280,21 @@ export function displayMCPTab(
 		connectBtn.disabled = !server.enabled;
 		connectBtn.addEventListener('click', () => {
 			void (async () => {
-				const currentlyConnected = registry.hasSource('mcp', server.name);
+				const currentlyConnected = plugin.services.tools.isMcpConnected(server.name);
 				const originalText = connectBtn.textContent ?? '';
 				connectBtn.disabled = true;
 				connectBtn.textContent = currentlyConnected ? t('settings.mcp.actions.disconnecting') : t('settings.mcp.actions.connecting');
 
 				try {
 					if (currentlyConnected) {
-						await registry.unregisterSource('mcp', server.name);
+						await plugin.services.tools.disconnectMcp(server.name);
 						new Notice(t('settings.mcp.notices.disconnected', { name: server.name }));
 					} else {
 						if (!server.enabled) {
 							new Notice(t('settings.mcp.notices.enableFirst'));
 							return;
 						}
-						registry.registerSource(new McpToolSource(server));
-						const tools = await registry.reloadSource('mcp', server.name);
-						server.cachedTools = snapshotMcpTools(tools);
-						server.cacheTimestamp = Date.now();
-						await plugin.saveSettings();
+						await plugin.services.tools.connectMcp(server);
 						new Notice(t('settings.mcp.notices.connected', { name: server.name }));
 					}
 				} catch (error) {
@@ -362,36 +328,23 @@ export function displayMCPTab(
 				testBtn.disabled = true;
 
 				try {
-					// Probe via a throw-away McpToolSource so the cache shape stays
-					// consistent with what the registry would produce. The source is
-					// not registered with the live registry — this is a connection
-					// test only.
-					const probeSource = new McpToolSource(server);
-					const probeTools = await probeSource.load();
-					await probeSource.dispose();
-
-					// snapshotMcpTools needs the registry-side RegisteredTool shape;
-					// build the minimum required shape inline from the probe results.
-					server.cachedTools = probeTools.map((t) => ({
-						name: t.definition.name,
-						description: t.definition.description,
-					}));
+					server.cachedTools = await plugin.services.tools.probeMcp(server);
 					server.cacheTimestamp = Date.now();
 					await plugin.saveSettings();
 
-					new Notice(t('settings.mcp.notices.testSuccess', { count: probeTools.length }));
+					new Notice(t('settings.mcp.notices.testSuccess', { count: server.cachedTools.length }));
 					refreshDisplay(); // Refresh the entire view to update status indicators
 				} catch (error) {
 					console.error('[MCP] Test connection failed:', error);
 
 					// Provide helpful error messages for common issues
-					const errorMessage = error instanceof Error ? error.message : String(error);
-					let displayMessage = errorMessage;
-					if (errorMessage.includes('ENOENT') && server.command === 'npx') {
+					const failure = errorMessage(error);
+					let displayMessage = failure;
+					if (failure.includes('ENOENT') && server.command === 'npx') {
 						displayMessage = 'npx command not found. Try using the full path (e.g., /usr/local/bin/npx) or install the package globally first.';
-					} else if (errorMessage.includes('ENOENT') && server.command === 'uvx') {
+					} else if (failure.includes('ENOENT') && server.command === 'uvx') {
 						displayMessage = 'uvx command not found. Please install uv first: "curl -LsSf https://astral.sh/uv/install.sh | sh" or try using the full path (e.g., ~/.local/bin/uvx or ~/.cargo/bin/uvx).';
-					} else if (errorMessage.includes('ENOENT')) {
+					} else if (failure.includes('ENOENT')) {
 						displayMessage = `Command "${server.command}" not found. Please check the command path.`;
 					}
 

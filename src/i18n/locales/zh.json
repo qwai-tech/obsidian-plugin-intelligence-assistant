@@ -982,7 +982,6 @@
     "usage": {
       "title": "Token 用量",
       "desc": "跟踪各服务商和模型的 Token 消耗。数据在所有对话中累积。",
-      "notAvailable": "Token 用量跟踪不可用。",
       "ranges": {
         "today": "今日",
         "week": "本周",
