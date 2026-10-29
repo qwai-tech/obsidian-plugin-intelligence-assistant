@@ -3,6 +3,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import type {Agent, BuiltInToolConfig, MCPServerConfig, CLIToolConfig} from '@/types';
 import { t } from '@/i18n';
 import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-metadata';
+import { ToolAccessEditor } from '@/application/agents/tool-access-editor';
 import { TestIds } from '@/presentation/utils/test-ids';
 
 export class AgentEditModal extends Modal {
@@ -15,6 +16,7 @@ export class AgentEditModal extends Modal {
 	private customPromptSection: HTMLElement | null = null;
 	private modelAliasMap: Map<string, string> = new Map();
 	private fixedModelSetting: Setting | null = null;
+	private readonly access: ToolAccessEditor;
 
 	constructor(app: App, plugin: IntelligenceAssistantPlugin, agent: Agent, onSave: (agent: Agent) => void | Promise<void>) {
 		super(app);
@@ -28,6 +30,7 @@ export class AgentEditModal extends Modal {
 		// hand-edit of agents/*.json) by initializing the sources map.
 		this.agent.toolAccess ??= { sources: {} };
 		this.agent.toolAccess.sources ??= {};
+		this.access = new ToolAccessEditor(this.agent.toolAccess);
 	}
 
 	onOpen() {
@@ -301,8 +304,8 @@ export class AgentEditModal extends Modal {
 			new Setting(contentEl)
 				.setName(t(toolNameKey, { defaultValue: fallbackName }))
 				.addToggle(toggle => toggle
-					.setValue(this.hasBuiltinTool(tool.type))
-					.onChange(value => this.setBuiltinTool(tool.type, value)));
+					.setValue(this.access.hasTool('builtin:builtin', `builtin:builtin:${tool.type}`))
+					.onChange(value => this.access.setTool('builtin:builtin', `builtin:builtin:${tool.type}`, value, this.enabledBuiltinToolIds())));
 		});
 
 		// CLI Tools
@@ -318,10 +321,10 @@ export class AgentEditModal extends Modal {
 				.setName(t('modals.agentEdit.tools.cli.name'))
 				.setDesc(t('modals.agentEdit.tools.cli.desc'))
 				.addToggle(toggle => {
-					toggle.setValue(this.allCliEnabled(enabledCLITools));
+					toggle.setValue(enabledCLITools.every(tool => this.access.includesSource(`cli:${tool.id}`)));
 					toggle.onChange(value => {
 						for (const tool of enabledCLITools) {
-							this.setCli(tool.id, value);
+							this.access.setWholeSource(`cli:${tool.id}`, value);
 						}
 						this.refreshCliPerToolToggles(cliToolToggles);
 					});
@@ -333,8 +336,8 @@ export class AgentEditModal extends Modal {
 					.setName(`⌨️ ${tool.name}`)
 					.setDesc(tool.description || tool.command)
 					.addToggle(toggle => {
-						toggle.setValue(this.hasCli(tool.id));
-						toggle.onChange(value => this.setCli(tool.id, value));
+						toggle.setValue(this.access.includesSource(`cli:${tool.id}`));
+						toggle.onChange(value => this.access.setWholeSource(`cli:${tool.id}`, value));
 						cliToolToggles.push({ id: tool.id, toggle });
 					});
 			});
@@ -406,103 +409,13 @@ export class AgentEditModal extends Modal {
 		saveButton.buttonEl.setAttribute('data-testid', TestIds.settings.agentModalSaveBtn);
 	}
 
-	// ── toolAccess-native helpers ──────────────────────────────────────
-	// Read/write agent.toolAccess.sources directly. Keys are
-	// `${kind}:${sourceId}`; values are 'all' or an array of toolIds.
-
-	private sources(): Record<string, 'all' | string[]> {
-		return this.agent.toolAccess.sources;
+	private enabledBuiltinToolIds(): string[] {
+		return (this.plugin.settings.builtInTools ?? []).filter(tool => tool.enabled).map(tool => `builtin:builtin:${tool.type}`);
 	}
 
-	private hasBuiltinTool(type: string): boolean {
-		const rule = this.sources()['builtin:builtin'];
-		if (rule === 'all') return true;
-		return rule?.includes(`builtin:builtin:${type}`) ?? false;
-	}
-
-	private setBuiltinTool(type: string, enabled: boolean): void {
-		const key = 'builtin:builtin';
-		const toolId = `builtin:builtin:${type}`;
-		const rule = this.sources()[key];
-		// If currently 'all', materialize to an explicit list of globally-
-		// enabled builtin tool ids before mutating, so the resulting state
-		// is a stable array regardless of future builtin config changes.
-		let next: string[];
-		if (rule === 'all') {
-			next = (this.plugin.settings.builtInTools ?? [])
-				.filter((t) => t.enabled)
-				.map((t) => `builtin:builtin:${t.type}`);
-		} else {
-			next = [...(rule ?? [])];
-		}
-		if (enabled && !next.includes(toolId)) next.push(toolId);
-		if (!enabled) next = next.filter((id) => id !== toolId);
-		if (next.length === 0) {
-			delete this.sources()[key];
-		} else {
-			this.sources()[key] = next;
-		}
-	}
-
-	private hasMcpServer(name: string): boolean {
-		return this.sources()[`mcp:${name}`] === 'all';
-	}
-
-	private setMcpServerAll(name: string, enabled: boolean): void {
-		const key = `mcp:${name}`;
-		if (enabled) {
-			this.sources()[key] = 'all';
-		} else {
-			delete this.sources()[key];
-		}
-	}
-
-	private hasMcpTool(server: string, tool: string): boolean {
-		const rule = this.sources()[`mcp:${server}`];
-		if (rule === 'all') return true;
-		return rule?.includes(`mcp:${server}:${tool}`) ?? false;
-	}
-
-	private setMcpTool(server: string, tool: string, enabled: boolean): void {
-		const key = `mcp:${server}`;
-		const toolId = `mcp:${server}:${tool}`;
-		const rule = this.sources()[key];
-		// Materialize 'all' to an explicit list before flipping a single
-		// tool so the user's deselection actually sticks.
-		let next: string[];
-		if (rule === 'all') {
-			const serverCfg = this.plugin.settings.mcpServers.find((s) => s.name === server);
-			next = (serverCfg?.cachedTools ?? []).map((c) => `mcp:${server}:${c.name}`);
-		} else {
-			next = [...(rule ?? [])];
-		}
-		if (enabled && !next.includes(toolId)) next.push(toolId);
-		if (!enabled) next = next.filter((id) => id !== toolId);
-		if (next.length === 0) {
-			delete this.sources()[key];
-		} else {
-			this.sources()[key] = next;
-		}
-	}
-
-	private hasCli(id: string): boolean {
-		// A CLI source is binary: enabled = present (as 'all'), disabled = absent.
-		return this.sources()[`cli:${id}`] !== undefined;
-	}
-
-	private setCli(id: string, enabled: boolean): void {
-		const key = `cli:${id}`;
-		if (enabled) {
-			this.sources()[key] = 'all';
-		} else {
-			delete this.sources()[key];
-		}
-	}
-
-	/** True iff every globally-enabled CLI tool is also enabled on this agent. */
-	private allCliEnabled(enabledCliConfigs: CLIToolConfig[]): boolean {
-		return enabledCliConfigs.length > 0
-			&& enabledCliConfigs.every((c) => this.hasCli(c.id));
+	private mcpToolIds(server: string): string[] {
+		const config = this.plugin.settings.mcpServers.find(candidate => candidate.name === server);
+		return (config?.cachedTools ?? []).map(tool => `mcp:${server}:${tool.name}`);
 	}
 
 	private buildModelOptions(): Array<{ id: string; label: string }> {
@@ -537,7 +450,7 @@ export class AgentEditModal extends Modal {
 		let toolsContainer: HTMLElement | null = null;
 		// Expand the tool list if the agent has any per-tool MCP overrides
 		// for this server (array form) — otherwise keep it collapsed by default.
-		const rule = this.sources()[`mcp:${server.name}`];
+		const rule = this.agent.toolAccess.sources[`mcp:${server.name}`];
 		let toolsVisible = hasTools && Array.isArray(rule);
 
 		const serverSetting = new Setting(wrapper)
@@ -566,7 +479,7 @@ export class AgentEditModal extends Modal {
 
 		const serverStatus = serverSetting.controlEl.createDiv('ia-mcp-status');
 		const updateServerStatus = () => {
-			const selected = this.hasMcpServer(server.name);
+			const selected = this.access.grantsWholeSource(`mcp:${server.name}`);
 			serverStatus.setText(selected ? t('modals.agentEdit.mcp.selected') : t('modals.agentEdit.mcp.notSelected'));
 			serverStatus.toggleClass('is-selected', selected);
 		};
@@ -576,9 +489,9 @@ export class AgentEditModal extends Modal {
 		// per-tool toggle OFF below switches the source to fine-grained mode
 		// (an explicit array) — the server-level toggle then reflects "off".
 		serverSetting.addToggle(toggle => {
-			toggle.setValue(this.hasMcpServer(server.name));
+			toggle.setValue(this.access.grantsWholeSource(`mcp:${server.name}`));
 			toggle.onChange(value => {
-				this.setMcpServerAll(server.name, value);
+				this.access.setWholeSource(`mcp:${server.name}`, value);
 				this.syncMcpToolStates(toolEntries, server.name);
 				updateServerStatus();
 			});
@@ -601,9 +514,9 @@ export class AgentEditModal extends Modal {
 					const statusEl = toolSetting.controlEl.createDiv('ia-mcp-status');
 					const entry = { toolName, toggle: undefined as unknown as ToggleComponent, statusEl };
 					toolSetting.addToggle(toggle => {
-						toggle.setValue(this.hasMcpTool(server.name, toolName));
+						toggle.setValue(this.access.hasTool(`mcp:${server.name}`, `mcp:${server.name}:${toolName}`));
 						toggle.onChange(value => {
-							this.setMcpTool(server.name, toolName, value);
+							this.access.setTool(`mcp:${server.name}`, `mcp:${server.name}:${toolName}`, value, this.mcpToolIds(server.name));
 							this.syncMcpToolStates(toolEntries, server.name);
 							updateServerStatus();
 						});
@@ -621,7 +534,7 @@ export class AgentEditModal extends Modal {
 	}
 
 	private syncMcpToolStates(entries: Array<{ toolName: string; toggle: ToggleComponent; statusEl: HTMLElement }>, serverName: string) {
-		const useAll = this.hasMcpServer(serverName);
+		const useAll = this.access.grantsWholeSource(`mcp:${serverName}`);
 		entries.forEach(({ toolName, toggle, statusEl }) => {
 			if (useAll) {
 				if (!toggle.getValue()) {
@@ -632,7 +545,7 @@ export class AgentEditModal extends Modal {
 				statusEl.toggleClass('is-selected', true);
 			} else {
 				toggle.setDisabled(false);
-				const selected = this.hasMcpTool(serverName, toolName);
+				const selected = this.access.hasTool(`mcp:${serverName}`, `mcp:${serverName}:${toolName}`);
 				if (toggle.getValue() !== selected) {
 					toggle.setValue(selected);
 				}
@@ -648,7 +561,7 @@ export class AgentEditModal extends Modal {
 	 */
 	private refreshCliPerToolToggles(entries: Array<{ id: string; toggle: ToggleComponent }>) {
 		entries.forEach(({ id, toggle }) => {
-			const desired = this.hasCli(id);
+			const desired = this.access.includesSource(`cli:${id}`);
 			if (toggle.getValue() !== desired) {
 				toggle.setValue(desired);
 			}
