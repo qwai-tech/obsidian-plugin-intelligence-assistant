@@ -1,0 +1,247 @@
+import {App, TFile, Notice} from 'obsidian';
+import type { RAGConfig, RAGSource } from '@/features/knowledge/types/rag';
+import type { LLMConfig } from '@/features/llm/types/model';
+import { VectorStore, SearchResult } from './vector-store';
+import { EmbeddingManager } from './embedding-manager';
+import { DocumentGrader } from './document-grader';
+import { errorMessage } from '@/core/utils/errors';
+
+export class RAGManager {
+  private vectorStore: VectorStore;
+  private app: App;
+  private config: RAGConfig;
+  private llmConfigs: LLMConfig[];
+  private documentGrader: DocumentGrader;
+  constructor(app: App, config: RAGConfig, llmConfigs: LLMConfig[]) {
+    this.app = app;
+    this.config = config;
+    this.llmConfigs = llmConfigs;
+    this.vectorStore = new VectorStore(app, llmConfigs);
+    this.documentGrader = new DocumentGrader(config, llmConfigs);
+  }
+
+  async initialize(): Promise<void> {
+    await this.vectorStore.load();
+  }
+
+  async indexVault(): Promise<void> {
+    // Index all markdown files in the vault
+    const files = this.app.vault.getMarkdownFiles();
+    
+    if (files.length === 0) {
+      const noFilesMessage = 'ℹ️ No Markdown files found to index for RAG';
+      new Notice(noFilesMessage);
+      return;
+    }
+    
+    console.debug(`Indexing ${files.length} files for RAG...`);
+    new Notice(`🔄 Starting RAG indexing for ${files.length} documents...`);
+    
+    // Process files in batches to avoid blocking the UI
+    return new Promise((resolve, reject) => {
+      const batchSize = 5; // Process 5 files at a time
+      let currentIndex = 0;
+      let successCount = 0;
+      let failureCount = 0;
+      
+      const processBatch = async () => {
+        const batchEnd = Math.min(currentIndex + batchSize, files.length);
+        
+        for (let i = currentIndex; i < batchEnd; i++) {
+          const file = files[i];
+          try {
+            await this.indexFile(file);
+            successCount++;
+          } catch (error) {
+            console.error(`Failed to index file ${file.path}:`, error);
+            failureCount++;
+          }
+          
+          currentIndex++;
+        }
+        
+        // Update progress every 10 files or at the end
+        if (currentIndex % 10 === 0 || currentIndex === files.length) {
+          new Notice(`🔄 RAG indexing progress: ${currentIndex}/${files.length} files...`);
+        }
+        
+        if (currentIndex < files.length) {
+          // Schedule next batch after a short delay to allow UI to update
+          window.setTimeout(() => {
+            processBatch().catch(reject);
+          }, 10); // 10ms delay allows UI to remain responsive
+        } else {
+          // All files processed
+          console.debug(`RAG indexing completed. Indexed ${this.vectorStore.getChunkCount()} chunks.`);
+          new Notice(`✅ RAG indexing completed! ${successCount} files indexed, ${failureCount} failed.`);
+          resolve();
+        }
+      };
+      
+      // Start the first batch immediately
+      processBatch().catch(reject);
+    });
+  }
+
+  async indexFile(file: TFile): Promise<void> {
+    if (!this.config.enabled) {
+      return;
+    }
+    
+    await this.vectorStore.addFile(file, this.config);
+  }
+
+  /**
+   * Incrementally drop a single deleted file from the index. No-op when RAG is
+   * disabled. Returns the number of chunks removed.
+   */
+  async removeFile(path: string): Promise<number> {
+    if (!this.config.enabled) {
+      return 0;
+    }
+    return await this.vectorStore.removeFile(path);
+  }
+
+  /**
+   * Incrementally re-key a renamed/moved file's chunks instead of re-embedding.
+   * No-op when RAG is disabled. Returns the number of chunks re-keyed.
+   */
+  async renameFile(oldPath: string, newPath: string): Promise<number> {
+    if (!this.config.enabled) {
+      return 0;
+    }
+    return await this.vectorStore.renameFile(oldPath, newPath);
+  }
+
+  async indexMemory(agentId: string, content: string): Promise<void> {
+    if (!this.config.enabled) {
+      return;
+    }
+    
+    await this.vectorStore.addContent(content, {
+      type: 'agent-memory',
+      agentId,
+      path: `memory://${agentId}`,
+      title: `Memory: ${agentId}`
+    }, this.config);
+  }
+
+  async search(query: string, chatModel?: string, defaultModel?: string): Promise<RAGSource[]> {
+    const results = await this.query(query, chatModel, defaultModel);
+    return results.map(result => ({
+      path: result.chunk.metadata.path,
+      content: result.chunk.content,
+      similarity: result.similarity,
+      title: result.chunk.metadata.title,
+    }));
+  }
+
+  private async query(query: string, chatModel?: string, defaultModel?: string): Promise<SearchResult[]> {
+    console.debug('[RAG Manager] Query called with:', query);
+    console.debug('[RAG Manager] Config enabled:', this.config.enabled);
+    if (!this.config.enabled) {
+      console.debug('[RAG Manager] RAG config is disabled, returning empty array');
+      return [];
+    }
+
+    // Get embedding model from config or use default
+    const embeddingModel = this.config.embeddingModel || EmbeddingManager.getDefaultEmbeddingModel().id;
+    console.debug('[RAG Manager] Using embedding model:', embeddingModel);
+
+    let results = await this.vectorStore.search(query, this.config, embeddingModel);
+    console.debug('[RAG Manager] Search returned:', results.length, 'results');
+    
+    // Check if we have any indexed documents, if not suggest embedding
+      if (results.length === 0) {
+        const stats = this.vectorStore.getDetailedStats();
+        if (stats.chunkCount === 0) {
+          console.debug('[RAG Manager] No indexed documents found, suggesting user to embed documents');
+          const noIndexMessage = 'ℹ️ No indexed documents found. Use "Embed all documents" command to index your vault for RAG.';
+          new Notice(noIndexMessage);
+        }
+      }
+    
+    // Apply document grading if enabled
+    if (this.config.enableGradingThreshold && results.length > 0) {
+      console.debug('[RAG Manager] Applying document grading...');
+      
+      try {
+        // Create grade requests for each result
+        const gradeRequests = results.map(result => ({
+          query: query,
+          doc: {
+            content: result.chunk.content,
+            path: result.chunk.metadata.path,
+            metadata: result.chunk.metadata
+          },
+          chunkId: result.chunk.id
+        }));
+        
+        // Grade all documents
+        const grades = await this.documentGrader.gradeDocuments(gradeRequests, chatModel, defaultModel);
+        console.debug('[RAG Manager] Graded', grades.length, 'documents');
+        
+        // Filter results based on grades
+        const filteredResults = results.filter(result => {
+          const grade = grades.find(g => g.chunkId === result.chunk.id);
+          return grade ? grade.shouldUse : true; // Include if no grade found
+        });
+        
+        console.debug('[RAG Manager] Filtered results from', results.length, 'to', filteredResults.length);
+        results = filteredResults;
+      } catch (error) {
+        console.error('[RAG Manager] Error during document grading:', error);
+        new Notice(`⚠️ Document grading error: ${errorMessage(error)}`);
+      }
+    }
+    
+    return results;
+  }
+
+  async refreshIndex(): Promise<void> {
+    new Notice('🔄 Clearing RAG index...');
+    this.vectorStore.clear();
+    if (this.config.enabled) {
+      await this.indexVault();
+    } else {
+      new Notice('✅ RAG index cleared');
+    }
+  }
+
+  async clearIndex(): Promise<void> {
+    new Notice('🔄 Clearing RAG index...');
+    this.vectorStore.clear();
+    await this.vectorStore.save();
+    new Notice('✅ RAG index cleared');
+  }
+
+  getStats(): { chunkCount: number } {
+    return {
+      chunkCount: this.vectorStore.getChunkCount()
+    };
+  }
+
+  async getDetailedStats(): Promise<{
+    chunkCount: number;
+    fileCount: number;
+    totalSize: number;
+    indexedFiles: string[];
+  }> {
+    await this.vectorStore.load();
+    return this.vectorStore.getDetailedStats();
+  }
+
+  updateConfig(config: RAGConfig, llmConfigs?: LLMConfig[]): void {
+    this.config = config;
+    if (llmConfigs) {
+      this.llmConfigs = llmConfigs;
+      this.vectorStore.setLlmConfigs(llmConfigs);
+    }
+    this.documentGrader = new DocumentGrader(this.config, this.llmConfigs);
+  }
+
+  async destroy(): Promise<void> {
+    await this.vectorStore.flush();
+    EmbeddingManager.cleanup();
+  }
+}

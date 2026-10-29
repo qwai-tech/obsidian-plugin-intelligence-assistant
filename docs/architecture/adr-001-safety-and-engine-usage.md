@@ -1,6 +1,6 @@
 # ADR-001: Safety model & agent-engine kernel usage
 
-Status: Accepted · Scope: `src/application/agents` (kernel: `src/application/agents/kernel/turn-kernel.ts`), `src/application/tools`
+Status: Accepted · Scope: `src/features/agent` (kernel: `src/features/agent/kernel/turn-kernel.ts`), `src/features/tools`
 
 > **Update (2026-10, kernel v2):** the run loop is the **turn kernel**
 > (`turn-kernel.ts`). One model turn yields text, reasoning and a batch of tool
@@ -20,7 +20,7 @@ Vault safety is enforced at the **tool-execution layer**, not the engine policy:
 
 - Tools with `sideEffects.vaultWrite` must return a structured `write_proposal`.
   `ToolRegistry.executeTool` calls `assertWriteProposalResult` and rejects any
-  write that is not a proposal (`src/application/tools/tool-registry.ts`).
+  write that is not a proposal (`src/features/tools/tool-registry.ts`).
 - The proposal is applied to the vault **only after the user confirms it in the
   UI** (`write-proposal-service.ts` + the chat write-proposal card). The agent
   loop never writes to the vault directly.

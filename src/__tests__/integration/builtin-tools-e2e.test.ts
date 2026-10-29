@@ -8,8 +8,8 @@
  * No network, fully deterministic.
  */
 import { App, TFile } from 'obsidian';
-import { ToolRegistry } from '@/application/tools/tool-registry';
-import { BuiltinToolSource } from '@/application/tools/sources/builtin-tool-source';
+import { ToolRegistry } from '@/features/tools/tool-registry';
+import { BuiltinToolSource } from '@/features/tools/sources/builtin-tool-source';
 
 function makeFile(path: string, size: number): TFile {
 	const f = new TFile();

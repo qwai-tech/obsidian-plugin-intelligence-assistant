@@ -1,6 +1,6 @@
 import { createHarnessApp } from './in-memory-vault';
 import { buildHarnessToolRegistry } from './build-tool-registry';
-import type { WriteProposal } from '@/application/services/write-proposal-service';
+import type { WriteProposal } from '@/features/agent/write-proposal-service';
 
 describe('harness tool registry', () => {
   it('reads a seeded file through the real read_file tool', async () => {

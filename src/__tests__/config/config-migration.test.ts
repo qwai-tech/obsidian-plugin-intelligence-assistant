@@ -1,12 +1,12 @@
 /**
  * Tests for Phase 4 config schema migration.
  */
-import { userConfigToPluginSettings, pluginSettingsToUserConfig } from '@/application/settings/settings-codec';
-import type { UserConfig, PluginSettings } from '@/types';
-import type { MCPServerConfig, MCPRegistry } from '@/types/features/mcp';
-import type { BuiltInToolConfig } from '@/types/common/tools';
-import type { OpenApiToolConfig } from '@/types/features/openapi-tools';
-import type { CLIToolConfig } from '@/types/features/cli-tools';
+import { userConfigToPluginSettings, pluginSettingsToUserConfig } from '@/features/settings/settings-codec';
+import type { UserConfig, PluginSettings } from '@/features/settings/types/settings';
+import type { MCPServerConfig, MCPRegistry } from '@/features/tools/types/mcp';
+import type { BuiltInToolConfig } from '@/features/tools/types/tools';
+import type { OpenApiToolConfig } from '@/features/tools/types/openapi-tools';
+import type { CLIToolConfig } from '@/features/tools/types/cli-tools';
 
 function sampleBuiltInTools(): BuiltInToolConfig[] {
 	return [

@@ -1,15 +1,15 @@
 import type { App } from 'obsidian';
-import { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
-import { HistoryCompactor } from '@/application/agents/history-compactor';
-import { AgentSenseService } from '@/application/agents/agent-sense-service';
-import { WebSearchService } from '@/application/services/web-search-service';
+import { AgentEngineLoop } from '@/features/agent/agent-engine-loop';
+import { HistoryCompactor } from '@/features/agent/history-compactor';
+import { AgentSenseService } from '@/features/agent/agent-sense-service';
+import { WebSearchService } from '@/features/web-search/web-search-service';
 import { ProviderFactory, createFetchHttpPort } from '@qwai/obsidian-llm';
 import { createTestAgent } from '@/test-support/test-utils';
-import type { Message } from '@/types/core/conversation';
-import type { AgentLoopOptions, AgentLoopCallbacks } from '@/application/agents/types';
+import type { Message } from '@/features/conversations/types/conversation';
+import type { AgentLoopOptions, AgentLoopCallbacks } from '@/features/agent/types';
 import { buildHarnessToolRegistry } from './build-tool-registry';
 import { createFakeKnowledgeBase } from './fake-rag';
-import type { KnowledgeBase } from '@/application/services/knowledge-base';
+import type { KnowledgeBase } from '@/features/knowledge/knowledge-base';
 import { DEFAULT_MOCK_LLM_PORT, mockLLM } from './mock-llm-harness';
 
 const MOCK_MODEL = 'mock-model';
@@ -74,7 +74,7 @@ export interface RunMissionInput {
   abortAfterToolCalls?: number;
   enableRAG?: boolean;
   ragResults?: import('./fake-rag').FakeRagResult[];
-  extraToolSources?: import('@/application/tools/tool-source').ToolSource[];
+  extraToolSources?: import('@/features/tools/tool-source').ToolSource[];
   maxSteps?: number;
 }
 

@@ -1,0 +1,104 @@
+import { Tool, ToolDefinition, ToolParameter, ToolResult } from '@/features/tools/types/tools';
+import { MCPClient, MCPTool } from './mcp-client';
+import { createToolDefinition } from '@/features/tools/tool-schema';
+
+/**
+ * Wraps an MCP tool to adapt it to our internal Tool interface
+ */
+export class MCPToolWrapper implements Tool {
+	definition: ToolDefinition;
+	provider: string;
+
+	constructor(
+		private mcpTool: MCPTool,
+		private mcpClient: MCPClient
+	) {
+		this.provider = `mcp:${mcpClient.getServerName()}`;
+		this.definition = this.convertMCPToolToDefinition(mcpTool);
+	}
+
+	/**
+	 * Convert MCP tool schema to our internal ToolDefinition format
+	 */
+	private convertMCPToolToDefinition(mcpTool: MCPTool): ToolDefinition {
+		const parameters: ToolParameter[] = [];
+
+		if (mcpTool.inputSchema?.properties) {
+			const required = new Set(mcpTool.inputSchema.required || []);
+
+			for (const [name, schema] of Object.entries(mcpTool.inputSchema.properties)) {
+				const paramSchema = schema as { type?: unknown; description?: string; enum?: unknown[] };
+
+				const stringEnum = Array.isArray(paramSchema.enum)
+					? paramSchema.enum.filter((v): v is string => typeof v === 'string')
+					: undefined;
+
+				parameters.push({
+					name,
+					type: this.mapJsonSchemaType(paramSchema.type),
+					description: paramSchema.description || '',
+					required: required.has(name),
+					enum: stringEnum,
+				});
+			}
+		}
+
+		return createToolDefinition({
+			name: mcpTool.name,
+			description: mcpTool.description || '',
+			parameters,
+			sideEffects: { process: true },
+		});
+	}
+
+	/**
+	 * Map JSON Schema types to our internal types
+	 */
+	private mapJsonSchemaType(jsonSchemaType: unknown): 'string' | 'number' | 'boolean' | 'array' | 'object' {
+		if (typeof jsonSchemaType !== 'string') {
+			return 'string';
+		}
+
+		switch (jsonSchemaType) {
+			case 'string':
+				return 'string';
+			case 'number':
+			case 'integer':
+				return 'number';
+			case 'boolean':
+				return 'boolean';
+			case 'array':
+				return 'array';
+			case 'object':
+				return 'object';
+			default:
+				return 'string';
+		}
+	}
+
+	/**
+	 * Execute the MCP tool
+	 */
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
+		try {
+			if (!this.mcpClient.isConnected()) {
+				return {
+					success: false,
+					error: `MCP server ${this.mcpClient.getServerName()} is not connected`,
+				};
+			}
+
+			const result = await this.mcpClient.callTool(this.mcpTool.name, args);
+
+			return {
+				success: true,
+				result,
+			};
+		} catch (error: unknown) {
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : 'Unknown error calling MCP tool',
+			};
+		}
+	}
+}

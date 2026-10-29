@@ -11,7 +11,6 @@ This folder contains all documentation for the Intelligence Assistant Obsidian p
 | [project/project-guide-en.md](project/project-guide-en.md) | Developer-oriented project guide (English) |
 | [project/project-guide-zh.md](project/project-guide-zh.md) | Developer-oriented project guide (Chinese) |
 | [reference/project-structure.md](reference/project-structure.md) | Full annotated source tree |
-| [reference/api.md](reference/api.md) | Internal API reference (core layer) |
 
 ## Quick orientation
 

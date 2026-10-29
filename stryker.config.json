@@ -17,8 +17,8 @@
     "docs"
   ],
   "mutate": [
-    "src/application/agents/kernel/kernel-tool-registry-adapter.ts",
-    "src/application/agents/kernel/json-utils.ts"
+    "src/features/agent/kernel/registry-tool-runner.ts",
+    "src/features/agent/kernel/json-utils.ts"
   ],
   "thresholds": { "high": 90, "low": 80, "break": 85 },
   "tempDirName": ".stryker-tmp",

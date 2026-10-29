@@ -1,6 +1,6 @@
 # ADR-003: Autonomous write (escape hatch from the proposal gate)
 
-Status: Accepted · Scope: `src/application/agents`, `agent-edit-modal`, Agent type
+Status: Accepted · Scope: `src/features/agent`, `agent-edit-modal`, Agent type
 
 ## Problem
 

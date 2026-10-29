@@ -1,0 +1,224 @@
+import { App, TFile } from 'obsidian';
+import { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
+import { createWriteProposal } from '@/features/agent/write-proposal-service';
+import { createToolDefinition } from '@/features/tools/tool-schema';
+import { z } from 'zod';
+
+export class SearchFilesTool implements Tool {
+	constructor(private _app: App) {}
+
+	definition: ToolDefinition = createToolDefinition({
+		name: 'search_files',
+		description: 'Search for files by name or content in the vault',
+		parameters: [
+			{
+				name: 'query',
+				type: 'string',
+				description: 'Search query',
+				required: true
+			},
+			{
+				name: 'search_content',
+				type: 'boolean',
+				description: 'Whether to search in file contents (default: false)',
+				required: false
+			},
+			{
+				name: 'limit',
+				type: 'number',
+				description: 'Maximum number of results (default: 10)',
+				required: false
+			}
+		],
+		inputSchema: z.object({
+			query: z.string().min(1),
+			search_content: z.boolean().optional(),
+			limit: z.number().positive().optional(),
+		}),
+	});
+
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
+		try {
+			const query = (args.query as string).toLowerCase();
+			const searchContent = args.search_content as boolean || false;
+			const limit = args.limit as number || 10;
+
+			const files = this._app.vault.getMarkdownFiles();
+			const results: Array<{ path: string; name: string; matches?: string[] }> = [];
+
+			for (const file of files) {
+				// Search by filename
+				if (file.name.toLowerCase().includes(query)) {
+					results.push({
+						path: file.path,
+						name: file.name
+					});
+					continue;
+				}
+
+				// Search by content if enabled
+				if (searchContent) {
+					const content = await this._app.vault.read(file);
+					if (content.toLowerCase().includes(query)) {
+						// Extract matching lines
+						const lines = content.split('\n');
+						const matches = lines
+							.filter(line => line.toLowerCase().includes(query))
+							.slice(0, 3);
+
+						results.push({
+							path: file.path,
+							name: file.name,
+							matches
+						});
+					}
+				}
+
+				if (results.length >= limit) break;
+			}
+
+			return {
+				success: true,
+				result: results
+			};
+		} catch (error: unknown) {
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : 'Unknown error'
+			};
+		}
+	}
+}
+
+export class CreateNoteTool implements Tool {
+	constructor(private _app: App) {}
+
+	definition: ToolDefinition = createToolDefinition({
+		name: 'create_note',
+		description: 'Prepare a proposal to create a new note. This does not modify the vault until the user confirms.',
+		parameters: [
+			{
+				name: 'title',
+				type: 'string',
+				description: 'Title/name of the note',
+				required: true
+			},
+			{
+				name: 'content',
+				type: 'string',
+				description: 'Content of the note',
+				required: true
+			},
+			{
+				name: 'folder',
+				type: 'string',
+				description: 'Folder path to create the note in (optional)',
+				required: false
+			}
+		],
+		inputSchema: z.object({
+			title: z.string().min(1),
+			content: z.string(),
+			folder: z.string().optional(),
+		}),
+		sideEffects: { vaultWrite: true },
+	});
+
+	execute(args: Record<string, unknown>): Promise<ToolResult> {
+		try {
+			const title = args.title as string;
+			const content = args.content as string;
+			const folder = args.folder as string || '';
+
+			// Sanitize title
+			const sanitized = title.replace(/[\\/:*?"<>|]/g, '-');
+			const path = folder ? `${folder}/${sanitized}.md` : `${sanitized}.md`;
+
+			// Check if file already exists
+			const existing = this._app.vault.getAbstractFileByPath(path);
+			if (existing) {
+				return Promise.resolve({
+					success: false,
+					error: `File already exists: ${path}`
+				});
+			}
+
+			return Promise.resolve({
+				success: true,
+				result: createWriteProposal({
+					operation: 'create',
+					path,
+					content,
+					proposedContent: content,
+				})
+			});
+		} catch (error: unknown) {
+			return Promise.resolve({
+				success: false,
+				error: error instanceof Error ? error.message : 'Unknown error'
+			});
+		}
+	}
+}
+
+export class AppendToNoteTool implements Tool {
+	constructor(private _app: App) {}
+
+	definition: ToolDefinition = createToolDefinition({
+		name: 'append_to_note',
+		description: 'Prepare a proposal to append content to an existing note. This does not modify the vault until the user confirms.',
+		parameters: [
+			{
+				name: 'path',
+				type: 'string',
+				description: 'Path to the note',
+				required: true
+			},
+			{
+				name: 'content',
+				type: 'string',
+				description: 'Content to append',
+				required: true
+			}
+		],
+		inputSchema: z.object({
+			path: z.string().min(1),
+			content: z.string(),
+		}),
+		sideEffects: { vaultWrite: true },
+	});
+
+	async execute(args: Record<string, unknown>): Promise<ToolResult> {
+		try {
+			const path = args.path as string;
+			const content = args.content as string;
+			const file = this._app.vault.getAbstractFileByPath(path);
+
+			if (!file || !(file instanceof TFile)) {
+				return {
+					success: false,
+					error: `File not found: ${path}`
+				};
+			}
+
+			const existing = await this._app.vault.read(file);
+			const proposedContent = existing + '\n\n' + content;
+
+			return {
+				success: true,
+				result: createWriteProposal({
+					operation: 'append',
+					path,
+					content,
+					previousContent: existing,
+					proposedContent,
+				})
+			};
+		} catch (error: unknown) {
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : 'Unknown error'
+			};
+		}
+	}
+}

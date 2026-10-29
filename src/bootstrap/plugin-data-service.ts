@@ -1,15 +1,18 @@
 import { App } from 'obsidian';
-import type { PersistUnit } from '@/application/settings/settings-store';
-import type { PluginSettings, LLMConfig, SystemPrompt, Agent, MCPServerConfig } from '@/types';
-import { AgentRepository } from '@/infrastructure/persistence/data/agent-repository';
-import { BUILTIN_AGENT_PRESETS } from '@/application/agents/presets/builtin-agents';
-import { PromptRepository } from '@/infrastructure/persistence/data/prompt-repository';
-import { ModelCacheRepository } from '@/infrastructure/persistence/data/model-cache-repository';
-import { ProviderRepository } from '@/infrastructure/persistence/data/provider-repository';
-import { McpServerRepository } from '@/infrastructure/persistence/data/mcp-server-repository';
-import { McpToolCacheRepository } from '@/infrastructure/persistence/data/mcp-tool-cache-repository';
-import { TokenUsageRepository } from '@/infrastructure/persistence/data/token-usage-repository';
-import { AgentMemoryRepository } from '@/infrastructure/persistence/data/agent-memory-repository';
+import type { PersistUnit } from '@/features/settings/settings-store';
+import type { PluginSettings } from '@/features/settings/types/settings';
+import type { LLMConfig } from '@/features/llm/types/model';
+import type { SystemPrompt, Agent } from '@/features/agent/types/agent';
+import type { MCPServerConfig } from '@/features/tools/types/mcp';
+import { AgentRepository } from '@/adapters/persistence/data/agent-repository';
+import { BUILTIN_AGENT_PRESETS } from '@/features/agent/presets/builtin-agents';
+import { PromptRepository } from '@/adapters/persistence/data/prompt-repository';
+import { ModelCacheRepository } from '@/adapters/persistence/data/model-cache-repository';
+import { ProviderRepository } from '@/adapters/persistence/data/provider-repository';
+import { McpServerRepository } from '@/adapters/persistence/data/mcp-server-repository';
+import { McpToolCacheRepository } from '@/adapters/persistence/data/mcp-tool-cache-repository';
+import { TokenUsageRepository } from '@/adapters/persistence/data/token-usage-repository';
+import { AgentMemoryRepository } from '@/adapters/persistence/data/agent-memory-repository';
 
 export interface HydrateResult {
 	llmConfigs?: LLMConfig[];

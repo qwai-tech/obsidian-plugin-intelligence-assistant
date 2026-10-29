@@ -17,10 +17,10 @@ Intelligence Assistant turns an Obsidian vault into a local AI workspace. The pl
 
 - `main.ts`: the Obsidian `Plugin` — loads settings, registers views and the settings tab, then calls the composition root
 - `src/bootstrap`: composition root; builds every service once
-- `src/application`: use cases and the ports they own — agents (turn kernel), chat, settings store, tools, web search
-- `src/infrastructure`: adapters — JSON/JSONL persistence, RAG, vector store, embeddings, Obsidian file system
-- `src/presentation`: chat view, settings tabs, modals, controllers, state
-- `src/core`, `src/types`, `src/utils`: plugin paths, shared interfaces and data shapes, small helpers
+- `src/features/<name>`: use cases, ports and types per feature — agent (turn kernel), chat, conversations, knowledge, llm, settings, tools, usage, web-search
+- `src/adapters`: JSON/JSONL persistence, RAG, vector store, embeddings, Obsidian file system
+- `src/ui`: chat view, settings tabs, modals, controllers, state
+- `src/core`: plugin paths, shared interfaces, constants, small helpers
 - `packages/obsidian-llm`: LLM providers, the HTTP port and the model manager (`@qwai/obsidian-llm`)
 
 Layer boundaries are enforced by lint (`no-restricted-imports` in `eslint.config.mts`).
@@ -38,18 +38,18 @@ On load, the plugin:
 
 ### Chat Request Lifecycle
 
-[`chat-view.ts`](../../src/presentation/views/chat-view.ts) collects text, attachments and references; [`ChatController`](../../src/presentation/components/chat/controllers/chat-controller.ts) sends them:
+[`chat-view.ts`](../../src/ui/views/chat-view.ts) collects text, attachments and references; [`ChatController`](../../src/ui/chat/controllers/chat-controller.ts) sends them:
 
-- Chat mode: [`ChatService`](../../src/application/services/chat.service.ts) adds RAG and web search context and streams the reply
-- Agent mode: [`AgentEngineLoop`](../../src/application/agents/agent-engine-loop.ts) runs the [`TurnKernel`](../../src/application/agents/kernel/turn-kernel.ts); tool calls appear live in the chat
+- Chat mode: [`ChatService`](../../src/features/chat/chat.service.ts) adds RAG and web search context and streams the reply
+- Agent mode: [`AgentEngineLoop`](../../src/features/agent/agent-engine-loop.ts) runs the [`TurnKernel`](../../src/features/agent/kernel/turn-kernel.ts); tool calls appear live in the chat
 - Stop cancels the request through an `AbortSignal`
 - The conversation is saved after the reply
 
 ### Tooling Pipeline
 
-[`ToolSourceManager`](../../src/application/tools/tool-source-manager.ts) loads tool sources into the [`ToolRegistry`](../../src/application/tools/tool-registry.ts):
+[`ToolSourceManager`](../../src/features/tools/tool-source-manager.ts) loads tool sources into the [`ToolRegistry`](../../src/features/tools/tool-registry.ts):
 
-- Built-in vault tools ([`builtin-tool-source.ts`](../../src/application/tools/sources/builtin-tool-source.ts))
+- Built-in vault tools ([`builtin-tool-source.ts`](../../src/features/tools/sources/builtin-tool-source.ts))
 - MCP servers, wrapped as tools
 - OpenAPI specs converted into tools
 - CLI tools from presets or user config
@@ -58,7 +58,7 @@ Each tool declares its side effects; agents only see the tools their `toolAccess
 
 ### RAG Pipeline
 
-[`RAGManager`](../../src/infrastructure/rag-manager.ts) indexes vault notes into the [`VectorStore`](../../src/infrastructure/vector-store.ts): notes → chunks ([`chunker.ts`](../../src/infrastructure/rag/chunker.ts)) → embeddings → local index → similarity search → optional grading. Unchanged notes are skipped by content hash. Chat and agents reach it through the `KnowledgeBase` port.
+[`RAGManager`](../../src/adapters/rag/rag-manager.ts) indexes vault notes into the [`VectorStore`](../../src/adapters/rag/vector-store.ts): notes → chunks ([`chunker.ts`](../../src/adapters/rag/chunker.ts)) → embeddings → local index → similarity search → optional grading. Unchanged notes are skipped by content hash. Chat and agents reach it through the `KnowledgeBase` port.
 
 ## Persistence Model
 
@@ -74,10 +74,10 @@ All paths come from [`pluginPaths(configDir)`](../../src/core/plugin-paths.ts). 
 
 1. [`main.ts`](../../main.ts)
 2. [`src/bootstrap/create-services.ts`](../../src/bootstrap/create-services.ts)
-3. [`src/application/settings/settings-store.ts`](../../src/application/settings/settings-store.ts)
-4. [`src/presentation/views/chat-view.ts`](../../src/presentation/views/chat-view.ts)
-5. [`src/application/agents/kernel/turn-kernel.ts`](../../src/application/agents/kernel/turn-kernel.ts)
-6. [`src/application/tools/tool-source-manager.ts`](../../src/application/tools/tool-source-manager.ts)
+3. [`src/features/settings/settings-store.ts`](../../src/features/settings/settings-store.ts)
+4. [`src/ui/views/chat-view.ts`](../../src/ui/views/chat-view.ts)
+5. [`src/features/agent/kernel/turn-kernel.ts`](../../src/features/agent/kernel/turn-kernel.ts)
+6. [`src/features/tools/tool-source-manager.ts`](../../src/features/tools/tool-source-manager.ts)
 7. [`packages/obsidian-llm/src/model-manager.ts`](../../packages/obsidian-llm/src/model-manager.ts)
 
 ## Known Engineering Hotspots
@@ -96,6 +96,6 @@ All paths come from [`pluginPaths(configDir)`](../../src/core/plugin-paths.ts). 
 ## Extension Guidance
 
 - New LLM providers belong in `packages/obsidian-llm/src/providers/`; OpenAI-compatible APIs can subclass `OpenAICompatibleProvider`.
-- New built-in tools are implemented in `src/application/services/*-tools.ts`, registered in `builtin-tool-source.ts`, and must declare their side effects.
+- New built-in tools are implemented in `src/features/tools/*-tools.ts`, registered in `builtin-tool-source.ts`, and must declare their side effects.
 - New settings need the type, codec and migration updates, plus a field in the relevant tab (`SettingsForm` for simple fields).
 - New ports belong to the layer that consumes them; adapters implement them structurally.

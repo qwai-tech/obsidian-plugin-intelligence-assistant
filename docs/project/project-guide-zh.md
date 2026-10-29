@@ -17,10 +17,10 @@ Intelligence Assistant 把 Obsidian 库变成本地 AI 工作区，包含：
 
 - `main.ts`：Obsidian `Plugin`——加载设置、注册视图和设置页，然后调用组合根
 - `src/bootstrap`：组合根，只构建一次所有服务
-- `src/application`：用例及其拥有的端口——智能体（回合内核）、聊天、设置存储、工具、Web 搜索
-- `src/infrastructure`：适配器——JSON/JSONL 持久化、RAG、向量库、嵌入、Obsidian 文件系统
-- `src/presentation`：聊天视图、设置选项卡、对话框、控制器、状态
-- `src/core`、`src/types`、`src/utils`：插件路径、共享接口与数据结构、小工具函数
+- `src/features/<名称>`：每个功能的用例、端口和类型——agent（回合内核）、chat、conversations、knowledge、llm、settings、tools、usage、web-search
+- `src/adapters`：JSON/JSONL 持久化、RAG、向量库、嵌入、Obsidian 文件系统
+- `src/ui`：聊天视图、设置选项卡、对话框、控制器、状态
+- `src/core`：插件路径、共享接口、常量、小工具函数
 - `packages/obsidian-llm`：LLM 提供商、HTTP 端口和模型管理（`@qwai/obsidian-llm`）
 
 分层边界由 lint 强制执行（`eslint.config.mts` 中的 `no-restricted-imports`）。
@@ -38,18 +38,18 @@ Intelligence Assistant 把 Obsidian 库变成本地 AI 工作区，包含：
 
 ### 聊天请求生命周期
 
-[`chat-view.ts`](../../src/presentation/views/chat-view.ts) 收集文本、附件和引用，由 [`ChatController`](../../src/presentation/components/chat/controllers/chat-controller.ts) 发送：
+[`chat-view.ts`](../../src/ui/views/chat-view.ts) 收集文本、附件和引用，由 [`ChatController`](../../src/ui/chat/controllers/chat-controller.ts) 发送：
 
-- 聊天模式：[`ChatService`](../../src/application/services/chat.service.ts) 加入 RAG 和 Web 搜索上下文并流式输出回复
-- 智能体模式：[`AgentEngineLoop`](../../src/application/agents/agent-engine-loop.ts) 运行 [`TurnKernel`](../../src/application/agents/kernel/turn-kernel.ts)，工具调用实时显示在聊天中
+- 聊天模式：[`ChatService`](../../src/features/chat/chat.service.ts) 加入 RAG 和 Web 搜索上下文并流式输出回复
+- 智能体模式：[`AgentEngineLoop`](../../src/features/agent/agent-engine-loop.ts) 运行 [`TurnKernel`](../../src/features/agent/kernel/turn-kernel.ts)，工具调用实时显示在聊天中
 - 停止按钮通过 `AbortSignal` 取消请求
 - 回复完成后保存会话
 
 ### 工具流水线
 
-[`ToolSourceManager`](../../src/application/tools/tool-source-manager.ts) 把工具源加载到 [`ToolRegistry`](../../src/application/tools/tool-registry.ts)：
+[`ToolSourceManager`](../../src/features/tools/tool-source-manager.ts) 把工具源加载到 [`ToolRegistry`](../../src/features/tools/tool-registry.ts)：
 
-- 内置库工具（[`builtin-tool-source.ts`](../../src/application/tools/sources/builtin-tool-source.ts)）
+- 内置库工具（[`builtin-tool-source.ts`](../../src/features/tools/sources/builtin-tool-source.ts)）
 - MCP 服务器，包装为工具
 - 由 OpenAPI 规范转换的工具
 - 来自预设或用户配置的 CLI 工具
@@ -58,7 +58,7 @@ Intelligence Assistant 把 Obsidian 库变成本地 AI 工作区，包含：
 
 ### RAG 流水线
 
-[`RAGManager`](../../src/infrastructure/rag-manager.ts) 把库中笔记索引到 [`VectorStore`](../../src/infrastructure/vector-store.ts)：笔记 → 分块（[`chunker.ts`](../../src/infrastructure/rag/chunker.ts)）→ 嵌入 → 本地索引 → 相似度检索 → 可选评分。未修改的笔记按内容哈希跳过。聊天和智能体通过 `KnowledgeBase` 端口访问它。
+[`RAGManager`](../../src/adapters/rag/rag-manager.ts) 把库中笔记索引到 [`VectorStore`](../../src/adapters/rag/vector-store.ts)：笔记 → 分块（[`chunker.ts`](../../src/adapters/rag/chunker.ts)）→ 嵌入 → 本地索引 → 相似度检索 → 可选评分。未修改的笔记按内容哈希跳过。聊天和智能体通过 `KnowledgeBase` 端口访问它。
 
 ## 持久化模型
 
@@ -74,10 +74,10 @@ Intelligence Assistant 把 Obsidian 库变成本地 AI 工作区，包含：
 
 1. [`main.ts`](../../main.ts)
 2. [`src/bootstrap/create-services.ts`](../../src/bootstrap/create-services.ts)
-3. [`src/application/settings/settings-store.ts`](../../src/application/settings/settings-store.ts)
-4. [`src/presentation/views/chat-view.ts`](../../src/presentation/views/chat-view.ts)
-5. [`src/application/agents/kernel/turn-kernel.ts`](../../src/application/agents/kernel/turn-kernel.ts)
-6. [`src/application/tools/tool-source-manager.ts`](../../src/application/tools/tool-source-manager.ts)
+3. [`src/features/settings/settings-store.ts`](../../src/features/settings/settings-store.ts)
+4. [`src/ui/views/chat-view.ts`](../../src/ui/views/chat-view.ts)
+5. [`src/features/agent/kernel/turn-kernel.ts`](../../src/features/agent/kernel/turn-kernel.ts)
+6. [`src/features/tools/tool-source-manager.ts`](../../src/features/tools/tool-source-manager.ts)
 7. [`packages/obsidian-llm/src/model-manager.ts`](../../packages/obsidian-llm/src/model-manager.ts)
 
 ## 已知工程热点
@@ -96,6 +96,6 @@ Intelligence Assistant 把 Obsidian 库变成本地 AI 工作区，包含：
 ## 扩展指南
 
 - 新的 LLM 提供商放在 `packages/obsidian-llm/src/providers/`；兼容 OpenAI 的 API 可以继承 `OpenAICompatibleProvider`。
-- 新的内置工具在 `src/application/services/*-tools.ts` 中实现，在 `builtin-tool-source.ts` 中注册，并且必须声明副作用。
+- 新的内置工具在 `src/features/tools/*-tools.ts` 中实现，在 `builtin-tool-source.ts` 中注册，并且必须声明副作用。
 - 新设置需要更新类型、编解码和迁移，并在对应选项卡中添加字段（简单字段用 `SettingsForm`）。
 - 新端口属于使用它的那一层；适配器以结构类型的方式实现它。

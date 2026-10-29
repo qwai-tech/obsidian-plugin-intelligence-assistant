@@ -1,4 +1,4 @@
-import type { KnowledgeBase } from '@/application/services/knowledge-base';
+import type { KnowledgeBase } from '@/features/knowledge/knowledge-base';
 
 export interface FakeRagResult { path: string; content: string; title?: string; similarity?: number; }
 

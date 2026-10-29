@@ -2,8 +2,8 @@
  * Test suite for Config Schema
  */
 
-import { ConfigSchema } from '@/presentation/utils/config-schema';
-import { DEFAULT_SETTINGS } from '@/application/settings/settings-codec';
+import { ConfigSchema } from '@/ui/utils/config-schema';
+import { DEFAULT_SETTINGS } from '@/features/settings/settings-codec';
 import { createTestSettings, createTestLLMConfig, createTestAgent } from '../../test-support/test-utils';
 
 describe('ConfigSchema', () => {

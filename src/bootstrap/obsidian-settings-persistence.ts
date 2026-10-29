@@ -1,9 +1,9 @@
 import type { Plugin } from 'obsidian';
-import type { PluginSettings, UserConfig } from '@/types';
-import type { PersistUnit, SettingsPersistence, StoredSettings } from '@/application/settings/settings-store';
-import { pluginSettingsToUserConfig } from '@/application/settings/settings-codec';
+import type { PluginSettings, UserConfig } from '@/features/settings/types/settings';
+import type { PersistUnit, SettingsPersistence, StoredSettings } from '@/features/settings/settings-store';
+import { pluginSettingsToUserConfig } from '@/features/settings/settings-codec';
 import type { PluginDataService } from '@/bootstrap/plugin-data-service';
-import { JsonFile } from '@/infrastructure/persistence/json-file';
+import { JsonFile } from '@/adapters/persistence/json-file';
 
 export class ObsidianSettingsPersistence implements SettingsPersistence {
 	private readonly configFile: JsonFile<UserConfig | null>;

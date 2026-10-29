@@ -44,7 +44,7 @@ export const CAPABILITY_MANIFEST: Capability[] = [
 	{ api: 'fileManager.trashFile/renameFile', probe: 'fileManager', status: 'used' },
 	{ api: 'metadataCache.getFileCache (frontmatter/headings)', probe: 'getFileCache', status: 'used' },
 	{ api: 'metadataCache.resolvedLinks / backlinks (link graph)', probe: 'resolvedLinks', status: 'used' },
-	{ api: 'stringifyYaml (safe frontmatter serialization)', probe: 'stringifyYaml', status: 'used', test: 'src/__tests__/application/update-properties-tool.test.ts' },
+	{ api: 'stringifyYaml (safe frontmatter serialization)', probe: 'stringifyYaml', status: 'used', test: 'src/__tests__/features/update-properties-tool.test.ts' },
 	{ api: 'MarkdownRenderer', probe: 'MarkdownRenderer', status: 'used' },
 	{ api: 'Menu (context menus)', probe: 'new Menu', status: 'used' },
 	{ api: 'Notice', probe: 'new Notice', status: 'used' },
@@ -55,9 +55,9 @@ export const CAPABILITY_MANIFEST: Capability[] = [
 	{ api: 'requestUrl (non-streaming HTTP)', probe: 'requestUrl', status: 'used' },
 	{ api: 'normalizePath', probe: 'normalizePath', status: 'used' },
 	{ api: 'ButtonComponent / ToggleComponent (form UI)', probe: 'ButtonComponent', status: 'used' },
-	{ api: 'fileManager.generateMarkdownLink (vault-correct links)', probe: 'generateMarkdownLink', status: 'used', test: 'src/__tests__/application/pdf-tag-link-tools.test.ts' },
-	{ api: 'loadPdfJs (read_pdf agent tool)', probe: 'loadPdfJs', status: 'used', test: 'src/__tests__/application/pdf-tag-link-tools.test.ts' },
-	{ api: 'getAllTags / parseFrontMatter* / resolveSubpath / parseLinktext', probe: 'getAllTags', status: 'used', test: 'src/__tests__/application/pdf-tag-link-tools.test.ts' },
+	{ api: 'fileManager.generateMarkdownLink (vault-correct links)', probe: 'generateMarkdownLink', status: 'used', test: 'src/__tests__/features/pdf-tag-link-tools.test.ts' },
+	{ api: 'loadPdfJs (read_pdf agent tool)', probe: 'loadPdfJs', status: 'used', test: 'src/__tests__/features/pdf-tag-link-tools.test.ts' },
+	{ api: 'getAllTags / parseFrontMatter* / resolveSubpath / parseLinktext', probe: 'getAllTags', status: 'used', test: 'src/__tests__/features/pdf-tag-link-tools.test.ts' },
 
 	// Foundational Obsidian types & micro-utilities used pervasively across src.
 	// Not standalone "capabilities" (they back the capabilities above — e.g.
@@ -67,17 +67,17 @@ export const CAPABILITY_MANIFEST: Capability[] = [
 	{ api: 'Utilities (debounce, moment, getLanguage, getIcon, setTooltip, arrayBufferToBase64, editorInfoField)', probe: 'debounce', status: 'used' },
 
 	// ---- Planned (high-value opportunities) ----
-	{ api: 'Vault/MetadataCache events -> incremental RAG indexing', probe: 'metadataCache.on(', status: 'used', test: 'src/__tests__/infrastructure/incremental-indexer.test.ts' },
+	{ api: 'Vault/MetadataCache events -> incremental RAG indexing', probe: 'metadataCache.on(', status: 'used', test: 'src/__tests__/adapters/incremental-indexer.test.ts' },
 	{ api: 'fileManager.processFrontMatter (safe frontmatter edits)', probe: 'processFrontMatter', status: 'na', reason: 'Writes directly, bypassing the proposal/approval + autonomousWrite model. Safe frontmatter serialization is instead achieved via stringifyYaml while keeping the proposal model.' },
-	{ api: 'registerMarkdownCodeBlockProcessor (inline AI widgets)', probe: 'registerMarkdownCodeBlockProcessor', status: 'used', test: 'src/__tests__/presentation/ai-code-block.test.ts' },
-	{ api: 'EditorSuggest / AbstractInputSuggest (@-mentions)', probe: 'AbstractInputSuggest', status: 'used', test: 'src/__tests__/presentation/mention-suggest.test.ts' },
+	{ api: 'registerMarkdownCodeBlockProcessor (inline AI widgets)', probe: 'registerMarkdownCodeBlockProcessor', status: 'used', test: 'src/__tests__/ui/ai-code-block.test.ts' },
+	{ api: 'EditorSuggest / AbstractInputSuggest (@-mentions)', probe: 'AbstractInputSuggest', status: 'used', test: 'src/__tests__/ui/mention-suggest.test.ts' },
 	{ api: 'registerObsidianProtocolHandler (deep links)', probe: 'registerObsidianProtocolHandler', status: 'used' },
 	{ api: 'addStatusBarItem (agent status / token usage)', probe: 'addStatusBarItem', status: 'used' },
-	{ api: 'htmlToMarkdown (web content -> markdown)', probe: 'htmlToMarkdown', status: 'used', test: 'src/__tests__/application/web-search-service.test.ts' },
-	{ api: 'registerHoverLinkSource / HoverPopover (hover previews)', probe: 'registerHoverLinkSource', status: 'used', test: 'src/__tests__/presentation/hover-link.test.ts' },
-	{ api: 'registerEditorExtension (CodeMirror inline AI)', probe: 'registerEditorExtension', status: 'used', test: 'src/__tests__/presentation/ai-selection-extension.test.ts' },
-	{ api: 'loadMermaid / loadMathJax / loadPrism (rich chat rendering)', probe: 'loadMermaid', status: 'used', test: 'src/__tests__/presentation/rich-markdown.test.ts' },
-	{ api: 'SuggestModal / FuzzySuggestModal (quick pickers)', probe: 'FuzzySuggestModal', status: 'used', test: 'src/__tests__/presentation/model-switcher-modal.test.ts' },
+	{ api: 'htmlToMarkdown (web content -> markdown)', probe: 'htmlToMarkdown', status: 'used', test: 'src/__tests__/features/web-search-service.test.ts' },
+	{ api: 'registerHoverLinkSource / HoverPopover (hover previews)', probe: 'registerHoverLinkSource', status: 'used', test: 'src/__tests__/ui/hover-link.test.ts' },
+	{ api: 'registerEditorExtension (CodeMirror inline AI)', probe: 'registerEditorExtension', status: 'used', test: 'src/__tests__/ui/ai-selection-extension.test.ts' },
+	{ api: 'loadMermaid / loadMathJax / loadPrism (rich chat rendering)', probe: 'loadMermaid', status: 'used', test: 'src/__tests__/ui/rich-markdown.test.ts' },
+	{ api: 'SuggestModal / FuzzySuggestModal (quick pickers)', probe: 'FuzzySuggestModal', status: 'used', test: 'src/__tests__/ui/model-switcher-modal.test.ts' },
 	{ api: 'onExternalSettingsChange + onUserEnable (lifecycle hooks)', probe: 'onExternalSettingsChange', status: 'used', test: 'src/__tests__/lifecycle-hooks.test.ts' },
 
 	// ---- N/A (intentionally not applicable) ----

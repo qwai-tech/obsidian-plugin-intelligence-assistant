@@ -1,0 +1,157 @@
+import { App, TFile } from 'obsidian';
+import type { AgentExecutionStep } from '@/features/llm/types/reasoning';
+
+export interface WriteProposal {
+	type: 'write_proposal';
+	operation: 'create' | 'update' | 'append' | 'delete' | 'move';
+	path: string;
+	content?: string;
+	previousContent?: string;
+	proposedContent?: string;
+	newPath?: string;
+	applied: false;
+	reason: string;
+}
+
+export interface BatchWriteProposal {
+	type: 'batch_proposal';
+	id: string;
+	proposals: WriteProposal[];
+	reason: string;
+	applied: false;
+}
+
+export function createWriteProposal(input: {
+	operation: WriteProposal['operation'];
+	path: string;
+	content?: string;
+	previousContent?: string;
+	proposedContent?: string;
+	newPath?: string;
+	reason?: string;
+}): WriteProposal {
+	return {
+		type: 'write_proposal',
+		operation: input.operation,
+		path: input.path,
+		content: input.content,
+		previousContent: input.previousContent,
+		proposedContent: input.proposedContent ?? input.content,
+		newPath: input.newPath,
+		applied: false,
+		reason: input.reason ?? 'Vault write was not applied. Review this proposal and explicitly confirm before making changes.',
+	};
+}
+
+export function isBatchWriteProposal(value: unknown): value is BatchWriteProposal {
+	if (!value || typeof value !== 'object') return false;
+	const candidate = value as Partial<BatchWriteProposal>;
+	return candidate.type === 'batch_proposal'
+		&& Array.isArray(candidate.proposals)
+		&& candidate.applied === false;
+}
+
+export function isWriteProposal(value: unknown): value is WriteProposal {
+	if (!value || typeof value !== 'object') return false;
+	const candidate = value as Partial<WriteProposal>;
+	return candidate.type === 'write_proposal'
+		&& (candidate.operation === 'create' || candidate.operation === 'update' || candidate.operation === 'append')
+		&& typeof candidate.path === 'string'
+		&& typeof candidate.proposedContent === 'string'
+		&& candidate.applied === false;
+}
+
+export function assertWriteProposalResult(value: unknown): { success: true } | { success: false; error: string } {
+	if (isWriteProposal(value)) {
+		return { success: true };
+	}
+	return { success: false, error: 'Vault write tools must return a write proposal and must not write directly.' };
+}
+
+export function extractWriteProposalsFromSteps(steps: AgentExecutionStep[] | undefined): (WriteProposal | BatchWriteProposal)[] {
+	if (!steps?.length) return [];
+	const proposals: (WriteProposal | BatchWriteProposal)[] = [];
+	for (const step of steps) {
+		const result = step.result ?? (step.type === 'observation' ? step.content : undefined);
+		if (!result) continue;
+		try {
+			const parsed = JSON.parse(result) as unknown;
+			if (isWriteProposal(parsed)) {
+				proposals.push(parsed);
+			} else if (isBatchWriteProposal(parsed)) {
+				proposals.push(parsed);
+			}
+		} catch {
+			continue;
+		}
+	}
+	return proposals;
+}
+
+export async function applyWriteProposal(app: App, proposal: WriteProposal | BatchWriteProposal): Promise<void> {
+	if (isBatchWriteProposal(proposal)) {
+		for (const subProposal of proposal.proposals) {
+			await applySingleProposal(app, subProposal);
+		}
+		return;
+	}
+	await applySingleProposal(app, proposal);
+}
+
+/**
+ * Ensure the parent folder of a vault-relative file path exists, creating each
+ * missing ancestor segment. vault.create() does NOT create parent folders, so
+ * writing "Folder/Note.md" into a non-existent "Folder" fails with ENOENT.
+ */
+async function ensureParentFolder(app: App, filePath: string): Promise<void> {
+	const slash = filePath.lastIndexOf('/');
+	if (slash <= 0) return; // root-level file — no parent folder to create
+	const folder = filePath.slice(0, slash);
+	if (app.vault.getAbstractFileByPath(folder)) return;
+	let current = '';
+	for (const segment of folder.split('/')) {
+		current = current ? `${current}/${segment}` : segment;
+		if (app.vault.getAbstractFileByPath(current)) continue;
+		try {
+			await app.vault.createFolder(current);
+		} catch {
+			// Ignore "already exists" races; a genuine failure surfaces at create time.
+		}
+	}
+}
+
+async function applySingleProposal(app: App, proposal: WriteProposal): Promise<void> {
+	if (proposal.operation === 'create') {
+		const existing = app.vault.getAbstractFileByPath(proposal.path);
+		if (existing) {
+			throw new Error(`File already exists: ${proposal.path}`);
+		}
+		await ensureParentFolder(app, proposal.path);
+		await app.vault.create(proposal.path, proposal.proposedContent || '');
+		return;
+	}
+
+	if (proposal.operation === 'delete') {
+		const file = app.vault.getAbstractFileByPath(proposal.path);
+		if (file) {
+			// Respect the user's deletion preference (system trash vs .trash vs permanent).
+			await app.fileManager.trashFile(file);
+		}
+		return;
+	}
+
+	if (proposal.operation === 'move') {
+		const file = app.vault.getAbstractFileByPath(proposal.path);
+		if (file && proposal.newPath) {
+			await ensureParentFolder(app, proposal.newPath);
+			await app.fileManager.renameFile(file, proposal.newPath);
+		}
+		return;
+	}
+
+	const file = app.vault.getAbstractFileByPath(proposal.path);
+	if (!file || !(file instanceof TFile)) {
+		throw new Error(`File not found: ${proposal.path}`);
+	}
+	await app.vault.modify(file, proposal.proposedContent || '');
+}

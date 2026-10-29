@@ -1,6 +1,6 @@
 # ADR-002: Agent self-estimated step budget & trimmed execution trace
 
-Status: Accepted · Scope: `src/application/agents` (loop + turn kernel `Budget`), `src/constants.ts`
+Status: Accepted · Scope: `src/features/agent` (loop + turn kernel `Budget`), `src/core/constants.ts`
 
 Two related changes driven by the principle "trust a capable agentic model; remove
 fixed scaffolding."

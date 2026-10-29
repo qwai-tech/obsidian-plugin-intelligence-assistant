@@ -1,9 +1,9 @@
 import { MarkdownRenderChild, Notice, TFile, type ObsidianProtocolData, type Plugin } from 'obsidian';
-import type { RAGConfig } from '@/types';
-import type { RAGManager } from '@/infrastructure/rag-manager';
-import { createIncrementalIndexHandlers } from '@/infrastructure/rag/incremental-indexer';
-import { parseAiBlock, buildAiWidget } from '@/presentation/markdown/ai-code-block';
-import type { AgentTaskLauncher } from '@/presentation/views/agent-task-launcher';
+import type { RAGConfig } from '@/features/knowledge/types/rag';
+import type { RAGManager } from '@/adapters/rag/rag-manager';
+import { createIncrementalIndexHandlers } from '@/adapters/rag/incremental-indexer';
+import { parseAiBlock, buildAiWidget } from '@/ui/markdown/ai-code-block';
+import type { AgentTaskLauncher } from '@/ui/views/agent-task-launcher';
 
 export function registerIncrementalRagIndexing(
 	plugin: Plugin,

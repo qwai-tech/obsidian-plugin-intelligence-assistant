@@ -1,5 +1,5 @@
 import { PluginDataService } from '@/bootstrap/plugin-data-service';
-import type { PluginSettings } from '@/types';
+import type { PluginSettings } from '@/features/settings/types/settings';
 
 function makeApp(files: Record<string, string> = {}) {
 	const store: Record<string, string> = { ...files };

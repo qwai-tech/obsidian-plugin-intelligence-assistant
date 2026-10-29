@@ -2,9 +2,11 @@
  * Test support utilities for creating test fixtures.
  */
 
-import type { Agent, LLMConfig, PluginSettings } from '@/types';
-import { DEFAULT_SETTINGS } from '@/application/settings/settings-codec';
-import { migrateAgentToolAccess } from '@/application/tools/tool-migrations';
+import type { Agent } from '@/features/agent/types/agent';
+import type { LLMConfig } from '@/features/llm/types/model';
+import type { PluginSettings } from '@/features/settings/types/settings';
+import { DEFAULT_SETTINGS } from '@/features/settings/settings-codec';
+import { migrateAgentToolAccess } from '@/features/tools/tool-migrations';
 
 /**
  * Legacy per-source enable arrays. Removed from the Agent type in Phase 6

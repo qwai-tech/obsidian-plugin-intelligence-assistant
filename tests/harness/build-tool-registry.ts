@@ -1,7 +1,7 @@
 import type { App } from 'obsidian';
-import { ToolRegistry } from '@/application/tools/tool-registry';
-import { BuiltinToolSource } from '@/application/tools/sources/builtin-tool-source';
-import type { ToolSource } from '@/application/tools/tool-source';
+import { ToolRegistry } from '@/features/tools/tool-registry';
+import { BuiltinToolSource } from '@/features/tools/sources/builtin-tool-source';
+import type { ToolSource } from '@/features/tools/tool-source';
 
 /**
  * Build a real ToolRegistry over the headless harness app.

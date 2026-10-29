@@ -165,21 +165,39 @@ export default defineConfig([
   },
 
   {
-    files: ["src/core/**/*.ts", "src/utils/**/*.ts", "src/types/**/*.ts", "src/constants.ts", "src/i18n/**/*.ts"],
+    files: ["src/core/**/*.ts", "src/i18n/**/*.ts"],
     rules: {
-      "no-restricted-imports": layer(["application", "infrastructure", "presentation"], "Core code depends on nothing above it."),
+      "no-restricted-imports": layer(["features", "adapters", "ui", "bootstrap"], "Core code depends on nothing above it."),
     },
   },
   {
-    files: ["src/application/**/*.ts"],
+    files: ["src/features/**/*.ts"],
     rules: {
-      "no-restricted-imports": layer(["infrastructure", "presentation"], "Application code reaches adapters through ports, never the UI."),
+      "no-restricted-imports": layer(["adapters", "ui", "bootstrap"], "Features reach adapters through ports, never the UI."),
     },
   },
   {
-    files: ["src/infrastructure/**/*.ts"],
+    files: ["src/adapters/**/*.ts"],
     rules: {
-      "no-restricted-imports": layer(["application", "presentation"], "Adapters implement ports; they never import use cases or UI."),
+      "no-restricted-imports": ["error", {
+        paths: OBSIDIAN_RESTRICTED_PATHS,
+        patterns: [
+          { group: ["@/ui/*", "**/ui/*", "@/bootstrap/*", "**/bootstrap/*"], message: "Adapters never import the UI or the composition root." },
+          { group: ["@/features/*/*", "!@/features/*/types"], message: "Adapters may only use a feature's types/." },
+        ],
+      }],
+    },
+  },
+  {
+    files: ["src/ui/**/*.ts"],
+    rules: {
+      "no-restricted-imports": ["error", { paths: OBSIDIAN_RESTRICTED_PATHS }],
+      "@typescript-eslint/no-restricted-imports": ["error", {
+        patterns: [
+          { group: ["@/bootstrap/*", "**/bootstrap/*"], message: "The UI never imports the composition root." },
+          { group: ["@/adapters/*", "**/adapters/*"], allowTypeImports: true, message: "The UI sees adapters only as types; services arrive through AppServices." },
+        ],
+      }],
     },
   },
   {

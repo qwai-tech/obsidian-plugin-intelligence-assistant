@@ -1,5 +1,7 @@
 import * as path from 'node:path';
-import type { Agent, LLMConfig, MCPServerConfig, ModelInfo } from '@/types';
+import type { Agent } from '@/features/agent/types/agent';
+import type { LLMConfig, ModelInfo } from '@/features/llm/types/model';
+import type { MCPServerConfig } from '@/features/tools/types/mcp';
 
 const DEFAULT_TIMESTAMP = 1_700_000_000_000;
 

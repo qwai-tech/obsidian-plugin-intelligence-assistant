@@ -13,12 +13,12 @@
  * Run:  RUN_LIVE_AGENT_E2E=1 DEEPSEEK_API_KEY=sk-... npx jest agent-e2e-live
  */
 import { App, TFile } from 'obsidian';
-import { ToolRegistry } from '@/application/tools/tool-registry';
-import { BuiltinToolSource } from '@/application/tools/sources/builtin-tool-source';
-import { AgentEngineLoop } from '@/application/agents/agent-engine-loop';
-import { HistoryCompactor } from '@/application/agents/history-compactor';
+import { ToolRegistry } from '@/features/tools/tool-registry';
+import { BuiltinToolSource } from '@/features/tools/sources/builtin-tool-source';
+import { AgentEngineLoop } from '@/features/agent/agent-engine-loop';
+import { HistoryCompactor } from '@/features/agent/history-compactor';
 import { DeepSeekProvider } from '@qwai/obsidian-llm';
-import type { Message } from '@/types';
+import type { Message } from '@/features/conversations/types/conversation';
 
 const KEY = process.env.DEEPSEEK_API_KEY;
 // Opt-in only: BOTH an explicit flag and a key are required, so an ambient

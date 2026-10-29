@@ -1,4 +1,4 @@
-import { reloadSettingsFromDisk, type SettingsReloadHost } from '@/application/services/settings-reload';
+import { reloadSettingsFromDisk, type SettingsReloadHost } from '@/features/settings/settings-reload';
 
 describe('onExternalSettingsChange reload sequence', () => {
 	const makeHost = (overrides: Partial<SettingsReloadHost> = {}) => {

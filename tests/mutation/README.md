@@ -11,13 +11,13 @@ that.
 Two well-covered orchestration files are mutated:
 
 ```
-src/application/agents/kernel/kernel-tool-registry-adapter.ts
-src/application/agents/kernel/json-utils.ts
+src/features/agent/kernel/registry-tool-runner.ts
+src/features/agent/kernel/json-utils.ts
 ```
 
-The adapter is the busiest orchestration seam: tool dispatch, the permission-deny
-path (disabled native tools), the autonomous write-apply path, the
-consecutive-failure circuit-breaker, and side-effect-level classification.
+The tool runner is the busiest orchestration seam: tool dispatch, the
+not-enabled and unknown-tool paths, the autonomous write-apply path, and
+write-proposal detection.
 `json-utils` is the tool-argument parse / result-serialize boundary. Both are
 exercised by the mission suite (`tests/missions/`) and the agent unit tests
 (`src/__tests__/application/agents/`).
@@ -171,8 +171,8 @@ To mutate more of the orchestration core, broaden `mutate` in
 
 ```json
 "mutate": [
-  "src/application/agents/**/*.ts",
-  "!src/application/agents/**/*.test.ts"
+  "src/features/agent/**/*.ts",
+  "!src/features/agent/**/*.test.ts"
 ]
 ```
 

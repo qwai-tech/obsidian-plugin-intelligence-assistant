@@ -1,5 +1,5 @@
-import type { ToolSource } from '@/application/tools/tool-source';
-import type { SourceTool } from '@/types/common/tools';
+import type { ToolSource } from '@/features/tools/tool-source';
+import type { SourceTool } from '@/features/tools/types/tools';
 
 /** Minimal in-process non-builtin tool source exposing `fake_echo` (source key `mcp:fake`). */
 export function createFakeToolSource(): ToolSource {
