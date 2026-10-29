@@ -2,8 +2,8 @@
  * Test support utilities for creating test fixtures.
  */
 
-import type { Agent, LLMConfig, PluginSettings, Conversation } from '@/types';
-import { DEFAULT_SETTINGS } from '@/types';
+import type { Agent, LLMConfig, PluginSettings } from '@/types';
+import { DEFAULT_SETTINGS } from '@/application/settings/settings-codec';
 import { migrateAgentToolAccess } from '@/application/tools/tool-migrations';
 
 /**
@@ -103,17 +103,5 @@ export function createMockApp() {
 			getActiveFile: fn,
 			openLinkText: fn,
 		},
-	};
-}
-
-export function createTestConversation(overrides: Partial<Conversation> = {}): Conversation {
-	const now = Date.now();
-	return {
-		id: 'test-conv-1',
-		title: 'Test Conversation',
-		messages: [],
-		createdAt: now,
-		updatedAt: now,
-		...overrides,
 	};
 }

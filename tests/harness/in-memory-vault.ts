@@ -3,6 +3,7 @@ import type { App } from 'obsidian';
 
 /** Map-backed vault store: path -> file content. */
 export class InMemoryVault {
+  readonly configDir = '.vault-config';
   private readonly files = new Map<string, string>();
 
   constructor(seed: Record<string, string> = {}) {

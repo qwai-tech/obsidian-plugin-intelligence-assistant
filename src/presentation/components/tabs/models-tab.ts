@@ -8,7 +8,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import type { ModelInfo, ModelCapability } from '@/types';
 import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
-import { getProviderMeta } from '../components/provider-meta';
+import { getProviderMeta } from '@/presentation/components/provider-meta';
 
 export interface ModelFilters {
 	providerFilter: string;
@@ -61,7 +61,6 @@ export function displayModelsTab(
 			}
 
 			await plugin.saveSettings();
-			await plugin.refreshChatViewsModels();
 			new Notice(t('settings.models.notices.refreshed'));
 
 			// Redisplay the tab
@@ -212,7 +211,6 @@ export function displayModelsTab(
 			void (async () => {
 				model.enabled = !model.enabled;
 				await plugin.saveSettings();
-				await plugin.refreshChatViewsModels();
 				refreshDisplay();
 			})();
 		});
@@ -228,7 +226,6 @@ export function displayModelsTab(
 					void (async () => {
 						plugin.settings.defaultModel = model.id;
 						await plugin.saveSettings();
-						await plugin.refreshChatViewsModels();
 						new Notice(t('settings.models.notices.defaultChatSet', { name: model.name }));
 						refreshDisplay();
 					})();
@@ -247,7 +244,6 @@ export function displayModelsTab(
 					void (async () => {
 						plugin.settings.ragConfig.embeddingModel = model.id;
 						await plugin.saveSettings();
-						await plugin.refreshChatViewsModels();
 						new Notice(t('settings.models.notices.defaultEmbeddingSet', { name: model.name }));
 						refreshDisplay();
 					})();

@@ -1,7 +1,7 @@
 /**
  * Tests for Phase 4 config schema migration.
  */
-import { userConfigToPluginSettings, pluginSettingsToUserConfig } from '@/types/settings';
+import { userConfigToPluginSettings, pluginSettingsToUserConfig } from '@/application/settings/settings-codec';
 import type { UserConfig, PluginSettings } from '@/types';
 import type { MCPServerConfig, MCPRegistry } from '@/types/features/mcp';
 import type { BuiltInToolConfig } from '@/types/common/tools';

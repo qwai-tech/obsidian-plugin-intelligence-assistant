@@ -8,6 +8,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
 import { applyConfigFieldMetadata, type ConfigFieldMetadataOptions } from '@/presentation/utils/config-field-metadata';
 import { TestIds } from '@/presentation/utils/test-ids';
+import { setDestructiveButton } from '@/presentation/utils/ui-helpers';
 import { displayWebSearchTab } from './websearch-tab';
 
 export function displayRAGTab(
@@ -121,7 +122,6 @@ function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 		toggle.setValue(plugin.settings.ragConfig.enabled)
 			.onChange(async (value) => {
 				plugin.settings.ragConfig.enabled = value;
-				plugin.getRAGManager().updateConfig(plugin.settings.ragConfig, plugin.settings.llmConfigs);
 				await plugin.saveSettings();
 			});
 	});
@@ -182,7 +182,7 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 	const updateStats = async () => {
 		statsContainer.empty();
 
-		const ragManager = plugin.getRAGManager();
+		const ragManager = plugin.services.rag;
 
 		try {
 			const stats = await ragManager.getDetailedStats();
@@ -244,14 +244,13 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 		.setDesc(t('settings.rag.indexMgmt.rebuild.desc'))
 		.addButton(button => {
 			button.buttonEl.setAttribute('data-testid', TestIds.settings.ragRebuildBtn);
-			button.setButtonText(t('settings.rag.indexMgmt.rebuild.btn'))
-			.setWarning()
+			setDestructiveButton(button.setButtonText(t('settings.rag.indexMgmt.rebuild.btn')))
 			.onClick(async () => {
 				button.setDisabled(true);
 				button.setButtonText(t('settings.rag.indexMgmt.rebuild.rebuilding'));
 
 				try {
-					const ragManager = plugin.getRAGManager();
+					const ragManager = plugin.services.rag;
 					ragManager.updateConfig(plugin.settings.ragConfig, plugin.settings.llmConfigs);
 					await ragManager.clearIndex();
 					await ragManager.indexVault();
@@ -278,7 +277,7 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 				button.setButtonText(t('settings.rag.indexMgmt.refresh.refreshing'));
 
 				try {
-					const ragManager = plugin.getRAGManager();
+					const ragManager = plugin.services.rag;
 					await ragManager.refreshIndex();
 					await updateStats();
 					new Notice(t('settings.rag.indexMgmt.notices.refreshed'));
@@ -295,15 +294,14 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 	new Setting(section)
 		.setName(t('settings.rag.indexMgmt.clear.name'))
 		.setDesc(t('settings.rag.indexMgmt.clear.desc'))
-		.addButton(button => button
-			.setButtonText(t('settings.rag.indexMgmt.clear.btn'))
-			.setWarning()
+		.addButton(button => setDestructiveButton(button
+			.setButtonText(t('settings.rag.indexMgmt.clear.btn')))
 			.onClick(async () => {
 				button.setDisabled(true);
 				button.setButtonText(t('settings.rag.indexMgmt.clear.clearing'));
 
 				try {
-					const ragManager = plugin.getRAGManager();
+					const ragManager = plugin.services.rag;
 					await ragManager.clearIndex();
 					await updateStats();
 					new Notice(t('settings.rag.indexMgmt.notices.cleared'));

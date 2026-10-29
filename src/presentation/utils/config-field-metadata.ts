@@ -1,5 +1,5 @@
 import { Setting } from 'obsidian';
-import { ConfigSchema } from '@/core/config-schema';
+import { ConfigSchema } from '@/presentation/utils/config-schema';
 
 export interface ConfigFieldMetadataOptions {
 	path: string;

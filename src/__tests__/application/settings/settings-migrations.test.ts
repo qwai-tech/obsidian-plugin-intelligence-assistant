@@ -1,10 +1,6 @@
-/**
- * Phase 5 regression: verify that loading a UserConfig with legacy agent
- * tool fields populates `toolAccess` automatically. Without this wiring
- * the migration function (defined in tool-migrations.ts) is dead code
- * and every user's existing agent stays on the deprecated schema.
- */
-import { userConfigToPluginSettings, type UserConfig } from '@/types/settings';
+import { userConfigToPluginSettings } from '@/application/settings/settings-codec';
+import { migrateSettings } from '@/application/settings/settings-migrations';
+import type { UserConfig } from '@/types/settings';
 import type { Agent } from '@/types/core/agent';
 
 function makeLegacyAgent(overrides: Partial<Agent> = {}): Agent {
@@ -31,7 +27,13 @@ function makeLegacyAgent(overrides: Partial<Agent> = {}): Agent {
 	} as Agent;
 }
 
-describe('userConfigToPluginSettings — agent toolAccess migration', () => {
+const load = (config: UserConfig) => {
+	const settings = userConfigToPluginSettings(config);
+	migrateSettings(settings);
+	return settings;
+};
+
+describe('migrateSettings — agent toolAccess', () => {
 	it('populates toolAccess.sources from legacy fields when loading', () => {
 		const config: UserConfig = {
 			agents: {
@@ -39,7 +41,7 @@ describe('userConfigToPluginSettings — agent toolAccess migration', () => {
 			},
 		} as UserConfig;
 
-		const settings = userConfigToPluginSettings(config);
+		const settings = load(config);
 		const agent = settings.agents[0];
 
 		expect(agent.toolAccess).toBeDefined();
@@ -68,7 +70,7 @@ describe('userConfigToPluginSettings — agent toolAccess migration', () => {
 		});
 		const config: UserConfig = { agents: { list: [preset] } } as UserConfig;
 
-		const settings = userConfigToPluginSettings(config);
+		const settings = load(config);
 		expect(settings.agents[0].toolAccess.sources).toEqual({
 			'builtin:builtin': 'all',
 		});
@@ -76,7 +78,43 @@ describe('userConfigToPluginSettings — agent toolAccess migration', () => {
 
 	it('handles empty agent list without throwing', () => {
 		const config: UserConfig = { agents: { list: [] } } as UserConfig;
-		const settings = userConfigToPluginSettings(config);
+		const settings = load(config);
 		expect(settings.agents).toEqual([]);
+	});
+});
+
+describe('migrateSettings — agent model strategy', () => {
+	const agentWith = (fields: Record<string, unknown>): Agent => {
+		const agent = makeLegacyAgent({ toolAccess: { sources: {} } }) as unknown as Record<string, unknown>;
+		delete agent.modelStrategy;
+		return { ...agent, ...fields } as unknown as Agent;
+	};
+
+	it('turns a legacy modelId into a fixed strategy and drops the old field', () => {
+		const settings = userConfigToPluginSettings(null);
+		settings.agents = [agentWith({ modelId: 'claude-x' })];
+
+		expect(migrateSettings(settings)).toBe(true);
+
+		expect(settings.agents[0].modelStrategy).toEqual({ strategy: 'fixed', modelId: 'claude-x' });
+		expect('modelId' in settings.agents[0]).toBe(false);
+	});
+
+	it('gives an agent without a strategy the default model', () => {
+		const settings = userConfigToPluginSettings(null);
+		settings.defaultModel = 'gpt-default';
+		settings.agents = [agentWith({})];
+
+		migrateSettings(settings);
+
+		expect(settings.agents[0].modelStrategy).toEqual({ strategy: 'default', modelId: 'gpt-default' });
+	});
+
+	it('reports no change for settings that are already current', () => {
+		const settings = userConfigToPluginSettings(null);
+		settings.agents = [makeLegacyAgent({ toolAccess: { sources: {} }, modelStrategy: { strategy: 'default' } } as Partial<Agent>)];
+		migrateSettings(settings);
+
+		expect(migrateSettings(settings)).toBe(false);
 	});
 });

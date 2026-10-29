@@ -53,3 +53,7 @@ export function buildSafeName(value: string, fallback: string): string {
 	const hash = stableHash(value);
 	return `${sanitized}-${hash}`;
 }
+
+export function parentFolder(path: string): string {
+	return path.slice(0, path.lastIndexOf('/'));
+}

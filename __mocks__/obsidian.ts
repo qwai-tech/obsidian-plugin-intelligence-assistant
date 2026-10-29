@@ -15,6 +15,10 @@ export function parseYaml(raw: string): unknown {
 	return YAML.parse(raw);
 }
 
+export function requireApiVersion(_version: string): boolean {
+	return true;
+}
+
 /** The handful of entities real search snippets emit, decoded in one pass. */
 const HTML_ENTITIES: Record<string, string> = {
 	'&nbsp;': ' ',
@@ -203,6 +207,7 @@ export class Events {
 
 export class App {
 	vault = {
+		configDir: '.obsidian',
 		getMarkdownFiles: jest.fn(() => []),
 		getFiles: jest.fn(() => []),
 		read: jest.fn(async () => ''),
@@ -327,7 +332,6 @@ export abstract class PopoverSuggest<T> {
 export abstract class AbstractInputSuggest<T> extends PopoverSuggest<T> {
 	limit = 100;
 	protected textInputEl: HTMLInputElement | HTMLDivElement;
-	private selectCb: ((value: T, evt: any) => void) | null = null;
 
 	constructor(app: App, textInputEl: HTMLInputElement | HTMLDivElement) {
 		super(app);
@@ -344,8 +348,7 @@ export abstract class AbstractInputSuggest<T> extends PopoverSuggest<T> {
 		return (this.textInputEl as HTMLInputElement).value ?? '';
 	}
 
-	onSelect(cb: (value: T, evt: any) => void): this {
-		this.selectCb = cb;
+	onSelect(_cb: (value: T, evt: any) => void): this {
 		return this;
 	}
 
@@ -364,6 +367,19 @@ export class Component {
 	onunload(): void {}
 	addChild<T extends Component>(child: T): T { return child; }
 	removeChild<T extends Component>(child: T): T { return child; }
+}
+
+export class ItemView extends Component {
+	app: App;
+	leaf: unknown;
+	containerEl: HTMLElement;
+	constructor(leaf: { app?: App } = {}) {
+		super();
+		this.leaf = leaf;
+		this.app = leaf.app ?? new App();
+		this.containerEl = document.createElement('div');
+	}
+	registerDomEvent(): void {}
 }
 
 export class MarkdownRenderChild extends Component {

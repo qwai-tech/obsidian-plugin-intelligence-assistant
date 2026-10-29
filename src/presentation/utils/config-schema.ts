@@ -4,7 +4,7 @@
  */
 
 import type { PluginSettings } from '@/types';
-import { DEFAULT_SETTINGS } from '@/types/settings';
+import { DEFAULT_SETTINGS } from '@/application/settings/settings-codec';
 
 export interface ValidationResult {
 	valid: boolean;
