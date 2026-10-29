@@ -572,3 +572,107 @@ export const Platform = {
 	isMobile: false,
 	isDesktop: true,
 };
+
+class ValueComponent<T> {
+	value!: T;
+	placeholder = '';
+	private handler?: (value: T) => unknown;
+
+	setValue(value: T): this {
+		this.value = value;
+		return this;
+	}
+
+	getValue(): T {
+		return this.value;
+	}
+
+	setPlaceholder(placeholder: string): this {
+		this.placeholder = placeholder;
+		return this;
+	}
+
+	onChange(handler: (value: T) => unknown): this {
+		this.handler = handler;
+		return this;
+	}
+
+	async change(value: T): Promise<void> {
+		this.value = value;
+		await this.handler?.(value);
+	}
+}
+
+export class ToggleComponent extends ValueComponent<boolean> {
+	toggleEl = document.createElement('div');
+}
+
+export class TextComponent extends ValueComponent<string> {
+	inputEl = document.createElement('input');
+}
+
+export class TextAreaComponent extends ValueComponent<string> {
+	inputEl = document.createElement('textarea');
+}
+
+export class DropdownComponent extends ValueComponent<string> {
+	selectEl = document.createElement('select');
+	options: Record<string, string> = {};
+
+	addOption(value: string, label: string): this {
+		this.options[value] = label;
+		return this;
+	}
+
+	addOptions(options: Record<string, string>): this {
+		Object.assign(this.options, options);
+		return this;
+	}
+}
+
+export class Setting {
+	settingEl: HTMLElement;
+	nameEl: HTMLElement;
+	descEl: HTMLElement;
+	controlEl: HTMLElement;
+	components: Array<ValueComponent<unknown>> = [];
+
+	constructor(containerEl: HTMLElement) {
+		this.settingEl = containerEl.createDiv('setting-item');
+		this.nameEl = this.settingEl.createDiv('setting-item-name');
+		this.descEl = this.settingEl.createDiv('setting-item-description');
+		this.controlEl = this.settingEl.createDiv('setting-item-control');
+	}
+
+	setName(name: string): this {
+		this.nameEl.textContent = name;
+		return this;
+	}
+
+	setDesc(desc: string): this {
+		this.descEl.textContent = desc;
+		return this;
+	}
+
+	addToggle(build: (component: ToggleComponent) => unknown): this {
+		return this.add(new ToggleComponent(), build);
+	}
+
+	addText(build: (component: TextComponent) => unknown): this {
+		return this.add(new TextComponent(), build);
+	}
+
+	addTextArea(build: (component: TextAreaComponent) => unknown): this {
+		return this.add(new TextAreaComponent(), build);
+	}
+
+	addDropdown(build: (component: DropdownComponent) => unknown): this {
+		return this.add(new DropdownComponent(), build);
+	}
+
+	private add<C>(component: C, build: (component: C) => unknown): this {
+		this.components.push(component as unknown as ValueComponent<unknown>);
+		build(component);
+		return this;
+	}
+}

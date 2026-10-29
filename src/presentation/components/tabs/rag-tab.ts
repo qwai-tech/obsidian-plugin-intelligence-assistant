@@ -6,7 +6,8 @@
 import { Setting, Notice } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
-import { applyConfigFieldMetadata, type ConfigFieldMetadataOptions } from '@/presentation/utils/config-field-metadata';
+import type { RAGConfig } from '@/types';
+import { SettingsForm } from '@/presentation/components/settings/settings-form';
 import { TestIds } from '@/presentation/utils/test-ids';
 import { setDestructiveButton } from '@/presentation/utils/ui-helpers';
 import { displayWebSearchTab } from './websearch-tab';
@@ -109,60 +110,28 @@ function renderAdvancedTab(containerEl: HTMLElement, plugin: IntelligenceAssista
 function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	section.createEl('h4', { text: t('settings.rag.general.title') });
+	const form = ragForm(section, plugin);
 
-	const createSetting = (options: ConfigFieldMetadataOptions) =>
-		applyConfigFieldMetadata(new Setting(section), options);
-
-	createSetting({
-		path: 'ragConfig.enabled',
+	form.toggle('enabled', {
 		label: t('settings.rag.general.enableRag.name'),
-		description: t('settings.rag.general.enableRag.desc')
-	}).addToggle(toggle => {
-		toggle.toggleEl.setAttribute('data-testid', TestIds.settings.ragEnableToggle);
-		toggle.setValue(plugin.settings.ragConfig.enabled)
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.enabled = value;
-				await plugin.saveSettings();
-			});
+		description: t('settings.rag.general.enableRag.desc'),
+		testId: TestIds.settings.ragEnableToggle,
 	});
-
-	createSetting({
-		path: 'ragConfig.vectorStore',
+	form.dropdown('vectorStore', {
 		label: t('settings.rag.general.vectorStore.name'),
-		description: t('settings.rag.general.vectorStore.desc')
-	}).addDropdown(dropdown => dropdown
-			.addOptions({
-				'memory': t('settings.rag.general.vectorStore.memory'),
-				'disk': t('settings.rag.general.vectorStore.disk')
-			})
-			.setValue(plugin.settings.ragConfig.vectorStore)
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.vectorStore = value;
-				await plugin.saveSettings();
-			}));
-
-	createSetting({
-		path: 'ragConfig.embeddingModel',
+		description: t('settings.rag.general.vectorStore.desc'),
+	}, {
+		memory: t('settings.rag.general.vectorStore.memory'),
+		disk: t('settings.rag.general.vectorStore.disk'),
+	});
+	form.text('embeddingModel', {
 		label: t('settings.rag.general.embeddingModel.name'),
-		description: t('settings.rag.general.embeddingModel.desc')
-	}).addText(text => text
-			.setPlaceholder('Text-embedding-ada-002')
-			.setValue(plugin.settings.ragConfig.embeddingModel)
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.embeddingModel = value;
-				await plugin.saveSettings();
-			}));
-
-	createSetting({
-		path: 'ragConfig.embedChangedFiles',
+		description: t('settings.rag.general.embeddingModel.desc'),
+	}, { placeholder: 'Text-embedding-ada-002' });
+	form.toggle('embedChangedFiles', {
 		label: t('settings.rag.general.embedChanged.name'),
-		description: t('settings.rag.general.embedChanged.desc')
-	}).addToggle(toggle => toggle
-			.setValue(plugin.settings.ragConfig.embedChangedFiles)
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.embedChangedFiles = value;
-				await plugin.saveSettings();
-			}));
+		description: t('settings.rag.general.embedChanged.desc'),
+	});
 }
 
 function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
@@ -318,412 +287,164 @@ function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAss
 function renderChunkingSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	section.createEl('h4', { text: t('settings.rag.chunking.title') });
+	const form = ragForm(section, plugin);
 
-	const createSetting = (options: ConfigFieldMetadataOptions) =>
-		applyConfigFieldMetadata(new Setting(section), options);
-
-	createSetting({
-		path: 'ragConfig.chunkingStrategy',
+	form.dropdown('chunkingStrategy', {
 		label: t('settings.rag.chunking.strategy.name'),
-		description: t('settings.rag.chunking.strategy.desc')
-	}).addDropdown(dropdown => dropdown
-			.addOptions({
-				'recursive': t('settings.rag.chunking.strategy.recursive'),
-				'fixed': t('settings.rag.chunking.strategy.fixed'),
-				'sentence': t('settings.rag.chunking.strategy.sentence'),
-				'paragraph': t('settings.rag.chunking.strategy.paragraph')
-			})
-			.setValue(plugin.settings.ragConfig.chunkingStrategy)
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.chunkingStrategy = value;
-				await plugin.saveSettings();
-			}));
-
-	createSetting({
-		path: 'ragConfig.chunkSize',
+		description: t('settings.rag.chunking.strategy.desc'),
+	}, {
+		recursive: t('settings.rag.chunking.strategy.recursive'),
+		fixed: t('settings.rag.chunking.strategy.fixed'),
+		sentence: t('settings.rag.chunking.strategy.sentence'),
+		paragraph: t('settings.rag.chunking.strategy.paragraph'),
+	});
+	form.number('chunkSize', {
 		label: t('settings.rag.chunking.chunkSize.name'),
-		description: t('settings.rag.chunking.chunkSize.desc')
-	}).addText(text => text
-			.setPlaceholder('1000')
-			.setValue(plugin.settings.ragConfig.chunkSize.toString())
-			.onChange(async (value) => {
-				const num = parseInt(value);
-				if (!isNaN(num) && num > 0) {
-					plugin.settings.ragConfig.chunkSize = num;
-					await plugin.saveSettings();
-				}
-			}));
-
-	createSetting({
-		path: 'ragConfig.chunkOverlap',
+		description: t('settings.rag.chunking.chunkSize.desc'),
+	}, { placeholder: '1000', integer: true, min: 1 });
+	form.number('chunkOverlap', {
 		label: t('settings.rag.chunking.chunkOverlap.name'),
-		description: t('settings.rag.chunking.chunkOverlap.desc')
-	}).addText(text => text
-			.setPlaceholder('200')
-			.setValue(plugin.settings.ragConfig.chunkOverlap.toString())
-			.onChange(async (value) => {
-				const num = parseInt(value);
-				if (!isNaN(num) && num >= 0) {
-					plugin.settings.ragConfig.chunkOverlap = num;
-					await plugin.saveSettings();
-				}
-			}));
-
-	createSetting({
-		path: 'ragConfig.minChunkSize',
+		description: t('settings.rag.chunking.chunkOverlap.desc'),
+	}, { placeholder: '200', integer: true, min: 0 });
+	form.number('minChunkSize', {
 		label: t('settings.rag.chunking.minChunkSize.name'),
-		description: t('settings.rag.chunking.minChunkSize.desc')
-	}).addText(text => text
-			.setPlaceholder('100')
-			.setValue(plugin.settings.ragConfig.minChunkSize.toString())
-			.onChange(async (value) => {
-				const num = parseInt(value);
-				if (!isNaN(num) && num > 0) {
-					plugin.settings.ragConfig.minChunkSize = num;
-					await plugin.saveSettings();
-				}
-			}));
-
-	createSetting({
-		path: 'ragConfig.maxTokensPerChunk',
+		description: t('settings.rag.chunking.minChunkSize.desc'),
+	}, { placeholder: '100', integer: true, min: 1 });
+	form.number('maxTokensPerChunk', {
 		label: t('settings.rag.chunking.maxTokens.name'),
-		description: t('settings.rag.chunking.maxTokens.desc')
-	}).addText(text => text
-			.setPlaceholder('512')
-			.setValue(plugin.settings.ragConfig.maxTokensPerChunk.toString())
-			.onChange(async (value) => {
-				const num = parseInt(value);
-				if (!isNaN(num) && num > 0) {
-					plugin.settings.ragConfig.maxTokensPerChunk = num;
-					await plugin.saveSettings();
-				}
-			}));
+		description: t('settings.rag.chunking.maxTokens.desc'),
+	}, { placeholder: '512', integer: true, min: 1 });
 }
 
 function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	section.createEl('h4', { text: t('settings.rag.search.title') });
+	const form = ragForm(section, plugin);
 
-	const createSetting = (options: ConfigFieldMetadataOptions) =>
-		applyConfigFieldMetadata(new Setting(section), options);
-
-	createSetting({
-		path: 'ragConfig.searchType',
+	form.dropdown('searchType', {
 		label: t('settings.rag.search.searchType.name'),
-		description: t('settings.rag.search.searchType.desc')
-	}).addDropdown(dropdown => dropdown
-			.addOptions({
-				'similarity': t('settings.rag.search.searchType.similarity'),
-			})
-			.setValue(plugin.settings.ragConfig.searchType)
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.searchType = value;
-				await plugin.saveSettings();
-			}));
-
-	createSetting({
-		path: 'ragConfig.topK',
+		description: t('settings.rag.search.searchType.desc'),
+	}, { similarity: t('settings.rag.search.searchType.similarity') });
+	form.number('topK', {
 		label: t('settings.rag.search.topK.name'),
-		description: t('settings.rag.search.topK.desc')
-	}).addText(text => text
-			.setPlaceholder('5')
-			.setValue(plugin.settings.ragConfig.topK.toString())
-			.onChange(async (value) => {
-				const num = parseInt(value);
-				if (!isNaN(num) && num > 0 && num <= 20) {
-					plugin.settings.ragConfig.topK = num;
-					await plugin.saveSettings();
-				}
-			}));
-
-	createSetting({
-		path: 'ragConfig.similarityThreshold',
+		description: t('settings.rag.search.topK.desc'),
+	}, { placeholder: '5', integer: true, min: 1, max: 20 });
+	form.number('similarityThreshold', {
 		label: t('settings.rag.search.threshold.name'),
-		description: t('settings.rag.search.threshold.desc')
-	}).addText(text => text
-			.setPlaceholder('0.7')
-			.setValue(plugin.settings.ragConfig.similarityThreshold.toString())
-			.onChange(async (value) => {
-				const num = parseFloat(value);
-				if (!isNaN(num) && num >= 0 && num <= 1) {
-					plugin.settings.ragConfig.similarityThreshold = num;
-					await plugin.saveSettings();
-				}
-			}));
-
-	createSetting({
-		path: 'ragConfig.relevanceScoreWeight',
+		description: t('settings.rag.search.threshold.desc'),
+	}, { placeholder: '0.7', min: 0, max: 1 });
+	form.number('relevanceScoreWeight', {
 		label: t('settings.rag.search.weight.name'),
-		description: t('settings.rag.search.weight.desc')
-	}).addText(text => text
-			.setPlaceholder('0.5')
-			.setValue(plugin.settings.ragConfig.relevanceScoreWeight.toString())
-			.onChange(async (value) => {
-				const num = parseFloat(value);
-				if (!isNaN(num) && num >= 0 && num <= 1) {
-					plugin.settings.ragConfig.relevanceScoreWeight = num;
-					await plugin.saveSettings();
-				}
-			}));
-
-	createSetting({
-		path: 'ragConfig.contextWindowLimit',
+		description: t('settings.rag.search.weight.desc'),
+	}, { placeholder: '0.5', min: 0, max: 1 });
+	form.number('contextWindowLimit', {
 		label: t('settings.rag.search.contextLimit.name'),
-		description: t('settings.rag.search.contextLimit.desc')
-	}).addText(text => text
-			.setPlaceholder('4000')
-			.setValue(plugin.settings.ragConfig.contextWindowLimit.toString())
-			.onChange(async (value) => {
-				const num = parseInt(value);
-				if (!isNaN(num) && num > 0) {
-					plugin.settings.ragConfig.contextWindowLimit = num;
-					await plugin.saveSettings();
-				}
-			}));
+		description: t('settings.rag.search.contextLimit.desc'),
+	}, { placeholder: '4000', integer: true, min: 1 });
 }
 
 function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	section.createEl('h4', { text: t('settings.rag.filters.title') });
+	const form = ragForm(section, plugin);
 
-	const createSetting = (options: ConfigFieldMetadataOptions) =>
-		applyConfigFieldMetadata(new Setting(section), options);
-
-	createSetting({
-		path: 'ragConfig.excludeFolders',
+	form.list('excludeFolders', {
 		label: t('settings.rag.filters.excludeFolders.name'),
 		description: t('settings.rag.filters.excludeFolders.desc'),
-		includeDefaultForArrays: true
-	}).addTextArea(text => text
-			.setPlaceholder(`${plugin.app.vault.configDir}, .trash`)
-			.setValue(plugin.settings.ragConfig.excludeFolders.join(', '))
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.excludeFolders = value.split(',').map(s => s.trim()).filter(s => s);
-				await plugin.saveSettings();
-			}));
-
-	createSetting({
-		path: 'ragConfig.includeFileTypes',
+		includeDefaultForArrays: true,
+	}, `${plugin.app.vault.configDir}, .trash`);
+	form.list('includeFileTypes', {
 		label: t('settings.rag.filters.includeTypes.name'),
 		description: t('settings.rag.filters.includeTypes.desc'),
-		includeDefaultForArrays: true
-	}).addTextArea(text => text
-			.setPlaceholder('Md, txt')
-			.setValue(plugin.settings.ragConfig.includeFileTypes.join(', '))
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.includeFileTypes = value.split(',').map(s => s.trim()).filter(s => s);
-				await plugin.saveSettings();
-			}));
-
-	createSetting({
-		path: 'ragConfig.excludeFileTypes',
+		includeDefaultForArrays: true,
+	}, 'Md, txt');
+	form.list('excludeFileTypes', {
 		label: t('settings.rag.filters.excludeTypes.name'),
 		description: t('settings.rag.filters.excludeTypes.desc'),
-		includeDefaultForArrays: true
-	}).addTextArea(text => {
-			const excludeFileTypesPlaceholder = 'canvas, excalidraw';
-			return text
-				.setPlaceholder(excludeFileTypesPlaceholder)
-				.setValue(plugin.settings.ragConfig.excludeFileTypes.join(', '))
-				.onChange(async (value) => {
-					plugin.settings.ragConfig.excludeFileTypes = value.split(',').map(s => s.trim()).filter(s => s);
-					await plugin.saveSettings();
-				});
-		});
-
-	createSetting({
-		path: 'ragConfig.filterByTag',
+		includeDefaultForArrays: true,
+	}, 'canvas, excalidraw');
+	form.list('filterByTag', {
 		label: t('settings.rag.filters.filterByTag.name'),
-		description: t('settings.rag.filters.filterByTag.desc')
-	}).addTextArea(text => text
-			.setPlaceholder('Important, reference')
-			.setValue(plugin.settings.ragConfig.filterByTag.join(', '))
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.filterByTag = value.split(',').map(s => s.trim()).filter(s => s);
-				await plugin.saveSettings();
-			}));
-
-	createSetting({
-		path: 'ragConfig.excludeByTag',
+		description: t('settings.rag.filters.filterByTag.desc'),
+	}, 'Important, reference');
+	form.list('excludeByTag', {
 		label: t('settings.rag.filters.excludeByTag.name'),
-		description: t('settings.rag.filters.excludeByTag.desc')
-	}).addTextArea(text => text
-			.setPlaceholder('Draft, private')
-			.setValue(plugin.settings.ragConfig.excludeByTag.join(', '))
-			.onChange(async (value) => {
-				plugin.settings.ragConfig.excludeByTag = value.split(',').map(s => s.trim()).filter(s => s);
-				await plugin.saveSettings();
-			}));
+		description: t('settings.rag.filters.excludeByTag.desc'),
+	}, 'Draft, private');
 }
 
 function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	section.createEl('h4', { text: t('settings.rag.advanced.title') });
 
-	const createSetting = (options: ConfigFieldMetadataOptions) =>
-		applyConfigFieldMetadata(new Setting(section), options);
-
-
-	createSetting({
-		path: 'ragConfig.embeddingBatchSize',
+	ragForm(section, plugin).number('embeddingBatchSize', {
 		label: t('settings.rag.advanced.batchSize.name'),
-		description: t('settings.rag.advanced.batchSize.desc')
-	}).addText(text => text
-			.setPlaceholder('10')
-			.setValue(plugin.settings.ragConfig.embeddingBatchSize.toString())
-			.onChange(async (value) => {
-				const num = parseInt(value);
-				if (!isNaN(num) && num > 0) {
-					plugin.settings.ragConfig.embeddingBatchSize = num;
-					await plugin.saveSettings();
-				}
-			}));
-
-
-
-	// Re-ranking toggle with dynamic re-rendering
+		description: t('settings.rag.advanced.batchSize.desc'),
+	}, { placeholder: '10', integer: true, min: 1 });
 }
 
 function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	section.createEl('h4', { text: t('settings.rag.grading.title') });
-
-	const graderDesc = section.createEl('p', {
-		text: t('settings.rag.grading.desc')
-	});
-	graderDesc.addClass('setting-item-description');
-
-	// Grading toggle with dynamic re-rendering
+	section.createEl('p', { text: t('settings.rag.grading.desc'), cls: 'setting-item-description' });
 	const gradingContainer = section.createDiv('ia-grading-container');
 
 	const renderGradingOptions = () => {
 		gradingContainer.empty();
+		const form = ragForm(gradingContainer, plugin);
+		const config = plugin.settings.ragConfig;
 
-		const createSetting = (options: ConfigFieldMetadataOptions) =>
-			applyConfigFieldMetadata(new Setting(gradingContainer), options);
-
-		createSetting({
-			path: 'ragConfig.enableGradingThreshold',
+		form.toggle('enableGradingThreshold', {
 			label: t('settings.rag.grading.enableGrading.name'),
-			description: t('settings.rag.grading.enableGrading.desc')
-		}).addToggle(toggle => toggle
-				.setValue(plugin.settings.ragConfig.enableGradingThreshold)
-				.onChange(async (value) => {
-					plugin.settings.ragConfig.enableGradingThreshold = value;
-					await plugin.saveSettings();
-					renderGradingOptions();
-				}));
+			description: t('settings.rag.grading.enableGrading.desc'),
+		}, { then: renderGradingOptions });
+		if (!config.enableGradingThreshold) {
+			return;
+		}
 
-		if (plugin.settings.ragConfig.enableGradingThreshold) {
-			// Model source container for nested dynamic rendering
-			const modelSourceContainer = gradingContainer.createDiv('ia-grading-model-source-container');
-
-			const renderModelSourceOptions = () => {
-				modelSourceContainer.empty();
-
-				const createModelSourceSetting = (options: ConfigFieldMetadataOptions) =>
-					applyConfigFieldMetadata(new Setting(modelSourceContainer), options);
-
-				createModelSourceSetting({
-					path: 'ragConfig.graderModelSource',
-					label: t('settings.rag.grading.graderSource.name'),
-					description: t('settings.rag.grading.graderSource.desc')
-				}).addDropdown(dropdown => dropdown
-						.addOptions({
-							'chat': t('settings.rag.grading.graderSource.chat'),
-							'custom': t('settings.rag.grading.graderSource.custom')
-						})
-						.setValue(plugin.settings.ragConfig.graderModelSource)
-						.onChange(async (value) => {
-							plugin.settings.ragConfig.graderModelSource = value;
-							await plugin.saveSettings();
-							renderModelSourceOptions();
-						}));
-
-				if (plugin.settings.ragConfig.graderModelSource === 'custom') {
-					createModelSourceSetting({
-						path: 'ragConfig.graderModel',
-						label: t('settings.rag.grading.graderModel.name'),
-						description: t('settings.rag.grading.graderModel.desc')
-					}).addText(text => text
-							.setPlaceholder('Gpt-4')
-							.setValue(plugin.settings.ragConfig.graderModel || '')
-							.onChange(async (value) => {
-								plugin.settings.ragConfig.graderModel = value;
-								await plugin.saveSettings();
-							}));
-				}
-			};
-
-			renderModelSourceOptions();
-
-			createSetting({
-				path: 'ragConfig.graderParallelProcessing',
-				label: t('settings.rag.grading.parallel.name'),
-				description: t('settings.rag.grading.parallel.desc')
-			}).addText(text => text
-					.setPlaceholder('3')
-					.setValue(plugin.settings.ragConfig.graderParallelProcessing?.toString() || '3')
-					.onChange(async (value) => {
-						const num = parseInt(value);
-						if (!isNaN(num) && num > 0) {
-							plugin.settings.ragConfig.graderParallelProcessing = num;
-							await plugin.saveSettings();
-						}
-					}));
-
-			if (plugin.settings.ragConfig.minRelevanceScore !== undefined) {
-				createSetting({
-					path: 'ragConfig.minRelevanceScore',
-					label: t('settings.rag.grading.minRelevance.name'),
-					description: t('settings.rag.grading.minRelevance.desc')
-				}).addText(text => text
-						.setPlaceholder('5')
-						.setValue(plugin.settings.ragConfig.minRelevanceScore?.toString() || '5')
-						.onChange(async (value) => {
-							const num = parseFloat(value);
-							if (!isNaN(num) && num >= 0 && num <= 10) {
-								plugin.settings.ragConfig.minRelevanceScore = num;
-								await plugin.saveSettings();
-							}
-						}));
+		const modelSourceContainer = gradingContainer.createDiv('ia-grading-model-source-container');
+		const renderModelSourceOptions = () => {
+			modelSourceContainer.empty();
+			const sourceForm = ragForm(modelSourceContainer, plugin);
+			sourceForm.dropdown('graderModelSource', {
+				label: t('settings.rag.grading.graderSource.name'),
+				description: t('settings.rag.grading.graderSource.desc'),
+			}, {
+				chat: t('settings.rag.grading.graderSource.chat'),
+				custom: t('settings.rag.grading.graderSource.custom'),
+			}, { then: renderModelSourceOptions });
+			if (config.graderModelSource === 'custom') {
+				sourceForm.text('graderModel', {
+					label: t('settings.rag.grading.graderModel.name'),
+					description: t('settings.rag.grading.graderModel.desc'),
+				}, { placeholder: 'Gpt-4' });
 			}
+		};
+		renderModelSourceOptions();
 
-			if (plugin.settings.ragConfig.minAccuracyScore !== undefined) {
-				createSetting({
-					path: 'ragConfig.minAccuracyScore',
-					label: t('settings.rag.grading.minAccuracy.name'),
-					description: t('settings.rag.grading.minAccuracy.desc')
-				}).addText(text => text
-						.setPlaceholder('7')
-						.setValue(plugin.settings.ragConfig.minAccuracyScore?.toString() || '7')
-						.onChange(async (value) => {
-							const num = parseFloat(value);
-							if (!isNaN(num) && num >= 0 && num <= 10) {
-								plugin.settings.ragConfig.minAccuracyScore = num;
-								await plugin.saveSettings();
-							}
-						}));
-			}
+		form.number('graderParallelProcessing', {
+			label: t('settings.rag.grading.parallel.name'),
+			description: t('settings.rag.grading.parallel.desc'),
+		}, { placeholder: '3', integer: true, min: 1 });
 
-			if (plugin.settings.ragConfig.minSupportQualityScore !== undefined) {
-				createSetting({
-					path: 'ragConfig.minSupportQualityScore',
-					label: t('settings.rag.grading.minSupport.name'),
-					description: t('settings.rag.grading.minSupport.desc')
-				}).addText(text => text
-						.setPlaceholder('6')
-						.setValue(plugin.settings.ragConfig.minSupportQualityScore?.toString() || '6')
-						.onChange(async (value) => {
-							const num = parseFloat(value);
-							if (!isNaN(num) && num >= 0 && num <= 10) {
-								plugin.settings.ragConfig.minSupportQualityScore = num;
-								await plugin.saveSettings();
-							}
-						}));
+		const scores = [
+			{ key: 'minRelevanceScore', name: 'minRelevance', placeholder: '5' },
+			{ key: 'minAccuracyScore', name: 'minAccuracy', placeholder: '7' },
+			{ key: 'minSupportQualityScore', name: 'minSupport', placeholder: '6' },
+		] as const;
+		for (const score of scores) {
+			if (config[score.key] !== undefined) {
+				form.number(score.key, {
+					label: t(`settings.rag.grading.${score.name}.name`),
+					description: t(`settings.rag.grading.${score.name}.desc`),
+				}, { placeholder: score.placeholder, min: 0, max: 10 });
 			}
 		}
 	};
 
 	renderGradingOptions();
+}
+
+function ragForm(container: HTMLElement, plugin: IntelligenceAssistantPlugin): SettingsForm<RAGConfig> {
+	return new SettingsForm(container, () => plugin.settings.ragConfig, () => plugin.saveSettings(), 'ragConfig');
 }
