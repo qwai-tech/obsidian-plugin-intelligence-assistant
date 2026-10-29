@@ -1,6 +1,6 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { promises as fs, constants as fsConstants } from 'fs';
 import type { MCPServerConfig } from '@/types';
@@ -77,11 +77,10 @@ export class MCPClient {
 			`/usr/bin/${command}`,
 		];
 
-		const execPromise = promisify(exec);
+		const execFilePromise = promisify(execFile);
 
-		// Try to use 'which' command to find the executable
 		try {
-			const { stdout } = await execPromise(`which ${command}`);
+			const { stdout } = await execFilePromise('which', [command]);
 			const path = stdout.trim();
 			if (path) {
 				console.debug(`[MCP] Resolved ${command} to ${path}`);
