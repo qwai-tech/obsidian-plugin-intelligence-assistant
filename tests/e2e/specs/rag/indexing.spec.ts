@@ -41,15 +41,15 @@ describe('RAG indexing', () => {
 		const vectorStore = await vault.readRuntimeDataFile<VectorStoreFile>('data/vector_store/notes.json');
 		const indexedPaths = new Set(vectorStore._chunks.map(chunk => chunk.metadata.path));
 
-		await expect(Array.from(indexedPaths)).toEqual(expect.arrayContaining([
+		expect(Array.from(indexedPaths)).toEqual(expect.arrayContaining([
 			'PKM Principles.md',
 			'LLM Architecture.md',
 			'Reading List.md',
 		]));
-		await expect(vectorStore._chunks.length).toBeGreaterThanOrEqual(3);
-		await expect(vectorStore._chunks.every(chunk => Array.isArray(chunk.embedding))).toBe(true);
+		expect(vectorStore._chunks.length).toBeGreaterThanOrEqual(3);
+		expect(vectorStore._chunks.every(chunk => Array.isArray(chunk.embedding))).toBe(true);
 
 		const embeddingCalls = (await mockLLM.getCalls()).filter(call => call.path === '/v1/embeddings');
-		await expect(embeddingCalls.length).toBeGreaterThanOrEqual(3);
+		expect(embeddingCalls.length).toBeGreaterThanOrEqual(3);
 	});
 });

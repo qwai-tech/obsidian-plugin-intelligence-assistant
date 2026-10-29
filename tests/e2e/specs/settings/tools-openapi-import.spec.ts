@@ -62,10 +62,10 @@ describe('OpenAPI tool settings', () => {
 		);
 
 		const toolNames = await tools.getRegisteredToolNames('openapi', 'openapi-e2e-ping');
-		await expect(toolNames).toContain('e2e_ping_api_ping');
+		expect(toolNames).toContain('e2e_ping_api_ping');
 
 		const settings = await vault.readRuntimeDataFile<UserSettings>('config/user/settings.json');
-		await expect(settings.tools?.openapi).toEqual(expect.arrayContaining([
+		expect(settings.tools?.openapi).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				id: 'openapi-e2e-ping',
 				name: 'E2E Ping API',

@@ -39,17 +39,17 @@ describe('Agent tool permission isolation', () => {
 		await chat.waitForReplyComplete(20_000);
 
 		const traceText = await chat.getToolTraceText();
-		await expect(traceText).toContain('read_file');
-		await expect(traceText).toContain('Tool "read_file" is not enabled for this agent');
-		await expect(traceText).not.toContain('AGENT_TOOL_SENTINEL');
+		expect(traceText).toContain('read_file');
+		expect(traceText).toContain('Tool "read_file" is not enabled for this agent');
+		expect(traceText).not.toContain('AGENT_TOOL_SENTINEL');
 
 		const calls = (await mockLLM.getCalls())
 			.map(call => call.body as StreamChatRequest | null)
 			.filter(body => body?.stream === true);
 
-		await expect(calls).toHaveLength(2);
-		await expect(calls[0]?.tools?.map(tool => tool.function.name)).toEqual(['list_files']);
-		await expect(calls[1]?.messages).toEqual(expect.arrayContaining([
+		expect(calls).toHaveLength(2);
+		expect(calls[0]?.tools?.map(tool => tool.function.name)).toEqual(['list_files']);
+		expect(calls[1]?.messages).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				role: 'tool',
 				content: expect.stringContaining('Tool "read_file" is not enabled for this agent'),

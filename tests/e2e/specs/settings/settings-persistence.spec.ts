@@ -53,24 +53,24 @@ describe('Settings persistence', () => {
 			candidate.conversations?.title?.mode === 'manual' &&
 			candidate.conversations?.icon?.enabled === false
 		);
-		await expect(userSettings.providers?.defaultModel).toBe('openai:gpt-4o-persisted');
-		await expect(userSettings.conversations?.title?.mode).toBe('manual');
-		await expect(userSettings.conversations?.icon?.enabled).toBe(false);
+		expect(userSettings.providers?.defaultModel).toBe('openai:gpt-4o-persisted');
+		expect(userSettings.conversations?.title?.mode).toBe('manual');
+		expect(userSettings.conversations?.icon?.enabled).toBe(false);
 
 		await reloadPlugin();
 		await settings.open();
 
-		await expect(await settings.getDefaultModel()).toBe('openai:gpt-4o-persisted');
-		await expect(await settings.getConversationTitleMode()).toBe('manual');
-		await expect(await settings.getConversationIconsEnabled()).toBe(false);
+		expect(await settings.getDefaultModel()).toBe('openai:gpt-4o-persisted');
+		expect(await settings.getConversationTitleMode()).toBe('manual');
+		expect(await settings.getConversationIconsEnabled()).toBe(false);
 
 		userSettings = await waitForUserSettings(vault, candidate =>
 			candidate.providers?.defaultModel === 'openai:gpt-4o-persisted' &&
 			candidate.conversations?.title?.mode === 'manual' &&
 			candidate.conversations?.icon?.enabled === false
 		);
-		await expect(userSettings.providers?.defaultModel).toBe('openai:gpt-4o-persisted');
-		await expect(userSettings.conversations?.title?.mode).toBe('manual');
-		await expect(userSettings.conversations?.icon?.enabled).toBe(false);
+		expect(userSettings.providers?.defaultModel).toBe('openai:gpt-4o-persisted');
+		expect(userSettings.conversations?.title?.mode).toBe('manual');
+		expect(userSettings.conversations?.icon?.enabled).toBe(false);
 	});
 });

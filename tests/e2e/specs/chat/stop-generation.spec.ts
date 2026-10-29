@@ -21,15 +21,15 @@ describe('Chat stop generation', () => {
 
 		await chat.sendMessage('stop after first chunk');
 		await chat.waitForAssistantText('partial');
-		await expect(await chat.isStopBtnVisible()).toBe(true);
+		expect(await chat.isStopBtnVisible()).toBe(true);
 
 		await chat.stopGeneration();
 		await chat.waitForReplyComplete();
 
 		const finalText = await chat.getLastAssistantText();
-		await expect(finalText).toContain('partial');
-		await expect(finalText).not.toContain('ignored');
-		await expect(finalText).not.toContain('discarded');
+		expect(finalText).toContain('partial');
+		expect(finalText).not.toContain('ignored');
+		expect(finalText).not.toContain('discarded');
 
 		const conversationId = await chat.getConversationId();
 		const conversationPath = await vault.findRuntimeConversationFile(conversationId);
@@ -42,8 +42,8 @@ describe('Chat stop generation', () => {
 			{ timeout: 5_000, timeoutMsg: 'Stopped conversation was not persisted with an assistant message' }
 		);
 		const assistant = conversation.messages.find((message) => message.role === 'assistant');
-		await expect(assistant?.content).toContain('partial');
-		await expect(assistant?.content).not.toContain('ignored');
-		await expect(assistant?.content).not.toContain('discarded');
+		expect(assistant?.content).toContain('partial');
+		expect(assistant?.content).not.toContain('ignored');
+		expect(assistant?.content).not.toContain('discarded');
 	});
 });

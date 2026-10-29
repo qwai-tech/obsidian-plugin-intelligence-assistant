@@ -2,8 +2,8 @@ import { createHarnessApp } from './in-memory-vault';
 import { runAgentMission } from './mission-runner';
 
 /**
- * REAL-LLM mission: drives the full AgentEngineLoop (the migrated @agentic-kernel
- * core + our planner/tool adapter) against a live model via node `fetch` — no
+ * REAL-LLM mission: drives the full AgentEngineLoop (the harness kernel + our
+ * planner/tool adapter) against a live model via node `fetch` — no
  * browser CORS. Validates end-to-end that a real model reads a vault file through
  * the read_file tool and returns the sentinel.
  *

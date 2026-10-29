@@ -37,17 +37,17 @@ describe('CLI tool settings', () => {
 		});
 
 		let toolNames = await tools.getRegisteredToolNames('cli', 'cli-e2e-echo');
-		await expect(toolNames).toContain('echo_sentinel');
+		expect(toolNames).toContain('echo_sentinel');
 
 		await reloadPlugin();
 		await tools.open('cli');
 		await tools.waitForCliRow('cli-e2e-echo');
 
 		toolNames = await tools.getRegisteredToolNames('cli', 'cli-e2e-echo');
-		await expect(toolNames).toContain('echo_sentinel');
+		expect(toolNames).toContain('echo_sentinel');
 
 		const settings = await vault.readRuntimeDataFile<UserSettings>('config/user/settings.json');
-		await expect(settings.tools?.cli).toEqual(expect.arrayContaining([
+		expect(settings.tools?.cli).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				id: 'cli-e2e-echo',
 				name: 'echo_sentinel',

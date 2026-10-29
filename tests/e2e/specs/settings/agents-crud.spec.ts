@@ -31,21 +31,21 @@ describe('Agent settings CRUD', () => {
 			async () => vault.runtimeDataFileExists(agentPath),
 			{ timeout: 10_000, timeoutMsg: `Agent file not written: ${agentPath}` }
 		);
-		await expect(await vault.readRuntimeDataFile<PersistedAgent>(agentPath)).toEqual(expect.objectContaining({
+		expect(await vault.readRuntimeDataFile<PersistedAgent>(agentPath)).toEqual(expect.objectContaining({
 			id: agentId,
 			name: 'Research Agent Updated',
 		}));
 
 		await reloadPlugin();
 		await agents.open();
-		await expect(await agents.hasAgentNamed('Research Agent Updated')).toBe(true);
+		expect(await agents.hasAgentNamed('Research Agent Updated')).toBe(true);
 
 		await agents.deleteAgent('Research Agent Updated');
 		await browser.waitUntil(
 			async () => !(await vault.runtimeDataFileExists(agentPath)),
 			{ timeout: 10_000, timeoutMsg: `Agent file still exists: ${agentPath}` }
 		);
-		await expect(await agents.hasAgentNamed('Research Agent Updated')).toBe(false);
+		expect(await agents.hasAgentNamed('Research Agent Updated')).toBe(false);
 	});
 });
 

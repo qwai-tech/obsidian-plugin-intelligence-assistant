@@ -39,20 +39,20 @@ describe('Smoke — plugin loads, chat view + settings shell render', () => {
 		await chat.open();
 		await chat.newChat();
 
-		await expect(await chat.isContainerVisible()).toBe(true);
-		await expect(await chat.isInputVisible()).toBe(true);
-		await expect(await chat.isSendBtnPresent()).toBe(true);
-		await expect(await chat.isEmptyStateVisible()).toBe(true);
-		await expect(await chat.isModelSelectPresent()).toBe(true);
-		await expect(await chat.isModeSelectPresent()).toBe(true);
+		expect(await chat.isContainerVisible()).toBe(true);
+		expect(await chat.isInputVisible()).toBe(true);
+		expect(await chat.isSendBtnPresent()).toBe(true);
+		expect(await chat.isEmptyStateVisible()).toBe(true);
+		expect(await chat.isModelSelectPresent()).toBe(true);
+		expect(await chat.isModeSelectPresent()).toBe(true);
 	});
 
 	it('resets vault state between specs (settings.json restored from template)', async () => {
 		const settings = await vault.readDataFile<SeededSettings>('config/user/settings.json');
-		await expect(settings.providers.defaultModel).toBe('gpt-4o-mini');
-		await expect(settings.providers.list).toHaveLength(1);
-		await expect(settings.providers.list[0].provider).toBe('openai');
-		await expect(settings.providers.list[0].apiKey).toBe('sk-test-fixture');
+		expect(settings.providers.defaultModel).toBe('gpt-4o-mini');
+		expect(settings.providers.list).toHaveLength(1);
+		expect(settings.providers.list[0].provider).toBe('openai');
+		expect(settings.providers.list[0].apiKey).toBe('sk-test-fixture');
 	});
 
 	it('sends a mocked chat round-trip and persists the conversation', async () => {
@@ -64,16 +64,16 @@ describe('Smoke — plugin loads, chat view + settings shell render', () => {
 		await chat.waitForReplyComplete();
 
 		const messages = await chat.getMessages();
-		await expect(messages).toEqual([
+		expect(messages).toEqual([
 			expect.objectContaining({ role: 'user', text: expect.stringContaining('ping') }),
 			expect.objectContaining({ role: 'assistant', text: expect.stringContaining('pong') }),
 		]);
 
 		const conversationId = await chat.getConversationId();
-		await expect(conversationId).not.toBe('');
+		expect(conversationId).not.toBe('');
 		const conversationPath = await vault.findRuntimeConversationFile(conversationId);
 		const conversation = await vault.readRuntimeDataFile<{ messages: Array<{ role: string; content: string }> }>(conversationPath);
-		await expect(conversation.messages).toEqual([
+		expect(conversation.messages).toEqual([
 			expect.objectContaining({ role: 'user', content: expect.stringContaining('ping') }),
 			expect.objectContaining({ role: 'assistant', content: expect.stringContaining('pong') }),
 		]);
@@ -83,7 +83,7 @@ describe('Smoke — plugin loads, chat view + settings shell render', () => {
 			const body = call.body as { stream?: boolean } | null;
 			return body?.stream === true;
 		});
-		await expect(chatCalls).toHaveLength(1);
-		await expect(chatCalls[0].body).toMatchObject({ model: 'gpt-4o-mini' });
+		expect(chatCalls).toHaveLength(1);
+		expect(chatCalls[0].body).toMatchObject({ model: 'gpt-4o-mini' });
 	});
 });

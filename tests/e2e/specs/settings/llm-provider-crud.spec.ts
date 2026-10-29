@@ -30,7 +30,7 @@ describe('LLM provider CRUD settings', () => {
 		});
 
 		let providerFile = await vault.readRuntimeDataFile<ProviderFile>('data/llm-providers.json');
-		await expect(providerFile.providers).toEqual(expect.arrayContaining([
+		expect(providerFile.providers).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				provider: 'custom',
 				apiKey: 'sk-crud-create',
@@ -46,7 +46,7 @@ describe('LLM provider CRUD settings', () => {
 		});
 
 		providerFile = await vault.readRuntimeDataFile<ProviderFile>('data/llm-providers.json');
-		await expect(providerFile.providers).toEqual(expect.arrayContaining([
+		expect(providerFile.providers).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				provider: 'custom',
 				apiKey: 'sk-crud-update',
@@ -58,6 +58,6 @@ describe('LLM provider CRUD settings', () => {
 		await settings.deleteProvider('custom');
 
 		providerFile = await vault.readRuntimeDataFile<ProviderFile>('data/llm-providers.json');
-		await expect(providerFile.providers.find(provider => provider.provider === 'custom')).toBeUndefined();
+		expect(providerFile.providers.find(provider => provider.provider === 'custom')).toBeUndefined();
 	});
 });

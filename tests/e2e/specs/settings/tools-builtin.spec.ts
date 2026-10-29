@@ -44,8 +44,8 @@ describe('Built-in tool settings', () => {
 			.map(call => call.body as StreamChatRequest | null)
 			.filter(body => body?.stream === true);
 		let toolNames = calls[0]?.tools?.map(tool => tool.function.name) ?? [];
-		await expect(toolNames).not.toContain('read_file');
-		await expect(toolNames).toContain('list_files');
+		expect(toolNames).not.toContain('read_file');
+		expect(toolNames).toContain('list_files');
 
 		await tools.setBuiltinToolEnabled('read_file', true);
 		await tools.closeSettings();
@@ -62,6 +62,6 @@ describe('Built-in tool settings', () => {
 			.map(call => call.body as StreamChatRequest | null)
 			.filter(body => body?.stream === true);
 		toolNames = calls[0]?.tools?.map(tool => tool.function.name) ?? [];
-		await expect(toolNames).toContain('read_file');
+		expect(toolNames).toContain('read_file');
 	});
 });

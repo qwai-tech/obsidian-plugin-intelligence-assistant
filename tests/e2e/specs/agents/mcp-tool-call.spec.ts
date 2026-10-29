@@ -53,17 +53,17 @@ describe('Agent MCP tool call', () => {
 		await chat.waitForReplyComplete(20_000);
 
 		const traceText = await chat.getToolTraceText();
-		await expect(traceText).toContain('vault_echo');
-		await expect(traceText).toContain('MCP_SENTINEL route-c');
-		await expect(await chat.getLastAssistantText()).toContain('MCP_SENTINEL route-c');
+		expect(traceText).toContain('vault_echo');
+		expect(traceText).toContain('MCP_SENTINEL route-c');
+		expect(await chat.getLastAssistantText()).toContain('MCP_SENTINEL route-c');
 
 		const calls = (await mockLLM.getCalls())
 			.map(call => call.body as StreamChatRequest | null)
 			.filter(body => body?.stream === true);
 
-		await expect(calls).toHaveLength(2);
-		await expect(calls[0]?.tools?.map(tool => tool.function.name)).toEqual(['vault_echo']);
-		await expect(calls[1]?.messages).toEqual(expect.arrayContaining([
+		expect(calls).toHaveLength(2);
+		expect(calls[0]?.tools?.map(tool => tool.function.name)).toEqual(['vault_echo']);
+		expect(calls[1]?.messages).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				role: 'tool',
 				content: expect.stringContaining('MCP_SENTINEL route-c'),

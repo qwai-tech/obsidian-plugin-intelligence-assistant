@@ -25,7 +25,7 @@ describe('Chat error handling', () => {
 		await chat.waitForAssistantText('Mock LLM error 500');
 
 		const messages = await chat.getMessages();
-		await expect(messages).toEqual([
+		expect(messages).toEqual([
 			expect.objectContaining({ role: 'user', text: expect.stringContaining('trigger an error') }),
 			expect.objectContaining({ role: 'assistant', text: expect.stringContaining('Mock LLM error 500') }),
 		]);
@@ -33,7 +33,7 @@ describe('Chat error handling', () => {
 		const conversationId = await chat.getConversationId();
 		const conversationPath = await vault.findRuntimeConversationFile(conversationId);
 		const conversation = await vault.readRuntimeDataFile<{ messages: Array<{ role: string; content: string }> }>(conversationPath);
-		await expect(conversation.messages).toEqual([
+		expect(conversation.messages).toEqual([
 			expect.objectContaining({ role: 'user', content: expect.stringContaining('trigger an error') }),
 			expect.objectContaining({ role: 'assistant', content: expect.stringContaining('Mock LLM error 500') }),
 		]);

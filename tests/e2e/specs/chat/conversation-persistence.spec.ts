@@ -22,16 +22,16 @@ describe('Chat conversation persistence', () => {
 		await chat.waitForReplyComplete();
 
 		const conversationId = await chat.getConversationId();
-		await expect(conversationId).not.toBe('');
+		expect(conversationId).not.toBe('');
 		await vault.findRuntimeConversationFile(conversationId);
 
 		await reloadPlugin();
 		await chat.open();
 		await chat.waitForAssistantText('persisted reply');
 
-		await expect(await chat.getConversationId()).toBe(conversationId);
+		expect(await chat.getConversationId()).toBe(conversationId);
 		const messages = await chat.getMessages();
-		await expect(messages).toEqual([
+		expect(messages).toEqual([
 			expect.objectContaining({ role: 'user', text: expect.stringContaining('remember this') }),
 			expect.objectContaining({ role: 'assistant', text: expect.stringContaining('persisted reply') }),
 		]);

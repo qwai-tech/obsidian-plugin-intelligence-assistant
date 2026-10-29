@@ -19,14 +19,14 @@ describe('Chat model switch', () => {
 
 	it('uses the selected model for the next chat request', async () => {
 		await chat.selectModel('gpt-4o-mini-alt');
-		await expect(await chat.getSelectedModel()).toBe('gpt-4o-mini-alt');
+		expect(await chat.getSelectedModel()).toBe('gpt-4o-mini-alt');
 		await mockLLM.replyWith('alt model reply');
 
 		await chat.sendMessage('use the alternate model');
 		await chat.waitForReplyComplete();
 
 		const messages = await chat.getMessages();
-		await expect(messages).toEqual([
+		expect(messages).toEqual([
 			expect.objectContaining({ role: 'user', text: expect.stringContaining('use the alternate model') }),
 			expect.objectContaining({ role: 'assistant', text: expect.stringContaining('alt model reply') }),
 		]);
@@ -36,7 +36,7 @@ describe('Chat model switch', () => {
 			const body = call.body as { stream?: boolean } | null;
 			return body?.stream === true;
 		});
-		await expect(chatCalls).toHaveLength(1);
-		await expect(chatCalls[0].body).toMatchObject({ model: 'gpt-4o-mini-alt' });
+		expect(chatCalls).toHaveLength(1);
+		expect(chatCalls[0].body).toMatchObject({ model: 'gpt-4o-mini-alt' });
 	});
 });

@@ -84,7 +84,7 @@ describe('System prompt settings', () => {
 			candidate.prompts.some(prompt => prompt.name === 'E2E System Prompt' && prompt.enabled === false)
 		);
 		let entry = index.prompts.find(prompt => prompt.name === 'E2E System Prompt');
-		await expect(entry).toEqual(expect.objectContaining({ enabled: false }));
+		expect(entry).toEqual(expect.objectContaining({ enabled: false }));
 
 		const promptPath = toPluginRelativePath(entry!.file);
 		const promptFile = await waitForPromptFile(vault, promptPath, candidate =>
@@ -92,7 +92,7 @@ describe('System prompt settings', () => {
 			candidate.content === 'You are the E2E system prompt sentinel.' &&
 			candidate.enabled === false
 		);
-		await expect(promptFile).toEqual(expect.objectContaining({
+		expect(promptFile).toEqual(expect.objectContaining({
 			id: entry!.id,
 			name: 'E2E System Prompt',
 			content: 'You are the E2E system prompt sentinel.',
@@ -105,6 +105,6 @@ describe('System prompt settings', () => {
 			!candidate.prompts.some(prompt => prompt.name === 'E2E System Prompt')
 		);
 		entry = index.prompts.find(prompt => prompt.name === 'E2E System Prompt');
-		await expect(entry).toBeUndefined();
+		expect(entry).toBeUndefined();
 	});
 });

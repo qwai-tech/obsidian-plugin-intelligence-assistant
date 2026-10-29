@@ -93,16 +93,16 @@ describe('Release large agentic task', () => {
 		logLine('[large-task] TRACE: ' + trace.replace(/\s+/g, ' ').slice(0, 1500));
 		logLine('[large-task] marker hits: ' + MARKERS.map((m) => `${m}=${dump.filter((d) => d.content.includes(m)).map((d) => d.path).join('|') || 'MISSING'}`).join('  '));
 
-		await expect(reply).not.toContain('❌ Error');
+		expect(reply).not.toContain('❌ Error');
 
 		// PRIMARY oracle: each marker exists in some real vault note (the agent
 		// actually wrote it), and an index note links the three.
 		for (const marker of MARKERS) {
 			const hit = dump.find((d) => d.content.includes(marker));
-			await expect(Boolean(hit)).toBe(true);
+			expect(Boolean(hit)).toBe(true);
 		}
 		const indexNote = dump.find((d) => /\[\[\s*alpha/i.test(d.content) && /\[\[\s*beta/i.test(d.content) && /\[\[\s*gamma/i.test(d.content));
-		await expect(Boolean(indexNote)).toBe(true);
+		expect(Boolean(indexNote)).toBe(true);
 
 		// Cleanup any notes the agent created (those carrying our markers + the index).
 		const created = dump

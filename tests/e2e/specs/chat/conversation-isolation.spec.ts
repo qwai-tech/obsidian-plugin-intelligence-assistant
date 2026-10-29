@@ -26,24 +26,24 @@ describe('Chat conversation isolation', () => {
 		await chat.sendMessage('beta question');
 		await chat.waitForAssistantText('beta reply');
 		const betaConversationId = await chat.getConversationId();
-		await expect(betaConversationId).not.toBe(alphaConversationId);
+		expect(betaConversationId).not.toBe(alphaConversationId);
 
 		await chat.switchConversation(alphaConversationId);
 
-		await expect(await chat.getConversationId()).toBe(alphaConversationId);
-		await expect(await chat.getMessages()).toEqual([
+		expect(await chat.getConversationId()).toBe(alphaConversationId);
+		expect(await chat.getMessages()).toEqual([
 			expect.objectContaining({ role: 'user', text: expect.stringContaining('alpha question') }),
 			expect.objectContaining({ role: 'assistant', text: expect.stringContaining('alpha reply') }),
 		]);
-		await expect(await chat.getLastAssistantText()).not.toContain('beta reply');
+		expect(await chat.getLastAssistantText()).not.toContain('beta reply');
 
 		await chat.switchConversation(betaConversationId);
 
-		await expect(await chat.getConversationId()).toBe(betaConversationId);
-		await expect(await chat.getMessages()).toEqual([
+		expect(await chat.getConversationId()).toBe(betaConversationId);
+		expect(await chat.getMessages()).toEqual([
 			expect.objectContaining({ role: 'user', text: expect.stringContaining('beta question') }),
 			expect.objectContaining({ role: 'assistant', text: expect.stringContaining('beta reply') }),
 		]);
-		await expect(await chat.getLastAssistantText()).not.toContain('alpha reply');
+		expect(await chat.getLastAssistantText()).not.toContain('alpha reply');
 	});
 });

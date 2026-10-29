@@ -23,20 +23,20 @@ describe('Chat streaming', () => {
 		await chat.waitForAssistantText('hello');
 
 		const partialText = await chat.getLastAssistantText();
-		await expect(partialText).toContain('hello');
-		await expect(partialText).not.toContain('world');
+		expect(partialText).toContain('hello');
+		expect(partialText).not.toContain('world');
 
 		await chat.waitForReplyComplete();
 
 		const finalText = await chat.getLastAssistantText();
-		await expect(finalText).toContain('hello world');
+		expect(finalText).toContain('hello world');
 
 		const calls = await mockLLM.getCalls();
 		const streamCalls = calls.filter((call) => {
 			const body = call.body as { stream?: boolean } | null;
 			return body?.stream === true;
 		});
-		await expect(streamCalls).toHaveLength(1);
-		await expect(streamCalls[0].body).toMatchObject({ model: 'gpt-4o-mini' });
+		expect(streamCalls).toHaveLength(1);
+		expect(streamCalls[0].body).toMatchObject({ model: 'gpt-4o-mini' });
 	});
 });

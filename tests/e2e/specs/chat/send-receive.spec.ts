@@ -32,16 +32,16 @@ describe('Chat send and receive', () => {
 		await chat.waitForReplyComplete();
 
 		const messages = await chat.getMessages();
-		await expect(messages).toEqual([
+		expect(messages).toEqual([
 			expect.objectContaining({ role: 'user', text: expect.stringContaining('What is the next Route C task?') }),
 			expect.objectContaining({ role: 'assistant', text: expect.stringContaining('Route C reply') }),
 		]);
 
 		const conversationId = await chat.getConversationId();
-		await expect(conversationId).not.toBe('');
+		expect(conversationId).not.toBe('');
 		const conversationPath = await vault.findRuntimeConversationFile(conversationId);
 		const conversation = await vault.readRuntimeDataFile<PersistedConversation>(conversationPath);
-		await expect(conversation.messages).toEqual([
+		expect(conversation.messages).toEqual([
 			expect.objectContaining({ role: 'user', content: expect.stringContaining('What is the next Route C task?') }),
 			expect.objectContaining({ role: 'assistant', content: expect.stringContaining('Route C reply') }),
 		]);
@@ -50,8 +50,8 @@ describe('Chat send and receive', () => {
 		const chatCalls = calls
 			.map(call => call.body as StreamChatRequest | null)
 			.filter(body => body?.stream === true);
-		await expect(chatCalls).toHaveLength(1);
-		await expect(chatCalls[0]).toMatchObject({
+		expect(chatCalls).toHaveLength(1);
+		expect(chatCalls[0]).toMatchObject({
 			model: 'gpt-4o-mini',
 			stream: true,
 			messages: expect.arrayContaining([

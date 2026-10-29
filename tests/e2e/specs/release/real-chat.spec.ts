@@ -34,11 +34,11 @@ describe('Release real chat', () => {
 		await chat.waitForReplyComplete(120_000);
 
 		const reply = await chat.getLastAssistantText();
-		await expect(reply.trim()).not.toBe('');
-		await expect(reply).toContain('ROUTE_C_RELEASE_CHAT_SENTINEL');
+		expect(reply.trim()).not.toBe('');
+		expect(reply).toContain('ROUTE_C_RELEASE_CHAT_SENTINEL');
 
 		const conversationId = await chat.getConversationId();
-		await expect(conversationId).not.toBe('');
+		expect(conversationId).not.toBe('');
 		const conversationPath = await vault.findRuntimeConversationFile(conversationId, 10_000);
 		const conversation = await vault.readRuntimeDataFile<PersistedConversation>(conversationPath);
 		const assistantMessages = conversation.messages.filter(message => message.role === 'assistant');

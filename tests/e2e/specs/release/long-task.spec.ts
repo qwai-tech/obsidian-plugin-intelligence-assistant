@@ -127,7 +127,7 @@ describe('Release single long-running large task', () => {
 
 		// Oracle: the single task ran for the target duration AND really produced
 		// a large body of long-form notes in the vault.
-		await expect(elapsedMin).toBeGreaterThanOrEqual(TARGET_MIN);
-		await expect(substantial.length).toBeGreaterThanOrEqual(Math.floor(NOTES * 0.6));
+		expect(elapsedMin).toBeGreaterThanOrEqual(TARGET_MIN);
+		expect(substantial.length).toBeGreaterThanOrEqual(Math.floor(NOTES * 0.6));
 	});
 });

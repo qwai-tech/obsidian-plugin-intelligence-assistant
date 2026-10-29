@@ -47,7 +47,7 @@ describe('MCP settings CRUD', () => {
 		);
 
 		const serverFile = await vault.readRuntimeDataFile<McpServersFile>('data/mcp-servers.json');
-		await expect(serverFile.servers).toEqual(expect.arrayContaining([
+		expect(serverFile.servers).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				name: 'e2e-mcp',
 				command: 'node',
@@ -62,7 +62,7 @@ describe('MCP settings CRUD', () => {
 		const cacheContents = await Promise.all(
 			cacheFiles.map(file => vault.readRuntimeDataFile<McpToolCacheFile>(file))
 		);
-		await expect(cacheContents).toEqual(expect.arrayContaining([
+		expect(cacheContents).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				server: 'e2e-mcp',
 				tools: expect.arrayContaining([

@@ -48,7 +48,7 @@ describe('LLM model refresh settings', () => {
 
 		const providerFile = await vault.readRuntimeDataFile<ProviderFile>('data/llm-providers.json');
 		const provider = providerFile.providers.find(candidate => candidate.provider === 'openai');
-		await expect(provider).toEqual(expect.objectContaining({
+		expect(provider).toEqual(expect.objectContaining({
 			provider: 'openai',
 			cacheTimestamp: expect.any(Number),
 			cachedModels: expect.arrayContaining([
@@ -58,7 +58,7 @@ describe('LLM model refresh settings', () => {
 		}));
 
 		const modelCache = await vault.readRuntimeDataFile<ModelCacheFile>('data/cache/llm_models.json');
-		await expect(modelCache.entries).toEqual(expect.arrayContaining([
+		expect(modelCache.entries).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				provider: 'openai',
 				baseUrl: 'http://127.0.0.1:43117/v1',
@@ -71,7 +71,7 @@ describe('LLM model refresh settings', () => {
 		]));
 
 		const calls = await mockLLM.getCalls();
-		await expect(calls).toEqual(expect.arrayContaining([
+		expect(calls).toEqual(expect.arrayContaining([
 			expect.objectContaining({ method: 'GET', path: '/v1/models' }),
 		]));
 	});

@@ -1,3 +1,5 @@
+import { requireApiVersion, type ButtonComponent } from 'obsidian';
+
 /**
  * Presentation utility helpers for rendering tables and status indicators.
  */
@@ -29,4 +31,16 @@ export function createStatusIndicator(host: HTMLElement, status: StatusKind, lab
 
 	indicator.createSpan({ text: label, cls: 'ia-status-indicator__label' });
 	return indicator;
+}
+
+/**
+ * Style a button as destructive. `setDestructive` only exists from Obsidian 1.13,
+ * and minAppVersion is lower, so fall back to the deprecated `setWarning`.
+ */
+export function setDestructiveButton(button: ButtonComponent): ButtonComponent {
+	if (requireApiVersion('1.13.0')) {
+		return button.setDestructive();
+	}
+	// eslint-disable-next-line @typescript-eslint/no-deprecated -- pre-1.13 fallback
+	return button.setWarning();
 }

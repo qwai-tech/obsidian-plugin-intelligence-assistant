@@ -45,8 +45,8 @@ describe('Quick action settings', () => {
 		);
 		let settings = await vault.readRuntimeDataFile<UserSettings>('config/user/settings.json');
 		let action = settings.quickActions?.list?.find(item => item.name === 'E2E Refine Selection');
-		await expect(settings.quickActions?.prefix).toBe('QA');
-		await expect(action).toEqual(expect.objectContaining({
+		expect(settings.quickActions?.prefix).toBe('QA');
+		expect(action).toEqual(expect.objectContaining({
 			enabled: false,
 			prompt: 'Refine this E2E selection:\n\n',
 			actionType: 'replace',
@@ -67,6 +67,6 @@ describe('Quick action settings', () => {
 
 		settings = await vault.readRuntimeDataFile<UserSettings>('config/user/settings.json');
 		action = settings.quickActions?.list?.find(item => item.name === 'E2E Refine Selection');
-		await expect(action).toBeUndefined();
+		expect(action).toBeUndefined();
 	});
 });

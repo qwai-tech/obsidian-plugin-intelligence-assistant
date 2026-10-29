@@ -41,12 +41,12 @@ describe('Editor quick actions', () => {
 			filePath
 		);
 
-		await expect(content).toBe('Polished E2E selection.');
+		expect(content).toBe('Polished E2E selection.');
 
 		const calls = (await mockLLM.getCalls())
 			.map(call => call.body as ChatRequest | null)
 			.filter(body => Array.isArray(body?.messages));
-		await expect(calls[0]?.messages?.[0]).toEqual(expect.objectContaining({
+		expect(calls[0]?.messages?.[0]).toEqual(expect.objectContaining({
 			role: 'user',
 			content: 'Refine this E2E selection:\n\nrough e2e selection',
 		}));

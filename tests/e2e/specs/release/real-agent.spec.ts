@@ -37,10 +37,10 @@ describe('Release real agent', () => {
 		await chat.waitForReplyComplete(120_000);
 
 		const reply = await chat.getLastAssistantText();
-		await expect(reply).not.toContain('❌ Error');
+		expect(reply).not.toContain('❌ Error');
 		const traceText = await chat.getToolTraceText();
-		await expect(traceText).toContain('read_file');
-		await expect(traceText).toContain('AGENT_TOOL_SENTINEL');
-		await expect(reply).toContain('AGENT_TOOL_SENTINEL');
+		expect(traceText).toContain('read_file');
+		expect(traceText).toContain('AGENT_TOOL_SENTINEL');
+		expect(reply).toContain('AGENT_TOOL_SENTINEL');
 	});
 });

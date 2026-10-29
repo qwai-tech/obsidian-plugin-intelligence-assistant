@@ -31,17 +31,17 @@ describe('Agent tool call loop', () => {
 		await chat.waitForReplyComplete(20_000);
 
 		const traceText = await chat.getToolTraceText();
-		await expect(traceText).toContain('read_file');
-		await expect(traceText).toContain('AGENT_TOOL_SENTINEL');
-		await expect(await chat.getLastAssistantText()).toContain('AGENT_TOOL_SENTINEL');
+		expect(traceText).toContain('read_file');
+		expect(traceText).toContain('AGENT_TOOL_SENTINEL');
+		expect(await chat.getLastAssistantText()).toContain('AGENT_TOOL_SENTINEL');
 
 		const calls = (await mockLLM.getCalls())
 			.map(call => call.body as StreamChatRequest | null)
 			.filter(body => body?.stream === true);
 
-		await expect(calls).toHaveLength(2);
-		await expect(calls[0]?.tools?.map(tool => tool.function.name)).toContain('read_file');
-		await expect(calls[1]?.messages).toEqual(expect.arrayContaining([
+		expect(calls).toHaveLength(2);
+		expect(calls[0]?.tools?.map(tool => tool.function.name)).toContain('read_file');
+		expect(calls[1]?.messages).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				role: 'tool',
 				content: expect.stringContaining('AGENT_TOOL_SENTINEL'),
