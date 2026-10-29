@@ -118,4 +118,4 @@ All plugin paths come from `core/plugin-paths.ts` (`pluginPaths(configDir)`), so
 ## Design notes
 
 - **No dynamic imports in the Electron renderer.** Chromium rejects `import()` with bare specifiers and blocks `file://` ESM, so ESM-only packages need bundling.
-- **Settings are diffed, not rewritten.** Callers mutate `plugin.settings` and call `saveSettings()`; the store writes only changed units, so redundant saves are cheap.
+- **Settings are diffed, not rewritten.** Writes go through `plugin.updateSettings(settings => …)`, which applies the change and saves; the store writes only the units that changed, so redundant saves are cheap.

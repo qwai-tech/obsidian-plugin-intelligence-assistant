@@ -118,4 +118,4 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 ## 设计说明
 
 - **Electron 渲染进程中不使用动态导入。** Chromium 拒绝带裸模块说明符的 `import()`，并阻止 `file://` 方式加载 ESM，因此纯 ESM 包需要打包。
-- **设置按差异保存，而非整体重写。** 调用方修改 `plugin.settings` 后调用 `saveSettings()`；存储只写入变化的单元，因此多余的保存开销很小。
+- **设置按差异保存，而非整体重写。** 写入通过 `plugin.updateSettings(settings => …)` 完成，它应用修改并保存；存储只写入变化的单元，因此多余的保存开销很小。
