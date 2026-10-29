@@ -8,6 +8,7 @@ import {
 import { Tool, ToolDefinition, ToolResult } from './types';
 import { createToolDefinition } from '@/application/tools/tool-schema';
 import { z } from 'zod';
+import { errorMessage } from '@/utils/errors';
 
 /** Normalize a user-supplied tag to the `#tag` form `getAllTags` returns. */
 function normalizeTag(tag: string): string {
@@ -56,7 +57,7 @@ export class FindNotesByTagTool implements Tool {
 		} catch (error) {
 			return Promise.resolve({
 				success: false,
-				error: error instanceof Error ? error.message : String(error),
+				error: errorMessage(error),
 			});
 		}
 	}
@@ -128,7 +129,7 @@ export class ResolveLinkTool implements Tool {
 		} catch (error) {
 			return Promise.resolve({
 				success: false,
-				error: error instanceof Error ? error.message : String(error),
+				error: errorMessage(error),
 			});
 		}
 	}

@@ -1,7 +1,7 @@
-import { App } from 'obsidian';
-import { AGENT_MEMORY_DATA_FOLDER, AGENT_MEMORY_PATH } from '@/constants';
-import { ensureFolderExists } from '@/utils/file-system';
-import type { AgentMemorySnapshot } from '@/application/agents';
+import type { App } from 'obsidian';
+import type { AgentMemorySnapshot } from '@/types/features/memory';
+import { pluginPaths } from '@/core/plugin-paths';
+import { JsonFile } from '@/infrastructure/persistence/json-file';
 
 export interface AgentMemoryFile {
 	version: 1;
@@ -10,44 +10,18 @@ export interface AgentMemoryFile {
 }
 
 export class AgentMemoryRepository {
-	private initialized = false;
+	private readonly file: JsonFile<Partial<AgentMemoryFile>>;
 
-	constructor(private readonly app: App, private readonly filePath = AGENT_MEMORY_PATH) {}
-
-	async initialize(): Promise<void> {
-		if (this.initialized) return;
-		await ensureFolderExists(this.app.vault.adapter, AGENT_MEMORY_DATA_FOLDER);
-		if (!(await this.app.vault.adapter.exists(this.filePath))) {
-			await this.writeFile({ version: 1, updatedAt: Date.now(), agents: {} });
-		}
-		this.initialized = true;
+	constructor(app: App, filePath = pluginPaths(app.vault.configDir).agentMemory) {
+		this.file = new JsonFile(app.vault.adapter, filePath, () => ({}));
 	}
 
 	async load(): Promise<AgentMemoryFile> {
-		await this.initialize();
-		try {
-			const raw = await this.app.vault.adapter.read(this.filePath);
-			const parsed = JSON.parse(raw) as Partial<AgentMemoryFile>;
-			return {
-				version: 1,
-				updatedAt: parsed.updatedAt ?? 0,
-				agents: parsed.agents ?? {},
-			};
-		} catch {
-			return { version: 1, updatedAt: 0, agents: {} };
-		}
+		const stored = await this.file.read();
+		return { version: 1, updatedAt: stored.updatedAt ?? 0, agents: stored.agents ?? {} };
 	}
 
-	async save(file: AgentMemoryFile): Promise<void> {
-		await this.initialize();
-		await this.writeFile(file);
-	}
-
-	private async writeFile(file: AgentMemoryFile): Promise<void> {
-		await ensureFolderExists(this.app.vault.adapter, AGENT_MEMORY_DATA_FOLDER);
-		await this.app.vault.adapter.write(
-			this.filePath,
-			JSON.stringify({ ...file, updatedAt: Date.now() }, null, 2),
-		);
+	async save(memory: AgentMemoryFile): Promise<void> {
+		await this.file.write({ ...memory, updatedAt: Date.now() });
 	}
 }

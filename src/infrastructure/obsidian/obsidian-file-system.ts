@@ -1,5 +1,5 @@
 import { App, TFile, TFolder } from 'obsidian';
-import { IFileSystem } from '@/core/interfaces';
+import { IFileSystem } from '@/core/interfaces/file-system.interface';
 
 /**
  * Obsidian-specific implementation of the FileSystem interface.

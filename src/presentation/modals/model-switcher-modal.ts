@@ -1,7 +1,7 @@
 import { FuzzySuggestModal, Notice } from 'obsidian';
 import type { App } from 'obsidian';
 import type { ModelInfo } from '@/types';
-import { getModelDisplayName } from '@/presentation/components/chat/utils';
+import { getModelDisplayName } from '@/presentation/components/chat/utils/provider-utils';
 
 /**
  * Dependencies the model switcher needs, kept as a narrow interface so the modal

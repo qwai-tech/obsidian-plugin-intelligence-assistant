@@ -2,6 +2,7 @@ import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
 import { createToolDefinition } from '@/application/tools/tool-schema';
 import { z } from 'zod';
+import { errorMessage } from '@/utils/errors';
 
 /**
  * MakeLinkTool — produce a vault-correct link to a note using
@@ -65,7 +66,7 @@ export class MakeLinkTool implements Tool {
 		} catch (error) {
 			return Promise.resolve({
 				success: false,
-				error: error instanceof Error ? error.message : String(error),
+				error: errorMessage(error),
 			});
 		}
 	}

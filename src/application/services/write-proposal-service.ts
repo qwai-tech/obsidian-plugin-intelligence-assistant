@@ -51,20 +51,6 @@ export function isBatchWriteProposal(value: unknown): value is BatchWriteProposa
 		&& candidate.applied === false;
 }
 
-export function createBatchWriteProposal(input: {
-	id: string;
-	proposals: WriteProposal[];
-	reason: string;
-}): BatchWriteProposal {
-	return {
-		type: 'batch_proposal',
-		id: input.id,
-		proposals: input.proposals,
-		reason: input.reason,
-		applied: false,
-	};
-}
-
 export function isWriteProposal(value: unknown): value is WriteProposal {
 	if (!value || typeof value !== 'object') return false;
 	const candidate = value as Partial<WriteProposal>;

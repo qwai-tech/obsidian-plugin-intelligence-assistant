@@ -1,5 +1,5 @@
 import { TFile } from 'obsidian';
-import { AgentSenseService } from '@/application/agents';
+import { AgentSenseService } from '@/application/agents/agent-sense-service';
 
 function makeFile(path: string): TFile {
 	const file = new TFile();

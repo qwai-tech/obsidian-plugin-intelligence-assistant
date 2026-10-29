@@ -1,8 +1,7 @@
-import { App } from 'obsidian';
+import type { App } from 'obsidian';
 import type { Agent } from '@/types';
-import { AGENTS_DATA_FOLDER } from '@/constants';
-import { ensureFolderExists, buildSafeName } from '@/utils/file-system';
-import { BUILTIN_AGENT_PRESETS } from '@/application/agents/presets/builtin-agents';
+import { pluginPaths } from '@/core/plugin-paths';
+import { JsonCollection } from '@/infrastructure/persistence/json-collection';
 
 interface AgentIndexEntry {
 	id: string;
@@ -12,151 +11,41 @@ interface AgentIndexEntry {
 	file: string;
 }
 
-interface AgentIndexFile {
-	version: string;
-	updatedAt: number;
-	activeId: string | null;
-	agents: AgentIndexEntry[];
-}
-
-const INDEX_VERSION = '1.0';
-
 export class AgentRepository {
-	private readonly baseFolder = AGENTS_DATA_FOLDER;
-	private readonly indexPath = `${this.baseFolder}/index.json`;
-	private initialized = false;
+	private readonly collection: JsonCollection<Agent, AgentIndexEntry>;
+	private seeded: Promise<void> | null = null;
 
-	constructor(private readonly _app: App) {}
+	constructor(app: App, private readonly presets: Agent[]) {
+		this.collection = new JsonCollection(app.vault.adapter, pluginPaths(app.vault.configDir).agents, {
+			entriesKey: 'agents',
+			filePrefix: 'agent',
+			toEntry: (agent, file) => ({ id: agent.id, name: agent.name, icon: agent.icon, updatedAt: agent.updatedAt ?? Date.now(), file }),
+		});
+	}
 
-	async initialize(): Promise<void> {
-		if (this.initialized) return;
-		await ensureFolderExists(this._app.vault.adapter, this.baseFolder);
-
-		const indexExists = await this._app.vault.adapter.exists(this.indexPath);
-		// Mark initialized BEFORE seeding. saveAll() re-enters initialize(); if the
-		// flag is only set afterwards the guard never trips and the two methods
-		// recurse infinitely on a fresh vault (no agents/index.json yet), which
-		// exhausts the heap. Setting it here makes the re-entrant call a no-op.
-		this.initialized = true;
-		if (!indexExists) {
-			// Auto-initialize with builtin presets
-			await this.saveAll(BUILTIN_AGENT_PRESETS, null);
-		}
+	initialize(): Promise<void> {
+		this.seeded ??= this.seedPresets();
+		return this.seeded;
 	}
 
 	async loadAll(): Promise<{ agents: Agent[]; activeId: string | null }> {
 		await this.initialize();
-		const index = await this.readIndex();
-		const agents: Agent[] = [];
-
-		for (const entry of index.agents) {
-			const agent = await this.readAgent(entry.file);
-			if (agent) {
-				agents.push(agent);
-			}
+		const { items, activeId } = await this.collection.load();
+		if (items.length > 0) {
+			return { agents: items, activeId };
 		}
-
-		if (agents.length === 0) {
-			// Try presets as a fallback if nothing loaded
-			await this.saveAll(BUILTIN_AGENT_PRESETS, index.activeId ?? null);
-			return { agents: BUILTIN_AGENT_PRESETS, activeId: index.activeId ?? null };
-		}
-
-		return { agents, activeId: index.activeId ?? null };
+		await this.collection.save(this.presets, activeId);
+		return { agents: this.presets, activeId };
 	}
 
 	async saveAll(agents: Agent[], activeId: string | null): Promise<void> {
 		await this.initialize();
-		const adapter = this._app.vault.adapter;
-		await ensureFolderExists(adapter, this.baseFolder);
-		const keepFiles = new Set<string>();
+		await this.collection.save(agents, activeId ?? null);
+	}
 
-		for (const agent of agents) {
-			const filePath = this.getAgentFilePath(agent.id);
-			keepFiles.add(filePath);
-			await adapter.write(filePath, JSON.stringify(agent, null, 2));
+	private async seedPresets(): Promise<void> {
+		if (!(await this.collection.load()).indexExists) {
+			await this.collection.save(this.presets, null);
 		}
-
-		await this.removeOrphanedAgentFiles(keepFiles);
-
-		const index: AgentIndexFile = {
-			version: INDEX_VERSION,
-			updatedAt: Date.now(),
-			activeId: activeId ?? null,
-			agents: agents.map(agent => ({
-				id: agent.id,
-				name: agent.name,
-				icon: agent.icon,
-				updatedAt: agent.updatedAt ?? Date.now(),
-				file: this.getAgentFilePath(agent.id)
-			}))
-		};
-
-		await this.writeIndex(index);
-	}
-
-	private async readAgent(filePath: string): Promise<Agent | null> {
-		try {
-			const content = await this._app.vault.adapter.read(filePath);
-			return JSON.parse(content) as Agent;
-		} catch (error) {
-			console.warn(`[Agents] Failed to read agent file ${filePath}:`, error);
-			return null;
-		}
-	}
-
-	private async loadAgentsFromFolder(): Promise<Agent[]> {
-		const adapter = this._app.vault.adapter;
-		const agents: Agent[] = [];
-		const listing = await adapter.list(this.baseFolder);
-
-		for (const file of listing.files) {
-			if (file === this.indexPath || !file.endsWith('.json')) {
-				continue;
-			}
-			const agent = await this.readAgent(file);
-			if (agent) {
-				agents.push(agent);
-			}
-		}
-
-		return agents;
-	}
-
-	private async removeOrphanedAgentFiles(keep: Set<string>): Promise<void> {
-		const adapter = this._app.vault.adapter;
-		const listing = await adapter.list(this.baseFolder);
-
-		for (const file of listing.files) {
-			if (file === this.indexPath || !file.endsWith('.json')) {
-				continue;
-			}
-			if (!keep.has(file)) {
-				await adapter.remove(file);
-			}
-		}
-	}
-
-	private getAgentFilePath(agentId: string): string {
-		const safeName = buildSafeName(agentId, 'agent');
-		return `${this.baseFolder}/${safeName}.json`;
-	}
-
-	private async readIndex(): Promise<AgentIndexFile> {
-		try {
-			const content = await this._app.vault.adapter.read(this.indexPath);
-			return JSON.parse(content) as AgentIndexFile;
-		} catch {
-			return {
-				version: INDEX_VERSION,
-				updatedAt: Date.now(),
-				activeId: null,
-				agents: []
-			};
-		}
-	}
-
-	private async writeIndex(index: AgentIndexFile): Promise<void> {
-		await this._app.vault.adapter.write(this.indexPath, JSON.stringify(index, null, 2));
 	}
 }

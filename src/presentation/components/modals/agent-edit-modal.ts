@@ -655,26 +655,6 @@ export class AgentEditModal extends Modal {
 		});
 	}
 
-	private getInitialModelSelection(options: Array<{ id: string; label: string }>): string {
-		if (options.length === 0) {
-			return this.agent.modelStrategy.modelId || '';
-		}
-
-		const current = this.agent.modelStrategy.modelId;
-		if (current && options.some(option => option.id === current)) {
-			return current;
-		}
-
-		if (current) {
-			const alias = this.modelAliasMap.get(current);
-			if (alias && options.some(option => option.id === alias)) {
-				return alias;
-			}
-		}
-
-		return options[0].id;
-	}
-
 	private normalizeModelId(modelId: string): string | null {
 		if (!modelId) return null;
 		return modelId.includes(':') ? modelId.split(':').slice(1).join(':') : modelId;

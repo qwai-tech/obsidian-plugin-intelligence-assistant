@@ -2,6 +2,7 @@ import { App, TFile, loadPdfJs } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from './types';
 import { createToolDefinition } from '@/application/tools/tool-schema';
 import { z } from 'zod';
+import { errorMessage } from '@/utils/errors';
 
 /** Hard cap on extracted characters so we never blow up the model context. */
 const MAX_TEXT_CHARS = 50_000;
@@ -106,7 +107,7 @@ export class ReadPdfTool implements Tool {
 		} catch (error) {
 			return {
 				success: false,
-				error: error instanceof Error ? error.message : String(error),
+				error: errorMessage(error),
 			};
 		}
 	}

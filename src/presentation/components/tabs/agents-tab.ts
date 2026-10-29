@@ -10,7 +10,7 @@ import type { Agent, ModelInfo } from '@/types';
 import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
 import { TestIds } from '@/presentation/utils/test-ids';
-import { AgentEditModal } from '../modals';
+import { AgentEditModal } from '@/presentation/components/modals/agent-edit-modal';
 import { DEFAULT_AGENT_ID, DEFAULT_MAX_STEPS } from '@/constants';
 
 export function displayAgentsTab(

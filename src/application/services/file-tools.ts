@@ -3,6 +3,7 @@ import { Tool, ToolDefinition, ToolResult } from './types';
 import { createWriteProposal } from './write-proposal-service';
 import { createToolDefinition } from '@/application/tools/tool-schema';
 import { z } from 'zod';
+import { errorMessage } from '@/utils/errors';
 
 export class ReadFileTool implements Tool {
 	constructor(private _app: App) {}
@@ -41,7 +42,7 @@ export class ReadFileTool implements Tool {
 		} catch (error) {
 			return {
 				success: false,
-				error: error instanceof Error ? error.message : String(error)
+				error: errorMessage(error)
 			};
 		}
 	}
@@ -106,7 +107,7 @@ export class WriteFileTool implements Tool {
 		} catch (error) {
 			return {
 				success: false,
-				error: error instanceof Error ? error.message : String(error)
+				error: errorMessage(error)
 			};
 		}
 	}
@@ -168,7 +169,7 @@ export class ListFilesTool implements Tool {
 		} catch (error) {
 			return Promise.resolve({
 				success: false,
-				error: error instanceof Error ? error.message : String(error)
+				error: errorMessage(error)
 			});
 		}
 	}
@@ -255,7 +256,7 @@ export class UpdatePropertiesTool implements Tool {
 		} catch (error) {
 			return {
 				success: false,
-				error: error instanceof Error ? error.message : String(error)
+				error: errorMessage(error)
 			};
 		}
 	}

@@ -3,6 +3,7 @@ import { Tool, ToolDefinition, ToolResult } from './types';
 import { createWriteProposal } from './write-proposal-service';
 import { createToolDefinition } from '@/application/tools/tool-schema';
 import { z } from 'zod';
+import { errorMessage } from '@/utils/errors';
 
 export interface CanvasData {
 	nodes: CanvasNode[];
@@ -71,7 +72,7 @@ export class ReadCanvasTool implements Tool {
 		} catch (error) {
 			return {
 				success: false,
-				error: error instanceof Error ? error.message : String(error)
+				error: errorMessage(error)
 			};
 		}
 	}
@@ -160,7 +161,7 @@ export class UpdateCanvasTool implements Tool {
 		} catch (error) {
 			return {
 				success: false,
-				error: error instanceof Error ? error.message : String(error)
+				error: errorMessage(error)
 			};
 		}
 	}

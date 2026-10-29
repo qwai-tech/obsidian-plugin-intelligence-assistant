@@ -9,7 +9,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/presentation/utils/ui-helpers';
 import { TestIds } from '@/presentation/utils/test-ids';
-import { SystemPromptEditModal } from '../modals';
+import { SystemPromptEditModal } from '@/presentation/components/modals/system-prompt-edit-modal';
 
 export function displayPromptsTab(
 	containerEl: HTMLElement,

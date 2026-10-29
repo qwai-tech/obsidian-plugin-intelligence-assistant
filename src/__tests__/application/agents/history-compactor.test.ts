@@ -1,5 +1,5 @@
-import { HistoryCompactor } from '@/application/agents';
-import type { AgentWorkingMessage } from '@/application/agents';
+import { HistoryCompactor } from '@/application/agents/history-compactor';
+import type { AgentWorkingMessage } from '@/application/agents/types';
 
 describe('HistoryCompactor', () => {
 	it('keeps short histories unchanged', () => {

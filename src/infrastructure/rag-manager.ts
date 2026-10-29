@@ -3,6 +3,7 @@ import type { RAGConfig, LLMConfig } from '@/types';
 import { VectorStore, SearchResult } from './vector-store';
 import { EmbeddingManager } from './embedding-manager';
 import { DocumentGrader } from './document-grader';
+import { errorMessage } from '@/utils/errors';
 
 export class RAGManager {
   private vectorStore: VectorStore;
@@ -10,8 +11,6 @@ export class RAGManager {
   private config: RAGConfig;
   private llmConfigs: LLMConfig[];
   private documentGrader: DocumentGrader;
-  private fileChangeListener: ((file: TFile) => void) | null = null;
-  private initialized: boolean = false;
   constructor(app: App, config: RAGConfig, llmConfigs: LLMConfig[]) {
     this.app = app;
     this.config = config;
@@ -21,16 +20,7 @@ export class RAGManager {
   }
 
   async initialize(): Promise<void> {
-    // Load persisted vector store data
     await this.vectorStore.load();
-    
-    
-    // Setup file change listener if enabled
-    if (this.config.enabled && this.config.embedChangedFiles) {
-      this.setupFileChangeListener();
-    }
-    
-    this.initialized = true;
   }
 
   async indexVault(): Promise<void> {
@@ -198,8 +188,7 @@ export class RAGManager {
         results = filteredResults;
       } catch (error) {
         console.error('[RAG Manager] Error during document grading:', error);
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        new Notice(`⚠️ Document grading error: ${errorMessage}`);
+        new Notice(`⚠️ Document grading error: ${errorMessage(error)}`);
       }
     }
     
@@ -273,68 +262,17 @@ export class RAGManager {
     return this.vectorStore.getDetailedStats();
   }
 
-	  private getStoredChunks(): unknown[] {
-	    return this.vectorStore.getStoredChunks();
-	  }
-
-  private setupFileChangeListener(): void {
-    // Remove any existing listener
-    this.removeFileChangeListener();
-    
-    // Create new listener
-    this.fileChangeListener = (file: TFile) => {
-      if (this.config.enabled && this.config.embedChangedFiles && file.extension === 'md') {
-        console.debug(`File changed: ${file.path}, re-indexing for RAG...`);
-        // Use void to explicitly ignore the promise
-        void (async () => {
-          try {
-            await this.indexFile(file);
-            console.debug(`Successfully re-indexed ${file.path}`);
-            // Send notification for successful indexing
-            if (this.config.indexingMode !== 'manual') { // Only show for automatic indexing
-              new Notice(`🔄 RAG: Indexed ${file.basename}`);
-            }
-          } catch (error) {
-            console.error(`Failed to re-index file ${file.path}:`, error);
-            const errorMessage = error instanceof Error ? error.message : String(error);
-              new Notice(`❌ RAG: Failed to index ${file.basename} - ${errorMessage}`);
-          }
-        })();
-      }
-    };
-    
-    // Register the listener with the vault
-    this.app.vault.on('modify', this.fileChangeListener);
-  }
-
-  private removeFileChangeListener(): void {
-    if (this.fileChangeListener) {
-      this.app.vault.off('modify', this.fileChangeListener);
-      this.fileChangeListener = null;
-    }
-  }
-
   updateConfig(config: RAGConfig, llmConfigs?: LLMConfig[]): void {
-    const wasEmbeddingChangedFiles = this.config.embedChangedFiles;
     this.config = config;
     if (llmConfigs) {
       this.llmConfigs = llmConfigs;
+      this.vectorStore.setLlmConfigs(llmConfigs);
     }
     this.documentGrader = new DocumentGrader(this.config, this.llmConfigs);
-
-    if (config.embedChangedFiles && !wasEmbeddingChangedFiles) {
-      this.setupFileChangeListener();
-    } else if (!config.embedChangedFiles && wasEmbeddingChangedFiles) {
-      this.removeFileChangeListener();
-    }
   }
 
-  destroy(): Promise<void> {
-    // Clean up listeners when destroying the manager
-    this.removeFileChangeListener();
-    
-    // Clean up the embedding worker
+  async destroy(): Promise<void> {
+    await this.vectorStore.flush();
     EmbeddingManager.cleanup();
-    return Promise.resolve();
   }
 }

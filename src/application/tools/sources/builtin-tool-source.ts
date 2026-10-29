@@ -50,9 +50,6 @@ const BUILTIN_TOOL_FACTORIES: Record<string, BuiltinToolFactory> = {
 	make_link: (app) => new MakeLinkTool(app),
 };
 
-/** All builtin tool types in their canonical registration order. */
-export const ALL_BUILTIN_TOOL_TYPES: readonly string[] = Object.keys(BUILTIN_TOOL_FACTORIES);
-
 export class BuiltinToolSource implements ToolSource {
 	readonly kind: ToolSourceKind = 'builtin';
 	readonly id: string = 'builtin';

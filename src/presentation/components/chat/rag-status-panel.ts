@@ -4,6 +4,7 @@ import type { RAGManager } from '@/infrastructure/rag-manager';
 import type { RAGConfig } from '@/types';
 import type { RAGSource } from '@/types';
 import { TestIds } from '@/presentation/utils/test-ids';
+import { errorMessage } from '@/utils/errors';
 
 type RagIndexStats = {
 	chunkCount: number;
@@ -73,7 +74,7 @@ export class RagStatusPanel {
 				statusSpan.removeClass('ia-cursor-help');
 				statusSpan.onclick = null;
 			}
-			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			const errMsg = errorMessage(_error);
 			console.error('Error updating RAG status:', errMsg);
 		}
 	}
@@ -119,7 +120,7 @@ export class RagStatusPanel {
 			const stats = await this.ragManager.getDetailedStats();
 			this.showStatsModal(stats);
 		} catch (_error) {
-			const errMsg = _error instanceof Error ? _error.message : String(_error);
+			const errMsg = errorMessage(_error);
 			console.error('Error loading RAG stats modal:', errMsg);
 			new Notice(t('chat.notices.unableToLoadRag'));
 		}

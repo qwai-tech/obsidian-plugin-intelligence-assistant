@@ -6,6 +6,7 @@ import { ModelManager } from '@qwai/obsidian-llm';
 import { ProviderFactory } from '@qwai/obsidian-llm';
 import type { LLMConfig } from '@/types';
 import type { QuickActionConfig } from '@/types/settings';
+import { errorMessage } from '@/utils/errors';
 
 export interface EditorQuickActionsConfig {
 	quickActions: QuickActionConfig[];
@@ -118,7 +119,7 @@ export class EditorQuickActions {
 			}
 		} catch (error) {
 			loadingNotice.hide();
-			const errorMsg = error instanceof Error ? error.message : String(error);
+			const errorMsg = errorMessage(error);
 			new Notice(t('notices.error', { message: errorMsg }));
 			console.error('[Editor AI Action] Error:', error);
 		}

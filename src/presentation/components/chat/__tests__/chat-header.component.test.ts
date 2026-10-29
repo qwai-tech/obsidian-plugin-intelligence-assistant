@@ -1,5 +1,4 @@
 import { ChatHeaderComponent } from '../chat-header.component';
-import { ChatViewState } from '@/presentation/state/chat-view-state';
 import { initI18n } from '@/i18n';
 
 describe('ChatHeaderComponent', () => {
@@ -20,7 +19,6 @@ describe('ChatHeaderComponent', () => {
 					},
 				},
 			} as never,
-			new ChatViewState(),
 			{
 				onToggleConversations: jest.fn(),
 				onShowCapabilities: jest.fn(),
@@ -51,7 +49,6 @@ describe('ChatHeaderComponent', () => {
 					},
 				},
 			} as never,
-			new ChatViewState(),
 			{
 				onToggleConversations: jest.fn(),
 				onShowCapabilities,
