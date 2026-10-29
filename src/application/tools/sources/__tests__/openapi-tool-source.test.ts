@@ -1,5 +1,5 @@
 import { OpenApiToolSource } from '../openapi-tool-source';
-import type { IFileSystem } from '@/core/interfaces';
+import type { IFileSystem } from '@/core/interfaces/file-system.interface';
 import type { OpenApiToolConfig } from '@/types/features/openapi-tools';
 
 /** Minimal in-memory IFileSystem. */
@@ -42,7 +42,7 @@ function makeConfig(overrides: Partial<OpenApiToolConfig> = {}): OpenApiToolConf
 describe('OpenApiToolSource', () => {
 	it('exposes openapi kind with id and label from the config', () => {
 		const fs = makeFileSystem({ 'specs/demo.json': SPEC });
-		const source = new OpenApiToolSource(makeConfig(), fs, '/plugin/data');
+		const source = new OpenApiToolSource(makeConfig(), { fileSystem: fs, pluginDataPath: '/plugin/data', http: { request: jest.fn(), stream: jest.fn() } as never });
 		expect(source.kind).toBe('openapi');
 		expect(source.id).toBe('demo');
 		expect(source.label).toBe('Demo API');
@@ -50,7 +50,7 @@ describe('OpenApiToolSource', () => {
 
 	it('loads tools generated from the spec', async () => {
 		const fs = makeFileSystem({ 'specs/demo.json': SPEC });
-		const source = new OpenApiToolSource(makeConfig(), fs, '/plugin/data');
+		const source = new OpenApiToolSource(makeConfig(), { fileSystem: fs, pluginDataPath: '/plugin/data', http: { request: jest.fn(), stream: jest.fn() } as never });
 		const tools = await source.load();
 		expect(tools).toHaveLength(1);
 		expect(typeof tools[0].execute).toBe('function');
@@ -58,19 +58,19 @@ describe('OpenApiToolSource', () => {
 
 	it('returns an empty list for a disabled config', async () => {
 		const fs = makeFileSystem({ 'specs/demo.json': SPEC });
-		const source = new OpenApiToolSource(makeConfig({ enabled: false }), fs, '/plugin/data');
+		const source = new OpenApiToolSource(makeConfig({ enabled: false }), { fileSystem: fs, pluginDataPath: '/plugin/data', http: { request: jest.fn(), stream: jest.fn() } as never });
 		expect(await source.load()).toEqual([]);
 	});
 
 	it('propagates a spec parse failure so the registry can isolate it', async () => {
 		const fs = makeFileSystem({ 'specs/demo.json': 'not-json' });
-		const source = new OpenApiToolSource(makeConfig(), fs, '/plugin/data');
+		const source = new OpenApiToolSource(makeConfig(), { fileSystem: fs, pluginDataPath: '/plugin/data', http: { request: jest.fn(), stream: jest.fn() } as never });
 		await expect(source.load()).rejects.toThrow('Failed to parse OpenAPI JSON specification');
 	});
 
 	it('dispose is a no-op that resolves', async () => {
 		const fs = makeFileSystem({ 'specs/demo.json': SPEC });
-		const source = new OpenApiToolSource(makeConfig(), fs, '/plugin/data');
+		const source = new OpenApiToolSource(makeConfig(), { fileSystem: fs, pluginDataPath: '/plugin/data', http: { request: jest.fn(), stream: jest.fn() } as never });
 		await expect(source.dispose()).resolves.toBeUndefined();
 	});
 });

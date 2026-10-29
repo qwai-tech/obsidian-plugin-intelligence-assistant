@@ -3,41 +3,16 @@
  * Displays LLM provider management and configuration
  */
 
-import { App, Notice, requestUrl } from 'obsidian';
+import { App, Notice } from 'obsidian';
 import { showConfirm } from '@/presentation/components/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { LLMConfig } from '@/types';
 import { t } from '@/i18n';
 import { createTable } from '@/presentation/utils/ui-helpers';
-import { ProviderConfigModal, OllamaModelManagerModal } from '../modals';
-import { getProviderMeta } from '../components/provider-meta';
+import { ProviderConfigModal } from '@/presentation/components/modals/provider-config-modal';
+import { OllamaModelManagerModal } from '@/presentation/components/modals/ollama-model-manager-modal';
+import { getProviderMeta } from '@/presentation/components/provider-meta';
 import { TestIds } from '@/presentation/utils/test-ids';
-
-/**
- * Check Ollama server status
- */
-async function checkOllamaStatus(baseUrl: string): Promise<{ online: boolean; version?: string }> {
-	try {
-		const url = baseUrl.endsWith('/') ? `${baseUrl}api/version` : `${baseUrl}/api/version`;
-		const response = await requestUrl({
-			url,
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			throw: false,
-		});
-
-		if (response.status === 200) {
-			const data = response.json as { version?: string };
-			return { online: true, version: data.version };
-		}
-		return { online: false };
-	} catch (error) {
-		console.error('Failed to check Ollama status:', error);
-		return { online: false };
-	}
-}
 
 export function displayProviderTab(
 	containerEl: HTMLElement,
@@ -81,10 +56,9 @@ export function displayProviderTab(
 			baseUrl: '',
 			cachedModels: []
 		};
-		new ProviderConfigModal(app, draft, async (updated) => {
+		new ProviderConfigModal(app, plugin.services.ollama, draft, async (updated) => {
 			plugin.settings.llmConfigs.push(updated);
 			await plugin.saveSettings();
-			await plugin.refreshChatViewsModels();
 			refreshDisplay();
 		}).open();
 	});
@@ -205,7 +179,7 @@ export function displayProviderTab(
 			serverStatusLine.addClass('ia-text-italic');
 
 			// Check Ollama server status
-			checkOllamaStatus(ollamaBaseUrl).then((status) => {
+			plugin.services.ollama.status(ollamaBaseUrl).then((status) => {
 				if (status.online) {
 					serverStatusLine.setText(t('settings.provider.ollama.server.online'));
 					serverStatusLine.removeClass('ia-text-italic');
@@ -303,10 +277,9 @@ export function displayProviderTab(
 		editBtn.addClass('ia-button--ghost');
 		editBtn.addEventListener('click', () => {
 			const draft = JSON.parse(JSON.stringify(config)) as LLMConfig;
-			new ProviderConfigModal(app, draft, async (updated) => {
+			new ProviderConfigModal(app, plugin.services.ollama, draft, async (updated) => {
 				plugin.settings.llmConfigs[index] = updated;
 				await plugin.saveSettings();
-				await plugin.refreshChatViewsModels();
 				refreshDisplay();
 			}).open();
 		});
@@ -317,10 +290,9 @@ export function displayProviderTab(
 			manageBtn.addClass('ia-button');
 			manageBtn.addClass('ia-button--ghost');
 			manageBtn.addEventListener('click', () => {
-				new OllamaModelManagerModal(app, config, () => {
+				new OllamaModelManagerModal(app, plugin.services.ollama, config, () => {
 					void (async () => {
 						await plugin.saveSettings();
-						await plugin.refreshChatViewsModels();
 						refreshDisplay();
 					})();
 				}).open();
@@ -341,7 +313,6 @@ export function displayProviderTab(
 					config.cachedModels = models;
 					config.cacheTimestamp = Date.now();
 					await plugin.saveSettings();
-					await plugin.refreshChatViewsModels();
 					new Notice(t('settings.provider.notices.refreshed', { provider: config.provider }));
 					refreshDisplay();
 				} catch (_error) {
@@ -365,7 +336,6 @@ export function displayProviderTab(
 				if (await showConfirm(app, t('settings.provider.confirm.delete', { provider: config.provider }))) {
 					plugin.settings.llmConfigs.splice(index, 1);
 					await plugin.saveSettings();
-					await plugin.refreshChatViewsModels();
 					refreshDisplay();
 				}
 			})();

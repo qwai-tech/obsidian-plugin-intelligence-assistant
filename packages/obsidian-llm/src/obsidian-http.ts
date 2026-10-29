@@ -61,8 +61,12 @@ export function createObsidianHttpPort(): HttpPort {
 					method: req.method ?? 'POST',
 					headers: req.headers,
 					body: req.body,
+					signal: req.signal,
 				});
 			} catch (error: unknown) {
+				if (req.signal?.aborted) {
+					throw error;
+				}
 				if (error instanceof TypeError) {
 					throw new StreamTransportUnavailableError(
 						`Streaming transport blocked for ${req.url} (likely missing CORS headers)`,

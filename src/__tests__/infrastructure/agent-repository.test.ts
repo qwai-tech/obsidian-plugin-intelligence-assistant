@@ -4,7 +4,8 @@
  * saveAll() and saveAll() re-enters initialize() before the `initialized` flag
  * is set — exhausting the heap (OOM). This test pins the fix.
  */
-import { AgentRepository } from '@/infrastructure/persistence';
+import { AgentRepository } from '@/infrastructure/persistence/data/agent-repository';
+import { BUILTIN_AGENT_PRESETS } from '@/application/agents/presets/builtin-agents';
 
 function makeApp() {
 	const store: Record<string, string> = {};
@@ -13,6 +14,7 @@ function makeApp() {
 		read: jest.fn(async (p: string) => { if (!(p in store)) throw new Error(`nf:${p}`); return store[p]; }),
 		write: jest.fn(async (p: string, d: string) => { store[p] = d; }),
 		remove: jest.fn(async (p: string) => { delete store[p]; }),
+		rename: jest.fn(async (from: string, to: string) => { store[to] = store[from]; delete store[from]; }),
 		mkdir: jest.fn(async () => {}),
 		list: jest.fn(async () => ({ files: Object.keys(store), folders: [] })),
 	};
@@ -22,7 +24,7 @@ function makeApp() {
 describe('AgentRepository.initialize (fresh vault)', () => {
 	it('resolves without infinite recursion and seeds builtin presets', async () => {
 		const { app, store } = makeApp();
-		const repo = new AgentRepository(app);
+		const repo = new AgentRepository(app, BUILTIN_AGENT_PRESETS);
 
 		// Before the fix this never resolves (recurses to OOM). A finite resolve
 		// within the default timeout is the assertion.
@@ -36,7 +38,7 @@ describe('AgentRepository.initialize (fresh vault)', () => {
 
 	it('is idempotent: a second initialize() does not re-seed or throw', async () => {
 		const { app } = makeApp();
-		const repo = new AgentRepository(app);
+		const repo = new AgentRepository(app, BUILTIN_AGENT_PRESETS);
 		await repo.initialize();
 		const first = (await repo.loadAll()).agents.length;
 		await repo.initialize();

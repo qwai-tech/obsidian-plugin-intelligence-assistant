@@ -2,8 +2,8 @@
  * ConversationStorageService unit tests
  */
 
-import { ConversationStorageService } from '../../application/services/conversation-storage-service';
-import type { Conversation } from '../../types/core/conversation';
+import { ConversationStorageService } from '@/infrastructure/persistence/conversation-storage-service';
+import type { Conversation } from '@/types/core/conversation';
 
 function makeConversation(overrides: Partial<Conversation> = {}): Conversation {
 	return {
@@ -27,6 +27,7 @@ function makeApp(files: Record<string, string> = {}) {
 		}),
 		write: jest.fn(async (path: string, data: string) => { store[path] = data; }),
 		remove: jest.fn(async (path: string) => { delete store[path]; }),
+		rename: jest.fn(async (from: string, to: string) => { store[to] = store[from]; delete store[from]; }),
 		mkdir: jest.fn(async () => {}),
 		list: jest.fn(async () => ({ files: [], folders: [] })),
 	};

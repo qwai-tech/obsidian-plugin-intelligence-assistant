@@ -1,7 +1,7 @@
-import { App } from 'obsidian';
+import type { App } from 'obsidian';
 import type { MCPServerConfig } from '@/types';
-import { DATA_FOLDER, MCP_SERVERS_PATH } from '@/constants';
-import { ensureFolderExists } from '@/utils/file-system';
+import { pluginPaths } from '@/core/plugin-paths';
+import { JsonFile } from '@/infrastructure/persistence/json-file';
 
 interface McpServerFile {
 	version: string;
@@ -12,42 +12,18 @@ interface McpServerFile {
 const FILE_VERSION = '1.0';
 
 export class McpServerRepository {
-	private initialized = false;
+	private readonly file: JsonFile<McpServerFile>;
 
-	constructor(private readonly _app: App, private readonly filePath = MCP_SERVERS_PATH) {}
-
-	async initialize(): Promise<void> {
-		if (this.initialized) return;
-		await ensureFolderExists(this._app.vault.adapter, DATA_FOLDER);
-		if (!(await this._app.vault.adapter.exists(this.filePath))) {
-			await this._app.vault.adapter.write(
-				this.filePath,
-				JSON.stringify({ version: FILE_VERSION, updatedAt: Date.now(), servers: [] }, null, 2)
-			);
-		}
-		this.initialized = true;
+	constructor(app: App, filePath = pluginPaths(app.vault.configDir).mcpServers) {
+		this.file = new JsonFile(app.vault.adapter, filePath, () => ({ version: FILE_VERSION, updatedAt: 0, servers: [] }));
 	}
 
 	async loadAll(): Promise<MCPServerConfig[]> {
-		await this.initialize();
-		try {
-			const content = await this._app.vault.adapter.read(this.filePath);
-			const parsed = JSON.parse(content) as McpServerFile;
-			return Array.isArray(parsed.servers) ? parsed.servers : [];
-		} catch (error) {
-			console.warn('[MCP] Failed to load MCP servers:', error);
-			return [];
-		}
+		const { servers } = await this.file.read();
+		return Array.isArray(servers) ? servers : [];
 	}
 
 	async saveAll(servers: MCPServerConfig[]): Promise<void> {
-		await this.initialize();
-		await ensureFolderExists(this._app.vault.adapter, DATA_FOLDER);
-		const payload: McpServerFile = {
-			version: FILE_VERSION,
-			updatedAt: Date.now(),
-			servers: servers ?? []
-		};
-		await this._app.vault.adapter.write(this.filePath, JSON.stringify(payload, null, 2));
+		await this.file.write({ version: FILE_VERSION, updatedAt: Date.now(), servers: servers ?? [] });
 	}
 }

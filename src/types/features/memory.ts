@@ -23,3 +23,11 @@ export interface AgentMemory {
 	conversationSummaries: ConversationSummary[];
 	embeddings: MemoryEmbedding[];
 }
+
+export interface AgentMemorySnapshot {
+	agentId: string;
+	workingNotes: string[];
+	researchLog: string;
+	preferences: Record<string, string>;
+	updatedAt: number;
+}

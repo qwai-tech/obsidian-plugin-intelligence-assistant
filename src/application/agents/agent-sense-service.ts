@@ -3,7 +3,8 @@ import { TFile, TFolder } from 'obsidian';
 import type { FileReference, RAGSource } from '@/types';
 import type { RAGManager } from '@/infrastructure/rag-manager';
 import { buildObsidianContextSnapshot } from '@/application/services/obsidian-context-builder';
-import type { AgentMemorySnapshot, AgentContextSection, AgentSenseContext } from './types';
+import type { AgentContextSection, AgentSenseContext } from './types';
+import type { AgentMemorySnapshot } from '@/types/features/memory';
 
 interface AgentMemoryReader {
 	getSnapshot(agentId: string): Promise<AgentMemorySnapshot>;

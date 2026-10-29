@@ -1,5 +1,5 @@
-import type { AgentMemorySnapshot } from '@/application/agents';
-import type { AgentMemoryFile, AgentMemoryRepository } from '@/infrastructure/persistence';
+import type { AgentMemorySnapshot } from '@/types/features/memory';
+import type { AgentMemoryFile, AgentMemoryRepository } from '@/infrastructure/persistence/data/agent-memory-repository';
 
 function emptySnapshot(agentId: string): AgentMemorySnapshot {
 	return {

@@ -5,15 +5,14 @@
 
 import { App, Vault } from 'obsidian';
 import type { Conversation, ConversationConfig } from '@/types/core/conversation';
-import { CONVERSATIONS_DATA_FOLDER, DATA_FOLDER, PLUGIN_BASE_FOLDER } from '@/constants';
+import { pluginPaths, type PluginPaths } from '@/core/plugin-paths';
+import { ensureFolderExists } from '@/utils/file-system';
+import { JsonFile } from './json-file';
 
-const CONVERSATION_FOLDER = CONVERSATIONS_DATA_FOLDER;
 const INDEX_FILE_NAME = 'conversation-index.json';
 const INDEX_FILE_VERSION = '2.0';
 const LEGACY_ROOT_FOLDER = '.conversations';
 const LEGACY_ROOT_INDEX_PATH = `${LEGACY_ROOT_FOLDER}/index.json`;
-const LEGACY_PLUGIN_CONVERSATION_FOLDER = `${PLUGIN_BASE_FOLDER}/.conversation`;
-const LEGACY_PLUGIN_INDEX_PATH = `${LEGACY_PLUGIN_CONVERSATION_FOLDER}/${INDEX_FILE_NAME}`;
 
 export type ConversationMode = 'chat' | 'agent';
 
@@ -53,13 +52,23 @@ interface LegacyConversationIndex {
 export class ConversationStorageService {
   private vault: Vault;
   private initialized = false;
-  private conversationsFolder: string = CONVERSATION_FOLDER;
-  private indexFilePath: string = `${CONVERSATION_FOLDER}/${INDEX_FILE_NAME}`;
+  private readonly paths: PluginPaths;
+  private readonly conversationsFolder: string;
+  private readonly indexFilePath: string;
+  private readonly indexFile: JsonFile<ConversationIndex>;
   private _writeLock: Promise<void> = Promise.resolve();
   private _indexCache: ConversationIndex | null = null;
 
-  constructor(private app: App) {
+  private get legacyPluginIndexPath(): string {
+    return `${this.paths.legacyConversations}/${INDEX_FILE_NAME}`;
+  }
+
+  constructor(app: App) {
     this.vault = app.vault;
+    this.paths = pluginPaths(app.vault.configDir);
+    this.conversationsFolder = this.paths.conversations;
+    this.indexFilePath = `${this.conversationsFolder}/${INDEX_FILE_NAME}`;
+    this.indexFile = new JsonFile<ConversationIndex>(app.vault.adapter, this.indexFilePath, () => ({ version: INDEX_FILE_VERSION, conversations: [] }));
   }
 
   /**
@@ -271,9 +280,9 @@ export class ConversationStorageService {
 
     const adapter = this.vault.adapter;
 
-    await this.ensureFolderExists(PLUGIN_BASE_FOLDER);
-    await this.ensureFolderExists(DATA_FOLDER);
-    await this.ensureFolderExists(this.conversationsFolder);
+    await ensureFolderExists(this.vault.adapter, this.paths.base);
+    await ensureFolderExists(this.vault.adapter, this.paths.data);
+    await ensureFolderExists(this.vault.adapter, this.conversationsFolder);
 
     const indexExists = await adapter.exists(this.indexFilePath);
     if (!indexExists) {
@@ -288,24 +297,16 @@ export class ConversationStorageService {
 
   private async loadIndex(): Promise<ConversationIndex> {
     if (this._indexCache) return this._indexCache;
-    try {
-      const content = await this.vault.adapter.read(this.indexFilePath);
-      const parsed = JSON.parse(content) as ConversationIndex;
-      if (!parsed.version) {
-        parsed.version = INDEX_FILE_VERSION;
-      }
-      this._indexCache = parsed;
-      return parsed;
-    } catch (error) {
-      console.error('Failed to load conversation index:', error);
-      return { version: INDEX_FILE_VERSION, conversations: [] };
-    }
+    const index = await this.indexFile.read();
+    index.version ||= INDEX_FILE_VERSION;
+    index.conversations ??= [];
+    this._indexCache = index;
+    return index;
   }
 
   private async saveIndex(index: ConversationIndex): Promise<void> {
     this._indexCache = index;
-    const payload = JSON.stringify(index, null, 2);
-    await this.vault.adapter.write(this.indexFilePath, payload);
+    await this.indexFile.write(index);
   }
 
   private normalizeConversation(conv: Conversation): Conversation {
@@ -369,8 +370,7 @@ export class ConversationStorageService {
   }
 
   private async writeConversationFile(filePath: string, conversation: Conversation): Promise<void> {
-    const payload = JSON.stringify(conversation, null, 2);
-    await this.vault.adapter.write(filePath, payload);
+    await new JsonFile<Conversation>(this.vault.adapter, filePath, () => conversation).write(conversation);
   }
 
   private generateConversationFilePath(conversation: Conversation, index: ConversationIndex): string {
@@ -433,12 +433,12 @@ export class ConversationStorageService {
 
   private async migrateFromPluginLegacyStorage(): Promise<boolean> {
     const adapter = this.vault.adapter;
-    if (!(await adapter.exists(LEGACY_PLUGIN_INDEX_PATH))) {
+    if (!(await adapter.exists(this.legacyPluginIndexPath))) {
       return false;
     }
 
     try {
-      const legacyRaw = await adapter.read(LEGACY_PLUGIN_INDEX_PATH);
+      const legacyRaw = await adapter.read(this.legacyPluginIndexPath);
       const legacyIndex = JSON.parse(legacyRaw) as ConversationIndex;
       const migratedIndex: ConversationIndex = { version: INDEX_FILE_VERSION, conversations: [] };
 
@@ -493,21 +493,6 @@ export class ConversationStorageService {
     } catch (error) {
       console.warn('No legacy root conversation index found; starting fresh.', error);
       return false;
-    }
-  }
-
-  private async ensureFolderExists(folder: string): Promise<void> {
-    if (await this.vault.adapter.exists(folder)) {
-      return;
-    }
-
-    const segments = folder.split('/');
-    let current = '';
-    for (const segment of segments) {
-      current = current ? `${current}/${segment}` : segment;
-      if (!(await this.vault.adapter.exists(current))) {
-        await this.vault.createFolder(current);
-      }
     }
   }
 }

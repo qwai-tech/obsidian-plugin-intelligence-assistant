@@ -1,5 +1,6 @@
-import { normalizePath, requestUrl } from 'obsidian';
-import { IFileSystem } from '@/core/interfaces';
+import { normalizePath } from 'obsidian';
+import type { HttpPort } from '@qwai/obsidian-llm';
+import { IFileSystem } from '@/core/interfaces/file-system.interface';
 import type { OpenApiToolConfig, OpenApiAuthType } from '@/types';
 import type { Tool, ToolDefinition, ToolParameter, ToolResult } from '@/application/services/types';
 import { createToolDefinition } from '@/application/tools/tool-schema';
@@ -26,9 +27,11 @@ interface OpenApiDocumentLike {
 	info?: { title?: string };
 }
 
-interface ReloadOptions {
-	forceRefetch?: boolean;
-	persistCacheMetadata?: boolean;
+export interface OpenApiLoadContext {
+	fileSystem: IFileSystem;
+	pluginDataPath: string;
+	http: HttpPort;
+	refetch?: boolean;
 }
 
 class OpenApiOperationTool implements Tool {
@@ -42,7 +45,8 @@ class OpenApiOperationTool implements Tool {
 		private readonly baseUrl: string,
 		private readonly metadata: Record<string, ParameterMetadata>,
 		providerId: string,
-		private readonly auth: AuthConfig
+		private readonly auth: AuthConfig,
+		private readonly http: HttpPort,
 	) {
 		this.definition = definition;
 		this.provider = providerId;
@@ -57,7 +61,7 @@ class OpenApiOperationTool implements Tool {
 			}
 
 			const prepared = this.prepareRequest(normalizedArgs);
-			const response = await requestUrl({
+			const response = await this.http.request({
 				url: prepared.url,
 				method: this.method.toUpperCase(),
 				headers: prepared.headers,
@@ -193,16 +197,11 @@ class OpenApiOperationTool implements Tool {
 // Module-level helper functions (moved from OpenApiToolLoader class methods)
 // ---------------------------------------------------------------------------
 
-async function loadSpec(
-	config: OpenApiToolConfig,
-	fileSystem: IFileSystem,
-	pluginDataPath: string,
-	options?: ReloadOptions
-): Promise<string> {
+async function loadSpec(config: OpenApiToolConfig, context: OpenApiLoadContext): Promise<string> {
 	if (config.sourceType === 'url') {
-		return await loadRemoteSpec(config, fileSystem, pluginDataPath, options);
+		return await loadRemoteSpec(config, context);
 	}
-	return await loadLocalSpec(config.specPath ?? '', fileSystem);
+	return await loadLocalSpec(config.specPath ?? '', context.fileSystem);
 }
 
 async function loadLocalSpec(specPath: string, fileSystem: IFileSystem): Promise<string> {
@@ -219,29 +218,26 @@ async function loadLocalSpec(specPath: string, fileSystem: IFileSystem): Promise
 	}
 }
 
-async function loadRemoteSpec(
-	config: OpenApiToolConfig,
-	fileSystem: IFileSystem,
-	pluginDataPath: string,
-	options?: ReloadOptions
-): Promise<string> {
+async function loadRemoteSpec(config: OpenApiToolConfig, context: OpenApiLoadContext): Promise<string> {
 	if (!config.specUrl?.trim()) {
 		throw new Error('OpenAPI URL is required');
 	}
 
-	const cache = getCachePaths(config.id, pluginDataPath);
+	const { fileSystem } = context;
+	const cache = getCachePaths(config.id, context.pluginDataPath);
 	await fileSystem.mkdir(cache.directoryAbsolute);
-	const shouldRefetch = options?.forceRefetch ?? false;
 	const cacheExists = await fileSystem.exists(cache.absolutePath);
 
-	if (!cacheExists || shouldRefetch) {
-		const response = await requestUrl({ url: config.specUrl.trim(), method: 'GET' });
-		const contents = response.text;
-		await fileSystem.write(cache.absolutePath, contents);
-		if (options?.persistCacheMetadata) {
+	if (!cacheExists || context.refetch) {
+		const response = await context.http.request({ url: config.specUrl.trim(), method: 'GET' });
+		if (!response.ok) {
+			throw new Error(`OpenAPI spec request failed: HTTP ${response.status}`);
+		}
+		await fileSystem.write(cache.absolutePath, response.text);
+		if (context.refetch) {
 			config.lastFetchedAt = Date.now();
 		}
-		return contents;
+		return response.text;
 	}
 
 	return await fileSystem.read(cache.absolutePath);
@@ -277,7 +273,8 @@ function generateTools(
 	baseUrl: string,
 	providerId: string,
 	namespace: string,
-	auth: AuthConfig
+	auth: AuthConfig,
+	http: HttpPort,
 ): Tool[] {
 	const paths = spec.paths;
 	if (!paths) {
@@ -313,7 +310,7 @@ function generateTools(
 				parameters: [...parameters, ...requestBody],
 				sideEffects: ['post', 'put', 'delete', 'patch'].includes(method) ? { externalWrite: true } : undefined,
 			});
-			const tool = new OpenApiOperationTool(definition, method, pathKey, baseUrl, metadata, providerId, auth);
+			const tool = new OpenApiOperationTool(definition, method, pathKey, baseUrl, metadata, providerId, auth, http);
 			tools.push(tool);
 		}
 	}
@@ -467,12 +464,7 @@ function describeSchema(schema: Record<string, unknown>): string {
  * Load an OpenAPI spec for the given config and generate its HTTP tools.
  * Returns an empty list for a disabled config.
  */
-export async function loadOpenApiTools(
-	config: OpenApiToolConfig,
-	fileSystem: IFileSystem,
-	pluginDataPath: string,
-	options?: ReloadOptions,
-): Promise<Tool[]> {
+export async function loadOpenApiTools(config: OpenApiToolConfig, context: OpenApiLoadContext): Promise<Tool[]> {
 	if (!config.id) {
 		throw new Error('OpenAPI config is missing an id');
 	}
@@ -480,7 +472,7 @@ export async function loadOpenApiTools(
 		return [];
 	}
 
-	const specContent = await loadSpec(config, fileSystem, pluginDataPath, options);
+	const specContent = await loadSpec(config, context);
 	let parsedSpec: OpenApiDocumentLike;
 	try {
 		parsedSpec = JSON.parse(specContent) as OpenApiDocumentLike;
@@ -503,8 +495,6 @@ export async function loadOpenApiTools(
 		value: config.authValue?.trim() || undefined,
 	};
 
-	return generateTools(parsedSpec, baseUrl, providerId, namespace, auth);
+	return generateTools(parsedSpec, baseUrl, providerId, namespace, auth, context.http);
 }
 
-// OpenApiToolLoader class deleted in Phase 5 — OpenApiToolSource handles the
-// per-config load/dispose lifecycle via the ToolRegistry now.

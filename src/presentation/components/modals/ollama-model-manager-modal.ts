@@ -3,16 +3,18 @@
  * Manages Ollama models (pull, delete, refresh)
  */
 
-import { App, Modal, Notice, Setting, requestUrl } from 'obsidian';
+import { App, Modal, Notice, Setting } from 'obsidian';
+import type { OllamaAdmin } from '@/application/services/ollama-admin';
 import type { LLMConfig, ModelInfo } from '@/types';
 import { t } from '@/i18n';
+import { errorMessage } from '@/utils/errors';
 
 export class OllamaModelManagerModal extends Modal {
 	private config: LLMConfig;
 	private onUpdate: () => void;
 	private models: ModelInfo[];
 
-	constructor(app: App, config: LLMConfig, onUpdate: () => void) {
+	constructor(app: App, private readonly admin: OllamaAdmin, config: LLMConfig, onUpdate: () => void) {
 		super(app);
 		this.config = config;
 		this.onUpdate = onUpdate;
@@ -46,25 +48,21 @@ export class OllamaModelManagerModal extends Modal {
 				.onClick(() => this.close()));
 	}
 
-	private async checkServerStatus(statusEl: HTMLElement) {
-		try {
-			const baseUrl = this.config.baseUrl || 'http://localhost:11434';
-			const url = baseUrl.endsWith('/') ? `${baseUrl}api/version` : `${baseUrl}/api/version`;
-			const response = await requestUrl({
-				url,
-				method: 'GET',
-				throw: false,
-			});
+	private get baseUrl(): string {
+		return this.config.baseUrl || 'http://localhost:11434';
+	}
 
-			if (response.status === 200) {
-				const data = response.json as { version?: string };
+	private async checkServerStatus(statusEl: HTMLElement) {
+		const baseUrl = this.baseUrl;
+		const status = await this.admin.status(baseUrl);
+		if (status.online) {
 				statusEl.empty();
 				statusEl.createEl('span', {
 					text: t('modals.ollamaManager.serverOnline'),
 					cls: 'ia-server-status-online'
 				});
 				statusEl.createEl('span', {
-					text: t('modals.ollamaManager.versionLabel', { version: data.version || 'unknown' }),
+					text: t('modals.ollamaManager.versionLabel', { version: status.version || 'unknown' }),
 					cls: 'ia-server-status-meta'
 				});
 				statusEl.createEl('span', {
@@ -75,11 +73,6 @@ export class OllamaModelManagerModal extends Modal {
 				statusEl.setText(t('modals.ollamaManager.serverOffline'));
 				statusEl.addClass('ia-text-error');
 			}
-		} catch (error) {
-			console.error('Failed to check Ollama server status:', error);
-			statusEl.setText(t('modals.ollamaManager.connectionError'));
-			statusEl.addClass('ia-text-error');
-		}
 	}
 
 	private renderPullSection(containerEl: HTMLElement) {
@@ -173,30 +166,13 @@ export class OllamaModelManagerModal extends Modal {
 		(buttonEl as HTMLButtonElement).disabled = true;
 
 		try {
-			const baseUrl = this.config.baseUrl || 'http://localhost:11434';
-			const url = baseUrl.endsWith('/') ? `${baseUrl}api/pull` : `${baseUrl}/api/pull`;
-
 			new Notice(t('modals.ollamaManager.notices.pulling', { name: modelName }));
-
-			const response = await requestUrl({
-				url,
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name: modelName } ),
-				throw: false,
-			});
-
-			if (response.status >= 200 && response.status < 300) {
-				new Notice(t('modals.ollamaManager.notices.pullSuccess', { name: modelName }));
-				await this.refreshModelList();
-			} else {
-				const errorText = response.text;
-				console.error('Pull model error:', errorText);
-				new Notice(t('modals.ollamaManager.notices.pullFailed', { message: errorText }));
-			}
-		} catch (_error) {
-			console.error('Failed to pull model:', _error);
-			new Notice(t('modals.ollamaManager.notices.pullFailed', { message: _error instanceof Error ? _error.message : 'Unknown error' }));
+			await this.admin.pull(this.baseUrl, modelName);
+			new Notice(t('modals.ollamaManager.notices.pullSuccess', { name: modelName }));
+			await this.refreshModelList();
+		} catch (error) {
+			console.error('Failed to pull model:', error);
+			new Notice(t('modals.ollamaManager.notices.pullFailed', { message: errorMessage(error) }));
 		} finally {
 			(buttonEl as HTMLButtonElement).disabled = false;
 			buttonEl.textContent = _originalText;
@@ -242,28 +218,12 @@ export class OllamaModelManagerModal extends Modal {
 		(buttonEl as HTMLButtonElement).disabled = true;
 
 		try {
-			const baseUrl = this.config.baseUrl || 'http://localhost:11434';
-			const url = baseUrl.endsWith('/') ? `${baseUrl}api/delete` : `${baseUrl}/api/delete`;
-
-			const response = await requestUrl({
-				url,
-				method: 'DELETE',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name: modelName } ),
-				throw: false,
-			});
-
-			if (response.status >= 200 && response.status < 300) {
-				new Notice(t('modals.ollamaManager.notices.deleted', { name: modelName }));
-				await this.refreshModelList();
-			} else {
-				const errorText = response.text;
-				console.error('Delete model error:', errorText);
-				new Notice(t('modals.ollamaManager.notices.deleteFailed', { message: errorText }));
-			}
-		} catch (_error) {
-			console.error('Failed to delete model:', _error);
-			new Notice(t('modals.ollamaManager.notices.deleteFailed', { message: _error instanceof Error ? _error.message : 'Unknown error' }));
+			await this.admin.remove(this.baseUrl, modelName);
+			new Notice(t('modals.ollamaManager.notices.deleted', { name: modelName }));
+			await this.refreshModelList();
+		} catch (error) {
+			console.error('Failed to delete model:', error);
+			new Notice(t('modals.ollamaManager.notices.deleteFailed', { message: errorMessage(error) }));
 		} finally {
 			(buttonEl as HTMLButtonElement).disabled = false;
 			buttonEl.textContent = _originalText;

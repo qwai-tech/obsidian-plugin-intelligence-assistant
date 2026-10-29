@@ -1,5 +1,5 @@
 import { WebSearchService, snippetToMarkdown } from '@/application/services/web-search-service';
-import type { IHttpClient } from '@/core/interfaces';
+import type { HttpPort } from '@qwai/obsidian-llm';
 import type { WebSearchConfig } from '@/types';
 
 describe('WebSearchService', () => {
@@ -11,9 +11,10 @@ describe('WebSearchService', () => {
 		...overrides,
 	});
 
-	const httpClient: IHttpClient = {
+	const httpClient = {
 		request: jest.fn(),
-	};
+		stream: jest.fn(),
+	} as unknown as HttpPort;
 
 	beforeEach(() => {
 		jest.clearAllMocks();
@@ -25,7 +26,7 @@ describe('WebSearchService', () => {
 	});
 
 	it('returns no results when the configured provider fails instead of returning a placeholder result', async () => {
-		const service = new WebSearchService(createConfig(), httpClient);
+		const service = new WebSearchService(() => createConfig(), httpClient);
 
 		const results = await service.search('latest TypeScript release');
 
@@ -50,7 +51,7 @@ describe('WebSearchService', () => {
 		});
 
 		it('returns HTML-free markdown snippets from a real provider search path', async () => {
-			const googleClient: IHttpClient = {
+			const googleClient = {
 				request: jest.fn(async () => ({
 					status: 200,
 					headers: {},
@@ -69,7 +70,7 @@ describe('WebSearchService', () => {
 				})),
 			};
 			const service = new WebSearchService(
-				createConfig({ provider: 'google', apiKey: 'k', googleCseId: 'cx' }),
+				() => createConfig({ provider: 'google', apiKey: 'k', googleCseId: 'cx' }),
 				googleClient,
 			);
 

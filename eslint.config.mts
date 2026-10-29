@@ -4,6 +4,31 @@ import tsparser from "@typescript-eslint/parser";
 import obsidianmd from "eslint-plugin-obsidianmd";
 import eslintComments from "@eslint-community/eslint-plugin-eslint-comments";
 
+const REQUEST_URL_INSTEAD = "Use the built-in `requestUrl` function instead of";
+const OBSIDIAN_RESTRICTED_PATHS = [
+  ...["axios", "superagent", "got", "ofetch", "ky", "node-fetch"].map((name) => ({
+    name,
+    message: `${REQUEST_URL_INSTEAD} \`${name}\`.`,
+  })),
+  { name: "moment", message: "The 'moment' package is bundled with Obsidian. Please import it from 'obsidian' instead." },
+];
+
+const layer = (forbidden: string[], message: string) => [
+  "error",
+  {
+    paths: OBSIDIAN_RESTRICTED_PATHS,
+    patterns: [{ group: forbidden.flatMap((name) => [`@/${name}/*`, `**/${name}/*`]), message }],
+  },
+];
+
+const LAYER_EXEMPTIONS = [
+  "src/application/services/plugin-data-service.ts",
+  "src/application/services/agent-memory-service.ts",
+  "src/application/services/chat.service.ts",
+  "src/application/agents/agent-engine-loop.ts",
+  "src/application/agents/agent-sense-service.ts",
+];
+
 export default defineConfig([
   {
     ignores: [
@@ -145,6 +170,37 @@ export default defineConfig([
         // fetch intentionally omitted: requestUrl cannot handle SSE streaming
       ]
     }
+  },
+
+  {
+    files: ["src/core/**/*.ts", "src/utils/**/*.ts", "src/types/**/*.ts", "src/constants.ts", "src/i18n/**/*.ts"],
+    rules: {
+      "no-restricted-imports": layer(["application", "infrastructure", "presentation"], "Core code depends on nothing above it."),
+    },
+  },
+  {
+    files: ["src/application/**/*.ts"],
+    rules: {
+      "no-restricted-imports": layer(["infrastructure", "presentation"], "Application code reaches adapters through ports, never the UI."),
+    },
+  },
+  {
+    files: ["src/infrastructure/**/*.ts"],
+    rules: {
+      "no-restricted-imports": layer(["application", "presentation"], "Adapters implement ports; they never import use cases or UI."),
+    },
+  },
+  {
+    files: ["packages/obsidian-llm/**/*.ts"],
+    rules: {
+      "no-restricted-imports": ["error", { paths: OBSIDIAN_RESTRICTED_PATHS, patterns: [{ group: ["@/*"], message: "The LLM package must not depend on the plugin." }] }],
+    },
+  },
+  {
+    files: LAYER_EXEMPTIONS,
+    rules: {
+      "no-restricted-imports": ["error", { paths: OBSIDIAN_RESTRICTED_PATHS }],
+    },
   },
 
   // E2E test files: relax strict TS rules that don't apply to test code

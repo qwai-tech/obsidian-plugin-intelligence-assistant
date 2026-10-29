@@ -4,6 +4,7 @@ import { applyConfigFieldMetadata } from '@/presentation/utils/config-field-meta
 import { OllamaModelManagerModal } from './ollama-model-manager-modal';
 import { t } from '@/i18n';
 import { TestIds } from '@/presentation/utils/test-ids';
+import type { OllamaAdmin } from '@/application/services/ollama-admin';
 
 export const LLM_PROVIDER_OPTIONS: Array<{ value: string; labelKey: string }> = [
 	{ value: 'openai', labelKey: 'modals.provider.providers.openai' },
@@ -20,7 +21,7 @@ export class ProviderConfigModal extends Modal {
 	private draft: LLMConfig;
 	private readonly onSaveCallback: (config: LLMConfig) => void | Promise<void>;
 	private providerContainer: HTMLElement | null = null;
-	constructor(app: App, initial: LLMConfig, onSave: (config: LLMConfig) => void | Promise<void>) {
+	constructor(app: App, private readonly ollama: OllamaAdmin, initial: LLMConfig, onSave: (config: LLMConfig) => void | Promise<void>) {
 		super(app);
 		const clonedDraft = JSON.parse(JSON.stringify(initial)) as unknown as LLMConfig;
 		this.draft = clonedDraft;
@@ -171,9 +172,7 @@ export class ProviderConfigModal extends Modal {
 				.addButton(button => button
 					.setButtonText(t('modals.provider.manageModels.btn'))
 					.onClick(() => {
-						new OllamaModelManagerModal(this.app, this.draft, () => {
-							// No specific action needed on close as this is just pulling models
-						}).open();
+						new OllamaModelManagerModal(this.app, this.ollama, this.draft, () => undefined).open();
 					}));
 		} else {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {

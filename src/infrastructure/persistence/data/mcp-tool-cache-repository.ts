@@ -1,7 +1,8 @@
 import { App } from 'obsidian';
 import type { CachedMCPTool } from '@/types';
-import { MCP_TOOLS_CACHE_FOLDER } from '@/constants';
-import { ensureFolderExists, buildSafeName } from '@/utils/file-system';
+import { buildSafeName } from '@/utils/file-system';
+import { pluginPaths } from '@/core/plugin-paths';
+import { JsonFile } from '@/infrastructure/persistence/json-file';
 
 interface ToolCacheFile {
 	version: string;
@@ -13,46 +14,27 @@ interface ToolCacheFile {
 const CACHE_VERSION = '1.0';
 
 export class McpToolCacheRepository {
-	private initialized = false;
+	private readonly files = new Map<string, JsonFile<ToolCacheFile | null>>();
 
-	constructor(private readonly _app: App, private readonly baseFolder = MCP_TOOLS_CACHE_FOLDER) {}
-
-	async initialize(): Promise<void> {
-		if (this.initialized) return;
-		await ensureFolderExists(this._app.vault.adapter, this.baseFolder);
-		this.initialized = true;
-	}
+	constructor(private readonly _app: App, private readonly baseFolder = pluginPaths(_app.vault.configDir).mcpToolsCache) {}
 
 	async save(serverName: string, tools: CachedMCPTool[], updatedAt?: number): Promise<void> {
-		await this.initialize();
-		await ensureFolderExists(this._app.vault.adapter, this.baseFolder);
-		const filePath = this.getCacheFilePath(serverName);
-		const payload: ToolCacheFile = {
+		await this.fileFor(serverName).write({
 			version: CACHE_VERSION,
 			server: serverName,
 			updatedAt: updatedAt ?? Date.now(),
 			tools: tools ?? []
-		};
-		await this._app.vault.adapter.write(filePath, JSON.stringify(payload, null, 2));
+		});
 	}
 
 	async load(serverName: string): Promise<ToolCacheFile | null> {
-		await this.initialize();
-		const filePath = this.getCacheFilePath(serverName);
-		if (!(await this._app.vault.adapter.exists(filePath))) {
-			return null;
-		}
-		try {
-			const content = await this._app.vault.adapter.read(filePath);
-			return JSON.parse(content) as ToolCacheFile;
-		} catch (error) {
-			console.warn(`[MCP] Failed to load cache for ${serverName}:`, error);
-			return null;
-		}
+		return await this.fileFor(serverName).read();
 	}
 
 	async loadAll(): Promise<Record<string, ToolCacheFile>> {
-		await this.initialize();
+		if (!(await this._app.vault.adapter.exists(this.baseFolder))) {
+			return {};
+		}
 		const result: Record<string, ToolCacheFile> = {};
 		try {
 			const listing = await this._app.vault.adapter.list(this.baseFolder);
@@ -74,8 +56,12 @@ export class McpToolCacheRepository {
 		return result;
 	}
 
-	private getCacheFilePath(serverName: string): string {
-		const safe = buildSafeName(serverName, 'mcp');
-		return `${this.baseFolder}/${safe}.json`;
+	private fileFor(serverName: string): JsonFile<ToolCacheFile | null> {
+		let file = this.files.get(serverName);
+		if (!file) {
+			file = new JsonFile<ToolCacheFile | null>(this._app.vault.adapter, `${this.baseFolder}/${buildSafeName(serverName, 'mcp')}.json`, () => null);
+			this.files.set(serverName, file);
+		}
+		return file;
 	}
 }

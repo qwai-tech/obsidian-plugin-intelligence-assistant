@@ -19,6 +19,8 @@ export interface HttpRequest {
 	method?: string;
 	headers?: Record<string, string>;
 	body?: string;
+	signal?: AbortSignal;
+	timeoutMs?: number;
 }
 
 export interface HttpResponse {
@@ -139,6 +141,7 @@ export function createFetchHttpPort(fetchImpl: typeof fetch = fetch): HttpPort {
 					method: req.method ?? 'POST',
 					headers: req.headers,
 					body: req.body,
+					signal: req.signal,
 				});
 			} catch (error: unknown) {
 				// A blocked request throws before any response is available.

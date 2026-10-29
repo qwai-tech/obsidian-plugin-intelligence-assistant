@@ -1,16 +1,7 @@
-import { App } from 'obsidian';
-import { DATA_FOLDER, TOKEN_USAGE_PATH } from '@/constants';
-import { ensureFolderExists } from '@/utils/file-system';
-
-export interface UsageRecord {
-	model: string;
-	provider: string;
-	promptTokens: number;
-	completionTokens: number;
-	totalTokens: number;
-	timestamp: number;
-	conversationId?: string;
-}
+import type { App } from 'obsidian';
+import type { UsageRecord } from '@/types/features/usage';
+import { pluginPaths } from '@/core/plugin-paths';
+import { JsonFile } from '@/infrastructure/persistence/json-file';
 
 interface TokenUsageFile {
 	version: number;
@@ -25,43 +16,31 @@ export interface UsageSummary {
 	callCount: number;
 }
 
+const MAX_RECORDS = 1000;
+
 export class TokenUsageRepository {
-	private initialized = false;
+	private readonly file: JsonFile<TokenUsageFile>;
 
-	constructor(private readonly _app: App, private readonly filePath = TOKEN_USAGE_PATH) {}
-
-	async initialize(): Promise<void> {
-		if (this.initialized) return;
-		await ensureFolderExists(this._app.vault.adapter, DATA_FOLDER);
-		if (!(await this._app.vault.adapter.exists(this.filePath))) {
-			await this._app.vault.adapter.write(
-				this.filePath,
-				JSON.stringify({ version: 1, records: [] }, null, 2)
-			);
-		}
-		this.initialized = true;
+	constructor(app: App, filePath = pluginPaths(app.vault.configDir).tokenUsage) {
+		this.file = new JsonFile(app.vault.adapter, filePath, () => ({ version: 1, updatedAt: 0, records: [] }));
 	}
 
 	async recordUsage(record: UsageRecord): Promise<void> {
-		await this.initialize();
-		const file = await this.readFile();
-		file.records.push(record);
-		// Keep last 1000 records to bound file size
-		if (file.records.length > 1000) {
-			file.records = file.records.slice(-1000);
-		}
-		await this.writeFile(file);
+		await this.mutate((file) => {
+			file.records.push(record);
+			if (file.records.length > MAX_RECORDS) {
+				file.records = file.records.slice(-MAX_RECORDS);
+			}
+		});
 	}
 
 	async getAllRecords(): Promise<UsageRecord[]> {
-		await this.initialize();
-		const file = await this.readFile();
+		const file = await this.records();
 		return [...file.records];
 	}
 
 	async getTotalByProvider(): Promise<Map<string, UsageSummary>> {
-		await this.initialize();
-		const file = await this.readFile();
+		const file = await this.records();
 		const map = new Map<string, UsageSummary>();
 
 		for (const r of file.records) {
@@ -76,8 +55,7 @@ export class TokenUsageRepository {
 	}
 
 	async getTotalByModel(): Promise<Map<string, UsageSummary>> {
-		await this.initialize();
-		const file = await this.readFile();
+		const file = await this.records();
 		const map = new Map<string, UsageSummary>();
 
 		for (const r of file.records) {
@@ -92,8 +70,7 @@ export class TokenUsageRepository {
 	}
 
 	async getGrandTotal(): Promise<UsageSummary> {
-		await this.initialize();
-		const file = await this.readFile();
+		const file = await this.records();
 		const s: UsageSummary = { promptTokens: 0, completionTokens: 0, totalTokens: 0, callCount: 0 };
 		for (const r of file.records) {
 			s.promptTokens += r.promptTokens;
@@ -105,39 +82,31 @@ export class TokenUsageRepository {
 	}
 
 	async getRecentRecords(limit = 10): Promise<UsageRecord[]> {
-		await this.initialize();
-		const file = await this.readFile();
+		const file = await this.records();
 		return file.records.slice(-limit).reverse();
 	}
 
 	async getRecordsByDateRange(start: number, end: number): Promise<UsageRecord[]> {
-		await this.initialize();
-		const file = await this.readFile();
+		const file = await this.records();
 		return file.records.filter(r => r.timestamp >= start && r.timestamp <= end);
 	}
 
 	async clearAll(): Promise<void> {
-		await this.initialize();
-		await this.writeFile({ version: 1, updatedAt: Date.now(), records: [] });
+		await this.mutate((file) => {
+			file.records = [];
+		});
 	}
 
-	private async readFile(): Promise<TokenUsageFile> {
-		try {
-			const raw = await this._app.vault.adapter.read(this.filePath);
-			const parsed = JSON.parse(raw) as TokenUsageFile;
-			return {
-				version: parsed.version ?? 1,
-				updatedAt: parsed.updatedAt ?? 0,
-				records: Array.isArray(parsed.records) ? parsed.records : []
-			};
-		} catch {
-			return { version: 1, updatedAt: 0, records: [] };
-		}
+	private async mutate(change: (file: TokenUsageFile) => void): Promise<void> {
+		await this.file.update((file) => {
+			file.records = Array.isArray(file.records) ? file.records : [];
+			change(file);
+			file.updatedAt = Date.now();
+		});
 	}
 
-	private async writeFile(file: TokenUsageFile): Promise<void> {
-		file.updatedAt = Date.now();
-		await ensureFolderExists(this._app.vault.adapter, DATA_FOLDER);
-		await this._app.vault.adapter.write(this.filePath, JSON.stringify(file, null, 2));
+	private async records(): Promise<TokenUsageFile> {
+		const file = await this.file.read();
+		return { ...file, records: Array.isArray(file.records) ? file.records : [] };
 	}
 }

@@ -1,8 +1,8 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  // @agentic-kernel/core ships ESM-only; transform its .js with ts-jest (allowJs)
-  // so the CommonJS Jest runtime can load it. Production bundles it via esbuild.
+  // ESM-only dependencies (see transformIgnorePatterns) ship .js; transform it
+  // with ts-jest (allowJs) so the CommonJS Jest runtime can load it.
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
     '^.+\\.jsx?$': ['ts-jest', { tsconfig: { allowJs: true, checkJs: false, isolatedModules: true } }],
@@ -15,13 +15,6 @@ module.exports = {
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   moduleNameMapper: {
-    // Jest's resolver ignores the package's `exports` map (it has no legacy
-    // `main`), so point directly at the ESM dist entry; its relative .js imports
-    // resolve normally and get transformed via the transformIgnorePatterns allowlist.
-    '^@agentic-kernel/core$': '<rootDir>/node_modules/@agentic-kernel/core/dist/index.js',
-    '^@agentic-kernel/conformance$': '<rootDir>/node_modules/@agentic-kernel/conformance/dist/index.js',
-    // The conformance suites import test primitives from vitest; bridge to jest.
-    '^vitest$': '<rootDir>/__mocks__/vitest.ts',
     '^obsidian$': '<rootDir>/__mocks__/obsidian.ts',
     '^marked$': '<rootDir>/__mocks__/marked.ts',
     '^@qwai/obsidian-llm$': '<rootDir>/packages/obsidian-llm/src/index.ts',
@@ -34,7 +27,7 @@ module.exports = {
     '!src/test-support/**'
   ],
   transformIgnorePatterns: [
-    'node_modules/(?!(marked|@agentic-kernel)/)'
+    'node_modules/(?!(marked)/)'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',

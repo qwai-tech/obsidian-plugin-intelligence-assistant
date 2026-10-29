@@ -1,16 +1,16 @@
 // src/application/services/plugin-data-service.ts
 import { App } from 'obsidian';
+import type { PersistUnit } from '@/application/settings/settings-store';
 import type { PluginSettings, LLMConfig, SystemPrompt, Agent, MCPServerConfig } from '@/types';
-import {
-	AgentRepository,
-	PromptRepository,
-	ModelCacheRepository,
-	ProviderRepository,
-	McpServerRepository,
-	McpToolCacheRepository,
-	TokenUsageRepository,
-	AgentMemoryRepository,
-} from '@/infrastructure/persistence';
+import { AgentRepository } from '@/infrastructure/persistence/data/agent-repository';
+import { BUILTIN_AGENT_PRESETS } from '@/application/agents/presets/builtin-agents';
+import { PromptRepository } from '@/infrastructure/persistence/data/prompt-repository';
+import { ModelCacheRepository } from '@/infrastructure/persistence/data/model-cache-repository';
+import { ProviderRepository } from '@/infrastructure/persistence/data/provider-repository';
+import { McpServerRepository } from '@/infrastructure/persistence/data/mcp-server-repository';
+import { McpToolCacheRepository } from '@/infrastructure/persistence/data/mcp-tool-cache-repository';
+import { TokenUsageRepository } from '@/infrastructure/persistence/data/token-usage-repository';
+import { AgentMemoryRepository } from '@/infrastructure/persistence/data/agent-memory-repository';
 
 export interface HydrateResult {
 	llmConfigs?: LLMConfig[];
@@ -35,7 +35,7 @@ export class PluginDataService {
 
 	async initialize(): Promise<void> {
 		this.promptRepository = new PromptRepository(this.app);
-		this.agentRepository = new AgentRepository(this.app);
+		this.agentRepository = new AgentRepository(this.app, BUILTIN_AGENT_PRESETS);
 		this.modelCacheRepository = new ModelCacheRepository(this.app);
 		this.providerRepository = new ProviderRepository(this.app);
 		this.mcpServerRepository = new McpServerRepository(this.app);
@@ -44,14 +44,7 @@ export class PluginDataService {
 		this.agentMemoryRepo = new AgentMemoryRepository(this.app);
 
 		await Promise.all([
-			this.promptRepository.initialize(),
 			this.agentRepository.initialize(),
-			this.modelCacheRepository.initialize(),
-			this.providerRepository.initialize(),
-			this.mcpServerRepository.initialize(),
-			this.mcpToolCacheRepository.initialize(),
-			this.tokenUsageRepo.initialize(),
-			this.agentMemoryRepo.initialize(),
 		]);
 	}
 
@@ -113,15 +106,27 @@ export class PluginDataService {
 		return result;
 	}
 
-	async persistAll(settings: PluginSettings): Promise<void> {
-		await Promise.all([
-			this.promptRepository.saveAll(settings.systemPrompts ?? [], settings.activeSystemPromptId ?? null),
-			this.agentRepository.saveAll(settings.agents ?? [], settings.activeAgentId ?? null),
-			this.modelCacheRepository.saveFromConfigs(settings.llmConfigs ?? []),
-			this.providerRepository.saveAll(settings.llmConfigs ?? []),
-			this.mcpServerRepository.saveAll(settings.mcpServers ?? []),
-			this.persistMcpToolCaches(settings.mcpServers ?? []),
-		]);
+	async persist(settings: PluginSettings, units: ReadonlySet<PersistUnit>): Promise<void> {
+		const writes: Array<Promise<void>> = [];
+		if (units.has('providers')) {
+			writes.push(
+				this.modelCacheRepository.saveFromConfigs(settings.llmConfigs ?? []),
+				this.providerRepository.saveAll(settings.llmConfigs ?? []),
+			);
+		}
+		if (units.has('prompts')) {
+			writes.push(this.promptRepository.saveAll(settings.systemPrompts ?? [], settings.activeSystemPromptId ?? null));
+		}
+		if (units.has('agents')) {
+			writes.push(this.agentRepository.saveAll(settings.agents ?? [], settings.activeAgentId ?? null));
+		}
+		if (units.has('mcp')) {
+			writes.push(
+				this.mcpServerRepository.saveAll(settings.mcpServers ?? []),
+				this.persistMcpToolCaches(settings.mcpServers ?? []),
+			);
+		}
+		await Promise.all(writes);
 	}
 
 	async persistMcpToolCaches(servers: MCPServerConfig[]): Promise<void> {

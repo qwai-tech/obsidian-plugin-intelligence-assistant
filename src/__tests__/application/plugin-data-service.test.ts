@@ -12,6 +12,7 @@ function makeApp(files: Record<string, string> = {}) {
 		}),
 		write: jest.fn(async (path: string, data: string) => { store[path] = data; }),
 		remove: jest.fn(async (path: string) => { delete store[path]; }),
+		rename: jest.fn(async (from: string, to: string) => { store[to] = store[from]; delete store[from]; }),
 		mkdir: jest.fn(async () => {}),
 		list: jest.fn(async () => ({ files: [], folders: [] })),
 	};
@@ -89,11 +90,11 @@ describe('PluginDataService', () => {
 			const svc = new PluginDataService(app);
 			await svc.initialize();
 
-			// Pre-populate via persistAll
+			// Pre-populate via persist
 			const settings = makeSettings({
 				llmConfigs: [{ id: 'p1', provider: 'openai', apiKey: 'k', modelId: 'gpt-4o' } as any],
 			});
-			await svc.persistAll(settings);
+			await svc.persist(settings, new Set(['providers']));
 
 			// Now a second service on the same store should hydrate from repo
 			const svc2 = new PluginDataService(app);
@@ -104,8 +105,8 @@ describe('PluginDataService', () => {
 		});
 	});
 
-	describe('persistAll', () => {
-		it('writes all settings to repositories', async () => {
+	describe('persist', () => {
+		it('writes the units it is given', async () => {
 			const { app, store } = makeApp();
 			const svc = new PluginDataService(app);
 			await svc.initialize();
@@ -113,9 +114,21 @@ describe('PluginDataService', () => {
 				systemPrompts: [{ id: 'sp1', name: 'Test', content: 'Be helpful', enabled: true } as any],
 				activeSystemPromptId: 'sp1',
 			});
-			await svc.persistAll(settings);
+			await svc.persist(settings, new Set(['prompts']));
 			const promptKeys = Object.keys(store).filter(k => k.includes('prompt'));
 			expect(promptKeys.length).toBeGreaterThan(0);
+		});
+
+		it('leaves units it is not given untouched', async () => {
+			const { app } = makeApp();
+			const svc = new PluginDataService(app);
+			await svc.initialize();
+			app.vault.adapter.write.mockClear();
+
+			await svc.persist(makeSettings({ llmConfigs: [{ provider: 'openai', apiKey: 'k' } as any] }), new Set(['prompts']));
+
+			const written = (app.vault.adapter.write.mock.calls as Array<[string]>).map(([path]) => path);
+			expect(written.some((path) => /provider|model/.test(path))).toBe(false);
 		});
 	});
 });
