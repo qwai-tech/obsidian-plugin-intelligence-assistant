@@ -74,7 +74,7 @@ export class SettingsStore {
 		}
 	}
 
-	async save(): Promise<void> {
+	private async save(): Promise<void> {
 		const settings = this.current;
 		const next = this.snapshot(settings);
 		const changed = new Set<PersistUnit>([...next].filter(([unit, value]) => this.snapshots.get(unit) !== value).map(([unit]) => unit));

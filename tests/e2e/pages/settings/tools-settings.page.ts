@@ -96,8 +96,7 @@ export class ToolsSettingsPage extends BasePage {
 					};
 					plugins: {
 						plugins: Record<string, {
-							settings: { openApiTools?: OpenApiToolConfig[] };
-							saveSettings(): Promise<void>;
+							updateSettings(change: (settings: { openApiTools: OpenApiToolConfig[] }) => void): Promise<void>;
 							services: { tools: { reloadOpenApi(id: string): Promise<number> } };
 						}>;
 					};
@@ -125,11 +124,9 @@ export class ToolsSettingsPage extends BasePage {
 				}
 				await app.vault.create(path, data);
 			}
-			plugin.settings.openApiTools = [
-				...(plugin.settings.openApiTools ?? []).filter(item => item.id !== toolConfig.id),
-				toolConfig,
-			];
-			await plugin.saveSettings();
+			await plugin.updateSettings((settings) => {
+				settings.openApiTools = [...settings.openApiTools.filter(item => item.id !== toolConfig.id), toolConfig];
+			});
 			const loaded = await plugin.services.tools.reloadOpenApi(toolConfig.id);
 			if (loaded < 1) {
 				throw new Error(`OpenAPI tool did not load: ${toolConfig.id}`);
@@ -145,18 +142,15 @@ export class ToolsSettingsPage extends BasePage {
 				app: {
 					plugins: {
 						plugins: Record<string, {
-							settings: { cliTools?: CliToolConfig[] };
-							saveSettings(): Promise<void>;
+							updateSettings(change: (settings: { cliTools: CliToolConfig[] }) => void): Promise<void>;
 							services: { tools: { reloadCli(): Promise<void> } };
 						}>;
 					};
 				};
 			}).app.plugins.plugins[pluginId];
-			plugin.settings.cliTools = [
-				...(plugin.settings.cliTools ?? []).filter(item => item.id !== toolConfig.id),
-				toolConfig,
-			];
-			await plugin.saveSettings();
+			await plugin.updateSettings((settings) => {
+				settings.cliTools = [...settings.cliTools.filter(item => item.id !== toolConfig.id), toolConfig];
+			});
 			await plugin.services.tools.reloadCli();
 		}, PLUGIN_ID, config);
 		await this.open('cli');

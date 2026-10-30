@@ -8,5 +8,4 @@ export interface PluginHost {
 	readonly settings: PluginSettings;
 	readonly services: AppServices;
 	updateSettings(change: (settings: PluginSettings) => void): Promise<void>;
-	saveSettings(): Promise<void>;
 }

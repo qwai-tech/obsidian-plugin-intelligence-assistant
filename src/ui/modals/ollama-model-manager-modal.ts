@@ -10,10 +10,10 @@ import { errorMessage } from '@/core/utils/errors';
 
 export class OllamaModelManagerModal extends Modal {
 	private config: LLMConfig;
-	private onUpdate: () => void;
+	private onUpdate: (models: ModelInfo[]) => void;
 	private models: ModelInfo[];
 
-	constructor(app: App, private readonly admin: OllamaAdmin, config: LLMConfig, onUpdate: () => void) {
+	constructor(app: App, private readonly admin: OllamaAdmin, config: LLMConfig, onUpdate: (models: ModelInfo[]) => void) {
 		super(app);
 		this.config = config;
 		this.onUpdate = onUpdate;
@@ -248,8 +248,7 @@ export class OllamaModelManagerModal extends Modal {
 			this.contentEl.empty();
 			this.onOpen();
 
-			// Notify parent to save and refresh
-			this.onUpdate();
+			this.onUpdate(models);
 
 			new Notice(t('modals.ollamaManager.notices.refreshSuccess'));
 		} catch (_error) {

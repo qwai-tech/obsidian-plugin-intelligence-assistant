@@ -38,7 +38,7 @@ export class ToolSourceManager {
 		readonly registry: ToolRegistry,
 		private readonly factory: ToolSourceFactory,
 		private readonly settings: () => ToolSourceSettings,
-		private readonly persist: () => Promise<void>,
+		private readonly update: (change: (settings: ToolSourceSettings) => void) => Promise<void>,
 	) {}
 
 	async initialize(): Promise<void> {
@@ -70,7 +70,6 @@ export class ToolSourceManager {
 
 	async syncMcpServers(): Promise<void> {
 		const enabled = new Map(this.settings().mcpServers.filter((server) => server.enabled).map((server) => [server.name, server]));
-		let restarted = false;
 		for (const name of this.registry.sourceIds('mcp')) {
 			const server = enabled.get(name);
 			if (server && mcpLaunchKey(server) === this.runningMcpConfigs.get(name)) {
@@ -80,15 +79,12 @@ export class ToolSourceManager {
 			if (server) {
 				try {
 					await this.loadMcp(server);
-					restarted = true;
 				} catch (error) {
 					console.error(`[MCP] Restart failed for ${name}:`, error);
 				}
 			}
 		}
-		if (!(await this.connectAutoMcpServers()) && restarted) {
-			await this.persist();
-		}
+		await this.connectAutoMcpServers();
 	}
 
 	async reloadBuiltin(): Promise<void> {
@@ -136,9 +132,7 @@ export class ToolSourceManager {
 	}
 
 	async connectMcp(server: MCPServerConfig): Promise<number> {
-		const count = await this.loadMcp(server);
-		await this.persist();
-		return count;
+		return this.loadMcp(server);
 	}
 
 	async disconnectMcp(serverName: string): Promise<void> {
@@ -155,7 +149,6 @@ export class ToolSourceManager {
 				results.push({ server: server.name, tools: 0, error: errorMessage(error) });
 			}
 		}
-		await this.persist();
 		return results;
 	}
 
@@ -182,9 +175,6 @@ export class ToolSourceManager {
 				console.error(`[MCP] Auto-connect failed for ${server.name}:`, error);
 			}
 		}
-		if (connected > 0) {
-			await this.persist();
-		}
 		return connected > 0;
 	}
 
@@ -192,23 +182,31 @@ export class ToolSourceManager {
 		if (!this.isMcpConnected(server.name)) {
 			this.registry.registerSource(this.factory.mcp(server));
 		}
+		let count: number;
 		try {
-			const tools = await this.registry.reloadSource('mcp', server.name);
+			count = (await this.registry.reloadSource('mcp', server.name)).length;
 			this.runningMcpConfigs.set(server.name, mcpLaunchKey(server));
-			this.cacheLiveTools(server);
-			return tools.length;
 		} catch (error) {
 			await this.disconnectMcp(server.name);
 			throw error;
 		}
+		await this.cacheLiveTools(server.name);
+		return count;
 	}
 
-	private cacheLiveTools(server: MCPServerConfig): void {
-		const tools = this.toolsOf('mcp').filter((t) => t.origin.sourceId === server.name);
-		if (tools.length > 0) {
-			server.cachedTools = snapshotMcpTools(tools);
-			server.cacheTimestamp = Date.now();
+	private async cacheLiveTools(serverName: string): Promise<void> {
+		const tools = this.toolsOf('mcp').filter((t) => t.origin.sourceId === serverName);
+		if (tools.length === 0) {
+			return;
 		}
+		const cachedTools = snapshotMcpTools(tools);
+		await this.update((settings) => {
+			const server = settings.mcpServers.find((candidate) => candidate.name === serverName);
+			if (server) {
+				server.cachedTools = cachedTools;
+				server.cacheTimestamp = Date.now();
+			}
+		});
 	}
 
 	private toolsOf(kind: 'mcp' | 'cli') {

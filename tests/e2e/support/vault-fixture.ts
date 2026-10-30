@@ -153,18 +153,19 @@ export class VaultFixture {
 					plugins: {
 						plugins: Record<string, {
 							settings?: Record<string, unknown>;
-							saveSettings?: () => Promise<void>;
+							updateSettings?: (change: (settings: Record<string, unknown>) => void) => Promise<void>;
 							services?: { tools: { registry: { reload(): Promise<void> } } };
 						}>;
 					};
 				};
 			}).app.plugins.plugins[pluginId];
-			if (!plugin?.settings || typeof plugin.saveSettings !== 'function') {
+			if (!plugin?.settings || typeof plugin.updateSettings !== 'function') {
 				throw new Error(`Plugin settings not available: ${pluginId}`);
 			}
 
-			Object.assign(plugin.settings, patch);
-			await plugin.saveSettings();
+			await plugin.updateSettings((settings) => {
+				Object.assign(settings, patch);
+			});
 			await plugin.services?.tools.registry.reload();
 		}, PLUGIN_ID, settingsPatch);
 	}

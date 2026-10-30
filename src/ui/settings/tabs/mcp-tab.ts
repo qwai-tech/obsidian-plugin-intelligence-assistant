@@ -191,7 +191,9 @@ export function displayMCPTab(
 		toggleBtn.addEventListener('click', () => {
 			void (async () => {
 				const wasEnabled = server.enabled;
-				server.enabled = !server.enabled;
+				await plugin.updateSettings(() => {
+					server.enabled = !wasEnabled;
+				});
 				try {
 					if (!server.enabled && wasEnabled && isConnected) {
 						await plugin.services.tools.disconnectMcp(server.name);
@@ -206,7 +208,6 @@ export function displayMCPTab(
 						}
 					}
 				} finally {
-					await plugin.saveSettings();
 					refreshDisplay();
 				}
 			})();

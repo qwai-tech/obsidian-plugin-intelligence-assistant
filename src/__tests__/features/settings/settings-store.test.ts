@@ -82,9 +82,8 @@ describe('SettingsStore', () => {
 		const store = new SettingsStore(persistence, memoryVault());
 		await store.load();
 
-		store.current.ragConfig.chunkSize = 777;
-		await store.save();
-		await store.save();
+		await store.update((settings) => { settings.ragConfig.chunkSize = 777; });
+		await store.update(() => undefined);
 
 		expect(writes).toEqual([new Set(['config'])]);
 	});
@@ -96,9 +95,10 @@ describe('SettingsStore', () => {
 		const listener = jest.fn();
 		store.onChange(listener);
 
-		store.current.llmConfigs.push({ provider: 'ollama' } as LLMConfig);
-		store.current.defaultModel = 'other';
-		await store.save();
+		await store.update((settings) => {
+			settings.llmConfigs.push({ provider: 'ollama' } as LLMConfig);
+			settings.defaultModel = 'other';
+		});
 
 		expect(listener).toHaveBeenCalledWith(new Set(['providers', 'config']));
 	});
@@ -160,10 +160,8 @@ describe('SettingsStore', () => {
 		const store = new SettingsStore(persistence, vault);
 		await store.load();
 
-		store.current.llmConfigs[0].apiKey = 'sk-other';
-		await store.save();
-		store.current.llmConfigs[0].apiKeySecret = 'other';
-		await store.save();
+		await store.update((settings) => { settings.llmConfigs[0].apiKey = 'sk-other'; });
+		await store.update((settings) => { settings.llmConfigs[0].apiKeySecret = 'other'; });
 
 		expect(writes).toEqual([new Set(['providers'])]);
 		expect(written.join()).not.toContain('sk-');

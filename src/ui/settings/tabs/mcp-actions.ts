@@ -1,6 +1,6 @@
 import { App, Notice } from 'obsidian';
 import type { PluginHost } from '@/ui/plugin-host';
-import type { MCPServerConfig } from '@/features/tools';
+import type { CachedMCPTool, MCPServerConfig } from '@/features/tools';
 import { t } from '@/i18n';
 import { MCPServerModal } from '@/ui/modals/mcp-server-modal';
 
@@ -15,7 +15,7 @@ export async function testAllMcpConnections(plugin: PluginHost): Promise<void> {
 	new Notice(t('settings.mcp.notices.testingAll', { count: mcpServers.length }));
 
 	const results: {name: string, success: boolean, error?: string}[] = [];
-	let settingsDirty = false;
+	const probed = new Map<string, CachedMCPTool[]>();
 
 	for (const server of mcpServers) {
 		if (!server.enabled) {
@@ -24,10 +24,7 @@ export async function testAllMcpConnections(plugin: PluginHost): Promise<void> {
 		}
 
 		try {
-			const tools = await plugin.services.tools.probeMcp(server);
-			server.cachedTools = tools;
-			server.cacheTimestamp = Date.now();
-			settingsDirty = true;
+			probed.set(server.name, await plugin.services.tools.probeMcp(server));
 
 			results.push({
 				name: server.name,
@@ -44,8 +41,16 @@ export async function testAllMcpConnections(plugin: PluginHost): Promise<void> {
 		}
 	}
 
-	if (settingsDirty) {
-		await plugin.saveSettings();
+	if (probed.size > 0) {
+		await plugin.updateSettings((settings) => {
+			for (const server of settings.mcpServers) {
+				const tools = probed.get(server.name);
+				if (tools) {
+					server.cachedTools = tools;
+					server.cacheTimestamp = Date.now();
+				}
+			}
+		});
 	}
 
 	// Show results

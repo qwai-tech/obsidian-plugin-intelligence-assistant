@@ -47,19 +47,23 @@ export function displayModelsTab(
 			try {
 			const { ModelManager } = await import('@qwai/obsidian-llm');
 
-			for (const config of plugin.settings.llmConfigs) {
+			const refreshed = new Map<number, Awaited<ReturnType<typeof ModelManager.getModelsForConfig>>>();
+			for (const [index, config] of plugin.settings.llmConfigs.entries()) {
 				try {
 					new Notice(t('settings.models.notices.fetching', { provider: config.provider }));
-					const models = await ModelManager.getModelsForConfig(config, true);
-					config.cachedModels = models;
-					config.cacheTimestamp = Date.now();
+					refreshed.set(index, await ModelManager.getModelsForConfig(config, true));
 				} catch (error) {
 					console.error(`Failed to refresh models for ${config.provider}:`, error);
 					new Notice(t('settings.models.notices.fetchFailed', { provider: config.provider }));
 				}
 			}
 
-			await plugin.saveSettings();
+			await plugin.updateSettings((settings) => {
+				for (const [index, models] of refreshed) {
+					settings.llmConfigs[index].cachedModels = models;
+					settings.llmConfigs[index].cacheTimestamp = Date.now();
+				}
+			});
 			new Notice(t('settings.models.notices.refreshed'));
 
 			// Redisplay the tab

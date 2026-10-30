@@ -136,7 +136,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	}
 
 	async ensureDefaultAgent(): Promise<void> {
-		await ensureDefaultAgentService(this.settings, async () => await this.saveSettings());
+		await this.updateSettings(ensureDefaultAgentService);
 	}
 
 	private async loadStorage(pluginDir: string): Promise<void> {
@@ -162,7 +162,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		this.owned = createServices({
 			app: this.app,
 			settings: () => this.settings,
-			saveSettings: () => this.saveSettings(),
+			updateSettings: (change) => this.updateSettings(change),
 			paths: pluginPaths(pluginDir),
 			data: this.dataService,
 			conversations: this.conversations,
@@ -202,8 +202,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 					getModels: () => ModelManager.getAllAvailableModels(this.settings.llmConfigs),
 					getCurrentModelId: () => this.settings.defaultModel,
 					applyModel: async (modelId: string) => {
-						this.settings.defaultModel = modelId;
-						await this.saveSettings();
+						await this.updateSettings((settings) => {
+							settings.defaultModel = modelId;
+						});
 					},
 				});
 			},
@@ -217,8 +218,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 				&& (process.env.NODE_ENV === 'test' || Boolean(process.env.WDIO_WORKER_ID));
 			if (this.store?.peek() && currentVersion !== (this.settings.lastVersion || '0.0.0') && !isAutomatedTest) {
 				new ChangelogModal(this.app, currentVersion, getLanguage().startsWith('zh')).open();
-				this.settings.lastVersion = currentVersion;
-				await this.saveSettings();
+				await this.updateSettings((settings) => {
+					settings.lastVersion = currentVersion;
+				});
 			}
 		});
 
@@ -244,10 +246,6 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		await this.store.update(change);
 	}
 
-	async saveSettings(): Promise<void> {
-		await this.store.save();
-	}
-
 	private async migrateConversationsIfNeeded() {
 		const migration = new ConversationMigrationService(this.conversations);
 		const legacyConversations = this.store.legacyConversations;
@@ -257,8 +255,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			
 			if (success) {
 				legacyConversations.length = 0;
-				this.settings.conversations = [];
-				await this.saveSettings();
+				await this.updateSettings((settings) => {
+					settings.conversations = [];
+				});
 			} else {
 				console.error('Conversation migration failed');
 			}

@@ -5,12 +5,15 @@ import type { CLIToolConfig } from '@/features/tools';
 import { DEFAULT_CLI_TIMEOUT } from '@/features/tools';
 
 export class CLIToolConfigModal extends Modal {
+	private readonly config: CLIToolConfig;
+
 	constructor(
 		private readonly plugin: PluginHost,
-		private readonly config: CLIToolConfig,
+		config: CLIToolConfig,
 		private readonly onChange: () => void
 	) {
 		super(plugin.app);
+		this.config = JSON.parse(JSON.stringify(config)) as CLIToolConfig;
 	}
 
 	onOpen(): void {
@@ -19,7 +22,11 @@ export class CLIToolConfigModal extends Modal {
 		this.setTitle(this.config.name || t('settings.tools.cli.modal.defaultTitle'));
 
 		const persist = async () => {
-			await this.plugin.saveSettings();
+			const saved = JSON.parse(JSON.stringify(this.config)) as CLIToolConfig;
+			await this.plugin.updateSettings((settings) => {
+				const index = settings.cliTools.findIndex(tool => tool.id === saved.id);
+				settings.cliTools.splice(index === -1 ? settings.cliTools.length : index, 1, saved);
+			});
 			await this.plugin.services.tools.reloadCli();
 			this.onChange();
 		};

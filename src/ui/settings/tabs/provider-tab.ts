@@ -257,9 +257,13 @@ export function displayProviderTab(
 			manageBtn.addClass('ia-button');
 			manageBtn.addClass('ia-button--ghost');
 			manageBtn.addEventListener('click', () => {
-				new OllamaModelManagerModal(app, plugin.services.ollama, config, () => {
+				const draft = JSON.parse(JSON.stringify(config)) as LLMConfig;
+				new OllamaModelManagerModal(app, plugin.services.ollama, draft, (models) => {
 					void (async () => {
-						await plugin.saveSettings();
+						await plugin.updateSettings((settings) => {
+							settings.llmConfigs[index].cachedModels = models;
+							settings.llmConfigs[index].cacheTimestamp = Date.now();
+						});
 						refreshDisplay();
 					})();
 				}).open();

@@ -78,11 +78,9 @@ describe('ConversationManager', () => {
 				titleSummaryPrompt: null,
 				llmConfigs: [],
 			},
-			saveSettings: jest.fn().mockResolvedValue(undefined),
-			async updateSettings(change: (settings: unknown) => void) {
+			updateSettings: jest.fn(async function (this: { settings: unknown }, change: (settings: unknown) => void) {
 				change(this.settings);
-				await this.saveSettings();
-			},
+			}),
 		} as any;
 
 		state = new ChatViewState();
@@ -216,7 +214,7 @@ describe('ConversationManager', () => {
 		it('should save settings', async () => {
 			await manager.createNewConversation();
 
-			expect(mockPlugin.saveSettings).toHaveBeenCalled();
+			expect(mockPlugin.updateSettings).toHaveBeenCalled();
 		});
 
 		it('should emit conversation-created event', async () => {
@@ -235,9 +233,7 @@ describe('ConversationManager', () => {
 			// Create a new conversation
 			await manager.createNewConversation();
 			
-			// We can't test the actual state change here because the test doesn't run the full initialization flow
-			// But we verify the saveSettings call was made
-			expect(mockPlugin.saveSettings).toHaveBeenCalled();
+			expect(mockPlugin.updateSettings).toHaveBeenCalled();
 		});
 	});
 

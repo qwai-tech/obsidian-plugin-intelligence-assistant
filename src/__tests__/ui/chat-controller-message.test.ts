@@ -34,7 +34,6 @@ function makePlugin(overrides: Partial<{ settings: Partial<{ llmConfigs: unknown
 			ragConfig: { enabled: false },
 			...overrides.settings,
 		},
-		saveSettings: jest.fn().mockResolvedValue(undefined),
 	} as any;
 }
 

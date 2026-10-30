@@ -5,7 +5,7 @@ describe('ChatView lifecycle', () => {
 		const ragManager = { destroy: jest.fn(async () => undefined) };
 		const view = {
 			ragManager,
-			plugin: { saveSettings: jest.fn(async () => undefined) },
+			plugin: {},
 		};
 
 		await ChatView.prototype.onClose.call(view);

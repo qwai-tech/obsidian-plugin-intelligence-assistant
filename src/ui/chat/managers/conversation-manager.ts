@@ -94,7 +94,9 @@ export class ConversationManager extends Events {
 		if (conv.config) {
 			applyConversationSettings(this.state, conv.config, conv.mode ?? this.state.mode);
 		}
-		this.plugin.settings.activeConversationId = conv.id;
+		void this.plugin.updateSettings((settings) => {
+			settings.activeConversationId = conv.id;
+		});
 
 		this.chatContainer.empty();
 		this.renderMessageList(this.state.messages);
@@ -118,7 +120,6 @@ export class ConversationManager extends Events {
 		const conv = await this.storage.loadConversation(convId);
 		if (conv) {
 			this.loadConversation(conv);
-			await this.plugin.saveSettings();
 			this.closeListUnlessPinned();
 		}
 	}

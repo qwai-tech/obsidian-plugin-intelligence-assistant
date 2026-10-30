@@ -32,24 +32,16 @@ function builtinAccess(toolNames: string[]): AgentToolAccess {
  * Ensure the default agent exists and is properly configured
  * Creates the default agent if it doesn't exist and syncs enabled tools
  */
-export async function ensureDefaultAgent(
-	settings: PluginSettings,
-	saveSettings: () => Promise<void>
-): Promise<void> {
-	let settingsDirty = false;
+export function ensureDefaultAgent(settings: PluginSettings): void {
 	const assistantPromptId = 'builtin-intelligence-assistant';
 
-	if (settings.defaultChatMode !== 'agent') {
-		settings.defaultChatMode = 'agent';
-		settingsDirty = true;
-	}
+	settings.defaultChatMode = 'agent';
 
 	// Phase F: Ensure all builtin prompts are present and up-to-date (readonly)
 	for (const preset of BUILTIN_PROMPT_PRESETS) {
 		const existing = settings.systemPrompts.find(p => p.id === preset.id);
 		if (!existing) {
 			settings.systemPrompts.push({ ...preset });
-			settingsDirty = true;
 		} else if (preset.readonly) {
 			// Force update content and metadata for readonly builtins
 			if (existing.content !== preset.content || existing.name !== preset.name || !existing.readonly) {
@@ -57,7 +49,6 @@ export async function ensureDefaultAgent(
 				existing.name = preset.name;
 				existing.readonly = true;
 				existing.updatedAt = Date.now();
-				settingsDirty = true;
 			}
 		}
 	}
@@ -68,7 +59,6 @@ export async function ensureDefaultAgent(
 		const assistantPreset = BUILTIN_PROMPT_PRESETS.find(p => p.id === 'builtin-intelligence-assistant')!;
 		legacyPrompt.content = assistantPreset.content;
 		legacyPrompt.name = 'Default Assistant (Optimized)';
-		settingsDirty = true;
 	}
 
 	const enabledBuiltInTools = settings.builtInTools
@@ -90,16 +80,13 @@ export async function ensureDefaultAgent(
 		// Force update existing default agent to use the new optimized prompt and settings
 		if (defaultAgent.systemPromptId !== assistantPromptId) {
 			defaultAgent.systemPromptId = assistantPromptId;
-			settingsDirty = true;
 		}
 		if (defaultAgent.temperature !== 0.5) {
 			defaultAgent.temperature = 0.5;
-			settingsDirty = true;
 		}
 		const newDesc = 'Advanced Obsidian Agent specializing in multi-step vault operations, spatial thinking, and long-term knowledge management.';
 		if (defaultAgent.description !== newDesc) {
 			defaultAgent.description = newDesc;
-			settingsDirty = true;
 		}
 	}
 
@@ -132,14 +119,12 @@ export async function ensureDefaultAgent(
 			updatedAt: timestamp
 		};
 		settings.agents.unshift(defaultAgent);
-		settingsDirty = true;
 	}
 
 	// Ensure all builtin expert agents are present
 	for (const preset of BUILTIN_AGENT_PRESETS) {
 		if (!settings.agents.some(a => a.id === preset.id)) {
 			settings.agents.push({ ...preset });
-			settingsDirty = true;
 		}
 	}
 
@@ -148,7 +133,6 @@ export async function ensureDefaultAgent(
 	if (ensuredAgent.maxTokens === LEGACY_DEFAULT_AGENT_MAX_TOKENS) {
 		ensuredAgent.maxTokens = DEFAULT_MODEL_CONFIG.MAX_TOKENS;
 		ensuredAgent.updatedAt = Date.now();
-		settingsDirty = true;
 	}
 
 	// Sync the default agent's builtin tool access to whatever is globally
@@ -175,21 +159,14 @@ export async function ensureDefaultAgent(
 				delete ensuredAgent.toolAccess.sources['builtin:builtin'];
 			}
 			ensuredAgent.updatedAt = Date.now();
-			settingsDirty = true;
 		}
 	}
 
 	if (!settings.systemPrompts.some(prompt => prompt.id === ensuredAgent.systemPromptId)) {
 		ensuredAgent.systemPromptId = defaultPromptId;
-		settingsDirty = true;
 	}
 
 	if (!settings.activeAgentId) {
 		settings.activeAgentId = ensuredAgent.id;
-		settingsDirty = true;
-	}
-
-	if (settingsDirty) {
-		await saveSettings();
 	}
 }

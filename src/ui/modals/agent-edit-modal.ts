@@ -323,13 +323,15 @@ export class AgentEditModal extends Modal {
 						const timestamp = Date.now();
 						const newPromptId = uniquePromptId(name, this.plugin.settings.systemPrompts.map(prompt => prompt.id));
 
-						this.plugin.settings.systemPrompts.push({
-							id: newPromptId,
-							name,
-							content,
-							enabled: true,
-							createdAt: timestamp,
-							updatedAt: timestamp
+						await this.plugin.updateSettings((settings) => {
+							settings.systemPrompts.push({
+								id: newPromptId,
+								name,
+								content,
+								enabled: true,
+								createdAt: timestamp,
+								updatedAt: timestamp
+							});
 						});
 						this.agent.systemPromptId = newPromptId;
 						this.selectedSystemPromptId = newPromptId;
@@ -337,9 +339,7 @@ export class AgentEditModal extends Modal {
 						this.agent.systemPromptId = this.selectedSystemPromptId;
 					}
 
-					// All edits already mutate this.agent.toolAccess directly;
-					// no recompute step needed.
-				this.agent.updatedAt = Date.now();
+					this.agent.updatedAt = Date.now();
 					await this.onSaveCallback(this.agent);
 					this.close();
 				})();

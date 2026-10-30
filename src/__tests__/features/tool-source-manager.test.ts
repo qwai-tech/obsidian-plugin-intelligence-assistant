@@ -65,9 +65,9 @@ const setup = (settings: ToolSourceSettings) => {
 		cli: (config) => track(fakeSource('cli', config.id, [`${config.id}_run`])),
 	};
 	const registry = new ToolRegistry();
-	const persist = jest.fn(async () => undefined);
-	const manager = new ToolSourceManager(registry, factory, () => settings, persist);
-	return { manager, registry, persist, created, openApiRequests };
+	const update = jest.fn(async (change: (current: ToolSourceSettings) => void) => change(settings));
+	const manager = new ToolSourceManager(registry, factory, () => settings, update);
+	return { manager, registry, update, created, openApiRequests };
 };
 
 const names = (registry: ToolRegistry) => registry.getTools().map((t) => t.definition.name).sort();
@@ -86,22 +86,22 @@ describe('ToolSourceManager', () => {
 		expect(names(registry)).toEqual(['alpha_tool', 'api_a', 'api_b', 'git_run', 'read_file']);
 	});
 
-	it('caches the tools of each loaded MCP server and persists once', async () => {
+	it('caches the tools of each loaded MCP server and saves them', async () => {
 		const alpha = server('alpha');
-		const { manager, persist } = setup({ builtInTools: [], mcpServers: [alpha], openApiTools: [], cliTools: [] });
+		const { manager, update } = setup({ builtInTools: [], mcpServers: [alpha], openApiTools: [], cliTools: [] });
 
 		await manager.initialize();
 
 		expect(alpha.cachedTools?.map((t) => t.name)).toEqual(['alpha_tool']);
-		expect(persist).toHaveBeenCalledTimes(1);
+		expect(update).toHaveBeenCalledTimes(1);
 	});
 
-	it('does not persist when no MCP server produced tools', async () => {
-		const { manager, persist } = setup({ builtInTools: [], mcpServers: [], openApiTools: [], cliTools: [] });
+	it('does not update when no MCP server produced tools', async () => {
+		const { manager, update } = setup({ builtInTools: [], mcpServers: [], openApiTools: [], cliTools: [] });
 
 		await manager.initialize();
 
-		expect(persist).not.toHaveBeenCalled();
+		expect(update).not.toHaveBeenCalled();
 	});
 
 	it('reloadCli swaps stale CLI sources for the enabled configs', async () => {
@@ -134,27 +134,27 @@ describe('ToolSourceManager', () => {
 		expect(openApiRequests).toEqual([{ id: 'api', refetch: false }, { id: 'api', refetch: true }]);
 	});
 
-	it('connectMcp registers the server, caches its tools and persists; disconnectMcp unregisters it', async () => {
+	it('connectMcp registers the server, caches its tools; disconnectMcp unregisters it', async () => {
 		const beta = server('beta', { connectionMode: 'manual' });
-		const { manager, registry, persist } = setup({ builtInTools: [], mcpServers: [beta], openApiTools: [], cliTools: [] });
+		const { manager, registry, update } = setup({ builtInTools: [], mcpServers: [beta], openApiTools: [], cliTools: [] });
 
 		expect(await manager.connectMcp(beta)).toBe(1);
 		expect(registry.hasSource('mcp', 'beta')).toBe(true);
 		expect(beta.cachedTools?.map((t) => t.name)).toEqual(['beta_tool']);
-		expect(persist).toHaveBeenCalledTimes(1);
+		expect(update).toHaveBeenCalledTimes(1);
 
 		await manager.disconnectMcp('beta');
 		expect(registry.hasSource('mcp', 'beta')).toBe(false);
 	});
 
-	it('refreshMcpServers reloads every enabled server, reports failures and persists once', async () => {
+	it('refreshMcpServers reloads every enabled server, reports failures and saves them', async () => {
 		const settings: ToolSourceSettings = {
 			builtInTools: [],
 			mcpServers: [server('ok'), server('broken', { command: 'missing-binary' }), server('off', { enabled: false })],
 			openApiTools: [],
 			cliTools: [],
 		};
-		const { manager, persist, created } = setup(settings);
+		const { manager, update, created } = setup(settings);
 
 		const results = await manager.refreshMcpServers();
 
@@ -163,7 +163,7 @@ describe('ToolSourceManager', () => {
 			{ server: 'broken', tools: 0, error: 'spawn failed' },
 		]);
 		expect(created.some((s) => s.id === 'off')).toBe(false);
-		expect(persist).toHaveBeenCalledTimes(1);
+		expect(update).toHaveBeenCalledTimes(1);
 	});
 
 	it('starts only auto-connect servers at startup', async () => {

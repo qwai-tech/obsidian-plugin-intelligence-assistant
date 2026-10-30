@@ -123,7 +123,6 @@ async function reloadConfig(
 ): Promise<void> {
 	try {
 		const loaded = await plugin.services.tools.reloadOpenApi(configId, { refetch: forceRefetch });
-		await plugin.saveSettings();
 		refreshDisplay();
 		new Notice(t('settings.tools.openapi.notices.reloaded', { count: loaded }));
 	} catch (error) {
@@ -151,12 +150,15 @@ function createDefaultOpenApiConfig(): OpenApiToolConfig {
 }
 
 class OpenApiConfigModal extends Modal {
+	private readonly config: OpenApiToolConfig;
+
 	constructor(
 		private readonly plugin: PluginHost,
-		private readonly config: OpenApiToolConfig,
+		config: OpenApiToolConfig,
 		private readonly onChange: () => void
 	) {
 		super(plugin.app);
+		this.config = JSON.parse(JSON.stringify(config)) as OpenApiToolConfig;
 	}
 
 	onOpen(): void {
@@ -165,7 +167,11 @@ class OpenApiConfigModal extends Modal {
 		this.setTitle(this.config.name || t('settings.tools.openapi.modal.defaultTitle'));
 
 		const persist = async () => {
-			await this.plugin.saveSettings();
+			const saved = JSON.parse(JSON.stringify(this.config)) as OpenApiToolConfig;
+			await this.plugin.updateSettings((settings) => {
+				const index = settings.openApiTools.findIndex(tool => tool.id === saved.id);
+				settings.openApiTools.splice(index === -1 ? settings.openApiTools.length : index, 1, saved);
+			});
 			this.onChange();
 		};
 

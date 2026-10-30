@@ -20,7 +20,7 @@ import { createToolSourceFactory } from './tool-source-factory';
 export interface ServiceHost {
 	app: App;
 	settings: () => PluginSettings;
-	saveSettings: () => Promise<void>;
+	updateSettings: (change: (settings: PluginSettings) => void) => Promise<void>;
 	paths: PluginPaths;
 	data: PluginDataService;
 	conversations: ConversationStorageService;
@@ -34,7 +34,7 @@ export function createServices(host: ServiceHost): OwnedServices {
 	const { app, settings, data } = host;
 	const rag = new RAGManager(app, settings().ragConfig, settings().llmConfigs, host.paths.vectorStoreNotes);
 	const registry = new ToolRegistry();
-	const tools = new ToolSourceManager(registry, createToolSourceFactory(app, host.paths.data), settings, host.saveSettings);
+	const tools = new ToolSourceManager(registry, createToolSourceFactory(app, host.paths.data), settings, host.updateSettings);
 	const webSearch = new WebSearchService(() => settings().webSearchConfig, getDefaultHttpPort());
 	const activity = new RunActivity();
 	const recordUsage = async (record: UsageRecord) => {

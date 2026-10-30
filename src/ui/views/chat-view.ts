@@ -219,10 +219,10 @@ export class ChatView extends ItemView {
 		}
 	}
 
-	async onClose() {
+	onClose(): Promise<void> {
 		this.mentionSuggest?.close();
 		void this.chatController?.cleanup();
-		await this.plugin.saveSettings();
+		return Promise.resolve();
 	}
 
 	private async sendMessage(text: string) {

@@ -88,7 +88,7 @@ export function migrateAgentToolAccess(
 
 	agent.toolAccess = { sources };
 	// Strip the legacy fields so they don't get re-persisted by callers
-	// that round-trip the agent through saveSettings / agentRepository.
+	// that save the agent back.
 	delete legacy.enabledBuiltInTools;
 	delete legacy.enabledMcpServers;
 	delete legacy.enabledMcpTools;
