@@ -111,6 +111,10 @@ export class ToolRegistry {
 		});
 	}
 
+	sourceIds(kind: ToolSourceKind): string[] {
+		return [...this.sources.values()].filter((source) => source.kind === kind).map((source) => source.id);
+	}
+
 	/** True if a source with the given kind+id is currently registered. */
 	hasSource(kind: ToolSourceKind, id: string): boolean {
 		return this.sources.has(sourceKey(kind, id));

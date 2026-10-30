@@ -13,6 +13,8 @@ export interface SettingsReloadHost {
 	invalidateDerivedState(): void;
 	/** Push refreshed settings into any open chat views (model pickers, etc.). */
 	refreshChatViewsModels(): Promise<void>;
+	/** Connect, disconnect and reload tool sources to match the reloaded settings. */
+	reloadToolSources(): Promise<void>;
 	/** Repaint settings-derived UI (e.g. the status bar). */
 	refreshStatusBar(): void;
 }
@@ -28,6 +30,11 @@ export async function reloadSettingsFromDisk(host: SettingsReloadHost): Promise<
 		await host.refreshChatViewsModels();
 	} catch (error) {
 		console.error('[Plugin] refreshChatViewsModels after external change failed:', error);
+	}
+	try {
+		await host.reloadToolSources();
+	} catch (error) {
+		console.error('[Plugin] reloadToolSources after external change failed:', error);
 	}
 	host.refreshStatusBar();
 }

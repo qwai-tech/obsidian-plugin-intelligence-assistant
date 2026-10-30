@@ -7,6 +7,7 @@ describe('onExternalSettingsChange reload sequence', () => {
 			loadSettings: jest.fn(async () => { calls.push('loadSettings'); }),
 			invalidateDerivedState: jest.fn(() => { calls.push('invalidateDerivedState'); }),
 			refreshChatViewsModels: jest.fn(async () => { calls.push('refreshChatViewsModels'); }),
+			reloadToolSources: jest.fn(async () => { calls.push('reloadToolSources'); }),
 			refreshStatusBar: jest.fn(() => { calls.push('refreshStatusBar'); }),
 			...overrides,
 		};
@@ -29,6 +30,7 @@ describe('onExternalSettingsChange reload sequence', () => {
 		expect(host.loadSettings).toHaveBeenCalledTimes(1);
 		expect(host.invalidateDerivedState).toHaveBeenCalledTimes(1);
 		expect(host.refreshChatViewsModels).toHaveBeenCalledTimes(1);
+		expect(host.reloadToolSources).toHaveBeenCalledTimes(1);
 		expect(host.refreshStatusBar).toHaveBeenCalledTimes(1);
 		// loadSettings must run first; status bar repaint last.
 		expect(calls[0]).toBe('loadSettings');
@@ -43,6 +45,16 @@ describe('onExternalSettingsChange reload sequence', () => {
 		await expect(reloadSettingsFromDisk(host)).resolves.toBeUndefined();
 
 		expect(host.loadSettings).toHaveBeenCalledTimes(1);
+		expect(host.refreshStatusBar).toHaveBeenCalledTimes(1);
+	});
+
+	it('still repaints the status bar when tool sources fail to reload', async () => {
+		const { host } = makeHost({
+			reloadToolSources: jest.fn(async () => { throw new Error('mcp down'); }),
+		});
+
+		await expect(reloadSettingsFromDisk(host)).resolves.toBeUndefined();
+
 		expect(host.refreshStatusBar).toHaveBeenCalledTimes(1);
 	});
 });

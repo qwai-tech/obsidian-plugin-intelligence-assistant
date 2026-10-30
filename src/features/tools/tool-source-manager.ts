@@ -59,6 +59,24 @@ export class ToolSourceManager {
 		}
 	}
 
+	async resync(): Promise<void> {
+		const { mcpServers, openApiTools } = this.settings();
+		const enabledServers = new Set(mcpServers.filter((server) => server.enabled).map((server) => server.name));
+		for (const name of this.registry.sourceIds('mcp').filter((name) => !enabledServers.has(name))) {
+			await this.registry.unregisterSource('mcp', name);
+		}
+		const enabledApis = new Set(openApiTools.filter((config) => config.enabled).map((config) => config.id));
+		for (const id of this.registry.sourceIds('openapi').filter((id) => !enabledApis.has(id))) {
+			await this.registry.unregisterSource('openapi', id);
+		}
+		for (const id of [...enabledApis].filter((id) => !this.registry.hasSource('openapi', id))) {
+			await this.reloadOpenApi(id);
+		}
+		await this.reloadCli();
+		await this.reloadBuiltin();
+		await this.connectAutoMcpServers();
+	}
+
 	async reloadBuiltin(): Promise<void> {
 		if (this.registry.hasSource('builtin', 'builtin')) {
 			await this.registry.reloadSource('builtin', 'builtin');

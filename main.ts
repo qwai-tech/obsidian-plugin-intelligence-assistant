@@ -131,6 +131,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			loadSettings: () => this.loadSettings(),
 			invalidateDerivedState: () => { this.owned?.rag.updateConfig(this.settings.ragConfig, this.settings.llmConfigs); },
 			refreshChatViewsModels: () => this.chatWorkspace.refreshModels(),
+			reloadToolSources: async () => { await this.owned?.tools.resync(); },
 			refreshStatusBar: () => this.statusBar?.render(),
 		});
 	}

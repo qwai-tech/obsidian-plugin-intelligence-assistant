@@ -62,7 +62,7 @@ export class SettingsStore {
 		const migrated = migrateSettings(settings);
 		const keysMoved = moveKeysToVault(settings, this.vault);
 		revealKeys(settings, this.vault);
-		this.settings = settings;
+		this.settings = this.settings ? replaceContents(this.settings, settings) : settings;
 		this.snapshots = this.snapshot(settings);
 		const pending = new Set<PersistUnit>();
 		if (!userConfig) pending.add('config');
@@ -107,6 +107,13 @@ export class SettingsStore {
 		const stored = withoutKeys(settings);
 		return new Map((Object.keys(UNITS) as PersistUnit[]).map((unit) => [unit, JSON.stringify(UNITS[unit](stored))]));
 	}
+}
+
+function replaceContents(target: PluginSettings, source: PluginSettings): PluginSettings {
+	for (const key of Object.keys(target) as Array<keyof PluginSettings>) {
+		if (!(key in source)) delete target[key];
+	}
+	return Object.assign(target, source);
 }
 
 function asLegacySettings(data: unknown): Partial<PluginSettings> | null {

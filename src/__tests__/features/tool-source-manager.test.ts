@@ -191,4 +191,25 @@ describe('ToolSourceManager', () => {
 		expect(registry.hasSource('mcp', 'manual')).toBe(false);
 		expect(await manager.connectAutoMcpServers()).toBe(false);
 	});
+
+	it('resyncs sources with settings changed from outside', async () => {
+		const settings: ToolSourceSettings = {
+			builtInTools: [],
+			mcpServers: [server('keep'), server('drop')],
+			openApiTools: [{ id: 'old-api', enabled: true } as OpenApiToolConfig],
+			cliTools: [],
+		};
+		const { manager, registry, created } = setup(settings);
+		await manager.initialize();
+
+		settings.mcpServers = [server('keep'), server('drop', { enabled: false }), server('added')];
+		settings.openApiTools = [{ id: 'new-api', enabled: true } as OpenApiToolConfig];
+		settings.cliTools = [{ id: 'echo', enabled: true } as CLIToolConfig];
+		await manager.resync();
+
+		expect(names(registry)).toEqual(['added_tool', 'echo_run', 'keep_tool', 'new-api_a', 'new-api_b', 'read_file']);
+		expect(created.find(source => source.id === 'drop')?.disposed).toBe(true);
+		expect(created.find(source => source.id === 'old-api')?.disposed).toBe(true);
+	});
 });
+

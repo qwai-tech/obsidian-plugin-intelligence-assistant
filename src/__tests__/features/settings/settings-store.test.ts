@@ -193,4 +193,20 @@ describe('SettingsStore', () => {
 
 		expect(store.current.llmConfigs[0].apiKey).toBe('sk-new');
 	});
+
+	it('reloads into the same settings object so holders of it see the new values', async () => {
+		const config = currentConfig();
+		const stored = { userConfig: config, legacyData: null, outdated: false };
+		const { persistence } = fakePersistence(stored);
+		const store = new SettingsStore(persistence, memoryVault());
+		await store.load();
+		const held = store.current;
+
+		config.providers.defaultModel = 'changed-elsewhere';
+		await store.load();
+
+		expect(store.current).toBe(held);
+		expect(held.defaultModel).toBe('changed-elsewhere');
+	});
 });
+
