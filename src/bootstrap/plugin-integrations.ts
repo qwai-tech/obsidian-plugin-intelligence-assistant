@@ -34,20 +34,22 @@ export function registerIncrementalRagIndexing(
 			clearTimeoutFn: (handle) => window.clearTimeout(handle as number),
 		},
 	);
-	const { vault, metadataCache } = plugin.app;
-	plugin.registerEvent(vault.on('create', (file) => {
-		if (file instanceof TFile) handlers.onCreate(file);
-	}));
-	plugin.registerEvent(vault.on('modify', (file) => {
-		if (file instanceof TFile) handlers.onModify(file);
-	}));
-	plugin.registerEvent(vault.on('delete', (file) => {
-		if (file instanceof TFile) handlers.onDelete(file);
-	}));
-	plugin.registerEvent(vault.on('rename', (file, oldPath) => {
-		if (file instanceof TFile) handlers.onRename(file, oldPath);
-	}));
-	plugin.registerEvent(metadataCache.on('changed', (file) => handlers.onMetadataChanged(file)));
+	const { vault, metadataCache, workspace } = plugin.app;
+	workspace.onLayoutReady(() => {
+		plugin.registerEvent(vault.on('create', (file) => {
+			if (file instanceof TFile) handlers.onCreate(file);
+		}));
+		plugin.registerEvent(vault.on('modify', (file) => {
+			if (file instanceof TFile) handlers.onModify(file);
+		}));
+		plugin.registerEvent(vault.on('delete', (file) => {
+			if (file instanceof TFile) handlers.onDelete(file);
+		}));
+		plugin.registerEvent(vault.on('rename', (file, oldPath) => {
+			if (file instanceof TFile) handlers.onRename(file, oldPath);
+		}));
+		plugin.registerEvent(metadataCache.on('changed', (file) => handlers.onMetadataChanged(file)));
+	});
 }
 
 export function registerInlineAiBlocks(plugin: Plugin, launcher: AgentTaskLauncher): void {

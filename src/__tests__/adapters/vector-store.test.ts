@@ -88,6 +88,45 @@ describe('VectorStore', () => {
 		expect(app.vault.adapter.write).toHaveBeenCalledTimes(1);
 	});
 
+	it('embeds a file again when an earlier embedding attempt failed', async () => {
+		const app = makeApp('alpha');
+		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
+		const file = { path: 'a.md', basename: 'a', stat: { mtime: 1 } } as any;
+		(EmbeddingManager.generateEmbedding as jest.Mock).mockRejectedValue(new Error('offline'));
+		await store.addFile(file, makeConfig());
+		(EmbeddingManager.generateEmbedding as jest.Mock).mockReset().mockResolvedValue([1, 0, 0]);
+
+		await store.addFile(file, makeConfig());
+
+		expect(store.getStoredChunks().every(chunk => chunk.embedding?.length === 3)).toBe(true);
+	});
+
+	it('indexing one file leaves files whose path starts with the same text alone', async () => {
+		const app = makeApp('alpha');
+		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
+		await store.addFile({ path: 'a.md-copy.md', basename: 'a.md-copy', stat: { mtime: 1 } } as any, makeConfig());
+		app.vault.read.mockResolvedValue('changed');
+
+		await store.addFile({ path: 'a.md', basename: 'a', stat: { mtime: 2 } } as any, makeConfig());
+		await store.removeFile('a.md');
+
+		expect(store.getStoredChunks().map(chunk => chunk.metadata.path)).toEqual(['a.md-copy.md']);
+	});
+
+	it('runs overlapping index requests for one file one after the other', async () => {
+		const app = makeApp('alpha\n\nbeta');
+		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
+		const file = { path: 'a.md', basename: 'a', stat: { mtime: 1 } } as any;
+		const first = store.addFile(file, makeConfig());
+		app.vault.read.mockResolvedValue('alpha\n\nbeta\n\ngamma');
+
+		await Promise.all([first, store.addFile(file, makeConfig())]);
+
+		const ids = store.getStoredChunks().map(chunk => chunk.id);
+		expect(new Set(ids).size).toBe(ids.length);
+		expect(store.getStoredChunks().map(chunk => chunk.content).join('\n\n')).toBe('alpha\n\nbeta\n\ngamma');
+	});
+
 	it('removeFile drops only the matching file\'s chunks and persists', async () => {
 		const app = makeApp('alpha\n\nbeta');
 		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);

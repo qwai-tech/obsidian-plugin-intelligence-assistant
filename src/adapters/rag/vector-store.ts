@@ -28,6 +28,7 @@ export class VectorStore {
 	private chunkNorms = new Map<string, number>();
 
   private readonly file: JsonFile<VectorStoreData | null>;
+  private readonly indexing = new Map<string, Promise<void>>();
 
   constructor(app: App, filePath: string, llmConfigs: LLMConfig[] = []) {
     this.app = app;
@@ -91,12 +92,24 @@ export class VectorStore {
 		}
 	}
 
-  async addFile(file: TFile, config: RAGConfig): Promise<void> {
+  addFile(file: TFile, config: RAGConfig): Promise<void> {
+    const previous = this.indexing.get(file.path) ?? Promise.resolve();
+    const run = previous.catch(() => undefined).then(() => this.indexFile(file, config));
+    this.indexing.set(file.path, run);
+    return run.finally(() => {
+      if (this.indexing.get(file.path) === run) this.indexing.delete(file.path);
+    });
+  }
+
+  private async indexFile(file: TFile, config: RAGConfig): Promise<void> {
     await this.load();
     const content = await this.app.vault.read(file);
     const contentHash = stableHash(content);
-    const existing = this._chunks.filter(chunk => chunk.id.startsWith(`${file.path}-`));
-    if (existing.length > 0 && existing.every(chunk => chunk.metadata.contentHash === contentHash && chunk.metadata.embeddingModel === config.embeddingModel)) {
+    const existing = this._chunks.filter(chunk => chunk.metadata.path === file.path);
+    const upToDate = (chunk: DocumentChunk) => chunk.metadata.contentHash === contentHash
+      && chunk.metadata.embeddingModel === config.embeddingModel
+      && (!config.embeddingModel || chunk.embedding !== undefined);
+    if (existing.length > 0 && existing.every(upToDate)) {
       return;
     }
     this.chunkNorms.clear();
@@ -105,7 +118,7 @@ export class VectorStore {
     const _chunks = chunkText(content, config);
     
     // Remove existing _chunks for this file
-    this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(`${file.path ?? 'unknown'}-`));
+    this._chunks = this._chunks.filter(chunk => chunk.metadata.path !== file.path);
 
     const batchSize = 10; // Process 10 _chunks at a time
     for (let currentIndex = 0; currentIndex < _chunks.length; currentIndex += batchSize) {
@@ -162,14 +175,13 @@ export class VectorStore {
 
   /**
    * Remove every chunk belonging to a file path from the in-memory index and
-   * persist. Chunk ids are keyed as `${path}-${i}`, so we match on that prefix.
+   * persist.
    * Returns the number of chunks removed.
    */
   async removeFile(path: string): Promise<number> {
     await this.load();
-    const prefix = `${path}-`;
     const before = this._chunks.length;
-    this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(prefix));
+    this._chunks = this._chunks.filter(chunk => chunk.metadata.path !== path);
     const removed = before - this._chunks.length;
     if (removed > 0) {
       this.chunkNorms.clear();
@@ -185,10 +197,9 @@ export class VectorStore {
    */
   async renameFile(oldPath: string, newPath: string): Promise<number> {
     await this.load();
-    const prefix = `${oldPath}-`;
     let renamed = 0;
     for (const chunk of this._chunks) {
-      if (chunk.id.startsWith(prefix)) {
+      if (chunk.metadata.path === oldPath) {
         chunk.id = `${newPath}${chunk.id.slice(oldPath.length)}`;
         chunk.metadata.path = newPath;
         renamed++;
