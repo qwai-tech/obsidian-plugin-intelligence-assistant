@@ -32,6 +32,7 @@ Measured performance and the options behind the current choices are in [performa
 - Write the failing test first, then the change.
 - Unit tests import the module under test directly; everything else imports features through their `index.ts`.
 - Mission and Jest tests get their own mock LLM port from the OS, so suites can run in parallel.
+- User-visible text goes through `t()`: `src/__tests__/i18n/untranslated-ui-strings.test.ts` fails on a hard-coded label, notice or placeholder in `src/ui`, `src/bootstrap` or `src/adapters`, and `locale-coverage.test.ts` requires every key in all 49 locales.
 - E2E specs drive the UI through page objects and `data-testid`s, wait on conditions rather than sleeping (lint enforces it), and check persisted state in `data.json` with `VaultFixture.waitForSettings`.
 - To assert on a partial stream, hold it with `mockLLM.streaming(chunks, { holdAfter })` and release it with `mockLLM.releaseStream()` instead of relying on timing.
 - The e2e vault template keeps the settings layout of older versions, so every e2e run also exercises the settings migration.
