@@ -27,7 +27,7 @@ export interface MessageRendererCallbacks {
 	displayRagSources?: (container: HTMLElement, message: Message) => void;
 	getProviderAvatar?: (message: Message) => string;
 	getProviderColor?: (message: Message) => string;
-	applyWriteProposal?: (proposal: WriteProposal | BatchWriteProposal) => Promise<void>;
+	applyWriteProposal?: (proposal: WriteProposal | BatchWriteProposal) => Promise<boolean>;
 }
 
 interface AssistantMeta {

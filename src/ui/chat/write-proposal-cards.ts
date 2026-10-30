@@ -9,7 +9,14 @@ import {
 } from '@/features/agent';
 import { errorMessage } from '@/core/utils/errors';
 
-export type ApplyProposal = (proposal: WriteProposal | BatchWriteProposal) => Promise<void>;
+export type ApplyProposal = (proposal: WriteProposal | BatchWriteProposal) => Promise<boolean>;
+
+export function describeProposal(proposal: WriteProposal | BatchWriteProposal): string {
+	if (isBatchWriteProposal(proposal)) {
+		return `${proposal.proposals.length} changes: ${proposal.proposals.map(describeProposal).join(', ')}`;
+	}
+	return `${proposal.operation} ${proposal.path}`;
+}
 
 export function renderWriteProposalCards(container: HTMLElement, steps: Message['agentExecutionSteps'], apply?: ApplyProposal): void {
 	const proposals = extractWriteProposalsFromSteps(steps);
@@ -65,7 +72,11 @@ function renderApplyButton(card: HTMLElement, label: string, proposal: WriteProp
 	button.addEventListener('click', () => {
 		if (!apply) return;
 		button.disabled = true;
-		apply(proposal).then(() => {
+		apply(proposal).then((applied) => {
+			if (!applied) {
+				button.disabled = false;
+				return;
+			}
 			button.setText('Applied');
 			button.addClass('is-applied');
 		}, (error: unknown) => {

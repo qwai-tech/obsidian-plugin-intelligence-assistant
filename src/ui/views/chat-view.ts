@@ -23,7 +23,8 @@ import { resolveMessageProviderId } from '@/ui/chat/utils/provider-utils';
 import { providerAvatar, providerColor } from '@/ui/provider-meta';
 import { TestIds } from '@/ui/utils/test-ids';
 import type { AppServices } from '@/ui/app-services';
-import { applyWriteProposal, type WriteProposal } from '@/features/agent';
+import { applyWriteProposal, type BatchWriteProposal, type WriteProposal } from '@/features/agent';
+import { describeProposal } from '@/ui/chat/write-proposal-cards';
 import { errorMessage } from '@/core/utils/errors';
 
 export const CHAT_VIEW_TYPE = 'intelligence-assistant-chat';
@@ -246,7 +247,7 @@ export class ChatView extends ItemView {
 			displayRagSources: (container, message) => this.ragStatusPanel.displaySources(container, message.ragSources ?? []),
 			getProviderAvatar: (message) => message.role === 'user' ? '🧑' : providerAvatar(resolveMessageProviderId(message, this.plugin)),
 			getProviderColor: (message) => providerColor(resolveMessageProviderId(message, this.plugin)),
-			applyWriteProposal: (proposal) => this.confirmAndApplyProposal(proposal as WriteProposal),
+			applyWriteProposal: (proposal) => this.confirmAndApplyProposal(proposal),
 		};
 	}
 
@@ -331,11 +332,12 @@ export class ChatView extends ItemView {
 		return this.session.capabilitySummary(this.services.tools.registry, references);
 	}
 
-	private async confirmAndApplyProposal(proposal: WriteProposal): Promise<void> {
-		const confirmed = await showConfirm(this.app, `Apply ${proposal.operation} proposal for ${proposal.path}?`);
-		if (!confirmed) return;
+	private async confirmAndApplyProposal(proposal: WriteProposal | BatchWriteProposal): Promise<boolean> {
+		const summary = describeProposal(proposal);
+		if (!await showConfirm(this.app, `Apply ${summary}?`)) return false;
 		await applyWriteProposal(this.app, proposal);
-		new Notice(`Applied proposal: ${proposal.path}`);
+		new Notice(`Applied ${summary}`);
+		return true;
 	}
 
 	private async updateRagStatus(): Promise<void> {
