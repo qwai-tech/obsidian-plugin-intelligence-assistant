@@ -25,7 +25,7 @@ export function toSettingsDocument(settings: PluginSettings): SettingsDocument {
 	return {
 		format: FORMAT,
 		config,
-		providers: settings.llmConfigs.map(({ cachedModels: _models, cacheTimestamp: _at, ...provider }) => provider),
+		providers: settings.llmConfigs.map(toStoredProvider),
 		prompts: { list: settings.systemPrompts, activeId: settings.activeSystemPromptId ?? null },
 		agents: { list: settings.agents, activeId: settings.activeAgentId ?? null },
 	};
@@ -42,4 +42,23 @@ export function fromSettingsDocument(document: SettingsDocument): { userConfig: 
 			activeAgentId: document.agents?.activeId ?? null,
 		},
 	};
+}
+
+export function applyDisabledModels(configs: LLMConfig[]): void {
+	for (const config of configs) {
+		const disabled = new Set(config.disabledModels ?? []);
+		for (const model of config.cachedModels ?? []) {
+			if (disabled.has(model.id)) model.enabled = false;
+		}
+	}
+}
+
+function toStoredProvider({ cachedModels, cacheTimestamp: _at, disabledModels, ...provider }: LLMConfig): LLMConfig {
+	const cached = cachedModels ?? [];
+	const cachedIds = new Set(cached.map((model) => model.id));
+	const disabled = [
+		...(disabledModels ?? []).filter((id) => !cachedIds.has(id)),
+		...cached.filter((model) => model.enabled === false).map((model) => model.id),
+	];
+	return disabled.length > 0 ? { ...provider, disabledModels: disabled } : provider;
 }

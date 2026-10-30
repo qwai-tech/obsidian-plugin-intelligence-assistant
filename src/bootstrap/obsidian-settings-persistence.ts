@@ -1,6 +1,6 @@
 import type { Plugin } from 'obsidian';
 import type { PersistUnit, PluginSettings, SettingsDocument, SettingsPersistence, StoredSettings } from '@/features/settings';
-import { fromSettingsDocument, isSettingsDocument, toSettingsDocument } from '@/features/settings';
+import { applyDisabledModels, fromSettingsDocument, isSettingsDocument, toSettingsDocument } from '@/features/settings';
 import type { PluginDataService } from '@/bootstrap/plugin-data-service';
 import type { LegacySettingsFiles, LegacySettings } from '@/adapters/persistence/legacy-settings-files';
 
@@ -31,7 +31,9 @@ export class ObsidianSettingsPersistence implements SettingsPersistence {
 
 	async hydrate(settings: PluginSettings): Promise<Partial<PluginSettings>> {
 		const overlay: Partial<PluginSettings> = this.saved ? fromSettingsDocument(this.saved).stored : { ...this.legacy?.stored };
-		await this.data.modelCacheRepository.applyCacheToConfigs(overlay.llmConfigs ?? settings.llmConfigs);
+		const providers = overlay.llmConfigs ?? settings.llmConfigs;
+		await this.data.modelCacheRepository.applyCacheToConfigs(providers);
+		applyDisabledModels(providers);
 		await this.data.applyMcpToolCaches(overlay.mcpServers ?? settings.mcpServers);
 		return overlay;
 	}

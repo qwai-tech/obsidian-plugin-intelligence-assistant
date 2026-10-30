@@ -29,7 +29,8 @@ export class ModelManager {
 		if (!forceRefresh && config.provider !== 'ollama' && stored.length > 0) {
 			return this.filterModels(stored, config.modelFilter);
 		}
-		const models = await this.fetchOnce(config);
+		const switchedOff = new Set(stored.filter((model) => model.enabled === false).map((model) => model.id));
+		const models = (await this.fetchOnce(config)).map((model) => (switchedOff.has(model.id) ? { ...model, enabled: false } : { ...model }));
 		config.cachedModels = models;
 		config.cacheTimestamp = Date.now();
 		return this.filterModels(models, config.modelFilter);

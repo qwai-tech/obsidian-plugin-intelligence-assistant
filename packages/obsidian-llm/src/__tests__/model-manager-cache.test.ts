@@ -36,6 +36,26 @@ describe('ModelManager model cache', () => {
 		expect(config.cacheTimestamp).toBeGreaterThan(0);
 	});
 
+	it('keeps models the user switched off switched off after a refresh', async () => {
+		portListing(['gpt-4o', 'gpt-4o-mini']);
+		const config: LLMConfig = { provider: 'openai', apiKey: 'k5', cachedModels: [{ ...model('openai:gpt-4o-mini'), enabled: false }] };
+
+		await ModelManager.getModelsForConfig(config, true);
+
+		expect(config.cachedModels?.map((m) => [m.id, m.enabled !== false])).toEqual([['openai:gpt-4o', true], ['openai:gpt-4o-mini', false]]);
+	});
+
+	it('gives each config its own copies of the built-in model list', async () => {
+		const first: LLMConfig = { provider: 'anthropic', apiKey: 'a1' };
+		const second: LLMConfig = { provider: 'anthropic', apiKey: 'a2' };
+		await ModelManager.getModelsForConfig(first, true);
+		await ModelManager.getModelsForConfig(second, true);
+
+		first.cachedModels![0].enabled = false;
+
+		expect(second.cachedModels![0].enabled).not.toBe(false);
+	});
+
 	it('reflects edits to the stored list on the next call', async () => {
 		portListing(['gpt-4o']);
 		const config: LLMConfig = { provider: 'openai', apiKey: 'k3' };

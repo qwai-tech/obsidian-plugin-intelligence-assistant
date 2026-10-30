@@ -1,4 +1,4 @@
-import { fromSettingsDocument, isSettingsDocument, toSettingsDocument } from '@/features/settings/settings-document';
+import { applyDisabledModels, fromSettingsDocument, isSettingsDocument, toSettingsDocument } from '@/features/settings/settings-document';
 import { DEFAULT_SETTINGS, userConfigToPluginSettings } from '@/features/settings/settings-codec';
 import type { PluginSettings } from '@/features/settings/types/settings';
 
@@ -43,4 +43,34 @@ describe('settings document', () => {
 		expect(isSettingsDocument({ defaultModel: 'legacy data.json' })).toBe(false);
 		expect(isSettingsDocument(null)).toBe(false);
 	});
+
+	it('records the models switched off on each provider, keeping ones this device has not cached', () => {
+		const value = settings();
+		value.llmConfigs = [{
+			provider: 'openai',
+			disabledModels: ['from-other-device', 'm-on'],
+			cachedModels: [
+				{ id: 'm-on', name: 'On', provider: 'openai', capabilities: [], enabled: true },
+				{ id: 'm-off', name: 'Off', provider: 'openai', capabilities: [], enabled: false },
+			],
+		}];
+
+		expect(toSettingsDocument(value).providers[0].disabledModels).toEqual(['from-other-device', 'm-off']);
+	});
+
+	it('switches off the recorded models once the cache is loaded', () => {
+		const configs = [{
+			provider: 'openai',
+			disabledModels: ['m-off'],
+			cachedModels: [
+				{ id: 'm-on', name: 'On', provider: 'openai', capabilities: [] },
+				{ id: 'm-off', name: 'Off', provider: 'openai', capabilities: [] },
+			],
+		}];
+
+		applyDisabledModels(configs);
+
+		expect(configs[0].cachedModels.map(model => (model as { enabled?: boolean }).enabled !== false)).toEqual([true, false]);
+	});
 });
+
