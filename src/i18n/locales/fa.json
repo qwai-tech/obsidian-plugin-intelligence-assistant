@@ -85,6 +85,13 @@
         "allCapabilities": "همه قابلیت‌ها",
         "allStates": "همه حالت‌ها",
         "searchPlaceholder": "جستجو بر اساس نام یا شناسه"
+      },
+      "refreshing": "در حال تازه‌سازی…",
+      "tableHeaders": {
+        "model": "مدل",
+        "capabilities": "قابلیت‌ها",
+        "status": "وضعیت",
+        "actions": "اقدامات"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "حذف سرور MCP «{{name}}»؟"
-      }
+      },
+      "namePlaceholder": "سرور MCP شرکت Acme"
     },
     "agents": {
       "desc": "عوامل هوش مصنوعی با قابلیت‌ها، ابزارها و رفتارهای خاص ایجاد و مدیریت کنید.",
@@ -394,7 +402,8 @@
             "reloadTools": "بارگذاری مجدد ابزارها",
             "refetchTooltip": "دریافت مجدد مشخصات از URL",
             "deleteTooltip": "حذف منبع"
-          }
+          },
+          "namePlaceholder": "منبع HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "متغیرهای محیطی",
             "desc": "فرمت: KEY=value، یکی در هر خط"
-          }
+          },
+          "descriptionPlaceholder": "یک فرمان اجرا می‌کند تا…"
         },
         "presets": {
           "title": "افزودن ابزار CLI از پیش‌تنظیم‌ها",
@@ -898,6 +908,10 @@
           "name": "توضیح متن",
           "prompt": "متن زیر را به زبان ساده توضیح دهید:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "طولانی‌تر کردن متن",
+        "prompt": "متن زیر را گسترش دهید و شرح دهید…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "{{count}} مرجع اضافه شد",
       "fileNotFound": "فایل پیدا نشد: {{path}}",
       "unableToLoadRag": "بارگذاری آمار RAG ناموفق بود.",
-      "referenced": "مرجع شد: {{name}}"
+      "referenced": "مرجع شد: {{name}}",
+      "openViewFailed": "نمای گفتگو باز نشد."
     },
     "status": {
       "unavailable": "در دسترس نیست",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "کل",
       "save": "ذخیره",
       "insertToNotes": "درج در یادداشت‌ها",
-      "regenerate": "بازتولید"
+      "regenerate": "بازتولید",
+      "assistant": "دستیار"
     },
     "toolCall": {
       "executionProcess": "فرآیند اجرا",
@@ -1061,7 +1077,10 @@
       "today": "امروز",
       "yesterday": "دیروز",
       "thisWeek": "این هفته",
-      "older": "قدیمی‌تر"
+      "older": "قدیمی‌تر",
+      "empty": "هنوز گفتگویی وجود ندارد",
+      "rename": "تغییر نام",
+      "delete": "حذف"
     },
     "header": {
       "noModels": "هیچ مدلی در دسترس نیست"
@@ -1098,6 +1117,41 @@
         "placeholder": "وظیفه خود را اینجا وارد کنید...",
         "start": "شروع",
         "title": "شروع وظیفه عامل"
+      }
+    },
+    "references": {
+      "usingContext": "استفاده از زمینه",
+      "remove": "حذف {{path}}"
+    },
+    "scrollToBottom": "پیمایش به پایین",
+    "preflight": {
+      "title": "بررسی پیش از اجرای وظیفه عامل",
+      "agent": "عامل: {{name}}",
+      "reads": "خواندن: {{paths}}",
+      "readsDefault": "خواندن: یادداشت فعال و تصویر لحظه‌ای زمینه",
+      "tools": "ابزارها: {{count}} فعال",
+      "writesProposal": "نوشتن: فقط پیشنهاد؛ اعمال لازم است",
+      "writesNone": "نوشتن: در دسترس نیست",
+      "rag": "RAG: {{state}}",
+      "web": "وب: {{state}}"
+    },
+    "proposals": {
+      "title": "پیشنهادهای نوشتن",
+      "preview": "پیش‌نمایش محتوای پیشنهادی",
+      "apply": "اعمال",
+      "applyAll": "اعمال همه",
+      "applied": "اعمال شد",
+      "changes_one": "{{count}} تغییر",
+      "changes_other": "{{count}} تغییر",
+      "confirm": "{{summary}} اعمال شود؟",
+      "appliedNotice": "{{summary}} اعمال شد",
+      "operations": {
+        "create": "ایجاد",
+        "update": "به‌روزرسانی",
+        "append": "افزودن به انتها",
+        "delete": "حذف",
+        "move": "انتقال",
+        "batch": "دسته‌ای"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "در حال بازخوانی...",
         "refreshSuccess": "فهرست مدل‌ها بازخوانی شد",
         "refreshFailed": "بازخوانی فهرست مدل‌ها ناموفق بود"
-      }
+      },
+      "pulling": "در حال دریافت…",
+      "deleting": "در حال حذف…"
     },
     "promptEdit": {
       "title": "ویرایش دستورالعمل سیستم",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ در حال پردازش...",
       "error": "خطا در رندر توضیح",
       "errorPrefix": "خطا:"
+    },
+    "modelSwitcher": {
+      "placeholder": "تغییر مدل…",
+      "switched": "مدل به {{name}} تغییر کرد",
+      "failed": "تغییر مدل ممکن نشد."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "هیچ پیکربندی ارائه‌دهنده معتبری برای مدل پیدا نشد: {{modelId}}",
     "processing": "در حال پردازش...",
     "textUpdated": "متن با موفقیت به‌روزرسانی شد",
-    "error": "خطا: {{message}}"
+    "error": "خطا: {{message}}",
+    "inlineBlockFailed": "بلوک هوش مصنوعی درون‌خطی اجرا نشد.",
+    "deepLinkFailed": "پیوند Intelligence Assistant باز نشد."
   },
   "commands": {
     "askAgentCurrentNote": "وظیفه عامل: پرسش درباره یادداشت فعلی",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "وظیفه عامل: سازمان‌دهی یادداشت فعلی",
     "sourceGroundedQuestion": "وظیفه عامل: پرسش مبتنی بر منابع",
     "summarizeCurrentNote": "وظیفه عامل: خلاصه‌سازی یادداشت فعلی",
-    "switchModel": "تغییر مدل"
+    "switchModel": "تغییر مدل",
+    "notices": {
+      "openNoteToAsk": "پیش از پرسیدن از عامل، یک یادداشت باز کنید.",
+      "openNoteToSummarize": "پیش از خلاصه‌سازی با عامل، یک یادداشت باز کنید.",
+      "openNoteToOrganize": "پیش از سازمان‌دهی با عامل، یک یادداشت باز کنید.",
+      "openProjectNote": "پیش از ایجاد خلاصه پروژه، یک یادداشت پروژه باز کنید.",
+      "openNoteToResearch": "پیش از ایجاد خلاصه پژوهشی، یک یادداشت باز کنید.",
+      "openNoteToFindRelated": "پیش از یافتن یادداشت‌های مرتبط، یک یادداشت باز کنید.",
+      "openNoteToImproveLinks": "پیش از بهبود پیوندها، برچسب‌ها و ویژگی‌ها، یک یادداشت باز کنید.",
+      "openNoteToDraft": "پیش از پیش‌نویس‌کردن با عامل، یک یادداشت باز کنید.",
+      "selectTextToImprove": "پیش از اینکه از عامل بخواهید متن را بهبود دهد، آن را انتخاب کنید."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: پرسش از عامل درباره این فایل",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "باز کردن گفتگوی AI"
+  },
+  "status": {
+    "idle": "IA: بیکار · {{tokens}} توکن",
+    "running": "IA: در حال اجرا · {{tokens}} توکن",
+    "ariaIdle": "Intelligence Assistant بیکار است؛ {{tokens}} توکن استفاده شده",
+    "ariaRunning": "عامل Intelligence Assistant در حال اجراست؛ {{tokens}} توکن استفاده شده"
+  },
+  "capability": {
+    "title": "ابزارها و مجوزها",
+    "subtitle_one": "{{agent}} می‌تواند از {{count}} ابزار استفاده کند.",
+    "subtitle_other": "{{agent}} می‌تواند از {{count}} ابزار استفاده کند.",
+    "chatMode": "حالت گفتگو",
+    "permissions": "مجوزهای فعلی",
+    "reads": "این وظیفه می‌تواند بخواند",
+    "tools": "ابزارهای فعال",
+    "noTools": "هیچ ابزاری برای عامل فعلی فعال نیست.",
+    "noDescription": "بدون توضیح",
+    "builtinGroup": "ابزارهای داخلی vault",
+    "tags": {
+      "applyRequired": "اعمال لازم است",
+      "externalWrite": "نوشتن خارجی",
+      "localProcess": "یک فرایند محلی اجرا می‌کند"
+    },
+    "state": {
+      "on": "روشن",
+      "off": "خاموش",
+      "disabled": "غیرفعال"
+    },
+    "rows": {
+      "vaultContext": "زمینه vault",
+      "referencesPlusContext_one": "{{count}} ارجاع صریح به‌علاوه زمینه فعال",
+      "referencesPlusContext_other": "{{count}} ارجاع صریح به‌علاوه زمینه فعال",
+      "activeContext": "یادداشت فعال و تصویر لحظه‌ای زمینه گراف",
+      "readTools": "ابزارهای خواندن vault",
+      "enabledCount": "{{count}} فعال",
+      "noReadTool": "هیچ ابزار خواندن مستقیمی فعال نیست",
+      "writes": "نوشتن در vault",
+      "proposalOnly": "فقط پیشنهاد؛ اعمال لازم است",
+      "unavailable": "در دسترس نیست",
+      "rag": "RAG",
+      "web": "جستجوی وب",
+      "on": "روشن",
+      "off": "خاموش",
+      "disabledInSettings": "در تنظیمات غیرفعال است",
+      "custom": "ابزارهای سفارشی",
+      "customEnabled_one": "{{count}} ابزار MCP، OpenAPI یا CLI فعال",
+      "customEnabled_other": "{{count}} ابزار MCP، OpenAPI یا CLI فعال",
+      "noneEnabled": "هیچ‌کدام فعال نیست",
+      "destructive": "اقدامات مخرب در vault",
+      "notProvided": "ابزارهای داخلی آن را ارائه نمی‌کنند"
+    }
+  },
+  "markdown": {
+    "run": "اجرا"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "هیچ یادداشت Markdown برای نمایه‌سازی وجود ندارد.",
+      "starting_one": "در حال نمایه‌سازی {{count}} یادداشت…",
+      "starting_other": "در حال نمایه‌سازی {{count}} یادداشت…",
+      "progress": "نمایه‌سازی: {{done}} از {{total}} یادداشت",
+      "completed": "نمایه‌سازی تمام شد: {{indexed}} نمایه‌شده، {{failed}} ناموفق.",
+      "noIndex": "هنوز چیزی نمایه نشده است. برای نمایه‌سازی vault خود \"Embed all documents\" را اجرا کنید.",
+      "gradingError": "ارزیابی سند ناموفق بود: {{message}}",
+      "clearing": "در حال پاک کردن فهرست…",
+      "cleared": "فهرست پاک شد."
+    }
   }
 }

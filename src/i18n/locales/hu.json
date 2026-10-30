@@ -85,6 +85,13 @@
         "allCapabilities": "Összes képesség",
         "allStates": "Összes állapot",
         "searchPlaceholder": "Keresés név vagy azonosító alapján"
+      },
+      "refreshing": "Frissítés…",
+      "tableHeaders": {
+        "model": "Modell",
+        "capabilities": "Képességek",
+        "status": "Állapot",
+        "actions": "Műveletek"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Törli a(z) \"{{name}}\" MCP szervert?"
-      }
+      },
+      "namePlaceholder": "Acme MCP szerver"
     },
     "agents": {
       "desc": "AI ügynökök létrehozása és kezelése meghatározott képességekkel, eszközökkel és viselkedéssel.",
@@ -394,7 +402,8 @@
             "reloadTools": "Eszközök újratöltése",
             "refetchTooltip": "Specifikáció újralekérése URL-ről",
             "deleteTooltip": "Forrás törlése"
-          }
+          },
+          "namePlaceholder": "HTTP-forrás"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Környezeti változók",
             "desc": "Formátum: KULCS=érték, soronként egy"
-          }
+          },
+          "descriptionPlaceholder": "Parancsot futtat, hogy…"
         },
         "presets": {
           "title": "CLI eszköz hozzáadása előre beállítottakból",
@@ -898,6 +908,10 @@
           "name": "Szöveg magyarázata",
           "prompt": "Magyarázza el egyszerű szavakkal a következő szöveget:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Szöveg hosszabbítása",
+        "prompt": "Bővítsd ki és fejtsd ki részletesebben a következő szöveget…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "{{count}} hivatkozás hozzáadva",
       "fileNotFound": "A fájl nem található: {{path}}",
       "unableToLoadRag": "Nem sikerült betölteni a RAG statisztikákat.",
-      "referenced": "Hivatkozva: {{name}}"
+      "referenced": "Hivatkozva: {{name}}",
+      "openViewFailed": "Nem sikerült megnyitni a csevegőnézetet."
     },
     "status": {
       "unavailable": "Nem elérhető",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Összesen",
       "save": "Mentés",
       "insertToNotes": "Beillesztés a jegyzetekbe",
-      "regenerate": "Újragenerálás"
+      "regenerate": "Újragenerálás",
+      "assistant": "Asszisztens"
     },
     "toolCall": {
       "executionProcess": "Végrehajtási folyamat",
@@ -1061,7 +1077,10 @@
       "today": "Ma",
       "yesterday": "Tegnap",
       "thisWeek": "Ezen a héten",
-      "older": "Régebbi"
+      "older": "Régebbi",
+      "empty": "Még nincsenek beszélgetések",
+      "rename": "Átnevezés",
+      "delete": "Törlés"
     },
     "header": {
       "noModels": "Nincsenek elérhető modellek"
@@ -1098,6 +1117,41 @@
         "placeholder": "Írja be ide a feladatot...",
         "start": "Indítás",
         "title": "Ügynökfeladat indítása"
+      }
+    },
+    "references": {
+      "usingContext": "Használt kontextus",
+      "remove": "{{path}} eltávolítása"
+    },
+    "scrollToBottom": "Görgetés az aljára",
+    "preflight": {
+      "title": "Ügynökfeladat előzetes ellenőrzése",
+      "agent": "Ügynök: {{name}}",
+      "reads": "Olvasás: {{paths}}",
+      "readsDefault": "Olvasás: aktív jegyzet és kontextuspillanatkép",
+      "tools": "Eszközök: {{count}} engedélyezve",
+      "writesProposal": "Írás: csak javaslat; Alkalmazás szükséges",
+      "writesNone": "Írás: nem érhető el",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Írási javaslatok",
+      "preview": "Javasolt tartalom előnézete",
+      "apply": "Alkalmazás",
+      "applyAll": "Összes alkalmazása",
+      "applied": "Alkalmazva",
+      "changes_one": "{{count}} módosítás",
+      "changes_other": "{{count}} módosítás",
+      "confirm": "Alkalmazza ezt: {{summary}}?",
+      "appliedNotice": "Alkalmazva: {{summary}}",
+      "operations": {
+        "create": "Létrehozás",
+        "update": "Frissítés",
+        "append": "Hozzáfűzés",
+        "delete": "Törlés",
+        "move": "Áthelyezés",
+        "batch": "Köteg"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Frissítés...",
         "refreshSuccess": "Modelllista frissítve",
         "refreshFailed": "Nem sikerült frissíteni a modelllistát"
-      }
+      },
+      "pulling": "Letöltés…",
+      "deleting": "Törlés…"
     },
     "promptEdit": {
       "title": "Rendszerprompt szerkesztése",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Feldolgozás...",
       "error": "Hiba a magyarázat megjelenítésekor",
       "errorPrefix": "Hiba:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Modell váltása…",
+      "switched": "Modell átváltva erre: {{name}}",
+      "failed": "Nem sikerült modellt váltani."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Nem található érvényes szolgáltatókonfiguráció ehhez a modellhez: {{modelId}}",
     "processing": "Feldolgozás...",
     "textUpdated": "A szöveg sikeresen frissítve",
-    "error": "Hiba: {{message}}"
+    "error": "Hiba: {{message}}",
+    "inlineBlockFailed": "Nem sikerült futtatni a beágyazott AI-blokkot.",
+    "deepLinkFailed": "Nem sikerült megnyitni az Intelligence Assistant hivatkozást."
   },
   "commands": {
     "askAgentCurrentNote": "Ügynökfeladat: kérdés az aktuális jegyzetről",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Ügynökfeladat: aktuális jegyzet rendszerezése",
     "sourceGroundedQuestion": "Ügynökfeladat: forrásokon alapuló kérdés feltevése",
     "summarizeCurrentNote": "Ügynökfeladat: aktuális jegyzet összefoglalása",
-    "switchModel": "Modellváltás"
+    "switchModel": "Modellváltás",
+    "notices": {
+      "openNoteToAsk": "Nyisson meg egy jegyzetet, mielőtt az ügynökhöz fordul.",
+      "openNoteToSummarize": "Nyisson meg egy jegyzetet az ügynökkel való összefoglalás előtt.",
+      "openNoteToOrganize": "Nyisson meg egy jegyzetet az ügynökkel való rendszerezés előtt.",
+      "openProjectNote": "Nyisson meg egy projektjegyzetet a projektösszefoglaló létrehozása előtt.",
+      "openNoteToResearch": "Nyisson meg egy jegyzetet a kutatási összefoglaló létrehozása előtt.",
+      "openNoteToFindRelated": "Nyisson meg egy jegyzetet a kapcsolódó jegyzetek keresése előtt.",
+      "openNoteToImproveLinks": "Nyisson meg egy jegyzetet a hivatkozások, címkék és tulajdonságok javítása előtt.",
+      "openNoteToDraft": "Nyisson meg egy jegyzetet az ügynökkel való vázlatkészítés előtt.",
+      "selectTextToImprove": "Jelöljön ki szöveget, mielőtt megkéri az ügynököt a javítására."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: kérdés az ügynöknek erről a fájlról",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "AI csevegés megnyitása"
+  },
+  "status": {
+    "idle": "IA: tétlen · {{tokens}} token",
+    "running": "IA: fut · {{tokens}} token",
+    "ariaIdle": "Az Intelligence Assistant tétlen; {{tokens}} token felhasználva",
+    "ariaRunning": "Az Intelligence Assistant ügynök fut; {{tokens}} token felhasználva"
+  },
+  "capability": {
+    "title": "Eszközök és engedélyek",
+    "subtitle_one": "{{agent}} {{count}} eszközt használhat.",
+    "subtitle_other": "{{agent}} {{count}} eszközt használhat.",
+    "chatMode": "Csevegési mód",
+    "permissions": "Jelenlegi engedélyek",
+    "reads": "Ez a feladat olvashatja",
+    "tools": "Engedélyezett eszközök",
+    "noTools": "A jelenlegi ügynökhöz nincs engedélyezett eszköz.",
+    "noDescription": "Nincs leírás",
+    "builtinGroup": "Beépített vault-eszközök",
+    "tags": {
+      "applyRequired": "Alkalmazás szükséges",
+      "externalWrite": "Külső írás",
+      "localProcess": "Helyi folyamatot futtat"
+    },
+    "state": {
+      "on": "be",
+      "off": "ki",
+      "disabled": "letiltva"
+    },
+    "rows": {
+      "vaultContext": "Vault-kontextus",
+      "referencesPlusContext_one": "{{count}} explicit hivatkozás és az aktív kontextus",
+      "referencesPlusContext_other": "{{count}} explicit hivatkozás és az aktív kontextus",
+      "activeContext": "Aktív jegyzet és a gráfkontextus pillanatképe",
+      "readTools": "Vault-olvasó eszközök",
+      "enabledCount": "{{count}} engedélyezve",
+      "noReadTool": "Nincs engedélyezett közvetlen olvasóeszköz",
+      "writes": "Írás a vaultba",
+      "proposalOnly": "Csak javaslat; Alkalmazás szükséges",
+      "unavailable": "Nem érhető el",
+      "rag": "RAG",
+      "web": "Webkeresés",
+      "on": "Be",
+      "off": "Ki",
+      "disabledInSettings": "Letiltva a beállításokban",
+      "custom": "Egyéni eszközök",
+      "customEnabled_one": "{{count}} MCP, OpenAPI vagy CLI eszköz engedélyezve",
+      "customEnabled_other": "{{count}} MCP, OpenAPI vagy CLI eszköz engedélyezve",
+      "noneEnabled": "Egyik sincs engedélyezve",
+      "destructive": "Romboló vault-műveletek",
+      "notProvided": "A beépített eszközök nem biztosítják"
+    }
+  },
+  "markdown": {
+    "run": "Futtatás"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Nincs indexelhető Markdown jegyzet.",
+      "starting_one": "{{count}} jegyzet indexelése…",
+      "starting_other": "{{count}} jegyzet indexelése…",
+      "progress": "Indexelés: {{done}} / {{total}} jegyzet",
+      "completed": "Az indexelés befejeződött: {{indexed}} indexelve, {{failed}} sikertelen.",
+      "noIndex": "Még semmi sincs indexelve. Futtassa az \"Embed all documents\" parancsot a vault indexeléséhez.",
+      "gradingError": "A dokumentumok értékelése sikertelen: {{message}}",
+      "clearing": "Index törlése…",
+      "cleared": "Index törölve."
+    }
   }
 }

@@ -85,6 +85,13 @@
         "allCapabilities": "جميع القدرات",
         "allStates": "جميع الحالات",
         "searchPlaceholder": "ابحث بالاسم أو المعرّف"
+      },
+      "refreshing": "جارٍ التحديث…",
+      "tableHeaders": {
+        "model": "النموذج",
+        "capabilities": "القدرات",
+        "status": "الحالة",
+        "actions": "الإجراءات"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "حذف خادم MCP \"{{name}}\"؟"
-      }
+      },
+      "namePlaceholder": "خادم Acme MCP"
     },
     "agents": {
       "desc": "إنشاء وإدارة وكلاء الذكاء الاصطناعي بقدرات وأدوات وسلوكيات محددة.",
@@ -394,7 +402,8 @@
             "reloadTools": "إعادة تحميل الأدوات",
             "refetchTooltip": "إعادة جلب المواصفة من URL",
             "deleteTooltip": "حذف المصدر"
-          }
+          },
+          "namePlaceholder": "مصدر HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "متغيرات البيئة",
             "desc": "الصيغة: KEY=value، واحد في كل سطر"
-          }
+          },
+          "descriptionPlaceholder": "يشغّل أمرًا من أجل…"
         },
         "presets": {
           "title": "إضافة أداة CLI من الإعدادات المسبقة",
@@ -898,6 +908,10 @@
           "name": "شرح النص",
           "prompt": "اشرح النص التالي بمصطلحات بسيطة:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "إطالة النص",
+        "prompt": "وسّع النص التالي وأضف إليه تفاصيل…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "تمت إضافة {{count}} مرجع",
       "fileNotFound": "لم يتم العثور على الملف: {{path}}",
       "unableToLoadRag": "تعذّر تحميل إحصائيات RAG.",
-      "referenced": "مُرجَع: {{name}}"
+      "referenced": "مُرجَع: {{name}}",
+      "openViewFailed": "تعذّر فتح عرض الدردشة."
     },
     "status": {
       "unavailable": "غير متاح",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "الإجمالي",
       "save": "حفظ",
       "insertToNotes": "إدراج في الملاحظات",
-      "regenerate": "إعادة التوليد"
+      "regenerate": "إعادة التوليد",
+      "assistant": "المساعد"
     },
     "toolCall": {
       "executionProcess": "عملية التنفيذ",
@@ -1061,7 +1077,10 @@
       "today": "اليوم",
       "yesterday": "أمس",
       "thisWeek": "هذا الأسبوع",
-      "older": "أقدم"
+      "older": "أقدم",
+      "empty": "لا توجد محادثات بعد",
+      "rename": "إعادة تسمية",
+      "delete": "حذف"
     },
     "header": {
       "noModels": "لا توجد نماذج متاحة"
@@ -1098,6 +1117,41 @@
         "placeholder": "أدخل مهمتك هنا...",
         "start": "بدء",
         "title": "بدء مهمة وكيل"
+      }
+    },
+    "references": {
+      "usingContext": "استخدام السياق",
+      "remove": "إزالة {{path}}"
+    },
+    "scrollToBottom": "التمرير إلى الأسفل",
+    "preflight": {
+      "title": "فحص مسبق لمهمة الوكيل",
+      "agent": "الوكيل: {{name}}",
+      "reads": "القراءة: {{paths}}",
+      "readsDefault": "القراءة: الملاحظة النشطة ولقطة السياق",
+      "tools": "الأدوات: {{count}} مفعّلة",
+      "writesProposal": "الكتابة: اقتراح فقط؛ يلزم التطبيق",
+      "writesNone": "الكتابة: غير متاحة",
+      "rag": "RAG: {{state}}",
+      "web": "الويب: {{state}}"
+    },
+    "proposals": {
+      "title": "اقتراحات الكتابة",
+      "preview": "معاينة المحتوى المقترح",
+      "apply": "تطبيق",
+      "applyAll": "تطبيق الكل",
+      "applied": "مُطبَّق",
+      "changes_one": "{{count}} تغيير",
+      "changes_other": "{{count}} تغييرات",
+      "confirm": "تطبيق {{summary}}؟",
+      "appliedNotice": "تم تطبيق {{summary}}",
+      "operations": {
+        "create": "إنشاء",
+        "update": "تحديث",
+        "append": "إلحاق",
+        "delete": "حذف",
+        "move": "نقل",
+        "batch": "دفعة"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "جارٍ التحديث...",
         "refreshSuccess": "تم تحديث قائمة النماذج",
         "refreshFailed": "فشل تحديث قائمة النماذج"
-      }
+      },
+      "pulling": "جارٍ السحب…",
+      "deleting": "جارٍ الحذف…"
     },
     "promptEdit": {
       "title": "تعديل مطالبة النظام",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ جارٍ المعالجة...",
       "error": "خطأ في عرض الشرح",
       "errorPrefix": "خطأ:"
+    },
+    "modelSwitcher": {
+      "placeholder": "تبديل النموذج…",
+      "switched": "تم التبديل إلى النموذج {{name}}",
+      "failed": "تعذّر تبديل النموذج."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "لم يتم العثور على تهيئة مزود صالحة للنموذج: {{modelId}}",
     "processing": "جارٍ المعالجة...",
     "textUpdated": "تم تحديث النص بنجاح",
-    "error": "خطأ: {{message}}"
+    "error": "خطأ: {{message}}",
+    "inlineBlockFailed": "تعذّر تشغيل كتلة الذكاء الاصطناعي المضمّنة.",
+    "deepLinkFailed": "تعذّر فتح رابط Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "مهمة وكيل: السؤال عن الملاحظة الحالية",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "مهمة وكيل: تنظيم الملاحظة الحالية",
     "sourceGroundedQuestion": "مهمة وكيل: طرح سؤال مستند إلى المصادر",
     "summarizeCurrentNote": "مهمة وكيل: تلخيص الملاحظة الحالية",
-    "switchModel": "تبديل النموذج"
+    "switchModel": "تبديل النموذج",
+    "notices": {
+      "openNoteToAsk": "افتح ملاحظة قبل سؤال الوكيل.",
+      "openNoteToSummarize": "افتح ملاحظة قبل التلخيص باستخدام الوكيل.",
+      "openNoteToOrganize": "افتح ملاحظة قبل التنظيم باستخدام الوكيل.",
+      "openProjectNote": "افتح ملاحظة مشروع قبل إنشاء موجز المشروع.",
+      "openNoteToResearch": "افتح ملاحظة قبل إنشاء موجز بحثي.",
+      "openNoteToFindRelated": "افتح ملاحظة قبل البحث عن ملاحظات ذات صلة.",
+      "openNoteToImproveLinks": "افتح ملاحظة قبل تحسين الروابط والوسوم والخصائص.",
+      "openNoteToDraft": "افتح ملاحظة قبل الصياغة باستخدام الوكيل.",
+      "selectTextToImprove": "حدّد نصًا قبل أن تطلب من الوكيل تحسينه."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: اسأل الوكيل عن هذا الملف",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "فتح دردشة AI"
+  },
+  "status": {
+    "idle": "IA: خامل · {{tokens}} رمز",
+    "running": "IA: قيد التشغيل · {{tokens}} رمز",
+    "ariaIdle": "Intelligence Assistant خامل؛ تم استخدام {{tokens}} رمز",
+    "ariaRunning": "وكيل Intelligence Assistant قيد التشغيل؛ تم استخدام {{tokens}} رمز"
+  },
+  "capability": {
+    "title": "الأدوات والأذونات",
+    "subtitle_one": "يمكن لـ {{agent}} استخدام {{count}} أداة.",
+    "subtitle_other": "يمكن لـ {{agent}} استخدام {{count}} أدوات.",
+    "chatMode": "وضع الدردشة",
+    "permissions": "الأذونات الحالية",
+    "reads": "يمكن لهذه المهمة قراءة",
+    "tools": "الأدوات المفعّلة",
+    "noTools": "لا توجد أدوات مفعّلة للوكيل الحالي.",
+    "noDescription": "لا يوجد وصف",
+    "builtinGroup": "أدوات المستودع المدمجة",
+    "tags": {
+      "applyRequired": "يلزم التطبيق",
+      "externalWrite": "كتابة خارجية",
+      "localProcess": "يشغّل عملية محلية"
+    },
+    "state": {
+      "on": "مفعّل",
+      "off": "متوقف",
+      "disabled": "معطّل"
+    },
+    "rows": {
+      "vaultContext": "سياق المستودع",
+      "referencesPlusContext_one": "{{count}} مرجع صريح بالإضافة إلى السياق النشط",
+      "referencesPlusContext_other": "{{count}} مراجع صريحة بالإضافة إلى السياق النشط",
+      "activeContext": "الملاحظة النشطة ولقطة سياق الرسم البياني",
+      "readTools": "أدوات قراءة المستودع",
+      "enabledCount": "{{count}} مفعّلة",
+      "noReadTool": "لا توجد أداة قراءة مباشرة مفعّلة",
+      "writes": "الكتابة في المستودع",
+      "proposalOnly": "اقتراح فقط؛ يلزم التطبيق",
+      "unavailable": "غير متاح",
+      "rag": "RAG",
+      "web": "البحث على الويب",
+      "on": "مفعّل",
+      "off": "متوقف",
+      "disabledInSettings": "معطّل في الإعدادات",
+      "custom": "أدوات مخصصة",
+      "customEnabled_one": "{{count}} أداة MCP أو OpenAPI أو CLI مفعّلة",
+      "customEnabled_other": "{{count}} أدوات MCP أو OpenAPI أو CLI مفعّلة",
+      "noneEnabled": "لا شيء مفعّل",
+      "destructive": "إجراءات مدمّرة في المستودع",
+      "notProvided": "لا توفّرها الأدوات المدمجة"
+    }
+  },
+  "markdown": {
+    "run": "تشغيل"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "لا توجد ملاحظات Markdown للفهرسة.",
+      "starting_one": "جارٍ فهرسة {{count}} ملاحظة…",
+      "starting_other": "جارٍ فهرسة {{count}} ملاحظات…",
+      "progress": "الفهرسة: {{done}} من {{total}} ملاحظات",
+      "completed": "اكتملت الفهرسة: {{indexed}} مفهرسة، {{failed}} فشلت.",
+      "noIndex": "لم تتم فهرسة أي شيء بعد. شغّل \"Embed all documents\" لفهرسة مستودعك.",
+      "gradingError": "فشل تقييم المستند: {{message}}",
+      "clearing": "جارٍ مسح الفهرس…",
+      "cleared": "تم مسح الفهرس."
+    }
   }
 }

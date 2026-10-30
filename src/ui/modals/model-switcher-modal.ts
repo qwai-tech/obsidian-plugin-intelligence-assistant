@@ -2,6 +2,7 @@ import { FuzzySuggestModal, Notice } from 'obsidian';
 import type { App } from 'obsidian';
 import type { ModelInfo } from '@/features/llm';
 import { getModelDisplayName } from '@/ui/chat/utils/provider-utils';
+import { t } from '@/i18n';
 
 /**
  * Dependencies the model switcher needs, kept as a narrow interface so the modal
@@ -30,7 +31,7 @@ export class ModelSwitcherModal extends FuzzySuggestModal<ModelInfo> {
 
 	constructor(app: App, private readonly deps: ModelSwitcherDeps) {
 		super(app);
-		this.setPlaceholder('Switch model…');
+		this.setPlaceholder(t('modals.modelSwitcher.placeholder'));
 	}
 
 	/** Pre-load the (possibly async) model list before opening so getItems is sync. */
@@ -52,11 +53,11 @@ export class ModelSwitcherModal extends FuzzySuggestModal<ModelInfo> {
 		void this.deps
 			.applyModel(item.id)
 			.then(() => {
-				new Notice(`Model switched to ${item.name || item.id}`);
+				new Notice(t('modals.modelSwitcher.switched', { name: item.name || item.id }));
 			})
 			.catch((error) => {
 				console.error('[ModelSwitcher] Failed to apply model', error);
-				new Notice('Failed to switch model.');
+				new Notice(t('modals.modelSwitcher.failed'));
 			});
 	}
 }

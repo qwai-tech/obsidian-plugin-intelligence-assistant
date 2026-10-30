@@ -85,6 +85,13 @@
         "allCapabilities": "Alle eigenskapar",
         "allStates": "Alle tilstandar",
         "searchPlaceholder": "Søk etter namn eller ID"
+      },
+      "refreshing": "Oppdaterer…",
+      "tableHeaders": {
+        "model": "Modell",
+        "capabilities": "Eigenskapar",
+        "status": "Status",
+        "actions": "Handlingar"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Slett MCP-tenaren «{{name}}»?"
-      }
+      },
+      "namePlaceholder": "Acme MCP-tenar"
     },
     "agents": {
       "desc": "Opprett og handter AI-agentar med spesifikke eigenskapar, verktøy og åtferd.",
@@ -394,7 +402,8 @@
             "reloadTools": "Last inn verktøy på nytt",
             "refetchTooltip": "Hent spesifikasjon frå URL på nytt",
             "deleteTooltip": "Slett kjelde"
-          }
+          },
+          "namePlaceholder": "HTTP-kjelde"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Miljøvariablar",
             "desc": "Format: NØKKEL=verdi, éin per linje"
-          }
+          },
+          "descriptionPlaceholder": "Køyrer ein kommando for å…"
         },
         "presets": {
           "title": "Legg til CLI-verktøy frå førehandsinnstillingar",
@@ -898,6 +908,10 @@
           "name": "Forklar tekst",
           "prompt": "Forklar følgjande tekst med enkle ord:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Gjer teksten lengre",
+        "prompt": "Utvid og utdjup denne teksten…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "La til {{count}} referanse(r)",
       "fileNotFound": "Fil ikkje funnen: {{path}}",
       "unableToLoadRag": "Kan ikkje laste RAG-statistikk.",
-      "referenced": "Referert: {{name}}"
+      "referenced": "Referert: {{name}}",
+      "openViewFailed": "Klarte ikkje å opne chattevisinga."
     },
     "status": {
       "unavailable": "Utilgjengeleg",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Totalt",
       "save": "Lagre",
       "insertToNotes": "Set inn i notat",
-      "regenerate": "Regenerer"
+      "regenerate": "Regenerer",
+      "assistant": "Assistent"
     },
     "toolCall": {
       "executionProcess": "Køyringsprosess",
@@ -1061,7 +1077,10 @@
       "today": "I dag",
       "yesterday": "I går",
       "thisWeek": "Denne veka",
-      "older": "Eldre"
+      "older": "Eldre",
+      "empty": "Ingen samtalar enno",
+      "rename": "Endra namn",
+      "delete": "Slett"
     },
     "header": {
       "noModels": "Ingen modellar tilgjengelege"
@@ -1098,6 +1117,41 @@
         "placeholder": "Skriv inn oppgåva di her...",
         "start": "Start",
         "title": "Start agentoppgåve"
+      }
+    },
+    "references": {
+      "usingContext": "Brukar kontekst",
+      "remove": "Fjern {{path}}"
+    },
+    "scrollToBottom": "Rull til botnen",
+    "preflight": {
+      "title": "Førehandssjekk av agentoppgåve",
+      "agent": "Agent: {{name}}",
+      "reads": "Les: {{paths}}",
+      "readsDefault": "Les: aktivt notat og øyeblinksbilete av konteksten",
+      "tools": "Verktøy: {{count}} aktiverte",
+      "writesProposal": "Skriv: berre forslag; Bruk må veljast",
+      "writesNone": "Skriv: ikkje tilgjengeleg",
+      "rag": "RAG: {{state}}",
+      "web": "Nett: {{state}}"
+    },
+    "proposals": {
+      "title": "Skriveforslag",
+      "preview": "Førehandsvis foreslått innhald",
+      "apply": "Bruk",
+      "applyAll": "Bruk alle",
+      "applied": "Brukt",
+      "changes_one": "{{count}} endring",
+      "changes_other": "{{count}} endringar",
+      "confirm": "Bruke {{summary}}?",
+      "appliedNotice": "Brukt: {{summary}}",
+      "operations": {
+        "create": "Opprett",
+        "update": "Oppdater",
+        "append": "Legg til",
+        "delete": "Slett",
+        "move": "Flytt",
+        "batch": "Samling"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Oppdaterer...",
         "refreshSuccess": "Modelliste oppdatert",
         "refreshFailed": "Klarte ikkje å oppdatere modellista"
-      }
+      },
+      "pulling": "Hentar…",
+      "deleting": "Slettar…"
     },
     "promptEdit": {
       "title": "Rediger systemleidetekst",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Handsamar...",
       "error": "Feil ved vising av forklaring",
       "errorPrefix": "Feil:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Byt modell…",
+      "switched": "Modell bytt til {{name}}",
+      "failed": "Klarte ikkje å byte modell."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Ingen gyldig leverandørkonfigurasjon funnen for modellen: {{modelId}}",
     "processing": "Handsamar...",
     "textUpdated": "Tekst oppdatert",
-    "error": "Feil: {{message}}"
+    "error": "Feil: {{message}}",
+    "inlineBlockFailed": "Klarte ikkje å køyre den innebygde AI-blokka.",
+    "deepLinkFailed": "Klarte ikkje å opne Intelligence Assistant-lenkja."
   },
   "commands": {
     "askAgentCurrentNote": "Agentoppgåve: spør om gjeldande notat",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Agentoppgåve: organiser gjeldande notat",
     "sourceGroundedQuestion": "Agentoppgåve: still eit kjeldebasert spørsmål",
     "summarizeCurrentNote": "Agentoppgåve: samanfatt gjeldande notat",
-    "switchModel": "Byt modell"
+    "switchModel": "Byt modell",
+    "notices": {
+      "openNoteToAsk": "Opne eit notat før du spør agenten.",
+      "openNoteToSummarize": "Opne eit notat før du samanfattar med agenten.",
+      "openNoteToOrganize": "Opne eit notat før du organiserer med agenten.",
+      "openProjectNote": "Opne eit prosjektnotat før du lagar eit prosjektsamandrag.",
+      "openNoteToResearch": "Opne eit notat før du lagar eit forskingssamandrag.",
+      "openNoteToFindRelated": "Opne eit notat før du finn relaterte notat.",
+      "openNoteToImproveLinks": "Opne eit notat før du forbetrar lenkjer, taggar og eigenskapar.",
+      "openNoteToDraft": "Opne eit notat før du skriv utkast med agenten.",
+      "selectTextToImprove": "Merk tekst før du ber agenten forbetre han."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: spør agenten om denne fila",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Opne AI-chat"
+  },
+  "status": {
+    "idle": "IA: ledig · {{tokens}} token",
+    "running": "IA: køyrer · {{tokens}} token",
+    "ariaIdle": "Intelligence Assistant er ledig; {{tokens}} token brukte",
+    "ariaRunning": "Intelligence Assistant-agenten køyrer; {{tokens}} token brukte"
+  },
+  "capability": {
+    "title": "Verktøy og løyve",
+    "subtitle_one": "{{agent}} kan bruke {{count}} verktøy.",
+    "subtitle_other": "{{agent}} kan bruke {{count}} verktøy.",
+    "chatMode": "Chattemodus",
+    "permissions": "Gjeldande løyve",
+    "reads": "Denne oppgåva kan lese",
+    "tools": "Aktiverte verktøy",
+    "noTools": "Ingen verktøy er aktiverte for den gjeldande agenten.",
+    "noDescription": "Inga skildring",
+    "builtinGroup": "Innebygde kvelvverktøy",
+    "tags": {
+      "applyRequired": "Krev Bruk",
+      "externalWrite": "Ekstern skriving",
+      "localProcess": "Køyrer ein lokal prosess"
+    },
+    "state": {
+      "on": "på",
+      "off": "av",
+      "disabled": "deaktivert"
+    },
+    "rows": {
+      "vaultContext": "Kvelvkontekst",
+      "referencesPlusContext_one": "{{count}} eksplisitt referanse pluss aktiv kontekst",
+      "referencesPlusContext_other": "{{count}} eksplisitte referansar pluss aktiv kontekst",
+      "activeContext": "Aktivt notat og øyeblinksbilete av grafkonteksten",
+      "readTools": "Leseverktøy for kvelvet",
+      "enabledCount": "{{count}} aktiverte",
+      "noReadTool": "Ingen direkte leseverktøy aktivert",
+      "writes": "Skriving til kvelvet",
+      "proposalOnly": "Berre forslag; Bruk må veljast",
+      "unavailable": "Ikkje tilgjengeleg",
+      "rag": "RAG",
+      "web": "Nettsøk",
+      "on": "På",
+      "off": "Av",
+      "disabledInSettings": "Deaktivert i innstillingane",
+      "custom": "Eigne verktøy",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- eller CLI-verktøy aktivert",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- eller CLI-verktøy aktiverte",
+      "noneEnabled": "Ingen aktiverte",
+      "destructive": "Destruktive kvelvhandlingar",
+      "notProvided": "Ikkje levert av innebygde verktøy"
+    }
+  },
+  "markdown": {
+    "run": "Køyr"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Ingen Markdown-notat å indeksere.",
+      "starting_one": "Indekserer {{count}} notat…",
+      "starting_other": "Indekserer {{count}} notat…",
+      "progress": "Indekserer: {{done}} av {{total}} notat",
+      "completed": "Indeksering ferdig: {{indexed}} indekserte, {{failed}} mislukka.",
+      "noIndex": "Ingenting er indeksert enno. Køyr \"Embed all documents\" for å indeksere kvelvet ditt.",
+      "gradingError": "Vurdering av dokument mislukkast: {{message}}",
+      "clearing": "Tømmer indeksen…",
+      "cleared": "Indeksen er tømd."
+    }
   }
 }

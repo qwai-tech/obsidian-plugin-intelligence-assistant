@@ -323,7 +323,7 @@ export class ChatInputComponent {
 
 		const summary = referenceList.createDiv('reference-summary');
 		setIcon(summary.createSpan('reference-summary-icon'), 'paperclip');
-		summary.createSpan({ text: 'Using context', cls: 'reference-summary-label' });
+		summary.createSpan({ text: t('chat.references.usingContext'), cls: 'reference-summary-label' });
 
 		this.state.referencedFiles.slice(0, 4).forEach((item, index) => {
 			const refItem = referenceList.createDiv('reference-item');
@@ -338,7 +338,7 @@ export class ChatInputComponent {
 			});
 			const removeBtn = refItem.createEl('button', { cls: 'reference-remove' });
 			removeBtn.type = 'button';
-			removeBtn.setAttribute('aria-label', `Remove ${item.path}`);
+			removeBtn.setAttribute('aria-label', t('chat.references.remove', { path: item.path }));
 			setIcon(removeBtn, 'x');
 			removeBtn.addEventListener('click', (e) => {
 				e.stopPropagation();

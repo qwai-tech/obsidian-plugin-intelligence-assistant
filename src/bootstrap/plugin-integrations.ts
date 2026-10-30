@@ -4,6 +4,7 @@ import type { RAGManager } from '@/adapters/rag/rag-manager';
 import { createIncrementalIndexHandlers } from '@/adapters/rag/incremental-indexer';
 import { parseAiBlock, buildAiWidget } from '@/ui/markdown/ai-code-block';
 import type { AgentTaskLauncher } from '@/ui/views/agent-task-launcher';
+import { t } from '@/i18n';
 
 export function registerIncrementalRagIndexing(
 	plugin: Plugin,
@@ -67,7 +68,7 @@ export function registerInlineAiBlocks(plugin: Plugin, launcher: AgentTaskLaunch
 			})
 				.catch((error) => {
 					console.error('[Plugin] Inline ai block run failed:', error);
-					new Notice('Failed to run inline AI block.');
+					new Notice(t('notices.inlineBlockFailed'));
 				})
 				.finally(() => handle.setRunning(false));
 		});
@@ -78,7 +79,7 @@ export function registerDeepLinks(plugin: Plugin, launcher: AgentTaskLauncher): 
 	plugin.registerObsidianProtocolHandler('intelligence-assistant', (params) => {
 		runDeepLink(plugin, launcher, params).catch((error) => {
 			console.error('[Plugin] Protocol deep link failed:', error);
-			new Notice('Failed to handle intelligence-assistant deep link.');
+			new Notice(t('notices.deepLinkFailed'));
 		});
 	});
 }

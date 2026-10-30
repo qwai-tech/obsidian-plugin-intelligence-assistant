@@ -85,6 +85,13 @@
         "allCapabilities": "모든 기능",
         "allStates": "모든 상태",
         "searchPlaceholder": "이름 또는 ID 검색"
+      },
+      "refreshing": "새로 고치는 중…",
+      "tableHeaders": {
+        "model": "모델",
+        "capabilities": "기능",
+        "status": "상태",
+        "actions": "작업"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "MCP 서버 \"{{name}}\"을 삭제하시겠습니까?"
-      }
+      },
+      "namePlaceholder": "Acme MCP 서버"
     },
     "agents": {
       "desc": "특정 기능, 도구, 동작을 가진 AI 에이전트를 생성하고 관리합니다.",
@@ -394,7 +402,8 @@
             "reloadTools": "도구 다시 로드",
             "refetchTooltip": "URL에서 사양 다시 가져오기",
             "deleteTooltip": "소스 삭제"
-          }
+          },
+          "namePlaceholder": "HTTP 소스"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "환경 변수",
             "desc": "형식: KEY=value, 한 줄에 하나씩"
-          }
+          },
+          "descriptionPlaceholder": "명령을 실행하여…"
         },
         "presets": {
           "title": "프리셋에서 CLI 도구 추가",
@@ -898,6 +908,10 @@
           "name": "텍스트 설명하기",
           "prompt": "다음 텍스트를 쉬운 말로 설명하세요:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "텍스트 늘리기",
+        "prompt": "다음 텍스트를 확장하고 자세히 설명하세요…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "{{count}}개의 참조가 추가되었습니다",
       "fileNotFound": "파일을 찾을 수 없습니다: {{path}}",
       "unableToLoadRag": "RAG 통계를 불러올 수 없습니다.",
-      "referenced": "참조됨: {{name}}"
+      "referenced": "참조됨: {{name}}",
+      "openViewFailed": "채팅 보기를 열 수 없습니다."
     },
     "status": {
       "unavailable": "사용 불가",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "합계",
       "save": "저장",
       "insertToNotes": "노트에 삽입",
-      "regenerate": "재생성"
+      "regenerate": "재생성",
+      "assistant": "어시스턴트"
     },
     "toolCall": {
       "executionProcess": "실행 프로세스",
@@ -1061,7 +1077,10 @@
       "today": "오늘",
       "yesterday": "어제",
       "thisWeek": "이번 주",
-      "older": "이전"
+      "older": "이전",
+      "empty": "아직 대화가 없습니다",
+      "rename": "이름 바꾸기",
+      "delete": "삭제"
     },
     "header": {
       "noModels": "사용 가능한 모델 없음"
@@ -1098,6 +1117,41 @@
         "placeholder": "여기에 작업을 입력하세요...",
         "start": "시작",
         "title": "에이전트 작업 시작"
+      }
+    },
+    "references": {
+      "usingContext": "사용 중인 컨텍스트",
+      "remove": "{{path}} 제거"
+    },
+    "scrollToBottom": "맨 아래로 스크롤",
+    "preflight": {
+      "title": "에이전트 작업 사전 점검",
+      "agent": "에이전트: {{name}}",
+      "reads": "읽기: {{paths}}",
+      "readsDefault": "읽기: 활성 노트 및 컨텍스트 스냅샷",
+      "tools": "도구: {{count}}개 활성화됨",
+      "writesProposal": "쓰기: 제안만 가능, 적용 필요",
+      "writesNone": "쓰기: 사용할 수 없음",
+      "rag": "RAG: {{state}}",
+      "web": "웹: {{state}}"
+    },
+    "proposals": {
+      "title": "쓰기 제안",
+      "preview": "제안된 내용 미리보기",
+      "apply": "적용",
+      "applyAll": "모두 적용",
+      "applied": "적용됨",
+      "changes_one": "변경 {{count}}개",
+      "changes_other": "변경 {{count}}개",
+      "confirm": "{{summary}}을(를) 적용할까요?",
+      "appliedNotice": "{{summary}} 적용됨",
+      "operations": {
+        "create": "생성",
+        "update": "업데이트",
+        "append": "추가",
+        "delete": "삭제",
+        "move": "이동",
+        "batch": "일괄"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "새로 고침 중...",
         "refreshSuccess": "모델 목록이 새로 고침되었습니다",
         "refreshFailed": "모델 목록 새로 고침 실패"
-      }
+      },
+      "pulling": "가져오는 중…",
+      "deleting": "삭제 중…"
     },
     "promptEdit": {
       "title": "시스템 프롬프트 편집",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ 처리 중...",
       "error": "설명 렌더링 오류",
       "errorPrefix": "오류:"
+    },
+    "modelSwitcher": {
+      "placeholder": "모델 전환…",
+      "switched": "모델이 {{name}}(으)로 전환되었습니다",
+      "failed": "모델을 전환할 수 없습니다."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "이 모델에 대한 유효한 제공자 구성을 찾을 수 없습니다: {{modelId}}",
     "processing": "처리 중...",
     "textUpdated": "텍스트가 성공적으로 업데이트되었습니다",
-    "error": "오류: {{message}}"
+    "error": "오류: {{message}}",
+    "inlineBlockFailed": "인라인 AI 블록을 실행할 수 없습니다.",
+    "deepLinkFailed": "Intelligence Assistant 링크를 열 수 없습니다."
   },
   "commands": {
     "askAgentCurrentNote": "에이전트 작업: 현재 노트에 대해 질문",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "에이전트 작업: 현재 노트 정리",
     "sourceGroundedQuestion": "에이전트 작업: 출처 기반 질문하기",
     "summarizeCurrentNote": "에이전트 작업: 현재 노트 요약",
-    "switchModel": "모델 전환"
+    "switchModel": "모델 전환",
+    "notices": {
+      "openNoteToAsk": "에이전트에게 묻기 전에 노트를 여세요.",
+      "openNoteToSummarize": "에이전트로 요약하기 전에 노트를 여세요.",
+      "openNoteToOrganize": "에이전트로 정리하기 전에 노트를 여세요.",
+      "openProjectNote": "프로젝트 브리프를 만들기 전에 프로젝트 노트를 여세요.",
+      "openNoteToResearch": "리서치 브리프를 만들기 전에 노트를 여세요.",
+      "openNoteToFindRelated": "관련 노트를 찾기 전에 노트를 여세요.",
+      "openNoteToImproveLinks": "링크, 태그, 속성을 개선하기 전에 노트를 여세요.",
+      "openNoteToDraft": "에이전트로 초안을 작성하기 전에 노트를 여세요.",
+      "selectTextToImprove": "에이전트에게 개선을 요청하기 전에 텍스트를 선택하세요."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: 이 파일에 대해 에이전트에게 질문",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "AI 채팅 열기"
+  },
+  "status": {
+    "idle": "IA: 대기 중 · 토큰 {{tokens}}개",
+    "running": "IA: 실행 중 · 토큰 {{tokens}}개",
+    "ariaIdle": "Intelligence Assistant 대기 중, 토큰 {{tokens}}개 사용됨",
+    "ariaRunning": "Intelligence Assistant 에이전트 실행 중, 토큰 {{tokens}}개 사용됨"
+  },
+  "capability": {
+    "title": "도구 및 권한",
+    "subtitle_one": "{{agent}}은(는) 도구 {{count}}개를 사용할 수 있습니다.",
+    "subtitle_other": "{{agent}}은(는) 도구 {{count}}개를 사용할 수 있습니다.",
+    "chatMode": "채팅 모드",
+    "permissions": "현재 권한",
+    "reads": "이 작업이 읽을 수 있는 항목",
+    "tools": "활성화된 도구",
+    "noTools": "현재 에이전트에 활성화된 도구가 없습니다.",
+    "noDescription": "설명 없음",
+    "builtinGroup": "기본 제공 볼트 도구",
+    "tags": {
+      "applyRequired": "적용 필요",
+      "externalWrite": "외부 쓰기",
+      "localProcess": "로컬 프로세스 실행"
+    },
+    "state": {
+      "on": "켜짐",
+      "off": "꺼짐",
+      "disabled": "비활성화됨"
+    },
+    "rows": {
+      "vaultContext": "볼트 컨텍스트",
+      "referencesPlusContext_one": "명시적 참조 {{count}}개와 활성 컨텍스트",
+      "referencesPlusContext_other": "명시적 참조 {{count}}개와 활성 컨텍스트",
+      "activeContext": "활성 노트 및 그래프 컨텍스트 스냅샷",
+      "readTools": "볼트 읽기 도구",
+      "enabledCount": "{{count}}개 활성화됨",
+      "noReadTool": "활성화된 직접 읽기 도구 없음",
+      "writes": "볼트 쓰기",
+      "proposalOnly": "제안만 가능, 적용이 필요합니다",
+      "unavailable": "사용할 수 없음",
+      "rag": "RAG",
+      "web": "웹 검색",
+      "on": "켜짐",
+      "off": "꺼짐",
+      "disabledInSettings": "설정에서 비활성화됨",
+      "custom": "사용자 지정 도구",
+      "customEnabled_one": "MCP, OpenAPI 또는 CLI 도구 {{count}}개 활성화됨",
+      "customEnabled_other": "MCP, OpenAPI 또는 CLI 도구 {{count}}개 활성화됨",
+      "noneEnabled": "활성화된 항목 없음",
+      "destructive": "파괴적인 볼트 작업",
+      "notProvided": "기본 제공 도구에서 제공하지 않음"
+    }
+  },
+  "markdown": {
+    "run": "실행"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "인덱싱할 Markdown 노트가 없습니다.",
+      "starting_one": "노트 {{count}}개 인덱싱 중…",
+      "starting_other": "노트 {{count}}개 인덱싱 중…",
+      "progress": "인덱싱 중: 노트 {{total}}개 중 {{done}}개",
+      "completed": "인덱싱 완료: {{indexed}}개 인덱싱됨, {{failed}}개 실패.",
+      "noIndex": "아직 인덱싱된 항목이 없습니다. \"Embed all documents\"를 실행해 볼트를 인덱싱하세요.",
+      "gradingError": "문서 평가 실패: {{message}}",
+      "clearing": "인덱스를 지우는 중…",
+      "cleared": "인덱스가 지워졌습니다."
+    }
   }
 }

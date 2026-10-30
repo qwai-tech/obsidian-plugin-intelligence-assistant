@@ -85,6 +85,13 @@
         "allCapabilities": "Всички възможности",
         "allStates": "Всички статуси",
         "searchPlaceholder": "Търси по име или ID"
+      },
+      "refreshing": "Опресняване…",
+      "tableHeaders": {
+        "model": "Модел",
+        "capabilities": "Възможности",
+        "status": "Състояние",
+        "actions": "Действия"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Изтриване на MCP сървър \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "MCP сървър на Acme"
     },
     "agents": {
       "desc": "Създавайте и управлявайте AI агенти със специфични възможности, инструменти и поведения.",
@@ -394,7 +402,8 @@
             "reloadTools": "Презареди инструменти",
             "refetchTooltip": "Извлечи отново спецификацията от URL",
             "deleteTooltip": "Изтрий източника"
-          }
+          },
+          "namePlaceholder": "HTTP източник"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Променливи на средата",
             "desc": "Формат: KEY=стойност, по един на ред"
-          }
+          },
+          "descriptionPlaceholder": "Изпълнява команда, за да…"
         },
         "presets": {
           "title": "Добавяне на CLI инструмент от предварителни настройки",
@@ -898,6 +908,10 @@
           "name": "Обясни текст",
           "prompt": "Обяснете следния текст с прости думи:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Удължи текста",
+        "prompt": "Разширете и доразвийте следния текст…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Добавени {{count}} референци(и)",
       "fileNotFound": "Файлът не е намерен: {{path}}",
       "unableToLoadRag": "Невъзможно зареждане на RAG статистиките.",
-      "referenced": "Референция: {{name}}"
+      "referenced": "Референция: {{name}}",
+      "openViewFailed": "Изгледът на чата не можа да се отвори."
     },
     "status": {
       "unavailable": "Недостъпен",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Общо",
       "save": "Запази",
       "insertToNotes": "Вмъкни в бележките",
-      "regenerate": "Регенерирай"
+      "regenerate": "Регенерирай",
+      "assistant": "Асистент"
     },
     "toolCall": {
       "executionProcess": "Процес на изпълнение",
@@ -1061,7 +1077,10 @@
       "today": "Днес",
       "yesterday": "Вчера",
       "thisWeek": "Тази седмица",
-      "older": "По-стари"
+      "older": "По-стари",
+      "empty": "Все още няма разговори",
+      "rename": "Преименувай",
+      "delete": "Изтрий"
     },
     "header": {
       "noModels": "Няма налични модели"
@@ -1098,6 +1117,41 @@
         "placeholder": "Въведете задачата си тук...",
         "start": "Старт",
         "title": "Стартиране на задача за агент"
+      }
+    },
+    "references": {
+      "usingContext": "Използва се контекст",
+      "remove": "Премахни {{path}}"
+    },
+    "scrollToBottom": "Превърти до края",
+    "preflight": {
+      "title": "Предварителна проверка на задачата на агента",
+      "agent": "Агент: {{name}}",
+      "reads": "Чете: {{paths}}",
+      "readsDefault": "Чете: активната бележка и моментна снимка на контекста",
+      "tools": "Инструменти: {{count}} активирани",
+      "writesProposal": "Запис: само предложение; изисква се „Приложи“",
+      "writesNone": "Запис: недостъпен",
+      "rag": "RAG: {{state}}",
+      "web": "Уеб: {{state}}"
+    },
+    "proposals": {
+      "title": "Предложения за запис",
+      "preview": "Преглед на предложеното съдържание",
+      "apply": "Приложи",
+      "applyAll": "Приложи всички",
+      "applied": "Приложено",
+      "changes_one": "{{count}} промяна",
+      "changes_other": "{{count}} промени",
+      "confirm": "Да се приложи ли {{summary}}?",
+      "appliedNotice": "Приложено: {{summary}}",
+      "operations": {
+        "create": "Създаване",
+        "update": "Актуализиране",
+        "append": "Добавяне в края",
+        "delete": "Изтриване",
+        "move": "Преместване",
+        "batch": "Пакет"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Обновяване...",
         "refreshSuccess": "Списъкът с модели е обновен",
         "refreshFailed": "Неуспешно обновяване на списъка с модели"
-      }
+      },
+      "pulling": "Изтегляне…",
+      "deleting": "Изтриване…"
     },
     "promptEdit": {
       "title": "Редактирай системно подканване",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Обработва се...",
       "error": "Грешка при показване на обяснението",
       "errorPrefix": "Грешка:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Смяна на модел…",
+      "switched": "Моделът е сменен на {{name}}",
+      "failed": "Моделът не можа да бъде сменен."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Не е намерена валидна конфигурация на доставчик за модел: {{modelId}}",
     "processing": "Обработва се...",
     "textUpdated": "Текстът е актуализиран успешно",
-    "error": "Грешка: {{message}}"
+    "error": "Грешка: {{message}}",
+    "inlineBlockFailed": "Вграденият блок с ИИ не можа да се изпълни.",
+    "deepLinkFailed": "Връзката към Intelligence Assistant не можа да се отвори."
   },
   "commands": {
     "askAgentCurrentNote": "Задача за агент: въпрос за текущата бележка",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Задача за агент: организиране на текущата бележка",
     "sourceGroundedQuestion": "Задача за агент: въпрос, основан на източници",
     "summarizeCurrentNote": "Задача за агент: обобщаване на текущата бележка",
-    "switchModel": "Смяна на модела"
+    "switchModel": "Смяна на модела",
+    "notices": {
+      "openNoteToAsk": "Отворете бележка, преди да питате агента.",
+      "openNoteToSummarize": "Отворете бележка, преди да обобщавате с агента.",
+      "openNoteToOrganize": "Отворете бележка, преди да организирате с агента.",
+      "openProjectNote": "Отворете бележка за проект, преди да създадете резюме на проекта.",
+      "openNoteToResearch": "Отворете бележка, преди да създадете проучвателно резюме.",
+      "openNoteToFindRelated": "Отворете бележка, преди да търсите свързани бележки.",
+      "openNoteToImproveLinks": "Отворете бележка, преди да подобрявате връзки, етикети и свойства.",
+      "openNoteToDraft": "Отворете бележка, преди да пишете чернова с агента.",
+      "selectTextToImprove": "Изберете текст, преди да помолите агента да го подобри."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: попитай агента за този файл",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Отваряне на AI чат"
+  },
+  "status": {
+    "idle": "IA: неактивен · {{tokens}} токена",
+    "running": "IA: работи · {{tokens}} токена",
+    "ariaIdle": "Intelligence Assistant е неактивен; използвани {{tokens}} токена",
+    "ariaRunning": "Агентът на Intelligence Assistant работи; използвани {{tokens}} токена"
+  },
+  "capability": {
+    "title": "Инструменти и разрешения",
+    "subtitle_one": "{{agent}} може да използва {{count}} инструмент.",
+    "subtitle_other": "{{agent}} може да използва {{count}} инструмента.",
+    "chatMode": "Режим на чат",
+    "permissions": "Текущи разрешения",
+    "reads": "Тази задача може да чете",
+    "tools": "Активирани инструменти",
+    "noTools": "Няма активирани инструменти за текущия агент.",
+    "noDescription": "Няма описание",
+    "builtinGroup": "Вградени инструменти за хранилището",
+    "tags": {
+      "applyRequired": "Изисква се „Приложи“",
+      "externalWrite": "Външен запис",
+      "localProcess": "Стартира локален процес"
+    },
+    "state": {
+      "on": "вкл.",
+      "off": "изкл.",
+      "disabled": "деактивирано"
+    },
+    "rows": {
+      "vaultContext": "Контекст на хранилището",
+      "referencesPlusContext_one": "{{count}} изрична препратка плюс активния контекст",
+      "referencesPlusContext_other": "{{count}} изрични препратки плюс активния контекст",
+      "activeContext": "Активната бележка и моментна снимка на контекста на графа",
+      "readTools": "Инструменти за четене от хранилището",
+      "enabledCount": "{{count}} активирани",
+      "noReadTool": "Няма активиран инструмент за директно четене",
+      "writes": "Запис в хранилището",
+      "proposalOnly": "Само предложение; изисква се „Приложи“",
+      "unavailable": "Недостъпно",
+      "rag": "RAG",
+      "web": "Търсене в уеб",
+      "on": "Вкл.",
+      "off": "Изкл.",
+      "disabledInSettings": "Деактивирано в настройките",
+      "custom": "Персонализирани инструменти",
+      "customEnabled_one": "{{count}} активиран инструмент MCP, OpenAPI или CLI",
+      "customEnabled_other": "{{count}} активирани инструмента MCP, OpenAPI или CLI",
+      "noneEnabled": "Няма активирани",
+      "destructive": "Разрушителни действия в хранилището",
+      "notProvided": "Не се предоставя от вградените инструменти"
+    }
+  },
+  "markdown": {
+    "run": "Изпълни"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Няма Markdown бележки за индексиране.",
+      "starting_one": "Индексиране на {{count}} бележка…",
+      "starting_other": "Индексиране на {{count}} бележки…",
+      "progress": "Индексиране: {{done}} от {{total}} бележки",
+      "completed": "Индексирането приключи: {{indexed}} индексирани, {{failed}} неуспешни.",
+      "noIndex": "Все още нищо не е индексирано. Изпълнете \"Embed all documents\", за да индексирате хранилището си.",
+      "gradingError": "Оценяването на документа не бе успешно: {{message}}",
+      "clearing": "Изчистване на индекса…",
+      "cleared": "Индексът е изчистен."
+    }
   }
 }

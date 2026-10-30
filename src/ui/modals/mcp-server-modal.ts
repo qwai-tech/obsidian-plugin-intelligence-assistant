@@ -46,7 +46,7 @@ export class MCPServerModal extends Modal {
 			description: t('modals.mcpServer.serverName.desc')
 		}).addText(text => {
 				text.inputEl.setAttribute('data-testid', TestIds.settings.mcpModalNameInput);
-				text.setPlaceholder('Acme MCP server');
+				text.setPlaceholder(t('settings.mcp.namePlaceholder'));
 				text.setValue(this.draft.name ?? '');
 				text.onChange(value => {
 					this.draft.name = value;

@@ -85,6 +85,13 @@
         "allCapabilities": "Semua keupayaan",
         "allStates": "Semua status",
         "searchPlaceholder": "Cari nama atau ID"
+      },
+      "refreshing": "Menyegarkan…",
+      "tableHeaders": {
+        "model": "Model",
+        "capabilities": "Keupayaan",
+        "status": "Status",
+        "actions": "Tindakan"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Padam pelayan MCP \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "Pelayan MCP Acme"
     },
     "agents": {
       "desc": "Cipta dan urus ejen AI dengan keupayaan, alat, dan tingkah laku tertentu.",
@@ -394,7 +402,8 @@
             "reloadTools": "Muat semula alat",
             "refetchTooltip": "Ambil semula spesifikasi daripada URL",
             "deleteTooltip": "Padam sumber"
-          }
+          },
+          "namePlaceholder": "Sumber HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Pemboleh ubah persekitaran",
             "desc": "Format: KEY=value, satu setiap baris"
-          }
+          },
+          "descriptionPlaceholder": "Menjalankan arahan untuk…"
         },
         "presets": {
           "title": "Tambah alat CLI daripada praset",
@@ -898,6 +908,10 @@
           "name": "Jelaskan teks",
           "prompt": "Jelaskan teks berikut dengan kata-kata mudah:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Panjangkan teks",
+        "prompt": "Kembangkan dan huraikan teks berikut…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Menambah {{count}} rujukan",
       "fileNotFound": "Fail tidak dijumpai: {{path}}",
       "unableToLoadRag": "Tidak dapat memuatkan statistik RAG.",
-      "referenced": "Dirujuk: {{name}}"
+      "referenced": "Dirujuk: {{name}}",
+      "openViewFailed": "Tidak dapat membuka paparan sembang."
     },
     "status": {
       "unavailable": "Tidak tersedia",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Jumlah",
       "save": "Simpan",
       "insertToNotes": "Masukkan ke Nota",
-      "regenerate": "Jana Semula"
+      "regenerate": "Jana Semula",
+      "assistant": "Pembantu"
     },
     "toolCall": {
       "executionProcess": "Proses Pelaksanaan",
@@ -1061,7 +1077,10 @@
       "today": "Hari ini",
       "yesterday": "Semalam",
       "thisWeek": "Minggu ini",
-      "older": "Lebih lama"
+      "older": "Lebih lama",
+      "empty": "Belum ada perbualan",
+      "rename": "Namakan semula",
+      "delete": "Padam"
     },
     "header": {
       "noModels": "Tiada model tersedia"
@@ -1098,6 +1117,41 @@
         "placeholder": "Masukkan tugas anda di sini...",
         "start": "Mula",
         "title": "Mulakan tugas ejen"
+      }
+    },
+    "references": {
+      "usingContext": "Menggunakan konteks",
+      "remove": "Alih keluar {{path}}"
+    },
+    "scrollToBottom": "Tatal ke bawah",
+    "preflight": {
+      "title": "Semakan awal tugas ejen",
+      "agent": "Ejen: {{name}}",
+      "reads": "Membaca: {{paths}}",
+      "readsDefault": "Membaca: nota aktif dan petikan konteks",
+      "tools": "Alat: {{count}} didayakan",
+      "writesProposal": "Menulis: cadangan sahaja; perlu Guna",
+      "writesNone": "Menulis: tidak tersedia",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Cadangan penulisan",
+      "preview": "Pratonton kandungan yang dicadangkan",
+      "apply": "Guna",
+      "applyAll": "Guna semua",
+      "applied": "Digunakan",
+      "changes_one": "{{count}} perubahan",
+      "changes_other": "{{count}} perubahan",
+      "confirm": "Guna {{summary}}?",
+      "appliedNotice": "Digunakan: {{summary}}",
+      "operations": {
+        "create": "Cipta",
+        "update": "Kemas kini",
+        "append": "Tambah",
+        "delete": "Padam",
+        "move": "Alih",
+        "batch": "Kelompok"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Menyegarkan...",
         "refreshSuccess": "Senarai model disegarkan",
         "refreshFailed": "Gagal menyegarkan senarai model"
-      }
+      },
+      "pulling": "Memuat turun…",
+      "deleting": "Memadam…"
     },
     "promptEdit": {
       "title": "Edit prompt sistem",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Memproses...",
       "error": "Ralat memaparkan penjelasan",
       "errorPrefix": "Ralat:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Tukar model…",
+      "switched": "Model ditukar kepada {{name}}",
+      "failed": "Tidak dapat menukar model."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Tiada konfigurasi pembekal yang sah untuk model: {{modelId}}",
     "processing": "Memproses...",
     "textUpdated": "Teks berjaya dikemas kini",
-    "error": "Ralat: {{message}}"
+    "error": "Ralat: {{message}}",
+    "inlineBlockFailed": "Tidak dapat menjalankan blok AI sebaris.",
+    "deepLinkFailed": "Tidak dapat membuka pautan Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Tugas ejen: tanya tentang nota semasa",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Tugas ejen: susun nota semasa",
     "sourceGroundedQuestion": "Tugas ejen: tanya soalan berasaskan sumber",
     "summarizeCurrentNote": "Tugas ejen: ringkaskan nota semasa",
-    "switchModel": "Tukar model"
+    "switchModel": "Tukar model",
+    "notices": {
+      "openNoteToAsk": "Buka nota sebelum bertanya kepada ejen.",
+      "openNoteToSummarize": "Buka nota sebelum meringkaskan dengan ejen.",
+      "openNoteToOrganize": "Buka nota sebelum menyusun dengan ejen.",
+      "openProjectNote": "Buka nota projek sebelum mencipta ringkasan projek.",
+      "openNoteToResearch": "Buka nota sebelum mencipta ringkasan penyelidikan.",
+      "openNoteToFindRelated": "Buka nota sebelum mencari nota berkaitan.",
+      "openNoteToImproveLinks": "Buka nota sebelum menambah baik pautan, tag dan sifat.",
+      "openNoteToDraft": "Buka nota sebelum membuat draf dengan ejen.",
+      "selectTextToImprove": "Pilih teks sebelum meminta ejen menambah baiknya."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: tanya ejen tentang fail ini",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Buka sembang AI"
+  },
+  "status": {
+    "idle": "IA: melahu · {{tokens}} token",
+    "running": "IA: berjalan · {{tokens}} token",
+    "ariaIdle": "Intelligence Assistant sedang melahu; {{tokens}} token digunakan",
+    "ariaRunning": "Ejen Intelligence Assistant sedang berjalan; {{tokens}} token digunakan"
+  },
+  "capability": {
+    "title": "Alat dan kebenaran",
+    "subtitle_one": "{{agent}} boleh menggunakan {{count}} alat.",
+    "subtitle_other": "{{agent}} boleh menggunakan {{count}} alat.",
+    "chatMode": "Mod sembang",
+    "permissions": "Kebenaran semasa",
+    "reads": "Tugas ini boleh membaca",
+    "tools": "Alat yang didayakan",
+    "noTools": "Tiada alat didayakan untuk ejen semasa.",
+    "noDescription": "Tiada penerangan",
+    "builtinGroup": "Alat vault terbina dalam",
+    "tags": {
+      "applyRequired": "Perlu Guna",
+      "externalWrite": "Penulisan luaran",
+      "localProcess": "Menjalankan proses setempat"
+    },
+    "state": {
+      "on": "hidup",
+      "off": "mati",
+      "disabled": "dilumpuhkan"
+    },
+    "rows": {
+      "vaultContext": "Konteks vault",
+      "referencesPlusContext_one": "{{count}} rujukan eksplisit serta konteks aktif",
+      "referencesPlusContext_other": "{{count}} rujukan eksplisit serta konteks aktif",
+      "activeContext": "Nota aktif dan petikan konteks graf",
+      "readTools": "Alat baca vault",
+      "enabledCount": "{{count}} didayakan",
+      "noReadTool": "Tiada alat baca langsung didayakan",
+      "writes": "Penulisan vault",
+      "proposalOnly": "Cadangan sahaja; Guna diperlukan",
+      "unavailable": "Tidak tersedia",
+      "rag": "RAG",
+      "web": "Carian web",
+      "on": "Hidup",
+      "off": "Mati",
+      "disabledInSettings": "Dilumpuhkan dalam tetapan",
+      "custom": "Alat tersuai",
+      "customEnabled_one": "{{count}} alat MCP, OpenAPI atau CLI didayakan",
+      "customEnabled_other": "{{count}} alat MCP, OpenAPI atau CLI didayakan",
+      "noneEnabled": "Tiada yang didayakan",
+      "destructive": "Tindakan vault yang memusnahkan",
+      "notProvided": "Tidak disediakan oleh alat terbina dalam"
+    }
+  },
+  "markdown": {
+    "run": "Jalankan"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Tiada nota Markdown untuk diindeks.",
+      "starting_one": "Mengindeks {{count}} nota…",
+      "starting_other": "Mengindeks {{count}} nota…",
+      "progress": "Mengindeks: {{done}} daripada {{total}} nota",
+      "completed": "Pengindeksan selesai: {{indexed}} diindeks, {{failed}} gagal.",
+      "noIndex": "Belum ada yang diindeks. Jalankan \"Embed all documents\" untuk mengindeks vault anda.",
+      "gradingError": "Penilaian dokumen gagal: {{message}}",
+      "clearing": "Mengosongkan indeks…",
+      "cleared": "Indeks dikosongkan."
+    }
   }
 }

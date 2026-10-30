@@ -85,6 +85,13 @@
         "allCapabilities": "Visas iespējas",
         "allStates": "Visi stāvokļi",
         "searchPlaceholder": "Meklēt pēc nosaukuma vai ID"
+      },
+      "refreshing": "Atsvaidzina…",
+      "tableHeaders": {
+        "model": "Modelis",
+        "capabilities": "Iespējas",
+        "status": "Statuss",
+        "actions": "Darbības"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Dzēst MCP serveri «{{name}}»?"
-      }
+      },
+      "namePlaceholder": "Acme MCP serveris"
     },
     "agents": {
       "desc": "Izveidot un pārvaldīt AI aģentus ar specifiskām iespējām, rīkiem un uzvedību.",
@@ -394,7 +402,8 @@
             "reloadTools": "Atkārtoti ielādēt rīkus",
             "refetchTooltip": "Atkārtoti iegūt specifikāciju no URL",
             "deleteTooltip": "Dzēst avotu"
-          }
+          },
+          "namePlaceholder": "HTTP avots"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Vides mainīgie",
             "desc": "Formāts: ATSLĒGA=vērtība, viens katrā rindā"
-          }
+          },
+          "descriptionPlaceholder": "Palaiž komandu, lai…"
         },
         "presets": {
           "title": "Pievienot CLI rīku no priekšiestatījumiem",
@@ -898,6 +908,10 @@
           "name": "Paskaidrot tekstu",
           "prompt": "Paskaidrojiet sekojošo tekstu vienkāršos vārdos:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Padarīt tekstu garāku",
+        "prompt": "Paplašini un izvērs šo tekstu…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Pievienotas {{count}} atsauces",
       "fileNotFound": "Fails nav atrasts: {{path}}",
       "unableToLoadRag": "Nevar ielādēt RAG statistiku.",
-      "referenced": "Atsaukts: {{name}}"
+      "referenced": "Atsaukts: {{name}}",
+      "openViewFailed": "Nevarēja atvērt tērzēšanas skatu."
     },
     "status": {
       "unavailable": "Nav pieejams",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Kopā",
       "save": "Saglabāt",
       "insertToNotes": "Ievietot piezīmēs",
-      "regenerate": "Reģenerēt"
+      "regenerate": "Reģenerēt",
+      "assistant": "Asistents"
     },
     "toolCall": {
       "executionProcess": "Izpildes process",
@@ -1061,7 +1077,10 @@
       "today": "Šodien",
       "yesterday": "Vakar",
       "thisWeek": "Šonedēļ",
-      "older": "Vecākas"
+      "older": "Vecākas",
+      "empty": "Vēl nav sarunu",
+      "rename": "Pārdēvēt",
+      "delete": "Dzēst"
     },
     "header": {
       "noModels": "Nav pieejamu modeļu"
@@ -1098,6 +1117,41 @@
         "placeholder": "Ievadiet savu uzdevumu šeit...",
         "start": "Sākt",
         "title": "Sākt aģenta uzdevumu"
+      }
+    },
+    "references": {
+      "usingContext": "Izmanto kontekstu",
+      "remove": "Noņemt {{path}}"
+    },
+    "scrollToBottom": "Ritināt uz leju",
+    "preflight": {
+      "title": "Aģenta uzdevuma priekšpārbaude",
+      "agent": "Aģents: {{name}}",
+      "reads": "Lasa: {{paths}}",
+      "readsDefault": "Lasa: aktīvo piezīmi un konteksta momentuzņēmumu",
+      "tools": "Rīki: iespējoti {{count}}",
+      "writesProposal": "Rakstīšana: tikai priekšlikums; nepieciešams Lietot",
+      "writesNone": "Rakstīšana: nav pieejama",
+      "rag": "RAG: {{state}}",
+      "web": "Tīmeklis: {{state}}"
+    },
+    "proposals": {
+      "title": "Rakstīšanas priekšlikumi",
+      "preview": "Priekšskatīt piedāvāto saturu",
+      "apply": "Lietot",
+      "applyAll": "Lietot visu",
+      "applied": "Lietots",
+      "changes_one": "{{count}} izmaiņa",
+      "changes_other": "{{count}} izmaiņas",
+      "confirm": "Lietot {{summary}}?",
+      "appliedNotice": "Lietots: {{summary}}",
+      "operations": {
+        "create": "Izveidot",
+        "update": "Atjaunināt",
+        "append": "Pievienot",
+        "delete": "Dzēst",
+        "move": "Pārvietot",
+        "batch": "Pakete"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Atsvaidzina...",
         "refreshSuccess": "Modeļu saraksts atsvaidzināts",
         "refreshFailed": "Neizdevās atsvaidzināt modeļu sarakstu"
-      }
+      },
+      "pulling": "Lejupielādē…",
+      "deleting": "Dzēš…"
     },
     "promptEdit": {
       "title": "Rediģēt sistēmas uzvedni",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Apstrādā...",
       "error": "Kļūda rādot skaidrojumu",
       "errorPrefix": "Kļūda:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Pārslēgt modeli…",
+      "switched": "Modelis pārslēgts uz {{name}}",
+      "failed": "Nevarēja pārslēgt modeli."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Modelim nav atrasta derīga pakalpojumu sniedzēja konfigurācija: {{modelId}}",
     "processing": "Apstrādā...",
     "textUpdated": "Teksts veiksmīgi atjaunināts",
-    "error": "Kļūda: {{message}}"
+    "error": "Kļūda: {{message}}",
+    "inlineBlockFailed": "Nevarēja palaist iekļauto AI bloku.",
+    "deepLinkFailed": "Nevarēja atvērt Intelligence Assistant saiti."
   },
   "commands": {
     "askAgentCurrentNote": "Aģenta uzdevums: jautāt par pašreizējo piezīmi",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Aģenta uzdevums: sakārtot pašreizējo piezīmi",
     "sourceGroundedQuestion": "Aģenta uzdevums: uzdot uz avotiem balstītu jautājumu",
     "summarizeCurrentNote": "Aģenta uzdevums: apkopot pašreizējo piezīmi",
-    "switchModel": "Pārslēgt modeli"
+    "switchModel": "Pārslēgt modeli",
+    "notices": {
+      "openNoteToAsk": "Pirms jautāt aģentam, atveriet piezīmi.",
+      "openNoteToSummarize": "Pirms kopsavilkuma veidošanas ar aģentu atveriet piezīmi.",
+      "openNoteToOrganize": "Pirms kārtošanas ar aģentu atveriet piezīmi.",
+      "openProjectNote": "Pirms projekta kopsavilkuma izveides atveriet projekta piezīmi.",
+      "openNoteToResearch": "Pirms izpētes kopsavilkuma izveides atveriet piezīmi.",
+      "openNoteToFindRelated": "Pirms saistīto piezīmju meklēšanas atveriet piezīmi.",
+      "openNoteToImproveLinks": "Pirms saišu, tagu un rekvizītu uzlabošanas atveriet piezīmi.",
+      "openNoteToDraft": "Pirms melnraksta rakstīšanas ar aģentu atveriet piezīmi.",
+      "selectTextToImprove": "Pirms lūgt aģentam uzlabot tekstu, atlasiet to."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: jautāt aģentam par šo failu",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Atvērt AI tērzēšanu"
+  },
+  "status": {
+    "idle": "IA: dīkstāvē · {{tokens}} marķieri",
+    "running": "IA: darbojas · {{tokens}} marķieri",
+    "ariaIdle": "Intelligence Assistant ir dīkstāvē; izmantoti {{tokens}} marķieri",
+    "ariaRunning": "Intelligence Assistant aģents darbojas; izmantoti {{tokens}} marķieri"
+  },
+  "capability": {
+    "title": "Rīki un atļaujas",
+    "subtitle_one": "{{agent}} var izmantot {{count}} rīku.",
+    "subtitle_other": "{{agent}} var izmantot {{count}} rīkus.",
+    "chatMode": "Tērzēšanas režīms",
+    "permissions": "Pašreizējās atļaujas",
+    "reads": "Šis uzdevums var lasīt",
+    "tools": "Iespējotie rīki",
+    "noTools": "Pašreizējam aģentam nav iespējotu rīku.",
+    "noDescription": "Nav apraksta",
+    "builtinGroup": "Iebūvētie velves rīki",
+    "tags": {
+      "applyRequired": "Nepieciešams Lietot",
+      "externalWrite": "Ārēja rakstīšana",
+      "localProcess": "Palaiž lokālu procesu"
+    },
+    "state": {
+      "on": "ieslēgts",
+      "off": "izslēgts",
+      "disabled": "atspējots"
+    },
+    "rows": {
+      "vaultContext": "Velves konteksts",
+      "referencesPlusContext_one": "{{count}} skaidra atsauce un aktīvais konteksts",
+      "referencesPlusContext_other": "{{count}} skaidras atsauces un aktīvais konteksts",
+      "activeContext": "Aktīvā piezīme un grafa konteksta momentuzņēmums",
+      "readTools": "Velves lasīšanas rīki",
+      "enabledCount": "Iespējoti: {{count}}",
+      "noReadTool": "Nav iespējots neviens tiešās lasīšanas rīks",
+      "writes": "Rakstīšana velvē",
+      "proposalOnly": "Tikai priekšlikums; nepieciešams Lietot",
+      "unavailable": "Nav pieejams",
+      "rag": "RAG",
+      "web": "Tīmekļa meklēšana",
+      "on": "Ieslēgts",
+      "off": "Izslēgts",
+      "disabledInSettings": "Atspējots iestatījumos",
+      "custom": "Pielāgoti rīki",
+      "customEnabled_one": "Iespējots {{count}} MCP, OpenAPI vai CLI rīks",
+      "customEnabled_other": "Iespējoti {{count}} MCP, OpenAPI vai CLI rīki",
+      "noneEnabled": "Neviens nav iespējots",
+      "destructive": "Destruktīvas velves darbības",
+      "notProvided": "Iebūvētie rīki to nenodrošina"
+    }
+  },
+  "markdown": {
+    "run": "Palaist"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Nav Markdown piezīmju, ko indeksēt.",
+      "starting_one": "Indeksē {{count}} piezīmi…",
+      "starting_other": "Indeksē {{count}} piezīmes…",
+      "progress": "Indeksē: {{done}} no {{total}} piezīmēm",
+      "completed": "Indeksēšana pabeigta: indeksētas {{indexed}}, neizdevās {{failed}}.",
+      "noIndex": "Vēl nekas nav indeksēts. Palaidiet \"Embed all documents\", lai indeksētu velvi.",
+      "gradingError": "Dokumentu vērtēšana neizdevās: {{message}}",
+      "clearing": "Notīra indeksu…",
+      "cleared": "Indekss notīrīts."
+    }
   }
 }

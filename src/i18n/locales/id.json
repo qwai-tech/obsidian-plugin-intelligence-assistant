@@ -85,6 +85,13 @@
         "allCapabilities": "Semua kemampuan",
         "allStates": "Semua status",
         "searchPlaceholder": "Cari nama atau ID"
+      },
+      "refreshing": "Menyegarkan…",
+      "tableHeaders": {
+        "model": "Model",
+        "capabilities": "Kemampuan",
+        "status": "Status",
+        "actions": "Tindakan"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Hapus server MCP \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "Server MCP Acme"
     },
     "agents": {
       "desc": "Buat dan kelola agen AI dengan kemampuan, alat, dan perilaku tertentu.",
@@ -394,7 +402,8 @@
             "reloadTools": "Muat ulang alat",
             "refetchTooltip": "Ambil ulang spesifikasi dari URL",
             "deleteTooltip": "Hapus sumber"
-          }
+          },
+          "namePlaceholder": "Sumber HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Variabel lingkungan",
             "desc": "Format: KEY=value, satu per baris"
-          }
+          },
+          "descriptionPlaceholder": "Menjalankan perintah untuk…"
         },
         "presets": {
           "title": "Tambah alat CLI dari preset",
@@ -898,6 +908,10 @@
           "name": "Jelaskan teks",
           "prompt": "Jelaskan teks berikut dengan kata-kata sederhana:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Perpanjang teks",
+        "prompt": "Kembangkan dan uraikan teks berikut…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Menambahkan {{count}} referensi",
       "fileNotFound": "File tidak ditemukan: {{path}}",
       "unableToLoadRag": "Tidak dapat memuat statistik RAG.",
-      "referenced": "Direferensikan: {{name}}"
+      "referenced": "Direferensikan: {{name}}",
+      "openViewFailed": "Tidak dapat membuka tampilan obrolan."
     },
     "status": {
       "unavailable": "Tidak tersedia",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Total",
       "save": "Simpan",
       "insertToNotes": "Sisipkan ke Catatan",
-      "regenerate": "Regenerasi"
+      "regenerate": "Regenerasi",
+      "assistant": "Asisten"
     },
     "toolCall": {
       "executionProcess": "Proses Eksekusi",
@@ -1061,7 +1077,10 @@
       "today": "Hari ini",
       "yesterday": "Kemarin",
       "thisWeek": "Minggu ini",
-      "older": "Lebih lama"
+      "older": "Lebih lama",
+      "empty": "Belum ada percakapan",
+      "rename": "Ganti nama",
+      "delete": "Hapus"
     },
     "header": {
       "noModels": "Tidak ada model yang tersedia"
@@ -1098,6 +1117,41 @@
         "placeholder": "Masukkan tugas Anda di sini...",
         "start": "Mulai",
         "title": "Mulai tugas agen"
+      }
+    },
+    "references": {
+      "usingContext": "Menggunakan konteks",
+      "remove": "Hapus {{path}}"
+    },
+    "scrollToBottom": "Gulir ke bawah",
+    "preflight": {
+      "title": "Pemeriksaan awal tugas agen",
+      "agent": "Agen: {{name}}",
+      "reads": "Membaca: {{paths}}",
+      "readsDefault": "Membaca: catatan aktif dan cuplikan konteks",
+      "tools": "Alat: {{count}} diaktifkan",
+      "writesProposal": "Menulis: hanya usulan; perlu Terapkan",
+      "writesNone": "Menulis: tidak tersedia",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Usulan penulisan",
+      "preview": "Pratinjau konten yang diusulkan",
+      "apply": "Terapkan",
+      "applyAll": "Terapkan semua",
+      "applied": "Diterapkan",
+      "changes_one": "{{count}} perubahan",
+      "changes_other": "{{count}} perubahan",
+      "confirm": "Terapkan {{summary}}?",
+      "appliedNotice": "Diterapkan: {{summary}}",
+      "operations": {
+        "create": "Buat",
+        "update": "Perbarui",
+        "append": "Tambahkan",
+        "delete": "Hapus",
+        "move": "Pindahkan",
+        "batch": "Batch"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Menyegarkan...",
         "refreshSuccess": "Daftar model disegarkan",
         "refreshFailed": "Gagal menyegarkan daftar model"
-      }
+      },
+      "pulling": "Mengunduh…",
+      "deleting": "Menghapus…"
     },
     "promptEdit": {
       "title": "Edit prompt sistem",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Memproses...",
       "error": "Kesalahan merender penjelasan",
       "errorPrefix": "Kesalahan:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Ganti model…",
+      "switched": "Model diganti ke {{name}}",
+      "failed": "Tidak dapat mengganti model."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Tidak ada konfigurasi penyedia yang valid untuk model: {{modelId}}",
     "processing": "Memproses...",
     "textUpdated": "Teks berhasil diperbarui",
-    "error": "Kesalahan: {{message}}"
+    "error": "Kesalahan: {{message}}",
+    "inlineBlockFailed": "Tidak dapat menjalankan blok AI sebaris.",
+    "deepLinkFailed": "Tidak dapat membuka tautan Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Tugas agen: tanyakan tentang catatan saat ini",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Tugas agen: rapikan catatan saat ini",
     "sourceGroundedQuestion": "Tugas agen: ajukan pertanyaan berbasis sumber",
     "summarizeCurrentNote": "Tugas agen: ringkas catatan saat ini",
-    "switchModel": "Ganti model"
+    "switchModel": "Ganti model",
+    "notices": {
+      "openNoteToAsk": "Buka catatan sebelum bertanya kepada agen.",
+      "openNoteToSummarize": "Buka catatan sebelum meringkas dengan agen.",
+      "openNoteToOrganize": "Buka catatan sebelum menata dengan agen.",
+      "openProjectNote": "Buka catatan proyek sebelum membuat ringkasan proyek.",
+      "openNoteToResearch": "Buka catatan sebelum membuat ringkasan riset.",
+      "openNoteToFindRelated": "Buka catatan sebelum mencari catatan terkait.",
+      "openNoteToImproveLinks": "Buka catatan sebelum memperbaiki tautan, tag, dan properti.",
+      "openNoteToDraft": "Buka catatan sebelum membuat draf dengan agen.",
+      "selectTextToImprove": "Pilih teks sebelum meminta agen untuk memperbaikinya."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: tanyakan agen tentang file ini",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Buka obrolan AI"
+  },
+  "status": {
+    "idle": "IA: diam · {{tokens}} token",
+    "running": "IA: berjalan · {{tokens}} token",
+    "ariaIdle": "Intelligence Assistant sedang diam; {{tokens}} token digunakan",
+    "ariaRunning": "Agen Intelligence Assistant sedang berjalan; {{tokens}} token digunakan"
+  },
+  "capability": {
+    "title": "Alat dan izin",
+    "subtitle_one": "{{agent}} dapat menggunakan {{count}} alat.",
+    "subtitle_other": "{{agent}} dapat menggunakan {{count}} alat.",
+    "chatMode": "Mode obrolan",
+    "permissions": "Izin saat ini",
+    "reads": "Tugas ini dapat membaca",
+    "tools": "Alat yang diaktifkan",
+    "noTools": "Tidak ada alat yang diaktifkan untuk agen saat ini.",
+    "noDescription": "Tanpa deskripsi",
+    "builtinGroup": "Alat vault bawaan",
+    "tags": {
+      "applyRequired": "Perlu Terapkan",
+      "externalWrite": "Penulisan eksternal",
+      "localProcess": "Menjalankan proses lokal"
+    },
+    "state": {
+      "on": "aktif",
+      "off": "nonaktif",
+      "disabled": "dinonaktifkan"
+    },
+    "rows": {
+      "vaultContext": "Konteks vault",
+      "referencesPlusContext_one": "{{count}} referensi eksplisit ditambah konteks aktif",
+      "referencesPlusContext_other": "{{count}} referensi eksplisit ditambah konteks aktif",
+      "activeContext": "Catatan aktif dan cuplikan konteks grafik",
+      "readTools": "Alat baca vault",
+      "enabledCount": "{{count}} diaktifkan",
+      "noReadTool": "Tidak ada alat baca langsung yang diaktifkan",
+      "writes": "Penulisan vault",
+      "proposalOnly": "Hanya usulan; perlu Terapkan",
+      "unavailable": "Tidak tersedia",
+      "rag": "RAG",
+      "web": "Pencarian web",
+      "on": "Aktif",
+      "off": "Nonaktif",
+      "disabledInSettings": "Dinonaktifkan di pengaturan",
+      "custom": "Alat kustom",
+      "customEnabled_one": "{{count}} alat MCP, OpenAPI, atau CLI diaktifkan",
+      "customEnabled_other": "{{count}} alat MCP, OpenAPI, atau CLI diaktifkan",
+      "noneEnabled": "Tidak ada yang diaktifkan",
+      "destructive": "Tindakan vault destruktif",
+      "notProvided": "Tidak disediakan oleh alat bawaan"
+    }
+  },
+  "markdown": {
+    "run": "Jalankan"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Tidak ada catatan Markdown untuk diindeks.",
+      "starting_one": "Mengindeks {{count}} catatan…",
+      "starting_other": "Mengindeks {{count}} catatan…",
+      "progress": "Mengindeks: {{done}} dari {{total}} catatan",
+      "completed": "Pengindeksan selesai: {{indexed}} diindeks, {{failed}} gagal.",
+      "noIndex": "Belum ada yang diindeks. Jalankan \"Embed all documents\" untuk mengindeks vault Anda.",
+      "gradingError": "Penilaian dokumen gagal: {{message}}",
+      "clearing": "Mengosongkan indeks…",
+      "cleared": "Indeks dikosongkan."
+    }
   }
 }

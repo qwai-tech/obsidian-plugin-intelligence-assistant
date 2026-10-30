@@ -85,6 +85,13 @@
         "allCapabilities": "Todas as capacidades",
         "allStates": "Todos os estados",
         "searchPlaceholder": "Pesquisar nome ou ID"
+      },
+      "refreshing": "Atualizando…",
+      "tableHeaders": {
+        "model": "Modelo",
+        "capabilities": "Capacidades",
+        "status": "Status",
+        "actions": "Ações"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Excluir servidor MCP \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "Servidor MCP da Acme"
     },
     "agents": {
       "desc": "Crie e gerencie agentes de IA com capacidades, ferramentas e comportamentos específicos.",
@@ -394,7 +402,8 @@
             "reloadTools": "Recarregar ferramentas",
             "refetchTooltip": "Buscar especificação novamente a partir do URL",
             "deleteTooltip": "Excluir fonte"
-          }
+          },
+          "namePlaceholder": "Fonte HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Variáveis de ambiente",
             "desc": "Formato: CHAVE=valor, uma por linha"
-          }
+          },
+          "descriptionPlaceholder": "Executa um comando para…"
         },
         "presets": {
           "title": "Adicionar ferramenta CLI a partir de predefinições",
@@ -898,6 +908,10 @@
           "name": "Explicar texto",
           "prompt": "Explique o seguinte texto em termos simples:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Deixar o texto mais longo",
+        "prompt": "Expanda e desenvolva o texto a seguir…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Adicionadas {{count}} referência(s)",
       "fileNotFound": "Arquivo não encontrado: {{path}}",
       "unableToLoadRag": "Não é possível carregar as estatísticas RAG.",
-      "referenced": "Referenciado: {{name}}"
+      "referenced": "Referenciado: {{name}}",
+      "openViewFailed": "Não foi possível abrir a visualização do chat."
     },
     "status": {
       "unavailable": "Indisponível",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Total",
       "save": "Salvar",
       "insertToNotes": "Inserir nas Notas",
-      "regenerate": "Regenerar"
+      "regenerate": "Regenerar",
+      "assistant": "Assistente"
     },
     "toolCall": {
       "executionProcess": "Processo de Execução",
@@ -1061,7 +1077,10 @@
       "today": "Hoje",
       "yesterday": "Ontem",
       "thisWeek": "Esta semana",
-      "older": "Mais antigas"
+      "older": "Mais antigas",
+      "empty": "Nenhuma conversa ainda",
+      "rename": "Renomear",
+      "delete": "Excluir"
     },
     "header": {
       "noModels": "Nenhum modelo disponível"
@@ -1098,6 +1117,41 @@
         "placeholder": "Digite sua tarefa aqui...",
         "start": "Iniciar",
         "title": "Iniciar tarefa do agente"
+      }
+    },
+    "references": {
+      "usingContext": "Usando contexto",
+      "remove": "Remover {{path}}"
+    },
+    "scrollToBottom": "Rolar até o fim",
+    "preflight": {
+      "title": "Verificação prévia da tarefa do agente",
+      "agent": "Agente: {{name}}",
+      "reads": "Leituras: {{paths}}",
+      "readsDefault": "Leituras: nota ativa e snapshot do contexto",
+      "tools": "Ferramentas: {{count}} ativadas",
+      "writesProposal": "Gravações: apenas proposta; é preciso Aplicar",
+      "writesNone": "Gravações: indisponíveis",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Propostas de gravação",
+      "preview": "Visualizar o conteúdo proposto",
+      "apply": "Aplicar",
+      "applyAll": "Aplicar tudo",
+      "applied": "Aplicado",
+      "changes_one": "{{count}} alteração",
+      "changes_other": "{{count}} alterações",
+      "confirm": "Aplicar {{summary}}?",
+      "appliedNotice": "Aplicado: {{summary}}",
+      "operations": {
+        "create": "Criar",
+        "update": "Atualizar",
+        "append": "Anexar",
+        "delete": "Excluir",
+        "move": "Mover",
+        "batch": "Lote"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Atualizando...",
         "refreshSuccess": "Lista de modelos atualizada",
         "refreshFailed": "Falha ao atualizar lista de modelos"
-      }
+      },
+      "pulling": "Baixando…",
+      "deleting": "Excluindo…"
     },
     "promptEdit": {
       "title": "Editar prompt de sistema",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Processando...",
       "error": "Erro ao renderizar explicação",
       "errorPrefix": "Erro:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Trocar de modelo…",
+      "switched": "Modelo trocado para {{name}}",
+      "failed": "Não foi possível trocar de modelo."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Nenhuma configuração de provedor válida encontrada para o modelo: {{modelId}}",
     "processing": "Processando...",
     "textUpdated": "Texto atualizado com sucesso",
-    "error": "Erro: {{message}}"
+    "error": "Erro: {{message}}",
+    "inlineBlockFailed": "Não foi possível executar o bloco de IA inline.",
+    "deepLinkFailed": "Não foi possível abrir o link do Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Tarefa do agente: perguntar sobre a nota atual",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Tarefa do agente: organizar a nota atual",
     "sourceGroundedQuestion": "Tarefa do agente: fazer pergunta baseada em fontes",
     "summarizeCurrentNote": "Tarefa do agente: resumir a nota atual",
-    "switchModel": "Trocar modelo"
+    "switchModel": "Trocar modelo",
+    "notices": {
+      "openNoteToAsk": "Abra uma nota antes de perguntar ao agente.",
+      "openNoteToSummarize": "Abra uma nota antes de resumir com o agente.",
+      "openNoteToOrganize": "Abra uma nota antes de organizar com o agente.",
+      "openProjectNote": "Abra uma nota de projeto antes de criar um resumo do projeto.",
+      "openNoteToResearch": "Abra uma nota antes de criar um resumo de pesquisa.",
+      "openNoteToFindRelated": "Abra uma nota antes de buscar notas relacionadas.",
+      "openNoteToImproveLinks": "Abra uma nota antes de melhorar links, tags e propriedades.",
+      "openNoteToDraft": "Abra uma nota antes de redigir com o agente.",
+      "selectTextToImprove": "Selecione um texto antes de pedir ao agente para melhorá-lo."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: perguntar ao agente sobre este arquivo",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Abrir chat de IA"
+  },
+  "status": {
+    "idle": "IA: ocioso · {{tokens}} tokens",
+    "running": "IA: em execução · {{tokens}} tokens",
+    "ariaIdle": "O Intelligence Assistant está ocioso; {{tokens}} tokens usados",
+    "ariaRunning": "O agente do Intelligence Assistant está em execução; {{tokens}} tokens usados"
+  },
+  "capability": {
+    "title": "Ferramentas e permissões",
+    "subtitle_one": "{{agent}} pode usar {{count}} ferramenta.",
+    "subtitle_other": "{{agent}} pode usar {{count}} ferramentas.",
+    "chatMode": "Modo de chat",
+    "permissions": "Permissões atuais",
+    "reads": "Esta tarefa pode ler",
+    "tools": "Ferramentas ativadas",
+    "noTools": "Nenhuma ferramenta está ativada para o agente atual.",
+    "noDescription": "Sem descrição",
+    "builtinGroup": "Ferramentas integradas do vault",
+    "tags": {
+      "applyRequired": "Exige Aplicar",
+      "externalWrite": "Gravação externa",
+      "localProcess": "Executa um processo local"
+    },
+    "state": {
+      "on": "ligado",
+      "off": "desligado",
+      "disabled": "desativado"
+    },
+    "rows": {
+      "vaultContext": "Contexto do vault",
+      "referencesPlusContext_one": "{{count}} referência explícita mais o contexto ativo",
+      "referencesPlusContext_other": "{{count}} referências explícitas mais o contexto ativo",
+      "activeContext": "Nota ativa e snapshot do contexto do grafo",
+      "readTools": "Ferramentas de leitura do vault",
+      "enabledCount": "{{count}} ativadas",
+      "noReadTool": "Nenhuma ferramenta de leitura direta ativada",
+      "writes": "Gravações no vault",
+      "proposalOnly": "Apenas proposta; é preciso Aplicar",
+      "unavailable": "Indisponível",
+      "rag": "RAG",
+      "web": "Pesquisa na Web",
+      "on": "Ligado",
+      "off": "Desligado",
+      "disabledInSettings": "Desativado nas configurações",
+      "custom": "Ferramentas personalizadas",
+      "customEnabled_one": "{{count}} ferramenta MCP, OpenAPI ou CLI ativada",
+      "customEnabled_other": "{{count}} ferramentas MCP, OpenAPI ou CLI ativadas",
+      "noneEnabled": "Nenhuma ativada",
+      "destructive": "Ações destrutivas no vault",
+      "notProvided": "Não oferecidas pelas ferramentas integradas"
+    }
+  },
+  "markdown": {
+    "run": "Executar"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Nenhuma nota Markdown para indexar.",
+      "starting_one": "Indexando {{count}} nota…",
+      "starting_other": "Indexando {{count}} notas…",
+      "progress": "Indexando: {{done}} de {{total}} notas",
+      "completed": "Indexação concluída: {{indexed}} indexadas, {{failed}} com falha.",
+      "noIndex": "Nada foi indexado ainda. Execute \"Embed all documents\" para indexar seu vault.",
+      "gradingError": "Falha na avaliação de documentos: {{message}}",
+      "clearing": "Limpando o índice…",
+      "cleared": "Índice limpo."
+    }
   }
 }

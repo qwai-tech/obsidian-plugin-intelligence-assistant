@@ -85,6 +85,13 @@
         "allCapabilities": "ความสามารถทั้งหมด",
         "allStates": "สถานะทั้งหมด",
         "searchPlaceholder": "ค้นหาชื่อหรือ ID"
+      },
+      "refreshing": "กำลังรีเฟรช…",
+      "tableHeaders": {
+        "model": "โมเดล",
+        "capabilities": "ความสามารถ",
+        "status": "สถานะ",
+        "actions": "การดำเนินการ"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "ลบเซิร์ฟเวอร์ MCP \"{{name}}\" หรือไม่?"
-      }
+      },
+      "namePlaceholder": "เซิร์ฟเวอร์ MCP ของ Acme"
     },
     "agents": {
       "desc": "สร้างและจัดการเอเจนต์ AI ที่มีความสามารถ เครื่องมือ และพฤติกรรมเฉพาะ",
@@ -394,7 +402,8 @@
             "reloadTools": "โหลดเครื่องมือใหม่",
             "refetchTooltip": "ดึงสเปกจาก URL อีกครั้ง",
             "deleteTooltip": "ลบแหล่งข้อมูล"
-          }
+          },
+          "namePlaceholder": "แหล่ง HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "ตัวแปรสภาพแวดล้อม",
             "desc": "รูปแบบ: KEY=value หนึ่งรายการต่อบรรทัด"
-          }
+          },
+          "descriptionPlaceholder": "เรียกใช้คำสั่งเพื่อ…"
         },
         "presets": {
           "title": "เพิ่มเครื่องมือ CLI จากชุดเริ่มต้น",
@@ -898,6 +908,10 @@
           "name": "อธิบายข้อความ",
           "prompt": "อธิบายข้อความต่อไปนี้ในแบบง่าย:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "ทำให้ข้อความยาวขึ้น",
+        "prompt": "ขยายความและอธิบายข้อความต่อไปนี้ให้ละเอียดขึ้น…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "เพิ่ม {{count}} การอ้างอิงแล้ว",
       "fileNotFound": "ไม่พบไฟล์: {{path}}",
       "unableToLoadRag": "ไม่สามารถโหลดสถิติ RAG",
-      "referenced": "อ้างอิงแล้ว: {{name}}"
+      "referenced": "อ้างอิงแล้ว: {{name}}",
+      "openViewFailed": "ไม่สามารถเปิดมุมมองแชทได้"
     },
     "status": {
       "unavailable": "ไม่พร้อมใช้งาน",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "รวม",
       "save": "บันทึก",
       "insertToNotes": "แทรกลงในบันทึก",
-      "regenerate": "สร้างใหม่"
+      "regenerate": "สร้างใหม่",
+      "assistant": "ผู้ช่วย"
     },
     "toolCall": {
       "executionProcess": "กระบวนการดำเนินการ",
@@ -1061,7 +1077,10 @@
       "today": "วันนี้",
       "yesterday": "เมื่อวาน",
       "thisWeek": "สัปดาห์นี้",
-      "older": "เก่ากว่า"
+      "older": "เก่ากว่า",
+      "empty": "ยังไม่มีการสนทนา",
+      "rename": "เปลี่ยนชื่อ",
+      "delete": "ลบ"
     },
     "header": {
       "noModels": "ไม่มีโมเดลที่พร้อมใช้งาน"
@@ -1098,6 +1117,41 @@
         "placeholder": "ป้อนงานของคุณที่นี่...",
         "start": "เริ่ม",
         "title": "เริ่มงานเอเจนต์"
+      }
+    },
+    "references": {
+      "usingContext": "บริบทที่ใช้",
+      "remove": "นำ {{path}} ออก"
+    },
+    "scrollToBottom": "เลื่อนไปด้านล่างสุด",
+    "preflight": {
+      "title": "ตรวจสอบก่อนเริ่มงานเอเจนต์",
+      "agent": "เอเจนต์: {{name}}",
+      "reads": "การอ่าน: {{paths}}",
+      "readsDefault": "การอ่าน: บันทึกที่เปิดอยู่และภาพรวมบริบท",
+      "tools": "เครื่องมือ: เปิดใช้งาน {{count}} รายการ",
+      "writesProposal": "การเขียน: เป็นข้อเสนอเท่านั้น ต้องกด \"นำไปใช้\"",
+      "writesNone": "การเขียน: ไม่พร้อมใช้งาน",
+      "rag": "RAG: {{state}}",
+      "web": "เว็บ: {{state}}"
+    },
+    "proposals": {
+      "title": "ข้อเสนอการเขียน",
+      "preview": "ดูตัวอย่างเนื้อหาที่เสนอ",
+      "apply": "นำไปใช้",
+      "applyAll": "นำไปใช้ทั้งหมด",
+      "applied": "นำไปใช้แล้ว",
+      "changes_one": "{{count}} การเปลี่ยนแปลง",
+      "changes_other": "{{count}} การเปลี่ยนแปลง",
+      "confirm": "นำ {{summary}} ไปใช้หรือไม่?",
+      "appliedNotice": "นำ {{summary}} ไปใช้แล้ว",
+      "operations": {
+        "create": "สร้าง",
+        "update": "อัปเดต",
+        "append": "ต่อท้าย",
+        "delete": "ลบ",
+        "move": "ย้าย",
+        "batch": "ชุดคำสั่ง"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "กำลังรีเฟรช...",
         "refreshSuccess": "รีเฟรชรายการโมเดลแล้ว",
         "refreshFailed": "ไม่สามารถรีเฟรชรายการโมเดล"
-      }
+      },
+      "pulling": "กำลังดาวน์โหลด…",
+      "deleting": "กำลังลบ…"
     },
     "promptEdit": {
       "title": "แก้ไขพรอมต์ระบบ",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ กำลังประมวลผล...",
       "error": "ข้อผิดพลาดในการแสดงคำอธิบาย",
       "errorPrefix": "ข้อผิดพลาด:"
+    },
+    "modelSwitcher": {
+      "placeholder": "สลับโมเดล…",
+      "switched": "สลับโมเดลเป็น {{name}} แล้ว",
+      "failed": "ไม่สามารถสลับโมเดลได้"
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "ไม่พบการกำหนดค่าผู้ให้บริการที่ถูกต้องสำหรับโมเดล: {{modelId}}",
     "processing": "กำลังประมวลผล...",
     "textUpdated": "อัปเดตข้อความสำเร็จ",
-    "error": "ข้อผิดพลาด: {{message}}"
+    "error": "ข้อผิดพลาด: {{message}}",
+    "inlineBlockFailed": "ไม่สามารถเรียกใช้บล็อก AI แบบอินไลน์ได้",
+    "deepLinkFailed": "ไม่สามารถเปิดลิงก์ Intelligence Assistant ได้"
   },
   "commands": {
     "askAgentCurrentNote": "งานเอเจนต์: ถามเกี่ยวกับโน้ตปัจจุบัน",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "งานเอเจนต์: จัดระเบียบโน้ตปัจจุบัน",
     "sourceGroundedQuestion": "งานเอเจนต์: ถามคำถามโดยอ้างอิงแหล่งที่มา",
     "summarizeCurrentNote": "งานเอเจนต์: สรุปโน้ตปัจจุบัน",
-    "switchModel": "สลับโมเดล"
+    "switchModel": "สลับโมเดล",
+    "notices": {
+      "openNoteToAsk": "เปิดบันทึกก่อนถามเอเจนต์",
+      "openNoteToSummarize": "เปิดบันทึกก่อนสรุปด้วยเอเจนต์",
+      "openNoteToOrganize": "เปิดบันทึกก่อนจัดระเบียบด้วยเอเจนต์",
+      "openProjectNote": "เปิดบันทึกโปรเจกต์ก่อนสร้างสรุปโปรเจกต์",
+      "openNoteToResearch": "เปิดบันทึกก่อนสร้างสรุปงานวิจัย",
+      "openNoteToFindRelated": "เปิดบันทึกก่อนค้นหาบันทึกที่เกี่ยวข้อง",
+      "openNoteToImproveLinks": "เปิดบันทึกก่อนปรับปรุงลิงก์ แท็ก และพร็อพเพอร์ตี",
+      "openNoteToDraft": "เปิดบันทึกก่อนร่างเนื้อหาด้วยเอเจนต์",
+      "selectTextToImprove": "เลือกข้อความก่อนขอให้เอเจนต์ปรับปรุง"
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: ถามเอเจนต์เกี่ยวกับไฟล์นี้",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "เปิดแชต AI"
+  },
+  "status": {
+    "idle": "IA: ว่าง · {{tokens}} โทเค็น",
+    "running": "IA: กำลังทำงาน · {{tokens}} โทเค็น",
+    "ariaIdle": "Intelligence Assistant ว่างอยู่ ใช้ไป {{tokens}} โทเค็น",
+    "ariaRunning": "เอเจนต์ Intelligence Assistant กำลังทำงาน ใช้ไป {{tokens}} โทเค็น"
+  },
+  "capability": {
+    "title": "เครื่องมือและสิทธิ์",
+    "subtitle_one": "{{agent}} ใช้เครื่องมือได้ {{count}} รายการ",
+    "subtitle_other": "{{agent}} ใช้เครื่องมือได้ {{count}} รายการ",
+    "chatMode": "โหมดแชท",
+    "permissions": "สิทธิ์ปัจจุบัน",
+    "reads": "งานนี้อ่านได้",
+    "tools": "เครื่องมือที่เปิดใช้งาน",
+    "noTools": "ไม่มีเครื่องมือที่เปิดใช้งานสำหรับเอเจนต์ปัจจุบัน",
+    "noDescription": "ไม่มีคำอธิบาย",
+    "builtinGroup": "เครื่องมือ Vault ในตัว",
+    "tags": {
+      "applyRequired": "ต้องกด \"นำไปใช้\"",
+      "externalWrite": "เขียนภายนอก",
+      "localProcess": "เรียกใช้โปรเซสในเครื่อง"
+    },
+    "state": {
+      "on": "เปิด",
+      "off": "ปิด",
+      "disabled": "ปิดใช้งาน"
+    },
+    "rows": {
+      "vaultContext": "บริบท Vault",
+      "referencesPlusContext_one": "การอ้างอิงที่ระบุ {{count}} รายการ พร้อมบริบทที่ใช้งานอยู่",
+      "referencesPlusContext_other": "การอ้างอิงที่ระบุ {{count}} รายการ พร้อมบริบทที่ใช้งานอยู่",
+      "activeContext": "บันทึกที่เปิดอยู่และภาพรวมบริบทกราฟ",
+      "readTools": "เครื่องมืออ่าน Vault",
+      "enabledCount": "เปิดใช้งาน {{count}} รายการ",
+      "noReadTool": "ไม่ได้เปิดใช้งานเครื่องมืออ่านโดยตรง",
+      "writes": "การเขียนใน Vault",
+      "proposalOnly": "เป็นข้อเสนอเท่านั้น ต้องกด \"นำไปใช้\"",
+      "unavailable": "ไม่พร้อมใช้งาน",
+      "rag": "RAG",
+      "web": "การค้นหาเว็บ",
+      "on": "เปิด",
+      "off": "ปิด",
+      "disabledInSettings": "ปิดใช้งานในการตั้งค่า",
+      "custom": "เครื่องมือที่กำหนดเอง",
+      "customEnabled_one": "เปิดใช้งานเครื่องมือ MCP, OpenAPI หรือ CLI {{count}} รายการ",
+      "customEnabled_other": "เปิดใช้งานเครื่องมือ MCP, OpenAPI หรือ CLI {{count}} รายการ",
+      "noneEnabled": "ไม่ได้เปิดใช้งาน",
+      "destructive": "การกระทำที่ทำลายข้อมูลใน Vault",
+      "notProvided": "เครื่องมือในตัวไม่มีให้"
+    }
+  },
+  "markdown": {
+    "run": "เรียกใช้"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "ไม่มีบันทึก Markdown ให้ทำดัชนี",
+      "starting_one": "กำลังทำดัชนี {{count}} บันทึก…",
+      "starting_other": "กำลังทำดัชนี {{count}} บันทึก…",
+      "progress": "กำลังทำดัชนี: {{done}} จาก {{total}} บันทึก",
+      "completed": "ทำดัชนีเสร็จแล้ว: สำเร็จ {{indexed}} ล้มเหลว {{failed}}",
+      "noIndex": "ยังไม่มีสิ่งใดถูกทำดัชนี เรียกใช้ \"Embed all documents\" เพื่อทำดัชนี Vault ของคุณ",
+      "gradingError": "การให้คะแนนเอกสารล้มเหลว: {{message}}",
+      "clearing": "กำลังล้างดัชนี…",
+      "cleared": "ล้างดัชนีแล้ว"
+    }
   }
 }

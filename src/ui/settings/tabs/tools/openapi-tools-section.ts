@@ -183,7 +183,7 @@ class OpenApiConfigModal extends Modal {
 			.setName(t('settings.tools.openapi.modal.displayName.name'))
 			.setDesc(t('settings.tools.openapi.modal.displayName.desc'))
 			.addText(text => {
-				text.setPlaceholder('HTTP source')
+				text.setPlaceholder(t('settings.tools.openapi.modal.namePlaceholder'))
 					.setValue(this.config.name ?? '')
 					.onChange(value => {
 						this.config.name = value;

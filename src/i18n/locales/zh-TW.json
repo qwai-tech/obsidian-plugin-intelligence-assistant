@@ -85,6 +85,13 @@
         "allCapabilities": "所有功能",
         "allStates": "所有狀態",
         "searchPlaceholder": "搜尋名稱或 ID"
+      },
+      "refreshing": "正在重新整理…",
+      "tableHeaders": {
+        "model": "模型",
+        "capabilities": "功能",
+        "status": "狀態",
+        "actions": "動作"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "刪除 MCP 伺服器「{{name}}」？"
-      }
+      },
+      "namePlaceholder": "Acme MCP 伺服器"
     },
     "agents": {
       "desc": "建立並管理具有特定功能、工具和行為的 AI 代理。",
@@ -394,7 +402,8 @@
             "reloadTools": "重新載入工具",
             "refetchTooltip": "從 URL 重新擷取規格",
             "deleteTooltip": "刪除來源"
-          }
+          },
+          "namePlaceholder": "HTTP 來源"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "環境變數",
             "desc": "格式：KEY=value，每行一個"
-          }
+          },
+          "descriptionPlaceholder": "執行指令以…"
         },
         "presets": {
           "title": "從預設值新增 CLI 工具",
@@ -898,6 +908,10 @@
           "name": "解釋文字",
           "prompt": "以簡單的術語解釋以下文字：\n\n"
         }
+      },
+      "placeholders": {
+        "name": "擴寫文字",
+        "prompt": "擴充並詳細闡述以下文字…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "已新增 {{count}} 個參考",
       "fileNotFound": "找不到檔案：{{path}}",
       "unableToLoadRag": "無法載入 RAG 統計資料。",
-      "referenced": "已參考：{{name}}"
+      "referenced": "已參考：{{name}}",
+      "openViewFailed": "無法開啟聊天檢視。"
     },
     "status": {
       "unavailable": "不可用",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "總計",
       "save": "儲存",
       "insertToNotes": "插入至筆記",
-      "regenerate": "重新生成"
+      "regenerate": "重新生成",
+      "assistant": "助理"
     },
     "toolCall": {
       "executionProcess": "執行過程",
@@ -1061,7 +1077,10 @@
       "today": "今天",
       "yesterday": "昨天",
       "thisWeek": "本週",
-      "older": "更早"
+      "older": "更早",
+      "empty": "尚無對話",
+      "rename": "重新命名",
+      "delete": "刪除"
     },
     "header": {
       "noModels": "沒有可用的模型"
@@ -1098,6 +1117,41 @@
         "placeholder": "在此輸入您的任務...",
         "start": "開始",
         "title": "開始代理任務"
+      }
+    },
+    "references": {
+      "usingContext": "正在使用的上下文",
+      "remove": "移除 {{path}}"
+    },
+    "scrollToBottom": "捲動至底部",
+    "preflight": {
+      "title": "代理任務預檢",
+      "agent": "代理：{{name}}",
+      "reads": "讀取：{{paths}}",
+      "readsDefault": "讀取：目前的筆記與上下文快照",
+      "tools": "工具：已啟用 {{count}} 個",
+      "writesProposal": "寫入：僅產生提案；需點選「套用」",
+      "writesNone": "寫入：無法使用",
+      "rag": "RAG：{{state}}",
+      "web": "網頁：{{state}}"
+    },
+    "proposals": {
+      "title": "寫入提案",
+      "preview": "預覽提案內容",
+      "apply": "套用",
+      "applyAll": "全部套用",
+      "applied": "已套用",
+      "changes_one": "{{count}} 項變更",
+      "changes_other": "{{count}} 項變更",
+      "confirm": "套用 {{summary}}？",
+      "appliedNotice": "已套用 {{summary}}",
+      "operations": {
+        "create": "建立",
+        "update": "更新",
+        "append": "附加",
+        "delete": "刪除",
+        "move": "移動",
+        "batch": "批次"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "重新整理中...",
         "refreshSuccess": "模型清單已重新整理",
         "refreshFailed": "無法重新整理模型清單"
-      }
+      },
+      "pulling": "正在拉取…",
+      "deleting": "正在刪除…"
     },
     "promptEdit": {
       "title": "編輯系統提示詞",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ 處理中...",
       "error": "轉譯說明時發生錯誤",
       "errorPrefix": "錯誤："
+    },
+    "modelSwitcher": {
+      "placeholder": "切換模型…",
+      "switched": "已切換至模型 {{name}}",
+      "failed": "無法切換模型。"
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "找不到模型的有效提供者設定：{{modelId}}",
     "processing": "處理中...",
     "textUpdated": "文字更新成功",
-    "error": "錯誤：{{message}}"
+    "error": "錯誤：{{message}}",
+    "inlineBlockFailed": "無法執行內嵌 AI 區塊。",
+    "deepLinkFailed": "無法開啟 Intelligence Assistant 連結。"
   },
   "commands": {
     "askAgentCurrentNote": "代理任務：詢問目前筆記",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "代理任務：整理目前筆記",
     "sourceGroundedQuestion": "代理任務：提出基於來源的問題",
     "summarizeCurrentNote": "代理任務：摘要目前筆記",
-    "switchModel": "切換模型"
+    "switchModel": "切換模型",
+    "notices": {
+      "openNoteToAsk": "請先開啟筆記，再向代理提問。",
+      "openNoteToSummarize": "請先開啟筆記，再讓代理摘要。",
+      "openNoteToOrganize": "請先開啟筆記，再讓代理整理。",
+      "openProjectNote": "請先開啟專案筆記，再建立專案簡報。",
+      "openNoteToResearch": "請先開啟筆記，再建立研究簡報。",
+      "openNoteToFindRelated": "請先開啟筆記，再尋找相關筆記。",
+      "openNoteToImproveLinks": "請先開啟筆記，再改善連結、標籤與屬性。",
+      "openNoteToDraft": "請先開啟筆記，再讓代理撰寫草稿。",
+      "selectTextToImprove": "請先選取文字，再請代理改善。"
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant：詢問代理關於此檔案",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "開啟 AI 聊天"
+  },
+  "status": {
+    "idle": "IA：閒置 · {{tokens}} 個權杖",
+    "running": "IA：執行中 · {{tokens}} 個權杖",
+    "ariaIdle": "Intelligence Assistant 閒置中；已使用 {{tokens}} 個權杖",
+    "ariaRunning": "Intelligence Assistant 代理正在執行；已使用 {{tokens}} 個權杖"
+  },
+  "capability": {
+    "title": "工具與權限",
+    "subtitle_one": "{{agent}} 可使用 {{count}} 個工具。",
+    "subtitle_other": "{{agent}} 可使用 {{count}} 個工具。",
+    "chatMode": "聊天模式",
+    "permissions": "目前權限",
+    "reads": "此任務可讀取",
+    "tools": "已啟用的工具",
+    "noTools": "目前的代理未啟用任何工具。",
+    "noDescription": "無說明",
+    "builtinGroup": "內建知識庫工具",
+    "tags": {
+      "applyRequired": "需要套用",
+      "externalWrite": "外部寫入",
+      "localProcess": "執行本機處理程序"
+    },
+    "state": {
+      "on": "開啟",
+      "off": "關閉",
+      "disabled": "已停用"
+    },
+    "rows": {
+      "vaultContext": "知識庫上下文",
+      "referencesPlusContext_one": "{{count}} 個明確參照及目前上下文",
+      "referencesPlusContext_other": "{{count}} 個明確參照及目前上下文",
+      "activeContext": "目前的筆記與關聯圖上下文快照",
+      "readTools": "知識庫讀取工具",
+      "enabledCount": "已啟用 {{count}} 個",
+      "noReadTool": "未啟用直接讀取工具",
+      "writes": "知識庫寫入",
+      "proposalOnly": "僅產生提案；必須點選「套用」",
+      "unavailable": "無法使用",
+      "rag": "RAG",
+      "web": "網頁搜尋",
+      "on": "開啟",
+      "off": "關閉",
+      "disabledInSettings": "已在設定中停用",
+      "custom": "自訂工具",
+      "customEnabled_one": "已啟用 {{count}} 個 MCP、OpenAPI 或 CLI 工具",
+      "customEnabled_other": "已啟用 {{count}} 個 MCP、OpenAPI 或 CLI 工具",
+      "noneEnabled": "未啟用",
+      "destructive": "破壞性知識庫操作",
+      "notProvided": "內建工具未提供"
+    }
+  },
+  "markdown": {
+    "run": "執行"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "沒有可索引的 Markdown 筆記。",
+      "starting_one": "正在索引 {{count}} 則筆記…",
+      "starting_other": "正在索引 {{count}} 則筆記…",
+      "progress": "正在索引：{{done}}/{{total}} 則筆記",
+      "completed": "索引完成：已索引 {{indexed}} 則，失敗 {{failed}} 則。",
+      "noIndex": "尚未索引任何內容。請執行「Embed all documents」以索引您的知識庫。",
+      "gradingError": "文件評分失敗：{{message}}",
+      "clearing": "正在清除索引…",
+      "cleared": "索引已清除。"
+    }
   }
 }

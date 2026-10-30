@@ -26,7 +26,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice('Open a note before asking the agent.');
+				new Notice(t('commands.notices.openNoteToAsk'));
 				return;
 			}
 			await launcher.launch(
@@ -43,7 +43,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice('Open a note before summarizing with the agent.');
+				new Notice(t('commands.notices.openNoteToSummarize'));
 				return;
 			}
 			await launcher.launch(buildSummarizeCurrentNotePrompt(file.path), [file]);
@@ -56,7 +56,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice('Open a note before organizing with the agent.');
+				new Notice(t('commands.notices.openNoteToOrganize'));
 				return;
 			}
 			await launcher.launch(buildOrganizeCurrentNotePrompt(file.path), [file]);
@@ -82,7 +82,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice('Open a project note before creating a project brief.');
+				new Notice(t('commands.notices.openProjectNote'));
 				return;
 			}
 			await launcher.launch(buildProjectBriefPrompt(file.path), [file]);
@@ -95,7 +95,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice('Open a note before creating a research brief.');
+				new Notice(t('commands.notices.openNoteToResearch'));
 				return;
 			}
 			await launcher.launch(
@@ -124,7 +124,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice('Open a note before finding related notes.');
+				new Notice(t('commands.notices.openNoteToFindRelated'));
 				return;
 			}
 			await launcher.launch(buildRelatedNotesPrompt(file.path), [file]);
@@ -145,7 +145,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice('Open a note before improving links, tags, and properties.');
+				new Notice(t('commands.notices.openNoteToImproveLinks'));
 				return;
 			}
 			await launcher.launch(buildBacklinkTagDoctorPrompt(file.path), [file]);
@@ -158,7 +158,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice('Open a note before drafting with the agent.');
+				new Notice(t('commands.notices.openNoteToDraft'));
 				return;
 			}
 			await launcher.launch(
@@ -183,7 +183,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		editorCallback: async (editor: Editor, view: MarkdownView) => {
 			const selection = editor.getSelection();
 			if (!selection.trim()) {
-				new Notice('Select text before asking the agent to improve it.');
+				new Notice(t('commands.notices.selectTextToImprove'));
 				return;
 			}
 			const file = view.file ?? activeMarkdownFile(plugin.app);

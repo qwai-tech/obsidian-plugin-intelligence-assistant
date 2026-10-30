@@ -41,7 +41,7 @@ export function displayModelsTab(
 	refreshAllBtn.addClass('ia-button--ghost');
 	refreshAllBtn.addEventListener('click', () => {
 		void (async () => {
-			refreshAllBtn.textContent = 'Refreshing...';
+			refreshAllBtn.textContent = t('settings.models.refreshing');
 			refreshAllBtn.disabled = true;
 
 			try {
@@ -120,7 +120,12 @@ export function displayModelsTab(
 		return;
 	}
 
-	const table = createTable(containerEl, ['Model', 'Capabilities', 'Status', 'Actions']);
+	const table = createTable(containerEl, [
+		t('settings.models.tableHeaders.model'),
+		t('settings.models.tableHeaders.capabilities'),
+		t('settings.models.tableHeaders.status'),
+		t('settings.models.tableHeaders.actions'),
+	]);
 	const tbody = table.tBodies[0];
 
 	filteredModels.forEach(({ provider, model }) => {

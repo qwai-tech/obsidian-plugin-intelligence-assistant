@@ -161,7 +161,7 @@ export class OllamaModelManagerModal extends Modal {
 
 	private async pullModel(modelName: string, buttonEl: HTMLElement) {
 		const _originalText = buttonEl.textContent;
-		buttonEl.textContent = 'Pulling...';
+		buttonEl.textContent = t('modals.ollamaManager.pulling');
 		(buttonEl as HTMLButtonElement).disabled = true;
 
 		try {
@@ -213,7 +213,7 @@ export class OllamaModelManagerModal extends Modal {
 		}
 
 		const _originalText = buttonEl.textContent;
-		buttonEl.textContent = 'Deleting...';
+		buttonEl.textContent = t('modals.ollamaManager.deleting');
 		(buttonEl as HTMLButtonElement).disabled = true;
 
 		try {

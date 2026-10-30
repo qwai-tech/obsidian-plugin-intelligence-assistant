@@ -7,6 +7,7 @@ import type { SearchResult } from './rag-types';
 import { EmbeddingManager } from './embedding-manager';
 import { DocumentGrader } from './document-grader';
 import { errorMessage } from '@/core/utils/errors';
+import { t } from '@/i18n';
 
 export class RAGManager {
   private vectorStore: VectorStore;
@@ -30,12 +31,11 @@ export class RAGManager {
     const files = this.app.vault.getMarkdownFiles().filter(file => this.isIndexable(file));
     
     if (files.length === 0) {
-      const noFilesMessage = 'ℹ️ No Markdown files found to index for RAG';
-      new Notice(noFilesMessage);
+      new Notice(t('rag.notices.noFiles'));
       return;
     }
     
-    new Notice(`🔄 Starting RAG indexing for ${files.length} documents...`);
+    new Notice(t('rag.notices.starting', { count: files.length }));
     
     // Process files in batches to avoid blocking the UI
     return new Promise((resolve, reject) => {
@@ -62,7 +62,7 @@ export class RAGManager {
         
         // Update progress every 10 files or at the end
         if (currentIndex % 10 === 0 || currentIndex === files.length) {
-          new Notice(`🔄 RAG indexing progress: ${currentIndex}/${files.length} files...`);
+          new Notice(t('rag.notices.progress', { done: currentIndex, total: files.length }));
         }
         
         if (currentIndex < files.length) {
@@ -72,7 +72,7 @@ export class RAGManager {
           }, 10); // 10ms delay allows UI to remain responsive
         } else {
           // All files processed
-          new Notice(`✅ RAG indexing completed! ${successCount} files indexed, ${failureCount} failed.`);
+          new Notice(t('rag.notices.completed', { indexed: successCount, failed: failureCount }));
           resolve();
         }
       };
@@ -163,8 +163,7 @@ export class RAGManager {
       if (results.length === 0) {
         const stats = this.vectorStore.getDetailedStats();
         if (stats.chunkCount === 0) {
-          const noIndexMessage = 'ℹ️ No indexed documents found. Use "Embed all documents" command to index your vault for RAG.';
-          new Notice(noIndexMessage);
+          new Notice(t('rag.notices.noIndex'));
         }
       }
     
@@ -194,7 +193,7 @@ export class RAGManager {
         results = filteredResults;
       } catch (error) {
         console.error('[RAG Manager] Error during document grading:', error);
-        new Notice(`⚠️ Document grading error: ${errorMessage(error)}`);
+        new Notice(t('rag.notices.gradingError', { message: errorMessage(error) }));
       }
     }
     
@@ -202,20 +201,20 @@ export class RAGManager {
   }
 
   async refreshIndex(): Promise<void> {
-    new Notice('🔄 Clearing RAG index...');
+    new Notice(t('rag.notices.clearing'));
     this.vectorStore.clear();
     if (this.config.enabled) {
       await this.indexVault();
     } else {
-      new Notice('✅ RAG index cleared');
+      new Notice(t('rag.notices.cleared'));
     }
   }
 
   async clearIndex(): Promise<void> {
-    new Notice('🔄 Clearing RAG index...');
+    new Notice(t('rag.notices.clearing'));
     this.vectorStore.clear();
     await this.vectorStore.save();
-    new Notice('✅ RAG index cleared');
+    new Notice(t('rag.notices.cleared'));
   }
 
   getStats(): { chunkCount: number } {

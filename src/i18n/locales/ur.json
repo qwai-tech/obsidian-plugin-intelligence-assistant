@@ -85,6 +85,13 @@
         "allCapabilities": "تمام صلاحیتیں",
         "allStates": "تمام حالتیں",
         "searchPlaceholder": "نام یا شناخت سے تلاش کریں"
+      },
+      "refreshing": "ریفریش ہو رہا ہے…",
+      "tableHeaders": {
+        "model": "ماڈل",
+        "capabilities": "صلاحیتیں",
+        "status": "حالت",
+        "actions": "کارروائیاں"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "MCP سرور «{{name}}» حذف کریں؟"
-      }
+      },
+      "namePlaceholder": "Acme MCP سرور"
     },
     "agents": {
       "desc": "مخصوص صلاحیتوں، ٹولز اور رویوں کے ساتھ AI ایجنٹس بنائیں اور ان کا انتظام کریں۔",
@@ -394,7 +402,8 @@
             "reloadTools": "ٹولز دوبارہ لوڈ کریں",
             "refetchTooltip": "URL سے اسپیک دوبارہ حاصل کریں",
             "deleteTooltip": "ذریعہ حذف کریں"
-          }
+          },
+          "namePlaceholder": "HTTP ماخذ"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "ماحولیاتی متغیرات",
             "desc": "فارمیٹ: KEY=value، فی لائن ایک"
-          }
+          },
+          "descriptionPlaceholder": "ایک کمانڈ چلاتا ہے تاکہ…"
         },
         "presets": {
           "title": "پری سیٹس سے CLI ٹول شامل کریں",
@@ -898,6 +908,10 @@
           "name": "متن کی وضاحت",
           "prompt": "مندرجہ ذیل متن کو سادہ الفاظ میں سمجھائیں:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "متن کو طویل کریں",
+        "prompt": "درج ذیل متن کو وسعت دیں اور تفصیل سے بیان کریں…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "{{count}} حوالے شامل",
       "fileNotFound": "فائل نہیں ملی: {{path}}",
       "unableToLoadRag": "RAG کے اعداد و شمار لوڈ نہیں ہو سکے۔",
-      "referenced": "حوالہ دیا گیا: {{name}}"
+      "referenced": "حوالہ دیا گیا: {{name}}",
+      "openViewFailed": "چیٹ ویو نہیں کھل سکا۔"
     },
     "status": {
       "unavailable": "دستیاب نہیں",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "کل",
       "save": "محفوظ",
       "insertToNotes": "نوٹس میں داخل کریں",
-      "regenerate": "دوبارہ بنائیں"
+      "regenerate": "دوبارہ بنائیں",
+      "assistant": "اسسٹنٹ"
     },
     "toolCall": {
       "executionProcess": "عمل کا عمل",
@@ -1061,7 +1077,10 @@
       "today": "آج",
       "yesterday": "کل",
       "thisWeek": "اس ہفتے",
-      "older": "پرانی"
+      "older": "پرانی",
+      "empty": "ابھی تک کوئی گفتگو نہیں",
+      "rename": "نام تبدیل کریں",
+      "delete": "حذف"
     },
     "header": {
       "noModels": "کوئی ماڈل دستیاب نہیں"
@@ -1098,6 +1117,41 @@
         "placeholder": "اپنا ٹاسک یہاں درج کریں...",
         "start": "شروع کریں",
         "title": "ایجنٹ ٹاسک شروع کریں"
+      }
+    },
+    "references": {
+      "usingContext": "استعمال ہونے والا سیاق و سباق",
+      "remove": "{{path}} ہٹائیں"
+    },
+    "scrollToBottom": "نیچے تک اسکرول کریں",
+    "preflight": {
+      "title": "ایجنٹ ٹاسک کی پیشگی جانچ",
+      "agent": "ایجنٹ: {{name}}",
+      "reads": "پڑھتا ہے: {{paths}}",
+      "readsDefault": "پڑھتا ہے: فعال نوٹ اور سیاق و سباق کا اسنیپ شاٹ",
+      "tools": "ٹولز: {{count}} فعال",
+      "writesProposal": "لکھتا ہے: صرف تجویز؛ \"لاگو کریں\" ضروری ہے",
+      "writesNone": "لکھتا ہے: دستیاب نہیں",
+      "rag": "RAG: {{state}}",
+      "web": "ویب: {{state}}"
+    },
+    "proposals": {
+      "title": "لکھنے کی تجاویز",
+      "preview": "تجویز کردہ مواد کا پیش منظر",
+      "apply": "لاگو کریں",
+      "applyAll": "سب لاگو کریں",
+      "applied": "لاگو ہو گیا",
+      "changes_one": "{{count}} تبدیلی",
+      "changes_other": "{{count}} تبدیلیاں",
+      "confirm": "{{summary}} لاگو کریں؟",
+      "appliedNotice": "{{summary}} لاگو ہو گئیں",
+      "operations": {
+        "create": "بنائیں",
+        "update": "اپ ڈیٹ کریں",
+        "append": "آخر میں شامل کریں",
+        "delete": "حذف کریں",
+        "move": "منتقل کریں",
+        "batch": "بیچ"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "ریفریش ہو رہا ہے...",
         "refreshSuccess": "ماڈل کی فہرست ریفریش ہو گئی",
         "refreshFailed": "ماڈل کی فہرست ریفریش کرنا ناکام ہوا"
-      }
+      },
+      "pulling": "ڈاؤن لوڈ ہو رہا ہے…",
+      "deleting": "حذف ہو رہا ہے…"
     },
     "promptEdit": {
       "title": "سسٹم ہدایت ترمیم",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ پروسیس ہو رہا ہے...",
       "error": "وضاحت رینڈر کرنے میں خرابی",
       "errorPrefix": "خرابی:"
+    },
+    "modelSwitcher": {
+      "placeholder": "ماڈل تبدیل کریں…",
+      "switched": "ماڈل {{name}} پر تبدیل ہو گیا",
+      "failed": "ماڈل تبدیل نہیں ہو سکا۔"
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "ماڈل کے لیے کوئی درست فراہم کنندہ کنفیگریشن نہیں ملی: {{modelId}}",
     "processing": "پروسیس ہو رہا ہے...",
     "textUpdated": "متن کامیابی سے اپ ڈیٹ ہو گیا",
-    "error": "خرابی: {{message}}"
+    "error": "خرابی: {{message}}",
+    "inlineBlockFailed": "ان لائن AI بلاک نہیں چل سکا۔",
+    "deepLinkFailed": "Intelligence Assistant لنک نہیں کھل سکا۔"
   },
   "commands": {
     "askAgentCurrentNote": "ایجنٹ ٹاسک: موجودہ نوٹ کے بارے میں پوچھیں",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "ایجنٹ ٹاسک: موجودہ نوٹ منظم کریں",
     "sourceGroundedQuestion": "ایجنٹ ٹاسک: ماخذ پر مبنی سوال پوچھیں",
     "summarizeCurrentNote": "ایجنٹ ٹاسک: موجودہ نوٹ کا خلاصہ کریں",
-    "switchModel": "ماڈل تبدیل کریں"
+    "switchModel": "ماڈل تبدیل کریں",
+    "notices": {
+      "openNoteToAsk": "ایجنٹ سے پوچھنے سے پہلے ایک نوٹ کھولیں۔",
+      "openNoteToSummarize": "ایجنٹ کے ساتھ خلاصہ کرنے سے پہلے ایک نوٹ کھولیں۔",
+      "openNoteToOrganize": "ایجنٹ کے ساتھ ترتیب دینے سے پہلے ایک نوٹ کھولیں۔",
+      "openProjectNote": "پروجیکٹ بریف بنانے سے پہلے ایک پروجیکٹ نوٹ کھولیں۔",
+      "openNoteToResearch": "تحقیقی بریف بنانے سے پہلے ایک نوٹ کھولیں۔",
+      "openNoteToFindRelated": "متعلقہ نوٹس تلاش کرنے سے پہلے ایک نوٹ کھولیں۔",
+      "openNoteToImproveLinks": "لنکس، ٹیگز اور پراپرٹیز بہتر کرنے سے پہلے ایک نوٹ کھولیں۔",
+      "openNoteToDraft": "ایجنٹ کے ساتھ مسودہ لکھنے سے پہلے ایک نوٹ کھولیں۔",
+      "selectTextToImprove": "ایجنٹ سے بہتر کرنے کا کہنے سے پہلے متن منتخب کریں۔"
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: اس فائل کے بارے میں ایجنٹ سے پوچھیں",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "AI چیٹ کھولیں"
+  },
+  "status": {
+    "idle": "IA: غیر مصروف · {{tokens}} ٹوکنز",
+    "running": "IA: چل رہا ہے · {{tokens}} ٹوکنز",
+    "ariaIdle": "Intelligence Assistant غیر مصروف ہے؛ {{tokens}} ٹوکنز استعمال ہوئے",
+    "ariaRunning": "Intelligence Assistant ایجنٹ چل رہا ہے؛ {{tokens}} ٹوکنز استعمال ہوئے"
+  },
+  "capability": {
+    "title": "ٹولز اور اجازتیں",
+    "subtitle_one": "{{agent}} {{count}} ٹول استعمال کر سکتا ہے۔",
+    "subtitle_other": "{{agent}} {{count}} ٹولز استعمال کر سکتا ہے۔",
+    "chatMode": "چیٹ موڈ",
+    "permissions": "موجودہ اجازتیں",
+    "reads": "یہ ٹاسک پڑھ سکتا ہے",
+    "tools": "فعال ٹولز",
+    "noTools": "موجودہ ایجنٹ کے لیے کوئی ٹول فعال نہیں۔",
+    "noDescription": "کوئی وضاحت نہیں",
+    "builtinGroup": "بلٹ اِن vault ٹولز",
+    "tags": {
+      "applyRequired": "\"لاگو کریں\" ضروری",
+      "externalWrite": "بیرونی تحریر",
+      "localProcess": "مقامی پروسیس چلاتا ہے"
+    },
+    "state": {
+      "on": "آن",
+      "off": "آف",
+      "disabled": "غیر فعال"
+    },
+    "rows": {
+      "vaultContext": "vault کا سیاق و سباق",
+      "referencesPlusContext_one": "{{count}} واضح حوالہ اور فعال سیاق و سباق",
+      "referencesPlusContext_other": "{{count}} واضح حوالے اور فعال سیاق و سباق",
+      "activeContext": "فعال نوٹ اور گراف سیاق و سباق کا اسنیپ شاٹ",
+      "readTools": "vault پڑھنے کے ٹولز",
+      "enabledCount": "{{count}} فعال",
+      "noReadTool": "براہ راست پڑھنے کا کوئی ٹول فعال نہیں",
+      "writes": "vault میں تحریر",
+      "proposalOnly": "صرف تجویز؛ \"لاگو کریں\" ضروری ہے",
+      "unavailable": "دستیاب نہیں",
+      "rag": "RAG",
+      "web": "ویب تلاش",
+      "on": "آن",
+      "off": "آف",
+      "disabledInSettings": "ترتیبات میں غیر فعال",
+      "custom": "حسب ضرورت ٹولز",
+      "customEnabled_one": "{{count}} MCP، OpenAPI یا CLI ٹول فعال",
+      "customEnabled_other": "{{count}} MCP، OpenAPI یا CLI ٹولز فعال",
+      "noneEnabled": "کوئی فعال نہیں",
+      "destructive": "vault میں تباہ کن کارروائیاں",
+      "notProvided": "بلٹ اِن ٹولز فراہم نہیں کرتے"
+    }
+  },
+  "markdown": {
+    "run": "چلائیں"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "انڈیکس کرنے کے لیے کوئی Markdown نوٹ نہیں۔",
+      "starting_one": "{{count}} نوٹ انڈیکس ہو رہا ہے…",
+      "starting_other": "{{count}} نوٹس انڈیکس ہو رہے ہیں…",
+      "progress": "انڈیکسنگ: {{total}} میں سے {{done}} نوٹس",
+      "completed": "انڈیکسنگ مکمل: {{indexed}} انڈیکس ہوئے، {{failed}} ناکام۔",
+      "noIndex": "ابھی کچھ انڈیکس نہیں ہوا۔ اپنا vault انڈیکس کرنے کے لیے \"Embed all documents\" چلائیں۔",
+      "gradingError": "دستاویز کی درجہ بندی ناکام ہو گئی: {{message}}",
+      "clearing": "انڈیکس صاف ہو رہا ہے…",
+      "cleared": "انڈیکس صاف ہو گیا۔"
+    }
   }
 }

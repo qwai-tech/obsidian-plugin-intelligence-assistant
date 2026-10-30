@@ -85,6 +85,13 @@
         "allCapabilities": "Alla funktioner",
         "allStates": "Alla tillstånd",
         "searchPlaceholder": "Sök namn eller ID"
+      },
+      "refreshing": "Uppdaterar…",
+      "tableHeaders": {
+        "model": "Modell",
+        "capabilities": "Funktioner",
+        "status": "Status",
+        "actions": "Åtgärder"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Ta bort MCP-servern \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "Acme MCP-server"
     },
     "agents": {
       "desc": "Skapa och hantera AI-agenter med specifika funktioner, verktyg och beteenden.",
@@ -394,7 +402,8 @@
             "reloadTools": "Ladda om verktyg",
             "refetchTooltip": "Hämta spec från URL igen",
             "deleteTooltip": "Ta bort källa"
-          }
+          },
+          "namePlaceholder": "HTTP-källa"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Miljövariabler",
             "desc": "Format: NYCKEL=värde, ett per rad"
-          }
+          },
+          "descriptionPlaceholder": "Kör ett kommando för att…"
         },
         "presets": {
           "title": "Lägg till CLI-verktyg från förinställningar",
@@ -898,6 +908,10 @@
           "name": "Förklara text",
           "prompt": "Förklara följande text med enkla ord:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Gör texten längre",
+        "prompt": "Utveckla och fördjupa följande text…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "{{count}} referens(er) tillagda",
       "fileNotFound": "Filen hittades inte: {{path}}",
       "unableToLoadRag": "Kan inte ladda RAG-statistik.",
-      "referenced": "Refererad: {{name}}"
+      "referenced": "Refererad: {{name}}",
+      "openViewFailed": "Det gick inte att öppna chattvyn."
     },
     "status": {
       "unavailable": "Ej tillgänglig",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Totalt",
       "save": "Spara",
       "insertToNotes": "Infoga i anteckningar",
-      "regenerate": "Regenerera"
+      "regenerate": "Regenerera",
+      "assistant": "Assistent"
     },
     "toolCall": {
       "executionProcess": "Körningsprocess",
@@ -1061,7 +1077,10 @@
       "today": "Idag",
       "yesterday": "Igår",
       "thisWeek": "Den här veckan",
-      "older": "Äldre"
+      "older": "Äldre",
+      "empty": "Inga konversationer än",
+      "rename": "Byt namn",
+      "delete": "Ta bort"
     },
     "header": {
       "noModels": "Inga modeller tillgängliga"
@@ -1098,6 +1117,41 @@
         "placeholder": "Ange din uppgift här...",
         "start": "Starta",
         "title": "Starta agentuppgift"
+      }
+    },
+    "references": {
+      "usingContext": "Använder kontext",
+      "remove": "Ta bort {{path}}"
+    },
+    "scrollToBottom": "Rulla längst ned",
+    "preflight": {
+      "title": "Förhandskontroll av agentuppgift",
+      "agent": "Agent: {{name}}",
+      "reads": "Läser: {{paths}}",
+      "readsDefault": "Läser: aktiv anteckning och kontextögonblicksbild",
+      "tools": "Verktyg: {{count}} aktiverade",
+      "writesProposal": "Skriver: endast förslag; Tillämpa krävs",
+      "writesNone": "Skriver: inte tillgängligt",
+      "rag": "RAG: {{state}}",
+      "web": "Webb: {{state}}"
+    },
+    "proposals": {
+      "title": "Skrivförslag",
+      "preview": "Förhandsgranska föreslaget innehåll",
+      "apply": "Tillämpa",
+      "applyAll": "Tillämpa alla",
+      "applied": "Tillämpad",
+      "changes_one": "{{count}} ändring",
+      "changes_other": "{{count}} ändringar",
+      "confirm": "Tillämpa {{summary}}?",
+      "appliedNotice": "Tillämpade {{summary}}",
+      "operations": {
+        "create": "Skapa",
+        "update": "Uppdatera",
+        "append": "Lägg till",
+        "delete": "Ta bort",
+        "move": "Flytta",
+        "batch": "Batch"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Uppdaterar...",
         "refreshSuccess": "Modellistan uppdaterades",
         "refreshFailed": "Det gick inte att uppdatera modellistan"
-      }
+      },
+      "pulling": "Hämtar…",
+      "deleting": "Tar bort…"
     },
     "promptEdit": {
       "title": "Redigera systemprompt",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Bearbetar...",
       "error": "Fel vid rendering av förklaring",
       "errorPrefix": "Fel:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Byt modell…",
+      "switched": "Modell bytt till {{name}}",
+      "failed": "Det gick inte att byta modell."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Ingen giltig leverantörskonfiguration hittades för modellen: {{modelId}}",
     "processing": "Bearbetar...",
     "textUpdated": "Texten uppdaterades",
-    "error": "Fel: {{message}}"
+    "error": "Fel: {{message}}",
+    "inlineBlockFailed": "Det gick inte att köra det infogade AI-blocket.",
+    "deepLinkFailed": "Det gick inte att öppna Intelligence Assistant-länken."
   },
   "commands": {
     "askAgentCurrentNote": "Agentuppgift: fråga om aktuell anteckning",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Agentuppgift: organisera aktuell anteckning",
     "sourceGroundedQuestion": "Agentuppgift: ställ en källförankrad fråga",
     "summarizeCurrentNote": "Agentuppgift: sammanfatta aktuell anteckning",
-    "switchModel": "Byt modell"
+    "switchModel": "Byt modell",
+    "notices": {
+      "openNoteToAsk": "Öppna en anteckning innan du frågar agenten.",
+      "openNoteToSummarize": "Öppna en anteckning innan du sammanfattar med agenten.",
+      "openNoteToOrganize": "Öppna en anteckning innan du organiserar med agenten.",
+      "openProjectNote": "Öppna en projektanteckning innan du skapar en projektsammanfattning.",
+      "openNoteToResearch": "Öppna en anteckning innan du skapar en forskningssammanfattning.",
+      "openNoteToFindRelated": "Öppna en anteckning innan du söker efter relaterade anteckningar.",
+      "openNoteToImproveLinks": "Öppna en anteckning innan du förbättrar länkar, taggar och egenskaper.",
+      "openNoteToDraft": "Öppna en anteckning innan du skriver utkast med agenten.",
+      "selectTextToImprove": "Markera text innan du ber agenten att förbättra den."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: fråga agenten om den här filen",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Öppna AI-chatt"
+  },
+  "status": {
+    "idle": "IA: inaktiv · {{tokens}} tokens",
+    "running": "IA: körs · {{tokens}} tokens",
+    "ariaIdle": "Intelligence Assistant är inaktiv; {{tokens}} tokens använda",
+    "ariaRunning": "Intelligence Assistant-agenten körs; {{tokens}} tokens använda"
+  },
+  "capability": {
+    "title": "Verktyg och behörigheter",
+    "subtitle_one": "{{agent}} kan använda {{count}} verktyg.",
+    "subtitle_other": "{{agent}} kan använda {{count}} verktyg.",
+    "chatMode": "Chattläge",
+    "permissions": "Aktuella behörigheter",
+    "reads": "Den här uppgiften kan läsa",
+    "tools": "Aktiverade verktyg",
+    "noTools": "Inga verktyg är aktiverade för den aktuella agenten.",
+    "noDescription": "Ingen beskrivning",
+    "builtinGroup": "Inbyggda valvverktyg",
+    "tags": {
+      "applyRequired": "Tillämpa krävs",
+      "externalWrite": "Extern skrivning",
+      "localProcess": "Kör en lokal process"
+    },
+    "state": {
+      "on": "på",
+      "off": "av",
+      "disabled": "inaktiverad"
+    },
+    "rows": {
+      "vaultContext": "Valvkontext",
+      "referencesPlusContext_one": "{{count}} explicit referens plus aktiv kontext",
+      "referencesPlusContext_other": "{{count}} explicita referenser plus aktiv kontext",
+      "activeContext": "Aktiv anteckning och ögonblicksbild av grafkontext",
+      "readTools": "Läsverktyg för valvet",
+      "enabledCount": "{{count}} aktiverade",
+      "noReadTool": "Inget direkt läsverktyg aktiverat",
+      "writes": "Skrivningar i valvet",
+      "proposalOnly": "Endast förslag; Tillämpa krävs",
+      "unavailable": "Inte tillgängligt",
+      "rag": "RAG",
+      "web": "Webbsökning",
+      "on": "På",
+      "off": "Av",
+      "disabledInSettings": "Inaktiverad i inställningarna",
+      "custom": "Anpassade verktyg",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- eller CLI-verktyg aktiverat",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- eller CLI-verktyg aktiverade",
+      "noneEnabled": "Inga aktiverade",
+      "destructive": "Destruktiva valvåtgärder",
+      "notProvided": "Tillhandahålls inte av inbyggda verktyg"
+    }
+  },
+  "markdown": {
+    "run": "Kör"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Inga Markdown-anteckningar att indexera.",
+      "starting_one": "Indexerar {{count}} anteckning…",
+      "starting_other": "Indexerar {{count}} anteckningar…",
+      "progress": "Indexerar: {{done}} av {{total}} anteckningar",
+      "completed": "Indexering klar: {{indexed}} indexerade, {{failed}} misslyckades.",
+      "noIndex": "Inget är indexerat än. Kör \"Embed all documents\" för att indexera ditt valv.",
+      "gradingError": "Dokumentbedömningen misslyckades: {{message}}",
+      "clearing": "Rensar indexet…",
+      "cleared": "Indexet har rensats."
+    }
   }
 }

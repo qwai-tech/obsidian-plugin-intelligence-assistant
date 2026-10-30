@@ -85,6 +85,13 @@
         "allCapabilities": "Totes les capacitats",
         "allStates": "Tots els estats",
         "searchPlaceholder": "Cerca per nom o ID"
+      },
+      "refreshing": "S'està actualitzant…",
+      "tableHeaders": {
+        "model": "Model",
+        "capabilities": "Capacitats",
+        "status": "Estat",
+        "actions": "Accions"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Elimina el servidor MCP „{{name}}“?"
-      }
+      },
+      "namePlaceholder": "Servidor MCP d'Acme"
     },
     "agents": {
       "desc": "Creeu i gestioneu agents d'IA amb capacitats, eines i comportaments específics.",
@@ -394,7 +402,8 @@
             "reloadTools": "Torna a carregar eines",
             "refetchTooltip": "Torna a obtenir l'especificació de la URL",
             "deleteTooltip": "Elimina la font"
-          }
+          },
+          "namePlaceholder": "Font HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Variables d'entorn",
             "desc": "Format: CLAU=valor, una per línia"
-          }
+          },
+          "descriptionPlaceholder": "Executa una ordre per…"
         },
         "presets": {
           "title": "Afegeix eina CLI des de preajustos",
@@ -898,6 +908,10 @@
           "name": "Explica el text",
           "prompt": "Explica el text següent en termes senzills:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Allarga el text",
+        "prompt": "Amplia i desenvolupa el text següent…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Afegides {{count}} referència(es)",
       "fileNotFound": "Fitxer no trobat: {{path}}",
       "unableToLoadRag": "No es poden carregar les estadístiques RAG.",
-      "referenced": "Referenciat: {{name}}"
+      "referenced": "Referenciat: {{name}}",
+      "openViewFailed": "No s'ha pogut obrir la vista del xat."
     },
     "status": {
       "unavailable": "No disponible",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Total",
       "save": "Desa",
       "insertToNotes": "Insereix a les notes",
-      "regenerate": "Regenera"
+      "regenerate": "Regenera",
+      "assistant": "Assistent"
     },
     "toolCall": {
       "executionProcess": "Procés d'execució",
@@ -1061,7 +1077,10 @@
       "today": "Avui",
       "yesterday": "Ahir",
       "thisWeek": "Aquesta setmana",
-      "older": "Més antigues"
+      "older": "Més antigues",
+      "empty": "Encara no hi ha converses",
+      "rename": "Canvia el nom",
+      "delete": "Suprimeix"
     },
     "header": {
       "noModels": "Cap model disponible"
@@ -1098,6 +1117,41 @@
         "placeholder": "Introduïu la vostra tasca aquí...",
         "start": "Comença",
         "title": "Inicia una tasca d'agent"
+      }
+    },
+    "references": {
+      "usingContext": "S'està utilitzant el context",
+      "remove": "Elimina {{path}}"
+    },
+    "scrollToBottom": "Desplaça't al final",
+    "preflight": {
+      "title": "Comprovació prèvia de la tasca de l'agent",
+      "agent": "Agent: {{name}}",
+      "reads": "Llegeix: {{paths}}",
+      "readsDefault": "Llegeix: la nota activa i una instantània del context",
+      "tools": "Eines: {{count}} activades",
+      "writesProposal": "Escriptura: només proposta; cal Aplica",
+      "writesNone": "Escriptura: no disponible",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Propostes d'escriptura",
+      "preview": "Previsualitza el contingut proposat",
+      "apply": "Aplica",
+      "applyAll": "Aplica-ho tot",
+      "applied": "Aplicat",
+      "changes_one": "{{count}} canvi",
+      "changes_other": "{{count}} canvis",
+      "confirm": "Voleu aplicar {{summary}}?",
+      "appliedNotice": "S'ha aplicat {{summary}}",
+      "operations": {
+        "create": "Crea",
+        "update": "Actualitza",
+        "append": "Afegeix al final",
+        "delete": "Suprimeix",
+        "move": "Mou",
+        "batch": "Lot"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Actualitzant...",
         "refreshSuccess": "Llista de models actualitzada",
         "refreshFailed": "No s'ha pogut actualitzar la llista de models"
-      }
+      },
+      "pulling": "S'està baixant…",
+      "deleting": "S'està suprimint…"
     },
     "promptEdit": {
       "title": "Edita la instrucció de sistema",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Processant...",
       "error": "Error en mostrar l'explicació",
       "errorPrefix": "Error:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Canvia de model…",
+      "switched": "S'ha canviat el model a {{name}}",
+      "failed": "No s'ha pogut canviar el model."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "No s'ha trobat cap configuració de proveïdor vàlida per al model: {{modelId}}",
     "processing": "Processant...",
     "textUpdated": "Text actualitzat correctament",
-    "error": "Error: {{message}}"
+    "error": "Error: {{message}}",
+    "inlineBlockFailed": "No s'ha pogut executar el bloc d'IA en línia.",
+    "deepLinkFailed": "No s'ha pogut obrir l'enllaç d'Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Tasca d'agent: pregunta sobre la nota actual",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Tasca d'agent: organitza la nota actual",
     "sourceGroundedQuestion": "Tasca d'agent: fes una pregunta basada en fonts",
     "summarizeCurrentNote": "Tasca d'agent: resumeix la nota actual",
-    "switchModel": "Canvia de model"
+    "switchModel": "Canvia de model",
+    "notices": {
+      "openNoteToAsk": "Obriu una nota abans de preguntar a l'agent.",
+      "openNoteToSummarize": "Obriu una nota abans de resumir amb l'agent.",
+      "openNoteToOrganize": "Obriu una nota abans d'organitzar amb l'agent.",
+      "openProjectNote": "Obriu una nota de projecte abans de crear un resum del projecte.",
+      "openNoteToResearch": "Obriu una nota abans de crear un resum de recerca.",
+      "openNoteToFindRelated": "Obriu una nota abans de cercar notes relacionades.",
+      "openNoteToImproveLinks": "Obriu una nota abans de millorar enllaços, etiquetes i propietats.",
+      "openNoteToDraft": "Obriu una nota abans de redactar amb l'agent.",
+      "selectTextToImprove": "Seleccioneu text abans de demanar a l'agent que el millori."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: pregunta a l'agent sobre aquest fitxer",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Obre el xat d'AI"
+  },
+  "status": {
+    "idle": "IA: inactiu · {{tokens}} tokens",
+    "running": "IA: en execució · {{tokens}} tokens",
+    "ariaIdle": "Intelligence Assistant està inactiu; {{tokens}} tokens utilitzats",
+    "ariaRunning": "L'agent d'Intelligence Assistant s'està executant; {{tokens}} tokens utilitzats"
+  },
+  "capability": {
+    "title": "Eines i permisos",
+    "subtitle_one": "{{agent}} pot utilitzar {{count}} eina.",
+    "subtitle_other": "{{agent}} pot utilitzar {{count}} eines.",
+    "chatMode": "Mode de xat",
+    "permissions": "Permisos actuals",
+    "reads": "Aquesta tasca pot llegir",
+    "tools": "Eines activades",
+    "noTools": "No hi ha cap eina activada per a l'agent actual.",
+    "noDescription": "Sense descripció",
+    "builtinGroup": "Eines integrades del vault",
+    "tags": {
+      "applyRequired": "Cal Aplica",
+      "externalWrite": "Escriptura externa",
+      "localProcess": "Executa un procés local"
+    },
+    "state": {
+      "on": "activat",
+      "off": "desactivat",
+      "disabled": "inhabilitat"
+    },
+    "rows": {
+      "vaultContext": "Context del vault",
+      "referencesPlusContext_one": "{{count}} referència explícita més el context actiu",
+      "referencesPlusContext_other": "{{count}} referències explícites més el context actiu",
+      "activeContext": "Nota activa i instantània del context del graf",
+      "readTools": "Eines de lectura del vault",
+      "enabledCount": "{{count}} activades",
+      "noReadTool": "No hi ha cap eina de lectura directa activada",
+      "writes": "Escriptures al vault",
+      "proposalOnly": "Només proposta; cal Aplica",
+      "unavailable": "No disponible",
+      "rag": "RAG",
+      "web": "Cerca web",
+      "on": "Activat",
+      "off": "Desactivat",
+      "disabledInSettings": "Inhabilitat a la configuració",
+      "custom": "Eines personalitzades",
+      "customEnabled_one": "{{count}} eina MCP, OpenAPI o CLI activada",
+      "customEnabled_other": "{{count}} eines MCP, OpenAPI o CLI activades",
+      "noneEnabled": "Cap activada",
+      "destructive": "Accions destructives al vault",
+      "notProvided": "No ho proporcionen les eines integrades"
+    }
+  },
+  "markdown": {
+    "run": "Executa"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "No hi ha notes Markdown per indexar.",
+      "starting_one": "S'està indexant {{count}} nota…",
+      "starting_other": "S'estan indexant {{count}} notes…",
+      "progress": "Indexació: {{done}} de {{total}} notes",
+      "completed": "Indexació acabada: {{indexed}} indexades, {{failed}} amb errors.",
+      "noIndex": "Encara no s'ha indexat res. Executeu \"Embed all documents\" per indexar el vostre vault.",
+      "gradingError": "Ha fallat la valoració del document: {{message}}",
+      "clearing": "S'està esborrant l'índex…",
+      "cleared": "S'ha esborrat l'índex."
+    }
   }
 }

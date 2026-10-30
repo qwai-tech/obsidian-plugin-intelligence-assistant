@@ -85,6 +85,13 @@
         "allCapabilities": "Kaikki ominaisuudet",
         "allStates": "Kaikki tilat",
         "searchPlaceholder": "Hae nimellä tai tunnuksella"
+      },
+      "refreshing": "Päivitetään…",
+      "tableHeaders": {
+        "model": "Malli",
+        "capabilities": "Ominaisuudet",
+        "status": "Tila",
+        "actions": "Toiminnot"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Poista MCP-palvelin \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "Acme MCP -palvelin"
     },
     "agents": {
       "desc": "Luo ja hallinnoi tekoälyagentteja erityisillä ominaisuuksilla, työkaluilla ja käyttäytymisillä.",
@@ -394,7 +402,8 @@
             "reloadTools": "Lataa työkalut uudelleen",
             "refetchTooltip": "Hae spesifikaatio uudelleen URL:sta",
             "deleteTooltip": "Poista lähde"
-          }
+          },
+          "namePlaceholder": "HTTP-lähde"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Ympäristömuuttujat",
             "desc": "Muoto: AVAIN=arvo, yksi per rivi"
-          }
+          },
+          "descriptionPlaceholder": "Suorittaa komennon, jotta…"
         },
         "presets": {
           "title": "Lisää CLI-työkalu esiasetuksista",
@@ -898,6 +908,10 @@
           "name": "Selitä teksti",
           "prompt": "Selitä seuraava teksti yksinkertaisilla termeillä:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Pidennä tekstiä",
+        "prompt": "Laajenna ja syvennä seuraavaa tekstiä…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Lisätty {{count}} viittaus(ta)",
       "fileNotFound": "Tiedostoa ei löydy: {{path}}",
       "unableToLoadRag": "RAG-tilastojen lataaminen epäonnistui.",
-      "referenced": "Viitattu: {{name}}"
+      "referenced": "Viitattu: {{name}}",
+      "openViewFailed": "Keskustelunäkymää ei voitu avata."
     },
     "status": {
       "unavailable": "Ei saatavilla",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Yhteensä",
       "save": "Tallenna",
       "insertToNotes": "Lisää muistiinpanoihin",
-      "regenerate": "Regeneroi"
+      "regenerate": "Regeneroi",
+      "assistant": "Avustaja"
     },
     "toolCall": {
       "executionProcess": "Suoritusprosessi",
@@ -1061,7 +1077,10 @@
       "today": "Tänään",
       "yesterday": "Eilen",
       "thisWeek": "Tällä viikolla",
-      "older": "Vanhemmat"
+      "older": "Vanhemmat",
+      "empty": "Ei vielä keskusteluja",
+      "rename": "Nimeä uudelleen",
+      "delete": "Poista"
     },
     "header": {
       "noModels": "Ei malleja saatavilla"
@@ -1098,6 +1117,41 @@
         "placeholder": "Kirjoita tehtäväsi tähän...",
         "start": "Aloita",
         "title": "Aloita agenttitehtävä"
+      }
+    },
+    "references": {
+      "usingContext": "Käytetään kontekstia",
+      "remove": "Poista {{path}}"
+    },
+    "scrollToBottom": "Vieritä alas",
+    "preflight": {
+      "title": "Agenttitehtävän ennakkotarkistus",
+      "agent": "Agentti: {{name}}",
+      "reads": "Lukee: {{paths}}",
+      "readsDefault": "Lukee: aktiivisen muistiinpanon ja kontekstin tilannekuvan",
+      "tools": "Työkalut: {{count}} käytössä",
+      "writesProposal": "Kirjoittaa: vain ehdotus; Käytä vaaditaan",
+      "writesNone": "Kirjoittaa: ei käytettävissä",
+      "rag": "RAG: {{state}}",
+      "web": "Verkko: {{state}}"
+    },
+    "proposals": {
+      "title": "Kirjoitusehdotukset",
+      "preview": "Esikatsele ehdotettua sisältöä",
+      "apply": "Käytä",
+      "applyAll": "Käytä kaikki",
+      "applied": "Käytetty",
+      "changes_one": "{{count}} muutos",
+      "changes_other": "{{count}} muutosta",
+      "confirm": "Käytetäänkö {{summary}}?",
+      "appliedNotice": "Käytetty: {{summary}}",
+      "operations": {
+        "create": "Luo",
+        "update": "Päivitä",
+        "append": "Lisää loppuun",
+        "delete": "Poista",
+        "move": "Siirrä",
+        "batch": "Erä"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Päivitetään...",
         "refreshSuccess": "Mallilista päivitetty",
         "refreshFailed": "Mallilistan päivittäminen epäonnistui"
-      }
+      },
+      "pulling": "Ladataan…",
+      "deleting": "Poistetaan…"
     },
     "promptEdit": {
       "title": "Muokkaa järjestelmäkehotusta",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Käsitellään...",
       "error": "Virhe selityksen näyttämisessä",
       "errorPrefix": "Virhe:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Vaihda mallia…",
+      "switched": "Malliksi vaihdettiin {{name}}",
+      "failed": "Mallia ei voitu vaihtaa."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Mallille ei löydy kelvollista palveluntarjoajan konfiguraatiota: {{modelId}}",
     "processing": "Käsitellään...",
     "textUpdated": "Teksti päivitetty onnistuneesti",
-    "error": "Virhe: {{message}}"
+    "error": "Virhe: {{message}}",
+    "inlineBlockFailed": "Upotettua tekoälylohkoa ei voitu suorittaa.",
+    "deepLinkFailed": "Intelligence Assistant -linkkiä ei voitu avata."
   },
   "commands": {
     "askAgentCurrentNote": "Agenttitehtävä: kysy nykyisestä muistiinpanosta",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Agenttitehtävä: järjestä nykyinen muistiinpano",
     "sourceGroundedQuestion": "Agenttitehtävä: esitä lähteisiin perustuva kysymys",
     "summarizeCurrentNote": "Agenttitehtävä: tiivistä nykyinen muistiinpano",
-    "switchModel": "Vaihda malli"
+    "switchModel": "Vaihda malli",
+    "notices": {
+      "openNoteToAsk": "Avaa muistiinpano ennen kuin kysyt agentilta.",
+      "openNoteToSummarize": "Avaa muistiinpano ennen tiivistämistä agentin avulla.",
+      "openNoteToOrganize": "Avaa muistiinpano ennen järjestämistä agentin avulla.",
+      "openProjectNote": "Avaa projektimuistiinpano ennen projektikoosteen luomista.",
+      "openNoteToResearch": "Avaa muistiinpano ennen tutkimuskoosteen luomista.",
+      "openNoteToFindRelated": "Avaa muistiinpano ennen liittyvien muistiinpanojen etsimistä.",
+      "openNoteToImproveLinks": "Avaa muistiinpano ennen linkkien, tunnisteiden ja ominaisuuksien parantamista.",
+      "openNoteToDraft": "Avaa muistiinpano ennen luonnostelua agentin avulla.",
+      "selectTextToImprove": "Valitse teksti ennen kuin pyydät agenttia parantamaan sitä."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: kysy agentilta tästä tiedostosta",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Avaa AI-keskustelu"
+  },
+  "status": {
+    "idle": "IA: joutilas · {{tokens}} tokenia",
+    "running": "IA: käynnissä · {{tokens}} tokenia",
+    "ariaIdle": "Intelligence Assistant on joutilas; {{tokens}} tokenia käytetty",
+    "ariaRunning": "Intelligence Assistant -agentti on käynnissä; {{tokens}} tokenia käytetty"
+  },
+  "capability": {
+    "title": "Työkalut ja oikeudet",
+    "subtitle_one": "{{agent}} voi käyttää {{count}} työkalua.",
+    "subtitle_other": "{{agent}} voi käyttää {{count}} työkalua.",
+    "chatMode": "Keskustelutila",
+    "permissions": "Nykyiset oikeudet",
+    "reads": "Tämä tehtävä voi lukea",
+    "tools": "Käytössä olevat työkalut",
+    "noTools": "Nykyiselle agentille ei ole otettu käyttöön työkaluja.",
+    "noDescription": "Ei kuvausta",
+    "builtinGroup": "Holvin sisäänrakennetut työkalut",
+    "tags": {
+      "applyRequired": "Käytä vaaditaan",
+      "externalWrite": "Ulkoinen kirjoitus",
+      "localProcess": "Suorittaa paikallisen prosessin"
+    },
+    "state": {
+      "on": "päällä",
+      "off": "pois",
+      "disabled": "poistettu käytöstä"
+    },
+    "rows": {
+      "vaultContext": "Holvin konteksti",
+      "referencesPlusContext_one": "{{count}} eksplisiittinen viittaus sekä aktiivinen konteksti",
+      "referencesPlusContext_other": "{{count}} eksplisiittistä viittausta sekä aktiivinen konteksti",
+      "activeContext": "Aktiivinen muistiinpano ja graafikontekstin tilannekuva",
+      "readTools": "Holvin lukutyökalut",
+      "enabledCount": "{{count}} käytössä",
+      "noReadTool": "Suoraa lukutyökalua ei ole käytössä",
+      "writes": "Holviin kirjoittaminen",
+      "proposalOnly": "Vain ehdotus; Käytä vaaditaan",
+      "unavailable": "Ei käytettävissä",
+      "rag": "RAG",
+      "web": "Verkkohaku",
+      "on": "Päällä",
+      "off": "Pois",
+      "disabledInSettings": "Poistettu käytöstä asetuksissa",
+      "custom": "Mukautetut työkalut",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- tai CLI-työkalu käytössä",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- tai CLI-työkalua käytössä",
+      "noneEnabled": "Ei yhtään käytössä",
+      "destructive": "Tuhoavat toiminnot holvissa",
+      "notProvided": "Sisäänrakennetut työkalut eivät tarjoa"
+    }
+  },
+  "markdown": {
+    "run": "Suorita"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Ei indeksoitavia Markdown-muistiinpanoja.",
+      "starting_one": "Indeksoidaan {{count}} muistiinpano…",
+      "starting_other": "Indeksoidaan {{count}} muistiinpanoa…",
+      "progress": "Indeksointi: {{done}}/{{total}} muistiinpanoa",
+      "completed": "Indeksointi valmis: {{indexed}} indeksoitu, {{failed}} epäonnistui.",
+      "noIndex": "Mitään ei ole vielä indeksoitu. Suorita \"Embed all documents\" indeksoidaksesi holvisi.",
+      "gradingError": "Asiakirjan arviointi epäonnistui: {{message}}",
+      "clearing": "Tyhjennetään indeksiä…",
+      "cleared": "Indeksi tyhjennetty."
+    }
   }
 }

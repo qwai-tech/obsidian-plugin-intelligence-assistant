@@ -85,6 +85,13 @@
         "allCapabilities": "Visos galimybės",
         "allStates": "Visos būsenos",
         "searchPlaceholder": "Ieškoti pagal pavadinimą arba ID"
+      },
+      "refreshing": "Atnaujinama…",
+      "tableHeaders": {
+        "model": "Modelis",
+        "capabilities": "Galimybės",
+        "status": "Būsena",
+        "actions": "Veiksmai"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Ištrinti MCP serverį «{{name}}»?"
-      }
+      },
+      "namePlaceholder": "Acme MCP serveris"
     },
     "agents": {
       "desc": "Kurti ir valdyti DI agentus su specifinėmis galimybėmis, įrankiais ir elgesiu.",
@@ -394,7 +402,8 @@
             "reloadTools": "Perkrauti įrankius",
             "refetchTooltip": "Gauti specifikaciją iš URL iš naujo",
             "deleteTooltip": "Ištrinti šaltinį"
-          }
+          },
+          "namePlaceholder": "HTTP šaltinis"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Aplinkos kintamieji",
             "desc": "Formatas: RAKTAS=reikšmė, po vieną eilutėje"
-          }
+          },
+          "descriptionPlaceholder": "Vykdo komandą, kad…"
         },
         "presets": {
           "title": "Pridėti CLI įrankį iš išankstinių nustatymų",
@@ -898,6 +908,10 @@
           "name": "Paaiškinti tekstą",
           "prompt": "Paprastais žodžiais paaiškinkite šį tekstą:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Pailginti tekstą",
+        "prompt": "Išplėsk ir išsamiau išdėstyk šį tekstą…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Pridėta {{count}} nuoroda (-os)",
       "fileNotFound": "Failas nerastas: {{path}}",
       "unableToLoadRag": "Nepavyko įkelti RAG statistikos.",
-      "referenced": "Paminėta: {{name}}"
+      "referenced": "Paminėta: {{name}}",
+      "openViewFailed": "Nepavyko atidaryti pokalbio rodinio."
     },
     "status": {
       "unavailable": "Nepasiekiamas",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Iš viso",
       "save": "Išsaugoti",
       "insertToNotes": "Įterpti į užrašus",
-      "regenerate": "Regeneruoti"
+      "regenerate": "Regeneruoti",
+      "assistant": "Asistentas"
     },
     "toolCall": {
       "executionProcess": "Vykdymo procesas",
@@ -1061,7 +1077,10 @@
       "today": "Šiandien",
       "yesterday": "Vakar",
       "thisWeek": "Šią savaitę",
-      "older": "Senesni"
+      "older": "Senesni",
+      "empty": "Pokalbių dar nėra",
+      "rename": "Pervardyti",
+      "delete": "Ištrinti"
     },
     "header": {
       "noModels": "Nėra galimų modelių"
@@ -1098,6 +1117,41 @@
         "placeholder": "Įveskite savo užduotį čia...",
         "start": "Pradėti",
         "title": "Pradėti agento užduotį"
+      }
+    },
+    "references": {
+      "usingContext": "Naudojamas kontekstas",
+      "remove": "Pašalinti {{path}}"
+    },
+    "scrollToBottom": "Slinkti į apačią",
+    "preflight": {
+      "title": "Agento užduoties išankstinė patikra",
+      "agent": "Agentas: {{name}}",
+      "reads": "Skaito: {{paths}}",
+      "readsDefault": "Skaito: aktyvų užrašą ir konteksto momentinę kopiją",
+      "tools": "Įrankiai: įjungta {{count}}",
+      "writesProposal": "Rašymas: tik pasiūlymas; reikia Taikyti",
+      "writesNone": "Rašymas: nepasiekiamas",
+      "rag": "RAG: {{state}}",
+      "web": "Žiniatinklis: {{state}}"
+    },
+    "proposals": {
+      "title": "Rašymo pasiūlymai",
+      "preview": "Peržiūrėti siūlomą turinį",
+      "apply": "Taikyti",
+      "applyAll": "Taikyti viską",
+      "applied": "Pritaikyta",
+      "changes_one": "{{count}} pakeitimas",
+      "changes_other": "Pakeitimų: {{count}}",
+      "confirm": "Taikyti {{summary}}?",
+      "appliedNotice": "Pritaikyta: {{summary}}",
+      "operations": {
+        "create": "Sukurti",
+        "update": "Atnaujinti",
+        "append": "Papildyti",
+        "delete": "Ištrinti",
+        "move": "Perkelti",
+        "batch": "Paketas"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Atnaujinama...",
         "refreshSuccess": "Modelių sąrašas atnaujintas",
         "refreshFailed": "Nepavyko atnaujinti modelių sąrašo"
-      }
+      },
+      "pulling": "Atsisiunčiama…",
+      "deleting": "Trinama…"
     },
     "promptEdit": {
       "title": "Redaguoti sistemos raginį",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Apdorojama...",
       "error": "Klaida rodant paaiškinimą",
       "errorPrefix": "Klaida:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Keisti modelį…",
+      "switched": "Modelis pakeistas į {{name}}",
+      "failed": "Nepavyko pakeisti modelio."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Modeliui nerasta tinkama tiekėjo konfigūracija: {{modelId}}",
     "processing": "Apdorojama...",
     "textUpdated": "Tekstas sėkmingai atnaujintas",
-    "error": "Klaida: {{message}}"
+    "error": "Klaida: {{message}}",
+    "inlineBlockFailed": "Nepavyko paleisti įterptinio AI bloko.",
+    "deepLinkFailed": "Nepavyko atidaryti Intelligence Assistant nuorodos."
   },
   "commands": {
     "askAgentCurrentNote": "Agento užduotis: klausti apie dabartinį užrašą",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Agento užduotis: sutvarkyti dabartinį užrašą",
     "sourceGroundedQuestion": "Agento užduotis: užduoti šaltiniais pagrįstą klausimą",
     "summarizeCurrentNote": "Agento užduotis: apibendrinti dabartinį užrašą",
-    "switchModel": "Perjungti modelį"
+    "switchModel": "Perjungti modelį",
+    "notices": {
+      "openNoteToAsk": "Prieš klausdami agento, atidarykite užrašą.",
+      "openNoteToSummarize": "Prieš apibendrindami su agentu, atidarykite užrašą.",
+      "openNoteToOrganize": "Prieš tvarkydami su agentu, atidarykite užrašą.",
+      "openProjectNote": "Prieš kurdami projekto santrauką, atidarykite projekto užrašą.",
+      "openNoteToResearch": "Prieš kurdami tyrimo santrauką, atidarykite užrašą.",
+      "openNoteToFindRelated": "Prieš ieškodami susijusių užrašų, atidarykite užrašą.",
+      "openNoteToImproveLinks": "Prieš tobulindami nuorodas, žymes ir savybes, atidarykite užrašą.",
+      "openNoteToDraft": "Prieš rašydami juodraštį su agentu, atidarykite užrašą.",
+      "selectTextToImprove": "Prieš prašydami agento patobulinti tekstą, jį pažymėkite."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: klausti agento apie šį failą",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Atidaryti DI pokalbį"
+  },
+  "status": {
+    "idle": "IA: neveikia · žetonų: {{tokens}}",
+    "running": "IA: vykdoma · žetonų: {{tokens}}",
+    "ariaIdle": "Intelligence Assistant neveikia; panaudota žetonų: {{tokens}}",
+    "ariaRunning": "Intelligence Assistant agentas vykdomas; panaudota žetonų: {{tokens}}"
+  },
+  "capability": {
+    "title": "Įrankiai ir leidimai",
+    "subtitle_one": "{{agent}} gali naudoti {{count}} įrankį.",
+    "subtitle_other": "{{agent}} gali naudoti įrankių: {{count}}.",
+    "chatMode": "Pokalbio režimas",
+    "permissions": "Dabartiniai leidimai",
+    "reads": "Ši užduotis gali skaityti",
+    "tools": "Įjungti įrankiai",
+    "noTools": "Dabartiniam agentui neįjungtas nė vienas įrankis.",
+    "noDescription": "Aprašo nėra",
+    "builtinGroup": "Integruoti saugyklos įrankiai",
+    "tags": {
+      "applyRequired": "Reikia Taikyti",
+      "externalWrite": "Išorinis rašymas",
+      "localProcess": "Paleidžia vietinį procesą"
+    },
+    "state": {
+      "on": "įjungta",
+      "off": "išjungta",
+      "disabled": "neleidžiama"
+    },
+    "rows": {
+      "vaultContext": "Saugyklos kontekstas",
+      "referencesPlusContext_one": "{{count}} aiški nuoroda ir aktyvus kontekstas",
+      "referencesPlusContext_other": "Aiškių nuorodų: {{count}}, ir aktyvus kontekstas",
+      "activeContext": "Aktyvus užrašas ir grafo konteksto momentinė kopija",
+      "readTools": "Saugyklos skaitymo įrankiai",
+      "enabledCount": "Įjungta: {{count}}",
+      "noReadTool": "Neįjungtas joks tiesioginio skaitymo įrankis",
+      "writes": "Rašymas į saugyklą",
+      "proposalOnly": "Tik pasiūlymas; reikia Taikyti",
+      "unavailable": "Nepasiekiama",
+      "rag": "RAG",
+      "web": "Žiniatinklio paieška",
+      "on": "Įjungta",
+      "off": "Išjungta",
+      "disabledInSettings": "Išjungta nustatymuose",
+      "custom": "Pasirinktiniai įrankiai",
+      "customEnabled_one": "Įjungtas {{count}} MCP, OpenAPI arba CLI įrankis",
+      "customEnabled_other": "Įjungta MCP, OpenAPI arba CLI įrankių: {{count}}",
+      "noneEnabled": "Nieko neįjungta",
+      "destructive": "Destruktyvūs saugyklos veiksmai",
+      "notProvided": "Integruoti įrankiai to nepateikia"
+    }
+  },
+  "markdown": {
+    "run": "Vykdyti"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Nėra Markdown užrašų, kuriuos būtų galima indeksuoti.",
+      "starting_one": "Indeksuojamas {{count}} užrašas…",
+      "starting_other": "Indeksuojama užrašų: {{count}}…",
+      "progress": "Indeksuojama: {{done}} iš {{total}} užrašų",
+      "completed": "Indeksavimas baigtas: suindeksuota {{indexed}}, nepavyko {{failed}}.",
+      "noIndex": "Kol kas niekas nesuindeksuota. Paleiskite \"Embed all documents\", kad suindeksuotumėte saugyklą.",
+      "gradingError": "Dokumentų vertinimas nepavyko: {{message}}",
+      "clearing": "Valomas indeksas…",
+      "cleared": "Indeksas išvalytas."
+    }
   }
 }

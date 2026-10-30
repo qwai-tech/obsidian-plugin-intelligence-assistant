@@ -85,6 +85,13 @@
         "allCapabilities": "Усе магчымасці",
         "allStates": "Усе стану",
         "searchPlaceholder": "Пошук па назве або ID"
+      },
+      "refreshing": "Абнаўленне…",
+      "tableHeaders": {
+        "model": "Мадэль",
+        "capabilities": "Магчымасці",
+        "status": "Стан",
+        "actions": "Дзеянні"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Выдаліць сервер MCP «{{name}}»?"
-      }
+      },
+      "namePlaceholder": "Сервер Acme MCP"
     },
     "agents": {
       "desc": "Ствараць і кіраваць агентамі DI са спецыфічнымі магчымасцямі, інструментамі і паводзінамі.",
@@ -394,7 +402,8 @@
             "reloadTools": "Перазагрузіць інструменты",
             "refetchTooltip": "Атрымаць спецыфікацыю з URL зноў",
             "deleteTooltip": "Выдаліць крыніцу"
-          }
+          },
+          "namePlaceholder": "Крыніца HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Зменныя асяроддзя",
             "desc": "Фармат: КЛЮЧ=значэнне, па адным у радку"
-          }
+          },
+          "descriptionPlaceholder": "Выконвае каманду, каб…"
         },
         "presets": {
           "title": "Дадаць інструмент CLI з прэсетаў",
@@ -898,6 +908,10 @@
           "name": "Растлумачыць тэкст",
           "prompt": "Растлумачце наступны тэкст простымі словамі:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Зрабіць тэкст даўжэйшым",
+        "prompt": "Пашырце і дапоўніце наступны тэкст…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Дадана {{count}} спасылак(-а)",
       "fileNotFound": "Файл не знойдзены: {{path}}",
       "unableToLoadRag": "Не ўдаецца загрузіць статыстыку RAG.",
-      "referenced": "Спасылка: {{name}}"
+      "referenced": "Спасылка: {{name}}",
+      "openViewFailed": "Не ўдалося адкрыць акно чата."
     },
     "status": {
       "unavailable": "Недаступна",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Усяго",
       "save": "Захаваць",
       "insertToNotes": "Уставіць у нататкі",
-      "regenerate": "Рэгенераваць"
+      "regenerate": "Рэгенераваць",
+      "assistant": "Памочнік"
     },
     "toolCall": {
       "executionProcess": "Працэс выканання",
@@ -1061,7 +1077,10 @@
       "today": "Сёння",
       "yesterday": "Учора",
       "thisWeek": "Гэты тыдзень",
-      "older": "Раней"
+      "older": "Раней",
+      "empty": "Размоў пакуль няма",
+      "rename": "Перайменаваць",
+      "delete": "Выдаліць"
     },
     "header": {
       "noModels": "Мадэлі недаступны"
@@ -1098,6 +1117,41 @@
         "placeholder": "Увядзіце вашу задачу тут...",
         "start": "Пачаць",
         "title": "Пачаць задачу агента"
+      }
+    },
+    "references": {
+      "usingContext": "Выкарыстоўваецца кантэкст",
+      "remove": "Выдаліць {{path}}"
+    },
+    "scrollToBottom": "Пракруціць уніз",
+    "preflight": {
+      "title": "Папярэдняя праверка задачы агента",
+      "agent": "Агент: {{name}}",
+      "reads": "Чытае: {{paths}}",
+      "readsDefault": "Чытае: актыўную нататку і здымак кантэксту",
+      "tools": "Інструменты: уключана {{count}}",
+      "writesProposal": "Запіс: толькі прапанова; патрабуецца «Ужыць»",
+      "writesNone": "Запіс: недаступны",
+      "rag": "RAG: {{state}}",
+      "web": "Вэб: {{state}}"
+    },
+    "proposals": {
+      "title": "Прапановы запісу",
+      "preview": "Папярэдні прагляд прапанаванага змесціва",
+      "apply": "Ужыць",
+      "applyAll": "Ужыць усе",
+      "applied": "Ужыта",
+      "changes_one": "{{count}} змена",
+      "changes_other": "{{count}} змен",
+      "confirm": "Ужыць {{summary}}?",
+      "appliedNotice": "Ужыта: {{summary}}",
+      "operations": {
+        "create": "Стварыць",
+        "update": "Абнавіць",
+        "append": "Дадаць у канец",
+        "delete": "Выдаліць",
+        "move": "Перамясціць",
+        "batch": "Пакет"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Абнаўленне...",
         "refreshSuccess": "Спіс мадэляў абноўлены",
         "refreshFailed": "Не ўдалося абнавіць спіс мадэляў"
-      }
+      },
+      "pulling": "Загрузка…",
+      "deleting": "Выдаленне…"
     },
     "promptEdit": {
       "title": "Рэдагаваць сістэмную падказку",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Апрацоўка...",
       "error": "Памылка адлюстравання тлумачэння",
       "errorPrefix": "Памылка:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Змяніць мадэль…",
+      "switched": "Мадэль зменена на {{name}}",
+      "failed": "Не ўдалося змяніць мадэль."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Для мадэлі не знойдзена дзейнай канфігурацыі пастаўшчыка: {{modelId}}",
     "processing": "Апрацоўка...",
     "textUpdated": "Тэкст паспяхова абноўлены",
-    "error": "Памылка: {{message}}"
+    "error": "Памылка: {{message}}",
+    "inlineBlockFailed": "Не ўдалося запусціць убудаваны блок ШІ.",
+    "deepLinkFailed": "Не ўдалося адкрыць спасылку Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Задача агента: спытаць пра бягучую нататку",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Задача агента: упарадкаваць бягучую нататку",
     "sourceGroundedQuestion": "Задача агента: задаць пытанне з апорай на крыніцы",
     "summarizeCurrentNote": "Задача агента: падсумаваць бягучую нататку",
-    "switchModel": "Змяніць мадэль"
+    "switchModel": "Змяніць мадэль",
+    "notices": {
+      "openNoteToAsk": "Адкрыйце нататку, перш чым звяртацца да агента.",
+      "openNoteToSummarize": "Адкрыйце нататку, перш чым рабіць зводку з агентам.",
+      "openNoteToOrganize": "Адкрыйце нататку, перш чым упарадкоўваць яе з агентам.",
+      "openProjectNote": "Адкрыйце нататку праекта, перш чым ствараць кароткі агляд праекта.",
+      "openNoteToResearch": "Адкрыйце нататку, перш чым ствараць даследчы агляд.",
+      "openNoteToFindRelated": "Адкрыйце нататку, перш чым шукаць звязаныя нататкі.",
+      "openNoteToImproveLinks": "Адкрыйце нататку, перш чым паляпшаць спасылкі, тэгі і ўласцівасці.",
+      "openNoteToDraft": "Адкрыйце нататку, перш чым пісаць чарнавік з агентам.",
+      "selectTextToImprove": "Вылучыце тэкст, перш чым прасіць агента палепшыць яго."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: спытаць агента пра гэты файл",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Адкрыць AI-чат"
+  },
+  "status": {
+    "idle": "IA: у чаканні · токенаў: {{tokens}}",
+    "running": "IA: працуе · токенаў: {{tokens}}",
+    "ariaIdle": "Intelligence Assistant у чаканні; выкарыстана токенаў: {{tokens}}",
+    "ariaRunning": "Агент Intelligence Assistant працуе; выкарыстана токенаў: {{tokens}}"
+  },
+  "capability": {
+    "title": "Інструменты і дазволы",
+    "subtitle_one": "{{agent}} можа выкарыстоўваць {{count}} інструмент.",
+    "subtitle_other": "{{agent}} можа выкарыстоўваць інструментаў: {{count}}.",
+    "chatMode": "Рэжым чата",
+    "permissions": "Бягучыя дазволы",
+    "reads": "Гэтая задача можа чытаць",
+    "tools": "Уключаныя інструменты",
+    "noTools": "Для бягучага агента не ўключана ніводнага інструмента.",
+    "noDescription": "Няма апісання",
+    "builtinGroup": "Убудаваныя інструменты сховішча",
+    "tags": {
+      "applyRequired": "Патрабуецца «Ужыць»",
+      "externalWrite": "Знешні запіс",
+      "localProcess": "Запускае лакальны працэс"
+    },
+    "state": {
+      "on": "укл.",
+      "off": "выкл.",
+      "disabled": "адключана"
+    },
+    "rows": {
+      "vaultContext": "Кантэкст сховішча",
+      "referencesPlusContext_one": "{{count}} яўная спасылка плюс актыўны кантэкст",
+      "referencesPlusContext_other": "Яўных спасылак: {{count}} плюс актыўны кантэкст",
+      "activeContext": "Актыўная нататка і здымак кантэксту графа",
+      "readTools": "Інструменты чытання сховішча",
+      "enabledCount": "Уключана: {{count}}",
+      "noReadTool": "Няма ўключанага інструмента прамога чытання",
+      "writes": "Запіс у сховішча",
+      "proposalOnly": "Толькі прапанова; патрабуецца «Ужыць»",
+      "unavailable": "Недаступна",
+      "rag": "RAG",
+      "web": "Пошук у вэбе",
+      "on": "Укл.",
+      "off": "Выкл.",
+      "disabledInSettings": "Адключана ў наладах",
+      "custom": "Карыстальніцкія інструменты",
+      "customEnabled_one": "Уключаны {{count}} інструмент MCP, OpenAPI або CLI",
+      "customEnabled_other": "Уключана інструментаў MCP, OpenAPI або CLI: {{count}}",
+      "noneEnabled": "Нічога не ўключана",
+      "destructive": "Разбуральныя дзеянні ў сховішчы",
+      "notProvided": "Не прадастаўляецца ўбудаванымі інструментамі"
+    }
+  },
+  "markdown": {
+    "run": "Запусціць"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Няма нататак Markdown для індэксацыі.",
+      "starting_one": "Індэксацыя {{count}} нататкі…",
+      "starting_other": "Індэксацыя нататак: {{count}}…",
+      "progress": "Індэксацыя: {{done}} з {{total}} нататак",
+      "completed": "Індэксацыя завершана: праіндэксавана {{indexed}}, з памылкай {{failed}}.",
+      "noIndex": "Пакуль нічога не праіндэксавана. Запусціце \"Embed all documents\", каб праіндэксаваць сховішча.",
+      "gradingError": "Не ўдалося ацаніць дакумент: {{message}}",
+      "clearing": "Ачыстка індэкса…",
+      "cleared": "Індэкс ачышчаны."
+    }
   }
 }

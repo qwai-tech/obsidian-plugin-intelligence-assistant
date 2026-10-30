@@ -85,6 +85,13 @@
         "allCapabilities": "Alle funktioner",
         "allStates": "Alle tilstande",
         "searchPlaceholder": "Søg navn eller ID"
+      },
+      "refreshing": "Opdaterer…",
+      "tableHeaders": {
+        "model": "Model",
+        "capabilities": "Funktioner",
+        "status": "Status",
+        "actions": "Handlinger"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Slet MCP-server \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "Acme MCP-server"
     },
     "agents": {
       "desc": "Opret og administrer AI-agenter med specifikke funktioner, værktøjer og adfærd.",
@@ -394,7 +402,8 @@
             "reloadTools": "Genindlæs værktøjer",
             "refetchTooltip": "Hent specifikation fra URL igen",
             "deleteTooltip": "Slet kilde"
-          }
+          },
+          "namePlaceholder": "HTTP-kilde"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Miljøvariabler",
             "desc": "Format: NØGLE=værdi, én pr. linje"
-          }
+          },
+          "descriptionPlaceholder": "Kører en kommando for at…"
         },
         "presets": {
           "title": "Tilføj CLI-værktøj fra forudindstillinger",
@@ -898,6 +908,10 @@
           "name": "Forklar tekst",
           "prompt": "Forklar følgende tekst med enkle ord:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Gør teksten længere",
+        "prompt": "Udvid og uddyb følgende tekst…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Tilføjede {{count}} reference(r)",
       "fileNotFound": "Fil ikke fundet: {{path}}",
       "unableToLoadRag": "Kan ikke indlæse RAG-statistik.",
-      "referenced": "Refereret: {{name}}"
+      "referenced": "Refereret: {{name}}",
+      "openViewFailed": "Kunne ikke åbne chatvisningen."
     },
     "status": {
       "unavailable": "Ikke tilgængelig",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Total",
       "save": "Gem",
       "insertToNotes": "Indsæt i notitier",
-      "regenerate": "Regenerer"
+      "regenerate": "Regenerer",
+      "assistant": "Assistent"
     },
     "toolCall": {
       "executionProcess": "Udførelsesproces",
@@ -1061,7 +1077,10 @@
       "today": "I dag",
       "yesterday": "I går",
       "thisWeek": "Denne uge",
-      "older": "Ældre"
+      "older": "Ældre",
+      "empty": "Ingen samtaler endnu",
+      "rename": "Omdøb",
+      "delete": "Slet"
     },
     "header": {
       "noModels": "Ingen modeller tilgængelige"
@@ -1098,6 +1117,41 @@
         "placeholder": "Indtast din opgave her...",
         "start": "Start",
         "title": "Start agentopgave"
+      }
+    },
+    "references": {
+      "usingContext": "Bruger kontekst",
+      "remove": "Fjern {{path}}"
+    },
+    "scrollToBottom": "Rul til bunden",
+    "preflight": {
+      "title": "Forhåndstjek af agentopgave",
+      "agent": "Agent: {{name}}",
+      "reads": "Læser: {{paths}}",
+      "readsDefault": "Læser: aktiv note og kontekstøjebliksbillede",
+      "tools": "Værktøjer: {{count}} aktiveret",
+      "writesProposal": "Skrivning: kun forslag; Anvend kræves",
+      "writesNone": "Skrivning: ikke tilgængelig",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Skriveforslag",
+      "preview": "Forhåndsvis foreslået indhold",
+      "apply": "Anvend",
+      "applyAll": "Anvend alle",
+      "applied": "Anvendt",
+      "changes_one": "{{count}} ændring",
+      "changes_other": "{{count}} ændringer",
+      "confirm": "Anvend {{summary}}?",
+      "appliedNotice": "Anvendt: {{summary}}",
+      "operations": {
+        "create": "Opret",
+        "update": "Opdater",
+        "append": "Tilføj til slutningen",
+        "delete": "Slet",
+        "move": "Flyt",
+        "batch": "Batch"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Opdaterer...",
         "refreshSuccess": "Modelliste opdateret",
         "refreshFailed": "Kunne ikke opdatere modelliste"
-      }
+      },
+      "pulling": "Henter…",
+      "deleting": "Sletter…"
     },
     "promptEdit": {
       "title": "Rediger systemprompt",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Behandler...",
       "error": "Fejl ved gengivelse af forklaring",
       "errorPrefix": "Fejl:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Skift model…",
+      "switched": "Model skiftet til {{name}}",
+      "failed": "Kunne ikke skifte model."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Ingen gyldig udbyderindstilling fundet for model: {{modelId}}",
     "processing": "Behandler...",
     "textUpdated": "Tekst opdateret",
-    "error": "Fejl: {{message}}"
+    "error": "Fejl: {{message}}",
+    "inlineBlockFailed": "Kunne ikke køre den indlejrede AI-blok.",
+    "deepLinkFailed": "Kunne ikke åbne Intelligence Assistant-linket."
   },
   "commands": {
     "askAgentCurrentNote": "Agentopgave: spørg om aktuel note",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Agentopgave: organisér aktuel note",
     "sourceGroundedQuestion": "Agentopgave: stil kildebaseret spørgsmål",
     "summarizeCurrentNote": "Agentopgave: opsummér aktuel note",
-    "switchModel": "Skift model"
+    "switchModel": "Skift model",
+    "notices": {
+      "openNoteToAsk": "Åbn en note, før du spørger agenten.",
+      "openNoteToSummarize": "Åbn en note, før du opsummerer med agenten.",
+      "openNoteToOrganize": "Åbn en note, før du organiserer med agenten.",
+      "openProjectNote": "Åbn en projektnote, før du opretter et projektresumé.",
+      "openNoteToResearch": "Åbn en note, før du opretter et researchresumé.",
+      "openNoteToFindRelated": "Åbn en note, før du finder relaterede noter.",
+      "openNoteToImproveLinks": "Åbn en note, før du forbedrer links, tags og egenskaber.",
+      "openNoteToDraft": "Åbn en note, før du skriver et udkast med agenten.",
+      "selectTextToImprove": "Markér tekst, før du beder agenten om at forbedre den."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: spørg agent om denne fil",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Åbn AI-chat"
+  },
+  "status": {
+    "idle": "IA: inaktiv · {{tokens}} tokens",
+    "running": "IA: kører · {{tokens}} tokens",
+    "ariaIdle": "Intelligence Assistant er inaktiv; {{tokens}} tokens brugt",
+    "ariaRunning": "Intelligence Assistant-agenten kører; {{tokens}} tokens brugt"
+  },
+  "capability": {
+    "title": "Værktøjer og tilladelser",
+    "subtitle_one": "{{agent}} kan bruge {{count}} værktøj.",
+    "subtitle_other": "{{agent}} kan bruge {{count}} værktøjer.",
+    "chatMode": "Chattilstand",
+    "permissions": "Nuværende tilladelser",
+    "reads": "Denne opgave kan læse",
+    "tools": "Aktiverede værktøjer",
+    "noTools": "Ingen værktøjer er aktiveret for den aktuelle agent.",
+    "noDescription": "Ingen beskrivelse",
+    "builtinGroup": "Indbyggede vault-værktøjer",
+    "tags": {
+      "applyRequired": "Anvend kræves",
+      "externalWrite": "Ekstern skrivning",
+      "localProcess": "Kører en lokal proces"
+    },
+    "state": {
+      "on": "til",
+      "off": "fra",
+      "disabled": "deaktiveret"
+    },
+    "rows": {
+      "vaultContext": "Vault-kontekst",
+      "referencesPlusContext_one": "{{count}} eksplicit reference plus aktiv kontekst",
+      "referencesPlusContext_other": "{{count}} eksplicitte referencer plus aktiv kontekst",
+      "activeContext": "Aktiv note og øjebliksbillede af grafkontekst",
+      "readTools": "Vault-læseværktøjer",
+      "enabledCount": "{{count}} aktiveret",
+      "noReadTool": "Intet direkte læseværktøj aktiveret",
+      "writes": "Skrivning i vault",
+      "proposalOnly": "Kun forslag; Anvend er påkrævet",
+      "unavailable": "Ikke tilgængelig",
+      "rag": "RAG",
+      "web": "Websøgning",
+      "on": "Til",
+      "off": "Fra",
+      "disabledInSettings": "Deaktiveret i indstillinger",
+      "custom": "Brugerdefinerede værktøjer",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- eller CLI-værktøj aktiveret",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- eller CLI-værktøjer aktiveret",
+      "noneEnabled": "Ingen aktiveret",
+      "destructive": "Destruktive handlinger i vault",
+      "notProvided": "Leveres ikke af indbyggede værktøjer"
+    }
+  },
+  "markdown": {
+    "run": "Kør"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Ingen Markdown-noter at indeksere.",
+      "starting_one": "Indekserer {{count}} note…",
+      "starting_other": "Indekserer {{count}} noter…",
+      "progress": "Indeksering: {{done}} af {{total}} noter",
+      "completed": "Indeksering færdig: {{indexed}} indekseret, {{failed}} mislykkedes.",
+      "noIndex": "Intet er indekseret endnu. Kør \"Embed all documents\" for at indeksere din vault.",
+      "gradingError": "Dokumentvurdering mislykkedes: {{message}}",
+      "clearing": "Rydder indekset…",
+      "cleared": "Indeks ryddet."
+    }
   }
 }

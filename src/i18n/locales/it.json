@@ -85,6 +85,13 @@
         "allCapabilities": "Tutte le capacità",
         "allStates": "Tutti gli stati",
         "searchPlaceholder": "Cerca nome o ID"
+      },
+      "refreshing": "Aggiornamento…",
+      "tableHeaders": {
+        "model": "Modello",
+        "capabilities": "Capacità",
+        "status": "Stato",
+        "actions": "Azioni"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Eliminare il server MCP \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "Server MCP Acme"
     },
     "agents": {
       "desc": "Crea e gestisci agenti AI con capacità, strumenti e comportamenti specifici.",
@@ -394,7 +402,8 @@
             "reloadTools": "Ricarica strumenti",
             "refetchTooltip": "Recupera di nuovo la specifica dall'URL",
             "deleteTooltip": "Elimina sorgente"
-          }
+          },
+          "namePlaceholder": "Sorgente HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Variabili d'ambiente",
             "desc": "Formato: CHIAVE=valore, una per riga"
-          }
+          },
+          "descriptionPlaceholder": "Esegue un comando per…"
         },
         "presets": {
           "title": "Aggiungi strumento CLI da preset",
@@ -898,6 +908,10 @@
           "name": "Spiega testo",
           "prompt": "Spiega il seguente testo in termini semplici:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Allunga il testo",
+        "prompt": "Espandi e approfondisci il testo seguente…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Aggiunt{{count}} riferimento/i",
       "fileNotFound": "File non trovato: {{path}}",
       "unableToLoadRag": "Impossibile caricare le statistiche RAG.",
-      "referenced": "Referenziato: {{name}}"
+      "referenced": "Referenziato: {{name}}",
+      "openViewFailed": "Impossibile aprire la vista della chat."
     },
     "status": {
       "unavailable": "Non disponibile",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Totale",
       "save": "Salva",
       "insertToNotes": "Inserisci nelle note",
-      "regenerate": "Rigenera"
+      "regenerate": "Rigenera",
+      "assistant": "Assistente"
     },
     "toolCall": {
       "executionProcess": "Processo di esecuzione",
@@ -1061,7 +1077,10 @@
       "today": "Oggi",
       "yesterday": "Ieri",
       "thisWeek": "Questa settimana",
-      "older": "Meno recenti"
+      "older": "Meno recenti",
+      "empty": "Ancora nessuna conversazione",
+      "rename": "Rinomina",
+      "delete": "Elimina"
     },
     "header": {
       "noModels": "Nessun modello disponibile"
@@ -1098,6 +1117,41 @@
         "placeholder": "Inserisci qui la tua attività...",
         "start": "Avvia",
         "title": "Avvia attività dell'agente"
+      }
+    },
+    "references": {
+      "usingContext": "Contesto in uso",
+      "remove": "Rimuovi {{path}}"
+    },
+    "scrollToBottom": "Scorri in fondo",
+    "preflight": {
+      "title": "Verifica preliminare dell'attività dell'agente",
+      "agent": "Agente: {{name}}",
+      "reads": "Letture: {{paths}}",
+      "readsDefault": "Letture: nota attiva e istantanea del contesto",
+      "tools": "Strumenti: {{count}} attivi",
+      "writesProposal": "Scritture: solo proposta; serve Applica",
+      "writesNone": "Scritture: non disponibili",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Proposte di scrittura",
+      "preview": "Anteprima del contenuto proposto",
+      "apply": "Applica",
+      "applyAll": "Applica tutto",
+      "applied": "Applicato",
+      "changes_one": "{{count}} modifica",
+      "changes_other": "{{count}} modifiche",
+      "confirm": "Applicare {{summary}}?",
+      "appliedNotice": "Applicato: {{summary}}",
+      "operations": {
+        "create": "Crea",
+        "update": "Aggiorna",
+        "append": "Accoda",
+        "delete": "Elimina",
+        "move": "Sposta",
+        "batch": "Batch"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Aggiornamento...",
         "refreshSuccess": "Elenco modelli aggiornato",
         "refreshFailed": "Impossibile aggiornare l'elenco modelli"
-      }
+      },
+      "pulling": "Download in corso…",
+      "deleting": "Eliminazione…"
     },
     "promptEdit": {
       "title": "Modifica prompt di sistema",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Elaborazione...",
       "error": "Errore nel rendering della spiegazione",
       "errorPrefix": "Errore:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Cambia modello…",
+      "switched": "Modello cambiato in {{name}}",
+      "failed": "Impossibile cambiare modello."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Nessuna configurazione provider valida trovata per il modello: {{modelId}}",
     "processing": "Elaborazione...",
     "textUpdated": "Testo aggiornato con successo",
-    "error": "Errore: {{message}}"
+    "error": "Errore: {{message}}",
+    "inlineBlockFailed": "Impossibile eseguire il blocco IA inline.",
+    "deepLinkFailed": "Impossibile aprire il link di Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Attività dell'agente: chiedi informazioni sulla nota corrente",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Attività dell'agente: organizza la nota corrente",
     "sourceGroundedQuestion": "Attività dell'agente: fai una domanda basata sulle fonti",
     "summarizeCurrentNote": "Attività dell'agente: riassumi la nota corrente",
-    "switchModel": "Cambia modello"
+    "switchModel": "Cambia modello",
+    "notices": {
+      "openNoteToAsk": "Apri una nota prima di fare domande all'agente.",
+      "openNoteToSummarize": "Apri una nota prima di riassumerla con l'agente.",
+      "openNoteToOrganize": "Apri una nota prima di organizzarla con l'agente.",
+      "openProjectNote": "Apri una nota di progetto prima di creare un brief di progetto.",
+      "openNoteToResearch": "Apri una nota prima di creare un brief di ricerca.",
+      "openNoteToFindRelated": "Apri una nota prima di cercare note correlate.",
+      "openNoteToImproveLinks": "Apri una nota prima di migliorare link, tag e proprietà.",
+      "openNoteToDraft": "Apri una nota prima di scrivere una bozza con l'agente.",
+      "selectTextToImprove": "Seleziona del testo prima di chiedere all'agente di migliorarlo."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: chiedi all'agente informazioni su questo file",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Apri la chat AI"
+  },
+  "status": {
+    "idle": "IA: inattivo · {{tokens}} token",
+    "running": "IA: in esecuzione · {{tokens}} token",
+    "ariaIdle": "Intelligence Assistant è inattivo; {{tokens}} token usati",
+    "ariaRunning": "L'agente di Intelligence Assistant è in esecuzione; {{tokens}} token usati"
+  },
+  "capability": {
+    "title": "Strumenti e permessi",
+    "subtitle_one": "{{agent}} può usare {{count}} strumento.",
+    "subtitle_other": "{{agent}} può usare {{count}} strumenti.",
+    "chatMode": "Modalità chat",
+    "permissions": "Permessi attuali",
+    "reads": "Questa attività può leggere",
+    "tools": "Strumenti attivi",
+    "noTools": "Nessuno strumento attivo per l'agente corrente.",
+    "noDescription": "Nessuna descrizione",
+    "builtinGroup": "Strumenti del vault integrati",
+    "tags": {
+      "applyRequired": "Serve Applica",
+      "externalWrite": "Scrittura esterna",
+      "localProcess": "Esegue un processo locale"
+    },
+    "state": {
+      "on": "attivo",
+      "off": "spento",
+      "disabled": "disabilitato"
+    },
+    "rows": {
+      "vaultContext": "Contesto del vault",
+      "referencesPlusContext_one": "{{count}} riferimento esplicito più il contesto attivo",
+      "referencesPlusContext_other": "{{count}} riferimenti espliciti più il contesto attivo",
+      "activeContext": "Nota attiva e istantanea del contesto del grafo",
+      "readTools": "Strumenti di lettura del vault",
+      "enabledCount": "{{count}} attivi",
+      "noReadTool": "Nessuno strumento di lettura diretta attivo",
+      "writes": "Scritture nel vault",
+      "proposalOnly": "Solo proposta; serve Applica",
+      "unavailable": "Non disponibile",
+      "rag": "RAG",
+      "web": "Ricerca web",
+      "on": "Attivo",
+      "off": "Spento",
+      "disabledInSettings": "Disabilitato nelle impostazioni",
+      "custom": "Strumenti personalizzati",
+      "customEnabled_one": "{{count}} strumento MCP, OpenAPI o CLI attivo",
+      "customEnabled_other": "{{count}} strumenti MCP, OpenAPI o CLI attivi",
+      "noneEnabled": "Nessuno attivo",
+      "destructive": "Azioni distruttive sul vault",
+      "notProvided": "Non fornito dagli strumenti integrati"
+    }
+  },
+  "markdown": {
+    "run": "Esegui"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Nessuna nota Markdown da indicizzare.",
+      "starting_one": "Indicizzazione di {{count}} nota…",
+      "starting_other": "Indicizzazione di {{count}} note…",
+      "progress": "Indicizzazione: {{done}} di {{total}} note",
+      "completed": "Indicizzazione completata: {{indexed}} indicizzate, {{failed}} non riuscite.",
+      "noIndex": "Non è ancora indicizzato nulla. Esegui \"Embed all documents\" per indicizzare il tuo vault.",
+      "gradingError": "Valutazione dei documenti non riuscita: {{message}}",
+      "clearing": "Cancellazione dell'indice…",
+      "cleared": "Indice cancellato."
+    }
   }
 }

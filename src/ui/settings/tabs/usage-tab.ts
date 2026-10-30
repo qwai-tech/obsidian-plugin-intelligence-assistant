@@ -112,7 +112,7 @@ export async function displayUsageTab(
 				t('settings.usage.tableHeaders.completion'),
 				t('settings.usage.tableHeaders.total'),
 				t('settings.usage.tableHeaders.calls')
-			]);
+			], { numericColumns: 4 });
 			const tbody = tbl.tBodies[0];
 			for (const [name, s] of byProvider) {
 				const row = tbody.insertRow();
@@ -141,7 +141,7 @@ export async function displayUsageTab(
 				t('settings.usage.tableHeaders.completion'),
 				t('settings.usage.tableHeaders.total'),
 				t('settings.usage.tableHeaders.calls')
-			]);
+			], { numericColumns: 4 });
 			const tbody = tbl.tBodies[0];
 			for (const [name, s] of byModel) {
 				const row = tbody.insertRow();
@@ -172,7 +172,7 @@ export async function displayUsageTab(
 				t('settings.usage.tableHeaders.in'),
 				t('settings.usage.tableHeaders.out'),
 				t('settings.usage.tableHeaders.total')
-			]);
+			], { numericColumns: 3 });
 			const tbody = tbl.tBodies[0];
 			for (const r of recent) {
 				const row = tbody.insertRow();

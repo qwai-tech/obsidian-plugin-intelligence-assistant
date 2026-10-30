@@ -85,6 +85,13 @@
         "allCapabilities": "Све могућности",
         "allStates": "Сва стања",
         "searchPlaceholder": "Претражи назив или ID"
+      },
+      "refreshing": "Освежавање…",
+      "tableHeaders": {
+        "model": "Модел",
+        "capabilities": "Могућности",
+        "status": "Статус",
+        "actions": "Радње"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Обриши MCP сервер „{{name}}“?"
-      }
+      },
+      "namePlaceholder": "Acme MCP сервер"
     },
     "agents": {
       "desc": "Креирајте и управљајте AI агентима са специфичним могућностима, алатима и понашањем.",
@@ -394,7 +402,8 @@
             "reloadTools": "Поново учитај алате",
             "refetchTooltip": "Поново преузми спецификацију са URL-а",
             "deleteTooltip": "Обриши извор"
-          }
+          },
+          "namePlaceholder": "HTTP извор"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Променљиве окружења",
             "desc": "Формат: КЉУЧ=вредност, по једна у реду"
-          }
+          },
+          "descriptionPlaceholder": "Покреће команду која…"
         },
         "presets": {
           "title": "Додај CLI алат из предефинисаних",
@@ -898,6 +908,10 @@
           "name": "Објасни текст",
           "prompt": "Објасни следећи текст наједноставан начин:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Продужи текст",
+        "prompt": "Прошири и разради следећи текст…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Додато {{count}} референци(е)",
       "fileNotFound": "Датотека није пронађена: {{path}}",
       "unableToLoadRag": "Није могуће учитати RAG статистику.",
-      "referenced": "Референцирано: {{name}}"
+      "referenced": "Референцирано: {{name}}",
+      "openViewFailed": "Није могуће отворити приказ ћаскања."
     },
     "status": {
       "unavailable": "Недоступно",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Укупно",
       "save": "Сачувај",
       "insertToNotes": "Убаци у белешке",
-      "regenerate": "Регенериши"
+      "regenerate": "Регенериши",
+      "assistant": "Асистент"
     },
     "toolCall": {
       "executionProcess": "Процес извршавања",
@@ -1061,7 +1077,10 @@
       "today": "Данас",
       "yesterday": "Јуче",
       "thisWeek": "Ове недеље",
-      "older": "Старије"
+      "older": "Старије",
+      "empty": "Још нема разговора",
+      "rename": "Преименуј",
+      "delete": "Обриши"
     },
     "header": {
       "noModels": "Нема доступних модела"
@@ -1098,6 +1117,41 @@
         "placeholder": "Унесите свој задатак овде...",
         "start": "Започни",
         "title": "Покрени задатак агента"
+      }
+    },
+    "references": {
+      "usingContext": "Коришћени контекст",
+      "remove": "Уклони {{path}}"
+    },
+    "scrollToBottom": "Помери на дно",
+    "preflight": {
+      "title": "Претходна провера задатка агента",
+      "agent": "Агент: {{name}}",
+      "reads": "Читање: {{paths}}",
+      "readsDefault": "Читање: активна белешка и снимак контекста",
+      "tools": "Алати: омогућено {{count}}",
+      "writesProposal": "Уписи: само предлог; потребно је Примени",
+      "writesNone": "Уписи: недоступно",
+      "rag": "RAG: {{state}}",
+      "web": "Веб: {{state}}"
+    },
+    "proposals": {
+      "title": "Предлози уписа",
+      "preview": "Прегледај предложени садржај",
+      "apply": "Примени",
+      "applyAll": "Примени све",
+      "applied": "Примењено",
+      "changes_one": "{{count}} измена",
+      "changes_other": "измена: {{count}}",
+      "confirm": "Применити ({{summary}})?",
+      "appliedNotice": "Примењено ({{summary}})",
+      "operations": {
+        "create": "Креирање",
+        "update": "Ажурирање",
+        "append": "Додавање",
+        "delete": "Брисање",
+        "move": "Премештање",
+        "batch": "Група"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Освежавање...",
         "refreshSuccess": "Листа модела освежена",
         "refreshFailed": "Није успело освежавање листе модела"
-      }
+      },
+      "pulling": "Преузимање…",
+      "deleting": "Брисање…"
     },
     "promptEdit": {
       "title": "Уреди системски упит",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Обрада...",
       "error": "Грешка при приказу објашњења",
       "errorPrefix": "Грешка:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Промени модел…",
+      "switched": "Модел је промењен на {{name}}",
+      "failed": "Није могуће променити модел."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Није пронађена важећа конфигурација провајдера за модел: {{modelId}}",
     "processing": "Обрада...",
     "textUpdated": "Текст успешно ажуриран",
-    "error": "Грешка: {{message}}"
+    "error": "Грешка: {{message}}",
+    "inlineBlockFailed": "Није могуће покренути уметнути AI блок.",
+    "deepLinkFailed": "Није могуће отворити Intelligence Assistant везу."
   },
   "commands": {
     "askAgentCurrentNote": "Задатак агента: питај о тренутној белешци",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Задатак агента: организуј тренутну белешку",
     "sourceGroundedQuestion": "Задатак агента: постави питање засновано на изворима",
     "summarizeCurrentNote": "Задатак агента: сажми тренутну белешку",
-    "switchModel": "Промени модел"
+    "switchModel": "Промени модел",
+    "notices": {
+      "openNoteToAsk": "Отворите белешку пре него што питате агента.",
+      "openNoteToSummarize": "Отворите белешку пре сажимања са агентом.",
+      "openNoteToOrganize": "Отворите белешку пре организовања са агентом.",
+      "openProjectNote": "Отворите белешку пројекта пре креирања прегледа пројекта.",
+      "openNoteToResearch": "Отворите белешку пре креирања прегледа истраживања.",
+      "openNoteToFindRelated": "Отворите белешку пре тражења повезаних белешки.",
+      "openNoteToImproveLinks": "Отворите белешку пре побољшавања веза, ознака и својстава.",
+      "openNoteToDraft": "Отворите белешку пре писања нацрта са агентом.",
+      "selectTextToImprove": "Означите текст пре него што замолите агента да га побољша."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: питај агента о овој датотеци",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Отвори AI ћаскање"
+  },
+  "status": {
+    "idle": "IA: неактиван · токена: {{tokens}}",
+    "running": "IA: ради · токена: {{tokens}}",
+    "ariaIdle": "Intelligence Assistant је неактиван; искоришћено токена: {{tokens}}",
+    "ariaRunning": "Агент Intelligence Assistant ради; искоришћено токена: {{tokens}}"
+  },
+  "capability": {
+    "title": "Алати и дозволе",
+    "subtitle_one": "{{agent}} може да користи {{count}} алат.",
+    "subtitle_other": "{{agent}} може да користи алата: {{count}}.",
+    "chatMode": "Режим ћаскања",
+    "permissions": "Тренутне дозволе",
+    "reads": "Овај задатак може да чита",
+    "tools": "Омогућени алати",
+    "noTools": "За тренутног агента није омогућен ниједан алат.",
+    "noDescription": "Нема описа",
+    "builtinGroup": "Уграђени алати трезора",
+    "tags": {
+      "applyRequired": "Потребно Примени",
+      "externalWrite": "Спољни упис",
+      "localProcess": "Покреће локални процес"
+    },
+    "state": {
+      "on": "укључено",
+      "off": "искључено",
+      "disabled": "онемогућено"
+    },
+    "rows": {
+      "vaultContext": "Контекст трезора",
+      "referencesPlusContext_one": "{{count}} експлицитна референца и активни контекст",
+      "referencesPlusContext_other": "Експлицитних референци: {{count}}, плус активни контекст",
+      "activeContext": "Активна белешка и снимак контекста графа",
+      "readTools": "Алати за читање трезора",
+      "enabledCount": "Омогућено: {{count}}",
+      "noReadTool": "Није омогућен ниједан алат за директно читање",
+      "writes": "Уписи у трезор",
+      "proposalOnly": "Само предлог; Примени је обавезно",
+      "unavailable": "Недоступно",
+      "rag": "RAG",
+      "web": "Веб претрага",
+      "on": "Укључено",
+      "off": "Искључено",
+      "disabledInSettings": "Онемогућено у подешавањима",
+      "custom": "Прилагођени алати",
+      "customEnabled_one": "Омогућен {{count}} MCP, OpenAPI или CLI алат",
+      "customEnabled_other": "Омогућено MCP, OpenAPI или CLI алата: {{count}}",
+      "noneEnabled": "Ништа није омогућено",
+      "destructive": "Деструктивне радње у трезору",
+      "notProvided": "Уграђени алати их не пружају"
+    }
+  },
+  "markdown": {
+    "run": "Покрени"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Нема Markdown белешки за индексирање.",
+      "starting_one": "Индексирање {{count}} белешке…",
+      "starting_other": "Индексирање белешки: {{count}}…",
+      "progress": "Индексирање: {{done}} од {{total}} белешки",
+      "completed": "Индексирање је завршено: индексирано {{indexed}}, неуспешно {{failed}}.",
+      "noIndex": "Још ништа није индексирано. Покрените „Embed all documents“ да индексирате трезор.",
+      "gradingError": "Оцењивање докумената није успело: {{message}}",
+      "clearing": "Брисање индекса…",
+      "cleared": "Индекс је обрисан."
+    }
   }
 }

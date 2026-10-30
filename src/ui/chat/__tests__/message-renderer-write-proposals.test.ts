@@ -2,6 +2,9 @@ import { renderMessage } from '../message-renderer';
 import { describeProposal } from '../write-proposal-cards';
 import type { Message } from '@/features/conversations/types/conversation';
 import type { WriteProposal } from '@/features/agent/write-proposal-service';
+import { initI18n } from '@/i18n';
+
+beforeAll(() => initI18n('en'));
 
 const mockContext = {
 	app: {} as any,
@@ -51,7 +54,7 @@ describe('renderMessage write proposals', () => {
 		const card = messageEl.querySelector('.ia-write-proposal-card');
 		expect(card).toBeTruthy();
 		expect(card?.textContent).toContain('Notes/A.md');
-		expect(card?.textContent).toContain('update');
+		expect(card?.textContent).toContain('Update');
 		const button = card?.querySelector('button');
 		expect(button?.textContent).toContain('Apply');
 	});
@@ -129,10 +132,10 @@ describe('renderMessage write proposals', () => {
 
 describe('describeProposal', () => {
 	it('describes single and batch proposals', () => {
-		expect(describeProposal({ type: 'write_proposal', operation: 'update', path: 'A.md', applied: false, reason: '' })).toBe('update A.md');
+		expect(describeProposal({ type: 'write_proposal', operation: 'update', path: 'A.md', applied: false, reason: '' })).toBe('Update A.md');
 		expect(describeProposal({ type: 'batch_proposal', id: 'b', reason: '', applied: false, proposals: [
 			{ type: 'write_proposal', operation: 'create', path: 'B.md', applied: false, reason: '' },
 			{ type: 'write_proposal', operation: 'delete', path: 'C.md', applied: false, reason: '' },
-		] })).toBe('2 changes: create B.md, delete C.md');
+		] })).toBe('2 changes: Create B.md, Delete C.md');
 	});
 });

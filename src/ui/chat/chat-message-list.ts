@@ -42,7 +42,7 @@ export class ChatMessageList {
 	showPreflight(title: string, items: string[]): void {
 		this.removeEmptyState();
 		const card = this.element.createDiv('ia-agent-preflight-card');
-		card.createDiv({ cls: 'ia-agent-preflight-card__eyebrow', text: 'Agent task preflight' });
+		card.createDiv({ cls: 'ia-agent-preflight-card__eyebrow', text: t('chat.preflight.title') });
 		card.createDiv({ cls: 'ia-agent-preflight-card__title', text: title });
 		const list = card.createDiv('ia-agent-preflight-card__items');
 		for (const item of items) {

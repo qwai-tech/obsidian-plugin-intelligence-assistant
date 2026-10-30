@@ -48,7 +48,7 @@ export class CLIToolConfigModal extends Modal {
 			.setName(t('settings.tools.cli.modal.description.name'))
 			.setDesc(t('settings.tools.cli.modal.description.desc'))
 			.addTextArea(text => {
-				text.setPlaceholder('Executes a command to...')
+				text.setPlaceholder(t('settings.tools.cli.modal.descriptionPlaceholder'))
 					.setValue(this.config.description ?? '')
 					.onChange(value => {
 						this.config.description = value;

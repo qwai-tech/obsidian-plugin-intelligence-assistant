@@ -85,6 +85,13 @@
         "allCapabilities": "সব সক্ষমতা",
         "allStates": "সব অবস্থা",
         "searchPlaceholder": "নাম বা ID অনুসন্ধান করুন"
+      },
+      "refreshing": "রিফ্রেশ করা হচ্ছে…",
+      "tableHeaders": {
+        "model": "মডেল",
+        "capabilities": "সক্ষমতা",
+        "status": "অবস্থা",
+        "actions": "ক্রিয়া"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "\"{{name}}\" MCP সার্ভার মুছে ফেলবেন?"
-      }
+      },
+      "namePlaceholder": "Acme MCP সার্ভার"
     },
     "agents": {
       "desc": "নির্দিষ্ট সক্ষমতা, টুল এবং আচরণ সহ AI এজেন্ট তৈরি এবং পরিচালনা করুন।",
@@ -394,7 +402,8 @@
             "reloadTools": "টুল রিলোড করুন",
             "refetchTooltip": "URL থেকে স্পেস পুনরায় আনুন",
             "deleteTooltip": "উৎস মুছুন"
-          }
+          },
+          "namePlaceholder": "HTTP উৎস"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "এনভায়রনমেন্ট ভেরিয়েবল",
             "desc": "ফরম্যাট: KEY=মান, প্রতি লাইনে একটি"
-          }
+          },
+          "descriptionPlaceholder": "একটি কমান্ড চালায় যাতে…"
         },
         "presets": {
           "title": "প্রিসেট থেকে CLI টুল যোগ করুন",
@@ -898,6 +908,10 @@
           "name": "টেক্সট ব্যাখ্যা করুন",
           "prompt": "নিম্নলিখিত টেক্সটটি সহজ ভাষায় ব্যাখ্যা করুন:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "টেক্সট দীর্ঘ করুন",
+        "prompt": "নিচের টেক্সটটি বিস্তৃত ও বিশদ করুন…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "{{count}}টি রেফারেন্স যোগ করা হয়েছে",
       "fileNotFound": "ফাইল পাওয়া যায়নি: {{path}}",
       "unableToLoadRag": "RAG পরিসংখ্যান লোড করতে অক্ষম।",
-      "referenced": "রেফারেন্স করা হয়েছে: {{name}}"
+      "referenced": "রেফারেন্স করা হয়েছে: {{name}}",
+      "openViewFailed": "চ্যাট ভিউ খোলা যায়নি।"
     },
     "status": {
       "unavailable": "অনুপলব্ধ",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "মোট",
       "save": "সংরক্ষণ",
       "insertToNotes": "নোটে সন্নিবেশ করুন",
-      "regenerate": "পুনরায় তৈরি করুন"
+      "regenerate": "পুনরায় তৈরি করুন",
+      "assistant": "সহকারী"
     },
     "toolCall": {
       "executionProcess": "কার্যকরীকরণ প্রক্রিয়া",
@@ -1061,7 +1077,10 @@
       "today": "আজ",
       "yesterday": "গতকাল",
       "thisWeek": "এই সপ্তাহ",
-      "older": "পুরোনো"
+      "older": "পুরোনো",
+      "empty": "এখনও কোনো কথোপকথন নেই",
+      "rename": "নাম পরিবর্তন করুন",
+      "delete": "মুছুন"
     },
     "header": {
       "noModels": "কোনো মডেল উপলব্ধ নেই"
@@ -1098,6 +1117,41 @@
         "placeholder": "এখানে আপনার কাজ লিখুন...",
         "start": "শুরু",
         "title": "এজেন্ট কাজ শুরু করুন"
+      }
+    },
+    "references": {
+      "usingContext": "প্রসঙ্গ ব্যবহার করা হচ্ছে",
+      "remove": "{{path}} সরান"
+    },
+    "scrollToBottom": "নিচে স্ক্রোল করুন",
+    "preflight": {
+      "title": "এজেন্ট কাজের প্রাক-পরীক্ষা",
+      "agent": "এজেন্ট: {{name}}",
+      "reads": "পড়ে: {{paths}}",
+      "readsDefault": "পড়ে: সক্রিয় নোট এবং প্রসঙ্গের স্ন্যাপশট",
+      "tools": "টুল: {{count}}টি সক্রিয়",
+      "writesProposal": "লেখা: শুধু প্রস্তাব; প্রয়োগ প্রয়োজন",
+      "writesNone": "লেখা: উপলব্ধ নয়",
+      "rag": "RAG: {{state}}",
+      "web": "ওয়েব: {{state}}"
+    },
+    "proposals": {
+      "title": "লেখার প্রস্তাব",
+      "preview": "প্রস্তাবিত বিষয়বস্তুর প্রিভিউ",
+      "apply": "প্রয়োগ",
+      "applyAll": "সব প্রয়োগ",
+      "applied": "প্রয়োগ করা হয়েছে",
+      "changes_one": "{{count}}টি পরিবর্তন",
+      "changes_other": "{{count}}টি পরিবর্তন",
+      "confirm": "{{summary}} প্রয়োগ করবেন?",
+      "appliedNotice": "{{summary}} প্রয়োগ করা হয়েছে",
+      "operations": {
+        "create": "তৈরি",
+        "update": "হালনাগাদ",
+        "append": "যুক্ত",
+        "delete": "মুছুন",
+        "move": "সরান",
+        "batch": "ব্যাচ"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "রিফ্রেশ করা হচ্ছে...",
         "refreshSuccess": "মডেল তালিকা রিফ্রেশ হয়েছে",
         "refreshFailed": "মডেল তালিকা রিফ্রেশ করতে ব্যর্থ হয়েছে"
-      }
+      },
+      "pulling": "পুল করা হচ্ছে…",
+      "deleting": "মোছা হচ্ছে…"
     },
     "promptEdit": {
       "title": "সিস্টেম প্রম্পট সম্পাদনা করুন",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ প্রক্রিয়াকরণ করা হচ্ছে...",
       "error": "ব্যাখ্যা রেন্ডার করতে ত্রুটি",
       "errorPrefix": "ত্রুটি:"
+    },
+    "modelSwitcher": {
+      "placeholder": "মডেল পরিবর্তন করুন…",
+      "switched": "মডেল {{name}}-এ পরিবর্তন করা হয়েছে",
+      "failed": "মডেল পরিবর্তন করা যায়নি।"
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "{{modelId}} মডেলের জন্য কোনো বৈধ প্রদানকারী কনফিগারেশন পাওয়া যায়নি",
     "processing": "প্রক্রিয়াকরণ করা হচ্ছে...",
     "textUpdated": "টেক্সট সফলভাবে হালনাগাদ হয়েছে",
-    "error": "ত্রুটি: {{message}}"
+    "error": "ত্রুটি: {{message}}",
+    "inlineBlockFailed": "ইনলাইন AI ব্লক চালানো যায়নি।",
+    "deepLinkFailed": "Intelligence Assistant লিংক খোলা যায়নি।"
   },
   "commands": {
     "askAgentCurrentNote": "এজেন্ট কাজ: বর্তমান নোট সম্পর্কে জিজ্ঞাসা করুন",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "এজেন্ট কাজ: বর্তমান নোট সংগঠিত করুন",
     "sourceGroundedQuestion": "এজেন্ট কাজ: উৎস-ভিত্তিক প্রশ্ন জিজ্ঞাসা করুন",
     "summarizeCurrentNote": "এজেন্ট কাজ: বর্তমান নোটের সারাংশ করুন",
-    "switchModel": "মডেল পরিবর্তন করুন"
+    "switchModel": "মডেল পরিবর্তন করুন",
+    "notices": {
+      "openNoteToAsk": "এজেন্টকে জিজ্ঞাসা করার আগে একটি নোট খুলুন।",
+      "openNoteToSummarize": "এজেন্ট দিয়ে সারসংক্ষেপ করার আগে একটি নোট খুলুন।",
+      "openNoteToOrganize": "এজেন্ট দিয়ে সংগঠিত করার আগে একটি নোট খুলুন।",
+      "openProjectNote": "প্রকল্প সারসংক্ষেপ তৈরি করার আগে একটি প্রকল্প নোট খুলুন।",
+      "openNoteToResearch": "গবেষণা সারসংক্ষেপ তৈরি করার আগে একটি নোট খুলুন।",
+      "openNoteToFindRelated": "সম্পর্কিত নোট খোঁজার আগে একটি নোট খুলুন।",
+      "openNoteToImproveLinks": "লিংক, ট্যাগ এবং প্রপার্টি উন্নত করার আগে একটি নোট খুলুন।",
+      "openNoteToDraft": "এজেন্ট দিয়ে খসড়া লেখার আগে একটি নোট খুলুন।",
+      "selectTextToImprove": "এজেন্টকে উন্নত করতে বলার আগে টেক্সট নির্বাচন করুন।"
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: এই ফাইল সম্পর্কে এজেন্টকে জিজ্ঞাসা করুন",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "AI চ্যাট খুলুন"
+  },
+  "status": {
+    "idle": "IA: নিষ্ক্রিয় · {{tokens}} টোকেন",
+    "running": "IA: চলছে · {{tokens}} টোকেন",
+    "ariaIdle": "Intelligence Assistant নিষ্ক্রিয়; {{tokens}} টোকেন ব্যবহৃত",
+    "ariaRunning": "Intelligence Assistant এজেন্ট চলছে; {{tokens}} টোকেন ব্যবহৃত"
+  },
+  "capability": {
+    "title": "টুল এবং অনুমতি",
+    "subtitle_one": "{{agent}} {{count}}টি টুল ব্যবহার করতে পারে।",
+    "subtitle_other": "{{agent}} {{count}}টি টুল ব্যবহার করতে পারে।",
+    "chatMode": "চ্যাট মোড",
+    "permissions": "বর্তমান অনুমতি",
+    "reads": "এই কাজটি পড়তে পারে",
+    "tools": "সক্রিয় টুল",
+    "noTools": "বর্তমান এজেন্টের জন্য কোনো টুল সক্রিয় নেই।",
+    "noDescription": "কোনো বিবরণ নেই",
+    "builtinGroup": "অন্তর্নির্মিত ভল্ট টুল",
+    "tags": {
+      "applyRequired": "প্রয়োগ প্রয়োজন",
+      "externalWrite": "বাহ্যিক লেখা",
+      "localProcess": "একটি স্থানীয় প্রক্রিয়া চালায়"
+    },
+    "state": {
+      "on": "চালু",
+      "off": "বন্ধ",
+      "disabled": "নিষ্ক্রিয়"
+    },
+    "rows": {
+      "vaultContext": "ভল্টের প্রসঙ্গ",
+      "referencesPlusContext_one": "{{count}}টি সুস্পষ্ট রেফারেন্স এবং সক্রিয় প্রসঙ্গ",
+      "referencesPlusContext_other": "{{count}}টি সুস্পষ্ট রেফারেন্স এবং সক্রিয় প্রসঙ্গ",
+      "activeContext": "সক্রিয় নোট এবং গ্রাফ প্রসঙ্গের স্ন্যাপশট",
+      "readTools": "ভল্ট পড়ার টুল",
+      "enabledCount": "{{count}}টি সক্রিয়",
+      "noReadTool": "কোনো সরাসরি পড়ার টুল সক্রিয় নেই",
+      "writes": "ভল্টে লেখা",
+      "proposalOnly": "শুধু প্রস্তাব; প্রয়োগ প্রয়োজন",
+      "unavailable": "উপলব্ধ নয়",
+      "rag": "RAG",
+      "web": "ওয়েব অনুসন্ধান",
+      "on": "চালু",
+      "off": "বন্ধ",
+      "disabledInSettings": "সেটিংসে নিষ্ক্রিয়",
+      "custom": "কাস্টম টুল",
+      "customEnabled_one": "{{count}}টি MCP, OpenAPI বা CLI টুল সক্রিয়",
+      "customEnabled_other": "{{count}}টি MCP, OpenAPI বা CLI টুল সক্রিয়",
+      "noneEnabled": "কোনোটি সক্রিয় নেই",
+      "destructive": "ভল্টে ধ্বংসাত্মক ক্রিয়া",
+      "notProvided": "অন্তর্নির্মিত টুল দ্বারা সরবরাহ করা হয় না"
+    }
+  },
+  "markdown": {
+    "run": "চালান"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "ইন্ডেক্স করার মতো কোনো Markdown নোট নেই।",
+      "starting_one": "{{count}}টি নোট ইন্ডেক্স করা হচ্ছে…",
+      "starting_other": "{{count}}টি নোট ইন্ডেক্স করা হচ্ছে…",
+      "progress": "ইন্ডেক্সিং: {{total}}টির মধ্যে {{done}}টি নোট",
+      "completed": "ইন্ডেক্সিং সম্পন্ন: {{indexed}}টি ইন্ডেক্স হয়েছে, {{failed}}টি ব্যর্থ।",
+      "noIndex": "এখনও কিছু ইন্ডেক্স করা হয়নি। আপনার ভল্ট ইন্ডেক্স করতে \"Embed all documents\" চালান।",
+      "gradingError": "ডকুমেন্ট মূল্যায়ন ব্যর্থ হয়েছে: {{message}}",
+      "clearing": "ইন্ডেক্স সাফ করা হচ্ছে…",
+      "cleared": "ইন্ডেক্স সাফ করা হয়েছে।"
+    }
   }
 }

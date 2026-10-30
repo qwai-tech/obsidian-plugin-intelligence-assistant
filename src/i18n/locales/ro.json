@@ -85,6 +85,13 @@
         "allCapabilities": "Toate capacitățile",
         "allStates": "Toate stările",
         "searchPlaceholder": "Căutați nume sau ID"
+      },
+      "refreshing": "Se reîmprospătează…",
+      "tableHeaders": {
+        "model": "Model",
+        "capabilities": "Capacități",
+        "status": "Stare",
+        "actions": "Acțiuni"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Ștergeți serverul MCP „{{name}}“?"
-      }
+      },
+      "namePlaceholder": "Server MCP Acme"
     },
     "agents": {
       "desc": "Creați și gestionați agenți AI cu capacități, instrumente și comportamente specifice.",
@@ -394,7 +402,8 @@
             "reloadTools": "Reîncărcați instrumente",
             "refetchTooltip": "Reobțineți specificația de la URL",
             "deleteTooltip": "Ștergeți sursa"
-          }
+          },
+          "namePlaceholder": "Sursă HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Variabile de mediu",
             "desc": "Format: CHEIE=valoare, câte una pe linie"
-          }
+          },
+          "descriptionPlaceholder": "Rulează o comandă pentru…"
         },
         "presets": {
           "title": "Adăugați instrument CLI din presetări",
@@ -898,6 +908,10 @@
           "name": "Explicați textul",
           "prompt": "Explicați următorul text în termeni simpli:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Faceți textul mai lung",
+        "prompt": "Extindeți și dezvoltați textul următor…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Adăugate {{count}} referințe",
       "fileNotFound": "Fișierul nu a fost găsit: {{path}}",
       "unableToLoadRag": "Nu se pot încărca statisticile RAG.",
-      "referenced": "Referențiat: {{name}}"
+      "referenced": "Referențiat: {{name}}",
+      "openViewFailed": "Nu s-a putut deschide vizualizarea de chat."
     },
     "status": {
       "unavailable": "Indisponibil",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Total",
       "save": "Salvați",
       "insertToNotes": "Inserați în notițe",
-      "regenerate": "Regenerați"
+      "regenerate": "Regenerați",
+      "assistant": "Asistent"
     },
     "toolCall": {
       "executionProcess": "Procesul de execuție",
@@ -1061,7 +1077,10 @@
       "today": "Astăzi",
       "yesterday": "Ieri",
       "thisWeek": "Săptămâna aceasta",
-      "older": "Mai vechi"
+      "older": "Mai vechi",
+      "empty": "Nicio conversație încă",
+      "rename": "Redenumiți",
+      "delete": "Ștergeți"
     },
     "header": {
       "noModels": "Niciun model disponibil"
@@ -1098,6 +1117,41 @@
         "placeholder": "Introduceți sarcina aici...",
         "start": "Începeți",
         "title": "Începeți o sarcină a agentului"
+      }
+    },
+    "references": {
+      "usingContext": "Se folosește contextul",
+      "remove": "Eliminați {{path}}"
+    },
+    "scrollToBottom": "Derulați până jos",
+    "preflight": {
+      "title": "Verificare prealabilă a sarcinii agentului",
+      "agent": "Agent: {{name}}",
+      "reads": "Citiri: {{paths}}",
+      "readsDefault": "Citiri: notița activă și instantaneul contextului",
+      "tools": "Instrumente: {{count}} activate",
+      "writesProposal": "Scrieri: doar propunere; necesită Aplicați",
+      "writesNone": "Scrieri: indisponibile",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Propuneri de scriere",
+      "preview": "Previzualizați conținutul propus",
+      "apply": "Aplicați",
+      "applyAll": "Aplicați tot",
+      "applied": "Aplicat",
+      "changes_one": "{{count}} modificare",
+      "changes_other": "{{count}} modificări",
+      "confirm": "Aplicați {{summary}}?",
+      "appliedNotice": "Aplicat: {{summary}}",
+      "operations": {
+        "create": "Creare",
+        "update": "Actualizare",
+        "append": "Adăugare la final",
+        "delete": "Ștergere",
+        "move": "Mutare",
+        "batch": "Lot"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Se reîmprospătează...",
         "refreshSuccess": "Lista de modele reîmprospătată",
         "refreshFailed": "Reîmprospătarea listei de modele a eșuat"
-      }
+      },
+      "pulling": "Se descarcă…",
+      "deleting": "Se șterge…"
     },
     "promptEdit": {
       "title": "Editați promptul de sistem",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Se procesează...",
       "error": "Eroare la afișarea explicației",
       "errorPrefix": "Eroare:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Schimbați modelul…",
+      "switched": "Model schimbat la {{name}}",
+      "failed": "Nu s-a putut schimba modelul."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Nu s-a găsit o configurație validă de furnizor pentru modelul: {{modelId}}",
     "processing": "Se procesează...",
     "textUpdated": "Text actualizat cu succes",
-    "error": "Eroare: {{message}}"
+    "error": "Eroare: {{message}}",
+    "inlineBlockFailed": "Nu s-a putut rula blocul AI inline.",
+    "deepLinkFailed": "Nu s-a putut deschide linkul Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Sarcină agent: întrebați despre nota curentă",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Sarcină agent: organizați nota curentă",
     "sourceGroundedQuestion": "Sarcină agent: puneți o întrebare bazată pe surse",
     "summarizeCurrentNote": "Sarcină agent: rezumați nota curentă",
-    "switchModel": "Schimbați modelul"
+    "switchModel": "Schimbați modelul",
+    "notices": {
+      "openNoteToAsk": "Deschideți o notiță înainte de a întreba agentul.",
+      "openNoteToSummarize": "Deschideți o notiță înainte de a rezuma cu agentul.",
+      "openNoteToOrganize": "Deschideți o notiță înainte de a organiza cu agentul.",
+      "openProjectNote": "Deschideți o notiță de proiect înainte de a crea un rezumat al proiectului.",
+      "openNoteToResearch": "Deschideți o notiță înainte de a crea un rezumat de cercetare.",
+      "openNoteToFindRelated": "Deschideți o notiță înainte de a căuta notițe asociate.",
+      "openNoteToImproveLinks": "Deschideți o notiță înainte de a îmbunătăți linkurile, etichetele și proprietățile.",
+      "openNoteToDraft": "Deschideți o notiță înainte de a redacta cu agentul.",
+      "selectTextToImprove": "Selectați text înainte de a cere agentului să-l îmbunătățească."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: întrebați agentul despre acest fișier",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Deschideți chatul AI"
+  },
+  "status": {
+    "idle": "IA: inactiv · {{tokens}} tokeni",
+    "running": "IA: rulează · {{tokens}} tokeni",
+    "ariaIdle": "Intelligence Assistant este inactiv; {{tokens}} tokeni folosiți",
+    "ariaRunning": "Agentul Intelligence Assistant rulează; {{tokens}} tokeni folosiți"
+  },
+  "capability": {
+    "title": "Instrumente și permisiuni",
+    "subtitle_one": "{{agent}} poate folosi {{count}} instrument.",
+    "subtitle_other": "{{agent}} poate folosi {{count}} instrumente.",
+    "chatMode": "Mod chat",
+    "permissions": "Permisiuni curente",
+    "reads": "Această sarcină poate citi",
+    "tools": "Instrumente activate",
+    "noTools": "Niciun instrument nu este activat pentru agentul curent.",
+    "noDescription": "Fără descriere",
+    "builtinGroup": "Instrumente integrate pentru seif",
+    "tags": {
+      "applyRequired": "Necesită Aplicați",
+      "externalWrite": "Scriere externă",
+      "localProcess": "Rulează un proces local"
+    },
+    "state": {
+      "on": "pornit",
+      "off": "oprit",
+      "disabled": "dezactivat"
+    },
+    "rows": {
+      "vaultContext": "Contextul seifului",
+      "referencesPlusContext_one": "{{count}} referință explicită plus contextul activ",
+      "referencesPlusContext_other": "{{count}} referințe explicite plus contextul activ",
+      "activeContext": "Notița activă și instantaneul contextului grafului",
+      "readTools": "Instrumente de citire a seifului",
+      "enabledCount": "{{count}} activate",
+      "noReadTool": "Niciun instrument de citire directă activat",
+      "writes": "Scrieri în seif",
+      "proposalOnly": "Doar propunere; Aplicați este obligatoriu",
+      "unavailable": "Indisponibil",
+      "rag": "RAG",
+      "web": "Căutare web",
+      "on": "Pornit",
+      "off": "Oprit",
+      "disabledInSettings": "Dezactivat în setări",
+      "custom": "Instrumente personalizate",
+      "customEnabled_one": "{{count}} instrument MCP, OpenAPI sau CLI activat",
+      "customEnabled_other": "{{count}} instrumente MCP, OpenAPI sau CLI activate",
+      "noneEnabled": "Niciunul activat",
+      "destructive": "Acțiuni distructive în seif",
+      "notProvided": "Nu sunt oferite de instrumentele integrate"
+    }
+  },
+  "markdown": {
+    "run": "Rulați"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Nu există notițe Markdown de indexat.",
+      "starting_one": "Se indexează {{count}} notiță…",
+      "starting_other": "Se indexează {{count}} notițe…",
+      "progress": "Indexare: {{done}} din {{total}} notițe",
+      "completed": "Indexare finalizată: {{indexed}} indexate, {{failed}} eșuate.",
+      "noIndex": "Nimic nu este indexat încă. Rulați „Embed all documents” pentru a indexa seiful.",
+      "gradingError": "Evaluarea documentelor a eșuat: {{message}}",
+      "clearing": "Se golește indexul…",
+      "cleared": "Index golit."
+    }
   }
 }

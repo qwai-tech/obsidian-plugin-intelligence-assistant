@@ -85,6 +85,13 @@
         "allCapabilities": "すべての機能",
         "allStates": "すべての状態",
         "searchPlaceholder": "名前またはIDで検索"
+      },
+      "refreshing": "更新中…",
+      "tableHeaders": {
+        "model": "モデル",
+        "capabilities": "機能",
+        "status": "ステータス",
+        "actions": "操作"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "MCP サーバー「{{name}}」を削除しますか？"
-      }
+      },
+      "namePlaceholder": "Acme MCP サーバー"
     },
     "agents": {
       "desc": "特定の機能、ツール、動作を持つ AI エージェントを作成・管理します。",
@@ -394,7 +402,8 @@
             "reloadTools": "ツールを再読み込み",
             "refetchTooltip": "URL からスペックを再取得",
             "deleteTooltip": "ソースを削除"
-          }
+          },
+          "namePlaceholder": "HTTP ソース"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "環境変数",
             "desc": "形式: KEY=value、1行に1つ"
-          }
+          },
+          "descriptionPlaceholder": "コマンドを実行して…"
         },
         "presets": {
           "title": "プリセットから CLI ツールを追加",
@@ -898,6 +908,10 @@
           "name": "テキストを説明する",
           "prompt": "以下のテキストをわかりやすく説明してください：\n\n"
         }
+      },
+      "placeholders": {
+        "name": "文章を長くする",
+        "prompt": "次の文章を膨らませて詳しく書いてください…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "{{count}} 件の参照を追加しました",
       "fileNotFound": "ファイルが見つかりません: {{path}}",
       "unableToLoadRag": "RAG 統計を読み込めません。",
-      "referenced": "参照済み: {{name}}"
+      "referenced": "参照済み: {{name}}",
+      "openViewFailed": "チャットビューを開けませんでした。"
     },
     "status": {
       "unavailable": "利用不可",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "合計",
       "save": "保存",
       "insertToNotes": "ノートに挿入",
-      "regenerate": "再生成"
+      "regenerate": "再生成",
+      "assistant": "アシスタント"
     },
     "toolCall": {
       "executionProcess": "実行プロセス",
@@ -1061,7 +1077,10 @@
       "today": "今日",
       "yesterday": "昨日",
       "thisWeek": "今週",
-      "older": "それ以前"
+      "older": "それ以前",
+      "empty": "まだ会話はありません",
+      "rename": "名前を変更",
+      "delete": "削除"
     },
     "header": {
       "noModels": "利用可能なモデルがありません"
@@ -1098,6 +1117,41 @@
         "placeholder": "ここにタスクを入力...",
         "start": "開始",
         "title": "エージェントタスクを開始"
+      }
+    },
+    "references": {
+      "usingContext": "使用中のコンテキスト",
+      "remove": "{{path}} を削除"
+    },
+    "scrollToBottom": "一番下へスクロール",
+    "preflight": {
+      "title": "エージェントタスクの事前確認",
+      "agent": "エージェント: {{name}}",
+      "reads": "読み取り: {{paths}}",
+      "readsDefault": "読み取り: アクティブなノートとコンテキストのスナップショット",
+      "tools": "ツール: {{count}} 個有効",
+      "writesProposal": "書き込み: 提案のみ。適用が必要",
+      "writesNone": "書き込み: 利用不可",
+      "rag": "RAG: {{state}}",
+      "web": "ウェブ: {{state}}"
+    },
+    "proposals": {
+      "title": "書き込みの提案",
+      "preview": "提案内容をプレビュー",
+      "apply": "適用",
+      "applyAll": "すべて適用",
+      "applied": "適用済み",
+      "changes_one": "{{count}} 件の変更",
+      "changes_other": "{{count}} 件の変更",
+      "confirm": "{{summary}}を適用しますか？",
+      "appliedNotice": "{{summary}}を適用しました",
+      "operations": {
+        "create": "作成",
+        "update": "更新",
+        "append": "追記",
+        "delete": "削除",
+        "move": "移動",
+        "batch": "一括"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "更新中...",
         "refreshSuccess": "モデルリストが更新されました",
         "refreshFailed": "モデルリストの更新に失敗しました"
-      }
+      },
+      "pulling": "取得中…",
+      "deleting": "削除中…"
     },
     "promptEdit": {
       "title": "システムプロンプトを編集",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ 処理中...",
       "error": "説明のレンダリング中にエラーが発生しました",
       "errorPrefix": "エラー:"
+    },
+    "modelSwitcher": {
+      "placeholder": "モデルを切り替え…",
+      "switched": "モデルを {{name}} に切り替えました",
+      "failed": "モデルを切り替えられませんでした。"
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "モデルに対して有効なプロバイダー設定が見つかりません: {{modelId}}",
     "processing": "処理中...",
     "textUpdated": "テキストが正常に更新されました",
-    "error": "エラー: {{message}}"
+    "error": "エラー: {{message}}",
+    "inlineBlockFailed": "インライン AI ブロックを実行できませんでした。",
+    "deepLinkFailed": "Intelligence Assistant のリンクを開けませんでした。"
   },
   "commands": {
     "askAgentCurrentNote": "エージェントタスク: 現在のノートについて質問",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "エージェントタスク: 現在のノートを整理",
     "sourceGroundedQuestion": "エージェントタスク: ソースに基づいて質問",
     "summarizeCurrentNote": "エージェントタスク: 現在のノートを要約",
-    "switchModel": "モデルを切り替え"
+    "switchModel": "モデルを切り替え",
+    "notices": {
+      "openNoteToAsk": "エージェントに質問する前にノートを開いてください。",
+      "openNoteToSummarize": "エージェントで要約する前にノートを開いてください。",
+      "openNoteToOrganize": "エージェントで整理する前にノートを開いてください。",
+      "openProjectNote": "プロジェクト概要を作成する前にプロジェクトノートを開いてください。",
+      "openNoteToResearch": "リサーチ概要を作成する前にノートを開いてください。",
+      "openNoteToFindRelated": "関連ノートを探す前にノートを開いてください。",
+      "openNoteToImproveLinks": "リンク・タグ・プロパティを改善する前にノートを開いてください。",
+      "openNoteToDraft": "エージェントで下書きする前にノートを開いてください。",
+      "selectTextToImprove": "エージェントに改善を依頼する前にテキストを選択してください。"
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: このファイルについてエージェントに質問",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "AI チャットを開く"
+  },
+  "status": {
+    "idle": "IA: 待機中 · {{tokens}} トークン",
+    "running": "IA: 実行中 · {{tokens}} トークン",
+    "ariaIdle": "Intelligence Assistant は待機中です。{{tokens}} トークン使用済み",
+    "ariaRunning": "Intelligence Assistant のエージェントが実行中です。{{tokens}} トークン使用済み"
+  },
+  "capability": {
+    "title": "ツールと権限",
+    "subtitle_one": "{{agent}} は {{count}} 個のツールを使用できます。",
+    "subtitle_other": "{{agent}} は {{count}} 個のツールを使用できます。",
+    "chatMode": "チャットモード",
+    "permissions": "現在の権限",
+    "reads": "このタスクが読み取れるもの",
+    "tools": "有効なツール",
+    "noTools": "現在のエージェントで有効なツールはありません。",
+    "noDescription": "説明なし",
+    "builtinGroup": "組み込みのボルトツール",
+    "tags": {
+      "applyRequired": "適用が必要",
+      "externalWrite": "外部への書き込み",
+      "localProcess": "ローカルプロセスを実行"
+    },
+    "state": {
+      "on": "オン",
+      "off": "オフ",
+      "disabled": "無効"
+    },
+    "rows": {
+      "vaultContext": "ボルトのコンテキスト",
+      "referencesPlusContext_one": "明示的な参照 {{count}} 件とアクティブなコンテキスト",
+      "referencesPlusContext_other": "明示的な参照 {{count}} 件とアクティブなコンテキスト",
+      "activeContext": "アクティブなノートとグラフコンテキストのスナップショット",
+      "readTools": "ボルト読み取りツール",
+      "enabledCount": "{{count}} 個有効",
+      "noReadTool": "直接読み取りツールは有効になっていません",
+      "writes": "ボルトへの書き込み",
+      "proposalOnly": "提案のみ。適用が必要です",
+      "unavailable": "利用不可",
+      "rag": "RAG",
+      "web": "ウェブ検索",
+      "on": "オン",
+      "off": "オフ",
+      "disabledInSettings": "設定で無効",
+      "custom": "カスタムツール",
+      "customEnabled_one": "MCP・OpenAPI・CLI ツール {{count}} 個が有効",
+      "customEnabled_other": "MCP・OpenAPI・CLI ツール {{count}} 個が有効",
+      "noneEnabled": "有効なものはありません",
+      "destructive": "ボルトへの破壊的な操作",
+      "notProvided": "組み込みツールでは提供されていません"
+    }
+  },
+  "markdown": {
+    "run": "実行"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "インデックスする Markdown ノートがありません。",
+      "starting_one": "{{count}} 件のノートをインデックス中…",
+      "starting_other": "{{count}} 件のノートをインデックス中…",
+      "progress": "インデックス中: {{done}} / {{total}} ノート",
+      "completed": "インデックス完了: {{indexed}} 件成功、{{failed}} 件失敗。",
+      "noIndex": "まだ何もインデックスされていません。\"Embed all documents\" を実行してボルトをインデックスしてください。",
+      "gradingError": "ドキュメントの評価に失敗しました: {{message}}",
+      "clearing": "インデックスをクリア中…",
+      "cleared": "インデックスをクリアしました。"
+    }
   }
 }

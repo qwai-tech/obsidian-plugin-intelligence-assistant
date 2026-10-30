@@ -85,6 +85,13 @@
         "allCapabilities": "Все возможности",
         "allStates": "Все состояния",
         "searchPlaceholder": "Поиск по имени или ID"
+      },
+      "refreshing": "Обновление…",
+      "tableHeaders": {
+        "model": "Модель",
+        "capabilities": "Возможности",
+        "status": "Статус",
+        "actions": "Действия"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Удалить MCP-сервер «{{name}}»?"
-      }
+      },
+      "namePlaceholder": "MCP-сервер Acme"
     },
     "agents": {
       "desc": "Создавайте и управляйте ИИ-агентами с определёнными возможностями, инструментами и поведением.",
@@ -394,7 +402,8 @@
             "reloadTools": "Перезагрузить инструменты",
             "refetchTooltip": "Перезапросить спецификацию с URL",
             "deleteTooltip": "Удалить источник"
-          }
+          },
+          "namePlaceholder": "HTTP-источник"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Переменные окружения",
             "desc": "Формат: KEY=value, по одной на строку"
-          }
+          },
+          "descriptionPlaceholder": "Запускает команду, чтобы…"
         },
         "presets": {
           "title": "Добавить CLI-инструмент из шаблонов",
@@ -898,6 +908,10 @@
           "name": "Объяснить текст",
           "prompt": "Объясните следующий текст простыми словами:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Сделать текст длиннее",
+        "prompt": "Расширьте и дополните следующий текст…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Добавлено {{count}} ссылок",
       "fileNotFound": "Файл не найден: {{path}}",
       "unableToLoadRag": "Не удалось загрузить статистику RAG.",
-      "referenced": "Упомянуто: {{name}}"
+      "referenced": "Упомянуто: {{name}}",
+      "openViewFailed": "Не удалось открыть окно чата."
     },
     "status": {
       "unavailable": "Недоступно",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Итого",
       "save": "Сохранить",
       "insertToNotes": "Вставить в заметки",
-      "regenerate": "Повторно сгенерировать"
+      "regenerate": "Повторно сгенерировать",
+      "assistant": "Ассистент"
     },
     "toolCall": {
       "executionProcess": "Процесс выполнения",
@@ -1061,7 +1077,10 @@
       "today": "Сегодня",
       "yesterday": "Вчера",
       "thisWeek": "На этой неделе",
-      "older": "Ранее"
+      "older": "Ранее",
+      "empty": "Разговоров пока нет",
+      "rename": "Переименовать",
+      "delete": "Удалить"
     },
     "header": {
       "noModels": "Модели недоступны"
@@ -1098,6 +1117,41 @@
         "placeholder": "Введите задачу здесь...",
         "start": "Начать",
         "title": "Запустить задачу агента"
+      }
+    },
+    "references": {
+      "usingContext": "Используемый контекст",
+      "remove": "Убрать {{path}}"
+    },
+    "scrollToBottom": "Прокрутить вниз",
+    "preflight": {
+      "title": "Предварительная проверка задачи агента",
+      "agent": "Агент: {{name}}",
+      "reads": "Чтение: {{paths}}",
+      "readsDefault": "Чтение: активная заметка и снимок контекста",
+      "tools": "Инструменты: включено {{count}}",
+      "writesProposal": "Запись: только предложение; требуется «Применить»",
+      "writesNone": "Запись: недоступна",
+      "rag": "RAG: {{state}}",
+      "web": "Веб: {{state}}"
+    },
+    "proposals": {
+      "title": "Предложения записи",
+      "preview": "Просмотреть предлагаемое содержимое",
+      "apply": "Применить",
+      "applyAll": "Применить все",
+      "applied": "Применено",
+      "changes_one": "{{count}} изменение",
+      "changes_other": "изменений: {{count}}",
+      "confirm": "Применить ({{summary}})?",
+      "appliedNotice": "Применено ({{summary}})",
+      "operations": {
+        "create": "Создание",
+        "update": "Обновление",
+        "append": "Дополнение",
+        "delete": "Удаление",
+        "move": "Перемещение",
+        "batch": "Пакет"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Обновление...",
         "refreshSuccess": "Список моделей обновлён",
         "refreshFailed": "Не удалось обновить список моделей"
-      }
+      },
+      "pulling": "Загрузка…",
+      "deleting": "Удаление…"
     },
     "promptEdit": {
       "title": "Редактировать системный промпт",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Обработка...",
       "error": "Ошибка отображения объяснения",
       "errorPrefix": "Ошибка:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Сменить модель…",
+      "switched": "Модель изменена на {{name}}",
+      "failed": "Не удалось сменить модель."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Действующая конфигурация провайдера для модели не найдена: {{modelId}}",
     "processing": "Обработка...",
     "textUpdated": "Текст успешно обновлён",
-    "error": "Ошибка: {{message}}"
+    "error": "Ошибка: {{message}}",
+    "inlineBlockFailed": "Не удалось выполнить встроенный ИИ-блок.",
+    "deepLinkFailed": "Не удалось открыть ссылку Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Задача агента: спросить о текущей заметке",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Задача агента: упорядочить текущую заметку",
     "sourceGroundedQuestion": "Задача агента: задать вопрос с опорой на источники",
     "summarizeCurrentNote": "Задача агента: кратко изложить текущую заметку",
-    "switchModel": "Сменить модель"
+    "switchModel": "Сменить модель",
+    "notices": {
+      "openNoteToAsk": "Откройте заметку, прежде чем задавать вопрос агенту.",
+      "openNoteToSummarize": "Откройте заметку, прежде чем делать сводку с агентом.",
+      "openNoteToOrganize": "Откройте заметку, прежде чем упорядочивать её с агентом.",
+      "openProjectNote": "Откройте заметку проекта, прежде чем создавать бриф проекта.",
+      "openNoteToResearch": "Откройте заметку, прежде чем создавать исследовательский бриф.",
+      "openNoteToFindRelated": "Откройте заметку, прежде чем искать связанные заметки.",
+      "openNoteToImproveLinks": "Откройте заметку, прежде чем улучшать ссылки, теги и свойства.",
+      "openNoteToDraft": "Откройте заметку, прежде чем писать черновик с агентом.",
+      "selectTextToImprove": "Выделите текст, прежде чем просить агента его улучшить."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: спросить агента об этом файле",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Открыть чат ИИ"
+  },
+  "status": {
+    "idle": "IA: простаивает · токенов: {{tokens}}",
+    "running": "IA: работает · токенов: {{tokens}}",
+    "ariaIdle": "Intelligence Assistant простаивает; использовано токенов: {{tokens}}",
+    "ariaRunning": "Агент Intelligence Assistant работает; использовано токенов: {{tokens}}"
+  },
+  "capability": {
+    "title": "Инструменты и разрешения",
+    "subtitle_one": "{{agent}} может использовать {{count}} инструмент.",
+    "subtitle_other": "{{agent}} может использовать инструментов: {{count}}.",
+    "chatMode": "Режим чата",
+    "permissions": "Текущие разрешения",
+    "reads": "Эта задача может читать",
+    "tools": "Включённые инструменты",
+    "noTools": "Для текущего агента не включено ни одного инструмента.",
+    "noDescription": "Нет описания",
+    "builtinGroup": "Встроенные инструменты хранилища",
+    "tags": {
+      "applyRequired": "Требуется «Применить»",
+      "externalWrite": "Внешняя запись",
+      "localProcess": "Запускает локальный процесс"
+    },
+    "state": {
+      "on": "вкл.",
+      "off": "выкл.",
+      "disabled": "отключено"
+    },
+    "rows": {
+      "vaultContext": "Контекст хранилища",
+      "referencesPlusContext_one": "{{count}} явная ссылка и активный контекст",
+      "referencesPlusContext_other": "Явных ссылок: {{count}}, плюс активный контекст",
+      "activeContext": "Активная заметка и снимок контекста графа",
+      "readTools": "Инструменты чтения хранилища",
+      "enabledCount": "Включено: {{count}}",
+      "noReadTool": "Нет включённых инструментов прямого чтения",
+      "writes": "Запись в хранилище",
+      "proposalOnly": "Только предложение; требуется «Применить»",
+      "unavailable": "Недоступно",
+      "rag": "RAG",
+      "web": "Веб-поиск",
+      "on": "Вкл.",
+      "off": "Выкл.",
+      "disabledInSettings": "Отключено в настройках",
+      "custom": "Пользовательские инструменты",
+      "customEnabled_one": "Включён {{count}} инструмент MCP, OpenAPI или CLI",
+      "customEnabled_other": "Включено инструментов MCP, OpenAPI или CLI: {{count}}",
+      "noneEnabled": "Ничего не включено",
+      "destructive": "Разрушающие действия в хранилище",
+      "notProvided": "Не предоставляются встроенными инструментами"
+    }
+  },
+  "markdown": {
+    "run": "Запустить"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Нет заметок Markdown для индексирования.",
+      "starting_one": "Индексирование {{count}} заметки…",
+      "starting_other": "Индексирование заметок: {{count}}…",
+      "progress": "Индексирование: {{done}} из {{total}} заметок",
+      "completed": "Индексирование завершено: проиндексировано {{indexed}}, с ошибкой {{failed}}.",
+      "noIndex": "Пока ничего не проиндексировано. Запустите «Embed all documents», чтобы проиндексировать хранилище.",
+      "gradingError": "Ошибка оценки документов: {{message}}",
+      "clearing": "Очистка индекса…",
+      "cleared": "Индекс очищен."
+    }
   }
 }

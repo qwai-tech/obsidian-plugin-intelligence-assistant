@@ -47,7 +47,7 @@ export class ConversationListView {
 
 		const newConvBtn = headerButtons.createDiv({ cls: 'clickable-icon new-conversation-btn' });
 		setIcon(newConvBtn, 'plus');
-		newConvBtn.setAttribute('aria-label', 'New conversation');
+		newConvBtn.setAttribute('aria-label', t('chat.newConversation'));
 		newConvBtn.addEventListener('click', () => {
 			void this.actions.create();
 		});
@@ -87,7 +87,7 @@ export class ConversationListView {
 		const conversationsMetadata = await storage.getAllConversationsMetadata();
 
 		if (conversationsMetadata.length === 0) {
-			listContent.createDiv('empty-state').setText('No conversations yet');
+			listContent.createDiv('empty-state').setText(t('chat.history.empty'));
 			return;
 		}
 
@@ -140,10 +140,10 @@ export class ConversationListView {
 
 			const modeBadge = convInfo.createSpan('conversation-info__mode');
 			if (isAgent) {
-				modeBadge.setText('Agent');
+				modeBadge.setText(t('chat.modeOptions.agent'));
 				modeBadge.addClass('is-agent');
 			} else {
-				modeBadge.setText('Chat');
+				modeBadge.setText(t('chat.modeOptions.chat'));
 				modeBadge.addClass('is-chat');
 			}
 
@@ -205,7 +205,7 @@ export class ConversationListView {
 				const menu = new Menu();
 
 				menu.addItem((item) => {
-					item.setTitle('Rename')
+					item.setTitle(t('chat.history.rename'))
 						.setIcon('pencil')
 						.onClick(() => {
 							void this.actions.rename(conv.id);
@@ -213,7 +213,7 @@ export class ConversationListView {
 				});
 
 				menu.addItem((item) => {
-					item.setTitle('Delete')
+					item.setTitle(t('chat.history.delete'))
 						.setIcon('trash')
 						.onClick(() => {
 							void this.actions.remove(conv.id);

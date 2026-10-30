@@ -1,6 +1,9 @@
 import 'obsidian';
 import { RunActivity } from '@/features/agent/run-activity';
 import { AgentStatusBar } from '@/ui/status/agent-status-bar';
+import { initI18n } from '@/i18n';
+
+beforeAll(() => initI18n('en'));
 
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
 

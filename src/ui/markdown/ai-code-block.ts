@@ -1,3 +1,5 @@
+import { t } from '@/i18n';
+
 /**
  * Inline AI widget rendered from a fenced ```ai code block.
  *
@@ -81,7 +83,7 @@ export function buildAiWidget(
 	header.createSpan({ cls: 'ia-ai-block__title', text: directive.title || 'AI' });
 	const runButton = header.createEl('button', {
 		cls: 'ia-ai-block__run',
-		text: 'Run',
+		text: t('markdown.run'),
 	});
 	runButton.type = 'button';
 

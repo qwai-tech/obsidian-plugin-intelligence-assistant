@@ -1,5 +1,6 @@
 import { App, Modal, Setting } from 'obsidian';
 import type { AgentCapabilitySummary, CapabilityPermissionRow } from '@/features/agent';
+import { t } from '@/i18n';
 
 export class AgentCapabilityModal extends Modal {
 	constructor(
@@ -14,10 +15,10 @@ export class AgentCapabilityModal extends Modal {
 		contentEl.empty();
 		contentEl.addClass('ia-agent-capability-modal');
 
-		this.setTitle('Tools & permissions');
+		this.setTitle(t('capability.title'));
 		contentEl.createEl('p', {
 			cls: 'ia-agent-capability-modal__subtitle',
-			text: `${this.summary.agentName} can use ${this.summary.toolCount} tool${this.summary.toolCount === 1 ? '' : 's'} in ${this.summary.mode} mode.`,
+			text: t('capability.subtitle', { agent: this.summary.agentName, count: this.summary.toolCount }),
 		});
 
 		this.renderPermissions(contentEl);
@@ -31,7 +32,7 @@ export class AgentCapabilityModal extends Modal {
 
 	private renderPermissions(container: HTMLElement): void {
 		const section = container.createDiv('ia-agent-capability-modal__section');
-		new Setting(section).setName('Current permissions').setHeading();
+		new Setting(section).setName(t('capability.permissions')).setHeading();
 
 		const grid = section.createDiv('ia-agent-capability-grid');
 		for (const row of this.summary.permissions) {
@@ -49,7 +50,7 @@ export class AgentCapabilityModal extends Modal {
 		if (this.summary.references.length === 0) return;
 
 		const section = container.createDiv('ia-agent-capability-modal__section');
-		new Setting(section).setName('This task can read').setHeading();
+		new Setting(section).setName(t('capability.reads')).setHeading();
 		const list = section.createEl('ul', { cls: 'ia-agent-capability-list' });
 		for (const reference of this.summary.references) {
 			list.createEl('li', { text: `${reference.type}: ${reference.path}` });
@@ -58,12 +59,12 @@ export class AgentCapabilityModal extends Modal {
 
 	private renderTools(container: HTMLElement): void {
 		const section = container.createDiv('ia-agent-capability-modal__section');
-		new Setting(section).setName('Enabled tools').setHeading();
+		new Setting(section).setName(t('capability.tools')).setHeading();
 
 		if (this.summary.toolGroups.length === 0) {
 			section.createEl('p', {
 				cls: 'ia-agent-capability-modal__empty',
-				text: 'No tools are enabled for the current agent.',
+				text: t('capability.noTools'),
 			});
 			return;
 		}
@@ -76,11 +77,11 @@ export class AgentCapabilityModal extends Modal {
 				const title = toolEl.createDiv('ia-agent-capability-tool__title');
 				title.createSpan({ cls: 'ia-agent-capability-tool__name', text: tool.name });
 				if (tool.sideEffect === 'vault-write-proposal') {
-					title.createSpan({ cls: 'ia-agent-capability-tool__tag is-warn', text: 'Apply required' });
+					title.createSpan({ cls: 'ia-agent-capability-tool__tag is-warn', text: t('capability.tags.applyRequired') });
 				} else if (tool.sideEffect === 'external-write') {
-					title.createSpan({ cls: 'ia-agent-capability-tool__tag is-danger', text: 'External write' });
+					title.createSpan({ cls: 'ia-agent-capability-tool__tag is-danger', text: t('capability.tags.externalWrite') });
 				} else if (tool.sideEffect === 'local-process') {
-					title.createSpan({ cls: 'ia-agent-capability-tool__tag is-danger', text: 'Runs a local process' });
+					title.createSpan({ cls: 'ia-agent-capability-tool__tag is-danger', text: t('capability.tags.localProcess') });
 				}
 				toolEl.createDiv({ cls: 'ia-agent-capability-tool__description', text: tool.description });
 			}

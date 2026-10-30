@@ -85,6 +85,13 @@
         "allCapabilities": "Sve mogućnosti",
         "allStates": "Sva stanja",
         "searchPlaceholder": "Pretraži naziv ili ID"
+      },
+      "refreshing": "Osvježavanje…",
+      "tableHeaders": {
+        "model": "Model",
+        "capabilities": "Mogućnosti",
+        "status": "Status",
+        "actions": "Radnje"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Obriši MCP poslužitelj „{{name}}“?"
-      }
+      },
+      "namePlaceholder": "Acme MCP poslužitelj"
     },
     "agents": {
       "desc": "Stvarajte i upravljajte AI agentima s određenim mogućnostima, alatima i ponašanjem.",
@@ -394,7 +402,8 @@
             "reloadTools": "Ponovo učitaj alate",
             "refetchTooltip": "Ponovo dohvati specifikaciju s URL-a",
             "deleteTooltip": "Obriši izvor"
-          }
+          },
+          "namePlaceholder": "HTTP izvor"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Varijable okruženja",
             "desc": "Format: KLJUČ=vrijednost, jedna u retku"
-          }
+          },
+          "descriptionPlaceholder": "Pokreće naredbu za…"
         },
         "presets": {
           "title": "Dodaj CLI alat iz predefiniranih",
@@ -898,6 +908,10 @@
           "name": "Objasni tekst",
           "prompt": "Objasni sljedeći tekst jednostavnim riječima:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Produlji tekst",
+        "prompt": "Proširi i razradi sljedeći tekst…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Dodano {{count}} referenci",
       "fileNotFound": "Datoteka nije pronađena: {{path}}",
       "unableToLoadRag": "Nije moguće učitati RAG statistike.",
-      "referenced": "Referencirano: {{name}}"
+      "referenced": "Referencirano: {{name}}",
+      "openViewFailed": "Nije moguće otvoriti prikaz razgovora."
     },
     "status": {
       "unavailable": "Nedostupno",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Ukupno",
       "save": "Spremi",
       "insertToNotes": "Umetni u bilješke",
-      "regenerate": "Regeneriraj"
+      "regenerate": "Regeneriraj",
+      "assistant": "Asistent"
     },
     "toolCall": {
       "executionProcess": "Proces izvršavanja",
@@ -1061,7 +1077,10 @@
       "today": "Danas",
       "yesterday": "Jučer",
       "thisWeek": "Ovaj tjedan",
-      "older": "Starije"
+      "older": "Starije",
+      "empty": "Još nema razgovora",
+      "rename": "Preimenuj",
+      "delete": "Izbriši"
     },
     "header": {
       "noModels": "Nema dostupnih modela"
@@ -1098,6 +1117,41 @@
         "placeholder": "Ovdje unesite svoj zadatak...",
         "start": "Pokreni",
         "title": "Pokreni zadatak agenta"
+      }
+    },
+    "references": {
+      "usingContext": "Korištenje konteksta",
+      "remove": "Ukloni {{path}}"
+    },
+    "scrollToBottom": "Pomakni se na dno",
+    "preflight": {
+      "title": "Predprovjera zadatka agenta",
+      "agent": "Agent: {{name}}",
+      "reads": "Čita: {{paths}}",
+      "readsDefault": "Čita: aktivnu bilješku i snimku konteksta",
+      "tools": "Alati: omogućeno {{count}}",
+      "writesProposal": "Zapisi: samo prijedlog; potrebno je Primijeni",
+      "writesNone": "Zapisi: nedostupno",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Prijedlozi zapisa",
+      "preview": "Pregled predloženog sadržaja",
+      "apply": "Primijeni",
+      "applyAll": "Primijeni sve",
+      "applied": "Primijenjeno",
+      "changes_one": "{{count}} promjena",
+      "changes_other": "Promjene: {{count}}",
+      "confirm": "Primijeniti {{summary}}?",
+      "appliedNotice": "Primijenjeno: {{summary}}",
+      "operations": {
+        "create": "Stvori",
+        "update": "Ažuriraj",
+        "append": "Dodaj",
+        "delete": "Izbriši",
+        "move": "Premjesti",
+        "batch": "Skupno"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Osvježavanje...",
         "refreshSuccess": "Popis modela osvježen",
         "refreshFailed": "Osvježavanje popisa modela nije uspjelo"
-      }
+      },
+      "pulling": "Preuzimanje…",
+      "deleting": "Brisanje…"
     },
     "promptEdit": {
       "title": "Uredi sistemski upit",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Obrađujem...",
       "error": "Pogreška pri prikazu objašnjenja",
       "errorPrefix": "Pogreška:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Promijeni model…",
+      "switched": "Model je promijenjen u {{name}}",
+      "failed": "Nije moguće promijeniti model."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Za model nije pronađena valjana konfiguracija pružatelja: {{modelId}}",
     "processing": "Obrađujem...",
     "textUpdated": "Tekst uspješno ažuriran",
-    "error": "Pogreška: {{message}}"
+    "error": "Pogreška: {{message}}",
+    "inlineBlockFailed": "Nije moguće pokrenuti ugrađeni AI blok.",
+    "deepLinkFailed": "Nije moguće otvoriti poveznicu Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Zadatak agenta: pitaj o trenutnoj bilješci",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Zadatak agenta: organiziraj trenutnu bilješku",
     "sourceGroundedQuestion": "Zadatak agenta: postavi pitanje utemeljeno na izvorima",
     "summarizeCurrentNote": "Zadatak agenta: sažmi trenutnu bilješku",
-    "switchModel": "Promijeni model"
+    "switchModel": "Promijeni model",
+    "notices": {
+      "openNoteToAsk": "Otvorite bilješku prije nego što upitate agenta.",
+      "openNoteToSummarize": "Otvorite bilješku prije sažimanja s agentom.",
+      "openNoteToOrganize": "Otvorite bilješku prije organiziranja s agentom.",
+      "openProjectNote": "Otvorite bilješku projekta prije stvaranja sažetka projekta.",
+      "openNoteToResearch": "Otvorite bilješku prije stvaranja sažetka istraživanja.",
+      "openNoteToFindRelated": "Otvorite bilješku prije traženja povezanih bilješki.",
+      "openNoteToImproveLinks": "Otvorite bilješku prije poboljšanja poveznica, oznaka i svojstava.",
+      "openNoteToDraft": "Otvorite bilješku prije izrade nacrta s agentom.",
+      "selectTextToImprove": "Odaberite tekst prije nego što zatražite od agenta da ga poboljša."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: pitaj agenta o ovoj datoteci",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Otvori AI chat"
+  },
+  "status": {
+    "idle": "IA: neaktivan · tokeni: {{tokens}}",
+    "running": "IA: radi · tokeni: {{tokens}}",
+    "ariaIdle": "Intelligence Assistant je neaktivan; iskorišteno tokena: {{tokens}}",
+    "ariaRunning": "Agent Intelligence Assistanta radi; iskorišteno tokena: {{tokens}}"
+  },
+  "capability": {
+    "title": "Alati i dopuštenja",
+    "subtitle_one": "{{agent}} može koristiti {{count}} alat.",
+    "subtitle_other": "{{agent}} može koristiti alata: {{count}}.",
+    "chatMode": "Način razgovora",
+    "permissions": "Trenutačna dopuštenja",
+    "reads": "Ovaj zadatak može čitati",
+    "tools": "Omogućeni alati",
+    "noTools": "Za trenutačnog agenta nije omogućen nijedan alat.",
+    "noDescription": "Nema opisa",
+    "builtinGroup": "Ugrađeni alati trezora",
+    "tags": {
+      "applyRequired": "Potrebno Primijeni",
+      "externalWrite": "Vanjski zapis",
+      "localProcess": "Pokreće lokalni proces"
+    },
+    "state": {
+      "on": "uključeno",
+      "off": "isključeno",
+      "disabled": "onemogućeno"
+    },
+    "rows": {
+      "vaultContext": "Kontekst trezora",
+      "referencesPlusContext_one": "{{count}} izričita referenca uz aktivni kontekst",
+      "referencesPlusContext_other": "Izričite reference: {{count}}, uz aktivni kontekst",
+      "activeContext": "Aktivna bilješka i snimka konteksta grafa",
+      "readTools": "Alati za čitanje trezora",
+      "enabledCount": "Omogućeno: {{count}}",
+      "noReadTool": "Nije omogućen nijedan alat za izravno čitanje",
+      "writes": "Zapisi u trezor",
+      "proposalOnly": "Samo prijedlog; potrebno je Primijeni",
+      "unavailable": "Nedostupno",
+      "rag": "RAG",
+      "web": "Web pretraživanje",
+      "on": "Uključeno",
+      "off": "Isključeno",
+      "disabledInSettings": "Onemogućeno u postavkama",
+      "custom": "Prilagođeni alati",
+      "customEnabled_one": "Omogućen {{count}} MCP, OpenAPI ili CLI alat",
+      "customEnabled_other": "Omogućeni MCP, OpenAPI ili CLI alati: {{count}}",
+      "noneEnabled": "Nijedan nije omogućen",
+      "destructive": "Destruktivne radnje u trezoru",
+      "notProvided": "Ugrađeni alati to ne pružaju"
+    }
+  },
+  "markdown": {
+    "run": "Pokreni"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Nema Markdown bilješki za indeksiranje.",
+      "starting_one": "Indeksiranje {{count}} bilješke…",
+      "starting_other": "Indeksiranje bilješki: {{count}}…",
+      "progress": "Indeksiranje: {{done}} od {{total}} bilješki",
+      "completed": "Indeksiranje završeno: indeksirano {{indexed}}, neuspješno {{failed}}.",
+      "noIndex": "Još ništa nije indeksirano. Pokrenite \"Embed all documents\" za indeksiranje trezora.",
+      "gradingError": "Ocjenjivanje dokumenata nije uspjelo: {{message}}",
+      "clearing": "Čišćenje indeksa…",
+      "cleared": "Indeks je očišćen."
+    }
   }
 }

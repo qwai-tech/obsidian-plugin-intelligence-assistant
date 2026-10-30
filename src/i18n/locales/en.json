@@ -85,6 +85,13 @@
         "allCapabilities": "All capabilities",
         "allStates": "All states",
         "searchPlaceholder": "Search name or ID"
+      },
+      "refreshing": "Refreshing…",
+      "tableHeaders": {
+        "model": "Model",
+        "capabilities": "Capabilities",
+        "status": "Status",
+        "actions": "Actions"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Delete MCP server \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "Acme MCP server"
     },
     "agents": {
       "desc": "Create and manage AI agents with specific capabilities, tools, and behaviors.",
@@ -394,7 +402,8 @@
             "reloadTools": "Reload tools",
             "refetchTooltip": "Refetch spec from URL",
             "deleteTooltip": "Delete source"
-          }
+          },
+          "namePlaceholder": "HTTP source"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Environment variables",
             "desc": "Format: KEY=value, one per line"
-          }
+          },
+          "descriptionPlaceholder": "Runs a command to…"
         },
         "presets": {
           "title": "Add CLI tool from presets",
@@ -898,6 +908,10 @@
           "name": "Explain text",
           "prompt": "Explain the following text in simple terms:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Make text longer",
+        "prompt": "Expand and elaborate on the following text…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Added {{count}} reference(s)",
       "fileNotFound": "File not found: {{path}}",
       "unableToLoadRag": "Unable to load RAG statistics.",
-      "referenced": "Referenced: {{name}}"
+      "referenced": "Referenced: {{name}}",
+      "openViewFailed": "Could not open the chat view."
     },
     "status": {
       "unavailable": "Unavailable",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Total",
       "save": "Save",
       "insertToNotes": "Insert to notes",
-      "regenerate": "Regenerate"
+      "regenerate": "Regenerate",
+      "assistant": "Assistant"
     },
     "toolCall": {
       "executionProcess": "Execution process",
@@ -1061,7 +1077,10 @@
       "today": "Today",
       "yesterday": "Yesterday",
       "thisWeek": "This week",
-      "older": "Older"
+      "older": "Older",
+      "empty": "No conversations yet",
+      "rename": "Rename",
+      "delete": "Delete"
     },
     "header": {
       "noModels": "No models available"
@@ -1098,6 +1117,41 @@
         "newConversationDesc": "Keep this agent run separate from the current chat.",
         "cancel": "Cancel",
         "start": "Start"
+      }
+    },
+    "references": {
+      "usingContext": "Using context",
+      "remove": "Remove {{path}}"
+    },
+    "scrollToBottom": "Scroll to bottom",
+    "preflight": {
+      "title": "Agent task preflight",
+      "agent": "Agent: {{name}}",
+      "reads": "Reads: {{paths}}",
+      "readsDefault": "Reads: active note and context snapshot",
+      "tools": "Tools: {{count}} enabled",
+      "writesProposal": "Writes: proposal only; Apply required",
+      "writesNone": "Writes: unavailable",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Write proposals",
+      "preview": "Preview proposed content",
+      "apply": "Apply",
+      "applyAll": "Apply all",
+      "applied": "Applied",
+      "changes_one": "{{count}} change",
+      "changes_other": "{{count}} changes",
+      "confirm": "Apply {{summary}}?",
+      "appliedNotice": "Applied {{summary}}",
+      "operations": {
+        "create": "Create",
+        "update": "Update",
+        "append": "Append",
+        "delete": "Delete",
+        "move": "Move",
+        "batch": "Batch"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Refreshing...",
         "refreshSuccess": "Model list refreshed",
         "refreshFailed": "Failed to refresh model list"
-      }
+      },
+      "pulling": "Pulling…",
+      "deleting": "Deleting…"
     },
     "promptEdit": {
       "title": "Edit system prompt",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Processing...",
       "error": "Error rendering explanation",
       "errorPrefix": "Error:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Switch model…",
+      "switched": "Model switched to {{name}}",
+      "failed": "Could not switch model."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "No valid provider configuration found for model: {{modelId}}",
     "processing": "Processing...",
     "textUpdated": "Text updated successfully",
-    "error": "Error: {{message}}"
+    "error": "Error: {{message}}",
+    "inlineBlockFailed": "Could not run the inline AI block.",
+    "deepLinkFailed": "Could not open the Intelligence Assistant link."
   },
   "commands": {
     "openChatSidebar": "Open AI chat in sidebar",
@@ -1470,7 +1533,18 @@
     "draftFromNote": "Agent task: draft from current note",
     "diagnoseVault": "Agent task: diagnose vault",
     "improveSelection": "Agent task: improve selection",
-    "switchModel": "Switch model"
+    "switchModel": "Switch model",
+    "notices": {
+      "openNoteToAsk": "Open a note before asking the agent.",
+      "openNoteToSummarize": "Open a note before summarizing with the agent.",
+      "openNoteToOrganize": "Open a note before organizing with the agent.",
+      "openProjectNote": "Open a project note before creating a project brief.",
+      "openNoteToResearch": "Open a note before creating a research brief.",
+      "openNoteToFindRelated": "Open a note before finding related notes.",
+      "openNoteToImproveLinks": "Open a note before improving links, tags and properties.",
+      "openNoteToDraft": "Open a note before drafting with the agent.",
+      "selectTextToImprove": "Select text before asking the agent to improve it."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: ask agent about this file",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Open AI chat"
+  },
+  "status": {
+    "idle": "IA: idle · {{tokens}} tokens",
+    "running": "IA: running · {{tokens}} tokens",
+    "ariaIdle": "Intelligence Assistant is idle; {{tokens}} tokens used",
+    "ariaRunning": "Intelligence Assistant agent is running; {{tokens}} tokens used"
+  },
+  "capability": {
+    "title": "Tools and permissions",
+    "subtitle_one": "{{agent}} can use {{count}} tool.",
+    "subtitle_other": "{{agent}} can use {{count}} tools.",
+    "chatMode": "Chat mode",
+    "permissions": "Current permissions",
+    "reads": "This task can read",
+    "tools": "Enabled tools",
+    "noTools": "No tools are enabled for the current agent.",
+    "noDescription": "No description",
+    "builtinGroup": "Built-in vault tools",
+    "tags": {
+      "applyRequired": "Apply required",
+      "externalWrite": "External write",
+      "localProcess": "Runs a local process"
+    },
+    "state": {
+      "on": "on",
+      "off": "off",
+      "disabled": "disabled"
+    },
+    "rows": {
+      "vaultContext": "Vault context",
+      "referencesPlusContext_one": "{{count}} explicit reference plus active context",
+      "referencesPlusContext_other": "{{count}} explicit references plus active context",
+      "activeContext": "Active note and graph context snapshot",
+      "readTools": "Vault read tools",
+      "enabledCount": "{{count}} enabled",
+      "noReadTool": "No direct read tool enabled",
+      "writes": "Vault writes",
+      "proposalOnly": "Proposal only; Apply is required",
+      "unavailable": "Unavailable",
+      "rag": "RAG",
+      "web": "Web search",
+      "on": "On",
+      "off": "Off",
+      "disabledInSettings": "Disabled in settings",
+      "custom": "Custom tools",
+      "customEnabled_one": "{{count}} MCP, OpenAPI or CLI tool enabled",
+      "customEnabled_other": "{{count}} MCP, OpenAPI or CLI tools enabled",
+      "noneEnabled": "None enabled",
+      "destructive": "Destructive vault actions",
+      "notProvided": "Not provided by built-in tools"
+    }
+  },
+  "markdown": {
+    "run": "Run"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "No Markdown notes to index.",
+      "starting_one": "Indexing {{count}} note…",
+      "starting_other": "Indexing {{count}} notes…",
+      "progress": "Indexing: {{done}} of {{total}} notes",
+      "completed": "Indexing finished: {{indexed}} indexed, {{failed}} failed.",
+      "noIndex": "Nothing is indexed yet. Run \"Embed all documents\" to index your vault.",
+      "gradingError": "Document grading failed: {{message}}",
+      "clearing": "Clearing the index…",
+      "cleared": "Index cleared."
+    }
   }
 }

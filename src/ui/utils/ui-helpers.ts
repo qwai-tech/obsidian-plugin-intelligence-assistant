@@ -4,7 +4,7 @@ import { requireApiVersion, type ButtonComponent } from 'obsidian';
  * Presentation utility helpers for rendering tables and status indicators.
  */
 
-export function createTable(containerEl: HTMLElement, headers: string[]): HTMLTableElement {
+export function createTable(containerEl: HTMLElement, headers: string[], options: { numericColumns?: number } = {}): HTMLTableElement {
 	const wrapper = containerEl.createDiv('ia-table-container');
 	wrapper.addClass('ia-scrollable');
 
@@ -12,8 +12,10 @@ export function createTable(containerEl: HTMLElement, headers: string[]): HTMLTa
 
 	const thead = table.createEl('thead', { cls: 'ia-table-head' });
 	const headerRow = thead.createEl('tr');
-	headers.forEach(headerText => {
-		headerRow.createEl('th', { text: headerText, cls: 'ia-table-header' });
+	const firstNumeric = headers.length - (options.numericColumns ?? 0);
+	headers.forEach((headerText, index) => {
+		const header = headerRow.createEl('th', { text: headerText, cls: 'ia-table-header' });
+		header.toggleClass('ia-table-cell--right', index >= firstNumeric);
 	});
 
 	table.createEl('tbody', { cls: 'ia-table-body' });

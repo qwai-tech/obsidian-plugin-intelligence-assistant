@@ -85,6 +85,13 @@
         "allCapabilities": "Всі можливості",
         "allStates": "Всі стани",
         "searchPlaceholder": "Пошук за ім'ям або ID"
+      },
+      "refreshing": "Оновлення…",
+      "tableHeaders": {
+        "model": "Модель",
+        "capabilities": "Можливості",
+        "status": "Стан",
+        "actions": "Дії"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Видалити MCP-сервер «{{name}}»?"
-      }
+      },
+      "namePlaceholder": "MCP-сервер Acme"
     },
     "agents": {
       "desc": "Створюйте та керуйте ШІ-агентами з певними можливостями, інструментами та поведінкою.",
@@ -394,7 +402,8 @@
             "reloadTools": "Перезавантажити інструменти",
             "refetchTooltip": "Перезапросити специфікацію з URL",
             "deleteTooltip": "Видалити джерело"
-          }
+          },
+          "namePlaceholder": "HTTP-джерело"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Змінні середовища",
             "desc": "Формат: KEY=value, по одному на рядок"
-          }
+          },
+          "descriptionPlaceholder": "Запускає команду, щоб…"
         },
         "presets": {
           "title": "Додати CLI-інструмент з шаблонів",
@@ -898,6 +908,10 @@
           "name": "Пояснити текст",
           "prompt": "Поясніть наступний текст простими словами:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Зробити текст довшим",
+        "prompt": "Розширте й доповніть наступний текст…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Додано {{count}} посилань",
       "fileNotFound": "Файл не знайдено: {{path}}",
       "unableToLoadRag": "Не вдалося завантажити статистику RAG.",
-      "referenced": "Згадано: {{name}}"
+      "referenced": "Згадано: {{name}}",
+      "openViewFailed": "Не вдалося відкрити вікно чату."
     },
     "status": {
       "unavailable": "Недоступно",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Разом",
       "save": "Зберегти",
       "insertToNotes": "Вставити в нотатки",
-      "regenerate": "Повторно згенерувати"
+      "regenerate": "Повторно згенерувати",
+      "assistant": "Асистент"
     },
     "toolCall": {
       "executionProcess": "Процес виконання",
@@ -1061,7 +1077,10 @@
       "today": "Сьогодні",
       "yesterday": "Учора",
       "thisWeek": "Цього тижня",
-      "older": "Раніше"
+      "older": "Раніше",
+      "empty": "Розмов поки немає",
+      "rename": "Перейменувати",
+      "delete": "Видалити"
     },
     "header": {
       "noModels": "Моделі недоступні"
@@ -1098,6 +1117,41 @@
         "placeholder": "Введіть завдання тут...",
         "start": "Почати",
         "title": "Запустити завдання агента"
+      }
+    },
+    "references": {
+      "usingContext": "Використовуваний контекст",
+      "remove": "Прибрати {{path}}"
+    },
+    "scrollToBottom": "Прокрутити донизу",
+    "preflight": {
+      "title": "Попередня перевірка завдання агента",
+      "agent": "Агент: {{name}}",
+      "reads": "Читання: {{paths}}",
+      "readsDefault": "Читання: активна нотатка та знімок контексту",
+      "tools": "Інструменти: увімкнено {{count}}",
+      "writesProposal": "Запис: лише пропозиція; потрібно «Застосувати»",
+      "writesNone": "Запис: недоступний",
+      "rag": "RAG: {{state}}",
+      "web": "Веб: {{state}}"
+    },
+    "proposals": {
+      "title": "Пропозиції запису",
+      "preview": "Переглянути запропонований вміст",
+      "apply": "Застосувати",
+      "applyAll": "Застосувати все",
+      "applied": "Застосовано",
+      "changes_one": "{{count}} зміна",
+      "changes_other": "змін: {{count}}",
+      "confirm": "Застосувати ({{summary}})?",
+      "appliedNotice": "Застосовано ({{summary}})",
+      "operations": {
+        "create": "Створення",
+        "update": "Оновлення",
+        "append": "Доповнення",
+        "delete": "Видалення",
+        "move": "Переміщення",
+        "batch": "Пакет"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Оновлення...",
         "refreshSuccess": "Список моделей оновлено",
         "refreshFailed": "Не вдалося оновити список моделей"
-      }
+      },
+      "pulling": "Завантаження…",
+      "deleting": "Видалення…"
     },
     "promptEdit": {
       "title": "Редагувати системний промпт",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Обробка...",
       "error": "Помилка відображення пояснення",
       "errorPrefix": "Помилка:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Змінити модель…",
+      "switched": "Модель змінено на {{name}}",
+      "failed": "Не вдалося змінити модель."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Дійсну конфігурацію провайдера для моделі не знайдено: {{modelId}}",
     "processing": "Обробка...",
     "textUpdated": "Текст успішно оновлено",
-    "error": "Помилка: {{message}}"
+    "error": "Помилка: {{message}}",
+    "inlineBlockFailed": "Не вдалося виконати вбудований ШІ-блок.",
+    "deepLinkFailed": "Не вдалося відкрити посилання Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Завдання агента: запитати про поточну нотатку",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Завдання агента: упорядкувати поточну нотатку",
     "sourceGroundedQuestion": "Завдання агента: поставити запитання з опорою на джерела",
     "summarizeCurrentNote": "Завдання агента: стисло викласти поточну нотатку",
-    "switchModel": "Змінити модель"
+    "switchModel": "Змінити модель",
+    "notices": {
+      "openNoteToAsk": "Відкрийте нотатку, перш ніж ставити запитання агенту.",
+      "openNoteToSummarize": "Відкрийте нотатку, перш ніж підсумовувати з агентом.",
+      "openNoteToOrganize": "Відкрийте нотатку, перш ніж упорядковувати її з агентом.",
+      "openProjectNote": "Відкрийте нотатку проєкту, перш ніж створювати бриф проєкту.",
+      "openNoteToResearch": "Відкрийте нотатку, перш ніж створювати дослідницький бриф.",
+      "openNoteToFindRelated": "Відкрийте нотатку, перш ніж шукати пов'язані нотатки.",
+      "openNoteToImproveLinks": "Відкрийте нотатку, перш ніж покращувати посилання, теги та властивості.",
+      "openNoteToDraft": "Відкрийте нотатку, перш ніж писати чернетку з агентом.",
+      "selectTextToImprove": "Виділіть текст, перш ніж просити агента його покращити."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: запитати агента про цей файл",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Відкрити чат ШІ"
+  },
+  "status": {
+    "idle": "IA: очікує · токенів: {{tokens}}",
+    "running": "IA: працює · токенів: {{tokens}}",
+    "ariaIdle": "Intelligence Assistant очікує; використано токенів: {{tokens}}",
+    "ariaRunning": "Агент Intelligence Assistant працює; використано токенів: {{tokens}}"
+  },
+  "capability": {
+    "title": "Інструменти та дозволи",
+    "subtitle_one": "{{agent}} може використовувати {{count}} інструмент.",
+    "subtitle_other": "{{agent}} може використовувати інструментів: {{count}}.",
+    "chatMode": "Режим чату",
+    "permissions": "Поточні дозволи",
+    "reads": "Це завдання може читати",
+    "tools": "Увімкнені інструменти",
+    "noTools": "Для поточного агента не увімкнено жодного інструмента.",
+    "noDescription": "Немає опису",
+    "builtinGroup": "Вбудовані інструменти сховища",
+    "tags": {
+      "applyRequired": "Потрібно «Застосувати»",
+      "externalWrite": "Зовнішній запис",
+      "localProcess": "Запускає локальний процес"
+    },
+    "state": {
+      "on": "увімк.",
+      "off": "вимк.",
+      "disabled": "вимкнено"
+    },
+    "rows": {
+      "vaultContext": "Контекст сховища",
+      "referencesPlusContext_one": "{{count}} явне посилання та активний контекст",
+      "referencesPlusContext_other": "Явних посилань: {{count}}, плюс активний контекст",
+      "activeContext": "Активна нотатка та знімок контексту графа",
+      "readTools": "Інструменти читання сховища",
+      "enabledCount": "Увімкнено: {{count}}",
+      "noReadTool": "Немає увімкнених інструментів прямого читання",
+      "writes": "Запис у сховище",
+      "proposalOnly": "Лише пропозиція; потрібно «Застосувати»",
+      "unavailable": "Недоступно",
+      "rag": "RAG",
+      "web": "Веб-пошук",
+      "on": "Увімк.",
+      "off": "Вимк.",
+      "disabledInSettings": "Вимкнено в налаштуваннях",
+      "custom": "Користувацькі інструменти",
+      "customEnabled_one": "Увімкнено {{count}} інструмент MCP, OpenAPI або CLI",
+      "customEnabled_other": "Увімкнено інструментів MCP, OpenAPI або CLI: {{count}}",
+      "noneEnabled": "Нічого не увімкнено",
+      "destructive": "Руйнівні дії у сховищі",
+      "notProvided": "Не надаються вбудованими інструментами"
+    }
+  },
+  "markdown": {
+    "run": "Запустити"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Немає нотаток Markdown для індексування.",
+      "starting_one": "Індексування {{count}} нотатки…",
+      "starting_other": "Індексування нотаток: {{count}}…",
+      "progress": "Індексування: {{done}} з {{total}} нотаток",
+      "completed": "Індексування завершено: проіндексовано {{indexed}}, з помилкою {{failed}}.",
+      "noIndex": "Ще нічого не проіндексовано. Запустіть «Embed all documents», щоб проіндексувати сховище.",
+      "gradingError": "Помилка оцінювання документів: {{message}}",
+      "clearing": "Очищення індексу…",
+      "cleared": "Індекс очищено."
+    }
   }
 }

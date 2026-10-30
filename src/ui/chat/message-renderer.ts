@@ -245,7 +245,7 @@ function applyAvatarAndLabel(
 	avatar.setAttr('title', providerLabel);
 
 	labelElement.addClass('ia-chat-message__model-label');
-	labelElement.setText('Assistant');
+	labelElement.setText(t('chat.message.assistant'));
 
 	return {
 		modelLabel,

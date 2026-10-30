@@ -85,6 +85,13 @@
         "allCapabilities": "Všechny schopnosti",
         "allStates": "Všechny stavy",
         "searchPlaceholder": "Hledat název nebo ID"
+      },
+      "refreshing": "Obnovování…",
+      "tableHeaders": {
+        "model": "Model",
+        "capabilities": "Schopnosti",
+        "status": "Stav",
+        "actions": "Akce"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Smazat server MCP \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "Server MCP Acme"
     },
     "agents": {
       "desc": "Vytvářejte a spravujte AI agenty s konkrétními schopnostmi, nástroji a chováním.",
@@ -394,7 +402,8 @@
             "reloadTools": "Znovu načíst nástroje",
             "refetchTooltip": "Znovu stáhnout specifikaci z URL",
             "deleteTooltip": "Smazat zdroj"
-          }
+          },
+          "namePlaceholder": "Zdroj HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Proměnné prostředí",
             "desc": "Formát: KLÍČ=hodnota, jeden na řádek"
-          }
+          },
+          "descriptionPlaceholder": "Spouští příkaz pro…"
         },
         "presets": {
           "title": "Přidat nástroj CLI z předvoleb",
@@ -898,6 +908,10 @@
           "name": "Vysvětlit text",
           "prompt": "Vysvětlete následující text jednoduchými slovy:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Prodloužit text",
+        "prompt": "Rozšiř a rozveď následující text…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Přidáno {{count}} odkazů",
       "fileNotFound": "Soubor nenalezen: {{path}}",
       "unableToLoadRag": "Nelze načíst statistiky RAG.",
-      "referenced": "Odkazováno: {{name}}"
+      "referenced": "Odkazováno: {{name}}",
+      "openViewFailed": "Zobrazení chatu se nepodařilo otevřít."
     },
     "status": {
       "unavailable": "Nedostupné",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Celkem",
       "save": "Uložit",
       "insertToNotes": "Vložit do poznámek",
-      "regenerate": "Regenerovat"
+      "regenerate": "Regenerovat",
+      "assistant": "Asistent"
     },
     "toolCall": {
       "executionProcess": "Průběh provádění",
@@ -1061,7 +1077,10 @@
       "today": "Dnes",
       "yesterday": "Včera",
       "thisWeek": "Tento týden",
-      "older": "Starší"
+      "older": "Starší",
+      "empty": "Zatím žádné konverzace",
+      "rename": "Přejmenovat",
+      "delete": "Smazat"
     },
     "header": {
       "noModels": "Žádné modely nejsou dostupné"
@@ -1098,6 +1117,41 @@
         "placeholder": "Sem zadejte svůj úkol...",
         "start": "Spustit",
         "title": "Spustit úkol agenta"
+      }
+    },
+    "references": {
+      "usingContext": "Používá se kontext",
+      "remove": "Odebrat {{path}}"
+    },
+    "scrollToBottom": "Posunout dolů",
+    "preflight": {
+      "title": "Předběžná kontrola úkolu agenta",
+      "agent": "Agent: {{name}}",
+      "reads": "Čte: {{paths}}",
+      "readsDefault": "Čte: aktivní poznámku a snímek kontextu",
+      "tools": "Nástroje: povoleno {{count}}",
+      "writesProposal": "Zápis: pouze návrh; vyžaduje Použít",
+      "writesNone": "Zápis: nedostupný",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Návrhy zápisu",
+      "preview": "Náhled navrhovaného obsahu",
+      "apply": "Použít",
+      "applyAll": "Použít vše",
+      "applied": "Použito",
+      "changes_one": "{{count}} změna",
+      "changes_other": "{{count}} změn",
+      "confirm": "Použít {{summary}}?",
+      "appliedNotice": "Použito: {{summary}}",
+      "operations": {
+        "create": "Vytvořit",
+        "update": "Aktualizovat",
+        "append": "Připojit",
+        "delete": "Smazat",
+        "move": "Přesunout",
+        "batch": "Dávka"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Obnovuji...",
         "refreshSuccess": "Seznam modelů obnoven",
         "refreshFailed": "Nepodařilo se obnovit seznam modelů"
-      }
+      },
+      "pulling": "Stahování…",
+      "deleting": "Mazání…"
     },
     "promptEdit": {
       "title": "Upravit systémový prompt",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Zpracovávám...",
       "error": "Chyba při vykreslování vysvětlení",
       "errorPrefix": "Chyba:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Přepnout model…",
+      "switched": "Model přepnut na {{name}}",
+      "failed": "Model se nepodařilo přepnout."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Pro model nebyla nalezena platná konfigurace poskytovatele: {{modelId}}",
     "processing": "Zpracovávám...",
     "textUpdated": "Text úspěšně aktualizován",
-    "error": "Chyba: {{message}}"
+    "error": "Chyba: {{message}}",
+    "inlineBlockFailed": "Vložený blok AI se nepodařilo spustit.",
+    "deepLinkFailed": "Odkaz Intelligence Assistant se nepodařilo otevřít."
   },
   "commands": {
     "askAgentCurrentNote": "Úkol agenta: zeptat se na aktuální poznámku",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Úkol agenta: uspořádat aktuální poznámku",
     "sourceGroundedQuestion": "Úkol agenta: položit otázku podloženou zdroji",
     "summarizeCurrentNote": "Úkol agenta: shrnout aktuální poznámku",
-    "switchModel": "Přepnout model"
+    "switchModel": "Přepnout model",
+    "notices": {
+      "openNoteToAsk": "Než se zeptáte agenta, otevřete poznámku.",
+      "openNoteToSummarize": "Před shrnutím pomocí agenta otevřete poznámku.",
+      "openNoteToOrganize": "Před uspořádáním pomocí agenta otevřete poznámku.",
+      "openProjectNote": "Před vytvořením přehledu projektu otevřete poznámku projektu.",
+      "openNoteToResearch": "Před vytvořením výzkumného přehledu otevřete poznámku.",
+      "openNoteToFindRelated": "Před hledáním souvisejících poznámek otevřete poznámku.",
+      "openNoteToImproveLinks": "Před vylepšením odkazů, štítků a vlastností otevřete poznámku.",
+      "openNoteToDraft": "Před psaním konceptu pomocí agenta otevřete poznámku.",
+      "selectTextToImprove": "Než agenta požádáte o vylepšení textu, vyberte jej."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: zeptat se agenta na tento soubor",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Otevřít AI chat"
+  },
+  "status": {
+    "idle": "IA: nečinný · tokenů: {{tokens}}",
+    "running": "IA: běží · tokenů: {{tokens}}",
+    "ariaIdle": "Intelligence Assistant je nečinný; použito tokenů: {{tokens}}",
+    "ariaRunning": "Agent Intelligence Assistant běží; použito tokenů: {{tokens}}"
+  },
+  "capability": {
+    "title": "Nástroje a oprávnění",
+    "subtitle_one": "{{agent}} může používat {{count}} nástroj.",
+    "subtitle_other": "{{agent}} může používat nástroje (celkem {{count}}).",
+    "chatMode": "Režim chatu",
+    "permissions": "Aktuální oprávnění",
+    "reads": "Tento úkol může číst",
+    "tools": "Povolené nástroje",
+    "noTools": "Pro aktuálního agenta nejsou povoleny žádné nástroje.",
+    "noDescription": "Bez popisu",
+    "builtinGroup": "Vestavěné nástroje trezoru",
+    "tags": {
+      "applyRequired": "Vyžaduje Použít",
+      "externalWrite": "Externí zápis",
+      "localProcess": "Spouští místní proces"
+    },
+    "state": {
+      "on": "zapnuto",
+      "off": "vypnuto",
+      "disabled": "zakázáno"
+    },
+    "rows": {
+      "vaultContext": "Kontext trezoru",
+      "referencesPlusContext_one": "{{count}} explicitní odkaz plus aktivní kontext",
+      "referencesPlusContext_other": "Explicitní odkazy ({{count}}) plus aktivní kontext",
+      "activeContext": "Aktivní poznámka a snímek kontextu grafu",
+      "readTools": "Nástroje pro čtení trezoru",
+      "enabledCount": "Povoleno: {{count}}",
+      "noReadTool": "Není povolen žádný nástroj pro přímé čtení",
+      "writes": "Zápisy do trezoru",
+      "proposalOnly": "Pouze návrh; je nutné Použít",
+      "unavailable": "Nedostupné",
+      "rag": "RAG",
+      "web": "Vyhledávání na webu",
+      "on": "Zapnuto",
+      "off": "Vypnuto",
+      "disabledInSettings": "Zakázáno v nastavení",
+      "custom": "Vlastní nástroje",
+      "customEnabled_one": "Povolen {{count}} nástroj MCP, OpenAPI nebo CLI",
+      "customEnabled_other": "Povolené nástroje MCP, OpenAPI nebo CLI: {{count}}",
+      "noneEnabled": "Žádné povoleno",
+      "destructive": "Destruktivní akce v trezoru",
+      "notProvided": "Vestavěné nástroje neposkytují"
+    }
+  },
+  "markdown": {
+    "run": "Spustit"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Žádné poznámky Markdown k indexování.",
+      "starting_one": "Indexuje se {{count}} poznámka…",
+      "starting_other": "Indexují se poznámky ({{count}})…",
+      "progress": "Indexování: {{done}} z {{total}} poznámek",
+      "completed": "Indexování dokončeno: indexováno {{indexed}}, selhalo {{failed}}.",
+      "noIndex": "Zatím není nic indexováno. Spusťte \"Embed all documents\" a zaindexujte svůj trezor.",
+      "gradingError": "Hodnocení dokumentu selhalo: {{message}}",
+      "clearing": "Mazání indexu…",
+      "cleared": "Index vymazán."
+    }
   }
 }

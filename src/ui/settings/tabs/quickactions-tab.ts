@@ -161,7 +161,7 @@ function openQuickActionEditModal(
 				.addText(text => {
 					text.inputEl.setAttribute('data-testid', TestIds.settings.quickActionModalNameInput);
 					text.setValue(this.action.name)
-						.setPlaceholder('Make text longer')
+						.setPlaceholder(t('settings.quickActions.placeholders.name'))
 						.onChange(value => {
 							this.action.name = value;
 						});
@@ -202,7 +202,7 @@ function openQuickActionEditModal(
 				.addTextArea(text => {
 					text.inputEl.setAttribute('data-testid', TestIds.settings.quickActionModalPromptInput);
 					text.setValue(this.action.prompt);
-					text.setPlaceholder('Expand and elaborate on the following text...');
+					text.setPlaceholder(t('settings.quickActions.placeholders.prompt'));
 					text.inputEl.rows = 6;
 					text.onChange(value => {
 						this.action.prompt = value;

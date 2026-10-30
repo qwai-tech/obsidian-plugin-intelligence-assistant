@@ -85,6 +85,13 @@
         "allCapabilities": "Όλες οι δυνατότητες",
         "allStates": "Όλες οι καταστάσεις",
         "searchPlaceholder": "Αναζήτηση ονόματος ή ID"
+      },
+      "refreshing": "Ανανέωση…",
+      "tableHeaders": {
+        "model": "Μοντέλο",
+        "capabilities": "Δυνατότητες",
+        "status": "Κατάσταση",
+        "actions": "Ενέργειες"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Διαγραφή MCP διακομιστή «{{name}}»;"
-      }
+      },
+      "namePlaceholder": "Διακομιστής MCP Acme"
     },
     "agents": {
       "desc": "Δημιουργία και διαχείριση AI πρακτόρων με συγκεκριμένες δυνατότητες, εργαλεία και συμπεριφορές.",
@@ -394,7 +402,8 @@
             "reloadTools": "Επαναφόρτωση εργαλείων",
             "refetchTooltip": "Επαναλήψη προδιαγραφής από URL",
             "deleteTooltip": "Διαγραφή πηγής"
-          }
+          },
+          "namePlaceholder": "Πηγή HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Μεταβλητές περιβάλλοντος",
             "desc": "Μορφή: KEY=τιμή, μία ανά γραμμή"
-          }
+          },
+          "descriptionPlaceholder": "Εκτελεί μια εντολή για να…"
         },
         "presets": {
           "title": "Προσθήκη εργαλείου CLI από προεπιλογές",
@@ -898,6 +908,10 @@
           "name": "Επεξήγηση κειμένου",
           "prompt": "Εξηγήστε το ακόλουθο κείμενο με απλά λόγια:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Επέκταση κειμένου",
+        "prompt": "Επέκτεινε και ανάπτυξε το παρακάτω κείμενο…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Προστέθηκαν {{count}} αναφορά(ές)",
       "fileNotFound": "Το αρχείο δεν βρέθηκε: {{path}}",
       "unableToLoadRag": "Αδυναμία φόρτωσης στατιστικών RAG.",
-      "referenced": "Αναφέρθηκε: {{name}}"
+      "referenced": "Αναφέρθηκε: {{name}}",
+      "openViewFailed": "Δεν ήταν δυνατό το άνοιγμα της προβολής συνομιλίας."
     },
     "status": {
       "unavailable": "Μη διαθέσιμο",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Σύνολο",
       "save": "Αποθήκευση",
       "insertToNotes": "Εισαγωγή σε σημειώσεις",
-      "regenerate": "Αναδημιουργία"
+      "regenerate": "Αναδημιουργία",
+      "assistant": "Βοηθός"
     },
     "toolCall": {
       "executionProcess": "Διαδικασία εκτέλεσης",
@@ -1061,7 +1077,10 @@
       "today": "Σήμερα",
       "yesterday": "Χθες",
       "thisWeek": "Αυτή την εβδομάδα",
-      "older": "Παλαιότερα"
+      "older": "Παλαιότερα",
+      "empty": "Δεν υπάρχουν ακόμη συνομιλίες",
+      "rename": "Μετονομασία",
+      "delete": "Διαγραφή"
     },
     "header": {
       "noModels": "Δεν υπάρχουν διαθέσιμα μοντέλα"
@@ -1098,6 +1117,41 @@
         "placeholder": "Εισαγάγετε την εργασία σας εδώ...",
         "start": "Έναρξη",
         "title": "Έναρξη εργασίας πράκτορα"
+      }
+    },
+    "references": {
+      "usingContext": "Χρήση πλαισίου",
+      "remove": "Αφαίρεση {{path}}"
+    },
+    "scrollToBottom": "Κύλιση στο τέλος",
+    "preflight": {
+      "title": "Προέλεγχος εργασίας πράκτορα",
+      "agent": "Πράκτορας: {{name}}",
+      "reads": "Ανάγνωση: {{paths}}",
+      "readsDefault": "Ανάγνωση: ενεργή σημείωση και στιγμιότυπο πλαισίου",
+      "tools": "Εργαλεία: {{count}} ενεργά",
+      "writesProposal": "Εγγραφή: μόνο πρόταση· απαιτείται Εφαρμογή",
+      "writesNone": "Εγγραφή: μη διαθέσιμη",
+      "rag": "RAG: {{state}}",
+      "web": "Ιστός: {{state}}"
+    },
+    "proposals": {
+      "title": "Προτάσεις εγγραφής",
+      "preview": "Προεπισκόπηση προτεινόμενου περιεχομένου",
+      "apply": "Εφαρμογή",
+      "applyAll": "Εφαρμογή όλων",
+      "applied": "Εφαρμόστηκε",
+      "changes_one": "{{count}} αλλαγή",
+      "changes_other": "{{count}} αλλαγές",
+      "confirm": "Εφαρμογή {{summary}};",
+      "appliedNotice": "Εφαρμόστηκε: {{summary}}",
+      "operations": {
+        "create": "Δημιουργία",
+        "update": "Ενημέρωση",
+        "append": "Προσάρτηση",
+        "delete": "Διαγραφή",
+        "move": "Μετακίνηση",
+        "batch": "Δέσμη"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Ανανέωση...",
         "refreshSuccess": "Η λίστα μοντέλων ανανεώθηκε",
         "refreshFailed": "Αποτυχία ανανέωσης λίστας μοντέλων"
-      }
+      },
+      "pulling": "Λήψη…",
+      "deleting": "Διαγραφή…"
     },
     "promptEdit": {
       "title": "Επεξεργασία προτροπής συστήματος",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Επεξεργασία...",
       "error": "Σφάλμα κατά την απόδοση της επεξήγησης",
       "errorPrefix": "Σφάλμα:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Αλλαγή μοντέλου…",
+      "switched": "Το μοντέλο άλλαξε σε {{name}}",
+      "failed": "Δεν ήταν δυνατή η αλλαγή μοντέλου."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Δεν βρέθηκε έγκυρη ρύθμιση παρόχου για το μοντέλο: {{modelId}}",
     "processing": "Επεξεργασία...",
     "textUpdated": "Το κείμενο ενημερώθηκε επιτυχώς",
-    "error": "Σφάλμα: {{message}}"
+    "error": "Σφάλμα: {{message}}",
+    "inlineBlockFailed": "Δεν ήταν δυνατή η εκτέλεση του ενσωματωμένου μπλοκ AI.",
+    "deepLinkFailed": "Δεν ήταν δυνατό το άνοιγμα του συνδέσμου Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Εργασία πράκτορα: ερώτηση για την τρέχουσα σημείωση",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Εργασία πράκτορα: οργάνωση της τρέχουσας σημείωσης",
     "sourceGroundedQuestion": "Εργασία πράκτορα: ερώτηση βασισμένη σε πηγές",
     "summarizeCurrentNote": "Εργασία πράκτορα: σύνοψη της τρέχουσας σημείωσης",
-    "switchModel": "Αλλαγή μοντέλου"
+    "switchModel": "Αλλαγή μοντέλου",
+    "notices": {
+      "openNoteToAsk": "Ανοίξτε μια σημείωση πριν ρωτήσετε τον πράκτορα.",
+      "openNoteToSummarize": "Ανοίξτε μια σημείωση πριν τη συνοψίσετε με τον πράκτορα.",
+      "openNoteToOrganize": "Ανοίξτε μια σημείωση πριν την οργανώσετε με τον πράκτορα.",
+      "openProjectNote": "Ανοίξτε μια σημείωση έργου πριν δημιουργήσετε σύνοψη έργου.",
+      "openNoteToResearch": "Ανοίξτε μια σημείωση πριν δημιουργήσετε σύνοψη έρευνας.",
+      "openNoteToFindRelated": "Ανοίξτε μια σημείωση πριν αναζητήσετε σχετικές σημειώσεις.",
+      "openNoteToImproveLinks": "Ανοίξτε μια σημείωση πριν βελτιώσετε συνδέσμους, ετικέτες και ιδιότητες.",
+      "openNoteToDraft": "Ανοίξτε μια σημείωση πριν γράψετε προσχέδιο με τον πράκτορα.",
+      "selectTextToImprove": "Επιλέξτε κείμενο πριν ζητήσετε από τον πράκτορα να το βελτιώσει."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: ρωτήστε τον πράκτορα για αυτό το αρχείο",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Άνοιγμα συνομιλίας AI"
+  },
+  "status": {
+    "idle": "IA: αδρανές · {{tokens}} tokens",
+    "running": "IA: εκτελείται · {{tokens}} tokens",
+    "ariaIdle": "Το Intelligence Assistant είναι αδρανές· χρησιμοποιήθηκαν {{tokens}} tokens",
+    "ariaRunning": "Ο πράκτορας του Intelligence Assistant εκτελείται· χρησιμοποιήθηκαν {{tokens}} tokens"
+  },
+  "capability": {
+    "title": "Εργαλεία και δικαιώματα",
+    "subtitle_one": "Ο {{agent}} μπορεί να χρησιμοποιήσει {{count}} εργαλείο.",
+    "subtitle_other": "Ο {{agent}} μπορεί να χρησιμοποιήσει {{count}} εργαλεία.",
+    "chatMode": "Λειτουργία συνομιλίας",
+    "permissions": "Τρέχοντα δικαιώματα",
+    "reads": "Αυτή η εργασία μπορεί να διαβάσει",
+    "tools": "Ενεργά εργαλεία",
+    "noTools": "Δεν υπάρχουν ενεργά εργαλεία για τον τρέχοντα πράκτορα.",
+    "noDescription": "Χωρίς περιγραφή",
+    "builtinGroup": "Ενσωματωμένα εργαλεία vault",
+    "tags": {
+      "applyRequired": "Απαιτείται Εφαρμογή",
+      "externalWrite": "Εξωτερική εγγραφή",
+      "localProcess": "Εκτελεί τοπική διεργασία"
+    },
+    "state": {
+      "on": "ενεργό",
+      "off": "ανενεργό",
+      "disabled": "απενεργοποιημένο"
+    },
+    "rows": {
+      "vaultContext": "Πλαίσιο vault",
+      "referencesPlusContext_one": "{{count}} ρητή αναφορά συν το ενεργό πλαίσιο",
+      "referencesPlusContext_other": "{{count}} ρητές αναφορές συν το ενεργό πλαίσιο",
+      "activeContext": "Ενεργή σημείωση και στιγμιότυπο πλαισίου γραφήματος",
+      "readTools": "Εργαλεία ανάγνωσης vault",
+      "enabledCount": "{{count}} ενεργά",
+      "noReadTool": "Κανένα εργαλείο άμεσης ανάγνωσης δεν είναι ενεργό",
+      "writes": "Εγγραφές στο vault",
+      "proposalOnly": "Μόνο πρόταση· απαιτείται Εφαρμογή",
+      "unavailable": "Μη διαθέσιμο",
+      "rag": "RAG",
+      "web": "Αναζήτηση στον ιστό",
+      "on": "Ενεργό",
+      "off": "Ανενεργό",
+      "disabledInSettings": "Απενεργοποιημένο στις ρυθμίσεις",
+      "custom": "Προσαρμοσμένα εργαλεία",
+      "customEnabled_one": "{{count}} εργαλείο MCP, OpenAPI ή CLI ενεργό",
+      "customEnabled_other": "{{count}} εργαλεία MCP, OpenAPI ή CLI ενεργά",
+      "noneEnabled": "Κανένα ενεργό",
+      "destructive": "Καταστροφικές ενέργειες στο vault",
+      "notProvided": "Δεν παρέχεται από τα ενσωματωμένα εργαλεία"
+    }
+  },
+  "markdown": {
+    "run": "Εκτέλεση"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Δεν υπάρχουν σημειώσεις Markdown για ευρετηρίαση.",
+      "starting_one": "Ευρετηρίαση {{count}} σημείωσης…",
+      "starting_other": "Ευρετηρίαση {{count}} σημειώσεων…",
+      "progress": "Ευρετηρίαση: {{done}} από {{total}} σημειώσεις",
+      "completed": "Η ευρετηρίαση ολοκληρώθηκε: {{indexed}} ευρετηριάστηκαν, {{failed}} απέτυχαν.",
+      "noIndex": "Δεν έχει ευρετηριαστεί τίποτα ακόμη. Εκτελέστε \"Embed all documents\" για να ευρετηριάσετε το vault σας.",
+      "gradingError": "Η αξιολόγηση εγγράφου απέτυχε: {{message}}",
+      "clearing": "Εκκαθάριση ευρετηρίου…",
+      "cleared": "Το ευρετήριο εκκαθαρίστηκε."
+    }
   }
 }

@@ -85,6 +85,13 @@
         "allCapabilities": "כל היכולות",
         "allStates": "כל המצבים",
         "searchPlaceholder": "חפש לפי שם או מזהה"
+      },
+      "refreshing": "מרענן…",
+      "tableHeaders": {
+        "model": "מודל",
+        "capabilities": "יכולות",
+        "status": "מצב",
+        "actions": "פעולות"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "מחק שרת MCP \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "שרת MCP של Acme"
     },
     "agents": {
       "desc": "צור ונהל סוכני AI עם יכולות, כלים והתנהגויות ספציפיות.",
@@ -394,7 +402,8 @@
             "reloadTools": "טען כלים מחדש",
             "refetchTooltip": "אחזר מפרט מ-URL",
             "deleteTooltip": "מחק מקור"
-          }
+          },
+          "namePlaceholder": "מקור HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "משתני סביבה",
             "desc": "פורמט: מפתח=ערך, אחד לכל שורה"
-          }
+          },
+          "descriptionPlaceholder": "מריץ פקודה כדי…"
         },
         "presets": {
           "title": "הוסף כלי CLI מהגדרות מוכנות",
@@ -898,6 +908,10 @@
           "name": "הסבר טקסט",
           "prompt": "הסבר את הטקסט הבא במונחים פשוטים:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "הארך את הטקסט",
+        "prompt": "הרחב ופרט את הטקסט הבא…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "נוספו {{count}} הפניות",
       "fileNotFound": "קובץ לא נמצא: {{path}}",
       "unableToLoadRag": "לא ניתן לטעון סטטיסטיקות RAG.",
-      "referenced": "הפניה ל: {{name}}"
+      "referenced": "הפניה ל: {{name}}",
+      "openViewFailed": "לא ניתן לפתוח את תצוגת הצ'אט."
     },
     "status": {
       "unavailable": "לא זמין",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "סך הכל",
       "save": "שמור",
       "insertToNotes": "הכנס לפתקים",
-      "regenerate": "צור מחדש"
+      "regenerate": "צור מחדש",
+      "assistant": "עוזר"
     },
     "toolCall": {
       "executionProcess": "תהליך הפעלה",
@@ -1061,7 +1077,10 @@
       "today": "היום",
       "yesterday": "אתמול",
       "thisWeek": "השבוע",
-      "older": "ישנות יותר"
+      "older": "ישנות יותר",
+      "empty": "אין עדיין שיחות",
+      "rename": "שנה שם",
+      "delete": "מחק"
     },
     "header": {
       "noModels": "אין מודלים זמינים"
@@ -1098,6 +1117,41 @@
         "placeholder": "הזן את המשימה שלך כאן...",
         "start": "התחל",
         "title": "התחל משימת סוכן"
+      }
+    },
+    "references": {
+      "usingContext": "משתמש בהקשר",
+      "remove": "הסר את {{path}}"
+    },
+    "scrollToBottom": "גלול לתחתית",
+    "preflight": {
+      "title": "בדיקה מקדימה למשימת סוכן",
+      "agent": "סוכן: {{name}}",
+      "reads": "קריאה: {{paths}}",
+      "readsDefault": "קריאה: הפתק הפעיל ותמונת מצב של ההקשר",
+      "tools": "כלים: {{count}} מופעלים",
+      "writesProposal": "כתיבה: הצעה בלבד; נדרשת החלה",
+      "writesNone": "כתיבה: לא זמינה",
+      "rag": "RAG: {{state}}",
+      "web": "רשת: {{state}}"
+    },
+    "proposals": {
+      "title": "הצעות כתיבה",
+      "preview": "תצוגה מקדימה של התוכן המוצע",
+      "apply": "החל",
+      "applyAll": "החל הכול",
+      "applied": "הוחל",
+      "changes_one": "{{count}} שינוי",
+      "changes_other": "{{count}} שינויים",
+      "confirm": "להחיל {{summary}}?",
+      "appliedNotice": "הוחל: {{summary}}",
+      "operations": {
+        "create": "יצירה",
+        "update": "עדכון",
+        "append": "הוספה",
+        "delete": "מחיקה",
+        "move": "העברה",
+        "batch": "אצווה"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "מרענן...",
         "refreshSuccess": "רשימת מודלים רועננה",
         "refreshFailed": "נכשל בריענון רשימת מודלים"
-      }
+      },
+      "pulling": "מוריד…",
+      "deleting": "מוחק…"
     },
     "promptEdit": {
       "title": "ערוך הנחיית מערכת",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ מעבד...",
       "error": "שגיאה בעיבוד הסבר",
       "errorPrefix": "שגיאה:"
+    },
+    "modelSwitcher": {
+      "placeholder": "החלף מודל…",
+      "switched": "המודל הוחלף ל-{{name}}",
+      "failed": "לא ניתן להחליף מודל."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "לא נמצאה הגדרת ספק תקפה עבור מודל: {{modelId}}",
     "processing": "מעבד...",
     "textUpdated": "הטקסט עודכן בהצלחה",
-    "error": "שגיאה: {{message}}"
+    "error": "שגיאה: {{message}}",
+    "inlineBlockFailed": "לא ניתן להריץ את בלוק ה-AI המוטמע.",
+    "deepLinkFailed": "לא ניתן לפתוח את הקישור של Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "משימת סוכן: שאל על הפתק הנוכחי",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "משימת סוכן: ארגן את הפתק הנוכחי",
     "sourceGroundedQuestion": "משימת סוכן: שאל שאלה מבוססת מקורות",
     "summarizeCurrentNote": "משימת סוכן: סכם את הפתק הנוכחי",
-    "switchModel": "החלף מודל"
+    "switchModel": "החלף מודל",
+    "notices": {
+      "openNoteToAsk": "פתח פתק לפני שתשאל את הסוכן.",
+      "openNoteToSummarize": "פתח פתק לפני סיכום עם הסוכן.",
+      "openNoteToOrganize": "פתח פתק לפני ארגון עם הסוכן.",
+      "openProjectNote": "פתח פתק פרויקט לפני יצירת תקציר פרויקט.",
+      "openNoteToResearch": "פתח פתק לפני יצירת תקציר מחקר.",
+      "openNoteToFindRelated": "פתח פתק לפני חיפוש פתקים קשורים.",
+      "openNoteToImproveLinks": "פתח פתק לפני שיפור קישורים, תגיות ומאפיינים.",
+      "openNoteToDraft": "פתח פתק לפני כתיבת טיוטה עם הסוכן.",
+      "selectTextToImprove": "בחר טקסט לפני שתבקש מהסוכן לשפר אותו."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: שאל את הסוכן על קובץ זה",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "פתח צ'אט AI"
+  },
+  "status": {
+    "idle": "IA: במנוחה · {{tokens}} טוקנים",
+    "running": "IA: פועל · {{tokens}} טוקנים",
+    "ariaIdle": "Intelligence Assistant במנוחה; נוצלו {{tokens}} טוקנים",
+    "ariaRunning": "הסוכן של Intelligence Assistant פועל; נוצלו {{tokens}} טוקנים"
+  },
+  "capability": {
+    "title": "כלים והרשאות",
+    "subtitle_one": "{{agent}} יכול להשתמש ב-{{count}} כלי.",
+    "subtitle_other": "{{agent}} יכול להשתמש ב-{{count}} כלים.",
+    "chatMode": "מצב צ'אט",
+    "permissions": "הרשאות נוכחיות",
+    "reads": "משימה זו יכולה לקרוא",
+    "tools": "כלים מופעלים",
+    "noTools": "אין כלים מופעלים עבור הסוכן הנוכחי.",
+    "noDescription": "אין תיאור",
+    "builtinGroup": "כלי כספת מובנים",
+    "tags": {
+      "applyRequired": "נדרשת החלה",
+      "externalWrite": "כתיבה חיצונית",
+      "localProcess": "מריץ תהליך מקומי"
+    },
+    "state": {
+      "on": "פועל",
+      "off": "כבוי",
+      "disabled": "מושבת"
+    },
+    "rows": {
+      "vaultContext": "הקשר הכספת",
+      "referencesPlusContext_one": "{{count}} הפניה מפורשת בתוספת ההקשר הפעיל",
+      "referencesPlusContext_other": "{{count}} הפניות מפורשות בתוספת ההקשר הפעיל",
+      "activeContext": "הפתק הפעיל ותמונת מצב של הקשר הגרף",
+      "readTools": "כלי קריאה מהכספת",
+      "enabledCount": "{{count}} מופעלים",
+      "noReadTool": "אין כלי קריאה ישירה מופעל",
+      "writes": "כתיבה לכספת",
+      "proposalOnly": "הצעה בלבד; נדרשת החלה",
+      "unavailable": "לא זמין",
+      "rag": "RAG",
+      "web": "חיפוש ברשת",
+      "on": "פועל",
+      "off": "כבוי",
+      "disabledInSettings": "מושבת בהגדרות",
+      "custom": "כלים מותאמים אישית",
+      "customEnabled_one": "{{count}} כלי MCP, OpenAPI או CLI מופעל",
+      "customEnabled_other": "{{count}} כלי MCP, OpenAPI או CLI מופעלים",
+      "noneEnabled": "אף אחד לא מופעל",
+      "destructive": "פעולות הרסניות בכספת",
+      "notProvided": "לא מסופק על ידי הכלים המובנים"
+    }
+  },
+  "markdown": {
+    "run": "הרץ"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "אין פתקי Markdown לאינדוקס.",
+      "starting_one": "מאנדקס {{count}} פתק…",
+      "starting_other": "מאנדקס {{count}} פתקים…",
+      "progress": "מאנדקס: {{done}} מתוך {{total}} פתקים",
+      "completed": "האינדוקס הסתיים: {{indexed}} אונדקסו, {{failed}} נכשלו.",
+      "noIndex": "עדיין לא אונדקס דבר. הרץ את \"Embed all documents\" כדי לאנדקס את הכספת.",
+      "gradingError": "דירוג המסמכים נכשל: {{message}}",
+      "clearing": "מנקה את האינדקס…",
+      "cleared": "האינדקס נוקה."
+    }
   }
 }

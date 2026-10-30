@@ -1,5 +1,6 @@
 import type { Agent } from '@/features/agent/types/agent';
 import type { RegisteredTool, ToolRegistry } from '@/features/tools';
+import { t } from '@/i18n';
 
 export interface CapabilityReference {
 	type: 'file' | 'folder';
@@ -68,46 +69,46 @@ export function buildAgentCapabilitySummary(input: BuildAgentCapabilitySummaryIn
 	const customToolCount = input.tools.filter(tool => tool.origin.kind !== 'builtin').length;
 	const agentName = input.mode === 'agent'
 		? (input.agent?.name || 'Intelligence Assistant')
-		: 'Chat mode';
+		: t('capability.chatMode');
 
 	const permissions: CapabilityPermissionRow[] = [
 		{
-			label: 'Vault context',
+			label: t('capability.rows.vaultContext'),
 			value: references.length > 0
-				? `${references.length} explicit reference${references.length === 1 ? '' : 's'} plus active context`
-				: 'Active note and graph context snapshot',
+				? t('capability.rows.referencesPlusContext', { count: references.length })
+				: t('capability.rows.activeContext'),
 			tone: 'allow',
 		},
 		{
-			label: 'Vault read tools',
-			value: vaultReadToolCount > 0 ? `${vaultReadToolCount} enabled` : 'No direct read tool enabled',
+			label: t('capability.rows.readTools'),
+			value: vaultReadToolCount > 0 ? t('capability.rows.enabledCount', { count: vaultReadToolCount }) : t('capability.rows.noReadTool'),
 			tone: vaultReadToolCount > 0 ? 'allow' : 'muted',
 		},
 		{
-			label: 'Vault writes',
+			label: t('capability.rows.writes'),
 			value: vaultWriteProposalToolCount > 0
-				? 'Proposal only; Apply is required'
-				: 'Unavailable',
+				? t('capability.rows.proposalOnly')
+				: t('capability.rows.unavailable'),
 			tone: vaultWriteProposalToolCount > 0 ? 'warn' : 'muted',
 		},
 		{
-			label: 'RAG',
-			value: input.ragConfigured ? (input.ragActive ? 'On' : 'Off') : 'Disabled in settings',
+			label: t('capability.rows.rag'),
+			value: rowState(input.ragConfigured, input.ragActive),
 			tone: input.ragConfigured && input.ragActive ? 'allow' : 'muted',
 		},
 		{
-			label: 'Web search',
-			value: input.webSearchConfigured ? (input.webSearchActive ? 'On' : 'Off') : 'Disabled in settings',
+			label: t('capability.rows.web'),
+			value: rowState(input.webSearchConfigured, input.webSearchActive),
 			tone: input.webSearchConfigured && input.webSearchActive ? 'allow' : 'muted',
 		},
 		{
-			label: 'Custom tools',
-			value: customToolCount > 0 ? `${customToolCount} MCP/OpenAPI/CLI tool${customToolCount === 1 ? '' : 's'} enabled` : 'None enabled',
+			label: t('capability.rows.custom'),
+			value: customToolCount > 0 ? t('capability.rows.customEnabled', { count: customToolCount }) : t('capability.rows.noneEnabled'),
 			tone: customToolCount > 0 ? 'warn' : 'muted',
 		},
 		{
-			label: 'Destructive vault actions',
-			value: 'Not provided by built-in tools',
+			label: t('capability.rows.destructive'),
+			value: t('capability.rows.notProvided'),
 			tone: 'deny',
 		},
 	];
@@ -142,7 +143,7 @@ export function buildAgentCapabilitySummary(input: BuildAgentCapabilitySummaryIn
 function toCapabilityToolSummary(tool: RegisteredTool): CapabilityToolSummary {
 	return {
 		name: tool.llmName,
-		description: tool.definition.description || 'No description',
+		description: tool.definition.description || t('capability.noDescription'),
 		source: formatToolSource(tool),
 		sideEffect: sideEffectOf(tool),
 	};
@@ -163,7 +164,7 @@ function isBuiltinReadTool(tool: RegisteredTool): boolean {
 function formatToolSource(tool: RegisteredTool): string {
 	switch (tool.origin.kind) {
 		case 'builtin':
-			return 'Built-in vault tools';
+			return t('capability.builtinGroup');
 		case 'mcp':
 			return `MCP: ${tool.origin.sourceId}`;
 		case 'openapi':
@@ -197,15 +198,25 @@ function buildPreflightItems(input: {
 	webSearchActive: boolean;
 }): string[] {
 	return [
-		`Agent: ${input.agentName}`,
+		t('chat.preflight.agent', { name: input.agentName }),
 		input.references.length > 0
-			? `Reads: ${input.references.map(ref => ref.path).join(', ')}`
-			: 'Reads: active note and context snapshot',
-		`Tools: ${input.toolCount} enabled`,
+			? t('chat.preflight.reads', { paths: input.references.map(ref => ref.path).join(', ') })
+			: t('chat.preflight.readsDefault'),
+		t('chat.preflight.tools', { count: input.toolCount }),
 		input.vaultWriteProposalToolCount > 0
-			? 'Writes: proposal only; Apply required'
-			: 'Writes: unavailable',
-		`RAG: ${input.ragConfigured ? (input.ragActive ? 'on' : 'off') : 'disabled'}`,
-		`Web: ${input.webSearchConfigured ? (input.webSearchActive ? 'on' : 'off') : 'disabled'}`,
+			? t('chat.preflight.writesProposal')
+			: t('chat.preflight.writesNone'),
+		t('chat.preflight.rag', { state: lineState(input.ragConfigured, input.ragActive) }),
+		t('chat.preflight.web', { state: lineState(input.webSearchConfigured, input.webSearchActive) }),
 	];
+}
+
+function rowState(configured: boolean, active: boolean): string {
+	if (!configured) return t('capability.rows.disabledInSettings');
+	return t(active ? 'capability.rows.on' : 'capability.rows.off');
+}
+
+function lineState(configured: boolean, active: boolean): string {
+	if (!configured) return t('capability.state.disabled');
+	return t(active ? 'capability.state.on' : 'capability.state.off');
 }

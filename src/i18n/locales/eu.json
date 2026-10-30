@@ -85,6 +85,13 @@
         "allCapabilities": "Gaitasun guztiak",
         "allStates": "Egoera guztiak",
         "searchPlaceholder": "Bilatu izena edo IDa"
+      },
+      "refreshing": "Freskatzen…",
+      "tableHeaders": {
+        "model": "Modeloa",
+        "capabilities": "Gaitasunak",
+        "status": "Egoera",
+        "actions": "Ekintzak"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Ezabatu \"{{name}}\" MCP zerbitzaria?"
-      }
+      },
+      "namePlaceholder": "Acme MCP zerbitzaria"
     },
     "agents": {
       "desc": "Sortu eta kudeatu AI agenteak gaitasun, tresna eta portaera zehatzekin.",
@@ -394,7 +402,8 @@
             "reloadTools": "Birkargatu tresnak",
             "refetchTooltip": "Berreskuratu zehaztapena URL-tik",
             "deleteTooltip": "Ezabatu iturria"
-          }
+          },
+          "namePlaceholder": "HTTP iturria"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Ingurune-aldagaiak",
             "desc": "Formatua: KEY=balioa, lerro bakoitzeko bat"
-          }
+          },
+          "descriptionPlaceholder": "Komando bat exekutatzen du honetarako…"
         },
         "presets": {
           "title": "Gehitu CLI tresna aurrezarpenetatik",
@@ -898,6 +908,10 @@
           "name": "Azaldu testua",
           "prompt": "Azaldu ondorengo testua termino sinpleetan:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Luzatu testua",
+        "prompt": "Zabaldu eta garatu honako testua…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "{{count}} erreferentzia gehitu dira",
       "fileNotFound": "Fitxategia ez da aurkitu: {{path}}",
       "unableToLoadRag": "Ezin dira RAG estatistikak kargatu.",
-      "referenced": "Erreferentziatua: {{name}}"
+      "referenced": "Erreferentziatua: {{name}}",
+      "openViewFailed": "Ezin izan da txat-ikuspegia ireki."
     },
     "status": {
       "unavailable": "Ez eskuragarri",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Guztira",
       "save": "Gorde",
       "insertToNotes": "Txertatu Oharretan",
-      "regenerate": "Birsortu"
+      "regenerate": "Birsortu",
+      "assistant": "Laguntzailea"
     },
     "toolCall": {
       "executionProcess": "Exekuzio Prozesua",
@@ -1061,7 +1077,10 @@
       "today": "Gaur",
       "yesterday": "Atzo",
       "thisWeek": "Aste honetan",
-      "older": "Zaharragoak"
+      "older": "Zaharragoak",
+      "empty": "Oraindik ez dago elkarrizketarik",
+      "rename": "Aldatu izena",
+      "delete": "Ezabatu"
     },
     "header": {
       "noModels": "Ez dago modelo erabilgarririk"
@@ -1098,6 +1117,41 @@
         "placeholder": "Idatzi zure ataza hemen...",
         "start": "Hasi",
         "title": "Hasi agentearen ataza"
+      }
+    },
+    "references": {
+      "usingContext": "Testuingurua erabiltzen",
+      "remove": "Kendu {{path}}"
+    },
+    "scrollToBottom": "Korritu behera",
+    "preflight": {
+      "title": "Agentearen atazaren aurrezko egiaztapena",
+      "agent": "Agentea: {{name}}",
+      "reads": "Irakurtzen du: {{paths}}",
+      "readsDefault": "Irakurtzen du: ohar aktiboa eta testuinguruaren argazkia",
+      "tools": "Tresnak: {{count}} gaituta",
+      "writesProposal": "Idazketa: proposamena soilik; Aplikatu behar da",
+      "writesNone": "Idazketa: ez dago erabilgarri",
+      "rag": "RAG: {{state}}",
+      "web": "Weba: {{state}}"
+    },
+    "proposals": {
+      "title": "Idazketa-proposamenak",
+      "preview": "Aurrebistan ikusi proposatutako edukia",
+      "apply": "Aplikatu",
+      "applyAll": "Aplikatu guztiak",
+      "applied": "Aplikatuta",
+      "changes_one": "aldaketa {{count}}",
+      "changes_other": "{{count}} aldaketa",
+      "confirm": "{{summary}} aplikatu?",
+      "appliedNotice": "Aplikatuta: {{summary}}",
+      "operations": {
+        "create": "Sortu",
+        "update": "Eguneratu",
+        "append": "Gehitu amaieran",
+        "delete": "Ezabatu",
+        "move": "Mugitu",
+        "batch": "Sorta"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Freskatzen...",
         "refreshSuccess": "Modelo-zerrenda freskatu da",
         "refreshFailed": "Ezin izan da modelo-zerrenda freskatu"
-      }
+      },
+      "pulling": "Deskargatzen…",
+      "deleting": "Ezabatzen…"
     },
     "promptEdit": {
       "title": "Editatu sistemaren prompt-a",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Prozesatzen...",
       "error": "Errorea azalpena errendatzean",
       "errorPrefix": "Errorea:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Aldatu modeloa…",
+      "switched": "Modeloa {{name}} modelora aldatu da",
+      "failed": "Ezin izan da modeloa aldatu."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Ez da modelo honentzako hornitzaile-konfigurazio baliogarririk aurkitu: {{modelId}}",
     "processing": "Prozesatzen...",
     "textUpdated": "Testua behar bezala eguneratu da",
-    "error": "Errorea: {{message}}"
+    "error": "Errorea: {{message}}",
+    "inlineBlockFailed": "Ezin izan da lerroko AA blokea exekutatu.",
+    "deepLinkFailed": "Ezin izan da Intelligence Assistant esteka ireki."
   },
   "commands": {
     "askAgentCurrentNote": "Agentearen ataza: galdetu uneko oharrari buruz",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Agentearen ataza: antolatu uneko oharra",
     "sourceGroundedQuestion": "Agentearen ataza: egin iturrietan oinarritutako galdera",
     "summarizeCurrentNote": "Agentearen ataza: laburtu uneko oharra",
-    "switchModel": "Aldatu modeloa"
+    "switchModel": "Aldatu modeloa",
+    "notices": {
+      "openNoteToAsk": "Ireki ohar bat agenteari galdetu aurretik.",
+      "openNoteToSummarize": "Ireki ohar bat agentearekin laburbildu aurretik.",
+      "openNoteToOrganize": "Ireki ohar bat agentearekin antolatu aurretik.",
+      "openProjectNote": "Ireki proiektu-ohar bat proiektuaren laburpena sortu aurretik.",
+      "openNoteToResearch": "Ireki ohar bat ikerketa-laburpena sortu aurretik.",
+      "openNoteToFindRelated": "Ireki ohar bat erlazionatutako oharrak bilatu aurretik.",
+      "openNoteToImproveLinks": "Ireki ohar bat estekak, etiketak eta propietateak hobetu aurretik.",
+      "openNoteToDraft": "Ireki ohar bat agentearekin zirriborroa idatzi aurretik.",
+      "selectTextToImprove": "Hautatu testua agenteari hobetzeko eskatu aurretik."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: galdetu agenteari fitxategi honi buruz",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Ireki AI txata"
+  },
+  "status": {
+    "idle": "IA: inaktibo · {{tokens}} token",
+    "running": "IA: abian · {{tokens}} token",
+    "ariaIdle": "Intelligence Assistant inaktibo dago; {{tokens}} token erabilita",
+    "ariaRunning": "Intelligence Assistant agentea abian dago; {{tokens}} token erabilita"
+  },
+  "capability": {
+    "title": "Tresnak eta baimenak",
+    "subtitle_one": "{{agent}} agenteak tresna {{count}} erabil dezake.",
+    "subtitle_other": "{{agent}} agenteak {{count}} tresna erabil ditzake.",
+    "chatMode": "Txat modua",
+    "permissions": "Uneko baimenak",
+    "reads": "Ataza honek irakur dezake",
+    "tools": "Gaitutako tresnak",
+    "noTools": "Ez dago tresnarik gaituta uneko agentearentzat.",
+    "noDescription": "Deskribapenik ez",
+    "builtinGroup": "Biltegiaren tresna integratuak",
+    "tags": {
+      "applyRequired": "Aplikatu behar da",
+      "externalWrite": "Kanpoko idazketa",
+      "localProcess": "Prozesu lokal bat exekutatzen du"
+    },
+    "state": {
+      "on": "aktibo",
+      "off": "itzalita",
+      "disabled": "desgaituta"
+    },
+    "rows": {
+      "vaultContext": "Biltegiaren testuingurua",
+      "referencesPlusContext_one": "Erreferentzia esplizitu {{count}} gehi testuinguru aktiboa",
+      "referencesPlusContext_other": "{{count}} erreferentzia esplizitu gehi testuinguru aktiboa",
+      "activeContext": "Ohar aktiboa eta grafoaren testuinguruaren argazkia",
+      "readTools": "Biltegia irakurtzeko tresnak",
+      "enabledCount": "{{count}} gaituta",
+      "noReadTool": "Ez dago zuzenean irakurtzeko tresnarik gaituta",
+      "writes": "Biltegiko idazketak",
+      "proposalOnly": "Proposamena soilik; Aplikatu behar da",
+      "unavailable": "Ez dago erabilgarri",
+      "rag": "RAG",
+      "web": "Web-bilaketa",
+      "on": "Aktibo",
+      "off": "Itzalita",
+      "disabledInSettings": "Ezarpenetan desgaituta",
+      "custom": "Tresna pertsonalizatuak",
+      "customEnabled_one": "MCP, OpenAPI edo CLI tresna {{count}} gaituta",
+      "customEnabled_other": "{{count}} MCP, OpenAPI edo CLI tresna gaituta",
+      "noneEnabled": "Bat ere ez gaituta",
+      "destructive": "Biltegiko ekintza suntsitzaileak",
+      "notProvided": "Tresna integratuek ez dute eskaintzen"
+    }
+  },
+  "markdown": {
+    "run": "Exekutatu"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Ez dago indexatzeko Markdown oharrik.",
+      "starting_one": "Ohar {{count}} indexatzen…",
+      "starting_other": "{{count}} ohar indexatzen…",
+      "progress": "Indexatzen: {{done}} / {{total}} ohar",
+      "completed": "Indexazioa amaitu da: {{indexed}} indexatuta, {{failed}} huts eginda.",
+      "noIndex": "Oraindik ez dago ezer indexatuta. Exekutatu \"Embed all documents\" zure biltegia indexatzeko.",
+      "gradingError": "Dokumentuaren ebaluazioak huts egin du: {{message}}",
+      "clearing": "Indizea garbitzen…",
+      "cleared": "Indizea garbitu da."
+    }
   }
 }

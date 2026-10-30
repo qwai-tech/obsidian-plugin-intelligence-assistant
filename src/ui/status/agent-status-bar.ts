@@ -1,4 +1,5 @@
 import type { RunActivity } from '@/features/agent';
+import { t } from '@/i18n';
 
 export interface UsageTotals {
 	getGrandTotal(): Promise<{ totalTokens: number }>;
@@ -28,7 +29,7 @@ export class AgentStatusBar {
 	private paint(totalTokens: number): void {
 		const running = this.activity.isRunning;
 		const tokens = totalTokens >= 1000 ? `${(totalTokens / 1000).toFixed(1)}k` : `${totalTokens}`;
-		this.el.setText(`IA: ${running ? 'running' : 'idle'} · ${tokens} tokens`);
-		this.el.setAttr('aria-label', `Intelligence Assistant — ${running ? 'agent running' : 'idle'}, ${totalTokens} tokens used`);
+		this.el.setText(t(running ? 'status.running' : 'status.idle', { tokens }));
+		this.el.setAttr('aria-label', t(running ? 'status.ariaRunning' : 'status.ariaIdle', { tokens: totalTokens }));
 	}
 }

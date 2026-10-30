@@ -85,6 +85,13 @@
         "allCapabilities": "Alle mogelijkheden",
         "allStates": "Alle statussen",
         "searchPlaceholder": "Zoek naam of ID"
+      },
+      "refreshing": "Vernieuwen…",
+      "tableHeaders": {
+        "model": "Model",
+        "capabilities": "Mogelijkheden",
+        "status": "Status",
+        "actions": "Acties"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "MCP server \"{{name}}\" verwijderen?"
-      }
+      },
+      "namePlaceholder": "Acme MCP-server"
     },
     "agents": {
       "desc": "Maak en beheer AI-agenten met specifieke mogelijkheden, tools en gedragingen.",
@@ -394,7 +402,8 @@
             "reloadTools": "Tools herladen",
             "refetchTooltip": "Specificatie opnieuw ophalen van URL",
             "deleteTooltip": "Bron verwijderen"
-          }
+          },
+          "namePlaceholder": "HTTP-bron"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Omgevingsvariabelen",
             "desc": "Indeling: SLEUTEL=waarde, één per regel"
-          }
+          },
+          "descriptionPlaceholder": "Voert een opdracht uit om…"
         },
         "presets": {
           "title": "CLI tool toevoegen uit voorinstellingen",
@@ -898,6 +908,10 @@
           "name": "Tekst uitleggen",
           "prompt": "Leg de volgende tekst in eenvoudige bewoordingen uit:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Tekst langer maken",
+        "prompt": "Breid de volgende tekst uit en werk hem verder uit…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "{{count}} referentie(s) toegevoegd",
       "fileNotFound": "Bestand niet gevonden: {{path}}",
       "unableToLoadRag": "Kan RAG-statistieken niet laden.",
-      "referenced": "Gerefereerd: {{name}}"
+      "referenced": "Gerefereerd: {{name}}",
+      "openViewFailed": "Kan de chatweergave niet openen."
     },
     "status": {
       "unavailable": "Niet beschikbaar",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Totaal",
       "save": "Opslaan",
       "insertToNotes": "Invoegen in notities",
-      "regenerate": "Regenereren"
+      "regenerate": "Regenereren",
+      "assistant": "Assistent"
     },
     "toolCall": {
       "executionProcess": "Uitvoeringsproces",
@@ -1061,7 +1077,10 @@
       "today": "Vandaag",
       "yesterday": "Gisteren",
       "thisWeek": "Deze week",
-      "older": "Ouder"
+      "older": "Ouder",
+      "empty": "Nog geen gesprekken",
+      "rename": "Hernoemen",
+      "delete": "Verwijderen"
     },
     "header": {
       "noModels": "Geen modellen beschikbaar"
@@ -1098,6 +1117,41 @@
         "placeholder": "Voer hier uw taak in...",
         "start": "Starten",
         "title": "Agenttaak starten"
+      }
+    },
+    "references": {
+      "usingContext": "Gebruikte context",
+      "remove": "{{path}} verwijderen"
+    },
+    "scrollToBottom": "Naar beneden scrollen",
+    "preflight": {
+      "title": "Voorcontrole agenttaak",
+      "agent": "Agent: {{name}}",
+      "reads": "Leest: {{paths}}",
+      "readsDefault": "Leest: actieve notitie en contextmomentopname",
+      "tools": "Tools: {{count}} ingeschakeld",
+      "writesProposal": "Schrijft: alleen voorstel; Toepassen vereist",
+      "writesNone": "Schrijft: niet beschikbaar",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Schrijfvoorstellen",
+      "preview": "Voorgestelde inhoud bekijken",
+      "apply": "Toepassen",
+      "applyAll": "Alles toepassen",
+      "applied": "Toegepast",
+      "changes_one": "{{count}} wijziging",
+      "changes_other": "{{count}} wijzigingen",
+      "confirm": "{{summary}} toepassen?",
+      "appliedNotice": "Toegepast: {{summary}}",
+      "operations": {
+        "create": "Aanmaken",
+        "update": "Bijwerken",
+        "append": "Toevoegen",
+        "delete": "Verwijderen",
+        "move": "Verplaatsen",
+        "batch": "Batch"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Vernieuwen...",
         "refreshSuccess": "Modellijst vernieuwd",
         "refreshFailed": "Modellijst vernieuwen mislukt"
-      }
+      },
+      "pulling": "Ophalen…",
+      "deleting": "Verwijderen…"
     },
     "promptEdit": {
       "title": "Systeemprompt bewerken",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Verwerken...",
       "error": "Fout bij het weergeven van de uitleg",
       "errorPrefix": "Fout:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Model wisselen…",
+      "switched": "Model gewisseld naar {{name}}",
+      "failed": "Kan niet van model wisselen."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Geen geldige providerconfiguratie gevonden voor model: {{modelId}}",
     "processing": "Verwerken...",
     "textUpdated": "Tekst succesvol bijgewerkt",
-    "error": "Fout: {{message}}"
+    "error": "Fout: {{message}}",
+    "inlineBlockFailed": "Kan het inline AI-blok niet uitvoeren.",
+    "deepLinkFailed": "Kan de Intelligence Assistant-link niet openen."
   },
   "commands": {
     "askAgentCurrentNote": "Agenttaak: vragen over huidige notitie",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Agenttaak: huidige notitie ordenen",
     "sourceGroundedQuestion": "Agenttaak: brongebaseerde vraag stellen",
     "summarizeCurrentNote": "Agenttaak: huidige notitie samenvatten",
-    "switchModel": "Model wisselen"
+    "switchModel": "Model wisselen",
+    "notices": {
+      "openNoteToAsk": "Open een notitie voordat je de agent iets vraagt.",
+      "openNoteToSummarize": "Open een notitie voordat je met de agent samenvat.",
+      "openNoteToOrganize": "Open een notitie voordat je met de agent ordent.",
+      "openProjectNote": "Open een projectnotitie voordat je een projectbrief maakt.",
+      "openNoteToResearch": "Open een notitie voordat je een onderzoeksbrief maakt.",
+      "openNoteToFindRelated": "Open een notitie voordat je gerelateerde notities zoekt.",
+      "openNoteToImproveLinks": "Open een notitie voordat je links, tags en eigenschappen verbetert.",
+      "openNoteToDraft": "Open een notitie voordat je met de agent een concept schrijft.",
+      "selectTextToImprove": "Selecteer tekst voordat je de agent vraagt die te verbeteren."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: agent vragen over dit bestand",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "AI-chat openen"
+  },
+  "status": {
+    "idle": "IA: inactief · {{tokens}} tokens",
+    "running": "IA: actief · {{tokens}} tokens",
+    "ariaIdle": "Intelligence Assistant is inactief; {{tokens}} tokens gebruikt",
+    "ariaRunning": "Intelligence Assistant-agent is actief; {{tokens}} tokens gebruikt"
+  },
+  "capability": {
+    "title": "Tools en machtigingen",
+    "subtitle_one": "{{agent}} kan {{count}} tool gebruiken.",
+    "subtitle_other": "{{agent}} kan {{count}} tools gebruiken.",
+    "chatMode": "Chatmodus",
+    "permissions": "Huidige machtigingen",
+    "reads": "Deze taak kan lezen",
+    "tools": "Ingeschakelde tools",
+    "noTools": "Er zijn geen tools ingeschakeld voor de huidige agent.",
+    "noDescription": "Geen beschrijving",
+    "builtinGroup": "Ingebouwde kluistools",
+    "tags": {
+      "applyRequired": "Toepassen vereist",
+      "externalWrite": "Externe schrijfactie",
+      "localProcess": "Start een lokaal proces"
+    },
+    "state": {
+      "on": "aan",
+      "off": "uit",
+      "disabled": "uitgeschakeld"
+    },
+    "rows": {
+      "vaultContext": "Kluiscontext",
+      "referencesPlusContext_one": "{{count}} expliciete verwijzing plus actieve context",
+      "referencesPlusContext_other": "{{count}} expliciete verwijzingen plus actieve context",
+      "activeContext": "Actieve notitie en momentopname van grafcontext",
+      "readTools": "Leestools voor de kluis",
+      "enabledCount": "{{count}} ingeschakeld",
+      "noReadTool": "Geen directe leestool ingeschakeld",
+      "writes": "Schrijven naar de kluis",
+      "proposalOnly": "Alleen voorstel; Toepassen is vereist",
+      "unavailable": "Niet beschikbaar",
+      "rag": "RAG",
+      "web": "Webzoeken",
+      "on": "Aan",
+      "off": "Uit",
+      "disabledInSettings": "Uitgeschakeld in instellingen",
+      "custom": "Aangepaste tools",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- of CLI-tool ingeschakeld",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- of CLI-tools ingeschakeld",
+      "noneEnabled": "Geen ingeschakeld",
+      "destructive": "Destructieve kluisacties",
+      "notProvided": "Niet geleverd door ingebouwde tools"
+    }
+  },
+  "markdown": {
+    "run": "Uitvoeren"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Geen Markdown-notities om te indexeren.",
+      "starting_one": "{{count}} notitie indexeren…",
+      "starting_other": "{{count}} notities indexeren…",
+      "progress": "Indexeren: {{done}} van {{total}} notities",
+      "completed": "Indexeren voltooid: {{indexed}} geïndexeerd, {{failed}} mislukt.",
+      "noIndex": "Er is nog niets geïndexeerd. Voer \"Embed all documents\" uit om je kluis te indexeren.",
+      "gradingError": "Beoordelen van documenten mislukt: {{message}}",
+      "clearing": "Index wissen…",
+      "cleared": "Index gewist."
+    }
   }
 }

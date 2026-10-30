@@ -288,7 +288,7 @@ export class ChatView extends ItemView {
 	private renderScrollToBottom(parent: HTMLElement): void {
 		const button = parent.createDiv('ia-scroll-to-bottom ia-hidden');
 		setIcon(button, 'arrow-down');
-		button.setAttribute('aria-label', 'Scroll to bottom');
+		button.setAttribute('aria-label', t('chat.scrollToBottom'));
 		button.addEventListener('click', () => {
 			this.messageList.scrollToEnd();
 			button.addClass('ia-hidden');
@@ -326,9 +326,9 @@ export class ChatView extends ItemView {
 
 	private async confirmAndApplyProposal(proposal: WriteProposal | BatchWriteProposal): Promise<boolean> {
 		const summary = describeProposal(proposal);
-		if (!await showConfirm(this.app, `Apply ${summary}?`)) return false;
+		if (!await showConfirm(this.app, t('chat.proposals.confirm', { summary }))) return false;
 		await applyWriteProposal(this.app, proposal);
-		new Notice(`Applied ${summary}`);
+		new Notice(t('chat.proposals.appliedNotice', { summary }));
 		return true;
 	}
 

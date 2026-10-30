@@ -85,6 +85,13 @@
         "allCapabilities": "Tüm özellikler",
         "allStates": "Tüm durumlar",
         "searchPlaceholder": "İsim veya ID ile ara"
+      },
+      "refreshing": "Yenileniyor…",
+      "tableHeaders": {
+        "model": "Model",
+        "capabilities": "Özellikler",
+        "status": "Durum",
+        "actions": "İşlemler"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "\"{{name}}\" MCP sunucusu silinsin mi?"
-      }
+      },
+      "namePlaceholder": "Acme MCP sunucusu"
     },
     "agents": {
       "desc": "Belirli yeteneklere, araçlara ve davranışlara sahip AI ajanları oluşturun ve yönetin.",
@@ -394,7 +402,8 @@
             "reloadTools": "Araçları yeniden yükle",
             "refetchTooltip": "URL'den özelliği yeniden getir",
             "deleteTooltip": "Kaynağı sil"
-          }
+          },
+          "namePlaceholder": "HTTP kaynağı"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Ortam değişkenleri",
             "desc": "Biçim: ANAHTAR=değer, satır başına bir tane"
-          }
+          },
+          "descriptionPlaceholder": "Şunu yapmak için bir komut çalıştırır…"
         },
         "presets": {
           "title": "Ön ayarlardan CLI aracı ekle",
@@ -898,6 +908,10 @@
           "name": "Metni açıkla",
           "prompt": "Aşağıdaki metni basit terimlerle açıklayın:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Metni uzat",
+        "prompt": "Aşağıdaki metni genişlet ve ayrıntılandır…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "{{count}} referans eklendi",
       "fileNotFound": "Dosya bulunamadı: {{path}}",
       "unableToLoadRag": "RAG istatistikleri yüklenemiyor.",
-      "referenced": "Referans alındı: {{name}}"
+      "referenced": "Referans alındı: {{name}}",
+      "openViewFailed": "Sohbet görünümü açılamadı."
     },
     "status": {
       "unavailable": "Kullanılamaz",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Toplam",
       "save": "Kaydet",
       "insertToNotes": "Notlara Ekle",
-      "regenerate": "Yeniden oluştur"
+      "regenerate": "Yeniden oluştur",
+      "assistant": "Asistan"
     },
     "toolCall": {
       "executionProcess": "Yürütme Süreci",
@@ -1061,7 +1077,10 @@
       "today": "Bugün",
       "yesterday": "Dün",
       "thisWeek": "Bu hafta",
-      "older": "Daha eski"
+      "older": "Daha eski",
+      "empty": "Henüz konuşma yok",
+      "rename": "Yeniden adlandır",
+      "delete": "Sil"
     },
     "header": {
       "noModels": "Kullanılabilir model yok"
@@ -1098,6 +1117,41 @@
         "placeholder": "Görevinizi buraya girin...",
         "start": "Başlat",
         "title": "Ajan görevi başlat"
+      }
+    },
+    "references": {
+      "usingContext": "Kullanılan bağlam",
+      "remove": "{{path}} öğesini kaldır"
+    },
+    "scrollToBottom": "En alta kaydır",
+    "preflight": {
+      "title": "Ajan görevi ön kontrolü",
+      "agent": "Ajan: {{name}}",
+      "reads": "Okumalar: {{paths}}",
+      "readsDefault": "Okumalar: etkin not ve bağlam anlık görüntüsü",
+      "tools": "Araçlar: {{count}} etkin",
+      "writesProposal": "Yazmalar: yalnızca öneri; Uygula gerekli",
+      "writesNone": "Yazmalar: kullanılamıyor",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Yazma önerileri",
+      "preview": "Önerilen içeriği önizle",
+      "apply": "Uygula",
+      "applyAll": "Tümünü uygula",
+      "applied": "Uygulandı",
+      "changes_one": "{{count}} değişiklik",
+      "changes_other": "{{count}} değişiklik",
+      "confirm": "{{summary}} uygulansın mı?",
+      "appliedNotice": "{{summary}} uygulandı",
+      "operations": {
+        "create": "Oluştur",
+        "update": "Güncelle",
+        "append": "Sona ekle",
+        "delete": "Sil",
+        "move": "Taşı",
+        "batch": "Toplu"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Yenileniyor...",
         "refreshSuccess": "Model listesi yenilendi",
         "refreshFailed": "Model listesi yenilenemedi"
-      }
+      },
+      "pulling": "İndiriliyor…",
+      "deleting": "Siliniyor…"
     },
     "promptEdit": {
       "title": "Sistem istemini düzenle",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ İşleniyor...",
       "error": "Açıklama oluşturulurken hata",
       "errorPrefix": "Hata:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Model değiştir…",
+      "switched": "Model {{name}} olarak değiştirildi",
+      "failed": "Model değiştirilemedi."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Model için geçerli sağlayıcı yapılandırması bulunamadı: {{modelId}}",
     "processing": "İşleniyor...",
     "textUpdated": "Metin başarıyla güncellendi",
-    "error": "Hata: {{message}}"
+    "error": "Hata: {{message}}",
+    "inlineBlockFailed": "Satır içi AI bloğu çalıştırılamadı.",
+    "deepLinkFailed": "Intelligence Assistant bağlantısı açılamadı."
   },
   "commands": {
     "askAgentCurrentNote": "Ajan görevi: geçerli not hakkında sor",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Ajan görevi: geçerli notu düzenle",
     "sourceGroundedQuestion": "Ajan görevi: kaynaklara dayalı soru sor",
     "summarizeCurrentNote": "Ajan görevi: geçerli notu özetle",
-    "switchModel": "Model değiştir"
+    "switchModel": "Model değiştir",
+    "notices": {
+      "openNoteToAsk": "Ajana sormadan önce bir not açın.",
+      "openNoteToSummarize": "Ajanla özetlemeden önce bir not açın.",
+      "openNoteToOrganize": "Ajanla düzenlemeden önce bir not açın.",
+      "openProjectNote": "Proje özeti oluşturmadan önce bir proje notu açın.",
+      "openNoteToResearch": "Araştırma özeti oluşturmadan önce bir not açın.",
+      "openNoteToFindRelated": "İlgili notları bulmadan önce bir not açın.",
+      "openNoteToImproveLinks": "Bağlantıları, etiketleri ve özellikleri iyileştirmeden önce bir not açın.",
+      "openNoteToDraft": "Ajanla taslak yazmadan önce bir not açın.",
+      "selectTextToImprove": "Ajandan iyileştirmesini istemeden önce metin seçin."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: bu dosya hakkında ajana sor",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "AI sohbetini aç"
+  },
+  "status": {
+    "idle": "IA: boşta · {{tokens}} token",
+    "running": "IA: çalışıyor · {{tokens}} token",
+    "ariaIdle": "Intelligence Assistant boşta; {{tokens}} token kullanıldı",
+    "ariaRunning": "Intelligence Assistant ajanı çalışıyor; {{tokens}} token kullanıldı"
+  },
+  "capability": {
+    "title": "Araçlar ve izinler",
+    "subtitle_one": "{{agent}} {{count}} araç kullanabilir.",
+    "subtitle_other": "{{agent}} {{count}} araç kullanabilir.",
+    "chatMode": "Sohbet modu",
+    "permissions": "Geçerli izinler",
+    "reads": "Bu görevin okuyabildikleri",
+    "tools": "Etkin araçlar",
+    "noTools": "Geçerli ajan için etkin araç yok.",
+    "noDescription": "Açıklama yok",
+    "builtinGroup": "Yerleşik vault araçları",
+    "tags": {
+      "applyRequired": "Uygula gerekli",
+      "externalWrite": "Harici yazma",
+      "localProcess": "Yerel bir süreç çalıştırır"
+    },
+    "state": {
+      "on": "açık",
+      "off": "kapalı",
+      "disabled": "devre dışı"
+    },
+    "rows": {
+      "vaultContext": "Vault bağlamı",
+      "referencesPlusContext_one": "{{count}} açık referans ve etkin bağlam",
+      "referencesPlusContext_other": "{{count}} açık referans ve etkin bağlam",
+      "activeContext": "Etkin not ve grafik bağlamı anlık görüntüsü",
+      "readTools": "Vault okuma araçları",
+      "enabledCount": "{{count}} etkin",
+      "noReadTool": "Doğrudan okuma aracı etkin değil",
+      "writes": "Vault yazmaları",
+      "proposalOnly": "Yalnızca öneri; Uygula gereklidir",
+      "unavailable": "Kullanılamıyor",
+      "rag": "RAG",
+      "web": "Web araması",
+      "on": "Açık",
+      "off": "Kapalı",
+      "disabledInSettings": "Ayarlarda devre dışı",
+      "custom": "Özel araçlar",
+      "customEnabled_one": "{{count}} MCP, OpenAPI veya CLI aracı etkin",
+      "customEnabled_other": "{{count}} MCP, OpenAPI veya CLI aracı etkin",
+      "noneEnabled": "Hiçbiri etkin değil",
+      "destructive": "Yıkıcı vault işlemleri",
+      "notProvided": "Yerleşik araçlar tarafından sağlanmıyor"
+    }
+  },
+  "markdown": {
+    "run": "Çalıştır"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Dizinlenecek Markdown notu yok.",
+      "starting_one": "{{count}} not dizinleniyor…",
+      "starting_other": "{{count}} not dizinleniyor…",
+      "progress": "Dizinleniyor: {{done}} / {{total}} not",
+      "completed": "Dizinleme tamamlandı: {{indexed}} dizinlendi, {{failed}} başarısız.",
+      "noIndex": "Henüz hiçbir şey dizinlenmedi. Vault'unuzu dizinlemek için \"Embed all documents\" komutunu çalıştırın.",
+      "gradingError": "Belge derecelendirme başarısız oldu: {{message}}",
+      "clearing": "Dizin temizleniyor…",
+      "cleared": "Dizin temizlendi."
+    }
   }
 }

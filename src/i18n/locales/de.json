@@ -85,6 +85,13 @@
         "allCapabilities": "Alle Fähigkeiten",
         "allStates": "Alle Zustände",
         "searchPlaceholder": "Name oder ID suchen"
+      },
+      "refreshing": "Wird aktualisiert…",
+      "tableHeaders": {
+        "model": "Modell",
+        "capabilities": "Fähigkeiten",
+        "status": "Status",
+        "actions": "Aktionen"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "MCP-Server \"{{name}}\" löschen?"
-      }
+      },
+      "namePlaceholder": "Acme-MCP-Server"
     },
     "agents": {
       "desc": "KI-Agenten mit spezifischen Fähigkeiten, Werkzeugen und Verhaltensweisen erstellen und verwalten.",
@@ -394,7 +402,8 @@
             "reloadTools": "Werkzeuge neu laden",
             "refetchTooltip": "Spezifikation von URL neu abrufen",
             "deleteTooltip": "Quelle löschen"
-          }
+          },
+          "namePlaceholder": "HTTP-Quelle"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Umgebungsvariablen",
             "desc": "Format: SCHLÜSSEL=Wert, eine pro Zeile"
-          }
+          },
+          "descriptionPlaceholder": "Führt einen Befehl aus, um…"
         },
         "presets": {
           "title": "CLI-Werkzeug aus Vorlagen hinzufügen",
@@ -898,6 +908,10 @@
           "name": "Text erklären",
           "prompt": "Erklären Sie den folgenden Text in einfachen Worten:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Text verlängern",
+        "prompt": "Erweitere und vertiefe den folgenden Text…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "{{count}} Referenz(en) hinzugefügt",
       "fileNotFound": "Datei nicht gefunden: {{path}}",
       "unableToLoadRag": "RAG-Statistiken konnten nicht geladen werden.",
-      "referenced": "Referenziert: {{name}}"
+      "referenced": "Referenziert: {{name}}",
+      "openViewFailed": "Die Chat-Ansicht konnte nicht geöffnet werden."
     },
     "status": {
       "unavailable": "Nicht verfügbar",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Gesamt",
       "save": "Speichern",
       "insertToNotes": "In Notizen einfügen",
-      "regenerate": "Regenerieren"
+      "regenerate": "Regenerieren",
+      "assistant": "Assistent"
     },
     "toolCall": {
       "executionProcess": "Ausführungsprozess",
@@ -1061,7 +1077,10 @@
       "today": "Heute",
       "yesterday": "Gestern",
       "thisWeek": "Diese Woche",
-      "older": "Älter"
+      "older": "Älter",
+      "empty": "Noch keine Unterhaltungen",
+      "rename": "Umbenennen",
+      "delete": "Löschen"
     },
     "header": {
       "noModels": "Keine Modelle verfügbar"
@@ -1098,6 +1117,41 @@
         "placeholder": "Aufgabe hier eingeben...",
         "start": "Starten",
         "title": "Agentenaufgabe starten"
+      }
+    },
+    "references": {
+      "usingContext": "Verwendeter Kontext",
+      "remove": "{{path}} entfernen"
+    },
+    "scrollToBottom": "Nach unten scrollen",
+    "preflight": {
+      "title": "Vorabprüfung der Agentenaufgabe",
+      "agent": "Agent: {{name}}",
+      "reads": "Liest: {{paths}}",
+      "readsDefault": "Liest: aktive Notiz und Kontext-Snapshot",
+      "tools": "Werkzeuge: {{count}} aktiviert",
+      "writesProposal": "Schreibt: nur Vorschlag; Übernehmen erforderlich",
+      "writesNone": "Schreibt: nicht verfügbar",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Schreibvorschläge",
+      "preview": "Vorgeschlagenen Inhalt anzeigen",
+      "apply": "Übernehmen",
+      "applyAll": "Alle übernehmen",
+      "applied": "Übernommen",
+      "changes_one": "{{count}} Änderung",
+      "changes_other": "{{count}} Änderungen",
+      "confirm": "{{summary}} übernehmen?",
+      "appliedNotice": "{{summary}} übernommen",
+      "operations": {
+        "create": "Erstellen",
+        "update": "Aktualisieren",
+        "append": "Anhängen",
+        "delete": "Löschen",
+        "move": "Verschieben",
+        "batch": "Stapel"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Wird aktualisiert...",
         "refreshSuccess": "Modellliste aktualisiert",
         "refreshFailed": "Fehler beim Aktualisieren der Modellliste"
-      }
+      },
+      "pulling": "Wird heruntergeladen…",
+      "deleting": "Wird gelöscht…"
     },
     "promptEdit": {
       "title": "System-Prompt bearbeiten",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Wird verarbeitet...",
       "error": "Fehler beim Rendern der Erklärung",
       "errorPrefix": "Fehler:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Modell wechseln…",
+      "switched": "Modell gewechselt zu {{name}}",
+      "failed": "Modell konnte nicht gewechselt werden."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Keine gültige Anbieterkonfiguration für Modell gefunden: {{modelId}}",
     "processing": "Wird verarbeitet...",
     "textUpdated": "Text erfolgreich aktualisiert",
-    "error": "Fehler: {{message}}"
+    "error": "Fehler: {{message}}",
+    "inlineBlockFailed": "Der Inline-KI-Block konnte nicht ausgeführt werden.",
+    "deepLinkFailed": "Der Intelligence Assistant-Link konnte nicht geöffnet werden."
   },
   "commands": {
     "askAgentCurrentNote": "Agentenaufgabe: Zur aktuellen Notiz fragen",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Agentenaufgabe: Aktuelle Notiz organisieren",
     "sourceGroundedQuestion": "Agentenaufgabe: Quellengestützte Frage stellen",
     "summarizeCurrentNote": "Agentenaufgabe: Aktuelle Notiz zusammenfassen",
-    "switchModel": "Modell wechseln"
+    "switchModel": "Modell wechseln",
+    "notices": {
+      "openNoteToAsk": "Öffnen Sie eine Notiz, bevor Sie den Agenten fragen.",
+      "openNoteToSummarize": "Öffnen Sie eine Notiz, bevor Sie mit dem Agenten zusammenfassen.",
+      "openNoteToOrganize": "Öffnen Sie eine Notiz, bevor Sie mit dem Agenten organisieren.",
+      "openProjectNote": "Öffnen Sie eine Projektnotiz, bevor Sie ein Projekt-Briefing erstellen.",
+      "openNoteToResearch": "Öffnen Sie eine Notiz, bevor Sie ein Recherche-Briefing erstellen.",
+      "openNoteToFindRelated": "Öffnen Sie eine Notiz, bevor Sie verwandte Notizen suchen.",
+      "openNoteToImproveLinks": "Öffnen Sie eine Notiz, bevor Sie Links, Tags und Eigenschaften verbessern.",
+      "openNoteToDraft": "Öffnen Sie eine Notiz, bevor Sie mit dem Agenten einen Entwurf schreiben.",
+      "selectTextToImprove": "Markieren Sie Text, bevor Sie den Agenten bitten, ihn zu verbessern."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: Agent zu dieser Datei fragen",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "AI-Chat öffnen"
+  },
+  "status": {
+    "idle": "IA: inaktiv · {{tokens}} Tokens",
+    "running": "IA: läuft · {{tokens}} Tokens",
+    "ariaIdle": "Intelligence Assistant ist inaktiv; {{tokens}} Tokens verbraucht",
+    "ariaRunning": "Intelligence Assistant-Agent läuft; {{tokens}} Tokens verbraucht"
+  },
+  "capability": {
+    "title": "Werkzeuge und Berechtigungen",
+    "subtitle_one": "{{agent}} kann {{count}} Werkzeug verwenden.",
+    "subtitle_other": "{{agent}} kann {{count}} Werkzeuge verwenden.",
+    "chatMode": "Chatmodus",
+    "permissions": "Aktuelle Berechtigungen",
+    "reads": "Diese Aufgabe kann lesen",
+    "tools": "Aktivierte Werkzeuge",
+    "noTools": "Für den aktuellen Agenten sind keine Werkzeuge aktiviert.",
+    "noDescription": "Keine Beschreibung",
+    "builtinGroup": "Integrierte Vault-Werkzeuge",
+    "tags": {
+      "applyRequired": "Übernehmen erforderlich",
+      "externalWrite": "Externer Schreibzugriff",
+      "localProcess": "Startet einen lokalen Prozess"
+    },
+    "state": {
+      "on": "an",
+      "off": "aus",
+      "disabled": "deaktiviert"
+    },
+    "rows": {
+      "vaultContext": "Vault-Kontext",
+      "referencesPlusContext_one": "{{count}} explizite Referenz plus aktiver Kontext",
+      "referencesPlusContext_other": "{{count}} explizite Referenzen plus aktiver Kontext",
+      "activeContext": "Aktive Notiz und Snapshot des Graph-Kontexts",
+      "readTools": "Vault-Lesewerkzeuge",
+      "enabledCount": "{{count}} aktiviert",
+      "noReadTool": "Kein direktes Lesewerkzeug aktiviert",
+      "writes": "Schreibzugriffe im Vault",
+      "proposalOnly": "Nur Vorschlag; Übernehmen ist erforderlich",
+      "unavailable": "Nicht verfügbar",
+      "rag": "RAG",
+      "web": "Websuche",
+      "on": "An",
+      "off": "Aus",
+      "disabledInSettings": "In den Einstellungen deaktiviert",
+      "custom": "Benutzerdefinierte Werkzeuge",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- oder CLI-Werkzeug aktiviert",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- oder CLI-Werkzeuge aktiviert",
+      "noneEnabled": "Keine aktiviert",
+      "destructive": "Destruktive Vault-Aktionen",
+      "notProvided": "Nicht durch integrierte Werkzeuge verfügbar"
+    }
+  },
+  "markdown": {
+    "run": "Ausführen"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Keine Markdown-Notizen zum Indexieren.",
+      "starting_one": "{{count}} Notiz wird indexiert…",
+      "starting_other": "{{count}} Notizen werden indexiert…",
+      "progress": "Indexierung: {{done}} von {{total}} Notizen",
+      "completed": "Indexierung abgeschlossen: {{indexed}} indexiert, {{failed}} fehlgeschlagen.",
+      "noIndex": "Noch nichts indexiert. Führen Sie \"Embed all documents\" aus, um Ihren Vault zu indexieren.",
+      "gradingError": "Dokumentbewertung fehlgeschlagen: {{message}}",
+      "clearing": "Index wird geleert…",
+      "cleared": "Index geleert."
+    }
   }
 }

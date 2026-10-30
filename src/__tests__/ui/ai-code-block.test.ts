@@ -3,6 +3,9 @@ import { parseAiBlock, buildAiWidget } from '@/ui/markdown/ai-code-block';
 // The widget uses Obsidian's HTMLElement.createDiv/createEl helpers, which the
 // jest obsidian mock installs on HTMLElement.prototype.
 import 'obsidian';
+import { initI18n } from '@/i18n';
+
+beforeAll(() => initI18n('en'));
 
 describe('parseAiBlock', () => {
 	it('parses a plain prompt with no options', () => {

@@ -85,6 +85,13 @@
         "allCapabilities": "所有能力",
         "allStates": "所有状态",
         "searchPlaceholder": "搜索名称或 ID"
+      },
+      "refreshing": "正在刷新…",
+      "tableHeaders": {
+        "model": "模型",
+        "capabilities": "能力",
+        "status": "状态",
+        "actions": "操作"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "删除 MCP 服务器\"{{name}}\"？"
-      }
+      },
+      "namePlaceholder": "Acme MCP 服务器"
     },
     "agents": {
       "desc": "创建和管理具有特定功能、工具和行为的 AI 智能体。",
@@ -394,7 +402,8 @@
             "reloadTools": "重载工具",
             "refetchTooltip": "从 URL 重新获取规范",
             "deleteTooltip": "删除源"
-          }
+          },
+          "namePlaceholder": "HTTP 来源"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "环境变量",
             "desc": "格式：KEY=value，每行一个"
-          }
+          },
+          "descriptionPlaceholder": "运行一条命令以…"
         },
         "presets": {
           "title": "从预设添加 CLI 工具",
@@ -898,6 +908,10 @@
           "name": "解释文本",
           "prompt": "用简单的语言解释以下文本：\n\n"
         }
+      },
+      "placeholders": {
+        "name": "扩写文本",
+        "prompt": "扩展并详细阐述以下文本…"
       }
     },
     "usage": {
@@ -985,7 +999,8 @@
       "referencesAdded": "已添加 {{count}} 个引用",
       "fileNotFound": "文件未找到：{{path}}",
       "unableToLoadRag": "无法加载 RAG 统计信息。",
-      "referenced": "已引用: {{name}}"
+      "referenced": "已引用: {{name}}",
+      "openViewFailed": "无法打开聊天视图。"
     },
     "status": {
       "unavailable": "不可用",
@@ -1036,7 +1051,8 @@
       "tokenUsageTotal": "总计",
       "save": "保存",
       "insertToNotes": "插入笔记",
-      "regenerate": "重新生成"
+      "regenerate": "重新生成",
+      "assistant": "助手"
     },
     "toolCall": {
       "executionProcess": "执行过程",
@@ -1061,7 +1077,10 @@
       "today": "今天",
       "yesterday": "昨天",
       "thisWeek": "本周",
-      "older": "更早"
+      "older": "更早",
+      "empty": "暂无对话",
+      "rename": "重命名",
+      "delete": "删除"
     },
     "header": {
       "noModels": "暂无可用模型"
@@ -1098,6 +1117,41 @@
         "newConversationDesc": "让此智能体任务与当前对话保持独立。",
         "cancel": "取消",
         "start": "开始"
+      }
+    },
+    "references": {
+      "usingContext": "正在使用的上下文",
+      "remove": "移除 {{path}}"
+    },
+    "scrollToBottom": "滚动到底部",
+    "preflight": {
+      "title": "智能体任务预检",
+      "agent": "智能体：{{name}}",
+      "reads": "读取：{{paths}}",
+      "readsDefault": "读取：当前笔记和上下文快照",
+      "tools": "工具：已启用 {{count}} 个",
+      "writesProposal": "写入：仅生成提案；需要点击“应用”",
+      "writesNone": "写入：不可用",
+      "rag": "RAG：{{state}}",
+      "web": "网络：{{state}}"
+    },
+    "proposals": {
+      "title": "写入提案",
+      "preview": "预览提议的内容",
+      "apply": "应用",
+      "applyAll": "全部应用",
+      "applied": "已应用",
+      "changes_one": "{{count}} 项更改",
+      "changes_other": "{{count}} 项更改",
+      "confirm": "应用 {{summary}}？",
+      "appliedNotice": "已应用 {{summary}}",
+      "operations": {
+        "create": "创建",
+        "update": "更新",
+        "append": "追加",
+        "delete": "删除",
+        "move": "移动",
+        "batch": "批量"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "刷新中...",
         "refreshSuccess": "模型列表刷新成功",
         "refreshFailed": "刷新模型列表失败"
-      }
+      },
+      "pulling": "正在拉取…",
+      "deleting": "正在删除…"
     },
     "promptEdit": {
       "title": "编辑系统提示词",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ 处理中...",
       "error": "渲染解释时出错",
       "errorPrefix": "错误："
+    },
+    "modelSwitcher": {
+      "placeholder": "切换模型…",
+      "switched": "已切换到模型 {{name}}",
+      "failed": "无法切换模型。"
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "未找到模型 {{modelId}} 的有效服务商配置",
     "processing": "处理中...",
     "textUpdated": "文本更新成功",
-    "error": "错误：{{message}}"
+    "error": "错误：{{message}}",
+    "inlineBlockFailed": "无法运行内联 AI 块。",
+    "deepLinkFailed": "无法打开 Intelligence Assistant 链接。"
   },
   "commands": {
     "openChatSidebar": "在侧边栏打开 AI 聊天",
@@ -1470,7 +1533,18 @@
     "draftFromNote": "智能体任务：基于当前笔记起草",
     "diagnoseVault": "智能体任务：诊断库健康状况",
     "improveSelection": "智能体任务：优化选中文本",
-    "switchModel": "切换模型"
+    "switchModel": "切换模型",
+    "notices": {
+      "openNoteToAsk": "请先打开一篇笔记，再向智能体提问。",
+      "openNoteToSummarize": "请先打开一篇笔记，再让智能体总结。",
+      "openNoteToOrganize": "请先打开一篇笔记，再让智能体整理。",
+      "openProjectNote": "请先打开一篇项目笔记，再创建项目简报。",
+      "openNoteToResearch": "请先打开一篇笔记，再创建研究简报。",
+      "openNoteToFindRelated": "请先打开一篇笔记，再查找相关笔记。",
+      "openNoteToImproveLinks": "请先打开一篇笔记，再改进链接、标签和属性。",
+      "openNoteToDraft": "请先打开一篇笔记，再让智能体起草。",
+      "selectTextToImprove": "请先选中文字，再让智能体改进。"
+    }
   },
   "contextMenu": {
     "askAgent": "智能助手：询问智能体关于此文件",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "打开 AI 聊天"
+  },
+  "status": {
+    "idle": "IA：空闲 · {{tokens}} Token",
+    "running": "IA：运行中 · {{tokens}} Token",
+    "ariaIdle": "Intelligence Assistant 空闲；已使用 {{tokens}} 个 Token",
+    "ariaRunning": "Intelligence Assistant 智能体正在运行；已使用 {{tokens}} 个 Token"
+  },
+  "capability": {
+    "title": "工具与权限",
+    "subtitle_one": "{{agent}} 可以使用 {{count}} 个工具。",
+    "subtitle_other": "{{agent}} 可以使用 {{count}} 个工具。",
+    "chatMode": "聊天模式",
+    "permissions": "当前权限",
+    "reads": "此任务可读取",
+    "tools": "已启用的工具",
+    "noTools": "当前智能体未启用任何工具。",
+    "noDescription": "无描述",
+    "builtinGroup": "内置仓库工具",
+    "tags": {
+      "applyRequired": "需要应用",
+      "externalWrite": "外部写入",
+      "localProcess": "运行本地进程"
+    },
+    "state": {
+      "on": "开",
+      "off": "关",
+      "disabled": "已禁用"
+    },
+    "rows": {
+      "vaultContext": "仓库上下文",
+      "referencesPlusContext_one": "{{count}} 个显式引用及当前上下文",
+      "referencesPlusContext_other": "{{count}} 个显式引用及当前上下文",
+      "activeContext": "当前笔记和关系图上下文快照",
+      "readTools": "仓库读取工具",
+      "enabledCount": "已启用 {{count}} 个",
+      "noReadTool": "未启用直接读取工具",
+      "writes": "仓库写入",
+      "proposalOnly": "仅生成提案；必须点击“应用”",
+      "unavailable": "不可用",
+      "rag": "RAG",
+      "web": "网络搜索",
+      "on": "开",
+      "off": "关",
+      "disabledInSettings": "已在设置中禁用",
+      "custom": "自定义工具",
+      "customEnabled_one": "已启用 {{count}} 个 MCP、OpenAPI 或 CLI 工具",
+      "customEnabled_other": "已启用 {{count}} 个 MCP、OpenAPI 或 CLI 工具",
+      "noneEnabled": "未启用",
+      "destructive": "破坏性仓库操作",
+      "notProvided": "内置工具不提供"
+    }
+  },
+  "markdown": {
+    "run": "运行"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "没有可索引的 Markdown 笔记。",
+      "starting_one": "正在索引 {{count}} 篇笔记…",
+      "starting_other": "正在索引 {{count}} 篇笔记…",
+      "progress": "正在索引：{{done}}/{{total}} 篇笔记",
+      "completed": "索引完成：已索引 {{indexed}} 篇，失败 {{failed}} 篇。",
+      "noIndex": "尚未索引任何内容。运行“Embed all documents”以索引你的仓库。",
+      "gradingError": "文档评分失败：{{message}}",
+      "clearing": "正在清除索引…",
+      "cleared": "索引已清除。"
+    }
   }
 }

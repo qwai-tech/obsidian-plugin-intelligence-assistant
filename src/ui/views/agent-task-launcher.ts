@@ -3,6 +3,7 @@ import { agentTaskLaunchText, withUserTaskInput } from '@/features/agent';
 import { showAgentTaskLaunchModal } from '@/ui/modals/agent-task-launch-modal';
 import type { ChatWorkspace } from './chat-workspace';
 import type { ChatView } from './chat-view';
+import { t } from '@/i18n';
 
 export interface AgentTask {
 	prompt: string;
@@ -39,7 +40,7 @@ export class AgentTaskLauncher {
 	async openChat(): Promise<ChatView | null> {
 		const view = await this.workspace.openInSidebar();
 		if (!view) {
-			new Notice('Unable to open intelligence assistant chat view.');
+			new Notice(t('chat.notices.openViewFailed'));
 		}
 		return view;
 	}

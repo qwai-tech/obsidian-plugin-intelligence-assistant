@@ -4,6 +4,9 @@ import {
 } from '@/features/agent/agent-capability-summary';
 import type { Agent } from '@/features/agent/types/agent';
 import type { RegisteredTool } from '@/features/tools/types/tools';
+import { initI18n } from '@/i18n';
+
+beforeAll(() => initI18n('en'));
 
 function makeTool(name: string, overrides: Partial<RegisteredTool> = {}): RegisteredTool {
 	return {

@@ -85,6 +85,13 @@
         "allCapabilities": "Tất cả khả năng",
         "allStates": "Tất cả trạng thái",
         "searchPlaceholder": "Tìm kiếm tên hoặc ID"
+      },
+      "refreshing": "Đang làm mới…",
+      "tableHeaders": {
+        "model": "Mô hình",
+        "capabilities": "Khả năng",
+        "status": "Trạng thái",
+        "actions": "Thao tác"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Xóa máy chủ MCP \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "Máy chủ MCP Acme"
     },
     "agents": {
       "desc": "Tạo và quản lý các tác nhân AI với khả năng, công cụ và hành vi cụ thể.",
@@ -394,7 +402,8 @@
             "reloadTools": "Tải lại công cụ",
             "refetchTooltip": "Tải lại spec từ URL",
             "deleteTooltip": "Xóa nguồn"
-          }
+          },
+          "namePlaceholder": "Nguồn HTTP"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Biến môi trường",
             "desc": "Định dạng: KEY=value, mỗi dòng một cái"
-          }
+          },
+          "descriptionPlaceholder": "Chạy một lệnh để…"
         },
         "presets": {
           "title": "Thêm công cụ CLI từ cài đặt sẵn",
@@ -898,6 +908,10 @@
           "name": "Giải thích văn bản",
           "prompt": "Giải thích đoạn văn bản sau bằng ngôn ngữ đơn giản:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Viết dài hơn",
+        "prompt": "Mở rộng và triển khai chi tiết đoạn văn bản sau…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Đã thêm {{count}} tham chiếu",
       "fileNotFound": "Không tìm thấy tệp: {{path}}",
       "unableToLoadRag": "Không thể tải thống kê RAG.",
-      "referenced": "Đã tham chiếu: {{name}}"
+      "referenced": "Đã tham chiếu: {{name}}",
+      "openViewFailed": "Không thể mở khung chat."
     },
     "status": {
       "unavailable": "Không khả dụng",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Tổng cộng",
       "save": "Lưu",
       "insertToNotes": "Chèn vào ghi chú",
-      "regenerate": "Tạo lại"
+      "regenerate": "Tạo lại",
+      "assistant": "Trợ lý"
     },
     "toolCall": {
       "executionProcess": "Quá trình thực thi",
@@ -1061,7 +1077,10 @@
       "today": "Hôm nay",
       "yesterday": "Hôm qua",
       "thisWeek": "Tuần này",
-      "older": "Cũ hơn"
+      "older": "Cũ hơn",
+      "empty": "Chưa có cuộc hội thoại nào",
+      "rename": "Đổi tên",
+      "delete": "Xóa"
     },
     "header": {
       "noModels": "Không có mô hình nào"
@@ -1098,6 +1117,41 @@
         "placeholder": "Nhập tác vụ của bạn tại đây...",
         "start": "Bắt đầu",
         "title": "Bắt đầu tác vụ tác nhân"
+      }
+    },
+    "references": {
+      "usingContext": "Ngữ cảnh đang dùng",
+      "remove": "Gỡ {{path}}"
+    },
+    "scrollToBottom": "Cuộn xuống cuối",
+    "preflight": {
+      "title": "Kiểm tra trước tác vụ của tác nhân",
+      "agent": "Tác nhân: {{name}}",
+      "reads": "Đọc: {{paths}}",
+      "readsDefault": "Đọc: ghi chú đang mở và ảnh chụp ngữ cảnh",
+      "tools": "Công cụ: đã bật {{count}}",
+      "writesProposal": "Ghi: chỉ đề xuất; cần nhấn Áp dụng",
+      "writesNone": "Ghi: không khả dụng",
+      "rag": "RAG: {{state}}",
+      "web": "Web: {{state}}"
+    },
+    "proposals": {
+      "title": "Đề xuất ghi",
+      "preview": "Xem trước nội dung đề xuất",
+      "apply": "Áp dụng",
+      "applyAll": "Áp dụng tất cả",
+      "applied": "Đã áp dụng",
+      "changes_one": "{{count}} thay đổi",
+      "changes_other": "{{count}} thay đổi",
+      "confirm": "Áp dụng {{summary}}?",
+      "appliedNotice": "Đã áp dụng {{summary}}",
+      "operations": {
+        "create": "Tạo",
+        "update": "Cập nhật",
+        "append": "Nối thêm",
+        "delete": "Xóa",
+        "move": "Di chuyển",
+        "batch": "Hàng loạt"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Đang làm mới...",
         "refreshSuccess": "Đã làm mới danh sách mô hình",
         "refreshFailed": "Không thể làm mới danh sách mô hình"
-      }
+      },
+      "pulling": "Đang tải xuống…",
+      "deleting": "Đang xóa…"
     },
     "promptEdit": {
       "title": "Chỉnh sửa lời nhắc hệ thống",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Đang xử lý...",
       "error": "Lỗi hiển thị giải thích",
       "errorPrefix": "Lỗi:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Chuyển mô hình…",
+      "switched": "Đã chuyển sang mô hình {{name}}",
+      "failed": "Không thể chuyển mô hình."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Không tìm thấy cấu hình nhà cung cấp hợp lệ cho mô hình: {{modelId}}",
     "processing": "Đang xử lý...",
     "textUpdated": "Văn bản đã được cập nhật thành công",
-    "error": "Lỗi: {{message}}"
+    "error": "Lỗi: {{message}}",
+    "inlineBlockFailed": "Không thể chạy khối AI nội tuyến.",
+    "deepLinkFailed": "Không thể mở liên kết Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Tác vụ tác nhân: hỏi về ghi chú hiện tại",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Tác vụ tác nhân: sắp xếp ghi chú hiện tại",
     "sourceGroundedQuestion": "Tác vụ tác nhân: đặt câu hỏi dựa trên nguồn",
     "summarizeCurrentNote": "Tác vụ tác nhân: tóm tắt ghi chú hiện tại",
-    "switchModel": "Chuyển mô hình"
+    "switchModel": "Chuyển mô hình",
+    "notices": {
+      "openNoteToAsk": "Hãy mở một ghi chú trước khi hỏi tác nhân.",
+      "openNoteToSummarize": "Hãy mở một ghi chú trước khi tóm tắt cùng tác nhân.",
+      "openNoteToOrganize": "Hãy mở một ghi chú trước khi sắp xếp cùng tác nhân.",
+      "openProjectNote": "Hãy mở một ghi chú dự án trước khi tạo bản tóm tắt dự án.",
+      "openNoteToResearch": "Hãy mở một ghi chú trước khi tạo bản tóm tắt nghiên cứu.",
+      "openNoteToFindRelated": "Hãy mở một ghi chú trước khi tìm các ghi chú liên quan.",
+      "openNoteToImproveLinks": "Hãy mở một ghi chú trước khi cải thiện liên kết, thẻ và thuộc tính.",
+      "openNoteToDraft": "Hãy mở một ghi chú trước khi soạn nháp cùng tác nhân.",
+      "selectTextToImprove": "Hãy chọn văn bản trước khi nhờ tác nhân cải thiện."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: hỏi tác nhân về tệp này",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Mở trò chuyện AI"
+  },
+  "status": {
+    "idle": "IA: rảnh · {{tokens}} token",
+    "running": "IA: đang chạy · {{tokens}} token",
+    "ariaIdle": "Intelligence Assistant đang rảnh; đã dùng {{tokens}} token",
+    "ariaRunning": "Tác nhân Intelligence Assistant đang chạy; đã dùng {{tokens}} token"
+  },
+  "capability": {
+    "title": "Công cụ và quyền",
+    "subtitle_one": "{{agent}} có thể dùng {{count}} công cụ.",
+    "subtitle_other": "{{agent}} có thể dùng {{count}} công cụ.",
+    "chatMode": "Chế độ chat",
+    "permissions": "Quyền hiện tại",
+    "reads": "Tác vụ này có thể đọc",
+    "tools": "Công cụ đã bật",
+    "noTools": "Không có công cụ nào được bật cho tác nhân hiện tại.",
+    "noDescription": "Không có mô tả",
+    "builtinGroup": "Công cụ vault tích hợp",
+    "tags": {
+      "applyRequired": "Cần Áp dụng",
+      "externalWrite": "Ghi ra bên ngoài",
+      "localProcess": "Chạy một tiến trình cục bộ"
+    },
+    "state": {
+      "on": "bật",
+      "off": "tắt",
+      "disabled": "đã vô hiệu hóa"
+    },
+    "rows": {
+      "vaultContext": "Ngữ cảnh vault",
+      "referencesPlusContext_one": "{{count}} tham chiếu tường minh cùng ngữ cảnh đang hoạt động",
+      "referencesPlusContext_other": "{{count}} tham chiếu tường minh cùng ngữ cảnh đang hoạt động",
+      "activeContext": "Ghi chú đang mở và ảnh chụp ngữ cảnh đồ thị",
+      "readTools": "Công cụ đọc vault",
+      "enabledCount": "Đã bật {{count}}",
+      "noReadTool": "Chưa bật công cụ đọc trực tiếp nào",
+      "writes": "Ghi vào vault",
+      "proposalOnly": "Chỉ đề xuất; bắt buộc nhấn Áp dụng",
+      "unavailable": "Không khả dụng",
+      "rag": "RAG",
+      "web": "Tìm kiếm web",
+      "on": "Bật",
+      "off": "Tắt",
+      "disabledInSettings": "Đã tắt trong cài đặt",
+      "custom": "Công cụ tùy chỉnh",
+      "customEnabled_one": "Đã bật {{count}} công cụ MCP, OpenAPI hoặc CLI",
+      "customEnabled_other": "Đã bật {{count}} công cụ MCP, OpenAPI hoặc CLI",
+      "noneEnabled": "Chưa bật công cụ nào",
+      "destructive": "Thao tác phá hủy trên vault",
+      "notProvided": "Công cụ tích hợp không cung cấp"
+    }
+  },
+  "markdown": {
+    "run": "Chạy"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Không có ghi chú Markdown nào để lập chỉ mục.",
+      "starting_one": "Đang lập chỉ mục {{count}} ghi chú…",
+      "starting_other": "Đang lập chỉ mục {{count}} ghi chú…",
+      "progress": "Đang lập chỉ mục: {{done}}/{{total}} ghi chú",
+      "completed": "Đã lập chỉ mục xong: {{indexed}} thành công, {{failed}} thất bại.",
+      "noIndex": "Chưa có gì được lập chỉ mục. Hãy chạy \"Embed all documents\" để lập chỉ mục vault của bạn.",
+      "gradingError": "Chấm điểm tài liệu thất bại: {{message}}",
+      "clearing": "Đang xóa chỉ mục…",
+      "cleared": "Đã xóa chỉ mục."
+    }
   }
 }

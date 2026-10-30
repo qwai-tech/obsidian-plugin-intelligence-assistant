@@ -85,6 +85,13 @@
         "allCapabilities": "Ĉiuj kapabloj",
         "allStates": "Ĉiuj statoj",
         "searchPlaceholder": "Serĉi nomon aŭ ID"
+      },
+      "refreshing": "Aktualigante…",
+      "tableHeaders": {
+        "model": "Modelo",
+        "capabilities": "Kapabloj",
+        "status": "Stato",
+        "actions": "Agoj"
       }
     },
     "provider": {
@@ -210,7 +217,8 @@
       },
       "confirm": {
         "delete": "Forigi MCP-servilon \"{{name}}\"?"
-      }
+      },
+      "namePlaceholder": "MCP-servilo de Acme"
     },
     "agents": {
       "desc": "Kreu kaj administru AI-agentojn kun specifaj kapabloj, iloj kaj kondutoj.",
@@ -394,7 +402,8 @@
             "reloadTools": "Reŝargi ilojn",
             "refetchTooltip": "Reprenи specifon el URL",
             "deleteTooltip": "Forigi fonton"
-          }
+          },
+          "namePlaceholder": "HTTP-fonto"
         }
       },
       "cli": {
@@ -494,7 +503,8 @@
           "envVars": {
             "name": "Mediavariabloj",
             "desc": "Formato: ŜLOSILO=valoro, unu por linio"
-          }
+          },
+          "descriptionPlaceholder": "Rulas komandon por…"
         },
         "presets": {
           "title": "Aldoni CLI-ilon el antaŭagordoj",
@@ -898,6 +908,10 @@
           "name": "Klarigi tekston",
           "prompt": "Klarigi la jenan tekston per simplaj vortoj:\n\n"
         }
+      },
+      "placeholders": {
+        "name": "Plilongigi tekston",
+        "prompt": "Etendu kaj pliprofundigu la jenan tekston…"
       }
     },
     "usage": {
@@ -984,7 +998,8 @@
       "referencesAdded": "Aldonitaj {{count}} referenco(j)",
       "fileNotFound": "Dosiero ne trovita: {{path}}",
       "unableToLoadRag": "Ne eblas ŝargi RAG-statistikojn.",
-      "referenced": "Referencita: {{name}}"
+      "referenced": "Referencita: {{name}}",
+      "openViewFailed": "Ne eblis malfermi la babilan vidon."
     },
     "status": {
       "unavailable": "Nedisponebla",
@@ -1039,7 +1054,8 @@
       "tokenUsageTotal": "Entute",
       "save": "Konservi",
       "insertToNotes": "Enmeti al Notoj",
-      "regenerate": "Regeneri"
+      "regenerate": "Regeneri",
+      "assistant": "Asistanto"
     },
     "toolCall": {
       "executionProcess": "Ekzekutprocezo",
@@ -1061,7 +1077,10 @@
       "today": "Hodiaŭ",
       "yesterday": "Hieraŭ",
       "thisWeek": "Ĉi-semajne",
-      "older": "Pli malnovaj"
+      "older": "Pli malnovaj",
+      "empty": "Ankoraŭ neniuj konversacioj",
+      "rename": "Renomi",
+      "delete": "Forigi"
     },
     "header": {
       "noModels": "Neniuj modeloj disponeblaj"
@@ -1098,6 +1117,41 @@
         "placeholder": "Enigu vian taskon ĉi tie...",
         "start": "Komenci",
         "title": "Komenci agento-taskon"
+      }
+    },
+    "references": {
+      "usingContext": "Uzata kunteksto",
+      "remove": "Forigi {{path}}"
+    },
+    "scrollToBottom": "Rulumi al la fino",
+    "preflight": {
+      "title": "Antaŭkontrolo de agento-tasko",
+      "agent": "Agento: {{name}}",
+      "reads": "Legas: {{paths}}",
+      "readsDefault": "Legas: aktivan noton kaj kuntekstan momentfoton",
+      "tools": "Iloj: {{count}} ŝaltitaj",
+      "writesProposal": "Skribas: nur propono; Apliki necesas",
+      "writesNone": "Skribas: ne disponebla",
+      "rag": "RAG: {{state}}",
+      "web": "Reto: {{state}}"
+    },
+    "proposals": {
+      "title": "Skribaj proponoj",
+      "preview": "Antaŭrigardi proponitan enhavon",
+      "apply": "Apliki",
+      "applyAll": "Apliki ĉiujn",
+      "applied": "Aplikita",
+      "changes_one": "{{count}} ŝanĝo",
+      "changes_other": "{{count}} ŝanĝoj",
+      "confirm": "Ĉu apliki {{summary}}?",
+      "appliedNotice": "Aplikita: {{summary}}",
+      "operations": {
+        "create": "Krei",
+        "update": "Ĝisdatigi",
+        "append": "Aldoni al la fino",
+        "delete": "Forigi",
+        "move": "Movi",
+        "batch": "Aro"
       }
     }
   },
@@ -1412,7 +1466,9 @@
         "refreshing": "Aktualizante...",
         "refreshSuccess": "Modellisto aktualizita",
         "refreshFailed": "Malsukcesis aktualigi modelliston"
-      }
+      },
+      "pulling": "Elŝutante…",
+      "deleting": "Forigante…"
     },
     "promptEdit": {
       "title": "Redakti sisteman instigilon",
@@ -1444,6 +1500,11 @@
       "loading": "⏳ Pretigante...",
       "error": "Eraro dum renderado de klarigo",
       "errorPrefix": "Eraro:"
+    },
+    "modelSwitcher": {
+      "placeholder": "Ŝanĝi modelon…",
+      "switched": "Modelo ŝanĝita al {{name}}",
+      "failed": "Ne eblis ŝanĝi modelon."
     }
   },
   "notices": {
@@ -1452,7 +1513,9 @@
     "noValidProvider": "Neniu valida provizantagordo trovita por modelo: {{modelId}}",
     "processing": "Pretigante...",
     "textUpdated": "Teksto sukcese ĝisdatigita",
-    "error": "Eraro: {{message}}"
+    "error": "Eraro: {{message}}",
+    "inlineBlockFailed": "Ne eblis ruli la enlinian AI-blokon.",
+    "deepLinkFailed": "Ne eblis malfermi la ligilon de Intelligence Assistant."
   },
   "commands": {
     "askAgentCurrentNote": "Agento-tasko: demandi pri la nuna noto",
@@ -1470,7 +1533,18 @@
     "organizeCurrentNote": "Agento-tasko: organizi la nunan noton",
     "sourceGroundedQuestion": "Agento-tasko: demandi font-bazitan demandon",
     "summarizeCurrentNote": "Agento-tasko: resumi la nunan noton",
-    "switchModel": "Ŝanĝi modelon"
+    "switchModel": "Ŝanĝi modelon",
+    "notices": {
+      "openNoteToAsk": "Malfermu noton antaŭ ol demandi la agenton.",
+      "openNoteToSummarize": "Malfermu noton antaŭ ol resumi per la agento.",
+      "openNoteToOrganize": "Malfermu noton antaŭ ol organizi per la agento.",
+      "openProjectNote": "Malfermu projektan noton antaŭ ol krei projektan resumon.",
+      "openNoteToResearch": "Malfermu noton antaŭ ol krei esploran resumon.",
+      "openNoteToFindRelated": "Malfermu noton antaŭ ol serĉi rilatajn notojn.",
+      "openNoteToImproveLinks": "Malfermu noton antaŭ ol plibonigi ligilojn, etikedojn kaj ecojn.",
+      "openNoteToDraft": "Malfermu noton antaŭ ol malneti per la agento.",
+      "selectTextToImprove": "Elektu tekston antaŭ ol peti la agenton plibonigi ĝin."
+    }
   },
   "contextMenu": {
     "askAgent": "Intelligence assistant: demandi agenton pri ĉi tiu dosiero",
@@ -1486,5 +1560,72 @@
   },
   "ribbon": {
     "openChat": "Malfermi AI-babilejon"
+  },
+  "status": {
+    "idle": "IA: senokupa · {{tokens}} ĵetonoj",
+    "running": "IA: rulanta · {{tokens}} ĵetonoj",
+    "ariaIdle": "Intelligence Assistant estas senokupa; {{tokens}} ĵetonoj uzitaj",
+    "ariaRunning": "La agento de Intelligence Assistant rulas; {{tokens}} ĵetonoj uzitaj"
+  },
+  "capability": {
+    "title": "Iloj kaj permesoj",
+    "subtitle_one": "{{agent}} povas uzi {{count}} ilon.",
+    "subtitle_other": "{{agent}} povas uzi {{count}} ilojn.",
+    "chatMode": "Babila reĝimo",
+    "permissions": "Nunaj permesoj",
+    "reads": "Ĉi tiu tasko povas legi",
+    "tools": "Ŝaltitaj iloj",
+    "noTools": "Neniuj iloj estas ŝaltitaj por la nuna agento.",
+    "noDescription": "Neniu priskribo",
+    "builtinGroup": "Enkonstruitaj arkivaj iloj",
+    "tags": {
+      "applyRequired": "Apliki necesas",
+      "externalWrite": "Ekstera skribado",
+      "localProcess": "Rulas lokan procezon"
+    },
+    "state": {
+      "on": "ŝaltita",
+      "off": "malŝaltita",
+      "disabled": "malebligita"
+    },
+    "rows": {
+      "vaultContext": "Arkiva kunteksto",
+      "referencesPlusContext_one": "{{count}} eksplicita referenco plus aktiva kunteksto",
+      "referencesPlusContext_other": "{{count}} eksplicitaj referencoj plus aktiva kunteksto",
+      "activeContext": "Aktiva noto kaj momentfoto de grafea kunteksto",
+      "readTools": "Arkivaj legiloj",
+      "enabledCount": "{{count}} ŝaltitaj",
+      "noReadTool": "Neniu rekta legilo ŝaltita",
+      "writes": "Skribado en la arkivo",
+      "proposalOnly": "Nur propono; Apliki estas necesa",
+      "unavailable": "Ne disponebla",
+      "rag": "RAG",
+      "web": "Reta serĉo",
+      "on": "Ŝaltita",
+      "off": "Malŝaltita",
+      "disabledInSettings": "Malebligita en agordoj",
+      "custom": "Propraj iloj",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- aŭ CLI-ilo ŝaltita",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- aŭ CLI-iloj ŝaltitaj",
+      "noneEnabled": "Neniu ŝaltita",
+      "destructive": "Detruaj agoj en la arkivo",
+      "notProvided": "Ne provizita de enkonstruitaj iloj"
+    }
+  },
+  "markdown": {
+    "run": "Ruli"
+  },
+  "rag": {
+    "notices": {
+      "noFiles": "Neniuj Markdown-notoj por indeksi.",
+      "starting_one": "Indeksante {{count}} noton…",
+      "starting_other": "Indeksante {{count}} notojn…",
+      "progress": "Indeksado: {{done}} el {{total}} notoj",
+      "completed": "Indeksado finiĝis: {{indexed}} indeksitaj, {{failed}} malsukcesaj.",
+      "noIndex": "Nenio estas indeksita ankoraŭ. Rulu \"Embed all documents\" por indeksi vian arkivon.",
+      "gradingError": "Taksado de dokumento malsukcesis: {{message}}",
+      "clearing": "Forviŝante la indekson…",
+      "cleared": "Indekso forviŝita."
+    }
   }
 }
