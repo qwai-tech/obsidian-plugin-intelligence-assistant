@@ -19,7 +19,7 @@ Production bundle, largest contributors:
 
 | Part | Size |
 |------|------|
-| Locale packs (48 languages) | 541 KB |
+| Locale packs (48 languages, every plural form) | 605 KB |
 | `src/ui` | 240 KB |
 | `src/features` | 129 KB |
 | i18next | 44 KB |
@@ -35,7 +35,7 @@ Production bundle, largest contributors:
 | Tool schemas | `zod` classic 454 KB · `zod/mini` 24 KB | `zod/mini` | Same validation; the production bundle went from 1.28 MB to 697 KB. Each file imports `zod/mini` directly; re-exporting the namespace from a wrapper module defeats tree-shaking and pulls in every zod locale. |
 | MCP client | `@modelcontextprotocol/sdk` (with its zod and ajv) · in-house stdio JSON-RPC session | In-house (`adapters/process/mcp-stdio-session.ts`) | The plugin needs only `initialize`, `tools/list` (paged) and `tools/call` over stdio. The SDK brought its own full zod, ajv and 55 transitive packages. |
 | Package entry points | esbuild default `main` · `mainFields: ['module', 'main']` | `module` first | ES module builds tree-shake; CommonJS builds do not. |
-| Languages | Separate `locales/*.json` (686 KB) · all locales inlined as JSON (≈3.2 MB) · fetch from GitHub on first use · one Brotli blob for all locales (≈560 KB, decode all ≈10 ms) · one Brotli pack per locale (541 KB, decode one ≈0.5 ms) | Per-locale Brotli packs | Obsidian installs only `main.js`, `styles.css` and `manifest.json`, so separate files never reached users. Fetching adds a network dependency and fails offline. Per-locale packs keep values only, in English key order, and decode just the active language. |
+| Languages | Separate `locales/*.json` (686 KB) · all locales inlined as JSON (≈3.2 MB) · fetch from GitHub on first use · one Brotli blob for all locales (≈560 KB, decode all ≈10 ms) · one Brotli pack per locale (541 KB, decode one ≈0.5 ms) | Per-locale Brotli packs | Obsidian installs only `main.js`, `styles.css` and `manifest.json`, so separate files never reached users. Fetching adds a network dependency and fails offline. Per-locale packs keep values in English key order plus the plural forms English lacks (`_few`, `_many`, …), and decode just the active language. With every language's plural forms the packs are 605 KB and `main.js` is 1.21 MB. |
 | Markdown in chat | marked (41 KB, synchronous) · Obsidian `MarkdownRenderer` (no bundle cost, asynchronous, renders embeds and plugins' post-processors) | marked | Streaming appends plain text and renders markdown once at the end, so render speed is not the bottleneck. marked is kept because it renders a long history synchronously, without layout shifts, and does not run other plugins' post-processors on model output. Switching saves 41 KB if that trade-off changes. |
 | Translation runtime | i18next (44 KB) · a hand-written `t()` | i18next | Plural forms for 49 languages and interpolation are already correct and tested; a rewrite would save 44 KB at the risk of plural bugs in languages nobody on the project reads. |
 
