@@ -82,6 +82,18 @@ describe('settings secrets', () => {
 		expect(settings.webSearchConfig.braveApiKey).toBe('sk-live');
 	});
 
+	it('forgets a web search key once its secret is unlinked', () => {
+		const vault = memoryVault({ chosen: 'sk-live' });
+		const settings = settingsWith({});
+		settings.webSearchConfig = { ...settings.webSearchConfig, braveApiKeySecret: 'chosen' };
+		revealKeys(settings, vault);
+
+		settings.webSearchConfig.braveApiKeySecret = undefined;
+		revealKeys(settings, vault);
+
+		expect(settings.webSearchConfig.braveApiKey).toBeUndefined();
+	});
+
 	it('strips every key from the copy it returns, leaving the settings untouched', () => {
 		const settings = settingsWith({ llmConfigs: [{ provider: 'openai', apiKey: 'sk', apiKeySecret: 'chosen' }] });
 		settings.webSearchConfig = { ...settings.webSearchConfig, apiKey: 'serp', apiKeySecret: 'web' };

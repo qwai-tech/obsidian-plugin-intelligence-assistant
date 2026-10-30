@@ -56,9 +56,7 @@ export function revealKeys(settings: PluginSettings, vault: SecretVault): void {
 	const web = settings.webSearchConfig;
 	for (const { key, secret } of WEB_SEARCH_KEYS) {
 		const id = web[secret];
-		if (id) {
-			web[key] = vault.get(id) ?? undefined;
-		}
+		web[key] = id ? vault.get(id) ?? undefined : undefined;
 	}
 }
 
