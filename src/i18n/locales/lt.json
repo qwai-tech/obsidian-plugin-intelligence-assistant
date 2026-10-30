@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Peržiūrėti ir valdyti modelius iš visų sukonfigūruotų tiekėjų. Spauskite «atnaujinti modelius», kad gautumėte naujausius galimus modelius.",
-      "providerCount": "{{count}} tiekėjas sukonfigūruotas",
-      "providerCount_plural": "{{count}} tiekėjai sukonfigūruoti",
+      "providerCount_one": "{{count}} tiekėjas sukonfigūruotas",
+      "providerCount_other": "{{count}} tiekėjai sukonfigūruoti",
+      "providerCount": "{{count}} tiekėjai sukonfigūruoti",
       "refreshAll": "🔄 atnaujinti visus modelius",
       "empty": "Dar nėra sukonfigūruotų tiekėjų. Pirmiausia pridėkite tiekėjus tiekėjų skirtuke.",
       "noModels": "Nėra galimų modelių. Spauskite «atnaujinti visus modelius» arba atnaujinkite atskirus tiekėjus tiekėjų skirtuke.",
       "noMatch": "Nė vienas modelis neatitinka dabartinių filtrų. Koreguokite arba išvalykite filtrus, kad pamatytumėte rezultatus.",
-      "modelCount": "• {{count}} modelis talpykloje",
-      "modelCount_plural": "• {{count}} modeliai talpykloje",
+      "modelCount_one": "• {{count}} modelis talpykloje",
+      "modelCount_other": "• {{count}} modeliai talpykloje",
+      "modelCount": "• {{count}} modeliai talpykloje",
+      "matchCount_one": "• {{count}} atitinka pasirinktus filtrus",
+      "matchCount_other": "• {{count}} atitinka pasirinktus filtrus",
       "matchCount": "• {{count}} atitinka pasirinktus filtrus",
-      "matchCount_plural": "• {{count}} atitinka pasirinktus filtrus",
       "status": {
         "enabled": "Įjungtas",
         "disabled": "Išjungtas"
@@ -99,8 +102,9 @@
       "securityItem2": "Pridėkite šį aplanką į .gitignore, jei naudojate Git sinchronizavimą.",
       "securityItem3": "Būkite atsargūs naudodami viešas debesų sinchronizavimo paslaugas.",
       "desc": "Valdyti LLM tiekėjus ir API kredencialus. Naudokite veiksmų stulpelį, kad redaguotumėte konfigūracijos informaciją arba atnaujintumėte talpykloje esančius modelius.",
-      "count": "{{count}} tiekėjas sukonfigūruotas",
-      "count_plural": "{{count}} tiekėjai sukonfigūruoti",
+      "count_one": "{{count}} tiekėjas sukonfigūruotas",
+      "count_other": "{{count}} tiekėjai sukonfigūruoti",
+      "count": "{{count}} tiekėjai sukonfigūruoti",
       "addBtn": "+ Pridėti tiekėją",
       "empty": "Nėra sukonfigūruotų tiekėjų. Pasirinkite «Pridėti tiekėją», kad pradėtumėte.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Nėra modelių",
-        "count": "{{count}} modelis",
-        "count_plural": "{{count}} modeliai"
+        "count_one": "{{count}} modelis",
+        "count_other": "{{count}} modeliai",
+        "count": "{{count}} modeliai"
       },
       "ollama": {
         "checkingVersion": "Tikrinama versija...",
@@ -183,8 +188,9 @@
       "noArgs": "Nėra",
       "cached": "Talpykloje",
       "disabled": "Išjungtas",
-      "envVars": "{{count}} aplinkos kintamasis",
-      "envVars_plural": "{{count}} aplinkos kintamieji",
+      "envVars_one": "{{count}} aplinkos kintamasis",
+      "envVars_other": "{{count}} aplinkos kintamieji",
+      "envVars": "{{count}} aplinkos kintamieji",
       "status": {
         "disabled": "Išjungtas",
         "connected": "prijungtas",
@@ -194,10 +200,12 @@
         "autoConnect": "Automatinis prisijungimas"
       },
       "toolCount": {
-        "live": "{{count}} aktyvus įrankis",
-        "live_plural": "{{count}} aktyvūs įrankiai",
-        "cached": "{{count}} talpykloje esantis įrankis",
-        "cached_plural": "{{count}} talpykloje esantys įrankiai"
+        "live_one": "{{count}} aktyvus įrankis",
+        "live_other": "{{count}} aktyvūs įrankiai",
+        "live": "{{count}} aktyvūs įrankiai",
+        "cached_one": "{{count}} talpykloje esantis įrankis",
+        "cached_other": "{{count}} talpykloje esantys įrankiai",
+        "cached": "{{count}} talpykloje esantys įrankiai"
       },
       "actions": {
         "edit": "Redaguoti",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ prieš tikrinant ryšį įveskite komandą",
         "testSuccess": "✅ sėkmingai prisijungta! Rasta {{count}} įrankių.",
         "testFailed": "❌ Ryšys nepavyko: {{message}}",
-        "refreshedAll": "✅ atnaujinti įrankiai {{count}} serveriui",
-        "refreshedAll_plural": "✅ atnaujinti įrankiai {{count}} serveriams",
+        "refreshedAll_one": "✅ atnaujinti įrankiai {{count}} serveriui",
+        "refreshedAll_other": "✅ atnaujinti įrankiai {{count}} serveriams",
+        "refreshedAll": "✅ atnaujinti įrankiai {{count}} serveriams",
         "refreshedPartial": "✅ atnaujinta {{success}} serverių, ❌ {{failed}} nepavyko",
         "noServersConfigured": "⚠️ Nėra sukonfigūruotų MCP serverių",
         "testingAll": "🧪 Tikrinami {{count}} MCP serverio ryšiai...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Kurti ir valdyti DI agentus su specifinėmis galimybėmis, įrankiais ir elgesiu.",
-      "count": "{{count}} agentas sukonfigūruotas",
-      "count_plural": "{{count}} agentai sukonfigūruoti",
+      "count_one": "{{count}} agentas sukonfigūruotas",
+      "count_other": "{{count}} agentai sukonfigūruoti",
+      "count": "{{count}} agentai sukonfigūruoti",
       "addBtn": "+ pridėti agentą",
       "empty": "Nėra sukonfigūruotų agentų. Pasirinkite pridėti agentą, kad pradėtumėte.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} įtaisytasis",
-        "mcpServer": "{{count}} MCP serveris",
-        "mcpServer_plural": "{{count}} MCP serveriai",
-        "mcpTool": "{{count}} MCP įrankis",
-        "mcpTool_plural": "{{count}} MCP įrankiai",
+        "mcpServer_one": "{{count}} MCP serveris",
+        "mcpServer_other": "{{count}} MCP serveriai",
+        "mcpServer": "{{count}} MCP serveriai",
+        "mcpTool_one": "{{count}} MCP įrankis",
+        "mcpTool_other": "{{count}} MCP įrankiai",
+        "mcpTool": "{{count}} MCP įrankiai",
         "noTools": "Nėra įjungtų įrankių"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Veiksmai"
         },
         "unnamed": "Nepavadintas CLI įrankis",
-        "paramCount": "{{count}} parametras",
-        "paramCount_plural": "{{count}} parametrai",
+        "paramCount_one": "{{count}} parametras",
+        "paramCount_other": "{{count}} parametrai",
+        "paramCount": "{{count}} parametrai",
         "noParams": "Nėra",
         "statusEnabled": "Įjungtas",
         "statusDisabled": "Išjungtas",
@@ -895,8 +908,9 @@
         "desc": "Prefiksas (jaustukų piktograma arba tekstas), rodomas prieš visus greitus veiksmus kontekstiniame meniu",
         "placeholder": "⚡"
       },
-      "count": "{{count}} veiksmas sukonfigūruotas ({{enabled}} įjungtas)",
-      "count_plural": "{{count}} veiksmai sukonfigūruoti ({{enabled}} įjungti)",
+      "count_one": "{{count}} veiksmas sukonfigūruotas ({{enabled}} įjungtas)",
+      "count_other": "{{count}} veiksmai sukonfigūruoti ({{enabled}} įjungti)",
+      "count": "{{count}} veiksmai sukonfigūruoti ({{enabled}} įjungti)",
       "addBtn": "+ pridėti greitą veiksmą",
       "empty": "Nėra sukonfigūruotų greitų veiksmų. Pasirinkite pridėti greitą veiksmą, kad pradėtumėte.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Įjungti RAG",
       "step3": "Pasirinkti indeksuoti saugyklą",
       "close": "Uždaryti",
-      "retrieved": "📚 gauta iš {{count}} dokumento",
-      "retrieved_plural": "📚 gauta iš {{count}} dokumentų"
+      "retrieved_one": "📚 gauta iš {{count}} dokumento",
+      "retrieved_other": "📚 gauta iš {{count}} dokumentų",
+      "retrieved": "📚 gauta iš {{count}} dokumentų"
     },
     "ragTooltip": {
       "status": "RAG indekso būsena:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP prieiga",
         "noServers": "Nesukonfigūruoti MCP serveriai. Pridėkite serverius Nustatymai → MCP, kad atrakintumėte šias parinktis.",
-        "toolsCached": "{{count}} įrankis talpykloje",
-        "toolsCached_plural": "{{count}} įrankiai talpykloje",
+        "toolsCached_one": "{{count}} įrankis talpykloje",
+        "toolsCached_other": "{{count}} įrankiai talpykloje",
+        "toolsCached": "{{count}} įrankiai talpykloje",
         "noToolsCached": "Talpykloje dar nėra įrankių. Įjunkite visišką prieigą arba atnaujinkite talpyklą.",
         "showTools": "Rodyti įrankius",
         "hideTools": "Slėpti įrankius",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Išjungtas",
         "statusConnected": "● prijungtas",
         "statusDisconnected": "○ atjungtas",
-        "toolsLive": "{{count}} įrankis",
-        "toolsLive_plural": "{{count}} įrankiai",
-        "toolsCached": "{{count}} įrankis (talpykloje)",
-        "toolsCached_plural": "{{count}} įrankiai (talpykloje)",
+        "toolsLive_one": "{{count}} įrankis",
+        "toolsLive_other": "{{count}} įrankiai",
+        "toolsLive": "{{count}} įrankiai",
+        "toolsCached_one": "{{count}} įrankis (talpykloje)",
+        "toolsCached_other": "{{count}} įrankiai (talpykloje)",
+        "toolsCached": "{{count}} įrankiai (talpykloje)",
         "noTools": "0 įrankių",
         "connectBtn": "Prisijungti",
         "disconnectBtn": "Atjungti",

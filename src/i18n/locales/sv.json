@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Visa och hantera modeller från alla konfigurerade leverantörer. Klicka på \"uppdatera modeller\" för att hämta de senaste tillgängliga modellerna.",
-      "providerCount": "{{count}} leverantör konfigurerad",
-      "providerCount_plural": "{{count}} leverantörer konfigurerade",
+      "providerCount_one": "{{count}} leverantör konfigurerad",
+      "providerCount_other": "{{count}} leverantörer konfigurerade",
+      "providerCount": "{{count}} leverantörer konfigurerade",
       "refreshAll": "🔄 uppdatera alla modeller",
       "empty": "Inga leverantörer konfigurerade ännu. Lägg till leverantörer på leverantörsfliken först.",
       "noModels": "Inga modeller tillgängliga. Klicka på \"uppdatera alla modeller\" eller uppdatera enskilda leverantörer på leverantörsfliken.",
       "noMatch": "Inga modeller matchar de aktuella filtren. Justera eller rensa filter för att se resultat.",
-      "modelCount": "• {{count}} modell cachad",
-      "modelCount_plural": "• {{count}} modeller cachade",
-      "matchCount": "• {{count}} träff på valda filter",
-      "matchCount_plural": "• {{count}} träffar på valda filter",
+      "modelCount_one": "• {{count}} modell cachad",
+      "modelCount_other": "• {{count}} modeller cachade",
+      "modelCount": "• {{count}} modeller cachade",
+      "matchCount_one": "• {{count}} träff på valda filter",
+      "matchCount_other": "• {{count}} träffar på valda filter",
+      "matchCount": "• {{count}} träffar på valda filter",
       "status": {
         "enabled": "Aktiverad",
         "disabled": "Inaktiverad"
@@ -99,8 +102,9 @@
       "securityItem2": "Lägg till den här mappen i din .gitignore om du använder Git-synkronisering.",
       "securityItem3": "Var försiktig när du använder offentliga molnsynkroniseringstjänster.",
       "desc": "Hantera LLM-leverantörer och API-uppgifter. Använd åtgärdskolumnen för att redigera konfigurationsdetaljer eller uppdatera cachade modeller.",
-      "count": "{{count}} leverantör konfigurerad",
-      "count_plural": "{{count}} leverantörer konfigurerade",
+      "count_one": "{{count}} leverantör konfigurerad",
+      "count_other": "{{count}} leverantörer konfigurerade",
+      "count": "{{count}} leverantörer konfigurerade",
       "addBtn": "+ Lägg till leverantör",
       "empty": "Inga leverantörer konfigurerade. Välj \"Lägg till leverantör\" för att komma igång.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Inga modeller",
-        "count": "{{count}} modell",
-        "count_plural": "{{count}} modeller"
+        "count_one": "{{count}} modell",
+        "count_other": "{{count}} modeller",
+        "count": "{{count}} modeller"
       },
       "ollama": {
         "checkingVersion": "Kontrollerar version...",
@@ -183,8 +188,9 @@
       "noArgs": "Inga",
       "cached": "Cachad",
       "disabled": "Inaktiverad",
-      "envVars": "{{count}} miljövariabel",
-      "envVars_plural": "{{count}} miljövariabler",
+      "envVars_one": "{{count}} miljövariabel",
+      "envVars_other": "{{count}} miljövariabler",
+      "envVars": "{{count}} miljövariabler",
       "status": {
         "disabled": "Inaktiverad",
         "connected": "ansluten",
@@ -194,10 +200,12 @@
         "autoConnect": "Automatisk anslutning"
       },
       "toolCount": {
+        "live_one": "{{count}} live-verktyg",
+        "live_other": "{{count}} live-verktyg",
         "live": "{{count}} live-verktyg",
-        "live_plural": "{{count}} live-verktyg",
-        "cached": "{{count}} cachat verktyg",
-        "cached_plural": "{{count}} cachade verktyg"
+        "cached_one": "{{count}} cachat verktyg",
+        "cached_other": "{{count}} cachade verktyg",
+        "cached": "{{count}} cachade verktyg"
       },
       "actions": {
         "edit": "Redigera",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ ange ett kommando innan du testar anslutningen",
         "testSuccess": "✅ anslutningen lyckades! Hittade {{count}} verktyg.",
         "testFailed": "❌ Anslutningen misslyckades: {{message}}",
-        "refreshedAll": "✅ verktyg uppdaterades för {{count}} server",
-        "refreshedAll_plural": "✅ verktyg uppdaterades för {{count}} servrar",
+        "refreshedAll_one": "✅ verktyg uppdaterades för {{count}} server",
+        "refreshedAll_other": "✅ verktyg uppdaterades för {{count}} servrar",
+        "refreshedAll": "✅ verktyg uppdaterades för {{count}} servrar",
         "refreshedPartial": "✅ {{success}} servrar uppdaterades, ❌ {{failed}} misslyckades",
         "noServersConfigured": "⚠️ Inga MCP-servrar konfigurerade",
         "testingAll": "🧪 Testar {{count}} MCP-serveranslutningar...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Skapa och hantera AI-agenter med specifika funktioner, verktyg och beteenden.",
-      "count": "{{count}} agent konfigurerad",
-      "count_plural": "{{count}} agenter konfigurerade",
+      "count_one": "{{count}} agent konfigurerad",
+      "count_other": "{{count}} agenter konfigurerade",
+      "count": "{{count}} agenter konfigurerade",
       "addBtn": "+ lägg till agent",
       "empty": "Inga agenter konfigurerade. Välj lägg till agent för att komma igång.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} inbyggd",
-        "mcpServer": "{{count}} mcp-server",
-        "mcpServer_plural": "{{count}} mcp-servrar",
+        "mcpServer_one": "{{count}} mcp-server",
+        "mcpServer_other": "{{count}} mcp-servrar",
+        "mcpServer": "{{count}} mcp-servrar",
+        "mcpTool_one": "{{count}} mcp-verktyg",
+        "mcpTool_other": "{{count}} mcp-verktyg",
         "mcpTool": "{{count}} mcp-verktyg",
-        "mcpTool_plural": "{{count}} mcp-verktyg",
         "noTools": "Inga verktyg aktiverade"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Åtgärder"
         },
         "unnamed": "Namnlöst CLI-verktyg",
-        "paramCount": "{{count}} parameter",
-        "paramCount_plural": "{{count}} parametrar",
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parametrar",
+        "paramCount": "{{count}} parametrar",
         "noParams": "Inga",
         "statusEnabled": "Aktiverad",
         "statusDisabled": "Inaktiverad",
@@ -895,8 +908,9 @@
         "desc": "Prefix (emoji eller text) att visa före alla snabbåtgärder i snabbmenyn",
         "placeholder": "⚡"
       },
-      "count": "{{count}} åtgärd konfigurerad ({{enabled}} aktiverade)",
-      "count_plural": "{{count}} åtgärder konfigurerade ({{enabled}} aktiverade)",
+      "count_one": "{{count}} åtgärd konfigurerad ({{enabled}} aktiverade)",
+      "count_other": "{{count}} åtgärder konfigurerade ({{enabled}} aktiverade)",
+      "count": "{{count}} åtgärder konfigurerade ({{enabled}} aktiverade)",
       "addBtn": "+ lägg till snabbåtgärd",
       "empty": "Inga snabbåtgärder konfigurerade. Välj lägg till snabbåtgärd för att komma igång.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Aktivera RAG",
       "step3": "Välj index-valv",
       "close": "Stäng",
-      "retrieved": "📚 hämtat från {{count}} dokument",
-      "retrieved_plural": "📚 hämtat från {{count}} dokument"
+      "retrieved_one": "📚 hämtat från {{count}} dokument",
+      "retrieved_other": "📚 hämtat från {{count}} dokument",
+      "retrieved": "📚 hämtat från {{count}} dokument"
     },
     "ragTooltip": {
       "status": "RAG-indexstatus:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP-åtkomst",
         "noServers": "Inga MCP-servrar konfigurerade. Lägg till servrar under Inställningar → MCP för att låsa upp dessa alternativ.",
-        "toolsCached": "{{count}} verktyg cachat",
-        "toolsCached_plural": "{{count}} verktyg cachade",
+        "toolsCached_one": "{{count}} verktyg cachat",
+        "toolsCached_other": "{{count}} verktyg cachade",
+        "toolsCached": "{{count}} verktyg cachade",
         "noToolsCached": "Inga verktyg cachade ännu. Aktivera full åtkomst eller uppdatera cachen.",
         "showTools": "Visa verktyg",
         "hideTools": "Dölj verktyg",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Inaktiverad",
         "statusConnected": "● ansluten",
         "statusDisconnected": "○ frånkopplad",
+        "toolsLive_one": "{{count}} verktyg",
+        "toolsLive_other": "{{count}} verktyg",
         "toolsLive": "{{count}} verktyg",
-        "toolsLive_plural": "{{count}} verktyg",
-        "toolsCached": "{{count}} verktyg (cachat)",
-        "toolsCached_plural": "{{count}} verktyg (cachade)",
+        "toolsCached_one": "{{count}} verktyg (cachat)",
+        "toolsCached_other": "{{count}} verktyg (cachade)",
+        "toolsCached": "{{count}} verktyg (cachade)",
         "noTools": "0 verktyg",
         "connectBtn": "Anslut",
         "disconnectBtn": "Koppla från",

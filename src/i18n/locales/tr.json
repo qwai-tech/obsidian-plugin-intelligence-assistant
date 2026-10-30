@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Tüm yapılandırılmış sağlayıcıların modellerini görüntüleyin ve yönetin. En son kullanılabilir modelleri almak için \"modelleri yenile\" seçeneğine tıklayın.",
+      "providerCount_one": "{{count}} sağlayıcı yapılandırıldı",
+      "providerCount_other": "{{count}} sağlayıcı yapılandırıldı",
       "providerCount": "{{count}} sağlayıcı yapılandırıldı",
-      "providerCount_plural": "{{count}} sağlayıcı yapılandırıldı",
       "refreshAll": "🔄 tüm modelleri yenile",
       "empty": "Henüz sağlayıcı yapılandırılmadı. Önce sağlayıcı sekmesinde sağlayıcı ekleyin.",
       "noModels": "Kullanılabilir model yok. \"Tüm modelleri yenile\" seçeneğine tıklayın veya sağlayıcı sekmesindeki sağlayıcıları tek tek yenileyin.",
       "noMatch": "Mevcut filtrelerle eşleşen model yok. Sonuçları görmek için filtreleri ayarlayın veya temizleyin.",
+      "modelCount_one": "• {{count}} model önbellekte",
+      "modelCount_other": "• {{count}} model önbellekte",
       "modelCount": "• {{count}} model önbellekte",
-      "modelCount_plural": "• {{count}} model önbellekte",
+      "matchCount_one": "• {{count}} seçili filtrelerle eşleşiyor",
+      "matchCount_other": "• {{count}} seçili filtrelerle eşleşiyor",
       "matchCount": "• {{count}} seçili filtrelerle eşleşiyor",
-      "matchCount_plural": "• {{count}} seçili filtrelerle eşleşiyor",
       "status": {
         "enabled": "Etkin",
         "disabled": "Devre dışı"
@@ -99,8 +102,9 @@
       "securityItem2": "Git senkronizasyonu kullanıyorsanız bu klasörü .gitignore dosyanıza ekleyin.",
       "securityItem3": "Genel bulut senkronizasyon hizmetlerini kullanırken dikkatli olun.",
       "desc": "LLM sağlayıcılarını ve API kimlik bilgilerini yönetin. Yapılandırma ayrıntılarını düzenlemek veya önbellekteki modelleri yenilemek için eylemler sütununu kullanın.",
+      "count_one": "{{count}} sağlayıcı yapılandırıldı",
+      "count_other": "{{count}} sağlayıcı yapılandırıldı",
       "count": "{{count}} sağlayıcı yapılandırıldı",
-      "count_plural": "{{count}} sağlayıcı yapılandırıldı",
       "addBtn": "+ Sağlayıcı ekle",
       "empty": "Sağlayıcı yapılandırılmadı. Başlamak için \"Sağlayıcı ekle\" seçeneğini seçin.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Model yok",
-        "count": "{{count}} model",
-        "count_plural": "{{count}} model"
+        "count_one": "{{count}} model",
+        "count_other": "{{count}} model",
+        "count": "{{count}} model"
       },
       "ollama": {
         "checkingVersion": "Sürüm kontrol ediliyor...",
@@ -183,8 +188,9 @@
       "noArgs": "Yok",
       "cached": "Önbellekte",
       "disabled": "Devre dışı",
+      "envVars_one": "{{count}} ortam değişkeni",
+      "envVars_other": "{{count}} ortam değişkeni",
       "envVars": "{{count}} ortam değişkeni",
-      "envVars_plural": "{{count}} ortam değişkeni",
       "status": {
         "disabled": "Devre dışı",
         "connected": "bağlı",
@@ -194,10 +200,12 @@
         "autoConnect": "Otomatik bağlan"
       },
       "toolCount": {
+        "live_one": "{{count}} canlı araç",
+        "live_other": "{{count}} canlı araç",
         "live": "{{count}} canlı araç",
-        "live_plural": "{{count}} canlı araç",
-        "cached": "{{count}} önbellekteki araç",
-        "cached_plural": "{{count}} önbellekteki araç"
+        "cached_one": "{{count}} önbellekteki araç",
+        "cached_other": "{{count}} önbellekteki araç",
+        "cached": "{{count}} önbellekteki araç"
       },
       "actions": {
         "edit": "Düzenle",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ bağlantıyı test etmeden önce lütfen bir komut girin",
         "testSuccess": "✅ başarıyla bağlanıldı! {{count}} araç bulundu.",
         "testFailed": "❌ Bağlantı başarısız: {{message}}",
+        "refreshedAll_one": "✅ {{count}} sunucu için araçlar yenilendi",
+        "refreshedAll_other": "✅ {{count}} sunucu için araçlar yenilendi",
         "refreshedAll": "✅ {{count}} sunucu için araçlar yenilendi",
-        "refreshedAll_plural": "✅ {{count}} sunucu için araçlar yenilendi",
         "refreshedPartial": "✅ {{success}} sunucu yenilendi, ❌ {{failed}} başarısız",
         "noServersConfigured": "⚠️ MCP sunucusu yapılandırılmadı",
         "testingAll": "🧪 {{count}} MCP sunucu bağlantısı test ediliyor...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Belirli yeteneklere, araçlara ve davranışlara sahip AI ajanları oluşturun ve yönetin.",
+      "count_one": "{{count}} ajan yapılandırıldı",
+      "count_other": "{{count}} ajan yapılandırıldı",
       "count": "{{count}} ajan yapılandırıldı",
-      "count_plural": "{{count}} ajan yapılandırıldı",
       "addBtn": "+ ajan ekle",
       "empty": "Ajan yapılandırılmadı. Başlamak için ajan ekle seçeneğini seçin.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} yerleşik",
+        "mcpServer_one": "{{count}} mcp sunucusu",
+        "mcpServer_other": "{{count}} mcp sunucusu",
         "mcpServer": "{{count}} mcp sunucusu",
-        "mcpServer_plural": "{{count}} mcp sunucusu",
+        "mcpTool_one": "{{count}} mcp aracı",
+        "mcpTool_other": "{{count}} mcp aracı",
         "mcpTool": "{{count}} mcp aracı",
-        "mcpTool_plural": "{{count}} mcp aracı",
         "noTools": "Araç etkinleştirilmedi"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Eylemler"
         },
         "unnamed": "İsimsiz CLI Aracı",
+        "paramCount_one": "{{count}} parametre",
+        "paramCount_other": "{{count}} parametre",
         "paramCount": "{{count}} parametre",
-        "paramCount_plural": "{{count}} parametre",
         "noParams": "Yok",
         "statusEnabled": "Etkin",
         "statusDisabled": "Devre dışı",
@@ -895,8 +908,9 @@
         "desc": "Bağlam menüsündeki tüm hızlı eylemlerden önce görüntülenecek önek (emoji veya metin)",
         "placeholder": "⚡"
       },
+      "count_one": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)",
+      "count_other": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)",
       "count": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)",
-      "count_plural": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)",
       "addBtn": "+ hızlı eylem ekle",
       "empty": "Hızlı eylem yapılandırılmadı. Başlamak için hızlı eylem ekle seçeneğini seçin.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "RAG'ı etkinleştirin",
       "step3": "Vault dizinini seçin",
       "close": "Kapat",
-      "retrieved": "📚 {{count}} belgeden alındı",
-      "retrieved_plural": "📚 {{count}} belgeden alındı"
+      "retrieved_one": "📚 {{count}} belgeden alındı",
+      "retrieved_other": "📚 {{count}} belgeden alındı",
+      "retrieved": "📚 {{count}} belgeden alındı"
     },
     "ragTooltip": {
       "status": "RAG Dizin Durumu:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP erişimi",
         "noServers": "MCP sunucusu yapılandırılmadı. Bu seçeneklerin kilidini açmak için Ayarlar → MCP altında sunucu ekleyin.",
+        "toolsCached_one": "{{count}} araç önbellekte",
+        "toolsCached_other": "{{count}} araç önbellekte",
         "toolsCached": "{{count}} araç önbellekte",
-        "toolsCached_plural": "{{count}} araç önbellekte",
         "noToolsCached": "Henüz araç önbellekte değil. Tam erişimi etkinleştirin veya önbelleği yenileyin.",
         "showTools": "Araçları göster",
         "hideTools": "Araçları gizle",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Devre dışı",
         "statusConnected": "● bağlı",
         "statusDisconnected": "○ bağlantısız",
+        "toolsLive_one": "{{count}} araç",
+        "toolsLive_other": "{{count}} araç",
         "toolsLive": "{{count}} araç",
-        "toolsLive_plural": "{{count}} araç",
+        "toolsCached_one": "{{count}} araç (önbellekte)",
+        "toolsCached_other": "{{count}} araç (önbellekte)",
         "toolsCached": "{{count}} araç (önbellekte)",
-        "toolsCached_plural": "{{count}} araç (önbellekte)",
         "noTools": "0 araç",
         "connectBtn": "Bağlan",
         "disconnectBtn": "Bağlantıyı kes",

@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "عرض وإدارة النماذج من جميع المزودين المُهيَّئين. انقر على \"تحديث النماذج\" لجلب أحدث النماذج المتاحة.",
-      "providerCount": "تم تهيئة {{count}} مزود",
-      "providerCount_plural": "تم تهيئة {{count}} مزودين",
+      "providerCount_one": "تم تهيئة {{count}} مزود",
+      "providerCount_other": "تم تهيئة {{count}} مزودين",
+      "providerCount": "تم تهيئة {{count}} مزودين",
       "refreshAll": "🔄 تحديث جميع النماذج",
       "empty": "لم يتم تهيئة أي مزودين بعد. أضف المزودين في تبويب المزود أولًا.",
       "noModels": "لا توجد نماذج متاحة. انقر على \"تحديث جميع النماذج\" أو حدّث المزودين الفرديين في تبويب المزود.",
       "noMatch": "لا توجد نماذج تطابق الفلاتر الحالية. عدّل الفلاتر أو أزلها لرؤية النتائج.",
-      "modelCount": "• {{count}} نموذج مخزّن مؤقتًا",
-      "modelCount_plural": "• {{count}} نماذج مخزّنة مؤقتًا",
-      "matchCount": "• {{count}} تطابق مع الفلاتر المحددة",
-      "matchCount_plural": "• {{count}} تطابقات مع الفلاتر المحددة",
+      "modelCount_one": "• {{count}} نموذج مخزّن مؤقتًا",
+      "modelCount_other": "• {{count}} نماذج مخزّنة مؤقتًا",
+      "modelCount": "• {{count}} نماذج مخزّنة مؤقتًا",
+      "matchCount_one": "• {{count}} تطابق مع الفلاتر المحددة",
+      "matchCount_other": "• {{count}} تطابقات مع الفلاتر المحددة",
+      "matchCount": "• {{count}} تطابقات مع الفلاتر المحددة",
       "status": {
         "enabled": "مفعّل",
         "disabled": "معطّل"
@@ -99,8 +102,9 @@
       "securityItem2": "أضف هذا المجلد إلى ملف .gitignore إذا كنت تستخدم مزامنة Git.",
       "securityItem3": "توخَّ الحذر عند استخدام خدمات المزامنة السحابية العامة.",
       "desc": "إدارة مزودي LLM وبيانات اعتماد API. استخدم عمود الإجراءات لتعديل تفاصيل التهيئة أو تحديث النماذج المخزّنة مؤقتًا.",
-      "count": "تم تهيئة {{count}} مزود",
-      "count_plural": "تم تهيئة {{count}} مزودين",
+      "count_one": "تم تهيئة {{count}} مزود",
+      "count_other": "تم تهيئة {{count}} مزودين",
+      "count": "تم تهيئة {{count}} مزودين",
       "addBtn": "+ إضافة مزود",
       "empty": "لم يتم تهيئة أي مزودين. اختر \"إضافة مزود\" للبدء.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "لا توجد نماذج",
-        "count": "{{count}} نموذج",
-        "count_plural": "{{count}} نماذج"
+        "count_one": "{{count}} نموذج",
+        "count_other": "{{count}} نماذج",
+        "count": "{{count}} نماذج"
       },
       "ollama": {
         "checkingVersion": "جارٍ فحص الإصدار...",
@@ -183,8 +188,9 @@
       "noArgs": "لا شيء",
       "cached": "مخزّن مؤقتًا",
       "disabled": "معطّل",
-      "envVars": "{{count}} متغير بيئة",
-      "envVars_plural": "{{count}} متغيرات بيئة",
+      "envVars_one": "{{count}} متغير بيئة",
+      "envVars_other": "{{count}} متغيرات بيئة",
+      "envVars": "{{count}} متغيرات بيئة",
       "status": {
         "disabled": "معطّل",
         "connected": "متصل",
@@ -194,10 +200,12 @@
         "autoConnect": "اتصال تلقائي"
       },
       "toolCount": {
-        "live": "{{count}} أداة مباشرة",
-        "live_plural": "{{count}} أدوات مباشرة",
-        "cached": "{{count}} أداة مخزّنة مؤقتًا",
-        "cached_plural": "{{count}} أدوات مخزّنة مؤقتًا"
+        "live_one": "{{count}} أداة مباشرة",
+        "live_other": "{{count}} أدوات مباشرة",
+        "live": "{{count}} أدوات مباشرة",
+        "cached_one": "{{count}} أداة مخزّنة مؤقتًا",
+        "cached_other": "{{count}} أدوات مخزّنة مؤقتًا",
+        "cached": "{{count}} أدوات مخزّنة مؤقتًا"
       },
       "actions": {
         "edit": "تعديل",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ يرجى إدخال أمر قبل اختبار الاتصال",
         "testSuccess": "✅ تم الاتصال بنجاح! تم العثور على {{count}} أداة.",
         "testFailed": "❌ فشل الاتصال: {{message}}",
-        "refreshedAll": "✅ تم تحديث الأدوات لـ {{count}} خادم",
-        "refreshedAll_plural": "✅ تم تحديث الأدوات لـ {{count}} خوادم",
+        "refreshedAll_one": "✅ تم تحديث الأدوات لـ {{count}} خادم",
+        "refreshedAll_other": "✅ تم تحديث الأدوات لـ {{count}} خوادم",
+        "refreshedAll": "✅ تم تحديث الأدوات لـ {{count}} خوادم",
         "refreshedPartial": "✅ تم تحديث {{success}} خوادم، ❌ فشل {{failed}}",
         "noServersConfigured": "⚠️ لم يتم تهيئة أي خوادم MCP",
         "testingAll": "🧪 جارٍ اختبار {{count}} اتصالات خادم MCP...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "إنشاء وإدارة وكلاء الذكاء الاصطناعي بقدرات وأدوات وسلوكيات محددة.",
-      "count": "تم تهيئة {{count}} وكيل",
-      "count_plural": "تم تهيئة {{count}} وكلاء",
+      "count_one": "تم تهيئة {{count}} وكيل",
+      "count_other": "تم تهيئة {{count}} وكلاء",
+      "count": "تم تهيئة {{count}} وكلاء",
       "addBtn": "+ إضافة وكيل",
       "empty": "لم يتم تهيئة أي وكلاء. اختر إضافة وكيل للبدء.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} مدمج",
-        "mcpServer": "{{count}} خادم mcp",
-        "mcpServer_plural": "{{count}} خوادم mcp",
-        "mcpTool": "{{count}} أداة mcp",
-        "mcpTool_plural": "{{count}} أدوات mcp",
+        "mcpServer_one": "{{count}} خادم mcp",
+        "mcpServer_other": "{{count}} خوادم mcp",
+        "mcpServer": "{{count}} خوادم mcp",
+        "mcpTool_one": "{{count}} أداة mcp",
+        "mcpTool_other": "{{count}} أدوات mcp",
+        "mcpTool": "{{count}} أدوات mcp",
         "noTools": "لا توجد أدوات مفعّلة"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "الإجراءات"
         },
         "unnamed": "أداة CLI بلا اسم",
-        "paramCount": "{{count}} معامل",
-        "paramCount_plural": "{{count}} معاملات",
+        "paramCount_one": "{{count}} معامل",
+        "paramCount_other": "{{count}} معاملات",
+        "paramCount": "{{count}} معاملات",
         "noParams": "لا شيء",
         "statusEnabled": "مفعّل",
         "statusDisabled": "معطّل",
@@ -895,8 +908,9 @@
         "desc": "بادئة (رمز تعبيري أو نص) لعرضها قبل جميع الإجراءات السريعة في قائمة السياق",
         "placeholder": "⚡"
       },
-      "count": "تم تهيئة {{count}} إجراء ({{enabled}} مفعّل)",
-      "count_plural": "تم تهيئة {{count}} إجراءات ({{enabled}} مفعّلة)",
+      "count_one": "تم تهيئة {{count}} إجراء ({{enabled}} مفعّل)",
+      "count_other": "تم تهيئة {{count}} إجراءات ({{enabled}} مفعّلة)",
+      "count": "تم تهيئة {{count}} إجراءات ({{enabled}} مفعّلة)",
       "addBtn": "+ إضافة إجراء سريع",
       "empty": "لم يتم تهيئة أي إجراءات سريعة. اختر إضافة إجراء سريع للبدء.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "فعّل RAG",
       "step3": "اختر فهرسة المستودع",
       "close": "إغلاق",
-      "retrieved": "📚 تم الاسترداد من {{count}} وثيقة",
-      "retrieved_plural": "📚 تم الاسترداد من {{count}} وثائق"
+      "retrieved_one": "📚 تم الاسترداد من {{count}} وثيقة",
+      "retrieved_other": "📚 تم الاسترداد من {{count}} وثائق",
+      "retrieved": "📚 تم الاسترداد من {{count}} وثائق"
     },
     "ragTooltip": {
       "status": "حالة فهرس RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "وصول MCP",
         "noServers": "لم يتم تهيئة أي خوادم MCP. أضف الخوادم من الإعدادات ← MCP لإلغاء قفل هذه الخيارات.",
-        "toolsCached": "{{count}} أداة مخزّنة مؤقتًا",
-        "toolsCached_plural": "{{count}} أدوات مخزّنة مؤقتًا",
+        "toolsCached_one": "{{count}} أداة مخزّنة مؤقتًا",
+        "toolsCached_other": "{{count}} أدوات مخزّنة مؤقتًا",
+        "toolsCached": "{{count}} أدوات مخزّنة مؤقتًا",
         "noToolsCached": "لم يتم تخزين أي أدوات مؤقتًا بعد. فعّل الوصول الكامل أو حدّث الذاكرة المؤقتة.",
         "showTools": "عرض الأدوات",
         "hideTools": "إخفاء الأدوات",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "معطّل",
         "statusConnected": "● متصل",
         "statusDisconnected": "○ منقطع",
-        "toolsLive": "{{count}} أداة",
-        "toolsLive_plural": "{{count}} أدوات",
-        "toolsCached": "{{count}} أداة (مخزّنة مؤقتًا)",
-        "toolsCached_plural": "{{count}} أدوات (مخزّنة مؤقتًا)",
+        "toolsLive_one": "{{count}} أداة",
+        "toolsLive_other": "{{count}} أدوات",
+        "toolsLive": "{{count}} أدوات",
+        "toolsCached_one": "{{count}} أداة (مخزّنة مؤقتًا)",
+        "toolsCached_other": "{{count}} أدوات (مخزّنة مؤقتًا)",
+        "toolsCached": "{{count}} أدوات (مخزّنة مؤقتًا)",
         "noTools": "0 أدوات",
         "connectBtn": "اتصال",
         "disconnectBtn": "قطع الاتصال",

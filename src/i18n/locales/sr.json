@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Прегледајте и управљајте моделима свих конфигурисаних провајдера. Кликните \"освежи моделе\" да бисте преузели најновије доступне моделе.",
-      "providerCount": "{{count}} провајдер конфигурисан",
-      "providerCount_plural": "{{count}} провајдера конфигурисано",
+      "providerCount_one": "{{count}} провајдер конфигурисан",
+      "providerCount_other": "{{count}} провајдера конфигурисано",
+      "providerCount": "{{count}} провајдера конфигурисано",
       "refreshAll": "🔄 освежи све моделе",
       "empty": "Нема конфигурисаних провајдера. Прво додајте провајдере на картици провајдера.",
       "noModels": "Нема доступних модела. Кликните „освежи све моделе“ или освежите појединачне провајдере на картици провајдера.",
       "noMatch": "Ниједан модел не одговара тренутним филтерима. Прилагодите или обришите филтере да бисте видели резултате.",
-      "modelCount": "• {{count}} модел у кешу",
-      "modelCount_plural": "• {{count}} модела у кешу",
-      "matchCount": "• {{count}} одговара одабраним филтерима",
-      "matchCount_plural": "• {{count}} одговарају одабраним филтерима",
+      "modelCount_one": "• {{count}} модел у кешу",
+      "modelCount_other": "• {{count}} модела у кешу",
+      "modelCount": "• {{count}} модела у кешу",
+      "matchCount_one": "• {{count}} одговара одабраним филтерима",
+      "matchCount_other": "• {{count}} одговарају одабраним филтерима",
+      "matchCount": "• {{count}} одговарају одабраним филтерима",
       "status": {
         "enabled": "Омогућено",
         "disabled": "Онемогућено"
@@ -99,8 +102,9 @@
       "securityItem2": "Додајте ову фасциклу у ваш .gitignore ако користите Git синхронизацију.",
       "securityItem3": "Будите опрезни при коришћењу јавних услуга синхронизације у облаку.",
       "desc": "Управљајте LLM провајдерима и API акредитивима. Користите колону радњи за уређивање детаља конфигурације или освежавање кешираних модела.",
-      "count": "{{count}} провајдер конфигурисан",
-      "count_plural": "{{count}} провајдера конфигурисано",
+      "count_one": "{{count}} провајдер конфигурисан",
+      "count_other": "{{count}} провајдера конфигурисано",
+      "count": "{{count}} провајдера конфигурисано",
       "addBtn": "+ Додај провајдера",
       "empty": "Нема конфигурисаних провајдера. Изаберите „Додај провајдера“ за почетак.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Нема модела",
-        "count": "{{count}} модел",
-        "count_plural": "{{count}} модела"
+        "count_one": "{{count}} модел",
+        "count_other": "{{count}} модела",
+        "count": "{{count}} модела"
       },
       "ollama": {
         "checkingVersion": "Проверавање верзије...",
@@ -183,8 +188,9 @@
       "noArgs": "Нема",
       "cached": "У кешу",
       "disabled": "Онемогућено",
-      "envVars": "{{count}} env променљива",
-      "envVars_plural": "{{count}} env променљивих",
+      "envVars_one": "{{count}} env променљива",
+      "envVars_other": "{{count}} env променљивих",
+      "envVars": "{{count}} env променљивих",
       "status": {
         "disabled": "Онемогућено",
         "connected": "повезано",
@@ -194,10 +200,12 @@
         "autoConnect": "Аутоматско повезивање"
       },
       "toolCount": {
-        "live": "{{count}} активни алат",
-        "live_plural": "{{count}} активних алата",
-        "cached": "{{count}} кеширани алат",
-        "cached_plural": "{{count}} кешираних алата"
+        "live_one": "{{count}} активни алат",
+        "live_other": "{{count}} активних алата",
+        "live": "{{count}} активних алата",
+        "cached_one": "{{count}} кеширани алат",
+        "cached_other": "{{count}} кешираних алата",
+        "cached": "{{count}} кешираних алата"
       },
       "actions": {
         "edit": "Уреди",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ молимо унесите команду пре тестирања везе",
         "testSuccess": "✅ успешно повезано! Пронађено {{count}} алата.",
         "testFailed": "❌ Повезивање није успело: {{message}}",
-        "refreshedAll": "✅ освежени алати за {{count}} сервер",
-        "refreshedAll_plural": "✅ освежени алати за {{count}} сервера",
+        "refreshedAll_one": "✅ освежени алати за {{count}} сервер",
+        "refreshedAll_other": "✅ освежени алати за {{count}} сервера",
+        "refreshedAll": "✅ освежени алати за {{count}} сервера",
         "refreshedPartial": "✅ освежено {{success}} сервера, ❌ {{failed}} неуспешно",
         "noServersConfigured": "⚠️ Нема конфигурисаних MCP сервера",
         "testingAll": "🧪 Тестирање {{count}} MCP веза сервера...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Креирајте и управљајте AI агентима са специфичним могућностима, алатима и понашањем.",
-      "count": "{{count}} агент конфигурисан",
-      "count_plural": "{{count}} агената конфигурисано",
+      "count_one": "{{count}} агент конфигурисан",
+      "count_other": "{{count}} агената конфигурисано",
+      "count": "{{count}} агената конфигурисано",
       "addBtn": "+ додај агента",
       "empty": "Нема конфигурисаних агената. Изаберите додај агента за почетак.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} уграђени",
-        "mcpServer": "{{count}} mcp сервер",
-        "mcpServer_plural": "{{count}} mcp сервера",
-        "mcpTool": "{{count}} mcp алат",
-        "mcpTool_plural": "{{count}} mcp алата",
+        "mcpServer_one": "{{count}} mcp сервер",
+        "mcpServer_other": "{{count}} mcp сервера",
+        "mcpServer": "{{count}} mcp сервера",
+        "mcpTool_one": "{{count}} mcp алат",
+        "mcpTool_other": "{{count}} mcp алата",
+        "mcpTool": "{{count}} mcp алата",
         "noTools": "Нема омогућених алата"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Радње"
         },
         "unnamed": "CLI алат без назива",
-        "paramCount": "{{count}} параметар",
-        "paramCount_plural": "{{count}} параметара",
+        "paramCount_one": "{{count}} параметар",
+        "paramCount_other": "{{count}} параметара",
+        "paramCount": "{{count}} параметара",
         "noParams": "Нема",
         "statusEnabled": "Омогућено",
         "statusDisabled": "Онемогућено",
@@ -895,8 +908,9 @@
         "desc": "Префикс (емоџи или текст) за приказ испред свих брзих радњи у контекстном менију",
         "placeholder": "⚡"
       },
-      "count": "{{count}} радња конфигурисана ({{enabled}} омогућено)",
-      "count_plural": "{{count}} радњи конфигурисано ({{enabled}} омогућено)",
+      "count_one": "{{count}} радња конфигурисана ({{enabled}} омогућено)",
+      "count_other": "{{count}} радњи конфигурисано ({{enabled}} омогућено)",
+      "count": "{{count}} радњи конфигурисано ({{enabled}} омогућено)",
       "addBtn": "+ додај брзу радњу",
       "empty": "Нема конфигурисаних брзих радњи. Изаберите додај брзу радњу за почетак.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Омогући RAG",
       "step3": "Изаберите индексирај трезор",
       "close": "Затвори",
-      "retrieved": "📚 преузето из {{count}} документа",
-      "retrieved_plural": "📚 преузето из {{count}} докумената"
+      "retrieved_one": "📚 преузето из {{count}} документа",
+      "retrieved_other": "📚 преузето из {{count}} докумената",
+      "retrieved": "📚 преузето из {{count}} докумената"
     },
     "ragTooltip": {
       "status": "Статус RAG индекса:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP приступ",
         "noServers": "Нема конфигурисаних MCP сервера. Додајте сервере у Поставке → MCP да бисте откључали ове опције.",
-        "toolsCached": "{{count}} алат у кешу",
-        "toolsCached_plural": "{{count}} алата у кешу",
+        "toolsCached_one": "{{count}} алат у кешу",
+        "toolsCached_other": "{{count}} алата у кешу",
+        "toolsCached": "{{count}} алата у кешу",
         "noToolsCached": "Нема кешираних алата. Омогућите пун приступ или освежите кеш.",
         "showTools": "Прикажи алате",
         "hideTools": "Сакриј алате",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Онемогућено",
         "statusConnected": "● повезано",
         "statusDisconnected": "○ прекинуто",
-        "toolsLive": "{{count}} алат",
-        "toolsLive_plural": "{{count}} алата",
-        "toolsCached": "{{count}} алат (у кешу)",
-        "toolsCached_plural": "{{count}} алата (у кешу)",
+        "toolsLive_one": "{{count}} алат",
+        "toolsLive_other": "{{count}} алата",
+        "toolsLive": "{{count}} алата",
+        "toolsCached_one": "{{count}} алат (у кешу)",
+        "toolsCached_other": "{{count}} алата (у кешу)",
+        "toolsCached": "{{count}} алата (у кешу)",
         "noTools": "0 алата",
         "connectBtn": "Повежи",
         "disconnectBtn": "Прекини везу",

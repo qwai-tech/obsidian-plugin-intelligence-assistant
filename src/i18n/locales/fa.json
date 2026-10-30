@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "مدل‌های همه ارائه‌دهندگان پیکربندی شده را مشاهده و مدیریت کنید. برای دریافت آخرین مدل‌های موجود روی «بازخوانی مدل‌ها» کلیک کنید.",
+      "providerCount_one": "{{count}} ارائه‌دهنده پیکربندی شده",
+      "providerCount_other": "{{count}} ارائه‌دهنده پیکربندی شده",
       "providerCount": "{{count}} ارائه‌دهنده پیکربندی شده",
-      "providerCount_plural": "{{count}} ارائه‌دهنده پیکربندی شده",
       "refreshAll": "🔄 بازخوانی همه مدل‌ها",
       "empty": "هنوز ارائه‌دهنده‌ای پیکربندی نشده. ابتدا در تب ارائه‌دهندگان ارائه‌دهنده اضافه کنید.",
       "noModels": "مدلی در دسترس نیست. روی «بازخوانی همه مدل‌ها» کلیک کنید یا ارائه‌دهندگان منفرد را در تب ارائه‌دهندگان بازخوانی کنید.",
       "noMatch": "هیچ مدلی با فیلترهای فعلی مطابقت ندارد. فیلترها را تنظیم کرده یا پاک کنید تا نتایج نمایش داده شود.",
+      "modelCount_one": "• {{count}} مدل در حافظه پنهان",
+      "modelCount_other": "• {{count}} مدل در حافظه پنهان",
       "modelCount": "• {{count}} مدل در حافظه پنهان",
-      "modelCount_plural": "• {{count}} مدل در حافظه پنهان",
+      "matchCount_one": "• {{count}} مورد با فیلترهای انتخاب شده مطابقت دارد",
+      "matchCount_other": "• {{count}} مورد با فیلترهای انتخاب شده مطابقت دارد",
       "matchCount": "• {{count}} مورد با فیلترهای انتخاب شده مطابقت دارد",
-      "matchCount_plural": "• {{count}} مورد با فیلترهای انتخاب شده مطابقت دارد",
       "status": {
         "enabled": "فعال",
         "disabled": "غیرفعال"
@@ -99,8 +102,9 @@
       "securityItem2": "اگر از همگام‌سازی Git استفاده می‌کنید، این پوشه را به .gitignore اضافه کنید.",
       "securityItem3": "هنگام استفاده از سرویس‌های همگام‌سازی ابر عمومی احتیاط کنید.",
       "desc": "ارائه‌دهندگان LLM و اعتبارنامه‌های API را مدیریت کنید. از ستون اقدامات برای ویرایش جزئیات پیکربندی یا بازخوانی مدل‌های کش‌شده استفاده کنید.",
+      "count_one": "{{count}} ارائه‌دهنده پیکربندی شده",
+      "count_other": "{{count}} ارائه‌دهنده پیکربندی شده",
       "count": "{{count}} ارائه‌دهنده پیکربندی شده",
-      "count_plural": "{{count}} ارائه‌دهنده پیکربندی شده",
       "addBtn": "+ افزودن ارائه‌دهنده",
       "empty": "هیچ ارائه‌دهنده‌ای پیکربندی نشده. «افزودن ارائه‌دهنده» را انتخاب کنید تا شروع کنید.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "بدون مدل",
-        "count": "{{count}} مدل",
-        "count_plural": "{{count}} مدل"
+        "count_one": "{{count}} مدل",
+        "count_other": "{{count}} مدل",
+        "count": "{{count}} مدل"
       },
       "ollama": {
         "checkingVersion": "در حال بررسی نسخه...",
@@ -183,8 +188,9 @@
       "noArgs": "ندارد",
       "cached": "کش شده",
       "disabled": "غیرفعال",
+      "envVars_one": "{{count}} متغیر محیطی",
+      "envVars_other": "{{count}} متغیر محیطی",
       "envVars": "{{count}} متغیر محیطی",
-      "envVars_plural": "{{count}} متغیر محیطی",
       "status": {
         "disabled": "غیرفعال",
         "connected": "متصل",
@@ -194,10 +200,12 @@
         "autoConnect": "اتصال خودکار"
       },
       "toolCount": {
+        "live_one": "{{count}} ابزار زنده",
+        "live_other": "{{count}} ابزار زنده",
         "live": "{{count}} ابزار زنده",
-        "live_plural": "{{count}} ابزار زنده",
-        "cached": "{{count}} ابزار کش‌شده",
-        "cached_plural": "{{count}} ابزار کش‌شده"
+        "cached_one": "{{count}} ابزار کش‌شده",
+        "cached_other": "{{count}} ابزار کش‌شده",
+        "cached": "{{count}} ابزار کش‌شده"
       },
       "actions": {
         "edit": "ویرایش",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ لطفاً قبل از آزمایش اتصال یک دستور وارد کنید",
         "testSuccess": "✅ با موفقیت متصل شد! {{count}} ابزار پیدا شد.",
         "testFailed": "❌ اتصال ناموفق بود: {{message}}",
+        "refreshedAll_one": "✅ ابزارها برای {{count}} سرور بازخوانی شدند",
+        "refreshedAll_other": "✅ ابزارها برای {{count}} سرور بازخوانی شدند",
         "refreshedAll": "✅ ابزارها برای {{count}} سرور بازخوانی شدند",
-        "refreshedAll_plural": "✅ ابزارها برای {{count}} سرور بازخوانی شدند",
         "refreshedPartial": "✅ {{success}} سرور بازخوانی شد، ❌ {{failed}} ناموفق",
         "noServersConfigured": "⚠️ هیچ سرور MCP پیکربندی نشده",
         "testingAll": "🧪 آزمایش {{count}} اتصال سرور MCP...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "عوامل هوش مصنوعی با قابلیت‌ها، ابزارها و رفتارهای خاص ایجاد و مدیریت کنید.",
+      "count_one": "{{count}} عامل پیکربندی شده",
+      "count_other": "{{count}} عامل پیکربندی شده",
       "count": "{{count}} عامل پیکربندی شده",
-      "count_plural": "{{count}} عامل پیکربندی شده",
       "addBtn": "+ افزودن عامل",
       "empty": "هیچ عاملی پیکربندی نشده. افزودن عامل را انتخاب کنید تا شروع کنید.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} داخلی",
+        "mcpServer_one": "{{count}} سرور mcp",
+        "mcpServer_other": "{{count}} سرور mcp",
         "mcpServer": "{{count}} سرور mcp",
-        "mcpServer_plural": "{{count}} سرور mcp",
+        "mcpTool_one": "{{count}} ابزار mcp",
+        "mcpTool_other": "{{count}} ابزار mcp",
         "mcpTool": "{{count}} ابزار mcp",
-        "mcpTool_plural": "{{count}} ابزار mcp",
         "noTools": "هیچ ابزاری فعال نیست"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "اقدامات"
         },
         "unnamed": "ابزار CLI بدون نام",
+        "paramCount_one": "{{count}} پارامتر",
+        "paramCount_other": "{{count}} پارامتر",
         "paramCount": "{{count}} پارامتر",
-        "paramCount_plural": "{{count}} پارامتر",
         "noParams": "ندارد",
         "statusEnabled": "فعال",
         "statusDisabled": "غیرفعال",
@@ -895,8 +908,9 @@
         "desc": "پیشوند (ایموجی یا متن) برای نمایش قبل از همه اقدامات سریع در منوی زمینه",
         "placeholder": "⚡"
       },
+      "count_one": "{{count}} اقدام پیکربندی شده ({{enabled}} فعال)",
+      "count_other": "{{count}} اقدام پیکربندی شده ({{enabled}} فعال)",
       "count": "{{count}} اقدام پیکربندی شده ({{enabled}} فعال)",
-      "count_plural": "{{count}} اقدام پیکربندی شده ({{enabled}} فعال)",
       "addBtn": "+ افزودن اقدام سریع",
       "empty": "هیچ اقدام سریعی پیکربندی نشده. افزودن اقدام سریع را انتخاب کنید تا شروع کنید.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "RAG را فعال کنید",
       "step3": "فهرست vault را انتخاب کنید",
       "close": "بستن",
-      "retrieved": "📚 از {{count}} سند بازیابی شد",
-      "retrieved_plural": "📚 از {{count}} سند بازیابی شد"
+      "retrieved_one": "📚 از {{count}} سند بازیابی شد",
+      "retrieved_other": "📚 از {{count}} سند بازیابی شد",
+      "retrieved": "📚 از {{count}} سند بازیابی شد"
     },
     "ragTooltip": {
       "status": "وضعیت فهرست RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "دسترسی MCP",
         "noServers": "هیچ سرور MCP پیکربندی نشده. برای باز کردن این گزینه‌ها سرورها را در تنظیمات ← MCP اضافه کنید.",
+        "toolsCached_one": "{{count}} ابزار در حافظه پنهان",
+        "toolsCached_other": "{{count}} ابزار در حافظه پنهان",
         "toolsCached": "{{count}} ابزار در حافظه پنهان",
-        "toolsCached_plural": "{{count}} ابزار در حافظه پنهان",
         "noToolsCached": "هنوز هیچ ابزاری در حافظه پنهان نیست. دسترسی کامل را فعال کنید یا حافظه پنهان را بازخوانی کنید.",
         "showTools": "نمایش ابزارها",
         "hideTools": "پنهان کردن ابزارها",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "غیرفعال",
         "statusConnected": "● متصل",
         "statusDisconnected": "○ قطع شده",
+        "toolsLive_one": "{{count}} ابزار",
+        "toolsLive_other": "{{count}} ابزار",
         "toolsLive": "{{count}} ابزار",
-        "toolsLive_plural": "{{count}} ابزار",
+        "toolsCached_one": "{{count}} ابزار (کش شده)",
+        "toolsCached_other": "{{count}} ابزار (کش شده)",
         "toolsCached": "{{count}} ابزار (کش شده)",
-        "toolsCached_plural": "{{count}} ابزار (کش شده)",
         "noTools": "0 ابزار",
         "connectBtn": "اتصال",
         "disconnectBtn": "قطع اتصال",

@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "檢視並管理所有已設定提供者的模型。點擊「重新整理模型」以擷取最新可用的模型。",
+      "providerCount_one": "已設定 {{count}} 個提供者",
+      "providerCount_other": "已設定 {{count}} 個提供者",
       "providerCount": "已設定 {{count}} 個提供者",
-      "providerCount_plural": "已設定 {{count}} 個提供者",
       "refreshAll": "🔄 重新整理所有模型",
       "empty": "尚未設定任何提供者。請先在提供者頁籤中新增提供者。",
       "noModels": "沒有可用的模型。請點擊「重新整理所有模型」或在提供者頁籤中重新整理個別提供者。",
       "noMatch": "沒有模型符合目前的篩選條件。請調整或清除篩選條件以查看結果。",
+      "modelCount_one": "• 快取了 {{count}} 個模型",
+      "modelCount_other": "• 快取了 {{count}} 個模型",
       "modelCount": "• 快取了 {{count}} 個模型",
-      "modelCount_plural": "• 快取了 {{count}} 個模型",
+      "matchCount_one": "• {{count}} 個符合所選篩選條件",
+      "matchCount_other": "• {{count}} 個符合所選篩選條件",
       "matchCount": "• {{count}} 個符合所選篩選條件",
-      "matchCount_plural": "• {{count}} 個符合所選篩選條件",
       "status": {
         "enabled": "已啟用",
         "disabled": "已停用"
@@ -99,8 +102,9 @@
       "securityItem2": "如果您使用 Git 同步，請將此資料夾新增至 .gitignore。",
       "securityItem3": "使用公共雲端同步服務時請謹慎。",
       "desc": "管理 LLM 提供者和 API 憑證。使用操作欄位來編輯設定詳細資訊或重新整理快取模型。",
+      "count_one": "已設定 {{count}} 個提供者",
+      "count_other": "已設定 {{count}} 個提供者",
       "count": "已設定 {{count}} 個提供者",
-      "count_plural": "已設定 {{count}} 個提供者",
       "addBtn": "+ 新增提供者",
       "empty": "未設定任何提供者。請選擇「新增提供者」以開始使用。",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "無模型",
-        "count": "{{count}} 個模型",
-        "count_plural": "{{count}} 個模型"
+        "count_one": "{{count}} 個模型",
+        "count_other": "{{count}} 個模型",
+        "count": "{{count}} 個模型"
       },
       "ollama": {
         "checkingVersion": "正在檢查版本...",
@@ -183,8 +188,9 @@
       "noArgs": "無",
       "cached": "已快取",
       "disabled": "已停用",
+      "envVars_one": "{{count}} 個環境變數",
+      "envVars_other": "{{count}} 個環境變數",
       "envVars": "{{count}} 個環境變數",
-      "envVars_plural": "{{count}} 個環境變數",
       "status": {
         "disabled": "已停用",
         "connected": "已連線",
@@ -194,10 +200,12 @@
         "autoConnect": "自動連線"
       },
       "toolCount": {
+        "live_one": "{{count}} 個即時工具",
+        "live_other": "{{count}} 個即時工具",
         "live": "{{count}} 個即時工具",
-        "live_plural": "{{count}} 個即時工具",
-        "cached": "{{count}} 個已快取工具",
-        "cached_plural": "{{count}} 個已快取工具"
+        "cached_one": "{{count}} 個已快取工具",
+        "cached_other": "{{count}} 個已快取工具",
+        "cached": "{{count}} 個已快取工具"
       },
       "actions": {
         "edit": "編輯",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ 測試連線前請先輸入命令",
         "testSuccess": "✅ 連線成功！找到 {{count}} 個工具。",
         "testFailed": "❌ 連線失敗：{{message}}",
+        "refreshedAll_one": "✅ 已重新整理 {{count}} 個伺服器的工具",
+        "refreshedAll_other": "✅ 已重新整理 {{count}} 個伺服器的工具",
         "refreshedAll": "✅ 已重新整理 {{count}} 個伺服器的工具",
-        "refreshedAll_plural": "✅ 已重新整理 {{count}} 個伺服器的工具",
         "refreshedPartial": "✅ 已重新整理 {{success}} 個伺服器，❌ {{failed}} 個失敗",
         "noServersConfigured": "⚠️ 未設定任何 MCP 伺服器",
         "testingAll": "🧪 正在測試 {{count}} 個 MCP 伺服器連線...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "建立並管理具有特定功能、工具和行為的 AI 代理。",
+      "count_one": "已設定 {{count}} 個代理",
+      "count_other": "已設定 {{count}} 個代理",
       "count": "已設定 {{count}} 個代理",
-      "count_plural": "已設定 {{count}} 個代理",
       "addBtn": "+ 新增代理",
       "empty": "未設定任何代理。請選擇「新增代理」以開始使用。",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} 個內建",
+        "mcpServer_one": "{{count}} 個 mcp 伺服器",
+        "mcpServer_other": "{{count}} 個 mcp 伺服器",
         "mcpServer": "{{count}} 個 mcp 伺服器",
-        "mcpServer_plural": "{{count}} 個 mcp 伺服器",
+        "mcpTool_one": "{{count}} 個 mcp 工具",
+        "mcpTool_other": "{{count}} 個 mcp 工具",
         "mcpTool": "{{count}} 個 mcp 工具",
-        "mcpTool_plural": "{{count}} 個 mcp 工具",
         "noTools": "未啟用任何工具"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "操作"
         },
         "unnamed": "未命名 CLI 工具",
+        "paramCount_one": "{{count}} 個參數",
+        "paramCount_other": "{{count}} 個參數",
         "paramCount": "{{count}} 個參數",
-        "paramCount_plural": "{{count}} 個參數",
         "noParams": "無",
         "statusEnabled": "已啟用",
         "statusDisabled": "已停用",
@@ -895,8 +908,9 @@
         "desc": "在上下文選單中所有快速動作之前顯示的前綴（表情符號或文字）",
         "placeholder": "⚡"
       },
+      "count_one": "已設定 {{count}} 個動作（{{enabled}} 個已啟用）",
+      "count_other": "已設定 {{count}} 個動作（{{enabled}} 個已啟用）",
       "count": "已設定 {{count}} 個動作（{{enabled}} 個已啟用）",
-      "count_plural": "已設定 {{count}} 個動作（{{enabled}} 個已啟用）",
       "addBtn": "+ 新增快速動作",
       "empty": "未設定任何快速動作。請選擇「新增快速動作」以開始使用。",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "啟用 RAG",
       "step3": "選擇索引知識庫",
       "close": "關閉",
-      "retrieved": "📚 從 {{count}} 個文件中擷取",
-      "retrieved_plural": "📚 從 {{count}} 個文件中擷取"
+      "retrieved_one": "📚 從 {{count}} 個文件中擷取",
+      "retrieved_other": "📚 從 {{count}} 個文件中擷取",
+      "retrieved": "📚 從 {{count}} 個文件中擷取"
     },
     "ragTooltip": {
       "status": "RAG 索引狀態：",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP 存取",
         "noServers": "未設定任何 MCP 伺服器。請在「設定 → MCP」中新增伺服器以解鎖這些選項。",
+        "toolsCached_one": "已快取 {{count}} 個工具",
+        "toolsCached_other": "已快取 {{count}} 個工具",
         "toolsCached": "已快取 {{count}} 個工具",
-        "toolsCached_plural": "已快取 {{count}} 個工具",
         "noToolsCached": "尚未快取任何工具。請啟用完整存取或重新整理快取。",
         "showTools": "顯示工具",
         "hideTools": "隱藏工具",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "已停用",
         "statusConnected": "● 已連線",
         "statusDisconnected": "○ 已中斷",
+        "toolsLive_one": "{{count}} 個工具",
+        "toolsLive_other": "{{count}} 個工具",
         "toolsLive": "{{count}} 個工具",
-        "toolsLive_plural": "{{count}} 個工具",
+        "toolsCached_one": "{{count}} 個工具（已快取）",
+        "toolsCached_other": "{{count}} 個工具（已快取）",
         "toolsCached": "{{count}} 個工具（已快取）",
-        "toolsCached_plural": "{{count}} 個工具（已快取）",
         "noTools": "0 個工具",
         "connectBtn": "連線",
         "disconnectBtn": "中斷連線",

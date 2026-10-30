@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Skatīt un pārvaldīt modeļus no visiem konfigurētajiem pakalpojumu sniedzējiem. Noklikšķiniet uz «atsvaidzināt modeļus», lai iegūtu jaunākos pieejamos modeļus.",
-      "providerCount": "{{count}} pakalpojumu sniedzējs konfigurēts",
-      "providerCount_plural": "{{count}} pakalpojumu sniedzēji konfigurēti",
+      "providerCount_one": "{{count}} pakalpojumu sniedzējs konfigurēts",
+      "providerCount_other": "{{count}} pakalpojumu sniedzēji konfigurēti",
+      "providerCount": "{{count}} pakalpojumu sniedzēji konfigurēti",
       "refreshAll": "🔄 atsvaidzināt visus modeļus",
       "empty": "Vēl nav konfigurētu pakalpojumu sniedzēju. Vispirms pievienojiet pakalpojumu sniedzējus pakalpojumu sniedzēju cilnē.",
       "noModels": "Nav pieejamu modeļu. Noklikšķiniet uz «atsvaidzināt visus modeļus» vai atsvaidziniet atsevišķus pakalpojumu sniedzējus pakalpojumu sniedzēju cilnē.",
       "noMatch": "Neviens modelis neatbilst pašreizējiem filtriem. Pielāgojiet vai notīriet filtrus, lai skatītu rezultātus.",
-      "modelCount": "• {{count}} modelis kešatmiņā",
-      "modelCount_plural": "• {{count}} modeļi kešatmiņā",
+      "modelCount_one": "• {{count}} modelis kešatmiņā",
+      "modelCount_other": "• {{count}} modeļi kešatmiņā",
+      "modelCount": "• {{count}} modeļi kešatmiņā",
+      "matchCount_one": "• {{count}} atbilst izvēlētajiem filtriem",
+      "matchCount_other": "• {{count}} atbilst izvēlētajiem filtriem",
       "matchCount": "• {{count}} atbilst izvēlētajiem filtriem",
-      "matchCount_plural": "• {{count}} atbilst izvēlētajiem filtriem",
       "status": {
         "enabled": "Iespējots",
         "disabled": "Atspējots"
@@ -99,8 +102,9 @@
       "securityItem2": "Pievienojiet šo mapi .gitignore failam, ja izmantojat Git sinhronizāciju.",
       "securityItem3": "Esiet uzmanīgi, izmantojot publiskos mākoņsinhronizācijas pakalpojumus.",
       "desc": "Pārvaldīt LLM pakalpojumu sniedzējus un API akreditācijas datus. Izmantojiet darbību kolonnu, lai rediģētu konfigurācijas informāciju vai atsvaidzinātu kešatmiņā saglabātos modeļus.",
-      "count": "{{count}} pakalpojumu sniedzējs konfigurēts",
-      "count_plural": "{{count}} pakalpojumu sniedzēji konfigurēti",
+      "count_one": "{{count}} pakalpojumu sniedzējs konfigurēts",
+      "count_other": "{{count}} pakalpojumu sniedzēji konfigurēti",
+      "count": "{{count}} pakalpojumu sniedzēji konfigurēti",
       "addBtn": "+ Pievienot pakalpojumu sniedzēju",
       "empty": "Nav konfigurētu pakalpojumu sniedzēju. Izvēlieties «Pievienot pakalpojumu sniedzēju», lai sāktu.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Nav modeļu",
-        "count": "{{count}} modelis",
-        "count_plural": "{{count}} modeļi"
+        "count_one": "{{count}} modelis",
+        "count_other": "{{count}} modeļi",
+        "count": "{{count}} modeļi"
       },
       "ollama": {
         "checkingVersion": "Pārbauda versiju...",
@@ -183,8 +188,9 @@
       "noArgs": "Nav",
       "cached": "Kešatmiņā",
       "disabled": "Atspējots",
-      "envVars": "{{count}} vides mainīgais",
-      "envVars_plural": "{{count}} vides mainīgie",
+      "envVars_one": "{{count}} vides mainīgais",
+      "envVars_other": "{{count}} vides mainīgie",
+      "envVars": "{{count}} vides mainīgie",
       "status": {
         "disabled": "Atspējots",
         "connected": "savienots",
@@ -194,10 +200,12 @@
         "autoConnect": "Automātisks savienojums"
       },
       "toolCount": {
-        "live": "{{count}} aktīvs rīks",
-        "live_plural": "{{count}} aktīvi rīki",
-        "cached": "{{count}} kešatmiņā saglabāts rīks",
-        "cached_plural": "{{count}} kešatmiņā saglabāti rīki"
+        "live_one": "{{count}} aktīvs rīks",
+        "live_other": "{{count}} aktīvi rīki",
+        "live": "{{count}} aktīvi rīki",
+        "cached_one": "{{count}} kešatmiņā saglabāts rīks",
+        "cached_other": "{{count}} kešatmiņā saglabāti rīki",
+        "cached": "{{count}} kešatmiņā saglabāti rīki"
       },
       "actions": {
         "edit": "Rediģēt",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ lūdzu, ievadiet komandu pirms savienojuma pārbaudes",
         "testSuccess": "✅ veiksmīgi savienots! Atrasti {{count}} rīki.",
         "testFailed": "❌ Savienojums neizdevās: {{message}}",
-        "refreshedAll": "✅ atsvaidzināti rīki {{count}} serverim",
-        "refreshedAll_plural": "✅ atsvaidzināti rīki {{count}} serveriem",
+        "refreshedAll_one": "✅ atsvaidzināti rīki {{count}} serverim",
+        "refreshedAll_other": "✅ atsvaidzināti rīki {{count}} serveriem",
+        "refreshedAll": "✅ atsvaidzināti rīki {{count}} serveriem",
         "refreshedPartial": "✅ atsvaidzināti {{success}} serveri, ❌ {{failed}} neizdevās",
         "noServersConfigured": "⚠️ Nav konfigurētu MCP serveru",
         "testingAll": "🧪 Pārbauda {{count}} MCP servera savienojumus...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Izveidot un pārvaldīt AI aģentus ar specifiskām iespējām, rīkiem un uzvedību.",
-      "count": "{{count}} aģents konfigurēts",
-      "count_plural": "{{count}} aģenti konfigurēti",
+      "count_one": "{{count}} aģents konfigurēts",
+      "count_other": "{{count}} aģenti konfigurēti",
+      "count": "{{count}} aģenti konfigurēti",
       "addBtn": "+ pievienot aģentu",
       "empty": "Nav konfigurētu aģentu. Izvēlieties pievienot aģentu, lai sāktu.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} iebūvēts",
-        "mcpServer": "{{count}} MCP serveris",
-        "mcpServer_plural": "{{count}} MCP serveri",
-        "mcpTool": "{{count}} MCP rīks",
-        "mcpTool_plural": "{{count}} MCP rīki",
+        "mcpServer_one": "{{count}} MCP serveris",
+        "mcpServer_other": "{{count}} MCP serveri",
+        "mcpServer": "{{count}} MCP serveri",
+        "mcpTool_one": "{{count}} MCP rīks",
+        "mcpTool_other": "{{count}} MCP rīki",
+        "mcpTool": "{{count}} MCP rīki",
         "noTools": "Nav iespējotu rīku"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Darbības"
         },
         "unnamed": "Nenosaukts CLI rīks",
-        "paramCount": "{{count}} parametrs",
-        "paramCount_plural": "{{count}} parametri",
+        "paramCount_one": "{{count}} parametrs",
+        "paramCount_other": "{{count}} parametri",
+        "paramCount": "{{count}} parametri",
         "noParams": "Nav",
         "statusEnabled": "Iespējots",
         "statusDisabled": "Atspējots",
@@ -895,8 +908,9 @@
         "desc": "Prefikss (emocijzīme vai teksts), kas tiek rādīts pirms visām ātrā darbībām konteksta izvēlnē",
         "placeholder": "⚡"
       },
-      "count": "{{count}} darbība konfigurēta ({{enabled}} iespējotas)",
-      "count_plural": "{{count}} darbības konfigurētas ({{enabled}} iespējotas)",
+      "count_one": "{{count}} darbība konfigurēta ({{enabled}} iespējotas)",
+      "count_other": "{{count}} darbības konfigurētas ({{enabled}} iespējotas)",
+      "count": "{{count}} darbības konfigurētas ({{enabled}} iespējotas)",
       "addBtn": "+ pievienot ātro darbību",
       "empty": "Nav konfigurētu ātro darbību. Izvēlieties pievienot ātro darbību, lai sāktu.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Iespējot RAG",
       "step3": "Atlasīt velventī indeksēšanu",
       "close": "Aizvērt",
-      "retrieved": "📚 iegūts no {{count}} dokumenta",
-      "retrieved_plural": "📚 iegūts no {{count}} dokumentiem"
+      "retrieved_one": "📚 iegūts no {{count}} dokumenta",
+      "retrieved_other": "📚 iegūts no {{count}} dokumentiem",
+      "retrieved": "📚 iegūts no {{count}} dokumentiem"
     },
     "ragTooltip": {
       "status": "RAG indeksa statuss:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP piekļuve",
         "noServers": "Nav konfigurētu MCP serveru. Pievienojiet serverus sadaļā Iestatījumi → MCP, lai atbloķētu šīs opcijas.",
-        "toolsCached": "{{count}} rīks kešatmiņā",
-        "toolsCached_plural": "{{count}} rīki kešatmiņā",
+        "toolsCached_one": "{{count}} rīks kešatmiņā",
+        "toolsCached_other": "{{count}} rīki kešatmiņā",
+        "toolsCached": "{{count}} rīki kešatmiņā",
         "noToolsCached": "Kešatmiņā vēl nav rīku. Iespējojiet pilnu piekļuvi vai atsvaidziniet kešatmiņu.",
         "showTools": "Rādīt rīkus",
         "hideTools": "Slēpt rīkus",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Atspējots",
         "statusConnected": "● savienots",
         "statusDisconnected": "○ atvienots",
-        "toolsLive": "{{count}} rīks",
-        "toolsLive_plural": "{{count}} rīki",
-        "toolsCached": "{{count}} rīks (kešatmiņā)",
-        "toolsCached_plural": "{{count}} rīki (kešatmiņā)",
+        "toolsLive_one": "{{count}} rīks",
+        "toolsLive_other": "{{count}} rīki",
+        "toolsLive": "{{count}} rīki",
+        "toolsCached_one": "{{count}} rīks (kešatmiņā)",
+        "toolsCached_other": "{{count}} rīki (kešatmiņā)",
+        "toolsCached": "{{count}} rīki (kešatmiņā)",
         "noTools": "0 rīku",
         "connectBtn": "Savienot",
         "disconnectBtn": "Atvienot",

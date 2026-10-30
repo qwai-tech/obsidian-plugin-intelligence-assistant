@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Vis og administrer modeller fra alle konfigurerte leverandører. Klikk «oppdater modeller» for å hente de nyeste tilgjengelige modellene.",
-      "providerCount": "{{count}} leverandør konfigurert",
-      "providerCount_plural": "{{count}} leverandører konfigurert",
+      "providerCount_one": "{{count}} leverandør konfigurert",
+      "providerCount_other": "{{count}} leverandører konfigurert",
+      "providerCount": "{{count}} leverandører konfigurert",
       "refreshAll": "🔄 oppdater alle modeller",
       "empty": "Ingen leverandører konfigurert ennå. Legg til leverandører i leverandør-fanen først.",
       "noModels": "Ingen modeller tilgjengelig. Klikk «oppdater alle modeller» eller oppdater individuelle leverandører i leverandør-fanen.",
       "noMatch": "Ingen modeller samsvarer med de gjeldende filtrene. Juster eller fjern filtre for å se resultater.",
-      "modelCount": "• {{count}} modell i hurtigminnet",
-      "modelCount_plural": "• {{count}} modeller i hurtigminnet",
+      "modelCount_one": "• {{count}} modell i hurtigminnet",
+      "modelCount_other": "• {{count}} modeller i hurtigminnet",
+      "modelCount": "• {{count}} modeller i hurtigminnet",
+      "matchCount_one": "• {{count}} samsvarer med valgte filtre",
+      "matchCount_other": "• {{count}} samsvarer med valgte filtre",
       "matchCount": "• {{count}} samsvarer med valgte filtre",
-      "matchCount_plural": "• {{count}} samsvarer med valgte filtre",
       "status": {
         "enabled": "Aktivert",
         "disabled": "Deaktivert"
@@ -99,8 +102,9 @@
       "securityItem2": "Legg denne mappen til .gitignore hvis du bruker Git-synkronisering.",
       "securityItem3": "Vær forsiktig når du bruker offentlige skysynkroniseringstjenester.",
       "desc": "Administrer LLM-leverandører og API-legitimasjon. Bruk handlingskolonnen til å redigere konfigurasjonsdetaljer eller oppdatere mellomlagrede modeller.",
-      "count": "{{count}} leverandør konfigurert",
-      "count_plural": "{{count}} leverandører konfigurert",
+      "count_one": "{{count}} leverandør konfigurert",
+      "count_other": "{{count}} leverandører konfigurert",
+      "count": "{{count}} leverandører konfigurert",
       "addBtn": "+ Legg til leverandør",
       "empty": "Ingen leverandører konfigurert. Velg «Legg til leverandør» for å komme i gang.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Ingen modeller",
-        "count": "{{count}} modell",
-        "count_plural": "{{count}} modeller"
+        "count_one": "{{count}} modell",
+        "count_other": "{{count}} modeller",
+        "count": "{{count}} modeller"
       },
       "ollama": {
         "checkingVersion": "Sjekker versjon...",
@@ -183,8 +188,9 @@
       "noArgs": "Ingen",
       "cached": "Mellomlagret",
       "disabled": "Deaktivert",
-      "envVars": "{{count}} miljøvariabel",
-      "envVars_plural": "{{count}} miljøvariabler",
+      "envVars_one": "{{count}} miljøvariabel",
+      "envVars_other": "{{count}} miljøvariabler",
+      "envVars": "{{count}} miljøvariabler",
       "status": {
         "disabled": "Deaktivert",
         "connected": "tilkoblet",
@@ -194,10 +200,12 @@
         "autoConnect": "Automatisk tilkobling"
       },
       "toolCount": {
-        "live": "{{count}} aktivt verktøy",
-        "live_plural": "{{count}} aktive verktøy",
-        "cached": "{{count}} mellomlagret verktøy",
-        "cached_plural": "{{count}} mellomlagrede verktøy"
+        "live_one": "{{count}} aktivt verktøy",
+        "live_other": "{{count}} aktive verktøy",
+        "live": "{{count}} aktive verktøy",
+        "cached_one": "{{count}} mellomlagret verktøy",
+        "cached_other": "{{count}} mellomlagrede verktøy",
+        "cached": "{{count}} mellomlagrede verktøy"
       },
       "actions": {
         "edit": "Rediger",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ skriv inn en kommando før du tester tilkoblingen",
         "testSuccess": "✅ tilkoblet! Fant {{count}} verktøy.",
         "testFailed": "❌ Tilkobling mislyktes: {{message}}",
-        "refreshedAll": "✅ oppdaterte verktøy for {{count}} server",
-        "refreshedAll_plural": "✅ oppdaterte verktøy for {{count}} servere",
+        "refreshedAll_one": "✅ oppdaterte verktøy for {{count}} server",
+        "refreshedAll_other": "✅ oppdaterte verktøy for {{count}} servere",
+        "refreshedAll": "✅ oppdaterte verktøy for {{count}} servere",
         "refreshedPartial": "✅ oppdaterte {{success}} servere, ❌ {{failed}} mislyktes",
         "noServersConfigured": "⚠️ Ingen MCP-servere konfigurert",
         "testingAll": "🧪 Tester {{count}} MCP-servertilkoblinger...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Opprett og administrer AI-agenter med spesifikke egenskaper, verktøy og atferd.",
-      "count": "{{count}} agent konfigurert",
-      "count_plural": "{{count}} agenter konfigurert",
+      "count_one": "{{count}} agent konfigurert",
+      "count_other": "{{count}} agenter konfigurert",
+      "count": "{{count}} agenter konfigurert",
       "addBtn": "+ legg til agent",
       "empty": "Ingen agenter konfigurert. Velg legg til agent for å komme i gang.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} innebygd",
-        "mcpServer": "{{count}} MCP-server",
-        "mcpServer_plural": "{{count}} MCP-servere",
+        "mcpServer_one": "{{count}} MCP-server",
+        "mcpServer_other": "{{count}} MCP-servere",
+        "mcpServer": "{{count}} MCP-servere",
+        "mcpTool_one": "{{count}} MCP-verktøy",
+        "mcpTool_other": "{{count}} MCP-verktøy",
         "mcpTool": "{{count}} MCP-verktøy",
-        "mcpTool_plural": "{{count}} MCP-verktøy",
         "noTools": "Ingen verktøy aktivert"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Handlinger"
         },
         "unnamed": "Navnløst CLI-verktøy",
-        "paramCount": "{{count}} parameter",
-        "paramCount_plural": "{{count}} parametere",
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parametere",
+        "paramCount": "{{count}} parametere",
         "noParams": "Ingen",
         "statusEnabled": "Aktivert",
         "statusDisabled": "Deaktivert",
@@ -895,8 +908,9 @@
         "desc": "Prefiks (emoji eller tekst) som vises foran alle hurtighandlinger i kontekstmenyen",
         "placeholder": "⚡"
       },
-      "count": "{{count}} handling konfigurert ({{enabled}} aktivert)",
-      "count_plural": "{{count}} handlinger konfigurert ({{enabled}} aktivert)",
+      "count_one": "{{count}} handling konfigurert ({{enabled}} aktivert)",
+      "count_other": "{{count}} handlinger konfigurert ({{enabled}} aktivert)",
+      "count": "{{count}} handlinger konfigurert ({{enabled}} aktivert)",
       "addBtn": "+ legg til hurtighandling",
       "empty": "Ingen hurtighandlinger konfigurert. Velg legg til hurtighandling for å komme i gang.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Aktiver RAG",
       "step3": "Velg indekser hvelv",
       "close": "Lukk",
-      "retrieved": "📚 hentet fra {{count}} dokument",
-      "retrieved_plural": "📚 hentet fra {{count}} dokumenter"
+      "retrieved_one": "📚 hentet fra {{count}} dokument",
+      "retrieved_other": "📚 hentet fra {{count}} dokumenter",
+      "retrieved": "📚 hentet fra {{count}} dokumenter"
     },
     "ragTooltip": {
       "status": "RAG-indeksstatus:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP-tilgang",
         "noServers": "Ingen MCP-servere konfigurert. Legg til servere under Innstillinger → MCP for å låse opp disse alternativene.",
+        "toolsCached_one": "{{count}} verktøy i hurtigminnet",
+        "toolsCached_other": "{{count}} verktøy i hurtigminnet",
         "toolsCached": "{{count}} verktøy i hurtigminnet",
-        "toolsCached_plural": "{{count}} verktøy i hurtigminnet",
         "noToolsCached": "Ingen verktøy i hurtigminnet ennå. Aktiver full tilgang eller oppdater hurtigminnet.",
         "showTools": "Vis verktøy",
         "hideTools": "Skjul verktøy",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Deaktivert",
         "statusConnected": "● tilkoblet",
         "statusDisconnected": "○ frakoblet",
+        "toolsLive_one": "{{count}} verktøy",
+        "toolsLive_other": "{{count}} verktøy",
         "toolsLive": "{{count}} verktøy",
-        "toolsLive_plural": "{{count}} verktøy",
+        "toolsCached_one": "{{count}} verktøy (mellomlagret)",
+        "toolsCached_other": "{{count}} verktøy (mellomlagret)",
         "toolsCached": "{{count}} verktøy (mellomlagret)",
-        "toolsCached_plural": "{{count}} verktøy (mellomlagret)",
         "noTools": "0 verktøy",
         "connectBtn": "Koble til",
         "disconnectBtn": "Koble fra",

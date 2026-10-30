@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Prezerajte a spravujte modely od všetkých nakonfigurovaných poskytovateľov. Kliknite na „obnoviť modely“ a načítajte najnovšie dostupné modely.",
-      "providerCount": "{{count}} poskytovateľ nakonfigurovaný",
-      "providerCount_plural": "{{count}} poskytovatelia nakonfigurovaní",
+      "providerCount_one": "{{count}} poskytovateľ nakonfigurovaný",
+      "providerCount_other": "{{count}} poskytovatelia nakonfigurovaní",
+      "providerCount": "{{count}} poskytovatelia nakonfigurovaní",
       "refreshAll": "🔄 obnoviť všetky modely",
       "empty": "Zatiaľ žiadni poskytovatelia. Pridajte ich najprv na karte poskytovateľov.",
       "noModels": "Žiadne dostupné modely. Kliknite na „obnoviť všetky modely“ alebo obnovte jednotlivých poskytovateľov na karte poskytovateľov.",
       "noMatch": "Žiadne modely nezodpovedajú aktuálnym filtrom. Upravte alebo vymažte filtre, aby ste zobrazili výsledky.",
-      "modelCount": "• {{count}} model uložený v cache",
-      "modelCount_plural": "• {{count}} modely uložené v cache",
+      "modelCount_one": "• {{count}} model uložený v cache",
+      "modelCount_other": "• {{count}} modely uložené v cache",
+      "modelCount": "• {{count}} modely uložené v cache",
+      "matchCount_one": "• {{count}} zodpovedá zvoleným filtrom",
+      "matchCount_other": "• {{count}} zodpovedá zvoleným filtrom",
       "matchCount": "• {{count}} zodpovedá zvoleným filtrom",
-      "matchCount_plural": "• {{count}} zodpovedá zvoleným filtrom",
       "status": {
         "enabled": "Povolené",
         "disabled": "Zakázané"
@@ -99,8 +102,9 @@
       "securityItem2": "Pridajte tento priečinok do svojho .gitignore, ak používate Git synchronizáciu.",
       "securityItem3": "Buďte opatrní pri používaní verejných cloudových synchronizačných služieb.",
       "desc": "Spravujte poskytovateľov LLM a API prihlasovacie údaje. Použite stĺpec akcií na úpravu podrobností konfigurácie alebo obnovenie uložených modelov.",
-      "count": "{{count}} poskytovateľ nakonfigurovaný",
-      "count_plural": "{{count}} poskytovatelia nakonfigurovaní",
+      "count_one": "{{count}} poskytovateľ nakonfigurovaný",
+      "count_other": "{{count}} poskytovatelia nakonfigurovaní",
+      "count": "{{count}} poskytovatelia nakonfigurovaní",
       "addBtn": "+ Pridať poskytovateľa",
       "empty": "Žiadni poskytovatelia. Vyberte „Pridať poskytovateľa“ a začnite.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Žiadne modely",
-        "count": "{{count}} model",
-        "count_plural": "{{count}} modely"
+        "count_one": "{{count}} model",
+        "count_other": "{{count}} modely",
+        "count": "{{count}} modely"
       },
       "ollama": {
         "checkingVersion": "Kontrolujem verziu...",
@@ -183,8 +188,9 @@
       "noArgs": "Žiadne",
       "cached": "V cache",
       "disabled": "Zakázané",
-      "envVars": "{{count}} env premenná",
-      "envVars_plural": "{{count}} env premenné",
+      "envVars_one": "{{count}} env premenná",
+      "envVars_other": "{{count}} env premenné",
+      "envVars": "{{count}} env premenné",
       "status": {
         "disabled": "Zakázané",
         "connected": "pripojené",
@@ -194,10 +200,12 @@
         "autoConnect": "Automatické pripojenie"
       },
       "toolCount": {
-        "live": "{{count}} živý nástroj",
-        "live_plural": "{{count}} živé nástroje",
-        "cached": "{{count}} nástroj v cache",
-        "cached_plural": "{{count}} nástroje v cache"
+        "live_one": "{{count}} živý nástroj",
+        "live_other": "{{count}} živé nástroje",
+        "live": "{{count}} živé nástroje",
+        "cached_one": "{{count}} nástroj v cache",
+        "cached_other": "{{count}} nástroje v cache",
+        "cached": "{{count}} nástroje v cache"
       },
       "actions": {
         "edit": "Upraviť",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ Pred testovaním pripojenia zadajte príkaz",
         "testSuccess": "✅ Úspešne pripojené! Nájdených {{count}} nástrojov.",
         "testFailed": "❌ Pripojenie zlyhalo: {{message}}",
-        "refreshedAll": "✅ nástroje obnovené pre {{count}} server",
-        "refreshedAll_plural": "✅ nástroje obnovené pre {{count}} servery",
+        "refreshedAll_one": "✅ nástroje obnovené pre {{count}} server",
+        "refreshedAll_other": "✅ nástroje obnovené pre {{count}} servery",
+        "refreshedAll": "✅ nástroje obnovené pre {{count}} servery",
         "refreshedPartial": "✅ obnovených {{success}} serverov, ❌ {{failed}} zlyhalo",
         "noServersConfigured": "⚠️ Žiadne MCP servery nenakonfigurované",
         "testingAll": "🧪 Testujem {{count}} MCP pripojení serverov...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Vytvárajte a spravujte AI agentov so špecifickými schopnosťami, nástrojmi a správaním.",
-      "count": "{{count}} agent nakonfigurovaný",
-      "count_plural": "{{count}} agenti nakonfigurovaní",
+      "count_one": "{{count}} agent nakonfigurovaný",
+      "count_other": "{{count}} agenti nakonfigurovaní",
+      "count": "{{count}} agenti nakonfigurovaní",
       "addBtn": "+ pridať agenta",
       "empty": "Žiadni agenti. Vyberte pridať agenta a začnite.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} vstavaný",
-        "mcpServer": "{{count}} mcp server",
-        "mcpServer_plural": "{{count}} mcp servery",
-        "mcpTool": "{{count}} mcp nástroj",
-        "mcpTool_plural": "{{count}} mcp nástroje",
+        "mcpServer_one": "{{count}} mcp server",
+        "mcpServer_other": "{{count}} mcp servery",
+        "mcpServer": "{{count}} mcp servery",
+        "mcpTool_one": "{{count}} mcp nástroj",
+        "mcpTool_other": "{{count}} mcp nástroje",
+        "mcpTool": "{{count}} mcp nástroje",
         "noTools": "Žiadne povolené nástroje"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Akcie"
         },
         "unnamed": "CLI nástroj bez názvu",
-        "paramCount": "{{count}} parameter",
-        "paramCount_plural": "{{count}} parametre",
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parametre",
+        "paramCount": "{{count}} parametre",
         "noParams": "Žiadne",
         "statusEnabled": "Povolené",
         "statusDisabled": "Zakázané",
@@ -895,8 +908,9 @@
         "desc": "Predpona (emoji alebo text) na zobrazenie pred všetkými rýchlymi akciami v kontextovom menu",
         "placeholder": "⚡"
       },
-      "count": "{{count}} akcia nakonfigurovaná ({{enabled}} povolených)",
-      "count_plural": "{{count}} akcie nakonfigurované ({{enabled}} povolených)",
+      "count_one": "{{count}} akcia nakonfigurovaná ({{enabled}} povolených)",
+      "count_other": "{{count}} akcie nakonfigurované ({{enabled}} povolených)",
+      "count": "{{count}} akcie nakonfigurované ({{enabled}} povolených)",
       "addBtn": "+ pridať rýchlu akciu",
       "empty": "Žiadne rýchle akcie. Vyberte pridať rýchlu akciu a začnite.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Povoliť RAG",
       "step3": "Vybrať indexovať trezor",
       "close": "Zatvoriť",
-      "retrieved": "📚 načítané z {{count}} dokumentu",
-      "retrieved_plural": "📚 načítané z {{count}} dokumentov"
+      "retrieved_one": "📚 načítané z {{count}} dokumentu",
+      "retrieved_other": "📚 načítané z {{count}} dokumentov",
+      "retrieved": "📚 načítané z {{count}} dokumentov"
     },
     "ragTooltip": {
       "status": "Stav RAG indexu:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP prístup",
         "noServers": "Žiadne MCP servery. Pridajte ich v Nastavenia → MCP na odomknutie možností.",
-        "toolsCached": "{{count}} nástroj v cache",
-        "toolsCached_plural": "{{count}} nástroje v cache",
+        "toolsCached_one": "{{count}} nástroj v cache",
+        "toolsCached_other": "{{count}} nástroje v cache",
+        "toolsCached": "{{count}} nástroje v cache",
         "noToolsCached": "Žiadne nástroje v cache. Povoľte plný prístup alebo obnovte cache.",
         "showTools": "Zobraziť nástroje",
         "hideTools": "Skryť nástroje",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Zakázané",
         "statusConnected": "● pripojené",
         "statusDisconnected": "○ odpojené",
-        "toolsLive": "{{count}} nástroj",
-        "toolsLive_plural": "{{count}} nástroje",
-        "toolsCached": "{{count}} nástroj (v cache)",
-        "toolsCached_plural": "{{count}} nástroje (v cache)",
+        "toolsLive_one": "{{count}} nástroj",
+        "toolsLive_other": "{{count}} nástroje",
+        "toolsLive": "{{count}} nástroje",
+        "toolsCached_one": "{{count}} nástroj (v cache)",
+        "toolsCached_other": "{{count}} nástroje (v cache)",
+        "toolsCached": "{{count}} nástroje (v cache)",
         "noTools": "0 nástrojov",
         "connectBtn": "Pripojiť",
         "disconnectBtn": "Odpojiť",

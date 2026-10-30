@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Lihat dan urus model daripada semua pembekal yang dikonfigurasi. Klik \"segarkan model\" untuk mendapatkan model terbaru yang tersedia.",
+      "providerCount_one": "{{count}} pembekal dikonfigurasi",
+      "providerCount_other": "{{count}} pembekal dikonfigurasi",
       "providerCount": "{{count}} pembekal dikonfigurasi",
-      "providerCount_plural": "{{count}} pembekal dikonfigurasi",
       "refreshAll": "🔄 segarkan semua model",
       "empty": "Tiada pembekal dikonfigurasi lagi. Tambah pembekal dalam tab pembekal terlebih dahulu.",
       "noModels": "Tiada model tersedia. Klik \"segarkan semua model\" atau segarkan pembekal individu dalam tab pembekal.",
       "noMatch": "Tiada model sepadan dengan penapis semasa. Laraskan atau kosongkan penapis untuk melihat keputusan.",
+      "modelCount_one": "• {{count}} model dicache",
+      "modelCount_other": "• {{count}} model dicache",
       "modelCount": "• {{count}} model dicache",
-      "modelCount_plural": "• {{count}} model dicache",
+      "matchCount_one": "• {{count}} sepadan dengan penapis yang dipilih",
+      "matchCount_other": "• {{count}} sepadan dengan penapis yang dipilih",
       "matchCount": "• {{count}} sepadan dengan penapis yang dipilih",
-      "matchCount_plural": "• {{count}} sepadan dengan penapis yang dipilih",
       "status": {
         "enabled": "Aktif",
         "disabled": "Tidak aktif"
@@ -99,8 +102,9 @@
       "securityItem2": "Tambah folder ini ke .gitignore jika anda menggunakan penyegerakan Git.",
       "securityItem3": "Berhati-hati apabila menggunakan perkhidmatan penyegerakan awan awam.",
       "desc": "Urus pembekal LLM dan kelayakan API. Gunakan lajur tindakan untuk mengedit butiran konfigurasi atau menyegarkan model yang dicache.",
+      "count_one": "{{count}} pembekal dikonfigurasi",
+      "count_other": "{{count}} pembekal dikonfigurasi",
       "count": "{{count}} pembekal dikonfigurasi",
-      "count_plural": "{{count}} pembekal dikonfigurasi",
       "addBtn": "+ Tambah pembekal",
       "empty": "Tiada pembekal dikonfigurasi. Pilih \"Tambah pembekal\" untuk bermula.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Tiada model",
-        "count": "{{count}} model",
-        "count_plural": "{{count}} model"
+        "count_one": "{{count}} model",
+        "count_other": "{{count}} model",
+        "count": "{{count}} model"
       },
       "ollama": {
         "checkingVersion": "Memeriksa versi...",
@@ -183,8 +188,9 @@
       "noArgs": "Tiada",
       "cached": "Dicache",
       "disabled": "Tidak aktif",
+      "envVars_one": "{{count}} pemboleh ubah persekitaran",
+      "envVars_other": "{{count}} pemboleh ubah persekitaran",
       "envVars": "{{count}} pemboleh ubah persekitaran",
-      "envVars_plural": "{{count}} pemboleh ubah persekitaran",
       "status": {
         "disabled": "Tidak aktif",
         "connected": "disambungkan",
@@ -194,10 +200,12 @@
         "autoConnect": "Sambung automatik"
       },
       "toolCount": {
+        "live_one": "{{count}} alat langsung",
+        "live_other": "{{count}} alat langsung",
         "live": "{{count}} alat langsung",
-        "live_plural": "{{count}} alat langsung",
-        "cached": "{{count}} alat dicache",
-        "cached_plural": "{{count}} alat dicache"
+        "cached_one": "{{count}} alat dicache",
+        "cached_other": "{{count}} alat dicache",
+        "cached": "{{count}} alat dicache"
       },
       "actions": {
         "edit": "Edit",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ sila masukkan perintah sebelum menguji sambungan",
         "testSuccess": "✅ berjaya disambungkan! Dijumpai {{count}} alat.",
         "testFailed": "❌ Sambungan gagal: {{message}}",
+        "refreshedAll_one": "✅ menyegarkan alat untuk {{count}} pelayan",
+        "refreshedAll_other": "✅ menyegarkan alat untuk {{count}} pelayan",
         "refreshedAll": "✅ menyegarkan alat untuk {{count}} pelayan",
-        "refreshedAll_plural": "✅ menyegarkan alat untuk {{count}} pelayan",
         "refreshedPartial": "✅ disegarkan {{success}} pelayan, ❌ {{failed}} gagal",
         "noServersConfigured": "⚠️ Tiada pelayan MCP dikonfigurasi",
         "testingAll": "🧪 Menguji {{count}} sambungan pelayan MCP...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Cipta dan urus ejen AI dengan keupayaan, alat, dan tingkah laku tertentu.",
+      "count_one": "{{count}} ejen dikonfigurasi",
+      "count_other": "{{count}} ejen dikonfigurasi",
       "count": "{{count}} ejen dikonfigurasi",
-      "count_plural": "{{count}} ejen dikonfigurasi",
       "addBtn": "+ tambah ejen",
       "empty": "Tiada ejen dikonfigurasi. Pilih tambah ejen untuk bermula.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} terbina dalam",
+        "mcpServer_one": "{{count}} pelayan MCP",
+        "mcpServer_other": "{{count}} pelayan MCP",
         "mcpServer": "{{count}} pelayan MCP",
-        "mcpServer_plural": "{{count}} pelayan MCP",
+        "mcpTool_one": "{{count}} alat MCP",
+        "mcpTool_other": "{{count}} alat MCP",
         "mcpTool": "{{count}} alat MCP",
-        "mcpTool_plural": "{{count}} alat MCP",
         "noTools": "Tiada alat diaktifkan"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Tindakan"
         },
         "unnamed": "Alat CLI Tanpa Nama",
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parameter",
         "paramCount": "{{count}} parameter",
-        "paramCount_plural": "{{count}} parameter",
         "noParams": "Tiada",
         "statusEnabled": "Aktif",
         "statusDisabled": "Tidak aktif",
@@ -895,8 +908,9 @@
         "desc": "Awalan (emoji atau teks) untuk dipaparkan sebelum semua tindakan pantas dalam menu konteks",
         "placeholder": "⚡"
       },
+      "count_one": "{{count}} tindakan dikonfigurasi ({{enabled}} aktif)",
+      "count_other": "{{count}} tindakan dikonfigurasi ({{enabled}} aktif)",
       "count": "{{count}} tindakan dikonfigurasi ({{enabled}} aktif)",
-      "count_plural": "{{count}} tindakan dikonfigurasi ({{enabled}} aktif)",
       "addBtn": "+ tambah tindakan pantas",
       "empty": "Tiada tindakan pantas dikonfigurasi. Pilih tambah tindakan pantas untuk bermula.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Aktifkan RAG",
       "step3": "Pilih indeks vault",
       "close": "Tutup",
-      "retrieved": "📚 diambil daripada {{count}} dokumen",
-      "retrieved_plural": "📚 diambil daripada {{count}} dokumen"
+      "retrieved_one": "📚 diambil daripada {{count}} dokumen",
+      "retrieved_other": "📚 diambil daripada {{count}} dokumen",
+      "retrieved": "📚 diambil daripada {{count}} dokumen"
     },
     "ragTooltip": {
       "status": "Status Indeks RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "Akses MCP",
         "noServers": "Tiada pelayan MCP dikonfigurasi. Tambah pelayan di bawah Tetapan → MCP untuk membuka kunci pilihan ini.",
+        "toolsCached_one": "{{count}} alat dicache",
+        "toolsCached_other": "{{count}} alat dicache",
         "toolsCached": "{{count}} alat dicache",
-        "toolsCached_plural": "{{count}} alat dicache",
         "noToolsCached": "Tiada alat dicache lagi. Aktifkan akses penuh atau segarkan cache.",
         "showTools": "Tunjukkan alat",
         "hideTools": "Sembunyikan alat",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Tidak aktif",
         "statusConnected": "● disambungkan",
         "statusDisconnected": "○ diputuskan",
+        "toolsLive_one": "{{count}} alat",
+        "toolsLive_other": "{{count}} alat",
         "toolsLive": "{{count}} alat",
-        "toolsLive_plural": "{{count}} alat",
+        "toolsCached_one": "{{count}} alat (dicache)",
+        "toolsCached_other": "{{count}} alat (dicache)",
         "toolsCached": "{{count}} alat (dicache)",
-        "toolsCached_plural": "{{count}} alat (dicache)",
         "noTools": "0 alat",
         "connectBtn": "Sambung",
         "disconnectBtn": "Putus",

@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "تمام کنفیگر کردہ فراہم کنندگان سے ماڈلز دیکھیں اور ان کا انتظام کریں۔ تازہ ترین دستیاب ماڈلز حاصل کرنے کے لیے \"ماڈلز ریفریش کریں\" پر کلک کریں۔",
-      "providerCount": "{{count}} فراہم کنندہ کنفیگر ہے",
-      "providerCount_plural": "{{count}} فراہم کنندگان کنفیگر ہیں",
+      "providerCount_one": "{{count}} فراہم کنندہ کنفیگر ہے",
+      "providerCount_other": "{{count}} فراہم کنندگان کنفیگر ہیں",
+      "providerCount": "{{count}} فراہم کنندگان کنفیگر ہیں",
       "refreshAll": "🔄 تمام ماڈلز ریفریش کریں",
       "empty": "ابھی تک کوئی فراہم کنندہ کنفیگر نہیں ہوا۔ پہلے فراہم کنندگان ٹیب میں فراہم کنندگان شامل کریں۔",
       "noModels": "کوئی ماڈل دستیاب نہیں۔ \"تمام ماڈلز ریفریش کریں\" پر کلک کریں یا فراہم کنندگان ٹیب میں انفرادی فراہم کنندگان ریفریش کریں۔",
       "noMatch": "موجودہ فلٹروں سے کوئی ماڈل مطابقت نہیں رکھتا۔ نتائج دیکھنے کے لیے فلٹرز ایڈجسٹ یا صاف کریں۔",
-      "modelCount": "• {{count}} ماڈل کیشڈ",
-      "modelCount_plural": "• {{count}} ماڈلز کیشڈ",
+      "modelCount_one": "• {{count}} ماڈل کیشڈ",
+      "modelCount_other": "• {{count}} ماڈلز کیشڈ",
+      "modelCount": "• {{count}} ماڈلز کیشڈ",
+      "matchCount_one": "• {{count}} منتخب فلٹروں سے مطابقت",
+      "matchCount_other": "• {{count}} منتخب فلٹروں سے مطابقت",
       "matchCount": "• {{count}} منتخب فلٹروں سے مطابقت",
-      "matchCount_plural": "• {{count}} منتخب فلٹروں سے مطابقت",
       "status": {
         "enabled": "فعال",
         "disabled": "غیر فعال"
@@ -99,8 +102,9 @@
       "securityItem2": "اگر آپ Git sync استعمال کرتے ہیں تو اس فولڈر کو .gitignore میں شامل کریں۔",
       "securityItem3": "عوامی کلاؤڈ sync سروسز استعمال کرتے وقت احتیاط برتیں۔",
       "desc": "LLM فراہم کنندگان اور API اسناد کا انتظام کریں۔ کنفیگریشن تفصیلات ترمیم کرنے یا کیشڈ ماڈلز ریفریش کرنے کے لیے اقدامات کالم استعمال کریں۔",
-      "count": "{{count}} فراہم کنندہ کنفیگر ہے",
-      "count_plural": "{{count}} فراہم کنندگان کنفیگر ہیں",
+      "count_one": "{{count}} فراہم کنندہ کنفیگر ہے",
+      "count_other": "{{count}} فراہم کنندگان کنفیگر ہیں",
+      "count": "{{count}} فراہم کنندگان کنفیگر ہیں",
       "addBtn": "+ فراہم کنندہ شامل کریں",
       "empty": "کوئی فراہم کنندہ کنفیگر نہیں۔ شروع کرنے کے لیے \"فراہم کنندہ شامل کریں\" منتخب کریں۔",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "کوئی ماڈل نہیں",
-        "count": "{{count}} ماڈل",
-        "count_plural": "{{count}} ماڈلز"
+        "count_one": "{{count}} ماڈل",
+        "count_other": "{{count}} ماڈلز",
+        "count": "{{count}} ماڈلز"
       },
       "ollama": {
         "checkingVersion": "ورژن چیک ہو رہا ہے...",
@@ -183,8 +188,9 @@
       "noArgs": "کوئی نہیں",
       "cached": "کیشڈ",
       "disabled": "غیر فعال",
-      "envVars": "{{count}} ماحولیاتی متغیر",
-      "envVars_plural": "{{count}} ماحولیاتی متغیرات",
+      "envVars_one": "{{count}} ماحولیاتی متغیر",
+      "envVars_other": "{{count}} ماحولیاتی متغیرات",
+      "envVars": "{{count}} ماحولیاتی متغیرات",
       "status": {
         "disabled": "غیر فعال",
         "connected": "منسلک",
@@ -194,10 +200,12 @@
         "autoConnect": "خودکار کنکشن"
       },
       "toolCount": {
-        "live": "{{count}} لائیو ٹول",
-        "live_plural": "{{count}} لائیو ٹولز",
-        "cached": "{{count}} کیشڈ ٹول",
-        "cached_plural": "{{count}} کیشڈ ٹولز"
+        "live_one": "{{count}} لائیو ٹول",
+        "live_other": "{{count}} لائیو ٹولز",
+        "live": "{{count}} لائیو ٹولز",
+        "cached_one": "{{count}} کیشڈ ٹول",
+        "cached_other": "{{count}} کیشڈ ٹولز",
+        "cached": "{{count}} کیشڈ ٹولز"
       },
       "actions": {
         "edit": "ترمیم",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ کنکشن ٹیسٹ کرنے سے پہلے براہ کرم ایک کمانڈ درج کریں",
         "testSuccess": "✅ کامیابی سے منسلک ہو گیا! {{count}} ٹولز ملے۔",
         "testFailed": "❌ کنکشن ناکام ہوا: {{message}}",
-        "refreshedAll": "✅ {{count}} سرور کے ٹولز ریفریش ہو گئے",
-        "refreshedAll_plural": "✅ {{count}} سرورز کے ٹولز ریفریش ہو گئے",
+        "refreshedAll_one": "✅ {{count}} سرور کے ٹولز ریفریش ہو گئے",
+        "refreshedAll_other": "✅ {{count}} سرورز کے ٹولز ریفریش ہو گئے",
+        "refreshedAll": "✅ {{count}} سرورز کے ٹولز ریفریش ہو گئے",
         "refreshedPartial": "✅ {{success}} سرورز ریفریش ہوئے، ❌ {{failed}} ناکام",
         "noServersConfigured": "⚠️ کوئی MCP سرور کنفیگر نہیں",
         "testingAll": "🧪 {{count}} MCP سرور کنکشن ٹیسٹ ہو رہے ہیں...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "مخصوص صلاحیتوں، ٹولز اور رویوں کے ساتھ AI ایجنٹس بنائیں اور ان کا انتظام کریں۔",
-      "count": "{{count}} ایجنٹ کنفیگر ہے",
-      "count_plural": "{{count}} ایجنٹس کنفیگر ہیں",
+      "count_one": "{{count}} ایجنٹ کنفیگر ہے",
+      "count_other": "{{count}} ایجنٹس کنفیگر ہیں",
+      "count": "{{count}} ایجنٹس کنفیگر ہیں",
       "addBtn": "+ ایجنٹ شامل کریں",
       "empty": "کوئی ایجنٹ کنفیگر نہیں۔ شروع کرنے کے لیے ایجنٹ شامل کریں منتخب کریں۔",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} بلٹ ان",
-        "mcpServer": "{{count}} mcp سرور",
-        "mcpServer_plural": "{{count}} mcp سرورز",
-        "mcpTool": "{{count}} mcp ٹول",
-        "mcpTool_plural": "{{count}} mcp ٹولز",
+        "mcpServer_one": "{{count}} mcp سرور",
+        "mcpServer_other": "{{count}} mcp سرورز",
+        "mcpServer": "{{count}} mcp سرورز",
+        "mcpTool_one": "{{count}} mcp ٹول",
+        "mcpTool_other": "{{count}} mcp ٹولز",
+        "mcpTool": "{{count}} mcp ٹولز",
         "noTools": "کوئی ٹول فعال نہیں"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "اقدامات"
         },
         "unnamed": "بے نام CLI ٹول",
-        "paramCount": "{{count}} پیرامیٹر",
-        "paramCount_plural": "{{count}} پیرامیٹرز",
+        "paramCount_one": "{{count}} پیرامیٹر",
+        "paramCount_other": "{{count}} پیرامیٹرز",
+        "paramCount": "{{count}} پیرامیٹرز",
         "noParams": "کوئی نہیں",
         "statusEnabled": "فعال",
         "statusDisabled": "غیر فعال",
@@ -895,8 +908,9 @@
         "desc": "سیاق و سباق مینو میں تمام فوری اقدامات سے پہلے ڈسپلے کرنے کا سابقہ (ایموجی یا متن)",
         "placeholder": "⚡"
       },
-      "count": "{{count}} اقدام کنفیگر ({{enabled}} فعال)",
-      "count_plural": "{{count}} اقدامات کنفیگر ({{enabled}} فعال)",
+      "count_one": "{{count}} اقدام کنفیگر ({{enabled}} فعال)",
+      "count_other": "{{count}} اقدامات کنفیگر ({{enabled}} فعال)",
+      "count": "{{count}} اقدامات کنفیگر ({{enabled}} فعال)",
       "addBtn": "+ فوری اقدام شامل کریں",
       "empty": "کوئی فوری اقدام کنفیگر نہیں۔ شروع کرنے کے لیے فوری اقدام شامل کریں منتخب کریں۔",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "RAG فعال کریں",
       "step3": "vault انڈیکس منتخب کریں",
       "close": "بند کریں",
-      "retrieved": "📚 {{count}} دستاویز سے بازیافت",
-      "retrieved_plural": "📚 {{count}} دستاویزات سے بازیافت"
+      "retrieved_one": "📚 {{count}} دستاویز سے بازیافت",
+      "retrieved_other": "📚 {{count}} دستاویزات سے بازیافت",
+      "retrieved": "📚 {{count}} دستاویزات سے بازیافت"
     },
     "ragTooltip": {
       "status": "RAG انڈیکس کی حالت:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP رسائی",
         "noServers": "کوئی MCP سرور کنفیگر نہیں۔ ان اختیارات کو غیر مقفل کرنے کے لیے ترتیبات ← MCP میں سرورز شامل کریں۔",
-        "toolsCached": "{{count}} ٹول کیشڈ",
-        "toolsCached_plural": "{{count}} ٹولز کیشڈ",
+        "toolsCached_one": "{{count}} ٹول کیشڈ",
+        "toolsCached_other": "{{count}} ٹولز کیشڈ",
+        "toolsCached": "{{count}} ٹولز کیشڈ",
         "noToolsCached": "ابھی تک کوئی ٹول کیشڈ نہیں۔ مکمل رسائی فعال کریں یا کیش ریفریش کریں۔",
         "showTools": "ٹولز دکھائیں",
         "hideTools": "ٹولز چھپائیں",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "غیر فعال",
         "statusConnected": "● منسلک",
         "statusDisconnected": "○ منقطع",
-        "toolsLive": "{{count}} ٹول",
-        "toolsLive_plural": "{{count}} ٹولز",
-        "toolsCached": "{{count}} ٹول (کیشڈ)",
-        "toolsCached_plural": "{{count}} ٹولز (کیشڈ)",
+        "toolsLive_one": "{{count}} ٹول",
+        "toolsLive_other": "{{count}} ٹولز",
+        "toolsLive": "{{count}} ٹولز",
+        "toolsCached_one": "{{count}} ٹول (کیشڈ)",
+        "toolsCached_other": "{{count}} ٹولز (کیشڈ)",
+        "toolsCached": "{{count}} ٹولز (کیشڈ)",
         "noTools": "0 ٹولز",
         "connectBtn": "کنکٹ",
         "disconnectBtn": "ڈسکنکٹ",

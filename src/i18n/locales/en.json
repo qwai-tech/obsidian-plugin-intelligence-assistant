@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "View and manage models from all configured providers. Click \"refresh models\" to fetch the latest available models.",
-      "providerCount": "{{count}} provider configured",
-      "providerCount_plural": "{{count}} providers configured",
+      "providerCount_one": "{{count}} provider configured",
+      "providerCount_other": "{{count}} providers configured",
+      "providerCount": "{{count}} providers configured",
       "refreshAll": "🔄 refresh all models",
       "empty": "No providers configured yet. Add providers in the provider tab first.",
       "noModels": "No models available. Click \"refresh all models\" or refresh individual providers in the provider tab.",
       "noMatch": "No models match the current filters. Adjust or clear filters to see results.",
-      "modelCount": "• {{count}} model cached",
-      "modelCount_plural": "• {{count}} models cached",
-      "matchCount": "• {{count}} match selected filters",
-      "matchCount_plural": "• {{count}} matches selected filters",
+      "modelCount_one": "• {{count}} model cached",
+      "modelCount_other": "• {{count}} models cached",
+      "modelCount": "• {{count}} models cached",
+      "matchCount_one": "• {{count}} match selected filters",
+      "matchCount_other": "• {{count}} matches selected filters",
+      "matchCount": "• {{count}} matches selected filters",
       "status": {
         "enabled": "Enabled",
         "disabled": "Disabled"
@@ -99,8 +102,9 @@
       "securityItem2": "Add this folder to your .gitignore if you use Git sync.",
       "securityItem3": "Be cautious when using public cloud sync services.",
       "desc": "Manage LLM providers and API credentials. Use the actions column to edit configuration details or refresh cached models.",
-      "count": "{{count}} provider configured",
-      "count_plural": "{{count}} providers configured",
+      "count_one": "{{count}} provider configured",
+      "count_other": "{{count}} providers configured",
+      "count": "{{count}} providers configured",
       "addBtn": "+ Add provider",
       "empty": "No providers configured. Select \"Add provider\" to get started.",
       "tableHeaders": {
@@ -123,8 +127,9 @@
       },
       "models": {
         "none": "No models",
-        "count": "{{count}} model",
-        "count_plural": "{{count}} models"
+        "count_one": "{{count}} model",
+        "count_other": "{{count}} models",
+        "count": "{{count}} models"
       },
       "ollama": {
         "checkingVersion": "Checking version...",
@@ -182,8 +187,9 @@
       "noArgs": "None",
       "cached": "Cached",
       "disabled": "Disabled",
-      "envVars": "{{count}} env var",
-      "envVars_plural": "{{count}} env vars",
+      "envVars_one": "{{count}} env var",
+      "envVars_other": "{{count}} env vars",
+      "envVars": "{{count}} env vars",
       "status": {
         "disabled": "Disabled",
         "connected": "connected",
@@ -193,10 +199,12 @@
         "autoConnect": "Auto-connect"
       },
       "toolCount": {
-        "live": "{{count}} live tool",
-        "live_plural": "{{count}} live tools",
-        "cached": "{{count}} cached tool",
-        "cached_plural": "{{count}} cached tools"
+        "live_one": "{{count}} live tool",
+        "live_other": "{{count}} live tools",
+        "live": "{{count}} live tools",
+        "cached_one": "{{count}} cached tool",
+        "cached_other": "{{count}} cached tools",
+        "cached": "{{count}} cached tools"
       },
       "actions": {
         "edit": "Edit",
@@ -220,8 +228,9 @@
         "testNoCommand": "❌ please enter a command before testing connection",
         "testSuccess": "✅ connected successfully! Found {{count}} tools.",
         "testFailed": "❌ Connection failed: {{message}}",
-        "refreshedAll": "✅ refreshed tools for {{count}} server",
-        "refreshedAll_plural": "✅ refreshed tools for {{count}} servers",
+        "refreshedAll_one": "✅ refreshed tools for {{count}} server",
+        "refreshedAll_other": "✅ refreshed tools for {{count}} servers",
+        "refreshedAll": "✅ refreshed tools for {{count}} servers",
         "refreshedPartial": "✅ refreshed {{success}} servers, ❌ {{failed}} failed",
         "noServersConfigured": "⚠️ No MCP servers configured",
         "testingAll": "🧪 Testing {{count}} MCP server connections...",
@@ -234,8 +243,9 @@
     },
     "agents": {
       "desc": "Create and manage AI agents with specific capabilities, tools, and behaviors.",
-      "count": "{{count}} agent configured",
-      "count_plural": "{{count}} agents configured",
+      "count_one": "{{count}} agent configured",
+      "count_other": "{{count}} agents configured",
+      "count": "{{count}} agents configured",
       "addBtn": "+ add agent",
       "empty": "No agents configured. Select add agent to get started.",
       "tableHeaders": {
@@ -261,10 +271,12 @@
       },
       "tools": {
         "builtIn": "{{count}} built-in",
-        "mcpServer": "{{count}} MCP server",
-        "mcpServer_plural": "{{count}} MCP servers",
-        "mcpTool": "{{count}} MCP tool",
-        "mcpTool_plural": "{{count}} MCP tools",
+        "mcpServer_one": "{{count}} MCP server",
+        "mcpServer_other": "{{count}} MCP servers",
+        "mcpServer": "{{count}} MCP servers",
+        "mcpTool_one": "{{count}} MCP tool",
+        "mcpTool_other": "{{count}} MCP tools",
+        "mcpTool": "{{count}} MCP tools",
         "noTools": "No tools enabled"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Actions"
         },
         "unnamed": "Unnamed CLI Tool",
-        "paramCount": "{{count}} parameter",
-        "paramCount_plural": "{{count}} parameters",
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parameters",
+        "paramCount": "{{count}} parameters",
         "noParams": "None",
         "statusEnabled": "Enabled",
         "statusDisabled": "Disabled",
@@ -895,8 +908,9 @@
         "desc": "Prefix (emoji or text) to display before all quick actions in the context menu",
         "placeholder": "⚡"
       },
-      "count": "{{count}} action configured ({{enabled}} enabled)",
-      "count_plural": "{{count}} actions configured ({{enabled}} enabled)",
+      "count_one": "{{count}} action configured ({{enabled}} enabled)",
+      "count_other": "{{count}} actions configured ({{enabled}} enabled)",
+      "count": "{{count}} actions configured ({{enabled}} enabled)",
       "addBtn": "+ add quick action",
       "empty": "No quick actions configured. Select add quick action to get started.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Enable RAG",
       "step3": "Select index vault",
       "close": "Close",
-      "retrieved": "📚 retrieved from {{count}} document",
-      "retrieved_plural": "📚 retrieved from {{count}} documents"
+      "retrieved_one": "📚 retrieved from {{count}} document",
+      "retrieved_other": "📚 retrieved from {{count}} documents",
+      "retrieved": "📚 retrieved from {{count}} documents"
     },
     "ragTooltip": {
       "status": "RAG Index Status:",
@@ -1278,8 +1293,9 @@
       "mcp": {
         "title": "MCP access",
         "noServers": "No MCP servers configured. Add servers under Settings → MCP to unlock these options.",
-        "toolsCached": "{{count}} tool cached",
-        "toolsCached_plural": "{{count}} tools cached",
+        "toolsCached_one": "{{count}} tool cached",
+        "toolsCached_other": "{{count}} tools cached",
+        "toolsCached": "{{count}} tools cached",
         "noToolsCached": "No tools cached yet. Enable full access or refresh the cache.",
         "showTools": "Show tools",
         "hideTools": "Hide tools",
@@ -1393,10 +1409,12 @@
         "statusDisabled": "Disabled",
         "statusConnected": "● connected",
         "statusDisconnected": "○ disconnected",
-        "toolsLive": "{{count}} tool",
-        "toolsLive_plural": "{{count}} tools",
-        "toolsCached": "{{count}} tool (cached)",
-        "toolsCached_plural": "{{count}} tools (cached)",
+        "toolsLive_one": "{{count}} tool",
+        "toolsLive_other": "{{count}} tools",
+        "toolsLive": "{{count}} tools",
+        "toolsCached_one": "{{count}} tool (cached)",
+        "toolsCached_other": "{{count}} tools (cached)",
+        "toolsCached": "{{count}} tools (cached)",
         "noTools": "0 tools",
         "connectBtn": "Connect",
         "disconnectBtn": "Disconnect",

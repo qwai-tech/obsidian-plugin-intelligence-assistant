@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Прагляд і кіраванне мадэлямі ад усіх наладжаных пастаўшчыкоў. Націсніце «абнавіць мадэлі», каб атрымаць апошнія даступныя мадэлі.",
-      "providerCount": "{{count}} пастаўшчык наладжаны",
-      "providerCount_plural": "{{count}} пастаўшчыкі наладжаны",
+      "providerCount_one": "{{count}} пастаўшчык наладжаны",
+      "providerCount_other": "{{count}} пастаўшчыкі наладжаны",
+      "providerCount": "{{count}} пастаўшчыкі наладжаны",
       "refreshAll": "🔄 абнавіць усе мадэлі",
       "empty": "Яшчэ не наладжана ніводнага пастаўшчыка. Спачатку дадайце пастаўшчыкоў на ўкладцы пастаўшчыкоў.",
       "noModels": "Няма даступных мадэляў. Націсніце «абнавіць усе мадэлі» або абнавіце асобных пастаўшчыкоў на ўкладцы пастаўшчыкоў.",
       "noMatch": "Ніводная мадэль не адпавядае бягучым фільтрам. Наладзьце або ачысціце фільтры, каб убачыць вынікі.",
-      "modelCount": "• {{count}} мадэль у кэшы",
-      "modelCount_plural": "• {{count}} мадэлі ў кэшы",
-      "matchCount": "• {{count}} адпавядае абраным фільтрам",
-      "matchCount_plural": "• {{count}} адпавядаюць абраным фільтрам",
+      "modelCount_one": "• {{count}} мадэль у кэшы",
+      "modelCount_other": "• {{count}} мадэлі ў кэшы",
+      "modelCount": "• {{count}} мадэлі ў кэшы",
+      "matchCount_one": "• {{count}} адпавядае абраным фільтрам",
+      "matchCount_other": "• {{count}} адпавядаюць абраным фільтрам",
+      "matchCount": "• {{count}} адпавядаюць абраным фільтрам",
       "status": {
         "enabled": "Уключана",
         "disabled": "Адключана"
@@ -99,8 +102,9 @@
       "securityItem2": "Дадайце гэту папку ў .gitignore, калі вы выкарыстоўваеце сінхранізацыю Git.",
       "securityItem3": "Будзьце асцярожныя пры выкарыстанні публічных аблачных сэрвісаў сінхранізацыі.",
       "desc": "Кіраваць пастаўшчыкамі LLM і ўліковымі дадзенымі API. Выкарыстоўвайце слупок дзеянняў для рэдагавання дэталяў канфігурацыі або абнаўлення мадэляў з кэша.",
-      "count": "{{count}} пастаўшчык наладжаны",
-      "count_plural": "{{count}} пастаўшчыкі наладжаны",
+      "count_one": "{{count}} пастаўшчык наладжаны",
+      "count_other": "{{count}} пастаўшчыкі наладжаны",
+      "count": "{{count}} пастаўшчыкі наладжаны",
       "addBtn": "+ Дадаць пастаўшчыка",
       "empty": "Пастаўшчыкі не наладжаны. Выберыце «Дадаць пастаўшчыка», каб пачаць.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Няма мадэляў",
-        "count": "{{count}} мадэль",
-        "count_plural": "{{count}} мадэлі"
+        "count_one": "{{count}} мадэль",
+        "count_other": "{{count}} мадэлі",
+        "count": "{{count}} мадэлі"
       },
       "ollama": {
         "checkingVersion": "Праверка версіі...",
@@ -183,8 +188,9 @@
       "noArgs": "Адсутнічаюць",
       "cached": "У кэшы",
       "disabled": "Адключана",
-      "envVars": "{{count}} зменная асяроддзя",
-      "envVars_plural": "{{count}} зменных асяроддзя",
+      "envVars_one": "{{count}} зменная асяроддзя",
+      "envVars_other": "{{count}} зменных асяроддзя",
+      "envVars": "{{count}} зменных асяроддзя",
       "status": {
         "disabled": "Адключана",
         "connected": "падключана",
@@ -194,10 +200,12 @@
         "autoConnect": "Аўтаматычнае злучэнне"
       },
       "toolCount": {
-        "live": "{{count}} актыўны інструмент",
-        "live_plural": "{{count}} актыўных інструментаў",
-        "cached": "{{count}} інструмент з кэша",
-        "cached_plural": "{{count}} інструментаў з кэша"
+        "live_one": "{{count}} актыўны інструмент",
+        "live_other": "{{count}} актыўных інструментаў",
+        "live": "{{count}} актыўных інструментаў",
+        "cached_one": "{{count}} інструмент з кэша",
+        "cached_other": "{{count}} інструментаў з кэша",
+        "cached": "{{count}} інструментаў з кэша"
       },
       "actions": {
         "edit": "Рэдагаваць",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ увядзіце каманду перад тэставаннем злучэння",
         "testSuccess": "✅ паспяхова падключана! Знойдзена {{count}} інструментаў.",
         "testFailed": "❌ Злучэнне не ўдалося: {{message}}",
-        "refreshedAll": "✅ абноўлены інструменты для {{count}} сервера",
-        "refreshedAll_plural": "✅ абноўлены інструменты для {{count}} сервераў",
+        "refreshedAll_one": "✅ абноўлены інструменты для {{count}} сервера",
+        "refreshedAll_other": "✅ абноўлены інструменты для {{count}} сервераў",
+        "refreshedAll": "✅ абноўлены інструменты для {{count}} сервераў",
         "refreshedPartial": "✅ абноўлена {{success}} сервераў, ❌ {{failed}} не ўдалося",
         "noServersConfigured": "⚠️ Серверы MCP не наладжаны",
         "testingAll": "🧪 Тэставанне {{count}} злучэнняў сервера MCP...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Ствараць і кіраваць агентамі DI са спецыфічнымі магчымасцямі, інструментамі і паводзінамі.",
-      "count": "{{count}} агент наладжаны",
-      "count_plural": "{{count}} агентаў наладжана",
+      "count_one": "{{count}} агент наладжаны",
+      "count_other": "{{count}} агентаў наладжана",
+      "count": "{{count}} агентаў наладжана",
       "addBtn": "+ дадаць агента",
       "empty": "Агенты не наладжаны. Выберыце дадаць агента, каб пачаць.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} убудаваны",
-        "mcpServer": "{{count}} сервер MCP",
-        "mcpServer_plural": "{{count}} сервераў MCP",
-        "mcpTool": "{{count}} інструмент MCP",
-        "mcpTool_plural": "{{count}} інструментаў MCP",
+        "mcpServer_one": "{{count}} сервер MCP",
+        "mcpServer_other": "{{count}} сервераў MCP",
+        "mcpServer": "{{count}} сервераў MCP",
+        "mcpTool_one": "{{count}} інструмент MCP",
+        "mcpTool_other": "{{count}} інструментаў MCP",
+        "mcpTool": "{{count}} інструментаў MCP",
         "noTools": "Інструменты не ўключаны"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Дзеянні"
         },
         "unnamed": "Безназоўны інструмент CLI",
-        "paramCount": "{{count}} параметр",
-        "paramCount_plural": "{{count}} параметраў",
+        "paramCount_one": "{{count}} параметр",
+        "paramCount_other": "{{count}} параметраў",
+        "paramCount": "{{count}} параметраў",
         "noParams": "Адсутнічаюць",
         "statusEnabled": "Уключана",
         "statusDisabled": "Адключана",
@@ -895,8 +908,9 @@
         "desc": "Прэфікс (эмодзі або тэкст), які адлюстроўваецца перад усімі хуткімі дзеяннямі ў кантэкстным меню",
         "placeholder": "⚡"
       },
-      "count": "{{count}} дзеянне наладжана ({{enabled}} уключана)",
-      "count_plural": "{{count}} дзеянняў наладжана ({{enabled}} уключана)",
+      "count_one": "{{count}} дзеянне наладжана ({{enabled}} уключана)",
+      "count_other": "{{count}} дзеянняў наладжана ({{enabled}} уключана)",
+      "count": "{{count}} дзеянняў наладжана ({{enabled}} уключана)",
       "addBtn": "+ дадаць хуткае дзеянне",
       "empty": "Хуткія дзеянні не наладжаны. Выберыце дадаць хуткае дзеянне, каб пачаць.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Уключыць RAG",
       "step3": "Выбраць індэксаваць сховішча",
       "close": "Закрыць",
-      "retrieved": "📚 атрымана з {{count}} дакумента",
-      "retrieved_plural": "📚 атрымана з {{count}} дакументаў"
+      "retrieved_one": "📚 атрымана з {{count}} дакумента",
+      "retrieved_other": "📚 атрымана з {{count}} дакументаў",
+      "retrieved": "📚 атрымана з {{count}} дакументаў"
     },
     "ragTooltip": {
       "status": "Стан індэкса RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "Доступ MCP",
         "noServers": "Серверы MCP не наладжаны. Дадайце серверы ў Налады → MCP, каб разблакаваць гэтыя параметры.",
-        "toolsCached": "{{count}} інструмент у кэшы",
-        "toolsCached_plural": "{{count}} інструментаў у кэшы",
+        "toolsCached_one": "{{count}} інструмент у кэшы",
+        "toolsCached_other": "{{count}} інструментаў у кэшы",
+        "toolsCached": "{{count}} інструментаў у кэшы",
         "noToolsCached": "У кэшы інструментаў пакуль няма. Уключыце поўны доступ або абнавіце кэш.",
         "showTools": "Паказаць інструменты",
         "hideTools": "Схаваць інструменты",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Адключана",
         "statusConnected": "● падключана",
         "statusDisconnected": "○ адключана",
-        "toolsLive": "{{count}} інструмент",
-        "toolsLive_plural": "{{count}} інструментаў",
-        "toolsCached": "{{count}} інструмент (у кэшы)",
-        "toolsCached_plural": "{{count}} інструментаў (у кэшы)",
+        "toolsLive_one": "{{count}} інструмент",
+        "toolsLive_other": "{{count}} інструментаў",
+        "toolsLive": "{{count}} інструментаў",
+        "toolsCached_one": "{{count}} інструмент (у кэшы)",
+        "toolsCached_other": "{{count}} інструментаў (у кэшы)",
+        "toolsCached": "{{count}} інструментаў (у кэшы)",
         "noTools": "0 інструментаў",
         "connectBtn": "Падключыць",
         "disconnectBtn": "Адключыць",

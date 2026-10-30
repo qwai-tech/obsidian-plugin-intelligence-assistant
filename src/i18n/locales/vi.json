@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Xem và quản lý các mô hình từ tất cả nhà cung cấp đã cấu hình. Nhấp \"làm mới mô hình\" để tải các mô hình mới nhất.",
+      "providerCount_one": "{{count}} nhà cung cấp đã cấu hình",
+      "providerCount_other": "{{count}} nhà cung cấp đã cấu hình",
       "providerCount": "{{count}} nhà cung cấp đã cấu hình",
-      "providerCount_plural": "{{count}} nhà cung cấp đã cấu hình",
       "refreshAll": "🔄 làm mới tất cả mô hình",
       "empty": "Chưa có nhà cung cấp nào được cấu hình. Thêm nhà cung cấp trong tab nhà cung cấp trước.",
       "noModels": "Không có mô hình nào. Nhấp \"làm mới tất cả mô hình\" hoặc làm mới từng nhà cung cấp trong tab nhà cung cấp.",
       "noMatch": "Không có mô hình nào khớp với bộ lọc hiện tại. Điều chỉnh hoặc xóa bộ lọc để xem kết quả.",
+      "modelCount_one": "• {{count}} mô hình đã lưu cache",
+      "modelCount_other": "• {{count}} mô hình đã lưu cache",
       "modelCount": "• {{count}} mô hình đã lưu cache",
-      "modelCount_plural": "• {{count}} mô hình đã lưu cache",
+      "matchCount_one": "• {{count}} kết quả khớp bộ lọc đã chọn",
+      "matchCount_other": "• {{count}} kết quả khớp bộ lọc đã chọn",
       "matchCount": "• {{count}} kết quả khớp bộ lọc đã chọn",
-      "matchCount_plural": "• {{count}} kết quả khớp bộ lọc đã chọn",
       "status": {
         "enabled": "Đã bật",
         "disabled": "Đã tắt"
@@ -99,8 +102,9 @@
       "securityItem2": "Thêm thư mục này vào .gitignore nếu bạn dùng Git sync.",
       "securityItem3": "Hãy cẩn thận khi sử dụng các dịch vụ đồng bộ hóa đám mây công cộng.",
       "desc": "Quản lý nhà cung cấp LLM và thông tin xác thực API. Sử dụng cột thao tác để chỉnh sửa chi tiết cấu hình hoặc làm mới mô hình được lưu cache.",
+      "count_one": "{{count}} nhà cung cấp đã cấu hình",
+      "count_other": "{{count}} nhà cung cấp đã cấu hình",
       "count": "{{count}} nhà cung cấp đã cấu hình",
-      "count_plural": "{{count}} nhà cung cấp đã cấu hình",
       "addBtn": "+ Thêm nhà cung cấp",
       "empty": "Chưa có nhà cung cấp nào. Chọn \"Thêm nhà cung cấp\" để bắt đầu.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Không có mô hình",
-        "count": "{{count}} mô hình",
-        "count_plural": "{{count}} mô hình"
+        "count_one": "{{count}} mô hình",
+        "count_other": "{{count}} mô hình",
+        "count": "{{count}} mô hình"
       },
       "ollama": {
         "checkingVersion": "Đang kiểm tra phiên bản...",
@@ -183,8 +188,9 @@
       "noArgs": "Không có",
       "cached": "Đã lưu cache",
       "disabled": "Đã tắt",
+      "envVars_one": "{{count}} biến môi trường",
+      "envVars_other": "{{count}} biến môi trường",
       "envVars": "{{count}} biến môi trường",
-      "envVars_plural": "{{count}} biến môi trường",
       "status": {
         "disabled": "Đã tắt",
         "connected": "đã kết nối",
@@ -194,10 +200,12 @@
         "autoConnect": "Tự động kết nối"
       },
       "toolCount": {
+        "live_one": "{{count}} công cụ trực tiếp",
+        "live_other": "{{count}} công cụ trực tiếp",
         "live": "{{count}} công cụ trực tiếp",
-        "live_plural": "{{count}} công cụ trực tiếp",
-        "cached": "{{count}} công cụ đã lưu cache",
-        "cached_plural": "{{count}} công cụ đã lưu cache"
+        "cached_one": "{{count}} công cụ đã lưu cache",
+        "cached_other": "{{count}} công cụ đã lưu cache",
+        "cached": "{{count}} công cụ đã lưu cache"
       },
       "actions": {
         "edit": "Chỉnh sửa",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ vui lòng nhập lệnh trước khi kiểm tra kết nối",
         "testSuccess": "✅ đã kết nối thành công! Tìm thấy {{count}} công cụ.",
         "testFailed": "❌ Kết nối thất bại: {{message}}",
+        "refreshedAll_one": "✅ đã làm mới công cụ cho {{count}} máy chủ",
+        "refreshedAll_other": "✅ đã làm mới công cụ cho {{count}} máy chủ",
         "refreshedAll": "✅ đã làm mới công cụ cho {{count}} máy chủ",
-        "refreshedAll_plural": "✅ đã làm mới công cụ cho {{count}} máy chủ",
         "refreshedPartial": "✅ đã làm mới {{success}} máy chủ, ❌ {{failed}} thất bại",
         "noServersConfigured": "⚠️ Không có máy chủ MCP nào được cấu hình",
         "testingAll": "🧪 Đang kiểm tra {{count}} kết nối máy chủ MCP...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Tạo và quản lý các tác nhân AI với khả năng, công cụ và hành vi cụ thể.",
+      "count_one": "{{count}} tác nhân đã cấu hình",
+      "count_other": "{{count}} tác nhân đã cấu hình",
       "count": "{{count}} tác nhân đã cấu hình",
-      "count_plural": "{{count}} tác nhân đã cấu hình",
       "addBtn": "+ thêm tác nhân",
       "empty": "Chưa có tác nhân nào. Chọn thêm tác nhân để bắt đầu.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} tích hợp sẵn",
+        "mcpServer_one": "{{count}} máy chủ MCP",
+        "mcpServer_other": "{{count}} máy chủ MCP",
         "mcpServer": "{{count}} máy chủ MCP",
-        "mcpServer_plural": "{{count}} máy chủ MCP",
+        "mcpTool_one": "{{count}} công cụ MCP",
+        "mcpTool_other": "{{count}} công cụ MCP",
         "mcpTool": "{{count}} công cụ MCP",
-        "mcpTool_plural": "{{count}} công cụ MCP",
         "noTools": "Không có công cụ nào được bật"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Thao tác"
         },
         "unnamed": "Công cụ CLI chưa đặt tên",
+        "paramCount_one": "{{count}} tham số",
+        "paramCount_other": "{{count}} tham số",
         "paramCount": "{{count}} tham số",
-        "paramCount_plural": "{{count}} tham số",
         "noParams": "Không có",
         "statusEnabled": "Đã bật",
         "statusDisabled": "Đã tắt",
@@ -895,8 +908,9 @@
         "desc": "Tiền tố (emoji hoặc văn bản) hiển thị trước tất cả thao tác nhanh trong menu ngữ cảnh",
         "placeholder": "⚡"
       },
+      "count_one": "{{count}} hành động đã cấu hình ({{enabled}} đã bật)",
+      "count_other": "{{count}} hành động đã cấu hình ({{enabled}} đã bật)",
       "count": "{{count}} hành động đã cấu hình ({{enabled}} đã bật)",
-      "count_plural": "{{count}} hành động đã cấu hình ({{enabled}} đã bật)",
       "addBtn": "+ thêm thao tác nhanh",
       "empty": "Chưa có thao tác nhanh nào. Chọn thêm thao tác nhanh để bắt đầu.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Bật RAG",
       "step3": "Chọn lập chỉ mục vault",
       "close": "Đóng",
-      "retrieved": "📚 đã truy xuất từ {{count}} tài liệu",
-      "retrieved_plural": "📚 đã truy xuất từ {{count}} tài liệu"
+      "retrieved_one": "📚 đã truy xuất từ {{count}} tài liệu",
+      "retrieved_other": "📚 đã truy xuất từ {{count}} tài liệu",
+      "retrieved": "📚 đã truy xuất từ {{count}} tài liệu"
     },
     "ragTooltip": {
       "status": "Trạng thái chỉ mục RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "Quyền truy cập MCP",
         "noServers": "Chưa có máy chủ MCP nào. Thêm máy chủ trong Cài đặt → MCP để mở khóa các tùy chọn này.",
+        "toolsCached_one": "{{count}} công cụ đã lưu cache",
+        "toolsCached_other": "{{count}} công cụ đã lưu cache",
         "toolsCached": "{{count}} công cụ đã lưu cache",
-        "toolsCached_plural": "{{count}} công cụ đã lưu cache",
         "noToolsCached": "Chưa có công cụ nào trong cache. Bật toàn quyền truy cập hoặc làm mới cache.",
         "showTools": "Hiển thị công cụ",
         "hideTools": "Ẩn công cụ",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Đã tắt",
         "statusConnected": "● đã kết nối",
         "statusDisconnected": "○ đã ngắt kết nối",
+        "toolsLive_one": "{{count}} công cụ",
+        "toolsLive_other": "{{count}} công cụ",
         "toolsLive": "{{count}} công cụ",
-        "toolsLive_plural": "{{count}} công cụ",
+        "toolsCached_one": "{{count}} công cụ (đã lưu cache)",
+        "toolsCached_other": "{{count}} công cụ (đã lưu cache)",
         "toolsCached": "{{count}} công cụ (đã lưu cache)",
-        "toolsCached_plural": "{{count}} công cụ (đã lưu cache)",
         "noTools": "0 công cụ",
         "connectBtn": "Kết nối",
         "disconnectBtn": "Ngắt kết nối",

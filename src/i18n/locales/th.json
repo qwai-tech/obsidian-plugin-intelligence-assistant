@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "ดูและจัดการโมเดลจากผู้ให้บริการทั้งหมดที่กำหนดค่าไว้ คลิก \"รีเฟรชโมเดลทั้งหมด\" เพื่อดึงโมเดลล่าสุด",
+      "providerCount_one": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
+      "providerCount_other": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
       "providerCount": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
-      "providerCount_plural": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
       "refreshAll": "🔄 รีเฟรชโมเดลทั้งหมด",
       "empty": "ยังไม่ได้กำหนดค่าผู้ให้บริการ โปรดเพิ่มผู้ให้บริการในแท็บผู้ให้บริการก่อน",
       "noModels": "ไม่มีโมเดลที่พร้อมใช้งาน คลิก \"รีเฟรชโมเดลทั้งหมด\" หรือรีเฟรชผู้ให้บริการแต่ละรายในแท็บผู้ให้บริการ",
       "noMatch": "ไม่มีโมเดลที่ตรงกับตัวกรองปัจจุบัน ปรับหรือล้างตัวกรองเพื่อดูผลลัพธ์",
+      "modelCount_one": "• แคช {{count}} โมเดล",
+      "modelCount_other": "• แคช {{count}} โมเดล",
       "modelCount": "• แคช {{count}} โมเดล",
-      "modelCount_plural": "• แคช {{count}} โมเดล",
+      "matchCount_one": "• {{count}} รายการตรงกับตัวกรองที่เลือก",
+      "matchCount_other": "• {{count}} รายการตรงกับตัวกรองที่เลือก",
       "matchCount": "• {{count}} รายการตรงกับตัวกรองที่เลือก",
-      "matchCount_plural": "• {{count}} รายการตรงกับตัวกรองที่เลือก",
       "status": {
         "enabled": "เปิดใช้งาน",
         "disabled": "ปิดใช้งาน"
@@ -99,8 +102,9 @@
       "securityItem2": "เพิ่มโฟลเดอร์นี้ใน .gitignore หากคุณใช้ Git sync",
       "securityItem3": "โปรดใช้ความระมัดระวังเมื่อใช้บริการซิงค์คลาวด์สาธารณะ",
       "desc": "จัดการผู้ให้บริการ LLM และข้อมูลประจำตัวของ API ใช้คอลัมน์การดำเนินการเพื่อแก้ไขรายละเอียดการกำหนดค่าหรือรีเฟรชโมเดลที่แคชไว้",
+      "count_one": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
+      "count_other": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
       "count": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
-      "count_plural": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
       "addBtn": "+ เพิ่มผู้ให้บริการ",
       "empty": "ยังไม่ได้กำหนดค่าผู้ให้บริการ เลือก \"เพิ่มผู้ให้บริการ\" เพื่อเริ่มต้น",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "ไม่มีโมเดล",
-        "count": "{{count}} โมเดล",
-        "count_plural": "{{count}} โมเดล"
+        "count_one": "{{count}} โมเดล",
+        "count_other": "{{count}} โมเดล",
+        "count": "{{count}} โมเดล"
       },
       "ollama": {
         "checkingVersion": "กำลังตรวจสอบเวอร์ชัน...",
@@ -183,8 +188,9 @@
       "noArgs": "ไม่มี",
       "cached": "แคช",
       "disabled": "ปิดใช้งาน",
+      "envVars_one": "{{count}} ตัวแปรสภาพแวดล้อม",
+      "envVars_other": "{{count}} ตัวแปรสภาพแวดล้อม",
       "envVars": "{{count}} ตัวแปรสภาพแวดล้อม",
-      "envVars_plural": "{{count}} ตัวแปรสภาพแวดล้อม",
       "status": {
         "disabled": "ปิดใช้งาน",
         "connected": "เชื่อมต่อแล้ว",
@@ -194,10 +200,12 @@
         "autoConnect": "เชื่อมต่ออัตโนมัติ"
       },
       "toolCount": {
+        "live_one": "{{count}} เครื่องมือที่ใช้งาน",
+        "live_other": "{{count}} เครื่องมือที่ใช้งาน",
         "live": "{{count}} เครื่องมือที่ใช้งาน",
-        "live_plural": "{{count}} เครื่องมือที่ใช้งาน",
-        "cached": "{{count}} เครื่องมือที่แคช",
-        "cached_plural": "{{count}} เครื่องมือที่แคช"
+        "cached_one": "{{count}} เครื่องมือที่แคช",
+        "cached_other": "{{count}} เครื่องมือที่แคช",
+        "cached": "{{count}} เครื่องมือที่แคช"
       },
       "actions": {
         "edit": "แก้ไข",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ โปรดป้อนคำสั่งก่อนทดสอบการเชื่อมต่อ",
         "testSuccess": "✅ เชื่อมต่อสำเร็จ! พบ {{count}} เครื่องมือ",
         "testFailed": "❌ การเชื่อมต่อล้มเหลว: {{message}}",
+        "refreshedAll_one": "✅ รีเฟรชเครื่องมือสำหรับ {{count}} เซิร์ฟเวอร์แล้ว",
+        "refreshedAll_other": "✅ รีเฟรชเครื่องมือสำหรับ {{count}} เซิร์ฟเวอร์แล้ว",
         "refreshedAll": "✅ รีเฟรชเครื่องมือสำหรับ {{count}} เซิร์ฟเวอร์แล้ว",
-        "refreshedAll_plural": "✅ รีเฟรชเครื่องมือสำหรับ {{count}} เซิร์ฟเวอร์แล้ว",
         "refreshedPartial": "✅ รีเฟรช {{success}} เซิร์ฟเวอร์สำเร็จ, ❌ {{failed}} ล้มเหลว",
         "noServersConfigured": "⚠️ ไม่ได้กำหนดค่าเซิร์ฟเวอร์ MCP",
         "testingAll": "🧪 กำลังทดสอบการเชื่อมต่อเซิร์ฟเวอร์ MCP {{count}} รายการ...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "สร้างและจัดการเอเจนต์ AI ที่มีความสามารถ เครื่องมือ และพฤติกรรมเฉพาะ",
+      "count_one": "กำหนดค่า {{count}} เอเจนต์แล้ว",
+      "count_other": "กำหนดค่า {{count}} เอเจนต์แล้ว",
       "count": "กำหนดค่า {{count}} เอเจนต์แล้ว",
-      "count_plural": "กำหนดค่า {{count}} เอเจนต์แล้ว",
       "addBtn": "+ เพิ่มเอเจนต์",
       "empty": "ยังไม่ได้กำหนดค่าเอเจนต์ เลือกเพิ่มเอเจนต์เพื่อเริ่มต้น",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} แบบในตัว",
+        "mcpServer_one": "{{count}} เซิร์ฟเวอร์ MCP",
+        "mcpServer_other": "{{count}} เซิร์ฟเวอร์ MCP",
         "mcpServer": "{{count}} เซิร์ฟเวอร์ MCP",
-        "mcpServer_plural": "{{count}} เซิร์ฟเวอร์ MCP",
+        "mcpTool_one": "{{count}} เครื่องมือ MCP",
+        "mcpTool_other": "{{count}} เครื่องมือ MCP",
         "mcpTool": "{{count}} เครื่องมือ MCP",
-        "mcpTool_plural": "{{count}} เครื่องมือ MCP",
         "noTools": "ไม่มีเครื่องมือที่เปิดใช้งาน"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "การดำเนินการ"
         },
         "unnamed": "เครื่องมือ CLI ไม่มีชื่อ",
+        "paramCount_one": "{{count}} พารามิเตอร์",
+        "paramCount_other": "{{count}} พารามิเตอร์",
         "paramCount": "{{count}} พารามิเตอร์",
-        "paramCount_plural": "{{count}} พารามิเตอร์",
         "noParams": "ไม่มี",
         "statusEnabled": "เปิดใช้งาน",
         "statusDisabled": "ปิดใช้งาน",
@@ -895,8 +908,9 @@
         "desc": "คำนำหน้า (อิโมจิหรือข้อความ) ที่จะแสดงก่อนการดำเนินการด่วนทั้งหมดในเมนูบริบท",
         "placeholder": "⚡"
       },
+      "count_one": "กำหนดค่า {{count}} รายการ (เปิดใช้งาน {{enabled}} รายการ)",
+      "count_other": "กำหนดค่า {{count}} รายการ (เปิดใช้งาน {{enabled}} รายการ)",
       "count": "กำหนดค่า {{count}} รายการ (เปิดใช้งาน {{enabled}} รายการ)",
-      "count_plural": "กำหนดค่า {{count}} รายการ (เปิดใช้งาน {{enabled}} รายการ)",
       "addBtn": "+ เพิ่มการดำเนินการด่วน",
       "empty": "ยังไม่ได้กำหนดค่าการดำเนินการด่วน เลือกเพิ่มการดำเนินการด่วนเพื่อเริ่มต้น",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "เปิดใช้งาน RAG",
       "step3": "เลือกทำดัชนี Vault",
       "close": "ปิด",
-      "retrieved": "📚 ดึงมาจาก {{count}} เอกสาร",
-      "retrieved_plural": "📚 ดึงมาจาก {{count}} เอกสาร"
+      "retrieved_one": "📚 ดึงมาจาก {{count}} เอกสาร",
+      "retrieved_other": "📚 ดึงมาจาก {{count}} เอกสาร",
+      "retrieved": "📚 ดึงมาจาก {{count}} เอกสาร"
     },
     "ragTooltip": {
       "status": "สถานะดัชนี RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "การเข้าถึง MCP",
         "noServers": "ไม่ได้กำหนดค่าเซิร์ฟเวอร์ MCP เพิ่มเซิร์ฟเวอร์ภายใต้การตั้งค่า → MCP เพื่อปลดล็อกตัวเลือกเหล่านี้",
+        "toolsCached_one": "แคช {{count}} เครื่องมือ",
+        "toolsCached_other": "แคช {{count}} เครื่องมือ",
         "toolsCached": "แคช {{count}} เครื่องมือ",
-        "toolsCached_plural": "แคช {{count}} เครื่องมือ",
         "noToolsCached": "ยังไม่มีเครื่องมือที่แคช เปิดใช้งานการเข้าถึงเต็มรูปแบบหรือรีเฟรชแคช",
         "showTools": "แสดงเครื่องมือ",
         "hideTools": "ซ่อนเครื่องมือ",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "ปิดใช้งาน",
         "statusConnected": "● เชื่อมต่อแล้ว",
         "statusDisconnected": "○ ตัดการเชื่อมต่อแล้ว",
+        "toolsLive_one": "{{count}} เครื่องมือ",
+        "toolsLive_other": "{{count}} เครื่องมือ",
         "toolsLive": "{{count}} เครื่องมือ",
-        "toolsLive_plural": "{{count}} เครื่องมือ",
+        "toolsCached_one": "{{count}} เครื่องมือ (แคช)",
+        "toolsCached_other": "{{count}} เครื่องมือ (แคช)",
         "toolsCached": "{{count}} เครื่องมือ (แคช)",
-        "toolsCached_plural": "{{count}} เครื่องมือ (แคช)",
         "noTools": "0 เครื่องมือ",
         "connectBtn": "เชื่อมต่อ",
         "disconnectBtn": "ตัดการเชื่อมต่อ",

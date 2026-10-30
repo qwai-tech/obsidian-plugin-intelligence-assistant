@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "הצג ונהל מודלים מכל הספקים המוגדרים. לחץ על \"רענן מודלים\" לקבלת המודלים הזמינים האחרונים.",
-      "providerCount": "{{count}} ספק מוגדר",
-      "providerCount_plural": "{{count}} ספקים מוגדרים",
+      "providerCount_one": "{{count}} ספק מוגדר",
+      "providerCount_other": "{{count}} ספקים מוגדרים",
+      "providerCount": "{{count}} ספקים מוגדרים",
       "refreshAll": "🔄 רענן את כל המודלים",
       "empty": "אין ספקים מוגדרים עדיין. הוסף ספקים בלשונית הספקים תחילה.",
       "noModels": "אין מודלים זמינים. לחץ על \"רענן את כל המודלים\" או רענן ספקים בנפרד בלשונית הספקים.",
       "noMatch": "אין מודלים התואמים למסננים הנוכחיים. התאם או נקה מסננים כדי לראות תוצאות.",
-      "modelCount": "• {{count}} מודל במטמון",
-      "modelCount_plural": "• {{count}} מודלים במטמון",
-      "matchCount": "• {{count}} תואם למסננים הנבחרים",
-      "matchCount_plural": "• {{count}} תואמים למסננים הנבחרים",
+      "modelCount_one": "• {{count}} מודל במטמון",
+      "modelCount_other": "• {{count}} מודלים במטמון",
+      "modelCount": "• {{count}} מודלים במטמון",
+      "matchCount_one": "• {{count}} תואם למסננים הנבחרים",
+      "matchCount_other": "• {{count}} תואמים למסננים הנבחרים",
+      "matchCount": "• {{count}} תואמים למסננים הנבחרים",
       "status": {
         "enabled": "פעיל",
         "disabled": "מושבת"
@@ -99,8 +102,9 @@
       "securityItem2": "הוסף תיקייה זו ל-.gitignore אם אתה משתמש בסנכרון Git.",
       "securityItem3": "היה זהיר בעת שימוש בשירותי סנכרון ענן ציבוריים.",
       "desc": "נהל ספקי LLM ואישורי API. השתמש בעמודת הפעולות לעריכת פרטי הגדרות או רענון מודלים במטמון.",
-      "count": "{{count}} ספק מוגדר",
-      "count_plural": "{{count}} ספקים מוגדרים",
+      "count_one": "{{count}} ספק מוגדר",
+      "count_other": "{{count}} ספקים מוגדרים",
+      "count": "{{count}} ספקים מוגדרים",
       "addBtn": "+ הוסף ספק",
       "empty": "אין ספקים מוגדרים. בחר \"הוסף ספק\" כדי להתחיל.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "אין מודלים",
-        "count": "{{count}} מודל",
-        "count_plural": "{{count}} מודלים"
+        "count_one": "{{count}} מודל",
+        "count_other": "{{count}} מודלים",
+        "count": "{{count}} מודלים"
       },
       "ollama": {
         "checkingVersion": "בודק גרסה...",
@@ -183,8 +188,9 @@
       "noArgs": "ללא",
       "cached": "במטמון",
       "disabled": "מושבת",
-      "envVars": "{{count}} משתנה סביבה",
-      "envVars_plural": "{{count}} משתני סביבה",
+      "envVars_one": "{{count}} משתנה סביבה",
+      "envVars_other": "{{count}} משתני סביבה",
+      "envVars": "{{count}} משתני סביבה",
       "status": {
         "disabled": "מושבת",
         "connected": "מחובר",
@@ -194,10 +200,12 @@
         "autoConnect": "התחבר אוטומטית"
       },
       "toolCount": {
-        "live": "{{count}} כלי חי",
-        "live_plural": "{{count}} כלים חיים",
-        "cached": "{{count}} כלי במטמון",
-        "cached_plural": "{{count}} כלים במטמון"
+        "live_one": "{{count}} כלי חי",
+        "live_other": "{{count}} כלים חיים",
+        "live": "{{count}} כלים חיים",
+        "cached_one": "{{count}} כלי במטמון",
+        "cached_other": "{{count}} כלים במטמון",
+        "cached": "{{count}} כלים במטמון"
       },
       "actions": {
         "edit": "ערוך",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ אנא הזן פקודה לפני בדיקת החיבור",
         "testSuccess": "✅ התחבר בהצלחה! נמצאו {{count}} כלים.",
         "testFailed": "❌ החיבור נכשל: {{message}}",
-        "refreshedAll": "✅ רועננו כלים עבור {{count}} שרת",
-        "refreshedAll_plural": "✅ רועננו כלים עבור {{count}} שרתים",
+        "refreshedAll_one": "✅ רועננו כלים עבור {{count}} שרת",
+        "refreshedAll_other": "✅ רועננו כלים עבור {{count}} שרתים",
+        "refreshedAll": "✅ רועננו כלים עבור {{count}} שרתים",
         "refreshedPartial": "✅ רועננו {{success}} שרתים, ❌ {{failed}} נכשלו",
         "noServersConfigured": "⚠️ אין שרתי MCP מוגדרים",
         "testingAll": "🧪 בודק {{count}} חיבורי שרת MCP...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "צור ונהל סוכני AI עם יכולות, כלים והתנהגויות ספציפיות.",
-      "count": "{{count}} סוכן מוגדר",
-      "count_plural": "{{count}} סוכנים מוגדרים",
+      "count_one": "{{count}} סוכן מוגדר",
+      "count_other": "{{count}} סוכנים מוגדרים",
+      "count": "{{count}} סוכנים מוגדרים",
       "addBtn": "+ הוסף סוכן",
       "empty": "אין סוכנים מוגדרים. בחר הוסף סוכן כדי להתחיל.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} מובנה",
-        "mcpServer": "{{count}} שרת mcp",
-        "mcpServer_plural": "{{count}} שרתי mcp",
+        "mcpServer_one": "{{count}} שרת mcp",
+        "mcpServer_other": "{{count}} שרתי mcp",
+        "mcpServer": "{{count}} שרתי mcp",
+        "mcpTool_one": "{{count}} כלי mcp",
+        "mcpTool_other": "{{count}} כלי mcp",
         "mcpTool": "{{count}} כלי mcp",
-        "mcpTool_plural": "{{count}} כלי mcp",
         "noTools": "אין כלים פעילים"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "פעולות"
         },
         "unnamed": "כלי CLI ללא שם",
-        "paramCount": "{{count}} פרמטר",
-        "paramCount_plural": "{{count}} פרמטרים",
+        "paramCount_one": "{{count}} פרמטר",
+        "paramCount_other": "{{count}} פרמטרים",
+        "paramCount": "{{count}} פרמטרים",
         "noParams": "ללא",
         "statusEnabled": "פעיל",
         "statusDisabled": "מושבת",
@@ -895,8 +908,9 @@
         "desc": "קידומת (אמוג'י או טקסט) להצגה לפני כל הפעולות המהירות בתפריט ההקשר",
         "placeholder": "⚡"
       },
-      "count": "{{count}} פעולה מוגדרת ({{enabled}} פעילות)",
-      "count_plural": "{{count}} פעולות מוגדרות ({{enabled}} פעילות)",
+      "count_one": "{{count}} פעולה מוגדרת ({{enabled}} פעילות)",
+      "count_other": "{{count}} פעולות מוגדרות ({{enabled}} פעילות)",
+      "count": "{{count}} פעולות מוגדרות ({{enabled}} פעילות)",
       "addBtn": "+ הוסף פעולה מהירה",
       "empty": "אין פעולות מהירות מוגדרות. בחר הוסף פעולה מהירה כדי להתחיל.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "הפעל RAG",
       "step3": "בחר אינדקס כספת",
       "close": "סגור",
-      "retrieved": "📚 נאחזר מ-{{count}} מסמך",
-      "retrieved_plural": "📚 נאחזר מ-{{count}} מסמכים"
+      "retrieved_one": "📚 נאחזר מ-{{count}} מסמך",
+      "retrieved_other": "📚 נאחזר מ-{{count}} מסמכים",
+      "retrieved": "📚 נאחזר מ-{{count}} מסמכים"
     },
     "ragTooltip": {
       "status": "סטטוס אינדקס RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "גישת MCP",
         "noServers": "אין שרתי MCP מוגדרים. הוסף שרתים בהגדרות ← MCP לביטול נעילת אפשרויות אלה.",
-        "toolsCached": "{{count}} כלי במטמון",
-        "toolsCached_plural": "{{count}} כלים במטמון",
+        "toolsCached_one": "{{count}} כלי במטמון",
+        "toolsCached_other": "{{count}} כלים במטמון",
+        "toolsCached": "{{count}} כלים במטמון",
         "noToolsCached": "אין כלים במטמון עדיין. הפעל גישה מלאה או רענן את המטמון.",
         "showTools": "הצג כלים",
         "hideTools": "הסתר כלים",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "מושבת",
         "statusConnected": "● מחובר",
         "statusDisconnected": "○ מנותק",
-        "toolsLive": "{{count}} כלי",
-        "toolsLive_plural": "{{count}} כלים",
-        "toolsCached": "{{count}} כלי (במטמון)",
-        "toolsCached_plural": "{{count}} כלים (במטמון)",
+        "toolsLive_one": "{{count}} כלי",
+        "toolsLive_other": "{{count}} כלים",
+        "toolsLive": "{{count}} כלים",
+        "toolsCached_one": "{{count}} כלי (במטמון)",
+        "toolsCached_other": "{{count}} כלים (במטמון)",
+        "toolsCached": "{{count}} כלים (במטמון)",
         "noTools": "0 כלים",
         "connectBtn": "התחבר",
         "disconnectBtn": "התנתק",

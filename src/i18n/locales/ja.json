@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "すべての設定済みプロバイダーからモデルを表示・管理します。「モデルを更新」をクリックして最新の利用可能なモデルを取得します。",
+      "providerCount_one": "{{count}} プロバイダー設定済み",
+      "providerCount_other": "{{count}} プロバイダー設定済み",
       "providerCount": "{{count}} プロバイダー設定済み",
-      "providerCount_plural": "{{count}} プロバイダー設定済み",
       "refreshAll": "🔄 すべてのモデルを更新",
       "empty": "プロバイダーがまだ設定されていません。先にプロバイダータブでプロバイダーを追加してください。",
       "noModels": "利用可能なモデルがありません。「すべてのモデルを更新」をクリックするか、プロバイダータブで個別のプロバイダーを更新してください。",
       "noMatch": "現在のフィルターに一致するモデルがありません。フィルターを調整またはクリアして結果を表示してください。",
+      "modelCount_one": "• {{count}} モデルキャッシュ済み",
+      "modelCount_other": "• {{count}} モデルキャッシュ済み",
       "modelCount": "• {{count}} モデルキャッシュ済み",
-      "modelCount_plural": "• {{count}} モデルキャッシュ済み",
+      "matchCount_one": "• {{count}} 件が選択フィルターに一致",
+      "matchCount_other": "• {{count}} 件が選択フィルターに一致",
       "matchCount": "• {{count}} 件が選択フィルターに一致",
-      "matchCount_plural": "• {{count}} 件が選択フィルターに一致",
       "status": {
         "enabled": "有効",
         "disabled": "無効"
@@ -99,8 +102,9 @@
       "securityItem2": "Git 同期を使用する場合は、このフォルダーを .gitignore に追加してください。",
       "securityItem3": "パブリッククラウド同期サービスを使用する際は注意してください。",
       "desc": "LLM プロバイダーと API 認証情報を管理します。アクション列を使用して設定の詳細を編集するか、キャッシュされたモデルを更新します。",
+      "count_one": "{{count}} プロバイダー設定済み",
+      "count_other": "{{count}} プロバイダー設定済み",
       "count": "{{count}} プロバイダー設定済み",
-      "count_plural": "{{count}} プロバイダー設定済み",
       "addBtn": "+ プロバイダーを追加",
       "empty": "プロバイダーが設定されていません。「プロバイダーを追加」を選択して開始してください。",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "モデルなし",
-        "count": "{{count}} モデル",
-        "count_plural": "{{count}} モデル"
+        "count_one": "{{count}} モデル",
+        "count_other": "{{count}} モデル",
+        "count": "{{count}} モデル"
       },
       "ollama": {
         "checkingVersion": "バージョン確認中...",
@@ -183,8 +188,9 @@
       "noArgs": "なし",
       "cached": "キャッシュ済み",
       "disabled": "無効",
+      "envVars_one": "{{count}} 環境変数",
+      "envVars_other": "{{count}} 環境変数",
       "envVars": "{{count}} 環境変数",
-      "envVars_plural": "{{count}} 環境変数",
       "status": {
         "disabled": "無効",
         "connected": "接続済み",
@@ -194,10 +200,12 @@
         "autoConnect": "自動接続"
       },
       "toolCount": {
+        "live_one": "{{count}} ライブツール",
+        "live_other": "{{count}} ライブツール",
         "live": "{{count}} ライブツール",
-        "live_plural": "{{count}} ライブツール",
-        "cached": "{{count}} キャッシュツール",
-        "cached_plural": "{{count}} キャッシュツール"
+        "cached_one": "{{count}} キャッシュツール",
+        "cached_other": "{{count}} キャッシュツール",
+        "cached": "{{count}} キャッシュツール"
       },
       "actions": {
         "edit": "編集",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ 接続をテストする前にコマンドを入力してください",
         "testSuccess": "✅ 接続に成功しました！{{count}} ツールが見つかりました。",
         "testFailed": "❌ 接続に失敗しました: {{message}}",
+        "refreshedAll_one": "✅ {{count}} サーバーのツールを更新しました",
+        "refreshedAll_other": "✅ {{count}} サーバーのツールを更新しました",
         "refreshedAll": "✅ {{count}} サーバーのツールを更新しました",
-        "refreshedAll_plural": "✅ {{count}} サーバーのツールを更新しました",
         "refreshedPartial": "✅ {{success}} サーバー更新完了、❌ {{failed}} 失敗",
         "noServersConfigured": "⚠️ MCP サーバーが設定されていません",
         "testingAll": "🧪 {{count}} MCP サーバー接続をテスト中...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "特定の機能、ツール、動作を持つ AI エージェントを作成・管理します。",
+      "count_one": "{{count}} エージェント設定済み",
+      "count_other": "{{count}} エージェント設定済み",
       "count": "{{count}} エージェント設定済み",
-      "count_plural": "{{count}} エージェント設定済み",
       "addBtn": "+ エージェントを追加",
       "empty": "エージェントが設定されていません。「エージェントを追加」を選択して開始してください。",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} 組み込み",
+        "mcpServer_one": "{{count}} MCP サーバー",
+        "mcpServer_other": "{{count}} MCP サーバー",
         "mcpServer": "{{count}} MCP サーバー",
-        "mcpServer_plural": "{{count}} MCP サーバー",
+        "mcpTool_one": "{{count}} MCP ツール",
+        "mcpTool_other": "{{count}} MCP ツール",
         "mcpTool": "{{count}} MCP ツール",
-        "mcpTool_plural": "{{count}} MCP ツール",
         "noTools": "ツールが有効化されていません"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "アクション"
         },
         "unnamed": "名前のない CLI ツール",
+        "paramCount_one": "{{count}} パラメーター",
+        "paramCount_other": "{{count}} パラメーター",
         "paramCount": "{{count}} パラメーター",
-        "paramCount_plural": "{{count}} パラメーター",
         "noParams": "なし",
         "statusEnabled": "有効",
         "statusDisabled": "無効",
@@ -895,8 +908,9 @@
         "desc": "コンテキストメニューのすべてのクイックアクションの前に表示するプレフィックス（絵文字またはテキスト）",
         "placeholder": "⚡"
       },
+      "count_one": "{{count}} アクション設定済み ({{enabled}} 有効)",
+      "count_other": "{{count}} アクション設定済み ({{enabled}} 有効)",
       "count": "{{count}} アクション設定済み ({{enabled}} 有効)",
-      "count_plural": "{{count}} アクション設定済み ({{enabled}} 有効)",
       "addBtn": "+ クイックアクションを追加",
       "empty": "クイックアクションが設定されていません。「クイックアクションを追加」を選択して開始してください。",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "RAG を有効にする",
       "step3": "ボルトインデックスを選択",
       "close": "閉じる",
-      "retrieved": "📚 {{count}} ドキュメントから取得",
-      "retrieved_plural": "📚 {{count}} ドキュメントから取得"
+      "retrieved_one": "📚 {{count}} ドキュメントから取得",
+      "retrieved_other": "📚 {{count}} ドキュメントから取得",
+      "retrieved": "📚 {{count}} ドキュメントから取得"
     },
     "ragTooltip": {
       "status": "RAG インデックスステータス:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP アクセス",
         "noServers": "MCP サーバーが設定されていません。設定 → MCP でサーバーを追加してこれらのオプションを利用できます。",
+        "toolsCached_one": "{{count}} ツールキャッシュ済み",
+        "toolsCached_other": "{{count}} ツールキャッシュ済み",
         "toolsCached": "{{count}} ツールキャッシュ済み",
-        "toolsCached_plural": "{{count}} ツールキャッシュ済み",
         "noToolsCached": "ツールがまだキャッシュされていません。フルアクセスを有効にするかキャッシュを更新してください。",
         "showTools": "ツールを表示",
         "hideTools": "ツールを非表示",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "無効",
         "statusConnected": "● 接続済み",
         "statusDisconnected": "○ 切断済み",
+        "toolsLive_one": "{{count}} ツール",
+        "toolsLive_other": "{{count}} ツール",
         "toolsLive": "{{count}} ツール",
-        "toolsLive_plural": "{{count}} ツール",
+        "toolsCached_one": "{{count}} ツール（キャッシュ済み）",
+        "toolsCached_other": "{{count}} ツール（キャッシュ済み）",
         "toolsCached": "{{count}} ツール（キャッシュ済み）",
-        "toolsCached_plural": "{{count}} ツール（キャッシュ済み）",
         "noTools": "0 ツール",
         "connectBtn": "接続",
         "disconnectBtn": "切断",

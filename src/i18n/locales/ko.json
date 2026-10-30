@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "구성된 모든 제공자의 모델을 보고 관리합니다. \"모델 새로 고침\"을 클릭하여 최신 사용 가능한 모델을 가져옵니다.",
+      "providerCount_one": "{{count}}개 제공자 구성됨",
+      "providerCount_other": "{{count}}개 제공자 구성됨",
       "providerCount": "{{count}}개 제공자 구성됨",
-      "providerCount_plural": "{{count}}개 제공자 구성됨",
       "refreshAll": "🔄 모든 모델 새로 고침",
       "empty": "아직 구성된 제공자가 없습니다. 먼저 제공자 탭에서 제공자를 추가하세요.",
       "noModels": "사용 가능한 모델이 없습니다. \"모든 모델 새로 고침\"을 클릭하거나 제공자 탭에서 개별 제공자를 새로 고침하세요.",
       "noMatch": "현재 필터와 일치하는 모델이 없습니다. 필터를 조정하거나 지워서 결과를 확인하세요.",
+      "modelCount_one": "• {{count}}개 모델 캐시됨",
+      "modelCount_other": "• {{count}}개 모델 캐시됨",
       "modelCount": "• {{count}}개 모델 캐시됨",
-      "modelCount_plural": "• {{count}}개 모델 캐시됨",
+      "matchCount_one": "• {{count}}개가 선택한 필터와 일치",
+      "matchCount_other": "• {{count}}개가 선택한 필터와 일치",
       "matchCount": "• {{count}}개가 선택한 필터와 일치",
-      "matchCount_plural": "• {{count}}개가 선택한 필터와 일치",
       "status": {
         "enabled": "활성화됨",
         "disabled": "비활성화됨"
@@ -99,8 +102,9 @@
       "securityItem2": "Git 동기화를 사용하는 경우 이 폴더를 .gitignore에 추가하세요.",
       "securityItem3": "퍼블릭 클라우드 동기화 서비스를 사용할 때 주의하세요.",
       "desc": "LLM 제공자와 API 자격 증명을 관리합니다. 작업 열을 사용하여 구성 세부 정보를 편집하거나 캐시된 모델을 새로 고침하세요.",
+      "count_one": "{{count}}개 제공자 구성됨",
+      "count_other": "{{count}}개 제공자 구성됨",
       "count": "{{count}}개 제공자 구성됨",
-      "count_plural": "{{count}}개 제공자 구성됨",
       "addBtn": "+ 제공자 추가",
       "empty": "구성된 제공자가 없습니다. \"제공자 추가\"를 선택하여 시작하세요.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "모델 없음",
-        "count": "{{count}}개 모델",
-        "count_plural": "{{count}}개 모델"
+        "count_one": "{{count}}개 모델",
+        "count_other": "{{count}}개 모델",
+        "count": "{{count}}개 모델"
       },
       "ollama": {
         "checkingVersion": "버전 확인 중...",
@@ -183,8 +188,9 @@
       "noArgs": "없음",
       "cached": "캐시됨",
       "disabled": "비활성화됨",
+      "envVars_one": "{{count}}개 환경 변수",
+      "envVars_other": "{{count}}개 환경 변수",
       "envVars": "{{count}}개 환경 변수",
-      "envVars_plural": "{{count}}개 환경 변수",
       "status": {
         "disabled": "비활성화됨",
         "connected": "연결됨",
@@ -194,10 +200,12 @@
         "autoConnect": "자동 연결"
       },
       "toolCount": {
+        "live_one": "{{count}}개 라이브 도구",
+        "live_other": "{{count}}개 라이브 도구",
         "live": "{{count}}개 라이브 도구",
-        "live_plural": "{{count}}개 라이브 도구",
-        "cached": "{{count}}개 캐시된 도구",
-        "cached_plural": "{{count}}개 캐시된 도구"
+        "cached_one": "{{count}}개 캐시된 도구",
+        "cached_other": "{{count}}개 캐시된 도구",
+        "cached": "{{count}}개 캐시된 도구"
       },
       "actions": {
         "edit": "편집",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ 연결 테스트 전에 명령을 입력해 주세요",
         "testSuccess": "✅ 연결 성공! {{count}}개의 도구를 찾았습니다.",
         "testFailed": "❌ 연결 실패: {{message}}",
+        "refreshedAll_one": "✅ {{count}}개 서버의 도구를 새로 고침했습니다",
+        "refreshedAll_other": "✅ {{count}}개 서버의 도구를 새로 고침했습니다",
         "refreshedAll": "✅ {{count}}개 서버의 도구를 새로 고침했습니다",
-        "refreshedAll_plural": "✅ {{count}}개 서버의 도구를 새로 고침했습니다",
         "refreshedPartial": "✅ {{success}}개 서버 새로 고침 완료, ❌ {{failed}}개 실패",
         "noServersConfigured": "⚠️ 구성된 MCP 서버가 없습니다",
         "testingAll": "🧪 {{count}}개 MCP 서버 연결 테스트 중...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "특정 기능, 도구, 동작을 가진 AI 에이전트를 생성하고 관리합니다.",
+      "count_one": "{{count}}개 에이전트 구성됨",
+      "count_other": "{{count}}개 에이전트 구성됨",
       "count": "{{count}}개 에이전트 구성됨",
-      "count_plural": "{{count}}개 에이전트 구성됨",
       "addBtn": "+ 에이전트 추가",
       "empty": "구성된 에이전트가 없습니다. 에이전트 추가를 선택하여 시작하세요.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}}개 내장",
+        "mcpServer_one": "{{count}}개 MCP 서버",
+        "mcpServer_other": "{{count}}개 MCP 서버",
         "mcpServer": "{{count}}개 MCP 서버",
-        "mcpServer_plural": "{{count}}개 MCP 서버",
+        "mcpTool_one": "{{count}}개 MCP 도구",
+        "mcpTool_other": "{{count}}개 MCP 도구",
         "mcpTool": "{{count}}개 MCP 도구",
-        "mcpTool_plural": "{{count}}개 MCP 도구",
         "noTools": "활성화된 도구 없음"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "작업"
         },
         "unnamed": "이름 없는 CLI 도구",
+        "paramCount_one": "{{count}}개 매개변수",
+        "paramCount_other": "{{count}}개 매개변수",
         "paramCount": "{{count}}개 매개변수",
-        "paramCount_plural": "{{count}}개 매개변수",
         "noParams": "없음",
         "statusEnabled": "활성화됨",
         "statusDisabled": "비활성화됨",
@@ -895,8 +908,9 @@
         "desc": "컨텍스트 메뉴의 모든 빠른 작업 앞에 표시할 접두사 (이모지 또는 텍스트)",
         "placeholder": "⚡"
       },
+      "count_one": "{{count}}개 작업 구성됨 ({{enabled}}개 활성화됨)",
+      "count_other": "{{count}}개 작업 구성됨 ({{enabled}}개 활성화됨)",
       "count": "{{count}}개 작업 구성됨 ({{enabled}}개 활성화됨)",
-      "count_plural": "{{count}}개 작업 구성됨 ({{enabled}}개 활성화됨)",
       "addBtn": "+ 빠른 작업 추가",
       "empty": "구성된 빠른 작업이 없습니다. 빠른 작업 추가를 선택하여 시작하세요.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "RAG 활성화",
       "step3": "볼트 인덱스 선택",
       "close": "닫기",
-      "retrieved": "📚 {{count}}개 문서에서 검색됨",
-      "retrieved_plural": "📚 {{count}}개 문서에서 검색됨"
+      "retrieved_one": "📚 {{count}}개 문서에서 검색됨",
+      "retrieved_other": "📚 {{count}}개 문서에서 검색됨",
+      "retrieved": "📚 {{count}}개 문서에서 검색됨"
     },
     "ragTooltip": {
       "status": "RAG 인덱스 상태:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP 액세스",
         "noServers": "MCP 서버가 구성되지 않았습니다. 설정 → MCP에서 서버를 추가하여 이 옵션을 사용할 수 있습니다.",
+        "toolsCached_one": "{{count}}개 도구 캐시됨",
+        "toolsCached_other": "{{count}}개 도구 캐시됨",
         "toolsCached": "{{count}}개 도구 캐시됨",
-        "toolsCached_plural": "{{count}}개 도구 캐시됨",
         "noToolsCached": "아직 캐시된 도구가 없습니다. 전체 액세스를 활성화하거나 캐시를 새로 고침하세요.",
         "showTools": "도구 표시",
         "hideTools": "도구 숨기기",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "비활성화됨",
         "statusConnected": "● 연결됨",
         "statusDisconnected": "○ 연결 끊김",
+        "toolsLive_one": "{{count}}개 도구",
+        "toolsLive_other": "{{count}}개 도구",
         "toolsLive": "{{count}}개 도구",
-        "toolsLive_plural": "{{count}}개 도구",
+        "toolsCached_one": "{{count}}개 도구 (캐시됨)",
+        "toolsCached_other": "{{count}}개 도구 (캐시됨)",
         "toolsCached": "{{count}}개 도구 (캐시됨)",
-        "toolsCached_plural": "{{count}}개 도구 (캐시됨)",
         "noTools": "0개 도구",
         "connectBtn": "연결",
         "disconnectBtn": "연결 끊기",

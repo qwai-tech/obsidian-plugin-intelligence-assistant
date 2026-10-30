@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Visualizza e gestisci i modelli di tutti i provider configurati. Fai clic su \"aggiorna modelli\" per recuperare gli ultimi modelli disponibili.",
-      "providerCount": "{{count}} provider configurato",
-      "providerCount_plural": "{{count}} provider configurati",
+      "providerCount_one": "{{count}} provider configurato",
+      "providerCount_other": "{{count}} provider configurati",
+      "providerCount": "{{count}} provider configurati",
       "refreshAll": "🔄 aggiorna tutti i modelli",
       "empty": "Nessun provider configurato. Aggiungi prima i provider nella scheda provider.",
       "noModels": "Nessun modello disponibile. Fai clic su \"aggiorna tutti i modelli\" o aggiorna i singoli provider nella scheda provider.",
       "noMatch": "Nessun modello corrisponde ai filtri correnti. Regola o cancella i filtri per vedere i risultati.",
-      "modelCount": "• {{count}} modello in cache",
-      "modelCount_plural": "• {{count}} modelli in cache",
-      "matchCount": "• {{count}} corrispondenza con i filtri selezionati",
-      "matchCount_plural": "• {{count}} corrispondenze con i filtri selezionati",
+      "modelCount_one": "• {{count}} modello in cache",
+      "modelCount_other": "• {{count}} modelli in cache",
+      "modelCount": "• {{count}} modelli in cache",
+      "matchCount_one": "• {{count}} corrispondenza con i filtri selezionati",
+      "matchCount_other": "• {{count}} corrispondenze con i filtri selezionati",
+      "matchCount": "• {{count}} corrispondenze con i filtri selezionati",
       "status": {
         "enabled": "Abilitato",
         "disabled": "Disabilitato"
@@ -99,8 +102,9 @@
       "securityItem2": "Aggiungi questa cartella al tuo .gitignore se usi la sincronizzazione Git.",
       "securityItem3": "Fai attenzione quando usi servizi di sincronizzazione cloud pubblici.",
       "desc": "Gestisci i provider LLM e le credenziali API. Usa la colonna azioni per modificare i dettagli di configurazione o aggiornare i modelli in cache.",
-      "count": "{{count}} provider configurato",
-      "count_plural": "{{count}} provider configurati",
+      "count_one": "{{count}} provider configurato",
+      "count_other": "{{count}} provider configurati",
+      "count": "{{count}} provider configurati",
       "addBtn": "+ Aggiungi provider",
       "empty": "Nessun provider configurato. Seleziona \"Aggiungi provider\" per iniziare.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Nessun modello",
-        "count": "{{count}} modello",
-        "count_plural": "{{count}} modelli"
+        "count_one": "{{count}} modello",
+        "count_other": "{{count}} modelli",
+        "count": "{{count}} modelli"
       },
       "ollama": {
         "checkingVersion": "Verifica versione...",
@@ -183,8 +188,9 @@
       "noArgs": "Nessuno",
       "cached": "In cache",
       "disabled": "Disabilitato",
-      "envVars": "{{count}} variabile d'ambiente",
-      "envVars_plural": "{{count}} variabili d'ambiente",
+      "envVars_one": "{{count}} variabile d'ambiente",
+      "envVars_other": "{{count}} variabili d'ambiente",
+      "envVars": "{{count}} variabili d'ambiente",
       "status": {
         "disabled": "Disabilitato",
         "connected": "connesso",
@@ -194,10 +200,12 @@
         "autoConnect": "Connessione automatica"
       },
       "toolCount": {
-        "live": "{{count}} strumento attivo",
-        "live_plural": "{{count}} strumenti attivi",
-        "cached": "{{count}} strumento in cache",
-        "cached_plural": "{{count}} strumenti in cache"
+        "live_one": "{{count}} strumento attivo",
+        "live_other": "{{count}} strumenti attivi",
+        "live": "{{count}} strumenti attivi",
+        "cached_one": "{{count}} strumento in cache",
+        "cached_other": "{{count}} strumenti in cache",
+        "cached": "{{count}} strumenti in cache"
       },
       "actions": {
         "edit": "Modifica",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ inserisci un comando prima di testare la connessione",
         "testSuccess": "✅ connessione riuscita! Trovati {{count}} strumenti.",
         "testFailed": "❌ Connessione fallita: {{message}}",
+        "refreshedAll_one": "✅ strumenti aggiornati per {{count}} server",
+        "refreshedAll_other": "✅ strumenti aggiornati per {{count}} server",
         "refreshedAll": "✅ strumenti aggiornati per {{count}} server",
-        "refreshedAll_plural": "✅ strumenti aggiornati per {{count}} server",
         "refreshedPartial": "✅ {{success}} server aggiornati, ❌ {{failed}} falliti",
         "noServersConfigured": "⚠️ Nessun server MCP configurato",
         "testingAll": "🧪 Test di {{count}} connessioni server MCP...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Crea e gestisci agenti AI con capacità, strumenti e comportamenti specifici.",
-      "count": "{{count}} agente configurato",
-      "count_plural": "{{count}} agenti configurati",
+      "count_one": "{{count}} agente configurato",
+      "count_other": "{{count}} agenti configurati",
+      "count": "{{count}} agenti configurati",
       "addBtn": "+ aggiungi agente",
       "empty": "Nessun agente configurato. Seleziona aggiungi agente per iniziare.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} integrato",
+        "mcpServer_one": "{{count}} server mcp",
+        "mcpServer_other": "{{count}} server mcp",
         "mcpServer": "{{count}} server mcp",
-        "mcpServer_plural": "{{count}} server mcp",
-        "mcpTool": "{{count}} strumento mcp",
-        "mcpTool_plural": "{{count}} strumenti mcp",
+        "mcpTool_one": "{{count}} strumento mcp",
+        "mcpTool_other": "{{count}} strumenti mcp",
+        "mcpTool": "{{count}} strumenti mcp",
         "noTools": "Nessuno strumento abilitato"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Azioni"
         },
         "unnamed": "Strumento CLI senza nome",
-        "paramCount": "{{count}} parametro",
-        "paramCount_plural": "{{count}} parametri",
+        "paramCount_one": "{{count}} parametro",
+        "paramCount_other": "{{count}} parametri",
+        "paramCount": "{{count}} parametri",
         "noParams": "Nessuno",
         "statusEnabled": "Abilitato",
         "statusDisabled": "Disabilitato",
@@ -895,8 +908,9 @@
         "desc": "Prefisso (emoji o testo) da visualizzare prima di tutte le azioni rapide nel menu contestuale",
         "placeholder": "⚡"
       },
-      "count": "{{count}} azione configurata ({{enabled}} abilitata)",
-      "count_plural": "{{count}} azioni configurate ({{enabled}} abilitate)",
+      "count_one": "{{count}} azione configurata ({{enabled}} abilitata)",
+      "count_other": "{{count}} azioni configurate ({{enabled}} abilitate)",
+      "count": "{{count}} azioni configurate ({{enabled}} abilitate)",
       "addBtn": "+ aggiungi azione rapida",
       "empty": "Nessuna azione rapida configurata. Seleziona aggiungi azione rapida per iniziare.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Abilita RAG",
       "step3": "Seleziona indicizza vault",
       "close": "Chiudi",
-      "retrieved": "📚 recuperato da {{count}} documento",
-      "retrieved_plural": "📚 recuperato da {{count}} documenti"
+      "retrieved_one": "📚 recuperato da {{count}} documento",
+      "retrieved_other": "📚 recuperato da {{count}} documenti",
+      "retrieved": "📚 recuperato da {{count}} documenti"
     },
     "ragTooltip": {
       "status": "Stato indice RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "Accesso MCP",
         "noServers": "Nessun server MCP configurato. Aggiungi server in Impostazioni → MCP per sbloccare queste opzioni.",
-        "toolsCached": "{{count}} strumento in cache",
-        "toolsCached_plural": "{{count}} strumenti in cache",
+        "toolsCached_one": "{{count}} strumento in cache",
+        "toolsCached_other": "{{count}} strumenti in cache",
+        "toolsCached": "{{count}} strumenti in cache",
         "noToolsCached": "Nessuno strumento ancora in cache. Abilita l'accesso completo o aggiorna la cache.",
         "showTools": "Mostra strumenti",
         "hideTools": "Nascondi strumenti",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Disabilitato",
         "statusConnected": "● connesso",
         "statusDisconnected": "○ disconnesso",
-        "toolsLive": "{{count}} strumento",
-        "toolsLive_plural": "{{count}} strumenti",
-        "toolsCached": "{{count}} strumento (in cache)",
-        "toolsCached_plural": "{{count}} strumenti (in cache)",
+        "toolsLive_one": "{{count}} strumento",
+        "toolsLive_other": "{{count}} strumenti",
+        "toolsLive": "{{count}} strumenti",
+        "toolsCached_one": "{{count}} strumento (in cache)",
+        "toolsCached_other": "{{count}} strumenti (in cache)",
+        "toolsCached": "{{count}} strumenti (in cache)",
         "noTools": "0 strumenti",
         "connectBtn": "Connetti",
         "disconnectBtn": "Disconnetti",

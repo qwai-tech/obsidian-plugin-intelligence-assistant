@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Ikusi eta kudeatu modeloak hornitzaile guztietatik. Egin klik \"freskatu modelo guztiak\" erabilgarri dauden modelo berrienak eskuratzeko.",
+      "providerCount_one": "{{count}} hornitzaile konfiguratuta",
+      "providerCount_other": "{{count}} hornitzaile konfiguratuta",
       "providerCount": "{{count}} hornitzaile konfiguratuta",
-      "providerCount_plural": "{{count}} hornitzaile konfiguratuta",
       "refreshAll": "🔄 freskatu modelo guztiak",
       "empty": "Oraindik ez dago hornitzailerik konfiguratuta. Gehitu hornitzaileak hornitzaileen fitxan lehenik.",
       "noModels": "Ez dago modelo erabilgarririk. Egin klik \"freskatu modelo guztiak\" edo freskatu hornitzaile indibidualak hornitzaileen fitxan.",
       "noMatch": "Modelo bakar batek ere ez ditu uneko iragazkiak betetzen. Doitu edo garbitu iragazkiak emaitzak ikusteko.",
+      "modelCount_one": "• {{count}} modelo katxetatuta",
+      "modelCount_other": "• {{count}} modelo katxetatuta",
       "modelCount": "• {{count}} modelo katxetatuta",
-      "modelCount_plural": "• {{count}} modelo katxetatuta",
-      "matchCount": "• {{count}} bat dator hautatutako iragazkiekin",
-      "matchCount_plural": "• {{count}} bat datoz hautatutako iragazkiekin",
+      "matchCount_one": "• {{count}} bat dator hautatutako iragazkiekin",
+      "matchCount_other": "• {{count}} bat datoz hautatutako iragazkiekin",
+      "matchCount": "• {{count}} bat datoz hautatutako iragazkiekin",
       "status": {
         "enabled": "Gaituta",
         "disabled": "Desgaituta"
@@ -99,8 +102,9 @@
       "securityItem2": "Gehitu karpeta hau zure .gitignore fitxategian Git sinkronizazioa erabiltzen baduzu.",
       "securityItem3": "Kontuz ibili hodeiko sinkronizazio zerbitzu publikoak erabiltzean.",
       "desc": "Kudeatu LLM hornitzaileak eta API kredentzialak. Erabili ekintzak zutabea konfigurazio xehetasunak editatu edo modelo katxetatuak freskatzeko.",
+      "count_one": "{{count}} hornitzaile konfiguratuta",
+      "count_other": "{{count}} hornitzaile konfiguratuta",
       "count": "{{count}} hornitzaile konfiguratuta",
-      "count_plural": "{{count}} hornitzaile konfiguratuta",
       "addBtn": "+ Gehitu hornitzailea",
       "empty": "Ez dago hornitzailerik konfiguratuta. Hautatu \"Gehitu hornitzailea\" hasteko.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Modelorik ez",
-        "count": "{{count}} modelo",
-        "count_plural": "{{count}} modelo"
+        "count_one": "{{count}} modelo",
+        "count_other": "{{count}} modelo",
+        "count": "{{count}} modelo"
       },
       "ollama": {
         "checkingVersion": "Bertsioa egiaztatzen...",
@@ -183,8 +188,9 @@
       "noArgs": "Bat ere ez",
       "cached": "Katxetatuta",
       "disabled": "Desgaituta",
+      "envVars_one": "{{count}} ingurune-aldagai",
+      "envVars_other": "{{count}} ingurune-aldagai",
       "envVars": "{{count}} ingurune-aldagai",
-      "envVars_plural": "{{count}} ingurune-aldagai",
       "status": {
         "disabled": "Desgaituta",
         "connected": "konektatuta",
@@ -194,10 +200,12 @@
         "autoConnect": "Konexio automatikoa"
       },
       "toolCount": {
+        "live_one": "{{count}} tresna zuzenean",
+        "live_other": "{{count}} tresna zuzenean",
         "live": "{{count}} tresna zuzenean",
-        "live_plural": "{{count}} tresna zuzenean",
-        "cached": "{{count}} tresna katxetatuta",
-        "cached_plural": "{{count}} tresna katxetatuta"
+        "cached_one": "{{count}} tresna katxetatuta",
+        "cached_other": "{{count}} tresna katxetatuta",
+        "cached": "{{count}} tresna katxetatuta"
       },
       "actions": {
         "edit": "Editatu",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ mesedez, sartu komando bat konexioa probatu aurretik",
         "testSuccess": "✅ behar bezala konektatuta! {{count}} tresna aurkitu dira.",
         "testFailed": "❌ Konexioak huts egin du: {{message}}",
+        "refreshedAll_one": "✅ {{count}} zerbitzariren tresnak freskatu dira",
+        "refreshedAll_other": "✅ {{count}} zerbitzariren tresnak freskatu dira",
         "refreshedAll": "✅ {{count}} zerbitzariren tresnak freskatu dira",
-        "refreshedAll_plural": "✅ {{count}} zerbitzariren tresnak freskatu dira",
         "refreshedPartial": "✅ {{success}} zerbitzari freskatuta, ❌ {{failed}} huts",
         "noServersConfigured": "⚠️ Ez dago MCP zerbitzari konfiguraturik",
         "testingAll": "🧪 {{count}} MCP zerbitzarien konexioak probatzen...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Sortu eta kudeatu AI agenteak gaitasun, tresna eta portaera zehatzekin.",
+      "count_one": "{{count}} agente konfiguratuta",
+      "count_other": "{{count}} agente konfiguratuta",
       "count": "{{count}} agente konfiguratuta",
-      "count_plural": "{{count}} agente konfiguratuta",
       "addBtn": "+ gehitu agentea",
       "empty": "Ez dago agente konfiguraturik. Hautatu \"gehitu agentea\" hasteko.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} tresna integratu",
+        "mcpServer_one": "{{count}} mcp zerbitzari",
+        "mcpServer_other": "{{count}} mcp zerbitzari",
         "mcpServer": "{{count}} mcp zerbitzari",
-        "mcpServer_plural": "{{count}} mcp zerbitzari",
+        "mcpTool_one": "{{count}} mcp tresna",
+        "mcpTool_other": "{{count}} mcp tresna",
         "mcpTool": "{{count}} mcp tresna",
-        "mcpTool_plural": "{{count}} mcp tresna",
         "noTools": "Tresna gaiturik ez"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Ekintzak"
         },
         "unnamed": "CLI Tresna izengabea",
+        "paramCount_one": "{{count}} parametro",
+        "paramCount_other": "{{count}} parametro",
         "paramCount": "{{count}} parametro",
-        "paramCount_plural": "{{count}} parametro",
         "noParams": "Bat ere ez",
         "statusEnabled": "Gaituta",
         "statusDisabled": "Desgaituta",
@@ -895,8 +908,9 @@
         "desc": "Ekintza azkar guztien aurretik testuinguru-menuan erakusteko aurrizkia (emoji edo testua)",
         "placeholder": "⚡"
       },
+      "count_one": "{{count}} ekintza konfiguratuta ({{enabled}} gaituta)",
+      "count_other": "{{count}} ekintza konfiguratuta ({{enabled}} gaituta)",
       "count": "{{count}} ekintza konfiguratuta ({{enabled}} gaituta)",
-      "count_plural": "{{count}} ekintza konfiguratuta ({{enabled}} gaituta)",
       "addBtn": "+ gehitu ekintza azkarra",
       "empty": "Ez dago ekintza azkar konfiguraturik. Hautatu \"gehitu ekintza azkarra\" hasteko.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Gaitu RAG",
       "step3": "Hautatu indexatze-biltegia",
       "close": "Itxi",
-      "retrieved": "📚 {{count}} dokumentutik berreskuratuta",
-      "retrieved_plural": "📚 {{count}} dokumentutatik berreskuratuta"
+      "retrieved_one": "📚 {{count}} dokumentutik berreskuratuta",
+      "retrieved_other": "📚 {{count}} dokumentutatik berreskuratuta",
+      "retrieved": "📚 {{count}} dokumentutatik berreskuratuta"
     },
     "ragTooltip": {
       "status": "RAG Indizearen Egoera:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP sarbidea",
         "noServers": "Ez dago MCP zerbitzari konfiguraturik. Gehitu zerbitzariak hemen: Ezarpenak → MCP aukera hauek desblokeatzeko.",
+        "toolsCached_one": "{{count}} tresna katxetatuta",
+        "toolsCached_other": "{{count}} tresna katxetatuta",
         "toolsCached": "{{count}} tresna katxetatuta",
-        "toolsCached_plural": "{{count}} tresna katxetatuta",
         "noToolsCached": "Oraindik ez dago tresnarik katxean. Gaitu sarbide osoa edo freskatu katxea.",
         "showTools": "Erakutsi tresnak",
         "hideTools": "Ezkutatu tresnak",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Desgaituta",
         "statusConnected": "● konektatuta",
         "statusDisconnected": "○ deskonektatuta",
+        "toolsLive_one": "{{count}} tresna",
+        "toolsLive_other": "{{count}} tresna",
         "toolsLive": "{{count}} tresna",
-        "toolsLive_plural": "{{count}} tresna",
+        "toolsCached_one": "{{count}} tresna (katxean)",
+        "toolsCached_other": "{{count}} tresna (katxean)",
         "toolsCached": "{{count}} tresna (katxean)",
-        "toolsCached_plural": "{{count}} tresna (katxean)",
         "noTools": "0 tresna",
         "connectBtn": "Konektatu",
         "disconnectBtn": "Deskonektatu",

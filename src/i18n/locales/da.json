@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Vis og administrer modeller fra alle konfigurerede udbydere. Klik på \"opdater modeller\" for at hente de seneste tilgængelige modeller.",
-      "providerCount": "{{count}} udbyder konfigureret",
-      "providerCount_plural": "{{count}} udbydere konfigureret",
+      "providerCount_one": "{{count}} udbyder konfigureret",
+      "providerCount_other": "{{count}} udbydere konfigureret",
+      "providerCount": "{{count}} udbydere konfigureret",
       "refreshAll": "🔄 opdater alle modeller",
       "empty": "Ingen udbydere konfigureret endnu. Tilføj udbydere i udbyderens fane først.",
       "noModels": "Ingen modeller tilgængelige. Klik på \"opdater alle modeller\" eller opdater individuelle udbydere i udbyderens fane.",
       "noMatch": "Ingen modeller matcher de nuværende filtre. Juster eller ryd filtre for at se resultater.",
-      "modelCount": "• {{count}} model i cache",
-      "modelCount_plural": "• {{count}} modeller i cache",
-      "matchCount": "• {{count}} match med valgte filtre",
-      "matchCount_plural": "• {{count}} matches med valgte filtre",
+      "modelCount_one": "• {{count}} model i cache",
+      "modelCount_other": "• {{count}} modeller i cache",
+      "modelCount": "• {{count}} modeller i cache",
+      "matchCount_one": "• {{count}} match med valgte filtre",
+      "matchCount_other": "• {{count}} matches med valgte filtre",
+      "matchCount": "• {{count}} matches med valgte filtre",
       "status": {
         "enabled": "Aktiveret",
         "disabled": "Deaktiveret"
@@ -99,8 +102,9 @@
       "securityItem2": "Tilføj denne mappe til din .gitignore, hvis du bruger Git-synkronisering.",
       "securityItem3": "Vær forsigtig ved brug af offentlige cloud-synkroniseringstjenester.",
       "desc": "Administrer LLM-udbydere og API-legitimationsoplysninger. Brug handlingskolonnen til at redigere konfigurationsoplysninger eller opdatere cachelagrede modeller.",
-      "count": "{{count}} udbyder konfigureret",
-      "count_plural": "{{count}} udbydere konfigureret",
+      "count_one": "{{count}} udbyder konfigureret",
+      "count_other": "{{count}} udbydere konfigureret",
+      "count": "{{count}} udbydere konfigureret",
       "addBtn": "+ Tilføj udbyder",
       "empty": "Ingen udbydere konfigureret. Vælg \"Tilføj udbyder\" for at komme i gang.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Ingen modeller",
-        "count": "{{count}} model",
-        "count_plural": "{{count}} modeller"
+        "count_one": "{{count}} model",
+        "count_other": "{{count}} modeller",
+        "count": "{{count}} modeller"
       },
       "ollama": {
         "checkingVersion": "Kontrollerer version...",
@@ -183,8 +188,9 @@
       "noArgs": "Ingen",
       "cached": "I cache",
       "disabled": "Deaktiveret",
-      "envVars": "{{count}} miljøvariabel",
-      "envVars_plural": "{{count}} miljøvariabler",
+      "envVars_one": "{{count}} miljøvariabel",
+      "envVars_other": "{{count}} miljøvariabler",
+      "envVars": "{{count}} miljøvariabler",
       "status": {
         "disabled": "Deaktiveret",
         "connected": "forbundet",
@@ -194,10 +200,12 @@
         "autoConnect": "Automatisk forbindelse"
       },
       "toolCount": {
-        "live": "{{count}} aktivt værktøj",
-        "live_plural": "{{count}} aktive værktøjer",
-        "cached": "{{count}} cachelagret værktøj",
-        "cached_plural": "{{count}} cachelagrede værktøjer"
+        "live_one": "{{count}} aktivt værktøj",
+        "live_other": "{{count}} aktive værktøjer",
+        "live": "{{count}} aktive værktøjer",
+        "cached_one": "{{count}} cachelagret værktøj",
+        "cached_other": "{{count}} cachelagrede værktøjer",
+        "cached": "{{count}} cachelagrede værktøjer"
       },
       "actions": {
         "edit": "Rediger",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ angiv en kommando inden test af forbindelsen",
         "testSuccess": "✅ forbundet! Fandt {{count}} værktøjer.",
         "testFailed": "❌ Forbindelsen mislykkedes: {{message}}",
-        "refreshedAll": "✅ opdaterede værktøjer for {{count}} server",
-        "refreshedAll_plural": "✅ opdaterede værktøjer for {{count}} servere",
+        "refreshedAll_one": "✅ opdaterede værktøjer for {{count}} server",
+        "refreshedAll_other": "✅ opdaterede værktøjer for {{count}} servere",
+        "refreshedAll": "✅ opdaterede værktøjer for {{count}} servere",
         "refreshedPartial": "✅ {{success}} servere opdateret, ❌ {{failed}} mislykkedes",
         "noServersConfigured": "⚠️ Ingen MCP-servere konfigureret",
         "testingAll": "🧪 Tester {{count}} MCP-serverforbindelser...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Opret og administrer AI-agenter med specifikke funktioner, værktøjer og adfærd.",
-      "count": "{{count}} agent konfigureret",
-      "count_plural": "{{count}} agenter konfigureret",
+      "count_one": "{{count}} agent konfigureret",
+      "count_other": "{{count}} agenter konfigureret",
+      "count": "{{count}} agenter konfigureret",
       "addBtn": "+ tilføj agent",
       "empty": "Ingen agenter konfigureret. Vælg tilføj agent for at komme i gang.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} indbygget",
-        "mcpServer": "{{count}} mcp-server",
-        "mcpServer_plural": "{{count}} mcp-servere",
-        "mcpTool": "{{count}} mcp-værktøj",
-        "mcpTool_plural": "{{count}} mcp-værktøjer",
+        "mcpServer_one": "{{count}} mcp-server",
+        "mcpServer_other": "{{count}} mcp-servere",
+        "mcpServer": "{{count}} mcp-servere",
+        "mcpTool_one": "{{count}} mcp-værktøj",
+        "mcpTool_other": "{{count}} mcp-værktøjer",
+        "mcpTool": "{{count}} mcp-værktøjer",
         "noTools": "Ingen værktøjer aktiveret"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Handlinger"
         },
         "unnamed": "Unavngivet CLI-værktøj",
-        "paramCount": "{{count}} parameter",
-        "paramCount_plural": "{{count}} parametre",
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parametre",
+        "paramCount": "{{count}} parametre",
         "noParams": "Ingen",
         "statusEnabled": "Aktiveret",
         "statusDisabled": "Deaktiveret",
@@ -895,8 +908,9 @@
         "desc": "Præfiks (emoji eller tekst) der vises før alle hurtighandlinger i kontekstmenuen",
         "placeholder": "⚡"
       },
-      "count": "{{count}} handling konfigureret ({{enabled}} aktiveret)",
-      "count_plural": "{{count}} handlinger konfigureret ({{enabled}} aktiveret)",
+      "count_one": "{{count}} handling konfigureret ({{enabled}} aktiveret)",
+      "count_other": "{{count}} handlinger konfigureret ({{enabled}} aktiveret)",
+      "count": "{{count}} handlinger konfigureret ({{enabled}} aktiveret)",
       "addBtn": "+ tilføj hurtighandling",
       "empty": "Ingen hurtighandlinger konfigureret. Vælg tilføj hurtighandling for at komme i gang.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Aktiver RAG",
       "step3": "Vælg indekser vault",
       "close": "Luk",
-      "retrieved": "📚 hentet fra {{count}} dokument",
-      "retrieved_plural": "📚 hentet fra {{count}} dokumenter"
+      "retrieved_one": "📚 hentet fra {{count}} dokument",
+      "retrieved_other": "📚 hentet fra {{count}} dokumenter",
+      "retrieved": "📚 hentet fra {{count}} dokumenter"
     },
     "ragTooltip": {
       "status": "RAG-indeksstatus:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP-adgang",
         "noServers": "Ingen MCP-servere konfigureret. Tilføj servere under Indstillinger → MCP for at låse disse muligheder op.",
-        "toolsCached": "{{count}} cachelagret værktøj",
-        "toolsCached_plural": "{{count}} cachelagrede værktøjer",
+        "toolsCached_one": "{{count}} cachelagret værktøj",
+        "toolsCached_other": "{{count}} cachelagrede værktøjer",
+        "toolsCached": "{{count}} cachelagrede værktøjer",
         "noToolsCached": "Ingen cachelagrede værktøjer endnu. Aktivér fuld adgang, eller opdater cachen.",
         "showTools": "Vis værktøjer",
         "hideTools": "Skjul værktøjer",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Deaktiveret",
         "statusConnected": "● forbundet",
         "statusDisconnected": "○ afbrudt",
-        "toolsLive": "{{count}} værktøj",
-        "toolsLive_plural": "{{count}} værktøjer",
-        "toolsCached": "{{count}} værktøj (cachelagret)",
-        "toolsCached_plural": "{{count}} værktøjer (cachelagret)",
+        "toolsLive_one": "{{count}} værktøj",
+        "toolsLive_other": "{{count}} værktøjer",
+        "toolsLive": "{{count}} værktøjer",
+        "toolsCached_one": "{{count}} værktøj (cachelagret)",
+        "toolsCached_other": "{{count}} værktøjer (cachelagret)",
+        "toolsCached": "{{count}} værktøjer (cachelagret)",
         "noTools": "0 værktøjer",
         "connectBtn": "Opret forbindelse",
         "disconnectBtn": "Afbryd forbindelse",

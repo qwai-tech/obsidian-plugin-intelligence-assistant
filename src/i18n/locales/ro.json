@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Vizualizați și gestionați modele de la toți furnizorii configurați. Apăsați „reîmprospătare modele“ pentru a obține cele mai recente modele disponibile.",
-      "providerCount": "{{count}} furnizor configurat",
-      "providerCount_plural": "{{count}} furnizori configurați",
+      "providerCount_one": "{{count}} furnizor configurat",
+      "providerCount_other": "{{count}} furnizori configurați",
+      "providerCount": "{{count}} furnizori configurați",
       "refreshAll": "🔄 reîmprospătare toate modelele",
       "empty": "Niciun furnizor configurat. Adăugați mai întâi furnizori în fila furnizori.",
       "noModels": "Niciun model disponibil. Apăsați „reîmprospătare toate modelele“ sau reîmprospătați furnizorii individuali din fila furnizori.",
       "noMatch": "Niciun model nu corespunde filtrelor curente. Ajustați sau ștergeți filtrele pentru a vedea rezultate.",
-      "modelCount": "• {{count}} model în cache",
-      "modelCount_plural": "• {{count}} modele în cache",
-      "matchCount": "• {{count}} corespunde filtrelor selectate",
-      "matchCount_plural": "• {{count}} corespund filtrelor selectate",
+      "modelCount_one": "• {{count}} model în cache",
+      "modelCount_other": "• {{count}} modele în cache",
+      "modelCount": "• {{count}} modele în cache",
+      "matchCount_one": "• {{count}} corespunde filtrelor selectate",
+      "matchCount_other": "• {{count}} corespund filtrelor selectate",
+      "matchCount": "• {{count}} corespund filtrelor selectate",
       "status": {
         "enabled": "Activat",
         "disabled": "Dezactivat"
@@ -99,8 +102,9 @@
       "securityItem2": "Adăugați acest folder în .gitignore dacă utilizați sincronizare Git.",
       "securityItem3": "Fiți precauți când utilizați servicii de sincronizare cloud publice.",
       "desc": "Gestionați furnizorii LLM și acreditările API. Utilizați coloana de acțiuni pentru a edita detaliile de configurare sau a reîmprospăta modelele din cache.",
-      "count": "{{count}} furnizor configurat",
-      "count_plural": "{{count}} furnizori configurați",
+      "count_one": "{{count}} furnizor configurat",
+      "count_other": "{{count}} furnizori configurați",
+      "count": "{{count}} furnizori configurați",
       "addBtn": "+ Adăugați furnizor",
       "empty": "Niciun furnizor configurat. Selectați „Adăugați furnizor“ pentru a începe.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Niciun model",
-        "count": "{{count}} model",
-        "count_plural": "{{count}} modele"
+        "count_one": "{{count}} model",
+        "count_other": "{{count}} modele",
+        "count": "{{count}} modele"
       },
       "ollama": {
         "checkingVersion": "Se verifică versiunea...",
@@ -183,8 +188,9 @@
       "noArgs": "Niciun",
       "cached": "În cache",
       "disabled": "Dezactivat",
-      "envVars": "{{count}} variabilă env",
-      "envVars_plural": "{{count}} variabile env",
+      "envVars_one": "{{count}} variabilă env",
+      "envVars_other": "{{count}} variabile env",
+      "envVars": "{{count}} variabile env",
       "status": {
         "disabled": "Dezactivat",
         "connected": "conectat",
@@ -194,10 +200,12 @@
         "autoConnect": "Conectare automată"
       },
       "toolCount": {
-        "live": "{{count}} instrument activ",
-        "live_plural": "{{count}} instrumente active",
-        "cached": "{{count}} instrument în cache",
-        "cached_plural": "{{count}} instrumente în cache"
+        "live_one": "{{count}} instrument activ",
+        "live_other": "{{count}} instrumente active",
+        "live": "{{count}} instrumente active",
+        "cached_one": "{{count}} instrument în cache",
+        "cached_other": "{{count}} instrumente în cache",
+        "cached": "{{count}} instrumente în cache"
       },
       "actions": {
         "edit": "Editați",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ introduceți o comandă înainte de testarea conexiunii",
         "testSuccess": "✅ conectat cu succes! Au fost găsite {{count}} instrumente.",
         "testFailed": "❌ Conexiunea a eșuat: {{message}}",
-        "refreshedAll": "✅ instrumente reîmprospătate pentru {{count}} server",
-        "refreshedAll_plural": "✅ instrumente reîmprospătate pentru {{count}} servere",
+        "refreshedAll_one": "✅ instrumente reîmprospătate pentru {{count}} server",
+        "refreshedAll_other": "✅ instrumente reîmprospătate pentru {{count}} servere",
+        "refreshedAll": "✅ instrumente reîmprospătate pentru {{count}} servere",
         "refreshedPartial": "✅ {{success}} servere reîmprospătate, ❌ {{failed}} eșuate",
         "noServersConfigured": "⚠️ Niciun server MCP configurat",
         "testingAll": "🧪 Se testează {{count}} conexiuni server MCP...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Creați și gestionați agenți AI cu capacități, instrumente și comportamente specifice.",
-      "count": "{{count}} agent configurat",
-      "count_plural": "{{count}} agenți configurați",
+      "count_one": "{{count}} agent configurat",
+      "count_other": "{{count}} agenți configurați",
+      "count": "{{count}} agenți configurați",
       "addBtn": "+ adăugați agent",
       "empty": "Niciun agent configurat. Selectați adăugați agent pentru a începe.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} incorporat",
-        "mcpServer": "{{count}} server mcp",
-        "mcpServer_plural": "{{count}} servere mcp",
-        "mcpTool": "{{count}} instrument mcp",
-        "mcpTool_plural": "{{count}} instrumente mcp",
+        "mcpServer_one": "{{count}} server mcp",
+        "mcpServer_other": "{{count}} servere mcp",
+        "mcpServer": "{{count}} servere mcp",
+        "mcpTool_one": "{{count}} instrument mcp",
+        "mcpTool_other": "{{count}} instrumente mcp",
+        "mcpTool": "{{count}} instrumente mcp",
         "noTools": "Niciun instrument activat"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Acțiuni"
         },
         "unnamed": "Instrument CLI fără nume",
-        "paramCount": "{{count}} parametru",
-        "paramCount_plural": "{{count}} parametri",
+        "paramCount_one": "{{count}} parametru",
+        "paramCount_other": "{{count}} parametri",
+        "paramCount": "{{count}} parametri",
         "noParams": "Niciunul",
         "statusEnabled": "Activat",
         "statusDisabled": "Dezactivat",
@@ -895,8 +908,9 @@
         "desc": "Prefix (emoji sau text) de afișat înaintea tuturor acțiunilor rapide în meniul contextual",
         "placeholder": "⚡"
       },
-      "count": "{{count}} acțiune configurată ({{enabled}} activate)",
-      "count_plural": "{{count}} acțiuni configurate ({{enabled}} activate)",
+      "count_one": "{{count}} acțiune configurată ({{enabled}} activate)",
+      "count_other": "{{count}} acțiuni configurate ({{enabled}} activate)",
+      "count": "{{count}} acțiuni configurate ({{enabled}} activate)",
       "addBtn": "+ adăugați acțiune rapidă",
       "empty": "Nicio acțiune rapidă configurată. Selectați adăugați acțiune rapidă pentru a începe.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Activați RAG",
       "step3": "Selectați indexare seif",
       "close": "Închideți",
-      "retrieved": "📚 obținut din {{count}} document",
-      "retrieved_plural": "📚 obținut din {{count}} documente"
+      "retrieved_one": "📚 obținut din {{count}} document",
+      "retrieved_other": "📚 obținut din {{count}} documente",
+      "retrieved": "📚 obținut din {{count}} documente"
     },
     "ragTooltip": {
       "status": "Starea indexului RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "Acces MCP",
         "noServers": "Niciun server MCP configurat. Adăugați servere în Setări → MCP pentru a debloca aceste opțiuni.",
-        "toolsCached": "{{count}} instrument în cache",
-        "toolsCached_plural": "{{count}} instrumente în cache",
+        "toolsCached_one": "{{count}} instrument în cache",
+        "toolsCached_other": "{{count}} instrumente în cache",
+        "toolsCached": "{{count}} instrumente în cache",
         "noToolsCached": "Niciun instrument în cache. Activați accesul complet sau reîmprospătați cache-ul.",
         "showTools": "Afișați instrumente",
         "hideTools": "Ascundeți instrumente",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Dezactivat",
         "statusConnected": "● conectat",
         "statusDisconnected": "○ deconectat",
-        "toolsLive": "{{count}} instrument",
-        "toolsLive_plural": "{{count}} instrumente",
-        "toolsCached": "{{count}} instrument (în cache)",
-        "toolsCached_plural": "{{count}} instrumente (în cache)",
+        "toolsLive_one": "{{count}} instrument",
+        "toolsLive_other": "{{count}} instrumente",
+        "toolsLive": "{{count}} instrumente",
+        "toolsCached_one": "{{count}} instrument (în cache)",
+        "toolsCached_other": "{{count}} instrumente (în cache)",
+        "toolsCached": "{{count}} instrumente (în cache)",
         "noTools": "0 instrumente",
         "connectBtn": "Conectați",
         "disconnectBtn": "Deconectați",

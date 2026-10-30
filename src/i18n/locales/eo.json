@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Rigardu kaj administru modelojn de ĉiuj agorditaj provizantoj. Alklaku \"aktualigi modelojn\" por preni la plej novajn disponeblajn modelojn.",
-      "providerCount": "{{count}} provizanto agordita",
-      "providerCount_plural": "{{count}} provizantoj agorditaj",
+      "providerCount_one": "{{count}} provizanto agordita",
+      "providerCount_other": "{{count}} provizantoj agorditaj",
+      "providerCount": "{{count}} provizantoj agorditaj",
       "refreshAll": "🔄 aktualigi ĉiujn modelojn",
       "empty": "Neniu provizanto agordita ankoraŭ. Unue aldonu provizantojn en la provizanta langeto.",
       "noModels": "Neniuj modeloj disponeblaj. Alklaku \"aktualigi ĉiujn modelojn\" aŭ aktualigu individuajn provizantojn en la provizanta langeto.",
       "noMatch": "Neniu modelo kongruas kun la nunaj filtroj. Alĝustigu aŭ forigu filtrojn por vidi rezultojn.",
-      "modelCount": "• {{count}} modelo en kaŝmemoro",
-      "modelCount_plural": "• {{count}} modeloj en kaŝmemoro",
+      "modelCount_one": "• {{count}} modelo en kaŝmemoro",
+      "modelCount_other": "• {{count}} modeloj en kaŝmemoro",
+      "modelCount": "• {{count}} modeloj en kaŝmemoro",
+      "matchCount_one": "• {{count}} kongruas kun elektitaj filtroj",
+      "matchCount_other": "• {{count}} kongruas kun elektitaj filtroj",
       "matchCount": "• {{count}} kongruas kun elektitaj filtroj",
-      "matchCount_plural": "• {{count}} kongruas kun elektitaj filtroj",
       "status": {
         "enabled": "Ebligita",
         "disabled": "Malŝaltita"
@@ -99,8 +102,9 @@
       "securityItem2": "Aldonu ĉi tiun dosierujon al via .gitignore se vi uzas Git-sinkronigon.",
       "securityItem3": "Estu singarda dum uzado de publikaj nuba-sinkronigaj servoj.",
       "desc": "Administru LLM-provizantojn kaj API-akreditaĵojn. Uzu la ago-kolumnon por redakti agorddetajlojn aŭ aktualigi kaŝmemoritajn modelojn.",
-      "count": "{{count}} provizanto agordita",
-      "count_plural": "{{count}} provizantoj agorditaj",
+      "count_one": "{{count}} provizanto agordita",
+      "count_other": "{{count}} provizantoj agorditaj",
+      "count": "{{count}} provizantoj agorditaj",
       "addBtn": "+ Aldoni provizanton",
       "empty": "Neniu provizanto agordita. Elektu \"Aldoni provizanton\" por komenci.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Neniuj modeloj",
-        "count": "{{count}} modelo",
-        "count_plural": "{{count}} modeloj"
+        "count_one": "{{count}} modelo",
+        "count_other": "{{count}} modeloj",
+        "count": "{{count}} modeloj"
       },
       "ollama": {
         "checkingVersion": "Kontrolante version...",
@@ -183,8 +188,9 @@
       "noArgs": "Neniu",
       "cached": "Kaŝmemorіta",
       "disabled": "Malŝaltita",
-      "envVars": "{{count}} mediavariablo",
-      "envVars_plural": "{{count}} mediavariabloj",
+      "envVars_one": "{{count}} mediavariablo",
+      "envVars_other": "{{count}} mediavariabloj",
+      "envVars": "{{count}} mediavariabloj",
       "status": {
         "disabled": "Malŝaltita",
         "connected": "konektita",
@@ -194,10 +200,12 @@
         "autoConnect": "Aŭtomata konekto"
       },
       "toolCount": {
-        "live": "{{count}} viva ilo",
-        "live_plural": "{{count}} vivaj iloj",
-        "cached": "{{count}} kaŝmemorіta ilo",
-        "cached_plural": "{{count}} kaŝmemorіtaj iloj"
+        "live_one": "{{count}} viva ilo",
+        "live_other": "{{count}} vivaj iloj",
+        "live": "{{count}} vivaj iloj",
+        "cached_one": "{{count}} kaŝmemorіta ilo",
+        "cached_other": "{{count}} kaŝmemorіtaj iloj",
+        "cached": "{{count}} kaŝmemorіtaj iloj"
       },
       "actions": {
         "edit": "Redakti",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ bonvolu enigi komandon antaŭ testi la konekton",
         "testSuccess": "✅ sukcese konektita! Trovitaj {{count}} iloj.",
         "testFailed": "❌ Konekto malsukcesis: {{message}}",
-        "refreshedAll": "✅ aktualizitaj iloj por {{count}} servilo",
-        "refreshedAll_plural": "✅ aktualizitaj iloj por {{count}} serviloj",
+        "refreshedAll_one": "✅ aktualizitaj iloj por {{count}} servilo",
+        "refreshedAll_other": "✅ aktualizitaj iloj por {{count}} serviloj",
+        "refreshedAll": "✅ aktualizitaj iloj por {{count}} serviloj",
         "refreshedPartial": "✅ aktualizitaj {{success}} serviloj, ❌ {{failed}} malsukcesis",
         "noServersConfigured": "⚠️ Neniu MCP-servilo agordita",
         "testingAll": "🧪 Testante {{count}} MCP-servilkonektojn...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Kreu kaj administru AI-agentojn kun specifaj kapabloj, iloj kaj kondutoj.",
-      "count": "{{count}} agento agordita",
-      "count_plural": "{{count}} agentoj agorditaj",
+      "count_one": "{{count}} agento agordita",
+      "count_other": "{{count}} agentoj agorditaj",
+      "count": "{{count}} agentoj agorditaj",
       "addBtn": "+ aldoni agenton",
       "empty": "Neniu agento agordita. Elektu aldoni agenton por komenci.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} enkonstruita",
-        "mcpServer": "{{count}} MCP-servilo",
-        "mcpServer_plural": "{{count}} MCP-serviloj",
-        "mcpTool": "{{count}} MCP-ilo",
-        "mcpTool_plural": "{{count}} MCP-iloj",
+        "mcpServer_one": "{{count}} MCP-servilo",
+        "mcpServer_other": "{{count}} MCP-serviloj",
+        "mcpServer": "{{count}} MCP-serviloj",
+        "mcpTool_one": "{{count}} MCP-ilo",
+        "mcpTool_other": "{{count}} MCP-iloj",
+        "mcpTool": "{{count}} MCP-iloj",
         "noTools": "Neniuj iloj ebligitaj"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Agoj"
         },
         "unnamed": "Sennoma CLI-Ilo",
-        "paramCount": "{{count}} parametro",
-        "paramCount_plural": "{{count}} parametroj",
+        "paramCount_one": "{{count}} parametro",
+        "paramCount_other": "{{count}} parametroj",
+        "paramCount": "{{count}} parametroj",
         "noParams": "Neniu",
         "statusEnabled": "Ebligita",
         "statusDisabled": "Malŝaltita",
@@ -895,8 +908,9 @@
         "desc": "Prefikso (emoĝio aŭ teksto) por montri antaŭ ĉiuj rapidaj agoj en la kuntekstmenuo",
         "placeholder": "⚡"
       },
-      "count": "{{count}} ago agordita ({{enabled}} ebligita)",
-      "count_plural": "{{count}} agoj agorditaj ({{enabled}} ebligitaj)",
+      "count_one": "{{count}} ago agordita ({{enabled}} ebligita)",
+      "count_other": "{{count}} agoj agorditaj ({{enabled}} ebligitaj)",
+      "count": "{{count}} agoj agorditaj ({{enabled}} ebligitaj)",
       "addBtn": "+ aldoni rapidan agon",
       "empty": "Neniu rapida ago agordita. Elektu aldoni rapidan agon por komenci.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Ebligi RAG",
       "step3": "Elekti indeksi arkivon",
       "close": "Fermi",
-      "retrieved": "📚 retrovita el {{count}} dokumento",
-      "retrieved_plural": "📚 retrovita el {{count}} dokumentoj"
+      "retrieved_one": "📚 retrovita el {{count}} dokumento",
+      "retrieved_other": "📚 retrovita el {{count}} dokumentoj",
+      "retrieved": "📚 retrovita el {{count}} dokumentoj"
     },
     "ragTooltip": {
       "status": "RAG-Indeksa Stato:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP-aliro",
         "noServers": "Neniuj MCP-serviloj agordataj. Aldonu servilojn sub Agordoj → MCP por malŝlosi ĉi tiujn opciojn.",
-        "toolsCached": "{{count}} ilo kaŝmemorіta",
-        "toolsCached_plural": "{{count}} iloj kaŝmemorіtaj",
+        "toolsCached_one": "{{count}} ilo kaŝmemorіta",
+        "toolsCached_other": "{{count}} iloj kaŝmemorіtaj",
+        "toolsCached": "{{count}} iloj kaŝmemorіtaj",
         "noToolsCached": "Neniuj iloj ankoraŭ kaŝmemorіtaj. Ebligi plenan aliron aŭ aktualigi la kaŝmemoron.",
         "showTools": "Montri ilojn",
         "hideTools": "Kaŝi ilojn",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Malŝaltita",
         "statusConnected": "● konektita",
         "statusDisconnected": "○ malkonektita",
-        "toolsLive": "{{count}} ilo",
-        "toolsLive_plural": "{{count}} iloj",
-        "toolsCached": "{{count}} ilo (kaŝmemorіta)",
-        "toolsCached_plural": "{{count}} iloj (kaŝmemorіtaj)",
+        "toolsLive_one": "{{count}} ilo",
+        "toolsLive_other": "{{count}} iloj",
+        "toolsLive": "{{count}} iloj",
+        "toolsCached_one": "{{count}} ilo (kaŝmemorіta)",
+        "toolsCached_other": "{{count}} iloj (kaŝmemorіtaj)",
+        "toolsCached": "{{count}} iloj (kaŝmemorіtaj)",
         "noTools": "0 iloj",
         "connectBtn": "Konekti",
         "disconnectBtn": "Malkonekti",

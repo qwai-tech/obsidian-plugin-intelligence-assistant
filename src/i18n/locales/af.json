@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Bekyk en bestuur modelle van alle gekonfigureerde verskaffers. Klik \"verfris modelle\" om die nuutste beskikbare modelle te haal.",
-      "providerCount": "{{count}} verskaffer gekonfigureer",
-      "providerCount_plural": "{{count}} verskaffers gekonfigureer",
+      "providerCount_one": "{{count}} verskaffer gekonfigureer",
+      "providerCount_other": "{{count}} verskaffers gekonfigureer",
+      "providerCount": "{{count}} verskaffers gekonfigureer",
       "refreshAll": "🔄 verfris alle modelle",
       "empty": "Geen verskaffers nog gekonfigureer nie. Voeg eers verskaffers by in die verskaffer-oortjie.",
       "noModels": "Geen modelle beskikbaar nie. Klik \"verfris alle modelle\" of verfris individuele verskaffers in die verskaffer-oortjie.",
       "noMatch": "Geen modelle stem ooreen met die huidige filters nie. Pas filters aan of verwyder filters om resultate te sien.",
-      "modelCount": "• {{count}} model gekassineer",
-      "modelCount_plural": "• {{count}} modelle gekassineer",
+      "modelCount_one": "• {{count}} model gekassineer",
+      "modelCount_other": "• {{count}} modelle gekassineer",
+      "modelCount": "• {{count}} modelle gekassineer",
+      "matchCount_one": "• {{count}} stem ooreen met geselekteerde filters",
+      "matchCount_other": "• {{count}} stem ooreen met geselekteerde filters",
       "matchCount": "• {{count}} stem ooreen met geselekteerde filters",
-      "matchCount_plural": "• {{count}} stem ooreen met geselekteerde filters",
       "status": {
         "enabled": "Geaktiveer",
         "disabled": "Gedeaktiveer"
@@ -99,8 +102,9 @@
       "securityItem2": "Voeg hierdie gids by u .gitignore as u Git-sinchronisasie gebruik.",
       "securityItem3": "Wees versigtig wanneer u openbare wolksinchronisasiedienste gebruik.",
       "desc": "Bestuur LLM-verskaffers en API-geloofsbriewe. Gebruik die aksieskolom om konfigurasiebesonderhede te redigeer of gekassineerde modelle te verfris.",
-      "count": "{{count}} verskaffer gekonfigureer",
-      "count_plural": "{{count}} verskaffers gekonfigureer",
+      "count_one": "{{count}} verskaffer gekonfigureer",
+      "count_other": "{{count}} verskaffers gekonfigureer",
+      "count": "{{count}} verskaffers gekonfigureer",
       "addBtn": "+ Voeg verskaffer by",
       "empty": "Geen verskaffers gekonfigureer nie. Kies \"Voeg verskaffer by\" om te begin.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Geen modelle",
-        "count": "{{count}} model",
-        "count_plural": "{{count}} modelle"
+        "count_one": "{{count}} model",
+        "count_other": "{{count}} modelle",
+        "count": "{{count}} modelle"
       },
       "ollama": {
         "checkingVersion": "Nagaan weergawe...",
@@ -183,8 +188,9 @@
       "noArgs": "Geen",
       "cached": "Gekassineer",
       "disabled": "Gedeaktiveer",
-      "envVars": "{{count}} omgewingsveranderlike",
-      "envVars_plural": "{{count}} omgewingsveranderlikes",
+      "envVars_one": "{{count}} omgewingsveranderlike",
+      "envVars_other": "{{count}} omgewingsveranderlikes",
+      "envVars": "{{count}} omgewingsveranderlikes",
       "status": {
         "disabled": "Gedeaktiveer",
         "connected": "verbind",
@@ -194,10 +200,12 @@
         "autoConnect": "Outoverbinding"
       },
       "toolCount": {
+        "live_one": "{{count}} lewendige gereedskap",
+        "live_other": "{{count}} lewendige gereedskap",
         "live": "{{count}} lewendige gereedskap",
-        "live_plural": "{{count}} lewendige gereedskap",
-        "cached": "{{count}} gekassineerde gereedskap",
-        "cached_plural": "{{count}} gekassineerde gereedskap"
+        "cached_one": "{{count}} gekassineerde gereedskap",
+        "cached_other": "{{count}} gekassineerde gereedskap",
+        "cached": "{{count}} gekassineerde gereedskap"
       },
       "actions": {
         "edit": "Redigeer",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ voer asseblief 'n opdrag in voor toetsing van verbinding",
         "testSuccess": "✅ suksesvol verbind! {{count}} gereedskap gevind.",
         "testFailed": "❌ Verbinding misluk: {{message}}",
-        "refreshedAll": "✅ gereedskap verfris vir {{count}} bediener",
-        "refreshedAll_plural": "✅ gereedskap verfris vir {{count}} bedieners",
+        "refreshedAll_one": "✅ gereedskap verfris vir {{count}} bediener",
+        "refreshedAll_other": "✅ gereedskap verfris vir {{count}} bedieners",
+        "refreshedAll": "✅ gereedskap verfris vir {{count}} bedieners",
         "refreshedPartial": "✅ {{success}} bedieners verfris, ❌ {{failed}} misluk",
         "noServersConfigured": "⚠️ Geen MCP-bedieners gekonfigureer nie",
         "testingAll": "🧪 Toets {{count}} MCP-bedienerverbindings...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Skep en bestuur KI-agente met spesifieke vermoëns, gereedskap en gedrag.",
-      "count": "{{count}} agent gekonfigureer",
-      "count_plural": "{{count}} agente gekonfigureer",
+      "count_one": "{{count}} agent gekonfigureer",
+      "count_other": "{{count}} agente gekonfigureer",
+      "count": "{{count}} agente gekonfigureer",
       "addBtn": "+ voeg agent by",
       "empty": "Geen agente gekonfigureer nie. Kies voeg agent by om te begin.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} ingeboude",
-        "mcpServer": "{{count}} mcp-bediener",
-        "mcpServer_plural": "{{count}} mcp-bedieners",
+        "mcpServer_one": "{{count}} mcp-bediener",
+        "mcpServer_other": "{{count}} mcp-bedieners",
+        "mcpServer": "{{count}} mcp-bedieners",
+        "mcpTool_one": "{{count}} mcp-gereedskap",
+        "mcpTool_other": "{{count}} mcp-gereedskap",
         "mcpTool": "{{count}} mcp-gereedskap",
-        "mcpTool_plural": "{{count}} mcp-gereedskap",
         "noTools": "Geen gereedskap geaktiveer nie"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Aksies"
         },
         "unnamed": "Naamlose CLI-gereedskap",
-        "paramCount": "{{count}} parameter",
-        "paramCount_plural": "{{count}} parameters",
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parameters",
+        "paramCount": "{{count}} parameters",
         "noParams": "Geen",
         "statusEnabled": "Geaktiveer",
         "statusDisabled": "Gedeaktiveer",
@@ -895,8 +908,9 @@
         "desc": "Voorvoegsel (emoji of teks) om voor alle vinnige aksies in die kontekskieslys te vertoon",
         "placeholder": "⚡"
       },
-      "count": "{{count}} aksie gekonfigureer ({{enabled}} geaktiveer)",
-      "count_plural": "{{count}} aksies gekonfigureer ({{enabled}} geaktiveer)",
+      "count_one": "{{count}} aksie gekonfigureer ({{enabled}} geaktiveer)",
+      "count_other": "{{count}} aksies gekonfigureer ({{enabled}} geaktiveer)",
+      "count": "{{count}} aksies gekonfigureer ({{enabled}} geaktiveer)",
       "addBtn": "+ voeg vinnige aksie by",
       "empty": "Geen vinnige aksies gekonfigureer nie. Kies voeg vinnige aksie by om te begin.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Aktiveer RAG",
       "step3": "Kies indekseer gewelf",
       "close": "Sluit",
-      "retrieved": "📚 herwin van {{count}} dokument",
-      "retrieved_plural": "📚 herwin van {{count}} dokumente"
+      "retrieved_one": "📚 herwin van {{count}} dokument",
+      "retrieved_other": "📚 herwin van {{count}} dokumente",
+      "retrieved": "📚 herwin van {{count}} dokumente"
     },
     "ragTooltip": {
       "status": "RAG-indeks Status:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "MCP-toegang",
         "noServers": "Geen MCP-bedieners gekonfigureer nie. Voeg bedieners by onder Instellings → MCP om hierdie opsies te ontsluit.",
+        "toolsCached_one": "{{count}} gereedskap gekassineer",
+        "toolsCached_other": "{{count}} gereedskap gekassineer",
         "toolsCached": "{{count}} gereedskap gekassineer",
-        "toolsCached_plural": "{{count}} gereedskap gekassineer",
         "noToolsCached": "Nog geen gereedskap gekassineer nie. Aktiveer volle toegang of verfris die kas.",
         "showTools": "Wys gereedskap",
         "hideTools": "Verberg gereedskap",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Gedeaktiveer",
         "statusConnected": "● verbind",
         "statusDisconnected": "○ ontkoppel",
+        "toolsLive_one": "{{count}} gereedskap",
+        "toolsLive_other": "{{count}} gereedskap",
         "toolsLive": "{{count}} gereedskap",
-        "toolsLive_plural": "{{count}} gereedskap",
+        "toolsCached_one": "{{count}} gereedskap (gekassineer)",
+        "toolsCached_other": "{{count}} gereedskap (gekassineer)",
         "toolsCached": "{{count}} gereedskap (gekassineer)",
-        "toolsCached_plural": "{{count}} gereedskap (gekassineer)",
         "noTools": "0 gereedskap",
         "connectBtn": "Verbind",
         "disconnectBtn": "Ontkoppel",

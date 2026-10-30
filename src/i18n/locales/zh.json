@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "查看并管理所有已配置服务商的模型。点击「刷新模型」获取最新可用模型。",
+      "providerCount_one": "已配置 {{count}} 个服务商",
+      "providerCount_other": "已配置 {{count}} 个服务商",
       "providerCount": "已配置 {{count}} 个服务商",
-      "providerCount_plural": "已配置 {{count}} 个服务商",
       "refreshAll": "🔄 刷新所有模型",
       "empty": "尚未配置服务商，请先在服务商标签页中添加。",
       "noModels": "暂无可用模型，请点击「刷新所有模型」或在服务商标签页中单独刷新。",
       "noMatch": "没有模型符合当前过滤条件，请调整或清除过滤器。",
+      "modelCount_one": "• 已缓存 {{count}} 个模型",
+      "modelCount_other": "• 已缓存 {{count}} 个模型",
       "modelCount": "• 已缓存 {{count}} 个模型",
-      "modelCount_plural": "• 已缓存 {{count}} 个模型",
+      "matchCount_one": "• {{count}} 个符合过滤条件",
+      "matchCount_other": "• {{count}} 个符合过滤条件",
       "matchCount": "• {{count}} 个符合过滤条件",
-      "matchCount_plural": "• {{count}} 个符合过滤条件",
       "status": {
         "enabled": "已启用",
         "disabled": "已禁用"
@@ -99,8 +102,9 @@
       "securityItem2": "如使用 Git 同步，请将此目录添加到 .gitignore。",
       "securityItem3": "使用公共云同步服务时请谨慎。",
       "desc": "管理 LLM 服务商和 API 凭据。使用操作列编辑配置详情或刷新缓存模型。",
+      "count_one": "已配置 {{count}} 个服务商",
+      "count_other": "已配置 {{count}} 个服务商",
       "count": "已配置 {{count}} 个服务商",
-      "count_plural": "已配置 {{count}} 个服务商",
       "addBtn": "+ 添加服务商",
       "empty": "未配置服务商，点击「添加服务商」开始。",
       "tableHeaders": {
@@ -123,8 +127,9 @@
       },
       "models": {
         "none": "无模型",
-        "count": "{{count}} 个模型",
-        "count_plural": "{{count}} 个模型"
+        "count_one": "{{count}} 个模型",
+        "count_other": "{{count}} 个模型",
+        "count": "{{count}} 个模型"
       },
       "ollama": {
         "checkingVersion": "正在检查版本...",
@@ -182,8 +187,9 @@
       "noArgs": "无",
       "cached": "已缓存",
       "disabled": "已禁用",
+      "envVars_one": "{{count}} 个环境变量",
+      "envVars_other": "{{count}} 个环境变量",
       "envVars": "{{count}} 个环境变量",
-      "envVars_plural": "{{count}} 个环境变量",
       "status": {
         "disabled": "已禁用",
         "connected": "已连接",
@@ -193,10 +199,12 @@
         "autoConnect": "自动连接"
       },
       "toolCount": {
+        "live_one": "{{count}} 个实时工具",
+        "live_other": "{{count}} 个实时工具",
         "live": "{{count}} 个实时工具",
-        "live_plural": "{{count}} 个实时工具",
-        "cached": "{{count}} 个缓存工具",
-        "cached_plural": "{{count}} 个缓存工具"
+        "cached_one": "{{count}} 个缓存工具",
+        "cached_other": "{{count}} 个缓存工具",
+        "cached": "{{count}} 个缓存工具"
       },
       "actions": {
         "edit": "编辑",
@@ -220,8 +228,9 @@
         "testNoCommand": "❌ 请在测试连接前输入命令",
         "testSuccess": "✅ 连接成功！找到 {{count}} 个工具。",
         "testFailed": "❌ 连接失败：{{message}}",
+        "refreshedAll_one": "✅ 已刷新 {{count}} 个服务器的工具",
+        "refreshedAll_other": "✅ 已刷新 {{count}} 个服务器的工具",
         "refreshedAll": "✅ 已刷新 {{count}} 个服务器的工具",
-        "refreshedAll_plural": "✅ 已刷新 {{count}} 个服务器的工具",
         "refreshedPartial": "✅ 已刷新 {{success}} 个服务器，❌ {{failed}} 个失败",
         "noServersConfigured": "⚠️ 未配置MCP服务器",
         "testingAll": "🧪 正在测试 {{count}} 个MCP服务器连接...",
@@ -234,8 +243,9 @@
     },
     "agents": {
       "desc": "创建和管理具有特定功能、工具和行为的 AI 智能体。",
+      "count_one": "已配置 {{count}} 个智能体",
+      "count_other": "已配置 {{count}} 个智能体",
       "count": "已配置 {{count}} 个智能体",
-      "count_plural": "已配置 {{count}} 个智能体",
       "addBtn": "+ 添加智能体",
       "empty": "未配置智能体，点击「添加智能体」开始。",
       "tableHeaders": {
@@ -261,10 +271,12 @@
       },
       "tools": {
         "builtIn": "{{count}} 个内置工具",
+        "mcpServer_one": "{{count}} 个 MCP 服务器",
+        "mcpServer_other": "{{count}} 个 MCP 服务器",
         "mcpServer": "{{count}} 个 MCP 服务器",
-        "mcpServer_plural": "{{count}} 个 MCP 服务器",
+        "mcpTool_one": "{{count}} 个 MCP 工具",
+        "mcpTool_other": "{{count}} 个 MCP 工具",
         "mcpTool": "{{count}} 个 MCP 工具",
-        "mcpTool_plural": "{{count}} 个 MCP 工具",
         "noTools": "未启用工具"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "操作"
         },
         "unnamed": "未命名 CLI 工具",
+        "paramCount_one": "{{count}} 个参数",
+        "paramCount_other": "{{count}} 个参数",
         "paramCount": "{{count}} 个参数",
-        "paramCount_plural": "{{count}} 个参数",
         "noParams": "无",
         "statusEnabled": "已启用",
         "statusDisabled": "已禁用",
@@ -895,8 +908,9 @@
         "desc": "在上下文菜单中所有快捷操作前显示的前缀（表情符号或文字）",
         "placeholder": "⚡"
       },
+      "count_one": "已配置 {{count}} 个操作（{{enabled}} 个已启用）",
+      "count_other": "已配置 {{count}} 个操作（{{enabled}} 个已启用）",
       "count": "已配置 {{count}} 个操作（{{enabled}} 个已启用）",
-      "count_plural": "已配置 {{count}} 个操作（{{enabled}} 个已启用）",
       "addBtn": "+ 添加快捷操作",
       "empty": "未配置快捷操作，点击「添加快捷操作」开始。",
       "tableHeaders": {
@@ -1112,8 +1126,9 @@
       "step2": "启用 RAG",
       "step3": "选择索引仓库",
       "close": "关闭",
-      "retrieved": "📚 从 {{count}} 篇文档中检索",
-      "retrieved_plural": "📚 从 {{count}} 篇文档中检索"
+      "retrieved_one": "📚 从 {{count}} 篇文档中检索",
+      "retrieved_other": "📚 从 {{count}} 篇文档中检索",
+      "retrieved": "📚 从 {{count}} 篇文档中检索"
     },
     "ragTooltip": {
       "status": "RAG 索引状态：",
@@ -1278,8 +1293,9 @@
       "mcp": {
         "title": "MCP 访问",
         "noServers": "未配置 MCP 服务器。请在设置 → MCP 中添加服务器以解锁这些选项。",
+        "toolsCached_one": "已缓存 {{count}} 个工具",
+        "toolsCached_other": "已缓存 {{count}} 个工具",
         "toolsCached": "已缓存 {{count}} 个工具",
-        "toolsCached_plural": "已缓存 {{count}} 个工具",
         "noToolsCached": "尚无缓存工具。启用完全访问权限或刷新缓存。",
         "showTools": "显示工具",
         "hideTools": "隐藏工具",
@@ -1393,10 +1409,12 @@
         "statusDisabled": "已禁用",
         "statusConnected": "● 已连接",
         "statusDisconnected": "○ 未连接",
+        "toolsLive_one": "{{count}} 个工具",
+        "toolsLive_other": "{{count}} 个工具",
         "toolsLive": "{{count}} 个工具",
-        "toolsLive_plural": "{{count}} 个工具",
+        "toolsCached_one": "{{count}} 个工具（缓存）",
+        "toolsCached_other": "{{count}} 个工具（缓存）",
         "toolsCached": "{{count}} 个工具（缓存）",
-        "toolsCached_plural": "{{count}} 个工具（缓存）",
         "noTools": "0 个工具",
         "connectBtn": "连接",
         "disconnectBtn": "断开",

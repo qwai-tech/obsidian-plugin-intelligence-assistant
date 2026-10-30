@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Ver y gestionar modelos de todos los proveedores configurados. Haga clic en \"actualizar modelos\" para obtener los últimos modelos disponibles.",
-      "providerCount": "{{count}} proveedor configurado",
-      "providerCount_plural": "{{count}} proveedores configurados",
+      "providerCount_one": "{{count}} proveedor configurado",
+      "providerCount_other": "{{count}} proveedores configurados",
+      "providerCount": "{{count}} proveedores configurados",
       "refreshAll": "🔄 actualizar todos los modelos",
       "empty": "No hay proveedores configurados. Añada proveedores en la pestaña de proveedores primero.",
       "noModels": "No hay modelos disponibles. Haga clic en \"actualizar todos los modelos\" o actualice los proveedores individuales en la pestaña de proveedores.",
       "noMatch": "Ningún modelo coincide con los filtros actuales. Ajuste o elimine los filtros para ver los resultados.",
-      "modelCount": "• {{count}} modelo en caché",
-      "modelCount_plural": "• {{count}} modelos en caché",
-      "matchCount": "• {{count}} coincidencia con los filtros seleccionados",
-      "matchCount_plural": "• {{count}} coincidencias con los filtros seleccionados",
+      "modelCount_one": "• {{count}} modelo en caché",
+      "modelCount_other": "• {{count}} modelos en caché",
+      "modelCount": "• {{count}} modelos en caché",
+      "matchCount_one": "• {{count}} coincidencia con los filtros seleccionados",
+      "matchCount_other": "• {{count}} coincidencias con los filtros seleccionados",
+      "matchCount": "• {{count}} coincidencias con los filtros seleccionados",
       "status": {
         "enabled": "Habilitado",
         "disabled": "Deshabilitado"
@@ -99,8 +102,9 @@
       "securityItem2": "Añada esta carpeta a su .gitignore si usa sincronización con Git.",
       "securityItem3": "Tenga cuidado al usar servicios de sincronización en la nube pública.",
       "desc": "Gestione los proveedores de LLM y las credenciales de API. Use la columna de acciones para editar los detalles de configuración o actualizar los modelos en caché.",
-      "count": "{{count}} proveedor configurado",
-      "count_plural": "{{count}} proveedores configurados",
+      "count_one": "{{count}} proveedor configurado",
+      "count_other": "{{count}} proveedores configurados",
+      "count": "{{count}} proveedores configurados",
       "addBtn": "+ Añadir proveedor",
       "empty": "No hay proveedores configurados. Seleccione \"Añadir proveedor\" para comenzar.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Sin modelos",
-        "count": "{{count}} modelo",
-        "count_plural": "{{count}} modelos"
+        "count_one": "{{count}} modelo",
+        "count_other": "{{count}} modelos",
+        "count": "{{count}} modelos"
       },
       "ollama": {
         "checkingVersion": "Comprobando versión...",
@@ -183,8 +188,9 @@
       "noArgs": "Ninguno",
       "cached": "En caché",
       "disabled": "Deshabilitado",
-      "envVars": "{{count}} variable de entorno",
-      "envVars_plural": "{{count}} variables de entorno",
+      "envVars_one": "{{count}} variable de entorno",
+      "envVars_other": "{{count}} variables de entorno",
+      "envVars": "{{count}} variables de entorno",
       "status": {
         "disabled": "Deshabilitado",
         "connected": "conectado",
@@ -194,10 +200,12 @@
         "autoConnect": "Conexión automática"
       },
       "toolCount": {
-        "live": "{{count}} herramienta en vivo",
-        "live_plural": "{{count}} herramientas en vivo",
-        "cached": "{{count}} herramienta en caché",
-        "cached_plural": "{{count}} herramientas en caché"
+        "live_one": "{{count}} herramienta en vivo",
+        "live_other": "{{count}} herramientas en vivo",
+        "live": "{{count}} herramientas en vivo",
+        "cached_one": "{{count}} herramienta en caché",
+        "cached_other": "{{count}} herramientas en caché",
+        "cached": "{{count}} herramientas en caché"
       },
       "actions": {
         "edit": "Editar",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ ingrese un comando antes de probar la conexión",
         "testSuccess": "✅ ¡conexión exitosa! Se encontraron {{count}} herramientas.",
         "testFailed": "❌ Conexión fallida: {{message}}",
-        "refreshedAll": "✅ herramientas actualizadas para {{count}} servidor",
-        "refreshedAll_plural": "✅ herramientas actualizadas para {{count}} servidores",
+        "refreshedAll_one": "✅ herramientas actualizadas para {{count}} servidor",
+        "refreshedAll_other": "✅ herramientas actualizadas para {{count}} servidores",
+        "refreshedAll": "✅ herramientas actualizadas para {{count}} servidores",
         "refreshedPartial": "✅ {{success}} servidores actualizados, ❌ {{failed}} fallidos",
         "noServersConfigured": "⚠️ No hay servidores MCP configurados",
         "testingAll": "🧪 Probando {{count}} conexiones de servidores MCP...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Cree y gestione agentes de IA con capacidades, herramientas y comportamientos específicos.",
-      "count": "{{count}} agente configurado",
-      "count_plural": "{{count}} agentes configurados",
+      "count_one": "{{count}} agente configurado",
+      "count_other": "{{count}} agentes configurados",
+      "count": "{{count}} agentes configurados",
       "addBtn": "+ añadir agente",
       "empty": "No hay agentes configurados. Seleccione añadir agente para comenzar.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} integrado",
-        "mcpServer": "{{count}} servidor mcp",
-        "mcpServer_plural": "{{count}} servidores mcp",
-        "mcpTool": "{{count}} herramienta mcp",
-        "mcpTool_plural": "{{count}} herramientas mcp",
+        "mcpServer_one": "{{count}} servidor mcp",
+        "mcpServer_other": "{{count}} servidores mcp",
+        "mcpServer": "{{count}} servidores mcp",
+        "mcpTool_one": "{{count}} herramienta mcp",
+        "mcpTool_other": "{{count}} herramientas mcp",
+        "mcpTool": "{{count}} herramientas mcp",
         "noTools": "Sin herramientas habilitadas"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Acciones"
         },
         "unnamed": "Herramienta CLI sin nombre",
-        "paramCount": "{{count}} parámetro",
-        "paramCount_plural": "{{count}} parámetros",
+        "paramCount_one": "{{count}} parámetro",
+        "paramCount_other": "{{count}} parámetros",
+        "paramCount": "{{count}} parámetros",
         "noParams": "Ninguno",
         "statusEnabled": "Habilitado",
         "statusDisabled": "Deshabilitado",
@@ -895,8 +908,9 @@
         "desc": "Prefijo (emoji o texto) para mostrar antes de todas las acciones rápidas en el menú contextual",
         "placeholder": "⚡"
       },
-      "count": "{{count}} acción configurada ({{enabled}} habilitada)",
-      "count_plural": "{{count}} acciones configuradas ({{enabled}} habilitadas)",
+      "count_one": "{{count}} acción configurada ({{enabled}} habilitada)",
+      "count_other": "{{count}} acciones configuradas ({{enabled}} habilitadas)",
+      "count": "{{count}} acciones configuradas ({{enabled}} habilitadas)",
       "addBtn": "+ añadir acción rápida",
       "empty": "No hay acciones rápidas configuradas. Seleccione añadir acción rápida para comenzar.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Habilitar RAG",
       "step3": "Seleccionar indexar vault",
       "close": "Cerrar",
-      "retrieved": "📚 recuperado de {{count}} documento",
-      "retrieved_plural": "📚 recuperado de {{count}} documentos"
+      "retrieved_one": "📚 recuperado de {{count}} documento",
+      "retrieved_other": "📚 recuperado de {{count}} documentos",
+      "retrieved": "📚 recuperado de {{count}} documentos"
     },
     "ragTooltip": {
       "status": "Estado del índice RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "Acceso MCP",
         "noServers": "No hay servidores MCP configurados. Añada servidores en Configuración → MCP para desbloquear estas opciones.",
-        "toolsCached": "{{count}} herramienta en caché",
-        "toolsCached_plural": "{{count}} herramientas en caché",
+        "toolsCached_one": "{{count}} herramienta en caché",
+        "toolsCached_other": "{{count}} herramientas en caché",
+        "toolsCached": "{{count}} herramientas en caché",
         "noToolsCached": "Todavía no hay herramientas en caché. Habilite el acceso completo o actualice el caché.",
         "showTools": "Mostrar herramientas",
         "hideTools": "Ocultar herramientas",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Deshabilitado",
         "statusConnected": "● conectado",
         "statusDisconnected": "○ desconectado",
-        "toolsLive": "{{count}} herramienta",
-        "toolsLive_plural": "{{count}} herramientas",
-        "toolsCached": "{{count}} herramienta (en caché)",
-        "toolsCached_plural": "{{count}} herramientas (en caché)",
+        "toolsLive_one": "{{count}} herramienta",
+        "toolsLive_other": "{{count}} herramientas",
+        "toolsLive": "{{count}} herramientas",
+        "toolsCached_one": "{{count}} herramienta (en caché)",
+        "toolsCached_other": "{{count}} herramientas (en caché)",
+        "toolsCached": "{{count}} herramientas (en caché)",
         "noTools": "0 herramientas",
         "connectBtn": "Conectar",
         "disconnectBtn": "Desconectar",

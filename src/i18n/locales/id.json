@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Lihat dan kelola model dari semua penyedia yang dikonfigurasi. Klik \"segarkan model\" untuk mengambil model terbaru yang tersedia.",
+      "providerCount_one": "{{count}} penyedia dikonfigurasi",
+      "providerCount_other": "{{count}} penyedia dikonfigurasi",
       "providerCount": "{{count}} penyedia dikonfigurasi",
-      "providerCount_plural": "{{count}} penyedia dikonfigurasi",
       "refreshAll": "🔄 segarkan semua model",
       "empty": "Belum ada penyedia yang dikonfigurasi. Tambahkan penyedia di tab penyedia terlebih dahulu.",
       "noModels": "Tidak ada model yang tersedia. Klik \"segarkan semua model\" atau segarkan penyedia individual di tab penyedia.",
       "noMatch": "Tidak ada model yang cocok dengan filter saat ini. Sesuaikan atau hapus filter untuk melihat hasilnya.",
+      "modelCount_one": "• {{count}} model di-cache",
+      "modelCount_other": "• {{count}} model di-cache",
       "modelCount": "• {{count}} model di-cache",
-      "modelCount_plural": "• {{count}} model di-cache",
+      "matchCount_one": "• {{count}} cocok dengan filter yang dipilih",
+      "matchCount_other": "• {{count}} cocok dengan filter yang dipilih",
       "matchCount": "• {{count}} cocok dengan filter yang dipilih",
-      "matchCount_plural": "• {{count}} cocok dengan filter yang dipilih",
       "status": {
         "enabled": "Aktif",
         "disabled": "Nonaktif"
@@ -99,8 +102,9 @@
       "securityItem2": "Tambahkan folder ini ke .gitignore jika Anda menggunakan sinkronisasi Git.",
       "securityItem3": "Berhati-hatilah saat menggunakan layanan sinkronisasi cloud publik.",
       "desc": "Kelola penyedia LLM dan kredensial API. Gunakan kolom tindakan untuk mengedit detail konfigurasi atau menyegarkan model yang di-cache.",
+      "count_one": "{{count}} penyedia dikonfigurasi",
+      "count_other": "{{count}} penyedia dikonfigurasi",
       "count": "{{count}} penyedia dikonfigurasi",
-      "count_plural": "{{count}} penyedia dikonfigurasi",
       "addBtn": "+ Tambah penyedia",
       "empty": "Tidak ada penyedia yang dikonfigurasi. Pilih \"Tambah penyedia\" untuk memulai.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Tidak ada model",
-        "count": "{{count}} model",
-        "count_plural": "{{count}} model"
+        "count_one": "{{count}} model",
+        "count_other": "{{count}} model",
+        "count": "{{count}} model"
       },
       "ollama": {
         "checkingVersion": "Memeriksa versi...",
@@ -183,8 +188,9 @@
       "noArgs": "Tidak ada",
       "cached": "Di-cache",
       "disabled": "Nonaktif",
+      "envVars_one": "{{count}} variabel lingkungan",
+      "envVars_other": "{{count}} variabel lingkungan",
       "envVars": "{{count}} variabel lingkungan",
-      "envVars_plural": "{{count}} variabel lingkungan",
       "status": {
         "disabled": "Nonaktif",
         "connected": "terhubung",
@@ -194,10 +200,12 @@
         "autoConnect": "Hubungkan otomatis"
       },
       "toolCount": {
+        "live_one": "{{count}} alat aktif",
+        "live_other": "{{count}} alat aktif",
         "live": "{{count}} alat aktif",
-        "live_plural": "{{count}} alat aktif",
-        "cached": "{{count}} alat di-cache",
-        "cached_plural": "{{count}} alat di-cache"
+        "cached_one": "{{count}} alat di-cache",
+        "cached_other": "{{count}} alat di-cache",
+        "cached": "{{count}} alat di-cache"
       },
       "actions": {
         "edit": "Edit",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ harap masukkan perintah sebelum menguji koneksi",
         "testSuccess": "✅ berhasil terhubung! Ditemukan {{count}} alat.",
         "testFailed": "❌ Koneksi gagal: {{message}}",
+        "refreshedAll_one": "✅ menyegarkan alat untuk {{count}} server",
+        "refreshedAll_other": "✅ menyegarkan alat untuk {{count}} server",
         "refreshedAll": "✅ menyegarkan alat untuk {{count}} server",
-        "refreshedAll_plural": "✅ menyegarkan alat untuk {{count}} server",
         "refreshedPartial": "✅ disegarkan {{success}} server, ❌ {{failed}} gagal",
         "noServersConfigured": "⚠️ Tidak ada server MCP yang dikonfigurasi",
         "testingAll": "🧪 Menguji {{count}} koneksi server MCP...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Buat dan kelola agen AI dengan kemampuan, alat, dan perilaku tertentu.",
+      "count_one": "{{count}} agen dikonfigurasi",
+      "count_other": "{{count}} agen dikonfigurasi",
       "count": "{{count}} agen dikonfigurasi",
-      "count_plural": "{{count}} agen dikonfigurasi",
       "addBtn": "+ tambah agen",
       "empty": "Tidak ada agen yang dikonfigurasi. Pilih tambah agen untuk memulai.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} bawaan",
+        "mcpServer_one": "{{count}} server MCP",
+        "mcpServer_other": "{{count}} server MCP",
         "mcpServer": "{{count}} server MCP",
-        "mcpServer_plural": "{{count}} server MCP",
+        "mcpTool_one": "{{count}} alat MCP",
+        "mcpTool_other": "{{count}} alat MCP",
         "mcpTool": "{{count}} alat MCP",
-        "mcpTool_plural": "{{count}} alat MCP",
         "noTools": "Tidak ada alat yang diaktifkan"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Tindakan"
         },
         "unnamed": "Alat CLI Tanpa Nama",
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parameter",
         "paramCount": "{{count}} parameter",
-        "paramCount_plural": "{{count}} parameter",
         "noParams": "Tidak ada",
         "statusEnabled": "Aktif",
         "statusDisabled": "Nonaktif",
@@ -895,8 +908,9 @@
         "desc": "Awalan (emoji atau teks) yang ditampilkan sebelum semua aksi cepat di menu konteks",
         "placeholder": "⚡"
       },
+      "count_one": "{{count}} aksi dikonfigurasi ({{enabled}} aktif)",
+      "count_other": "{{count}} aksi dikonfigurasi ({{enabled}} aktif)",
       "count": "{{count}} aksi dikonfigurasi ({{enabled}} aktif)",
-      "count_plural": "{{count}} aksi dikonfigurasi ({{enabled}} aktif)",
       "addBtn": "+ tambah aksi cepat",
       "empty": "Tidak ada aksi cepat yang dikonfigurasi. Pilih tambah aksi cepat untuk memulai.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Aktifkan RAG",
       "step3": "Pilih indeks vault",
       "close": "Tutup",
-      "retrieved": "📚 diambil dari {{count}} dokumen",
-      "retrieved_plural": "📚 diambil dari {{count}} dokumen"
+      "retrieved_one": "📚 diambil dari {{count}} dokumen",
+      "retrieved_other": "📚 diambil dari {{count}} dokumen",
+      "retrieved": "📚 diambil dari {{count}} dokumen"
     },
     "ragTooltip": {
       "status": "Status Indeks RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "Akses MCP",
         "noServers": "Tidak ada server MCP yang dikonfigurasi. Tambahkan server di Pengaturan → MCP untuk membuka opsi ini.",
+        "toolsCached_one": "{{count}} alat di-cache",
+        "toolsCached_other": "{{count}} alat di-cache",
         "toolsCached": "{{count}} alat di-cache",
-        "toolsCached_plural": "{{count}} alat di-cache",
         "noToolsCached": "Belum ada alat yang di-cache. Aktifkan akses penuh atau segarkan cache.",
         "showTools": "Tampilkan alat",
         "hideTools": "Sembunyikan alat",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Nonaktif",
         "statusConnected": "● terhubung",
         "statusDisconnected": "○ terputus",
+        "toolsLive_one": "{{count}} alat",
+        "toolsLive_other": "{{count}} alat",
         "toolsLive": "{{count}} alat",
-        "toolsLive_plural": "{{count}} alat",
+        "toolsCached_one": "{{count}} alat (di-cache)",
+        "toolsCached_other": "{{count}} alat (di-cache)",
         "toolsCached": "{{count}} alat (di-cache)",
-        "toolsCached_plural": "{{count}} alat (di-cache)",
         "noTools": "0 alat",
         "connectBtn": "Hubungkan",
         "disconnectBtn": "Putuskan",

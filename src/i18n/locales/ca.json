@@ -55,16 +55,19 @@
     },
     "models": {
       "desc": "Visualitzeu i gestioneu models de tots els proveïdors configurats. Feu clic a \"actualitza models\" per obtenir els models disponibles més recents.",
-      "providerCount": "{{count}} proveïdor configurat",
-      "providerCount_plural": "{{count}} proveïdors configurats",
+      "providerCount_one": "{{count}} proveïdor configurat",
+      "providerCount_other": "{{count}} proveïdors configurats",
+      "providerCount": "{{count}} proveïdors configurats",
       "refreshAll": "🔄 actualitza tots els models",
       "empty": "No hi ha proveïdors configurats. Afegiu proveïdors primer a la pestanya de proveïdors.",
       "noModels": "No hi ha models disponibles. Feu clic a „actualitza tots els models“ o actualitzeu els proveïdors individuals a la pestanya de proveïdors.",
       "noMatch": "Cap model no coincideix amb els filtres actuals. Ajusteu o elimineu els filtres per veure resultats.",
-      "modelCount": "• {{count}} model a la memòria cau",
-      "modelCount_plural": "• {{count}} models a la memòria cau",
-      "matchCount": "• {{count}} coincideix amb els filtres seleccionats",
-      "matchCount_plural": "• {{count}} coincideixen amb els filtres seleccionats",
+      "modelCount_one": "• {{count}} model a la memòria cau",
+      "modelCount_other": "• {{count}} models a la memòria cau",
+      "modelCount": "• {{count}} models a la memòria cau",
+      "matchCount_one": "• {{count}} coincideix amb els filtres seleccionats",
+      "matchCount_other": "• {{count}} coincideixen amb els filtres seleccionats",
+      "matchCount": "• {{count}} coincideixen amb els filtres seleccionats",
       "status": {
         "enabled": "Activat",
         "disabled": "Desactivat"
@@ -99,8 +102,9 @@
       "securityItem2": "Afegiu aquesta carpeta al vostre .gitignore si feu servir sincronització Git.",
       "securityItem3": "Aneu amb compte quan feu servir serveis de sincronització al núvol públics.",
       "desc": "Gestioneu els proveïdors LLM i les credencials API. Feu servir la columna d'accions per editar els detalls de configuració o actualitzar els models emmagatzemats a la memòria cau.",
-      "count": "{{count}} proveïdor configurat",
-      "count_plural": "{{count}} proveïdors configurats",
+      "count_one": "{{count}} proveïdor configurat",
+      "count_other": "{{count}} proveïdors configurats",
+      "count": "{{count}} proveïdors configurats",
       "addBtn": "+ Afegeix proveïdor",
       "empty": "No hi ha proveïdors configurats. Seleccioneu „Afegeix proveïdor“ per començar.",
       "tableHeaders": {
@@ -124,8 +128,9 @@
       },
       "models": {
         "none": "Cap model",
-        "count": "{{count}} model",
-        "count_plural": "{{count}} models"
+        "count_one": "{{count}} model",
+        "count_other": "{{count}} models",
+        "count": "{{count}} models"
       },
       "ollama": {
         "checkingVersion": "Comprovant la versió...",
@@ -183,8 +188,9 @@
       "noArgs": "Cap",
       "cached": "A la memòria cau",
       "disabled": "Desactivat",
-      "envVars": "{{count}} variable env",
-      "envVars_plural": "{{count}} variables env",
+      "envVars_one": "{{count}} variable env",
+      "envVars_other": "{{count}} variables env",
+      "envVars": "{{count}} variables env",
       "status": {
         "disabled": "Desactivat",
         "connected": "connectat",
@@ -194,10 +200,12 @@
         "autoConnect": "Connexió automàtica"
       },
       "toolCount": {
-        "live": "{{count}} eina activa",
-        "live_plural": "{{count}} eines actives",
-        "cached": "{{count}} eina a la memòria cau",
-        "cached_plural": "{{count}} eines a la memòria cau"
+        "live_one": "{{count}} eina activa",
+        "live_other": "{{count}} eines actives",
+        "live": "{{count}} eines actives",
+        "cached_one": "{{count}} eina a la memòria cau",
+        "cached_other": "{{count}} eines a la memòria cau",
+        "cached": "{{count}} eines a la memòria cau"
       },
       "actions": {
         "edit": "Edita",
@@ -221,8 +229,9 @@
         "testNoCommand": "❌ introduïu una ordre abans de provar la connexió",
         "testSuccess": "✅ connectat correctament! S'han trobat {{count}} eines.",
         "testFailed": "❌ La connexió ha fallat: {{message}}",
-        "refreshedAll": "✅ eines actualitzades per a {{count}} servidor",
-        "refreshedAll_plural": "✅ eines actualitzades per a {{count}} servidors",
+        "refreshedAll_one": "✅ eines actualitzades per a {{count}} servidor",
+        "refreshedAll_other": "✅ eines actualitzades per a {{count}} servidors",
+        "refreshedAll": "✅ eines actualitzades per a {{count}} servidors",
         "refreshedPartial": "✅ {{success}} servidors actualitzats, ❌ {{failed}} fallits",
         "noServersConfigured": "⚠️ No hi ha servidors MCP configurats",
         "testingAll": "🧪 Provant {{count}} connexions de servidor MCP...",
@@ -235,8 +244,9 @@
     },
     "agents": {
       "desc": "Creeu i gestioneu agents d'IA amb capacitats, eines i comportaments específics.",
-      "count": "{{count}} agent configurat",
-      "count_plural": "{{count}} agents configurats",
+      "count_one": "{{count}} agent configurat",
+      "count_other": "{{count}} agents configurats",
+      "count": "{{count}} agents configurats",
       "addBtn": "+ afegeix agent",
       "empty": "No hi ha agents configurats. Seleccioneu afegeix agent per començar.",
       "tableHeaders": {
@@ -262,10 +272,12 @@
       },
       "tools": {
         "builtIn": "{{count}} integrat",
-        "mcpServer": "{{count}} servidor mcp",
-        "mcpServer_plural": "{{count}} servidors mcp",
-        "mcpTool": "{{count}} eina mcp",
-        "mcpTool_plural": "{{count}} eines mcp",
+        "mcpServer_one": "{{count}} servidor mcp",
+        "mcpServer_other": "{{count}} servidors mcp",
+        "mcpServer": "{{count}} servidors mcp",
+        "mcpTool_one": "{{count}} eina mcp",
+        "mcpTool_other": "{{count}} eines mcp",
+        "mcpTool": "{{count}} eines mcp",
         "noTools": "Cap eina activada"
       },
       "actions": {
@@ -472,8 +484,9 @@
           "actions": "Accions"
         },
         "unnamed": "Eina CLI sense nom",
-        "paramCount": "{{count}} paràmetre",
-        "paramCount_plural": "{{count}} paràmetres",
+        "paramCount_one": "{{count}} paràmetre",
+        "paramCount_other": "{{count}} paràmetres",
+        "paramCount": "{{count}} paràmetres",
         "noParams": "Cap",
         "statusEnabled": "Activat",
         "statusDisabled": "Desactivat",
@@ -895,8 +908,9 @@
         "desc": "Prefix (emoji o text) per mostrar davant de totes les accions ràpides al menú contextual",
         "placeholder": "⚡"
       },
-      "count": "{{count}} acció configurada ({{enabled}} activades)",
-      "count_plural": "{{count}} accions configurades ({{enabled}} activades)",
+      "count_one": "{{count}} acció configurada ({{enabled}} activades)",
+      "count_other": "{{count}} accions configurades ({{enabled}} activades)",
+      "count": "{{count}} accions configurades ({{enabled}} activades)",
       "addBtn": "+ afegeix acció ràpida",
       "empty": "Cap acció ràpida configurada. Seleccioneu afegeix acció ràpida per començar.",
       "tableHeaders": {
@@ -1091,8 +1105,9 @@
       "step2": "Activa RAG",
       "step3": "Seleccioneu indexar el vault",
       "close": "Tanca",
-      "retrieved": "📚 recuperat de {{count}} document",
-      "retrieved_plural": "📚 recuperat de {{count}} documents"
+      "retrieved_one": "📚 recuperat de {{count}} document",
+      "retrieved_other": "📚 recuperat de {{count}} documents",
+      "retrieved": "📚 recuperat de {{count}} documents"
     },
     "ragTooltip": {
       "status": "Estat de l'índex RAG:",
@@ -1269,8 +1284,9 @@
       "mcp": {
         "title": "Accés MCP",
         "noServers": "Cap servidor MCP configurat. Afegiu servidors a Configuració → MCP per desbloquejar aquestes opcions.",
-        "toolsCached": "{{count}} eina a la memòria cau",
-        "toolsCached_plural": "{{count}} eines a la memòria cau",
+        "toolsCached_one": "{{count}} eina a la memòria cau",
+        "toolsCached_other": "{{count}} eines a la memòria cau",
+        "toolsCached": "{{count}} eines a la memòria cau",
         "noToolsCached": "Cap eina a la memòria cau. Activeu l'accés complet o actualitzeu la memòria cau.",
         "showTools": "Mostra eines",
         "hideTools": "Amaga eines",
@@ -1378,10 +1394,12 @@
         "statusDisabled": "Desactivat",
         "statusConnected": "● connectat",
         "statusDisconnected": "○ desconnectat",
-        "toolsLive": "{{count}} eina",
-        "toolsLive_plural": "{{count}} eines",
-        "toolsCached": "{{count}} eina (a la memòria cau)",
-        "toolsCached_plural": "{{count}} eines (a la memòria cau)",
+        "toolsLive_one": "{{count}} eina",
+        "toolsLive_other": "{{count}} eines",
+        "toolsLive": "{{count}} eines",
+        "toolsCached_one": "{{count}} eina (a la memòria cau)",
+        "toolsCached_other": "{{count}} eines (a la memòria cau)",
+        "toolsCached": "{{count}} eines (a la memòria cau)",
         "noTools": "0 eines",
         "connectBtn": "Connecta",
         "disconnectBtn": "Desconnecta",
