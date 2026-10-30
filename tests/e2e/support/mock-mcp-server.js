@@ -68,6 +68,10 @@ rl.on('line', (line) => {
 			if (text === 'crash') {
 				process.exit(1);
 			}
+			if (text === 'multi') {
+				result(message.id, { content: [{ type: 'text', text: 'first' }, { type: 'text', text: 'second' }], isError: false });
+				break;
+			}
 			result(message.id, {
 				content: [{ type: 'text', text: `MCP_SENTINEL ${text}`.trim() }],
 				isError: false,

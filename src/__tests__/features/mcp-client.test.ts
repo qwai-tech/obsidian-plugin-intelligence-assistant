@@ -11,6 +11,7 @@ describe('MCPClient', () => {
 			expect(client.isConnected()).toBe(true);
 			expect((await client.listTools()).map(tool => tool.name)).toEqual(['vault_echo']);
 			expect(await client.callTool('vault_echo', { text: 'ok' })).toBe('MCP_SENTINEL ok');
+			expect(await client.callTool('vault_echo', { text: 'multi' })).toBe('first\nsecond');
 		} finally {
 			await client.disconnect();
 		}

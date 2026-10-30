@@ -117,9 +117,9 @@ export class MCPClient {
 			if (response.isError) {
 				throw new Error(`Tool execution error: ${JSON.stringify(response.content)}`);
 			}
-			const [first] = Array.isArray(response.content) ? response.content as unknown[] : [];
-			if (first) {
-				return isTextBlock(first) ? first.text : first;
+			const blocks = Array.isArray(response.content) ? response.content as unknown[] : [];
+			if (blocks.length > 0) {
+				return blocks.every(isTextBlock) ? blocks.map((block) => block.text).join('\n') : blocks;
 			}
 			return response.structuredContent ?? response.content;
 		} catch (error) {
