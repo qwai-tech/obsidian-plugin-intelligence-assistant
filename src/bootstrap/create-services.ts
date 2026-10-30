@@ -74,7 +74,7 @@ export function createServices(host: ServiceHost): OwnedServices {
 		usage: data.tokenUsageRepo,
 		activity,
 		ollama: new OllamaAdmin(getDefaultHttpPort()),
-		namer: new ConversationNamer(settings),
+		namer: new ConversationNamer(settings, { recordUsage: (record) => void recordUsage(record) }),
 		dispose: async () => {
 			await Promise.all([registry.dispose(), rag.destroy()]);
 		},

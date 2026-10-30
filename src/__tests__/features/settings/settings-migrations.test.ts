@@ -148,4 +148,13 @@ describe('migrateSettings — removed SAP AI Core provider', () => {
 
 		expect(migrateSettings(settings)).toBe(false);
 	});
+
+	it('renames the old llm-summary title mode to auto-summary', () => {
+		const settings = userConfigToPluginSettings(null);
+		settings.conversationTitleMode = 'llm-summary';
+
+		expect(migrateSettings(settings)).toBe(true);
+		expect(settings.conversationTitleMode).toBe('auto-summary');
+	});
 });
+

@@ -9,7 +9,14 @@ export function migrateSettings(settings: PluginSettings): boolean {
 	const cliToolIds = (settings.cliTools ?? []).map((tool) => tool.id);
 	const toolAccessChanged = migrateAllAgents(settings.agents, cliToolIds).size > 0;
 	const removedProviderDropped = dropRemovedProviders(settings);
-	return strategyChanged || toolAccessChanged || removedProviderDropped;
+	const titleModeRenamed = renameTitleMode(settings);
+	return strategyChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed;
+}
+
+function renameTitleMode(settings: PluginSettings): boolean {
+	if (settings.conversationTitleMode !== 'llm-summary') return false;
+	settings.conversationTitleMode = 'auto-summary';
+	return true;
 }
 
 const REMOVED_PROVIDERS = ['sap-ai-core'];

@@ -2,7 +2,7 @@ import { ConversationNamer, type NamingSettings } from '@/features/chat/conversa
 import type { Message } from '@/features/conversations/types/conversation';
 
 const settings = (overrides: Partial<NamingSettings> = {}): NamingSettings => ({
-	conversationTitleMode: 'llm-summary',
+	conversationTitleMode: 'auto-summary',
 	titleSummaryModel: 'openai:gpt-4o-mini',
 	titleSummaryPrompt: 'Title for:\n{conversation}',
 	llmConfigs: [{ provider: 'openai', apiKey: 'k', cachedModels: [{ id: 'openai:gpt-4o-mini', name: 'mini', provider: 'openai', capabilities: [] }] }],
@@ -26,7 +26,7 @@ describe('ConversationNamer', () => {
 
 	it('asks the title model and cleans its reply', async () => {
 		const provider = providerReplying('Title: "Splitting Q3 research"');
-		const namer = new ConversationNamer(() => settings(), () => provider as never);
+		const namer = new ConversationNamer(() => settings(), { createProvider: () => provider as never });
 
 		expect(await namer.title(messages, 'fallback-model')).toBe('Splitting Q3 research');
 		const prompt = (provider.chat.mock.calls[0][0] as { messages: Message[] }).messages[0].content;
@@ -34,21 +34,40 @@ describe('ConversationNamer', () => {
 	});
 
 	it('falls back to the first message when the model fails', async () => {
-		const namer = new ConversationNamer(() => settings(), () => ({ chat: jest.fn(async () => { throw new Error('offline'); }) }) as never);
+		const namer = new ConversationNamer(() => settings(), { createProvider: () => ({ chat: jest.fn(async () => { throw new Error('offline'); }) }) as never });
 		jest.spyOn(console, 'error').mockImplementation(() => undefined);
 
 		expect(await namer.title(messages, 'x')).toBe('How do I split my Q3 research notes into topics?');
 	});
 
 	it('picks the first emoji of the model reply as the icon', async () => {
-		const namer = new ConversationNamer(() => settings(), () => providerReplying('Sure: 📚 books') as never);
+		const namer = new ConversationNamer(() => settings(), { createProvider: () => providerReplying('Sure: 📚 books') as never });
 
 		expect(await namer.icon('Reading list', 'x')).toBe('📚');
 	});
 
 	it('has no icon when no model can be resolved', async () => {
-		const namer = new ConversationNamer(() => settings({ titleSummaryModel: undefined, llmConfigs: [] }), () => providerReplying('📚') as never);
+		const namer = new ConversationNamer(() => settings({ titleSummaryModel: undefined, llmConfigs: [] }), { createProvider: () => providerReplying('📚') as never });
 
 		expect(await namer.icon('Reading list', '')).toBeNull();
 	});
+
+	it('leaves the title alone in manual mode', async () => {
+		const provider = providerReplying('Ignored');
+		const namer = new ConversationNamer(() => settings({ conversationTitleMode: 'manual' }), { createProvider: () => provider as never });
+
+		expect(await namer.title(messages, 'x')).toBeNull();
+		expect(provider.chat).not.toHaveBeenCalled();
+	});
+
+	it('records the token usage of its model requests', async () => {
+		const provider = { chat: jest.fn(async () => ({ content: 'Q3 notes', usage: { promptTokens: 5, completionTokens: 2, totalTokens: 7 } })) };
+		const recordUsage = jest.fn();
+		const namer = new ConversationNamer(() => settings(), { createProvider: () => provider as never, recordUsage });
+
+		await namer.title(messages, 'x');
+
+		expect(recordUsage).toHaveBeenCalledWith(expect.objectContaining({ model: 'openai:gpt-4o-mini', provider: 'openai', totalTokens: 7 }));
+	});
 });
+

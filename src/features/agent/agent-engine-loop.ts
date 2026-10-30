@@ -177,6 +177,9 @@ assistant: ${finalOutput}
 				maxTokens: 1000,
 				responseFormat: { type: 'json_object' },
 			});
+			if (response.usage) {
+				this.recordUsage(response.usage, providerBundle.providerId, options);
+			}
 			const reflectionResponse = response.content;
 
 			// Simple JSON extraction from response (it might be wrapped in markdown)

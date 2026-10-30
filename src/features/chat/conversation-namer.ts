@@ -1,6 +1,7 @@
 import { ModelManager, ProviderFactory } from '@qwai/obsidian-llm';
 import type { LLMConfig, ILLMProvider } from '@/features/llm';
 import type { Message } from '@/features/conversations';
+import type { UsageRecord } from '@/features/usage';
 
 const DEFAULT_TITLE_PROMPT = 'Generate a short, descriptive title (max 6 words) for this conversation:\n\n{conversation}\n\nTitle:';
 const FIRST_MESSAGE_TITLE_LENGTH = 50;
@@ -13,14 +14,27 @@ export interface NamingSettings {
 	llmConfigs: LLMConfig[];
 }
 
+export interface NamerDependencies {
+	createProvider?: (config: LLMConfig) => ILLMProvider;
+	recordUsage?: (record: UsageRecord) => void;
+}
+
 export class ConversationNamer {
+	private readonly createProvider: (config: LLMConfig) => ILLMProvider;
+
 	constructor(
 		private readonly settings: () => NamingSettings,
-		private readonly createProvider: (config: LLMConfig) => ILLMProvider = (config) => ProviderFactory.createProvider(config),
-	) {}
+		private readonly deps: NamerDependencies = {},
+	) {
+		this.createProvider = deps.createProvider ?? ((config) => ProviderFactory.createProvider(config));
+	}
 
-	async title(messages: Message[], fallbackModel: string): Promise<string> {
-		if (this.settings().conversationTitleMode === 'llm-summary') {
+	async title(messages: Message[], fallbackModel: string): Promise<string | null> {
+		const mode = this.settings().conversationTitleMode;
+		if (mode === 'manual') {
+			return null;
+		}
+		if (mode === 'auto-summary') {
 			const summary = await this.summarize(messages, fallbackModel);
 			if (summary) {
 				return summary;
@@ -56,6 +70,9 @@ export class ConversationNamer {
 		}
 		try {
 			const response = await this.createProvider(config).chat({ messages: [{ role: 'user', content: prompt }], model, temperature });
+			if (response.usage) {
+				this.deps.recordUsage?.({ model, provider: config.provider, ...response.usage, timestamp: Date.now() });
+			}
 			return response.content;
 		} catch (error) {
 			console.error('[ConversationNamer] Model request failed:', error);
