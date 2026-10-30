@@ -2,7 +2,7 @@ import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
 import { createWriteProposal } from '@/features/agent';
 import { createToolDefinition } from '@/features/tools/tool-schema';
-import { z } from 'zod';
+import * as z from 'zod/mini';
 import { vaultPath } from './vault-path';
 
 export class SearchFilesTool implements Tool {
@@ -32,9 +32,9 @@ export class SearchFilesTool implements Tool {
 			}
 		],
 		inputSchema: z.object({
-			query: z.string().min(1),
-			search_content: z.boolean().optional(),
-			limit: z.number().positive().optional(),
+			query: z.string().check(z.minLength(1)),
+			search_content: z.optional(z.boolean()),
+			limit: z.optional(z.number().check(z.positive())),
 		}),
 	});
 
@@ -118,9 +118,9 @@ export class CreateNoteTool implements Tool {
 			}
 		],
 		inputSchema: z.object({
-			title: z.string().min(1),
+			title: z.string().check(z.minLength(1)),
 			content: z.string(),
-			folder: z.string().optional(),
+			folder: z.optional(z.string()),
 		}),
 		sideEffects: { vaultWrite: true },
 	});
@@ -183,7 +183,7 @@ export class AppendToNoteTool implements Tool {
 			}
 		],
 		inputSchema: z.object({
-			path: z.string().min(1),
+			path: z.string().check(z.minLength(1)),
 			content: z.string(),
 		}),
 		sideEffects: { vaultWrite: true },

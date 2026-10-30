@@ -2,7 +2,7 @@ import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
 import { createWriteProposal } from '@/features/agent';
 import { createToolDefinition } from '@/features/tools/tool-schema';
-import { z } from 'zod';
+import * as z from 'zod/mini';
 import { errorMessage } from '@/core/utils/errors';
 import { vaultPath } from './vault-path';
 
@@ -51,7 +51,7 @@ export class ReadCanvasTool implements Tool {
 				required: true
 			}
 		],
-		inputSchema: z.object({ path: z.string().min(1) }),
+		inputSchema: z.object({ path: z.string().check(z.minLength(1)) }),
 	});
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
@@ -106,9 +106,9 @@ export class UpdateCanvasTool implements Tool {
 			}
 		],
 		inputSchema: z.object({
-			path: z.string().min(1),
-			nodes: z.array(z.any()).optional(),
-			edges: z.array(z.any()).optional(),
+			path: z.string().check(z.minLength(1)),
+			nodes: z.optional(z.array(z.any())),
+			edges: z.optional(z.array(z.any())),
 		}),
 		sideEffects: { vaultWrite: true },
 	});

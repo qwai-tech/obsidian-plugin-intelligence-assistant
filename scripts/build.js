@@ -195,6 +195,7 @@ if you want to view the source, please visit the github repository of this plugi
                 format: 'cjs',
                 target: 'es2018',
                 platform: 'node',
+                mainFields: ['module', 'main'],
                 logLevel: 'info',
                 sourcemap: !this.isProduction,
                 treeShaking: true,

@@ -1,5 +1,6 @@
-import { z } from 'zod';
-import type { ToolDefinition, ToolParameter } from '@/features/tools/types/tools';
+import * as z from 'zod/mini';
+import './zod-locale';
+import type { ToolDefinition, ToolInputSchema, ToolParameter } from '@/features/tools/types/tools';
 
 type CreateToolDefinitionInput = ToolDefinition;
 
@@ -27,19 +28,19 @@ export function validateToolArguments(
 	return { success: true, data: result.data };
 }
 
-function parametersToZodObject(parameters: ToolParameter[]): z.ZodObject<z.ZodRawShape> {
-	const shape: Record<string, z.ZodType> = {};
+function parametersToZodObject(parameters: ToolParameter[]): ToolInputSchema {
+	const shape: Record<string, z.ZodMiniType> = {};
 	for (const parameter of parameters) {
 		let field = zodForParameter(parameter);
 		if (!parameter.required) {
-			field = field.optional();
+			field = z.optional(field);
 		}
 		shape[parameter.name] = field;
 	}
 	return z.looseObject(shape);
 }
 
-function zodForParameter(parameter: ToolParameter): z.ZodType {
+function zodForParameter(parameter: ToolParameter): z.ZodMiniType {
 	if (parameter.enum?.length) {
 		return z.enum(parameter.enum as [string, ...string[]]);
 	}

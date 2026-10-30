@@ -1,7 +1,7 @@
 import { ToolRegistry } from '../tool-registry';
 import type { ToolSource } from '../tool-source';
 import type { AgentToolAccess, SourceTool, ToolSourceKind } from '@/features/tools/types/tools';
-import { z } from 'zod';
+import * as z from 'zod/mini';
 import { createToolDefinition } from '@/features/tools/tool-schema';
 
 /** Build a fake tool that returns a fixed result. */
@@ -256,7 +256,7 @@ describe('ToolRegistry - executeTool', () => {
 					name: 'read_file',
 					description: 'Read file',
 					parameters: [{ name: 'path', type: 'string', description: 'Path', required: true }],
-					inputSchema: z.object({ path: z.string().min(1) }),
+					inputSchema: z.object({ path: z.string().check(z.minLength(1)) }),
 				}),
 				execute,
 			}],

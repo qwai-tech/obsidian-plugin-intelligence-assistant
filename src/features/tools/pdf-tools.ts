@@ -1,7 +1,7 @@
 import { App, TFile, loadPdfJs } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
 import { createToolDefinition } from '@/features/tools/tool-schema';
-import { z } from 'zod';
+import * as z from 'zod/mini';
 import { errorMessage } from '@/core/utils/errors';
 import { vaultPath } from './vault-path';
 
@@ -55,8 +55,8 @@ export class ReadPdfTool implements Tool {
 			},
 		],
 		inputSchema: z.object({
-			path: z.string().min(1),
-			maxPages: z.number().int().positive().optional(),
+			path: z.string().check(z.minLength(1)),
+			maxPages: z.optional(z.int().check(z.positive())),
 		}),
 	});
 

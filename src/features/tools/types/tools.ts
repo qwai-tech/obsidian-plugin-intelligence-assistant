@@ -2,7 +2,7 @@
  * Tool Common Types
  * Shared types for tool system
  */
-import type { z } from 'zod';
+import type { ZodMiniObject, ZodMiniType } from 'zod/mini';
 
 export interface ToolParameter {
 	name: string;
@@ -16,7 +16,7 @@ export interface ToolDefinition {
 	name: string;
 	description: string;
 	parameters: ToolParameter[];
-	inputSchema?: z.ZodObject<z.ZodRawShape>;
+	inputSchema?: ToolInputSchema;
 	sideEffects?: ToolSideEffects;
 }
 
@@ -98,3 +98,5 @@ export interface RegisteredTool {
 export interface AgentToolAccess {
 	sources: Record<string, 'all' | string[]>;
 }
+
+export type ToolInputSchema = ZodMiniObject<Record<string, ZodMiniType>>;

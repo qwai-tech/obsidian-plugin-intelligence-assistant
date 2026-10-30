@@ -1,7 +1,7 @@
 import { App, TFile } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
 import { createToolDefinition } from '@/features/tools/tool-schema';
-import { z } from 'zod';
+import * as z from 'zod/mini';
 import { errorMessage } from '@/core/utils/errors';
 import { vaultPath } from './vault-path';
 
@@ -39,9 +39,9 @@ export class MakeLinkTool implements Tool {
 			},
 		],
 		inputSchema: z.object({
-			path: z.string().min(1),
-			sourcePath: z.string().optional(),
-			alias: z.string().optional(),
+			path: z.string().check(z.minLength(1)),
+			sourcePath: z.optional(z.string()),
+			alias: z.optional(z.string()),
 		}),
 	});
 

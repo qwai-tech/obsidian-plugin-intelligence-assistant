@@ -2,7 +2,7 @@ import { App, TFile, stringifyYaml } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
 import { createWriteProposal } from '@/features/agent';
 import { createToolDefinition } from '@/features/tools/tool-schema';
-import { z } from 'zod';
+import * as z from 'zod/mini';
 import { errorMessage } from '@/core/utils/errors';
 import { vaultPath } from './vault-path';
 
@@ -20,7 +20,7 @@ export class ReadFileTool implements Tool {
 				required: true
 			}
 		],
-		inputSchema: z.object({ path: z.string().min(1) }),
+		inputSchema: z.object({ path: z.string().check(z.minLength(1)) }),
 	});
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
@@ -70,7 +70,7 @@ export class WriteFileTool implements Tool {
 			}
 		],
 		inputSchema: z.object({
-			path: z.string().min(1),
+			path: z.string().check(z.minLength(1)),
 			content: z.string(),
 		}),
 		sideEffects: { vaultWrite: true },
@@ -135,8 +135,8 @@ export class ListFilesTool implements Tool {
 			}
 		],
 		inputSchema: z.object({
-			folder: z.string().optional(),
-			extension: z.string().optional(),
+			folder: z.optional(z.string()),
+			extension: z.optional(z.string()),
 		}),
 	});
 
@@ -203,9 +203,9 @@ export class UpdatePropertiesTool implements Tool {
 			}
 		],
 		inputSchema: z.object({
-			path: z.string().min(1),
+			path: z.string().check(z.minLength(1)),
 			updates: z.record(z.string(), z.any()),
-			deleteKeys: z.array(z.string()).optional(),
+			deleteKeys: z.optional(z.array(z.string())),
 		}),
 		sideEffects: { vaultWrite: true },
 	});

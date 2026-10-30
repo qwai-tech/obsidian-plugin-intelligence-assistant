@@ -7,7 +7,7 @@ import {
 } from 'obsidian';
 import { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
 import { createToolDefinition } from '@/features/tools/tool-schema';
-import { z } from 'zod';
+import * as z from 'zod/mini';
 import { errorMessage } from '@/core/utils/errors';
 import { vaultPath } from './vault-path';
 
@@ -37,7 +37,7 @@ export class FindNotesByTagTool implements Tool {
 				required: true,
 			},
 		],
-		inputSchema: z.object({ tag: z.string().min(1) }),
+		inputSchema: z.object({ tag: z.string().check(z.minLength(1)) }),
 	});
 
 	execute(args: Record<string, unknown>): Promise<ToolResult> {
@@ -92,8 +92,8 @@ export class ResolveLinkTool implements Tool {
 			},
 		],
 		inputSchema: z.object({
-			linktext: z.string().min(1),
-			sourcePath: z.string().optional(),
+			linktext: z.string().check(z.minLength(1)),
+			sourcePath: z.optional(z.string()),
 		}),
 	});
 

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as z from 'zod/mini';
 import { createToolDefinition, validateToolArguments } from '@/features/tools/tool-schema';
 
 describe('tool-schema', () => {
@@ -7,7 +7,7 @@ describe('tool-schema', () => {
 			name: 'read_file',
 			description: 'Read file',
 			parameters: [{ name: 'path', type: 'string', description: 'Path', required: true }],
-			inputSchema: z.object({ path: z.string().min(1) }),
+			inputSchema: z.object({ path: z.string().check(z.minLength(1)) }),
 		});
 
 		expect(validateToolArguments(definition, { path: 'A.md' }).success).toBe(true);
