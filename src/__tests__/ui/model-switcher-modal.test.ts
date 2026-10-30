@@ -41,7 +41,7 @@ describe('ModelSwitcherModal', () => {
 			applyModel: async (id) => { applied.push(id); },
 		});
 		await modal.load();
-		modal.onChooseItem(MODELS[1], new MouseEvent('click'));
+		modal.onChooseItem(MODELS[1]);
 		// onChooseItem fires the apply asynchronously; flush microtasks.
 		await new Promise((r) => setTimeout(r, 0));
 		expect(applied).toEqual(['anthropic:claude-3-5-sonnet']);

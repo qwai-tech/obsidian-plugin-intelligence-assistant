@@ -6,7 +6,7 @@ const response = (status: number): HttpResponse => ({ status, ok: status < 400, 
 const fakePort = (behaviours: Array<() => Promise<HttpResponse>>): HttpPort & { calls: number } => {
 	const port = {
 		calls: 0,
-		request: jest.fn(async () => {
+		request: jest.fn(async (): Promise<HttpResponse> => {
 			const next = behaviours[Math.min(port.calls, behaviours.length - 1)];
 			port.calls++;
 			return await next();

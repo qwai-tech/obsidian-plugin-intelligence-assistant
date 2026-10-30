@@ -206,8 +206,8 @@ describe('Provider Integration Tests', () => {
 				temperature: 0.7,
 				max_tokens: 2000,
 				stream: true,
+				system: expect.stringContaining('JSON'),
 			});
-			expect(body.system).toContain('JSON');
 		});
 
 		it('should forward JSON response format for non-streaming chat requests', async () => {
@@ -297,10 +297,12 @@ describe('Provider Integration Tests', () => {
 			expect(url).toContain('/models/gemini-pro:streamGenerateContent');
 			expect(url).toContain('alt=sse');
 			expect(body).toHaveProperty('contents');
-			expect(body.generationConfig).toMatchObject({
-				temperature: 0.9,
-				maxOutputTokens: 1000,
-				responseMimeType: 'application/json',
+			expect(body).toMatchObject({
+				generationConfig: {
+					temperature: 0.9,
+					maxOutputTokens: 1000,
+					responseMimeType: 'application/json',
+				},
 			});
 		});
 

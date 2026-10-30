@@ -1,10 +1,11 @@
 import { AgentMemoryService } from '@/features/agent/agent-memory-service';
+import type { AgentMemoryFile } from '@/features/agent/types/memory';
 
 describe('AgentMemoryService', () => {
 	it('creates empty memory for an unknown agent and persists research log updates', async () => {
 		const repository = {
 			load: jest.fn(async () => ({ version: 1 as const, updatedAt: 0, agents: {} })),
-			save: jest.fn(async () => undefined),
+			save: jest.fn(async (_memory: AgentMemoryFile) => undefined),
 		};
 		const service = new AgentMemoryService(repository);
 
@@ -26,7 +27,7 @@ describe('AgentMemoryService', () => {
 	it('stores user preferences as key value memory', async () => {
 		const repository = {
 			load: jest.fn(async () => ({ version: 1 as const, updatedAt: 0, agents: {} })),
-			save: jest.fn(async () => undefined),
+			save: jest.fn(async (_memory: AgentMemoryFile) => undefined),
 		};
 		const service = new AgentMemoryService(repository);
 

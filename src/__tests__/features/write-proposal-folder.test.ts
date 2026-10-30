@@ -3,7 +3,7 @@
  * does not exist used to fail with ENOENT (vault.create does not create parent
  * folders). applyWriteProposal must create the missing parent folder(s) first.
  */
-import { applyWriteProposal } from '@/features/agent/write-proposal-service';
+import { applyWriteProposal, type WriteProposal } from '@/features/agent/write-proposal-service';
 
 function makeApp() {
 	const folders = new Set<string>();
@@ -18,7 +18,7 @@ function makeApp() {
 	return { app, folders, created };
 }
 
-const proposal = (path: string) => ({ type: 'write_proposal' as const, operation: 'create' as const, path, reason: 'r', proposedContent: '# x', applied: false });
+const proposal = (path: string): WriteProposal => ({ type: 'write_proposal', operation: 'create', path, reason: 'r', proposedContent: '# x', applied: false });
 
 describe('applyWriteProposal — parent folder creation', () => {
 	it('creates a missing single-level parent folder before the file', async () => {

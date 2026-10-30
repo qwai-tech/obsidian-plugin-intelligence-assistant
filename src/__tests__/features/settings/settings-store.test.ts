@@ -113,7 +113,7 @@ describe('SettingsStore', () => {
 		await store.update(settings => { settings.defaultModel = 'changed'; });
 
 		expect(store.current.defaultModel).toBe('changed');
-		expect(writes.at(-1)).toEqual(new Set(['config']));
+		expect(writes[writes.length - 1]).toEqual(new Set(['config']));
 		expect(listener).toHaveBeenCalledWith(new Set(['config']));
 	});
 

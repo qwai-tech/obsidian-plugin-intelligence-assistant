@@ -102,7 +102,7 @@ describe('ObsidianSettingsPersistence', () => {
 		await store.load();
 
 		await store.update(settings => {
-			settings.llmConfigs = [{ provider: 'ollama', cachedModels: [{ id: 'llama', name: 'Llama', provider: 'ollama', capabilities: ['chat'] }], cacheTimestamp: 1 }];
+			settings.llmConfigs = [{ provider: 'ollama', cachedModels: [{ id: 'llama', name: 'Llama', provider: 'ollama', capabilities: ['chat'], enabled: true }], cacheTimestamp: 1 }];
 		});
 		expect(JSON.stringify(plugin.data)).not.toContain('cachedModels');
 

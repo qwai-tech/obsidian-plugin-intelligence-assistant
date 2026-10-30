@@ -1,15 +1,16 @@
 import { ConversationNamer, type NamingSettings } from '@/features/chat/conversation-namer';
 import type { Message } from '@/features/conversations/types/conversation';
+import type { ChatRequest } from '@/features/llm';
 
 const settings = (overrides: Partial<NamingSettings> = {}): NamingSettings => ({
 	conversationTitleMode: 'auto-summary',
 	titleSummaryModel: 'openai:gpt-4o-mini',
 	titleSummaryPrompt: 'Title for:\n{conversation}',
-	llmConfigs: [{ provider: 'openai', apiKey: 'k', cachedModels: [{ id: 'openai:gpt-4o-mini', name: 'mini', provider: 'openai', capabilities: [] }] }],
+	llmConfigs: [{ provider: 'openai', apiKey: 'k', cachedModels: [{ id: 'openai:gpt-4o-mini', name: 'mini', provider: 'openai', capabilities: [], enabled: true }] }],
 	...overrides,
 });
 
-const providerReplying = (content: string) => ({ chat: jest.fn(async () => ({ content })) });
+const providerReplying = (content: string) => ({ chat: jest.fn(async (_request: ChatRequest) => ({ content })) });
 
 const messages: Message[] = [
 	{ role: 'user', content: 'How do I split my Q3 research notes into topics?' },
@@ -29,7 +30,7 @@ describe('ConversationNamer', () => {
 		const namer = new ConversationNamer(() => settings(), { createProvider: () => provider as never });
 
 		expect(await namer.title(messages, 'fallback-model')).toBe('Splitting Q3 research');
-		const prompt = (provider.chat.mock.calls[0][0] as { messages: Message[] }).messages[0].content;
+		const prompt = provider.chat.mock.calls[0][0].messages[0].content;
 		expect(prompt).toContain('user: How do I split');
 	});
 

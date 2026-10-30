@@ -5,7 +5,7 @@ Every change goes through the same layers, cheapest first. `npm run verify` runs
 | Layer | What it proves | Command | Runs in CI |
 |-------|----------------|---------|------------|
 | Lint | Code style, Obsidian guidelines (`eslint-plugin-obsidianmd`), the layering rules between `core`, `features`, `adapters`, `ui` and `bootstrap`, no `export *`, no global `app`, no debug logging, no HTML headings in settings or modals | `npm run lint` | Verification gate |
-| Typecheck | The whole tree, e2e included, compiles | `npm run typecheck` | Verification gate |
+| Typecheck | The whole tree compiles, unit tests and e2e included (`tsconfig.json` for the source, `tsconfig.test.json` for the Jest tests) | `npm run typecheck` | Verification gate |
 | Unit tests | Pure logic and components with the Obsidian API mocked (`__mocks__/obsidian.ts`) | `npx jest src packages` | Verification gate |
 | Agent missions | The agent loop end to end against a mock LLM server and an in-memory vault: tool calls, write proposals, permissions, step budgets, stop, error recovery | `npm run test:missions` | Verification gate |
 | Perf | Agent efficiency baseline (turns and tool calls per scenario), timing record, memory growth under forced GC | `npm run test:perf`, `npm run test:perf:mem` | Verification gate |

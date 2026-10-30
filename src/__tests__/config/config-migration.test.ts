@@ -147,6 +147,7 @@ describe('Phase 4: Config schema migration', () => {
 				systemPrompts: [], activeSystemPromptId: null,
 				agents: [], agentMemories: [], activeAgentId: null,
 				quickActions: [], quickActionPrefix: '',
+				lastVersion: '0.0.0',
 			};
 			const uc = pluginSettingsToUserConfig(settings);
 			expect(uc.tools.builtin).toEqual(sampleBuiltInTools());

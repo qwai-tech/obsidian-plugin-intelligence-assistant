@@ -5,7 +5,7 @@ const appWith = (existing: TFile | null) => ({
 	vault: {
 		getAbstractFileByPath: jest.fn(() => existing),
 		process: jest.fn(async (_file: TFile, fn: (data: string) => string) => fn('old')),
-		create: jest.fn(async () => undefined),
+		create: jest.fn(async (_path: string, _data: string) => undefined),
 		modify: jest.fn(),
 		adapter: { exists: jest.fn(async () => true), mkdir: jest.fn(async () => undefined) },
 	},

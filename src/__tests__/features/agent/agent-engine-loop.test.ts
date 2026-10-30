@@ -2,6 +2,7 @@ import { AgentEngineLoop } from '@/features/agent/agent-engine-loop';
 import { HistoryCompactor } from '@/features/agent/history-compactor';
 import type { KernelEvent } from '@/features/agent/types/agent-run';
 import type { Message } from '@/features/conversations/types/conversation';
+import type { ChatRequest } from '@/features/llm';
 
 
 describe('AgentEngineLoop', () => {
@@ -73,7 +74,7 @@ describe('AgentEngineLoop', () => {
 		const registry = {
 			resolveForAgent: jest.fn(() => [{ llmName: 'read_file', toolId: 'builtin:builtin:read_file', definition: { description: 'Read file' } }]),
 			toOpenAIFunctions: jest.fn(() => [{ type: 'function', function: { name: 'read_file', description: 'Read file', parameters: { type: 'object', properties: {} } } }]),
-			executeTool: jest.fn(async () => ({ success: true, result: 'file contents' })),
+			executeTool: jest.fn(async (_name: string, _args: Record<string, unknown>) => ({ success: true, result: 'file contents' })),
 		};
 		const senseService = {
 			sense: jest.fn(async () => ({ userQuery: 'read', activeFilePath: null, references: [], sections: [], ragSources: [], memory: null })),
@@ -226,7 +227,7 @@ describe('AgentEngineLoop', () => {
 					parameters: { type: 'object', properties: {} },
 				},
 			}]),
-			executeTool: jest.fn(async () => ({ success: true, result: proposal })),
+			executeTool: jest.fn(async (_name: string, _args: Record<string, unknown>) => ({ success: true, result: proposal })),
 		};
 		const senseService = {
 			sense: jest.fn(async () => ({ userQuery: 'research', activeFilePath: null, references: [], sections: [], ragSources: [], memory: null })),
@@ -375,7 +376,7 @@ describe('AgentEngineLoop', () => {
 			streamChat: jest.fn(async (_request, onChunk) => {
 				onChunk({ content: 'remember this answer' });
 			}),
-			chat: jest.fn(async () => ({
+			chat: jest.fn(async (_request: ChatRequest) => ({
 				content: JSON.stringify({
 					preferences: { tone: 'concise' },
 					newResearchEntries: ['Finding A'],
@@ -383,14 +384,14 @@ describe('AgentEngineLoop', () => {
 			})),
 		};
 		const memoryWriter = {
-			setPreference: jest.fn(async () => undefined),
-			appendResearchLog: jest.fn(async () => undefined),
+			setPreference: jest.fn(async (_agentId: string, _key: string, _value: string) => undefined),
+			appendResearchLog: jest.fn(async (_agentId: string, _entry: string) => undefined),
 		};
 		const senseService = {
 			sense: jest.fn(async () => ({ userQuery: 'remember', activeFilePath: null, references: [], sections: [], ragSources: [], memory: null })),
 			formatSenseContext: jest.fn(() => 'sense context'),
 		};
-		const memoryIndex = { indexMemory: jest.fn(async () => undefined) };
+		const memoryIndex = { indexMemory: jest.fn(async (_agentId: string, _content: string) => undefined) };
 		const loop = new AgentEngineLoop({
 			toolRegistry: {
 				resolveForAgent: jest.fn(() => []),

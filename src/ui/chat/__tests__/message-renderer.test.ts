@@ -14,8 +14,8 @@ const mockContext: MessageRendererContext = {
 	plugin: {
 		settings: {
 			llmConfigs: [
-				{ provider: 'openai', models: ['openai:gpt-4o'] },
-				{ provider: 'anthropic', models: ['anthropic:claude-3-5-sonnet'] },
+				{ provider: 'openai' },
+				{ provider: 'anthropic' },
 			],
 		},
 	} as MessageRendererContext['plugin'],
@@ -156,7 +156,7 @@ describe('renderMessage', () => {
 				content: 'Answer',
 				ragSources,
 			};
-			const displayRagSources = jest.fn((container: HTMLElement) => {
+			const displayRagSources = jest.fn((container: HTMLElement, _message: Message) => {
 				container.createDiv({ cls: 'mock-rag-source', text: 'Source Note' });
 			});
 			const container = document.createElement('div');

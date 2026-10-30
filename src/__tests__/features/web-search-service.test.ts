@@ -51,9 +51,10 @@ describe('WebSearchService', () => {
 		});
 
 		it('returns HTML-free markdown snippets from a real provider search path', async () => {
-			const googleClient = {
+			const googleClient: HttpPort = {
 				request: jest.fn(async () => ({
 					status: 200,
+					ok: true,
 					headers: {},
 					json: {
 						items: [
@@ -66,8 +67,8 @@ describe('WebSearchService', () => {
 						],
 					},
 					text: '',
-					arrayBuffer: new ArrayBuffer(0),
 				})),
+				stream: jest.fn(),
 			};
 			const service = new WebSearchService(
 				() => createConfig({ provider: 'google', apiKey: 'k', googleCseId: 'cx' }),

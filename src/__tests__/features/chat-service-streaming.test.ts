@@ -1,5 +1,6 @@
 import { ChatService } from '@/features/chat/chat.service';
 import type { StreamChunk } from '@/features/llm/types/llm';
+import type { AgentEngineLoop } from '@/features/agent/agent-engine-loop';
 
 const provider = {
 	streamChat: jest.fn(),
@@ -72,7 +73,7 @@ describe('ChatService streaming cancellation', () => {
 
 describe('ChatService agent delegation', () => {
 	it('delegates executeAgentLoop to AgentEngineLoop when one is configured', async () => {
-		const loop = { execute: jest.fn(async () => undefined) };
+		const loop = { execute: jest.fn<ReturnType<AgentEngineLoop['execute']>, Parameters<AgentEngineLoop['execute']>>(async () => undefined) };
 		const service = new ChatService({
 			fileSystem: {} as any,
 			knowledge: {} as any,

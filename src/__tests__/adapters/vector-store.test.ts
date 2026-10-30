@@ -49,7 +49,7 @@ const makeConfig = (overrides: Partial<RAGConfig> = {}): RAGConfig => ({
 const makeApp = (content = '') => {
 	const adapter = {
 		exists: jest.fn(async () => true),
-		read: jest.fn(async () => {
+		read: jest.fn(async (): Promise<string> => {
 			throw new Error('missing');
 		}),
 		write: jest.fn(async () => undefined),

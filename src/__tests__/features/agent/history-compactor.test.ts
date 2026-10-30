@@ -30,7 +30,7 @@ describe('HistoryCompactor', () => {
 
 		expect(result.compacted).toBe(true);
 		expect(result.messages.some(message => message.content.includes('Research Log'))).toBe(true);
-		expect(result.messages.at(-1)?.content).toBe('latest request');
+		expect(result.messages[result.messages.length - 1].content).toBe('latest request');
 		expect(result.summary).toContain('first question');
 	});
 });

@@ -2,7 +2,7 @@ import { ModelManager } from '../model-manager';
 import { setDefaultHttpPort, resetDefaultHttpPort, type HttpPort } from '../http';
 import type { LLMConfig, ModelInfo } from '../types';
 
-const model = (id: string): ModelInfo => ({ id, name: id, provider: 'openai', capabilities: [] });
+const model = (id: string): ModelInfo => ({ id, name: id, provider: 'openai', capabilities: [], enabled: true });
 
 const portListing = (ids: string[]) => {
 	const port = {

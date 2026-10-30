@@ -6,15 +6,14 @@ const turn = (text: string): ModelTurn => ({ text, reasoning: '', calls: [] });
 describe('EmptyTurnGuard', () => {
 	it('retries an empty turn twice, then answers with an explanation', () => {
 		const guard = new EmptyTurnGuard();
-		const view = { proposalsCreated: 0 };
 
-		expect(guard.check(turn(''), view)).toMatchObject({ kind: 'retry', placeholder: '(empty response)' });
-		expect(guard.check(turn('  '), view)).toMatchObject({ kind: 'retry' });
-		expect(guard.check(turn(''), view)).toEqual({ kind: 'answer', answer: EMPTY_RESPONSE_FINAL_MESSAGE });
+		expect(guard.check(turn(''))).toMatchObject({ kind: 'retry', placeholder: '(empty response)' });
+		expect(guard.check(turn('  '))).toMatchObject({ kind: 'retry' });
+		expect(guard.check(turn(''))).toEqual({ kind: 'answer', answer: EMPTY_RESPONSE_FINAL_MESSAGE });
 	});
 
 	it('passes a turn with text', () => {
-		expect(new EmptyTurnGuard().check(turn('done'), { proposalsCreated: 0 })).toEqual({ kind: 'pass' });
+		expect(new EmptyTurnGuard().check(turn('done'))).toEqual({ kind: 'pass' });
 	});
 });
 

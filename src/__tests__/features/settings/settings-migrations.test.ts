@@ -78,7 +78,7 @@ describe('migrateSettings — agent toolAccess', () => {
 	});
 
 	it('handles empty agent list without throwing', () => {
-		const config: UserConfig = { agents: { list: [] } } as UserConfig;
+		const config: UserConfig = { agents: { list: [] as Agent[] } } as UserConfig;
 		const settings = load(config);
 		expect(settings.agents).toEqual([]);
 	});

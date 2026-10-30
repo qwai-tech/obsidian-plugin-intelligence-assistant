@@ -1,11 +1,12 @@
 import { applyDisabledModels, fromSettingsDocument, isSettingsDocument, toSettingsDocument } from '@/features/settings/settings-document';
 import { DEFAULT_SETTINGS, userConfigToPluginSettings } from '@/features/settings/settings-codec';
 import type { PluginSettings } from '@/features/settings/types/settings';
+import type { LLMConfig } from '@/features/llm';
 
 const settings = (): PluginSettings => {
 	const value = structuredClone(DEFAULT_SETTINGS);
 	value.defaultModel = 'openai:gpt-4o';
-	value.llmConfigs = [{ provider: 'openai', apiKeySecret: 'k', cachedModels: [{ id: 'm', name: 'M', provider: 'openai', capabilities: [] }], cacheTimestamp: 5 }];
+	value.llmConfigs = [{ provider: 'openai', apiKeySecret: 'k', cachedModels: [{ id: 'm', name: 'M', provider: 'openai', capabilities: [], enabled: true }], cacheTimestamp: 5 }];
 	value.systemPrompts = [{ id: 'p1', name: 'P', content: 'c', enabled: true, createdAt: 1, updatedAt: 1 }];
 	value.activeSystemPromptId = 'p1';
 	value.agents = [{ id: 'a1', name: 'A' } as PluginSettings['agents'][number]];
@@ -59,18 +60,18 @@ describe('settings document', () => {
 	});
 
 	it('switches off the recorded models once the cache is loaded', () => {
-		const configs = [{
+		const configs: LLMConfig[] = [{
 			provider: 'openai',
 			disabledModels: ['m-off'],
 			cachedModels: [
-				{ id: 'm-on', name: 'On', provider: 'openai', capabilities: [] },
-				{ id: 'm-off', name: 'Off', provider: 'openai', capabilities: [] },
+				{ id: 'm-on', name: 'On', provider: 'openai', capabilities: [], enabled: true },
+				{ id: 'm-off', name: 'Off', provider: 'openai', capabilities: [], enabled: true },
 			],
 		}];
 
 		applyDisabledModels(configs);
 
-		expect(configs[0].cachedModels.map(model => (model as { enabled?: boolean }).enabled !== false)).toEqual([true, false]);
+		expect(configs[0].cachedModels?.map(model => model.enabled)).toEqual([true, false]);
 	});
 });
 

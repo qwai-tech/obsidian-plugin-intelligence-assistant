@@ -1,7 +1,17 @@
 import { migrateAgentToolAccess, migrateAllAgents } from '../tool-migrations';
 import type { Agent } from '@/features/agent/types/agent';
 
-function makeAgent(overrides: Partial<Agent> = {}): Agent {
+interface LegacyAgentFields {
+	enabledBuiltInTools?: string[];
+	enabledMcpServers?: string[];
+	enabledMcpTools?: string[];
+	enabledCLITools?: string[];
+	enabledAllCLITools?: boolean;
+}
+
+type LegacyAgent = Agent & LegacyAgentFields;
+
+function makeAgent(overrides: Partial<LegacyAgent> = {}): LegacyAgent {
 	return {
 		id: 'test-agent',
 		name: 'Test Agent',
@@ -25,7 +35,7 @@ function makeAgent(overrides: Partial<Agent> = {}): Agent {
 		createdAt: Date.now(),
 		updatedAt: Date.now(),
 		...overrides,
-	};
+	} as LegacyAgent;
 }
 
 describe('migrateAgentToolAccess', () => {

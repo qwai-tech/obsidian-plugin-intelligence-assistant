@@ -79,7 +79,7 @@ export function missingReleaseMcpVars(env = getReleaseEnv()): string[] {
 	return missing;
 }
 
-export function skipUnlessReleaseLLM(ctx: Mocha.Context): ReleaseEnv {
+export function skipUnlessReleaseLLM(ctx: { skip(): void }): ReleaseEnv {
 	const env = getReleaseEnv();
 	const missing = missingReleaseLLMVars(env);
 	if (missing.length > 0) {
@@ -89,7 +89,7 @@ export function skipUnlessReleaseLLM(ctx: Mocha.Context): ReleaseEnv {
 	return env;
 }
 
-export function skipUnlessReleaseMcp(ctx: Mocha.Context): ReleaseEnv {
+export function skipUnlessReleaseMcp(ctx: { skip(): void }): ReleaseEnv {
 	const env = getReleaseEnv();
 	const missing = missingReleaseMcpVars(env);
 	if (missing.length > 0) {

@@ -13,7 +13,7 @@ const tool = {
 	},
 };
 
-const makeRegistry = (execute = jest.fn(async () => ({ success: true, result: { hits: 2 } }))) => ({
+const makeRegistry = (execute = jest.fn(async (_name: string, _args: Record<string, unknown>) => ({ success: true, result: { hits: 2 } }))) => ({
 	getTools: () => [tool],
 	getToolByLlmName: (name: string) => (name === tool.llmName ? tool : undefined),
 	executeTool: execute,

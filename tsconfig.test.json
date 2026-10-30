@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "obsidian", "jest", "@wdio/globals/types"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "packages/obsidian-llm/src/**/*.ts",
+    "__mocks__/**/*.ts",
+    "tests/harness/**/*.ts",
+    "tests/missions/**/*.ts",
+    "tests/perf/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist", "coverage"]
+}

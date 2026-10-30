@@ -7,7 +7,7 @@ The source tree after the feature-folder refactor. Folder roles and import rules
 ```
 obsidian-plugin-intelligence-assistant/
 ├── main.ts                  # Obsidian Plugin: settings, views, commands; calls src/bootstrap
-├── manifest.json · package.json · tsconfig.json · jest.config.js · eslint.config.mts
+├── manifest.json · package.json · tsconfig.json · tsconfig.test.json · jest.config.js · eslint.config.mts
 ├── styles.css               # Plugin CSS, loaded by Obsidian
 ├── scripts/                 # build.js (esbuild), dev, deploy, version
 ├── packages/obsidian-llm/   # LLM providers package (@qwai/obsidian-llm)

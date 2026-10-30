@@ -252,7 +252,7 @@ describe('mock LLM server', () => {
 		expect(String(response.headers['content-type'])).toContain('text/event-stream');
 		expect(chunks[0].choices?.[0].delta?.content).toBe('pong');
 		expect(chunks.some((chunk) => chunk.usage?.total_tokens === 2)).toBe(true);
-		expect(events.at(-1)).toBe('[DONE]');
+		expect(events[events.length - 1]).toBe('[DONE]');
 	});
 
 	it('supports delayed explicit streaming chunks', async () => {

@@ -3,7 +3,7 @@ import { registerIncrementalRagIndexing } from '@/bootstrap/plugin-integrations'
 describe('registerIncrementalRagIndexing', () => {
 	it('listens to vault events only once the workspace layout is ready', () => {
 		let ready: () => void = () => undefined;
-		const on = jest.fn(() => ({}));
+		const on = jest.fn((_event: string, _callback: (...args: unknown[]) => void) => ({}));
 		const plugin = {
 			app: {
 				vault: { on },

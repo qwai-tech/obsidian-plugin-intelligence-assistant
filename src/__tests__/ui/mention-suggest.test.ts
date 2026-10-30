@@ -70,14 +70,14 @@ describe('MentionSuggest', () => {
 	it('selectSuggestion inserts a wikilink replacing the @ token', () => {
 		const target = file('Foobar.md');
 		const { textarea, suggest } = setup('hello @foo', 10, [target]);
-		suggest.selectSuggestion(target, new MouseEvent('click'));
+		suggest.selectSuggestion(target);
 		expect(textarea.value).toBe('hello [[Foobar]] ');
 	});
 
 	it('selectSuggestion replaces a [[ fragment', () => {
 		const target = file('Notes/Foobar.md');
 		const { textarea, suggest } = setup('see [[foo', 9, [target]);
-		suggest.selectSuggestion(target, new MouseEvent('click'));
+		suggest.selectSuggestion(target);
 		expect(textarea.value).toBe('see [[Foobar]] ');
 	});
 
@@ -85,7 +85,7 @@ describe('MentionSuggest', () => {
 		const target = file('Notes/Foobar.md');
 		const attached: TFile[] = [];
 		const { suggest } = setup('hello @foo', 10, [target], (f) => attached.push(f));
-		suggest.selectSuggestion(target, new MouseEvent('click'));
+		suggest.selectSuggestion(target);
 		// Without this, the agent only sees an opaque `[[Foobar]]` and cannot read it.
 		expect(attached).toEqual([target]);
 	});

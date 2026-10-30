@@ -1,4 +1,4 @@
-import { MarkdownView, TFile } from 'obsidian';
+import { MarkdownView, TFile, type WorkspaceLeaf } from 'obsidian';
 import { changedRange, rewriteNote } from '@/core/utils/note-writer';
 
 const makeFile = (path: string): TFile => Object.assign(new TFile(), { path });
@@ -34,7 +34,7 @@ const appWith = (views: unknown[], stored = 'on disk') => {
 	};
 };
 
-const openView = (file: TFile, editor: unknown) => Object.assign(new MarkdownView(), { file, editor });
+const openView = (file: TFile, editor: unknown) => Object.assign(new MarkdownView({} as WorkspaceLeaf), { file, editor });
 
 describe('changedRange', () => {
 	it('covers only the part between the common prefix and suffix', () => {
