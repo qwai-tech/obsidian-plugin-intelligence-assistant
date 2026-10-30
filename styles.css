@@ -3476,7 +3476,10 @@ details[open] .ia-chat-message__summary::before {
 }
 
 .tool-icon {
-	font-size: 16px;
+	display: inline-flex;
+	vertical-align: middle;
+	margin-right: var(--size-4-2);
+	color: var(--text-muted);
 }
 
 /* Responsive Design */
