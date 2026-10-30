@@ -74,4 +74,18 @@ describe('ChatInputComponent', () => {
 		expect(ragToggle.classList.contains('ia-hidden')).toBe(true);
 		expect(webToggle.classList.contains('ia-hidden')).toBe(true);
 	});
+
+	it('sends on Enter, but not while an input method is still composing', () => {
+		const callbacks = makeCallbacks();
+		const component = new ChatInputComponent(document.body.createDiv(), {} as any, makePlugin(), new ChatViewState(), callbacks);
+		component.textarea.value = 'ni hao';
+
+		component.textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', isComposing: true }));
+		expect(callbacks.onSendMessage).not.toHaveBeenCalled();
+		expect(component.textarea.value).toBe('ni hao');
+
+		component.textarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+		expect(callbacks.onSendMessage).toHaveBeenCalledWith('ni hao');
+	});
 });
+

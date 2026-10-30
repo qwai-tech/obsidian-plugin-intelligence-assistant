@@ -97,7 +97,7 @@ export class ChatInputComponent {
 		};
 
 		this.textarea.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter' && !e.shiftKey) {
+			if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
 				e.preventDefault();
 				void handleSend();
 			}
