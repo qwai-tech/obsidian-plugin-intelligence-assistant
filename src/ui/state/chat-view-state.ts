@@ -8,6 +8,7 @@ import type { Attachment, FileReference } from '@/features/chat';
 import type { ModelInfo, AgentExecutionStep } from '@/features/llm';
 import { TFile, TFolder } from 'obsidian';
 import { Events } from 'obsidian';
+import { DEFAULT_CHAT_SAMPLING } from '@/core/constants';
 
 
 /**
@@ -21,11 +22,11 @@ export class ChatViewState extends Events {
 	private _availableModels: ModelInfo[] = [];
 
 	// Configuration
-	private _temperature: number = 0.7;
-	private _maxTokens: number = 4000;
-	private _topP: number = 1.0;
-	private _frequencyPenalty: number = 0;
-	private _presencePenalty: number = 0;
+	private _temperature: number = DEFAULT_CHAT_SAMPLING.temperature;
+	private _maxTokens: number = DEFAULT_CHAT_SAMPLING.maxTokens;
+	private _topP: number = DEFAULT_CHAT_SAMPLING.topP;
+	private _frequencyPenalty: number = DEFAULT_CHAT_SAMPLING.frequencyPenalty;
+	private _presencePenalty: number = DEFAULT_CHAT_SAMPLING.presencePenalty;
 	private _mode: 'chat' | 'agent' = 'agent';
 
 	// Feature flags
@@ -353,11 +354,11 @@ export class ChatViewState extends Events {
 		this.clearMessages();
 		this.currentConversationId = null;
 		this.availableModels = [];
-		this.temperature = 0.7;
-		this.maxTokens = 4000;
-		this.topP = 1.0;
-		this.frequencyPenalty = 0;
-		this.presencePenalty = 0;
+		this.temperature = DEFAULT_CHAT_SAMPLING.temperature;
+		this.maxTokens = DEFAULT_CHAT_SAMPLING.maxTokens;
+		this.topP = DEFAULT_CHAT_SAMPLING.topP;
+		this.frequencyPenalty = DEFAULT_CHAT_SAMPLING.frequencyPenalty;
+		this.presencePenalty = DEFAULT_CHAT_SAMPLING.presencePenalty;
 		this.mode = 'agent';
 		this.enableRAG = false;
 		this.enableWebSearch = false;

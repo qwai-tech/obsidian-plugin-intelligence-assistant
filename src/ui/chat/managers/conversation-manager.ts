@@ -10,15 +10,12 @@ import { agentModelId } from '@/features/chat';
 import { ConversationListView } from '@/ui/chat/conversation-list-view';
 import { applyConversationSettings } from '@/ui/chat/conversation-settings';
 import type { ConversationStorageService } from '@/adapters/persistence/conversation-storage-service';
+import { DEFAULT_CHAT_SAMPLING } from '@/core/constants';
 
 const NEW_CONVERSATION_CONFIG = {
 	promptId: null,
 	agentId: null,
-	temperature: 0.7,
-	maxTokens: 4000,
-	topP: 1.0,
-	frequencyPenalty: 0,
-	presencePenalty: 0,
+	...DEFAULT_CHAT_SAMPLING,
 	ragEnabled: false,
 	webSearchEnabled: false,
 };

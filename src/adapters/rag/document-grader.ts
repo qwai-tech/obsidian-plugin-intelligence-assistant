@@ -2,6 +2,7 @@ import type { LLMConfig } from '@/features/llm';
 import type { RAGConfig } from '@/features/knowledge';
 import { ModelManager } from '@qwai/obsidian-llm';
 import { ProviderFactory } from '@qwai/obsidian-llm';
+import { DEFAULT_MODEL_CONFIG } from '@/core/constants';
 
 export interface DocumentGrade {
   relevance: number; // 0-10 scale
@@ -343,6 +344,6 @@ Respond with a JSON object in this exact format:
     }
 
     console.warn('[DocumentGrader] No models found, using fallback');
-    return 'gpt-4o'; // Ultimate fallback
+    return DEFAULT_MODEL_CONFIG.FALLBACK_MODEL;
   }
 }

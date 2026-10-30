@@ -11,7 +11,7 @@ import type { ModelInfo } from '@/features/llm';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 import { AgentEditModal } from '@/ui/modals/agent-edit-modal';
-import { DEFAULT_AGENT_ID, DEFAULT_MAX_STEPS } from '@/core/constants';
+import { DEFAULT_AGENT_ID, DEFAULT_CHAT_SAMPLING, DEFAULT_MAX_STEPS, DEFAULT_MODEL_CONFIG } from '@/core/constants';
 import { renderListRow, tagButton } from '@/ui/settings/list-row';
 
 export function displayAgentsTab(
@@ -46,10 +46,10 @@ export function displayAgentsTab(
 			icon: 'bot',
 			modelStrategy: {
 				strategy: 'default',
-				modelId: plugin.settings.defaultModel || 'gpt-4o'
+				modelId: plugin.settings.defaultModel || DEFAULT_MODEL_CONFIG.FALLBACK_MODEL
 			},
-			temperature: 0.7,
-			maxTokens: 4000,
+			temperature: DEFAULT_CHAT_SAMPLING.temperature,
+			maxTokens: DEFAULT_CHAT_SAMPLING.maxTokens,
 			systemPromptId: plugin.settings.systemPrompts[0]?.id || 'default',
 			contextWindow: 20,
 			toolAccess: enabledTools.length > 0

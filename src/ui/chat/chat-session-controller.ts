@@ -19,8 +19,7 @@ import type { ChatViewState } from '@/ui/state/chat-view-state';
 import type { ChatInputComponent } from './chat-input.component';
 import { applyConversationSettings } from './conversation-settings';
 import type { ChatHeaderComponent } from './chat-header.component';
-
-const NEW_CHAT_SAMPLING = { temperature: 0.7, maxTokens: 4000, topP: 1.0, frequencyPenalty: 0, presencePenalty: 0 };
+import { DEFAULT_CHAT_SAMPLING } from '@/core/constants';
 
 export interface ChatSessionControls {
 	input: ChatInputComponent;
@@ -151,7 +150,7 @@ export class ChatSessionController {
 			} else {
 				this.controls.input.modelSelect.value = '';
 			}
-			Object.assign(this.state, NEW_CHAT_SAMPLING);
+			Object.assign(this.state, DEFAULT_CHAT_SAMPLING);
 			this.state.enableRAG = false;
 			this.state.enableWebSearch = false;
 		}

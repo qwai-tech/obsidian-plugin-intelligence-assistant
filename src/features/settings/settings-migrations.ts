@@ -1,7 +1,7 @@
 import type { Agent } from '@/features/agent';
 import type { PluginSettings } from '@/features/settings/types/settings';
 import { migrateAllAgents } from '@/features/tools';
-import { DEFAULT_MAX_STEPS } from '@/core/constants';
+import { DEFAULT_MAX_STEPS, DEFAULT_MODEL_CONFIG } from '@/core/constants';
 
 type LegacyAgent = Agent & { modelId?: unknown; reactMaxSteps?: unknown; reactEnabled?: unknown; reactAutoContinue?: unknown };
 
@@ -114,7 +114,7 @@ function migrateModelStrategy(agent: LegacyAgent, defaultModel: string): boolean
 		return true;
 	}
 	if (!agent.modelStrategy) {
-		agent.modelStrategy = { strategy: 'default', modelId: defaultModel || 'gpt-4o' };
+		agent.modelStrategy = { strategy: 'default', modelId: defaultModel || DEFAULT_MODEL_CONFIG.FALLBACK_MODEL };
 		return true;
 	}
 	return false;

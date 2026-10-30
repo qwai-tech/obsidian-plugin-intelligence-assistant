@@ -82,7 +82,7 @@ export async function ensureDefaultAgent(
 	const fallbackModel = settings.defaultModel?.trim()
 		|| settings.llmConfigs.flatMap(config => config.cachedModels ?? [])
 			.find(model => model.capabilities?.includes('chat'))?.id
-		|| 'gpt-4o';
+		|| DEFAULT_MODEL_CONFIG.FALLBACK_MODEL;
 
 	let defaultAgent = settings.agents.find(agent => agent.id === DEFAULT_AGENT_ID);
 
