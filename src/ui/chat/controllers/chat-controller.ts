@@ -172,15 +172,9 @@ export class ChatController extends BaseController {
 	}): Promise<Reply> {
 		const { selectedModel, config, llmContent, targetMessage } = options;
 
-		const activeSystemPrompts: Message[] = [];
-		if (this.plugin.settings.activeSystemPromptId) {
-			const activePrompt = this.plugin.settings.systemPrompts.find(
-				(p: { id: string; enabled: boolean }) => p.id === this.plugin.settings.activeSystemPromptId
-			);
-			if (activePrompt && activePrompt.enabled) {
-				activeSystemPrompts.push({ role: 'system', content: activePrompt.content });
-			}
-		}
+		const { activeSystemPromptId, systemPrompts } = this.plugin.settings;
+		const activePrompt = activeSystemPromptId ? systemPrompts.find(prompt => prompt.id === activeSystemPromptId && prompt.enabled) : undefined;
+		const activeSystemPrompts: Message[] = activePrompt ? [{ role: 'system', content: activePrompt.content }] : [];
 
 		const contextWindow = this.getActiveAgent()?.contextWindow ?? 20;
 		const llmMessages = this.options.chatService.prepareLlmMessages(
