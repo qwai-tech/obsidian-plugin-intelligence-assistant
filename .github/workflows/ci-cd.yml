@@ -56,8 +56,8 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Build plugin
-      run: npm run build
+    - name: Verify and build plugin
+      run: npm run verify
 
     - name: Verify plugin files exist
       run: |

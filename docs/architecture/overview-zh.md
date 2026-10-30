@@ -111,6 +111,8 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 
 ## 测试
 
+`npm run verify` 依次运行 lint、类型检查、带覆盖率阈值的全部 Jest 测试和构建。完整的测试分层见 [reference/testing.md](../reference/testing.md)。
+
 - `npx jest` — 单元测试（jsdom，Obsidian 模拟位于 `__mocks__/obsidian.ts`）。
 - `npx jest tests/harness tests/missions --runInBand` — 基于模拟 LLM 和内存库的智能体任务测试。
 - `npm run test:e2e` — 基于最新版 Obsidian 的 WebdriverIO 测试（用 `OBSIDIAN_VERSION` 指定其他版本）。

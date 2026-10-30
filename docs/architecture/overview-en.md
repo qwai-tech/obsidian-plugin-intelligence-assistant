@@ -111,6 +111,8 @@ All plugin paths come from `core/plugin-paths.ts` (`pluginPaths(configDir)`), so
 
 ## Testing
 
+`npm run verify` runs lint, the typecheck, every Jest suite with coverage thresholds, and the build. The full set of test layers is in [reference/testing.md](../reference/testing.md).
+
 - `npx jest` — unit tests (jsdom, Obsidian mock in `__mocks__/obsidian.ts`).
 - `npx jest tests/harness tests/missions --runInBand` — agent missions against a mock LLM and an in-memory vault.
 - `npm run test:e2e` — WebdriverIO against the latest Obsidian (`OBSIDIAN_VERSION` picks another).

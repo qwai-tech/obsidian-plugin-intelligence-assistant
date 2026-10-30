@@ -21,6 +21,12 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@plugin$': '<rootDir>/main.ts'
   },
+  coverageThreshold: {
+    global: { lines: 30, branches: 26 },
+    './src/core/': { lines: 90, branches: 65 },
+    './src/features/': { lines: 72, branches: 57 },
+    './src/adapters/': { lines: 58, branches: 50 },
+  },
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',

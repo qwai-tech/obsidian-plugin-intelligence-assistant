@@ -35,8 +35,11 @@ jobs:
       - name: Obsidian API capability audit (no regressions)
         run: npm run audit:obsidian-api
 
-      - name: Unit + mission + perf suite
-        run: npm test
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit + mission + perf suite (with coverage thresholds)
+        run: npx jest --coverage --coverageReporters=text-summary
 
       - name: Flake-soak (determinism)
         run: npm run test:flake-soak
