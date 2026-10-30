@@ -1170,7 +1170,10 @@
       "executionProcess": "Execution process",
       "input": "Input",
       "output": "Output",
-      "running": "Running..."
+      "running": "Running...",
+      "summary_one": "{{count}} tool call · {{tools}}",
+      "summary_other": "{{count}} tool calls · {{tools}}",
+      "summary": "{{count}} tool calls · {{tools}}"
     },
     "addPicture": "Add picture",
     "addPictureTooltip": "Attach an image to your message",

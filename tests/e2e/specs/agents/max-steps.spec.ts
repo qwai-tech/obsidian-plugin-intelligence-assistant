@@ -40,8 +40,7 @@ describe('Agent max steps', () => {
 		const assistantText = await chat.getLastAssistantText();
 		expect(assistantText).toContain('Reached the agent step budget of 2');
 
-		const traceText = await chat.getToolTraceText();
-		expect((traceText.match(/read_file/g) ?? [])).toHaveLength(2);
+		expect(await chat.getToolCallNames()).toEqual(['read_file', 'read_file']);
 
 		const calls = (await mockLLM.getCalls())
 			.map(call => call.body as StreamChatRequest | null)

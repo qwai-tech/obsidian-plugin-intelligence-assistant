@@ -1,3 +1,4 @@
+import { setIcon } from 'obsidian';
 import type { Message } from '@/features/conversations';
 import type { AgentExecutionStep } from '@/ui/state/chat-view-state';
 import { t } from '@/i18n';
@@ -94,8 +95,7 @@ function renderToolCallCard(container: HTMLElement, actionStep: AgentExecutionSt
 	}
 
 	// Expand/Collapse Chevron
-	const chevron = titleRow.createSpan('agent-tool-call__chevron');
-	chevron.setText('▼');
+	setIcon(titleRow.createSpan('agent-tool-call__chevron'), 'chevron-down');
 
 	// Details container (hidden by default)
 	const details = card.createDiv('agent-tool-call__details');
@@ -132,14 +132,14 @@ function renderCollapsibleSection(
 
 	const header = section.createDiv('agent-collapsible-section__header');
 	header.createSpan().setText(title);
-	const chevron = header.createSpan('agent-collapsible-section__chevron');
+	setIcon(header.createSpan('agent-collapsible-section__chevron'), 'chevron-down');
 
 	const body = section.createDiv('agent-collapsible-section__body');
 	if (isError) body.addClass('agent-collapsible-section__body--error');
 	if (bodyTestId) body.setAttribute('data-testid', bodyTestId);
 
-	const collapse = () => { body.addClass('ia-hidden'); chevron.setText('▶'); };
-	const expand = () => { body.classList.remove('ia-hidden'); chevron.setText('▼'); };
+	const collapse = () => { body.addClass('ia-hidden'); section.addClass('is-collapsed'); };
+	const expand = () => { body.classList.remove('ia-hidden'); section.removeClass('is-collapsed'); };
 
 	body.setText(content);
 	if (startExpanded) { expand(); } else { collapse(); }
@@ -152,7 +152,7 @@ function renderCollapsibleSection(
 /**
  * Creates a collapsible "Execution Process" container
  */
-export function createAgentExecutionTraceContainer(messageBody: HTMLElement, _stepCount: number): HTMLElement {
+export function createAgentExecutionTraceContainer(messageBody: HTMLElement, summary: string): HTMLElement {
 	const traceContainer = messageBody.createDiv('agent-execution-trace-container');
 	traceContainer.addClass('ia-agent-trace-container');
 	traceContainer.setAttribute('data-testid', TestIds.chat.agentTrace);
@@ -160,23 +160,18 @@ export function createAgentExecutionTraceContainer(messageBody: HTMLElement, _st
 	const header = traceContainer.createDiv('agent-execution-trace-header');
 	header.addClass('ia-agent-trace-header');
 
-	const title = header.createSpan('agent-trace-title');
-	title.setText(t('chat.toolCall.executionProcess'));
-
-	const icon = header.createSpan('agent-trace-icon');
-	icon.setText('▲');
+	setIcon(header.createSpan('agent-trace-icon'), 'chevron-down');
+	header.createSpan({ cls: 'agent-trace-title', text: t('chat.toolCall.executionProcess') });
+	if (summary) {
+		header.createSpan({ cls: 'agent-trace-summary', text: summary });
+	}
 
 	const content = traceContainer.createDiv('agent-execution-trace-content');
 
-	// Toggle on click - reads DOM state so external collapse is synced
 	header.addEventListener('click', () => {
-		if (content.classList.contains('ia-hidden')) {
-			content.classList.remove('ia-hidden');
-			icon.setText('▲');
-		} else {
-			content.classList.add('ia-hidden');
-			icon.setText('▼');
-		}
+		const collapsed = !content.classList.contains('ia-hidden');
+		content.classList.toggle('ia-hidden', collapsed);
+		traceContainer.classList.toggle('is-collapsed', collapsed);
 	});
 
 	return content;
@@ -187,13 +182,7 @@ export function createAgentExecutionTraceContainer(messageBody: HTMLElement, _st
  */
 export function collapseExecutionTrace(contentEl: HTMLElement): void {
 	contentEl.classList.add('ia-hidden');
-	const traceRoot = contentEl.parentElement;
-	if (traceRoot) {
-		const icon = traceRoot.querySelector('.agent-trace-icon');
-		if (icon) {
-			icon.textContent = '▼';
-		}
-	}
+	contentEl.parentElement?.classList.add('is-collapsed');
 }
 
 /**

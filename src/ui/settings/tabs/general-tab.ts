@@ -6,7 +6,7 @@ export function generalDefinitions(plugin: IntelligenceAssistantPlugin): Setting
 	return [
 		{
 			name: t('settings.general.pluginVersion.name'),
-			desc: `${t('settings.general.pluginVersion.desc')} ${plugin.manifest.version}`,
+			desc: plugin.manifest.version,
 		},
 		{
 			name: t('settings.general.defaultModel.name'),

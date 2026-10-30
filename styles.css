@@ -975,7 +975,7 @@
 .ia-agent-trace-header {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	gap: var(--size-4-2);
 	padding: 8px 12px;
 	background: var(--background-secondary);
 	cursor: pointer;
@@ -989,14 +989,24 @@
 }
 
 .agent-trace-icon {
-	font-size: var(--ia-font-size-xs);
+	display: inline-flex;
+	color: var(--text-muted);
 	transition: transform 0.2s ease;
-	color: var(--color-accent);
+}
+
+.is-collapsed > .ia-agent-trace-header .agent-trace-icon {
+	transform: rotate(-90deg);
 }
 
 .agent-trace-title {
-	color: var(--color-accent);
-	font-weight: 600;
+	color: var(--text-muted);
+	font-size: var(--font-ui-small);
+}
+
+.agent-trace-summary {
+	margin-left: auto;
+	color: var(--text-faint);
+	font-size: var(--font-ui-small);
 }
 
 .agent-execution-trace-content {
@@ -3788,4 +3798,16 @@ details[open] .ia-chat-message__summary::before {
 	background-color: var(--background-modifier-error);
 	border-radius: 4px;
 	font-size: 14px;
+}
+
+.agent-tool-call__chevron,
+.agent-collapsible-section__chevron {
+	display: inline-flex;
+	color: var(--text-faint);
+	transition: transform 0.2s ease;
+}
+
+.agent-tool-call-card:not(.is-expanded) .agent-tool-call__chevron,
+.agent-collapsible-section.is-collapsed .agent-collapsible-section__chevron {
+	transform: rotate(-90deg);
 }

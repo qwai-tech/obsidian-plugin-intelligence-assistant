@@ -202,6 +202,12 @@ export class ChatViewPage extends BasePage {
 		}, TestIds.chat.agentTrace);
 	}
 
+	async getToolCallNames(): Promise<string[]> {
+		await this.$testid(TestIds.chat.agentTrace).waitForExist({ timeout: 10_000 });
+		return browser.execute((testId) => Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
+			.map(name => (name.textContent || '').trim()), TestIds.chat.agentTraceToolName);
+	}
+
 	async getRagSourceText(): Promise<string> {
 		await this.$testid(TestIds.chat.ragSources).waitForExist({ timeout: 10_000 });
 		return browser.execute((testId) => {
