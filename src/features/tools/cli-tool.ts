@@ -3,19 +3,19 @@
  * Executes local command-line tools as agent tools
  */
 
-import { spawn } from 'child_process';
 import { buildSubprocessEnv } from '@/features/tools/subprocess-env';
 import type { Tool, ToolDefinition, ToolResult, ToolParameter } from '@/features/tools/types/tools';
 import type { CLIToolConfig, CLIToolParameter } from '@/features/tools/types/cli-tools';
 import { DEFAULT_CLI_TIMEOUT } from '@/features/tools/types/cli-tools';
 import { createToolDefinition } from '@/features/tools/tool-schema';
 import { errorMessage } from '@/core/utils/errors';
+import type { CommandRunner } from './process-ports';
 
 export class CLITool implements Tool {
 	definition: ToolDefinition;
 	provider: string;
 
-	constructor(private config: CLIToolConfig) {
+	constructor(private config: CLIToolConfig, private readonly runner: CommandRunner) {
 		this.provider = `cli:${config.id}`;
 		this.definition = createToolDefinition({
 			name: config.name,
@@ -131,50 +131,23 @@ export class CLITool implements Tool {
 		return { command, commandArgs, env };
 	}
 
-	/**
-	 * Run the command using child_process.spawn
-	 */
 	private async runCommand(
 		command: string,
 		args: string[],
 		env: Record<string, string>
 	): Promise<string> {
-		return new Promise((resolve, reject) => {
-			const timeout = this.config.timeout ?? DEFAULT_CLI_TIMEOUT;
-			const useShell = this.config.shell ?? true;
-			const cwd = this.config.cwd || process.cwd();
-
-			const proc = spawn(command, args, {
-				shell: useShell,
-				cwd,
-				env: buildSubprocessEnv(env),
-				timeout
-			});
-
-			let stdout = '';
-			let stderr = '';
-
-			proc.stdout?.on('data', (data: Buffer) => {
-				stdout += data.toString();
-			});
-
-			proc.stderr?.on('data', (data: Buffer) => {
-				stderr += data.toString();
-			});
-
-			proc.on('close', (code) => {
-				if (code === 0) {
-					resolve(stdout.trim() || 'Command completed successfully');
-				} else {
-					const errorMessage = stderr.trim() || stdout.trim() || `Command exited with code ${String(code ?? 'unknown')}`;
-					reject(new Error(errorMessage));
-				}
-			});
-
-			proc.on('error', (error) => {
-				reject(new Error(`Failed to execute command: ${error.message}`));
-			});
+		const { exitCode, stdout, stderr } = await this.runner({
+			command,
+			args,
+			env: buildSubprocessEnv(env),
+			cwd: this.config.cwd,
+			shell: this.config.shell ?? true,
+			timeoutMs: this.config.timeout ?? DEFAULT_CLI_TIMEOUT,
 		});
+		if (exitCode === 0) {
+			return stdout.trim() || 'Command completed successfully';
+		}
+		throw new Error(stderr.trim() || stdout.trim() || `Command exited with code ${String(exitCode ?? 'unknown')}`);
 	}
 
 	/**

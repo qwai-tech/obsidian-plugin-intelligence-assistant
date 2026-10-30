@@ -55,7 +55,7 @@ beforeEach(() => {
 
 describe('McpToolSource', () => {
 	it('exposes mcp kind with id and label derived from the server name', () => {
-		const source = new McpToolSource(makeConfig());
+		const source = new McpToolSource(makeConfig(), jest.fn());
 		expect(source.kind).toBe('mcp');
 		expect(source.id).toBe('test-server');
 		expect(source.label).toBe('test-server');
@@ -65,7 +65,7 @@ describe('McpToolSource', () => {
 		const client = buildClientMock();
 		MockedMCPClient.mockImplementation(() => client);
 
-		const source = new McpToolSource(makeConfig());
+		const source = new McpToolSource(makeConfig(), jest.fn());
 		const tools = await source.load();
 
 		expect(client.connect).toHaveBeenCalledTimes(1);
@@ -77,7 +77,7 @@ describe('McpToolSource', () => {
 		const client = buildClientMock();
 		MockedMCPClient.mockImplementation(() => client);
 
-		const source = new McpToolSource(makeConfig());
+		const source = new McpToolSource(makeConfig(), jest.fn());
 		const tools = await source.load();
 		const result = await tools[0].execute({ query: 'hello' });
 
@@ -91,7 +91,7 @@ describe('McpToolSource', () => {
 		});
 		MockedMCPClient.mockImplementation(() => client);
 
-		const source = new McpToolSource(makeConfig());
+		const source = new McpToolSource(makeConfig(), jest.fn());
 		await expect(source.load()).rejects.toThrow('connection refused');
 	});
 
@@ -99,7 +99,7 @@ describe('McpToolSource', () => {
 		const client = buildClientMock();
 		MockedMCPClient.mockImplementation(() => client);
 
-		const source = new McpToolSource(makeConfig());
+		const source = new McpToolSource(makeConfig(), jest.fn());
 		await source.load();
 		await source.dispose();
 
@@ -107,7 +107,7 @@ describe('McpToolSource', () => {
 	});
 
 	it('dispose is a safe no-op when load was never called', async () => {
-		const source = new McpToolSource(makeConfig());
+		const source = new McpToolSource(makeConfig(), jest.fn());
 		await expect(source.dispose()).resolves.toBeUndefined();
 	});
 
@@ -117,7 +117,7 @@ describe('McpToolSource', () => {
 		});
 		MockedMCPClient.mockImplementation(() => client);
 
-		const source = new McpToolSource(makeConfig());
+		const source = new McpToolSource(makeConfig(), jest.fn());
 		await expect(source.load()).rejects.toThrow('connection refused');
 		await expect(source.dispose()).resolves.toBeUndefined();
 		expect(client.disconnect).toHaveBeenCalledTimes(1);

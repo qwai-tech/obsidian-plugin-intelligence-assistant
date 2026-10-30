@@ -14,14 +14,21 @@ const OBSIDIAN_RESTRICTED_PATHS = [
   { name: "moment", message: "The 'moment' package is bundled with Obsidian. Please import it from 'obsidian' instead." },
 ];
 
+const NODE_MODULES = ["child_process", "fs", "fs/promises", "util", "path", "os", "net", "http", "https", "cross-spawn"];
+const PLATFORM_FREE_PATHS = [
+  ...OBSIDIAN_RESTRICTED_PATHS,
+  ...NODE_MODULES.map((name) => ({ name, message: "Node APIs live in src/adapters; reach them through a port." })),
+];
+const NODE_PROTOCOL = { group: ["node:*"], message: "Node APIs live in src/adapters; reach them through a port." };
+
 const FEATURES = readdirSync("src/features", { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name);
 const FEATURE_INDEX_MESSAGE = "Import another feature through its index (@/features/<name>), not its internals.";
 
 const layer = (forbidden: string[], message: string) => [
   "error",
   {
-    paths: OBSIDIAN_RESTRICTED_PATHS,
-    patterns: [{ group: forbidden.flatMap((name) => [`@/${name}/*`, `**/${name}/*`]), message }],
+    paths: PLATFORM_FREE_PATHS,
+    patterns: [{ group: forbidden.flatMap((name) => [`@/${name}/*`, `**/${name}/*`]), message }, NODE_PROTOCOL],
   },
 ];
 
@@ -192,10 +199,11 @@ export default defineConfig([
     files: [`src/features/${feature}/**/*.ts`],
     rules: {
       "no-restricted-imports": ["error", {
-        paths: OBSIDIAN_RESTRICTED_PATHS,
+        paths: PLATFORM_FREE_PATHS,
         patterns: [
           { group: ["@/adapters/*", "**/adapters/*", "@/ui/*", "**/ui/*", "@/bootstrap/*", "**/bootstrap/*"], message: "Features reach adapters through ports, never the UI." },
           { group: ["@/features/*/*", `!@/features/${feature}/*`], message: FEATURE_INDEX_MESSAGE },
+          NODE_PROTOCOL,
         ],
       }],
     },
@@ -225,8 +233,8 @@ export default defineConfig([
     files: ["src/ui/**/*.ts"],
     rules: {
       "no-restricted-imports": ["error", {
-        paths: OBSIDIAN_RESTRICTED_PATHS,
-        patterns: [{ group: ["@/features/*/*"], message: FEATURE_INDEX_MESSAGE }],
+        paths: PLATFORM_FREE_PATHS,
+        patterns: [{ group: ["@/features/*/*"], message: FEATURE_INDEX_MESSAGE }, NODE_PROTOCOL],
       }],
       "@typescript-eslint/no-restricted-imports": ["error", {
         patterns: [

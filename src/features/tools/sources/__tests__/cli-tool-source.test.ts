@@ -18,14 +18,14 @@ describe('CliToolSource', () => {
 	}
 
 	it('exposes cli kind with id and label from the config', () => {
-		const source = new CliToolSource(makeConfig());
+		const source = new CliToolSource(makeConfig(), jest.fn());
 		expect(source.kind).toBe('cli');
 		expect(source.id).toBe('cli-1');
 		expect(source.label).toBe('echo_tool');
 	});
 
 	it('loads exactly one CLITool whose definition matches the config', async () => {
-		const tools = await new CliToolSource(makeConfig()).load();
+		const tools = await new CliToolSource(makeConfig(), jest.fn()).load();
 		expect(tools).toHaveLength(1);
 		expect(tools[0].definition.name).toBe('echo_tool');
 		expect(tools[0].definition.description).toBe('Echoes input');
@@ -35,18 +35,18 @@ describe('CliToolSource', () => {
 	});
 
 	it('uses distinct ids for distinct configs', () => {
-		const a = new CliToolSource(makeConfig({ id: 'a', name: 'tool_a' }));
-		const b = new CliToolSource(makeConfig({ id: 'b', name: 'tool_b' }));
+		const a = new CliToolSource(makeConfig({ id: 'a', name: 'tool_a' }), jest.fn());
+		const b = new CliToolSource(makeConfig({ id: 'b', name: 'tool_b' }), jest.fn());
 		expect(a.id).toBe('a');
 		expect(b.id).toBe('b');
 	});
 
 	it('returns a tool with an execute function', async () => {
-		const tools = await new CliToolSource(makeConfig()).load();
+		const tools = await new CliToolSource(makeConfig(), jest.fn()).load();
 		expect(typeof tools[0].execute).toBe('function');
 	});
 
 	it('dispose is a no-op that resolves', async () => {
-		await expect(new CliToolSource(makeConfig()).dispose()).resolves.toBeUndefined();
+		await expect(new CliToolSource(makeConfig(), jest.fn()).dispose()).resolves.toBeUndefined();
 	});
 });

@@ -1,13 +1,14 @@
 import * as path from 'node:path';
 import { MCPClient } from '@/features/tools/mcp-client';
 import { McpToolSource } from '@/features/tools/sources/mcp-tool-source';
+import { connectMcpStdio } from '@/adapters/process/mcp-stdio-connector';
 
 const MOCK_SERVER = path.resolve('tests/e2e/support/mock-mcp-server.js');
 
 describe('McpToolSource', () => {
 	it('stops the previous server process when it is loaded again', async () => {
 		const disconnect = jest.spyOn(MCPClient.prototype, 'disconnect');
-		const source = new McpToolSource({ name: 'mock', command: process.execPath, args: [MOCK_SERVER], enabled: true } as never);
+		const source = new McpToolSource({ name: 'mock', command: process.execPath, args: [MOCK_SERVER], enabled: true } as never, connectMcpStdio);
 		try {
 			await source.load();
 			await source.load();
@@ -20,7 +21,7 @@ describe('McpToolSource', () => {
 	});
 
 	it('its tools start a crashed server again on the next call', async () => {
-		const source = new McpToolSource({ name: 'mock', command: process.execPath, args: [MOCK_SERVER], enabled: true } as never);
+		const source = new McpToolSource({ name: 'mock', command: process.execPath, args: [MOCK_SERVER], enabled: true } as never, connectMcpStdio);
 		try {
 			const [echo] = await source.load();
 			expect((await echo.execute({ text: 'crash' })).success).toBe(false);

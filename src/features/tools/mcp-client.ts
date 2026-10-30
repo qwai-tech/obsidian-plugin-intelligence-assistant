@@ -1,11 +1,6 @@
-import { execFile } from 'child_process';
-import { promisify } from 'util';
-import { promises as fs, constants as fsConstants } from 'fs';
 import type { MCPServerConfig } from '@/features/tools/types/mcp';
 import { buildSubprocessEnv } from '@/features/tools/subprocess-env';
-import { McpStdioSession } from './mcp-stdio-session';
-
-const CLIENT_INFO = { name: 'obsidian-intelligence-assistant', version: '1.0.0' };
+import type { McpConnection, McpConnector } from './process-ports';
 
 export interface MCPTool {
 	name: string;
@@ -18,10 +13,10 @@ export interface MCPTool {
 }
 
 export class MCPClient {
-	private session: McpStdioSession | null = null;
+	private session: McpConnection | null = null;
 	private wanted = false;
 
-	constructor(private _config: MCPServerConfig) {}
+	constructor(private _config: MCPServerConfig, private readonly connector: McpConnector) {}
 
 	async connect(): Promise<void> {
 		this.wanted = true;
@@ -31,59 +26,11 @@ export class MCPClient {
 		this.session = null;
 
 		try {
-			// Resolve command path if needed (e.g., npx -> /usr/local/bin/npx)
-			let command = this._config.command;
-			if (command === 'npx' || command === 'npm' || command === 'node' || command === 'uvx' || command === 'python' || command === 'python3') {
-				command = await this.resolveCommandPath(command);
-			}
-
-			// Create stdio transport with an allowlisted environment (avoids
-			// leaking unrelated parent-process secrets into the MCP subprocess).
-			const env = buildSubprocessEnv(this._config.env);
-			this.session = await McpStdioSession.open({ command, args: this._config.args || [], env }, CLIENT_INFO);
+			this.session = await this.connector({ command: this._config.command, args: this._config.args || [], env: buildSubprocessEnv(this._config.env) });
 		} catch (error) {
 			console.error(`[MCP] Failed to connect to ${this._config.name}:`, error);
 			throw error;
 		}
-	}
-
-	private async resolveCommandPath(command: string): Promise<string> {
-		// Try common paths first
-		const homeDir = process.env.HOME ?? '';
-		const commonPaths = [
-			`/usr/local/bin/${command}`,
-			`/opt/homebrew/bin/${command}`,
-			`${homeDir}/.nvm/current/bin/${command}`, // Node/npm
-			`${homeDir}/.local/bin/${command}`, // Python user install
-			`${homeDir}/.cargo/bin/${command}`, // Rust/cargo (uv is often installed via cargo)
-			`/usr/bin/${command}`,
-		];
-
-		const execFilePromise = promisify(execFile);
-
-		try {
-			const { stdout } = await execFilePromise('which', [command]);
-			const path = stdout.trim();
-			if (path) {
-				return path;
-			}
-		} catch {
-			// 'which' failed, try common paths
-		}
-
-		// Check common paths
-		for (const path of commonPaths) {
-			try {
-				await fs.access(path, fsConstants.X_OK);
-				return path;
-			} catch {
-				// Path doesn't exist or isn't executable
-			}
-		}
-
-		// If all else fails, return original command
-		console.warn(`[MCP] Could not resolve path for ${command}, using original`);
-		return command;
 	}
 
 	async disconnect(): Promise<void> {
@@ -132,7 +79,7 @@ export class MCPClient {
 		return this.session?.isOpen ?? false;
 	}
 
-	private async liveSession(): Promise<McpStdioSession> {
+	private async liveSession(): Promise<McpConnection> {
 		if (!this.wanted) {
 			throw new Error('Not connected to MCP server');
 		}

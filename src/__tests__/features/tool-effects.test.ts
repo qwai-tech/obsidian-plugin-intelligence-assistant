@@ -12,7 +12,7 @@ const registered = (tool: { definition: RegisteredTool['definition'] }, kind: 'c
 });
 
 describe('tools that run local processes', () => {
-	const cli = new CLITool({ id: 'git', name: 'git_status', description: 'Show git status', command: 'git', enabled: true } as never);
+	const cli = new CLITool({ id: 'git', name: 'git_status', description: 'Show git status', command: 'git', enabled: true } as never, jest.fn());
 	const mcp = new MCPToolWrapper({ name: 'search', inputSchema: { type: 'object' } }, { getServerName: () => 'web' } as never);
 
 	it('declare the process effect for CLI and MCP tools', () => {

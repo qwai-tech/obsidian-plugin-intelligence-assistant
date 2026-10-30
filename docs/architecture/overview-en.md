@@ -22,7 +22,7 @@ Intelligence Assistant is a ports-and-adapters plugin organised by feature. `mai
 └───────────────┬───────────────────────────────────────────────┘
                 │ ports implemented by
 ┌───────────────▼───────────────────────────────────────────────┐
-│ adapters/  obsidian · persistence (JSON/JSONL) · rag           │
+│ adapters/  obsidian · persistence (JSON/JSONL) · process · rag │
 └───────────────┬───────────────────────────────────────────────┘
                 │
 ┌───────────────▼───────────────────────────────────────────────┐
@@ -40,6 +40,8 @@ The import rules are enforced in `eslint.config.mts`, with no exemptions:
 | `features/<name>/` | adapters, ui, bootstrap, and other features' internals (use their index) |
 | `adapters/` | ui, bootstrap; features only as `import type` from their index |
 | `ui/` | bootstrap; adapters only as `import type`; features only through their index |
+
+`core/`, `features/` and `ui/` may not import Node modules (`child_process`, `fs`, `node:*`, `cross-spawn`, …); those live in `adapters/` behind a port.
 | `packages/obsidian-llm` | anything from the plugin (`@/*`) |
 
 `bootstrap/` and `main.ts` are the only places that see every folder.
@@ -87,6 +89,7 @@ Contracts shared with adapters (`KernelEvent`, `FinishReason`, `RunJournal`) liv
 - `persistence/conversation-storage-service.ts` — conversations as per-file JSON.
 - `rag/` — `rag-manager.ts`, `vector-store.ts`, `chunker.ts`, `embedding-manager.ts`, `document-grader.ts`, `incremental-indexer.ts`: vault indexing and retrieval. Chunks record a content hash and the embedding model, so unchanged notes are not re-embedded and searches only compare vectors from the same model. `RAGManager` implements `KnowledgeBase` and `MemoryIndex`.
 - `obsidian/obsidian-file-system.ts` — the file-system port over the vault.
+- `process/` — everything that starts a process: `mcp-stdio-session.ts` speaks MCP over a server's stdio (`connectMcpStdio` implements the tools feature's `McpConnector` port, resolving launchers such as `npx` with `resolve-command.ts`), and `command-runner.ts` implements the `CommandRunner` port that CLI tools use.
 
 All plugin paths come from `core/plugin-paths.ts` (`pluginPaths(configDir)`), so the vault's real config folder is used.
 

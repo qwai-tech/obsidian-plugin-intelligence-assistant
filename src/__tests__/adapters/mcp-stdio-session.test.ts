@@ -1,5 +1,5 @@
 import * as path from 'node:path';
-import { McpStdioSession } from '@/features/tools/mcp-stdio-session';
+import { McpStdioSession } from '@/adapters/process/mcp-stdio-session';
 
 const MOCK_SERVER = path.resolve('tests/e2e/support/mock-mcp-server.js');
 const CLIENT = { name: 'test-client', version: '1.0.0' };

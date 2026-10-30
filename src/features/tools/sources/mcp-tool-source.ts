@@ -11,6 +11,7 @@ import type { SourceTool, ToolSourceKind } from '@/features/tools/types/tools';
 import type { MCPServerConfig } from '@/features/tools/types/mcp';
 import { MCPClient } from '@/features/tools/mcp-client';
 import { MCPToolWrapper } from '@/features/tools/mcp-tool-wrapper';
+import type { McpConnector } from '@/features/tools/process-ports';
 
 export class McpToolSource implements ToolSource {
 	readonly kind: ToolSourceKind = 'mcp';
@@ -20,7 +21,7 @@ export class McpToolSource implements ToolSource {
 	/** Lazily created on load(); kept so dispose() can release the connection. */
 	private client: MCPClient | null = null;
 
-	constructor(private readonly config: MCPServerConfig) {
+	constructor(private readonly config: MCPServerConfig, private readonly connector: McpConnector) {
 		this.id = config.name;
 		this.label = config.name;
 	}
@@ -32,7 +33,7 @@ export class McpToolSource implements ToolSource {
 	 */
 	async load(): Promise<SourceTool[]> {
 		await this.dispose();
-		const client = new MCPClient(this.config);
+		const client = new MCPClient(this.config, this.connector);
 		this.client = client;
 		await client.connect();
 		const mcpTools = await client.listTools();

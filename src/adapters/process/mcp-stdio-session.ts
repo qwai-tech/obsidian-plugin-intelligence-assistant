@@ -1,14 +1,10 @@
 import spawn from 'cross-spawn';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
+import type { McpConnection, ProcessLaunch } from '@/features/tools';
 
 const PROTOCOL_VERSION = '2025-06-18';
 const DEFAULT_REQUEST_TIMEOUT_MS = 60_000;
 
-export interface McpLaunch {
-	command: string;
-	args: string[];
-	env: Record<string, string>;
-}
 
 interface JsonRpcMessage {
 	id?: number | string;
@@ -23,7 +19,7 @@ interface PendingRequest {
 	timer: number;
 }
 
-export class McpStdioSession {
+export class McpStdioSession implements McpConnection {
 	private nextId = 1;
 	private buffer = '';
 	private closed = false;
@@ -38,7 +34,7 @@ export class McpStdioSession {
 		child.on('exit', (code) => this.fail(new Error(`MCP server exited with code ${code ?? 'unknown'}`)));
 	}
 
-	static async open(launch: McpLaunch, clientInfo: { name: string; version: string }, options: { requestTimeoutMs?: number } = {}): Promise<McpStdioSession> {
+	static async open(launch: ProcessLaunch, clientInfo: { name: string; version: string }, options: { requestTimeoutMs?: number } = {}): Promise<McpStdioSession> {
 		const child = spawn(launch.command, launch.args, { env: launch.env, stdio: 'pipe' });
 		const session = new McpStdioSession(child, options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS);
 		try {

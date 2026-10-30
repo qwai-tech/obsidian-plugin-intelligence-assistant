@@ -22,7 +22,7 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 └───────────────┬───────────────────────────────────────────────┘
                 │ 端口由下层实现
 ┌───────────────▼───────────────────────────────────────────────┐
-│ adapters/  obsidian · persistence（JSON/JSONL）· rag           │
+│ adapters/  obsidian · persistence（JSON/JSONL）· process · rag │
 └───────────────┬───────────────────────────────────────────────┘
                 │
 ┌───────────────▼───────────────────────────────────────────────┐
@@ -40,6 +40,8 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 | `features/<名称>/` | adapters、ui、bootstrap，以及其他功能的内部模块（应使用其 index） |
 | `adapters/` | ui、bootstrap；功能只能通过其 index 以 `import type` 使用 |
 | `ui/` | bootstrap；adapters 只能用 `import type`；功能只能通过其 index 导入 |
+
+`core/`、`features/` 和 `ui/` 不能导入 Node 模块（`child_process`、`fs`、`node:*`、`cross-spawn` 等）；这些代码位于 `adapters/`，通过端口访问。
 | `packages/obsidian-llm` | 插件中的任何代码（`@/*`） |
 
 只有 `bootstrap/` 和 `main.ts` 可以看到所有目录。
@@ -87,6 +89,7 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 - `persistence/conversation-storage-service.ts` — 每个会话一个 JSON 文件。
 - `rag/` — `rag-manager.ts`、`vector-store.ts`、`chunker.ts`、`embedding-manager.ts`、`document-grader.ts`、`incremental-indexer.ts`：库索引与检索。分块记录内容哈希和嵌入模型，因此未修改的笔记不会重新嵌入，检索也只比较同一模型的向量。`RAGManager` 实现 `KnowledgeBase` 和 `MemoryIndex`。
 - `obsidian/obsidian-file-system.ts` — 基于库的文件系统端口。
+- `process/` — 所有启动进程的代码：`mcp-stdio-session.ts` 通过服务器的 stdio 使用 MCP 协议（`connectMcpStdio` 实现 tools 功能的 `McpConnector` 端口，并用 `resolve-command.ts` 解析 `npx` 等启动器），`command-runner.ts` 实现 CLI 工具使用的 `CommandRunner` 端口。
 
 所有插件路径都来自 `core/plugin-paths.ts`（`pluginPaths(configDir)`），因此使用的是库实际的配置目录。
 

@@ -2,6 +2,7 @@ export { CLI_TOOL_DEFAULTS, CLI_TOOL_PRESETS, PRESET_CATEGORIES, availablePreset
 export { BuiltinToolSource, builtinToolDefinitions } from './sources/builtin-tool-source';
 export { CliToolSource } from './sources/cli-tool-source';
 export { McpToolSource } from './sources/mcp-tool-source';
+export type { CommandOutcome, CommandRun, CommandRunner, McpConnection, McpConnector, ProcessLaunch } from './process-ports';
 export { OpenApiToolSource } from './sources/openapi-tool-source';
 export { migrateAllAgents } from './tool-migrations';
 export { ToolRegistry } from './tool-registry';
