@@ -1,10 +1,10 @@
 import { Setting, Notice } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 import { setDestructiveButton } from '@/ui/utils/ui-helpers';
 
-export function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
+export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHost): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	new Setting(section).setName(t('settings.rag.indexMgmt.title')).setHeading();
 

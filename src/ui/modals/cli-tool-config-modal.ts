@@ -1,12 +1,12 @@
 import { Setting, Modal, setIcon } from 'obsidian';
 import { t } from '@/i18n';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { CLIToolConfig } from '@/features/tools';
 import { DEFAULT_CLI_TIMEOUT } from '@/features/tools';
 
 export class CLIToolConfigModal extends Modal {
 	constructor(
-		private readonly plugin: IntelligenceAssistantPlugin,
+		private readonly plugin: PluginHost,
 		private readonly config: CLIToolConfig,
 		private readonly onChange: () => void
 	) {

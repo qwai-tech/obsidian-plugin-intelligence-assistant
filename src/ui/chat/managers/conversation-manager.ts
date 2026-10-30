@@ -2,7 +2,7 @@ import { App, Events } from 'obsidian';
 import { t } from '@/i18n';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import { showPrompt } from '@/ui/modals/prompt-modal';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { Conversation, Message } from '@/features/conversations';
 import { ChatViewState } from '@/ui/state/chat-view-state';
 import type { ConversationNamer } from '@/features/chat';
@@ -26,7 +26,7 @@ export class ConversationManager extends Events {
 
 	constructor(
 		private app: App,
-		private plugin: IntelligenceAssistantPlugin,
+		private plugin: PluginHost,
 		private readonly storage: ConversationStorageService,
 		private readonly namer: ConversationNamer,
 		private state: ChatViewState,

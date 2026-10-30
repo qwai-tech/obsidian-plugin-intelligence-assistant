@@ -1,10 +1,10 @@
 import { App, Notice } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { MCPServerConfig } from '@/features/tools';
 import { t } from '@/i18n';
 import { MCPServerModal } from '@/ui/modals/mcp-server-modal';
 
-export async function testAllMcpConnections(plugin: IntelligenceAssistantPlugin): Promise<void> {
+export async function testAllMcpConnections(plugin: PluginHost): Promise<void> {
 	const mcpServers = plugin.settings.mcpServers;
 
 	if (mcpServers.length === 0) {
@@ -59,7 +59,7 @@ export async function testAllMcpConnections(plugin: IntelligenceAssistantPlugin)
 	}
 }
 
-export function openAddMcpServer(app: App, plugin: IntelligenceAssistantPlugin, onAdded: () => void): void {
+export function openAddMcpServer(app: App, plugin: PluginHost, onAdded: () => void): void {
 	const draft: MCPServerConfig = {
 		name: 'New MCP server',
 		command: '',

@@ -5,7 +5,7 @@
 
 import {App} from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 import { SystemPromptEditModal } from '@/ui/modals/system-prompt-edit-modal';
@@ -13,7 +13,7 @@ import { renderListRow, tagButton } from '@/ui/settings/list-row';
 
 export function displayPromptsTab(
 	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	app: App,
 	refreshDisplay: () => void
 ): void {

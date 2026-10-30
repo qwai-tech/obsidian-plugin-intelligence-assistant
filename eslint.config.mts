@@ -19,6 +19,7 @@ const PLATFORM_FREE_PATHS = [
   ...OBSIDIAN_RESTRICTED_PATHS,
   ...NODE_MODULES.map((name) => ({ name, message: "Node APIs live in src/adapters; reach them through a port." })),
 ];
+const UI_PLUGIN_RULE = [{ group: ["@plugin"], message: "UI code takes a PluginHost (src/ui/plugin-host.ts), not the plugin class." }];
 const NODE_PROTOCOL = { group: ["node:*"], message: "Node APIs live in src/adapters; reach them through a port." };
 
 const FEATURES = readdirSync("src/features", { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name);
@@ -236,6 +237,18 @@ export default defineConfig([
         paths: PLATFORM_FREE_PATHS,
         patterns: [{ group: ["@/features/*/*"], message: FEATURE_INDEX_MESSAGE }, NODE_PROTOCOL],
       }],
+      "@typescript-eslint/no-restricted-imports": ["error", {
+        patterns: [
+          { group: ["@/bootstrap/*", "**/bootstrap/*"], message: "The UI never imports the composition root." },
+          { group: ["@/adapters/*", "**/adapters/*"], allowTypeImports: true, message: "The UI sees adapters only as types; services arrive through AppServices." },
+          ...UI_PLUGIN_RULE,
+        ],
+      }],
+    },
+  },
+  {
+    files: ["src/ui/settings/settings-tab.ts", "src/ui/views/chat-view.ts", "src/ui/chat/chat-session-controller.ts"],
+    rules: {
       "@typescript-eslint/no-restricted-imports": ["error", {
         patterns: [
           { group: ["@/bootstrap/*", "**/bootstrap/*"], message: "The UI never imports the composition root." },

@@ -1,5 +1,5 @@
 import { App, setIcon, TFile, TFolder } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import { ChatViewState } from '@/ui/state/chat-view-state';
 import { t } from '@/i18n';
 import type { ModelInfo } from '@/features/llm';
@@ -39,7 +39,7 @@ export class ChatInputComponent {
 	constructor(
 		private parent: HTMLElement,
 		private app: App,
-		private plugin: IntelligenceAssistantPlugin,
+		private plugin: PluginHost,
 		private state: ChatViewState,
 		private callbacks: ChatInputCallbacks
 	) {

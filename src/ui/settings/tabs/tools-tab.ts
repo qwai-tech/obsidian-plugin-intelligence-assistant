@@ -3,7 +3,7 @@
  * Displays built-in tools and MCP tools management
  */
 
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { CachedMCPTool, RegisteredTool } from '@/features/tools';
 import { t } from '@/i18n';
 import { createTable, createStatusIndicator } from '@/ui/utils/ui-helpers';
@@ -17,7 +17,7 @@ export type ToolsSubTab = 'built-in' | 'mcp' | 'openapi' | 'cli';
 
 export function displayToolsTab(
 	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	toolsSubTab: ToolsSubTab,
 	setToolsSubTab: (tab: ToolsSubTab) => void,
 	refreshDisplay: () => void,
@@ -63,7 +63,7 @@ export function displayToolsTab(
  */
 function renderMcpTools(
 	content: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	_refreshDisplay: () => void,
 	openMcpManagement?: () => void
 ): void {

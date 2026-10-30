@@ -5,7 +5,7 @@
 
 import { Setting, App, Notice } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { LLMConfig } from '@/features/llm';
 import { t } from '@/i18n';
 import { ProviderConfigModal } from '@/ui/modals/provider-config-modal';
@@ -15,7 +15,7 @@ import { TestIds } from '@/ui/utils/test-ids';
 
 export function displayProviderTab(
 	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	app: App,
 	refreshDisplay: () => void
 ): void {

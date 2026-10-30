@@ -1,10 +1,10 @@
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import { ModelManager } from '@qwai/obsidian-llm';
 import type { Message } from '@/features/conversations';
 
 export function resolveMessageProviderId(
 	message: Message,
-	plugin: IntelligenceAssistantPlugin
+	plugin: PluginHost
 ): string | null {
 	const explicitProvider = message.provider?.trim();
 	if (explicitProvider) {

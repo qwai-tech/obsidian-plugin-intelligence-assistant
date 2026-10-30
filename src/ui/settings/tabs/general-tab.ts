@@ -1,8 +1,8 @@
 import type { SettingDefinitionItem } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import { t } from '@/i18n';
 
-export function generalDefinitions(plugin: IntelligenceAssistantPlugin): SettingDefinitionItem[] {
+export function generalDefinitions(plugin: PluginHost): SettingDefinitionItem[] {
 	return [
 		{
 			name: t('settings.general.pluginVersion.name'),

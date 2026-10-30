@@ -4,7 +4,7 @@
  */
 
 import { Notice } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { ModelInfo, ModelCapability } from '@/features/llm';
 import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
@@ -19,7 +19,7 @@ export interface ModelFilters {
 
 export function displayModelsTab(
 	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	filters: ModelFilters,
 	onFilterChange: (filters: Partial<ModelFilters>) => void,
 	refreshDisplay: () => void
@@ -257,7 +257,7 @@ export function displayModelsTab(
 
 function renderModelFilters(
 	parent: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	capabilities: ModelCapability[],
 	filters: ModelFilters,
 	onFilterChange: (filters: Partial<ModelFilters>) => void,

@@ -7,12 +7,12 @@ import { Notice, Setting, Modal } from 'obsidian';
 import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { OpenApiToolConfig, OpenApiAuthType, OpenApiSourceType } from '@/features/tools';
 
 export function renderOpenapiToolsSection(
 	content: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	refreshDisplay: () => void
 ): void {
 	const configs = plugin.settings.openApiTools;
@@ -116,7 +116,7 @@ function formatAuth(config: OpenApiToolConfig): string {
 }
 
 async function reloadConfig(
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	configId: string,
 	forceRefetch: boolean,
 	refreshDisplay: () => void
@@ -152,7 +152,7 @@ function createDefaultOpenApiConfig(): OpenApiToolConfig {
 
 class OpenApiConfigModal extends Modal {
 	constructor(
-		private readonly plugin: IntelligenceAssistantPlugin,
+		private readonly plugin: PluginHost,
 		private readonly config: OpenApiToolConfig,
 		private readonly onChange: () => void
 	) {

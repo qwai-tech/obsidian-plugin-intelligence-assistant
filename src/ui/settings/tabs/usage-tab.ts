@@ -7,12 +7,12 @@ import { Setting, type App } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { t } from '@/i18n';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import { getProviderMeta } from '@/ui/provider-meta';
 
 export async function displayUsageTab(
 	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	_app: App,
 	_refreshDisplay: () => void
 ): Promise<void> {

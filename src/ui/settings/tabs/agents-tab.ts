@@ -5,7 +5,7 @@
 
 import { App } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { Agent } from '@/features/agent';
 import type { ModelInfo } from '@/features/llm';
 import { t } from '@/i18n';
@@ -16,7 +16,7 @@ import { renderListRow, tagButton } from '@/ui/settings/list-row';
 
 export function displayAgentsTab(
 	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	app: App,
 	refreshDisplay: () => void
 ): void {
@@ -173,7 +173,7 @@ function capabilities(agent: Agent): string[] {
 	return [agent.ragEnabled ? 'RAG' : '', agent.webSearchEnabled ? 'Web' : ''].filter(Boolean);
 }
 
-function toolCounts(agent: Agent, plugin: IntelligenceAssistantPlugin): string[] {
+function toolCounts(agent: Agent, plugin: PluginHost): string[] {
 	const sources = agent.toolAccess?.sources ?? {};
 	const builtInRule = sources['builtin:builtin'];
 	const builtInCount = builtInRule === 'all'

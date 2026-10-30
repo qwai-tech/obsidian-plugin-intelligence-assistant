@@ -4,7 +4,7 @@
  */
 
 import { App, ButtonComponent, DropdownComponent, Modal, Setting } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { QuickActionConfig } from '@/features/settings';
 import { t } from '@/i18n';
 import { showConfirm } from '@/ui/modals/confirm-modal';
@@ -14,7 +14,7 @@ import { renderListRow, tagButton } from '@/ui/settings/list-row';
 
 export function displayQuickActionsTab(
 	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	app: App,
 	refreshDisplay: () => void
 ): void {
@@ -131,7 +131,7 @@ export function displayQuickActionsTab(
  * Open modal to edit a quick action
  */
 function openQuickActionEditModal(
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	app: App,
 	action: QuickActionConfig,
 	index: number,
@@ -140,7 +140,7 @@ function openQuickActionEditModal(
 	class QuickActionEditModal extends Modal {
 		constructor(
 			app: App,
-			private plugin: IntelligenceAssistantPlugin,
+			private plugin: PluginHost,
 			private action: QuickActionConfig,
 			private index: number,
 			private refreshDisplay: () => void

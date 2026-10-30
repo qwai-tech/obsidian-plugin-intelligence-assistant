@@ -2,12 +2,12 @@ import { Setting } from 'obsidian';
 import { t } from '@/i18n';
 import { builtinToolDefinitions } from '@/features/tools';
 import { TestIds } from '@/ui/utils/test-ids';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import { renderIcon } from '@/ui/utils/icon';
 
 export function renderBuiltinToolsSection(
 	content: HTMLElement,
-	plugin: IntelligenceAssistantPlugin
+	plugin: PluginHost
 ): void {
 	const toolMetadata: Record<string, { description: string; icon: string }> = {
 		'read_file': { description: t('settings.tools.builtIn.toolMeta.readFile.desc'), icon: 'file-text' },

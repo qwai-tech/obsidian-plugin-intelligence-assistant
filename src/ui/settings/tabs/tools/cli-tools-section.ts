@@ -1,6 +1,6 @@
 import { Notice } from 'obsidian';
 import { t } from '@/i18n';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { CLIToolConfig } from '@/features/tools';
 import { CLI_TOOL_DEFAULTS, CLI_TOOL_PRESETS } from '@/features/tools';
 import { createTable, createStatusIndicator } from '@/ui/utils/ui-helpers';
@@ -10,7 +10,7 @@ import { CLIToolPresetModal } from '@/ui/modals/cli-tool-preset-modal';
 
 export function renderCliToolsSection(
 	content: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	refreshDisplay: () => void
 ): void {
 	const configs = plugin.settings.cliTools;

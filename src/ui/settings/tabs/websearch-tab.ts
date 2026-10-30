@@ -4,7 +4,7 @@
  */
 
 import { Setting } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import { t } from '@/i18n';
 import type { WebSearchConfig } from '@/features/web-search';
 import { SettingsForm } from '@/ui/settings/settings-form';
@@ -25,7 +25,7 @@ const SEARCH_PROVIDERS = ['duckduckgo', 'google', 'bing', 'serpapi', 'tavily', '
 
 export function displayWebSearchTab(
 	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin
+	plugin: PluginHost
 ): void {
 	containerEl.createEl('p', { text: t('settings.websearch.desc'), cls: ['ia-section-description', 'ia-section-description--spaced'] });
 

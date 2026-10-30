@@ -4,13 +4,13 @@
  */
 
 import type { App } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { ChatViewState } from '@/ui/state/chat-view-state';
 
 export abstract class BaseController {
 	constructor(
 		protected _app: App,
-		protected _plugin: IntelligenceAssistantPlugin,
+		protected _plugin: PluginHost,
 		protected state: ChatViewState
 	) {}
 

@@ -41,6 +41,8 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 | `adapters/` | ui、bootstrap；功能只能通过其 index 以 `import type` 使用 |
 | `ui/` | bootstrap；adapters 只能用 `import type`；功能只能通过其 index 导入 |
 
+UI 代码接收 `PluginHost`（`ui/plugin-host.ts`：app、manifest、settings、services、`updateSettings`、`saveSettings`），而不是插件类本身；只有设置页、聊天视图和聊天会话控制器能看到插件对象。
+
 `core/`、`features/` 和 `ui/` 不能导入 Node 模块（`child_process`、`fs`、`node:*`、`cross-spawn` 等）；这些代码位于 `adapters/`，通过端口访问。
 | `packages/obsidian-llm` | 插件中的任何代码（`@/*`） |
 

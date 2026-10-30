@@ -1,12 +1,12 @@
 import { Notice, Modal, Setting } from 'obsidian';
 import { t } from '@/i18n';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { CLIToolConfig, CLIToolPreset } from '@/features/tools';
 import { CLI_TOOL_DEFAULTS, availablePresets, PRESET_CATEGORIES } from '@/features/tools';
 
 export class CLIToolPresetModal extends Modal {
 	constructor(
-		private readonly plugin: IntelligenceAssistantPlugin,
+		private readonly plugin: PluginHost,
 		private readonly onChange: () => void
 	) {
 		super(plugin.app);

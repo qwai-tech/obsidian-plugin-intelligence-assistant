@@ -41,6 +41,8 @@ The import rules are enforced in `eslint.config.mts`, with no exemptions:
 | `adapters/` | ui, bootstrap; features only as `import type` from their index |
 | `ui/` | bootstrap; adapters only as `import type`; features only through their index |
 
+UI code receives a `PluginHost` (`ui/plugin-host.ts`: app, manifest, settings, services, `updateSettings`, `saveSettings`) instead of the plugin class; only the settings tab, the chat view and the chat session controller see the plugin itself.
+
 `core/`, `features/` and `ui/` may not import Node modules (`child_process`, `fs`, `node:*`, `cross-spawn`, …); those live in `adapters/` behind a port.
 | `packages/obsidian-llm` | anything from the plugin (`@/*`) |
 

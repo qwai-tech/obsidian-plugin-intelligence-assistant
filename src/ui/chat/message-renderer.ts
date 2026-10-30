@@ -1,6 +1,6 @@
 import { setIcon, type App } from 'obsidian';
 import { t } from '@/i18n';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { Message } from '@/features/conversations';
 import { marked } from 'marked';
 import { enhanceRichMarkdown } from '@/ui/chat/rich-markdown';
@@ -14,7 +14,7 @@ import type { WriteProposal, BatchWriteProposal } from '@/features/agent';
 
 export interface MessageRendererContext {
 	app: App;
-	plugin: IntelligenceAssistantPlugin;
+	plugin: PluginHost;
 	mode: 'chat' | 'agent';
 	messages: Message[];
 }

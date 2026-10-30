@@ -1,5 +1,5 @@
 import { setIcon } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import { hasSettings } from '@/core/utils/type-guards';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
@@ -17,7 +17,7 @@ export class ChatHeaderComponent {
 
 	constructor(
 		private parent: HTMLElement,
-		private plugin: IntelligenceAssistantPlugin,
+		private plugin: PluginHost,
 		private callbacks: ChatHeaderCallbacks
 	) {
 		this.render();

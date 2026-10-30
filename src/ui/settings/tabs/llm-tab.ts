@@ -4,7 +4,7 @@
  */
 
 import type { App } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import { t } from '@/i18n';
 import { displayProviderTab } from './provider-tab';
 import { displayModelsTab, type ModelFilters } from './models-tab';
@@ -15,7 +15,7 @@ export type LLMSubTab = 'provider' | 'models';
 
 export function displayLLMTab(
 	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	app: App,
 	modelFilters: ModelFilters,
 	onModelFilterChange: (filters: Partial<ModelFilters>) => void,

@@ -1,14 +1,14 @@
 import { App, Modal, Notice, Setting } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { RegisteredTool } from '@/features/tools';
 import { getConnectedMcpServers, getToolsByProviderKey } from './mcp-inspector-data';
 import { renderMcpToolTester } from './mcp-tool-tester';
 import { t } from '@/i18n';
 
 export class MCPInspectorModal extends Modal {
-	private plugin: IntelligenceAssistantPlugin;
+	private plugin: PluginHost;
 
-	constructor(app: App, plugin: IntelligenceAssistantPlugin) {
+	constructor(app: App, plugin: PluginHost) {
 		super(app);
 		this.plugin = plugin;
 	}

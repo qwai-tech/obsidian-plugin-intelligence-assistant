@@ -4,7 +4,7 @@
  */
 
 import { Setting } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import { t } from '@/i18n';
 import type { RAGConfig } from '@/features/knowledge';
 import { SettingsForm } from '@/ui/settings/settings-form';
@@ -19,7 +19,7 @@ const FILE_TYPES_PLACEHOLDER = 'md, txt';
 
 export function displayRAGTab(
 	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin
+	plugin: PluginHost
 ): void {
 
 	const desc = containerEl.createEl('p', {
@@ -62,7 +62,7 @@ export function displayRAGTab(
 	});
 }
 
-function renderOverviewTab(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
+function renderOverviewTab(containerEl: HTMLElement, plugin: PluginHost): void {
 	// General Settings Section
 	renderGeneralSettings(containerEl, plugin);
 
@@ -70,7 +70,7 @@ function renderOverviewTab(containerEl: HTMLElement, plugin: IntelligenceAssista
 	renderIndexManagement(containerEl, plugin);
 }
 
-function renderAdvancedTab(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
+function renderAdvancedTab(containerEl: HTMLElement, plugin: PluginHost): void {
 	// Advanced Settings Section
 	renderAdvancedSettings(containerEl, plugin);
 
@@ -78,7 +78,7 @@ function renderAdvancedTab(containerEl: HTMLElement, plugin: IntelligenceAssista
 	renderGradingSettings(containerEl, plugin);
 }
 
-function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
+function renderGeneralSettings(containerEl: HTMLElement, plugin: PluginHost): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	new Setting(section).setName(t('settings.rag.general.title')).setHeading();
 	const form = ragForm(section, plugin);
@@ -105,7 +105,7 @@ function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 	});
 }
 
-function renderChunkingSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
+function renderChunkingSettings(containerEl: HTMLElement, plugin: PluginHost): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	new Setting(section).setName(t('settings.rag.chunking.title')).setHeading();
 	const form = ragForm(section, plugin);
@@ -137,7 +137,7 @@ function renderChunkingSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 	}, { placeholder: '512', integer: true, min: 1 });
 }
 
-function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
+function renderSearchSettings(containerEl: HTMLElement, plugin: PluginHost): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	new Setting(section).setName(t('settings.rag.search.title')).setHeading();
 	const form = ragForm(section, plugin);
@@ -164,7 +164,7 @@ function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssi
 	}, { placeholder: '4000', integer: true, min: 1 });
 }
 
-function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
+function renderFileFilters(containerEl: HTMLElement, plugin: PluginHost): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	new Setting(section).setName(t('settings.rag.filters.title')).setHeading();
 	const form = ragForm(section, plugin);
@@ -191,7 +191,7 @@ function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssista
 	}, 'Draft, private');
 }
 
-function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
+function renderAdvancedSettings(containerEl: HTMLElement, plugin: PluginHost): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	new Setting(section).setName(t('settings.rag.advanced.title')).setHeading();
 
@@ -201,7 +201,7 @@ function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 	}, { placeholder: '10', integer: true, min: 1 });
 }
 
-function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
+function renderGradingSettings(containerEl: HTMLElement, plugin: PluginHost): void {
 	const section = containerEl.createDiv('ia-settings-section');
 	new Setting(section).setName(t('settings.rag.grading.title')).setHeading();
 	section.createEl('p', { text: t('settings.rag.grading.desc'), cls: 'setting-item-description' });
@@ -263,6 +263,6 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 	renderGradingOptions();
 }
 
-function ragForm(container: HTMLElement, plugin: IntelligenceAssistantPlugin): SettingsForm<RAGConfig> {
+function ragForm(container: HTMLElement, plugin: PluginHost): SettingsForm<RAGConfig> {
 	return new SettingsForm(container, () => plugin.settings.ragConfig, (change) => plugin.updateSettings(change), 'ragConfig');
 }

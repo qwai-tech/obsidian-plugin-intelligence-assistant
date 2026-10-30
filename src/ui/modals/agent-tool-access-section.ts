@@ -1,12 +1,12 @@
 import { Setting, type ToggleComponent } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { BuiltInToolConfig, CLIToolConfig, MCPServerConfig } from '@/features/tools';
 import { t } from '@/i18n';
 import type { ToolAccessEditor } from '@/features/agent';
 
 export class AgentToolAccessSection {
 	constructor(
-		private readonly plugin: IntelligenceAssistantPlugin,
+		private readonly plugin: PluginHost,
 		private readonly access: ToolAccessEditor,
 	) {}
 

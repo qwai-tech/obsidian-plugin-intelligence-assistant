@@ -5,7 +5,7 @@
 
 import { App, Notice, Setting } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { MCPServerConfig, RegisteredTool } from '@/features/tools';
 import { t } from '@/i18n';
 import { createStatusIndicator } from '@/ui/utils/ui-helpers';
@@ -17,7 +17,7 @@ import { openAddMcpServer } from './mcp-actions';
 
 export function displayMCPTab(
 	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin,
+	plugin: PluginHost,
 	app: App,
 	testAllMCPConnections: () => Promise<void>,
 	refreshDisplay: () => void

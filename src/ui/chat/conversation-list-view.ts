@@ -1,6 +1,6 @@
 import { Menu, setIcon } from 'obsidian';
 import { t } from '@/i18n';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { ChatViewState } from '@/ui/state/chat-view-state';
 import type { ConversationStorageService } from '@/adapters/persistence/conversation-storage-service';
 import { TestIds } from '@/ui/utils/test-ids';
@@ -20,7 +20,7 @@ export class ConversationListView {
 		private readonly container: HTMLElement,
 		private readonly storage: ConversationStorageService,
 		private readonly state: ChatViewState,
-		private readonly plugin: IntelligenceAssistantPlugin,
+		private readonly plugin: PluginHost,
 		private readonly actions: ConversationListActions,
 	) {}
 

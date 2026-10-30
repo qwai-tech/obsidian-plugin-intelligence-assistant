@@ -1,6 +1,6 @@
 import { setIcon, type App } from 'obsidian';
 import { t } from '@/i18n';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { Message } from '@/features/conversations';
 import type { ChatViewState } from '@/ui/state/chat-view-state';
 import { TestIds } from '@/ui/utils/test-ids';
@@ -16,7 +16,7 @@ export class ChatMessageList {
 	constructor(
 		parent: HTMLElement,
 		private readonly app: App,
-		private readonly plugin: IntelligenceAssistantPlugin,
+		private readonly plugin: PluginHost,
 		private readonly state: ChatViewState,
 		private readonly callbacks: MessageRendererCallbacks,
 	) {

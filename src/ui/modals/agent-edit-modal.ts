@@ -1,5 +1,5 @@
 import { App, ButtonComponent, Modal, Notice, Setting } from 'obsidian';
-import type IntelligenceAssistantPlugin from '@plugin';
+import type { PluginHost } from '@/ui/plugin-host';
 import type { Agent } from '@/features/agent';
 import { t } from '@/i18n';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
@@ -11,7 +11,7 @@ import { TestIds } from '@/ui/utils/test-ids';
 export class AgentEditModal extends Modal {
 	private agent: Agent;
 	private onSaveCallback: (agent: Agent) => void | Promise<void>;
-	private plugin: IntelligenceAssistantPlugin;
+	private plugin: PluginHost;
 	private selectedSystemPromptId: string;
 	private customPromptName: string = '';
 	private customPromptContent: string = '';
@@ -19,7 +19,7 @@ export class AgentEditModal extends Modal {
 	private fixedModelSetting: Setting | null = null;
 	private readonly access: ToolAccessEditor;
 
-	constructor(app: App, plugin: IntelligenceAssistantPlugin, agent: Agent, onSave: (agent: Agent) => void | Promise<void>) {
+	constructor(app: App, plugin: PluginHost, agent: Agent, onSave: (agent: Agent) => void | Promise<void>) {
 		super(app);
 		this.plugin = plugin;
 		const clonedAgent = JSON.parse(JSON.stringify(agent)) as unknown as Agent; // Deep copy with explicit typing
