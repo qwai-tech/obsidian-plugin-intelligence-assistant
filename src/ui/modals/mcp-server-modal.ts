@@ -56,8 +56,8 @@ export class MCPServerModal extends Modal {
 			label: t('modals.mcpServer.connectionMode.name'),
 			description: t('modals.mcpServer.connectionMode.desc')
 		}).addDropdown(dropdown => dropdown
-				.addOption('Auto', t('modals.mcpServer.connectionMode.auto'))
-				.addOption('Manual', t('modals.mcpServer.connectionMode.manual'))
+				.addOption('auto', t('modals.mcpServer.connectionMode.auto'))
+				.addOption('manual', t('modals.mcpServer.connectionMode.manual'))
 				.setValue(this.draft.connectionMode ?? 'auto')
 				.onChange(value => {
 					this.draft.connectionMode = value as 'auto' | 'manual';

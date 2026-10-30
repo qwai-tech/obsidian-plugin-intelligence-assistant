@@ -156,5 +156,17 @@ describe('migrateSettings — removed SAP AI Core provider', () => {
 		expect(migrateSettings(settings)).toBe(true);
 		expect(settings.conversationTitleMode).toBe('auto-summary');
 	});
+
+	it('lowercases MCP connection modes saved by the old server dialog', () => {
+		const settings = userConfigToPluginSettings(null);
+		settings.mcpServers = [
+			{ name: 'a', command: 'x', enabled: true, connectionMode: 'Auto' as never },
+			{ name: 'b', command: 'x', enabled: true, connectionMode: 'Manual' as never },
+			{ name: 'c', command: 'x', enabled: true, connectionMode: 'manual' },
+		];
+
+		expect(migrateSettings(settings)).toBe(true);
+		expect(settings.mcpServers.map(server => server.connectionMode)).toEqual(['auto', 'manual', 'manual']);
+	});
 });
 

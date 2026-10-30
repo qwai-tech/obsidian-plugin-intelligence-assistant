@@ -10,7 +10,20 @@ export function migrateSettings(settings: PluginSettings): boolean {
 	const toolAccessChanged = migrateAllAgents(settings.agents, cliToolIds).size > 0;
 	const removedProviderDropped = dropRemovedProviders(settings);
 	const titleModeRenamed = renameTitleMode(settings);
-	return strategyChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed;
+	const connectionModesFixed = lowercaseConnectionModes(settings);
+	return strategyChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed || connectionModesFixed;
+}
+
+function lowercaseConnectionModes(settings: PluginSettings): boolean {
+	let changed = false;
+	for (const server of settings.mcpServers) {
+		const mode = server.connectionMode?.toLowerCase();
+		if (mode && mode !== server.connectionMode && (mode === 'auto' || mode === 'manual')) {
+			server.connectionMode = mode;
+			changed = true;
+		}
+	}
+	return changed;
 }
 
 function renameTitleMode(settings: PluginSettings): boolean {
