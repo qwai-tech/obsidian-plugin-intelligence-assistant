@@ -31,7 +31,7 @@ export class AgentSenseService {
 	constructor(
 		private readonly app: App,
 		private readonly knowledge: KnowledgeBase,
-		public readonly memoryService?: AgentMemoryReader,
+		private readonly memoryService?: AgentMemoryReader,
 	) {}
 
 	async sense(input: SenseInput): Promise<AgentSenseContext> {

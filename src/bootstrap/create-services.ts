@@ -41,10 +41,12 @@ export function createServices(host: ServiceHost): OwnedServices {
 		await data.tokenUsageRepo.recordUsage(record);
 		activity.usageRecorded();
 	};
+	const agentMemory = new AgentMemoryService(data.agentMemoryRepo);
 	const agentLoop = new AgentEngineLoop({
 		app,
 		toolRegistry: registry,
-		senseService: new AgentSenseService(app, rag, new AgentMemoryService(data.agentMemoryRepo)),
+		senseService: new AgentSenseService(app, rag, agentMemory),
+		memoryWriter: agentMemory,
 		historyCompactor: new HistoryCompactor(),
 		webSearchService: webSearch,
 		memoryIndex: rag,

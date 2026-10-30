@@ -382,19 +382,11 @@ describe('AgentEngineLoop', () => {
 				}),
 			})),
 		};
-		const memoryService = {
-			getSnapshot: jest.fn(async () => ({
-				agentId: 'agent-1',
-				workingNotes: [],
-				researchLog: '',
-				preferences: {},
-				updatedAt: Date.now(),
-			})),
+		const memoryWriter = {
 			setPreference: jest.fn(async () => undefined),
 			appendResearchLog: jest.fn(async () => undefined),
 		};
 		const senseService = {
-			memoryService,
 			sense: jest.fn(async () => ({ userQuery: 'remember', activeFilePath: null, references: [], sections: [], ragSources: [], memory: null })),
 			formatSenseContext: jest.fn(() => 'sense context'),
 		};
@@ -409,6 +401,7 @@ describe('AgentEngineLoop', () => {
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
 			memoryIndex,
+			memoryWriter,
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
 			recordUsage: jest.fn(async () => undefined),
 		});
@@ -433,8 +426,8 @@ describe('AgentEngineLoop', () => {
 			responseFormat: { type: 'json_object' },
 		}));
 		expect(provider.streamChat).toHaveBeenCalledTimes(1);
-		expect(memoryService.setPreference).toHaveBeenCalledWith('agent-1', 'tone', 'concise');
-		expect(memoryService.appendResearchLog).toHaveBeenCalledWith('agent-1', 'Finding A');
+		expect(memoryWriter.setPreference).toHaveBeenCalledWith('agent-1', 'tone', 'concise');
+		expect(memoryWriter.appendResearchLog).toHaveBeenCalledWith('agent-1', 'Finding A');
 		expect(memoryIndex.indexMemory).toHaveBeenCalledWith('agent-1', 'Finding A');
 	});
 });

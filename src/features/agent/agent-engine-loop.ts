@@ -22,6 +22,11 @@ const AUTONOMY_INTENT_RE = /(自主完成|自动完成|自动应用|自动创建
 
 export type AgentUsageRecorder = (record: UsageRecord) => Promise<void>;
 
+export interface AgentMemoryWriter {
+	setPreference(agentId: string, key: string, value: string): Promise<void>;
+	appendResearchLog(agentId: string, entry: string): Promise<void>;
+}
+
 interface AgentEngineLoopDeps {
 	app?: App;
 	toolRegistry: AppToolRegistry;
@@ -29,6 +34,7 @@ interface AgentEngineLoopDeps {
 	historyCompactor: HistoryCompactor;
 	webSearchService: WebSearchService;
 	memoryIndex?: MemoryIndex;
+	memoryWriter?: AgentMemoryWriter;
 	journal?: RunJournal;
 	createProvider: (modelId: string) => { provider: ILLMProvider; providerId: string } | null;
 	recordUsage?: AgentUsageRecorder;
@@ -120,8 +126,8 @@ export class AgentEngineLoop {
 				reasoningContent: run.reasoning || undefined,
 			});
 
-			if (activeAgent?.id && this.deps.senseService.memoryService) {
-				void this.consolidateMemory(activeAgent.id, messages, finalContent, options);
+			if (activeAgent?.id && this.deps.memoryWriter) {
+				void this.consolidateMemory(activeAgent.id, this.deps.memoryWriter, messages, finalContent, options);
 			}
 		} catch (error) {
 			callbacks.onError(error instanceof Error ? error : new Error(String(error)));
@@ -146,12 +152,11 @@ export class AgentEngineLoop {
 		});
 	}
 
-	private async consolidateMemory(agentId: string, history: Message[], finalOutput: string, options: AgentLoopOptions): Promise<void> {
+	private async consolidateMemory(agentId: string, writer: AgentMemoryWriter, history: Message[], finalOutput: string, options: AgentLoopOptions): Promise<void> {
 		try {
 			const providerBundle = this.deps.createProvider(options.model);
-			if (!providerBundle || !this.deps.senseService.memoryService) return;
+			if (!providerBundle) return;
 
-			const memoryService = this.deps.senseService.memoryService;
 			const reflectionPrompt = `
 Analyze the following conversation between a user and an Obsidian agent.
 Extract:
@@ -188,10 +193,6 @@ assistant: ${finalOutput}
 				const data = JSON.parse(jsonMatch[0]) as {
 					preferences?: Record<string, unknown>;
 					newResearchEntries?: string[];
-				};
-				const writer = memoryService as unknown as {
-					setPreference(agentId: string, key: string, value: string): Promise<void>;
-					appendResearchLog(agentId: string, entry: string): Promise<void>;
 				};
 				if (data.preferences) {
 					for (const [key, value] of Object.entries(data.preferences)) {
