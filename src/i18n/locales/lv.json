@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Skatīt un pārvaldīt modeļus no visiem konfigurētajiem pakalpojumu sniedzējiem. Noklikšķiniet uz «atsvaidzināt modeļus», lai iegūtu jaunākos pieejamos modeļus.",
-      "providerCount_one": "{{count}} pakalpojumu sniedzējs konfigurēts",
-      "providerCount_other": "{{count}} pakalpojumu sniedzēji konfigurēti",
-      "providerCount": "{{count}} pakalpojumu sniedzēji konfigurēti",
       "refreshAll": "atsvaidzināt visus modeļus",
       "empty": "Vēl nav konfigurētu pakalpojumu sniedzēju. Vispirms pievienojiet pakalpojumu sniedzējus pakalpojumu sniedzēju cilnē.",
       "noModels": "Nav pieejamu modeļu. Noklikšķiniet uz «atsvaidzināt visus modeļus» vai atsvaidziniet atsevišķus pakalpojumu sniedzējus pakalpojumu sniedzēju cilnē.",
       "noMatch": "Neviens modelis neatbilst pašreizējiem filtriem. Pielāgojiet vai notīriet filtrus, lai skatītu rezultātus.",
-      "modelCount_one": "• {{count}} modelis kešatmiņā",
-      "modelCount_other": "• {{count}} modeļi kešatmiņā",
-      "modelCount": "• {{count}} modeļi kešatmiņā",
-      "matchCount_one": "• {{count}} atbilst izvēlētajiem filtriem",
-      "matchCount_other": "• {{count}} atbilst izvēlētajiem filtriem",
-      "matchCount": "• {{count}} atbilst izvēlētajiem filtriem",
       "status": {
         "enabled": "Iespējots",
         "disabled": "Atspējots"
@@ -92,12 +83,18 @@
         "capabilities": "Iespējas",
         "status": "Statuss",
         "actions": "Darbības"
-      }
+      },
+      "matchCount_one": "• {{count}} atbilstība atlasītajiem filtriem",
+      "matchCount_zero": "• {{count}} atbilstības atlasītajiem filtriem",
+      "matchCount_other": "• {{count}} atbilstības atlasītajiem filtriem",
+      "modelCount_one": "• {{count}} modelis kešatmiņā",
+      "modelCount_zero": "• {{count}} modeļi kešatmiņā",
+      "modelCount_other": "• {{count}} modeļi kešatmiņā",
+      "providerCount_one": "{{count}} pakalpojumu sniedzējs konfigurēts",
+      "providerCount_zero": "{{count}} pakalpojumu sniedzēji konfigurēti",
+      "providerCount_other": "{{count}} pakalpojumu sniedzēji konfigurēti"
     },
     "provider": {
-      "count_one": "{{count}} pakalpojumu sniedzējs konfigurēts",
-      "count_other": "{{count}} pakalpojumu sniedzēji konfigurēti",
-      "count": "{{count}} pakalpojumu sniedzēji konfigurēti",
       "addBtn": "+ Pievienot pakalpojumu sniedzēju",
       "empty": "Nav konfigurētu pakalpojumu sniedzēju. Izvēlieties «Pievienot pakalpojumu sniedzēju», lai sāktu.",
       "status": {
@@ -116,8 +113,8 @@
       "models": {
         "none": "Nav modeļu",
         "count_one": "{{count}} modelis",
-        "count_other": "{{count}} modeļi",
-        "count": "{{count}} modeļi"
+        "count_zero": "{{count}} modeļi",
+        "count_other": "{{count}} modeļi"
       },
       "ollama": {
         "checkingVersion": "Pārbauda versiju...",
@@ -153,7 +150,10 @@
       },
       "confirm": {
         "delete": "Noņemt pakalpojumu sniedzēju {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} pakalpojumu sniedzējs konfigurēts",
+      "count_zero": "{{count}} pakalpojumu sniedzēji konfigurēti",
+      "count_other": "{{count}} pakalpojumu sniedzēji konfigurēti"
     },
     "mcp": {
       "desc": "Konfigurēt Model Context Protocol (MCP) serverus, lai paplašinātu aģentu iespējas ar ārējiem rīkiem un datu avotiem.",
@@ -165,9 +165,6 @@
       "untitled": "Nenosaukts MCP serveris",
       "notConfigured": "Nav konfigurēts",
       "cached": "Kešatmiņā",
-      "envVars_one": "{{count}} vides mainīgais",
-      "envVars_other": "{{count}} vides mainīgie",
-      "envVars": "{{count}} vides mainīgie",
       "status": {
         "disabled": "Atspējots",
         "connected": "savienots",
@@ -177,12 +174,12 @@
         "autoConnect": "Automātisks savienojums"
       },
       "toolCount": {
-        "live_one": "{{count}} aktīvs rīks",
-        "live_other": "{{count}} aktīvi rīki",
-        "live": "{{count}} aktīvi rīki",
         "cached_one": "{{count}} kešatmiņā saglabāts rīks",
+        "cached_zero": "{{count}} kešatmiņā saglabāti rīki",
         "cached_other": "{{count}} kešatmiņā saglabāti rīki",
-        "cached": "{{count}} kešatmiņā saglabāti rīki"
+        "live_one": "{{count}} aktīvs rīks",
+        "live_zero": "{{count}} aktīvi rīki",
+        "live_other": "{{count}} aktīvi rīki"
       },
       "actions": {
         "edit": "Rediģēt",
@@ -204,27 +201,33 @@
         "disconnectFailed": "Neizdevās atvienoties no {{name}}",
         "connectFailed": "Neizdevās savienoties ar {{name}}",
         "testNoCommand": "lūdzu, ievadiet komandu pirms savienojuma pārbaudes",
-        "testSuccess": "veiksmīgi savienots! Atrasti {{count}} rīki.",
         "testFailed": "Savienojums neizdevās: {{message}}",
-        "refreshedAll_one": "atsvaidzināti rīki {{count}} serverim",
-        "refreshedAll_other": "atsvaidzināti rīki {{count}} serveriem",
-        "refreshedAll": "atsvaidzināti rīki {{count}} serveriem",
         "refreshedPartial": "atsvaidzināti {{success}} serveri, {{failed}} neizdevās",
         "noServersConfigured": "Nav konfigurētu MCP serveru",
-        "testingAll": "Pārbauda {{count}} MCP servera savienojumus...",
-        "testAllSuccess": "visi {{count}} MCP serveri veiksmīgi savienoti!",
-        "testAllPartial": "{{successful}} savienoti, {{failed}} neizdevās"
+        "testAllPartial": "{{successful}} savienoti, {{failed}} neizdevās",
+        "refreshedAll_one": "Atsvaidzināti rīki {{count}} serverim",
+        "refreshedAll_zero": "Atsvaidzināti rīki {{count}} serveriem",
+        "refreshedAll_other": "Atsvaidzināti rīki {{count}} serveriem",
+        "testAllSuccess_one": "{{count}} MCP serveris veiksmīgi savienots.",
+        "testAllSuccess_zero": "Visi {{count}} MCP serveri veiksmīgi savienoti.",
+        "testAllSuccess_other": "Visi {{count}} MCP serveri veiksmīgi savienoti.",
+        "testSuccess_one": "Savienots. Atrasts {{count}} rīks.",
+        "testSuccess_zero": "Savienots. Atrasti {{count}} rīki.",
+        "testSuccess_other": "Savienots. Atrasti {{count}} rīki.",
+        "testingAll_one": "Pārbauda {{count}} MCP servera savienojumu…",
+        "testingAll_zero": "Pārbauda {{count}} MCP serveru savienojumus…",
+        "testingAll_other": "Pārbauda {{count}} MCP serveru savienojumus…"
       },
       "confirm": {
         "delete": "Dzēst MCP serveri «{{name}}»?"
       },
-      "namePlaceholder": "Acme MCP serveris"
+      "namePlaceholder": "Acme MCP serveris",
+      "envVars_one": "{{count}} vides mainīgais",
+      "envVars_zero": "{{count}} vides mainīgie",
+      "envVars_other": "{{count}} vides mainīgie"
     },
     "agents": {
       "desc": "Izveidot un pārvaldīt AI aģentus ar specifiskām iespējām, rīkiem un uzvedību.",
-      "count_one": "{{count}} aģents konfigurēts",
-      "count_other": "{{count}} aģenti konfigurēti",
-      "count": "{{count}} aģenti konfigurēti",
       "addBtn": "+ pievienot aģentu",
       "empty": "Nav konfigurētu aģentu. Izvēlieties pievienot aģentu, lai sāktu.",
       "defaultBadge": "Noklusējums",
@@ -238,11 +241,11 @@
       "tools": {
         "builtIn": "{{count}} iebūvēts",
         "mcpServer_one": "{{count}} MCP serveris",
+        "mcpServer_zero": "{{count}} MCP serveri",
         "mcpServer_other": "{{count}} MCP serveri",
-        "mcpServer": "{{count}} MCP serveri",
         "mcpTool_one": "{{count}} MCP rīks",
-        "mcpTool_other": "{{count}} MCP rīki",
-        "mcpTool": "{{count}} MCP rīki"
+        "mcpTool_zero": "{{count}} MCP rīki",
+        "mcpTool_other": "{{count}} MCP rīki"
       },
       "actions": {
         "edit": "Rediģēt",
@@ -250,7 +253,10 @@
       },
       "confirm": {
         "delete": "Dzēst aģentu «{{name}}»?"
-      }
+      },
+      "count_one": "{{count}} aģents konfigurēts",
+      "count_zero": "{{count}} aģenti konfigurēti",
+      "count_other": "{{count}} aģenti konfigurēti"
     },
     "prompts": {
       "desc": "Pārvaldīt sistēmas uzvednes, kas nosaka AI asistenta uzvedību un personību.",
@@ -352,8 +358,10 @@
         },
         "notices": {
           "removed": "HTTP avots noņemts",
-          "reloaded": "Atkārtoti ielādētas {{count}} darbības",
-          "reloadFailed": "Neizdevās atkārtoti ielādēt HTTP avotu. Skatiet konsoli sīkākai informācijai."
+          "reloadFailed": "Neizdevās atkārtoti ielādēt HTTP avotu. Skatiet konsoli sīkākai informācijai.",
+          "reloaded_one": "Atkārtoti ielādēta {{count}} darbība",
+          "reloaded_zero": "Atkārtoti ielādētas {{count}} darbības",
+          "reloaded_other": "Atkārtoti ielādētas {{count}} darbības"
         },
         "modal": {
           "defaultTitle": "HTTP avots",
@@ -419,9 +427,6 @@
           "actions": "Darbības"
         },
         "unnamed": "Nenosaukts CLI rīks",
-        "paramCount_one": "{{count}} parametrs",
-        "paramCount_other": "{{count}} parametri",
-        "paramCount": "{{count}} parametri",
         "noParams": "Nav",
         "statusEnabled": "Iespējots",
         "statusDisabled": "Atspējots",
@@ -554,7 +559,10 @@
             "preset-screencapture": "Ekrānuzņēmums",
             "preset-applescript-list-apps": "Uzskaitīt darbojošās lietotnes"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parametrs",
+        "paramCount_zero": "{{count}} parametri",
+        "paramCount_other": "{{count}} parametri"
       }
     },
     "rag": {
@@ -844,9 +852,6 @@
         "desc": "Prefikss (emocijzīme vai teksts), kas tiek rādīts pirms visām ātrā darbībām konteksta izvēlnē",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} darbība konfigurēta ({{enabled}} iespējotas)",
-      "count_other": "{{count}} darbības konfigurētas ({{enabled}} iespējotas)",
-      "count": "{{count}} darbības konfigurētas ({{enabled}} iespējotas)",
       "addBtn": "+ pievienot ātro darbību",
       "empty": "Nav konfigurētu ātro darbību. Izvēlieties pievienot ātro darbību, lai sāktu.",
       "defaultModel": "Noklusējums",
@@ -912,7 +917,10 @@
       "placeholders": {
         "name": "Padarīt tekstu garāku",
         "prompt": "Paplašini un izvērs šo tekstu…"
-      }
+      },
+      "count_one": "{{count}} darbība konfigurēta (iespējotas: {{enabled}})",
+      "count_zero": "{{count}} darbības konfigurētas (iespējotas: {{enabled}})",
+      "count_other": "{{count}} darbības konfigurētas (iespējotas: {{enabled}})"
     },
     "usage": {
       "desc": "Izsekot pilnvaru patēriņam dažādiem pakalpojumu sniedzējiem un modeļiem. Dati tiek uzkrāti visās sarunās.",
@@ -994,12 +1002,16 @@
       "ragDisabled": "RAG ir atspējots iestatījumos. Iespējojiet to sadaļā iestatījumi → tērzēšanas funkcijas → RAG.",
       "webSearchDisabled": "Tīmekļa meklēšana ir atspējota iestatījumos. Iespējojiet to sadaļā iestatījumi → tērzēšanas funkcijas → tīmekļa meklēšana.",
       "attached": "Pievienots: {{name}}",
-      "attachedImages": "Pievienotas {{count}} attēls(-i)",
-      "referencesAdded": "Pievienotas {{count}} atsauces",
       "fileNotFound": "Fails nav atrasts: {{path}}",
       "unableToLoadRag": "Nevar ielādēt RAG statistiku.",
       "referenced": "Atsaukts: {{name}}",
-      "openViewFailed": "Nevarēja atvērt tērzēšanas skatu."
+      "openViewFailed": "Nevarēja atvērt tērzēšanas skatu.",
+      "attachedImages_one": "Pievienots {{count}} attēls",
+      "attachedImages_zero": "Pievienoti {{count}} attēli",
+      "attachedImages_other": "Pievienoti {{count}} attēli",
+      "referencesAdded_one": "Pievienota {{count}} atsauce",
+      "referencesAdded_zero": "Pievienotas {{count}} atsauces",
+      "referencesAdded_other": "Pievienotas {{count}} atsauces"
     },
     "status": {
       "unavailable": "Nav pieejams",
@@ -1020,9 +1032,9 @@
       "step2": "Iespējot RAG",
       "step3": "Atlasīt velventī indeksēšanu",
       "close": "Aizvērt",
-      "retrieved_one": "iegūts no {{count}} dokumenta",
-      "retrieved_other": "iegūts no {{count}} dokumentiem",
-      "retrieved": "iegūts no {{count}} dokumentiem"
+      "retrieved_one": "Iegūts no {{count}} dokumenta",
+      "retrieved_zero": "Iegūts no {{count}} dokumentiem",
+      "retrieved_other": "Iegūts no {{count}} dokumentiem"
     },
     "ragTooltip": {
       "status": "RAG indeksa statuss:",
@@ -1141,8 +1153,6 @@
       "apply": "Lietot",
       "applyAll": "Lietot visu",
       "applied": "Lietots",
-      "changes_one": "{{count}} izmaiņa",
-      "changes_other": "{{count}} izmaiņas",
       "confirm": "Lietot {{summary}}?",
       "appliedNotice": "Lietots: {{summary}}",
       "operations": {
@@ -1152,7 +1162,10 @@
         "delete": "Dzēst",
         "move": "Pārvietot",
         "batch": "Pakete"
-      }
+      },
+      "changes_one": "{{count}} izmaiņa",
+      "changes_zero": "{{count}} izmaiņas",
+      "changes_other": "{{count}} izmaiņas"
     }
   },
   "modals": {
@@ -1213,15 +1226,15 @@
       "mcp": {
         "title": "MCP piekļuve",
         "noServers": "Nav konfigurētu MCP serveru. Pievienojiet serverus sadaļā Iestatījumi → MCP, lai atbloķētu šīs opcijas.",
-        "toolsCached_one": "{{count}} rīks kešatmiņā",
-        "toolsCached_other": "{{count}} rīki kešatmiņā",
-        "toolsCached": "{{count}} rīki kešatmiņā",
         "noToolsCached": "Kešatmiņā vēl nav rīku. Iespējojiet pilnu piekļuvi vai atsvaidziniet kešatmiņu.",
         "showTools": "Rādīt rīkus",
         "hideTools": "Slēpt rīkus",
         "selected": "Atlasīts",
         "notSelected": "Nav atlasīts",
-        "noToolsAvailable": "Šajā serverī vēl nav pieejamu rīku."
+        "noToolsAvailable": "Šajā serverī vēl nav pieejamu rīku.",
+        "toolsCached_one": "{{count}} rīks kešatmiņā",
+        "toolsCached_zero": "{{count}} rīki kešatmiņā",
+        "toolsCached_other": "{{count}} rīki kešatmiņā"
       },
       "notices": {
         "promptRequired": "Lūdzu, norādiet nosaukumu un saturu jaunajai sistēmas uzvedne."
@@ -1303,10 +1316,12 @@
       },
       "cachedModels": "Kešatmiņā saglabātie modeļi: {{count}}",
       "connectionFailed": "Savienojuma pārbaude neizdevās. Pārbaudiet pakalpojumu sniedzēja iestatījumus.",
-      "connectionSuccess": "Savienojums izdevies. Kešatmiņā saglabāti modeļi: {{count}}.",
       "noCachedModels": "Kešatmiņā nav modeļu",
       "testConnection": "Pārbaudīt savienojumu",
-      "testing": "Pārbauda..."
+      "testing": "Pārbauda...",
+      "connectionSuccess_one": "Savienojums izdevies. Kešatmiņā saglabāts {{count}} modelis.",
+      "connectionSuccess_zero": "Savienojums izdevies. Kešatmiņā saglabāti {{count}} modeļi.",
+      "connectionSuccess_other": "Savienojums izdevies. Kešatmiņā saglabāti {{count}} modeļi."
     },
     "mcpInspector": {
       "title": "MCP inspektors",
@@ -1329,12 +1344,6 @@
         "statusDisabled": "Atspējots",
         "statusConnected": "● savienots",
         "statusDisconnected": "○ atvienots",
-        "toolsLive_one": "{{count}} rīks",
-        "toolsLive_other": "{{count}} rīki",
-        "toolsLive": "{{count}} rīki",
-        "toolsCached_one": "{{count}} rīks (kešatmiņā)",
-        "toolsCached_other": "{{count}} rīki (kešatmiņā)",
-        "toolsCached": "{{count}} rīki (kešatmiņā)",
         "noTools": "0 rīku",
         "connectBtn": "Savienot",
         "disconnectBtn": "Atvienot",
@@ -1346,7 +1355,13 @@
           "connected": "Savienots ar {{name}}",
           "failedDisconnect": "Neizdevās atvienoties no {{name}}: {{message}}",
           "failedConnect": "Neizdevās savienoties ar {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} rīks (kešatmiņā)",
+        "toolsCached_zero": "{{count}} rīki (kešatmiņā)",
+        "toolsCached_other": "{{count}} rīki (kešatmiņā)",
+        "toolsLive_one": "{{count}} rīks",
+        "toolsLive_zero": "{{count}} rīki",
+        "toolsLive_other": "{{count}} rīki"
       },
       "tools": {
         "title": "Pieejamie MCP rīki",
@@ -1569,8 +1584,6 @@
   },
   "capability": {
     "title": "Rīki un atļaujas",
-    "subtitle_one": "{{agent}} var izmantot {{count}} rīku.",
-    "subtitle_other": "{{agent}} var izmantot {{count}} rīkus.",
     "chatMode": "Tērzēšanas režīms",
     "permissions": "Pašreizējās atļaujas",
     "reads": "Šis uzdevums var lasīt",
@@ -1590,8 +1603,6 @@
     },
     "rows": {
       "vaultContext": "Velves konteksts",
-      "referencesPlusContext_one": "{{count}} skaidra atsauce un aktīvais konteksts",
-      "referencesPlusContext_other": "{{count}} skaidras atsauces un aktīvais konteksts",
       "activeContext": "Aktīvā piezīme un grafa konteksta momentuzņēmums",
       "readTools": "Velves lasīšanas rīki",
       "enabledCount": "Iespējoti: {{count}}",
@@ -1605,12 +1616,19 @@
       "off": "Izslēgts",
       "disabledInSettings": "Atspējots iestatījumos",
       "custom": "Pielāgoti rīki",
-      "customEnabled_one": "Iespējots {{count}} MCP, OpenAPI vai CLI rīks",
-      "customEnabled_other": "Iespējoti {{count}} MCP, OpenAPI vai CLI rīki",
       "noneEnabled": "Neviens nav iespējots",
       "destructive": "Destruktīvas velves darbības",
-      "notProvided": "Iebūvētie rīki to nenodrošina"
-    }
+      "notProvided": "Iebūvētie rīki to nenodrošina",
+      "customEnabled_one": "Iespējots {{count}} MCP, OpenAPI vai CLI rīks",
+      "customEnabled_zero": "Iespējoti {{count}} MCP, OpenAPI vai CLI rīki",
+      "customEnabled_other": "Iespējoti {{count}} MCP, OpenAPI vai CLI rīki",
+      "referencesPlusContext_one": "{{count}} skaidra atsauce un aktīvais konteksts",
+      "referencesPlusContext_zero": "{{count}} skaidras atsauces un aktīvais konteksts",
+      "referencesPlusContext_other": "{{count}} skaidras atsauces un aktīvais konteksts"
+    },
+    "subtitle_one": "{{agent}} var izmantot {{count}} rīku.",
+    "subtitle_zero": "{{agent}} var izmantot {{count}} rīkus.",
+    "subtitle_other": "{{agent}} var izmantot {{count}} rīkus."
   },
   "markdown": {
     "run": "Palaist"
@@ -1618,14 +1636,15 @@
   "rag": {
     "notices": {
       "noFiles": "Nav Markdown piezīmju, ko indeksēt.",
-      "starting_one": "Indeksē {{count}} piezīmi…",
-      "starting_other": "Indeksē {{count}} piezīmes…",
       "progress": "Indeksē: {{done}} no {{total}} piezīmēm",
       "completed": "Indeksēšana pabeigta: indeksētas {{indexed}}, neizdevās {{failed}}.",
       "noIndex": "Vēl nekas nav indeksēts. Palaidiet \"Embed all documents\", lai indeksētu velvi.",
       "gradingError": "Dokumentu vērtēšana neizdevās: {{message}}",
       "clearing": "Notīra indeksu…",
-      "cleared": "Indekss notīrīts."
+      "cleared": "Indekss notīrīts.",
+      "starting_one": "Indeksē {{count}} piezīmi…",
+      "starting_zero": "Indeksē {{count}} piezīmes…",
+      "starting_other": "Indeksē {{count}} piezīmes…"
     }
   }
 }

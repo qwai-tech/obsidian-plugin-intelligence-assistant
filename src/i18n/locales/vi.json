@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Xem và quản lý các mô hình từ tất cả nhà cung cấp đã cấu hình. Nhấp \"làm mới mô hình\" để tải các mô hình mới nhất.",
-      "providerCount_one": "{{count}} nhà cung cấp đã cấu hình",
-      "providerCount_other": "{{count}} nhà cung cấp đã cấu hình",
-      "providerCount": "{{count}} nhà cung cấp đã cấu hình",
       "refreshAll": "làm mới tất cả mô hình",
       "empty": "Chưa có nhà cung cấp nào được cấu hình. Thêm nhà cung cấp trong tab nhà cung cấp trước.",
       "noModels": "Không có mô hình nào. Nhấp \"làm mới tất cả mô hình\" hoặc làm mới từng nhà cung cấp trong tab nhà cung cấp.",
       "noMatch": "Không có mô hình nào khớp với bộ lọc hiện tại. Điều chỉnh hoặc xóa bộ lọc để xem kết quả.",
-      "modelCount_one": "• {{count}} mô hình đã lưu cache",
-      "modelCount_other": "• {{count}} mô hình đã lưu cache",
-      "modelCount": "• {{count}} mô hình đã lưu cache",
-      "matchCount_one": "• {{count}} kết quả khớp bộ lọc đã chọn",
-      "matchCount_other": "• {{count}} kết quả khớp bộ lọc đã chọn",
-      "matchCount": "• {{count}} kết quả khớp bộ lọc đã chọn",
       "status": {
         "enabled": "Đã bật",
         "disabled": "Đã tắt"
@@ -92,12 +83,12 @@
         "capabilities": "Khả năng",
         "status": "Trạng thái",
         "actions": "Thao tác"
-      }
+      },
+      "matchCount_other": "• {{count}} kết quả khớp bộ lọc đã chọn",
+      "modelCount_other": "• Đã lưu cache {{count}} mô hình",
+      "providerCount_other": "Đã cấu hình {{count}} nhà cung cấp"
     },
     "provider": {
-      "count_one": "{{count}} nhà cung cấp đã cấu hình",
-      "count_other": "{{count}} nhà cung cấp đã cấu hình",
-      "count": "{{count}} nhà cung cấp đã cấu hình",
       "addBtn": "+ Thêm nhà cung cấp",
       "empty": "Chưa có nhà cung cấp nào. Chọn \"Thêm nhà cung cấp\" để bắt đầu.",
       "status": {
@@ -115,9 +106,7 @@
       },
       "models": {
         "none": "Không có mô hình",
-        "count_one": "{{count}} mô hình",
-        "count_other": "{{count}} mô hình",
-        "count": "{{count}} mô hình"
+        "count_other": "{{count}} mô hình"
       },
       "ollama": {
         "checkingVersion": "Đang kiểm tra phiên bản...",
@@ -153,7 +142,8 @@
       },
       "confirm": {
         "delete": "Xóa nhà cung cấp {{provider}}?"
-      }
+      },
+      "count_other": "Đã cấu hình {{count}} nhà cung cấp"
     },
     "mcp": {
       "desc": "Cấu hình máy chủ Model Context Protocol (MCP) để mở rộng khả năng của tác nhân với các công cụ và nguồn dữ liệu bên ngoài.",
@@ -165,9 +155,6 @@
       "untitled": "Máy chủ MCP chưa đặt tên",
       "notConfigured": "Chưa cấu hình",
       "cached": "Đã lưu cache",
-      "envVars_one": "{{count}} biến môi trường",
-      "envVars_other": "{{count}} biến môi trường",
-      "envVars": "{{count}} biến môi trường",
       "status": {
         "disabled": "Đã tắt",
         "connected": "đã kết nối",
@@ -177,12 +164,8 @@
         "autoConnect": "Tự động kết nối"
       },
       "toolCount": {
-        "live_one": "{{count}} công cụ trực tiếp",
-        "live_other": "{{count}} công cụ trực tiếp",
-        "live": "{{count}} công cụ trực tiếp",
-        "cached_one": "{{count}} công cụ đã lưu cache",
         "cached_other": "{{count}} công cụ đã lưu cache",
-        "cached": "{{count}} công cụ đã lưu cache"
+        "live_other": "{{count}} công cụ trực tiếp"
       },
       "actions": {
         "edit": "Chỉnh sửa",
@@ -204,27 +187,23 @@
         "disconnectFailed": "Không thể ngắt kết nối khỏi {{name}}",
         "connectFailed": "Không thể kết nối tới {{name}}",
         "testNoCommand": "vui lòng nhập lệnh trước khi kiểm tra kết nối",
-        "testSuccess": "đã kết nối thành công! Tìm thấy {{count}} công cụ.",
         "testFailed": "Kết nối thất bại: {{message}}",
-        "refreshedAll_one": "đã làm mới công cụ cho {{count}} máy chủ",
-        "refreshedAll_other": "đã làm mới công cụ cho {{count}} máy chủ",
-        "refreshedAll": "đã làm mới công cụ cho {{count}} máy chủ",
         "refreshedPartial": "đã làm mới {{success}} máy chủ, {{failed}} thất bại",
         "noServersConfigured": "Không có máy chủ MCP nào được cấu hình",
-        "testingAll": "Đang kiểm tra {{count}} kết nối máy chủ MCP...",
-        "testAllSuccess": "tất cả {{count}} máy chủ MCP đã kết nối thành công!",
-        "testAllPartial": "{{successful}} đã kết nối, {{failed}} thất bại"
+        "testAllPartial": "{{successful}} đã kết nối, {{failed}} thất bại",
+        "refreshedAll_other": "Đã làm mới công cụ cho {{count}} máy chủ",
+        "testAllSuccess_other": "Đã kết nối thành công {{count}} máy chủ MCP.",
+        "testSuccess_other": "Đã kết nối. Tìm thấy {{count}} công cụ.",
+        "testingAll_other": "Đang kiểm tra {{count}} kết nối máy chủ MCP…"
       },
       "confirm": {
         "delete": "Xóa máy chủ MCP \"{{name}}\"?"
       },
-      "namePlaceholder": "Máy chủ MCP Acme"
+      "namePlaceholder": "Máy chủ MCP Acme",
+      "envVars_other": "{{count}} biến môi trường"
     },
     "agents": {
       "desc": "Tạo và quản lý các tác nhân AI với khả năng, công cụ và hành vi cụ thể.",
-      "count_one": "{{count}} tác nhân đã cấu hình",
-      "count_other": "{{count}} tác nhân đã cấu hình",
-      "count": "{{count}} tác nhân đã cấu hình",
       "addBtn": "+ thêm tác nhân",
       "empty": "Chưa có tác nhân nào. Chọn thêm tác nhân để bắt đầu.",
       "defaultBadge": "Mặc định",
@@ -237,12 +216,8 @@
       },
       "tools": {
         "builtIn": "{{count}} tích hợp sẵn",
-        "mcpServer_one": "{{count}} máy chủ MCP",
         "mcpServer_other": "{{count}} máy chủ MCP",
-        "mcpServer": "{{count}} máy chủ MCP",
-        "mcpTool_one": "{{count}} công cụ MCP",
-        "mcpTool_other": "{{count}} công cụ MCP",
-        "mcpTool": "{{count}} công cụ MCP"
+        "mcpTool_other": "{{count}} công cụ MCP"
       },
       "actions": {
         "edit": "Chỉnh sửa",
@@ -250,7 +225,8 @@
       },
       "confirm": {
         "delete": "Xóa tác nhân \"{{name}}\"?"
-      }
+      },
+      "count_other": "Đã cấu hình {{count}} tác nhân"
     },
     "prompts": {
       "desc": "Quản lý các lời nhắc hệ thống xác định hành vi và tính cách của trợ lý AI.",
@@ -352,8 +328,8 @@
         },
         "notices": {
           "removed": "Đã xóa nguồn HTTP",
-          "reloaded": "Đã tải lại {{count}} thao tác",
-          "reloadFailed": "Không thể tải lại nguồn HTTP. Kiểm tra console để biết chi tiết."
+          "reloadFailed": "Không thể tải lại nguồn HTTP. Kiểm tra console để biết chi tiết.",
+          "reloaded_other": "Đã tải lại {{count}} thao tác"
         },
         "modal": {
           "defaultTitle": "Nguồn HTTP",
@@ -419,9 +395,6 @@
           "actions": "Thao tác"
         },
         "unnamed": "Công cụ CLI chưa đặt tên",
-        "paramCount_one": "{{count}} tham số",
-        "paramCount_other": "{{count}} tham số",
-        "paramCount": "{{count}} tham số",
         "noParams": "Không có",
         "statusEnabled": "Đã bật",
         "statusDisabled": "Đã tắt",
@@ -554,7 +527,8 @@
             "preset-screencapture": "Chụp màn hình",
             "preset-applescript-list-apps": "Liệt kê ứng dụng đang chạy"
           }
-        }
+        },
+        "paramCount_other": "{{count}} tham số"
       }
     },
     "rag": {
@@ -844,9 +818,6 @@
         "desc": "Tiền tố (emoji hoặc văn bản) hiển thị trước tất cả thao tác nhanh trong menu ngữ cảnh",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} hành động đã cấu hình ({{enabled}} đã bật)",
-      "count_other": "{{count}} hành động đã cấu hình ({{enabled}} đã bật)",
-      "count": "{{count}} hành động đã cấu hình ({{enabled}} đã bật)",
       "addBtn": "+ thêm thao tác nhanh",
       "empty": "Chưa có thao tác nhanh nào. Chọn thêm thao tác nhanh để bắt đầu.",
       "defaultModel": "Mặc định",
@@ -912,7 +883,8 @@
       "placeholders": {
         "name": "Viết dài hơn",
         "prompt": "Mở rộng và triển khai chi tiết đoạn văn bản sau…"
-      }
+      },
+      "count_other": "Đã cấu hình {{count}} hành động ({{enabled}} đã bật)"
     },
     "usage": {
       "desc": "Theo dõi mức tiêu thụ token trên các nhà cung cấp và mô hình. Dữ liệu được tích lũy qua tất cả hội thoại.",
@@ -994,12 +966,12 @@
       "ragDisabled": "RAG bị tắt trong cài đặt. Bật nó trong cài đặt → tính năng chat → RAG.",
       "webSearchDisabled": "Tìm kiếm web bị tắt trong cài đặt. Bật nó trong cài đặt → tính năng chat → tìm kiếm web.",
       "attached": "Đã đính kèm: {{name}}",
-      "attachedImages": "Đã đính kèm {{count}} hình ảnh",
-      "referencesAdded": "Đã thêm {{count}} tham chiếu",
       "fileNotFound": "Không tìm thấy tệp: {{path}}",
       "unableToLoadRag": "Không thể tải thống kê RAG.",
       "referenced": "Đã tham chiếu: {{name}}",
-      "openViewFailed": "Không thể mở khung chat."
+      "openViewFailed": "Không thể mở khung chat.",
+      "attachedImages_other": "Đã đính kèm {{count}} hình ảnh",
+      "referencesAdded_other": "Đã thêm {{count}} tham chiếu"
     },
     "status": {
       "unavailable": "Không khả dụng",
@@ -1020,9 +992,7 @@
       "step2": "Bật RAG",
       "step3": "Chọn lập chỉ mục vault",
       "close": "Đóng",
-      "retrieved_one": "đã truy xuất từ {{count}} tài liệu",
-      "retrieved_other": "đã truy xuất từ {{count}} tài liệu",
-      "retrieved": "đã truy xuất từ {{count}} tài liệu"
+      "retrieved_other": "Đã truy xuất từ {{count}} tài liệu"
     },
     "ragTooltip": {
       "status": "Trạng thái chỉ mục RAG:",
@@ -1141,8 +1111,6 @@
       "apply": "Áp dụng",
       "applyAll": "Áp dụng tất cả",
       "applied": "Đã áp dụng",
-      "changes_one": "{{count}} thay đổi",
-      "changes_other": "{{count}} thay đổi",
       "confirm": "Áp dụng {{summary}}?",
       "appliedNotice": "Đã áp dụng {{summary}}",
       "operations": {
@@ -1152,7 +1120,8 @@
         "delete": "Xóa",
         "move": "Di chuyển",
         "batch": "Hàng loạt"
-      }
+      },
+      "changes_other": "{{count}} thay đổi"
     }
   },
   "modals": {
@@ -1213,15 +1182,13 @@
       "mcp": {
         "title": "Quyền truy cập MCP",
         "noServers": "Chưa có máy chủ MCP nào. Thêm máy chủ trong Cài đặt → MCP để mở khóa các tùy chọn này.",
-        "toolsCached_one": "{{count}} công cụ đã lưu cache",
-        "toolsCached_other": "{{count}} công cụ đã lưu cache",
-        "toolsCached": "{{count}} công cụ đã lưu cache",
         "noToolsCached": "Chưa có công cụ nào trong cache. Bật toàn quyền truy cập hoặc làm mới cache.",
         "showTools": "Hiển thị công cụ",
         "hideTools": "Ẩn công cụ",
         "selected": "Đã chọn",
         "notSelected": "Chưa chọn",
-        "noToolsAvailable": "Chưa có công cụ nào từ máy chủ này."
+        "noToolsAvailable": "Chưa có công cụ nào từ máy chủ này.",
+        "toolsCached_other": "{{count}} công cụ đã lưu cache"
       },
       "notices": {
         "promptRequired": "Vui lòng cung cấp tên và nội dung cho lời nhắc hệ thống mới."
@@ -1303,10 +1270,10 @@
       },
       "cachedModels": "Mô hình đã lưu cache: {{count}}",
       "connectionFailed": "Kiểm tra kết nối thất bại. Hãy kiểm tra cài đặt nhà cung cấp.",
-      "connectionSuccess": "Kết nối thành công. Đã lưu cache {{count}} mô hình.",
       "noCachedModels": "Không có mô hình nào được lưu cache",
       "testConnection": "Kiểm tra kết nối",
-      "testing": "Đang kiểm tra..."
+      "testing": "Đang kiểm tra...",
+      "connectionSuccess_other": "Kết nối thành công. Đã lưu cache {{count}} mô hình."
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1329,12 +1296,6 @@
         "statusDisabled": "Đã tắt",
         "statusConnected": "● đã kết nối",
         "statusDisconnected": "○ đã ngắt kết nối",
-        "toolsLive_one": "{{count}} công cụ",
-        "toolsLive_other": "{{count}} công cụ",
-        "toolsLive": "{{count}} công cụ",
-        "toolsCached_one": "{{count}} công cụ (đã lưu cache)",
-        "toolsCached_other": "{{count}} công cụ (đã lưu cache)",
-        "toolsCached": "{{count}} công cụ (đã lưu cache)",
         "noTools": "0 công cụ",
         "connectBtn": "Kết nối",
         "disconnectBtn": "Ngắt kết nối",
@@ -1346,7 +1307,9 @@
           "connected": "Đã kết nối tới {{name}}",
           "failedDisconnect": "Không thể ngắt kết nối khỏi {{name}}: {{message}}",
           "failedConnect": "Không thể kết nối tới {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_other": "{{count}} công cụ (đã lưu cache)",
+        "toolsLive_other": "{{count}} công cụ"
       },
       "tools": {
         "title": "Công cụ MCP khả dụng",
@@ -1569,8 +1532,6 @@
   },
   "capability": {
     "title": "Công cụ và quyền",
-    "subtitle_one": "{{agent}} có thể dùng {{count}} công cụ.",
-    "subtitle_other": "{{agent}} có thể dùng {{count}} công cụ.",
     "chatMode": "Chế độ chat",
     "permissions": "Quyền hiện tại",
     "reads": "Tác vụ này có thể đọc",
@@ -1590,8 +1551,6 @@
     },
     "rows": {
       "vaultContext": "Ngữ cảnh vault",
-      "referencesPlusContext_one": "{{count}} tham chiếu tường minh cùng ngữ cảnh đang hoạt động",
-      "referencesPlusContext_other": "{{count}} tham chiếu tường minh cùng ngữ cảnh đang hoạt động",
       "activeContext": "Ghi chú đang mở và ảnh chụp ngữ cảnh đồ thị",
       "readTools": "Công cụ đọc vault",
       "enabledCount": "Đã bật {{count}}",
@@ -1605,12 +1564,13 @@
       "off": "Tắt",
       "disabledInSettings": "Đã tắt trong cài đặt",
       "custom": "Công cụ tùy chỉnh",
-      "customEnabled_one": "Đã bật {{count}} công cụ MCP, OpenAPI hoặc CLI",
-      "customEnabled_other": "Đã bật {{count}} công cụ MCP, OpenAPI hoặc CLI",
       "noneEnabled": "Chưa bật công cụ nào",
       "destructive": "Thao tác phá hủy trên vault",
-      "notProvided": "Công cụ tích hợp không cung cấp"
-    }
+      "notProvided": "Công cụ tích hợp không cung cấp",
+      "customEnabled_other": "Đã bật {{count}} công cụ MCP, OpenAPI hoặc CLI",
+      "referencesPlusContext_other": "{{count}} tham chiếu tường minh cùng ngữ cảnh đang hoạt động"
+    },
+    "subtitle_other": "{{agent}} có thể dùng {{count}} công cụ."
   },
   "markdown": {
     "run": "Chạy"
@@ -1618,14 +1578,13 @@
   "rag": {
     "notices": {
       "noFiles": "Không có ghi chú Markdown nào để lập chỉ mục.",
-      "starting_one": "Đang lập chỉ mục {{count}} ghi chú…",
-      "starting_other": "Đang lập chỉ mục {{count}} ghi chú…",
       "progress": "Đang lập chỉ mục: {{done}}/{{total}} ghi chú",
       "completed": "Đã lập chỉ mục xong: {{indexed}} thành công, {{failed}} thất bại.",
       "noIndex": "Chưa có gì được lập chỉ mục. Hãy chạy \"Embed all documents\" để lập chỉ mục vault của bạn.",
       "gradingError": "Chấm điểm tài liệu thất bại: {{message}}",
       "clearing": "Đang xóa chỉ mục…",
-      "cleared": "Đã xóa chỉ mục."
+      "cleared": "Đã xóa chỉ mục.",
+      "starting_other": "Đang lập chỉ mục {{count}} ghi chú…"
     }
   }
 }

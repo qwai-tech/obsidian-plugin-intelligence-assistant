@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Prohlížejte a spravujte modely od všech nakonfigurovaných poskytovatelů. Klikněte na \"obnovit modely\" pro načtení nejnovějších dostupných modelů.",
-      "providerCount_one": "{{count}} poskytovatel nakonfigurován",
-      "providerCount_other": "{{count}} poskytovatelů nakonfigurováno",
-      "providerCount": "{{count}} poskytovatelů nakonfigurováno",
       "refreshAll": "obnovit všechny modely",
       "empty": "Žádní poskytovatelé nejsou nakonfigurováni. Nejprve přidejte poskytovatele na kartě poskytovatelů.",
       "noModels": "Žádné modely nejsou dostupné. Klikněte na \"obnovit všechny modely\" nebo obnovte jednotlivé poskytovatele na kartě poskytovatelů.",
       "noMatch": "Žádné modely neodpovídají aktuálním filtrům. Upravte nebo odstraňte filtry pro zobrazení výsledků.",
-      "modelCount_one": "• {{count}} model v mezipaměti",
-      "modelCount_other": "• {{count}} modelů v mezipaměti",
-      "modelCount": "• {{count}} modelů v mezipaměti",
-      "matchCount_one": "• {{count}} odpovídá vybraným filtrům",
-      "matchCount_other": "• {{count}} odpovídá vybraným filtrům",
-      "matchCount": "• {{count}} odpovídá vybraným filtrům",
       "status": {
         "enabled": "Povoleno",
         "disabled": "Zakázáno"
@@ -92,12 +83,21 @@
         "capabilities": "Schopnosti",
         "status": "Stav",
         "actions": "Akce"
-      }
+      },
+      "matchCount_one": "• {{count}} odpovídá vybraným filtrům",
+      "matchCount_few": "• {{count}} odpovídají vybraným filtrům",
+      "matchCount_many": "• {{count}} odpovídá vybraným filtrům",
+      "matchCount_other": "• {{count}} odpovídá vybraným filtrům",
+      "modelCount_one": "• {{count}} model v mezipaměti",
+      "modelCount_few": "• {{count}} modely v mezipaměti",
+      "modelCount_many": "• {{count}} modelu v mezipaměti",
+      "modelCount_other": "• {{count}} modelů v mezipaměti",
+      "providerCount_one": "{{count}} poskytovatel nakonfigurován",
+      "providerCount_few": "{{count}} poskytovatelé nakonfigurováni",
+      "providerCount_many": "{{count}} poskytovatele nakonfigurováno",
+      "providerCount_other": "{{count}} poskytovatelů nakonfigurováno"
     },
     "provider": {
-      "count_one": "{{count}} poskytovatel nakonfigurován",
-      "count_other": "{{count}} poskytovatelů nakonfigurováno",
-      "count": "{{count}} poskytovatelů nakonfigurováno",
       "addBtn": "+ Přidat poskytovatele",
       "empty": "Žádní poskytovatelé nejsou nakonfigurováni. Vyberte \"Přidat poskytovatele\" pro začátek.",
       "status": {
@@ -116,8 +116,9 @@
       "models": {
         "none": "Žádné modely",
         "count_one": "{{count}} model",
-        "count_other": "{{count}} modelů",
-        "count": "{{count}} modelů"
+        "count_few": "{{count}} modely",
+        "count_many": "{{count}} modelu",
+        "count_other": "{{count}} modelů"
       },
       "ollama": {
         "checkingVersion": "Kontroluji verzi...",
@@ -153,7 +154,11 @@
       },
       "confirm": {
         "delete": "Odebrat poskytovatele {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} poskytovatel nakonfigurován",
+      "count_few": "{{count}} poskytovatelé nakonfigurováni",
+      "count_many": "{{count}} poskytovatele nakonfigurováno",
+      "count_other": "{{count}} poskytovatelů nakonfigurováno"
     },
     "mcp": {
       "desc": "Nakonfigurujte servery Model Context Protocol (MCP) pro rozšíření schopností agentů o externí nástroje a zdroje dat.",
@@ -165,9 +170,6 @@
       "untitled": "Nepojmenovaný server MCP",
       "notConfigured": "Není nakonfigurováno",
       "cached": "V mezipaměti",
-      "envVars_one": "{{count}} proměnná prostředí",
-      "envVars_other": "{{count}} proměnných prostředí",
-      "envVars": "{{count}} proměnných prostředí",
       "status": {
         "disabled": "Zakázáno",
         "connected": "připojeno",
@@ -177,12 +179,14 @@
         "autoConnect": "Automatické připojení"
       },
       "toolCount": {
+        "cached_one": "{{count}} nástroj z mezipaměti",
+        "cached_few": "{{count}} nástroje z mezipaměti",
+        "cached_many": "{{count}} nástroje z mezipaměti",
+        "cached_other": "{{count}} nástrojů z mezipaměti",
         "live_one": "{{count}} živý nástroj",
-        "live_other": "{{count}} živých nástrojů",
-        "live": "{{count}} živých nástrojů",
-        "cached_one": "{{count}} nástroj v mezipaměti",
-        "cached_other": "{{count}} nástrojů v mezipaměti",
-        "cached": "{{count}} nástrojů v mezipaměti"
+        "live_few": "{{count}} živé nástroje",
+        "live_many": "{{count}} živého nástroje",
+        "live_other": "{{count}} živých nástrojů"
       },
       "actions": {
         "edit": "Upravit",
@@ -204,27 +208,38 @@
         "disconnectFailed": "Nepodařilo se odpojit od {{name}}",
         "connectFailed": "Nepodařilo se připojit k {{name}}",
         "testNoCommand": "před testováním připojení zadejte příkaz",
-        "testSuccess": "úspěšně připojeno! Nalezeno {{count}} nástrojů.",
         "testFailed": "Připojení selhalo: {{message}}",
-        "refreshedAll_one": "obnoveny nástroje pro {{count}} server",
-        "refreshedAll_other": "obnoveny nástroje pro {{count}} serverů",
-        "refreshedAll": "obnoveny nástroje pro {{count}} serverů",
         "refreshedPartial": "obnoveno {{success}} serverů, {{failed}} selhalo",
         "noServersConfigured": "Žádné servery MCP nejsou nakonfigurovány",
-        "testingAll": "Testování {{count}} připojení k serverům MCP...",
-        "testAllSuccess": "všechny {{count}} servery MCP úspěšně připojeny!",
-        "testAllPartial": "{{successful}} připojeno, {{failed}} selhalo"
+        "testAllPartial": "{{successful}} připojeno, {{failed}} selhalo",
+        "refreshedAll_one": "Obnoveny nástroje pro {{count}} server",
+        "refreshedAll_few": "Obnoveny nástroje pro {{count}} servery",
+        "refreshedAll_many": "Obnoveny nástroje pro {{count}} serveru",
+        "refreshedAll_other": "Obnoveny nástroje pro {{count}} serverů",
+        "testAllSuccess_one": "{{count}} server MCP úspěšně připojen.",
+        "testAllSuccess_few": "Všechny {{count}} servery MCP úspěšně připojeny.",
+        "testAllSuccess_many": "Úspěšně připojeno {{count}} serveru MCP.",
+        "testAllSuccess_other": "Všech {{count}} serverů MCP úspěšně připojeno.",
+        "testSuccess_one": "Připojeno. Nalezen {{count}} nástroj.",
+        "testSuccess_few": "Připojeno. Nalezeny {{count}} nástroje.",
+        "testSuccess_many": "Připojeno. Nalezeno {{count}} nástroje.",
+        "testSuccess_other": "Připojeno. Nalezeno {{count}} nástrojů.",
+        "testingAll_one": "Testuje se {{count}} připojení k serveru MCP…",
+        "testingAll_few": "Testují se {{count}} připojení k serverům MCP…",
+        "testingAll_many": "Testuje se {{count}} připojení k serverům MCP…",
+        "testingAll_other": "Testuje se {{count}} připojení k serverům MCP…"
       },
       "confirm": {
         "delete": "Smazat server MCP \"{{name}}\"?"
       },
-      "namePlaceholder": "Server MCP Acme"
+      "namePlaceholder": "Server MCP Acme",
+      "envVars_one": "{{count}} proměnná prostředí",
+      "envVars_few": "{{count}} proměnné prostředí",
+      "envVars_many": "{{count}} proměnné prostředí",
+      "envVars_other": "{{count}} proměnných prostředí"
     },
     "agents": {
       "desc": "Vytvářejte a spravujte AI agenty s konkrétními schopnostmi, nástroji a chováním.",
-      "count_one": "{{count}} agent nakonfigurován",
-      "count_other": "{{count}} agentů nakonfigurováno",
-      "count": "{{count}} agentů nakonfigurováno",
       "addBtn": "+ přidat agenta",
       "empty": "Žádní agenti nejsou nakonfigurováni. Vyberte přidat agenta pro začátek.",
       "defaultBadge": "Výchozí",
@@ -238,11 +253,13 @@
       "tools": {
         "builtIn": "{{count}} vestavěný",
         "mcpServer_one": "{{count}} server MCP",
+        "mcpServer_few": "{{count}} servery MCP",
+        "mcpServer_many": "{{count}} serveru MCP",
         "mcpServer_other": "{{count}} serverů MCP",
-        "mcpServer": "{{count}} serverů MCP",
         "mcpTool_one": "{{count}} nástroj MCP",
-        "mcpTool_other": "{{count}} nástrojů MCP",
-        "mcpTool": "{{count}} nástrojů MCP"
+        "mcpTool_few": "{{count}} nástroje MCP",
+        "mcpTool_many": "{{count}} nástroje MCP",
+        "mcpTool_other": "{{count}} nástrojů MCP"
       },
       "actions": {
         "edit": "Upravit",
@@ -250,7 +267,11 @@
       },
       "confirm": {
         "delete": "Smazat agenta \"{{name}}\"?"
-      }
+      },
+      "count_one": "{{count}} agent nakonfigurován",
+      "count_few": "{{count}} agenti nakonfigurováni",
+      "count_many": "{{count}} agenta nakonfigurováno",
+      "count_other": "{{count}} agentů nakonfigurováno"
     },
     "prompts": {
       "desc": "Spravujte systémové prompty, které definují chování a osobnost vašeho AI asistenta.",
@@ -352,8 +373,11 @@
         },
         "notices": {
           "removed": "HTTP zdroj odstraněn",
-          "reloaded": "Znovu načteno {{count}} operací",
-          "reloadFailed": "Nepodařilo se znovu načíst HTTP zdroj. Zkontrolujte konzoli pro podrobnosti."
+          "reloadFailed": "Nepodařilo se znovu načíst HTTP zdroj. Zkontrolujte konzoli pro podrobnosti.",
+          "reloaded_one": "Znovu načtena {{count}} operace",
+          "reloaded_few": "Znovu načteny {{count}} operace",
+          "reloaded_many": "Znovu načteno {{count}} operace",
+          "reloaded_other": "Znovu načteno {{count}} operací"
         },
         "modal": {
           "defaultTitle": "HTTP zdroj",
@@ -419,9 +443,6 @@
           "actions": "Akce"
         },
         "unnamed": "Nepojmenovaný nástroj CLI",
-        "paramCount_one": "{{count}} parametr",
-        "paramCount_other": "{{count}} parametrů",
-        "paramCount": "{{count}} parametrů",
         "noParams": "Žádné",
         "statusEnabled": "Povoleno",
         "statusDisabled": "Zakázáno",
@@ -554,7 +575,11 @@
             "preset-screencapture": "Snímek obrazovky",
             "preset-applescript-list-apps": "Zobrazit spuštěné aplikace"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parametr",
+        "paramCount_few": "{{count}} parametry",
+        "paramCount_many": "{{count}} parametru",
+        "paramCount_other": "{{count}} parametrů"
       }
     },
     "rag": {
@@ -844,9 +869,6 @@
         "desc": "Předpona (emoji nebo text) zobrazená před všemi rychlými akcemi v kontextovém menu",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} akce nakonfigurována ({{enabled}} povolena)",
-      "count_other": "{{count}} akcí nakonfigurováno ({{enabled}} povoleno)",
-      "count": "{{count}} akcí nakonfigurováno ({{enabled}} povoleno)",
       "addBtn": "+ přidat rychlou akci",
       "empty": "Žádné rychlé akce nejsou nakonfigurovány. Vyberte přidat rychlou akci pro začátek.",
       "defaultModel": "Výchozí",
@@ -912,7 +934,11 @@
       "placeholders": {
         "name": "Prodloužit text",
         "prompt": "Rozšiř a rozveď následující text…"
-      }
+      },
+      "count_one": "{{count}} akce nakonfigurována (povoleno: {{enabled}})",
+      "count_few": "{{count}} akce nakonfigurovány (povoleno: {{enabled}})",
+      "count_many": "{{count}} akce nakonfigurováno (povoleno: {{enabled}})",
+      "count_other": "{{count}} akcí nakonfigurováno (povoleno: {{enabled}})"
     },
     "usage": {
       "desc": "Sledujte spotřebu tokenů u poskytovatelů a modelů. Data jsou shromažďována ze všech konverzací.",
@@ -994,12 +1020,18 @@
       "ragDisabled": "RAG je v nastavení zakázán. Povolte jej v nastavení → funkce chatu → RAG.",
       "webSearchDisabled": "Webové vyhledávání je v nastavení zakázáno. Povolte jej v nastavení → funkce chatu → webové vyhledávání.",
       "attached": "Přiloženo: {{name}}",
-      "attachedImages": "Přiloženo {{count}} obrázků",
-      "referencesAdded": "Přidáno {{count}} odkazů",
       "fileNotFound": "Soubor nenalezen: {{path}}",
       "unableToLoadRag": "Nelze načíst statistiky RAG.",
       "referenced": "Odkazováno: {{name}}",
-      "openViewFailed": "Zobrazení chatu se nepodařilo otevřít."
+      "openViewFailed": "Zobrazení chatu se nepodařilo otevřít.",
+      "attachedImages_one": "Přiložen {{count}} obrázek",
+      "attachedImages_few": "Přiloženy {{count}} obrázky",
+      "attachedImages_many": "Přiloženo {{count}} obrázku",
+      "attachedImages_other": "Přiloženo {{count}} obrázků",
+      "referencesAdded_one": "Přidán {{count}} odkaz",
+      "referencesAdded_few": "Přidány {{count}} odkazy",
+      "referencesAdded_many": "Přidáno {{count}} odkazu",
+      "referencesAdded_other": "Přidáno {{count}} odkazů"
     },
     "status": {
       "unavailable": "Nedostupné",
@@ -1020,9 +1052,10 @@
       "step2": "Povolte RAG",
       "step3": "Vyberte indexovat trezor",
       "close": "Zavřít",
-      "retrieved_one": "načteno z {{count}} dokumentu",
-      "retrieved_other": "načteno z {{count}} dokumentů",
-      "retrieved": "načteno z {{count}} dokumentů"
+      "retrieved_one": "Načteno z {{count}} dokumentu",
+      "retrieved_few": "Načteno z {{count}} dokumentů",
+      "retrieved_many": "Načteno z {{count}} dokumentu",
+      "retrieved_other": "Načteno z {{count}} dokumentů"
     },
     "ragTooltip": {
       "status": "Stav indexu RAG:",
@@ -1141,8 +1174,6 @@
       "apply": "Použít",
       "applyAll": "Použít vše",
       "applied": "Použito",
-      "changes_one": "{{count}} změna",
-      "changes_other": "{{count}} změn",
       "confirm": "Použít {{summary}}?",
       "appliedNotice": "Použito: {{summary}}",
       "operations": {
@@ -1152,7 +1183,11 @@
         "delete": "Smazat",
         "move": "Přesunout",
         "batch": "Dávka"
-      }
+      },
+      "changes_one": "{{count}} změna",
+      "changes_few": "{{count}} změny",
+      "changes_many": "{{count}} změny",
+      "changes_other": "{{count}} změn"
     }
   },
   "modals": {
@@ -1213,15 +1248,16 @@
       "mcp": {
         "title": "Přístup k MCP",
         "noServers": "Žádné servery MCP nejsou nakonfigurovány. Přidejte servery v Nastavení → MCP pro odemknutí těchto možností.",
-        "toolsCached_one": "{{count}} nástroj v mezipaměti",
-        "toolsCached_other": "{{count}} nástrojů v mezipaměti",
-        "toolsCached": "{{count}} nástrojů v mezipaměti",
         "noToolsCached": "Žádné nástroje v mezipaměti. Povolte plný přístup nebo obnovte mezipaměť.",
         "showTools": "Zobrazit nástroje",
         "hideTools": "Skrýt nástroje",
         "selected": "Vybráno",
         "notSelected": "Nevybráno",
-        "noToolsAvailable": "Z tohoto serveru zatím nejsou dostupné žádné nástroje."
+        "noToolsAvailable": "Z tohoto serveru zatím nejsou dostupné žádné nástroje.",
+        "toolsCached_one": "{{count}} nástroj v mezipaměti",
+        "toolsCached_few": "{{count}} nástroje v mezipaměti",
+        "toolsCached_many": "{{count}} nástroje v mezipaměti",
+        "toolsCached_other": "{{count}} nástrojů v mezipaměti"
       },
       "notices": {
         "promptRequired": "Zadejte název a obsah nového systémového promptu."
@@ -1303,10 +1339,13 @@
       },
       "cachedModels": "Modely v mezipaměti: {{count}}",
       "connectionFailed": "Test připojení selhal. Zkontrolujte nastavení poskytovatele.",
-      "connectionSuccess": "Připojení úspěšné. Modelů uloženo do mezipaměti: {{count}}.",
       "noCachedModels": "Žádné modely v mezipaměti",
       "testConnection": "Otestovat připojení",
-      "testing": "Testování..."
+      "testing": "Testování...",
+      "connectionSuccess_one": "Připojení úspěšné. Do mezipaměti uložen {{count}} model.",
+      "connectionSuccess_few": "Připojení úspěšné. Do mezipaměti uloženy {{count}} modely.",
+      "connectionSuccess_many": "Připojení úspěšné. Do mezipaměti uloženo {{count}} modelu.",
+      "connectionSuccess_other": "Připojení úspěšné. Do mezipaměti uloženo {{count}} modelů."
     },
     "mcpInspector": {
       "title": "Inspektor MCP",
@@ -1329,12 +1368,6 @@
         "statusDisabled": "Zakázáno",
         "statusConnected": "● připojeno",
         "statusDisconnected": "○ odpojeno",
-        "toolsLive_one": "{{count}} nástroj",
-        "toolsLive_other": "{{count}} nástrojů",
-        "toolsLive": "{{count}} nástrojů",
-        "toolsCached_one": "{{count}} nástroj (v mezipaměti)",
-        "toolsCached_other": "{{count}} nástrojů (v mezipaměti)",
-        "toolsCached": "{{count}} nástrojů (v mezipaměti)",
         "noTools": "0 nástrojů",
         "connectBtn": "Připojit",
         "disconnectBtn": "Odpojit",
@@ -1346,7 +1379,15 @@
           "connected": "Připojeno k {{name}}",
           "failedDisconnect": "Nepodařilo se odpojit od {{name}}: {{message}}",
           "failedConnect": "Nepodařilo se připojit k {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} nástroj (v mezipaměti)",
+        "toolsCached_few": "{{count}} nástroje (v mezipaměti)",
+        "toolsCached_many": "{{count}} nástroje (v mezipaměti)",
+        "toolsCached_other": "{{count}} nástrojů (v mezipaměti)",
+        "toolsLive_one": "{{count}} nástroj",
+        "toolsLive_few": "{{count}} nástroje",
+        "toolsLive_many": "{{count}} nástroje",
+        "toolsLive_other": "{{count}} nástrojů"
       },
       "tools": {
         "title": "Dostupné nástroje MCP",
@@ -1569,8 +1610,6 @@
   },
   "capability": {
     "title": "Nástroje a oprávnění",
-    "subtitle_one": "{{agent}} může používat {{count}} nástroj.",
-    "subtitle_other": "{{agent}} může používat nástroje (celkem {{count}}).",
     "chatMode": "Režim chatu",
     "permissions": "Aktuální oprávnění",
     "reads": "Tento úkol může číst",
@@ -1590,8 +1629,6 @@
     },
     "rows": {
       "vaultContext": "Kontext trezoru",
-      "referencesPlusContext_one": "{{count}} explicitní odkaz plus aktivní kontext",
-      "referencesPlusContext_other": "Explicitní odkazy ({{count}}) plus aktivní kontext",
       "activeContext": "Aktivní poznámka a snímek kontextu grafu",
       "readTools": "Nástroje pro čtení trezoru",
       "enabledCount": "Povoleno: {{count}}",
@@ -1605,12 +1642,22 @@
       "off": "Vypnuto",
       "disabledInSettings": "Zakázáno v nastavení",
       "custom": "Vlastní nástroje",
-      "customEnabled_one": "Povolen {{count}} nástroj MCP, OpenAPI nebo CLI",
-      "customEnabled_other": "Povolené nástroje MCP, OpenAPI nebo CLI: {{count}}",
       "noneEnabled": "Žádné povoleno",
       "destructive": "Destruktivní akce v trezoru",
-      "notProvided": "Vestavěné nástroje neposkytují"
-    }
+      "notProvided": "Vestavěné nástroje neposkytují",
+      "customEnabled_one": "Povolen {{count}} nástroj MCP, OpenAPI nebo CLI",
+      "customEnabled_few": "Povoleny {{count}} nástroje MCP, OpenAPI nebo CLI",
+      "customEnabled_many": "Povoleno {{count}} nástroje MCP, OpenAPI nebo CLI",
+      "customEnabled_other": "Povoleno {{count}} nástrojů MCP, OpenAPI nebo CLI",
+      "referencesPlusContext_one": "{{count}} explicitní odkaz plus aktivní kontext",
+      "referencesPlusContext_few": "{{count}} explicitní odkazy plus aktivní kontext",
+      "referencesPlusContext_many": "{{count}} explicitního odkazu plus aktivní kontext",
+      "referencesPlusContext_other": "{{count}} explicitních odkazů plus aktivní kontext"
+    },
+    "subtitle_one": "{{agent}} může používat {{count}} nástroj.",
+    "subtitle_few": "{{agent}} může používat {{count}} nástroje.",
+    "subtitle_many": "{{agent}} může používat {{count}} nástroje.",
+    "subtitle_other": "{{agent}} může používat {{count}} nástrojů."
   },
   "markdown": {
     "run": "Spustit"
@@ -1618,14 +1665,16 @@
   "rag": {
     "notices": {
       "noFiles": "Žádné poznámky Markdown k indexování.",
-      "starting_one": "Indexuje se {{count}} poznámka…",
-      "starting_other": "Indexují se poznámky ({{count}})…",
       "progress": "Indexování: {{done}} z {{total}} poznámek",
       "completed": "Indexování dokončeno: indexováno {{indexed}}, selhalo {{failed}}.",
       "noIndex": "Zatím není nic indexováno. Spusťte \"Embed all documents\" a zaindexujte svůj trezor.",
       "gradingError": "Hodnocení dokumentu selhalo: {{message}}",
       "clearing": "Mazání indexu…",
-      "cleared": "Index vymazán."
+      "cleared": "Index vymazán.",
+      "starting_one": "Indexuje se {{count}} poznámka…",
+      "starting_few": "Indexují se {{count}} poznámky…",
+      "starting_many": "Indexuje se {{count}} poznámky…",
+      "starting_other": "Indexuje se {{count}} poznámek…"
     }
   }
 }

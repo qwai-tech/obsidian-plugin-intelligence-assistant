@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Ikusi eta kudeatu modeloak hornitzaile guztietatik. Egin klik \"freskatu modelo guztiak\" erabilgarri dauden modelo berrienak eskuratzeko.",
-      "providerCount_one": "{{count}} hornitzaile konfiguratuta",
-      "providerCount_other": "{{count}} hornitzaile konfiguratuta",
-      "providerCount": "{{count}} hornitzaile konfiguratuta",
       "refreshAll": "freskatu modelo guztiak",
       "empty": "Oraindik ez dago hornitzailerik konfiguratuta. Gehitu hornitzaileak hornitzaileen fitxan lehenik.",
       "noModels": "Ez dago modelo erabilgarririk. Egin klik \"freskatu modelo guztiak\" edo freskatu hornitzaile indibidualak hornitzaileen fitxan.",
       "noMatch": "Modelo bakar batek ere ez ditu uneko iragazkiak betetzen. Doitu edo garbitu iragazkiak emaitzak ikusteko.",
-      "modelCount_one": "• {{count}} modelo katxetatuta",
-      "modelCount_other": "• {{count}} modelo katxetatuta",
-      "modelCount": "• {{count}} modelo katxetatuta",
-      "matchCount_one": "• {{count}} bat dator hautatutako iragazkiekin",
-      "matchCount_other": "• {{count}} bat datoz hautatutako iragazkiekin",
-      "matchCount": "• {{count}} bat datoz hautatutako iragazkiekin",
       "status": {
         "enabled": "Gaituta",
         "disabled": "Desgaituta"
@@ -92,12 +83,15 @@
         "capabilities": "Gaitasunak",
         "status": "Egoera",
         "actions": "Ekintzak"
-      }
+      },
+      "matchCount_one": "• {{count}} bat dator hautatutako iragazkiekin",
+      "matchCount_other": "• {{count}} bat datoz hautatutako iragazkiekin",
+      "modelCount_one": "• Modelo {{count}} katxean",
+      "modelCount_other": "• {{count}} modelo katxean",
+      "providerCount_one": "Hornitzaile {{count}} konfiguratuta",
+      "providerCount_other": "{{count}} hornitzaile konfiguratuta"
     },
     "provider": {
-      "count_one": "{{count}} hornitzaile konfiguratuta",
-      "count_other": "{{count}} hornitzaile konfiguratuta",
-      "count": "{{count}} hornitzaile konfiguratuta",
       "addBtn": "+ Gehitu hornitzailea",
       "empty": "Ez dago hornitzailerik konfiguratuta. Hautatu \"Gehitu hornitzailea\" hasteko.",
       "status": {
@@ -115,9 +109,8 @@
       },
       "models": {
         "none": "Modelorik ez",
-        "count_one": "{{count}} modelo",
-        "count_other": "{{count}} modelo",
-        "count": "{{count}} modelo"
+        "count_one": "Modelo {{count}}",
+        "count_other": "{{count}} modelo"
       },
       "ollama": {
         "checkingVersion": "Bertsioa egiaztatzen...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "{{provider}} hornitzailea kendu?"
-      }
+      },
+      "count_one": "Hornitzaile {{count}} konfiguratuta",
+      "count_other": "{{count}} hornitzaile konfiguratuta"
     },
     "mcp": {
       "desc": "Konfiguratu Model Context Protocol (MCP) zerbitzariak agenteen gaitasunak hedatzen dituzten kanpoko tresnekin eta datu-iturriekin.",
@@ -165,9 +160,6 @@
       "untitled": "MCP Zerbitzari izengabea",
       "notConfigured": "Konfiguratu gabe",
       "cached": "Katxetatuta",
-      "envVars_one": "{{count}} ingurune-aldagai",
-      "envVars_other": "{{count}} ingurune-aldagai",
-      "envVars": "{{count}} ingurune-aldagai",
       "status": {
         "disabled": "Desgaituta",
         "connected": "konektatuta",
@@ -177,12 +169,10 @@
         "autoConnect": "Konexio automatikoa"
       },
       "toolCount": {
-        "live_one": "{{count}} tresna zuzenean",
-        "live_other": "{{count}} tresna zuzenean",
-        "live": "{{count}} tresna zuzenean",
-        "cached_one": "{{count}} tresna katxetatuta",
-        "cached_other": "{{count}} tresna katxetatuta",
-        "cached": "{{count}} tresna katxetatuta"
+        "cached_one": "Katxeko tresna {{count}}",
+        "cached_other": "Katxeko {{count}} tresna",
+        "live_one": "Tresna aktibo {{count}}",
+        "live_other": "{{count}} tresna aktibo"
       },
       "actions": {
         "edit": "Editatu",
@@ -204,27 +194,28 @@
         "disconnectFailed": "Ezin izan da {{name}}-tik deskonektatu",
         "connectFailed": "Ezin izan da {{name}}-ra konektatu",
         "testNoCommand": "mesedez, sartu komando bat konexioa probatu aurretik",
-        "testSuccess": "behar bezala konektatuta! {{count}} tresna aurkitu dira.",
         "testFailed": "Konexioak huts egin du: {{message}}",
-        "refreshedAll_one": "{{count}} zerbitzariren tresnak freskatu dira",
-        "refreshedAll_other": "{{count}} zerbitzariren tresnak freskatu dira",
-        "refreshedAll": "{{count}} zerbitzariren tresnak freskatu dira",
         "refreshedPartial": "{{success}} zerbitzari freskatuta, {{failed}} huts",
         "noServersConfigured": "Ez dago MCP zerbitzari konfiguraturik",
-        "testingAll": "{{count}} MCP zerbitzarien konexioak probatzen...",
-        "testAllSuccess": "{{count}} mcp zerbitzari guztiak behar bezala konektatu dira!",
-        "testAllPartial": "{{success}} konektatuta, {{failed}} huts"
+        "testAllPartial": "{{success}} konektatuta, {{failed}} huts",
+        "refreshedAll_one": "Zerbitzari {{count}}en tresnak freskatu dira",
+        "refreshedAll_other": "{{count}} zerbitzariren tresnak freskatu dira",
+        "testAllSuccess_one": "MCP zerbitzari {{count}} ondo konektatu da.",
+        "testAllSuccess_other": "{{count}} MCP zerbitzari guztiak ondo konektatu dira.",
+        "testSuccess_one": "Konektatuta. Tresna {{count}} aurkitu da.",
+        "testSuccess_other": "Konektatuta. {{count}} tresna aurkitu dira.",
+        "testingAll_one": "MCP zerbitzariarekiko konexio {{count}} probatzen…",
+        "testingAll_other": "MCP zerbitzariekiko {{count}} konexio probatzen…"
       },
       "confirm": {
         "delete": "Ezabatu \"{{name}}\" MCP zerbitzaria?"
       },
-      "namePlaceholder": "Acme MCP zerbitzaria"
+      "namePlaceholder": "Acme MCP zerbitzaria",
+      "envVars_one": "Ingurune-aldagai {{count}}",
+      "envVars_other": "{{count}} ingurune-aldagai"
     },
     "agents": {
       "desc": "Sortu eta kudeatu AI agenteak gaitasun, tresna eta portaera zehatzekin.",
-      "count_one": "{{count}} agente konfiguratuta",
-      "count_other": "{{count}} agente konfiguratuta",
-      "count": "{{count}} agente konfiguratuta",
       "addBtn": "+ gehitu agentea",
       "empty": "Ez dago agente konfiguraturik. Hautatu \"gehitu agentea\" hasteko.",
       "defaultBadge": "Lehenetsia",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} tresna integratu",
-        "mcpServer_one": "{{count}} mcp zerbitzari",
-        "mcpServer_other": "{{count}} mcp zerbitzari",
-        "mcpServer": "{{count}} mcp zerbitzari",
-        "mcpTool_one": "{{count}} mcp tresna",
-        "mcpTool_other": "{{count}} mcp tresna",
-        "mcpTool": "{{count}} mcp tresna"
+        "mcpServer_one": "MCP zerbitzari {{count}}",
+        "mcpServer_other": "{{count}} MCP zerbitzari",
+        "mcpTool_one": "MCP tresna {{count}}",
+        "mcpTool_other": "{{count}} MCP tresna"
       },
       "actions": {
         "edit": "Editatu",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "Ezabatu \"{{name}}\" agentea?"
-      }
+      },
+      "count_one": "Agente {{count}} konfiguratuta",
+      "count_other": "{{count}} agente konfiguratuta"
     },
     "prompts": {
       "desc": "Kudeatu zure AI laguntzailearen portaera eta nortasuna definitzen duten sistemaren prompt-ak.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP iturria kendu da",
-          "reloaded": "{{count}} eragiketa birkargatu dira",
-          "reloadFailed": "Ezin izan da HTTP iturria birkargatu. Egiaztatu kontsola xehetasunetarako."
+          "reloadFailed": "Ezin izan da HTTP iturria birkargatu. Egiaztatu kontsola xehetasunetarako.",
+          "reloaded_one": "Eragiketa {{count}} birkargatu da",
+          "reloaded_other": "{{count}} eragiketa birkargatu dira"
         },
         "modal": {
           "defaultTitle": "HTTP Iturria",
@@ -419,9 +411,6 @@
           "actions": "Ekintzak"
         },
         "unnamed": "CLI Tresna izengabea",
-        "paramCount_one": "{{count}} parametro",
-        "paramCount_other": "{{count}} parametro",
-        "paramCount": "{{count}} parametro",
         "noParams": "Bat ere ez",
         "statusEnabled": "Gaituta",
         "statusDisabled": "Desgaituta",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Pantaila-argazkia",
             "preset-applescript-list-apps": "Zerrendatu Aplikazioak"
           }
-        }
+        },
+        "paramCount_one": "Parametro {{count}}",
+        "paramCount_other": "{{count}} parametro"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Ekintza azkar guztien aurretik testuinguru-menuan erakusteko aurrizkia (emoji edo testua)",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} ekintza konfiguratuta ({{enabled}} gaituta)",
-      "count_other": "{{count}} ekintza konfiguratuta ({{enabled}} gaituta)",
-      "count": "{{count}} ekintza konfiguratuta ({{enabled}} gaituta)",
       "addBtn": "+ gehitu ekintza azkarra",
       "empty": "Ez dago ekintza azkar konfiguraturik. Hautatu \"gehitu ekintza azkarra\" hasteko.",
       "defaultModel": "Lehenetsia",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Luzatu testua",
         "prompt": "Zabaldu eta garatu honako testua…"
-      }
+      },
+      "count_one": "Ekintza {{count}} konfiguratuta ({{enabled}} gaituta)",
+      "count_other": "{{count}} ekintza konfiguratuta ({{enabled}} gaituta)"
     },
     "usage": {
       "desc": "Jarraitu tokenen kontsumoa hornitzaile eta modelo guztietan. Datuak elkarrizketa guztietan metatzen dira.",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG desgaituta dago ezarpenetan. Gaitu hemen: ezarpenak → txat ezaugarriak → RAG.",
       "webSearchDisabled": "Web bilaketa desgaituta dago ezarpenetan. Gaitu hemen: ezarpenak → txat ezaugarriak → web bilaketa.",
       "attached": "Erantsita: {{name}}",
-      "attachedImages": "{{count}} irudi erantsita",
-      "referencesAdded": "{{count}} erreferentzia gehitu dira",
       "fileNotFound": "Fitxategia ez da aurkitu: {{path}}",
       "unableToLoadRag": "Ezin dira RAG estatistikak kargatu.",
       "referenced": "Erreferentziatua: {{name}}",
-      "openViewFailed": "Ezin izan da txat-ikuspegia ireki."
+      "openViewFailed": "Ezin izan da txat-ikuspegia ireki.",
+      "attachedImages_one": "Irudi {{count}} erantsi da",
+      "attachedImages_other": "{{count}} irudi erantsi dira",
+      "referencesAdded_one": "Erreferentzia {{count}} gehitu da",
+      "referencesAdded_other": "{{count}} erreferentzia gehitu dira"
     },
     "status": {
       "unavailable": "Ez eskuragarri",
@@ -1020,9 +1012,8 @@
       "step2": "Gaitu RAG",
       "step3": "Hautatu indexatze-biltegia",
       "close": "Itxi",
-      "retrieved_one": "{{count}} dokumentutik berreskuratuta",
-      "retrieved_other": "{{count}} dokumentutatik berreskuratuta",
-      "retrieved": "{{count}} dokumentutatik berreskuratuta"
+      "retrieved_one": "{{count}} dokumentutik berreskuratua",
+      "retrieved_other": "{{count}} dokumentutatik berreskuratua"
     },
     "ragTooltip": {
       "status": "RAG Indizearen Egoera:",
@@ -1141,8 +1132,6 @@
       "apply": "Aplikatu",
       "applyAll": "Aplikatu guztiak",
       "applied": "Aplikatuta",
-      "changes_one": "aldaketa {{count}}",
-      "changes_other": "{{count}} aldaketa",
       "confirm": "{{summary}} aplikatu?",
       "appliedNotice": "Aplikatuta: {{summary}}",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Ezabatu",
         "move": "Mugitu",
         "batch": "Sorta"
-      }
+      },
+      "changes_one": "Aldaketa {{count}}",
+      "changes_other": "{{count}} aldaketa"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP sarbidea",
         "noServers": "Ez dago MCP zerbitzari konfiguraturik. Gehitu zerbitzariak hemen: Ezarpenak → MCP aukera hauek desblokeatzeko.",
-        "toolsCached_one": "{{count}} tresna katxetatuta",
-        "toolsCached_other": "{{count}} tresna katxetatuta",
-        "toolsCached": "{{count}} tresna katxetatuta",
         "noToolsCached": "Oraindik ez dago tresnarik katxean. Gaitu sarbide osoa edo freskatu katxea.",
         "showTools": "Erakutsi tresnak",
         "hideTools": "Ezkutatu tresnak",
         "selected": "Hautatua",
         "notSelected": "Hautatu gabe",
-        "noToolsAvailable": "Oraindik ez dago tresna erabilgarririk zerbitzari honetan."
+        "noToolsAvailable": "Oraindik ez dago tresna erabilgarririk zerbitzari honetan.",
+        "toolsCached_one": "Tresna {{count}} katxean",
+        "toolsCached_other": "{{count}} tresna katxean"
       },
       "notices": {
         "promptRequired": "Mesedez, eman izen bat eta edukia prompt berriarentzat."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Cachean gordetako modeloak: {{count}}",
       "connectionFailed": "Konexio-probak huts egin du. Egiaztatu hornitzailearen ezarpenak.",
-      "connectionSuccess": "Konexioa ondo. {{count}} modelo cachean gorde dira.",
       "noCachedModels": "Ez dago cachean gordetako modelorik",
       "testConnection": "Probatu konexioa",
-      "testing": "Probatzen..."
+      "testing": "Probatzen...",
+      "connectionSuccess_one": "Konexioa ondo egin da. Modelo {{count}} katxean gorde da.",
+      "connectionSuccess_other": "Konexioa ondo egin da. {{count}} modelo katxean gorde dira."
     },
     "mcpInspector": {
       "title": "MCP ikuskatzailea",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Desgaituta",
         "statusConnected": "● konektatuta",
         "statusDisconnected": "○ deskonektatuta",
-        "toolsLive_one": "{{count}} tresna",
-        "toolsLive_other": "{{count}} tresna",
-        "toolsLive": "{{count}} tresna",
-        "toolsCached_one": "{{count}} tresna (katxean)",
-        "toolsCached_other": "{{count}} tresna (katxean)",
-        "toolsCached": "{{count}} tresna (katxean)",
         "noTools": "0 tresna",
         "connectBtn": "Konektatu",
         "disconnectBtn": "Deskonektatu",
@@ -1346,7 +1331,11 @@
           "connected": "{{name}}-ra konektatuta",
           "failedDisconnect": "Ezin izan da {{name}}-tik deskonektatu: {{message}}",
           "failedConnect": "Ezin izan da {{name}}-ra konektatu: {{message}}"
-        }
+        },
+        "toolsCached_one": "Tresna {{count}} (katxean)",
+        "toolsCached_other": "{{count}} tresna (katxean)",
+        "toolsLive_one": "Tresna {{count}}",
+        "toolsLive_other": "{{count}} tresna"
       },
       "tools": {
         "title": "Eskuragarri dauden MCP tresnak",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Tresnak eta baimenak",
-    "subtitle_one": "{{agent}} agenteak tresna {{count}} erabil dezake.",
-    "subtitle_other": "{{agent}} agenteak {{count}} tresna erabil ditzake.",
     "chatMode": "Txat modua",
     "permissions": "Uneko baimenak",
     "reads": "Ataza honek irakur dezake",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Biltegiaren testuingurua",
-      "referencesPlusContext_one": "Erreferentzia esplizitu {{count}} gehi testuinguru aktiboa",
-      "referencesPlusContext_other": "{{count}} erreferentzia esplizitu gehi testuinguru aktiboa",
       "activeContext": "Ohar aktiboa eta grafoaren testuinguruaren argazkia",
       "readTools": "Biltegia irakurtzeko tresnak",
       "enabledCount": "{{count}} gaituta",
@@ -1605,12 +1590,16 @@
       "off": "Itzalita",
       "disabledInSettings": "Ezarpenetan desgaituta",
       "custom": "Tresna pertsonalizatuak",
-      "customEnabled_one": "MCP, OpenAPI edo CLI tresna {{count}} gaituta",
-      "customEnabled_other": "{{count}} MCP, OpenAPI edo CLI tresna gaituta",
       "noneEnabled": "Bat ere ez gaituta",
       "destructive": "Biltegiko ekintza suntsitzaileak",
-      "notProvided": "Tresna integratuek ez dute eskaintzen"
-    }
+      "notProvided": "Tresna integratuek ez dute eskaintzen",
+      "customEnabled_one": "MCP, OpenAPI edo CLI tresna {{count}} gaituta",
+      "customEnabled_other": "{{count}} MCP, OpenAPI edo CLI tresna gaituta",
+      "referencesPlusContext_one": "Erreferentzia esplizitu {{count}} gehi testuinguru aktiboa",
+      "referencesPlusContext_other": "{{count}} erreferentzia esplizitu gehi testuinguru aktiboa"
+    },
+    "subtitle_one": "{{agent}} agenteak tresna {{count}} erabil dezake.",
+    "subtitle_other": "{{agent}} agenteak {{count}} tresna erabil ditzake."
   },
   "markdown": {
     "run": "Exekutatu"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Ez dago indexatzeko Markdown oharrik.",
-      "starting_one": "Ohar {{count}} indexatzen…",
-      "starting_other": "{{count}} ohar indexatzen…",
       "progress": "Indexatzen: {{done}} / {{total}} ohar",
       "completed": "Indexazioa amaitu da: {{indexed}} indexatuta, {{failed}} huts eginda.",
       "noIndex": "Oraindik ez dago ezer indexatuta. Exekutatu \"Embed all documents\" zure biltegia indexatzeko.",
       "gradingError": "Dokumentuaren ebaluazioak huts egin du: {{message}}",
       "clearing": "Indizea garbitzen…",
-      "cleared": "Indizea garbitu da."
+      "cleared": "Indizea garbitu da.",
+      "starting_one": "Ohar {{count}} indexatzen…",
+      "starting_other": "{{count}} ohar indexatzen…"
     }
   }
 }

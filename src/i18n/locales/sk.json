@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Prezerajte a spravujte modely od všetkých nakonfigurovaných poskytovateľov. Kliknite na „obnoviť modely“ a načítajte najnovšie dostupné modely.",
-      "providerCount_one": "{{count}} poskytovateľ nakonfigurovaný",
-      "providerCount_other": "{{count}} poskytovatelia nakonfigurovaní",
-      "providerCount": "{{count}} poskytovatelia nakonfigurovaní",
       "refreshAll": "obnoviť všetky modely",
       "empty": "Zatiaľ žiadni poskytovatelia. Pridajte ich najprv na karte poskytovateľov.",
       "noModels": "Žiadne dostupné modely. Kliknite na „obnoviť všetky modely“ alebo obnovte jednotlivých poskytovateľov na karte poskytovateľov.",
       "noMatch": "Žiadne modely nezodpovedajú aktuálnym filtrom. Upravte alebo vymažte filtre, aby ste zobrazili výsledky.",
-      "modelCount_one": "• {{count}} model uložený v cache",
-      "modelCount_other": "• {{count}} modely uložené v cache",
-      "modelCount": "• {{count}} modely uložené v cache",
-      "matchCount_one": "• {{count}} zodpovedá zvoleným filtrom",
-      "matchCount_other": "• {{count}} zodpovedá zvoleným filtrom",
-      "matchCount": "• {{count}} zodpovedá zvoleným filtrom",
       "status": {
         "enabled": "Povolené",
         "disabled": "Zakázané"
@@ -92,12 +83,21 @@
         "capabilities": "Schopnosti",
         "status": "Stav",
         "actions": "Akcie"
-      }
+      },
+      "matchCount_one": "• {{count}} zhoda s vybranými filtrami",
+      "matchCount_few": "• {{count}} zhody s vybranými filtrami",
+      "matchCount_many": "• {{count}} zhody s vybranými filtrami",
+      "matchCount_other": "• {{count}} zhôd s vybranými filtrami",
+      "modelCount_one": "• {{count}} model v cache",
+      "modelCount_few": "• {{count}} modely v cache",
+      "modelCount_many": "• {{count}} modelu v cache",
+      "modelCount_other": "• {{count}} modelov v cache",
+      "providerCount_one": "Nakonfigurovaný {{count}} poskytovateľ",
+      "providerCount_few": "Nakonfigurovaní {{count}} poskytovatelia",
+      "providerCount_many": "Nakonfigurované {{count}} poskytovateľa",
+      "providerCount_other": "Nakonfigurovaných {{count}} poskytovateľov"
     },
     "provider": {
-      "count_one": "{{count}} poskytovateľ nakonfigurovaný",
-      "count_other": "{{count}} poskytovatelia nakonfigurovaní",
-      "count": "{{count}} poskytovatelia nakonfigurovaní",
       "addBtn": "+ Pridať poskytovateľa",
       "empty": "Žiadni poskytovatelia. Vyberte „Pridať poskytovateľa“ a začnite.",
       "status": {
@@ -116,8 +116,9 @@
       "models": {
         "none": "Žiadne modely",
         "count_one": "{{count}} model",
-        "count_other": "{{count}} modely",
-        "count": "{{count}} modely"
+        "count_few": "{{count}} modely",
+        "count_many": "{{count}} modelu",
+        "count_other": "{{count}} modelov"
       },
       "ollama": {
         "checkingVersion": "Kontrolujem verziu...",
@@ -153,7 +154,11 @@
       },
       "confirm": {
         "delete": "Odstrániť poskytovateľa {{provider}}?"
-      }
+      },
+      "count_one": "Nakonfigurovaný {{count}} poskytovateľ",
+      "count_few": "Nakonfigurovaní {{count}} poskytovatelia",
+      "count_many": "Nakonfigurované {{count}} poskytovateľa",
+      "count_other": "Nakonfigurovaných {{count}} poskytovateľov"
     },
     "mcp": {
       "desc": "Konfigurácia serverov Model Context Protocol (MCP) na rozšírenie schopností agenta externými nástrojmi a zdrojmi dát.",
@@ -165,9 +170,6 @@
       "untitled": "MCP server bez názvu",
       "notConfigured": "Nenakonfigurované",
       "cached": "V cache",
-      "envVars_one": "{{count}} env premenná",
-      "envVars_other": "{{count}} env premenné",
-      "envVars": "{{count}} env premenné",
       "status": {
         "disabled": "Zakázané",
         "connected": "pripojené",
@@ -177,12 +179,14 @@
         "autoConnect": "Automatické pripojenie"
       },
       "toolCount": {
+        "cached_one": "{{count}} nástroj z cache",
+        "cached_few": "{{count}} nástroje z cache",
+        "cached_many": "{{count}} nástroja z cache",
+        "cached_other": "{{count}} nástrojov z cache",
         "live_one": "{{count}} živý nástroj",
-        "live_other": "{{count}} živé nástroje",
-        "live": "{{count}} živé nástroje",
-        "cached_one": "{{count}} nástroj v cache",
-        "cached_other": "{{count}} nástroje v cache",
-        "cached": "{{count}} nástroje v cache"
+        "live_few": "{{count}} živé nástroje",
+        "live_many": "{{count}} živého nástroja",
+        "live_other": "{{count}} živých nástrojov"
       },
       "actions": {
         "edit": "Upraviť",
@@ -204,27 +208,38 @@
         "disconnectFailed": "Odpojenie od {{name}} zlyhalo",
         "connectFailed": "Pripojenie k {{name}} zlyhalo",
         "testNoCommand": "Pred testovaním pripojenia zadajte príkaz",
-        "testSuccess": "Úspešne pripojené! Nájdených {{count}} nástrojov.",
         "testFailed": "Pripojenie zlyhalo: {{message}}",
-        "refreshedAll_one": "nástroje obnovené pre {{count}} server",
-        "refreshedAll_other": "nástroje obnovené pre {{count}} servery",
-        "refreshedAll": "nástroje obnovené pre {{count}} servery",
         "refreshedPartial": "obnovených {{success}} serverov, {{failed}} zlyhalo",
         "noServersConfigured": "Žiadne MCP servery nenakonfigurované",
-        "testingAll": "Testujem {{count}} MCP pripojení serverov...",
-        "testAllSuccess": "všetky {{count}} mcp servery úspešne pripojené!",
-        "testAllPartial": "{{successful}} pripojených, {{failed}} zlyhalo"
+        "testAllPartial": "{{successful}} pripojených, {{failed}} zlyhalo",
+        "refreshedAll_one": "Nástroje obnovené pre {{count}} server",
+        "refreshedAll_few": "Nástroje obnovené pre {{count}} servery",
+        "refreshedAll_many": "Nástroje obnovené pre {{count}} servera",
+        "refreshedAll_other": "Nástroje obnovené pre {{count}} serverov",
+        "testAllSuccess_one": "{{count}} MCP server sa úspešne pripojil.",
+        "testAllSuccess_few": "Všetky {{count}} MCP servery sa úspešne pripojili.",
+        "testAllSuccess_many": "Všetky {{count}} MCP servera sa úspešne pripojili.",
+        "testAllSuccess_other": "Všetkých {{count}} MCP serverov sa úspešne pripojilo.",
+        "testSuccess_one": "Pripojené. Nájdený {{count}} nástroj.",
+        "testSuccess_few": "Pripojené. Nájdené {{count}} nástroje.",
+        "testSuccess_many": "Pripojené. Nájdené {{count}} nástroja.",
+        "testSuccess_other": "Pripojené. Nájdených {{count}} nástrojov.",
+        "testingAll_one": "Testujem {{count}} pripojenie k MCP serveru…",
+        "testingAll_few": "Testujem {{count}} pripojenia k MCP serverom…",
+        "testingAll_many": "Testujem {{count}} pripojenia k MCP serverom…",
+        "testingAll_other": "Testujem {{count}} pripojení k MCP serverom…"
       },
       "confirm": {
         "delete": "Odstrániť MCP server „{{name}}“?"
       },
-      "namePlaceholder": "MCP server Acme"
+      "namePlaceholder": "MCP server Acme",
+      "envVars_one": "{{count}} premenná prostredia",
+      "envVars_few": "{{count}} premenné prostredia",
+      "envVars_many": "{{count}} premennej prostredia",
+      "envVars_other": "{{count}} premenných prostredia"
     },
     "agents": {
       "desc": "Vytvárajte a spravujte AI agentov so špecifickými schopnosťami, nástrojmi a správaním.",
-      "count_one": "{{count}} agent nakonfigurovaný",
-      "count_other": "{{count}} agenti nakonfigurovaní",
-      "count": "{{count}} agenti nakonfigurovaní",
       "addBtn": "+ pridať agenta",
       "empty": "Žiadni agenti. Vyberte pridať agenta a začnite.",
       "defaultBadge": "Predvolené",
@@ -237,12 +252,14 @@
       },
       "tools": {
         "builtIn": "{{count}} vstavaný",
-        "mcpServer_one": "{{count}} mcp server",
-        "mcpServer_other": "{{count}} mcp servery",
-        "mcpServer": "{{count}} mcp servery",
-        "mcpTool_one": "{{count}} mcp nástroj",
-        "mcpTool_other": "{{count}} mcp nástroje",
-        "mcpTool": "{{count}} mcp nástroje"
+        "mcpServer_one": "{{count}} MCP server",
+        "mcpServer_few": "{{count}} MCP servery",
+        "mcpServer_many": "{{count}} MCP servera",
+        "mcpServer_other": "{{count}} MCP serverov",
+        "mcpTool_one": "{{count}} MCP nástroj",
+        "mcpTool_few": "{{count}} MCP nástroje",
+        "mcpTool_many": "{{count}} MCP nástroja",
+        "mcpTool_other": "{{count}} MCP nástrojov"
       },
       "actions": {
         "edit": "Upraviť",
@@ -250,7 +267,11 @@
       },
       "confirm": {
         "delete": "Odstrániť agenta „{{name}}“?"
-      }
+      },
+      "count_one": "Nakonfigurovaný {{count}} agent",
+      "count_few": "Nakonfigurovaní {{count}} agenti",
+      "count_many": "Nakonfigurované {{count}} agenta",
+      "count_other": "Nakonfigurovaných {{count}} agentov"
     },
     "prompts": {
       "desc": "Spravujte systémové výzvy, ktoré definujú správanie a osobnosť vášho AI asistenta.",
@@ -352,8 +373,11 @@
         },
         "notices": {
           "removed": "HTTP zdroj odstránený",
-          "reloaded": "Znova načítaných {{count}} operácií",
-          "reloadFailed": "Nepodarilo sa znova načítať HTTP zdroj. Skontrolujte konzolu."
+          "reloadFailed": "Nepodarilo sa znova načítať HTTP zdroj. Skontrolujte konzolu.",
+          "reloaded_one": "Znova načítaná {{count}} operácia",
+          "reloaded_few": "Znova načítané {{count}} operácie",
+          "reloaded_many": "Znova načítané {{count}} operácie",
+          "reloaded_other": "Znova načítaných {{count}} operácií"
         },
         "modal": {
           "defaultTitle": "HTTP zdroj",
@@ -419,9 +443,6 @@
           "actions": "Akcie"
         },
         "unnamed": "CLI nástroj bez názvu",
-        "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parametre",
-        "paramCount": "{{count}} parametre",
         "noParams": "Žiadne",
         "statusEnabled": "Povolené",
         "statusDisabled": "Zakázané",
@@ -554,7 +575,11 @@
             "preset-screencapture": "Snímka obrazovky",
             "preset-applescript-list-apps": "Zobraziť spustené aplikácie"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_few": "{{count}} parametre",
+        "paramCount_many": "{{count}} parametra",
+        "paramCount_other": "{{count}} parametrov"
       }
     },
     "rag": {
@@ -844,9 +869,6 @@
         "desc": "Predpona (emoji alebo text) na zobrazenie pred všetkými rýchlymi akciami v kontextovom menu",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} akcia nakonfigurovaná ({{enabled}} povolených)",
-      "count_other": "{{count}} akcie nakonfigurované ({{enabled}} povolených)",
-      "count": "{{count}} akcie nakonfigurované ({{enabled}} povolených)",
       "addBtn": "+ pridať rýchlu akciu",
       "empty": "Žiadne rýchle akcie. Vyberte pridať rýchlu akciu a začnite.",
       "defaultModel": "Predvolené",
@@ -912,7 +934,11 @@
       "placeholders": {
         "name": "Predĺžiť text",
         "prompt": "Rozšír a rozpracuj nasledujúci text…"
-      }
+      },
+      "count_one": "Nakonfigurovaná {{count}} akcia (povolené: {{enabled}})",
+      "count_few": "Nakonfigurované {{count}} akcie (povolené: {{enabled}})",
+      "count_many": "Nakonfigurované {{count}} akcie (povolené: {{enabled}})",
+      "count_other": "Nakonfigurovaných {{count}} akcií (povolené: {{enabled}})"
     },
     "usage": {
       "desc": "Sledujte spotrebu tokenov u poskytovateľov a modelov. Dáta sú akumulované naprieč všetkými konverzáciami.",
@@ -994,12 +1020,18 @@
       "ragDisabled": "RAG je zakázaný v nastaveniach. Povoľte ho v nastavenia → funkcie chatu → RAG.",
       "webSearchDisabled": "Webové vyhľadávanie je zakázané v nastaveniach. Povoľte ho v nastavenia → funkcie chatu → webové vyhľadávanie.",
       "attached": "Priložené: {{name}}",
-      "attachedImages": "Priložených {{count}} obrázkov",
-      "referencesAdded": "Pridaných {{count}} referencií",
       "fileNotFound": "Súbor nebol nájdený: {{path}}",
       "unableToLoadRag": "Nedajú sa načítať štatistiky RAG.",
       "referenced": "Odkazovaný: {{name}}",
-      "openViewFailed": "Zobrazenie chatu sa nepodarilo otvoriť."
+      "openViewFailed": "Zobrazenie chatu sa nepodarilo otvoriť.",
+      "attachedImages_one": "Priložený {{count}} obrázok",
+      "attachedImages_few": "Priložené {{count}} obrázky",
+      "attachedImages_many": "Priložené {{count}} obrázka",
+      "attachedImages_other": "Priložených {{count}} obrázkov",
+      "referencesAdded_one": "Pridaný {{count}} odkaz",
+      "referencesAdded_few": "Pridané {{count}} odkazy",
+      "referencesAdded_many": "Pridané {{count}} odkazu",
+      "referencesAdded_other": "Pridaných {{count}} odkazov"
     },
     "status": {
       "unavailable": "Nedostupné",
@@ -1020,9 +1052,10 @@
       "step2": "Povoliť RAG",
       "step3": "Vybrať indexovať trezor",
       "close": "Zatvoriť",
-      "retrieved_one": "načítané z {{count}} dokumentu",
-      "retrieved_other": "načítané z {{count}} dokumentov",
-      "retrieved": "načítané z {{count}} dokumentov"
+      "retrieved_one": "Načítané z {{count}} dokumentu",
+      "retrieved_few": "Načítané z {{count}} dokumentov",
+      "retrieved_many": "Načítané z {{count}} dokumentu",
+      "retrieved_other": "Načítané z {{count}} dokumentov"
     },
     "ragTooltip": {
       "status": "Stav RAG indexu:",
@@ -1141,8 +1174,6 @@
       "apply": "Použiť",
       "applyAll": "Použiť všetko",
       "applied": "Použité",
-      "changes_one": "{{count}} zmena",
-      "changes_other": "zmeny: {{count}}",
       "confirm": "Použiť ({{summary}})?",
       "appliedNotice": "Použité ({{summary}})",
       "operations": {
@@ -1152,7 +1183,11 @@
         "delete": "Odstrániť",
         "move": "Presunúť",
         "batch": "Dávka"
-      }
+      },
+      "changes_one": "{{count}} zmena",
+      "changes_few": "{{count}} zmeny",
+      "changes_many": "{{count}} zmeny",
+      "changes_other": "{{count}} zmien"
     }
   },
   "modals": {
@@ -1213,15 +1248,16 @@
       "mcp": {
         "title": "MCP prístup",
         "noServers": "Žiadne MCP servery. Pridajte ich v Nastavenia → MCP na odomknutie možností.",
-        "toolsCached_one": "{{count}} nástroj v cache",
-        "toolsCached_other": "{{count}} nástroje v cache",
-        "toolsCached": "{{count}} nástroje v cache",
         "noToolsCached": "Žiadne nástroje v cache. Povoľte plný prístup alebo obnovte cache.",
         "showTools": "Zobraziť nástroje",
         "hideTools": "Skryť nástroje",
         "selected": "Vybrané",
         "notSelected": "Nevybrané",
-        "noToolsAvailable": "Zatiaľ žiadne nástroje z tohto servera."
+        "noToolsAvailable": "Zatiaľ žiadne nástroje z tohto servera.",
+        "toolsCached_one": "{{count}} nástroj v cache",
+        "toolsCached_few": "{{count}} nástroje v cache",
+        "toolsCached_many": "{{count}} nástroja v cache",
+        "toolsCached_other": "{{count}} nástrojov v cache"
       },
       "notices": {
         "promptRequired": "Zadajte prosím názov a obsah novej systémovej výzvy."
@@ -1303,10 +1339,13 @@
       },
       "cachedModels": "Modely v cache: {{count}}",
       "connectionFailed": "Test pripojenia zlyhal. Skontrolujte nastavenia poskytovateľa.",
-      "connectionSuccess": "Pripojenie úspešné. Počet modelov v cache: {{count}}.",
       "noCachedModels": "Žiadne modely v cache",
       "testConnection": "Otestovať pripojenie",
-      "testing": "Testuje sa..."
+      "testing": "Testuje sa...",
+      "connectionSuccess_one": "Pripojenie úspešné. V cache je {{count}} model.",
+      "connectionSuccess_few": "Pripojenie úspešné. V cache sú {{count}} modely.",
+      "connectionSuccess_many": "Pripojenie úspešné. V cache je {{count}} modelu.",
+      "connectionSuccess_other": "Pripojenie úspešné. V cache je {{count}} modelov."
     },
     "mcpInspector": {
       "title": "MCP inšpektor",
@@ -1329,12 +1368,6 @@
         "statusDisabled": "Zakázané",
         "statusConnected": "● pripojené",
         "statusDisconnected": "○ odpojené",
-        "toolsLive_one": "{{count}} nástroj",
-        "toolsLive_other": "{{count}} nástroje",
-        "toolsLive": "{{count}} nástroje",
-        "toolsCached_one": "{{count}} nástroj (v cache)",
-        "toolsCached_other": "{{count}} nástroje (v cache)",
-        "toolsCached": "{{count}} nástroje (v cache)",
         "noTools": "0 nástrojov",
         "connectBtn": "Pripojiť",
         "disconnectBtn": "Odpojiť",
@@ -1346,7 +1379,15 @@
           "connected": "Pripojené k {{name}}",
           "failedDisconnect": "Nepodarilo sa odpojiť od {{name}}: {{message}}",
           "failedConnect": "Nepodarilo sa pripojiť k {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} nástroj (v cache)",
+        "toolsCached_few": "{{count}} nástroje (v cache)",
+        "toolsCached_many": "{{count}} nástroja (v cache)",
+        "toolsCached_other": "{{count}} nástrojov (v cache)",
+        "toolsLive_one": "{{count}} nástroj",
+        "toolsLive_few": "{{count}} nástroje",
+        "toolsLive_many": "{{count}} nástroja",
+        "toolsLive_other": "{{count}} nástrojov"
       },
       "tools": {
         "title": "Dostupné MCP nástroje",
@@ -1569,8 +1610,6 @@
   },
   "capability": {
     "title": "Nástroje a oprávnenia",
-    "subtitle_one": "{{agent}} môže používať {{count}} nástroj.",
-    "subtitle_other": "{{agent}} môže používať nástroje: {{count}}.",
     "chatMode": "Režim chatu",
     "permissions": "Aktuálne oprávnenia",
     "reads": "Táto úloha môže čítať",
@@ -1590,8 +1629,6 @@
     },
     "rows": {
       "vaultContext": "Kontext trezora",
-      "referencesPlusContext_one": "{{count}} explicitný odkaz a aktívny kontext",
-      "referencesPlusContext_other": "Explicitné odkazy: {{count}}, plus aktívny kontext",
       "activeContext": "Aktívna poznámka a snímka kontextu grafu",
       "readTools": "Nástroje na čítanie trezora",
       "enabledCount": "Povolené: {{count}}",
@@ -1605,12 +1642,22 @@
       "off": "Vypnuté",
       "disabledInSettings": "Zakázané v nastaveniach",
       "custom": "Vlastné nástroje",
-      "customEnabled_one": "Povolený {{count}} nástroj MCP, OpenAPI alebo CLI",
-      "customEnabled_other": "Povolené nástroje MCP, OpenAPI alebo CLI: {{count}}",
       "noneEnabled": "Nič nie je povolené",
       "destructive": "Deštruktívne akcie v trezore",
-      "notProvided": "Vstavané nástroje ich neposkytujú"
-    }
+      "notProvided": "Vstavané nástroje ich neposkytujú",
+      "customEnabled_one": "Povolený {{count}} nástroj MCP, OpenAPI alebo CLI",
+      "customEnabled_few": "Povolené {{count}} nástroje MCP, OpenAPI alebo CLI",
+      "customEnabled_many": "Povolené {{count}} nástroja MCP, OpenAPI alebo CLI",
+      "customEnabled_other": "Povolených {{count}} nástrojov MCP, OpenAPI alebo CLI",
+      "referencesPlusContext_one": "{{count}} explicitný odkaz plus aktívny kontext",
+      "referencesPlusContext_few": "{{count}} explicitné odkazy plus aktívny kontext",
+      "referencesPlusContext_many": "{{count}} explicitného odkazu plus aktívny kontext",
+      "referencesPlusContext_other": "{{count}} explicitných odkazov plus aktívny kontext"
+    },
+    "subtitle_one": "{{agent}} môže používať {{count}} nástroj.",
+    "subtitle_few": "{{agent}} môže používať {{count}} nástroje.",
+    "subtitle_many": "{{agent}} môže používať {{count}} nástroja.",
+    "subtitle_other": "{{agent}} môže používať {{count}} nástrojov."
   },
   "markdown": {
     "run": "Spustiť"
@@ -1618,14 +1665,16 @@
   "rag": {
     "notices": {
       "noFiles": "Žiadne poznámky Markdown na indexovanie.",
-      "starting_one": "Indexujem {{count}} poznámku…",
-      "starting_other": "Indexujem poznámky: {{count}}…",
       "progress": "Indexovanie: {{done}} z {{total}} poznámok",
       "completed": "Indexovanie dokončené: indexované {{indexed}}, neúspešné {{failed}}.",
       "noIndex": "Zatiaľ nie je nič indexované. Spustite „Embed all documents“ na indexovanie trezora.",
       "gradingError": "Hodnotenie dokumentov zlyhalo: {{message}}",
       "clearing": "Čistím index…",
-      "cleared": "Index vyčistený."
+      "cleared": "Index vyčistený.",
+      "starting_one": "Indexujem {{count}} poznámku…",
+      "starting_few": "Indexujem {{count}} poznámky…",
+      "starting_many": "Indexujem {{count}} poznámky…",
+      "starting_other": "Indexujem {{count}} poznámok…"
     }
   }
 }

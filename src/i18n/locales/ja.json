@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "すべての設定済みプロバイダーからモデルを表示・管理します。「モデルを更新」をクリックして最新の利用可能なモデルを取得します。",
-      "providerCount_one": "{{count}} プロバイダー設定済み",
-      "providerCount_other": "{{count}} プロバイダー設定済み",
-      "providerCount": "{{count}} プロバイダー設定済み",
       "refreshAll": "すべてのモデルを更新",
       "empty": "プロバイダーがまだ設定されていません。先にプロバイダータブでプロバイダーを追加してください。",
       "noModels": "利用可能なモデルがありません。「すべてのモデルを更新」をクリックするか、プロバイダータブで個別のプロバイダーを更新してください。",
       "noMatch": "現在のフィルターに一致するモデルがありません。フィルターを調整またはクリアして結果を表示してください。",
-      "modelCount_one": "• {{count}} モデルキャッシュ済み",
-      "modelCount_other": "• {{count}} モデルキャッシュ済み",
-      "modelCount": "• {{count}} モデルキャッシュ済み",
-      "matchCount_one": "• {{count}} 件が選択フィルターに一致",
-      "matchCount_other": "• {{count}} 件が選択フィルターに一致",
-      "matchCount": "• {{count}} 件が選択フィルターに一致",
       "status": {
         "enabled": "有効",
         "disabled": "無効"
@@ -92,12 +83,12 @@
         "capabilities": "機能",
         "status": "ステータス",
         "actions": "操作"
-      }
+      },
+      "matchCount_other": "• {{count}} 件が選択したフィルターに一致",
+      "modelCount_other": "• {{count}} 個のモデルをキャッシュ済み",
+      "providerCount_other": "{{count}} 個のプロバイダーを設定済み"
     },
     "provider": {
-      "count_one": "{{count}} プロバイダー設定済み",
-      "count_other": "{{count}} プロバイダー設定済み",
-      "count": "{{count}} プロバイダー設定済み",
       "addBtn": "+ プロバイダーを追加",
       "empty": "プロバイダーが設定されていません。「プロバイダーを追加」を選択して開始してください。",
       "status": {
@@ -115,9 +106,7 @@
       },
       "models": {
         "none": "モデルなし",
-        "count_one": "{{count}} モデル",
-        "count_other": "{{count}} モデル",
-        "count": "{{count}} モデル"
+        "count_other": "{{count}} 個のモデル"
       },
       "ollama": {
         "checkingVersion": "バージョン確認中...",
@@ -153,7 +142,8 @@
       },
       "confirm": {
         "delete": "プロバイダー {{provider}} を削除しますか？"
-      }
+      },
+      "count_other": "{{count}} 個のプロバイダーを設定済み"
     },
     "mcp": {
       "desc": "Model Context Protocol (MCP) サーバーを設定して、外部ツールとデータソースでエージェント機能を拡張します。",
@@ -165,9 +155,6 @@
       "untitled": "無題の MCP サーバー",
       "notConfigured": "未設定",
       "cached": "キャッシュ済み",
-      "envVars_one": "{{count}} 環境変数",
-      "envVars_other": "{{count}} 環境変数",
-      "envVars": "{{count}} 環境変数",
       "status": {
         "disabled": "無効",
         "connected": "接続済み",
@@ -177,12 +164,8 @@
         "autoConnect": "自動接続"
       },
       "toolCount": {
-        "live_one": "{{count}} ライブツール",
-        "live_other": "{{count}} ライブツール",
-        "live": "{{count}} ライブツール",
-        "cached_one": "{{count}} キャッシュツール",
-        "cached_other": "{{count}} キャッシュツール",
-        "cached": "{{count}} キャッシュツール"
+        "cached_other": "キャッシュ済みツール {{count}} 個",
+        "live_other": "ライブツール {{count}} 個"
       },
       "actions": {
         "edit": "編集",
@@ -204,27 +187,23 @@
         "disconnectFailed": "{{name}} からの切断に失敗しました",
         "connectFailed": "{{name}} への接続に失敗しました",
         "testNoCommand": "接続をテストする前にコマンドを入力してください",
-        "testSuccess": "接続に成功しました！{{count}} ツールが見つかりました。",
         "testFailed": "接続に失敗しました: {{message}}",
-        "refreshedAll_one": "{{count}} サーバーのツールを更新しました",
-        "refreshedAll_other": "{{count}} サーバーのツールを更新しました",
-        "refreshedAll": "{{count}} サーバーのツールを更新しました",
         "refreshedPartial": "{{success}} サーバー更新完了、{{failed}} 失敗",
         "noServersConfigured": "MCP サーバーが設定されていません",
-        "testingAll": "{{count}} MCP サーバー接続をテスト中...",
-        "testAllSuccess": "すべての {{count}} MCP サーバーが正常に接続されました！",
-        "testAllPartial": "{{successful}} 接続済み、{{failed}} 失敗"
+        "testAllPartial": "{{successful}} 接続済み、{{failed}} 失敗",
+        "refreshedAll_other": "{{count}} 個のサーバーのツールを更新しました",
+        "testAllSuccess_other": "{{count}} 個の MCP サーバーに正常に接続しました。",
+        "testSuccess_other": "接続しました。{{count}} 個のツールが見つかりました。",
+        "testingAll_other": "{{count}} 件の MCP サーバー接続をテスト中…"
       },
       "confirm": {
         "delete": "MCP サーバー「{{name}}」を削除しますか？"
       },
-      "namePlaceholder": "Acme MCP サーバー"
+      "namePlaceholder": "Acme MCP サーバー",
+      "envVars_other": "{{count}} 個の環境変数"
     },
     "agents": {
       "desc": "特定の機能、ツール、動作を持つ AI エージェントを作成・管理します。",
-      "count_one": "{{count}} エージェント設定済み",
-      "count_other": "{{count}} エージェント設定済み",
-      "count": "{{count}} エージェント設定済み",
       "addBtn": "+ エージェントを追加",
       "empty": "エージェントが設定されていません。「エージェントを追加」を選択して開始してください。",
       "defaultBadge": "デフォルト",
@@ -237,12 +216,8 @@
       },
       "tools": {
         "builtIn": "{{count}} 組み込み",
-        "mcpServer_one": "{{count}} MCP サーバー",
-        "mcpServer_other": "{{count}} MCP サーバー",
-        "mcpServer": "{{count}} MCP サーバー",
-        "mcpTool_one": "{{count}} MCP ツール",
-        "mcpTool_other": "{{count}} MCP ツール",
-        "mcpTool": "{{count}} MCP ツール"
+        "mcpServer_other": "{{count}} 個の MCP サーバー",
+        "mcpTool_other": "{{count}} 個の MCP ツール"
       },
       "actions": {
         "edit": "編集",
@@ -250,7 +225,8 @@
       },
       "confirm": {
         "delete": "エージェント「{{name}}」を削除しますか？"
-      }
+      },
+      "count_other": "{{count}} 個のエージェントを設定済み"
     },
     "prompts": {
       "desc": "AI アシスタントの動作と個性を定義するシステムプロンプトを管理します。",
@@ -352,8 +328,8 @@
         },
         "notices": {
           "removed": "HTTP ソースが削除されました",
-          "reloaded": "{{count}} 件の操作を再読み込みしました",
-          "reloadFailed": "HTTP ソースの再読み込みに失敗しました。詳細はコンソールを確認してください。"
+          "reloadFailed": "HTTP ソースの再読み込みに失敗しました。詳細はコンソールを確認してください。",
+          "reloaded_other": "{{count}} 件の操作を再読み込みしました"
         },
         "modal": {
           "defaultTitle": "HTTP ソース",
@@ -419,9 +395,6 @@
           "actions": "アクション"
         },
         "unnamed": "名前のない CLI ツール",
-        "paramCount_one": "{{count}} パラメーター",
-        "paramCount_other": "{{count}} パラメーター",
-        "paramCount": "{{count}} パラメーター",
         "noParams": "なし",
         "statusEnabled": "有効",
         "statusDisabled": "無効",
@@ -554,7 +527,8 @@
             "preset-screencapture": "スクリーンショット",
             "preset-applescript-list-apps": "実行中のアプリを一覧表示"
           }
-        }
+        },
+        "paramCount_other": "{{count}} 個のパラメーター"
       }
     },
     "rag": {
@@ -844,9 +818,6 @@
         "desc": "コンテキストメニューのすべてのクイックアクションの前に表示するプレフィックス（絵文字またはテキスト）",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} アクション設定済み ({{enabled}} 有効)",
-      "count_other": "{{count}} アクション設定済み ({{enabled}} 有効)",
-      "count": "{{count}} アクション設定済み ({{enabled}} 有効)",
       "addBtn": "+ クイックアクションを追加",
       "empty": "クイックアクションが設定されていません。「クイックアクションを追加」を選択して開始してください。",
       "defaultModel": "デフォルト",
@@ -912,7 +883,8 @@
       "placeholders": {
         "name": "文章を長くする",
         "prompt": "次の文章を膨らませて詳しく書いてください…"
-      }
+      },
+      "count_other": "{{count}} 個のアクションを設定済み（{{enabled}} 個が有効）"
     },
     "usage": {
       "desc": "プロバイダーとモデル全体のトークン消費を追跡します。データはすべての会話で累積されます。",
@@ -994,12 +966,12 @@
       "ragDisabled": "RAG が設定で無効になっています。設定 → チャット機能 → RAG で有効にしてください。",
       "webSearchDisabled": "ウェブ検索が設定で無効になっています。設定 → チャット機能 → ウェブ検索で有効にしてください。",
       "attached": "添付: {{name}}",
-      "attachedImages": "{{count}} 枚の画像を添付しました",
-      "referencesAdded": "{{count}} 件の参照を追加しました",
       "fileNotFound": "ファイルが見つかりません: {{path}}",
       "unableToLoadRag": "RAG 統計を読み込めません。",
       "referenced": "参照済み: {{name}}",
-      "openViewFailed": "チャットビューを開けませんでした。"
+      "openViewFailed": "チャットビューを開けませんでした。",
+      "attachedImages_other": "{{count}} 枚の画像を添付しました",
+      "referencesAdded_other": "{{count}} 件の参照を追加しました"
     },
     "status": {
       "unavailable": "利用不可",
@@ -1020,9 +992,7 @@
       "step2": "RAG を有効にする",
       "step3": "ボルトインデックスを選択",
       "close": "閉じる",
-      "retrieved_one": "{{count}} ドキュメントから取得",
-      "retrieved_other": "{{count}} ドキュメントから取得",
-      "retrieved": "{{count}} ドキュメントから取得"
+      "retrieved_other": "{{count}} 件のドキュメントから取得"
     },
     "ragTooltip": {
       "status": "RAG インデックスステータス:",
@@ -1141,8 +1111,6 @@
       "apply": "適用",
       "applyAll": "すべて適用",
       "applied": "適用済み",
-      "changes_one": "{{count}} 件の変更",
-      "changes_other": "{{count}} 件の変更",
       "confirm": "{{summary}}を適用しますか？",
       "appliedNotice": "{{summary}}を適用しました",
       "operations": {
@@ -1152,7 +1120,8 @@
         "delete": "削除",
         "move": "移動",
         "batch": "一括"
-      }
+      },
+      "changes_other": "{{count}} 件の変更"
     }
   },
   "modals": {
@@ -1213,15 +1182,13 @@
       "mcp": {
         "title": "MCP アクセス",
         "noServers": "MCP サーバーが設定されていません。設定 → MCP でサーバーを追加してこれらのオプションを利用できます。",
-        "toolsCached_one": "{{count}} ツールキャッシュ済み",
-        "toolsCached_other": "{{count}} ツールキャッシュ済み",
-        "toolsCached": "{{count}} ツールキャッシュ済み",
         "noToolsCached": "ツールがまだキャッシュされていません。フルアクセスを有効にするかキャッシュを更新してください。",
         "showTools": "ツールを表示",
         "hideTools": "ツールを非表示",
         "selected": "選択済み",
         "notSelected": "未選択",
-        "noToolsAvailable": "このサーバーからまだ利用可能なツールがありません。"
+        "noToolsAvailable": "このサーバーからまだ利用可能なツールがありません。",
+        "toolsCached_other": "{{count}} 個のツールをキャッシュ済み"
       },
       "notices": {
         "promptRequired": "新しいシステムプロンプトの名前と内容を入力してください。"
@@ -1303,10 +1270,10 @@
       },
       "cachedModels": "キャッシュ済みモデル: {{count}}",
       "connectionFailed": "接続テストに失敗しました。プロバイダー設定を確認してください。",
-      "connectionSuccess": "接続に成功しました。{{count}} 個のモデルをキャッシュしました。",
       "noCachedModels": "キャッシュ済みモデルはありません",
       "testConnection": "接続をテスト",
-      "testing": "テスト中..."
+      "testing": "テスト中...",
+      "connectionSuccess_other": "接続に成功しました。{{count}} 個のモデルをキャッシュしました。"
     },
     "mcpInspector": {
       "title": "MCP インスペクター",
@@ -1329,12 +1296,6 @@
         "statusDisabled": "無効",
         "statusConnected": "● 接続済み",
         "statusDisconnected": "○ 切断済み",
-        "toolsLive_one": "{{count}} ツール",
-        "toolsLive_other": "{{count}} ツール",
-        "toolsLive": "{{count}} ツール",
-        "toolsCached_one": "{{count}} ツール（キャッシュ済み）",
-        "toolsCached_other": "{{count}} ツール（キャッシュ済み）",
-        "toolsCached": "{{count}} ツール（キャッシュ済み）",
         "noTools": "0 ツール",
         "connectBtn": "接続",
         "disconnectBtn": "切断",
@@ -1346,7 +1307,9 @@
           "connected": "{{name}} に接続しました",
           "failedDisconnect": "{{name}} からの切断に失敗しました: {{message}}",
           "failedConnect": "{{name}} への接続に失敗しました: {{message}}"
-        }
+        },
+        "toolsCached_other": "{{count}} 個のツール（キャッシュ済み）",
+        "toolsLive_other": "{{count}} 個のツール"
       },
       "tools": {
         "title": "利用可能な MCP ツール",
@@ -1569,8 +1532,6 @@
   },
   "capability": {
     "title": "ツールと権限",
-    "subtitle_one": "{{agent}} は {{count}} 個のツールを使用できます。",
-    "subtitle_other": "{{agent}} は {{count}} 個のツールを使用できます。",
     "chatMode": "チャットモード",
     "permissions": "現在の権限",
     "reads": "このタスクが読み取れるもの",
@@ -1590,8 +1551,6 @@
     },
     "rows": {
       "vaultContext": "ボルトのコンテキスト",
-      "referencesPlusContext_one": "明示的な参照 {{count}} 件とアクティブなコンテキスト",
-      "referencesPlusContext_other": "明示的な参照 {{count}} 件とアクティブなコンテキスト",
       "activeContext": "アクティブなノートとグラフコンテキストのスナップショット",
       "readTools": "ボルト読み取りツール",
       "enabledCount": "{{count}} 個有効",
@@ -1605,12 +1564,13 @@
       "off": "オフ",
       "disabledInSettings": "設定で無効",
       "custom": "カスタムツール",
-      "customEnabled_one": "MCP・OpenAPI・CLI ツール {{count}} 個が有効",
-      "customEnabled_other": "MCP・OpenAPI・CLI ツール {{count}} 個が有効",
       "noneEnabled": "有効なものはありません",
       "destructive": "ボルトへの破壊的な操作",
-      "notProvided": "組み込みツールでは提供されていません"
-    }
+      "notProvided": "組み込みツールでは提供されていません",
+      "customEnabled_other": "MCP・OpenAPI・CLI ツール {{count}} 個が有効",
+      "referencesPlusContext_other": "明示的な参照 {{count}} 件とアクティブなコンテキスト"
+    },
+    "subtitle_other": "{{agent}} は {{count}} 個のツールを使用できます。"
   },
   "markdown": {
     "run": "実行"
@@ -1618,14 +1578,13 @@
   "rag": {
     "notices": {
       "noFiles": "インデックスする Markdown ノートがありません。",
-      "starting_one": "{{count}} 件のノートをインデックス中…",
-      "starting_other": "{{count}} 件のノートをインデックス中…",
       "progress": "インデックス中: {{done}} / {{total}} ノート",
       "completed": "インデックス完了: {{indexed}} 件成功、{{failed}} 件失敗。",
       "noIndex": "まだ何もインデックスされていません。\"Embed all documents\" を実行してボルトをインデックスしてください。",
       "gradingError": "ドキュメントの評価に失敗しました: {{message}}",
       "clearing": "インデックスをクリア中…",
-      "cleared": "インデックスをクリアしました。"
+      "cleared": "インデックスをクリアしました。",
+      "starting_other": "{{count}} 件のノートをインデックス中…"
     }
   }
 }

@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "সকল কনফিগার করা প্রদানকারীর মডেল দেখুন এবং পরিচালনা করুন। সর্বশেষ উপলব্ধ মডেল পেতে \"মডেল রিফ্রেশ করুন\" এ ক্লিক করুন।",
-      "providerCount_one": "{{count}}টি প্রদানকারী কনফিগার করা হয়েছে",
-      "providerCount_other": "{{count}}টি প্রদানকারী কনফিগার করা হয়েছে",
-      "providerCount": "{{count}}টি প্রদানকারী কনফিগার করা হয়েছে",
       "refreshAll": "সব মডেল রিফ্রেশ করুন",
       "empty": "এখনো কোনো প্রদানকারী কনফিগার করা হয়নি। প্রথমে প্রদানকারী ট্যাবে প্রদানকারী যোগ করুন।",
       "noModels": "কোনো মডেল উপলব্ধ নেই। \"সব মডেল রিফ্রেশ করুন\" এ ক্লিক করুন অথবা প্রদানকারী ট্যাবে পৃথক প্রদানকারী রিফ্রেশ করুন।",
       "noMatch": "কোনো মডেল বর্তমান ফিল্টারের সাথে মেলে না। ফলাফল দেখতে ফিল্টার সামঞ্জস্য বা সাফ করুন।",
-      "modelCount_one": "• {{count}}টি মডেল ক্যাশে করা হয়েছে",
-      "modelCount_other": "• {{count}}টি মডেল ক্যাশে করা হয়েছে",
-      "modelCount": "• {{count}}টি মডেল ক্যাশে করা হয়েছে",
-      "matchCount_one": "• {{count}}টি নির্বাচিত ফিল্টারের সাথে মিলেছে",
-      "matchCount_other": "• {{count}}টি নির্বাচিত ফিল্টারের সাথে মিলেছে",
-      "matchCount": "• {{count}}টি নির্বাচিত ফিল্টারের সাথে মিলেছে",
       "status": {
         "enabled": "সক্রিয়",
         "disabled": "নিষ্ক্রিয়"
@@ -92,12 +83,15 @@
         "capabilities": "সক্ষমতা",
         "status": "অবস্থা",
         "actions": "ক্রিয়া"
-      }
+      },
+      "matchCount_one": "• {{count}}টি নির্বাচিত ফিল্টারের সাথে মেলে",
+      "matchCount_other": "• {{count}}টি নির্বাচিত ফিল্টারের সাথে মেলে",
+      "modelCount_one": "• {{count}}টি মডেল ক্যাশে করা হয়েছে",
+      "modelCount_other": "• {{count}}টি মডেল ক্যাশে করা হয়েছে",
+      "providerCount_one": "{{count}}টি প্রদানকারী কনফিগার করা হয়েছে",
+      "providerCount_other": "{{count}}টি প্রদানকারী কনফিগার করা হয়েছে"
     },
     "provider": {
-      "count_one": "{{count}}টি প্রদানকারী কনফিগার করা হয়েছে",
-      "count_other": "{{count}}টি প্রদানকারী কনফিগার করা হয়েছে",
-      "count": "{{count}}টি প্রদানকারী কনফিগার করা হয়েছে",
       "addBtn": "+ প্রদানকারী যোগ করুন",
       "empty": "কোনো প্রদানকারী কনফিগার করা হয়নি। শুরু করতে \"প্রদানকারী যোগ করুন\" নির্বাচন করুন।",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "কোনো মডেল নেই",
         "count_one": "{{count}}টি মডেল",
-        "count_other": "{{count}}টি মডেল",
-        "count": "{{count}}টি মডেল"
+        "count_other": "{{count}}টি মডেল"
       },
       "ollama": {
         "checkingVersion": "সংস্করণ পরীক্ষা করা হচ্ছে...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "{{provider}} প্রদানকারী সরিয়ে ফেলবেন?"
-      }
+      },
+      "count_one": "{{count}}টি প্রদানকারী কনফিগার করা হয়েছে",
+      "count_other": "{{count}}টি প্রদানকারী কনফিগার করা হয়েছে"
     },
     "mcp": {
       "desc": "এজেন্ট সক্ষমতা বাড়ানোর জন্য বাহ্যিক টুল এবং ডেটা উৎস সহ মডেল কনটেক্সট প্রোটোকল (MCP) সার্ভার কনফিগার করুন।",
@@ -165,9 +160,6 @@
       "untitled": "শিরোনামহীন MCP সার্ভার",
       "notConfigured": "কনফিগার করা হয়নি",
       "cached": "ক্যাশে করা",
-      "envVars_one": "{{count}}টি এনভ ভেরিয়েবল",
-      "envVars_other": "{{count}}টি এনভ ভেরিয়েবল",
-      "envVars": "{{count}}টি এনভ ভেরিয়েবল",
       "status": {
         "disabled": "নিষ্ক্রিয়",
         "connected": "সংযুক্ত",
@@ -177,12 +169,10 @@
         "autoConnect": "স্বয়ংক্রিয়-সংযোগ"
       },
       "toolCount": {
-        "live_one": "{{count}}টি লাইভ টুল",
-        "live_other": "{{count}}টি লাইভ টুল",
-        "live": "{{count}}টি লাইভ টুল",
         "cached_one": "{{count}}টি ক্যাশে করা টুল",
         "cached_other": "{{count}}টি ক্যাশে করা টুল",
-        "cached": "{{count}}টি ক্যাশে করা টুল"
+        "live_one": "{{count}}টি লাইভ টুল",
+        "live_other": "{{count}}টি লাইভ টুল"
       },
       "actions": {
         "edit": "সম্পাদনা",
@@ -204,27 +194,28 @@
         "disconnectFailed": "{{name}} থেকে সংযোগ বিচ্ছিন্ন করতে ব্যর্থ হয়েছে",
         "connectFailed": "{{name}} এর সাথে সংযোগ করতে ব্যর্থ হয়েছে",
         "testNoCommand": "সংযোগ পরীক্ষা করার আগে অনুগ্রহ করে একটি কমান্ড লিখুন",
-        "testSuccess": "সফলভাবে সংযুক্ত! {{count}}টি টুল পাওয়া গেছে।",
         "testFailed": "সংযোগ ব্যর্থ হয়েছে: {{message}}",
-        "refreshedAll_one": "{{count}}টি সার্ভারের জন্য টুল রিফ্রেশ করা হয়েছে",
-        "refreshedAll_other": "{{count}}টি সার্ভারের জন্য টুল রিফ্রেশ করা হয়েছে",
-        "refreshedAll": "{{count}}টি সার্ভারের জন্য টুল রিফ্রেশ করা হয়েছে",
         "refreshedPartial": "{{success}}টি সার্ভার রিফ্রেশ হয়েছে, {{failed}}টি ব্যর্থ হয়েছে",
         "noServersConfigured": "কোনো MCP সার্ভার কনফিগার করা হয়নি",
-        "testingAll": "{{count}}টি MCP সার্ভার সংযোগ পরীক্ষা করা হচ্ছে...",
-        "testAllSuccess": "সব {{count}}টি MCP সার্ভার সফলভাবে সংযুক্ত হয়েছে!",
-        "testAllPartial": "{{successful}}টি সংযুক্ত, {{failed}}টি ব্যর্থ হয়েছে"
+        "testAllPartial": "{{successful}}টি সংযুক্ত, {{failed}}টি ব্যর্থ হয়েছে",
+        "refreshedAll_one": "{{count}}টি সার্ভারের টুল রিফ্রেশ করা হয়েছে",
+        "refreshedAll_other": "{{count}}টি সার্ভারের টুল রিফ্রেশ করা হয়েছে",
+        "testAllSuccess_one": "{{count}}টি MCP সার্ভার সফলভাবে সংযুক্ত হয়েছে।",
+        "testAllSuccess_other": "সব {{count}}টি MCP সার্ভার সফলভাবে সংযুক্ত হয়েছে।",
+        "testSuccess_one": "সংযুক্ত হয়েছে। {{count}}টি টুল পাওয়া গেছে।",
+        "testSuccess_other": "সংযুক্ত হয়েছে। {{count}}টি টুল পাওয়া গেছে।",
+        "testingAll_one": "{{count}}টি MCP সার্ভার সংযোগ পরীক্ষা করা হচ্ছে…",
+        "testingAll_other": "{{count}}টি MCP সার্ভার সংযোগ পরীক্ষা করা হচ্ছে…"
       },
       "confirm": {
         "delete": "\"{{name}}\" MCP সার্ভার মুছে ফেলবেন?"
       },
-      "namePlaceholder": "Acme MCP সার্ভার"
+      "namePlaceholder": "Acme MCP সার্ভার",
+      "envVars_one": "{{count}}টি এনভায়রনমেন্ট ভেরিয়েবল",
+      "envVars_other": "{{count}}টি এনভায়রনমেন্ট ভেরিয়েবল"
     },
     "agents": {
       "desc": "নির্দিষ্ট সক্ষমতা, টুল এবং আচরণ সহ AI এজেন্ট তৈরি এবং পরিচালনা করুন।",
-      "count_one": "{{count}}টি এজেন্ট কনফিগার করা হয়েছে",
-      "count_other": "{{count}}টি এজেন্ট কনফিগার করা হয়েছে",
-      "count": "{{count}}টি এজেন্ট কনফিগার করা হয়েছে",
       "addBtn": "+ এজেন্ট যোগ করুন",
       "empty": "কোনো এজেন্ট কনফিগার করা হয়নি। শুরু করতে এজেন্ট যোগ করুন নির্বাচন করুন।",
       "defaultBadge": "ডিফল্ট",
@@ -239,10 +230,8 @@
         "builtIn": "{{count}}টি বিল্ট-ইন",
         "mcpServer_one": "{{count}}টি MCP সার্ভার",
         "mcpServer_other": "{{count}}টি MCP সার্ভার",
-        "mcpServer": "{{count}}টি MCP সার্ভার",
         "mcpTool_one": "{{count}}টি MCP টুল",
-        "mcpTool_other": "{{count}}টি MCP টুল",
-        "mcpTool": "{{count}}টি MCP টুল"
+        "mcpTool_other": "{{count}}টি MCP টুল"
       },
       "actions": {
         "edit": "সম্পাদনা",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "\"{{name}}\" এজেন্ট মুছে ফেলবেন?"
-      }
+      },
+      "count_one": "{{count}}টি এজেন্ট কনফিগার করা হয়েছে",
+      "count_other": "{{count}}টি এজেন্ট কনফিগার করা হয়েছে"
     },
     "prompts": {
       "desc": "সিস্টেম প্রম্পট পরিচালনা করুন যা আপনার AI সহায়কের আচরণ এবং ব্যক্তিত্ব নির্ধারণ করে।",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP উৎস সরানো হয়েছে",
-          "reloaded": "{{count}}টি অপারেশন রিলোড করা হয়েছে",
-          "reloadFailed": "HTTP উৎস রিলোড করতে ব্যর্থ হয়েছে। বিস্তারিত জানতে কনসোল পরীক্ষা করুন।"
+          "reloadFailed": "HTTP উৎস রিলোড করতে ব্যর্থ হয়েছে। বিস্তারিত জানতে কনসোল পরীক্ষা করুন।",
+          "reloaded_one": "{{count}}টি অপারেশন রিলোড করা হয়েছে",
+          "reloaded_other": "{{count}}টি অপারেশন রিলোড করা হয়েছে"
         },
         "modal": {
           "defaultTitle": "HTTP উৎস",
@@ -419,9 +411,6 @@
           "actions": "অ্যাকশন"
         },
         "unnamed": "নামহীন CLI টুল",
-        "paramCount_one": "{{count}}টি প্যারামিটার",
-        "paramCount_other": "{{count}}টি প্যারামিটার",
-        "paramCount": "{{count}}টি প্যারামিটার",
         "noParams": "কোনোটি নয়",
         "statusEnabled": "সক্রিয়",
         "statusDisabled": "নিষ্ক্রিয়",
@@ -554,7 +543,9 @@
             "preset-screencapture": "স্ক্রিনশট",
             "preset-applescript-list-apps": "চলমান অ্যাপের তালিকা"
           }
-        }
+        },
+        "paramCount_one": "{{count}}টি প্যারামিটার",
+        "paramCount_other": "{{count}}টি প্যারামিটার"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "কনটেক্সট মেনুতে সব দ্রুত অ্যাকশনের আগে প্রদর্শিত উপসর্গ (ইমোজি বা টেক্সট)",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}}টি অ্যাকশন কনফিগার করা হয়েছে ({{enabled}}টি সক্রিয়)",
-      "count_other": "{{count}}টি অ্যাকশন কনফিগার করা হয়েছে ({{enabled}}টি সক্রিয়)",
-      "count": "{{count}}টি অ্যাকশন কনফিগার করা হয়েছে ({{enabled}}টি সক্রিয়)",
       "addBtn": "+ দ্রুত অ্যাকশন যোগ করুন",
       "empty": "কোনো দ্রুত অ্যাকশন কনফিগার করা হয়নি। শুরু করতে দ্রুত অ্যাকশন যোগ করুন নির্বাচন করুন।",
       "defaultModel": "ডিফল্ট",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "টেক্সট দীর্ঘ করুন",
         "prompt": "নিচের টেক্সটটি বিস্তৃত ও বিশদ করুন…"
-      }
+      },
+      "count_one": "{{count}}টি অ্যাকশন কনফিগার করা হয়েছে ({{enabled}}টি সক্রিয়)",
+      "count_other": "{{count}}টি অ্যাকশন কনফিগার করা হয়েছে ({{enabled}}টি সক্রিয়)"
     },
     "usage": {
       "desc": "প্রদানকারী এবং মডেল জুড়ে টোকেন খরচ ট্র্যাক করুন। ডেটা সমস্ত কথোপকথন জুড়ে জমা হয়।",
@@ -994,12 +984,14 @@
       "ragDisabled": "সেটিংসে RAG নিষ্ক্রিয় আছে। সেটিংস → চ্যাট বৈশিষ্ট্য → RAG-এর অধীনে সক্রিয় করুন।",
       "webSearchDisabled": "সেটিংসে ওয়েব অনুসন্ধান নিষ্ক্রিয় আছে। সেটিংস → চ্যাট বৈশিষ্ট্য → ওয়েব অনুসন্ধানের অধীনে সক্রিয় করুন।",
       "attached": "সংযুক্ত: {{name}}",
-      "attachedImages": "{{count}}টি ছবি সংযুক্ত করা হয়েছে",
-      "referencesAdded": "{{count}}টি রেফারেন্স যোগ করা হয়েছে",
       "fileNotFound": "ফাইল পাওয়া যায়নি: {{path}}",
       "unableToLoadRag": "RAG পরিসংখ্যান লোড করতে অক্ষম।",
       "referenced": "রেফারেন্স করা হয়েছে: {{name}}",
-      "openViewFailed": "চ্যাট ভিউ খোলা যায়নি।"
+      "openViewFailed": "চ্যাট ভিউ খোলা যায়নি।",
+      "attachedImages_one": "{{count}}টি ছবি সংযুক্ত করা হয়েছে",
+      "attachedImages_other": "{{count}}টি ছবি সংযুক্ত করা হয়েছে",
+      "referencesAdded_one": "{{count}}টি রেফারেন্স যোগ করা হয়েছে",
+      "referencesAdded_other": "{{count}}টি রেফারেন্স যোগ করা হয়েছে"
     },
     "status": {
       "unavailable": "অনুপলব্ধ",
@@ -1021,8 +1013,7 @@
       "step3": "ইন্ডেক্স ভল্ট নির্বাচন করুন",
       "close": "বন্ধ করুন",
       "retrieved_one": "{{count}}টি ডকুমেন্ট থেকে পুনরুদ্ধার করা হয়েছে",
-      "retrieved_other": "{{count}}টি ডকুমেন্ট থেকে পুনরুদ্ধার করা হয়েছে",
-      "retrieved": "{{count}}টি ডকুমেন্ট থেকে পুনরুদ্ধার করা হয়েছে"
+      "retrieved_other": "{{count}}টি ডকুমেন্ট থেকে পুনরুদ্ধার করা হয়েছে"
     },
     "ragTooltip": {
       "status": "RAG ইন্ডেক্স অবস্থা:",
@@ -1141,8 +1132,6 @@
       "apply": "প্রয়োগ",
       "applyAll": "সব প্রয়োগ",
       "applied": "প্রয়োগ করা হয়েছে",
-      "changes_one": "{{count}}টি পরিবর্তন",
-      "changes_other": "{{count}}টি পরিবর্তন",
       "confirm": "{{summary}} প্রয়োগ করবেন?",
       "appliedNotice": "{{summary}} প্রয়োগ করা হয়েছে",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "মুছুন",
         "move": "সরান",
         "batch": "ব্যাচ"
-      }
+      },
+      "changes_one": "{{count}}টি পরিবর্তন",
+      "changes_other": "{{count}}টি পরিবর্তন"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP অ্যাক্সেস",
         "noServers": "কোনো MCP সার্ভার কনফিগার করা হয়নি। এই অপশনগুলি আনলক করতে সেটিংস → MCP-এর অধীনে সার্ভার যোগ করুন।",
-        "toolsCached_one": "{{count}}টি টুল ক্যাশে করা হয়েছে",
-        "toolsCached_other": "{{count}}টি টুল ক্যাশে করা হয়েছে",
-        "toolsCached": "{{count}}টি টুল ক্যাশে করা হয়েছে",
         "noToolsCached": "এখনো কোনো টুল ক্যাশে করা হয়নি। সম্পূর্ণ অ্যাক্সেস সক্রিয় করুন অথবা ক্যাশে রিফ্রেশ করুন।",
         "showTools": "টুল দেখান",
         "hideTools": "টুল লুকান",
         "selected": "নির্বাচিত",
         "notSelected": "নির্বাচিত নয়",
-        "noToolsAvailable": "এই সার্ভার থেকে এখনো কোনো টুল উপলব্ধ নেই।"
+        "noToolsAvailable": "এই সার্ভার থেকে এখনো কোনো টুল উপলব্ধ নেই।",
+        "toolsCached_one": "{{count}}টি টুল ক্যাশে করা হয়েছে",
+        "toolsCached_other": "{{count}}টি টুল ক্যাশে করা হয়েছে"
       },
       "notices": {
         "promptRequired": "অনুগ্রহ করে নতুন সিস্টেম প্রম্পটের জন্য একটি নাম এবং বিষয়বস্তু প্রদান করুন।"
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "ক্যাশ করা মডেল: {{count}}",
       "connectionFailed": "সংযোগ পরীক্ষা ব্যর্থ হয়েছে। প্রদানকারী সেটিংস পরীক্ষা করুন।",
-      "connectionSuccess": "সংযোগ সফল। {{count}}টি মডেল ক্যাশ করা হয়েছে।",
       "noCachedModels": "কোনো ক্যাশ করা মডেল নেই",
       "testConnection": "সংযোগ পরীক্ষা করুন",
-      "testing": "পরীক্ষা করা হচ্ছে..."
+      "testing": "পরীক্ষা করা হচ্ছে...",
+      "connectionSuccess_one": "সংযোগ সফল। {{count}}টি মডেল ক্যাশে করা হয়েছে।",
+      "connectionSuccess_other": "সংযোগ সফল। {{count}}টি মডেল ক্যাশে করা হয়েছে।"
     },
     "mcpInspector": {
       "title": "MCP ইনস্পেক্টর",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "নিষ্ক্রিয়",
         "statusConnected": "● সংযুক্ত",
         "statusDisconnected": "○ সংযোগ বিচ্ছিন্ন",
-        "toolsLive_one": "{{count}}টি টুল",
-        "toolsLive_other": "{{count}}টি টুল",
-        "toolsLive": "{{count}}টি টুল",
-        "toolsCached_one": "{{count}}টি টুল (ক্যাশে করা)",
-        "toolsCached_other": "{{count}}টি টুল (ক্যাশে করা)",
-        "toolsCached": "{{count}}টি টুল (ক্যাশে করা)",
         "noTools": "০টি টুল",
         "connectBtn": "সংযোগ করুন",
         "disconnectBtn": "সংযোগ বিচ্ছিন্ন করুন",
@@ -1346,7 +1331,11 @@
           "connected": "{{name}} এর সাথে সংযুক্ত হয়েছে",
           "failedDisconnect": "{{name}} থেকে সংযোগ বিচ্ছিন্ন করতে ব্যর্থ হয়েছে: {{message}}",
           "failedConnect": "{{name}} এর সাথে সংযোগ করতে ব্যর্থ হয়েছে: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}}টি টুল (ক্যাশে করা)",
+        "toolsCached_other": "{{count}}টি টুল (ক্যাশে করা)",
+        "toolsLive_one": "{{count}}টি টুল",
+        "toolsLive_other": "{{count}}টি টুল"
       },
       "tools": {
         "title": "উপলব্ধ MCP টুল",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "টুল এবং অনুমতি",
-    "subtitle_one": "{{agent}} {{count}}টি টুল ব্যবহার করতে পারে।",
-    "subtitle_other": "{{agent}} {{count}}টি টুল ব্যবহার করতে পারে।",
     "chatMode": "চ্যাট মোড",
     "permissions": "বর্তমান অনুমতি",
     "reads": "এই কাজটি পড়তে পারে",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "ভল্টের প্রসঙ্গ",
-      "referencesPlusContext_one": "{{count}}টি সুস্পষ্ট রেফারেন্স এবং সক্রিয় প্রসঙ্গ",
-      "referencesPlusContext_other": "{{count}}টি সুস্পষ্ট রেফারেন্স এবং সক্রিয় প্রসঙ্গ",
       "activeContext": "সক্রিয় নোট এবং গ্রাফ প্রসঙ্গের স্ন্যাপশট",
       "readTools": "ভল্ট পড়ার টুল",
       "enabledCount": "{{count}}টি সক্রিয়",
@@ -1605,12 +1590,16 @@
       "off": "বন্ধ",
       "disabledInSettings": "সেটিংসে নিষ্ক্রিয়",
       "custom": "কাস্টম টুল",
-      "customEnabled_one": "{{count}}টি MCP, OpenAPI বা CLI টুল সক্রিয়",
-      "customEnabled_other": "{{count}}টি MCP, OpenAPI বা CLI টুল সক্রিয়",
       "noneEnabled": "কোনোটি সক্রিয় নেই",
       "destructive": "ভল্টে ধ্বংসাত্মক ক্রিয়া",
-      "notProvided": "অন্তর্নির্মিত টুল দ্বারা সরবরাহ করা হয় না"
-    }
+      "notProvided": "অন্তর্নির্মিত টুল দ্বারা সরবরাহ করা হয় না",
+      "customEnabled_one": "{{count}}টি MCP, OpenAPI বা CLI টুল সক্রিয়",
+      "customEnabled_other": "{{count}}টি MCP, OpenAPI বা CLI টুল সক্রিয়",
+      "referencesPlusContext_one": "{{count}}টি সুস্পষ্ট রেফারেন্স এবং সক্রিয় প্রসঙ্গ",
+      "referencesPlusContext_other": "{{count}}টি সুস্পষ্ট রেফারেন্স এবং সক্রিয় প্রসঙ্গ"
+    },
+    "subtitle_one": "{{agent}} {{count}}টি টুল ব্যবহার করতে পারে।",
+    "subtitle_other": "{{agent}} {{count}}টি টুল ব্যবহার করতে পারে।"
   },
   "markdown": {
     "run": "চালান"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "ইন্ডেক্স করার মতো কোনো Markdown নোট নেই।",
-      "starting_one": "{{count}}টি নোট ইন্ডেক্স করা হচ্ছে…",
-      "starting_other": "{{count}}টি নোট ইন্ডেক্স করা হচ্ছে…",
       "progress": "ইন্ডেক্সিং: {{total}}টির মধ্যে {{done}}টি নোট",
       "completed": "ইন্ডেক্সিং সম্পন্ন: {{indexed}}টি ইন্ডেক্স হয়েছে, {{failed}}টি ব্যর্থ।",
       "noIndex": "এখনও কিছু ইন্ডেক্স করা হয়নি। আপনার ভল্ট ইন্ডেক্স করতে \"Embed all documents\" চালান।",
       "gradingError": "ডকুমেন্ট মূল্যায়ন ব্যর্থ হয়েছে: {{message}}",
       "clearing": "ইন্ডেক্স সাফ করা হচ্ছে…",
-      "cleared": "ইন্ডেক্স সাফ করা হয়েছে।"
+      "cleared": "ইন্ডেক্স সাফ করা হয়েছে।",
+      "starting_one": "{{count}}টি নোট ইনডেক্স করা হচ্ছে…",
+      "starting_other": "{{count}}টি নোট ইনডেক্স করা হচ্ছে…"
     }
   }
 }

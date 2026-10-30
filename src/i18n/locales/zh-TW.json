@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "檢視並管理所有已設定提供者的模型。點擊「重新整理模型」以擷取最新可用的模型。",
-      "providerCount_one": "已設定 {{count}} 個提供者",
-      "providerCount_other": "已設定 {{count}} 個提供者",
-      "providerCount": "已設定 {{count}} 個提供者",
       "refreshAll": "重新整理所有模型",
       "empty": "尚未設定任何提供者。請先在提供者頁籤中新增提供者。",
       "noModels": "沒有可用的模型。請點擊「重新整理所有模型」或在提供者頁籤中重新整理個別提供者。",
       "noMatch": "沒有模型符合目前的篩選條件。請調整或清除篩選條件以查看結果。",
-      "modelCount_one": "• 快取了 {{count}} 個模型",
-      "modelCount_other": "• 快取了 {{count}} 個模型",
-      "modelCount": "• 快取了 {{count}} 個模型",
-      "matchCount_one": "• {{count}} 個符合所選篩選條件",
-      "matchCount_other": "• {{count}} 個符合所選篩選條件",
-      "matchCount": "• {{count}} 個符合所選篩選條件",
       "status": {
         "enabled": "已啟用",
         "disabled": "已停用"
@@ -92,12 +83,12 @@
         "capabilities": "功能",
         "status": "狀態",
         "actions": "動作"
-      }
+      },
+      "matchCount_other": "• {{count}} 個符合所選篩選條件",
+      "modelCount_other": "• 已快取 {{count}} 個模型",
+      "providerCount_other": "已設定 {{count}} 個提供者"
     },
     "provider": {
-      "count_one": "已設定 {{count}} 個提供者",
-      "count_other": "已設定 {{count}} 個提供者",
-      "count": "已設定 {{count}} 個提供者",
       "addBtn": "+ 新增提供者",
       "empty": "未設定任何提供者。請選擇「新增提供者」以開始使用。",
       "status": {
@@ -115,9 +106,7 @@
       },
       "models": {
         "none": "無模型",
-        "count_one": "{{count}} 個模型",
-        "count_other": "{{count}} 個模型",
-        "count": "{{count}} 個模型"
+        "count_other": "{{count}} 個模型"
       },
       "ollama": {
         "checkingVersion": "正在檢查版本...",
@@ -153,7 +142,8 @@
       },
       "confirm": {
         "delete": "移除提供者 {{provider}}？"
-      }
+      },
+      "count_other": "已設定 {{count}} 個提供者"
     },
     "mcp": {
       "desc": "設定 Model Context Protocol (MCP) 伺服器，以使用外部工具和資料來源擴充代理功能。",
@@ -165,9 +155,6 @@
       "untitled": "未命名 MCP 伺服器",
       "notConfigured": "未設定",
       "cached": "已快取",
-      "envVars_one": "{{count}} 個環境變數",
-      "envVars_other": "{{count}} 個環境變數",
-      "envVars": "{{count}} 個環境變數",
       "status": {
         "disabled": "已停用",
         "connected": "已連線",
@@ -177,12 +164,8 @@
         "autoConnect": "自動連線"
       },
       "toolCount": {
-        "live_one": "{{count}} 個即時工具",
-        "live_other": "{{count}} 個即時工具",
-        "live": "{{count}} 個即時工具",
-        "cached_one": "{{count}} 個已快取工具",
         "cached_other": "{{count}} 個已快取工具",
-        "cached": "{{count}} 個已快取工具"
+        "live_other": "{{count}} 個即時工具"
       },
       "actions": {
         "edit": "編輯",
@@ -204,27 +187,23 @@
         "disconnectFailed": "無法從 {{name}} 中斷連線",
         "connectFailed": "無法連線至 {{name}}",
         "testNoCommand": "測試連線前請先輸入命令",
-        "testSuccess": "連線成功！找到 {{count}} 個工具。",
         "testFailed": "連線失敗：{{message}}",
-        "refreshedAll_one": "已重新整理 {{count}} 個伺服器的工具",
-        "refreshedAll_other": "已重新整理 {{count}} 個伺服器的工具",
-        "refreshedAll": "已重新整理 {{count}} 個伺服器的工具",
         "refreshedPartial": "已重新整理 {{success}} 個伺服器，{{failed}} 個失敗",
         "noServersConfigured": "未設定任何 MCP 伺服器",
-        "testingAll": "正在測試 {{count}} 個 MCP 伺服器連線...",
-        "testAllSuccess": "所有 {{count}} 個 mcp 伺服器均已成功連線！",
-        "testAllPartial": "{{successful}} 個已連線，{{failed}} 個失敗"
+        "testAllPartial": "{{successful}} 個已連線，{{failed}} 個失敗",
+        "refreshedAll_other": "已重新整理 {{count}} 個伺服器的工具",
+        "testAllSuccess_other": "已成功連線 {{count}} 個 MCP 伺服器。",
+        "testSuccess_other": "已連線，找到 {{count}} 個工具。",
+        "testingAll_other": "正在測試 {{count}} 個 MCP 伺服器連線…"
       },
       "confirm": {
         "delete": "刪除 MCP 伺服器「{{name}}」？"
       },
-      "namePlaceholder": "Acme MCP 伺服器"
+      "namePlaceholder": "Acme MCP 伺服器",
+      "envVars_other": "{{count}} 個環境變數"
     },
     "agents": {
       "desc": "建立並管理具有特定功能、工具和行為的 AI 代理。",
-      "count_one": "已設定 {{count}} 個代理",
-      "count_other": "已設定 {{count}} 個代理",
-      "count": "已設定 {{count}} 個代理",
       "addBtn": "+ 新增代理",
       "empty": "未設定任何代理。請選擇「新增代理」以開始使用。",
       "defaultBadge": "預設",
@@ -237,12 +216,8 @@
       },
       "tools": {
         "builtIn": "{{count}} 個內建",
-        "mcpServer_one": "{{count}} 個 mcp 伺服器",
-        "mcpServer_other": "{{count}} 個 mcp 伺服器",
-        "mcpServer": "{{count}} 個 mcp 伺服器",
-        "mcpTool_one": "{{count}} 個 mcp 工具",
-        "mcpTool_other": "{{count}} 個 mcp 工具",
-        "mcpTool": "{{count}} 個 mcp 工具"
+        "mcpServer_other": "{{count}} 個 MCP 伺服器",
+        "mcpTool_other": "{{count}} 個 MCP 工具"
       },
       "actions": {
         "edit": "編輯",
@@ -250,7 +225,8 @@
       },
       "confirm": {
         "delete": "刪除代理「{{name}}」？"
-      }
+      },
+      "count_other": "已設定 {{count}} 個代理"
     },
     "prompts": {
       "desc": "管理定義 AI 助理行為和個性的系統提示詞。",
@@ -352,8 +328,8 @@
         },
         "notices": {
           "removed": "HTTP 來源已移除",
-          "reloaded": "已重新載入 {{count}} 個操作",
-          "reloadFailed": "無法重新載入 HTTP 來源。請查看主控台以取得詳細資訊。"
+          "reloadFailed": "無法重新載入 HTTP 來源。請查看主控台以取得詳細資訊。",
+          "reloaded_other": "已重新載入 {{count}} 個操作"
         },
         "modal": {
           "defaultTitle": "HTTP 來源",
@@ -419,9 +395,6 @@
           "actions": "操作"
         },
         "unnamed": "未命名 CLI 工具",
-        "paramCount_one": "{{count}} 個參數",
-        "paramCount_other": "{{count}} 個參數",
-        "paramCount": "{{count}} 個參數",
         "noParams": "無",
         "statusEnabled": "已啟用",
         "statusDisabled": "已停用",
@@ -554,7 +527,8 @@
             "preset-screencapture": "截圖",
             "preset-applescript-list-apps": "列出執行中的應用程式"
           }
-        }
+        },
+        "paramCount_other": "{{count}} 個參數"
       }
     },
     "rag": {
@@ -844,9 +818,6 @@
         "desc": "在上下文選單中所有快速動作之前顯示的前綴（表情符號或文字）",
         "placeholder": "⚡"
       },
-      "count_one": "已設定 {{count}} 個動作（{{enabled}} 個已啟用）",
-      "count_other": "已設定 {{count}} 個動作（{{enabled}} 個已啟用）",
-      "count": "已設定 {{count}} 個動作（{{enabled}} 個已啟用）",
       "addBtn": "+ 新增快速動作",
       "empty": "未設定任何快速動作。請選擇「新增快速動作」以開始使用。",
       "defaultModel": "預設",
@@ -912,7 +883,8 @@
       "placeholders": {
         "name": "擴寫文字",
         "prompt": "擴充並詳細闡述以下文字…"
-      }
+      },
+      "count_other": "已設定 {{count}} 個動作（{{enabled}} 個已啟用）"
     },
     "usage": {
       "desc": "追蹤各提供者和模型的權杖消耗量。資料會在所有對話中累積。",
@@ -994,12 +966,12 @@
       "ragDisabled": "RAG 在設定中已停用。請在「設定 → 聊天功能 → RAG」中啟用。",
       "webSearchDisabled": "網頁搜尋在設定中已停用。請在「設定 → 聊天功能 → 網頁搜尋」中啟用。",
       "attached": "已附加：{{name}}",
-      "attachedImages": "已附加 {{count}} 張圖片",
-      "referencesAdded": "已新增 {{count}} 個參考",
       "fileNotFound": "找不到檔案：{{path}}",
       "unableToLoadRag": "無法載入 RAG 統計資料。",
       "referenced": "已參考：{{name}}",
-      "openViewFailed": "無法開啟聊天檢視。"
+      "openViewFailed": "無法開啟聊天檢視。",
+      "attachedImages_other": "已附加 {{count}} 張圖片",
+      "referencesAdded_other": "已新增 {{count}} 個參照"
     },
     "status": {
       "unavailable": "不可用",
@@ -1020,9 +992,7 @@
       "step2": "啟用 RAG",
       "step3": "選擇索引知識庫",
       "close": "關閉",
-      "retrieved_one": "從 {{count}} 個文件中擷取",
-      "retrieved_other": "從 {{count}} 個文件中擷取",
-      "retrieved": "從 {{count}} 個文件中擷取"
+      "retrieved_other": "已從 {{count}} 個文件中擷取"
     },
     "ragTooltip": {
       "status": "RAG 索引狀態：",
@@ -1141,8 +1111,6 @@
       "apply": "套用",
       "applyAll": "全部套用",
       "applied": "已套用",
-      "changes_one": "{{count}} 項變更",
-      "changes_other": "{{count}} 項變更",
       "confirm": "套用 {{summary}}？",
       "appliedNotice": "已套用 {{summary}}",
       "operations": {
@@ -1152,7 +1120,8 @@
         "delete": "刪除",
         "move": "移動",
         "batch": "批次"
-      }
+      },
+      "changes_other": "{{count}} 項變更"
     }
   },
   "modals": {
@@ -1213,15 +1182,13 @@
       "mcp": {
         "title": "MCP 存取",
         "noServers": "未設定任何 MCP 伺服器。請在「設定 → MCP」中新增伺服器以解鎖這些選項。",
-        "toolsCached_one": "已快取 {{count}} 個工具",
-        "toolsCached_other": "已快取 {{count}} 個工具",
-        "toolsCached": "已快取 {{count}} 個工具",
         "noToolsCached": "尚未快取任何工具。請啟用完整存取或重新整理快取。",
         "showTools": "顯示工具",
         "hideTools": "隱藏工具",
         "selected": "已選取",
         "notSelected": "未選取",
-        "noToolsAvailable": "此伺服器目前沒有可用的工具。"
+        "noToolsAvailable": "此伺服器目前沒有可用的工具。",
+        "toolsCached_other": "已快取 {{count}} 個工具"
       },
       "notices": {
         "promptRequired": "請為新系統提示詞提供名稱和內容。"
@@ -1303,10 +1270,10 @@
       },
       "cachedModels": "已快取模型：{{count}}",
       "connectionFailed": "連線測試失敗，請檢查提供者設定。",
-      "connectionSuccess": "連線成功，已快取 {{count}} 個模型。",
       "noCachedModels": "沒有已快取的模型",
       "testConnection": "測試連線",
-      "testing": "測試中..."
+      "testing": "測試中...",
+      "connectionSuccess_other": "連線成功，已快取 {{count}} 個模型。"
     },
     "mcpInspector": {
       "title": "MCP 檢查器",
@@ -1329,12 +1296,6 @@
         "statusDisabled": "已停用",
         "statusConnected": "● 已連線",
         "statusDisconnected": "○ 已中斷",
-        "toolsLive_one": "{{count}} 個工具",
-        "toolsLive_other": "{{count}} 個工具",
-        "toolsLive": "{{count}} 個工具",
-        "toolsCached_one": "{{count}} 個工具（已快取）",
-        "toolsCached_other": "{{count}} 個工具（已快取）",
-        "toolsCached": "{{count}} 個工具（已快取）",
         "noTools": "0 個工具",
         "connectBtn": "連線",
         "disconnectBtn": "中斷連線",
@@ -1346,7 +1307,9 @@
           "connected": "已連線至 {{name}}",
           "failedDisconnect": "無法從 {{name}} 中斷連線：{{message}}",
           "failedConnect": "無法連線至 {{name}}：{{message}}"
-        }
+        },
+        "toolsCached_other": "{{count}} 個工具（已快取）",
+        "toolsLive_other": "{{count}} 個工具"
       },
       "tools": {
         "title": "可用的 MCP 工具",
@@ -1569,8 +1532,6 @@
   },
   "capability": {
     "title": "工具與權限",
-    "subtitle_one": "{{agent}} 可使用 {{count}} 個工具。",
-    "subtitle_other": "{{agent}} 可使用 {{count}} 個工具。",
     "chatMode": "聊天模式",
     "permissions": "目前權限",
     "reads": "此任務可讀取",
@@ -1590,8 +1551,6 @@
     },
     "rows": {
       "vaultContext": "知識庫上下文",
-      "referencesPlusContext_one": "{{count}} 個明確參照及目前上下文",
-      "referencesPlusContext_other": "{{count}} 個明確參照及目前上下文",
       "activeContext": "目前的筆記與關聯圖上下文快照",
       "readTools": "知識庫讀取工具",
       "enabledCount": "已啟用 {{count}} 個",
@@ -1605,12 +1564,13 @@
       "off": "關閉",
       "disabledInSettings": "已在設定中停用",
       "custom": "自訂工具",
-      "customEnabled_one": "已啟用 {{count}} 個 MCP、OpenAPI 或 CLI 工具",
-      "customEnabled_other": "已啟用 {{count}} 個 MCP、OpenAPI 或 CLI 工具",
       "noneEnabled": "未啟用",
       "destructive": "破壞性知識庫操作",
-      "notProvided": "內建工具未提供"
-    }
+      "notProvided": "內建工具未提供",
+      "customEnabled_other": "已啟用 {{count}} 個 MCP、OpenAPI 或 CLI 工具",
+      "referencesPlusContext_other": "{{count}} 個明確參照及目前上下文"
+    },
+    "subtitle_other": "{{agent}} 可使用 {{count}} 個工具。"
   },
   "markdown": {
     "run": "執行"
@@ -1618,14 +1578,13 @@
   "rag": {
     "notices": {
       "noFiles": "沒有可索引的 Markdown 筆記。",
-      "starting_one": "正在索引 {{count}} 則筆記…",
-      "starting_other": "正在索引 {{count}} 則筆記…",
       "progress": "正在索引：{{done}}/{{total}} 則筆記",
       "completed": "索引完成：已索引 {{indexed}} 則，失敗 {{failed}} 則。",
       "noIndex": "尚未索引任何內容。請執行「Embed all documents」以索引您的知識庫。",
       "gradingError": "文件評分失敗：{{message}}",
       "clearing": "正在清除索引…",
-      "cleared": "索引已清除。"
+      "cleared": "索引已清除。",
+      "starting_other": "正在索引 {{count}} 則筆記…"
     }
   }
 }

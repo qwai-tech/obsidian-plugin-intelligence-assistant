@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "ดูและจัดการโมเดลจากผู้ให้บริการทั้งหมดที่กำหนดค่าไว้ คลิก \"รีเฟรชโมเดลทั้งหมด\" เพื่อดึงโมเดลล่าสุด",
-      "providerCount_one": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
-      "providerCount_other": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
-      "providerCount": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
       "refreshAll": "รีเฟรชโมเดลทั้งหมด",
       "empty": "ยังไม่ได้กำหนดค่าผู้ให้บริการ โปรดเพิ่มผู้ให้บริการในแท็บผู้ให้บริการก่อน",
       "noModels": "ไม่มีโมเดลที่พร้อมใช้งาน คลิก \"รีเฟรชโมเดลทั้งหมด\" หรือรีเฟรชผู้ให้บริการแต่ละรายในแท็บผู้ให้บริการ",
       "noMatch": "ไม่มีโมเดลที่ตรงกับตัวกรองปัจจุบัน ปรับหรือล้างตัวกรองเพื่อดูผลลัพธ์",
-      "modelCount_one": "• แคช {{count}} โมเดล",
-      "modelCount_other": "• แคช {{count}} โมเดล",
-      "modelCount": "• แคช {{count}} โมเดล",
-      "matchCount_one": "• {{count}} รายการตรงกับตัวกรองที่เลือก",
-      "matchCount_other": "• {{count}} รายการตรงกับตัวกรองที่เลือก",
-      "matchCount": "• {{count}} รายการตรงกับตัวกรองที่เลือก",
       "status": {
         "enabled": "เปิดใช้งาน",
         "disabled": "ปิดใช้งาน"
@@ -92,12 +83,12 @@
         "capabilities": "ความสามารถ",
         "status": "สถานะ",
         "actions": "การดำเนินการ"
-      }
+      },
+      "matchCount_other": "• ตรงกับตัวกรองที่เลือก {{count}} รายการ",
+      "modelCount_other": "• แคชโมเดลไว้ {{count}} รายการ",
+      "providerCount_other": "กำหนดค่าผู้ให้บริการ {{count}} รายแล้ว"
     },
     "provider": {
-      "count_one": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
-      "count_other": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
-      "count": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
       "addBtn": "+ เพิ่มผู้ให้บริการ",
       "empty": "ยังไม่ได้กำหนดค่าผู้ให้บริการ เลือก \"เพิ่มผู้ให้บริการ\" เพื่อเริ่มต้น",
       "status": {
@@ -115,9 +106,7 @@
       },
       "models": {
         "none": "ไม่มีโมเดล",
-        "count_one": "{{count}} โมเดล",
-        "count_other": "{{count}} โมเดล",
-        "count": "{{count}} โมเดล"
+        "count_other": "โมเดล {{count}} รายการ"
       },
       "ollama": {
         "checkingVersion": "กำลังตรวจสอบเวอร์ชัน...",
@@ -153,7 +142,8 @@
       },
       "confirm": {
         "delete": "ลบผู้ให้บริการ {{provider}} หรือไม่?"
-      }
+      },
+      "count_other": "กำหนดค่าผู้ให้บริการ {{count}} รายแล้ว"
     },
     "mcp": {
       "desc": "กำหนดค่าเซิร์ฟเวอร์ Model Context Protocol (MCP) เพื่อขยายความสามารถของเอเจนต์ด้วยเครื่องมือภายนอกและแหล่งข้อมูล",
@@ -165,9 +155,6 @@
       "untitled": "เซิร์ฟเวอร์ MCP ไม่มีชื่อ",
       "notConfigured": "ไม่ได้กำหนดค่า",
       "cached": "แคช",
-      "envVars_one": "{{count}} ตัวแปรสภาพแวดล้อม",
-      "envVars_other": "{{count}} ตัวแปรสภาพแวดล้อม",
-      "envVars": "{{count}} ตัวแปรสภาพแวดล้อม",
       "status": {
         "disabled": "ปิดใช้งาน",
         "connected": "เชื่อมต่อแล้ว",
@@ -177,12 +164,8 @@
         "autoConnect": "เชื่อมต่ออัตโนมัติ"
       },
       "toolCount": {
-        "live_one": "{{count}} เครื่องมือที่ใช้งาน",
-        "live_other": "{{count}} เครื่องมือที่ใช้งาน",
-        "live": "{{count}} เครื่องมือที่ใช้งาน",
-        "cached_one": "{{count}} เครื่องมือที่แคช",
-        "cached_other": "{{count}} เครื่องมือที่แคช",
-        "cached": "{{count}} เครื่องมือที่แคช"
+        "cached_other": "เครื่องมือที่แคช {{count}} รายการ",
+        "live_other": "เครื่องมือที่ใช้งานจริง {{count}} รายการ"
       },
       "actions": {
         "edit": "แก้ไข",
@@ -204,27 +187,23 @@
         "disconnectFailed": "ไม่สามารถตัดการเชื่อมต่อจาก {{name}}",
         "connectFailed": "ไม่สามารถเชื่อมต่อกับ {{name}}",
         "testNoCommand": "โปรดป้อนคำสั่งก่อนทดสอบการเชื่อมต่อ",
-        "testSuccess": "เชื่อมต่อสำเร็จ! พบ {{count}} เครื่องมือ",
         "testFailed": "การเชื่อมต่อล้มเหลว: {{message}}",
-        "refreshedAll_one": "รีเฟรชเครื่องมือสำหรับ {{count}} เซิร์ฟเวอร์แล้ว",
-        "refreshedAll_other": "รีเฟรชเครื่องมือสำหรับ {{count}} เซิร์ฟเวอร์แล้ว",
-        "refreshedAll": "รีเฟรชเครื่องมือสำหรับ {{count}} เซิร์ฟเวอร์แล้ว",
         "refreshedPartial": "รีเฟรช {{success}} เซิร์ฟเวอร์สำเร็จ, {{failed}} ล้มเหลว",
         "noServersConfigured": "ไม่ได้กำหนดค่าเซิร์ฟเวอร์ MCP",
-        "testingAll": "กำลังทดสอบการเชื่อมต่อเซิร์ฟเวอร์ MCP {{count}} รายการ...",
-        "testAllSuccess": "เซิร์ฟเวอร์ MCP ทั้ง {{count}} รายการเชื่อมต่อสำเร็จ!",
-        "testAllPartial": "เชื่อมต่อ {{success}} รายการ, ล้มเหลว {{failed}} รายการ"
+        "testAllPartial": "เชื่อมต่อ {{success}} รายการ, ล้มเหลว {{failed}} รายการ",
+        "refreshedAll_other": "รีเฟรชเครื่องมือสำหรับเซิร์ฟเวอร์ {{count}} รายการแล้ว",
+        "testAllSuccess_other": "เชื่อมต่อเซิร์ฟเวอร์ MCP สำเร็จ {{count}} รายการ",
+        "testSuccess_other": "เชื่อมต่อแล้ว พบเครื่องมือ {{count}} รายการ",
+        "testingAll_other": "กำลังทดสอบการเชื่อมต่อเซิร์ฟเวอร์ MCP {{count}} รายการ…"
       },
       "confirm": {
         "delete": "ลบเซิร์ฟเวอร์ MCP \"{{name}}\" หรือไม่?"
       },
-      "namePlaceholder": "เซิร์ฟเวอร์ MCP ของ Acme"
+      "namePlaceholder": "เซิร์ฟเวอร์ MCP ของ Acme",
+      "envVars_other": "ตัวแปรสภาพแวดล้อม {{count}} รายการ"
     },
     "agents": {
       "desc": "สร้างและจัดการเอเจนต์ AI ที่มีความสามารถ เครื่องมือ และพฤติกรรมเฉพาะ",
-      "count_one": "กำหนดค่า {{count}} เอเจนต์แล้ว",
-      "count_other": "กำหนดค่า {{count}} เอเจนต์แล้ว",
-      "count": "กำหนดค่า {{count}} เอเจนต์แล้ว",
       "addBtn": "+ เพิ่มเอเจนต์",
       "empty": "ยังไม่ได้กำหนดค่าเอเจนต์ เลือกเพิ่มเอเจนต์เพื่อเริ่มต้น",
       "defaultBadge": "เริ่มต้น",
@@ -237,12 +216,8 @@
       },
       "tools": {
         "builtIn": "{{count}} แบบในตัว",
-        "mcpServer_one": "{{count}} เซิร์ฟเวอร์ MCP",
-        "mcpServer_other": "{{count}} เซิร์ฟเวอร์ MCP",
-        "mcpServer": "{{count}} เซิร์ฟเวอร์ MCP",
-        "mcpTool_one": "{{count}} เครื่องมือ MCP",
-        "mcpTool_other": "{{count}} เครื่องมือ MCP",
-        "mcpTool": "{{count}} เครื่องมือ MCP"
+        "mcpServer_other": "เซิร์ฟเวอร์ MCP {{count}} รายการ",
+        "mcpTool_other": "เครื่องมือ MCP {{count}} รายการ"
       },
       "actions": {
         "edit": "แก้ไข",
@@ -250,7 +225,8 @@
       },
       "confirm": {
         "delete": "ลบเอเจนต์ \"{{name}}\" หรือไม่?"
-      }
+      },
+      "count_other": "กำหนดค่าเอเจนต์ {{count}} รายการแล้ว"
     },
     "prompts": {
       "desc": "จัดการพรอมต์ระบบที่กำหนดพฤติกรรมและบุคลิกภาพของผู้ช่วย AI ของคุณ",
@@ -352,8 +328,8 @@
         },
         "notices": {
           "removed": "ลบแหล่งข้อมูล HTTP แล้ว",
-          "reloaded": "โหลด {{count}} การดำเนินการใหม่แล้ว",
-          "reloadFailed": "ไม่สามารถโหลดแหล่งข้อมูล HTTP ใหม่ โปรดตรวจสอบ Console สำหรับรายละเอียด"
+          "reloadFailed": "ไม่สามารถโหลดแหล่งข้อมูล HTTP ใหม่ โปรดตรวจสอบ Console สำหรับรายละเอียด",
+          "reloaded_other": "โหลดการดำเนินการ {{count}} รายการใหม่แล้ว"
         },
         "modal": {
           "defaultTitle": "แหล่งข้อมูล HTTP",
@@ -419,9 +395,6 @@
           "actions": "การดำเนินการ"
         },
         "unnamed": "เครื่องมือ CLI ไม่มีชื่อ",
-        "paramCount_one": "{{count}} พารามิเตอร์",
-        "paramCount_other": "{{count}} พารามิเตอร์",
-        "paramCount": "{{count}} พารามิเตอร์",
         "noParams": "ไม่มี",
         "statusEnabled": "เปิดใช้งาน",
         "statusDisabled": "ปิดใช้งาน",
@@ -554,7 +527,8 @@
             "preset-screencapture": "จับภาพหน้าจอ",
             "preset-applescript-list-apps": "แสดงรายการแอปที่กำลังทำงาน"
           }
-        }
+        },
+        "paramCount_other": "พารามิเตอร์ {{count}} รายการ"
       }
     },
     "rag": {
@@ -844,9 +818,6 @@
         "desc": "คำนำหน้า (อิโมจิหรือข้อความ) ที่จะแสดงก่อนการดำเนินการด่วนทั้งหมดในเมนูบริบท",
         "placeholder": "⚡"
       },
-      "count_one": "กำหนดค่า {{count}} รายการ (เปิดใช้งาน {{enabled}} รายการ)",
-      "count_other": "กำหนดค่า {{count}} รายการ (เปิดใช้งาน {{enabled}} รายการ)",
-      "count": "กำหนดค่า {{count}} รายการ (เปิดใช้งาน {{enabled}} รายการ)",
       "addBtn": "+ เพิ่มการดำเนินการด่วน",
       "empty": "ยังไม่ได้กำหนดค่าการดำเนินการด่วน เลือกเพิ่มการดำเนินการด่วนเพื่อเริ่มต้น",
       "defaultModel": "เริ่มต้น",
@@ -912,7 +883,8 @@
       "placeholders": {
         "name": "ทำให้ข้อความยาวขึ้น",
         "prompt": "ขยายความและอธิบายข้อความต่อไปนี้ให้ละเอียดขึ้น…"
-      }
+      },
+      "count_other": "กำหนดค่าการดำเนินการ {{count}} รายการ (เปิดใช้งาน {{enabled}} รายการ)"
     },
     "usage": {
       "desc": "ติดตามการบริโภค Token ในทุกผู้ให้บริการและโมเดล ข้อมูลจะสะสมจากการสนทนาทั้งหมด",
@@ -994,12 +966,12 @@
       "ragDisabled": "ปิดใช้งาน RAG ในการตั้งค่า เปิดใช้งานภายใต้การตั้งค่า → ฟีเจอร์แชท → RAG",
       "webSearchDisabled": "ปิดใช้งานการค้นหาเว็บในการตั้งค่า เปิดใช้งานภายใต้การตั้งค่า → ฟีเจอร์แชท → การค้นหาเว็บ",
       "attached": "แนบแล้ว: {{name}}",
-      "attachedImages": "แนบ {{count}} รูปภาพแล้ว",
-      "referencesAdded": "เพิ่ม {{count}} การอ้างอิงแล้ว",
       "fileNotFound": "ไม่พบไฟล์: {{path}}",
       "unableToLoadRag": "ไม่สามารถโหลดสถิติ RAG",
       "referenced": "อ้างอิงแล้ว: {{name}}",
-      "openViewFailed": "ไม่สามารถเปิดมุมมองแชทได้"
+      "openViewFailed": "ไม่สามารถเปิดมุมมองแชทได้",
+      "attachedImages_other": "แนบรูปภาพ {{count}} รูปแล้ว",
+      "referencesAdded_other": "เพิ่มการอ้างอิง {{count}} รายการแล้ว"
     },
     "status": {
       "unavailable": "ไม่พร้อมใช้งาน",
@@ -1020,9 +992,7 @@
       "step2": "เปิดใช้งาน RAG",
       "step3": "เลือกทำดัชนี Vault",
       "close": "ปิด",
-      "retrieved_one": "ดึงมาจาก {{count}} เอกสาร",
-      "retrieved_other": "ดึงมาจาก {{count}} เอกสาร",
-      "retrieved": "ดึงมาจาก {{count}} เอกสาร"
+      "retrieved_other": "ดึงมาจากเอกสาร {{count}} ฉบับ"
     },
     "ragTooltip": {
       "status": "สถานะดัชนี RAG:",
@@ -1141,8 +1111,6 @@
       "apply": "นำไปใช้",
       "applyAll": "นำไปใช้ทั้งหมด",
       "applied": "นำไปใช้แล้ว",
-      "changes_one": "{{count}} การเปลี่ยนแปลง",
-      "changes_other": "{{count}} การเปลี่ยนแปลง",
       "confirm": "นำ {{summary}} ไปใช้หรือไม่?",
       "appliedNotice": "นำ {{summary}} ไปใช้แล้ว",
       "operations": {
@@ -1152,7 +1120,8 @@
         "delete": "ลบ",
         "move": "ย้าย",
         "batch": "ชุดคำสั่ง"
-      }
+      },
+      "changes_other": "การเปลี่ยนแปลง {{count}} รายการ"
     }
   },
   "modals": {
@@ -1213,15 +1182,13 @@
       "mcp": {
         "title": "การเข้าถึง MCP",
         "noServers": "ไม่ได้กำหนดค่าเซิร์ฟเวอร์ MCP เพิ่มเซิร์ฟเวอร์ภายใต้การตั้งค่า → MCP เพื่อปลดล็อกตัวเลือกเหล่านี้",
-        "toolsCached_one": "แคช {{count}} เครื่องมือ",
-        "toolsCached_other": "แคช {{count}} เครื่องมือ",
-        "toolsCached": "แคช {{count}} เครื่องมือ",
         "noToolsCached": "ยังไม่มีเครื่องมือที่แคช เปิดใช้งานการเข้าถึงเต็มรูปแบบหรือรีเฟรชแคช",
         "showTools": "แสดงเครื่องมือ",
         "hideTools": "ซ่อนเครื่องมือ",
         "selected": "เลือกแล้ว",
         "notSelected": "ไม่ได้เลือก",
-        "noToolsAvailable": "ยังไม่มีเครื่องมือจากเซิร์ฟเวอร์นี้"
+        "noToolsAvailable": "ยังไม่มีเครื่องมือจากเซิร์ฟเวอร์นี้",
+        "toolsCached_other": "แคชเครื่องมือ {{count}} รายการ"
       },
       "notices": {
         "promptRequired": "โปรดระบุชื่อและเนื้อหาสำหรับพรอมต์ระบบใหม่"
@@ -1303,10 +1270,10 @@
       },
       "cachedModels": "โมเดลที่แคชไว้: {{count}}",
       "connectionFailed": "การทดสอบการเชื่อมต่อล้มเหลว โปรดตรวจสอบการตั้งค่าผู้ให้บริการ",
-      "connectionSuccess": "เชื่อมต่อสำเร็จ แคชโมเดลไว้ {{count}} รายการ",
       "noCachedModels": "ไม่มีโมเดลที่แคชไว้",
       "testConnection": "ทดสอบการเชื่อมต่อ",
-      "testing": "กำลังทดสอบ..."
+      "testing": "กำลังทดสอบ...",
+      "connectionSuccess_other": "เชื่อมต่อสำเร็จ แคชโมเดลไว้ {{count}} รายการ"
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1329,12 +1296,6 @@
         "statusDisabled": "ปิดใช้งาน",
         "statusConnected": "● เชื่อมต่อแล้ว",
         "statusDisconnected": "○ ตัดการเชื่อมต่อแล้ว",
-        "toolsLive_one": "{{count}} เครื่องมือ",
-        "toolsLive_other": "{{count}} เครื่องมือ",
-        "toolsLive": "{{count}} เครื่องมือ",
-        "toolsCached_one": "{{count}} เครื่องมือ (แคช)",
-        "toolsCached_other": "{{count}} เครื่องมือ (แคช)",
-        "toolsCached": "{{count}} เครื่องมือ (แคช)",
         "noTools": "0 เครื่องมือ",
         "connectBtn": "เชื่อมต่อ",
         "disconnectBtn": "ตัดการเชื่อมต่อ",
@@ -1346,7 +1307,9 @@
           "connected": "เชื่อมต่อกับ {{name}} แล้ว",
           "failedDisconnect": "ไม่สามารถตัดการเชื่อมต่อจาก {{name}}: {{message}}",
           "failedConnect": "ไม่สามารถเชื่อมต่อกับ {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_other": "เครื่องมือ {{count}} รายการ (แคช)",
+        "toolsLive_other": "เครื่องมือ {{count}} รายการ"
       },
       "tools": {
         "title": "เครื่องมือ MCP ที่พร้อมใช้งาน",
@@ -1569,8 +1532,6 @@
   },
   "capability": {
     "title": "เครื่องมือและสิทธิ์",
-    "subtitle_one": "{{agent}} ใช้เครื่องมือได้ {{count}} รายการ",
-    "subtitle_other": "{{agent}} ใช้เครื่องมือได้ {{count}} รายการ",
     "chatMode": "โหมดแชท",
     "permissions": "สิทธิ์ปัจจุบัน",
     "reads": "งานนี้อ่านได้",
@@ -1590,8 +1551,6 @@
     },
     "rows": {
       "vaultContext": "บริบท Vault",
-      "referencesPlusContext_one": "การอ้างอิงที่ระบุ {{count}} รายการ พร้อมบริบทที่ใช้งานอยู่",
-      "referencesPlusContext_other": "การอ้างอิงที่ระบุ {{count}} รายการ พร้อมบริบทที่ใช้งานอยู่",
       "activeContext": "บันทึกที่เปิดอยู่และภาพรวมบริบทกราฟ",
       "readTools": "เครื่องมืออ่าน Vault",
       "enabledCount": "เปิดใช้งาน {{count}} รายการ",
@@ -1605,12 +1564,13 @@
       "off": "ปิด",
       "disabledInSettings": "ปิดใช้งานในการตั้งค่า",
       "custom": "เครื่องมือที่กำหนดเอง",
-      "customEnabled_one": "เปิดใช้งานเครื่องมือ MCP, OpenAPI หรือ CLI {{count}} รายการ",
-      "customEnabled_other": "เปิดใช้งานเครื่องมือ MCP, OpenAPI หรือ CLI {{count}} รายการ",
       "noneEnabled": "ไม่ได้เปิดใช้งาน",
       "destructive": "การกระทำที่ทำลายข้อมูลใน Vault",
-      "notProvided": "เครื่องมือในตัวไม่มีให้"
-    }
+      "notProvided": "เครื่องมือในตัวไม่มีให้",
+      "customEnabled_other": "เปิดใช้งานเครื่องมือ MCP, OpenAPI หรือ CLI {{count}} รายการ",
+      "referencesPlusContext_other": "การอ้างอิงที่ระบุ {{count}} รายการ พร้อมบริบทที่ใช้งานอยู่"
+    },
+    "subtitle_other": "{{agent}} ใช้เครื่องมือได้ {{count}} รายการ"
   },
   "markdown": {
     "run": "เรียกใช้"
@@ -1618,14 +1578,13 @@
   "rag": {
     "notices": {
       "noFiles": "ไม่มีบันทึก Markdown ให้ทำดัชนี",
-      "starting_one": "กำลังทำดัชนี {{count}} บันทึก…",
-      "starting_other": "กำลังทำดัชนี {{count}} บันทึก…",
       "progress": "กำลังทำดัชนี: {{done}} จาก {{total}} บันทึก",
       "completed": "ทำดัชนีเสร็จแล้ว: สำเร็จ {{indexed}} ล้มเหลว {{failed}}",
       "noIndex": "ยังไม่มีสิ่งใดถูกทำดัชนี เรียกใช้ \"Embed all documents\" เพื่อทำดัชนี Vault ของคุณ",
       "gradingError": "การให้คะแนนเอกสารล้มเหลว: {{message}}",
       "clearing": "กำลังล้างดัชนี…",
-      "cleared": "ล้างดัชนีแล้ว"
+      "cleared": "ล้างดัชนีแล้ว",
+      "starting_other": "กำลังทำดัชนีบันทึก {{count}} รายการ…"
     }
   }
 }

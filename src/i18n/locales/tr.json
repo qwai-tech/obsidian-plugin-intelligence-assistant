@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Tüm yapılandırılmış sağlayıcıların modellerini görüntüleyin ve yönetin. En son kullanılabilir modelleri almak için \"modelleri yenile\" seçeneğine tıklayın.",
-      "providerCount_one": "{{count}} sağlayıcı yapılandırıldı",
-      "providerCount_other": "{{count}} sağlayıcı yapılandırıldı",
-      "providerCount": "{{count}} sağlayıcı yapılandırıldı",
       "refreshAll": "tüm modelleri yenile",
       "empty": "Henüz sağlayıcı yapılandırılmadı. Önce sağlayıcı sekmesinde sağlayıcı ekleyin.",
       "noModels": "Kullanılabilir model yok. \"Tüm modelleri yenile\" seçeneğine tıklayın veya sağlayıcı sekmesindeki sağlayıcıları tek tek yenileyin.",
       "noMatch": "Mevcut filtrelerle eşleşen model yok. Sonuçları görmek için filtreleri ayarlayın veya temizleyin.",
-      "modelCount_one": "• {{count}} model önbellekte",
-      "modelCount_other": "• {{count}} model önbellekte",
-      "modelCount": "• {{count}} model önbellekte",
-      "matchCount_one": "• {{count}} seçili filtrelerle eşleşiyor",
-      "matchCount_other": "• {{count}} seçili filtrelerle eşleşiyor",
-      "matchCount": "• {{count}} seçili filtrelerle eşleşiyor",
       "status": {
         "enabled": "Etkin",
         "disabled": "Devre dışı"
@@ -92,12 +83,15 @@
         "capabilities": "Özellikler",
         "status": "Durum",
         "actions": "İşlemler"
-      }
+      },
+      "matchCount_one": "• {{count}} öğe seçili filtrelerle eşleşiyor",
+      "matchCount_other": "• {{count}} öğe seçili filtrelerle eşleşiyor",
+      "modelCount_one": "• {{count}} model önbellekte",
+      "modelCount_other": "• {{count}} model önbellekte",
+      "providerCount_one": "{{count}} sağlayıcı yapılandırıldı",
+      "providerCount_other": "{{count}} sağlayıcı yapılandırıldı"
     },
     "provider": {
-      "count_one": "{{count}} sağlayıcı yapılandırıldı",
-      "count_other": "{{count}} sağlayıcı yapılandırıldı",
-      "count": "{{count}} sağlayıcı yapılandırıldı",
       "addBtn": "+ Sağlayıcı ekle",
       "empty": "Sağlayıcı yapılandırılmadı. Başlamak için \"Sağlayıcı ekle\" seçeneğini seçin.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "Model yok",
         "count_one": "{{count}} model",
-        "count_other": "{{count}} model",
-        "count": "{{count}} model"
+        "count_other": "{{count}} model"
       },
       "ollama": {
         "checkingVersion": "Sürüm kontrol ediliyor...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "{{provider}} sağlayıcısı kaldırılsın mı?"
-      }
+      },
+      "count_one": "{{count}} sağlayıcı yapılandırıldı",
+      "count_other": "{{count}} sağlayıcı yapılandırıldı"
     },
     "mcp": {
       "desc": "Harici araçlar ve veri kaynaklarıyla ajan yeteneklerini genişletmek için Model Context Protocol (MCP) sunucularını yapılandırın.",
@@ -165,9 +160,6 @@
       "untitled": "İsimsiz MCP Sunucusu",
       "notConfigured": "Yapılandırılmadı",
       "cached": "Önbellekte",
-      "envVars_one": "{{count}} ortam değişkeni",
-      "envVars_other": "{{count}} ortam değişkeni",
-      "envVars": "{{count}} ortam değişkeni",
       "status": {
         "disabled": "Devre dışı",
         "connected": "bağlı",
@@ -177,12 +169,10 @@
         "autoConnect": "Otomatik bağlan"
       },
       "toolCount": {
+        "cached_one": "{{count}} önbelleğe alınmış araç",
+        "cached_other": "{{count}} önbelleğe alınmış araç",
         "live_one": "{{count}} canlı araç",
-        "live_other": "{{count}} canlı araç",
-        "live": "{{count}} canlı araç",
-        "cached_one": "{{count}} önbellekteki araç",
-        "cached_other": "{{count}} önbellekteki araç",
-        "cached": "{{count}} önbellekteki araç"
+        "live_other": "{{count}} canlı araç"
       },
       "actions": {
         "edit": "Düzenle",
@@ -204,27 +194,28 @@
         "disconnectFailed": "{{name}} bağlantısı kesilemedi",
         "connectFailed": "{{name}} ile bağlantı kurulamadı",
         "testNoCommand": "bağlantıyı test etmeden önce lütfen bir komut girin",
-        "testSuccess": "başarıyla bağlanıldı! {{count}} araç bulundu.",
         "testFailed": "Bağlantı başarısız: {{message}}",
-        "refreshedAll_one": "{{count}} sunucu için araçlar yenilendi",
-        "refreshedAll_other": "{{count}} sunucu için araçlar yenilendi",
-        "refreshedAll": "{{count}} sunucu için araçlar yenilendi",
         "refreshedPartial": "{{success}} sunucu yenilendi, {{failed}} başarısız",
         "noServersConfigured": "MCP sunucusu yapılandırılmadı",
-        "testingAll": "{{count}} MCP sunucu bağlantısı test ediliyor...",
-        "testAllSuccess": "tüm {{count}} mcp sunucusu başarıyla bağlandı!",
-        "testAllPartial": "{{successful}} bağlandı, {{failed}} başarısız"
+        "testAllPartial": "{{successful}} bağlandı, {{failed}} başarısız",
+        "refreshedAll_one": "{{count}} sunucu için araçlar yenilendi",
+        "refreshedAll_other": "{{count}} sunucu için araçlar yenilendi",
+        "testAllSuccess_one": "{{count}} MCP sunucusu başarıyla bağlandı.",
+        "testAllSuccess_other": "{{count}} MCP sunucusunun tümü başarıyla bağlandı.",
+        "testSuccess_one": "Bağlandı. {{count}} araç bulundu.",
+        "testSuccess_other": "Bağlandı. {{count}} araç bulundu.",
+        "testingAll_one": "{{count}} MCP sunucu bağlantısı test ediliyor…",
+        "testingAll_other": "{{count}} MCP sunucu bağlantısı test ediliyor…"
       },
       "confirm": {
         "delete": "\"{{name}}\" MCP sunucusu silinsin mi?"
       },
-      "namePlaceholder": "Acme MCP sunucusu"
+      "namePlaceholder": "Acme MCP sunucusu",
+      "envVars_one": "{{count}} ortam değişkeni",
+      "envVars_other": "{{count}} ortam değişkeni"
     },
     "agents": {
       "desc": "Belirli yeteneklere, araçlara ve davranışlara sahip AI ajanları oluşturun ve yönetin.",
-      "count_one": "{{count}} ajan yapılandırıldı",
-      "count_other": "{{count}} ajan yapılandırıldı",
-      "count": "{{count}} ajan yapılandırıldı",
       "addBtn": "+ ajan ekle",
       "empty": "Ajan yapılandırılmadı. Başlamak için ajan ekle seçeneğini seçin.",
       "defaultBadge": "Varsayılan",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} yerleşik",
-        "mcpServer_one": "{{count}} mcp sunucusu",
-        "mcpServer_other": "{{count}} mcp sunucusu",
-        "mcpServer": "{{count}} mcp sunucusu",
-        "mcpTool_one": "{{count}} mcp aracı",
-        "mcpTool_other": "{{count}} mcp aracı",
-        "mcpTool": "{{count}} mcp aracı"
+        "mcpServer_one": "{{count}} MCP sunucusu",
+        "mcpServer_other": "{{count}} MCP sunucusu",
+        "mcpTool_one": "{{count}} MCP aracı",
+        "mcpTool_other": "{{count}} MCP aracı"
       },
       "actions": {
         "edit": "Düzenle",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "\"{{name}}\" ajanı silinsin mi?"
-      }
+      },
+      "count_one": "{{count}} ajan yapılandırıldı",
+      "count_other": "{{count}} ajan yapılandırıldı"
     },
     "prompts": {
       "desc": "AI asistanınızın davranışını ve kişiliğini tanımlayan sistem istemlerini yönetin.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP kaynağı kaldırıldı",
-          "reloaded": "{{count}} işlem yeniden yüklendi",
-          "reloadFailed": "HTTP kaynağı yeniden yüklenemedi. Ayrıntılar için konsolu kontrol edin."
+          "reloadFailed": "HTTP kaynağı yeniden yüklenemedi. Ayrıntılar için konsolu kontrol edin.",
+          "reloaded_one": "{{count}} işlem yeniden yüklendi",
+          "reloaded_other": "{{count}} işlem yeniden yüklendi"
         },
         "modal": {
           "defaultTitle": "HTTP Kaynağı",
@@ -419,9 +411,6 @@
           "actions": "Eylemler"
         },
         "unnamed": "İsimsiz CLI Aracı",
-        "paramCount_one": "{{count}} parametre",
-        "paramCount_other": "{{count}} parametre",
-        "paramCount": "{{count}} parametre",
         "noParams": "Yok",
         "statusEnabled": "Etkin",
         "statusDisabled": "Devre dışı",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Ekran Görüntüsü",
             "preset-applescript-list-apps": "Çalışan Uygulamaları Listele"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parametre",
+        "paramCount_other": "{{count}} parametre"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Bağlam menüsündeki tüm hızlı eylemlerden önce görüntülenecek önek (emoji veya metin)",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)",
-      "count_other": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)",
-      "count": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)",
       "addBtn": "+ hızlı eylem ekle",
       "empty": "Hızlı eylem yapılandırılmadı. Başlamak için hızlı eylem ekle seçeneğini seçin.",
       "defaultModel": "Varsayılan",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Metni uzat",
         "prompt": "Aşağıdaki metni genişlet ve ayrıntılandır…"
-      }
+      },
+      "count_one": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)",
+      "count_other": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)"
     },
     "usage": {
       "desc": "Sağlayıcılar ve modeller arasındaki token tüketimini takip edin. Veriler tüm konuşmalar boyunca biriktirilir.",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG ayarlarda devre dışı. Ayarlar → sohbet özellikleri → RAG altında etkinleştirin.",
       "webSearchDisabled": "Web araması ayarlarda devre dışı. Ayarlar → sohbet özellikleri → web araması altında etkinleştirin.",
       "attached": "Eklendi: {{name}}",
-      "attachedImages": "{{count}} görsel eklendi",
-      "referencesAdded": "{{count}} referans eklendi",
       "fileNotFound": "Dosya bulunamadı: {{path}}",
       "unableToLoadRag": "RAG istatistikleri yüklenemiyor.",
       "referenced": "Referans alındı: {{name}}",
-      "openViewFailed": "Sohbet görünümü açılamadı."
+      "openViewFailed": "Sohbet görünümü açılamadı.",
+      "attachedImages_one": "{{count}} görsel eklendi",
+      "attachedImages_other": "{{count}} görsel eklendi",
+      "referencesAdded_one": "{{count}} referans eklendi",
+      "referencesAdded_other": "{{count}} referans eklendi"
     },
     "status": {
       "unavailable": "Kullanılamaz",
@@ -1021,8 +1013,7 @@
       "step3": "Vault dizinini seçin",
       "close": "Kapat",
       "retrieved_one": "{{count}} belgeden alındı",
-      "retrieved_other": "{{count}} belgeden alındı",
-      "retrieved": "{{count}} belgeden alındı"
+      "retrieved_other": "{{count}} belgeden alındı"
     },
     "ragTooltip": {
       "status": "RAG Dizin Durumu:",
@@ -1141,8 +1132,6 @@
       "apply": "Uygula",
       "applyAll": "Tümünü uygula",
       "applied": "Uygulandı",
-      "changes_one": "{{count}} değişiklik",
-      "changes_other": "{{count}} değişiklik",
       "confirm": "{{summary}} uygulansın mı?",
       "appliedNotice": "{{summary}} uygulandı",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Sil",
         "move": "Taşı",
         "batch": "Toplu"
-      }
+      },
+      "changes_one": "{{count}} değişiklik",
+      "changes_other": "{{count}} değişiklik"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP erişimi",
         "noServers": "MCP sunucusu yapılandırılmadı. Bu seçeneklerin kilidini açmak için Ayarlar → MCP altında sunucu ekleyin.",
-        "toolsCached_one": "{{count}} araç önbellekte",
-        "toolsCached_other": "{{count}} araç önbellekte",
-        "toolsCached": "{{count}} araç önbellekte",
         "noToolsCached": "Henüz araç önbellekte değil. Tam erişimi etkinleştirin veya önbelleği yenileyin.",
         "showTools": "Araçları göster",
         "hideTools": "Araçları gizle",
         "selected": "Seçildi",
         "notSelected": "Seçilmedi",
-        "noToolsAvailable": "Bu sunucudan henüz araç mevcut değil."
+        "noToolsAvailable": "Bu sunucudan henüz araç mevcut değil.",
+        "toolsCached_one": "{{count}} araç önbellekte",
+        "toolsCached_other": "{{count}} araç önbellekte"
       },
       "notices": {
         "promptRequired": "Lütfen yeni sistem istemi için bir ad ve içerik sağlayın."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Önbellekteki modeller: {{count}}",
       "connectionFailed": "Bağlantı testi başarısız oldu. Sağlayıcı ayarlarını kontrol edin.",
-      "connectionSuccess": "Bağlantı başarılı. {{count}} model önbelleğe alındı.",
       "noCachedModels": "Önbellekte model yok",
       "testConnection": "Bağlantıyı test et",
-      "testing": "Test ediliyor..."
+      "testing": "Test ediliyor...",
+      "connectionSuccess_one": "Bağlantı başarılı. {{count}} model önbelleğe alındı.",
+      "connectionSuccess_other": "Bağlantı başarılı. {{count}} model önbelleğe alındı."
     },
     "mcpInspector": {
       "title": "MCP denetçisi",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Devre dışı",
         "statusConnected": "● bağlı",
         "statusDisconnected": "○ bağlantısız",
-        "toolsLive_one": "{{count}} araç",
-        "toolsLive_other": "{{count}} araç",
-        "toolsLive": "{{count}} araç",
-        "toolsCached_one": "{{count}} araç (önbellekte)",
-        "toolsCached_other": "{{count}} araç (önbellekte)",
-        "toolsCached": "{{count}} araç (önbellekte)",
         "noTools": "0 araç",
         "connectBtn": "Bağlan",
         "disconnectBtn": "Bağlantıyı kes",
@@ -1346,7 +1331,11 @@
           "connected": "{{name}} ile bağlantı kuruldu",
           "failedDisconnect": "{{name}} bağlantısı kesilemedi: {{message}}",
           "failedConnect": "{{name}} ile bağlantı kurulamadı: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} araç (önbellekte)",
+        "toolsCached_other": "{{count}} araç (önbellekte)",
+        "toolsLive_one": "{{count}} araç",
+        "toolsLive_other": "{{count}} araç"
       },
       "tools": {
         "title": "Kullanılabilir MCP araçları",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Araçlar ve izinler",
-    "subtitle_one": "{{agent}} {{count}} araç kullanabilir.",
-    "subtitle_other": "{{agent}} {{count}} araç kullanabilir.",
     "chatMode": "Sohbet modu",
     "permissions": "Geçerli izinler",
     "reads": "Bu görevin okuyabildikleri",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Vault bağlamı",
-      "referencesPlusContext_one": "{{count}} açık referans ve etkin bağlam",
-      "referencesPlusContext_other": "{{count}} açık referans ve etkin bağlam",
       "activeContext": "Etkin not ve grafik bağlamı anlık görüntüsü",
       "readTools": "Vault okuma araçları",
       "enabledCount": "{{count}} etkin",
@@ -1605,12 +1590,16 @@
       "off": "Kapalı",
       "disabledInSettings": "Ayarlarda devre dışı",
       "custom": "Özel araçlar",
-      "customEnabled_one": "{{count}} MCP, OpenAPI veya CLI aracı etkin",
-      "customEnabled_other": "{{count}} MCP, OpenAPI veya CLI aracı etkin",
       "noneEnabled": "Hiçbiri etkin değil",
       "destructive": "Yıkıcı vault işlemleri",
-      "notProvided": "Yerleşik araçlar tarafından sağlanmıyor"
-    }
+      "notProvided": "Yerleşik araçlar tarafından sağlanmıyor",
+      "customEnabled_one": "{{count}} MCP, OpenAPI veya CLI aracı etkin",
+      "customEnabled_other": "{{count}} MCP, OpenAPI veya CLI aracı etkin",
+      "referencesPlusContext_one": "{{count}} açık referans ve etkin bağlam",
+      "referencesPlusContext_other": "{{count}} açık referans ve etkin bağlam"
+    },
+    "subtitle_one": "{{agent}} {{count}} araç kullanabilir.",
+    "subtitle_other": "{{agent}} {{count}} araç kullanabilir."
   },
   "markdown": {
     "run": "Çalıştır"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Dizinlenecek Markdown notu yok.",
-      "starting_one": "{{count}} not dizinleniyor…",
-      "starting_other": "{{count}} not dizinleniyor…",
       "progress": "Dizinleniyor: {{done}} / {{total}} not",
       "completed": "Dizinleme tamamlandı: {{indexed}} dizinlendi, {{failed}} başarısız.",
       "noIndex": "Henüz hiçbir şey dizinlenmedi. Vault'unuzu dizinlemek için \"Embed all documents\" komutunu çalıştırın.",
       "gradingError": "Belge derecelendirme başarısız oldu: {{message}}",
       "clearing": "Dizin temizleniyor…",
-      "cleared": "Dizin temizlendi."
+      "cleared": "Dizin temizlendi.",
+      "starting_one": "{{count}} not dizinleniyor…",
+      "starting_other": "{{count}} not dizinleniyor…"
     }
   }
 }

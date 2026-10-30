@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "تمام کنفیگر کردہ فراہم کنندگان سے ماڈلز دیکھیں اور ان کا انتظام کریں۔ تازہ ترین دستیاب ماڈلز حاصل کرنے کے لیے \"ماڈلز ریفریش کریں\" پر کلک کریں۔",
-      "providerCount_one": "{{count}} فراہم کنندہ کنفیگر ہے",
-      "providerCount_other": "{{count}} فراہم کنندگان کنفیگر ہیں",
-      "providerCount": "{{count}} فراہم کنندگان کنفیگر ہیں",
       "refreshAll": "تمام ماڈلز ریفریش کریں",
       "empty": "ابھی تک کوئی فراہم کنندہ کنفیگر نہیں ہوا۔ پہلے فراہم کنندگان ٹیب میں فراہم کنندگان شامل کریں۔",
       "noModels": "کوئی ماڈل دستیاب نہیں۔ \"تمام ماڈلز ریفریش کریں\" پر کلک کریں یا فراہم کنندگان ٹیب میں انفرادی فراہم کنندگان ریفریش کریں۔",
       "noMatch": "موجودہ فلٹروں سے کوئی ماڈل مطابقت نہیں رکھتا۔ نتائج دیکھنے کے لیے فلٹرز ایڈجسٹ یا صاف کریں۔",
-      "modelCount_one": "• {{count}} ماڈل کیشڈ",
-      "modelCount_other": "• {{count}} ماڈلز کیشڈ",
-      "modelCount": "• {{count}} ماڈلز کیشڈ",
-      "matchCount_one": "• {{count}} منتخب فلٹروں سے مطابقت",
-      "matchCount_other": "• {{count}} منتخب فلٹروں سے مطابقت",
-      "matchCount": "• {{count}} منتخب فلٹروں سے مطابقت",
       "status": {
         "enabled": "فعال",
         "disabled": "غیر فعال"
@@ -92,12 +83,15 @@
         "capabilities": "صلاحیتیں",
         "status": "حالت",
         "actions": "کارروائیاں"
-      }
+      },
+      "matchCount_one": "• {{count}} نتیجہ منتخب فلٹرز سے مطابقت رکھتا ہے",
+      "matchCount_other": "• {{count}} نتائج منتخب فلٹرز سے مطابقت رکھتے ہیں",
+      "modelCount_one": "• {{count}} ماڈل کیشڈ",
+      "modelCount_other": "• {{count}} ماڈلز کیشڈ",
+      "providerCount_one": "{{count}} فراہم کنندہ کنفیگر ہے",
+      "providerCount_other": "{{count}} فراہم کنندگان کنفیگر ہیں"
     },
     "provider": {
-      "count_one": "{{count}} فراہم کنندہ کنفیگر ہے",
-      "count_other": "{{count}} فراہم کنندگان کنفیگر ہیں",
-      "count": "{{count}} فراہم کنندگان کنفیگر ہیں",
       "addBtn": "+ فراہم کنندہ شامل کریں",
       "empty": "کوئی فراہم کنندہ کنفیگر نہیں۔ شروع کرنے کے لیے \"فراہم کنندہ شامل کریں\" منتخب کریں۔",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "کوئی ماڈل نہیں",
         "count_one": "{{count}} ماڈل",
-        "count_other": "{{count}} ماڈلز",
-        "count": "{{count}} ماڈلز"
+        "count_other": "{{count}} ماڈلز"
       },
       "ollama": {
         "checkingVersion": "ورژن چیک ہو رہا ہے...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "فراہم کنندہ {{provider}} ہٹا دیا جائے؟"
-      }
+      },
+      "count_one": "{{count}} فراہم کنندہ کنفیگر ہے",
+      "count_other": "{{count}} فراہم کنندگان کنفیگر ہیں"
     },
     "mcp": {
       "desc": "بیرونی ٹولز اور ڈیٹا ذرائع کے ساتھ ایجنٹ کی صلاحیتوں کو بڑھانے کے لیے Model Context Protocol (MCP) سرورز کنفیگر کریں۔",
@@ -165,9 +160,6 @@
       "untitled": "بے نام MCP سرور",
       "notConfigured": "کنفیگر نہیں",
       "cached": "کیشڈ",
-      "envVars_one": "{{count}} ماحولیاتی متغیر",
-      "envVars_other": "{{count}} ماحولیاتی متغیرات",
-      "envVars": "{{count}} ماحولیاتی متغیرات",
       "status": {
         "disabled": "غیر فعال",
         "connected": "منسلک",
@@ -177,12 +169,10 @@
         "autoConnect": "خودکار کنکشن"
       },
       "toolCount": {
-        "live_one": "{{count}} لائیو ٹول",
-        "live_other": "{{count}} لائیو ٹولز",
-        "live": "{{count}} لائیو ٹولز",
         "cached_one": "{{count}} کیشڈ ٹول",
         "cached_other": "{{count}} کیشڈ ٹولز",
-        "cached": "{{count}} کیشڈ ٹولز"
+        "live_one": "{{count}} لائیو ٹول",
+        "live_other": "{{count}} لائیو ٹولز"
       },
       "actions": {
         "edit": "ترمیم",
@@ -204,27 +194,28 @@
         "disconnectFailed": "{{name}} سے منقطع ہونا ناکام ہوا",
         "connectFailed": "{{name}} سے کنکٹ ہونا ناکام ہوا",
         "testNoCommand": "کنکشن ٹیسٹ کرنے سے پہلے براہ کرم ایک کمانڈ درج کریں",
-        "testSuccess": "کامیابی سے منسلک ہو گیا! {{count}} ٹولز ملے۔",
         "testFailed": "کنکشن ناکام ہوا: {{message}}",
-        "refreshedAll_one": "{{count}} سرور کے ٹولز ریفریش ہو گئے",
-        "refreshedAll_other": "{{count}} سرورز کے ٹولز ریفریش ہو گئے",
-        "refreshedAll": "{{count}} سرورز کے ٹولز ریفریش ہو گئے",
         "refreshedPartial": "{{success}} سرورز ریفریش ہوئے، {{failed}} ناکام",
         "noServersConfigured": "کوئی MCP سرور کنفیگر نہیں",
-        "testingAll": "{{count}} MCP سرور کنکشن ٹیسٹ ہو رہے ہیں...",
-        "testAllSuccess": "تمام {{count}} mcp سرورز کامیابی سے منسلک ہو گئے!",
-        "testAllPartial": "{{successful}} منسلک ہوئے، {{failed}} ناکام"
+        "testAllPartial": "{{successful}} منسلک ہوئے، {{failed}} ناکام",
+        "refreshedAll_one": "{{count}} سرور کے ٹولز ریفریش ہو گئے",
+        "refreshedAll_other": "{{count}} سرورز کے ٹولز ریفریش ہو گئے",
+        "testAllSuccess_one": "{{count}} MCP سرور کامیابی سے منسلک ہو گیا۔",
+        "testAllSuccess_other": "تمام {{count}} MCP سرورز کامیابی سے منسلک ہو گئے۔",
+        "testSuccess_one": "منسلک ہو گیا۔ {{count}} ٹول ملا۔",
+        "testSuccess_other": "منسلک ہو گیا۔ {{count}} ٹولز ملے۔",
+        "testingAll_one": "{{count}} MCP سرور کنکشن ٹیسٹ ہو رہا ہے…",
+        "testingAll_other": "{{count}} MCP سرور کنکشنز ٹیسٹ ہو رہے ہیں…"
       },
       "confirm": {
         "delete": "MCP سرور «{{name}}» حذف کریں؟"
       },
-      "namePlaceholder": "Acme MCP سرور"
+      "namePlaceholder": "Acme MCP سرور",
+      "envVars_one": "{{count}} ماحولیاتی متغیر",
+      "envVars_other": "{{count}} ماحولیاتی متغیرات"
     },
     "agents": {
       "desc": "مخصوص صلاحیتوں، ٹولز اور رویوں کے ساتھ AI ایجنٹس بنائیں اور ان کا انتظام کریں۔",
-      "count_one": "{{count}} ایجنٹ کنفیگر ہے",
-      "count_other": "{{count}} ایجنٹس کنفیگر ہیں",
-      "count": "{{count}} ایجنٹس کنفیگر ہیں",
       "addBtn": "+ ایجنٹ شامل کریں",
       "empty": "کوئی ایجنٹ کنفیگر نہیں۔ شروع کرنے کے لیے ایجنٹ شامل کریں منتخب کریں۔",
       "defaultBadge": "ڈیفالٹ",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} بلٹ ان",
-        "mcpServer_one": "{{count}} mcp سرور",
-        "mcpServer_other": "{{count}} mcp سرورز",
-        "mcpServer": "{{count}} mcp سرورز",
-        "mcpTool_one": "{{count}} mcp ٹول",
-        "mcpTool_other": "{{count}} mcp ٹولز",
-        "mcpTool": "{{count}} mcp ٹولز"
+        "mcpServer_one": "{{count}} MCP سرور",
+        "mcpServer_other": "{{count}} MCP سرورز",
+        "mcpTool_one": "{{count}} MCP ٹول",
+        "mcpTool_other": "{{count}} MCP ٹولز"
       },
       "actions": {
         "edit": "ترمیم",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "ایجنٹ «{{name}}» حذف کریں؟"
-      }
+      },
+      "count_one": "{{count}} ایجنٹ کنفیگر ہے",
+      "count_other": "{{count}} ایجنٹس کنفیگر ہیں"
     },
     "prompts": {
       "desc": "سسٹم ہدایات کا انتظام کریں جو آپ کے AI اسسٹنٹ کا رویہ اور شخصیت تعریف کرتی ہیں۔",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP ذریعہ ہٹا دیا گیا",
-          "reloaded": "{{count}} آپریشنز دوبارہ لوڈ ہوئے",
-          "reloadFailed": "HTTP ذریعہ دوبارہ لوڈ کرنا ناکام ہوا۔ تفصیلات کے لیے کنسول چیک کریں۔"
+          "reloadFailed": "HTTP ذریعہ دوبارہ لوڈ کرنا ناکام ہوا۔ تفصیلات کے لیے کنسول چیک کریں۔",
+          "reloaded_one": "{{count}} آپریشن دوبارہ لوڈ ہوا",
+          "reloaded_other": "{{count}} آپریشنز دوبارہ لوڈ ہوئے"
         },
         "modal": {
           "defaultTitle": "HTTP ذریعہ",
@@ -419,9 +411,6 @@
           "actions": "اقدامات"
         },
         "unnamed": "بے نام CLI ٹول",
-        "paramCount_one": "{{count}} پیرامیٹر",
-        "paramCount_other": "{{count}} پیرامیٹرز",
-        "paramCount": "{{count}} پیرامیٹرز",
         "noParams": "کوئی نہیں",
         "statusEnabled": "فعال",
         "statusDisabled": "غیر فعال",
@@ -554,7 +543,9 @@
             "preset-screencapture": "اسکرین شاٹ",
             "preset-applescript-list-apps": "چلتی ایپس درج کریں"
           }
-        }
+        },
+        "paramCount_one": "{{count}} پیرامیٹر",
+        "paramCount_other": "{{count}} پیرامیٹرز"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "سیاق و سباق مینو میں تمام فوری اقدامات سے پہلے ڈسپلے کرنے کا سابقہ (ایموجی یا متن)",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} اقدام کنفیگر ({{enabled}} فعال)",
-      "count_other": "{{count}} اقدامات کنفیگر ({{enabled}} فعال)",
-      "count": "{{count}} اقدامات کنفیگر ({{enabled}} فعال)",
       "addBtn": "+ فوری اقدام شامل کریں",
       "empty": "کوئی فوری اقدام کنفیگر نہیں۔ شروع کرنے کے لیے فوری اقدام شامل کریں منتخب کریں۔",
       "defaultModel": "ڈیفالٹ",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "متن کو طویل کریں",
         "prompt": "درج ذیل متن کو وسعت دیں اور تفصیل سے بیان کریں…"
-      }
+      },
+      "count_one": "{{count}} اقدام کنفیگر ({{enabled}} فعال)",
+      "count_other": "{{count}} اقدامات کنفیگر ({{enabled}} فعال)"
     },
     "usage": {
       "desc": "فراہم کنندگان اور ماڈلز میں ٹوکن استعمال ٹریک کریں۔ ڈیٹا تمام گفتگو میں جمع ہوتا ہے۔",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG ترتیبات میں غیر فعال ہے۔ ترتیبات ← چیٹ خصوصیات ← RAG میں فعال کریں۔",
       "webSearchDisabled": "ویب تلاش ترتیبات میں غیر فعال ہے۔ ترتیبات ← چیٹ خصوصیات ← ویب تلاش میں فعال کریں۔",
       "attached": "منسلک: {{name}}",
-      "attachedImages": "{{count}} تصویر منسلک",
-      "referencesAdded": "{{count}} حوالے شامل",
       "fileNotFound": "فائل نہیں ملی: {{path}}",
       "unableToLoadRag": "RAG کے اعداد و شمار لوڈ نہیں ہو سکے۔",
       "referenced": "حوالہ دیا گیا: {{name}}",
-      "openViewFailed": "چیٹ ویو نہیں کھل سکا۔"
+      "openViewFailed": "چیٹ ویو نہیں کھل سکا۔",
+      "attachedImages_one": "{{count}} تصویر منسلک کی گئی",
+      "attachedImages_other": "{{count}} تصاویر منسلک کی گئیں",
+      "referencesAdded_one": "{{count}} حوالہ شامل کیا گیا",
+      "referencesAdded_other": "{{count}} حوالے شامل کیے گئے"
     },
     "status": {
       "unavailable": "دستیاب نہیں",
@@ -1021,8 +1013,7 @@
       "step3": "vault انڈیکس منتخب کریں",
       "close": "بند کریں",
       "retrieved_one": "{{count}} دستاویز سے بازیافت",
-      "retrieved_other": "{{count}} دستاویزات سے بازیافت",
-      "retrieved": "{{count}} دستاویزات سے بازیافت"
+      "retrieved_other": "{{count}} دستاویزات سے بازیافت"
     },
     "ragTooltip": {
       "status": "RAG انڈیکس کی حالت:",
@@ -1141,8 +1132,6 @@
       "apply": "لاگو کریں",
       "applyAll": "سب لاگو کریں",
       "applied": "لاگو ہو گیا",
-      "changes_one": "{{count}} تبدیلی",
-      "changes_other": "{{count}} تبدیلیاں",
       "confirm": "{{summary}} لاگو کریں؟",
       "appliedNotice": "{{summary}} لاگو ہو گئیں",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "حذف کریں",
         "move": "منتقل کریں",
         "batch": "بیچ"
-      }
+      },
+      "changes_one": "{{count}} تبدیلی",
+      "changes_other": "{{count}} تبدیلیاں"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP رسائی",
         "noServers": "کوئی MCP سرور کنفیگر نہیں۔ ان اختیارات کو غیر مقفل کرنے کے لیے ترتیبات ← MCP میں سرورز شامل کریں۔",
-        "toolsCached_one": "{{count}} ٹول کیشڈ",
-        "toolsCached_other": "{{count}} ٹولز کیشڈ",
-        "toolsCached": "{{count}} ٹولز کیشڈ",
         "noToolsCached": "ابھی تک کوئی ٹول کیشڈ نہیں۔ مکمل رسائی فعال کریں یا کیش ریفریش کریں۔",
         "showTools": "ٹولز دکھائیں",
         "hideTools": "ٹولز چھپائیں",
         "selected": "منتخب",
         "notSelected": "منتخب نہیں",
-        "noToolsAvailable": "ابھی اس سرور سے کوئی ٹول دستیاب نہیں۔"
+        "noToolsAvailable": "ابھی اس سرور سے کوئی ٹول دستیاب نہیں۔",
+        "toolsCached_one": "{{count}} ٹول کیشڈ",
+        "toolsCached_other": "{{count}} ٹولز کیشڈ"
       },
       "notices": {
         "promptRequired": "براہ کرم نئی سسٹم ہدایت کے لیے نام اور مواد فراہم کریں۔"
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "کیشڈ ماڈلز: {{count}}",
       "connectionFailed": "کنکشن ٹیسٹ ناکام ہو گیا۔ فراہم کنندہ کی ترتیبات چیک کریں۔",
-      "connectionSuccess": "کنکشن کامیاب۔ {{count}} ماڈل کیش کیے گئے۔",
       "noCachedModels": "کوئی کیشڈ ماڈل نہیں",
       "testConnection": "کنکشن ٹیسٹ کریں",
-      "testing": "ٹیسٹ ہو رہا ہے..."
+      "testing": "ٹیسٹ ہو رہا ہے...",
+      "connectionSuccess_one": "کنکشن کامیاب۔ {{count}} ماڈل کیش کیا گیا۔",
+      "connectionSuccess_other": "کنکشن کامیاب۔ {{count}} ماڈلز کیش کیے گئے۔"
     },
     "mcpInspector": {
       "title": "MCP انسپیکٹر",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "غیر فعال",
         "statusConnected": "● منسلک",
         "statusDisconnected": "○ منقطع",
-        "toolsLive_one": "{{count}} ٹول",
-        "toolsLive_other": "{{count}} ٹولز",
-        "toolsLive": "{{count}} ٹولز",
-        "toolsCached_one": "{{count}} ٹول (کیشڈ)",
-        "toolsCached_other": "{{count}} ٹولز (کیشڈ)",
-        "toolsCached": "{{count}} ٹولز (کیشڈ)",
         "noTools": "0 ٹولز",
         "connectBtn": "کنکٹ",
         "disconnectBtn": "ڈسکنکٹ",
@@ -1346,7 +1331,11 @@
           "connected": "{{name}} سے منسلک ہو گیا",
           "failedDisconnect": "{{name}} سے منقطع ہونا ناکام ہوا: {{message}}",
           "failedConnect": "{{name}} سے کنکٹ ہونا ناکام ہوا: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} ٹول (کیشڈ)",
+        "toolsCached_other": "{{count}} ٹولز (کیشڈ)",
+        "toolsLive_one": "{{count}} ٹول",
+        "toolsLive_other": "{{count}} ٹولز"
       },
       "tools": {
         "title": "دستیاب MCP ٹولز",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "ٹولز اور اجازتیں",
-    "subtitle_one": "{{agent}} {{count}} ٹول استعمال کر سکتا ہے۔",
-    "subtitle_other": "{{agent}} {{count}} ٹولز استعمال کر سکتا ہے۔",
     "chatMode": "چیٹ موڈ",
     "permissions": "موجودہ اجازتیں",
     "reads": "یہ ٹاسک پڑھ سکتا ہے",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "vault کا سیاق و سباق",
-      "referencesPlusContext_one": "{{count}} واضح حوالہ اور فعال سیاق و سباق",
-      "referencesPlusContext_other": "{{count}} واضح حوالے اور فعال سیاق و سباق",
       "activeContext": "فعال نوٹ اور گراف سیاق و سباق کا اسنیپ شاٹ",
       "readTools": "vault پڑھنے کے ٹولز",
       "enabledCount": "{{count}} فعال",
@@ -1605,12 +1590,16 @@
       "off": "آف",
       "disabledInSettings": "ترتیبات میں غیر فعال",
       "custom": "حسب ضرورت ٹولز",
-      "customEnabled_one": "{{count}} MCP، OpenAPI یا CLI ٹول فعال",
-      "customEnabled_other": "{{count}} MCP، OpenAPI یا CLI ٹولز فعال",
       "noneEnabled": "کوئی فعال نہیں",
       "destructive": "vault میں تباہ کن کارروائیاں",
-      "notProvided": "بلٹ اِن ٹولز فراہم نہیں کرتے"
-    }
+      "notProvided": "بلٹ اِن ٹولز فراہم نہیں کرتے",
+      "customEnabled_one": "{{count}} MCP، OpenAPI یا CLI ٹول فعال ہے",
+      "customEnabled_other": "{{count}} MCP، OpenAPI یا CLI ٹولز فعال ہیں",
+      "referencesPlusContext_one": "{{count}} واضح حوالہ اور فعال سیاق و سباق",
+      "referencesPlusContext_other": "{{count}} واضح حوالے اور فعال سیاق و سباق"
+    },
+    "subtitle_one": "{{agent}} {{count}} ٹول استعمال کر سکتا ہے۔",
+    "subtitle_other": "{{agent}} {{count}} ٹولز استعمال کر سکتا ہے۔"
   },
   "markdown": {
     "run": "چلائیں"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "انڈیکس کرنے کے لیے کوئی Markdown نوٹ نہیں۔",
-      "starting_one": "{{count}} نوٹ انڈیکس ہو رہا ہے…",
-      "starting_other": "{{count}} نوٹس انڈیکس ہو رہے ہیں…",
       "progress": "انڈیکسنگ: {{total}} میں سے {{done}} نوٹس",
       "completed": "انڈیکسنگ مکمل: {{indexed}} انڈیکس ہوئے، {{failed}} ناکام۔",
       "noIndex": "ابھی کچھ انڈیکس نہیں ہوا۔ اپنا vault انڈیکس کرنے کے لیے \"Embed all documents\" چلائیں۔",
       "gradingError": "دستاویز کی درجہ بندی ناکام ہو گئی: {{message}}",
       "clearing": "انڈیکس صاف ہو رہا ہے…",
-      "cleared": "انڈیکس صاف ہو گیا۔"
+      "cleared": "انڈیکس صاف ہو گیا۔",
+      "starting_one": "{{count}} نوٹ انڈیکس ہو رہا ہے…",
+      "starting_other": "{{count}} نوٹس انڈیکس ہو رہے ہیں…"
     }
   }
 }

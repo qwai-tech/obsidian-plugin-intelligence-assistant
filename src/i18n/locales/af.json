@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Bekyk en bestuur modelle van alle gekonfigureerde verskaffers. Klik \"verfris modelle\" om die nuutste beskikbare modelle te haal.",
-      "providerCount_one": "{{count}} verskaffer gekonfigureer",
-      "providerCount_other": "{{count}} verskaffers gekonfigureer",
-      "providerCount": "{{count}} verskaffers gekonfigureer",
       "refreshAll": "verfris alle modelle",
       "empty": "Geen verskaffers nog gekonfigureer nie. Voeg eers verskaffers by in die verskaffer-oortjie.",
       "noModels": "Geen modelle beskikbaar nie. Klik \"verfris alle modelle\" of verfris individuele verskaffers in die verskaffer-oortjie.",
       "noMatch": "Geen modelle stem ooreen met die huidige filters nie. Pas filters aan of verwyder filters om resultate te sien.",
-      "modelCount_one": "• {{count}} model gekassineer",
-      "modelCount_other": "• {{count}} modelle gekassineer",
-      "modelCount": "• {{count}} modelle gekassineer",
-      "matchCount_one": "• {{count}} stem ooreen met geselekteerde filters",
-      "matchCount_other": "• {{count}} stem ooreen met geselekteerde filters",
-      "matchCount": "• {{count}} stem ooreen met geselekteerde filters",
       "status": {
         "enabled": "Geaktiveer",
         "disabled": "Gedeaktiveer"
@@ -92,12 +83,15 @@
         "capabilities": "Vermoëns",
         "status": "Status",
         "actions": "Aksies"
-      }
+      },
+      "matchCount_one": "• {{count}} stem ooreen met die gekose filters",
+      "matchCount_other": "• {{count}} stem ooreen met die gekose filters",
+      "modelCount_one": "• {{count}} model gekas",
+      "modelCount_other": "• {{count}} modelle gekas",
+      "providerCount_one": "{{count}} verskaffer gekonfigureer",
+      "providerCount_other": "{{count}} verskaffers gekonfigureer"
     },
     "provider": {
-      "count_one": "{{count}} verskaffer gekonfigureer",
-      "count_other": "{{count}} verskaffers gekonfigureer",
-      "count": "{{count}} verskaffers gekonfigureer",
       "addBtn": "+ Voeg verskaffer by",
       "empty": "Geen verskaffers gekonfigureer nie. Kies \"Voeg verskaffer by\" om te begin.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "Geen modelle",
         "count_one": "{{count}} model",
-        "count_other": "{{count}} modelle",
-        "count": "{{count}} modelle"
+        "count_other": "{{count}} modelle"
       },
       "ollama": {
         "checkingVersion": "Nagaan weergawe...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "Verwyder verskaffer {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} verskaffer gekonfigureer",
+      "count_other": "{{count}} verskaffers gekonfigureer"
     },
     "mcp": {
       "desc": "Stel Model Context Protocol (MCP)-bedieners in om agentvermoëns uit te brei met eksterne gereedskap en databronne.",
@@ -165,9 +160,6 @@
       "untitled": "Naamlose MCP-bediener",
       "notConfigured": "Nie gekonfigureer nie",
       "cached": "Gekassineer",
-      "envVars_one": "{{count}} omgewingsveranderlike",
-      "envVars_other": "{{count}} omgewingsveranderlikes",
-      "envVars": "{{count}} omgewingsveranderlikes",
       "status": {
         "disabled": "Gedeaktiveer",
         "connected": "verbind",
@@ -177,12 +169,10 @@
         "autoConnect": "Outoverbinding"
       },
       "toolCount": {
-        "live_one": "{{count}} lewendige gereedskap",
-        "live_other": "{{count}} lewendige gereedskap",
-        "live": "{{count}} lewendige gereedskap",
-        "cached_one": "{{count}} gekassineerde gereedskap",
-        "cached_other": "{{count}} gekassineerde gereedskap",
-        "cached": "{{count}} gekassineerde gereedskap"
+        "cached_one": "{{count}} gekaste hulpmiddel",
+        "cached_other": "{{count}} gekaste hulpmiddels",
+        "live_one": "{{count}} lewendige hulpmiddel",
+        "live_other": "{{count}} lewendige hulpmiddels"
       },
       "actions": {
         "edit": "Redigeer",
@@ -204,27 +194,28 @@
         "disconnectFailed": "Kon nie van {{name}} ontkoppel nie",
         "connectFailed": "Kon nie met {{name}} verbind nie",
         "testNoCommand": "voer asseblief 'n opdrag in voor toetsing van verbinding",
-        "testSuccess": "suksesvol verbind! {{count}} gereedskap gevind.",
         "testFailed": "Verbinding misluk: {{message}}",
-        "refreshedAll_one": "gereedskap verfris vir {{count}} bediener",
-        "refreshedAll_other": "gereedskap verfris vir {{count}} bedieners",
-        "refreshedAll": "gereedskap verfris vir {{count}} bedieners",
         "refreshedPartial": "{{success}} bedieners verfris, {{failed}} misluk",
         "noServersConfigured": "Geen MCP-bedieners gekonfigureer nie",
-        "testingAll": "Toets {{count}} MCP-bedienerverbindings...",
-        "testAllSuccess": "alle {{count}} mcp-bedieners suksesvol verbind!",
-        "testAllPartial": "{{successful}} verbind, {{failed}} misluk"
+        "testAllPartial": "{{successful}} verbind, {{failed}} misluk",
+        "refreshedAll_one": "Hulpmiddels vir {{count}} bediener verfris",
+        "refreshedAll_other": "Hulpmiddels vir {{count}} bedieners verfris",
+        "testAllSuccess_one": "{{count}} MCP-bediener suksesvol verbind.",
+        "testAllSuccess_other": "Al {{count}} MCP-bedieners suksesvol verbind.",
+        "testSuccess_one": "Verbind. {{count}} hulpmiddel gevind.",
+        "testSuccess_other": "Verbind. {{count}} hulpmiddels gevind.",
+        "testingAll_one": "Toets {{count}} MCP-bedienerverbinding…",
+        "testingAll_other": "Toets {{count}} MCP-bedienerverbindings…"
       },
       "confirm": {
         "delete": "Verwyder MCP-bediener \"{{name}}\"?"
       },
-      "namePlaceholder": "Acme MCP-bediener"
+      "namePlaceholder": "Acme MCP-bediener",
+      "envVars_one": "{{count}} omgewingsveranderlike",
+      "envVars_other": "{{count}} omgewingsveranderlikes"
     },
     "agents": {
       "desc": "Skep en bestuur KI-agente met spesifieke vermoëns, gereedskap en gedrag.",
-      "count_one": "{{count}} agent gekonfigureer",
-      "count_other": "{{count}} agente gekonfigureer",
-      "count": "{{count}} agente gekonfigureer",
       "addBtn": "+ voeg agent by",
       "empty": "Geen agente gekonfigureer nie. Kies voeg agent by om te begin.",
       "defaultBadge": "Verstek",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} ingeboude",
-        "mcpServer_one": "{{count}} mcp-bediener",
-        "mcpServer_other": "{{count}} mcp-bedieners",
-        "mcpServer": "{{count}} mcp-bedieners",
-        "mcpTool_one": "{{count}} mcp-gereedskap",
-        "mcpTool_other": "{{count}} mcp-gereedskap",
-        "mcpTool": "{{count}} mcp-gereedskap"
+        "mcpServer_one": "{{count}} MCP-bediener",
+        "mcpServer_other": "{{count}} MCP-bedieners",
+        "mcpTool_one": "{{count}} MCP-hulpmiddel",
+        "mcpTool_other": "{{count}} MCP-hulpmiddels"
       },
       "actions": {
         "edit": "Redigeer",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "Verwyder agent \"{{name}}\"?"
-      }
+      },
+      "count_one": "{{count}} agent gekonfigureer",
+      "count_other": "{{count}} agente gekonfigureer"
     },
     "prompts": {
       "desc": "Bestuur stelselaanwysings wat die gedrag en persoonlikheid van u KI-assistent definieer.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP-bron verwyder",
-          "reloaded": "{{count}} bewerkings hergelaai",
-          "reloadFailed": "Kon nie HTTP-bron herlaai nie. Kyk die konsole vir besonderhede."
+          "reloadFailed": "Kon nie HTTP-bron herlaai nie. Kyk die konsole vir besonderhede.",
+          "reloaded_one": "{{count}} bewerking herlaai",
+          "reloaded_other": "{{count}} bewerkings herlaai"
         },
         "modal": {
           "defaultTitle": "HTTP-bron",
@@ -419,9 +411,6 @@
           "actions": "Aksies"
         },
         "unnamed": "Naamlose CLI-gereedskap",
-        "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parameters",
-        "paramCount": "{{count}} parameters",
         "noParams": "Geen",
         "statusEnabled": "Geaktiveer",
         "statusDisabled": "Gedeaktiveer",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Skermkiekie",
             "preset-applescript-list-apps": "Lys Lopende Programme"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parameters"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Voorvoegsel (emoji of teks) om voor alle vinnige aksies in die kontekskieslys te vertoon",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} aksie gekonfigureer ({{enabled}} geaktiveer)",
-      "count_other": "{{count}} aksies gekonfigureer ({{enabled}} geaktiveer)",
-      "count": "{{count}} aksies gekonfigureer ({{enabled}} geaktiveer)",
       "addBtn": "+ voeg vinnige aksie by",
       "empty": "Geen vinnige aksies gekonfigureer nie. Kies voeg vinnige aksie by om te begin.",
       "defaultModel": "Verstek",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Maak teks langer",
         "prompt": "Brei die volgende teks uit en verfyn dit…"
-      }
+      },
+      "count_one": "{{count}} aksie gekonfigureer ({{enabled}} geaktiveer)",
+      "count_other": "{{count}} aksies gekonfigureer ({{enabled}} geaktiveer)"
     },
     "usage": {
       "desc": "Volg token-verbruik oor verskaffers en modelle. Data word oor alle gesprekke opgehoop.",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG is gedeaktiveer in instellings. Aktiveer dit onder instellings → gespreks-kenmerke → RAG.",
       "webSearchDisabled": "Websoek is gedeaktiveer in instellings. Aktiveer dit onder instellings → gespreks-kenmerke → websoek.",
       "attached": "Aangeheg: {{name}}",
-      "attachedImages": "{{count}} prent(e) aangeheg",
-      "referencesAdded": "{{count}} verwysing(e) bygevoeg",
       "fileNotFound": "Lêer nie gevind nie: {{path}}",
       "unableToLoadRag": "Kan nie RAG-statistieke laai nie.",
       "referenced": "Verwys na: {{name}}",
-      "openViewFailed": "Kon nie die kletsaansig oopmaak nie."
+      "openViewFailed": "Kon nie die kletsaansig oopmaak nie.",
+      "attachedImages_one": "{{count}} prent aangeheg",
+      "attachedImages_other": "{{count}} prente aangeheg",
+      "referencesAdded_one": "{{count}} verwysing bygevoeg",
+      "referencesAdded_other": "{{count}} verwysings bygevoeg"
     },
     "status": {
       "unavailable": "Nie beskikbaar nie",
@@ -1020,9 +1012,8 @@
       "step2": "Aktiveer RAG",
       "step3": "Kies indekseer gewelf",
       "close": "Sluit",
-      "retrieved_one": "herwin van {{count}} dokument",
-      "retrieved_other": "herwin van {{count}} dokumente",
-      "retrieved": "herwin van {{count}} dokumente"
+      "retrieved_one": "Herwin uit {{count}} dokument",
+      "retrieved_other": "Herwin uit {{count}} dokumente"
     },
     "ragTooltip": {
       "status": "RAG-indeks Status:",
@@ -1141,8 +1132,6 @@
       "apply": "Pas toe",
       "applyAll": "Pas alles toe",
       "applied": "Toegepas",
-      "changes_one": "{{count}} verandering",
-      "changes_other": "{{count}} veranderinge",
       "confirm": "Pas {{summary}} toe?",
       "appliedNotice": "{{summary}} toegepas",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Verwyder",
         "move": "Skuif",
         "batch": "Bondel"
-      }
+      },
+      "changes_one": "{{count}} verandering",
+      "changes_other": "{{count}} veranderinge"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP-toegang",
         "noServers": "Geen MCP-bedieners gekonfigureer nie. Voeg bedieners by onder Instellings → MCP om hierdie opsies te ontsluit.",
-        "toolsCached_one": "{{count}} gereedskap gekassineer",
-        "toolsCached_other": "{{count}} gereedskap gekassineer",
-        "toolsCached": "{{count}} gereedskap gekassineer",
         "noToolsCached": "Nog geen gereedskap gekassineer nie. Aktiveer volle toegang of verfris die kas.",
         "showTools": "Wys gereedskap",
         "hideTools": "Verberg gereedskap",
         "selected": "Gekies",
         "notSelected": "Nie gekies nie",
-        "noToolsAvailable": "Geen gereedskap nog beskikbaar van hierdie bediener nie."
+        "noToolsAvailable": "Geen gereedskap nog beskikbaar van hierdie bediener nie.",
+        "toolsCached_one": "{{count}} hulpmiddel gekas",
+        "toolsCached_other": "{{count}} hulpmiddels gekas"
       },
       "notices": {
         "promptRequired": "Verskaf asseblief 'n naam en inhoud vir die nuwe stelselaanwysing."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Gekasde modelle: {{count}}",
       "connectionFailed": "Verbindingstoets het misluk. Gaan verskafferinstellings na.",
-      "connectionSuccess": "Verbinding suksesvol. {{count}} model(le) gekas.",
       "noCachedModels": "Geen gekasde modelle nie",
       "testConnection": "Toets verbinding",
-      "testing": "Toets tans..."
+      "testing": "Toets tans...",
+      "connectionSuccess_one": "Verbinding suksesvol. {{count}} model gekas.",
+      "connectionSuccess_other": "Verbinding suksesvol. {{count}} modelle gekas."
     },
     "mcpInspector": {
       "title": "MCP-inspekteur",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Gedeaktiveer",
         "statusConnected": "● verbind",
         "statusDisconnected": "○ ontkoppel",
-        "toolsLive_one": "{{count}} gereedskap",
-        "toolsLive_other": "{{count}} gereedskap",
-        "toolsLive": "{{count}} gereedskap",
-        "toolsCached_one": "{{count}} gereedskap (gekassineer)",
-        "toolsCached_other": "{{count}} gereedskap (gekassineer)",
-        "toolsCached": "{{count}} gereedskap (gekassineer)",
         "noTools": "0 gereedskap",
         "connectBtn": "Verbind",
         "disconnectBtn": "Ontkoppel",
@@ -1346,7 +1331,11 @@
           "connected": "Verbind met {{name}}",
           "failedDisconnect": "Kon nie van {{name}} ontkoppel nie: {{message}}",
           "failedConnect": "Kon nie met {{name}} verbind nie: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} hulpmiddel (gekas)",
+        "toolsCached_other": "{{count}} hulpmiddels (gekas)",
+        "toolsLive_one": "{{count}} hulpmiddel",
+        "toolsLive_other": "{{count}} hulpmiddels"
       },
       "tools": {
         "title": "Beskikbare MCP-gereedskap",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Gereedskap en toestemmings",
-    "subtitle_one": "{{agent}} kan {{count}} hulpmiddel gebruik.",
-    "subtitle_other": "{{agent}} kan {{count}} hulpmiddels gebruik.",
     "chatMode": "Kletsmodus",
     "permissions": "Huidige toestemmings",
     "reads": "Hierdie taak kan lees",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Gewelfkonteks",
-      "referencesPlusContext_one": "{{count}} eksplisiete verwysing plus aktiewe konteks",
-      "referencesPlusContext_other": "{{count}} eksplisiete verwysings plus aktiewe konteks",
       "activeContext": "Aktiewe nota en kiekie van grafiekkonteks",
       "readTools": "Gewelf-leesgereedskap",
       "enabledCount": "{{count}} geaktiveer",
@@ -1605,12 +1590,16 @@
       "off": "Af",
       "disabledInSettings": "Gedeaktiveer in instellings",
       "custom": "Pasgemaakte gereedskap",
-      "customEnabled_one": "{{count}} MCP-, OpenAPI- of CLI-hulpmiddel geaktiveer",
-      "customEnabled_other": "{{count}} MCP-, OpenAPI- of CLI-hulpmiddels geaktiveer",
       "noneEnabled": "Geen geaktiveer nie",
       "destructive": "Vernietigende gewelfaksies",
-      "notProvided": "Nie deur ingeboude gereedskap verskaf nie"
-    }
+      "notProvided": "Nie deur ingeboude gereedskap verskaf nie",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- of CLI-hulpmiddel geaktiveer",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- of CLI-hulpmiddels geaktiveer",
+      "referencesPlusContext_one": "{{count}} eksplisiete verwysing plus aktiewe konteks",
+      "referencesPlusContext_other": "{{count}} eksplisiete verwysings plus aktiewe konteks"
+    },
+    "subtitle_one": "{{agent}} kan {{count}} hulpmiddel gebruik.",
+    "subtitle_other": "{{agent}} kan {{count}} hulpmiddels gebruik."
   },
   "markdown": {
     "run": "Voer uit"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Geen Markdown-notas om te indekseer nie.",
-      "starting_one": "Indekseer {{count}} nota…",
-      "starting_other": "Indekseer {{count}} notas…",
       "progress": "Indeksering: {{done}} van {{total}} notas",
       "completed": "Indeksering voltooi: {{indexed}} geïndekseer, {{failed}} misluk.",
       "noIndex": "Niks is nog geïndekseer nie. Voer \"Embed all documents\" uit om u gewelf te indekseer.",
       "gradingError": "Dokumentgradering het misluk: {{message}}",
       "clearing": "Maak die indeks skoon…",
-      "cleared": "Indeks skoongemaak."
+      "cleared": "Indeks skoongemaak.",
+      "starting_one": "Indekseer {{count}} nota…",
+      "starting_other": "Indekseer {{count}} notas…"
     }
   }
 }

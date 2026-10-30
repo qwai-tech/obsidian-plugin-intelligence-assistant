@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "مدل‌های همه ارائه‌دهندگان پیکربندی شده را مشاهده و مدیریت کنید. برای دریافت آخرین مدل‌های موجود روی «بازخوانی مدل‌ها» کلیک کنید.",
-      "providerCount_one": "{{count}} ارائه‌دهنده پیکربندی شده",
-      "providerCount_other": "{{count}} ارائه‌دهنده پیکربندی شده",
-      "providerCount": "{{count}} ارائه‌دهنده پیکربندی شده",
       "refreshAll": "بازخوانی همه مدل‌ها",
       "empty": "هنوز ارائه‌دهنده‌ای پیکربندی نشده. ابتدا در تب ارائه‌دهندگان ارائه‌دهنده اضافه کنید.",
       "noModels": "مدلی در دسترس نیست. روی «بازخوانی همه مدل‌ها» کلیک کنید یا ارائه‌دهندگان منفرد را در تب ارائه‌دهندگان بازخوانی کنید.",
       "noMatch": "هیچ مدلی با فیلترهای فعلی مطابقت ندارد. فیلترها را تنظیم کرده یا پاک کنید تا نتایج نمایش داده شود.",
-      "modelCount_one": "• {{count}} مدل در حافظه پنهان",
-      "modelCount_other": "• {{count}} مدل در حافظه پنهان",
-      "modelCount": "• {{count}} مدل در حافظه پنهان",
-      "matchCount_one": "• {{count}} مورد با فیلترهای انتخاب شده مطابقت دارد",
-      "matchCount_other": "• {{count}} مورد با فیلترهای انتخاب شده مطابقت دارد",
-      "matchCount": "• {{count}} مورد با فیلترهای انتخاب شده مطابقت دارد",
       "status": {
         "enabled": "فعال",
         "disabled": "غیرفعال"
@@ -92,12 +83,15 @@
         "capabilities": "قابلیت‌ها",
         "status": "وضعیت",
         "actions": "اقدامات"
-      }
+      },
+      "matchCount_one": "• {{count}} مورد با فیلترهای انتخاب‌شده مطابقت دارد",
+      "matchCount_other": "• {{count}} مورد با فیلترهای انتخاب‌شده مطابقت دارد",
+      "modelCount_one": "• {{count}} مدل در حافظهٔ نهان",
+      "modelCount_other": "• {{count}} مدل در حافظهٔ نهان",
+      "providerCount_one": "{{count}} ارائه‌دهندهٔ پیکربندی‌شده",
+      "providerCount_other": "{{count}} ارائه‌دهندهٔ پیکربندی‌شده"
     },
     "provider": {
-      "count_one": "{{count}} ارائه‌دهنده پیکربندی شده",
-      "count_other": "{{count}} ارائه‌دهنده پیکربندی شده",
-      "count": "{{count}} ارائه‌دهنده پیکربندی شده",
       "addBtn": "+ افزودن ارائه‌دهنده",
       "empty": "هیچ ارائه‌دهنده‌ای پیکربندی نشده. «افزودن ارائه‌دهنده» را انتخاب کنید تا شروع کنید.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "بدون مدل",
         "count_one": "{{count}} مدل",
-        "count_other": "{{count}} مدل",
-        "count": "{{count}} مدل"
+        "count_other": "{{count}} مدل"
       },
       "ollama": {
         "checkingVersion": "در حال بررسی نسخه...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "حذف ارائه‌دهنده {{provider}}؟"
-      }
+      },
+      "count_one": "{{count}} ارائه‌دهندهٔ پیکربندی‌شده",
+      "count_other": "{{count}} ارائه‌دهندهٔ پیکربندی‌شده"
     },
     "mcp": {
       "desc": "سرورهای Model Context Protocol (MCP) را برای گسترش قابلیت‌های عامل با ابزارها و منابع داده خارجی پیکربندی کنید.",
@@ -165,9 +160,6 @@
       "untitled": "سرور MCP بدون نام",
       "notConfigured": "پیکربندی نشده",
       "cached": "کش شده",
-      "envVars_one": "{{count}} متغیر محیطی",
-      "envVars_other": "{{count}} متغیر محیطی",
-      "envVars": "{{count}} متغیر محیطی",
       "status": {
         "disabled": "غیرفعال",
         "connected": "متصل",
@@ -177,12 +169,10 @@
         "autoConnect": "اتصال خودکار"
       },
       "toolCount": {
+        "cached_one": "{{count}} ابزار ذخیره‌شده در حافظهٔ نهان",
+        "cached_other": "{{count}} ابزار ذخیره‌شده در حافظهٔ نهان",
         "live_one": "{{count}} ابزار زنده",
-        "live_other": "{{count}} ابزار زنده",
-        "live": "{{count}} ابزار زنده",
-        "cached_one": "{{count}} ابزار کش‌شده",
-        "cached_other": "{{count}} ابزار کش‌شده",
-        "cached": "{{count}} ابزار کش‌شده"
+        "live_other": "{{count}} ابزار زنده"
       },
       "actions": {
         "edit": "ویرایش",
@@ -204,27 +194,28 @@
         "disconnectFailed": "قطع اتصال از {{name}} ناموفق بود",
         "connectFailed": "اتصال به {{name}} ناموفق بود",
         "testNoCommand": "لطفاً قبل از آزمایش اتصال یک دستور وارد کنید",
-        "testSuccess": "با موفقیت متصل شد! {{count}} ابزار پیدا شد.",
         "testFailed": "اتصال ناموفق بود: {{message}}",
-        "refreshedAll_one": "ابزارها برای {{count}} سرور بازخوانی شدند",
-        "refreshedAll_other": "ابزارها برای {{count}} سرور بازخوانی شدند",
-        "refreshedAll": "ابزارها برای {{count}} سرور بازخوانی شدند",
         "refreshedPartial": "{{success}} سرور بازخوانی شد، {{failed}} ناموفق",
         "noServersConfigured": "هیچ سرور MCP پیکربندی نشده",
-        "testingAll": "آزمایش {{count}} اتصال سرور MCP...",
-        "testAllSuccess": "همه {{count}} سرور mcp با موفقیت متصل شدند!",
-        "testAllPartial": "{{successful}} متصل شدند، {{failed}} ناموفق"
+        "testAllPartial": "{{successful}} متصل شدند، {{failed}} ناموفق",
+        "refreshedAll_one": "ابزارهای {{count}} سرور تازه‌سازی شد",
+        "refreshedAll_other": "ابزارهای {{count}} سرور تازه‌سازی شد",
+        "testAllSuccess_one": "{{count}} سرور MCP با موفقیت متصل شد.",
+        "testAllSuccess_other": "همهٔ {{count}} سرور MCP با موفقیت متصل شدند.",
+        "testSuccess_one": "متصل شد. {{count}} ابزار پیدا شد.",
+        "testSuccess_other": "متصل شد. {{count}} ابزار پیدا شد.",
+        "testingAll_one": "در حال آزمایش {{count}} اتصال سرور MCP…",
+        "testingAll_other": "در حال آزمایش {{count}} اتصال سرور MCP…"
       },
       "confirm": {
         "delete": "حذف سرور MCP «{{name}}»؟"
       },
-      "namePlaceholder": "سرور MCP شرکت Acme"
+      "namePlaceholder": "سرور MCP شرکت Acme",
+      "envVars_one": "{{count}} متغیر محیطی",
+      "envVars_other": "{{count}} متغیر محیطی"
     },
     "agents": {
       "desc": "عوامل هوش مصنوعی با قابلیت‌ها، ابزارها و رفتارهای خاص ایجاد و مدیریت کنید.",
-      "count_one": "{{count}} عامل پیکربندی شده",
-      "count_other": "{{count}} عامل پیکربندی شده",
-      "count": "{{count}} عامل پیکربندی شده",
       "addBtn": "+ افزودن عامل",
       "empty": "هیچ عاملی پیکربندی نشده. افزودن عامل را انتخاب کنید تا شروع کنید.",
       "defaultBadge": "پیش‌فرض",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} داخلی",
-        "mcpServer_one": "{{count}} سرور mcp",
-        "mcpServer_other": "{{count}} سرور mcp",
-        "mcpServer": "{{count}} سرور mcp",
-        "mcpTool_one": "{{count}} ابزار mcp",
-        "mcpTool_other": "{{count}} ابزار mcp",
-        "mcpTool": "{{count}} ابزار mcp"
+        "mcpServer_one": "{{count}} سرور MCP",
+        "mcpServer_other": "{{count}} سرور MCP",
+        "mcpTool_one": "{{count}} ابزار MCP",
+        "mcpTool_other": "{{count}} ابزار MCP"
       },
       "actions": {
         "edit": "ویرایش",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "حذف عامل «{{name}}»؟"
-      }
+      },
+      "count_one": "{{count}} عامل پیکربندی‌شده",
+      "count_other": "{{count}} عامل پیکربندی‌شده"
     },
     "prompts": {
       "desc": "دستورالعمل‌های سیستمی که رفتار و شخصیت دستیار هوش مصنوعی شما را تعریف می‌کنند مدیریت کنید.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "منبع HTTP حذف شد",
-          "reloaded": "{{count}} عملیات مجدداً بارگذاری شد",
-          "reloadFailed": "بارگذاری مجدد منبع HTTP ناموفق بود. برای جزئیات کنسول را بررسی کنید."
+          "reloadFailed": "بارگذاری مجدد منبع HTTP ناموفق بود. برای جزئیات کنسول را بررسی کنید.",
+          "reloaded_one": "{{count}} عملیات دوباره بارگذاری شد",
+          "reloaded_other": "{{count}} عملیات دوباره بارگذاری شد"
         },
         "modal": {
           "defaultTitle": "منبع HTTP",
@@ -419,9 +411,6 @@
           "actions": "اقدامات"
         },
         "unnamed": "ابزار CLI بدون نام",
-        "paramCount_one": "{{count}} پارامتر",
-        "paramCount_other": "{{count}} پارامتر",
-        "paramCount": "{{count}} پارامتر",
         "noParams": "ندارد",
         "statusEnabled": "فعال",
         "statusDisabled": "غیرفعال",
@@ -554,7 +543,9 @@
             "preset-screencapture": "اسکرین‌شات",
             "preset-applescript-list-apps": "فهرست برنامه‌های در حال اجرا"
           }
-        }
+        },
+        "paramCount_one": "{{count}} پارامتر",
+        "paramCount_other": "{{count}} پارامتر"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "پیشوند (ایموجی یا متن) برای نمایش قبل از همه اقدامات سریع در منوی زمینه",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} اقدام پیکربندی شده ({{enabled}} فعال)",
-      "count_other": "{{count}} اقدام پیکربندی شده ({{enabled}} فعال)",
-      "count": "{{count}} اقدام پیکربندی شده ({{enabled}} فعال)",
       "addBtn": "+ افزودن اقدام سریع",
       "empty": "هیچ اقدام سریعی پیکربندی نشده. افزودن اقدام سریع را انتخاب کنید تا شروع کنید.",
       "defaultModel": "پیش‌فرض",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "طولانی‌تر کردن متن",
         "prompt": "متن زیر را گسترش دهید و شرح دهید…"
-      }
+      },
+      "count_one": "{{count}} اقدام پیکربندی‌شده ({{enabled}} فعال)",
+      "count_other": "{{count}} اقدام پیکربندی‌شده ({{enabled}} فعال)"
     },
     "usage": {
       "desc": "مصرف توکن در ارائه‌دهندگان و مدل‌ها را دنبال کنید. داده‌ها در همه مکالمات انباشته می‌شوند.",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG در تنظیمات غیرفعال است. آن را در تنظیمات ← ویژگی‌های گفتگو ← RAG فعال کنید.",
       "webSearchDisabled": "جستجوی وب در تنظیمات غیرفعال است. آن را در تنظیمات ← ویژگی‌های گفتگو ← جستجوی وب فعال کنید.",
       "attached": "پیوست شد: {{name}}",
-      "attachedImages": "{{count}} تصویر پیوست شد",
-      "referencesAdded": "{{count}} مرجع اضافه شد",
       "fileNotFound": "فایل پیدا نشد: {{path}}",
       "unableToLoadRag": "بارگذاری آمار RAG ناموفق بود.",
       "referenced": "مرجع شد: {{name}}",
-      "openViewFailed": "نمای گفتگو باز نشد."
+      "openViewFailed": "نمای گفتگو باز نشد.",
+      "attachedImages_one": "{{count}} تصویر پیوست شد",
+      "attachedImages_other": "{{count}} تصویر پیوست شد",
+      "referencesAdded_one": "{{count}} ارجاع اضافه شد",
+      "referencesAdded_other": "{{count}} ارجاع اضافه شد"
     },
     "status": {
       "unavailable": "در دسترس نیست",
@@ -1020,9 +1012,8 @@
       "step2": "RAG را فعال کنید",
       "step3": "فهرست vault را انتخاب کنید",
       "close": "بستن",
-      "retrieved_one": "از {{count}} سند بازیابی شد",
-      "retrieved_other": "از {{count}} سند بازیابی شد",
-      "retrieved": "از {{count}} سند بازیابی شد"
+      "retrieved_one": "بازیابی‌شده از {{count}} سند",
+      "retrieved_other": "بازیابی‌شده از {{count}} سند"
     },
     "ragTooltip": {
       "status": "وضعیت فهرست RAG:",
@@ -1141,8 +1132,6 @@
       "apply": "اعمال",
       "applyAll": "اعمال همه",
       "applied": "اعمال شد",
-      "changes_one": "{{count}} تغییر",
-      "changes_other": "{{count}} تغییر",
       "confirm": "{{summary}} اعمال شود؟",
       "appliedNotice": "{{summary}} اعمال شد",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "حذف",
         "move": "انتقال",
         "batch": "دسته‌ای"
-      }
+      },
+      "changes_one": "{{count}} تغییر",
+      "changes_other": "{{count}} تغییر"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "دسترسی MCP",
         "noServers": "هیچ سرور MCP پیکربندی نشده. برای باز کردن این گزینه‌ها سرورها را در تنظیمات ← MCP اضافه کنید.",
-        "toolsCached_one": "{{count}} ابزار در حافظه پنهان",
-        "toolsCached_other": "{{count}} ابزار در حافظه پنهان",
-        "toolsCached": "{{count}} ابزار در حافظه پنهان",
         "noToolsCached": "هنوز هیچ ابزاری در حافظه پنهان نیست. دسترسی کامل را فعال کنید یا حافظه پنهان را بازخوانی کنید.",
         "showTools": "نمایش ابزارها",
         "hideTools": "پنهان کردن ابزارها",
         "selected": "انتخاب شده",
         "notSelected": "انتخاب نشده",
-        "noToolsAvailable": "هنوز هیچ ابزاری از این سرور در دسترس نیست."
+        "noToolsAvailable": "هنوز هیچ ابزاری از این سرور در دسترس نیست.",
+        "toolsCached_one": "{{count}} ابزار در حافظهٔ نهان",
+        "toolsCached_other": "{{count}} ابزار در حافظهٔ نهان"
       },
       "notices": {
         "promptRequired": "لطفاً یک نام و محتوا برای دستورالعمل سیستم جدید ارائه دهید."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "مدل‌های ذخیره‌شده در حافظه نهان: {{count}}",
       "connectionFailed": "آزمایش اتصال ناموفق بود. تنظیمات ارائه‌دهنده را بررسی کنید.",
-      "connectionSuccess": "اتصال موفق بود. {{count}} مدل در حافظه نهان ذخیره شد.",
       "noCachedModels": "هیچ مدلی در حافظه نهان ذخیره نشده است",
       "testConnection": "آزمایش اتصال",
-      "testing": "در حال آزمایش..."
+      "testing": "در حال آزمایش...",
+      "connectionSuccess_one": "اتصال موفق بود. {{count}} مدل در حافظهٔ نهان ذخیره شد.",
+      "connectionSuccess_other": "اتصال موفق بود. {{count}} مدل در حافظهٔ نهان ذخیره شد."
     },
     "mcpInspector": {
       "title": "بازرس MCP",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "غیرفعال",
         "statusConnected": "● متصل",
         "statusDisconnected": "○ قطع شده",
-        "toolsLive_one": "{{count}} ابزار",
-        "toolsLive_other": "{{count}} ابزار",
-        "toolsLive": "{{count}} ابزار",
-        "toolsCached_one": "{{count}} ابزار (کش شده)",
-        "toolsCached_other": "{{count}} ابزار (کش شده)",
-        "toolsCached": "{{count}} ابزار (کش شده)",
         "noTools": "0 ابزار",
         "connectBtn": "اتصال",
         "disconnectBtn": "قطع اتصال",
@@ -1346,7 +1331,11 @@
           "connected": "به {{name}} متصل شد",
           "failedDisconnect": "قطع اتصال از {{name}} ناموفق بود: {{message}}",
           "failedConnect": "اتصال به {{name}} ناموفق بود: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} ابزار (در حافظهٔ نهان)",
+        "toolsCached_other": "{{count}} ابزار (در حافظهٔ نهان)",
+        "toolsLive_one": "{{count}} ابزار",
+        "toolsLive_other": "{{count}} ابزار"
       },
       "tools": {
         "title": "ابزارهای MCP موجود",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "ابزارها و مجوزها",
-    "subtitle_one": "{{agent}} می‌تواند از {{count}} ابزار استفاده کند.",
-    "subtitle_other": "{{agent}} می‌تواند از {{count}} ابزار استفاده کند.",
     "chatMode": "حالت گفتگو",
     "permissions": "مجوزهای فعلی",
     "reads": "این وظیفه می‌تواند بخواند",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "زمینه vault",
-      "referencesPlusContext_one": "{{count}} ارجاع صریح به‌علاوه زمینه فعال",
-      "referencesPlusContext_other": "{{count}} ارجاع صریح به‌علاوه زمینه فعال",
       "activeContext": "یادداشت فعال و تصویر لحظه‌ای زمینه گراف",
       "readTools": "ابزارهای خواندن vault",
       "enabledCount": "{{count}} فعال",
@@ -1605,12 +1590,16 @@
       "off": "خاموش",
       "disabledInSettings": "در تنظیمات غیرفعال است",
       "custom": "ابزارهای سفارشی",
-      "customEnabled_one": "{{count}} ابزار MCP، OpenAPI یا CLI فعال",
-      "customEnabled_other": "{{count}} ابزار MCP، OpenAPI یا CLI فعال",
       "noneEnabled": "هیچ‌کدام فعال نیست",
       "destructive": "اقدامات مخرب در vault",
-      "notProvided": "ابزارهای داخلی آن را ارائه نمی‌کنند"
-    }
+      "notProvided": "ابزارهای داخلی آن را ارائه نمی‌کنند",
+      "customEnabled_one": "{{count}} ابزار MCP، OpenAPI یا CLI فعال",
+      "customEnabled_other": "{{count}} ابزار MCP، OpenAPI یا CLI فعال",
+      "referencesPlusContext_one": "{{count}} ارجاع صریح به‌علاوهٔ زمینهٔ فعال",
+      "referencesPlusContext_other": "{{count}} ارجاع صریح به‌علاوهٔ زمینهٔ فعال"
+    },
+    "subtitle_one": "{{agent}} می‌تواند از {{count}} ابزار استفاده کند.",
+    "subtitle_other": "{{agent}} می‌تواند از {{count}} ابزار استفاده کند."
   },
   "markdown": {
     "run": "اجرا"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "هیچ یادداشت Markdown برای نمایه‌سازی وجود ندارد.",
-      "starting_one": "در حال نمایه‌سازی {{count}} یادداشت…",
-      "starting_other": "در حال نمایه‌سازی {{count}} یادداشت…",
       "progress": "نمایه‌سازی: {{done}} از {{total}} یادداشت",
       "completed": "نمایه‌سازی تمام شد: {{indexed}} نمایه‌شده، {{failed}} ناموفق.",
       "noIndex": "هنوز چیزی نمایه نشده است. برای نمایه‌سازی vault خود \"Embed all documents\" را اجرا کنید.",
       "gradingError": "ارزیابی سند ناموفق بود: {{message}}",
       "clearing": "در حال پاک کردن فهرست…",
-      "cleared": "فهرست پاک شد."
+      "cleared": "فهرست پاک شد.",
+      "starting_one": "در حال نمایه‌سازی {{count}} یادداشت…",
+      "starting_other": "در حال نمایه‌سازی {{count}} یادداشت…"
     }
   }
 }

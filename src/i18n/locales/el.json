@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Προβολή και διαχείριση μοντέλων από όλους τους ρυθμισμένους παρόχους. Κάντε κλικ στο «ανανέωση μοντέλων» για λήψη των πιο πρόσφατων διαθέσιμων μοντέλων.",
-      "providerCount_one": "{{count}} πάροχος ρυθμισμένος",
-      "providerCount_other": "{{count}} πάροχοι ρυθμισμένοι",
-      "providerCount": "{{count}} πάροχοι ρυθμισμένοι",
       "refreshAll": "ανανέωση όλων των μοντέλων",
       "empty": "Δεν έχει ρυθμιστεί ακόμα κανένας πάροχος. Προσθέστε παρόχους στην καρτέλα παρόχων πρώτα.",
       "noModels": "Δεν υπάρχουν διαθέσιμα μοντέλα. Κάντε κλικ στο «ανανέωση όλων των μοντέλων» ή ανανεώστε μεμονωμένους παρόχους στην καρτέλα παρόχων.",
       "noMatch": "Κανένα μοντέλο δεν ταιριάζει με τα τρέχοντα φίλτρα. Προσαρμόστε ή καθαρίστε τα φίλτρα για να δείτε αποτελέσματα.",
-      "modelCount_one": "• {{count}} μοντέλο σε κρυφή μνήμη",
-      "modelCount_other": "• {{count}} μοντέλα σε κρυφή μνήμη",
-      "modelCount": "• {{count}} μοντέλα σε κρυφή μνήμη",
-      "matchCount_one": "• {{count}} ταιριάζει με επιλεγμένα φίλτρα",
-      "matchCount_other": "• {{count}} ταιριάζουν με επιλεγμένα φίλτρα",
-      "matchCount": "• {{count}} ταιριάζουν με επιλεγμένα φίλτρα",
       "status": {
         "enabled": "Ενεργό",
         "disabled": "Ανενεργό"
@@ -92,12 +83,15 @@
         "capabilities": "Δυνατότητες",
         "status": "Κατάσταση",
         "actions": "Ενέργειες"
-      }
+      },
+      "matchCount_one": "• {{count}} ταιριάζει με τα επιλεγμένα φίλτρα",
+      "matchCount_other": "• {{count}} ταιριάζουν με τα επιλεγμένα φίλτρα",
+      "modelCount_one": "• {{count}} μοντέλο στην κρυφή μνήμη",
+      "modelCount_other": "• {{count}} μοντέλα στην κρυφή μνήμη",
+      "providerCount_one": "{{count}} ρυθμισμένος πάροχος",
+      "providerCount_other": "{{count}} ρυθμισμένοι πάροχοι"
     },
     "provider": {
-      "count_one": "{{count}} πάροχος ρυθμισμένος",
-      "count_other": "{{count}} πάροχοι ρυθμισμένοι",
-      "count": "{{count}} πάροχοι ρυθμισμένοι",
       "addBtn": "+ Προσθήκη παρόχου",
       "empty": "Δεν έχει ρυθμιστεί κανένας πάροχος. Επιλέξτε «Προσθήκη παρόχου» για να ξεκινήσετε.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "Κανένα μοντέλο",
         "count_one": "{{count}} μοντέλο",
-        "count_other": "{{count}} μοντέλα",
-        "count": "{{count}} μοντέλα"
+        "count_other": "{{count}} μοντέλα"
       },
       "ollama": {
         "checkingVersion": "Έλεγχος έκδοσης...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "Αφαίρεση παρόχου {{provider}};"
-      }
+      },
+      "count_one": "{{count}} ρυθμισμένος πάροχος",
+      "count_other": "{{count}} ρυθμισμένοι πάροχοι"
     },
     "mcp": {
       "desc": "Διαμόρφωση διακομιστών Πρωτοκόλλου Περιβάλλοντος Μοντέλου (MCP) για επέκταση των δυνατοτήτων του πράκτορα με εξωτερικά εργαλεία και πηγές δεδομένων.",
@@ -165,9 +160,6 @@
       "untitled": "MCP διακομιστής χωρίς τίτλο",
       "notConfigured": "Δεν έχει ρυθμιστεί",
       "cached": "Προσωρινή μνήμη",
-      "envVars_one": "{{count}} μεταβλητή περιβάλλοντος",
-      "envVars_other": "{{count}} μεταβλητές περιβάλλοντος",
-      "envVars": "{{count}} μεταβλητές περιβάλλοντος",
       "status": {
         "disabled": "Ανενεργό",
         "connected": "συνδεδεμένο",
@@ -177,12 +169,10 @@
         "autoConnect": "Αυτόματη σύνδεση"
       },
       "toolCount": {
+        "cached_one": "{{count}} αποθηκευμένο εργαλείο στην κρυφή μνήμη",
+        "cached_other": "{{count}} αποθηκευμένα εργαλεία στην κρυφή μνήμη",
         "live_one": "{{count}} ενεργό εργαλείο",
-        "live_other": "{{count}} ενεργά εργαλεία",
-        "live": "{{count}} ενεργά εργαλεία",
-        "cached_one": "{{count}} εργαλείο σε κρυφή μνήμη",
-        "cached_other": "{{count}} εργαλεία σε κρυφή μνήμη",
-        "cached": "{{count}} εργαλεία σε κρυφή μνήμη"
+        "live_other": "{{count}} ενεργά εργαλεία"
       },
       "actions": {
         "edit": "Επεξεργασία",
@@ -204,27 +194,28 @@
         "disconnectFailed": "Αποτυχία αποσύνδεσης από {{name}}",
         "connectFailed": "Αποτυχία σύνδεσης στο {{name}}",
         "testNoCommand": "παρακαλώ εισάγετε μια εντολή πριν από τη δοκιμή σύνδεσης",
-        "testSuccess": "επιτυχής σύνδεση! Βρέθηκαν {{count}} εργαλεία.",
         "testFailed": "Η σύνδεση απέτυχε: {{message}}",
-        "refreshedAll_one": "ανανεώθηκαν εργαλεία για {{count}} διακομιστή",
-        "refreshedAll_other": "ανανεώθηκαν εργαλεία για {{count}} διακομιστές",
-        "refreshedAll": "ανανεώθηκαν εργαλεία για {{count}} διακομιστές",
         "refreshedPartial": "ανανεώθηκαν {{success}} διακομιστές, {{failed}} απέτυχαν",
         "noServersConfigured": "Δεν έχει ρυθμιστεί κανένας MCP διακομιστής",
-        "testingAll": "Δοκιμή {{count}} MCP συνδέσεων διακομιστή...",
-        "testAllSuccess": "και οι {{count}} MCP διακομιστές συνδέθηκαν επιτυχώς!",
-        "testAllPartial": "{{success}} συνδέθηκαν, {{failed}} απέτυχαν"
+        "testAllPartial": "{{success}} συνδέθηκαν, {{failed}} απέτυχαν",
+        "refreshedAll_one": "Ανανεώθηκαν τα εργαλεία για {{count}} διακομιστή",
+        "refreshedAll_other": "Ανανεώθηκαν τα εργαλεία για {{count}} διακομιστές",
+        "testAllSuccess_one": "{{count}} διακομιστής MCP συνδέθηκε επιτυχώς.",
+        "testAllSuccess_other": "Και οι {{count}} διακομιστές MCP συνδέθηκαν επιτυχώς.",
+        "testSuccess_one": "Συνδέθηκε. Βρέθηκε {{count}} εργαλείο.",
+        "testSuccess_other": "Συνδέθηκε. Βρέθηκαν {{count}} εργαλεία.",
+        "testingAll_one": "Δοκιμή {{count}} σύνδεσης διακομιστή MCP…",
+        "testingAll_other": "Δοκιμή {{count}} συνδέσεων διακομιστών MCP…"
       },
       "confirm": {
         "delete": "Διαγραφή MCP διακομιστή «{{name}}»;"
       },
-      "namePlaceholder": "Διακομιστής MCP Acme"
+      "namePlaceholder": "Διακομιστής MCP Acme",
+      "envVars_one": "{{count}} μεταβλητή περιβάλλοντος",
+      "envVars_other": "{{count}} μεταβλητές περιβάλλοντος"
     },
     "agents": {
       "desc": "Δημιουργία και διαχείριση AI πρακτόρων με συγκεκριμένες δυνατότητες, εργαλεία και συμπεριφορές.",
-      "count_one": "{{count}} πράκτορας ρυθμισμένος",
-      "count_other": "{{count}} πράκτορες ρυθμισμένοι",
-      "count": "{{count}} πράκτορες ρυθμισμένοι",
       "addBtn": "+ προσθήκη πράκτορα",
       "empty": "Δεν έχει ρυθμιστεί κανένας πράκτορας. Επιλέξτε προσθήκη πράκτορα για να ξεκινήσετε.",
       "defaultBadge": "Προεπιλογή",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} ενσωματωμένο",
-        "mcpServer_one": "{{count}} MCP διακομιστής",
-        "mcpServer_other": "{{count}} MCP διακομιστές",
-        "mcpServer": "{{count}} MCP διακομιστές",
-        "mcpTool_one": "{{count}} MCP εργαλείο",
-        "mcpTool_other": "{{count}} MCP εργαλεία",
-        "mcpTool": "{{count}} MCP εργαλεία"
+        "mcpServer_one": "{{count}} διακομιστής MCP",
+        "mcpServer_other": "{{count}} διακομιστές MCP",
+        "mcpTool_one": "{{count}} εργαλείο MCP",
+        "mcpTool_other": "{{count}} εργαλεία MCP"
       },
       "actions": {
         "edit": "Επεξεργασία",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "Διαγραφή πράκτορα «{{name}}»;"
-      }
+      },
+      "count_one": "{{count}} ρυθμισμένος πράκτορας",
+      "count_other": "{{count}} ρυθμισμένοι πράκτορες"
     },
     "prompts": {
       "desc": "Διαχείριση προτροπών συστήματος που καθορίζουν τη συμπεριφορά και την προσωπικότητα του AI βοηθού σας.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "Η HTTP πηγή αφαιρέθηκε",
-          "reloaded": "Επαναφορτώθηκαν {{count}} λειτουργίες",
-          "reloadFailed": "Αποτυχία επαναφόρτωσης HTTP πηγής. Ελέγξτε την κονσόλα για λεπτομέρειες."
+          "reloadFailed": "Αποτυχία επαναφόρτωσης HTTP πηγής. Ελέγξτε την κονσόλα για λεπτομέρειες.",
+          "reloaded_one": "Επαναφορτώθηκε {{count}} λειτουργία",
+          "reloaded_other": "Επαναφορτώθηκαν {{count}} λειτουργίες"
         },
         "modal": {
           "defaultTitle": "HTTP πηγή",
@@ -419,9 +411,6 @@
           "actions": "Ενέργειες"
         },
         "unnamed": "Ανώνυμο εργαλείο CLI",
-        "paramCount_one": "{{count}} παράμετρος",
-        "paramCount_other": "{{count}} παράμετροι",
-        "paramCount": "{{count}} παράμετροι",
         "noParams": "Καμία",
         "statusEnabled": "Ενεργό",
         "statusDisabled": "Ανενεργό",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Στιγμιότυπο οθόνης",
             "preset-applescript-list-apps": "Λίστα εκτελούμενων εφαρμογών"
           }
-        }
+        },
+        "paramCount_one": "{{count}} παράμετρος",
+        "paramCount_other": "{{count}} παράμετροι"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Πρόθεμα (emoji ή κείμενο) για εμφάνιση πριν από όλες τις γρήγορες ενέργειες στο μενού περιβάλλοντος",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} ενέργεια ρυθμισμένη ({{enabled}} ενεργή)",
-      "count_other": "{{count}} ενέργειες ρυθμισμένες ({{enabled}} ενεργές)",
-      "count": "{{count}} ενέργειες ρυθμισμένες ({{enabled}} ενεργές)",
       "addBtn": "+ προσθήκη γρήγορης ενέργειας",
       "empty": "Δεν έχει ρυθμιστεί καμία γρήγορη ενέργεια. Επιλέξτε προσθήκη γρήγορης ενέργειας για να ξεκινήσετε.",
       "defaultModel": "Προεπιλογή",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Επέκταση κειμένου",
         "prompt": "Επέκτεινε και ανάπτυξε το παρακάτω κείμενο…"
-      }
+      },
+      "count_one": "{{count}} ρυθμισμένη ενέργεια (ενεργές: {{enabled}})",
+      "count_other": "{{count}} ρυθμισμένες ενέργειες (ενεργές: {{enabled}})"
     },
     "usage": {
       "desc": "Παρακολούθηση κατανάλωσης tokens ανά πάροχο και μοντέλο. Τα δεδομένα συσσωρεύονται σε όλες τις συνομιλίες.",
@@ -994,12 +984,14 @@
       "ragDisabled": "Το RAG είναι απενεργοποιημένο στις ρυθμίσεις. Ενεργοποιήστε το στις ρυθμίσεις → λειτουργίες συνομιλίας → RAG.",
       "webSearchDisabled": "Η αναζήτηση ιστού είναι απενεργοποιημένη στις ρυθμίσεις. Ενεργοποιήστε την στις ρυθμίσεις → λειτουργίες συνομιλίας → αναζήτηση ιστού.",
       "attached": "Επισυνάφθηκε: {{name}}",
-      "attachedImages": "Επισυνάφθηκαν {{count}} εικόνα(ες)",
-      "referencesAdded": "Προστέθηκαν {{count}} αναφορά(ές)",
       "fileNotFound": "Το αρχείο δεν βρέθηκε: {{path}}",
       "unableToLoadRag": "Αδυναμία φόρτωσης στατιστικών RAG.",
       "referenced": "Αναφέρθηκε: {{name}}",
-      "openViewFailed": "Δεν ήταν δυνατό το άνοιγμα της προβολής συνομιλίας."
+      "openViewFailed": "Δεν ήταν δυνατό το άνοιγμα της προβολής συνομιλίας.",
+      "attachedImages_one": "Επισυνάφθηκε {{count}} εικόνα",
+      "attachedImages_other": "Επισυνάφθηκαν {{count}} εικόνες",
+      "referencesAdded_one": "Προστέθηκε {{count}} αναφορά",
+      "referencesAdded_other": "Προστέθηκαν {{count}} αναφορές"
     },
     "status": {
       "unavailable": "Μη διαθέσιμο",
@@ -1020,9 +1012,8 @@
       "step2": "Ενεργοποιήστε το RAG",
       "step3": "Επιλέξτε ευρετηρίαση vault",
       "close": "Κλείσιμο",
-      "retrieved_one": "ανακτήθηκαν από {{count}} έγγραφο",
-      "retrieved_other": "ανακτήθηκαν από {{count}} έγγραφα",
-      "retrieved": "ανακτήθηκαν από {{count}} έγγραφα"
+      "retrieved_one": "Ανακτήθηκε από {{count}} έγγραφο",
+      "retrieved_other": "Ανακτήθηκε από {{count}} έγγραφα"
     },
     "ragTooltip": {
       "status": "Κατάσταση RAG ευρετηρίου:",
@@ -1141,8 +1132,6 @@
       "apply": "Εφαρμογή",
       "applyAll": "Εφαρμογή όλων",
       "applied": "Εφαρμόστηκε",
-      "changes_one": "{{count}} αλλαγή",
-      "changes_other": "{{count}} αλλαγές",
       "confirm": "Εφαρμογή {{summary}};",
       "appliedNotice": "Εφαρμόστηκε: {{summary}}",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Διαγραφή",
         "move": "Μετακίνηση",
         "batch": "Δέσμη"
-      }
+      },
+      "changes_one": "{{count}} αλλαγή",
+      "changes_other": "{{count}} αλλαγές"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "Πρόσβαση MCP",
         "noServers": "Δεν έχει ρυθμιστεί κανένας MCP διακομιστής. Προσθέστε διακομιστές στις Ρυθμίσεις → MCP για να ξεκλειδώσετε αυτές τις επιλογές.",
-        "toolsCached_one": "{{count}} εργαλείο σε κρυφή μνήμη",
-        "toolsCached_other": "{{count}} εργαλεία σε κρυφή μνήμη",
-        "toolsCached": "{{count}} εργαλεία σε κρυφή μνήμη",
         "noToolsCached": "Δεν υπάρχουν ακόμα εργαλεία σε κρυφή μνήμη. Ενεργοποιήστε την πλήρη πρόσβαση ή ανανεώστε την κρυφή μνήμη.",
         "showTools": "Εμφάνιση εργαλείων",
         "hideTools": "Απόκρυψη εργαλείων",
         "selected": "Επιλεγμένο",
         "notSelected": "Δεν επιλέχθηκε",
-        "noToolsAvailable": "Δεν υπάρχουν ακόμα διαθέσιμα εργαλεία από αυτόν τον διακομιστή."
+        "noToolsAvailable": "Δεν υπάρχουν ακόμα διαθέσιμα εργαλεία από αυτόν τον διακομιστή.",
+        "toolsCached_one": "{{count}} εργαλείο στην κρυφή μνήμη",
+        "toolsCached_other": "{{count}} εργαλεία στην κρυφή μνήμη"
       },
       "notices": {
         "promptRequired": "Παρακαλώ δώστε ένα όνομα και περιεχόμενο για τη νέα προτροπή συστήματος."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Αποθηκευμένα μοντέλα: {{count}}",
       "connectionFailed": "Η δοκιμή σύνδεσης απέτυχε. Ελέγξτε τις ρυθμίσεις παρόχου.",
-      "connectionSuccess": "Επιτυχής σύνδεση. Αποθηκεύτηκαν {{count}} μοντέλα.",
       "noCachedModels": "Δεν υπάρχουν αποθηκευμένα μοντέλα",
       "testConnection": "Δοκιμή σύνδεσης",
-      "testing": "Δοκιμή..."
+      "testing": "Δοκιμή...",
+      "connectionSuccess_one": "Επιτυχής σύνδεση. Αποθηκεύτηκε {{count}} μοντέλο στην κρυφή μνήμη.",
+      "connectionSuccess_other": "Επιτυχής σύνδεση. Αποθηκεύτηκαν {{count}} μοντέλα στην κρυφή μνήμη."
     },
     "mcpInspector": {
       "title": "MCP επιθεωρητής",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Ανενεργό",
         "statusConnected": "● συνδεδεμένο",
         "statusDisconnected": "○ αποσυνδεδεμένο",
-        "toolsLive_one": "{{count}} εργαλείο",
-        "toolsLive_other": "{{count}} εργαλεία",
-        "toolsLive": "{{count}} εργαλεία",
-        "toolsCached_one": "{{count}} εργαλείο (κρυφή μνήμη)",
-        "toolsCached_other": "{{count}} εργαλεία (κρυφή μνήμη)",
-        "toolsCached": "{{count}} εργαλεία (κρυφή μνήμη)",
         "noTools": "0 εργαλεία",
         "connectBtn": "Σύνδεση",
         "disconnectBtn": "Αποσύνδεση",
@@ -1346,7 +1331,11 @@
           "connected": "Συνδέθηκε στο {{name}}",
           "failedDisconnect": "Αποτυχία αποσύνδεσης από {{name}}: {{message}}",
           "failedConnect": "Αποτυχία σύνδεσης στο {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} εργαλείο (στην κρυφή μνήμη)",
+        "toolsCached_other": "{{count}} εργαλεία (στην κρυφή μνήμη)",
+        "toolsLive_one": "{{count}} εργαλείο",
+        "toolsLive_other": "{{count}} εργαλεία"
       },
       "tools": {
         "title": "Διαθέσιμα MCP εργαλεία",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Εργαλεία και δικαιώματα",
-    "subtitle_one": "Ο {{agent}} μπορεί να χρησιμοποιήσει {{count}} εργαλείο.",
-    "subtitle_other": "Ο {{agent}} μπορεί να χρησιμοποιήσει {{count}} εργαλεία.",
     "chatMode": "Λειτουργία συνομιλίας",
     "permissions": "Τρέχοντα δικαιώματα",
     "reads": "Αυτή η εργασία μπορεί να διαβάσει",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Πλαίσιο vault",
-      "referencesPlusContext_one": "{{count}} ρητή αναφορά συν το ενεργό πλαίσιο",
-      "referencesPlusContext_other": "{{count}} ρητές αναφορές συν το ενεργό πλαίσιο",
       "activeContext": "Ενεργή σημείωση και στιγμιότυπο πλαισίου γραφήματος",
       "readTools": "Εργαλεία ανάγνωσης vault",
       "enabledCount": "{{count}} ενεργά",
@@ -1605,12 +1590,16 @@
       "off": "Ανενεργό",
       "disabledInSettings": "Απενεργοποιημένο στις ρυθμίσεις",
       "custom": "Προσαρμοσμένα εργαλεία",
-      "customEnabled_one": "{{count}} εργαλείο MCP, OpenAPI ή CLI ενεργό",
-      "customEnabled_other": "{{count}} εργαλεία MCP, OpenAPI ή CLI ενεργά",
       "noneEnabled": "Κανένα ενεργό",
       "destructive": "Καταστροφικές ενέργειες στο vault",
-      "notProvided": "Δεν παρέχεται από τα ενσωματωμένα εργαλεία"
-    }
+      "notProvided": "Δεν παρέχεται από τα ενσωματωμένα εργαλεία",
+      "customEnabled_one": "{{count}} ενεργό εργαλείο MCP, OpenAPI ή CLI",
+      "customEnabled_other": "{{count}} ενεργά εργαλεία MCP, OpenAPI ή CLI",
+      "referencesPlusContext_one": "{{count}} ρητή αναφορά συν το ενεργό πλαίσιο",
+      "referencesPlusContext_other": "{{count}} ρητές αναφορές συν το ενεργό πλαίσιο"
+    },
+    "subtitle_one": "Ο πράκτορας {{agent}} μπορεί να χρησιμοποιήσει {{count}} εργαλείο.",
+    "subtitle_other": "Ο πράκτορας {{agent}} μπορεί να χρησιμοποιήσει {{count}} εργαλεία."
   },
   "markdown": {
     "run": "Εκτέλεση"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Δεν υπάρχουν σημειώσεις Markdown για ευρετηρίαση.",
-      "starting_one": "Ευρετηρίαση {{count}} σημείωσης…",
-      "starting_other": "Ευρετηρίαση {{count}} σημειώσεων…",
       "progress": "Ευρετηρίαση: {{done}} από {{total}} σημειώσεις",
       "completed": "Η ευρετηρίαση ολοκληρώθηκε: {{indexed}} ευρετηριάστηκαν, {{failed}} απέτυχαν.",
       "noIndex": "Δεν έχει ευρετηριαστεί τίποτα ακόμη. Εκτελέστε \"Embed all documents\" για να ευρετηριάσετε το vault σας.",
       "gradingError": "Η αξιολόγηση εγγράφου απέτυχε: {{message}}",
       "clearing": "Εκκαθάριση ευρετηρίου…",
-      "cleared": "Το ευρετήριο εκκαθαρίστηκε."
+      "cleared": "Το ευρετήριο εκκαθαρίστηκε.",
+      "starting_one": "Ευρετηρίαση {{count}} σημείωσης…",
+      "starting_other": "Ευρετηρίαση {{count}} σημειώσεων…"
     }
   }
 }

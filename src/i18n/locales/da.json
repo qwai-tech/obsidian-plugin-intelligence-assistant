@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Vis og administrer modeller fra alle konfigurerede udbydere. Klik på \"opdater modeller\" for at hente de seneste tilgængelige modeller.",
-      "providerCount_one": "{{count}} udbyder konfigureret",
-      "providerCount_other": "{{count}} udbydere konfigureret",
-      "providerCount": "{{count}} udbydere konfigureret",
       "refreshAll": "opdater alle modeller",
       "empty": "Ingen udbydere konfigureret endnu. Tilføj udbydere i udbyderens fane først.",
       "noModels": "Ingen modeller tilgængelige. Klik på \"opdater alle modeller\" eller opdater individuelle udbydere i udbyderens fane.",
       "noMatch": "Ingen modeller matcher de nuværende filtre. Juster eller ryd filtre for at se resultater.",
-      "modelCount_one": "• {{count}} model i cache",
-      "modelCount_other": "• {{count}} modeller i cache",
-      "modelCount": "• {{count}} modeller i cache",
-      "matchCount_one": "• {{count}} match med valgte filtre",
-      "matchCount_other": "• {{count}} matches med valgte filtre",
-      "matchCount": "• {{count}} matches med valgte filtre",
       "status": {
         "enabled": "Aktiveret",
         "disabled": "Deaktiveret"
@@ -92,12 +83,15 @@
         "capabilities": "Funktioner",
         "status": "Status",
         "actions": "Handlinger"
-      }
+      },
+      "matchCount_one": "• {{count}} matcher de valgte filtre",
+      "matchCount_other": "• {{count}} matcher de valgte filtre",
+      "modelCount_one": "• {{count}} model cachelagret",
+      "modelCount_other": "• {{count}} modeller cachelagret",
+      "providerCount_one": "{{count}} udbyder konfigureret",
+      "providerCount_other": "{{count}} udbydere konfigureret"
     },
     "provider": {
-      "count_one": "{{count}} udbyder konfigureret",
-      "count_other": "{{count}} udbydere konfigureret",
-      "count": "{{count}} udbydere konfigureret",
       "addBtn": "+ Tilføj udbyder",
       "empty": "Ingen udbydere konfigureret. Vælg \"Tilføj udbyder\" for at komme i gang.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "Ingen modeller",
         "count_one": "{{count}} model",
-        "count_other": "{{count}} modeller",
-        "count": "{{count}} modeller"
+        "count_other": "{{count}} modeller"
       },
       "ollama": {
         "checkingVersion": "Kontrollerer version...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "Fjern udbyder {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} udbyder konfigureret",
+      "count_other": "{{count}} udbydere konfigureret"
     },
     "mcp": {
       "desc": "Konfigurer Model Context Protocol (MCP)-servere for at udvide agentens funktioner med eksterne værktøjer og datakilder.",
@@ -165,9 +160,6 @@
       "untitled": "Unavngivet MCP-server",
       "notConfigured": "Ikke konfigureret",
       "cached": "I cache",
-      "envVars_one": "{{count}} miljøvariabel",
-      "envVars_other": "{{count}} miljøvariabler",
-      "envVars": "{{count}} miljøvariabler",
       "status": {
         "disabled": "Deaktiveret",
         "connected": "forbundet",
@@ -177,12 +169,10 @@
         "autoConnect": "Automatisk forbindelse"
       },
       "toolCount": {
-        "live_one": "{{count}} aktivt værktøj",
-        "live_other": "{{count}} aktive værktøjer",
-        "live": "{{count}} aktive værktøjer",
         "cached_one": "{{count}} cachelagret værktøj",
         "cached_other": "{{count}} cachelagrede værktøjer",
-        "cached": "{{count}} cachelagrede værktøjer"
+        "live_one": "{{count}} aktivt værktøj",
+        "live_other": "{{count}} aktive værktøjer"
       },
       "actions": {
         "edit": "Rediger",
@@ -204,27 +194,28 @@
         "disconnectFailed": "Kunne ikke afbryde forbindelsen til {{name}}",
         "connectFailed": "Kunne ikke oprette forbindelse til {{name}}",
         "testNoCommand": "angiv en kommando inden test af forbindelsen",
-        "testSuccess": "forbundet! Fandt {{count}} værktøjer.",
         "testFailed": "Forbindelsen mislykkedes: {{message}}",
-        "refreshedAll_one": "opdaterede værktøjer for {{count}} server",
-        "refreshedAll_other": "opdaterede værktøjer for {{count}} servere",
-        "refreshedAll": "opdaterede værktøjer for {{count}} servere",
         "refreshedPartial": "{{success}} servere opdateret, {{failed}} mislykkedes",
         "noServersConfigured": "Ingen MCP-servere konfigureret",
-        "testingAll": "Tester {{count}} MCP-serverforbindelser...",
-        "testAllSuccess": "alle {{count}} mcp-servere forbundet!",
-        "testAllPartial": "{{successful}} forbundet, {{failed}} mislykkedes"
+        "testAllPartial": "{{successful}} forbundet, {{failed}} mislykkedes",
+        "refreshedAll_one": "Værktøjer opdateret for {{count}} server",
+        "refreshedAll_other": "Værktøjer opdateret for {{count}} servere",
+        "testAllSuccess_one": "{{count}} MCP-server forbundet.",
+        "testAllSuccess_other": "Alle {{count}} MCP-servere forbundet.",
+        "testSuccess_one": "Forbundet. Fandt {{count}} værktøj.",
+        "testSuccess_other": "Forbundet. Fandt {{count}} værktøjer.",
+        "testingAll_one": "Tester {{count}} MCP-serverforbindelse…",
+        "testingAll_other": "Tester {{count}} MCP-serverforbindelser…"
       },
       "confirm": {
         "delete": "Slet MCP-server \"{{name}}\"?"
       },
-      "namePlaceholder": "Acme MCP-server"
+      "namePlaceholder": "Acme MCP-server",
+      "envVars_one": "{{count}} miljøvariabel",
+      "envVars_other": "{{count}} miljøvariabler"
     },
     "agents": {
       "desc": "Opret og administrer AI-agenter med specifikke funktioner, værktøjer og adfærd.",
-      "count_one": "{{count}} agent konfigureret",
-      "count_other": "{{count}} agenter konfigureret",
-      "count": "{{count}} agenter konfigureret",
       "addBtn": "+ tilføj agent",
       "empty": "Ingen agenter konfigureret. Vælg tilføj agent for at komme i gang.",
       "defaultBadge": "Standard",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} indbygget",
-        "mcpServer_one": "{{count}} mcp-server",
-        "mcpServer_other": "{{count}} mcp-servere",
-        "mcpServer": "{{count}} mcp-servere",
-        "mcpTool_one": "{{count}} mcp-værktøj",
-        "mcpTool_other": "{{count}} mcp-værktøjer",
-        "mcpTool": "{{count}} mcp-værktøjer"
+        "mcpServer_one": "{{count}} MCP-server",
+        "mcpServer_other": "{{count}} MCP-servere",
+        "mcpTool_one": "{{count}} MCP-værktøj",
+        "mcpTool_other": "{{count}} MCP-værktøjer"
       },
       "actions": {
         "edit": "Rediger",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "Slet agent \"{{name}}\"?"
-      }
+      },
+      "count_one": "{{count}} agent konfigureret",
+      "count_other": "{{count}} agenter konfigureret"
     },
     "prompts": {
       "desc": "Administrer systemprompter, der definerer adfærden og personligheden af din AI-assistent.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP-kilde fjernet",
-          "reloaded": "Genindlæste {{count}} handlinger",
-          "reloadFailed": "Kunne ikke genindlæse HTTP-kilde. Tjek konsollen for detaljer."
+          "reloadFailed": "Kunne ikke genindlæse HTTP-kilde. Tjek konsollen for detaljer.",
+          "reloaded_one": "Genindlæste {{count}} operation",
+          "reloaded_other": "Genindlæste {{count}} operationer"
         },
         "modal": {
           "defaultTitle": "HTTP-kilde",
@@ -419,9 +411,6 @@
           "actions": "Handlinger"
         },
         "unnamed": "Unavngivet CLI-værktøj",
-        "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parametre",
-        "paramCount": "{{count}} parametre",
         "noParams": "Ingen",
         "statusEnabled": "Aktiveret",
         "statusDisabled": "Deaktiveret",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Skærmbillede",
             "preset-applescript-list-apps": "List kørende apps"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parametre"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Præfiks (emoji eller tekst) der vises før alle hurtighandlinger i kontekstmenuen",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} handling konfigureret ({{enabled}} aktiveret)",
-      "count_other": "{{count}} handlinger konfigureret ({{enabled}} aktiveret)",
-      "count": "{{count}} handlinger konfigureret ({{enabled}} aktiveret)",
       "addBtn": "+ tilføj hurtighandling",
       "empty": "Ingen hurtighandlinger konfigureret. Vælg tilføj hurtighandling for at komme i gang.",
       "defaultModel": "Standard",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Gør teksten længere",
         "prompt": "Udvid og uddyb følgende tekst…"
-      }
+      },
+      "count_one": "{{count}} handling konfigureret ({{enabled}} aktiveret)",
+      "count_other": "{{count}} handlinger konfigureret ({{enabled}} aktiveret)"
     },
     "usage": {
       "desc": "Spor tokenforbrug på tværs af udbydere og modeller. Data akkumuleres på tværs af alle samtaler.",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG er deaktiveret i indstillinger. Aktivér det under indstillinger → chatfunktioner → RAG.",
       "webSearchDisabled": "Websøgning er deaktiveret i indstillinger. Aktivér det under indstillinger → chatfunktioner → websøgning.",
       "attached": "Vedhæftet: {{name}}",
-      "attachedImages": "Vedhæftede {{count}} billede(r)",
-      "referencesAdded": "Tilføjede {{count}} reference(r)",
       "fileNotFound": "Fil ikke fundet: {{path}}",
       "unableToLoadRag": "Kan ikke indlæse RAG-statistik.",
       "referenced": "Refereret: {{name}}",
-      "openViewFailed": "Kunne ikke åbne chatvisningen."
+      "openViewFailed": "Kunne ikke åbne chatvisningen.",
+      "attachedImages_one": "{{count}} billede vedhæftet",
+      "attachedImages_other": "{{count}} billeder vedhæftet",
+      "referencesAdded_one": "{{count}} reference tilføjet",
+      "referencesAdded_other": "{{count}} referencer tilføjet"
     },
     "status": {
       "unavailable": "Ikke tilgængelig",
@@ -1020,9 +1012,8 @@
       "step2": "Aktiver RAG",
       "step3": "Vælg indekser vault",
       "close": "Luk",
-      "retrieved_one": "hentet fra {{count}} dokument",
-      "retrieved_other": "hentet fra {{count}} dokumenter",
-      "retrieved": "hentet fra {{count}} dokumenter"
+      "retrieved_one": "Hentet fra {{count}} dokument",
+      "retrieved_other": "Hentet fra {{count}} dokumenter"
     },
     "ragTooltip": {
       "status": "RAG-indeksstatus:",
@@ -1141,8 +1132,6 @@
       "apply": "Anvend",
       "applyAll": "Anvend alle",
       "applied": "Anvendt",
-      "changes_one": "{{count}} ændring",
-      "changes_other": "{{count}} ændringer",
       "confirm": "Anvend {{summary}}?",
       "appliedNotice": "Anvendt: {{summary}}",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Slet",
         "move": "Flyt",
         "batch": "Batch"
-      }
+      },
+      "changes_one": "{{count}} ændring",
+      "changes_other": "{{count}} ændringer"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP-adgang",
         "noServers": "Ingen MCP-servere konfigureret. Tilføj servere under Indstillinger → MCP for at låse disse muligheder op.",
-        "toolsCached_one": "{{count}} cachelagret værktøj",
-        "toolsCached_other": "{{count}} cachelagrede værktøjer",
-        "toolsCached": "{{count}} cachelagrede værktøjer",
         "noToolsCached": "Ingen cachelagrede værktøjer endnu. Aktivér fuld adgang, eller opdater cachen.",
         "showTools": "Vis værktøjer",
         "hideTools": "Skjul værktøjer",
         "selected": "Valgt",
         "notSelected": "Ikke valgt",
-        "noToolsAvailable": "Ingen værktøjer tilgængelige fra denne server endnu."
+        "noToolsAvailable": "Ingen værktøjer tilgængelige fra denne server endnu.",
+        "toolsCached_one": "{{count}} værktøj cachelagret",
+        "toolsCached_other": "{{count}} værktøjer cachelagret"
       },
       "notices": {
         "promptRequired": "Angiv venligst et navn og indhold til den nye systemprompt."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Cachelagrede modeller: {{count}}",
       "connectionFailed": "Forbindelsestest mislykkedes. Tjek udbyderindstillinger.",
-      "connectionSuccess": "Forbindelse lykkedes. {{count}} model(ler) cachelagret.",
       "noCachedModels": "Ingen cachelagrede modeller",
       "testConnection": "Test forbindelse",
-      "testing": "Tester..."
+      "testing": "Tester...",
+      "connectionSuccess_one": "Forbindelsen lykkedes. {{count}} model cachelagret.",
+      "connectionSuccess_other": "Forbindelsen lykkedes. {{count}} modeller cachelagret."
     },
     "mcpInspector": {
       "title": "MCP-inspektor",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Deaktiveret",
         "statusConnected": "● forbundet",
         "statusDisconnected": "○ afbrudt",
-        "toolsLive_one": "{{count}} værktøj",
-        "toolsLive_other": "{{count}} værktøjer",
-        "toolsLive": "{{count}} værktøjer",
-        "toolsCached_one": "{{count}} værktøj (cachelagret)",
-        "toolsCached_other": "{{count}} værktøjer (cachelagret)",
-        "toolsCached": "{{count}} værktøjer (cachelagret)",
         "noTools": "0 værktøjer",
         "connectBtn": "Opret forbindelse",
         "disconnectBtn": "Afbryd forbindelse",
@@ -1346,7 +1331,11 @@
           "connected": "Forbundet til {{name}}",
           "failedDisconnect": "Kunne ikke afbryde forbindelsen til {{name}}: {{message}}",
           "failedConnect": "Kunne ikke oprette forbindelse til {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} værktøj (cachelagret)",
+        "toolsCached_other": "{{count}} værktøjer (cachelagret)",
+        "toolsLive_one": "{{count}} værktøj",
+        "toolsLive_other": "{{count}} værktøjer"
       },
       "tools": {
         "title": "Tilgængelige MCP-værktøjer",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Værktøjer og tilladelser",
-    "subtitle_one": "{{agent}} kan bruge {{count}} værktøj.",
-    "subtitle_other": "{{agent}} kan bruge {{count}} værktøjer.",
     "chatMode": "Chattilstand",
     "permissions": "Nuværende tilladelser",
     "reads": "Denne opgave kan læse",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Vault-kontekst",
-      "referencesPlusContext_one": "{{count}} eksplicit reference plus aktiv kontekst",
-      "referencesPlusContext_other": "{{count}} eksplicitte referencer plus aktiv kontekst",
       "activeContext": "Aktiv note og øjebliksbillede af grafkontekst",
       "readTools": "Vault-læseværktøjer",
       "enabledCount": "{{count}} aktiveret",
@@ -1605,12 +1590,16 @@
       "off": "Fra",
       "disabledInSettings": "Deaktiveret i indstillinger",
       "custom": "Brugerdefinerede værktøjer",
-      "customEnabled_one": "{{count}} MCP-, OpenAPI- eller CLI-værktøj aktiveret",
-      "customEnabled_other": "{{count}} MCP-, OpenAPI- eller CLI-værktøjer aktiveret",
       "noneEnabled": "Ingen aktiveret",
       "destructive": "Destruktive handlinger i vault",
-      "notProvided": "Leveres ikke af indbyggede værktøjer"
-    }
+      "notProvided": "Leveres ikke af indbyggede værktøjer",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- eller CLI-værktøj aktiveret",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- eller CLI-værktøjer aktiveret",
+      "referencesPlusContext_one": "{{count}} eksplicit reference plus aktiv kontekst",
+      "referencesPlusContext_other": "{{count}} eksplicitte referencer plus aktiv kontekst"
+    },
+    "subtitle_one": "{{agent}} kan bruge {{count}} værktøj.",
+    "subtitle_other": "{{agent}} kan bruge {{count}} værktøjer."
   },
   "markdown": {
     "run": "Kør"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Ingen Markdown-noter at indeksere.",
-      "starting_one": "Indekserer {{count}} note…",
-      "starting_other": "Indekserer {{count}} noter…",
       "progress": "Indeksering: {{done}} af {{total}} noter",
       "completed": "Indeksering færdig: {{indexed}} indekseret, {{failed}} mislykkedes.",
       "noIndex": "Intet er indekseret endnu. Kør \"Embed all documents\" for at indeksere din vault.",
       "gradingError": "Dokumentvurdering mislykkedes: {{message}}",
       "clearing": "Rydder indekset…",
-      "cleared": "Indeks ryddet."
+      "cleared": "Indeks ryddet.",
+      "starting_one": "Indekserer {{count}} note…",
+      "starting_other": "Indekserer {{count}} noter…"
     }
   }
 }

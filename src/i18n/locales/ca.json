@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Visualitzeu i gestioneu models de tots els proveïdors configurats. Feu clic a \"actualitza models\" per obtenir els models disponibles més recents.",
-      "providerCount_one": "{{count}} proveïdor configurat",
-      "providerCount_other": "{{count}} proveïdors configurats",
-      "providerCount": "{{count}} proveïdors configurats",
       "refreshAll": "actualitza tots els models",
       "empty": "No hi ha proveïdors configurats. Afegiu proveïdors primer a la pestanya de proveïdors.",
       "noModels": "No hi ha models disponibles. Feu clic a „actualitza tots els models“ o actualitzeu els proveïdors individuals a la pestanya de proveïdors.",
       "noMatch": "Cap model no coincideix amb els filtres actuals. Ajusteu o elimineu els filtres per veure resultats.",
-      "modelCount_one": "• {{count}} model a la memòria cau",
-      "modelCount_other": "• {{count}} models a la memòria cau",
-      "modelCount": "• {{count}} models a la memòria cau",
-      "matchCount_one": "• {{count}} coincideix amb els filtres seleccionats",
-      "matchCount_other": "• {{count}} coincideixen amb els filtres seleccionats",
-      "matchCount": "• {{count}} coincideixen amb els filtres seleccionats",
       "status": {
         "enabled": "Activat",
         "disabled": "Desactivat"
@@ -92,12 +83,18 @@
         "capabilities": "Capacitats",
         "status": "Estat",
         "actions": "Accions"
-      }
+      },
+      "matchCount_one": "• {{count}} coincideix amb els filtres seleccionats",
+      "matchCount_many": "• {{count}} coincideixen amb els filtres seleccionats",
+      "matchCount_other": "• {{count}} coincideixen amb els filtres seleccionats",
+      "modelCount_one": "• {{count}} model a la memòria cau",
+      "modelCount_many": "• {{count}} models a la memòria cau",
+      "modelCount_other": "• {{count}} models a la memòria cau",
+      "providerCount_one": "{{count}} proveïdor configurat",
+      "providerCount_many": "{{count}} proveïdors configurats",
+      "providerCount_other": "{{count}} proveïdors configurats"
     },
     "provider": {
-      "count_one": "{{count}} proveïdor configurat",
-      "count_other": "{{count}} proveïdors configurats",
-      "count": "{{count}} proveïdors configurats",
       "addBtn": "+ Afegeix proveïdor",
       "empty": "No hi ha proveïdors configurats. Seleccioneu „Afegeix proveïdor“ per començar.",
       "status": {
@@ -116,8 +113,8 @@
       "models": {
         "none": "Cap model",
         "count_one": "{{count}} model",
-        "count_other": "{{count}} models",
-        "count": "{{count}} models"
+        "count_many": "{{count}} models",
+        "count_other": "{{count}} models"
       },
       "ollama": {
         "checkingVersion": "Comprovant la versió...",
@@ -153,7 +150,10 @@
       },
       "confirm": {
         "delete": "Elimina el proveïdor {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} proveïdor configurat",
+      "count_many": "{{count}} proveïdors configurats",
+      "count_other": "{{count}} proveïdors configurats"
     },
     "mcp": {
       "desc": "Configureu els servidors Model Context Protocol (MCP) per ampliar les capacitats de l'agent amb eines externes i fonts de dades.",
@@ -165,9 +165,6 @@
       "untitled": "Servidor MCP sense títol",
       "notConfigured": "No configurat",
       "cached": "A la memòria cau",
-      "envVars_one": "{{count}} variable env",
-      "envVars_other": "{{count}} variables env",
-      "envVars": "{{count}} variables env",
       "status": {
         "disabled": "Desactivat",
         "connected": "connectat",
@@ -177,12 +174,12 @@
         "autoConnect": "Connexió automàtica"
       },
       "toolCount": {
-        "live_one": "{{count}} eina activa",
-        "live_other": "{{count}} eines actives",
-        "live": "{{count}} eines actives",
         "cached_one": "{{count}} eina a la memòria cau",
+        "cached_many": "{{count}} eines a la memòria cau",
         "cached_other": "{{count}} eines a la memòria cau",
-        "cached": "{{count}} eines a la memòria cau"
+        "live_one": "{{count}} eina activa",
+        "live_many": "{{count}} eines actives",
+        "live_other": "{{count}} eines actives"
       },
       "actions": {
         "edit": "Edita",
@@ -204,27 +201,33 @@
         "disconnectFailed": "La desconnexió de {{name}} ha fallat",
         "connectFailed": "La connexió a {{name}} ha fallat",
         "testNoCommand": "introduïu una ordre abans de provar la connexió",
-        "testSuccess": "connectat correctament! S'han trobat {{count}} eines.",
         "testFailed": "La connexió ha fallat: {{message}}",
-        "refreshedAll_one": "eines actualitzades per a {{count}} servidor",
-        "refreshedAll_other": "eines actualitzades per a {{count}} servidors",
-        "refreshedAll": "eines actualitzades per a {{count}} servidors",
         "refreshedPartial": "{{success}} servidors actualitzats, {{failed}} fallits",
         "noServersConfigured": "No hi ha servidors MCP configurats",
-        "testingAll": "Provant {{count}} connexions de servidor MCP...",
-        "testAllSuccess": "tots {{count}} servidors mcp connectats correctament!",
-        "testAllPartial": "{{successful}} connectats, {{failed}} fallits"
+        "testAllPartial": "{{successful}} connectats, {{failed}} fallits",
+        "refreshedAll_one": "S'han actualitzat les eines de {{count}} servidor",
+        "refreshedAll_many": "S'han actualitzat les eines de {{count}} servidors",
+        "refreshedAll_other": "S'han actualitzat les eines de {{count}} servidors",
+        "testAllSuccess_one": "{{count}} servidor MCP s'ha connectat correctament.",
+        "testAllSuccess_many": "Els {{count}} servidors MCP s'han connectat correctament.",
+        "testAllSuccess_other": "Els {{count}} servidors MCP s'han connectat correctament.",
+        "testSuccess_one": "Connectat. S'ha trobat {{count}} eina.",
+        "testSuccess_many": "Connectat. S'han trobat {{count}} eines.",
+        "testSuccess_other": "Connectat. S'han trobat {{count}} eines.",
+        "testingAll_one": "S'està provant {{count}} connexió de servidor MCP…",
+        "testingAll_many": "S'estan provant {{count}} connexions de servidors MCP…",
+        "testingAll_other": "S'estan provant {{count}} connexions de servidors MCP…"
       },
       "confirm": {
         "delete": "Elimina el servidor MCP „{{name}}“?"
       },
-      "namePlaceholder": "Servidor MCP d'Acme"
+      "namePlaceholder": "Servidor MCP d'Acme",
+      "envVars_one": "{{count}} variable d'entorn",
+      "envVars_many": "{{count}} variables d'entorn",
+      "envVars_other": "{{count}} variables d'entorn"
     },
     "agents": {
       "desc": "Creeu i gestioneu agents d'IA amb capacitats, eines i comportaments específics.",
-      "count_one": "{{count}} agent configurat",
-      "count_other": "{{count}} agents configurats",
-      "count": "{{count}} agents configurats",
       "addBtn": "+ afegeix agent",
       "empty": "No hi ha agents configurats. Seleccioneu afegeix agent per començar.",
       "defaultBadge": "Predeterminat",
@@ -237,12 +240,12 @@
       },
       "tools": {
         "builtIn": "{{count}} integrat",
-        "mcpServer_one": "{{count}} servidor mcp",
-        "mcpServer_other": "{{count}} servidors mcp",
-        "mcpServer": "{{count}} servidors mcp",
-        "mcpTool_one": "{{count}} eina mcp",
-        "mcpTool_other": "{{count}} eines mcp",
-        "mcpTool": "{{count}} eines mcp"
+        "mcpServer_one": "{{count}} servidor MCP",
+        "mcpServer_many": "{{count}} servidors MCP",
+        "mcpServer_other": "{{count}} servidors MCP",
+        "mcpTool_one": "{{count}} eina MCP",
+        "mcpTool_many": "{{count}} eines MCP",
+        "mcpTool_other": "{{count}} eines MCP"
       },
       "actions": {
         "edit": "Edita",
@@ -250,7 +253,10 @@
       },
       "confirm": {
         "delete": "Elimina l'agent „{{name}}“?"
-      }
+      },
+      "count_one": "{{count}} agent configurat",
+      "count_many": "{{count}} agents configurats",
+      "count_other": "{{count}} agents configurats"
     },
     "prompts": {
       "desc": "Gestioneu les instruccions de sistema que defineixen el comportament i la personalitat del vostre assistent d'IA.",
@@ -352,8 +358,10 @@
         },
         "notices": {
           "removed": "Font HTTP eliminada",
-          "reloaded": "{{count}} operacions tornades a carregar",
-          "reloadFailed": "No s'ha pogut tornar a carregar la font HTTP. Consulteu la consola per a detalls."
+          "reloadFailed": "No s'ha pogut tornar a carregar la font HTTP. Consulteu la consola per a detalls.",
+          "reloaded_one": "S'ha tornat a carregar {{count}} operació",
+          "reloaded_many": "S'han tornat a carregar {{count}} operacions",
+          "reloaded_other": "S'han tornat a carregar {{count}} operacions"
         },
         "modal": {
           "defaultTitle": "Font HTTP",
@@ -419,9 +427,6 @@
           "actions": "Accions"
         },
         "unnamed": "Eina CLI sense nom",
-        "paramCount_one": "{{count}} paràmetre",
-        "paramCount_other": "{{count}} paràmetres",
-        "paramCount": "{{count}} paràmetres",
         "noParams": "Cap",
         "statusEnabled": "Activat",
         "statusDisabled": "Desactivat",
@@ -554,7 +559,10 @@
             "preset-screencapture": "Captura de pantalla",
             "preset-applescript-list-apps": "Llista aplicacions en execució"
           }
-        }
+        },
+        "paramCount_one": "{{count}} paràmetre",
+        "paramCount_many": "{{count}} paràmetres",
+        "paramCount_other": "{{count}} paràmetres"
       }
     },
     "rag": {
@@ -844,9 +852,6 @@
         "desc": "Prefix (emoji o text) per mostrar davant de totes les accions ràpides al menú contextual",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} acció configurada ({{enabled}} activades)",
-      "count_other": "{{count}} accions configurades ({{enabled}} activades)",
-      "count": "{{count}} accions configurades ({{enabled}} activades)",
       "addBtn": "+ afegeix acció ràpida",
       "empty": "Cap acció ràpida configurada. Seleccioneu afegeix acció ràpida per començar.",
       "defaultModel": "Predeterminat",
@@ -912,7 +917,10 @@
       "placeholders": {
         "name": "Allarga el text",
         "prompt": "Amplia i desenvolupa el text següent…"
-      }
+      },
+      "count_one": "{{count}} acció configurada (activades: {{enabled}})",
+      "count_many": "{{count}} accions configurades (activades: {{enabled}})",
+      "count_other": "{{count}} accions configurades (activades: {{enabled}})"
     },
     "usage": {
       "desc": "Seguiu el consum de tokens per proveïdors i models. Les dades s'acumulen en totes les converses.",
@@ -994,12 +1002,16 @@
       "ragDisabled": "RAG està desactivat a la configuració. Activeu-lo a configuració → funcions de xat → RAG.",
       "webSearchDisabled": "La cerca web està desactivada a la configuració. Activeu-la a configuració → funcions de xat → cerca web.",
       "attached": "Adjuntat: {{name}}",
-      "attachedImages": "Adjuntades {{count}} imatge(s)",
-      "referencesAdded": "Afegides {{count}} referència(es)",
       "fileNotFound": "Fitxer no trobat: {{path}}",
       "unableToLoadRag": "No es poden carregar les estadístiques RAG.",
       "referenced": "Referenciat: {{name}}",
-      "openViewFailed": "No s'ha pogut obrir la vista del xat."
+      "openViewFailed": "No s'ha pogut obrir la vista del xat.",
+      "attachedImages_one": "S'ha adjuntat {{count}} imatge",
+      "attachedImages_many": "S'han adjuntat {{count}} imatges",
+      "attachedImages_other": "S'han adjuntat {{count}} imatges",
+      "referencesAdded_one": "S'ha afegit {{count}} referència",
+      "referencesAdded_many": "S'han afegit {{count}} referències",
+      "referencesAdded_other": "S'han afegit {{count}} referències"
     },
     "status": {
       "unavailable": "No disponible",
@@ -1020,9 +1032,9 @@
       "step2": "Activa RAG",
       "step3": "Seleccioneu indexar el vault",
       "close": "Tanca",
-      "retrieved_one": "recuperat de {{count}} document",
-      "retrieved_other": "recuperat de {{count}} documents",
-      "retrieved": "recuperat de {{count}} documents"
+      "retrieved_one": "Recuperat de {{count}} document",
+      "retrieved_many": "Recuperat de {{count}} documents",
+      "retrieved_other": "Recuperat de {{count}} documents"
     },
     "ragTooltip": {
       "status": "Estat de l'índex RAG:",
@@ -1141,8 +1153,6 @@
       "apply": "Aplica",
       "applyAll": "Aplica-ho tot",
       "applied": "Aplicat",
-      "changes_one": "{{count}} canvi",
-      "changes_other": "{{count}} canvis",
       "confirm": "Voleu aplicar {{summary}}?",
       "appliedNotice": "S'ha aplicat {{summary}}",
       "operations": {
@@ -1152,7 +1162,10 @@
         "delete": "Suprimeix",
         "move": "Mou",
         "batch": "Lot"
-      }
+      },
+      "changes_one": "{{count}} canvi",
+      "changes_many": "{{count}} canvis",
+      "changes_other": "{{count}} canvis"
     }
   },
   "modals": {
@@ -1213,15 +1226,15 @@
       "mcp": {
         "title": "Accés MCP",
         "noServers": "Cap servidor MCP configurat. Afegiu servidors a Configuració → MCP per desbloquejar aquestes opcions.",
-        "toolsCached_one": "{{count}} eina a la memòria cau",
-        "toolsCached_other": "{{count}} eines a la memòria cau",
-        "toolsCached": "{{count}} eines a la memòria cau",
         "noToolsCached": "Cap eina a la memòria cau. Activeu l'accés complet o actualitzeu la memòria cau.",
         "showTools": "Mostra eines",
         "hideTools": "Amaga eines",
         "selected": "Seleccionat",
         "notSelected": "No seleccionat",
-        "noToolsAvailable": "Cap eina disponible d'aquest servidor."
+        "noToolsAvailable": "Cap eina disponible d'aquest servidor.",
+        "toolsCached_one": "{{count}} eina a la memòria cau",
+        "toolsCached_many": "{{count}} eines a la memòria cau",
+        "toolsCached_other": "{{count}} eines a la memòria cau"
       },
       "notices": {
         "promptRequired": "Proporcioneu un nom i contingut per a la nova instrucció de sistema."
@@ -1303,10 +1316,12 @@
       },
       "cachedModels": "Models a la memòria cau: {{count}}",
       "connectionFailed": "La prova de connexió ha fallat. Comproveu la configuració del proveïdor.",
-      "connectionSuccess": "Connexió correcta. {{count}} model(s) a la memòria cau.",
       "noCachedModels": "No hi ha models a la memòria cau",
       "testConnection": "Prova la connexió",
-      "testing": "S'està provant..."
+      "testing": "S'està provant...",
+      "connectionSuccess_one": "Connexió correcta. {{count}} model a la memòria cau.",
+      "connectionSuccess_many": "Connexió correcta. {{count}} models a la memòria cau.",
+      "connectionSuccess_other": "Connexió correcta. {{count}} models a la memòria cau."
     },
     "mcpInspector": {
       "title": "Inspector MCP",
@@ -1329,12 +1344,6 @@
         "statusDisabled": "Desactivat",
         "statusConnected": "● connectat",
         "statusDisconnected": "○ desconnectat",
-        "toolsLive_one": "{{count}} eina",
-        "toolsLive_other": "{{count}} eines",
-        "toolsLive": "{{count}} eines",
-        "toolsCached_one": "{{count}} eina (a la memòria cau)",
-        "toolsCached_other": "{{count}} eines (a la memòria cau)",
-        "toolsCached": "{{count}} eines (a la memòria cau)",
         "noTools": "0 eines",
         "connectBtn": "Connecta",
         "disconnectBtn": "Desconnecta",
@@ -1346,7 +1355,13 @@
           "connected": "Connectat a {{name}}",
           "failedDisconnect": "No s'ha pogut desconnectar de {{name}}: {{message}}",
           "failedConnect": "No s'ha pogut connectar a {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} eina (a la memòria cau)",
+        "toolsCached_many": "{{count}} eines (a la memòria cau)",
+        "toolsCached_other": "{{count}} eines (a la memòria cau)",
+        "toolsLive_one": "{{count}} eina",
+        "toolsLive_many": "{{count}} eines",
+        "toolsLive_other": "{{count}} eines"
       },
       "tools": {
         "title": "Eines MCP disponibles",
@@ -1569,8 +1584,6 @@
   },
   "capability": {
     "title": "Eines i permisos",
-    "subtitle_one": "{{agent}} pot utilitzar {{count}} eina.",
-    "subtitle_other": "{{agent}} pot utilitzar {{count}} eines.",
     "chatMode": "Mode de xat",
     "permissions": "Permisos actuals",
     "reads": "Aquesta tasca pot llegir",
@@ -1590,8 +1603,6 @@
     },
     "rows": {
       "vaultContext": "Context del vault",
-      "referencesPlusContext_one": "{{count}} referència explícita més el context actiu",
-      "referencesPlusContext_other": "{{count}} referències explícites més el context actiu",
       "activeContext": "Nota activa i instantània del context del graf",
       "readTools": "Eines de lectura del vault",
       "enabledCount": "{{count}} activades",
@@ -1605,12 +1616,19 @@
       "off": "Desactivat",
       "disabledInSettings": "Inhabilitat a la configuració",
       "custom": "Eines personalitzades",
-      "customEnabled_one": "{{count}} eina MCP, OpenAPI o CLI activada",
-      "customEnabled_other": "{{count}} eines MCP, OpenAPI o CLI activades",
       "noneEnabled": "Cap activada",
       "destructive": "Accions destructives al vault",
-      "notProvided": "No ho proporcionen les eines integrades"
-    }
+      "notProvided": "No ho proporcionen les eines integrades",
+      "customEnabled_one": "{{count}} eina MCP, OpenAPI o CLI activada",
+      "customEnabled_many": "{{count}} eines MCP, OpenAPI o CLI activades",
+      "customEnabled_other": "{{count}} eines MCP, OpenAPI o CLI activades",
+      "referencesPlusContext_one": "{{count}} referència explícita més el context actiu",
+      "referencesPlusContext_many": "{{count}} referències explícites més el context actiu",
+      "referencesPlusContext_other": "{{count}} referències explícites més el context actiu"
+    },
+    "subtitle_one": "{{agent}} pot utilitzar {{count}} eina.",
+    "subtitle_many": "{{agent}} pot utilitzar {{count}} eines.",
+    "subtitle_other": "{{agent}} pot utilitzar {{count}} eines."
   },
   "markdown": {
     "run": "Executa"
@@ -1618,14 +1636,15 @@
   "rag": {
     "notices": {
       "noFiles": "No hi ha notes Markdown per indexar.",
-      "starting_one": "S'està indexant {{count}} nota…",
-      "starting_other": "S'estan indexant {{count}} notes…",
       "progress": "Indexació: {{done}} de {{total}} notes",
       "completed": "Indexació acabada: {{indexed}} indexades, {{failed}} amb errors.",
       "noIndex": "Encara no s'ha indexat res. Executeu \"Embed all documents\" per indexar el vostre vault.",
       "gradingError": "Ha fallat la valoració del document: {{message}}",
       "clearing": "S'està esborrant l'índex…",
-      "cleared": "S'ha esborrat l'índex."
+      "cleared": "S'ha esborrat l'índex.",
+      "starting_one": "S'està indexant {{count}} nota…",
+      "starting_many": "S'estan indexant {{count}} notes…",
+      "starting_other": "S'estan indexant {{count}} notes…"
     }
   }
 }

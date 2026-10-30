@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "عرض وإدارة النماذج من جميع المزودين المُهيَّئين. انقر على \"تحديث النماذج\" لجلب أحدث النماذج المتاحة.",
-      "providerCount_one": "تم تهيئة {{count}} مزود",
-      "providerCount_other": "تم تهيئة {{count}} مزودين",
-      "providerCount": "تم تهيئة {{count}} مزودين",
       "refreshAll": "تحديث جميع النماذج",
       "empty": "لم يتم تهيئة أي مزودين بعد. أضف المزودين في تبويب المزود أولًا.",
       "noModels": "لا توجد نماذج متاحة. انقر على \"تحديث جميع النماذج\" أو حدّث المزودين الفرديين في تبويب المزود.",
       "noMatch": "لا توجد نماذج تطابق الفلاتر الحالية. عدّل الفلاتر أو أزلها لرؤية النتائج.",
-      "modelCount_one": "• {{count}} نموذج مخزّن مؤقتًا",
-      "modelCount_other": "• {{count}} نماذج مخزّنة مؤقتًا",
-      "modelCount": "• {{count}} نماذج مخزّنة مؤقتًا",
-      "matchCount_one": "• {{count}} تطابق مع الفلاتر المحددة",
-      "matchCount_other": "• {{count}} تطابقات مع الفلاتر المحددة",
-      "matchCount": "• {{count}} تطابقات مع الفلاتر المحددة",
       "status": {
         "enabled": "مفعّل",
         "disabled": "معطّل"
@@ -92,12 +83,27 @@
         "capabilities": "القدرات",
         "status": "الحالة",
         "actions": "الإجراءات"
-      }
+      },
+      "matchCount_zero": "• {{count}} نتائج تطابق الفلاتر المحددة",
+      "matchCount_one": "• {{count}} نتيجة تطابق الفلاتر المحددة",
+      "matchCount_two": "• {{count}} نتيجتان تطابقان الفلاتر المحددة",
+      "matchCount_few": "• {{count}} نتائج تطابق الفلاتر المحددة",
+      "matchCount_many": "• {{count}} نتيجةً تطابق الفلاتر المحددة",
+      "matchCount_other": "• {{count}} نتيجة تطابق الفلاتر المحددة",
+      "modelCount_zero": "• {{count}} نماذج مخزّنة مؤقتًا",
+      "modelCount_one": "• {{count}} نموذج مخزّن مؤقتًا",
+      "modelCount_two": "• {{count}} نموذجان مخزّنان مؤقتًا",
+      "modelCount_few": "• {{count}} نماذج مخزّنة مؤقتًا",
+      "modelCount_many": "• {{count}} نموذجًا مخزّنًا مؤقتًا",
+      "modelCount_other": "• {{count}} نموذج مخزّن مؤقتًا",
+      "providerCount_zero": "تمت تهيئة {{count}} مزوّدين",
+      "providerCount_one": "تمت تهيئة {{count}} مزوّد",
+      "providerCount_two": "تمت تهيئة {{count}} مزوّدَين",
+      "providerCount_few": "تمت تهيئة {{count}} مزوّدين",
+      "providerCount_many": "تمت تهيئة {{count}} مزوّدًا",
+      "providerCount_other": "تمت تهيئة {{count}} مزوّد"
     },
     "provider": {
-      "count_one": "تم تهيئة {{count}} مزود",
-      "count_other": "تم تهيئة {{count}} مزودين",
-      "count": "تم تهيئة {{count}} مزودين",
       "addBtn": "+ إضافة مزود",
       "empty": "لم يتم تهيئة أي مزودين. اختر \"إضافة مزود\" للبدء.",
       "status": {
@@ -115,9 +121,12 @@
       },
       "models": {
         "none": "لا توجد نماذج",
+        "count_zero": "{{count}} نماذج",
         "count_one": "{{count}} نموذج",
-        "count_other": "{{count}} نماذج",
-        "count": "{{count}} نماذج"
+        "count_two": "{{count}} نموذجان",
+        "count_few": "{{count}} نماذج",
+        "count_many": "{{count}} نموذجًا",
+        "count_other": "{{count}} نموذج"
       },
       "ollama": {
         "checkingVersion": "جارٍ فحص الإصدار...",
@@ -153,7 +162,13 @@
       },
       "confirm": {
         "delete": "إزالة المزود {{provider}}؟"
-      }
+      },
+      "count_zero": "تمت تهيئة {{count}} مزوّدين",
+      "count_one": "تمت تهيئة {{count}} مزوّد",
+      "count_two": "تمت تهيئة {{count}} مزوّدَين",
+      "count_few": "تمت تهيئة {{count}} مزوّدين",
+      "count_many": "تمت تهيئة {{count}} مزوّدًا",
+      "count_other": "تمت تهيئة {{count}} مزوّد"
     },
     "mcp": {
       "desc": "تهيئة خوادم Model Context Protocol (MCP) لتوسيع قدرات الوكيل بالأدوات الخارجية ومصادر البيانات.",
@@ -165,9 +180,6 @@
       "untitled": "خادم MCP بلا عنوان",
       "notConfigured": "غير مُهيَّأ",
       "cached": "مخزّن مؤقتًا",
-      "envVars_one": "{{count}} متغير بيئة",
-      "envVars_other": "{{count}} متغيرات بيئة",
-      "envVars": "{{count}} متغيرات بيئة",
       "status": {
         "disabled": "معطّل",
         "connected": "متصل",
@@ -177,12 +189,18 @@
         "autoConnect": "اتصال تلقائي"
       },
       "toolCount": {
-        "live_one": "{{count}} أداة مباشرة",
-        "live_other": "{{count}} أدوات مباشرة",
-        "live": "{{count}} أدوات مباشرة",
+        "cached_zero": "{{count}} أدوات مخزّنة مؤقتًا",
         "cached_one": "{{count}} أداة مخزّنة مؤقتًا",
-        "cached_other": "{{count}} أدوات مخزّنة مؤقتًا",
-        "cached": "{{count}} أدوات مخزّنة مؤقتًا"
+        "cached_two": "{{count}} أداتان مخزّنتان مؤقتًا",
+        "cached_few": "{{count}} أدوات مخزّنة مؤقتًا",
+        "cached_many": "{{count}} أداةً مخزّنة مؤقتًا",
+        "cached_other": "{{count}} أداة مخزّنة مؤقتًا",
+        "live_zero": "{{count}} أدوات نشطة",
+        "live_one": "{{count}} أداة نشطة",
+        "live_two": "{{count}} أداتان نشطتان",
+        "live_few": "{{count}} أدوات نشطة",
+        "live_many": "{{count}} أداةً نشطة",
+        "live_other": "{{count}} أداة نشطة"
       },
       "actions": {
         "edit": "تعديل",
@@ -204,27 +222,48 @@
         "disconnectFailed": "فشل قطع الاتصال عن {{name}}",
         "connectFailed": "فشل الاتصال بـ {{name}}",
         "testNoCommand": "يرجى إدخال أمر قبل اختبار الاتصال",
-        "testSuccess": "تم الاتصال بنجاح! تم العثور على {{count}} أداة.",
         "testFailed": "فشل الاتصال: {{message}}",
-        "refreshedAll_one": "تم تحديث الأدوات لـ {{count}} خادم",
-        "refreshedAll_other": "تم تحديث الأدوات لـ {{count}} خوادم",
-        "refreshedAll": "تم تحديث الأدوات لـ {{count}} خوادم",
         "refreshedPartial": "تم تحديث {{success}} خوادم، فشل {{failed}}",
         "noServersConfigured": "لم يتم تهيئة أي خوادم MCP",
-        "testingAll": "جارٍ اختبار {{count}} اتصالات خادم MCP...",
-        "testAllSuccess": "تم توصيل جميع {{count}} خوادم mcp بنجاح!",
-        "testAllPartial": "{{successful}} متصل، {{failed}} فشل"
+        "testAllPartial": "{{successful}} متصل، {{failed}} فشل",
+        "refreshedAll_zero": "تم تحديث الأدوات لـ {{count}} خوادم",
+        "refreshedAll_one": "تم تحديث الأدوات لـ {{count}} خادم",
+        "refreshedAll_two": "تم تحديث الأدوات لـ {{count}} خادمين",
+        "refreshedAll_few": "تم تحديث الأدوات لـ {{count}} خوادم",
+        "refreshedAll_many": "تم تحديث الأدوات لـ {{count}} خادمًا",
+        "refreshedAll_other": "تم تحديث الأدوات لـ {{count}} خادم",
+        "testAllSuccess_zero": "تم توصيل جميع خوادم MCP البالغ عددها {{count}} بنجاح.",
+        "testAllSuccess_one": "تم توصيل {{count}} خادم MCP بنجاح.",
+        "testAllSuccess_two": "تم توصيل جميع خوادم MCP البالغ عددها {{count}} بنجاح.",
+        "testAllSuccess_few": "تم توصيل جميع خوادم MCP البالغ عددها {{count}} بنجاح.",
+        "testAllSuccess_many": "تم توصيل جميع خوادم MCP البالغ عددها {{count}} بنجاح.",
+        "testAllSuccess_other": "تم توصيل جميع خوادم MCP البالغ عددها {{count}} بنجاح.",
+        "testSuccess_zero": "تم الاتصال. تم العثور على {{count}} أدوات.",
+        "testSuccess_one": "تم الاتصال. تم العثور على {{count}} أداة.",
+        "testSuccess_two": "تم الاتصال. تم العثور على {{count}} أداتين.",
+        "testSuccess_few": "تم الاتصال. تم العثور على {{count}} أدوات.",
+        "testSuccess_many": "تم الاتصال. تم العثور على {{count}} أداةً.",
+        "testSuccess_other": "تم الاتصال. تم العثور على {{count}} أداة.",
+        "testingAll_zero": "جارٍ اختبار {{count}} اتصالات بخوادم MCP…",
+        "testingAll_one": "جارٍ اختبار {{count}} اتصال بخادم MCP…",
+        "testingAll_two": "جارٍ اختبار {{count}} اتصالين بخوادم MCP…",
+        "testingAll_few": "جارٍ اختبار {{count}} اتصالات بخوادم MCP…",
+        "testingAll_many": "جارٍ اختبار {{count}} اتصالًا بخوادم MCP…",
+        "testingAll_other": "جارٍ اختبار {{count}} اتصال بخوادم MCP…"
       },
       "confirm": {
         "delete": "حذف خادم MCP \"{{name}}\"؟"
       },
-      "namePlaceholder": "خادم Acme MCP"
+      "namePlaceholder": "خادم Acme MCP",
+      "envVars_zero": "{{count}} متغيرات بيئة",
+      "envVars_one": "{{count}} متغير بيئة",
+      "envVars_two": "{{count}} متغيرا بيئة",
+      "envVars_few": "{{count}} متغيرات بيئة",
+      "envVars_many": "{{count}} متغيرَ بيئة",
+      "envVars_other": "{{count}} متغير بيئة"
     },
     "agents": {
       "desc": "إنشاء وإدارة وكلاء الذكاء الاصطناعي بقدرات وأدوات وسلوكيات محددة.",
-      "count_one": "تم تهيئة {{count}} وكيل",
-      "count_other": "تم تهيئة {{count}} وكلاء",
-      "count": "تم تهيئة {{count}} وكلاء",
       "addBtn": "+ إضافة وكيل",
       "empty": "لم يتم تهيئة أي وكلاء. اختر إضافة وكيل للبدء.",
       "defaultBadge": "افتراضي",
@@ -237,12 +276,18 @@
       },
       "tools": {
         "builtIn": "{{count}} مدمج",
-        "mcpServer_one": "{{count}} خادم mcp",
-        "mcpServer_other": "{{count}} خوادم mcp",
-        "mcpServer": "{{count}} خوادم mcp",
-        "mcpTool_one": "{{count}} أداة mcp",
-        "mcpTool_other": "{{count}} أدوات mcp",
-        "mcpTool": "{{count}} أدوات mcp"
+        "mcpServer_zero": "{{count}} خوادم MCP",
+        "mcpServer_one": "{{count}} خادم MCP",
+        "mcpServer_two": "{{count}} خادمان MCP",
+        "mcpServer_few": "{{count}} خوادم MCP",
+        "mcpServer_many": "{{count}} خادمَ MCP",
+        "mcpServer_other": "{{count}} خادم MCP",
+        "mcpTool_zero": "{{count}} أدوات MCP",
+        "mcpTool_one": "{{count}} أداة MCP",
+        "mcpTool_two": "{{count}} أداتان MCP",
+        "mcpTool_few": "{{count}} أدوات MCP",
+        "mcpTool_many": "{{count}} أداةَ MCP",
+        "mcpTool_other": "{{count}} أداة MCP"
       },
       "actions": {
         "edit": "تعديل",
@@ -250,7 +295,13 @@
       },
       "confirm": {
         "delete": "حذف الوكيل \"{{name}}\"؟"
-      }
+      },
+      "count_zero": "تمت تهيئة {{count}} وكلاء",
+      "count_one": "تمت تهيئة {{count}} وكيل",
+      "count_two": "تمت تهيئة {{count}} وكيلين",
+      "count_few": "تمت تهيئة {{count}} وكلاء",
+      "count_many": "تمت تهيئة {{count}} وكيلًا",
+      "count_other": "تمت تهيئة {{count}} وكيل"
     },
     "prompts": {
       "desc": "إدارة مطالبات النظام التي تحدد سلوك وشخصية مساعدك الذكي.",
@@ -352,8 +403,13 @@
         },
         "notices": {
           "removed": "تم إزالة مصدر HTTP",
-          "reloaded": "تم إعادة تحميل {{count}} عملية",
-          "reloadFailed": "فشل إعادة تحميل مصدر HTTP. تحقق من وحدة التحكم للحصول على التفاصيل."
+          "reloadFailed": "فشل إعادة تحميل مصدر HTTP. تحقق من وحدة التحكم للحصول على التفاصيل.",
+          "reloaded_zero": "تمت إعادة تحميل {{count}} عمليات",
+          "reloaded_one": "تمت إعادة تحميل {{count}} عملية",
+          "reloaded_two": "تمت إعادة تحميل {{count}} عمليتين",
+          "reloaded_few": "تمت إعادة تحميل {{count}} عمليات",
+          "reloaded_many": "تمت إعادة تحميل {{count}} عمليةً",
+          "reloaded_other": "تمت إعادة تحميل {{count}} عملية"
         },
         "modal": {
           "defaultTitle": "مصدر HTTP",
@@ -419,9 +475,6 @@
           "actions": "الإجراءات"
         },
         "unnamed": "أداة CLI بلا اسم",
-        "paramCount_one": "{{count}} معامل",
-        "paramCount_other": "{{count}} معاملات",
-        "paramCount": "{{count}} معاملات",
         "noParams": "لا شيء",
         "statusEnabled": "مفعّل",
         "statusDisabled": "معطّل",
@@ -554,7 +607,13 @@
             "preset-screencapture": "لقطة شاشة",
             "preset-applescript-list-apps": "سرد التطبيقات قيد التشغيل"
           }
-        }
+        },
+        "paramCount_zero": "{{count}} معاملات",
+        "paramCount_one": "{{count}} معامل",
+        "paramCount_two": "{{count}} معاملان",
+        "paramCount_few": "{{count}} معاملات",
+        "paramCount_many": "{{count}} معاملًا",
+        "paramCount_other": "{{count}} معامل"
       }
     },
     "rag": {
@@ -844,9 +903,6 @@
         "desc": "بادئة (رمز تعبيري أو نص) لعرضها قبل جميع الإجراءات السريعة في قائمة السياق",
         "placeholder": "⚡"
       },
-      "count_one": "تم تهيئة {{count}} إجراء ({{enabled}} مفعّل)",
-      "count_other": "تم تهيئة {{count}} إجراءات ({{enabled}} مفعّلة)",
-      "count": "تم تهيئة {{count}} إجراءات ({{enabled}} مفعّلة)",
       "addBtn": "+ إضافة إجراء سريع",
       "empty": "لم يتم تهيئة أي إجراءات سريعة. اختر إضافة إجراء سريع للبدء.",
       "defaultModel": "افتراضي",
@@ -912,7 +968,13 @@
       "placeholders": {
         "name": "إطالة النص",
         "prompt": "وسّع النص التالي وأضف إليه تفاصيل…"
-      }
+      },
+      "count_zero": "تمت تهيئة {{count}} إجراءات (المفعّل منها: {{enabled}})",
+      "count_one": "تمت تهيئة {{count}} إجراء (المفعّل منها: {{enabled}})",
+      "count_two": "تمت تهيئة {{count}} إجراءين (المفعّل منها: {{enabled}})",
+      "count_few": "تمت تهيئة {{count}} إجراءات (المفعّل منها: {{enabled}})",
+      "count_many": "تمت تهيئة {{count}} إجراءً (المفعّل منها: {{enabled}})",
+      "count_other": "تمت تهيئة {{count}} إجراء (المفعّل منها: {{enabled}})"
     },
     "usage": {
       "desc": "تتبّع استهلاك الرموز عبر المزودين والنماذج. تتراكم البيانات عبر جميع المحادثات.",
@@ -994,12 +1056,22 @@
       "ragDisabled": "تم تعطيل RAG في الإعدادات. فعّله من الإعدادات ← ميزات المحادثة ← RAG.",
       "webSearchDisabled": "تم تعطيل البحث على الويب في الإعدادات. فعّله من الإعدادات ← ميزات المحادثة ← البحث على الويب.",
       "attached": "مُرفق: {{name}}",
-      "attachedImages": "تم إرفاق {{count}} صورة",
-      "referencesAdded": "تمت إضافة {{count}} مرجع",
       "fileNotFound": "لم يتم العثور على الملف: {{path}}",
       "unableToLoadRag": "تعذّر تحميل إحصائيات RAG.",
       "referenced": "مُرجَع: {{name}}",
-      "openViewFailed": "تعذّر فتح عرض الدردشة."
+      "openViewFailed": "تعذّر فتح عرض الدردشة.",
+      "attachedImages_zero": "تم إرفاق {{count}} صور",
+      "attachedImages_one": "تم إرفاق {{count}} صورة",
+      "attachedImages_two": "تم إرفاق {{count}} صورتين",
+      "attachedImages_few": "تم إرفاق {{count}} صور",
+      "attachedImages_many": "تم إرفاق {{count}} صورةً",
+      "attachedImages_other": "تم إرفاق {{count}} صورة",
+      "referencesAdded_zero": "تمت إضافة {{count}} مراجع",
+      "referencesAdded_one": "تمت إضافة {{count}} مرجع",
+      "referencesAdded_two": "تمت إضافة {{count}} مرجعين",
+      "referencesAdded_few": "تمت إضافة {{count}} مراجع",
+      "referencesAdded_many": "تمت إضافة {{count}} مرجعًا",
+      "referencesAdded_other": "تمت إضافة {{count}} مرجع"
     },
     "status": {
       "unavailable": "غير متاح",
@@ -1020,9 +1092,12 @@
       "step2": "فعّل RAG",
       "step3": "اختر فهرسة المستودع",
       "close": "إغلاق",
+      "retrieved_zero": "تم الاسترداد من {{count}} وثائق",
       "retrieved_one": "تم الاسترداد من {{count}} وثيقة",
-      "retrieved_other": "تم الاسترداد من {{count}} وثائق",
-      "retrieved": "تم الاسترداد من {{count}} وثائق"
+      "retrieved_two": "تم الاسترداد من {{count}} وثيقتين",
+      "retrieved_few": "تم الاسترداد من {{count}} وثائق",
+      "retrieved_many": "تم الاسترداد من {{count}} وثيقةً",
+      "retrieved_other": "تم الاسترداد من {{count}} وثيقة"
     },
     "ragTooltip": {
       "status": "حالة فهرس RAG:",
@@ -1141,8 +1216,6 @@
       "apply": "تطبيق",
       "applyAll": "تطبيق الكل",
       "applied": "مُطبَّق",
-      "changes_one": "{{count}} تغيير",
-      "changes_other": "{{count}} تغييرات",
       "confirm": "تطبيق {{summary}}؟",
       "appliedNotice": "تم تطبيق {{summary}}",
       "operations": {
@@ -1152,7 +1225,13 @@
         "delete": "حذف",
         "move": "نقل",
         "batch": "دفعة"
-      }
+      },
+      "changes_zero": "{{count}} تغييرات",
+      "changes_one": "{{count}} تغيير",
+      "changes_two": "{{count}} تغييران",
+      "changes_few": "{{count}} تغييرات",
+      "changes_many": "{{count}} تغييرًا",
+      "changes_other": "{{count}} تغيير"
     }
   },
   "modals": {
@@ -1213,15 +1292,18 @@
       "mcp": {
         "title": "وصول MCP",
         "noServers": "لم يتم تهيئة أي خوادم MCP. أضف الخوادم من الإعدادات ← MCP لإلغاء قفل هذه الخيارات.",
-        "toolsCached_one": "{{count}} أداة مخزّنة مؤقتًا",
-        "toolsCached_other": "{{count}} أدوات مخزّنة مؤقتًا",
-        "toolsCached": "{{count}} أدوات مخزّنة مؤقتًا",
         "noToolsCached": "لم يتم تخزين أي أدوات مؤقتًا بعد. فعّل الوصول الكامل أو حدّث الذاكرة المؤقتة.",
         "showTools": "عرض الأدوات",
         "hideTools": "إخفاء الأدوات",
         "selected": "محدد",
         "notSelected": "غير محدد",
-        "noToolsAvailable": "لا توجد أدوات متاحة من هذا الخادم بعد."
+        "noToolsAvailable": "لا توجد أدوات متاحة من هذا الخادم بعد.",
+        "toolsCached_zero": "{{count}} أدوات مخزّنة مؤقتًا",
+        "toolsCached_one": "{{count}} أداة مخزّنة مؤقتًا",
+        "toolsCached_two": "{{count}} أداتان مخزّنتان مؤقتًا",
+        "toolsCached_few": "{{count}} أدوات مخزّنة مؤقتًا",
+        "toolsCached_many": "{{count}} أداةً مخزّنة مؤقتًا",
+        "toolsCached_other": "{{count}} أداة مخزّنة مؤقتًا"
       },
       "notices": {
         "promptRequired": "يرجى تقديم اسم ومحتوى لمطالبة النظام الجديدة."
@@ -1303,10 +1385,15 @@
       },
       "cachedModels": "النماذج المخزنة مؤقتًا: {{count}}",
       "connectionFailed": "فشل اختبار الاتصال. تحقق من إعدادات المزود.",
-      "connectionSuccess": "تم الاتصال بنجاح. تم تخزين {{count}} نموذج(نماذج) مؤقتًا.",
       "noCachedModels": "لا توجد نماذج مخزنة مؤقتًا",
       "testConnection": "اختبار الاتصال",
-      "testing": "جارٍ الاختبار..."
+      "testing": "جارٍ الاختبار...",
+      "connectionSuccess_zero": "تم الاتصال بنجاح. تم تخزين {{count}} نماذج مؤقتًا.",
+      "connectionSuccess_one": "تم الاتصال بنجاح. تم تخزين {{count}} نموذج مؤقتًا.",
+      "connectionSuccess_two": "تم الاتصال بنجاح. تم تخزين {{count}} نموذجين مؤقتًا.",
+      "connectionSuccess_few": "تم الاتصال بنجاح. تم تخزين {{count}} نماذج مؤقتًا.",
+      "connectionSuccess_many": "تم الاتصال بنجاح. تم تخزين {{count}} نموذجًا مؤقتًا.",
+      "connectionSuccess_other": "تم الاتصال بنجاح. تم تخزين {{count}} نموذج مؤقتًا."
     },
     "mcpInspector": {
       "title": "مفتش MCP",
@@ -1329,12 +1416,6 @@
         "statusDisabled": "معطّل",
         "statusConnected": "● متصل",
         "statusDisconnected": "○ منقطع",
-        "toolsLive_one": "{{count}} أداة",
-        "toolsLive_other": "{{count}} أدوات",
-        "toolsLive": "{{count}} أدوات",
-        "toolsCached_one": "{{count}} أداة (مخزّنة مؤقتًا)",
-        "toolsCached_other": "{{count}} أدوات (مخزّنة مؤقتًا)",
-        "toolsCached": "{{count}} أدوات (مخزّنة مؤقتًا)",
         "noTools": "0 أدوات",
         "connectBtn": "اتصال",
         "disconnectBtn": "قطع الاتصال",
@@ -1346,7 +1427,19 @@
           "connected": "تم الاتصال بـ {{name}}",
           "failedDisconnect": "فشل قطع الاتصال عن {{name}}: {{message}}",
           "failedConnect": "فشل الاتصال بـ {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_zero": "{{count}} أدوات (مخزّنة مؤقتًا)",
+        "toolsCached_one": "{{count}} أداة (مخزّنة مؤقتًا)",
+        "toolsCached_two": "{{count}} أداتان (مخزّنتان مؤقتًا)",
+        "toolsCached_few": "{{count}} أدوات (مخزّنة مؤقتًا)",
+        "toolsCached_many": "{{count}} أداةً (مخزّنة مؤقتًا)",
+        "toolsCached_other": "{{count}} أداة (مخزّنة مؤقتًا)",
+        "toolsLive_zero": "{{count}} أدوات",
+        "toolsLive_one": "{{count}} أداة",
+        "toolsLive_two": "{{count}} أداتان",
+        "toolsLive_few": "{{count}} أدوات",
+        "toolsLive_many": "{{count}} أداةً",
+        "toolsLive_other": "{{count}} أداة"
       },
       "tools": {
         "title": "أدوات MCP المتاحة",
@@ -1569,8 +1662,6 @@
   },
   "capability": {
     "title": "الأدوات والأذونات",
-    "subtitle_one": "يمكن لـ {{agent}} استخدام {{count}} أداة.",
-    "subtitle_other": "يمكن لـ {{agent}} استخدام {{count}} أدوات.",
     "chatMode": "وضع الدردشة",
     "permissions": "الأذونات الحالية",
     "reads": "يمكن لهذه المهمة قراءة",
@@ -1590,8 +1681,6 @@
     },
     "rows": {
       "vaultContext": "سياق المستودع",
-      "referencesPlusContext_one": "{{count}} مرجع صريح بالإضافة إلى السياق النشط",
-      "referencesPlusContext_other": "{{count}} مراجع صريحة بالإضافة إلى السياق النشط",
       "activeContext": "الملاحظة النشطة ولقطة سياق الرسم البياني",
       "readTools": "أدوات قراءة المستودع",
       "enabledCount": "{{count}} مفعّلة",
@@ -1605,12 +1694,28 @@
       "off": "متوقف",
       "disabledInSettings": "معطّل في الإعدادات",
       "custom": "أدوات مخصصة",
-      "customEnabled_one": "{{count}} أداة MCP أو OpenAPI أو CLI مفعّلة",
-      "customEnabled_other": "{{count}} أدوات MCP أو OpenAPI أو CLI مفعّلة",
       "noneEnabled": "لا شيء مفعّل",
       "destructive": "إجراءات مدمّرة في المستودع",
-      "notProvided": "لا توفّرها الأدوات المدمجة"
-    }
+      "notProvided": "لا توفّرها الأدوات المدمجة",
+      "customEnabled_zero": "{{count}} أدوات مفعّلة من MCP أو OpenAPI أو CLI",
+      "customEnabled_one": "{{count}} أداة مفعّلة من MCP أو OpenAPI أو CLI",
+      "customEnabled_two": "{{count}} أداتان مفعّلتان من MCP أو OpenAPI أو CLI",
+      "customEnabled_few": "{{count}} أدوات مفعّلة من MCP أو OpenAPI أو CLI",
+      "customEnabled_many": "{{count}} أداةً مفعّلة من MCP أو OpenAPI أو CLI",
+      "customEnabled_other": "{{count}} أداة مفعّلة من MCP أو OpenAPI أو CLI",
+      "referencesPlusContext_zero": "{{count}} مراجع صريحة بالإضافة إلى السياق النشط",
+      "referencesPlusContext_one": "{{count}} مرجع صريح بالإضافة إلى السياق النشط",
+      "referencesPlusContext_two": "{{count}} مرجعان صريحان بالإضافة إلى السياق النشط",
+      "referencesPlusContext_few": "{{count}} مراجع صريحة بالإضافة إلى السياق النشط",
+      "referencesPlusContext_many": "{{count}} مرجعًا صريحًا بالإضافة إلى السياق النشط",
+      "referencesPlusContext_other": "{{count}} مرجع صريح بالإضافة إلى السياق النشط"
+    },
+    "subtitle_zero": "يمكن لـ {{agent}} استخدام {{count}} أدوات.",
+    "subtitle_one": "يمكن لـ {{agent}} استخدام {{count}} أداة.",
+    "subtitle_two": "يمكن لـ {{agent}} استخدام {{count}} أداتين.",
+    "subtitle_few": "يمكن لـ {{agent}} استخدام {{count}} أدوات.",
+    "subtitle_many": "يمكن لـ {{agent}} استخدام {{count}} أداةً.",
+    "subtitle_other": "يمكن لـ {{agent}} استخدام {{count}} أداة."
   },
   "markdown": {
     "run": "تشغيل"
@@ -1618,14 +1723,18 @@
   "rag": {
     "notices": {
       "noFiles": "لا توجد ملاحظات Markdown للفهرسة.",
-      "starting_one": "جارٍ فهرسة {{count}} ملاحظة…",
-      "starting_other": "جارٍ فهرسة {{count}} ملاحظات…",
       "progress": "الفهرسة: {{done}} من {{total}} ملاحظات",
       "completed": "اكتملت الفهرسة: {{indexed}} مفهرسة، {{failed}} فشلت.",
       "noIndex": "لم تتم فهرسة أي شيء بعد. شغّل \"Embed all documents\" لفهرسة مستودعك.",
       "gradingError": "فشل تقييم المستند: {{message}}",
       "clearing": "جارٍ مسح الفهرس…",
-      "cleared": "تم مسح الفهرس."
+      "cleared": "تم مسح الفهرس.",
+      "starting_zero": "جارٍ فهرسة {{count}} ملاحظات…",
+      "starting_one": "جارٍ فهرسة {{count}} ملاحظة…",
+      "starting_two": "جارٍ فهرسة {{count}} ملاحظتين…",
+      "starting_few": "جارٍ فهرسة {{count}} ملاحظات…",
+      "starting_many": "جارٍ فهرسة {{count}} ملاحظةً…",
+      "starting_other": "جارٍ فهرسة {{count}} ملاحظة…"
     }
   }
 }

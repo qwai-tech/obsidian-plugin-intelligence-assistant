@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Перегляд і керування моделями від усіх налаштованих провайдерів. Натисніть «оновити моделі», щоб отримати останні доступні моделі.",
-      "providerCount_one": "{{count}} провайдер налаштовано",
-      "providerCount_other": "{{count}} провайдерів налаштовано",
-      "providerCount": "{{count}} провайдерів налаштовано",
       "refreshAll": "оновити всі моделі",
       "empty": "Провайдери ще не налаштовані. Спочатку додайте провайдерів на вкладці провайдерів.",
       "noModels": "Моделі недоступні. Натисніть «оновити всі моделі» або оновіть окремих провайдерів на вкладці провайдерів.",
       "noMatch": "Моделі не відповідають поточним фільтрам. Змініть або скиньте фільтри, щоб побачити результати.",
-      "modelCount_one": "• {{count}} модель у кеші",
-      "modelCount_other": "• {{count}} моделей у кеші",
-      "modelCount": "• {{count}} моделей у кеші",
-      "matchCount_one": "• {{count}} збіг з вибраними фільтрами",
-      "matchCount_other": "• {{count}} збігів з вибраними фільтрами",
-      "matchCount": "• {{count}} збігів з вибраними фільтрами",
       "status": {
         "enabled": "Увімкнено",
         "disabled": "Вимкнено"
@@ -92,12 +83,21 @@
         "capabilities": "Можливості",
         "status": "Стан",
         "actions": "Дії"
-      }
+      },
+      "matchCount_one": "• {{count}} збіг з вибраними фільтрами",
+      "matchCount_few": "• {{count}} збіги з вибраними фільтрами",
+      "matchCount_many": "• {{count}} збігів з вибраними фільтрами",
+      "matchCount_other": "• {{count}} збігу з вибраними фільтрами",
+      "modelCount_one": "• {{count}} модель у кеші",
+      "modelCount_few": "• {{count}} моделі у кеші",
+      "modelCount_many": "• {{count}} моделей у кеші",
+      "modelCount_other": "• {{count}} моделі у кеші",
+      "providerCount_one": "{{count}} провайдер налаштовано",
+      "providerCount_few": "{{count}} провайдери налаштовано",
+      "providerCount_many": "{{count}} провайдерів налаштовано",
+      "providerCount_other": "{{count}} провайдера налаштовано"
     },
     "provider": {
-      "count_one": "{{count}} провайдер налаштовано",
-      "count_other": "{{count}} провайдерів налаштовано",
-      "count": "{{count}} провайдерів налаштовано",
       "addBtn": "+ Додати провайдера",
       "empty": "Провайдери не налаштовані. Виберіть «Додати провайдера», щоб почати.",
       "status": {
@@ -116,8 +116,9 @@
       "models": {
         "none": "Немає моделей",
         "count_one": "{{count}} модель",
-        "count_other": "{{count}} моделей",
-        "count": "{{count}} моделей"
+        "count_few": "{{count}} моделі",
+        "count_many": "{{count}} моделей",
+        "count_other": "{{count}} моделі"
       },
       "ollama": {
         "checkingVersion": "Перевірка версії...",
@@ -153,7 +154,11 @@
       },
       "confirm": {
         "delete": "Видалити провайдера {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} провайдер налаштовано",
+      "count_few": "{{count}} провайдери налаштовано",
+      "count_many": "{{count}} провайдерів налаштовано",
+      "count_other": "{{count}} провайдера налаштовано"
     },
     "mcp": {
       "desc": "Налаштуйте сервери Model Context Protocol (MCP) для розширення можливостей агентів за допомогою зовнішніх інструментів і джерел даних.",
@@ -165,9 +170,6 @@
       "untitled": "Безіменний MCP-сервер",
       "notConfigured": "Не налаштовано",
       "cached": "Кешовано",
-      "envVars_one": "{{count}} змінна середовища",
-      "envVars_other": "{{count}} змінних середовища",
-      "envVars": "{{count}} змінних середовища",
       "status": {
         "disabled": "Вимкнено",
         "connected": "підключено",
@@ -177,12 +179,14 @@
         "autoConnect": "Авто-підключення"
       },
       "toolCount": {
-        "live_one": "{{count}} активний інструмент",
-        "live_other": "{{count}} активних інструментів",
-        "live": "{{count}} активних інструментів",
         "cached_one": "{{count}} кешований інструмент",
-        "cached_other": "{{count}} кешованих інструментів",
-        "cached": "{{count}} кешованих інструментів"
+        "cached_few": "{{count}} кешовані інструменти",
+        "cached_many": "{{count}} кешованих інструментів",
+        "cached_other": "{{count}} кешованого інструмента",
+        "live_one": "{{count}} активний інструмент",
+        "live_few": "{{count}} активні інструменти",
+        "live_many": "{{count}} активних інструментів",
+        "live_other": "{{count}} активного інструмента"
       },
       "actions": {
         "edit": "Редагувати",
@@ -204,27 +208,38 @@
         "disconnectFailed": "Не вдалося відключитися від {{name}}",
         "connectFailed": "Не вдалося підключитися до {{name}}",
         "testNoCommand": "будь ласка, введіть команду перед тестуванням з'єднання",
-        "testSuccess": "успішно підключено! Знайдено {{count}} інструментів.",
         "testFailed": "З'єднання не вдалося: {{message}}",
-        "refreshedAll_one": "інструменти оновлено для {{count}} сервера",
-        "refreshedAll_other": "інструменти оновлено для {{count}} серверів",
-        "refreshedAll": "інструменти оновлено для {{count}} серверів",
         "refreshedPartial": "оновлено {{success}} серверів, {{failed}} не вдалося",
         "noServersConfigured": "MCP-сервери не налаштовані",
-        "testingAll": "Тестування {{count}} MCP-серверних з'єднань...",
-        "testAllSuccess": "всі {{count}} MCP-серверів успішно підключено!",
-        "testAllPartial": "{{successful}} підключено, {{failed}} не вдалося"
+        "testAllPartial": "{{successful}} підключено, {{failed}} не вдалося",
+        "refreshedAll_one": "Інструменти оновлено для {{count}} сервера",
+        "refreshedAll_few": "Інструменти оновлено для {{count}} серверів",
+        "refreshedAll_many": "Інструменти оновлено для {{count}} серверів",
+        "refreshedAll_other": "Інструменти оновлено для {{count}} сервера",
+        "testAllSuccess_one": "{{count}} MCP-сервер успішно підключено.",
+        "testAllSuccess_few": "Усі {{count}} MCP-сервери успішно підключено.",
+        "testAllSuccess_many": "Усі {{count}} MCP-серверів успішно підключено.",
+        "testAllSuccess_other": "Усі {{count}} MCP-сервера успішно підключено.",
+        "testSuccess_one": "Підключено. Знайдено {{count}} інструмент.",
+        "testSuccess_few": "Підключено. Знайдено {{count}} інструменти.",
+        "testSuccess_many": "Підключено. Знайдено {{count}} інструментів.",
+        "testSuccess_other": "Підключено. Знайдено {{count}} інструмента.",
+        "testingAll_one": "Перевірка {{count}} підключення до MCP-сервера…",
+        "testingAll_few": "Перевірка {{count}} підключень до MCP-серверів…",
+        "testingAll_many": "Перевірка {{count}} підключень до MCP-серверів…",
+        "testingAll_other": "Перевірка {{count}} підключення до MCP-серверів…"
       },
       "confirm": {
         "delete": "Видалити MCP-сервер «{{name}}»?"
       },
-      "namePlaceholder": "MCP-сервер Acme"
+      "namePlaceholder": "MCP-сервер Acme",
+      "envVars_one": "{{count}} змінна середовища",
+      "envVars_few": "{{count}} змінні середовища",
+      "envVars_many": "{{count}} змінних середовища",
+      "envVars_other": "{{count}} змінної середовища"
     },
     "agents": {
       "desc": "Створюйте та керуйте ШІ-агентами з певними можливостями, інструментами та поведінкою.",
-      "count_one": "{{count}} агент налаштовано",
-      "count_other": "{{count}} агентів налаштовано",
-      "count": "{{count}} агентів налаштовано",
       "addBtn": "+ додати агента",
       "empty": "Агенти не налаштовані. Виберіть «додати агента», щоб почати.",
       "defaultBadge": "За замовчуванням",
@@ -238,11 +253,13 @@
       "tools": {
         "builtIn": "{{count}} вбудованих",
         "mcpServer_one": "{{count}} MCP-сервер",
-        "mcpServer_other": "{{count}} MCP-серверів",
-        "mcpServer": "{{count}} MCP-серверів",
+        "mcpServer_few": "{{count}} MCP-сервери",
+        "mcpServer_many": "{{count}} MCP-серверів",
+        "mcpServer_other": "{{count}} MCP-сервера",
         "mcpTool_one": "{{count}} MCP-інструмент",
-        "mcpTool_other": "{{count}} MCP-інструментів",
-        "mcpTool": "{{count}} MCP-інструментів"
+        "mcpTool_few": "{{count}} MCP-інструменти",
+        "mcpTool_many": "{{count}} MCP-інструментів",
+        "mcpTool_other": "{{count}} MCP-інструмента"
       },
       "actions": {
         "edit": "Редагувати",
@@ -250,7 +267,11 @@
       },
       "confirm": {
         "delete": "Видалити агента «{{name}}»?"
-      }
+      },
+      "count_one": "{{count}} агент налаштовано",
+      "count_few": "{{count}} агенти налаштовано",
+      "count_many": "{{count}} агентів налаштовано",
+      "count_other": "{{count}} агента налаштовано"
     },
     "prompts": {
       "desc": "Керуйте системними промптами, що визначають поведінку та особистість вашого ШІ-асистента.",
@@ -352,8 +373,11 @@
         },
         "notices": {
           "removed": "HTTP-джерело видалено",
-          "reloaded": "Перезавантажено {{count}} операцій",
-          "reloadFailed": "Не вдалося перезавантажити HTTP-джерело. Перевірте консоль для отримання деталей."
+          "reloadFailed": "Не вдалося перезавантажити HTTP-джерело. Перевірте консоль для отримання деталей.",
+          "reloaded_one": "Перезавантажено {{count}} операцію",
+          "reloaded_few": "Перезавантажено {{count}} операції",
+          "reloaded_many": "Перезавантажено {{count}} операцій",
+          "reloaded_other": "Перезавантажено {{count}} операції"
         },
         "modal": {
           "defaultTitle": "HTTP-джерело",
@@ -419,9 +443,6 @@
           "actions": "Дії"
         },
         "unnamed": "Безіменний CLI-інструмент",
-        "paramCount_one": "{{count}} параметр",
-        "paramCount_other": "{{count}} параметрів",
-        "paramCount": "{{count}} параметрів",
         "noParams": "Немає",
         "statusEnabled": "Увімкнено",
         "statusDisabled": "Вимкнено",
@@ -554,7 +575,11 @@
             "preset-screencapture": "Знімок екрана",
             "preset-applescript-list-apps": "Список запущених застосунків"
           }
-        }
+        },
+        "paramCount_one": "{{count}} параметр",
+        "paramCount_few": "{{count}} параметри",
+        "paramCount_many": "{{count}} параметрів",
+        "paramCount_other": "{{count}} параметра"
       }
     },
     "rag": {
@@ -844,9 +869,6 @@
         "desc": "Префікс (емодзі або текст), що відображається перед усіма швидкими діями в контекстному меню",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} дія налаштована ({{enabled}} увімкнено)",
-      "count_other": "{{count}} дій налаштовано ({{enabled}} увімкнено)",
-      "count": "{{count}} дій налаштовано ({{enabled}} увімкнено)",
       "addBtn": "+ додати швидку дію",
       "empty": "Швидкі дії не налаштовані. Виберіть «додати швидку дію», щоб почати.",
       "defaultModel": "За замовчуванням",
@@ -912,7 +934,11 @@
       "placeholders": {
         "name": "Зробити текст довшим",
         "prompt": "Розширте й доповніть наступний текст…"
-      }
+      },
+      "count_one": "{{count}} дія налаштована (увімкнено: {{enabled}})",
+      "count_few": "{{count}} дії налаштовано (увімкнено: {{enabled}})",
+      "count_many": "{{count}} дій налаштовано (увімкнено: {{enabled}})",
+      "count_other": "{{count}} дії налаштовано (увімкнено: {{enabled}})"
     },
     "usage": {
       "desc": "Відстежуйте споживання токенів у провайдерів і моделей. Дані накопичуються по всіх розмовах.",
@@ -994,12 +1020,18 @@
       "ragDisabled": "RAG вимкнено в налаштуваннях. Увімкніть у розділі «Налаштування → функції чату → RAG».",
       "webSearchDisabled": "Веб-пошук вимкнено в налаштуваннях. Увімкніть у розділі «Налаштування → функції чату → веб-пошук».",
       "attached": "Прикріплено: {{name}}",
-      "attachedImages": "Прикріплено {{count}} зображень",
-      "referencesAdded": "Додано {{count}} посилань",
       "fileNotFound": "Файл не знайдено: {{path}}",
       "unableToLoadRag": "Не вдалося завантажити статистику RAG.",
       "referenced": "Згадано: {{name}}",
-      "openViewFailed": "Не вдалося відкрити вікно чату."
+      "openViewFailed": "Не вдалося відкрити вікно чату.",
+      "attachedImages_one": "Прикріплено {{count}} зображення",
+      "attachedImages_few": "Прикріплено {{count}} зображення",
+      "attachedImages_many": "Прикріплено {{count}} зображень",
+      "attachedImages_other": "Прикріплено {{count}} зображення",
+      "referencesAdded_one": "Додано {{count}} посилання",
+      "referencesAdded_few": "Додано {{count}} посилання",
+      "referencesAdded_many": "Додано {{count}} посилань",
+      "referencesAdded_other": "Додано {{count}} посилання"
     },
     "status": {
       "unavailable": "Недоступно",
@@ -1020,9 +1052,10 @@
       "step2": "Увімкніть RAG",
       "step3": "Виберіть індексоване сховище",
       "close": "Закрити",
-      "retrieved_one": "отримано з {{count}} документа",
-      "retrieved_other": "отримано з {{count}} документів",
-      "retrieved": "отримано з {{count}} документів"
+      "retrieved_one": "Отримано з {{count}} документа",
+      "retrieved_few": "Отримано з {{count}} документів",
+      "retrieved_many": "Отримано з {{count}} документів",
+      "retrieved_other": "Отримано з {{count}} документа"
     },
     "ragTooltip": {
       "status": "Стан індексу RAG:",
@@ -1141,8 +1174,6 @@
       "apply": "Застосувати",
       "applyAll": "Застосувати все",
       "applied": "Застосовано",
-      "changes_one": "{{count}} зміна",
-      "changes_other": "змін: {{count}}",
       "confirm": "Застосувати ({{summary}})?",
       "appliedNotice": "Застосовано ({{summary}})",
       "operations": {
@@ -1152,7 +1183,11 @@
         "delete": "Видалення",
         "move": "Переміщення",
         "batch": "Пакет"
-      }
+      },
+      "changes_one": "{{count}} зміна",
+      "changes_few": "{{count}} зміни",
+      "changes_many": "{{count}} змін",
+      "changes_other": "{{count}} зміни"
     }
   },
   "modals": {
@@ -1213,15 +1248,16 @@
       "mcp": {
         "title": "Доступ до MCP",
         "noServers": "MCP-сервери не налаштовані. Додайте сервери в розділі «Налаштування → MCP», щоб розблокувати ці параметри.",
-        "toolsCached_one": "{{count}} інструмент у кеші",
-        "toolsCached_other": "{{count}} інструментів у кеші",
-        "toolsCached": "{{count}} інструментів у кеші",
         "noToolsCached": "Інструменти ще не кешовані. Увімкніть повний доступ або оновіть кеш.",
         "showTools": "Показати інструменти",
         "hideTools": "Приховати інструменти",
         "selected": "Вибрано",
         "notSelected": "Не вибрано",
-        "noToolsAvailable": "Інструменти з цього сервера поки недоступні."
+        "noToolsAvailable": "Інструменти з цього сервера поки недоступні.",
+        "toolsCached_one": "{{count}} інструмент у кеші",
+        "toolsCached_few": "{{count}} інструменти у кеші",
+        "toolsCached_many": "{{count}} інструментів у кеші",
+        "toolsCached_other": "{{count}} інструмента у кеші"
       },
       "notices": {
         "promptRequired": "Будь ласка, вкажіть ім'я та вміст нового системного промпту."
@@ -1303,10 +1339,13 @@
       },
       "cachedModels": "Кешовані моделі: {{count}}",
       "connectionFailed": "Перевірка підключення не вдалася. Перевірте налаштування провайдера.",
-      "connectionSuccess": "Підключення успішне. Кешовано моделей: {{count}}.",
       "noCachedModels": "Немає кешованих моделей",
       "testConnection": "Перевірити підключення",
-      "testing": "Перевірка..."
+      "testing": "Перевірка...",
+      "connectionSuccess_one": "Підключення успішне. У кеші {{count}} модель.",
+      "connectionSuccess_few": "Підключення успішне. У кеші {{count}} моделі.",
+      "connectionSuccess_many": "Підключення успішне. У кеші {{count}} моделей.",
+      "connectionSuccess_other": "Підключення успішне. У кеші {{count}} моделі."
     },
     "mcpInspector": {
       "title": "Інспектор MCP",
@@ -1329,12 +1368,6 @@
         "statusDisabled": "Вимкнено",
         "statusConnected": "● підключено",
         "statusDisconnected": "○ відключено",
-        "toolsLive_one": "{{count}} інструмент",
-        "toolsLive_other": "{{count}} інструментів",
-        "toolsLive": "{{count}} інструментів",
-        "toolsCached_one": "{{count}} інструмент (кешовано)",
-        "toolsCached_other": "{{count}} інструментів (кешовано)",
-        "toolsCached": "{{count}} інструментів (кешовано)",
         "noTools": "0 інструментів",
         "connectBtn": "Підключити",
         "disconnectBtn": "Відключити",
@@ -1346,7 +1379,15 @@
           "connected": "Підключено до {{name}}",
           "failedDisconnect": "Не вдалося відключитися від {{name}}: {{message}}",
           "failedConnect": "Не вдалося підключитися до {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} інструмент (у кеші)",
+        "toolsCached_few": "{{count}} інструменти (у кеші)",
+        "toolsCached_many": "{{count}} інструментів (у кеші)",
+        "toolsCached_other": "{{count}} інструмента (у кеші)",
+        "toolsLive_one": "{{count}} інструмент",
+        "toolsLive_few": "{{count}} інструменти",
+        "toolsLive_many": "{{count}} інструментів",
+        "toolsLive_other": "{{count}} інструмента"
       },
       "tools": {
         "title": "Доступні MCP-інструменти",
@@ -1569,8 +1610,6 @@
   },
   "capability": {
     "title": "Інструменти та дозволи",
-    "subtitle_one": "{{agent}} може використовувати {{count}} інструмент.",
-    "subtitle_other": "{{agent}} може використовувати інструментів: {{count}}.",
     "chatMode": "Режим чату",
     "permissions": "Поточні дозволи",
     "reads": "Це завдання може читати",
@@ -1590,8 +1629,6 @@
     },
     "rows": {
       "vaultContext": "Контекст сховища",
-      "referencesPlusContext_one": "{{count}} явне посилання та активний контекст",
-      "referencesPlusContext_other": "Явних посилань: {{count}}, плюс активний контекст",
       "activeContext": "Активна нотатка та знімок контексту графа",
       "readTools": "Інструменти читання сховища",
       "enabledCount": "Увімкнено: {{count}}",
@@ -1605,12 +1642,22 @@
       "off": "Вимк.",
       "disabledInSettings": "Вимкнено в налаштуваннях",
       "custom": "Користувацькі інструменти",
-      "customEnabled_one": "Увімкнено {{count}} інструмент MCP, OpenAPI або CLI",
-      "customEnabled_other": "Увімкнено інструментів MCP, OpenAPI або CLI: {{count}}",
       "noneEnabled": "Нічого не увімкнено",
       "destructive": "Руйнівні дії у сховищі",
-      "notProvided": "Не надаються вбудованими інструментами"
-    }
+      "notProvided": "Не надаються вбудованими інструментами",
+      "customEnabled_one": "Увімкнено {{count}} інструмент MCP, OpenAPI або CLI",
+      "customEnabled_few": "Увімкнено {{count}} інструменти MCP, OpenAPI або CLI",
+      "customEnabled_many": "Увімкнено {{count}} інструментів MCP, OpenAPI або CLI",
+      "customEnabled_other": "Увімкнено {{count}} інструмента MCP, OpenAPI або CLI",
+      "referencesPlusContext_one": "{{count}} явне посилання плюс активний контекст",
+      "referencesPlusContext_few": "{{count}} явні посилання плюс активний контекст",
+      "referencesPlusContext_many": "{{count}} явних посилань плюс активний контекст",
+      "referencesPlusContext_other": "{{count}} явного посилання плюс активний контекст"
+    },
+    "subtitle_one": "{{agent}} може використовувати {{count}} інструмент.",
+    "subtitle_few": "{{agent}} може використовувати {{count}} інструменти.",
+    "subtitle_many": "{{agent}} може використовувати {{count}} інструментів.",
+    "subtitle_other": "{{agent}} може використовувати {{count}} інструмента."
   },
   "markdown": {
     "run": "Запустити"
@@ -1618,14 +1665,16 @@
   "rag": {
     "notices": {
       "noFiles": "Немає нотаток Markdown для індексування.",
-      "starting_one": "Індексування {{count}} нотатки…",
-      "starting_other": "Індексування нотаток: {{count}}…",
       "progress": "Індексування: {{done}} з {{total}} нотаток",
       "completed": "Індексування завершено: проіндексовано {{indexed}}, з помилкою {{failed}}.",
       "noIndex": "Ще нічого не проіндексовано. Запустіть «Embed all documents», щоб проіндексувати сховище.",
       "gradingError": "Помилка оцінювання документів: {{message}}",
       "clearing": "Очищення індексу…",
-      "cleared": "Індекс очищено."
+      "cleared": "Індекс очищено.",
+      "starting_one": "Індексування {{count}} нотатки…",
+      "starting_few": "Індексування {{count}} нотаток…",
+      "starting_many": "Індексування {{count}} нотаток…",
+      "starting_other": "Індексування {{count}} нотатки…"
     }
   }
 }

@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Visa och hantera modeller från alla konfigurerade leverantörer. Klicka på \"uppdatera modeller\" för att hämta de senaste tillgängliga modellerna.",
-      "providerCount_one": "{{count}} leverantör konfigurerad",
-      "providerCount_other": "{{count}} leverantörer konfigurerade",
-      "providerCount": "{{count}} leverantörer konfigurerade",
       "refreshAll": "uppdatera alla modeller",
       "empty": "Inga leverantörer konfigurerade ännu. Lägg till leverantörer på leverantörsfliken först.",
       "noModels": "Inga modeller tillgängliga. Klicka på \"uppdatera alla modeller\" eller uppdatera enskilda leverantörer på leverantörsfliken.",
       "noMatch": "Inga modeller matchar de aktuella filtren. Justera eller rensa filter för att se resultat.",
-      "modelCount_one": "• {{count}} modell cachad",
-      "modelCount_other": "• {{count}} modeller cachade",
-      "modelCount": "• {{count}} modeller cachade",
-      "matchCount_one": "• {{count}} träff på valda filter",
-      "matchCount_other": "• {{count}} träffar på valda filter",
-      "matchCount": "• {{count}} träffar på valda filter",
       "status": {
         "enabled": "Aktiverad",
         "disabled": "Inaktiverad"
@@ -92,12 +83,15 @@
         "capabilities": "Funktioner",
         "status": "Status",
         "actions": "Åtgärder"
-      }
+      },
+      "matchCount_one": "• {{count}} träff för valda filter",
+      "matchCount_other": "• {{count}} träffar för valda filter",
+      "modelCount_one": "• {{count}} modell cachad",
+      "modelCount_other": "• {{count}} modeller cachade",
+      "providerCount_one": "{{count}} leverantör konfigurerad",
+      "providerCount_other": "{{count}} leverantörer konfigurerade"
     },
     "provider": {
-      "count_one": "{{count}} leverantör konfigurerad",
-      "count_other": "{{count}} leverantörer konfigurerade",
-      "count": "{{count}} leverantörer konfigurerade",
       "addBtn": "+ Lägg till leverantör",
       "empty": "Inga leverantörer konfigurerade. Välj \"Lägg till leverantör\" för att komma igång.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "Inga modeller",
         "count_one": "{{count}} modell",
-        "count_other": "{{count}} modeller",
-        "count": "{{count}} modeller"
+        "count_other": "{{count}} modeller"
       },
       "ollama": {
         "checkingVersion": "Kontrollerar version...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "Ta bort leverantören {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} leverantör konfigurerad",
+      "count_other": "{{count}} leverantörer konfigurerade"
     },
     "mcp": {
       "desc": "Konfigurera Model Context Protocol (MCP)-servrar för att utöka agentfunktioner med externa verktyg och datakällor.",
@@ -165,9 +160,6 @@
       "untitled": "Namnlös MCP-server",
       "notConfigured": "Inte konfigurerad",
       "cached": "Cachad",
-      "envVars_one": "{{count}} miljövariabel",
-      "envVars_other": "{{count}} miljövariabler",
-      "envVars": "{{count}} miljövariabler",
       "status": {
         "disabled": "Inaktiverad",
         "connected": "ansluten",
@@ -177,12 +169,10 @@
         "autoConnect": "Automatisk anslutning"
       },
       "toolCount": {
-        "live_one": "{{count}} live-verktyg",
-        "live_other": "{{count}} live-verktyg",
-        "live": "{{count}} live-verktyg",
         "cached_one": "{{count}} cachat verktyg",
         "cached_other": "{{count}} cachade verktyg",
-        "cached": "{{count}} cachade verktyg"
+        "live_one": "{{count}} live-verktyg",
+        "live_other": "{{count}} live-verktyg"
       },
       "actions": {
         "edit": "Redigera",
@@ -204,27 +194,28 @@
         "disconnectFailed": "Det gick inte att koppla från {{name}}",
         "connectFailed": "Det gick inte att ansluta till {{name}}",
         "testNoCommand": "ange ett kommando innan du testar anslutningen",
-        "testSuccess": "anslutningen lyckades! Hittade {{count}} verktyg.",
         "testFailed": "Anslutningen misslyckades: {{message}}",
-        "refreshedAll_one": "verktyg uppdaterades för {{count}} server",
-        "refreshedAll_other": "verktyg uppdaterades för {{count}} servrar",
-        "refreshedAll": "verktyg uppdaterades för {{count}} servrar",
         "refreshedPartial": "{{success}} servrar uppdaterades, {{failed}} misslyckades",
         "noServersConfigured": "Inga MCP-servrar konfigurerade",
-        "testingAll": "Testar {{count}} MCP-serveranslutningar...",
-        "testAllSuccess": "alla {{count}} mcp-servrar anslutna!",
-        "testAllPartial": "{{successful}} anslutna, {{failed}} misslyckades"
+        "testAllPartial": "{{successful}} anslutna, {{failed}} misslyckades",
+        "refreshedAll_one": "Verktyg uppdaterade för {{count}} server",
+        "refreshedAll_other": "Verktyg uppdaterade för {{count}} servrar",
+        "testAllSuccess_one": "{{count}} MCP-server anslöts.",
+        "testAllSuccess_other": "Alla {{count}} MCP-servrar anslöts.",
+        "testSuccess_one": "Ansluten. Hittade {{count}} verktyg.",
+        "testSuccess_other": "Ansluten. Hittade {{count}} verktyg.",
+        "testingAll_one": "Testar {{count}} MCP-serveranslutning…",
+        "testingAll_other": "Testar {{count}} MCP-serveranslutningar…"
       },
       "confirm": {
         "delete": "Ta bort MCP-servern \"{{name}}\"?"
       },
-      "namePlaceholder": "Acme MCP-server"
+      "namePlaceholder": "Acme MCP-server",
+      "envVars_one": "{{count}} miljövariabel",
+      "envVars_other": "{{count}} miljövariabler"
     },
     "agents": {
       "desc": "Skapa och hantera AI-agenter med specifika funktioner, verktyg och beteenden.",
-      "count_one": "{{count}} agent konfigurerad",
-      "count_other": "{{count}} agenter konfigurerade",
-      "count": "{{count}} agenter konfigurerade",
       "addBtn": "+ lägg till agent",
       "empty": "Inga agenter konfigurerade. Välj lägg till agent för att komma igång.",
       "defaultBadge": "Standard",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} inbyggd",
-        "mcpServer_one": "{{count}} mcp-server",
-        "mcpServer_other": "{{count}} mcp-servrar",
-        "mcpServer": "{{count}} mcp-servrar",
-        "mcpTool_one": "{{count}} mcp-verktyg",
-        "mcpTool_other": "{{count}} mcp-verktyg",
-        "mcpTool": "{{count}} mcp-verktyg"
+        "mcpServer_one": "{{count}} MCP-server",
+        "mcpServer_other": "{{count}} MCP-servrar",
+        "mcpTool_one": "{{count}} MCP-verktyg",
+        "mcpTool_other": "{{count}} MCP-verktyg"
       },
       "actions": {
         "edit": "Redigera",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "Ta bort agenten \"{{name}}\"?"
-      }
+      },
+      "count_one": "{{count}} agent konfigurerad",
+      "count_other": "{{count}} agenter konfigurerade"
     },
     "prompts": {
       "desc": "Hantera systempromptar som definierar beteende och personlighet hos din AI-assistent.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP-källa borttagen",
-          "reloaded": "{{count}} åtgärder omladdade",
-          "reloadFailed": "Det gick inte att ladda om HTTP-källan. Kontrollera konsolen för detaljer."
+          "reloadFailed": "Det gick inte att ladda om HTTP-källan. Kontrollera konsolen för detaljer.",
+          "reloaded_one": "{{count}} operation laddades om",
+          "reloaded_other": "{{count}} operationer laddades om"
         },
         "modal": {
           "defaultTitle": "HTTP-källa",
@@ -419,9 +411,6 @@
           "actions": "Åtgärder"
         },
         "unnamed": "Namnlöst CLI-verktyg",
-        "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parametrar",
-        "paramCount": "{{count}} parametrar",
         "noParams": "Inga",
         "statusEnabled": "Aktiverad",
         "statusDisabled": "Inaktiverad",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Skärmbild",
             "preset-applescript-list-apps": "Lista aktiva appar"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parametrar"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Prefix (emoji eller text) att visa före alla snabbåtgärder i snabbmenyn",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} åtgärd konfigurerad ({{enabled}} aktiverade)",
-      "count_other": "{{count}} åtgärder konfigurerade ({{enabled}} aktiverade)",
-      "count": "{{count}} åtgärder konfigurerade ({{enabled}} aktiverade)",
       "addBtn": "+ lägg till snabbåtgärd",
       "empty": "Inga snabbåtgärder konfigurerade. Välj lägg till snabbåtgärd för att komma igång.",
       "defaultModel": "Standard",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Gör texten längre",
         "prompt": "Utveckla och fördjupa följande text…"
-      }
+      },
+      "count_one": "{{count}} åtgärd konfigurerad (aktiverade: {{enabled}})",
+      "count_other": "{{count}} åtgärder konfigurerade (aktiverade: {{enabled}})"
     },
     "usage": {
       "desc": "Spåra tokenkonsumtion för leverantörer och modeller. Data ackumuleras över alla konversationer.",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG är inaktiverat i inställningarna. Aktivera det under inställningar → chattfunktioner → RAG.",
       "webSearchDisabled": "Webbsökning är inaktiverat i inställningarna. Aktivera det under inställningar → chattfunktioner → webbsökning.",
       "attached": "Bifogad: {{name}}",
-      "attachedImages": "{{count}} bild(er) bifogade",
-      "referencesAdded": "{{count}} referens(er) tillagda",
       "fileNotFound": "Filen hittades inte: {{path}}",
       "unableToLoadRag": "Kan inte ladda RAG-statistik.",
       "referenced": "Refererad: {{name}}",
-      "openViewFailed": "Det gick inte att öppna chattvyn."
+      "openViewFailed": "Det gick inte att öppna chattvyn.",
+      "attachedImages_one": "{{count}} bild bifogad",
+      "attachedImages_other": "{{count}} bilder bifogade",
+      "referencesAdded_one": "{{count}} referens tillagd",
+      "referencesAdded_other": "{{count}} referenser tillagda"
     },
     "status": {
       "unavailable": "Ej tillgänglig",
@@ -1020,9 +1012,8 @@
       "step2": "Aktivera RAG",
       "step3": "Välj index-valv",
       "close": "Stäng",
-      "retrieved_one": "hämtat från {{count}} dokument",
-      "retrieved_other": "hämtat från {{count}} dokument",
-      "retrieved": "hämtat från {{count}} dokument"
+      "retrieved_one": "Hämtat från {{count}} dokument",
+      "retrieved_other": "Hämtat från {{count}} dokument"
     },
     "ragTooltip": {
       "status": "RAG-indexstatus:",
@@ -1141,8 +1132,6 @@
       "apply": "Tillämpa",
       "applyAll": "Tillämpa alla",
       "applied": "Tillämpad",
-      "changes_one": "{{count}} ändring",
-      "changes_other": "{{count}} ändringar",
       "confirm": "Tillämpa {{summary}}?",
       "appliedNotice": "Tillämpade {{summary}}",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Ta bort",
         "move": "Flytta",
         "batch": "Batch"
-      }
+      },
+      "changes_one": "{{count}} ändring",
+      "changes_other": "{{count}} ändringar"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP-åtkomst",
         "noServers": "Inga MCP-servrar konfigurerade. Lägg till servrar under Inställningar → MCP för att låsa upp dessa alternativ.",
-        "toolsCached_one": "{{count}} verktyg cachat",
-        "toolsCached_other": "{{count}} verktyg cachade",
-        "toolsCached": "{{count}} verktyg cachade",
         "noToolsCached": "Inga verktyg cachade ännu. Aktivera full åtkomst eller uppdatera cachen.",
         "showTools": "Visa verktyg",
         "hideTools": "Dölj verktyg",
         "selected": "Vald",
         "notSelected": "Inte vald",
-        "noToolsAvailable": "Inga verktyg tillgängliga från den här servern ännu."
+        "noToolsAvailable": "Inga verktyg tillgängliga från den här servern ännu.",
+        "toolsCached_one": "{{count}} verktyg cachat",
+        "toolsCached_other": "{{count}} verktyg cachade"
       },
       "notices": {
         "promptRequired": "Ange ett namn och innehåll för den nya systemprompt."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Cachade modeller: {{count}}",
       "connectionFailed": "Anslutningstestet misslyckades. Kontrollera leverantörsinställningarna.",
-      "connectionSuccess": "Anslutningen lyckades. {{count}} modell(er) cachade.",
       "noCachedModels": "Inga cachade modeller",
       "testConnection": "Testa anslutning",
-      "testing": "Testar..."
+      "testing": "Testar...",
+      "connectionSuccess_one": "Anslutningen lyckades. {{count}} modell cachad.",
+      "connectionSuccess_other": "Anslutningen lyckades. {{count}} modeller cachade."
     },
     "mcpInspector": {
       "title": "MCP-inspektör",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Inaktiverad",
         "statusConnected": "● ansluten",
         "statusDisconnected": "○ frånkopplad",
-        "toolsLive_one": "{{count}} verktyg",
-        "toolsLive_other": "{{count}} verktyg",
-        "toolsLive": "{{count}} verktyg",
-        "toolsCached_one": "{{count}} verktyg (cachat)",
-        "toolsCached_other": "{{count}} verktyg (cachade)",
-        "toolsCached": "{{count}} verktyg (cachade)",
         "noTools": "0 verktyg",
         "connectBtn": "Anslut",
         "disconnectBtn": "Koppla från",
@@ -1346,7 +1331,11 @@
           "connected": "Ansluten till {{name}}",
           "failedDisconnect": "Det gick inte att koppla från {{name}}: {{message}}",
           "failedConnect": "Det gick inte att ansluta till {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} verktyg (cachat)",
+        "toolsCached_other": "{{count}} verktyg (cachade)",
+        "toolsLive_one": "{{count}} verktyg",
+        "toolsLive_other": "{{count}} verktyg"
       },
       "tools": {
         "title": "Tillgängliga MCP-verktyg",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Verktyg och behörigheter",
-    "subtitle_one": "{{agent}} kan använda {{count}} verktyg.",
-    "subtitle_other": "{{agent}} kan använda {{count}} verktyg.",
     "chatMode": "Chattläge",
     "permissions": "Aktuella behörigheter",
     "reads": "Den här uppgiften kan läsa",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Valvkontext",
-      "referencesPlusContext_one": "{{count}} explicit referens plus aktiv kontext",
-      "referencesPlusContext_other": "{{count}} explicita referenser plus aktiv kontext",
       "activeContext": "Aktiv anteckning och ögonblicksbild av grafkontext",
       "readTools": "Läsverktyg för valvet",
       "enabledCount": "{{count}} aktiverade",
@@ -1605,12 +1590,16 @@
       "off": "Av",
       "disabledInSettings": "Inaktiverad i inställningarna",
       "custom": "Anpassade verktyg",
-      "customEnabled_one": "{{count}} MCP-, OpenAPI- eller CLI-verktyg aktiverat",
-      "customEnabled_other": "{{count}} MCP-, OpenAPI- eller CLI-verktyg aktiverade",
       "noneEnabled": "Inga aktiverade",
       "destructive": "Destruktiva valvåtgärder",
-      "notProvided": "Tillhandahålls inte av inbyggda verktyg"
-    }
+      "notProvided": "Tillhandahålls inte av inbyggda verktyg",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- eller CLI-verktyg aktiverat",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- eller CLI-verktyg aktiverade",
+      "referencesPlusContext_one": "{{count}} explicit referens plus aktiv kontext",
+      "referencesPlusContext_other": "{{count}} explicita referenser plus aktiv kontext"
+    },
+    "subtitle_one": "{{agent}} kan använda {{count}} verktyg.",
+    "subtitle_other": "{{agent}} kan använda {{count}} verktyg."
   },
   "markdown": {
     "run": "Kör"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Inga Markdown-anteckningar att indexera.",
-      "starting_one": "Indexerar {{count}} anteckning…",
-      "starting_other": "Indexerar {{count}} anteckningar…",
       "progress": "Indexerar: {{done}} av {{total}} anteckningar",
       "completed": "Indexering klar: {{indexed}} indexerade, {{failed}} misslyckades.",
       "noIndex": "Inget är indexerat än. Kör \"Embed all documents\" för att indexera ditt valv.",
       "gradingError": "Dokumentbedömningen misslyckades: {{message}}",
       "clearing": "Rensar indexet…",
-      "cleared": "Indexet har rensats."
+      "cleared": "Indexet har rensats.",
+      "starting_one": "Indexerar {{count}} anteckning…",
+      "starting_other": "Indexerar {{count}} anteckningar…"
     }
   }
 }

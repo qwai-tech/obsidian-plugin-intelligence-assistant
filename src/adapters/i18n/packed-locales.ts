@@ -6,7 +6,7 @@ export function unpackLocale(lang: string, keys: readonly string[]): Record<stri
 	if (!packed) {
 		return undefined;
 	}
-	const values = JSON.parse(brotliDecompressSync(Buffer.from(packed, 'base64')).toString('utf8')) as Array<string | null>;
+	const [values, extras] = JSON.parse(brotliDecompressSync(Buffer.from(packed, 'base64')).toString('utf8')) as [Array<string | null>, Record<string, string>];
 	const tree: Record<string, unknown> = {};
 	keys.forEach((key, index) => {
 		const value = values[index];
@@ -14,6 +14,9 @@ export function unpackLocale(lang: string, keys: readonly string[]): Record<stri
 			setPath(tree, key.split('.'), value);
 		}
 	});
+	for (const [key, value] of Object.entries(extras)) {
+		setPath(tree, key.split('.'), value);
+	}
 	return tree;
 }
 

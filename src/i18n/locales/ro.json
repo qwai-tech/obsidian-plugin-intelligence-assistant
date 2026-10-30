@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Vizualizați și gestionați modele de la toți furnizorii configurați. Apăsați „reîmprospătare modele“ pentru a obține cele mai recente modele disponibile.",
-      "providerCount_one": "{{count}} furnizor configurat",
-      "providerCount_other": "{{count}} furnizori configurați",
-      "providerCount": "{{count}} furnizori configurați",
       "refreshAll": "reîmprospătare toate modelele",
       "empty": "Niciun furnizor configurat. Adăugați mai întâi furnizori în fila furnizori.",
       "noModels": "Niciun model disponibil. Apăsați „reîmprospătare toate modelele“ sau reîmprospătați furnizorii individuali din fila furnizori.",
       "noMatch": "Niciun model nu corespunde filtrelor curente. Ajustați sau ștergeți filtrele pentru a vedea rezultate.",
-      "modelCount_one": "• {{count}} model în cache",
-      "modelCount_other": "• {{count}} modele în cache",
-      "modelCount": "• {{count}} modele în cache",
-      "matchCount_one": "• {{count}} corespunde filtrelor selectate",
-      "matchCount_other": "• {{count}} corespund filtrelor selectate",
-      "matchCount": "• {{count}} corespund filtrelor selectate",
       "status": {
         "enabled": "Activat",
         "disabled": "Dezactivat"
@@ -92,12 +83,18 @@
         "capabilities": "Capacități",
         "status": "Stare",
         "actions": "Acțiuni"
-      }
+      },
+      "matchCount_one": "• {{count}} rezultat corespunde filtrelor selectate",
+      "matchCount_few": "• {{count}} rezultate corespund filtrelor selectate",
+      "matchCount_other": "• {{count}} de rezultate corespund filtrelor selectate",
+      "modelCount_one": "• {{count}} model în cache",
+      "modelCount_few": "• {{count}} modele în cache",
+      "modelCount_other": "• {{count}} de modele în cache",
+      "providerCount_one": "{{count}} furnizor configurat",
+      "providerCount_few": "{{count}} furnizori configurați",
+      "providerCount_other": "{{count}} de furnizori configurați"
     },
     "provider": {
-      "count_one": "{{count}} furnizor configurat",
-      "count_other": "{{count}} furnizori configurați",
-      "count": "{{count}} furnizori configurați",
       "addBtn": "+ Adăugați furnizor",
       "empty": "Niciun furnizor configurat. Selectați „Adăugați furnizor“ pentru a începe.",
       "status": {
@@ -116,8 +113,8 @@
       "models": {
         "none": "Niciun model",
         "count_one": "{{count}} model",
-        "count_other": "{{count}} modele",
-        "count": "{{count}} modele"
+        "count_few": "{{count}} modele",
+        "count_other": "{{count}} de modele"
       },
       "ollama": {
         "checkingVersion": "Se verifică versiunea...",
@@ -153,7 +150,10 @@
       },
       "confirm": {
         "delete": "Eliminați furnizorul {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} furnizor configurat",
+      "count_few": "{{count}} furnizori configurați",
+      "count_other": "{{count}} de furnizori configurați"
     },
     "mcp": {
       "desc": "Configurați serverele Model Context Protocol (MCP) pentru a extinde capacitățile agentului cu instrumente externe și surse de date.",
@@ -165,9 +165,6 @@
       "untitled": "Server MCP fără titlu",
       "notConfigured": "Neconfigurat",
       "cached": "În cache",
-      "envVars_one": "{{count}} variabilă env",
-      "envVars_other": "{{count}} variabile env",
-      "envVars": "{{count}} variabile env",
       "status": {
         "disabled": "Dezactivat",
         "connected": "conectat",
@@ -177,12 +174,12 @@
         "autoConnect": "Conectare automată"
       },
       "toolCount": {
+        "cached_one": "{{count}} instrument din cache",
+        "cached_few": "{{count}} instrumente din cache",
+        "cached_other": "{{count}} de instrumente din cache",
         "live_one": "{{count}} instrument activ",
-        "live_other": "{{count}} instrumente active",
-        "live": "{{count}} instrumente active",
-        "cached_one": "{{count}} instrument în cache",
-        "cached_other": "{{count}} instrumente în cache",
-        "cached": "{{count}} instrumente în cache"
+        "live_few": "{{count}} instrumente active",
+        "live_other": "{{count}} de instrumente active"
       },
       "actions": {
         "edit": "Editați",
@@ -204,27 +201,33 @@
         "disconnectFailed": "Deconectarea de la {{name}} a eșuat",
         "connectFailed": "Conectarea la {{name}} a eșuat",
         "testNoCommand": "introduceți o comandă înainte de testarea conexiunii",
-        "testSuccess": "conectat cu succes! Au fost găsite {{count}} instrumente.",
         "testFailed": "Conexiunea a eșuat: {{message}}",
-        "refreshedAll_one": "instrumente reîmprospătate pentru {{count}} server",
-        "refreshedAll_other": "instrumente reîmprospătate pentru {{count}} servere",
-        "refreshedAll": "instrumente reîmprospătate pentru {{count}} servere",
         "refreshedPartial": "{{success}} servere reîmprospătate, {{failed}} eșuate",
         "noServersConfigured": "Niciun server MCP configurat",
-        "testingAll": "Se testează {{count}} conexiuni server MCP...",
-        "testAllSuccess": "toate {{count}} servere mcp conectate cu succes!",
-        "testAllPartial": "{{successful}} conectate, {{failed}} eșuate"
+        "testAllPartial": "{{successful}} conectate, {{failed}} eșuate",
+        "refreshedAll_one": "Instrumente reîmprospătate pentru {{count}} server",
+        "refreshedAll_few": "Instrumente reîmprospătate pentru {{count}} servere",
+        "refreshedAll_other": "Instrumente reîmprospătate pentru {{count}} de servere",
+        "testAllSuccess_one": "{{count}} server MCP conectat cu succes.",
+        "testAllSuccess_few": "Toate cele {{count}} servere MCP s-au conectat cu succes.",
+        "testAllSuccess_other": "Toate cele {{count}} de servere MCP s-au conectat cu succes.",
+        "testSuccess_one": "Conectat. A fost găsit {{count}} instrument.",
+        "testSuccess_few": "Conectat. Au fost găsite {{count}} instrumente.",
+        "testSuccess_other": "Conectat. Au fost găsite {{count}} de instrumente.",
+        "testingAll_one": "Se testează {{count}} conexiune la serverul MCP…",
+        "testingAll_few": "Se testează {{count}} conexiuni la serverele MCP…",
+        "testingAll_other": "Se testează {{count}} de conexiuni la serverele MCP…"
       },
       "confirm": {
         "delete": "Ștergeți serverul MCP „{{name}}“?"
       },
-      "namePlaceholder": "Server MCP Acme"
+      "namePlaceholder": "Server MCP Acme",
+      "envVars_one": "{{count}} variabilă de mediu",
+      "envVars_few": "{{count}} variabile de mediu",
+      "envVars_other": "{{count}} de variabile de mediu"
     },
     "agents": {
       "desc": "Creați și gestionați agenți AI cu capacități, instrumente și comportamente specifice.",
-      "count_one": "{{count}} agent configurat",
-      "count_other": "{{count}} agenți configurați",
-      "count": "{{count}} agenți configurați",
       "addBtn": "+ adăugați agent",
       "empty": "Niciun agent configurat. Selectați adăugați agent pentru a începe.",
       "defaultBadge": "Implicit",
@@ -237,12 +240,12 @@
       },
       "tools": {
         "builtIn": "{{count}} incorporat",
-        "mcpServer_one": "{{count}} server mcp",
-        "mcpServer_other": "{{count}} servere mcp",
-        "mcpServer": "{{count}} servere mcp",
-        "mcpTool_one": "{{count}} instrument mcp",
-        "mcpTool_other": "{{count}} instrumente mcp",
-        "mcpTool": "{{count}} instrumente mcp"
+        "mcpServer_one": "{{count}} server MCP",
+        "mcpServer_few": "{{count}} servere MCP",
+        "mcpServer_other": "{{count}} de servere MCP",
+        "mcpTool_one": "{{count}} instrument MCP",
+        "mcpTool_few": "{{count}} instrumente MCP",
+        "mcpTool_other": "{{count}} de instrumente MCP"
       },
       "actions": {
         "edit": "Editați",
@@ -250,7 +253,10 @@
       },
       "confirm": {
         "delete": "Ștergeți agentul „{{name}}“?"
-      }
+      },
+      "count_one": "{{count}} agent configurat",
+      "count_few": "{{count}} agenți configurați",
+      "count_other": "{{count}} de agenți configurați"
     },
     "prompts": {
       "desc": "Gestionați prompturile de sistem care definesc comportamentul și personalitatea asistentului dvs. AI.",
@@ -352,8 +358,10 @@
         },
         "notices": {
           "removed": "Sursă HTTP eliminată",
-          "reloaded": "{{count}} operații reîncărcate",
-          "reloadFailed": "Reîncărcarea sursei HTTP a eșuat. Verificați consola pentru detalii."
+          "reloadFailed": "Reîncărcarea sursei HTTP a eșuat. Verificați consola pentru detalii.",
+          "reloaded_one": "{{count}} operație reîncărcată",
+          "reloaded_few": "{{count}} operații reîncărcate",
+          "reloaded_other": "{{count}} de operații reîncărcate"
         },
         "modal": {
           "defaultTitle": "Sursă HTTP",
@@ -419,9 +427,6 @@
           "actions": "Acțiuni"
         },
         "unnamed": "Instrument CLI fără nume",
-        "paramCount_one": "{{count}} parametru",
-        "paramCount_other": "{{count}} parametri",
-        "paramCount": "{{count}} parametri",
         "noParams": "Niciunul",
         "statusEnabled": "Activat",
         "statusDisabled": "Dezactivat",
@@ -554,7 +559,10 @@
             "preset-screencapture": "Captură ecran",
             "preset-applescript-list-apps": "Listare aplicații active"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parametru",
+        "paramCount_few": "{{count}} parametri",
+        "paramCount_other": "{{count}} de parametri"
       }
     },
     "rag": {
@@ -844,9 +852,6 @@
         "desc": "Prefix (emoji sau text) de afișat înaintea tuturor acțiunilor rapide în meniul contextual",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} acțiune configurată ({{enabled}} activate)",
-      "count_other": "{{count}} acțiuni configurate ({{enabled}} activate)",
-      "count": "{{count}} acțiuni configurate ({{enabled}} activate)",
       "addBtn": "+ adăugați acțiune rapidă",
       "empty": "Nicio acțiune rapidă configurată. Selectați adăugați acțiune rapidă pentru a începe.",
       "defaultModel": "Implicit",
@@ -912,7 +917,10 @@
       "placeholders": {
         "name": "Faceți textul mai lung",
         "prompt": "Extindeți și dezvoltați textul următor…"
-      }
+      },
+      "count_one": "{{count}} acțiune configurată (activate: {{enabled}})",
+      "count_few": "{{count}} acțiuni configurate (activate: {{enabled}})",
+      "count_other": "{{count}} de acțiuni configurate (activate: {{enabled}})"
     },
     "usage": {
       "desc": "Urmăriți consumul de tokeni pe furnizori și modele. Datele sunt acumulate în toate conversațiile.",
@@ -994,12 +1002,16 @@
       "ragDisabled": "RAG este dezactivat în setări. Activați-l în setări → funcții chat → RAG.",
       "webSearchDisabled": "Căutarea web este dezactivată în setări. Activați-o în setări → funcții chat → căutare web.",
       "attached": "Atașat: {{name}}",
-      "attachedImages": "Atașate {{count}} imagini",
-      "referencesAdded": "Adăugate {{count}} referințe",
       "fileNotFound": "Fișierul nu a fost găsit: {{path}}",
       "unableToLoadRag": "Nu se pot încărca statisticile RAG.",
       "referenced": "Referențiat: {{name}}",
-      "openViewFailed": "Nu s-a putut deschide vizualizarea de chat."
+      "openViewFailed": "Nu s-a putut deschide vizualizarea de chat.",
+      "attachedImages_one": "{{count}} imagine atașată",
+      "attachedImages_few": "{{count}} imagini atașate",
+      "attachedImages_other": "{{count}} de imagini atașate",
+      "referencesAdded_one": "{{count}} referință adăugată",
+      "referencesAdded_few": "{{count}} referințe adăugate",
+      "referencesAdded_other": "{{count}} de referințe adăugate"
     },
     "status": {
       "unavailable": "Indisponibil",
@@ -1020,9 +1032,9 @@
       "step2": "Activați RAG",
       "step3": "Selectați indexare seif",
       "close": "Închideți",
-      "retrieved_one": "obținut din {{count}} document",
-      "retrieved_other": "obținut din {{count}} documente",
-      "retrieved": "obținut din {{count}} documente"
+      "retrieved_one": "Obținut din {{count}} document",
+      "retrieved_few": "Obținut din {{count}} documente",
+      "retrieved_other": "Obținut din {{count}} de documente"
     },
     "ragTooltip": {
       "status": "Starea indexului RAG:",
@@ -1141,8 +1153,6 @@
       "apply": "Aplicați",
       "applyAll": "Aplicați tot",
       "applied": "Aplicat",
-      "changes_one": "{{count}} modificare",
-      "changes_other": "{{count}} modificări",
       "confirm": "Aplicați {{summary}}?",
       "appliedNotice": "Aplicat: {{summary}}",
       "operations": {
@@ -1152,7 +1162,10 @@
         "delete": "Ștergere",
         "move": "Mutare",
         "batch": "Lot"
-      }
+      },
+      "changes_one": "{{count}} modificare",
+      "changes_few": "{{count}} modificări",
+      "changes_other": "{{count}} de modificări"
     }
   },
   "modals": {
@@ -1213,15 +1226,15 @@
       "mcp": {
         "title": "Acces MCP",
         "noServers": "Niciun server MCP configurat. Adăugați servere în Setări → MCP pentru a debloca aceste opțiuni.",
-        "toolsCached_one": "{{count}} instrument în cache",
-        "toolsCached_other": "{{count}} instrumente în cache",
-        "toolsCached": "{{count}} instrumente în cache",
         "noToolsCached": "Niciun instrument în cache. Activați accesul complet sau reîmprospătați cache-ul.",
         "showTools": "Afișați instrumente",
         "hideTools": "Ascundeți instrumente",
         "selected": "Selectat",
         "notSelected": "Neselectat",
-        "noToolsAvailable": "Niciun instrument disponibil de pe acest server."
+        "noToolsAvailable": "Niciun instrument disponibil de pe acest server.",
+        "toolsCached_one": "{{count}} instrument în cache",
+        "toolsCached_few": "{{count}} instrumente în cache",
+        "toolsCached_other": "{{count}} de instrumente în cache"
       },
       "notices": {
         "promptRequired": "Furnizați un nume și conținut pentru noul prompt de sistem."
@@ -1303,10 +1316,12 @@
       },
       "cachedModels": "Modele în cache: {{count}}",
       "connectionFailed": "Testul conexiunii a eșuat. Verificați setările furnizorului.",
-      "connectionSuccess": "Conexiune reușită. {{count}} model(e) în cache.",
       "noCachedModels": "Niciun model în cache",
       "testConnection": "Testați conexiunea",
-      "testing": "Se testează..."
+      "testing": "Se testează...",
+      "connectionSuccess_one": "Conexiune reușită. {{count}} model în cache.",
+      "connectionSuccess_few": "Conexiune reușită. {{count}} modele în cache.",
+      "connectionSuccess_other": "Conexiune reușită. {{count}} de modele în cache."
     },
     "mcpInspector": {
       "title": "Inspector MCP",
@@ -1329,12 +1344,6 @@
         "statusDisabled": "Dezactivat",
         "statusConnected": "● conectat",
         "statusDisconnected": "○ deconectat",
-        "toolsLive_one": "{{count}} instrument",
-        "toolsLive_other": "{{count}} instrumente",
-        "toolsLive": "{{count}} instrumente",
-        "toolsCached_one": "{{count}} instrument (în cache)",
-        "toolsCached_other": "{{count}} instrumente (în cache)",
-        "toolsCached": "{{count}} instrumente (în cache)",
         "noTools": "0 instrumente",
         "connectBtn": "Conectați",
         "disconnectBtn": "Deconectați",
@@ -1346,7 +1355,13 @@
           "connected": "Conectat la {{name}}",
           "failedDisconnect": "Deconectarea de la {{name}} a eșuat: {{message}}",
           "failedConnect": "Conectarea la {{name}} a eșuat: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} instrument (în cache)",
+        "toolsCached_few": "{{count}} instrumente (în cache)",
+        "toolsCached_other": "{{count}} de instrumente (în cache)",
+        "toolsLive_one": "{{count}} instrument",
+        "toolsLive_few": "{{count}} instrumente",
+        "toolsLive_other": "{{count}} de instrumente"
       },
       "tools": {
         "title": "Instrumente MCP disponibile",
@@ -1569,8 +1584,6 @@
   },
   "capability": {
     "title": "Instrumente și permisiuni",
-    "subtitle_one": "{{agent}} poate folosi {{count}} instrument.",
-    "subtitle_other": "{{agent}} poate folosi {{count}} instrumente.",
     "chatMode": "Mod chat",
     "permissions": "Permisiuni curente",
     "reads": "Această sarcină poate citi",
@@ -1590,8 +1603,6 @@
     },
     "rows": {
       "vaultContext": "Contextul seifului",
-      "referencesPlusContext_one": "{{count}} referință explicită plus contextul activ",
-      "referencesPlusContext_other": "{{count}} referințe explicite plus contextul activ",
       "activeContext": "Notița activă și instantaneul contextului grafului",
       "readTools": "Instrumente de citire a seifului",
       "enabledCount": "{{count}} activate",
@@ -1605,12 +1616,19 @@
       "off": "Oprit",
       "disabledInSettings": "Dezactivat în setări",
       "custom": "Instrumente personalizate",
-      "customEnabled_one": "{{count}} instrument MCP, OpenAPI sau CLI activat",
-      "customEnabled_other": "{{count}} instrumente MCP, OpenAPI sau CLI activate",
       "noneEnabled": "Niciunul activat",
       "destructive": "Acțiuni distructive în seif",
-      "notProvided": "Nu sunt oferite de instrumentele integrate"
-    }
+      "notProvided": "Nu sunt oferite de instrumentele integrate",
+      "customEnabled_one": "{{count}} instrument MCP, OpenAPI sau CLI activat",
+      "customEnabled_few": "{{count}} instrumente MCP, OpenAPI sau CLI activate",
+      "customEnabled_other": "{{count}} de instrumente MCP, OpenAPI sau CLI activate",
+      "referencesPlusContext_one": "{{count}} referință explicită plus contextul activ",
+      "referencesPlusContext_few": "{{count}} referințe explicite plus contextul activ",
+      "referencesPlusContext_other": "{{count}} de referințe explicite plus contextul activ"
+    },
+    "subtitle_one": "{{agent}} poate folosi {{count}} instrument.",
+    "subtitle_few": "{{agent}} poate folosi {{count}} instrumente.",
+    "subtitle_other": "{{agent}} poate folosi {{count}} de instrumente."
   },
   "markdown": {
     "run": "Rulați"
@@ -1618,14 +1636,15 @@
   "rag": {
     "notices": {
       "noFiles": "Nu există notițe Markdown de indexat.",
-      "starting_one": "Se indexează {{count}} notiță…",
-      "starting_other": "Se indexează {{count}} notițe…",
       "progress": "Indexare: {{done}} din {{total}} notițe",
       "completed": "Indexare finalizată: {{indexed}} indexate, {{failed}} eșuate.",
       "noIndex": "Nimic nu este indexat încă. Rulați „Embed all documents” pentru a indexa seiful.",
       "gradingError": "Evaluarea documentelor a eșuat: {{message}}",
       "clearing": "Se golește indexul…",
-      "cleared": "Index golit."
+      "cleared": "Index golit.",
+      "starting_one": "Se indexează {{count}} notiță…",
+      "starting_few": "Se indexează {{count}} notițe…",
+      "starting_other": "Se indexează {{count}} de notițe…"
     }
   }
 }

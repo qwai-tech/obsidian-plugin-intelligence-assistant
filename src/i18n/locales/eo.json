@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Rigardu kaj administru modelojn de ĉiuj agorditaj provizantoj. Alklaku \"aktualigi modelojn\" por preni la plej novajn disponeblajn modelojn.",
-      "providerCount_one": "{{count}} provizanto agordita",
-      "providerCount_other": "{{count}} provizantoj agorditaj",
-      "providerCount": "{{count}} provizantoj agorditaj",
       "refreshAll": "aktualigi ĉiujn modelojn",
       "empty": "Neniu provizanto agordita ankoraŭ. Unue aldonu provizantojn en la provizanta langeto.",
       "noModels": "Neniuj modeloj disponeblaj. Alklaku \"aktualigi ĉiujn modelojn\" aŭ aktualigu individuajn provizantojn en la provizanta langeto.",
       "noMatch": "Neniu modelo kongruas kun la nunaj filtroj. Alĝustigu aŭ forigu filtrojn por vidi rezultojn.",
-      "modelCount_one": "• {{count}} modelo en kaŝmemoro",
-      "modelCount_other": "• {{count}} modeloj en kaŝmemoro",
-      "modelCount": "• {{count}} modeloj en kaŝmemoro",
-      "matchCount_one": "• {{count}} kongruas kun elektitaj filtroj",
-      "matchCount_other": "• {{count}} kongruas kun elektitaj filtroj",
-      "matchCount": "• {{count}} kongruas kun elektitaj filtroj",
       "status": {
         "enabled": "Ebligita",
         "disabled": "Malŝaltita"
@@ -92,12 +83,15 @@
         "capabilities": "Kapabloj",
         "status": "Stato",
         "actions": "Agoj"
-      }
+      },
+      "matchCount_one": "• {{count}} kongruas kun la elektitaj filtriloj",
+      "matchCount_other": "• {{count}} kongruas kun la elektitaj filtriloj",
+      "modelCount_one": "• {{count}} modelo en kaŝmemoro",
+      "modelCount_other": "• {{count}} modeloj en kaŝmemoro",
+      "providerCount_one": "{{count}} provizanto agordita",
+      "providerCount_other": "{{count}} provizantoj agorditaj"
     },
     "provider": {
-      "count_one": "{{count}} provizanto agordita",
-      "count_other": "{{count}} provizantoj agorditaj",
-      "count": "{{count}} provizantoj agorditaj",
       "addBtn": "+ Aldoni provizanton",
       "empty": "Neniu provizanto agordita. Elektu \"Aldoni provizanton\" por komenci.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "Neniuj modeloj",
         "count_one": "{{count}} modelo",
-        "count_other": "{{count}} modeloj",
-        "count": "{{count}} modeloj"
+        "count_other": "{{count}} modeloj"
       },
       "ollama": {
         "checkingVersion": "Kontrolante version...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "Forigi provizanton {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} provizanto agordita",
+      "count_other": "{{count}} provizantoj agorditaj"
     },
     "mcp": {
       "desc": "Agordu Model Context Protocol (MCP)-servilojn por etendi agentkapablojn per eksteraj iloj kaj datumfontoj.",
@@ -165,9 +160,6 @@
       "untitled": "Sennoma MCP-Servilo",
       "notConfigured": "Ne agordita",
       "cached": "Kaŝmemorіta",
-      "envVars_one": "{{count}} mediavariablo",
-      "envVars_other": "{{count}} mediavariabloj",
-      "envVars": "{{count}} mediavariabloj",
       "status": {
         "disabled": "Malŝaltita",
         "connected": "konektita",
@@ -177,12 +169,10 @@
         "autoConnect": "Aŭtomata konekto"
       },
       "toolCount": {
+        "cached_one": "{{count}} kaŝmemorigita ilo",
+        "cached_other": "{{count}} kaŝmemorigitaj iloj",
         "live_one": "{{count}} viva ilo",
-        "live_other": "{{count}} vivaj iloj",
-        "live": "{{count}} vivaj iloj",
-        "cached_one": "{{count}} kaŝmemorіta ilo",
-        "cached_other": "{{count}} kaŝmemorіtaj iloj",
-        "cached": "{{count}} kaŝmemorіtaj iloj"
+        "live_other": "{{count}} vivaj iloj"
       },
       "actions": {
         "edit": "Redakti",
@@ -204,27 +194,28 @@
         "disconnectFailed": "Malsukcesis malkonekti de {{name}}",
         "connectFailed": "Malsukcesis konekti al {{name}}",
         "testNoCommand": "bonvolu enigi komandon antaŭ testi la konekton",
-        "testSuccess": "sukcese konektita! Trovitaj {{count}} iloj.",
         "testFailed": "Konekto malsukcesis: {{message}}",
-        "refreshedAll_one": "aktualizitaj iloj por {{count}} servilo",
-        "refreshedAll_other": "aktualizitaj iloj por {{count}} serviloj",
-        "refreshedAll": "aktualizitaj iloj por {{count}} serviloj",
         "refreshedPartial": "aktualizitaj {{success}} serviloj, {{failed}} malsukcesis",
         "noServersConfigured": "Neniu MCP-servilo agordita",
-        "testingAll": "Testante {{count}} MCP-servilkonektojn...",
-        "testAllSuccess": "ĉiuj {{count}} MCP-serviloj sukcese konektitaj!",
-        "testAllPartial": "{{successful}} konektitaj, {{failed}} malsukcesis"
+        "testAllPartial": "{{successful}} konektitaj, {{failed}} malsukcesis",
+        "refreshedAll_one": "Iloj aktualigitaj por {{count}} servilo",
+        "refreshedAll_other": "Iloj aktualigitaj por {{count}} serviloj",
+        "testAllSuccess_one": "{{count}} MCP-servilo sukcese konektita.",
+        "testAllSuccess_other": "Ĉiuj {{count}} MCP-serviloj sukcese konektitaj.",
+        "testSuccess_one": "Konektita. Trovis {{count}} ilon.",
+        "testSuccess_other": "Konektita. Trovis {{count}} ilojn.",
+        "testingAll_one": "Testante {{count}} MCP-servilan konekton…",
+        "testingAll_other": "Testante {{count}} MCP-servilajn konektojn…"
       },
       "confirm": {
         "delete": "Forigi MCP-servilon \"{{name}}\"?"
       },
-      "namePlaceholder": "MCP-servilo de Acme"
+      "namePlaceholder": "MCP-servilo de Acme",
+      "envVars_one": "{{count}} mediavariablo",
+      "envVars_other": "{{count}} mediavariabloj"
     },
     "agents": {
       "desc": "Kreu kaj administru AI-agentojn kun specifaj kapabloj, iloj kaj kondutoj.",
-      "count_one": "{{count}} agento agordita",
-      "count_other": "{{count}} agentoj agorditaj",
-      "count": "{{count}} agentoj agorditaj",
       "addBtn": "+ aldoni agenton",
       "empty": "Neniu agento agordita. Elektu aldoni agenton por komenci.",
       "defaultBadge": "Defaŭlta",
@@ -239,10 +230,8 @@
         "builtIn": "{{count}} enkonstruita",
         "mcpServer_one": "{{count}} MCP-servilo",
         "mcpServer_other": "{{count}} MCP-serviloj",
-        "mcpServer": "{{count}} MCP-serviloj",
         "mcpTool_one": "{{count}} MCP-ilo",
-        "mcpTool_other": "{{count}} MCP-iloj",
-        "mcpTool": "{{count}} MCP-iloj"
+        "mcpTool_other": "{{count}} MCP-iloj"
       },
       "actions": {
         "edit": "Redakti",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "Forigi agenton \"{{name}}\"?"
-      }
+      },
+      "count_one": "{{count}} agento agordita",
+      "count_other": "{{count}} agentoj agorditaj"
     },
     "prompts": {
       "desc": "Administru sistemajn instigilojn kiuj difinas la konduton kaj personon de via AI-asistanto.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP-fonto forigita",
-          "reloaded": "Reŝargitaj {{count}} operacioj",
-          "reloadFailed": "Malsukcesis reŝargi HTTP-fonton. Kontrolu la konzolon por detaloj."
+          "reloadFailed": "Malsukcesis reŝargi HTTP-fonton. Kontrolu la konzolon por detaloj.",
+          "reloaded_one": "Reŝargis {{count}} operacion",
+          "reloaded_other": "Reŝargis {{count}} operaciojn"
         },
         "modal": {
           "defaultTitle": "HTTP-Fonto",
@@ -419,9 +411,6 @@
           "actions": "Agoj"
         },
         "unnamed": "Sennoma CLI-Ilo",
-        "paramCount_one": "{{count}} parametro",
-        "paramCount_other": "{{count}} parametroj",
-        "paramCount": "{{count}} parametroj",
         "noParams": "Neniu",
         "statusEnabled": "Ebligita",
         "statusDisabled": "Malŝaltita",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Ekrankopio",
             "preset-applescript-list-apps": "Listigi Rulantajn Programojn"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parametro",
+        "paramCount_other": "{{count}} parametroj"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Prefikso (emoĝio aŭ teksto) por montri antaŭ ĉiuj rapidaj agoj en la kuntekstmenuo",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} ago agordita ({{enabled}} ebligita)",
-      "count_other": "{{count}} agoj agorditaj ({{enabled}} ebligitaj)",
-      "count": "{{count}} agoj agorditaj ({{enabled}} ebligitaj)",
       "addBtn": "+ aldoni rapidan agon",
       "empty": "Neniu rapida ago agordita. Elektu aldoni rapidan agon por komenci.",
       "defaultModel": "Defaŭlta",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Plilongigi tekston",
         "prompt": "Etendu kaj pliprofundigu la jenan tekston…"
-      }
+      },
+      "count_one": "{{count}} ago agordita (ŝaltitaj: {{enabled}})",
+      "count_other": "{{count}} agoj agorditaj (ŝaltitaj: {{enabled}})"
     },
     "usage": {
       "desc": "Spuri ĵetonan konsumon tra provizantoj kaj modeloj. Datumoj estas amasigataj tra ĉiuj konversacioj.",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG estas malŝaltita en agordoj. Ebligi ĝin sub agordoj → babilfunkciaĵoj → RAG.",
       "webSearchDisabled": "Retserĉo estas malŝaltita en agordoj. Ebligi ĝin sub agordoj → babilfunkciaĵoj → retserĉo.",
       "attached": "Aldonita: {{name}}",
-      "attachedImages": "Aldonitaj {{count}} bildo(j)",
-      "referencesAdded": "Aldonitaj {{count}} referenco(j)",
       "fileNotFound": "Dosiero ne trovita: {{path}}",
       "unableToLoadRag": "Ne eblas ŝargi RAG-statistikojn.",
       "referenced": "Referencita: {{name}}",
-      "openViewFailed": "Ne eblis malfermi la babilan vidon."
+      "openViewFailed": "Ne eblis malfermi la babilan vidon.",
+      "attachedImages_one": "{{count}} bildo aldonita",
+      "attachedImages_other": "{{count}} bildoj aldonitaj",
+      "referencesAdded_one": "{{count}} referenco aldonita",
+      "referencesAdded_other": "{{count}} referencoj aldonitaj"
     },
     "status": {
       "unavailable": "Nedisponebla",
@@ -1020,9 +1012,8 @@
       "step2": "Ebligi RAG",
       "step3": "Elekti indeksi arkivon",
       "close": "Fermi",
-      "retrieved_one": "retrovita el {{count}} dokumento",
-      "retrieved_other": "retrovita el {{count}} dokumentoj",
-      "retrieved": "retrovita el {{count}} dokumentoj"
+      "retrieved_one": "Retrovita el {{count}} dokumento",
+      "retrieved_other": "Retrovita el {{count}} dokumentoj"
     },
     "ragTooltip": {
       "status": "RAG-Indeksa Stato:",
@@ -1141,8 +1132,6 @@
       "apply": "Apliki",
       "applyAll": "Apliki ĉiujn",
       "applied": "Aplikita",
-      "changes_one": "{{count}} ŝanĝo",
-      "changes_other": "{{count}} ŝanĝoj",
       "confirm": "Ĉu apliki {{summary}}?",
       "appliedNotice": "Aplikita: {{summary}}",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Forigi",
         "move": "Movi",
         "batch": "Aro"
-      }
+      },
+      "changes_one": "{{count}} ŝanĝo",
+      "changes_other": "{{count}} ŝanĝoj"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP-aliro",
         "noServers": "Neniuj MCP-serviloj agordataj. Aldonu servilojn sub Agordoj → MCP por malŝlosi ĉi tiujn opciojn.",
-        "toolsCached_one": "{{count}} ilo kaŝmemorіta",
-        "toolsCached_other": "{{count}} iloj kaŝmemorіtaj",
-        "toolsCached": "{{count}} iloj kaŝmemorіtaj",
         "noToolsCached": "Neniuj iloj ankoraŭ kaŝmemorіtaj. Ebligi plenan aliron aŭ aktualigi la kaŝmemoron.",
         "showTools": "Montri ilojn",
         "hideTools": "Kaŝi ilojn",
         "selected": "Elektita",
         "notSelected": "Ne elektita",
-        "noToolsAvailable": "Neniuj iloj disponeblaj de ĉi tiu servilo ankoraŭ."
+        "noToolsAvailable": "Neniuj iloj disponeblaj de ĉi tiu servilo ankoraŭ.",
+        "toolsCached_one": "{{count}} ilo kaŝmemorigita",
+        "toolsCached_other": "{{count}} iloj kaŝmemorigitaj"
       },
       "notices": {
         "promptRequired": "Bonvolu provizi nomon kaj enhavon por la nova sistema instigilo."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Kaŝmemorigitaj modeloj: {{count}}",
       "connectionFailed": "Konekto-testo malsukcesis. Kontrolu la provizantajn agordojn.",
-      "connectionSuccess": "Konekto sukcesis. {{count}} modelo(j) kaŝmemorigita(j).",
       "noCachedModels": "Neniuj kaŝmemorigitaj modeloj",
       "testConnection": "Testi konekton",
-      "testing": "Testante..."
+      "testing": "Testante...",
+      "connectionSuccess_one": "Konekto sukcesis. {{count}} modelo kaŝmemorigita.",
+      "connectionSuccess_other": "Konekto sukcesis. {{count}} modeloj kaŝmemorigitaj."
     },
     "mcpInspector": {
       "title": "MCP-inspektisto",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Malŝaltita",
         "statusConnected": "● konektita",
         "statusDisconnected": "○ malkonektita",
-        "toolsLive_one": "{{count}} ilo",
-        "toolsLive_other": "{{count}} iloj",
-        "toolsLive": "{{count}} iloj",
-        "toolsCached_one": "{{count}} ilo (kaŝmemorіta)",
-        "toolsCached_other": "{{count}} iloj (kaŝmemorіtaj)",
-        "toolsCached": "{{count}} iloj (kaŝmemorіtaj)",
         "noTools": "0 iloj",
         "connectBtn": "Konekti",
         "disconnectBtn": "Malkonekti",
@@ -1346,7 +1331,11 @@
           "connected": "Konektita al {{name}}",
           "failedDisconnect": "Malsukcesis malkonekti de {{name}}: {{message}}",
           "failedConnect": "Malsukcesis konekti al {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} ilo (kaŝmemorigita)",
+        "toolsCached_other": "{{count}} iloj (kaŝmemorigitaj)",
+        "toolsLive_one": "{{count}} ilo",
+        "toolsLive_other": "{{count}} iloj"
       },
       "tools": {
         "title": "Disponeblaj MCP-iloj",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Iloj kaj permesoj",
-    "subtitle_one": "{{agent}} povas uzi {{count}} ilon.",
-    "subtitle_other": "{{agent}} povas uzi {{count}} ilojn.",
     "chatMode": "Babila reĝimo",
     "permissions": "Nunaj permesoj",
     "reads": "Ĉi tiu tasko povas legi",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Arkiva kunteksto",
-      "referencesPlusContext_one": "{{count}} eksplicita referenco plus aktiva kunteksto",
-      "referencesPlusContext_other": "{{count}} eksplicitaj referencoj plus aktiva kunteksto",
       "activeContext": "Aktiva noto kaj momentfoto de grafea kunteksto",
       "readTools": "Arkivaj legiloj",
       "enabledCount": "{{count}} ŝaltitaj",
@@ -1605,12 +1590,16 @@
       "off": "Malŝaltita",
       "disabledInSettings": "Malebligita en agordoj",
       "custom": "Propraj iloj",
-      "customEnabled_one": "{{count}} MCP-, OpenAPI- aŭ CLI-ilo ŝaltita",
-      "customEnabled_other": "{{count}} MCP-, OpenAPI- aŭ CLI-iloj ŝaltitaj",
       "noneEnabled": "Neniu ŝaltita",
       "destructive": "Detruaj agoj en la arkivo",
-      "notProvided": "Ne provizita de enkonstruitaj iloj"
-    }
+      "notProvided": "Ne provizita de enkonstruitaj iloj",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- aŭ CLI-ilo ŝaltita",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- aŭ CLI-iloj ŝaltitaj",
+      "referencesPlusContext_one": "{{count}} eksplicita referenco plus la aktiva kunteksto",
+      "referencesPlusContext_other": "{{count}} eksplicitaj referencoj plus la aktiva kunteksto"
+    },
+    "subtitle_one": "{{agent}} povas uzi {{count}} ilon.",
+    "subtitle_other": "{{agent}} povas uzi {{count}} ilojn."
   },
   "markdown": {
     "run": "Ruli"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Neniuj Markdown-notoj por indeksi.",
-      "starting_one": "Indeksante {{count}} noton…",
-      "starting_other": "Indeksante {{count}} notojn…",
       "progress": "Indeksado: {{done}} el {{total}} notoj",
       "completed": "Indeksado finiĝis: {{indexed}} indeksitaj, {{failed}} malsukcesaj.",
       "noIndex": "Nenio estas indeksita ankoraŭ. Rulu \"Embed all documents\" por indeksi vian arkivon.",
       "gradingError": "Taksado de dokumento malsukcesis: {{message}}",
       "clearing": "Forviŝante la indekson…",
-      "cleared": "Indekso forviŝita."
+      "cleared": "Indekso forviŝita.",
+      "starting_one": "Indeksante {{count}} noton…",
+      "starting_other": "Indeksante {{count}} notojn…"
     }
   }
 }

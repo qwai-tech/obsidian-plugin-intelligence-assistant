@@ -17,7 +17,9 @@ function buildLocalePacks(localesDir) {
 	const packs = {};
 	for (const file of readdirSync(localesDir).filter((name) => name.endsWith('.json') && name !== 'en.json')) {
 		const locale = read(file);
-		const values = JSON.stringify(keys.map((key) => valueAt(locale, key) ?? null));
+		const known = new Set(keys);
+		const extras = Object.fromEntries(flattenKeys(locale).filter((key) => !known.has(key)).map((key) => [key, valueAt(locale, key)]));
+		const values = JSON.stringify([keys.map((key) => valueAt(locale, key) ?? null), extras]);
 		packs[file.slice(0, -'.json'.length)] = zlib
 			.brotliCompressSync(Buffer.from(values), { params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 11 } })
 			.toString('base64');

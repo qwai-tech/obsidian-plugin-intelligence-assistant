@@ -28,6 +28,18 @@ describe('i18n module', () => {
 		expect(t('chat.renameConversationPrompt')).toBe('Neuer Titel');
 	});
 
+	it('uses the right plural form for every count in languages with more than two', () => {
+		jest.resetModules();
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
+		const { initI18n, t } = require('@/i18n') as typeof import('@/i18n');
+		initI18n('ru', unpackLocale);
+
+		const words = [1, 3, 5].map(count => t('chat.proposals.changes', { count }).replace(/\d+/g, '').trim());
+
+		expect(words.filter(text => text.includes('chat.proposals'))).toEqual([]);
+		expect(new Set(words).size).toBe(3);
+	});
+
 	it('falls back to English for unknown locale', () => {
 		jest.resetModules();
 		// eslint-disable-next-line @typescript-eslint/no-require-imports

@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Прегледајте и управљајте моделима свих конфигурисаних провајдера. Кликните \"освежи моделе\" да бисте преузели најновије доступне моделе.",
-      "providerCount_one": "{{count}} провајдер конфигурисан",
-      "providerCount_other": "{{count}} провајдера конфигурисано",
-      "providerCount": "{{count}} провајдера конфигурисано",
       "refreshAll": "освежи све моделе",
       "empty": "Нема конфигурисаних провајдера. Прво додајте провајдере на картици провајдера.",
       "noModels": "Нема доступних модела. Кликните „освежи све моделе“ или освежите појединачне провајдере на картици провајдера.",
       "noMatch": "Ниједан модел не одговара тренутним филтерима. Прилагодите или обришите филтере да бисте видели резултате.",
-      "modelCount_one": "• {{count}} модел у кешу",
-      "modelCount_other": "• {{count}} модела у кешу",
-      "modelCount": "• {{count}} модела у кешу",
-      "matchCount_one": "• {{count}} одговара одабраним филтерима",
-      "matchCount_other": "• {{count}} одговарају одабраним филтерима",
-      "matchCount": "• {{count}} одговарају одабраним филтерима",
       "status": {
         "enabled": "Омогућено",
         "disabled": "Онемогућено"
@@ -92,12 +83,18 @@
         "capabilities": "Могућности",
         "status": "Статус",
         "actions": "Радње"
-      }
+      },
+      "matchCount_one": "• {{count}} подударање са изабраним филтерима",
+      "matchCount_few": "• {{count}} подударања са изабраним филтерима",
+      "matchCount_other": "• {{count}} подударања са изабраним филтерима",
+      "modelCount_one": "• {{count}} модел у кешу",
+      "modelCount_few": "• {{count}} модела у кешу",
+      "modelCount_other": "• {{count}} модела у кешу",
+      "providerCount_one": "{{count}} провајдер конфигурисан",
+      "providerCount_few": "{{count}} провајдера конфигурисана",
+      "providerCount_other": "{{count}} провајдера конфигурисано"
     },
     "provider": {
-      "count_one": "{{count}} провајдер конфигурисан",
-      "count_other": "{{count}} провајдера конфигурисано",
-      "count": "{{count}} провајдера конфигурисано",
       "addBtn": "+ Додај провајдера",
       "empty": "Нема конфигурисаних провајдера. Изаберите „Додај провајдера“ за почетак.",
       "status": {
@@ -116,8 +113,8 @@
       "models": {
         "none": "Нема модела",
         "count_one": "{{count}} модел",
-        "count_other": "{{count}} модела",
-        "count": "{{count}} модела"
+        "count_few": "{{count}} модела",
+        "count_other": "{{count}} модела"
       },
       "ollama": {
         "checkingVersion": "Проверавање верзије...",
@@ -153,7 +150,10 @@
       },
       "confirm": {
         "delete": "Уклони провајдера {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} провајдер конфигурисан",
+      "count_few": "{{count}} провајдера конфигурисана",
+      "count_other": "{{count}} провајдера конфигурисано"
     },
     "mcp": {
       "desc": "Конфигуришите Model Context Protocol (MCP) сервере за проширивање могућности агента спољашњим алатима и изворима података.",
@@ -165,9 +165,6 @@
       "untitled": "MCP сервер без назива",
       "notConfigured": "Није конфигурисано",
       "cached": "У кешу",
-      "envVars_one": "{{count}} env променљива",
-      "envVars_other": "{{count}} env променљивих",
-      "envVars": "{{count}} env променљивих",
       "status": {
         "disabled": "Онемогућено",
         "connected": "повезано",
@@ -177,12 +174,12 @@
         "autoConnect": "Аутоматско повезивање"
       },
       "toolCount": {
-        "live_one": "{{count}} активни алат",
-        "live_other": "{{count}} активних алата",
-        "live": "{{count}} активних алата",
         "cached_one": "{{count}} кеширани алат",
+        "cached_few": "{{count}} кеширана алата",
         "cached_other": "{{count}} кешираних алата",
-        "cached": "{{count}} кешираних алата"
+        "live_one": "{{count}} активни алат",
+        "live_few": "{{count}} активна алата",
+        "live_other": "{{count}} активних алата"
       },
       "actions": {
         "edit": "Уреди",
@@ -204,27 +201,33 @@
         "disconnectFailed": "Прекидање везе са {{name}} није успело",
         "connectFailed": "Повезивање са {{name}} није успело",
         "testNoCommand": "молимо унесите команду пре тестирања везе",
-        "testSuccess": "успешно повезано! Пронађено {{count}} алата.",
         "testFailed": "Повезивање није успело: {{message}}",
-        "refreshedAll_one": "освежени алати за {{count}} сервер",
-        "refreshedAll_other": "освежени алати за {{count}} сервера",
-        "refreshedAll": "освежени алати за {{count}} сервера",
         "refreshedPartial": "освежено {{success}} сервера, {{failed}} неуспешно",
         "noServersConfigured": "Нема конфигурисаних MCP сервера",
-        "testingAll": "Тестирање {{count}} MCP веза сервера...",
-        "testAllSuccess": "свих {{count}} mcp сервера успешно повезано!",
-        "testAllPartial": "{{successful}} повезано, {{failed}} неуспешно"
+        "testAllPartial": "{{successful}} повезано, {{failed}} неуспешно",
+        "refreshedAll_one": "Освежени алати за {{count}} сервер",
+        "refreshedAll_few": "Освежени алати за {{count}} сервера",
+        "refreshedAll_other": "Освежени алати за {{count}} сервера",
+        "testAllSuccess_one": "{{count}} MCP сервер је успешно повезан.",
+        "testAllSuccess_few": "Сва {{count}} MCP сервера су успешно повезана.",
+        "testAllSuccess_other": "Свих {{count}} MCP сервера је успешно повезано.",
+        "testSuccess_one": "Повезано. Пронађен {{count}} алат.",
+        "testSuccess_few": "Повезано. Пронађена {{count}} алата.",
+        "testSuccess_other": "Повезано. Пронађено {{count}} алата.",
+        "testingAll_one": "Тестирање {{count}} везе са MCP сервером…",
+        "testingAll_few": "Тестирање {{count}} везе са MCP серверима…",
+        "testingAll_other": "Тестирање {{count}} веза са MCP серверима…"
       },
       "confirm": {
         "delete": "Обриши MCP сервер „{{name}}“?"
       },
-      "namePlaceholder": "Acme MCP сервер"
+      "namePlaceholder": "Acme MCP сервер",
+      "envVars_one": "{{count}} променљива окружења",
+      "envVars_few": "{{count}} променљиве окружења",
+      "envVars_other": "{{count}} променљивих окружења"
     },
     "agents": {
       "desc": "Креирајте и управљајте AI агентима са специфичним могућностима, алатима и понашањем.",
-      "count_one": "{{count}} агент конфигурисан",
-      "count_other": "{{count}} агената конфигурисано",
-      "count": "{{count}} агената конфигурисано",
       "addBtn": "+ додај агента",
       "empty": "Нема конфигурисаних агената. Изаберите додај агента за почетак.",
       "defaultBadge": "Подразумевано",
@@ -237,12 +240,12 @@
       },
       "tools": {
         "builtIn": "{{count}} уграђени",
-        "mcpServer_one": "{{count}} mcp сервер",
-        "mcpServer_other": "{{count}} mcp сервера",
-        "mcpServer": "{{count}} mcp сервера",
-        "mcpTool_one": "{{count}} mcp алат",
-        "mcpTool_other": "{{count}} mcp алата",
-        "mcpTool": "{{count}} mcp алата"
+        "mcpServer_one": "{{count}} MCP сервер",
+        "mcpServer_few": "{{count}} MCP сервера",
+        "mcpServer_other": "{{count}} MCP сервера",
+        "mcpTool_one": "{{count}} MCP алат",
+        "mcpTool_few": "{{count}} MCP алата",
+        "mcpTool_other": "{{count}} MCP алата"
       },
       "actions": {
         "edit": "Уреди",
@@ -250,7 +253,10 @@
       },
       "confirm": {
         "delete": "Обриши агента „{{name}}“?"
-      }
+      },
+      "count_one": "{{count}} агент конфигурисан",
+      "count_few": "{{count}} агента конфигурисана",
+      "count_other": "{{count}} агената конфигурисано"
     },
     "prompts": {
       "desc": "Управљајте системским упитима који дефинишу понашање и личност вашег AI асистента.",
@@ -352,8 +358,10 @@
         },
         "notices": {
           "removed": "HTTP извор уклоњен",
-          "reloaded": "Поново учитано {{count}} операција",
-          "reloadFailed": "Није успело поновно учитавање HTTP извора. Проверите конзолу за детаље."
+          "reloadFailed": "Није успело поновно учитавање HTTP извора. Проверите конзолу за детаље.",
+          "reloaded_one": "Поново учитана {{count}} операција",
+          "reloaded_few": "Поново учитане {{count}} операције",
+          "reloaded_other": "Поново учитано {{count}} операција"
         },
         "modal": {
           "defaultTitle": "HTTP извор",
@@ -419,9 +427,6 @@
           "actions": "Радње"
         },
         "unnamed": "CLI алат без назива",
-        "paramCount_one": "{{count}} параметар",
-        "paramCount_other": "{{count}} параметара",
-        "paramCount": "{{count}} параметара",
         "noParams": "Нема",
         "statusEnabled": "Омогућено",
         "statusDisabled": "Онемогућено",
@@ -554,7 +559,10 @@
             "preset-screencapture": "Снимак екрана",
             "preset-applescript-list-apps": "Наведи покренуте апликације"
           }
-        }
+        },
+        "paramCount_one": "{{count}} параметар",
+        "paramCount_few": "{{count}} параметра",
+        "paramCount_other": "{{count}} параметара"
       }
     },
     "rag": {
@@ -844,9 +852,6 @@
         "desc": "Префикс (емоџи или текст) за приказ испред свих брзих радњи у контекстном менију",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} радња конфигурисана ({{enabled}} омогућено)",
-      "count_other": "{{count}} радњи конфигурисано ({{enabled}} омогућено)",
-      "count": "{{count}} радњи конфигурисано ({{enabled}} омогућено)",
       "addBtn": "+ додај брзу радњу",
       "empty": "Нема конфигурисаних брзих радњи. Изаберите додај брзу радњу за почетак.",
       "defaultModel": "Подразумевано",
@@ -912,7 +917,10 @@
       "placeholders": {
         "name": "Продужи текст",
         "prompt": "Прошири и разради следећи текст…"
-      }
+      },
+      "count_one": "{{count}} радња конфигурисана (омогућено: {{enabled}})",
+      "count_few": "{{count}} радње конфигурисане (омогућено: {{enabled}})",
+      "count_other": "{{count}} радњи конфигурисано (омогућено: {{enabled}})"
     },
     "usage": {
       "desc": "Пратите потрошњу токена по провајдерима и моделима. Подаци се акумулирају кроз све разговоре.",
@@ -994,12 +1002,16 @@
       "ragDisabled": "RAG је онемогућен у поставкама. Омогућите га у поставке → функције ћаскања → RAG.",
       "webSearchDisabled": "Веб претрага је онемогућена у поставкама. Омогућите је у поставке → функције ћаскања → веб претрага.",
       "attached": "Приложено: {{name}}",
-      "attachedImages": "Приложено {{count}} слика(е)",
-      "referencesAdded": "Додато {{count}} референци(е)",
       "fileNotFound": "Датотека није пронађена: {{path}}",
       "unableToLoadRag": "Није могуће учитати RAG статистику.",
       "referenced": "Референцирано: {{name}}",
-      "openViewFailed": "Није могуће отворити приказ ћаскања."
+      "openViewFailed": "Није могуће отворити приказ ћаскања.",
+      "attachedImages_one": "Приложена {{count}} слика",
+      "attachedImages_few": "Приложене {{count}} слике",
+      "attachedImages_other": "Приложено {{count}} слика",
+      "referencesAdded_one": "Додата {{count}} референца",
+      "referencesAdded_few": "Додате {{count}} референце",
+      "referencesAdded_other": "Додато {{count}} референци"
     },
     "status": {
       "unavailable": "Недоступно",
@@ -1020,9 +1032,9 @@
       "step2": "Омогући RAG",
       "step3": "Изаберите индексирај трезор",
       "close": "Затвори",
-      "retrieved_one": "преузето из {{count}} документа",
-      "retrieved_other": "преузето из {{count}} докумената",
-      "retrieved": "преузето из {{count}} докумената"
+      "retrieved_one": "Преузето из {{count}} документа",
+      "retrieved_few": "Преузето из {{count}} документа",
+      "retrieved_other": "Преузето из {{count}} докумената"
     },
     "ragTooltip": {
       "status": "Статус RAG индекса:",
@@ -1141,8 +1153,6 @@
       "apply": "Примени",
       "applyAll": "Примени све",
       "applied": "Примењено",
-      "changes_one": "{{count}} измена",
-      "changes_other": "измена: {{count}}",
       "confirm": "Применити ({{summary}})?",
       "appliedNotice": "Примењено ({{summary}})",
       "operations": {
@@ -1152,7 +1162,10 @@
         "delete": "Брисање",
         "move": "Премештање",
         "batch": "Група"
-      }
+      },
+      "changes_one": "{{count}} измена",
+      "changes_few": "{{count}} измене",
+      "changes_other": "{{count}} измена"
     }
   },
   "modals": {
@@ -1213,15 +1226,15 @@
       "mcp": {
         "title": "MCP приступ",
         "noServers": "Нема конфигурисаних MCP сервера. Додајте сервере у Поставке → MCP да бисте откључали ове опције.",
-        "toolsCached_one": "{{count}} алат у кешу",
-        "toolsCached_other": "{{count}} алата у кешу",
-        "toolsCached": "{{count}} алата у кешу",
         "noToolsCached": "Нема кешираних алата. Омогућите пун приступ или освежите кеш.",
         "showTools": "Прикажи алате",
         "hideTools": "Сакриј алате",
         "selected": "Изабрано",
         "notSelected": "Није изабрано",
-        "noToolsAvailable": "Нема доступних алата са овог сервера."
+        "noToolsAvailable": "Нема доступних алата са овог сервера.",
+        "toolsCached_one": "{{count}} алат у кешу",
+        "toolsCached_few": "{{count}} алата у кешу",
+        "toolsCached_other": "{{count}} алата у кешу"
       },
       "notices": {
         "promptRequired": "Молимо унесите назив и садржај новог системског упита."
@@ -1303,10 +1316,12 @@
       },
       "cachedModels": "Кеширани модели: {{count}}",
       "connectionFailed": "Тест везе није успео. Проверите поставке провајдера.",
-      "connectionSuccess": "Веза је успешна. Кеширано модела: {{count}}.",
       "noCachedModels": "Нема кешираних модела",
       "testConnection": "Тестирај везу",
-      "testing": "Тестирање..."
+      "testing": "Тестирање...",
+      "connectionSuccess_one": "Веза је успешна. У кешу је {{count}} модел.",
+      "connectionSuccess_few": "Веза је успешна. У кешу су {{count}} модела.",
+      "connectionSuccess_other": "Веза је успешна. У кешу је {{count}} модела."
     },
     "mcpInspector": {
       "title": "MCP инспектор",
@@ -1329,12 +1344,6 @@
         "statusDisabled": "Онемогућено",
         "statusConnected": "● повезано",
         "statusDisconnected": "○ прекинуто",
-        "toolsLive_one": "{{count}} алат",
-        "toolsLive_other": "{{count}} алата",
-        "toolsLive": "{{count}} алата",
-        "toolsCached_one": "{{count}} алат (у кешу)",
-        "toolsCached_other": "{{count}} алата (у кешу)",
-        "toolsCached": "{{count}} алата (у кешу)",
         "noTools": "0 алата",
         "connectBtn": "Повежи",
         "disconnectBtn": "Прекини везу",
@@ -1346,7 +1355,13 @@
           "connected": "Повезано са {{name}}",
           "failedDisconnect": "Није успело прекидање везе са {{name}}: {{message}}",
           "failedConnect": "Није успело повезивање са {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} алат (у кешу)",
+        "toolsCached_few": "{{count}} алата (у кешу)",
+        "toolsCached_other": "{{count}} алата (у кешу)",
+        "toolsLive_one": "{{count}} алат",
+        "toolsLive_few": "{{count}} алата",
+        "toolsLive_other": "{{count}} алата"
       },
       "tools": {
         "title": "Доступни MCP алати",
@@ -1569,8 +1584,6 @@
   },
   "capability": {
     "title": "Алати и дозволе",
-    "subtitle_one": "{{agent}} може да користи {{count}} алат.",
-    "subtitle_other": "{{agent}} може да користи алата: {{count}}.",
     "chatMode": "Режим ћаскања",
     "permissions": "Тренутне дозволе",
     "reads": "Овај задатак може да чита",
@@ -1590,8 +1603,6 @@
     },
     "rows": {
       "vaultContext": "Контекст трезора",
-      "referencesPlusContext_one": "{{count}} експлицитна референца и активни контекст",
-      "referencesPlusContext_other": "Експлицитних референци: {{count}}, плус активни контекст",
       "activeContext": "Активна белешка и снимак контекста графа",
       "readTools": "Алати за читање трезора",
       "enabledCount": "Омогућено: {{count}}",
@@ -1605,12 +1616,19 @@
       "off": "Искључено",
       "disabledInSettings": "Онемогућено у подешавањима",
       "custom": "Прилагођени алати",
-      "customEnabled_one": "Омогућен {{count}} MCP, OpenAPI или CLI алат",
-      "customEnabled_other": "Омогућено MCP, OpenAPI или CLI алата: {{count}}",
       "noneEnabled": "Ништа није омогућено",
       "destructive": "Деструктивне радње у трезору",
-      "notProvided": "Уграђени алати их не пружају"
-    }
+      "notProvided": "Уграђени алати их не пружају",
+      "customEnabled_one": "Омогућен {{count}} MCP, OpenAPI или CLI алат",
+      "customEnabled_few": "Омогућена {{count}} MCP, OpenAPI или CLI алата",
+      "customEnabled_other": "Омогућено {{count}} MCP, OpenAPI или CLI алата",
+      "referencesPlusContext_one": "{{count}} експлицитна референца плус активни контекст",
+      "referencesPlusContext_few": "{{count}} експлицитне референце плус активни контекст",
+      "referencesPlusContext_other": "{{count}} експлицитних референци плус активни контекст"
+    },
+    "subtitle_one": "{{agent}} може да користи {{count}} алат.",
+    "subtitle_few": "{{agent}} може да користи {{count}} алата.",
+    "subtitle_other": "{{agent}} може да користи {{count}} алата."
   },
   "markdown": {
     "run": "Покрени"
@@ -1618,14 +1636,15 @@
   "rag": {
     "notices": {
       "noFiles": "Нема Markdown белешки за индексирање.",
-      "starting_one": "Индексирање {{count}} белешке…",
-      "starting_other": "Индексирање белешки: {{count}}…",
       "progress": "Индексирање: {{done}} од {{total}} белешки",
       "completed": "Индексирање је завршено: индексирано {{indexed}}, неуспешно {{failed}}.",
       "noIndex": "Још ништа није индексирано. Покрените „Embed all documents“ да индексирате трезор.",
       "gradingError": "Оцењивање докумената није успело: {{message}}",
       "clearing": "Брисање индекса…",
-      "cleared": "Индекс је обрисан."
+      "cleared": "Индекс је обрисан.",
+      "starting_one": "Индексирање {{count}} белешке…",
+      "starting_few": "Индексирање {{count}} белешке…",
+      "starting_other": "Индексирање {{count}} белешки…"
     }
   }
 }

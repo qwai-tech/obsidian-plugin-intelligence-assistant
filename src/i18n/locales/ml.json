@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "കോൺഫിഗർ ചെയ്ത എല്ലാ ദാതാക്കളിൽ നിന്നുമുള്ള മോഡലുകൾ കാണുകയും നിയന്ത്രിക്കുകയും ചെയ്യുക. ഏറ്റവും പുതിയ ലഭ്യമായ മോഡലുകൾ ലഭിക്കുന്നതിന് \"refresh models\" ക്ലിക്ക് ചെയ്യുക.",
-      "providerCount_one": "{{count}} ദാതാവ് കോൺഫിഗർ ചെയ്തു",
-      "providerCount_other": "{{count}} ദാതാക്കൾ കോൺഫിഗർ ചെയ്തു",
-      "providerCount": "{{count}} ദാതാക്കൾ കോൺഫിഗർ ചെയ്തു",
       "refreshAll": "എല്ലാ മോഡലുകളും പുതുക്കുക",
       "empty": "ഇതുവരെ ദാതാക്കളൊന്നും കോൺഫിഗർ ചെയ്തിട്ടില്ല. ആദ്യം ദാതാവ് ടാബിൽ ദാതാക്കളെ ചേർക്കുക.",
       "noModels": "മോഡലുകളൊന്നും ലഭ്യമല്ല. \"refresh all models\" ക്ലിക്ക് ചെയ്യുക അല്ലെങ്കിൽ ദാതാവ് ടാബിൽ വ്യക്തിഗത ദാതാക്കളെ പുതുക്കുക.",
       "noMatch": "നിലവിലെ ഫിൽറ്ററുകളുമായി യോജിക്കുന്ന മോഡലുകളൊന്നുമില്ല. ഫലങ്ങൾ കാണുന്നതിന് ഫിൽറ്ററുകൾ ക്രമീകരിക്കുക അല്ലെങ്കിൽ മായ്ക്കുക.",
-      "modelCount_one": "• {{count}} മോഡൽ കാഷെ ചെയ്തു",
-      "modelCount_other": "• {{count}} മോഡലുകൾ കാഷെ ചെയ്തു",
-      "modelCount": "• {{count}} മോഡലുകൾ കാഷെ ചെയ്തു",
-      "matchCount_one": "• {{count}} തിരഞ്ഞെടുത്ത ഫിൽറ്ററുമായി യോജിക്കുന്നു",
-      "matchCount_other": "• {{count}} തിരഞ്ഞെടുത്ത ഫിൽറ്ററുകളുമായി യോജിക്കുന്നു",
-      "matchCount": "• {{count}} തിരഞ്ഞെടുത്ത ഫിൽറ്ററുകളുമായി യോജിക്കുന്നു",
       "status": {
         "enabled": "പ്രവർത്തനക്ഷമമാക്കി",
         "disabled": "അപ്രാപ്തമാക്കി"
@@ -92,12 +83,15 @@
         "capabilities": "കഴിവുകൾ",
         "status": "സ്റ്റാറ്റസ്",
         "actions": "പ്രവർത്തനങ്ങൾ"
-      }
+      },
+      "matchCount_one": "• തിരഞ്ഞെടുത്ത ഫിൽറ്ററുകളുമായി {{count}} പൊരുത്തം",
+      "matchCount_other": "• തിരഞ്ഞെടുത്ത ഫിൽറ്ററുകളുമായി {{count}} പൊരുത്തങ്ങൾ",
+      "modelCount_one": "• {{count}} മോഡൽ കാഷെ ചെയ്തു",
+      "modelCount_other": "• {{count}} മോഡലുകൾ കാഷെ ചെയ്തു",
+      "providerCount_one": "{{count}} ദാതാവ് കോൺഫിഗർ ചെയ്തു",
+      "providerCount_other": "{{count}} ദാതാക്കൾ കോൺഫിഗർ ചെയ്തു"
     },
     "provider": {
-      "count_one": "{{count}} ദാതാവ് കോൺഫിഗർ ചെയ്തു",
-      "count_other": "{{count}} ദാതാക്കൾ കോൺഫിഗർ ചെയ്തു",
-      "count": "{{count}} ദാതാക്കൾ കോൺഫിഗർ ചെയ്തു",
       "addBtn": "+ ദാതാവിനെ ചേർക്കുക",
       "empty": "ദാതാക്കളൊന്നും കോൺഫിഗർ ചെയ്തിട്ടില്ല. ആരംഭിക്കുന്നതിന് \"Add provider\" തിരഞ്ഞെടുക്കുക.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "മോഡലുകളൊന്നുമില്ല",
         "count_one": "{{count}} മോഡൽ",
-        "count_other": "{{count}} മോഡലുകൾ",
-        "count": "{{count}} മോഡലുകൾ"
+        "count_other": "{{count}} മോഡലുകൾ"
       },
       "ollama": {
         "checkingVersion": "പതിപ്പ് പരിശോധിക്കുന്നു...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "{{provider}} ദാതാവിനെ നീക്കം ചെയ്യണോ?"
-      }
+      },
+      "count_one": "{{count}} ദാതാവ് കോൺഫിഗർ ചെയ്തു",
+      "count_other": "{{count}} ദാതാക്കൾ കോൺഫിഗർ ചെയ്തു"
     },
     "mcp": {
       "desc": "ബാഹ്യ ഉപകരണങ്ങളും ഡാറ്റ സ്രോതസ്സുകളും ഉപയോഗിച്ച് ഏജന്റ് കഴിവുകൾ വികസിപ്പിക്കുന്നതിന് Model Context Protocol (MCP) സെർവറുകൾ കോൺഫിഗർ ചെയ്യുക.",
@@ -165,9 +160,6 @@
       "untitled": "പേരില്ലാത്ത MCP സെർവർ",
       "notConfigured": "കോൺഫിഗർ ചെയ്തിട്ടില്ല",
       "cached": "കാഷെ ചെയ്തു",
-      "envVars_one": "{{count}} എൻവി വേരിയബിൾ",
-      "envVars_other": "{{count}} എൻവി വേരിയബിളുകൾ",
-      "envVars": "{{count}} എൻവി വേരിയബിളുകൾ",
       "status": {
         "disabled": "അപ്രാപ്തമാക്കി",
         "connected": "കണക്റ്റ് ചെയ്തു",
@@ -177,12 +169,10 @@
         "autoConnect": "സ്വയം കണക്റ്റ് ചെയ്യുക"
       },
       "toolCount": {
-        "live_one": "{{count}} തത്സമയ ഉപകരണം",
-        "live_other": "{{count}} തത്സമയ ഉപകരണങ്ങൾ",
-        "live": "{{count}} തത്സമയ ഉപകരണങ്ങൾ",
         "cached_one": "{{count}} കാഷെ ചെയ്ത ഉപകരണം",
         "cached_other": "{{count}} കാഷെ ചെയ്ത ഉപകരണങ്ങൾ",
-        "cached": "{{count}} കാഷെ ചെയ്ത ഉപകരണങ്ങൾ"
+        "live_one": "{{count}} തത്സമയ ഉപകരണം",
+        "live_other": "{{count}} തത്സമയ ഉപകരണങ്ങൾ"
       },
       "actions": {
         "edit": "എഡിറ്റ്",
@@ -204,27 +194,28 @@
         "disconnectFailed": "{{name}}-ൽ നിന്ന് വിച്ഛേദിക്കുന്നതിൽ പരാജയപ്പെട്ടു",
         "connectFailed": "{{name}}-ലേക്ക് കണക്റ്റ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു",
         "testNoCommand": "കണക്ഷൻ പരിശോധിക്കുന്നതിന് മുൻപ് ദയവായി ഒരു കമാൻഡ് നൽകുക",
-        "testSuccess": "വിജയകരമായി കണക്റ്റ് ചെയ്തു! {{count}} ഉപകരണങ്ങൾ കണ്ടെത്തി.",
         "testFailed": "കണക്ഷൻ പരാജയപ്പെട്ടു: {{message}}",
-        "refreshedAll_one": "{{count}} സെർവറിനായുള്ള ഉപകരണങ്ങൾ പുതുക്കി",
-        "refreshedAll_other": "{{count}} സെർവറുകൾക്കായുള്ള ഉപകരണങ്ങൾ പുതുക്കി",
-        "refreshedAll": "{{count}} സെർവറുകൾക്കായുള്ള ഉപകരണങ്ങൾ പുതുക്കി",
         "refreshedPartial": "{{success}} സെർവറുകൾ പുതുക്കി, {{failed}} പരാജയപ്പെട്ടു",
         "noServersConfigured": "MCP സെർവറുകളൊന്നും കോൺഫിഗർ ചെയ്തിട്ടില്ല",
-        "testingAll": "{{count}} MCP സെർവർ കണക്ഷനുകൾ പരിശോധിക്കുന്നു...",
-        "testAllSuccess": "എല്ലാ {{count}} mcp സെർവറുകളും വിജയകരമായി കണക്റ്റ് ചെയ്തു!",
-        "testAllPartial": "{{successful}} കണക്റ്റ് ചെയ്തു, {{failed}} പരാജയപ്പെട്ടു"
+        "testAllPartial": "{{successful}} കണക്റ്റ് ചെയ്തു, {{failed}} പരാജയപ്പെട്ടു",
+        "refreshedAll_one": "{{count}} സെർവറിനായുള്ള ഉപകരണങ്ങൾ പുതുക്കി",
+        "refreshedAll_other": "{{count}} സെർവറുകൾക്കായുള്ള ഉപകരണങ്ങൾ പുതുക്കി",
+        "testAllSuccess_one": "{{count}} MCP സെർവർ വിജയകരമായി കണക്റ്റ് ചെയ്തു.",
+        "testAllSuccess_other": "എല്ലാ {{count}} MCP സെർവറുകളും വിജയകരമായി കണക്റ്റ് ചെയ്തു.",
+        "testSuccess_one": "കണക്റ്റ് ചെയ്തു. {{count}} ഉപകരണം കണ്ടെത്തി.",
+        "testSuccess_other": "കണക്റ്റ് ചെയ്തു. {{count}} ഉപകരണങ്ങൾ കണ്ടെത്തി.",
+        "testingAll_one": "{{count}} MCP സെർവർ കണക്ഷൻ പരിശോധിക്കുന്നു…",
+        "testingAll_other": "{{count}} MCP സെർവർ കണക്ഷനുകൾ പരിശോധിക്കുന്നു…"
       },
       "confirm": {
         "delete": "MCP സെർവർ \"{{name}}\" ഇല്ലാതാക്കണോ?"
       },
-      "namePlaceholder": "Acme MCP സെർവർ"
+      "namePlaceholder": "Acme MCP സെർവർ",
+      "envVars_one": "{{count}} എൻവി വേരിയബിൾ",
+      "envVars_other": "{{count}} എൻവി വേരിയബിളുകൾ"
     },
     "agents": {
       "desc": "നിർദ്ദിഷ്ട കഴിവുകൾ, ഉപകരണങ്ങൾ, പെരുമാറ്റങ്ങൾ എന്നിവയുള്ള AI ഏജന്റുകൾ സൃഷ്ടിക്കുകയും നിയന്ത്രിക്കുകയും ചെയ്യുക.",
-      "count_one": "{{count}} ഏജന്റ് കോൺഫിഗർ ചെയ്തു",
-      "count_other": "{{count}} ഏജന്റുകൾ കോൺഫിഗർ ചെയ്തു",
-      "count": "{{count}} ഏജന്റുകൾ കോൺഫിഗർ ചെയ്തു",
       "addBtn": "+ ഏജന്റിനെ ചേർക്കുക",
       "empty": "ഏജന്റുകളൊന്നും കോൺഫിഗർ ചെയ്തിട്ടില്ല. ആരംഭിക്കുന്നതിന് add agent തിരഞ്ഞെടുക്കുക.",
       "defaultBadge": "ഡിഫോൾട്ട്",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} ബിൽറ്റ്-ഇൻ",
-        "mcpServer_one": "{{count}} mcp സെർവർ",
-        "mcpServer_other": "{{count}} mcp സെർവറുകൾ",
-        "mcpServer": "{{count}} mcp സെർവറുകൾ",
-        "mcpTool_one": "{{count}} mcp ഉപകരണം",
-        "mcpTool_other": "{{count}} mcp ഉപകരണങ്ങൾ",
-        "mcpTool": "{{count}} mcp ഉപകരണങ്ങൾ"
+        "mcpServer_one": "{{count}} MCP സെർവർ",
+        "mcpServer_other": "{{count}} MCP സെർവറുകൾ",
+        "mcpTool_one": "{{count}} MCP ഉപകരണം",
+        "mcpTool_other": "{{count}} MCP ഉപകരണങ്ങൾ"
       },
       "actions": {
         "edit": "എഡിറ്റ്",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "ഏജന്റ് \"{{name}}\" ഇല്ലാതാക്കണോ?"
-      }
+      },
+      "count_one": "{{count}} ഏജന്റ് കോൺഫിഗർ ചെയ്തു",
+      "count_other": "{{count}} ഏജന്റുകൾ കോൺഫിഗർ ചെയ്തു"
     },
     "prompts": {
       "desc": "നിങ്ങളുടെ AI അസിസ്റ്റന്റിന്റെ പെരുമാറ്റവും വ്യക്തിത്വവും നിർവചിക്കുന്ന സിസ്റ്റം പ്രോംപ്റ്റുകൾ നിയന്ത്രിക്കുക.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP സ്രോതസ്സ് നീക്കം ചെയ്തു",
-          "reloaded": "{{count}} ഓപ്പറേഷനുകൾ റീലോഡ് ചെയ്തു",
-          "reloadFailed": "HTTP സ്രോതസ്സ് റീലോഡ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു. വിശദാംശങ്ങൾക്ക് കൺസോൾ പരിശോധിക്കുക."
+          "reloadFailed": "HTTP സ്രോതസ്സ് റീലോഡ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു. വിശദാംശങ്ങൾക്ക് കൺസോൾ പരിശോധിക്കുക.",
+          "reloaded_one": "{{count}} ഓപ്പറേഷൻ റീലോഡ് ചെയ്തു",
+          "reloaded_other": "{{count}} ഓപ്പറേഷനുകൾ റീലോഡ് ചെയ്തു"
         },
         "modal": {
           "defaultTitle": "HTTP സ്രോതസ്സ്",
@@ -419,9 +411,6 @@
           "actions": "പ്രവർത്തനങ്ങൾ"
         },
         "unnamed": "പേരില്ലാത്ത CLI ഉപകരണം",
-        "paramCount_one": "{{count}} പാരാമീറ്റർ",
-        "paramCount_other": "{{count}} പാരാമീറ്ററുകൾ",
-        "paramCount": "{{count}} പാരാമീറ്ററുകൾ",
         "noParams": "ഒന്നുമില്ല",
         "statusEnabled": "പ്രവർത്തനക്ഷമമാക്കി",
         "statusDisabled": "അപ്രാപ്തമാക്കി",
@@ -554,7 +543,9 @@
             "preset-screencapture": "സ്ക്രീൻഷോട്ട്",
             "preset-applescript-list-apps": "റണ്ണിംഗ് ആപ്പുകൾ പട്ടികപ്പെടുത്തുക"
           }
-        }
+        },
+        "paramCount_one": "{{count}} പാരാമീറ്റർ",
+        "paramCount_other": "{{count}} പാരാമീറ്ററുകൾ"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "കോൺടെക്സ്റ്റ് മെനുവിലെ എല്ലാ ദ്രുത പ്രവർത്തനങ്ങൾക്കും മുൻപായി പ്രദർശിപ്പിക്കേണ്ട പ്രിഫിക്സ് (ഇമോജി അല്ലെങ്കിൽ ടെക്സ്റ്റ്)",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} പ്രവർത്തനം കോൺഫിഗർ ചെയ്തു ({{enabled}} പ്രവർത്തനക്ഷമമാക്കി)",
-      "count_other": "{{count}} പ്രവർത്തനങ്ങൾ കോൺഫിഗർ ചെയ്തു ({{enabled}} പ്രവർത്തനക്ഷമമാക്കി)",
-      "count": "{{count}} പ്രവർത്തനങ്ങൾ കോൺഫിഗർ ചെയ്തു ({{enabled}} പ്രവർത്തനക്ഷമമാക്കി)",
       "addBtn": "+ ദ്രുത പ്രവർത്തനം ചേർക്കുക",
       "empty": "ദ്രുത പ്രവർത്തനങ്ങളൊന്നും കോൺഫിഗർ ചെയ്തിട്ടില്ല. ആരംഭിക്കുന്നതിന് add quick action തിരഞ്ഞെടുക്കുക.",
       "defaultModel": "ഡിഫോൾട്ട്",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "ടെക്സ്റ്റ് ദൈർഘ്യമുള്ളതാക്കുക",
         "prompt": "താഴെയുള്ള ടെക്സ്റ്റ് വിപുലീകരിച്ച് വിശദമാക്കുക…"
-      }
+      },
+      "count_one": "{{count}} പ്രവർത്തനം കോൺഫിഗർ ചെയ്തു ({{enabled}} പ്രവർത്തനക്ഷമമാക്കി)",
+      "count_other": "{{count}} പ്രവർത്തനങ്ങൾ കോൺഫിഗർ ചെയ്തു ({{enabled}} പ്രവർത്തനക്ഷമമാക്കി)"
     },
     "usage": {
       "desc": "ദാതാക്കളിലും മോഡലുകളിലും ടോക്കൺ ഉപഭോഗം ട്രാക്ക് ചെയ്യുക. എല്ലാ സംഭാഷണങ്ങളിലും ഡാറ്റ ശേഖരിക്കപ്പെടുന്നു.",
@@ -994,12 +984,14 @@
       "ragDisabled": "ക്രമീകരണങ്ങളിൽ RAG അപ്രാപ്തമാക്കി. ക്രമീകരണങ്ങൾ → ചാറ്റ് ഫീച്ചറുകൾ → RAG-ന് കീഴിൽ ഇത് പ്രവർത്തനക്ഷമമാക്കുക.",
       "webSearchDisabled": "ക്രമീകരണങ്ങളിൽ വെബ് തിരയൽ അപ്രാപ്തമാക്കി. ക്രമീകരണങ്ങൾ → ചാറ്റ് ഫീച്ചറുകൾ → വെബ് തിരയലിന് കീഴിൽ ഇത് പ്രവർത്തനക്ഷമമാക്കുക.",
       "attached": "അറ്റാച്ച് ചെയ്തു: {{name}}",
-      "attachedImages": "{{count}} ഇമേജ്(കൾ) അറ്റാച്ച് ചെയ്തു",
-      "referencesAdded": "{{count}} റഫറൻസ്(കൾ) ചേർത്തു",
       "fileNotFound": "ഫയൽ കണ്ടെത്തിയില്ല: {{path}}",
       "unableToLoadRag": "RAG സ്ഥിതിവിവരക്കണക്കുകൾ ലോഡ് ചെയ്യാൻ കഴിയുന്നില്ല.",
       "referenced": "റഫറൻസ് ചെയ്തു: {{name}}",
-      "openViewFailed": "ചാറ്റ് കാഴ്ച തുറക്കാനായില്ല."
+      "openViewFailed": "ചാറ്റ് കാഴ്ച തുറക്കാനായില്ല.",
+      "attachedImages_one": "{{count}} ഇമേജ് അറ്റാച്ച് ചെയ്തു",
+      "attachedImages_other": "{{count}} ഇമേജുകൾ അറ്റാച്ച് ചെയ്തു",
+      "referencesAdded_one": "{{count}} റഫറൻസ് ചേർത്തു",
+      "referencesAdded_other": "{{count}} റഫറൻസുകൾ ചേർത്തു"
     },
     "status": {
       "unavailable": "ലഭ്യമല്ല",
@@ -1021,8 +1013,7 @@
       "step3": "വോൾട്ട് ഇൻഡക്സ് തിരഞ്ഞെടുക്കുക",
       "close": "അടയ്ക്കുക",
       "retrieved_one": "{{count}} ഡോക്യുമെന്റിൽ നിന്ന് വീണ്ടെടുത്തു",
-      "retrieved_other": "{{count}} ഡോക്യുമെന്റുകളിൽ നിന്ന് വീണ്ടെടുത്തു",
-      "retrieved": "{{count}} ഡോക്യുമെന്റുകളിൽ നിന്ന് വീണ്ടെടുത്തു"
+      "retrieved_other": "{{count}} ഡോക്യുമെന്റുകളിൽ നിന്ന് വീണ്ടെടുത്തു"
     },
     "ragTooltip": {
       "status": "RAG ഇൻഡക്സ് സ്റ്റാറ്റസ്:",
@@ -1141,8 +1132,6 @@
       "apply": "പ്രയോഗിക്കുക",
       "applyAll": "എല്ലാം പ്രയോഗിക്കുക",
       "applied": "പ്രയോഗിച്ചു",
-      "changes_one": "{{count}} മാറ്റം",
-      "changes_other": "{{count}} മാറ്റങ്ങൾ",
       "confirm": "{{summary}} പ്രയോഗിക്കണോ?",
       "appliedNotice": "{{summary}} പ്രയോഗിച്ചു",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "ഇല്ലാതാക്കുക",
         "move": "നീക്കുക",
         "batch": "ബാച്ച്"
-      }
+      },
+      "changes_one": "{{count}} മാറ്റം",
+      "changes_other": "{{count}} മാറ്റങ്ങൾ"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP ആക്സസ്",
         "noServers": "MCP സെർവറുകളൊന്നും കോൺഫിഗർ ചെയ്തിട്ടില്ല. ഈ ഓപ്ഷനുകൾ അൺലോക്ക് ചെയ്യുന്നതിന് ക്രമീകരണങ്ങൾ → MCP-ന് കീഴിൽ സെർവറുകൾ ചേർക്കുക.",
-        "toolsCached_one": "{{count}} ഉപകരണം കാഷെ ചെയ്തു",
-        "toolsCached_other": "{{count}} ഉപകരണങ്ങൾ കാഷെ ചെയ്തു",
-        "toolsCached": "{{count}} ഉപകരണങ്ങൾ കാഷെ ചെയ്തു",
         "noToolsCached": "ഇതുവരെ ഉപകരണങ്ങളൊന്നും കാഷെ ചെയ്തിട്ടില്ല. പൂർണ്ണ ആക്സസ് പ്രവർത്തനക്ഷമമാക്കുക അല്ലെങ്കിൽ കാഷെ പുതുക്കുക.",
         "showTools": "ഉപകരണങ്ങൾ കാണിക്കുക",
         "hideTools": "ഉപകരണങ്ങൾ മറയ്ക്കുക",
         "selected": "തിരഞ്ഞെടുത്തു",
         "notSelected": "തിരഞ്ഞെടുത്തിട്ടില്ല",
-        "noToolsAvailable": "ഈ സെർവറിൽ നിന്ന് ഇതുവരെ ഉപകരണങ്ങളൊന്നും ലഭ്യമല്ല."
+        "noToolsAvailable": "ഈ സെർവറിൽ നിന്ന് ഇതുവരെ ഉപകരണങ്ങളൊന്നും ലഭ്യമല്ല.",
+        "toolsCached_one": "{{count}} ഉപകരണം കാഷെ ചെയ്തു",
+        "toolsCached_other": "{{count}} ഉപകരണങ്ങൾ കാഷെ ചെയ്തു"
       },
       "notices": {
         "promptRequired": "ദയവായി പുതിയ സിസ്റ്റം പ്രോംപ്റ്റിനായി ഒരു പേരും ഉള്ളടക്കവും നൽകുക."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "കാഷെ ചെയ്ത മോഡലുകൾ: {{count}}",
       "connectionFailed": "കണക്ഷൻ പരിശോധന പരാജയപ്പെട്ടു. ദാതാവ് ക്രമീകരണങ്ങൾ പരിശോധിക്കുക.",
-      "connectionSuccess": "കണക്ഷൻ വിജയിച്ചു. {{count}} മോഡൽ(കൾ) കാഷെ ചെയ്തു.",
       "noCachedModels": "കാഷെ ചെയ്ത മോഡലുകളൊന്നുമില്ല",
       "testConnection": "കണക്ഷൻ പരിശോധിക്കുക",
-      "testing": "പരിശോധിക്കുന്നു..."
+      "testing": "പരിശോധിക്കുന്നു...",
+      "connectionSuccess_one": "കണക്ഷൻ വിജയിച്ചു. {{count}} മോഡൽ കാഷെ ചെയ്തു.",
+      "connectionSuccess_other": "കണക്ഷൻ വിജയിച്ചു. {{count}} മോഡലുകൾ കാഷെ ചെയ്തു."
     },
     "mcpInspector": {
       "title": "MCP ഇൻസ്പെക്ടർ",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "അപ്രാപ്തമാക്കി",
         "statusConnected": "● കണക്റ്റ് ചെയ്തു",
         "statusDisconnected": "○ വിച്ഛേദിച്ചു",
-        "toolsLive_one": "{{count}} ഉപകരണം",
-        "toolsLive_other": "{{count}} ഉപകരണങ്ങൾ",
-        "toolsLive": "{{count}} ഉപകരണങ്ങൾ",
-        "toolsCached_one": "{{count}} ഉപകരണം (കാഷെ ചെയ്തു)",
-        "toolsCached_other": "{{count}} ഉപകരണങ്ങൾ (കാഷെ ചെയ്തു)",
-        "toolsCached": "{{count}} ഉപകരണങ്ങൾ (കാഷെ ചെയ്തു)",
         "noTools": "0 ഉപകരണങ്ങൾ",
         "connectBtn": "കണക്റ്റ് ചെയ്യുക",
         "disconnectBtn": "വിച്ഛേദിക്കുക",
@@ -1346,7 +1331,11 @@
           "connected": "{{name}}-ലേക്ക് കണക്റ്റ് ചെയ്തു",
           "failedDisconnect": "{{name}}-ൽ നിന്ന് വിച്ഛേദിക്കുന്നതിൽ പരാജയപ്പെട്ടു: {{message}}",
           "failedConnect": "{{name}}-ലേക്ക് കണക്റ്റ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} ഉപകരണം (കാഷെ ചെയ്തു)",
+        "toolsCached_other": "{{count}} ഉപകരണങ്ങൾ (കാഷെ ചെയ്തു)",
+        "toolsLive_one": "{{count}} ഉപകരണം",
+        "toolsLive_other": "{{count}} ഉപകരണങ്ങൾ"
       },
       "tools": {
         "title": "ലഭ്യമായ MCP ഉപകരണങ്ങൾ",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "ഉപകരണങ്ങളും അനുമതികളും",
-    "subtitle_one": "{{agent}}-ന് {{count}} ഉപകരണം ഉപയോഗിക്കാം.",
-    "subtitle_other": "{{agent}}-ന് {{count}} ഉപകരണങ്ങൾ ഉപയോഗിക്കാം.",
     "chatMode": "ചാറ്റ് മോഡ്",
     "permissions": "നിലവിലെ അനുമതികൾ",
     "reads": "ഈ ടാസ്ക്കിന് വായിക്കാവുന്നത്",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "വോൾട്ട് സന്ദർഭം",
-      "referencesPlusContext_one": "{{count}} വ്യക്തമായ റഫറൻസും സജീവ സന്ദർഭവും",
-      "referencesPlusContext_other": "{{count}} വ്യക്തമായ റഫറൻസുകളും സജീവ സന്ദർഭവും",
       "activeContext": "സജീവ നോട്ടും ഗ്രാഫ് സന്ദർഭ സ്നാപ്ഷോട്ടും",
       "readTools": "വോൾട്ട് വായനാ ഉപകരണങ്ങൾ",
       "enabledCount": "{{count}} എണ്ണം പ്രവർത്തനക്ഷമം",
@@ -1605,12 +1590,16 @@
       "off": "ഓഫ്",
       "disabledInSettings": "ക്രമീകരണങ്ങളിൽ പ്രവർത്തനരഹിതം",
       "custom": "ഇഷ്ടാനുസൃത ഉപകരണങ്ങൾ",
-      "customEnabled_one": "{{count}} MCP, OpenAPI അല്ലെങ്കിൽ CLI ഉപകരണം പ്രവർത്തനക്ഷമം",
-      "customEnabled_other": "{{count}} MCP, OpenAPI അല്ലെങ്കിൽ CLI ഉപകരണങ്ങൾ പ്രവർത്തനക്ഷമം",
       "noneEnabled": "ഒന്നും പ്രവർത്തനക്ഷമമല്ല",
       "destructive": "വിനാശകരമായ വോൾട്ട് പ്രവർത്തനങ്ങൾ",
-      "notProvided": "ബിൽറ്റ്-ഇൻ ഉപകരണങ്ങൾ നൽകുന്നില്ല"
-    }
+      "notProvided": "ബിൽറ്റ്-ഇൻ ഉപകരണങ്ങൾ നൽകുന്നില്ല",
+      "customEnabled_one": "{{count}} MCP, OpenAPI അല്ലെങ്കിൽ CLI ഉപകരണം പ്രവർത്തനക്ഷമം",
+      "customEnabled_other": "{{count}} MCP, OpenAPI അല്ലെങ്കിൽ CLI ഉപകരണങ്ങൾ പ്രവർത്തനക്ഷമം",
+      "referencesPlusContext_one": "{{count}} വ്യക്തമായ റഫറൻസും സജീവ സന്ദർഭവും",
+      "referencesPlusContext_other": "{{count}} വ്യക്തമായ റഫറൻസുകളും സജീവ സന്ദർഭവും"
+    },
+    "subtitle_one": "{{agent}}-ന് {{count}} ഉപകരണം ഉപയോഗിക്കാം.",
+    "subtitle_other": "{{agent}}-ന് {{count}} ഉപകരണങ്ങൾ ഉപയോഗിക്കാം."
   },
   "markdown": {
     "run": "പ്രവർത്തിപ്പിക്കുക"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "ഇൻഡക്സ് ചെയ്യാൻ Markdown നോട്ടുകളൊന്നുമില്ല.",
-      "starting_one": "{{count}} നോട്ട് ഇൻഡക്സ് ചെയ്യുന്നു…",
-      "starting_other": "{{count}} നോട്ടുകൾ ഇൻഡക്സ് ചെയ്യുന്നു…",
       "progress": "ഇൻഡക്സ് ചെയ്യുന്നു: {{total}} നോട്ടുകളിൽ {{done}}",
       "completed": "ഇൻഡക്സിംഗ് പൂർത്തിയായി: {{indexed}} ഇൻഡക്സ് ചെയ്തു, {{failed}} പരാജയപ്പെട്ടു.",
       "noIndex": "ഇതുവരെ ഒന്നും ഇൻഡക്സ് ചെയ്തിട്ടില്ല. നിങ്ങളുടെ വോൾട്ട് ഇൻഡക്സ് ചെയ്യാൻ \"Embed all documents\" പ്രവർത്തിപ്പിക്കുക.",
       "gradingError": "ഡോക്യുമെന്റ് ഗ്രേഡിംഗ് പരാജയപ്പെട്ടു: {{message}}",
       "clearing": "ഇൻഡക്സ് മായ്ക്കുന്നു…",
-      "cleared": "ഇൻഡക്സ് മായ്ച്ചു."
+      "cleared": "ഇൻഡക്സ് മായ്ച്ചു.",
+      "starting_one": "{{count}} നോട്ട് ഇൻഡക്സ് ചെയ്യുന്നു…",
+      "starting_other": "{{count}} നോട്ടുകൾ ഇൻഡക്സ് ചെയ്യുന്നു…"
     }
   }
 }

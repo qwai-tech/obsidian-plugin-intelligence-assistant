@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Sjå og handter modellar frå alle konfigurerte leverandørar. Klikk «oppdater modellar» for å hente dei siste tilgjengelege modellane.",
-      "providerCount_one": "{{count}} leverandør konfigurert",
-      "providerCount_other": "{{count}} leverandørar konfigurert",
-      "providerCount": "{{count}} leverandørar konfigurert",
       "refreshAll": "oppdater alle modellar",
       "empty": "Ingen leverandørar konfigurert enno. Legg til leverandørar i leverandørfana fyrst.",
       "noModels": "Ingen modellar tilgjengelege. Klikk «oppdater alle modellar» eller oppdater individuelle leverandørar i leverandørfana.",
       "noMatch": "Ingen modellar samsvarar med dei gjeldande filtrera. Juster eller fjern filtre for å sjå resultat.",
-      "modelCount_one": "• {{count}} modell i mellomlageret",
-      "modelCount_other": "• {{count}} modellar i mellomlageret",
-      "modelCount": "• {{count}} modellar i mellomlageret",
-      "matchCount_one": "• {{count}} samsvarar med valde filtre",
-      "matchCount_other": "• {{count}} samsvarar med valde filtre",
-      "matchCount": "• {{count}} samsvarar med valde filtre",
       "status": {
         "enabled": "Aktivert",
         "disabled": "Deaktivert"
@@ -92,12 +83,15 @@
         "capabilities": "Eigenskapar",
         "status": "Status",
         "actions": "Handlingar"
-      }
+      },
+      "matchCount_one": "• {{count}} treff for valde filter",
+      "matchCount_other": "• {{count}} treff for valde filter",
+      "modelCount_one": "• {{count}} modell i mellomlageret",
+      "modelCount_other": "• {{count}} modellar i mellomlageret",
+      "providerCount_one": "{{count}} leverandør konfigurert",
+      "providerCount_other": "{{count}} leverandørar konfigurert"
     },
     "provider": {
-      "count_one": "{{count}} leverandør konfigurert",
-      "count_other": "{{count}} leverandørar konfigurert",
-      "count": "{{count}} leverandørar konfigurert",
       "addBtn": "+ Legg til leverandør",
       "empty": "Ingen leverandørar konfigurert. Vel «Legg til leverandør» for å kome i gang.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "Ingen modellar",
         "count_one": "{{count}} modell",
-        "count_other": "{{count}} modellar",
-        "count": "{{count}} modellar"
+        "count_other": "{{count}} modellar"
       },
       "ollama": {
         "checkingVersion": "Sjekkar versjon...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "Fjern leverandøren {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} leverandør konfigurert",
+      "count_other": "{{count}} leverandørar konfigurert"
     },
     "mcp": {
       "desc": "Konfigurer Model Context Protocol (MCP)-tenarar for å utvide agentfunksjonane med eksterne verktøy og datakjelder.",
@@ -165,9 +160,6 @@
       "untitled": "Namnlaus MCP-tenar",
       "notConfigured": "Ikkje konfigurert",
       "cached": "Mellomlagra",
-      "envVars_one": "{{count}} miljøvariabel",
-      "envVars_other": "{{count}} miljøvariablar",
-      "envVars": "{{count}} miljøvariablar",
       "status": {
         "disabled": "Deaktivert",
         "connected": "tilkopla",
@@ -177,12 +169,10 @@
         "autoConnect": "Automatisk tilkopling"
       },
       "toolCount": {
-        "live_one": "{{count}} aktivt verktøy",
-        "live_other": "{{count}} aktive verktøy",
-        "live": "{{count}} aktive verktøy",
         "cached_one": "{{count}} mellomlagra verktøy",
         "cached_other": "{{count}} mellomlagra verktøy",
-        "cached": "{{count}} mellomlagra verktøy"
+        "live_one": "{{count}} aktivt verktøy",
+        "live_other": "{{count}} aktive verktøy"
       },
       "actions": {
         "edit": "Rediger",
@@ -204,27 +194,28 @@
         "disconnectFailed": "Klarte ikkje å kople frå {{name}}",
         "connectFailed": "Klarte ikkje å kople til {{name}}",
         "testNoCommand": "skriv inn ein kommando før du testar tilkoplinga",
-        "testSuccess": "kopla til! Fann {{count}} verktøy.",
         "testFailed": "Tilkopling mislukkast: {{message}}",
-        "refreshedAll_one": "oppdaterte verktøy for {{count}} tenar",
-        "refreshedAll_other": "oppdaterte verktøy for {{count}} tenarar",
-        "refreshedAll": "oppdaterte verktøy for {{count}} tenarar",
         "refreshedPartial": "oppdaterte {{success}} tenarar, {{failed}} mislukkast",
         "noServersConfigured": "Ingen MCP-tenarar konfigurert",
-        "testingAll": "Testar {{count}} MCP-tenartilkoplingar...",
-        "testAllSuccess": "alle {{count}} MCP-tenarar vart tilkopla!",
-        "testAllPartial": "{{successful}} tilkopla, {{failed}} mislukkast"
+        "testAllPartial": "{{successful}} tilkopla, {{failed}} mislukkast",
+        "refreshedAll_one": "Oppdaterte verktøy for {{count}} tenar",
+        "refreshedAll_other": "Oppdaterte verktøy for {{count}} tenarar",
+        "testAllSuccess_one": "{{count}} MCP-tenar vart kopla til.",
+        "testAllSuccess_other": "Alle dei {{count}} MCP-tenarane vart kopla til.",
+        "testSuccess_one": "Kopla til. Fann {{count}} verktøy.",
+        "testSuccess_other": "Kopla til. Fann {{count}} verktøy.",
+        "testingAll_one": "Testar {{count}} MCP-tenartilkopling…",
+        "testingAll_other": "Testar {{count}} MCP-tenartilkoplingar…"
       },
       "confirm": {
         "delete": "Slett MCP-tenaren «{{name}}»?"
       },
-      "namePlaceholder": "Acme MCP-tenar"
+      "namePlaceholder": "Acme MCP-tenar",
+      "envVars_one": "{{count}} miljøvariabel",
+      "envVars_other": "{{count}} miljøvariablar"
     },
     "agents": {
       "desc": "Opprett og handter AI-agentar med spesifikke eigenskapar, verktøy og åtferd.",
-      "count_one": "{{count}} agent konfigurert",
-      "count_other": "{{count}} agentar konfigurert",
-      "count": "{{count}} agentar konfigurert",
       "addBtn": "+ legg til agent",
       "empty": "Ingen agentar konfigurert. Vel legg til agent for å kome i gang.",
       "defaultBadge": "Standard",
@@ -239,10 +230,8 @@
         "builtIn": "{{count}} innebygd",
         "mcpServer_one": "{{count}} MCP-tenar",
         "mcpServer_other": "{{count}} MCP-tenarar",
-        "mcpServer": "{{count}} MCP-tenarar",
         "mcpTool_one": "{{count}} MCP-verktøy",
-        "mcpTool_other": "{{count}} MCP-verktøy",
-        "mcpTool": "{{count}} MCP-verktøy"
+        "mcpTool_other": "{{count}} MCP-verktøy"
       },
       "actions": {
         "edit": "Rediger",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "Slett agenten «{{name}}»?"
-      }
+      },
+      "count_one": "{{count}} agent konfigurert",
+      "count_other": "{{count}} agentar konfigurert"
     },
     "prompts": {
       "desc": "Handter systemleidetekstar som definerer åtferda og personlegdomen til AI-assistenten.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP-kjelde fjerna",
-          "reloaded": "Lasta inn {{count}} operasjonar på nytt",
-          "reloadFailed": "Klarte ikkje å laste inn HTTP-kjelda på nytt. Sjå konsollen for detaljar."
+          "reloadFailed": "Klarte ikkje å laste inn HTTP-kjelda på nytt. Sjå konsollen for detaljar.",
+          "reloaded_one": "Lasta inn {{count}} operasjon på nytt",
+          "reloaded_other": "Lasta inn {{count}} operasjonar på nytt"
         },
         "modal": {
           "defaultTitle": "HTTP-kjelde",
@@ -419,9 +411,6 @@
           "actions": "Handlingar"
         },
         "unnamed": "Namnlaust CLI-verktøy",
-        "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parametrar",
-        "paramCount": "{{count}} parametrar",
         "noParams": "Ingen",
         "statusEnabled": "Aktivert",
         "statusDisabled": "Deaktivert",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Skjermbilete",
             "preset-applescript-list-apps": "List opp køyrande appar"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parametrar"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Prefiks (emoji eller tekst) som vert vist framfor alle hurtighandlingar i kontekstmenyen",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} handling konfigurert ({{enabled}} aktivert)",
-      "count_other": "{{count}} handlingar konfigurert ({{enabled}} aktivert)",
-      "count": "{{count}} handlingar konfigurert ({{enabled}} aktivert)",
       "addBtn": "+ legg til hurtighandling",
       "empty": "Ingen hurtighandlingar konfigurert. Vel legg til hurtighandling for å kome i gang.",
       "defaultModel": "Standard",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Gjer teksten lengre",
         "prompt": "Utvid og utdjup denne teksten…"
-      }
+      },
+      "count_one": "{{count}} handling konfigurert ({{enabled}} aktivert)",
+      "count_other": "{{count}} handlingar konfigurert ({{enabled}} aktivert)"
     },
     "usage": {
       "desc": "Spor tokenforbruk på tvers av leverandørar og modellar. Data vert akkumulert over alle samtalar.",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG er deaktivert i innstillingane. Aktiver det under innstillingar → chattfunksjonar → RAG.",
       "webSearchDisabled": "Nettsøk er deaktivert i innstillingane. Aktiver det under innstillingar → chattfunksjonar → nettsøk.",
       "attached": "Vedlagd: {{name}}",
-      "attachedImages": "Vedlagd {{count}} bilete",
-      "referencesAdded": "La til {{count}} referanse(r)",
       "fileNotFound": "Fil ikkje funnen: {{path}}",
       "unableToLoadRag": "Kan ikkje laste RAG-statistikk.",
       "referenced": "Referert: {{name}}",
-      "openViewFailed": "Klarte ikkje å opne chattevisinga."
+      "openViewFailed": "Klarte ikkje å opne chattevisinga.",
+      "attachedImages_one": "La ved {{count}} bilete",
+      "attachedImages_other": "La ved {{count}} bilete",
+      "referencesAdded_one": "La til {{count}} referanse",
+      "referencesAdded_other": "La til {{count}} referansar"
     },
     "status": {
       "unavailable": "Utilgjengeleg",
@@ -1020,9 +1012,8 @@
       "step2": "Aktiver RAG",
       "step3": "Vel indekser kvelv",
       "close": "Lukk",
-      "retrieved_one": "henta frå {{count}} dokument",
-      "retrieved_other": "henta frå {{count}} dokument",
-      "retrieved": "henta frå {{count}} dokument"
+      "retrieved_one": "Henta frå {{count}} dokument",
+      "retrieved_other": "Henta frå {{count}} dokument"
     },
     "ragTooltip": {
       "status": "RAG-indeksstatus:",
@@ -1141,8 +1132,6 @@
       "apply": "Bruk",
       "applyAll": "Bruk alle",
       "applied": "Brukt",
-      "changes_one": "{{count}} endring",
-      "changes_other": "{{count}} endringar",
       "confirm": "Bruke {{summary}}?",
       "appliedNotice": "Brukt: {{summary}}",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Slett",
         "move": "Flytt",
         "batch": "Samling"
-      }
+      },
+      "changes_one": "{{count}} endring",
+      "changes_other": "{{count}} endringar"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP-tilgang",
         "noServers": "Ingen MCP-tenarar konfigurert. Legg til tenarar under Innstillingar → MCP for å låse opp desse alternativa.",
-        "toolsCached_one": "{{count}} verktøy i mellomlageret",
-        "toolsCached_other": "{{count}} verktøy i mellomlageret",
-        "toolsCached": "{{count}} verktøy i mellomlageret",
         "noToolsCached": "Ingen verktøy i mellomlageret enno. Aktiver full tilgang eller oppdater mellomlageret.",
         "showTools": "Vis verktøy",
         "hideTools": "Gøym verktøy",
         "selected": "Vald",
         "notSelected": "Ikkje vald",
-        "noToolsAvailable": "Ingen verktøy tilgjengelege frå denne tenaren enno."
+        "noToolsAvailable": "Ingen verktøy tilgjengelege frå denne tenaren enno.",
+        "toolsCached_one": "{{count}} verktøy i mellomlageret",
+        "toolsCached_other": "{{count}} verktøy i mellomlageret"
       },
       "notices": {
         "promptRequired": "Oppgje eit namn og innhald for den nye systemleideteksten."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Mellomlagra modellar: {{count}}",
       "connectionFailed": "Tilkoplingstesten feila. Sjekk leverandørinnstillingane.",
-      "connectionSuccess": "Tilkoplinga var vellukka. {{count}} modell(ar) mellomlagra.",
       "noCachedModels": "Ingen mellomlagra modellar",
       "testConnection": "Test tilkopling",
-      "testing": "Testar..."
+      "testing": "Testar...",
+      "connectionSuccess_one": "Tilkoplinga var vellukka. {{count}} modell mellomlagra.",
+      "connectionSuccess_other": "Tilkoplinga var vellukka. {{count}} modellar mellomlagra."
     },
     "mcpInspector": {
       "title": "MCP-inspektør",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Deaktivert",
         "statusConnected": "● tilkopla",
         "statusDisconnected": "○ fråkopla",
-        "toolsLive_one": "{{count}} verktøy",
-        "toolsLive_other": "{{count}} verktøy",
-        "toolsLive": "{{count}} verktøy",
-        "toolsCached_one": "{{count}} verktøy (mellomlagra)",
-        "toolsCached_other": "{{count}} verktøy (mellomlagra)",
-        "toolsCached": "{{count}} verktøy (mellomlagra)",
         "noTools": "0 verktøy",
         "connectBtn": "Kople til",
         "disconnectBtn": "Kople frå",
@@ -1346,7 +1331,11 @@
           "connected": "Kopla til {{name}}",
           "failedDisconnect": "Klarte ikkje å kople frå {{name}}: {{message}}",
           "failedConnect": "Klarte ikkje å kople til {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} verktøy (mellomlagra)",
+        "toolsCached_other": "{{count}} verktøy (mellomlagra)",
+        "toolsLive_one": "{{count}} verktøy",
+        "toolsLive_other": "{{count}} verktøy"
       },
       "tools": {
         "title": "Tilgjengelege MCP-verktøy",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Verktøy og løyve",
-    "subtitle_one": "{{agent}} kan bruke {{count}} verktøy.",
-    "subtitle_other": "{{agent}} kan bruke {{count}} verktøy.",
     "chatMode": "Chattemodus",
     "permissions": "Gjeldande løyve",
     "reads": "Denne oppgåva kan lese",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Kvelvkontekst",
-      "referencesPlusContext_one": "{{count}} eksplisitt referanse pluss aktiv kontekst",
-      "referencesPlusContext_other": "{{count}} eksplisitte referansar pluss aktiv kontekst",
       "activeContext": "Aktivt notat og øyeblinksbilete av grafkonteksten",
       "readTools": "Leseverktøy for kvelvet",
       "enabledCount": "{{count}} aktiverte",
@@ -1605,12 +1590,16 @@
       "off": "Av",
       "disabledInSettings": "Deaktivert i innstillingane",
       "custom": "Eigne verktøy",
-      "customEnabled_one": "{{count}} MCP-, OpenAPI- eller CLI-verktøy aktivert",
-      "customEnabled_other": "{{count}} MCP-, OpenAPI- eller CLI-verktøy aktiverte",
       "noneEnabled": "Ingen aktiverte",
       "destructive": "Destruktive kvelvhandlingar",
-      "notProvided": "Ikkje levert av innebygde verktøy"
-    }
+      "notProvided": "Ikkje levert av innebygde verktøy",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- eller CLI-verktøy aktivert",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- eller CLI-verktøy aktiverte",
+      "referencesPlusContext_one": "{{count}} eksplisitt referanse pluss aktiv kontekst",
+      "referencesPlusContext_other": "{{count}} eksplisitte referansar pluss aktiv kontekst"
+    },
+    "subtitle_one": "{{agent}} kan bruke {{count}} verktøy.",
+    "subtitle_other": "{{agent}} kan bruke {{count}} verktøy."
   },
   "markdown": {
     "run": "Køyr"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Ingen Markdown-notat å indeksere.",
-      "starting_one": "Indekserer {{count}} notat…",
-      "starting_other": "Indekserer {{count}} notat…",
       "progress": "Indekserer: {{done}} av {{total}} notat",
       "completed": "Indeksering ferdig: {{indexed}} indekserte, {{failed}} mislukka.",
       "noIndex": "Ingenting er indeksert enno. Køyr \"Embed all documents\" for å indeksere kvelvet ditt.",
       "gradingError": "Vurdering av dokument mislukkast: {{message}}",
       "clearing": "Tømmer indeksen…",
-      "cleared": "Indeksen er tømd."
+      "cleared": "Indeksen er tømd.",
+      "starting_one": "Indekserer {{count}} notat…",
+      "starting_other": "Indekserer {{count}} notat…"
     }
   }
 }

@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Lihat dan kelola model dari semua penyedia yang dikonfigurasi. Klik \"segarkan model\" untuk mengambil model terbaru yang tersedia.",
-      "providerCount_one": "{{count}} penyedia dikonfigurasi",
-      "providerCount_other": "{{count}} penyedia dikonfigurasi",
-      "providerCount": "{{count}} penyedia dikonfigurasi",
       "refreshAll": "segarkan semua model",
       "empty": "Belum ada penyedia yang dikonfigurasi. Tambahkan penyedia di tab penyedia terlebih dahulu.",
       "noModels": "Tidak ada model yang tersedia. Klik \"segarkan semua model\" atau segarkan penyedia individual di tab penyedia.",
       "noMatch": "Tidak ada model yang cocok dengan filter saat ini. Sesuaikan atau hapus filter untuk melihat hasilnya.",
-      "modelCount_one": "• {{count}} model di-cache",
-      "modelCount_other": "• {{count}} model di-cache",
-      "modelCount": "• {{count}} model di-cache",
-      "matchCount_one": "• {{count}} cocok dengan filter yang dipilih",
-      "matchCount_other": "• {{count}} cocok dengan filter yang dipilih",
-      "matchCount": "• {{count}} cocok dengan filter yang dipilih",
       "status": {
         "enabled": "Aktif",
         "disabled": "Nonaktif"
@@ -92,12 +83,12 @@
         "capabilities": "Kemampuan",
         "status": "Status",
         "actions": "Tindakan"
-      }
+      },
+      "matchCount_other": "• {{count}} cocok dengan filter yang dipilih",
+      "modelCount_other": "• {{count}} model di-cache",
+      "providerCount_other": "{{count}} penyedia dikonfigurasi"
     },
     "provider": {
-      "count_one": "{{count}} penyedia dikonfigurasi",
-      "count_other": "{{count}} penyedia dikonfigurasi",
-      "count": "{{count}} penyedia dikonfigurasi",
       "addBtn": "+ Tambah penyedia",
       "empty": "Tidak ada penyedia yang dikonfigurasi. Pilih \"Tambah penyedia\" untuk memulai.",
       "status": {
@@ -115,9 +106,7 @@
       },
       "models": {
         "none": "Tidak ada model",
-        "count_one": "{{count}} model",
-        "count_other": "{{count}} model",
-        "count": "{{count}} model"
+        "count_other": "{{count}} model"
       },
       "ollama": {
         "checkingVersion": "Memeriksa versi...",
@@ -153,7 +142,8 @@
       },
       "confirm": {
         "delete": "Hapus penyedia {{provider}}?"
-      }
+      },
+      "count_other": "{{count}} penyedia dikonfigurasi"
     },
     "mcp": {
       "desc": "Konfigurasikan server Model Context Protocol (MCP) untuk memperluas kemampuan agen dengan alat dan sumber data eksternal.",
@@ -165,9 +155,6 @@
       "untitled": "Server MCP Tanpa Judul",
       "notConfigured": "Belum dikonfigurasi",
       "cached": "Di-cache",
-      "envVars_one": "{{count}} variabel lingkungan",
-      "envVars_other": "{{count}} variabel lingkungan",
-      "envVars": "{{count}} variabel lingkungan",
       "status": {
         "disabled": "Nonaktif",
         "connected": "terhubung",
@@ -177,12 +164,8 @@
         "autoConnect": "Hubungkan otomatis"
       },
       "toolCount": {
-        "live_one": "{{count}} alat aktif",
-        "live_other": "{{count}} alat aktif",
-        "live": "{{count}} alat aktif",
-        "cached_one": "{{count}} alat di-cache",
         "cached_other": "{{count}} alat di-cache",
-        "cached": "{{count}} alat di-cache"
+        "live_other": "{{count}} alat aktif"
       },
       "actions": {
         "edit": "Edit",
@@ -204,27 +187,23 @@
         "disconnectFailed": "Gagal memutuskan dari {{name}}",
         "connectFailed": "Gagal menghubungkan ke {{name}}",
         "testNoCommand": "harap masukkan perintah sebelum menguji koneksi",
-        "testSuccess": "berhasil terhubung! Ditemukan {{count}} alat.",
         "testFailed": "Koneksi gagal: {{message}}",
-        "refreshedAll_one": "menyegarkan alat untuk {{count}} server",
-        "refreshedAll_other": "menyegarkan alat untuk {{count}} server",
-        "refreshedAll": "menyegarkan alat untuk {{count}} server",
         "refreshedPartial": "disegarkan {{success}} server, {{failed}} gagal",
         "noServersConfigured": "Tidak ada server MCP yang dikonfigurasi",
-        "testingAll": "Menguji {{count}} koneksi server MCP...",
-        "testAllSuccess": "semua {{count}} server MCP berhasil terhubung!",
-        "testAllPartial": "{{successful}} terhubung, {{failed}} gagal"
+        "testAllPartial": "{{successful}} terhubung, {{failed}} gagal",
+        "refreshedAll_other": "Menyegarkan alat untuk {{count}} server",
+        "testAllSuccess_other": "{{count}} server MCP berhasil terhubung.",
+        "testSuccess_other": "Terhubung. Ditemukan {{count}} alat.",
+        "testingAll_other": "Menguji {{count}} koneksi server MCP…"
       },
       "confirm": {
         "delete": "Hapus server MCP \"{{name}}\"?"
       },
-      "namePlaceholder": "Server MCP Acme"
+      "namePlaceholder": "Server MCP Acme",
+      "envVars_other": "{{count}} variabel lingkungan"
     },
     "agents": {
       "desc": "Buat dan kelola agen AI dengan kemampuan, alat, dan perilaku tertentu.",
-      "count_one": "{{count}} agen dikonfigurasi",
-      "count_other": "{{count}} agen dikonfigurasi",
-      "count": "{{count}} agen dikonfigurasi",
       "addBtn": "+ tambah agen",
       "empty": "Tidak ada agen yang dikonfigurasi. Pilih tambah agen untuk memulai.",
       "defaultBadge": "Default",
@@ -237,12 +216,8 @@
       },
       "tools": {
         "builtIn": "{{count}} bawaan",
-        "mcpServer_one": "{{count}} server MCP",
         "mcpServer_other": "{{count}} server MCP",
-        "mcpServer": "{{count}} server MCP",
-        "mcpTool_one": "{{count}} alat MCP",
-        "mcpTool_other": "{{count}} alat MCP",
-        "mcpTool": "{{count}} alat MCP"
+        "mcpTool_other": "{{count}} alat MCP"
       },
       "actions": {
         "edit": "Edit",
@@ -250,7 +225,8 @@
       },
       "confirm": {
         "delete": "Hapus agen \"{{name}}\"?"
-      }
+      },
+      "count_other": "{{count}} agen dikonfigurasi"
     },
     "prompts": {
       "desc": "Kelola prompt sistem yang mendefinisikan perilaku dan kepribadian asisten AI Anda.",
@@ -352,8 +328,8 @@
         },
         "notices": {
           "removed": "Sumber HTTP dihapus",
-          "reloaded": "Memuat ulang {{count}} operasi",
-          "reloadFailed": "Gagal memuat ulang sumber HTTP. Periksa konsol untuk detail."
+          "reloadFailed": "Gagal memuat ulang sumber HTTP. Periksa konsol untuk detail.",
+          "reloaded_other": "Memuat ulang {{count}} operasi"
         },
         "modal": {
           "defaultTitle": "Sumber HTTP",
@@ -419,9 +395,6 @@
           "actions": "Tindakan"
         },
         "unnamed": "Alat CLI Tanpa Nama",
-        "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parameter",
-        "paramCount": "{{count}} parameter",
         "noParams": "Tidak ada",
         "statusEnabled": "Aktif",
         "statusDisabled": "Nonaktif",
@@ -554,7 +527,8 @@
             "preset-screencapture": "Tangkapan Layar",
             "preset-applescript-list-apps": "Daftar Aplikasi yang Berjalan"
           }
-        }
+        },
+        "paramCount_other": "{{count}} parameter"
       }
     },
     "rag": {
@@ -844,9 +818,6 @@
         "desc": "Awalan (emoji atau teks) yang ditampilkan sebelum semua aksi cepat di menu konteks",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} aksi dikonfigurasi ({{enabled}} aktif)",
-      "count_other": "{{count}} aksi dikonfigurasi ({{enabled}} aktif)",
-      "count": "{{count}} aksi dikonfigurasi ({{enabled}} aktif)",
       "addBtn": "+ tambah aksi cepat",
       "empty": "Tidak ada aksi cepat yang dikonfigurasi. Pilih tambah aksi cepat untuk memulai.",
       "defaultModel": "Default",
@@ -912,7 +883,8 @@
       "placeholders": {
         "name": "Perpanjang teks",
         "prompt": "Kembangkan dan uraikan teks berikut…"
-      }
+      },
+      "count_other": "{{count}} aksi dikonfigurasi ({{enabled}} aktif)"
     },
     "usage": {
       "desc": "Lacak konsumsi token di seluruh penyedia dan model. Data diakumulasikan di semua percakapan.",
@@ -994,12 +966,12 @@
       "ragDisabled": "RAG dinonaktifkan di pengaturan. Aktifkan di pengaturan → fitur obrolan → RAG.",
       "webSearchDisabled": "Pencarian web dinonaktifkan di pengaturan. Aktifkan di pengaturan → fitur obrolan → pencarian web.",
       "attached": "Dilampirkan: {{name}}",
-      "attachedImages": "Melampirkan {{count}} gambar",
-      "referencesAdded": "Menambahkan {{count}} referensi",
       "fileNotFound": "File tidak ditemukan: {{path}}",
       "unableToLoadRag": "Tidak dapat memuat statistik RAG.",
       "referenced": "Direferensikan: {{name}}",
-      "openViewFailed": "Tidak dapat membuka tampilan obrolan."
+      "openViewFailed": "Tidak dapat membuka tampilan obrolan.",
+      "attachedImages_other": "Melampirkan {{count}} gambar",
+      "referencesAdded_other": "Menambahkan {{count}} referensi"
     },
     "status": {
       "unavailable": "Tidak tersedia",
@@ -1020,9 +992,7 @@
       "step2": "Aktifkan RAG",
       "step3": "Pilih indeks vault",
       "close": "Tutup",
-      "retrieved_one": "diambil dari {{count}} dokumen",
-      "retrieved_other": "diambil dari {{count}} dokumen",
-      "retrieved": "diambil dari {{count}} dokumen"
+      "retrieved_other": "Diambil dari {{count}} dokumen"
     },
     "ragTooltip": {
       "status": "Status Indeks RAG:",
@@ -1141,8 +1111,6 @@
       "apply": "Terapkan",
       "applyAll": "Terapkan semua",
       "applied": "Diterapkan",
-      "changes_one": "{{count}} perubahan",
-      "changes_other": "{{count}} perubahan",
       "confirm": "Terapkan {{summary}}?",
       "appliedNotice": "Diterapkan: {{summary}}",
       "operations": {
@@ -1152,7 +1120,8 @@
         "delete": "Hapus",
         "move": "Pindahkan",
         "batch": "Batch"
-      }
+      },
+      "changes_other": "{{count}} perubahan"
     }
   },
   "modals": {
@@ -1213,15 +1182,13 @@
       "mcp": {
         "title": "Akses MCP",
         "noServers": "Tidak ada server MCP yang dikonfigurasi. Tambahkan server di Pengaturan → MCP untuk membuka opsi ini.",
-        "toolsCached_one": "{{count}} alat di-cache",
-        "toolsCached_other": "{{count}} alat di-cache",
-        "toolsCached": "{{count}} alat di-cache",
         "noToolsCached": "Belum ada alat yang di-cache. Aktifkan akses penuh atau segarkan cache.",
         "showTools": "Tampilkan alat",
         "hideTools": "Sembunyikan alat",
         "selected": "Dipilih",
         "notSelected": "Tidak dipilih",
-        "noToolsAvailable": "Belum ada alat yang tersedia dari server ini."
+        "noToolsAvailable": "Belum ada alat yang tersedia dari server ini.",
+        "toolsCached_other": "{{count}} alat di-cache"
       },
       "notices": {
         "promptRequired": "Harap berikan nama dan konten untuk prompt sistem baru."
@@ -1303,10 +1270,10 @@
       },
       "cachedModels": "Model di-cache: {{count}}",
       "connectionFailed": "Uji koneksi gagal. Periksa pengaturan penyedia.",
-      "connectionSuccess": "Koneksi berhasil. {{count}} model di-cache.",
       "noCachedModels": "Tidak ada model di-cache",
       "testConnection": "Uji koneksi",
-      "testing": "Menguji..."
+      "testing": "Menguji...",
+      "connectionSuccess_other": "Koneksi berhasil. {{count}} model di-cache."
     },
     "mcpInspector": {
       "title": "Inspektor MCP",
@@ -1329,12 +1296,6 @@
         "statusDisabled": "Nonaktif",
         "statusConnected": "● terhubung",
         "statusDisconnected": "○ terputus",
-        "toolsLive_one": "{{count}} alat",
-        "toolsLive_other": "{{count}} alat",
-        "toolsLive": "{{count}} alat",
-        "toolsCached_one": "{{count}} alat (di-cache)",
-        "toolsCached_other": "{{count}} alat (di-cache)",
-        "toolsCached": "{{count}} alat (di-cache)",
         "noTools": "0 alat",
         "connectBtn": "Hubungkan",
         "disconnectBtn": "Putuskan",
@@ -1346,7 +1307,9 @@
           "connected": "Terhubung ke {{name}}",
           "failedDisconnect": "Gagal memutuskan dari {{name}}: {{message}}",
           "failedConnect": "Gagal menghubungkan ke {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_other": "{{count}} alat (di-cache)",
+        "toolsLive_other": "{{count}} alat"
       },
       "tools": {
         "title": "Alat MCP yang tersedia",
@@ -1569,8 +1532,6 @@
   },
   "capability": {
     "title": "Alat dan izin",
-    "subtitle_one": "{{agent}} dapat menggunakan {{count}} alat.",
-    "subtitle_other": "{{agent}} dapat menggunakan {{count}} alat.",
     "chatMode": "Mode obrolan",
     "permissions": "Izin saat ini",
     "reads": "Tugas ini dapat membaca",
@@ -1590,8 +1551,6 @@
     },
     "rows": {
       "vaultContext": "Konteks vault",
-      "referencesPlusContext_one": "{{count}} referensi eksplisit ditambah konteks aktif",
-      "referencesPlusContext_other": "{{count}} referensi eksplisit ditambah konteks aktif",
       "activeContext": "Catatan aktif dan cuplikan konteks grafik",
       "readTools": "Alat baca vault",
       "enabledCount": "{{count}} diaktifkan",
@@ -1605,12 +1564,13 @@
       "off": "Nonaktif",
       "disabledInSettings": "Dinonaktifkan di pengaturan",
       "custom": "Alat kustom",
-      "customEnabled_one": "{{count}} alat MCP, OpenAPI, atau CLI diaktifkan",
-      "customEnabled_other": "{{count}} alat MCP, OpenAPI, atau CLI diaktifkan",
       "noneEnabled": "Tidak ada yang diaktifkan",
       "destructive": "Tindakan vault destruktif",
-      "notProvided": "Tidak disediakan oleh alat bawaan"
-    }
+      "notProvided": "Tidak disediakan oleh alat bawaan",
+      "customEnabled_other": "{{count}} alat MCP, OpenAPI, atau CLI diaktifkan",
+      "referencesPlusContext_other": "{{count}} referensi eksplisit ditambah konteks aktif"
+    },
+    "subtitle_other": "{{agent}} dapat menggunakan {{count}} alat."
   },
   "markdown": {
     "run": "Jalankan"
@@ -1618,14 +1578,13 @@
   "rag": {
     "notices": {
       "noFiles": "Tidak ada catatan Markdown untuk diindeks.",
-      "starting_one": "Mengindeks {{count}} catatan…",
-      "starting_other": "Mengindeks {{count}} catatan…",
       "progress": "Mengindeks: {{done}} dari {{total}} catatan",
       "completed": "Pengindeksan selesai: {{indexed}} diindeks, {{failed}} gagal.",
       "noIndex": "Belum ada yang diindeks. Jalankan \"Embed all documents\" untuk mengindeks vault Anda.",
       "gradingError": "Penilaian dokumen gagal: {{message}}",
       "clearing": "Mengosongkan indeks…",
-      "cleared": "Indeks dikosongkan."
+      "cleared": "Indeks dikosongkan.",
+      "starting_other": "Mengindeks {{count}} catatan…"
     }
   }
 }

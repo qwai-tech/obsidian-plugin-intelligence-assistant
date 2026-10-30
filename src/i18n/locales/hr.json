@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Pregledajte i upravljajte modelima svih konfiguriranih pružatelja. Kliknite „osvježi modele“ za dohvat najnovijih dostupnih modela.",
-      "providerCount_one": "{{count}} pružatelj konfiguriran",
-      "providerCount_other": "{{count}} pružatelja konfigurirano",
-      "providerCount": "{{count}} pružatelja konfigurirano",
       "refreshAll": "osvježi sve modele",
       "empty": "Nema konfiguriranih pružatelja. Najprije dodajte pružatelje na kartici pružatelja.",
       "noModels": "Nema dostupnih modela. Kliknite „osvježi sve modele“ ili osvježite pojedine pružatelje na kartici pružatelja.",
       "noMatch": "Nijedan model ne odgovara trenutnim filterima. Prilagodite ili obrišite filtere za prikaz rezultata.",
-      "modelCount_one": "• {{count}} model u predmemoriji",
-      "modelCount_other": "• {{count}} modela u predmemoriji",
-      "modelCount": "• {{count}} modela u predmemoriji",
-      "matchCount_one": "• {{count}} odgovara odabranim filterima",
-      "matchCount_other": "• {{count}} odgovara odabranim filterima",
-      "matchCount": "• {{count}} odgovara odabranim filterima",
       "status": {
         "enabled": "Omogućeno",
         "disabled": "Onemogućeno"
@@ -92,12 +83,18 @@
         "capabilities": "Mogućnosti",
         "status": "Status",
         "actions": "Radnje"
-      }
+      },
+      "matchCount_few": "• {{count}} podudaranja s odabranim filterima",
+      "matchCount_one": "• {{count}} podudaranje s odabranim filterima",
+      "matchCount_other": "• {{count}} podudaranja s odabranim filterima",
+      "modelCount_few": "• {{count}} modela u predmemoriji",
+      "modelCount_one": "• {{count}} model u predmemoriji",
+      "modelCount_other": "• {{count}} modela u predmemoriji",
+      "providerCount_few": "{{count}} pružatelja konfigurirana",
+      "providerCount_one": "{{count}} pružatelj konfiguriran",
+      "providerCount_other": "{{count}} pružatelja konfigurirano"
     },
     "provider": {
-      "count_one": "{{count}} pružatelj konfiguriran",
-      "count_other": "{{count}} pružatelja konfigurirano",
-      "count": "{{count}} pružatelja konfigurirano",
       "addBtn": "+ Dodaj pružatelja",
       "empty": "Nema konfiguriranih pružatelja. Odaberite „Dodaj pružatelja“ za početak.",
       "status": {
@@ -115,9 +112,9 @@
       },
       "models": {
         "none": "Nema modela",
+        "count_few": "{{count}} modela",
         "count_one": "{{count}} model",
-        "count_other": "{{count}} modela",
-        "count": "{{count}} modela"
+        "count_other": "{{count}} modela"
       },
       "ollama": {
         "checkingVersion": "Provjeravam verziju...",
@@ -153,7 +150,10 @@
       },
       "confirm": {
         "delete": "Ukloni pružatelja {{provider}}?"
-      }
+      },
+      "count_few": "{{count}} pružatelja konfigurirana",
+      "count_one": "{{count}} pružatelj konfiguriran",
+      "count_other": "{{count}} pružatelja konfigurirano"
     },
     "mcp": {
       "desc": "Konfigurirajte poslužitelje Model Context Protocol (MCP) za proširivanje mogućnosti agenta vanjskim alatima i izvorima podataka.",
@@ -165,9 +165,6 @@
       "untitled": "MCP poslužitelj bez naziva",
       "notConfigured": "Nije konfigurirano",
       "cached": "U predmemoriji",
-      "envVars_one": "{{count}} env varijabla",
-      "envVars_other": "{{count}} env varijabli",
-      "envVars": "{{count}} env varijabli",
       "status": {
         "disabled": "Onemogućeno",
         "connected": "povezano",
@@ -177,12 +174,12 @@
         "autoConnect": "Automatsko spajanje"
       },
       "toolCount": {
-        "live_one": "{{count}} aktivni alat",
-        "live_other": "{{count}} aktivnih alata",
-        "live": "{{count}} aktivnih alata",
+        "cached_few": "{{count}} predmemorirana alata",
         "cached_one": "{{count}} predmemorirani alat",
         "cached_other": "{{count}} predmemoriranih alata",
-        "cached": "{{count}} predmemoriranih alata"
+        "live_few": "{{count}} aktivna alata",
+        "live_one": "{{count}} aktivni alat",
+        "live_other": "{{count}} aktivnih alata"
       },
       "actions": {
         "edit": "Uredi",
@@ -204,27 +201,33 @@
         "disconnectFailed": "Odspajanje od {{name}} nije uspjelo",
         "connectFailed": "Spajanje na {{name}} nije uspjelo",
         "testNoCommand": "unesite naredbu prije testiranja veze",
-        "testSuccess": "uspješno spojeno! Pronađeno {{count}} alata.",
         "testFailed": "Spajanje nije uspjelo: {{message}}",
-        "refreshedAll_one": "alati osvježeni za {{count}} poslužitelj",
-        "refreshedAll_other": "alati osvježeni za {{count}} poslužitelja",
-        "refreshedAll": "alati osvježeni za {{count}} poslužitelja",
         "refreshedPartial": "osvježeno {{success}} poslužitelja, {{failed}} neuspješno",
         "noServersConfigured": "Nema konfiguriranih MCP poslužitelja",
-        "testingAll": "Testiranje {{count}} MCP veza poslužitelja...",
-        "testAllSuccess": "svih {{count}} mcp poslužitelja uspješno spojeno!",
-        "testAllPartial": "{{successful}} spojeno, {{failed}} neuspješno"
+        "testAllPartial": "{{successful}} spojeno, {{failed}} neuspješno",
+        "refreshedAll_few": "Alati osvježeni za {{count}} poslužitelja",
+        "refreshedAll_one": "Alati osvježeni za {{count}} poslužitelj",
+        "refreshedAll_other": "Alati osvježeni za {{count}} poslužitelja",
+        "testAllSuccess_few": "Sva {{count}} MCP poslužitelja uspješno su povezana.",
+        "testAllSuccess_one": "{{count}} MCP poslužitelj uspješno povezan.",
+        "testAllSuccess_other": "Svih {{count}} MCP poslužitelja uspješno je povezano.",
+        "testSuccess_few": "Povezano. Pronađena {{count}} alata.",
+        "testSuccess_one": "Povezano. Pronađen {{count}} alat.",
+        "testSuccess_other": "Povezano. Pronađeno {{count}} alata.",
+        "testingAll_few": "Testiraju se {{count}} veze s MCP poslužiteljima…",
+        "testingAll_one": "Testira se {{count}} veza s MCP poslužiteljem…",
+        "testingAll_other": "Testira se {{count}} veza s MCP poslužiteljima…"
       },
       "confirm": {
         "delete": "Obriši MCP poslužitelj „{{name}}“?"
       },
-      "namePlaceholder": "Acme MCP poslužitelj"
+      "namePlaceholder": "Acme MCP poslužitelj",
+      "envVars_few": "{{count}} env varijable",
+      "envVars_one": "{{count}} env varijabla",
+      "envVars_other": "{{count}} env varijabli"
     },
     "agents": {
       "desc": "Stvarajte i upravljajte AI agentima s određenim mogućnostima, alatima i ponašanjem.",
-      "count_one": "{{count}} agent konfiguriran",
-      "count_other": "{{count}} agenata konfigurirano",
-      "count": "{{count}} agenata konfigurirano",
       "addBtn": "+ dodaj agenta",
       "empty": "Nema konfiguriranih agenata. Odaberite dodaj agenta za početak.",
       "defaultBadge": "Zadano",
@@ -237,12 +240,12 @@
       },
       "tools": {
         "builtIn": "{{count}} ugrađeni",
-        "mcpServer_one": "{{count}} mcp poslužitelj",
-        "mcpServer_other": "{{count}} mcp poslužitelja",
-        "mcpServer": "{{count}} mcp poslužitelja",
-        "mcpTool_one": "{{count}} mcp alat",
-        "mcpTool_other": "{{count}} mcp alata",
-        "mcpTool": "{{count}} mcp alata"
+        "mcpServer_few": "{{count}} MCP poslužitelja",
+        "mcpServer_one": "{{count}} MCP poslužitelj",
+        "mcpServer_other": "{{count}} MCP poslužitelja",
+        "mcpTool_few": "{{count}} MCP alata",
+        "mcpTool_one": "{{count}} MCP alat",
+        "mcpTool_other": "{{count}} MCP alata"
       },
       "actions": {
         "edit": "Uredi",
@@ -250,7 +253,10 @@
       },
       "confirm": {
         "delete": "Obriši agenta „{{name}}“?"
-      }
+      },
+      "count_few": "{{count}} agenta konfigurirana",
+      "count_one": "{{count}} agent konfiguriran",
+      "count_other": "{{count}} agenata konfigurirano"
     },
     "prompts": {
       "desc": "Upravljajte sistemskim upitima koji definiraju ponašanje i osobnost vašeg AI asistenta.",
@@ -352,8 +358,10 @@
         },
         "notices": {
           "removed": "HTTP izvor uklonjen",
-          "reloaded": "Ponovo učitano {{count}} operacija",
-          "reloadFailed": "Ponovo učitavanje HTTP izvora nije uspjelo. Provjerite konzolu za detalje."
+          "reloadFailed": "Ponovo učitavanje HTTP izvora nije uspjelo. Provjerite konzolu za detalje.",
+          "reloaded_few": "Ponovno učitane {{count}} operacije",
+          "reloaded_one": "Ponovno učitana {{count}} operacija",
+          "reloaded_other": "Ponovno učitano {{count}} operacija"
         },
         "modal": {
           "defaultTitle": "HTTP izvor",
@@ -419,9 +427,6 @@
           "actions": "Radnje"
         },
         "unnamed": "CLI alat bez naziva",
-        "paramCount_one": "{{count}} parametar",
-        "paramCount_other": "{{count}} parametara",
-        "paramCount": "{{count}} parametara",
         "noParams": "Nema",
         "statusEnabled": "Omogućeno",
         "statusDisabled": "Onemogućeno",
@@ -554,7 +559,10 @@
             "preset-screencapture": "Snimka zaslona",
             "preset-applescript-list-apps": "Prikaži pokrenute aplikacije"
           }
-        }
+        },
+        "paramCount_few": "{{count}} parametra",
+        "paramCount_one": "{{count}} parametar",
+        "paramCount_other": "{{count}} parametara"
       }
     },
     "rag": {
@@ -844,9 +852,6 @@
         "desc": "Prefiks (emoji ili tekst) za prikaz ispred svih brzih radnji u kontekstnom izborniku",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} radnja konfigurirana ({{enabled}} omogućeno)",
-      "count_other": "{{count}} radnji konfigurirano ({{enabled}} omogućeno)",
-      "count": "{{count}} radnji konfigurirano ({{enabled}} omogućeno)",
       "addBtn": "+ dodaj brzu radnju",
       "empty": "Nema konfiguriranih brzih radnji. Odaberite dodaj brzu radnju za početak.",
       "defaultModel": "Zadano",
@@ -912,7 +917,10 @@
       "placeholders": {
         "name": "Produlji tekst",
         "prompt": "Proširi i razradi sljedeći tekst…"
-      }
+      },
+      "count_few": "{{count}} radnje konfigurirane (omogućeno: {{enabled}})",
+      "count_one": "{{count}} radnja konfigurirana (omogućeno: {{enabled}})",
+      "count_other": "{{count}} radnji konfigurirano (omogućeno: {{enabled}})"
     },
     "usage": {
       "desc": "Pratite potrošnju tokena po pružateljima i modelima. Podaci se akumuliraju kroz sve razgovore.",
@@ -994,12 +1002,16 @@
       "ragDisabled": "RAG je onemogućen u postavkama. Omogućite ga u postavke → značajke razgovora → RAG.",
       "webSearchDisabled": "Web pretraživanje je onemogućeno u postavkama. Omogućite ga u postavke → značajke razgovora → web pretraživanje.",
       "attached": "Priloženo: {{name}}",
-      "attachedImages": "Priloženo {{count}} slika",
-      "referencesAdded": "Dodano {{count}} referenci",
       "fileNotFound": "Datoteka nije pronađena: {{path}}",
       "unableToLoadRag": "Nije moguće učitati RAG statistike.",
       "referenced": "Referencirano: {{name}}",
-      "openViewFailed": "Nije moguće otvoriti prikaz razgovora."
+      "openViewFailed": "Nije moguće otvoriti prikaz razgovora.",
+      "attachedImages_few": "Priložene {{count}} slike",
+      "attachedImages_one": "Priložena {{count}} slika",
+      "attachedImages_other": "Priloženo {{count}} slika",
+      "referencesAdded_few": "Dodane {{count}} reference",
+      "referencesAdded_one": "Dodana {{count}} referenca",
+      "referencesAdded_other": "Dodano {{count}} referenci"
     },
     "status": {
       "unavailable": "Nedostupno",
@@ -1020,9 +1032,9 @@
       "step2": "Omogući RAG",
       "step3": "Odaberi indeksiranje trezora",
       "close": "Zatvori",
-      "retrieved_one": "dohvaćeno iz {{count}} dokumenta",
-      "retrieved_other": "dohvaćeno iz {{count}} dokumenata",
-      "retrieved": "dohvaćeno iz {{count}} dokumenata"
+      "retrieved_few": "Dohvaćeno iz {{count}} dokumenta",
+      "retrieved_one": "Dohvaćeno iz {{count}} dokumenta",
+      "retrieved_other": "Dohvaćeno iz {{count}} dokumenata"
     },
     "ragTooltip": {
       "status": "Status RAG indeksa:",
@@ -1141,8 +1153,6 @@
       "apply": "Primijeni",
       "applyAll": "Primijeni sve",
       "applied": "Primijenjeno",
-      "changes_one": "{{count}} promjena",
-      "changes_other": "Promjene: {{count}}",
       "confirm": "Primijeniti {{summary}}?",
       "appliedNotice": "Primijenjeno: {{summary}}",
       "operations": {
@@ -1152,7 +1162,10 @@
         "delete": "Izbriši",
         "move": "Premjesti",
         "batch": "Skupno"
-      }
+      },
+      "changes_few": "{{count}} promjene",
+      "changes_one": "{{count}} promjena",
+      "changes_other": "{{count}} promjena"
     }
   },
   "modals": {
@@ -1213,15 +1226,15 @@
       "mcp": {
         "title": "MCP pristup",
         "noServers": "Nema konfiguriranih MCP poslužitelja. Dodajte poslužitelje u Postavke → MCP za otključavanje opcija.",
-        "toolsCached_one": "{{count}} alat u predmemoriji",
-        "toolsCached_other": "{{count}} alata u predmemoriji",
-        "toolsCached": "{{count}} alata u predmemoriji",
         "noToolsCached": "Nema alata u predmemoriji. Omogućite puni pristup ili osvježite predmemoriju.",
         "showTools": "Prikaži alate",
         "hideTools": "Sakrij alate",
         "selected": "Odabrano",
         "notSelected": "Nije odabrano",
-        "noToolsAvailable": "Nema dostupnih alata s ovog poslužitelja."
+        "noToolsAvailable": "Nema dostupnih alata s ovog poslužitelja.",
+        "toolsCached_few": "{{count}} alata u predmemoriji",
+        "toolsCached_one": "{{count}} alat u predmemoriji",
+        "toolsCached_other": "{{count}} alata u predmemoriji"
       },
       "notices": {
         "promptRequired": "Unesite naziv i sadržaj novog sistemskog upita."
@@ -1303,10 +1316,12 @@
       },
       "cachedModels": "Predmemorirani modeli: {{count}}",
       "connectionFailed": "Test veze nije uspio. Provjerite postavke pružatelja.",
-      "connectionSuccess": "Veza uspješna. Predmemorirano modela: {{count}}.",
       "noCachedModels": "Nema predmemoriranih modela",
       "testConnection": "Testiraj vezu",
-      "testing": "Testiranje..."
+      "testing": "Testiranje...",
+      "connectionSuccess_few": "Veza uspješna. {{count}} modela u predmemoriji.",
+      "connectionSuccess_one": "Veza uspješna. {{count}} model u predmemoriji.",
+      "connectionSuccess_other": "Veza uspješna. {{count}} modela u predmemoriji."
     },
     "mcpInspector": {
       "title": "MCP inspektor",
@@ -1329,12 +1344,6 @@
         "statusDisabled": "Onemogućeno",
         "statusConnected": "● spojeno",
         "statusDisconnected": "○ odspojeno",
-        "toolsLive_one": "{{count}} alat",
-        "toolsLive_other": "{{count}} alata",
-        "toolsLive": "{{count}} alata",
-        "toolsCached_one": "{{count}} alat (u predmemoriji)",
-        "toolsCached_other": "{{count}} alata (u predmemoriji)",
-        "toolsCached": "{{count}} alata (u predmemoriji)",
         "noTools": "0 alata",
         "connectBtn": "Spoji",
         "disconnectBtn": "Odspoji",
@@ -1346,7 +1355,13 @@
           "connected": "Spojeno na {{name}}",
           "failedDisconnect": "Odspajanje od {{name}} nije uspjelo: {{message}}",
           "failedConnect": "Spajanje na {{name}} nije uspjelo: {{message}}"
-        }
+        },
+        "toolsCached_few": "{{count}} alata (u predmemoriji)",
+        "toolsCached_one": "{{count}} alat (u predmemoriji)",
+        "toolsCached_other": "{{count}} alata (u predmemoriji)",
+        "toolsLive_few": "{{count}} alata",
+        "toolsLive_one": "{{count}} alat",
+        "toolsLive_other": "{{count}} alata"
       },
       "tools": {
         "title": "Dostupni MCP alati",
@@ -1569,8 +1584,6 @@
   },
   "capability": {
     "title": "Alati i dopuštenja",
-    "subtitle_one": "{{agent}} može koristiti {{count}} alat.",
-    "subtitle_other": "{{agent}} može koristiti alata: {{count}}.",
     "chatMode": "Način razgovora",
     "permissions": "Trenutačna dopuštenja",
     "reads": "Ovaj zadatak može čitati",
@@ -1590,8 +1603,6 @@
     },
     "rows": {
       "vaultContext": "Kontekst trezora",
-      "referencesPlusContext_one": "{{count}} izričita referenca uz aktivni kontekst",
-      "referencesPlusContext_other": "Izričite reference: {{count}}, uz aktivni kontekst",
       "activeContext": "Aktivna bilješka i snimka konteksta grafa",
       "readTools": "Alati za čitanje trezora",
       "enabledCount": "Omogućeno: {{count}}",
@@ -1605,12 +1616,19 @@
       "off": "Isključeno",
       "disabledInSettings": "Onemogućeno u postavkama",
       "custom": "Prilagođeni alati",
-      "customEnabled_one": "Omogućen {{count}} MCP, OpenAPI ili CLI alat",
-      "customEnabled_other": "Omogućeni MCP, OpenAPI ili CLI alati: {{count}}",
       "noneEnabled": "Nijedan nije omogućen",
       "destructive": "Destruktivne radnje u trezoru",
-      "notProvided": "Ugrađeni alati to ne pružaju"
-    }
+      "notProvided": "Ugrađeni alati to ne pružaju",
+      "customEnabled_few": "Omogućena {{count}} MCP, OpenAPI ili CLI alata",
+      "customEnabled_one": "Omogućen {{count}} MCP, OpenAPI ili CLI alat",
+      "customEnabled_other": "Omogućeno {{count}} MCP, OpenAPI ili CLI alata",
+      "referencesPlusContext_few": "{{count}} izričite reference uz aktivni kontekst",
+      "referencesPlusContext_one": "{{count}} izričita referenca uz aktivni kontekst",
+      "referencesPlusContext_other": "{{count}} izričitih referenci uz aktivni kontekst"
+    },
+    "subtitle_few": "{{agent}} može koristiti {{count}} alata.",
+    "subtitle_one": "{{agent}} može koristiti {{count}} alat.",
+    "subtitle_other": "{{agent}} može koristiti {{count}} alata."
   },
   "markdown": {
     "run": "Pokreni"
@@ -1618,14 +1636,15 @@
   "rag": {
     "notices": {
       "noFiles": "Nema Markdown bilješki za indeksiranje.",
-      "starting_one": "Indeksiranje {{count}} bilješke…",
-      "starting_other": "Indeksiranje bilješki: {{count}}…",
       "progress": "Indeksiranje: {{done}} od {{total}} bilješki",
       "completed": "Indeksiranje završeno: indeksirano {{indexed}}, neuspješno {{failed}}.",
       "noIndex": "Još ništa nije indeksirano. Pokrenite \"Embed all documents\" za indeksiranje trezora.",
       "gradingError": "Ocjenjivanje dokumenata nije uspjelo: {{message}}",
       "clearing": "Čišćenje indeksa…",
-      "cleared": "Indeks je očišćen."
+      "cleared": "Indeks je očišćen.",
+      "starting_few": "Indeksiraju se {{count}} bilješke…",
+      "starting_one": "Indeksira se {{count}} bilješka…",
+      "starting_other": "Indeksira se {{count}} bilježaka…"
     }
   }
 }

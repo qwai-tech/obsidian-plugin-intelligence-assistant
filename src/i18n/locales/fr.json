@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Afficher et gérer les modèles de tous les fournisseurs configurés. Cliquez sur « actualiser les modèles » pour récupérer les derniers modèles disponibles.",
-      "providerCount_one": "{{count}} fournisseur configuré",
-      "providerCount_other": "{{count}} fournisseurs configurés",
-      "providerCount": "{{count}} fournisseurs configurés",
       "refreshAll": "actualiser tous les modèles",
       "empty": "Aucun fournisseur configuré. Ajoutez des fournisseurs dans l'onglet fournisseur d'abord.",
       "noModels": "Aucun modèle disponible. Cliquez sur « actualiser tous les modèles » ou actualisez les fournisseurs individuels dans l'onglet fournisseur.",
       "noMatch": "Aucun modèle ne correspond aux filtres actuels. Ajustez ou effacez les filtres pour voir les résultats.",
-      "modelCount_one": "• {{count}} modèle en cache",
-      "modelCount_other": "• {{count}} modèles en cache",
-      "modelCount": "• {{count}} modèles en cache",
-      "matchCount_one": "• {{count}} correspond aux filtres sélectionnés",
-      "matchCount_other": "• {{count}} correspondent aux filtres sélectionnés",
-      "matchCount": "• {{count}} correspondent aux filtres sélectionnés",
       "status": {
         "enabled": "Activé",
         "disabled": "Désactivé"
@@ -92,12 +83,18 @@
         "capabilities": "Capacités",
         "status": "Statut",
         "actions": "Actions"
-      }
+      },
+      "matchCount_one": "• {{count}} correspond aux filtres sélectionnés",
+      "matchCount_many": "• {{count}} correspondent aux filtres sélectionnés",
+      "matchCount_other": "• {{count}} correspondent aux filtres sélectionnés",
+      "modelCount_one": "• {{count}} modèle en cache",
+      "modelCount_many": "• {{count}} modèles en cache",
+      "modelCount_other": "• {{count}} modèles en cache",
+      "providerCount_one": "{{count}} fournisseur configuré",
+      "providerCount_many": "{{count}} fournisseurs configurés",
+      "providerCount_other": "{{count}} fournisseurs configurés"
     },
     "provider": {
-      "count_one": "{{count}} fournisseur configuré",
-      "count_other": "{{count}} fournisseurs configurés",
-      "count": "{{count}} fournisseurs configurés",
       "addBtn": "+ Ajouter un fournisseur",
       "empty": "Aucun fournisseur configuré. Sélectionnez « Ajouter un fournisseur » pour commencer.",
       "status": {
@@ -116,8 +113,8 @@
       "models": {
         "none": "Aucun modèle",
         "count_one": "{{count}} modèle",
-        "count_other": "{{count}} modèles",
-        "count": "{{count}} modèles"
+        "count_many": "{{count}} modèles",
+        "count_other": "{{count}} modèles"
       },
       "ollama": {
         "checkingVersion": "Vérification de la version...",
@@ -153,7 +150,10 @@
       },
       "confirm": {
         "delete": "Supprimer le fournisseur {{provider}} ?"
-      }
+      },
+      "count_one": "{{count}} fournisseur configuré",
+      "count_many": "{{count}} fournisseurs configurés",
+      "count_other": "{{count}} fournisseurs configurés"
     },
     "mcp": {
       "desc": "Configurer les serveurs Model Context Protocol (MCP) pour étendre les capacités des agents avec des outils et sources de données externes.",
@@ -165,9 +165,6 @@
       "untitled": "Serveur MCP sans titre",
       "notConfigured": "Non configuré",
       "cached": "En cache",
-      "envVars_one": "{{count}} variable d'environnement",
-      "envVars_other": "{{count}} variables d'environnement",
-      "envVars": "{{count}} variables d'environnement",
       "status": {
         "disabled": "Désactivé",
         "connected": "connecté",
@@ -177,12 +174,12 @@
         "autoConnect": "Connexion automatique"
       },
       "toolCount": {
-        "live_one": "{{count}} outil actif",
-        "live_other": "{{count}} outils actifs",
-        "live": "{{count}} outils actifs",
         "cached_one": "{{count}} outil en cache",
+        "cached_many": "{{count}} outils en cache",
         "cached_other": "{{count}} outils en cache",
-        "cached": "{{count}} outils en cache"
+        "live_one": "{{count}} outil actif",
+        "live_many": "{{count}} outils actifs",
+        "live_other": "{{count}} outils actifs"
       },
       "actions": {
         "edit": "Modifier",
@@ -204,27 +201,33 @@
         "disconnectFailed": "Échec de la déconnexion de {{name}}",
         "connectFailed": "Échec de la connexion à {{name}}",
         "testNoCommand": "veuillez saisir une commande avant de tester la connexion",
-        "testSuccess": "connecté avec succès ! {{count}} outils trouvés.",
         "testFailed": "Connexion échouée : {{message}}",
-        "refreshedAll_one": "outils actualisés pour {{count}} serveur",
-        "refreshedAll_other": "outils actualisés pour {{count}} serveurs",
-        "refreshedAll": "outils actualisés pour {{count}} serveurs",
         "refreshedPartial": "{{success}} serveurs actualisés, {{failed}} échecs",
         "noServersConfigured": "Aucun serveur MCP configuré",
-        "testingAll": "Test de {{count}} connexion de serveur MCP...",
-        "testAllSuccess": "tous les {{count}} serveurs MCP connectés avec succès !",
-        "testAllPartial": "{{successful}} connectés, {{failed}} échoués"
+        "testAllPartial": "{{successful}} connectés, {{failed}} échoués",
+        "refreshedAll_one": "Outils actualisés pour {{count}} serveur",
+        "refreshedAll_many": "Outils actualisés pour {{count}} serveurs",
+        "refreshedAll_other": "Outils actualisés pour {{count}} serveurs",
+        "testAllSuccess_one": "{{count}} serveur MCP connecté avec succès.",
+        "testAllSuccess_many": "Les {{count}} serveurs MCP sont connectés avec succès.",
+        "testAllSuccess_other": "Les {{count}} serveurs MCP sont connectés avec succès.",
+        "testSuccess_one": "Connecté. {{count}} outil trouvé.",
+        "testSuccess_many": "Connecté. {{count}} outils trouvés.",
+        "testSuccess_other": "Connecté. {{count}} outils trouvés.",
+        "testingAll_one": "Test de {{count}} connexion au serveur MCP…",
+        "testingAll_many": "Test de {{count}} connexions aux serveurs MCP…",
+        "testingAll_other": "Test de {{count}} connexions aux serveurs MCP…"
       },
       "confirm": {
         "delete": "Supprimer le serveur MCP « {{name}} » ?"
       },
-      "namePlaceholder": "Serveur MCP Acme"
+      "namePlaceholder": "Serveur MCP Acme",
+      "envVars_one": "{{count}} variable d'environnement",
+      "envVars_many": "{{count}} variables d'environnement",
+      "envVars_other": "{{count}} variables d'environnement"
     },
     "agents": {
       "desc": "Créer et gérer des agents IA avec des capacités, outils et comportements spécifiques.",
-      "count_one": "{{count}} agent configuré",
-      "count_other": "{{count}} agents configurés",
-      "count": "{{count}} agents configurés",
       "addBtn": "+ ajouter un agent",
       "empty": "Aucun agent configuré. Sélectionnez ajouter un agent pour commencer.",
       "defaultBadge": "Par défaut",
@@ -238,11 +241,11 @@
       "tools": {
         "builtIn": "{{count}} intégré",
         "mcpServer_one": "{{count}} serveur MCP",
+        "mcpServer_many": "{{count}} serveurs MCP",
         "mcpServer_other": "{{count}} serveurs MCP",
-        "mcpServer": "{{count}} serveurs MCP",
         "mcpTool_one": "{{count}} outil MCP",
-        "mcpTool_other": "{{count}} outils MCP",
-        "mcpTool": "{{count}} outils MCP"
+        "mcpTool_many": "{{count}} outils MCP",
+        "mcpTool_other": "{{count}} outils MCP"
       },
       "actions": {
         "edit": "Modifier",
@@ -250,7 +253,10 @@
       },
       "confirm": {
         "delete": "Supprimer l'agent « {{name}} » ?"
-      }
+      },
+      "count_one": "{{count}} agent configuré",
+      "count_many": "{{count}} agents configurés",
+      "count_other": "{{count}} agents configurés"
     },
     "prompts": {
       "desc": "Gérer les prompts système qui définissent le comportement et la personnalité de votre assistant IA.",
@@ -352,8 +358,10 @@
         },
         "notices": {
           "removed": "Source HTTP supprimée",
-          "reloaded": "{{count}} opérations rechargées",
-          "reloadFailed": "Échec du rechargement de la source HTTP. Vérifiez la console pour les détails."
+          "reloadFailed": "Échec du rechargement de la source HTTP. Vérifiez la console pour les détails.",
+          "reloaded_one": "{{count}} opération rechargée",
+          "reloaded_many": "{{count}} opérations rechargées",
+          "reloaded_other": "{{count}} opérations rechargées"
         },
         "modal": {
           "defaultTitle": "Source HTTP",
@@ -419,9 +427,6 @@
           "actions": "Actions"
         },
         "unnamed": "Outil CLI sans nom",
-        "paramCount_one": "{{count}} paramètre",
-        "paramCount_other": "{{count}} paramètres",
-        "paramCount": "{{count}} paramètres",
         "noParams": "Aucun",
         "statusEnabled": "Activé",
         "statusDisabled": "Désactivé",
@@ -554,7 +559,10 @@
             "preset-screencapture": "Capture d'écran",
             "preset-applescript-list-apps": "Lister les applications en cours"
           }
-        }
+        },
+        "paramCount_one": "{{count}} paramètre",
+        "paramCount_many": "{{count}} paramètres",
+        "paramCount_other": "{{count}} paramètres"
       }
     },
     "rag": {
@@ -844,9 +852,6 @@
         "desc": "Préfixe (emoji ou texte) à afficher avant toutes les actions rapides dans le menu contextuel",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} action configurée ({{enabled}} activée)",
-      "count_other": "{{count}} actions configurées ({{enabled}} activées)",
-      "count": "{{count}} actions configurées ({{enabled}} activées)",
       "addBtn": "+ ajouter une action rapide",
       "empty": "Aucune action rapide configurée. Sélectionnez ajouter une action rapide pour commencer.",
       "defaultModel": "Par défaut",
@@ -912,7 +917,10 @@
       "placeholders": {
         "name": "Allonger le texte",
         "prompt": "Développe et approfondis le texte suivant…"
-      }
+      },
+      "count_one": "{{count}} action configurée (activées : {{enabled}})",
+      "count_many": "{{count}} actions configurées (activées : {{enabled}})",
+      "count_other": "{{count}} actions configurées (activées : {{enabled}})"
     },
     "usage": {
       "desc": "Suivre la consommation de tokens entre les fournisseurs et les modèles. Les données sont accumulées sur toutes les conversations.",
@@ -994,12 +1002,16 @@
       "ragDisabled": "Le RAG est désactivé dans les paramètres. Activez-le sous Paramètres → fonctionnalités chat → RAG.",
       "webSearchDisabled": "La recherche web est désactivée dans les paramètres. Activez-la sous Paramètres → fonctionnalités chat → recherche web.",
       "attached": "Attaché : {{name}}",
-      "attachedImages": "{{count}} image(s) attachée(s)",
-      "referencesAdded": "{{count}} référence(s) ajoutée(s)",
       "fileNotFound": "Fichier introuvable : {{path}}",
       "unableToLoadRag": "Impossible de charger les statistiques RAG.",
       "referenced": "Référencé : {{name}}",
-      "openViewFailed": "Impossible d'ouvrir la vue de discussion."
+      "openViewFailed": "Impossible d'ouvrir la vue de discussion.",
+      "attachedImages_one": "{{count}} image jointe",
+      "attachedImages_many": "{{count}} images jointes",
+      "attachedImages_other": "{{count}} images jointes",
+      "referencesAdded_one": "{{count}} référence ajoutée",
+      "referencesAdded_many": "{{count}} références ajoutées",
+      "referencesAdded_other": "{{count}} références ajoutées"
     },
     "status": {
       "unavailable": "Indisponible",
@@ -1020,9 +1032,9 @@
       "step2": "Activer le RAG",
       "step3": "Sélectionner indexer le coffre",
       "close": "Fermer",
-      "retrieved_one": "récupéré depuis {{count}} document",
-      "retrieved_other": "récupéré depuis {{count}} documents",
-      "retrieved": "récupéré depuis {{count}} documents"
+      "retrieved_one": "Récupéré depuis {{count}} document",
+      "retrieved_many": "Récupéré depuis {{count}} documents",
+      "retrieved_other": "Récupéré depuis {{count}} documents"
     },
     "ragTooltip": {
       "status": "État de l'index RAG :",
@@ -1141,8 +1153,6 @@
       "apply": "Appliquer",
       "applyAll": "Tout appliquer",
       "applied": "Appliqué",
-      "changes_one": "{{count}} modification",
-      "changes_other": "{{count}} modifications",
       "confirm": "Appliquer {{summary}} ?",
       "appliedNotice": "{{summary}} appliqué",
       "operations": {
@@ -1152,7 +1162,10 @@
         "delete": "Supprimer",
         "move": "Déplacer",
         "batch": "Lot"
-      }
+      },
+      "changes_one": "{{count}} modification",
+      "changes_many": "{{count}} modifications",
+      "changes_other": "{{count}} modifications"
     }
   },
   "modals": {
@@ -1213,15 +1226,15 @@
       "mcp": {
         "title": "Accès MCP",
         "noServers": "Aucun serveur MCP configuré. Ajoutez des serveurs sous Paramètres → MCP pour débloquer ces options.",
-        "toolsCached_one": "{{count}} outil en cache",
-        "toolsCached_other": "{{count}} outils en cache",
-        "toolsCached": "{{count}} outils en cache",
         "noToolsCached": "Aucun outil en cache pour l'instant. Activez l'accès complet ou actualisez le cache.",
         "showTools": "Afficher les outils",
         "hideTools": "Masquer les outils",
         "selected": "Sélectionné",
         "notSelected": "Non sélectionné",
-        "noToolsAvailable": "Aucun outil disponible depuis ce serveur pour l'instant."
+        "noToolsAvailable": "Aucun outil disponible depuis ce serveur pour l'instant.",
+        "toolsCached_one": "{{count}} outil en cache",
+        "toolsCached_many": "{{count}} outils en cache",
+        "toolsCached_other": "{{count}} outils en cache"
       },
       "notices": {
         "promptRequired": "Veuillez fournir un nom et un contenu pour le nouveau prompt système."
@@ -1303,10 +1316,12 @@
       },
       "cachedModels": "Modèles en cache : {{count}}",
       "connectionFailed": "Échec du test de connexion. Vérifiez les paramètres du fournisseur.",
-      "connectionSuccess": "Connexion réussie. {{count}} modèle(s) mis en cache.",
       "noCachedModels": "Aucun modèle en cache",
       "testConnection": "Tester la connexion",
-      "testing": "Test en cours..."
+      "testing": "Test en cours...",
+      "connectionSuccess_one": "Connexion réussie. {{count}} modèle mis en cache.",
+      "connectionSuccess_many": "Connexion réussie. {{count}} modèles mis en cache.",
+      "connectionSuccess_other": "Connexion réussie. {{count}} modèles mis en cache."
     },
     "mcpInspector": {
       "title": "Inspecteur MCP",
@@ -1329,12 +1344,6 @@
         "statusDisabled": "Désactivé",
         "statusConnected": "● connecté",
         "statusDisconnected": "○ déconnecté",
-        "toolsLive_one": "{{count}} outil",
-        "toolsLive_other": "{{count}} outils",
-        "toolsLive": "{{count}} outils",
-        "toolsCached_one": "{{count}} outil (en cache)",
-        "toolsCached_other": "{{count}} outils (en cache)",
-        "toolsCached": "{{count}} outils (en cache)",
         "noTools": "0 outil",
         "connectBtn": "Connecter",
         "disconnectBtn": "Déconnecter",
@@ -1346,7 +1355,13 @@
           "connected": "Connecté à {{name}}",
           "failedDisconnect": "Échec de la déconnexion de {{name}} : {{message}}",
           "failedConnect": "Échec de la connexion à {{name}} : {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} outil (en cache)",
+        "toolsCached_many": "{{count}} outils (en cache)",
+        "toolsCached_other": "{{count}} outils (en cache)",
+        "toolsLive_one": "{{count}} outil",
+        "toolsLive_many": "{{count}} outils",
+        "toolsLive_other": "{{count}} outils"
       },
       "tools": {
         "title": "Outils MCP disponibles",
@@ -1569,8 +1584,6 @@
   },
   "capability": {
     "title": "Outils et autorisations",
-    "subtitle_one": "{{agent}} peut utiliser {{count}} outil.",
-    "subtitle_other": "{{agent}} peut utiliser {{count}} outils.",
     "chatMode": "Mode discussion",
     "permissions": "Autorisations actuelles",
     "reads": "Cette tâche peut lire",
@@ -1590,8 +1603,6 @@
     },
     "rows": {
       "vaultContext": "Contexte du coffre",
-      "referencesPlusContext_one": "{{count}} référence explicite plus le contexte actif",
-      "referencesPlusContext_other": "{{count}} références explicites plus le contexte actif",
       "activeContext": "Note active et instantané du contexte du graphe",
       "readTools": "Outils de lecture du coffre",
       "enabledCount": "{{count}} activés",
@@ -1605,12 +1616,19 @@
       "off": "Désactivé",
       "disabledInSettings": "Désactivé dans les paramètres",
       "custom": "Outils personnalisés",
-      "customEnabled_one": "{{count}} outil MCP, OpenAPI ou CLI activé",
-      "customEnabled_other": "{{count}} outils MCP, OpenAPI ou CLI activés",
       "noneEnabled": "Aucun activé",
       "destructive": "Actions destructives dans le coffre",
-      "notProvided": "Non fourni par les outils intégrés"
-    }
+      "notProvided": "Non fourni par les outils intégrés",
+      "customEnabled_one": "{{count}} outil MCP, OpenAPI ou CLI activé",
+      "customEnabled_many": "{{count}} outils MCP, OpenAPI ou CLI activés",
+      "customEnabled_other": "{{count}} outils MCP, OpenAPI ou CLI activés",
+      "referencesPlusContext_one": "{{count}} référence explicite plus le contexte actif",
+      "referencesPlusContext_many": "{{count}} références explicites plus le contexte actif",
+      "referencesPlusContext_other": "{{count}} références explicites plus le contexte actif"
+    },
+    "subtitle_one": "{{agent}} peut utiliser {{count}} outil.",
+    "subtitle_many": "{{agent}} peut utiliser {{count}} outils.",
+    "subtitle_other": "{{agent}} peut utiliser {{count}} outils."
   },
   "markdown": {
     "run": "Exécuter"
@@ -1618,14 +1636,15 @@
   "rag": {
     "notices": {
       "noFiles": "Aucune note Markdown à indexer.",
-      "starting_one": "Indexation de {{count}} note…",
-      "starting_other": "Indexation de {{count}} notes…",
       "progress": "Indexation : {{done}} sur {{total}} notes",
       "completed": "Indexation terminée : {{indexed}} indexées, {{failed}} en échec.",
       "noIndex": "Rien n'est encore indexé. Lancez \"Embed all documents\" pour indexer votre coffre.",
       "gradingError": "Échec de l'évaluation du document : {{message}}",
       "clearing": "Effacement de l'index…",
-      "cleared": "Index effacé."
+      "cleared": "Index effacé.",
+      "starting_one": "Indexation de {{count}} note…",
+      "starting_many": "Indexation de {{count}} notes…",
+      "starting_other": "Indexation de {{count}} notes…"
     }
   }
 }

@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Az összes konfigurált szolgáltatótól származó modellek megtekintése és kezelése. Kattintson a \"modellek frissítése\" gombra a legújabb elérhető modellek lekéréséhez.",
-      "providerCount_one": "{{count}} szolgáltató konfigurálva",
-      "providerCount_other": "{{count}} szolgáltató konfigurálva",
-      "providerCount": "{{count}} szolgáltató konfigurálva",
       "refreshAll": "összes modell frissítése",
       "empty": "Még nincsenek konfigurált szolgáltatók. Először adjon hozzá szolgáltatókat a szolgáltató fülön.",
       "noModels": "Nincsenek elérhető modellek. Kattintson az \"összes modell frissítése\" gombra, vagy frissítse az egyes szolgáltatókat a szolgáltató fülön.",
       "noMatch": "Egy modell sem felel meg az aktuális szűrőknek. Módosítsa vagy törölje a szűrőket az eredmények megtekintéséhez.",
-      "modelCount_one": "• {{count}} modell gyorsítótárban",
-      "modelCount_other": "• {{count}} modell gyorsítótárban",
-      "modelCount": "• {{count}} modell gyorsítótárban",
-      "matchCount_one": "• {{count}} megfelel a kiválasztott szűrőknek",
-      "matchCount_other": "• {{count}} megfelel a kiválasztott szűrőknek",
-      "matchCount": "• {{count}} megfelel a kiválasztott szűrőknek",
       "status": {
         "enabled": "Engedélyezve",
         "disabled": "Letiltva"
@@ -92,12 +83,15 @@
         "capabilities": "Képességek",
         "status": "Állapot",
         "actions": "Műveletek"
-      }
+      },
+      "matchCount_one": "• {{count}} találat a kiválasztott szűrőkkel",
+      "matchCount_other": "• {{count}} találat a kiválasztott szűrőkkel",
+      "modelCount_one": "• {{count}} modell gyorsítótárban",
+      "modelCount_other": "• {{count}} modell gyorsítótárban",
+      "providerCount_one": "{{count}} szolgáltató konfigurálva",
+      "providerCount_other": "{{count}} szolgáltató konfigurálva"
     },
     "provider": {
-      "count_one": "{{count}} szolgáltató konfigurálva",
-      "count_other": "{{count}} szolgáltató konfigurálva",
-      "count": "{{count}} szolgáltató konfigurálva",
       "addBtn": "+ Szolgáltató hozzáadása",
       "empty": "Nincsenek konfigurált szolgáltatók. Válassza a \"Szolgáltató hozzáadása\" lehetőséget a kezdéshez.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "Nincsenek modellek",
         "count_one": "{{count}} modell",
-        "count_other": "{{count}} modell",
-        "count": "{{count}} modell"
+        "count_other": "{{count}} modell"
       },
       "ollama": {
         "checkingVersion": "Verzió ellenőrzése...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "Eltávolítja a(z) {{provider}} szolgáltatót?"
-      }
+      },
+      "count_one": "{{count}} szolgáltató konfigurálva",
+      "count_other": "{{count}} szolgáltató konfigurálva"
     },
     "mcp": {
       "desc": "Model Context Protocol (MCP) szerverek konfigurálása az ügynök képességeinek bővítéséhez külső eszközökkel és adatforrásokkal.",
@@ -165,9 +160,6 @@
       "untitled": "Névtelen MCP szerver",
       "notConfigured": "Nincs konfigurálva",
       "cached": "Gyorsítótárban",
-      "envVars_one": "{{count}} környezeti változó",
-      "envVars_other": "{{count}} környezeti változó",
-      "envVars": "{{count}} környezeti változó",
       "status": {
         "disabled": "Letiltva",
         "connected": "csatlakozva",
@@ -177,12 +169,10 @@
         "autoConnect": "Automatikus csatlakozás"
       },
       "toolCount": {
-        "live_one": "{{count}} élő eszköz",
-        "live_other": "{{count}} élő eszköz",
-        "live": "{{count}} élő eszköz",
         "cached_one": "{{count}} gyorsítótárazott eszköz",
         "cached_other": "{{count}} gyorsítótárazott eszköz",
-        "cached": "{{count}} gyorsítótárazott eszköz"
+        "live_one": "{{count}} élő eszköz",
+        "live_other": "{{count}} élő eszköz"
       },
       "actions": {
         "edit": "Szerkesztés",
@@ -204,27 +194,28 @@
         "disconnectFailed": "Nem sikerült lecsatlakozni erről: {{name}}",
         "connectFailed": "Nem sikerült csatlakozni ehhez: {{name}}",
         "testNoCommand": "kérjük, adjon meg egy parancsot a kapcsolat tesztelése előtt",
-        "testSuccess": "sikeresen csatlakozva! {{count}} eszköz található.",
         "testFailed": "Kapcsolódás sikertelen: {{message}}",
-        "refreshedAll_one": "eszközök frissítve {{count}} szerveren",
-        "refreshedAll_other": "eszközök frissítve {{count}} szerveren",
-        "refreshedAll": "eszközök frissítve {{count}} szerveren",
         "refreshedPartial": "{{success}} szerver frissítve, {{failed}} sikertelen",
         "noServersConfigured": "Nincsenek konfigurált MCP szerverek",
-        "testingAll": "{{count}} MCP szerver kapcsolatának tesztelése...",
-        "testAllSuccess": "mind a {{count}} MCP szerver sikeresen csatlakoztatva!",
-        "testAllPartial": "{{successful}} csatlakozva, {{failed}} sikertelen"
+        "testAllPartial": "{{successful}} csatlakozva, {{failed}} sikertelen",
+        "refreshedAll_one": "Eszközök frissítve {{count}} szerveren",
+        "refreshedAll_other": "Eszközök frissítve {{count}} szerveren",
+        "testAllSuccess_one": "{{count}} MCP szerver sikeresen csatlakozott.",
+        "testAllSuccess_other": "Összesen {{count}} MCP szerver, mindegyik sikeresen csatlakozott.",
+        "testSuccess_one": "Csatlakozva. {{count}} eszköz található.",
+        "testSuccess_other": "Csatlakozva. {{count}} eszköz található.",
+        "testingAll_one": "{{count}} MCP szerverkapcsolat tesztelése…",
+        "testingAll_other": "{{count}} MCP szerverkapcsolat tesztelése…"
       },
       "confirm": {
         "delete": "Törli a(z) \"{{name}}\" MCP szervert?"
       },
-      "namePlaceholder": "Acme MCP szerver"
+      "namePlaceholder": "Acme MCP szerver",
+      "envVars_one": "{{count}} környezeti változó",
+      "envVars_other": "{{count}} környezeti változó"
     },
     "agents": {
       "desc": "AI ügynökök létrehozása és kezelése meghatározott képességekkel, eszközökkel és viselkedéssel.",
-      "count_one": "{{count}} ügynök konfigurálva",
-      "count_other": "{{count}} ügynök konfigurálva",
-      "count": "{{count}} ügynök konfigurálva",
       "addBtn": "+ ügynök hozzáadása",
       "empty": "Nincsenek konfigurált ügynökök. Válassza az ügynök hozzáadása lehetőséget a kezdéshez.",
       "defaultBadge": "Alapértelmezett",
@@ -239,10 +230,8 @@
         "builtIn": "{{count}} beépített",
         "mcpServer_one": "{{count}} MCP szerver",
         "mcpServer_other": "{{count}} MCP szerver",
-        "mcpServer": "{{count}} MCP szerver",
         "mcpTool_one": "{{count}} MCP eszköz",
-        "mcpTool_other": "{{count}} MCP eszköz",
-        "mcpTool": "{{count}} MCP eszköz"
+        "mcpTool_other": "{{count}} MCP eszköz"
       },
       "actions": {
         "edit": "Szerkesztés",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "Törli a(z) \"{{name}}\" ügynököt?"
-      }
+      },
+      "count_one": "{{count}} ügynök konfigurálva",
+      "count_other": "{{count}} ügynök konfigurálva"
     },
     "prompts": {
       "desc": "Az AI asszisztens viselkedését és személyiségét meghatározó rendszerpromptok kezelése.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP forrás eltávolítva",
-          "reloaded": "{{count}} művelet újratöltve",
-          "reloadFailed": "Nem sikerült újratölteni a HTTP forrást. Ellenőrizze a konzolt a részletekért."
+          "reloadFailed": "Nem sikerült újratölteni a HTTP forrást. Ellenőrizze a konzolt a részletekért.",
+          "reloaded_one": "{{count}} művelet újratöltve",
+          "reloaded_other": "{{count}} művelet újratöltve"
         },
         "modal": {
           "defaultTitle": "HTTP forrás",
@@ -419,9 +411,6 @@
           "actions": "Műveletek"
         },
         "unnamed": "Névtelen CLI eszköz",
-        "paramCount_one": "{{count}} paraméter",
-        "paramCount_other": "{{count}} paraméter",
-        "paramCount": "{{count}} paraméter",
         "noParams": "Nincs",
         "statusEnabled": "Engedélyezve",
         "statusDisabled": "Letiltva",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Képernyőkép",
             "preset-applescript-list-apps": "Futó alkalmazások listázása"
           }
-        }
+        },
+        "paramCount_one": "{{count}} paraméter",
+        "paramCount_other": "{{count}} paraméter"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Az összes gyors művelet előtt megjelenő előtag (emoji vagy szöveg) a kontextusmenüben",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} művelet konfigurálva ({{enabled}} engedélyezve)",
-      "count_other": "{{count}} művelet konfigurálva ({{enabled}} engedélyezve)",
-      "count": "{{count}} művelet konfigurálva ({{enabled}} engedélyezve)",
       "addBtn": "+ gyors művelet hozzáadása",
       "empty": "Nincsenek konfigurált gyors műveletek. Válassza a gyors művelet hozzáadása lehetőséget a kezdéshez.",
       "defaultModel": "Alapértelmezett",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Szöveg hosszabbítása",
         "prompt": "Bővítsd ki és fejtsd ki részletesebben a következő szöveget…"
-      }
+      },
+      "count_one": "{{count}} művelet konfigurálva ({{enabled}} engedélyezve)",
+      "count_other": "{{count}} művelet konfigurálva ({{enabled}} engedélyezve)"
     },
     "usage": {
       "desc": "Token-felhasználás nyomon követése szolgáltatók és modellek szerint. Az adatok az összes beszélgetésből halmozódnak fel.",
@@ -994,12 +984,14 @@
       "ragDisabled": "A RAG le van tiltva a beállításokban. Engedélyezze a beállítások → csevegési funkciók → RAG menüpontban.",
       "webSearchDisabled": "A webkeresés le van tiltva a beállításokban. Engedélyezze a beállítások → csevegési funkciók → webkeresés menüpontban.",
       "attached": "Csatolva: {{name}}",
-      "attachedImages": "{{count}} kép csatolva",
-      "referencesAdded": "{{count}} hivatkozás hozzáadva",
       "fileNotFound": "A fájl nem található: {{path}}",
       "unableToLoadRag": "Nem sikerült betölteni a RAG statisztikákat.",
       "referenced": "Hivatkozva: {{name}}",
-      "openViewFailed": "Nem sikerült megnyitni a csevegőnézetet."
+      "openViewFailed": "Nem sikerült megnyitni a csevegőnézetet.",
+      "attachedImages_one": "{{count}} kép csatolva",
+      "attachedImages_other": "{{count}} kép csatolva",
+      "referencesAdded_one": "{{count}} hivatkozás hozzáadva",
+      "referencesAdded_other": "{{count}} hivatkozás hozzáadva"
     },
     "status": {
       "unavailable": "Nem elérhető",
@@ -1020,9 +1012,8 @@
       "step2": "Engedélyezze a RAG-ot",
       "step3": "Válassza az index vault lehetőséget",
       "close": "Bezárás",
-      "retrieved_one": "{{count}} dokumentumból visszakeresve",
-      "retrieved_other": "{{count}} dokumentumból visszakeresve",
-      "retrieved": "{{count}} dokumentumból visszakeresve"
+      "retrieved_one": "Visszakeresve {{count}} dokumentumból",
+      "retrieved_other": "Visszakeresve {{count}} dokumentumból"
     },
     "ragTooltip": {
       "status": "RAG index állapota:",
@@ -1141,8 +1132,6 @@
       "apply": "Alkalmazás",
       "applyAll": "Összes alkalmazása",
       "applied": "Alkalmazva",
-      "changes_one": "{{count}} módosítás",
-      "changes_other": "{{count}} módosítás",
       "confirm": "Alkalmazza ezt: {{summary}}?",
       "appliedNotice": "Alkalmazva: {{summary}}",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Törlés",
         "move": "Áthelyezés",
         "batch": "Köteg"
-      }
+      },
+      "changes_one": "{{count}} módosítás",
+      "changes_other": "{{count}} módosítás"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP hozzáférés",
         "noServers": "Nincsenek konfigurált MCP szerverek. Adjon hozzá szervereket a Beállítások → MCP menüben ezen lehetőségek feloldásához.",
-        "toolsCached_one": "{{count}} eszköz gyorsítótárban",
-        "toolsCached_other": "{{count}} eszköz gyorsítótárban",
-        "toolsCached": "{{count}} eszköz gyorsítótárban",
         "noToolsCached": "Még nincsenek gyorsítótárazott eszközök. Engedélyezze a teljes hozzáférést, vagy frissítse a gyorsítótárat.",
         "showTools": "Eszközök megjelenítése",
         "hideTools": "Eszközök elrejtése",
         "selected": "Kiválasztva",
         "notSelected": "Nincs kiválasztva",
-        "noToolsAvailable": "Ebből a szerverből még nem érhetők el eszközök."
+        "noToolsAvailable": "Ebből a szerverből még nem érhetők el eszközök.",
+        "toolsCached_one": "{{count}} eszköz gyorsítótárban",
+        "toolsCached_other": "{{count}} eszköz gyorsítótárban"
       },
       "notices": {
         "promptRequired": "Kérjük, adjon meg nevet és tartalmat az új rendszerprompthoz."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Gyorsítótárazott modellek: {{count}}",
       "connectionFailed": "A kapcsolat tesztelése sikertelen. Ellenőrizze a szolgáltató beállításait.",
-      "connectionSuccess": "Sikeres kapcsolat. {{count}} modell gyorsítótárazva.",
       "noCachedModels": "Nincsenek gyorsítótárazott modellek",
       "testConnection": "Kapcsolat tesztelése",
-      "testing": "Tesztelés..."
+      "testing": "Tesztelés...",
+      "connectionSuccess_one": "Sikeres kapcsolat. {{count}} modell gyorsítótárazva.",
+      "connectionSuccess_other": "Sikeres kapcsolat. {{count}} modell gyorsítótárazva."
     },
     "mcpInspector": {
       "title": "MCP vizsgáló",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Letiltva",
         "statusConnected": "● csatlakozva",
         "statusDisconnected": "○ lecsatlakozva",
-        "toolsLive_one": "{{count}} eszköz",
-        "toolsLive_other": "{{count}} eszköz",
-        "toolsLive": "{{count}} eszköz",
-        "toolsCached_one": "{{count}} eszköz (gyorsítótárban)",
-        "toolsCached_other": "{{count}} eszköz (gyorsítótárban)",
-        "toolsCached": "{{count}} eszköz (gyorsítótárban)",
         "noTools": "0 eszköz",
         "connectBtn": "Csatlakozás",
         "disconnectBtn": "Lecsatlakozás",
@@ -1346,7 +1331,11 @@
           "connected": "Csatlakozva ehhez: {{name}}",
           "failedDisconnect": "Nem sikerült lecsatlakozni erről: {{name}}: {{message}}",
           "failedConnect": "Nem sikerült csatlakozni ehhez: {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} eszköz (gyorsítótárban)",
+        "toolsCached_other": "{{count}} eszköz (gyorsítótárban)",
+        "toolsLive_one": "{{count}} eszköz",
+        "toolsLive_other": "{{count}} eszköz"
       },
       "tools": {
         "title": "Elérhető MCP eszközök",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Eszközök és engedélyek",
-    "subtitle_one": "{{agent}} {{count}} eszközt használhat.",
-    "subtitle_other": "{{agent}} {{count}} eszközt használhat.",
     "chatMode": "Csevegési mód",
     "permissions": "Jelenlegi engedélyek",
     "reads": "Ez a feladat olvashatja",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Vault-kontextus",
-      "referencesPlusContext_one": "{{count}} explicit hivatkozás és az aktív kontextus",
-      "referencesPlusContext_other": "{{count}} explicit hivatkozás és az aktív kontextus",
       "activeContext": "Aktív jegyzet és a gráfkontextus pillanatképe",
       "readTools": "Vault-olvasó eszközök",
       "enabledCount": "{{count}} engedélyezve",
@@ -1605,12 +1590,16 @@
       "off": "Ki",
       "disabledInSettings": "Letiltva a beállításokban",
       "custom": "Egyéni eszközök",
-      "customEnabled_one": "{{count}} MCP, OpenAPI vagy CLI eszköz engedélyezve",
-      "customEnabled_other": "{{count}} MCP, OpenAPI vagy CLI eszköz engedélyezve",
       "noneEnabled": "Egyik sincs engedélyezve",
       "destructive": "Romboló vault-műveletek",
-      "notProvided": "A beépített eszközök nem biztosítják"
-    }
+      "notProvided": "A beépített eszközök nem biztosítják",
+      "customEnabled_one": "{{count}} MCP, OpenAPI vagy CLI eszköz engedélyezve",
+      "customEnabled_other": "{{count}} MCP, OpenAPI vagy CLI eszköz engedélyezve",
+      "referencesPlusContext_one": "{{count}} explicit hivatkozás és az aktív kontextus",
+      "referencesPlusContext_other": "{{count}} explicit hivatkozás és az aktív kontextus"
+    },
+    "subtitle_one": "{{agent}} {{count}} eszközt használhat.",
+    "subtitle_other": "{{agent}} {{count}} eszközt használhat."
   },
   "markdown": {
     "run": "Futtatás"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Nincs indexelhető Markdown jegyzet.",
-      "starting_one": "{{count}} jegyzet indexelése…",
-      "starting_other": "{{count}} jegyzet indexelése…",
       "progress": "Indexelés: {{done}} / {{total}} jegyzet",
       "completed": "Az indexelés befejeződött: {{indexed}} indexelve, {{failed}} sikertelen.",
       "noIndex": "Még semmi sincs indexelve. Futtassa az \"Embed all documents\" parancsot a vault indexeléséhez.",
       "gradingError": "A dokumentumok értékelése sikertelen: {{message}}",
       "clearing": "Index törlése…",
-      "cleared": "Index törölve."
+      "cleared": "Index törölve.",
+      "starting_one": "{{count}} jegyzet indexelése…",
+      "starting_other": "{{count}} jegyzet indexelése…"
     }
   }
 }

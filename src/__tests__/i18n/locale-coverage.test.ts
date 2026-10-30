@@ -28,10 +28,24 @@ function sourceFiles(dir: string): string[] {
 describe('locale coverage', () => {
 	const english = new Set(keysOf(readLocale('en.json')));
 
-	it.each(fs.readdirSync(LOCALES).filter(file => file !== 'en.json'))('%s has exactly the English keys', (file) => {
+	const pluralBases = [...english].filter(key => key.endsWith('_one')).map(key => key.slice(0, -'_one'.length));
+	const pluralForms = (file: string) => new Intl.PluralRules(file.replace('.json', '')).resolvedOptions().pluralCategories;
+
+	const isPluralForm = (key: string) => /_(zero|one|two|few|many|other)$/.test(key) && pluralBases.includes(key.replace(/_[a-z]+$/, ''));
+
+	it.each(fs.readdirSync(LOCALES).filter(file => file !== 'en.json'))('%s has the English keys and no others but its plural forms', (file) => {
 		const keys = new Set(keysOf(readLocale(file)));
-		expect([...english].filter(key => !keys.has(key))).toEqual([]);
-		expect([...keys].filter(key => !english.has(key))).toEqual([]);
+		const ownPluralKeys = new Set(pluralBases.flatMap(base => pluralForms(file).map(form => `${base}_${form}`)));
+		expect([...english].filter(key => !isPluralForm(key) && !keys.has(key))).toEqual([]);
+		expect([...keys].filter(key => isPluralForm(key) ? !ownPluralKeys.has(key) : !english.has(key))).toEqual([]);
+	});
+
+	it.each(fs.readdirSync(LOCALES))('%s has every plural form its language uses', (file) => {
+		const keys = new Set(keysOf(readLocale(file)));
+
+		const missing = pluralBases.flatMap(base => pluralForms(file).map(form => `${base}_${form}`)).filter(key => !keys.has(key));
+
+		expect(missing).toEqual([]);
 	});
 
 	it('defines every literal key the source translates', () => {

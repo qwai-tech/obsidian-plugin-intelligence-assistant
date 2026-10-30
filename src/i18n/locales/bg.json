@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Преглеждайте и управлявайте модели от всички конфигурирани доставчици. Кликнете \"обнови модели\", за да извлечете най-новите налични модели.",
-      "providerCount_one": "{{count}} конфигуриран доставчик",
-      "providerCount_other": "{{count}} конфигурирани доставчика",
-      "providerCount": "{{count}} конфигурирани доставчика",
       "refreshAll": "обнови всички модели",
       "empty": "Все още няма конфигурирани доставчици. Първо добавете доставчици в раздела за доставчици.",
       "noModels": "Няма налични модели. Кликнете \"обнови всички модели\" или обновете отделни доставчици в раздела за доставчици.",
       "noMatch": "Няма модели, съответстващи на текущите филтри. Коригирайте или изчистете филтрите, за да видите резултати.",
-      "modelCount_one": "• {{count}} кеширан модел",
-      "modelCount_other": "• {{count}} кеширани модела",
-      "modelCount": "• {{count}} кеширани модела",
-      "matchCount_one": "• {{count}} съответствие с избраните филтри",
-      "matchCount_other": "• {{count}} съответствия с избраните филтри",
-      "matchCount": "• {{count}} съответствия с избраните филтри",
       "status": {
         "enabled": "Активен",
         "disabled": "Деактивиран"
@@ -92,12 +83,15 @@
         "capabilities": "Възможности",
         "status": "Състояние",
         "actions": "Действия"
-      }
+      },
+      "matchCount_one": "• {{count}} съответства на избраните филтри",
+      "matchCount_other": "• {{count}} съответстват на избраните филтри",
+      "modelCount_one": "• {{count}} кеширан модел",
+      "modelCount_other": "• {{count}} кеширани модела",
+      "providerCount_one": "{{count}} конфигуриран доставчик",
+      "providerCount_other": "{{count}} конфигурирани доставчика"
     },
     "provider": {
-      "count_one": "{{count}} конфигуриран доставчик",
-      "count_other": "{{count}} конфигурирани доставчика",
-      "count": "{{count}} конфигурирани доставчика",
       "addBtn": "+ Добави доставчик",
       "empty": "Няма конфигурирани доставчици. Изберете \"Добави доставчик\", за да започнете.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "Няма модели",
         "count_one": "{{count}} модел",
-        "count_other": "{{count}} модела",
-        "count": "{{count}} модела"
+        "count_other": "{{count}} модела"
       },
       "ollama": {
         "checkingVersion": "Проверка на версията...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "Премахване на доставчик {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} конфигуриран доставчик",
+      "count_other": "{{count}} конфигурирани доставчика"
     },
     "mcp": {
       "desc": "Конфигурирайте сървъри на Model Context Protocol (MCP), за да разширите възможностите на агента с външни инструменти и източници на данни.",
@@ -165,9 +160,6 @@
       "untitled": "Неозаглавен MCP сървър",
       "notConfigured": "Не е конфигуриран",
       "cached": "Кеширан",
-      "envVars_one": "{{count}} променлива на средата",
-      "envVars_other": "{{count}} променливи на средата",
-      "envVars": "{{count}} променливи на средата",
       "status": {
         "disabled": "Деактивиран",
         "connected": "свързан",
@@ -177,12 +169,10 @@
         "autoConnect": "Автоматично свързване"
       },
       "toolCount": {
-        "live_one": "{{count}} активен инструмент",
-        "live_other": "{{count}} активни инструмента",
-        "live": "{{count}} активни инструмента",
         "cached_one": "{{count}} кеширан инструмент",
         "cached_other": "{{count}} кеширани инструмента",
-        "cached": "{{count}} кеширани инструмента"
+        "live_one": "{{count}} активен инструмент",
+        "live_other": "{{count}} активни инструмента"
       },
       "actions": {
         "edit": "Редактирай",
@@ -204,27 +194,28 @@
         "disconnectFailed": "Неуспешно прекъсване от {{name}}",
         "connectFailed": "Неуспешно свързване с {{name}}",
         "testNoCommand": "моля, въведете команда преди тестване на връзката",
-        "testSuccess": "свързването е успешно! Намерени са {{count}} инструмента.",
         "testFailed": "Неуспешна връзка: {{message}}",
-        "refreshedAll_one": "инструментите са обновени за {{count}} сървър",
-        "refreshedAll_other": "инструментите са обновени за {{count}} сървъра",
-        "refreshedAll": "инструментите са обновени за {{count}} сървъра",
         "refreshedPartial": "обновени {{success}} сървъра, {{failed}} неуспешни",
         "noServersConfigured": "Няма конфигурирани MCP сървъри",
-        "testingAll": "Тестване на {{count}} MCP сървърни връзки...",
-        "testAllSuccess": "всички {{count}} mcp сървъра са свързани успешно!",
-        "testAllPartial": "{{successful}} свързани, {{failed}} неуспешни"
+        "testAllPartial": "{{successful}} свързани, {{failed}} неуспешни",
+        "refreshedAll_one": "Инструментите са обновени за {{count}} сървър",
+        "refreshedAll_other": "Инструментите са обновени за {{count}} сървъра",
+        "testAllSuccess_one": "{{count}} MCP сървър е свързан успешно.",
+        "testAllSuccess_other": "Всички {{count}} MCP сървъра са свързани успешно.",
+        "testSuccess_one": "Свързано. Намерен е {{count}} инструмент.",
+        "testSuccess_other": "Свързано. Намерени са {{count}} инструмента.",
+        "testingAll_one": "Тестване на {{count}} връзка с MCP сървър…",
+        "testingAll_other": "Тестване на {{count}} връзки с MCP сървъри…"
       },
       "confirm": {
         "delete": "Изтриване на MCP сървър \"{{name}}\"?"
       },
-      "namePlaceholder": "MCP сървър на Acme"
+      "namePlaceholder": "MCP сървър на Acme",
+      "envVars_one": "{{count}} променлива на средата",
+      "envVars_other": "{{count}} променливи на средата"
     },
     "agents": {
       "desc": "Създавайте и управлявайте AI агенти със специфични възможности, инструменти и поведения.",
-      "count_one": "{{count}} конфигуриран агент",
-      "count_other": "{{count}} конфигурирани агента",
-      "count": "{{count}} конфигурирани агента",
       "addBtn": "+ добави агент",
       "empty": "Няма конфигурирани агенти. Изберете \"добави агент\", за да започнете.",
       "defaultBadge": "По подразбиране",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} вграден",
-        "mcpServer_one": "{{count}} mcp сървър",
-        "mcpServer_other": "{{count}} mcp сървъра",
-        "mcpServer": "{{count}} mcp сървъра",
-        "mcpTool_one": "{{count}} mcp инструмент",
-        "mcpTool_other": "{{count}} mcp инструмента",
-        "mcpTool": "{{count}} mcp инструмента"
+        "mcpServer_one": "{{count}} MCP сървър",
+        "mcpServer_other": "{{count}} MCP сървъра",
+        "mcpTool_one": "{{count}} MCP инструмент",
+        "mcpTool_other": "{{count}} MCP инструмента"
       },
       "actions": {
         "edit": "Редактирай",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "Изтриване на агент \"{{name}}\"?"
-      }
+      },
+      "count_one": "{{count}} конфигуриран агент",
+      "count_other": "{{count}} конфигурирани агента"
     },
     "prompts": {
       "desc": "Управлявайте системните подканвания, които определят поведението и личността на вашия AI асистент.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP източникът е премахнат",
-          "reloaded": "Презаредени {{count}} операции",
-          "reloadFailed": "Неуспешно презареждане на HTTP източника. Проверете конзолата за подробности."
+          "reloadFailed": "Неуспешно презареждане на HTTP източника. Проверете конзолата за подробности.",
+          "reloaded_one": "Презаредена е {{count}} операция",
+          "reloaded_other": "Презаредени са {{count}} операции"
         },
         "modal": {
           "defaultTitle": "HTTP източник",
@@ -419,9 +411,6 @@
           "actions": "Действия"
         },
         "unnamed": "Неименуван CLI инструмент",
-        "paramCount_one": "{{count}} параметър",
-        "paramCount_other": "{{count}} параметъра",
-        "paramCount": "{{count}} параметъра",
         "noParams": "Няма",
         "statusEnabled": "Активен",
         "statusDisabled": "Деактивиран",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Екранна снимка",
             "preset-applescript-list-apps": "Изброи работещите приложения"
           }
-        }
+        },
+        "paramCount_one": "{{count}} параметър",
+        "paramCount_other": "{{count}} параметъра"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Префикс (емотикон или текст) за показване пред всички бързи действия в контекстното меню",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} конфигурирано действие ({{enabled}} активно)",
-      "count_other": "{{count}} конфигурирани действия ({{enabled}} активни)",
-      "count": "{{count}} конфигурирани действия ({{enabled}} активни)",
       "addBtn": "+ добави бързо действие",
       "empty": "Няма конфигурирани бързи действия. Изберете \"добави бързо действие\", за да започнете.",
       "defaultModel": "По подразбиране",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Удължи текста",
         "prompt": "Разширете и доразвийте следния текст…"
-      }
+      },
+      "count_one": "{{count}} конфигурирано действие (активни: {{enabled}})",
+      "count_other": "{{count}} конфигурирани действия (активни: {{enabled}})"
     },
     "usage": {
       "desc": "Проследявайте консумацията на токени при доставчиците и моделите. Данните се натрупват при всички разговори.",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG е деактивиран в настройките. Активирайте го в настройки → функции на чата → RAG.",
       "webSearchDisabled": "Уеб търсенето е деактивирано в настройките. Активирайте го в настройки → функции на чата → уеб търсене.",
       "attached": "Прикачено: {{name}}",
-      "attachedImages": "Прикачени {{count}} изображени(я)",
-      "referencesAdded": "Добавени {{count}} референци(и)",
       "fileNotFound": "Файлът не е намерен: {{path}}",
       "unableToLoadRag": "Невъзможно зареждане на RAG статистиките.",
       "referenced": "Референция: {{name}}",
-      "openViewFailed": "Изгледът на чата не можа да се отвори."
+      "openViewFailed": "Изгледът на чата не можа да се отвори.",
+      "attachedImages_one": "Прикачено е {{count}} изображение",
+      "attachedImages_other": "Прикачени са {{count}} изображения",
+      "referencesAdded_one": "Добавена е {{count}} препратка",
+      "referencesAdded_other": "Добавени са {{count}} препратки"
     },
     "status": {
       "unavailable": "Недостъпен",
@@ -1020,9 +1012,8 @@
       "step2": "Активирайте RAG",
       "step3": "Изберете \"индексирай хранилище\"",
       "close": "Затвори",
-      "retrieved_one": "извлечено от {{count}} документ",
-      "retrieved_other": "извлечено от {{count}} документа",
-      "retrieved": "извлечено от {{count}} документа"
+      "retrieved_one": "Извлечено от {{count}} документ",
+      "retrieved_other": "Извлечено от {{count}} документа"
     },
     "ragTooltip": {
       "status": "Статус на RAG индекса:",
@@ -1141,8 +1132,6 @@
       "apply": "Приложи",
       "applyAll": "Приложи всички",
       "applied": "Приложено",
-      "changes_one": "{{count}} промяна",
-      "changes_other": "{{count}} промени",
       "confirm": "Да се приложи ли {{summary}}?",
       "appliedNotice": "Приложено: {{summary}}",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Изтриване",
         "move": "Преместване",
         "batch": "Пакет"
-      }
+      },
+      "changes_one": "{{count}} промяна",
+      "changes_other": "{{count}} промени"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP достъп",
         "noServers": "Няма конфигурирани MCP сървъри. Добавете сървъри в Настройки → MCP, за да отключите тези опции.",
-        "toolsCached_one": "{{count}} кеширан инструмент",
-        "toolsCached_other": "{{count}} кеширани инструмента",
-        "toolsCached": "{{count}} кеширани инструмента",
         "noToolsCached": "Все още няма кеширани инструменти. Активирайте пълен достъп или обновете кеша.",
         "showTools": "Покажи инструментите",
         "hideTools": "Скрий инструментите",
         "selected": "Избрано",
         "notSelected": "Не е избрано",
-        "noToolsAvailable": "Все още няма налични инструменти от този сървър."
+        "noToolsAvailable": "Все още няма налични инструменти от този сървър.",
+        "toolsCached_one": "{{count}} кеширан инструмент",
+        "toolsCached_other": "{{count}} кеширани инструмента"
       },
       "notices": {
         "promptRequired": "Моля, предоставете ime и съдържание за новото системно подканване."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Кеширани модели: {{count}}",
       "connectionFailed": "Тестът на връзката неуспешен. Проверете настройките на доставчика.",
-      "connectionSuccess": "Успешна връзка. Кеширани модели: {{count}}.",
       "noCachedModels": "Няма кеширани модели",
       "testConnection": "Тест на връзката",
-      "testing": "Тестване..."
+      "testing": "Тестване...",
+      "connectionSuccess_one": "Успешна връзка. Кеширан е {{count}} модел.",
+      "connectionSuccess_other": "Успешна връзка. Кеширани са {{count}} модела."
     },
     "mcpInspector": {
       "title": "MCP инспектор",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Деактивиран",
         "statusConnected": "● свързан",
         "statusDisconnected": "○ прекъснат",
-        "toolsLive_one": "{{count}} инструмент",
-        "toolsLive_other": "{{count}} инструмента",
-        "toolsLive": "{{count}} инструмента",
-        "toolsCached_one": "{{count}} инструмент (кеширан)",
-        "toolsCached_other": "{{count}} инструмента (кеширани)",
-        "toolsCached": "{{count}} инструмента (кеширани)",
         "noTools": "0 инструмента",
         "connectBtn": "Свържи",
         "disconnectBtn": "Прекъсни",
@@ -1346,7 +1331,11 @@
           "connected": "Свързано с {{name}}",
           "failedDisconnect": "Неуспешно прекъсване от {{name}}: {{message}}",
           "failedConnect": "Неуспешно свързване с {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} инструмент (кеширан)",
+        "toolsCached_other": "{{count}} инструмента (кеширани)",
+        "toolsLive_one": "{{count}} инструмент",
+        "toolsLive_other": "{{count}} инструмента"
       },
       "tools": {
         "title": "Налични MCP инструменти",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Инструменти и разрешения",
-    "subtitle_one": "{{agent}} може да използва {{count}} инструмент.",
-    "subtitle_other": "{{agent}} може да използва {{count}} инструмента.",
     "chatMode": "Режим на чат",
     "permissions": "Текущи разрешения",
     "reads": "Тази задача може да чете",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Контекст на хранилището",
-      "referencesPlusContext_one": "{{count}} изрична препратка плюс активния контекст",
-      "referencesPlusContext_other": "{{count}} изрични препратки плюс активния контекст",
       "activeContext": "Активната бележка и моментна снимка на контекста на графа",
       "readTools": "Инструменти за четене от хранилището",
       "enabledCount": "{{count}} активирани",
@@ -1605,12 +1590,16 @@
       "off": "Изкл.",
       "disabledInSettings": "Деактивирано в настройките",
       "custom": "Персонализирани инструменти",
-      "customEnabled_one": "{{count}} активиран инструмент MCP, OpenAPI или CLI",
-      "customEnabled_other": "{{count}} активирани инструмента MCP, OpenAPI или CLI",
       "noneEnabled": "Няма активирани",
       "destructive": "Разрушителни действия в хранилището",
-      "notProvided": "Не се предоставя от вградените инструменти"
-    }
+      "notProvided": "Не се предоставя от вградените инструменти",
+      "customEnabled_one": "{{count}} активиран инструмент MCP, OpenAPI или CLI",
+      "customEnabled_other": "{{count}} активирани инструмента MCP, OpenAPI или CLI",
+      "referencesPlusContext_one": "{{count}} изрична препратка плюс активния контекст",
+      "referencesPlusContext_other": "{{count}} изрични препратки плюс активния контекст"
+    },
+    "subtitle_one": "{{agent}} може да използва {{count}} инструмент.",
+    "subtitle_other": "{{agent}} може да използва {{count}} инструмента."
   },
   "markdown": {
     "run": "Изпълни"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Няма Markdown бележки за индексиране.",
-      "starting_one": "Индексиране на {{count}} бележка…",
-      "starting_other": "Индексиране на {{count}} бележки…",
       "progress": "Индексиране: {{done}} от {{total}} бележки",
       "completed": "Индексирането приключи: {{indexed}} индексирани, {{failed}} неуспешни.",
       "noIndex": "Все още нищо не е индексирано. Изпълнете \"Embed all documents\", за да индексирате хранилището си.",
       "gradingError": "Оценяването на документа не бе успешно: {{message}}",
       "clearing": "Изчистване на индекса…",
-      "cleared": "Индексът е изчистен."
+      "cleared": "Индексът е изчистен.",
+      "starting_one": "Индексиране на {{count}} бележка…",
+      "starting_other": "Индексиране на {{count}} бележки…"
     }
   }
 }

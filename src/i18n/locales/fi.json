@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Tarkastele ja hallinnoi malleja kaikista määritetyistä palveluntarjoajista. Napsauta \"päivitä mallit\" hakea uusimmat saatavilla olevat mallit.",
-      "providerCount_one": "{{count}} palveluntarjoaja määritetty",
-      "providerCount_other": "{{count}} palveluntarjoajaa määritetty",
-      "providerCount": "{{count}} palveluntarjoajaa määritetty",
       "refreshAll": "päivitä kaikki mallit",
       "empty": "Ei palveluntarjoajia määritetty. Lisää palveluntarjoajia ensin palveluntarjoaja-välilehdeltä.",
       "noModels": "Ei saatavilla olevia malleja. Napsauta \"päivitä kaikki mallit\" tai päivitä yksittäiset palveluntarjoajat palveluntarjoaja-välilehdeltä.",
       "noMatch": "Mikään malli ei vastaa nykyisiä suodattimia. Muuta tai poista suodattimet nähdäksesi tulokset.",
-      "modelCount_one": "• {{count}} malli välimuistissa",
-      "modelCount_other": "• {{count}} mallia välimuistissa",
-      "modelCount": "• {{count}} mallia välimuistissa",
-      "matchCount_one": "• {{count}} vastaa valittuja suodattimia",
-      "matchCount_other": "• {{count}} vastaavat valittuja suodattimia",
-      "matchCount": "• {{count}} vastaavat valittuja suodattimia",
       "status": {
         "enabled": "Käytössä",
         "disabled": "Pois käytöstä"
@@ -92,12 +83,15 @@
         "capabilities": "Ominaisuudet",
         "status": "Tila",
         "actions": "Toiminnot"
-      }
+      },
+      "matchCount_one": "• {{count}} vastaa valittuja suodattimia",
+      "matchCount_other": "• {{count}} vastaa valittuja suodattimia",
+      "modelCount_one": "• {{count}} malli välimuistissa",
+      "modelCount_other": "• {{count}} mallia välimuistissa",
+      "providerCount_one": "{{count}} palveluntarjoaja määritetty",
+      "providerCount_other": "{{count}} palveluntarjoajaa määritetty"
     },
     "provider": {
-      "count_one": "{{count}} palveluntarjoaja määritetty",
-      "count_other": "{{count}} palveluntarjoajaa määritetty",
-      "count": "{{count}} palveluntarjoajaa määritetty",
       "addBtn": "+ Lisää palveluntarjoaja",
       "empty": "Ei palveluntarjoajia määritetty. Valitse \"Lisää palveluntarjoaja\" aloittaaksesi.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "Ei malleja",
         "count_one": "{{count}} malli",
-        "count_other": "{{count}} mallia",
-        "count": "{{count}} mallia"
+        "count_other": "{{count}} mallia"
       },
       "ollama": {
         "checkingVersion": "Tarkistetaan versiota...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "Poista palveluntarjoaja {{provider}}?"
-      }
+      },
+      "count_one": "{{count}} palveluntarjoaja määritetty",
+      "count_other": "{{count}} palveluntarjoajaa määritetty"
     },
     "mcp": {
       "desc": "Määritä Model Context Protocol (MCP) -palvelimia laajentamaan agenttien toimintoja ulkoisilla työkaluilla ja tietolähteillä.",
@@ -165,9 +160,6 @@
       "untitled": "Nimetön MCP-palvelin",
       "notConfigured": "Ei määritetty",
       "cached": "Välimuistissa",
-      "envVars_one": "{{count}} ympäristömuuttuja",
-      "envVars_other": "{{count}} ympäristömuuttujaa",
-      "envVars": "{{count}} ympäristömuuttujaa",
       "status": {
         "disabled": "Pois käytöstä",
         "connected": "yhdistetty",
@@ -177,12 +169,10 @@
         "autoConnect": "Automaattinen yhteys"
       },
       "toolCount": {
-        "live_one": "{{count}} live-työkalu",
-        "live_other": "{{count}} live-työkalua",
-        "live": "{{count}} live-työkalua",
-        "cached_one": "{{count}} välimuistin työkalu",
-        "cached_other": "{{count}} välimuistin työkalua",
-        "cached": "{{count}} välimuistin työkalua"
+        "cached_one": "{{count}} välimuistissa oleva työkalu",
+        "cached_other": "{{count}} välimuistissa olevaa työkalua",
+        "live_one": "{{count}} aktiivinen työkalu",
+        "live_other": "{{count}} aktiivista työkalua"
       },
       "actions": {
         "edit": "Muokkaa",
@@ -204,27 +194,28 @@
         "disconnectFailed": "Yhteyden katkaiseminen epäonnistui kohteesta {{name}}",
         "connectFailed": "Yhdistäminen epäonnistui kohteeseen {{name}}",
         "testNoCommand": "syötä komento ennen yhteyden testaamista",
-        "testSuccess": "yhdistettiin onnistuneesti! Löydettiin {{count}} työkalua.",
         "testFailed": "Yhteys epäonnistui: {{message}}",
-        "refreshedAll_one": "päivitetty työkalut {{count}} palvelimelle",
-        "refreshedAll_other": "päivitetty työkalut {{count}} palvelimelle",
-        "refreshedAll": "päivitetty työkalut {{count}} palvelimelle",
         "refreshedPartial": "päivitetty {{success}} palvelinta, {{failed}} epäonnistui",
         "noServersConfigured": "Ei MCP-palvelimia määritetty",
-        "testingAll": "Testataan {{count}} MCP-palvelimen yhteyksiä...",
-        "testAllSuccess": "kaikki {{count}} mcp-palvelinta yhdistetty onnistuneesti!",
-        "testAllPartial": "{{successful}} yhdistetty, {{failed}} epäonnistui"
+        "testAllPartial": "{{successful}} yhdistetty, {{failed}} epäonnistui",
+        "refreshedAll_one": "Päivitettiin työkalut {{count}} palvelimelle",
+        "refreshedAll_other": "Päivitettiin työkalut {{count}} palvelimelle",
+        "testAllSuccess_one": "{{count}} MCP-palvelin yhdistetty onnistuneesti.",
+        "testAllSuccess_other": "Kaikki {{count}} MCP-palvelinta yhdistetty onnistuneesti.",
+        "testSuccess_one": "Yhdistetty. Löydettiin {{count}} työkalu.",
+        "testSuccess_other": "Yhdistetty. Löydettiin {{count}} työkalua.",
+        "testingAll_one": "Testataan {{count}} MCP-palvelinyhteys…",
+        "testingAll_other": "Testataan {{count}} MCP-palvelinyhteyttä…"
       },
       "confirm": {
         "delete": "Poista MCP-palvelin \"{{name}}\"?"
       },
-      "namePlaceholder": "Acme MCP -palvelin"
+      "namePlaceholder": "Acme MCP -palvelin",
+      "envVars_one": "{{count}} ympäristömuuttuja",
+      "envVars_other": "{{count}} ympäristömuuttujaa"
     },
     "agents": {
       "desc": "Luo ja hallinnoi tekoälyagentteja erityisillä ominaisuuksilla, työkaluilla ja käyttäytymisillä.",
-      "count_one": "{{count}} agentti määritetty",
-      "count_other": "{{count}} agenttia määritetty",
-      "count": "{{count}} agenttia määritetty",
       "addBtn": "+ lisää agentti",
       "empty": "Ei agentteja määritetty. Valitse lisää agentti aloittaaksesi.",
       "defaultBadge": "Oletus",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} sisäänrakennettu",
-        "mcpServer_one": "{{count}} mcp-palvelin",
-        "mcpServer_other": "{{count}} mcp-palvelinta",
-        "mcpServer": "{{count}} mcp-palvelinta",
-        "mcpTool_one": "{{count}} mcp-työkalu",
-        "mcpTool_other": "{{count}} mcp-työkalua",
-        "mcpTool": "{{count}} mcp-työkalua"
+        "mcpServer_one": "{{count}} MCP-palvelin",
+        "mcpServer_other": "{{count}} MCP-palvelinta",
+        "mcpTool_one": "{{count}} MCP-työkalu",
+        "mcpTool_other": "{{count}} MCP-työkalua"
       },
       "actions": {
         "edit": "Muokkaa",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "Poista agentti \"{{name}}\"?"
-      }
+      },
+      "count_one": "{{count}} agentti määritetty",
+      "count_other": "{{count}} agenttia määritetty"
     },
     "prompts": {
       "desc": "Hallinnoi järjestelmäkehotuksia, jotka määrittävät tekoälyavustimesi käyttäytymisen ja persoonallisuuden.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP-lähde poistettu",
-          "reloaded": "Ladattu uudelleen {{count}} operaatiota",
-          "reloadFailed": "HTTP-lähteen uudelleenlataus epäonnistui. Tarkista konsoli lisätietoja varten."
+          "reloadFailed": "HTTP-lähteen uudelleenlataus epäonnistui. Tarkista konsoli lisätietoja varten.",
+          "reloaded_one": "Ladattiin uudelleen {{count}} operaatio",
+          "reloaded_other": "Ladattiin uudelleen {{count}} operaatiota"
         },
         "modal": {
           "defaultTitle": "HTTP-lähde",
@@ -419,9 +411,6 @@
           "actions": "Toiminnot"
         },
         "unnamed": "Nimetön CLI-työkalu",
-        "paramCount_one": "{{count}} parametri",
-        "paramCount_other": "{{count}} parametria",
-        "paramCount": "{{count}} parametria",
         "noParams": "Ei mitään",
         "statusEnabled": "Käytössä",
         "statusDisabled": "Pois käytöstä",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Kuvakaappaus",
             "preset-applescript-list-apps": "Listaa käynnissä olevat sovellukset"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parametri",
+        "paramCount_other": "{{count}} parametria"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Etuliite (emoji tai teksti) näytettäväksi kaikkien pikatoimintojen edessä kontekstivalikossa",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} toiminto määritetty ({{enabled}} käytössä)",
-      "count_other": "{{count}} toimintoa määritetty ({{enabled}} käytössä)",
-      "count": "{{count}} toimintoa määritetty ({{enabled}} käytössä)",
       "addBtn": "+ lisää pikatoiminto",
       "empty": "Ei pikatoimintoja määritetty. Valitse lisää pikatoiminto aloittaaksesi.",
       "defaultModel": "Oletus",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Pidennä tekstiä",
         "prompt": "Laajenna ja syvennä seuraavaa tekstiä…"
-      }
+      },
+      "count_one": "{{count}} toiminto määritetty ({{enabled}} käytössä)",
+      "count_other": "{{count}} toimintoa määritetty ({{enabled}} käytössä)"
     },
     "usage": {
       "desc": "Seuraa tokenien kulutusta palveluntarjoajien ja mallien välillä. Tiedot kertyy kaikista keskusteluista.",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG on poistettu käytöstä asetuksissa. Ota se käyttöön kohdassa asetukset → chat-ominaisuudet → RAG.",
       "webSearchDisabled": "Verkkohaku on poistettu käytöstä asetuksissa. Ota se käyttöön kohdassa asetukset → chat-ominaisuudet → verkkohaku.",
       "attached": "Liitetty: {{name}}",
-      "attachedImages": "Liitetty {{count}} kuva(a)",
-      "referencesAdded": "Lisätty {{count}} viittaus(ta)",
       "fileNotFound": "Tiedostoa ei löydy: {{path}}",
       "unableToLoadRag": "RAG-tilastojen lataaminen epäonnistui.",
       "referenced": "Viitattu: {{name}}",
-      "openViewFailed": "Keskustelunäkymää ei voitu avata."
+      "openViewFailed": "Keskustelunäkymää ei voitu avata.",
+      "attachedImages_one": "{{count}} kuva liitetty",
+      "attachedImages_other": "{{count}} kuvaa liitetty",
+      "referencesAdded_one": "{{count}} viittaus lisätty",
+      "referencesAdded_other": "{{count}} viittausta lisätty"
     },
     "status": {
       "unavailable": "Ei saatavilla",
@@ -1020,9 +1012,8 @@
       "step2": "Ota RAG käyttöön",
       "step3": "Valitse indeksoi holvi",
       "close": "Sulje",
-      "retrieved_one": "haettu {{count}} dokumentista",
-      "retrieved_other": "haettu {{count}} dokumentista",
-      "retrieved": "haettu {{count}} dokumentista"
+      "retrieved_one": "Haettu {{count}} dokumentista",
+      "retrieved_other": "Haettu {{count}} dokumentista"
     },
     "ragTooltip": {
       "status": "RAG-indeksin tila:",
@@ -1141,8 +1132,6 @@
       "apply": "Käytä",
       "applyAll": "Käytä kaikki",
       "applied": "Käytetty",
-      "changes_one": "{{count}} muutos",
-      "changes_other": "{{count}} muutosta",
       "confirm": "Käytetäänkö {{summary}}?",
       "appliedNotice": "Käytetty: {{summary}}",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Poista",
         "move": "Siirrä",
         "batch": "Erä"
-      }
+      },
+      "changes_one": "{{count}} muutos",
+      "changes_other": "{{count}} muutosta"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP-käyttöoikeus",
         "noServers": "Ei MCP-palvelimia määritetty. Lisää palvelimia kohdassa Asetukset → MCP avataksesi nämä vaihtoehdot.",
-        "toolsCached_one": "{{count}} työkalu välimuistissa",
-        "toolsCached_other": "{{count}} työkalua välimuistissa",
-        "toolsCached": "{{count}} työkalua välimuistissa",
         "noToolsCached": "Ei välimuistissa olevia työkaluja. Ota käyttöön täysi käyttöoikeus tai päivitä välimuisti.",
         "showTools": "Näytä työkalut",
         "hideTools": "Piilota työkalut",
         "selected": "Valittu",
         "notSelected": "Ei valittu",
-        "noToolsAvailable": "Tältä palvelimelta ei ole vielä saatavilla työkaluja."
+        "noToolsAvailable": "Tältä palvelimelta ei ole vielä saatavilla työkaluja.",
+        "toolsCached_one": "{{count}} työkalu välimuistissa",
+        "toolsCached_other": "{{count}} työkalua välimuistissa"
       },
       "notices": {
         "promptRequired": "Anna nimi ja sisältö uudelle järjestelmäkehotukselle."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Välimuistissa olevat mallit: {{count}}",
       "connectionFailed": "Yhteystesti epäonnistui. Tarkista palveluntarjoajan asetukset.",
-      "connectionSuccess": "Yhteys onnistui. {{count}} mallia tallennettu välimuistiin.",
       "noCachedModels": "Ei malleja välimuistissa",
       "testConnection": "Testaa yhteys",
-      "testing": "Testataan..."
+      "testing": "Testataan...",
+      "connectionSuccess_one": "Yhteys onnistui. {{count}} malli tallennettu välimuistiin.",
+      "connectionSuccess_other": "Yhteys onnistui. {{count}} mallia tallennettu välimuistiin."
     },
     "mcpInspector": {
       "title": "MCP-tarkastin",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Pois käytöstä",
         "statusConnected": "● yhdistetty",
         "statusDisconnected": "○ yhteys katkaistu",
-        "toolsLive_one": "{{count}} työkalu",
-        "toolsLive_other": "{{count}} työkalua",
-        "toolsLive": "{{count}} työkalua",
-        "toolsCached_one": "{{count}} työkalu (välimuistissa)",
-        "toolsCached_other": "{{count}} työkalua (välimuistissa)",
-        "toolsCached": "{{count}} työkalua (välimuistissa)",
         "noTools": "0 työkalua",
         "connectBtn": "Yhdistä",
         "disconnectBtn": "Katkaise yhteys",
@@ -1346,7 +1331,11 @@
           "connected": "Yhdistetty kohteeseen {{name}}",
           "failedDisconnect": "Yhteyden katkaiseminen epäonnistui kohteesta {{name}}: {{message}}",
           "failedConnect": "Yhdistäminen epäonnistui kohteeseen {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} työkalu (välimuistissa)",
+        "toolsCached_other": "{{count}} työkalua (välimuistissa)",
+        "toolsLive_one": "{{count}} työkalu",
+        "toolsLive_other": "{{count}} työkalua"
       },
       "tools": {
         "title": "Saatavilla olevat MCP-työkalut",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Työkalut ja oikeudet",
-    "subtitle_one": "{{agent}} voi käyttää {{count}} työkalua.",
-    "subtitle_other": "{{agent}} voi käyttää {{count}} työkalua.",
     "chatMode": "Keskustelutila",
     "permissions": "Nykyiset oikeudet",
     "reads": "Tämä tehtävä voi lukea",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Holvin konteksti",
-      "referencesPlusContext_one": "{{count}} eksplisiittinen viittaus sekä aktiivinen konteksti",
-      "referencesPlusContext_other": "{{count}} eksplisiittistä viittausta sekä aktiivinen konteksti",
       "activeContext": "Aktiivinen muistiinpano ja graafikontekstin tilannekuva",
       "readTools": "Holvin lukutyökalut",
       "enabledCount": "{{count}} käytössä",
@@ -1605,12 +1590,16 @@
       "off": "Pois",
       "disabledInSettings": "Poistettu käytöstä asetuksissa",
       "custom": "Mukautetut työkalut",
-      "customEnabled_one": "{{count}} MCP-, OpenAPI- tai CLI-työkalu käytössä",
-      "customEnabled_other": "{{count}} MCP-, OpenAPI- tai CLI-työkalua käytössä",
       "noneEnabled": "Ei yhtään käytössä",
       "destructive": "Tuhoavat toiminnot holvissa",
-      "notProvided": "Sisäänrakennetut työkalut eivät tarjoa"
-    }
+      "notProvided": "Sisäänrakennetut työkalut eivät tarjoa",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- tai CLI-työkalu käytössä",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- tai CLI-työkalua käytössä",
+      "referencesPlusContext_one": "{{count}} eksplisiittinen viittaus sekä aktiivinen konteksti",
+      "referencesPlusContext_other": "{{count}} eksplisiittistä viittausta sekä aktiivinen konteksti"
+    },
+    "subtitle_one": "{{agent}} voi käyttää {{count}} työkalua.",
+    "subtitle_other": "{{agent}} voi käyttää {{count}} työkalua."
   },
   "markdown": {
     "run": "Suorita"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Ei indeksoitavia Markdown-muistiinpanoja.",
-      "starting_one": "Indeksoidaan {{count}} muistiinpano…",
-      "starting_other": "Indeksoidaan {{count}} muistiinpanoa…",
       "progress": "Indeksointi: {{done}}/{{total}} muistiinpanoa",
       "completed": "Indeksointi valmis: {{indexed}} indeksoitu, {{failed}} epäonnistui.",
       "noIndex": "Mitään ei ole vielä indeksoitu. Suorita \"Embed all documents\" indeksoidaksesi holvisi.",
       "gradingError": "Asiakirjan arviointi epäonnistui: {{message}}",
       "clearing": "Tyhjennetään indeksiä…",
-      "cleared": "Indeksi tyhjennetty."
+      "cleared": "Indeksi tyhjennetty.",
+      "starting_one": "Indeksoidaan {{count}} muistiinpano…",
+      "starting_other": "Indeksoidaan {{count}} muistiinpanoa…"
     }
   }
 }

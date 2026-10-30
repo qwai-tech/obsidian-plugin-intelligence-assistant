@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Bekijk en beheer modellen van alle geconfigureerde providers. Klik op \"modellen vernieuwen\" om de nieuwste beschikbare modellen op te halen.",
-      "providerCount_one": "{{count}} provider geconfigureerd",
-      "providerCount_other": "{{count}} providers geconfigureerd",
-      "providerCount": "{{count}} providers geconfigureerd",
       "refreshAll": "alle modellen vernieuwen",
       "empty": "Nog geen providers geconfigureerd. Voeg eerst providers toe op het providertabblad.",
       "noModels": "Geen modellen beschikbaar. Klik op \"alle modellen vernieuwen\" of vernieuw individuele providers op het providertabblad.",
       "noMatch": "Geen modellen voldoen aan de huidige filters. Pas de filters aan of wis ze om resultaten te zien.",
-      "modelCount_one": "• {{count}} model gecached",
-      "modelCount_other": "• {{count}} modellen gecached",
-      "modelCount": "• {{count}} modellen gecached",
-      "matchCount_one": "• {{count}} overeenkomst met geselecteerde filters",
-      "matchCount_other": "• {{count}} overeenkomsten met geselecteerde filters",
-      "matchCount": "• {{count}} overeenkomsten met geselecteerde filters",
       "status": {
         "enabled": "Ingeschakeld",
         "disabled": "Uitgeschakeld"
@@ -92,12 +83,15 @@
         "capabilities": "Mogelijkheden",
         "status": "Status",
         "actions": "Acties"
-      }
+      },
+      "matchCount_one": "• {{count}} overeenkomst met geselecteerde filters",
+      "matchCount_other": "• {{count}} overeenkomsten met geselecteerde filters",
+      "modelCount_one": "• {{count}} model gecached",
+      "modelCount_other": "• {{count}} modellen gecached",
+      "providerCount_one": "{{count}} provider geconfigureerd",
+      "providerCount_other": "{{count}} providers geconfigureerd"
     },
     "provider": {
-      "count_one": "{{count}} provider geconfigureerd",
-      "count_other": "{{count}} providers geconfigureerd",
-      "count": "{{count}} providers geconfigureerd",
       "addBtn": "+ Provider toevoegen",
       "empty": "Geen providers geconfigureerd. Selecteer \"Provider toevoegen\" om te beginnen.",
       "status": {
@@ -116,8 +110,7 @@
       "models": {
         "none": "Geen modellen",
         "count_one": "{{count}} model",
-        "count_other": "{{count}} modellen",
-        "count": "{{count}} modellen"
+        "count_other": "{{count}} modellen"
       },
       "ollama": {
         "checkingVersion": "Versie controleren...",
@@ -153,7 +146,9 @@
       },
       "confirm": {
         "delete": "Provider {{provider}} verwijderen?"
-      }
+      },
+      "count_one": "{{count}} provider geconfigureerd",
+      "count_other": "{{count}} providers geconfigureerd"
     },
     "mcp": {
       "desc": "Configureer Model Context Protocol (MCP) servers om agentmogelijkheden uit te breiden met externe tools en gegevensbronnen.",
@@ -165,9 +160,6 @@
       "untitled": "Naamloze MCP Server",
       "notConfigured": "Niet geconfigureerd",
       "cached": "Gecached",
-      "envVars_one": "{{count}} omgevingsvariabele",
-      "envVars_other": "{{count}} omgevingsvariabelen",
-      "envVars": "{{count}} omgevingsvariabelen",
       "status": {
         "disabled": "Uitgeschakeld",
         "connected": "verbonden",
@@ -177,12 +169,10 @@
         "autoConnect": "Automatisch verbinden"
       },
       "toolCount": {
-        "live_one": "{{count}} live tool",
-        "live_other": "{{count}} live tools",
-        "live": "{{count}} live tools",
         "cached_one": "{{count}} gecachede tool",
         "cached_other": "{{count}} gecachede tools",
-        "cached": "{{count}} gecachede tools"
+        "live_one": "{{count}} live tool",
+        "live_other": "{{count}} live tools"
       },
       "actions": {
         "edit": "Bewerken",
@@ -204,27 +194,28 @@
         "disconnectFailed": "Verbinding verbreken met {{name}} mislukt",
         "connectFailed": "Verbinding maken met {{name}} mislukt",
         "testNoCommand": "voer een commando in voordat u de verbinding test",
-        "testSuccess": "succesvol verbonden! {{count}} tools gevonden.",
         "testFailed": "Verbinding mislukt: {{message}}",
-        "refreshedAll_one": "tools vernieuwd voor {{count}} server",
-        "refreshedAll_other": "tools vernieuwd voor {{count}} servers",
-        "refreshedAll": "tools vernieuwd voor {{count}} servers",
         "refreshedPartial": "{{success}} servers vernieuwd, {{failed}} mislukt",
         "noServersConfigured": "Geen MCP servers geconfigureerd",
-        "testingAll": "{{count}} MCP serververbindingen testen...",
-        "testAllSuccess": "alle {{count}} mcp servers succesvol verbonden!",
-        "testAllPartial": "{{successful}} verbonden, {{failed}} mislukt"
+        "testAllPartial": "{{successful}} verbonden, {{failed}} mislukt",
+        "refreshedAll_one": "Tools vernieuwd voor {{count}} server",
+        "refreshedAll_other": "Tools vernieuwd voor {{count}} servers",
+        "testAllSuccess_one": "{{count}} MCP-server succesvol verbonden.",
+        "testAllSuccess_other": "Alle {{count}} MCP-servers succesvol verbonden.",
+        "testSuccess_one": "Verbonden. {{count}} tool gevonden.",
+        "testSuccess_other": "Verbonden. {{count}} tools gevonden.",
+        "testingAll_one": "{{count}} MCP-serververbinding testen…",
+        "testingAll_other": "{{count}} MCP-serververbindingen testen…"
       },
       "confirm": {
         "delete": "MCP server \"{{name}}\" verwijderen?"
       },
-      "namePlaceholder": "Acme MCP-server"
+      "namePlaceholder": "Acme MCP-server",
+      "envVars_one": "{{count}} omgevingsvariabele",
+      "envVars_other": "{{count}} omgevingsvariabelen"
     },
     "agents": {
       "desc": "Maak en beheer AI-agenten met specifieke mogelijkheden, tools en gedragingen.",
-      "count_one": "{{count}} agent geconfigureerd",
-      "count_other": "{{count}} agenten geconfigureerd",
-      "count": "{{count}} agenten geconfigureerd",
       "addBtn": "+ agent toevoegen",
       "empty": "Geen agenten geconfigureerd. Selecteer agent toevoegen om te beginnen.",
       "defaultBadge": "Standaard",
@@ -237,12 +228,10 @@
       },
       "tools": {
         "builtIn": "{{count}} ingebouwd",
-        "mcpServer_one": "{{count}} mcp server",
-        "mcpServer_other": "{{count}} mcp servers",
-        "mcpServer": "{{count}} mcp servers",
-        "mcpTool_one": "{{count}} mcp tool",
-        "mcpTool_other": "{{count}} mcp tools",
-        "mcpTool": "{{count}} mcp tools"
+        "mcpServer_one": "{{count}} MCP-server",
+        "mcpServer_other": "{{count}} MCP-servers",
+        "mcpTool_one": "{{count}} MCP-tool",
+        "mcpTool_other": "{{count}} MCP-tools"
       },
       "actions": {
         "edit": "Bewerken",
@@ -250,7 +239,9 @@
       },
       "confirm": {
         "delete": "Agent \"{{name}}\" verwijderen?"
-      }
+      },
+      "count_one": "{{count}} agent geconfigureerd",
+      "count_other": "{{count}} agenten geconfigureerd"
     },
     "prompts": {
       "desc": "Beheer systeemprompts die het gedrag en de persoonlijkheid van uw AI-assistent definiëren.",
@@ -352,8 +343,9 @@
         },
         "notices": {
           "removed": "HTTP-bron verwijderd",
-          "reloaded": "{{count}} bewerkingen herladen",
-          "reloadFailed": "Herladen van HTTP-bron mislukt. Controleer de console voor details."
+          "reloadFailed": "Herladen van HTTP-bron mislukt. Controleer de console voor details.",
+          "reloaded_one": "{{count}} bewerking herladen",
+          "reloaded_other": "{{count}} bewerkingen herladen"
         },
         "modal": {
           "defaultTitle": "HTTP-bron",
@@ -419,9 +411,6 @@
           "actions": "Acties"
         },
         "unnamed": "Naamloze CLI tool",
-        "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parameters",
-        "paramCount": "{{count}} parameters",
         "noParams": "Geen",
         "statusEnabled": "Ingeschakeld",
         "statusDisabled": "Uitgeschakeld",
@@ -554,7 +543,9 @@
             "preset-screencapture": "Schermafbeelding",
             "preset-applescript-list-apps": "Actieve apps weergeven"
           }
-        }
+        },
+        "paramCount_one": "{{count}} parameter",
+        "paramCount_other": "{{count}} parameters"
       }
     },
     "rag": {
@@ -844,9 +835,6 @@
         "desc": "Prefix (emoji of tekst) om voor alle snelle acties in het contextmenu weer te geven",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} actie geconfigureerd ({{enabled}} ingeschakeld)",
-      "count_other": "{{count}} acties geconfigureerd ({{enabled}} ingeschakeld)",
-      "count": "{{count}} acties geconfigureerd ({{enabled}} ingeschakeld)",
       "addBtn": "+ snelle actie toevoegen",
       "empty": "Geen snelle acties geconfigureerd. Selecteer snelle actie toevoegen om te beginnen.",
       "defaultModel": "Standaard",
@@ -912,7 +900,9 @@
       "placeholders": {
         "name": "Tekst langer maken",
         "prompt": "Breid de volgende tekst uit en werk hem verder uit…"
-      }
+      },
+      "count_one": "{{count}} actie geconfigureerd ({{enabled}} ingeschakeld)",
+      "count_other": "{{count}} acties geconfigureerd ({{enabled}} ingeschakeld)"
     },
     "usage": {
       "desc": "Volg tokenconsumptie over providers en modellen. Gegevens worden opgebouwd over alle gesprekken.",
@@ -994,12 +984,14 @@
       "ragDisabled": "RAG is uitgeschakeld in de instellingen. Schakel het in via instellingen → chatfuncties → RAG.",
       "webSearchDisabled": "Webzoeken is uitgeschakeld in de instellingen. Schakel het in via instellingen → chatfuncties → webzoeken.",
       "attached": "Bijgevoegd: {{name}}",
-      "attachedImages": "{{count}} afbeelding(en) bijgevoegd",
-      "referencesAdded": "{{count}} referentie(s) toegevoegd",
       "fileNotFound": "Bestand niet gevonden: {{path}}",
       "unableToLoadRag": "Kan RAG-statistieken niet laden.",
       "referenced": "Gerefereerd: {{name}}",
-      "openViewFailed": "Kan de chatweergave niet openen."
+      "openViewFailed": "Kan de chatweergave niet openen.",
+      "attachedImages_one": "{{count}} afbeelding bijgevoegd",
+      "attachedImages_other": "{{count}} afbeeldingen bijgevoegd",
+      "referencesAdded_one": "{{count}} referentie toegevoegd",
+      "referencesAdded_other": "{{count}} referenties toegevoegd"
     },
     "status": {
       "unavailable": "Niet beschikbaar",
@@ -1020,9 +1012,8 @@
       "step2": "RAG inschakelen",
       "step3": "Index kluis selecteren",
       "close": "Sluiten",
-      "retrieved_one": "opgehaald uit {{count}} document",
-      "retrieved_other": "opgehaald uit {{count}} documenten",
-      "retrieved": "opgehaald uit {{count}} documenten"
+      "retrieved_one": "Opgehaald uit {{count}} document",
+      "retrieved_other": "Opgehaald uit {{count}} documenten"
     },
     "ragTooltip": {
       "status": "RAG Index Status:",
@@ -1141,8 +1132,6 @@
       "apply": "Toepassen",
       "applyAll": "Alles toepassen",
       "applied": "Toegepast",
-      "changes_one": "{{count}} wijziging",
-      "changes_other": "{{count}} wijzigingen",
       "confirm": "{{summary}} toepassen?",
       "appliedNotice": "Toegepast: {{summary}}",
       "operations": {
@@ -1152,7 +1141,9 @@
         "delete": "Verwijderen",
         "move": "Verplaatsen",
         "batch": "Batch"
-      }
+      },
+      "changes_one": "{{count}} wijziging",
+      "changes_other": "{{count}} wijzigingen"
     }
   },
   "modals": {
@@ -1213,15 +1204,14 @@
       "mcp": {
         "title": "MCP toegang",
         "noServers": "Geen MCP servers geconfigureerd. Voeg servers toe via Instellingen → MCP om deze opties te ontgrendelen.",
-        "toolsCached_one": "{{count}} tool gecached",
-        "toolsCached_other": "{{count}} tools gecached",
-        "toolsCached": "{{count}} tools gecached",
         "noToolsCached": "Nog geen tools gecached. Schakel volledige toegang in of vernieuw de cache.",
         "showTools": "Tools tonen",
         "hideTools": "Tools verbergen",
         "selected": "Geselecteerd",
         "notSelected": "Niet geselecteerd",
-        "noToolsAvailable": "Nog geen tools beschikbaar van deze server."
+        "noToolsAvailable": "Nog geen tools beschikbaar van deze server.",
+        "toolsCached_one": "{{count}} tool gecached",
+        "toolsCached_other": "{{count}} tools gecached"
       },
       "notices": {
         "promptRequired": "Geef een naam en inhoud op voor de nieuwe systeemprompt."
@@ -1303,10 +1293,11 @@
       },
       "cachedModels": "Gecachede modellen: {{count}}",
       "connectionFailed": "Verbindingstest mislukt. Controleer de providerinstellingen.",
-      "connectionSuccess": "Verbinding geslaagd. {{count}} model(len) gecached.",
       "noCachedModels": "Geen gecachede modellen",
       "testConnection": "Verbinding testen",
-      "testing": "Testen..."
+      "testing": "Testen...",
+      "connectionSuccess_one": "Verbinding geslaagd. {{count}} model gecached.",
+      "connectionSuccess_other": "Verbinding geslaagd. {{count}} modellen gecached."
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1329,12 +1320,6 @@
         "statusDisabled": "Uitgeschakeld",
         "statusConnected": "● verbonden",
         "statusDisconnected": "○ verbroken",
-        "toolsLive_one": "{{count}} tool",
-        "toolsLive_other": "{{count}} tools",
-        "toolsLive": "{{count}} tools",
-        "toolsCached_one": "{{count}} tool (gecached)",
-        "toolsCached_other": "{{count}} tools (gecached)",
-        "toolsCached": "{{count}} tools (gecached)",
         "noTools": "0 tools",
         "connectBtn": "Verbinden",
         "disconnectBtn": "Verbreken",
@@ -1346,7 +1331,11 @@
           "connected": "Verbonden met {{name}}",
           "failedDisconnect": "Verbinding verbreken met {{name}} mislukt: {{message}}",
           "failedConnect": "Verbinding maken met {{name}} mislukt: {{message}}"
-        }
+        },
+        "toolsCached_one": "{{count}} tool (gecached)",
+        "toolsCached_other": "{{count}} tools (gecached)",
+        "toolsLive_one": "{{count}} tool",
+        "toolsLive_other": "{{count}} tools"
       },
       "tools": {
         "title": "Beschikbare MCP tools",
@@ -1569,8 +1558,6 @@
   },
   "capability": {
     "title": "Tools en machtigingen",
-    "subtitle_one": "{{agent}} kan {{count}} tool gebruiken.",
-    "subtitle_other": "{{agent}} kan {{count}} tools gebruiken.",
     "chatMode": "Chatmodus",
     "permissions": "Huidige machtigingen",
     "reads": "Deze taak kan lezen",
@@ -1590,8 +1577,6 @@
     },
     "rows": {
       "vaultContext": "Kluiscontext",
-      "referencesPlusContext_one": "{{count}} expliciete verwijzing plus actieve context",
-      "referencesPlusContext_other": "{{count}} expliciete verwijzingen plus actieve context",
       "activeContext": "Actieve notitie en momentopname van grafcontext",
       "readTools": "Leestools voor de kluis",
       "enabledCount": "{{count}} ingeschakeld",
@@ -1605,12 +1590,16 @@
       "off": "Uit",
       "disabledInSettings": "Uitgeschakeld in instellingen",
       "custom": "Aangepaste tools",
-      "customEnabled_one": "{{count}} MCP-, OpenAPI- of CLI-tool ingeschakeld",
-      "customEnabled_other": "{{count}} MCP-, OpenAPI- of CLI-tools ingeschakeld",
       "noneEnabled": "Geen ingeschakeld",
       "destructive": "Destructieve kluisacties",
-      "notProvided": "Niet geleverd door ingebouwde tools"
-    }
+      "notProvided": "Niet geleverd door ingebouwde tools",
+      "customEnabled_one": "{{count}} MCP-, OpenAPI- of CLI-tool ingeschakeld",
+      "customEnabled_other": "{{count}} MCP-, OpenAPI- of CLI-tools ingeschakeld",
+      "referencesPlusContext_one": "{{count}} expliciete verwijzing plus actieve context",
+      "referencesPlusContext_other": "{{count}} expliciete verwijzingen plus actieve context"
+    },
+    "subtitle_one": "{{agent}} kan {{count}} tool gebruiken.",
+    "subtitle_other": "{{agent}} kan {{count}} tools gebruiken."
   },
   "markdown": {
     "run": "Uitvoeren"
@@ -1618,14 +1607,14 @@
   "rag": {
     "notices": {
       "noFiles": "Geen Markdown-notities om te indexeren.",
-      "starting_one": "{{count}} notitie indexeren…",
-      "starting_other": "{{count}} notities indexeren…",
       "progress": "Indexeren: {{done}} van {{total}} notities",
       "completed": "Indexeren voltooid: {{indexed}} geïndexeerd, {{failed}} mislukt.",
       "noIndex": "Er is nog niets geïndexeerd. Voer \"Embed all documents\" uit om je kluis te indexeren.",
       "gradingError": "Beoordelen van documenten mislukt: {{message}}",
       "clearing": "Index wissen…",
-      "cleared": "Index gewist."
+      "cleared": "Index gewist.",
+      "starting_one": "{{count}} notitie indexeren…",
+      "starting_other": "{{count}} notities indexeren…"
     }
   }
 }

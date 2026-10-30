@@ -47,19 +47,10 @@
     },
     "models": {
       "desc": "Peržiūrėti ir valdyti modelius iš visų sukonfigūruotų tiekėjų. Spauskite «atnaujinti modelius», kad gautumėte naujausius galimus modelius.",
-      "providerCount_one": "{{count}} tiekėjas sukonfigūruotas",
-      "providerCount_other": "{{count}} tiekėjai sukonfigūruoti",
-      "providerCount": "{{count}} tiekėjai sukonfigūruoti",
       "refreshAll": "atnaujinti visus modelius",
       "empty": "Dar nėra sukonfigūruotų tiekėjų. Pirmiausia pridėkite tiekėjus tiekėjų skirtuke.",
       "noModels": "Nėra galimų modelių. Spauskite «atnaujinti visus modelius» arba atnaujinkite atskirus tiekėjus tiekėjų skirtuke.",
       "noMatch": "Nė vienas modelis neatitinka dabartinių filtrų. Koreguokite arba išvalykite filtrus, kad pamatytumėte rezultatus.",
-      "modelCount_one": "• {{count}} modelis talpykloje",
-      "modelCount_other": "• {{count}} modeliai talpykloje",
-      "modelCount": "• {{count}} modeliai talpykloje",
-      "matchCount_one": "• {{count}} atitinka pasirinktus filtrus",
-      "matchCount_other": "• {{count}} atitinka pasirinktus filtrus",
-      "matchCount": "• {{count}} atitinka pasirinktus filtrus",
       "status": {
         "enabled": "Įjungtas",
         "disabled": "Išjungtas"
@@ -92,12 +83,21 @@
         "capabilities": "Galimybės",
         "status": "Būsena",
         "actions": "Veiksmai"
-      }
+      },
+      "matchCount_few": "• {{count}} atitikmenys pasirinktiems filtrams",
+      "matchCount_many": "• {{count}} atitikmens pasirinktiems filtrams",
+      "matchCount_one": "• {{count}} atitikmuo pasirinktiems filtrams",
+      "matchCount_other": "• {{count}} atitikmenų pasirinktiems filtrams",
+      "modelCount_few": "• {{count}} modeliai talpykloje",
+      "modelCount_many": "• {{count}} modelio talpykloje",
+      "modelCount_one": "• {{count}} modelis talpykloje",
+      "modelCount_other": "• {{count}} modelių talpykloje",
+      "providerCount_few": "{{count}} tiekėjai sukonfigūruoti",
+      "providerCount_many": "Sukonfigūruota {{count}} tiekėjo",
+      "providerCount_one": "{{count}} tiekėjas sukonfigūruotas",
+      "providerCount_other": "Sukonfigūruota {{count}} tiekėjų"
     },
     "provider": {
-      "count_one": "{{count}} tiekėjas sukonfigūruotas",
-      "count_other": "{{count}} tiekėjai sukonfigūruoti",
-      "count": "{{count}} tiekėjai sukonfigūruoti",
       "addBtn": "+ Pridėti tiekėją",
       "empty": "Nėra sukonfigūruotų tiekėjų. Pasirinkite «Pridėti tiekėją», kad pradėtumėte.",
       "status": {
@@ -115,9 +115,10 @@
       },
       "models": {
         "none": "Nėra modelių",
+        "count_few": "{{count}} modeliai",
+        "count_many": "{{count}} modelio",
         "count_one": "{{count}} modelis",
-        "count_other": "{{count}} modeliai",
-        "count": "{{count}} modeliai"
+        "count_other": "{{count}} modelių"
       },
       "ollama": {
         "checkingVersion": "Tikrinama versija...",
@@ -153,7 +154,11 @@
       },
       "confirm": {
         "delete": "Pašalinti tiekėją {{provider}}?"
-      }
+      },
+      "count_few": "{{count}} tiekėjai sukonfigūruoti",
+      "count_many": "Sukonfigūruota {{count}} tiekėjo",
+      "count_one": "{{count}} tiekėjas sukonfigūruotas",
+      "count_other": "Sukonfigūruota {{count}} tiekėjų"
     },
     "mcp": {
       "desc": "Konfigūruoti Model Context Protocol (MCP) serverius, kad išplėstumėte agento galimybes su išoriniais įrankiais ir duomenų šaltiniais.",
@@ -165,9 +170,6 @@
       "untitled": "Nepavadintas MCP serveris",
       "notConfigured": "Nesukonfigūruotas",
       "cached": "Talpykloje",
-      "envVars_one": "{{count}} aplinkos kintamasis",
-      "envVars_other": "{{count}} aplinkos kintamieji",
-      "envVars": "{{count}} aplinkos kintamieji",
       "status": {
         "disabled": "Išjungtas",
         "connected": "prijungtas",
@@ -177,12 +179,14 @@
         "autoConnect": "Automatinis prisijungimas"
       },
       "toolCount": {
-        "live_one": "{{count}} aktyvus įrankis",
-        "live_other": "{{count}} aktyvūs įrankiai",
-        "live": "{{count}} aktyvūs įrankiai",
+        "cached_few": "{{count}} talpykloje esantys įrankiai",
+        "cached_many": "{{count}} talpykloje esančio įrankio",
         "cached_one": "{{count}} talpykloje esantis įrankis",
-        "cached_other": "{{count}} talpykloje esantys įrankiai",
-        "cached": "{{count}} talpykloje esantys įrankiai"
+        "cached_other": "{{count}} talpykloje esančių įrankių",
+        "live_few": "{{count}} aktyvūs įrankiai",
+        "live_many": "{{count}} aktyvaus įrankio",
+        "live_one": "{{count}} aktyvus įrankis",
+        "live_other": "{{count}} aktyvių įrankių"
       },
       "actions": {
         "edit": "Redaguoti",
@@ -204,27 +208,38 @@
         "disconnectFailed": "Nepavyko atjungti nuo {{name}}",
         "connectFailed": "Nepavyko prisijungti prie {{name}}",
         "testNoCommand": "prieš tikrinant ryšį įveskite komandą",
-        "testSuccess": "sėkmingai prisijungta! Rasta {{count}} įrankių.",
         "testFailed": "Ryšys nepavyko: {{message}}",
-        "refreshedAll_one": "atnaujinti įrankiai {{count}} serveriui",
-        "refreshedAll_other": "atnaujinti įrankiai {{count}} serveriams",
-        "refreshedAll": "atnaujinti įrankiai {{count}} serveriams",
         "refreshedPartial": "atnaujinta {{success}} serverių, {{failed}} nepavyko",
         "noServersConfigured": "Nėra sukonfigūruotų MCP serverių",
-        "testingAll": "Tikrinami {{count}} MCP serverio ryšiai...",
-        "testAllSuccess": "visi {{count}} MCP serveriai sėkmingai prijungti!",
-        "testAllPartial": "{{successful}} prijungta, {{failed}} nepavyko"
+        "testAllPartial": "{{successful}} prijungta, {{failed}} nepavyko",
+        "refreshedAll_few": "Atnaujinti įrankiai {{count}} serveriams",
+        "refreshedAll_many": "Atnaujinti įrankiai {{count}} serverio",
+        "refreshedAll_one": "Atnaujinti įrankiai {{count}} serveriui",
+        "refreshedAll_other": "Atnaujinti įrankiai {{count}} serverių",
+        "testAllSuccess_few": "Sėkmingai prisijungta prie visų {{count}} MCP serverių.",
+        "testAllSuccess_many": "Sėkmingai prisijungta prie {{count}} MCP serverio.",
+        "testAllSuccess_one": "Sėkmingai prisijungta prie {{count}} MCP serverio.",
+        "testAllSuccess_other": "Sėkmingai prisijungta prie visų {{count}} MCP serverių.",
+        "testSuccess_few": "Prisijungta. Rasti {{count}} įrankiai.",
+        "testSuccess_many": "Prisijungta. Rasta {{count}} įrankio.",
+        "testSuccess_one": "Prisijungta. Rastas {{count}} įrankis.",
+        "testSuccess_other": "Prisijungta. Rasta {{count}} įrankių.",
+        "testingAll_few": "Tikrinami {{count}} MCP serverių ryšiai…",
+        "testingAll_many": "Tikrinama {{count}} MCP serverių ryšio…",
+        "testingAll_one": "Tikrinamas {{count}} MCP serverio ryšys…",
+        "testingAll_other": "Tikrinama {{count}} MCP serverių ryšių…"
       },
       "confirm": {
         "delete": "Ištrinti MCP serverį «{{name}}»?"
       },
-      "namePlaceholder": "Acme MCP serveris"
+      "namePlaceholder": "Acme MCP serveris",
+      "envVars_few": "{{count}} aplinkos kintamieji",
+      "envVars_many": "{{count}} aplinkos kintamojo",
+      "envVars_one": "{{count}} aplinkos kintamasis",
+      "envVars_other": "{{count}} aplinkos kintamųjų"
     },
     "agents": {
       "desc": "Kurti ir valdyti DI agentus su specifinėmis galimybėmis, įrankiais ir elgesiu.",
-      "count_one": "{{count}} agentas sukonfigūruotas",
-      "count_other": "{{count}} agentai sukonfigūruoti",
-      "count": "{{count}} agentai sukonfigūruoti",
       "addBtn": "+ pridėti agentą",
       "empty": "Nėra sukonfigūruotų agentų. Pasirinkite pridėti agentą, kad pradėtumėte.",
       "defaultBadge": "Numatytasis",
@@ -237,12 +252,14 @@
       },
       "tools": {
         "builtIn": "{{count}} įtaisytasis",
+        "mcpServer_few": "{{count}} MCP serveriai",
+        "mcpServer_many": "{{count}} MCP serverio",
         "mcpServer_one": "{{count}} MCP serveris",
-        "mcpServer_other": "{{count}} MCP serveriai",
-        "mcpServer": "{{count}} MCP serveriai",
+        "mcpServer_other": "{{count}} MCP serverių",
+        "mcpTool_few": "{{count}} MCP įrankiai",
+        "mcpTool_many": "{{count}} MCP įrankio",
         "mcpTool_one": "{{count}} MCP įrankis",
-        "mcpTool_other": "{{count}} MCP įrankiai",
-        "mcpTool": "{{count}} MCP įrankiai"
+        "mcpTool_other": "{{count}} MCP įrankių"
       },
       "actions": {
         "edit": "Redaguoti",
@@ -250,7 +267,11 @@
       },
       "confirm": {
         "delete": "Ištrinti agentą «{{name}}»?"
-      }
+      },
+      "count_few": "{{count}} agentai sukonfigūruoti",
+      "count_many": "Sukonfigūruota {{count}} agento",
+      "count_one": "{{count}} agentas sukonfigūruotas",
+      "count_other": "Sukonfigūruota {{count}} agentų"
     },
     "prompts": {
       "desc": "Valdyti sistemos raginius, apibrėžiančius DI asistento elgesį ir asmenybę.",
@@ -352,8 +373,11 @@
         },
         "notices": {
           "removed": "HTTP šaltinis pašalintas",
-          "reloaded": "Perkrauta {{count}} operacijų",
-          "reloadFailed": "Nepavyko perkrauti HTTP šaltinio. Išsamiau žr. konsolę."
+          "reloadFailed": "Nepavyko perkrauti HTTP šaltinio. Išsamiau žr. konsolę.",
+          "reloaded_few": "Perkrautos {{count}} operacijos",
+          "reloaded_many": "Perkrauta {{count}} operacijos",
+          "reloaded_one": "Perkrauta {{count}} operacija",
+          "reloaded_other": "Perkrauta {{count}} operacijų"
         },
         "modal": {
           "defaultTitle": "HTTP šaltinis",
@@ -419,9 +443,6 @@
           "actions": "Veiksmai"
         },
         "unnamed": "Nepavadintas CLI įrankis",
-        "paramCount_one": "{{count}} parametras",
-        "paramCount_other": "{{count}} parametrai",
-        "paramCount": "{{count}} parametrai",
         "noParams": "Nėra",
         "statusEnabled": "Įjungtas",
         "statusDisabled": "Išjungtas",
@@ -554,7 +575,11 @@
             "preset-screencapture": "Ekrano kopija",
             "preset-applescript-list-apps": "Išvardyti veikiančias programas"
           }
-        }
+        },
+        "paramCount_few": "{{count}} parametrai",
+        "paramCount_many": "{{count}} parametro",
+        "paramCount_one": "{{count}} parametras",
+        "paramCount_other": "{{count}} parametrų"
       }
     },
     "rag": {
@@ -844,9 +869,6 @@
         "desc": "Prefiksas (jaustukų piktograma arba tekstas), rodomas prieš visus greitus veiksmus kontekstiniame meniu",
         "placeholder": "⚡"
       },
-      "count_one": "{{count}} veiksmas sukonfigūruotas ({{enabled}} įjungtas)",
-      "count_other": "{{count}} veiksmai sukonfigūruoti ({{enabled}} įjungti)",
-      "count": "{{count}} veiksmai sukonfigūruoti ({{enabled}} įjungti)",
       "addBtn": "+ pridėti greitą veiksmą",
       "empty": "Nėra sukonfigūruotų greitų veiksmų. Pasirinkite pridėti greitą veiksmą, kad pradėtumėte.",
       "defaultModel": "Numatytasis",
@@ -912,7 +934,11 @@
       "placeholders": {
         "name": "Pailginti tekstą",
         "prompt": "Išplėsk ir išsamiau išdėstyk šį tekstą…"
-      }
+      },
+      "count_few": "{{count}} veiksmai sukonfigūruoti (įjungta: {{enabled}})",
+      "count_many": "Sukonfigūruota {{count}} veiksmo (įjungta: {{enabled}})",
+      "count_one": "{{count}} veiksmas sukonfigūruotas (įjungta: {{enabled}})",
+      "count_other": "Sukonfigūruota {{count}} veiksmų (įjungta: {{enabled}})"
     },
     "usage": {
       "desc": "Stebėti žetonų suvartojimą įvairių tiekėjų ir modelių. Duomenys kaupiami visuose pokalbiuose.",
@@ -994,12 +1020,18 @@
       "ragDisabled": "RAG išjungtas nustatymuose. Įjunkite jį nustatymai → pokalbio funkcijos → RAG.",
       "webSearchDisabled": "Žiniatinklio paieška išjungta nustatymuose. Įjunkite ją nustatymai → pokalbio funkcijos → žiniatinklio paieška.",
       "attached": "Pridėta: {{name}}",
-      "attachedImages": "Pridėtas (-i) {{count}} vaizdas (-ai)",
-      "referencesAdded": "Pridėta {{count}} nuoroda (-os)",
       "fileNotFound": "Failas nerastas: {{path}}",
       "unableToLoadRag": "Nepavyko įkelti RAG statistikos.",
       "referenced": "Paminėta: {{name}}",
-      "openViewFailed": "Nepavyko atidaryti pokalbio rodinio."
+      "openViewFailed": "Nepavyko atidaryti pokalbio rodinio.",
+      "attachedImages_few": "Pridėti {{count}} vaizdai",
+      "attachedImages_many": "Pridėta {{count}} vaizdo",
+      "attachedImages_one": "Pridėtas {{count}} vaizdas",
+      "attachedImages_other": "Pridėta {{count}} vaizdų",
+      "referencesAdded_few": "Pridėtos {{count}} nuorodos",
+      "referencesAdded_many": "Pridėta {{count}} nuorodos",
+      "referencesAdded_one": "Pridėta {{count}} nuoroda",
+      "referencesAdded_other": "Pridėta {{count}} nuorodų"
     },
     "status": {
       "unavailable": "Nepasiekiamas",
@@ -1020,9 +1052,10 @@
       "step2": "Įjungti RAG",
       "step3": "Pasirinkti indeksuoti saugyklą",
       "close": "Uždaryti",
-      "retrieved_one": "gauta iš {{count}} dokumento",
-      "retrieved_other": "gauta iš {{count}} dokumentų",
-      "retrieved": "gauta iš {{count}} dokumentų"
+      "retrieved_few": "Gauta iš {{count}} dokumentų",
+      "retrieved_many": "Gauta iš {{count}} dokumento",
+      "retrieved_one": "Gauta iš {{count}} dokumento",
+      "retrieved_other": "Gauta iš {{count}} dokumentų"
     },
     "ragTooltip": {
       "status": "RAG indekso būsena:",
@@ -1141,8 +1174,6 @@
       "apply": "Taikyti",
       "applyAll": "Taikyti viską",
       "applied": "Pritaikyta",
-      "changes_one": "{{count}} pakeitimas",
-      "changes_other": "Pakeitimų: {{count}}",
       "confirm": "Taikyti {{summary}}?",
       "appliedNotice": "Pritaikyta: {{summary}}",
       "operations": {
@@ -1152,7 +1183,11 @@
         "delete": "Ištrinti",
         "move": "Perkelti",
         "batch": "Paketas"
-      }
+      },
+      "changes_few": "{{count}} pakeitimai",
+      "changes_many": "{{count}} pakeitimo",
+      "changes_one": "{{count}} pakeitimas",
+      "changes_other": "{{count}} pakeitimų"
     }
   },
   "modals": {
@@ -1213,15 +1248,16 @@
       "mcp": {
         "title": "MCP prieiga",
         "noServers": "Nesukonfigūruoti MCP serveriai. Pridėkite serverius Nustatymai → MCP, kad atrakintumėte šias parinktis.",
-        "toolsCached_one": "{{count}} įrankis talpykloje",
-        "toolsCached_other": "{{count}} įrankiai talpykloje",
-        "toolsCached": "{{count}} įrankiai talpykloje",
         "noToolsCached": "Talpykloje dar nėra įrankių. Įjunkite visišką prieigą arba atnaujinkite talpyklą.",
         "showTools": "Rodyti įrankius",
         "hideTools": "Slėpti įrankius",
         "selected": "Pasirinktas",
         "notSelected": "Nepasirinktas",
-        "noToolsAvailable": "Iš šio serverio dar nėra galimų įrankių."
+        "noToolsAvailable": "Iš šio serverio dar nėra galimų įrankių.",
+        "toolsCached_few": "{{count}} įrankiai talpykloje",
+        "toolsCached_many": "{{count}} įrankio talpykloje",
+        "toolsCached_one": "{{count}} įrankis talpykloje",
+        "toolsCached_other": "{{count}} įrankių talpykloje"
       },
       "notices": {
         "promptRequired": "Pateikite pavadinimą ir turinį naujam sistemos raginiui."
@@ -1303,10 +1339,13 @@
       },
       "cachedModels": "Talpykloje esantys modeliai: {{count}}",
       "connectionFailed": "Ryšio patikrinimas nepavyko. Patikrinkite tiekėjo nustatymus.",
-      "connectionSuccess": "Ryšys sėkmingas. Talpykloje išsaugota modelių: {{count}}.",
       "noCachedModels": "Talpykloje nėra modelių",
       "testConnection": "Patikrinti ryšį",
-      "testing": "Tikrinama..."
+      "testing": "Tikrinama...",
+      "connectionSuccess_few": "Ryšys sėkmingas. Talpykloje išsaugoti {{count}} modeliai.",
+      "connectionSuccess_many": "Ryšys sėkmingas. Talpykloje išsaugota {{count}} modelio.",
+      "connectionSuccess_one": "Ryšys sėkmingas. Talpykloje išsaugotas {{count}} modelis.",
+      "connectionSuccess_other": "Ryšys sėkmingas. Talpykloje išsaugota {{count}} modelių."
     },
     "mcpInspector": {
       "title": "MCP inspektorius",
@@ -1329,12 +1368,6 @@
         "statusDisabled": "Išjungtas",
         "statusConnected": "● prijungtas",
         "statusDisconnected": "○ atjungtas",
-        "toolsLive_one": "{{count}} įrankis",
-        "toolsLive_other": "{{count}} įrankiai",
-        "toolsLive": "{{count}} įrankiai",
-        "toolsCached_one": "{{count}} įrankis (talpykloje)",
-        "toolsCached_other": "{{count}} įrankiai (talpykloje)",
-        "toolsCached": "{{count}} įrankiai (talpykloje)",
         "noTools": "0 įrankių",
         "connectBtn": "Prisijungti",
         "disconnectBtn": "Atjungti",
@@ -1346,7 +1379,15 @@
           "connected": "Prisijungta prie {{name}}",
           "failedDisconnect": "Nepavyko atjungti nuo {{name}}: {{message}}",
           "failedConnect": "Nepavyko prisijungti prie {{name}}: {{message}}"
-        }
+        },
+        "toolsCached_few": "{{count}} įrankiai (talpykloje)",
+        "toolsCached_many": "{{count}} įrankio (talpykloje)",
+        "toolsCached_one": "{{count}} įrankis (talpykloje)",
+        "toolsCached_other": "{{count}} įrankių (talpykloje)",
+        "toolsLive_few": "{{count}} įrankiai",
+        "toolsLive_many": "{{count}} įrankio",
+        "toolsLive_one": "{{count}} įrankis",
+        "toolsLive_other": "{{count}} įrankių"
       },
       "tools": {
         "title": "Galimi MCP įrankiai",
@@ -1569,8 +1610,6 @@
   },
   "capability": {
     "title": "Įrankiai ir leidimai",
-    "subtitle_one": "{{agent}} gali naudoti {{count}} įrankį.",
-    "subtitle_other": "{{agent}} gali naudoti įrankių: {{count}}.",
     "chatMode": "Pokalbio režimas",
     "permissions": "Dabartiniai leidimai",
     "reads": "Ši užduotis gali skaityti",
@@ -1590,8 +1629,6 @@
     },
     "rows": {
       "vaultContext": "Saugyklos kontekstas",
-      "referencesPlusContext_one": "{{count}} aiški nuoroda ir aktyvus kontekstas",
-      "referencesPlusContext_other": "Aiškių nuorodų: {{count}}, ir aktyvus kontekstas",
       "activeContext": "Aktyvus užrašas ir grafo konteksto momentinė kopija",
       "readTools": "Saugyklos skaitymo įrankiai",
       "enabledCount": "Įjungta: {{count}}",
@@ -1605,12 +1642,22 @@
       "off": "Išjungta",
       "disabledInSettings": "Išjungta nustatymuose",
       "custom": "Pasirinktiniai įrankiai",
-      "customEnabled_one": "Įjungtas {{count}} MCP, OpenAPI arba CLI įrankis",
-      "customEnabled_other": "Įjungta MCP, OpenAPI arba CLI įrankių: {{count}}",
       "noneEnabled": "Nieko neįjungta",
       "destructive": "Destruktyvūs saugyklos veiksmai",
-      "notProvided": "Integruoti įrankiai to nepateikia"
-    }
+      "notProvided": "Integruoti įrankiai to nepateikia",
+      "customEnabled_few": "Įjungti {{count}} MCP, OpenAPI arba CLI įrankiai",
+      "customEnabled_many": "Įjungta {{count}} MCP, OpenAPI arba CLI įrankio",
+      "customEnabled_one": "Įjungtas {{count}} MCP, OpenAPI arba CLI įrankis",
+      "customEnabled_other": "Įjungta {{count}} MCP, OpenAPI arba CLI įrankių",
+      "referencesPlusContext_few": "{{count}} aiškios nuorodos ir aktyvus kontekstas",
+      "referencesPlusContext_many": "{{count}} aiškios nuorodos ir aktyvus kontekstas",
+      "referencesPlusContext_one": "{{count}} aiški nuoroda ir aktyvus kontekstas",
+      "referencesPlusContext_other": "{{count}} aiškių nuorodų ir aktyvus kontekstas"
+    },
+    "subtitle_few": "{{agent}} gali naudoti {{count}} įrankius.",
+    "subtitle_many": "{{agent}} gali naudoti {{count}} įrankio.",
+    "subtitle_one": "{{agent}} gali naudoti {{count}} įrankį.",
+    "subtitle_other": "{{agent}} gali naudoti {{count}} įrankių."
   },
   "markdown": {
     "run": "Vykdyti"
@@ -1618,14 +1665,16 @@
   "rag": {
     "notices": {
       "noFiles": "Nėra Markdown užrašų, kuriuos būtų galima indeksuoti.",
-      "starting_one": "Indeksuojamas {{count}} užrašas…",
-      "starting_other": "Indeksuojama užrašų: {{count}}…",
       "progress": "Indeksuojama: {{done}} iš {{total}} užrašų",
       "completed": "Indeksavimas baigtas: suindeksuota {{indexed}}, nepavyko {{failed}}.",
       "noIndex": "Kol kas niekas nesuindeksuota. Paleiskite \"Embed all documents\", kad suindeksuotumėte saugyklą.",
       "gradingError": "Dokumentų vertinimas nepavyko: {{message}}",
       "clearing": "Valomas indeksas…",
-      "cleared": "Indeksas išvalytas."
+      "cleared": "Indeksas išvalytas.",
+      "starting_few": "Indeksuojami {{count}} užrašai…",
+      "starting_many": "Indeksuojama {{count}} užrašo…",
+      "starting_one": "Indeksuojamas {{count}} užrašas…",
+      "starting_other": "Indeksuojama {{count}} užrašų…"
     }
   }
 }
