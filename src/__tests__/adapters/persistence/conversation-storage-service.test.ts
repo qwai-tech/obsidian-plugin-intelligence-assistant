@@ -4,6 +4,7 @@
 
 import { ConversationStorageService } from '@/adapters/persistence/conversation-storage-service';
 import type { Conversation } from '@/features/conversations/types/conversation';
+import { pluginPaths } from '@/core/plugin-paths';
 
 function makeConversation(overrides: Partial<Conversation> = {}): Conversation {
 	return {
@@ -47,7 +48,7 @@ describe('ConversationStorageService', () => {
 	describe('createConversation', () => {
 		it('creates conversation file and updates index', async () => {
 			const { app, adapter } = makeApp();
-			const svc = new ConversationStorageService(app);
+			const svc = new ConversationStorageService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 
 			const conv = makeConversation();
@@ -71,7 +72,7 @@ describe('ConversationStorageService', () => {
 	describe('loadConversation', () => {
 		it('returns null for unknown conversation id', async () => {
 			const { app } = makeApp();
-			const svc = new ConversationStorageService(app);
+			const svc = new ConversationStorageService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 
 			const result = await svc.loadConversation('nonexistent');
@@ -80,7 +81,7 @@ describe('ConversationStorageService', () => {
 
 		it('round-trips a conversation through create then load', async () => {
 			const { app } = makeApp();
-			const svc = new ConversationStorageService(app);
+			const svc = new ConversationStorageService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 
 			const conv = makeConversation({ messages: [{ role: 'user', content: 'hello' }] });
@@ -96,7 +97,7 @@ describe('ConversationStorageService', () => {
 	describe('updateConversation', () => {
 		it('updates conversation content and metadata', async () => {
 			const { app } = makeApp();
-			const svc = new ConversationStorageService(app);
+			const svc = new ConversationStorageService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 
 			const conv = makeConversation();
@@ -111,7 +112,7 @@ describe('ConversationStorageService', () => {
 
 		it('throws when updating a conversation not in the index', async () => {
 			const { app } = makeApp();
-			const svc = new ConversationStorageService(app);
+			const svc = new ConversationStorageService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 
 			await expect(
@@ -123,7 +124,7 @@ describe('ConversationStorageService', () => {
 	describe('deleteConversation', () => {
 		it('removes conversation from index and returns true', async () => {
 			const { app } = makeApp();
-			const svc = new ConversationStorageService(app);
+			const svc = new ConversationStorageService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 
 			const conv = makeConversation();
@@ -138,7 +139,7 @@ describe('ConversationStorageService', () => {
 
 		it('returns false for unknown conversation id', async () => {
 			const { app } = makeApp();
-			const svc = new ConversationStorageService(app);
+			const svc = new ConversationStorageService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 
 			const result = await svc.deleteConversation('ghost');
@@ -149,7 +150,7 @@ describe('ConversationStorageService', () => {
 	describe('listConversations', () => {
 		it('returns empty list when no conversations created', async () => {
 			const { app } = makeApp();
-			const svc = new ConversationStorageService(app);
+			const svc = new ConversationStorageService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 
 			const list = await svc.getAllConversationsMetadata();
@@ -158,7 +159,7 @@ describe('ConversationStorageService', () => {
 
 		it('lists all created conversations sorted by updatedAt descending', async () => {
 			const { app } = makeApp();
-			const svc = new ConversationStorageService(app);
+			const svc = new ConversationStorageService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 
 			await svc.createConversation(makeConversation({ id: 'a', updatedAt: 1000 }));
@@ -174,7 +175,7 @@ describe('ConversationStorageService', () => {
 	describe('write lock (concurrency)', () => {
 		it('serializes concurrent createConversation calls', async () => {
 			const { app } = makeApp();
-			const svc = new ConversationStorageService(app);
+			const svc = new ConversationStorageService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 
 			// Fire 5 creates in parallel — all should succeed

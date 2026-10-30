@@ -9,7 +9,7 @@ import { ToolRegistry, ToolSourceManager } from '@/features/tools';
 import { WebSearchService } from '@/features/web-search';
 import { AgentMemoryService, AgentSenseService, AgentEngineLoop, HistoryCompactor, RunActivity } from '@/features/agent';
 import { JsonlRunJournal } from '@/adapters/persistence/jsonl-run-journal';
-import { pluginPaths } from '@/core/plugin-paths';
+import type { PluginPaths } from '@/core/plugin-paths';
 import { ChatService, VaultExportService, ConversationNamer } from '@/features/chat';
 import { OllamaAdmin } from '@/features/llm';
 import type { ConversationStorageService } from '@/adapters/persistence/conversation-storage-service';
@@ -21,7 +21,7 @@ export interface ServiceHost {
 	app: App;
 	settings: () => PluginSettings;
 	saveSettings: () => Promise<void>;
-	pluginDataPath: string;
+	paths: PluginPaths;
 	data: PluginDataService;
 	conversations: ConversationStorageService;
 }
@@ -32,9 +32,9 @@ export interface OwnedServices extends AppServices {
 
 export function createServices(host: ServiceHost): OwnedServices {
 	const { app, settings, data } = host;
-	const rag = new RAGManager(app, settings().ragConfig, settings().llmConfigs);
+	const rag = new RAGManager(app, settings().ragConfig, settings().llmConfigs, host.paths.vectorStoreNotes);
 	const registry = new ToolRegistry();
-	const tools = new ToolSourceManager(registry, createToolSourceFactory(app, host.pluginDataPath), settings, host.saveSettings);
+	const tools = new ToolSourceManager(registry, createToolSourceFactory(app, host.paths.data), settings, host.saveSettings);
 	const webSearch = new WebSearchService(() => settings().webSearchConfig, getDefaultHttpPort());
 	const activity = new RunActivity();
 	const recordUsage = async (record: UsageRecord) => {
@@ -48,7 +48,7 @@ export function createServices(host: ServiceHost): OwnedServices {
 		historyCompactor: new HistoryCompactor(),
 		webSearchService: webSearch,
 		memoryIndex: rag,
-		journal: new JsonlRunJournal(app.vault.adapter, pluginPaths(app.vault.configDir).agentRuns),
+		journal: new JsonlRunJournal(app.vault.adapter, host.paths.agentRuns),
 		createProvider: (modelId) => {
 			const config = ModelManager.findConfigForModelByProvider(modelId, settings().llmConfigs);
 			return config ? { provider: ProviderFactory.createProvider(config), providerId: config.provider } : null;

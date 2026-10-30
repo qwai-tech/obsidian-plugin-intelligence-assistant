@@ -1,6 +1,5 @@
 import type { App } from 'obsidian';
 import type { LLMConfig, ModelInfo } from '@/features/llm';
-import { pluginPaths } from '@/core/plugin-paths';
 import { JsonFile } from '@/adapters/persistence/json-file';
 
 interface ModelCacheEntry {
@@ -22,7 +21,7 @@ const CACHE_VERSION = '1.0';
 export class ModelCacheRepository {
 	private readonly file: JsonFile<ModelCacheFile>;
 
-	constructor(app: App, filePath = pluginPaths(app.vault.configDir).modelCache) {
+	constructor(app: App, filePath: string) {
 		this.file = new JsonFile(app.vault.adapter, filePath, () => ({ version: CACHE_VERSION, updatedAt: 0, entries: [] }));
 	}
 

@@ -1,7 +1,6 @@
 import {App, TFile} from 'obsidian';
 import type { RAGConfig } from '@/features/knowledge';
 import type { LLMConfig } from '@/features/llm';
-import { pluginPaths } from '@/core/plugin-paths';
 import { JsonFile } from '@/adapters/persistence/json-file';
 import { EmbeddingManager } from './embedding-manager';
 import { stableHash } from '@/core/utils/file-system';
@@ -30,9 +29,9 @@ export class VectorStore {
 
   private readonly file: JsonFile<VectorStoreData | null>;
 
-  constructor(app: App, llmConfigs?: LLMConfig[]) {
+  constructor(app: App, filePath: string, llmConfigs?: LLMConfig[]) {
     this.app = app;
-    this.file = new JsonFile<VectorStoreData | null>(app.vault.adapter, pluginPaths(app.vault.configDir).vectorStoreNotes, () => null, 0);
+    this.file = new JsonFile<VectorStoreData | null>(app.vault.adapter, filePath, () => null, 0);
     this.llmConfigs = llmConfigs;
   }
 

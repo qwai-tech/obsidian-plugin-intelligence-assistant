@@ -61,7 +61,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	}
 
 	async onload() {
-		const pluginDir = `${this.app.vault.configDir}/plugins/${this.manifest.id}`;
+		const pluginDir = this.manifest.dir ?? `${this.app.vault.configDir}/plugins/${this.manifest.id}`;
 		initI18n(undefined, pluginDir);
 		setDefaultHttpPort(withResilience(createObsidianHttpPort()));
 		setDiagnosticsSink(({ message }) => { new Notice(message); });
@@ -139,13 +139,14 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	}
 
 	private async loadStorage(pluginDir: string): Promise<void> {
-		await ensureFolderExists(this.app.vault.adapter, `${pluginDir}/data`);
-		this.conversations = new ConversationStorageService(this.app);
+		const paths = pluginPaths(pluginDir);
+		await ensureFolderExists(this.app.vault.adapter, paths.data);
+		this.conversations = new ConversationStorageService(this.app, paths);
 		await this.conversations.initialize();
-		this.dataService = new PluginDataService(this.app);
+		this.dataService = new PluginDataService(this.app, paths);
 		await this.dataService.initialize();
 		this.store = new SettingsStore(
-			new ObsidianSettingsPersistence(this, this.dataService, pluginPaths(this.app.vault.configDir).userConfig),
+			new ObsidianSettingsPersistence(this, this.dataService, paths.userConfig),
 			new ObsidianSecretVault(this.app),
 		);
 		this.editorQuickActions = new EditorQuickActions(this.app, () => ({
@@ -161,7 +162,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			app: this.app,
 			settings: () => this.settings,
 			saveSettings: () => this.saveSettings(),
-			pluginDataPath: `${pluginDir}/data`,
+			paths: pluginPaths(pluginDir),
 			data: this.dataService,
 			conversations: this.conversations,
 		});

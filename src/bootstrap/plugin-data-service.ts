@@ -1,4 +1,5 @@
 import { App } from 'obsidian';
+import type { PluginPaths } from '@/core/plugin-paths';
 import { withoutProviderKeys, type PersistUnit, type PluginSettings } from '@/features/settings';
 import type { LLMConfig } from '@/features/llm';
 import type { SystemPrompt, Agent } from '@/features/agent';
@@ -32,17 +33,17 @@ export class PluginDataService {
 	public tokenUsageRepo!: TokenUsageRepository;
 	public agentMemoryRepo!: AgentMemoryRepository;
 
-	constructor(private readonly app: App) {}
+	constructor(private readonly app: App, private readonly paths: PluginPaths) {}
 
 	async initialize(): Promise<void> {
-		this.promptRepository = new PromptRepository(this.app);
-		this.agentRepository = new AgentRepository(this.app, BUILTIN_AGENT_PRESETS);
-		this.modelCacheRepository = new ModelCacheRepository(this.app);
-		this.providerRepository = new ProviderRepository(this.app);
-		this.mcpServerRepository = new McpServerRepository(this.app);
-		this.mcpToolCacheRepository = new McpToolCacheRepository(this.app);
-		this.tokenUsageRepo = new TokenUsageRepository(this.app);
-		this.agentMemoryRepo = new AgentMemoryRepository(this.app);
+		this.promptRepository = new PromptRepository(this.app, this.paths.prompts);
+		this.agentRepository = new AgentRepository(this.app, this.paths.agents, BUILTIN_AGENT_PRESETS);
+		this.modelCacheRepository = new ModelCacheRepository(this.app, this.paths.modelCache);
+		this.providerRepository = new ProviderRepository(this.app, this.paths.providers);
+		this.mcpServerRepository = new McpServerRepository(this.app, this.paths.mcpServers);
+		this.mcpToolCacheRepository = new McpToolCacheRepository(this.app, this.paths.mcpToolsCache);
+		this.tokenUsageRepo = new TokenUsageRepository(this.app, this.paths.tokenUsage);
+		this.agentMemoryRepo = new AgentMemoryRepository(this.app, this.paths.agentMemory);
 
 		await Promise.all([
 			this.agentRepository.initialize(),

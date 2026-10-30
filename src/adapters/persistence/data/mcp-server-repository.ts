@@ -1,6 +1,5 @@
 import type { App } from 'obsidian';
 import type { MCPServerConfig } from '@/features/tools';
-import { pluginPaths } from '@/core/plugin-paths';
 import { JsonFile } from '@/adapters/persistence/json-file';
 
 interface McpServerFile {
@@ -14,7 +13,7 @@ const FILE_VERSION = '1.0';
 export class McpServerRepository {
 	private readonly file: JsonFile<McpServerFile>;
 
-	constructor(app: App, filePath = pluginPaths(app.vault.configDir).mcpServers) {
+	constructor(app: App, filePath: string) {
 		this.file = new JsonFile(app.vault.adapter, filePath, () => ({ version: FILE_VERSION, updatedAt: 0, servers: [] }));
 	}
 

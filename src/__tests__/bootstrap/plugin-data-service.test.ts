@@ -1,5 +1,6 @@
 import { PluginDataService } from '@/bootstrap/plugin-data-service';
 import type { PluginSettings } from '@/features/settings/types/settings';
+import { pluginPaths } from '@/core/plugin-paths';
 
 function makeApp(files: Record<string, string> = {}) {
 	const store: Record<string, string> = { ...files };
@@ -45,13 +46,13 @@ describe('PluginDataService', () => {
 	describe('initialize', () => {
 		it('initializes without error when storage is empty', async () => {
 			const { app } = makeApp();
-			const svc = new PluginDataService(app);
+			const svc = new PluginDataService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await expect(svc.initialize()).resolves.not.toThrow();
 		});
 
 		it('exposes tokenUsageRepo after initialize', async () => {
 			const { app } = makeApp();
-			const svc = new PluginDataService(app);
+			const svc = new PluginDataService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 			expect(svc.tokenUsageRepo).toBeDefined();
 		});
@@ -60,7 +61,7 @@ describe('PluginDataService', () => {
 	describe('hydrateAll', () => {
 		it('returns only seeded builtin agents when repos are otherwise empty and settings have no data', async () => {
 			const { app } = makeApp();
-			const svc = new PluginDataService(app);
+			const svc = new PluginDataService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 			const result = await svc.hydrateAll(makeSettings());
 			// AgentRepository self-seeds builtin presets on init, so agents are
@@ -73,7 +74,7 @@ describe('PluginDataService', () => {
 
 		it('saves settings llmConfigs to repo when repo is empty and settings has data', async () => {
 			const { app, store } = makeApp();
-			const svc = new PluginDataService(app);
+			const svc = new PluginDataService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 			const settings = makeSettings({
 				llmConfigs: [{ id: 'p1', provider: 'openai', apiKey: 'k', modelId: 'gpt-4o' } as any],
@@ -86,7 +87,7 @@ describe('PluginDataService', () => {
 
 		it('returns loaded providers from repo when repo is non-empty', async () => {
 			const { app } = makeApp();
-			const svc = new PluginDataService(app);
+			const svc = new PluginDataService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 
 			// Pre-populate via persist
@@ -96,7 +97,7 @@ describe('PluginDataService', () => {
 			await svc.persist(settings, new Set(['providers']));
 
 			// Now a second service on the same store should hydrate from repo
-			const svc2 = new PluginDataService(app);
+			const svc2 = new PluginDataService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc2.initialize();
 			const result = await svc2.hydrateAll(makeSettings());
 			expect(result.llmConfigs).toHaveLength(1);
@@ -107,7 +108,7 @@ describe('PluginDataService', () => {
 	describe('persist', () => {
 		it('writes the units it is given', async () => {
 			const { app, store } = makeApp();
-			const svc = new PluginDataService(app);
+			const svc = new PluginDataService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 			const settings = makeSettings({
 				systemPrompts: [{ id: 'sp1', name: 'Test', content: 'Be helpful', enabled: true } as any],
@@ -120,7 +121,7 @@ describe('PluginDataService', () => {
 
 		it('leaves units it is not given untouched', async () => {
 			const { app } = makeApp();
-			const svc = new PluginDataService(app);
+			const svc = new PluginDataService(app, pluginPaths('.obsidian/plugins/intelligence-assistant'));
 			await svc.initialize();
 			app.vault.adapter.write.mockClear();
 

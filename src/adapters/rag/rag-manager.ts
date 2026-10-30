@@ -13,11 +13,11 @@ export class RAGManager {
   private config: RAGConfig;
   private llmConfigs: LLMConfig[];
   private documentGrader: DocumentGrader;
-  constructor(app: App, config: RAGConfig, llmConfigs: LLMConfig[]) {
+  constructor(app: App, config: RAGConfig, llmConfigs: LLMConfig[], vectorStorePath: string) {
     this.app = app;
     this.config = config;
     this.llmConfigs = llmConfigs;
-    this.vectorStore = new VectorStore(app, llmConfigs);
+    this.vectorStore = new VectorStore(app, vectorStorePath, llmConfigs);
     this.documentGrader = new DocumentGrader(config, llmConfigs);
   }
 

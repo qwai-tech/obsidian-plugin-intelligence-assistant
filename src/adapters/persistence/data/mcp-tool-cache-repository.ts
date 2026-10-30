@@ -1,7 +1,6 @@
 import { App } from 'obsidian';
 import type { CachedMCPTool } from '@/features/tools';
 import { buildSafeName } from '@/core/utils/file-system';
-import { pluginPaths } from '@/core/plugin-paths';
 import { JsonFile } from '@/adapters/persistence/json-file';
 
 interface ToolCacheFile {
@@ -16,7 +15,7 @@ const CACHE_VERSION = '1.0';
 export class McpToolCacheRepository {
 	private readonly files = new Map<string, JsonFile<ToolCacheFile | null>>();
 
-	constructor(private readonly _app: App, private readonly baseFolder = pluginPaths(_app.vault.configDir).mcpToolsCache) {}
+	constructor(private readonly _app: App, private readonly baseFolder: string) {}
 
 	async save(serverName: string, tools: CachedMCPTool[], updatedAt?: number): Promise<void> {
 		await this.fileFor(serverName).write({

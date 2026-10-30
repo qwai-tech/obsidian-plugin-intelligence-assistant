@@ -1,6 +1,6 @@
 import { App, Vault } from 'obsidian';
 import type { Conversation } from '@/features/conversations';
-import { pluginPaths, type PluginPaths } from '@/core/plugin-paths';
+import type { PluginPaths } from '@/core/plugin-paths';
 import { ensureFolderExists } from '@/core/utils/file-system';
 import { JsonFile } from './json-file';
 import { buildMetadata, conversationFileName, hasMetadataChanged, normalizeConversation, type ConversationIndex, type ConversationMetadata } from './conversation-records';
@@ -29,7 +29,6 @@ interface LegacyConversationIndex {
 export class ConversationStorageService {
   private vault: Vault;
   private initialized = false;
-  private readonly paths: PluginPaths;
   private readonly conversationsFolder: string;
   private readonly indexFilePath: string;
   private readonly indexFile: JsonFile<ConversationIndex>;
@@ -40,9 +39,8 @@ export class ConversationStorageService {
     return `${this.paths.legacyConversations}/${INDEX_FILE_NAME}`;
   }
 
-  constructor(app: App) {
+  constructor(app: App, private readonly paths: PluginPaths) {
     this.vault = app.vault;
-    this.paths = pluginPaths(app.vault.configDir);
     this.conversationsFolder = this.paths.conversations;
     this.indexFilePath = `${this.conversationsFolder}/${INDEX_FILE_NAME}`;
     this.indexFile = new JsonFile<ConversationIndex>(app.vault.adapter, this.indexFilePath, () => ({ version: INDEX_FILE_VERSION, conversations: [] }));

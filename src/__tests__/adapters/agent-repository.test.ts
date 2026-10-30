@@ -6,6 +6,7 @@
  */
 import { AgentRepository } from '@/adapters/persistence/data/agent-repository';
 import { BUILTIN_AGENT_PRESETS } from '@/features/agent/presets/builtin-agents';
+import { pluginPaths } from '@/core/plugin-paths';
 
 function makeApp() {
 	const store: Record<string, string> = {};
@@ -24,7 +25,7 @@ function makeApp() {
 describe('AgentRepository.initialize (fresh vault)', () => {
 	it('resolves without infinite recursion and seeds builtin presets', async () => {
 		const { app, store } = makeApp();
-		const repo = new AgentRepository(app, BUILTIN_AGENT_PRESETS);
+		const repo = new AgentRepository(app, pluginPaths('.obsidian/plugins/intelligence-assistant').agents, BUILTIN_AGENT_PRESETS);
 
 		// Before the fix this never resolves (recurses to OOM). A finite resolve
 		// within the default timeout is the assertion.
@@ -38,7 +39,7 @@ describe('AgentRepository.initialize (fresh vault)', () => {
 
 	it('is idempotent: a second initialize() does not re-seed or throw', async () => {
 		const { app } = makeApp();
-		const repo = new AgentRepository(app, BUILTIN_AGENT_PRESETS);
+		const repo = new AgentRepository(app, pluginPaths('.obsidian/plugins/intelligence-assistant').agents, BUILTIN_AGENT_PRESETS);
 		await repo.initialize();
 		const first = (await repo.loadAll()).agents.length;
 		await repo.initialize();

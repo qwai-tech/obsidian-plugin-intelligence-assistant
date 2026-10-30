@@ -1,6 +1,5 @@
 import type { App } from 'obsidian';
 import type { Agent } from '@/features/agent';
-import { pluginPaths } from '@/core/plugin-paths';
 import { JsonCollection } from '@/adapters/persistence/json-collection';
 
 interface AgentIndexEntry {
@@ -15,8 +14,8 @@ export class AgentRepository {
 	private readonly collection: JsonCollection<Agent, AgentIndexEntry>;
 	private seeded: Promise<void> | null = null;
 
-	constructor(app: App, private readonly presets: Agent[]) {
-		this.collection = new JsonCollection(app.vault.adapter, pluginPaths(app.vault.configDir).agents, {
+	constructor(app: App, folder: string, private readonly presets: Agent[]) {
+		this.collection = new JsonCollection(app.vault.adapter, folder, {
 			entriesKey: 'agents',
 			filePrefix: 'agent',
 			toEntry: (agent, file) => ({ id: agent.id, name: agent.name, icon: agent.icon, updatedAt: agent.updatedAt ?? Date.now(), file }),

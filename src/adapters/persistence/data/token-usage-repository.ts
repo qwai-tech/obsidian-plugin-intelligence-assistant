@@ -1,6 +1,5 @@
 import type { App } from 'obsidian';
 import type { UsageRecord } from '@/features/usage';
-import { pluginPaths } from '@/core/plugin-paths';
 import { JsonFile } from '@/adapters/persistence/json-file';
 
 interface TokenUsageFile {
@@ -21,7 +20,7 @@ const MAX_RECORDS = 1000;
 export class TokenUsageRepository {
 	private readonly file: JsonFile<TokenUsageFile>;
 
-	constructor(app: App, filePath = pluginPaths(app.vault.configDir).tokenUsage) {
+	constructor(app: App, filePath: string) {
 		this.file = new JsonFile(app.vault.adapter, filePath, () => ({ version: 1, updatedAt: 0, records: [] }));
 	}
 

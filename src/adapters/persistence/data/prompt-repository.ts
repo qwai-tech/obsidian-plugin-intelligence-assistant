@@ -1,6 +1,5 @@
 import type { App } from 'obsidian';
 import type { SystemPrompt } from '@/features/agent';
-import { pluginPaths } from '@/core/plugin-paths';
 import { JsonCollection } from '@/adapters/persistence/json-collection';
 
 interface PromptIndexEntry {
@@ -14,8 +13,8 @@ interface PromptIndexEntry {
 export class PromptRepository {
 	private readonly collection: JsonCollection<SystemPrompt, PromptIndexEntry>;
 
-	constructor(app: App) {
-		this.collection = new JsonCollection(app.vault.adapter, pluginPaths(app.vault.configDir).prompts, {
+	constructor(app: App, folder: string) {
+		this.collection = new JsonCollection(app.vault.adapter, folder, {
 			entriesKey: 'prompts',
 			filePrefix: 'prompt',
 			toEntry: (prompt, file) => ({ id: prompt.id, name: prompt.name, enabled: prompt.enabled !== false, updatedAt: prompt.updatedAt ?? Date.now(), file }),

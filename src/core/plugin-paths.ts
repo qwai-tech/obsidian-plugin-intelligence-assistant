@@ -1,5 +1,3 @@
-const PLUGIN_ID = 'intelligence-assistant';
-
 export interface PluginPaths {
 	base: string;
 	userConfig: string;
@@ -21,8 +19,7 @@ export interface PluginPaths {
 	tokenUsage: string;
 }
 
-export function pluginPaths(configDir: string): PluginPaths {
-	const base = `${configDir}/plugins/${PLUGIN_ID}`;
+export function pluginPaths(base: string): PluginPaths {
 	const data = `${base}/data`;
 	const cache = `${data}/cache`;
 	const agentMemoryFolder = `${data}/agent-memory`;

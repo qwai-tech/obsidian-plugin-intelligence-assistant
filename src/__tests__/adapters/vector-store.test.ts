@@ -3,6 +3,8 @@ import { RAGManager } from '@/adapters/rag/rag-manager';
 import { EmbeddingManager } from '@/adapters/rag/embedding-manager';
 import type { RAGConfig } from '@/features/knowledge/types/rag';
 
+const STORE_PATH = '.obsidian/plugins/intelligence-assistant/data/vector_store/notes.json';
+
 jest.mock('@/adapters/rag/embedding-manager', () => ({
 	EmbeddingManager: {
 		generateEmbedding: jest.fn(),
@@ -75,7 +77,7 @@ describe('VectorStore', () => {
 	it('resolves addFile only after every scheduled chunk batch has been indexed and saved', async () => {
 		const paragraphs = Array.from({ length: 25 }, (_, i) => `paragraph-${i}`).join('\n\n');
 		const app = makeApp(paragraphs);
-		const store = new VectorStore(app as any, [{ provider: 'openai', apiKey: 'k' }] as any);
+		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
 
 		await store.addFile({
 			path: 'notes/large.md',
@@ -89,7 +91,7 @@ describe('VectorStore', () => {
 
 	it('removeFile drops only the matching file\'s chunks and persists', async () => {
 		const app = makeApp('alpha\n\nbeta');
-		const store = new VectorStore(app as any, [{ provider: 'openai', apiKey: 'k' }] as any);
+		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
 		await store.addFile({ path: 'a.md', basename: 'a', stat: { mtime: 1 } } as any, makeConfig());
 		await store.addFile({ path: 'b.md', basename: 'b', stat: { mtime: 1 } } as any, makeConfig());
 		const before = store.getStoredChunks().length;
@@ -103,7 +105,7 @@ describe('VectorStore', () => {
 
 	it('renameFile re-keys chunk ids + metadata path without re-embedding', async () => {
 		const app = makeApp('alpha\n\nbeta');
-		const store = new VectorStore(app as any, [{ provider: 'openai', apiKey: 'k' }] as any);
+		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
 		await store.addFile({ path: 'old.md', basename: 'old', stat: { mtime: 1 } } as any, makeConfig());
 		(EmbeddingManager.generateEmbedding as jest.Mock).mockClear();
 
@@ -137,7 +139,7 @@ describe('VectorStore', () => {
 	it('keeps chunks already on disk when a file is indexed before any explicit load', async () => {
 		const app = makeApp('fresh note');
 		app.vault.adapter.read.mockImplementation(async () => persisted(['kept.md']));
-		const store = new VectorStore(app as any, [{ provider: 'openai', apiKey: 'k' }] as any);
+		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
 
 		await store.addFile({ path: 'new.md', basename: 'new', stat: { mtime: 2 } } as any, makeConfig());
 
@@ -147,7 +149,7 @@ describe('VectorStore', () => {
 	it('keeps chunks already on disk when a file is removed before any explicit load', async () => {
 		const app = makeApp();
 		app.vault.adapter.read.mockImplementation(async () => persisted(['kept.md', 'gone.md']));
-		const store = new VectorStore(app as any, [{ provider: 'openai', apiKey: 'k' }] as any);
+		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
 
 		await store.removeFile('gone.md');
 
@@ -157,7 +159,7 @@ describe('VectorStore', () => {
 	it('loads from disk once, so a later load cannot discard newer in-memory chunks', async () => {
 		const app = makeApp('fresh note');
 		app.vault.adapter.read.mockImplementation(async () => persisted(['kept.md']));
-		const store = new VectorStore(app as any, [{ provider: 'openai', apiKey: 'k' }] as any);
+		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
 		await store.load();
 		await store.addFile({ path: 'new.md', basename: 'new', stat: { mtime: 2 } } as any, makeConfig());
 
@@ -177,7 +179,7 @@ describe('VectorStore change detection', () => {
 	const note = { path: 'n.md', basename: 'n', stat: { mtime: 1 } } as any;
 
 	it('does not re-embed a note whose content has not changed', async () => {
-		const store = new VectorStore(makeApp('alpha\n\nbeta') as any, [] as any);
+		const store = new VectorStore(makeApp('alpha\n\nbeta') as any, STORE_PATH, [] as any);
 		await store.addFile(note, makeConfig());
 		(EmbeddingManager.generateEmbedding as jest.Mock).mockClear();
 
@@ -187,7 +189,7 @@ describe('VectorStore change detection', () => {
 	});
 
 	it('re-embeds an unchanged note when the embedding model changes', async () => {
-		const store = new VectorStore(makeApp('alpha') as any, [] as any);
+		const store = new VectorStore(makeApp('alpha') as any, STORE_PATH, [] as any);
 		await store.addFile(note, makeConfig());
 		(EmbeddingManager.generateEmbedding as jest.Mock).mockClear();
 
@@ -198,7 +200,7 @@ describe('VectorStore change detection', () => {
 
 	it('re-embeds a note whose content changed', async () => {
 		const app = makeApp('alpha');
-		const store = new VectorStore(app as any, [] as any);
+		const store = new VectorStore(app as any, STORE_PATH, [] as any);
 		await store.addFile(note, makeConfig());
 		app.vault.read.mockImplementation(async () => 'gamma');
 		(EmbeddingManager.generateEmbedding as jest.Mock).mockClear();
@@ -210,7 +212,7 @@ describe('VectorStore change detection', () => {
 	});
 
 	it('only scores chunks embedded with the model used for the query', async () => {
-		const store = new VectorStore(makeApp('alpha') as any, [] as any);
+		const store = new VectorStore(makeApp('alpha') as any, STORE_PATH, [] as any);
 		await store.addFile({ ...note, path: 'old.md' }, makeConfig({ embeddingModel: 'old-model' }));
 		await store.addFile({ ...note, path: 'new.md' }, makeConfig());
 
@@ -222,7 +224,7 @@ describe('VectorStore change detection', () => {
 
 describe('RAGManager', () => {
 	it('search returns knowledge sources mapped from matching chunks', async () => {
-		const manager = new RAGManager(makeApp() as any, makeConfig(), [{ provider: 'openai', apiKey: 'k' }] as any);
+		const manager = new RAGManager(makeApp() as any, makeConfig(), [{ provider: 'openai', apiKey: 'k' }] as any, STORE_PATH);
 		(manager as any).vectorStore.search = jest.fn(async () => [
 			{ chunk: { id: 'c1', content: 'Body', metadata: { path: 'notes/a.md', title: 'A', source: 'vault', timestamp: 1 } }, similarity: 0.8 },
 		]);
@@ -231,7 +233,7 @@ describe('RAGManager', () => {
 	});
 
 	it('search returns nothing when RAG is disabled', async () => {
-		const manager = new RAGManager(makeApp() as any, makeConfig({ enabled: false }), [{ provider: 'openai', apiKey: 'k' }] as any);
+		const manager = new RAGManager(makeApp() as any, makeConfig({ enabled: false }), [{ provider: 'openai', apiKey: 'k' }] as any, STORE_PATH);
 		(manager as any).vectorStore.search = jest.fn();
 
 		expect(await manager.search('query')).toEqual([]);
@@ -239,7 +241,7 @@ describe('RAGManager', () => {
 	});
 
 	it('does not clear the existing vector store when RAG is disabled through config', async () => {
-		const manager = new RAGManager(makeApp() as any, makeConfig(), [{ provider: 'openai', apiKey: 'k' }] as any);
+		const manager = new RAGManager(makeApp() as any, makeConfig(), [{ provider: 'openai', apiKey: 'k' }] as any, STORE_PATH);
 		const vectorStore = (manager as any).vectorStore;
 		vectorStore.clear = jest.fn();
 
@@ -249,7 +251,7 @@ describe('RAGManager', () => {
 	});
 
 	it('removeFile / renameFile delegate to the vector store when enabled', async () => {
-		const manager = new RAGManager(makeApp() as any, makeConfig(), [{ provider: 'openai', apiKey: 'k' }] as any);
+		const manager = new RAGManager(makeApp() as any, makeConfig(), [{ provider: 'openai', apiKey: 'k' }] as any, STORE_PATH);
 		const vectorStore = (manager as any).vectorStore;
 		vectorStore.removeFile = jest.fn(async () => 3);
 		vectorStore.renameFile = jest.fn(async () => 2);
@@ -261,7 +263,7 @@ describe('RAGManager', () => {
 	});
 
 	it('removeFile / renameFile are no-ops when RAG is disabled', async () => {
-		const manager = new RAGManager(makeApp() as any, makeConfig({ enabled: false }), [{ provider: 'openai', apiKey: 'k' }] as any);
+		const manager = new RAGManager(makeApp() as any, makeConfig({ enabled: false }), [{ provider: 'openai', apiKey: 'k' }] as any, STORE_PATH);
 		const vectorStore = (manager as any).vectorStore;
 		vectorStore.removeFile = jest.fn();
 		vectorStore.renameFile = jest.fn();
@@ -274,7 +276,7 @@ describe('RAGManager', () => {
 
 	it('registers no vault listener of its own, leaving change tracking to the incremental indexer', async () => {
 		const app = makeApp();
-		const manager = new RAGManager(app as any, makeConfig({ embedChangedFiles: true }), [{ provider: 'openai', apiKey: 'k' }] as any);
+		const manager = new RAGManager(app as any, makeConfig({ embedChangedFiles: true }), [{ provider: 'openai', apiKey: 'k' }] as any, STORE_PATH);
 
 		await manager.initialize();
 		manager.updateConfig(makeConfig({ embedChangedFiles: false }));
@@ -284,7 +286,7 @@ describe('RAGManager', () => {
 	});
 
 	it('passes refreshed LLM configs to the vector store on updateConfig', () => {
-		const manager = new RAGManager(makeApp() as any, makeConfig(), [{ provider: 'openai', apiKey: 'old' }] as any);
+		const manager = new RAGManager(makeApp() as any, makeConfig(), [{ provider: 'openai', apiKey: 'old' }] as any, STORE_PATH);
 		const refreshed = [{ provider: 'openai', apiKey: 'new' }] as any;
 
 		manager.updateConfig(makeConfig(), refreshed);
