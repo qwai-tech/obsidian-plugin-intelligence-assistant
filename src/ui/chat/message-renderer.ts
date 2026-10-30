@@ -97,12 +97,9 @@ export function renderMessage(
 		renderAssistantBadges(header, assistantMeta);
 	}
 
-	const timestampValue = typeof (message as unknown as { timestamp?: number }).timestamp === 'number' 
-		? (message as unknown as { timestamp: number }).timestamp 
-		: Date.now();
-	const timestamp = header.createDiv('ia-chat-message__timestamp');
-	timestamp.addClass('message-timestamp');
-	timestamp.setText(new Date(timestampValue).toLocaleTimeString());
+	if (message.timestamp !== undefined) {
+		header.createDiv({ cls: 'ia-chat-message__timestamp message-timestamp', text: new Date(message.timestamp).toLocaleTimeString() });
+	}
 
 	if (message.agentExecutionSteps?.length || message.reasoningContent || message.reasoningSteps?.length) {
 		if (_context.mode === 'agent') {

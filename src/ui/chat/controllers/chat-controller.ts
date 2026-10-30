@@ -74,6 +74,7 @@ export class ChatController extends BaseController {
 		const userMessage: Message = {
 			role: 'user',
 			content: text,
+			timestamp: Date.now(),
 			attachments: attachments.length > 0 ? attachments : undefined,
 			references: references.length > 0 ? references : undefined,
 		};
@@ -186,6 +187,7 @@ export class ChatController extends BaseController {
 			content: '',
 			model: selectedModel,
 			provider: config.provider ?? undefined,
+			timestamp: Date.now(),
 		};
 		const assistantMessageEl = this.options.addMessageToUI(placeholderAssistant);
 		const contentEl = this.options.findMessageContentElement(assistantMessageEl);
@@ -198,6 +200,7 @@ export class ChatController extends BaseController {
 		let settled: Promise<Reply> | null = null;
 		const settle = (ok: boolean, message: Message, show: () => HTMLElement, ragSources?: RAGSource[]) => {
 			let element = assistantMessageEl;
+			message.timestamp ??= placeholderAssistant.timestamp;
 			settled = this.finishReply(message, () => (element = show()), ragSources).then(() => ({ ok, message, element }));
 		};
 

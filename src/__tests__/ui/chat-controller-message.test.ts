@@ -106,6 +106,24 @@ describe('ChatController (upgraded message pipeline)', () => {
 		expect(chatService.streamResponse).toHaveBeenCalledTimes(1);
 	});
 
+	it('records when the user message was sent and when the reply started', async () => {
+		const chatService = makeChatService({
+			streamResponse: jest.fn().mockImplementation((_messages, _options, callbacks) => {
+				callbacks.onComplete({ role: 'assistant', content: 'done' });
+				return Promise.resolve();
+			}),
+		});
+		controller.configure(makeOptions(chatService));
+		const before = Date.now();
+
+		await controller.sendMessage('hello');
+
+		const [user, reply] = state.messages;
+		expect(user.timestamp).toBeGreaterThanOrEqual(before);
+		expect(reply.content).toBe('done');
+		expect(reply.timestamp).toBeGreaterThanOrEqual(user.timestamp ?? Infinity);
+	});
+
 	it('preserves attachments on the user message sent to the provider pipeline', async () => {
 		const chatService = makeChatService();
 		controller.configure(makeOptions(chatService));

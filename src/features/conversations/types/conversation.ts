@@ -11,6 +11,7 @@ import type { ReasoningStep, AgentExecutionStep } from '@/features/llm';
 export interface Message {
 	role: 'user' | 'assistant' | 'system';
 	content: string;
+	timestamp?: number;
 	model?: string;
 	provider?: string;
 	attachments?: Attachment[];

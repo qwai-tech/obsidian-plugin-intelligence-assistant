@@ -39,6 +39,7 @@ describe('renderMessage', () => {
 			const { container, messageEl } = render({
 				role: 'user',
 				content: 'Hello, world!',
+				timestamp: Date.now(),
 			});
 
 			expect(container.children).toHaveLength(1);
@@ -284,4 +285,15 @@ describe('renderMessage', () => {
 			expect(messageEl.querySelector('.ia-chat-message__footer')?.textContent).toContain('30');
 		});
 	});
+
+	it('shows the time the message was sent, and no time when it was never recorded', () => {
+		const sent = new Date(2026, 0, 2, 9, 30).getTime();
+
+		const { messageEl: stamped } = render({ role: 'user', content: 'hi', timestamp: sent });
+		const { messageEl: legacy } = render({ role: 'user', content: 'old message' });
+
+		expect(stamped.querySelector('.message-timestamp')?.textContent).toBe(new Date(sent).toLocaleTimeString());
+		expect(legacy.querySelector('.message-timestamp')).toBeNull();
+	});
 });
+
