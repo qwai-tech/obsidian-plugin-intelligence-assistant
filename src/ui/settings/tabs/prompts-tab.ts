@@ -36,7 +36,7 @@ export function displayPromptsTab(
 	addBtn.addEventListener('click', () => {
 		const draft = {
 			id: `prompt-${Date.now()}`,
-			name: 'New Prompt',
+			name: 'New prompt',
 			content: 'You are a helpful assistant.',
 			enabled: true,
 			createdAt: Date.now(),

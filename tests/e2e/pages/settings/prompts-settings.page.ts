@@ -15,7 +15,7 @@ export class PromptsSettingsPage extends BasePage {
 	async addPrompt(values: PromptModalValues): Promise<void> {
 		await this.open();
 		await this.click(TestIds.settings.promptAddBtn);
-		await this.fillPromptModal(values, 'New Prompt');
+		await this.fillPromptModal(values, 'New prompt');
 	}
 
 	async editPrompt(currentName: string, values: PromptModalValues): Promise<void> {

@@ -349,7 +349,7 @@ export class AgentEditModal extends Modal {
 
 	private ensureCustomPromptDefaults() {
 		if (!this.customPromptName || this.customPromptName.trim().length === 0) {
-			this.customPromptName = `${this.agent.name} Prompt`;
+			this.customPromptName = `${this.agent.name} prompt`;
 		}
 		if (!this.customPromptContent || this.customPromptContent.trim().length === 0) {
 			this.customPromptContent = 'You are a helpful assistant for this Obsidian vault.';

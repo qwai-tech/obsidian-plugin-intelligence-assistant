@@ -171,6 +171,10 @@ export class ProviderConfigModal extends Modal {
 	private renderCachedModelsPreview(container: HTMLElement): void {
 		const wrapper = container.createDiv('ia-provider-cached-models');
 		const models = this.draft.cachedModels ?? [];
+		if (models.length === 0) {
+			wrapper.createDiv('ia-table-subtext').setText(t('modals.provider.noCachedModels'));
+			return;
+		}
 		wrapper.createDiv('ia-table-subtext').setText(t('modals.provider.cachedModels', { count: models.length }));
 
 		const table = wrapper.createEl('table');
@@ -178,12 +182,6 @@ export class ProviderConfigModal extends Modal {
 		table.setAttribute('data-testid', TestIds.settings.providerModalCachedModelsTable);
 
 		const tbody = table.createEl('tbody');
-		if (models.length === 0) {
-			const row = tbody.createEl('tr');
-			const cell = row.createEl('td');
-			cell.setText(t('modals.provider.noCachedModels'));
-			return;
-		}
 
 		models.forEach(model => {
 			const row = tbody.createEl('tr');
