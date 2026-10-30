@@ -243,6 +243,5 @@ export class RAGManager {
 
   async destroy(): Promise<void> {
     await this.vectorStore.flush();
-    EmbeddingManager.cleanup();
   }
 }

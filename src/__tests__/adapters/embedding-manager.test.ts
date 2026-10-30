@@ -37,4 +37,24 @@ describe('EmbeddingManager', () => {
 
 		expect(ProviderFactory.createProvider).not.toHaveBeenCalled();
 	});
+
+	it('lists embedding models cached on provider configs, skipping disabled ones and duplicates', () => {
+		const models = EmbeddingManager.getAllEmbeddingModels([
+			{
+				provider: 'ollama',
+				cachedModels: [
+					{ id: 'nomic-embed', name: 'Nomic', provider: 'ollama', capabilities: ['embedding'], enabled: true },
+					{ id: 'off-embed', name: 'Off', provider: 'ollama', capabilities: ['embedding'], enabled: false },
+					{ id: 'chat-only', name: 'Chat', provider: 'ollama', capabilities: ['chat'], enabled: true },
+					{ id: 'text-embedding-3-small', name: 'Dup', provider: 'openai', capabilities: ['embedding'], enabled: true },
+				],
+			},
+		] as any);
+
+		const ids = models.map(model => model.id);
+		expect(ids).toContain('nomic-embed');
+		expect(ids).not.toContain('off-embed');
+		expect(ids).not.toContain('chat-only');
+		expect(ids.filter(id => id === 'text-embedding-3-small')).toHaveLength(1);
+	});
 });

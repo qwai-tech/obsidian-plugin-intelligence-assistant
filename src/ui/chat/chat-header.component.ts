@@ -73,7 +73,7 @@ export class ChatHeaderComponent {
 			e.stopPropagation();
 			if (hasSettings(this.plugin.app)) {
 				this.plugin.app.setting.open();
-				this.plugin.app.setting.openTabById('intelligence-assistant');
+				this.plugin.app.setting.openTabById(this.plugin.manifest.id);
 			}
 		});
 	}

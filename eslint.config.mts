@@ -34,6 +34,10 @@ const RESTRICTED_SYNTAX = [
     selector: "ExportAllDeclaration",
     message: "Name each export explicitly instead of export *.",
   },
+  {
+    selector: "MemberExpression[object.name=/^(window|globalThis|activeWindow)$/][property.name='app'], MemberExpression[property.name='app'] > TSAsExpression.object Identifier[name=/^(window|globalThis|activeWindow)$/]",
+    message: "Use this.app from the plugin or view instead of the global app object.",
+  },
 ];
 
 const HEADING_ELEMENT = {

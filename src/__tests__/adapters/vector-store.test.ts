@@ -9,7 +9,6 @@ jest.mock('@/adapters/rag/embedding-manager', () => ({
 	EmbeddingManager: {
 		generateEmbedding: jest.fn(),
 		getDefaultEmbeddingModel: jest.fn(() => ({ id: 'test-embedding' })),
-		cleanup: jest.fn(),
 	},
 }));
 

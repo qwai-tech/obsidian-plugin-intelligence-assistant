@@ -17,7 +17,7 @@ export interface VectorStoreData {
 export class VectorStore {
 	private _chunks: DocumentChunk[] = [];
 	private app: App;
-	private llmConfigs?: LLMConfig[];
+	private llmConfigs: LLMConfig[];
 	/**
 	 * Cache of each chunk's embedding vector L2 norm, keyed by chunk id.
 	 * Chunk embeddings never change once created (re-indexing pushes new ids
@@ -29,7 +29,7 @@ export class VectorStore {
 
   private readonly file: JsonFile<VectorStoreData | null>;
 
-  constructor(app: App, filePath: string, llmConfigs?: LLMConfig[]) {
+  constructor(app: App, filePath: string, llmConfigs: LLMConfig[] = []) {
     this.app = app;
     this.file = new JsonFile<VectorStoreData | null>(app.vault.adapter, filePath, () => null, 0);
     this.llmConfigs = llmConfigs;

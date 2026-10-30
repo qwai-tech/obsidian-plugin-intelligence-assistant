@@ -1,20 +1,5 @@
-import type { RAGConfig } from '@/features/knowledge';
 import type { LLMConfig } from '@/features/llm';
-import { ProviderFactory } from'@qwai/obsidian-llm';
-
-interface PluginLookup {
-	settings?: {
-		llmConfigs?: LLMConfig[];
-	};
-}
-
-interface WindowWithObsidianPlugins {
-	app?: {
-		plugins?: {
-			plugins?: Record<string, unknown>;
-		};
-	};
-}
+import { ProviderFactory } from '@qwai/obsidian-llm';
 
 export interface EmbeddingModel {
   id: string;
@@ -59,39 +44,23 @@ export class EmbeddingManager {
     return this.EMBEDDING_MODELS.find(m => m.id === this.DEFAULT_EMBEDDING_MODEL) || this.EMBEDDING_MODELS[0];
   }
 
-  static getAllEmbeddingModels(llmConfigs?: LLMConfig[]): EmbeddingModel[] {
+  static getAllEmbeddingModels(llmConfigs: LLMConfig[]): EmbeddingModel[] {
     const embeddingModels = [...this.EMBEDDING_MODELS];
-
-    try {
-      const configs = llmConfigs ?? this.getPluginInstance()?.settings?.llmConfigs;
-      if (configs) {
-        configs.forEach((config) => {
-          if (config.cachedModels) {
-            config.cachedModels.forEach((model) => {
-              if (model.capabilities?.includes('embedding') && model.enabled !== false) {
-                const exists = embeddingModels.some(m => m.id === model.id);
-                if (!exists) {
-                  embeddingModels.push({
-                    id: model.id,
-                    name: `${model.name ?? 'unknown'} (${model.provider})`,
-                    dimensions: 1536,
-                    provider: model.provider,
-                    maxTokens: 8192
-                  });
-                }
-              }
-            });
-          }
+    for (const model of llmConfigs.flatMap(config => config.cachedModels ?? [])) {
+      if (model.capabilities?.includes('embedding') && model.enabled !== false && !embeddingModels.some(m => m.id === model.id)) {
+        embeddingModels.push({
+          id: model.id,
+          name: `${model.name ?? 'unknown'} (${model.provider})`,
+          dimensions: 1536,
+          provider: model.provider,
+          maxTokens: 8192
         });
       }
-    } catch (error) {
-      console.error('[EmbeddingManager] Error loading LLM embedding models:', error);
     }
-
     return embeddingModels;
   }
 
-  static getEmbeddingModelById(id: string, llmConfigs?: LLMConfig[]): EmbeddingModel | undefined {
+  static getEmbeddingModelById(id: string, llmConfigs: LLMConfig[]): EmbeddingModel | undefined {
     const builtInModel = this.EMBEDDING_MODELS.find(m => m.id === id);
     if (builtInModel) {
       return builtInModel;
@@ -101,17 +70,7 @@ export class EmbeddingManager {
     return allModels.find(m => m.id === id);
   }
 
-  static getEmbeddingModelForConfig(config: RAGConfig): EmbeddingModel {
-    if (config.embeddingModel) {
-      const model = this.getEmbeddingModelById(config.embeddingModel);
-      if (model) {
-        return model;
-      }
-    }
-    return this.getDefaultEmbeddingModel();
-  }
-
-  static async generateEmbedding(text: string, modelId?: string, llmConfigs?: LLMConfig[]): Promise<number[]> {
+  static async generateEmbedding(text: string, modelId: string | undefined, llmConfigs: LLMConfig[]): Promise<number[]> {
     const model = modelId
       ? this.getEmbeddingModelById(modelId, llmConfigs)
       : this.getDefaultEmbeddingModel();
@@ -120,12 +79,7 @@ export class EmbeddingManager {
       throw new Error(`Embedding model ${modelId ?? ''} not found`);
     }
 
-    const configs = llmConfigs ?? this.getPluginInstance()?.settings?.llmConfigs;
-    if (!configs) {
-      throw new Error('No LLM configs available for embedding generation');
-    }
-
-    const config = this.findConfigForEmbeddingModel(model, configs);
+    const config = this.findConfigForEmbeddingModel(model, llmConfigs);
     if (!config) {
       throw new Error(`Embedding model ${model.id} does not have a configured embedding provider (${model.provider})`);
     }
@@ -155,19 +109,5 @@ export class EmbeddingManager {
     }
 
     return configs.find(config => config.provider === model.provider) ?? null;
-  }
-
-  private static getPluginInstance(): PluginLookup | null {
-    if (typeof window !== 'undefined') {
-      const plugin = (window as Window & WindowWithObsidianPlugins).app?.plugins?.plugins?.['intelligence-assistant'];
-      if (plugin && typeof plugin === 'object') {
-        return plugin as PluginLookup;
-      }
-    }
-    return null;
-  }
-
-  static cleanup(): void {
-    // No worker to terminate after embedding refactor
   }
 }
