@@ -30,7 +30,7 @@ export class AgentTaskLaunchModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 		contentEl.addClass('ia-agent-task-modal');
-		contentEl.createEl('h2', { text: this.title });
+		this.setTitle(this.title);
 
 		const fieldEl = contentEl.createDiv('ia-agent-task-modal__field');
 		fieldEl.createEl('label', {

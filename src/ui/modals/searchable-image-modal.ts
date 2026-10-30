@@ -23,7 +23,7 @@ export class SearchableImageModal extends Modal {
 		const { contentEl } = this;
 		contentEl.addClass('searchable-image-modal');
 
-		contentEl.createEl('h2', { text: t('chat.modals.image.title') });
+		this.setTitle(t('chat.modals.image.title'));
 
 		this.searchInput = contentEl.createEl('input', {
 			type: 'text',

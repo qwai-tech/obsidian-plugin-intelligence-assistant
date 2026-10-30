@@ -25,10 +25,10 @@ export class OllamaModelManagerModal extends Modal {
 		contentEl.empty();
 		contentEl.addClass('ia-ollama-manager-modal');
 
-		contentEl.createEl('h2', { text: t('modals.ollamaManager.title') });
+		this.setTitle(t('modals.ollamaManager.title'));
 
 		const serverInfo = contentEl.createDiv('ia-modal-section');
-		serverInfo.createEl('h3', { text: t('modals.ollamaManager.serverInfo') });
+		new Setting(serverInfo).setName(t('modals.ollamaManager.serverInfo')).setHeading();
 
 		const serverStatus = serverInfo.createDiv('ia-server-status');
 		serverStatus.setText(t('modals.ollamaManager.checkingServer'));
@@ -76,7 +76,7 @@ export class OllamaModelManagerModal extends Modal {
 
 	private renderPullSection(containerEl: HTMLElement) {
 		const section = containerEl.createDiv('ia-modal-section');
-		section.createEl('h3', { text: t('modals.ollamaManager.pullTitle') });
+		new Setting(section).setName(t('modals.ollamaManager.pullTitle')).setHeading();
 
 		section.createEl('p', {
 			text: t('modals.ollamaManager.pullHint'),
@@ -111,7 +111,7 @@ export class OllamaModelManagerModal extends Modal {
 		const section = containerEl.createDiv('ia-modal-section');
 		const header = section.createDiv('ia-modal-section-header');
 
-		header.createEl('h3', { text: t('modals.ollamaManager.installedTitle') });
+		new Setting(header).setName(t('modals.ollamaManager.installedTitle')).setHeading();
 
 		const refreshBtn = header.createEl('button', { text: t('modals.ollamaManager.refreshList') });
 		refreshBtn.addClass('ia-button');

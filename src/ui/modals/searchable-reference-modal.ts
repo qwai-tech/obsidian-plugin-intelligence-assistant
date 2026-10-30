@@ -20,7 +20,7 @@ export class SearchableReferenceModal extends Modal {
 		const { contentEl } = this;
 		contentEl.addClass('searchable-reference-modal');
 
-		contentEl.createEl('h2', { text: t('chat.modals.reference.title') });
+		this.setTitle(t('chat.modals.reference.title'));
 
 		this.searchInput = contentEl.createEl('input', {
 			type: 'text',

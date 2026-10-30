@@ -29,7 +29,7 @@ export class ProviderConfigModal extends Modal {
 		onOpen() {
 		const { contentEl } = this;
 		contentEl.empty();
-		contentEl.createEl('h2', { text: t('modals.provider.title') });
+		this.setTitle(t('modals.provider.title'));
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'llmConfigs[].provider',

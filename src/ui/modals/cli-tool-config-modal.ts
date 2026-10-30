@@ -16,7 +16,7 @@ export class CLIToolConfigModal extends Modal {
 	onOpen(): void {
 		const { contentEl } = this;
 		contentEl.empty();
-		contentEl.createEl('h3', { text: this.config.name || t('settings.tools.cli.modal.defaultTitle') });
+		this.setTitle(this.config.name || t('settings.tools.cli.modal.defaultTitle'));
 
 		const persist = async () => {
 			await this.plugin.saveSettings();
@@ -60,7 +60,7 @@ export class CLIToolConfigModal extends Modal {
 					await persist();
 				}));
 
-		contentEl.createEl('h4', { text: t('settings.tools.cli.modal.commandConfig') });
+		new Setting(contentEl).setName(t('settings.tools.cli.modal.commandConfig')).setHeading();
 
 		new Setting(contentEl)
 			.setName(t('settings.tools.cli.modal.command.name'))
@@ -123,7 +123,7 @@ export class CLIToolConfigModal extends Modal {
 					await persist();
 				}));
 
-		contentEl.createEl('h4', { text: t('settings.tools.cli.modal.paramsTitle') });
+		new Setting(contentEl).setName(t('settings.tools.cli.modal.paramsTitle')).setHeading();
 		contentEl.createEl('p', {
 			text: t('settings.tools.cli.modal.paramsDesc'),
 			cls: 'ia-table-subtext'
@@ -148,7 +148,7 @@ export class CLIToolConfigModal extends Modal {
 			void persist();
 		});
 
-		contentEl.createEl('h4', { text: t('settings.tools.cli.modal.envTitle') });
+		new Setting(contentEl).setName(t('settings.tools.cli.modal.envTitle')).setHeading();
 		contentEl.createEl('p', {
 			text: t('settings.tools.cli.modal.envDesc'),
 			cls: 'ia-table-subtext'

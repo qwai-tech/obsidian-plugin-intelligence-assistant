@@ -17,7 +17,7 @@ export class SystemPromptEditModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: t('modals.promptEdit.title') });
+		this.setTitle(t('modals.promptEdit.title'));
 
 		new Setting(contentEl)
 			.setName(t('modals.promptEdit.name.name'))

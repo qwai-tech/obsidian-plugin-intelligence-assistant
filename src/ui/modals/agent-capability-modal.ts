@@ -1,4 +1,4 @@
-import { App, Modal } from 'obsidian';
+import { App, Modal, Setting } from 'obsidian';
 import type { AgentCapabilitySummary, CapabilityPermissionRow } from '@/features/agent';
 
 export class AgentCapabilityModal extends Modal {
@@ -14,7 +14,7 @@ export class AgentCapabilityModal extends Modal {
 		contentEl.empty();
 		contentEl.addClass('ia-agent-capability-modal');
 
-		contentEl.createEl('h2', { text: 'Tools & permissions' });
+		this.setTitle('Tools & permissions');
 		contentEl.createEl('p', {
 			cls: 'ia-agent-capability-modal__subtitle',
 			text: `${this.summary.agentName} can use ${this.summary.toolCount} tool${this.summary.toolCount === 1 ? '' : 's'} in ${this.summary.mode} mode.`,
@@ -31,7 +31,7 @@ export class AgentCapabilityModal extends Modal {
 
 	private renderPermissions(container: HTMLElement): void {
 		const section = container.createDiv('ia-agent-capability-modal__section');
-		section.createEl('h3', { text: 'Current permissions' });
+		new Setting(section).setName('Current permissions').setHeading();
 
 		const grid = section.createDiv('ia-agent-capability-grid');
 		for (const row of this.summary.permissions) {
@@ -49,7 +49,7 @@ export class AgentCapabilityModal extends Modal {
 		if (this.summary.references.length === 0) return;
 
 		const section = container.createDiv('ia-agent-capability-modal__section');
-		section.createEl('h3', { text: 'This task can read' });
+		new Setting(section).setName('This task can read').setHeading();
 		const list = section.createEl('ul', { cls: 'ia-agent-capability-list' });
 		for (const reference of this.summary.references) {
 			list.createEl('li', { text: `${reference.type}: ${reference.path}` });
@@ -58,7 +58,7 @@ export class AgentCapabilityModal extends Modal {
 
 	private renderTools(container: HTMLElement): void {
 		const section = container.createDiv('ia-agent-capability-modal__section');
-		section.createEl('h3', { text: 'Enabled tools' });
+		new Setting(section).setName('Enabled tools').setHeading();
 
 		if (this.summary.toolGroups.length === 0) {
 			section.createEl('p', {
@@ -70,7 +70,7 @@ export class AgentCapabilityModal extends Modal {
 
 		for (const group of this.summary.toolGroups) {
 			const groupEl = section.createDiv('ia-agent-capability-tool-group');
-			groupEl.createEl('h4', { text: group.label });
+			new Setting(groupEl).setName(group.label).setHeading();
 			for (const tool of group.tools) {
 				const toolEl = groupEl.createDiv('ia-agent-capability-tool');
 				const title = toolEl.createDiv('ia-agent-capability-tool__title');

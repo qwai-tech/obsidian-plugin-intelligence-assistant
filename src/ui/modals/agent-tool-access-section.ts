@@ -66,7 +66,7 @@ export class AgentToolAccessSection {
 		}
 
 		// MCP Servers
-		container.createEl('h3', { text: t('modals.agentEdit.mcp.title') });
+		new Setting(container).setName(t('modals.agentEdit.mcp.title')).setHeading();
 		if (this.plugin.settings.mcpServers.length === 0) {
 			const empty = container.createDiv('ia-table-subtext');
 			empty.setText(t('modals.agentEdit.mcp.noServers'));

@@ -1,4 +1,4 @@
-import { App, Modal, Notice } from 'obsidian';
+import { App, Modal, Notice, Setting } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { RegisteredTool } from '@/features/tools';
 import { getConnectedMcpServers, getToolsByProviderKey } from './mcp-inspector-data';
@@ -17,7 +17,7 @@ export class MCPInspectorModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: t('modals.mcpInspector.title') });
+		this.setTitle(t('modals.mcpInspector.title'));
 		const descEl = contentEl.createEl('p', {
 			text: t('modals.mcpInspector.desc')
 		});
@@ -116,7 +116,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderConnectionsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: t('modals.mcpInspector.connections.title') });
+		new Setting(container).setName(t('modals.mcpInspector.connections.title')).setHeading();
 
 		// Check for active connections
 		const registry = this.plugin.services.tools.registry;
@@ -219,7 +219,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderToolsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: t('modals.mcpInspector.tools.title') });
+		new Setting(container).setName(t('modals.mcpInspector.tools.title')).setHeading();
 
 		// Check for active connections
 		const toolsRegistry = this.plugin.services.tools.registry;
@@ -243,7 +243,7 @@ export class MCPInspectorModal extends Modal {
 			const serverName = provider.substring(4); // Remove 'mcp:' prefix
 			const serverSection = container.createDiv();
 
-			serverSection.createEl('h4', { text: t('modals.mcpInspector.tools.serverPrefix', { name: serverName }) });
+			new Setting(serverSection).setName(t('modals.mcpInspector.tools.serverPrefix', { name: serverName })).setHeading();
 
 			if (tools.length === 0) {
 				serverSection.createEl('p', { text: t('modals.mcpInspector.tools.noToolsInServer') });
@@ -282,7 +282,7 @@ export class MCPInspectorModal extends Modal {
 
 	private renderLogsTab(container: HTMLElement) {
 		container.empty();
-		container.createEl('h3', { text: t('modals.mcpInspector.logs.title') });
+		new Setting(container).setName(t('modals.mcpInspector.logs.title')).setHeading();
 
 		// Display any stored logs or debugging information
 		const logContainer = container.createDiv();

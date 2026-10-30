@@ -1,4 +1,4 @@
-import { Notice } from 'obsidian';
+import { Notice, Setting } from 'obsidian';
 import { t } from '@/i18n';
 import type { ToolRegistry, ToolParameter } from '@/features/tools';
 import { errorMessage } from '@/core/utils/errors';
@@ -9,7 +9,7 @@ type ParamInput = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 export function renderMcpToolTester(container: HTMLElement, registry: ToolRegistry): void {
 	const section = container.createDiv('ia-mcpi-test-section');
-	section.createEl('h4', { text: t('modals.mcpInspector.logs.testTitle') });
+	new Setting(section).setName(t('modals.mcpInspector.logs.testTitle')).setHeading();
 
 	const selectionRow = section.createDiv('ia-mcpi-selection-row');
 	const serverSelect = selectionRow.createEl('select', { cls: 'ia-mcpi-select--flex' });
@@ -54,7 +54,7 @@ export function renderMcpToolTester(container: HTMLElement, registry: ToolRegist
 		if (parameters.length === 0) return;
 
 		paramsContainer.removeClass('ia-hidden');
-		paramsContainer.createEl('h5', { text: t('modals.mcpInspector.logs.parametersTitle') });
+		new Setting(paramsContainer).setName(t('modals.mcpInspector.logs.parametersTitle')).setHeading();
 		inputs = parameters.map(param => ({ param, input: renderParameterInput(paramsContainer, param) }));
 	});
 

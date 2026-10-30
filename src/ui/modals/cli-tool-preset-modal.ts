@@ -1,4 +1,4 @@
-import { Notice, Modal } from 'obsidian';
+import { Notice, Modal, Setting } from 'obsidian';
 import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { CLIToolConfig, CLIToolPreset } from '@/features/tools';
@@ -15,7 +15,7 @@ export class CLIToolPresetModal extends Modal {
 	onOpen(): void {
 		const { contentEl } = this;
 		contentEl.empty();
-		contentEl.createEl('h3', { text: t('settings.tools.cli.presets.title') });
+		this.setTitle(t('settings.tools.cli.presets.title'));
 
 		contentEl.createEl('p', {
 			text: t('settings.tools.cli.presets.desc'),
@@ -38,7 +38,7 @@ export class CLIToolPresetModal extends Modal {
 		// Render each category
 		for (const [category, categoryPresets] of categories) {
 			const categoryName = t(`settings.tools.cli.presets.categories.${category}`, { defaultValue: PRESET_CATEGORIES[category as keyof typeof PRESET_CATEGORIES] || category });
-			contentEl.createEl('h4', { text: categoryName });
+			new Setting(contentEl).setName(categoryName).setHeading();
 
 			const categoryContainer = contentEl.createDiv('cli-preset-category');
 

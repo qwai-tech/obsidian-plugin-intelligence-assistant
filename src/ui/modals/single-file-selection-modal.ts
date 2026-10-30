@@ -22,7 +22,7 @@ export class SingleFileSelectionModal extends Modal {
 		const { contentEl } = this;
 		contentEl.addClass("single-file-selection-modal");
 
-		contentEl.createEl("h2", { text: t('chat.modals.insertNote.title') });
+		this.setTitle(t('chat.modals.insertNote.title'));
 
 		this.searchInput = contentEl.createEl("input", {
 			type: "text",

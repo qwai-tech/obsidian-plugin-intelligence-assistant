@@ -36,7 +36,7 @@ export class MCPServerModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: this.mode === 'edit' ? t('modals.mcpServer.titleEdit') : t('modals.mcpServer.titleAdd') });
+		this.setTitle(this.mode === 'edit' ? t('modals.mcpServer.titleEdit') : t('modals.mcpServer.titleAdd'));
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].name',

@@ -20,7 +20,7 @@ export class TextInputModal extends Modal {
 	onOpen() {
 		const { contentEl } = this;
 
-		contentEl.createEl('h2', { text: this.title });
+		this.setTitle(this.title);
 
 		new Setting(contentEl)
 			.setName(t('modals.textInput.nameLabel'))

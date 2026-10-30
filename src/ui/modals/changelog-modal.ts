@@ -15,7 +15,7 @@ export class ChangelogModal extends Modal {
 		contentEl.empty();
 		contentEl.addClass('ia-changelog-modal');
 
-		contentEl.createEl('h2', { text: this.isChinese ? `🎉 欢迎使用新版本 v${this.version}` : `🎉 Welcome to v${this.version}` });
+		this.setTitle(this.isChinese ? `🎉 欢迎使用新版本 v${this.version}` : `🎉 Welcome to v${this.version}`);
 
 		const body = contentEl.createDiv('ia-changelog-body');
 		

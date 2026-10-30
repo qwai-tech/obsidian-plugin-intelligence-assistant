@@ -212,7 +212,7 @@ export default defineConfig([
     },
   },
   {
-    files: ["src/ui/settings/**/*.ts"],
+    files: ["src/ui/settings/**/*.ts", "src/ui/modals/**/*.ts"],
     rules: {
       "no-restricted-syntax": ["error", ...RESTRICTED_SYNTAX, HEADING_ELEMENT],
     },

@@ -38,7 +38,7 @@ export class AgentEditModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 
-		contentEl.createEl('h2', { text: t('modals.agentEdit.title') });
+		this.setTitle(t('modals.agentEdit.title'));
 
 		// Icon field
 		new Setting(contentEl)
@@ -242,7 +242,7 @@ export class AgentEditModal extends Modal {
 			});
 
 		// Capabilities section
-		contentEl.createEl('h3', { text: t('modals.agentEdit.capabilities') });
+		new Setting(contentEl).setName(t('modals.agentEdit.capabilities')).setHeading();
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].ragEnabled',
@@ -275,14 +275,14 @@ export class AgentEditModal extends Modal {
 				}));
 
 		// Memory settings placeholder (temporarily disabled)
-		contentEl.createEl('h3', { text: t('modals.agentEdit.memory.title') });
+		new Setting(contentEl).setName(t('modals.agentEdit.memory.title')).setHeading();
 		const memoryNotice = contentEl.createEl('p', {
 			text: t('modals.agentEdit.memory.notice')
 		});
 		memoryNotice.addClass('ia-section-description');
 
 		// Tools section
-		contentEl.createEl('h3', { text: t('modals.agentEdit.tools.title') });
+		new Setting(contentEl).setName(t('modals.agentEdit.tools.title')).setHeading();
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].maxSteps',
