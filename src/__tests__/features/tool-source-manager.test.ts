@@ -166,6 +166,35 @@ describe('ToolSourceManager', () => {
 		expect(persist).toHaveBeenCalledTimes(1);
 	});
 
+	it('starts only auto-connect servers at startup', async () => {
+		const { manager, registry } = setup({
+			builtInTools: [],
+			mcpServers: [server('auto'), server('manual', { connectionMode: 'manual' })],
+			openApiTools: [],
+			cliTools: [],
+		});
+
+		await manager.initialize();
+
+		expect(manager.isMcpConnected('auto')).toBe(true);
+		expect(manager.isMcpConnected('manual')).toBe(false);
+		expect(names(registry)).toEqual(['auto_tool', 'read_file']);
+	});
+
+	it('a server that fails to start is not shown as connected, and auto-connect tries it again', async () => {
+		const broken = server('broken', { command: 'missing-binary' });
+		const { manager, created } = setup({ builtInTools: [], mcpServers: [broken], openApiTools: [], cliTools: [] });
+
+		await manager.initialize();
+		await expect(manager.connectMcp(broken)).rejects.toThrow('spawn failed');
+
+		expect(manager.isMcpConnected('broken')).toBe(false);
+		expect(created.filter((source) => source.id === 'broken').every((source) => source.disposed)).toBe(true);
+		broken.command = 'npx';
+		expect(await manager.connectAutoMcpServers()).toBe(true);
+		expect(manager.isMcpConnected('broken')).toBe(true);
+	});
+
 	it('probeMcp loads and disposes a throw-away source without registering it', async () => {
 		const gamma = server('gamma');
 		const { manager, registry, created } = setup({ builtInTools: [], mcpServers: [], openApiTools: [], cliTools: [] });

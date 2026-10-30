@@ -40,11 +40,8 @@ export class ToolSourceManager {
 	) {}
 
 	async initialize(): Promise<void> {
-		const { mcpServers, openApiTools, cliTools } = this.settings();
+		const { openApiTools, cliTools } = this.settings();
 		this.registry.registerSource(this.factory.builtin(() => this.enabledBuiltinTypes()));
-		for (const server of mcpServers.filter((s) => s.enabled)) {
-			this.registry.registerSource(this.factory.mcp(server));
-		}
 		for (const config of openApiTools.filter((c) => c.enabled)) {
 			this.registry.registerSource(this.factory.openApi(config));
 		}
@@ -52,11 +49,7 @@ export class ToolSourceManager {
 			this.registry.registerSource(this.factory.cli(config));
 		}
 		await this.registry.reload();
-
-		const cached = mcpServers.filter((server) => server.enabled && this.cacheLiveTools(server));
-		if (cached.length > 0) {
-			await this.persist();
-		}
+		await this.connectAutoMcpServers();
 	}
 
 	async resync(): Promise<void> {
@@ -177,19 +170,22 @@ export class ToolSourceManager {
 		if (!this.isMcpConnected(server.name)) {
 			this.registry.registerSource(this.factory.mcp(server));
 		}
-		const tools = await this.registry.reloadSource('mcp', server.name);
-		this.cacheLiveTools(server);
-		return tools.length;
+		try {
+			const tools = await this.registry.reloadSource('mcp', server.name);
+			this.cacheLiveTools(server);
+			return tools.length;
+		} catch (error) {
+			await this.registry.unregisterSource('mcp', server.name);
+			throw error;
+		}
 	}
 
-	private cacheLiveTools(server: MCPServerConfig): boolean {
+	private cacheLiveTools(server: MCPServerConfig): void {
 		const tools = this.toolsOf('mcp').filter((t) => t.origin.sourceId === server.name);
-		if (tools.length === 0) {
-			return false;
+		if (tools.length > 0) {
+			server.cachedTools = snapshotMcpTools(tools);
+			server.cacheTimestamp = Date.now();
 		}
-		server.cachedTools = snapshotMcpTools(tools);
-		server.cacheTimestamp = Date.now();
-		return true;
 	}
 
 	private toolsOf(kind: 'mcp' | 'cli') {
