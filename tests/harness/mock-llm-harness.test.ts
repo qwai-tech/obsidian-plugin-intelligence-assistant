@@ -1,5 +1,5 @@
 import { request } from 'node:http';
-import { startMockLLM, stopMockLLM, mockLLM, DEFAULT_MOCK_LLM_PORT } from './mock-llm-harness';
+import { startMockLLM, stopMockLLM, mockLLM, mockLLMPort } from './mock-llm-harness';
 
 function postChat(body: unknown): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -7,7 +7,7 @@ function postChat(body: unknown): Promise<string> {
     const req = request(
       {
         hostname: '127.0.0.1',
-        port: DEFAULT_MOCK_LLM_PORT,
+        port: mockLLMPort(),
         path: '/v1/chat/completions',
         method: 'POST',
         agent: false,

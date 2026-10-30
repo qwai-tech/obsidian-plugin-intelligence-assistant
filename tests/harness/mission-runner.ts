@@ -10,7 +10,7 @@ import type { AgentLoopOptions, AgentLoopCallbacks } from '@/features/agent/type
 import { buildHarnessToolRegistry } from './build-tool-registry';
 import { createFakeKnowledgeBase } from './fake-rag';
 import type { KnowledgeBase } from '@/features/knowledge/knowledge-base';
-import { DEFAULT_MOCK_LLM_PORT, mockLLM } from './mock-llm-harness';
+import { mockLLM, mockLLMPort } from './mock-llm-harness';
 
 const MOCK_MODEL = 'mock-model';
 
@@ -19,7 +19,6 @@ const MOCK_MODEL = 'mock-model';
 // port explicitly rather than relying on whatever global a previous test left
 // registered.
 const harnessHttpPort = createFetchHttpPort();
-const MOCK_BASE_URL = `http://127.0.0.1:${DEFAULT_MOCK_LLM_PORT}/v1`;
 
 /**
  * Mission LLM config. Defaults to the in-process mock (deterministic — what the
@@ -34,7 +33,7 @@ function resolveMissionLLM(): { provider: 'custom'; baseUrl: string; apiKey: str
   if (baseUrl && apiKey && model) {
     return { provider: 'custom', baseUrl, apiKey, model };
   }
-  return { provider: 'custom', baseUrl: MOCK_BASE_URL, apiKey: 'test-key', model: MOCK_MODEL };
+  return { provider: 'custom', baseUrl: `http://127.0.0.1:${mockLLMPort()}/v1`, apiKey: 'test-key', model: MOCK_MODEL };
 }
 
 export interface ToolCallRecord {

@@ -1,9 +1,6 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 
-// Worker-aware so parallel jest workers (JEST_WORKER_ID 1,2,3…) bind distinct
-// ports and never collide — which lets the suite drop the global maxWorkers:1.
-// Outside jest (e.g. the wdio runner), JEST_WORKER_ID is unset → the base port.
-export const DEFAULT_MOCK_LLM_PORT = 43117 + (Number(process.env.JEST_WORKER_ID) || 0);
+export const DEFAULT_MOCK_LLM_PORT = 43117;
 export const MOCK_LLM_BASE_URL = `http://127.0.0.1:${DEFAULT_MOCK_LLM_PORT}`;
 export const MOCK_LLM_OPENAI_BASE_URL = `${MOCK_LLM_BASE_URL}/v1`;
 
@@ -33,13 +30,14 @@ export interface CapturedLLMCall {
 export interface MockLLMServer {
 	start(): Promise<void>;
 	stop(): Promise<void>;
+	port(): number;
 	reset(): void;
 	queue(response: QueuedLLMResponse): void;
 	getCalls(): CapturedLLMCall[];
 }
 
 export function createMockLLMServer(options: { port?: number } = {}): MockLLMServer {
-	const port = options.port ?? DEFAULT_MOCK_LLM_PORT;
+	const requestedPort = options.port ?? DEFAULT_MOCK_LLM_PORT;
 	const queue: QueuedLLMResponse[] = [];
 	const embeddingQueue: QueuedEmbeddingResponse[] = [];
 	const calls: CapturedLLMCall[] = [];
@@ -76,11 +74,17 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 		});
 		await new Promise<void>((resolve, reject) => {
 			server!.once('error', reject);
-			server!.listen(port, '127.0.0.1', () => {
+			server!.listen(requestedPort, '127.0.0.1', () => {
 				server!.off('error', reject);
 				resolve();
 			});
 		});
+	}
+
+	function port(): number {
+		const address = server?.address();
+		if (!address || typeof address === 'string') throw new Error('Server is not running.');
+		return address.port;
 	}
 
 	async function stop(): Promise<void> {
@@ -170,7 +174,7 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 		writeJson(res, 404, { error: { message: `No mock route for ${req.method ?? 'GET'} ${requestPath}` } });
 	}
 
-	return { start, stop, reset, queue: queueResponse, getCalls };
+	return { start, stop, port, reset, queue: queueResponse, getCalls };
 }
 
 async function readRawBody(req: IncomingMessage): Promise<string> {

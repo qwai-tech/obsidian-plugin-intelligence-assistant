@@ -42,15 +42,12 @@ targets — each needs a dedicated unit suite (like the adapter's) first. (The
 planner's new empty-turn-recovery logic is already covered by
 `tests/missions/agent/empty-turn-recovery.mission.test.ts`.)
 
-## Why `concurrency: 1`
+## Mock LLM ports
 
-The mission harness starts a mock LLM server. `DEFAULT_MOCK_LLM_PORT` is now
-**worker-aware** (`43117 + JEST_WORKER_ID`), so the base Jest suite runs in
-parallel without collisions. But Stryker spawns separate Jest **processes** per
-concurrent mutant, and `JEST_WORKER_ID` resets to `1` inside each — so two
-concurrent Stryker mutants would both land on port `43118` and collide.
-Therefore `stryker.config.json` keeps `"concurrency": 1`. Raising it would need a
-Stryker-process-aware port offset, not just the per-worker one.
+The mission harness starts its mock LLM server on port `0`, so the OS assigns a
+free port to every Jest worker and every Stryker process. Concurrent mutants
+never collide; `"concurrency"` in `stryker.config.json` only trades speed for
+CPU.
 
 ## Configuration notes
 

@@ -1,9 +1,10 @@
 import { request } from 'node:http';
 import {
-	DEFAULT_MOCK_LLM_PORT,
 	createMockLLMServer,
 	type MockLLMServer,
 } from '../../tests/e2e/support/mock-llm-server';
+
+let server: MockLLMServer;
 
 function httpJson<T>(method: string, path: string, body?: unknown): Promise<T> {
 	return new Promise((resolve, reject) => {
@@ -11,7 +12,7 @@ function httpJson<T>(method: string, path: string, body?: unknown): Promise<T> {
 		const req = request(
 			{
 				hostname: '127.0.0.1',
-				port: DEFAULT_MOCK_LLM_PORT,
+				port: server.port(),
 				path,
 				method,
 				agent: false,
@@ -44,7 +45,7 @@ function httpText(method: string, path: string, body?: unknown): Promise<{ heade
 		const req = request(
 			{
 				hostname: '127.0.0.1',
-				port: DEFAULT_MOCK_LLM_PORT,
+				port: server.port(),
 				path,
 				method,
 				agent: false,
@@ -82,7 +83,7 @@ function httpRaw(method: string, path: string): Promise<{ statusCode: number; he
 		const req = request(
 			{
 				hostname: '127.0.0.1',
-				port: DEFAULT_MOCK_LLM_PORT,
+				port: server.port(),
 				path,
 				method,
 				agent: false,
@@ -102,16 +103,30 @@ function httpRaw(method: string, path: string): Promise<{ statusCode: number; he
 }
 
 describe('mock LLM server', () => {
-	let server: MockLLMServer;
-
 	beforeEach(async () => {
-		server = createMockLLMServer({ port: DEFAULT_MOCK_LLM_PORT });
+		server = createMockLLMServer({ port: 0 });
 		await server.start();
 		await httpJson('POST', '/__mock__/reset');
 	});
 
 	afterEach(async () => {
 		await server.stop();
+	});
+
+	it('binds a free port of its own when asked for port 0', async () => {
+		const other = createMockLLMServer({ port: 0 });
+		await other.start();
+		try {
+			expect(other.port()).toBeGreaterThan(0);
+			expect(other.port()).not.toBe(server.port());
+		} finally {
+			await other.stop();
+		}
+	});
+
+	it('reports no port once stopped', async () => {
+		await server.stop();
+		expect(() => server.port()).toThrow('Server is not running.');
 	});
 
 	it('returns queued chat responses and captures requests', async () => {
