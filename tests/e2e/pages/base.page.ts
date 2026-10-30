@@ -11,6 +11,13 @@ export abstract class BasePage {
 		return $$(`[data-testid="${id}"]`);
 	}
 
+	protected async waitForAnimations(): Promise<void> {
+		await browser.waitUntil(
+			async () => browser.execute(() => activeDocument.getAnimations().every(animation => animation.playState !== 'running')),
+			{ timeout: 5_000, timeoutMsg: 'Animations did not settle' }
+		);
+	}
+
 	protected async waitFor(id: string, timeoutMs = 10_000): Promise<void> {
 		await this.$testid(id).waitForDisplayed({ timeout: timeoutMs });
 	}
@@ -54,6 +61,7 @@ export abstract class BasePage {
 			{ timeout: 10_000, timeoutMsg: `Settings section not found: ${name}` }
 		);
 		await $('.setting-page-content').waitForDisplayed({ timeout: 10_000 });
+		await this.waitForAnimations();
 	}
 
 	protected settingControl(name: string, control: 'input' | 'select' | '.checkbox-container'): ChainablePromiseElement {
@@ -61,7 +69,7 @@ export abstract class BasePage {
 	}
 
 	protected async click(id: string): Promise<void> {
-		await this.waitFor(id);
+		await this.$testid(id).waitForClickable({ timeout: 10_000 });
 		await this.$testid(id).click();
 	}
 

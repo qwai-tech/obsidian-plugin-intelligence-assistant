@@ -14,10 +14,7 @@ class Tour extends BasePage {
 	theme: string = THEMES[0];
 
 	async shot(name: string): Promise<void> {
-		await browser.waitUntil(
-			async () => browser.execute(() => activeDocument.getAnimations().every(animation => animation.playState !== 'running')),
-			{ timeout: 5_000, timeoutMsg: 'Animations did not settle' }
-		);
+		await this.waitForAnimations();
 		await browser.saveScreenshot(path.join(OUT, `${this.theme}-${name}.png`));
 	}
 
