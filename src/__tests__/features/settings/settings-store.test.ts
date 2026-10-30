@@ -35,7 +35,7 @@ describe('SettingsStore', () => {
 		const config = currentConfig();
 		config.providers.defaultModel = 'model-from-config';
 		const providers = [{ provider: 'openai', apiKey: 'k' }] as LLMConfig[];
-		const { persistence } = fakePersistence({ userConfig: config, legacyData: null }, { llmConfigs: providers });
+		const { persistence } = fakePersistence({ userConfig: config, legacyData: null, outdated: false }, { llmConfigs: providers });
 		const store = new SettingsStore(persistence, memoryVault());
 
 		await store.load();
@@ -46,7 +46,7 @@ describe('SettingsStore', () => {
 
 	it('falls back to legacy data.json, keeps its conversations aside and writes a config file', async () => {
 		const legacy = { defaultModel: 'legacy-model', conversations: [{ id: 'c1' }] };
-		const { persistence, writes } = fakePersistence({ userConfig: null, legacyData: legacy });
+		const { persistence, writes } = fakePersistence({ userConfig: null, legacyData: legacy, outdated: false });
 		const store = new SettingsStore(persistence, memoryVault());
 
 		await store.load();
@@ -58,7 +58,7 @@ describe('SettingsStore', () => {
 
 	it('persists migrated agents right after loading', async () => {
 		const legacyAgent = { id: 'a1', name: 'Old', modelId: 'm1', toolAccess: { sources: {} } };
-		const { persistence, writes } = fakePersistence({ userConfig: currentConfig(), legacyData: null }, { agents: [legacyAgent] as never });
+		const { persistence, writes } = fakePersistence({ userConfig: currentConfig(), legacyData: null, outdated: false }, { agents: [legacyAgent] as never });
 		const store = new SettingsStore(persistence, memoryVault());
 
 		await store.load();
@@ -68,8 +68,17 @@ describe('SettingsStore', () => {
 		expect(writes[0].has('agents')).toBe(true);
 	});
 
+	it('writes every unit when the stored settings are in an outdated format', async () => {
+		const { persistence, writes } = fakePersistence({ userConfig: currentConfig(), legacyData: null, outdated: true });
+		const store = new SettingsStore(persistence, memoryVault());
+
+		await store.load();
+
+		expect(writes).toEqual([new Set(['config', 'providers', 'prompts', 'agents', 'mcp'])]);
+	});
+
 	it('saves only the units that changed, and nothing when nothing changed', async () => {
-		const { persistence, writes } = fakePersistence({ userConfig: currentConfig(), legacyData: null });
+		const { persistence, writes } = fakePersistence({ userConfig: currentConfig(), legacyData: null, outdated: false });
 		const store = new SettingsStore(persistence, memoryVault());
 		await store.load();
 
@@ -81,7 +90,7 @@ describe('SettingsStore', () => {
 	});
 
 	it('tells subscribers which units changed', async () => {
-		const { persistence } = fakePersistence({ userConfig: currentConfig(), legacyData: null });
+		const { persistence } = fakePersistence({ userConfig: currentConfig(), legacyData: null, outdated: false });
 		const store = new SettingsStore(persistence, memoryVault());
 		await store.load();
 		const listener = jest.fn();
@@ -95,7 +104,7 @@ describe('SettingsStore', () => {
 	});
 
 	it('applies a change and saves only the units it touched', async () => {
-		const { persistence, writes } = fakePersistence({ userConfig: currentConfig(), legacyData: null });
+		const { persistence, writes } = fakePersistence({ userConfig: currentConfig(), legacyData: null, outdated: false });
 		const store = new SettingsStore(persistence, memoryVault());
 		await store.load();
 		const listener = jest.fn();
@@ -109,7 +118,7 @@ describe('SettingsStore', () => {
 	});
 
 	it('never shares nested objects with the defaults', async () => {
-		const { persistence } = fakePersistence({ userConfig: null, legacyData: null });
+		const { persistence } = fakePersistence({ userConfig: null, legacyData: null, outdated: false });
 		const store = new SettingsStore(persistence, memoryVault());
 		await store.load();
 
@@ -121,7 +130,7 @@ describe('SettingsStore', () => {
 	it('moves plain-text keys into the vault on load and never writes them', async () => {
 		const vault = memoryVault();
 		const providers = [{ provider: 'openai', apiKey: 'sk-plain' }] as LLMConfig[];
-		const { persistence, writes, written } = fakePersistence({ userConfig: currentConfig(), legacyData: null }, { llmConfigs: providers });
+		const { persistence, writes, written } = fakePersistence({ userConfig: currentConfig(), legacyData: null, outdated: false }, { llmConfigs: providers });
 		const store = new SettingsStore(persistence, vault);
 
 		await store.load();
@@ -135,7 +144,7 @@ describe('SettingsStore', () => {
 	it('reads keys from the vault by their secret name', async () => {
 		const vault = memoryVault({ mine: 'sk-vault' });
 		const providers = [{ provider: 'openai', apiKeySecret: 'mine' }] as LLMConfig[];
-		const { persistence, writes } = fakePersistence({ userConfig: currentConfig(), legacyData: null }, { llmConfigs: providers });
+		const { persistence, writes } = fakePersistence({ userConfig: currentConfig(), legacyData: null, outdated: false }, { llmConfigs: providers });
 		const store = new SettingsStore(persistence, vault);
 
 		await store.load();
@@ -147,7 +156,7 @@ describe('SettingsStore', () => {
 	it('keeps keys out of saves and saves nothing when only a key changed', async () => {
 		const vault = memoryVault({ mine: 'sk-vault' });
 		const providers = [{ provider: 'openai', apiKeySecret: 'mine' }] as LLMConfig[];
-		const { persistence, writes, written } = fakePersistence({ userConfig: currentConfig(), legacyData: null }, { llmConfigs: providers });
+		const { persistence, writes, written } = fakePersistence({ userConfig: currentConfig(), legacyData: null, outdated: false }, { llmConfigs: providers });
 		const store = new SettingsStore(persistence, vault);
 		await store.load();
 
@@ -163,7 +172,7 @@ describe('SettingsStore', () => {
 	it('reads the key for a newly chosen secret as part of an update', async () => {
 		const vault = memoryVault({ first: 'sk-1', second: 'sk-2' });
 		const providers = [{ provider: 'openai', apiKeySecret: 'first' }] as LLMConfig[];
-		const { persistence } = fakePersistence({ userConfig: currentConfig(), legacyData: null }, { llmConfigs: providers });
+		const { persistence } = fakePersistence({ userConfig: currentConfig(), legacyData: null, outdated: false }, { llmConfigs: providers });
 		const store = new SettingsStore(persistence, vault);
 		await store.load();
 
@@ -175,7 +184,7 @@ describe('SettingsStore', () => {
 	it('picks up keys changed in the vault when asked to', async () => {
 		const vault = memoryVault({ mine: 'sk-old' });
 		const providers = [{ provider: 'openai', apiKeySecret: 'mine' }] as LLMConfig[];
-		const { persistence } = fakePersistence({ userConfig: currentConfig(), legacyData: null }, { llmConfigs: providers });
+		const { persistence } = fakePersistence({ userConfig: currentConfig(), legacyData: null, outdated: false }, { llmConfigs: providers });
 		const store = new SettingsStore(persistence, vault);
 		await store.load();
 

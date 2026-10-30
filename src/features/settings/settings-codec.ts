@@ -204,7 +204,7 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 		providers: {
 			defaultModel: settings.defaultModel,
 			titleSummaryModel: settings.titleSummaryModel,
-			list: [] // managed by ProviderRepository; not persisted here
+			list: []
 		},
 		conversations: {
 			title: {
@@ -220,10 +220,6 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 		tools: {
 			builtin: deepClone(settings.builtInTools ?? []),
 			mcp: {
-				// MCP servers also persist via the per-server repository at
-				// data/mcp-servers.json. Writing them here too keeps the unified
-				// settings.json schema (Phase 4 design 5.1) honest — anyone
-				// inspecting only the config file gets the full picture.
 				servers: deepClone(settings.mcpServers ?? []),
 				registries: deepClone(settings.mcpRegistries ?? []),
 			},
@@ -282,13 +278,13 @@ export function pluginSettingsToUserConfig(settings: PluginSettings): UserConfig
 			web: deepClone(settings.webSearchConfig)
 		},
 		prompts: {
-			system: [], // managed by PromptRepository; not persisted here
+			system: [],
 			activeId: settings.activeSystemPromptId ?? null
 		},
 		agents: {
-			list: [], // managed by AgentRepository; not persisted here
+			list: [],
 			activeId: settings.activeAgentId ?? null,
-			memories: [] // managed by AgentRepository; not persisted here
+			memories: []
 		},
 		quickActions: {
 			list: deepClone(settings.quickActions ?? DEFAULT_QUICK_ACTIONS),

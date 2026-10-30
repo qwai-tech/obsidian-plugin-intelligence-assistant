@@ -9,6 +9,7 @@ export type PersistUnit = 'config' | 'providers' | 'prompts' | 'agents' | 'mcp';
 export interface StoredSettings {
 	userConfig: UserConfig | null;
 	legacyData: unknown;
+	outdated: boolean;
 }
 
 export interface SettingsPersistence {
@@ -52,7 +53,7 @@ export class SettingsStore {
 	}
 
 	async load(): Promise<void> {
-		const { userConfig, legacyData } = await this.persistence.read();
+		const { userConfig, legacyData, outdated } = await this.persistence.read();
 		const legacy = userConfig ? null : asLegacySettings(legacyData);
 		const settings: PluginSettings = { ...userConfigToPluginSettings(userConfig), ...legacy };
 		this.conversations = legacy?.conversations ?? [];
@@ -65,6 +66,7 @@ export class SettingsStore {
 		this.snapshots = this.snapshot(settings);
 		const pending = new Set<PersistUnit>();
 		if (!userConfig) pending.add('config');
+		if (outdated) (Object.keys(UNITS) as PersistUnit[]).forEach((unit) => pending.add(unit));
 		if (migrated) pending.add('agents').add('config').add('providers');
 		if (keysMoved) pending.add('providers').add('config');
 		if (pending.size > 0) {

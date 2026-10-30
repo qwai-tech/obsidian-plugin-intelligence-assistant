@@ -3,6 +3,22 @@ import * as path from 'node:path';
 import { getReleaseEnv, missingReleaseLLMVars } from './release-env';
 import { createSettingsPatchForProfile, type VaultFixtureProfile } from './data-fixtures';
 
+export interface StoredSettings {
+	config: {
+		providers?: { defaultModel?: string };
+		conversations?: { title?: { mode?: string }; icon?: { enabled?: boolean } };
+		tools?: {
+			mcp?: { servers?: Array<{ name: string; command: string; args?: string[] }> };
+			openapi?: Array<Record<string, unknown>>;
+			cli?: Array<Record<string, unknown>>;
+		};
+		quickActions?: { list?: Array<{ id: string; name: string; enabled: boolean; prompt: string; actionType?: string }>; prefix?: string };
+	};
+	providers: Array<{ provider: string; apiKey?: string; apiKeySecret?: string; baseUrl?: string; modelFilter?: string }>;
+	prompts: { list: Array<{ id: string; name: string; content: string; enabled: boolean }>; activeId: string | null };
+	agents: { list: Array<{ id: string; name: string }>; activeId: string | null };
+}
+
 const REPO_ROOT = path.resolve(__dirname, '../../..');
 const VAULT_ROOT = path.join(REPO_ROOT, 'tests/e2e/test-vault');
 const PLUGIN_DIR_REL = '.obsidian/plugins/intelligence-assistant';
@@ -166,6 +182,19 @@ export class VaultFixture {
 			return JSON.parse(raw) as unknown;
 		}, PLUGIN_DIR_REL, relativePath);
 		return data as T;
+	}
+
+	async waitForSettings(matches: (settings: StoredSettings) => boolean, timeoutMsg: string): Promise<StoredSettings> {
+		let last: StoredSettings | null = null;
+		await browser.waitUntil(
+			async () => {
+				if (!(await this.runtimeDataFileExists('data.json'))) return false;
+				last = await this.readRuntimeDataFile<StoredSettings>('data.json');
+				return matches(last);
+			},
+			{ timeout: 10_000, timeoutMsg }
+		);
+		return last as unknown as StoredSettings;
 	}
 
 	async runtimeDataFileExists(relativePath: string): Promise<boolean> {

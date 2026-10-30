@@ -2,17 +2,6 @@ import { ToolsSettingsPage } from '../../pages/settings/tools-settings.page';
 import { waitForPluginReady } from '../../support/plugin-helpers';
 import { VaultFixture } from '../../support/vault-fixture';
 
-interface UserSettings {
-	tools?: {
-		openapi?: Array<{
-			id: string;
-			name: string;
-			enabled: boolean;
-			specPath?: string;
-		}>;
-	};
-}
-
 describe('OpenAPI tool settings', () => {
 	const tools = new ToolsSettingsPage();
 	const vault = new VaultFixture();
@@ -64,8 +53,11 @@ describe('OpenAPI tool settings', () => {
 		const toolNames = await tools.getRegisteredToolNames('openapi', 'openapi-e2e-ping');
 		expect(toolNames).toContain('e2e_ping_api_ping');
 
-		const settings = await vault.readRuntimeDataFile<UserSettings>('config/user/settings.json');
-		expect(settings.tools?.openapi).toEqual(expect.arrayContaining([
+		const settings = await vault.waitForSettings(
+			candidate => (candidate.config.tools?.openapi?.length ?? 0) > 0,
+			'openapi tool config was not persisted'
+		);
+		expect(settings.config.tools?.openapi).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				id: 'openapi-e2e-ping',
 				name: 'E2E Ping API',

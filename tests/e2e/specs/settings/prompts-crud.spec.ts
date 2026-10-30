@@ -1,67 +1,8 @@
 import { PromptsSettingsPage } from '../../pages/settings/prompts-settings.page';
 import { waitForPluginReady } from '../../support/plugin-helpers';
-import { VaultFixture } from '../../support/vault-fixture';
+import { VaultFixture, type StoredSettings } from '../../support/vault-fixture';
 
-interface PromptIndexFile {
-	prompts: Array<{
-		id: string;
-		name: string;
-		enabled: boolean;
-		file: string;
-	}>;
-}
-
-interface PromptFile {
-	id: string;
-	name: string;
-	content: string;
-	enabled: boolean;
-}
-
-function toPluginRelativePath(file: string): string {
-	const pluginPrefix = '.obsidian/plugins/intelligence-assistant/';
-	return file.startsWith(pluginPrefix) ? file.slice(pluginPrefix.length) : file;
-}
-
-async function waitForPromptIndex(
-	vault: VaultFixture,
-	matches: (index: PromptIndexFile) => boolean
-): Promise<PromptIndexFile> {
-	let lastIndex: PromptIndexFile | null = null;
-	await browser.waitUntil(
-		async () => {
-			lastIndex = await vault.readRuntimeDataFile<PromptIndexFile>('data/prompts/index.json');
-			return matches(lastIndex);
-		},
-		{ timeout: 10_000, timeoutMsg: 'Prompt index did not reach expected state' }
-	);
-	if (!lastIndex) {
-		throw new Error('Prompt index was not read');
-	}
-	return lastIndex;
-}
-
-async function waitForPromptFile(
-	vault: VaultFixture,
-	relativePath: string,
-	matches: (prompt: PromptFile) => boolean
-): Promise<PromptFile> {
-	let lastPrompt: PromptFile | null = null;
-	await browser.waitUntil(
-		async () => {
-			if (!(await vault.runtimeDataFileExists(relativePath))) {
-				return false;
-			}
-			lastPrompt = await vault.readRuntimeDataFile<PromptFile>(relativePath);
-			return matches(lastPrompt);
-		},
-		{ timeout: 10_000, timeoutMsg: `Prompt file did not reach expected state: ${relativePath}` }
-	);
-	if (!lastPrompt) {
-		throw new Error(`Prompt file was not read: ${relativePath}`);
-	}
-	return lastPrompt;
-}
+const sentinel = (settings: StoredSettings) => settings.prompts.list.find(prompt => prompt.name === 'E2E System Prompt');
 
 describe('System prompt settings', () => {
 	const prompts = new PromptsSettingsPage();
@@ -80,31 +21,17 @@ describe('System prompt settings', () => {
 		});
 		await prompts.togglePrompt('E2E System Prompt');
 
-		let index = await waitForPromptIndex(vault, candidate =>
-			candidate.prompts.some(prompt => prompt.name === 'E2E System Prompt' && prompt.enabled === false)
+		const settings = await vault.waitForSettings(
+			candidate => sentinel(candidate)?.enabled === false && sentinel(candidate)?.content === 'You are the E2E system prompt sentinel.',
+			'The edited prompt was not persisted'
 		);
-		let entry = index.prompts.find(prompt => prompt.name === 'E2E System Prompt');
-		expect(entry).toEqual(expect.objectContaining({ enabled: false }));
-
-		const promptPath = toPluginRelativePath(entry!.file);
-		const promptFile = await waitForPromptFile(vault, promptPath, candidate =>
-			candidate.name === 'E2E System Prompt' &&
-			candidate.content === 'You are the E2E system prompt sentinel.' &&
-			candidate.enabled === false
-		);
-		expect(promptFile).toEqual(expect.objectContaining({
-			id: entry!.id,
+		expect(sentinel(settings)).toEqual(expect.objectContaining({
 			name: 'E2E System Prompt',
 			content: 'You are the E2E system prompt sentinel.',
 			enabled: false,
 		}));
 
 		await prompts.deletePrompt('E2E System Prompt');
-
-		index = await waitForPromptIndex(vault, candidate =>
-			!candidate.prompts.some(prompt => prompt.name === 'E2E System Prompt')
-		);
-		entry = index.prompts.find(prompt => prompt.name === 'E2E System Prompt');
-		expect(entry).toBeUndefined();
+		await vault.waitForSettings(candidate => sentinel(candidate) === undefined, 'The prompt was not removed');
 	});
 });

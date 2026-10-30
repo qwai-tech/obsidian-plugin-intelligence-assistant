@@ -55,7 +55,7 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 
 ## 功能 — `src/features/`
 
-**settings**：`SettingsStore` 负责加载、迁移（`settings-migrations.ts`）和保存设置。API 密钥通过 `SecretVault` 端口（`settings-secrets.ts`，适配器为 `adapters/obsidian/obsidian-secret-vault.ts`）保存在 Obsidian 的密钥存储中：设置只记录密钥名称，存储在加载时填入密钥，写入时一律去除。保存时只写入发生变化的单元（`config`、`providers`、`prompts`、`agents`、`mcp`），并通知 `onChange` 订阅者；插件据此刷新 RAG 和聊天模型列表。`types/settings.ts` 定义 `PluginSettings`。
+**settings**：`SettingsStore` 负责加载、迁移（`settings-migrations.ts`）和保存设置。API 密钥通过 `SecretVault` 端口（`settings-secrets.ts`，适配器为 `adapters/obsidian/obsidian-secret-vault.ts`）保存在 Obsidian 的密钥存储中：设置只记录密钥名称，存储在加载时填入密钥，写入时一律去除。设置作为一个文档保存在插件的 `data.json` 中（`settings-document.ts`：配置、提供商、提示词、智能体），因此 Obsidian Sync 会同步它们，`onExternalSettingsChange` 会重新加载。只有当某个单元（`config`、`providers`、`prompts`、`agents`、`mcp`）变化时才保存，并通知 `onChange` 订阅者；插件据此刷新 RAG 和聊天模型列表。模型和 MCP 工具缓存保存在 `data/cache/`。旧版本保存在 `config/user/settings.json` 和 `data/` 中的设置会在首次加载时迁入 `data.json`（`adapters/persistence/legacy-settings-files.ts`）。`types/settings.ts` 定义 `PluginSettings`。
 
 **agent**：
 
@@ -82,7 +82,7 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 
 ## 适配器 — `src/adapters/`
 
-- `persistence/json-file.ts` — 原子 JSON 写入（先写临时文件再重命名），并能恢复遗留的临时文件；`json-collection.ts` 存储一个索引加每项一个文件。`persistence/data/` 中的所有仓库都基于它们。
+- `persistence/json-file.ts` — 原子 JSON 写入（先写临时文件再重命名），并能恢复遗留的临时文件；`json-collection.ts` 读取旧版本用于提示词和智能体的“索引加每项一个文件”布局。`persistence/data/` 中的缓存、Token 用量和智能体记忆都基于 `JsonFile`。
 - `persistence/jsonl-run-journal.ts` — 每个智能体事件追加一行 JSON。
 - `persistence/conversation-storage-service.ts` — 每个会话一个 JSON 文件。
 - `rag/` — `rag-manager.ts`、`vector-store.ts`、`chunker.ts`、`embedding-manager.ts`、`document-grader.ts`、`incremental-indexer.ts`：库索引与检索。分块记录内容哈希和嵌入模型，因此未修改的笔记不会重新嵌入，检索也只比较同一模型的向量。`RAGManager` 实现 `KnowledgeBase` 和 `MemoryIndex`。

@@ -7,6 +7,7 @@ import { pluginPaths } from './src/core/plugin-paths';
 import { ensureFolderExists } from './src/core/utils/file-system';
 import { ModelManager, createObsidianHttpPort, setDefaultHttpPort, setDiagnosticsSink, withResilience, type LLMHub } from '@qwai/obsidian-llm';
 import { SettingsStore, reloadSettingsFromDisk as runSettingsReload } from './src/features/settings';
+import { LegacySettingsFiles } from './src/adapters/persistence/legacy-settings-files';
 import { ObsidianSecretVault } from './src/adapters/obsidian/obsidian-secret-vault';
 import { ObsidianSettingsPersistence } from './src/bootstrap/obsidian-settings-persistence';
 import { buildImproveSelectionPrompt, ensureDefaultAgent as ensureDefaultAgentService } from './src/features/agent';
@@ -144,9 +145,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		this.conversations = new ConversationStorageService(this.app, paths);
 		await this.conversations.initialize();
 		this.dataService = new PluginDataService(this.app, paths);
-		await this.dataService.initialize();
+		this.dataService.initialize();
 		this.store = new SettingsStore(
-			new ObsidianSettingsPersistence(this, this.dataService, paths.userConfig),
+			new ObsidianSettingsPersistence(this, this.dataService, new LegacySettingsFiles(this.app.vault.adapter, paths)),
 			new ObsidianSecretVault(this.app),
 		);
 		this.editorQuickActions = new EditorQuickActions(this.app, () => ({

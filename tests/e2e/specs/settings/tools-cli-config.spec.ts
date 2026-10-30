@@ -2,18 +2,6 @@ import { ToolsSettingsPage } from '../../pages/settings/tools-settings.page';
 import { reloadPlugin, waitForPluginReady } from '../../support/plugin-helpers';
 import { VaultFixture } from '../../support/vault-fixture';
 
-interface UserSettings {
-	tools?: {
-		cli?: Array<{
-			id: string;
-			name: string;
-			command: string;
-			args?: string[];
-			enabled: boolean;
-		}>;
-	};
-}
-
 describe('CLI tool settings', () => {
 	const tools = new ToolsSettingsPage();
 	const vault = new VaultFixture();
@@ -46,8 +34,11 @@ describe('CLI tool settings', () => {
 		toolNames = await tools.getRegisteredToolNames('cli', 'cli-e2e-echo');
 		expect(toolNames).toContain('echo_sentinel');
 
-		const settings = await vault.readRuntimeDataFile<UserSettings>('config/user/settings.json');
-		expect(settings.tools?.cli).toEqual(expect.arrayContaining([
+		const settings = await vault.waitForSettings(
+			candidate => (candidate.config.tools?.cli?.length ?? 0) > 0,
+			'cli tool config was not persisted'
+		);
+		expect(settings.config.tools?.cli).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				id: 'cli-e2e-echo',
 				name: 'echo_sentinel',

@@ -55,7 +55,7 @@ The import rules are enforced in `eslint.config.mts`, with no exemptions:
 
 ## Features — `src/features/`
 
-**settings**: `SettingsStore` loads, migrates (`settings-migrations.ts`) and saves settings. API keys live in Obsidian's secret storage behind the `SecretVault` port (`settings-secrets.ts`, adapter `adapters/obsidian/obsidian-secret-vault.ts`): settings keep the secret's name, the store fills in the key on load and strips it from every write. A save writes only the units that changed (`config`, `providers`, `prompts`, `agents`, `mcp`) and notifies `onChange` subscribers; the plugin uses that to refresh RAG and the chat model list. `types/settings.ts` holds `PluginSettings`.
+**settings**: `SettingsStore` loads, migrates (`settings-migrations.ts`) and saves settings. API keys live in Obsidian's secret storage behind the `SecretVault` port (`settings-secrets.ts`, adapter `adapters/obsidian/obsidian-secret-vault.ts`): settings keep the secret's name, the store fills in the key on load and strips it from every write. Settings are stored in the plugin's `data.json` as one document (`settings-document.ts`: config, providers, prompts, agents), so Obsidian Sync carries them and `onExternalSettingsChange` reloads them. A save happens only when a unit (`config`, `providers`, `prompts`, `agents`, `mcp`) changed, and `onChange` subscribers learn which; the plugin uses that to refresh RAG and the chat model list. Model and MCP tool caches stay in `data/cache/`. Settings saved by older versions in `config/user/settings.json` and `data/` files move into `data.json` on first load (`adapters/persistence/legacy-settings-files.ts`). `types/settings.ts` holds `PluginSettings`.
 
 **agent**:
 
@@ -82,7 +82,7 @@ Contracts shared with adapters (`KernelEvent`, `FinishReason`, `RunJournal`) liv
 
 ## Adapters — `src/adapters/`
 
-- `persistence/json-file.ts` — atomic JSON writes (temp file, then rename) with recovery of a leftover temp file; `json-collection.ts` stores an index plus one file per item. Every repository in `persistence/data/` is built on these.
+- `persistence/json-file.ts` — atomic JSON writes (temp file, then rename) with recovery of a leftover temp file; `json-collection.ts` reads an index plus one file per item, the layout older versions used for prompts and agents. The caches, token usage and agent memory in `persistence/data/` are built on `JsonFile`.
 - `persistence/jsonl-run-journal.ts` — appends one JSON line per agent event.
 - `persistence/conversation-storage-service.ts` — conversations as per-file JSON.
 - `rag/` — `rag-manager.ts`, `vector-store.ts`, `chunker.ts`, `embedding-manager.ts`, `document-grader.ts`, `incremental-indexer.ts`: vault indexing and retrieval. Chunks record a content hash and the embedding model, so unchanged notes are not re-embedded and searches only compare vectors from the same model. `RAGManager` implements `KnowledgeBase` and `MemoryIndex`.

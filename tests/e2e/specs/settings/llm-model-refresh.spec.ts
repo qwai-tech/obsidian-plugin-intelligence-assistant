@@ -3,15 +3,6 @@ import { waitForPluginReady } from '../../support/plugin-helpers';
 import { mockLLM } from '../../support/mock-llm';
 import { VaultFixture } from '../../support/vault-fixture';
 
-interface ProviderFile {
-	providers: Array<{
-		provider: string;
-		baseUrl?: string;
-		cacheTimestamp?: number;
-		cachedModels?: Array<{ id: string; name: string; provider: string }>;
-	}>;
-}
-
 interface ModelCacheFile {
 	entries: Array<{
 		provider: string;
@@ -32,30 +23,22 @@ describe('LLM model refresh settings', () => {
 		await settings.openProviderTab();
 	});
 
-	it('refreshes provider models into provider and model-cache persistence', async () => {
+	it('refreshes provider models into the model cache, not data.json', async () => {
 		await mockLLM.models(['gpt-4o-refresh-a', 'gpt-4o-refresh-b']);
 
 		await settings.refreshProviderModels('openai');
 
 		await browser.waitUntil(
 			async () => {
-				const providerFile = await vault.readRuntimeDataFile<ProviderFile>('data/llm-providers.json');
-				const provider = providerFile.providers.find(candidate => candidate.provider === 'openai');
-				return provider?.cachedModels?.some(model => model.id === 'openai:gpt-4o-refresh-a') ?? false;
+				if (!(await vault.runtimeDataFileExists('data/cache/llm_models.json'))) return false;
+				const cache = await vault.readRuntimeDataFile<ModelCacheFile>('data/cache/llm_models.json');
+				return cache.entries.some(entry => entry.cachedModels.some(model => model.id === 'openai:gpt-4o-refresh-a'));
 			},
-			{ timeout: 10_000, timeoutMsg: 'Provider model refresh was not persisted' }
+			{ timeout: 10_000, timeoutMsg: 'Provider model refresh was not persisted to the model cache' }
 		);
 
-		const providerFile = await vault.readRuntimeDataFile<ProviderFile>('data/llm-providers.json');
-		const provider = providerFile.providers.find(candidate => candidate.provider === 'openai');
-		expect(provider).toEqual(expect.objectContaining({
-			provider: 'openai',
-			cacheTimestamp: expect.any(Number),
-			cachedModels: expect.arrayContaining([
-				expect.objectContaining({ id: 'openai:gpt-4o-refresh-a', name: 'gpt-4o-refresh-a', provider: 'openai' }),
-				expect.objectContaining({ id: 'openai:gpt-4o-refresh-b', name: 'gpt-4o-refresh-b', provider: 'openai' }),
-			]),
-		}));
+		const stored = await vault.waitForSettings(() => true, 'data.json missing');
+		expect(JSON.stringify(stored.providers)).not.toContain('cachedModels');
 
 		const modelCache = await vault.readRuntimeDataFile<ModelCacheFile>('data/cache/llm_models.json');
 		expect(modelCache.entries).toEqual(expect.arrayContaining([

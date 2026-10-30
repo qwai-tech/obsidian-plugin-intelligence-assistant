@@ -3,11 +3,9 @@ import { waitForPluginReady } from '../../support/plugin-helpers';
 import { skipUnlessReleaseMcp, type ReleaseEnv } from '../../support/release-env';
 import { VaultFixture } from '../../support/vault-fixture';
 
-interface McpServersFile {
-	servers: Array<{
-		name: string;
-		cachedTools?: Array<{ name: string }>;
-	}>;
+interface McpToolCacheFile {
+	server: string;
+	tools: Array<{ name: string }>;
 }
 
 interface ToolExecutionProbe {
@@ -45,9 +43,10 @@ describe('Release real MCP', () => {
 
 		await browser.waitUntil(
 			async () => {
-				const serverFile = await vault.readRuntimeDataFile<McpServersFile>('data/mcp-servers.json');
-				const server = serverFile.servers.find(candidate => candidate.name === env.mcpName);
-				return server?.cachedTools?.some(tool => tool.name === toolName) ?? false;
+				const caches = await Promise.all(
+					(await vault.listRuntimeDataFiles('data/cache/mcp-tools')).map(file => vault.readRuntimeDataFile<McpToolCacheFile>(file))
+				);
+				return caches.some(cache => cache.server === env.mcpName && cache.tools.some(tool => tool.name === toolName));
 			},
 			{ timeout: 30_000, timeoutMsg: `MCP tool was not listed: ${toolName}` }
 		);

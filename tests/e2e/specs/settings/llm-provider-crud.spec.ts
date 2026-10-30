@@ -2,16 +2,6 @@ import { LlmSettingsPage } from '../../pages/settings/llm-settings.page';
 import { waitForPluginReady } from '../../support/plugin-helpers';
 import { VaultFixture } from '../../support/vault-fixture';
 
-interface ProviderFile {
-	providers: Array<{
-		provider: string;
-		apiKey?: string;
-		apiKeySecret?: string;
-		baseUrl?: string;
-		modelFilter?: string;
-	}>;
-}
-
 describe('LLM provider CRUD settings', () => {
 	const settings = new LlmSettingsPage();
 	const vault = new VaultFixture();
@@ -30,8 +20,11 @@ describe('LLM provider CRUD settings', () => {
 			modelFilter: 'crud-create',
 		});
 
-		let providerFile = await vault.readRuntimeDataFile<ProviderFile>('data/llm-providers.json');
-		expect(providerFile.providers).toEqual(expect.arrayContaining([
+		let stored = await vault.waitForSettings(
+			candidate => candidate.providers.some(provider => provider.apiKeySecret === 'crud-create'),
+			'Created provider was not persisted'
+		);
+		expect(stored.providers).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				provider: 'custom',
 				apiKeySecret: 'crud-create',
@@ -46,8 +39,11 @@ describe('LLM provider CRUD settings', () => {
 			modelFilter: 'crud-update',
 		});
 
-		providerFile = await vault.readRuntimeDataFile<ProviderFile>('data/llm-providers.json');
-		expect(providerFile.providers).toEqual(expect.arrayContaining([
+		stored = await vault.waitForSettings(
+			candidate => candidate.providers.some(provider => provider.apiKeySecret === 'crud-update'),
+			'Updated provider was not persisted'
+		);
+		expect(stored.providers).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				provider: 'custom',
 				apiKeySecret: 'crud-update',
@@ -56,12 +52,14 @@ describe('LLM provider CRUD settings', () => {
 			}),
 		]));
 
-		expect(JSON.stringify(providerFile)).not.toContain('sk-crud');
+		expect(JSON.stringify(stored)).not.toContain('sk-crud');
 		expect(await settings.readSecret('crud-update')).toBe('sk-crud-update');
 
 		await settings.deleteProvider('custom');
 
-		providerFile = await vault.readRuntimeDataFile<ProviderFile>('data/llm-providers.json');
-		expect(providerFile.providers.find(provider => provider.provider === 'custom')).toBeUndefined();
+		await vault.waitForSettings(
+			candidate => !candidate.providers.some(provider => provider.provider === 'custom'),
+			'Deleted provider is still persisted'
+		);
 	});
 });

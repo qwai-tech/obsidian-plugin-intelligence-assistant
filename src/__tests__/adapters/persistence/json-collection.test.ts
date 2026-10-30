@@ -33,49 +33,27 @@ const makeAdapter = () => {
 	};
 };
 
-const collection = (adapter: ReturnType<typeof makeAdapter>) => new JsonCollection<Note, { id: string; name: string; file: string }>(
-	adapter as never,
-	'data/notes',
-	{ entriesKey: 'notes', filePrefix: 'note', toEntry: (note, file) => ({ id: note.id, name: note.name, file }) },
-);
+const collection = (adapter: ReturnType<typeof makeAdapter>) => new JsonCollection<Note>(adapter as never, 'data/notes', 'notes');
 
 describe('JsonCollection', () => {
-	it('round-trips items and the active id', async () => {
+	it('reads the items listed in the index, with the active id', async () => {
 		const adapter = makeAdapter();
+		adapter.files.set('data/notes/index.json', JSON.stringify({ activeId: 'b', notes: [{ file: 'data/notes/note-a.json' }, { file: 'data/notes/note-b.json' }] }));
+		adapter.files.set('data/notes/note-a.json', JSON.stringify({ id: 'a', name: 'A' }));
+		adapter.files.set('data/notes/note-b.json', JSON.stringify({ id: 'b', name: 'B' }));
 
-		await collection(adapter).save([{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }], 'b');
-		const loaded = await collection(adapter).load();
-
-		expect(loaded.items).toEqual([{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }]);
-		expect(loaded.activeId).toBe('b');
-		expect(loaded.indexExists).toBe(true);
+		expect(await collection(adapter).load()).toEqual({ items: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }], activeId: 'b', indexExists: true });
 	});
 
-	it('keeps the index layout under the configured key', async () => {
+	it('skips index entries whose file is missing', async () => {
 		const adapter = makeAdapter();
+		adapter.files.set('data/notes/index.json', JSON.stringify({ notes: [{ file: 'data/notes/gone.json' }, { file: 'data/notes/note-a.json' }] }));
+		adapter.files.set('data/notes/note-a.json', JSON.stringify({ id: 'a', name: 'A' }));
 
-		await collection(adapter).save([{ id: 'a', name: 'A' }], null);
-
-		const index = JSON.parse(adapter.files.get('data/notes/index.json') ?? '{}') as { notes: Array<{ file: string }> };
-		expect(index.notes[0].file).toMatch(/^data\/notes\/.+\.json$/);
+		expect((await collection(adapter).load()).items).toEqual([{ id: 'a', name: 'A' }]);
 	});
 
-	it('removes files of items that were dropped', async () => {
-		const adapter = makeAdapter();
-		const notes = collection(adapter);
-		await notes.save([{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }], null);
-
-		await notes.save([{ id: 'a', name: 'A' }], null);
-
-		expect([...adapter.files.keys()].filter((f) => f !== 'data/notes/index.json')).toHaveLength(1);
-	});
-
-	it('reports a missing index and finds items by scanning the folder', async () => {
-		const adapter = makeAdapter();
-		adapter.files.set('data/notes/loose.json', JSON.stringify({ id: 'loose', name: 'Loose' }));
-		const notes = collection(adapter);
-
-		expect((await notes.load()).indexExists).toBe(false);
-		expect(await notes.scan()).toEqual([{ id: 'loose', name: 'Loose' }]);
+	it('reports a missing index', async () => {
+		expect(await collection(makeAdapter()).load()).toEqual({ items: [], activeId: null, indexExists: false });
 	});
 });
