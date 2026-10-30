@@ -16,4 +16,27 @@ describe('MCPClient', () => {
 		}
 		expect(client.isConnected()).toBe(false);
 	});
+
+	it('reports a crashed server as disconnected and starts it again on the next call', async () => {
+		const client = new MCPClient({ name: 'mock', command: process.execPath, args: [MOCK_SERVER], enabled: true } as never);
+		await client.connect();
+		try {
+			await expect(client.callTool('vault_echo', { text: 'crash' })).rejects.toThrow();
+			expect(client.isConnected()).toBe(false);
+
+			expect(await client.callTool('vault_echo', { text: 'back' })).toBe('MCP_SENTINEL back');
+			expect(client.isConnected()).toBe(true);
+		} finally {
+			await client.disconnect();
+		}
+	});
+
+	it('does not start a server again after an explicit disconnect', async () => {
+		const client = new MCPClient({ name: 'mock', command: process.execPath, args: [MOCK_SERVER], enabled: true } as never);
+		await client.connect();
+		await client.disconnect();
+
+		await expect(client.callTool('vault_echo', { text: 'x' })).rejects.toThrow('Not connected');
+	});
 });
+

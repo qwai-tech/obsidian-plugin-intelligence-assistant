@@ -19,13 +19,16 @@ export interface MCPTool {
 
 export class MCPClient {
 	private session: McpStdioSession | null = null;
+	private wanted = false;
 
 	constructor(private _config: MCPServerConfig) {}
 
 	async connect(): Promise<void> {
-		if (this.session) {
+		this.wanted = true;
+		if (this.session?.isOpen) {
 			return;
 		}
+		this.session = null;
 
 		try {
 			// Resolve command path if needed (e.g., npx -> /usr/local/bin/npx)
@@ -84,13 +87,14 @@ export class MCPClient {
 	}
 
 	async disconnect(): Promise<void> {
+		this.wanted = false;
 		const session = this.session;
 		this.session = null;
 		await session?.close();
 	}
 
 	async listTools(): Promise<MCPTool[]> {
-		const session = this.requireSession();
+		const session = await this.liveSession();
 		try {
 			const tools: MCPTool[] = [];
 			let cursor: string | undefined;
@@ -107,7 +111,7 @@ export class MCPClient {
 	}
 
 	async callTool(name: string, args: Record<string, unknown>): Promise<unknown> {
-		const session = this.requireSession();
+		const session = await this.liveSession();
 		try {
 			const response = await session.request('tools/call', { name, arguments: args }) as { isError?: boolean; content?: unknown; structuredContent?: unknown };
 			if (response.isError) {
@@ -125,10 +129,14 @@ export class MCPClient {
 	}
 
 	isConnected(): boolean {
-		return this.session !== null;
+		return this.session?.isOpen ?? false;
 	}
 
-	private requireSession(): McpStdioSession {
+	private async liveSession(): Promise<McpStdioSession> {
+		if (!this.wanted) {
+			throw new Error('Not connected to MCP server');
+		}
+		await this.connect();
 		if (!this.session) {
 			throw new Error('Not connected to MCP server');
 		}

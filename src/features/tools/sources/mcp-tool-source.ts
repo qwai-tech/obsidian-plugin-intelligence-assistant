@@ -31,6 +31,7 @@ export class McpToolSource implements ToolSource {
 	 * ToolRegistry can isolate this source and keep the others.
 	 */
 	async load(): Promise<SourceTool[]> {
+		await this.dispose();
 		const client = new MCPClient(this.config);
 		this.client = client;
 		await client.connect();
@@ -40,8 +41,8 @@ export class McpToolSource implements ToolSource {
 
 	/** Disconnect the MCP client if one was created. */
 	async dispose(): Promise<void> {
-		if (this.client) {
-			await this.client.disconnect();
-		}
+		const client = this.client;
+		this.client = null;
+		await client?.disconnect();
 	}
 }

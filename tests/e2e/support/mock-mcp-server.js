@@ -65,6 +65,9 @@ rl.on('line', (line) => {
 		case 'tools/call': {
 			const args = message.params?.arguments ?? {};
 			const text = typeof args.text === 'string' ? args.text : '';
+			if (text === 'crash') {
+				process.exit(1);
+			}
 			result(message.id, {
 				content: [{ type: 'text', text: `MCP_SENTINEL ${text}`.trim() }],
 				isError: false,

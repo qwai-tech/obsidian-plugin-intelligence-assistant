@@ -66,6 +66,10 @@ export class McpStdioSession {
 		});
 	}
 
+	get isOpen(): boolean {
+		return !this.closed;
+	}
+
 	close(): Promise<void> {
 		if (!this.closed) {
 			this.fail(new Error('MCP session is closed'));
