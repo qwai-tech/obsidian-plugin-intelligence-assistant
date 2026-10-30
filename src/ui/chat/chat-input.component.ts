@@ -5,6 +5,7 @@ import { t } from '@/i18n';
 import type { ModelInfo } from '@/features/llm';
 import { TestIds } from '@/ui/utils/test-ids';
 import { isIconId } from '@/ui/utils/icon';
+import { activeAgent } from '@/features/chat';
 
 export interface ChatInputCallbacks {
 	onSendMessage: (text: string) => Promise<void>;
@@ -185,8 +186,7 @@ export class ChatInputComponent {
 
 		let showModelSelect = mode === 'chat';
 		if (mode === 'agent') {
-			const activeId = this.plugin.settings.activeAgentId;
-			const agent = this.plugin.settings.agents.find(a => a.id === activeId);
+			const agent = activeAgent(this.plugin.settings);
 			if (agent?.modelStrategy?.strategy === 'chat-view') {
 				showModelSelect = true;
 			}

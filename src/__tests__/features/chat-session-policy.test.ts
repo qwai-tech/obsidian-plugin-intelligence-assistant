@@ -1,6 +1,7 @@
 import { createTestAgent } from '@/test-support/test-utils';
 import { DEFAULT_AGENT_ID } from '@/core/constants';
 import {
+	activeAgent,
 	agentModelId,
 	openingSession,
 	pickAgentId,
@@ -87,5 +88,15 @@ describe('openingSession', () => {
 
 	it('keeps the active agent untouched in chat mode', () => {
 		expect(openingSession(settings({ activeAgentId: 'a1' }), 'chat')).toEqual({ mode: 'chat', activeAgentId: 'a1' });
+	});
+});
+
+describe('activeAgent', () => {
+	it('returns the agent whose id is active, and null when none is or it no longer exists', () => {
+		const agents = [createTestAgent({ id: 'a' }), createTestAgent({ id: 'b' })];
+
+		expect(activeAgent({ agents, activeAgentId: 'b' })).toBe(agents[1]);
+		expect(activeAgent({ agents, activeAgentId: null })).toBeNull();
+		expect(activeAgent({ agents, activeAgentId: 'gone' })).toBeNull();
 	});
 });

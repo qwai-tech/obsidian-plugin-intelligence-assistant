@@ -1,4 +1,4 @@
-export { agentModelId, openingSession, pickAgentId, selectionForConversation, selectionForNewChat } from './chat-session-policy';
+export { activeAgent, agentModelId, openingSession, pickAgentId, selectionForConversation, selectionForNewChat } from './chat-session-policy';
 export type { ChatMode, SessionSelection } from './chat-session-policy';
 export { ChatService } from './chat.service';
 export { ConversationNamer } from './conversation-namer';

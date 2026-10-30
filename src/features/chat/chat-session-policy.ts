@@ -24,6 +24,11 @@ export function pickAgentId(settings: Pick<SessionSettings, 'agents' | 'activeAg
 	return (agents.find(agent => agent.id === DEFAULT_AGENT_ID) ?? agents[0])?.id ?? null;
 }
 
+export function activeAgent(settings: Pick<SessionSettings, 'agents' | 'activeAgentId'>): Agent | null {
+	const { agents, activeAgentId } = settings;
+	return activeAgentId ? agents.find(agent => agent.id === activeAgentId) ?? null : null;
+}
+
 export function agentModelId(agent: Agent, selectedModel: string, defaultModel: string): string {
 	switch (agent.modelStrategy?.strategy) {
 		case 'chat-view':

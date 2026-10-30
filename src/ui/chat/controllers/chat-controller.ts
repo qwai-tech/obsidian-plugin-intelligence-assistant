@@ -4,6 +4,7 @@ import { t } from '@/i18n';
 import type { Message } from '@/features/conversations';
 import type { LLMConfig, StreamChunk } from '@/features/llm';
 import type { FileReference, ChatService } from '@/features/chat';
+import { activeAgent } from '@/features/chat';
 import { renderAssistantMarkdown } from '@/ui/chat/message-renderer';
 import { appendTokenUsageToMessage } from '@/ui/chat/message-footer';
 import { renderLiveTrace } from '@/ui/chat/agent-trace-view';
@@ -393,8 +394,6 @@ export class ChatController extends BaseController {
 	}
 
 	private getActiveAgent() {
-		const activeId = this.plugin.settings.activeAgentId;
-		if (!activeId) return null;
-		return this.plugin.settings.agents.find((a: { id: string }) => a.id === activeId) || null;
+		return activeAgent(this.plugin.settings);
 	}
 }

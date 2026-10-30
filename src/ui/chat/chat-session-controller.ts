@@ -6,6 +6,7 @@ import type { Agent } from '@/features/agent';
 import type { Conversation, ConversationConfig } from '@/features/conversations';
 import type { PluginSettings } from '@/features/settings';
 import {
+	activeAgent,
 	agentModelId,
 	pickAgentId,
 	selectionForConversation,
@@ -39,8 +40,7 @@ export class ChatSessionController {
 	}
 
 	activeAgent(): Agent | null {
-		const activeId = this.settings.activeAgentId;
-		return activeId ? this.settings.agents.find(agent => agent.id === activeId) ?? null : null;
+		return activeAgent(this.settings);
 	}
 
 	ragActive(): boolean {
