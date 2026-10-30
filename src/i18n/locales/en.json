@@ -42,7 +42,7 @@
       "configStatus": {
         "name": "Configuration status",
         "desc": "Overall plugin configuration status",
-        "ok": "Configured ({{providers}} providers, {{conversations}} conversations)",
+        "ok": "Configured · providers: {{providers}} · conversations: {{conversations}}",
         "incomplete": "Incomplete - Please configure providers and models"
       }
     },
@@ -100,7 +100,7 @@
       "count_one": "{{count}} provider configured",
       "count_other": "{{count}} providers configured",
       "count": "{{count}} providers configured",
-      "addBtn": "+ Add provider",
+      "addBtn": "Add provider",
       "empty": "No providers configured. Select \"Add provider\" to get started.",
       "tableHeaders": {
         "provider": "Provider",
@@ -167,7 +167,7 @@
       "inspectorBtn": "Open MCP inspector",
       "testAllBtn": "Test all connections",
       "refreshAllBtn": "Refresh all tools",
-      "addBtn": "+ Add MCP server",
+      "addBtn": "Add MCP server",
       "empty": "No MCP servers configured. Select Add MCP server to get started.",
       "tableHeaders": {
         "name": "Name",
@@ -627,7 +627,7 @@
         "websearch": "Web search"
       },
       "general": {
-        "title": "General settings",
+        "title": "General",
         "enableRag": {
           "name": "Enable RAG",
           "desc": "Enable Retrieval-Augmented Generation for enhanced context"
@@ -687,7 +687,7 @@
         }
       },
       "chunking": {
-        "title": "Chunking settings",
+        "title": "Chunking",
         "strategy": {
           "name": "Chunking strategy",
           "desc": "Strategy for splitting documents into chunks",
@@ -714,7 +714,7 @@
         }
       },
       "search": {
-        "title": "Search settings",
+        "title": "Search",
         "searchType": {
           "name": "Search type",
           "desc": "Type of similarity search to perform",
@@ -761,14 +761,14 @@
         }
       },
       "advanced": {
-        "title": "Advanced settings",
+        "title": "Advanced",
         "batchSize": {
           "name": "Embedding batch size",
           "desc": "Number of chunks to embed in parallel"
         }
       },
       "grading": {
-        "title": "Grading settings",
+        "title": "Grading",
         "desc": "Grade retrieved chunks for relevance before sending to the LLM. This helps filter out low-quality results.",
         "enableGrading": {
           "name": "Enable grading threshold",
@@ -1339,7 +1339,7 @@
       }
     },
     "provider": {
-      "title": "Provider settings",
+      "title": "Provider",
       "selectProvider": {
         "name": "Provider",
         "desc": "Select the LLM provider type",

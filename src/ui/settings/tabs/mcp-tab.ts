@@ -417,7 +417,7 @@ export async function testAllMcpConnections(plugin: IntelligenceAssistantPlugin)
 
 export function openAddMcpServer(app: App, plugin: IntelligenceAssistantPlugin, onAdded: () => void): void {
 	const draft: MCPServerConfig = {
-		name: 'New MCP Server',
+		name: 'New MCP server',
 		command: '',
 		args: [],
 		env: {},
