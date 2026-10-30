@@ -12,21 +12,13 @@
       "usage": "Využitie"
     },
     "general": {
-      "desc": "Konfigurácia všeobecných nastavení pluginu inteligentného asistenta.",
       "pluginVersion": {
-        "name": "Verzia pluginu",
-        "desc": "Aktuálna verzia pluginu inteligentného asistenta"
+        "name": "Verzia pluginu"
       },
       "defaultModel": {
         "name": "Predvolený model",
         "desc": "Predvolený model na použitie v konverzáciách",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Predvolený režim chatu",
-        "desc": "Vyberte, v akom režime sa otvorí zobrazenie chatu",
-        "chat": "Režim chatu",
-        "agent": "Režim agenta"
       },
       "conversationTitleMode": {
         "name": "Režim názvu konverzácie",
@@ -102,11 +94,6 @@
       "count": "{{count}} poskytovatelia nakonfigurovaní",
       "addBtn": "+ Pridať poskytovateľa",
       "empty": "Žiadni poskytovatelia. Vyberte „Pridať poskytovateľa“ a začnite.",
-      "tableHeaders": {
-        "provider": "Poskytovateľ",
-        "status": "Stav",
-        "actions": "Akcie"
-      },
       "status": {
         "ready": "Pripravený",
         "needsConfig": "Vyžaduje konfiguráciu",
@@ -117,7 +104,6 @@
         "serverError": "Chyba servera"
       },
       "guidance": {
-        "requiresCli": "Vyžaduje lokálne CLI",
         "configureBaseUrl": "Konfigurovať základnú URL",
         "addApiKey": "Pridať API kľúč"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "obnoviť všetky nástroje",
       "addBtn": "+ Pridať MCP server",
       "empty": "Žiadne MCP servery. Vyberte Pridať MCP server a začnite.",
-      "tableHeaders": {
-        "name": "Názov",
-        "command": "Príkaz",
-        "arguments": "Argumenty",
-        "status": "Stav",
-        "tools": "Nástroje",
-        "actions": "Akcie"
-      },
       "untitled": "MCP server bez názvu",
       "notConfigured": "Nenakonfigurované",
-      "noArgs": "Žiadne",
       "cached": "V cache",
-      "disabled": "Zakázané",
       "envVars_one": "{{count}} env premenná",
       "envVars_other": "{{count}} env premenné",
       "envVars": "{{count}} env premenné",
@@ -244,26 +220,13 @@
       "count": "{{count}} agenti nakonfigurovaní",
       "addBtn": "+ pridať agenta",
       "empty": "Žiadni agenti. Vyberte pridať agenta a začnite.",
-      "tableHeaders": {
-        "agent": "Agent",
-        "model": "Model",
-        "capabilities": "Schopnosti",
-        "tools": "Nástroje",
-        "actions": "Akcie"
-      },
       "defaultBadge": "Predvolené",
       "systemPrompt": "Systémová výzva • {{promptName}}",
       "customPrompt": "Vlastná výzva",
       "model": {
         "notSet": "Nenastavené",
-        "notFound": "Model nenájdený v cache",
         "useChatView": "Použiť model zobrazenia chatu",
-        "useChatViewDesc": "Použije model zvolený v zobrazení chatu",
-        "useDefault": "Použiť predvolený model",
-        "useDefaultDesc": "Použije predvolený model z nastavení"
-      },
-      "capabilities": {
-        "noSpecialModes": "Žiadne špeciálne režimy"
+        "useDefault": "Použiť predvolený model"
       },
       "tools": {
         "builtIn": "{{count}} vstavaný",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp servery",
         "mcpTool_one": "{{count}} mcp nástroj",
         "mcpTool_other": "{{count}} mcp nástroje",
-        "mcpTool": "{{count}} mcp nástroje",
-        "noTools": "Žiadne povolené nástroje"
+        "mcpTool": "{{count}} mcp nástroje"
       },
       "actions": {
         "edit": "Upraviť",
-        "delete": "odstrániť",
-        "protected": "chránené"
+        "delete": "odstrániť"
       },
       "confirm": {
         "delete": "Odstrániť agenta „{{name}}“?"
@@ -288,18 +249,6 @@
       "desc": "Spravujte systémové výzvy, ktoré definujú správanie a osobnosť vášho AI asistenta.",
       "addBtn": "+ pridať systémovú výzvu",
       "empty": "Žiadne systémové výzvy. Vyberte pridať systémovú výzvu a začnite.",
-      "tableHeaders": {
-        "name": "Názov",
-        "contentPreview": "Náhľad obsahu",
-        "created": "Vytvorené",
-        "updated": "Aktualizované",
-        "enabled": "Povolené",
-        "actions": "Akcie"
-      },
-      "status": {
-        "enabled": "Povolené",
-        "disabled": "Zakázané"
-      },
       "actions": {
         "edit": "Upraviť",
         "disable": "Zakázať",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "pripojené",
           "disconnected": "odpojené"
-        }
+        },
+        "addBtn": "Pridať MCP nástroje"
       },
       "openapi": {
         "desc": "Generovanie HTTP nástrojov z dokumentov OpenAPI. Vzdialené špecifikácie sú uložené v {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} akcie nakonfigurované ({{enabled}} povolených)",
       "addBtn": "+ pridať rýchlu akciu",
       "empty": "Žiadne rýchle akcie. Vyberte pridať rýchlu akciu a začnite.",
-      "tableHeaders": {
-        "action": "Akcia",
-        "type": "Typ",
-        "model": "Model",
-        "promptPreview": "Náhľad výzvy",
-        "actions": "Akcie"
-      },
       "defaultModel": "Predvolené",
       "editBtn": "Upraviť",
       "deleteBtn": "odstrániť",
@@ -1004,26 +947,16 @@
     "currentConversation": "Aktuálna konverzácia",
     "new": "Nové",
     "settings": "Nastavenia",
-    "openSettingsTitle": "Otvoriť nastavenia pluginu",
-    "mode": "Režim",
-    "prompt": "Výzva",
-    "agent": "Agent",
     "modeOptions": {
       "chat": "Chat",
       "agent": "Agent"
     },
-    "noSystemPrompt": "Žiadna systémová výzva",
     "noAgentsAvailable": "Žiadni dostupní agenti",
-    "sendHintPrefix": "Stlačte ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " na odoslanie",
     "sendAriaLabel": "Odoslať správu",
     "stop": " Zastaviť",
-    "addReference": "Pridať referenciu",
     "addReferenceTooltip": "Pridať referenciu súboru alebo priečinka (@)",
     "emptyHeading": "Začnite konverzáciu",
     "emptySubtext": "Napíšte správu nižšie a začnite, alebo vyberte konverzáciu z histórie.",
-    "noAgentConfig": "Žiadni nakonfigurovaní agenti",
     "selectAgent": "Vyberte agenta…",
     "notices": {
       "stopping": "Zastavujem generovanie...",
@@ -1047,23 +980,15 @@
       "noAgents": "Žiadni dostupní agenti. Nakonfigurujte ich v Nastavenia → Agenti.",
       "ragDisabled": "RAG je zakázaný v nastaveniach. Povoľte ho v nastavenia → funkcie chatu → RAG.",
       "webSearchDisabled": "Webové vyhľadávanie je zakázané v nastaveniach. Povoľte ho v nastavenia → funkcie chatu → webové vyhľadávanie.",
-      "noFilesInVault": "V trezore neboli nájdené žiadne súbory",
       "attached": "Priložené: {{name}}",
       "attachedImages": "Priložených {{count}} obrázkov",
       "referencesAdded": "Pridaných {{count}} referencií",
       "fileNotFound": "Súbor nebol nájdený: {{path}}",
       "agentConfigApplied": "Aplikovaná konfigurácia pre agenta: {{name}}",
-      "waitForComplete": "Čakajte prosím na dokončenie aktuálnej odpovede",
-      "chatServiceFallback": "ChatService nie je nakonfigurovaný. Používam záložný ChatView.",
-      "noModelSelected": "Žiadny model nevybraný",
-      "noProviderConfig": "Konfigurácia poskytovateľa nebola nájdená",
-      "noResponseToRegenerate": "Žiadna odpoveď na regeneráciu",
-      "agentNotFound": "Agent nebol nájdený",
       "unableToLoadRag": "Nedajú sa načítať štatistiky RAG.",
       "referenced": "Odkazovaný: {{name}}"
     },
     "status": {
-      "available": "Dostupné",
       "unavailable": "Nedostupné",
       "disabled": "Zakázané",
       "on": "Zapnuté · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG je momentálne vypnutý pre tento chat."
     },
     "agentSummary": {
-      "model": "Model",
-      "temp": "Tep.",
-      "max": "Max",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Nástroje",
-      "memory": "Pamäť",
-      "none": "Žiadna",
-      "configuration": "Konfigurácia {{name}}",
-      "modelFixed": "{{name}} · Pevný",
-      "modelDefault": "{{name}} · Predvolený",
-      "modelChatView": "{{name}} · Zobrazenie chatu",
-      "customModel": "Vlastný model",
-      "notSet": "Nenastavené",
-      "auto": "Automaticky",
       "on": "Zapnuté",
-      "off": "Vypnuté",
-      "shortTerm": "Krátkodobá",
-      "longTerm": "Dlhodobá",
-      "disabledMemory": "Zakázaná",
-      "builtIn": "{{count}} vstavaný",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Vypnuté"
     },
     "message": {
       "webResults": "Webové výsledky",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Vložiť do poznámok",
       "regenerate": "Regenerovať"
     },
-    "streaming": {
-      "thinking": "Premýšľam..."
-    },
     "toolCall": {
-      "thinking": "Premýšľam",
       "executionProcess": "Proces vykonávania",
       "input": "Vstup",
       "output": "Výstup",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Použiť indexované poznámky ako kontext",
     "webSearchLabel": "Webové vyhľadávanie",
     "webSearchTooltipLabel": "Vyhľadávať na internete podľa potreby",
-    "imageUnavailable": "Prikladanie obrázkov nie je pre aktuálny model dostupné.",
-    "newChat": "Nový chat",
     "newConversation": "Nová konverzácia",
     "searchConversations": "Hľadať konverzácie...",
     "header": {
-      "model": "Model",
-      "advancedParams": "Pokročilé parametre",
-      "temperature": "Teplota",
-      "maxTokens": "Max tokenov",
-      "topP": "Top P",
-      "freqPenalty": "Frekv. pokuta",
-      "presPenalty": "Prít. pokuta",
-      "agentConfig": "Konfigurácia agenta",
-      "modelsCount": "Modely: {{count}}",
-      "tokensCount": "Tokeny: {{count}}",
       "noModels": "Žiadne dostupné modely"
-    },
-    "temperature": {
-      "precise": "0 (Presné)",
-      "balanced": "1 (Vyvážené)",
-      "creative": "2 (Kreatívne)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Vložiť do vybranej poznámky",
         "createNew": "Vytvoriť novú poznámku",
         "noResults": "Nenašli sa žiadne zodpovedajúce poznámky."
+      },
+      "agentTask": {
+        "cancel": "Zrušiť",
+        "fieldLabel": "Úloha",
+        "newConversation": "Začať v novej konverzácii",
+        "newConversationDesc": "Ponechať toto spustenie agenta oddelene od aktuálneho chatu.",
+        "placeholder": "Sem zadajte svoju úlohu...",
+        "start": "Začať",
+        "title": "Spustiť úlohu agenta"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Vyberte prosím typ poskytovateľa",
         "invalidUrl": "Neplatný formát základnej URL. Zadajte platnú URL (napr. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Modely v cache: {{count}}",
+      "connectionFailed": "Test pripojenia zlyhal. Skontrolujte nastavenia poskytovateľa.",
+      "connectionSuccess": "Pripojenie úspešné. Počet modelov v cache: {{count}}.",
+      "noCachedModels": "Žiadne modely v cache",
+      "testConnection": "Otestovať pripojenie",
+      "testing": "Testuje sa..."
     },
     "mcpInspector": {
       "title": "MCP inšpektor",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Neplatné číslo pre parameter: {{name}}",
           "invalidJson": "Neplatný JSON pre parameter: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Žiadne MCP servery nakonfigurované",
-        "testing": "Testujem {{count}} MCP pripojení serverov...",
-        "allSuccess": "všetky {{count}} mcp servery úspešne pripojené!",
-        "partial": "{{success}} pripojených, {{failed}} zlyhalo"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Verzia: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Server offline",
-      "connectionError": "Chyba pripojenia",
       "pullTitle": "Stiahnuť nový model",
       "pullHint": "Zadajte názov modelu na stiahnutie z knižnice Ollama (napr. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Spracovávam...",
     "textUpdated": "Text úspešne aktualizovaný",
     "error": "Chyba: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Úloha agenta: opýtať sa na aktuálnu poznámku",
+    "createProjectBrief": "Úloha agenta: vytvoriť prehľad projektu",
+    "createResearchBrief": "Úloha agenta: vytvoriť prehľad výskumu",
+    "diagnoseVault": "Úloha agenta: diagnostikovať trezor",
+    "doctorLinksTags": "Úloha agenta: vylepšiť odkazy, značky a vlastnosti",
+    "draftFromNote": "Úloha agenta: koncept z aktuálnej poznámky",
+    "findDuplicateNotes": "Úloha agenta: nájsť duplikáty a kandidátov na zlúčenie",
+    "findRelatedNotes": "Úloha agenta: nájsť súvisiace poznámky",
+    "generateWeeklyReview": "Úloha agenta: vygenerovať týždenný prehľad",
+    "improveSelection": "Úloha agenta: vylepšiť výber",
+    "openChatMain": "Otvoriť AI chat v hlavnej oblasti",
+    "openChatSidebar": "Otvoriť AI chat v bočnom paneli",
+    "organizeCurrentNote": "Úloha agenta: usporiadať aktuálnu poznámku",
+    "sourceGroundedQuestion": "Úloha agenta: položiť otázku podloženú zdrojmi",
+    "summarizeCurrentNote": "Úloha agenta: zhrnúť aktuálnu poznámku",
+    "switchModel": "Prepnúť model"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: opýtať sa agenta na tento súbor",
+    "createProjectBrief": "Intelligence assistant: vytvoriť prehľad projektu pomocou agenta",
+    "createResearchBrief": "Intelligence assistant: vytvoriť prehľad výskumu pomocou agenta",
+    "doctorLinksTags": "Intelligence assistant: vylepšiť odkazy, značky a vlastnosti pomocou agenta",
+    "draftFromFile": "Intelligence assistant: vytvoriť koncept z tohto súboru pomocou agenta",
+    "findDuplicates": "Intelligence assistant: nájsť duplikáty a kandidátov na zlúčenie pomocou agenta",
+    "findRelatedNotes": "Intelligence assistant: nájsť súvisiace poznámky pomocou agenta",
+    "improveFolder": "Intelligence assistant: vylepšiť odkazy, značky a vlastnosti priečinka pomocou agenta",
+    "organizeFolder": "Intelligence assistant: usporiadať priečinok pomocou agenta",
+    "summarize": "Intelligence assistant: zhrnúť pomocou agenta"
+  },
+  "ribbon": {
+    "openChat": "Otvoriť AI chat"
   }
 }

@@ -12,21 +12,13 @@
       "usage": "Bruk"
     },
     "general": {
-      "desc": "Konfigurer generelle innstillingar for intelligensassistent-tillegget.",
       "pluginVersion": {
-        "name": "Tilleggsversjon",
-        "desc": "Gjeldande versjon av intelligensassistent-tillegget"
+        "name": "Tilleggsversjon"
       },
       "defaultModel": {
         "name": "Standardmodell",
         "desc": "Standardmodell som vert nytta til samtalar",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Standard chattmodus",
-        "desc": "Vel kva modus chattvindauget opnar med",
-        "chat": "Chattmodus",
-        "agent": "Agentmodus"
       },
       "conversationTitleMode": {
         "name": "Samtaletittel-modus",
@@ -102,11 +94,6 @@
       "count": "{{count}} leverandørar konfigurert",
       "addBtn": "+ Legg til leverandør",
       "empty": "Ingen leverandørar konfigurert. Vel «Legg til leverandør» for å kome i gang.",
-      "tableHeaders": {
-        "provider": "Leverandør",
-        "status": "Status",
-        "actions": "Handlingar"
-      },
       "status": {
         "ready": "Klar",
         "needsConfig": "Treng konfigurasjon",
@@ -117,7 +104,6 @@
         "serverError": "Tenarfeil"
       },
       "guidance": {
-        "requiresCli": "Krev lokal CLI",
         "configureBaseUrl": "Konfigurer basis-URL",
         "addApiKey": "Legg til API-nøkkel"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "oppdater alle verktøy",
       "addBtn": "+ Legg til MCP-tenar",
       "empty": "Ingen MCP-tenarar konfigurert. Vel Legg til MCP-tenar for å kome i gang.",
-      "tableHeaders": {
-        "name": "Namn",
-        "command": "Kommando",
-        "arguments": "Argument",
-        "status": "Status",
-        "tools": "Verktøy",
-        "actions": "Handlingar"
-      },
       "untitled": "Namnlaus MCP-tenar",
       "notConfigured": "Ikkje konfigurert",
-      "noArgs": "Ingen",
       "cached": "Mellomlagra",
-      "disabled": "Deaktivert",
       "envVars_one": "{{count}} miljøvariabel",
       "envVars_other": "{{count}} miljøvariablar",
       "envVars": "{{count}} miljøvariablar",
@@ -244,26 +220,13 @@
       "count": "{{count}} agentar konfigurert",
       "addBtn": "+ legg til agent",
       "empty": "Ingen agentar konfigurert. Vel legg til agent for å kome i gang.",
-      "tableHeaders": {
-        "agent": "Agent",
-        "model": "Modell",
-        "capabilities": "Eigenskapar",
-        "tools": "Verktøy",
-        "actions": "Handlingar"
-      },
       "defaultBadge": "Standard",
       "systemPrompt": "Systemleidetekst • {{promptName}}",
       "customPrompt": "Eigendefinert leidetekst",
       "model": {
         "notSet": "Ikkje sett",
-        "notFound": "Modell ikkje funnen i mellomlageret",
         "useChatView": "Nytt chattvindaugemodell",
-        "useChatViewDesc": "Vil nytte modellen som er vald i chattvindauget",
-        "useDefault": "Nytt standardmodell",
-        "useDefaultDesc": "Vil nytte standardmodell frå innstillingar"
-      },
-      "capabilities": {
-        "noSpecialModes": "Ingen spesielle moduser"
+        "useDefault": "Nytt standardmodell"
       },
       "tools": {
         "builtIn": "{{count}} innebygd",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} MCP-tenarar",
         "mcpTool_one": "{{count}} MCP-verktøy",
         "mcpTool_other": "{{count}} MCP-verktøy",
-        "mcpTool": "{{count}} MCP-verktøy",
-        "noTools": "Ingen verktøy aktivert"
+        "mcpTool": "{{count}} MCP-verktøy"
       },
       "actions": {
         "edit": "Rediger",
-        "delete": "slett",
-        "protected": "verna"
+        "delete": "slett"
       },
       "confirm": {
         "delete": "Slett agenten «{{name}}»?"
@@ -288,18 +249,6 @@
       "desc": "Handter systemleidetekstar som definerer åtferda og personlegdomen til AI-assistenten.",
       "addBtn": "+ legg til systemleidetekst",
       "empty": "Ingen systemleidetekstar konfigurert. Vel legg til systemleidetekst for å kome i gang.",
-      "tableHeaders": {
-        "name": "Namn",
-        "contentPreview": "Innhaldsførehandsvising",
-        "created": "Oppretta",
-        "updated": "Oppdatert",
-        "enabled": "Aktivert",
-        "actions": "Handlingar"
-      },
-      "status": {
-        "enabled": "Aktivert",
-        "disabled": "Deaktivert"
-      },
       "actions": {
         "edit": "Rediger",
         "disable": "Deaktiver",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "tilkopla",
           "disconnected": "fråkopla"
-        }
+        },
+        "addBtn": "Legg til MCP-verktøy"
       },
       "openapi": {
         "desc": "Generer HTTP-verktøy frå OpenAPI-dokument. Eksterne spesifikasjonar vert mellomlagra under {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} handlingar konfigurert ({{enabled}} aktivert)",
       "addBtn": "+ legg til hurtighandling",
       "empty": "Ingen hurtighandlingar konfigurert. Vel legg til hurtighandling for å kome i gang.",
-      "tableHeaders": {
-        "action": "Handling",
-        "type": "Type",
-        "model": "Modell",
-        "promptPreview": "Leidetekstførehandsvising",
-        "actions": "Handlingar"
-      },
       "defaultModel": "Standard",
       "editBtn": "Rediger",
       "deleteBtn": "slett",
@@ -1004,26 +947,16 @@
     "currentConversation": "Gjeldande samtale",
     "new": "Ny",
     "settings": "Innstillingar",
-    "openSettingsTitle": "Opne tilleggsinnstillingar",
-    "mode": "Modus",
-    "prompt": "Leidetekst",
-    "agent": "Agent",
     "modeOptions": {
       "chat": "Chatt",
       "agent": "Agent"
     },
-    "noSystemPrompt": "Ingen systemleidetekst",
     "noAgentsAvailable": "Ingen agentar tilgjengelege",
-    "sendHintPrefix": "Trykk ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " for å sende",
     "sendAriaLabel": "Send melding",
     "stop": " Stopp",
-    "addReference": "Legg til referanse",
     "addReferenceTooltip": "Legg til fil- eller mappereferanse (@)",
     "emptyHeading": "Start ein samtale",
     "emptySubtext": "Skriv ei melding nedanfor for å kome i gang, eller vel ein samtale frå historikken.",
-    "noAgentConfig": "Ingen agentar konfigurert",
     "selectAgent": "Vel ein agent…",
     "notices": {
       "stopping": "Stoppar generering...",
@@ -1047,23 +980,15 @@
       "noAgents": "Ingen agentar tilgjengelege. Konfigurer agentar i Innstillingar → Agentar.",
       "ragDisabled": "RAG er deaktivert i innstillingane. Aktiver det under innstillingar → chattfunksjonar → RAG.",
       "webSearchDisabled": "Nettsøk er deaktivert i innstillingane. Aktiver det under innstillingar → chattfunksjonar → nettsøk.",
-      "noFilesInVault": "Ingen filer funne i kvelvet",
       "attached": "Vedlagd: {{name}}",
       "attachedImages": "Vedlagd {{count}} bilete",
       "referencesAdded": "La til {{count}} referanse(r)",
       "fileNotFound": "Fil ikkje funnen: {{path}}",
       "agentConfigApplied": "Nytta konfigurasjon for agenten: {{name}}",
-      "waitForComplete": "Vent til det noverande svaret er fullført",
-      "chatServiceFallback": "ChatService ikkje konfigurert. Nyttar ChatView-reserve.",
-      "noModelSelected": "Ingen modell vald",
-      "noProviderConfig": "Ingen leverandørkonfigurasjon funnen",
-      "noResponseToRegenerate": "Ingen svar å regenerere",
-      "agentNotFound": "Agent ikkje funnen",
       "unableToLoadRag": "Kan ikkje laste RAG-statistikk.",
       "referenced": "Referert: {{name}}"
     },
     "status": {
-      "available": "Tilgjengeleg",
       "unavailable": "Utilgjengeleg",
       "disabled": "Deaktivert",
       "on": "På · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG er for tida slått av for denne chatten."
     },
     "agentSummary": {
-      "model": "Modell",
-      "temp": "Temp",
-      "max": "Maks",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Verktøy",
-      "memory": "Minne",
-      "none": "Ingen",
-      "configuration": "{{name}}-konfigurasjon",
-      "modelFixed": "{{name}} · Fast",
-      "modelDefault": "{{name}} · Standard",
-      "modelChatView": "{{name}} · Chattvindauge",
-      "customModel": "Eigendefinert modell",
-      "notSet": "Ikkje sett",
-      "auto": "Auto",
       "on": "På",
-      "off": "Av",
-      "shortTerm": "Kortvarig",
-      "longTerm": "Langvarig",
-      "disabledMemory": "Deaktivert",
-      "builtIn": "{{count}} innebygd",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Av"
     },
     "message": {
       "webResults": "Nettresultat",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Set inn i notat",
       "regenerate": "Regenerer"
     },
-    "streaming": {
-      "thinking": "Tenkjer..."
-    },
     "toolCall": {
-      "thinking": "Tenkjer",
       "executionProcess": "Køyringsprosess",
       "input": "Inn",
       "output": "Ut",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Nytt indekserte notat som kontekst",
     "webSearchLabel": "Nettsøk",
     "webSearchTooltipLabel": "Søk på internett ved behov",
-    "imageUnavailable": "Biletevedlegg er ikkje tilgjengeleg for den gjeldande modellen.",
-    "newChat": "Ny chatt",
     "newConversation": "Ny samtale",
     "searchConversations": "Søk i samtalar...",
     "header": {
-      "model": "Modell",
-      "advancedParams": "Avanserte parametrar",
-      "temperature": "Temperatur",
-      "maxTokens": "Maks token",
-      "topP": "Topp P",
-      "freqPenalty": "Frekvensstraff",
-      "presPenalty": "Tilstadeveringsstraff",
-      "agentConfig": "Agentkonfigurasjon",
-      "modelsCount": "Modellar: {{count}}",
-      "tokensCount": "Token: {{count}}",
       "noModels": "Ingen modellar tilgjengelege"
-    },
-    "temperature": {
-      "precise": "0 (Presis)",
-      "balanced": "1 (Balansert)",
-      "creative": "2 (Kreativ)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Set inn i valt notat",
         "createNew": "Opprett nytt notat",
         "noResults": "Ingen samsvarande notat funne."
+      },
+      "agentTask": {
+        "cancel": "Avbryt",
+        "fieldLabel": "Oppgåve",
+        "newConversation": "Start i ny samtale",
+        "newConversationDesc": "Hald denne agentkøyringa skild frå den gjeldande samtalen.",
+        "placeholder": "Skriv inn oppgåva di her...",
+        "start": "Start",
+        "title": "Start agentoppgåve"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Vel ein leverandørtype",
         "invalidUrl": "Ugyldig basis-URL-format. Skriv inn ein gyldig URL (t.d. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Mellomlagra modellar: {{count}}",
+      "connectionFailed": "Tilkoplingstesten feila. Sjekk leverandørinnstillingane.",
+      "connectionSuccess": "Tilkoplinga var vellukka. {{count}} modell(ar) mellomlagra.",
+      "noCachedModels": "Ingen mellomlagra modellar",
+      "testConnection": "Test tilkopling",
+      "testing": "Testar..."
     },
     "mcpInspector": {
       "title": "MCP-inspektør",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Ugyldig tal for parameter: {{name}}",
           "invalidJson": "Ugyldig JSON for parameter: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Ingen MCP-tenarar konfigurert",
-        "testing": "Testar {{count}} MCP-tenartilkoplingar...",
-        "allSuccess": "alle {{count}} MCP-tenarar vart tilkopla!",
-        "partial": "{{success}} tilkopla, {{failed}} mislukkast"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Versjon: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Tenar offline",
-      "connectionError": "Tilkoblingsfeil",
       "pullTitle": "Hent ny modell",
       "pullHint": "Skriv inn eit modellnamn for å laste ned frå Ollama-biblioteket (t.d. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Handsamar...",
     "textUpdated": "Tekst oppdatert",
     "error": "Feil: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Agentoppgåve: spør om gjeldande notat",
+    "createProjectBrief": "Agentoppgåve: lag prosjektoversikt",
+    "createResearchBrief": "Agentoppgåve: lag forskingsoversikt",
+    "diagnoseVault": "Agentoppgåve: diagnostiser kvelvet",
+    "doctorLinksTags": "Agentoppgåve: forbetre lenkjer, merkelappar og eigenskapar",
+    "draftFromNote": "Agentoppgåve: skriv utkast frå gjeldande notat",
+    "findDuplicateNotes": "Agentoppgåve: finn duplikat og kandidatar for samanslåing",
+    "findRelatedNotes": "Agentoppgåve: finn relaterte notat",
+    "generateWeeklyReview": "Agentoppgåve: generer vekegjennomgang",
+    "improveSelection": "Agentoppgåve: forbetre utvalet",
+    "openChatMain": "Opne AI-chat i hovudområdet",
+    "openChatSidebar": "Opne AI-chat i sidefeltet",
+    "organizeCurrentNote": "Agentoppgåve: organiser gjeldande notat",
+    "sourceGroundedQuestion": "Agentoppgåve: still eit kjeldebasert spørsmål",
+    "summarizeCurrentNote": "Agentoppgåve: samanfatt gjeldande notat",
+    "switchModel": "Byt modell"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: spør agenten om denne fila",
+    "createProjectBrief": "Intelligence assistant: lag prosjektoversikt med agent",
+    "createResearchBrief": "Intelligence assistant: lag forskingsoversikt med agent",
+    "doctorLinksTags": "Intelligence assistant: forbetre lenkjer, merkelappar og eigenskapar med agent",
+    "draftFromFile": "Intelligence assistant: skriv utkast frå denne fila med agent",
+    "findDuplicates": "Intelligence assistant: finn duplikat og kandidatar for samanslåing med agent",
+    "findRelatedNotes": "Intelligence assistant: finn relaterte notat med agent",
+    "improveFolder": "Intelligence assistant: forbetre lenkjer, merkelappar og eigenskapar i mappa med agent",
+    "organizeFolder": "Intelligence assistant: organiser mappa med agent",
+    "summarize": "Intelligence assistant: samanfatt med agent"
+  },
+  "ribbon": {
+    "openChat": "Opne AI-chat"
   }
 }

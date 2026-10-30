@@ -12,21 +12,13 @@
       "usage": "استعمال"
     },
     "general": {
-      "desc": "ذہانت اسسٹنٹ پلگ ان کے لیے عام ترتیبات کنفیگر کریں۔",
       "pluginVersion": {
-        "name": "پلگ ان ورژن",
-        "desc": "ذہانت اسسٹنٹ پلگ ان کا موجودہ ورژن"
+        "name": "پلگ ان ورژن"
       },
       "defaultModel": {
         "name": "ڈیفالٹ ماڈل",
         "desc": "گفتگو کے لیے استعمال ہونے والا ڈیفالٹ ماڈل",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "ڈیفالٹ چیٹ موڈ",
-        "desc": "منتخب کریں کہ چیٹ ویو کس موڈ سے کھلے",
-        "chat": "چیٹ موڈ",
-        "agent": "ایجنٹ موڈ"
       },
       "conversationTitleMode": {
         "name": "گفتگو کے عنوان کا موڈ",
@@ -102,11 +94,6 @@
       "count": "{{count}} فراہم کنندگان کنفیگر ہیں",
       "addBtn": "+ فراہم کنندہ شامل کریں",
       "empty": "کوئی فراہم کنندہ کنفیگر نہیں۔ شروع کرنے کے لیے \"فراہم کنندہ شامل کریں\" منتخب کریں۔",
-      "tableHeaders": {
-        "provider": "فراہم کنندہ",
-        "status": "حالت",
-        "actions": "اقدامات"
-      },
       "status": {
         "ready": "تیار",
         "needsConfig": "کنفیگریشن کی ضرورت ہے",
@@ -117,7 +104,6 @@
         "serverError": "سرور کی خرابی"
       },
       "guidance": {
-        "requiresCli": "مقامی CLI کی ضرورت ہے",
         "configureBaseUrl": "بنیادی URL کنفیگر کریں",
         "addApiKey": "API کی شامل کریں"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "تمام ٹولز ریفریش",
       "addBtn": "+ MCP سرور شامل کریں",
       "empty": "کوئی MCP سرور کنفیگر نہیں۔ شروع کرنے کے لیے MCP سرور شامل کریں منتخب کریں۔",
-      "tableHeaders": {
-        "name": "نام",
-        "command": "کمانڈ",
-        "arguments": "دلائل",
-        "status": "حالت",
-        "tools": "ٹولز",
-        "actions": "اقدامات"
-      },
       "untitled": "بے نام MCP سرور",
       "notConfigured": "کنفیگر نہیں",
-      "noArgs": "کوئی نہیں",
       "cached": "کیشڈ",
-      "disabled": "غیر فعال",
       "envVars_one": "{{count}} ماحولیاتی متغیر",
       "envVars_other": "{{count}} ماحولیاتی متغیرات",
       "envVars": "{{count}} ماحولیاتی متغیرات",
@@ -244,26 +220,13 @@
       "count": "{{count}} ایجنٹس کنفیگر ہیں",
       "addBtn": "+ ایجنٹ شامل کریں",
       "empty": "کوئی ایجنٹ کنفیگر نہیں۔ شروع کرنے کے لیے ایجنٹ شامل کریں منتخب کریں۔",
-      "tableHeaders": {
-        "agent": "ایجنٹ",
-        "model": "ماڈل",
-        "capabilities": "صلاحیتیں",
-        "tools": "ٹولز",
-        "actions": "اقدامات"
-      },
       "defaultBadge": "ڈیفالٹ",
       "systemPrompt": "سسٹم ہدایت • {{promptName}}",
       "customPrompt": "کسٹم ہدایت",
       "model": {
         "notSet": "مقرر نہیں",
-        "notFound": "ماڈل کیش میں نہیں ملا",
         "useChatView": "چیٹ ویو ماڈل استعمال کریں",
-        "useChatViewDesc": "چیٹ ویو میں منتخب ماڈل استعمال کرے گا",
-        "useDefault": "ڈیفالٹ ماڈل استعمال کریں",
-        "useDefaultDesc": "ترتیبات سے ڈیفالٹ ماڈل استعمال کرے گا"
-      },
-      "capabilities": {
-        "noSpecialModes": "کوئی خاص موڈ نہیں"
+        "useDefault": "ڈیفالٹ ماڈل استعمال کریں"
       },
       "tools": {
         "builtIn": "{{count}} بلٹ ان",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp سرورز",
         "mcpTool_one": "{{count}} mcp ٹول",
         "mcpTool_other": "{{count}} mcp ٹولز",
-        "mcpTool": "{{count}} mcp ٹولز",
-        "noTools": "کوئی ٹول فعال نہیں"
+        "mcpTool": "{{count}} mcp ٹولز"
       },
       "actions": {
         "edit": "ترمیم",
-        "delete": "حذف",
-        "protected": "محفوظ"
+        "delete": "حذف"
       },
       "confirm": {
         "delete": "ایجنٹ «{{name}}» حذف کریں؟"
@@ -288,18 +249,6 @@
       "desc": "سسٹم ہدایات کا انتظام کریں جو آپ کے AI اسسٹنٹ کا رویہ اور شخصیت تعریف کرتی ہیں۔",
       "addBtn": "+ سسٹم ہدایت شامل کریں",
       "empty": "کوئی سسٹم ہدایت کنفیگر نہیں۔ شروع کرنے کے لیے سسٹم ہدایت شامل کریں منتخب کریں۔",
-      "tableHeaders": {
-        "name": "نام",
-        "contentPreview": "مواد کی پیش نظری",
-        "created": "بنایا گیا",
-        "updated": "اپ ڈیٹ ہوا",
-        "enabled": "فعال",
-        "actions": "اقدامات"
-      },
-      "status": {
-        "enabled": "فعال",
-        "disabled": "غیر فعال"
-      },
       "actions": {
         "edit": "ترمیم",
         "disable": "غیر فعال کریں",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "منسلک",
           "disconnected": "منقطع"
-        }
+        },
+        "addBtn": "MCP ٹولز شامل کریں"
       },
       "openapi": {
         "desc": "OpenAPI دستاویزات سے HTTP ٹولز بنائیں۔ ریموٹ اسپیکس {{cacheDir}} کے تحت کیشڈ ہوتے ہیں۔",
@@ -890,13 +840,6 @@
       "count": "{{count}} اقدامات کنفیگر ({{enabled}} فعال)",
       "addBtn": "+ فوری اقدام شامل کریں",
       "empty": "کوئی فوری اقدام کنفیگر نہیں۔ شروع کرنے کے لیے فوری اقدام شامل کریں منتخب کریں۔",
-      "tableHeaders": {
-        "action": "اقدام",
-        "type": "قسم",
-        "model": "ماڈل",
-        "promptPreview": "ہدایت کی پیش نظری",
-        "actions": "اقدامات"
-      },
       "defaultModel": "ڈیفالٹ",
       "editBtn": "ترمیم",
       "deleteBtn": "حذف",
@@ -1004,26 +947,16 @@
     "currentConversation": "موجودہ گفتگو",
     "new": "نیا",
     "settings": "ترتیبات",
-    "openSettingsTitle": "پلگ ان ترتیبات کھولیں",
-    "mode": "موڈ",
-    "prompt": "ہدایت",
-    "agent": "ایجنٹ",
     "modeOptions": {
       "chat": "چیٹ",
       "agent": "ایجنٹ"
     },
-    "noSystemPrompt": "کوئی سسٹم ہدایت نہیں",
     "noAgentsAvailable": "کوئی ایجنٹ دستیاب نہیں",
-    "sendHintPrefix": "",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " دبائیں بھیجنے کے لیے",
     "sendAriaLabel": "پیغام بھیجیں",
     "stop": " روکیں",
-    "addReference": "حوالہ شامل کریں",
     "addReferenceTooltip": "فائل یا فولڈر کا حوالہ شامل کریں (@)",
     "emptyHeading": "گفتگو شروع کریں",
     "emptySubtext": "شروع کرنے کے لیے نیچے ایک پیغام ٹائپ کریں، یا تاریخ سے گفتگو منتخب کریں۔",
-    "noAgentConfig": "کوئی ایجنٹ کنفیگر نہیں",
     "selectAgent": "ایک ایجنٹ منتخب کریں…",
     "notices": {
       "stopping": "جنریشن روکی جا رہی ہے...",
@@ -1047,23 +980,15 @@
       "noAgents": "کوئی ایجنٹ دستیاب نہیں۔ ترتیبات ← ایجنٹس میں ایجنٹس کنفیگر کریں۔",
       "ragDisabled": "RAG ترتیبات میں غیر فعال ہے۔ ترتیبات ← چیٹ خصوصیات ← RAG میں فعال کریں۔",
       "webSearchDisabled": "ویب تلاش ترتیبات میں غیر فعال ہے۔ ترتیبات ← چیٹ خصوصیات ← ویب تلاش میں فعال کریں۔",
-      "noFilesInVault": "vault میں کوئی فائل نہیں ملی",
       "attached": "منسلک: {{name}}",
       "attachedImages": "{{count}} تصویر منسلک",
       "referencesAdded": "{{count}} حوالے شامل",
       "fileNotFound": "فائل نہیں ملی: {{path}}",
       "agentConfigApplied": "ایجنٹ کی کنفیگریشن لاگو ہو گئی: {{name}}",
-      "waitForComplete": "براہ کرم موجودہ جواب مکمل ہونے کا انتظار کریں",
-      "chatServiceFallback": "ChatService کنفیگر نہیں۔ ChatView فال بیک استعمال ہو رہا ہے۔",
-      "noModelSelected": "کوئی ماڈل منتخب نہیں",
-      "noProviderConfig": "کوئی فراہم کنندہ کنفیگریشن نہیں ملی",
-      "noResponseToRegenerate": "دوبارہ بنانے کے لیے کوئی جواب نہیں",
-      "agentNotFound": "ایجنٹ نہیں ملا",
       "unableToLoadRag": "RAG کے اعداد و شمار لوڈ نہیں ہو سکے۔",
       "referenced": "حوالہ دیا گیا: {{name}}"
     },
     "status": {
-      "available": "دستیاب",
       "unavailable": "دستیاب نہیں",
       "disabled": "غیر فعال",
       "on": "آن · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG ابھی اس چیٹ کے لیے آف ہے۔"
     },
     "agentSummary": {
-      "model": "ماڈل",
-      "temp": "درجہ حرارت",
-      "max": "زیادہ سے زیادہ",
-      "rag": "RAG",
-      "web": "ویب",
-      "tools": "ٹولز",
-      "memory": "یادداشت",
-      "none": "کوئی نہیں",
-      "configuration": "{{name}} کنفیگریشن",
-      "modelFixed": "{{name}} · ثابت",
-      "modelDefault": "{{name}} · ڈیفالٹ",
-      "modelChatView": "{{name}} · چیٹ ویو",
-      "customModel": "کسٹم ماڈل",
-      "notSet": "مقرر نہیں",
-      "auto": "خودکار",
       "on": "آن",
-      "off": "آف",
-      "shortTerm": "قلیل المدت",
-      "longTerm": "طویل المدت",
-      "disabledMemory": "غیر فعال",
-      "builtIn": "{{count}} بلٹ ان",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "آف"
     },
     "message": {
       "webResults": "ویب نتائج",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "نوٹس میں داخل کریں",
       "regenerate": "دوبارہ بنائیں"
     },
-    "streaming": {
-      "thinking": "سوچ رہا ہے..."
-    },
     "toolCall": {
-      "thinking": "سوچ رہا ہے",
       "executionProcess": "عمل کا عمل",
       "input": "ان پٹ",
       "output": "آؤٹ پٹ",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "انڈیکس کردہ نوٹس کو سیاق و سباق کے طور پر استعمال کریں",
     "webSearchLabel": "ویب تلاش",
     "webSearchTooltipLabel": "ضرورت پڑنے پر انٹرنیٹ پر تلاش کریں",
-    "imageUnavailable": "موجودہ ماڈل کے لیے تصویر منسلک کرنا دستیاب نہیں۔",
-    "newChat": "نئی چیٹ",
     "newConversation": "نئی گفتگو",
     "searchConversations": "گفتگو تلاش کریں...",
     "header": {
-      "model": "ماڈل",
-      "advancedParams": "جدید پیرامیٹرز",
-      "temperature": "درجہ حرارت",
-      "maxTokens": "زیادہ سے زیادہ ٹوکنز",
-      "topP": "Top P",
-      "freqPenalty": "فریکوئنسی جرمانہ",
-      "presPenalty": "موجودگی جرمانہ",
-      "agentConfig": "ایجنٹ کنفیگریشن",
-      "modelsCount": "ماڈلز: {{count}}",
-      "tokensCount": "ٹوکنز: {{count}}",
       "noModels": "کوئی ماڈل دستیاب نہیں"
-    },
-    "temperature": {
-      "precise": "0 (درست)",
-      "balanced": "1 (متوازن)",
-      "creative": "2 (تخلیقی)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "منتخب نوٹ میں داخل کریں",
         "createNew": "نیا نوٹ بنائیں",
         "noResults": "کوئی مطابقت رکھنے والا نوٹ نہیں ملا۔"
+      },
+      "agentTask": {
+        "cancel": "منسوخ",
+        "fieldLabel": "ٹاسک",
+        "newConversation": "نئی گفتگو میں شروع کریں",
+        "newConversationDesc": "اس ایجنٹ رن کو موجودہ چیٹ سے الگ رکھیں۔",
+        "placeholder": "اپنا ٹاسک یہاں درج کریں...",
+        "start": "شروع کریں",
+        "title": "ایجنٹ ٹاسک شروع کریں"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "براہ کرم فراہم کنندہ کی قسم منتخب کریں",
         "invalidUrl": "غلط بنیادی URL فارمیٹ۔ براہ کرم ایک درست URL درج کریں (مثلاً https://api.example.com)"
-      }
+      },
+      "cachedModels": "کیشڈ ماڈلز: {{count}}",
+      "connectionFailed": "کنکشن ٹیسٹ ناکام ہو گیا۔ فراہم کنندہ کی ترتیبات چیک کریں۔",
+      "connectionSuccess": "کنکشن کامیاب۔ {{count}} ماڈل کیش کیے گئے۔",
+      "noCachedModels": "کوئی کیشڈ ماڈل نہیں",
+      "testConnection": "کنکشن ٹیسٹ کریں",
+      "testing": "ٹیسٹ ہو رہا ہے..."
     },
     "mcpInspector": {
       "title": "MCP انسپیکٹر",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "پیرامیٹر کے لیے غلط نمبر: {{name}}",
           "invalidJson": "پیرامیٹر کے لیے غلط JSON: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "کوئی MCP سرور کنفیگر نہیں",
-        "testing": "{{count}} MCP سرور کنکشن ٹیسٹ ہو رہے ہیں...",
-        "allSuccess": "تمام {{count}} mcp سرورز کامیابی سے منسلک ہو گئے!",
-        "partial": "{{success}} منسلک ہوئے، {{failed}} ناکام"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | ورژن: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "سرور آف لائن",
-      "connectionError": "کنکشن کی خرابی",
       "pullTitle": "نیا ماڈل پل کریں",
       "pullHint": "Ollama لائبریری سے ڈاؤن لوڈ کرنے کے لیے ماڈل کا نام درج کریں (مثلاً llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "پروسیس ہو رہا ہے...",
     "textUpdated": "متن کامیابی سے اپ ڈیٹ ہو گیا",
     "error": "خرابی: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "ایجنٹ ٹاسک: موجودہ نوٹ کے بارے میں پوچھیں",
+    "createProjectBrief": "ایجنٹ ٹاسک: پروجیکٹ کا خلاصہ بنائیں",
+    "createResearchBrief": "ایجنٹ ٹاسک: تحقیقی خلاصہ بنائیں",
+    "diagnoseVault": "ایجنٹ ٹاسک: vault کی تشخیص کریں",
+    "doctorLinksTags": "ایجنٹ ٹاسک: لنکس، ٹیگز اور خصوصیات بہتر بنائیں",
+    "draftFromNote": "ایجنٹ ٹاسک: موجودہ نوٹ سے مسودہ بنائیں",
+    "findDuplicateNotes": "ایجنٹ ٹاسک: ڈپلیکیٹ اور ضم کرنے کے قابل نوٹس تلاش کریں",
+    "findRelatedNotes": "ایجنٹ ٹاسک: متعلقہ نوٹس تلاش کریں",
+    "generateWeeklyReview": "ایجنٹ ٹاسک: ہفتہ وار جائزہ تیار کریں",
+    "improveSelection": "ایجنٹ ٹاسک: انتخاب بہتر بنائیں",
+    "openChatMain": "مرکزی حصے میں AI چیٹ کھولیں",
+    "openChatSidebar": "سائیڈ بار میں AI چیٹ کھولیں",
+    "organizeCurrentNote": "ایجنٹ ٹاسک: موجودہ نوٹ منظم کریں",
+    "sourceGroundedQuestion": "ایجنٹ ٹاسک: ماخذ پر مبنی سوال پوچھیں",
+    "summarizeCurrentNote": "ایجنٹ ٹاسک: موجودہ نوٹ کا خلاصہ کریں",
+    "switchModel": "ماڈل تبدیل کریں"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: اس فائل کے بارے میں ایجنٹ سے پوچھیں",
+    "createProjectBrief": "Intelligence assistant: ایجنٹ کے ساتھ پروجیکٹ کا خلاصہ بنائیں",
+    "createResearchBrief": "Intelligence assistant: ایجنٹ کے ساتھ تحقیقی خلاصہ بنائیں",
+    "doctorLinksTags": "Intelligence assistant: ایجنٹ کے ساتھ لنکس، ٹیگز اور خصوصیات بہتر بنائیں",
+    "draftFromFile": "Intelligence assistant: ایجنٹ کے ساتھ اس فائل سے مسودہ بنائیں",
+    "findDuplicates": "Intelligence assistant: ایجنٹ کے ساتھ ڈپلیکیٹ اور ضم کرنے کے قابل نوٹس تلاش کریں",
+    "findRelatedNotes": "Intelligence assistant: ایجنٹ کے ساتھ متعلقہ نوٹس تلاش کریں",
+    "improveFolder": "Intelligence assistant: ایجنٹ کے ساتھ فولڈر کے لنکس، ٹیگز اور خصوصیات بہتر بنائیں",
+    "organizeFolder": "Intelligence assistant: ایجنٹ کے ساتھ فولڈر منظم کریں",
+    "summarize": "Intelligence assistant: ایجنٹ کے ساتھ خلاصہ کریں"
+  },
+  "ribbon": {
+    "openChat": "AI چیٹ کھولیں"
   }
 }

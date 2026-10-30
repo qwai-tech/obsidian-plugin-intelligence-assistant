@@ -12,21 +12,13 @@
       "usage": "Usage"
     },
     "general": {
-      "desc": "Configure general settings for the intelligence assistant plugin.",
       "pluginVersion": {
-        "name": "Plugin version",
-        "desc": "Current version of the intelligence assistant plugin"
+        "name": "Plugin version"
       },
       "defaultModel": {
         "name": "Default model",
         "desc": "Default model to use for conversations",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Default chat mode",
-        "desc": "Choose which mode the chat view opens with",
-        "chat": "Chat mode",
-        "agent": "Agent mode"
       },
       "conversationTitleMode": {
         "name": "Conversation title mode",
@@ -102,11 +94,6 @@
       "count": "{{count}} providers configured",
       "addBtn": "+ Add provider",
       "empty": "No providers configured. Select \"Add provider\" to get started.",
-      "tableHeaders": {
-        "provider": "Provider",
-        "status": "Status",
-        "actions": "Actions"
-      },
       "status": {
         "ready": "Ready",
         "needsConfig": "Needs Configuration",
@@ -117,7 +104,6 @@
         "serverError": "Server error"
       },
       "guidance": {
-        "requiresCli": "Requires local CLI",
         "configureBaseUrl": "Configure base URL",
         "addApiKey": "Add API key"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "refresh all tools",
       "addBtn": "+ Add MCP server",
       "empty": "No MCP servers configured. Select Add MCP server to get started.",
-      "tableHeaders": {
-        "name": "Name",
-        "command": "Command",
-        "arguments": "Arguments",
-        "status": "Status",
-        "tools": "Tools",
-        "actions": "Actions"
-      },
       "untitled": "Untitled MCP Server",
       "notConfigured": "Not configured",
-      "noArgs": "None",
       "cached": "Cached",
-      "disabled": "Disabled",
       "envVars_one": "{{count}} env var",
       "envVars_other": "{{count}} env vars",
       "envVars": "{{count}} env vars",
@@ -244,26 +220,13 @@
       "count": "{{count}} agents configured",
       "addBtn": "+ add agent",
       "empty": "No agents configured. Select add agent to get started.",
-      "tableHeaders": {
-        "agent": "Agent",
-        "model": "Model",
-        "capabilities": "Capabilities",
-        "tools": "Tools",
-        "actions": "Actions"
-      },
       "defaultBadge": "Default",
       "systemPrompt": "System prompt • {{promptName}}",
       "customPrompt": "Custom prompt",
       "model": {
         "notSet": "Not set",
-        "notFound": "Model not found in cache",
         "useChatView": "Use Chat View Model",
-        "useChatViewDesc": "Will use model selected in chat view",
-        "useDefault": "Use Default Model",
-        "useDefaultDesc": "Will use default model from settings"
-      },
-      "capabilities": {
-        "noSpecialModes": "No special modes"
+        "useDefault": "Use Default Model"
       },
       "tools": {
         "builtIn": "{{count}} built-in",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp servers",
         "mcpTool_one": "{{count}} mcp tool",
         "mcpTool_other": "{{count}} mcp tools",
-        "mcpTool": "{{count}} mcp tools",
-        "noTools": "No tools enabled"
+        "mcpTool": "{{count}} mcp tools"
       },
       "actions": {
         "edit": "Edit",
-        "delete": "delete",
-        "protected": "protected"
+        "delete": "delete"
       },
       "confirm": {
         "delete": "Delete agent \"{{name}}\"?"
@@ -288,18 +249,6 @@
       "desc": "Manage system prompts that define the behaviour and personality of your AI assistant.",
       "addBtn": "+ add system prompt",
       "empty": "No system prompts configured. Select add system prompt to get started.",
-      "tableHeaders": {
-        "name": "Name",
-        "contentPreview": "Content Preview",
-        "created": "Created",
-        "updated": "Updated",
-        "enabled": "Enabled",
-        "actions": "Actions"
-      },
-      "status": {
-        "enabled": "Enabled",
-        "disabled": "Disabled"
-      },
       "actions": {
         "edit": "Edit",
         "disable": "Disable",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "connected",
           "disconnected": "disconnected"
-        }
+        },
+        "addBtn": "Add MCP tools"
       },
       "openapi": {
         "desc": "Generate HTTP tools from OpenAPI documents. Remote specs are cached under {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} actions configured ({{enabled}} enabled)",
       "addBtn": "+ add quick action",
       "empty": "No quick actions configured. Select add quick action to get started.",
-      "tableHeaders": {
-        "action": "Action",
-        "type": "Type",
-        "model": "Model",
-        "promptPreview": "Prompt Preview",
-        "actions": "Actions"
-      },
       "defaultModel": "Default",
       "editBtn": "Edit",
       "deleteBtn": "delete",
@@ -1004,26 +947,16 @@
     "currentConversation": "Current conversation",
     "new": "New",
     "settings": "Settings",
-    "openSettingsTitle": "Open plugin settings",
-    "mode": "Mode",
-    "prompt": "Prompt",
-    "agent": "Agent",
     "modeOptions": {
       "chat": "Chat",
       "agent": "Agent"
     },
-    "noSystemPrompt": "No system prompt",
     "noAgentsAvailable": "No agents available",
-    "sendHintPrefix": "Press ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " to send",
     "sendAriaLabel": "Send message",
     "stop": " Stop",
-    "addReference": "Add reference",
     "addReferenceTooltip": "Add file or folder reference (@)",
     "emptyHeading": "Start a conversation",
     "emptySubtext": "Type a message below to get started, or select a conversation from history.",
-    "noAgentConfig": "No agents configured",
     "selectAgent": "Select an agent…",
     "notices": {
       "stopping": "Stopping generation...",
@@ -1047,23 +980,15 @@
       "noAgents": "No agents available. Configure agents in Settings → Agents.",
       "ragDisabled": "RAG is disabled in settings. Enable it under settings → chat features → RAG.",
       "webSearchDisabled": "Web search is disabled in settings. Enable it under settings → chat features → web search.",
-      "noFilesInVault": "No files found in vault",
       "attached": "Attached: {{name}}",
       "attachedImages": "Attached {{count}} image(s)",
       "referencesAdded": "Added {{count}} reference(s)",
       "fileNotFound": "File not found: {{path}}",
       "agentConfigApplied": "Applied configuration for agent: {{name}}",
-      "waitForComplete": "Please wait for the current response to complete",
-      "chatServiceFallback": "ChatService not configured. Using ChatView fallback.",
-      "noModelSelected": "No model selected",
-      "noProviderConfig": "No provider configuration found",
-      "noResponseToRegenerate": "No response to regenerate",
-      "agentNotFound": "Agent not found",
       "unableToLoadRag": "Unable to load RAG statistics.",
       "referenced": "Referenced: {{name}}"
     },
     "status": {
-      "available": "Available",
       "unavailable": "Unavailable",
       "disabled": "Disabled",
       "on": "On · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG is currently turned off for this chat."
     },
     "agentSummary": {
-      "model": "Model",
-      "temp": "Temp",
-      "max": "Max",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Tools",
-      "memory": "Memory",
-      "none": "None",
-      "configuration": "{{name}} configuration",
-      "modelFixed": "{{name}} · Fixed",
-      "modelDefault": "{{name}} · Default",
-      "modelChatView": "{{name}} · Chat View",
-      "customModel": "Custom model",
-      "notSet": "Not set",
-      "auto": "Auto",
       "on": "On",
-      "off": "Off",
-      "shortTerm": "Short-term",
-      "longTerm": "Long-term",
-      "disabledMemory": "Disabled",
-      "builtIn": "{{count}} built-in",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Off"
     },
     "message": {
       "webResults": "Web results",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Insert to Notes",
       "regenerate": "Regenerate"
     },
-    "streaming": {
-      "thinking": "Thinking..."
-    },
     "toolCall": {
-      "thinking": "Thinking",
       "executionProcess": "Execution Process",
       "input": "Input",
       "output": "Output",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Use indexed notes as context",
     "webSearchLabel": "Web Search",
     "webSearchTooltipLabel": "Search the internet when needed",
-    "imageUnavailable": "Image attachment is unavailable for the current model.",
-    "newChat": "New Chat",
     "newConversation": "New Conversation",
     "searchConversations": "Search conversations...",
     "header": {
-      "model": "Model",
-      "advancedParams": "Advanced parameters",
-      "temperature": "Temperature",
-      "maxTokens": "Max tokens",
-      "topP": "Top P",
-      "freqPenalty": "Freq. penalty",
-      "presPenalty": "Pres. penalty",
-      "agentConfig": "Agent configuration",
-      "modelsCount": "Models: {{count}}",
-      "tokensCount": "Tokens: {{count}}",
       "noModels": "No models available"
-    },
-    "temperature": {
-      "precise": "0 (Precise)",
-      "balanced": "1 (Balanced)",
-      "creative": "2 (Creative)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Insert to selected note",
         "createNew": "Create new note",
         "noResults": "No matching notes found."
+      },
+      "agentTask": {
+        "cancel": "Cancel",
+        "fieldLabel": "Task",
+        "newConversation": "Start in new conversation",
+        "newConversationDesc": "Keep this agent run separate from the current chat.",
+        "placeholder": "Enter your task here...",
+        "start": "Start",
+        "title": "Start agent task"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Please select a provider type",
         "invalidUrl": "Invalid base URL format. Please enter a valid URL (e.g., https://api.example.com)"
-      }
+      },
+      "cachedModels": "Cached models: {{count}}",
+      "connectionFailed": "Connection test failed. Check provider settings.",
+      "connectionSuccess": "Connection successful. {{count}} model(s) cached.",
+      "noCachedModels": "No cached models",
+      "testConnection": "Test connection",
+      "testing": "Testing..."
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Invalid number for parameter: {{name}}",
           "invalidJson": "Invalid JSON for parameter: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "No MCP servers configured",
-        "testing": "Testing {{count}} MCP server connections...",
-        "allSuccess": "all {{count}} mcp servers connected successfully!",
-        "partial": "{{success}} connected, {{failed}} failed"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Version: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Server offline",
-      "connectionError": "Connection error",
       "pullTitle": "Pull new model",
       "pullHint": "Enter a model name to download from Ollama library (e.g., llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Processing...",
     "textUpdated": "Text updated successfully",
     "error": "Error: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Agent task: ask about current note",
+    "createProjectBrief": "Agent task: create project brief",
+    "createResearchBrief": "Agent task: create research brief",
+    "diagnoseVault": "Agent task: diagnose vault",
+    "doctorLinksTags": "Agent task: improve links, tags, and properties",
+    "draftFromNote": "Agent task: draft from current note",
+    "findDuplicateNotes": "Agent task: find duplicate and merge candidates",
+    "findRelatedNotes": "Agent task: find related notes",
+    "generateWeeklyReview": "Agent task: generate weekly review",
+    "improveSelection": "Agent task: improve selection",
+    "openChatMain": "Open AI chat in main area",
+    "openChatSidebar": "Open AI chat in sidebar",
+    "organizeCurrentNote": "Agent task: organise current note",
+    "sourceGroundedQuestion": "Agent task: ask source-grounded question",
+    "summarizeCurrentNote": "Agent task: summarise current note",
+    "switchModel": "Switch model"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: ask agent about this file",
+    "createProjectBrief": "Intelligence assistant: create project brief with agent",
+    "createResearchBrief": "Intelligence assistant: create research brief with agent",
+    "doctorLinksTags": "Intelligence assistant: improve links, tags, and properties with agent",
+    "draftFromFile": "Intelligence assistant: draft from this file with agent",
+    "findDuplicates": "Intelligence assistant: find duplicate and merge candidates with agent",
+    "findRelatedNotes": "Intelligence assistant: find related notes with agent",
+    "improveFolder": "Intelligence assistant: improve folder links, tags, and properties with agent",
+    "organizeFolder": "Intelligence assistant: organise folder with agent",
+    "summarize": "Intelligence assistant: summarise with agent"
+  },
+  "ribbon": {
+    "openChat": "Open AI chat"
   }
 }

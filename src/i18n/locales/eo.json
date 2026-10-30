@@ -12,21 +12,13 @@
       "usage": "Uzado"
     },
     "general": {
-      "desc": "Agordu ĝeneralajn agordojn por la inteligenta asistanta kromaĵo.",
       "pluginVersion": {
-        "name": "Kromaĵa versio",
-        "desc": "Nuna versio de la inteligenta asistanta kromaĵo"
+        "name": "Kromaĵa versio"
       },
       "defaultModel": {
         "name": "Defaŭlta modelo",
         "desc": "Defaŭlta modelo por konversacioj",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Defaŭlta babilmodo",
-        "desc": "Elektu kun kiu modo la babilvidaĵo malfermiĝas",
-        "chat": "Babilmodo",
-        "agent": "Agentmodo"
       },
       "conversationTitleMode": {
         "name": "Konversacia titolmodo",
@@ -102,11 +94,6 @@
       "count": "{{count}} provizantoj agorditaj",
       "addBtn": "+ Aldoni provizanton",
       "empty": "Neniu provizanto agordita. Elektu \"Aldoni provizanton\" por komenci.",
-      "tableHeaders": {
-        "provider": "Provizanto",
-        "status": "Stato",
-        "actions": "Agoj"
-      },
       "status": {
         "ready": "Preta",
         "needsConfig": "Bezonas Agordon",
@@ -117,7 +104,6 @@
         "serverError": "Servilero"
       },
       "guidance": {
-        "requiresCli": "Postulas lokan CLI",
         "configureBaseUrl": "Agordu bazan URL",
         "addApiKey": "Aldonu API-ŝlosilon"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "aktualigi ĉiujn ilojn",
       "addBtn": "+ Aldoni MCP-servilon",
       "empty": "Neniu MCP-servilo agordita. Elektu Aldoni MCP-servilon por komenci.",
-      "tableHeaders": {
-        "name": "Nomo",
-        "command": "Komando",
-        "arguments": "Argumentoj",
-        "status": "Stato",
-        "tools": "Iloj",
-        "actions": "Agoj"
-      },
       "untitled": "Sennoma MCP-Servilo",
       "notConfigured": "Ne agordita",
-      "noArgs": "Neniu",
       "cached": "Kaŝmemorіta",
-      "disabled": "Malŝaltita",
       "envVars_one": "{{count}} mediavariablo",
       "envVars_other": "{{count}} mediavariabloj",
       "envVars": "{{count}} mediavariabloj",
@@ -244,26 +220,13 @@
       "count": "{{count}} agentoj agorditaj",
       "addBtn": "+ aldoni agenton",
       "empty": "Neniu agento agordita. Elektu aldoni agenton por komenci.",
-      "tableHeaders": {
-        "agent": "Agento",
-        "model": "Modelo",
-        "capabilities": "Kapabloj",
-        "tools": "Iloj",
-        "actions": "Agoj"
-      },
       "defaultBadge": "Defaŭlta",
       "systemPrompt": "Sistema instigilo • {{promptName}}",
       "customPrompt": "Propra instigilo",
       "model": {
         "notSet": "Ne agordita",
-        "notFound": "Modelo ne trovita en kaŝmemoro",
         "useChatView": "Uzi Babilvidaĵan Modelon",
-        "useChatViewDesc": "Uzos modelon elektitan en babilvidaĵo",
-        "useDefault": "Uzi Defaŭltan Modelon",
-        "useDefaultDesc": "Uzos defaŭltan modelon el agordoj"
-      },
-      "capabilities": {
-        "noSpecialModes": "Neniuj specialaj modusoj"
+        "useDefault": "Uzi Defaŭltan Modelon"
       },
       "tools": {
         "builtIn": "{{count}} enkonstruita",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} MCP-serviloj",
         "mcpTool_one": "{{count}} MCP-ilo",
         "mcpTool_other": "{{count}} MCP-iloj",
-        "mcpTool": "{{count}} MCP-iloj",
-        "noTools": "Neniuj iloj ebligitaj"
+        "mcpTool": "{{count}} MCP-iloj"
       },
       "actions": {
         "edit": "Redakti",
-        "delete": "forigi",
-        "protected": "protektita"
+        "delete": "forigi"
       },
       "confirm": {
         "delete": "Forigi agenton \"{{name}}\"?"
@@ -288,18 +249,6 @@
       "desc": "Administru sistemajn instigilojn kiuj difinas la konduton kaj personon de via AI-asistanto.",
       "addBtn": "+ aldoni sisteman instigilon",
       "empty": "Neniu sistema instigilo agordita. Elektu aldoni sisteman instigilon por komenci.",
-      "tableHeaders": {
-        "name": "Nomo",
-        "contentPreview": "Enhavantaŭrigardo",
-        "created": "Kreita",
-        "updated": "Ĝisdatigita",
-        "enabled": "Ebligita",
-        "actions": "Agoj"
-      },
-      "status": {
-        "enabled": "Ebligita",
-        "disabled": "Malŝaltita"
-      },
       "actions": {
         "edit": "Redakti",
         "disable": "Malŝalti",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "konektita",
           "disconnected": "malkonektita"
-        }
+        },
+        "addBtn": "Aldoni MCP-ilojn"
       },
       "openapi": {
         "desc": "Generu HTTP-ilojn el OpenAPI-dokumentoj. Foraj specifoj estas kaŝmemoritaj sub {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} agoj agorditaj ({{enabled}} ebligitaj)",
       "addBtn": "+ aldoni rapidan agon",
       "empty": "Neniu rapida ago agordita. Elektu aldoni rapidan agon por komenci.",
-      "tableHeaders": {
-        "action": "Ago",
-        "type": "Tipo",
-        "model": "Modelo",
-        "promptPreview": "Instigiloantaŭrigardo",
-        "actions": "Agoj"
-      },
       "defaultModel": "Defaŭlta",
       "editBtn": "Redakti",
       "deleteBtn": "forigi",
@@ -1004,26 +947,16 @@
     "currentConversation": "Nuna konversacio",
     "new": "Nova",
     "settings": "Agordoj",
-    "openSettingsTitle": "Malfermi kromaĵajn agordojn",
-    "mode": "Modo",
-    "prompt": "Instigilo",
-    "agent": "Agento",
     "modeOptions": {
       "chat": "Babilo",
       "agent": "Agento"
     },
-    "noSystemPrompt": "Neniu sistema instigilo",
     "noAgentsAvailable": "Neniuj agentoj disponeblaj",
-    "sendHintPrefix": "Premu ",
-    "sendHintKey": "Eniri",
-    "sendHintSuffix": " por sendi",
     "sendAriaLabel": "Sendi mesaĝon",
     "stop": " Haltigi",
-    "addReference": "Aldoni referencon",
     "addReferenceTooltip": "Aldoni dosieron aŭ dosierujoreferencon (@)",
     "emptyHeading": "Komenci konversacion",
     "emptySubtext": "Tajpu mesaĝon malsupre por komenci, aŭ elektu konversacion el historio.",
-    "noAgentConfig": "Neniuj agentoj agordataj",
     "selectAgent": "Elekti agenton…",
     "notices": {
       "stopping": "Haltante generadon...",
@@ -1047,23 +980,15 @@
       "noAgents": "Neniuj agentoj disponeblaj. Agordu agentojn en Agordoj → Agentoj.",
       "ragDisabled": "RAG estas malŝaltita en agordoj. Ebligi ĝin sub agordoj → babilfunkciaĵoj → RAG.",
       "webSearchDisabled": "Retserĉo estas malŝaltita en agordoj. Ebligi ĝin sub agordoj → babilfunkciaĵoj → retserĉo.",
-      "noFilesInVault": "Neniuj dosieroj trovitaj en arkivo",
       "attached": "Aldonita: {{name}}",
       "attachedImages": "Aldonitaj {{count}} bildo(j)",
       "referencesAdded": "Aldonitaj {{count}} referenco(j)",
       "fileNotFound": "Dosiero ne trovita: {{path}}",
       "agentConfigApplied": "Aplikita agordo por agento: {{name}}",
-      "waitForComplete": "Bonvolu atendi ke la nuna respondo finiĝu",
-      "chatServiceFallback": "ChatService ne agordita. Uzante ChatView-ŝtopfunkciaĵon.",
-      "noModelSelected": "Neniu modelo elektita",
-      "noProviderConfig": "Neniu provizantagordo trovita",
-      "noResponseToRegenerate": "Neniu respondo por regeneri",
-      "agentNotFound": "Agento ne trovita",
       "unableToLoadRag": "Ne eblas ŝargi RAG-statistikojn.",
       "referenced": "Referencita: {{name}}"
     },
     "status": {
-      "available": "Disponebla",
       "unavailable": "Nedisponebla",
       "disabled": "Malŝaltita",
       "on": "Ŝaltita · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG estas nuntempe malŝaltita por ĉi tiu babilo."
     },
     "agentSummary": {
-      "model": "Modelo",
-      "temp": "Temp",
-      "max": "Maks",
-      "rag": "RAG",
-      "web": "Reto",
-      "tools": "Iloj",
-      "memory": "Memoro",
-      "none": "Neniu",
-      "configuration": "{{name}}-agordo",
-      "modelFixed": "{{name}} · Fiksita",
-      "modelDefault": "{{name}} · Defaŭlta",
-      "modelChatView": "{{name}} · Babilvidaĵo",
-      "customModel": "Propra modelo",
-      "notSet": "Ne agordita",
-      "auto": "Aŭto",
       "on": "Ŝaltita",
-      "off": "Malŝaltita",
-      "shortTerm": "Mallongdaŭra",
-      "longTerm": "Longdaŭra",
-      "disabledMemory": "Malŝaltita",
-      "builtIn": "{{count}} enkonstruita",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Malŝaltita"
     },
     "message": {
       "webResults": "Retaj rezultoj",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Enmeti al Notoj",
       "regenerate": "Regeneri"
     },
-    "streaming": {
-      "thinking": "Pensante..."
-    },
     "toolCall": {
-      "thinking": "Pensante",
       "executionProcess": "Ekzekutprocezo",
       "input": "Enigo",
       "output": "Eliĝo",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Uzi indeksitajn notojn kiel kuntekston",
     "webSearchLabel": "Retserĉo",
     "webSearchTooltipLabel": "Serĉi la interreton kiam necese",
-    "imageUnavailable": "Bildaldono ne disponeblas por la nuna modelo.",
-    "newChat": "Nova Babilo",
     "newConversation": "Nova Konversacio",
     "searchConversations": "Serĉi konversaciojn...",
     "header": {
-      "model": "Modelo",
-      "advancedParams": "Progresintaj parametroj",
-      "temperature": "Temperaturo",
-      "maxTokens": "Maks. ĵetonoj",
-      "topP": "Supra P",
-      "freqPenalty": "Frekv. puno",
-      "presPenalty": "Ĉeest. puno",
-      "agentConfig": "Agentagordo",
-      "modelsCount": "Modeloj: {{count}}",
-      "tokensCount": "Ĵetonoj: {{count}}",
       "noModels": "Neniuj modeloj disponeblaj"
-    },
-    "temperature": {
-      "precise": "0 (Preciza)",
-      "balanced": "1 (Ekvilibra)",
-      "creative": "2 (Kreiva)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Enmeti al elektita noto",
         "createNew": "Krei novan noton",
         "noResults": "Neniuj kongruaj notoj trovitaj."
+      },
+      "agentTask": {
+        "cancel": "Nuligi",
+        "fieldLabel": "Tasko",
+        "newConversation": "Komenci en nova konversacio",
+        "newConversationDesc": "Teni ĉi tiun agento-rulon aparte de la nuna babilejo.",
+        "placeholder": "Enigu vian taskon ĉi tie...",
+        "start": "Komenci",
+        "title": "Komenci agento-taskon"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Bonvolu elekti provizanttipo",
         "invalidUrl": "Nevalida baza URL-formato. Bonvolu enigi validan URL (ekz., https://api.example.com)"
-      }
+      },
+      "cachedModels": "Kaŝmemorigitaj modeloj: {{count}}",
+      "connectionFailed": "Konekto-testo malsukcesis. Kontrolu la provizantajn agordojn.",
+      "connectionSuccess": "Konekto sukcesis. {{count}} modelo(j) kaŝmemorigita(j).",
+      "noCachedModels": "Neniuj kaŝmemorigitaj modeloj",
+      "testConnection": "Testi konekton",
+      "testing": "Testante..."
     },
     "mcpInspector": {
       "title": "MCP-inspektisto",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Nevalida nombro por parametro: {{name}}",
           "invalidJson": "Nevalida JSON por parametro: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Neniuj MCP-serviloj agordataj",
-        "testing": "Testante {{count}} MCP-servilkonektojn...",
-        "allSuccess": "ĉiuj {{count}} MCP-serviloj sukcese konektitaj!",
-        "partial": "{{success}} konektitaj, {{failed}} malsukcesis"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Versio: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Servilo eksterrete",
-      "connectionError": "Konekteraro",
       "pullTitle": "Tiri novan modelon",
       "pullHint": "Enigi modelonomon por elŝuti el la Ollama-biblioteko (ekz., llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Pretigante...",
     "textUpdated": "Teksto sukcese ĝisdatigita",
     "error": "Eraro: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Agento-tasko: demandi pri la nuna noto",
+    "createProjectBrief": "Agento-tasko: krei projektan resumon",
+    "createResearchBrief": "Agento-tasko: krei esploran resumon",
+    "diagnoseVault": "Agento-tasko: diagnozi arkivon",
+    "doctorLinksTags": "Agento-tasko: plibonigi ligilojn, etikedojn kaj ecojn",
+    "draftFromNote": "Agento-tasko: malneto el la nuna noto",
+    "findDuplicateNotes": "Agento-tasko: trovi duobligojn kaj kandidatojn por kunfando",
+    "findRelatedNotes": "Agento-tasko: trovi rilatajn notojn",
+    "generateWeeklyReview": "Agento-tasko: generi semajnan revizion",
+    "improveSelection": "Agento-tasko: plibonigi elekton",
+    "openChatMain": "Malfermi AI-babilejon en la ĉefa areo",
+    "openChatSidebar": "Malfermi AI-babilejon en la flanka panelo",
+    "organizeCurrentNote": "Agento-tasko: organizi la nunan noton",
+    "sourceGroundedQuestion": "Agento-tasko: demandi font-bazitan demandon",
+    "summarizeCurrentNote": "Agento-tasko: resumi la nunan noton",
+    "switchModel": "Ŝanĝi modelon"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: demandi agenton pri ĉi tiu dosiero",
+    "createProjectBrief": "Intelligence assistant: krei projektan resumon per agento",
+    "createResearchBrief": "Intelligence assistant: krei esploran resumon per agento",
+    "doctorLinksTags": "Intelligence assistant: plibonigi ligilojn, etikedojn kaj ecojn per agento",
+    "draftFromFile": "Intelligence assistant: malneto el ĉi tiu dosiero per agento",
+    "findDuplicates": "Intelligence assistant: trovi duobligojn kaj kandidatojn por kunfando per agento",
+    "findRelatedNotes": "Intelligence assistant: trovi rilatajn notojn per agento",
+    "improveFolder": "Intelligence assistant: plibonigi ligilojn, etikedojn kaj ecojn de dosierujo per agento",
+    "organizeFolder": "Intelligence assistant: organizi dosierujon per agento",
+    "summarize": "Intelligence assistant: resumi per agento"
+  },
+  "ribbon": {
+    "openChat": "Malfermi AI-babilejon"
   }
 }

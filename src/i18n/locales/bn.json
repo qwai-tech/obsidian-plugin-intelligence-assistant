@@ -12,21 +12,13 @@
       "usage": "ব্যবহার"
     },
     "general": {
-      "desc": "ইন্টেলিজেন্স অ্যাসিস্ট্যান্ট প্লাগইনের জন্য সাধারণ সেটিংস কনফিগার করুন।",
       "pluginVersion": {
-        "name": "প্লাগইন সংস্করণ",
-        "desc": "ইন্টেলিজেন্স অ্যাসিস্ট্যান্ট প্লাগইনের বর্তমান সংস্করণ"
+        "name": "প্লাগইন সংস্করণ"
       },
       "defaultModel": {
         "name": "ডিফল্ট মডেল",
         "desc": "কথোপকথনের জন্য ডিফল্ট মডেল",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "ডিফল্ট চ্যাট মোড",
-        "desc": "চ্যাট ভিউ কোন মোডে খুলবে তা নির্বাচন করুন",
-        "chat": "চ্যাট মোড",
-        "agent": "এজেন্ট মোড"
       },
       "conversationTitleMode": {
         "name": "কথোপকথনের শিরোনাম মোড",
@@ -102,11 +94,6 @@
       "count": "{{count}}টি প্রদানকারী কনফিগার করা হয়েছে",
       "addBtn": "+ প্রদানকারী যোগ করুন",
       "empty": "কোনো প্রদানকারী কনফিগার করা হয়নি। শুরু করতে \"প্রদানকারী যোগ করুন\" নির্বাচন করুন।",
-      "tableHeaders": {
-        "provider": "প্রদানকারী",
-        "status": "অবস্থা",
-        "actions": "অ্যাকশন"
-      },
       "status": {
         "ready": "প্রস্তুত",
         "needsConfig": "কনফিগারেশন প্রয়োজন",
@@ -117,7 +104,6 @@
         "serverError": "সার্ভার ত্রুটি"
       },
       "guidance": {
-        "requiresCli": "স্থানীয় CLI প্রয়োজন",
         "configureBaseUrl": "বেস URL কনফিগার করুন",
         "addApiKey": "API কী যোগ করুন"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "সব টুল রিফ্রেশ করুন",
       "addBtn": "+ MCP সার্ভার যোগ করুন",
       "empty": "কোনো MCP সার্ভার কনফিগার করা হয়নি। শুরু করতে MCP সার্ভার যোগ করুন নির্বাচন করুন।",
-      "tableHeaders": {
-        "name": "নাম",
-        "command": "কমান্ড",
-        "arguments": "আর্গুমেন্ট",
-        "status": "অবস্থা",
-        "tools": "টুলস",
-        "actions": "অ্যাকশন"
-      },
       "untitled": "শিরোনামহীন MCP সার্ভার",
       "notConfigured": "কনফিগার করা হয়নি",
-      "noArgs": "কোনোটি নয়",
       "cached": "ক্যাশে করা",
-      "disabled": "নিষ্ক্রিয়",
       "envVars_one": "{{count}}টি এনভ ভেরিয়েবল",
       "envVars_other": "{{count}}টি এনভ ভেরিয়েবল",
       "envVars": "{{count}}টি এনভ ভেরিয়েবল",
@@ -244,26 +220,13 @@
       "count": "{{count}}টি এজেন্ট কনফিগার করা হয়েছে",
       "addBtn": "+ এজেন্ট যোগ করুন",
       "empty": "কোনো এজেন্ট কনফিগার করা হয়নি। শুরু করতে এজেন্ট যোগ করুন নির্বাচন করুন।",
-      "tableHeaders": {
-        "agent": "এজেন্ট",
-        "model": "মডেল",
-        "capabilities": "সক্ষমতা",
-        "tools": "টুলস",
-        "actions": "অ্যাকশন"
-      },
       "defaultBadge": "ডিফল্ট",
       "systemPrompt": "সিস্টেম প্রম্পট • {{promptName}}",
       "customPrompt": "কাস্টম প্রম্পট",
       "model": {
         "notSet": "নির্ধারণ করা হয়নি",
-        "notFound": "ক্যাশে মডেল পাওয়া যায়নি",
         "useChatView": "চ্যাট ভিউ মডেল ব্যবহার করুন",
-        "useChatViewDesc": "চ্যাট ভিউতে নির্বাচিত মডেল ব্যবহার করবে",
-        "useDefault": "ডিফল্ট মডেল ব্যবহার করুন",
-        "useDefaultDesc": "সেটিংস থেকে ডিফল্ট মডেল ব্যবহার করবে"
-      },
-      "capabilities": {
-        "noSpecialModes": "কোনো বিশেষ মোড নেই"
+        "useDefault": "ডিফল্ট মডেল ব্যবহার করুন"
       },
       "tools": {
         "builtIn": "{{count}}টি বিল্ট-ইন",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}}টি MCP সার্ভার",
         "mcpTool_one": "{{count}}টি MCP টুল",
         "mcpTool_other": "{{count}}টি MCP টুল",
-        "mcpTool": "{{count}}টি MCP টুল",
-        "noTools": "কোনো টুল সক্রিয় নেই"
+        "mcpTool": "{{count}}টি MCP টুল"
       },
       "actions": {
         "edit": "সম্পাদনা",
-        "delete": "মুছে ফেলুন",
-        "protected": "সুরক্ষিত"
+        "delete": "মুছে ফেলুন"
       },
       "confirm": {
         "delete": "\"{{name}}\" এজেন্ট মুছে ফেলবেন?"
@@ -288,18 +249,6 @@
       "desc": "সিস্টেম প্রম্পট পরিচালনা করুন যা আপনার AI সহায়কের আচরণ এবং ব্যক্তিত্ব নির্ধারণ করে।",
       "addBtn": "+ সিস্টেম প্রম্পট যোগ করুন",
       "empty": "কোনো সিস্টেম প্রম্পট কনফিগার করা হয়নি। শুরু করতে সিস্টেম প্রম্পট যোগ করুন নির্বাচন করুন।",
-      "tableHeaders": {
-        "name": "নাম",
-        "contentPreview": "কন্টেন্ট প্রিভিউ",
-        "created": "তৈরি করা হয়েছে",
-        "updated": "হালনাগাদ করা হয়েছে",
-        "enabled": "সক্রিয়",
-        "actions": "অ্যাকশন"
-      },
-      "status": {
-        "enabled": "সক্রিয়",
-        "disabled": "নিষ্ক্রিয়"
-      },
       "actions": {
         "edit": "সম্পাদনা",
         "disable": "নিষ্ক্রিয় করুন",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "সংযুক্ত",
           "disconnected": "সংযোগ বিচ্ছিন্ন"
-        }
+        },
+        "addBtn": "MCP টুল যোগ করুন"
       },
       "openapi": {
         "desc": "OpenAPI ডকুমেন্ট থেকে HTTP টুল তৈরি করুন। রিমোট স্পেসগুলি {{cacheDir}} এর অধীনে ক্যাশে করা হয়।",
@@ -890,13 +840,6 @@
       "count": "{{count}}টি অ্যাকশন কনফিগার করা হয়েছে ({{enabled}}টি সক্রিয়)",
       "addBtn": "+ দ্রুত অ্যাকশন যোগ করুন",
       "empty": "কোনো দ্রুত অ্যাকশন কনফিগার করা হয়নি। শুরু করতে দ্রুত অ্যাকশন যোগ করুন নির্বাচন করুন।",
-      "tableHeaders": {
-        "action": "অ্যাকশন",
-        "type": "ধরন",
-        "model": "মডেল",
-        "promptPreview": "প্রম্পট প্রিভিউ",
-        "actions": "অ্যাকশন"
-      },
       "defaultModel": "ডিফল্ট",
       "editBtn": "সম্পাদনা",
       "deleteBtn": "মুছে ফেলুন",
@@ -1004,26 +947,16 @@
     "currentConversation": "বর্তমান কথোপকথন",
     "new": "নতুন",
     "settings": "সেটিংস",
-    "openSettingsTitle": "প্লাগইন সেটিংস খুলুন",
-    "mode": "মোড",
-    "prompt": "প্রম্পট",
-    "agent": "এজেন্ট",
     "modeOptions": {
       "chat": "চ্যাট",
       "agent": "এজেন্ট"
     },
-    "noSystemPrompt": "কোনো সিস্টেম প্রম্পট নেই",
     "noAgentsAvailable": "কোনো এজেন্ট উপলব্ধ নেই",
-    "sendHintPrefix": "পাঠাতে ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " চাপুন",
     "sendAriaLabel": "বার্তা পাঠান",
     "stop": " বন্ধ করুন",
-    "addReference": "রেফারেন্স যোগ করুন",
     "addReferenceTooltip": "ফাইল বা ফোল্ডার রেফারেন্স যোগ করুন (@)",
     "emptyHeading": "একটি কথোপকথন শুরু করুন",
     "emptySubtext": "শুরু করতে নিচে একটি বার্তা টাইপ করুন, অথবা ইতিহাস থেকে একটি কথোপকথন নির্বাচন করুন।",
-    "noAgentConfig": "কোনো এজেন্ট কনফিগার করা হয়নি",
     "selectAgent": "একটি এজেন্ট নির্বাচন করুন…",
     "notices": {
       "stopping": "জেনারেশন বন্ধ করা হচ্ছে...",
@@ -1047,23 +980,15 @@
       "noAgents": "কোনো এজেন্ট উপলব্ধ নেই। সেটিংস → এজেন্ট-এ এজেন্ট কনফিগার করুন।",
       "ragDisabled": "সেটিংসে RAG নিষ্ক্রিয় আছে। সেটিংস → চ্যাট বৈশিষ্ট্য → RAG-এর অধীনে সক্রিয় করুন।",
       "webSearchDisabled": "সেটিংসে ওয়েব অনুসন্ধান নিষ্ক্রিয় আছে। সেটিংস → চ্যাট বৈশিষ্ট্য → ওয়েব অনুসন্ধানের অধীনে সক্রিয় করুন।",
-      "noFilesInVault": "ভল্টে কোনো ফাইল পাওয়া যায়নি",
       "attached": "সংযুক্ত: {{name}}",
       "attachedImages": "{{count}}টি ছবি সংযুক্ত করা হয়েছে",
       "referencesAdded": "{{count}}টি রেফারেন্স যোগ করা হয়েছে",
       "fileNotFound": "ফাইল পাওয়া যায়নি: {{path}}",
       "agentConfigApplied": "{{name}} এজেন্টের জন্য কনফিগারেশন প্রয়োগ করা হয়েছে",
-      "waitForComplete": "অনুগ্রহ করে বর্তমান প্রতিক্রিয়া সম্পূর্ণ হওয়ার জন্য অপেক্ষা করুন",
-      "chatServiceFallback": "ChatService কনফিগার করা হয়নি। ChatView ফallback ব্যবহার করা হচ্ছে।",
-      "noModelSelected": "কোনো মডেল নির্বাচিত হয়নি",
-      "noProviderConfig": "কোনো প্রদানকারী কনফিগারেশন পাওয়া যায়নি",
-      "noResponseToRegenerate": "পুনরায় তৈরি করার মতো কোনো প্রতিক্রিয়া নেই",
-      "agentNotFound": "এজেন্ট পাওয়া যায়নি",
       "unableToLoadRag": "RAG পরিসংখ্যান লোড করতে অক্ষম।",
       "referenced": "রেফারেন্স করা হয়েছে: {{name}}"
     },
     "status": {
-      "available": "উপলব্ধ",
       "unavailable": "অনুপলব্ধ",
       "disabled": "নিষ্ক্রিয়",
       "on": "চালু · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ এই চ্যাটের জন্য RAG বর্তমানে বন্ধ আছে।"
     },
     "agentSummary": {
-      "model": "মডেল",
-      "temp": "তাপমাত্রা",
-      "max": "সর্বোচ্চ",
-      "rag": "RAG",
-      "web": "ওয়েব",
-      "tools": "টুলস",
-      "memory": "মেমোরি",
-      "none": "কোনোটি নয়",
-      "configuration": "{{name}} কনফিগারেশন",
-      "modelFixed": "{{name}} · নির্দিষ্ট",
-      "modelDefault": "{{name}} · ডিফল্ট",
-      "modelChatView": "{{name}} · চ্যাট ভিউ",
-      "customModel": "কাস্টম মডেল",
-      "notSet": "নির্ধারণ করা হয়নি",
-      "auto": "স্বয়ংক্রিয়",
       "on": "চালু",
-      "off": "বন্ধ",
-      "shortTerm": "স্বল্পমেয়াদী",
-      "longTerm": "দীর্ঘমেয়াদী",
-      "disabledMemory": "নিষ্ক্রিয়",
-      "builtIn": "{{count}}টি বিল্ট-ইন",
-      "mcp": "{{count}}টি MCP",
-      "cli": "{{count}}টি CLI"
+      "off": "বন্ধ"
     },
     "message": {
       "webResults": "ওয়েব ফলাফল",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "নোটে সন্নিবেশ করুন",
       "regenerate": "পুনরায় তৈরি করুন"
     },
-    "streaming": {
-      "thinking": "চিন্তা করা হচ্ছে..."
-    },
     "toolCall": {
-      "thinking": "চিন্তা করা হচ্ছে",
       "executionProcess": "কার্যকরীকরণ প্রক্রিয়া",
       "input": "ইনপুট",
       "output": "আউটপুট",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "কনটেক্সট হিসেবে ইন্ডেক্সকৃত নোট ব্যবহার করুন",
     "webSearchLabel": "ওয়েব অনুসন্ধান",
     "webSearchTooltipLabel": "প্রয়োজন হলে ইন্টারনেট অনুসন্ধান করুন",
-    "imageUnavailable": "বর্তমান মডেলের জন্য ছবি সংযুক্তি উপলব্ধ নেই।",
-    "newChat": "নতুন চ্যাট",
     "newConversation": "নতুন কথোপকথন",
     "searchConversations": "কথোপকথন অনুসন্ধান করুন...",
     "header": {
-      "model": "মডেল",
-      "advancedParams": "উন্নত প্যারামিটার",
-      "temperature": "তাপমাত্রা",
-      "maxTokens": "সর্বোচ্চ টোকেন",
-      "topP": "টপ P",
-      "freqPenalty": "ফ্রিকোয়েন্সি পেনাল্টি",
-      "presPenalty": "প্রেজেন্স পেনাল্টি",
-      "agentConfig": "এজেন্ট কনফিগারেশন",
-      "modelsCount": "মডেল: {{count}}",
-      "tokensCount": "টোকেন: {{count}}",
       "noModels": "কোনো মডেল উপলব্ধ নেই"
-    },
-    "temperature": {
-      "precise": "০ (সুনির্দিষ্ট)",
-      "balanced": "১ (সুষম)",
-      "creative": "২ (সৃজনশীল)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "নির্বাচিত নোটে সন্নিবেশ করুন",
         "createNew": "নতুন নোট তৈরি করুন",
         "noResults": "কোনো মিলে যাওয়া নোট পাওয়া যায়নি।"
+      },
+      "agentTask": {
+        "cancel": "বাতিল",
+        "fieldLabel": "কাজ",
+        "newConversation": "নতুন কথোপকথনে শুরু করুন",
+        "newConversationDesc": "এই এজেন্ট রানটি বর্তমান চ্যাট থেকে আলাদা রাখুন।",
+        "placeholder": "এখানে আপনার কাজ লিখুন...",
+        "start": "শুরু",
+        "title": "এজেন্ট কাজ শুরু করুন"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "অনুগ্রহ করে একটি প্রদানকারীর ধরন নির্বাচন করুন",
         "invalidUrl": "অবৈধ বেস URL ফরম্যাট। অনুগ্রহ করে একটি বৈধ URL লিখুন (যেমন, https://api.example.com)"
-      }
+      },
+      "cachedModels": "ক্যাশ করা মডেল: {{count}}",
+      "connectionFailed": "সংযোগ পরীক্ষা ব্যর্থ হয়েছে। প্রদানকারী সেটিংস পরীক্ষা করুন।",
+      "connectionSuccess": "সংযোগ সফল। {{count}}টি মডেল ক্যাশ করা হয়েছে।",
+      "noCachedModels": "কোনো ক্যাশ করা মডেল নেই",
+      "testConnection": "সংযোগ পরীক্ষা করুন",
+      "testing": "পরীক্ষা করা হচ্ছে..."
     },
     "mcpInspector": {
       "title": "MCP ইনস্পেক্টর",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "{{name}} প্যারামিটারের জন্য অবৈধ সংখ্যা",
           "invalidJson": "{{name}} প্যারামিটারের জন্য অবৈধ JSON"
         }
-      },
-      "testAll": {
-        "noServers": "কোনো MCP সার্ভার কনফিগার করা হয়নি",
-        "testing": "{{count}}টি MCP সার্ভার সংযোগ পরীক্ষা করা হচ্ছে...",
-        "allSuccess": "সব {{count}}টি MCP সার্ভার সফলভাবে সংযুক্ত হয়েছে!",
-        "partial": "{{success}}টি সংযুক্ত, {{failed}}টি ব্যর্থ হয়েছে"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | সংস্করণ: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "সার্ভার অফলাইন",
-      "connectionError": "সংযোগ ত্রুটি",
       "pullTitle": "নতুন মডেল আনুন",
       "pullHint": "Ollama লাইব্রেরি থেকে ডাউনলোড করার জন্য একটি মডেলের নাম লিখুন (যেমন, llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "প্রক্রিয়াকরণ করা হচ্ছে...",
     "textUpdated": "টেক্সট সফলভাবে হালনাগাদ হয়েছে",
     "error": "ত্রুটি: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "এজেন্ট কাজ: বর্তমান নোট সম্পর্কে জিজ্ঞাসা করুন",
+    "createProjectBrief": "এজেন্ট কাজ: প্রকল্প সারসংক্ষেপ তৈরি করুন",
+    "createResearchBrief": "এজেন্ট কাজ: গবেষণা সারসংক্ষেপ তৈরি করুন",
+    "diagnoseVault": "এজেন্ট কাজ: ভল্ট নির্ণয় করুন",
+    "doctorLinksTags": "এজেন্ট কাজ: লিঙ্ক, ট্যাগ ও বৈশিষ্ট্য উন্নত করুন",
+    "draftFromNote": "এজেন্ট কাজ: বর্তমান নোট থেকে খসড়া তৈরি করুন",
+    "findDuplicateNotes": "এজেন্ট কাজ: ডুপ্লিকেট ও একত্রীকরণের প্রার্থী খুঁজুন",
+    "findRelatedNotes": "এজেন্ট কাজ: সম্পর্কিত নোট খুঁজুন",
+    "generateWeeklyReview": "এজেন্ট কাজ: সাপ্তাহিক পর্যালোচনা তৈরি করুন",
+    "improveSelection": "এজেন্ট কাজ: নির্বাচন উন্নত করুন",
+    "openChatMain": "মূল এলাকায় AI চ্যাট খুলুন",
+    "openChatSidebar": "সাইডবারে AI চ্যাট খুলুন",
+    "organizeCurrentNote": "এজেন্ট কাজ: বর্তমান নোট সংগঠিত করুন",
+    "sourceGroundedQuestion": "এজেন্ট কাজ: উৎস-ভিত্তিক প্রশ্ন জিজ্ঞাসা করুন",
+    "summarizeCurrentNote": "এজেন্ট কাজ: বর্তমান নোটের সারাংশ করুন",
+    "switchModel": "মডেল পরিবর্তন করুন"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: এই ফাইল সম্পর্কে এজেন্টকে জিজ্ঞাসা করুন",
+    "createProjectBrief": "Intelligence assistant: এজেন্ট দিয়ে প্রকল্প সারসংক্ষেপ তৈরি করুন",
+    "createResearchBrief": "Intelligence assistant: এজেন্ট দিয়ে গবেষণা সারসংক্ষেপ তৈরি করুন",
+    "doctorLinksTags": "Intelligence assistant: এজেন্ট দিয়ে লিঙ্ক, ট্যাগ ও বৈশিষ্ট্য উন্নত করুন",
+    "draftFromFile": "Intelligence assistant: এজেন্ট দিয়ে এই ফাইল থেকে খসড়া তৈরি করুন",
+    "findDuplicates": "Intelligence assistant: এজেন্ট দিয়ে ডুপ্লিকেট ও একত্রীকরণের প্রার্থী খুঁজুন",
+    "findRelatedNotes": "Intelligence assistant: এজেন্ট দিয়ে সম্পর্কিত নোট খুঁজুন",
+    "improveFolder": "Intelligence assistant: এজেন্ট দিয়ে ফোল্ডারের লিঙ্ক, ট্যাগ ও বৈশিষ্ট্য উন্নত করুন",
+    "organizeFolder": "Intelligence assistant: এজেন্ট দিয়ে ফোল্ডার সংগঠিত করুন",
+    "summarize": "Intelligence assistant: এজেন্ট দিয়ে সারাংশ করুন"
+  },
+  "ribbon": {
+    "openChat": "AI চ্যাট খুলুন"
   }
 }

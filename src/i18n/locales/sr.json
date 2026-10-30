@@ -12,21 +12,13 @@
       "usage": "Употреба"
     },
     "general": {
-      "desc": "Конфигуришите опште поставке за додатак асистента интелигенције.",
       "pluginVersion": {
-        "name": "Верзија додатка",
-        "desc": "Тренутна верзија додатка асистента интелигенције"
+        "name": "Верзија додатка"
       },
       "defaultModel": {
         "name": "Подразумевани модел",
         "desc": "Подразумевани модел за разговоре",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Подразумевани режим ћаскања",
-        "desc": "Изаберите у ком режиму се отвара приказ ћаскања",
-        "chat": "Режим ћаскања",
-        "agent": "Режим агента"
       },
       "conversationTitleMode": {
         "name": "Режим наслова разговора",
@@ -102,11 +94,6 @@
       "count": "{{count}} провајдера конфигурисано",
       "addBtn": "+ Додај провајдера",
       "empty": "Нема конфигурисаних провајдера. Изаберите „Додај провајдера“ за почетак.",
-      "tableHeaders": {
-        "provider": "Провајдер",
-        "status": "Статус",
-        "actions": "Радње"
-      },
       "status": {
         "ready": "Спреман",
         "needsConfig": "Потребна конфигурација",
@@ -117,7 +104,6 @@
         "serverError": "Грешка сервера"
       },
       "guidance": {
-        "requiresCli": "Захтева локални CLI",
         "configureBaseUrl": "Конфигуришите основни URL",
         "addApiKey": "Додај API кључ"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "освежи све алате",
       "addBtn": "+ Додај MCP сервер",
       "empty": "Нема конфигурисаних MCP сервера. Изаберите Додај MCP сервер за почетак.",
-      "tableHeaders": {
-        "name": "Назив",
-        "command": "Команда",
-        "arguments": "Аргументи",
-        "status": "Статус",
-        "tools": "Алати",
-        "actions": "Радње"
-      },
       "untitled": "MCP сервер без назива",
       "notConfigured": "Није конфигурисано",
-      "noArgs": "Нема",
       "cached": "У кешу",
-      "disabled": "Онемогућено",
       "envVars_one": "{{count}} env променљива",
       "envVars_other": "{{count}} env променљивих",
       "envVars": "{{count}} env променљивих",
@@ -244,26 +220,13 @@
       "count": "{{count}} агената конфигурисано",
       "addBtn": "+ додај агента",
       "empty": "Нема конфигурисаних агената. Изаберите додај агента за почетак.",
-      "tableHeaders": {
-        "agent": "Агент",
-        "model": "Модел",
-        "capabilities": "Могућности",
-        "tools": "Алати",
-        "actions": "Радње"
-      },
       "defaultBadge": "Подразумевано",
       "systemPrompt": "Системски упит • {{promptName}}",
       "customPrompt": "Прилагођени упит",
       "model": {
         "notSet": "Није постављено",
-        "notFound": "Модел није пронађен у кешу",
         "useChatView": "Употреби модел приказа ћаскања",
-        "useChatViewDesc": "Користиће модел изабран у приказу ћаскања",
-        "useDefault": "Употреби подразумевани модел",
-        "useDefaultDesc": "Користиће подразумевани модел из поставки"
-      },
-      "capabilities": {
-        "noSpecialModes": "Нема посебних режима"
+        "useDefault": "Употреби подразумевани модел"
       },
       "tools": {
         "builtIn": "{{count}} уграђени",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp сервера",
         "mcpTool_one": "{{count}} mcp алат",
         "mcpTool_other": "{{count}} mcp алата",
-        "mcpTool": "{{count}} mcp алата",
-        "noTools": "Нема омогућених алата"
+        "mcpTool": "{{count}} mcp алата"
       },
       "actions": {
         "edit": "Уреди",
-        "delete": "обриши",
-        "protected": "заштићено"
+        "delete": "обриши"
       },
       "confirm": {
         "delete": "Обриши агента „{{name}}“?"
@@ -288,18 +249,6 @@
       "desc": "Управљајте системским упитима који дефинишу понашање и личност вашег AI асистента.",
       "addBtn": "+ додај системски упит",
       "empty": "Нема конфигурисаних системских упита. Изаберите додај системски упит за почетак.",
-      "tableHeaders": {
-        "name": "Назив",
-        "contentPreview": "Преглед садржаја",
-        "created": "Креирано",
-        "updated": "Ажурирано",
-        "enabled": "Омогућено",
-        "actions": "Радње"
-      },
-      "status": {
-        "enabled": "Омогућено",
-        "disabled": "Онемогућено"
-      },
       "actions": {
         "edit": "Уреди",
         "disable": "Онемогући",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "повезано",
           "disconnected": "прекинуто"
-        }
+        },
+        "addBtn": "Додај MCP алате"
       },
       "openapi": {
         "desc": "Генеришите HTTP алате из OpenAPI докумената. Удаљене спецификације се кешираjу у {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} радњи конфигурисано ({{enabled}} омогућено)",
       "addBtn": "+ додај брзу радњу",
       "empty": "Нема конфигурисаних брзих радњи. Изаберите додај брзу радњу за почетак.",
-      "tableHeaders": {
-        "action": "Радња",
-        "type": "Тип",
-        "model": "Модел",
-        "promptPreview": "Преглед упита",
-        "actions": "Радње"
-      },
       "defaultModel": "Подразумевано",
       "editBtn": "Уреди",
       "deleteBtn": "обриши",
@@ -1004,26 +947,16 @@
     "currentConversation": "Тренутни разговор",
     "new": "Ново",
     "settings": "Поставке",
-    "openSettingsTitle": "Отвори поставке додатка",
-    "mode": "Режим",
-    "prompt": "Упит",
-    "agent": "Агент",
     "modeOptions": {
       "chat": "Ћаскање",
       "agent": "Агент"
     },
-    "noSystemPrompt": "Нема системског упита",
     "noAgentsAvailable": "Нема доступних агената",
-    "sendHintPrefix": "Притисните ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " за слање",
     "sendAriaLabel": "Пошаљи поруку",
     "stop": " Заустави",
-    "addReference": "Додај референцу",
     "addReferenceTooltip": "Додај референцу датотеке или фасцикле (@)",
     "emptyHeading": "Покрените разговор",
     "emptySubtext": "Унесите поруку испод за почетак, или изаберите разговор из историје.",
-    "noAgentConfig": "Нема конфигурисаних агената",
     "selectAgent": "Изаберите агента…",
     "notices": {
       "stopping": "Заустављање генерисања...",
@@ -1047,23 +980,15 @@
       "noAgents": "Нема доступних агената. Конфигуришите агенте у Поставке → Агенти.",
       "ragDisabled": "RAG је онемогућен у поставкама. Омогућите га у поставке → функције ћаскања → RAG.",
       "webSearchDisabled": "Веб претрага је онемогућена у поставкама. Омогућите је у поставке → функције ћаскања → веб претрага.",
-      "noFilesInVault": "У трезору нису пронађене датотеке",
       "attached": "Приложено: {{name}}",
       "attachedImages": "Приложено {{count}} слика(е)",
       "referencesAdded": "Додато {{count}} референци(е)",
       "fileNotFound": "Датотека није пронађена: {{path}}",
       "agentConfigApplied": "Примењена конфигурација за агента: {{name}}",
-      "waitForComplete": "Сачекајте да тренутни одговор заврши",
-      "chatServiceFallback": "ChatService није конфигурисан. Употреба ChatView резервне варијанте.",
-      "noModelSelected": "Није изабран модел",
-      "noProviderConfig": "Конфигурација провајдера није пронађена",
-      "noResponseToRegenerate": "Нема одговора за регенерацију",
-      "agentNotFound": "Агент није пронађен",
       "unableToLoadRag": "Није могуће учитати RAG статистику.",
       "referenced": "Референцирано: {{name}}"
     },
     "status": {
-      "available": "Доступно",
       "unavailable": "Недоступно",
       "disabled": "Онемогућено",
       "on": "Укључено · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG је тренутно искључен за ово ћаскање."
     },
     "agentSummary": {
-      "model": "Модел",
-      "temp": "Темп",
-      "max": "Макс",
-      "rag": "RAG",
-      "web": "Веб",
-      "tools": "Алати",
-      "memory": "Меморија",
-      "none": "Нема",
-      "configuration": "{{name}} конфигурација",
-      "modelFixed": "{{name}} · Фиксно",
-      "modelDefault": "{{name}} · Подразумевано",
-      "modelChatView": "{{name}} · Приказ ћаскања",
-      "customModel": "Прилагођени модел",
-      "notSet": "Није постављено",
-      "auto": "Аутоматски",
       "on": "Укључено",
-      "off": "Искључено",
-      "shortTerm": "Краткорочна",
-      "longTerm": "Дугорочна",
-      "disabledMemory": "Онемогућено",
-      "builtIn": "{{count}} уграђени",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Искључено"
     },
     "message": {
       "webResults": "Веб резултати",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Убаци у белешке",
       "regenerate": "Регенериши"
     },
-    "streaming": {
-      "thinking": "Размишљање..."
-    },
     "toolCall": {
-      "thinking": "Размишљање",
       "executionProcess": "Процес извршавања",
       "input": "Улаз",
       "output": "Излаз",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Употреби индексиране белешке као контекст",
     "webSearchLabel": "Веб претрага",
     "webSearchTooltipLabel": "Претражи интернет кад је потребно",
-    "imageUnavailable": "Прилагање слика није доступно за тренутни модел.",
-    "newChat": "Ново ћаскање",
     "newConversation": "Нови разговор",
     "searchConversations": "Претражи разговоре...",
     "header": {
-      "model": "Модел",
-      "advancedParams": "Напредни параметри",
-      "temperature": "Температура",
-      "maxTokens": "Макс. токени",
-      "topP": "Top P",
-      "freqPenalty": "Казна за учесталост",
-      "presPenalty": "Казна за присуство",
-      "agentConfig": "Конфигурација агента",
-      "modelsCount": "Модели: {{count}}",
-      "tokensCount": "Токени: {{count}}",
       "noModels": "Нема доступних модела"
-    },
-    "temperature": {
-      "precise": "0 (Прецизно)",
-      "balanced": "1 (Уравнотежено)",
-      "creative": "2 (Креативно)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Убаци у изабрану белешку",
         "createNew": "Креирај нову белешку",
         "noResults": "Нису пронађене одговарајуће белешке."
+      },
+      "agentTask": {
+        "cancel": "Откажи",
+        "fieldLabel": "Задатак",
+        "newConversation": "Започни у новом разговору",
+        "newConversationDesc": "Држи ово покретање агента одвојено од тренутног ћаскања.",
+        "placeholder": "Унесите свој задатак овде...",
+        "start": "Започни",
+        "title": "Покрени задатак агента"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Молимо изаберите тип провајдера",
         "invalidUrl": "Неважећи формат основног URL-а. Молимо унесите важећи URL (нпр. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Кеширани модели: {{count}}",
+      "connectionFailed": "Тест везе није успео. Проверите поставке провајдера.",
+      "connectionSuccess": "Веза је успешна. Кеширано модела: {{count}}.",
+      "noCachedModels": "Нема кешираних модела",
+      "testConnection": "Тестирај везу",
+      "testing": "Тестирање..."
     },
     "mcpInspector": {
       "title": "MCP инспектор",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Неважећи број за параметар: {{name}}",
           "invalidJson": "Неважећи JSON за параметар: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Нема конфигурисаних MCP сервера",
-        "testing": "Тестирање {{count}} MCP веза сервера...",
-        "allSuccess": "свих {{count}} mcp сервера успешно повезано!",
-        "partial": "{{success}} повезано, {{failed}} неуспешно"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Верзија: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Сервер ван мреже",
-      "connectionError": "Грешка при повезивању",
       "pullTitle": "Преузми нови модел",
       "pullHint": "Унесите назив модела за преузимање из Ollama библиотеке (нпр. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Обрада...",
     "textUpdated": "Текст успешно ажуриран",
     "error": "Грешка: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Задатак агента: питај о тренутној белешци",
+    "createProjectBrief": "Задатак агента: направи преглед пројекта",
+    "createResearchBrief": "Задатак агента: направи преглед истраживања",
+    "diagnoseVault": "Задатак агента: дијагностикуј трезор",
+    "doctorLinksTags": "Задатак агента: побољшај везе, ознаке и својства",
+    "draftFromNote": "Задатак агента: нацрт на основу тренутне белешке",
+    "findDuplicateNotes": "Задатак агента: пронађи дупликате и кандидате за спајање",
+    "findRelatedNotes": "Задатак агента: пронађи повезане белешке",
+    "generateWeeklyReview": "Задатак агента: генериши недељни преглед",
+    "improveSelection": "Задатак агента: побољшај избор",
+    "openChatMain": "Отвори AI ћаскање у главној области",
+    "openChatSidebar": "Отвори AI ћаскање у бочној траци",
+    "organizeCurrentNote": "Задатак агента: организуј тренутну белешку",
+    "sourceGroundedQuestion": "Задатак агента: постави питање засновано на изворима",
+    "summarizeCurrentNote": "Задатак агента: сажми тренутну белешку",
+    "switchModel": "Промени модел"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: питај агента о овој датотеци",
+    "createProjectBrief": "Intelligence assistant: направи преглед пројекта помоћу агента",
+    "createResearchBrief": "Intelligence assistant: направи преглед истраживања помоћу агента",
+    "doctorLinksTags": "Intelligence assistant: побољшај везе, ознаке и својства помоћу агента",
+    "draftFromFile": "Intelligence assistant: направи нацрт из ове датотеке помоћу агента",
+    "findDuplicates": "Intelligence assistant: пронађи дупликате и кандидате за спајање помоћу агента",
+    "findRelatedNotes": "Intelligence assistant: пронађи повезане белешке помоћу агента",
+    "improveFolder": "Intelligence assistant: побољшај везе, ознаке и својства у фасцикли помоћу агента",
+    "organizeFolder": "Intelligence assistant: организуј фасциклу помоћу агента",
+    "summarize": "Intelligence assistant: сажми помоћу агента"
+  },
+  "ribbon": {
+    "openChat": "Отвори AI ћаскање"
   }
 }

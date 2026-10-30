@@ -12,21 +12,13 @@
       "usage": "Ús"
     },
     "general": {
-      "desc": "Configureu els ajustos generals del connector d'assistent intel·ligent.",
       "pluginVersion": {
-        "name": "Versió del connector",
-        "desc": "Versió actual del connector d'assistent intel·ligent"
+        "name": "Versió del connector"
       },
       "defaultModel": {
         "name": "Model predeterminat",
         "desc": "Model predeterminat per a les converses",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Mode de xat predeterminat",
-        "desc": "Trieu en quin mode s'obre la vista de xat",
-        "chat": "Mode xat",
-        "agent": "Mode agent"
       },
       "conversationTitleMode": {
         "name": "Mode de títol de conversa",
@@ -102,11 +94,6 @@
       "count": "{{count}} proveïdors configurats",
       "addBtn": "+ Afegeix proveïdor",
       "empty": "No hi ha proveïdors configurats. Seleccioneu „Afegeix proveïdor“ per començar.",
-      "tableHeaders": {
-        "provider": "Proveïdor",
-        "status": "Estat",
-        "actions": "Accions"
-      },
       "status": {
         "ready": "Preparat",
         "needsConfig": "Cal configuració",
@@ -117,7 +104,6 @@
         "serverError": "Error del servidor"
       },
       "guidance": {
-        "requiresCli": "Requereix CLI local",
         "configureBaseUrl": "Configureu la URL base",
         "addApiKey": "Afegeix clau API"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "actualitza totes les eines",
       "addBtn": "+ Afegeix servidor MCP",
       "empty": "No hi ha servidors MCP configurats. Seleccioneu Afegeix servidor MCP per començar.",
-      "tableHeaders": {
-        "name": "Nom",
-        "command": "Ordre",
-        "arguments": "Arguments",
-        "status": "Estat",
-        "tools": "Eines",
-        "actions": "Accions"
-      },
       "untitled": "Servidor MCP sense títol",
       "notConfigured": "No configurat",
-      "noArgs": "Cap",
       "cached": "A la memòria cau",
-      "disabled": "Desactivat",
       "envVars_one": "{{count}} variable env",
       "envVars_other": "{{count}} variables env",
       "envVars": "{{count}} variables env",
@@ -244,26 +220,13 @@
       "count": "{{count}} agents configurats",
       "addBtn": "+ afegeix agent",
       "empty": "No hi ha agents configurats. Seleccioneu afegeix agent per començar.",
-      "tableHeaders": {
-        "agent": "Agent",
-        "model": "Model",
-        "capabilities": "Capacitats",
-        "tools": "Eines",
-        "actions": "Accions"
-      },
       "defaultBadge": "Predeterminat",
       "systemPrompt": "Instrucció de sistema • {{promptName}}",
       "customPrompt": "Instrucció personalitzada",
       "model": {
         "notSet": "No establert",
-        "notFound": "Model no trobat a la memòria cau",
         "useChatView": "Usa el model de la vista de xat",
-        "useChatViewDesc": "Farà servir el model seleccionat a la vista de xat",
-        "useDefault": "Usa el model predeterminat",
-        "useDefaultDesc": "Farà servir el model predeterminat de la configuració"
-      },
-      "capabilities": {
-        "noSpecialModes": "Cap mode especial"
+        "useDefault": "Usa el model predeterminat"
       },
       "tools": {
         "builtIn": "{{count}} integrat",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} servidors mcp",
         "mcpTool_one": "{{count}} eina mcp",
         "mcpTool_other": "{{count}} eines mcp",
-        "mcpTool": "{{count}} eines mcp",
-        "noTools": "Cap eina activada"
+        "mcpTool": "{{count}} eines mcp"
       },
       "actions": {
         "edit": "Edita",
-        "delete": "elimina",
-        "protected": "protegit"
+        "delete": "elimina"
       },
       "confirm": {
         "delete": "Elimina l'agent „{{name}}“?"
@@ -288,18 +249,6 @@
       "desc": "Gestioneu les instruccions de sistema que defineixen el comportament i la personalitat del vostre assistent d'IA.",
       "addBtn": "+ afegeix instrucció de sistema",
       "empty": "No hi ha instruccions de sistema configurades. Seleccioneu afegeix instrucció de sistema per començar.",
-      "tableHeaders": {
-        "name": "Nom",
-        "contentPreview": "Previsualització del contingut",
-        "created": "Creat",
-        "updated": "Actualitzat",
-        "enabled": "Activat",
-        "actions": "Accions"
-      },
-      "status": {
-        "enabled": "Activat",
-        "disabled": "Desactivat"
-      },
       "actions": {
         "edit": "Edita",
         "disable": "Desactiva",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "connectat",
           "disconnected": "desconnectat"
-        }
+        },
+        "addBtn": "Afegeix eines MCP"
       },
       "openapi": {
         "desc": "Genereu eines HTTP a partir de documents OpenAPI. Les especificacions remotes s'emmagatzemen a la memòria cau a {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} accions configurades ({{enabled}} activades)",
       "addBtn": "+ afegeix acció ràpida",
       "empty": "Cap acció ràpida configurada. Seleccioneu afegeix acció ràpida per començar.",
-      "tableHeaders": {
-        "action": "Acció",
-        "type": "Tipus",
-        "model": "Model",
-        "promptPreview": "Previsualització de la instrucció",
-        "actions": "Accions"
-      },
       "defaultModel": "Predeterminat",
       "editBtn": "Edita",
       "deleteBtn": "elimina",
@@ -1004,26 +947,16 @@
     "currentConversation": "Conversa actual",
     "new": "Nou",
     "settings": "Configuració",
-    "openSettingsTitle": "Obre la configuració del connector",
-    "mode": "Mode",
-    "prompt": "Instrucció",
-    "agent": "Agent",
     "modeOptions": {
       "chat": "Xat",
       "agent": "Agent"
     },
-    "noSystemPrompt": "Sense instrucció de sistema",
     "noAgentsAvailable": "Cap agent disponible",
-    "sendHintPrefix": "Premeu ",
-    "sendHintKey": "Retorn",
-    "sendHintSuffix": " per enviar",
     "sendAriaLabel": "Envia el missatge",
     "stop": " Atura",
-    "addReference": "Afegeix referència",
     "addReferenceTooltip": "Afegeix referència de fitxer o carpeta (@)",
     "emptyHeading": "Inicieu una conversa",
     "emptySubtext": "Escriviu un missatge a continuació per començar, o seleccioneu una conversa de l'historial.",
-    "noAgentConfig": "Cap agent configurat",
     "selectAgent": "Seleccioneu un agent…",
     "notices": {
       "stopping": "S'atura la generació...",
@@ -1047,23 +980,15 @@
       "noAgents": "Cap agent disponible. Configureu agents a Configuració → Agents.",
       "ragDisabled": "RAG està desactivat a la configuració. Activeu-lo a configuració → funcions de xat → RAG.",
       "webSearchDisabled": "La cerca web està desactivada a la configuració. Activeu-la a configuració → funcions de xat → cerca web.",
-      "noFilesInVault": "No s'han trobat fitxers al vault",
       "attached": "Adjuntat: {{name}}",
       "attachedImages": "Adjuntades {{count}} imatge(s)",
       "referencesAdded": "Afegides {{count}} referència(es)",
       "fileNotFound": "Fitxer no trobat: {{path}}",
       "agentConfigApplied": "Configuració aplicada per a l'agent: {{name}}",
-      "waitForComplete": "Espereu que acabi la resposta actual",
-      "chatServiceFallback": "ChatService no configurat. S'usa el fallback de ChatView.",
-      "noModelSelected": "Cap model seleccionat",
-      "noProviderConfig": "No s'ha trobat la configuració del proveïdor",
-      "noResponseToRegenerate": "Cap resposta per regenerar",
-      "agentNotFound": "Agent no trobat",
       "unableToLoadRag": "No es poden carregar les estadístiques RAG.",
       "referenced": "Referenciat: {{name}}"
     },
     "status": {
-      "available": "Disponible",
       "unavailable": "No disponible",
       "disabled": "Desactivat",
       "on": "Activat · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG està desactivat en aquest xat."
     },
     "agentSummary": {
-      "model": "Model",
-      "temp": "Temp",
-      "max": "Màx",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Eines",
-      "memory": "Memòria",
-      "none": "Cap",
-      "configuration": "Configuració de {{name}}",
-      "modelFixed": "{{name}} · Fix",
-      "modelDefault": "{{name}} · Predeterminat",
-      "modelChatView": "{{name}} · Vista de xat",
-      "customModel": "Model personalitzat",
-      "notSet": "No establert",
-      "auto": "Automàtic",
       "on": "Activat",
-      "off": "Desactivat",
-      "shortTerm": "Curt termini",
-      "longTerm": "Llarg termini",
-      "disabledMemory": "Desactivat",
-      "builtIn": "{{count}} integrat",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Desactivat"
     },
     "message": {
       "webResults": "Resultats web",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Insereix a les notes",
       "regenerate": "Regenera"
     },
-    "streaming": {
-      "thinking": "Pensant..."
-    },
     "toolCall": {
-      "thinking": "Pensant",
       "executionProcess": "Procés d'execució",
       "input": "Entrada",
       "output": "Sortida",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Usa les notes indexades com a context",
     "webSearchLabel": "Cerca web",
     "webSearchTooltipLabel": "Cerca a Internet quan calgui",
-    "imageUnavailable": "L'adjunció d'imatges no està disponible per al model actual.",
-    "newChat": "Xat nou",
     "newConversation": "Conversa nova",
     "searchConversations": "Cerca converses...",
     "header": {
-      "model": "Model",
-      "advancedParams": "Paràmetres avançats",
-      "temperature": "Temperatura",
-      "maxTokens": "Màx. tokens",
-      "topP": "Top P",
-      "freqPenalty": "Penalització de freqüència",
-      "presPenalty": "Penalització de presència",
-      "agentConfig": "Configuració de l'agent",
-      "modelsCount": "Models: {{count}}",
-      "tokensCount": "Tokens: {{count}}",
       "noModels": "Cap model disponible"
-    },
-    "temperature": {
-      "precise": "0 (Precís)",
-      "balanced": "1 (Equilibrat)",
-      "creative": "2 (Creatiu)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Insereix a la nota seleccionada",
         "createNew": "Crea una nota nova",
         "noResults": "No s'han trobat notes coincidents."
+      },
+      "agentTask": {
+        "cancel": "Cancel·la",
+        "fieldLabel": "Tasca",
+        "newConversation": "Comença en una conversa nova",
+        "newConversationDesc": "Mantén aquesta execució de l'agent separada del xat actual.",
+        "placeholder": "Introduïu la vostra tasca aquí...",
+        "start": "Comença",
+        "title": "Inicia una tasca d'agent"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Seleccioneu un tipus de proveïdor",
         "invalidUrl": "Format d'URL base no vàlid. Introduïu una URL vàlida (p. ex. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Models a la memòria cau: {{count}}",
+      "connectionFailed": "La prova de connexió ha fallat. Comproveu la configuració del proveïdor.",
+      "connectionSuccess": "Connexió correcta. {{count}} model(s) a la memòria cau.",
+      "noCachedModels": "No hi ha models a la memòria cau",
+      "testConnection": "Prova la connexió",
+      "testing": "S'està provant..."
     },
     "mcpInspector": {
       "title": "Inspector MCP",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Número no vàlid per al paràmetre: {{name}}",
           "invalidJson": "JSON no vàlid per al paràmetre: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Cap servidor MCP configurat",
-        "testing": "S'estan provant {{count}} connexions de servidor MCP...",
-        "allSuccess": "tots {{count}} servidors mcp connectats correctament!",
-        "partial": "{{success}} connectats, {{failed}} fallits"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Versió: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Servidor fora de línia",
-      "connectionError": "Error de connexió",
       "pullTitle": "Baixa un model nou",
       "pullHint": "Introduïu un nom de model per baixar de la biblioteca Ollama (p. ex. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Processant...",
     "textUpdated": "Text actualitzat correctament",
     "error": "Error: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Tasca d'agent: pregunta sobre la nota actual",
+    "createProjectBrief": "Tasca d'agent: crea un resum de projecte",
+    "createResearchBrief": "Tasca d'agent: crea un resum de recerca",
+    "diagnoseVault": "Tasca d'agent: diagnostica el vault",
+    "doctorLinksTags": "Tasca d'agent: millora enllaços, etiquetes i propietats",
+    "draftFromNote": "Tasca d'agent: redacta a partir de la nota actual",
+    "findDuplicateNotes": "Tasca d'agent: troba duplicats i candidats a fusionar",
+    "findRelatedNotes": "Tasca d'agent: troba notes relacionades",
+    "generateWeeklyReview": "Tasca d'agent: genera una revisió setmanal",
+    "improveSelection": "Tasca d'agent: millora la selecció",
+    "openChatMain": "Obre el xat d'AI a l'àrea principal",
+    "openChatSidebar": "Obre el xat d'AI a la barra lateral",
+    "organizeCurrentNote": "Tasca d'agent: organitza la nota actual",
+    "sourceGroundedQuestion": "Tasca d'agent: fes una pregunta basada en fonts",
+    "summarizeCurrentNote": "Tasca d'agent: resumeix la nota actual",
+    "switchModel": "Canvia de model"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: pregunta a l'agent sobre aquest fitxer",
+    "createProjectBrief": "Intelligence assistant: crea un resum de projecte amb l'agent",
+    "createResearchBrief": "Intelligence assistant: crea un resum de recerca amb l'agent",
+    "doctorLinksTags": "Intelligence assistant: millora enllaços, etiquetes i propietats amb l'agent",
+    "draftFromFile": "Intelligence assistant: redacta a partir d'aquest fitxer amb l'agent",
+    "findDuplicates": "Intelligence assistant: troba duplicats i candidats a fusionar amb l'agent",
+    "findRelatedNotes": "Intelligence assistant: troba notes relacionades amb l'agent",
+    "improveFolder": "Intelligence assistant: millora els enllaços, etiquetes i propietats de la carpeta amb l'agent",
+    "organizeFolder": "Intelligence assistant: organitza la carpeta amb l'agent",
+    "summarize": "Intelligence assistant: resumeix amb l'agent"
+  },
+  "ribbon": {
+    "openChat": "Obre el xat d'AI"
   }
 }

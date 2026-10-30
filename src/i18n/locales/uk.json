@@ -12,21 +12,13 @@
       "usage": "Використання"
     },
     "general": {
-      "desc": "Налаштуйте основні параметри плагіна-асистента.",
       "pluginVersion": {
-        "name": "Версія плагіна",
-        "desc": "Поточна версія плагіна-асистента"
+        "name": "Версія плагіна"
       },
       "defaultModel": {
         "name": "Модель за замовчуванням",
         "desc": "Модель за замовчуванням для розмов",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Режим чату за замовчуванням",
-        "desc": "Виберіть, в якому режимі відкривається вікно чату",
-        "chat": "Режим чату",
-        "agent": "Режим агента"
       },
       "conversationTitleMode": {
         "name": "Режим заголовка розмови",
@@ -102,11 +94,6 @@
       "count": "{{count}} провайдерів налаштовано",
       "addBtn": "+ Додати провайдера",
       "empty": "Провайдери не налаштовані. Виберіть «Додати провайдера», щоб почати.",
-      "tableHeaders": {
-        "provider": "Провайдер",
-        "status": "Стан",
-        "actions": "Дії"
-      },
       "status": {
         "ready": "Готовий",
         "needsConfig": "Потребує налаштування",
@@ -117,7 +104,6 @@
         "serverError": "Помилка сервера"
       },
       "guidance": {
-        "requiresCli": "Потрібен локальний CLI",
         "configureBaseUrl": "Налаштуйте базовий URL",
         "addApiKey": "Додайте API-ключ"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "оновити всі інструменти",
       "addBtn": "+ Додати MCP-сервер",
       "empty": "MCP-сервери не налаштовані. Виберіть «Додати MCP-сервер», щоб почати.",
-      "tableHeaders": {
-        "name": "Ім'я",
-        "command": "Команда",
-        "arguments": "Аргументи",
-        "status": "Стан",
-        "tools": "Інструменти",
-        "actions": "Дії"
-      },
       "untitled": "Безіменний MCP-сервер",
       "notConfigured": "Не налаштовано",
-      "noArgs": "Немає",
       "cached": "Кешовано",
-      "disabled": "Вимкнено",
       "envVars_one": "{{count}} змінна середовища",
       "envVars_other": "{{count}} змінних середовища",
       "envVars": "{{count}} змінних середовища",
@@ -244,26 +220,13 @@
       "count": "{{count}} агентів налаштовано",
       "addBtn": "+ додати агента",
       "empty": "Агенти не налаштовані. Виберіть «додати агента», щоб почати.",
-      "tableHeaders": {
-        "agent": "Агент",
-        "model": "Модель",
-        "capabilities": "Можливості",
-        "tools": "Інструменти",
-        "actions": "Дії"
-      },
       "defaultBadge": "За замовчуванням",
       "systemPrompt": "Системний промпт • {{promptName}}",
       "customPrompt": "Власний промпт",
       "model": {
         "notSet": "Не задано",
-        "notFound": "Модель не знайдена в кеші",
         "useChatView": "Використовувати модель вікна чату",
-        "useChatViewDesc": "Буде використовуватися модель, вибрана у вікні чату",
-        "useDefault": "Використовувати модель за замовчуванням",
-        "useDefaultDesc": "Буде використовуватися модель за замовчуванням з налаштувань"
-      },
-      "capabilities": {
-        "noSpecialModes": "Немає спеціальних режимів"
+        "useDefault": "Використовувати модель за замовчуванням"
       },
       "tools": {
         "builtIn": "{{count}} вбудованих",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} MCP-серверів",
         "mcpTool_one": "{{count}} MCP-інструмент",
         "mcpTool_other": "{{count}} MCP-інструментів",
-        "mcpTool": "{{count}} MCP-інструментів",
-        "noTools": "Інструменти не увімкнено"
+        "mcpTool": "{{count}} MCP-інструментів"
       },
       "actions": {
         "edit": "Редагувати",
-        "delete": "видалити",
-        "protected": "захищено"
+        "delete": "видалити"
       },
       "confirm": {
         "delete": "Видалити агента «{{name}}»?"
@@ -288,18 +249,6 @@
       "desc": "Керуйте системними промптами, що визначають поведінку та особистість вашого ШІ-асистента.",
       "addBtn": "+ додати системний промпт",
       "empty": "Системні промпти не налаштовані. Виберіть «додати системний промпт», щоб почати.",
-      "tableHeaders": {
-        "name": "Ім'я",
-        "contentPreview": "Попередній перегляд вмісту",
-        "created": "Створено",
-        "updated": "Оновлено",
-        "enabled": "Увімкнено",
-        "actions": "Дії"
-      },
-      "status": {
-        "enabled": "Увімкнено",
-        "disabled": "Вимкнено"
-      },
       "actions": {
         "edit": "Редагувати",
         "disable": "Вимкнути",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "підключено",
           "disconnected": "відключено"
-        }
+        },
+        "addBtn": "Додати інструменти MCP"
       },
       "openapi": {
         "desc": "Генеруйте HTTP-інструменти з документів OpenAPI. Віддалені специфікації кешуються в {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} дій налаштовано ({{enabled}} увімкнено)",
       "addBtn": "+ додати швидку дію",
       "empty": "Швидкі дії не налаштовані. Виберіть «додати швидку дію», щоб почати.",
-      "tableHeaders": {
-        "action": "Дія",
-        "type": "Тип",
-        "model": "Модель",
-        "promptPreview": "Попередній перегляд промпту",
-        "actions": "Дії"
-      },
       "defaultModel": "За замовчуванням",
       "editBtn": "Редагувати",
       "deleteBtn": "видалити",
@@ -1004,26 +947,16 @@
     "currentConversation": "Поточна розмова",
     "new": "Нова",
     "settings": "Налаштування",
-    "openSettingsTitle": "Відкрити налаштування плагіна",
-    "mode": "Режим",
-    "prompt": "Промпт",
-    "agent": "Агент",
     "modeOptions": {
       "chat": "Чат",
       "agent": "Агент"
     },
-    "noSystemPrompt": "Немає системного промпту",
     "noAgentsAvailable": "Агенти недоступні",
-    "sendHintPrefix": "Натисніть ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " для відправки",
     "sendAriaLabel": "Відправити повідомлення",
     "stop": " Стоп",
-    "addReference": "Додати посилання",
     "addReferenceTooltip": "Додати посилання на файл або папку (@)",
     "emptyHeading": "Почніть розмову",
     "emptySubtext": "Введіть повідомлення нижче, щоб почати, або виберіть розмову з історії.",
-    "noAgentConfig": "Агенти не налаштовані",
     "selectAgent": "Виберіть агента…",
     "notices": {
       "stopping": "Зупинка генерації...",
@@ -1047,23 +980,15 @@
       "noAgents": "Агенти недоступні. Налаштуйте агентів у розділі «Налаштування → Агенти».",
       "ragDisabled": "RAG вимкнено в налаштуваннях. Увімкніть у розділі «Налаштування → функції чату → RAG».",
       "webSearchDisabled": "Веб-пошук вимкнено в налаштуваннях. Увімкніть у розділі «Налаштування → функції чату → веб-пошук».",
-      "noFilesInVault": "Файли у сховищі не знайдено",
       "attached": "Прикріплено: {{name}}",
       "attachedImages": "Прикріплено {{count}} зображень",
       "referencesAdded": "Додано {{count}} посилань",
       "fileNotFound": "Файл не знайдено: {{path}}",
       "agentConfigApplied": "Застосовано конфігурацію для агента: {{name}}",
-      "waitForComplete": "Будь ласка, зачекайте завершення поточної відповіді",
-      "chatServiceFallback": "ChatService не налаштовано. Використовується резервний ChatView.",
-      "noModelSelected": "Модель не вибрано",
-      "noProviderConfig": "Конфігурацію провайдера не знайдено",
-      "noResponseToRegenerate": "Немає відповіді для повторної генерації",
-      "agentNotFound": "Агента не знайдено",
       "unableToLoadRag": "Не вдалося завантажити статистику RAG.",
       "referenced": "Згадано: {{name}}"
     },
     "status": {
-      "available": "Доступно",
       "unavailable": "Недоступно",
       "disabled": "Вимкнено",
       "on": "Увімк. · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG наразі вимкнено для цього чату."
     },
     "agentSummary": {
-      "model": "Модель",
-      "temp": "Темп.",
-      "max": "Макс.",
-      "rag": "RAG",
-      "web": "Веб",
-      "tools": "Інструменти",
-      "memory": "Пам'ять",
-      "none": "Немає",
-      "configuration": "Конфігурація {{name}}",
-      "modelFixed": "{{name}} · Фіксована",
-      "modelDefault": "{{name}} · За замовчуванням",
-      "modelChatView": "{{name}} · Вікно чату",
-      "customModel": "Власна модель",
-      "notSet": "Не задано",
-      "auto": "Авто",
       "on": "Увімк.",
-      "off": "Вимк.",
-      "shortTerm": "Короткострокова",
-      "longTerm": "Довгострокова",
-      "disabledMemory": "Вимкнено",
-      "builtIn": "{{count}} вбудованих",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Вимк."
     },
     "message": {
       "webResults": "Результати веб-пошуку",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Вставити в нотатки",
       "regenerate": "Повторно згенерувати"
     },
-    "streaming": {
-      "thinking": "Обробка..."
-    },
     "toolCall": {
-      "thinking": "Обробка",
       "executionProcess": "Процес виконання",
       "input": "Введення",
       "output": "Виведення",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Використовувати проіндексовані нотатки як контекст",
     "webSearchLabel": "Веб-пошук",
     "webSearchTooltipLabel": "Пошук в інтернеті при необхідності",
-    "imageUnavailable": "Прикріплення зображень недоступне для поточної моделі.",
-    "newChat": "Новий чат",
     "newConversation": "Нова розмова",
     "searchConversations": "Пошук розмов...",
     "header": {
-      "model": "Модель",
-      "advancedParams": "Розширені параметри",
-      "temperature": "Температура",
-      "maxTokens": "Макс. токенів",
-      "topP": "Top P",
-      "freqPenalty": "Штраф за повторення",
-      "presPenalty": "Штраф за присутність",
-      "agentConfig": "Конфігурація агента",
-      "modelsCount": "Моделей: {{count}}",
-      "tokensCount": "Токенів: {{count}}",
       "noModels": "Моделі недоступні"
-    },
-    "temperature": {
-      "precise": "0 (Точний)",
-      "balanced": "1 (Збалансований)",
-      "creative": "2 (Творчий)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Вставити у вибрану нотатку",
         "createNew": "Створити нову нотатку",
         "noResults": "Підходящих нотаток не знайдено."
+      },
+      "agentTask": {
+        "cancel": "Скасувати",
+        "fieldLabel": "Завдання",
+        "newConversation": "Почати в новій розмові",
+        "newConversationDesc": "Відокремити цей запуск агента від поточного чату.",
+        "placeholder": "Введіть завдання тут...",
+        "start": "Почати",
+        "title": "Запустити завдання агента"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Будь ласка, виберіть тип провайдера",
         "invalidUrl": "Неправильний формат базового URL. Будь ласка, введіть коректний URL (наприклад, https://api.example.com)"
-      }
+      },
+      "cachedModels": "Кешовані моделі: {{count}}",
+      "connectionFailed": "Перевірка підключення не вдалася. Перевірте налаштування провайдера.",
+      "connectionSuccess": "Підключення успішне. Кешовано моделей: {{count}}.",
+      "noCachedModels": "Немає кешованих моделей",
+      "testConnection": "Перевірити підключення",
+      "testing": "Перевірка..."
     },
     "mcpInspector": {
       "title": "Інспектор MCP",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Неприпустиме число для параметра: {{name}}",
           "invalidJson": "Неприпустимий JSON для параметра: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "MCP-сервери не налаштовані",
-        "testing": "Тестування {{count}} MCP-серверних з'єднань...",
-        "allSuccess": "всі {{count}} MCP-серверів успішно підключено!",
-        "partial": "{{success}} підключено, {{failed}} не вдалося"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Версія: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Сервер офлайн",
-      "connectionError": "Помилка з'єднання",
       "pullTitle": "Завантажити нову модель",
       "pullHint": "Введіть назву моделі для завантаження з бібліотеки Ollama (наприклад, llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Обробка...",
     "textUpdated": "Текст успішно оновлено",
     "error": "Помилка: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Завдання агента: запитати про поточну нотатку",
+    "createProjectBrief": "Завдання агента: створити опис проєкту",
+    "createResearchBrief": "Завдання агента: створити дослідницьке зведення",
+    "diagnoseVault": "Завдання агента: діагностика сховища",
+    "doctorLinksTags": "Завдання агента: покращити посилання, теги та властивості",
+    "draftFromNote": "Завдання агента: чернетка на основі поточної нотатки",
+    "findDuplicateNotes": "Завдання агента: знайти дублікати та кандидатів на об'єднання",
+    "findRelatedNotes": "Завдання агента: знайти пов'язані нотатки",
+    "generateWeeklyReview": "Завдання агента: створити щотижневий огляд",
+    "improveSelection": "Завдання агента: покращити виділений текст",
+    "openChatMain": "Відкрити чат ШІ в основній області",
+    "openChatSidebar": "Відкрити чат ШІ на бічній панелі",
+    "organizeCurrentNote": "Завдання агента: упорядкувати поточну нотатку",
+    "sourceGroundedQuestion": "Завдання агента: поставити запитання з опорою на джерела",
+    "summarizeCurrentNote": "Завдання агента: стисло викласти поточну нотатку",
+    "switchModel": "Змінити модель"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: запитати агента про цей файл",
+    "createProjectBrief": "Intelligence assistant: створити опис проєкту за допомогою агента",
+    "createResearchBrief": "Intelligence assistant: створити дослідницьке зведення за допомогою агента",
+    "doctorLinksTags": "Intelligence assistant: покращити посилання, теги та властивості за допомогою агента",
+    "draftFromFile": "Intelligence assistant: створити чернетку на основі цього файлу за допомогою агента",
+    "findDuplicates": "Intelligence assistant: знайти дублікати та кандидатів на об'єднання за допомогою агента",
+    "findRelatedNotes": "Intelligence assistant: знайти пов'язані нотатки за допомогою агента",
+    "improveFolder": "Intelligence assistant: покращити посилання, теги та властивості в папці за допомогою агента",
+    "organizeFolder": "Intelligence assistant: упорядкувати папку за допомогою агента",
+    "summarize": "Intelligence assistant: стисло викласти за допомогою агента"
+  },
+  "ribbon": {
+    "openChat": "Відкрити чат ШІ"
   }
 }

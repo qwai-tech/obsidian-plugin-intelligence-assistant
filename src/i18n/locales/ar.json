@@ -12,21 +12,13 @@
       "usage": "الاستخدام"
     },
     "general": {
-      "desc": "تهيئة الإعدادات العامة لملحق المساعد الذكي.",
       "pluginVersion": {
-        "name": "إصدار الملحق",
-        "desc": "الإصدار الحالي لملحق المساعد الذكي"
+        "name": "إصدار الملحق"
       },
       "defaultModel": {
         "name": "النموذج الافتراضي",
         "desc": "النموذج الافتراضي المستخدم في المحادثات",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "وضع المحادثة الافتراضي",
-        "desc": "اختر الوضع الذي تُفتح به نافذة المحادثة",
-        "chat": "وضع المحادثة",
-        "agent": "وضع الوكيل"
       },
       "conversationTitleMode": {
         "name": "وضع عنوان المحادثة",
@@ -102,11 +94,6 @@
       "count": "تم تهيئة {{count}} مزودين",
       "addBtn": "+ إضافة مزود",
       "empty": "لم يتم تهيئة أي مزودين. اختر \"إضافة مزود\" للبدء.",
-      "tableHeaders": {
-        "provider": "المزود",
-        "status": "الحالة",
-        "actions": "الإجراءات"
-      },
       "status": {
         "ready": "جاهز",
         "needsConfig": "يحتاج إلى تهيئة",
@@ -117,7 +104,6 @@
         "serverError": "خطأ في الخادم"
       },
       "guidance": {
-        "requiresCli": "يتطلب CLI محليًا",
         "configureBaseUrl": "هيّئ عنوان URL الأساسي",
         "addApiKey": "أضف مفتاح API"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "تحديث جميع الأدوات",
       "addBtn": "+ إضافة خادم MCP",
       "empty": "لم يتم تهيئة أي خوادم MCP. اختر إضافة خادم MCP للبدء.",
-      "tableHeaders": {
-        "name": "الاسم",
-        "command": "الأمر",
-        "arguments": "الوسائط",
-        "status": "الحالة",
-        "tools": "الأدوات",
-        "actions": "الإجراءات"
-      },
       "untitled": "خادم MCP بلا عنوان",
       "notConfigured": "غير مُهيَّأ",
-      "noArgs": "لا شيء",
       "cached": "مخزّن مؤقتًا",
-      "disabled": "معطّل",
       "envVars_one": "{{count}} متغير بيئة",
       "envVars_other": "{{count}} متغيرات بيئة",
       "envVars": "{{count}} متغيرات بيئة",
@@ -244,26 +220,13 @@
       "count": "تم تهيئة {{count}} وكلاء",
       "addBtn": "+ إضافة وكيل",
       "empty": "لم يتم تهيئة أي وكلاء. اختر إضافة وكيل للبدء.",
-      "tableHeaders": {
-        "agent": "الوكيل",
-        "model": "النموذج",
-        "capabilities": "القدرات",
-        "tools": "الأدوات",
-        "actions": "الإجراءات"
-      },
       "defaultBadge": "افتراضي",
       "systemPrompt": "مطالبة النظام • {{promptName}}",
       "customPrompt": "مطالبة مخصصة",
       "model": {
         "notSet": "غير مُعيَّن",
-        "notFound": "لم يتم العثور على النموذج في الذاكرة المؤقتة",
         "useChatView": "استخدم نموذج عرض المحادثة",
-        "useChatViewDesc": "سيستخدم النموذج المحدد في عرض المحادثة",
-        "useDefault": "استخدم النموذج الافتراضي",
-        "useDefaultDesc": "سيستخدم النموذج الافتراضي من الإعدادات"
-      },
-      "capabilities": {
-        "noSpecialModes": "لا توجد أوضاع خاصة"
+        "useDefault": "استخدم النموذج الافتراضي"
       },
       "tools": {
         "builtIn": "{{count}} مدمج",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} خوادم mcp",
         "mcpTool_one": "{{count}} أداة mcp",
         "mcpTool_other": "{{count}} أدوات mcp",
-        "mcpTool": "{{count}} أدوات mcp",
-        "noTools": "لا توجد أدوات مفعّلة"
+        "mcpTool": "{{count}} أدوات mcp"
       },
       "actions": {
         "edit": "تعديل",
-        "delete": "حذف",
-        "protected": "محمي"
+        "delete": "حذف"
       },
       "confirm": {
         "delete": "حذف الوكيل \"{{name}}\"؟"
@@ -288,18 +249,6 @@
       "desc": "إدارة مطالبات النظام التي تحدد سلوك وشخصية مساعدك الذكي.",
       "addBtn": "+ إضافة مطالبة نظام",
       "empty": "لم يتم تهيئة أي مطالبات نظام. اختر إضافة مطالبة نظام للبدء.",
-      "tableHeaders": {
-        "name": "الاسم",
-        "contentPreview": "معاينة المحتوى",
-        "created": "تاريخ الإنشاء",
-        "updated": "تاريخ التحديث",
-        "enabled": "مفعّل",
-        "actions": "الإجراءات"
-      },
-      "status": {
-        "enabled": "مفعّل",
-        "disabled": "معطّل"
-      },
       "actions": {
         "edit": "تعديل",
         "disable": "تعطيل",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "متصل",
           "disconnected": "منقطع"
-        }
+        },
+        "addBtn": "إضافة أدوات MCP"
       },
       "openapi": {
         "desc": "توليد أدوات HTTP من وثائق OpenAPI. يتم تخزين المواصفات البعيدة مؤقتًا في {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "تم تهيئة {{count}} إجراءات ({{enabled}} مفعّلة)",
       "addBtn": "+ إضافة إجراء سريع",
       "empty": "لم يتم تهيئة أي إجراءات سريعة. اختر إضافة إجراء سريع للبدء.",
-      "tableHeaders": {
-        "action": "الإجراء",
-        "type": "النوع",
-        "model": "النموذج",
-        "promptPreview": "معاينة المطالبة",
-        "actions": "الإجراءات"
-      },
       "defaultModel": "افتراضي",
       "editBtn": "تعديل",
       "deleteBtn": "حذف",
@@ -1004,26 +947,16 @@
     "currentConversation": "المحادثة الحالية",
     "new": "جديد",
     "settings": "الإعدادات",
-    "openSettingsTitle": "فتح إعدادات الملحق",
-    "mode": "الوضع",
-    "prompt": "المطالبة",
-    "agent": "الوكيل",
     "modeOptions": {
       "chat": "محادثة",
       "agent": "وكيل"
     },
-    "noSystemPrompt": "لا توجد مطالبة نظام",
     "noAgentsAvailable": "لا يوجد وكلاء متاحون",
-    "sendHintPrefix": "اضغط ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " للإرسال",
     "sendAriaLabel": "إرسال الرسالة",
     "stop": " إيقاف",
-    "addReference": "إضافة مرجع",
     "addReferenceTooltip": "إضافة ملف أو مجلد كمرجع (@)",
     "emptyHeading": "ابدأ محادثة",
     "emptySubtext": "اكتب رسالة أدناه للبدء، أو اختر محادثة من السجل.",
-    "noAgentConfig": "لم يتم تهيئة أي وكلاء",
     "selectAgent": "اختر وكيلًا…",
     "notices": {
       "stopping": "جارٍ إيقاف التوليد...",
@@ -1047,23 +980,15 @@
       "noAgents": "لا يوجد وكلاء متاحون. هيّئ الوكلاء في الإعدادات ← الوكلاء.",
       "ragDisabled": "تم تعطيل RAG في الإعدادات. فعّله من الإعدادات ← ميزات المحادثة ← RAG.",
       "webSearchDisabled": "تم تعطيل البحث على الويب في الإعدادات. فعّله من الإعدادات ← ميزات المحادثة ← البحث على الويب.",
-      "noFilesInVault": "لم يتم العثور على ملفات في المستودع",
       "attached": "مُرفق: {{name}}",
       "attachedImages": "تم إرفاق {{count}} صورة",
       "referencesAdded": "تمت إضافة {{count}} مرجع",
       "fileNotFound": "لم يتم العثور على الملف: {{path}}",
       "agentConfigApplied": "تم تطبيق تهيئة الوكيل: {{name}}",
-      "waitForComplete": "يرجى انتظار اكتمال الاستجابة الحالية",
-      "chatServiceFallback": "لم يتم تهيئة ChatService. استخدام ChatView الاحتياطي.",
-      "noModelSelected": "لم يتم تحديد نموذج",
-      "noProviderConfig": "لم يتم العثور على تهيئة المزود",
-      "noResponseToRegenerate": "لا توجد استجابة لإعادة التوليد",
-      "agentNotFound": "لم يتم العثور على الوكيل",
       "unableToLoadRag": "تعذّر تحميل إحصائيات RAG.",
       "referenced": "مُرجَع: {{name}}"
     },
     "status": {
-      "available": "متاح",
       "unavailable": "غير متاح",
       "disabled": "معطّل",
       "on": "مفعّل · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG معطّل حاليًا لهذه المحادثة."
     },
     "agentSummary": {
-      "model": "النموذج",
-      "temp": "الحرارة",
-      "max": "الحد الأقصى",
-      "rag": "RAG",
-      "web": "الويب",
-      "tools": "الأدوات",
-      "memory": "الذاكرة",
-      "none": "لا شيء",
-      "configuration": "تهيئة {{name}}",
-      "modelFixed": "{{name}} · ثابت",
-      "modelDefault": "{{name}} · افتراضي",
-      "modelChatView": "{{name}} · عرض المحادثة",
-      "customModel": "نموذج مخصص",
-      "notSet": "غير مُعيَّن",
-      "auto": "تلقائي",
       "on": "مفعّل",
-      "off": "معطّل",
-      "shortTerm": "قصير المدى",
-      "longTerm": "طويل المدى",
-      "disabledMemory": "معطّل",
-      "builtIn": "{{count}} مدمج",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "معطّل"
     },
     "message": {
       "webResults": "نتائج الويب",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "إدراج في الملاحظات",
       "regenerate": "إعادة التوليد"
     },
-    "streaming": {
-      "thinking": "جارٍ التفكير..."
-    },
     "toolCall": {
-      "thinking": "التفكير",
       "executionProcess": "عملية التنفيذ",
       "input": "المدخل",
       "output": "المخرج",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "استخدام الملاحظات المفهرسة كسياق",
     "webSearchLabel": "البحث على الويب",
     "webSearchTooltipLabel": "البحث على الإنترنت عند الحاجة",
-    "imageUnavailable": "إرفاق الصور غير متاح للنموذج الحالي.",
-    "newChat": "محادثة جديدة",
     "newConversation": "محادثة جديدة",
     "searchConversations": "البحث في المحادثات...",
     "header": {
-      "model": "النموذج",
-      "advancedParams": "المعاملات المتقدمة",
-      "temperature": "الحرارة",
-      "maxTokens": "الحد الأقصى للرموز",
-      "topP": "Top P",
-      "freqPenalty": "عقوبة التكرار",
-      "presPenalty": "عقوبة الحضور",
-      "agentConfig": "تهيئة الوكيل",
-      "modelsCount": "النماذج: {{count}}",
-      "tokensCount": "الرموز: {{count}}",
       "noModels": "لا توجد نماذج متاحة"
-    },
-    "temperature": {
-      "precise": "0 (دقيق)",
-      "balanced": "1 (متوازن)",
-      "creative": "2 (إبداعي)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "إدراج في الملاحظة المحددة",
         "createNew": "إنشاء ملاحظة جديدة",
         "noResults": "لم يتم العثور على ملاحظات مطابقة."
+      },
+      "agentTask": {
+        "cancel": "إلغاء",
+        "fieldLabel": "المهمة",
+        "newConversation": "البدء في محادثة جديدة",
+        "newConversationDesc": "إبقاء تشغيل هذا الوكيل منفصلًا عن الدردشة الحالية.",
+        "placeholder": "أدخل مهمتك هنا...",
+        "start": "بدء",
+        "title": "بدء مهمة وكيل"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "يرجى تحديد نوع مزود",
         "invalidUrl": "صيغة URL الأساسي غير صالحة. يرجى إدخال URL صالح (مثلًا، https://api.example.com)"
-      }
+      },
+      "cachedModels": "النماذج المخزنة مؤقتًا: {{count}}",
+      "connectionFailed": "فشل اختبار الاتصال. تحقق من إعدادات المزود.",
+      "connectionSuccess": "تم الاتصال بنجاح. تم تخزين {{count}} نموذج(نماذج) مؤقتًا.",
+      "noCachedModels": "لا توجد نماذج مخزنة مؤقتًا",
+      "testConnection": "اختبار الاتصال",
+      "testing": "جارٍ الاختبار..."
     },
     "mcpInspector": {
       "title": "مفتش MCP",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "رقم غير صالح للمعامل: {{name}}",
           "invalidJson": "JSON غير صالح للمعامل: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "لم يتم تهيئة أي خوادم MCP",
-        "testing": "جارٍ اختبار {{count}} اتصالات خادم MCP...",
-        "allSuccess": "تم توصيل جميع {{count}} خوادم mcp بنجاح!",
-        "partial": "{{success}} متصل، {{failed}} فشل"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | الإصدار: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "الخادم غير متصل",
-      "connectionError": "خطأ في الاتصال",
       "pullTitle": "سحب نموذج جديد",
       "pullHint": "أدخل اسم نموذج للتنزيل من مكتبة Ollama (مثلًا، llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "جارٍ المعالجة...",
     "textUpdated": "تم تحديث النص بنجاح",
     "error": "خطأ: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "مهمة وكيل: السؤال عن الملاحظة الحالية",
+    "createProjectBrief": "مهمة وكيل: إنشاء موجز مشروع",
+    "createResearchBrief": "مهمة وكيل: إنشاء موجز بحثي",
+    "diagnoseVault": "مهمة وكيل: تشخيص المستودع",
+    "doctorLinksTags": "مهمة وكيل: تحسين الروابط والوسوم والخصائص",
+    "draftFromNote": "مهمة وكيل: صياغة مسودة من الملاحظة الحالية",
+    "findDuplicateNotes": "مهمة وكيل: البحث عن المكررات ومرشحي الدمج",
+    "findRelatedNotes": "مهمة وكيل: البحث عن ملاحظات ذات صلة",
+    "generateWeeklyReview": "مهمة وكيل: إنشاء مراجعة أسبوعية",
+    "improveSelection": "مهمة وكيل: تحسين التحديد",
+    "openChatMain": "فتح دردشة AI في المنطقة الرئيسية",
+    "openChatSidebar": "فتح دردشة AI في الشريط الجانبي",
+    "organizeCurrentNote": "مهمة وكيل: تنظيم الملاحظة الحالية",
+    "sourceGroundedQuestion": "مهمة وكيل: طرح سؤال مستند إلى المصادر",
+    "summarizeCurrentNote": "مهمة وكيل: تلخيص الملاحظة الحالية",
+    "switchModel": "تبديل النموذج"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: اسأل الوكيل عن هذا الملف",
+    "createProjectBrief": "Intelligence assistant: إنشاء موجز مشروع بواسطة الوكيل",
+    "createResearchBrief": "Intelligence assistant: إنشاء موجز بحثي بواسطة الوكيل",
+    "doctorLinksTags": "Intelligence assistant: تحسين الروابط والوسوم والخصائص بواسطة الوكيل",
+    "draftFromFile": "Intelligence assistant: صياغة مسودة من هذا الملف بواسطة الوكيل",
+    "findDuplicates": "Intelligence assistant: البحث عن المكررات ومرشحي الدمج بواسطة الوكيل",
+    "findRelatedNotes": "Intelligence assistant: البحث عن ملاحظات ذات صلة بواسطة الوكيل",
+    "improveFolder": "Intelligence assistant: تحسين روابط المجلد ووسومه وخصائصه بواسطة الوكيل",
+    "organizeFolder": "Intelligence assistant: تنظيم المجلد بواسطة الوكيل",
+    "summarize": "Intelligence assistant: التلخيص بواسطة الوكيل"
+  },
+  "ribbon": {
+    "openChat": "فتح دردشة AI"
   }
 }

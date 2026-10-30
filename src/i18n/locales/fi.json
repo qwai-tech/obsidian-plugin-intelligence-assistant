@@ -12,21 +12,13 @@
       "usage": "Käyttö"
     },
     "general": {
-      "desc": "Määritä tekoälyavustinlaajennuksen yleiset asetukset.",
       "pluginVersion": {
-        "name": "Laajennuksen versio",
-        "desc": "Tekoälyavustinlaajennuksen nykyinen versio"
+        "name": "Laajennuksen versio"
       },
       "defaultModel": {
         "name": "Oletusmallin",
         "desc": "Oletusmallin käyttö keskusteluihin",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Oletuskeskustelutila",
-        "desc": "Valitse tila, jolla chat-näkymä avautuu",
-        "chat": "Keskustelutila",
-        "agent": "Agenttitila"
       },
       "conversationTitleMode": {
         "name": "Keskustelun otsikkotila",
@@ -102,11 +94,6 @@
       "count": "{{count}} palveluntarjoajaa määritetty",
       "addBtn": "+ Lisää palveluntarjoaja",
       "empty": "Ei palveluntarjoajia määritetty. Valitse \"Lisää palveluntarjoaja\" aloittaaksesi.",
-      "tableHeaders": {
-        "provider": "Palveluntarjoaja",
-        "status": "Tila",
-        "actions": "Toiminnot"
-      },
       "status": {
         "ready": "Valmis",
         "needsConfig": "Tarvitsee konfiguraation",
@@ -117,7 +104,6 @@
         "serverError": "Palvelinvirhe"
       },
       "guidance": {
-        "requiresCli": "Vaatii paikallisen CLI:n",
         "configureBaseUrl": "Määritä perus-URL",
         "addApiKey": "Lisää API-avain"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "päivitä kaikki työkalut",
       "addBtn": "+ Lisää MCP-palvelin",
       "empty": "Ei MCP-palvelimia määritetty. Valitse Lisää MCP-palvelin aloittaaksesi.",
-      "tableHeaders": {
-        "name": "Nimi",
-        "command": "Komento",
-        "arguments": "Argumentit",
-        "status": "Tila",
-        "tools": "Työkalut",
-        "actions": "Toiminnot"
-      },
       "untitled": "Nimetön MCP-palvelin",
       "notConfigured": "Ei määritetty",
-      "noArgs": "Ei mitään",
       "cached": "Välimuistissa",
-      "disabled": "Pois käytöstä",
       "envVars_one": "{{count}} ympäristömuuttuja",
       "envVars_other": "{{count}} ympäristömuuttujaa",
       "envVars": "{{count}} ympäristömuuttujaa",
@@ -244,26 +220,13 @@
       "count": "{{count}} agenttia määritetty",
       "addBtn": "+ lisää agentti",
       "empty": "Ei agentteja määritetty. Valitse lisää agentti aloittaaksesi.",
-      "tableHeaders": {
-        "agent": "Agentti",
-        "model": "Malli",
-        "capabilities": "Ominaisuudet",
-        "tools": "Työkalut",
-        "actions": "Toiminnot"
-      },
       "defaultBadge": "Oletus",
       "systemPrompt": "Järjestelmäkehotus • {{promptName}}",
       "customPrompt": "Mukautettu kehotus",
       "model": {
         "notSet": "Ei asetettu",
-        "notFound": "Mallia ei löydy välimuistista",
         "useChatView": "Käytä chat-näkymän mallia",
-        "useChatViewDesc": "Käyttää chat-näkymässä valittua mallia",
-        "useDefault": "Käytä oletusmallia",
-        "useDefaultDesc": "Käyttää asetusten oletusmallia"
-      },
-      "capabilities": {
-        "noSpecialModes": "Ei erityistiloja"
+        "useDefault": "Käytä oletusmallia"
       },
       "tools": {
         "builtIn": "{{count}} sisäänrakennettu",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp-palvelinta",
         "mcpTool_one": "{{count}} mcp-työkalu",
         "mcpTool_other": "{{count}} mcp-työkalua",
-        "mcpTool": "{{count}} mcp-työkalua",
-        "noTools": "Ei työkaluja käytössä"
+        "mcpTool": "{{count}} mcp-työkalua"
       },
       "actions": {
         "edit": "Muokkaa",
-        "delete": "poista",
-        "protected": "suojattu"
+        "delete": "poista"
       },
       "confirm": {
         "delete": "Poista agentti \"{{name}}\"?"
@@ -288,18 +249,6 @@
       "desc": "Hallinnoi järjestelmäkehotuksia, jotka määrittävät tekoälyavustimesi käyttäytymisen ja persoonallisuuden.",
       "addBtn": "+ lisää järjestelmäkehotus",
       "empty": "Ei järjestelmäkehotuksia määritetty. Valitse lisää järjestelmäkehotus aloittaaksesi.",
-      "tableHeaders": {
-        "name": "Nimi",
-        "contentPreview": "Sisällön esikatselu",
-        "created": "Luotu",
-        "updated": "Päivitetty",
-        "enabled": "Käytössä",
-        "actions": "Toiminnot"
-      },
-      "status": {
-        "enabled": "Käytössä",
-        "disabled": "Pois käytöstä"
-      },
       "actions": {
         "edit": "Muokkaa",
         "disable": "Poista käytöstä",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "yhdistetty",
           "disconnected": "yhteys katkaistu"
-        }
+        },
+        "addBtn": "Lisää MCP-työkaluja"
       },
       "openapi": {
         "desc": "Luo HTTP-työkaluja OpenAPI-dokumenteista. Etäspesifikaatiot välimuistetaan kohteessa {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} toimintoa määritetty ({{enabled}} käytössä)",
       "addBtn": "+ lisää pikatoiminto",
       "empty": "Ei pikatoimintoja määritetty. Valitse lisää pikatoiminto aloittaaksesi.",
-      "tableHeaders": {
-        "action": "Toiminto",
-        "type": "Tyyppi",
-        "model": "Malli",
-        "promptPreview": "Kehotuksen esikatselu",
-        "actions": "Toiminnot"
-      },
       "defaultModel": "Oletus",
       "editBtn": "Muokkaa",
       "deleteBtn": "poista",
@@ -1004,26 +947,16 @@
     "currentConversation": "Nykyinen keskustelu",
     "new": "Uusi",
     "settings": "Asetukset",
-    "openSettingsTitle": "Avaa laajennuksen asetukset",
-    "mode": "Tila",
-    "prompt": "Kehotus",
-    "agent": "Agentti",
     "modeOptions": {
       "chat": "Keskustelu",
       "agent": "Agentti"
     },
-    "noSystemPrompt": "Ei järjestelmäkehotusta",
     "noAgentsAvailable": "Ei agentteja saatavilla",
-    "sendHintPrefix": "Paina ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " lähettääksesi",
     "sendAriaLabel": "Lähetä viesti",
     "stop": " Pysäytä",
-    "addReference": "Lisää viittaus",
     "addReferenceTooltip": "Lisää tiedosto- tai kansioviittaus (@)",
     "emptyHeading": "Aloita keskustelu",
     "emptySubtext": "Kirjoita viesti alle aloittaaksesi tai valitse keskustelu historiasta.",
-    "noAgentConfig": "Ei agentteja määritetty",
     "selectAgent": "Valitse agentti…",
     "notices": {
       "stopping": "Pysäytetään generointia...",
@@ -1047,23 +980,15 @@
       "noAgents": "Ei agentteja saatavilla. Määritä agentit kohdassa Asetukset → Agentit.",
       "ragDisabled": "RAG on poistettu käytöstä asetuksissa. Ota se käyttöön kohdassa asetukset → chat-ominaisuudet → RAG.",
       "webSearchDisabled": "Verkkohaku on poistettu käytöstä asetuksissa. Ota se käyttöön kohdassa asetukset → chat-ominaisuudet → verkkohaku.",
-      "noFilesInVault": "Holvissa ei löydy tiedostoja",
       "attached": "Liitetty: {{name}}",
       "attachedImages": "Liitetty {{count}} kuva(a)",
       "referencesAdded": "Lisätty {{count}} viittaus(ta)",
       "fileNotFound": "Tiedostoa ei löydy: {{path}}",
       "agentConfigApplied": "Sovellettu konfiguraatio agentille: {{name}}",
-      "waitForComplete": "Odota, että nykyinen vastaus valmistuu",
-      "chatServiceFallback": "ChatService ei ole määritetty. Käytetään ChatView-varavaihtoehtoa.",
-      "noModelSelected": "Ei mallia valittuna",
-      "noProviderConfig": "Palveluntarjoajan konfiguraatiota ei löydy",
-      "noResponseToRegenerate": "Ei vastausta regeneroitavaksi",
-      "agentNotFound": "Agenttia ei löydy",
       "unableToLoadRag": "RAG-tilastojen lataaminen epäonnistui.",
       "referenced": "Viitattu: {{name}}"
     },
     "status": {
-      "available": "Saatavilla",
       "unavailable": "Ei saatavilla",
       "disabled": "Pois käytöstä",
       "on": "Päällä · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG on tällä hetkellä pois käytöstä tässä chatissa."
     },
     "agentSummary": {
-      "model": "Malli",
-      "temp": "Lämpötila",
-      "max": "Maks",
-      "rag": "RAG",
-      "web": "Verkko",
-      "tools": "Työkalut",
-      "memory": "Muisti",
-      "none": "Ei mitään",
-      "configuration": "{{name}} konfiguraatio",
-      "modelFixed": "{{name}} · Kiinteä",
-      "modelDefault": "{{name}} · Oletus",
-      "modelChatView": "{{name}} · Chat-näkymä",
-      "customModel": "Mukautettu malli",
-      "notSet": "Ei asetettu",
-      "auto": "Automaattinen",
       "on": "Päällä",
-      "off": "Pois",
-      "shortTerm": "Lyhytaikainen",
-      "longTerm": "Pitkäaikainen",
-      "disabledMemory": "Pois käytöstä",
-      "builtIn": "{{count}} sisäänrakennettu",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Pois"
     },
     "message": {
       "webResults": "Verkkotulokset",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Lisää muistiinpanoihin",
       "regenerate": "Regeneroi"
     },
-    "streaming": {
-      "thinking": "Pohditaan..."
-    },
     "toolCall": {
-      "thinking": "Pohditaan",
       "executionProcess": "Suoritusprosessi",
       "input": "Syöte",
       "output": "Tuloste",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Käytä indeksoituja muistiinpanoja kontekstina",
     "webSearchLabel": "Verkkohaku",
     "webSearchTooltipLabel": "Hae internetistä tarvittaessa",
-    "imageUnavailable": "Kuvan liittäminen ei ole saatavilla nykyiselle mallille.",
-    "newChat": "Uusi chat",
     "newConversation": "Uusi keskustelu",
     "searchConversations": "Hae keskusteluja...",
     "header": {
-      "model": "Malli",
-      "advancedParams": "Lisäparametrit",
-      "temperature": "Lämpötila",
-      "maxTokens": "Enimmäistokenit",
-      "topP": "Top P",
-      "freqPenalty": "Toistumisrangaistus",
-      "presPenalty": "Läsnäolorangaistus",
-      "agentConfig": "Agentin konfiguraatio",
-      "modelsCount": "Mallit: {{count}}",
-      "tokensCount": "Tokenit: {{count}}",
       "noModels": "Ei malleja saatavilla"
-    },
-    "temperature": {
-      "precise": "0 (Tarkka)",
-      "balanced": "1 (Tasapainoinen)",
-      "creative": "2 (Luova)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Lisää valittuun muistiinpanoon",
         "createNew": "Luo uusi muistiinpano",
         "noResults": "Ei vastaavia muistiinpanoja löydetty."
+      },
+      "agentTask": {
+        "cancel": "Peruuta",
+        "fieldLabel": "Tehtävä",
+        "newConversation": "Aloita uudessa keskustelussa",
+        "newConversationDesc": "Pidä tämä agentin ajo erillään nykyisestä keskustelusta.",
+        "placeholder": "Kirjoita tehtäväsi tähän...",
+        "start": "Aloita",
+        "title": "Aloita agenttitehtävä"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Valitse palveluntarjoajan tyyppi",
         "invalidUrl": "Virheellinen perus-URL-muoto. Syötä kelvollinen URL (esim. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Välimuistissa olevat mallit: {{count}}",
+      "connectionFailed": "Yhteystesti epäonnistui. Tarkista palveluntarjoajan asetukset.",
+      "connectionSuccess": "Yhteys onnistui. {{count}} mallia tallennettu välimuistiin.",
+      "noCachedModels": "Ei malleja välimuistissa",
+      "testConnection": "Testaa yhteys",
+      "testing": "Testataan..."
     },
     "mcpInspector": {
       "title": "MCP-tarkastin",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Virheellinen numero parametrille: {{name}}",
           "invalidJson": "Virheellinen JSON parametrille: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Ei MCP-palvelimia määritetty",
-        "testing": "Testataan {{count}} MCP-palvelimen yhteyksiä...",
-        "allSuccess": "kaikki {{count}} mcp-palvelinta yhdistetty onnistuneesti!",
-        "partial": "{{success}} yhdistetty, {{failed}} epäonnistui"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Versio: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Palvelin offline",
-      "connectionError": "Yhteysvirhe",
       "pullTitle": "Hae uusi malli",
       "pullHint": "Syötä mallin nimi ladataksesi Ollama-kirjastosta (esim. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Käsitellään...",
     "textUpdated": "Teksti päivitetty onnistuneesti",
     "error": "Virhe: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Agenttitehtävä: kysy nykyisestä muistiinpanosta",
+    "createProjectBrief": "Agenttitehtävä: luo projektikooste",
+    "createResearchBrief": "Agenttitehtävä: luo tutkimuskooste",
+    "diagnoseVault": "Agenttitehtävä: diagnosoi holvi",
+    "doctorLinksTags": "Agenttitehtävä: paranna linkkejä, tunnisteita ja ominaisuuksia",
+    "draftFromNote": "Agenttitehtävä: luonnostele nykyisestä muistiinpanosta",
+    "findDuplicateNotes": "Agenttitehtävä: etsi kaksoiskappaleet ja yhdistämisehdokkaat",
+    "findRelatedNotes": "Agenttitehtävä: etsi liittyvät muistiinpanot",
+    "generateWeeklyReview": "Agenttitehtävä: luo viikkokatsaus",
+    "improveSelection": "Agenttitehtävä: paranna valintaa",
+    "openChatMain": "Avaa AI-keskustelu pääalueella",
+    "openChatSidebar": "Avaa AI-keskustelu sivupalkissa",
+    "organizeCurrentNote": "Agenttitehtävä: järjestä nykyinen muistiinpano",
+    "sourceGroundedQuestion": "Agenttitehtävä: esitä lähteisiin perustuva kysymys",
+    "summarizeCurrentNote": "Agenttitehtävä: tiivistä nykyinen muistiinpano",
+    "switchModel": "Vaihda malli"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: kysy agentilta tästä tiedostosta",
+    "createProjectBrief": "Intelligence assistant: luo projektikooste agentilla",
+    "createResearchBrief": "Intelligence assistant: luo tutkimuskooste agentilla",
+    "doctorLinksTags": "Intelligence assistant: paranna linkkejä, tunnisteita ja ominaisuuksia agentilla",
+    "draftFromFile": "Intelligence assistant: luonnostele tästä tiedostosta agentilla",
+    "findDuplicates": "Intelligence assistant: etsi kaksoiskappaleet ja yhdistämisehdokkaat agentilla",
+    "findRelatedNotes": "Intelligence assistant: etsi liittyvät muistiinpanot agentilla",
+    "improveFolder": "Intelligence assistant: paranna kansion linkkejä, tunnisteita ja ominaisuuksia agentilla",
+    "organizeFolder": "Intelligence assistant: järjestä kansio agentilla",
+    "summarize": "Intelligence assistant: tiivistä agentilla"
+  },
+  "ribbon": {
+    "openChat": "Avaa AI-keskustelu"
   }
 }

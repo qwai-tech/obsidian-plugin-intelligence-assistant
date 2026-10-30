@@ -12,21 +12,13 @@
       "usage": "Erabilera"
     },
     "general": {
-      "desc": "Konfiguratu ezarpen orokorrak adimen artifizialeko laguntzaile-pluginarentzat.",
       "pluginVersion": {
-        "name": "Pluginaren bertsioa",
-        "desc": "Adimen artifizialeko laguntzaile-pluginaren egungo bertsioa"
+        "name": "Pluginaren bertsioa"
       },
       "defaultModel": {
         "name": "Lehenetsitako modeloa",
         "desc": "Elkarrizketetarako erabiliko den lehenetsitako modeloa",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Lehenetsitako txat modua",
-        "desc": "Aukeratu txat-ikuspegia zein modutan irekiko den",
-        "chat": "Txat modua",
-        "agent": "Agente modua"
       },
       "conversationTitleMode": {
         "name": "Elkarrizketa izenburuaren modua",
@@ -102,11 +94,6 @@
       "count": "{{count}} hornitzaile konfiguratuta",
       "addBtn": "+ Gehitu hornitzailea",
       "empty": "Ez dago hornitzailerik konfiguratuta. Hautatu \"Gehitu hornitzailea\" hasteko.",
-      "tableHeaders": {
-        "provider": "Hornitzailea",
-        "status": "Egoera",
-        "actions": "Ekintzak"
-      },
       "status": {
         "ready": "Prest",
         "needsConfig": "Konfigurazioa behar du",
@@ -117,7 +104,6 @@
         "serverError": "Zerbitzariaren errorea"
       },
       "guidance": {
-        "requiresCli": "CLI lokala behar du",
         "configureBaseUrl": "Konfiguratu oinarrizko URLa",
         "addApiKey": "Gehitu API giltza"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "freskatu tresna guztiak",
       "addBtn": "+ Gehitu MCP zerbitzaria",
       "empty": "Ez dago MCP zerbitzari konfiguraturik. Hautatu \"Gehitu MCP zerbitzaria\" hasteko.",
-      "tableHeaders": {
-        "name": "Izena",
-        "command": "Komandoa",
-        "arguments": "Argumentuak",
-        "status": "Egoera",
-        "tools": "Tresnak",
-        "actions": "Ekintzak"
-      },
       "untitled": "MCP Zerbitzari izengabea",
       "notConfigured": "Konfiguratu gabe",
-      "noArgs": "Bat ere ez",
       "cached": "Katxetatuta",
-      "disabled": "Desgaituta",
       "envVars_one": "{{count}} ingurune-aldagai",
       "envVars_other": "{{count}} ingurune-aldagai",
       "envVars": "{{count}} ingurune-aldagai",
@@ -244,26 +220,13 @@
       "count": "{{count}} agente konfiguratuta",
       "addBtn": "+ gehitu agentea",
       "empty": "Ez dago agente konfiguraturik. Hautatu \"gehitu agentea\" hasteko.",
-      "tableHeaders": {
-        "agent": "Agentea",
-        "model": "Modeloa",
-        "capabilities": "Gaitasunak",
-        "tools": "Tresnak",
-        "actions": "Ekintzak"
-      },
       "defaultBadge": "Lehenetsia",
       "systemPrompt": "Sistemaren prompt-a • {{promptName}}",
       "customPrompt": "Prompt pertsonalizatua",
       "model": {
         "notSet": "Ezarri gabe",
-        "notFound": "Modeloa ez da aurkitu katxean",
         "useChatView": "Erabili Txat Ikuspegiko Modeloa",
-        "useChatViewDesc": "Txat ikuspegian hautatutako modeloa erabiliko du",
-        "useDefault": "Erabili Lehenetsitako Modeloa",
-        "useDefaultDesc": "Ezarpenetako lehenetsitako modeloa erabiliko du"
-      },
-      "capabilities": {
-        "noSpecialModes": "Modu berezirik ez"
+        "useDefault": "Erabili Lehenetsitako Modeloa"
       },
       "tools": {
         "builtIn": "{{count}} tresna integratu",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp zerbitzari",
         "mcpTool_one": "{{count}} mcp tresna",
         "mcpTool_other": "{{count}} mcp tresna",
-        "mcpTool": "{{count}} mcp tresna",
-        "noTools": "Tresna gaiturik ez"
+        "mcpTool": "{{count}} mcp tresna"
       },
       "actions": {
         "edit": "Editatu",
-        "delete": "ezabatu",
-        "protected": "babestuta"
+        "delete": "ezabatu"
       },
       "confirm": {
         "delete": "Ezabatu \"{{name}}\" agentea?"
@@ -288,18 +249,6 @@
       "desc": "Kudeatu zure AI laguntzailearen portaera eta nortasuna definitzen duten sistemaren prompt-ak.",
       "addBtn": "+ gehitu sistemaren prompt-a",
       "empty": "Ez dago sistemaren prompt konfiguraturik. Hautatu \"gehitu sistemaren prompt-a\" hasteko.",
-      "tableHeaders": {
-        "name": "Izena",
-        "contentPreview": "Edukiaren aurrebista",
-        "created": "Sortua",
-        "updated": "Eguneratua",
-        "enabled": "Gaituta",
-        "actions": "Ekintzak"
-      },
-      "status": {
-        "enabled": "Gaituta",
-        "disabled": "Desgaituta"
-      },
       "actions": {
         "edit": "Editatu",
         "disable": "Desgaitu",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "konektatuta",
           "disconnected": "deskonektatuta"
-        }
+        },
+        "addBtn": "Gehitu MCP tresnak"
       },
       "openapi": {
         "desc": "Sortu HTTP tresnak OpenAPI dokumentuetatik. Urruneko zehaztapenak {{cacheDir}}-n katxeatzen dira.",
@@ -890,13 +840,6 @@
       "count": "{{count}} ekintza konfiguratuta ({{enabled}} gaituta)",
       "addBtn": "+ gehitu ekintza azkarra",
       "empty": "Ez dago ekintza azkar konfiguraturik. Hautatu \"gehitu ekintza azkarra\" hasteko.",
-      "tableHeaders": {
-        "action": "Ekintza",
-        "type": "Mota",
-        "model": "Modeloa",
-        "promptPreview": "Prompt-aren Aurrebista",
-        "actions": "Ekintzak"
-      },
       "defaultModel": "Lehenetsia",
       "editBtn": "Editatu",
       "deleteBtn": "ezabatu",
@@ -1004,26 +947,16 @@
     "currentConversation": "Uneko elkarrizketa",
     "new": "Berria",
     "settings": "Ezarpenak",
-    "openSettingsTitle": "Ireki plugin-ezarpenak",
-    "mode": "Modua",
-    "prompt": "Prompt-a",
-    "agent": "Agentea",
     "modeOptions": {
       "chat": "Txata",
       "agent": "Agentea"
     },
-    "noSystemPrompt": "Sistemako prompt-ik ez",
     "noAgentsAvailable": "Ez dago agente erabilgarririk",
-    "sendHintPrefix": "Sakatu ",
-    "sendHintKey": "Sartu",
-    "sendHintSuffix": " bidaltzeko",
     "sendAriaLabel": "Bidali mezua",
     "stop": " Gelditu",
-    "addReference": "Gehitu erreferentzia",
     "addReferenceTooltip": "Gehitu fitxategi edo karpeta-erreferentzia (@)",
     "emptyHeading": "Hasi elkarrizketa bat",
     "emptySubtext": "Idatzi mezu bat behean hasteko, edo hautatu elkarrizketa bat historiatik.",
-    "noAgentConfig": "Ez dago agente konfiguraturik",
     "selectAgent": "Hautatu agente bat...",
     "notices": {
       "stopping": "Sorkuntza gelditzen...",
@@ -1047,23 +980,15 @@
       "noAgents": "Ez dago agente erabilgarririk. Konfiguratu agenteak hemen: Ezarpenak → Agenteak.",
       "ragDisabled": "RAG desgaituta dago ezarpenetan. Gaitu hemen: ezarpenak → txat ezaugarriak → RAG.",
       "webSearchDisabled": "Web bilaketa desgaituta dago ezarpenetan. Gaitu hemen: ezarpenak → txat ezaugarriak → web bilaketa.",
-      "noFilesInVault": "Ez da fitxategirik aurkitu biltegian",
       "attached": "Erantsita: {{name}}",
       "attachedImages": "{{count}} irudi erantsita",
       "referencesAdded": "{{count}} erreferentzia gehitu dira",
       "fileNotFound": "Fitxategia ez da aurkitu: {{path}}",
       "agentConfigApplied": "{{name}} agentearentzako konfigurazioa aplikatu da",
-      "waitForComplete": "Itxaron uneko erantzuna osatu arte",
-      "chatServiceFallback": "ChatService ez dago konfiguratuta. ChatView atzeralpena erabiltzen.",
-      "noModelSelected": "Ez da modelorik hautatu",
-      "noProviderConfig": "Ez da hornitzaile-konfiguraziorik aurkitu",
-      "noResponseToRegenerate": "Ez dago birsortzeko erantzunik",
-      "agentNotFound": "Agentea ez da aurkitu",
       "unableToLoadRag": "Ezin dira RAG estatistikak kargatu.",
       "referenced": "Erreferentziatua: {{name}}"
     },
     "status": {
-      "available": "Eskuragarri",
       "unavailable": "Ez eskuragarri",
       "disabled": "Desgaituta",
       "on": "Piztuta · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG une honetan itzalita dago txat honetarako."
     },
     "agentSummary": {
-      "model": "Modeloa",
-      "temp": "Tenp",
-      "max": "Geh",
-      "rag": "RAG",
-      "web": "Weba",
-      "tools": "Tresnak",
-      "memory": "Memoria",
-      "none": "Bat ere ez",
-      "configuration": "{{name}} konfigurazioa",
-      "modelFixed": "{{name}} · Finkoa",
-      "modelDefault": "{{name}} · Lehenetsia",
-      "modelChatView": "{{name}} · Txat Ikuspegia",
-      "customModel": "Modelo pertsonalizatua",
-      "notSet": "Ezarri gabe",
-      "auto": "Auto",
       "on": "Piztuta",
-      "off": "Itzalita",
-      "shortTerm": "Epe laburrera",
-      "longTerm": "Epe luzera",
-      "disabledMemory": "Desgaituta",
-      "builtIn": "{{count}} integratu",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Itzalita"
     },
     "message": {
       "webResults": "Web emaitzak",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Txertatu Oharretan",
       "regenerate": "Birsortu"
     },
-    "streaming": {
-      "thinking": "Pentsatzen..."
-    },
     "toolCall": {
-      "thinking": "Pentsatzen",
       "executionProcess": "Exekuzio Prozesua",
       "input": "Sarrera",
       "output": "Irteera",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Erabili indexatutako oharrak testuinguru gisa",
     "webSearchLabel": "Web Bilaketa",
     "webSearchTooltipLabel": "Bilatu interneten behar denean",
-    "imageUnavailable": "Irudi-eranskina ez dago erabilgarri uneko modeloarentzat.",
-    "newChat": "Txat Berria",
     "newConversation": "Elkarrizketa Berria",
     "searchConversations": "Bilatu elkarrizketak...",
     "header": {
-      "model": "Modeloa",
-      "advancedParams": "Parametro aurreratuak",
-      "temperature": "Tenperatura",
-      "maxTokens": "Token maximoak",
-      "topP": "Goi P",
-      "freqPenalty": "Fre. zigorra",
-      "presPenalty": "Aur. zigorra",
-      "agentConfig": "Agentearen konfigurazioa",
-      "modelsCount": "Modeloak: {{count}}",
-      "tokensCount": "Tokenak: {{count}}",
       "noModels": "Ez dago modelo erabilgarririk"
-    },
-    "temperature": {
-      "precise": "0 (Zehatza)",
-      "balanced": "1 (Orekatua)",
-      "creative": "2 (Sortzailea)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Txertatu hautatutako oharrean",
         "createNew": "Sortu ohar berria",
         "noResults": "Ez da bat datorren oharrik aurkitu."
+      },
+      "agentTask": {
+        "cancel": "Utzi",
+        "fieldLabel": "Ataza",
+        "newConversation": "Hasi elkarrizketa berri batean",
+        "newConversationDesc": "Mantendu agentearen exekuzio hau uneko txatetik bereizita.",
+        "placeholder": "Idatzi zure ataza hemen...",
+        "start": "Hasi",
+        "title": "Hasi agentearen ataza"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Mesedez, hautatu hornitzaile mota bat",
         "invalidUrl": "Oinarrizko URL formatu baliogabea. Mesedez, sartu URL baliozko bat (adibidez, https://api.example.com)"
-      }
+      },
+      "cachedModels": "Cachean gordetako modeloak: {{count}}",
+      "connectionFailed": "Konexio-probak huts egin du. Egiaztatu hornitzailearen ezarpenak.",
+      "connectionSuccess": "Konexioa ondo. {{count}} modelo cachean gorde dira.",
+      "noCachedModels": "Ez dago cachean gordetako modelorik",
+      "testConnection": "Probatu konexioa",
+      "testing": "Probatzen..."
     },
     "mcpInspector": {
       "title": "MCP ikuskatzailea",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Zenbaki baliogabea parametro honentzat: {{name}}",
           "invalidJson": "JSON baliogabea parametro honentzat: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Ez dago MCP zerbitzari konfiguraturik",
-        "testing": "{{count}} MCP zerbitzarien konexioak probatzen...",
-        "allSuccess": "{{count}} mcp zerbitzari guztiak behar bezala konektatu dira!",
-        "partial": "{{success}} konektatuta, {{failed}} huts"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Bertsioa: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Zerbitzaria lineaz kanpo",
-      "connectionError": "Konexio-errorea",
       "pullTitle": "Bota modelo berria",
       "pullHint": "Sartu modelo-izen bat Ollama liburutegitik deskargatzeko (adibidez, llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Prozesatzen...",
     "textUpdated": "Testua behar bezala eguneratu da",
     "error": "Errorea: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Agentearen ataza: galdetu uneko oharrari buruz",
+    "createProjectBrief": "Agentearen ataza: sortu proiektuaren laburpena",
+    "createResearchBrief": "Agentearen ataza: sortu ikerketaren laburpena",
+    "diagnoseVault": "Agentearen ataza: diagnostikatu biltegia",
+    "doctorLinksTags": "Agentearen ataza: hobetu estekak, etiketak eta propietateak",
+    "draftFromNote": "Agentearen ataza: zirriborroa uneko oharretik",
+    "findDuplicateNotes": "Agentearen ataza: bilatu bikoiztuak eta bateratzeko hautagaiak",
+    "findRelatedNotes": "Agentearen ataza: bilatu erlazionatutako oharrak",
+    "generateWeeklyReview": "Agentearen ataza: sortu asteko berrikuspena",
+    "improveSelection": "Agentearen ataza: hobetu hautapena",
+    "openChatMain": "Ireki AI txata eremu nagusian",
+    "openChatSidebar": "Ireki AI txata alboko barran",
+    "organizeCurrentNote": "Agentearen ataza: antolatu uneko oharra",
+    "sourceGroundedQuestion": "Agentearen ataza: egin iturrietan oinarritutako galdera",
+    "summarizeCurrentNote": "Agentearen ataza: laburtu uneko oharra",
+    "switchModel": "Aldatu modeloa"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: galdetu agenteari fitxategi honi buruz",
+    "createProjectBrief": "Intelligence assistant: sortu proiektuaren laburpena agentearekin",
+    "createResearchBrief": "Intelligence assistant: sortu ikerketaren laburpena agentearekin",
+    "doctorLinksTags": "Intelligence assistant: hobetu estekak, etiketak eta propietateak agentearekin",
+    "draftFromFile": "Intelligence assistant: zirriborroa fitxategi honetatik agentearekin",
+    "findDuplicates": "Intelligence assistant: bilatu bikoiztuak eta bateratzeko hautagaiak agentearekin",
+    "findRelatedNotes": "Intelligence assistant: bilatu erlazionatutako oharrak agentearekin",
+    "improveFolder": "Intelligence assistant: hobetu karpetaren estekak, etiketak eta propietateak agentearekin",
+    "organizeFolder": "Intelligence assistant: antolatu karpeta agentearekin",
+    "summarize": "Intelligence assistant: laburtu agentearekin"
+  },
+  "ribbon": {
+    "openChat": "Ireki AI txata"
   }
 }

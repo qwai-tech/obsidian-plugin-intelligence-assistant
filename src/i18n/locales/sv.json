@@ -12,21 +12,13 @@
       "usage": "Användning"
     },
     "general": {
-      "desc": "Konfigurera allmänna inställningar för intelligensassistentens plugin.",
       "pluginVersion": {
-        "name": "Plugin-version",
-        "desc": "Aktuell version av intelligensassistentens plugin"
+        "name": "Plugin-version"
       },
       "defaultModel": {
         "name": "Standardmodell",
         "desc": "Standardmodell för konversationer",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Standardchattläge",
-        "desc": "Välj vilket läge chattvyn öppnas med",
-        "chat": "Chattläge",
-        "agent": "Agentläge"
       },
       "conversationTitleMode": {
         "name": "Konversationstitelläge",
@@ -102,11 +94,6 @@
       "count": "{{count}} leverantörer konfigurerade",
       "addBtn": "+ Lägg till leverantör",
       "empty": "Inga leverantörer konfigurerade. Välj \"Lägg till leverantör\" för att komma igång.",
-      "tableHeaders": {
-        "provider": "Leverantör",
-        "status": "Status",
-        "actions": "Åtgärder"
-      },
       "status": {
         "ready": "Redo",
         "needsConfig": "Kräver konfiguration",
@@ -117,7 +104,6 @@
         "serverError": "Serverfel"
       },
       "guidance": {
-        "requiresCli": "Kräver lokal CLI",
         "configureBaseUrl": "Konfigurera bas-URL",
         "addApiKey": "Lägg till API-nyckel"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "uppdatera alla verktyg",
       "addBtn": "+ Lägg till MCP-server",
       "empty": "Inga MCP-servrar konfigurerade. Välj Lägg till MCP-server för att komma igång.",
-      "tableHeaders": {
-        "name": "Namn",
-        "command": "Kommando",
-        "arguments": "Argument",
-        "status": "Status",
-        "tools": "Verktyg",
-        "actions": "Åtgärder"
-      },
       "untitled": "Namnlös MCP-server",
       "notConfigured": "Inte konfigurerad",
-      "noArgs": "Inga",
       "cached": "Cachad",
-      "disabled": "Inaktiverad",
       "envVars_one": "{{count}} miljövariabel",
       "envVars_other": "{{count}} miljövariabler",
       "envVars": "{{count}} miljövariabler",
@@ -244,26 +220,13 @@
       "count": "{{count}} agenter konfigurerade",
       "addBtn": "+ lägg till agent",
       "empty": "Inga agenter konfigurerade. Välj lägg till agent för att komma igång.",
-      "tableHeaders": {
-        "agent": "Agent",
-        "model": "Modell",
-        "capabilities": "Funktioner",
-        "tools": "Verktyg",
-        "actions": "Åtgärder"
-      },
       "defaultBadge": "Standard",
       "systemPrompt": "Systemprompt • {{promptName}}",
       "customPrompt": "Anpassad prompt",
       "model": {
         "notSet": "Inte angiven",
-        "notFound": "Modellen hittades inte i cache",
         "useChatView": "Använd chattvymodell",
-        "useChatViewDesc": "Använder modellen vald i chattvyn",
-        "useDefault": "Använd standardmodell",
-        "useDefaultDesc": "Använder standardmodellen från inställningarna"
-      },
-      "capabilities": {
-        "noSpecialModes": "Inga speciallägen"
+        "useDefault": "Använd standardmodell"
       },
       "tools": {
         "builtIn": "{{count}} inbyggd",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp-servrar",
         "mcpTool_one": "{{count}} mcp-verktyg",
         "mcpTool_other": "{{count}} mcp-verktyg",
-        "mcpTool": "{{count}} mcp-verktyg",
-        "noTools": "Inga verktyg aktiverade"
+        "mcpTool": "{{count}} mcp-verktyg"
       },
       "actions": {
         "edit": "Redigera",
-        "delete": "ta bort",
-        "protected": "skyddad"
+        "delete": "ta bort"
       },
       "confirm": {
         "delete": "Ta bort agenten \"{{name}}\"?"
@@ -288,18 +249,6 @@
       "desc": "Hantera systempromptar som definierar beteende och personlighet hos din AI-assistent.",
       "addBtn": "+ lägg till systemprompt",
       "empty": "Inga systempromptar konfigurerade. Välj lägg till systemprompt för att komma igång.",
-      "tableHeaders": {
-        "name": "Namn",
-        "contentPreview": "Innehållsförhandsvisning",
-        "created": "Skapad",
-        "updated": "Uppdaterad",
-        "enabled": "Aktiverad",
-        "actions": "Åtgärder"
-      },
-      "status": {
-        "enabled": "Aktiverad",
-        "disabled": "Inaktiverad"
-      },
       "actions": {
         "edit": "Redigera",
         "disable": "Inaktivera",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "ansluten",
           "disconnected": "frånkopplad"
-        }
+        },
+        "addBtn": "Lägg till MCP-verktyg"
       },
       "openapi": {
         "desc": "Generera HTTP-verktyg från OpenAPI-dokument. Fjärrspecifikationer cachas under {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} åtgärder konfigurerade ({{enabled}} aktiverade)",
       "addBtn": "+ lägg till snabbåtgärd",
       "empty": "Inga snabbåtgärder konfigurerade. Välj lägg till snabbåtgärd för att komma igång.",
-      "tableHeaders": {
-        "action": "Åtgärd",
-        "type": "Typ",
-        "model": "Modell",
-        "promptPreview": "Promptförhandsvisning",
-        "actions": "Åtgärder"
-      },
       "defaultModel": "Standard",
       "editBtn": "Redigera",
       "deleteBtn": "ta bort",
@@ -1004,26 +947,16 @@
     "currentConversation": "Aktuell konversation",
     "new": "Ny",
     "settings": "Inställningar",
-    "openSettingsTitle": "Öppna plugin-inställningar",
-    "mode": "Läge",
-    "prompt": "Prompt",
-    "agent": "Agent",
     "modeOptions": {
       "chat": "Chatt",
       "agent": "Agent"
     },
-    "noSystemPrompt": "Ingen systemprompt",
     "noAgentsAvailable": "Inga agenter tillgängliga",
-    "sendHintPrefix": "Tryck på ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " för att skicka",
     "sendAriaLabel": "Skicka meddelande",
     "stop": " Stoppa",
-    "addReference": "Lägg till referens",
     "addReferenceTooltip": "Lägg till fil- eller mappreferens (@)",
     "emptyHeading": "Starta en konversation",
     "emptySubtext": "Skriv ett meddelande nedan för att komma igång, eller välj en konversation från historiken.",
-    "noAgentConfig": "Inga agenter konfigurerade",
     "selectAgent": "Välj en agent…",
     "notices": {
       "stopping": "Stoppar generering...",
@@ -1047,23 +980,15 @@
       "noAgents": "Inga agenter tillgängliga. Konfigurera agenter i Inställningar → Agenter.",
       "ragDisabled": "RAG är inaktiverat i inställningarna. Aktivera det under inställningar → chattfunktioner → RAG.",
       "webSearchDisabled": "Webbsökning är inaktiverat i inställningarna. Aktivera det under inställningar → chattfunktioner → webbsökning.",
-      "noFilesInVault": "Inga filer hittades i valvet",
       "attached": "Bifogad: {{name}}",
       "attachedImages": "{{count}} bild(er) bifogade",
       "referencesAdded": "{{count}} referens(er) tillagda",
       "fileNotFound": "Filen hittades inte: {{path}}",
       "agentConfigApplied": "Konfiguration tillämpad för agent: {{name}}",
-      "waitForComplete": "Vänta tills det aktuella svaret är slutfört",
-      "chatServiceFallback": "ChatService inte konfigurerad. Använder ChatView-reserv.",
-      "noModelSelected": "Ingen modell vald",
-      "noProviderConfig": "Ingen leverantörskonfiguration hittades",
-      "noResponseToRegenerate": "Inget svar att regenerera",
-      "agentNotFound": "Agent hittades inte",
       "unableToLoadRag": "Kan inte ladda RAG-statistik.",
       "referenced": "Refererad: {{name}}"
     },
     "status": {
-      "available": "Tillgänglig",
       "unavailable": "Ej tillgänglig",
       "disabled": "Inaktiverad",
       "on": "På · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG är för närvarande avstängt för den här chatten."
     },
     "agentSummary": {
-      "model": "Modell",
-      "temp": "Temp",
-      "max": "Max",
-      "rag": "RAG",
-      "web": "Webb",
-      "tools": "Verktyg",
-      "memory": "Minne",
-      "none": "Ingen",
-      "configuration": "{{name}}-konfiguration",
-      "modelFixed": "{{name}} · Fast",
-      "modelDefault": "{{name}} · Standard",
-      "modelChatView": "{{name}} · Chattvy",
-      "customModel": "Anpassad modell",
-      "notSet": "Inte angiven",
-      "auto": "Auto",
       "on": "På",
-      "off": "Av",
-      "shortTerm": "Kortsiktigt",
-      "longTerm": "Långsiktigt",
-      "disabledMemory": "Inaktiverat",
-      "builtIn": "{{count}} inbyggd",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Av"
     },
     "message": {
       "webResults": "Webbresultat",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Infoga i anteckningar",
       "regenerate": "Regenerera"
     },
-    "streaming": {
-      "thinking": "Tänker..."
-    },
     "toolCall": {
-      "thinking": "Tänker",
       "executionProcess": "Körningsprocess",
       "input": "Indata",
       "output": "Utdata",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Använd indexerade anteckningar som kontext",
     "webSearchLabel": "Webbsökning",
     "webSearchTooltipLabel": "Sök på internet när det behövs",
-    "imageUnavailable": "Bildbilaga är inte tillgänglig för den aktuella modellen.",
-    "newChat": "Ny chatt",
     "newConversation": "Ny konversation",
     "searchConversations": "Sök konversationer...",
     "header": {
-      "model": "Modell",
-      "advancedParams": "Avancerade parametrar",
-      "temperature": "Temperatur",
-      "maxTokens": "Max tokens",
-      "topP": "Top P",
-      "freqPenalty": "Frekv. straff",
-      "presPenalty": "Närvaro. straff",
-      "agentConfig": "Agentkonfiguration",
-      "modelsCount": "Modeller: {{count}}",
-      "tokensCount": "Tokens: {{count}}",
       "noModels": "Inga modeller tillgängliga"
-    },
-    "temperature": {
-      "precise": "0 (Precis)",
-      "balanced": "1 (Balanserad)",
-      "creative": "2 (Kreativ)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Infoga i vald anteckning",
         "createNew": "Skapa ny anteckning",
         "noResults": "Inga matchande anteckningar hittades."
+      },
+      "agentTask": {
+        "cancel": "Avbryt",
+        "fieldLabel": "Uppgift",
+        "newConversation": "Starta i ny konversation",
+        "newConversationDesc": "Håll den här agentkörningen åtskild från den aktuella chatten.",
+        "placeholder": "Ange din uppgift här...",
+        "start": "Starta",
+        "title": "Starta agentuppgift"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Välj en leverantörstyp",
         "invalidUrl": "Ogiltigt bas-URL-format. Ange en giltig URL (t.ex. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Cachade modeller: {{count}}",
+      "connectionFailed": "Anslutningstestet misslyckades. Kontrollera leverantörsinställningarna.",
+      "connectionSuccess": "Anslutningen lyckades. {{count}} modell(er) cachade.",
+      "noCachedModels": "Inga cachade modeller",
+      "testConnection": "Testa anslutning",
+      "testing": "Testar..."
     },
     "mcpInspector": {
       "title": "MCP-inspektör",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Ogiltigt nummer för parameter: {{name}}",
           "invalidJson": "Ogiltig JSON för parameter: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Inga MCP-servrar konfigurerade",
-        "testing": "Testar {{count}} MCP-serveranslutningar...",
-        "allSuccess": "alla {{count}} mcp-servrar anslutna!",
-        "partial": "{{success}} anslutna, {{failed}} misslyckades"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Version: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Server offline",
-      "connectionError": "Anslutningsfel",
       "pullTitle": "Hämta ny modell",
       "pullHint": "Ange ett modellnamn för att ladda ner från Ollama-biblioteket (t.ex. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Bearbetar...",
     "textUpdated": "Texten uppdaterades",
     "error": "Fel: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Agentuppgift: fråga om aktuell anteckning",
+    "createProjectBrief": "Agentuppgift: skapa projektsammanfattning",
+    "createResearchBrief": "Agentuppgift: skapa forskningssammanfattning",
+    "diagnoseVault": "Agentuppgift: diagnostisera valvet",
+    "doctorLinksTags": "Agentuppgift: förbättra länkar, taggar och egenskaper",
+    "draftFromNote": "Agentuppgift: skapa utkast från aktuell anteckning",
+    "findDuplicateNotes": "Agentuppgift: hitta dubbletter och sammanslagningskandidater",
+    "findRelatedNotes": "Agentuppgift: hitta relaterade anteckningar",
+    "generateWeeklyReview": "Agentuppgift: skapa veckogenomgång",
+    "improveSelection": "Agentuppgift: förbättra markering",
+    "openChatMain": "Öppna AI-chatt i huvudområdet",
+    "openChatSidebar": "Öppna AI-chatt i sidofältet",
+    "organizeCurrentNote": "Agentuppgift: organisera aktuell anteckning",
+    "sourceGroundedQuestion": "Agentuppgift: ställ en källförankrad fråga",
+    "summarizeCurrentNote": "Agentuppgift: sammanfatta aktuell anteckning",
+    "switchModel": "Byt modell"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: fråga agenten om den här filen",
+    "createProjectBrief": "Intelligence assistant: skapa projektsammanfattning med agent",
+    "createResearchBrief": "Intelligence assistant: skapa forskningssammanfattning med agent",
+    "doctorLinksTags": "Intelligence assistant: förbättra länkar, taggar och egenskaper med agent",
+    "draftFromFile": "Intelligence assistant: skapa utkast från den här filen med agent",
+    "findDuplicates": "Intelligence assistant: hitta dubbletter och sammanslagningskandidater med agent",
+    "findRelatedNotes": "Intelligence assistant: hitta relaterade anteckningar med agent",
+    "improveFolder": "Intelligence assistant: förbättra länkar, taggar och egenskaper i mappen med agent",
+    "organizeFolder": "Intelligence assistant: organisera mappen med agent",
+    "summarize": "Intelligence assistant: sammanfatta med agent"
+  },
+  "ribbon": {
+    "openChat": "Öppna AI-chatt"
   }
 }

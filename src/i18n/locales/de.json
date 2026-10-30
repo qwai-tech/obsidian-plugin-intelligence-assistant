@@ -12,21 +12,13 @@
       "usage": "Nutzung"
     },
     "general": {
-      "desc": "Konfigurieren Sie die allgemeinen Einstellungen für das Intelligence-Assistant-Plugin.",
       "pluginVersion": {
-        "name": "Plugin-Version",
-        "desc": "Aktuelle Version des Intelligence-Assistant-Plugins"
+        "name": "Plugin-Version"
       },
       "defaultModel": {
         "name": "Standardmodell",
         "desc": "Standardmodell für Konversationen",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Standardchat-Modus",
-        "desc": "Wählen Sie, mit welchem Modus die Chat-Ansicht geöffnet wird",
-        "chat": "Chat-Modus",
-        "agent": "Agenten-Modus"
       },
       "conversationTitleMode": {
         "name": "Konversationstitel-Modus",
@@ -102,11 +94,6 @@
       "count": "{{count}} Anbieter konfiguriert",
       "addBtn": "+ Anbieter hinzufügen",
       "empty": "Keine Anbieter konfiguriert. Wählen Sie \"Anbieter hinzufügen\", um zu beginnen.",
-      "tableHeaders": {
-        "provider": "Anbieter",
-        "status": "Status",
-        "actions": "Aktionen"
-      },
       "status": {
         "ready": "Bereit",
         "needsConfig": "Konfiguration erforderlich",
@@ -117,7 +104,6 @@
         "serverError": "Serverfehler"
       },
       "guidance": {
-        "requiresCli": "Erfordert lokale CLI",
         "configureBaseUrl": "Basis-URL konfigurieren",
         "addApiKey": "API-Schlüssel hinzufügen"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "alle Werkzeuge aktualisieren",
       "addBtn": "+ MCP-Server hinzufügen",
       "empty": "Keine MCP-Server konfiguriert. Wählen Sie MCP-Server hinzufügen, um zu beginnen.",
-      "tableHeaders": {
-        "name": "Name",
-        "command": "Befehl",
-        "arguments": "Argumente",
-        "status": "Status",
-        "tools": "Werkzeuge",
-        "actions": "Aktionen"
-      },
       "untitled": "Unbenannter MCP-Server",
       "notConfigured": "Nicht konfiguriert",
-      "noArgs": "Keine",
       "cached": "Zwischengespeichert",
-      "disabled": "Deaktiviert",
       "envVars_one": "{{count}} Umgebungsvariable",
       "envVars_other": "{{count}} Umgebungsvariablen",
       "envVars": "{{count}} Umgebungsvariablen",
@@ -244,26 +220,13 @@
       "count": "{{count}} Agenten konfiguriert",
       "addBtn": "+ Agent hinzufügen",
       "empty": "Keine Agenten konfiguriert. Wählen Sie Agent hinzufügen, um zu beginnen.",
-      "tableHeaders": {
-        "agent": "Agent",
-        "model": "Modell",
-        "capabilities": "Fähigkeiten",
-        "tools": "Werkzeuge",
-        "actions": "Aktionen"
-      },
       "defaultBadge": "Standard",
       "systemPrompt": "System-Prompt • {{promptName}}",
       "customPrompt": "Benutzerdefinierter Prompt",
       "model": {
         "notSet": "Nicht gesetzt",
-        "notFound": "Modell nicht im Cache gefunden",
         "useChatView": "Chat-Ansicht-Modell verwenden",
-        "useChatViewDesc": "Verwendet das in der Chat-Ansicht ausgewählte Modell",
-        "useDefault": "Standardmodell verwenden",
-        "useDefaultDesc": "Verwendet das Standardmodell aus den Einstellungen"
-      },
-      "capabilities": {
-        "noSpecialModes": "Keine speziellen Modi"
+        "useDefault": "Standardmodell verwenden"
       },
       "tools": {
         "builtIn": "{{count}} integriert",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} MCP-Server",
         "mcpTool_one": "{{count}} MCP-Werkzeug",
         "mcpTool_other": "{{count}} MCP-Werkzeuge",
-        "mcpTool": "{{count}} MCP-Werkzeuge",
-        "noTools": "Keine Werkzeuge aktiviert"
+        "mcpTool": "{{count}} MCP-Werkzeuge"
       },
       "actions": {
         "edit": "Bearbeiten",
-        "delete": "löschen",
-        "protected": "geschützt"
+        "delete": "löschen"
       },
       "confirm": {
         "delete": "Agent \"{{name}}\" löschen?"
@@ -288,18 +249,6 @@
       "desc": "System-Prompts verwalten, die das Verhalten und die Persönlichkeit Ihres KI-Assistenten definieren.",
       "addBtn": "+ System-Prompt hinzufügen",
       "empty": "Keine System-Prompts konfiguriert. Wählen Sie System-Prompt hinzufügen, um zu beginnen.",
-      "tableHeaders": {
-        "name": "Name",
-        "contentPreview": "Inhaltsvorschau",
-        "created": "Erstellt",
-        "updated": "Aktualisiert",
-        "enabled": "Aktiviert",
-        "actions": "Aktionen"
-      },
-      "status": {
-        "enabled": "Aktiviert",
-        "disabled": "Deaktiviert"
-      },
       "actions": {
         "edit": "Bearbeiten",
         "disable": "Deaktivieren",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "verbunden",
           "disconnected": "getrennt"
-        }
+        },
+        "addBtn": "MCP-Werkzeuge hinzufügen"
       },
       "openapi": {
         "desc": "HTTP-Werkzeuge aus OpenAPI-Dokumenten generieren. Remote-Spezifikationen werden unter {{cacheDir}} zwischengespeichert.",
@@ -890,13 +840,6 @@
       "count": "{{count}} Aktionen konfiguriert ({{enabled}} aktiviert)",
       "addBtn": "+ Schnellaktion hinzufügen",
       "empty": "Keine Schnellaktionen konfiguriert. Wählen Sie Schnellaktion hinzufügen, um zu beginnen.",
-      "tableHeaders": {
-        "action": "Aktion",
-        "type": "Typ",
-        "model": "Modell",
-        "promptPreview": "Prompt-Vorschau",
-        "actions": "Aktionen"
-      },
       "defaultModel": "Standard",
       "editBtn": "Bearbeiten",
       "deleteBtn": "löschen",
@@ -1004,26 +947,16 @@
     "currentConversation": "Aktuelle Konversation",
     "new": "Neu",
     "settings": "Einstellungen",
-    "openSettingsTitle": "Plugin-Einstellungen öffnen",
-    "mode": "Modus",
-    "prompt": "Prompt",
-    "agent": "Agent",
     "modeOptions": {
       "chat": "Chat",
       "agent": "Agent"
     },
-    "noSystemPrompt": "Kein System-Prompt",
     "noAgentsAvailable": "Keine Agenten verfügbar",
-    "sendHintPrefix": "Drücken Sie ",
-    "sendHintKey": "Eingabe",
-    "sendHintSuffix": " zum Senden",
     "sendAriaLabel": "Nachricht senden",
     "stop": " Stopp",
-    "addReference": "Referenz hinzufügen",
     "addReferenceTooltip": "Datei- oder Ordnerreferenz hinzufügen (@)",
     "emptyHeading": "Konversation starten",
     "emptySubtext": "Geben Sie unten eine Nachricht ein, oder wählen Sie eine Konversation aus dem Verlauf.",
-    "noAgentConfig": "Keine Agenten konfiguriert",
     "selectAgent": "Agenten auswählen…",
     "notices": {
       "stopping": "Generierung wird gestoppt...",
@@ -1047,23 +980,15 @@
       "noAgents": "Keine Agenten verfügbar. Agenten unter Einstellungen → Agenten konfigurieren.",
       "ragDisabled": "RAG ist in den Einstellungen deaktiviert. Unter Einstellungen → Chat-Funktionen → RAG aktivieren.",
       "webSearchDisabled": "Websuche ist in den Einstellungen deaktiviert. Unter Einstellungen → Chat-Funktionen → Websuche aktivieren.",
-      "noFilesInVault": "Keine Dateien im Vault gefunden",
       "attached": "Angehängt: {{name}}",
       "attachedImages": "{{count}} Bild(er) angehängt",
       "referencesAdded": "{{count}} Referenz(en) hinzugefügt",
       "fileNotFound": "Datei nicht gefunden: {{path}}",
       "agentConfigApplied": "Konfiguration für Agent angewendet: {{name}}",
-      "waitForComplete": "Bitte warten Sie, bis die aktuelle Antwort abgeschlossen ist",
-      "chatServiceFallback": "ChatService nicht konfiguriert. ChatView-Fallback wird verwendet.",
-      "noModelSelected": "Kein Modell ausgewählt",
-      "noProviderConfig": "Keine Anbieterkonfiguration gefunden",
-      "noResponseToRegenerate": "Keine Antwort zum Regenerieren",
-      "agentNotFound": "Agent nicht gefunden",
       "unableToLoadRag": "RAG-Statistiken konnten nicht geladen werden.",
       "referenced": "Referenziert: {{name}}"
     },
     "status": {
-      "available": "Verfügbar",
       "unavailable": "Nicht verfügbar",
       "disabled": "Deaktiviert",
       "on": "An · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG ist für diesen Chat derzeit deaktiviert."
     },
     "agentSummary": {
-      "model": "Modell",
-      "temp": "Temp",
-      "max": "Max",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Werkzeuge",
-      "memory": "Speicher",
-      "none": "Keine",
-      "configuration": "{{name}}-Konfiguration",
-      "modelFixed": "{{name}} · Fest",
-      "modelDefault": "{{name}} · Standard",
-      "modelChatView": "{{name}} · Chat-Ansicht",
-      "customModel": "Benutzerdefiniertes Modell",
-      "notSet": "Nicht gesetzt",
-      "auto": "Auto",
       "on": "An",
-      "off": "Aus",
-      "shortTerm": "Kurzzeit",
-      "longTerm": "Langzeit",
-      "disabledMemory": "Deaktiviert",
-      "builtIn": "{{count}} integriert",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Aus"
     },
     "message": {
       "webResults": "Webergebnisse",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "In Notizen einfügen",
       "regenerate": "Regenerieren"
     },
-    "streaming": {
-      "thinking": "Wird verarbeitet..."
-    },
     "toolCall": {
-      "thinking": "Denken",
       "executionProcess": "Ausführungsprozess",
       "input": "Eingabe",
       "output": "Ausgabe",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Indizierte Notizen als Kontext verwenden",
     "webSearchLabel": "Websuche",
     "webSearchTooltipLabel": "Bei Bedarf das Internet durchsuchen",
-    "imageUnavailable": "Bildanhang ist für das aktuelle Modell nicht verfügbar.",
-    "newChat": "Neuer Chat",
     "newConversation": "Neue Konversation",
     "searchConversations": "Konversationen suchen...",
     "header": {
-      "model": "Modell",
-      "advancedParams": "Erweiterte Parameter",
-      "temperature": "Temperatur",
-      "maxTokens": "Max. Token",
-      "topP": "Top P",
-      "freqPenalty": "Häufigkeitsstrafe",
-      "presPenalty": "Präsenzstrafe",
-      "agentConfig": "Agentenkonfiguration",
-      "modelsCount": "Modelle: {{count}}",
-      "tokensCount": "Token: {{count}}",
       "noModels": "Keine Modelle verfügbar"
-    },
-    "temperature": {
-      "precise": "0 (Präzise)",
-      "balanced": "1 (Ausgewogen)",
-      "creative": "2 (Kreativ)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "In ausgewählte Notiz einfügen",
         "createNew": "Neue Notiz erstellen",
         "noResults": "Keine passenden Notizen gefunden."
+      },
+      "agentTask": {
+        "cancel": "Abbrechen",
+        "fieldLabel": "Aufgabe",
+        "newConversation": "In neuer Konversation starten",
+        "newConversationDesc": "Diesen Agentenlauf vom aktuellen Chat getrennt halten.",
+        "placeholder": "Aufgabe hier eingeben...",
+        "start": "Starten",
+        "title": "Agentenaufgabe starten"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Bitte einen Anbietertyp auswählen",
         "invalidUrl": "Ungültiges Basis-URL-Format. Bitte eine gültige URL eingeben (z. B. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Zwischengespeicherte Modelle: {{count}}",
+      "connectionFailed": "Verbindungstest fehlgeschlagen. Anbietereinstellungen prüfen.",
+      "connectionSuccess": "Verbindung erfolgreich. {{count}} Modell(e) zwischengespeichert.",
+      "noCachedModels": "Keine zwischengespeicherten Modelle",
+      "testConnection": "Verbindung testen",
+      "testing": "Wird getestet..."
     },
     "mcpInspector": {
       "title": "MCP-Inspektor",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Ungültige Zahl für Parameter: {{name}}",
           "invalidJson": "Ungültiges JSON für Parameter: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Keine MCP-Server konfiguriert",
-        "testing": "{{count}} MCP-Serververbindungen werden getestet...",
-        "allSuccess": "alle {{count}} MCP-Server erfolgreich verbunden!",
-        "partial": "{{success}} verbunden, {{failed}} fehlgeschlagen"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Version: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Server offline",
-      "connectionError": "Verbindungsfehler",
       "pullTitle": "Neues Modell herunterladen",
       "pullHint": "Geben Sie einen Modellnamen ein, um ihn aus der Ollama-Bibliothek herunterzuladen (z. B. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Wird verarbeitet...",
     "textUpdated": "Text erfolgreich aktualisiert",
     "error": "Fehler: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Agentenaufgabe: Zur aktuellen Notiz fragen",
+    "createProjectBrief": "Agentenaufgabe: Projektbriefing erstellen",
+    "createResearchBrief": "Agentenaufgabe: Recherchebriefing erstellen",
+    "diagnoseVault": "Agentenaufgabe: Vault diagnostizieren",
+    "doctorLinksTags": "Agentenaufgabe: Links, Tags und Eigenschaften verbessern",
+    "draftFromNote": "Agentenaufgabe: Entwurf aus aktueller Notiz",
+    "findDuplicateNotes": "Agentenaufgabe: Duplikate und Zusammenführungskandidaten finden",
+    "findRelatedNotes": "Agentenaufgabe: Verwandte Notizen finden",
+    "generateWeeklyReview": "Agentenaufgabe: Wochenrückblick erstellen",
+    "improveSelection": "Agentenaufgabe: Auswahl verbessern",
+    "openChatMain": "AI-Chat im Hauptbereich öffnen",
+    "openChatSidebar": "AI-Chat in der Seitenleiste öffnen",
+    "organizeCurrentNote": "Agentenaufgabe: Aktuelle Notiz organisieren",
+    "sourceGroundedQuestion": "Agentenaufgabe: Quellengestützte Frage stellen",
+    "summarizeCurrentNote": "Agentenaufgabe: Aktuelle Notiz zusammenfassen",
+    "switchModel": "Modell wechseln"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: Agent zu dieser Datei fragen",
+    "createProjectBrief": "Intelligence assistant: Projektbriefing mit Agent erstellen",
+    "createResearchBrief": "Intelligence assistant: Recherchebriefing mit Agent erstellen",
+    "doctorLinksTags": "Intelligence assistant: Links, Tags und Eigenschaften mit Agent verbessern",
+    "draftFromFile": "Intelligence assistant: Entwurf aus dieser Datei mit Agent",
+    "findDuplicates": "Intelligence assistant: Duplikate und Zusammenführungskandidaten mit Agent finden",
+    "findRelatedNotes": "Intelligence assistant: Verwandte Notizen mit Agent finden",
+    "improveFolder": "Intelligence assistant: Links, Tags und Eigenschaften des Ordners mit Agent verbessern",
+    "organizeFolder": "Intelligence assistant: Ordner mit Agent organisieren",
+    "summarize": "Intelligence assistant: Mit Agent zusammenfassen"
+  },
+  "ribbon": {
+    "openChat": "AI-Chat öffnen"
   }
 }

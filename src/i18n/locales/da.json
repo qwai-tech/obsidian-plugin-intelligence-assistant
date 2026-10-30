@@ -12,21 +12,13 @@
       "usage": "Forbrug"
     },
     "general": {
-      "desc": "Konfigurer generelle indstillinger for intelligent assistent-plugin'et.",
       "pluginVersion": {
-        "name": "Plugin-version",
-        "desc": "Aktuel version af intelligent assistent-plugin'et"
+        "name": "Plugin-version"
       },
       "defaultModel": {
         "name": "Standardmodel",
         "desc": "Standardmodel til brug i samtaler",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Standard chattilstand",
-        "desc": "Vælg hvilken tilstand chatvisningen åbnes med",
-        "chat": "Chattilstand",
-        "agent": "Agenttilstand"
       },
       "conversationTitleMode": {
         "name": "Samtaletiteltilstand",
@@ -102,11 +94,6 @@
       "count": "{{count}} udbydere konfigureret",
       "addBtn": "+ Tilføj udbyder",
       "empty": "Ingen udbydere konfigureret. Vælg \"Tilføj udbyder\" for at komme i gang.",
-      "tableHeaders": {
-        "provider": "Udbyder",
-        "status": "Status",
-        "actions": "Handlinger"
-      },
       "status": {
         "ready": "Klar",
         "needsConfig": "Kræver konfiguration",
@@ -117,7 +104,6 @@
         "serverError": "Serverfejl"
       },
       "guidance": {
-        "requiresCli": "Kræver lokal CLI",
         "configureBaseUrl": "Konfigurer basis-URL",
         "addApiKey": "Tilføj API-nøgle"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "opdater alle værktøjer",
       "addBtn": "+ Tilføj MCP-server",
       "empty": "Ingen MCP-servere konfigureret. Vælg Tilføj MCP-server for at komme i gang.",
-      "tableHeaders": {
-        "name": "Navn",
-        "command": "Kommando",
-        "arguments": "Argumenter",
-        "status": "Status",
-        "tools": "Værktøjer",
-        "actions": "Handlinger"
-      },
       "untitled": "Unavngivet MCP-server",
       "notConfigured": "Ikke konfigureret",
-      "noArgs": "Ingen",
       "cached": "I cache",
-      "disabled": "Deaktiveret",
       "envVars_one": "{{count}} miljøvariabel",
       "envVars_other": "{{count}} miljøvariabler",
       "envVars": "{{count}} miljøvariabler",
@@ -244,26 +220,13 @@
       "count": "{{count}} agenter konfigureret",
       "addBtn": "+ tilføj agent",
       "empty": "Ingen agenter konfigureret. Vælg tilføj agent for at komme i gang.",
-      "tableHeaders": {
-        "agent": "Agent",
-        "model": "Model",
-        "capabilities": "Funktioner",
-        "tools": "Værktøjer",
-        "actions": "Handlinger"
-      },
       "defaultBadge": "Standard",
       "systemPrompt": "Systemprompt • {{promptName}}",
       "customPrompt": "Brugerdefineret prompt",
       "model": {
         "notSet": "Ikke angivet",
-        "notFound": "Model ikke fundet i cache",
         "useChatView": "Brug chatvisningsmodel",
-        "useChatViewDesc": "Vil bruge den model, der er valgt i chatvisningen",
-        "useDefault": "Brug standardmodel",
-        "useDefaultDesc": "Vil bruge standardmodellen fra indstillinger"
-      },
-      "capabilities": {
-        "noSpecialModes": "Ingen særlige tilstande"
+        "useDefault": "Brug standardmodel"
       },
       "tools": {
         "builtIn": "{{count}} indbygget",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp-servere",
         "mcpTool_one": "{{count}} mcp-værktøj",
         "mcpTool_other": "{{count}} mcp-værktøjer",
-        "mcpTool": "{{count}} mcp-værktøjer",
-        "noTools": "Ingen værktøjer aktiveret"
+        "mcpTool": "{{count}} mcp-værktøjer"
       },
       "actions": {
         "edit": "Rediger",
-        "delete": "slet",
-        "protected": "beskyttet"
+        "delete": "slet"
       },
       "confirm": {
         "delete": "Slet agent \"{{name}}\"?"
@@ -288,18 +249,6 @@
       "desc": "Administrer systemprompter, der definerer adfærden og personligheden af din AI-assistent.",
       "addBtn": "+ tilføj systemprompt",
       "empty": "Ingen systemprompter konfigureret. Vælg tilføj systemprompt for at komme i gang.",
-      "tableHeaders": {
-        "name": "Navn",
-        "contentPreview": "Indholdsforhåndsvisning",
-        "created": "Oprettet",
-        "updated": "Opdateret",
-        "enabled": "Aktiveret",
-        "actions": "Handlinger"
-      },
-      "status": {
-        "enabled": "Aktiveret",
-        "disabled": "Deaktiveret"
-      },
       "actions": {
         "edit": "Rediger",
         "disable": "Deaktiver",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "forbundet",
           "disconnected": "afbrudt"
-        }
+        },
+        "addBtn": "Tilføj MCP-værktøjer"
       },
       "openapi": {
         "desc": "Generer HTTP-værktøjer fra OpenAPI-dokumenter. Fjernspecifikationer cachelagres under {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} handlinger konfigureret ({{enabled}} aktiveret)",
       "addBtn": "+ tilføj hurtighandling",
       "empty": "Ingen hurtighandlinger konfigureret. Vælg tilføj hurtighandling for at komme i gang.",
-      "tableHeaders": {
-        "action": "Handling",
-        "type": "Type",
-        "model": "Model",
-        "promptPreview": "Promptforhåndsvisning",
-        "actions": "Handlinger"
-      },
       "defaultModel": "Standard",
       "editBtn": "Rediger",
       "deleteBtn": "slet",
@@ -1004,26 +947,16 @@
     "currentConversation": "Aktuel samtale",
     "new": "Ny",
     "settings": "Indstillinger",
-    "openSettingsTitle": "Åbn plugin-indstillinger",
-    "mode": "Tilstand",
-    "prompt": "Prompt",
-    "agent": "Agent",
     "modeOptions": {
       "chat": "Chat",
       "agent": "Agent"
     },
-    "noSystemPrompt": "Ingen systemprompt",
     "noAgentsAvailable": "Ingen agenter tilgængelige",
-    "sendHintPrefix": "Tryk ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " for at sende",
     "sendAriaLabel": "Send besked",
     "stop": " Stop",
-    "addReference": "Tilføj reference",
     "addReferenceTooltip": "Tilføj fil- eller mappereference (@)",
     "emptyHeading": "Start en samtale",
     "emptySubtext": "Skriv en besked nedenfor for at komme i gang, eller vælg en samtale fra historikken.",
-    "noAgentConfig": "Ingen agenter konfigureret",
     "selectAgent": "Vælg en agent…",
     "notices": {
       "stopping": "Stopper generering...",
@@ -1047,23 +980,15 @@
       "noAgents": "Ingen agenter tilgængelige. Konfigurér agenter i Indstillinger → Agenter.",
       "ragDisabled": "RAG er deaktiveret i indstillinger. Aktivér det under indstillinger → chatfunktioner → RAG.",
       "webSearchDisabled": "Websøgning er deaktiveret i indstillinger. Aktivér det under indstillinger → chatfunktioner → websøgning.",
-      "noFilesInVault": "Ingen filer fundet i vault",
       "attached": "Vedhæftet: {{name}}",
       "attachedImages": "Vedhæftede {{count}} billede(r)",
       "referencesAdded": "Tilføjede {{count}} reference(r)",
       "fileNotFound": "Fil ikke fundet: {{path}}",
       "agentConfigApplied": "Konfiguration anvendt for agent: {{name}}",
-      "waitForComplete": "Vent venligst på at det aktuelle svar er færdigt",
-      "chatServiceFallback": "ChatService ikke konfigureret. Bruger ChatView-reserveløsning.",
-      "noModelSelected": "Ingen model valgt",
-      "noProviderConfig": "Ingen udbyderindstilling fundet",
-      "noResponseToRegenerate": "Intet svar at regenerere",
-      "agentNotFound": "Agent ikke fundet",
       "unableToLoadRag": "Kan ikke indlæse RAG-statistik.",
       "referenced": "Refereret: {{name}}"
     },
     "status": {
-      "available": "Tilgængelig",
       "unavailable": "Ikke tilgængelig",
       "disabled": "Deaktiveret",
       "on": "Til · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG er i øjeblikket slået fra for denne chat."
     },
     "agentSummary": {
-      "model": "Model",
-      "temp": "Temp",
-      "max": "Maks",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Værktøjer",
-      "memory": "Hukommelse",
-      "none": "Ingen",
-      "configuration": "{{name}}-konfiguration",
-      "modelFixed": "{{name}} · Fast",
-      "modelDefault": "{{name}} · Standard",
-      "modelChatView": "{{name}} · Chatvisning",
-      "customModel": "Brugerdefineret model",
-      "notSet": "Ikke angivet",
-      "auto": "Automatisk",
       "on": "Til",
-      "off": "Fra",
-      "shortTerm": "Kortsigtet",
-      "longTerm": "Langsigtet",
-      "disabledMemory": "Deaktiveret",
-      "builtIn": "{{count}} indbygget",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Fra"
     },
     "message": {
       "webResults": "Webresultater",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Indsæt i notitier",
       "regenerate": "Regenerer"
     },
-    "streaming": {
-      "thinking": "Tænker..."
-    },
     "toolCall": {
-      "thinking": "Tænker",
       "executionProcess": "Udførelsesproces",
       "input": "Input",
       "output": "Output",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Brug indekserede notitier som kontekst",
     "webSearchLabel": "Websøgning",
     "webSearchTooltipLabel": "Søg på internettet efter behov",
-    "imageUnavailable": "Billedvedhæftning er ikke tilgængelig for den aktuelle model.",
-    "newChat": "Ny chat",
     "newConversation": "Ny samtale",
     "searchConversations": "Søg samtaler...",
     "header": {
-      "model": "Model",
-      "advancedParams": "Avancerede parametre",
-      "temperature": "Temperatur",
-      "maxTokens": "Maks. tokens",
-      "topP": "Top P",
-      "freqPenalty": "Frekvenspenalty",
-      "presPenalty": "Tilstedeværelsespenalty",
-      "agentConfig": "Agentkonfiguration",
-      "modelsCount": "Modeller: {{count}}",
-      "tokensCount": "Tokens: {{count}}",
       "noModels": "Ingen modeller tilgængelige"
-    },
-    "temperature": {
-      "precise": "0 (Præcis)",
-      "balanced": "1 (Afbalanceret)",
-      "creative": "2 (Kreativ)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Indsæt i valgt notitie",
         "createNew": "Opret ny notitie",
         "noResults": "Ingen matchende notitier fundet."
+      },
+      "agentTask": {
+        "cancel": "Annullér",
+        "fieldLabel": "Opgave",
+        "newConversation": "Start i ny samtale",
+        "newConversationDesc": "Hold denne agentkørsel adskilt fra den aktuelle chat.",
+        "placeholder": "Indtast din opgave her...",
+        "start": "Start",
+        "title": "Start agentopgave"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Vælg venligst en udbydertype",
         "invalidUrl": "Ugyldigt basis-URL-format. Angiv venligst en gyldig URL (f.eks. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Cachelagrede modeller: {{count}}",
+      "connectionFailed": "Forbindelsestest mislykkedes. Tjek udbyderindstillinger.",
+      "connectionSuccess": "Forbindelse lykkedes. {{count}} model(ler) cachelagret.",
+      "noCachedModels": "Ingen cachelagrede modeller",
+      "testConnection": "Test forbindelse",
+      "testing": "Tester..."
     },
     "mcpInspector": {
       "title": "MCP-inspektor",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Ugyldigt tal for parameter: {{name}}",
           "invalidJson": "Ugyldig JSON for parameter: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Ingen MCP-servere konfigureret",
-        "testing": "Tester {{count}} MCP-serverforbindelser...",
-        "allSuccess": "alle {{count}} mcp-servere forbundet!",
-        "partial": "{{success}} forbundet, {{failed}} mislykkedes"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Version: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Server offline",
-      "connectionError": "Forbindelsesfejl",
       "pullTitle": "Hent ny model",
       "pullHint": "Indtast et modelnavn til download fra Ollama-biblioteket (f.eks. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Behandler...",
     "textUpdated": "Tekst opdateret",
     "error": "Fejl: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Agentopgave: spørg om aktuel note",
+    "createProjectBrief": "Agentopgave: opret projektoversigt",
+    "createResearchBrief": "Agentopgave: opret researchoversigt",
+    "diagnoseVault": "Agentopgave: diagnosticér vault",
+    "doctorLinksTags": "Agentopgave: forbedr links, tags og egenskaber",
+    "draftFromNote": "Agentopgave: lav udkast ud fra aktuel note",
+    "findDuplicateNotes": "Agentopgave: find dubletter og kandidater til sammenfletning",
+    "findRelatedNotes": "Agentopgave: find relaterede noter",
+    "generateWeeklyReview": "Agentopgave: generér ugentlig gennemgang",
+    "improveSelection": "Agentopgave: forbedr markering",
+    "openChatMain": "Åbn AI-chat i hovedområdet",
+    "openChatSidebar": "Åbn AI-chat i sidepanelet",
+    "organizeCurrentNote": "Agentopgave: organisér aktuel note",
+    "sourceGroundedQuestion": "Agentopgave: stil kildebaseret spørgsmål",
+    "summarizeCurrentNote": "Agentopgave: opsummér aktuel note",
+    "switchModel": "Skift model"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: spørg agent om denne fil",
+    "createProjectBrief": "Intelligence assistant: opret projektoversigt med agent",
+    "createResearchBrief": "Intelligence assistant: opret researchoversigt med agent",
+    "doctorLinksTags": "Intelligence assistant: forbedr links, tags og egenskaber med agent",
+    "draftFromFile": "Intelligence assistant: lav udkast ud fra denne fil med agent",
+    "findDuplicates": "Intelligence assistant: find dubletter og kandidater til sammenfletning med agent",
+    "findRelatedNotes": "Intelligence assistant: find relaterede noter med agent",
+    "improveFolder": "Intelligence assistant: forbedr mappens links, tags og egenskaber med agent",
+    "organizeFolder": "Intelligence assistant: organisér mappe med agent",
+    "summarize": "Intelligence assistant: opsummér med agent"
+  },
+  "ribbon": {
+    "openChat": "Åbn AI-chat"
   }
 }

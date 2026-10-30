@@ -12,21 +12,13 @@
       "usage": "사용량"
     },
     "general": {
-      "desc": "인텔리전스 어시스턴트 플러그인의 일반 설정을 구성합니다.",
       "pluginVersion": {
-        "name": "플러그인 버전",
-        "desc": "인텔리전스 어시스턴트 플러그인의 현재 버전"
+        "name": "플러그인 버전"
       },
       "defaultModel": {
         "name": "기본 모델",
         "desc": "대화에 사용할 기본 모델",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "기본 채팅 모드",
-        "desc": "채팅 보기가 열릴 모드 선택",
-        "chat": "채팅 모드",
-        "agent": "에이전트 모드"
       },
       "conversationTitleMode": {
         "name": "대화 제목 모드",
@@ -102,11 +94,6 @@
       "count": "{{count}}개 제공자 구성됨",
       "addBtn": "+ 제공자 추가",
       "empty": "구성된 제공자가 없습니다. \"제공자 추가\"를 선택하여 시작하세요.",
-      "tableHeaders": {
-        "provider": "제공자",
-        "status": "상태",
-        "actions": "작업"
-      },
       "status": {
         "ready": "준비됨",
         "needsConfig": "구성 필요",
@@ -117,7 +104,6 @@
         "serverError": "서버 오류"
       },
       "guidance": {
-        "requiresCli": "로컬 CLI 필요",
         "configureBaseUrl": "기본 URL 구성",
         "addApiKey": "API 키 추가"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "모든 도구 새로 고침",
       "addBtn": "+ MCP 서버 추가",
       "empty": "구성된 MCP 서버가 없습니다. MCP 서버 추가를 선택하여 시작하세요.",
-      "tableHeaders": {
-        "name": "이름",
-        "command": "명령",
-        "arguments": "인수",
-        "status": "상태",
-        "tools": "도구",
-        "actions": "작업"
-      },
       "untitled": "제목 없는 MCP 서버",
       "notConfigured": "구성되지 않음",
-      "noArgs": "없음",
       "cached": "캐시됨",
-      "disabled": "비활성화됨",
       "envVars_one": "{{count}}개 환경 변수",
       "envVars_other": "{{count}}개 환경 변수",
       "envVars": "{{count}}개 환경 변수",
@@ -244,26 +220,13 @@
       "count": "{{count}}개 에이전트 구성됨",
       "addBtn": "+ 에이전트 추가",
       "empty": "구성된 에이전트가 없습니다. 에이전트 추가를 선택하여 시작하세요.",
-      "tableHeaders": {
-        "agent": "에이전트",
-        "model": "모델",
-        "capabilities": "기능",
-        "tools": "도구",
-        "actions": "작업"
-      },
       "defaultBadge": "기본",
       "systemPrompt": "시스템 프롬프트 • {{promptName}}",
       "customPrompt": "사용자 정의 프롬프트",
       "model": {
         "notSet": "설정되지 않음",
-        "notFound": "캐시에서 모델을 찾을 수 없음",
         "useChatView": "채팅 보기 모델 사용",
-        "useChatViewDesc": "채팅 보기에서 선택된 모델을 사용합니다",
-        "useDefault": "기본 모델 사용",
-        "useDefaultDesc": "설정의 기본 모델을 사용합니다"
-      },
-      "capabilities": {
-        "noSpecialModes": "특별한 모드 없음"
+        "useDefault": "기본 모델 사용"
       },
       "tools": {
         "builtIn": "{{count}}개 내장",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}}개 MCP 서버",
         "mcpTool_one": "{{count}}개 MCP 도구",
         "mcpTool_other": "{{count}}개 MCP 도구",
-        "mcpTool": "{{count}}개 MCP 도구",
-        "noTools": "활성화된 도구 없음"
+        "mcpTool": "{{count}}개 MCP 도구"
       },
       "actions": {
         "edit": "편집",
-        "delete": "삭제",
-        "protected": "보호됨"
+        "delete": "삭제"
       },
       "confirm": {
         "delete": "에이전트 \"{{name}}\"을 삭제하시겠습니까?"
@@ -288,18 +249,6 @@
       "desc": "AI 어시스턴트의 동작과 개성을 정의하는 시스템 프롬프트를 관리합니다.",
       "addBtn": "+ 시스템 프롬프트 추가",
       "empty": "구성된 시스템 프롬프트가 없습니다. 시스템 프롬프트 추가를 선택하여 시작하세요.",
-      "tableHeaders": {
-        "name": "이름",
-        "contentPreview": "내용 미리 보기",
-        "created": "생성일",
-        "updated": "수정일",
-        "enabled": "활성화됨",
-        "actions": "작업"
-      },
-      "status": {
-        "enabled": "활성화됨",
-        "disabled": "비활성화됨"
-      },
       "actions": {
         "edit": "편집",
         "disable": "비활성화",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "연결됨",
           "disconnected": "연결 끊김"
-        }
+        },
+        "addBtn": "MCP 도구 추가"
       },
       "openapi": {
         "desc": "OpenAPI 문서에서 HTTP 도구를 생성합니다. 원격 사양은 {{cacheDir}}에 캐시됩니다.",
@@ -890,13 +840,6 @@
       "count": "{{count}}개 작업 구성됨 ({{enabled}}개 활성화됨)",
       "addBtn": "+ 빠른 작업 추가",
       "empty": "구성된 빠른 작업이 없습니다. 빠른 작업 추가를 선택하여 시작하세요.",
-      "tableHeaders": {
-        "action": "작업",
-        "type": "유형",
-        "model": "모델",
-        "promptPreview": "프롬프트 미리 보기",
-        "actions": "작업"
-      },
       "defaultModel": "기본",
       "editBtn": "편집",
       "deleteBtn": "삭제",
@@ -1004,26 +947,16 @@
     "currentConversation": "현재 대화",
     "new": "새로 만들기",
     "settings": "설정",
-    "openSettingsTitle": "플러그인 설정 열기",
-    "mode": "모드",
-    "prompt": "프롬프트",
-    "agent": "에이전트",
     "modeOptions": {
       "chat": "채팅",
       "agent": "에이전트"
     },
-    "noSystemPrompt": "시스템 프롬프트 없음",
     "noAgentsAvailable": "사용 가능한 에이전트 없음",
-    "sendHintPrefix": "",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": "를 눌러 전송",
     "sendAriaLabel": "메시지 전송",
     "stop": " 중지",
-    "addReference": "참조 추가",
     "addReferenceTooltip": "파일 또는 폴더 참조 추가 (@)",
     "emptyHeading": "대화 시작하기",
     "emptySubtext": "아래에 메시지를 입력하여 시작하거나 기록에서 대화를 선택하세요.",
-    "noAgentConfig": "구성된 에이전트 없음",
     "selectAgent": "에이전트 선택...",
     "notices": {
       "stopping": "생성 중지 중...",
@@ -1047,23 +980,15 @@
       "noAgents": "사용 가능한 에이전트가 없습니다. 설정 → 에이전트에서 에이전트를 구성하세요.",
       "ragDisabled": "RAG가 설정에서 비활성화되어 있습니다. 설정 → 채팅 기능 → RAG에서 활성화하세요.",
       "webSearchDisabled": "웹 검색이 설정에서 비활성화되어 있습니다. 설정 → 채팅 기능 → 웹 검색에서 활성화하세요.",
-      "noFilesInVault": "볼트에서 파일을 찾을 수 없습니다",
       "attached": "첨부됨: {{name}}",
       "attachedImages": "{{count}}개의 이미지를 첨부했습니다",
       "referencesAdded": "{{count}}개의 참조가 추가되었습니다",
       "fileNotFound": "파일을 찾을 수 없습니다: {{path}}",
       "agentConfigApplied": "에이전트 구성이 적용되었습니다: {{name}}",
-      "waitForComplete": "현재 응답이 완료될 때까지 기다려 주세요",
-      "chatServiceFallback": "ChatService가 구성되지 않았습니다. ChatView 폴백을 사용합니다.",
-      "noModelSelected": "선택된 모델이 없습니다",
-      "noProviderConfig": "제공자 구성을 찾을 수 없습니다",
-      "noResponseToRegenerate": "재생성할 응답이 없습니다",
-      "agentNotFound": "에이전트를 찾을 수 없습니다",
       "unableToLoadRag": "RAG 통계를 불러올 수 없습니다.",
       "referenced": "참조됨: {{name}}"
     },
     "status": {
-      "available": "사용 가능",
       "unavailable": "사용 불가",
       "disabled": "비활성화됨",
       "on": "켜짐 · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ 이 채팅에서는 현재 RAG가 꺼져 있습니다."
     },
     "agentSummary": {
-      "model": "모델",
-      "temp": "온도",
-      "max": "최대",
-      "rag": "RAG",
-      "web": "웹",
-      "tools": "도구",
-      "memory": "메모리",
-      "none": "없음",
-      "configuration": "{{name}} 구성",
-      "modelFixed": "{{name}} · 고정",
-      "modelDefault": "{{name}} · 기본",
-      "modelChatView": "{{name}} · 채팅 보기",
-      "customModel": "사용자 정의 모델",
-      "notSet": "설정되지 않음",
-      "auto": "자동",
       "on": "켜짐",
-      "off": "꺼짐",
-      "shortTerm": "단기 기억",
-      "longTerm": "장기 기억",
-      "disabledMemory": "비활성화됨",
-      "builtIn": "{{count}}개 내장",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "꺼짐"
     },
     "message": {
       "webResults": "웹 결과",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "노트에 삽입",
       "regenerate": "재생성"
     },
-    "streaming": {
-      "thinking": "생각 중..."
-    },
     "toolCall": {
-      "thinking": "생각 중",
       "executionProcess": "실행 프로세스",
       "input": "입력",
       "output": "출력",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "인덱싱된 노트를 컨텍스트로 사용",
     "webSearchLabel": "웹 검색",
     "webSearchTooltipLabel": "필요할 때 인터넷 검색",
-    "imageUnavailable": "현재 모델에서는 이미지 첨부를 사용할 수 없습니다.",
-    "newChat": "새 채팅",
     "newConversation": "새 대화",
     "searchConversations": "대화 검색...",
     "header": {
-      "model": "모델",
-      "advancedParams": "고급 매개변수",
-      "temperature": "온도",
-      "maxTokens": "최대 토큰 수",
-      "topP": "Top P",
-      "freqPenalty": "빈도 패널티",
-      "presPenalty": "존재 패널티",
-      "agentConfig": "에이전트 구성",
-      "modelsCount": "모델: {{count}}",
-      "tokensCount": "토큰: {{count}}",
       "noModels": "사용 가능한 모델 없음"
-    },
-    "temperature": {
-      "precise": "0 (정밀)",
-      "balanced": "1 (균형)",
-      "creative": "2 (창의적)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "선택한 노트에 삽입",
         "createNew": "새 노트 만들기",
         "noResults": "일치하는 노트를 찾을 수 없습니다."
+      },
+      "agentTask": {
+        "cancel": "취소",
+        "fieldLabel": "작업",
+        "newConversation": "새 대화에서 시작",
+        "newConversationDesc": "이 에이전트 실행을 현재 대화와 분리합니다.",
+        "placeholder": "여기에 작업을 입력하세요...",
+        "start": "시작",
+        "title": "에이전트 작업 시작"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "제공자 유형을 선택하세요",
         "invalidUrl": "기본 URL 형식이 잘못되었습니다. 유효한 URL을 입력하세요 (예: https://api.example.com)"
-      }
+      },
+      "cachedModels": "캐시된 모델: {{count}}",
+      "connectionFailed": "연결 테스트에 실패했습니다. 제공자 설정을 확인하세요.",
+      "connectionSuccess": "연결에 성공했습니다. {{count}}개 모델을 캐시했습니다.",
+      "noCachedModels": "캐시된 모델 없음",
+      "testConnection": "연결 테스트",
+      "testing": "테스트 중..."
     },
     "mcpInspector": {
       "title": "MCP 검사기",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "매개변수의 숫자가 잘못되었습니다: {{name}}",
           "invalidJson": "매개변수의 JSON이 잘못되었습니다: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "구성된 MCP 서버가 없습니다",
-        "testing": "{{count}}개 MCP 서버 연결 테스트 중...",
-        "allSuccess": "모든 {{count}}개 MCP 서버가 성공적으로 연결되었습니다!",
-        "partial": "{{success}}개 연결됨, {{failed}}개 실패"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | 버전: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "서버 오프라인",
-      "connectionError": "연결 오류",
       "pullTitle": "새 모델 가져오기",
       "pullHint": "Ollama 라이브러리에서 다운로드할 모델 이름을 입력하세요 (예: llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "처리 중...",
     "textUpdated": "텍스트가 성공적으로 업데이트되었습니다",
     "error": "오류: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "에이전트 작업: 현재 노트에 대해 질문",
+    "createProjectBrief": "에이전트 작업: 프로젝트 개요 작성",
+    "createResearchBrief": "에이전트 작업: 리서치 개요 작성",
+    "diagnoseVault": "에이전트 작업: 볼트 진단",
+    "doctorLinksTags": "에이전트 작업: 링크, 태그, 속성 개선",
+    "draftFromNote": "에이전트 작업: 현재 노트로 초안 작성",
+    "findDuplicateNotes": "에이전트 작업: 중복 및 병합 후보 찾기",
+    "findRelatedNotes": "에이전트 작업: 관련 노트 찾기",
+    "generateWeeklyReview": "에이전트 작업: 주간 리뷰 생성",
+    "improveSelection": "에이전트 작업: 선택 영역 개선",
+    "openChatMain": "메인 영역에서 AI 채팅 열기",
+    "openChatSidebar": "사이드바에서 AI 채팅 열기",
+    "organizeCurrentNote": "에이전트 작업: 현재 노트 정리",
+    "sourceGroundedQuestion": "에이전트 작업: 출처 기반 질문하기",
+    "summarizeCurrentNote": "에이전트 작업: 현재 노트 요약",
+    "switchModel": "모델 전환"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: 이 파일에 대해 에이전트에게 질문",
+    "createProjectBrief": "Intelligence assistant: 에이전트로 프로젝트 개요 작성",
+    "createResearchBrief": "Intelligence assistant: 에이전트로 리서치 개요 작성",
+    "doctorLinksTags": "Intelligence assistant: 에이전트로 링크, 태그, 속성 개선",
+    "draftFromFile": "Intelligence assistant: 에이전트로 이 파일에서 초안 작성",
+    "findDuplicates": "Intelligence assistant: 에이전트로 중복 및 병합 후보 찾기",
+    "findRelatedNotes": "Intelligence assistant: 에이전트로 관련 노트 찾기",
+    "improveFolder": "Intelligence assistant: 에이전트로 폴더의 링크, 태그, 속성 개선",
+    "organizeFolder": "Intelligence assistant: 에이전트로 폴더 정리",
+    "summarize": "Intelligence assistant: 에이전트로 요약"
+  },
+  "ribbon": {
+    "openChat": "AI 채팅 열기"
   }
 }

@@ -12,21 +12,13 @@
       "usage": "שימוש"
     },
     "general": {
-      "desc": "הגדר את ההגדרות הכלליות עבור תוסף העוזר החכם.",
       "pluginVersion": {
-        "name": "גרסת התוסף",
-        "desc": "הגרסה הנוכחית של תוסף העוזר החכם"
+        "name": "גרסת התוסף"
       },
       "defaultModel": {
         "name": "מודל ברירת מחדל",
         "desc": "מודל ברירת המחדל לשיחות",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "מצב שיחה ברירת מחדל",
-        "desc": "בחר באיזה מצב תיפתח תצוגת השיחה",
-        "chat": "מצב שיחה",
-        "agent": "מצב סוכן"
       },
       "conversationTitleMode": {
         "name": "מצב כותרת שיחה",
@@ -102,11 +94,6 @@
       "count": "{{count}} ספקים מוגדרים",
       "addBtn": "+ הוסף ספק",
       "empty": "אין ספקים מוגדרים. בחר \"הוסף ספק\" כדי להתחיל.",
-      "tableHeaders": {
-        "provider": "ספק",
-        "status": "סטטוס",
-        "actions": "פעולות"
-      },
       "status": {
         "ready": "מוכן",
         "needsConfig": "נדרשת הגדרה",
@@ -117,7 +104,6 @@
         "serverError": "שגיאת שרת"
       },
       "guidance": {
-        "requiresCli": "דורש CLI מקומי",
         "configureBaseUrl": "הגדר כתובת URL בסיסית",
         "addApiKey": "הוסף מפתח API"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "רענן את כל הכלים",
       "addBtn": "+ הוסף שרת MCP",
       "empty": "אין שרתי MCP מוגדרים. בחר הוסף שרת MCP כדי להתחיל.",
-      "tableHeaders": {
-        "name": "שם",
-        "command": "פקודה",
-        "arguments": "ארגומנטים",
-        "status": "סטטוס",
-        "tools": "כלים",
-        "actions": "פעולות"
-      },
       "untitled": "שרת MCP ללא שם",
       "notConfigured": "לא מוגדר",
-      "noArgs": "ללא",
       "cached": "במטמון",
-      "disabled": "מושבת",
       "envVars_one": "{{count}} משתנה סביבה",
       "envVars_other": "{{count}} משתני סביבה",
       "envVars": "{{count}} משתני סביבה",
@@ -244,26 +220,13 @@
       "count": "{{count}} סוכנים מוגדרים",
       "addBtn": "+ הוסף סוכן",
       "empty": "אין סוכנים מוגדרים. בחר הוסף סוכן כדי להתחיל.",
-      "tableHeaders": {
-        "agent": "סוכן",
-        "model": "מודל",
-        "capabilities": "יכולות",
-        "tools": "כלים",
-        "actions": "פעולות"
-      },
       "defaultBadge": "ברירת מחדל",
       "systemPrompt": "הנחיית מערכת • {{promptName}}",
       "customPrompt": "הנחייה מותאמת אישית",
       "model": {
         "notSet": "לא הוגדר",
-        "notFound": "מודל לא נמצא במטמון",
         "useChatView": "השתמש במודל תצוגת שיחה",
-        "useChatViewDesc": "ישתמש במודל שנבחר בתצוגת השיחה",
-        "useDefault": "השתמש במודל ברירת המחדל",
-        "useDefaultDesc": "ישתמש במודל ברירת המחדל מההגדרות"
-      },
-      "capabilities": {
-        "noSpecialModes": "אין מצבים מיוחדים"
+        "useDefault": "השתמש במודל ברירת המחדל"
       },
       "tools": {
         "builtIn": "{{count}} מובנה",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} שרתי mcp",
         "mcpTool_one": "{{count}} כלי mcp",
         "mcpTool_other": "{{count}} כלי mcp",
-        "mcpTool": "{{count}} כלי mcp",
-        "noTools": "אין כלים פעילים"
+        "mcpTool": "{{count}} כלי mcp"
       },
       "actions": {
         "edit": "ערוך",
-        "delete": "מחק",
-        "protected": "מוגן"
+        "delete": "מחק"
       },
       "confirm": {
         "delete": "מחק סוכן \"{{name}}\"?"
@@ -288,18 +249,6 @@
       "desc": "נהל הנחיות מערכת המגדירות את ההתנהגות והאישיות של עוזר ה-AI שלך.",
       "addBtn": "+ הוסף הנחיית מערכת",
       "empty": "אין הנחיות מערכת מוגדרות. בחר הוסף הנחיית מערכת כדי להתחיל.",
-      "tableHeaders": {
-        "name": "שם",
-        "contentPreview": "תצוגה מקדימה של תוכן",
-        "created": "נוצר",
-        "updated": "עודכן",
-        "enabled": "פעיל",
-        "actions": "פעולות"
-      },
-      "status": {
-        "enabled": "פעיל",
-        "disabled": "מושבת"
-      },
       "actions": {
         "edit": "ערוך",
         "disable": "השבת",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "מחובר",
           "disconnected": "מנותק"
-        }
+        },
+        "addBtn": "הוסף כלי MCP"
       },
       "openapi": {
         "desc": "צור כלי HTTP ממסמכי OpenAPI. מפרטים מרוחקים נשמרים במטמון תחת {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} פעולות מוגדרות ({{enabled}} פעילות)",
       "addBtn": "+ הוסף פעולה מהירה",
       "empty": "אין פעולות מהירות מוגדרות. בחר הוסף פעולה מהירה כדי להתחיל.",
-      "tableHeaders": {
-        "action": "פעולה",
-        "type": "סוג",
-        "model": "מודל",
-        "promptPreview": "תצוגה מקדימה של הנחייה",
-        "actions": "פעולות"
-      },
       "defaultModel": "ברירת מחדל",
       "editBtn": "ערוך",
       "deleteBtn": "מחק",
@@ -1004,26 +947,16 @@
     "currentConversation": "שיחה נוכחית",
     "new": "חדש",
     "settings": "הגדרות",
-    "openSettingsTitle": "פתח הגדרות תוסף",
-    "mode": "מצב",
-    "prompt": "הנחייה",
-    "agent": "סוכן",
     "modeOptions": {
       "chat": "שיחה",
       "agent": "סוכן"
     },
-    "noSystemPrompt": "אין הנחיית מערכת",
     "noAgentsAvailable": "אין סוכנים זמינים",
-    "sendHintPrefix": "לחץ ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " לשליחה",
     "sendAriaLabel": "שלח הודעה",
     "stop": " עצור",
-    "addReference": "הוסף הפניה",
     "addReferenceTooltip": "הוסף הפניה לקובץ או תיקייה (@)",
     "emptyHeading": "התחל שיחה",
     "emptySubtext": "הקלד הודעה למטה כדי להתחיל, או בחר שיחה מהיסטוריה.",
-    "noAgentConfig": "אין סוכנים מוגדרים",
     "selectAgent": "בחר סוכן…",
     "notices": {
       "stopping": "עוצר יצירה...",
@@ -1047,23 +980,15 @@
       "noAgents": "אין סוכנים זמינים. הגדר סוכנים בהגדרות ← סוכנים.",
       "ragDisabled": "RAG מושבת בהגדרות. הפעל אותו בהגדרות ← תכונות שיחה ← RAG.",
       "webSearchDisabled": "חיפוש ברשת מושבת בהגדרות. הפעל אותו בהגדרות ← תכונות שיחה ← חיפוש ברשת.",
-      "noFilesInVault": "לא נמצאו קבצים בכספת",
       "attached": "מצורף: {{name}}",
       "attachedImages": "צורפו {{count}} תמונות",
       "referencesAdded": "נוספו {{count}} הפניות",
       "fileNotFound": "קובץ לא נמצא: {{path}}",
       "agentConfigApplied": "הוחלה הגדרה לסוכן: {{name}}",
-      "waitForComplete": "אנא המתן לסיום התגובה הנוכחית",
-      "chatServiceFallback": "ChatService לא מוגדר. משתמש בגיבוי ChatView.",
-      "noModelSelected": "לא נבחר מודל",
-      "noProviderConfig": "לא נמצאה הגדרת ספק",
-      "noResponseToRegenerate": "אין תגובה ליצירה מחדש",
-      "agentNotFound": "סוכן לא נמצא",
       "unableToLoadRag": "לא ניתן לטעון סטטיסטיקות RAG.",
       "referenced": "הפניה ל: {{name}}"
     },
     "status": {
-      "available": "זמין",
       "unavailable": "לא זמין",
       "disabled": "מושבת",
       "on": "פועל · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG כבוי כרגע לשיחה זו."
     },
     "agentSummary": {
-      "model": "מודל",
-      "temp": "טמפ'",
-      "max": "מקס",
-      "rag": "RAG",
-      "web": "רשת",
-      "tools": "כלים",
-      "memory": "זיכרון",
-      "none": "ללא",
-      "configuration": "הגדרת {{name}}",
-      "modelFixed": "{{name}} · קבוע",
-      "modelDefault": "{{name}} · ברירת מחדל",
-      "modelChatView": "{{name}} · תצוגת שיחה",
-      "customModel": "מודל מותאם אישית",
-      "notSet": "לא הוגדר",
-      "auto": "אוטומטי",
       "on": "פועל",
-      "off": "כבוי",
-      "shortTerm": "קצר טווח",
-      "longTerm": "ארוך טווח",
-      "disabledMemory": "מושבת",
-      "builtIn": "{{count}} מובנה",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "כבוי"
     },
     "message": {
       "webResults": "תוצאות רשת",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "הכנס לפתקים",
       "regenerate": "צור מחדש"
     },
-    "streaming": {
-      "thinking": "חושב..."
-    },
     "toolCall": {
-      "thinking": "חושב",
       "executionProcess": "תהליך הפעלה",
       "input": "קלט",
       "output": "פלט",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "השתמש בפתקים מאונדקסים כקונטקסט",
     "webSearchLabel": "חיפוש ברשת",
     "webSearchTooltipLabel": "חפש באינטרנט לפי הצורך",
-    "imageUnavailable": "צירוף תמונה אינו זמין עבור המודל הנוכחי.",
-    "newChat": "שיחה חדשה",
     "newConversation": "שיחה חדשה",
     "searchConversations": "חפש שיחות...",
     "header": {
-      "model": "מודל",
-      "advancedParams": "פרמטרים מתקדמים",
-      "temperature": "טמפרטורה",
-      "maxTokens": "מקסימום טוקנים",
-      "topP": "Top P",
-      "freqPenalty": "עונש תדירות",
-      "presPenalty": "עונש נוכחות",
-      "agentConfig": "הגדרת סוכן",
-      "modelsCount": "מודלים: {{count}}",
-      "tokensCount": "טוקנים: {{count}}",
       "noModels": "אין מודלים זמינים"
-    },
-    "temperature": {
-      "precise": "0 (מדויק)",
-      "balanced": "1 (מאוזן)",
-      "creative": "2 (יצירתי)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "הכנס לפתק הנבחר",
         "createNew": "צור פתק חדש",
         "noResults": "לא נמצאו פתקים תואמים."
+      },
+      "agentTask": {
+        "cancel": "ביטול",
+        "fieldLabel": "משימה",
+        "newConversation": "התחל בשיחה חדשה",
+        "newConversationDesc": "שמור את הרצת הסוכן הזו בנפרד מהשיחה הנוכחית.",
+        "placeholder": "הזן את המשימה שלך כאן...",
+        "start": "התחל",
+        "title": "התחל משימת סוכן"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "אנא בחר סוג ספק",
         "invalidUrl": "פורמט כתובת URL בסיסית לא תקף. אנא הזן כתובת URL תקפה (למשל, https://api.example.com)"
-      }
+      },
+      "cachedModels": "מודלים במטמון: {{count}}",
+      "connectionFailed": "בדיקת החיבור נכשלה. בדוק את הגדרות הספק.",
+      "connectionSuccess": "החיבור הצליח. {{count}} מודלים נשמרו במטמון.",
+      "noCachedModels": "אין מודלים במטמון",
+      "testConnection": "בדוק חיבור",
+      "testing": "בודק..."
     },
     "mcpInspector": {
       "title": "בודק MCP",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "מספר לא תקף עבור פרמטר: {{name}}",
           "invalidJson": "JSON לא תקף עבור פרמטר: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "אין שרתי MCP מוגדרים",
-        "testing": "בודק {{count}} חיבורי שרת MCP...",
-        "allSuccess": "כל {{count}} שרתי mcp התחברו בהצלחה!",
-        "partial": "{{success}} התחברו, {{failed}} נכשלו"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | גרסה: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "שרת לא מקוון",
-      "connectionError": "שגיאת חיבור",
       "pullTitle": "משוך מודל חדש",
       "pullHint": "הזן שם מודל להורדה מספריית Ollama (למשל, llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "מעבד...",
     "textUpdated": "הטקסט עודכן בהצלחה",
     "error": "שגיאה: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "משימת סוכן: שאל על הפתק הנוכחי",
+    "createProjectBrief": "משימת סוכן: צור תקציר פרויקט",
+    "createResearchBrief": "משימת סוכן: צור תקציר מחקר",
+    "diagnoseVault": "משימת סוכן: אבחן את הכספת",
+    "doctorLinksTags": "משימת סוכן: שפר קישורים, תגים ומאפיינים",
+    "draftFromNote": "משימת סוכן: נסח טיוטה מהפתק הנוכחי",
+    "findDuplicateNotes": "משימת סוכן: מצא כפילויות ומועמדים למיזוג",
+    "findRelatedNotes": "משימת סוכן: מצא פתקים קשורים",
+    "generateWeeklyReview": "משימת סוכן: צור סקירה שבועית",
+    "improveSelection": "משימת סוכן: שפר את הבחירה",
+    "openChatMain": "פתח צ'אט AI באזור הראשי",
+    "openChatSidebar": "פתח צ'אט AI בסרגל הצד",
+    "organizeCurrentNote": "משימת סוכן: ארגן את הפתק הנוכחי",
+    "sourceGroundedQuestion": "משימת סוכן: שאל שאלה מבוססת מקורות",
+    "summarizeCurrentNote": "משימת סוכן: סכם את הפתק הנוכחי",
+    "switchModel": "החלף מודל"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: שאל את הסוכן על קובץ זה",
+    "createProjectBrief": "Intelligence assistant: צור תקציר פרויקט עם הסוכן",
+    "createResearchBrief": "Intelligence assistant: צור תקציר מחקר עם הסוכן",
+    "doctorLinksTags": "Intelligence assistant: שפר קישורים, תגים ומאפיינים עם הסוכן",
+    "draftFromFile": "Intelligence assistant: נסח טיוטה מקובץ זה עם הסוכן",
+    "findDuplicates": "Intelligence assistant: מצא כפילויות ומועמדים למיזוג עם הסוכן",
+    "findRelatedNotes": "Intelligence assistant: מצא פתקים קשורים עם הסוכן",
+    "improveFolder": "Intelligence assistant: שפר קישורים, תגים ומאפיינים של התיקייה עם הסוכן",
+    "organizeFolder": "Intelligence assistant: ארגן את התיקייה עם הסוכן",
+    "summarize": "Intelligence assistant: סכם עם הסוכן"
+  },
+  "ribbon": {
+    "openChat": "פתח צ'אט AI"
   }
 }

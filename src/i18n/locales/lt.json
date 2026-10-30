@@ -12,21 +12,13 @@
       "usage": "Naudojimas"
     },
     "general": {
-      "desc": "Konfigūruoti bendruosius intelektualaus asistento įskiepio nustatymus.",
       "pluginVersion": {
-        "name": "Įskiepio versija",
-        "desc": "Dabartinė intelektualaus asistento įskiepio versija"
+        "name": "Įskiepio versija"
       },
       "defaultModel": {
         "name": "Numatytasis modelis",
         "desc": "Numatytasis modelis naudojamas pokalbiuose",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Numatytasis pokalbio režimas",
-        "desc": "Pasirinkite, kuriuo režimu atidaromas pokalbio vaizdas",
-        "chat": "Pokalbio režimas",
-        "agent": "Agento režimas"
       },
       "conversationTitleMode": {
         "name": "Pokalbio pavadinimo režimas",
@@ -102,11 +94,6 @@
       "count": "{{count}} tiekėjai sukonfigūruoti",
       "addBtn": "+ Pridėti tiekėją",
       "empty": "Nėra sukonfigūruotų tiekėjų. Pasirinkite «Pridėti tiekėją», kad pradėtumėte.",
-      "tableHeaders": {
-        "provider": "Tiekėjas",
-        "status": "Būsena",
-        "actions": "Veiksmai"
-      },
       "status": {
         "ready": "Paruoštas",
         "needsConfig": "Reikalinga konfigūracija",
@@ -117,7 +104,6 @@
         "serverError": "Serverio klaida"
       },
       "guidance": {
-        "requiresCli": "Reikalingas vietinis CLI",
         "configureBaseUrl": "Sukonfigūruoti bazinį URL",
         "addApiKey": "Pridėti API raktą"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "atnaujinti visus įrankius",
       "addBtn": "+ Pridėti MCP serverį",
       "empty": "Nėra sukonfigūruotų MCP serverių. Pasirinkite Pridėti MCP serverį, kad pradėtumėte.",
-      "tableHeaders": {
-        "name": "Pavadinimas",
-        "command": "Komanda",
-        "arguments": "Argumentai",
-        "status": "Būsena",
-        "tools": "Įrankiai",
-        "actions": "Veiksmai"
-      },
       "untitled": "Nepavadintas MCP serveris",
       "notConfigured": "Nesukonfigūruotas",
-      "noArgs": "Nėra",
       "cached": "Talpykloje",
-      "disabled": "Išjungtas",
       "envVars_one": "{{count}} aplinkos kintamasis",
       "envVars_other": "{{count}} aplinkos kintamieji",
       "envVars": "{{count}} aplinkos kintamieji",
@@ -244,26 +220,13 @@
       "count": "{{count}} agentai sukonfigūruoti",
       "addBtn": "+ pridėti agentą",
       "empty": "Nėra sukonfigūruotų agentų. Pasirinkite pridėti agentą, kad pradėtumėte.",
-      "tableHeaders": {
-        "agent": "Agentas",
-        "model": "Modelis",
-        "capabilities": "Galimybės",
-        "tools": "Įrankiai",
-        "actions": "Veiksmai"
-      },
       "defaultBadge": "Numatytasis",
       "systemPrompt": "Sistemos raginys • {{promptName}}",
       "customPrompt": "Pasirinktinis raginys",
       "model": {
         "notSet": "Nenustatyta",
-        "notFound": "Modelis nerastas talpykloje",
         "useChatView": "Naudoti pokalbio vaizdo modelį",
-        "useChatViewDesc": "Naudos pokalbio vaizde pasirinktą modelį",
-        "useDefault": "Naudoti numatytąjį modelį",
-        "useDefaultDesc": "Naudos numatytąjį modelį iš nustatymų"
-      },
-      "capabilities": {
-        "noSpecialModes": "Nėra specialių režimų"
+        "useDefault": "Naudoti numatytąjį modelį"
       },
       "tools": {
         "builtIn": "{{count}} įtaisytasis",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} MCP serveriai",
         "mcpTool_one": "{{count}} MCP įrankis",
         "mcpTool_other": "{{count}} MCP įrankiai",
-        "mcpTool": "{{count}} MCP įrankiai",
-        "noTools": "Nėra įjungtų įrankių"
+        "mcpTool": "{{count}} MCP įrankiai"
       },
       "actions": {
         "edit": "Redaguoti",
-        "delete": "ištrinti",
-        "protected": "apsaugotas"
+        "delete": "ištrinti"
       },
       "confirm": {
         "delete": "Ištrinti agentą «{{name}}»?"
@@ -288,18 +249,6 @@
       "desc": "Valdyti sistemos raginius, apibrėžiančius DI asistento elgesį ir asmenybę.",
       "addBtn": "+ pridėti sistemos raginį",
       "empty": "Nėra sukonfigūruotų sistemos raginių. Pasirinkite pridėti sistemos raginį, kad pradėtumėte.",
-      "tableHeaders": {
-        "name": "Pavadinimas",
-        "contentPreview": "Turinio peržiūra",
-        "created": "Sukurta",
-        "updated": "Atnaujinta",
-        "enabled": "Įjungtas",
-        "actions": "Veiksmai"
-      },
-      "status": {
-        "enabled": "Įjungtas",
-        "disabled": "Išjungtas"
-      },
       "actions": {
         "edit": "Redaguoti",
         "disable": "Išjungti",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "prijungtas",
           "disconnected": "atjungtas"
-        }
+        },
+        "addBtn": "Pridėti MCP įrankių"
       },
       "openapi": {
         "desc": "Generuoti HTTP įrankius iš OpenAPI dokumentų. Nuotolinės specifikacijos talpykloje saugomos direktorijai {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} veiksmai sukonfigūruoti ({{enabled}} įjungti)",
       "addBtn": "+ pridėti greitą veiksmą",
       "empty": "Nėra sukonfigūruotų greitų veiksmų. Pasirinkite pridėti greitą veiksmą, kad pradėtumėte.",
-      "tableHeaders": {
-        "action": "Veiksmas",
-        "type": "Tipas",
-        "model": "Modelis",
-        "promptPreview": "Raginio peržiūra",
-        "actions": "Veiksmai"
-      },
       "defaultModel": "Numatytasis",
       "editBtn": "Redaguoti",
       "deleteBtn": "ištrinti",
@@ -1004,26 +947,16 @@
     "currentConversation": "Dabartinis pokalbis",
     "new": "Naujas",
     "settings": "Nustatymai",
-    "openSettingsTitle": "Atidaryti įskiepio nustatymus",
-    "mode": "Režimas",
-    "prompt": "Raginys",
-    "agent": "Agentas",
     "modeOptions": {
       "chat": "Pokalbis",
       "agent": "Agentas"
     },
-    "noSystemPrompt": "Nėra sistemos raginio",
     "noAgentsAvailable": "Nėra galimų agentų",
-    "sendHintPrefix": "Paspauskite ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": ", kad siųstumėte",
     "sendAriaLabel": "Siųsti žinutę",
     "stop": " Sustabdyti",
-    "addReference": "Pridėti nuorodą",
     "addReferenceTooltip": "Pridėti failo arba aplanko nuorodą (@)",
     "emptyHeading": "Pradėkite pokalbį",
     "emptySubtext": "Įveskite žinutę žemiau, kad pradėtumėte, arba pasirinkite pokalbį iš istorijos.",
-    "noAgentConfig": "Nėra sukonfigūruotų agentų",
     "selectAgent": "Pasirinkite agentą…",
     "notices": {
       "stopping": "Stabdomas generavimas...",
@@ -1047,23 +980,15 @@
       "noAgents": "Nėra galimų agentų. Sukonfigūruokite agentus Nustatymai → Agentai.",
       "ragDisabled": "RAG išjungtas nustatymuose. Įjunkite jį nustatymai → pokalbio funkcijos → RAG.",
       "webSearchDisabled": "Žiniatinklio paieška išjungta nustatymuose. Įjunkite ją nustatymai → pokalbio funkcijos → žiniatinklio paieška.",
-      "noFilesInVault": "Saugykloje nerasta failų",
       "attached": "Pridėta: {{name}}",
       "attachedImages": "Pridėtas (-i) {{count}} vaizdas (-ai)",
       "referencesAdded": "Pridėta {{count}} nuoroda (-os)",
       "fileNotFound": "Failas nerastas: {{path}}",
       "agentConfigApplied": "Pritaikyta agento konfigūracija: {{name}}",
-      "waitForComplete": "Palaukite, kol bus baigtas dabartinis atsakymas",
-      "chatServiceFallback": "ChatService nesukonfigūruotas. Naudojamas ChatView atsarginis variantas.",
-      "noModelSelected": "Nepasirinktas modelis",
-      "noProviderConfig": "Nerasta tiekėjo konfigūracija",
-      "noResponseToRegenerate": "Nėra atsakymo, kurį regeneruoti",
-      "agentNotFound": "Agentas nerastas",
       "unableToLoadRag": "Nepavyko įkelti RAG statistikos.",
       "referenced": "Paminėta: {{name}}"
     },
     "status": {
-      "available": "Pasiekiamas",
       "unavailable": "Nepasiekiamas",
       "disabled": "Išjungtas",
       "on": "Įjungta · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG šiuo metu išjungtas šiame pokalbyje."
     },
     "agentSummary": {
-      "model": "Modelis",
-      "temp": "Temp",
-      "max": "Maks",
-      "rag": "RAG",
-      "web": "Žiniatinklis",
-      "tools": "Įrankiai",
-      "memory": "Atmintis",
-      "none": "Nėra",
-      "configuration": "{{name}} konfigūracija",
-      "modelFixed": "{{name}} · Fiksuotas",
-      "modelDefault": "{{name}} · Numatytasis",
-      "modelChatView": "{{name}} · Pokalbio vaizdas",
-      "customModel": "Pasirinktinis modelis",
-      "notSet": "Nenustatyta",
-      "auto": "Automatinis",
       "on": "Įjungta",
-      "off": "Išjungta",
-      "shortTerm": "Trumpalaikė",
-      "longTerm": "Ilgalaikė",
-      "disabledMemory": "Išjungta",
-      "builtIn": "{{count}} įtaisytasis",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Išjungta"
     },
     "message": {
       "webResults": "Žiniatinklio rezultatai",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Įterpti į užrašus",
       "regenerate": "Regeneruoti"
     },
-    "streaming": {
-      "thinking": "Galvojama..."
-    },
     "toolCall": {
-      "thinking": "Galvojama",
       "executionProcess": "Vykdymo procesas",
       "input": "Įvestis",
       "output": "Išvestis",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Naudoti indeksuotus užrašus kaip kontekstą",
     "webSearchLabel": "Žiniatinklio paieška",
     "webSearchTooltipLabel": "Ieškoti internete prireikus",
-    "imageUnavailable": "Vaizdo priedas nepasiekiamas dabartiniam modeliui.",
-    "newChat": "Naujas pokalbis",
     "newConversation": "Naujas pokalbis",
     "searchConversations": "Ieškoti pokalbiuose...",
     "header": {
-      "model": "Modelis",
-      "advancedParams": "Išplėstiniai parametrai",
-      "temperature": "Temperatūra",
-      "maxTokens": "Maks. žetonų",
-      "topP": "Top P",
-      "freqPenalty": "Dažnio bauda",
-      "presPenalty": "Buvimo bauda",
-      "agentConfig": "Agento konfigūracija",
-      "modelsCount": "Modeliai: {{count}}",
-      "tokensCount": "Žetonai: {{count}}",
       "noModels": "Nėra galimų modelių"
-    },
-    "temperature": {
-      "precise": "0 (Tikslus)",
-      "balanced": "1 (Subalansuotas)",
-      "creative": "2 (Kūrybiškas)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Įterpti į pasirinktą užrašą",
         "createNew": "Sukurti naują užrašą",
         "noResults": "Nerasta atitinkančių užrašų."
+      },
+      "agentTask": {
+        "cancel": "Atšaukti",
+        "fieldLabel": "Užduotis",
+        "newConversation": "Pradėti naujame pokalbyje",
+        "newConversationDesc": "Laikyti šį agento vykdymą atskirai nuo dabartinio pokalbio.",
+        "placeholder": "Įveskite savo užduotį čia...",
+        "start": "Pradėti",
+        "title": "Pradėti agento užduotį"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Pasirinkite tiekėjo tipą",
         "invalidUrl": "Netinkamas bazinio URL formatas. Įveskite galiojantį URL (pvz., https://api.example.com)"
-      }
+      },
+      "cachedModels": "Talpykloje esantys modeliai: {{count}}",
+      "connectionFailed": "Ryšio patikrinimas nepavyko. Patikrinkite tiekėjo nustatymus.",
+      "connectionSuccess": "Ryšys sėkmingas. Talpykloje išsaugota modelių: {{count}}.",
+      "noCachedModels": "Talpykloje nėra modelių",
+      "testConnection": "Patikrinti ryšį",
+      "testing": "Tikrinama..."
     },
     "mcpInspector": {
       "title": "MCP inspektorius",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Netinkamas skaičius parametrui: {{name}}",
           "invalidJson": "Netinkamas JSON parametrui: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Nesukonfigūruoti MCP serveriai",
-        "testing": "Tikrinami {{count}} MCP serverio ryšiai...",
-        "allSuccess": "visi {{count}} MCP serveriai sėkmingai prijungti!",
-        "partial": "{{success}} prijungta, {{failed}} nepavyko"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Versija: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Serveris neprisijungęs",
-      "connectionError": "Ryšio klaida",
       "pullTitle": "Parsisiųsti naują modelį",
       "pullHint": "Įveskite modelio pavadinimą, kad parsisiųstumėte iš Ollama bibliotekos (pvz., llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Apdorojama...",
     "textUpdated": "Tekstas sėkmingai atnaujintas",
     "error": "Klaida: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Agento užduotis: klausti apie dabartinį užrašą",
+    "createProjectBrief": "Agento užduotis: sukurti projekto apžvalgą",
+    "createResearchBrief": "Agento užduotis: sukurti tyrimo apžvalgą",
+    "diagnoseVault": "Agento užduotis: diagnozuoti saugyklą",
+    "doctorLinksTags": "Agento užduotis: patobulinti nuorodas, žymas ir savybes",
+    "draftFromNote": "Agento užduotis: parengti juodraštį iš dabartinio užrašo",
+    "findDuplicateNotes": "Agento užduotis: rasti dublikatus ir sujungimo kandidatus",
+    "findRelatedNotes": "Agento užduotis: rasti susijusius užrašus",
+    "generateWeeklyReview": "Agento užduotis: sugeneruoti savaitės suvestinę",
+    "improveSelection": "Agento užduotis: patobulinti pažymėtą tekstą",
+    "openChatMain": "Atidaryti DI pokalbį pagrindinėje srityje",
+    "openChatSidebar": "Atidaryti DI pokalbį šoninėje juostoje",
+    "organizeCurrentNote": "Agento užduotis: sutvarkyti dabartinį užrašą",
+    "sourceGroundedQuestion": "Agento užduotis: užduoti šaltiniais pagrįstą klausimą",
+    "summarizeCurrentNote": "Agento užduotis: apibendrinti dabartinį užrašą",
+    "switchModel": "Perjungti modelį"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: klausti agento apie šį failą",
+    "createProjectBrief": "Intelligence assistant: sukurti projekto apžvalgą su agentu",
+    "createResearchBrief": "Intelligence assistant: sukurti tyrimo apžvalgą su agentu",
+    "doctorLinksTags": "Intelligence assistant: patobulinti nuorodas, žymas ir savybes su agentu",
+    "draftFromFile": "Intelligence assistant: parengti juodraštį iš šio failo su agentu",
+    "findDuplicates": "Intelligence assistant: rasti dublikatus ir sujungimo kandidatus su agentu",
+    "findRelatedNotes": "Intelligence assistant: rasti susijusius užrašus su agentu",
+    "improveFolder": "Intelligence assistant: patobulinti aplanko nuorodas, žymas ir savybes su agentu",
+    "organizeFolder": "Intelligence assistant: sutvarkyti aplanką su agentu",
+    "summarize": "Intelligence assistant: apibendrinti su agentu"
+  },
+  "ribbon": {
+    "openChat": "Atidaryti DI pokalbį"
   }
 }

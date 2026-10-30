@@ -12,21 +12,13 @@
       "usage": "Lietojums"
     },
     "general": {
-      "desc": "Konfigurēt vispārīgos iestatījumus inteliģentā asistenta spraudnim.",
       "pluginVersion": {
-        "name": "Spraudņa versija",
-        "desc": "Inteliģentā asistenta spraudņa pašreizējā versija"
+        "name": "Spraudņa versija"
       },
       "defaultModel": {
         "name": "Noklusējuma modelis",
         "desc": "Noklusējuma modelis, ko izmantot sarunās",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Noklusējuma tērzēšanas režīms",
-        "desc": "Izvēlieties, kurā režīmā tiek atvērts tērzēšanas skats",
-        "chat": "Tērzēšanas režīms",
-        "agent": "Aģenta režīms"
       },
       "conversationTitleMode": {
         "name": "Sarunas virsraksta režīms",
@@ -102,11 +94,6 @@
       "count": "{{count}} pakalpojumu sniedzēji konfigurēti",
       "addBtn": "+ Pievienot pakalpojumu sniedzēju",
       "empty": "Nav konfigurētu pakalpojumu sniedzēju. Izvēlieties «Pievienot pakalpojumu sniedzēju», lai sāktu.",
-      "tableHeaders": {
-        "provider": "Pakalpojumu sniedzējs",
-        "status": "Statuss",
-        "actions": "Darbības"
-      },
       "status": {
         "ready": "Gatavs",
         "needsConfig": "Nepieciešama konfigurācija",
@@ -117,7 +104,6 @@
         "serverError": "Servera kļūda"
       },
       "guidance": {
-        "requiresCli": "Nepieciešams lokāls CLI",
         "configureBaseUrl": "Konfigurēt bāzes URL",
         "addApiKey": "Pievienot API atslēgu"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "atsvaidzināt visus rīkus",
       "addBtn": "+ Pievienot MCP serveri",
       "empty": "Nav konfigurētu MCP serveru. Izvēlieties Pievienot MCP serveri, lai sāktu.",
-      "tableHeaders": {
-        "name": "Nosaukums",
-        "command": "Komanda",
-        "arguments": "Argumenti",
-        "status": "Statuss",
-        "tools": "Rīki",
-        "actions": "Darbības"
-      },
       "untitled": "Nenosaukts MCP serveris",
       "notConfigured": "Nav konfigurēts",
-      "noArgs": "Nav",
       "cached": "Kešatmiņā",
-      "disabled": "Atspējots",
       "envVars_one": "{{count}} vides mainīgais",
       "envVars_other": "{{count}} vides mainīgie",
       "envVars": "{{count}} vides mainīgie",
@@ -244,26 +220,13 @@
       "count": "{{count}} aģenti konfigurēti",
       "addBtn": "+ pievienot aģentu",
       "empty": "Nav konfigurētu aģentu. Izvēlieties pievienot aģentu, lai sāktu.",
-      "tableHeaders": {
-        "agent": "Aģents",
-        "model": "Modelis",
-        "capabilities": "Iespējas",
-        "tools": "Rīki",
-        "actions": "Darbības"
-      },
       "defaultBadge": "Noklusējums",
       "systemPrompt": "Sistēmas uzvedne • {{promptName}}",
       "customPrompt": "Pielāgota uzvedne",
       "model": {
         "notSet": "Nav iestatīts",
-        "notFound": "Modelis nav atrasts kešatmiņā",
         "useChatView": "Izmantot tērzēšanas skata modeli",
-        "useChatViewDesc": "Izmantos modeli, kas atlasīts tērzēšanas skatā",
-        "useDefault": "Izmantot noklusējuma modeli",
-        "useDefaultDesc": "Izmantos noklusējuma modeli no iestatījumiem"
-      },
-      "capabilities": {
-        "noSpecialModes": "Nav īpašu režīmu"
+        "useDefault": "Izmantot noklusējuma modeli"
       },
       "tools": {
         "builtIn": "{{count}} iebūvēts",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} MCP serveri",
         "mcpTool_one": "{{count}} MCP rīks",
         "mcpTool_other": "{{count}} MCP rīki",
-        "mcpTool": "{{count}} MCP rīki",
-        "noTools": "Nav iespējotu rīku"
+        "mcpTool": "{{count}} MCP rīki"
       },
       "actions": {
         "edit": "Rediģēt",
-        "delete": "dzēst",
-        "protected": "aizsargāts"
+        "delete": "dzēst"
       },
       "confirm": {
         "delete": "Dzēst aģentu «{{name}}»?"
@@ -288,18 +249,6 @@
       "desc": "Pārvaldīt sistēmas uzvednes, kas nosaka AI asistenta uzvedību un personību.",
       "addBtn": "+ pievienot sistēmas uzvedni",
       "empty": "Nav konfigurētu sistēmas uzvedņu. Izvēlieties pievienot sistēmas uzvedni, lai sāktu.",
-      "tableHeaders": {
-        "name": "Nosaukums",
-        "contentPreview": "Satura priekšskatījums",
-        "created": "Izveidots",
-        "updated": "Atjaunināts",
-        "enabled": "Iespējots",
-        "actions": "Darbības"
-      },
-      "status": {
-        "enabled": "Iespējots",
-        "disabled": "Atspējots"
-      },
       "actions": {
         "edit": "Rediģēt",
         "disable": "Atspējot",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "savienots",
           "disconnected": "atvienots"
-        }
+        },
+        "addBtn": "Pievienot MCP rīkus"
       },
       "openapi": {
         "desc": "Ģenerēt HTTP rīkus no OpenAPI dokumentiem. Attālinātās specifikācijas tiek kešotas direktorijā {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} darbības konfigurētas ({{enabled}} iespējotas)",
       "addBtn": "+ pievienot ātro darbību",
       "empty": "Nav konfigurētu ātro darbību. Izvēlieties pievienot ātro darbību, lai sāktu.",
-      "tableHeaders": {
-        "action": "Darbība",
-        "type": "Tips",
-        "model": "Modelis",
-        "promptPreview": "Uzvednes priekšskatījums",
-        "actions": "Darbības"
-      },
       "defaultModel": "Noklusējums",
       "editBtn": "Rediģēt",
       "deleteBtn": "dzēst",
@@ -1004,26 +947,16 @@
     "currentConversation": "Pašreizējā saruna",
     "new": "Jauns",
     "settings": "Iestatījumi",
-    "openSettingsTitle": "Atvērt spraudņa iestatījumus",
-    "mode": "Režīms",
-    "prompt": "Uzvedne",
-    "agent": "Aģents",
     "modeOptions": {
       "chat": "Tērzēšana",
       "agent": "Aģents"
     },
-    "noSystemPrompt": "Nav sistēmas uzvednes",
     "noAgentsAvailable": "Nav pieejamu aģentu",
-    "sendHintPrefix": "Nospiediet ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": ", lai nosūtītu",
     "sendAriaLabel": "Nosūtīt ziņojumu",
     "stop": " Apturēt",
-    "addReference": "Pievienot atsauci",
     "addReferenceTooltip": "Pievienot faila vai mapes atsauci (@)",
     "emptyHeading": "Sāciet sarunu",
     "emptySubtext": "Rakstiet ziņojumu zemāk, lai sāktu, vai atlasiet sarunu no vēstures.",
-    "noAgentConfig": "Nav konfigurētu aģentu",
     "selectAgent": "Atlasiet aģentu…",
     "notices": {
       "stopping": "Aptur ģenerēšanu...",
@@ -1047,23 +980,15 @@
       "noAgents": "Nav pieejamu aģentu. Konfigurējiet aģentus Iestatījumi → Aģenti.",
       "ragDisabled": "RAG ir atspējots iestatījumos. Iespējojiet to sadaļā iestatījumi → tērzēšanas funkcijas → RAG.",
       "webSearchDisabled": "Tīmekļa meklēšana ir atspējota iestatījumos. Iespējojiet to sadaļā iestatījumi → tērzēšanas funkcijas → tīmekļa meklēšana.",
-      "noFilesInVault": "Velventī nav atrasts neviens fails",
       "attached": "Pievienots: {{name}}",
       "attachedImages": "Pievienotas {{count}} attēls(-i)",
       "referencesAdded": "Pievienotas {{count}} atsauces",
       "fileNotFound": "Fails nav atrasts: {{path}}",
       "agentConfigApplied": "Piemērota aģenta konfigurācija: {{name}}",
-      "waitForComplete": "Lūdzu, uzgaidiet, līdz pašreizējā atbilde ir pabeigta",
-      "chatServiceFallback": "ChatService nav konfigurēts. Izmanto ChatView rezerves variantu.",
-      "noModelSelected": "Nav atlasīts modelis",
-      "noProviderConfig": "Nav atrasta pakalpojumu sniedzēja konfigurācija",
-      "noResponseToRegenerate": "Nav atbildes, ko reģenerēt",
-      "agentNotFound": "Aģents nav atrasts",
       "unableToLoadRag": "Nevar ielādēt RAG statistiku.",
       "referenced": "Atsaukts: {{name}}"
     },
     "status": {
-      "available": "Pieejams",
       "unavailable": "Nav pieejams",
       "disabled": "Atspējots",
       "on": "Ieslēgts · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG pašlaik ir izslēgts šajā tērzēšanā."
     },
     "agentSummary": {
-      "model": "Modelis",
-      "temp": "Temp",
-      "max": "Maks",
-      "rag": "RAG",
-      "web": "Tīmeklis",
-      "tools": "Rīki",
-      "memory": "Atmiņa",
-      "none": "Nav",
-      "configuration": "{{name}} konfigurācija",
-      "modelFixed": "{{name}} · Fiksēts",
-      "modelDefault": "{{name}} · Noklusējums",
-      "modelChatView": "{{name}} · Tērzēšanas skats",
-      "customModel": "Pielāgots modelis",
-      "notSet": "Nav iestatīts",
-      "auto": "Auto",
       "on": "Ieslēgts",
-      "off": "Izslēgts",
-      "shortTerm": "Īstermiņa",
-      "longTerm": "Ilgtermiņa",
-      "disabledMemory": "Atspējots",
-      "builtIn": "{{count}} iebūvēts",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Izslēgts"
     },
     "message": {
       "webResults": "Tīmekļa rezultāti",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Ievietot piezīmēs",
       "regenerate": "Reģenerēt"
     },
-    "streaming": {
-      "thinking": "Domā..."
-    },
     "toolCall": {
-      "thinking": "Domā",
       "executionProcess": "Izpildes process",
       "input": "Ievade",
       "output": "Izvade",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Izmantot indeksētās piezīmes kā kontekstu",
     "webSearchLabel": "Tīmekļa meklēšana",
     "webSearchTooltipLabel": "Meklēt internetā pēc vajadzības",
-    "imageUnavailable": "Attēlu pielikums nav pieejams pašreizējam modelim.",
-    "newChat": "Jauna tērzēšana",
     "newConversation": "Jauna saruna",
     "searchConversations": "Meklēt sarunās...",
     "header": {
-      "model": "Modelis",
-      "advancedParams": "Papildu parametri",
-      "temperature": "Temperatūra",
-      "maxTokens": "Maks. pilnvaru skaits",
-      "topP": "Top P",
-      "freqPenalty": "Biežuma sods",
-      "presPenalty": "Klātbūtnes sods",
-      "agentConfig": "Aģenta konfigurācija",
-      "modelsCount": "Modeļi: {{count}}",
-      "tokensCount": "Pilnvari: {{count}}",
       "noModels": "Nav pieejamu modeļu"
-    },
-    "temperature": {
-      "precise": "0 (Precīzs)",
-      "balanced": "1 (Līdzsvarots)",
-      "creative": "2 (Radošs)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Ievietot atlasītajā piezīmē",
         "createNew": "Izveidot jaunu piezīmi",
         "noResults": "Nav atrasta neviena atbilstoša piezīme."
+      },
+      "agentTask": {
+        "cancel": "Atcelt",
+        "fieldLabel": "Uzdevums",
+        "newConversation": "Sākt jaunā sarunā",
+        "newConversationDesc": "Saglabāt šo aģenta izpildi atsevišķi no pašreizējās sarunas.",
+        "placeholder": "Ievadiet savu uzdevumu šeit...",
+        "start": "Sākt",
+        "title": "Sākt aģenta uzdevumu"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Lūdzu, atlasiet pakalpojumu sniedzēja tipu",
         "invalidUrl": "Nederīgs bāzes URL formāts. Lūdzu, ievadiet derīgu URL (piem., https://api.example.com)"
-      }
+      },
+      "cachedModels": "Kešatmiņā saglabātie modeļi: {{count}}",
+      "connectionFailed": "Savienojuma pārbaude neizdevās. Pārbaudiet pakalpojumu sniedzēja iestatījumus.",
+      "connectionSuccess": "Savienojums izdevies. Kešatmiņā saglabāti modeļi: {{count}}.",
+      "noCachedModels": "Kešatmiņā nav modeļu",
+      "testConnection": "Pārbaudīt savienojumu",
+      "testing": "Pārbauda..."
     },
     "mcpInspector": {
       "title": "MCP inspektors",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Nederīgs skaitlis parametram: {{name}}",
           "invalidJson": "Nederīgs JSON parametram: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Nav konfigurētu MCP serveru",
-        "testing": "Pārbauda {{count}} MCP servera savienojumus...",
-        "allSuccess": "visi {{count}} MCP serveri veiksmīgi savienoti!",
-        "partial": "{{success}} savienoti, {{failed}} neizdevās"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Versija: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Serveris bezsaistē",
-      "connectionError": "Savienojuma kļūda",
       "pullTitle": "Lejupielādēt jaunu modeli",
       "pullHint": "Ievadiet modeļa nosaukumu, lai lejupielādētu no Ollama bibliotēkas (piem., llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Apstrādā...",
     "textUpdated": "Teksts veiksmīgi atjaunināts",
     "error": "Kļūda: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Aģenta uzdevums: jautāt par pašreizējo piezīmi",
+    "createProjectBrief": "Aģenta uzdevums: izveidot projekta kopsavilkumu",
+    "createResearchBrief": "Aģenta uzdevums: izveidot pētījuma kopsavilkumu",
+    "diagnoseVault": "Aģenta uzdevums: diagnosticēt velventu",
+    "doctorLinksTags": "Aģenta uzdevums: uzlabot saites, birkas un rekvizītus",
+    "draftFromNote": "Aģenta uzdevums: sagatavot melnrakstu no pašreizējās piezīmes",
+    "findDuplicateNotes": "Aģenta uzdevums: atrast dublikātus un apvienošanas kandidātus",
+    "findRelatedNotes": "Aģenta uzdevums: atrast saistītās piezīmes",
+    "generateWeeklyReview": "Aģenta uzdevums: ģenerēt nedēļas pārskatu",
+    "improveSelection": "Aģenta uzdevums: uzlabot atlasi",
+    "openChatMain": "Atvērt AI tērzēšanu galvenajā apgabalā",
+    "openChatSidebar": "Atvērt AI tērzēšanu sānjoslā",
+    "organizeCurrentNote": "Aģenta uzdevums: sakārtot pašreizējo piezīmi",
+    "sourceGroundedQuestion": "Aģenta uzdevums: uzdot uz avotiem balstītu jautājumu",
+    "summarizeCurrentNote": "Aģenta uzdevums: apkopot pašreizējo piezīmi",
+    "switchModel": "Pārslēgt modeli"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: jautāt aģentam par šo failu",
+    "createProjectBrief": "Intelligence assistant: izveidot projekta kopsavilkumu ar aģentu",
+    "createResearchBrief": "Intelligence assistant: izveidot pētījuma kopsavilkumu ar aģentu",
+    "doctorLinksTags": "Intelligence assistant: uzlabot saites, birkas un rekvizītus ar aģentu",
+    "draftFromFile": "Intelligence assistant: sagatavot melnrakstu no šī faila ar aģentu",
+    "findDuplicates": "Intelligence assistant: atrast dublikātus un apvienošanas kandidātus ar aģentu",
+    "findRelatedNotes": "Intelligence assistant: atrast saistītās piezīmes ar aģentu",
+    "improveFolder": "Intelligence assistant: uzlabot mapes saites, birkas un rekvizītus ar aģentu",
+    "organizeFolder": "Intelligence assistant: sakārtot mapi ar aģentu",
+    "summarize": "Intelligence assistant: apkopot ar aģentu"
+  },
+  "ribbon": {
+    "openChat": "Atvērt AI tērzēšanu"
   }
 }

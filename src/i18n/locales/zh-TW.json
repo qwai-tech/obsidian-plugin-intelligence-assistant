@@ -12,21 +12,13 @@
       "usage": "使用量"
     },
     "general": {
-      "desc": "設定智慧助理外掛程式的一般選項。",
       "pluginVersion": {
-        "name": "外掛程式版本",
-        "desc": "智慧助理外掛程式的目前版本"
+        "name": "外掛程式版本"
       },
       "defaultModel": {
         "name": "預設模型",
         "desc": "用於對話的預設模型",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "預設聊天模式",
-        "desc": "選擇聊天視圖開啟時的模式",
-        "chat": "聊天模式",
-        "agent": "代理模式"
       },
       "conversationTitleMode": {
         "name": "對話標題模式",
@@ -102,11 +94,6 @@
       "count": "已設定 {{count}} 個提供者",
       "addBtn": "+ 新增提供者",
       "empty": "未設定任何提供者。請選擇「新增提供者」以開始使用。",
-      "tableHeaders": {
-        "provider": "提供者",
-        "status": "狀態",
-        "actions": "操作"
-      },
       "status": {
         "ready": "就緒",
         "needsConfig": "需要設定",
@@ -117,7 +104,6 @@
         "serverError": "伺服器錯誤"
       },
       "guidance": {
-        "requiresCli": "需要本地端 CLI",
         "configureBaseUrl": "設定基礎 URL",
         "addApiKey": "新增 API 金鑰"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "重新整理所有工具",
       "addBtn": "+ 新增 MCP 伺服器",
       "empty": "未設定任何 MCP 伺服器。請選擇「新增 MCP 伺服器」以開始使用。",
-      "tableHeaders": {
-        "name": "名稱",
-        "command": "命令",
-        "arguments": "引數",
-        "status": "狀態",
-        "tools": "工具",
-        "actions": "操作"
-      },
       "untitled": "未命名 MCP 伺服器",
       "notConfigured": "未設定",
-      "noArgs": "無",
       "cached": "已快取",
-      "disabled": "已停用",
       "envVars_one": "{{count}} 個環境變數",
       "envVars_other": "{{count}} 個環境變數",
       "envVars": "{{count}} 個環境變數",
@@ -244,26 +220,13 @@
       "count": "已設定 {{count}} 個代理",
       "addBtn": "+ 新增代理",
       "empty": "未設定任何代理。請選擇「新增代理」以開始使用。",
-      "tableHeaders": {
-        "agent": "代理",
-        "model": "模型",
-        "capabilities": "功能",
-        "tools": "工具",
-        "actions": "操作"
-      },
       "defaultBadge": "預設",
       "systemPrompt": "系統提示詞 • {{promptName}}",
       "customPrompt": "自訂提示詞",
       "model": {
         "notSet": "未設定",
-        "notFound": "在快取中找不到模型",
         "useChatView": "使用聊天視圖模型",
-        "useChatViewDesc": "將使用聊天視圖中選取的模型",
-        "useDefault": "使用預設模型",
-        "useDefaultDesc": "將使用設定中的預設模型"
-      },
-      "capabilities": {
-        "noSpecialModes": "無特殊模式"
+        "useDefault": "使用預設模型"
       },
       "tools": {
         "builtIn": "{{count}} 個內建",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} 個 mcp 伺服器",
         "mcpTool_one": "{{count}} 個 mcp 工具",
         "mcpTool_other": "{{count}} 個 mcp 工具",
-        "mcpTool": "{{count}} 個 mcp 工具",
-        "noTools": "未啟用任何工具"
+        "mcpTool": "{{count}} 個 mcp 工具"
       },
       "actions": {
         "edit": "編輯",
-        "delete": "刪除",
-        "protected": "受保護"
+        "delete": "刪除"
       },
       "confirm": {
         "delete": "刪除代理「{{name}}」？"
@@ -288,18 +249,6 @@
       "desc": "管理定義 AI 助理行為和個性的系統提示詞。",
       "addBtn": "+ 新增系統提示詞",
       "empty": "未設定任何系統提示詞。請選擇「新增系統提示詞」以開始使用。",
-      "tableHeaders": {
-        "name": "名稱",
-        "contentPreview": "內容預覽",
-        "created": "建立時間",
-        "updated": "更新時間",
-        "enabled": "已啟用",
-        "actions": "操作"
-      },
-      "status": {
-        "enabled": "已啟用",
-        "disabled": "已停用"
-      },
       "actions": {
         "edit": "編輯",
         "disable": "停用",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "已連線",
           "disconnected": "已中斷"
-        }
+        },
+        "addBtn": "新增 MCP 工具"
       },
       "openapi": {
         "desc": "從 OpenAPI 文件產生 HTTP 工具。遠端規格會快取在 {{cacheDir}} 下。",
@@ -890,13 +840,6 @@
       "count": "已設定 {{count}} 個動作（{{enabled}} 個已啟用）",
       "addBtn": "+ 新增快速動作",
       "empty": "未設定任何快速動作。請選擇「新增快速動作」以開始使用。",
-      "tableHeaders": {
-        "action": "動作",
-        "type": "類型",
-        "model": "模型",
-        "promptPreview": "提示詞預覽",
-        "actions": "操作"
-      },
       "defaultModel": "預設",
       "editBtn": "編輯",
       "deleteBtn": "刪除",
@@ -1004,26 +947,16 @@
     "currentConversation": "目前對話",
     "new": "新增",
     "settings": "設定",
-    "openSettingsTitle": "開啟外掛程式設定",
-    "mode": "模式",
-    "prompt": "提示詞",
-    "agent": "代理",
     "modeOptions": {
       "chat": "聊天",
       "agent": "代理"
     },
-    "noSystemPrompt": "無系統提示詞",
     "noAgentsAvailable": "沒有可用的代理",
-    "sendHintPrefix": "按下 ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " 傳送",
     "sendAriaLabel": "傳送訊息",
     "stop": " 停止",
-    "addReference": "新增參考",
     "addReferenceTooltip": "新增檔案或資料夾參考 (@)",
     "emptyHeading": "開始對話",
     "emptySubtext": "在下方輸入訊息以開始，或從歷史記錄中選擇對話。",
-    "noAgentConfig": "未設定任何代理",
     "selectAgent": "選擇代理…",
     "notices": {
       "stopping": "正在停止生成...",
@@ -1047,23 +980,15 @@
       "noAgents": "沒有可用的代理。請在「設定 → 代理」中設定代理。",
       "ragDisabled": "RAG 在設定中已停用。請在「設定 → 聊天功能 → RAG」中啟用。",
       "webSearchDisabled": "網頁搜尋在設定中已停用。請在「設定 → 聊天功能 → 網頁搜尋」中啟用。",
-      "noFilesInVault": "在知識庫中找不到任何檔案",
       "attached": "已附加：{{name}}",
       "attachedImages": "已附加 {{count}} 張圖片",
       "referencesAdded": "已新增 {{count}} 個參考",
       "fileNotFound": "找不到檔案：{{path}}",
       "agentConfigApplied": "已套用代理設定：{{name}}",
-      "waitForComplete": "請等待目前的回應完成",
-      "chatServiceFallback": "ChatService 未設定。使用 ChatView 備援方案。",
-      "noModelSelected": "未選擇任何模型",
-      "noProviderConfig": "找不到提供者設定",
-      "noResponseToRegenerate": "沒有可重新生成的回應",
-      "agentNotFound": "找不到代理",
       "unableToLoadRag": "無法載入 RAG 統計資料。",
       "referenced": "已參考：{{name}}"
     },
     "status": {
-      "available": "可用",
       "unavailable": "不可用",
       "disabled": "已停用",
       "on": "開啟 · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ 此聊天中的 RAG 目前已關閉。"
     },
     "agentSummary": {
-      "model": "模型",
-      "temp": "溫度",
-      "max": "最大值",
-      "rag": "RAG",
-      "web": "網頁",
-      "tools": "工具",
-      "memory": "記憶體",
-      "none": "無",
-      "configuration": "{{name}} 設定",
-      "modelFixed": "{{name}} · 固定",
-      "modelDefault": "{{name}} · 預設",
-      "modelChatView": "{{name}} · 聊天視圖",
-      "customModel": "自訂模型",
-      "notSet": "未設定",
-      "auto": "自動",
       "on": "開啟",
-      "off": "關閉",
-      "shortTerm": "短期",
-      "longTerm": "長期",
-      "disabledMemory": "已停用",
-      "builtIn": "{{count}} 個內建",
-      "mcp": "{{count}} 個 MCP",
-      "cli": "{{count}} 個 CLI"
+      "off": "關閉"
     },
     "message": {
       "webResults": "網頁結果",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "插入至筆記",
       "regenerate": "重新生成"
     },
-    "streaming": {
-      "thinking": "思考中..."
-    },
     "toolCall": {
-      "thinking": "思考中",
       "executionProcess": "執行過程",
       "input": "輸入",
       "output": "輸出",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "使用已索引的筆記作為上下文",
     "webSearchLabel": "網頁搜尋",
     "webSearchTooltipLabel": "在需要時搜尋網際網路",
-    "imageUnavailable": "目前的模型不支援圖片附件。",
-    "newChat": "新聊天",
     "newConversation": "新對話",
     "searchConversations": "搜尋對話...",
     "header": {
-      "model": "模型",
-      "advancedParams": "進階參數",
-      "temperature": "溫度",
-      "maxTokens": "最大權杖數",
-      "topP": "Top P",
-      "freqPenalty": "頻率懲罰",
-      "presPenalty": "存在懲罰",
-      "agentConfig": "代理設定",
-      "modelsCount": "模型：{{count}}",
-      "tokensCount": "權杖：{{count}}",
       "noModels": "沒有可用的模型"
-    },
-    "temperature": {
-      "precise": "0（精確）",
-      "balanced": "1（平衡）",
-      "creative": "2（創意）"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "插入至所選筆記",
         "createNew": "建立新筆記",
         "noResults": "找不到符合的筆記。"
+      },
+      "agentTask": {
+        "cancel": "取消",
+        "fieldLabel": "任務內容",
+        "newConversation": "在新對話中開始",
+        "newConversationDesc": "讓此代理任務與目前的對話保持獨立。",
+        "placeholder": "在此輸入您的任務...",
+        "start": "開始",
+        "title": "開始代理任務"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "請選擇提供者類型",
         "invalidUrl": "基礎 URL 格式無效。請輸入有效的 URL（例如 https://api.example.com）"
-      }
+      },
+      "cachedModels": "已快取模型：{{count}}",
+      "connectionFailed": "連線測試失敗，請檢查提供者設定。",
+      "connectionSuccess": "連線成功，已快取 {{count}} 個模型。",
+      "noCachedModels": "沒有已快取的模型",
+      "testConnection": "測試連線",
+      "testing": "測試中..."
     },
     "mcpInspector": {
       "title": "MCP 檢查器",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "參數的數字無效：{{name}}",
           "invalidJson": "參數的 JSON 無效：{{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "未設定任何 MCP 伺服器",
-        "testing": "正在測試 {{count}} 個 MCP 伺服器連線...",
-        "allSuccess": "所有 {{count}} 個 mcp 伺服器均已成功連線！",
-        "partial": "{{success}} 個已連線，{{failed}} 個失敗"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | 版本：{{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "伺服器離線",
-      "connectionError": "連線錯誤",
       "pullTitle": "提取新模型",
       "pullHint": "輸入模型名稱以從 Ollama 函式庫下載（例如 llama2、mistral、codellama）",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "處理中...",
     "textUpdated": "文字更新成功",
     "error": "錯誤：{{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "代理任務：詢問目前筆記",
+    "createProjectBrief": "代理任務：建立專案簡介",
+    "createResearchBrief": "代理任務：建立研究簡報",
+    "diagnoseVault": "代理任務：診斷知識庫",
+    "doctorLinksTags": "代理任務：改善連結、標籤和屬性",
+    "draftFromNote": "代理任務：根據目前筆記起草",
+    "findDuplicateNotes": "代理任務：尋找重複與可合併的筆記",
+    "findRelatedNotes": "代理任務：尋找相關筆記",
+    "generateWeeklyReview": "代理任務：產生每週回顧",
+    "improveSelection": "代理任務：改善選取文字",
+    "openChatMain": "在主要區域開啟 AI 聊天",
+    "openChatSidebar": "在側邊欄開啟 AI 聊天",
+    "organizeCurrentNote": "代理任務：整理目前筆記",
+    "sourceGroundedQuestion": "代理任務：提出基於來源的問題",
+    "summarizeCurrentNote": "代理任務：摘要目前筆記",
+    "switchModel": "切換模型"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant：詢問代理關於此檔案",
+    "createProjectBrief": "Intelligence assistant：使用代理建立專案簡介",
+    "createResearchBrief": "Intelligence assistant：使用代理建立研究簡報",
+    "doctorLinksTags": "Intelligence assistant：使用代理改善連結、標籤和屬性",
+    "draftFromFile": "Intelligence assistant：使用代理根據此檔案起草",
+    "findDuplicates": "Intelligence assistant：使用代理尋找重複與可合併的筆記",
+    "findRelatedNotes": "Intelligence assistant：使用代理尋找相關筆記",
+    "improveFolder": "Intelligence assistant：使用代理改善資料夾的連結、標籤和屬性",
+    "organizeFolder": "Intelligence assistant：使用代理整理資料夾",
+    "summarize": "Intelligence assistant：使用代理進行摘要"
+  },
+  "ribbon": {
+    "openChat": "開啟 AI 聊天"
   }
 }

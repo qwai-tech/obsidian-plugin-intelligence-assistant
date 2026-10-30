@@ -12,21 +12,13 @@
       "usage": "Sử dụng"
     },
     "general": {
-      "desc": "Cấu hình cài đặt chung cho plugin trợ lý thông minh.",
       "pluginVersion": {
-        "name": "Phiên bản plugin",
-        "desc": "Phiên bản hiện tại của plugin trợ lý thông minh"
+        "name": "Phiên bản plugin"
       },
       "defaultModel": {
         "name": "Mô hình mặc định",
         "desc": "Mô hình mặc định để sử dụng cho hội thoại",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Chế độ trò chuyện mặc định",
-        "desc": "Chọn chế độ mở cửa sổ trò chuyện",
-        "chat": "Chế độ trò chuyện",
-        "agent": "Chế độ tác nhân"
       },
       "conversationTitleMode": {
         "name": "Chế độ tiêu đề hội thoại",
@@ -102,11 +94,6 @@
       "count": "{{count}} nhà cung cấp đã cấu hình",
       "addBtn": "+ Thêm nhà cung cấp",
       "empty": "Chưa có nhà cung cấp nào. Chọn \"Thêm nhà cung cấp\" để bắt đầu.",
-      "tableHeaders": {
-        "provider": "Nhà cung cấp",
-        "status": "Trạng thái",
-        "actions": "Thao tác"
-      },
       "status": {
         "ready": "Sẵn sàng",
         "needsConfig": "Cần cấu hình",
@@ -117,7 +104,6 @@
         "serverError": "Lỗi máy chủ"
       },
       "guidance": {
-        "requiresCli": "Yêu cầu CLI cục bộ",
         "configureBaseUrl": "Cấu hình URL cơ sở",
         "addApiKey": "Thêm khóa API"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "làm mới tất cả công cụ",
       "addBtn": "+ Thêm máy chủ MCP",
       "empty": "Chưa có máy chủ MCP nào. Chọn Thêm máy chủ MCP để bắt đầu.",
-      "tableHeaders": {
-        "name": "Tên",
-        "command": "Lệnh",
-        "arguments": "Đối số",
-        "status": "Trạng thái",
-        "tools": "Công cụ",
-        "actions": "Thao tác"
-      },
       "untitled": "Máy chủ MCP chưa đặt tên",
       "notConfigured": "Chưa cấu hình",
-      "noArgs": "Không có",
       "cached": "Đã lưu cache",
-      "disabled": "Đã tắt",
       "envVars_one": "{{count}} biến môi trường",
       "envVars_other": "{{count}} biến môi trường",
       "envVars": "{{count}} biến môi trường",
@@ -244,26 +220,13 @@
       "count": "{{count}} tác nhân đã cấu hình",
       "addBtn": "+ thêm tác nhân",
       "empty": "Chưa có tác nhân nào. Chọn thêm tác nhân để bắt đầu.",
-      "tableHeaders": {
-        "agent": "Tác nhân",
-        "model": "Mô hình",
-        "capabilities": "Khả năng",
-        "tools": "Công cụ",
-        "actions": "Thao tác"
-      },
       "defaultBadge": "Mặc định",
       "systemPrompt": "Lời nhắc hệ thống • {{promptName}}",
       "customPrompt": "Lời nhắc tùy chỉnh",
       "model": {
         "notSet": "Chưa đặt",
-        "notFound": "Không tìm thấy mô hình trong cache",
         "useChatView": "Dùng mô hình từ cửa sổ trò chuyện",
-        "useChatViewDesc": "Sẽ sử dụng mô hình được chọn trong cửa sổ trò chuyện",
-        "useDefault": "Dùng mô hình mặc định",
-        "useDefaultDesc": "Sẽ sử dụng mô hình mặc định từ cài đặt"
-      },
-      "capabilities": {
-        "noSpecialModes": "Không có chế độ đặc biệt"
+        "useDefault": "Dùng mô hình mặc định"
       },
       "tools": {
         "builtIn": "{{count}} tích hợp sẵn",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} máy chủ MCP",
         "mcpTool_one": "{{count}} công cụ MCP",
         "mcpTool_other": "{{count}} công cụ MCP",
-        "mcpTool": "{{count}} công cụ MCP",
-        "noTools": "Không có công cụ nào được bật"
+        "mcpTool": "{{count}} công cụ MCP"
       },
       "actions": {
         "edit": "Chỉnh sửa",
-        "delete": "xóa",
-        "protected": "được bảo vệ"
+        "delete": "xóa"
       },
       "confirm": {
         "delete": "Xóa tác nhân \"{{name}}\"?"
@@ -288,18 +249,6 @@
       "desc": "Quản lý các lời nhắc hệ thống xác định hành vi và tính cách của trợ lý AI.",
       "addBtn": "+ thêm lời nhắc hệ thống",
       "empty": "Chưa có lời nhắc hệ thống nào. Chọn thêm lời nhắc hệ thống để bắt đầu.",
-      "tableHeaders": {
-        "name": "Tên",
-        "contentPreview": "Xem trước nội dung",
-        "created": "Đã tạo",
-        "updated": "Đã cập nhật",
-        "enabled": "Đã bật",
-        "actions": "Thao tác"
-      },
-      "status": {
-        "enabled": "Đã bật",
-        "disabled": "Đã tắt"
-      },
       "actions": {
         "edit": "Chỉnh sửa",
         "disable": "Tắt",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "đã kết nối",
           "disconnected": "đã ngắt kết nối"
-        }
+        },
+        "addBtn": "Thêm công cụ MCP"
       },
       "openapi": {
         "desc": "Tạo công cụ HTTP từ tài liệu OpenAPI. Các spec từ xa được lưu cache trong {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} hành động đã cấu hình ({{enabled}} đã bật)",
       "addBtn": "+ thêm thao tác nhanh",
       "empty": "Chưa có thao tác nhanh nào. Chọn thêm thao tác nhanh để bắt đầu.",
-      "tableHeaders": {
-        "action": "Hành động",
-        "type": "Loại",
-        "model": "Mô hình",
-        "promptPreview": "Xem trước lời nhắc",
-        "actions": "Thao tác"
-      },
       "defaultModel": "Mặc định",
       "editBtn": "Chỉnh sửa",
       "deleteBtn": "xóa",
@@ -1004,26 +947,16 @@
     "currentConversation": "Hội thoại hiện tại",
     "new": "Mới",
     "settings": "Cài đặt",
-    "openSettingsTitle": "Mở cài đặt plugin",
-    "mode": "Chế độ",
-    "prompt": "Lời nhắc",
-    "agent": "Tác nhân",
     "modeOptions": {
       "chat": "Trò chuyện",
       "agent": "Tác nhân"
     },
-    "noSystemPrompt": "Không có lời nhắc hệ thống",
     "noAgentsAvailable": "Không có tác nhân nào",
-    "sendHintPrefix": "Nhấn ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " để gửi",
     "sendAriaLabel": "Gửi tin nhắn",
     "stop": " Dừng",
-    "addReference": "Thêm tham chiếu",
     "addReferenceTooltip": "Thêm tham chiếu tệp hoặc thư mục (@)",
     "emptyHeading": "Bắt đầu hội thoại",
     "emptySubtext": "Nhập tin nhắn bên dưới để bắt đầu, hoặc chọn hội thoại từ lịch sử.",
-    "noAgentConfig": "Chưa cấu hình tác nhân nào",
     "selectAgent": "Chọn một tác nhân…",
     "notices": {
       "stopping": "Đang dừng tạo sinh...",
@@ -1047,23 +980,15 @@
       "noAgents": "Không có tác nhân nào. Cấu hình tác nhân trong Cài đặt → Tác nhân.",
       "ragDisabled": "RAG bị tắt trong cài đặt. Bật nó trong cài đặt → tính năng chat → RAG.",
       "webSearchDisabled": "Tìm kiếm web bị tắt trong cài đặt. Bật nó trong cài đặt → tính năng chat → tìm kiếm web.",
-      "noFilesInVault": "Không tìm thấy tệp nào trong vault",
       "attached": "Đã đính kèm: {{name}}",
       "attachedImages": "Đã đính kèm {{count}} hình ảnh",
       "referencesAdded": "Đã thêm {{count}} tham chiếu",
       "fileNotFound": "Không tìm thấy tệp: {{path}}",
       "agentConfigApplied": "Đã áp dụng cấu hình cho tác nhân: {{name}}",
-      "waitForComplete": "Vui lòng chờ phản hồi hiện tại hoàn thành",
-      "chatServiceFallback": "ChatService chưa được cấu hình. Đang dùng ChatView dự phòng.",
-      "noModelSelected": "Chưa chọn mô hình",
-      "noProviderConfig": "Không tìm thấy cấu hình nhà cung cấp",
-      "noResponseToRegenerate": "Không có phản hồi để tạo lại",
-      "agentNotFound": "Không tìm thấy tác nhân",
       "unableToLoadRag": "Không thể tải thống kê RAG.",
       "referenced": "Đã tham chiếu: {{name}}"
     },
     "status": {
-      "available": "Khả dụng",
       "unavailable": "Không khả dụng",
       "disabled": "Đã tắt",
       "on": "Bật · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG hiện đang tắt cho cuộc trò chuyện này."
     },
     "agentSummary": {
-      "model": "Mô hình",
-      "temp": "Nhiệt độ",
-      "max": "Tối đa",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Công cụ",
-      "memory": "Bộ nhớ",
-      "none": "Không có",
-      "configuration": "Cấu hình {{name}}",
-      "modelFixed": "{{name}} · Cố định",
-      "modelDefault": "{{name}} · Mặc định",
-      "modelChatView": "{{name}} · Cửa sổ trò chuyện",
-      "customModel": "Mô hình tùy chỉnh",
-      "notSet": "Chưa đặt",
-      "auto": "Tự động",
       "on": "Bật",
-      "off": "Tắt",
-      "shortTerm": "Ngắn hạn",
-      "longTerm": "Dài hạn",
-      "disabledMemory": "Đã tắt",
-      "builtIn": "{{count}} tích hợp sẵn",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Tắt"
     },
     "message": {
       "webResults": "Kết quả web",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Chèn vào ghi chú",
       "regenerate": "Tạo lại"
     },
-    "streaming": {
-      "thinking": "Đang suy nghĩ..."
-    },
     "toolCall": {
-      "thinking": "Đang suy nghĩ",
       "executionProcess": "Quá trình thực thi",
       "input": "Đầu vào",
       "output": "Đầu ra",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Dùng ghi chú đã lập chỉ mục làm ngữ cảnh",
     "webSearchLabel": "Tìm kiếm web",
     "webSearchTooltipLabel": "Tìm kiếm internet khi cần",
-    "imageUnavailable": "Đính kèm hình ảnh không khả dụng cho mô hình hiện tại.",
-    "newChat": "Trò chuyện mới",
     "newConversation": "Hội thoại mới",
     "searchConversations": "Tìm kiếm hội thoại...",
     "header": {
-      "model": "Mô hình",
-      "advancedParams": "Tham số nâng cao",
-      "temperature": "Nhiệt độ",
-      "maxTokens": "Token tối đa",
-      "topP": "Top P",
-      "freqPenalty": "Phạt tần suất",
-      "presPenalty": "Phạt hiện diện",
-      "agentConfig": "Cấu hình tác nhân",
-      "modelsCount": "Mô hình: {{count}}",
-      "tokensCount": "Token: {{count}}",
       "noModels": "Không có mô hình nào"
-    },
-    "temperature": {
-      "precise": "0 (Chính xác)",
-      "balanced": "1 (Cân bằng)",
-      "creative": "2 (Sáng tạo)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Chèn vào ghi chú đã chọn",
         "createNew": "Tạo ghi chú mới",
         "noResults": "Không tìm thấy ghi chú phù hợp."
+      },
+      "agentTask": {
+        "cancel": "Hủy",
+        "fieldLabel": "Tác vụ",
+        "newConversation": "Bắt đầu trong hội thoại mới",
+        "newConversationDesc": "Giữ lần chạy tác nhân này tách biệt với cuộc trò chuyện hiện tại.",
+        "placeholder": "Nhập tác vụ của bạn tại đây...",
+        "start": "Bắt đầu",
+        "title": "Bắt đầu tác vụ tác nhân"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Vui lòng chọn loại nhà cung cấp",
         "invalidUrl": "Định dạng URL cơ sở không hợp lệ. Vui lòng nhập URL hợp lệ (ví dụ: https://api.example.com)"
-      }
+      },
+      "cachedModels": "Mô hình đã lưu cache: {{count}}",
+      "connectionFailed": "Kiểm tra kết nối thất bại. Hãy kiểm tra cài đặt nhà cung cấp.",
+      "connectionSuccess": "Kết nối thành công. Đã lưu cache {{count}} mô hình.",
+      "noCachedModels": "Không có mô hình nào được lưu cache",
+      "testConnection": "Kiểm tra kết nối",
+      "testing": "Đang kiểm tra..."
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Số không hợp lệ cho tham số: {{name}}",
           "invalidJson": "JSON không hợp lệ cho tham số: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Không có máy chủ MCP nào được cấu hình",
-        "testing": "Đang kiểm tra {{count}} kết nối máy chủ MCP...",
-        "allSuccess": "tất cả {{count}} máy chủ MCP đã kết nối thành công!",
-        "partial": "{{success}} đã kết nối, {{failed}} thất bại"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Phiên bản: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Máy chủ ngoại tuyến",
-      "connectionError": "Lỗi kết nối",
       "pullTitle": "Tải mô hình mới",
       "pullHint": "Nhập tên mô hình để tải từ thư viện Ollama (ví dụ: llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Đang xử lý...",
     "textUpdated": "Văn bản đã được cập nhật thành công",
     "error": "Lỗi: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Tác vụ tác nhân: hỏi về ghi chú hiện tại",
+    "createProjectBrief": "Tác vụ tác nhân: tạo bản tóm tắt dự án",
+    "createResearchBrief": "Tác vụ tác nhân: tạo bản tóm tắt nghiên cứu",
+    "diagnoseVault": "Tác vụ tác nhân: chẩn đoán vault",
+    "doctorLinksTags": "Tác vụ tác nhân: cải thiện liên kết, thẻ và thuộc tính",
+    "draftFromNote": "Tác vụ tác nhân: soạn nháp từ ghi chú hiện tại",
+    "findDuplicateNotes": "Tác vụ tác nhân: tìm bản trùng lặp và ứng viên hợp nhất",
+    "findRelatedNotes": "Tác vụ tác nhân: tìm ghi chú liên quan",
+    "generateWeeklyReview": "Tác vụ tác nhân: tạo bản đánh giá hằng tuần",
+    "improveSelection": "Tác vụ tác nhân: cải thiện vùng chọn",
+    "openChatMain": "Mở trò chuyện AI trong vùng chính",
+    "openChatSidebar": "Mở trò chuyện AI trong thanh bên",
+    "organizeCurrentNote": "Tác vụ tác nhân: sắp xếp ghi chú hiện tại",
+    "sourceGroundedQuestion": "Tác vụ tác nhân: đặt câu hỏi dựa trên nguồn",
+    "summarizeCurrentNote": "Tác vụ tác nhân: tóm tắt ghi chú hiện tại",
+    "switchModel": "Chuyển mô hình"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: hỏi tác nhân về tệp này",
+    "createProjectBrief": "Intelligence assistant: tạo bản tóm tắt dự án bằng tác nhân",
+    "createResearchBrief": "Intelligence assistant: tạo bản tóm tắt nghiên cứu bằng tác nhân",
+    "doctorLinksTags": "Intelligence assistant: cải thiện liên kết, thẻ và thuộc tính bằng tác nhân",
+    "draftFromFile": "Intelligence assistant: soạn nháp từ tệp này bằng tác nhân",
+    "findDuplicates": "Intelligence assistant: tìm bản trùng lặp và ứng viên hợp nhất bằng tác nhân",
+    "findRelatedNotes": "Intelligence assistant: tìm ghi chú liên quan bằng tác nhân",
+    "improveFolder": "Intelligence assistant: cải thiện liên kết, thẻ và thuộc tính của thư mục bằng tác nhân",
+    "organizeFolder": "Intelligence assistant: sắp xếp thư mục bằng tác nhân",
+    "summarize": "Intelligence assistant: tóm tắt bằng tác nhân"
+  },
+  "ribbon": {
+    "openChat": "Mở trò chuyện AI"
   }
 }

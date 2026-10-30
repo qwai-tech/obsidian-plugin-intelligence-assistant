@@ -12,21 +12,13 @@
       "usage": "Penggunaan"
     },
     "general": {
-      "desc": "Konfigurasikan pengaturan umum untuk plugin asisten kecerdasan.",
       "pluginVersion": {
-        "name": "Versi plugin",
-        "desc": "Versi saat ini dari plugin asisten kecerdasan"
+        "name": "Versi plugin"
       },
       "defaultModel": {
         "name": "Model default",
         "desc": "Model default yang digunakan untuk percakapan",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Mode obrolan default",
-        "desc": "Pilih mode pembukaan tampilan obrolan",
-        "chat": "Mode obrolan",
-        "agent": "Mode agen"
       },
       "conversationTitleMode": {
         "name": "Mode judul percakapan",
@@ -102,11 +94,6 @@
       "count": "{{count}} penyedia dikonfigurasi",
       "addBtn": "+ Tambah penyedia",
       "empty": "Tidak ada penyedia yang dikonfigurasi. Pilih \"Tambah penyedia\" untuk memulai.",
-      "tableHeaders": {
-        "provider": "Penyedia",
-        "status": "Status",
-        "actions": "Tindakan"
-      },
       "status": {
         "ready": "Siap",
         "needsConfig": "Perlu Konfigurasi",
@@ -117,7 +104,6 @@
         "serverError": "Kesalahan server"
       },
       "guidance": {
-        "requiresCli": "Memerlukan CLI lokal",
         "configureBaseUrl": "Konfigurasikan URL dasar",
         "addApiKey": "Tambah kunci API"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "segarkan semua alat",
       "addBtn": "+ Tambah server MCP",
       "empty": "Tidak ada server MCP yang dikonfigurasi. Pilih Tambah server MCP untuk memulai.",
-      "tableHeaders": {
-        "name": "Nama",
-        "command": "Perintah",
-        "arguments": "Argumen",
-        "status": "Status",
-        "tools": "Alat",
-        "actions": "Tindakan"
-      },
       "untitled": "Server MCP Tanpa Judul",
       "notConfigured": "Belum dikonfigurasi",
-      "noArgs": "Tidak ada",
       "cached": "Di-cache",
-      "disabled": "Nonaktif",
       "envVars_one": "{{count}} variabel lingkungan",
       "envVars_other": "{{count}} variabel lingkungan",
       "envVars": "{{count}} variabel lingkungan",
@@ -244,26 +220,13 @@
       "count": "{{count}} agen dikonfigurasi",
       "addBtn": "+ tambah agen",
       "empty": "Tidak ada agen yang dikonfigurasi. Pilih tambah agen untuk memulai.",
-      "tableHeaders": {
-        "agent": "Agen",
-        "model": "Model",
-        "capabilities": "Kemampuan",
-        "tools": "Alat",
-        "actions": "Tindakan"
-      },
       "defaultBadge": "Default",
       "systemPrompt": "Prompt sistem • {{promptName}}",
       "customPrompt": "Prompt kustom",
       "model": {
         "notSet": "Belum diatur",
-        "notFound": "Model tidak ditemukan di cache",
         "useChatView": "Gunakan Model Tampilan Obrolan",
-        "useChatViewDesc": "Akan menggunakan model yang dipilih di tampilan obrolan",
-        "useDefault": "Gunakan Model Default",
-        "useDefaultDesc": "Akan menggunakan model default dari pengaturan"
-      },
-      "capabilities": {
-        "noSpecialModes": "Tidak ada mode khusus"
+        "useDefault": "Gunakan Model Default"
       },
       "tools": {
         "builtIn": "{{count}} bawaan",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} server MCP",
         "mcpTool_one": "{{count}} alat MCP",
         "mcpTool_other": "{{count}} alat MCP",
-        "mcpTool": "{{count}} alat MCP",
-        "noTools": "Tidak ada alat yang diaktifkan"
+        "mcpTool": "{{count}} alat MCP"
       },
       "actions": {
         "edit": "Edit",
-        "delete": "hapus",
-        "protected": "terlindungi"
+        "delete": "hapus"
       },
       "confirm": {
         "delete": "Hapus agen \"{{name}}\"?"
@@ -288,18 +249,6 @@
       "desc": "Kelola prompt sistem yang mendefinisikan perilaku dan kepribadian asisten AI Anda.",
       "addBtn": "+ tambah prompt sistem",
       "empty": "Tidak ada prompt sistem yang dikonfigurasi. Pilih tambah prompt sistem untuk memulai.",
-      "tableHeaders": {
-        "name": "Nama",
-        "contentPreview": "Pratinjau Konten",
-        "created": "Dibuat",
-        "updated": "Diperbarui",
-        "enabled": "Aktif",
-        "actions": "Tindakan"
-      },
-      "status": {
-        "enabled": "Aktif",
-        "disabled": "Nonaktif"
-      },
       "actions": {
         "edit": "Edit",
         "disable": "Nonaktifkan",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "terhubung",
           "disconnected": "terputus"
-        }
+        },
+        "addBtn": "Tambah alat MCP"
       },
       "openapi": {
         "desc": "Buat alat HTTP dari dokumen OpenAPI. Spesifikasi jarak jauh di-cache di {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} aksi dikonfigurasi ({{enabled}} aktif)",
       "addBtn": "+ tambah aksi cepat",
       "empty": "Tidak ada aksi cepat yang dikonfigurasi. Pilih tambah aksi cepat untuk memulai.",
-      "tableHeaders": {
-        "action": "Aksi",
-        "type": "Tipe",
-        "model": "Model",
-        "promptPreview": "Pratinjau Prompt",
-        "actions": "Tindakan"
-      },
       "defaultModel": "Default",
       "editBtn": "Edit",
       "deleteBtn": "hapus",
@@ -1004,26 +947,16 @@
     "currentConversation": "Percakapan saat ini",
     "new": "Baru",
     "settings": "Pengaturan",
-    "openSettingsTitle": "Buka pengaturan plugin",
-    "mode": "Mode",
-    "prompt": "Prompt",
-    "agent": "Agen",
     "modeOptions": {
       "chat": "Obrolan",
       "agent": "Agen"
     },
-    "noSystemPrompt": "Tidak ada prompt sistem",
     "noAgentsAvailable": "Tidak ada agen yang tersedia",
-    "sendHintPrefix": "Tekan ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " untuk mengirim",
     "sendAriaLabel": "Kirim pesan",
     "stop": " Berhenti",
-    "addReference": "Tambah referensi",
     "addReferenceTooltip": "Tambah referensi file atau folder (@)",
     "emptyHeading": "Mulai percakapan",
     "emptySubtext": "Ketik pesan di bawah untuk memulai, atau pilih percakapan dari riwayat.",
-    "noAgentConfig": "Tidak ada agen yang dikonfigurasi",
     "selectAgent": "Pilih agen…",
     "notices": {
       "stopping": "Menghentikan pembuatan...",
@@ -1047,23 +980,15 @@
       "noAgents": "Tidak ada agen yang tersedia. Konfigurasikan agen di Pengaturan → Agen.",
       "ragDisabled": "RAG dinonaktifkan di pengaturan. Aktifkan di pengaturan → fitur obrolan → RAG.",
       "webSearchDisabled": "Pencarian web dinonaktifkan di pengaturan. Aktifkan di pengaturan → fitur obrolan → pencarian web.",
-      "noFilesInVault": "Tidak ada file yang ditemukan di vault",
       "attached": "Dilampirkan: {{name}}",
       "attachedImages": "Melampirkan {{count}} gambar",
       "referencesAdded": "Menambahkan {{count}} referensi",
       "fileNotFound": "File tidak ditemukan: {{path}}",
       "agentConfigApplied": "Konfigurasi diterapkan untuk agen: {{name}}",
-      "waitForComplete": "Harap tunggu hingga respons saat ini selesai",
-      "chatServiceFallback": "ChatService tidak dikonfigurasi. Menggunakan fallback ChatView.",
-      "noModelSelected": "Tidak ada model yang dipilih",
-      "noProviderConfig": "Tidak ada konfigurasi penyedia yang ditemukan",
-      "noResponseToRegenerate": "Tidak ada respons untuk diregenerasi",
-      "agentNotFound": "Agen tidak ditemukan",
       "unableToLoadRag": "Tidak dapat memuat statistik RAG.",
       "referenced": "Direferensikan: {{name}}"
     },
     "status": {
-      "available": "Tersedia",
       "unavailable": "Tidak tersedia",
       "disabled": "Nonaktif",
       "on": "Aktif · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG saat ini dimatikan untuk obrolan ini."
     },
     "agentSummary": {
-      "model": "Model",
-      "temp": "Suhu",
-      "max": "Maks",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Alat",
-      "memory": "Memori",
-      "none": "Tidak ada",
-      "configuration": "Konfigurasi {{name}}",
-      "modelFixed": "{{name}} · Tetap",
-      "modelDefault": "{{name}} · Default",
-      "modelChatView": "{{name}} · Tampilan Obrolan",
-      "customModel": "Model kustom",
-      "notSet": "Belum diatur",
-      "auto": "Otomatis",
       "on": "Aktif",
-      "off": "Nonaktif",
-      "shortTerm": "Jangka pendek",
-      "longTerm": "Jangka panjang",
-      "disabledMemory": "Nonaktif",
-      "builtIn": "{{count}} bawaan",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Nonaktif"
     },
     "message": {
       "webResults": "Hasil web",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Sisipkan ke Catatan",
       "regenerate": "Regenerasi"
     },
-    "streaming": {
-      "thinking": "Sedang berpikir..."
-    },
     "toolCall": {
-      "thinking": "Berpikir",
       "executionProcess": "Proses Eksekusi",
       "input": "Masukan",
       "output": "Keluaran",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Gunakan catatan yang diindeks sebagai konteks",
     "webSearchLabel": "Pencarian Web",
     "webSearchTooltipLabel": "Cari internet saat diperlukan",
-    "imageUnavailable": "Lampiran gambar tidak tersedia untuk model saat ini.",
-    "newChat": "Obrolan Baru",
     "newConversation": "Percakapan Baru",
     "searchConversations": "Cari percakapan...",
     "header": {
-      "model": "Model",
-      "advancedParams": "Parameter lanjutan",
-      "temperature": "Suhu",
-      "maxTokens": "Maks token",
-      "topP": "Top P",
-      "freqPenalty": "Penalti frekuensi",
-      "presPenalty": "Penalti kehadiran",
-      "agentConfig": "Konfigurasi agen",
-      "modelsCount": "Model: {{count}}",
-      "tokensCount": "Token: {{count}}",
       "noModels": "Tidak ada model yang tersedia"
-    },
-    "temperature": {
-      "precise": "0 (Tepat)",
-      "balanced": "1 (Seimbang)",
-      "creative": "2 (Kreatif)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Sisipkan ke catatan yang dipilih",
         "createNew": "Buat catatan baru",
         "noResults": "Tidak ada catatan yang cocok ditemukan."
+      },
+      "agentTask": {
+        "cancel": "Batal",
+        "fieldLabel": "Tugas",
+        "newConversation": "Mulai di percakapan baru",
+        "newConversationDesc": "Pisahkan proses agen ini dari percakapan saat ini.",
+        "placeholder": "Masukkan tugas Anda di sini...",
+        "start": "Mulai",
+        "title": "Mulai tugas agen"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Harap pilih jenis penyedia",
         "invalidUrl": "Format URL dasar tidak valid. Harap masukkan URL yang valid (misalnya, https://api.example.com)"
-      }
+      },
+      "cachedModels": "Model di-cache: {{count}}",
+      "connectionFailed": "Uji koneksi gagal. Periksa pengaturan penyedia.",
+      "connectionSuccess": "Koneksi berhasil. {{count}} model di-cache.",
+      "noCachedModels": "Tidak ada model di-cache",
+      "testConnection": "Uji koneksi",
+      "testing": "Menguji..."
     },
     "mcpInspector": {
       "title": "Inspektor MCP",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Angka tidak valid untuk parameter: {{name}}",
           "invalidJson": "JSON tidak valid untuk parameter: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Tidak ada server MCP yang dikonfigurasi",
-        "testing": "Menguji {{count}} koneksi server MCP...",
-        "allSuccess": "semua {{count}} server MCP berhasil terhubung!",
-        "partial": "{{success}} terhubung, {{failed}} gagal"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Versi: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Server offline",
-      "connectionError": "Kesalahan koneksi",
       "pullTitle": "Tarik model baru",
       "pullHint": "Masukkan nama model untuk diunduh dari library Ollama (misalnya, llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Memproses...",
     "textUpdated": "Teks berhasil diperbarui",
     "error": "Kesalahan: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Tugas agen: tanyakan tentang catatan saat ini",
+    "createProjectBrief": "Tugas agen: buat ikhtisar proyek",
+    "createResearchBrief": "Tugas agen: buat ikhtisar riset",
+    "diagnoseVault": "Tugas agen: diagnosis vault",
+    "doctorLinksTags": "Tugas agen: perbaiki tautan, tag, dan properti",
+    "draftFromNote": "Tugas agen: buat draf dari catatan saat ini",
+    "findDuplicateNotes": "Tugas agen: temukan duplikat dan kandidat penggabungan",
+    "findRelatedNotes": "Tugas agen: temukan catatan terkait",
+    "generateWeeklyReview": "Tugas agen: buat tinjauan mingguan",
+    "improveSelection": "Tugas agen: perbaiki teks yang dipilih",
+    "openChatMain": "Buka obrolan AI di area utama",
+    "openChatSidebar": "Buka obrolan AI di bilah samping",
+    "organizeCurrentNote": "Tugas agen: rapikan catatan saat ini",
+    "sourceGroundedQuestion": "Tugas agen: ajukan pertanyaan berbasis sumber",
+    "summarizeCurrentNote": "Tugas agen: ringkas catatan saat ini",
+    "switchModel": "Ganti model"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: tanyakan agen tentang file ini",
+    "createProjectBrief": "Intelligence assistant: buat ikhtisar proyek dengan agen",
+    "createResearchBrief": "Intelligence assistant: buat ikhtisar riset dengan agen",
+    "doctorLinksTags": "Intelligence assistant: perbaiki tautan, tag, dan properti dengan agen",
+    "draftFromFile": "Intelligence assistant: buat draf dari file ini dengan agen",
+    "findDuplicates": "Intelligence assistant: temukan duplikat dan kandidat penggabungan dengan agen",
+    "findRelatedNotes": "Intelligence assistant: temukan catatan terkait dengan agen",
+    "improveFolder": "Intelligence assistant: perbaiki tautan, tag, dan properti folder dengan agen",
+    "organizeFolder": "Intelligence assistant: rapikan folder dengan agen",
+    "summarize": "Intelligence assistant: ringkas dengan agen"
+  },
+  "ribbon": {
+    "openChat": "Buka obrolan AI"
   }
 }

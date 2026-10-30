@@ -12,21 +12,13 @@
       "usage": "Penggunaan"
     },
     "general": {
-      "desc": "Konfigurasikan tetapan umum untuk pemalam pembantu kecerdasan.",
       "pluginVersion": {
-        "name": "Versi pemalam",
-        "desc": "Versi semasa pemalam pembantu kecerdasan"
+        "name": "Versi pemalam"
       },
       "defaultModel": {
         "name": "Model lalai",
         "desc": "Model lalai yang digunakan untuk perbualan",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Mod sembang lalai",
-        "desc": "Pilih mod pembukaan paparan sembang",
-        "chat": "Mod sembang",
-        "agent": "Mod ejen"
       },
       "conversationTitleMode": {
         "name": "Mod tajuk perbualan",
@@ -102,11 +94,6 @@
       "count": "{{count}} pembekal dikonfigurasi",
       "addBtn": "+ Tambah pembekal",
       "empty": "Tiada pembekal dikonfigurasi. Pilih \"Tambah pembekal\" untuk bermula.",
-      "tableHeaders": {
-        "provider": "Pembekal",
-        "status": "Status",
-        "actions": "Tindakan"
-      },
       "status": {
         "ready": "Sedia",
         "needsConfig": "Perlu Konfigurasi",
@@ -117,7 +104,6 @@
         "serverError": "Ralat pelayan"
       },
       "guidance": {
-        "requiresCli": "Memerlukan CLI tempatan",
         "configureBaseUrl": "Konfigurasikan URL asas",
         "addApiKey": "Tambah kunci API"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "segarkan semua alat",
       "addBtn": "+ Tambah pelayan MCP",
       "empty": "Tiada pelayan MCP dikonfigurasi. Pilih Tambah pelayan MCP untuk bermula.",
-      "tableHeaders": {
-        "name": "Nama",
-        "command": "Perintah",
-        "arguments": "Argumen",
-        "status": "Status",
-        "tools": "Alat",
-        "actions": "Tindakan"
-      },
       "untitled": "Pelayan MCP Tanpa Tajuk",
       "notConfigured": "Tidak dikonfigurasi",
-      "noArgs": "Tiada",
       "cached": "Dicache",
-      "disabled": "Tidak aktif",
       "envVars_one": "{{count}} pemboleh ubah persekitaran",
       "envVars_other": "{{count}} pemboleh ubah persekitaran",
       "envVars": "{{count}} pemboleh ubah persekitaran",
@@ -244,26 +220,13 @@
       "count": "{{count}} ejen dikonfigurasi",
       "addBtn": "+ tambah ejen",
       "empty": "Tiada ejen dikonfigurasi. Pilih tambah ejen untuk bermula.",
-      "tableHeaders": {
-        "agent": "Ejen",
-        "model": "Model",
-        "capabilities": "Keupayaan",
-        "tools": "Alat",
-        "actions": "Tindakan"
-      },
       "defaultBadge": "Lalai",
       "systemPrompt": "Prompt sistem • {{promptName}}",
       "customPrompt": "Prompt tersuai",
       "model": {
         "notSet": "Tidak ditetapkan",
-        "notFound": "Model tidak dijumpai dalam cache",
         "useChatView": "Gunakan Model Paparan Sembang",
-        "useChatViewDesc": "Akan menggunakan model yang dipilih dalam paparan sembang",
-        "useDefault": "Gunakan Model Lalai",
-        "useDefaultDesc": "Akan menggunakan model lalai daripada tetapan"
-      },
-      "capabilities": {
-        "noSpecialModes": "Tiada mod khas"
+        "useDefault": "Gunakan Model Lalai"
       },
       "tools": {
         "builtIn": "{{count}} terbina dalam",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} pelayan MCP",
         "mcpTool_one": "{{count}} alat MCP",
         "mcpTool_other": "{{count}} alat MCP",
-        "mcpTool": "{{count}} alat MCP",
-        "noTools": "Tiada alat diaktifkan"
+        "mcpTool": "{{count}} alat MCP"
       },
       "actions": {
         "edit": "Edit",
-        "delete": "padam",
-        "protected": "dilindungi"
+        "delete": "padam"
       },
       "confirm": {
         "delete": "Padam ejen \"{{name}}\"?"
@@ -288,18 +249,6 @@
       "desc": "Urus prompt sistem yang menentukan tingkah laku dan keperibadian pembantu AI anda.",
       "addBtn": "+ tambah prompt sistem",
       "empty": "Tiada prompt sistem dikonfigurasi. Pilih tambah prompt sistem untuk bermula.",
-      "tableHeaders": {
-        "name": "Nama",
-        "contentPreview": "Pratonton Kandungan",
-        "created": "Dicipta",
-        "updated": "Dikemas kini",
-        "enabled": "Aktif",
-        "actions": "Tindakan"
-      },
-      "status": {
-        "enabled": "Aktif",
-        "disabled": "Tidak aktif"
-      },
       "actions": {
         "edit": "Edit",
         "disable": "Nyahaktifkan",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "disambungkan",
           "disconnected": "diputuskan"
-        }
+        },
+        "addBtn": "Tambah alat MCP"
       },
       "openapi": {
         "desc": "Jana alat HTTP daripada dokumen OpenAPI. Spesifikasi jauh dicache di bawah {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} tindakan dikonfigurasi ({{enabled}} aktif)",
       "addBtn": "+ tambah tindakan pantas",
       "empty": "Tiada tindakan pantas dikonfigurasi. Pilih tambah tindakan pantas untuk bermula.",
-      "tableHeaders": {
-        "action": "Tindakan",
-        "type": "Jenis",
-        "model": "Model",
-        "promptPreview": "Pratonton Prompt",
-        "actions": "Tindakan"
-      },
       "defaultModel": "Lalai",
       "editBtn": "Edit",
       "deleteBtn": "padam",
@@ -1004,26 +947,16 @@
     "currentConversation": "Perbualan semasa",
     "new": "Baharu",
     "settings": "Tetapan",
-    "openSettingsTitle": "Buka tetapan pemalam",
-    "mode": "Mod",
-    "prompt": "Prompt",
-    "agent": "Ejen",
     "modeOptions": {
       "chat": "Sembang",
       "agent": "Ejen"
     },
-    "noSystemPrompt": "Tiada prompt sistem",
     "noAgentsAvailable": "Tiada ejen tersedia",
-    "sendHintPrefix": "Tekan ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " untuk hantar",
     "sendAriaLabel": "Hantar mesej",
     "stop": " Henti",
-    "addReference": "Tambah rujukan",
     "addReferenceTooltip": "Tambah rujukan fail atau folder (@)",
     "emptyHeading": "Mulakan perbualan",
     "emptySubtext": "Taip mesej di bawah untuk bermula, atau pilih perbualan daripada sejarah.",
-    "noAgentConfig": "Tiada ejen dikonfigurasi",
     "selectAgent": "Pilih ejen…",
     "notices": {
       "stopping": "Menghentikan penjanaan...",
@@ -1047,23 +980,15 @@
       "noAgents": "Tiada ejen tersedia. Konfigurasikan ejen dalam Tetapan → Ejen.",
       "ragDisabled": "RAG dinyahaktifkan dalam tetapan. Aktifkan di bawah tetapan → ciri sembang → RAG.",
       "webSearchDisabled": "Carian web dinyahaktifkan dalam tetapan. Aktifkan di bawah tetapan → ciri sembang → carian web.",
-      "noFilesInVault": "Tiada fail dijumpai dalam vault",
       "attached": "Dilampirkan: {{name}}",
       "attachedImages": "Melampirkan {{count}} gambar",
       "referencesAdded": "Menambah {{count}} rujukan",
       "fileNotFound": "Fail tidak dijumpai: {{path}}",
       "agentConfigApplied": "Konfigurasi digunakan untuk ejen: {{name}}",
-      "waitForComplete": "Sila tunggu sehingga respons semasa selesai",
-      "chatServiceFallback": "ChatService tidak dikonfigurasi. Menggunakan fallback ChatView.",
-      "noModelSelected": "Tiada model dipilih",
-      "noProviderConfig": "Tiada konfigurasi pembekal dijumpai",
-      "noResponseToRegenerate": "Tiada respons untuk dijanakan semula",
-      "agentNotFound": "Ejen tidak dijumpai",
       "unableToLoadRag": "Tidak dapat memuatkan statistik RAG.",
       "referenced": "Dirujuk: {{name}}"
     },
     "status": {
-      "available": "Tersedia",
       "unavailable": "Tidak tersedia",
       "disabled": "Tidak aktif",
       "on": "Aktif · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG sedang dimatikan untuk sembang ini."
     },
     "agentSummary": {
-      "model": "Model",
-      "temp": "Suhu",
-      "max": "Maks",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Alat",
-      "memory": "Memori",
-      "none": "Tiada",
-      "configuration": "Konfigurasi {{name}}",
-      "modelFixed": "{{name}} · Tetap",
-      "modelDefault": "{{name}} · Lalai",
-      "modelChatView": "{{name}} · Paparan Sembang",
-      "customModel": "Model tersuai",
-      "notSet": "Tidak ditetapkan",
-      "auto": "Automatik",
       "on": "Aktif",
-      "off": "Tidak aktif",
-      "shortTerm": "Jangka pendek",
-      "longTerm": "Jangka panjang",
-      "disabledMemory": "Tidak aktif",
-      "builtIn": "{{count}} terbina dalam",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Tidak aktif"
     },
     "message": {
       "webResults": "Keputusan web",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Masukkan ke Nota",
       "regenerate": "Jana Semula"
     },
-    "streaming": {
-      "thinking": "Sedang berfikir..."
-    },
     "toolCall": {
-      "thinking": "Berfikir",
       "executionProcess": "Proses Pelaksanaan",
       "input": "Input",
       "output": "Output",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Gunakan nota yang diindeks sebagai konteks",
     "webSearchLabel": "Carian Web",
     "webSearchTooltipLabel": "Cari internet apabila diperlukan",
-    "imageUnavailable": "Lampiran gambar tidak tersedia untuk model semasa.",
-    "newChat": "Sembang Baharu",
     "newConversation": "Perbualan Baharu",
     "searchConversations": "Cari perbualan...",
     "header": {
-      "model": "Model",
-      "advancedParams": "Parameter lanjutan",
-      "temperature": "Suhu",
-      "maxTokens": "Token maks",
-      "topP": "Top P",
-      "freqPenalty": "Penalti frekuensi",
-      "presPenalty": "Penalti kehadiran",
-      "agentConfig": "Konfigurasi ejen",
-      "modelsCount": "Model: {{count}}",
-      "tokensCount": "Token: {{count}}",
       "noModels": "Tiada model tersedia"
-    },
-    "temperature": {
-      "precise": "0 (Tepat)",
-      "balanced": "1 (Seimbang)",
-      "creative": "2 (Kreatif)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Masukkan ke nota yang dipilih",
         "createNew": "Cipta nota baharu",
         "noResults": "Tiada nota yang sepadan dijumpai."
+      },
+      "agentTask": {
+        "cancel": "Batal",
+        "fieldLabel": "Tugas",
+        "newConversation": "Mulakan dalam perbualan baharu",
+        "newConversationDesc": "Asingkan larian ejen ini daripada perbualan semasa.",
+        "placeholder": "Masukkan tugas anda di sini...",
+        "start": "Mula",
+        "title": "Mulakan tugas ejen"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Sila pilih jenis pembekal",
         "invalidUrl": "Format URL asas tidak sah. Sila masukkan URL yang sah (cth., https://api.example.com)"
-      }
+      },
+      "cachedModels": "Model dicache: {{count}}",
+      "connectionFailed": "Ujian sambungan gagal. Semak tetapan pembekal.",
+      "connectionSuccess": "Sambungan berjaya. {{count}} model dicache.",
+      "noCachedModels": "Tiada model dicache",
+      "testConnection": "Uji sambungan",
+      "testing": "Menguji..."
     },
     "mcpInspector": {
       "title": "Pemeriksa MCP",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Nombor tidak sah untuk parameter: {{name}}",
           "invalidJson": "JSON tidak sah untuk parameter: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Tiada pelayan MCP dikonfigurasi",
-        "testing": "Menguji {{count}} sambungan pelayan MCP...",
-        "allSuccess": "semua {{count}} pelayan MCP berjaya disambungkan!",
-        "partial": "{{success}} disambungkan, {{failed}} gagal"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Versi: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Pelayan luar talian",
-      "connectionError": "Ralat sambungan",
       "pullTitle": "Tarik model baharu",
       "pullHint": "Masukkan nama model untuk dimuat turun daripada perpustakaan Ollama (cth., llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Memproses...",
     "textUpdated": "Teks berjaya dikemas kini",
     "error": "Ralat: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Tugas ejen: tanya tentang nota semasa",
+    "createProjectBrief": "Tugas ejen: cipta taklimat projek",
+    "createResearchBrief": "Tugas ejen: cipta taklimat penyelidikan",
+    "diagnoseVault": "Tugas ejen: diagnosis vault",
+    "doctorLinksTags": "Tugas ejen: tambah baik pautan, tag dan sifat",
+    "draftFromNote": "Tugas ejen: draf daripada nota semasa",
+    "findDuplicateNotes": "Tugas ejen: cari pendua dan calon gabungan",
+    "findRelatedNotes": "Tugas ejen: cari nota berkaitan",
+    "generateWeeklyReview": "Tugas ejen: jana semakan mingguan",
+    "improveSelection": "Tugas ejen: tambah baik pilihan",
+    "openChatMain": "Buka sembang AI di kawasan utama",
+    "openChatSidebar": "Buka sembang AI di bar sisi",
+    "organizeCurrentNote": "Tugas ejen: susun nota semasa",
+    "sourceGroundedQuestion": "Tugas ejen: tanya soalan berasaskan sumber",
+    "summarizeCurrentNote": "Tugas ejen: ringkaskan nota semasa",
+    "switchModel": "Tukar model"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: tanya ejen tentang fail ini",
+    "createProjectBrief": "Intelligence assistant: cipta taklimat projek dengan ejen",
+    "createResearchBrief": "Intelligence assistant: cipta taklimat penyelidikan dengan ejen",
+    "doctorLinksTags": "Intelligence assistant: tambah baik pautan, tag dan sifat dengan ejen",
+    "draftFromFile": "Intelligence assistant: draf daripada fail ini dengan ejen",
+    "findDuplicates": "Intelligence assistant: cari pendua dan calon gabungan dengan ejen",
+    "findRelatedNotes": "Intelligence assistant: cari nota berkaitan dengan ejen",
+    "improveFolder": "Intelligence assistant: tambah baik pautan, tag dan sifat folder dengan ejen",
+    "organizeFolder": "Intelligence assistant: susun folder dengan ejen",
+    "summarize": "Intelligence assistant: ringkaskan dengan ejen"
+  },
+  "ribbon": {
+    "openChat": "Buka sembang AI"
   }
 }

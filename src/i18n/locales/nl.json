@@ -12,21 +12,13 @@
       "usage": "Gebruik"
     },
     "general": {
-      "desc": "Configureer algemene instellingen voor de intelligentie-assistent plugin.",
       "pluginVersion": {
-        "name": "Plugin versie",
-        "desc": "Huidige versie van de intelligentie-assistent plugin"
+        "name": "Plugin versie"
       },
       "defaultModel": {
         "name": "Standaardmodel",
         "desc": "Standaardmodel voor gesprekken",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Standaard chatmodus",
-        "desc": "Kies in welke modus de chatweergave opent",
-        "chat": "Chatmodus",
-        "agent": "Agentmodus"
       },
       "conversationTitleMode": {
         "name": "Gesprekstitel modus",
@@ -102,11 +94,6 @@
       "count": "{{count}} providers geconfigureerd",
       "addBtn": "+ Provider toevoegen",
       "empty": "Geen providers geconfigureerd. Selecteer \"Provider toevoegen\" om te beginnen.",
-      "tableHeaders": {
-        "provider": "Provider",
-        "status": "Status",
-        "actions": "Acties"
-      },
       "status": {
         "ready": "Gereed",
         "needsConfig": "Configuratie vereist",
@@ -117,7 +104,6 @@
         "serverError": "Serverfout"
       },
       "guidance": {
-        "requiresCli": "Vereist lokale CLI",
         "configureBaseUrl": "Configureer basis-URL",
         "addApiKey": "API-sleutel toevoegen"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "alle tools vernieuwen",
       "addBtn": "+ MCP server toevoegen",
       "empty": "Geen MCP servers geconfigureerd. Selecteer MCP server toevoegen om te beginnen.",
-      "tableHeaders": {
-        "name": "Naam",
-        "command": "Commando",
-        "arguments": "Argumenten",
-        "status": "Status",
-        "tools": "Tools",
-        "actions": "Acties"
-      },
       "untitled": "Naamloze MCP Server",
       "notConfigured": "Niet geconfigureerd",
-      "noArgs": "Geen",
       "cached": "Gecached",
-      "disabled": "Uitgeschakeld",
       "envVars_one": "{{count}} omgevingsvariabele",
       "envVars_other": "{{count}} omgevingsvariabelen",
       "envVars": "{{count}} omgevingsvariabelen",
@@ -244,26 +220,13 @@
       "count": "{{count}} agenten geconfigureerd",
       "addBtn": "+ agent toevoegen",
       "empty": "Geen agenten geconfigureerd. Selecteer agent toevoegen om te beginnen.",
-      "tableHeaders": {
-        "agent": "Agent",
-        "model": "Model",
-        "capabilities": "Mogelijkheden",
-        "tools": "Tools",
-        "actions": "Acties"
-      },
       "defaultBadge": "Standaard",
       "systemPrompt": "Systeemprompt • {{promptName}}",
       "customPrompt": "Aangepaste prompt",
       "model": {
         "notSet": "Niet ingesteld",
-        "notFound": "Model niet gevonden in cache",
         "useChatView": "Chatweergavemodel gebruiken",
-        "useChatViewDesc": "Gebruikt het model geselecteerd in de chatweergave",
-        "useDefault": "Standaardmodel gebruiken",
-        "useDefaultDesc": "Gebruikt het standaardmodel uit de instellingen"
-      },
-      "capabilities": {
-        "noSpecialModes": "Geen speciale modi"
+        "useDefault": "Standaardmodel gebruiken"
       },
       "tools": {
         "builtIn": "{{count}} ingebouwd",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp servers",
         "mcpTool_one": "{{count}} mcp tool",
         "mcpTool_other": "{{count}} mcp tools",
-        "mcpTool": "{{count}} mcp tools",
-        "noTools": "Geen tools ingeschakeld"
+        "mcpTool": "{{count}} mcp tools"
       },
       "actions": {
         "edit": "Bewerken",
-        "delete": "verwijderen",
-        "protected": "beveiligd"
+        "delete": "verwijderen"
       },
       "confirm": {
         "delete": "Agent \"{{name}}\" verwijderen?"
@@ -288,18 +249,6 @@
       "desc": "Beheer systeemprompts die het gedrag en de persoonlijkheid van uw AI-assistent definiëren.",
       "addBtn": "+ systeemprompt toevoegen",
       "empty": "Geen systeemprompts geconfigureerd. Selecteer systeemprompt toevoegen om te beginnen.",
-      "tableHeaders": {
-        "name": "Naam",
-        "contentPreview": "Inhoudsvoorbeeld",
-        "created": "Aangemaakt",
-        "updated": "Bijgewerkt",
-        "enabled": "Ingeschakeld",
-        "actions": "Acties"
-      },
-      "status": {
-        "enabled": "Ingeschakeld",
-        "disabled": "Uitgeschakeld"
-      },
       "actions": {
         "edit": "Bewerken",
         "disable": "Uitschakelen",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "verbonden",
           "disconnected": "verbroken"
-        }
+        },
+        "addBtn": "MCP tools toevoegen"
       },
       "openapi": {
         "desc": "Genereer HTTP tools van OpenAPI documenten. Externe specificaties worden gecached onder {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} acties geconfigureerd ({{enabled}} ingeschakeld)",
       "addBtn": "+ snelle actie toevoegen",
       "empty": "Geen snelle acties geconfigureerd. Selecteer snelle actie toevoegen om te beginnen.",
-      "tableHeaders": {
-        "action": "Actie",
-        "type": "Type",
-        "model": "Model",
-        "promptPreview": "Promptvoorbeeld",
-        "actions": "Acties"
-      },
       "defaultModel": "Standaard",
       "editBtn": "Bewerken",
       "deleteBtn": "verwijderen",
@@ -1004,26 +947,16 @@
     "currentConversation": "Huidig gesprek",
     "new": "Nieuw",
     "settings": "Instellingen",
-    "openSettingsTitle": "Plugin-instellingen openen",
-    "mode": "Modus",
-    "prompt": "Prompt",
-    "agent": "Agent",
     "modeOptions": {
       "chat": "Chat",
       "agent": "Agent"
     },
-    "noSystemPrompt": "Geen systeemprompt",
     "noAgentsAvailable": "Geen agenten beschikbaar",
-    "sendHintPrefix": "Druk op ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " om te verzenden",
     "sendAriaLabel": "Bericht verzenden",
     "stop": " Stoppen",
-    "addReference": "Referentie toevoegen",
     "addReferenceTooltip": "Bestands- of mapreferentie toevoegen (@)",
     "emptyHeading": "Start een gesprek",
     "emptySubtext": "Typ hieronder een bericht om te beginnen, of selecteer een gesprek uit de geschiedenis.",
-    "noAgentConfig": "Geen agenten geconfigureerd",
     "selectAgent": "Selecteer een agent…",
     "notices": {
       "stopping": "Generatie stoppen...",
@@ -1047,23 +980,15 @@
       "noAgents": "Geen agenten beschikbaar. Configureer agenten in Instellingen → Agenten.",
       "ragDisabled": "RAG is uitgeschakeld in de instellingen. Schakel het in via instellingen → chatfuncties → RAG.",
       "webSearchDisabled": "Webzoeken is uitgeschakeld in de instellingen. Schakel het in via instellingen → chatfuncties → webzoeken.",
-      "noFilesInVault": "Geen bestanden gevonden in kluis",
       "attached": "Bijgevoegd: {{name}}",
       "attachedImages": "{{count}} afbeelding(en) bijgevoegd",
       "referencesAdded": "{{count}} referentie(s) toegevoegd",
       "fileNotFound": "Bestand niet gevonden: {{path}}",
       "agentConfigApplied": "Configuratie toegepast voor agent: {{name}}",
-      "waitForComplete": "Wacht tot het huidige antwoord is voltooid",
-      "chatServiceFallback": "ChatService niet geconfigureerd. ChatView fallback gebruiken.",
-      "noModelSelected": "Geen model geselecteerd",
-      "noProviderConfig": "Geen providerconfiguratie gevonden",
-      "noResponseToRegenerate": "Geen antwoord om te regenereren",
-      "agentNotFound": "Agent niet gevonden",
       "unableToLoadRag": "Kan RAG-statistieken niet laden.",
       "referenced": "Gerefereerd: {{name}}"
     },
     "status": {
-      "available": "Beschikbaar",
       "unavailable": "Niet beschikbaar",
       "disabled": "Uitgeschakeld",
       "on": "Aan · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG is momenteel uitgeschakeld voor deze chat."
     },
     "agentSummary": {
-      "model": "Model",
-      "temp": "Temp",
-      "max": "Max",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Tools",
-      "memory": "Geheugen",
-      "none": "Geen",
-      "configuration": "{{name}} configuratie",
-      "modelFixed": "{{name}} · Vast",
-      "modelDefault": "{{name}} · Standaard",
-      "modelChatView": "{{name}} · Chatweergave",
-      "customModel": "Aangepast model",
-      "notSet": "Niet ingesteld",
-      "auto": "Automatisch",
       "on": "Aan",
-      "off": "Uit",
-      "shortTerm": "Kortetermijn",
-      "longTerm": "Langetermijn",
-      "disabledMemory": "Uitgeschakeld",
-      "builtIn": "{{count}} ingebouwd",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Uit"
     },
     "message": {
       "webResults": "Webresultaten",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Invoegen in notities",
       "regenerate": "Regenereren"
     },
-    "streaming": {
-      "thinking": "Nadenken..."
-    },
     "toolCall": {
-      "thinking": "Nadenken",
       "executionProcess": "Uitvoeringsproces",
       "input": "Invoer",
       "output": "Uitvoer",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Geïndexeerde notities als context gebruiken",
     "webSearchLabel": "Webzoeken",
     "webSearchTooltipLabel": "Zoek op internet wanneer nodig",
-    "imageUnavailable": "Afbeeldingbijlage is niet beschikbaar voor het huidige model.",
-    "newChat": "Nieuwe chat",
     "newConversation": "Nieuw gesprek",
     "searchConversations": "Gesprekken zoeken...",
     "header": {
-      "model": "Model",
-      "advancedParams": "Geavanceerde parameters",
-      "temperature": "Temperatuur",
-      "maxTokens": "Max tokens",
-      "topP": "Top P",
-      "freqPenalty": "Freq. straf",
-      "presPenalty": "Aanw. straf",
-      "agentConfig": "Agentconfiguratie",
-      "modelsCount": "Modellen: {{count}}",
-      "tokensCount": "Tokens: {{count}}",
       "noModels": "Geen modellen beschikbaar"
-    },
-    "temperature": {
-      "precise": "0 (Precies)",
-      "balanced": "1 (Gebalanceerd)",
-      "creative": "2 (Creatief)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Invoegen in geselecteerde notitie",
         "createNew": "Nieuwe notitie aanmaken",
         "noResults": "Geen overeenkomende notities gevonden."
+      },
+      "agentTask": {
+        "cancel": "Annuleren",
+        "fieldLabel": "Taak",
+        "newConversation": "Starten in nieuw gesprek",
+        "newConversationDesc": "Houd deze agentuitvoering gescheiden van het huidige gesprek.",
+        "placeholder": "Voer hier uw taak in...",
+        "start": "Starten",
+        "title": "Agenttaak starten"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Selecteer een providertype",
         "invalidUrl": "Ongeldig basis-URL-formaat. Voer een geldige URL in (bijv. https://api.voorbeeld.com)"
-      }
+      },
+      "cachedModels": "Gecachede modellen: {{count}}",
+      "connectionFailed": "Verbindingstest mislukt. Controleer de providerinstellingen.",
+      "connectionSuccess": "Verbinding geslaagd. {{count}} model(len) gecached.",
+      "noCachedModels": "Geen gecachede modellen",
+      "testConnection": "Verbinding testen",
+      "testing": "Testen..."
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Ongeldig getal voor parameter: {{name}}",
           "invalidJson": "Ongeldige JSON voor parameter: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Geen MCP servers geconfigureerd",
-        "testing": "{{count}} MCP serververbindingen testen...",
-        "allSuccess": "alle {{count}} mcp servers succesvol verbonden!",
-        "partial": "{{success}} verbonden, {{failed}} mislukt"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Versie: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Server offline",
-      "connectionError": "Verbindingsfout",
       "pullTitle": "Nieuw model ophalen",
       "pullHint": "Voer een modelnaam in om te downloaden uit de Ollama bibliotheek (bijv. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Verwerken...",
     "textUpdated": "Tekst succesvol bijgewerkt",
     "error": "Fout: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Agenttaak: vragen over huidige notitie",
+    "createProjectBrief": "Agenttaak: projectbriefing maken",
+    "createResearchBrief": "Agenttaak: onderzoeksbriefing maken",
+    "diagnoseVault": "Agenttaak: kluis diagnosticeren",
+    "doctorLinksTags": "Agenttaak: links, tags en eigenschappen verbeteren",
+    "draftFromNote": "Agenttaak: concept schrijven op basis van huidige notitie",
+    "findDuplicateNotes": "Agenttaak: duplicaten en samenvoegkandidaten zoeken",
+    "findRelatedNotes": "Agenttaak: gerelateerde notities zoeken",
+    "generateWeeklyReview": "Agenttaak: weekoverzicht genereren",
+    "improveSelection": "Agenttaak: selectie verbeteren",
+    "openChatMain": "AI-chat openen in hoofdgebied",
+    "openChatSidebar": "AI-chat openen in zijbalk",
+    "organizeCurrentNote": "Agenttaak: huidige notitie ordenen",
+    "sourceGroundedQuestion": "Agenttaak: brongebaseerde vraag stellen",
+    "summarizeCurrentNote": "Agenttaak: huidige notitie samenvatten",
+    "switchModel": "Model wisselen"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: agent vragen over dit bestand",
+    "createProjectBrief": "Intelligence assistant: projectbriefing maken met agent",
+    "createResearchBrief": "Intelligence assistant: onderzoeksbriefing maken met agent",
+    "doctorLinksTags": "Intelligence assistant: links, tags en eigenschappen verbeteren met agent",
+    "draftFromFile": "Intelligence assistant: concept schrijven op basis van dit bestand met agent",
+    "findDuplicates": "Intelligence assistant: duplicaten en samenvoegkandidaten zoeken met agent",
+    "findRelatedNotes": "Intelligence assistant: gerelateerde notities zoeken met agent",
+    "improveFolder": "Intelligence assistant: links, tags en eigenschappen van map verbeteren met agent",
+    "organizeFolder": "Intelligence assistant: map ordenen met agent",
+    "summarize": "Intelligence assistant: samenvatten met agent"
+  },
+  "ribbon": {
+    "openChat": "AI-chat openen"
   }
 }

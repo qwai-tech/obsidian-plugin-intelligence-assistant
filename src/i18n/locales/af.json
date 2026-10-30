@@ -12,21 +12,13 @@
       "usage": "Gebruik"
     },
     "general": {
-      "desc": "Stel algemene instellings vir die intelligensie-assistent-inprop in.",
       "pluginVersion": {
-        "name": "Inprop-weergawe",
-        "desc": "Huidige weergawe van die intelligensie-assistent-inprop"
+        "name": "Inprop-weergawe"
       },
       "defaultModel": {
         "name": "Verstekmodel",
         "desc": "Verstekmodel om vir gesprekke te gebruik",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Verstek kletmodus",
-        "desc": "Kies watter modus die kletaansig mee oopmaak",
-        "chat": "Kletmodus",
-        "agent": "Agentmodus"
       },
       "conversationTitleMode": {
         "name": "Gesprekstitelmodus",
@@ -102,11 +94,6 @@
       "count": "{{count}} verskaffers gekonfigureer",
       "addBtn": "+ Voeg verskaffer by",
       "empty": "Geen verskaffers gekonfigureer nie. Kies \"Voeg verskaffer by\" om te begin.",
-      "tableHeaders": {
-        "provider": "Verskaffer",
-        "status": "Status",
-        "actions": "Aksies"
-      },
       "status": {
         "ready": "Gereed",
         "needsConfig": "Benodig Konfigurasie",
@@ -117,7 +104,6 @@
         "serverError": "Bedienerfout"
       },
       "guidance": {
-        "requiresCli": "Vereis plaaslike CLI",
         "configureBaseUrl": "Stel basis-URL in",
         "addApiKey": "Voeg API-sleutel by"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "verfris alle gereedskap",
       "addBtn": "+ Voeg MCP-bediener by",
       "empty": "Geen MCP-bedieners gekonfigureer nie. Kies Voeg MCP-bediener by om te begin.",
-      "tableHeaders": {
-        "name": "Naam",
-        "command": "Opdrag",
-        "arguments": "Argumente",
-        "status": "Status",
-        "tools": "Gereedskap",
-        "actions": "Aksies"
-      },
       "untitled": "Naamlose MCP-bediener",
       "notConfigured": "Nie gekonfigureer nie",
-      "noArgs": "Geen",
       "cached": "Gekassineer",
-      "disabled": "Gedeaktiveer",
       "envVars_one": "{{count}} omgewingsveranderlike",
       "envVars_other": "{{count}} omgewingsveranderlikes",
       "envVars": "{{count}} omgewingsveranderlikes",
@@ -244,26 +220,13 @@
       "count": "{{count}} agente gekonfigureer",
       "addBtn": "+ voeg agent by",
       "empty": "Geen agente gekonfigureer nie. Kies voeg agent by om te begin.",
-      "tableHeaders": {
-        "agent": "Agent",
-        "model": "Model",
-        "capabilities": "Vermoëns",
-        "tools": "Gereedskap",
-        "actions": "Aksies"
-      },
       "defaultBadge": "Verstek",
       "systemPrompt": "Stelselaanwysing • {{promptName}}",
       "customPrompt": "Pasgemaakte aanwysing",
       "model": {
         "notSet": "Nie gestel nie",
-        "notFound": "Model nie in kas gevind nie",
         "useChatView": "Gebruik Kletaansig-model",
-        "useChatViewDesc": "Sal model gebruik wat in kletaansig gekies is",
-        "useDefault": "Gebruik Verstekmodel",
-        "useDefaultDesc": "Sal verstekmodel van instellings gebruik"
-      },
-      "capabilities": {
-        "noSpecialModes": "Geen spesiale modusse nie"
+        "useDefault": "Gebruik Verstekmodel"
       },
       "tools": {
         "builtIn": "{{count}} ingeboude",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp-bedieners",
         "mcpTool_one": "{{count}} mcp-gereedskap",
         "mcpTool_other": "{{count}} mcp-gereedskap",
-        "mcpTool": "{{count}} mcp-gereedskap",
-        "noTools": "Geen gereedskap geaktiveer nie"
+        "mcpTool": "{{count}} mcp-gereedskap"
       },
       "actions": {
         "edit": "Redigeer",
-        "delete": "verwyder",
-        "protected": "beskerm"
+        "delete": "verwyder"
       },
       "confirm": {
         "delete": "Verwyder agent \"{{name}}\"?"
@@ -288,18 +249,6 @@
       "desc": "Bestuur stelselaanwysings wat die gedrag en persoonlikheid van u KI-assistent definieer.",
       "addBtn": "+ voeg stelselaanwysing by",
       "empty": "Geen stelselaanwysings gekonfigureer nie. Kies voeg stelselaanwysing by om te begin.",
-      "tableHeaders": {
-        "name": "Naam",
-        "contentPreview": "Inhoudsvoorskou",
-        "created": "Geskep",
-        "updated": "Opgedateer",
-        "enabled": "Geaktiveer",
-        "actions": "Aksies"
-      },
-      "status": {
-        "enabled": "Geaktiveer",
-        "disabled": "Gedeaktiveer"
-      },
       "actions": {
         "edit": "Redigeer",
         "disable": "Deaktiveer",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "verbind",
           "disconnected": "ontkoppel"
-        }
+        },
+        "addBtn": "Voeg MCP-gereedskap by"
       },
       "openapi": {
         "desc": "Genereer HTTP-gereedskap van OpenAPI-dokumente. Afgeleë spesifikasies word onder {{cacheDir}} gekassineer.",
@@ -890,13 +840,6 @@
       "count": "{{count}} aksies gekonfigureer ({{enabled}} geaktiveer)",
       "addBtn": "+ voeg vinnige aksie by",
       "empty": "Geen vinnige aksies gekonfigureer nie. Kies voeg vinnige aksie by om te begin.",
-      "tableHeaders": {
-        "action": "Aksie",
-        "type": "Tipe",
-        "model": "Model",
-        "promptPreview": "Aanwysingsvoorskou",
-        "actions": "Aksies"
-      },
       "defaultModel": "Verstek",
       "editBtn": "Redigeer",
       "deleteBtn": "verwyder",
@@ -1004,26 +947,16 @@
     "currentConversation": "Huidige gesprek",
     "new": "Nuut",
     "settings": "Instellings",
-    "openSettingsTitle": "Maak inprop-instellings oop",
-    "mode": "Modus",
-    "prompt": "Aanwysing",
-    "agent": "Agent",
     "modeOptions": {
       "chat": "Klet",
       "agent": "Agent"
     },
-    "noSystemPrompt": "Geen stelselaanwysing",
     "noAgentsAvailable": "Geen agente beskikbaar nie",
-    "sendHintPrefix": "Druk ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " om te stuur",
     "sendAriaLabel": "Stuur boodskap",
     "stop": " Stop",
-    "addReference": "Voeg verwysing by",
     "addReferenceTooltip": "Voeg lêer- of gids-verwysing by (@)",
     "emptyHeading": "Begin 'n gesprek",
     "emptySubtext": "Tik 'n boodskap hieronder om te begin, of kies 'n gesprek uit die geskiedenis.",
-    "noAgentConfig": "Geen agente gekonfigureer nie",
     "selectAgent": "Kies 'n agent…",
     "notices": {
       "stopping": "Generasie stop...",
@@ -1047,23 +980,15 @@
       "noAgents": "Geen agente beskikbaar nie. Stel agente in by Instellings → Agente.",
       "ragDisabled": "RAG is gedeaktiveer in instellings. Aktiveer dit onder instellings → gespreks-kenmerke → RAG.",
       "webSearchDisabled": "Websoek is gedeaktiveer in instellings. Aktiveer dit onder instellings → gespreks-kenmerke → websoek.",
-      "noFilesInVault": "Geen lêers gevind in gewelf nie",
       "attached": "Aangeheg: {{name}}",
       "attachedImages": "{{count}} prent(e) aangeheg",
       "referencesAdded": "{{count}} verwysing(e) bygevoeg",
       "fileNotFound": "Lêer nie gevind nie: {{path}}",
       "agentConfigApplied": "Konfigurasie toegepas vir agent: {{name}}",
-      "waitForComplete": "Wag asseblief vir die huidige antwoord om te voltooi",
-      "chatServiceFallback": "ChatService nie gekonfigureer nie. ChatView-terugval gebruik.",
-      "noModelSelected": "Geen model gekies nie",
-      "noProviderConfig": "Geen verskafferkonfigurasie gevind nie",
-      "noResponseToRegenerate": "Geen antwoord om te hergenereer nie",
-      "agentNotFound": "Agent nie gevind nie",
       "unableToLoadRag": "Kan nie RAG-statistieke laai nie.",
       "referenced": "Verwys na: {{name}}"
     },
     "status": {
-      "available": "Beskikbaar",
       "unavailable": "Nie beskikbaar nie",
       "disabled": "Gedeaktiveer",
       "on": "Aan · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG is tans afgeskakel vir hierdie klet."
     },
     "agentSummary": {
-      "model": "Model",
-      "temp": "Temp",
-      "max": "Maks",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Gereedskap",
-      "memory": "Geheue",
-      "none": "Geen",
-      "configuration": "{{name}} konfigurasie",
-      "modelFixed": "{{name}} · Vas",
-      "modelDefault": "{{name}} · Verstek",
-      "modelChatView": "{{name}} · Kletaansig",
-      "customModel": "Pasgemaakte model",
-      "notSet": "Nie gestel nie",
-      "auto": "Outo",
       "on": "Aan",
-      "off": "Af",
-      "shortTerm": "Korttermyn",
-      "longTerm": "Langtermyn",
-      "disabledMemory": "Gedeaktiveer",
-      "builtIn": "{{count}} ingeboude",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Af"
     },
     "message": {
       "webResults": "Webresultate",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Voeg in Notas",
       "regenerate": "Hergenereer"
     },
-    "streaming": {
-      "thinking": "Dink..."
-    },
     "toolCall": {
-      "thinking": "Dink",
       "executionProcess": "Uitvoeringsproses",
       "input": "Invoer",
       "output": "Uitvoer",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Gebruik geïndekseerde notas as konteks",
     "webSearchLabel": "Websoek",
     "webSearchTooltipLabel": "Soek die internet wanneer nodig",
-    "imageUnavailable": "Prentaanhegsel is nie beskikbaar vir die huidige model nie.",
-    "newChat": "Nuwe Klet",
     "newConversation": "Nuwe Gesprek",
     "searchConversations": "Soek gesprekke...",
     "header": {
-      "model": "Model",
-      "advancedParams": "Gevorderde parameters",
-      "temperature": "Temperatuur",
-      "maxTokens": "Maks. tokens",
-      "topP": "Top P",
-      "freqPenalty": "Frekw. boete",
-      "presPenalty": "Teenw. boete",
-      "agentConfig": "Agent-konfigurasie",
-      "modelsCount": "Modelle: {{count}}",
-      "tokensCount": "Tokens: {{count}}",
       "noModels": "Geen modelle beskikbaar nie"
-    },
-    "temperature": {
-      "precise": "0 (Presies)",
-      "balanced": "1 (Gebalanseerd)",
-      "creative": "2 (Kreatief)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Voeg in gekose nota",
         "createNew": "Skep nuwe nota",
         "noResults": "Geen ooreenstemmende notas gevind nie."
+      },
+      "agentTask": {
+        "cancel": "Kanselleer",
+        "fieldLabel": "Taak",
+        "newConversation": "Begin in nuwe gesprek",
+        "newConversationDesc": "Hou hierdie agentlopie apart van die huidige klets.",
+        "placeholder": "Voer jou taak hier in...",
+        "start": "Begin",
+        "title": "Begin agenttaak"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Kies asseblief 'n verskaffer-tipe",
         "invalidUrl": "Ongeldige basis-URL-formaat. Voer asseblief 'n geldige URL in (bv. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Gekasde modelle: {{count}}",
+      "connectionFailed": "Verbindingstoets het misluk. Gaan verskafferinstellings na.",
+      "connectionSuccess": "Verbinding suksesvol. {{count}} model(le) gekas.",
+      "noCachedModels": "Geen gekasde modelle nie",
+      "testConnection": "Toets verbinding",
+      "testing": "Toets tans..."
     },
     "mcpInspector": {
       "title": "MCP-inspekteur",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Ongeldige nommer vir parameter: {{name}}",
           "invalidJson": "Ongeldige JSON vir parameter: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Geen MCP-bedieners gekonfigureer nie",
-        "testing": "Toets {{count}} MCP-bedienerverbindings...",
-        "allSuccess": "alle {{count}} mcp-bedieners suksesvol verbind!",
-        "partial": "{{success}} verbind, {{failed}} misluk"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Weergawe: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Bediener aflyn",
-      "connectionError": "Verbindingsfout",
       "pullTitle": "Trek nuwe model",
       "pullHint": "Voer 'n modelnaam in om van die Ollama-biblioteek af te laai (bv. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Verwerk...",
     "textUpdated": "Teks suksesvol opgedateer",
     "error": "Fout: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Agenttaak: vra oor huidige nota",
+    "createProjectBrief": "Agenttaak: skep projekopsomming",
+    "createResearchBrief": "Agenttaak: skep navorsingsopsomming",
+    "diagnoseVault": "Agenttaak: diagnoseer gewelf",
+    "doctorLinksTags": "Agenttaak: verbeter skakels, etikette en eienskappe",
+    "draftFromNote": "Agenttaak: skep konsep uit huidige nota",
+    "findDuplicateNotes": "Agenttaak: vind duplikate en samesmeltingskandidate",
+    "findRelatedNotes": "Agenttaak: vind verwante notas",
+    "generateWeeklyReview": "Agenttaak: genereer weeklikse oorsig",
+    "improveSelection": "Agenttaak: verbeter seleksie",
+    "openChatMain": "Open AI-klets in hoofarea",
+    "openChatSidebar": "Open AI-klets in sybalk",
+    "organizeCurrentNote": "Agenttaak: organiseer huidige nota",
+    "sourceGroundedQuestion": "Agenttaak: vra bron-gegronde vraag",
+    "summarizeCurrentNote": "Agenttaak: som huidige nota op",
+    "switchModel": "Wissel model"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: vra agent oor hierdie lêer",
+    "createProjectBrief": "Intelligence assistant: skep projekopsomming met agent",
+    "createResearchBrief": "Intelligence assistant: skep navorsingsopsomming met agent",
+    "doctorLinksTags": "Intelligence assistant: verbeter skakels, etikette en eienskappe met agent",
+    "draftFromFile": "Intelligence assistant: skep konsep uit hierdie lêer met agent",
+    "findDuplicates": "Intelligence assistant: vind duplikate en samesmeltingskandidate met agent",
+    "findRelatedNotes": "Intelligence assistant: vind verwante notas met agent",
+    "improveFolder": "Intelligence assistant: verbeter gidsskakels, etikette en eienskappe met agent",
+    "organizeFolder": "Intelligence assistant: organiseer gids met agent",
+    "summarize": "Intelligence assistant: som op met agent"
+  },
+  "ribbon": {
+    "openChat": "Open AI-klets"
   }
 }

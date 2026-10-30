@@ -12,21 +12,13 @@
       "usage": "استفاده"
     },
     "general": {
-      "desc": "تنظیمات عمومی افزونه دستیار هوشمند را پیکربندی کنید.",
       "pluginVersion": {
-        "name": "نسخه افزونه",
-        "desc": "نسخه فعلی افزونه دستیار هوشمند"
+        "name": "نسخه افزونه"
       },
       "defaultModel": {
         "name": "مدل پیش‌فرض",
         "desc": "مدل پیش‌فرض برای مکالمات",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "حالت گفتگوی پیش‌فرض",
-        "desc": "انتخاب کنید نمای گفتگو با کدام حالت باز شود",
-        "chat": "حالت گفتگو",
-        "agent": "حالت عامل"
       },
       "conversationTitleMode": {
         "name": "حالت عنوان مکالمه",
@@ -102,11 +94,6 @@
       "count": "{{count}} ارائه‌دهنده پیکربندی شده",
       "addBtn": "+ افزودن ارائه‌دهنده",
       "empty": "هیچ ارائه‌دهنده‌ای پیکربندی نشده. «افزودن ارائه‌دهنده» را انتخاب کنید تا شروع کنید.",
-      "tableHeaders": {
-        "provider": "ارائه‌دهنده",
-        "status": "وضعیت",
-        "actions": "اقدامات"
-      },
       "status": {
         "ready": "آماده",
         "needsConfig": "نیاز به پیکربندی",
@@ -117,7 +104,6 @@
         "serverError": "خطای سرور"
       },
       "guidance": {
-        "requiresCli": "نیاز به CLI محلی",
         "configureBaseUrl": "آدرس پایه را پیکربندی کنید",
         "addApiKey": "کلید API اضافه کنید"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "بازخوانی همه ابزارها",
       "addBtn": "+ افزودن سرور MCP",
       "empty": "هیچ سرور MCP پیکربندی نشده. افزودن سرور MCP را انتخاب کنید تا شروع کنید.",
-      "tableHeaders": {
-        "name": "نام",
-        "command": "دستور",
-        "arguments": "آرگومان‌ها",
-        "status": "وضعیت",
-        "tools": "ابزارها",
-        "actions": "اقدامات"
-      },
       "untitled": "سرور MCP بدون نام",
       "notConfigured": "پیکربندی نشده",
-      "noArgs": "ندارد",
       "cached": "کش شده",
-      "disabled": "غیرفعال",
       "envVars_one": "{{count}} متغیر محیطی",
       "envVars_other": "{{count}} متغیر محیطی",
       "envVars": "{{count}} متغیر محیطی",
@@ -244,26 +220,13 @@
       "count": "{{count}} عامل پیکربندی شده",
       "addBtn": "+ افزودن عامل",
       "empty": "هیچ عاملی پیکربندی نشده. افزودن عامل را انتخاب کنید تا شروع کنید.",
-      "tableHeaders": {
-        "agent": "عامل",
-        "model": "مدل",
-        "capabilities": "قابلیت‌ها",
-        "tools": "ابزارها",
-        "actions": "اقدامات"
-      },
       "defaultBadge": "پیش‌فرض",
       "systemPrompt": "دستورالعمل سیستم • {{promptName}}",
       "customPrompt": "دستورالعمل سفارشی",
       "model": {
         "notSet": "تنظیم نشده",
-        "notFound": "مدل در حافظه پنهان پیدا نشد",
         "useChatView": "استفاده از مدل نمای گفتگو",
-        "useChatViewDesc": "از مدل انتخاب شده در نمای گفتگو استفاده می‌کند",
-        "useDefault": "استفاده از مدل پیش‌فرض",
-        "useDefaultDesc": "از مدل پیش‌فرض تنظیمات استفاده می‌کند"
-      },
-      "capabilities": {
-        "noSpecialModes": "بدون حالت‌های خاص"
+        "useDefault": "استفاده از مدل پیش‌فرض"
       },
       "tools": {
         "builtIn": "{{count}} داخلی",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} سرور mcp",
         "mcpTool_one": "{{count}} ابزار mcp",
         "mcpTool_other": "{{count}} ابزار mcp",
-        "mcpTool": "{{count}} ابزار mcp",
-        "noTools": "هیچ ابزاری فعال نیست"
+        "mcpTool": "{{count}} ابزار mcp"
       },
       "actions": {
         "edit": "ویرایش",
-        "delete": "حذف",
-        "protected": "محافظت شده"
+        "delete": "حذف"
       },
       "confirm": {
         "delete": "حذف عامل «{{name}}»؟"
@@ -288,18 +249,6 @@
       "desc": "دستورالعمل‌های سیستمی که رفتار و شخصیت دستیار هوش مصنوعی شما را تعریف می‌کنند مدیریت کنید.",
       "addBtn": "+ افزودن دستورالعمل سیستم",
       "empty": "هیچ دستورالعمل سیستمی پیکربندی نشده. افزودن دستورالعمل سیستم را انتخاب کنید تا شروع کنید.",
-      "tableHeaders": {
-        "name": "نام",
-        "contentPreview": "پیش‌نمایش محتوا",
-        "created": "ایجاد شده",
-        "updated": "به‌روزرسانی شده",
-        "enabled": "فعال",
-        "actions": "اقدامات"
-      },
-      "status": {
-        "enabled": "فعال",
-        "disabled": "غیرفعال"
-      },
       "actions": {
         "edit": "ویرایش",
         "disable": "غیرفعال کردن",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "متصل",
           "disconnected": "قطع شده"
-        }
+        },
+        "addBtn": "افزودن ابزارهای MCP"
       },
       "openapi": {
         "desc": "ابزارهای HTTP از اسناد OpenAPI ایجاد کنید. مشخصات از راه دور در {{cacheDir}} کش می‌شوند.",
@@ -890,13 +840,6 @@
       "count": "{{count}} اقدام پیکربندی شده ({{enabled}} فعال)",
       "addBtn": "+ افزودن اقدام سریع",
       "empty": "هیچ اقدام سریعی پیکربندی نشده. افزودن اقدام سریع را انتخاب کنید تا شروع کنید.",
-      "tableHeaders": {
-        "action": "اقدام",
-        "type": "نوع",
-        "model": "مدل",
-        "promptPreview": "پیش‌نمایش دستورالعمل",
-        "actions": "اقدامات"
-      },
       "defaultModel": "پیش‌فرض",
       "editBtn": "ویرایش",
       "deleteBtn": "حذف",
@@ -1004,26 +947,16 @@
     "currentConversation": "مکالمه جاری",
     "new": "جدید",
     "settings": "تنظیمات",
-    "openSettingsTitle": "باز کردن تنظیمات افزونه",
-    "mode": "حالت",
-    "prompt": "دستورالعمل",
-    "agent": "عامل",
     "modeOptions": {
       "chat": "گفتگو",
       "agent": "عامل"
     },
-    "noSystemPrompt": "بدون دستورالعمل سیستم",
     "noAgentsAvailable": "هیچ عاملی در دسترس نیست",
-    "sendHintPrefix": "برای ارسال ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " را فشار دهید",
     "sendAriaLabel": "ارسال پیام",
     "stop": " توقف",
-    "addReference": "افزودن مرجع",
     "addReferenceTooltip": "افزودن مرجع فایل یا پوشه (@)",
     "emptyHeading": "شروع یک مکالمه",
     "emptySubtext": "یک پیام در پایین تایپ کنید تا شروع کنید، یا یک مکالمه از تاریخچه انتخاب کنید.",
-    "noAgentConfig": "هیچ عاملی پیکربندی نشده",
     "selectAgent": "یک عامل انتخاب کنید…",
     "notices": {
       "stopping": "در حال توقف تولید...",
@@ -1047,23 +980,15 @@
       "noAgents": "هیچ عاملی در دسترس نیست. عوامل را در تنظیمات ← عوامل پیکربندی کنید.",
       "ragDisabled": "RAG در تنظیمات غیرفعال است. آن را در تنظیمات ← ویژگی‌های گفتگو ← RAG فعال کنید.",
       "webSearchDisabled": "جستجوی وب در تنظیمات غیرفعال است. آن را در تنظیمات ← ویژگی‌های گفتگو ← جستجوی وب فعال کنید.",
-      "noFilesInVault": "هیچ فایلی در vault پیدا نشد",
       "attached": "پیوست شد: {{name}}",
       "attachedImages": "{{count}} تصویر پیوست شد",
       "referencesAdded": "{{count}} مرجع اضافه شد",
       "fileNotFound": "فایل پیدا نشد: {{path}}",
       "agentConfigApplied": "پیکربندی برای عامل اعمال شد: {{name}}",
-      "waitForComplete": "لطفاً صبر کنید تا پاسخ جاری تکمیل شود",
-      "chatServiceFallback": "ChatService پیکربندی نشده. از ChatView جایگزین استفاده می‌شود.",
-      "noModelSelected": "مدلی انتخاب نشده",
-      "noProviderConfig": "پیکربندی ارائه‌دهنده پیدا نشد",
-      "noResponseToRegenerate": "هیچ پاسخی برای بازتولید وجود ندارد",
-      "agentNotFound": "عامل پیدا نشد",
       "unableToLoadRag": "بارگذاری آمار RAG ناموفق بود.",
       "referenced": "مرجع شد: {{name}}"
     },
     "status": {
-      "available": "در دسترس",
       "unavailable": "در دسترس نیست",
       "disabled": "غیرفعال",
       "on": "روشن · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG در حال حاضر برای این گفتگو خاموش است."
     },
     "agentSummary": {
-      "model": "مدل",
-      "temp": "دما",
-      "max": "حداکثر",
-      "rag": "RAG",
-      "web": "وب",
-      "tools": "ابزارها",
-      "memory": "حافظه",
-      "none": "ندارد",
-      "configuration": "پیکربندی {{name}}",
-      "modelFixed": "{{name}} · ثابت",
-      "modelDefault": "{{name}} · پیش‌فرض",
-      "modelChatView": "{{name}} · نمای گفتگو",
-      "customModel": "مدل سفارشی",
-      "notSet": "تنظیم نشده",
-      "auto": "خودکار",
       "on": "روشن",
-      "off": "خاموش",
-      "shortTerm": "کوتاه‌مدت",
-      "longTerm": "بلندمدت",
-      "disabledMemory": "غیرفعال",
-      "builtIn": "{{count}} داخلی",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "خاموش"
     },
     "message": {
       "webResults": "نتایج وب",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "درج در یادداشت‌ها",
       "regenerate": "بازتولید"
     },
-    "streaming": {
-      "thinking": "در حال فکر کردن..."
-    },
     "toolCall": {
-      "thinking": "در حال فکر کردن",
       "executionProcess": "فرآیند اجرا",
       "input": "ورودی",
       "output": "خروجی",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "استفاده از یادداشت‌های فهرست‌بندی شده به عنوان زمینه",
     "webSearchLabel": "جستجوی وب",
     "webSearchTooltipLabel": "در صورت نیاز در اینترنت جستجو کنید",
-    "imageUnavailable": "پیوست تصویر برای مدل جاری در دسترس نیست.",
-    "newChat": "گفتگوی جدید",
     "newConversation": "مکالمه جدید",
     "searchConversations": "جستجوی مکالمات...",
     "header": {
-      "model": "مدل",
-      "advancedParams": "پارامترهای پیشرفته",
-      "temperature": "دما",
-      "maxTokens": "حداکثر توکن‌ها",
-      "topP": "Top P",
-      "freqPenalty": "جریمه فرکانس",
-      "presPenalty": "جریمه حضور",
-      "agentConfig": "پیکربندی عامل",
-      "modelsCount": "مدل‌ها: {{count}}",
-      "tokensCount": "توکن‌ها: {{count}}",
       "noModels": "هیچ مدلی در دسترس نیست"
-    },
-    "temperature": {
-      "precise": "0 (دقیق)",
-      "balanced": "1 (متعادل)",
-      "creative": "2 (خلاق)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "درج در یادداشت انتخاب شده",
         "createNew": "ایجاد یادداشت جدید",
         "noResults": "هیچ یادداشت مطابقی پیدا نشد."
+      },
+      "agentTask": {
+        "cancel": "لغو",
+        "fieldLabel": "وظیفه",
+        "newConversation": "شروع در مکالمه جدید",
+        "newConversationDesc": "این اجرای عامل را از گفتگوی فعلی جدا نگه دار.",
+        "placeholder": "وظیفه خود را اینجا وارد کنید...",
+        "start": "شروع",
+        "title": "شروع وظیفه عامل"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "لطفاً یک نوع ارائه‌دهنده انتخاب کنید",
         "invalidUrl": "فرمت آدرس پایه نامعتبر. لطفاً یک آدرس URL معتبر وارد کنید (مثلاً https://api.example.com)"
-      }
+      },
+      "cachedModels": "مدل‌های ذخیره‌شده در حافظه نهان: {{count}}",
+      "connectionFailed": "آزمایش اتصال ناموفق بود. تنظیمات ارائه‌دهنده را بررسی کنید.",
+      "connectionSuccess": "اتصال موفق بود. {{count}} مدل در حافظه نهان ذخیره شد.",
+      "noCachedModels": "هیچ مدلی در حافظه نهان ذخیره نشده است",
+      "testConnection": "آزمایش اتصال",
+      "testing": "در حال آزمایش..."
     },
     "mcpInspector": {
       "title": "بازرس MCP",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "عدد نامعتبر برای پارامتر: {{name}}",
           "invalidJson": "JSON نامعتبر برای پارامتر: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "هیچ سرور MCP پیکربندی نشده",
-        "testing": "آزمایش {{count}} اتصال سرور MCP...",
-        "allSuccess": "همه {{count}} سرور mcp با موفقیت متصل شدند!",
-        "partial": "{{success}} متصل شدند، {{failed}} ناموفق"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | نسخه: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "سرور آفلاین",
-      "connectionError": "خطای اتصال",
       "pullTitle": "کشیدن مدل جدید",
       "pullHint": "نام مدلی را برای دانلود از کتابخانه Ollama وارد کنید (مثلاً llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "در حال پردازش...",
     "textUpdated": "متن با موفقیت به‌روزرسانی شد",
     "error": "خطا: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "وظیفه عامل: پرسش درباره یادداشت فعلی",
+    "createProjectBrief": "وظیفه عامل: ایجاد خلاصه پروژه",
+    "createResearchBrief": "وظیفه عامل: ایجاد خلاصه پژوهش",
+    "diagnoseVault": "وظیفه عامل: عیب‌یابی vault",
+    "doctorLinksTags": "وظیفه عامل: بهبود پیوندها، برچسب‌ها و ویژگی‌ها",
+    "draftFromNote": "وظیفه عامل: پیش‌نویس از یادداشت فعلی",
+    "findDuplicateNotes": "وظیفه عامل: یافتن موارد تکراری و نامزدهای ادغام",
+    "findRelatedNotes": "وظیفه عامل: یافتن یادداشت‌های مرتبط",
+    "generateWeeklyReview": "وظیفه عامل: ایجاد مرور هفتگی",
+    "improveSelection": "وظیفه عامل: بهبود متن انتخاب‌شده",
+    "openChatMain": "باز کردن گفتگوی AI در ناحیه اصلی",
+    "openChatSidebar": "باز کردن گفتگوی AI در نوار کناری",
+    "organizeCurrentNote": "وظیفه عامل: سازمان‌دهی یادداشت فعلی",
+    "sourceGroundedQuestion": "وظیفه عامل: پرسش مبتنی بر منابع",
+    "summarizeCurrentNote": "وظیفه عامل: خلاصه‌سازی یادداشت فعلی",
+    "switchModel": "تغییر مدل"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: پرسش از عامل درباره این فایل",
+    "createProjectBrief": "Intelligence assistant: ایجاد خلاصه پروژه با عامل",
+    "createResearchBrief": "Intelligence assistant: ایجاد خلاصه پژوهش با عامل",
+    "doctorLinksTags": "Intelligence assistant: بهبود پیوندها، برچسب‌ها و ویژگی‌ها با عامل",
+    "draftFromFile": "Intelligence assistant: پیش‌نویس از این فایل با عامل",
+    "findDuplicates": "Intelligence assistant: یافتن موارد تکراری و نامزدهای ادغام با عامل",
+    "findRelatedNotes": "Intelligence assistant: یافتن یادداشت‌های مرتبط با عامل",
+    "improveFolder": "Intelligence assistant: بهبود پیوندها، برچسب‌ها و ویژگی‌های پوشه با عامل",
+    "organizeFolder": "Intelligence assistant: سازمان‌دهی پوشه با عامل",
+    "summarize": "Intelligence assistant: خلاصه‌سازی با عامل"
+  },
+  "ribbon": {
+    "openChat": "باز کردن گفتگوی AI"
   }
 }

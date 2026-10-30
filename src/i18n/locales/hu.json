@@ -12,21 +12,13 @@
       "usage": "Használat"
     },
     "general": {
-      "desc": "Az intelligens asszisztens bővítmény általános beállításainak konfigurálása.",
       "pluginVersion": {
-        "name": "Bővítmény verzió",
-        "desc": "Az intelligens asszisztens bővítmény jelenlegi verziója"
+        "name": "Bővítmény verzió"
       },
       "defaultModel": {
         "name": "Alapértelmezett modell",
         "desc": "A beszélgetésekhez alapértelmezetten használt modell",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Alapértelmezett csevegési mód",
-        "desc": "Válassza ki, melyik módban nyíljon meg a csevegési nézet",
-        "chat": "Csevegési mód",
-        "agent": "Ügynök mód"
       },
       "conversationTitleMode": {
         "name": "Beszélgetés cím módja",
@@ -102,11 +94,6 @@
       "count": "{{count}} szolgáltató konfigurálva",
       "addBtn": "+ Szolgáltató hozzáadása",
       "empty": "Nincsenek konfigurált szolgáltatók. Válassza a \"Szolgáltató hozzáadása\" lehetőséget a kezdéshez.",
-      "tableHeaders": {
-        "provider": "Szolgáltató",
-        "status": "Állapot",
-        "actions": "Műveletek"
-      },
       "status": {
         "ready": "Kész",
         "needsConfig": "Konfiguráció szükséges",
@@ -117,7 +104,6 @@
         "serverError": "Szerverhiba"
       },
       "guidance": {
-        "requiresCli": "Helyi CLI szükséges",
         "configureBaseUrl": "Konfigurálja az alap URL-t",
         "addApiKey": "Adjon hozzá API-kulcsot"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "összes eszköz frissítése",
       "addBtn": "+ MCP szerver hozzáadása",
       "empty": "Nincsenek konfigurált MCP szerverek. Válassza az MCP szerver hozzáadása lehetőséget a kezdéshez.",
-      "tableHeaders": {
-        "name": "Név",
-        "command": "Parancs",
-        "arguments": "Argumentumok",
-        "status": "Állapot",
-        "tools": "Eszközök",
-        "actions": "Műveletek"
-      },
       "untitled": "Névtelen MCP szerver",
       "notConfigured": "Nincs konfigurálva",
-      "noArgs": "Nincs",
       "cached": "Gyorsítótárban",
-      "disabled": "Letiltva",
       "envVars_one": "{{count}} környezeti változó",
       "envVars_other": "{{count}} környezeti változó",
       "envVars": "{{count}} környezeti változó",
@@ -244,26 +220,13 @@
       "count": "{{count}} ügynök konfigurálva",
       "addBtn": "+ ügynök hozzáadása",
       "empty": "Nincsenek konfigurált ügynökök. Válassza az ügynök hozzáadása lehetőséget a kezdéshez.",
-      "tableHeaders": {
-        "agent": "Ügynök",
-        "model": "Modell",
-        "capabilities": "Képességek",
-        "tools": "Eszközök",
-        "actions": "Műveletek"
-      },
       "defaultBadge": "Alapértelmezett",
       "systemPrompt": "Rendszerprompt • {{promptName}}",
       "customPrompt": "Egyéni prompt",
       "model": {
         "notSet": "Nincs beállítva",
-        "notFound": "A modell nem található a gyorsítótárban",
         "useChatView": "Csevegési nézet modelljének használata",
-        "useChatViewDesc": "A csevegési nézetben kiválasztott modellt fogja használni",
-        "useDefault": "Alapértelmezett modell használata",
-        "useDefaultDesc": "A beállításokban megadott alapértelmezett modellt fogja használni"
-      },
-      "capabilities": {
-        "noSpecialModes": "Nincsenek speciális módok"
+        "useDefault": "Alapértelmezett modell használata"
       },
       "tools": {
         "builtIn": "{{count}} beépített",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} MCP szerver",
         "mcpTool_one": "{{count}} MCP eszköz",
         "mcpTool_other": "{{count}} MCP eszköz",
-        "mcpTool": "{{count}} MCP eszköz",
-        "noTools": "Nincsenek engedélyezett eszközök"
+        "mcpTool": "{{count}} MCP eszköz"
       },
       "actions": {
         "edit": "Szerkesztés",
-        "delete": "törlés",
-        "protected": "védett"
+        "delete": "törlés"
       },
       "confirm": {
         "delete": "Törli a(z) \"{{name}}\" ügynököt?"
@@ -288,18 +249,6 @@
       "desc": "Az AI asszisztens viselkedését és személyiségét meghatározó rendszerpromptok kezelése.",
       "addBtn": "+ rendszerprompt hozzáadása",
       "empty": "Nincsenek konfigurált rendszerpromptok. Válassza a rendszerprompt hozzáadása lehetőséget a kezdéshez.",
-      "tableHeaders": {
-        "name": "Név",
-        "contentPreview": "Tartalom előnézet",
-        "created": "Létrehozva",
-        "updated": "Frissítve",
-        "enabled": "Engedélyezve",
-        "actions": "Műveletek"
-      },
-      "status": {
-        "enabled": "Engedélyezve",
-        "disabled": "Letiltva"
-      },
       "actions": {
         "edit": "Szerkesztés",
         "disable": "Letiltás",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "csatlakozva",
           "disconnected": "lecsatlakozva"
-        }
+        },
+        "addBtn": "MCP eszközök hozzáadása"
       },
       "openapi": {
         "desc": "HTTP eszközök generálása OpenAPI dokumentumokból. A távoli specifikációk a {{cacheDir}} alatt kerülnek gyorsítótárazásra.",
@@ -890,13 +840,6 @@
       "count": "{{count}} művelet konfigurálva ({{enabled}} engedélyezve)",
       "addBtn": "+ gyors művelet hozzáadása",
       "empty": "Nincsenek konfigurált gyors műveletek. Válassza a gyors művelet hozzáadása lehetőséget a kezdéshez.",
-      "tableHeaders": {
-        "action": "Művelet",
-        "type": "Típus",
-        "model": "Modell",
-        "promptPreview": "Prompt előnézet",
-        "actions": "Műveletek"
-      },
       "defaultModel": "Alapértelmezett",
       "editBtn": "Szerkesztés",
       "deleteBtn": "törlés",
@@ -1004,26 +947,16 @@
     "currentConversation": "Aktuális beszélgetés",
     "new": "Új",
     "settings": "Beállítások",
-    "openSettingsTitle": "Bővítmény beállítások megnyitása",
-    "mode": "Mód",
-    "prompt": "Prompt",
-    "agent": "Ügynök",
     "modeOptions": {
       "chat": "Csevegés",
       "agent": "Ügynök"
     },
-    "noSystemPrompt": "Nincs rendszerprompt",
     "noAgentsAvailable": "Nincsenek elérhető ügynökök",
-    "sendHintPrefix": "Nyomja meg az ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " billentyűt a küldéshez",
     "sendAriaLabel": "Üzenet küldése",
     "stop": " Leállítás",
-    "addReference": "Hivatkozás hozzáadása",
     "addReferenceTooltip": "Fájl vagy mappa hivatkozás hozzáadása (@)",
     "emptyHeading": "Kezdjen el egy beszélgetést",
     "emptySubtext": "Írjon egy üzenetet alább a kezdéshez, vagy válasszon egy beszélgetést az előzmények közül.",
-    "noAgentConfig": "Nincsenek konfigurált ügynökök",
     "selectAgent": "Válasszon ügynököt…",
     "notices": {
       "stopping": "Generálás leállítása...",
@@ -1047,23 +980,15 @@
       "noAgents": "Nincsenek elérhető ügynökök. Konfigurálja az ügynököket a Beállítások → Ügynökök menüben.",
       "ragDisabled": "A RAG le van tiltva a beállításokban. Engedélyezze a beállítások → csevegési funkciók → RAG menüpontban.",
       "webSearchDisabled": "A webkeresés le van tiltva a beállításokban. Engedélyezze a beállítások → csevegési funkciók → webkeresés menüpontban.",
-      "noFilesInVault": "Nem találhatók fájlok a vaultban",
       "attached": "Csatolva: {{name}}",
       "attachedImages": "{{count}} kép csatolva",
       "referencesAdded": "{{count}} hivatkozás hozzáadva",
       "fileNotFound": "A fájl nem található: {{path}}",
       "agentConfigApplied": "Az ügynök konfigurációja alkalmazva: {{name}}",
-      "waitForComplete": "Kérjük, várja meg az aktuális válasz befejezését",
-      "chatServiceFallback": "A ChatService nincs konfigurálva. A ChatView tartalék változat kerül használatba.",
-      "noModelSelected": "Nincs kiválasztott modell",
-      "noProviderConfig": "Nem található szolgáltatókonfiguráció",
-      "noResponseToRegenerate": "Nincs újragenerálandó válasz",
-      "agentNotFound": "Az ügynök nem található",
       "unableToLoadRag": "Nem sikerült betölteni a RAG statisztikákat.",
       "referenced": "Hivatkozva: {{name}}"
     },
     "status": {
-      "available": "Elérhető",
       "unavailable": "Nem elérhető",
       "disabled": "Letiltva",
       "on": "Be · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ A RAG jelenleg ki van kapcsolva ebben a csevegésben."
     },
     "agentSummary": {
-      "model": "Modell",
-      "temp": "Hőm.",
-      "max": "Max.",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Eszközök",
-      "memory": "Memória",
-      "none": "Nincs",
-      "configuration": "{{name}} konfiguráció",
-      "modelFixed": "{{name}} · Rögzített",
-      "modelDefault": "{{name}} · Alapértelmezett",
-      "modelChatView": "{{name}} · Csevegési nézet",
-      "customModel": "Egyéni modell",
-      "notSet": "Nincs beállítva",
-      "auto": "Automatikus",
       "on": "Be",
-      "off": "Ki",
-      "shortTerm": "Rövid távú",
-      "longTerm": "Hosszú távú",
-      "disabledMemory": "Letiltva",
-      "builtIn": "{{count}} beépített",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Ki"
     },
     "message": {
       "webResults": "Webes eredmények",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Beillesztés a jegyzetekbe",
       "regenerate": "Újragenerálás"
     },
-    "streaming": {
-      "thinking": "Gondolkodás..."
-    },
     "toolCall": {
-      "thinking": "Gondolkodás",
       "executionProcess": "Végrehajtási folyamat",
       "input": "Bemenet",
       "output": "Kimenet",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Indexelt jegyzetek használata kontextusként",
     "webSearchLabel": "Webkeresés",
     "webSearchTooltipLabel": "Internetkeresés szükség esetén",
-    "imageUnavailable": "A képmellékelés nem érhető el az aktuális modellhez.",
-    "newChat": "Új csevegés",
     "newConversation": "Új beszélgetés",
     "searchConversations": "Keresés a beszélgetések között...",
     "header": {
-      "model": "Modell",
-      "advancedParams": "Speciális paraméterek",
-      "temperature": "Hőmérséklet",
-      "maxTokens": "Max. tokenek",
-      "topP": "Top P",
-      "freqPenalty": "Gyak. büntetés",
-      "presPenalty": "Jel. büntetés",
-      "agentConfig": "Ügynök konfiguráció",
-      "modelsCount": "Modellek: {{count}}",
-      "tokensCount": "Tokenek: {{count}}",
       "noModels": "Nincsenek elérhető modellek"
-    },
-    "temperature": {
-      "precise": "0 (Pontos)",
-      "balanced": "1 (Kiegyensúlyozott)",
-      "creative": "2 (Kreatív)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Beillesztés a kijelölt jegyzetbe",
         "createNew": "Új jegyzet létrehozása",
         "noResults": "Nem találhatók egyező jegyzetek."
+      },
+      "agentTask": {
+        "cancel": "Mégse",
+        "fieldLabel": "Feladat",
+        "newConversation": "Indítás új beszélgetésben",
+        "newConversationDesc": "Az ügynök futtatásának elkülönítése az aktuális beszélgetéstől.",
+        "placeholder": "Írja be ide a feladatot...",
+        "start": "Indítás",
+        "title": "Ügynökfeladat indítása"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Kérjük, válasszon egy szolgáltató típust",
         "invalidUrl": "Érvénytelen alap URL formátum. Kérjük, adjon meg érvényes URL-t (pl. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Gyorsítótárazott modellek: {{count}}",
+      "connectionFailed": "A kapcsolat tesztelése sikertelen. Ellenőrizze a szolgáltató beállításait.",
+      "connectionSuccess": "Sikeres kapcsolat. {{count}} modell gyorsítótárazva.",
+      "noCachedModels": "Nincsenek gyorsítótárazott modellek",
+      "testConnection": "Kapcsolat tesztelése",
+      "testing": "Tesztelés..."
     },
     "mcpInspector": {
       "title": "MCP vizsgáló",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Érvénytelen szám a paraméterhez: {{name}}",
           "invalidJson": "Érvénytelen JSON a paraméterhez: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Nincsenek konfigurált MCP szerverek",
-        "testing": "{{count}} MCP szerver kapcsolatának tesztelése...",
-        "allSuccess": "mind a {{count}} MCP szerver sikeresen csatlakoztatva!",
-        "partial": "{{success}} csatlakozva, {{failed}} sikertelen"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Verzió: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Szerver offline",
-      "connectionError": "Kapcsolódási hiba",
       "pullTitle": "Új modell letöltése",
       "pullHint": "Adjon meg egy modellnevet az Ollama könyvtárból való letöltéshez (pl. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Feldolgozás...",
     "textUpdated": "A szöveg sikeresen frissítve",
     "error": "Hiba: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Ügynökfeladat: kérdés az aktuális jegyzetről",
+    "createProjectBrief": "Ügynökfeladat: projektösszefoglaló készítése",
+    "createResearchBrief": "Ügynökfeladat: kutatási összefoglaló készítése",
+    "diagnoseVault": "Ügynökfeladat: vault diagnosztizálása",
+    "doctorLinksTags": "Ügynökfeladat: hivatkozások, címkék és tulajdonságok javítása",
+    "draftFromNote": "Ügynökfeladat: vázlat készítése az aktuális jegyzetből",
+    "findDuplicateNotes": "Ügynökfeladat: duplikátumok és összevonási jelöltek keresése",
+    "findRelatedNotes": "Ügynökfeladat: kapcsolódó jegyzetek keresése",
+    "generateWeeklyReview": "Ügynökfeladat: heti áttekintés készítése",
+    "improveSelection": "Ügynökfeladat: kijelölés javítása",
+    "openChatMain": "AI csevegés megnyitása a fő területen",
+    "openChatSidebar": "AI csevegés megnyitása az oldalsávban",
+    "organizeCurrentNote": "Ügynökfeladat: aktuális jegyzet rendszerezése",
+    "sourceGroundedQuestion": "Ügynökfeladat: forrásokon alapuló kérdés feltevése",
+    "summarizeCurrentNote": "Ügynökfeladat: aktuális jegyzet összefoglalása",
+    "switchModel": "Modellváltás"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: kérdés az ügynöknek erről a fájlról",
+    "createProjectBrief": "Intelligence assistant: projektösszefoglaló készítése ügynökkel",
+    "createResearchBrief": "Intelligence assistant: kutatási összefoglaló készítése ügynökkel",
+    "doctorLinksTags": "Intelligence assistant: hivatkozások, címkék és tulajdonságok javítása ügynökkel",
+    "draftFromFile": "Intelligence assistant: vázlat készítése ebből a fájlból ügynökkel",
+    "findDuplicates": "Intelligence assistant: duplikátumok és összevonási jelöltek keresése ügynökkel",
+    "findRelatedNotes": "Intelligence assistant: kapcsolódó jegyzetek keresése ügynökkel",
+    "improveFolder": "Intelligence assistant: a mappa hivatkozásainak, címkéinek és tulajdonságainak javítása ügynökkel",
+    "organizeFolder": "Intelligence assistant: mappa rendszerezése ügynökkel",
+    "summarize": "Intelligence assistant: összefoglalás ügynökkel"
+  },
+  "ribbon": {
+    "openChat": "AI csevegés megnyitása"
   }
 }

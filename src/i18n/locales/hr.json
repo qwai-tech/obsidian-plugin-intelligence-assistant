@@ -12,21 +12,13 @@
       "usage": "Korištenje"
     },
     "general": {
-      "desc": "Konfigurirajte opće postavke za dodatak inteligentnog asistenta.",
       "pluginVersion": {
-        "name": "Verzija dodatka",
-        "desc": "Trenutna verzija dodatka inteligentnog asistenta"
+        "name": "Verzija dodatka"
       },
       "defaultModel": {
         "name": "Zadani model",
         "desc": "Zadani model za razgovore",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Zadani način razgovora",
-        "desc": "Odaberite u kojem načinu se otvara prikaz razgovora",
-        "chat": "Način razgovora",
-        "agent": "Način agenta"
       },
       "conversationTitleMode": {
         "name": "Način naslova razgovora",
@@ -102,11 +94,6 @@
       "count": "{{count}} pružatelja konfigurirano",
       "addBtn": "+ Dodaj pružatelja",
       "empty": "Nema konfiguriranih pružatelja. Odaberite „Dodaj pružatelja“ za početak.",
-      "tableHeaders": {
-        "provider": "Pružatelj",
-        "status": "Status",
-        "actions": "Radnje"
-      },
       "status": {
         "ready": "Spreman",
         "needsConfig": "Potrebna konfiguracija",
@@ -117,7 +104,6 @@
         "serverError": "Pogreška poslužitelja"
       },
       "guidance": {
-        "requiresCli": "Zahtijeva lokalni CLI",
         "configureBaseUrl": "Konfiguriraj osnovni URL",
         "addApiKey": "Dodaj API ključ"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "osvježi sve alate",
       "addBtn": "+ Dodaj MCP poslužitelj",
       "empty": "Nema konfiguriranih MCP poslužitelja. Odaberite Dodaj MCP poslužitelj za početak.",
-      "tableHeaders": {
-        "name": "Naziv",
-        "command": "Naredba",
-        "arguments": "Argumenti",
-        "status": "Status",
-        "tools": "Alati",
-        "actions": "Radnje"
-      },
       "untitled": "MCP poslužitelj bez naziva",
       "notConfigured": "Nije konfigurirano",
-      "noArgs": "Nema",
       "cached": "U predmemoriji",
-      "disabled": "Onemogućeno",
       "envVars_one": "{{count}} env varijabla",
       "envVars_other": "{{count}} env varijabli",
       "envVars": "{{count}} env varijabli",
@@ -244,26 +220,13 @@
       "count": "{{count}} agenata konfigurirano",
       "addBtn": "+ dodaj agenta",
       "empty": "Nema konfiguriranih agenata. Odaberite dodaj agenta za početak.",
-      "tableHeaders": {
-        "agent": "Agent",
-        "model": "Model",
-        "capabilities": "Mogućnosti",
-        "tools": "Alati",
-        "actions": "Radnje"
-      },
       "defaultBadge": "Zadano",
       "systemPrompt": "Sistemski upit • {{promptName}}",
       "customPrompt": "Prilagođeni upit",
       "model": {
         "notSet": "Nije postavljeno",
-        "notFound": "Model nije pronađen u predmemoriji",
         "useChatView": "Koristi model prikaza razgovora",
-        "useChatViewDesc": "Koristit će model odabran u prikazu razgovora",
-        "useDefault": "Koristi zadani model",
-        "useDefaultDesc": "Koristit će zadani model iz postavki"
-      },
-      "capabilities": {
-        "noSpecialModes": "Nema posebnih načina"
+        "useDefault": "Koristi zadani model"
       },
       "tools": {
         "builtIn": "{{count}} ugrađeni",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp poslužitelja",
         "mcpTool_one": "{{count}} mcp alat",
         "mcpTool_other": "{{count}} mcp alata",
-        "mcpTool": "{{count}} mcp alata",
-        "noTools": "Nema omogućenih alata"
+        "mcpTool": "{{count}} mcp alata"
       },
       "actions": {
         "edit": "Uredi",
-        "delete": "obriši",
-        "protected": "zaštićeno"
+        "delete": "obriši"
       },
       "confirm": {
         "delete": "Obriši agenta „{{name}}“?"
@@ -288,18 +249,6 @@
       "desc": "Upravljajte sistemskim upitima koji definiraju ponašanje i osobnost vašeg AI asistenta.",
       "addBtn": "+ dodaj sistemski upit",
       "empty": "Nema konfiguriranih sistemskih upita. Odaberite dodaj sistemski upit za početak.",
-      "tableHeaders": {
-        "name": "Naziv",
-        "contentPreview": "Pregled sadržaja",
-        "created": "Stvoreno",
-        "updated": "Ažurirano",
-        "enabled": "Omogućeno",
-        "actions": "Radnje"
-      },
-      "status": {
-        "enabled": "Omogućeno",
-        "disabled": "Onemogućeno"
-      },
       "actions": {
         "edit": "Uredi",
         "disable": "Onemogući",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "povezano",
           "disconnected": "odspojeno"
-        }
+        },
+        "addBtn": "Dodaj MCP alate"
       },
       "openapi": {
         "desc": "Generiranje HTTP alata iz OpenAPI dokumenata. Udaljene specifikacije predmemoriraju se u {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} radnji konfigurirano ({{enabled}} omogućeno)",
       "addBtn": "+ dodaj brzu radnju",
       "empty": "Nema konfiguriranih brzih radnji. Odaberite dodaj brzu radnju za početak.",
-      "tableHeaders": {
-        "action": "Radnja",
-        "type": "Vrsta",
-        "model": "Model",
-        "promptPreview": "Pregled upita",
-        "actions": "Radnje"
-      },
       "defaultModel": "Zadano",
       "editBtn": "Uredi",
       "deleteBtn": "obriši",
@@ -1004,26 +947,16 @@
     "currentConversation": "Trenutni razgovor",
     "new": "Novo",
     "settings": "Postavke",
-    "openSettingsTitle": "Otvori postavke dodatka",
-    "mode": "Način",
-    "prompt": "Upit",
-    "agent": "Agent",
     "modeOptions": {
       "chat": "Razgovor",
       "agent": "Agent"
     },
-    "noSystemPrompt": "Nema sistemskog upita",
     "noAgentsAvailable": "Nema dostupnih agenata",
-    "sendHintPrefix": "Pritisnite ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " za slanje",
     "sendAriaLabel": "Pošalji poruku",
     "stop": " Zaustavi",
-    "addReference": "Dodaj referencu",
     "addReferenceTooltip": "Dodaj referencu datoteke ili mape (@)",
     "emptyHeading": "Pokrenite razgovor",
     "emptySubtext": "Upišite poruku ispod za početak, ili odaberite razgovor iz povijesti.",
-    "noAgentConfig": "Nema konfiguriranih agenata",
     "selectAgent": "Odaberite agenta…",
     "notices": {
       "stopping": "Zaustavljanje generiranja...",
@@ -1047,23 +980,15 @@
       "noAgents": "Nema dostupnih agenata. Konfigurirajte ih u Postavke → Agenti.",
       "ragDisabled": "RAG je onemogućen u postavkama. Omogućite ga u postavke → značajke razgovora → RAG.",
       "webSearchDisabled": "Web pretraživanje je onemogućeno u postavkama. Omogućite ga u postavke → značajke razgovora → web pretraživanje.",
-      "noFilesInVault": "U trezoru nisu pronađene datoteke",
       "attached": "Priloženo: {{name}}",
       "attachedImages": "Priloženo {{count}} slika",
       "referencesAdded": "Dodano {{count}} referenci",
       "fileNotFound": "Datoteka nije pronađena: {{path}}",
       "agentConfigApplied": "Primijenjena konfiguracija za agenta: {{name}}",
-      "waitForComplete": "Pričekajte završetak trenutnog odgovora",
-      "chatServiceFallback": "ChatService nije konfiguriran. Koristim ChatView rezervnu varijantu.",
-      "noModelSelected": "Nije odabran model",
-      "noProviderConfig": "Konfiguracija pružatelja nije pronađena",
-      "noResponseToRegenerate": "Nema odgovora za regeneraciju",
-      "agentNotFound": "Agent nije pronađen",
       "unableToLoadRag": "Nije moguće učitati RAG statistike.",
       "referenced": "Referencirano: {{name}}"
     },
     "status": {
-      "available": "Dostupno",
       "unavailable": "Nedostupno",
       "disabled": "Onemogućeno",
       "on": "Uključeno · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG je trenutno isključen za ovaj razgovor."
     },
     "agentSummary": {
-      "model": "Model",
-      "temp": "Temp",
-      "max": "Maks",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Alati",
-      "memory": "Memorija",
-      "none": "Nema",
-      "configuration": "{{name}} konfiguracija",
-      "modelFixed": "{{name}} · Fiksno",
-      "modelDefault": "{{name}} · Zadano",
-      "modelChatView": "{{name}} · Prikaz razgovora",
-      "customModel": "Prilagođeni model",
-      "notSet": "Nije postavljeno",
-      "auto": "Automatski",
       "on": "Uključeno",
-      "off": "Isključeno",
-      "shortTerm": "Kratkotrajna",
-      "longTerm": "Dugotrajna",
-      "disabledMemory": "Onemogućeno",
-      "builtIn": "{{count}} ugrađeni",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Isključeno"
     },
     "message": {
       "webResults": "Web rezultati",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Umetni u bilješke",
       "regenerate": "Regeneriraj"
     },
-    "streaming": {
-      "thinking": "Razmišljam..."
-    },
     "toolCall": {
-      "thinking": "Razmišljam",
       "executionProcess": "Proces izvršavanja",
       "input": "Ulaz",
       "output": "Izlaz",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Koristi indeksirane bilješke kao kontekst",
     "webSearchLabel": "Web pretraživanje",
     "webSearchTooltipLabel": "Pretraži internet kada je potrebno",
-    "imageUnavailable": "Prilaganje slika nije dostupno za trenutni model.",
-    "newChat": "Novi razgovor",
     "newConversation": "Novi razgovor",
     "searchConversations": "Pretraži razgovore...",
     "header": {
-      "model": "Model",
-      "advancedParams": "Napredni parametri",
-      "temperature": "Temperatura",
-      "maxTokens": "Maks. tokeni",
-      "topP": "Top P",
-      "freqPenalty": "Kazna učestalosti",
-      "presPenalty": "Kazna prisutnosti",
-      "agentConfig": "Konfiguracija agenta",
-      "modelsCount": "Modeli: {{count}}",
-      "tokensCount": "Tokeni: {{count}}",
       "noModels": "Nema dostupnih modela"
-    },
-    "temperature": {
-      "precise": "0 (Precizno)",
-      "balanced": "1 (Uravnoteženo)",
-      "creative": "2 (Kreativno)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Umetni u odabranu bilješku",
         "createNew": "Stvori novu bilješku",
         "noResults": "Nisu pronađene odgovarajuće bilješke."
+      },
+      "agentTask": {
+        "cancel": "Odustani",
+        "fieldLabel": "Zadatak",
+        "newConversation": "Pokreni u novom razgovoru",
+        "newConversationDesc": "Odvojite ovo pokretanje agenta od trenutnog razgovora.",
+        "placeholder": "Ovdje unesite svoj zadatak...",
+        "start": "Pokreni",
+        "title": "Pokreni zadatak agenta"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Odaberite vrstu pružatelja",
         "invalidUrl": "Nevaljani format osnovnog URL-a. Unesite valjani URL (npr. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Predmemorirani modeli: {{count}}",
+      "connectionFailed": "Test veze nije uspio. Provjerite postavke pružatelja.",
+      "connectionSuccess": "Veza uspješna. Predmemorirano modela: {{count}}.",
+      "noCachedModels": "Nema predmemoriranih modela",
+      "testConnection": "Testiraj vezu",
+      "testing": "Testiranje..."
     },
     "mcpInspector": {
       "title": "MCP inspektor",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Nevaljani broj za parametar: {{name}}",
           "invalidJson": "Nevaljani JSON za parametar: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Nema konfiguriranih MCP poslužitelja",
-        "testing": "Testiranje {{count}} MCP veza poslužitelja...",
-        "allSuccess": "svih {{count}} mcp poslužitelja uspješno spojeno!",
-        "partial": "{{success}} spojeno, {{failed}} neuspješno"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Verzija: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Poslužitelj offline",
-      "connectionError": "Pogreška veze",
       "pullTitle": "Povuci novi model",
       "pullHint": "Unesite naziv modela za preuzimanje iz Ollama biblioteke (npr. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Obrađujem...",
     "textUpdated": "Tekst uspješno ažuriran",
     "error": "Pogreška: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Zadatak agenta: pitaj o trenutnoj bilješci",
+    "createProjectBrief": "Zadatak agenta: izradi projektni sažetak",
+    "createResearchBrief": "Zadatak agenta: izradi istraživački sažetak",
+    "diagnoseVault": "Zadatak agenta: dijagnosticiraj trezor",
+    "doctorLinksTags": "Zadatak agenta: poboljšaj poveznice, oznake i svojstva",
+    "draftFromNote": "Zadatak agenta: izradi nacrt iz trenutne bilješke",
+    "findDuplicateNotes": "Zadatak agenta: pronađi duplikate i kandidate za spajanje",
+    "findRelatedNotes": "Zadatak agenta: pronađi povezane bilješke",
+    "generateWeeklyReview": "Zadatak agenta: izradi tjedni pregled",
+    "improveSelection": "Zadatak agenta: poboljšaj odabir",
+    "openChatMain": "Otvori AI chat u glavnom području",
+    "openChatSidebar": "Otvori AI chat u bočnoj traci",
+    "organizeCurrentNote": "Zadatak agenta: organiziraj trenutnu bilješku",
+    "sourceGroundedQuestion": "Zadatak agenta: postavi pitanje utemeljeno na izvorima",
+    "summarizeCurrentNote": "Zadatak agenta: sažmi trenutnu bilješku",
+    "switchModel": "Promijeni model"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: pitaj agenta o ovoj datoteci",
+    "createProjectBrief": "Intelligence assistant: izradi projektni sažetak s agentom",
+    "createResearchBrief": "Intelligence assistant: izradi istraživački sažetak s agentom",
+    "doctorLinksTags": "Intelligence assistant: poboljšaj poveznice, oznake i svojstva s agentom",
+    "draftFromFile": "Intelligence assistant: izradi nacrt iz ove datoteke s agentom",
+    "findDuplicates": "Intelligence assistant: pronađi duplikate i kandidate za spajanje s agentom",
+    "findRelatedNotes": "Intelligence assistant: pronađi povezane bilješke s agentom",
+    "improveFolder": "Intelligence assistant: poboljšaj poveznice, oznake i svojstva mape s agentom",
+    "organizeFolder": "Intelligence assistant: organiziraj mapu s agentom",
+    "summarize": "Intelligence assistant: sažmi s agentom"
+  },
+  "ribbon": {
+    "openChat": "Otvori AI chat"
   }
 }

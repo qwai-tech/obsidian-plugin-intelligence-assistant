@@ -12,21 +12,13 @@
       "usage": "Utilizare"
     },
     "general": {
-      "desc": "Configurați setările generale pentru pluginul asistentului inteligent.",
       "pluginVersion": {
-        "name": "Versiunea pluginului",
-        "desc": "Versiunea curentă a pluginului asistentului inteligent"
+        "name": "Versiunea pluginului"
       },
       "defaultModel": {
         "name": "Model implicit",
         "desc": "Modelul implicit pentru conversații",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Mod implicit de chat",
-        "desc": "Alegeți modul în care se deschide vizualizarea de chat",
-        "chat": "Modul chat",
-        "agent": "Modul agent"
       },
       "conversationTitleMode": {
         "name": "Modul de titlu al conversației",
@@ -102,11 +94,6 @@
       "count": "{{count}} furnizori configurați",
       "addBtn": "+ Adăugați furnizor",
       "empty": "Niciun furnizor configurat. Selectați „Adăugați furnizor“ pentru a începe.",
-      "tableHeaders": {
-        "provider": "Furnizor",
-        "status": "Stare",
-        "actions": "Acțiuni"
-      },
       "status": {
         "ready": "Pregătit",
         "needsConfig": "Necesită configurare",
@@ -117,7 +104,6 @@
         "serverError": "Eroare server"
       },
       "guidance": {
-        "requiresCli": "Necesită CLI local",
         "configureBaseUrl": "Configurați URL de bază",
         "addApiKey": "Adăugați cheie API"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "reîmprospătați toate instrumentele",
       "addBtn": "+ Adăugați server MCP",
       "empty": "Niciun server MCP configurat. Selectați Adăugați server MCP pentru a începe.",
-      "tableHeaders": {
-        "name": "Nume",
-        "command": "Comandă",
-        "arguments": "Argumente",
-        "status": "Stare",
-        "tools": "Instrumente",
-        "actions": "Acțiuni"
-      },
       "untitled": "Server MCP fără titlu",
       "notConfigured": "Neconfigurat",
-      "noArgs": "Niciun",
       "cached": "În cache",
-      "disabled": "Dezactivat",
       "envVars_one": "{{count}} variabilă env",
       "envVars_other": "{{count}} variabile env",
       "envVars": "{{count}} variabile env",
@@ -244,26 +220,13 @@
       "count": "{{count}} agenți configurați",
       "addBtn": "+ adăugați agent",
       "empty": "Niciun agent configurat. Selectați adăugați agent pentru a începe.",
-      "tableHeaders": {
-        "agent": "Agent",
-        "model": "Model",
-        "capabilities": "Capacități",
-        "tools": "Instrumente",
-        "actions": "Acțiuni"
-      },
       "defaultBadge": "Implicit",
       "systemPrompt": "Prompt de sistem • {{promptName}}",
       "customPrompt": "Prompt personalizat",
       "model": {
         "notSet": "Nesetat",
-        "notFound": "Modelul nu a fost găsit în cache",
         "useChatView": "Utilizați modelul din vizualizarea chat",
-        "useChatViewDesc": "Va folosi modelul selectat în vizualizarea chat",
-        "useDefault": "Utilizați modelul implicit",
-        "useDefaultDesc": "Va folosi modelul implicit din setări"
-      },
-      "capabilities": {
-        "noSpecialModes": "Niciun mod special"
+        "useDefault": "Utilizați modelul implicit"
       },
       "tools": {
         "builtIn": "{{count}} incorporat",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} servere mcp",
         "mcpTool_one": "{{count}} instrument mcp",
         "mcpTool_other": "{{count}} instrumente mcp",
-        "mcpTool": "{{count}} instrumente mcp",
-        "noTools": "Niciun instrument activat"
+        "mcpTool": "{{count}} instrumente mcp"
       },
       "actions": {
         "edit": "Editați",
-        "delete": "ștergeți",
-        "protected": "protejat"
+        "delete": "ștergeți"
       },
       "confirm": {
         "delete": "Ștergeți agentul „{{name}}“?"
@@ -288,18 +249,6 @@
       "desc": "Gestionați prompturile de sistem care definesc comportamentul și personalitatea asistentului dvs. AI.",
       "addBtn": "+ adăugați prompt de sistem",
       "empty": "Niciun prompt de sistem configurat. Selectați adăugați prompt de sistem pentru a începe.",
-      "tableHeaders": {
-        "name": "Nume",
-        "contentPreview": "Previzualizare conținut",
-        "created": "Creat",
-        "updated": "Actualizat",
-        "enabled": "Activat",
-        "actions": "Acțiuni"
-      },
-      "status": {
-        "enabled": "Activat",
-        "disabled": "Dezactivat"
-      },
       "actions": {
         "edit": "Editați",
         "disable": "Dezactivați",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "conectat",
           "disconnected": "deconectat"
-        }
+        },
+        "addBtn": "Adăugați instrumente MCP"
       },
       "openapi": {
         "desc": "Generați instrumente HTTP din documente OpenAPI. Specificațiile remote sunt stocate în cache în {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} acțiuni configurate ({{enabled}} activate)",
       "addBtn": "+ adăugați acțiune rapidă",
       "empty": "Nicio acțiune rapidă configurată. Selectați adăugați acțiune rapidă pentru a începe.",
-      "tableHeaders": {
-        "action": "Acțiune",
-        "type": "Tip",
-        "model": "Model",
-        "promptPreview": "Previzualizare prompt",
-        "actions": "Acțiuni"
-      },
       "defaultModel": "Implicit",
       "editBtn": "Editați",
       "deleteBtn": "ștergeți",
@@ -1004,26 +947,16 @@
     "currentConversation": "Conversația curentă",
     "new": "Nou",
     "settings": "Setări",
-    "openSettingsTitle": "Deschidere setări plugin",
-    "mode": "Mod",
-    "prompt": "Prompt",
-    "agent": "Agent",
     "modeOptions": {
       "chat": "Chat",
       "agent": "Agent"
     },
-    "noSystemPrompt": "Niciun prompt de sistem",
     "noAgentsAvailable": "Niciun agent disponibil",
-    "sendHintPrefix": "Apăsați ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " pentru trimitere",
     "sendAriaLabel": "Trimiteți mesajul",
     "stop": " Oprire",
-    "addReference": "Adăugați referință",
     "addReferenceTooltip": "Adăugați referință fișier sau folder (@)",
     "emptyHeading": "Porniți o conversație",
     "emptySubtext": "Introduceți un mesaj mai jos pentru a începe, sau selectați o conversație din istoric.",
-    "noAgentConfig": "Niciun agent configurat",
     "selectAgent": "Selectați un agent…",
     "notices": {
       "stopping": "Se oprește generarea...",
@@ -1047,23 +980,15 @@
       "noAgents": "Niciun agent disponibil. Configurați agenți în Setări → Agenți.",
       "ragDisabled": "RAG este dezactivat în setări. Activați-l în setări → funcții chat → RAG.",
       "webSearchDisabled": "Căutarea web este dezactivată în setări. Activați-o în setări → funcții chat → căutare web.",
-      "noFilesInVault": "Nu s-au găsit fișiere în seif",
       "attached": "Atașat: {{name}}",
       "attachedImages": "Atașate {{count}} imagini",
       "referencesAdded": "Adăugate {{count}} referințe",
       "fileNotFound": "Fișierul nu a fost găsit: {{path}}",
       "agentConfigApplied": "Configurație aplicată pentru agentul: {{name}}",
-      "waitForComplete": "Așteptați finalizarea răspunsului curent",
-      "chatServiceFallback": "ChatService nu este configurat. Se folosește fallback-ul ChatView.",
-      "noModelSelected": "Niciun model selectat",
-      "noProviderConfig": "Configurația furnizorului nu a fost găsită",
-      "noResponseToRegenerate": "Niciun răspuns de regenerat",
-      "agentNotFound": "Agentul nu a fost găsit",
       "unableToLoadRag": "Nu se pot încărca statisticile RAG.",
       "referenced": "Referențiat: {{name}}"
     },
     "status": {
-      "available": "Disponibil",
       "unavailable": "Indisponibil",
       "disabled": "Dezactivat",
       "on": "Activat · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG este în prezent dezactivat pentru acest chat."
     },
     "agentSummary": {
-      "model": "Model",
-      "temp": "Temp",
-      "max": "Max",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Instrumente",
-      "memory": "Memorie",
-      "none": "Niciunul",
-      "configuration": "Configurația {{name}}",
-      "modelFixed": "{{name}} · Fix",
-      "modelDefault": "{{name}} · Implicit",
-      "modelChatView": "{{name}} · Vizualizare chat",
-      "customModel": "Model personalizat",
-      "notSet": "Nesetat",
-      "auto": "Automat",
       "on": "Activat",
-      "off": "Dezactivat",
-      "shortTerm": "Termen scurt",
-      "longTerm": "Termen lung",
-      "disabledMemory": "Dezactivat",
-      "builtIn": "{{count}} incorporat",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Dezactivat"
     },
     "message": {
       "webResults": "Rezultate web",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Inserați în notițe",
       "regenerate": "Regenerați"
     },
-    "streaming": {
-      "thinking": "Se gândește..."
-    },
     "toolCall": {
-      "thinking": "Se gândește",
       "executionProcess": "Procesul de execuție",
       "input": "Intrare",
       "output": "Ieșire",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Utilizați notițele indexate ca context",
     "webSearchLabel": "Căutare web",
     "webSearchTooltipLabel": "Căutați pe internet când este necesar",
-    "imageUnavailable": "Atașarea imaginilor nu este disponibilă pentru modelul curent.",
-    "newChat": "Chat nou",
     "newConversation": "Conversație nouă",
     "searchConversations": "Căutați conversații...",
     "header": {
-      "model": "Model",
-      "advancedParams": "Parametri avansați",
-      "temperature": "Temperatură",
-      "maxTokens": "Tokeni maximi",
-      "topP": "Top P",
-      "freqPenalty": "Penalizare frecvență",
-      "presPenalty": "Penalizare prezență",
-      "agentConfig": "Configurație agent",
-      "modelsCount": "Modele: {{count}}",
-      "tokensCount": "Tokeni: {{count}}",
       "noModels": "Niciun model disponibil"
-    },
-    "temperature": {
-      "precise": "0 (Precis)",
-      "balanced": "1 (Echilibrat)",
-      "creative": "2 (Creativ)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Inserați în notița selectată",
         "createNew": "Creați notiță nouă",
         "noResults": "Nu s-au găsit notițe corespunzătoare."
+      },
+      "agentTask": {
+        "cancel": "Anulați",
+        "fieldLabel": "Sarcină",
+        "newConversation": "Începeți într-o conversație nouă",
+        "newConversationDesc": "Păstrați această rulare a agentului separată de chatul curent.",
+        "placeholder": "Introduceți sarcina aici...",
+        "start": "Începeți",
+        "title": "Începeți o sarcină a agentului"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Selectați un tip de furnizor",
         "invalidUrl": "Format URL de bază invalid. Introduceți un URL valid (de ex. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Modele în cache: {{count}}",
+      "connectionFailed": "Testul conexiunii a eșuat. Verificați setările furnizorului.",
+      "connectionSuccess": "Conexiune reușită. {{count}} model(e) în cache.",
+      "noCachedModels": "Niciun model în cache",
+      "testConnection": "Testați conexiunea",
+      "testing": "Se testează..."
     },
     "mcpInspector": {
       "title": "Inspector MCP",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Număr invalid pentru parametrul: {{name}}",
           "invalidJson": "JSON invalid pentru parametrul: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Niciun server MCP configurat",
-        "testing": "Se testează {{count}} conexiuni server MCP...",
-        "allSuccess": "toate {{count}} servere mcp conectate cu succes!",
-        "partial": "{{success}} conectate, {{failed}} eșuate"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Versiune: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Server offline",
-      "connectionError": "Eroare de conexiune",
       "pullTitle": "Descărcați model nou",
       "pullHint": "Introduceți un nume de model pentru descărcare din biblioteca Ollama (de ex. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Se procesează...",
     "textUpdated": "Text actualizat cu succes",
     "error": "Eroare: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Sarcină agent: întrebați despre nota curentă",
+    "createProjectBrief": "Sarcină agent: creați un rezumat de proiect",
+    "createResearchBrief": "Sarcină agent: creați un rezumat de cercetare",
+    "diagnoseVault": "Sarcină agent: diagnosticați seiful",
+    "doctorLinksTags": "Sarcină agent: îmbunătățiți linkurile, etichetele și proprietățile",
+    "draftFromNote": "Sarcină agent: redactați pornind de la nota curentă",
+    "findDuplicateNotes": "Sarcină agent: găsiți duplicate și candidați pentru îmbinare",
+    "findRelatedNotes": "Sarcină agent: găsiți note asociate",
+    "generateWeeklyReview": "Sarcină agent: generați revizuirea săptămânală",
+    "improveSelection": "Sarcină agent: îmbunătățiți selecția",
+    "openChatMain": "Deschideți chatul AI în zona principală",
+    "openChatSidebar": "Deschideți chatul AI în bara laterală",
+    "organizeCurrentNote": "Sarcină agent: organizați nota curentă",
+    "sourceGroundedQuestion": "Sarcină agent: puneți o întrebare bazată pe surse",
+    "summarizeCurrentNote": "Sarcină agent: rezumați nota curentă",
+    "switchModel": "Schimbați modelul"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: întrebați agentul despre acest fișier",
+    "createProjectBrief": "Intelligence assistant: creați un rezumat de proiect cu agentul",
+    "createResearchBrief": "Intelligence assistant: creați un rezumat de cercetare cu agentul",
+    "doctorLinksTags": "Intelligence assistant: îmbunătățiți linkurile, etichetele și proprietățile cu agentul",
+    "draftFromFile": "Intelligence assistant: redactați pornind de la acest fișier cu agentul",
+    "findDuplicates": "Intelligence assistant: găsiți duplicate și candidați pentru îmbinare cu agentul",
+    "findRelatedNotes": "Intelligence assistant: găsiți note asociate cu agentul",
+    "improveFolder": "Intelligence assistant: îmbunătățiți linkurile, etichetele și proprietățile din folder cu agentul",
+    "organizeFolder": "Intelligence assistant: organizați folderul cu agentul",
+    "summarize": "Intelligence assistant: rezumați cu agentul"
+  },
+  "ribbon": {
+    "openChat": "Deschideți chatul AI"
   }
 }

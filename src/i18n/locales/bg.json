@@ -12,21 +12,13 @@
       "usage": "Използване"
     },
     "general": {
-      "desc": "Конфигурирайте общите настройки за плъгина за интелигентен асистент.",
       "pluginVersion": {
-        "name": "Версия на плъгина",
-        "desc": "Текуща версия на плъгина за интелигентен асистент"
+        "name": "Версия на плъгина"
       },
       "defaultModel": {
         "name": "Модел по подразбиране",
         "desc": "Модел по подразбиране за разговори",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Режим на чат по подразбиране",
-        "desc": "Изберете с кой режим да се отвори изгледът на чата",
-        "chat": "Режим чат",
-        "agent": "Режим агент"
       },
       "conversationTitleMode": {
         "name": "Режим на заглавие на разговора",
@@ -102,11 +94,6 @@
       "count": "{{count}} конфигурирани доставчика",
       "addBtn": "+ Добави доставчик",
       "empty": "Няма конфигурирани доставчици. Изберете \"Добави доставчик\", за да започнете.",
-      "tableHeaders": {
-        "provider": "Доставчик",
-        "status": "Статус",
-        "actions": "Действия"
-      },
       "status": {
         "ready": "Готов",
         "needsConfig": "Изисква конфигурация",
@@ -117,7 +104,6 @@
         "serverError": "Грешка на сървъра"
       },
       "guidance": {
-        "requiresCli": "Изисква локален CLI",
         "configureBaseUrl": "Конфигурирайте базовия URL",
         "addApiKey": "Добавете API ключ"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "обнови всички инструменти",
       "addBtn": "+ Добави MCP сървър",
       "empty": "Няма конфигурирани MCP сървъри. Изберете \"Добави MCP сървър\", за да започнете.",
-      "tableHeaders": {
-        "name": "Име",
-        "command": "Команда",
-        "arguments": "Аргументи",
-        "status": "Статус",
-        "tools": "Инструменти",
-        "actions": "Действия"
-      },
       "untitled": "Неозаглавен MCP сървър",
       "notConfigured": "Не е конфигуриран",
-      "noArgs": "Няма",
       "cached": "Кеширан",
-      "disabled": "Деактивиран",
       "envVars_one": "{{count}} променлива на средата",
       "envVars_other": "{{count}} променливи на средата",
       "envVars": "{{count}} променливи на средата",
@@ -244,26 +220,13 @@
       "count": "{{count}} конфигурирани агента",
       "addBtn": "+ добави агент",
       "empty": "Няма конфигурирани агенти. Изберете \"добави агент\", за да започнете.",
-      "tableHeaders": {
-        "agent": "Агент",
-        "model": "Модел",
-        "capabilities": "Възможности",
-        "tools": "Инструменти",
-        "actions": "Действия"
-      },
       "defaultBadge": "По подразбиране",
       "systemPrompt": "Системно подканване • {{promptName}}",
       "customPrompt": "Персонализирано подканване",
       "model": {
         "notSet": "Не е зададено",
-        "notFound": "Моделът не е намерен в кеша",
         "useChatView": "Използвай модела от изгледа на чата",
-        "useChatViewDesc": "Ще използва модела, избран в изгледа на чата",
-        "useDefault": "Използвай модела по подразбиране",
-        "useDefaultDesc": "Ще използва модела по подразбиране от настройките"
-      },
-      "capabilities": {
-        "noSpecialModes": "Без специални режими"
+        "useDefault": "Използвай модела по подразбиране"
       },
       "tools": {
         "builtIn": "{{count}} вграден",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp сървъра",
         "mcpTool_one": "{{count}} mcp инструмент",
         "mcpTool_other": "{{count}} mcp инструмента",
-        "mcpTool": "{{count}} mcp инструмента",
-        "noTools": "Няма активирани инструменти"
+        "mcpTool": "{{count}} mcp инструмента"
       },
       "actions": {
         "edit": "Редактирай",
-        "delete": "изтрий",
-        "protected": "защитен"
+        "delete": "изтрий"
       },
       "confirm": {
         "delete": "Изтриване на агент \"{{name}}\"?"
@@ -288,18 +249,6 @@
       "desc": "Управлявайте системните подканвания, които определят поведението и личността на вашия AI асистент.",
       "addBtn": "+ добави системно подканване",
       "empty": "Няма конфигурирани системни подканвания. Изберете \"добави системно подканване\", за да започнете.",
-      "tableHeaders": {
-        "name": "Име",
-        "contentPreview": "Преглед на съдържанието",
-        "created": "Създадено",
-        "updated": "Актуализирано",
-        "enabled": "Активно",
-        "actions": "Действия"
-      },
-      "status": {
-        "enabled": "Активно",
-        "disabled": "Деактивирано"
-      },
       "actions": {
         "edit": "Редактирай",
         "disable": "Деактивирай",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "свързан",
           "disconnected": "прекъснат"
-        }
+        },
+        "addBtn": "Добавяне на MCP инструменти"
       },
       "openapi": {
         "desc": "Генерирайте HTTP инструменти от OpenAPI документи. Отдалечените спецификации се кешират в {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} конфигурирани действия ({{enabled}} активни)",
       "addBtn": "+ добави бързо действие",
       "empty": "Няма конфигурирани бързи действия. Изберете \"добави бързо действие\", за да започнете.",
-      "tableHeaders": {
-        "action": "Действие",
-        "type": "Тип",
-        "model": "Модел",
-        "promptPreview": "Преглед на подканването",
-        "actions": "Действия"
-      },
       "defaultModel": "По подразбиране",
       "editBtn": "Редактирай",
       "deleteBtn": "изтрий",
@@ -1004,26 +947,16 @@
     "currentConversation": "Текущ разговор",
     "new": "Нов",
     "settings": "Настройки",
-    "openSettingsTitle": "Отвори настройките на плъгина",
-    "mode": "Режим",
-    "prompt": "Подканване",
-    "agent": "Агент",
     "modeOptions": {
       "chat": "Чат",
       "agent": "Агент"
     },
-    "noSystemPrompt": "Няма системно подканване",
     "noAgentsAvailable": "Няма налични агенти",
-    "sendHintPrefix": "Натиснете ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " за изпращане",
     "sendAriaLabel": "Изпрати съобщение",
     "stop": " Спри",
-    "addReference": "Добави референция",
     "addReferenceTooltip": "Добави референция към файл или папка (@)",
     "emptyHeading": "Започнете разговор",
     "emptySubtext": "Въведете съобщение по-долу, за да започнете, или изберете разговор от историята.",
-    "noAgentConfig": "Няма конфигурирани агенти",
     "selectAgent": "Изберете агент…",
     "notices": {
       "stopping": "Спиране на генерирането...",
@@ -1047,23 +980,15 @@
       "noAgents": "Няма налични агенти. Конфигурирайте агенти в Настройки → Агенти.",
       "ragDisabled": "RAG е деактивиран в настройките. Активирайте го в настройки → функции на чата → RAG.",
       "webSearchDisabled": "Уеб търсенето е деактивирано в настройките. Активирайте го в настройки → функции на чата → уеб търсене.",
-      "noFilesInVault": "Няма намерени файлове в хранилището",
       "attached": "Прикачено: {{name}}",
       "attachedImages": "Прикачени {{count}} изображени(я)",
       "referencesAdded": "Добавени {{count}} референци(и)",
       "fileNotFound": "Файлът не е намерен: {{path}}",
       "agentConfigApplied": "Приложена конфигурация за агент: {{name}}",
-      "waitForComplete": "Моля, изчакайте текущия отговор да завърши",
-      "chatServiceFallback": "ChatService не е конфигуриран. Използва се резервен вариант на ChatView.",
-      "noModelSelected": "Не е избран модел",
-      "noProviderConfig": "Не е намерена конфигурация на доставчик",
-      "noResponseToRegenerate": "Няма отговор за регенериране",
-      "agentNotFound": "Агентът не е намерен",
       "unableToLoadRag": "Невъзможно зареждане на RAG статистиките.",
       "referenced": "Референция: {{name}}"
     },
     "status": {
-      "available": "Наличен",
       "unavailable": "Недостъпен",
       "disabled": "Деактивиран",
       "on": "Вкл. · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG в момента е изключен за този чат."
     },
     "agentSummary": {
-      "model": "Модел",
-      "temp": "Температура",
-      "max": "Макс.",
-      "rag": "RAG",
-      "web": "Уеб",
-      "tools": "Инструменти",
-      "memory": "Памет",
-      "none": "Няма",
-      "configuration": "Конфигурация на {{name}}",
-      "modelFixed": "{{name}} · Фиксиран",
-      "modelDefault": "{{name}} · По подразбиране",
-      "modelChatView": "{{name}} · Изглед на чат",
-      "customModel": "Персонализиран модел",
-      "notSet": "Не е зададено",
-      "auto": "Авто",
       "on": "Вкл.",
-      "off": "Изкл.",
-      "shortTerm": "Краткосрочна",
-      "longTerm": "Дългосрочна",
-      "disabledMemory": "Деактивирана",
-      "builtIn": "{{count}} вградени",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Изкл."
     },
     "message": {
       "webResults": "Уеб резултати",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Вмъкни в бележките",
       "regenerate": "Регенерирай"
     },
-    "streaming": {
-      "thinking": "Обмисля..."
-    },
     "toolCall": {
-      "thinking": "Обмисляне",
       "executionProcess": "Процес на изпълнение",
       "input": "Вход",
       "output": "Изход",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Използвай индексираните бележки като контекст",
     "webSearchLabel": "Уеб търсене",
     "webSearchTooltipLabel": "Търси в интернет при необходимост",
-    "imageUnavailable": "Прикачването на изображения не е налично за текущия модел.",
-    "newChat": "Нов чат",
     "newConversation": "Нов разговор",
     "searchConversations": "Търсене в разговорите...",
     "header": {
-      "model": "Модел",
-      "advancedParams": "Разширени параметри",
-      "temperature": "Температура",
-      "maxTokens": "Максимален брой токени",
-      "topP": "Top P",
-      "freqPenalty": "Честотна санкция",
-      "presPenalty": "Санкция за присъствие",
-      "agentConfig": "Конфигурация на агента",
-      "modelsCount": "Модели: {{count}}",
-      "tokensCount": "Токени: {{count}}",
       "noModels": "Няма налични модели"
-    },
-    "temperature": {
-      "precise": "0 (Точен)",
-      "balanced": "1 (Балансиран)",
-      "creative": "2 (Творчески)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Вмъкни в избраната бележка",
         "createNew": "Създай нова бележка",
         "noResults": "Няма намерени съответстващи бележки."
+      },
+      "agentTask": {
+        "cancel": "Отказ",
+        "fieldLabel": "Задача",
+        "newConversation": "Започване в нов разговор",
+        "newConversationDesc": "Тази работа на агента да остане отделно от текущия чат.",
+        "placeholder": "Въведете задачата си тук...",
+        "start": "Старт",
+        "title": "Стартиране на задача за агент"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Моля, изберете тип доставчик",
         "invalidUrl": "Невалиден формат на базов URL. Моля, въведете валиден URL (напр. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Кеширани модели: {{count}}",
+      "connectionFailed": "Тестът на връзката неуспешен. Проверете настройките на доставчика.",
+      "connectionSuccess": "Успешна връзка. Кеширани модели: {{count}}.",
+      "noCachedModels": "Няма кеширани модели",
+      "testConnection": "Тест на връзката",
+      "testing": "Тестване..."
     },
     "mcpInspector": {
       "title": "MCP инспектор",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Невалидно число за параметър: {{name}}",
           "invalidJson": "Невалиден JSON за параметър: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Няма конфигурирани MCP сървъри",
-        "testing": "Тестване на {{count}} MCP сървърни връзки...",
-        "allSuccess": "всички {{count}} mcp сървъра са свързани успешно!",
-        "partial": "{{success}} свързани, {{failed}} неуспешни"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Версия: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Сървърът е офлайн",
-      "connectionError": "Грешка при свързване",
       "pullTitle": "Изтегляне на нов модел",
       "pullHint": "Въведете ime на модел за изтегляне от библиотеката на Ollama (напр. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Обработва се...",
     "textUpdated": "Текстът е актуализиран успешно",
     "error": "Грешка: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Задача за агент: въпрос за текущата бележка",
+    "createProjectBrief": "Задача за агент: създаване на резюме на проект",
+    "createResearchBrief": "Задача за агент: създаване на резюме на проучване",
+    "diagnoseVault": "Задача за агент: диагностика на хранилището",
+    "doctorLinksTags": "Задача за агент: подобряване на връзки, тагове и свойства",
+    "draftFromNote": "Задача за агент: чернова от текущата бележка",
+    "findDuplicateNotes": "Задача за агент: намиране на дубликати и кандидати за сливане",
+    "findRelatedNotes": "Задача за агент: намиране на свързани бележки",
+    "generateWeeklyReview": "Задача за агент: генериране на седмичен преглед",
+    "improveSelection": "Задача за агент: подобряване на селекцията",
+    "openChatMain": "Отваряне на AI чат в основната област",
+    "openChatSidebar": "Отваряне на AI чат в страничната лента",
+    "organizeCurrentNote": "Задача за агент: организиране на текущата бележка",
+    "sourceGroundedQuestion": "Задача за агент: въпрос, основан на източници",
+    "summarizeCurrentNote": "Задача за агент: обобщаване на текущата бележка",
+    "switchModel": "Смяна на модела"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: попитай агента за този файл",
+    "createProjectBrief": "Intelligence assistant: създаване на резюме на проект с агент",
+    "createResearchBrief": "Intelligence assistant: създаване на резюме на проучване с агент",
+    "doctorLinksTags": "Intelligence assistant: подобряване на връзки, тагове и свойства с агент",
+    "draftFromFile": "Intelligence assistant: чернова от този файл с агент",
+    "findDuplicates": "Intelligence assistant: намиране на дубликати и кандидати за сливане с агент",
+    "findRelatedNotes": "Intelligence assistant: намиране на свързани бележки с агент",
+    "improveFolder": "Intelligence assistant: подобряване на връзките, таговете и свойствата на папката с агент",
+    "organizeFolder": "Intelligence assistant: организиране на папката с агент",
+    "summarize": "Intelligence assistant: обобщаване с агент"
+  },
+  "ribbon": {
+    "openChat": "Отваряне на AI чат"
   }
 }

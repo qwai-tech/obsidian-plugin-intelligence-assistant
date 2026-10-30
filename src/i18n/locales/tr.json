@@ -12,21 +12,13 @@
       "usage": "Kullanım"
     },
     "general": {
-      "desc": "Zeka asistanı eklentisi için genel ayarları yapılandırın.",
       "pluginVersion": {
-        "name": "Eklenti sürümü",
-        "desc": "Zeka asistanı eklentisinin mevcut sürümü"
+        "name": "Eklenti sürümü"
       },
       "defaultModel": {
         "name": "Varsayılan model",
         "desc": "Konuşmalar için kullanılacak varsayılan model",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Varsayılan sohbet modu",
-        "desc": "Sohbet görünümünün hangi modda açılacağını seçin",
-        "chat": "Sohbet modu",
-        "agent": "Ajan modu"
       },
       "conversationTitleMode": {
         "name": "Konuşma başlığı modu",
@@ -102,11 +94,6 @@
       "count": "{{count}} sağlayıcı yapılandırıldı",
       "addBtn": "+ Sağlayıcı ekle",
       "empty": "Sağlayıcı yapılandırılmadı. Başlamak için \"Sağlayıcı ekle\" seçeneğini seçin.",
-      "tableHeaders": {
-        "provider": "Sağlayıcı",
-        "status": "Durum",
-        "actions": "Eylemler"
-      },
       "status": {
         "ready": "Hazır",
         "needsConfig": "Yapılandırma Gerekiyor",
@@ -117,7 +104,6 @@
         "serverError": "Sunucu hatası"
       },
       "guidance": {
-        "requiresCli": "Yerel CLI gerektirir",
         "configureBaseUrl": "Temel URL'yi yapılandırın",
         "addApiKey": "API anahtarı ekleyin"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "tüm araçları yenile",
       "addBtn": "+ MCP sunucusu ekle",
       "empty": "MCP sunucusu yapılandırılmadı. Başlamak için MCP sunucusu ekle seçeneğini seçin.",
-      "tableHeaders": {
-        "name": "İsim",
-        "command": "Komut",
-        "arguments": "Argümanlar",
-        "status": "Durum",
-        "tools": "Araçlar",
-        "actions": "Eylemler"
-      },
       "untitled": "İsimsiz MCP Sunucusu",
       "notConfigured": "Yapılandırılmadı",
-      "noArgs": "Yok",
       "cached": "Önbellekte",
-      "disabled": "Devre dışı",
       "envVars_one": "{{count}} ortam değişkeni",
       "envVars_other": "{{count}} ortam değişkeni",
       "envVars": "{{count}} ortam değişkeni",
@@ -244,26 +220,13 @@
       "count": "{{count}} ajan yapılandırıldı",
       "addBtn": "+ ajan ekle",
       "empty": "Ajan yapılandırılmadı. Başlamak için ajan ekle seçeneğini seçin.",
-      "tableHeaders": {
-        "agent": "Ajan",
-        "model": "Model",
-        "capabilities": "Özellikler",
-        "tools": "Araçlar",
-        "actions": "Eylemler"
-      },
       "defaultBadge": "Varsayılan",
       "systemPrompt": "Sistem istemi • {{promptName}}",
       "customPrompt": "Özel istem",
       "model": {
         "notSet": "Ayarlanmadı",
-        "notFound": "Model önbellekte bulunamadı",
         "useChatView": "Sohbet Görünümü Modelini Kullan",
-        "useChatViewDesc": "Sohbet görünümünde seçilen modeli kullanır",
-        "useDefault": "Varsayılan Modeli Kullan",
-        "useDefaultDesc": "Ayarlardaki varsayılan modeli kullanır"
-      },
-      "capabilities": {
-        "noSpecialModes": "Özel mod yok"
+        "useDefault": "Varsayılan Modeli Kullan"
       },
       "tools": {
         "builtIn": "{{count}} yerleşik",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} mcp sunucusu",
         "mcpTool_one": "{{count}} mcp aracı",
         "mcpTool_other": "{{count}} mcp aracı",
-        "mcpTool": "{{count}} mcp aracı",
-        "noTools": "Araç etkinleştirilmedi"
+        "mcpTool": "{{count}} mcp aracı"
       },
       "actions": {
         "edit": "Düzenle",
-        "delete": "sil",
-        "protected": "korumalı"
+        "delete": "sil"
       },
       "confirm": {
         "delete": "\"{{name}}\" ajanı silinsin mi?"
@@ -288,18 +249,6 @@
       "desc": "AI asistanınızın davranışını ve kişiliğini tanımlayan sistem istemlerini yönetin.",
       "addBtn": "+ sistem istemi ekle",
       "empty": "Sistem istemi yapılandırılmadı. Başlamak için sistem istemi ekle seçeneğini seçin.",
-      "tableHeaders": {
-        "name": "İsim",
-        "contentPreview": "İçerik Önizlemesi",
-        "created": "Oluşturuldu",
-        "updated": "Güncellendi",
-        "enabled": "Etkin",
-        "actions": "Eylemler"
-      },
-      "status": {
-        "enabled": "Etkin",
-        "disabled": "Devre dışı"
-      },
       "actions": {
         "edit": "Düzenle",
         "disable": "Devre dışı bırak",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "bağlı",
           "disconnected": "bağlantısız"
-        }
+        },
+        "addBtn": "MCP araçları ekle"
       },
       "openapi": {
         "desc": "OpenAPI belgelerinden HTTP araçları oluşturun. Uzak özellikler {{cacheDir}} altında önbelleğe alınır.",
@@ -890,13 +840,6 @@
       "count": "{{count}} eylem yapılandırıldı ({{enabled}} etkin)",
       "addBtn": "+ hızlı eylem ekle",
       "empty": "Hızlı eylem yapılandırılmadı. Başlamak için hızlı eylem ekle seçeneğini seçin.",
-      "tableHeaders": {
-        "action": "Eylem",
-        "type": "Tür",
-        "model": "Model",
-        "promptPreview": "İstem Önizlemesi",
-        "actions": "Eylemler"
-      },
       "defaultModel": "Varsayılan",
       "editBtn": "Düzenle",
       "deleteBtn": "sil",
@@ -1004,26 +947,16 @@
     "currentConversation": "Mevcut konuşma",
     "new": "Yeni",
     "settings": "Ayarlar",
-    "openSettingsTitle": "Eklenti ayarlarını aç",
-    "mode": "Mod",
-    "prompt": "İstem",
-    "agent": "Ajan",
     "modeOptions": {
       "chat": "Sohbet",
       "agent": "Ajan"
     },
-    "noSystemPrompt": "Sistem istemi yok",
     "noAgentsAvailable": "Kullanılabilir ajan yok",
-    "sendHintPrefix": "Göndermek için ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " tuşuna basın",
     "sendAriaLabel": "Mesaj gönder",
     "stop": " Durdur",
-    "addReference": "Referans ekle",
     "addReferenceTooltip": "Dosya veya klasör referansı ekle (@)",
     "emptyHeading": "Bir konuşma başlatın",
     "emptySubtext": "Başlamak için aşağıya bir mesaj yazın veya geçmişten bir konuşma seçin.",
-    "noAgentConfig": "Ajan yapılandırılmadı",
     "selectAgent": "Bir ajan seçin…",
     "notices": {
       "stopping": "Oluşturma durduruluyor...",
@@ -1047,23 +980,15 @@
       "noAgents": "Kullanılabilir ajan yok. Ayarlar → Ajanlar'dan ajanları yapılandırın.",
       "ragDisabled": "RAG ayarlarda devre dışı. Ayarlar → sohbet özellikleri → RAG altında etkinleştirin.",
       "webSearchDisabled": "Web araması ayarlarda devre dışı. Ayarlar → sohbet özellikleri → web araması altında etkinleştirin.",
-      "noFilesInVault": "Vault'ta dosya bulunamadı",
       "attached": "Eklendi: {{name}}",
       "attachedImages": "{{count}} görsel eklendi",
       "referencesAdded": "{{count}} referans eklendi",
       "fileNotFound": "Dosya bulunamadı: {{path}}",
       "agentConfigApplied": "Ajan için yapılandırma uygulandı: {{name}}",
-      "waitForComplete": "Lütfen mevcut yanıtın tamamlanmasını bekleyin",
-      "chatServiceFallback": "ChatService yapılandırılmadı. ChatView yedek kullanılıyor.",
-      "noModelSelected": "Model seçilmedi",
-      "noProviderConfig": "Sağlayıcı yapılandırması bulunamadı",
-      "noResponseToRegenerate": "Yeniden oluşturulacak yanıt yok",
-      "agentNotFound": "Ajan bulunamadı",
       "unableToLoadRag": "RAG istatistikleri yüklenemiyor.",
       "referenced": "Referans alındı: {{name}}"
     },
     "status": {
-      "available": "Kullanılabilir",
       "unavailable": "Kullanılamaz",
       "disabled": "Devre dışı",
       "on": "Açık · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG şu anda bu sohbet için kapalı."
     },
     "agentSummary": {
-      "model": "Model",
-      "temp": "Sıcaklık",
-      "max": "Maks",
-      "rag": "RAG",
-      "web": "Web",
-      "tools": "Araçlar",
-      "memory": "Bellek",
-      "none": "Yok",
-      "configuration": "{{name}} yapılandırması",
-      "modelFixed": "{{name}} · Sabit",
-      "modelDefault": "{{name}} · Varsayılan",
-      "modelChatView": "{{name}} · Sohbet Görünümü",
-      "customModel": "Özel model",
-      "notSet": "Ayarlanmadı",
-      "auto": "Otomatik",
       "on": "Açık",
-      "off": "Kapalı",
-      "shortTerm": "Kısa vadeli",
-      "longTerm": "Uzun vadeli",
-      "disabledMemory": "Devre dışı",
-      "builtIn": "{{count}} yerleşik",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Kapalı"
     },
     "message": {
       "webResults": "Web sonuçları",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Notlara Ekle",
       "regenerate": "Yeniden oluştur"
     },
-    "streaming": {
-      "thinking": "Düşünüyor..."
-    },
     "toolCall": {
-      "thinking": "Düşünüyor",
       "executionProcess": "Yürütme Süreci",
       "input": "Girdi",
       "output": "Çıktı",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Dizinlenmiş notları bağlam olarak kullan",
     "webSearchLabel": "Web Araması",
     "webSearchTooltipLabel": "Gerektiğinde internette ara",
-    "imageUnavailable": "Görsel eki mevcut model için kullanılamaz.",
-    "newChat": "Yeni Sohbet",
     "newConversation": "Yeni Konuşma",
     "searchConversations": "Konuşmalarda ara...",
     "header": {
-      "model": "Model",
-      "advancedParams": "Gelişmiş parametreler",
-      "temperature": "Sıcaklık",
-      "maxTokens": "Maks token",
-      "topP": "Top P",
-      "freqPenalty": "Frekans cezası",
-      "presPenalty": "Varlık cezası",
-      "agentConfig": "Ajan yapılandırması",
-      "modelsCount": "Modeller: {{count}}",
-      "tokensCount": "Tokenler: {{count}}",
       "noModels": "Kullanılabilir model yok"
-    },
-    "temperature": {
-      "precise": "0 (Kesin)",
-      "balanced": "1 (Dengeli)",
-      "creative": "2 (Yaratıcı)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Seçilen nota ekle",
         "createNew": "Yeni not oluştur",
         "noResults": "Eşleşen not bulunamadı."
+      },
+      "agentTask": {
+        "cancel": "İptal",
+        "fieldLabel": "Görev",
+        "newConversation": "Yeni konuşmada başlat",
+        "newConversationDesc": "Bu ajan çalışmasını mevcut sohbetten ayrı tutun.",
+        "placeholder": "Görevinizi buraya girin...",
+        "start": "Başlat",
+        "title": "Ajan görevi başlat"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Lütfen bir sağlayıcı türü seçin",
         "invalidUrl": "Geçersiz temel URL biçimi. Lütfen geçerli bir URL girin (örn. https://api.example.com)"
-      }
+      },
+      "cachedModels": "Önbellekteki modeller: {{count}}",
+      "connectionFailed": "Bağlantı testi başarısız oldu. Sağlayıcı ayarlarını kontrol edin.",
+      "connectionSuccess": "Bağlantı başarılı. {{count}} model önbelleğe alındı.",
+      "noCachedModels": "Önbellekte model yok",
+      "testConnection": "Bağlantıyı test et",
+      "testing": "Test ediliyor..."
     },
     "mcpInspector": {
       "title": "MCP denetçisi",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Parametre için geçersiz sayı: {{name}}",
           "invalidJson": "Parametre için geçersiz JSON: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "MCP sunucusu yapılandırılmadı",
-        "testing": "{{count}} MCP sunucu bağlantısı test ediliyor...",
-        "allSuccess": "tüm {{count}} mcp sunucusu başarıyla bağlandı!",
-        "partial": "{{success}} bağlandı, {{failed}} başarısız"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Sürüm: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Sunucu çevrimdışı",
-      "connectionError": "Bağlantı hatası",
       "pullTitle": "Yeni model çek",
       "pullHint": "Ollama kütüphanesinden indirmek için bir model adı girin (örn. llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "İşleniyor...",
     "textUpdated": "Metin başarıyla güncellendi",
     "error": "Hata: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Ajan görevi: geçerli not hakkında sor",
+    "createProjectBrief": "Ajan görevi: proje özeti oluştur",
+    "createResearchBrief": "Ajan görevi: araştırma özeti oluştur",
+    "diagnoseVault": "Ajan görevi: vault'u teşhis et",
+    "doctorLinksTags": "Ajan görevi: bağlantıları, etiketleri ve özellikleri iyileştir",
+    "draftFromNote": "Ajan görevi: geçerli nottan taslak oluştur",
+    "findDuplicateNotes": "Ajan görevi: yinelenenleri ve birleştirme adaylarını bul",
+    "findRelatedNotes": "Ajan görevi: ilgili notları bul",
+    "generateWeeklyReview": "Ajan görevi: haftalık değerlendirme oluştur",
+    "improveSelection": "Ajan görevi: seçimi iyileştir",
+    "openChatMain": "AI sohbetini ana alanda aç",
+    "openChatSidebar": "AI sohbetini kenar çubuğunda aç",
+    "organizeCurrentNote": "Ajan görevi: geçerli notu düzenle",
+    "sourceGroundedQuestion": "Ajan görevi: kaynaklara dayalı soru sor",
+    "summarizeCurrentNote": "Ajan görevi: geçerli notu özetle",
+    "switchModel": "Model değiştir"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: bu dosya hakkında ajana sor",
+    "createProjectBrief": "Intelligence assistant: ajanla proje özeti oluştur",
+    "createResearchBrief": "Intelligence assistant: ajanla araştırma özeti oluştur",
+    "doctorLinksTags": "Intelligence assistant: ajanla bağlantıları, etiketleri ve özellikleri iyileştir",
+    "draftFromFile": "Intelligence assistant: ajanla bu dosyadan taslak oluştur",
+    "findDuplicates": "Intelligence assistant: ajanla yinelenenleri ve birleştirme adaylarını bul",
+    "findRelatedNotes": "Intelligence assistant: ajanla ilgili notları bul",
+    "improveFolder": "Intelligence assistant: ajanla klasördeki bağlantıları, etiketleri ve özellikleri iyileştir",
+    "organizeFolder": "Intelligence assistant: ajanla klasörü düzenle",
+    "summarize": "Intelligence assistant: ajanla özetle"
+  },
+  "ribbon": {
+    "openChat": "AI sohbetini aç"
   }
 }

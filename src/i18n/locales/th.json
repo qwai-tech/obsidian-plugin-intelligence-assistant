@@ -12,21 +12,13 @@
       "usage": "การใช้งาน"
     },
     "general": {
-      "desc": "กำหนดค่าการตั้งค่าทั่วไปสำหรับปลั๊กอินผู้ช่วยอัจฉริยะ",
       "pluginVersion": {
-        "name": "เวอร์ชันปลั๊กอิน",
-        "desc": "เวอร์ชันปัจจุบันของปลั๊กอินผู้ช่วยอัจฉริยะ"
+        "name": "เวอร์ชันปลั๊กอิน"
       },
       "defaultModel": {
         "name": "โมเดลเริ่มต้น",
         "desc": "โมเดลเริ่มต้นที่ใช้สำหรับการสนทนา",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "โหมดแชทเริ่มต้น",
-        "desc": "เลือกโหมดที่มุมมองแชทจะเปิดด้วย",
-        "chat": "โหมดแชท",
-        "agent": "โหมดเอเจนต์"
       },
       "conversationTitleMode": {
         "name": "โหมดชื่อการสนทนา",
@@ -102,11 +94,6 @@
       "count": "กำหนดค่า {{count}} ผู้ให้บริการแล้ว",
       "addBtn": "+ เพิ่มผู้ให้บริการ",
       "empty": "ยังไม่ได้กำหนดค่าผู้ให้บริการ เลือก \"เพิ่มผู้ให้บริการ\" เพื่อเริ่มต้น",
-      "tableHeaders": {
-        "provider": "ผู้ให้บริการ",
-        "status": "สถานะ",
-        "actions": "การดำเนินการ"
-      },
       "status": {
         "ready": "พร้อม",
         "needsConfig": "ต้องการการกำหนดค่า",
@@ -117,7 +104,6 @@
         "serverError": "ข้อผิดพลาดเซิร์ฟเวอร์"
       },
       "guidance": {
-        "requiresCli": "ต้องใช้ CLI ในเครื่อง",
         "configureBaseUrl": "กำหนดค่า Base URL",
         "addApiKey": "เพิ่มคีย์ API"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "รีเฟรชเครื่องมือทั้งหมด",
       "addBtn": "+ เพิ่มเซิร์ฟเวอร์ MCP",
       "empty": "ยังไม่ได้กำหนดค่าเซิร์ฟเวอร์ MCP เลือกเพิ่มเซิร์ฟเวอร์ MCP เพื่อเริ่มต้น",
-      "tableHeaders": {
-        "name": "ชื่อ",
-        "command": "คำสั่ง",
-        "arguments": "อาร์กิวเมนต์",
-        "status": "สถานะ",
-        "tools": "เครื่องมือ",
-        "actions": "การดำเนินการ"
-      },
       "untitled": "เซิร์ฟเวอร์ MCP ไม่มีชื่อ",
       "notConfigured": "ไม่ได้กำหนดค่า",
-      "noArgs": "ไม่มี",
       "cached": "แคช",
-      "disabled": "ปิดใช้งาน",
       "envVars_one": "{{count}} ตัวแปรสภาพแวดล้อม",
       "envVars_other": "{{count}} ตัวแปรสภาพแวดล้อม",
       "envVars": "{{count}} ตัวแปรสภาพแวดล้อม",
@@ -244,26 +220,13 @@
       "count": "กำหนดค่า {{count}} เอเจนต์แล้ว",
       "addBtn": "+ เพิ่มเอเจนต์",
       "empty": "ยังไม่ได้กำหนดค่าเอเจนต์ เลือกเพิ่มเอเจนต์เพื่อเริ่มต้น",
-      "tableHeaders": {
-        "agent": "เอเจนต์",
-        "model": "โมเดล",
-        "capabilities": "ความสามารถ",
-        "tools": "เครื่องมือ",
-        "actions": "การดำเนินการ"
-      },
       "defaultBadge": "เริ่มต้น",
       "systemPrompt": "พรอมต์ระบบ • {{promptName}}",
       "customPrompt": "พรอมต์กำหนดเอง",
       "model": {
         "notSet": "ไม่ได้ตั้งค่า",
-        "notFound": "ไม่พบโมเดลในแคช",
         "useChatView": "ใช้โมเดลจากมุมมองแชท",
-        "useChatViewDesc": "จะใช้โมเดลที่เลือกในมุมมองแชท",
-        "useDefault": "ใช้โมเดลเริ่มต้น",
-        "useDefaultDesc": "จะใช้โมเดลเริ่มต้นจากการตั้งค่า"
-      },
-      "capabilities": {
-        "noSpecialModes": "ไม่มีโหมดพิเศษ"
+        "useDefault": "ใช้โมเดลเริ่มต้น"
       },
       "tools": {
         "builtIn": "{{count}} แบบในตัว",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} เซิร์ฟเวอร์ MCP",
         "mcpTool_one": "{{count}} เครื่องมือ MCP",
         "mcpTool_other": "{{count}} เครื่องมือ MCP",
-        "mcpTool": "{{count}} เครื่องมือ MCP",
-        "noTools": "ไม่มีเครื่องมือที่เปิดใช้งาน"
+        "mcpTool": "{{count}} เครื่องมือ MCP"
       },
       "actions": {
         "edit": "แก้ไข",
-        "delete": "ลบ",
-        "protected": "ป้องกัน"
+        "delete": "ลบ"
       },
       "confirm": {
         "delete": "ลบเอเจนต์ \"{{name}}\" หรือไม่?"
@@ -288,18 +249,6 @@
       "desc": "จัดการพรอมต์ระบบที่กำหนดพฤติกรรมและบุคลิกภาพของผู้ช่วย AI ของคุณ",
       "addBtn": "+ เพิ่มพรอมต์ระบบ",
       "empty": "ยังไม่ได้กำหนดค่าพรอมต์ระบบ เลือกเพิ่มพรอมต์ระบบเพื่อเริ่มต้น",
-      "tableHeaders": {
-        "name": "ชื่อ",
-        "contentPreview": "ตัวอย่างเนื้อหา",
-        "created": "สร้างเมื่อ",
-        "updated": "อัปเดตเมื่อ",
-        "enabled": "เปิดใช้งาน",
-        "actions": "การดำเนินการ"
-      },
-      "status": {
-        "enabled": "เปิดใช้งาน",
-        "disabled": "ปิดใช้งาน"
-      },
       "actions": {
         "edit": "แก้ไข",
         "disable": "ปิดใช้งาน",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "เชื่อมต่อแล้ว",
           "disconnected": "ตัดการเชื่อมต่อแล้ว"
-        }
+        },
+        "addBtn": "เพิ่มเครื่องมือ MCP"
       },
       "openapi": {
         "desc": "สร้างเครื่องมือ HTTP จากเอกสาร OpenAPI สเปกจากระยะไกลจะถูกแคชไว้ที่ {{cacheDir}}",
@@ -890,13 +840,6 @@
       "count": "กำหนดค่า {{count}} รายการ (เปิดใช้งาน {{enabled}} รายการ)",
       "addBtn": "+ เพิ่มการดำเนินการด่วน",
       "empty": "ยังไม่ได้กำหนดค่าการดำเนินการด่วน เลือกเพิ่มการดำเนินการด่วนเพื่อเริ่มต้น",
-      "tableHeaders": {
-        "action": "การดำเนินการ",
-        "type": "ประเภท",
-        "model": "โมเดล",
-        "promptPreview": "ตัวอย่างพรอมต์",
-        "actions": "การดำเนินการ"
-      },
       "defaultModel": "เริ่มต้น",
       "editBtn": "แก้ไข",
       "deleteBtn": "ลบ",
@@ -1004,26 +947,16 @@
     "currentConversation": "การสนทนาปัจจุบัน",
     "new": "ใหม่",
     "settings": "ตั้งค่า",
-    "openSettingsTitle": "เปิดการตั้งค่าปลั๊กอิน",
-    "mode": "โหมด",
-    "prompt": "พรอมต์",
-    "agent": "เอเจนต์",
     "modeOptions": {
       "chat": "แชท",
       "agent": "เอเจนต์"
     },
-    "noSystemPrompt": "ไม่มีพรอมต์ระบบ",
     "noAgentsAvailable": "ไม่มีเอเจนต์ที่พร้อมใช้งาน",
-    "sendHintPrefix": "กด ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " เพื่อส่ง",
     "sendAriaLabel": "ส่งข้อความ",
     "stop": " หยุด",
-    "addReference": "เพิ่มการอ้างอิง",
     "addReferenceTooltip": "เพิ่มการอ้างอิงไฟล์หรือโฟลเดอร์ (@)",
     "emptyHeading": "เริ่มการสนทนา",
     "emptySubtext": "พิมพ์ข้อความด้านล่างเพื่อเริ่มต้น หรือเลือกการสนทนาจากประวัติ",
-    "noAgentConfig": "ไม่ได้กำหนดค่าเอเจนต์",
     "selectAgent": "เลือกเอเจนต์...",
     "notices": {
       "stopping": "กำลังหยุดการสร้าง...",
@@ -1047,23 +980,15 @@
       "noAgents": "ไม่มีเอเจนต์ที่พร้อมใช้งาน กำหนดค่าเอเจนต์ในการตั้งค่า → เอเจนต์",
       "ragDisabled": "ปิดใช้งาน RAG ในการตั้งค่า เปิดใช้งานภายใต้การตั้งค่า → ฟีเจอร์แชท → RAG",
       "webSearchDisabled": "ปิดใช้งานการค้นหาเว็บในการตั้งค่า เปิดใช้งานภายใต้การตั้งค่า → ฟีเจอร์แชท → การค้นหาเว็บ",
-      "noFilesInVault": "ไม่พบไฟล์ใน Vault",
       "attached": "แนบแล้ว: {{name}}",
       "attachedImages": "แนบ {{count}} รูปภาพแล้ว",
       "referencesAdded": "เพิ่ม {{count}} การอ้างอิงแล้ว",
       "fileNotFound": "ไม่พบไฟล์: {{path}}",
       "agentConfigApplied": "ใช้การกำหนดค่าสำหรับเอเจนต์: {{name}} แล้ว",
-      "waitForComplete": "โปรดรอให้การตอบสนองปัจจุบันเสร็จสมบูรณ์",
-      "chatServiceFallback": "ไม่ได้กำหนดค่า ChatService ใช้ ChatView แทน",
-      "noModelSelected": "ไม่ได้เลือกโมเดล",
-      "noProviderConfig": "ไม่พบการกำหนดค่าผู้ให้บริการ",
-      "noResponseToRegenerate": "ไม่มีการตอบสนองที่จะสร้างใหม่",
-      "agentNotFound": "ไม่พบเอเจนต์",
       "unableToLoadRag": "ไม่สามารถโหลดสถิติ RAG",
       "referenced": "อ้างอิงแล้ว: {{name}}"
     },
     "status": {
-      "available": "พร้อมใช้งาน",
       "unavailable": "ไม่พร้อมใช้งาน",
       "disabled": "ปิดใช้งาน",
       "on": "เปิด · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ ปิด RAG สำหรับการแชทนี้"
     },
     "agentSummary": {
-      "model": "โมเดล",
-      "temp": "อุณหภูมิ",
-      "max": "สูงสุด",
-      "rag": "RAG",
-      "web": "เว็บ",
-      "tools": "เครื่องมือ",
-      "memory": "หน่วยความจำ",
-      "none": "ไม่มี",
-      "configuration": "การกำหนดค่า {{name}}",
-      "modelFixed": "{{name}} · คงที่",
-      "modelDefault": "{{name}} · ค่าเริ่มต้น",
-      "modelChatView": "{{name}} · มุมมองแชท",
-      "customModel": "โมเดลกำหนดเอง",
-      "notSet": "ไม่ได้ตั้งค่า",
-      "auto": "อัตโนมัติ",
       "on": "เปิด",
-      "off": "ปิด",
-      "shortTerm": "ระยะสั้น",
-      "longTerm": "ระยะยาว",
-      "disabledMemory": "ปิดใช้งาน",
-      "builtIn": "{{count}} แบบในตัว",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "ปิด"
     },
     "message": {
       "webResults": "ผลการค้นหาเว็บ",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "แทรกลงในบันทึก",
       "regenerate": "สร้างใหม่"
     },
-    "streaming": {
-      "thinking": "กำลังคิด..."
-    },
     "toolCall": {
-      "thinking": "กำลังคิด",
       "executionProcess": "กระบวนการดำเนินการ",
       "input": "ข้อมูลนำเข้า",
       "output": "ผลลัพธ์",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "ใช้บันทึกที่ทำดัชนีเป็นบริบท",
     "webSearchLabel": "ค้นหาเว็บ",
     "webSearchTooltipLabel": "ค้นหาอินเทอร์เน็ตเมื่อจำเป็น",
-    "imageUnavailable": "การแนบรูปภาพไม่พร้อมใช้งานสำหรับโมเดลนี้",
-    "newChat": "แชทใหม่",
     "newConversation": "การสนทนาใหม่",
     "searchConversations": "ค้นหาการสนทนา...",
     "header": {
-      "model": "โมเดล",
-      "advancedParams": "พารามิเตอร์ขั้นสูง",
-      "temperature": "อุณหภูมิ",
-      "maxTokens": "Token สูงสุด",
-      "topP": "Top P",
-      "freqPenalty": "บทปรับความถี่",
-      "presPenalty": "บทปรับการซ้ำ",
-      "agentConfig": "การกำหนดค่าเอเจนต์",
-      "modelsCount": "โมเดล: {{count}}",
-      "tokensCount": "Token: {{count}}",
       "noModels": "ไม่มีโมเดลที่พร้อมใช้งาน"
-    },
-    "temperature": {
-      "precise": "0 (แม่นยำ)",
-      "balanced": "1 (สมดุล)",
-      "creative": "2 (สร้างสรรค์)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "แทรกลงในบันทึกที่เลือก",
         "createNew": "สร้างบันทึกใหม่",
         "noResults": "ไม่พบบันทึกที่ตรงกัน"
+      },
+      "agentTask": {
+        "cancel": "ยกเลิก",
+        "fieldLabel": "งาน",
+        "newConversation": "เริ่มในการสนทนาใหม่",
+        "newConversationDesc": "แยกการทำงานของเอเจนต์ครั้งนี้ออกจากแชตปัจจุบัน",
+        "placeholder": "ป้อนงานของคุณที่นี่...",
+        "start": "เริ่ม",
+        "title": "เริ่มงานเอเจนต์"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "โปรดเลือกประเภทผู้ให้บริการ",
         "invalidUrl": "รูปแบบ Base URL ไม่ถูกต้อง โปรดป้อน URL ที่ถูกต้อง (เช่น https://api.example.com)"
-      }
+      },
+      "cachedModels": "โมเดลที่แคชไว้: {{count}}",
+      "connectionFailed": "การทดสอบการเชื่อมต่อล้มเหลว โปรดตรวจสอบการตั้งค่าผู้ให้บริการ",
+      "connectionSuccess": "เชื่อมต่อสำเร็จ แคชโมเดลไว้ {{count}} รายการ",
+      "noCachedModels": "ไม่มีโมเดลที่แคชไว้",
+      "testConnection": "ทดสอบการเชื่อมต่อ",
+      "testing": "กำลังทดสอบ..."
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "ตัวเลขไม่ถูกต้องสำหรับพารามิเตอร์: {{name}}",
           "invalidJson": "JSON ไม่ถูกต้องสำหรับพารามิเตอร์: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "ไม่ได้กำหนดค่าเซิร์ฟเวอร์ MCP",
-        "testing": "กำลังทดสอบการเชื่อมต่อเซิร์ฟเวอร์ MCP {{count}} รายการ...",
-        "allSuccess": "เซิร์ฟเวอร์ MCP ทั้ง {{count}} รายการเชื่อมต่อสำเร็จ!",
-        "partial": "เชื่อมต่อ {{success}} รายการ, ล้มเหลว {{failed}} รายการ"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | เวอร์ชัน: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "เซิร์ฟเวอร์ออฟไลน์",
-      "connectionError": "ข้อผิดพลาดการเชื่อมต่อ",
       "pullTitle": "ดึงโมเดลใหม่",
       "pullHint": "ป้อนชื่อโมเดลเพื่อดาวน์โหลดจากคลัง Ollama (เช่น llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "กำลังประมวลผล...",
     "textUpdated": "อัปเดตข้อความสำเร็จ",
     "error": "ข้อผิดพลาด: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "งานเอเจนต์: ถามเกี่ยวกับโน้ตปัจจุบัน",
+    "createProjectBrief": "งานเอเจนต์: สร้างสรุปโครงการ",
+    "createResearchBrief": "งานเอเจนต์: สร้างสรุปงานวิจัย",
+    "diagnoseVault": "งานเอเจนต์: วินิจฉัย Vault",
+    "doctorLinksTags": "งานเอเจนต์: ปรับปรุงลิงก์ แท็ก และคุณสมบัติ",
+    "draftFromNote": "งานเอเจนต์: ร่างจากโน้ตปัจจุบัน",
+    "findDuplicateNotes": "งานเอเจนต์: ค้นหารายการซ้ำและรายการที่ควรรวม",
+    "findRelatedNotes": "งานเอเจนต์: ค้นหาโน้ตที่เกี่ยวข้อง",
+    "generateWeeklyReview": "งานเอเจนต์: สร้างรีวิวประจำสัปดาห์",
+    "improveSelection": "งานเอเจนต์: ปรับปรุงข้อความที่เลือก",
+    "openChatMain": "เปิดแชต AI ในพื้นที่หลัก",
+    "openChatSidebar": "เปิดแชต AI ในแถบด้านข้าง",
+    "organizeCurrentNote": "งานเอเจนต์: จัดระเบียบโน้ตปัจจุบัน",
+    "sourceGroundedQuestion": "งานเอเจนต์: ถามคำถามโดยอ้างอิงแหล่งที่มา",
+    "summarizeCurrentNote": "งานเอเจนต์: สรุปโน้ตปัจจุบัน",
+    "switchModel": "สลับโมเดล"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: ถามเอเจนต์เกี่ยวกับไฟล์นี้",
+    "createProjectBrief": "Intelligence assistant: สร้างสรุปโครงการด้วยเอเจนต์",
+    "createResearchBrief": "Intelligence assistant: สร้างสรุปงานวิจัยด้วยเอเจนต์",
+    "doctorLinksTags": "Intelligence assistant: ปรับปรุงลิงก์ แท็ก และคุณสมบัติด้วยเอเจนต์",
+    "draftFromFile": "Intelligence assistant: ร่างจากไฟล์นี้ด้วยเอเจนต์",
+    "findDuplicates": "Intelligence assistant: ค้นหารายการซ้ำและรายการที่ควรรวมด้วยเอเจนต์",
+    "findRelatedNotes": "Intelligence assistant: ค้นหาโน้ตที่เกี่ยวข้องด้วยเอเจนต์",
+    "improveFolder": "Intelligence assistant: ปรับปรุงลิงก์ แท็ก และคุณสมบัติในโฟลเดอร์ด้วยเอเจนต์",
+    "organizeFolder": "Intelligence assistant: จัดระเบียบโฟลเดอร์ด้วยเอเจนต์",
+    "summarize": "Intelligence assistant: สรุปด้วยเอเจนต์"
+  },
+  "ribbon": {
+    "openChat": "เปิดแชต AI"
   }
 }

@@ -12,21 +12,13 @@
       "usage": "用量统计"
     },
     "general": {
-      "desc": "配置智能助手插件的通用选项。",
       "pluginVersion": {
-        "name": "插件版本",
-        "desc": "智能助手插件的当前版本"
+        "name": "插件版本"
       },
       "defaultModel": {
         "name": "默认模型",
         "desc": "对话时使用的默认模型",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "默认对话模式",
-        "desc": "聊天视图打开时的默认模式",
-        "chat": "对话模式",
-        "agent": "智能体模式"
       },
       "conversationTitleMode": {
         "name": "对话标题模式",
@@ -102,11 +94,6 @@
       "count": "已配置 {{count}} 个服务商",
       "addBtn": "+ 添加服务商",
       "empty": "未配置服务商，点击「添加服务商」开始。",
-      "tableHeaders": {
-        "provider": "服务商",
-        "status": "状态",
-        "actions": "操作"
-      },
       "status": {
         "ready": "就绪",
         "needsConfig": "需要配置",
@@ -169,19 +156,9 @@
       "refreshAllBtn": "刷新所有工具",
       "addBtn": "+ 添加 MCP 服务器",
       "empty": "未配置 MCP 服务器，点击「添加 MCP 服务器」开始。",
-      "tableHeaders": {
-        "name": "名称",
-        "command": "命令",
-        "arguments": "参数",
-        "status": "状态",
-        "tools": "工具",
-        "actions": "操作"
-      },
       "untitled": "未命名 MCP 服务器",
       "notConfigured": "未配置",
-      "noArgs": "无",
       "cached": "已缓存",
-      "disabled": "已禁用",
       "envVars_one": "{{count}} 个环境变量",
       "envVars_other": "{{count}} 个环境变量",
       "envVars": "{{count}} 个环境变量",
@@ -243,26 +220,13 @@
       "count": "已配置 {{count}} 个智能体",
       "addBtn": "+ 添加智能体",
       "empty": "未配置智能体，点击「添加智能体」开始。",
-      "tableHeaders": {
-        "agent": "智能体",
-        "model": "模型",
-        "capabilities": "能力",
-        "tools": "工具",
-        "actions": "操作"
-      },
       "defaultBadge": "默认",
       "systemPrompt": "系统提示词 • {{promptName}}",
       "customPrompt": "自定义提示词",
       "model": {
         "notSet": "未设置",
-        "notFound": "模型不在缓存中",
         "useChatView": "使用聊天视图模型",
-        "useChatViewDesc": "将使用聊天视图中选中的模型",
-        "useDefault": "使用默认模型",
-        "useDefaultDesc": "将使用设置中的默认模型"
-      },
-      "capabilities": {
-        "noSpecialModes": "无特殊模式"
+        "useDefault": "使用默认模型"
       },
       "tools": {
         "builtIn": "{{count}} 个内置工具",
@@ -271,13 +235,11 @@
         "mcpServer": "{{count}} 个 MCP 服务器",
         "mcpTool_one": "{{count}} 个 MCP 工具",
         "mcpTool_other": "{{count}} 个 MCP 工具",
-        "mcpTool": "{{count}} 个 MCP 工具",
-        "noTools": "未启用工具"
+        "mcpTool": "{{count}} 个 MCP 工具"
       },
       "actions": {
         "edit": "编辑",
-        "delete": "删除",
-        "protected": "受保护"
+        "delete": "删除"
       },
       "confirm": {
         "delete": "删除智能体\"{{name}}\"？"
@@ -287,18 +249,6 @@
       "desc": "管理定义 AI 助手行为和个性的系统提示词。",
       "addBtn": "+ 添加系统提示词",
       "empty": "未配置系统提示词，点击「添加系统提示词」开始。",
-      "tableHeaders": {
-        "name": "名称",
-        "contentPreview": "内容预览",
-        "created": "创建时间",
-        "updated": "更新时间",
-        "enabled": "启用状态",
-        "actions": "操作"
-      },
-      "status": {
-        "enabled": "已启用",
-        "disabled": "已禁用"
-      },
       "actions": {
         "edit": "编辑",
         "disable": "禁用",
@@ -890,13 +840,6 @@
       "count": "已配置 {{count}} 个操作（{{enabled}} 个已启用）",
       "addBtn": "+ 添加快捷操作",
       "empty": "未配置快捷操作，点击「添加快捷操作」开始。",
-      "tableHeaders": {
-        "action": "操作",
-        "type": "类型",
-        "model": "模型",
-        "promptPreview": "提示词预览",
-        "actions": "操作"
-      },
       "defaultModel": "默认",
       "editBtn": "编辑",
       "deleteBtn": "删除",
@@ -1004,47 +947,17 @@
     "currentConversation": "当前对话",
     "new": "新建",
     "settings": "设置",
-    "openSettingsTitle": "打开插件设置",
-    "mode": "模式",
-    "prompt": "提示词",
-    "agent": "智能体",
     "modeOptions": {
       "chat": "对话",
       "agent": "智能体"
     },
-    "noSystemPrompt": "无系统提示词",
     "noAgentsAvailable": "暂无智能体",
-    "sendHintPrefix": "按 ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " 发送",
     "sendAriaLabel": "发送消息",
     "stop": " 停止",
-    "addReference": "添加引用",
     "addReferenceTooltip": "添加文件或文件夹引用 (@)",
     "agentSummary": {
-      "model": "模型",
-      "temp": "温度",
-      "max": "最大",
-      "rag": "RAG",
-      "web": "网络",
-      "tools": "工具",
-      "memory": "记忆",
-      "none": "无",
-      "configuration": "{{name}} 配置",
-      "modelFixed": "{{name}} · 固定",
-      "modelDefault": "{{name}} · 默认",
-      "modelChatView": "{{name}} · 聊天视图",
-      "customModel": "自定义模型",
-      "notSet": "未设置",
-      "auto": "自动",
       "on": "开",
-      "off": "关",
-      "shortTerm": "短期",
-      "longTerm": "长期",
-      "disabledMemory": "已禁用",
-      "builtIn": "{{count}} 个内置",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "关"
     },
     "notices": {
       "stopping": "正在停止生成...",
@@ -1068,23 +981,15 @@
       "noAgents": "没有可用的智能体。请在设置 → 智能体中配置。",
       "ragDisabled": "RAG 已在设置中禁用。请在设置 → 聊天功能 → RAG 中启用。",
       "webSearchDisabled": "网络搜索已在设置中禁用。请在设置 → 聊天功能 → 网络搜索中启用。",
-      "noFilesInVault": "在仓库中未找到文件",
       "attached": "已附加：{{name}}",
       "attachedImages": "已附加 {{count}} 张图片",
       "referencesAdded": "已添加 {{count}} 个引用",
       "fileNotFound": "文件未找到：{{path}}",
       "agentConfigApplied": "已应用智能体配置：{{name}}",
-      "waitForComplete": "请等待当前响应完成",
-      "chatServiceFallback": "ChatService 未配置，使用 ChatView 后备方案。",
-      "noModelSelected": "未选择模型",
-      "noProviderConfig": "未找到提供商配置",
-      "noResponseToRegenerate": "没有可重新生成的响应",
-      "agentNotFound": "未找到智能体",
       "unableToLoadRag": "无法加载 RAG 统计信息。",
       "referenced": "已引用: {{name}}"
     },
     "status": {
-      "available": "可用",
       "unavailable": "不可用",
       "disabled": "已禁用",
       "on": "开 · {{detail}}",
@@ -1135,11 +1040,7 @@
       "insertToNotes": "插入笔记",
       "regenerate": "重新生成"
     },
-    "streaming": {
-      "thinking": "思考中..."
-    },
     "toolCall": {
-      "thinking": "思考中",
       "executionProcess": "执行过程",
       "input": "输入",
       "output": "输出",
@@ -1147,7 +1048,6 @@
     },
     "emptyHeading": "开始对话",
     "emptySubtext": "在下方输入消息开始，或从历史记录中选择对话。",
-    "noAgentConfig": "未配置智能体",
     "selectAgent": "选择智能体…",
     "addPicture": "添加图片",
     "addPictureTooltip": "向消息附加图片",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "使用已索引的笔记作为上下文",
     "webSearchLabel": "网络搜索",
     "webSearchTooltipLabel": "在需要时搜索互联网",
-    "imageUnavailable": "当前模型不支持图片附件。",
-    "newChat": "新建对话",
     "newConversation": "新建对话",
     "searchConversations": "搜索对话...",
     "header": {
-      "model": "模型",
-      "advancedParams": "高级参数",
-      "temperature": "温度",
-      "maxTokens": "最大令牌数",
-      "topP": "Top P",
-      "freqPenalty": "频率惩罚",
-      "presPenalty": "存在惩罚",
-      "agentConfig": "代理配置",
-      "modelsCount": "模型数: {{count}}",
-      "tokensCount": "令牌数: {{count}}",
       "noModels": "暂无可用模型"
-    },
-    "temperature": {
-      "precise": "0 (精确)",
-      "balanced": "1 (均衡)",
-      "creative": "2 (创意)"
     },
     "modals": {
       "image": {
@@ -1447,12 +1330,6 @@
           "invalidNumber": "参数 {{name}} 的数字格式无效",
           "invalidJson": "参数 {{name}} 的 JSON 格式无效"
         }
-      },
-      "testAll": {
-        "noServers": "未配置 MCP 服务器",
-        "testing": "正在测试 {{count}} 个 MCP 服务器连接...",
-        "allSuccess": "所有 {{count}} 个 MCP 服务器连接成功！",
-        "partial": "{{success}} 个已连接，{{failed}} 个失败"
       }
     },
     "mcpServer": {
@@ -1500,7 +1377,6 @@
       "versionLabel": " | 版本：{{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "服务器离线",
-      "connectionError": "连接错误",
       "pullTitle": "拉取新模型",
       "pullHint": "输入模型名称以从 Ollama 库下载（如 llama2、mistral、codellama）",
       "modelName": {
@@ -1588,8 +1464,7 @@
     "draftFromNote": "智能体任务：基于当前笔记起草",
     "diagnoseVault": "智能体任务：诊断库健康状况",
     "improveSelection": "智能体任务：优化选中文本",
-    "switchModel": "切换模型",
-    "improveSelectionEditor": "智能体：优化选中文本（行内）"
+    "switchModel": "切换模型"
   },
   "contextMenu": {
     "askAgent": "智能助手：询问智能体关于此文件",

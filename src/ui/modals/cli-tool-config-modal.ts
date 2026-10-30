@@ -248,7 +248,7 @@ export class CLIToolConfigModal extends Modal {
 				.setName(t('settings.tools.cli.modal.param.insertAs.name'))
 				.setDesc(t('settings.tools.cli.modal.param.insertAs.desc'))
 				.addDropdown(dropdown => {
-					dropdown.addOption('template', 'Template ({{name}})');
+					dropdown.addOption('template', t('settings.tools.cli.modal.param.insertAs.template', { name: '{{name}}' }));
 					dropdown.addOption('arg', t('settings.tools.cli.modal.param.insertAs.arg'));
 					dropdown.addOption('env', t('settings.tools.cli.modal.param.insertAs.env'));
 					dropdown.setValue(param.insertAs ?? 'template')

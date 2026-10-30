@@ -12,21 +12,13 @@
       "usage": "Выкарыстанне"
     },
     "general": {
-      "desc": "Наладзіць агульныя параметры плагіна інтэлектуальнага асістэнта.",
       "pluginVersion": {
-        "name": "Версія плагіна",
-        "desc": "Бягучая версія плагіна інтэлектуальнага асістэнта"
+        "name": "Версія плагіна"
       },
       "defaultModel": {
         "name": "Мадэль па змаўчанні",
         "desc": "Мадэль па змаўчанні для выкарыстання ў размовах",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Рэжым чату па змаўчанні",
-        "desc": "Выбярыце рэжым, у якім адкрываецца від чату",
-        "chat": "Рэжым чату",
-        "agent": "Рэжым агента"
       },
       "conversationTitleMode": {
         "name": "Рэжым загалоўка размовы",
@@ -102,11 +94,6 @@
       "count": "{{count}} пастаўшчыкі наладжаны",
       "addBtn": "+ Дадаць пастаўшчыка",
       "empty": "Пастаўшчыкі не наладжаны. Выберыце «Дадаць пастаўшчыка», каб пачаць.",
-      "tableHeaders": {
-        "provider": "Пастаўшчык",
-        "status": "Статус",
-        "actions": "Дзеянні"
-      },
       "status": {
         "ready": "Гатовы",
         "needsConfig": "Патрабуецца канфігурацыя",
@@ -117,7 +104,6 @@
         "serverError": "Памылка сервера"
       },
       "guidance": {
-        "requiresCli": "Патрабуецца лакальны CLI",
         "configureBaseUrl": "Наладзіць базавы URL",
         "addApiKey": "Дадаць ключ API"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "абнавіць усе інструменты",
       "addBtn": "+ Дадаць сервер MCP",
       "empty": "Серверы MCP не наладжаны. Выберыце Дадаць сервер MCP, каб пачаць.",
-      "tableHeaders": {
-        "name": "Назва",
-        "command": "Каманда",
-        "arguments": "Аргументы",
-        "status": "Статус",
-        "tools": "Інструменты",
-        "actions": "Дзеянні"
-      },
       "untitled": "Безназоўны сервер MCP",
       "notConfigured": "Не наладжана",
-      "noArgs": "Адсутнічаюць",
       "cached": "У кэшы",
-      "disabled": "Адключана",
       "envVars_one": "{{count}} зменная асяроддзя",
       "envVars_other": "{{count}} зменных асяроддзя",
       "envVars": "{{count}} зменных асяроддзя",
@@ -244,26 +220,13 @@
       "count": "{{count}} агентаў наладжана",
       "addBtn": "+ дадаць агента",
       "empty": "Агенты не наладжаны. Выберыце дадаць агента, каб пачаць.",
-      "tableHeaders": {
-        "agent": "Агент",
-        "model": "Мадэль",
-        "capabilities": "Магчымасці",
-        "tools": "Інструменты",
-        "actions": "Дзеянні"
-      },
       "defaultBadge": "Па змаўчанні",
       "systemPrompt": "Сістэмная падказка • {{promptName}}",
       "customPrompt": "Карыстальніцкая падказка",
       "model": {
         "notSet": "Не ўсталявана",
-        "notFound": "Мадэль не знойдзена ў кэшы",
         "useChatView": "Выкарыстаць мадэль віду чату",
-        "useChatViewDesc": "Будзе выкарыстоўвацца мадэль, абраная ў відзе чату",
-        "useDefault": "Выкарыстаць мадэль па змаўчанні",
-        "useDefaultDesc": "Будзе выкарыстоўвацца мадэль па змаўчанні з налад"
-      },
-      "capabilities": {
-        "noSpecialModes": "Няма спецыяльных рэжымаў"
+        "useDefault": "Выкарыстаць мадэль па змаўчанні"
       },
       "tools": {
         "builtIn": "{{count}} убудаваны",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} сервераў MCP",
         "mcpTool_one": "{{count}} інструмент MCP",
         "mcpTool_other": "{{count}} інструментаў MCP",
-        "mcpTool": "{{count}} інструментаў MCP",
-        "noTools": "Інструменты не ўключаны"
+        "mcpTool": "{{count}} інструментаў MCP"
       },
       "actions": {
         "edit": "Рэдагаваць",
-        "delete": "выдаліць",
-        "protected": "абаронены"
+        "delete": "выдаліць"
       },
       "confirm": {
         "delete": "Выдаліць агента «{{name}}»?"
@@ -288,18 +249,6 @@
       "desc": "Кіраваць сістэмнымі падказкамі, якія вызначаюць паводзіны і асобу DI-асістэнта.",
       "addBtn": "+ дадаць сістэмную падказку",
       "empty": "Сістэмныя падказкі не наладжаны. Выберыце дадаць сістэмную падказку, каб пачаць.",
-      "tableHeaders": {
-        "name": "Назва",
-        "contentPreview": "Прагляд змесціва",
-        "created": "Створана",
-        "updated": "Абноўлена",
-        "enabled": "Уключана",
-        "actions": "Дзеянні"
-      },
-      "status": {
-        "enabled": "Уключана",
-        "disabled": "Адключана"
-      },
       "actions": {
         "edit": "Рэдагаваць",
         "disable": "Адключыць",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "падключана",
           "disconnected": "адключана"
-        }
+        },
+        "addBtn": "Дадаць інструменты MCP"
       },
       "openapi": {
         "desc": "Генераваць HTTP-інструменты з дакументаў OpenAPI. Аддаленыя спецыфікацыі кэшуюцца ў каталозе {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} дзеянняў наладжана ({{enabled}} уключана)",
       "addBtn": "+ дадаць хуткае дзеянне",
       "empty": "Хуткія дзеянні не наладжаны. Выберыце дадаць хуткае дзеянне, каб пачаць.",
-      "tableHeaders": {
-        "action": "Дзеянне",
-        "type": "Тып",
-        "model": "Мадэль",
-        "promptPreview": "Прагляд падказкі",
-        "actions": "Дзеянні"
-      },
       "defaultModel": "Па змаўчанні",
       "editBtn": "Рэдагаваць",
       "deleteBtn": "выдаліць",
@@ -1004,26 +947,16 @@
     "currentConversation": "Бягучая размова",
     "new": "Новая",
     "settings": "Налады",
-    "openSettingsTitle": "Адкрыць налады плагіна",
-    "mode": "Рэжым",
-    "prompt": "Падказка",
-    "agent": "Агент",
     "modeOptions": {
       "chat": "Чат",
       "agent": "Агент"
     },
-    "noSystemPrompt": "Сістэмная падказка адсутнічае",
     "noAgentsAvailable": "Агенты недаступны",
-    "sendHintPrefix": "Націсніце ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " для адпраўкі",
     "sendAriaLabel": "Адправіць паведамленне",
     "stop": " Спыніць",
-    "addReference": "Дадаць спасылку",
     "addReferenceTooltip": "Дадаць спасылку на файл або папку (@)",
     "emptyHeading": "Пачаць размову",
     "emptySubtext": "Увядзіце паведамленне ніжэй, каб пачаць, або выберыце размову з гісторыі.",
-    "noAgentConfig": "Агенты не наладжаны",
     "selectAgent": "Выберыце агента…",
     "notices": {
       "stopping": "Генерацыя спыняецца...",
@@ -1047,23 +980,15 @@
       "noAgents": "Агенты недаступны. Наладзьце агентаў у Налады → Агенты.",
       "ragDisabled": "RAG адключаны ў наладах. Уключыце яго ў налады → функцыі чату → RAG.",
       "webSearchDisabled": "Вэб-пошук адключаны ў наладах. Уключыце яго ў налады → функцыі чату → вэб-пошук.",
-      "noFilesInVault": "У сховішчы файлы не знойдзены",
       "attached": "Прымацавана: {{name}}",
       "attachedImages": "Прымацавана {{count}} малюнак(-аў)",
       "referencesAdded": "Дадана {{count}} спасылак(-а)",
       "fileNotFound": "Файл не знойдзены: {{path}}",
       "agentConfigApplied": "Прыменена канфігурацыя агента: {{name}}",
-      "waitForComplete": "Калі ласка, пачакайце заканчэння бягучага адказу",
-      "chatServiceFallback": "ChatService не наладжаны. Выкарыстоўваецца рэзервовы варыянт ChatView.",
-      "noModelSelected": "Мадэль не абрана",
-      "noProviderConfig": "Канфігурацыя пастаўшчыка не знойдзена",
-      "noResponseToRegenerate": "Адказу для рэгенерацыі няма",
-      "agentNotFound": "Агент не знойдзены",
       "unableToLoadRag": "Не ўдаецца загрузіць статыстыку RAG.",
       "referenced": "Спасылка: {{name}}"
     },
     "status": {
-      "available": "Даступна",
       "unavailable": "Недаступна",
       "disabled": "Адключана",
       "on": "Уключана · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG цяпер адключаны для гэтага чату."
     },
     "agentSummary": {
-      "model": "Мадэль",
-      "temp": "Тэмп",
-      "max": "Макс",
-      "rag": "RAG",
-      "web": "Вэб",
-      "tools": "Інструменты",
-      "memory": "Памяць",
-      "none": "Адсутнічае",
-      "configuration": "Канфігурацыя {{name}}",
-      "modelFixed": "{{name}} · Фіксаваная",
-      "modelDefault": "{{name}} · Па змаўчанні",
-      "modelChatView": "{{name}} · Від чату",
-      "customModel": "Карыстальніцкая мадэль",
-      "notSet": "Не ўсталявана",
-      "auto": "Аўта",
       "on": "Уключана",
-      "off": "Адключана",
-      "shortTerm": "Кароткатэрміновая",
-      "longTerm": "Доўгатэрміновая",
-      "disabledMemory": "Адключана",
-      "builtIn": "{{count}} убудаваны",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Адключана"
     },
     "message": {
       "webResults": "Вынікі вэба",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Уставіць у нататкі",
       "regenerate": "Рэгенераваць"
     },
-    "streaming": {
-      "thinking": "Думаю..."
-    },
     "toolCall": {
-      "thinking": "Думаю",
       "executionProcess": "Працэс выканання",
       "input": "Уваход",
       "output": "Выхад",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Выкарыстоўваць індэксаваныя нататкі ў якасці кантэксту",
     "webSearchLabel": "Вэб-пошук",
     "webSearchTooltipLabel": "Шукаць у інтэрнэце пры неабходнасці",
-    "imageUnavailable": "Укладанне малюнка недаступна для бягучай мадэлі.",
-    "newChat": "Новы чат",
     "newConversation": "Новая размова",
     "searchConversations": "Пошук размоў...",
     "header": {
-      "model": "Мадэль",
-      "advancedParams": "Пашыраныя параметры",
-      "temperature": "Тэмпература",
-      "maxTokens": "Макс. токенаў",
-      "topP": "Top P",
-      "freqPenalty": "Штраф за частату",
-      "presPenalty": "Штраф за прысутнасць",
-      "agentConfig": "Канфігурацыя агента",
-      "modelsCount": "Мадэлі: {{count}}",
-      "tokensCount": "Токены: {{count}}",
       "noModels": "Мадэлі недаступны"
-    },
-    "temperature": {
-      "precise": "0 (Дакладны)",
-      "balanced": "1 (Збалансаваны)",
-      "creative": "2 (Творчы)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Уставіць у абраную нататку",
         "createNew": "Стварыць новую нататку",
         "noResults": "Адпавядаючых нататак не знойдзена."
+      },
+      "agentTask": {
+        "cancel": "Адмяніць",
+        "fieldLabel": "Задача",
+        "newConversation": "Пачаць у новай размове",
+        "newConversationDesc": "Трымаць гэты запуск агента асобна ад бягучага чата.",
+        "placeholder": "Увядзіце вашу задачу тут...",
+        "start": "Пачаць",
+        "title": "Пачаць задачу агента"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Выберыце тып пастаўшчыка",
         "invalidUrl": "Няправільны фармат базавага URL. Увядзіце дзейны URL (напр., https://api.example.com)"
-      }
+      },
+      "cachedModels": "Кэшаваныя мадэлі: {{count}}",
+      "connectionFailed": "Праверка злучэння не ўдалася. Праверце налады пастаўшчыка.",
+      "connectionSuccess": "Злучэнне паспяховае. Кэшавана мадэляў: {{count}}.",
+      "noCachedModels": "Няма кэшаваных мадэляў",
+      "testConnection": "Праверыць злучэнне",
+      "testing": "Праверка..."
     },
     "mcpInspector": {
       "title": "Інспектар MCP",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Няправільны лік для параметра: {{name}}",
           "invalidJson": "Няправільны JSON для параметра: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "Серверы MCP не наладжаны",
-        "testing": "Тэставанне {{count}} злучэнняў сервера MCP...",
-        "allSuccess": "усе {{count}} серверы MCP паспяхова падключаны!",
-        "partial": "{{success}} падключана, {{failed}} не ўдалося"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Версія: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Сервер не ў сетцы",
-      "connectionError": "Памылка злучэння",
       "pullTitle": "Спампаваць новую мадэль",
       "pullHint": "Увядзіце назву мадэлі для спампавання з бібліятэкі Ollama (напр., llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Апрацоўка...",
     "textUpdated": "Тэкст паспяхова абноўлены",
     "error": "Памылка: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Задача агента: спытаць пра бягучую нататку",
+    "createProjectBrief": "Задача агента: стварыць кароткі апіс праекта",
+    "createResearchBrief": "Задача агента: стварыць кароткі агляд даследавання",
+    "diagnoseVault": "Задача агента: дыягнаставаць сховішча",
+    "doctorLinksTags": "Задача агента: палепшыць спасылкі, тэгі і ўласцівасці",
+    "draftFromNote": "Задача агента: чарнавік на аснове бягучай нататкі",
+    "findDuplicateNotes": "Задача агента: знайсці дублікаты і кандыдатаў на аб'яднанне",
+    "findRelatedNotes": "Задача агента: знайсці звязаныя нататкі",
+    "generateWeeklyReview": "Задача агента: стварыць штотыднёвы агляд",
+    "improveSelection": "Задача агента: палепшыць вылучэнне",
+    "openChatMain": "Адкрыць AI-чат у асноўнай вобласці",
+    "openChatSidebar": "Адкрыць AI-чат на бакавой панэлі",
+    "organizeCurrentNote": "Задача агента: упарадкаваць бягучую нататку",
+    "sourceGroundedQuestion": "Задача агента: задаць пытанне з апорай на крыніцы",
+    "summarizeCurrentNote": "Задача агента: падсумаваць бягучую нататку",
+    "switchModel": "Змяніць мадэль"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: спытаць агента пра гэты файл",
+    "createProjectBrief": "Intelligence assistant: стварыць кароткі апіс праекта з дапамогай агента",
+    "createResearchBrief": "Intelligence assistant: стварыць кароткі агляд даследавання з дапамогай агента",
+    "doctorLinksTags": "Intelligence assistant: палепшыць спасылкі, тэгі і ўласцівасці з дапамогай агента",
+    "draftFromFile": "Intelligence assistant: чарнавік на аснове гэтага файла з дапамогай агента",
+    "findDuplicates": "Intelligence assistant: знайсці дублікаты і кандыдатаў на аб'яднанне з дапамогай агента",
+    "findRelatedNotes": "Intelligence assistant: знайсці звязаныя нататкі з дапамогай агента",
+    "improveFolder": "Intelligence assistant: палепшыць спасылкі, тэгі і ўласцівасці папкі з дапамогай агента",
+    "organizeFolder": "Intelligence assistant: упарадкаваць папку з дапамогай агента",
+    "summarize": "Intelligence assistant: падсумаваць з дапамогай агента"
+  },
+  "ribbon": {
+    "openChat": "Адкрыць AI-чат"
   }
 }

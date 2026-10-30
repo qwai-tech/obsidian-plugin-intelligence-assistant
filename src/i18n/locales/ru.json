@@ -12,21 +12,13 @@
       "usage": "Использование"
     },
     "general": {
-      "desc": "Настройте основные параметры плагина-ассистента.",
       "pluginVersion": {
-        "name": "Версия плагина",
-        "desc": "Текущая версия плагина-ассистента"
+        "name": "Версия плагина"
       },
       "defaultModel": {
         "name": "Модель по умолчанию",
         "desc": "Модель по умолчанию для разговоров",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "Режим чата по умолчанию",
-        "desc": "Выберите, в каком режиме открывается окно чата",
-        "chat": "Режим чата",
-        "agent": "Режим агента"
       },
       "conversationTitleMode": {
         "name": "Режим заголовка разговора",
@@ -102,11 +94,6 @@
       "count": "{{count}} провайдеров настроено",
       "addBtn": "+ Добавить провайдера",
       "empty": "Провайдеры не настроены. Выберите «Добавить провайдера», чтобы начать.",
-      "tableHeaders": {
-        "provider": "Провайдер",
-        "status": "Статус",
-        "actions": "Действия"
-      },
       "status": {
         "ready": "Готов",
         "needsConfig": "Требует настройки",
@@ -117,7 +104,6 @@
         "serverError": "Ошибка сервера"
       },
       "guidance": {
-        "requiresCli": "Требуется локальный CLI",
         "configureBaseUrl": "Настройте базовый URL",
         "addApiKey": "Добавьте API-ключ"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "обновить все инструменты",
       "addBtn": "+ Добавить MCP-сервер",
       "empty": "MCP-серверы не настроены. Выберите «Добавить MCP-сервер», чтобы начать.",
-      "tableHeaders": {
-        "name": "Имя",
-        "command": "Команда",
-        "arguments": "Аргументы",
-        "status": "Статус",
-        "tools": "Инструменты",
-        "actions": "Действия"
-      },
       "untitled": "Безымянный MCP-сервер",
       "notConfigured": "Не настроен",
-      "noArgs": "Нет",
       "cached": "Кешировано",
-      "disabled": "Отключено",
       "envVars_one": "{{count}} переменная окружения",
       "envVars_other": "{{count}} переменных окружения",
       "envVars": "{{count}} переменных окружения",
@@ -244,26 +220,13 @@
       "count": "{{count}} агентов настроено",
       "addBtn": "+ добавить агента",
       "empty": "Агенты не настроены. Выберите «добавить агента», чтобы начать.",
-      "tableHeaders": {
-        "agent": "Агент",
-        "model": "Модель",
-        "capabilities": "Возможности",
-        "tools": "Инструменты",
-        "actions": "Действия"
-      },
       "defaultBadge": "По умолчанию",
       "systemPrompt": "Системный промпт • {{promptName}}",
       "customPrompt": "Пользовательский промпт",
       "model": {
         "notSet": "Не задано",
-        "notFound": "Модель не найдена в кеше",
         "useChatView": "Использовать модель окна чата",
-        "useChatViewDesc": "Будет использоваться модель, выбранная в окне чата",
-        "useDefault": "Использовать модель по умолчанию",
-        "useDefaultDesc": "Будет использоваться модель по умолчанию из настроек"
-      },
-      "capabilities": {
-        "noSpecialModes": "Нет специальных режимов"
+        "useDefault": "Использовать модель по умолчанию"
       },
       "tools": {
         "builtIn": "{{count}} встроенных",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} MCP-серверов",
         "mcpTool_one": "{{count}} MCP-инструмент",
         "mcpTool_other": "{{count}} MCP-инструментов",
-        "mcpTool": "{{count}} MCP-инструментов",
-        "noTools": "Инструменты не включены"
+        "mcpTool": "{{count}} MCP-инструментов"
       },
       "actions": {
         "edit": "Редактировать",
-        "delete": "удалить",
-        "protected": "защищено"
+        "delete": "удалить"
       },
       "confirm": {
         "delete": "Удалить агента «{{name}}»?"
@@ -288,18 +249,6 @@
       "desc": "Управляйте системными промптами, определяющими поведение и личность вашего ИИ-ассистента.",
       "addBtn": "+ добавить системный промпт",
       "empty": "Системные промпты не настроены. Выберите «добавить системный промпт», чтобы начать.",
-      "tableHeaders": {
-        "name": "Имя",
-        "contentPreview": "Предпросмотр содержимого",
-        "created": "Создано",
-        "updated": "Обновлено",
-        "enabled": "Включено",
-        "actions": "Действия"
-      },
-      "status": {
-        "enabled": "Включено",
-        "disabled": "Отключено"
-      },
       "actions": {
         "edit": "Редактировать",
         "disable": "Отключить",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "подключено",
           "disconnected": "отключено"
-        }
+        },
+        "addBtn": "Добавить инструменты MCP"
       },
       "openapi": {
         "desc": "Генерируйте HTTP-инструменты из документов OpenAPI. Удалённые спецификации кешируются в {{cacheDir}}.",
@@ -890,13 +840,6 @@
       "count": "{{count}} действий настроено ({{enabled}} включено)",
       "addBtn": "+ добавить быстрое действие",
       "empty": "Быстрые действия не настроены. Выберите «добавить быстрое действие», чтобы начать.",
-      "tableHeaders": {
-        "action": "Действие",
-        "type": "Тип",
-        "model": "Модель",
-        "promptPreview": "Предпросмотр промпта",
-        "actions": "Действия"
-      },
       "defaultModel": "По умолчанию",
       "editBtn": "Редактировать",
       "deleteBtn": "удалить",
@@ -1004,26 +947,16 @@
     "currentConversation": "Текущий разговор",
     "new": "Новый",
     "settings": "Настройки",
-    "openSettingsTitle": "Открыть настройки плагина",
-    "mode": "Режим",
-    "prompt": "Промпт",
-    "agent": "Агент",
     "modeOptions": {
       "chat": "Чат",
       "agent": "Агент"
     },
-    "noSystemPrompt": "Нет системного промпта",
     "noAgentsAvailable": "Агенты недоступны",
-    "sendHintPrefix": "Нажмите ",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " для отправки",
     "sendAriaLabel": "Отправить сообщение",
     "stop": " Стоп",
-    "addReference": "Добавить ссылку",
     "addReferenceTooltip": "Добавить ссылку на файл или папку (@)",
     "emptyHeading": "Начните разговор",
     "emptySubtext": "Введите сообщение ниже, чтобы начать, или выберите разговор из истории.",
-    "noAgentConfig": "Агенты не настроены",
     "selectAgent": "Выберите агента…",
     "notices": {
       "stopping": "Остановка генерации...",
@@ -1047,23 +980,15 @@
       "noAgents": "Агенты недоступны. Настройте агентов в разделе «Настройки → Агенты».",
       "ragDisabled": "RAG отключён в настройках. Включите в разделе «Настройки → функции чата → RAG».",
       "webSearchDisabled": "Веб-поиск отключён в настройках. Включите в разделе «Настройки → функции чата → веб-поиск».",
-      "noFilesInVault": "Файлы в хранилище не найдены",
       "attached": "Прикреплено: {{name}}",
       "attachedImages": "Прикреплено {{count}} изображений",
       "referencesAdded": "Добавлено {{count}} ссылок",
       "fileNotFound": "Файл не найден: {{path}}",
       "agentConfigApplied": "Применена конфигурация для агента: {{name}}",
-      "waitForComplete": "Пожалуйста, дождитесь завершения текущего ответа",
-      "chatServiceFallback": "ChatService не настроен. Используется резервный ChatView.",
-      "noModelSelected": "Модель не выбрана",
-      "noProviderConfig": "Конфигурация провайдера не найдена",
-      "noResponseToRegenerate": "Нет ответа для повторной генерации",
-      "agentNotFound": "Агент не найден",
       "unableToLoadRag": "Не удалось загрузить статистику RAG.",
       "referenced": "Упомянуто: {{name}}"
     },
     "status": {
-      "available": "Доступно",
       "unavailable": "Недоступно",
       "disabled": "Отключено",
       "on": "Вкл. · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ RAG в данный момент отключён для этого чата."
     },
     "agentSummary": {
-      "model": "Модель",
-      "temp": "Темп.",
-      "max": "Макс.",
-      "rag": "RAG",
-      "web": "Веб",
-      "tools": "Инструменты",
-      "memory": "Память",
-      "none": "Нет",
-      "configuration": "Конфигурация {{name}}",
-      "modelFixed": "{{name}} · Фиксированная",
-      "modelDefault": "{{name}} · По умолчанию",
-      "modelChatView": "{{name}} · Окно чата",
-      "customModel": "Пользовательская модель",
-      "notSet": "Не задано",
-      "auto": "Авто",
       "on": "Вкл.",
-      "off": "Выкл.",
-      "shortTerm": "Краткосрочная",
-      "longTerm": "Долгосрочная",
-      "disabledMemory": "Отключено",
-      "builtIn": "{{count}} встроенных",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "Выкл."
     },
     "message": {
       "webResults": "Результаты веб-поиска",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "Вставить в заметки",
       "regenerate": "Повторно сгенерировать"
     },
-    "streaming": {
-      "thinking": "Обработка..."
-    },
     "toolCall": {
-      "thinking": "Обработка",
       "executionProcess": "Процесс выполнения",
       "input": "Ввод",
       "output": "Вывод",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "Использовать проиндексированные заметки как контекст",
     "webSearchLabel": "Веб-поиск",
     "webSearchTooltipLabel": "Поиск в интернете при необходимости",
-    "imageUnavailable": "Прикрепление изображений недоступно для текущей модели.",
-    "newChat": "Новый чат",
     "newConversation": "Новый разговор",
     "searchConversations": "Поиск разговоров...",
     "header": {
-      "model": "Модель",
-      "advancedParams": "Расширенные параметры",
-      "temperature": "Температура",
-      "maxTokens": "Макс. токенов",
-      "topP": "Top P",
-      "freqPenalty": "Штраф за повторение",
-      "presPenalty": "Штраф за присутствие",
-      "agentConfig": "Конфигурация агента",
-      "modelsCount": "Моделей: {{count}}",
-      "tokensCount": "Токенов: {{count}}",
       "noModels": "Модели недоступны"
-    },
-    "temperature": {
-      "precise": "0 (Точный)",
-      "balanced": "1 (Сбалансированный)",
-      "creative": "2 (Творческий)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "Вставить в выбранную заметку",
         "createNew": "Создать новую заметку",
         "noResults": "Подходящие заметки не найдены."
+      },
+      "agentTask": {
+        "cancel": "Отмена",
+        "fieldLabel": "Задача",
+        "newConversation": "Начать в новом разговоре",
+        "newConversationDesc": "Отделить этот запуск агента от текущего чата.",
+        "placeholder": "Введите задачу здесь...",
+        "start": "Начать",
+        "title": "Запустить задачу агента"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "Пожалуйста, выберите тип провайдера",
         "invalidUrl": "Неверный формат базового URL. Пожалуйста, введите корректный URL (например, https://api.example.com)"
-      }
+      },
+      "cachedModels": "Кешированные модели: {{count}}",
+      "connectionFailed": "Проверка подключения не удалась. Проверьте настройки провайдера.",
+      "connectionSuccess": "Подключение успешно. Кешировано моделей: {{count}}.",
+      "noCachedModels": "Нет кешированных моделей",
+      "testConnection": "Проверить подключение",
+      "testing": "Проверка..."
     },
     "mcpInspector": {
       "title": "Инспектор MCP",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "Недопустимое число для параметра: {{name}}",
           "invalidJson": "Недопустимый JSON для параметра: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "MCP-серверы не настроены",
-        "testing": "Тестирование {{count}} MCP-серверных соединений...",
-        "allSuccess": "все {{count}} MCP-серверов успешно подключены!",
-        "partial": "{{success}} подключено, {{failed}} не удалось"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | Версия: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "Сервер офлайн",
-      "connectionError": "Ошибка соединения",
       "pullTitle": "Загрузить новую модель",
       "pullHint": "Введите имя модели для загрузки из библиотеки Ollama (например, llama2, mistral, codellama)",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "Обработка...",
     "textUpdated": "Текст успешно обновлён",
     "error": "Ошибка: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "Задача агента: спросить о текущей заметке",
+    "createProjectBrief": "Задача агента: создать описание проекта",
+    "createResearchBrief": "Задача агента: создать исследовательскую сводку",
+    "diagnoseVault": "Задача агента: диагностика хранилища",
+    "doctorLinksTags": "Задача агента: улучшить ссылки, теги и свойства",
+    "draftFromNote": "Задача агента: черновик на основе текущей заметки",
+    "findDuplicateNotes": "Задача агента: найти дубликаты и кандидатов на объединение",
+    "findRelatedNotes": "Задача агента: найти связанные заметки",
+    "generateWeeklyReview": "Задача агента: создать еженедельный обзор",
+    "improveSelection": "Задача агента: улучшить выделенный текст",
+    "openChatMain": "Открыть чат ИИ в основной области",
+    "openChatSidebar": "Открыть чат ИИ на боковой панели",
+    "organizeCurrentNote": "Задача агента: упорядочить текущую заметку",
+    "sourceGroundedQuestion": "Задача агента: задать вопрос с опорой на источники",
+    "summarizeCurrentNote": "Задача агента: кратко изложить текущую заметку",
+    "switchModel": "Сменить модель"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: спросить агента об этом файле",
+    "createProjectBrief": "Intelligence assistant: создать описание проекта с помощью агента",
+    "createResearchBrief": "Intelligence assistant: создать исследовательскую сводку с помощью агента",
+    "doctorLinksTags": "Intelligence assistant: улучшить ссылки, теги и свойства с помощью агента",
+    "draftFromFile": "Intelligence assistant: создать черновик на основе этого файла с помощью агента",
+    "findDuplicates": "Intelligence assistant: найти дубликаты и кандидатов на объединение с помощью агента",
+    "findRelatedNotes": "Intelligence assistant: найти связанные заметки с помощью агента",
+    "improveFolder": "Intelligence assistant: улучшить ссылки, теги и свойства в папке с помощью агента",
+    "organizeFolder": "Intelligence assistant: упорядочить папку с помощью агента",
+    "summarize": "Intelligence assistant: кратко изложить с помощью агента"
+  },
+  "ribbon": {
+    "openChat": "Открыть чат ИИ"
   }
 }

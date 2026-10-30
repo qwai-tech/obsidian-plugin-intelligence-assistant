@@ -12,21 +12,13 @@
       "usage": "使用状況"
     },
     "general": {
-      "desc": "インテリジェンスアシスタントプラグインの一般設定を構成します。",
       "pluginVersion": {
-        "name": "プラグインバージョン",
-        "desc": "インテリジェンスアシスタントプラグインの現在のバージョン"
+        "name": "プラグインバージョン"
       },
       "defaultModel": {
         "name": "デフォルトモデル",
         "desc": "会話に使用するデフォルトモデル",
         "placeholder": "Deepseek-chat"
-      },
-      "defaultChatMode": {
-        "name": "デフォルトチャットモード",
-        "desc": "チャットビューを開くモードを選択",
-        "chat": "チャットモード",
-        "agent": "エージェントモード"
       },
       "conversationTitleMode": {
         "name": "会話タイトルモード",
@@ -102,11 +94,6 @@
       "count": "{{count}} プロバイダー設定済み",
       "addBtn": "+ プロバイダーを追加",
       "empty": "プロバイダーが設定されていません。「プロバイダーを追加」を選択して開始してください。",
-      "tableHeaders": {
-        "provider": "プロバイダー",
-        "status": "ステータス",
-        "actions": "アクション"
-      },
       "status": {
         "ready": "準備完了",
         "needsConfig": "設定が必要",
@@ -117,7 +104,6 @@
         "serverError": "サーバーエラー"
       },
       "guidance": {
-        "requiresCli": "ローカル CLI が必要",
         "configureBaseUrl": "ベース URL を設定",
         "addApiKey": "API キーを追加"
       },
@@ -170,19 +156,9 @@
       "refreshAllBtn": "すべてのツールを更新",
       "addBtn": "+ MCP サーバーを追加",
       "empty": "MCP サーバーが設定されていません。「MCP サーバーを追加」を選択して開始してください。",
-      "tableHeaders": {
-        "name": "名前",
-        "command": "コマンド",
-        "arguments": "引数",
-        "status": "ステータス",
-        "tools": "ツール",
-        "actions": "アクション"
-      },
       "untitled": "無題の MCP サーバー",
       "notConfigured": "未設定",
-      "noArgs": "なし",
       "cached": "キャッシュ済み",
-      "disabled": "無効",
       "envVars_one": "{{count}} 環境変数",
       "envVars_other": "{{count}} 環境変数",
       "envVars": "{{count}} 環境変数",
@@ -244,26 +220,13 @@
       "count": "{{count}} エージェント設定済み",
       "addBtn": "+ エージェントを追加",
       "empty": "エージェントが設定されていません。「エージェントを追加」を選択して開始してください。",
-      "tableHeaders": {
-        "agent": "エージェント",
-        "model": "モデル",
-        "capabilities": "機能",
-        "tools": "ツール",
-        "actions": "アクション"
-      },
       "defaultBadge": "デフォルト",
       "systemPrompt": "システムプロンプト • {{promptName}}",
       "customPrompt": "カスタムプロンプト",
       "model": {
         "notSet": "未設定",
-        "notFound": "キャッシュにモデルが見つかりません",
         "useChatView": "チャットビューモデルを使用",
-        "useChatViewDesc": "チャットビューで選択されたモデルを使用します",
-        "useDefault": "デフォルトモデルを使用",
-        "useDefaultDesc": "設定のデフォルトモデルを使用します"
-      },
-      "capabilities": {
-        "noSpecialModes": "特別なモードなし"
+        "useDefault": "デフォルトモデルを使用"
       },
       "tools": {
         "builtIn": "{{count}} 組み込み",
@@ -272,13 +235,11 @@
         "mcpServer": "{{count}} MCP サーバー",
         "mcpTool_one": "{{count}} MCP ツール",
         "mcpTool_other": "{{count}} MCP ツール",
-        "mcpTool": "{{count}} MCP ツール",
-        "noTools": "ツールが有効化されていません"
+        "mcpTool": "{{count}} MCP ツール"
       },
       "actions": {
         "edit": "編集",
-        "delete": "削除",
-        "protected": "保護済み"
+        "delete": "削除"
       },
       "confirm": {
         "delete": "エージェント「{{name}}」を削除しますか？"
@@ -288,18 +249,6 @@
       "desc": "AI アシスタントの動作と個性を定義するシステムプロンプトを管理します。",
       "addBtn": "+ システムプロンプトを追加",
       "empty": "システムプロンプトが設定されていません。「システムプロンプトを追加」を選択して開始してください。",
-      "tableHeaders": {
-        "name": "名前",
-        "contentPreview": "コンテンツプレビュー",
-        "created": "作成日",
-        "updated": "更新日",
-        "enabled": "有効",
-        "actions": "アクション"
-      },
-      "status": {
-        "enabled": "有効",
-        "disabled": "無効"
-      },
       "actions": {
         "edit": "編集",
         "disable": "無効化",
@@ -366,7 +315,8 @@
         "status": {
           "connected": "接続済み",
           "disconnected": "切断済み"
-        }
+        },
+        "addBtn": "MCP ツールを追加"
       },
       "openapi": {
         "desc": "OpenAPI ドキュメントから HTTP ツールを生成します。リモートスペックは {{cacheDir}} にキャッシュされます。",
@@ -890,13 +840,6 @@
       "count": "{{count}} アクション設定済み ({{enabled}} 有効)",
       "addBtn": "+ クイックアクションを追加",
       "empty": "クイックアクションが設定されていません。「クイックアクションを追加」を選択して開始してください。",
-      "tableHeaders": {
-        "action": "アクション",
-        "type": "タイプ",
-        "model": "モデル",
-        "promptPreview": "プロンプトプレビュー",
-        "actions": "アクション"
-      },
       "defaultModel": "デフォルト",
       "editBtn": "編集",
       "deleteBtn": "削除",
@@ -1004,26 +947,16 @@
     "currentConversation": "現在の会話",
     "new": "新規",
     "settings": "設定",
-    "openSettingsTitle": "プラグイン設定を開く",
-    "mode": "モード",
-    "prompt": "プロンプト",
-    "agent": "エージェント",
     "modeOptions": {
       "chat": "チャット",
       "agent": "エージェント"
     },
-    "noSystemPrompt": "システムプロンプトなし",
     "noAgentsAvailable": "利用可能なエージェントなし",
-    "sendHintPrefix": "",
-    "sendHintKey": "Enter",
-    "sendHintSuffix": " で送信",
     "sendAriaLabel": "メッセージを送信",
     "stop": " 停止",
-    "addReference": "参照を追加",
     "addReferenceTooltip": "ファイルまたはフォルダーの参照を追加 (@)",
     "emptyHeading": "会話を始める",
     "emptySubtext": "以下にメッセージを入力して開始するか、履歴から会話を選択してください。",
-    "noAgentConfig": "エージェントが設定されていません",
     "selectAgent": "エージェントを選択...",
     "notices": {
       "stopping": "生成を停止中...",
@@ -1047,23 +980,15 @@
       "noAgents": "エージェントが利用できません。設定 → エージェントでエージェントを設定してください。",
       "ragDisabled": "RAG が設定で無効になっています。設定 → チャット機能 → RAG で有効にしてください。",
       "webSearchDisabled": "ウェブ検索が設定で無効になっています。設定 → チャット機能 → ウェブ検索で有効にしてください。",
-      "noFilesInVault": "ボルトにファイルが見つかりません",
       "attached": "添付: {{name}}",
       "attachedImages": "{{count}} 枚の画像を添付しました",
       "referencesAdded": "{{count}} 件の参照を追加しました",
       "fileNotFound": "ファイルが見つかりません: {{path}}",
       "agentConfigApplied": "エージェントの設定を適用しました: {{name}}",
-      "waitForComplete": "現在の応答が完了するまでお待ちください",
-      "chatServiceFallback": "ChatService が設定されていません。ChatView フォールバックを使用します。",
-      "noModelSelected": "モデルが選択されていません",
-      "noProviderConfig": "プロバイダー設定が見つかりません",
-      "noResponseToRegenerate": "再生成する応答がありません",
-      "agentNotFound": "エージェントが見つかりません",
       "unableToLoadRag": "RAG 統計を読み込めません。",
       "referenced": "参照済み: {{name}}"
     },
     "status": {
-      "available": "利用可能",
       "unavailable": "利用不可",
       "disabled": "無効",
       "on": "オン · {{detail}}",
@@ -1098,29 +1023,8 @@
       "ragOff": "ℹ️ このチャットでは現在 RAG がオフになっています。"
     },
     "agentSummary": {
-      "model": "モデル",
-      "temp": "温度",
-      "max": "最大",
-      "rag": "RAG",
-      "web": "ウェブ",
-      "tools": "ツール",
-      "memory": "メモリ",
-      "none": "なし",
-      "configuration": "{{name}} の設定",
-      "modelFixed": "{{name}} · 固定",
-      "modelDefault": "{{name}} · デフォルト",
-      "modelChatView": "{{name}} · チャットビュー",
-      "customModel": "カスタムモデル",
-      "notSet": "未設定",
-      "auto": "自動",
       "on": "オン",
-      "off": "オフ",
-      "shortTerm": "短期記憶",
-      "longTerm": "長期記憶",
-      "disabledMemory": "無効",
-      "builtIn": "{{count}} 組み込み",
-      "mcp": "{{count}} MCP",
-      "cli": "{{count}} CLI"
+      "off": "オフ"
     },
     "message": {
       "webResults": "ウェブ結果",
@@ -1139,11 +1043,7 @@
       "insertToNotes": "ノートに挿入",
       "regenerate": "再生成"
     },
-    "streaming": {
-      "thinking": "考え中..."
-    },
     "toolCall": {
-      "thinking": "考え中",
       "executionProcess": "実行プロセス",
       "input": "入力",
       "output": "出力",
@@ -1155,27 +1055,10 @@
     "ragTooltipLabel": "インデックス済みノートをコンテキストとして使用",
     "webSearchLabel": "ウェブ検索",
     "webSearchTooltipLabel": "必要に応じてインターネットを検索",
-    "imageUnavailable": "現在のモデルでは画像添付は利用できません。",
-    "newChat": "新しいチャット",
     "newConversation": "新しい会話",
     "searchConversations": "会話を検索...",
     "header": {
-      "model": "モデル",
-      "advancedParams": "詳細パラメーター",
-      "temperature": "温度",
-      "maxTokens": "最大トークン数",
-      "topP": "Top P",
-      "freqPenalty": "頻度ペナルティ",
-      "presPenalty": "存在ペナルティ",
-      "agentConfig": "エージェント設定",
-      "modelsCount": "モデル: {{count}}",
-      "tokensCount": "トークン: {{count}}",
       "noModels": "利用可能なモデルがありません"
-    },
-    "temperature": {
-      "precise": "0 (精密)",
-      "balanced": "1 (バランス)",
-      "creative": "2 (クリエイティブ)"
     },
     "modals": {
       "image": {
@@ -1200,6 +1083,15 @@
         "insert": "選択したノートに挿入",
         "createNew": "新しいノートを作成",
         "noResults": "一致するノートが見つかりません。"
+      },
+      "agentTask": {
+        "cancel": "キャンセル",
+        "fieldLabel": "タスク",
+        "newConversation": "新しい会話で開始",
+        "newConversationDesc": "このエージェントの実行を現在の会話とは分けておきます。",
+        "placeholder": "ここにタスクを入力...",
+        "start": "開始",
+        "title": "エージェントタスクを開始"
       }
     }
   },
@@ -1348,7 +1240,13 @@
       "validation": {
         "selectProvider": "プロバイダーのタイプを選択してください",
         "invalidUrl": "ベース URL の形式が無効です。有効な URL を入力してください（例: https://api.example.com）"
-      }
+      },
+      "cachedModels": "キャッシュ済みモデル: {{count}}",
+      "connectionFailed": "接続テストに失敗しました。プロバイダー設定を確認してください。",
+      "connectionSuccess": "接続に成功しました。{{count}} 個のモデルをキャッシュしました。",
+      "noCachedModels": "キャッシュ済みモデルはありません",
+      "testConnection": "接続をテスト",
+      "testing": "テスト中..."
     },
     "mcpInspector": {
       "title": "MCP インスペクター",
@@ -1432,12 +1330,6 @@
           "invalidNumber": "パラメーターの数値が無効です: {{name}}",
           "invalidJson": "パラメーターの JSON が無効です: {{name}}"
         }
-      },
-      "testAll": {
-        "noServers": "MCP サーバーが設定されていません",
-        "testing": "{{count}} MCP サーバー接続をテスト中...",
-        "allSuccess": "すべての {{count}} MCP サーバーが正常に接続されました！",
-        "partial": "{{success}} 接続済み、{{failed}} 失敗"
       }
     },
     "mcpServer": {
@@ -1485,7 +1377,6 @@
       "versionLabel": " | バージョン: {{version}}",
       "urlLabel": " | {{url}}",
       "serverOffline": "サーバーオフライン",
-      "connectionError": "接続エラー",
       "pullTitle": "新しいモデルをプル",
       "pullHint": "Ollama ライブラリからダウンロードするモデル名を入力してください（例: llama2、mistral、codellama）",
       "modelName": {
@@ -1556,5 +1447,38 @@
     "processing": "処理中...",
     "textUpdated": "テキストが正常に更新されました",
     "error": "エラー: {{message}}"
+  },
+  "commands": {
+    "askAgentCurrentNote": "エージェントタスク: 現在のノートについて質問",
+    "createProjectBrief": "エージェントタスク: プロジェクト概要を作成",
+    "createResearchBrief": "エージェントタスク: リサーチ概要を作成",
+    "diagnoseVault": "エージェントタスク: ボルトを診断",
+    "doctorLinksTags": "エージェントタスク: リンク、タグ、プロパティを改善",
+    "draftFromNote": "エージェントタスク: 現在のノートから下書きを作成",
+    "findDuplicateNotes": "エージェントタスク: 重複と統合候補を検索",
+    "findRelatedNotes": "エージェントタスク: 関連ノートを検索",
+    "generateWeeklyReview": "エージェントタスク: 週次レビューを生成",
+    "improveSelection": "エージェントタスク: 選択範囲を改善",
+    "openChatMain": "メインエリアで AI チャットを開く",
+    "openChatSidebar": "サイドバーで AI チャットを開く",
+    "organizeCurrentNote": "エージェントタスク: 現在のノートを整理",
+    "sourceGroundedQuestion": "エージェントタスク: ソースに基づいて質問",
+    "summarizeCurrentNote": "エージェントタスク: 現在のノートを要約",
+    "switchModel": "モデルを切り替え"
+  },
+  "contextMenu": {
+    "askAgent": "Intelligence assistant: このファイルについてエージェントに質問",
+    "createProjectBrief": "Intelligence assistant: エージェントでプロジェクト概要を作成",
+    "createResearchBrief": "Intelligence assistant: エージェントでリサーチ概要を作成",
+    "doctorLinksTags": "Intelligence assistant: エージェントでリンク、タグ、プロパティを改善",
+    "draftFromFile": "Intelligence assistant: エージェントでこのファイルから下書きを作成",
+    "findDuplicates": "Intelligence assistant: エージェントで重複と統合候補を検索",
+    "findRelatedNotes": "Intelligence assistant: エージェントで関連ノートを検索",
+    "improveFolder": "Intelligence assistant: エージェントでフォルダーのリンク、タグ、プロパティを改善",
+    "organizeFolder": "Intelligence assistant: エージェントでフォルダーを整理",
+    "summarize": "Intelligence assistant: エージェントで要約"
+  },
+  "ribbon": {
+    "openChat": "AI チャットを開く"
   }
 }
