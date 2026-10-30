@@ -12,7 +12,6 @@
       "usage": "Erabilera"
     },
     "general": {
-      "title": "Ezarpen orokorrak",
       "desc": "Konfiguratu ezarpen orokorrak adimen artifizialeko laguntzaile-pluginarentzat.",
       "pluginVersion": {
         "name": "Pluginaren bertsioa",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM konfigurazioa",
       "desc": "Konfiguratu hizkuntza-modeloen hornitzaileak eta kudeatu eskuragarri dauden modeloak.",
       "subTabs": {
         "provider": "Hornitzaileak",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Modeloen konfigurazioa",
       "desc": "Ikusi eta kudeatu modeloak hornitzaile guztietatik. Egin klik \"freskatu modelo guztiak\" erabilgarri dauden modelo berrienak eskuratzeko.",
       "providerCount": "{{count}} hornitzaile konfiguratuta",
       "providerCount_plural": "{{count}} hornitzaile konfiguratuta",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Hornitzaileen konfigurazioa",
       "securityTitle": "⚠️ Segurtasun abisua",
       "securityDesc": "API giltzak testu arruntean gordetzen dira zure biltegian bateragarritasuna bermatzeko. Istripuzko filtrazioak saihesteko:",
       "securityItem1": "Ez partekatu {{configDir}}/plugins/intelligence-assistant/data/ karpeta.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP zerbitzarien kudeaketa",
       "desc": "Konfiguratu Model Context Protocol (MCP) zerbitzariak agenteen gaitasunak hedatzen dituzten kanpoko tresnekin eta datu-iturriekin.",
       "inspectorBtn": "🔍 Ireki MCP ikuskatzailea",
       "testAllBtn": "🧪 probatu konexio guztiak",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Agenteen kudeaketa",
       "desc": "Sortu eta kudeatu AI agenteak gaitasun, tresna eta portaera zehatzekin.",
       "count": "{{count}} agente konfiguratuta",
       "count_plural": "{{count}} agente konfiguratuta",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Sistemaren prompt-ak",
       "desc": "Kudeatu zure AI laguntzailearen portaera eta nortasuna definitzen duten sistemaren prompt-ak.",
       "addBtn": "+ gehitu sistemaren prompt-a",
       "empty": "Ez dago sistemaren prompt konfiguraturik. Hautatu \"gehitu sistemaren prompt-a\" hasteko.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Tresnen konfigurazioa",
       "desc": "Berrikusi tresna integratuak eta arakatu konektatutako zerbitzarietatik kargatutako MCP tresnak. Gaitu zure agenteek egin beharko lituzketen ekintzak.",
       "subTabs": {
         "builtIn": "Tresna Integratuak",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG konfigurazioa",
       "desc": "Konfiguratu berreskuratze-handitutako sorkuntza eta web bilaketa AI erantzunak hobetzeko.",
       "subTabs": {
         "overview": "Ikuspegi orokorra",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Web bilaketaren konfigurazioa",
       "desc": "Konfiguratu web bilaketaren funtzionalitatea AI erantzunak interneteko informazio eguneratuarekin hobetzeko.",
       "generalBehavior": "Portaera orokorra",
       "providerSelection": "Hornitzailearen hautaketa",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Ekintza azkarrak",
       "desc": "Konfiguratu AI bidezko ekintza azkarrak editorearen testuinguru-menuan agertzen direnak testua hautatzen denean.",
       "actionPrefix": {
         "name": "Ekintzen aurrizkia",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Tokenen erabilera",
       "desc": "Jarraitu tokenen kontsumoa hornitzaile eta modelo guztietan. Datuak elkarrizketa guztietan metatzen dira.",
       "ranges": {
         "today": "Gaur",

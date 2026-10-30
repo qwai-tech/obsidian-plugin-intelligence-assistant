@@ -128,8 +128,7 @@ export function renderCliToolsSection(
 	}
 
 	const infoBox = content.createDiv('info-callout');
-	const infoTitle = infoBox.createEl('h5', { text: t('settings.tools.cli.infoTitle') });
-	infoTitle.addClass('info-callout-title');
+	infoBox.createDiv({ cls: 'ia-info-box__title', text: t('settings.tools.cli.infoTitle') });
 
 	const infoText = infoBox.createEl('p', {
 		text: t('settings.tools.cli.infoText')

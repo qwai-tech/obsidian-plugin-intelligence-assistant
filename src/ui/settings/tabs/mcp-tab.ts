@@ -21,7 +21,6 @@ export function displayMCPTab(
 	testAllMCPConnections: () => Promise<void>,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: t('settings.mcp.title') });
 
 	const desc = containerEl.createEl('p', {
 		text: t('settings.mcp.desc')

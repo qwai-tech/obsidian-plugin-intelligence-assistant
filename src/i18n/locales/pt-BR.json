@@ -12,7 +12,6 @@
       "usage": "Uso"
     },
     "general": {
-      "title": "Configurações gerais",
       "desc": "Configure as configurações gerais do plugin assistente de inteligência.",
       "pluginVersion": {
         "name": "Versão do plugin",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "Configuração de LLM",
       "desc": "Configure provedores de modelos de linguagem e gerencie os modelos disponíveis.",
       "subTabs": {
         "provider": "Provedores",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Configuração de modelos",
       "desc": "Visualize e gerencie modelos de todos os provedores configurados. Clique em \"atualizar modelos\" para obter os últimos modelos disponíveis.",
       "providerCount": "{{count}} provedor configurado",
       "providerCount_plural": "{{count}} provedores configurados",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Configuração de provedores",
       "securityTitle": "⚠️ Aviso de Segurança",
       "securityDesc": "As chaves de API são armazenadas como texto simples no seu vault por razões de compatibilidade. Para evitar vazamentos acidentais:",
       "securityItem1": "NÃO compartilhe a pasta {{configDir}}/plugins/intelligence-assistant/data/.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "Gerenciamento de servidores MCP",
       "desc": "Configure servidores Model Context Protocol (MCP) para expandir as capacidades do agente com ferramentas externas e fontes de dados.",
       "inspectorBtn": "🔍 Abrir inspetor MCP",
       "testAllBtn": "🧪 testar todas as conexões",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Gerenciamento de agentes",
       "desc": "Crie e gerencie agentes de IA com capacidades, ferramentas e comportamentos específicos.",
       "count": "{{count}} agente configurado",
       "count_plural": "{{count}} agentes configurados",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Prompts de sistema",
       "desc": "Gerencie prompts de sistema que definem o comportamento e personalidade do seu assistente de IA.",
       "addBtn": "+ adicionar prompt de sistema",
       "empty": "Nenhum prompt de sistema configurado. Selecione adicionar prompt de sistema para começar.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Configuração de ferramentas",
       "desc": "Revise as ferramentas integradas e explore ferramentas MCP carregadas de servidores conectados. Ative as ações que seus agentes devem poder realizar.",
       "subTabs": {
         "builtIn": "Ferramentas Integradas",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "Configuração de RAG",
       "desc": "Configure a geração aumentada por recuperação e pesquisa na web para melhorar as respostas da IA.",
       "subTabs": {
         "overview": "Visão Geral",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Configuração de pesquisa na web",
       "desc": "Configure a funcionalidade de pesquisa na web para melhorar as respostas da IA com informações atualizadas da internet.",
       "generalBehavior": "Comportamento geral",
       "providerSelection": "Seleção de provedor",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Ações rápidas",
       "desc": "Configure ações rápidas com IA que aparecem no menu de contexto do editor quando o texto está selecionado.",
       "actionPrefix": {
         "name": "Prefixo de ação",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Uso de tokens",
       "desc": "Acompanhe o consumo de tokens entre provedores e modelos. Os dados são acumulados em todas as conversas.",
       "ranges": {
         "today": "Hoje",

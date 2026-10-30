@@ -12,7 +12,6 @@
       "usage": "Sử dụng"
     },
     "general": {
-      "title": "Cài đặt chung",
       "desc": "Cấu hình cài đặt chung cho plugin trợ lý thông minh.",
       "pluginVersion": {
         "name": "Phiên bản plugin",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "Cấu hình LLM",
       "desc": "Cấu hình nhà cung cấp mô hình ngôn ngữ và quản lý các mô hình khả dụng.",
       "subTabs": {
         "provider": "Nhà cung cấp",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Cấu hình mô hình",
       "desc": "Xem và quản lý các mô hình từ tất cả nhà cung cấp đã cấu hình. Nhấp \"làm mới mô hình\" để tải các mô hình mới nhất.",
       "providerCount": "{{count}} nhà cung cấp đã cấu hình",
       "providerCount_plural": "{{count}} nhà cung cấp đã cấu hình",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Cấu hình nhà cung cấp",
       "securityTitle": "⚠️ Cảnh báo bảo mật",
       "securityDesc": "Khóa API được lưu dưới dạng văn bản thuần trong vault của bạn để tương thích. Để tránh rò rỉ ngoài ý muốn:",
       "securityItem1": "KHÔNG chia sẻ thư mục {{configDir}}/plugins/intelligence-assistant/data/.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "Quản lý máy chủ MCP",
       "desc": "Cấu hình máy chủ Model Context Protocol (MCP) để mở rộng khả năng của tác nhân với các công cụ và nguồn dữ liệu bên ngoài.",
       "inspectorBtn": "🔍 Mở MCP inspector",
       "testAllBtn": "🧪 kiểm tra tất cả kết nối",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Quản lý tác nhân",
       "desc": "Tạo và quản lý các tác nhân AI với khả năng, công cụ và hành vi cụ thể.",
       "count": "{{count}} tác nhân đã cấu hình",
       "count_plural": "{{count}} tác nhân đã cấu hình",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Lời nhắc hệ thống",
       "desc": "Quản lý các lời nhắc hệ thống xác định hành vi và tính cách của trợ lý AI.",
       "addBtn": "+ thêm lời nhắc hệ thống",
       "empty": "Chưa có lời nhắc hệ thống nào. Chọn thêm lời nhắc hệ thống để bắt đầu.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Cấu hình công cụ",
       "desc": "Xem lại các công cụ tích hợp sẵn và khám phá các công cụ MCP được tải từ các máy chủ đã kết nối. Bật các hành động mà tác nhân của bạn có thể thực hiện.",
       "subTabs": {
         "builtIn": "Công cụ tích hợp",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "Cấu hình RAG",
       "desc": "Cấu hình tạo sinh tăng cường truy xuất và tìm kiếm web để nâng cao phản hồi của AI.",
       "subTabs": {
         "overview": "Tổng quan",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Cấu hình tìm kiếm web",
       "desc": "Cấu hình chức năng tìm kiếm web để nâng cao phản hồi của AI với thông tin cập nhật từ internet.",
       "generalBehavior": "Hành vi chung",
       "providerSelection": "Chọn nhà cung cấp",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Thao tác nhanh",
       "desc": "Cấu hình các thao tác nhanh được hỗ trợ bởi AI xuất hiện trong menu ngữ cảnh trình soạn thảo khi văn bản được chọn.",
       "actionPrefix": {
         "name": "Tiền tố hành động",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Sử dụng token",
       "desc": "Theo dõi mức tiêu thụ token trên các nhà cung cấp và mô hình. Dữ liệu được tích lũy qua tất cả hội thoại.",
       "ranges": {
         "today": "Hôm nay",

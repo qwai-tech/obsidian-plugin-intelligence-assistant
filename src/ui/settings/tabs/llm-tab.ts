@@ -20,7 +20,6 @@ export function displayLLMTab(
 	initialActiveTab: 'provider' | 'models' = 'provider',
 	onActiveTabChange?: (tab: 'provider' | 'models') => void
 ): void {
-	containerEl.createEl('h3', { text: t('settings.llm.title') });
 
 	const desc = containerEl.createEl('p', {
 		text: t('settings.llm.desc')

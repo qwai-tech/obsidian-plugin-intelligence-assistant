@@ -12,7 +12,6 @@
       "usage": "Käyttö"
     },
     "general": {
-      "title": "Yleiset asetukset",
       "desc": "Määritä tekoälyavustinlaajennuksen yleiset asetukset.",
       "pluginVersion": {
         "name": "Laajennuksen versio",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM-konfiguraatio",
       "desc": "Määritä kielimallin palveluntarjoajat ja hallinnoi saatavilla olevia malleja.",
       "subTabs": {
         "provider": "Palveluntarjoajat",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Mallin konfiguraatio",
       "desc": "Tarkastele ja hallinnoi malleja kaikista määritetyistä palveluntarjoajista. Napsauta \"päivitä mallit\" hakea uusimmat saatavilla olevat mallit.",
       "providerCount": "{{count}} palveluntarjoaja määritetty",
       "providerCount_plural": "{{count}} palveluntarjoajaa määritetty",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Palveluntarjoajan konfiguraatio",
       "securityTitle": "⚠️ Tietoturvavaroitus",
       "securityDesc": "API-avaimet tallennetaan pelkkänä tekstinä holvissasi yhteensopivuuden vuoksi. Estääksesi vahingolliset vuodot:",
       "securityItem1": "ÄLÄ jaa {{configDir}}/plugins/intelligence-assistant/data/-kansiota.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP-palvelimen hallinta",
       "desc": "Määritä Model Context Protocol (MCP) -palvelimia laajentamaan agenttien toimintoja ulkoisilla työkaluilla ja tietolähteillä.",
       "inspectorBtn": "🔍 Avaa MCP-tarkastin",
       "testAllBtn": "🧪 testaa kaikki yhteydet",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Agenttien hallinta",
       "desc": "Luo ja hallinnoi tekoälyagentteja erityisillä ominaisuuksilla, työkaluilla ja käyttäytymisillä.",
       "count": "{{count}} agentti määritetty",
       "count_plural": "{{count}} agenttia määritetty",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Järjestelmäkehotukset",
       "desc": "Hallinnoi järjestelmäkehotuksia, jotka määrittävät tekoälyavustimesi käyttäytymisen ja persoonallisuuden.",
       "addBtn": "+ lisää järjestelmäkehotus",
       "empty": "Ei järjestelmäkehotuksia määritetty. Valitse lisää järjestelmäkehotus aloittaaksesi.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Työkalujen konfiguraatio",
       "desc": "Tarkastele sisäänrakennettuja työkaluja ja tutustu MCP-työkaluihin, jotka on ladattu yhdistettyiltä palvelimilta. Ota käyttöön toiminnot, joita agenttien pitäisi voida suorittaa.",
       "subTabs": {
         "builtIn": "Sisäänrakennetut työkalut",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG-konfiguraatio",
       "desc": "Määritä hakuun perustuva generointi ja verkkohaku tekoälyn vastausten parantamiseksi.",
       "subTabs": {
         "overview": "Yleiskatsaus",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Verkkohaun konfiguraatio",
       "desc": "Määritä verkkohakutoiminto parantamaan tekoälyn vastauksia ajantasaisella tiedolla internetistä.",
       "generalBehavior": "Yleinen käyttäytyminen",
       "providerSelection": "Palveluntarjoajan valinta",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Pikatoiminnot",
       "desc": "Määritä tekoälypohjaiset pikatoiminnot, jotka näkyvät editorin kontekstivalikossa, kun tekstiä on valittuna.",
       "actionPrefix": {
         "name": "Toiminnon etuliite",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Tokenien käyttö",
       "desc": "Seuraa tokenien kulutusta palveluntarjoajien ja mallien välillä. Tiedot kertyy kaikista keskusteluista.",
       "ranges": {
         "today": "Tänään",

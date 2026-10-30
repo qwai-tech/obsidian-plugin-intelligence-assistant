@@ -12,7 +12,6 @@
       "usage": "Usage"
     },
     "general": {
-      "title": "General settings",
       "desc": "Configure general settings for the intelligence assistant plugin.",
       "pluginVersion": {
         "name": "Plugin version",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM configuration",
       "desc": "Configure language model providers and manage available models.",
       "subTabs": {
         "provider": "Providers",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Model configuration",
       "desc": "View and manage models from all configured providers. Click \"refresh models\" to fetch the latest available models.",
       "providerCount": "{{count}} provider configured",
       "providerCount_plural": "{{count}} providers configured",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Provider configuration",
       "securityTitle": "⚠️ Security Warning",
       "securityDesc": "API keys are stored as plain text in your vault for compatibility. To prevent accidental leaks:",
       "securityItem1": "Do NOT share your {{configDir}}/plugins/intelligence-assistant/data/ folder.",
@@ -167,7 +163,6 @@
       }
     },
     "mcp": {
-      "title": "MCP server management",
       "desc": "Configure Model Context Protocol (MCP) servers to extend agent capabilities with external tools and data sources.",
       "inspectorBtn": "🔍 Open MCP inspector",
       "testAllBtn": "🧪 test all connections",
@@ -238,7 +233,6 @@
       }
     },
     "agents": {
-      "title": "Agent management",
       "desc": "Create and manage AI agents with specific capabilities, tools, and behaviors.",
       "count": "{{count}} agent configured",
       "count_plural": "{{count}} agents configured",
@@ -283,7 +277,6 @@
       }
     },
     "prompts": {
-      "title": "System prompts",
       "desc": "Manage system prompts that define the behavior and personality of your AI assistant.",
       "addBtn": "+ add system prompt",
       "empty": "No system prompts configured. Select add system prompt to get started.",
@@ -310,7 +303,6 @@
       }
     },
     "tools": {
-      "title": "Tool configuration",
       "desc": "Review built-in tools and explore MCP tools loaded from connected servers. Enable the actions your agents should be able to perform.",
       "subTabs": {
         "builtIn": "Built-in Tools",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG configuration",
       "desc": "Configure retrieval-augmented generation and web search to enhance AI responses.",
       "subTabs": {
         "overview": "Overview",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Web search configuration",
       "desc": "Configure web search functionality to enhance AI responses with up-to-date information from the internet.",
       "generalBehavior": "General behavior",
       "providerSelection": "Provider selection",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Quick actions",
       "desc": "Configure AI-powered quick actions that appear in the editor context menu when text is selected.",
       "actionPrefix": {
         "name": "Action prefix",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Token usage",
       "desc": "Track token consumption across providers and models. Data is accumulated across all conversations.",
       "ranges": {
         "today": "Today",

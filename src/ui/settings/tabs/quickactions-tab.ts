@@ -18,7 +18,6 @@ export function displayQuickActionsTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: t('settings.quickActions.title') });
 
 	const desc = containerEl.createEl('p', {
 		text: t('settings.quickActions.desc')
@@ -187,7 +186,7 @@ export function displayQuickActionsTab(
 	// Usage info
 	const infoEl = containerEl.createDiv('ia-info-box');
 
-	infoEl.createEl('h4', { text: t('settings.quickActions.usageInfo.title') });
+	infoEl.createDiv({ cls: 'ia-info-box__title', text: t('settings.quickActions.usageInfo.title') });
 	const usageList = infoEl.createEl('ul');
 	usageList.createEl('li', { text: t('settings.quickActions.usageInfo.step1') });
 	usageList.createEl('li', { text: t('settings.quickActions.usageInfo.step2') });
@@ -221,7 +220,7 @@ function openQuickActionEditModal(
 			const { contentEl } = this;
 			contentEl.empty();
 
-			contentEl.createEl('h2', { text: t('settings.quickActions.edit.title') });
+			this.setTitle(t('settings.quickActions.edit.title'));
 
 			// Name
 			new Setting(contentEl)

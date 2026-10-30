@@ -12,7 +12,6 @@
       "usage": "Korištenje"
     },
     "general": {
-      "title": "Opće postavke",
       "desc": "Konfigurirajte opće postavke za dodatak inteligentnog asistenta.",
       "pluginVersion": {
         "name": "Verzija dodatka",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM konfiguracija",
       "desc": "Konfigurirajte pružatelje jezičnih modela i upravljajte dostupnim modelima.",
       "subTabs": {
         "provider": "Pružatelji",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Konfiguracija modela",
       "desc": "Pregledajte i upravljajte modelima svih konfiguriranih pružatelja. Kliknite „osvježi modele“ za dohvat najnovijih dostupnih modela.",
       "providerCount": "{{count}} pružatelj konfiguriran",
       "providerCount_plural": "{{count}} pružatelja konfigurirano",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Konfiguracija pružatelja",
       "securityTitle": "⚠️ Sigurnosno upozorenje",
       "securityDesc": "API ključevi pohranjuju se kao čisti tekst u vašem trezoru radi kompatibilnosti. Kako biste spriječili slučajno curenje:",
       "securityItem1": "NE dijelite mapu {{configDir}}/plugins/intelligence-assistant/data/.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "Upravljanje MCP poslužiteljem",
       "desc": "Konfigurirajte poslužitelje Model Context Protocol (MCP) za proširivanje mogućnosti agenta vanjskim alatima i izvorima podataka.",
       "inspectorBtn": "🔍 Otvori MCP inspektor",
       "testAllBtn": "🧪 testiraj sve veze",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Upravljanje agentima",
       "desc": "Stvarajte i upravljajte AI agentima s određenim mogućnostima, alatima i ponašanjem.",
       "count": "{{count}} agent konfiguriran",
       "count_plural": "{{count}} agenata konfigurirano",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Sistemski upiti",
       "desc": "Upravljajte sistemskim upitima koji definiraju ponašanje i osobnost vašeg AI asistenta.",
       "addBtn": "+ dodaj sistemski upit",
       "empty": "Nema konfiguriranih sistemskih upita. Odaberite dodaj sistemski upit za početak.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Konfiguracija alata",
       "desc": "Pregledajte ugrađene alate i istražite MCP alate učitane s povezanih poslužitelja. Omogućite radnje koje vaši agenti trebaju moći izvesti.",
       "subTabs": {
         "builtIn": "Ugrađeni alati",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG konfiguracija",
       "desc": "Konfigurirajte RAG i web pretraživanje za poboljšanje AI odgovora.",
       "subTabs": {
         "overview": "Pregled",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Konfiguracija web pretraživanja",
       "desc": "Konfigurirajte funkcionalnost web pretraživanja za poboljšanje AI odgovora ažurnim informacijama s interneta.",
       "generalBehavior": "Opće ponašanje",
       "providerSelection": "Odabir pružatelja",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Brze radnje",
       "desc": "Konfigurirajte AI brze radnje koje se pojavljuju u kontekstnom izborniku uređivača kada je tekst odabran.",
       "actionPrefix": {
         "name": "Prefiks radnje",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Korištenje tokena",
       "desc": "Pratite potrošnju tokena po pružateljima i modelima. Podaci se akumuliraju kroz sve razgovore.",
       "ranges": {
         "today": "Danas",

@@ -4563,11 +4563,6 @@
 
 /* ─── Settings Tab Shared Helpers ──────────────────────────────── */
 
-/* Subheading used in settings tabs (e.g. web-search groups) */
-.ia-settings-subheading {
-	margin-top: 1.5em;
-}
-
 /* Install SDK button inside a detection card (stacked layout) */
 .ia-sdk-install-btn {
 	margin-top: 4px;
@@ -4653,27 +4648,6 @@
 	font-weight: 600;
 }
 
-.ia-usage-section-hdr {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 8px;
-}
-
-.ia-usage-section-hdr h4 {
-	margin: 0;
-	font-size: var(--ia-font-size-2xs);
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.04em;
-	color: var(--text-muted);
-}
-
-.ia-usage-section-hdr span {
-	font-size: var(--ia-font-size-3xs);
-	color: var(--text-faint);
-}
-
 .ia-table-cell--right {
 	text-align: right;
 	font-variant-numeric: tabular-nums;
@@ -4683,6 +4657,11 @@
 /* Info / usage box at the bottom of a settings tab */
 .ia-info-box {
 	margin-top: 20px;
+}
+
+.ia-info-box__title {
+	font-weight: var(--font-semibold);
+	margin-bottom: var(--size-4-2);
 }
 
 /* Button row at the bottom of a settings modal */

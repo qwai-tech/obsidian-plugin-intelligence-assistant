@@ -22,7 +22,6 @@ export function displayToolsTab(
 	refreshDisplay: () => void,
 	openMcpManagement?: () => void
 ): void {
-	containerEl.createEl('h3', { text: t('settings.tools.title') });
 
 	const desc = containerEl.createEl('p', {
 		text: t('settings.tools.desc')

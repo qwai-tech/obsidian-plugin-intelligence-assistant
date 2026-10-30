@@ -12,7 +12,6 @@
       "usage": "Gebruik"
     },
     "general": {
-      "title": "Algemene instellingen",
       "desc": "Configureer algemene instellingen voor de intelligentie-assistent plugin.",
       "pluginVersion": {
         "name": "Plugin versie",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM configuratie",
       "desc": "Configureer taalmodelproviders en beheer beschikbare modellen.",
       "subTabs": {
         "provider": "Providers",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Modelconfiguratie",
       "desc": "Bekijk en beheer modellen van alle geconfigureerde providers. Klik op \"modellen vernieuwen\" om de nieuwste beschikbare modellen op te halen.",
       "providerCount": "{{count}} provider geconfigureerd",
       "providerCount_plural": "{{count}} providers geconfigureerd",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Providerconfiguratie",
       "securityTitle": "⚠️ Beveiligingswaarschuwing",
       "securityDesc": "API-sleutels worden als platte tekst opgeslagen in uw kluis voor compatibiliteit. Om onbedoelde lekken te voorkomen:",
       "securityItem1": "Deel uw {{configDir}}/plugins/intelligence-assistant/data/ map NIET.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP serverbeheer",
       "desc": "Configureer Model Context Protocol (MCP) servers om agentmogelijkheden uit te breiden met externe tools en gegevensbronnen.",
       "inspectorBtn": "🔍 MCP inspector openen",
       "testAllBtn": "🧪 alle verbindingen testen",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Agentbeheer",
       "desc": "Maak en beheer AI-agenten met specifieke mogelijkheden, tools en gedragingen.",
       "count": "{{count}} agent geconfigureerd",
       "count_plural": "{{count}} agenten geconfigureerd",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Systeemprompts",
       "desc": "Beheer systeemprompts die het gedrag en de persoonlijkheid van uw AI-assistent definiëren.",
       "addBtn": "+ systeemprompt toevoegen",
       "empty": "Geen systeemprompts geconfigureerd. Selecteer systeemprompt toevoegen om te beginnen.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Toolconfiguratie",
       "desc": "Bekijk ingebouwde tools en verken MCP tools geladen van verbonden servers. Schakel de acties in die uw agenten moeten kunnen uitvoeren.",
       "subTabs": {
         "builtIn": "Ingebouwde tools",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG configuratie",
       "desc": "Configureer retrieval-augmented generation en webzoeken om AI-antwoorden te verbeteren.",
       "subTabs": {
         "overview": "Overzicht",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Webzoekconfiguratie",
       "desc": "Configureer webzoekfunctionaliteit om AI-antwoorden te verbeteren met actuele informatie van het internet.",
       "generalBehavior": "Algemeen gedrag",
       "providerSelection": "Providerselectie",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Snelle acties",
       "desc": "Configureer AI-gestuurde snelle acties die verschijnen in het contextmenu van de editor wanneer tekst is geselecteerd.",
       "actionPrefix": {
         "name": "Actieprefix",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Tokengebruik",
       "desc": "Volg tokenconsumptie over providers en modellen. Gegevens worden opgebouwd over alle gesprekken.",
       "ranges": {
         "today": "Vandaag",

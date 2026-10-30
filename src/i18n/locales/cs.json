@@ -12,7 +12,6 @@
       "usage": "Použití"
     },
     "general": {
-      "title": "Obecná nastavení",
       "desc": "Nakonfigurujte obecná nastavení pluginu inteligentního asistenta.",
       "pluginVersion": {
         "name": "Verze pluginu",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "Konfigurace LLM",
       "desc": "Nakonfigurujte poskytovatele jazykových modelů a spravujte dostupné modely.",
       "subTabs": {
         "provider": "Poskytovatelé",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Konfigurace modelů",
       "desc": "Prohlížejte a spravujte modely od všech nakonfigurovaných poskytovatelů. Klikněte na \"obnovit modely\" pro načtení nejnovějších dostupných modelů.",
       "providerCount": "{{count}} poskytovatel nakonfigurován",
       "providerCount_plural": "{{count}} poskytovatelů nakonfigurováno",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Konfigurace poskytovatele",
       "securityTitle": "⚠️ Bezpečnostní upozornění",
       "securityDesc": "API klíče jsou uloženy jako prostý text ve vašem trezoru kvůli kompatibilitě. Aby se zabránilo náhodným únikům:",
       "securityItem1": "NESDÍLEJTE složku {{configDir}}/plugins/intelligence-assistant/data/.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "Správa serverů MCP",
       "desc": "Nakonfigurujte servery Model Context Protocol (MCP) pro rozšíření schopností agentů o externí nástroje a zdroje dat.",
       "inspectorBtn": "🔍 Otevřít inspektor MCP",
       "testAllBtn": "🧪 otestovat všechna připojení",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Správa agentů",
       "desc": "Vytvářejte a spravujte AI agenty s konkrétními schopnostmi, nástroji a chováním.",
       "count": "{{count}} agent nakonfigurován",
       "count_plural": "{{count}} agentů nakonfigurováno",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Systémové prompty",
       "desc": "Spravujte systémové prompty, které definují chování a osobnost vašeho AI asistenta.",
       "addBtn": "+ přidat systémový prompt",
       "empty": "Žádné systémové prompty nejsou nakonfigurovány. Vyberte přidat systémový prompt pro začátek.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Konfigurace nástrojů",
       "desc": "Prohlížejte vestavěné nástroje a prozkoumávejte nástroje MCP načtené z připojených serverů. Povolte akce, které by vaši agenti měli být schopni provádět.",
       "subTabs": {
         "builtIn": "Vestavěné nástroje",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "Konfigurace RAG",
       "desc": "Nakonfigurujte generování rozšířené o vyhledávání a webové vyhledávání pro zlepšení odpovědí AI.",
       "subTabs": {
         "overview": "Přehled",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Konfigurace webového vyhledávání",
       "desc": "Nakonfigurujte funkci webového vyhledávání pro zlepšení odpovědí AI aktuálními informacemi z internetu.",
       "generalBehavior": "Obecné chování",
       "providerSelection": "Výběr poskytovatele",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Rychlé akce",
       "desc": "Nakonfigurujte rychlé akce s podporou AI, které se zobrazují v kontextovém menu editoru při výběru textu.",
       "actionPrefix": {
         "name": "Předpona akce",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Použití tokenů",
       "desc": "Sledujte spotřebu tokenů u poskytovatelů a modelů. Data jsou shromažďována ze všech konverzací.",
       "ranges": {
         "today": "Dnes",

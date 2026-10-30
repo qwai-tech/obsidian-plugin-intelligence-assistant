@@ -25,6 +25,22 @@ const layer = (forbidden: string[], message: string) => [
   },
 ];
 
+const RESTRICTED_SYNTAX = [
+  {
+    selector: "CallExpression[callee.object.name=/^(document|window|activeWindow|activeDocument)$/][callee.property.name='addEventListener']",
+    message: "Use this.registerDomEvent(target, type, handler) so the listener is detached on unload, instead of document/window addEventListener.",
+  },
+  {
+    selector: "ExportAllDeclaration",
+    message: "Name each export explicitly instead of export *.",
+  },
+];
+
+const HEADING_ELEMENT = {
+  selector: "CallExpression[callee.property.name='createEl'][arguments.0.value=/^h[1-6]$/]",
+  message: "Use new Setting(el).setName(...).setHeading() for settings sections and Modal.setTitle() for modal titles.",
+};
+
 export default defineConfig([
   {
     ignores: [
@@ -93,17 +109,7 @@ export default defineConfig([
       // Steer toward leak-safe Obsidian APIs (auto-detached on unload). A
       // listener on document/window/activeWindow/activeDocument outlives the
       // plugin unless removed by hand — use this.registerDomEvent(...) instead.
-      "no-restricted-syntax": [
-        "error",
-        {
-          selector: "CallExpression[callee.object.name=/^(document|window|activeWindow|activeDocument)$/][callee.property.name='addEventListener']",
-          message: "Use this.registerDomEvent(target, type, handler) so the listener is detached on unload, instead of document/window addEventListener."
-        },
-        {
-          selector: "ExportAllDeclaration",
-          message: "Name each export explicitly instead of export *."
-        }
-      ],
+      "no-restricted-syntax": ["error", ...RESTRICTED_SYNTAX],
 
       "no-implied-eval": "error",
       "no-new-func": "error",
@@ -203,6 +209,12 @@ export default defineConfig([
       "@typescript-eslint/no-restricted-imports": ["error", {
         patterns: [{ group: ["@/features/*"], allowTypeImports: true, message: "Adapters use features only as types." }],
       }],
+    },
+  },
+  {
+    files: ["src/ui/settings/**/*.ts"],
+    rules: {
+      "no-restricted-syntax": ["error", ...RESTRICTED_SYNTAX, HEADING_ELEMENT],
     },
   },
   {

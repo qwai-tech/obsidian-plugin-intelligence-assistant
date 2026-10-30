@@ -3,7 +3,7 @@
  * Displays token usage statistics per provider and model
  */
 
-import type { App } from 'obsidian';
+import { Setting, type App } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { t } from '@/i18n';
@@ -15,7 +15,6 @@ export async function displayUsageTab(
 	_app: App,
 	_refreshDisplay: () => void
 ): Promise<void> {
-	containerEl.createEl('h3', { text: t('settings.usage.title') });
 
 	const desc = containerEl.createEl('p', {
 		text: t('settings.usage.desc')
@@ -101,7 +100,7 @@ export async function displayUsageTab(
 		addStatCard(t('settings.usage.stats.completion'), grandTotal.completionTokens.toLocaleString(), t('settings.usage.stats.tokensOut'));
 
 		// ---- By Provider ----
-		statsContainer.createDiv('ia-usage-section-hdr').createEl('h4', { text: t('settings.usage.byProvider') });
+		new Setting(statsContainer).setName(t('settings.usage.byProvider')).setHeading();
 
 		if (byProvider.size === 0) {
 			statsContainer.createEl('p', { text: t('settings.usage.noData') }).addClass('ia-muted');
@@ -130,7 +129,7 @@ export async function displayUsageTab(
 		}
 
 		// ---- By Model ----
-		statsContainer.createDiv('ia-usage-section-hdr').createEl('h4', { text: t('settings.usage.byModel') });
+		new Setting(statsContainer).setName(t('settings.usage.byModel')).setHeading();
 
 		if (byModel.size === 0) {
 			statsContainer.createEl('p', { text: t('settings.usage.noData') }).addClass('ia-muted');
@@ -160,9 +159,7 @@ export async function displayUsageTab(
 		}
 
 		// ---- Recent Activity (last 10 from filtered range) ----
-		const recentHdr = statsContainer.createDiv('ia-usage-section-hdr');
-		recentHdr.createEl('h4', { text: t('settings.usage.recentActivity') });
-		recentHdr.createSpan({ text: t('settings.usage.last10') });
+		new Setting(statsContainer).setName(t('settings.usage.recentActivity')).setDesc(t('settings.usage.last10')).setHeading();
 
 		const recent = records.slice(-10).reverse();
 		if (recent.length === 0) {

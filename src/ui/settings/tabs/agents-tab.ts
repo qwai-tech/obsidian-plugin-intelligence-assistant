@@ -20,7 +20,6 @@ export function displayAgentsTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: t('settings.agents.title') });
 
 	const desc = containerEl.createEl('p', {
 		text: t('settings.agents.desc')

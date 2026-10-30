@@ -20,7 +20,6 @@ export function displayProviderTab(
 	app: App,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: t('settings.provider.title') });
 
 	// Security Warning
 	const warningContainer = containerEl.createDiv('ia-warning-box');

@@ -12,7 +12,6 @@
       "usage": "Ús"
     },
     "general": {
-      "title": "Configuració general",
       "desc": "Configureu els ajustos generals del connector d'assistent intel·ligent.",
       "pluginVersion": {
         "name": "Versió del connector",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "Configuració LLM",
       "desc": "Configureu els proveïdors de models de llenguatge i gestioneu els models disponibles.",
       "subTabs": {
         "provider": "Proveïdors",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Configuració de models",
       "desc": "Visualitzeu i gestioneu models de tots els proveïdors configurats. Feu clic a \"actualitza models\" per obtenir els models disponibles més recents.",
       "providerCount": "{{count}} proveïdor configurat",
       "providerCount_plural": "{{count}} proveïdors configurats",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Configuració del proveïdor",
       "securityTitle": "⚠️ Avís de seguretat",
       "securityDesc": "Les claus API s'emmagatzemen com a text pla al vostre vault per compatibilitat. Per evitar fuites accidentals:",
       "securityItem1": "NO compartiu la carpeta {{configDir}}/plugins/intelligence-assistant/data/.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "Gestió del servidor MCP",
       "desc": "Configureu els servidors Model Context Protocol (MCP) per ampliar les capacitats de l'agent amb eines externes i fonts de dades.",
       "inspectorBtn": "🔍 Obre l'inspector MCP",
       "testAllBtn": "🧪 prova totes les connexions",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Gestió d'agents",
       "desc": "Creeu i gestioneu agents d'IA amb capacitats, eines i comportaments específics.",
       "count": "{{count}} agent configurat",
       "count_plural": "{{count}} agents configurats",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Instruccions de sistema",
       "desc": "Gestioneu les instruccions de sistema que defineixen el comportament i la personalitat del vostre assistent d'IA.",
       "addBtn": "+ afegeix instrucció de sistema",
       "empty": "No hi ha instruccions de sistema configurades. Seleccioneu afegeix instrucció de sistema per començar.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Configuració d'eines",
       "desc": "Reviseu les eines integrades i exploreu les eines MCP carregades des dels servidors connectats. Activeu les accions que els vostres agents han de poder realitzar.",
       "subTabs": {
         "builtIn": "Eines integrades",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "Configuració RAG",
       "desc": "Configureu RAG i la cerca web per millorar les respostes de la IA.",
       "subTabs": {
         "overview": "Visió general",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Configuració de cerca web",
       "desc": "Configureu la funcionalitat de cerca web per millorar les respostes de la IA amb informació actualitzada d'Internet.",
       "generalBehavior": "Comportament general",
       "providerSelection": "Selecció de proveïdor",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Accions ràpides",
       "desc": "Configureu les accions ràpides d'IA que apareixen al menú contextual de l'editor quan hi ha text seleccionat.",
       "actionPrefix": {
         "name": "Prefix d'acció",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Ús de tokens",
       "desc": "Seguiu el consum de tokens per proveïdors i models. Les dades s'acumulen en totes les converses.",
       "ranges": {
         "today": "Avui",

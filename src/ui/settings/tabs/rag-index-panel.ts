@@ -6,7 +6,7 @@ import { setDestructiveButton } from '@/ui/utils/ui-helpers';
 
 export function renderIndexManagement(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: t('settings.rag.indexMgmt.title') });
+	new Setting(section).setName(t('settings.rag.indexMgmt.title')).setHeading();
 
 	const indexDesc = section.createEl('p', {
 		text: t('settings.rag.indexMgmt.desc')

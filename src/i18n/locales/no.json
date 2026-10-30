@@ -12,7 +12,6 @@
       "usage": "Bruk"
     },
     "general": {
-      "title": "Generelle innstillinger",
       "desc": "Konfigurer generelle innstillinger for intelligensassistent-pluginet.",
       "pluginVersion": {
         "name": "Plugin-versjon",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM-konfigurasjon",
       "desc": "Konfigurer språkmodell-leverandører og administrer tilgjengelige modeller.",
       "subTabs": {
         "provider": "Leverandører",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Modellkonfigurasjon",
       "desc": "Vis og administrer modeller fra alle konfigurerte leverandører. Klikk «oppdater modeller» for å hente de nyeste tilgjengelige modellene.",
       "providerCount": "{{count}} leverandør konfigurert",
       "providerCount_plural": "{{count}} leverandører konfigurert",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Leverandørkonfigurasjon",
       "securityTitle": "⚠️ Sikkerhetsadvarsel",
       "securityDesc": "API-nøkler lagres som ren tekst i hvelvet ditt av kompatibilitetshensyn. For å forhindre utilsiktet lekkasje:",
       "securityItem1": "Del IKKE {{configDir}}/plugins/intelligence-assistant/data/-mappen.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP-serveradministrasjon",
       "desc": "Konfigurer Model Context Protocol (MCP)-servere for å utvide agentfunksjonene med eksterne verktøy og datakilder.",
       "inspectorBtn": "🔍 Åpne MCP-inspektor",
       "testAllBtn": "🧪 test alle tilkoblinger",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Agentadministrasjon",
       "desc": "Opprett og administrer AI-agenter med spesifikke egenskaper, verktøy og atferd.",
       "count": "{{count}} agent konfigurert",
       "count_plural": "{{count}} agenter konfigurert",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Systemledetekster",
       "desc": "Administrer systemledetekster som definerer atferden og personligheten til AI-assistenten.",
       "addBtn": "+ legg til systemledetekst",
       "empty": "Ingen systemledetekster konfigurert. Velg legg til systemledetekst for å komme i gang.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Verktøykonfigurasjon",
       "desc": "Se innebygde verktøy og utforsk MCP-verktøy lastet fra tilkoblede servere. Aktiver handlingene agentene dine skal kunne utføre.",
       "subTabs": {
         "builtIn": "Innebygde verktøy",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG-konfigurasjon",
       "desc": "Konfigurer retrieval-augmented generation og nettsøk for å forbedre AI-svar.",
       "subTabs": {
         "overview": "Oversikt",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Nettsøkkonfigurasjon",
       "desc": "Konfigurer nettsøkfunksjonalitet for å forbedre AI-svar med oppdatert informasjon fra internett.",
       "generalBehavior": "Generell atferd",
       "providerSelection": "Leverandørvalg",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Hurtighandlinger",
       "desc": "Konfigurer AI-drevne hurtighandlinger som vises i redigeringsprogrammets kontekstmeny når tekst er valgt.",
       "actionPrefix": {
         "name": "Handlingsprefiks",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Token-bruk",
       "desc": "Spor tokenforbruk på tvers av leverandører og modeller. Data akkumuleres over alle samtaler.",
       "ranges": {
         "today": "I dag",

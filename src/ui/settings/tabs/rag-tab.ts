@@ -3,6 +3,7 @@
  * Displays Retrieval-Augmented Generation configuration and Web Search
  */
 
+import { Setting } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
 import type { RAGConfig } from '@/features/knowledge';
@@ -15,7 +16,6 @@ export function displayRAGTab(
 	containerEl: HTMLElement,
 	plugin: IntelligenceAssistantPlugin
 ): void {
-	containerEl.createEl('h3', { text: t('settings.rag.title') });
 
 	const desc = containerEl.createEl('p', {
 		text: t('settings.rag.desc')
@@ -108,7 +108,7 @@ function renderAdvancedTab(containerEl: HTMLElement, plugin: IntelligenceAssista
 
 function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: t('settings.rag.general.title') });
+	new Setting(section).setName(t('settings.rag.general.title')).setHeading();
 	const form = ragForm(section, plugin);
 
 	form.toggle('enabled', {
@@ -135,7 +135,7 @@ function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 
 function renderChunkingSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: t('settings.rag.chunking.title') });
+	new Setting(section).setName(t('settings.rag.chunking.title')).setHeading();
 	const form = ragForm(section, plugin);
 
 	form.dropdown('chunkingStrategy', {
@@ -167,7 +167,7 @@ function renderChunkingSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: t('settings.rag.search.title') });
+	new Setting(section).setName(t('settings.rag.search.title')).setHeading();
 	const form = ragForm(section, plugin);
 
 	form.dropdown('searchType', {
@@ -194,7 +194,7 @@ function renderSearchSettings(containerEl: HTMLElement, plugin: IntelligenceAssi
 
 function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: t('settings.rag.filters.title') });
+	new Setting(section).setName(t('settings.rag.filters.title')).setHeading();
 	const form = ragForm(section, plugin);
 
 	form.list('excludeFolders', {
@@ -224,7 +224,7 @@ function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssista
 
 function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: t('settings.rag.advanced.title') });
+	new Setting(section).setName(t('settings.rag.advanced.title')).setHeading();
 
 	ragForm(section, plugin).number('embeddingBatchSize', {
 		label: t('settings.rag.advanced.batchSize.name'),
@@ -234,7 +234,7 @@ function renderAdvancedSettings(containerEl: HTMLElement, plugin: IntelligenceAs
 
 function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {
 	const section = containerEl.createDiv('ia-settings-section');
-	section.createEl('h4', { text: t('settings.rag.grading.title') });
+	new Setting(section).setName(t('settings.rag.grading.title')).setHeading();
 	section.createEl('p', { text: t('settings.rag.grading.desc'), cls: 'setting-item-description' });
 	const gradingContainer = section.createDiv('ia-grading-container');
 

@@ -12,7 +12,6 @@
       "usage": "Naudojimas"
     },
     "general": {
-      "title": "Bendrieji nustatymai",
       "desc": "Konfigūruoti bendruosius intelektualaus asistento įskiepio nustatymus.",
       "pluginVersion": {
         "name": "Įskiepio versija",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM konfigūracija",
       "desc": "Konfigūruoti kalbos modelių tiekėjus ir valdyti galimus modelius.",
       "subTabs": {
         "provider": "Tiekėjai",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Modelio konfigūracija",
       "desc": "Peržiūrėti ir valdyti modelius iš visų sukonfigūruotų tiekėjų. Spauskite «atnaujinti modelius», kad gautumėte naujausius galimus modelius.",
       "providerCount": "{{count}} tiekėjas sukonfigūruotas",
       "providerCount_plural": "{{count}} tiekėjai sukonfigūruoti",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Tiekėjo konfigūracija",
       "securityTitle": "⚠️ Saugos įspėjimas",
       "securityDesc": "API raktai saugomi kaip paprastas tekstas jūsų saugykloje suderinamumo sumetimais. Kad išvengtumėte atsitiktinių nutekėjimų:",
       "securityItem1": "NEDALINKITĖS {{configDir}}/plugins/intelligence-assistant/data/ aplanku.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP serverio valdymas",
       "desc": "Konfigūruoti Model Context Protocol (MCP) serverius, kad išplėstumėte agento galimybes su išoriniais įrankiais ir duomenų šaltiniais.",
       "inspectorBtn": "🔍 Atidaryti MCP inspektorių",
       "testAllBtn": "🧪 patikrinti visus ryšius",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Agentų valdymas",
       "desc": "Kurti ir valdyti DI agentus su specifinėmis galimybėmis, įrankiais ir elgesiu.",
       "count": "{{count}} agentas sukonfigūruotas",
       "count_plural": "{{count}} agentai sukonfigūruoti",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Sistemos raginiai",
       "desc": "Valdyti sistemos raginius, apibrėžiančius DI asistento elgesį ir asmenybę.",
       "addBtn": "+ pridėti sistemos raginį",
       "empty": "Nėra sukonfigūruotų sistemos raginių. Pasirinkite pridėti sistemos raginį, kad pradėtumėte.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Įrankių konfigūracija",
       "desc": "Peržiūrėti įtaisytuosius įrankius ir nagrinėti MCP įrankius, įkeltus iš prijungtų serverių. Įjunkite veiksmus, kuriuos jūsų agentai turėtų galėti atlikti.",
       "subTabs": {
         "builtIn": "Įtaisytieji įrankiai",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG konfigūracija",
       "desc": "Konfigūruoti retrieval-augmented generation ir žiniatinklio paiešką, kad pagerėtų DI atsakymai.",
       "subTabs": {
         "overview": "Apžvalga",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Žiniatinklio paieškos konfigūracija",
       "desc": "Konfigūruoti žiniatinklio paieškos funkcionalumą, kad DI atsakymai būtų patobulinami nauja informacija iš interneto.",
       "generalBehavior": "Bendras elgesys",
       "providerSelection": "Tiekėjo pasirinkimas",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Greiti veiksmai",
       "desc": "Konfigūruoti DI greitus veiksmus, kurie rodomi redaktoriaus kontekstiniame meniu pasirinkus tekstą.",
       "actionPrefix": {
         "name": "Veiksmo prefiksas",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Žetonų naudojimas",
       "desc": "Stebėti žetonų suvartojimą įvairių tiekėjų ir modelių. Duomenys kaupiami visuose pokalbiuose.",
       "ranges": {
         "today": "Šiandien",

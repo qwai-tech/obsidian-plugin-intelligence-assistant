@@ -12,7 +12,6 @@
       "usage": "Használat"
     },
     "general": {
-      "title": "Általános beállítások",
       "desc": "Az intelligens asszisztens bővítmény általános beállításainak konfigurálása.",
       "pluginVersion": {
         "name": "Bővítmény verzió",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM konfiguráció",
       "desc": "Nyelvi modell szolgáltatók konfigurálása és az elérhető modellek kezelése.",
       "subTabs": {
         "provider": "Szolgáltatók",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Modell konfiguráció",
       "desc": "Az összes konfigurált szolgáltatótól származó modellek megtekintése és kezelése. Kattintson a \"modellek frissítése\" gombra a legújabb elérhető modellek lekéréséhez.",
       "providerCount": "{{count}} szolgáltató konfigurálva",
       "providerCount_plural": "{{count}} szolgáltató konfigurálva",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Szolgáltató konfiguráció",
       "securityTitle": "⚠️ Biztonsági figyelmeztetés",
       "securityDesc": "Az API-kulcsok kompatibilitási okokból egyszerű szövegként tárolódnak a vaultban. A véletlen kiszivárgás megelőzése érdekében:",
       "securityItem1": "NE ossza meg a {{configDir}}/plugins/intelligence-assistant/data/ mappát.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP szerver kezelése",
       "desc": "Model Context Protocol (MCP) szerverek konfigurálása az ügynök képességeinek bővítéséhez külső eszközökkel és adatforrásokkal.",
       "inspectorBtn": "🔍 MCP vizsgáló megnyitása",
       "testAllBtn": "🧪 összes kapcsolat tesztelése",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Ügynök kezelése",
       "desc": "AI ügynökök létrehozása és kezelése meghatározott képességekkel, eszközökkel és viselkedéssel.",
       "count": "{{count}} ügynök konfigurálva",
       "count_plural": "{{count}} ügynök konfigurálva",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Rendszerpromptok",
       "desc": "Az AI asszisztens viselkedését és személyiségét meghatározó rendszerpromptok kezelése.",
       "addBtn": "+ rendszerprompt hozzáadása",
       "empty": "Nincsenek konfigurált rendszerpromptok. Válassza a rendszerprompt hozzáadása lehetőséget a kezdéshez.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Eszköz konfiguráció",
       "desc": "Tekintse át a beépített eszközöket, és fedezze fel a csatlakoztatott szerverekről betöltött MCP eszközöket. Engedélyezze azokat a műveleteket, amelyeket az ügynökei végrehajthatnak.",
       "subTabs": {
         "builtIn": "Beépített eszközök",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG konfiguráció",
       "desc": "A visszakeresés-alapú generálás és webkeresés konfigurálása az AI válaszok javítása érdekében.",
       "subTabs": {
         "overview": "Áttekintés",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Webkeresés konfiguráció",
       "desc": "A webkeresési funkció konfigurálása az AI válaszok naprakész internetes információkkal való gazdagítása érdekében.",
       "generalBehavior": "Általános viselkedés",
       "providerSelection": "Szolgáltató kiválasztása",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Gyors műveletek",
       "desc": "AI-alapú gyors műveletek konfigurálása, amelyek a szöveg kijelölésekor megjelennek a szerkesztő kontextusmenüjében.",
       "actionPrefix": {
         "name": "Művelet előtag",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Token használat",
       "desc": "Token-felhasználás nyomon követése szolgáltatók és modellek szerint. Az adatok az összes beszélgetésből halmozódnak fel.",
       "ranges": {
         "today": "Ma",

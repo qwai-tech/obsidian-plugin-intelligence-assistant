@@ -24,7 +24,6 @@ export function displayModelsTab(
 	onFilterChange: (filters: Partial<ModelFilters>) => void,
 	refreshDisplay: () => void
 ): void {
-	containerEl.createEl('h3', { text: t('settings.models.title') });
 
 	const desc = containerEl.createEl('p', {
 		text: t('settings.models.desc')

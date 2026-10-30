@@ -12,7 +12,6 @@
       "usage": "Penggunaan"
     },
     "general": {
-      "title": "Pengaturan umum",
       "desc": "Konfigurasikan pengaturan umum untuk plugin asisten kecerdasan.",
       "pluginVersion": {
         "name": "Versi plugin",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "Konfigurasi LLM",
       "desc": "Konfigurasikan penyedia model bahasa dan kelola model yang tersedia.",
       "subTabs": {
         "provider": "Penyedia",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Konfigurasi model",
       "desc": "Lihat dan kelola model dari semua penyedia yang dikonfigurasi. Klik \"segarkan model\" untuk mengambil model terbaru yang tersedia.",
       "providerCount": "{{count}} penyedia dikonfigurasi",
       "providerCount_plural": "{{count}} penyedia dikonfigurasi",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Konfigurasi penyedia",
       "securityTitle": "⚠️ Peringatan Keamanan",
       "securityDesc": "Kunci API disimpan sebagai teks biasa di vault Anda untuk kompatibilitas. Untuk mencegah kebocoran yang tidak disengaja:",
       "securityItem1": "JANGAN bagikan folder {{configDir}}/plugins/intelligence-assistant/data/ Anda.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "Manajemen server MCP",
       "desc": "Konfigurasikan server Model Context Protocol (MCP) untuk memperluas kemampuan agen dengan alat dan sumber data eksternal.",
       "inspectorBtn": "🔍 Buka inspektor MCP",
       "testAllBtn": "🧪 uji semua koneksi",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Manajemen agen",
       "desc": "Buat dan kelola agen AI dengan kemampuan, alat, dan perilaku tertentu.",
       "count": "{{count}} agen dikonfigurasi",
       "count_plural": "{{count}} agen dikonfigurasi",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Prompt sistem",
       "desc": "Kelola prompt sistem yang mendefinisikan perilaku dan kepribadian asisten AI Anda.",
       "addBtn": "+ tambah prompt sistem",
       "empty": "Tidak ada prompt sistem yang dikonfigurasi. Pilih tambah prompt sistem untuk memulai.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Konfigurasi alat",
       "desc": "Tinjau alat bawaan dan jelajahi alat MCP yang dimuat dari server yang terhubung. Aktifkan tindakan yang dapat dilakukan oleh agen Anda.",
       "subTabs": {
         "builtIn": "Alat Bawaan",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "Konfigurasi RAG",
       "desc": "Konfigurasikan retrieval-augmented generation dan pencarian web untuk meningkatkan respons AI.",
       "subTabs": {
         "overview": "Ikhtisar",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Konfigurasi pencarian web",
       "desc": "Konfigurasikan fungsi pencarian web untuk meningkatkan respons AI dengan informasi terkini dari internet.",
       "generalBehavior": "Perilaku umum",
       "providerSelection": "Pemilihan penyedia",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Aksi cepat",
       "desc": "Konfigurasikan aksi cepat bertenaga AI yang muncul di menu konteks editor saat teks dipilih.",
       "actionPrefix": {
         "name": "Awalan aksi",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Penggunaan token",
       "desc": "Lacak konsumsi token di seluruh penyedia dan model. Data diakumulasikan di semua percakapan.",
       "ranges": {
         "today": "Hari ini",

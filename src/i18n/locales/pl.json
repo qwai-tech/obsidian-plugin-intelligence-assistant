@@ -12,7 +12,6 @@
       "usage": "Użycie"
     },
     "general": {
-      "title": "Ustawienia ogólne",
       "desc": "Skonfiguruj ogólne ustawienia wtyczki asystenta inteligencji.",
       "pluginVersion": {
         "name": "Wersja wtyczki",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "Konfiguracja LLM",
       "desc": "Konfiguruj dostawców modeli językowych i zarządzaj dostępnymi modelami.",
       "subTabs": {
         "provider": "Dostawcy",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Konfiguracja modeli",
       "desc": "Przeglądaj i zarządzaj modelami od wszystkich skonfigurowanych dostawców. Kliknij \"odśwież modele\", aby pobrać najnowsze dostępne modele.",
       "providerCount": "{{count}} dostawca skonfigurowany",
       "providerCount_plural": "{{count}} dostawców skonfigurowanych",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Konfiguracja dostawcy",
       "securityTitle": "⚠️ Ostrzeżenie dotyczące bezpieczeństwa",
       "securityDesc": "Klucze API są przechowywane jako zwykły tekst w Twoim sejfie dla zachowania kompatybilności. Aby zapobiec przypadkowym wyciekom:",
       "securityItem1": "NIE udostępniaj folderu {{configDir}}/plugins/intelligence-assistant/data/.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "Zarządzanie serwerami MCP",
       "desc": "Konfiguruj serwery Model Context Protocol (MCP), aby rozszerzyć możliwości agentów o zewnętrzne narzędzia i źródła danych.",
       "inspectorBtn": "🔍 Otwórz inspektor MCP",
       "testAllBtn": "🧪 przetestuj wszystkie połączenia",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Zarządzanie agentami",
       "desc": "Twórz i zarządzaj agentami AI z określonymi możliwościami, narzędziami i zachowaniami.",
       "count": "{{count}} agent skonfigurowany",
       "count_plural": "{{count}} agentów skonfigurowanych",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Prompty systemowe",
       "desc": "Zarządzaj promptami systemowymi, które definiują zachowanie i osobowość Twojego asystenta AI.",
       "addBtn": "+ dodaj prompt systemowy",
       "empty": "Brak skonfigurowanych promptów systemowych. Wybierz dodaj prompt systemowy, aby rozpocząć.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Konfiguracja narzędzi",
       "desc": "Przeglądaj wbudowane narzędzia i eksploruj narzędzia MCP załadowane z połączonych serwerów. Włącz akcje, które Twoi agenci powinni móc wykonywać.",
       "subTabs": {
         "builtIn": "Narzędzia wbudowane",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "Konfiguracja RAG",
       "desc": "Konfiguruj generowanie wspomagane wyszukiwaniem i wyszukiwanie w sieci, aby wzbogacać odpowiedzi AI.",
       "subTabs": {
         "overview": "Przegląd",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Konfiguracja wyszukiwania w sieci",
       "desc": "Konfiguruj funkcjonalność wyszukiwania w sieci, aby wzbogacać odpowiedzi AI aktualnymi informacjami z internetu.",
       "generalBehavior": "Ogólne zachowanie",
       "providerSelection": "Wybór dostawcy",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Szybkie akcje",
       "desc": "Konfiguruj szybkie akcje oparte na AI, które pojawiają się w menu kontekstowym edytora po zaznaczeniu tekstu.",
       "actionPrefix": {
         "name": "Prefiks akcji",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Użycie tokenów",
       "desc": "Śledź zużycie tokenów u dostawców i modeli. Dane są gromadzone we wszystkich rozmowach.",
       "ranges": {
         "today": "Dzisiaj",

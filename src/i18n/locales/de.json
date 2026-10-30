@@ -12,7 +12,6 @@
       "usage": "Nutzung"
     },
     "general": {
-      "title": "Allgemeine Einstellungen",
       "desc": "Konfigurieren Sie die allgemeinen Einstellungen für das Intelligence-Assistant-Plugin.",
       "pluginVersion": {
         "name": "Plugin-Version",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM-Konfiguration",
       "desc": "Konfigurieren Sie Sprachmodell-Anbieter und verwalten Sie verfügbare Modelle.",
       "subTabs": {
         "provider": "Anbieter",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Modellkonfiguration",
       "desc": "Modelle aller konfigurierten Anbieter anzeigen und verwalten. Klicken Sie auf \"Modelle aktualisieren\", um die neuesten verfügbaren Modelle abzurufen.",
       "providerCount": "{{count}} Anbieter konfiguriert",
       "providerCount_plural": "{{count}} Anbieter konfiguriert",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Anbieterkonfiguration",
       "securityTitle": "⚠️ Sicherheitswarnung",
       "securityDesc": "API-Schlüssel werden aus Kompatibilitätsgründen als Klartext in Ihrem Vault gespeichert. Um versehentliche Lecks zu vermeiden:",
       "securityItem1": "Teilen Sie den Ordner {{configDir}}/plugins/intelligence-assistant/data/ NICHT.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP-Serververwaltung",
       "desc": "Konfigurieren Sie Model Context Protocol (MCP)-Server, um Agentenfähigkeiten mit externen Werkzeugen und Datenquellen zu erweitern.",
       "inspectorBtn": "🔍 MCP-Inspektor öffnen",
       "testAllBtn": "🧪 alle Verbindungen testen",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Agentenverwaltung",
       "desc": "KI-Agenten mit spezifischen Fähigkeiten, Werkzeugen und Verhaltensweisen erstellen und verwalten.",
       "count": "{{count}} Agent konfiguriert",
       "count_plural": "{{count}} Agenten konfiguriert",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "System-Prompts",
       "desc": "System-Prompts verwalten, die das Verhalten und die Persönlichkeit Ihres KI-Assistenten definieren.",
       "addBtn": "+ System-Prompt hinzufügen",
       "empty": "Keine System-Prompts konfiguriert. Wählen Sie System-Prompt hinzufügen, um zu beginnen.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Werkzeugkonfiguration",
       "desc": "Integrierte Werkzeuge überprüfen und MCP-Werkzeuge von verbundenen Servern erkunden. Aktivieren Sie die Aktionen, die Ihre Agenten ausführen sollen.",
       "subTabs": {
         "builtIn": "Integrierte Werkzeuge",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG-Konfiguration",
       "desc": "Retrieval-Augmented Generation und Websuche konfigurieren, um KI-Antworten zu verbessern.",
       "subTabs": {
         "overview": "Übersicht",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Websuchkonfiguration",
       "desc": "Websuchfunktionalität konfigurieren, um KI-Antworten mit aktuellen Informationen aus dem Internet zu verbessern.",
       "generalBehavior": "Allgemeines Verhalten",
       "providerSelection": "Anbieterauswahl",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Schnellaktionen",
       "desc": "KI-gestützte Schnellaktionen konfigurieren, die im Editor-Kontextmenü erscheinen, wenn Text ausgewählt ist.",
       "actionPrefix": {
         "name": "Aktionspräfix",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Token-Nutzung",
       "desc": "Token-Verbrauch über Anbieter und Modelle verfolgen. Daten werden über alle Konversationen hinweg angesammelt.",
       "ranges": {
         "today": "Heute",

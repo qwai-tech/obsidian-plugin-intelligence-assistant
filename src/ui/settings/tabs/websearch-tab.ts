@@ -3,6 +3,7 @@
  * Displays web search configuration settings
  */
 
+import { Setting } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
 import type { WebSearchConfig } from '@/features/web-search';
@@ -26,7 +27,6 @@ export function displayWebSearchTab(
 	containerEl: HTMLElement,
 	plugin: IntelligenceAssistantPlugin
 ): void {
-	containerEl.createEl('h3', { text: t('settings.websearch.title') });
 	containerEl.createEl('p', { text: t('settings.websearch.desc'), cls: ['ia-section-description', 'ia-section-description--spaced'] });
 
 	const form = new SettingsForm<WebSearchConfig>(containerEl, () => plugin.settings.webSearchConfig, (change) => plugin.updateSettings(change), 'webSearchConfig');
@@ -34,7 +34,7 @@ export function displayWebSearchTab(
 		label: t(`settings.websearch.${name}.name`),
 		description: t(`settings.websearch.${name}.desc`),
 	});
-	const subheading = (text: string) => containerEl.createEl('h4', { text, cls: 'ia-settings-subheading' });
+	const subheading = (text: string) => new Setting(containerEl).setName(text).setHeading();
 
 	subheading(t('settings.websearch.generalBehavior'));
 	form.toggle('enabled', field('enabled'));

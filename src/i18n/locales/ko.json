@@ -12,7 +12,6 @@
       "usage": "사용량"
     },
     "general": {
-      "title": "일반 설정",
       "desc": "인텔리전스 어시스턴트 플러그인의 일반 설정을 구성합니다.",
       "pluginVersion": {
         "name": "플러그인 버전",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM 구성",
       "desc": "언어 모델 제공자를 구성하고 사용 가능한 모델을 관리합니다.",
       "subTabs": {
         "provider": "제공자",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "모델 구성",
       "desc": "구성된 모든 제공자의 모델을 보고 관리합니다. \"모델 새로 고침\"을 클릭하여 최신 사용 가능한 모델을 가져옵니다.",
       "providerCount": "{{count}}개 제공자 구성됨",
       "providerCount_plural": "{{count}}개 제공자 구성됨",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "제공자 구성",
       "securityTitle": "⚠️ 보안 경고",
       "securityDesc": "API 키는 호환성을 위해 볼트에 일반 텍스트로 저장됩니다. 의도치 않은 유출을 방지하려면:",
       "securityItem1": "{{configDir}}/plugins/intelligence-assistant/data/ 폴더를 공유하지 마세요.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP 서버 관리",
       "desc": "Model Context Protocol (MCP) 서버를 구성하여 외부 도구와 데이터 소스로 에이전트 기능을 확장합니다.",
       "inspectorBtn": "🔍 MCP 검사기 열기",
       "testAllBtn": "🧪 모든 연결 테스트",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "에이전트 관리",
       "desc": "특정 기능, 도구, 동작을 가진 AI 에이전트를 생성하고 관리합니다.",
       "count": "{{count}}개 에이전트 구성됨",
       "count_plural": "{{count}}개 에이전트 구성됨",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "시스템 프롬프트",
       "desc": "AI 어시스턴트의 동작과 개성을 정의하는 시스템 프롬프트를 관리합니다.",
       "addBtn": "+ 시스템 프롬프트 추가",
       "empty": "구성된 시스템 프롬프트가 없습니다. 시스템 프롬프트 추가를 선택하여 시작하세요.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "도구 구성",
       "desc": "내장 도구를 검토하고 연결된 서버에서 로드된 MCP 도구를 탐색합니다. 에이전트가 수행할 수 있는 작업을 활성화하세요.",
       "subTabs": {
         "builtIn": "내장 도구",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG 구성",
       "desc": "검색 증강 생성과 웹 검색을 구성하여 AI 응답을 향상합니다.",
       "subTabs": {
         "overview": "개요",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "웹 검색 구성",
       "desc": "인터넷의 최신 정보로 AI 응답을 향상하기 위한 웹 검색 기능을 구성합니다.",
       "generalBehavior": "일반 동작",
       "providerSelection": "제공자 선택",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "빠른 작업",
       "desc": "텍스트가 선택되었을 때 편집기 컨텍스트 메뉴에 표시되는 AI 기반 빠른 작업을 구성합니다.",
       "actionPrefix": {
         "name": "작업 접두사",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "토큰 사용량",
       "desc": "제공자와 모델 전반의 토큰 소비를 추적합니다. 데이터는 모든 대화에 걸쳐 누적됩니다.",
       "ranges": {
         "today": "오늘",

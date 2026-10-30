@@ -12,7 +12,6 @@
       "usage": "Penggunaan"
     },
     "general": {
-      "title": "Tetapan umum",
       "desc": "Konfigurasikan tetapan umum untuk pemalam pembantu kecerdasan.",
       "pluginVersion": {
         "name": "Versi pemalam",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "Konfigurasi LLM",
       "desc": "Konfigurasikan pembekal model bahasa dan urus model yang tersedia.",
       "subTabs": {
         "provider": "Pembekal",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Konfigurasi model",
       "desc": "Lihat dan urus model daripada semua pembekal yang dikonfigurasi. Klik \"segarkan model\" untuk mendapatkan model terbaru yang tersedia.",
       "providerCount": "{{count}} pembekal dikonfigurasi",
       "providerCount_plural": "{{count}} pembekal dikonfigurasi",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Konfigurasi pembekal",
       "securityTitle": "⚠️ Amaran Keselamatan",
       "securityDesc": "Kunci API disimpan sebagai teks biasa dalam vault anda untuk keserasian. Untuk mencegah kebocoran tidak sengaja:",
       "securityItem1": "JANGAN kongsi folder {{configDir}}/plugins/intelligence-assistant/data/ anda.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "Pengurusan pelayan MCP",
       "desc": "Konfigurasikan pelayan Model Context Protocol (MCP) untuk meluaskan keupayaan ejen dengan alat dan sumber data luaran.",
       "inspectorBtn": "🔍 Buka pemeriksa MCP",
       "testAllBtn": "🧪 uji semua sambungan",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Pengurusan ejen",
       "desc": "Cipta dan urus ejen AI dengan keupayaan, alat, dan tingkah laku tertentu.",
       "count": "{{count}} ejen dikonfigurasi",
       "count_plural": "{{count}} ejen dikonfigurasi",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Prompt sistem",
       "desc": "Urus prompt sistem yang menentukan tingkah laku dan keperibadian pembantu AI anda.",
       "addBtn": "+ tambah prompt sistem",
       "empty": "Tiada prompt sistem dikonfigurasi. Pilih tambah prompt sistem untuk bermula.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Konfigurasi alat",
       "desc": "Semak alat terbina dalam dan terokai alat MCP yang dimuatkan daripada pelayan yang disambungkan. Aktifkan tindakan yang boleh dilakukan oleh ejen anda.",
       "subTabs": {
         "builtIn": "Alat Terbina Dalam",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "Konfigurasi RAG",
       "desc": "Konfigurasikan retrieval-augmented generation dan carian web untuk meningkatkan respons AI.",
       "subTabs": {
         "overview": "Gambaran Keseluruhan",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Konfigurasi carian web",
       "desc": "Konfigurasikan fungsi carian web untuk meningkatkan respons AI dengan maklumat terkini daripada internet.",
       "generalBehavior": "Tingkah laku umum",
       "providerSelection": "Pemilihan pembekal",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Tindakan pantas",
       "desc": "Konfigurasikan tindakan pantas berkuasa AI yang muncul dalam menu konteks editor apabila teks dipilih.",
       "actionPrefix": {
         "name": "Awalan tindakan",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Penggunaan token",
       "desc": "Jejak penggunaan token merentasi pembekal dan model. Data dikumpul merentasi semua perbualan.",
       "ranges": {
         "today": "Hari ini",

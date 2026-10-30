@@ -12,7 +12,6 @@ export function displayGeneralTab(
 	containerEl: HTMLElement,
 	plugin: IntelligenceAssistantPlugin
 ): void {
-	containerEl.createEl('h3', { text: t('settings.general.title') });
 
 	const desc = containerEl.createEl('p', {
 		text: t('settings.general.desc')

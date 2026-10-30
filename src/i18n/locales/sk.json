@@ -12,7 +12,6 @@
       "usage": "Využitie"
     },
     "general": {
-      "title": "Všeobecné nastavenia",
       "desc": "Konfigurácia všeobecných nastavení pluginu inteligentného asistenta.",
       "pluginVersion": {
         "name": "Verzia pluginu",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "Konfigurácia LLM",
       "desc": "Konfigurácia poskytovateľov jazykových modelov a správa dostupných modelov.",
       "subTabs": {
         "provider": "Poskytovatelia",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Konfigurácia modelov",
       "desc": "Prezerajte a spravujte modely od všetkých nakonfigurovaných poskytovateľov. Kliknite na „obnoviť modely“ a načítajte najnovšie dostupné modely.",
       "providerCount": "{{count}} poskytovateľ nakonfigurovaný",
       "providerCount_plural": "{{count}} poskytovatelia nakonfigurovaní",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Konfigurácia poskytovateľa",
       "securityTitle": "⚠️ Bezpečnostné upozornenie",
       "securityDesc": "API kľúče sú uložené ako čistý text vo vašom trezore kvôli kompatibilite. Aby ste predišli náhodnému úniku:",
       "securityItem1": "NEZDIEĽAJTE priečinok {{configDir}}/plugins/intelligence-assistant/data/.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "Správa MCP servera",
       "desc": "Konfigurácia serverov Model Context Protocol (MCP) na rozšírenie schopností agenta externými nástrojmi a zdrojmi dát.",
       "inspectorBtn": "🔍 Otvoriť MCP inšpektor",
       "testAllBtn": "🧪 otestovať všetky pripojenia",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Správa agentov",
       "desc": "Vytvárajte a spravujte AI agentov so špecifickými schopnosťami, nástrojmi a správaním.",
       "count": "{{count}} agent nakonfigurovaný",
       "count_plural": "{{count}} agenti nakonfigurovaní",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Systémové výzvy",
       "desc": "Spravujte systémové výzvy, ktoré definujú správanie a osobnosť vášho AI asistenta.",
       "addBtn": "+ pridať systémovú výzvu",
       "empty": "Žiadne systémové výzvy. Vyberte pridať systémovú výzvu a začnite.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Konfigurácia nástrojov",
       "desc": "Prezerajte vstavané nástroje a preskúmajte MCP nástroje načítané z pripojených serverov. Povolte akcie, ktoré majú vaši agenti vykonávať.",
       "subTabs": {
         "builtIn": "Vstavané nástroje",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "Konfigurácia RAG",
       "desc": "Konfigurácia RAG a webového vyhľadávania na vylepšenie odpovedí AI.",
       "subTabs": {
         "overview": "Prehľad",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Konfigurácia webového vyhľadávania",
       "desc": "Konfigurácia webového vyhľadávania na vylepšenie odpovedí AI aktuálnymi informáciami z internetu.",
       "generalBehavior": "Všeobecné správanie",
       "providerSelection": "Výber poskytovateľa",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Rýchle akcie",
       "desc": "Konfigurácia rýchlych akcií AI, ktoré sa zobrazujú v kontextovom menu editora pri výbere textu.",
       "actionPrefix": {
         "name": "Predpona akcie",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Využitie tokenov",
       "desc": "Sledujte spotrebu tokenov u poskytovateľov a modelov. Dáta sú akumulované naprieč všetkými konverzáciami.",
       "ranges": {
         "today": "Dnes",

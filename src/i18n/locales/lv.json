@@ -12,7 +12,6 @@
       "usage": "Lietojums"
     },
     "general": {
-      "title": "Vispārīgie iestatījumi",
       "desc": "Konfigurēt vispārīgos iestatījumus inteliģentā asistenta spraudnim.",
       "pluginVersion": {
         "name": "Spraudņa versija",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM konfigurācija",
       "desc": "Konfigurēt valodas modeļu pakalpojumu sniedzējus un pārvaldīt pieejamos modeļus.",
       "subTabs": {
         "provider": "Pakalpojumu sniedzēji",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Modeļa konfigurācija",
       "desc": "Skatīt un pārvaldīt modeļus no visiem konfigurētajiem pakalpojumu sniedzējiem. Noklikšķiniet uz «atsvaidzināt modeļus», lai iegūtu jaunākos pieejamos modeļus.",
       "providerCount": "{{count}} pakalpojumu sniedzējs konfigurēts",
       "providerCount_plural": "{{count}} pakalpojumu sniedzēji konfigurēti",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Pakalpojumu sniedzēja konfigurācija",
       "securityTitle": "⚠️ Drošības brīdinājums",
       "securityDesc": "API atslēgas tiek glabātas kā vienkāršs teksts jūsu velventī saderības dēļ. Lai novērstu nejaušu noplūdi:",
       "securityItem1": "NEDALIETIES ar {{configDir}}/plugins/intelligence-assistant/data/ mapi.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP servera pārvaldība",
       "desc": "Konfigurēt Model Context Protocol (MCP) serverus, lai paplašinātu aģentu iespējas ar ārējiem rīkiem un datu avotiem.",
       "inspectorBtn": "🔍 Atvērt MCP inspektoru",
       "testAllBtn": "🧪 pārbaudīt visus savienojumus",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Aģentu pārvaldība",
       "desc": "Izveidot un pārvaldīt AI aģentus ar specifiskām iespējām, rīkiem un uzvedību.",
       "count": "{{count}} aģents konfigurēts",
       "count_plural": "{{count}} aģenti konfigurēti",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Sistēmas uzvednes",
       "desc": "Pārvaldīt sistēmas uzvednes, kas nosaka AI asistenta uzvedību un personību.",
       "addBtn": "+ pievienot sistēmas uzvedni",
       "empty": "Nav konfigurētu sistēmas uzvedņu. Izvēlieties pievienot sistēmas uzvedni, lai sāktu.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Rīku konfigurācija",
       "desc": "Pārskatīt iebūvētos rīkus un izpētīt MCP rīkus, kas ielādēti no pievienotajiem serveriem. Iespējojiet darbības, ko jūsu aģentiem vajadzētu varēt veikt.",
       "subTabs": {
         "builtIn": "Iebūvētie rīki",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG konfigurācija",
       "desc": "Konfigurēt retrieval-augmented generation un tīmekļa meklēšanu, lai uzlabotu AI atbildes.",
       "subTabs": {
         "overview": "Pārskats",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Tīmekļa meklēšanas konfigurācija",
       "desc": "Konfigurēt tīmekļa meklēšanas funkcionalitāti, lai uzlabotu AI atbildes ar aktuālu informāciju no interneta.",
       "generalBehavior": "Vispārīgā uzvedība",
       "providerSelection": "Pakalpojumu sniedzēja izvēle",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Ātrās darbības",
       "desc": "Konfigurēt AI darbinātas ātrās darbības, kas parādās redaktora konteksta izvēlnē, kad ir atlasīts teksts.",
       "actionPrefix": {
         "name": "Darbības prefikss",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Pilnvaru lietojums",
       "desc": "Izsekot pilnvaru patēriņam dažādiem pakalpojumu sniedzējiem un modeļiem. Dati tiek uzkrāti visās sarunās.",
       "ranges": {
         "today": "Šodien",

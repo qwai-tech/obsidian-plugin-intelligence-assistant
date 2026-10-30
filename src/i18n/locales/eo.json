@@ -12,7 +12,6 @@
       "usage": "Uzado"
     },
     "general": {
-      "title": "Ĝeneralaj agordoj",
       "desc": "Agordu ĝeneralajn agordojn por la inteligenta asistanta kromaĵo.",
       "pluginVersion": {
         "name": "Kromaĵa versio",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM-agordo",
       "desc": "Agordu lingvajn modeloprovizantojn kaj administru disponeblajn modelojn.",
       "subTabs": {
         "provider": "Provizantoj",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Modelagordo",
       "desc": "Rigardu kaj administru modelojn de ĉiuj agorditaj provizantoj. Alklaku \"aktualigi modelojn\" por preni la plej novajn disponeblajn modelojn.",
       "providerCount": "{{count}} provizanto agordita",
       "providerCount_plural": "{{count}} provizantoj agorditaj",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Provizantagordo",
       "securityTitle": "⚠️ Sekureca Averto",
       "securityDesc": "API-ŝlosiloj estas konservitaj kiel simpla teksto en via arkivo por kongrueco. Por malhelpi hazardan elfluon:",
       "securityItem1": "NE dividu vian dosierujon {{configDir}}/plugins/intelligence-assistant/data/.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP-serviloadministrado",
       "desc": "Agordu Model Context Protocol (MCP)-servilojn por etendi agentkapablojn per eksteraj iloj kaj datumfontoj.",
       "inspectorBtn": "🔍 Malfermi MCP-inspektiston",
       "testAllBtn": "🧪 testi ĉiujn konektojn",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Agentadministrado",
       "desc": "Kreu kaj administru AI-agentojn kun specifaj kapabloj, iloj kaj kondutoj.",
       "count": "{{count}} agento agordita",
       "count_plural": "{{count}} agentoj agorditaj",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Sistemaj instigiloj",
       "desc": "Administru sistemajn instigilojn kiuj difinas la konduton kaj personon de via AI-asistanto.",
       "addBtn": "+ aldoni sisteman instigilon",
       "empty": "Neniu sistema instigilo agordita. Elektu aldoni sisteman instigilon por komenci.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Ilagordo",
       "desc": "Revizu enkonstruitajn ilojn kaj esploru MCP-ilojn ŝargitajn de konektitaj serviloj. Ebligi la agojn kiujn viaj agentoj devas povi fari.",
       "subTabs": {
         "builtIn": "Enkonstruitaj Iloj",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG-agordo",
       "desc": "Agordu retroven-plifortigitan generacion kaj retserĉon por plibonigi AI-respondojn.",
       "subTabs": {
         "overview": "Superrigardo",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Retserĉa agordo",
       "desc": "Agordu retserĉan funkciaĵon por plibonigi AI-respondojn per ĝisdata informo el la interreto.",
       "generalBehavior": "Ĝenerala konduto",
       "providerSelection": "Provizantselektado",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Rapidaj agoj",
       "desc": "Agordu AI-plenumitajn rapidajn agojn kiuj aperas en la redaktila kuntekstmenuo kiam teksto estas elektita.",
       "actionPrefix": {
         "name": "Agprefikso",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Ĵetona uzado",
       "desc": "Spuri ĵetonan konsumon tra provizantoj kaj modeloj. Datumoj estas amasigataj tra ĉiuj konversacioj.",
       "ranges": {
         "today": "Hodiaŭ",

@@ -12,7 +12,6 @@
       "usage": "Gebruik"
     },
     "general": {
-      "title": "Algemene instellings",
       "desc": "Stel algemene instellings vir die intelligensie-assistent-inprop in.",
       "pluginVersion": {
         "name": "Inprop-weergawe",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM-konfigurasie",
       "desc": "Stel taalmodelverskaffer in en bestuur beskikbare modelle.",
       "subTabs": {
         "provider": "Verskaffers",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "Modelkonfigurasie",
       "desc": "Bekyk en bestuur modelle van alle gekonfigureerde verskaffers. Klik \"verfris modelle\" om die nuutste beskikbare modelle te haal.",
       "providerCount": "{{count}} verskaffer gekonfigureer",
       "providerCount_plural": "{{count}} verskaffers gekonfigureer",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "Verskafferkonfigurasie",
       "securityTitle": "⚠️ Sekuriteitswaarskuwing",
       "securityDesc": "API-sleutels word as gewone teks in u gewelf gestoor vir versoenbaarheid. Om toevallige lekke te voorkom:",
       "securityItem1": "Moenie u {{configDir}}/plugins/intelligence-assistant/data/-gids deel nie.",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP-bedienerbestuur",
       "desc": "Stel Model Context Protocol (MCP)-bedieners in om agentvermoëns uit te brei met eksterne gereedskap en databronne.",
       "inspectorBtn": "🔍 Maak MCP-inspekteur oop",
       "testAllBtn": "🧪 toets alle verbindings",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "Agentbestuur",
       "desc": "Skep en bestuur KI-agente met spesifieke vermoëns, gereedskap en gedrag.",
       "count": "{{count}} agent gekonfigureer",
       "count_plural": "{{count}} agente gekonfigureer",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "Stelselaanwysings",
       "desc": "Bestuur stelselaanwysings wat die gedrag en persoonlikheid van u KI-assistent definieer.",
       "addBtn": "+ voeg stelselaanwysing by",
       "empty": "Geen stelselaanwysings gekonfigureer nie. Kies voeg stelselaanwysing by om te begin.",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "Gereedskap-konfigurasie",
       "desc": "Hersien ingeboude gereedskap en verken MCP-gereedskap wat van verbinde bedieners gelaai is. Aktiveer die aksies wat u agente moet kan uitvoer.",
       "subTabs": {
         "builtIn": "Ingeboude Gereedskap",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG-konfigurasie",
       "desc": "Stel herwinning-versterkte generasie en websoek in om KI-antwoorde te verbeter.",
       "subTabs": {
         "overview": "Oorsig",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "Websoek-konfigurasie",
       "desc": "Stel websoekfunksionaliteit in om KI-antwoorde te verbeter met bygewerkte inligting van die internet.",
       "generalBehavior": "Algemene gedrag",
       "providerSelection": "Verskaffer-keuse",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "Vinnige aksies",
       "desc": "Stel KI-aangedrewe vinnige aksies in wat in die redigeerder-kontekskieslys verskyn wanneer teks gekies is.",
       "actionPrefix": {
         "name": "Aksie-voorvoegsel",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "Token-gebruik",
       "desc": "Volg token-verbruik oor verskaffers en modelle. Data word oor alle gesprekke opgehoop.",
       "ranges": {
         "today": "Vandag",

@@ -165,7 +165,7 @@ class OpenApiConfigModal extends Modal {
 	onOpen(): void {
 		const { contentEl } = this;
 		contentEl.empty();
-		contentEl.createEl('h3', { text: this.config.name || t('settings.tools.openapi.modal.defaultTitle') });
+		this.setTitle(this.config.name || t('settings.tools.openapi.modal.defaultTitle'));
 
 		const persist = async () => {
 			await this.plugin.saveSettings();

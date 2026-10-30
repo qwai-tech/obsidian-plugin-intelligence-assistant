@@ -12,7 +12,6 @@
       "usage": "使用量"
     },
     "general": {
-      "title": "一般設定",
       "desc": "設定智慧助理外掛程式的一般選項。",
       "pluginVersion": {
         "name": "外掛程式版本",
@@ -48,7 +47,6 @@
       }
     },
     "llm": {
-      "title": "LLM 設定",
       "desc": "設定語言模型提供者並管理可用的模型。",
       "subTabs": {
         "provider": "提供者",
@@ -56,7 +54,6 @@
       }
     },
     "models": {
-      "title": "模型設定",
       "desc": "檢視並管理所有已設定提供者的模型。點擊「重新整理模型」以擷取最新可用的模型。",
       "providerCount": "已設定 {{count}} 個提供者",
       "providerCount_plural": "已設定 {{count}} 個提供者",
@@ -96,7 +93,6 @@
       }
     },
     "provider": {
-      "title": "提供者設定",
       "securityTitle": "⚠️ 安全性警告",
       "securityDesc": "為了相容性，API 金鑰以明文儲存在您的知識庫中。為防止意外洩漏：",
       "securityItem1": "請勿共享您的 {{configDir}}/plugins/intelligence-assistant/data/ 資料夾。",
@@ -168,7 +164,6 @@
       }
     },
     "mcp": {
-      "title": "MCP 伺服器管理",
       "desc": "設定 Model Context Protocol (MCP) 伺服器，以使用外部工具和資料來源擴充代理功能。",
       "inspectorBtn": "🔍 開啟 MCP 檢查器",
       "testAllBtn": "🧪 測試所有連線",
@@ -239,7 +234,6 @@
       }
     },
     "agents": {
-      "title": "代理管理",
       "desc": "建立並管理具有特定功能、工具和行為的 AI 代理。",
       "count": "已設定 {{count}} 個代理",
       "count_plural": "已設定 {{count}} 個代理",
@@ -284,7 +278,6 @@
       }
     },
     "prompts": {
-      "title": "系統提示詞",
       "desc": "管理定義 AI 助理行為和個性的系統提示詞。",
       "addBtn": "+ 新增系統提示詞",
       "empty": "未設定任何系統提示詞。請選擇「新增系統提示詞」以開始使用。",
@@ -311,7 +304,6 @@
       }
     },
     "tools": {
-      "title": "工具設定",
       "desc": "檢視內建工具，並探索從已連線伺服器載入的 MCP 工具。啟用您希望代理能夠執行的動作。",
       "subTabs": {
         "builtIn": "內建工具",
@@ -617,7 +609,6 @@
       }
     },
     "rag": {
-      "title": "RAG 設定",
       "desc": "設定檢索增強生成和網頁搜尋，以增強 AI 回應。",
       "subTabs": {
         "overview": "概覽",
@@ -804,7 +795,6 @@
       }
     },
     "websearch": {
-      "title": "網頁搜尋設定",
       "desc": "設定網頁搜尋功能，以使用網際網路上的最新資訊來增強 AI 回應。",
       "generalBehavior": "一般行為",
       "providerSelection": "提供者選擇",
@@ -899,7 +889,6 @@
       }
     },
     "quickActions": {
-      "title": "快速動作",
       "desc": "設定選取文字時在編輯器上下文選單中顯示的 AI 快速動作。",
       "actionPrefix": {
         "name": "動作前綴",
@@ -979,7 +968,6 @@
       }
     },
     "usage": {
-      "title": "權杖使用量",
       "desc": "追蹤各提供者和模型的權杖消耗量。資料會在所有對話中累積。",
       "ranges": {
         "today": "今天",

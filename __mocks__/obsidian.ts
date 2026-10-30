@@ -413,10 +413,17 @@ export class MarkdownRenderChild extends Component {
 export class Modal {
 	app: App;
 	contentEl: HTMLElement;
+	titleEl: HTMLElement;
 
 	constructor(app: App) {
 		this.app = app;
 		this.contentEl = document.createElement('div');
+		this.titleEl = document.createElement('div');
+	}
+
+	setTitle(title: string): this {
+		this.titleEl.textContent = title;
+		return this;
 	}
 
 	open(): void {}
@@ -677,6 +684,11 @@ export class Setting {
 
 	setDesc(desc: string): this {
 		this.descEl.textContent = desc;
+		return this;
+	}
+
+	setHeading(): this {
+		this.settingEl.addClass('setting-item-heading');
 		return this;
 	}
 
