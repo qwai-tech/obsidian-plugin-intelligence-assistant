@@ -84,7 +84,7 @@ export class ConversationNamer {
 function firstMessageTitle(messages: Message[]): string {
 	const first = messages.find((m) => m.role === 'user')?.content;
 	if (!first) {
-		return 'New Conversation';
+		return 'New conversation';
 	}
 	return first.length > FIRST_MESSAGE_TITLE_LENGTH ? `${first.substring(0, FIRST_MESSAGE_TITLE_LENGTH)}...` : first;
 }

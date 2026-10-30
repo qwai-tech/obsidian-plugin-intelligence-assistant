@@ -1053,7 +1053,7 @@
     "ragTooltipLabel": "Use indexed notes as context",
     "webSearchLabel": "Web search",
     "webSearchTooltipLabel": "Search the internet when needed",
-    "newConversation": "New Conversation",
+    "newConversation": "New conversation",
     "searchConversations": "Search conversations...",
     "deleteConversationConfirm": "Delete conversation \"{{title}}\"?",
     "renameConversationPrompt": "New title",

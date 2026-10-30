@@ -140,7 +140,7 @@ export class ConversationManager extends Events {
 			config: this.currentConfig(),
 		};
 
-		if (conv.title === t('chat.newConversation') && this.state.messages.length >= 2) {
+		if (conv.title.toLowerCase() === t('chat.newConversation').toLowerCase() && this.state.messages.length >= 2) {
 			await this.nameConversation(conv);
 		}
 		await this.storage.updateConversation(conv);

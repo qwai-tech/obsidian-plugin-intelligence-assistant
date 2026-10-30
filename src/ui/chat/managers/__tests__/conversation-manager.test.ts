@@ -200,7 +200,7 @@ describe('ConversationManager', () => {
 
 			expect(mockStorageService.createConversation).toHaveBeenCalled();
 			const callArgs = (mockStorageService.createConversation as jest.Mock).mock.calls[0][0];
-			expect(callArgs.title).toBe('New Conversation');
+			expect(callArgs.title).toBe('New conversation');
 			expect(callArgs.messages).toEqual([]);
 		});
 
@@ -224,7 +224,7 @@ describe('ConversationManager', () => {
 			await manager.createNewConversation();
 
 			expect(triggerSpy).toHaveBeenCalledWith('conversation-created', expect.objectContaining({
-				title: 'New Conversation'
+				title: 'New conversation'
 			}));
 		});
 
@@ -435,6 +435,17 @@ describe('ConversationManager', () => {
 			await manager.saveCurrentConversation();
 
 			expect(mockStorageService.updateConversation).toHaveBeenCalled();
+		});
+
+		it('names a conversation saved by an older version under the old default title', async () => {
+			const conv: Conversation = { id: '1', title: 'New Conversation', messages: [], createdAt: 0, updatedAt: 0 };
+			state.currentConversationId = '1';
+			state.messages = [{ role: 'user', content: 'Plan my week' }, { role: 'assistant', content: 'Sure' }];
+			(mockStorageService.loadConversation as jest.Mock).mockResolvedValue(conv);
+
+			await manager.saveCurrentConversation();
+
+			expect(mockStorageService.updateConversation).toHaveBeenCalledWith(expect.objectContaining({ title: 'Generated title' }));
 		});
 
 		it('should preserve system messages when saving', async () => {
