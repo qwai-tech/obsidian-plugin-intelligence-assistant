@@ -17,6 +17,8 @@ Every change goes through the same layers, cheapest first. `npm run verify` runs
 | Release E2E | Real provider, real MCP server, long and large agent tasks | `npm run test:e2e:release` (needs `.env.test`) | Manual |
 | Visual tour | Screenshots of every screen and main dialog in the dark and light theme, saved to `tests/e2e/screenshots/tour/` for review | `npm run test:e2e:tour` | Manual |
 
+Measured performance and the options behind the current choices are in [performance.md](performance.md).
+
 ## Where tests live
 
 - `src/**/__tests__/`, `packages/obsidian-llm/src/__tests__/` — unit tests next to the code.
