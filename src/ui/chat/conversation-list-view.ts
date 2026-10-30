@@ -171,7 +171,7 @@ export class ConversationListView {
 					' ' + date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
 			};
 
-			convMeta.setText(`${formatDate(conv.createdAt)} | ${formatDate(conv.updatedAt)}`);
+			convMeta.setText(formatDate(conv.updatedAt));
 
 			// Actions container (hover visibility handled by CSS)
 			const actions = convItem.createDiv('conversation-actions');

@@ -8,6 +8,7 @@ import { showConfirm } from '@/ui/modals/confirm-modal';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
+import { getProviderMeta } from '@/ui/provider-meta';
 
 export async function displayUsageTab(
 	containerEl: HTMLElement,
@@ -83,7 +84,7 @@ export async function displayUsageTab(
 
 		// ---- Stat grid ----
 		const subLabel = rangeConfig.find(c => c.range === activeRange)?.subLabel ?? t('settings.usage.ranges.all');
-		const totalK = (grandTotal.totalTokens / 1000).toFixed(1);
+		const compact = new Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 });
 
 		const statGrid = statsContainer.createDiv('ia-usage-stat-grid');
 
@@ -94,7 +95,7 @@ export async function displayUsageTab(
 			card.createDiv({ cls: 'ia-usage-stat-card__sub', text: sub });
 		};
 
-		addStatCard(t('settings.usage.stats.totalTokens'), `${totalK}K`, subLabel);
+		addStatCard(t('settings.usage.stats.totalTokens'), compact.format(grandTotal.totalTokens), subLabel);
 		addStatCard(t('settings.usage.stats.apiCalls'), String(grandTotal.callCount), subLabel);
 		addStatCard(t('settings.usage.stats.promptTokens'), grandTotal.promptTokens.toLocaleString(), t('settings.usage.stats.tokensIn'));
 		addStatCard(t('settings.usage.stats.completion'), grandTotal.completionTokens.toLocaleString(), t('settings.usage.stats.tokensOut'));
@@ -117,7 +118,7 @@ export async function displayUsageTab(
 				const row = tbody.insertRow();
 				const nameCell = row.insertCell();
 				nameCell.addClass('ia-table-cell');
-				nameCell.setText(name);
+				nameCell.setText(getProviderMeta(name).label);
 				[s.promptTokens.toLocaleString(), s.completionTokens.toLocaleString(), s.totalTokens.toLocaleString(), String(s.callCount)]
 					.forEach(text => {
 						const c = row.insertCell();
