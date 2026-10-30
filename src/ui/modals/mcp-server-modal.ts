@@ -125,11 +125,10 @@ export class MCPServerModal extends Modal {
 		buttonBar.removeClass('ia-hidden');
 
 		const cancelBtn = buttonBar.createEl('button', { text: t('modals.mcpServer.cancel') });
-		cancelBtn.addClass('ia-modal-btn');
 		cancelBtn.addEventListener('click', () => this.close());
 
 		const saveBtn = buttonBar.createEl('button', { text: this.mode === 'edit' ? t('modals.mcpServer.saveEdit') : t('modals.mcpServer.saveAdd') });
-		saveBtn.addClass('ia-modal-btn--primary');
+		saveBtn.addClass('mod-cta');
 		saveBtn.setAttribute('data-testid', TestIds.settings.mcpModalSaveBtn);
 		saveBtn.addEventListener('click', () => {
 			void (async () => {

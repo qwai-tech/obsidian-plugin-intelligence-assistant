@@ -2596,18 +2596,8 @@
 }
 
 /* Cancel / secondary button in modal footer */
-.ia-modal-btn {
-	padding: 6px 16px;
-}
 
 /* Primary / accent button in modal footer */
-.ia-modal-btn--primary {
-	padding: 6px 16px;
-	background: var(--interactive-accent);
-	color: var(--text-on-accent);
-	border: none;
-	border-radius: 4px;
-}
 
 /* Monospace textarea used for prompt content and service-key fields */
 .ia-textarea--code {

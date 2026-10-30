@@ -73,19 +73,17 @@ export class ProviderConfigModal extends Modal {
 
 		const testBtn = buttonBar.createEl('button', { text: t('modals.provider.testConnection') });
 		testBtn.setAttribute('data-testid', TestIds.settings.providerModalTestConnectionBtn);
-		testBtn.addClass('ia-modal-btn');
 		testBtn.addEventListener('click', () => {
 			void this.testConnection(testBtn);
 		});
 
 		const cancelBtn = buttonBar.createEl('button', { text: t('modals.provider.cancel') });
 		cancelBtn.setAttribute('data-testid', TestIds.settings.providerModalCancelBtn);
-		cancelBtn.addClass('ia-modal-btn');
 		cancelBtn.addEventListener('click', () => this.close());
 
 		const saveBtn = buttonBar.createEl('button', { text: t('modals.provider.save') });
 		saveBtn.setAttribute('data-testid', TestIds.settings.providerModalSaveBtn);
-		saveBtn.addClass('ia-modal-btn--primary');
+		saveBtn.addClass('mod-cta');
 		saveBtn.addEventListener('click', () => {
 			void (async () => {
 				// Validate before saving
