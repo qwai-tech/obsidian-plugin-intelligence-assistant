@@ -1,10 +1,11 @@
-import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { promises as fs, constants as fsConstants } from 'fs';
 import type { MCPServerConfig } from '@/features/tools/types/mcp';
 import { buildSubprocessEnv } from '@/features/tools/subprocess-env';
+import { McpStdioSession } from './mcp-stdio-session';
+
+const CLIENT_INFO = { name: 'obsidian-intelligence-assistant', version: '1.0.0' };
 
 export interface MCPTool {
 	name: string;
@@ -17,24 +18,12 @@ export interface MCPTool {
 }
 
 export class MCPClient {
-	private client: Client;
-	private transport: StdioClientTransport | null = null;
-	private connected: boolean = false;
+	private session: McpStdioSession | null = null;
 
-	constructor(private _config: MCPServerConfig) {
-			this.client = new Client(
-				{
-					name: 'obsidian-intelligence-assistant',
-					version: '0.0.1',
-				},
-				{
-					capabilities: {},
-				}
-			);
-	}
+	constructor(private _config: MCPServerConfig) {}
 
 	async connect(): Promise<void> {
-		if (this.connected) {
+		if (this.session) {
 			return;
 		}
 
@@ -48,15 +37,7 @@ export class MCPClient {
 			// Create stdio transport with an allowlisted environment (avoids
 			// leaking unrelated parent-process secrets into the MCP subprocess).
 			const env = buildSubprocessEnv(this._config.env);
-			this.transport = new StdioClientTransport({
-				command,
-				args: this._config.args || [],
-				env,
-			});
-
-			// Connect the client
-			await this.client.connect(this.transport);
-			this.connected = true;
+			this.session = await McpStdioSession.open({ command, args: this._config.args || [], env }, CLIENT_INFO);
 		} catch (error) {
 			console.error(`[MCP] Failed to connect to ${this._config.name}:`, error);
 			throw error;
@@ -103,31 +84,22 @@ export class MCPClient {
 	}
 
 	async disconnect(): Promise<void> {
-		if (!this.connected) {
-			return;
-		}
-
-		try {
-			await this.client.close();
-			this.transport = null;
-			this.connected = false;
-		} catch (error) {
-			console.error(`[MCP] Error disconnecting from ${this._config.name}:`, error);
-		}
+		const session = this.session;
+		this.session = null;
+		await session?.close();
 	}
 
 	async listTools(): Promise<MCPTool[]> {
-		if (!this.connected) {
-			throw new Error('Not connected to MCP server');
-		}
-
+		const session = this.requireSession();
 		try {
-			const response = await this.client.listTools();
-			return response.tools.map((tool: { name: string; description?: string; inputSchema: unknown }) => ({
-				name: tool.name,
-				description: tool.description,
-				inputSchema: tool.inputSchema as MCPTool['inputSchema'],
-			}));
+			const tools: MCPTool[] = [];
+			let cursor: string | undefined;
+			do {
+				const page = await session.request('tools/list', cursor ? { cursor } : {}) as { tools?: MCPTool[]; nextCursor?: string };
+				tools.push(...(page.tools ?? []).map(({ name, description, inputSchema }) => ({ name, description, inputSchema })));
+				cursor = page.nextCursor;
+			} while (cursor);
+			return tools;
 		} catch (error) {
 			console.error(`[MCP] Failed to list tools from ${this._config.name}:`, error);
 			throw error;
@@ -135,32 +107,17 @@ export class MCPClient {
 	}
 
 	async callTool(name: string, args: Record<string, unknown>): Promise<unknown> {
-		if (!this.connected) {
-			throw new Error('Not connected to MCP server');
-		}
-
+		const session = this.requireSession();
 		try {
-			const response = await this.client.callTool({
-				name,
-				arguments: args,
-			});
-
-			// Check if the tool returned an error
+			const response = await session.request('tools/call', { name, arguments: args }) as { isError?: boolean; content?: unknown; structuredContent?: unknown };
 			if (response.isError) {
-				throw new Error(`Tool execution error: ${JSON.stringify((response as {content: unknown}).content)}`);
+				throw new Error(`Tool execution error: ${JSON.stringify(response.content)}`);
 			}
-
-			// Extract result from content array
-			// MCP tools return content as an array of ContentBlock
-			if (response.content && Array.isArray(response.content as unknown[]) && (response as {content: unknown[]}).content.length > 0) {
-				const firstContent = (response as {content: unknown[]}).content[0];
-				if (firstContent && typeof firstContent === 'object' && 'type' in firstContent && (firstContent as {type: string}).type === 'text' && 'text' in firstContent) {
-					return (firstContent as { text: string }).text;
-				}
-				return firstContent;
+			const [first] = Array.isArray(response.content) ? response.content as unknown[] : [];
+			if (first) {
+				return isTextBlock(first) ? first.text : first;
 			}
-
-			return (response as {structuredContent?: unknown, content?: unknown}).structuredContent || (response as {content?: unknown}).content;
+			return response.structuredContent ?? response.content;
 		} catch (error) {
 			console.error(`[MCP] Failed to call tool ${name} on ${this._config.name}:`, error);
 			throw error;
@@ -168,10 +125,21 @@ export class MCPClient {
 	}
 
 	isConnected(): boolean {
-		return this.connected;
+		return this.session !== null;
+	}
+
+	private requireSession(): McpStdioSession {
+		if (!this.session) {
+			throw new Error('Not connected to MCP server');
+		}
+		return this.session;
 	}
 
 	getServerName(): string {
 		return this._config.name;
 	}
+}
+
+function isTextBlock(block: unknown): block is { type: 'text'; text: string } {
+	return typeof block === 'object' && block !== null && (block as { type?: unknown }).type === 'text' && typeof (block as { text?: unknown }).text === 'string';
 }
