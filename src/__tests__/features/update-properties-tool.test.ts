@@ -52,4 +52,15 @@ describe('UpdatePropertiesTool — safe YAML serialization', () => {
 		expect(proposal.proposedContent).not.toContain('---');
 		expect(proposal.proposedContent).toContain('Body text');
 	});
+
+	it('ends the frontmatter at the closing line, not at a --- inside a value', async () => {
+		const tool = new UpdatePropertiesTool(mockApp('---\ntitle: a---b\n---\nBody', { title: 'a---b' }));
+
+		const res = await tool.execute({ path: 'note.md', updates: { status: 'done' } });
+
+		const proposal = res.result as WriteProposal;
+		expect(frontmatterOf(proposal)).toEqual({ title: 'a---b', status: 'done' });
+		expect(proposal.proposedContent?.replace(/^---\n[\s\S]*?\n---\n/, '')).toBe('Body');
+	});
 });
+

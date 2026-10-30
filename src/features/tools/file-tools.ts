@@ -236,7 +236,7 @@ export class UpdatePropertiesTool implements Tool {
 			// Remove the automatically added 'position' key if it exists
 			delete newMetadata.position;
 
-			const body = content.replace(/^---[\s\S]*?---\n?/, '');
+			const body = content.replace(/^---\r?\n[\s\S]*?\r?\n---[ \t]*(?:\r?\n|$)/, '');
 			// Serialize with Obsidian's YAML serializer (handles escaping, arrays,
 			// nesting, multiline) instead of hand-rolled string concatenation. If all
 			// properties were removed, emit no frontmatter block at all.
