@@ -11,6 +11,7 @@ import { SettingsForm } from '@/ui/settings/settings-form';
 import { renderIndexManagement } from './rag-index-panel';
 import { TestIds } from '@/ui/utils/test-ids';
 import { displayWebSearchTab } from './websearch-tab';
+import { renderSubTabs } from '@/ui/settings/sub-tabs';
 
 export function displayRAGTab(
 	containerEl: HTMLElement,
@@ -22,72 +23,39 @@ export function displayRAGTab(
 	});
 	desc.addClass('ia-section-description');
 
-	// Create sub-tab navigation
-	const tabNavContainer = containerEl.createDiv('ia-rag-tab-nav');
-	tabNavContainer.removeClass('ia-hidden');
-
-	// Create content container for sub-tabs
-	const tabContentContainer = containerEl.createDiv('ia-rag-tab-content');
-
-	const subTabs = [
-		{ id: 'overview', label: t('settings.rag.subTabs.overview'), icon: '🏠' },
-		{ id: 'chunking', label: t('settings.rag.subTabs.chunking'), icon: '📄' },
-		{ id: 'search', label: t('settings.rag.subTabs.search'), icon: '🔍' },
-		{ id: 'filters', label: t('settings.rag.subTabs.filters'), icon: '🗂️' },
-		{ id: 'advanced', label: t('settings.rag.subTabs.advanced'), icon: '⚙️' },
-		{ id: 'websearch', label: t('settings.rag.subTabs.websearch'), icon: '🌐' }
-	];
-
-	let activeTab = 'overview';
-
-	const renderActiveTab = () => {
-		tabContentContainer.empty();
-
-		switch (activeTab) {
-			case 'overview':
-				renderOverviewTab(tabContentContainer, plugin);
-				break;
-			case 'chunking':
-				renderChunkingSettings(tabContentContainer, plugin);
-				break;
-			case 'search':
-				renderSearchSettings(tabContentContainer, plugin);
-				break;
-			case 'filters':
-				renderFileFilters(tabContentContainer, plugin);
-				break;
-			case 'advanced':
-				renderAdvancedTab(tabContentContainer, plugin);
-				break;
-			case 'websearch':
-				displayWebSearchTab(tabContentContainer, plugin);
-				break;
-		}
-	};
-
-	// Create tab buttons
-	subTabs.forEach(tab => {
-		const tabBtn = tabNavContainer.createEl('button', {
-			text: `${tab.icon} ${tab.label}`,
-			cls: 'ia-rag-subtab-btn'
-		});
-
-		tabBtn.toggleClass('ia-rag-subtab-btn--active', activeTab === tab.id);
-		tabBtn.addClass('ia-clickable');
-
-		tabBtn.addEventListener('click', () => {
-			activeTab = tab.id;
-			// Update all buttons
-			tabNavContainer.querySelectorAll('.ia-rag-subtab-btn').forEach((btn, index) => {
-				const isActive = subTabs[index].id === activeTab;
-				(btn as HTMLElement).toggleClass('ia-rag-subtab-btn--active', isActive);
-			});
-			renderActiveTab();
-		});
+	renderSubTabs(containerEl, {
+		tabs: [
+			{ id: 'overview', label: t('settings.rag.subTabs.overview') },
+			{ id: 'chunking', label: t('settings.rag.subTabs.chunking') },
+			{ id: 'search', label: t('settings.rag.subTabs.search') },
+			{ id: 'filters', label: t('settings.rag.subTabs.filters') },
+			{ id: 'advanced', label: t('settings.rag.subTabs.advanced') },
+			{ id: 'websearch', label: t('settings.rag.subTabs.websearch') },
+		],
+		active: 'overview',
+		render: (content, id) => {
+			switch (id) {
+				case 'overview':
+					renderOverviewTab(content, plugin);
+					break;
+				case 'chunking':
+					renderChunkingSettings(content, plugin);
+					break;
+				case 'search':
+					renderSearchSettings(content, plugin);
+					break;
+				case 'filters':
+					renderFileFilters(content, plugin);
+					break;
+				case 'advanced':
+					renderAdvancedTab(content, plugin);
+					break;
+				case 'websearch':
+					displayWebSearchTab(content, plugin);
+					break;
+			}
+		},
 	});
-
-	// Initial render
-	renderActiveTab();
 }
 
 function renderOverviewTab(containerEl: HTMLElement, plugin: IntelligenceAssistantPlugin): void {

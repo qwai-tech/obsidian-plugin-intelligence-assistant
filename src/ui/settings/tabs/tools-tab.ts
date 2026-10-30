@@ -11,6 +11,7 @@ import { TestIds } from '@/ui/utils/test-ids';
 import { renderBuiltinToolsSection } from '@/ui/settings/tabs/tools/builtin-tools-section';
 import { renderOpenapiToolsSection } from '@/ui/settings/tabs/tools/openapi-tools-section';
 import { renderCliToolsSection } from '@/ui/settings/tabs/tools/cli-tools-section';
+import { renderSubTabs } from '@/ui/settings/sub-tabs';
 
 export type ToolsSubTab = 'built-in' | 'mcp' | 'openapi' | 'cli';
 
@@ -28,29 +29,18 @@ export function displayToolsTab(
 	});
 	desc.addClass('ia-section-description');
 
-	const tabBar = containerEl.createDiv('settings-tabs');
-	const tabDefs: Array<{ slug: ToolsSubTab; label: string }> = [
-		{ slug: 'built-in', label: t('settings.tools.subTabs.builtIn') },
-		{ slug: 'mcp', label: t('settings.tools.subTabs.mcp') },
-		{ slug: 'openapi', label: t('settings.tools.subTabs.openapi') },
-		{ slug: 'cli', label: t('settings.tools.subTabs.cli') }
-	];
-
-	tabDefs.forEach(def => {
-		const btn = tabBar.createEl('button', { text: def.label });
-		btn.className = 'settings-tab';
-		btn.dataset.slug = def.slug;
-		btn.setAttribute('data-testid', TestIds.settings.toolsSubTab);
-		btn.setAttribute('data-subtab-id', def.slug);
-		if (def.slug === toolsSubTab) {
-			btn.addClass('is-active');
-		}
-		btn.addEventListener('click', () => {
-			setToolsSubTab(def.slug);
-			Array.from(tabBar.children).forEach(el => el.removeClass('is-active'));
-			btn.addClass('is-active');
-			content.empty();
-			switch (def.slug) {
+	renderSubTabs<ToolsSubTab>(containerEl, {
+		tabs: [
+			{ id: 'built-in', label: t('settings.tools.subTabs.builtIn') },
+			{ id: 'mcp', label: t('settings.tools.subTabs.mcp') },
+			{ id: 'openapi', label: t('settings.tools.subTabs.openapi') },
+			{ id: 'cli', label: t('settings.tools.subTabs.cli') },
+		],
+		active: toolsSubTab,
+		testId: TestIds.settings.toolsSubTab,
+		onSelect: setToolsSubTab,
+		render: (content, id) => {
+			switch (id) {
 				case 'built-in':
 					renderBuiltinToolsSection(content, plugin);
 					break;
@@ -64,24 +54,8 @@ export function displayToolsTab(
 					renderCliToolsSection(content, plugin, refreshDisplay);
 					break;
 			}
-		});
+		},
 	});
-
-	const content = containerEl.createDiv('settings-tab-content');
-	switch (toolsSubTab) {
-		case 'built-in':
-			renderBuiltinToolsSection(content, plugin);
-			break;
-		case 'mcp':
-			renderMcpTools(content, plugin, refreshDisplay, openMcpManagement);
-			break;
-		case 'openapi':
-			renderOpenapiToolsSection(content, plugin, refreshDisplay);
-			break;
-		case 'cli':
-			renderCliToolsSection(content, plugin, refreshDisplay);
-			break;
-	}
 }
 
 /**
