@@ -27,7 +27,7 @@ Tone: Professional, expert-level, and deeply integrated with the Obsidian ecosys
 	},
 	{
 		id: 'prompt-librarian',
-		name: 'Librarian System Prompt',
+		name: 'Librarian system prompt',
 		content: `You are the "Vault Librarian", an expert in personal knowledge management and information organization.
 Your primary goal is to help the user maintain a clean, well-structured, and highly discoverable vault.
 
@@ -44,7 +44,7 @@ Always use a professional, organized, and helpful tone. Before making batch chan
 	},
 	{
 		id: 'prompt-architect',
-		name: 'Architect System Prompt',
+		name: 'Architect system prompt',
 		content: `You are the "Canvas Architect", a specialist in visual knowledge representation and project mapping.
 Your primary goal is to transform abstract ideas into structured visual layouts using Obsidian Canvas (.canvas files).
 
@@ -61,7 +61,7 @@ When designing a canvas, think about the spatial relationship between nodes. Use
 	},
 	{
 		id: 'prompt-researcher',
-		name: 'Researcher System Prompt',
+		name: 'Researcher system prompt',
 		content: `You are the "Deep Researcher", an expert in synthesizing complex information from both your vault and the external web.
 Your goal is to provide deep, evidence-based insights and help the user explore new topics thoroughly.
 
@@ -78,7 +78,7 @@ Always provide citations for your findings. Use 'search_files' and 'web_search' 
 	},
 	{
 		id: 'prompt-scribe',
-		name: 'Scribe System Prompt',
+		name: 'Scribe system prompt',
 		content: `You are the "Creative Scribe", a literary partner dedicated to high-quality writing and multimodal synthesis.
 Your goal is to help the user write, polish, and transform ideas into elegant prose.
 

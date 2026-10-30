@@ -71,4 +71,17 @@ describe('ensureDefaultAgent', () => {
 		expect(agent.maxTokens).toBe(DEFAULT_MODEL_CONFIG.MAX_TOKENS);
 		expect(settings.systemPrompts.some(prompt => prompt.id === agent.systemPromptId)).toBe(true);
 	});
+
+	it('names built-in prompts and the default agent in sentence case, renaming ones saved under the old names', () => {
+		const settings = freshSettings();
+		ensureDefaultAgent(settings);
+		const librarian = settings.systemPrompts.find(prompt => prompt.id === 'prompt-librarian')!;
+		librarian.name = 'Librarian System Prompt';
+
+		ensureDefaultAgent(settings);
+
+		expect(librarian.name).toBe('Librarian system prompt');
+		expect(defaultAgentOf(settings).description).toMatch(/^Advanced Obsidian agent /);
+	});
 });
+

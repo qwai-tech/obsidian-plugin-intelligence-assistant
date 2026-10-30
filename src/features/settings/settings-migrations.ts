@@ -19,10 +19,10 @@ export function migrateSettings(settings: PluginSettings): boolean {
 
 const OLD_PRESET_NAMES: Record<string, string> = {
 	'✨ Intelligence Assistant Core': 'Intelligence Assistant Core',
-	'🔍 Librarian System Prompt': 'Librarian System Prompt',
-	'🏗️ Architect System Prompt': 'Architect System Prompt',
-	'🧬 Researcher System Prompt': 'Researcher System Prompt',
-	'🖋️ Scribe System Prompt': 'Scribe System Prompt',
+	'🔍 Librarian System Prompt': 'Librarian system prompt',
+	'🏗️ Architect System Prompt': 'Architect system prompt',
+	'🧬 Researcher System Prompt': 'Researcher system prompt',
+	'🖋️ Scribe System Prompt': 'Scribe system prompt',
 	'🔍 Librarian (知识矿工)': 'Librarian',
 	'🏗️ Architect (白板建筑师)': 'Architect',
 	'🧬 Researcher (深度研究员)': 'Researcher',

@@ -58,7 +58,7 @@ export function ensureDefaultAgent(settings: PluginSettings): void {
 	if (legacyPrompt && legacyPrompt.content.includes('helpful AI assistant')) {
 		const assistantPreset = BUILTIN_PROMPT_PRESETS.find(p => p.id === 'builtin-intelligence-assistant')!;
 		legacyPrompt.content = assistantPreset.content;
-		legacyPrompt.name = 'Default Assistant (Optimized)';
+		legacyPrompt.name = 'Default assistant (optimized)';
 	}
 
 	const enabledBuiltInTools = settings.builtInTools
@@ -84,7 +84,7 @@ export function ensureDefaultAgent(settings: PluginSettings): void {
 		if (defaultAgent.temperature !== 0.5) {
 			defaultAgent.temperature = 0.5;
 		}
-		const newDesc = 'Advanced Obsidian Agent specializing in multi-step vault operations, spatial thinking, and long-term knowledge management.';
+		const newDesc = 'Advanced Obsidian agent specializing in multi-step vault operations, spatial thinking, and long-term knowledge management.';
 		if (defaultAgent.description !== newDesc) {
 			defaultAgent.description = newDesc;
 		}
@@ -96,7 +96,7 @@ export function ensureDefaultAgent(settings: PluginSettings): void {
 		defaultAgent = {
 			id: DEFAULT_AGENT_ID,
 			name: 'Intelligence Assistant',
-			description: 'Advanced Obsidian Agent specializing in multi-step vault operations, spatial thinking, and long-term knowledge management.',
+			description: 'Advanced Obsidian agent specializing in multi-step vault operations, spatial thinking, and long-term knowledge management.',
 			icon: 'sparkles',
 			modelStrategy: {
 				strategy: 'default',
