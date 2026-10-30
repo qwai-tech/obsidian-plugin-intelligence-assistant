@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} irudi erantsita",
       "referencesAdded": "{{count}} erreferentzia gehitu dira",
       "fileNotFound": "Fitxategia ez da aurkitu: {{path}}",
-      "agentConfigApplied": "{{name}} agentearentzako konfigurazioa aplikatu da",
       "unableToLoadRag": "Ezin dira RAG estatistikak kargatu.",
       "referenced": "Erreferentziatua: {{name}}"
     },

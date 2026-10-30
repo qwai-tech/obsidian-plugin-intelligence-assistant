@@ -983,7 +983,6 @@
       "attachedImages": "{{count}}টি ছবি সংযুক্ত করা হয়েছে",
       "referencesAdded": "{{count}}টি রেফারেন্স যোগ করা হয়েছে",
       "fileNotFound": "ফাইল পাওয়া যায়নি: {{path}}",
-      "agentConfigApplied": "{{name}} এজেন্টের জন্য কনফিগারেশন প্রয়োগ করা হয়েছে",
       "unableToLoadRag": "RAG পরিসংখ্যান লোড করতে অক্ষম।",
       "referenced": "রেফারেন্স করা হয়েছে: {{name}}"
     },

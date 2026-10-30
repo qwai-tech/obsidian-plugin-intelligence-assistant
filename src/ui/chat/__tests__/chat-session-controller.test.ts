@@ -182,7 +182,7 @@ describe('ChatSessionController', () => {
 			expect(input.refreshAgentSelect).toHaveBeenCalledWith('researcher');
 			expect(input.updateModeSelector).toHaveBeenLastCalledWith('agent');
 			expect(header.updateAgentBadge).toHaveBeenLastCalledWith('Researcher');
-			expect(Notice).toHaveBeenCalledWith(t('chat.notices.agentConfigApplied', { name: 'Researcher' }));
+			expect(Notice).not.toHaveBeenCalled();
 		});
 
 		it('falls back to the built-in default agent when no agent was active', async () => {
@@ -271,7 +271,7 @@ describe('ChatSessionController', () => {
 			expect(settings.activeAgentId).toBe('researcher');
 			expect(input.modelSelect.value).toBe('claude-sonnet');
 			expect(header.updateAgentBadge).toHaveBeenLastCalledWith('Researcher');
-			expect(Notice).toHaveBeenCalledWith(t('chat.notices.agentConfigApplied', { name: 'Researcher' }));
+			expect(Notice).not.toHaveBeenCalled();
 		});
 
 		it('does not reapply the agent that is already active', async () => {

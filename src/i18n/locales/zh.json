@@ -984,7 +984,6 @@
       "attachedImages": "已附加 {{count}} 张图片",
       "referencesAdded": "已添加 {{count}} 个引用",
       "fileNotFound": "文件未找到：{{path}}",
-      "agentConfigApplied": "已应用智能体配置：{{name}}",
       "unableToLoadRag": "无法加载 RAG 统计信息。",
       "referenced": "已引用: {{name}}"
     },

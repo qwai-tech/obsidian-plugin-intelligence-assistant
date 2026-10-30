@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} படம்(கள்) இணைக்கப்பட்டன",
       "referencesAdded": "{{count}} குறிப்பு(கள்) சேர்க்கப்பட்டன",
       "fileNotFound": "கோப்பு காணப்படவில்லை: {{path}}",
-      "agentConfigApplied": "முகவருக்கான உள்ளமைவு பயன்படுத்தப்பட்டது: {{name}}",
       "unableToLoadRag": "RAG புள்ளிவிவரங்களை ஏற்ற முடியவில்லை.",
       "referenced": "குறிப்பிடப்பட்டது: {{name}}"
     },

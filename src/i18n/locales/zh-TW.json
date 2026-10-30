@@ -983,7 +983,6 @@
       "attachedImages": "已附加 {{count}} 張圖片",
       "referencesAdded": "已新增 {{count}} 個參考",
       "fileNotFound": "找不到檔案：{{path}}",
-      "agentConfigApplied": "已套用代理設定：{{name}}",
       "unableToLoadRag": "無法載入 RAG 統計資料。",
       "referenced": "已參考：{{name}}"
     },

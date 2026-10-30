@@ -983,7 +983,6 @@
       "attachedImages": "Liitetty {{count}} kuva(a)",
       "referencesAdded": "Lisätty {{count}} viittaus(ta)",
       "fileNotFound": "Tiedostoa ei löydy: {{path}}",
-      "agentConfigApplied": "Sovellettu konfiguraatio agentille: {{name}}",
       "unableToLoadRag": "RAG-tilastojen lataaminen epäonnistui.",
       "referenced": "Viitattu: {{name}}"
     },

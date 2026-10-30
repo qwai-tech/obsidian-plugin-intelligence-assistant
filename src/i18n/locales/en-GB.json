@@ -983,7 +983,6 @@
       "attachedImages": "Attached {{count}} image(s)",
       "referencesAdded": "Added {{count}} reference(s)",
       "fileNotFound": "File not found: {{path}}",
-      "agentConfigApplied": "Applied configuration for agent: {{name}}",
       "unableToLoadRag": "Unable to load RAG statistics.",
       "referenced": "Referenced: {{name}}"
     },

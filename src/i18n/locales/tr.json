@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} görsel eklendi",
       "referencesAdded": "{{count}} referans eklendi",
       "fileNotFound": "Dosya bulunamadı: {{path}}",
-      "agentConfigApplied": "Ajan için yapılandırma uygulandı: {{name}}",
       "unableToLoadRag": "RAG istatistikleri yüklenemiyor.",
       "referenced": "Referans alındı: {{name}}"
     },

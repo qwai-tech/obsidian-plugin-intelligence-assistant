@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} afbeelding(en) bijgevoegd",
       "referencesAdded": "{{count}} referentie(s) toegevoegd",
       "fileNotFound": "Bestand niet gevonden: {{path}}",
-      "agentConfigApplied": "Configuratie toegepast voor agent: {{name}}",
       "unableToLoadRag": "Kan RAG-statistieken niet laden.",
       "referenced": "Gerefereerd: {{name}}"
     },

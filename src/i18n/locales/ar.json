@@ -983,7 +983,6 @@
       "attachedImages": "تم إرفاق {{count}} صورة",
       "referencesAdded": "تمت إضافة {{count}} مرجع",
       "fileNotFound": "لم يتم العثور على الملف: {{path}}",
-      "agentConfigApplied": "تم تطبيق تهيئة الوكيل: {{name}}",
       "unableToLoadRag": "تعذّر تحميل إحصائيات RAG.",
       "referenced": "مُرجَع: {{name}}"
     },

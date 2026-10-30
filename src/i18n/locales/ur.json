@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} تصویر منسلک",
       "referencesAdded": "{{count}} حوالے شامل",
       "fileNotFound": "فائل نہیں ملی: {{path}}",
-      "agentConfigApplied": "ایجنٹ کی کنفیگریشن لاگو ہو گئی: {{name}}",
       "unableToLoadRag": "RAG کے اعداد و شمار لوڈ نہیں ہو سکے۔",
       "referenced": "حوالہ دیا گیا: {{name}}"
     },

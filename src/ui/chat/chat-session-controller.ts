@@ -119,7 +119,7 @@ export class ChatSessionController {
 		const selection = selectionForConversation(this.settings, this.state.mode, config);
 		await this.select(selection);
 		if (selection.activeAgentId) {
-			await this.applyAgent(selection.activeAgentId, { silent: true });
+			await this.applyAgent(selection.activeAgentId);
 		} else {
 			this.controls.input.refreshAgentSelect();
 		}
@@ -137,7 +137,7 @@ export class ChatSessionController {
 		await this.select(selection);
 
 		if (selection.activeAgentId) {
-			await this.applyAgent(selection.activeAgentId, { silent: true });
+			await this.applyAgent(selection.activeAgentId);
 		} else {
 			this.controls.header.updateAgentBadge(null);
 			this.controls.input.refreshAgentSelect();
@@ -216,7 +216,7 @@ export class ChatSessionController {
 		await this.refreshImageButton();
 	}
 
-	private async applyAgent(agentId: string, options: { silent?: boolean } = {}): Promise<void> {
+	private async applyAgent(agentId: string): Promise<void> {
 		const agent = this.settings.agents.find(candidate => candidate.id === agentId);
 		if (!agent) return;
 
@@ -237,9 +237,6 @@ export class ChatSessionController {
 
 		this.controls.input.refreshAgentSelect(agentId);
 		this.controls.header.updateAgentBadge(agent.name ?? 'unknown');
-		if (!options.silent) {
-			new Notice(t('chat.notices.agentConfigApplied', { name: agent.name ?? 'unknown' }));
-		}
 	}
 
 	private applyStoredConfig(config: ConversationConfig): void {

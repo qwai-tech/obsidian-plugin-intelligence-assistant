@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} ഇമേജ്(കൾ) അറ്റാച്ച് ചെയ്തു",
       "referencesAdded": "{{count}} റഫറൻസ്(കൾ) ചേർത്തു",
       "fileNotFound": "ഫയൽ കണ്ടെത്തിയില്ല: {{path}}",
-      "agentConfigApplied": "ഏജന്റിനായുള്ള കോൺഫിഗറേഷൻ പ്രയോഗിച്ചു: {{name}}",
       "unableToLoadRag": "RAG സ്ഥിതിവിവരക്കണക്കുകൾ ലോഡ് ചെയ്യാൻ കഴിയുന്നില്ല.",
       "referenced": "റഫറൻസ് ചെയ്തു: {{name}}"
     },

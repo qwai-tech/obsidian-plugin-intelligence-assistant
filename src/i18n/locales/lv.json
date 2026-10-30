@@ -983,7 +983,6 @@
       "attachedImages": "Pievienotas {{count}} attēls(-i)",
       "referencesAdded": "Pievienotas {{count}} atsauces",
       "fileNotFound": "Fails nav atrasts: {{path}}",
-      "agentConfigApplied": "Piemērota aģenta konfigurācija: {{name}}",
       "unableToLoadRag": "Nevar ielādēt RAG statistiku.",
       "referenced": "Atsaukts: {{name}}"
     },

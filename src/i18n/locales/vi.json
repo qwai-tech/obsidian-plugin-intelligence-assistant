@@ -983,7 +983,6 @@
       "attachedImages": "Đã đính kèm {{count}} hình ảnh",
       "referencesAdded": "Đã thêm {{count}} tham chiếu",
       "fileNotFound": "Không tìm thấy tệp: {{path}}",
-      "agentConfigApplied": "Đã áp dụng cấu hình cho tác nhân: {{name}}",
       "unableToLoadRag": "Không thể tải thống kê RAG.",
       "referenced": "Đã tham chiếu: {{name}}"
     },

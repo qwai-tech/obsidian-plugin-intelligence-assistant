@@ -983,7 +983,6 @@
       "attachedImages": "Приложено {{count}} слика(е)",
       "referencesAdded": "Додато {{count}} референци(е)",
       "fileNotFound": "Датотека није пронађена: {{path}}",
-      "agentConfigApplied": "Примењена конфигурација за агента: {{name}}",
       "unableToLoadRag": "Није могуће учитати RAG статистику.",
       "referenced": "Референцирано: {{name}}"
     },

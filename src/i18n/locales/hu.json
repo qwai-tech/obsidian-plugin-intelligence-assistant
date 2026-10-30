@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} kép csatolva",
       "referencesAdded": "{{count}} hivatkozás hozzáadva",
       "fileNotFound": "A fájl nem található: {{path}}",
-      "agentConfigApplied": "Az ügynök konfigurációja alkalmazva: {{name}}",
       "unableToLoadRag": "Nem sikerült betölteni a RAG statisztikákat.",
       "referenced": "Hivatkozva: {{name}}"
     },

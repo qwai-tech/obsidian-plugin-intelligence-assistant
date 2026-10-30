@@ -983,7 +983,6 @@
       "attachedImages": "Επισυνάφθηκαν {{count}} εικόνα(ες)",
       "referencesAdded": "Προστέθηκαν {{count}} αναφορά(ές)",
       "fileNotFound": "Το αρχείο δεν βρέθηκε: {{path}}",
-      "agentConfigApplied": "Εφαρμόστηκε ρύθμιση για τον πράκτορα: {{name}}",
       "unableToLoadRag": "Αδυναμία φόρτωσης στατιστικών RAG.",
       "referenced": "Αναφέρθηκε: {{name}}"
     },

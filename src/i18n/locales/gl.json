@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} imaxe(es) anexada(s)",
       "referencesAdded": "{{count}} referencia(s) engadida(s)",
       "fileNotFound": "Ficheiro non atopado: {{path}}",
-      "agentConfigApplied": "Configuración aplicada para o axente: {{name}}",
       "unableToLoadRag": "Non se poden cargar as estatísticas de RAG.",
       "referenced": "Referenciado: {{name}}"
     },

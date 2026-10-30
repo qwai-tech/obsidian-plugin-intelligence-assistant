@@ -983,7 +983,6 @@
       "attachedImages": "Aldonitaj {{count}} bildo(j)",
       "referencesAdded": "Aldonitaj {{count}} referenco(j)",
       "fileNotFound": "Dosiero ne trovita: {{path}}",
-      "agentConfigApplied": "Aplikita agordo por agento: {{name}}",
       "unableToLoadRag": "Ne eblas ŝargi RAG-statistikojn.",
       "referenced": "Referencita: {{name}}"
     },

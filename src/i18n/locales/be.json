@@ -983,7 +983,6 @@
       "attachedImages": "Прымацавана {{count}} малюнак(-аў)",
       "referencesAdded": "Дадана {{count}} спасылак(-а)",
       "fileNotFound": "Файл не знойдзены: {{path}}",
-      "agentConfigApplied": "Прыменена канфігурацыя агента: {{name}}",
       "unableToLoadRag": "Не ўдаецца загрузіць статыстыку RAG.",
       "referenced": "Спасылка: {{name}}"
     },

@@ -983,7 +983,6 @@
       "attachedImages": "Прикачени {{count}} изображени(я)",
       "referencesAdded": "Добавени {{count}} референци(и)",
       "fileNotFound": "Файлът не е намерен: {{path}}",
-      "agentConfigApplied": "Приложена конфигурация за агент: {{name}}",
       "unableToLoadRag": "Невъзможно зареждане на RAG статистиките.",
       "referenced": "Референция: {{name}}"
     },

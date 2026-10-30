@@ -983,7 +983,6 @@
       "attachedImages": "Vedlagd {{count}} bilete",
       "referencesAdded": "La til {{count}} referanse(r)",
       "fileNotFound": "Fil ikkje funnen: {{path}}",
-      "agentConfigApplied": "Nytta konfigurasjon for agenten: {{name}}",
       "unableToLoadRag": "Kan ikkje laste RAG-statistikk.",
       "referenced": "Referert: {{name}}"
     },

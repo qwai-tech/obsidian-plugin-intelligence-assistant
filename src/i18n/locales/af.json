@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} prent(e) aangeheg",
       "referencesAdded": "{{count}} verwysing(e) bygevoeg",
       "fileNotFound": "Lêer nie gevind nie: {{path}}",
-      "agentConfigApplied": "Konfigurasie toegepas vir agent: {{name}}",
       "unableToLoadRag": "Kan nie RAG-statistieke laai nie.",
       "referenced": "Verwys na: {{name}}"
     },

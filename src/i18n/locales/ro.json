@@ -983,7 +983,6 @@
       "attachedImages": "Atașate {{count}} imagini",
       "referencesAdded": "Adăugate {{count}} referințe",
       "fileNotFound": "Fișierul nu a fost găsit: {{path}}",
-      "agentConfigApplied": "Configurație aplicată pentru agentul: {{name}}",
       "unableToLoadRag": "Nu se pot încărca statisticile RAG.",
       "referenced": "Referențiat: {{name}}"
     },

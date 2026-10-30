@@ -983,7 +983,6 @@
       "attachedImages": "แนบ {{count}} รูปภาพแล้ว",
       "referencesAdded": "เพิ่ม {{count}} การอ้างอิงแล้ว",
       "fileNotFound": "ไม่พบไฟล์: {{path}}",
-      "agentConfigApplied": "ใช้การกำหนดค่าสำหรับเอเจนต์: {{name}} แล้ว",
       "unableToLoadRag": "ไม่สามารถโหลดสถิติ RAG",
       "referenced": "อ้างอิงแล้ว: {{name}}"
     },

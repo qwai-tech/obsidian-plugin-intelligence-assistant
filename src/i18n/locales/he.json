@@ -983,7 +983,6 @@
       "attachedImages": "צורפו {{count}} תמונות",
       "referencesAdded": "נוספו {{count}} הפניות",
       "fileNotFound": "קובץ לא נמצא: {{path}}",
-      "agentConfigApplied": "הוחלה הגדרה לסוכן: {{name}}",
       "unableToLoadRag": "לא ניתן לטעון סטטיסטיקות RAG.",
       "referenced": "הפניה ל: {{name}}"
     },

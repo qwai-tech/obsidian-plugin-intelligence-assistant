@@ -983,7 +983,6 @@
       "attachedImages": "Vedlagt {{count}} bilde(r)",
       "referencesAdded": "La til {{count}} referanse(r)",
       "fileNotFound": "Fil ikke funnet: {{path}}",
-      "agentConfigApplied": "Brukte konfigurasjon for agenten: {{name}}",
       "unableToLoadRag": "Kan ikke laste RAG-statistikk.",
       "referenced": "Referert: {{name}}"
     },

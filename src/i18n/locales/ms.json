@@ -983,7 +983,6 @@
       "attachedImages": "Melampirkan {{count}} gambar",
       "referencesAdded": "Menambah {{count}} rujukan",
       "fileNotFound": "Fail tidak dijumpai: {{path}}",
-      "agentConfigApplied": "Konfigurasi digunakan untuk ejen: {{name}}",
       "unableToLoadRag": "Tidak dapat memuatkan statistik RAG.",
       "referenced": "Dirujuk: {{name}}"
     },

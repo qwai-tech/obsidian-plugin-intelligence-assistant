@@ -983,7 +983,6 @@
       "attachedImages": "Vedhæftede {{count}} billede(r)",
       "referencesAdded": "Tilføjede {{count}} reference(r)",
       "fileNotFound": "Fil ikke fundet: {{path}}",
-      "agentConfigApplied": "Konfiguration anvendt for agent: {{name}}",
       "unableToLoadRag": "Kan ikke indlæse RAG-statistik.",
       "referenced": "Refereret: {{name}}"
     },

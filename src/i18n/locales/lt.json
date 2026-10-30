@@ -983,7 +983,6 @@
       "attachedImages": "Pridėtas (-i) {{count}} vaizdas (-ai)",
       "referencesAdded": "Pridėta {{count}} nuoroda (-os)",
       "fileNotFound": "Failas nerastas: {{path}}",
-      "agentConfigApplied": "Pritaikyta agento konfigūracija: {{name}}",
       "unableToLoadRag": "Nepavyko įkelti RAG statistikos.",
       "referenced": "Paminėta: {{name}}"
     },

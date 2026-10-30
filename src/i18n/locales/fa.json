@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} تصویر پیوست شد",
       "referencesAdded": "{{count}} مرجع اضافه شد",
       "fileNotFound": "فایل پیدا نشد: {{path}}",
-      "agentConfigApplied": "پیکربندی برای عامل اعمال شد: {{name}}",
       "unableToLoadRag": "بارگذاری آمار RAG ناموفق بود.",
       "referenced": "مرجع شد: {{name}}"
     },

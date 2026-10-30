@@ -983,7 +983,6 @@
       "attachedImages": "Adjuntades {{count}} imatge(s)",
       "referencesAdded": "Afegides {{count}} referència(es)",
       "fileNotFound": "Fitxer no trobat: {{path}}",
-      "agentConfigApplied": "Configuració aplicada per a l'agent: {{name}}",
       "unableToLoadRag": "No es poden carregar les estadístiques RAG.",
       "referenced": "Referenciat: {{name}}"
     },

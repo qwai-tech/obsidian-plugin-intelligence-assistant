@@ -983,7 +983,6 @@
       "attachedImages": "Přiloženo {{count}} obrázků",
       "referencesAdded": "Přidáno {{count}} odkazů",
       "fileNotFound": "Soubor nenalezen: {{path}}",
-      "agentConfigApplied": "Použita konfigurace agenta: {{name}}",
       "unableToLoadRag": "Nelze načíst statistiky RAG.",
       "referenced": "Odkazováno: {{name}}"
     },

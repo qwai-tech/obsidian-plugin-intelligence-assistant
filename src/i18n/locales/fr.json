@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} image(s) attachée(s)",
       "referencesAdded": "{{count}} référence(s) ajoutée(s)",
       "fileNotFound": "Fichier introuvable : {{path}}",
-      "agentConfigApplied": "Configuration appliquée pour l'agent : {{name}}",
       "unableToLoadRag": "Impossible de charger les statistiques RAG.",
       "referenced": "Référencé : {{name}}"
     },

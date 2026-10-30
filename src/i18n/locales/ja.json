@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} 枚の画像を添付しました",
       "referencesAdded": "{{count}} 件の参照を追加しました",
       "fileNotFound": "ファイルが見つかりません: {{path}}",
-      "agentConfigApplied": "エージェントの設定を適用しました: {{name}}",
       "unableToLoadRag": "RAG 統計を読み込めません。",
       "referenced": "参照済み: {{name}}"
     },

@@ -983,7 +983,6 @@
       "attachedImages": "{{count}} bild(er) bifogade",
       "referencesAdded": "{{count}} referens(er) tillagda",
       "fileNotFound": "Filen hittades inte: {{path}}",
-      "agentConfigApplied": "Konfiguration tillämpad för agent: {{name}}",
       "unableToLoadRag": "Kan inte ladda RAG-statistik.",
       "referenced": "Refererad: {{name}}"
     },
