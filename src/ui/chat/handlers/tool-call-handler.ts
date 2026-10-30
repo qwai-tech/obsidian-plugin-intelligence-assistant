@@ -1,5 +1,4 @@
 import { setIcon } from 'obsidian';
-import type { Message } from '@/features/conversations';
 import type { AgentExecutionStep } from '@/features/llm';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
@@ -183,74 +182,4 @@ export function createAgentExecutionTraceContainer(messageBody: HTMLElement, sum
 export function collapseExecutionTrace(contentEl: HTMLElement): void {
 	contentEl.classList.add('ia-hidden');
 	contentEl.parentElement?.classList.add('is-collapsed');
-}
-
-/**
- * Returns true if the message content contains a JSON tool-call block.
- */
-export function hasAgentToolCall(content: string): boolean {
-	const regex = /```json\s*\n([\s\S]*?)\n```/g;
-	let match;
-	while ((match = regex.exec(content)) !== null) {
-		try {
-			const json = JSON.parse(match[1]) as Record<string, unknown>;
-			const name = json.name ?? json.tool;
-			if (name && typeof name === 'string') {
-				return true;
-			}
-		} catch { /* not a tool-call block */ }
-	}
-	return false;
-}
-
-/**
- * Strip legacy JSON tool-call blocks from a message so only the plain-language content remains.
- * Used for backward-compatible rendering of old conversations.
- */
-export function extractFinalContent(message: Message): string {
-	return message.content.replace(/```json\s*\n[\s\S]*?\n```/g, '').trim();
-}
-
-/**
- * Reconstruct AgentExecutionStep[] from a sequence of legacy assistant + system
- * messages that contained JSON tool-call blocks.
- * Used for backward-compatible rendering of old conversations.
- */
-export function reconstructAgentSteps(messages: Message[]): AgentExecutionStep[] {
-	const steps: AgentExecutionStep[] = [];
-	for (const msg of messages) {
-		if (msg.role === 'system' && msg.content.startsWith('Tool ')) {
-			const resultMatch = msg.content.match(/^Tool\s+\S+\s+result:\s*([\s\S]*)$/);
-			const resultContent = resultMatch ? resultMatch[1] : msg.content;
-			const isError = resultContent.startsWith('Error:') || resultContent.startsWith('Unknown error');
-			steps.push({
-				type: 'observation',
-				content: resultContent,
-				timestamp: Date.now(),
-				status: isError ? 'error' : 'success'
-			});
-			continue;
-		}
-
-		const regex = /```json\s*\n([\s\S]*?)\n```/g;
-		let match;
-		while ((match = regex.exec(msg.content)) !== null) {
-			try {
-				const json = JSON.parse(match[1]) as Record<string, unknown>;
-				const name = (json.name ?? json.tool) as string | undefined;
-				if (name && typeof name === 'string') {
-					const args = typeof json.arguments === 'object' && json.arguments !== null
-						? json.arguments as Record<string, unknown>
-						: {};
-					steps.push({
-						type: 'action',
-						content: `${name}(${JSON.stringify(args)})`,
-						timestamp: Date.now(),
-						status: 'success'
-					});
-				}
-			} catch { /* ignore malformed blocks */ }
-		}
-	}
-	return steps;
 }

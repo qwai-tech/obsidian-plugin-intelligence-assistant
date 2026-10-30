@@ -25,17 +25,25 @@ describe('groupAgentChains', () => {
 		expect(grouped[1].agentExecutionSteps?.some(step => step.type === 'observation' && step.content === 'two hits')).toBe(true);
 	});
 
-	it('uses the final tool-call message text when the chain never answers', () => {
-		const grouped = groupAgentChains([call('search', 'Still working')]);
+	it('uses the last tool-call message text when the chain never answers', () => {
+		const grouped = groupAgentChains([call('search', 'Still working'), toolResult('search', 'one hit')]);
 
 		expect(grouped).toHaveLength(1);
 		expect(grouped[0].content).toBe('Still working');
+		expect(grouped[0].agentExecutionSteps?.map(step => step.type)).toEqual(['action', 'observation']);
 	});
 
 	it('keeps saved execution steps over reconstructed ones', () => {
 		const saved = [{ type: 'thought', content: 'saved', timestamp: 1 }] as Message['agentExecutionSteps'];
-		const grouped = groupAgentChains([{ ...call('search'), agentExecutionSteps: saved }, { role: 'assistant', content: 'done' }]);
+		const grouped = groupAgentChains([{ ...call('search'), agentExecutionSteps: saved }, toolResult('search', 'hit'), { role: 'assistant', content: 'done' }]);
 
+		expect(grouped).toHaveLength(1);
 		expect(grouped[0].agentExecutionSteps).toBe(saved);
+	});
+
+	it('leaves an answer that merely contains JSON with a name field untouched', () => {
+		const answer: Message = { role: 'assistant', content: 'Here is the record:\n```json\n{"name": "Alice"}\n```' };
+
+		expect(groupAgentChains([{ role: 'user', content: 'json please' }, answer])).toEqual([{ role: 'user', content: 'json please' }, answer]);
 	});
 });
