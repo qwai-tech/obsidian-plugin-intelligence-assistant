@@ -276,7 +276,7 @@ export default defineConfig([
 
   // E2E spec discipline: no hardcoded sleeps; specs may not touch DOM directly.
   {
-    files: ["tests/e2e/specs/**/*.ts"],
+    files: ["tests/e2e/specs/**/*.ts", "tests/e2e/tour/**/*.ts"],
     rules: {
       "no-restricted-syntax": [
         "error",
