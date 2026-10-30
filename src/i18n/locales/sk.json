@@ -1057,6 +1057,12 @@
     "searchConversations": "Hľadať konverzácie...",
     "deleteConversationConfirm": "Odstrániť konverzáciu „{{title}}“?",
     "renameConversationPrompt": "Nový názov",
+    "history": {
+      "today": "Dnes",
+      "yesterday": "Včera",
+      "thisWeek": "Tento týždeň",
+      "older": "Staršie"
+    },
     "header": {
       "noModels": "Žiadne dostupné modely"
     },

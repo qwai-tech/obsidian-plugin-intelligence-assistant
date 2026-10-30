@@ -1057,6 +1057,12 @@
     "searchConversations": "Konuşmalarda ara...",
     "deleteConversationConfirm": "\"{{title}}\" sohbeti silinsin mi?",
     "renameConversationPrompt": "Yeni başlık",
+    "history": {
+      "today": "Bugün",
+      "yesterday": "Dün",
+      "thisWeek": "Bu hafta",
+      "older": "Daha eski"
+    },
     "header": {
       "noModels": "Kullanılabilir model yok"
     },

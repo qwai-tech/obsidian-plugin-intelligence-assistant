@@ -1057,6 +1057,12 @@
     "searchConversations": "Cerca converses...",
     "deleteConversationConfirm": "Voleu suprimir la conversa \"{{title}}\"?",
     "renameConversationPrompt": "Títol nou",
+    "history": {
+      "today": "Avui",
+      "yesterday": "Ahir",
+      "thisWeek": "Aquesta setmana",
+      "older": "Més antigues"
+    },
     "header": {
       "noModels": "Cap model disponible"
     },

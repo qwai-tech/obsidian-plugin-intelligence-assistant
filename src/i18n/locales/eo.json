@@ -1057,6 +1057,12 @@
     "searchConversations": "Serĉi konversaciojn...",
     "deleteConversationConfirm": "Ĉu forigi la konversacion \"{{title}}\"?",
     "renameConversationPrompt": "Nova titolo",
+    "history": {
+      "today": "Hodiaŭ",
+      "yesterday": "Hieraŭ",
+      "thisWeek": "Ĉi-semajne",
+      "older": "Pli malnovaj"
+    },
     "header": {
       "noModels": "Neniuj modeloj disponeblaj"
     },

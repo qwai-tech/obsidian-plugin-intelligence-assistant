@@ -1057,6 +1057,12 @@
     "searchConversations": "Αναζήτηση συνομιλιών...",
     "deleteConversationConfirm": "Διαγραφή της συνομιλίας \"{{title}}\";",
     "renameConversationPrompt": "Νέος τίτλος",
+    "history": {
+      "today": "Σήμερα",
+      "yesterday": "Χθες",
+      "thisWeek": "Αυτή την εβδομάδα",
+      "older": "Παλαιότερα"
+    },
     "header": {
       "noModels": "Δεν υπάρχουν διαθέσιμα μοντέλα"
     },

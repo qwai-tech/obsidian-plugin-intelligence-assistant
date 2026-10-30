@@ -1057,6 +1057,12 @@
     "searchConversations": "Пошук розмов...",
     "deleteConversationConfirm": "Видалити розмову «{{title}}»?",
     "renameConversationPrompt": "Нова назва",
+    "history": {
+      "today": "Сьогодні",
+      "yesterday": "Учора",
+      "thisWeek": "Цього тижня",
+      "older": "Раніше"
+    },
     "header": {
       "noModels": "Моделі недоступні"
     },

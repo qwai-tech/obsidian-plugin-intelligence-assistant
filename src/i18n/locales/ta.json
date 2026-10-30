@@ -1057,6 +1057,12 @@
     "searchConversations": "உரையாடல்களைத் தேடு...",
     "deleteConversationConfirm": "\"{{title}}\" உரையாடலை நீக்கவா?",
     "renameConversationPrompt": "புதிய தலைப்பு",
+    "history": {
+      "today": "இன்று",
+      "yesterday": "நேற்று",
+      "thisWeek": "இந்த வாரம்",
+      "older": "பழையவை"
+    },
     "header": {
       "noModels": "மாதிரிகள் எதுவும் இல்லை"
     },

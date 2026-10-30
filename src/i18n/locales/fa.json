@@ -1057,6 +1057,12 @@
     "searchConversations": "جستجوی مکالمات...",
     "deleteConversationConfirm": "گفتگوی \"{{title}}\" حذف شود؟",
     "renameConversationPrompt": "عنوان جدید",
+    "history": {
+      "today": "امروز",
+      "yesterday": "دیروز",
+      "thisWeek": "این هفته",
+      "older": "قدیمی‌تر"
+    },
     "header": {
       "noModels": "هیچ مدلی در دسترس نیست"
     },

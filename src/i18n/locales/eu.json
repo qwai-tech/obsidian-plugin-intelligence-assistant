@@ -1057,6 +1057,12 @@
     "searchConversations": "Bilatu elkarrizketak...",
     "deleteConversationConfirm": "\"{{title}}\" elkarrizketa ezabatu?",
     "renameConversationPrompt": "Izenburu berria",
+    "history": {
+      "today": "Gaur",
+      "yesterday": "Atzo",
+      "thisWeek": "Aste honetan",
+      "older": "Zaharragoak"
+    },
     "header": {
       "noModels": "Ez dago modelo erabilgarririk"
     },

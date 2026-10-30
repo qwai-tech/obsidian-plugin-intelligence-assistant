@@ -1057,6 +1057,12 @@
     "searchConversations": "Pretraži razgovore...",
     "deleteConversationConfirm": "Izbrisati razgovor \"{{title}}\"?",
     "renameConversationPrompt": "Novi naslov",
+    "history": {
+      "today": "Danas",
+      "yesterday": "Jučer",
+      "thisWeek": "Ovaj tjedan",
+      "older": "Starije"
+    },
     "header": {
       "noModels": "Nema dostupnih modela"
     },

@@ -1057,6 +1057,12 @@
     "searchConversations": "Căutați conversații...",
     "deleteConversationConfirm": "Ștergi conversația „{{title}}”?",
     "renameConversationPrompt": "Titlu nou",
+    "history": {
+      "today": "Astăzi",
+      "yesterday": "Ieri",
+      "thisWeek": "Săptămâna aceasta",
+      "older": "Mai vechi"
+    },
     "header": {
       "noModels": "Niciun model disponibil"
     },

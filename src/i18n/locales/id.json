@@ -1057,6 +1057,12 @@
     "searchConversations": "Cari percakapan...",
     "deleteConversationConfirm": "Hapus percakapan \"{{title}}\"?",
     "renameConversationPrompt": "Judul baru",
+    "history": {
+      "today": "Hari ini",
+      "yesterday": "Kemarin",
+      "thisWeek": "Minggu ini",
+      "older": "Lebih lama"
+    },
     "header": {
       "noModels": "Tidak ada model yang tersedia"
     },

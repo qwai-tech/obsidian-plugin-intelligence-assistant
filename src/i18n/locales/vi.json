@@ -1057,6 +1057,12 @@
     "searchConversations": "Tìm kiếm hội thoại...",
     "deleteConversationConfirm": "Xóa cuộc trò chuyện \"{{title}}\"?",
     "renameConversationPrompt": "Tiêu đề mới",
+    "history": {
+      "today": "Hôm nay",
+      "yesterday": "Hôm qua",
+      "thisWeek": "Tuần này",
+      "older": "Cũ hơn"
+    },
     "header": {
       "noModels": "Không có mô hình nào"
     },

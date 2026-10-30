@@ -1057,6 +1057,12 @@
     "searchConversations": "কথোপকথন অনুসন্ধান করুন...",
     "deleteConversationConfirm": "\"{{title}}\" কথোপকথন মুছবেন?",
     "renameConversationPrompt": "নতুন শিরোনাম",
+    "history": {
+      "today": "আজ",
+      "yesterday": "গতকাল",
+      "thisWeek": "এই সপ্তাহ",
+      "older": "পুরোনো"
+    },
     "header": {
       "noModels": "কোনো মডেল উপলব্ধ নেই"
     },

@@ -1057,6 +1057,12 @@
     "searchConversations": "Cari perbualan...",
     "deleteConversationConfirm": "Padam perbualan \"{{title}}\"?",
     "renameConversationPrompt": "Tajuk baharu",
+    "history": {
+      "today": "Hari ini",
+      "yesterday": "Semalam",
+      "thisWeek": "Minggu ini",
+      "older": "Lebih lama"
+    },
     "header": {
       "noModels": "Tiada model tersedia"
     },

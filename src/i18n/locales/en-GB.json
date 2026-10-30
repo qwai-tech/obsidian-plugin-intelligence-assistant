@@ -1057,6 +1057,12 @@
     "searchConversations": "Search conversations...",
     "deleteConversationConfirm": "Delete conversation \"{{title}}\"?",
     "renameConversationPrompt": "New title",
+    "history": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "thisWeek": "This week",
+      "older": "Older"
+    },
     "header": {
       "noModels": "No models available"
     },

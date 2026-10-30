@@ -1057,6 +1057,12 @@
     "searchConversations": "Sök konversationer...",
     "deleteConversationConfirm": "Ta bort konversationen \"{{title}}\"?",
     "renameConversationPrompt": "Ny titel",
+    "history": {
+      "today": "Idag",
+      "yesterday": "Igår",
+      "thisWeek": "Den här veckan",
+      "older": "Äldre"
+    },
     "header": {
       "noModels": "Inga modeller tillgängliga"
     },

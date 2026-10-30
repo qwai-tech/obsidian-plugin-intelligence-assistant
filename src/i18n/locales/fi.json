@@ -1057,6 +1057,12 @@
     "searchConversations": "Hae keskusteluja...",
     "deleteConversationConfirm": "Poistetaanko keskustelu \"{{title}}\"?",
     "renameConversationPrompt": "Uusi otsikko",
+    "history": {
+      "today": "Tänään",
+      "yesterday": "Eilen",
+      "thisWeek": "Tällä viikolla",
+      "older": "Vanhemmat"
+    },
     "header": {
       "noModels": "Ei malleja saatavilla"
     },

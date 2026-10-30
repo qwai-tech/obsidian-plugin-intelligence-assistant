@@ -1057,6 +1057,12 @@
     "searchConversations": "Gesprekken zoeken...",
     "deleteConversationConfirm": "Gesprek \"{{title}}\" verwijderen?",
     "renameConversationPrompt": "Nieuwe titel",
+    "history": {
+      "today": "Vandaag",
+      "yesterday": "Gisteren",
+      "thisWeek": "Deze week",
+      "older": "Ouder"
+    },
     "header": {
       "noModels": "Geen modellen beschikbaar"
     },

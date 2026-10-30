@@ -99,7 +99,7 @@ export class ConversationListView {
 
 		for (const group of groups) {
 			const groupEl = listContent.createDiv('conversation-date-group');
-			groupEl.createDiv({ text: group.label, cls: 'conversation-date-label' });
+			groupEl.createDiv({ text: t(`chat.history.${group.group}`), cls: 'conversation-date-label' });
 
 			group.conversations.forEach(conv => {
 			const convItem = groupEl.createDiv('conversation-item');
@@ -165,13 +165,10 @@ export class ConversationListView {
 			// Add timestamps below title
 			const convMeta = convContent.createDiv('conversation-meta');
 
-			const formatDate = (timestamp: number) => {
-				const date = new Date(timestamp);
-				return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
-					' ' + date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-			};
-
-			convMeta.setText(formatDate(conv.updatedAt));
+			const updated = new Date(conv.updatedAt);
+			const time = updated.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+			const recent = group.group === 'today' || group.group === 'yesterday';
+			convMeta.setText(recent ? time : `${updated.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} ${time}`);
 
 			// Actions container (hover visibility handled by CSS)
 			const actions = convItem.createDiv('conversation-actions');
@@ -242,32 +239,20 @@ export class ConversationListView {
 /**
  * Group conversations by date categories
  */
-function groupByDate(conversations: Array<{ id: string; title: string; createdAt: number; updatedAt: number; icon?: string; model?: string; mode?: string; agentId?: string }>): Array<{ label: string; conversations: typeof conversations }> {
-	const now = new Date();
+type DateGroup = 'today' | 'yesterday' | 'thisWeek' | 'older';
+
+const DAY_MS = 86_400_000;
+
+export function groupByDate<T extends { updatedAt: number }>(conversations: T[], now = new Date()): Array<{ group: DateGroup; conversations: T[] }> {
 	const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-	const yesterdayStart = todayStart - 86400000;
-	const weekStart = todayStart - (now.getDay() * 86400000);
-
-	const groups: Record<string, typeof conversations> = {
-		'Today': [],
-		'Yesterday': [],
-		'This week': [],
-		'Older': []
+	const groupOf = (updatedAt: number): DateGroup => {
+		if (updatedAt >= todayStart) return 'today';
+		if (updatedAt >= todayStart - DAY_MS) return 'yesterday';
+		if (updatedAt >= todayStart - now.getDay() * DAY_MS) return 'thisWeek';
+		return 'older';
 	};
-
-	for (const conv of conversations) {
-		if (conv.updatedAt >= todayStart) {
-			groups['Today'].push(conv);
-		} else if (conv.updatedAt >= yesterdayStart) {
-			groups['Yesterday'].push(conv);
-		} else if (conv.updatedAt >= weekStart) {
-			groups['This week'].push(conv);
-		} else {
-			groups['Older'].push(conv);
-		}
-	}
-
-	return Object.entries(groups)
-		.filter(([, convs]) => convs.length > 0)
-		.map(([label, convs]) => ({ label, conversations: convs }));
+	const order: DateGroup[] = ['today', 'yesterday', 'thisWeek', 'older'];
+	return order
+		.map(group => ({ group, conversations: conversations.filter(conv => groupOf(conv.updatedAt) === group) }))
+		.filter(entry => entry.conversations.length > 0);
 }

@@ -1057,6 +1057,12 @@
     "searchConversations": "搜索对话...",
     "deleteConversationConfirm": "删除对话“{{title}}”?",
     "renameConversationPrompt": "新标题",
+    "history": {
+      "today": "今天",
+      "yesterday": "昨天",
+      "thisWeek": "本周",
+      "older": "更早"
+    },
     "header": {
       "noModels": "暂无可用模型"
     },

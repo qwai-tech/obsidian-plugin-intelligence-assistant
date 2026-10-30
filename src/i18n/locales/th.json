@@ -1057,6 +1057,12 @@
     "searchConversations": "ค้นหาการสนทนา...",
     "deleteConversationConfirm": "ลบการสนทนา \"{{title}}\" หรือไม่?",
     "renameConversationPrompt": "ชื่อใหม่",
+    "history": {
+      "today": "วันนี้",
+      "yesterday": "เมื่อวาน",
+      "thisWeek": "สัปดาห์นี้",
+      "older": "เก่ากว่า"
+    },
     "header": {
       "noModels": "ไม่มีโมเดลที่พร้อมใช้งาน"
     },

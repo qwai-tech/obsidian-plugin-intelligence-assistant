@@ -1057,6 +1057,12 @@
     "searchConversations": "Keresés a beszélgetések között...",
     "deleteConversationConfirm": "Törlöd a(z) „{{title}}” beszélgetést?",
     "renameConversationPrompt": "Új cím",
+    "history": {
+      "today": "Ma",
+      "yesterday": "Tegnap",
+      "thisWeek": "Ezen a héten",
+      "older": "Régebbi"
+    },
     "header": {
       "noModels": "Nincsenek elérhető modellek"
     },

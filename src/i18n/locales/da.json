@@ -1057,6 +1057,12 @@
     "searchConversations": "Søg samtaler...",
     "deleteConversationConfirm": "Slet samtalen \"{{title}}\"?",
     "renameConversationPrompt": "Ny titel",
+    "history": {
+      "today": "I dag",
+      "yesterday": "I går",
+      "thisWeek": "Denne uge",
+      "older": "Ældre"
+    },
     "header": {
       "noModels": "Ingen modeller tilgængelige"
     },

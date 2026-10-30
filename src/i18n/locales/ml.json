@@ -1057,6 +1057,12 @@
     "searchConversations": "സംഭാഷണങ്ങൾ തിരയുക...",
     "deleteConversationConfirm": "\"{{title}}\" സംഭാഷണം ഇല്ലാതാക്കണോ?",
     "renameConversationPrompt": "പുതിയ ശീർഷകം",
+    "history": {
+      "today": "ഇന്ന്",
+      "yesterday": "ഇന്നലെ",
+      "thisWeek": "ഈ ആഴ്ച",
+      "older": "പഴയവ"
+    },
     "header": {
       "noModels": "മോഡലുകളൊന്നും ലഭ്യമല്ല"
     },

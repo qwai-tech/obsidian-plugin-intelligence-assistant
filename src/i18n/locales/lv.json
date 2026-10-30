@@ -1057,6 +1057,12 @@
     "searchConversations": "Meklēt sarunās...",
     "deleteConversationConfirm": "Dzēst sarunu “{{title}}”?",
     "renameConversationPrompt": "Jauns nosaukums",
+    "history": {
+      "today": "Šodien",
+      "yesterday": "Vakar",
+      "thisWeek": "Šonedēļ",
+      "older": "Vecākas"
+    },
     "header": {
       "noModels": "Nav pieejamu modeļu"
     },

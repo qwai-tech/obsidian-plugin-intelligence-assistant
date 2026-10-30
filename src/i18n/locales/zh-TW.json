@@ -1057,6 +1057,12 @@
     "searchConversations": "搜尋對話...",
     "deleteConversationConfirm": "刪除對話「{{title}}」?",
     "renameConversationPrompt": "新標題",
+    "history": {
+      "today": "今天",
+      "yesterday": "昨天",
+      "thisWeek": "本週",
+      "older": "更早"
+    },
     "header": {
       "noModels": "沒有可用的模型"
     },

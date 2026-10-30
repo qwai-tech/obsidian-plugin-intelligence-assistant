@@ -1057,6 +1057,12 @@
     "searchConversations": "대화 검색...",
     "deleteConversationConfirm": "\"{{title}}\" 대화를 삭제할까요?",
     "renameConversationPrompt": "새 제목",
+    "history": {
+      "today": "오늘",
+      "yesterday": "어제",
+      "thisWeek": "이번 주",
+      "older": "이전"
+    },
     "header": {
       "noModels": "사용 가능한 모델 없음"
     },

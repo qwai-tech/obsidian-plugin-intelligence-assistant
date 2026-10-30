@@ -1057,6 +1057,12 @@
     "searchConversations": "Soek gesprekke...",
     "deleteConversationConfirm": "Skrap gesprek \"{{title}}\"?",
     "renameConversationPrompt": "Nuwe titel",
+    "history": {
+      "today": "Vandag",
+      "yesterday": "Gister",
+      "thisWeek": "Hierdie week",
+      "older": "Ouer"
+    },
     "header": {
       "noModels": "Geen modelle beskikbaar nie"
     },
