@@ -4,6 +4,7 @@ import { createWriteProposal } from '@/features/agent';
 import { createToolDefinition } from '@/features/tools/tool-schema';
 import { z } from 'zod';
 import { errorMessage } from '@/core/utils/errors';
+import { vaultPath } from './vault-path';
 
 export interface CanvasData {
 	nodes: CanvasNode[];
@@ -55,7 +56,7 @@ export class ReadCanvasTool implements Tool {
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
-			const path = args.path as string;
+			const path = vaultPath(args.path);
 			const file = this._app.vault.getAbstractFileByPath(path);
 
 			if (!file || !(file instanceof TFile) || file.extension !== 'canvas') {
@@ -114,7 +115,7 @@ export class UpdateCanvasTool implements Tool {
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
-			const path = args.path as string;
+			const path = vaultPath(args.path);
 			const newNodes = (args.nodes as CanvasNode[]) || [];
 			const newEdges = (args.edges as CanvasEdge[]) || [];
 			

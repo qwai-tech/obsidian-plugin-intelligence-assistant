@@ -3,6 +3,7 @@ import { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
 import { createWriteProposal } from '@/features/agent';
 import { createToolDefinition } from '@/features/tools/tool-schema';
 import { z } from 'zod';
+import { vaultPath } from './vault-path';
 
 export class SearchFilesTool implements Tool {
 	constructor(private _app: App) {}
@@ -128,7 +129,7 @@ export class CreateNoteTool implements Tool {
 		try {
 			const title = args.title as string;
 			const content = args.content as string;
-			const folder = args.folder as string || '';
+			const folder = vaultPath(args.folder);
 
 			// Sanitize title
 			const sanitized = title.replace(/[\\/:*?"<>|]/g, '-');
@@ -190,7 +191,7 @@ export class AppendToNoteTool implements Tool {
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
-			const path = args.path as string;
+			const path = vaultPath(args.path);
 			const content = args.content as string;
 			const file = this._app.vault.getAbstractFileByPath(path);
 

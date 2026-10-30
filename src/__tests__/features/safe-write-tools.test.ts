@@ -11,6 +11,21 @@ function makeFile(path: string): TFile {
 }
 
 describe('safe write tools', () => {
+	it('write_file finds the existing note when the model writes the path with a leading slash', async () => {
+		const existing = makeFile('Notes/A.md');
+		const app = {
+			vault: {
+				getAbstractFileByPath: jest.fn((path: string) => (path === 'Notes/A.md' ? existing : null)),
+				read: jest.fn().mockResolvedValue('old content'),
+				create: jest.fn(),
+			},
+		};
+
+		const result = await new WriteFileTool(app as any).execute({ path: '/Notes/A.md', content: 'new content' });
+
+		expect(result.result).toMatchObject({ operation: 'update', path: 'Notes/A.md', previousContent: 'old content' });
+	});
+
 	it('write_file returns a proposal without modifying an existing file', async () => {
 		const existing = makeFile('Notes/A.md');
 		const app = {

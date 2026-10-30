@@ -4,6 +4,7 @@ import { createWriteProposal } from '@/features/agent';
 import { createToolDefinition } from '@/features/tools/tool-schema';
 import { z } from 'zod';
 import { errorMessage } from '@/core/utils/errors';
+import { vaultPath } from './vault-path';
 
 export class ReadFileTool implements Tool {
 	constructor(private _app: App) {}
@@ -24,7 +25,7 @@ export class ReadFileTool implements Tool {
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
-			const path = args.path as string;
+			const path = vaultPath(args.path);
 			const file = this._app.vault.getAbstractFileByPath(path);
 
 			if (!file || !(file instanceof TFile)) {
@@ -77,7 +78,7 @@ export class WriteFileTool implements Tool {
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
-			const path = args.path as string;
+			const path = vaultPath(args.path);
 			const content = args.content as string;
 			const file = this._app.vault.getAbstractFileByPath(path);
 
@@ -141,7 +142,7 @@ export class ListFilesTool implements Tool {
 
 	execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
-			const folderPath = args.folder as string || '';
+			const folderPath = vaultPath(args.folder);
 			const extension = args.extension as string;
 
 			let files = this._app.vault.getFiles();
@@ -211,7 +212,7 @@ export class UpdatePropertiesTool implements Tool {
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
-			const path = args.path as string;
+			const path = vaultPath(args.path);
 			const updates = args.updates as Record<string, unknown>;
 			const deleteKeys = (args.deleteKeys as string[]) || [];
 			const file = this._app.vault.getAbstractFileByPath(path);

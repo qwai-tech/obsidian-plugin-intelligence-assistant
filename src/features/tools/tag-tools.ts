@@ -9,6 +9,7 @@ import { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
 import { createToolDefinition } from '@/features/tools/tool-schema';
 import { z } from 'zod';
 import { errorMessage } from '@/core/utils/errors';
+import { vaultPath } from './vault-path';
 
 /** Normalize a user-supplied tag to the `#tag` form `getAllTags` returns. */
 function normalizeTag(tag: string): string {
@@ -99,7 +100,7 @@ export class ResolveLinkTool implements Tool {
 	execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
 			const linktext = args.linktext as string;
-			const sourcePath = (args.sourcePath as string) ?? '';
+			const sourcePath = vaultPath(args.sourcePath);
 
 			const { path, subpath } = parseLinktext(linktext);
 			const target = this._app.metadataCache.getFirstLinkpathDest(path, sourcePath);

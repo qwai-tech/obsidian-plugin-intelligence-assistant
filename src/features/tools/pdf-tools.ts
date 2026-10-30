@@ -3,6 +3,7 @@ import { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
 import { createToolDefinition } from '@/features/tools/tool-schema';
 import { z } from 'zod';
 import { errorMessage } from '@/core/utils/errors';
+import { vaultPath } from './vault-path';
 
 /** Hard cap on extracted characters so we never blow up the model context. */
 const MAX_TEXT_CHARS = 50_000;
@@ -61,7 +62,7 @@ export class ReadPdfTool implements Tool {
 
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
-			const path = args.path as string;
+			const path = vaultPath(args.path);
 			const maxPages = args.maxPages as number | undefined;
 
 			const file = this._app.vault.getAbstractFileByPath(path);

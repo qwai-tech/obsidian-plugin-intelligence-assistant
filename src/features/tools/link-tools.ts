@@ -3,6 +3,7 @@ import { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
 import { createToolDefinition } from '@/features/tools/tool-schema';
 import { z } from 'zod';
 import { errorMessage } from '@/core/utils/errors';
+import { vaultPath } from './vault-path';
 
 /**
  * MakeLinkTool — produce a vault-correct link to a note using
@@ -46,8 +47,8 @@ export class MakeLinkTool implements Tool {
 
 	execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
-			const path = args.path as string;
-			const sourcePath = (args.sourcePath as string) ?? '';
+			const path = vaultPath(args.path);
+			const sourcePath = vaultPath(args.sourcePath);
 			const alias = args.alias as string | undefined;
 
 			const file = this._app.vault.getAbstractFileByPath(path);
