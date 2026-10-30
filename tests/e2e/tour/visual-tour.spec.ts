@@ -14,7 +14,10 @@ class Tour extends BasePage {
 	theme: string = THEMES[0];
 
 	async shot(name: string): Promise<void> {
-		await browser.execute(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+		await browser.waitUntil(
+			async () => browser.execute(() => activeDocument.getAnimations().every(animation => animation.playState !== 'running')),
+			{ timeout: 5_000, timeoutMsg: 'Animations did not settle' }
+		);
 		await browser.saveScreenshot(path.join(OUT, `${this.theme}-${name}.png`));
 	}
 
@@ -90,13 +93,10 @@ describe('Visual tour', () => {
 
 			await tour.settingsRoot();
 			await tour.shot('10-settings-root');
-			const sections: Array<[string, string]> = [
-				['LLM', '11-settings-llm'], ['MCP', '12-settings-mcp'], ['Tools', '13-settings-tools'], ['RAG', '14-settings-rag'],
-				['Prompts', '15-settings-prompts'], ['Agents', '16-settings-agents'], ['Quick Actions', '17-settings-quick-actions'], ['Usage', '18-settings-usage'],
-			];
-			for (const [section, name] of sections) {
+			const sections = ['LLM', 'MCP', 'Tools', 'RAG', 'Prompts', 'Agents', 'Quick Actions', 'Usage'];
+			for (const [index, section] of sections.entries()) {
 				await tour.section(section);
-				await tour.shot(name);
+				await tour.shot(`${11 + index}-settings-${section.toLowerCase().replace(' ', '-')}`);
 			}
 
 			const dialogs: Array<[string, string, string]> = [
