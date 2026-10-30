@@ -2,18 +2,18 @@ import { Setting } from 'obsidian';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
 
 describe('applyConfigFieldMetadata', () => {
-	it('shows the description and a numeric range, without type or default noise', () => {
+	it('shows the translated description as written, which already states any range', () => {
 		const setting = applyConfigFieldMetadata(new Setting(document.createElement('div')), {
 			path: 'agents[].temperature',
 			label: 'Temperature',
-			description: 'Higher values make replies more varied.',
+			description: 'Controls randomness (0.0 - 2.0)',
 		});
 
 		expect(setting.nameEl.textContent).toBe('Temperature');
-		expect(setting.descEl.textContent).toBe('Higher values make replies more varied. (0–2)');
+		expect(setting.descEl.textContent).toBe('Controls randomness (0.0 - 2.0)');
 	});
 
-	it('shows just the description when the field has no range', () => {
+	it('shows just the description for other fields', () => {
 		const setting = applyConfigFieldMetadata(new Setting(document.createElement('div')), {
 			path: 'ragConfig.enabled',
 			label: 'Enable RAG',
