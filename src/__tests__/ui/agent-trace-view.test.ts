@@ -1,8 +1,6 @@
 import { toolSummary } from '@/ui/chat/agent-trace-view';
 import type { AgentExecutionStep } from '@/ui/state/chat-view-state';
 
-jest.mock('@/i18n', () => ({ t: (key: string, args: { count: number; tools: string }) => `${key}:${args.count}:${args.tools}` }));
-
 const step = (type: AgentExecutionStep['type'], content: string): AgentExecutionStep => ({ type, content, timestamp: 0 });
 
 describe('toolSummary', () => {
@@ -13,7 +11,7 @@ describe('toolSummary', () => {
 			step('observation', 'contents'),
 			step('action', 'read_file({"path":"b.md"})'),
 			step('action', 'write_file({})'),
-		])).toBe('chat.toolCall.summary:3:read_file, write_file');
+		])).toBe('read_file, write_file (3)');
 	});
 
 	it('is empty when no tool ran', () => {

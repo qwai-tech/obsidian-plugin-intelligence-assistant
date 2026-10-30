@@ -1,5 +1,4 @@
 import type { Message } from '@/features/conversations';
-import { t } from '@/i18n';
 import type { AgentExecutionStep } from '@/ui/state/chat-view-state';
 import { createAgentExecutionTraceContainer, updateExecutionTrace, collapseExecutionTrace } from '@/ui/chat/handlers/tool-call-handler';
 
@@ -30,5 +29,5 @@ export function renderExecutionTrace(
 export function toolSummary(steps: AgentExecutionStep[]): string {
 	const tools = steps.filter(step => step.type === 'action').map(step => step.content.split('(')[0].trim()).filter(Boolean);
 	if (tools.length === 0) return '';
-	return t('chat.toolCall.summary', { count: tools.length, tools: [...new Set(tools)].join(', ') });
+	return `${[...new Set(tools)].join(', ')} (${tools.length})`;
 }
