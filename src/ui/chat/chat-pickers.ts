@@ -27,7 +27,7 @@ export function pickImages(app: App, state: ChatViewState, onChange: () => void)
 		void (async () => {
 			for (const file of selected) {
 				const base64 = toBase64(await app.vault.readBinary(file));
-				state.currentAttachments.push({ type: 'image', name: file.name, path: file.path, content: `data:image/${file.extension};base64,${base64}` });
+				state.currentAttachments.push({ type: 'image', name: file.name, path: file.path, content: `data:${imageMediaType(file.extension)};base64,${base64}` });
 			}
 			onChange();
 			if (selected.length > 0) {
@@ -35,6 +35,13 @@ export function pickImages(app: App, state: ChatViewState, onChange: () => void)
 			}
 		})();
 	}).open();
+}
+
+const MEDIA_SUBTYPES: Record<string, string> = { jpg: 'jpeg', svg: 'svg+xml', tif: 'tiff' };
+
+export function imageMediaType(extension: string): string {
+	const normalized = extension.toLowerCase();
+	return `image/${MEDIA_SUBTYPES[normalized] ?? normalized}`;
 }
 
 function toBase64(buffer: ArrayBuffer): string {
