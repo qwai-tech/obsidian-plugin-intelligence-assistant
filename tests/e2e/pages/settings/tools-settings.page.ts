@@ -60,11 +60,11 @@ export class ToolsSettingsPage extends BasePage {
 		);
 		await browser.execute((testId, type, target) => {
 			const toggle = Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
-				.find(candidate => candidate.instanceOf(HTMLInputElement) && candidate.getAttribute('data-tool-type') === type);
-			if (!(toggle instanceof HTMLInputElement)) {
+				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-tool-type') === type);
+			if (!(toggle instanceof HTMLElement)) {
 				throw new Error(`Built-in tool toggle not found: ${type}`);
 			}
-			if (toggle.checked !== target) {
+			if (toggle.classList.contains('is-enabled') !== target) {
 				toggle.click();
 			}
 		}, TestIds.settings.toolsBuiltinToggle, toolType, enabled);
@@ -220,7 +220,7 @@ export class ToolsSettingsPage extends BasePage {
 	private async builtinToggleExists(toolType: string): Promise<boolean> {
 		return browser.execute((testId, type) => {
 			return Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
-				.some(toggle => toggle.instanceOf(HTMLInputElement) && toggle.getAttribute('data-tool-type') === type);
+				.some(toggle => toggle.instanceOf(HTMLElement) && toggle.getAttribute('data-tool-type') === type);
 		}, TestIds.settings.toolsBuiltinToggle, toolType);
 	}
 

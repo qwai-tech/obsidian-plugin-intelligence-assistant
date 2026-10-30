@@ -319,42 +319,24 @@
         "cli": "CLI Tresnak"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Izena",
-          "category": "Kategoria",
-          "description": "Deskribapena",
-          "parameters": "Parametroak",
-          "enabled": "Gaituta"
-        },
-        "categories": {
-          "fileOps": "Fitxategi Eragiketak",
-          "searchDisc": "Bilaketa eta Aurkikuntza",
-          "noteMgmt": "Oharren Kudeaketa"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Irakurri fitxategi baten edukiak zure biltegitik",
-            "params": "path (beharrezkoa): Irakurri beharreko fitxategiaren bidea"
+            "desc": "Irakurri fitxategi baten edukiak zure biltegitik"
           },
           "writeFile": {
-            "desc": "Idatzi edo eguneratu fitxategi bat zure biltegian",
-            "params": "path (beharrezkoa), content (beharrezkoa): Fitxategiaren bidea eta idazteko edukia"
+            "desc": "Idatzi edo eguneratu fitxategi bat zure biltegian"
           },
           "listFiles": {
-            "desc": "Zerrendatu fitxategiak biltegian edo karpeta zehatz batean",
-            "params": "folder (aukerakoa), extension (aukerakoa): Iragazkiak karpeta eta fitxategi-luzapenaren arabera"
+            "desc": "Zerrendatu fitxategiak biltegian edo karpeta zehatz batean"
           },
           "searchFiles": {
-            "desc": "Bilatu fitxategiak izenaren edo edukiaren arabera zure biltegian",
-            "params": "query (beharrezkoa), search_content (aukerakoa), limit (aukerakoa): Bilaketa-kontsulta eta aukerak"
+            "desc": "Bilatu fitxategiak izenaren edo edukiaren arabera zure biltegian"
           },
           "createNote": {
-            "desc": "Sortu ohar berria zehaztutako edukiarekin",
-            "params": "title (beharrezkoa), content (beharrezkoa), folder (aukerakoa): Oharraren izenburua, edukia eta kokalekua"
+            "desc": "Sortu ohar berria zehaztutako edukiarekin"
           },
           "appendNote": {
-            "desc": "Gehitu edukia lehendik dagoen ohar bati",
-            "params": "path (beharrezkoa), content (beharrezkoa): Oharraren bidea eta gehitzeko edukia"
+            "desc": "Gehitu edukia lehendik dagoen ohar bati"
           }
         },
         "infoTitle": "tresnei buruz",

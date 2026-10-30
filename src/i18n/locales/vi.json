@@ -319,42 +319,24 @@
         "cli": "Công cụ CLI"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Tên",
-          "category": "Danh mục",
-          "description": "Mô tả",
-          "parameters": "Tham số",
-          "enabled": "Đã bật"
-        },
-        "categories": {
-          "fileOps": "Thao tác tệp",
-          "searchDisc": "Tìm kiếm & Khám phá",
-          "noteMgmt": "Quản lý ghi chú"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Đọc nội dung của một tệp từ vault của bạn",
-            "params": "path (bắt buộc): Đường dẫn đến tệp cần đọc"
+            "desc": "Đọc nội dung của một tệp từ vault của bạn"
           },
           "writeFile": {
-            "desc": "Ghi hoặc cập nhật một tệp trong vault của bạn",
-            "params": "path (bắt buộc), content (bắt buộc): Đường dẫn tệp và nội dung cần ghi"
+            "desc": "Ghi hoặc cập nhật một tệp trong vault của bạn"
           },
           "listFiles": {
-            "desc": "Liệt kê các tệp trong vault hoặc một thư mục cụ thể",
-            "params": "folder (tùy chọn), extension (tùy chọn): Lọc theo thư mục và phần mở rộng tệp"
+            "desc": "Liệt kê các tệp trong vault hoặc một thư mục cụ thể"
           },
           "searchFiles": {
-            "desc": "Tìm kiếm tệp theo tên hoặc nội dung trong vault của bạn",
-            "params": "query (bắt buộc), search_content (tùy chọn), limit (tùy chọn): Truy vấn tìm kiếm và tùy chọn"
+            "desc": "Tìm kiếm tệp theo tên hoặc nội dung trong vault của bạn"
           },
           "createNote": {
-            "desc": "Tạo ghi chú mới với nội dung được chỉ định",
-            "params": "title (bắt buộc), content (bắt buộc), folder (tùy chọn): Tiêu đề, nội dung và vị trí ghi chú"
+            "desc": "Tạo ghi chú mới với nội dung được chỉ định"
           },
           "appendNote": {
-            "desc": "Thêm nội dung vào cuối một ghi chú hiện có",
-            "params": "path (bắt buộc), content (bắt buộc): Đường dẫn ghi chú và nội dung cần thêm"
+            "desc": "Thêm nội dung vào cuối một ghi chú hiện có"
           }
         },
         "infoTitle": "về công cụ",

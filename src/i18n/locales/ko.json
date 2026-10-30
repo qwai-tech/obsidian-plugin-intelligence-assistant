@@ -319,42 +319,24 @@
         "cli": "CLI 도구"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "이름",
-          "category": "카테고리",
-          "description": "설명",
-          "parameters": "매개변수",
-          "enabled": "활성화됨"
-        },
-        "categories": {
-          "fileOps": "파일 작업",
-          "searchDisc": "검색 및 탐색",
-          "noteMgmt": "노트 관리"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "볼트에서 파일 내용을 읽습니다",
-            "params": "path (필수): 읽을 파일의 경로"
+            "desc": "볼트에서 파일 내용을 읽습니다"
           },
           "writeFile": {
-            "desc": "볼트의 파일을 작성하거나 업데이트합니다",
-            "params": "path (필수), content (필수): 파일 경로와 작성할 내용"
+            "desc": "볼트의 파일을 작성하거나 업데이트합니다"
           },
           "listFiles": {
-            "desc": "볼트 또는 특정 폴더의 파일을 나열합니다",
-            "params": "folder (선택), extension (선택): 폴더와 파일 확장자로 필터"
+            "desc": "볼트 또는 특정 폴더의 파일을 나열합니다"
           },
           "searchFiles": {
-            "desc": "볼트에서 이름 또는 내용으로 파일을 검색합니다",
-            "params": "query (필수), search_content (선택), limit (선택): 검색 쿼리와 옵션"
+            "desc": "볼트에서 이름 또는 내용으로 파일을 검색합니다"
           },
           "createNote": {
-            "desc": "지정된 내용으로 새 노트를 만듭니다",
-            "params": "title (필수), content (필수), folder (선택): 노트 제목, 내용, 위치"
+            "desc": "지정된 내용으로 새 노트를 만듭니다"
           },
           "appendNote": {
-            "desc": "기존 노트에 내용을 추가합니다",
-            "params": "path (필수), content (필수): 노트 경로와 추가할 내용"
+            "desc": "기존 노트에 내용을 추가합니다"
           }
         },
         "infoTitle": "도구 정보",

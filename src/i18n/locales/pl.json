@@ -319,42 +319,24 @@
         "cli": "Narzędzia CLI"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nazwa",
-          "category": "Kategoria",
-          "description": "Opis",
-          "parameters": "Parametry",
-          "enabled": "Włączony"
-        },
-        "categories": {
-          "fileOps": "Operacje na plikach",
-          "searchDisc": "Wyszukiwanie i odkrywanie",
-          "noteMgmt": "Zarządzanie notatkami"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Odczytaj zawartość pliku z Twojego sejfu",
-            "params": "path (wymagany): Ścieżka do pliku do odczytania"
+            "desc": "Odczytaj zawartość pliku z Twojego sejfu"
           },
           "writeFile": {
-            "desc": "Zapisz lub zaktualizuj plik w Twoim sejfie",
-            "params": "path (wymagany), content (wymagany): Ścieżka do pliku i treść do zapisania"
+            "desc": "Zapisz lub zaktualizuj plik w Twoim sejfie"
           },
           "listFiles": {
-            "desc": "Wylistuj pliki w sejfie lub określonym folderze",
-            "params": "folder (opcjonalny), extension (opcjonalny): Filtruj według folderu i rozszerzenia pliku"
+            "desc": "Wylistuj pliki w sejfie lub określonym folderze"
           },
           "searchFiles": {
-            "desc": "Wyszukaj pliki według nazwy lub zawartości w Twoim sejfie",
-            "params": "query (wymagany), search_content (opcjonalny), limit (opcjonalny): Zapytanie wyszukiwania i opcje"
+            "desc": "Wyszukaj pliki według nazwy lub zawartości w Twoim sejfie"
           },
           "createNote": {
-            "desc": "Utwórz nową notatkę o określonej treści",
-            "params": "title (wymagany), content (wymagany), folder (opcjonalny): Tytuł notatki, treść i lokalizacja"
+            "desc": "Utwórz nową notatkę o określonej treści"
           },
           "appendNote": {
-            "desc": "Dołącz treść do istniejącej notatki",
-            "params": "path (wymagany), content (wymagany): Ścieżka do notatki i treść do dołączenia"
+            "desc": "Dołącz treść do istniejącej notatki"
           }
         },
         "infoTitle": "o narzędziach",

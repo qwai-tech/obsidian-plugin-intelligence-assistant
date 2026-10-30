@@ -319,42 +319,24 @@
         "cli": "CLI-verktøy"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Navn",
-          "category": "Kategori",
-          "description": "Beskrivelse",
-          "parameters": "Parametere",
-          "enabled": "Aktivert"
-        },
-        "categories": {
-          "fileOps": "Filoperasjoner",
-          "searchDisc": "Søk og oppdagelse",
-          "noteMgmt": "Notatadministrasjon"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Les innholdet i en fil fra hvelvet ditt",
-            "params": "path (påkrevd): Sti til filen som skal leses"
+            "desc": "Les innholdet i en fil fra hvelvet ditt"
           },
           "writeFile": {
-            "desc": "Skriv eller oppdater en fil i hvelvet ditt",
-            "params": "path (påkrevd), content (påkrevd): Filsti og innhold som skal skrives"
+            "desc": "Skriv eller oppdater en fil i hvelvet ditt"
           },
           "listFiles": {
-            "desc": "List opp filer i hvelvet eller en bestemt mappe",
-            "params": "folder (valgfritt), extension (valgfritt): Filtrer etter mappe og filtype"
+            "desc": "List opp filer i hvelvet eller en bestemt mappe"
           },
           "searchFiles": {
-            "desc": "Søk etter filer etter navn eller innhold i hvelvet ditt",
-            "params": "query (påkrevd), search_content (valgfritt), limit (valgfritt): Søkespørsmål og alternativer"
+            "desc": "Søk etter filer etter navn eller innhold i hvelvet ditt"
           },
           "createNote": {
-            "desc": "Opprett et nytt notat med angitt innhold",
-            "params": "title (påkrevd), content (påkrevd), folder (valgfritt): Notatets tittel, innhold og plassering"
+            "desc": "Opprett et nytt notat med angitt innhold"
           },
           "appendNote": {
-            "desc": "Legg til innhold i et eksisterende notat",
-            "params": "path (påkrevd), content (påkrevd): Notatets sti og innhold som skal legges til"
+            "desc": "Legg til innhold i et eksisterende notat"
           }
         },
         "infoTitle": "om verktøy",

@@ -319,42 +319,24 @@
         "cli": "Herramientas CLI"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nombre",
-          "category": "Categoría",
-          "description": "Descripción",
-          "parameters": "Parámetros",
-          "enabled": "Habilitado"
-        },
-        "categories": {
-          "fileOps": "Operaciones de archivo",
-          "searchDisc": "Búsqueda y descubrimiento",
-          "noteMgmt": "Gestión de notas"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Leer el contenido de un archivo de su vault",
-            "params": "path (requerido): Ruta al archivo a leer"
+            "desc": "Leer el contenido de un archivo de su vault"
           },
           "writeFile": {
-            "desc": "Escribir o actualizar un archivo en su vault",
-            "params": "path (requerido), content (requerido): Ruta del archivo y contenido a escribir"
+            "desc": "Escribir o actualizar un archivo en su vault"
           },
           "listFiles": {
-            "desc": "Listar archivos en el vault o en una carpeta específica",
-            "params": "folder (opcional), extension (opcional): Filtrar por carpeta y extensión de archivo"
+            "desc": "Listar archivos en el vault o en una carpeta específica"
           },
           "searchFiles": {
-            "desc": "Buscar archivos por nombre o contenido en su vault",
-            "params": "query (requerido), search_content (opcional), limit (opcional): Consulta de búsqueda y opciones"
+            "desc": "Buscar archivos por nombre o contenido en su vault"
           },
           "createNote": {
-            "desc": "Crear una nueva nota con el contenido especificado",
-            "params": "title (requerido), content (requerido), folder (opcional): Título, contenido y ubicación de la nota"
+            "desc": "Crear una nueva nota con el contenido especificado"
           },
           "appendNote": {
-            "desc": "Añadir contenido a una nota existente",
-            "params": "path (requerido), content (requerido): Ruta de la nota y contenido a añadir"
+            "desc": "Añadir contenido a una nota existente"
           }
         },
         "infoTitle": "acerca de las herramientas",

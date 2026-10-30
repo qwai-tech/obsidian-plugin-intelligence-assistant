@@ -319,42 +319,24 @@
         "cli": "CLI-työkalut"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nimi",
-          "category": "Luokka",
-          "description": "Kuvaus",
-          "parameters": "Parametrit",
-          "enabled": "Käytössä"
-        },
-        "categories": {
-          "fileOps": "Tiedosto-operaatiot",
-          "searchDisc": "Haku ja löytäminen",
-          "noteMgmt": "Muistiinpanojen hallinta"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Lue tiedoston sisältö holvistasi",
-            "params": "path (pakollinen): Luettavan tiedoston polku"
+            "desc": "Lue tiedoston sisältö holvistasi"
           },
           "writeFile": {
-            "desc": "Kirjoita tai päivitä tiedosto holvissasi",
-            "params": "path (pakollinen), content (pakollinen): Tiedoston polku ja kirjoitettava sisältö"
+            "desc": "Kirjoita tai päivitä tiedosto holvissasi"
           },
           "listFiles": {
-            "desc": "Listaa tiedostot holvissa tai tietyssä kansiossa",
-            "params": "folder (valinnainen), extension (valinnainen): Suodata kansion ja tiedostopäätteen mukaan"
+            "desc": "Listaa tiedostot holvissa tai tietyssä kansiossa"
           },
           "searchFiles": {
-            "desc": "Hae tiedostoja nimellä tai sisällöllä holvissasi",
-            "params": "query (pakollinen), search_content (valinnainen), limit (valinnainen): Hakukysely ja asetukset"
+            "desc": "Hae tiedostoja nimellä tai sisällöllä holvissasi"
           },
           "createNote": {
-            "desc": "Luo uusi muistiinpano määritetyllä sisällöllä",
-            "params": "title (pakollinen), content (pakollinen), folder (valinnainen): Muistiinpanon otsikko, sisältö ja sijainti"
+            "desc": "Luo uusi muistiinpano määritetyllä sisällöllä"
           },
           "appendNote": {
-            "desc": "Lisää sisältöä olemassa olevaan muistiinpanoon",
-            "params": "path (pakollinen), content (pakollinen): Muistiinpanon polku ja lisättävä sisältö"
+            "desc": "Lisää sisältöä olemassa olevaan muistiinpanoon"
           }
         },
         "infoTitle": "tietoa työkaluista",

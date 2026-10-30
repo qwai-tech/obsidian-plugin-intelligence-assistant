@@ -6,7 +6,7 @@
  */
 import type { App } from 'obsidian';
 import type { ToolSource } from '../tool-source';
-import type { SourceTool, ToolSourceKind } from '@/features/tools/types/tools';
+import type { SourceTool, ToolDefinition, ToolSourceKind } from '@/features/tools/types/tools';
 import {
 	ListFilesTool,
 	ReadFileTool,
@@ -49,6 +49,10 @@ const BUILTIN_TOOL_FACTORIES: Record<string, BuiltinToolFactory> = {
 	resolve_link: (app) => new ResolveLinkTool(app),
 	make_link: (app) => new MakeLinkTool(app),
 };
+
+export function builtinToolDefinitions(app: App): ToolDefinition[] {
+	return Object.values(BUILTIN_TOOL_FACTORIES).map((create) => create(app).definition);
+}
 
 export class BuiltinToolSource implements ToolSource {
 	readonly kind: ToolSourceKind = 'builtin';

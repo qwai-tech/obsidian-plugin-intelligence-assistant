@@ -319,42 +319,24 @@
         "cli": "Ferramentas CLI"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nome",
-          "category": "Categoría",
-          "description": "Descrición",
-          "parameters": "Parámetros",
-          "enabled": "Activado"
-        },
-        "categories": {
-          "fileOps": "Operacións de ficheiros",
-          "searchDisc": "Busca e Descubrimento",
-          "noteMgmt": "Xestión de notas"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Ler o contido dun ficheiro do teu vault",
-            "params": "path (obrigatorio): Ruta ao ficheiro a ler"
+            "desc": "Ler o contido dun ficheiro do teu vault"
           },
           "writeFile": {
-            "desc": "Escribir ou actualizar un ficheiro no teu vault",
-            "params": "path (obrigatorio), content (obrigatorio): Ruta e contido do ficheiro a escribir"
+            "desc": "Escribir ou actualizar un ficheiro no teu vault"
           },
           "listFiles": {
-            "desc": "Listar ficheiros no vault ou nun cartafol específico",
-            "params": "folder (opcional), extension (opcional): Filtrar por cartafol e extensión de ficheiro"
+            "desc": "Listar ficheiros no vault ou nun cartafol específico"
           },
           "searchFiles": {
-            "desc": "Buscar ficheiros por nome ou contido no teu vault",
-            "params": "query (obrigatorio), search_content (opcional), limit (opcional): Consulta de busca e opcións"
+            "desc": "Buscar ficheiros por nome ou contido no teu vault"
           },
           "createNote": {
-            "desc": "Crear unha nova nota con contido específico",
-            "params": "title (obrigatorio), content (obrigatorio), folder (opcional): Título, contido e localización da nota"
+            "desc": "Crear unha nova nota con contido específico"
           },
           "appendNote": {
-            "desc": "Engadir contido a unha nota existente",
-            "params": "path (obrigatorio), content (obrigatorio): Ruta da nota e contido a engadir"
+            "desc": "Engadir contido a unha nota existente"
           }
         },
         "infoTitle": "sobre as ferramentas",

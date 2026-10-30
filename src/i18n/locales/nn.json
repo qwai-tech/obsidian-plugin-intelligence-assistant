@@ -319,42 +319,24 @@
         "cli": "CLI-verktøy"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Namn",
-          "category": "Kategori",
-          "description": "Skildring",
-          "parameters": "Parametrar",
-          "enabled": "Aktivert"
-        },
-        "categories": {
-          "fileOps": "Filoperasjonar",
-          "searchDisc": "Søk og oppdaging",
-          "noteMgmt": "Notatkandtering"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Les innhaldet i ei fil frå kvelvet ditt",
-            "params": "path (påkravd): Sti til fila som skal lesast"
+            "desc": "Les innhaldet i ei fil frå kvelvet ditt"
           },
           "writeFile": {
-            "desc": "Skriv eller oppdater ei fil i kvelvet ditt",
-            "params": "path (påkravd), content (påkravd): Filsti og innhald som skal skrivast"
+            "desc": "Skriv eller oppdater ei fil i kvelvet ditt"
           },
           "listFiles": {
-            "desc": "List opp filer i kvelvet eller ei bestemt mappe",
-            "params": "folder (valfritt), extension (valfritt): Filtrer etter mappe og filtype"
+            "desc": "List opp filer i kvelvet eller ei bestemt mappe"
           },
           "searchFiles": {
-            "desc": "Søk etter filer etter namn eller innhald i kvelvet ditt",
-            "params": "query (påkravd), search_content (valfritt), limit (valfritt): Søkespørsmål og alternativ"
+            "desc": "Søk etter filer etter namn eller innhald i kvelvet ditt"
           },
           "createNote": {
-            "desc": "Opprett eit nytt notat med oppgjeve innhald",
-            "params": "title (påkravd), content (påkravd), folder (valfritt): Notattittel, innhald og plassering"
+            "desc": "Opprett eit nytt notat med oppgjeve innhald"
           },
           "appendNote": {
-            "desc": "Legg til innhald i eit eksisterande notat",
-            "params": "path (påkravd), content (påkravd): Notatsti og innhald som skal leggjast til"
+            "desc": "Legg til innhald i eit eksisterande notat"
           }
         },
         "infoTitle": "om verktøy",

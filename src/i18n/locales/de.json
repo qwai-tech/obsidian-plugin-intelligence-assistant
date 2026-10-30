@@ -319,42 +319,24 @@
         "cli": "CLI-Werkzeuge"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Name",
-          "category": "Kategorie",
-          "description": "Beschreibung",
-          "parameters": "Parameter",
-          "enabled": "Aktiviert"
-        },
-        "categories": {
-          "fileOps": "Dateioperationen",
-          "searchDisc": "Suche & Entdeckung",
-          "noteMgmt": "Notizverwaltung"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Den Inhalt einer Datei aus Ihrem Vault lesen",
-            "params": "path (erforderlich): Pfad zur zu lesenden Datei"
+            "desc": "Den Inhalt einer Datei aus Ihrem Vault lesen"
           },
           "writeFile": {
-            "desc": "Eine Datei in Ihrem Vault schreiben oder aktualisieren",
-            "params": "path (erforderlich), content (erforderlich): Dateipfad und zu schreibender Inhalt"
+            "desc": "Eine Datei in Ihrem Vault schreiben oder aktualisieren"
           },
           "listFiles": {
-            "desc": "Dateien im Vault oder in einem bestimmten Ordner auflisten",
-            "params": "folder (optional), extension (optional): Nach Ordner und Dateiendung filtern"
+            "desc": "Dateien im Vault oder in einem bestimmten Ordner auflisten"
           },
           "searchFiles": {
-            "desc": "Dateien nach Name oder Inhalt in Ihrem Vault suchen",
-            "params": "query (erforderlich), search_content (optional), limit (optional): Suchanfrage und Optionen"
+            "desc": "Dateien nach Name oder Inhalt in Ihrem Vault suchen"
           },
           "createNote": {
-            "desc": "Eine neue Notiz mit angegebenem Inhalt erstellen",
-            "params": "title (erforderlich), content (erforderlich), folder (optional): Notiztitel, Inhalt und Speicherort"
+            "desc": "Eine neue Notiz mit angegebenem Inhalt erstellen"
           },
           "appendNote": {
-            "desc": "Inhalt an eine vorhandene Notiz anhängen",
-            "params": "path (erforderlich), content (erforderlich): Notizpfad und anzuhängender Inhalt"
+            "desc": "Inhalt an eine vorhandene Notiz anhängen"
           }
         },
         "infoTitle": "Über Werkzeuge",

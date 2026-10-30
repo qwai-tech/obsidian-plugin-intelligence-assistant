@@ -319,42 +319,24 @@
         "cli": "Strumenti CLI"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nome",
-          "category": "Categoria",
-          "description": "Descrizione",
-          "parameters": "Parametri",
-          "enabled": "Abilitato"
-        },
-        "categories": {
-          "fileOps": "Operazioni sui file",
-          "searchDisc": "Ricerca e scoperta",
-          "noteMgmt": "Gestione note"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Leggi il contenuto di un file dal tuo vault",
-            "params": "path (obbligatorio): Percorso del file da leggere"
+            "desc": "Leggi il contenuto di un file dal tuo vault"
           },
           "writeFile": {
-            "desc": "Scrivi o aggiorna un file nel tuo vault",
-            "params": "path (obbligatorio), content (obbligatorio): Percorso del file e contenuto da scrivere"
+            "desc": "Scrivi o aggiorna un file nel tuo vault"
           },
           "listFiles": {
-            "desc": "Elenca i file nel vault o in una cartella specifica",
-            "params": "folder (facoltativo), extension (facoltativo): Filtra per cartella ed estensione file"
+            "desc": "Elenca i file nel vault o in una cartella specifica"
           },
           "searchFiles": {
-            "desc": "Cerca file per nome o contenuto nel tuo vault",
-            "params": "query (obbligatorio), search_content (facoltativo), limit (facoltativo): Query di ricerca e opzioni"
+            "desc": "Cerca file per nome o contenuto nel tuo vault"
           },
           "createNote": {
-            "desc": "Crea una nuova nota con il contenuto specificato",
-            "params": "title (obbligatorio), content (obbligatorio), folder (facoltativo): Titolo, contenuto e posizione della nota"
+            "desc": "Crea una nuova nota con il contenuto specificato"
           },
           "appendNote": {
-            "desc": "Aggiungi contenuto a una nota esistente",
-            "params": "path (obbligatorio), content (obbligatorio): Percorso della nota e contenuto da aggiungere"
+            "desc": "Aggiungi contenuto a una nota esistente"
           }
         },
         "infoTitle": "informazioni sugli strumenti",

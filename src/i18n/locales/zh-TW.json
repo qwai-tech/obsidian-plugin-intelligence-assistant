@@ -319,42 +319,24 @@
         "cli": "CLI 工具"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "名稱",
-          "category": "類別",
-          "description": "描述",
-          "parameters": "參數",
-          "enabled": "已啟用"
-        },
-        "categories": {
-          "fileOps": "檔案操作",
-          "searchDisc": "搜尋與探索",
-          "noteMgmt": "筆記管理"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "從您的知識庫讀取檔案內容",
-            "params": "path（必填）：要讀取的檔案路徑"
+            "desc": "從您的知識庫讀取檔案內容"
           },
           "writeFile": {
-            "desc": "在您的知識庫中寫入或更新檔案",
-            "params": "path（必填）、content（必填）：檔案路徑和要寫入的內容"
+            "desc": "在您的知識庫中寫入或更新檔案"
           },
           "listFiles": {
-            "desc": "列出知識庫或特定資料夾中的檔案",
-            "params": "folder（選填）、extension（選填）：依資料夾和副檔名篩選"
+            "desc": "列出知識庫或特定資料夾中的檔案"
           },
           "searchFiles": {
-            "desc": "在您的知識庫中依名稱或內容搜尋檔案",
-            "params": "query（必填）、search_content（選填）、limit（選填）：搜尋查詢和選項"
+            "desc": "在您的知識庫中依名稱或內容搜尋檔案"
           },
           "createNote": {
-            "desc": "建立含有指定內容的新筆記",
-            "params": "title（必填）、content（必填）、folder（選填）：筆記標題、內容和位置"
+            "desc": "建立含有指定內容的新筆記"
           },
           "appendNote": {
-            "desc": "在現有筆記中附加內容",
-            "params": "path（必填）、content（必填）：筆記路徑和要附加的內容"
+            "desc": "在現有筆記中附加內容"
           }
         },
         "infoTitle": "關於工具",

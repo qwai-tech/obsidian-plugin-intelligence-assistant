@@ -319,42 +319,24 @@
         "cli": "Outils CLI"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nom",
-          "category": "Catégorie",
-          "description": "Description",
-          "parameters": "Paramètres",
-          "enabled": "Activé"
-        },
-        "categories": {
-          "fileOps": "Opérations sur les fichiers",
-          "searchDisc": "Recherche et découverte",
-          "noteMgmt": "Gestion des notes"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Lire le contenu d'un fichier depuis votre coffre",
-            "params": "path (requis) : Chemin vers le fichier à lire"
+            "desc": "Lire le contenu d'un fichier depuis votre coffre"
           },
           "writeFile": {
-            "desc": "Écrire ou mettre à jour un fichier dans votre coffre",
-            "params": "path (requis), content (requis) : Chemin du fichier et contenu à écrire"
+            "desc": "Écrire ou mettre à jour un fichier dans votre coffre"
           },
           "listFiles": {
-            "desc": "Lister les fichiers dans le coffre ou un dossier spécifique",
-            "params": "folder (optionnel), extension (optionnel) : Filtrer par dossier et extension de fichier"
+            "desc": "Lister les fichiers dans le coffre ou un dossier spécifique"
           },
           "searchFiles": {
-            "desc": "Rechercher des fichiers par nom ou contenu dans votre coffre",
-            "params": "query (requis), search_content (optionnel), limit (optionnel) : Requête de recherche et options"
+            "desc": "Rechercher des fichiers par nom ou contenu dans votre coffre"
           },
           "createNote": {
-            "desc": "Créer une nouvelle note avec le contenu spécifié",
-            "params": "title (requis), content (requis), folder (optionnel) : Titre, contenu et emplacement de la note"
+            "desc": "Créer une nouvelle note avec le contenu spécifié"
           },
           "appendNote": {
-            "desc": "Ajouter du contenu à une note existante",
-            "params": "path (requis), content (requis) : Chemin de la note et contenu à ajouter"
+            "desc": "Ajouter du contenu à une note existante"
           }
         },
         "infoTitle": "À propos des outils",

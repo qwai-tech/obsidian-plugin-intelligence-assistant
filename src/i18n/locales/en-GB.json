@@ -319,42 +319,24 @@
         "cli": "CLI Tools"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Name",
-          "category": "Category",
-          "description": "Description",
-          "parameters": "Parameters",
-          "enabled": "Enabled"
-        },
-        "categories": {
-          "fileOps": "File Operations",
-          "searchDisc": "Search & Discovery",
-          "noteMgmt": "Note Management"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Read the contents of a file from your vault",
-            "params": "path (required): Path to the file to read"
+            "desc": "Read the contents of a file from your vault"
           },
           "writeFile": {
-            "desc": "Write or update a file in your vault",
-            "params": "path (required), content (required): File path and content to write"
+            "desc": "Write or update a file in your vault"
           },
           "listFiles": {
-            "desc": "List files in the vault or a specific folder",
-            "params": "folder (optional), extension (optional): Filter by folder and file extension"
+            "desc": "List files in the vault or a specific folder"
           },
           "searchFiles": {
-            "desc": "Search for files by name or content in your vault",
-            "params": "query (required), search_content (optional), limit (optional): Search query and options"
+            "desc": "Search for files by name or content in your vault"
           },
           "createNote": {
-            "desc": "Create a new note with specified content",
-            "params": "title (required), content (required), folder (optional): Note title, content, and location"
+            "desc": "Create a new note with specified content"
           },
           "appendNote": {
-            "desc": "Append content to an existing note",
-            "params": "path (required), content (required): Note path and content to append"
+            "desc": "Append content to an existing note"
           }
         },
         "infoTitle": "about tools",

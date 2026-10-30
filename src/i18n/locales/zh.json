@@ -318,42 +318,24 @@
         "cli": "CLI 工具"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "名称",
-          "category": "分类",
-          "description": "描述",
-          "parameters": "参数",
-          "enabled": "启用"
-        },
-        "categories": {
-          "fileOps": "文件操作",
-          "searchDisc": "搜索与发现",
-          "noteMgmt": "笔记管理"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "读取 Vault 中文件的内容",
-            "params": "path（必填）：要读取的文件路径"
+            "desc": "读取 Vault 中文件的内容"
           },
           "writeFile": {
-            "desc": "生成写入或更新 Vault 文件的提案",
-            "params": "path（必填），content（必填）：文件路径和拟写入内容"
+            "desc": "生成写入或更新 Vault 文件的提案"
           },
           "listFiles": {
-            "desc": "列出 Vault 或特定文件夹中的文件",
-            "params": "folder（可选），extension（可选）：按文件夹和扩展名过滤"
+            "desc": "列出 Vault 或特定文件夹中的文件"
           },
           "searchFiles": {
-            "desc": "在 Vault 中按名称或内容搜索文件",
-            "params": "query（必填），search_content（可选），limit（可选）：搜索词及选项"
+            "desc": "在 Vault 中按名称或内容搜索文件"
           },
           "createNote": {
-            "desc": "生成创建新笔记的提案",
-            "params": "title（必填），content（必填），folder（可选）：笔记标题、拟写入内容和位置"
+            "desc": "生成创建新笔记的提案"
           },
           "appendNote": {
-            "desc": "生成向现有笔记追加内容的提案",
-            "params": "path（必填），content（必填）：笔记路径和拟追加内容"
+            "desc": "生成向现有笔记追加内容的提案"
           }
         },
         "infoTitle": "关于工具",

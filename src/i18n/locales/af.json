@@ -319,42 +319,24 @@
         "cli": "CLI-gereedskap"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Naam",
-          "category": "Kategorie",
-          "description": "Beskrywing",
-          "parameters": "Parameters",
-          "enabled": "Geaktiveer"
-        },
-        "categories": {
-          "fileOps": "Lêerbewerkings",
-          "searchDisc": "Soek en Ontdekking",
-          "noteMgmt": "Nota-bestuur"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Lees die inhoud van 'n lêer uit u gewelf",
-            "params": "pad (vereis): Pad na die lêer om te lees"
+            "desc": "Lees die inhoud van 'n lêer uit u gewelf"
           },
           "writeFile": {
-            "desc": "Skryf of dateer 'n lêer in u gewelf op",
-            "params": "pad (vereis), inhoud (vereis): Lêerpad en inhoud om te skryf"
+            "desc": "Skryf of dateer 'n lêer in u gewelf op"
           },
           "listFiles": {
-            "desc": "Lys lêers in die gewelf of 'n spesifieke gids",
-            "params": "gids (opsioneel), uitbreiding (opsioneel): Filter op gids en lêeruitbreiding"
+            "desc": "Lys lêers in die gewelf of 'n spesifieke gids"
           },
           "searchFiles": {
-            "desc": "Soek lêers op naam of inhoud in u gewelf",
-            "params": "navraag (vereis), soek_inhoud (opsioneel), limiet (opsioneel): Soeknavraag en opsies"
+            "desc": "Soek lêers op naam of inhoud in u gewelf"
           },
           "createNote": {
-            "desc": "Skep 'n nuwe nota met gespesifiseerde inhoud",
-            "params": "titel (vereis), inhoud (vereis), gids (opsioneel): Notatitel, inhoud en ligging"
+            "desc": "Skep 'n nuwe nota met gespesifiseerde inhoud"
           },
           "appendNote": {
-            "desc": "Voeg inhoud by 'n bestaande nota",
-            "params": "pad (vereis), inhoud (vereis): Notapad en inhoud om by te voeg"
+            "desc": "Voeg inhoud by 'n bestaande nota"
           }
         },
         "infoTitle": "oor gereedskap",

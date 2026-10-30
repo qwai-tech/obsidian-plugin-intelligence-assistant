@@ -319,42 +319,24 @@
         "cli": "CLI rīki"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nosaukums",
-          "category": "Kategorija",
-          "description": "Apraksts",
-          "parameters": "Parametri",
-          "enabled": "Iespējots"
-        },
-        "categories": {
-          "fileOps": "Failu darbības",
-          "searchDisc": "Meklēšana un atklāšana",
-          "noteMgmt": "Piezīmju pārvaldība"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Lasīt faila saturu no jūsu velventa",
-            "params": "path (obligāts): Ceļš uz lasāmo failu"
+            "desc": "Lasīt faila saturu no jūsu velventa"
           },
           "writeFile": {
-            "desc": "Rakstīt vai atjaunināt failu jūsu velventī",
-            "params": "path (obligāts), content (obligāts): Faila ceļš un saturs, ko rakstīt"
+            "desc": "Rakstīt vai atjaunināt failu jūsu velventī"
           },
           "listFiles": {
-            "desc": "Uzskaitīt failus velventī vai konkrētā mapē",
-            "params": "folder (neobligāts), extension (neobligāts): Filtrēt pēc mapes un faila paplašinājuma"
+            "desc": "Uzskaitīt failus velventī vai konkrētā mapē"
           },
           "searchFiles": {
-            "desc": "Meklēt failus pēc nosaukuma vai satura jūsu velventī",
-            "params": "query (obligāts), search_content (neobligāts), limit (neobligāts): Meklēšanas vaicājums un opcijas"
+            "desc": "Meklēt failus pēc nosaukuma vai satura jūsu velventī"
           },
           "createNote": {
-            "desc": "Izveidot jaunu piezīmi ar norādīto saturu",
-            "params": "title (obligāts), content (obligāts), folder (neobligāts): Piezīmes virsraksts, saturs un atrašanās vieta"
+            "desc": "Izveidot jaunu piezīmi ar norādīto saturu"
           },
           "appendNote": {
-            "desc": "Pievienot saturu esošai piezīmei",
-            "params": "path (obligāts), content (obligāts): Piezīmes ceļš un pievienojamais saturs"
+            "desc": "Pievienot saturu esošai piezīmei"
           }
         },
         "infoTitle": "par rīkiem",

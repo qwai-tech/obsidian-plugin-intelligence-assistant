@@ -319,42 +319,24 @@
         "cli": "CLI Araçları"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "İsim",
-          "category": "Kategori",
-          "description": "Açıklama",
-          "parameters": "Parametreler",
-          "enabled": "Etkin"
-        },
-        "categories": {
-          "fileOps": "Dosya İşlemleri",
-          "searchDisc": "Arama ve Keşif",
-          "noteMgmt": "Not Yönetimi"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Vault'unuzdaki bir dosyanın içeriğini okuyun",
-            "params": "path (gerekli): Okunacak dosyanın yolu"
+            "desc": "Vault'unuzdaki bir dosyanın içeriğini okuyun"
           },
           "writeFile": {
-            "desc": "Vault'unuzdaki bir dosyayı yazın veya güncelleyin",
-            "params": "path (gerekli), content (gerekli): Dosya yolu ve yazılacak içerik"
+            "desc": "Vault'unuzdaki bir dosyayı yazın veya güncelleyin"
           },
           "listFiles": {
-            "desc": "Vault veya belirli bir klasördeki dosyaları listeleyin",
-            "params": "folder (isteğe bağlı), extension (isteğe bağlı): Klasör ve dosya uzantısına göre filtrele"
+            "desc": "Vault veya belirli bir klasördeki dosyaları listeleyin"
           },
           "searchFiles": {
-            "desc": "Vault'unuzda dosyaları isme veya içeriğe göre arayın",
-            "params": "query (gerekli), search_content (isteğe bağlı), limit (isteğe bağlı): Arama sorgusu ve seçenekleri"
+            "desc": "Vault'unuzda dosyaları isme veya içeriğe göre arayın"
           },
           "createNote": {
-            "desc": "Belirtilen içerikle yeni bir not oluşturun",
-            "params": "title (gerekli), content (gerekli), folder (isteğe bağlı): Not başlığı, içeriği ve konumu"
+            "desc": "Belirtilen içerikle yeni bir not oluşturun"
           },
           "appendNote": {
-            "desc": "Mevcut bir nota içerik ekleyin",
-            "params": "path (gerekli), content (gerekli): Not yolu ve eklenecek içerik"
+            "desc": "Mevcut bir nota içerik ekleyin"
           }
         },
         "infoTitle": "araçlar hakkında",

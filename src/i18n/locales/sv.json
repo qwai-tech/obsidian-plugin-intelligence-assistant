@@ -319,42 +319,24 @@
         "cli": "CLI-verktyg"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Namn",
-          "category": "Kategori",
-          "description": "Beskrivning",
-          "parameters": "Parametrar",
-          "enabled": "Aktiverad"
-        },
-        "categories": {
-          "fileOps": "Filåtgärder",
-          "searchDisc": "Sökning och utforskning",
-          "noteMgmt": "Anteckningshantering"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Läs innehållet i en fil från ditt valv",
-            "params": "sökväg (krävs): Sökväg till filen som ska läsas"
+            "desc": "Läs innehållet i en fil från ditt valv"
           },
           "writeFile": {
-            "desc": "Skriv eller uppdatera en fil i ditt valv",
-            "params": "sökväg (krävs), innehåll (krävs): Filsökväg och innehåll att skriva"
+            "desc": "Skriv eller uppdatera en fil i ditt valv"
           },
           "listFiles": {
-            "desc": "Lista filer i valvet eller en specifik mapp",
-            "params": "mapp (valfri), tillägg (valfritt): Filtrera efter mapp och filtillägg"
+            "desc": "Lista filer i valvet eller en specifik mapp"
           },
           "searchFiles": {
-            "desc": "Sök efter filer efter namn eller innehåll i ditt valv",
-            "params": "fråga (krävs), sök_innehåll (valfritt), gräns (valfritt): Sökfråga och alternativ"
+            "desc": "Sök efter filer efter namn eller innehåll i ditt valv"
           },
           "createNote": {
-            "desc": "Skapa en ny anteckning med angivet innehåll",
-            "params": "titel (krävs), innehåll (krävs), mapp (valfri): Anteckningstiteln, innehåll och plats"
+            "desc": "Skapa en ny anteckning med angivet innehåll"
           },
           "appendNote": {
-            "desc": "Lägg till innehåll i en befintlig anteckning",
-            "params": "sökväg (krävs), innehåll (krävs): Anteckningens sökväg och innehåll att lägga till"
+            "desc": "Lägg till innehåll i en befintlig anteckning"
           }
         },
         "infoTitle": "om verktyg",

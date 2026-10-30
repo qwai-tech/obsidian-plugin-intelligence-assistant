@@ -319,42 +319,24 @@
         "cli": "CLI nástroje"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Názov",
-          "category": "Kategória",
-          "description": "Popis",
-          "parameters": "Parametre",
-          "enabled": "Povolené"
-        },
-        "categories": {
-          "fileOps": "Operácie so súbormi",
-          "searchDisc": "Vyhľadávanie a objavovanie",
-          "noteMgmt": "Správa poznámok"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Čítať obsah súboru z vášho trezora",
-            "params": "path (povinné): Cesta k súboru na čítanie"
+            "desc": "Čítať obsah súboru z vášho trezora"
           },
           "writeFile": {
-            "desc": "Zapísať alebo aktualizovať súbor vo vašom trezore",
-            "params": "path (povinné), content (povinné): Cesta k súboru a obsah na zápis"
+            "desc": "Zapísať alebo aktualizovať súbor vo vašom trezore"
           },
           "listFiles": {
-            "desc": "Zobraziť súbory v trezore alebo konkrétnom priečinku",
-            "params": "folder (voliteľné), extension (voliteľné): Filtrovať podľa priečinka a prípony súboru"
+            "desc": "Zobraziť súbory v trezore alebo konkrétnom priečinku"
           },
           "searchFiles": {
-            "desc": "Vyhľadávať súbory podľa názvu alebo obsahu vo vašom trezore",
-            "params": "query (povinné), search_content (voliteľné), limit (voliteľné): Vyhľadávací dotaz a možnosti"
+            "desc": "Vyhľadávať súbory podľa názvu alebo obsahu vo vašom trezore"
           },
           "createNote": {
-            "desc": "Vytvoriť novú poznámku so zadaným obsahom",
-            "params": "title (povinné), content (povinné), folder (voliteľné): Názov poznámky, obsah a umiestnenie"
+            "desc": "Vytvoriť novú poznámku so zadaným obsahom"
           },
           "appendNote": {
-            "desc": "Pripojiť obsah k existujúcej poznámke",
-            "params": "path (povinné), content (povinné): Cesta k poznámke a obsah na pripojenie"
+            "desc": "Pripojiť obsah k existujúcej poznámke"
           }
         },
         "infoTitle": "o nástrojoch",

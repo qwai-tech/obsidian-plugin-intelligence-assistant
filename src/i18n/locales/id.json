@@ -319,42 +319,24 @@
         "cli": "Alat CLI"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nama",
-          "category": "Kategori",
-          "description": "Deskripsi",
-          "parameters": "Parameter",
-          "enabled": "Aktif"
-        },
-        "categories": {
-          "fileOps": "Operasi File",
-          "searchDisc": "Pencarian & Penemuan",
-          "noteMgmt": "Manajemen Catatan"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Baca konten file dari vault Anda",
-            "params": "path (wajib): Jalur ke file yang akan dibaca"
+            "desc": "Baca konten file dari vault Anda"
           },
           "writeFile": {
-            "desc": "Tulis atau perbarui file di vault Anda",
-            "params": "path (wajib), content (wajib): Jalur file dan konten yang akan ditulis"
+            "desc": "Tulis atau perbarui file di vault Anda"
           },
           "listFiles": {
-            "desc": "Daftar file di vault atau folder tertentu",
-            "params": "folder (opsional), extension (opsional): Filter berdasarkan folder dan ekstensi file"
+            "desc": "Daftar file di vault atau folder tertentu"
           },
           "searchFiles": {
-            "desc": "Cari file berdasarkan nama atau konten di vault Anda",
-            "params": "query (wajib), search_content (opsional), limit (opsional): Kueri pencarian dan opsi"
+            "desc": "Cari file berdasarkan nama atau konten di vault Anda"
           },
           "createNote": {
-            "desc": "Buat catatan baru dengan konten yang ditentukan",
-            "params": "title (wajib), content (wajib), folder (opsional): Judul catatan, konten, dan lokasi"
+            "desc": "Buat catatan baru dengan konten yang ditentukan"
           },
           "appendNote": {
-            "desc": "Tambahkan konten ke catatan yang sudah ada",
-            "params": "path (wajib), content (wajib): Jalur catatan dan konten yang akan ditambahkan"
+            "desc": "Tambahkan konten ke catatan yang sudah ada"
           }
         },
         "infoTitle": "tentang alat",

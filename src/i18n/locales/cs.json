@@ -319,42 +319,24 @@
         "cli": "Nástroje CLI"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Název",
-          "category": "Kategorie",
-          "description": "Popis",
-          "parameters": "Parametry",
-          "enabled": "Povoleno"
-        },
-        "categories": {
-          "fileOps": "Operace se soubory",
-          "searchDisc": "Vyhledávání a objevování",
-          "noteMgmt": "Správa poznámek"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Přečíst obsah souboru z vašeho trezoru",
-            "params": "path (povinný): Cesta k souboru ke čtení"
+            "desc": "Přečíst obsah souboru z vašeho trezoru"
           },
           "writeFile": {
-            "desc": "Zapsat nebo aktualizovat soubor ve vašem trezoru",
-            "params": "path (povinný), content (povinný): Cesta k souboru a obsah k zapsání"
+            "desc": "Zapsat nebo aktualizovat soubor ve vašem trezoru"
           },
           "listFiles": {
-            "desc": "Zobrazit soubory v trezoru nebo konkrétní složce",
-            "params": "folder (volitelný), extension (volitelný): Filtrovat podle složky a přípony souboru"
+            "desc": "Zobrazit soubory v trezoru nebo konkrétní složce"
           },
           "searchFiles": {
-            "desc": "Hledat soubory podle názvu nebo obsahu ve vašem trezoru",
-            "params": "query (povinný), search_content (volitelný), limit (volitelný): Vyhledávací dotaz a možnosti"
+            "desc": "Hledat soubory podle názvu nebo obsahu ve vašem trezoru"
           },
           "createNote": {
-            "desc": "Vytvořit novou poznámku se zadaným obsahem",
-            "params": "title (povinný), content (povinný), folder (volitelný): Název poznámky, obsah a umístění"
+            "desc": "Vytvořit novou poznámku se zadaným obsahem"
           },
           "appendNote": {
-            "desc": "Přidat obsah k existující poznámce",
-            "params": "path (povinný), content (povinný): Cesta k poznámce a obsah k přidání"
+            "desc": "Přidat obsah k existující poznámce"
           }
         },
         "infoTitle": "o nástrojích",

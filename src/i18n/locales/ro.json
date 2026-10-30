@@ -319,42 +319,24 @@
         "cli": "Instrumente CLI"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nume",
-          "category": "Categorie",
-          "description": "Descriere",
-          "parameters": "Parametri",
-          "enabled": "Activat"
-        },
-        "categories": {
-          "fileOps": "Operații cu fișiere",
-          "searchDisc": "Căutare și descoperire",
-          "noteMgmt": "Gestionare notițe"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Citiți conținutul unui fișier din seiful dvs.",
-            "params": "path (obligatoriu): Calea spre fișierul de citit"
+            "desc": "Citiți conținutul unui fișier din seiful dvs."
           },
           "writeFile": {
-            "desc": "Scrieți sau actualizați un fișier în seiful dvs.",
-            "params": "path (obligatoriu), content (obligatoriu): Calea fișierului și conținutul de scris"
+            "desc": "Scrieți sau actualizați un fișier în seiful dvs."
           },
           "listFiles": {
-            "desc": "Listați fișierele din seif sau un folder specific",
-            "params": "folder (opțional), extension (opțional): Filtrați după folder și extensie fișier"
+            "desc": "Listați fișierele din seif sau un folder specific"
           },
           "searchFiles": {
-            "desc": "Căutați fișiere după nume sau conținut în seiful dvs.",
-            "params": "query (obligatoriu), search_content (opțional), limit (opțional): Interogare de căutare și opțiuni"
+            "desc": "Căutați fișiere după nume sau conținut în seiful dvs."
           },
           "createNote": {
-            "desc": "Creați o notiță nouă cu conținut specificat",
-            "params": "title (obligatoriu), content (obligatoriu), folder (opțional): Titlul, conținutul și locația notiței"
+            "desc": "Creați o notiță nouă cu conținut specificat"
           },
           "appendNote": {
-            "desc": "Adăugați conținut la o notiță existentă",
-            "params": "path (obligatoriu), content (obligatoriu): Calea notiței și conținutul de adăugat"
+            "desc": "Adăugați conținut la o notiță existentă"
           }
         },
         "infoTitle": "despre instrumente",

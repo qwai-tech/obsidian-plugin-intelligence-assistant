@@ -319,42 +319,24 @@
         "cli": "CLI eszközök"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Név",
-          "category": "Kategória",
-          "description": "Leírás",
-          "parameters": "Paraméterek",
-          "enabled": "Engedélyezve"
-        },
-        "categories": {
-          "fileOps": "Fájlműveletek",
-          "searchDisc": "Keresés és felfedezés",
-          "noteMgmt": "Jegyzet kezelése"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Egy fájl tartalmának beolvasása a vaultból",
-            "params": "path (kötelező): Az olvasandó fájl elérési útja"
+            "desc": "Egy fájl tartalmának beolvasása a vaultból"
           },
           "writeFile": {
-            "desc": "Fájl írása vagy frissítése a vaultban",
-            "params": "path (kötelező), content (kötelező): A fájl elérési útja és a tartalom az íráshoz"
+            "desc": "Fájl írása vagy frissítése a vaultban"
           },
           "listFiles": {
-            "desc": "Fájlok listázása a vaultban vagy egy adott mappában",
-            "params": "folder (opcionális), extension (opcionális): Szűrés mappa és fájlkiterjesztés szerint"
+            "desc": "Fájlok listázása a vaultban vagy egy adott mappában"
           },
           "searchFiles": {
-            "desc": "Fájlok keresése név vagy tartalom alapján a vaultban",
-            "params": "query (kötelező), search_content (opcionális), limit (opcionális): Keresési kifejezés és beállítások"
+            "desc": "Fájlok keresése név vagy tartalom alapján a vaultban"
           },
           "createNote": {
-            "desc": "Új jegyzet létrehozása megadott tartalommal",
-            "params": "title (kötelező), content (kötelező), folder (opcionális): Jegyzet címe, tartalma és helye"
+            "desc": "Új jegyzet létrehozása megadott tartalommal"
           },
           "appendNote": {
-            "desc": "Tartalom hozzáfűzése egy meglévő jegyzethez",
-            "params": "path (kötelező), content (kötelező): Jegyzet elérési útja és a hozzáfűzendő tartalom"
+            "desc": "Tartalom hozzáfűzése egy meglévő jegyzethez"
           }
         },
         "infoTitle": "az eszközökről",

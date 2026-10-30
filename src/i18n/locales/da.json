@@ -319,42 +319,24 @@
         "cli": "CLI-værktøjer"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Navn",
-          "category": "Kategori",
-          "description": "Beskrivelse",
-          "parameters": "Parametre",
-          "enabled": "Aktiveret"
-        },
-        "categories": {
-          "fileOps": "Filhandlinger",
-          "searchDisc": "Søgning og opdagelse",
-          "noteMgmt": "Notitiehåndtering"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Læs indholdet af en fil fra din vault",
-            "params": "path (påkrævet): Sti til filen der skal læses"
+            "desc": "Læs indholdet af en fil fra din vault"
           },
           "writeFile": {
-            "desc": "Skriv eller opdater en fil i din vault",
-            "params": "path (påkrævet), content (påkrævet): Filsti og indhold der skal skrives"
+            "desc": "Skriv eller opdater en fil i din vault"
           },
           "listFiles": {
-            "desc": "List filer i vault'en eller en specifik mappe",
-            "params": "folder (valgfrit), extension (valgfrit): Filtrer efter mappe og filtypenavn"
+            "desc": "List filer i vault'en eller en specifik mappe"
           },
           "searchFiles": {
-            "desc": "Søg efter filer efter navn eller indhold i din vault",
-            "params": "query (påkrævet), search_content (valgfrit), limit (valgfrit): Søgeforespørgsel og indstillinger"
+            "desc": "Søg efter filer efter navn eller indhold i din vault"
           },
           "createNote": {
-            "desc": "Opret en ny notitie med specificeret indhold",
-            "params": "title (påkrævet), content (påkrævet), folder (valgfrit): Notitietitel, indhold og placering"
+            "desc": "Opret en ny notitie med specificeret indhold"
           },
           "appendNote": {
-            "desc": "Tilføj indhold til en eksisterende notitie",
-            "params": "path (påkrævet), content (påkrævet): Notitiens sti og indhold der skal tilføjes"
+            "desc": "Tilføj indhold til en eksisterende notitie"
           }
         },
         "infoTitle": "om værktøjer",

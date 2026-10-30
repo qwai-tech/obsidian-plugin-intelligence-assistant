@@ -319,42 +319,24 @@
         "cli": "CLI alati"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Naziv",
-          "category": "Kategorija",
-          "description": "Opis",
-          "parameters": "Parametri",
-          "enabled": "Omogućeno"
-        },
-        "categories": {
-          "fileOps": "Operacije s datotekama",
-          "searchDisc": "Pretraživanje i otkrivanje",
-          "noteMgmt": "Upravljanje bilješkama"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Čitaj sadržaj datoteke iz vašeg trezora",
-            "params": "path (obavezno): Putanja do datoteke za čitanje"
+            "desc": "Čitaj sadržaj datoteke iz vašeg trezora"
           },
           "writeFile": {
-            "desc": "Zapiši ili ažuriraj datoteku u vašem trezoru",
-            "params": "path (obavezno), content (obavezno): Putanja datoteke i sadržaj za upis"
+            "desc": "Zapiši ili ažuriraj datoteku u vašem trezoru"
           },
           "listFiles": {
-            "desc": "Prikaži datoteke u trezoru ili određenoj mapi",
-            "params": "folder (neobavezno), extension (neobavezno): Filtriraj po mapi i ekstenziji datoteke"
+            "desc": "Prikaži datoteke u trezoru ili određenoj mapi"
           },
           "searchFiles": {
-            "desc": "Pretraži datoteke po nazivu ili sadržaju u vašem trezoru",
-            "params": "query (obavezno), search_content (neobavezno), limit (neobavezno): Upit za pretraživanje i opcije"
+            "desc": "Pretraži datoteke po nazivu ili sadržaju u vašem trezoru"
           },
           "createNote": {
-            "desc": "Stvori novu bilješku s određenim sadržajem",
-            "params": "title (obavezno), content (obavezno), folder (neobavezno): Naslov bilješke, sadržaj i lokacija"
+            "desc": "Stvori novu bilješku s određenim sadržajem"
           },
           "appendNote": {
-            "desc": "Dodaj sadržaj postojećoj bilješci",
-            "params": "path (obavezno), content (obavezno): Putanja bilješke i sadržaj za dodavanje"
+            "desc": "Dodaj sadržaj postojećoj bilješci"
           }
         },
         "infoTitle": "o alatima",

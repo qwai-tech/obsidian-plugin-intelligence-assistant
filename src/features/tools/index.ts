@@ -1,5 +1,5 @@
 export { CLI_TOOL_DEFAULTS, CLI_TOOL_PRESETS, PRESET_CATEGORIES, availablePresets } from './cli-tool-presets';
-export { BuiltinToolSource } from './sources/builtin-tool-source';
+export { BuiltinToolSource, builtinToolDefinitions } from './sources/builtin-tool-source';
 export { CliToolSource } from './sources/cli-tool-source';
 export { McpToolSource } from './sources/mcp-tool-source';
 export { OpenApiToolSource } from './sources/openapi-tool-source';

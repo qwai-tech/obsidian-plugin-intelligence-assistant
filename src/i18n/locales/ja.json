@@ -319,42 +319,24 @@
         "cli": "CLI ツール"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "名前",
-          "category": "カテゴリー",
-          "description": "説明",
-          "parameters": "パラメーター",
-          "enabled": "有効"
-        },
-        "categories": {
-          "fileOps": "ファイル操作",
-          "searchDisc": "検索と探索",
-          "noteMgmt": "ノート管理"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "ボルトからファイルの内容を読み取ります",
-            "params": "path (必須): 読み取るファイルのパス"
+            "desc": "ボルトからファイルの内容を読み取ります"
           },
           "writeFile": {
-            "desc": "ボルト内のファイルを書き込みまたは更新します",
-            "params": "path (必須)、content (必須): ファイルパスと書き込む内容"
+            "desc": "ボルト内のファイルを書き込みまたは更新します"
           },
           "listFiles": {
-            "desc": "ボルトまたは特定のフォルダー内のファイルを一覧表示します",
-            "params": "folder (省略可)、extension (省略可): フォルダーとファイル拡張子でフィルター"
+            "desc": "ボルトまたは特定のフォルダー内のファイルを一覧表示します"
           },
           "searchFiles": {
-            "desc": "ボルト内のファイルを名前または内容で検索します",
-            "params": "query (必須)、search_content (省略可)、limit (省略可): 検索クエリとオプション"
+            "desc": "ボルト内のファイルを名前または内容で検索します"
           },
           "createNote": {
-            "desc": "指定した内容で新しいノートを作成します",
-            "params": "title (必須)、content (必須)、folder (省略可): ノートのタイトル、内容、場所"
+            "desc": "指定した内容で新しいノートを作成します"
           },
           "appendNote": {
-            "desc": "既存のノートに内容を追記します",
-            "params": "path (必須)、content (必須): ノートのパスと追記する内容"
+            "desc": "既存のノートに内容を追記します"
           }
         },
         "infoTitle": "ツールについて",

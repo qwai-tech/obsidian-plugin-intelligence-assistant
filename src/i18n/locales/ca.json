@@ -319,42 +319,24 @@
         "cli": "Eines CLI"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nom",
-          "category": "Categoria",
-          "description": "Descripció",
-          "parameters": "Paràmetres",
-          "enabled": "Activat"
-        },
-        "categories": {
-          "fileOps": "Operacions amb fitxers",
-          "searchDisc": "Cerca i descobriment",
-          "noteMgmt": "Gestió de notes"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Llegeix el contingut d'un fitxer del vostre vault",
-            "params": "path (obligatori): Ruta al fitxer a llegir"
+            "desc": "Llegeix el contingut d'un fitxer del vostre vault"
           },
           "writeFile": {
-            "desc": "Escriu o actualitza un fitxer al vostre vault",
-            "params": "path (obligatori), content (obligatori): Ruta del fitxer i contingut a escriure"
+            "desc": "Escriu o actualitza un fitxer al vostre vault"
           },
           "listFiles": {
-            "desc": "Llista els fitxers del vault o d'una carpeta específica",
-            "params": "folder (opcional), extension (opcional): Filtra per carpeta i extensió de fitxer"
+            "desc": "Llista els fitxers del vault o d'una carpeta específica"
           },
           "searchFiles": {
-            "desc": "Cerca fitxers per nom o contingut al vostre vault",
-            "params": "query (obligatori), search_content (opcional), limit (opcional): Consulta de cerca i opcions"
+            "desc": "Cerca fitxers per nom o contingut al vostre vault"
           },
           "createNote": {
-            "desc": "Crea una nota nova amb el contingut especificat",
-            "params": "title (obligatori), content (obligatori), folder (opcional): Títol, contingut i ubicació de la nota"
+            "desc": "Crea una nota nova amb el contingut especificat"
           },
           "appendNote": {
-            "desc": "Afegeix contingut a una nota existent",
-            "params": "path (obligatori), content (obligatori): Ruta de la nota i contingut a afegir"
+            "desc": "Afegeix contingut a una nota existent"
           }
         },
         "infoTitle": "sobre les eines",

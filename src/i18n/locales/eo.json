@@ -319,42 +319,24 @@
         "cli": "CLI-Iloj"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nomo",
-          "category": "Kategorio",
-          "description": "Priskribo",
-          "parameters": "Parametroj",
-          "enabled": "Ebligita"
-        },
-        "categories": {
-          "fileOps": "Dosieroperacioj",
-          "searchDisc": "Serĉo kaj Malkovro",
-          "noteMgmt": "Notenmastrumado"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Legu la enhavon de dosiero el via arkivo",
-            "params": "vojo (deviga): Vojo al la dosiero por legi"
+            "desc": "Legu la enhavon de dosiero el via arkivo"
           },
           "writeFile": {
-            "desc": "Skribu aŭ ĝisdatigu dosieron en via arkivo",
-            "params": "vojo (deviga), enhavo (deviga): Dosiervojon kaj enhavon por skribi"
+            "desc": "Skribu aŭ ĝisdatigu dosieron en via arkivo"
           },
           "listFiles": {
-            "desc": "Listigi dosierojn en la arkivo aŭ specifa dosierujo",
-            "params": "dosierujo (laŭvola), etendaĵo (laŭvola): Filtri laŭ dosierujo kaj dosieretendaĵo"
+            "desc": "Listigi dosierojn en la arkivo aŭ specifa dosierujo"
           },
           "searchFiles": {
-            "desc": "Serĉi dosierojn laŭ nomo aŭ enhavo en via arkivo",
-            "params": "demando (deviga), serĉi_enhavon (laŭvola), limo (laŭvola): Serĉa demando kaj opcioj"
+            "desc": "Serĉi dosierojn laŭ nomo aŭ enhavo en via arkivo"
           },
           "createNote": {
-            "desc": "Krei novan noton kun specifita enhavo",
-            "params": "titolo (deviga), enhavo (deviga), dosierujo (laŭvola): Nota titolo, enhavo kaj loko"
+            "desc": "Krei novan noton kun specifita enhavo"
           },
           "appendNote": {
-            "desc": "Aldoni enhavon al ekzistanta noto",
-            "params": "vojo (deviga), enhavo (deviga): Nota vojo kaj enhavo por aldoni"
+            "desc": "Aldoni enhavon al ekzistanta noto"
           }
         },
         "infoTitle": "pri iloj",

@@ -319,42 +319,24 @@
         "cli": "CLI tools"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Naam",
-          "category": "Categorie",
-          "description": "Beschrijving",
-          "parameters": "Parameters",
-          "enabled": "Ingeschakeld"
-        },
-        "categories": {
-          "fileOps": "Bestandsbewerkingen",
-          "searchDisc": "Zoeken en ontdekken",
-          "noteMgmt": "Notitiebeheer"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Lees de inhoud van een bestand uit uw kluis",
-            "params": "pad (vereist): Pad naar het te lezen bestand"
+            "desc": "Lees de inhoud van een bestand uit uw kluis"
           },
           "writeFile": {
-            "desc": "Schrijf of update een bestand in uw kluis",
-            "params": "pad (vereist), inhoud (vereist): Bestandspad en inhoud om te schrijven"
+            "desc": "Schrijf of update een bestand in uw kluis"
           },
           "listFiles": {
-            "desc": "Bestanden weergeven in de kluis of een specifieke map",
-            "params": "map (optioneel), extensie (optioneel): Filteren op map en bestandsextensie"
+            "desc": "Bestanden weergeven in de kluis of een specifieke map"
           },
           "searchFiles": {
-            "desc": "Zoek bestanden op naam of inhoud in uw kluis",
-            "params": "zoekopdracht (vereist), zoek_inhoud (optioneel), limiet (optioneel): Zoekopdracht en opties"
+            "desc": "Zoek bestanden op naam of inhoud in uw kluis"
           },
           "createNote": {
-            "desc": "Maak een nieuwe notitie met de opgegeven inhoud",
-            "params": "titel (vereist), inhoud (vereist), map (optioneel): Notitietitel, inhoud en locatie"
+            "desc": "Maak een nieuwe notitie met de opgegeven inhoud"
           },
           "appendNote": {
-            "desc": "Voeg inhoud toe aan een bestaande notitie",
-            "params": "pad (vereist), inhoud (vereist): Notitiepad en toe te voegen inhoud"
+            "desc": "Voeg inhoud toe aan een bestaande notitie"
           }
         },
         "infoTitle": "over tools",

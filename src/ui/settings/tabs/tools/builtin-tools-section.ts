@@ -1,10 +1,6 @@
-/**
- * Built-in Tools Section
- * Renders the built-in tools table for the tools settings tab
- */
-
+import { Setting } from 'obsidian';
 import { t } from '@/i18n';
-import { createTable } from '@/ui/utils/ui-helpers';
+import { builtinToolDefinitions } from '@/features/tools';
 import { TestIds } from '@/ui/utils/test-ids';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { renderIcon } from '@/ui/utils/icon';
@@ -13,81 +9,36 @@ export function renderBuiltinToolsSection(
 	content: HTMLElement,
 	plugin: IntelligenceAssistantPlugin
 ): void {
-	const toolMetadata: Record<string, {
-		category: string;
-		description: string;
-		parameters: string;
-		icon: string;
-	}> = {
-		'read_file': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.readFile.desc'), parameters: t('settings.tools.builtIn.toolMeta.readFile.params'), icon: 'file-text' },
-		'write_file': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.writeFile.desc'), parameters: t('settings.tools.builtIn.toolMeta.writeFile.params'), icon: 'pencil' },
-		'list_files': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.listFiles.desc'), parameters: t('settings.tools.builtIn.toolMeta.listFiles.params'), icon: 'folder' },
-		'search_files': { category: t('settings.tools.builtIn.categories.searchDisc'), description: t('settings.tools.builtIn.toolMeta.searchFiles.desc'), parameters: t('settings.tools.builtIn.toolMeta.searchFiles.params'), icon: 'search' },
-		'create_note': { category: t('settings.tools.builtIn.categories.noteMgmt'), description: t('settings.tools.builtIn.toolMeta.createNote.desc'), parameters: t('settings.tools.builtIn.toolMeta.createNote.params'), icon: 'file-plus' },
-		'append_to_note': { category: t('settings.tools.builtIn.categories.noteMgmt'), description: t('settings.tools.builtIn.toolMeta.appendNote.desc'), parameters: t('settings.tools.builtIn.toolMeta.appendNote.params'), icon: 'list-plus' }
+	const toolMetadata: Record<string, { description: string; icon: string }> = {
+		'read_file': { description: t('settings.tools.builtIn.toolMeta.readFile.desc'), icon: 'file-text' },
+		'write_file': { description: t('settings.tools.builtIn.toolMeta.writeFile.desc'), icon: 'pencil' },
+		'list_files': { description: t('settings.tools.builtIn.toolMeta.listFiles.desc'), icon: 'folder' },
+		'search_files': { description: t('settings.tools.builtIn.toolMeta.searchFiles.desc'), icon: 'search' },
+		'create_note': { description: t('settings.tools.builtIn.toolMeta.createNote.desc'), icon: 'file-plus' },
+		'append_to_note': { description: t('settings.tools.builtIn.toolMeta.appendNote.desc'), icon: 'list-plus' }
 	};
 
-	const table = createTable(content, [
-		t('settings.tools.builtIn.tableHeaders.name'),
-		t('settings.tools.builtIn.tableHeaders.category'),
-		t('settings.tools.builtIn.tableHeaders.description'),
-		t('settings.tools.builtIn.tableHeaders.parameters'),
-		t('settings.tools.builtIn.tableHeaders.enabled')
-	]);
-	const tbody = table.tBodies[0];
-
-	plugin.settings.builtInTools.forEach(tool => {
+	const definitions = new Map(builtinToolDefinitions(plugin.app).map(definition => [definition.name, definition]));
+	for (const tool of plugin.settings.builtInTools) {
 		const metadata = toolMetadata[tool.type];
-		if (!metadata) {
-			return;
-		}
-
-		const row = tbody.insertRow();
-		row.addClass('ia-table-row');
-		row.setAttribute('data-testid', TestIds.settings.toolsBuiltinRow);
-		row.setAttribute('data-tool-type', tool.type);
-
-		const nameCell = row.insertCell();
-		nameCell.addClass('ia-table-cell');
-		const nameDiv = nameCell.createDiv('tool-name');
-		renderIcon(nameDiv.createSpan('tool-icon'), metadata.icon, 'wrench');
-		const fallbackName = tool.type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-		nameDiv.createSpan().setText(t(`settings.tools.builtIn.toolNames.${tool.type}`, { defaultValue: fallbackName }));
-
-		const categoryCell = row.insertCell();
-		categoryCell.addClass('ia-table-cell');
-		categoryCell.addClass('ia-table-subtext');
-		categoryCell.setText(metadata.category);
-
-		const descCell = row.insertCell();
-		descCell.addClass('ia-table-cell');
-		descCell.setText(metadata.description);
-
-		const paramsCell = row.insertCell();
-		paramsCell.addClass('ia-table-cell');
-		paramsCell.addClass('ia-table-subtext');
-		paramsCell.setText(metadata.parameters);
-
-		const enabledCell = row.insertCell();
-		enabledCell.addClass('ia-table-cell');
-		enabledCell.addClass('ia-table-cell--center');
-
-		const toggle = enabledCell.createEl('input', { type: 'checkbox' });
-		toggle.setAttribute('data-testid', TestIds.settings.toolsBuiltinToggle);
-		toggle.setAttribute('data-tool-type', tool.type);
-		toggle.checked = tool.enabled;
-		toggle.addEventListener('change', () => {
-			void (async () => {
-				await plugin.updateSettings(() => {
-					tool.enabled = toggle.checked;
+		const fallbackName = tool.type.replace(/_/g, ' ').replace(/^\w/, l => l.toUpperCase());
+		const setting = new Setting(content)
+			.setName(t(`settings.tools.builtIn.toolNames.${tool.type}`, { defaultValue: fallbackName }))
+			.setDesc(metadata?.description ?? definitions.get(tool.type)?.description ?? '')
+			.addToggle(toggle => {
+				toggle.toggleEl.setAttribute('data-testid', TestIds.settings.toolsBuiltinToggle);
+				toggle.toggleEl.setAttribute('data-tool-type', tool.type);
+				toggle.setValue(tool.enabled).onChange(async (enabled) => {
+					await plugin.updateSettings(() => {
+						tool.enabled = enabled;
+					});
+					await plugin.services.tools.reloadBuiltin();
 				});
-				// Re-load the builtin source so the registry reflects the new
-				// enabled set; otherwise the toggle is purely cosmetic until
-				// the plugin reloads.
-				await plugin.services.tools.reloadBuiltin();
-			})();
-		});
-	});
+			});
+		setting.settingEl.setAttribute('data-testid', TestIds.settings.toolsBuiltinRow);
+		setting.settingEl.setAttribute('data-tool-type', tool.type);
+		renderIcon(setting.nameEl.createSpan({ cls: 'tool-icon', prepend: true }), metadata?.icon, 'wrench');
+	}
 
 	const infoBox = content.createDiv('info-callout');
 	infoBox.createDiv({ cls: 'ia-info-box__title', text: t('settings.tools.builtIn.infoTitle') });

@@ -318,42 +318,24 @@
         "cli": "CLI tools"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Name",
-          "category": "Category",
-          "description": "Description",
-          "parameters": "Parameters",
-          "enabled": "Enabled"
-        },
-        "categories": {
-          "fileOps": "File operations",
-          "searchDisc": "Search & discovery",
-          "noteMgmt": "Note management"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Read the contents of a file from your vault",
-            "params": "path (required): Path to the file to read"
+            "desc": "Read the contents of a file from your vault"
           },
           "writeFile": {
-            "desc": "Prepare a proposal to write or update a file in your vault",
-            "params": "path (required), content (required): File path and proposed content"
+            "desc": "Prepare a proposal to write or update a file in your vault"
           },
           "listFiles": {
-            "desc": "List files in the vault or a specific folder",
-            "params": "folder (optional), extension (optional): Filter by folder and file extension"
+            "desc": "List files in the vault or a specific folder"
           },
           "searchFiles": {
-            "desc": "Search for files by name or content in your vault",
-            "params": "query (required), search_content (optional), limit (optional): Search query and options"
+            "desc": "Search for files by name or content in your vault"
           },
           "createNote": {
-            "desc": "Prepare a proposal to create a new note",
-            "params": "title (required), content (required), folder (optional): Note title, proposed content, and location"
+            "desc": "Prepare a proposal to create a new note"
           },
           "appendNote": {
-            "desc": "Prepare a proposal to append content to an existing note",
-            "params": "path (required), content (required): Note path and proposed content to append"
+            "desc": "Prepare a proposal to append content to an existing note"
           }
         },
         "infoTitle": "About tools",

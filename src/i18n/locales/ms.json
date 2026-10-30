@@ -319,42 +319,24 @@
         "cli": "Alat CLI"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Nama",
-          "category": "Kategori",
-          "description": "Penerangan",
-          "parameters": "Parameter",
-          "enabled": "Aktif"
-        },
-        "categories": {
-          "fileOps": "Operasi Fail",
-          "searchDisc": "Carian & Penemuan",
-          "noteMgmt": "Pengurusan Nota"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Baca kandungan fail daripada vault anda",
-            "params": "path (diperlukan): Laluan ke fail yang hendak dibaca"
+            "desc": "Baca kandungan fail daripada vault anda"
           },
           "writeFile": {
-            "desc": "Tulis atau kemas kini fail dalam vault anda",
-            "params": "path (diperlukan), content (diperlukan): Laluan fail dan kandungan yang hendak ditulis"
+            "desc": "Tulis atau kemas kini fail dalam vault anda"
           },
           "listFiles": {
-            "desc": "Senaraikan fail dalam vault atau folder tertentu",
-            "params": "folder (pilihan), extension (pilihan): Tapis mengikut folder dan sambungan fail"
+            "desc": "Senaraikan fail dalam vault atau folder tertentu"
           },
           "searchFiles": {
-            "desc": "Cari fail mengikut nama atau kandungan dalam vault anda",
-            "params": "query (diperlukan), search_content (pilihan), limit (pilihan): Pertanyaan carian dan pilihan"
+            "desc": "Cari fail mengikut nama atau kandungan dalam vault anda"
           },
           "createNote": {
-            "desc": "Cipta nota baru dengan kandungan yang ditentukan",
-            "params": "title (diperlukan), content (diperlukan), folder (pilihan): Tajuk nota, kandungan, dan lokasi"
+            "desc": "Cipta nota baru dengan kandungan yang ditentukan"
           },
           "appendNote": {
-            "desc": "Tambah kandungan ke nota yang sedia ada",
-            "params": "path (diperlukan), content (diperlukan): Laluan nota dan kandungan yang hendak ditambah"
+            "desc": "Tambah kandungan ke nota yang sedia ada"
           }
         },
         "infoTitle": "tentang alat",

@@ -319,42 +319,24 @@
         "cli": "CLI įrankiai"
       },
       "builtIn": {
-        "tableHeaders": {
-          "name": "Pavadinimas",
-          "category": "Kategorija",
-          "description": "Aprašymas",
-          "parameters": "Parametrai",
-          "enabled": "Įjungtas"
-        },
-        "categories": {
-          "fileOps": "Failų operacijos",
-          "searchDisc": "Paieška ir atradimas",
-          "noteMgmt": "Užrašų valdymas"
-        },
         "toolMeta": {
           "readFile": {
-            "desc": "Perskaityti failo turinį iš jūsų saugyklos",
-            "params": "path (privalomas): Kelias iki nuskaitomo failo"
+            "desc": "Perskaityti failo turinį iš jūsų saugyklos"
           },
           "writeFile": {
-            "desc": "Rašyti arba atnaujinti failą jūsų saugykloje",
-            "params": "path (privalomas), content (privalomas): Failo kelias ir turinys, kurį rašyti"
+            "desc": "Rašyti arba atnaujinti failą jūsų saugykloje"
           },
           "listFiles": {
-            "desc": "Išvardyti failus saugykloje arba konkrečiame aplanke",
-            "params": "folder (neprivalomas), extension (neprivalomas): Filtruoti pagal aplanką ir failo plėtinį"
+            "desc": "Išvardyti failus saugykloje arba konkrečiame aplanke"
           },
           "searchFiles": {
-            "desc": "Ieškoti failų pagal pavadinimą arba turinį jūsų saugykloje",
-            "params": "query (privalomas), search_content (neprivalomas), limit (neprivalomas): Paieškos užklausa ir parinktys"
+            "desc": "Ieškoti failų pagal pavadinimą arba turinį jūsų saugykloje"
           },
           "createNote": {
-            "desc": "Sukurti naują užrašą su nurodytu turiniu",
-            "params": "title (privalomas), content (privalomas), folder (neprivalomas): Užrašo pavadinimas, turinys ir vieta"
+            "desc": "Sukurti naują užrašą su nurodytu turiniu"
           },
           "appendNote": {
-            "desc": "Pridėti turinį prie esamo užrašo",
-            "params": "path (privalomas), content (privalomas): Užrašo kelias ir turinys, kurį pridėti"
+            "desc": "Pridėti turinį prie esamo užrašo"
           }
         },
         "infoTitle": "apie įrankius",
