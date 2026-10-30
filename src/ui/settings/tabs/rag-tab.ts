@@ -15,6 +15,7 @@ import { renderSubTabs } from '@/ui/settings/sub-tabs';
 
 const EMBEDDING_MODEL_PLACEHOLDER = 'text-embedding-3-small';
 const GRADER_MODEL_PLACEHOLDER = 'gpt-4o-mini';
+const FILE_TYPES_PLACEHOLDER = 'md, txt';
 
 export function displayRAGTab(
 	containerEl: HTMLElement,
@@ -171,17 +172,14 @@ function renderFileFilters(containerEl: HTMLElement, plugin: IntelligenceAssista
 	form.list('excludeFolders', {
 		label: t('settings.rag.filters.excludeFolders.name'),
 		description: t('settings.rag.filters.excludeFolders.desc'),
-		includeDefaultForArrays: true,
 	}, `${plugin.app.vault.configDir}, .trash`);
 	form.list('includeFileTypes', {
 		label: t('settings.rag.filters.includeTypes.name'),
 		description: t('settings.rag.filters.includeTypes.desc'),
-		includeDefaultForArrays: true,
-	}, 'Md, txt');
+	}, FILE_TYPES_PLACEHOLDER);
 	form.list('excludeFileTypes', {
 		label: t('settings.rag.filters.excludeTypes.name'),
 		description: t('settings.rag.filters.excludeTypes.desc'),
-		includeDefaultForArrays: true,
 	}, 'canvas, excalidraw');
 	form.list('filterByTag', {
 		label: t('settings.rag.filters.filterByTag.name'),

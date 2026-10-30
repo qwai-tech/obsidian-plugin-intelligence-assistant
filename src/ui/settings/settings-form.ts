@@ -6,7 +6,6 @@ type KeysOf<T, V> = { [K in keyof T]-?: NonNullable<T[K]> extends V ? K : never 
 export interface FieldOptions {
 	label: string;
 	description?: string;
-	includeDefaultForArrays?: boolean;
 	testId?: string;
 }
 
@@ -112,7 +111,6 @@ export class SettingsForm<T extends object> {
 			path: `${this.pathPrefix}.${key}`,
 			label: field.label,
 			description: field.description,
-			includeDefaultForArrays: field.includeDefaultForArrays,
 		});
 	}
 
