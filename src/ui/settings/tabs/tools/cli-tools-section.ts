@@ -13,9 +13,6 @@ export function renderCliToolsSection(
 	plugin: IntelligenceAssistantPlugin,
 	refreshDisplay: () => void
 ): void {
-	if (!Array.isArray(plugin.settings.cliTools)) {
-		plugin.settings.cliTools = [];
-	}
 	const configs = plugin.settings.cliTools;
 
 	content.createEl('p', {

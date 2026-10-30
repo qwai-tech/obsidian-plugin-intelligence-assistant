@@ -93,9 +93,6 @@ export class CLIToolPresetModal extends Modal {
 			enabled: false // Start disabled so user can review
 		} as CLIToolConfig;
 
-		if (!this.plugin.settings.cliTools) {
-			this.plugin.settings.cliTools = [];
-		}
 		await this.plugin.updateSettings((settings) => {
 			settings.cliTools.push(newConfig);
 		});

@@ -15,9 +15,6 @@ export function renderOpenapiToolsSection(
 	plugin: IntelligenceAssistantPlugin,
 	refreshDisplay: () => void
 ): void {
-	if (!Array.isArray(plugin.settings.openApiTools)) {
-		plugin.settings.openApiTools = [];
-	}
 	const configs = plugin.settings.openApiTools;
 	const cacheDir = `${plugin.app.vault.configDir}/plugins/${plugin.manifest.id}/data/openapi/`;
 	content.createEl('p', {
