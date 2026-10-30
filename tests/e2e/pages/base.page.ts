@@ -30,6 +30,36 @@ export abstract class BasePage {
 		});
 	}
 
+	protected async openPluginSettings(): Promise<void> {
+		await browser.execute(() => {
+			const app = (window as unknown as {
+				app: { setting: { open(): void; openTabById(id: string): void } };
+			}).app;
+			app.setting.open();
+			app.setting.openTabById('intelligence-assistant');
+		});
+		await $('.vertical-tab-content .setting-item').waitForDisplayed({ timeout: 10_000 });
+	}
+
+	protected async openSettingsSection(name: string): Promise<void> {
+		await this.openPluginSettings();
+		await browser.waitUntil(
+			async () => browser.execute((label) => {
+				const row = Array.from(activeDocument.querySelectorAll('.vertical-tab-content .setting-item.mod-navigable'))
+					.find(item => item.querySelector('.setting-item-name')?.textContent === label);
+				if (!(row instanceof HTMLElement)) return false;
+				row.click();
+				return true;
+			}, name),
+			{ timeout: 10_000, timeoutMsg: `Settings section not found: ${name}` }
+		);
+		await $('.setting-page-content').waitForDisplayed({ timeout: 10_000 });
+	}
+
+	protected settingControl(name: string, control: 'input' | 'select' | '.checkbox-container'): ChainablePromiseElement {
+		return $(`//div[contains(@class,"setting-item")][.//div[contains(@class,"setting-item-name")][normalize-space()="${name}"]]`).$(control);
+	}
+
 	protected async click(id: string): Promise<void> {
 		await this.waitFor(id);
 		await this.$testid(id).click();

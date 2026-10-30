@@ -105,7 +105,7 @@ All plugin paths come from `core/plugin-paths.ts` (`pluginPaths(configDir)`), so
 - `chat/chat-message-list.ts` — message rendering, empty state and preflight card; `message-grouping.ts` folds legacy tool-call chains.
 - `chat/controllers/` — `ChatController` (send, stream, live agent trace) and `InputController`.
 - `chat/managers/conversation-manager.ts` and `chat/conversation-list-view.ts` — the conversation sidebar.
-- `settings/settings-tab.ts`, `settings/tabs/` and `settings/settings-form.ts` — the settings UI; `SettingsForm` binds a settings section to toggle, dropdown, text, number and list fields with one save path.
+- `settings/settings-tab.ts` — the settings UI uses Obsidian's declarative settings (1.13+): the general settings are `control` definitions, so they appear in Obsidian's settings search, and every other section is a native page (`settings/section-page.ts`) that renders its renderer from `settings/tabs/`. `settings/settings-form.ts` binds a settings section to toggle, dropdown, text, number, list and secret fields with one save path.
 - `modals/` — dialogs.
 - `state/chat-view-state.ts` — per-view state, including the `AbortController` for the running request.
 

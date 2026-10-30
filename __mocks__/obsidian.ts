@@ -719,3 +719,17 @@ export class Setting {
 		return this;
 	}
 }
+
+export class PluginSettingTab {
+	containerEl: HTMLElement = document.createElement('div');
+	constructor(public app: App, public plugin: unknown) {}
+}
+
+export abstract class SettingPage {
+	rootEl: HTMLElement = document.createElement('div');
+	titlebarEl: HTMLElement = document.createElement('div');
+	containerEl: HTMLElement = document.createElement('div');
+	title = '';
+	abstract display(): void;
+	hide(): void {}
+}

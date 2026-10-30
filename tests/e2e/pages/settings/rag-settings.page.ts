@@ -6,20 +6,7 @@ const MOCK_LLM_BASE_URL = 'http://127.0.0.1:43117/v1';
 
 export class RagSettingsPage extends BasePage {
 	async open(): Promise<void> {
-		await browser.execute(() => {
-			const app = (window as unknown as {
-				app: {
-					setting: {
-						open(): void;
-						openTabById(id: string): void;
-					};
-				};
-			}).app;
-			app.setting.open();
-			app.setting.openTabById('intelligence-assistant');
-		});
-		await this.waitFor(TestIds.settings.shell);
-		await this.clickSettingsTab('rag');
+		await this.openSettingsSection('RAG');
 		await this.waitFor(TestIds.settings.ragRebuildBtn);
 	}
 
@@ -124,21 +111,4 @@ export class RagSettingsPage extends BasePage {
 		);
 	}
 
-	private async clickSettingsTab(tabId: string): Promise<void> {
-		await browser.waitUntil(
-			async () => browser.execute((testId, id) => {
-				return Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
-					.some(tab => tab.instanceOf(HTMLElement) && tab.getAttribute('data-tab-id') === id);
-			}, TestIds.settings.tab, tabId),
-			{ timeout: 10_000, timeoutMsg: `Settings tab not found: ${tabId}` }
-		);
-		await browser.execute((testId, id) => {
-			const tab = Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
-				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-tab-id') === id);
-			if (!(tab instanceof HTMLElement)) {
-				throw new Error(`Settings tab not found: ${id}`);
-			}
-			tab.click();
-		}, TestIds.settings.tab, tabId);
-	}
 }

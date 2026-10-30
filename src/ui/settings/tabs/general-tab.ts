@@ -1,89 +1,48 @@
-/**
- * General Settings Tab
- * Displays general plugin settings
- */
-
-import { Setting } from 'obsidian';
+import type { SettingDefinitionItem } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
-import { TestIds } from '@/ui/utils/test-ids';
 
-export function displayGeneralTab(
-	containerEl: HTMLElement,
-	plugin: IntelligenceAssistantPlugin
-): void {
-
-	const desc = containerEl.createEl('p', {
-		text: t('settings.general.desc')
-	});
-	desc.addClass('ia-section-description', 'ia-section-description--spaced');
-	// Plugin Version
-	new Setting(containerEl)
-		.setName(t('settings.general.pluginVersion.name'))
-		.setDesc(t('settings.general.pluginVersion.desc'))
-		.addText(text => text
-			.setValue(plugin.manifest.version)
-			.setDisabled(true));
-
-	// Default Model
-	new Setting(containerEl)
-		.setName(t('settings.general.defaultModel.name'))
-		.setDesc(t('settings.general.defaultModel.desc'))
-		.addText(text => {
-			text.inputEl.setAttribute('data-testid', TestIds.settings.generalDefaultModelInput);
-			text
-				.setPlaceholder(t('settings.general.defaultModel.placeholder'))
-				.setValue(plugin.settings.defaultModel)
-				.onChange(async (value) => {
-					await plugin.updateSettings((settings) => {
-						settings.defaultModel = value;
-					});
+export function generalDefinitions(plugin: IntelligenceAssistantPlugin): SettingDefinitionItem[] {
+	return [
+		{
+			name: t('settings.general.pluginVersion.name'),
+			desc: `${t('settings.general.pluginVersion.desc')} ${plugin.manifest.version}`,
+		},
+		{
+			name: t('settings.general.defaultModel.name'),
+			desc: t('settings.general.defaultModel.desc'),
+			control: { type: 'text', key: 'defaultModel', placeholder: t('settings.general.defaultModel.placeholder') },
+		},
+		{
+			name: t('settings.general.conversationTitleMode.name'),
+			desc: t('settings.general.conversationTitleMode.desc'),
+			control: {
+				type: 'dropdown',
+				key: 'conversationTitleMode',
+				options: {
+					'first-message': t('settings.general.conversationTitleMode.firstMessage'),
+					'auto-summary': t('settings.general.conversationTitleMode.autoSummary'),
+					manual: t('settings.general.conversationTitleMode.manual'),
+				},
+			},
+		},
+		{
+			name: t('settings.general.conversationIcons.name'),
+			desc: t('settings.general.conversationIcons.desc'),
+			control: { type: 'toggle', key: 'conversationIconEnabled' },
+		},
+		{
+			name: t('settings.general.configStatus.name'),
+			desc: t('settings.general.configStatus.desc'),
+			render: (setting) => {
+				if (!(plugin.settings.llmConfigs.length > 0 && plugin.settings.defaultModel)) {
+					setting.setDesc(t('settings.general.configStatus.incomplete'));
+					return;
+				}
+				void plugin.services.conversations.getConversationCount().then(conversations => {
+					setting.setDesc(t('settings.general.configStatus.ok', { providers: plugin.settings.llmConfigs.length, conversations }));
 				});
-		});
-
-	// Conversation Title Mode
-	new Setting(containerEl)
-		.setName(t('settings.general.conversationTitleMode.name'))
-		.setDesc(t('settings.general.conversationTitleMode.desc'))
-		.addDropdown(dropdown => {
-			dropdown.selectEl.setAttribute('data-testid', TestIds.settings.generalConversationTitleModeSelect);
-			dropdown
-				.addOption('first-message', t('settings.general.conversationTitleMode.firstMessage'))
-				.addOption('auto-summary', t('settings.general.conversationTitleMode.autoSummary'))
-				.addOption('manual', t('settings.general.conversationTitleMode.manual'))
-				.setValue(plugin.settings.conversationTitleMode)
-				.onChange(async (value) => {
-					await plugin.updateSettings((settings) => {
-						settings.conversationTitleMode = value;
-					});
-				});
-		});
-
-	// Conversation Icon
-	new Setting(containerEl)
-		.setName(t('settings.general.conversationIcons.name'))
-		.setDesc(t('settings.general.conversationIcons.desc'))
-		.addToggle(toggle => {
-			toggle.toggleEl.setAttribute('data-testid', TestIds.settings.generalConversationIconToggle);
-			toggle
-				.setValue(plugin.settings.conversationIconEnabled)
-				.onChange(async (value) => {
-					await plugin.updateSettings((settings) => {
-						settings.conversationIconEnabled = value;
-					});
-				});
-		});
-
-	void plugin.services.conversations.getConversationCount().then(conversationCount => {
-		const statusValue = plugin.settings.llmConfigs.length > 0 && plugin.settings.defaultModel
-			? t('settings.general.configStatus.ok', { providers: plugin.settings.llmConfigs.length, conversations: conversationCount })
-			: t('settings.general.configStatus.incomplete');
-
-		new Setting(containerEl)
-			.setName(t('settings.general.configStatus.name'))
-			.setDesc(t('settings.general.configStatus.desc'))
-			.addText(text => text
-				.setValue(statusValue)
-				.setDisabled(true));
-	});
+			},
+		},
+	];
 }

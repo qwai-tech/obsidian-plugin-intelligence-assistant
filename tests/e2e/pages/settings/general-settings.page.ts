@@ -1,55 +1,36 @@
 import { BasePage } from '../base.page';
-import { TestIds } from '../../support/testids';
+
+const DEFAULT_MODEL = 'Default model';
+const TITLE_MODE = 'Conversation title mode';
+const CONVERSATION_ICONS = 'Conversation icons';
 
 export class GeneralSettingsPage extends BasePage {
 	async open(): Promise<void> {
-		await browser.execute(() => {
-			const app = (window as unknown as {
-				app: {
-					setting: {
-						open(): void;
-						openTabById(id: string): void;
-					};
-				};
-			}).app;
-			app.setting.open();
-			app.setting.openTabById('intelligence-assistant');
-		});
-		await this.waitFor(TestIds.settings.shell);
-		await this.clickSettingsTab('general');
-		await this.waitFor(TestIds.settings.generalDefaultModelInput);
+		await this.openPluginSettings();
+		await this.settingControl(DEFAULT_MODEL, 'input').waitForDisplayed({ timeout: 10_000 });
 	}
 
 	async setDefaultModel(modelId: string): Promise<void> {
-		await this.setTextInputValue(TestIds.settings.generalDefaultModelInput, modelId);
+		await this.setNamedControl(DEFAULT_MODEL, 'input', modelId);
 		await this.waitForPluginSetting('defaultModel', modelId);
 	}
 
 	async getDefaultModel(): Promise<string> {
-		await this.waitFor(TestIds.settings.generalDefaultModelInput);
-		return this.$testid(TestIds.settings.generalDefaultModelInput).getValue();
+		return this.settingControl(DEFAULT_MODEL, 'input').getValue();
 	}
 
 	async setConversationTitleMode(mode: string): Promise<void> {
-		await this.setSelectValue(TestIds.settings.generalConversationTitleModeSelect, mode);
+		await this.setNamedControl(TITLE_MODE, 'select', mode);
 		await this.waitForPluginSetting('conversationTitleMode', mode);
 	}
 
 	async getConversationTitleMode(): Promise<string> {
-		await this.waitFor(TestIds.settings.generalConversationTitleModeSelect);
-		return browser.execute((testId) => {
-			const select = activeDocument.querySelector(`[data-testid="${testId}"]`);
-			if (!(select instanceof HTMLSelectElement)) {
-				throw new Error(`Select not found: ${testId}`);
-			}
-			return select.value;
-		}, TestIds.settings.generalConversationTitleModeSelect);
+		return this.settingControl(TITLE_MODE, 'select').getValue();
 	}
 
 	async setConversationIconsEnabled(enabled: boolean): Promise<void> {
-		const current = await this.getPluginSetting<boolean>('conversationIconEnabled');
-		if (current !== enabled) {
-			await this.click(TestIds.settings.generalConversationIconToggle);
+		if ((await this.getPluginSetting<boolean>('conversationIconEnabled')) !== enabled) {
+			await this.settingControl(CONVERSATION_ICONS, '.checkbox-container').click();
 		}
 		await this.waitForPluginSetting('conversationIconEnabled', enabled);
 	}
@@ -58,47 +39,14 @@ export class GeneralSettingsPage extends BasePage {
 		return this.getPluginSetting<boolean>('conversationIconEnabled');
 	}
 
-	private async clickSettingsTab(tabId: string): Promise<void> {
-		await browser.waitUntil(
-			async () => browser.execute((testId, id) => {
-				return Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
-					.some(tab => tab.instanceOf(HTMLElement) && tab.getAttribute('data-tab-id') === id);
-			}, TestIds.settings.tab, tabId),
-			{ timeout: 10_000, timeoutMsg: `Settings tab not found: ${tabId}` }
-		);
-		await browser.execute((testId, id) => {
-			const tab = Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
-				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-tab-id') === id);
-			if (!(tab instanceof HTMLElement)) {
-				throw new Error(`Settings tab not found: ${id}`);
-			}
-			tab.click();
-		}, TestIds.settings.tab, tabId);
-	}
-
-	private async setSelectValue(testId: string, value: string): Promise<void> {
-		await this.waitFor(testId);
-		await browser.execute((id, selected) => {
-			const select = activeDocument.querySelector(`[data-testid="${id}"]`);
-			if (!(select instanceof HTMLSelectElement)) {
-				throw new Error(`Select not found: ${id}`);
-			}
-			select.value = selected;
-			select.dispatchEvent(new Event('change', { bubbles: true }));
-		}, testId, value);
-	}
-
-	private async setTextInputValue(testId: string, value: string): Promise<void> {
-		await this.waitFor(testId);
-		await browser.execute((id, selected) => {
-			const input = activeDocument.querySelector(`[data-testid="${id}"]`);
-			if (!(input instanceof HTMLInputElement)) {
-				throw new Error(`Text input not found: ${id}`);
-			}
-			input.value = selected;
-			input.dispatchEvent(new Event('input', { bubbles: true }));
-			input.dispatchEvent(new Event('change', { bubbles: true }));
-		}, testId, value);
+	private async setNamedControl(name: string, control: 'input' | 'select', value: string): Promise<void> {
+		const element = await this.settingControl(name, control).getElement();
+		await element.waitForDisplayed({ timeout: 10_000 });
+		await browser.execute((el, next) => {
+			el.value = next;
+			el.dispatchEvent(new Event('input', { bubbles: true }));
+			el.dispatchEvent(new Event('change', { bubbles: true }));
+		}, element as unknown as HTMLInputElement, value);
 	}
 
 	private async waitForPluginSetting<T>(key: string, value: T): Promise<void> {

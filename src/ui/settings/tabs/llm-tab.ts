@@ -10,6 +10,8 @@ import { displayProviderTab } from './provider-tab';
 import { displayModelsTab, type ModelFilters } from './models-tab';
 import { TestIds } from '@/ui/utils/test-ids';
 
+export type LLMSubTab = 'provider' | 'models';
+
 export function displayLLMTab(
 	containerEl: HTMLElement,
 	plugin: IntelligenceAssistantPlugin,
@@ -17,8 +19,8 @@ export function displayLLMTab(
 	modelFilters: ModelFilters,
 	onModelFilterChange: (filters: Partial<ModelFilters>) => void,
 	refreshDisplay: () => void,
-	initialActiveTab: 'provider' | 'models' = 'provider',
-	onActiveTabChange?: (tab: 'provider' | 'models') => void
+	initialActiveTab: LLMSubTab = 'provider',
+	onActiveTabChange?: (tab: LLMSubTab) => void
 ): void {
 
 	const desc = containerEl.createEl('p', {
@@ -32,12 +34,12 @@ export function displayLLMTab(
 	// Create content container for sub-tabs
 	const tabContentContainer = containerEl.createDiv('ia-llm-tab-content');
 
-	const subTabs: Array<{ id: 'provider' | 'models'; label: string; icon: string }> = [
+	const subTabs: Array<{ id: LLMSubTab; label: string; icon: string }> = [
 		{ id: 'provider', label: t('settings.llm.subTabs.provider'), icon: '🔌' },
 		{ id: 'models', label: t('settings.llm.subTabs.models'), icon: '🤖' }
 	];
 
-	let activeTab: 'provider' | 'models' = initialActiveTab;
+	let activeTab: LLMSubTab = initialActiveTab;
 
 	const renderActiveTab = () => {
 		tabContentContainer.empty();

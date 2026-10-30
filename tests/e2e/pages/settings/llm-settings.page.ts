@@ -10,20 +10,7 @@ interface ProviderFormValues {
 
 export class LlmSettingsPage extends BasePage {
 	async openProviderTab(): Promise<void> {
-		await browser.execute(() => {
-			const app = (window as unknown as {
-				app: {
-					setting: {
-						open(): void;
-						openTabById(id: string): void;
-					};
-				};
-			}).app;
-			app.setting.open();
-			app.setting.openTabById('intelligence-assistant');
-		});
-		await this.waitFor(TestIds.settings.shell);
-		await this.clickSettingsTab('llm');
+		await this.openSettingsSection('LLM');
 		await this.waitFor(TestIds.settings.providerAddBtn);
 	}
 
@@ -63,24 +50,6 @@ export class LlmSettingsPage extends BasePage {
 			async () => !(await this.providerRowExists(providerId)),
 			{ timeout: timeoutMs, timeoutMsg: `Provider row still exists: ${providerId}` }
 		);
-	}
-
-	private async clickSettingsTab(tabId: string): Promise<void> {
-		await browser.waitUntil(
-			async () => browser.execute((testId, id) => {
-				return Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
-					.some(tab => tab.instanceOf(HTMLElement) && tab.getAttribute('data-tab-id') === id);
-			}, TestIds.settings.tab, tabId),
-			{ timeout: 10_000, timeoutMsg: `Settings tab not found: ${tabId}` }
-		);
-		await browser.execute((testId, id) => {
-			const tab = Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
-				.find(candidate => candidate.instanceOf(HTMLElement) && candidate.getAttribute('data-tab-id') === id);
-			if (!(tab instanceof HTMLElement)) {
-				throw new Error(`Settings tab not found: ${id}`);
-			}
-			tab.click();
-		}, TestIds.settings.tab, tabId);
 	}
 
 	private async fillProviderModal(values: ProviderFormValues): Promise<void> {

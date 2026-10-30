@@ -12,7 +12,7 @@ import { renderBuiltinToolsSection } from '@/ui/settings/tabs/tools/builtin-tool
 import { renderOpenapiToolsSection } from '@/ui/settings/tabs/tools/openapi-tools-section';
 import { renderCliToolsSection } from '@/ui/settings/tabs/tools/cli-tools-section';
 
-type ToolsSubTab = 'built-in' | 'mcp' | 'openapi' | 'cli';
+export type ToolsSubTab = 'built-in' | 'mcp' | 'openapi' | 'cli';
 
 export function displayToolsTab(
 	containerEl: HTMLElement,
