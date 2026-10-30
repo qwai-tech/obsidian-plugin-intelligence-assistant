@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Konfigurasie-status",
         "desc": "Algehele inprop-konfigurasie-status",
-        "ok": "✅ Gekonfigureer ({{providers}} verskaffers, {{conversations}} gesprekke)",
-        "incomplete": "⚠️ Onvolledig - Stel asseblief verskaffers en modelle in"
+        "ok": "Gekonfigureer ({{providers}} verskaffers, {{conversations}} gesprekke)",
+        "incomplete": "Onvolledig - Stel asseblief verskaffers en modelle in"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} verskaffer gekonfigureer",
       "providerCount_other": "{{count}} verskaffers gekonfigureer",
       "providerCount": "{{count}} verskaffers gekonfigureer",
-      "refreshAll": "🔄 verfris alle modelle",
+      "refreshAll": "verfris alle modelle",
       "empty": "Geen verskaffers nog gekonfigureer nie. Voeg eers verskaffers by in die verskaffer-oortjie.",
       "noModels": "Geen modelle beskikbaar nie. Klik \"verfris alle modelle\" of verfris individuele verskaffers in die verskaffer-oortjie.",
       "noMatch": "Geen modelle stem ooreen met die huidige filters nie. Pas filters aan of verwyder filters om resultate te sien.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Sekuriteitswaarskuwing",
+      "securityTitle": "Sekuriteitswaarskuwing",
       "securityDesc": "API-sleutels word as gewone teks in u gewelf gestoor vir versoenbaarheid. Om toevallige lekke te voorkom:",
       "securityItem1": "Moenie u {{configDir}}/plugins/intelligence-assistant/data/-gids deel nie.",
       "securityItem2": "Voeg hierdie gids by u .gitignore as u Git-sinchronisasie gebruik.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Stel Model Context Protocol (MCP)-bedieners in om agentvermoëns uit te brei met eksterne gereedskap en databronne.",
-      "inspectorBtn": "🔍 Maak MCP-inspekteur oop",
-      "testAllBtn": "🧪 toets alle verbindings",
-      "refreshAllBtn": "🔄 verfris alle gereedskap",
+      "inspectorBtn": "Maak MCP-inspekteur oop",
+      "testAllBtn": "toets alle verbindings",
+      "refreshAllBtn": "verfris alle gereedskap",
       "addBtn": "+ Voeg MCP-bediener by",
       "empty": "Geen MCP-bedieners gekonfigureer nie. Kies Voeg MCP-bediener by om te begin.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Redigeer",
-        "enabled": "✓ Geaktiveer",
-        "enabledOff": "✗ Gedeaktiveer",
+        "enabled": "Geaktiveer",
+        "enabledOff": "Gedeaktiveer",
         "connect": "verbind",
         "disconnect": "ontkoppel",
         "connecting": "Verbind...",
@@ -226,17 +226,17 @@
         "enableFirst": "Aktiveer die bediener voor verbinding",
         "disconnectFailed": "Kon nie van {{name}} ontkoppel nie",
         "connectFailed": "Kon nie met {{name}} verbind nie",
-        "testNoCommand": "❌ voer asseblief 'n opdrag in voor toetsing van verbinding",
-        "testSuccess": "✅ suksesvol verbind! {{count}} gereedskap gevind.",
-        "testFailed": "❌ Verbinding misluk: {{message}}",
-        "refreshedAll_one": "✅ gereedskap verfris vir {{count}} bediener",
-        "refreshedAll_other": "✅ gereedskap verfris vir {{count}} bedieners",
-        "refreshedAll": "✅ gereedskap verfris vir {{count}} bedieners",
-        "refreshedPartial": "✅ {{success}} bedieners verfris, ❌ {{failed}} misluk",
-        "noServersConfigured": "⚠️ Geen MCP-bedieners gekonfigureer nie",
-        "testingAll": "🧪 Toets {{count}} MCP-bedienerverbindings...",
-        "testAllSuccess": "✅ alle {{count}} mcp-bedieners suksesvol verbind!",
-        "testAllPartial": "⚠️ {{successful}} verbind, {{failed}} misluk"
+        "testNoCommand": "voer asseblief 'n opdrag in voor toetsing van verbinding",
+        "testSuccess": "suksesvol verbind! {{count}} gereedskap gevind.",
+        "testFailed": "Verbinding misluk: {{message}}",
+        "refreshedAll_one": "gereedskap verfris vir {{count}} bediener",
+        "refreshedAll_other": "gereedskap verfris vir {{count}} bedieners",
+        "refreshedAll": "gereedskap verfris vir {{count}} bedieners",
+        "refreshedPartial": "{{success}} bedieners verfris, {{failed}} misluk",
+        "noServersConfigured": "Geen MCP-bedieners gekonfigureer nie",
+        "testingAll": "Toets {{count}} MCP-bedienerverbindings...",
+        "testAllSuccess": "alle {{count}} mcp-bedieners suksesvol verbind!",
+        "testAllPartial": "{{successful}} verbind, {{failed}} misluk"
       },
       "confirm": {
         "delete": "Verwyder MCP-bediener \"{{name}}\"?"
@@ -362,7 +362,7 @@
             "params": "pad (vereis), inhoud (vereis): Notapad en inhoud om by te voeg"
           }
         },
-        "infoTitle": "💡 oor gereedskap",
+        "infoTitle": "oor gereedskap",
         "infoText": "Ingeboude gereedskap word per inprop-instellings gekonfigureer. MCP-gereedskap word onafhanklik bestuur — gebruik die MCP-oortjie om bedieners te verbind en gereedskap-beskikbaarheid te verfris.",
         "toolNames": {
           "read_file": "Lees Lêer",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI-gereedskap verwyder"
         },
-        "infoTitle": "💡 Oor CLI-gereedskap",
+        "infoTitle": "Oor CLI-gereedskap",
         "infoText": "CLI-gereedskap voer shell-opdragte plaaslik uit. Gebruik {{paramName}} in argumente vir sjabloonvervanging, of stel parameters in om as argumente of omgewingsveranderlikes deur te gee.",
         "modal": {
           "defaultTitle": "CLI-gereedskap",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Gemid. Stukkie-grootte"
         },
         "empty": "Indeks is leeg. Kies herbou indeks om indeksering te begin.",
-        "error": "⚠️ kan nie indeksstatistieke laai nie",
+        "error": "kan nie indeksstatistieke laai nie",
         "rebuild": {
           "name": "Herbou indeks",
           "desc": "Herindekseer alle lêers in u gewelf. Dit kan 'n rukkie neem.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG-statistieke",
-      "totalChunks": "📊 totale stukkies:",
-      "filesIndexed": "📁 lêers geïndekseer:",
-      "totalSize": "💾 totale grootte:",
-      "avgChunks": "📈 Gemid. Stukkies/Lêer:",
-      "indexedFiles": "📄 geïndekseerde lêers",
-      "noFilesYet": "⚠️ geen lêers is nog geïndekseer nie.",
+      "totalChunks": "totale stukkies:",
+      "filesIndexed": "lêers geïndekseer:",
+      "totalSize": "totale grootte:",
+      "avgChunks": "Gemid. Stukkies/Lêer:",
+      "indexedFiles": "geïndekseerde lêers",
+      "noFilesYet": "geen lêers is nog geïndekseer nie.",
       "howToBuild": "Om die RAG-indeks te bou:",
       "step1": "Gaan na Instellings → RAG",
       "step2": "Aktiveer RAG",
       "step3": "Kies indekseer gewelf",
       "close": "Sluit",
-      "retrieved_one": "📚 herwin van {{count}} dokument",
-      "retrieved_other": "📚 herwin van {{count}} dokumente",
-      "retrieved": "📚 herwin van {{count}} dokumente"
+      "retrieved_one": "herwin van {{count}} dokument",
+      "retrieved_other": "herwin van {{count}} dokumente",
+      "retrieved": "herwin van {{count}} dokumente"
     },
     "ragTooltip": {
       "status": "RAG-indeks Status:",
-      "totalChunks": "📊 Totale Stukkies: {{count}}",
-      "filesIndexed": "📁 Lêers Geïndekseer: {{count}}",
-      "totalSize": "💾 Totale Grootte: {{size}} KB",
-      "indexedFiles": "📄 geïndekseerde Lêers:",
+      "totalChunks": "Totale Stukkies: {{count}}",
+      "filesIndexed": "Lêers Geïndekseer: {{count}}",
+      "totalSize": "Totale Grootte: {{size}} KB",
+      "indexedFiles": "geïndekseerde Lêers:",
       "andMore": "  ... en {{count}} meer",
-      "noFilesYet": "⚠️ geen lêers nog geïndekseer nie.",
+      "noFilesYet": "geen lêers nog geïndekseer nie.",
       "goToSettings": "Gaan na Instellings → RAG om die indeks te bou.",
       "ragOff": "ℹ️ RAG is tans afgeskakel vir hierdie klet."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Kies hoe die agent sy model sal kies"
       },
       "systemPrompt": {
-        "createNew": "➕ skep nuwe aanwysing…",
+        "createNew": "skep nuwe aanwysing…",
         "promptName": {
           "name": "Aanwysing-naam",
           "desc": "Vertoonnaam vir die nuwe stelselaanwysing"
@@ -1381,7 +1381,7 @@
         "tools": "Gereedskap",
         "logs": "Logboeke"
       },
-      "refreshBtn": "🔄 verfris",
+      "refreshBtn": "verfris",
       "connections": {
         "title": "MCP-bedienerverbindings",
         "noServers": "Geen MCP-bedieners gekonfigureer nie.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Voer gereedskap uit",
         "clearBtn": "Verwyder resultate",
         "executing": "Uitvoering...",
-        "success": "✅ uitvoering suksesvol",
-        "failed": "❌ uitvoering misluk",
-        "errorTitle": "❌ uitvoeringsfout",
+        "success": "uitvoering suksesvol",
+        "failed": "uitvoering misluk",
+        "errorTitle": "uitvoeringsfout",
         "errorLabel": "Fout: {{message}}",
         "notices": {
           "success": "Gereedskap suksesvol uitgevoer",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Geen MCP-bedieners gekonfigureer nie",
-        "testing": "🧪 Toets {{count}} MCP-bedienerverbindings...",
-        "allSuccess": "✅ alle {{count}} mcp-bedieners suksesvol verbind!",
-        "partial": "⚠️ {{success}} verbind, {{failed}} misluk"
+        "noServers": "Geen MCP-bedieners gekonfigureer nie",
+        "testing": "Toets {{count}} MCP-bedienerverbindings...",
+        "allSuccess": "alle {{count}} mcp-bedieners suksesvol verbind!",
+        "partial": "{{success}} verbind, {{failed}} misluk"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Bestuur Ollama-modelle",
       "serverInfo": "Bediener-inligting",
       "checkingServer": "Nagaan bediener...",
-      "serverOnline": "✅ Bediener aanlyn",
+      "serverOnline": "Bediener aanlyn",
       "versionLabel": " | Weergawe: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Bediener aflyn",
-      "connectionError": "❌ Verbindingsfout",
+      "serverOffline": "Bediener aflyn",
+      "connectionError": "Verbindingsfout",
       "pullTitle": "Trek nuwe model",
       "pullHint": "Voer 'n modelnaam in om van die Ollama-biblioteek af te laai (bv. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Trek model",
       "installedTitle": "Geïnstalleerde modelle",
-      "refreshList": "🔄 Verfris lys",
+      "refreshList": "Verfris lys",
       "noModels": "Geen modelle gevind nie. Trek 'n model om te begin.",
       "capabilities": "Vermoëns: {{caps}}",
       "deleteBtn": "Verwyder",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Voer asseblief 'n modelnaam in",
         "pulling": "Trek {{name}}... Dit kan 'n rukkie neem.",
-        "pullSuccess": "✅ {{name}} suksesvol getrek",
-        "pullFailed": "❌ Kon nie model trek nie: {{message}}",
-        "deleted": "✅ {{name}} verwyder",
-        "deleteFailed": "❌ Kon nie model verwyder nie: {{message}}",
+        "pullSuccess": "{{name}} suksesvol getrek",
+        "pullFailed": "Kon nie model trek nie: {{message}}",
+        "deleted": "{{name}} verwyder",
+        "deleteFailed": "Kon nie model verwyder nie: {{message}}",
         "refreshing": "Verfris...",
-        "refreshSuccess": "✅ Modellys verfris",
-        "refreshFailed": "❌ Kon nie modellys verfris nie"
+        "refreshSuccess": "Modellys verfris",
+        "refreshFailed": "Kon nie modellys verfris nie"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Verwerk...",
       "error": "Fout tydens weergawe van verduideliking",
-      "errorPrefix": "❌ Fout: "
+      "errorPrefix": "Fout:"
     }
   },
   "notices": {

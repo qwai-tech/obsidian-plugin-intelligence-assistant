@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Status konfiguracije",
         "desc": "Ukupni status konfiguracije dodatka",
-        "ok": "✅ Konfigurirano ({{providers}} pružatelja, {{conversations}} razgovora)",
-        "incomplete": "⚠️ Nepotpuno — Konfigurirajte pružatelje i modele"
+        "ok": "Konfigurirano ({{providers}} pružatelja, {{conversations}} razgovora)",
+        "incomplete": "Nepotpuno — Konfigurirajte pružatelje i modele"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} pružatelj konfiguriran",
       "providerCount_other": "{{count}} pružatelja konfigurirano",
       "providerCount": "{{count}} pružatelja konfigurirano",
-      "refreshAll": "🔄 osvježi sve modele",
+      "refreshAll": "osvježi sve modele",
       "empty": "Nema konfiguriranih pružatelja. Najprije dodajte pružatelje na kartici pružatelja.",
       "noModels": "Nema dostupnih modela. Kliknite „osvježi sve modele“ ili osvježite pojedine pružatelje na kartici pružatelja.",
       "noMatch": "Nijedan model ne odgovara trenutnim filterima. Prilagodite ili obrišite filtere za prikaz rezultata.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Sigurnosno upozorenje",
+      "securityTitle": "Sigurnosno upozorenje",
       "securityDesc": "API ključevi pohranjuju se kao čisti tekst u vašem trezoru radi kompatibilnosti. Kako biste spriječili slučajno curenje:",
       "securityItem1": "NE dijelite mapu {{configDir}}/plugins/intelligence-assistant/data/.",
       "securityItem2": "Dodajte ovu mapu u .gitignore ako koristite Git sinkronizaciju.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Konfigurirajte poslužitelje Model Context Protocol (MCP) za proširivanje mogućnosti agenta vanjskim alatima i izvorima podataka.",
-      "inspectorBtn": "🔍 Otvori MCP inspektor",
-      "testAllBtn": "🧪 testiraj sve veze",
-      "refreshAllBtn": "🔄 osvježi sve alate",
+      "inspectorBtn": "Otvori MCP inspektor",
+      "testAllBtn": "testiraj sve veze",
+      "refreshAllBtn": "osvježi sve alate",
       "addBtn": "+ Dodaj MCP poslužitelj",
       "empty": "Nema konfiguriranih MCP poslužitelja. Odaberite Dodaj MCP poslužitelj za početak.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Uredi",
-        "enabled": "✓ Omogućeno",
-        "enabledOff": "✗ Onemogućeno",
+        "enabled": "Omogućeno",
+        "enabledOff": "Onemogućeno",
         "connect": "spoji",
         "disconnect": "odspoji",
         "connecting": "Spajanje...",
@@ -226,17 +226,17 @@
         "enableFirst": "Omogućite poslužitelj prije spajanja",
         "disconnectFailed": "Odspajanje od {{name}} nije uspjelo",
         "connectFailed": "Spajanje na {{name}} nije uspjelo",
-        "testNoCommand": "❌ unesite naredbu prije testiranja veze",
-        "testSuccess": "✅ uspješno spojeno! Pronađeno {{count}} alata.",
-        "testFailed": "❌ Spajanje nije uspjelo: {{message}}",
-        "refreshedAll_one": "✅ alati osvježeni za {{count}} poslužitelj",
-        "refreshedAll_other": "✅ alati osvježeni za {{count}} poslužitelja",
-        "refreshedAll": "✅ alati osvježeni za {{count}} poslužitelja",
-        "refreshedPartial": "✅ osvježeno {{success}} poslužitelja, ❌ {{failed}} neuspješno",
-        "noServersConfigured": "⚠️ Nema konfiguriranih MCP poslužitelja",
-        "testingAll": "🧪 Testiranje {{count}} MCP veza poslužitelja...",
-        "testAllSuccess": "✅ svih {{count}} mcp poslužitelja uspješno spojeno!",
-        "testAllPartial": "⚠️ {{successful}} spojeno, {{failed}} neuspješno"
+        "testNoCommand": "unesite naredbu prije testiranja veze",
+        "testSuccess": "uspješno spojeno! Pronađeno {{count}} alata.",
+        "testFailed": "Spajanje nije uspjelo: {{message}}",
+        "refreshedAll_one": "alati osvježeni za {{count}} poslužitelj",
+        "refreshedAll_other": "alati osvježeni za {{count}} poslužitelja",
+        "refreshedAll": "alati osvježeni za {{count}} poslužitelja",
+        "refreshedPartial": "osvježeno {{success}} poslužitelja, {{failed}} neuspješno",
+        "noServersConfigured": "Nema konfiguriranih MCP poslužitelja",
+        "testingAll": "Testiranje {{count}} MCP veza poslužitelja...",
+        "testAllSuccess": "svih {{count}} mcp poslužitelja uspješno spojeno!",
+        "testAllPartial": "{{successful}} spojeno, {{failed}} neuspješno"
       },
       "confirm": {
         "delete": "Obriši MCP poslužitelj „{{name}}“?"
@@ -362,7 +362,7 @@
             "params": "path (obavezno), content (obavezno): Putanja bilješke i sadržaj za dodavanje"
           }
         },
-        "infoTitle": "💡 o alatima",
+        "infoTitle": "o alatima",
         "infoText": "Ugrađeni alati konfiguriraju se prema postavkama dodatka. MCP alati upravljaju se neovisno — koristite karticu MCP za povezivanje poslužitelja i osvježavanje dostupnosti alata.",
         "toolNames": {
           "read_file": "Čitaj datoteku",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI alat uklonjen"
         },
-        "infoTitle": "💡 O CLI alatima",
+        "infoTitle": "O CLI alatima",
         "infoText": "CLI alati izvršavaju naredbe ljuske lokalno. Koristite {{paramName}} u argumentima za zamjenu predloška, ili konfigurirajte parametre koji se prosljeđuju kao argumenti ili varijable okruženja.",
         "modal": {
           "defaultTitle": "CLI alat",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Prosječna veličina segmenta"
         },
         "empty": "Indeks je prazan. Odaberite ponovo izgradi indeks za početak indeksiranja.",
-        "error": "⚠️ nije moguće učitati statistike indeksa",
+        "error": "nije moguće učitati statistike indeksa",
         "rebuild": {
           "name": "Ponovo izgradi indeks",
           "desc": "Ponovo indeksiraj sve datoteke u vašem trezoru. Ovo može potrajati.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG statistike",
-      "totalChunks": "📊 ukupni segmenti:",
-      "filesIndexed": "📁 indeksirane datoteke:",
-      "totalSize": "💾 ukupna veličina:",
-      "avgChunks": "📈 Prosječni segmenti/datoteka:",
-      "indexedFiles": "📄 indeksirane datoteke",
-      "noFilesYet": "⚠️ još nema indeksiranih datoteka.",
+      "totalChunks": "ukupni segmenti:",
+      "filesIndexed": "indeksirane datoteke:",
+      "totalSize": "ukupna veličina:",
+      "avgChunks": "Prosječni segmenti/datoteka:",
+      "indexedFiles": "indeksirane datoteke",
+      "noFilesYet": "još nema indeksiranih datoteka.",
       "howToBuild": "Za izgradnju RAG indeksa:",
       "step1": "Idi na Postavke → RAG",
       "step2": "Omogući RAG",
       "step3": "Odaberi indeksiranje trezora",
       "close": "Zatvori",
-      "retrieved_one": "📚 dohvaćeno iz {{count}} dokumenta",
-      "retrieved_other": "📚 dohvaćeno iz {{count}} dokumenata",
-      "retrieved": "📚 dohvaćeno iz {{count}} dokumenata"
+      "retrieved_one": "dohvaćeno iz {{count}} dokumenta",
+      "retrieved_other": "dohvaćeno iz {{count}} dokumenata",
+      "retrieved": "dohvaćeno iz {{count}} dokumenata"
     },
     "ragTooltip": {
       "status": "Status RAG indeksa:",
-      "totalChunks": "📊 Ukupni segmenti: {{count}}",
-      "filesIndexed": "📁 Indeksirane datoteke: {{count}}",
-      "totalSize": "💾 Ukupna veličina: {{size}} KB",
-      "indexedFiles": "📄 indeksirane datoteke:",
+      "totalChunks": "Ukupni segmenti: {{count}}",
+      "filesIndexed": "Indeksirane datoteke: {{count}}",
+      "totalSize": "Ukupna veličina: {{size}} KB",
+      "indexedFiles": "indeksirane datoteke:",
       "andMore": "  ... i još {{count}}",
-      "noFilesYet": "⚠️ još nema indeksiranih datoteka.",
+      "noFilesYet": "još nema indeksiranih datoteka.",
       "goToSettings": "Idi na Postavke → RAG za izgradnju indeksa.",
       "ragOff": "ℹ️ RAG je trenutno isključen za ovaj razgovor."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Odaberite kako agent odabire svoj model"
       },
       "systemPrompt": {
-        "createNew": "➕ stvori novi upit…",
+        "createNew": "stvori novi upit…",
         "promptName": {
           "name": "Naziv upita",
           "desc": "Prikazni naziv novog sistemskog upita"
@@ -1381,7 +1381,7 @@
         "tools": "Alati",
         "logs": "Zapisnici"
       },
-      "refreshBtn": "🔄 osvježi",
+      "refreshBtn": "osvježi",
       "connections": {
         "title": "MCP veze poslužitelja",
         "noServers": "Nema konfiguriranih MCP poslužitelja.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Izvrši alat",
         "clearBtn": "Obriši rezultate",
         "executing": "Izvršavanje...",
-        "success": "✅ izvršavanje uspješno",
-        "failed": "❌ izvršavanje neuspješno",
-        "errorTitle": "❌ pogreška izvršavanja",
+        "success": "izvršavanje uspješno",
+        "failed": "izvršavanje neuspješno",
+        "errorTitle": "pogreška izvršavanja",
         "errorLabel": "Pogreška: {{message}}",
         "notices": {
           "success": "Alat uspješno izvršen",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Nema konfiguriranih MCP poslužitelja",
-        "testing": "🧪 Testiranje {{count}} MCP veza poslužitelja...",
-        "allSuccess": "✅ svih {{count}} mcp poslužitelja uspješno spojeno!",
-        "partial": "⚠️ {{success}} spojeno, {{failed}} neuspješno"
+        "noServers": "Nema konfiguriranih MCP poslužitelja",
+        "testing": "Testiranje {{count}} MCP veza poslužitelja...",
+        "allSuccess": "svih {{count}} mcp poslužitelja uspješno spojeno!",
+        "partial": "{{success}} spojeno, {{failed}} neuspješno"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Upravljaj Ollama modelima",
       "serverInfo": "Informacije o poslužitelju",
       "checkingServer": "Provjeravam poslužitelj...",
-      "serverOnline": "✅ Poslužitelj online",
+      "serverOnline": "Poslužitelj online",
       "versionLabel": " | Verzija: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Poslužitelj offline",
-      "connectionError": "❌ Pogreška veze",
+      "serverOffline": "Poslužitelj offline",
+      "connectionError": "Pogreška veze",
       "pullTitle": "Povuci novi model",
       "pullHint": "Unesite naziv modela za preuzimanje iz Ollama biblioteke (npr. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Povuci model",
       "installedTitle": "Instalirani modeli",
-      "refreshList": "🔄 Osvježi popis",
+      "refreshList": "Osvježi popis",
       "noModels": "Nema modela. Povucite model za početak.",
       "capabilities": "Mogućnosti: {{caps}}",
       "deleteBtn": "Obriši",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Unesite naziv modela",
         "pulling": "Povlačim {{name}}... Ovo može potrajati.",
-        "pullSuccess": "✅ Uspješno povučen {{name}}",
-        "pullFailed": "❌ Povlačenje modela nije uspjelo: {{message}}",
-        "deleted": "✅ Obrisan {{name}}",
-        "deleteFailed": "❌ Brisanje modela nije uspjelo: {{message}}",
+        "pullSuccess": "Uspješno povučen {{name}}",
+        "pullFailed": "Povlačenje modela nije uspjelo: {{message}}",
+        "deleted": "Obrisan {{name}}",
+        "deleteFailed": "Brisanje modela nije uspjelo: {{message}}",
         "refreshing": "Osvježavanje...",
-        "refreshSuccess": "✅ Popis modela osvježen",
-        "refreshFailed": "❌ Osvježavanje popisa modela nije uspjelo"
+        "refreshSuccess": "Popis modela osvježen",
+        "refreshFailed": "Osvježavanje popisa modela nije uspjelo"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Obrađujem...",
       "error": "Pogreška pri prikazu objašnjenja",
-      "errorPrefix": "❌ Pogreška: "
+      "errorPrefix": "Pogreška:"
     }
   },
   "notices": {

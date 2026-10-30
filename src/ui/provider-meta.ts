@@ -62,27 +62,6 @@ export function getProviderMeta(providerId: string): { label: string; iconSvg: s
 	};
 }
 
-const AVATARS: Record<string, string> = {
-	openai: '🤖',
-	anthropic: '🧠',
-	google: '🔍',
-	ollama: '🦙',
-	deepseek: '🌊',
-	openrouter: '🔀',
-	groq: '⚡',
-	mistral: '🌬️',
-	togetherai: '🤝',
-	perplexity: '❓',
-	cohere: '🌐',
-	huggingface: '😊',
-	azure: '☁️',
-	bedrock: '🪨',
-	vertex: '🔺',
-	fireworks: '🎆',
-	lepton: '⚛️',
-	xai: '❌',
-};
-
 const COLORS: Record<string, string> = {
 	openai: '#10a37f',
 	anthropic: '#191919',
@@ -94,10 +73,6 @@ const COLORS: Record<string, string> = {
 	mistral: '#0d9488',
 	togetherai: '#ec4899',
 };
-
-export function providerAvatar(providerId: string | null | undefined): string {
-	return (providerId && AVATARS[providerId]) || '🤖';
-}
 
 export function providerColor(providerId: string | null | undefined): string {
 	return (providerId && COLORS[providerId]) || '#666666';

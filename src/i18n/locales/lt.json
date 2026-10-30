@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Konfigūracijos būsena",
         "desc": "Bendra įskiepio konfigūracijos būsena",
-        "ok": "✅ Sukonfigūruota ({{providers}} tiekėjai, {{conversations}} pokalbiai)",
-        "incomplete": "⚠️ Neišsami – Prašome sukonfigūruoti tiekėjus ir modelius"
+        "ok": "Sukonfigūruota ({{providers}} tiekėjai, {{conversations}} pokalbiai)",
+        "incomplete": "Neišsami – Prašome sukonfigūruoti tiekėjus ir modelius"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} tiekėjas sukonfigūruotas",
       "providerCount_other": "{{count}} tiekėjai sukonfigūruoti",
       "providerCount": "{{count}} tiekėjai sukonfigūruoti",
-      "refreshAll": "🔄 atnaujinti visus modelius",
+      "refreshAll": "atnaujinti visus modelius",
       "empty": "Dar nėra sukonfigūruotų tiekėjų. Pirmiausia pridėkite tiekėjus tiekėjų skirtuke.",
       "noModels": "Nėra galimų modelių. Spauskite «atnaujinti visus modelius» arba atnaujinkite atskirus tiekėjus tiekėjų skirtuke.",
       "noMatch": "Nė vienas modelis neatitinka dabartinių filtrų. Koreguokite arba išvalykite filtrus, kad pamatytumėte rezultatus.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Saugos įspėjimas",
+      "securityTitle": "Saugos įspėjimas",
       "securityDesc": "API raktai saugomi kaip paprastas tekstas jūsų saugykloje suderinamumo sumetimais. Kad išvengtumėte atsitiktinių nutekėjimų:",
       "securityItem1": "NEDALINKITĖS {{configDir}}/plugins/intelligence-assistant/data/ aplanku.",
       "securityItem2": "Pridėkite šį aplanką į .gitignore, jei naudojate Git sinchronizavimą.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Konfigūruoti Model Context Protocol (MCP) serverius, kad išplėstumėte agento galimybes su išoriniais įrankiais ir duomenų šaltiniais.",
-      "inspectorBtn": "🔍 Atidaryti MCP inspektorių",
-      "testAllBtn": "🧪 patikrinti visus ryšius",
-      "refreshAllBtn": "🔄 atnaujinti visus įrankius",
+      "inspectorBtn": "Atidaryti MCP inspektorių",
+      "testAllBtn": "patikrinti visus ryšius",
+      "refreshAllBtn": "atnaujinti visus įrankius",
       "addBtn": "+ Pridėti MCP serverį",
       "empty": "Nėra sukonfigūruotų MCP serverių. Pasirinkite Pridėti MCP serverį, kad pradėtumėte.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Redaguoti",
-        "enabled": "✓ Įjungtas",
-        "enabledOff": "✗ Išjungtas",
+        "enabled": "Įjungtas",
+        "enabledOff": "Išjungtas",
         "connect": "prisijungti",
         "disconnect": "atjungti",
         "connecting": "Jungiamasi...",
@@ -226,17 +226,17 @@
         "enableFirst": "Prieš prisijungiant įjunkite serverį",
         "disconnectFailed": "Nepavyko atjungti nuo {{name}}",
         "connectFailed": "Nepavyko prisijungti prie {{name}}",
-        "testNoCommand": "❌ prieš tikrinant ryšį įveskite komandą",
-        "testSuccess": "✅ sėkmingai prisijungta! Rasta {{count}} įrankių.",
-        "testFailed": "❌ Ryšys nepavyko: {{message}}",
-        "refreshedAll_one": "✅ atnaujinti įrankiai {{count}} serveriui",
-        "refreshedAll_other": "✅ atnaujinti įrankiai {{count}} serveriams",
-        "refreshedAll": "✅ atnaujinti įrankiai {{count}} serveriams",
-        "refreshedPartial": "✅ atnaujinta {{success}} serverių, ❌ {{failed}} nepavyko",
-        "noServersConfigured": "⚠️ Nėra sukonfigūruotų MCP serverių",
-        "testingAll": "🧪 Tikrinami {{count}} MCP serverio ryšiai...",
-        "testAllSuccess": "✅ visi {{count}} MCP serveriai sėkmingai prijungti!",
-        "testAllPartial": "⚠️ {{successful}} prijungta, {{failed}} nepavyko"
+        "testNoCommand": "prieš tikrinant ryšį įveskite komandą",
+        "testSuccess": "sėkmingai prisijungta! Rasta {{count}} įrankių.",
+        "testFailed": "Ryšys nepavyko: {{message}}",
+        "refreshedAll_one": "atnaujinti įrankiai {{count}} serveriui",
+        "refreshedAll_other": "atnaujinti įrankiai {{count}} serveriams",
+        "refreshedAll": "atnaujinti įrankiai {{count}} serveriams",
+        "refreshedPartial": "atnaujinta {{success}} serverių, {{failed}} nepavyko",
+        "noServersConfigured": "Nėra sukonfigūruotų MCP serverių",
+        "testingAll": "Tikrinami {{count}} MCP serverio ryšiai...",
+        "testAllSuccess": "visi {{count}} MCP serveriai sėkmingai prijungti!",
+        "testAllPartial": "{{successful}} prijungta, {{failed}} nepavyko"
       },
       "confirm": {
         "delete": "Ištrinti MCP serverį «{{name}}»?"
@@ -362,7 +362,7 @@
             "params": "path (privalomas), content (privalomas): Užrašo kelias ir turinys, kurį pridėti"
           }
         },
-        "infoTitle": "💡 apie įrankius",
+        "infoTitle": "apie įrankius",
         "infoText": "Įtaisytieji įrankiai konfigūruojami pagal įskiepio nustatymus. MCP įrankiai valdomi nepriklausomai — naudokite MCP skirtuką, kad prisijungtumėte prie serverių ir atnaujintumėte įrankių pasiekiamumą.",
         "toolNames": {
           "read_file": "Skaityti failą",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI įrankis pašalintas"
         },
-        "infoTitle": "💡 Apie CLI įrankius",
+        "infoTitle": "Apie CLI įrankius",
         "infoText": "CLI įrankiai vykdo apvalkalo komandas lokaliai. Argumentuose naudokite {{paramName}} šablono pakeitimui arba konfigūruokite parametrus, kurie bus perduodami kaip argumentai arba aplinkos kintamieji.",
         "modal": {
           "defaultTitle": "CLI įrankis",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Vid. dalies dydis"
         },
         "empty": "Indeksas tuščias. Pasirinkite atkurti indeksą, kad pradėtumėte indeksavimą.",
-        "error": "⚠️ nepavyko įkelti indekso statistikos",
+        "error": "nepavyko įkelti indekso statistikos",
         "rebuild": {
           "name": "Atkurti indeksą",
           "desc": "Pakartotinai indeksuoti visus failus saugykloje. Tai gali užtrukti.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG statistika",
-      "totalChunks": "📊 iš viso dalių:",
-      "filesIndexed": "📁 indeksuoti failai:",
-      "totalSize": "💾 bendras dydis:",
-      "avgChunks": "📈 vid. dalių/failui:",
-      "indexedFiles": "📄 indeksuoti failai",
-      "noFilesYet": "⚠️ dar nėra indeksuotų failų.",
+      "totalChunks": "iš viso dalių:",
+      "filesIndexed": "indeksuoti failai:",
+      "totalSize": "bendras dydis:",
+      "avgChunks": "vid. dalių/failui:",
+      "indexedFiles": "indeksuoti failai",
+      "noFilesYet": "dar nėra indeksuotų failų.",
       "howToBuild": "Kaip sukurti RAG indeksą:",
       "step1": "Eiti į Nustatymai → RAG",
       "step2": "Įjungti RAG",
       "step3": "Pasirinkti indeksuoti saugyklą",
       "close": "Uždaryti",
-      "retrieved_one": "📚 gauta iš {{count}} dokumento",
-      "retrieved_other": "📚 gauta iš {{count}} dokumentų",
-      "retrieved": "📚 gauta iš {{count}} dokumentų"
+      "retrieved_one": "gauta iš {{count}} dokumento",
+      "retrieved_other": "gauta iš {{count}} dokumentų",
+      "retrieved": "gauta iš {{count}} dokumentų"
     },
     "ragTooltip": {
       "status": "RAG indekso būsena:",
-      "totalChunks": "📊 Iš viso dalių: {{count}}",
-      "filesIndexed": "📁 Indeksuoti failai: {{count}}",
-      "totalSize": "💾 Bendras dydis: {{size}} KB",
-      "indexedFiles": "📄 Indeksuoti failai:",
+      "totalChunks": "Iš viso dalių: {{count}}",
+      "filesIndexed": "Indeksuoti failai: {{count}}",
+      "totalSize": "Bendras dydis: {{size}} KB",
+      "indexedFiles": "Indeksuoti failai:",
       "andMore": "  ... ir dar {{count}}",
-      "noFilesYet": "⚠️ dar nėra indeksuotų failų.",
+      "noFilesYet": "dar nėra indeksuotų failų.",
       "goToSettings": "Eiti į Nustatymai → RAG, kad sukurtumėte indeksą.",
       "ragOff": "ℹ️ RAG šiuo metu išjungtas šiame pokalbyje."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Pasirinkite, kaip agentas rinks savo modelį"
       },
       "systemPrompt": {
-        "createNew": "➕ sukurti naują raginį…",
+        "createNew": "sukurti naują raginį…",
         "promptName": {
           "name": "Raginio pavadinimas",
           "desc": "Rodomas naujo sistemos raginio pavadinimas"
@@ -1381,7 +1381,7 @@
         "tools": "Įrankiai",
         "logs": "Žurnalai"
       },
-      "refreshBtn": "🔄 atnaujinti",
+      "refreshBtn": "atnaujinti",
       "connections": {
         "title": "MCP serverio ryšiai",
         "noServers": "Nesukonfigūruoti MCP serveriai.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Vykdyti įrankį",
         "clearBtn": "Išvalyti rezultatus",
         "executing": "Vykdoma...",
-        "success": "✅ vykdymas sėkmingas",
-        "failed": "❌ vykdymas nepavyko",
-        "errorTitle": "❌ vykdymo klaida",
+        "success": "vykdymas sėkmingas",
+        "failed": "vykdymas nepavyko",
+        "errorTitle": "vykdymo klaida",
         "errorLabel": "Klaida: {{message}}",
         "notices": {
           "success": "Įrankis sėkmingai įvykdytas",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Nesukonfigūruoti MCP serveriai",
-        "testing": "🧪 Tikrinami {{count}} MCP serverio ryšiai...",
-        "allSuccess": "✅ visi {{count}} MCP serveriai sėkmingai prijungti!",
-        "partial": "⚠️ {{success}} prijungta, {{failed}} nepavyko"
+        "noServers": "Nesukonfigūruoti MCP serveriai",
+        "testing": "Tikrinami {{count}} MCP serverio ryšiai...",
+        "allSuccess": "visi {{count}} MCP serveriai sėkmingai prijungti!",
+        "partial": "{{success}} prijungta, {{failed}} nepavyko"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Valdyti Ollama modelius",
       "serverInfo": "Serverio informacija",
       "checkingServer": "Tikrinamas serveris...",
-      "serverOnline": "✅ Serveris prisijungęs",
+      "serverOnline": "Serveris prisijungęs",
       "versionLabel": " | Versija: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Serveris neprisijungęs",
-      "connectionError": "❌ Ryšio klaida",
+      "serverOffline": "Serveris neprisijungęs",
+      "connectionError": "Ryšio klaida",
       "pullTitle": "Parsisiųsti naują modelį",
       "pullHint": "Įveskite modelio pavadinimą, kad parsisiųstumėte iš Ollama bibliotekos (pvz., llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Parsisiųsti modelį",
       "installedTitle": "Įdiegti modeliai",
-      "refreshList": "🔄 Atnaujinti sąrašą",
+      "refreshList": "Atnaujinti sąrašą",
       "noModels": "Nerasta modelių. Parsisiųskite modelį, kad pradėtumėte.",
       "capabilities": "Galimybės: {{caps}}",
       "deleteBtn": "Ištrinti",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Įveskite modelio pavadinimą",
         "pulling": "Parsisiunčiama {{name}}... Tai gali užtrukti.",
-        "pullSuccess": "✅ Sėkmingai parsisiųsta {{name}}",
-        "pullFailed": "❌ Nepavyko parsisiųsti modelio: {{message}}",
-        "deleted": "✅ Ištrinta {{name}}",
-        "deleteFailed": "❌ Nepavyko ištrinti modelio: {{message}}",
+        "pullSuccess": "Sėkmingai parsisiųsta {{name}}",
+        "pullFailed": "Nepavyko parsisiųsti modelio: {{message}}",
+        "deleted": "Ištrinta {{name}}",
+        "deleteFailed": "Nepavyko ištrinti modelio: {{message}}",
         "refreshing": "Atnaujinama...",
-        "refreshSuccess": "✅ Modelių sąrašas atnaujintas",
-        "refreshFailed": "❌ Nepavyko atnaujinti modelių sąrašo"
+        "refreshSuccess": "Modelių sąrašas atnaujintas",
+        "refreshFailed": "Nepavyko atnaujinti modelių sąrašo"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Apdorojama...",
       "error": "Klaida rodant paaiškinimą",
-      "errorPrefix": "❌ Klaida: "
+      "errorPrefix": "Klaida:"
     }
   },
   "notices": {

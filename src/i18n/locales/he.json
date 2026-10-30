@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "סטטוס הגדרות",
         "desc": "סטטוס הגדרות התוסף הכולל",
-        "ok": "✅ מוגדר ({{providers}} ספקים, {{conversations}} שיחות)",
-        "incomplete": "⚠️ לא שלם - אנא הגדר ספקים ומודלים"
+        "ok": "מוגדר ({{providers}} ספקים, {{conversations}} שיחות)",
+        "incomplete": "לא שלם - אנא הגדר ספקים ומודלים"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} ספק מוגדר",
       "providerCount_other": "{{count}} ספקים מוגדרים",
       "providerCount": "{{count}} ספקים מוגדרים",
-      "refreshAll": "🔄 רענן את כל המודלים",
+      "refreshAll": "רענן את כל המודלים",
       "empty": "אין ספקים מוגדרים עדיין. הוסף ספקים בלשונית הספקים תחילה.",
       "noModels": "אין מודלים זמינים. לחץ על \"רענן את כל המודלים\" או רענן ספקים בנפרד בלשונית הספקים.",
       "noMatch": "אין מודלים התואמים למסננים הנוכחיים. התאם או נקה מסננים כדי לראות תוצאות.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ אזהרת אבטחה",
+      "securityTitle": "אזהרת אבטחה",
       "securityDesc": "מפתחות API מאוחסנים כטקסט רגיל בכספת שלך לצורך תאימות. למניעת דליפות מקריות:",
       "securityItem1": "אל תשתף את תיקיית {{configDir}}/plugins/intelligence-assistant/data/.",
       "securityItem2": "הוסף תיקייה זו ל-.gitignore אם אתה משתמש בסנכרון Git.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "הגדר שרתי Model Context Protocol (MCP) להרחבת יכולות הסוכן עם כלים ומקורות נתונים חיצוניים.",
-      "inspectorBtn": "🔍 פתח בודק MCP",
-      "testAllBtn": "🧪 בדוק את כל החיבורים",
-      "refreshAllBtn": "🔄 רענן את כל הכלים",
+      "inspectorBtn": "פתח בודק MCP",
+      "testAllBtn": "בדוק את כל החיבורים",
+      "refreshAllBtn": "רענן את כל הכלים",
       "addBtn": "+ הוסף שרת MCP",
       "empty": "אין שרתי MCP מוגדרים. בחר הוסף שרת MCP כדי להתחיל.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "ערוך",
-        "enabled": "✓ פעיל",
-        "enabledOff": "✗ מושבת",
+        "enabled": "פעיל",
+        "enabledOff": "מושבת",
         "connect": "התחבר",
         "disconnect": "התנתק",
         "connecting": "מתחבר...",
@@ -226,17 +226,17 @@
         "enableFirst": "הפעל את השרת לפני ההתחברות",
         "disconnectFailed": "נכשל בניתוק מ-{{name}}",
         "connectFailed": "נכשל בהתחברות ל-{{name}}",
-        "testNoCommand": "❌ אנא הזן פקודה לפני בדיקת החיבור",
-        "testSuccess": "✅ התחבר בהצלחה! נמצאו {{count}} כלים.",
-        "testFailed": "❌ החיבור נכשל: {{message}}",
-        "refreshedAll_one": "✅ רועננו כלים עבור {{count}} שרת",
-        "refreshedAll_other": "✅ רועננו כלים עבור {{count}} שרתים",
-        "refreshedAll": "✅ רועננו כלים עבור {{count}} שרתים",
-        "refreshedPartial": "✅ רועננו {{success}} שרתים, ❌ {{failed}} נכשלו",
-        "noServersConfigured": "⚠️ אין שרתי MCP מוגדרים",
-        "testingAll": "🧪 בודק {{count}} חיבורי שרת MCP...",
-        "testAllSuccess": "✅ כל {{count}} שרתי mcp התחברו בהצלחה!",
-        "testAllPartial": "⚠️ {{successful}} התחברו, {{failed}} נכשלו"
+        "testNoCommand": "אנא הזן פקודה לפני בדיקת החיבור",
+        "testSuccess": "התחבר בהצלחה! נמצאו {{count}} כלים.",
+        "testFailed": "החיבור נכשל: {{message}}",
+        "refreshedAll_one": "רועננו כלים עבור {{count}} שרת",
+        "refreshedAll_other": "רועננו כלים עבור {{count}} שרתים",
+        "refreshedAll": "רועננו כלים עבור {{count}} שרתים",
+        "refreshedPartial": "רועננו {{success}} שרתים, {{failed}} נכשלו",
+        "noServersConfigured": "אין שרתי MCP מוגדרים",
+        "testingAll": "בודק {{count}} חיבורי שרת MCP...",
+        "testAllSuccess": "כל {{count}} שרתי mcp התחברו בהצלחה!",
+        "testAllPartial": "{{successful}} התחברו, {{failed}} נכשלו"
       },
       "confirm": {
         "delete": "מחק שרת MCP \"{{name}}\"?"
@@ -362,7 +362,7 @@
             "params": "path (נדרש), content (נדרש): נתיב פתק ותוכן להוספה"
           }
         },
-        "infoTitle": "💡 אודות כלים",
+        "infoTitle": "אודות כלים",
         "infoText": "כלים מובנים מוגדרים לפי הגדרות התוסף. כלי MCP מנוהלים באופן עצמאי — השתמש בלשונית MCP לחיבור שרתים ורענון זמינות הכלים.",
         "toolNames": {
           "read_file": "קרא קובץ",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "כלי CLI הוסר"
         },
-        "infoTitle": "💡 אודות כלי CLI",
+        "infoTitle": "אודות כלי CLI",
         "infoText": "כלי CLI מפעילים פקודות מעטפת מקומית. השתמש ב-{{paramName}} בארגומנטים להחלפת תבנית, או הגדר פרמטרים להעברה כארגומנטים או משתני סביבה.",
         "modal": {
           "defaultTitle": "כלי CLI",
@@ -663,7 +663,7 @@
           "avgChunkSize": "גודל פיסה ממוצע"
         },
         "empty": "האינדקס ריק. בחר בנה מחדש אינדקס כדי להתחיל אינדוקס.",
-        "error": "⚠️ לא ניתן לטעון סטטיסטיקות אינדקס",
+        "error": "לא ניתן לטעון סטטיסטיקות אינדקס",
         "rebuild": {
           "name": "בנה מחדש אינדקס",
           "desc": "אנדקס מחדש את כל הקבצים בכספת שלך. זה עשוי לקחת זמן.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "סטטיסטיקות RAG",
-      "totalChunks": "📊 סך פיסות:",
-      "filesIndexed": "📁 קבצים מאונדקסים:",
-      "totalSize": "💾 גודל כולל:",
-      "avgChunks": "📈 ממוצע פיסות/קובץ:",
-      "indexedFiles": "📄 קבצים מאונדקסים",
-      "noFilesYet": "⚠️ לא אונדקסו קבצים עדיין.",
+      "totalChunks": "סך פיסות:",
+      "filesIndexed": "קבצים מאונדקסים:",
+      "totalSize": "גודל כולל:",
+      "avgChunks": "ממוצע פיסות/קובץ:",
+      "indexedFiles": "קבצים מאונדקסים",
+      "noFilesYet": "לא אונדקסו קבצים עדיין.",
       "howToBuild": "לבניית אינדקס ה-RAG:",
       "step1": "לך להגדרות ← RAG",
       "step2": "הפעל RAG",
       "step3": "בחר אינדקס כספת",
       "close": "סגור",
-      "retrieved_one": "📚 נאחזר מ-{{count}} מסמך",
-      "retrieved_other": "📚 נאחזר מ-{{count}} מסמכים",
-      "retrieved": "📚 נאחזר מ-{{count}} מסמכים"
+      "retrieved_one": "נאחזר מ-{{count}} מסמך",
+      "retrieved_other": "נאחזר מ-{{count}} מסמכים",
+      "retrieved": "נאחזר מ-{{count}} מסמכים"
     },
     "ragTooltip": {
       "status": "סטטוס אינדקס RAG:",
-      "totalChunks": "📊 סך פיסות: {{count}}",
-      "filesIndexed": "📁 קבצים מאונדקסים: {{count}}",
-      "totalSize": "💾 גודל כולל: {{size}} KB",
-      "indexedFiles": "📄 קבצים מאונדקסים:",
+      "totalChunks": "סך פיסות: {{count}}",
+      "filesIndexed": "קבצים מאונדקסים: {{count}}",
+      "totalSize": "גודל כולל: {{size}} KB",
+      "indexedFiles": "קבצים מאונדקסים:",
       "andMore": "  ... ו-{{count}} נוספים",
-      "noFilesYet": "⚠️ לא אונדקסו קבצים עדיין.",
+      "noFilesYet": "לא אונדקסו קבצים עדיין.",
       "goToSettings": "לך להגדרות ← RAG לבניית האינדקס.",
       "ragOff": "ℹ️ RAG כבוי כרגע לשיחה זו."
     },
@@ -1252,7 +1252,7 @@
         "desc": "בחר כיצד הסוכן יבחר את המודל שלו"
       },
       "systemPrompt": {
-        "createNew": "➕ צור הנחייה חדשה…",
+        "createNew": "צור הנחייה חדשה…",
         "promptName": {
           "name": "שם הנחייה",
           "desc": "שם תצוגה עבור הנחיית המערכת החדשה"
@@ -1381,7 +1381,7 @@
         "tools": "כלים",
         "logs": "יומנים"
       },
-      "refreshBtn": "🔄 רענן",
+      "refreshBtn": "רענן",
       "connections": {
         "title": "חיבורי שרת MCP",
         "noServers": "אין שרתי MCP מוגדרים.",
@@ -1443,9 +1443,9 @@
         "performBtn": "הפעל כלי",
         "clearBtn": "נקה תוצאות",
         "executing": "מפעיל...",
-        "success": "✅ הפעלה הצליחה",
-        "failed": "❌ הפעלה נכשלה",
-        "errorTitle": "❌ שגיאת הפעלה",
+        "success": "הפעלה הצליחה",
+        "failed": "הפעלה נכשלה",
+        "errorTitle": "שגיאת הפעלה",
         "errorLabel": "שגיאה: {{message}}",
         "notices": {
           "success": "הכלי הופעל בהצלחה",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ אין שרתי MCP מוגדרים",
-        "testing": "🧪 בודק {{count}} חיבורי שרת MCP...",
-        "allSuccess": "✅ כל {{count}} שרתי mcp התחברו בהצלחה!",
-        "partial": "⚠️ {{success}} התחברו, {{failed}} נכשלו"
+        "noServers": "אין שרתי MCP מוגדרים",
+        "testing": "בודק {{count}} חיבורי שרת MCP...",
+        "allSuccess": "כל {{count}} שרתי mcp התחברו בהצלחה!",
+        "partial": "{{success}} התחברו, {{failed}} נכשלו"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "נהל מודלי Ollama",
       "serverInfo": "מידע שרת",
       "checkingServer": "בודק שרת...",
-      "serverOnline": "✅ שרת מקוון",
+      "serverOnline": "שרת מקוון",
       "versionLabel": " | גרסה: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ שרת לא מקוון",
-      "connectionError": "❌ שגיאת חיבור",
+      "serverOffline": "שרת לא מקוון",
+      "connectionError": "שגיאת חיבור",
       "pullTitle": "משוך מודל חדש",
       "pullHint": "הזן שם מודל להורדה מספריית Ollama (למשל, llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "משוך מודל",
       "installedTitle": "מודלים מותקנים",
-      "refreshList": "🔄 רענן רשימה",
+      "refreshList": "רענן רשימה",
       "noModels": "לא נמצאו מודלים. משוך מודל כדי להתחיל.",
       "capabilities": "יכולות: {{caps}}",
       "deleteBtn": "מחק",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "אנא הזן שם מודל",
         "pulling": "מושך {{name}}... זה עשוי לקחת זמן.",
-        "pullSuccess": "✅ {{name}} נמשך בהצלחה",
-        "pullFailed": "❌ נכשל במשיכת מודל: {{message}}",
-        "deleted": "✅ {{name}} נמחק",
-        "deleteFailed": "❌ נכשל במחיקת מודל: {{message}}",
+        "pullSuccess": "{{name}} נמשך בהצלחה",
+        "pullFailed": "נכשל במשיכת מודל: {{message}}",
+        "deleted": "{{name}} נמחק",
+        "deleteFailed": "נכשל במחיקת מודל: {{message}}",
         "refreshing": "מרענן...",
-        "refreshSuccess": "✅ רשימת מודלים רועננה",
-        "refreshFailed": "❌ נכשל בריענון רשימת מודלים"
+        "refreshSuccess": "רשימת מודלים רועננה",
+        "refreshFailed": "נכשל בריענון רשימת מודלים"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ מעבד...",
       "error": "שגיאה בעיבוד הסבר",
-      "errorPrefix": "❌ שגיאה: "
+      "errorPrefix": "שגיאה:"
     }
   },
   "notices": {

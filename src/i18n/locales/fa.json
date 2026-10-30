@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "وضعیت پیکربندی",
         "desc": "وضعیت کلی پیکربندی افزونه",
-        "ok": "✅ پیکربندی شده ({{providers}} ارائه‌دهنده، {{conversations}} مکالمه)",
-        "incomplete": "⚠️ ناقص - لطفاً ارائه‌دهندگان و مدل‌ها را پیکربندی کنید"
+        "ok": "پیکربندی شده ({{providers}} ارائه‌دهنده، {{conversations}} مکالمه)",
+        "incomplete": "ناقص - لطفاً ارائه‌دهندگان و مدل‌ها را پیکربندی کنید"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} ارائه‌دهنده پیکربندی شده",
       "providerCount_other": "{{count}} ارائه‌دهنده پیکربندی شده",
       "providerCount": "{{count}} ارائه‌دهنده پیکربندی شده",
-      "refreshAll": "🔄 بازخوانی همه مدل‌ها",
+      "refreshAll": "بازخوانی همه مدل‌ها",
       "empty": "هنوز ارائه‌دهنده‌ای پیکربندی نشده. ابتدا در تب ارائه‌دهندگان ارائه‌دهنده اضافه کنید.",
       "noModels": "مدلی در دسترس نیست. روی «بازخوانی همه مدل‌ها» کلیک کنید یا ارائه‌دهندگان منفرد را در تب ارائه‌دهندگان بازخوانی کنید.",
       "noMatch": "هیچ مدلی با فیلترهای فعلی مطابقت ندارد. فیلترها را تنظیم کرده یا پاک کنید تا نتایج نمایش داده شود.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ هشدار امنیتی",
+      "securityTitle": "هشدار امنیتی",
       "securityDesc": "کلیدهای API برای سازگاری به صورت متن ساده در vault شما ذخیره می‌شوند. برای جلوگیری از نشت تصادفی:",
       "securityItem1": "پوشه {{configDir}}/plugins/intelligence-assistant/data/ را به اشتراک نگذارید.",
       "securityItem2": "اگر از همگام‌سازی Git استفاده می‌کنید، این پوشه را به .gitignore اضافه کنید.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "سرورهای Model Context Protocol (MCP) را برای گسترش قابلیت‌های عامل با ابزارها و منابع داده خارجی پیکربندی کنید.",
-      "inspectorBtn": "🔍 باز کردن بازرس MCP",
-      "testAllBtn": "🧪 آزمایش همه اتصالات",
-      "refreshAllBtn": "🔄 بازخوانی همه ابزارها",
+      "inspectorBtn": "باز کردن بازرس MCP",
+      "testAllBtn": "آزمایش همه اتصالات",
+      "refreshAllBtn": "بازخوانی همه ابزارها",
       "addBtn": "+ افزودن سرور MCP",
       "empty": "هیچ سرور MCP پیکربندی نشده. افزودن سرور MCP را انتخاب کنید تا شروع کنید.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "ویرایش",
-        "enabled": "✓ فعال",
-        "enabledOff": "✗ غیرفعال",
+        "enabled": "فعال",
+        "enabledOff": "غیرفعال",
         "connect": "اتصال",
         "disconnect": "قطع اتصال",
         "connecting": "در حال اتصال...",
@@ -226,17 +226,17 @@
         "enableFirst": "قبل از اتصال سرور را فعال کنید",
         "disconnectFailed": "قطع اتصال از {{name}} ناموفق بود",
         "connectFailed": "اتصال به {{name}} ناموفق بود",
-        "testNoCommand": "❌ لطفاً قبل از آزمایش اتصال یک دستور وارد کنید",
-        "testSuccess": "✅ با موفقیت متصل شد! {{count}} ابزار پیدا شد.",
-        "testFailed": "❌ اتصال ناموفق بود: {{message}}",
-        "refreshedAll_one": "✅ ابزارها برای {{count}} سرور بازخوانی شدند",
-        "refreshedAll_other": "✅ ابزارها برای {{count}} سرور بازخوانی شدند",
-        "refreshedAll": "✅ ابزارها برای {{count}} سرور بازخوانی شدند",
-        "refreshedPartial": "✅ {{success}} سرور بازخوانی شد، ❌ {{failed}} ناموفق",
-        "noServersConfigured": "⚠️ هیچ سرور MCP پیکربندی نشده",
-        "testingAll": "🧪 آزمایش {{count}} اتصال سرور MCP...",
-        "testAllSuccess": "✅ همه {{count}} سرور mcp با موفقیت متصل شدند!",
-        "testAllPartial": "⚠️ {{successful}} متصل شدند، {{failed}} ناموفق"
+        "testNoCommand": "لطفاً قبل از آزمایش اتصال یک دستور وارد کنید",
+        "testSuccess": "با موفقیت متصل شد! {{count}} ابزار پیدا شد.",
+        "testFailed": "اتصال ناموفق بود: {{message}}",
+        "refreshedAll_one": "ابزارها برای {{count}} سرور بازخوانی شدند",
+        "refreshedAll_other": "ابزارها برای {{count}} سرور بازخوانی شدند",
+        "refreshedAll": "ابزارها برای {{count}} سرور بازخوانی شدند",
+        "refreshedPartial": "{{success}} سرور بازخوانی شد، {{failed}} ناموفق",
+        "noServersConfigured": "هیچ سرور MCP پیکربندی نشده",
+        "testingAll": "آزمایش {{count}} اتصال سرور MCP...",
+        "testAllSuccess": "همه {{count}} سرور mcp با موفقیت متصل شدند!",
+        "testAllPartial": "{{successful}} متصل شدند، {{failed}} ناموفق"
       },
       "confirm": {
         "delete": "حذف سرور MCP «{{name}}»؟"
@@ -362,7 +362,7 @@
             "params": "path (الزامی), content (الزامی): مسیر یادداشت و محتوا برای اضافه کردن"
           }
         },
-        "infoTitle": "💡 درباره ابزارها",
+        "infoTitle": "درباره ابزارها",
         "infoText": "ابزارهای داخلی بر اساس تنظیمات افزونه پیکربندی می‌شوند. ابزارهای MCP به طور مستقل مدیریت می‌شوند - از تب MCP برای اتصال سرورها و بازخوانی در دسترس بودن ابزارها استفاده کنید.",
         "toolNames": {
           "read_file": "خواندن فایل",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "ابزار CLI حذف شد"
         },
-        "infoTitle": "💡 درباره ابزارهای CLI",
+        "infoTitle": "درباره ابزارهای CLI",
         "infoText": "ابزارهای CLI دستورات shell را به صورت محلی اجرا می‌کنند. از {{paramName}} در آرگومان‌ها برای جایگزینی الگو استفاده کنید، یا پارامترها را برای انتقال به عنوان آرگومان یا متغیرهای محیطی پیکربندی کنید.",
         "modal": {
           "defaultTitle": "ابزار CLI",
@@ -663,7 +663,7 @@
           "avgChunkSize": "میانگین اندازه بخش"
         },
         "empty": "فهرست خالی است. برای شروع فهرست‌بندی، بازسازی فهرست را انتخاب کنید.",
-        "error": "⚠️ بارگذاری آمار فهرست ناموفق بود",
+        "error": "بارگذاری آمار فهرست ناموفق بود",
         "rebuild": {
           "name": "بازسازی فهرست",
           "desc": "همه فایل‌های vault شما را مجدداً فهرست‌بندی کنید. ممکن است کمی طول بکشد.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "آمار RAG",
-      "totalChunks": "📊 کل بخش‌ها:",
-      "filesIndexed": "📁 فایل‌های فهرست‌بندی شده:",
-      "totalSize": "💾 اندازه کل:",
-      "avgChunks": "📈 میانگین بخش‌ها/فایل:",
-      "indexedFiles": "📄 فایل‌های فهرست‌بندی شده",
-      "noFilesYet": "⚠️ هنوز هیچ فایلی فهرست‌بندی نشده.",
+      "totalChunks": "کل بخش‌ها:",
+      "filesIndexed": "فایل‌های فهرست‌بندی شده:",
+      "totalSize": "اندازه کل:",
+      "avgChunks": "میانگین بخش‌ها/فایل:",
+      "indexedFiles": "فایل‌های فهرست‌بندی شده",
+      "noFilesYet": "هنوز هیچ فایلی فهرست‌بندی نشده.",
       "howToBuild": "برای ساخت فهرست RAG:",
       "step1": "به تنظیمات ← RAG بروید",
       "step2": "RAG را فعال کنید",
       "step3": "فهرست vault را انتخاب کنید",
       "close": "بستن",
-      "retrieved_one": "📚 از {{count}} سند بازیابی شد",
-      "retrieved_other": "📚 از {{count}} سند بازیابی شد",
-      "retrieved": "📚 از {{count}} سند بازیابی شد"
+      "retrieved_one": "از {{count}} سند بازیابی شد",
+      "retrieved_other": "از {{count}} سند بازیابی شد",
+      "retrieved": "از {{count}} سند بازیابی شد"
     },
     "ragTooltip": {
       "status": "وضعیت فهرست RAG:",
-      "totalChunks": "📊 کل بخش‌ها: {{count}}",
-      "filesIndexed": "📁 فایل‌های فهرست‌بندی شده: {{count}}",
-      "totalSize": "💾 اندازه کل: {{size}} KB",
-      "indexedFiles": "📄 فایل‌های فهرست‌بندی شده:",
+      "totalChunks": "کل بخش‌ها: {{count}}",
+      "filesIndexed": "فایل‌های فهرست‌بندی شده: {{count}}",
+      "totalSize": "اندازه کل: {{size}} KB",
+      "indexedFiles": "فایل‌های فهرست‌بندی شده:",
       "andMore": "  ... و {{count}} بیشتر",
-      "noFilesYet": "⚠️ هنوز هیچ فایلی فهرست‌بندی نشده.",
+      "noFilesYet": "هنوز هیچ فایلی فهرست‌بندی نشده.",
       "goToSettings": "برای ساخت فهرست به تنظیمات ← RAG بروید.",
       "ragOff": "ℹ️ RAG در حال حاضر برای این گفتگو خاموش است."
     },
@@ -1252,7 +1252,7 @@
         "desc": "نحوه انتخاب مدل توسط عامل را انتخاب کنید"
       },
       "systemPrompt": {
-        "createNew": "➕ ایجاد دستورالعمل جدید…",
+        "createNew": "ایجاد دستورالعمل جدید…",
         "promptName": {
           "name": "نام دستورالعمل",
           "desc": "نام نمایشی برای دستورالعمل سیستم جدید"
@@ -1381,7 +1381,7 @@
         "tools": "ابزارها",
         "logs": "گزارش‌ها"
       },
-      "refreshBtn": "🔄 بازخوانی",
+      "refreshBtn": "بازخوانی",
       "connections": {
         "title": "اتصالات سرور MCP",
         "noServers": "هیچ سرور MCP پیکربندی نشده.",
@@ -1443,9 +1443,9 @@
         "performBtn": "اجرای ابزار",
         "clearBtn": "پاک کردن نتایج",
         "executing": "در حال اجرا...",
-        "success": "✅ اجرا موفق بود",
-        "failed": "❌ اجرا ناموفق بود",
-        "errorTitle": "❌ خطای اجرا",
+        "success": "اجرا موفق بود",
+        "failed": "اجرا ناموفق بود",
+        "errorTitle": "خطای اجرا",
         "errorLabel": "خطا: {{message}}",
         "notices": {
           "success": "ابزار با موفقیت اجرا شد",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ هیچ سرور MCP پیکربندی نشده",
-        "testing": "🧪 آزمایش {{count}} اتصال سرور MCP...",
-        "allSuccess": "✅ همه {{count}} سرور mcp با موفقیت متصل شدند!",
-        "partial": "⚠️ {{success}} متصل شدند، {{failed}} ناموفق"
+        "noServers": "هیچ سرور MCP پیکربندی نشده",
+        "testing": "آزمایش {{count}} اتصال سرور MCP...",
+        "allSuccess": "همه {{count}} سرور mcp با موفقیت متصل شدند!",
+        "partial": "{{success}} متصل شدند، {{failed}} ناموفق"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "مدیریت مدل‌های Ollama",
       "serverInfo": "اطلاعات سرور",
       "checkingServer": "در حال بررسی سرور...",
-      "serverOnline": "✅ سرور آنلاین",
+      "serverOnline": "سرور آنلاین",
       "versionLabel": " | نسخه: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ سرور آفلاین",
-      "connectionError": "❌ خطای اتصال",
+      "serverOffline": "سرور آفلاین",
+      "connectionError": "خطای اتصال",
       "pullTitle": "کشیدن مدل جدید",
       "pullHint": "نام مدلی را برای دانلود از کتابخانه Ollama وارد کنید (مثلاً llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "کشیدن مدل",
       "installedTitle": "مدل‌های نصب شده",
-      "refreshList": "🔄 بازخوانی فهرست",
+      "refreshList": "بازخوانی فهرست",
       "noModels": "هیچ مدلی پیدا نشد. یک مدل بکشید تا شروع کنید.",
       "capabilities": "قابلیت‌ها: {{caps}}",
       "deleteBtn": "حذف",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "لطفاً یک نام مدل وارد کنید",
         "pulling": "در حال کشیدن {{name}}... ممکن است کمی طول بکشد.",
-        "pullSuccess": "✅ {{name}} با موفقیت کشیده شد",
-        "pullFailed": "❌ کشیدن مدل ناموفق بود: {{message}}",
-        "deleted": "✅ {{name}} حذف شد",
-        "deleteFailed": "❌ حذف مدل ناموفق بود: {{message}}",
+        "pullSuccess": "{{name}} با موفقیت کشیده شد",
+        "pullFailed": "کشیدن مدل ناموفق بود: {{message}}",
+        "deleted": "{{name}} حذف شد",
+        "deleteFailed": "حذف مدل ناموفق بود: {{message}}",
         "refreshing": "در حال بازخوانی...",
-        "refreshSuccess": "✅ فهرست مدل‌ها بازخوانی شد",
-        "refreshFailed": "❌ بازخوانی فهرست مدل‌ها ناموفق بود"
+        "refreshSuccess": "فهرست مدل‌ها بازخوانی شد",
+        "refreshFailed": "بازخوانی فهرست مدل‌ها ناموفق بود"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ در حال پردازش...",
       "error": "خطا در رندر توضیح",
-      "errorPrefix": "❌ خطا: "
+      "errorPrefix": "خطا:"
     }
   },
   "notices": {

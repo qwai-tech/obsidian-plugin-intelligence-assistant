@@ -13,6 +13,7 @@ import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import { AgentEditModal } from '@/ui/modals/agent-edit-modal';
 import { DEFAULT_AGENT_ID, DEFAULT_MAX_STEPS } from '@/core/constants';
+import { renderIcon } from '@/ui/utils/icon';
 
 export function displayAgentsTab(
 	containerEl: HTMLElement,
@@ -43,7 +44,7 @@ export function displayAgentsTab(
 			id: `agent-${Date.now()}`,
 			name: 'New Agent',
 			description: 'A helpful AI assistant',
-			icon: '🤖',
+			icon: 'bot',
 			modelStrategy: {
 				strategy: 'default',
 				modelId: plugin.settings.defaultModel || 'gpt-4o'
@@ -143,7 +144,7 @@ export function displayAgentsTab(
 		const titleEl = agentStack.createDiv('ia-table-title');
 		const iconSpan = titleEl.createSpan();
 		iconSpan.addClass('ia-agent-icon');
-		iconSpan.setText(agent.icon || '🤖');
+		renderIcon(iconSpan, agent.icon);
 		titleEl.appendText(agent.name);
 
 		if (agent.id === DEFAULT_AGENT_ID) {

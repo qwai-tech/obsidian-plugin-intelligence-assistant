@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Konfigurazioaren egoera",
         "desc": "Pluginaren konfigurazioaren egoera orokorra",
-        "ok": "✅ Konfiguratuta ({{providers}} hornitzaile, {{conversations}} elkarrizketa)",
-        "incomplete": "⚠️ Osatu gabe - Mesedez, konfiguratu hornitzaileak eta modeloak"
+        "ok": "Konfiguratuta ({{providers}} hornitzaile, {{conversations}} elkarrizketa)",
+        "incomplete": "Osatu gabe - Mesedez, konfiguratu hornitzaileak eta modeloak"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} hornitzaile konfiguratuta",
       "providerCount_other": "{{count}} hornitzaile konfiguratuta",
       "providerCount": "{{count}} hornitzaile konfiguratuta",
-      "refreshAll": "🔄 freskatu modelo guztiak",
+      "refreshAll": "freskatu modelo guztiak",
       "empty": "Oraindik ez dago hornitzailerik konfiguratuta. Gehitu hornitzaileak hornitzaileen fitxan lehenik.",
       "noModels": "Ez dago modelo erabilgarririk. Egin klik \"freskatu modelo guztiak\" edo freskatu hornitzaile indibidualak hornitzaileen fitxan.",
       "noMatch": "Modelo bakar batek ere ez ditu uneko iragazkiak betetzen. Doitu edo garbitu iragazkiak emaitzak ikusteko.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Segurtasun abisua",
+      "securityTitle": "Segurtasun abisua",
       "securityDesc": "API giltzak testu arruntean gordetzen dira zure biltegian bateragarritasuna bermatzeko. Istripuzko filtrazioak saihesteko:",
       "securityItem1": "Ez partekatu {{configDir}}/plugins/intelligence-assistant/data/ karpeta.",
       "securityItem2": "Gehitu karpeta hau zure .gitignore fitxategian Git sinkronizazioa erabiltzen baduzu.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Konfiguratu Model Context Protocol (MCP) zerbitzariak agenteen gaitasunak hedatzen dituzten kanpoko tresnekin eta datu-iturriekin.",
-      "inspectorBtn": "🔍 Ireki MCP ikuskatzailea",
-      "testAllBtn": "🧪 probatu konexio guztiak",
-      "refreshAllBtn": "🔄 freskatu tresna guztiak",
+      "inspectorBtn": "Ireki MCP ikuskatzailea",
+      "testAllBtn": "probatu konexio guztiak",
+      "refreshAllBtn": "freskatu tresna guztiak",
       "addBtn": "+ Gehitu MCP zerbitzaria",
       "empty": "Ez dago MCP zerbitzari konfiguraturik. Hautatu \"Gehitu MCP zerbitzaria\" hasteko.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Editatu",
-        "enabled": "✓ Gaituta",
-        "enabledOff": "✗ Desgaituta",
+        "enabled": "Gaituta",
+        "enabledOff": "Desgaituta",
         "connect": "konektatu",
         "disconnect": "deskonektatu",
         "connecting": "Konektatzen...",
@@ -226,17 +226,17 @@
         "enableFirst": "Gaitu zerbitzaria konektatu aurretik",
         "disconnectFailed": "Ezin izan da {{name}}-tik deskonektatu",
         "connectFailed": "Ezin izan da {{name}}-ra konektatu",
-        "testNoCommand": "❌ mesedez, sartu komando bat konexioa probatu aurretik",
-        "testSuccess": "✅ behar bezala konektatuta! {{count}} tresna aurkitu dira.",
-        "testFailed": "❌ Konexioak huts egin du: {{message}}",
-        "refreshedAll_one": "✅ {{count}} zerbitzariren tresnak freskatu dira",
-        "refreshedAll_other": "✅ {{count}} zerbitzariren tresnak freskatu dira",
-        "refreshedAll": "✅ {{count}} zerbitzariren tresnak freskatu dira",
-        "refreshedPartial": "✅ {{success}} zerbitzari freskatuta, ❌ {{failed}} huts",
-        "noServersConfigured": "⚠️ Ez dago MCP zerbitzari konfiguraturik",
-        "testingAll": "🧪 {{count}} MCP zerbitzarien konexioak probatzen...",
-        "testAllSuccess": "✅ {{count}} mcp zerbitzari guztiak behar bezala konektatu dira!",
-        "testAllPartial": "⚠️ {{success}} konektatuta, {{failed}} huts"
+        "testNoCommand": "mesedez, sartu komando bat konexioa probatu aurretik",
+        "testSuccess": "behar bezala konektatuta! {{count}} tresna aurkitu dira.",
+        "testFailed": "Konexioak huts egin du: {{message}}",
+        "refreshedAll_one": "{{count}} zerbitzariren tresnak freskatu dira",
+        "refreshedAll_other": "{{count}} zerbitzariren tresnak freskatu dira",
+        "refreshedAll": "{{count}} zerbitzariren tresnak freskatu dira",
+        "refreshedPartial": "{{success}} zerbitzari freskatuta, {{failed}} huts",
+        "noServersConfigured": "Ez dago MCP zerbitzari konfiguraturik",
+        "testingAll": "{{count}} MCP zerbitzarien konexioak probatzen...",
+        "testAllSuccess": "{{count}} mcp zerbitzari guztiak behar bezala konektatu dira!",
+        "testAllPartial": "{{success}} konektatuta, {{failed}} huts"
       },
       "confirm": {
         "delete": "Ezabatu \"{{name}}\" MCP zerbitzaria?"
@@ -362,7 +362,7 @@
             "params": "path (beharrezkoa), content (beharrezkoa): Oharraren bidea eta gehitzeko edukia"
           }
         },
-        "infoTitle": "💡 tresnei buruz",
+        "infoTitle": "tresnei buruz",
         "infoText": "Tresna integratuak plugin-ezarpenen arabera konfiguratzen dira. MCP tresnak modu independentean kudeatzen dira. Erabili MCP fitxa zerbitzariak konektatu eta tresnen erabilgarritasuna freskatzeko.",
         "toolNames": {
           "read_file": "Irakurri Fitxategia",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI tresna kendu da"
         },
-        "infoTitle": "💡 CLI Tresnei buruz",
+        "infoTitle": "CLI Tresnei buruz",
         "infoText": "CLI tresnek komando-lerroko aginduak exekutatzen dituzte lokalean. Erabili {{paramName}} argumentuetan txantiloien ordezkapenerako, edo konfiguratu parametroak argumentu edo ingurune-aldagai gisa pasatzeko.",
         "modal": {
           "defaultTitle": "CLI Tresna",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Zatigunearen Batezbesteko Tamaina"
         },
         "empty": "Indizea hutsik dago. Hautatu \"berreraiki indizea\" indexatzen hasteko.",
-        "error": "⚠️ ezin dira indizearen estatistikak kargatu",
+        "error": "ezin dira indizearen estatistikak kargatu",
         "rebuild": {
           "name": "Berreraiki indizea",
           "desc": "Berrindexatu biltegiko fitxategi guztiak. Denbora bat har dezake.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG estatistikak",
-      "totalChunks": "📊 zatiguneak guztira:",
-      "filesIndexed": "📁 indexatutako fitxategiak:",
-      "totalSize": "💾 tamaina guztira:",
-      "avgChunks": "📈 Zatiguneak/Fitxategia batez beste:",
-      "indexedFiles": "📄 indexatutako fitxategiak",
-      "noFilesYet": "⚠️ oraindik ez da fitxategirik indexatu.",
+      "totalChunks": "zatiguneak guztira:",
+      "filesIndexed": "indexatutako fitxategiak:",
+      "totalSize": "tamaina guztira:",
+      "avgChunks": "Zatiguneak/Fitxategia batez beste:",
+      "indexedFiles": "indexatutako fitxategiak",
+      "noFilesYet": "oraindik ez da fitxategirik indexatu.",
       "howToBuild": "RAG indizea eraikitzeko:",
       "step1": "Joan hona: Ezarpenak → RAG",
       "step2": "Gaitu RAG",
       "step3": "Hautatu indexatze-biltegia",
       "close": "Itxi",
-      "retrieved_one": "📚 {{count}} dokumentutik berreskuratuta",
-      "retrieved_other": "📚 {{count}} dokumentutatik berreskuratuta",
-      "retrieved": "📚 {{count}} dokumentutatik berreskuratuta"
+      "retrieved_one": "{{count}} dokumentutik berreskuratuta",
+      "retrieved_other": "{{count}} dokumentutatik berreskuratuta",
+      "retrieved": "{{count}} dokumentutatik berreskuratuta"
     },
     "ragTooltip": {
       "status": "RAG Indizearen Egoera:",
-      "totalChunks": "📊 Zatiguneak Guztira: {{count}}",
-      "filesIndexed": "📁 Indexatutako Fitxategiak: {{count}}",
-      "totalSize": "💾 Tamaina Guztira: {{size}} KB",
-      "indexedFiles": "📄 indexatutako fitxategiak:",
+      "totalChunks": "Zatiguneak Guztira: {{count}}",
+      "filesIndexed": "Indexatutako Fitxategiak: {{count}}",
+      "totalSize": "Tamaina Guztira: {{size}} KB",
+      "indexedFiles": "indexatutako fitxategiak:",
       "andMore": "  ... eta {{count}} gehiago",
-      "noFilesYet": "⚠️ oraindik ez da fitxategirik indexatu.",
+      "noFilesYet": "oraindik ez da fitxategirik indexatu.",
       "goToSettings": "Joan hona: Ezarpenak → RAG indizea eraikitzeko.",
       "ragOff": "ℹ️ RAG une honetan itzalita dago txat honetarako."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Aukeratu nola hautatuko duen agenteak bere modeloa"
       },
       "systemPrompt": {
-        "createNew": "➕ sortu prompt berria...",
+        "createNew": "sortu prompt berria...",
         "promptName": {
           "name": "Prompt-aren izena",
           "desc": "Prompt berriaren erakusteko izena"
@@ -1381,7 +1381,7 @@
         "tools": "Tresnak",
         "logs": "Erregistroak"
       },
-      "refreshBtn": "🔄 freskatu",
+      "refreshBtn": "freskatu",
       "connections": {
         "title": "MCP zerbitzarien konexioak",
         "noServers": "Ez dago MCP zerbitzari konfiguraturik.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Exekutatu tresna",
         "clearBtn": "Garbitu emaitzak",
         "executing": "Exekutatzen...",
-        "success": "✅ exekuzioa arrakastatsua",
-        "failed": "❌ exekuzioak huts egin du",
-        "errorTitle": "❌ exekuzio-errorea",
+        "success": "exekuzioa arrakastatsua",
+        "failed": "exekuzioak huts egin du",
+        "errorTitle": "exekuzio-errorea",
         "errorLabel": "Errorea: {{message}}",
         "notices": {
           "success": "Tresna behar bezala exekutatu da",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Ez dago MCP zerbitzari konfiguraturik",
-        "testing": "🧪 {{count}} MCP zerbitzarien konexioak probatzen...",
-        "allSuccess": "✅ {{count}} mcp zerbitzari guztiak behar bezala konektatu dira!",
-        "partial": "⚠️ {{success}} konektatuta, {{failed}} huts"
+        "noServers": "Ez dago MCP zerbitzari konfiguraturik",
+        "testing": "{{count}} MCP zerbitzarien konexioak probatzen...",
+        "allSuccess": "{{count}} mcp zerbitzari guztiak behar bezala konektatu dira!",
+        "partial": "{{success}} konektatuta, {{failed}} huts"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Kudeatu Ollama modeloak",
       "serverInfo": "Zerbitzariaren informazioa",
       "checkingServer": "Zerbitzaria egiaztatzen...",
-      "serverOnline": "✅ Zerbitzaria sarean",
+      "serverOnline": "Zerbitzaria sarean",
       "versionLabel": " | Bertsioa: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Zerbitzaria lineaz kanpo",
-      "connectionError": "❌ Konexio-errorea",
+      "serverOffline": "Zerbitzaria lineaz kanpo",
+      "connectionError": "Konexio-errorea",
       "pullTitle": "Bota modelo berria",
       "pullHint": "Sartu modelo-izen bat Ollama liburutegitik deskargatzeko (adibidez, llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Bota modeloa",
       "installedTitle": "Instalatutako modeloak",
-      "refreshList": "🔄 Freskatu zerrenda",
+      "refreshList": "Freskatu zerrenda",
       "noModels": "Ez da modelorik aurkitu. Bota modelo bat hasteko.",
       "capabilities": "Gaitasunak: {{caps}}",
       "deleteBtn": "Ezabatu",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Mesedez, sartu modelo-izen bat",
         "pulling": "{{name}} botatzen... Denbora bat har dezake.",
-        "pullSuccess": "✅ {{name}} behar bezala bota da",
-        "pullFailed": "❌ Ezin izan da modeloa bota: {{message}}",
-        "deleted": "✅ {{name}} ezabatu da",
-        "deleteFailed": "❌ Ezin izan da modeloa ezabatu: {{message}}",
+        "pullSuccess": "{{name}} behar bezala bota da",
+        "pullFailed": "Ezin izan da modeloa bota: {{message}}",
+        "deleted": "{{name}} ezabatu da",
+        "deleteFailed": "Ezin izan da modeloa ezabatu: {{message}}",
         "refreshing": "Freskatzen...",
-        "refreshSuccess": "✅ Modelo-zerrenda freskatu da",
-        "refreshFailed": "❌ Ezin izan da modelo-zerrenda freskatu"
+        "refreshSuccess": "Modelo-zerrenda freskatu da",
+        "refreshFailed": "Ezin izan da modelo-zerrenda freskatu"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Prozesatzen...",
       "error": "Errorea azalpena errendatzean",
-      "errorPrefix": "❌ Errorea: "
+      "errorPrefix": "Errorea:"
     }
   },
   "notices": {

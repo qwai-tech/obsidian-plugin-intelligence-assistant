@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Agordostato",
         "desc": "Ĝenerala agordostato de la kromaĵo",
-        "ok": "✅ Agordita ({{providers}} provizantoj, {{conversations}} konversacioj)",
-        "incomplete": "⚠️ Nekompleta - Bonvolu agordi provizantojn kaj modelojn"
+        "ok": "Agordita ({{providers}} provizantoj, {{conversations}} konversacioj)",
+        "incomplete": "Nekompleta - Bonvolu agordi provizantojn kaj modelojn"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} provizanto agordita",
       "providerCount_other": "{{count}} provizantoj agorditaj",
       "providerCount": "{{count}} provizantoj agorditaj",
-      "refreshAll": "🔄 aktualigi ĉiujn modelojn",
+      "refreshAll": "aktualigi ĉiujn modelojn",
       "empty": "Neniu provizanto agordita ankoraŭ. Unue aldonu provizantojn en la provizanta langeto.",
       "noModels": "Neniuj modeloj disponeblaj. Alklaku \"aktualigi ĉiujn modelojn\" aŭ aktualigu individuajn provizantojn en la provizanta langeto.",
       "noMatch": "Neniu modelo kongruas kun la nunaj filtroj. Alĝustigu aŭ forigu filtrojn por vidi rezultojn.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Sekureca Averto",
+      "securityTitle": "Sekureca Averto",
       "securityDesc": "API-ŝlosiloj estas konservitaj kiel simpla teksto en via arkivo por kongrueco. Por malhelpi hazardan elfluon:",
       "securityItem1": "NE dividu vian dosierujon {{configDir}}/plugins/intelligence-assistant/data/.",
       "securityItem2": "Aldonu ĉi tiun dosierujon al via .gitignore se vi uzas Git-sinkronigon.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Agordu Model Context Protocol (MCP)-servilojn por etendi agentkapablojn per eksteraj iloj kaj datumfontoj.",
-      "inspectorBtn": "🔍 Malfermi MCP-inspektiston",
-      "testAllBtn": "🧪 testi ĉiujn konektojn",
-      "refreshAllBtn": "🔄 aktualigi ĉiujn ilojn",
+      "inspectorBtn": "Malfermi MCP-inspektiston",
+      "testAllBtn": "testi ĉiujn konektojn",
+      "refreshAllBtn": "aktualigi ĉiujn ilojn",
       "addBtn": "+ Aldoni MCP-servilon",
       "empty": "Neniu MCP-servilo agordita. Elektu Aldoni MCP-servilon por komenci.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Redakti",
-        "enabled": "✓ Ebligita",
-        "enabledOff": "✗ Malŝaltita",
+        "enabled": "Ebligita",
+        "enabledOff": "Malŝaltita",
         "connect": "konekti",
         "disconnect": "malkonekti",
         "connecting": "Konektante...",
@@ -226,17 +226,17 @@
         "enableFirst": "Ebligi la servilon antaŭ konektado",
         "disconnectFailed": "Malsukcesis malkonekti de {{name}}",
         "connectFailed": "Malsukcesis konekti al {{name}}",
-        "testNoCommand": "❌ bonvolu enigi komandon antaŭ testi la konekton",
-        "testSuccess": "✅ sukcese konektita! Trovitaj {{count}} iloj.",
-        "testFailed": "❌ Konekto malsukcesis: {{message}}",
-        "refreshedAll_one": "✅ aktualizitaj iloj por {{count}} servilo",
-        "refreshedAll_other": "✅ aktualizitaj iloj por {{count}} serviloj",
-        "refreshedAll": "✅ aktualizitaj iloj por {{count}} serviloj",
-        "refreshedPartial": "✅ aktualizitaj {{success}} serviloj, ❌ {{failed}} malsukcesis",
-        "noServersConfigured": "⚠️ Neniu MCP-servilo agordita",
-        "testingAll": "🧪 Testante {{count}} MCP-servilkonektojn...",
-        "testAllSuccess": "✅ ĉiuj {{count}} MCP-serviloj sukcese konektitaj!",
-        "testAllPartial": "⚠️ {{successful}} konektitaj, {{failed}} malsukcesis"
+        "testNoCommand": "bonvolu enigi komandon antaŭ testi la konekton",
+        "testSuccess": "sukcese konektita! Trovitaj {{count}} iloj.",
+        "testFailed": "Konekto malsukcesis: {{message}}",
+        "refreshedAll_one": "aktualizitaj iloj por {{count}} servilo",
+        "refreshedAll_other": "aktualizitaj iloj por {{count}} serviloj",
+        "refreshedAll": "aktualizitaj iloj por {{count}} serviloj",
+        "refreshedPartial": "aktualizitaj {{success}} serviloj, {{failed}} malsukcesis",
+        "noServersConfigured": "Neniu MCP-servilo agordita",
+        "testingAll": "Testante {{count}} MCP-servilkonektojn...",
+        "testAllSuccess": "ĉiuj {{count}} MCP-serviloj sukcese konektitaj!",
+        "testAllPartial": "{{successful}} konektitaj, {{failed}} malsukcesis"
       },
       "confirm": {
         "delete": "Forigi MCP-servilon \"{{name}}\"?"
@@ -362,7 +362,7 @@
             "params": "vojo (deviga), enhavo (deviga): Nota vojo kaj enhavo por aldoni"
           }
         },
-        "infoTitle": "💡 pri iloj",
+        "infoTitle": "pri iloj",
         "infoText": "Enkonstruitaj iloj estas agordataj laŭ kromaĵaj agordoj. MCP-iloj estas administrataj sendepende — uzu la MCP-langeton por konekti servilojn kaj aktualigi ildisponigeblecon.",
         "toolNames": {
           "read_file": "Legi Dosieron",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI-ilo forigita"
         },
-        "infoTitle": "💡 Pri CLI-Iloj",
+        "infoTitle": "Pri CLI-Iloj",
         "infoText": "CLI-iloj plenumas ŝelokomandojn loke. Uzu {{paramName}} en argumentoj por ŝablona anstataŭo, aŭ agordu parametrojn por esti pasataj kiel argumentoj aŭ mediavariabloj.",
         "modal": {
           "defaultTitle": "CLI-Ilo",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Mezuma Fragmentogrando"
         },
         "empty": "Indekso estas malplena. Elektu rekonstrui indekson por komenci indeksadon.",
-        "error": "⚠️ ne eblas ŝargi indeksajn statistikojn",
+        "error": "ne eblas ŝargi indeksajn statistikojn",
         "rebuild": {
           "name": "Rekonstrui indekson",
           "desc": "Re-indeksi ĉiujn dosierojn en via arkivo. Tio povas daŭri iom.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG-statistikoj",
-      "totalChunks": "📊 entutaj fragmentoj:",
-      "filesIndexed": "📁 dosieroj indeksitaj:",
-      "totalSize": "💾 entuta grandeco:",
-      "avgChunks": "📈 Mezumaj Fragmentoj/Dosiero:",
-      "indexedFiles": "📄 indeksitaj dosieroj",
-      "noFilesYet": "⚠️ neniu dosiero estis indeksita ankoraŭ.",
+      "totalChunks": "entutaj fragmentoj:",
+      "filesIndexed": "dosieroj indeksitaj:",
+      "totalSize": "entuta grandeco:",
+      "avgChunks": "Mezumaj Fragmentoj/Dosiero:",
+      "indexedFiles": "indeksitaj dosieroj",
+      "noFilesYet": "neniu dosiero estis indeksita ankoraŭ.",
       "howToBuild": "Por konstrui la RAG-indekson:",
       "step1": "Iru al Agordoj → RAG",
       "step2": "Ebligi RAG",
       "step3": "Elekti indeksi arkivon",
       "close": "Fermi",
-      "retrieved_one": "📚 retrovita el {{count}} dokumento",
-      "retrieved_other": "📚 retrovita el {{count}} dokumentoj",
-      "retrieved": "📚 retrovita el {{count}} dokumentoj"
+      "retrieved_one": "retrovita el {{count}} dokumento",
+      "retrieved_other": "retrovita el {{count}} dokumentoj",
+      "retrieved": "retrovita el {{count}} dokumentoj"
     },
     "ragTooltip": {
       "status": "RAG-Indeksa Stato:",
-      "totalChunks": "📊 Entutaj Fragmentoj: {{count}}",
-      "filesIndexed": "📁 Dosieroj Indeksitaj: {{count}}",
-      "totalSize": "💾 Entuta Grandeco: {{size}} KB",
-      "indexedFiles": "📄 indeksitaj Dosieroj:",
+      "totalChunks": "Entutaj Fragmentoj: {{count}}",
+      "filesIndexed": "Dosieroj Indeksitaj: {{count}}",
+      "totalSize": "Entuta Grandeco: {{size}} KB",
+      "indexedFiles": "indeksitaj Dosieroj:",
       "andMore": "  ... kaj {{count}} pliaj",
-      "noFilesYet": "⚠️ neniu dosiero indeksita ankoraŭ.",
+      "noFilesYet": "neniu dosiero indeksita ankoraŭ.",
       "goToSettings": "Iru al Agordoj → RAG por konstrui la indekson.",
       "ragOff": "ℹ️ RAG estas nuntempe malŝaltita por ĉi tiu babilo."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Elektu kiel la agento elektos sian modelon"
       },
       "systemPrompt": {
-        "createNew": "➕ krei novan instigilon…",
+        "createNew": "krei novan instigilon…",
         "promptName": {
           "name": "Instigilnomo",
           "desc": "Montrata nomo por la nova sistema instigilo"
@@ -1381,7 +1381,7 @@
         "tools": "Iloj",
         "logs": "Protokoloj"
       },
-      "refreshBtn": "🔄 aktualigi",
+      "refreshBtn": "aktualigi",
       "connections": {
         "title": "MCP-servilkonektoj",
         "noServers": "Neniuj MCP-serviloj agordataj.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Plenumi ilon",
         "clearBtn": "Forigi rezultojn",
         "executing": "Ekzekutante...",
-        "success": "✅ ekzekuto sukcesa",
-        "failed": "❌ ekzekuto malsukcesis",
-        "errorTitle": "❌ ekzekuteraro",
+        "success": "ekzekuto sukcesa",
+        "failed": "ekzekuto malsukcesis",
+        "errorTitle": "ekzekuteraro",
         "errorLabel": "Eraro: {{message}}",
         "notices": {
           "success": "Ilo sukcese ekzekutita",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Neniuj MCP-serviloj agordataj",
-        "testing": "🧪 Testante {{count}} MCP-servilkonektojn...",
-        "allSuccess": "✅ ĉiuj {{count}} MCP-serviloj sukcese konektitaj!",
-        "partial": "⚠️ {{success}} konektitaj, {{failed}} malsukcesis"
+        "noServers": "Neniuj MCP-serviloj agordataj",
+        "testing": "Testante {{count}} MCP-servilkonektojn...",
+        "allSuccess": "ĉiuj {{count}} MCP-serviloj sukcese konektitaj!",
+        "partial": "{{success}} konektitaj, {{failed}} malsukcesis"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Administri Ollama-modelojn",
       "serverInfo": "Servilinformoj",
       "checkingServer": "Kontrolante servilon...",
-      "serverOnline": "✅ Servilo enrete",
+      "serverOnline": "Servilo enrete",
       "versionLabel": " | Versio: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Servilo eksterrete",
-      "connectionError": "❌ Konekteraro",
+      "serverOffline": "Servilo eksterrete",
+      "connectionError": "Konekteraro",
       "pullTitle": "Tiri novan modelon",
       "pullHint": "Enigi modelonomon por elŝuti el la Ollama-biblioteko (ekz., llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Tiri modelon",
       "installedTitle": "Instalitaj modeloj",
-      "refreshList": "🔄 Aktualigi liston",
+      "refreshList": "Aktualigi liston",
       "noModels": "Neniuj modeloj trovitaj. Tiru modelon por komenci.",
       "capabilities": "Kapabloj: {{caps}}",
       "deleteBtn": "Forigi",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Bonvolu enigi modelonomon",
         "pulling": "Tirante {{name}}... Tio povas daŭri iom.",
-        "pullSuccess": "✅ Sukcese tirita {{name}}",
-        "pullFailed": "❌ Malsukcesis tiri modelon: {{message}}",
-        "deleted": "✅ Forigita {{name}}",
-        "deleteFailed": "❌ Malsukcesis forigi modelon: {{message}}",
+        "pullSuccess": "Sukcese tirita {{name}}",
+        "pullFailed": "Malsukcesis tiri modelon: {{message}}",
+        "deleted": "Forigita {{name}}",
+        "deleteFailed": "Malsukcesis forigi modelon: {{message}}",
         "refreshing": "Aktualizante...",
-        "refreshSuccess": "✅ Modellisto aktualizita",
-        "refreshFailed": "❌ Malsukcesis aktualigi modelliston"
+        "refreshSuccess": "Modellisto aktualizita",
+        "refreshFailed": "Malsukcesis aktualigi modelliston"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Pretigante...",
       "error": "Eraro dum renderado de klarigo",
-      "errorPrefix": "❌ Eraro: "
+      "errorPrefix": "Eraro:"
     }
   },
   "notices": {

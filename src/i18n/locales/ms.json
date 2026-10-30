@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Status konfigurasi",
         "desc": "Status konfigurasi pemalam keseluruhan",
-        "ok": "✅ Dikonfigurasi ({{providers}} pembekal, {{conversations}} perbualan)",
-        "incomplete": "⚠️ Tidak lengkap - Sila konfigurasikan pembekal dan model"
+        "ok": "Dikonfigurasi ({{providers}} pembekal, {{conversations}} perbualan)",
+        "incomplete": "Tidak lengkap - Sila konfigurasikan pembekal dan model"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} pembekal dikonfigurasi",
       "providerCount_other": "{{count}} pembekal dikonfigurasi",
       "providerCount": "{{count}} pembekal dikonfigurasi",
-      "refreshAll": "🔄 segarkan semua model",
+      "refreshAll": "segarkan semua model",
       "empty": "Tiada pembekal dikonfigurasi lagi. Tambah pembekal dalam tab pembekal terlebih dahulu.",
       "noModels": "Tiada model tersedia. Klik \"segarkan semua model\" atau segarkan pembekal individu dalam tab pembekal.",
       "noMatch": "Tiada model sepadan dengan penapis semasa. Laraskan atau kosongkan penapis untuk melihat keputusan.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Amaran Keselamatan",
+      "securityTitle": "Amaran Keselamatan",
       "securityDesc": "Kunci API disimpan sebagai teks biasa dalam vault anda untuk keserasian. Untuk mencegah kebocoran tidak sengaja:",
       "securityItem1": "JANGAN kongsi folder {{configDir}}/plugins/intelligence-assistant/data/ anda.",
       "securityItem2": "Tambah folder ini ke .gitignore jika anda menggunakan penyegerakan Git.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Konfigurasikan pelayan Model Context Protocol (MCP) untuk meluaskan keupayaan ejen dengan alat dan sumber data luaran.",
-      "inspectorBtn": "🔍 Buka pemeriksa MCP",
-      "testAllBtn": "🧪 uji semua sambungan",
-      "refreshAllBtn": "🔄 segarkan semua alat",
+      "inspectorBtn": "Buka pemeriksa MCP",
+      "testAllBtn": "uji semua sambungan",
+      "refreshAllBtn": "segarkan semua alat",
       "addBtn": "+ Tambah pelayan MCP",
       "empty": "Tiada pelayan MCP dikonfigurasi. Pilih Tambah pelayan MCP untuk bermula.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Edit",
-        "enabled": "✓ Aktif",
-        "enabledOff": "✗ Tidak aktif",
+        "enabled": "Aktif",
+        "enabledOff": "Tidak aktif",
         "connect": "sambung",
         "disconnect": "putus",
         "connecting": "Menyambung...",
@@ -226,17 +226,17 @@
         "enableFirst": "Aktifkan pelayan sebelum menyambung",
         "disconnectFailed": "Gagal memutuskan daripada {{name}}",
         "connectFailed": "Gagal menyambung ke {{name}}",
-        "testNoCommand": "❌ sila masukkan perintah sebelum menguji sambungan",
-        "testSuccess": "✅ berjaya disambungkan! Dijumpai {{count}} alat.",
-        "testFailed": "❌ Sambungan gagal: {{message}}",
-        "refreshedAll_one": "✅ menyegarkan alat untuk {{count}} pelayan",
-        "refreshedAll_other": "✅ menyegarkan alat untuk {{count}} pelayan",
-        "refreshedAll": "✅ menyegarkan alat untuk {{count}} pelayan",
-        "refreshedPartial": "✅ disegarkan {{success}} pelayan, ❌ {{failed}} gagal",
-        "noServersConfigured": "⚠️ Tiada pelayan MCP dikonfigurasi",
-        "testingAll": "🧪 Menguji {{count}} sambungan pelayan MCP...",
-        "testAllSuccess": "✅ semua {{count}} pelayan MCP berjaya disambungkan!",
-        "testAllPartial": "⚠️ {{successful}} disambungkan, {{failed}} gagal"
+        "testNoCommand": "sila masukkan perintah sebelum menguji sambungan",
+        "testSuccess": "berjaya disambungkan! Dijumpai {{count}} alat.",
+        "testFailed": "Sambungan gagal: {{message}}",
+        "refreshedAll_one": "menyegarkan alat untuk {{count}} pelayan",
+        "refreshedAll_other": "menyegarkan alat untuk {{count}} pelayan",
+        "refreshedAll": "menyegarkan alat untuk {{count}} pelayan",
+        "refreshedPartial": "disegarkan {{success}} pelayan, {{failed}} gagal",
+        "noServersConfigured": "Tiada pelayan MCP dikonfigurasi",
+        "testingAll": "Menguji {{count}} sambungan pelayan MCP...",
+        "testAllSuccess": "semua {{count}} pelayan MCP berjaya disambungkan!",
+        "testAllPartial": "{{successful}} disambungkan, {{failed}} gagal"
       },
       "confirm": {
         "delete": "Padam pelayan MCP \"{{name}}\"?"
@@ -362,7 +362,7 @@
             "params": "path (diperlukan), content (diperlukan): Laluan nota dan kandungan yang hendak ditambah"
           }
         },
-        "infoTitle": "💡 tentang alat",
+        "infoTitle": "tentang alat",
         "infoText": "Alat terbina dalam dikonfigurasi mengikut tetapan pemalam. Alat MCP diurus secara bebas—gunakan tab MCP untuk menyambung pelayan dan menyegarkan ketersediaan alat.",
         "toolNames": {
           "read_file": "Baca Fail",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "Alat CLI dipadam"
         },
-        "infoTitle": "💡 Tentang Alat CLI",
+        "infoTitle": "Tentang Alat CLI",
         "infoText": "Alat CLI melaksanakan perintah shell secara tempatan. Gunakan {{paramName}} dalam argumen untuk penggantian templat, atau konfigurasikan parameter untuk dihantar sebagai argumen atau pemboleh ubah persekitaran.",
         "modal": {
           "defaultTitle": "Alat CLI",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Saiz Chunk Purata"
         },
         "empty": "Indeks kosong. Pilih bina semula indeks untuk mula mengindeks.",
-        "error": "⚠️ tidak dapat memuatkan statistik indeks",
+        "error": "tidak dapat memuatkan statistik indeks",
         "rebuild": {
           "name": "Bina semula indeks",
           "desc": "Re-indeks semua fail dalam vault anda. Ini mungkin mengambil masa.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "Statistik RAG",
-      "totalChunks": "📊 jumlah chunk:",
-      "filesIndexed": "📁 fail diindeks:",
-      "totalSize": "💾 jumlah saiz:",
-      "avgChunks": "📈 Purata Chunk/Fail:",
-      "indexedFiles": "📄 fail yang diindeks",
-      "noFilesYet": "⚠️ tiada fail yang diindeks lagi.",
+      "totalChunks": "jumlah chunk:",
+      "filesIndexed": "fail diindeks:",
+      "totalSize": "jumlah saiz:",
+      "avgChunks": "Purata Chunk/Fail:",
+      "indexedFiles": "fail yang diindeks",
+      "noFilesYet": "tiada fail yang diindeks lagi.",
       "howToBuild": "Untuk membina indeks RAG:",
       "step1": "Pergi ke Tetapan → RAG",
       "step2": "Aktifkan RAG",
       "step3": "Pilih indeks vault",
       "close": "Tutup",
-      "retrieved_one": "📚 diambil daripada {{count}} dokumen",
-      "retrieved_other": "📚 diambil daripada {{count}} dokumen",
-      "retrieved": "📚 diambil daripada {{count}} dokumen"
+      "retrieved_one": "diambil daripada {{count}} dokumen",
+      "retrieved_other": "diambil daripada {{count}} dokumen",
+      "retrieved": "diambil daripada {{count}} dokumen"
     },
     "ragTooltip": {
       "status": "Status Indeks RAG:",
-      "totalChunks": "📊 Jumlah Chunk: {{count}}",
-      "filesIndexed": "📁 Fail Diindeks: {{count}}",
-      "totalSize": "💾 Jumlah Saiz: {{size}} KB",
-      "indexedFiles": "📄 Fail yang diindeks:",
+      "totalChunks": "Jumlah Chunk: {{count}}",
+      "filesIndexed": "Fail Diindeks: {{count}}",
+      "totalSize": "Jumlah Saiz: {{size}} KB",
+      "indexedFiles": "Fail yang diindeks:",
       "andMore": "  ... dan {{count}} lagi",
-      "noFilesYet": "⚠️ tiada fail diindeks lagi.",
+      "noFilesYet": "tiada fail diindeks lagi.",
       "goToSettings": "Pergi ke Tetapan → RAG untuk membina indeks.",
       "ragOff": "ℹ️ RAG sedang dimatikan untuk sembang ini."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Pilih cara ejen akan memilih modelnya"
       },
       "systemPrompt": {
-        "createNew": "➕ cipta prompt baharu…",
+        "createNew": "cipta prompt baharu…",
         "promptName": {
           "name": "Nama prompt",
           "desc": "Nama paparan untuk prompt sistem baharu"
@@ -1381,7 +1381,7 @@
         "tools": "Alat",
         "logs": "Log"
       },
-      "refreshBtn": "🔄 segarkan",
+      "refreshBtn": "segarkan",
       "connections": {
         "title": "Sambungan pelayan MCP",
         "noServers": "Tiada pelayan MCP dikonfigurasi.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Jalankan alat",
         "clearBtn": "Kosongkan keputusan",
         "executing": "Melaksanakan...",
-        "success": "✅ pelaksanaan berjaya",
-        "failed": "❌ pelaksanaan gagal",
-        "errorTitle": "❌ ralat pelaksanaan",
+        "success": "pelaksanaan berjaya",
+        "failed": "pelaksanaan gagal",
+        "errorTitle": "ralat pelaksanaan",
         "errorLabel": "Ralat: {{message}}",
         "notices": {
           "success": "Alat berjaya dilaksanakan",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Tiada pelayan MCP dikonfigurasi",
-        "testing": "🧪 Menguji {{count}} sambungan pelayan MCP...",
-        "allSuccess": "✅ semua {{count}} pelayan MCP berjaya disambungkan!",
-        "partial": "⚠️ {{success}} disambungkan, {{failed}} gagal"
+        "noServers": "Tiada pelayan MCP dikonfigurasi",
+        "testing": "Menguji {{count}} sambungan pelayan MCP...",
+        "allSuccess": "semua {{count}} pelayan MCP berjaya disambungkan!",
+        "partial": "{{success}} disambungkan, {{failed}} gagal"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Urus model Ollama",
       "serverInfo": "Maklumat pelayan",
       "checkingServer": "Memeriksa pelayan...",
-      "serverOnline": "✅ Pelayan dalam talian",
+      "serverOnline": "Pelayan dalam talian",
       "versionLabel": " | Versi: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Pelayan luar talian",
-      "connectionError": "❌ Ralat sambungan",
+      "serverOffline": "Pelayan luar talian",
+      "connectionError": "Ralat sambungan",
       "pullTitle": "Tarik model baharu",
       "pullHint": "Masukkan nama model untuk dimuat turun daripada perpustakaan Ollama (cth., llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Tarik model",
       "installedTitle": "Model yang dipasang",
-      "refreshList": "🔄 Segarkan senarai",
+      "refreshList": "Segarkan senarai",
       "noModels": "Tiada model dijumpai. Tarik model untuk bermula.",
       "capabilities": "Keupayaan: {{caps}}",
       "deleteBtn": "Padam",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Sila masukkan nama model",
         "pulling": "Menarik {{name}}... Ini mungkin mengambil masa.",
-        "pullSuccess": "✅ Berjaya menarik {{name}}",
-        "pullFailed": "❌ Gagal menarik model: {{message}}",
-        "deleted": "✅ Memadam {{name}}",
-        "deleteFailed": "❌ Gagal memadam model: {{message}}",
+        "pullSuccess": "Berjaya menarik {{name}}",
+        "pullFailed": "Gagal menarik model: {{message}}",
+        "deleted": "Memadam {{name}}",
+        "deleteFailed": "Gagal memadam model: {{message}}",
         "refreshing": "Menyegarkan...",
-        "refreshSuccess": "✅ Senarai model disegarkan",
-        "refreshFailed": "❌ Gagal menyegarkan senarai model"
+        "refreshSuccess": "Senarai model disegarkan",
+        "refreshFailed": "Gagal menyegarkan senarai model"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Memproses...",
       "error": "Ralat memaparkan penjelasan",
-      "errorPrefix": "❌ Ralat: "
+      "errorPrefix": "Ralat:"
     }
   },
   "notices": {

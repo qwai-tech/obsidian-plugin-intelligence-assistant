@@ -134,7 +134,7 @@ export async function ensureDefaultAgent(
 			id: DEFAULT_AGENT_ID,
 			name: 'Intelligence Assistant',
 			description: 'Advanced Obsidian Agent specializing in multi-step vault operations, spatial thinking, and long-term knowledge management.',
-			icon: '✨',
+			icon: 'sparkles',
 			modelStrategy: {
 				strategy: 'default',
 				modelId: fallbackModel

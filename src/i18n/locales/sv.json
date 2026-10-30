@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Konfigurationsstatus",
         "desc": "Pluginens övergripande konfigurationsstatus",
-        "ok": "✅ Konfigurerad ({{providers}} leverantörer, {{conversations}} konversationer)",
-        "incomplete": "⚠️ Ofullständig - Konfigurera leverantörer och modeller"
+        "ok": "Konfigurerad ({{providers}} leverantörer, {{conversations}} konversationer)",
+        "incomplete": "Ofullständig - Konfigurera leverantörer och modeller"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} leverantör konfigurerad",
       "providerCount_other": "{{count}} leverantörer konfigurerade",
       "providerCount": "{{count}} leverantörer konfigurerade",
-      "refreshAll": "🔄 uppdatera alla modeller",
+      "refreshAll": "uppdatera alla modeller",
       "empty": "Inga leverantörer konfigurerade ännu. Lägg till leverantörer på leverantörsfliken först.",
       "noModels": "Inga modeller tillgängliga. Klicka på \"uppdatera alla modeller\" eller uppdatera enskilda leverantörer på leverantörsfliken.",
       "noMatch": "Inga modeller matchar de aktuella filtren. Justera eller rensa filter för att se resultat.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Säkerhetsvarning",
+      "securityTitle": "Säkerhetsvarning",
       "securityDesc": "API-nycklar lagras som klartext i ditt valv för kompatibilitet. För att förhindra oavsiktliga läckor:",
       "securityItem1": "Dela INTE din {{configDir}}/plugins/intelligence-assistant/data/-mapp.",
       "securityItem2": "Lägg till den här mappen i din .gitignore om du använder Git-synkronisering.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Konfigurera Model Context Protocol (MCP)-servrar för att utöka agentfunktioner med externa verktyg och datakällor.",
-      "inspectorBtn": "🔍 Öppna MCP-inspektör",
-      "testAllBtn": "🧪 testa alla anslutningar",
-      "refreshAllBtn": "🔄 uppdatera alla verktyg",
+      "inspectorBtn": "Öppna MCP-inspektör",
+      "testAllBtn": "testa alla anslutningar",
+      "refreshAllBtn": "uppdatera alla verktyg",
       "addBtn": "+ Lägg till MCP-server",
       "empty": "Inga MCP-servrar konfigurerade. Välj Lägg till MCP-server för att komma igång.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Redigera",
-        "enabled": "✓ Aktiverad",
-        "enabledOff": "✗ Inaktiverad",
+        "enabled": "Aktiverad",
+        "enabledOff": "Inaktiverad",
         "connect": "anslut",
         "disconnect": "koppla från",
         "connecting": "Ansluter...",
@@ -226,17 +226,17 @@
         "enableFirst": "Aktivera servern innan du ansluter",
         "disconnectFailed": "Det gick inte att koppla från {{name}}",
         "connectFailed": "Det gick inte att ansluta till {{name}}",
-        "testNoCommand": "❌ ange ett kommando innan du testar anslutningen",
-        "testSuccess": "✅ anslutningen lyckades! Hittade {{count}} verktyg.",
-        "testFailed": "❌ Anslutningen misslyckades: {{message}}",
-        "refreshedAll_one": "✅ verktyg uppdaterades för {{count}} server",
-        "refreshedAll_other": "✅ verktyg uppdaterades för {{count}} servrar",
-        "refreshedAll": "✅ verktyg uppdaterades för {{count}} servrar",
-        "refreshedPartial": "✅ {{success}} servrar uppdaterades, ❌ {{failed}} misslyckades",
-        "noServersConfigured": "⚠️ Inga MCP-servrar konfigurerade",
-        "testingAll": "🧪 Testar {{count}} MCP-serveranslutningar...",
-        "testAllSuccess": "✅ alla {{count}} mcp-servrar anslutna!",
-        "testAllPartial": "⚠️ {{successful}} anslutna, {{failed}} misslyckades"
+        "testNoCommand": "ange ett kommando innan du testar anslutningen",
+        "testSuccess": "anslutningen lyckades! Hittade {{count}} verktyg.",
+        "testFailed": "Anslutningen misslyckades: {{message}}",
+        "refreshedAll_one": "verktyg uppdaterades för {{count}} server",
+        "refreshedAll_other": "verktyg uppdaterades för {{count}} servrar",
+        "refreshedAll": "verktyg uppdaterades för {{count}} servrar",
+        "refreshedPartial": "{{success}} servrar uppdaterades, {{failed}} misslyckades",
+        "noServersConfigured": "Inga MCP-servrar konfigurerade",
+        "testingAll": "Testar {{count}} MCP-serveranslutningar...",
+        "testAllSuccess": "alla {{count}} mcp-servrar anslutna!",
+        "testAllPartial": "{{successful}} anslutna, {{failed}} misslyckades"
       },
       "confirm": {
         "delete": "Ta bort MCP-servern \"{{name}}\"?"
@@ -362,7 +362,7 @@
             "params": "sökväg (krävs), innehåll (krävs): Anteckningens sökväg och innehåll att lägga till"
           }
         },
-        "infoTitle": "💡 om verktyg",
+        "infoTitle": "om verktyg",
         "infoText": "Inbyggda verktyg konfigureras per plugin-inställningar. MCP-verktyg hanteras oberoende—använd MCP-fliken för att ansluta servrar och uppdatera verktygstillgänglighet.",
         "toolNames": {
           "read_file": "Läs fil",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI-verktyg borttaget"
         },
-        "infoTitle": "💡 Om CLI-verktyg",
+        "infoTitle": "Om CLI-verktyg",
         "infoText": "CLI-verktyg kör skalkommandon lokalt. Använd {{paramName}} i argument för mallsubstitution eller konfigurera parametrar som ska skickas som argument eller miljövariabler.",
         "modal": {
           "defaultTitle": "CLI-verktyg",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Genomsnittlig chunkstorlek"
         },
         "empty": "Index är tomt. Välj bygg om index för att börja indexera.",
-        "error": "⚠️ kan inte ladda indexstatistik",
+        "error": "kan inte ladda indexstatistik",
         "rebuild": {
           "name": "Bygg om index",
           "desc": "Indexera om alla filer i ditt valv. Det kan ta ett tag.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG-statistik",
-      "totalChunks": "📊 totalt chunks:",
-      "filesIndexed": "📁 filer indexerade:",
-      "totalSize": "💾 total storlek:",
-      "avgChunks": "📈 Genomsn. chunks/fil:",
-      "indexedFiles": "📄 indexerade filer",
-      "noFilesYet": "⚠️ inga filer har indexerats ännu.",
+      "totalChunks": "totalt chunks:",
+      "filesIndexed": "filer indexerade:",
+      "totalSize": "total storlek:",
+      "avgChunks": "Genomsn. chunks/fil:",
+      "indexedFiles": "indexerade filer",
+      "noFilesYet": "inga filer har indexerats ännu.",
       "howToBuild": "För att bygga RAG-indexet:",
       "step1": "Gå till Inställningar → RAG",
       "step2": "Aktivera RAG",
       "step3": "Välj index-valv",
       "close": "Stäng",
-      "retrieved_one": "📚 hämtat från {{count}} dokument",
-      "retrieved_other": "📚 hämtat från {{count}} dokument",
-      "retrieved": "📚 hämtat från {{count}} dokument"
+      "retrieved_one": "hämtat från {{count}} dokument",
+      "retrieved_other": "hämtat från {{count}} dokument",
+      "retrieved": "hämtat från {{count}} dokument"
     },
     "ragTooltip": {
       "status": "RAG-indexstatus:",
-      "totalChunks": "📊 Totalt chunks: {{count}}",
-      "filesIndexed": "📁 Filer indexerade: {{count}}",
-      "totalSize": "💾 Total storlek: {{size}} KB",
-      "indexedFiles": "📄 indexerade filer:",
+      "totalChunks": "Totalt chunks: {{count}}",
+      "filesIndexed": "Filer indexerade: {{count}}",
+      "totalSize": "Total storlek: {{size}} KB",
+      "indexedFiles": "indexerade filer:",
       "andMore": "  ... och {{count}} till",
-      "noFilesYet": "⚠️ inga filer indexerade ännu.",
+      "noFilesYet": "inga filer indexerade ännu.",
       "goToSettings": "Gå till Inställningar → RAG för att bygga indexet.",
       "ragOff": "ℹ️ RAG är för närvarande avstängt för den här chatten."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Välj hur agenten väljer sin modell"
       },
       "systemPrompt": {
-        "createNew": "➕ skapa ny prompt…",
+        "createNew": "skapa ny prompt…",
         "promptName": {
           "name": "Promptnamn",
           "desc": "Visningsnamn för den nya systemprompt"
@@ -1381,7 +1381,7 @@
         "tools": "Verktyg",
         "logs": "Loggar"
       },
-      "refreshBtn": "🔄 uppdatera",
+      "refreshBtn": "uppdatera",
       "connections": {
         "title": "MCP-serveranslutningar",
         "noServers": "Inga MCP-servrar konfigurerade.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Utför verktyg",
         "clearBtn": "Rensa resultat",
         "executing": "Kör...",
-        "success": "✅ körning lyckades",
-        "failed": "❌ körning misslyckades",
-        "errorTitle": "❌ körningsfel",
+        "success": "körning lyckades",
+        "failed": "körning misslyckades",
+        "errorTitle": "körningsfel",
         "errorLabel": "Fel: {{message}}",
         "notices": {
           "success": "Verktyget kördes",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Inga MCP-servrar konfigurerade",
-        "testing": "🧪 Testar {{count}} MCP-serveranslutningar...",
-        "allSuccess": "✅ alla {{count}} mcp-servrar anslutna!",
-        "partial": "⚠️ {{success}} anslutna, {{failed}} misslyckades"
+        "noServers": "Inga MCP-servrar konfigurerade",
+        "testing": "Testar {{count}} MCP-serveranslutningar...",
+        "allSuccess": "alla {{count}} mcp-servrar anslutna!",
+        "partial": "{{success}} anslutna, {{failed}} misslyckades"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Hantera Ollama-modeller",
       "serverInfo": "Serverinformation",
       "checkingServer": "Kontrollerar server...",
-      "serverOnline": "✅ Server online",
+      "serverOnline": "Server online",
       "versionLabel": " | Version: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Server offline",
-      "connectionError": "❌ Anslutningsfel",
+      "serverOffline": "Server offline",
+      "connectionError": "Anslutningsfel",
       "pullTitle": "Hämta ny modell",
       "pullHint": "Ange ett modellnamn för att ladda ner från Ollama-biblioteket (t.ex. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Hämta modell",
       "installedTitle": "Installerade modeller",
-      "refreshList": "🔄 Uppdatera lista",
+      "refreshList": "Uppdatera lista",
       "noModels": "Inga modeller hittades. Hämta en modell för att komma igång.",
       "capabilities": "Funktioner: {{caps}}",
       "deleteBtn": "Ta bort",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Ange ett modellnamn",
         "pulling": "Hämtar {{name}}... Det kan ta ett tag.",
-        "pullSuccess": "✅ Hämtade {{name}}",
-        "pullFailed": "❌ Det gick inte att hämta modell: {{message}}",
-        "deleted": "✅ Tog bort {{name}}",
-        "deleteFailed": "❌ Det gick inte att ta bort modell: {{message}}",
+        "pullSuccess": "Hämtade {{name}}",
+        "pullFailed": "Det gick inte att hämta modell: {{message}}",
+        "deleted": "Tog bort {{name}}",
+        "deleteFailed": "Det gick inte att ta bort modell: {{message}}",
         "refreshing": "Uppdaterar...",
-        "refreshSuccess": "✅ Modellistan uppdaterades",
-        "refreshFailed": "❌ Det gick inte att uppdatera modellistan"
+        "refreshSuccess": "Modellistan uppdaterades",
+        "refreshFailed": "Det gick inte att uppdatera modellistan"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Bearbetar...",
       "error": "Fel vid rendering av förklaring",
-      "errorPrefix": "❌ Fel: "
+      "errorPrefix": "Fel:"
     }
   },
   "notices": {

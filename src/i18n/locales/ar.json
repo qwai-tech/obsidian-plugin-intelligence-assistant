@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "حالة التهيئة",
         "desc": "حالة تهيئة الملحق الإجمالية",
-        "ok": "✅ مُهيَّأ ({{providers}} مزودًا، {{conversations}} محادثة)",
-        "incomplete": "⚠️ غير مكتمل - يرجى تهيئة المزودين والنماذج"
+        "ok": "مُهيَّأ ({{providers}} مزودًا، {{conversations}} محادثة)",
+        "incomplete": "غير مكتمل - يرجى تهيئة المزودين والنماذج"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "تم تهيئة {{count}} مزود",
       "providerCount_other": "تم تهيئة {{count}} مزودين",
       "providerCount": "تم تهيئة {{count}} مزودين",
-      "refreshAll": "🔄 تحديث جميع النماذج",
+      "refreshAll": "تحديث جميع النماذج",
       "empty": "لم يتم تهيئة أي مزودين بعد. أضف المزودين في تبويب المزود أولًا.",
       "noModels": "لا توجد نماذج متاحة. انقر على \"تحديث جميع النماذج\" أو حدّث المزودين الفرديين في تبويب المزود.",
       "noMatch": "لا توجد نماذج تطابق الفلاتر الحالية. عدّل الفلاتر أو أزلها لرؤية النتائج.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ تحذير أمني",
+      "securityTitle": "تحذير أمني",
       "securityDesc": "يتم تخزين مفاتيح API كنص عادي في مستودعك للتوافق. لتجنب التسريبات العرضية:",
       "securityItem1": "لا تشارك مجلد {{configDir}}/plugins/intelligence-assistant/data/.",
       "securityItem2": "أضف هذا المجلد إلى ملف .gitignore إذا كنت تستخدم مزامنة Git.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "تهيئة خوادم Model Context Protocol (MCP) لتوسيع قدرات الوكيل بالأدوات الخارجية ومصادر البيانات.",
-      "inspectorBtn": "🔍 فتح مفتش MCP",
-      "testAllBtn": "🧪 اختبار جميع الاتصالات",
-      "refreshAllBtn": "🔄 تحديث جميع الأدوات",
+      "inspectorBtn": "فتح مفتش MCP",
+      "testAllBtn": "اختبار جميع الاتصالات",
+      "refreshAllBtn": "تحديث جميع الأدوات",
       "addBtn": "+ إضافة خادم MCP",
       "empty": "لم يتم تهيئة أي خوادم MCP. اختر إضافة خادم MCP للبدء.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "تعديل",
-        "enabled": "✓ مفعّل",
-        "enabledOff": "✗ معطّل",
+        "enabled": "مفعّل",
+        "enabledOff": "معطّل",
         "connect": "اتصال",
         "disconnect": "قطع الاتصال",
         "connecting": "جارٍ الاتصال...",
@@ -226,17 +226,17 @@
         "enableFirst": "فعّل الخادم قبل الاتصال",
         "disconnectFailed": "فشل قطع الاتصال عن {{name}}",
         "connectFailed": "فشل الاتصال بـ {{name}}",
-        "testNoCommand": "❌ يرجى إدخال أمر قبل اختبار الاتصال",
-        "testSuccess": "✅ تم الاتصال بنجاح! تم العثور على {{count}} أداة.",
-        "testFailed": "❌ فشل الاتصال: {{message}}",
-        "refreshedAll_one": "✅ تم تحديث الأدوات لـ {{count}} خادم",
-        "refreshedAll_other": "✅ تم تحديث الأدوات لـ {{count}} خوادم",
-        "refreshedAll": "✅ تم تحديث الأدوات لـ {{count}} خوادم",
-        "refreshedPartial": "✅ تم تحديث {{success}} خوادم، ❌ فشل {{failed}}",
-        "noServersConfigured": "⚠️ لم يتم تهيئة أي خوادم MCP",
-        "testingAll": "🧪 جارٍ اختبار {{count}} اتصالات خادم MCP...",
-        "testAllSuccess": "✅ تم توصيل جميع {{count}} خوادم mcp بنجاح!",
-        "testAllPartial": "⚠️ {{successful}} متصل، {{failed}} فشل"
+        "testNoCommand": "يرجى إدخال أمر قبل اختبار الاتصال",
+        "testSuccess": "تم الاتصال بنجاح! تم العثور على {{count}} أداة.",
+        "testFailed": "فشل الاتصال: {{message}}",
+        "refreshedAll_one": "تم تحديث الأدوات لـ {{count}} خادم",
+        "refreshedAll_other": "تم تحديث الأدوات لـ {{count}} خوادم",
+        "refreshedAll": "تم تحديث الأدوات لـ {{count}} خوادم",
+        "refreshedPartial": "تم تحديث {{success}} خوادم، فشل {{failed}}",
+        "noServersConfigured": "لم يتم تهيئة أي خوادم MCP",
+        "testingAll": "جارٍ اختبار {{count}} اتصالات خادم MCP...",
+        "testAllSuccess": "تم توصيل جميع {{count}} خوادم mcp بنجاح!",
+        "testAllPartial": "{{successful}} متصل، {{failed}} فشل"
       },
       "confirm": {
         "delete": "حذف خادم MCP \"{{name}}\"؟"
@@ -362,7 +362,7 @@
             "params": "path (مطلوب), content (مطلوب): مسار الملاحظة والمحتوى المراد إلحاقه"
           }
         },
-        "infoTitle": "💡 حول الأدوات",
+        "infoTitle": "حول الأدوات",
         "infoText": "يتم تهيئة الأدوات المدمجة وفقًا لإعدادات الملحق. تُدار أدوات MCP بشكل مستقل—استخدم تبويب MCP للاتصال بالخوادم وتحديث توافر الأدوات.",
         "toolNames": {
           "read_file": "قراءة ملف",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "تم إزالة أداة CLI"
         },
-        "infoTitle": "💡 حول أدوات CLI",
+        "infoTitle": "حول أدوات CLI",
         "infoText": "تُنفّذ أدوات CLI أوامر الصدفة محليًا. استخدم {{paramName}} في الوسائط للاستبدال بالقالب، أو هيّئ المعاملات لتمريرها كوسائط أو متغيرات بيئة.",
         "modal": {
           "defaultTitle": "أداة CLI",
@@ -663,7 +663,7 @@
           "avgChunkSize": "متوسط حجم المقطع"
         },
         "empty": "الفهرس فارغ. اختر إعادة بناء الفهرس لبدء الفهرسة.",
-        "error": "⚠️ تعذّر تحميل إحصائيات الفهرس",
+        "error": "تعذّر تحميل إحصائيات الفهرس",
         "rebuild": {
           "name": "إعادة بناء الفهرس",
           "desc": "إعادة فهرسة جميع الملفات في مستودعك. قد يستغرق ذلك بعض الوقت.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "إحصائيات RAG",
-      "totalChunks": "📊 إجمالي المقاطع:",
-      "filesIndexed": "📁 الملفات المفهرسة:",
-      "totalSize": "💾 الحجم الإجمالي:",
-      "avgChunks": "📈 متوسط المقاطع/الملف:",
-      "indexedFiles": "📄 الملفات المفهرسة",
-      "noFilesYet": "⚠️ لم يتم فهرسة أي ملفات بعد.",
+      "totalChunks": "إجمالي المقاطع:",
+      "filesIndexed": "الملفات المفهرسة:",
+      "totalSize": "الحجم الإجمالي:",
+      "avgChunks": "متوسط المقاطع/الملف:",
+      "indexedFiles": "الملفات المفهرسة",
+      "noFilesYet": "لم يتم فهرسة أي ملفات بعد.",
       "howToBuild": "لبناء فهرس RAG:",
       "step1": "انتقل إلى الإعدادات ← RAG",
       "step2": "فعّل RAG",
       "step3": "اختر فهرسة المستودع",
       "close": "إغلاق",
-      "retrieved_one": "📚 تم الاسترداد من {{count}} وثيقة",
-      "retrieved_other": "📚 تم الاسترداد من {{count}} وثائق",
-      "retrieved": "📚 تم الاسترداد من {{count}} وثائق"
+      "retrieved_one": "تم الاسترداد من {{count}} وثيقة",
+      "retrieved_other": "تم الاسترداد من {{count}} وثائق",
+      "retrieved": "تم الاسترداد من {{count}} وثائق"
     },
     "ragTooltip": {
       "status": "حالة فهرس RAG:",
-      "totalChunks": "📊 إجمالي المقاطع: {{count}}",
-      "filesIndexed": "📁 الملفات المفهرسة: {{count}}",
-      "totalSize": "💾 الحجم الإجمالي: {{size}} كيلوبايت",
-      "indexedFiles": "📄 الملفات المفهرسة:",
+      "totalChunks": "إجمالي المقاطع: {{count}}",
+      "filesIndexed": "الملفات المفهرسة: {{count}}",
+      "totalSize": "الحجم الإجمالي: {{size}} كيلوبايت",
+      "indexedFiles": "الملفات المفهرسة:",
       "andMore": "  ... و{{count}} أخرى",
-      "noFilesYet": "⚠️ لم يتم فهرسة أي ملفات بعد.",
+      "noFilesYet": "لم يتم فهرسة أي ملفات بعد.",
       "goToSettings": "انتقل إلى الإعدادات ← RAG لبناء الفهرس.",
       "ragOff": "ℹ️ RAG معطّل حاليًا لهذه المحادثة."
     },
@@ -1252,7 +1252,7 @@
         "desc": "اختر كيفية تحديد الوكيل لنموذجه"
       },
       "systemPrompt": {
-        "createNew": "➕ إنشاء مطالبة جديدة…",
+        "createNew": "إنشاء مطالبة جديدة…",
         "promptName": {
           "name": "اسم المطالبة",
           "desc": "اسم العرض لمطالبة النظام الجديدة"
@@ -1381,7 +1381,7 @@
         "tools": "الأدوات",
         "logs": "السجلات"
       },
-      "refreshBtn": "🔄 تحديث",
+      "refreshBtn": "تحديث",
       "connections": {
         "title": "اتصالات خادم MCP",
         "noServers": "لم يتم تهيئة أي خوادم MCP.",
@@ -1443,9 +1443,9 @@
         "performBtn": "تنفيذ الأداة",
         "clearBtn": "مسح النتائج",
         "executing": "جارٍ التنفيذ...",
-        "success": "✅ تم التنفيذ بنجاح",
-        "failed": "❌ فشل التنفيذ",
-        "errorTitle": "❌ خطأ في التنفيذ",
+        "success": "تم التنفيذ بنجاح",
+        "failed": "فشل التنفيذ",
+        "errorTitle": "خطأ في التنفيذ",
         "errorLabel": "خطأ: {{message}}",
         "notices": {
           "success": "تم تنفيذ الأداة بنجاح",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ لم يتم تهيئة أي خوادم MCP",
-        "testing": "🧪 جارٍ اختبار {{count}} اتصالات خادم MCP...",
-        "allSuccess": "✅ تم توصيل جميع {{count}} خوادم mcp بنجاح!",
-        "partial": "⚠️ {{success}} متصل، {{failed}} فشل"
+        "noServers": "لم يتم تهيئة أي خوادم MCP",
+        "testing": "جارٍ اختبار {{count}} اتصالات خادم MCP...",
+        "allSuccess": "تم توصيل جميع {{count}} خوادم mcp بنجاح!",
+        "partial": "{{success}} متصل، {{failed}} فشل"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "إدارة نماذج Ollama",
       "serverInfo": "معلومات الخادم",
       "checkingServer": "جارٍ فحص الخادم...",
-      "serverOnline": "✅ الخادم متصل",
+      "serverOnline": "الخادم متصل",
       "versionLabel": " | الإصدار: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ الخادم غير متصل",
-      "connectionError": "❌ خطأ في الاتصال",
+      "serverOffline": "الخادم غير متصل",
+      "connectionError": "خطأ في الاتصال",
       "pullTitle": "سحب نموذج جديد",
       "pullHint": "أدخل اسم نموذج للتنزيل من مكتبة Ollama (مثلًا، llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "سحب النموذج",
       "installedTitle": "النماذج المثبّتة",
-      "refreshList": "🔄 تحديث القائمة",
+      "refreshList": "تحديث القائمة",
       "noModels": "لم يتم العثور على نماذج. اسحب نموذجًا للبدء.",
       "capabilities": "القدرات: {{caps}}",
       "deleteBtn": "حذف",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "يرجى إدخال اسم نموذج",
         "pulling": "جارٍ سحب {{name}}... قد يستغرق ذلك بعض الوقت.",
-        "pullSuccess": "✅ تم سحب {{name}} بنجاح",
-        "pullFailed": "❌ فشل سحب النموذج: {{message}}",
-        "deleted": "✅ تم حذف {{name}}",
-        "deleteFailed": "❌ فشل حذف النموذج: {{message}}",
+        "pullSuccess": "تم سحب {{name}} بنجاح",
+        "pullFailed": "فشل سحب النموذج: {{message}}",
+        "deleted": "تم حذف {{name}}",
+        "deleteFailed": "فشل حذف النموذج: {{message}}",
         "refreshing": "جارٍ التحديث...",
-        "refreshSuccess": "✅ تم تحديث قائمة النماذج",
-        "refreshFailed": "❌ فشل تحديث قائمة النماذج"
+        "refreshSuccess": "تم تحديث قائمة النماذج",
+        "refreshFailed": "فشل تحديث قائمة النماذج"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ جارٍ المعالجة...",
       "error": "خطأ في عرض الشرح",
-      "errorPrefix": "❌ خطأ: "
+      "errorPrefix": "خطأ:"
     }
   },
   "notices": {

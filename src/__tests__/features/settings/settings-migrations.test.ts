@@ -168,5 +168,17 @@ describe('migrateSettings — removed SAP AI Core provider', () => {
 		expect(migrateSettings(settings)).toBe(true);
 		expect(settings.mcpServers.map(server => server.connectionMode)).toEqual(['auto', 'manual', 'manual']);
 	});
+
+	it('renames built-in agents still carrying the old decorated names', () => {
+		const settings = userConfigToPluginSettings(null);
+		settings.agents = [
+			makeLegacyAgent({ id: 'builtin-librarian', name: '🔍 Librarian (知识矿工)', toolAccess: { sources: {} } }),
+			makeLegacyAgent({ id: 'builtin-scribe', name: 'My own scribe', toolAccess: { sources: {} } }),
+		];
+
+		migrateSettings(settings);
+
+		expect(settings.agents.map(agent => agent.name)).toEqual(['Librarian', 'My own scribe']);
+	});
 });
 

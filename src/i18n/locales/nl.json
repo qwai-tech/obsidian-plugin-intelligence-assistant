@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Configuratiestatus",
         "desc": "Algemene configuratiestatus van de plugin",
-        "ok": "✅ Geconfigureerd ({{providers}} providers, {{conversations}} gesprekken)",
-        "incomplete": "⚠️ Onvolledig - Configureer providers en modellen"
+        "ok": "Geconfigureerd ({{providers}} providers, {{conversations}} gesprekken)",
+        "incomplete": "Onvolledig - Configureer providers en modellen"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} provider geconfigureerd",
       "providerCount_other": "{{count}} providers geconfigureerd",
       "providerCount": "{{count}} providers geconfigureerd",
-      "refreshAll": "🔄 alle modellen vernieuwen",
+      "refreshAll": "alle modellen vernieuwen",
       "empty": "Nog geen providers geconfigureerd. Voeg eerst providers toe op het providertabblad.",
       "noModels": "Geen modellen beschikbaar. Klik op \"alle modellen vernieuwen\" of vernieuw individuele providers op het providertabblad.",
       "noMatch": "Geen modellen voldoen aan de huidige filters. Pas de filters aan of wis ze om resultaten te zien.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Beveiligingswaarschuwing",
+      "securityTitle": "Beveiligingswaarschuwing",
       "securityDesc": "API-sleutels worden als platte tekst opgeslagen in uw kluis voor compatibiliteit. Om onbedoelde lekken te voorkomen:",
       "securityItem1": "Deel uw {{configDir}}/plugins/intelligence-assistant/data/ map NIET.",
       "securityItem2": "Voeg deze map toe aan uw .gitignore als u Git-synchronisatie gebruikt.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Configureer Model Context Protocol (MCP) servers om agentmogelijkheden uit te breiden met externe tools en gegevensbronnen.",
-      "inspectorBtn": "🔍 MCP inspector openen",
-      "testAllBtn": "🧪 alle verbindingen testen",
-      "refreshAllBtn": "🔄 alle tools vernieuwen",
+      "inspectorBtn": "MCP inspector openen",
+      "testAllBtn": "alle verbindingen testen",
+      "refreshAllBtn": "alle tools vernieuwen",
       "addBtn": "+ MCP server toevoegen",
       "empty": "Geen MCP servers geconfigureerd. Selecteer MCP server toevoegen om te beginnen.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Bewerken",
-        "enabled": "✓ Ingeschakeld",
-        "enabledOff": "✗ Uitgeschakeld",
+        "enabled": "Ingeschakeld",
+        "enabledOff": "Uitgeschakeld",
         "connect": "verbinden",
         "disconnect": "verbreken",
         "connecting": "Verbinden...",
@@ -226,17 +226,17 @@
         "enableFirst": "Schakel de server in voordat u verbinding maakt",
         "disconnectFailed": "Verbinding verbreken met {{name}} mislukt",
         "connectFailed": "Verbinding maken met {{name}} mislukt",
-        "testNoCommand": "❌ voer een commando in voordat u de verbinding test",
-        "testSuccess": "✅ succesvol verbonden! {{count}} tools gevonden.",
-        "testFailed": "❌ Verbinding mislukt: {{message}}",
-        "refreshedAll_one": "✅ tools vernieuwd voor {{count}} server",
-        "refreshedAll_other": "✅ tools vernieuwd voor {{count}} servers",
-        "refreshedAll": "✅ tools vernieuwd voor {{count}} servers",
-        "refreshedPartial": "✅ {{success}} servers vernieuwd, ❌ {{failed}} mislukt",
-        "noServersConfigured": "⚠️ Geen MCP servers geconfigureerd",
-        "testingAll": "🧪 {{count}} MCP serververbindingen testen...",
-        "testAllSuccess": "✅ alle {{count}} mcp servers succesvol verbonden!",
-        "testAllPartial": "⚠️ {{successful}} verbonden, {{failed}} mislukt"
+        "testNoCommand": "voer een commando in voordat u de verbinding test",
+        "testSuccess": "succesvol verbonden! {{count}} tools gevonden.",
+        "testFailed": "Verbinding mislukt: {{message}}",
+        "refreshedAll_one": "tools vernieuwd voor {{count}} server",
+        "refreshedAll_other": "tools vernieuwd voor {{count}} servers",
+        "refreshedAll": "tools vernieuwd voor {{count}} servers",
+        "refreshedPartial": "{{success}} servers vernieuwd, {{failed}} mislukt",
+        "noServersConfigured": "Geen MCP servers geconfigureerd",
+        "testingAll": "{{count}} MCP serververbindingen testen...",
+        "testAllSuccess": "alle {{count}} mcp servers succesvol verbonden!",
+        "testAllPartial": "{{successful}} verbonden, {{failed}} mislukt"
       },
       "confirm": {
         "delete": "MCP server \"{{name}}\" verwijderen?"
@@ -362,7 +362,7 @@
             "params": "pad (vereist), inhoud (vereist): Notitiepad en toe te voegen inhoud"
           }
         },
-        "infoTitle": "💡 over tools",
+        "infoTitle": "over tools",
         "infoText": "Ingebouwde tools worden geconfigureerd per plugin-instellingen. MCP tools worden onafhankelijk beheerd—gebruik het MCP-tabblad om servers te verbinden en de beschikbaarheid van tools te vernieuwen.",
         "toolNames": {
           "read_file": "Bestand lezen",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI tool verwijderd"
         },
-        "infoTitle": "💡 Over CLI tools",
+        "infoTitle": "Over CLI tools",
         "infoText": "CLI tools voeren shell-commando's lokaal uit. Gebruik {{paramName}} in argumenten voor sjabloonvervanging, of configureer parameters om door te geven als argumenten of omgevingsvariabelen.",
         "modal": {
           "defaultTitle": "CLI tool",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Gem. chunkgrootte"
         },
         "empty": "Index is leeg. Selecteer index opnieuw opbouwen om te beginnen met indexeren.",
-        "error": "⚠️ kan indexstatistieken niet laden",
+        "error": "kan indexstatistieken niet laden",
         "rebuild": {
           "name": "Index opnieuw opbouwen",
           "desc": "Indexeer alle bestanden in uw kluis opnieuw. Dit kan even duren.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG statistieken",
-      "totalChunks": "📊 totaal chunks:",
-      "filesIndexed": "📁 bestanden geïndexeerd:",
-      "totalSize": "💾 totale grootte:",
-      "avgChunks": "📈 Gem. chunks/bestand:",
-      "indexedFiles": "📄 geïndexeerde bestanden",
-      "noFilesYet": "⚠️ er zijn nog geen bestanden geïndexeerd.",
+      "totalChunks": "totaal chunks:",
+      "filesIndexed": "bestanden geïndexeerd:",
+      "totalSize": "totale grootte:",
+      "avgChunks": "Gem. chunks/bestand:",
+      "indexedFiles": "geïndexeerde bestanden",
+      "noFilesYet": "er zijn nog geen bestanden geïndexeerd.",
       "howToBuild": "Om de RAG index op te bouwen:",
       "step1": "Ga naar Instellingen → RAG",
       "step2": "RAG inschakelen",
       "step3": "Index kluis selecteren",
       "close": "Sluiten",
-      "retrieved_one": "📚 opgehaald uit {{count}} document",
-      "retrieved_other": "📚 opgehaald uit {{count}} documenten",
-      "retrieved": "📚 opgehaald uit {{count}} documenten"
+      "retrieved_one": "opgehaald uit {{count}} document",
+      "retrieved_other": "opgehaald uit {{count}} documenten",
+      "retrieved": "opgehaald uit {{count}} documenten"
     },
     "ragTooltip": {
       "status": "RAG Index Status:",
-      "totalChunks": "📊 Totaal chunks: {{count}}",
-      "filesIndexed": "📁 Bestanden geïndexeerd: {{count}}",
-      "totalSize": "💾 Totale grootte: {{size}} KB",
-      "indexedFiles": "📄 geïndexeerde bestanden:",
+      "totalChunks": "Totaal chunks: {{count}}",
+      "filesIndexed": "Bestanden geïndexeerd: {{count}}",
+      "totalSize": "Totale grootte: {{size}} KB",
+      "indexedFiles": "geïndexeerde bestanden:",
       "andMore": "  ... en {{count}} meer",
-      "noFilesYet": "⚠️ nog geen bestanden geïndexeerd.",
+      "noFilesYet": "nog geen bestanden geïndexeerd.",
       "goToSettings": "Ga naar Instellingen → RAG om de index te bouwen.",
       "ragOff": "ℹ️ RAG is momenteel uitgeschakeld voor deze chat."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Kies hoe de agent zijn model selecteert"
       },
       "systemPrompt": {
-        "createNew": "➕ nieuwe prompt aanmaken…",
+        "createNew": "nieuwe prompt aanmaken…",
         "promptName": {
           "name": "Promptnaam",
           "desc": "Weergavenaam voor de nieuwe systeemprompt"
@@ -1381,7 +1381,7 @@
         "tools": "Tools",
         "logs": "Logboeken"
       },
-      "refreshBtn": "🔄 vernieuwen",
+      "refreshBtn": "vernieuwen",
       "connections": {
         "title": "MCP serververbindingen",
         "noServers": "Geen MCP servers geconfigureerd.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Tool uitvoeren",
         "clearBtn": "Resultaten wissen",
         "executing": "Uitvoeren...",
-        "success": "✅ uitvoering succesvol",
-        "failed": "❌ uitvoering mislukt",
-        "errorTitle": "❌ uitvoeringsfout",
+        "success": "uitvoering succesvol",
+        "failed": "uitvoering mislukt",
+        "errorTitle": "uitvoeringsfout",
         "errorLabel": "Fout: {{message}}",
         "notices": {
           "success": "Tool succesvol uitgevoerd",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Geen MCP servers geconfigureerd",
-        "testing": "🧪 {{count}} MCP serververbindingen testen...",
-        "allSuccess": "✅ alle {{count}} mcp servers succesvol verbonden!",
-        "partial": "⚠️ {{success}} verbonden, {{failed}} mislukt"
+        "noServers": "Geen MCP servers geconfigureerd",
+        "testing": "{{count}} MCP serververbindingen testen...",
+        "allSuccess": "alle {{count}} mcp servers succesvol verbonden!",
+        "partial": "{{success}} verbonden, {{failed}} mislukt"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Ollama modellen beheren",
       "serverInfo": "Serverinformatie",
       "checkingServer": "Server controleren...",
-      "serverOnline": "✅ Server online",
+      "serverOnline": "Server online",
       "versionLabel": " | Versie: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Server offline",
-      "connectionError": "❌ Verbindingsfout",
+      "serverOffline": "Server offline",
+      "connectionError": "Verbindingsfout",
       "pullTitle": "Nieuw model ophalen",
       "pullHint": "Voer een modelnaam in om te downloaden uit de Ollama bibliotheek (bijv. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Model ophalen",
       "installedTitle": "Geïnstalleerde modellen",
-      "refreshList": "🔄 Lijst vernieuwen",
+      "refreshList": "Lijst vernieuwen",
       "noModels": "Geen modellen gevonden. Haal een model op om te beginnen.",
       "capabilities": "Mogelijkheden: {{caps}}",
       "deleteBtn": "Verwijderen",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Voer een modelnaam in",
         "pulling": "{{name}} ophalen... Dit kan even duren.",
-        "pullSuccess": "✅ {{name}} succesvol opgehaald",
-        "pullFailed": "❌ Model ophalen mislukt: {{message}}",
-        "deleted": "✅ {{name}} verwijderd",
-        "deleteFailed": "❌ Model verwijderen mislukt: {{message}}",
+        "pullSuccess": "{{name}} succesvol opgehaald",
+        "pullFailed": "Model ophalen mislukt: {{message}}",
+        "deleted": "{{name}} verwijderd",
+        "deleteFailed": "Model verwijderen mislukt: {{message}}",
         "refreshing": "Vernieuwen...",
-        "refreshSuccess": "✅ Modellijst vernieuwd",
-        "refreshFailed": "❌ Modellijst vernieuwen mislukt"
+        "refreshSuccess": "Modellijst vernieuwd",
+        "refreshFailed": "Modellijst vernieuwen mislukt"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Verwerken...",
       "error": "Fout bij het weergeven van de uitleg",
-      "errorPrefix": "❌ Fout: "
+      "errorPrefix": "Fout:"
     }
   },
   "notices": {

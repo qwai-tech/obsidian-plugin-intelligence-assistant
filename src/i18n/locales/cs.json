@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Stav konfigurace",
         "desc": "Celkový stav konfigurace pluginu",
-        "ok": "✅ Nakonfigurováno ({{providers}} poskytovatelů, {{conversations}} konverzací)",
-        "incomplete": "⚠️ Neúplné – nakonfigurujte poskytovatele a modely"
+        "ok": "Nakonfigurováno ({{providers}} poskytovatelů, {{conversations}} konverzací)",
+        "incomplete": "Neúplné – nakonfigurujte poskytovatele a modely"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} poskytovatel nakonfigurován",
       "providerCount_other": "{{count}} poskytovatelů nakonfigurováno",
       "providerCount": "{{count}} poskytovatelů nakonfigurováno",
-      "refreshAll": "🔄 obnovit všechny modely",
+      "refreshAll": "obnovit všechny modely",
       "empty": "Žádní poskytovatelé nejsou nakonfigurováni. Nejprve přidejte poskytovatele na kartě poskytovatelů.",
       "noModels": "Žádné modely nejsou dostupné. Klikněte na \"obnovit všechny modely\" nebo obnovte jednotlivé poskytovatele na kartě poskytovatelů.",
       "noMatch": "Žádné modely neodpovídají aktuálním filtrům. Upravte nebo odstraňte filtry pro zobrazení výsledků.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Bezpečnostní upozornění",
+      "securityTitle": "Bezpečnostní upozornění",
       "securityDesc": "API klíče jsou uloženy jako prostý text ve vašem trezoru kvůli kompatibilitě. Aby se zabránilo náhodným únikům:",
       "securityItem1": "NESDÍLEJTE složku {{configDir}}/plugins/intelligence-assistant/data/.",
       "securityItem2": "Přidejte tuto složku do .gitignore, pokud používáte synchronizaci Git.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Nakonfigurujte servery Model Context Protocol (MCP) pro rozšíření schopností agentů o externí nástroje a zdroje dat.",
-      "inspectorBtn": "🔍 Otevřít inspektor MCP",
-      "testAllBtn": "🧪 otestovat všechna připojení",
-      "refreshAllBtn": "🔄 obnovit všechny nástroje",
+      "inspectorBtn": "Otevřít inspektor MCP",
+      "testAllBtn": "otestovat všechna připojení",
+      "refreshAllBtn": "obnovit všechny nástroje",
       "addBtn": "+ Přidat server MCP",
       "empty": "Žádné servery MCP nejsou nakonfigurovány. Vyberte Přidat server MCP pro začátek.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Upravit",
-        "enabled": "✓ Povoleno",
-        "enabledOff": "✗ Zakázáno",
+        "enabled": "Povoleno",
+        "enabledOff": "Zakázáno",
         "connect": "připojit",
         "disconnect": "odpojit",
         "connecting": "Připojuji...",
@@ -226,17 +226,17 @@
         "enableFirst": "Před připojením povolte server",
         "disconnectFailed": "Nepodařilo se odpojit od {{name}}",
         "connectFailed": "Nepodařilo se připojit k {{name}}",
-        "testNoCommand": "❌ před testováním připojení zadejte příkaz",
-        "testSuccess": "✅ úspěšně připojeno! Nalezeno {{count}} nástrojů.",
-        "testFailed": "❌ Připojení selhalo: {{message}}",
-        "refreshedAll_one": "✅ obnoveny nástroje pro {{count}} server",
-        "refreshedAll_other": "✅ obnoveny nástroje pro {{count}} serverů",
-        "refreshedAll": "✅ obnoveny nástroje pro {{count}} serverů",
-        "refreshedPartial": "✅ obnoveno {{success}} serverů, ❌ {{failed}} selhalo",
-        "noServersConfigured": "⚠️ Žádné servery MCP nejsou nakonfigurovány",
-        "testingAll": "🧪 Testování {{count}} připojení k serverům MCP...",
-        "testAllSuccess": "✅ všechny {{count}} servery MCP úspěšně připojeny!",
-        "testAllPartial": "⚠️ {{successful}} připojeno, {{failed}} selhalo"
+        "testNoCommand": "před testováním připojení zadejte příkaz",
+        "testSuccess": "úspěšně připojeno! Nalezeno {{count}} nástrojů.",
+        "testFailed": "Připojení selhalo: {{message}}",
+        "refreshedAll_one": "obnoveny nástroje pro {{count}} server",
+        "refreshedAll_other": "obnoveny nástroje pro {{count}} serverů",
+        "refreshedAll": "obnoveny nástroje pro {{count}} serverů",
+        "refreshedPartial": "obnoveno {{success}} serverů, {{failed}} selhalo",
+        "noServersConfigured": "Žádné servery MCP nejsou nakonfigurovány",
+        "testingAll": "Testování {{count}} připojení k serverům MCP...",
+        "testAllSuccess": "všechny {{count}} servery MCP úspěšně připojeny!",
+        "testAllPartial": "{{successful}} připojeno, {{failed}} selhalo"
       },
       "confirm": {
         "delete": "Smazat server MCP \"{{name}}\"?"
@@ -362,7 +362,7 @@
             "params": "path (povinný), content (povinný): Cesta k poznámce a obsah k přidání"
           }
         },
-        "infoTitle": "💡 o nástrojích",
+        "infoTitle": "o nástrojích",
         "infoText": "Vestavěné nástroje jsou konfigurovány podle nastavení pluginu. Nástroje MCP jsou spravovány nezávisle – použijte kartu MCP pro připojení serverů a obnovení dostupnosti nástrojů.",
         "toolNames": {
           "read_file": "Číst soubor",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "Nástroj CLI odstraněn"
         },
-        "infoTitle": "💡 O nástrojích CLI",
+        "infoTitle": "O nástrojích CLI",
         "infoText": "Nástroje CLI spouštějí příkazy shellu místně. Používejte {{paramName}} v argumentech pro nahrazování šablon nebo nakonfigurujte parametry, které mají být předány jako argumenty nebo proměnné prostředí.",
         "modal": {
           "defaultTitle": "Nástroj CLI",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Průměrná velikost bloku"
         },
         "empty": "Index je prázdný. Vyberte přebudovat index pro zahájení indexování.",
-        "error": "⚠️ nelze načíst statistiky indexu",
+        "error": "nelze načíst statistiky indexu",
         "rebuild": {
           "name": "Přebudovat index",
           "desc": "Znovu zaindexovat všechny soubory v trezoru. Může to chvíli trvat.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "Statistiky RAG",
-      "totalChunks": "📊 celkem bloků:",
-      "filesIndexed": "📁 indexované soubory:",
-      "totalSize": "💾 celková velikost:",
-      "avgChunks": "📈 Prům. bloků/soubor:",
-      "indexedFiles": "📄 indexované soubory",
-      "noFilesYet": "⚠️ žádné soubory nebyly dosud indexovány.",
+      "totalChunks": "celkem bloků:",
+      "filesIndexed": "indexované soubory:",
+      "totalSize": "celková velikost:",
+      "avgChunks": "Prům. bloků/soubor:",
+      "indexedFiles": "indexované soubory",
+      "noFilesYet": "žádné soubory nebyly dosud indexovány.",
       "howToBuild": "Pro vytvoření indexu RAG:",
       "step1": "Přejděte do Nastavení → RAG",
       "step2": "Povolte RAG",
       "step3": "Vyberte indexovat trezor",
       "close": "Zavřít",
-      "retrieved_one": "📚 načteno z {{count}} dokumentu",
-      "retrieved_other": "📚 načteno z {{count}} dokumentů",
-      "retrieved": "📚 načteno z {{count}} dokumentů"
+      "retrieved_one": "načteno z {{count}} dokumentu",
+      "retrieved_other": "načteno z {{count}} dokumentů",
+      "retrieved": "načteno z {{count}} dokumentů"
     },
     "ragTooltip": {
       "status": "Stav indexu RAG:",
-      "totalChunks": "📊 Celkem bloků: {{count}}",
-      "filesIndexed": "📁 Indexované soubory: {{count}}",
-      "totalSize": "💾 Celková velikost: {{size}} KB",
-      "indexedFiles": "📄 indexované soubory:",
+      "totalChunks": "Celkem bloků: {{count}}",
+      "filesIndexed": "Indexované soubory: {{count}}",
+      "totalSize": "Celková velikost: {{size}} KB",
+      "indexedFiles": "indexované soubory:",
       "andMore": "  ... a {{count}} dalších",
-      "noFilesYet": "⚠️ zatím žádné indexované soubory.",
+      "noFilesYet": "zatím žádné indexované soubory.",
       "goToSettings": "Přejděte do Nastavení → RAG pro vytvoření indexu.",
       "ragOff": "ℹ️ RAG je v tomto chatu aktuálně vypnut."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Vyberte, jak bude agent vybírat svůj model"
       },
       "systemPrompt": {
-        "createNew": "➕ vytvořit nový prompt…",
+        "createNew": "vytvořit nový prompt…",
         "promptName": {
           "name": "Název promptu",
           "desc": "Zobrazovaný název nového systémového promptu"
@@ -1381,7 +1381,7 @@
         "tools": "Nástroje",
         "logs": "Záznamy"
       },
-      "refreshBtn": "🔄 obnovit",
+      "refreshBtn": "obnovit",
       "connections": {
         "title": "Připojení serverů MCP",
         "noServers": "Žádné servery MCP nejsou nakonfigurovány.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Provést nástroj",
         "clearBtn": "Vymazat výsledky",
         "executing": "Provádím...",
-        "success": "✅ provedení úspěšné",
-        "failed": "❌ provedení selhalo",
-        "errorTitle": "❌ chyba provádění",
+        "success": "provedení úspěšné",
+        "failed": "provedení selhalo",
+        "errorTitle": "chyba provádění",
         "errorLabel": "Chyba: {{message}}",
         "notices": {
           "success": "Nástroj byl úspěšně proveden",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Žádné servery MCP nejsou nakonfigurovány",
-        "testing": "🧪 Testování {{count}} připojení k serverům MCP...",
-        "allSuccess": "✅ všechny {{count}} servery MCP úspěšně připojeny!",
-        "partial": "⚠️ {{success}} připojeno, {{failed}} selhalo"
+        "noServers": "Žádné servery MCP nejsou nakonfigurovány",
+        "testing": "Testování {{count}} připojení k serverům MCP...",
+        "allSuccess": "všechny {{count}} servery MCP úspěšně připojeny!",
+        "partial": "{{success}} připojeno, {{failed}} selhalo"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Spravovat modely Ollama",
       "serverInfo": "Informace o serveru",
       "checkingServer": "Kontroluji server...",
-      "serverOnline": "✅ Server online",
+      "serverOnline": "Server online",
       "versionLabel": " | Verze: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Server offline",
-      "connectionError": "❌ Chyba připojení",
+      "serverOffline": "Server offline",
+      "connectionError": "Chyba připojení",
       "pullTitle": "Stáhnout nový model",
       "pullHint": "Zadejte název modelu ke stažení z knihovny Ollama (např. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Stáhnout model",
       "installedTitle": "Nainstalované modely",
-      "refreshList": "🔄 Obnovit seznam",
+      "refreshList": "Obnovit seznam",
       "noModels": "Nebyly nalezeny žádné modely. Stáhněte model pro začátek.",
       "capabilities": "Schopnosti: {{caps}}",
       "deleteBtn": "Smazat",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Zadejte název modelu",
         "pulling": "Stahuji {{name}}... Může to chvíli trvat.",
-        "pullSuccess": "✅ Úspěšně staženo {{name}}",
-        "pullFailed": "❌ Nepodařilo se stáhnout model: {{message}}",
-        "deleted": "✅ Smazáno {{name}}",
-        "deleteFailed": "❌ Nepodařilo se smazat model: {{message}}",
+        "pullSuccess": "Úspěšně staženo {{name}}",
+        "pullFailed": "Nepodařilo se stáhnout model: {{message}}",
+        "deleted": "Smazáno {{name}}",
+        "deleteFailed": "Nepodařilo se smazat model: {{message}}",
         "refreshing": "Obnovuji...",
-        "refreshSuccess": "✅ Seznam modelů obnoven",
-        "refreshFailed": "❌ Nepodařilo se obnovit seznam modelů"
+        "refreshSuccess": "Seznam modelů obnoven",
+        "refreshFailed": "Nepodařilo se obnovit seznam modelů"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Zpracovávám...",
       "error": "Chyba při vykreslování vysvětlení",
-      "errorPrefix": "❌ Chyba: "
+      "errorPrefix": "Chyba:"
     }
   },
   "notices": {

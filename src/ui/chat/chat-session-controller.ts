@@ -239,7 +239,7 @@ export class ChatSessionController {
 		this.controls.input.refreshAgentSelect(agentId);
 		this.controls.header.updateAgentBadge(agent.name ?? 'unknown');
 		if (!options.silent) {
-			new Notice(t('chat.notices.agentConfigApplied', { name: `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}` }));
+			new Notice(t('chat.notices.agentConfigApplied', { name: agent.name ?? 'unknown' }));
 		}
 	}
 

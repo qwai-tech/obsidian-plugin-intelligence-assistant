@@ -11,7 +11,38 @@ export function migrateSettings(settings: PluginSettings): boolean {
 	const removedProviderDropped = dropRemovedProviders(settings);
 	const titleModeRenamed = renameTitleMode(settings);
 	const connectionModesFixed = lowercaseConnectionModes(settings);
-	return strategyChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed || connectionModesFixed;
+	const presetsRenamed = renameBuiltinPresets(settings);
+	return strategyChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed || connectionModesFixed || presetsRenamed;
+}
+
+const OLD_PRESET_NAMES: Record<string, string> = {
+	'✨ Intelligence Assistant Core': 'Intelligence Assistant Core',
+	'🔍 Librarian System Prompt': 'Librarian System Prompt',
+	'🏗️ Architect System Prompt': 'Architect System Prompt',
+	'🧬 Researcher System Prompt': 'Researcher System Prompt',
+	'🖋️ Scribe System Prompt': 'Scribe System Prompt',
+	'🔍 Librarian (知识矿工)': 'Librarian',
+	'🏗️ Architect (白板建筑师)': 'Architect',
+	'🧬 Researcher (深度研究员)': 'Researcher',
+	'🖋️ Scribe (创作伙伴)': 'Scribe',
+};
+
+function renameBuiltinPresets(settings: PluginSettings): boolean {
+	let changed = false;
+	for (const preset of [...settings.agents, ...settings.systemPrompts]) {
+		const renamed = OLD_PRESET_NAMES[preset.name];
+		if (renamed) {
+			preset.name = renamed;
+			changed = true;
+		}
+	}
+	for (const agent of settings.agents) {
+		if (agent.icon === '✨') {
+			agent.icon = 'sparkles';
+			changed = true;
+		}
+	}
+	return changed;
 }
 
 function lowercaseConnectionModes(settings: PluginSettings): boolean {

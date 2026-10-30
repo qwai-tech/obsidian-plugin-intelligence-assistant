@@ -1,4 +1,4 @@
-import { App, TFile, Modal } from 'obsidian';
+import { App, TFile, Modal, setIcon } from 'obsidian';
 import { t } from '@/i18n';
 
 export class SearchableImageModal extends Modal {
@@ -89,7 +89,7 @@ export class SearchableImageModal extends Modal {
 			}
 
 			const iconEl = itemEl.createDiv('ia-modal-list-icon');
-			iconEl.setText('🖼️');
+			setIcon(iconEl, 'image');
 
 			const textEl = itemEl.createDiv('ia-flex-1');
 			textEl.setText(file.path);

@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Konfigurasjonsstatus",
         "desc": "Samla konfigurasjonsstatus for tillegget",
-        "ok": "✅ Konfigurert ({{providers}} leverandørar, {{conversations}} samtalar)",
-        "incomplete": "⚠️ Ufullstendig – Konfigurer leverandørar og modellar"
+        "ok": "Konfigurert ({{providers}} leverandørar, {{conversations}} samtalar)",
+        "incomplete": "Ufullstendig – Konfigurer leverandørar og modellar"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} leverandør konfigurert",
       "providerCount_other": "{{count}} leverandørar konfigurert",
       "providerCount": "{{count}} leverandørar konfigurert",
-      "refreshAll": "🔄 oppdater alle modellar",
+      "refreshAll": "oppdater alle modellar",
       "empty": "Ingen leverandørar konfigurert enno. Legg til leverandørar i leverandørfana fyrst.",
       "noModels": "Ingen modellar tilgjengelege. Klikk «oppdater alle modellar» eller oppdater individuelle leverandørar i leverandørfana.",
       "noMatch": "Ingen modellar samsvarar med dei gjeldande filtrera. Juster eller fjern filtre for å sjå resultat.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Tryggleiksåtvaring",
+      "securityTitle": "Tryggleiksåtvaring",
       "securityDesc": "API-nøklar vert lagra som klartekst i kvelvet ditt av kompatibilitetsomsyn. For å hindre utilsikta lekkasjar:",
       "securityItem1": "Del IKKJE {{configDir}}/plugins/intelligence-assistant/data/-mappa.",
       "securityItem2": "Legg denne mappa til .gitignore dersom du nyttar Git-synkronisering.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Konfigurer Model Context Protocol (MCP)-tenarar for å utvide agentfunksjonane med eksterne verktøy og datakjelder.",
-      "inspectorBtn": "🔍 Opne MCP-inspektør",
-      "testAllBtn": "🧪 test alle tilkoplingar",
-      "refreshAllBtn": "🔄 oppdater alle verktøy",
+      "inspectorBtn": "Opne MCP-inspektør",
+      "testAllBtn": "test alle tilkoplingar",
+      "refreshAllBtn": "oppdater alle verktøy",
       "addBtn": "+ Legg til MCP-tenar",
       "empty": "Ingen MCP-tenarar konfigurert. Vel Legg til MCP-tenar for å kome i gang.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Rediger",
-        "enabled": "✓ Aktivert",
-        "enabledOff": "✗ Deaktivert",
+        "enabled": "Aktivert",
+        "enabledOff": "Deaktivert",
         "connect": "kople til",
         "disconnect": "kople frå",
         "connecting": "Koplast til...",
@@ -226,17 +226,17 @@
         "enableFirst": "Aktiver tenaren før tilkopling",
         "disconnectFailed": "Klarte ikkje å kople frå {{name}}",
         "connectFailed": "Klarte ikkje å kople til {{name}}",
-        "testNoCommand": "❌ skriv inn ein kommando før du testar tilkoplinga",
-        "testSuccess": "✅ kopla til! Fann {{count}} verktøy.",
-        "testFailed": "❌ Tilkopling mislukkast: {{message}}",
-        "refreshedAll_one": "✅ oppdaterte verktøy for {{count}} tenar",
-        "refreshedAll_other": "✅ oppdaterte verktøy for {{count}} tenarar",
-        "refreshedAll": "✅ oppdaterte verktøy for {{count}} tenarar",
-        "refreshedPartial": "✅ oppdaterte {{success}} tenarar, ❌ {{failed}} mislukkast",
-        "noServersConfigured": "⚠️ Ingen MCP-tenarar konfigurert",
-        "testingAll": "🧪 Testar {{count}} MCP-tenartilkoplingar...",
-        "testAllSuccess": "✅ alle {{count}} MCP-tenarar vart tilkopla!",
-        "testAllPartial": "⚠️ {{successful}} tilkopla, {{failed}} mislukkast"
+        "testNoCommand": "skriv inn ein kommando før du testar tilkoplinga",
+        "testSuccess": "kopla til! Fann {{count}} verktøy.",
+        "testFailed": "Tilkopling mislukkast: {{message}}",
+        "refreshedAll_one": "oppdaterte verktøy for {{count}} tenar",
+        "refreshedAll_other": "oppdaterte verktøy for {{count}} tenarar",
+        "refreshedAll": "oppdaterte verktøy for {{count}} tenarar",
+        "refreshedPartial": "oppdaterte {{success}} tenarar, {{failed}} mislukkast",
+        "noServersConfigured": "Ingen MCP-tenarar konfigurert",
+        "testingAll": "Testar {{count}} MCP-tenartilkoplingar...",
+        "testAllSuccess": "alle {{count}} MCP-tenarar vart tilkopla!",
+        "testAllPartial": "{{successful}} tilkopla, {{failed}} mislukkast"
       },
       "confirm": {
         "delete": "Slett MCP-tenaren «{{name}}»?"
@@ -362,7 +362,7 @@
             "params": "path (påkravd), content (påkravd): Notatsti og innhald som skal leggjast til"
           }
         },
-        "infoTitle": "💡 om verktøy",
+        "infoTitle": "om verktøy",
         "infoText": "Innebygde verktøy vert konfigurert per tilleggsinnstillingar. MCP-verktøy vert handtert sjølvstendig – nytt MCP-fana til å kople til tenarar og oppdatere tilgjengelege verktøy.",
         "toolNames": {
           "read_file": "Les fil",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI-verktøy fjerna"
         },
-        "infoTitle": "💡 Om CLI-verktøy",
+        "infoTitle": "Om CLI-verktøy",
         "infoText": "CLI-verktøy køyrer skalkommandoar lokalt. Nytt {{paramName}} i argument for malsubstitusjon, eller konfigurer parametrar som skal sendast som argument eller miljøvariablar.",
         "modal": {
           "defaultTitle": "CLI-verktøy",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Gjennomsnittleg delstorleik"
         },
         "empty": "Indeksen er tom. Vel gjenoppbygg indeks for å starte indeksering.",
-        "error": "⚠️ kan ikkje laste indeksstatistikk",
+        "error": "kan ikkje laste indeksstatistikk",
         "rebuild": {
           "name": "Gjenoppbygg indeks",
           "desc": "Reindekser alle filer i kvelvet. Dette kan ta ei stund.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG-statistikk",
-      "totalChunks": "📊 totalt antal delar:",
-      "filesIndexed": "📁 indekserte filer:",
-      "totalSize": "💾 total storleik:",
-      "avgChunks": "📈 gj.snitt delar/fil:",
-      "indexedFiles": "📄 indekserte filer",
-      "noFilesYet": "⚠️ ingen filer er indekserte enno.",
+      "totalChunks": "totalt antal delar:",
+      "filesIndexed": "indekserte filer:",
+      "totalSize": "total storleik:",
+      "avgChunks": "gj.snitt delar/fil:",
+      "indexedFiles": "indekserte filer",
+      "noFilesYet": "ingen filer er indekserte enno.",
       "howToBuild": "Slik byggjer du RAG-indeksen:",
       "step1": "Gå til Innstillingar → RAG",
       "step2": "Aktiver RAG",
       "step3": "Vel indekser kvelv",
       "close": "Lukk",
-      "retrieved_one": "📚 henta frå {{count}} dokument",
-      "retrieved_other": "📚 henta frå {{count}} dokument",
-      "retrieved": "📚 henta frå {{count}} dokument"
+      "retrieved_one": "henta frå {{count}} dokument",
+      "retrieved_other": "henta frå {{count}} dokument",
+      "retrieved": "henta frå {{count}} dokument"
     },
     "ragTooltip": {
       "status": "RAG-indeksstatus:",
-      "totalChunks": "📊 Totalt antal delar: {{count}}",
-      "filesIndexed": "📁 Indekserte filer: {{count}}",
-      "totalSize": "💾 Total storleik: {{size}} KB",
-      "indexedFiles": "📄 Indekserte filer:",
+      "totalChunks": "Totalt antal delar: {{count}}",
+      "filesIndexed": "Indekserte filer: {{count}}",
+      "totalSize": "Total storleik: {{size}} KB",
+      "indexedFiles": "Indekserte filer:",
       "andMore": "  ... og {{count}} til",
-      "noFilesYet": "⚠️ ingen filer er indekserte enno.",
+      "noFilesYet": "ingen filer er indekserte enno.",
       "goToSettings": "Gå til Innstillingar → RAG for å byggje indeksen.",
       "ragOff": "ℹ️ RAG er for tida slått av for denne chatten."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Vel korleis agenten vel sin modell"
       },
       "systemPrompt": {
-        "createNew": "➕ opprett ny leidetekst…",
+        "createNew": "opprett ny leidetekst…",
         "promptName": {
           "name": "Leidetekstnamn",
           "desc": "Visingsnamn for den nye systemleideteksten"
@@ -1381,7 +1381,7 @@
         "tools": "Verktøy",
         "logs": "Logg"
       },
-      "refreshBtn": "🔄 oppdater",
+      "refreshBtn": "oppdater",
       "connections": {
         "title": "MCP-tenartilkoplingar",
         "noServers": "Ingen MCP-tenarar konfigurert.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Køyr verktøy",
         "clearBtn": "Tøm resultat",
         "executing": "Køyrer...",
-        "success": "✅ køyring vellukka",
-        "failed": "❌ køyring mislukkast",
-        "errorTitle": "❌ køyringsfeil",
+        "success": "køyring vellukka",
+        "failed": "køyring mislukkast",
+        "errorTitle": "køyringsfeil",
         "errorLabel": "Feil: {{message}}",
         "notices": {
           "success": "Verktøy vart køyrd",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Ingen MCP-tenarar konfigurert",
-        "testing": "🧪 Testar {{count}} MCP-tenartilkoplingar...",
-        "allSuccess": "✅ alle {{count}} MCP-tenarar vart tilkopla!",
-        "partial": "⚠️ {{success}} tilkopla, {{failed}} mislukkast"
+        "noServers": "Ingen MCP-tenarar konfigurert",
+        "testing": "Testar {{count}} MCP-tenartilkoplingar...",
+        "allSuccess": "alle {{count}} MCP-tenarar vart tilkopla!",
+        "partial": "{{success}} tilkopla, {{failed}} mislukkast"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Handter Ollama-modellar",
       "serverInfo": "Tenarinformasjon",
       "checkingServer": "Sjekkar tenar...",
-      "serverOnline": "✅ Tenar online",
+      "serverOnline": "Tenar online",
       "versionLabel": " | Versjon: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Tenar offline",
-      "connectionError": "❌ Tilkoblingsfeil",
+      "serverOffline": "Tenar offline",
+      "connectionError": "Tilkoblingsfeil",
       "pullTitle": "Hent ny modell",
       "pullHint": "Skriv inn eit modellnamn for å laste ned frå Ollama-biblioteket (t.d. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Hent modell",
       "installedTitle": "Installerte modellar",
-      "refreshList": "🔄 Oppdater liste",
+      "refreshList": "Oppdater liste",
       "noModels": "Ingen modellar funne. Hent ein modell for å kome i gang.",
       "capabilities": "Eigenskapar: {{caps}}",
       "deleteBtn": "Slett",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Skriv inn eit modellnamn",
         "pulling": "Hentar {{name}}... Dette kan ta ei stund.",
-        "pullSuccess": "✅ Henta {{name}}",
-        "pullFailed": "❌ Klarte ikkje å hente modell: {{message}}",
-        "deleted": "✅ Sletta {{name}}",
-        "deleteFailed": "❌ Klarte ikkje å slette modell: {{message}}",
+        "pullSuccess": "Henta {{name}}",
+        "pullFailed": "Klarte ikkje å hente modell: {{message}}",
+        "deleted": "Sletta {{name}}",
+        "deleteFailed": "Klarte ikkje å slette modell: {{message}}",
         "refreshing": "Oppdaterer...",
-        "refreshSuccess": "✅ Modelliste oppdatert",
-        "refreshFailed": "❌ Klarte ikkje å oppdatere modellista"
+        "refreshSuccess": "Modelliste oppdatert",
+        "refreshFailed": "Klarte ikkje å oppdatere modellista"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Handsamar...",
       "error": "Feil ved vising av forklaring",
-      "errorPrefix": "❌ Feil: "
+      "errorPrefix": "Feil:"
     }
   },
   "notices": {

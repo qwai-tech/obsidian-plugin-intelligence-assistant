@@ -1,4 +1,4 @@
-import { App, TFile, TFolder, Modal } from 'obsidian';
+import { App, TFile, TFolder, Modal, setIcon } from 'obsidian';
 import { t } from '@/i18n';
 
 export class SearchableReferenceModal extends Modal {
@@ -86,7 +86,7 @@ export class SearchableReferenceModal extends Modal {
 			}
 
 			const iconEl = itemEl.createDiv('ia-modal-list-icon');
-			iconEl.setText(item instanceof TFolder ? '📁' : '📄');
+			setIcon(iconEl, item instanceof TFolder ? 'folder' : 'file-text');
 
 			const textEl = itemEl.createDiv('ia-flex-1');
 			textEl.setText(item.path);

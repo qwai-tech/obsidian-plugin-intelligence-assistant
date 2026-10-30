@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "État de la configuration",
         "desc": "État global de la configuration du plugin",
-        "ok": "✅ Configuré ({{providers}} fournisseurs, {{conversations}} conversations)",
-        "incomplete": "⚠️ Incomplet - Veuillez configurer les fournisseurs et les modèles"
+        "ok": "Configuré ({{providers}} fournisseurs, {{conversations}} conversations)",
+        "incomplete": "Incomplet - Veuillez configurer les fournisseurs et les modèles"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} fournisseur configuré",
       "providerCount_other": "{{count}} fournisseurs configurés",
       "providerCount": "{{count}} fournisseurs configurés",
-      "refreshAll": "🔄 actualiser tous les modèles",
+      "refreshAll": "actualiser tous les modèles",
       "empty": "Aucun fournisseur configuré. Ajoutez des fournisseurs dans l'onglet fournisseur d'abord.",
       "noModels": "Aucun modèle disponible. Cliquez sur « actualiser tous les modèles » ou actualisez les fournisseurs individuels dans l'onglet fournisseur.",
       "noMatch": "Aucun modèle ne correspond aux filtres actuels. Ajustez ou effacez les filtres pour voir les résultats.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Avertissement de sécurité",
+      "securityTitle": "Avertissement de sécurité",
       "securityDesc": "Les clés API sont stockées en texte clair dans votre coffre pour des raisons de compatibilité. Pour éviter les fuites accidentelles :",
       "securityItem1": "Ne partagez PAS votre dossier {{configDir}}/plugins/intelligence-assistant/data/.",
       "securityItem2": "Ajoutez ce dossier à votre .gitignore si vous utilisez la synchronisation Git.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Configurer les serveurs Model Context Protocol (MCP) pour étendre les capacités des agents avec des outils et sources de données externes.",
-      "inspectorBtn": "🔍 Ouvrir l'inspecteur MCP",
-      "testAllBtn": "🧪 tester toutes les connexions",
-      "refreshAllBtn": "🔄 actualiser tous les outils",
+      "inspectorBtn": "Ouvrir l'inspecteur MCP",
+      "testAllBtn": "tester toutes les connexions",
+      "refreshAllBtn": "actualiser tous les outils",
       "addBtn": "+ Ajouter un serveur MCP",
       "empty": "Aucun serveur MCP configuré. Sélectionnez Ajouter un serveur MCP pour commencer.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Modifier",
-        "enabled": "✓ Activé",
-        "enabledOff": "✗ Désactivé",
+        "enabled": "Activé",
+        "enabledOff": "Désactivé",
         "connect": "connecter",
         "disconnect": "déconnecter",
         "connecting": "Connexion...",
@@ -226,17 +226,17 @@
         "enableFirst": "Activez le serveur avant de vous connecter",
         "disconnectFailed": "Échec de la déconnexion de {{name}}",
         "connectFailed": "Échec de la connexion à {{name}}",
-        "testNoCommand": "❌ veuillez saisir une commande avant de tester la connexion",
-        "testSuccess": "✅ connecté avec succès ! {{count}} outils trouvés.",
-        "testFailed": "❌ Connexion échouée : {{message}}",
-        "refreshedAll_one": "✅ outils actualisés pour {{count}} serveur",
-        "refreshedAll_other": "✅ outils actualisés pour {{count}} serveurs",
-        "refreshedAll": "✅ outils actualisés pour {{count}} serveurs",
-        "refreshedPartial": "✅ {{success}} serveurs actualisés, ❌ {{failed}} échecs",
-        "noServersConfigured": "⚠️ Aucun serveur MCP configuré",
-        "testingAll": "🧪 Test de {{count}} connexion de serveur MCP...",
-        "testAllSuccess": "✅ tous les {{count}} serveurs MCP connectés avec succès !",
-        "testAllPartial": "⚠️ {{successful}} connectés, {{failed}} échoués"
+        "testNoCommand": "veuillez saisir une commande avant de tester la connexion",
+        "testSuccess": "connecté avec succès ! {{count}} outils trouvés.",
+        "testFailed": "Connexion échouée : {{message}}",
+        "refreshedAll_one": "outils actualisés pour {{count}} serveur",
+        "refreshedAll_other": "outils actualisés pour {{count}} serveurs",
+        "refreshedAll": "outils actualisés pour {{count}} serveurs",
+        "refreshedPartial": "{{success}} serveurs actualisés, {{failed}} échecs",
+        "noServersConfigured": "Aucun serveur MCP configuré",
+        "testingAll": "Test de {{count}} connexion de serveur MCP...",
+        "testAllSuccess": "tous les {{count}} serveurs MCP connectés avec succès !",
+        "testAllPartial": "{{successful}} connectés, {{failed}} échoués"
       },
       "confirm": {
         "delete": "Supprimer le serveur MCP « {{name}} » ?"
@@ -362,7 +362,7 @@
             "params": "path (requis), content (requis) : Chemin de la note et contenu à ajouter"
           }
         },
-        "infoTitle": "💡 À propos des outils",
+        "infoTitle": "À propos des outils",
         "infoText": "Les outils intégrés sont configurés par paramètres de plugin. Les outils MCP sont gérés indépendamment — utilisez l'onglet MCP pour connecter des serveurs et actualiser la disponibilité des outils.",
         "toolNames": {
           "read_file": "Lire un fichier",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "Outil CLI supprimé"
         },
-        "infoTitle": "💡 À propos des outils CLI",
+        "infoTitle": "À propos des outils CLI",
         "infoText": "Les outils CLI exécutent des commandes shell localement. Utilisez {{paramName}} dans les arguments pour la substitution de modèle, ou configurez des paramètres à passer comme arguments ou variables d'environnement.",
         "modal": {
           "defaultTitle": "Outil CLI",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Taille moy. des fragments"
         },
         "empty": "L'index est vide. Sélectionnez reconstruire l'index pour commencer l'indexation.",
-        "error": "⚠️ impossible de charger les statistiques de l'index",
+        "error": "impossible de charger les statistiques de l'index",
         "rebuild": {
           "name": "Reconstruire l'index",
           "desc": "Réindexer tous les fichiers de votre coffre. Cela peut prendre un moment.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "Statistiques RAG",
-      "totalChunks": "📊 fragments totaux :",
-      "filesIndexed": "📁 fichiers indexés :",
-      "totalSize": "💾 taille totale :",
-      "avgChunks": "📈 Moy. fragments/fichier :",
-      "indexedFiles": "📄 fichiers indexés",
-      "noFilesYet": "⚠️ aucun fichier n'a encore été indexé.",
+      "totalChunks": "fragments totaux :",
+      "filesIndexed": "fichiers indexés :",
+      "totalSize": "taille totale :",
+      "avgChunks": "Moy. fragments/fichier :",
+      "indexedFiles": "fichiers indexés",
+      "noFilesYet": "aucun fichier n'a encore été indexé.",
       "howToBuild": "Pour construire l'index RAG :",
       "step1": "Aller dans Paramètres → RAG",
       "step2": "Activer le RAG",
       "step3": "Sélectionner indexer le coffre",
       "close": "Fermer",
-      "retrieved_one": "📚 récupéré depuis {{count}} document",
-      "retrieved_other": "📚 récupéré depuis {{count}} documents",
-      "retrieved": "📚 récupéré depuis {{count}} documents"
+      "retrieved_one": "récupéré depuis {{count}} document",
+      "retrieved_other": "récupéré depuis {{count}} documents",
+      "retrieved": "récupéré depuis {{count}} documents"
     },
     "ragTooltip": {
       "status": "État de l'index RAG :",
-      "totalChunks": "📊 Fragments totaux : {{count}}",
-      "filesIndexed": "📁 Fichiers indexés : {{count}}",
-      "totalSize": "💾 Taille totale : {{size}} Ko",
-      "indexedFiles": "📄 Fichiers indexés :",
+      "totalChunks": "Fragments totaux : {{count}}",
+      "filesIndexed": "Fichiers indexés : {{count}}",
+      "totalSize": "Taille totale : {{size}} Ko",
+      "indexedFiles": "Fichiers indexés :",
       "andMore": "  ... et {{count}} de plus",
-      "noFilesYet": "⚠️ aucun fichier indexé pour l'instant.",
+      "noFilesYet": "aucun fichier indexé pour l'instant.",
       "goToSettings": "Aller dans Paramètres → RAG pour construire l'index.",
       "ragOff": "ℹ️ Le RAG est actuellement désactivé pour ce chat."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Choisir comment l'agent sélectionnera son modèle"
       },
       "systemPrompt": {
-        "createNew": "➕ créer un nouveau prompt…",
+        "createNew": "créer un nouveau prompt…",
         "promptName": {
           "name": "Nom du prompt",
           "desc": "Nom d'affichage pour le nouveau prompt système"
@@ -1381,7 +1381,7 @@
         "tools": "Outils",
         "logs": "Journaux"
       },
-      "refreshBtn": "🔄 actualiser",
+      "refreshBtn": "actualiser",
       "connections": {
         "title": "Connexions aux serveurs MCP",
         "noServers": "Aucun serveur MCP configuré.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Exécuter l'outil",
         "clearBtn": "Effacer les résultats",
         "executing": "Exécution...",
-        "success": "✅ exécution réussie",
-        "failed": "❌ exécution échouée",
-        "errorTitle": "❌ erreur d'exécution",
+        "success": "exécution réussie",
+        "failed": "exécution échouée",
+        "errorTitle": "erreur d'exécution",
         "errorLabel": "Erreur : {{message}}",
         "notices": {
           "success": "Outil exécuté avec succès",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Aucun serveur MCP configuré",
-        "testing": "🧪 Test de {{count}} connexion de serveur MCP...",
-        "allSuccess": "✅ tous les {{count}} serveurs MCP connectés avec succès !",
-        "partial": "⚠️ {{success}} connectés, {{failed}} échoués"
+        "noServers": "Aucun serveur MCP configuré",
+        "testing": "Test de {{count}} connexion de serveur MCP...",
+        "allSuccess": "tous les {{count}} serveurs MCP connectés avec succès !",
+        "partial": "{{success}} connectés, {{failed}} échoués"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Gérer les modèles Ollama",
       "serverInfo": "Informations sur le serveur",
       "checkingServer": "Vérification du serveur...",
-      "serverOnline": "✅ Serveur en ligne",
+      "serverOnline": "Serveur en ligne",
       "versionLabel": " | Version : {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Serveur hors ligne",
-      "connectionError": "❌ Erreur de connexion",
+      "serverOffline": "Serveur hors ligne",
+      "connectionError": "Erreur de connexion",
       "pullTitle": "Télécharger un nouveau modèle",
       "pullHint": "Saisissez un nom de modèle pour le télécharger depuis la bibliothèque Ollama (ex. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Télécharger le modèle",
       "installedTitle": "Modèles installés",
-      "refreshList": "🔄 Actualiser la liste",
+      "refreshList": "Actualiser la liste",
       "noModels": "Aucun modèle trouvé. Téléchargez un modèle pour commencer.",
       "capabilities": "Capacités : {{caps}}",
       "deleteBtn": "Supprimer",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Veuillez saisir un nom de modèle",
         "pulling": "Téléchargement de {{name}}... Cela peut prendre un moment.",
-        "pullSuccess": "✅ {{name}} téléchargé avec succès",
-        "pullFailed": "❌ Échec du téléchargement du modèle : {{message}}",
-        "deleted": "✅ {{name}} supprimé",
-        "deleteFailed": "❌ Échec de la suppression du modèle : {{message}}",
+        "pullSuccess": "{{name}} téléchargé avec succès",
+        "pullFailed": "Échec du téléchargement du modèle : {{message}}",
+        "deleted": "{{name}} supprimé",
+        "deleteFailed": "Échec de la suppression du modèle : {{message}}",
         "refreshing": "Actualisation...",
-        "refreshSuccess": "✅ Liste des modèles actualisée",
-        "refreshFailed": "❌ Échec de l'actualisation de la liste des modèles"
+        "refreshSuccess": "Liste des modèles actualisée",
+        "refreshFailed": "Échec de l'actualisation de la liste des modèles"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Traitement...",
       "error": "Erreur lors du rendu de l'explication",
-      "errorPrefix": "❌ Erreur : "
+      "errorPrefix": "Erreur :"
     }
   },
   "notices": {

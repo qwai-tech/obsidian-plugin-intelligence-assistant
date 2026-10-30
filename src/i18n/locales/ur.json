@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "کنفیگریشن کی حالت",
         "desc": "پلگ ان کنفیگریشن کی مجموعی حالت",
-        "ok": "✅ کنفیگر ہو گیا ({{providers}} فراہم کنندگان، {{conversations}} گفتگو)",
-        "incomplete": "⚠️ نامکمل - براہ کرم فراہم کنندگان اور ماڈلز کنفیگر کریں"
+        "ok": "کنفیگر ہو گیا ({{providers}} فراہم کنندگان، {{conversations}} گفتگو)",
+        "incomplete": "نامکمل - براہ کرم فراہم کنندگان اور ماڈلز کنفیگر کریں"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} فراہم کنندہ کنفیگر ہے",
       "providerCount_other": "{{count}} فراہم کنندگان کنفیگر ہیں",
       "providerCount": "{{count}} فراہم کنندگان کنفیگر ہیں",
-      "refreshAll": "🔄 تمام ماڈلز ریفریش کریں",
+      "refreshAll": "تمام ماڈلز ریفریش کریں",
       "empty": "ابھی تک کوئی فراہم کنندہ کنفیگر نہیں ہوا۔ پہلے فراہم کنندگان ٹیب میں فراہم کنندگان شامل کریں۔",
       "noModels": "کوئی ماڈل دستیاب نہیں۔ \"تمام ماڈلز ریفریش کریں\" پر کلک کریں یا فراہم کنندگان ٹیب میں انفرادی فراہم کنندگان ریفریش کریں۔",
       "noMatch": "موجودہ فلٹروں سے کوئی ماڈل مطابقت نہیں رکھتا۔ نتائج دیکھنے کے لیے فلٹرز ایڈجسٹ یا صاف کریں۔",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ سیکیورٹی انتباہ",
+      "securityTitle": "سیکیورٹی انتباہ",
       "securityDesc": "API کیز مطابقت کے لیے آپ کے vault میں سادہ متن کے طور پر محفوظ ہوتے ہیں۔ حادثاتی لیک کو روکنے کے لیے:",
       "securityItem1": "اپنا {{configDir}}/plugins/intelligence-assistant/data/ فولڈر شیئر نہ کریں۔",
       "securityItem2": "اگر آپ Git sync استعمال کرتے ہیں تو اس فولڈر کو .gitignore میں شامل کریں۔",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "بیرونی ٹولز اور ڈیٹا ذرائع کے ساتھ ایجنٹ کی صلاحیتوں کو بڑھانے کے لیے Model Context Protocol (MCP) سرورز کنفیگر کریں۔",
-      "inspectorBtn": "🔍 MCP انسپیکٹر کھولیں",
-      "testAllBtn": "🧪 تمام کنکشن ٹیسٹ کریں",
-      "refreshAllBtn": "🔄 تمام ٹولز ریفریش",
+      "inspectorBtn": "MCP انسپیکٹر کھولیں",
+      "testAllBtn": "تمام کنکشن ٹیسٹ کریں",
+      "refreshAllBtn": "تمام ٹولز ریفریش",
       "addBtn": "+ MCP سرور شامل کریں",
       "empty": "کوئی MCP سرور کنفیگر نہیں۔ شروع کرنے کے لیے MCP سرور شامل کریں منتخب کریں۔",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "ترمیم",
-        "enabled": "✓ فعال",
-        "enabledOff": "✗ غیر فعال",
+        "enabled": "فعال",
+        "enabledOff": "غیر فعال",
         "connect": "کنکٹ",
         "disconnect": "ڈسکنکٹ",
         "connecting": "کنکٹ ہو رہا ہے...",
@@ -226,17 +226,17 @@
         "enableFirst": "کنکٹ ہونے سے پہلے سرور فعال کریں",
         "disconnectFailed": "{{name}} سے منقطع ہونا ناکام ہوا",
         "connectFailed": "{{name}} سے کنکٹ ہونا ناکام ہوا",
-        "testNoCommand": "❌ کنکشن ٹیسٹ کرنے سے پہلے براہ کرم ایک کمانڈ درج کریں",
-        "testSuccess": "✅ کامیابی سے منسلک ہو گیا! {{count}} ٹولز ملے۔",
-        "testFailed": "❌ کنکشن ناکام ہوا: {{message}}",
-        "refreshedAll_one": "✅ {{count}} سرور کے ٹولز ریفریش ہو گئے",
-        "refreshedAll_other": "✅ {{count}} سرورز کے ٹولز ریفریش ہو گئے",
-        "refreshedAll": "✅ {{count}} سرورز کے ٹولز ریفریش ہو گئے",
-        "refreshedPartial": "✅ {{success}} سرورز ریفریش ہوئے، ❌ {{failed}} ناکام",
-        "noServersConfigured": "⚠️ کوئی MCP سرور کنفیگر نہیں",
-        "testingAll": "🧪 {{count}} MCP سرور کنکشن ٹیسٹ ہو رہے ہیں...",
-        "testAllSuccess": "✅ تمام {{count}} mcp سرورز کامیابی سے منسلک ہو گئے!",
-        "testAllPartial": "⚠️ {{successful}} منسلک ہوئے، {{failed}} ناکام"
+        "testNoCommand": "کنکشن ٹیسٹ کرنے سے پہلے براہ کرم ایک کمانڈ درج کریں",
+        "testSuccess": "کامیابی سے منسلک ہو گیا! {{count}} ٹولز ملے۔",
+        "testFailed": "کنکشن ناکام ہوا: {{message}}",
+        "refreshedAll_one": "{{count}} سرور کے ٹولز ریفریش ہو گئے",
+        "refreshedAll_other": "{{count}} سرورز کے ٹولز ریفریش ہو گئے",
+        "refreshedAll": "{{count}} سرورز کے ٹولز ریفریش ہو گئے",
+        "refreshedPartial": "{{success}} سرورز ریفریش ہوئے، {{failed}} ناکام",
+        "noServersConfigured": "کوئی MCP سرور کنفیگر نہیں",
+        "testingAll": "{{count}} MCP سرور کنکشن ٹیسٹ ہو رہے ہیں...",
+        "testAllSuccess": "تمام {{count}} mcp سرورز کامیابی سے منسلک ہو گئے!",
+        "testAllPartial": "{{successful}} منسلک ہوئے، {{failed}} ناکام"
       },
       "confirm": {
         "delete": "MCP سرور «{{name}}» حذف کریں؟"
@@ -362,7 +362,7 @@
             "params": "path (ضروری), content (ضروری): نوٹ کا راستہ اور شامل کرنے کا مواد"
           }
         },
-        "infoTitle": "💡 ٹولز کے بارے میں",
+        "infoTitle": "ٹولز کے بارے میں",
         "infoText": "بلٹ ان ٹولز پلگ ان کی ترتیبات کے مطابق کنفیگر ہوتے ہیں۔ MCP ٹولز آزادانہ طور پر منیج ہوتے ہیں — سرورز کنکٹ کرنے اور ٹول کی دستیابی ریفریش کرنے کے لیے MCP ٹیب استعمال کریں۔",
         "toolNames": {
           "read_file": "فائل پڑھیں",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI ٹول ہٹا دیا گیا"
         },
-        "infoTitle": "💡 CLI ٹولز کے بارے میں",
+        "infoTitle": "CLI ٹولز کے بارے میں",
         "infoText": "CLI ٹولز shell کمانڈز مقامی طور پر چلاتے ہیں۔ ٹیمپلیٹ متبادل کے لیے دلائل میں {{paramName}} استعمال کریں، یا پیرامیٹرز کو دلائل یا ماحولیاتی متغیرات کے طور پر منتقل کرنے کے لیے کنفیگر کریں۔",
         "modal": {
           "defaultTitle": "CLI ٹول",
@@ -663,7 +663,7 @@
           "avgChunkSize": "اوسط ٹکڑے کا سائز"
         },
         "empty": "انڈیکس خالی ہے۔ انڈیکسنگ شروع کرنے کے لیے انڈیکس دوبارہ بنائیں منتخب کریں۔",
-        "error": "⚠️ انڈیکس کے اعداد و شمار لوڈ نہیں ہو سکے",
+        "error": "انڈیکس کے اعداد و شمار لوڈ نہیں ہو سکے",
         "rebuild": {
           "name": "انڈیکس دوبارہ بنائیں",
           "desc": "اپنے vault میں تمام فائلیں دوبارہ انڈیکس کریں۔ اس میں کچھ وقت لگ سکتا ہے۔",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG کے اعداد و شمار",
-      "totalChunks": "📊 کل ٹکڑے:",
-      "filesIndexed": "📁 انڈیکس کردہ فائلیں:",
-      "totalSize": "💾 کل سائز:",
-      "avgChunks": "📈 اوسط ٹکڑے/فائل:",
-      "indexedFiles": "📄 انڈیکس کردہ فائلیں",
-      "noFilesYet": "⚠️ ابھی تک کوئی فائل انڈیکس نہیں ہوئی۔",
+      "totalChunks": "کل ٹکڑے:",
+      "filesIndexed": "انڈیکس کردہ فائلیں:",
+      "totalSize": "کل سائز:",
+      "avgChunks": "اوسط ٹکڑے/فائل:",
+      "indexedFiles": "انڈیکس کردہ فائلیں",
+      "noFilesYet": "ابھی تک کوئی فائل انڈیکس نہیں ہوئی۔",
       "howToBuild": "RAG انڈیکس بنانے کے لیے:",
       "step1": "ترتیبات ← RAG پر جائیں",
       "step2": "RAG فعال کریں",
       "step3": "vault انڈیکس منتخب کریں",
       "close": "بند کریں",
-      "retrieved_one": "📚 {{count}} دستاویز سے بازیافت",
-      "retrieved_other": "📚 {{count}} دستاویزات سے بازیافت",
-      "retrieved": "📚 {{count}} دستاویزات سے بازیافت"
+      "retrieved_one": "{{count}} دستاویز سے بازیافت",
+      "retrieved_other": "{{count}} دستاویزات سے بازیافت",
+      "retrieved": "{{count}} دستاویزات سے بازیافت"
     },
     "ragTooltip": {
       "status": "RAG انڈیکس کی حالت:",
-      "totalChunks": "📊 کل ٹکڑے: {{count}}",
-      "filesIndexed": "📁 انڈیکس کردہ فائلیں: {{count}}",
-      "totalSize": "💾 کل سائز: {{size}} KB",
-      "indexedFiles": "📄 انڈیکس کردہ فائلیں:",
+      "totalChunks": "کل ٹکڑے: {{count}}",
+      "filesIndexed": "انڈیکس کردہ فائلیں: {{count}}",
+      "totalSize": "کل سائز: {{size}} KB",
+      "indexedFiles": "انڈیکس کردہ فائلیں:",
       "andMore": "  ... اور {{count}} مزید",
-      "noFilesYet": "⚠️ ابھی تک کوئی فائل انڈیکس نہیں۔",
+      "noFilesYet": "ابھی تک کوئی فائل انڈیکس نہیں۔",
       "goToSettings": "انڈیکس بنانے کے لیے ترتیبات ← RAG پر جائیں۔",
       "ragOff": "ℹ️ RAG ابھی اس چیٹ کے لیے آف ہے۔"
     },
@@ -1252,7 +1252,7 @@
         "desc": "انتخاب کریں ایجنٹ اپنا ماڈل کیسے منتخب کرے گا"
       },
       "systemPrompt": {
-        "createNew": "➕ نئی ہدایت بنائیں…",
+        "createNew": "نئی ہدایت بنائیں…",
         "promptName": {
           "name": "ہدایت کا نام",
           "desc": "نئی سسٹم ہدایت کے لیے ڈسپلے نام"
@@ -1381,7 +1381,7 @@
         "tools": "ٹولز",
         "logs": "لاگز"
       },
-      "refreshBtn": "🔄 ریفریش",
+      "refreshBtn": "ریفریش",
       "connections": {
         "title": "MCP سرور کنکشن",
         "noServers": "کوئی MCP سرور کنفیگر نہیں۔",
@@ -1443,9 +1443,9 @@
         "performBtn": "ٹول چلائیں",
         "clearBtn": "نتائج صاف کریں",
         "executing": "چل رہا ہے...",
-        "success": "✅ عمل کامیاب",
-        "failed": "❌ عمل ناکام",
-        "errorTitle": "❌ عمل کی خرابی",
+        "success": "عمل کامیاب",
+        "failed": "عمل ناکام",
+        "errorTitle": "عمل کی خرابی",
         "errorLabel": "خرابی: {{message}}",
         "notices": {
           "success": "ٹول کامیابی سے چلا",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ کوئی MCP سرور کنفیگر نہیں",
-        "testing": "🧪 {{count}} MCP سرور کنکشن ٹیسٹ ہو رہے ہیں...",
-        "allSuccess": "✅ تمام {{count}} mcp سرورز کامیابی سے منسلک ہو گئے!",
-        "partial": "⚠️ {{success}} منسلک ہوئے، {{failed}} ناکام"
+        "noServers": "کوئی MCP سرور کنفیگر نہیں",
+        "testing": "{{count}} MCP سرور کنکشن ٹیسٹ ہو رہے ہیں...",
+        "allSuccess": "تمام {{count}} mcp سرورز کامیابی سے منسلک ہو گئے!",
+        "partial": "{{success}} منسلک ہوئے، {{failed}} ناکام"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Ollama ماڈلز منیج کریں",
       "serverInfo": "سرور معلومات",
       "checkingServer": "سرور چیک ہو رہا ہے...",
-      "serverOnline": "✅ سرور آن لائن",
+      "serverOnline": "سرور آن لائن",
       "versionLabel": " | ورژن: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ سرور آف لائن",
-      "connectionError": "❌ کنکشن کی خرابی",
+      "serverOffline": "سرور آف لائن",
+      "connectionError": "کنکشن کی خرابی",
       "pullTitle": "نیا ماڈل پل کریں",
       "pullHint": "Ollama لائبریری سے ڈاؤن لوڈ کرنے کے لیے ماڈل کا نام درج کریں (مثلاً llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "ماڈل پل کریں",
       "installedTitle": "نصب شدہ ماڈلز",
-      "refreshList": "🔄 فہرست ریفریش",
+      "refreshList": "فہرست ریفریش",
       "noModels": "کوئی ماڈل نہیں ملا۔ شروع کرنے کے لیے ماڈل پل کریں۔",
       "capabilities": "صلاحیتیں: {{caps}}",
       "deleteBtn": "حذف",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "براہ کرم ماڈل کا نام درج کریں",
         "pulling": "{{name}} پل ہو رہا ہے... اس میں کچھ وقت لگ سکتا ہے۔",
-        "pullSuccess": "✅ {{name}} کامیابی سے پل ہو گیا",
-        "pullFailed": "❌ ماڈل پل کرنا ناکام ہوا: {{message}}",
-        "deleted": "✅ {{name}} حذف ہو گیا",
-        "deleteFailed": "❌ ماڈل حذف کرنا ناکام ہوا: {{message}}",
+        "pullSuccess": "{{name}} کامیابی سے پل ہو گیا",
+        "pullFailed": "ماڈل پل کرنا ناکام ہوا: {{message}}",
+        "deleted": "{{name}} حذف ہو گیا",
+        "deleteFailed": "ماڈل حذف کرنا ناکام ہوا: {{message}}",
         "refreshing": "ریفریش ہو رہا ہے...",
-        "refreshSuccess": "✅ ماڈل کی فہرست ریفریش ہو گئی",
-        "refreshFailed": "❌ ماڈل کی فہرست ریفریش کرنا ناکام ہوا"
+        "refreshSuccess": "ماڈل کی فہرست ریفریش ہو گئی",
+        "refreshFailed": "ماڈل کی فہرست ریفریش کرنا ناکام ہوا"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ پروسیس ہو رہا ہے...",
       "error": "وضاحت رینڈر کرنے میں خرابی",
-      "errorPrefix": "❌ خرابی: "
+      "errorPrefix": "خرابی:"
     }
   },
   "notices": {

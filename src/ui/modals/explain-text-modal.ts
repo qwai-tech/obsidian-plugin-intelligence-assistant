@@ -1,4 +1,4 @@
-import { Modal, App, MarkdownRenderer, Component } from 'obsidian';
+import { Modal, App, MarkdownRenderer, Component, setIcon } from 'obsidian';
 import { t } from '@/i18n';
 
 /**
@@ -28,7 +28,7 @@ export class ExplainTextModal extends Modal {
 
 		// Header
 		const header = contentEl.createDiv('explain-text-modal-header');
-		header.createSpan({ text: '💡', cls: 'explain-text-modal-icon' });
+		setIcon(header.createSpan({ cls: 'explain-text-modal-icon' }), 'lightbulb');
 		header.createSpan({ text: this.title, cls: 'explain-text-modal-title' });
 
 		// Content container

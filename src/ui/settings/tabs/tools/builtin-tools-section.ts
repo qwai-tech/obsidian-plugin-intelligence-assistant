@@ -7,6 +7,7 @@ import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import type IntelligenceAssistantPlugin from '@plugin';
+import { renderIcon } from '@/ui/utils/icon';
 
 export function renderBuiltinToolsSection(
 	content: HTMLElement,
@@ -18,12 +19,12 @@ export function renderBuiltinToolsSection(
 		parameters: string;
 		icon: string;
 	}> = {
-		'read_file': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.readFile.desc'), parameters: t('settings.tools.builtIn.toolMeta.readFile.params'), icon: '📖' },
-		'write_file': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.writeFile.desc'), parameters: t('settings.tools.builtIn.toolMeta.writeFile.params'), icon: '✍️' },
-		'list_files': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.listFiles.desc'), parameters: t('settings.tools.builtIn.toolMeta.listFiles.params'), icon: '📁' },
-		'search_files': { category: t('settings.tools.builtIn.categories.searchDisc'), description: t('settings.tools.builtIn.toolMeta.searchFiles.desc'), parameters: t('settings.tools.builtIn.toolMeta.searchFiles.params'), icon: '🔍' },
-		'create_note': { category: t('settings.tools.builtIn.categories.noteMgmt'), description: t('settings.tools.builtIn.toolMeta.createNote.desc'), parameters: t('settings.tools.builtIn.toolMeta.createNote.params'), icon: '📝' },
-		'append_to_note': { category: t('settings.tools.builtIn.categories.noteMgmt'), description: t('settings.tools.builtIn.toolMeta.appendNote.desc'), parameters: t('settings.tools.builtIn.toolMeta.appendNote.params'), icon: '➕' }
+		'read_file': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.readFile.desc'), parameters: t('settings.tools.builtIn.toolMeta.readFile.params'), icon: 'file-text' },
+		'write_file': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.writeFile.desc'), parameters: t('settings.tools.builtIn.toolMeta.writeFile.params'), icon: 'pencil' },
+		'list_files': { category: t('settings.tools.builtIn.categories.fileOps'), description: t('settings.tools.builtIn.toolMeta.listFiles.desc'), parameters: t('settings.tools.builtIn.toolMeta.listFiles.params'), icon: 'folder' },
+		'search_files': { category: t('settings.tools.builtIn.categories.searchDisc'), description: t('settings.tools.builtIn.toolMeta.searchFiles.desc'), parameters: t('settings.tools.builtIn.toolMeta.searchFiles.params'), icon: 'search' },
+		'create_note': { category: t('settings.tools.builtIn.categories.noteMgmt'), description: t('settings.tools.builtIn.toolMeta.createNote.desc'), parameters: t('settings.tools.builtIn.toolMeta.createNote.params'), icon: 'file-plus' },
+		'append_to_note': { category: t('settings.tools.builtIn.categories.noteMgmt'), description: t('settings.tools.builtIn.toolMeta.appendNote.desc'), parameters: t('settings.tools.builtIn.toolMeta.appendNote.params'), icon: 'list-plus' }
 	};
 
 	const table = createTable(content, [
@@ -49,7 +50,7 @@ export function renderBuiltinToolsSection(
 		const nameCell = row.insertCell();
 		nameCell.addClass('ia-table-cell');
 		const nameDiv = nameCell.createDiv('tool-name');
-		nameDiv.createSpan('tool-icon').setText(metadata.icon);
+		renderIcon(nameDiv.createSpan('tool-icon'), metadata.icon, 'wrench');
 		const fallbackName = tool.type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 		nameDiv.createSpan().setText(t(`settings.tools.builtIn.toolNames.${tool.type}`, { defaultValue: fallbackName }));
 

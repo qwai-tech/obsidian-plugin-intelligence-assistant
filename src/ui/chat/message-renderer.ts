@@ -1,4 +1,4 @@
-import type { App } from 'obsidian';
+import { setIcon, type App } from 'obsidian';
 import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Message } from '@/features/conversations';
@@ -25,7 +25,6 @@ export interface MessageRendererCallbacks {
 	insertMessageToNote?: (message: Message) => Promise<void>;
 	regenerateMessage?: (message: Message, element: HTMLElement) => Promise<void>;
 	displayRagSources?: (container: HTMLElement, message: Message) => void;
-	getProviderAvatar?: (message: Message) => string;
 	getProviderColor?: (message: Message) => string;
 	applyWriteProposal?: (proposal: WriteProposal | BatchWriteProposal) => Promise<boolean>;
 }
@@ -209,15 +208,15 @@ function applyAvatarAndLabel(
 			.join(' ');
 	};
 
-	const setDefaultAvatar = (emoji: string, label: string) => {
-		avatar.setText(emoji);
+	const setDefaultAvatar = (icon: string, label: string) => {
+		setIcon(avatar, icon);
 		avatar.removeClass('ia-chat-avatar--provider-bg');
 		avatar.addClass('ia-chat-avatar--default-bg');
 		labelElement.setText(label);
 	};
 
 	if (message.role === 'user') {
-		setDefaultAvatar('🧑', 'You');
+		setDefaultAvatar('user', 'You');
 		return null;
 	}
 
@@ -226,7 +225,6 @@ function applyAvatarAndLabel(
 	const fallbackColor = callbacks?.getProviderColor?.(message)
 		|| (providerId ? providerColorFallbacks[providerId] : undefined)
 		|| '#3f3f46';
-	const fallbackAvatar = callbacks?.getProviderAvatar?.(message) ?? '🤖';
 
 	const providerLabel = providerMeta?.label || humanizeProvider(providerId) || 'Unknown Provider';
 	const modelLabel = getModelDisplayName(message.model) || message.model || 'Unknown Model';
@@ -240,10 +238,10 @@ function applyAvatarAndLabel(
 		if (svgElement.instanceOf(SVGElement)) {
 			avatar.appendChild(svgElement);
 		} else {
-			avatar.setText(fallbackAvatar);
+			setIcon(avatar, 'bot');
 		}
 	} else {
-		avatar.setText(fallbackAvatar);
+		setIcon(avatar, 'bot');
 	}
 	avatar.setCssProps({ '--ia-avatar-bg': fallbackColor });
 	avatar.addClass('ia-chat-avatar--provider-bg');

@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Yapılandırma durumu",
         "desc": "Genel eklenti yapılandırma durumu",
-        "ok": "✅ Yapılandırıldı ({{providers}} sağlayıcı, {{conversations}} konuşma)",
-        "incomplete": "⚠️ Eksik - Lütfen sağlayıcıları ve modelleri yapılandırın"
+        "ok": "Yapılandırıldı ({{providers}} sağlayıcı, {{conversations}} konuşma)",
+        "incomplete": "Eksik - Lütfen sağlayıcıları ve modelleri yapılandırın"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} sağlayıcı yapılandırıldı",
       "providerCount_other": "{{count}} sağlayıcı yapılandırıldı",
       "providerCount": "{{count}} sağlayıcı yapılandırıldı",
-      "refreshAll": "🔄 tüm modelleri yenile",
+      "refreshAll": "tüm modelleri yenile",
       "empty": "Henüz sağlayıcı yapılandırılmadı. Önce sağlayıcı sekmesinde sağlayıcı ekleyin.",
       "noModels": "Kullanılabilir model yok. \"Tüm modelleri yenile\" seçeneğine tıklayın veya sağlayıcı sekmesindeki sağlayıcıları tek tek yenileyin.",
       "noMatch": "Mevcut filtrelerle eşleşen model yok. Sonuçları görmek için filtreleri ayarlayın veya temizleyin.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Güvenlik Uyarısı",
+      "securityTitle": "Güvenlik Uyarısı",
       "securityDesc": "API anahtarları uyumluluk için vault'unuzda düz metin olarak saklanır. Kazara sızıntıları önlemek için:",
       "securityItem1": "{{configDir}}/plugins/intelligence-assistant/data/ klasörünüzü PAYLAŞMAYIN.",
       "securityItem2": "Git senkronizasyonu kullanıyorsanız bu klasörü .gitignore dosyanıza ekleyin.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Harici araçlar ve veri kaynaklarıyla ajan yeteneklerini genişletmek için Model Context Protocol (MCP) sunucularını yapılandırın.",
-      "inspectorBtn": "🔍 MCP denetçisini aç",
-      "testAllBtn": "🧪 tüm bağlantıları test et",
-      "refreshAllBtn": "🔄 tüm araçları yenile",
+      "inspectorBtn": "MCP denetçisini aç",
+      "testAllBtn": "tüm bağlantıları test et",
+      "refreshAllBtn": "tüm araçları yenile",
       "addBtn": "+ MCP sunucusu ekle",
       "empty": "MCP sunucusu yapılandırılmadı. Başlamak için MCP sunucusu ekle seçeneğini seçin.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Düzenle",
-        "enabled": "✓ Etkin",
-        "enabledOff": "✗ Devre dışı",
+        "enabled": "Etkin",
+        "enabledOff": "Devre dışı",
         "connect": "bağlan",
         "disconnect": "bağlantıyı kes",
         "connecting": "Bağlanıyor...",
@@ -226,17 +226,17 @@
         "enableFirst": "Bağlanmadan önce sunucuyu etkinleştirin",
         "disconnectFailed": "{{name}} bağlantısı kesilemedi",
         "connectFailed": "{{name}} ile bağlantı kurulamadı",
-        "testNoCommand": "❌ bağlantıyı test etmeden önce lütfen bir komut girin",
-        "testSuccess": "✅ başarıyla bağlanıldı! {{count}} araç bulundu.",
-        "testFailed": "❌ Bağlantı başarısız: {{message}}",
-        "refreshedAll_one": "✅ {{count}} sunucu için araçlar yenilendi",
-        "refreshedAll_other": "✅ {{count}} sunucu için araçlar yenilendi",
-        "refreshedAll": "✅ {{count}} sunucu için araçlar yenilendi",
-        "refreshedPartial": "✅ {{success}} sunucu yenilendi, ❌ {{failed}} başarısız",
-        "noServersConfigured": "⚠️ MCP sunucusu yapılandırılmadı",
-        "testingAll": "🧪 {{count}} MCP sunucu bağlantısı test ediliyor...",
-        "testAllSuccess": "✅ tüm {{count}} mcp sunucusu başarıyla bağlandı!",
-        "testAllPartial": "⚠️ {{successful}} bağlandı, {{failed}} başarısız"
+        "testNoCommand": "bağlantıyı test etmeden önce lütfen bir komut girin",
+        "testSuccess": "başarıyla bağlanıldı! {{count}} araç bulundu.",
+        "testFailed": "Bağlantı başarısız: {{message}}",
+        "refreshedAll_one": "{{count}} sunucu için araçlar yenilendi",
+        "refreshedAll_other": "{{count}} sunucu için araçlar yenilendi",
+        "refreshedAll": "{{count}} sunucu için araçlar yenilendi",
+        "refreshedPartial": "{{success}} sunucu yenilendi, {{failed}} başarısız",
+        "noServersConfigured": "MCP sunucusu yapılandırılmadı",
+        "testingAll": "{{count}} MCP sunucu bağlantısı test ediliyor...",
+        "testAllSuccess": "tüm {{count}} mcp sunucusu başarıyla bağlandı!",
+        "testAllPartial": "{{successful}} bağlandı, {{failed}} başarısız"
       },
       "confirm": {
         "delete": "\"{{name}}\" MCP sunucusu silinsin mi?"
@@ -362,7 +362,7 @@
             "params": "path (gerekli), content (gerekli): Not yolu ve eklenecek içerik"
           }
         },
-        "infoTitle": "💡 araçlar hakkında",
+        "infoTitle": "araçlar hakkında",
         "infoText": "Yerleşik araçlar eklenti ayarları başına yapılandırılır. MCP araçları bağımsız olarak yönetilir—sunucuları bağlamak ve araç kullanılabilirliğini yenilemek için MCP sekmesini kullanın.",
         "toolNames": {
           "read_file": "Dosya Oku",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI aracı kaldırıldı"
         },
-        "infoTitle": "💡 CLI Araçları Hakkında",
+        "infoTitle": "CLI Araçları Hakkında",
         "infoText": "CLI araçları kabuk komutlarını yerel olarak çalıştırır. Şablon ikamesi için argümanlarda {{paramName}} kullanın veya parametreleri argüman ya da ortam değişkeni olarak geçirecek şekilde yapılandırın.",
         "modal": {
           "defaultTitle": "CLI Aracı",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Ort. Parça Boyutu"
         },
         "empty": "Dizin boş. Dizinlemeyi başlatmak için dizini yeniden oluştur seçeneğini seçin.",
-        "error": "⚠️ dizin istatistikleri yüklenemiyor",
+        "error": "dizin istatistikleri yüklenemiyor",
         "rebuild": {
           "name": "Dizini yeniden oluştur",
           "desc": "Vault'unuzdaki tüm dosyaları yeniden dizinleyin. Bu biraz zaman alabilir.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG istatistikleri",
-      "totalChunks": "📊 toplam parça:",
-      "filesIndexed": "📁 dizinlenen dosyalar:",
-      "totalSize": "💾 toplam boyut:",
-      "avgChunks": "📈 Ort. Parça/Dosya:",
-      "indexedFiles": "📄 dizinlenen dosyalar",
-      "noFilesYet": "⚠️ henüz hiçbir dosya dizinlenmedi.",
+      "totalChunks": "toplam parça:",
+      "filesIndexed": "dizinlenen dosyalar:",
+      "totalSize": "toplam boyut:",
+      "avgChunks": "Ort. Parça/Dosya:",
+      "indexedFiles": "dizinlenen dosyalar",
+      "noFilesYet": "henüz hiçbir dosya dizinlenmedi.",
       "howToBuild": "RAG dizinini oluşturmak için:",
       "step1": "Ayarlar → RAG'a gidin",
       "step2": "RAG'ı etkinleştirin",
       "step3": "Vault dizinini seçin",
       "close": "Kapat",
-      "retrieved_one": "📚 {{count}} belgeden alındı",
-      "retrieved_other": "📚 {{count}} belgeden alındı",
-      "retrieved": "📚 {{count}} belgeden alındı"
+      "retrieved_one": "{{count}} belgeden alındı",
+      "retrieved_other": "{{count}} belgeden alındı",
+      "retrieved": "{{count}} belgeden alındı"
     },
     "ragTooltip": {
       "status": "RAG Dizin Durumu:",
-      "totalChunks": "📊 Toplam Parça: {{count}}",
-      "filesIndexed": "📁 Dizinlenen Dosyalar: {{count}}",
-      "totalSize": "💾 Toplam Boyut: {{size}} KB",
-      "indexedFiles": "📄 dizinlenen Dosyalar:",
+      "totalChunks": "Toplam Parça: {{count}}",
+      "filesIndexed": "Dizinlenen Dosyalar: {{count}}",
+      "totalSize": "Toplam Boyut: {{size}} KB",
+      "indexedFiles": "dizinlenen Dosyalar:",
       "andMore": "  ... ve {{count}} daha",
-      "noFilesYet": "⚠️ henüz dizinlenen dosya yok.",
+      "noFilesYet": "henüz dizinlenen dosya yok.",
       "goToSettings": "Dizini oluşturmak için Ayarlar → RAG'a gidin.",
       "ragOff": "ℹ️ RAG şu anda bu sohbet için kapalı."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Ajanın modelini nasıl seçeceğini belirleyin"
       },
       "systemPrompt": {
-        "createNew": "➕ yeni istem oluştur…",
+        "createNew": "yeni istem oluştur…",
         "promptName": {
           "name": "İstem adı",
           "desc": "Yeni sistem istemi için görünen ad"
@@ -1381,7 +1381,7 @@
         "tools": "Araçlar",
         "logs": "Günlükler"
       },
-      "refreshBtn": "🔄 yenile",
+      "refreshBtn": "yenile",
       "connections": {
         "title": "MCP sunucu bağlantıları",
         "noServers": "MCP sunucusu yapılandırılmadı.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Aracı çalıştır",
         "clearBtn": "Sonuçları temizle",
         "executing": "Yürütülüyor...",
-        "success": "✅ yürütme başarılı",
-        "failed": "❌ yürütme başarısız",
-        "errorTitle": "❌ yürütme hatası",
+        "success": "yürütme başarılı",
+        "failed": "yürütme başarısız",
+        "errorTitle": "yürütme hatası",
         "errorLabel": "Hata: {{message}}",
         "notices": {
           "success": "Araç başarıyla yürütüldü",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ MCP sunucusu yapılandırılmadı",
-        "testing": "🧪 {{count}} MCP sunucu bağlantısı test ediliyor...",
-        "allSuccess": "✅ tüm {{count}} mcp sunucusu başarıyla bağlandı!",
-        "partial": "⚠️ {{success}} bağlandı, {{failed}} başarısız"
+        "noServers": "MCP sunucusu yapılandırılmadı",
+        "testing": "{{count}} MCP sunucu bağlantısı test ediliyor...",
+        "allSuccess": "tüm {{count}} mcp sunucusu başarıyla bağlandı!",
+        "partial": "{{success}} bağlandı, {{failed}} başarısız"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Ollama modellerini yönet",
       "serverInfo": "Sunucu bilgisi",
       "checkingServer": "Sunucu kontrol ediliyor...",
-      "serverOnline": "✅ Sunucu çevrimiçi",
+      "serverOnline": "Sunucu çevrimiçi",
       "versionLabel": " | Sürüm: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Sunucu çevrimdışı",
-      "connectionError": "❌ Bağlantı hatası",
+      "serverOffline": "Sunucu çevrimdışı",
+      "connectionError": "Bağlantı hatası",
       "pullTitle": "Yeni model çek",
       "pullHint": "Ollama kütüphanesinden indirmek için bir model adı girin (örn. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Modeli çek",
       "installedTitle": "Yüklü modeller",
-      "refreshList": "🔄 Listeyi yenile",
+      "refreshList": "Listeyi yenile",
       "noModels": "Model bulunamadı. Başlamak için bir model çekin.",
       "capabilities": "Özellikler: {{caps}}",
       "deleteBtn": "Sil",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Lütfen bir model adı girin",
         "pulling": "{{name}} çekiliyor... Bu biraz zaman alabilir.",
-        "pullSuccess": "✅ {{name}} başarıyla çekildi",
-        "pullFailed": "❌ Model çekilemedi: {{message}}",
-        "deleted": "✅ {{name}} silindi",
-        "deleteFailed": "❌ Model silinemedi: {{message}}",
+        "pullSuccess": "{{name}} başarıyla çekildi",
+        "pullFailed": "Model çekilemedi: {{message}}",
+        "deleted": "{{name}} silindi",
+        "deleteFailed": "Model silinemedi: {{message}}",
         "refreshing": "Yenileniyor...",
-        "refreshSuccess": "✅ Model listesi yenilendi",
-        "refreshFailed": "❌ Model listesi yenilenemedi"
+        "refreshSuccess": "Model listesi yenilendi",
+        "refreshFailed": "Model listesi yenilenemedi"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ İşleniyor...",
       "error": "Açıklama oluşturulurken hata",
-      "errorPrefix": "❌ Hata: "
+      "errorPrefix": "Hata:"
     }
   },
   "notices": {

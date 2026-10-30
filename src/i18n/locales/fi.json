@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Konfiguraation tila",
         "desc": "Laajennuksen konfiguraation kokonaistila",
-        "ok": "✅ Määritetty ({{providers}} palveluntarjoajaa, {{conversations}} keskustelua)",
-        "incomplete": "⚠️ Epätäydellinen - Määritä palveluntarjoajat ja mallit"
+        "ok": "Määritetty ({{providers}} palveluntarjoajaa, {{conversations}} keskustelua)",
+        "incomplete": "Epätäydellinen - Määritä palveluntarjoajat ja mallit"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} palveluntarjoaja määritetty",
       "providerCount_other": "{{count}} palveluntarjoajaa määritetty",
       "providerCount": "{{count}} palveluntarjoajaa määritetty",
-      "refreshAll": "🔄 päivitä kaikki mallit",
+      "refreshAll": "päivitä kaikki mallit",
       "empty": "Ei palveluntarjoajia määritetty. Lisää palveluntarjoajia ensin palveluntarjoaja-välilehdeltä.",
       "noModels": "Ei saatavilla olevia malleja. Napsauta \"päivitä kaikki mallit\" tai päivitä yksittäiset palveluntarjoajat palveluntarjoaja-välilehdeltä.",
       "noMatch": "Mikään malli ei vastaa nykyisiä suodattimia. Muuta tai poista suodattimet nähdäksesi tulokset.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Tietoturvavaroitus",
+      "securityTitle": "Tietoturvavaroitus",
       "securityDesc": "API-avaimet tallennetaan pelkkänä tekstinä holvissasi yhteensopivuuden vuoksi. Estääksesi vahingolliset vuodot:",
       "securityItem1": "ÄLÄ jaa {{configDir}}/plugins/intelligence-assistant/data/-kansiota.",
       "securityItem2": "Lisää tämä kansio .gitignore-tiedostoon, jos käytät Git-synkronointia.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Määritä Model Context Protocol (MCP) -palvelimia laajentamaan agenttien toimintoja ulkoisilla työkaluilla ja tietolähteillä.",
-      "inspectorBtn": "🔍 Avaa MCP-tarkastin",
-      "testAllBtn": "🧪 testaa kaikki yhteydet",
-      "refreshAllBtn": "🔄 päivitä kaikki työkalut",
+      "inspectorBtn": "Avaa MCP-tarkastin",
+      "testAllBtn": "testaa kaikki yhteydet",
+      "refreshAllBtn": "päivitä kaikki työkalut",
       "addBtn": "+ Lisää MCP-palvelin",
       "empty": "Ei MCP-palvelimia määritetty. Valitse Lisää MCP-palvelin aloittaaksesi.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Muokkaa",
-        "enabled": "✓ Käytössä",
-        "enabledOff": "✗ Pois käytöstä",
+        "enabled": "Käytössä",
+        "enabledOff": "Pois käytöstä",
         "connect": "yhdistä",
         "disconnect": "katkaise yhteys",
         "connecting": "Yhdistetään...",
@@ -226,17 +226,17 @@
         "enableFirst": "Ota palvelin käyttöön ennen yhdistämistä",
         "disconnectFailed": "Yhteyden katkaiseminen epäonnistui kohteesta {{name}}",
         "connectFailed": "Yhdistäminen epäonnistui kohteeseen {{name}}",
-        "testNoCommand": "❌ syötä komento ennen yhteyden testaamista",
-        "testSuccess": "✅ yhdistettiin onnistuneesti! Löydettiin {{count}} työkalua.",
-        "testFailed": "❌ Yhteys epäonnistui: {{message}}",
-        "refreshedAll_one": "✅ päivitetty työkalut {{count}} palvelimelle",
-        "refreshedAll_other": "✅ päivitetty työkalut {{count}} palvelimelle",
-        "refreshedAll": "✅ päivitetty työkalut {{count}} palvelimelle",
-        "refreshedPartial": "✅ päivitetty {{success}} palvelinta, ❌ {{failed}} epäonnistui",
-        "noServersConfigured": "⚠️ Ei MCP-palvelimia määritetty",
-        "testingAll": "🧪 Testataan {{count}} MCP-palvelimen yhteyksiä...",
-        "testAllSuccess": "✅ kaikki {{count}} mcp-palvelinta yhdistetty onnistuneesti!",
-        "testAllPartial": "⚠️ {{successful}} yhdistetty, {{failed}} epäonnistui"
+        "testNoCommand": "syötä komento ennen yhteyden testaamista",
+        "testSuccess": "yhdistettiin onnistuneesti! Löydettiin {{count}} työkalua.",
+        "testFailed": "Yhteys epäonnistui: {{message}}",
+        "refreshedAll_one": "päivitetty työkalut {{count}} palvelimelle",
+        "refreshedAll_other": "päivitetty työkalut {{count}} palvelimelle",
+        "refreshedAll": "päivitetty työkalut {{count}} palvelimelle",
+        "refreshedPartial": "päivitetty {{success}} palvelinta, {{failed}} epäonnistui",
+        "noServersConfigured": "Ei MCP-palvelimia määritetty",
+        "testingAll": "Testataan {{count}} MCP-palvelimen yhteyksiä...",
+        "testAllSuccess": "kaikki {{count}} mcp-palvelinta yhdistetty onnistuneesti!",
+        "testAllPartial": "{{successful}} yhdistetty, {{failed}} epäonnistui"
       },
       "confirm": {
         "delete": "Poista MCP-palvelin \"{{name}}\"?"
@@ -362,7 +362,7 @@
             "params": "path (pakollinen), content (pakollinen): Muistiinpanon polku ja lisättävä sisältö"
           }
         },
-        "infoTitle": "💡 tietoa työkaluista",
+        "infoTitle": "tietoa työkaluista",
         "infoText": "Sisäänrakennetut työkalut on konfiguroitu laajennusasetusten mukaan. MCP-työkaluja hallinnoidaan itsenäisesti — käytä MCP-välilehteä yhteyden muodostamiseen palvelimiin ja työkalujen saatavuuden päivittämiseen.",
         "toolNames": {
           "read_file": "Lue tiedosto",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI-työkalu poistettu"
         },
-        "infoTitle": "💡 Tietoa CLI-työkaluista",
+        "infoTitle": "Tietoa CLI-työkaluista",
         "infoText": "CLI-työkalut suorittavat komentotulkki-komentoja paikallisesti. Käytä {{paramName}} argumenteissa mallikorvauksia varten tai määritä parametrit välitettäväksi argumentteina tai ympäristömuuttujina.",
         "modal": {
           "defaultTitle": "CLI-työkalu",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Keskimääräinen palakoko"
         },
         "empty": "Indeksi on tyhjä. Valitse rakenna indeksi aloittaaksesi indeksoinnin.",
-        "error": "⚠️ indeksitilastojen lataaminen epäonnistui",
+        "error": "indeksitilastojen lataaminen epäonnistui",
         "rebuild": {
           "name": "Rakenna indeksi uudelleen",
           "desc": "Indeksoi kaikki tiedostot holvissasi uudelleen. Tämä voi kestää jonkin aikaa.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG-tilastot",
-      "totalChunks": "📊 paloja yhteensä:",
-      "filesIndexed": "📁 indeksoidut tiedostot:",
-      "totalSize": "💾 kokonaiskoko:",
-      "avgChunks": "📈 Keskimääräiset palat/tiedosto:",
-      "indexedFiles": "📄 indeksoidut tiedostot",
-      "noFilesYet": "⚠️ ei tiedostoja indeksoitu vielä.",
+      "totalChunks": "paloja yhteensä:",
+      "filesIndexed": "indeksoidut tiedostot:",
+      "totalSize": "kokonaiskoko:",
+      "avgChunks": "Keskimääräiset palat/tiedosto:",
+      "indexedFiles": "indeksoidut tiedostot",
+      "noFilesYet": "ei tiedostoja indeksoitu vielä.",
       "howToBuild": "RAG-indeksin rakentaminen:",
       "step1": "Siirry kohtaan Asetukset → RAG",
       "step2": "Ota RAG käyttöön",
       "step3": "Valitse indeksoi holvi",
       "close": "Sulje",
-      "retrieved_one": "📚 haettu {{count}} dokumentista",
-      "retrieved_other": "📚 haettu {{count}} dokumentista",
-      "retrieved": "📚 haettu {{count}} dokumentista"
+      "retrieved_one": "haettu {{count}} dokumentista",
+      "retrieved_other": "haettu {{count}} dokumentista",
+      "retrieved": "haettu {{count}} dokumentista"
     },
     "ragTooltip": {
       "status": "RAG-indeksin tila:",
-      "totalChunks": "📊 Paloja yhteensä: {{count}}",
-      "filesIndexed": "📁 Indeksoituja tiedostoja: {{count}}",
-      "totalSize": "💾 Kokonaiskoko: {{size}} KB",
-      "indexedFiles": "📄 indeksoidut tiedostot:",
+      "totalChunks": "Paloja yhteensä: {{count}}",
+      "filesIndexed": "Indeksoituja tiedostoja: {{count}}",
+      "totalSize": "Kokonaiskoko: {{size}} KB",
+      "indexedFiles": "indeksoidut tiedostot:",
       "andMore": "  ... ja {{count}} lisää",
-      "noFilesYet": "⚠️ ei tiedostoja indeksoitu vielä.",
+      "noFilesYet": "ei tiedostoja indeksoitu vielä.",
       "goToSettings": "Siirry kohtaan Asetukset → RAG rakentaaksesi indeksin.",
       "ragOff": "ℹ️ RAG on tällä hetkellä pois käytöstä tässä chatissa."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Valitse, miten agentti valitsee mallinsa"
       },
       "systemPrompt": {
-        "createNew": "➕ luo uusi kehotus…",
+        "createNew": "luo uusi kehotus…",
         "promptName": {
           "name": "Kehotuksen nimi",
           "desc": "Näyttönimi uudelle järjestelmäkehotukselle"
@@ -1381,7 +1381,7 @@
         "tools": "Työkalut",
         "logs": "Lokit"
       },
-      "refreshBtn": "🔄 päivitä",
+      "refreshBtn": "päivitä",
       "connections": {
         "title": "MCP-palvelinkytkennät",
         "noServers": "Ei MCP-palvelimia määritetty.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Suorita työkalu",
         "clearBtn": "Tyhjennä tulokset",
         "executing": "Suoritetaan...",
-        "success": "✅ suoritus onnistui",
-        "failed": "❌ suoritus epäonnistui",
-        "errorTitle": "❌ suoritusvirhe",
+        "success": "suoritus onnistui",
+        "failed": "suoritus epäonnistui",
+        "errorTitle": "suoritusvirhe",
         "errorLabel": "Virhe: {{message}}",
         "notices": {
           "success": "Työkalu suoritettu onnistuneesti",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Ei MCP-palvelimia määritetty",
-        "testing": "🧪 Testataan {{count}} MCP-palvelimen yhteyksiä...",
-        "allSuccess": "✅ kaikki {{count}} mcp-palvelinta yhdistetty onnistuneesti!",
-        "partial": "⚠️ {{success}} yhdistetty, {{failed}} epäonnistui"
+        "noServers": "Ei MCP-palvelimia määritetty",
+        "testing": "Testataan {{count}} MCP-palvelimen yhteyksiä...",
+        "allSuccess": "kaikki {{count}} mcp-palvelinta yhdistetty onnistuneesti!",
+        "partial": "{{success}} yhdistetty, {{failed}} epäonnistui"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Hallinnoi Ollama-malleja",
       "serverInfo": "Palvelintiedot",
       "checkingServer": "Tarkistetaan palvelinta...",
-      "serverOnline": "✅ Palvelin online",
+      "serverOnline": "Palvelin online",
       "versionLabel": " | Versio: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Palvelin offline",
-      "connectionError": "❌ Yhteysvirhe",
+      "serverOffline": "Palvelin offline",
+      "connectionError": "Yhteysvirhe",
       "pullTitle": "Hae uusi malli",
       "pullHint": "Syötä mallin nimi ladataksesi Ollama-kirjastosta (esim. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Hae malli",
       "installedTitle": "Asennetut mallit",
-      "refreshList": "🔄 Päivitä lista",
+      "refreshList": "Päivitä lista",
       "noModels": "Ei malleja löydetty. Hae malli aloittaaksesi.",
       "capabilities": "Ominaisuudet: {{caps}}",
       "deleteBtn": "Poista",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Syötä mallin nimi",
         "pulling": "Haetaan {{name}}... Tämä voi kestää jonkin aikaa.",
-        "pullSuccess": "✅ {{name}} haettu onnistuneesti",
-        "pullFailed": "❌ Mallin hakeminen epäonnistui: {{message}}",
-        "deleted": "✅ Poistettu {{name}}",
-        "deleteFailed": "❌ Mallin poistaminen epäonnistui: {{message}}",
+        "pullSuccess": "{{name}} haettu onnistuneesti",
+        "pullFailed": "Mallin hakeminen epäonnistui: {{message}}",
+        "deleted": "Poistettu {{name}}",
+        "deleteFailed": "Mallin poistaminen epäonnistui: {{message}}",
         "refreshing": "Päivitetään...",
-        "refreshSuccess": "✅ Mallilista päivitetty",
-        "refreshFailed": "❌ Mallilistan päivittäminen epäonnistui"
+        "refreshSuccess": "Mallilista päivitetty",
+        "refreshFailed": "Mallilistan päivittäminen epäonnistui"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Käsitellään...",
       "error": "Virhe selityksen näyttämisessä",
-      "errorPrefix": "❌ Virhe: "
+      "errorPrefix": "Virhe:"
     }
   },
   "notices": {

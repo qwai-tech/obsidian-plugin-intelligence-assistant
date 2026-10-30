@@ -4,6 +4,7 @@ import { ChatViewState } from '@/ui/state/chat-view-state';
 import { t } from '@/i18n';
 import type { ModelInfo } from '@/features/llm';
 import { TestIds } from '@/ui/utils/test-ids';
+import { isIconId } from '@/ui/utils/icon';
 
 export interface ChatInputCallbacks {
 	onSendMessage: (text: string) => Promise<void>;
@@ -230,7 +231,7 @@ export class ChatInputComponent {
 		for (const agent of agents) {
 			const opt = this.agentSelector.createEl('option', {
 				value: agent.id,
-				text: `${agent.icon || '🤖'} ${agent.name ?? 'unknown'}`
+				text: isIconId(agent.icon) || !agent.icon ? agent.name ?? 'unknown' : `${agent.icon} ${agent.name ?? 'unknown'}`
 			});
 			if (agent.id === activeId) opt.selected = true;
 		}
@@ -377,7 +378,7 @@ export class ChatInputComponent {
 				img.alt = att.name;
 				img.addClass('ia-attachment-img-thumb');
 			} else {
-				attPreview.createSpan({ text: att.type === 'image' ? '🖼️' : '📎' });
+				setIcon(attPreview.createSpan(), att.type === 'image' ? 'image' : 'paperclip');
 			}
 
 			attPreview.createSpan({ text: att.name, cls: 'ia-attachment-name' });

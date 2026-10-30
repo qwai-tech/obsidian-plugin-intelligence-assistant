@@ -20,7 +20,7 @@ import { MentionSuggest } from '@/ui/suggest/mention-suggest';
 import { internalLinktextFromEvent, triggerHoverLink } from '@/ui/chat/hover-link';
 import { RagStatusPanel } from '@/ui/chat/rag-status-panel';
 import { resolveMessageProviderId } from '@/ui/chat/utils/provider-utils';
-import { providerAvatar, providerColor } from '@/ui/provider-meta';
+import { providerColor } from '@/ui/provider-meta';
 import { TestIds } from '@/ui/utils/test-ids';
 import type { AppServices } from '@/ui/app-services';
 import { applyWriteProposal, type BatchWriteProposal, type WriteProposal } from '@/features/agent';
@@ -245,7 +245,6 @@ export class ChatView extends ItemView {
 			insertMessageToNote: (message) => this.services.vaultExport.insertIntoNote(message),
 			regenerateMessage: (message, element) => this.chatController.regenerateMessage(message, element),
 			displayRagSources: (container, message) => this.ragStatusPanel.displaySources(container, message.ragSources ?? []),
-			getProviderAvatar: (message) => message.role === 'user' ? '🧑' : providerAvatar(resolveMessageProviderId(message, this.plugin)),
 			getProviderColor: (message) => providerColor(resolveMessageProviderId(message, this.plugin)),
 			applyWriteProposal: (proposal) => this.confirmAndApplyProposal(proposal),
 		};

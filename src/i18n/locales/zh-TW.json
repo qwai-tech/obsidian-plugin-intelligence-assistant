@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "設定狀態",
         "desc": "外掛程式的整體設定狀態",
-        "ok": "✅ 已設定（{{providers}} 個提供者，{{conversations}} 則對話）",
-        "incomplete": "⚠️ 不完整 - 請設定提供者和模型"
+        "ok": "已設定（{{providers}} 個提供者，{{conversations}} 則對話）",
+        "incomplete": "不完整 - 請設定提供者和模型"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "已設定 {{count}} 個提供者",
       "providerCount_other": "已設定 {{count}} 個提供者",
       "providerCount": "已設定 {{count}} 個提供者",
-      "refreshAll": "🔄 重新整理所有模型",
+      "refreshAll": "重新整理所有模型",
       "empty": "尚未設定任何提供者。請先在提供者頁籤中新增提供者。",
       "noModels": "沒有可用的模型。請點擊「重新整理所有模型」或在提供者頁籤中重新整理個別提供者。",
       "noMatch": "沒有模型符合目前的篩選條件。請調整或清除篩選條件以查看結果。",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ 安全性警告",
+      "securityTitle": "安全性警告",
       "securityDesc": "為了相容性，API 金鑰以明文儲存在您的知識庫中。為防止意外洩漏：",
       "securityItem1": "請勿共享您的 {{configDir}}/plugins/intelligence-assistant/data/ 資料夾。",
       "securityItem2": "如果您使用 Git 同步，請將此資料夾新增至 .gitignore。",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "設定 Model Context Protocol (MCP) 伺服器，以使用外部工具和資料來源擴充代理功能。",
-      "inspectorBtn": "🔍 開啟 MCP 檢查器",
-      "testAllBtn": "🧪 測試所有連線",
-      "refreshAllBtn": "🔄 重新整理所有工具",
+      "inspectorBtn": "開啟 MCP 檢查器",
+      "testAllBtn": "測試所有連線",
+      "refreshAllBtn": "重新整理所有工具",
       "addBtn": "+ 新增 MCP 伺服器",
       "empty": "未設定任何 MCP 伺服器。請選擇「新增 MCP 伺服器」以開始使用。",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "編輯",
-        "enabled": "✓ 已啟用",
-        "enabledOff": "✗ 已停用",
+        "enabled": "已啟用",
+        "enabledOff": "已停用",
         "connect": "連線",
         "disconnect": "中斷連線",
         "connecting": "連線中...",
@@ -226,17 +226,17 @@
         "enableFirst": "連線前請先啟用伺服器",
         "disconnectFailed": "無法從 {{name}} 中斷連線",
         "connectFailed": "無法連線至 {{name}}",
-        "testNoCommand": "❌ 測試連線前請先輸入命令",
-        "testSuccess": "✅ 連線成功！找到 {{count}} 個工具。",
-        "testFailed": "❌ 連線失敗：{{message}}",
-        "refreshedAll_one": "✅ 已重新整理 {{count}} 個伺服器的工具",
-        "refreshedAll_other": "✅ 已重新整理 {{count}} 個伺服器的工具",
-        "refreshedAll": "✅ 已重新整理 {{count}} 個伺服器的工具",
-        "refreshedPartial": "✅ 已重新整理 {{success}} 個伺服器，❌ {{failed}} 個失敗",
-        "noServersConfigured": "⚠️ 未設定任何 MCP 伺服器",
-        "testingAll": "🧪 正在測試 {{count}} 個 MCP 伺服器連線...",
-        "testAllSuccess": "✅ 所有 {{count}} 個 mcp 伺服器均已成功連線！",
-        "testAllPartial": "⚠️ {{successful}} 個已連線，{{failed}} 個失敗"
+        "testNoCommand": "測試連線前請先輸入命令",
+        "testSuccess": "連線成功！找到 {{count}} 個工具。",
+        "testFailed": "連線失敗：{{message}}",
+        "refreshedAll_one": "已重新整理 {{count}} 個伺服器的工具",
+        "refreshedAll_other": "已重新整理 {{count}} 個伺服器的工具",
+        "refreshedAll": "已重新整理 {{count}} 個伺服器的工具",
+        "refreshedPartial": "已重新整理 {{success}} 個伺服器，{{failed}} 個失敗",
+        "noServersConfigured": "未設定任何 MCP 伺服器",
+        "testingAll": "正在測試 {{count}} 個 MCP 伺服器連線...",
+        "testAllSuccess": "所有 {{count}} 個 mcp 伺服器均已成功連線！",
+        "testAllPartial": "{{successful}} 個已連線，{{failed}} 個失敗"
       },
       "confirm": {
         "delete": "刪除 MCP 伺服器「{{name}}」？"
@@ -362,7 +362,7 @@
             "params": "path（必填）、content（必填）：筆記路徑和要附加的內容"
           }
         },
-        "infoTitle": "💡 關於工具",
+        "infoTitle": "關於工具",
         "infoText": "內建工具依外掛程式設定進行設定。MCP 工具則獨立管理——請使用 MCP 頁籤連線伺服器並重新整理工具可用性。",
         "toolNames": {
           "read_file": "讀取檔案",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI 工具已移除"
         },
-        "infoTitle": "💡 關於 CLI 工具",
+        "infoTitle": "關於 CLI 工具",
         "infoText": "CLI 工具在本機執行 shell 命令。在引數中使用 {{paramName}} 進行範本替換，或設定參數以作為引數或環境變數傳遞。",
         "modal": {
           "defaultTitle": "CLI 工具",
@@ -663,7 +663,7 @@
           "avgChunkSize": "平均區塊大小"
         },
         "empty": "索引為空。請選擇「重建索引」以開始索引。",
-        "error": "⚠️ 無法載入索引統計資訊",
+        "error": "無法載入索引統計資訊",
         "rebuild": {
           "name": "重建索引",
           "desc": "重新索引知識庫中的所有檔案。這可能需要一些時間。",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG 統計資料",
-      "totalChunks": "📊 總區塊數：",
-      "filesIndexed": "📁 已索引的檔案：",
-      "totalSize": "💾 總大小：",
-      "avgChunks": "📈 平均區塊/檔案：",
-      "indexedFiles": "📄 已索引的檔案",
-      "noFilesYet": "⚠️ 尚未索引任何檔案。",
+      "totalChunks": "總區塊數：",
+      "filesIndexed": "已索引的檔案：",
+      "totalSize": "總大小：",
+      "avgChunks": "平均區塊/檔案：",
+      "indexedFiles": "已索引的檔案",
+      "noFilesYet": "尚未索引任何檔案。",
       "howToBuild": "建立 RAG 索引的步驟：",
       "step1": "前往「設定 → RAG」",
       "step2": "啟用 RAG",
       "step3": "選擇索引知識庫",
       "close": "關閉",
-      "retrieved_one": "📚 從 {{count}} 個文件中擷取",
-      "retrieved_other": "📚 從 {{count}} 個文件中擷取",
-      "retrieved": "📚 從 {{count}} 個文件中擷取"
+      "retrieved_one": "從 {{count}} 個文件中擷取",
+      "retrieved_other": "從 {{count}} 個文件中擷取",
+      "retrieved": "從 {{count}} 個文件中擷取"
     },
     "ragTooltip": {
       "status": "RAG 索引狀態：",
-      "totalChunks": "📊 總區塊數：{{count}}",
-      "filesIndexed": "📁 已索引的檔案：{{count}}",
-      "totalSize": "💾 總大小：{{size}} KB",
-      "indexedFiles": "📄 已索引的檔案：",
+      "totalChunks": "總區塊數：{{count}}",
+      "filesIndexed": "已索引的檔案：{{count}}",
+      "totalSize": "總大小：{{size}} KB",
+      "indexedFiles": "已索引的檔案：",
       "andMore": "  ...以及另外 {{count}} 個",
-      "noFilesYet": "⚠️ 尚未索引任何檔案。",
+      "noFilesYet": "尚未索引任何檔案。",
       "goToSettings": "前往「設定 → RAG」建立索引。",
       "ragOff": "ℹ️ 此聊天中的 RAG 目前已關閉。"
     },
@@ -1252,7 +1252,7 @@
         "desc": "選擇代理如何選取其模型"
       },
       "systemPrompt": {
-        "createNew": "➕ 建立新提示詞…",
+        "createNew": "建立新提示詞…",
         "promptName": {
           "name": "提示詞名稱",
           "desc": "新系統提示詞的顯示名稱"
@@ -1381,7 +1381,7 @@
         "tools": "工具",
         "logs": "日誌"
       },
-      "refreshBtn": "🔄 重新整理",
+      "refreshBtn": "重新整理",
       "connections": {
         "title": "MCP 伺服器連線",
         "noServers": "未設定任何 MCP 伺服器。",
@@ -1443,9 +1443,9 @@
         "performBtn": "執行工具",
         "clearBtn": "清除結果",
         "executing": "執行中...",
-        "success": "✅ 執行成功",
-        "failed": "❌ 執行失敗",
-        "errorTitle": "❌ 執行錯誤",
+        "success": "執行成功",
+        "failed": "執行失敗",
+        "errorTitle": "執行錯誤",
         "errorLabel": "錯誤：{{message}}",
         "notices": {
           "success": "工具執行成功",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ 未設定任何 MCP 伺服器",
-        "testing": "🧪 正在測試 {{count}} 個 MCP 伺服器連線...",
-        "allSuccess": "✅ 所有 {{count}} 個 mcp 伺服器均已成功連線！",
-        "partial": "⚠️ {{success}} 個已連線，{{failed}} 個失敗"
+        "noServers": "未設定任何 MCP 伺服器",
+        "testing": "正在測試 {{count}} 個 MCP 伺服器連線...",
+        "allSuccess": "所有 {{count}} 個 mcp 伺服器均已成功連線！",
+        "partial": "{{success}} 個已連線，{{failed}} 個失敗"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "管理 Ollama 模型",
       "serverInfo": "伺服器資訊",
       "checkingServer": "正在檢查伺服器...",
-      "serverOnline": "✅ 伺服器上線",
+      "serverOnline": "伺服器上線",
       "versionLabel": " | 版本：{{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ 伺服器離線",
-      "connectionError": "❌ 連線錯誤",
+      "serverOffline": "伺服器離線",
+      "connectionError": "連線錯誤",
       "pullTitle": "提取新模型",
       "pullHint": "輸入模型名稱以從 Ollama 函式庫下載（例如 llama2、mistral、codellama）",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "提取模型",
       "installedTitle": "已安裝的模型",
-      "refreshList": "🔄 重新整理清單",
+      "refreshList": "重新整理清單",
       "noModels": "找不到任何模型。請提取模型以開始使用。",
       "capabilities": "功能：{{caps}}",
       "deleteBtn": "刪除",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "請輸入模型名稱",
         "pulling": "正在提取 {{name}}...這可能需要一些時間。",
-        "pullSuccess": "✅ 成功提取 {{name}}",
-        "pullFailed": "❌ 無法提取模型：{{message}}",
-        "deleted": "✅ 已刪除 {{name}}",
-        "deleteFailed": "❌ 無法刪除模型：{{message}}",
+        "pullSuccess": "成功提取 {{name}}",
+        "pullFailed": "無法提取模型：{{message}}",
+        "deleted": "已刪除 {{name}}",
+        "deleteFailed": "無法刪除模型：{{message}}",
         "refreshing": "重新整理中...",
-        "refreshSuccess": "✅ 模型清單已重新整理",
-        "refreshFailed": "❌ 無法重新整理模型清單"
+        "refreshSuccess": "模型清單已重新整理",
+        "refreshFailed": "無法重新整理模型清單"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ 處理中...",
       "error": "轉譯說明時發生錯誤",
-      "errorPrefix": "❌ 錯誤："
+      "errorPrefix": "錯誤："
     }
   },
   "notices": {

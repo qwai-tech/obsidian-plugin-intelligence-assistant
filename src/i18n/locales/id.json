@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Status konfigurasi",
         "desc": "Status konfigurasi plugin secara keseluruhan",
-        "ok": "✅ Dikonfigurasi ({{providers}} penyedia, {{conversations}} percakapan)",
-        "incomplete": "⚠️ Tidak lengkap - Harap konfigurasikan penyedia dan model"
+        "ok": "Dikonfigurasi ({{providers}} penyedia, {{conversations}} percakapan)",
+        "incomplete": "Tidak lengkap - Harap konfigurasikan penyedia dan model"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} penyedia dikonfigurasi",
       "providerCount_other": "{{count}} penyedia dikonfigurasi",
       "providerCount": "{{count}} penyedia dikonfigurasi",
-      "refreshAll": "🔄 segarkan semua model",
+      "refreshAll": "segarkan semua model",
       "empty": "Belum ada penyedia yang dikonfigurasi. Tambahkan penyedia di tab penyedia terlebih dahulu.",
       "noModels": "Tidak ada model yang tersedia. Klik \"segarkan semua model\" atau segarkan penyedia individual di tab penyedia.",
       "noMatch": "Tidak ada model yang cocok dengan filter saat ini. Sesuaikan atau hapus filter untuk melihat hasilnya.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Peringatan Keamanan",
+      "securityTitle": "Peringatan Keamanan",
       "securityDesc": "Kunci API disimpan sebagai teks biasa di vault Anda untuk kompatibilitas. Untuk mencegah kebocoran yang tidak disengaja:",
       "securityItem1": "JANGAN bagikan folder {{configDir}}/plugins/intelligence-assistant/data/ Anda.",
       "securityItem2": "Tambahkan folder ini ke .gitignore jika Anda menggunakan sinkronisasi Git.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Konfigurasikan server Model Context Protocol (MCP) untuk memperluas kemampuan agen dengan alat dan sumber data eksternal.",
-      "inspectorBtn": "🔍 Buka inspektor MCP",
-      "testAllBtn": "🧪 uji semua koneksi",
-      "refreshAllBtn": "🔄 segarkan semua alat",
+      "inspectorBtn": "Buka inspektor MCP",
+      "testAllBtn": "uji semua koneksi",
+      "refreshAllBtn": "segarkan semua alat",
       "addBtn": "+ Tambah server MCP",
       "empty": "Tidak ada server MCP yang dikonfigurasi. Pilih Tambah server MCP untuk memulai.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Edit",
-        "enabled": "✓ Aktif",
-        "enabledOff": "✗ Nonaktif",
+        "enabled": "Aktif",
+        "enabledOff": "Nonaktif",
         "connect": "hubungkan",
         "disconnect": "putuskan",
         "connecting": "Menghubungkan...",
@@ -226,17 +226,17 @@
         "enableFirst": "Aktifkan server sebelum menghubungkan",
         "disconnectFailed": "Gagal memutuskan dari {{name}}",
         "connectFailed": "Gagal menghubungkan ke {{name}}",
-        "testNoCommand": "❌ harap masukkan perintah sebelum menguji koneksi",
-        "testSuccess": "✅ berhasil terhubung! Ditemukan {{count}} alat.",
-        "testFailed": "❌ Koneksi gagal: {{message}}",
-        "refreshedAll_one": "✅ menyegarkan alat untuk {{count}} server",
-        "refreshedAll_other": "✅ menyegarkan alat untuk {{count}} server",
-        "refreshedAll": "✅ menyegarkan alat untuk {{count}} server",
-        "refreshedPartial": "✅ disegarkan {{success}} server, ❌ {{failed}} gagal",
-        "noServersConfigured": "⚠️ Tidak ada server MCP yang dikonfigurasi",
-        "testingAll": "🧪 Menguji {{count}} koneksi server MCP...",
-        "testAllSuccess": "✅ semua {{count}} server MCP berhasil terhubung!",
-        "testAllPartial": "⚠️ {{successful}} terhubung, {{failed}} gagal"
+        "testNoCommand": "harap masukkan perintah sebelum menguji koneksi",
+        "testSuccess": "berhasil terhubung! Ditemukan {{count}} alat.",
+        "testFailed": "Koneksi gagal: {{message}}",
+        "refreshedAll_one": "menyegarkan alat untuk {{count}} server",
+        "refreshedAll_other": "menyegarkan alat untuk {{count}} server",
+        "refreshedAll": "menyegarkan alat untuk {{count}} server",
+        "refreshedPartial": "disegarkan {{success}} server, {{failed}} gagal",
+        "noServersConfigured": "Tidak ada server MCP yang dikonfigurasi",
+        "testingAll": "Menguji {{count}} koneksi server MCP...",
+        "testAllSuccess": "semua {{count}} server MCP berhasil terhubung!",
+        "testAllPartial": "{{successful}} terhubung, {{failed}} gagal"
       },
       "confirm": {
         "delete": "Hapus server MCP \"{{name}}\"?"
@@ -362,7 +362,7 @@
             "params": "path (wajib), content (wajib): Jalur catatan dan konten yang akan ditambahkan"
           }
         },
-        "infoTitle": "💡 tentang alat",
+        "infoTitle": "tentang alat",
         "infoText": "Alat bawaan dikonfigurasi per pengaturan plugin. Alat MCP dikelola secara independen—gunakan tab MCP untuk menghubungkan server dan menyegarkan ketersediaan alat.",
         "toolNames": {
           "read_file": "Baca File",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "Alat CLI dihapus"
         },
-        "infoTitle": "💡 Tentang Alat CLI",
+        "infoTitle": "Tentang Alat CLI",
         "infoText": "Alat CLI mengeksekusi perintah shell secara lokal. Gunakan {{paramName}} dalam argumen untuk substitusi template, atau konfigurasikan parameter yang akan diteruskan sebagai argumen atau variabel lingkungan.",
         "modal": {
           "defaultTitle": "Alat CLI",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Rata-rata Ukuran Chunk"
         },
         "empty": "Indeks kosong. Pilih bangun ulang indeks untuk memulai pengindeksan.",
-        "error": "⚠️ tidak dapat memuat statistik indeks",
+        "error": "tidak dapat memuat statistik indeks",
         "rebuild": {
           "name": "Bangun ulang indeks",
           "desc": "Re-indeks semua file di vault Anda. Ini mungkin memakan waktu.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "Statistik RAG",
-      "totalChunks": "📊 total chunk:",
-      "filesIndexed": "📁 file diindeks:",
-      "totalSize": "💾 total ukuran:",
-      "avgChunks": "📈 Rata-rata Chunk/File:",
-      "indexedFiles": "📄 file yang diindeks",
-      "noFilesYet": "⚠️ belum ada file yang diindeks.",
+      "totalChunks": "total chunk:",
+      "filesIndexed": "file diindeks:",
+      "totalSize": "total ukuran:",
+      "avgChunks": "Rata-rata Chunk/File:",
+      "indexedFiles": "file yang diindeks",
+      "noFilesYet": "belum ada file yang diindeks.",
       "howToBuild": "Untuk membangun indeks RAG:",
       "step1": "Pergi ke Pengaturan → RAG",
       "step2": "Aktifkan RAG",
       "step3": "Pilih indeks vault",
       "close": "Tutup",
-      "retrieved_one": "📚 diambil dari {{count}} dokumen",
-      "retrieved_other": "📚 diambil dari {{count}} dokumen",
-      "retrieved": "📚 diambil dari {{count}} dokumen"
+      "retrieved_one": "diambil dari {{count}} dokumen",
+      "retrieved_other": "diambil dari {{count}} dokumen",
+      "retrieved": "diambil dari {{count}} dokumen"
     },
     "ragTooltip": {
       "status": "Status Indeks RAG:",
-      "totalChunks": "📊 Total Chunk: {{count}}",
-      "filesIndexed": "📁 File Diindeks: {{count}}",
-      "totalSize": "💾 Total Ukuran: {{size}} KB",
-      "indexedFiles": "📄 File yang diindeks:",
+      "totalChunks": "Total Chunk: {{count}}",
+      "filesIndexed": "File Diindeks: {{count}}",
+      "totalSize": "Total Ukuran: {{size}} KB",
+      "indexedFiles": "File yang diindeks:",
       "andMore": "  ... dan {{count}} lainnya",
-      "noFilesYet": "⚠️ belum ada file yang diindeks.",
+      "noFilesYet": "belum ada file yang diindeks.",
       "goToSettings": "Pergi ke Pengaturan → RAG untuk membangun indeks.",
       "ragOff": "ℹ️ RAG saat ini dimatikan untuk obrolan ini."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Pilih cara agen memilih modelnya"
       },
       "systemPrompt": {
-        "createNew": "➕ buat prompt baru…",
+        "createNew": "buat prompt baru…",
         "promptName": {
           "name": "Nama prompt",
           "desc": "Nama tampilan untuk prompt sistem baru"
@@ -1381,7 +1381,7 @@
         "tools": "Alat",
         "logs": "Log"
       },
-      "refreshBtn": "🔄 segarkan",
+      "refreshBtn": "segarkan",
       "connections": {
         "title": "Koneksi server MCP",
         "noServers": "Tidak ada server MCP yang dikonfigurasi.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Jalankan alat",
         "clearBtn": "Hapus hasil",
         "executing": "Mengeksekusi...",
-        "success": "✅ eksekusi berhasil",
-        "failed": "❌ eksekusi gagal",
-        "errorTitle": "❌ kesalahan eksekusi",
+        "success": "eksekusi berhasil",
+        "failed": "eksekusi gagal",
+        "errorTitle": "kesalahan eksekusi",
         "errorLabel": "Kesalahan: {{message}}",
         "notices": {
           "success": "Alat berhasil dieksekusi",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Tidak ada server MCP yang dikonfigurasi",
-        "testing": "🧪 Menguji {{count}} koneksi server MCP...",
-        "allSuccess": "✅ semua {{count}} server MCP berhasil terhubung!",
-        "partial": "⚠️ {{success}} terhubung, {{failed}} gagal"
+        "noServers": "Tidak ada server MCP yang dikonfigurasi",
+        "testing": "Menguji {{count}} koneksi server MCP...",
+        "allSuccess": "semua {{count}} server MCP berhasil terhubung!",
+        "partial": "{{success}} terhubung, {{failed}} gagal"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Kelola model Ollama",
       "serverInfo": "Informasi server",
       "checkingServer": "Memeriksa server...",
-      "serverOnline": "✅ Server online",
+      "serverOnline": "Server online",
       "versionLabel": " | Versi: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Server offline",
-      "connectionError": "❌ Kesalahan koneksi",
+      "serverOffline": "Server offline",
+      "connectionError": "Kesalahan koneksi",
       "pullTitle": "Tarik model baru",
       "pullHint": "Masukkan nama model untuk diunduh dari library Ollama (misalnya, llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Tarik model",
       "installedTitle": "Model yang terinstal",
-      "refreshList": "🔄 Segarkan daftar",
+      "refreshList": "Segarkan daftar",
       "noModels": "Tidak ada model yang ditemukan. Tarik model untuk memulai.",
       "capabilities": "Kemampuan: {{caps}}",
       "deleteBtn": "Hapus",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Harap masukkan nama model",
         "pulling": "Menarik {{name}}... Ini mungkin memakan waktu.",
-        "pullSuccess": "✅ Berhasil menarik {{name}}",
-        "pullFailed": "❌ Gagal menarik model: {{message}}",
-        "deleted": "✅ Menghapus {{name}}",
-        "deleteFailed": "❌ Gagal menghapus model: {{message}}",
+        "pullSuccess": "Berhasil menarik {{name}}",
+        "pullFailed": "Gagal menarik model: {{message}}",
+        "deleted": "Menghapus {{name}}",
+        "deleteFailed": "Gagal menghapus model: {{message}}",
         "refreshing": "Menyegarkan...",
-        "refreshSuccess": "✅ Daftar model disegarkan",
-        "refreshFailed": "❌ Gagal menyegarkan daftar model"
+        "refreshSuccess": "Daftar model disegarkan",
+        "refreshFailed": "Gagal menyegarkan daftar model"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Memproses...",
       "error": "Kesalahan merender penjelasan",
-      "errorPrefix": "❌ Kesalahan: "
+      "errorPrefix": "Kesalahan:"
     }
   },
   "notices": {

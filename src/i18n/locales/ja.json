@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "設定ステータス",
         "desc": "プラグインの全体的な設定ステータス",
-        "ok": "✅ 設定済み ({{providers}} プロバイダー、{{conversations}} 会話)",
-        "incomplete": "⚠️ 未完了 - プロバイダーとモデルを設定してください"
+        "ok": "設定済み ({{providers}} プロバイダー、{{conversations}} 会話)",
+        "incomplete": "未完了 - プロバイダーとモデルを設定してください"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} プロバイダー設定済み",
       "providerCount_other": "{{count}} プロバイダー設定済み",
       "providerCount": "{{count}} プロバイダー設定済み",
-      "refreshAll": "🔄 すべてのモデルを更新",
+      "refreshAll": "すべてのモデルを更新",
       "empty": "プロバイダーがまだ設定されていません。先にプロバイダータブでプロバイダーを追加してください。",
       "noModels": "利用可能なモデルがありません。「すべてのモデルを更新」をクリックするか、プロバイダータブで個別のプロバイダーを更新してください。",
       "noMatch": "現在のフィルターに一致するモデルがありません。フィルターを調整またはクリアして結果を表示してください。",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ セキュリティ警告",
+      "securityTitle": "セキュリティ警告",
       "securityDesc": "API キーは互換性のためにボルト内にプレーンテキストで保存されます。誤った漏洩を防ぐには：",
       "securityItem1": "{{configDir}}/plugins/intelligence-assistant/data/ フォルダーを共有しないでください。",
       "securityItem2": "Git 同期を使用する場合は、このフォルダーを .gitignore に追加してください。",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Model Context Protocol (MCP) サーバーを設定して、外部ツールとデータソースでエージェント機能を拡張します。",
-      "inspectorBtn": "🔍 MCP インスペクターを開く",
-      "testAllBtn": "🧪 すべての接続をテスト",
-      "refreshAllBtn": "🔄 すべてのツールを更新",
+      "inspectorBtn": "MCP インスペクターを開く",
+      "testAllBtn": "すべての接続をテスト",
+      "refreshAllBtn": "すべてのツールを更新",
       "addBtn": "+ MCP サーバーを追加",
       "empty": "MCP サーバーが設定されていません。「MCP サーバーを追加」を選択して開始してください。",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "編集",
-        "enabled": "✓ 有効",
-        "enabledOff": "✗ 無効",
+        "enabled": "有効",
+        "enabledOff": "無効",
         "connect": "接続",
         "disconnect": "切断",
         "connecting": "接続中...",
@@ -226,17 +226,17 @@
         "enableFirst": "接続する前にサーバーを有効化してください",
         "disconnectFailed": "{{name}} からの切断に失敗しました",
         "connectFailed": "{{name}} への接続に失敗しました",
-        "testNoCommand": "❌ 接続をテストする前にコマンドを入力してください",
-        "testSuccess": "✅ 接続に成功しました！{{count}} ツールが見つかりました。",
-        "testFailed": "❌ 接続に失敗しました: {{message}}",
-        "refreshedAll_one": "✅ {{count}} サーバーのツールを更新しました",
-        "refreshedAll_other": "✅ {{count}} サーバーのツールを更新しました",
-        "refreshedAll": "✅ {{count}} サーバーのツールを更新しました",
-        "refreshedPartial": "✅ {{success}} サーバー更新完了、❌ {{failed}} 失敗",
-        "noServersConfigured": "⚠️ MCP サーバーが設定されていません",
-        "testingAll": "🧪 {{count}} MCP サーバー接続をテスト中...",
-        "testAllSuccess": "✅ すべての {{count}} MCP サーバーが正常に接続されました！",
-        "testAllPartial": "⚠️ {{successful}} 接続済み、{{failed}} 失敗"
+        "testNoCommand": "接続をテストする前にコマンドを入力してください",
+        "testSuccess": "接続に成功しました！{{count}} ツールが見つかりました。",
+        "testFailed": "接続に失敗しました: {{message}}",
+        "refreshedAll_one": "{{count}} サーバーのツールを更新しました",
+        "refreshedAll_other": "{{count}} サーバーのツールを更新しました",
+        "refreshedAll": "{{count}} サーバーのツールを更新しました",
+        "refreshedPartial": "{{success}} サーバー更新完了、{{failed}} 失敗",
+        "noServersConfigured": "MCP サーバーが設定されていません",
+        "testingAll": "{{count}} MCP サーバー接続をテスト中...",
+        "testAllSuccess": "すべての {{count}} MCP サーバーが正常に接続されました！",
+        "testAllPartial": "{{successful}} 接続済み、{{failed}} 失敗"
       },
       "confirm": {
         "delete": "MCP サーバー「{{name}}」を削除しますか？"
@@ -362,7 +362,7 @@
             "params": "path (必須)、content (必須): ノートのパスと追記する内容"
           }
         },
-        "infoTitle": "💡 ツールについて",
+        "infoTitle": "ツールについて",
         "infoText": "組み込みツールはプラグイン設定ごとに構成されます。MCP ツールは独立して管理されます—MCP タブを使用してサーバーに接続し、ツールの利用可能性を更新してください。",
         "toolNames": {
           "read_file": "ファイルを読む",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI ツールが削除されました"
         },
-        "infoTitle": "💡 CLI ツールについて",
+        "infoTitle": "CLI ツールについて",
         "infoText": "CLI ツールはシェルコマンドをローカルで実行します。テンプレート置換には引数で {{paramName}} を使用するか、引数または環境変数として渡されるパラメーターを設定してください。",
         "modal": {
           "defaultTitle": "CLI ツール",
@@ -663,7 +663,7 @@
           "avgChunkSize": "平均チャンクサイズ"
         },
         "empty": "インデックスが空です。「インデックスを再構築」を選択してインデックス化を開始してください。",
-        "error": "⚠️ インデックス統計を読み込めません",
+        "error": "インデックス統計を読み込めません",
         "rebuild": {
           "name": "インデックスを再構築",
           "desc": "ボルト内のすべてのファイルを再インデックスします。時間がかかる場合があります。",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG 統計",
-      "totalChunks": "📊 総チャンク数:",
-      "filesIndexed": "📁 インデックス済みファイル数:",
-      "totalSize": "💾 総サイズ:",
-      "avgChunks": "📈 平均チャンク数/ファイル:",
-      "indexedFiles": "📄 インデックス済みファイル",
-      "noFilesYet": "⚠️ まだファイルがインデックス化されていません。",
+      "totalChunks": "総チャンク数:",
+      "filesIndexed": "インデックス済みファイル数:",
+      "totalSize": "総サイズ:",
+      "avgChunks": "平均チャンク数/ファイル:",
+      "indexedFiles": "インデックス済みファイル",
+      "noFilesYet": "まだファイルがインデックス化されていません。",
       "howToBuild": "RAG インデックスを構築するには：",
       "step1": "設定 → RAG に移動",
       "step2": "RAG を有効にする",
       "step3": "ボルトインデックスを選択",
       "close": "閉じる",
-      "retrieved_one": "📚 {{count}} ドキュメントから取得",
-      "retrieved_other": "📚 {{count}} ドキュメントから取得",
-      "retrieved": "📚 {{count}} ドキュメントから取得"
+      "retrieved_one": "{{count}} ドキュメントから取得",
+      "retrieved_other": "{{count}} ドキュメントから取得",
+      "retrieved": "{{count}} ドキュメントから取得"
     },
     "ragTooltip": {
       "status": "RAG インデックスステータス:",
-      "totalChunks": "📊 総チャンク数: {{count}}",
-      "filesIndexed": "📁 インデックス済みファイル数: {{count}}",
-      "totalSize": "💾 総サイズ: {{size}} KB",
-      "indexedFiles": "📄 インデックス済みファイル:",
+      "totalChunks": "総チャンク数: {{count}}",
+      "filesIndexed": "インデックス済みファイル数: {{count}}",
+      "totalSize": "総サイズ: {{size}} KB",
+      "indexedFiles": "インデックス済みファイル:",
       "andMore": "  ... と他 {{count}} 件",
-      "noFilesYet": "⚠️ まだファイルがインデックス化されていません。",
+      "noFilesYet": "まだファイルがインデックス化されていません。",
       "goToSettings": "設定 → RAG に移動してインデックスを構築してください。",
       "ragOff": "ℹ️ このチャットでは現在 RAG がオフになっています。"
     },
@@ -1252,7 +1252,7 @@
         "desc": "エージェントがモデルを選択する方法を選択"
       },
       "systemPrompt": {
-        "createNew": "➕ 新しいプロンプトを作成...",
+        "createNew": "新しいプロンプトを作成...",
         "promptName": {
           "name": "プロンプト名",
           "desc": "新しいシステムプロンプトの表示名"
@@ -1381,7 +1381,7 @@
         "tools": "ツール",
         "logs": "ログ"
       },
-      "refreshBtn": "🔄 更新",
+      "refreshBtn": "更新",
       "connections": {
         "title": "MCP サーバー接続",
         "noServers": "MCP サーバーが設定されていません。",
@@ -1443,9 +1443,9 @@
         "performBtn": "ツールを実行",
         "clearBtn": "結果をクリア",
         "executing": "実行中...",
-        "success": "✅ 実行成功",
-        "failed": "❌ 実行失敗",
-        "errorTitle": "❌ 実行エラー",
+        "success": "実行成功",
+        "failed": "実行失敗",
+        "errorTitle": "実行エラー",
         "errorLabel": "エラー: {{message}}",
         "notices": {
           "success": "ツールが正常に実行されました",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ MCP サーバーが設定されていません",
-        "testing": "🧪 {{count}} MCP サーバー接続をテスト中...",
-        "allSuccess": "✅ すべての {{count}} MCP サーバーが正常に接続されました！",
-        "partial": "⚠️ {{success}} 接続済み、{{failed}} 失敗"
+        "noServers": "MCP サーバーが設定されていません",
+        "testing": "{{count}} MCP サーバー接続をテスト中...",
+        "allSuccess": "すべての {{count}} MCP サーバーが正常に接続されました！",
+        "partial": "{{success}} 接続済み、{{failed}} 失敗"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Ollama モデルを管理",
       "serverInfo": "サーバー情報",
       "checkingServer": "サーバー確認中...",
-      "serverOnline": "✅ サーバーオンライン",
+      "serverOnline": "サーバーオンライン",
       "versionLabel": " | バージョン: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ サーバーオフライン",
-      "connectionError": "❌ 接続エラー",
+      "serverOffline": "サーバーオフライン",
+      "connectionError": "接続エラー",
       "pullTitle": "新しいモデルをプル",
       "pullHint": "Ollama ライブラリからダウンロードするモデル名を入力してください（例: llama2、mistral、codellama）",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "モデルをプル",
       "installedTitle": "インストール済みモデル",
-      "refreshList": "🔄 リストを更新",
+      "refreshList": "リストを更新",
       "noModels": "モデルが見つかりません。モデルをプルして開始してください。",
       "capabilities": "機能: {{caps}}",
       "deleteBtn": "削除",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "モデル名を入力してください",
         "pulling": "{{name}} をプル中... しばらくかかる場合があります。",
-        "pullSuccess": "✅ {{name}} を正常にプルしました",
-        "pullFailed": "❌ モデルのプルに失敗しました: {{message}}",
-        "deleted": "✅ {{name}} を削除しました",
-        "deleteFailed": "❌ モデルの削除に失敗しました: {{message}}",
+        "pullSuccess": "{{name}} を正常にプルしました",
+        "pullFailed": "モデルのプルに失敗しました: {{message}}",
+        "deleted": "{{name}} を削除しました",
+        "deleteFailed": "モデルの削除に失敗しました: {{message}}",
         "refreshing": "更新中...",
-        "refreshSuccess": "✅ モデルリストが更新されました",
-        "refreshFailed": "❌ モデルリストの更新に失敗しました"
+        "refreshSuccess": "モデルリストが更新されました",
+        "refreshFailed": "モデルリストの更新に失敗しました"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ 処理中...",
       "error": "説明のレンダリング中にエラーが発生しました",
-      "errorPrefix": "❌ エラー: "
+      "errorPrefix": "エラー:"
     }
   },
   "notices": {

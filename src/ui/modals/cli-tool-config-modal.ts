@@ -1,4 +1,4 @@
-import { Setting, Modal } from 'obsidian';
+import { Setting, Modal, setIcon } from 'obsidian';
 import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { CLIToolConfig } from '@/features/tools';
@@ -198,8 +198,8 @@ export class CLIToolConfigModal extends Modal {
 
 			headerDiv.createEl('strong', { text: t('settings.tools.cli.modal.paramN', { n: i + 1 }) });
 
-			const removeBtn = headerDiv.createEl('button', { text: '✕' });
-			removeBtn.addClass('ia-cli-tools-param-remove');
+			const removeBtn = headerDiv.createEl('button', { cls: 'clickable-icon ia-cli-tools-param-remove', attr: { 'aria-label': t('settings.tools.cli.actions.delete') } });
+			setIcon(removeBtn, 'x');
 			removeBtn.addEventListener('click', () => {
 				params.splice(i, 1);
 				this.renderParameters(container, persist);

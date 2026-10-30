@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "配置状态",
         "desc": "插件整体配置状态",
-        "ok": "✅ 已配置（{{providers}} 个服务商，{{conversations}} 条对话）",
-        "incomplete": "⚠️ 配置不完整 - 请配置服务商和模型"
+        "ok": "已配置（{{providers}} 个服务商，{{conversations}} 条对话）",
+        "incomplete": "配置不完整 - 请配置服务商和模型"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "已配置 {{count}} 个服务商",
       "providerCount_other": "已配置 {{count}} 个服务商",
       "providerCount": "已配置 {{count}} 个服务商",
-      "refreshAll": "🔄 刷新所有模型",
+      "refreshAll": "刷新所有模型",
       "empty": "尚未配置服务商，请先在服务商标签页中添加。",
       "noModels": "暂无可用模型，请点击「刷新所有模型」或在服务商标签页中单独刷新。",
       "noMatch": "没有模型符合当前过滤条件，请调整或清除过滤器。",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ 安全提示",
+      "securityTitle": "安全提示",
       "securityDesc": "API 密钥以明文存储在您的 Vault 中以保证兼容性。为防止意外泄露：",
       "securityItem1": "请勿共享 {{configDir}}/plugins/intelligence-assistant/data/ 目录。",
       "securityItem2": "如使用 Git 同步，请将此目录添加到 .gitignore。",
@@ -169,9 +169,9 @@
     },
     "mcp": {
       "desc": "配置模型上下文协议（MCP）服务器，为智能体扩展外部工具和数据源。",
-      "inspectorBtn": "🔍 打开 MCP 检查器",
-      "testAllBtn": "🧪 测试所有连接",
-      "refreshAllBtn": "🔄 刷新所有工具",
+      "inspectorBtn": "打开 MCP 检查器",
+      "testAllBtn": "测试所有连接",
+      "refreshAllBtn": "刷新所有工具",
       "addBtn": "+ 添加 MCP 服务器",
       "empty": "未配置 MCP 服务器，点击「添加 MCP 服务器」开始。",
       "tableHeaders": {
@@ -208,8 +208,8 @@
       },
       "actions": {
         "edit": "编辑",
-        "enabled": "✓ 已启用",
-        "enabledOff": "✗ 已禁用",
+        "enabled": "已启用",
+        "enabledOff": "已禁用",
         "connect": "连接",
         "disconnect": "断开",
         "connecting": "连接中...",
@@ -225,17 +225,17 @@
         "enableFirst": "连接前请先启用服务器",
         "disconnectFailed": "从 {{name}} 断开连接失败",
         "connectFailed": "连接 {{name}} 失败",
-        "testNoCommand": "❌ 请在测试连接前输入命令",
-        "testSuccess": "✅ 连接成功！找到 {{count}} 个工具。",
-        "testFailed": "❌ 连接失败：{{message}}",
-        "refreshedAll_one": "✅ 已刷新 {{count}} 个服务器的工具",
-        "refreshedAll_other": "✅ 已刷新 {{count}} 个服务器的工具",
-        "refreshedAll": "✅ 已刷新 {{count}} 个服务器的工具",
-        "refreshedPartial": "✅ 已刷新 {{success}} 个服务器，❌ {{failed}} 个失败",
-        "noServersConfigured": "⚠️ 未配置MCP服务器",
-        "testingAll": "🧪 正在测试 {{count}} 个MCP服务器连接...",
-        "testAllSuccess": "✅ 所有 {{count}} 个MCP服务器连接成功！",
-        "testAllPartial": "⚠️ {{successful}} 个连接成功，{{failed}} 个失败"
+        "testNoCommand": "请在测试连接前输入命令",
+        "testSuccess": "连接成功！找到 {{count}} 个工具。",
+        "testFailed": "连接失败：{{message}}",
+        "refreshedAll_one": "已刷新 {{count}} 个服务器的工具",
+        "refreshedAll_other": "已刷新 {{count}} 个服务器的工具",
+        "refreshedAll": "已刷新 {{count}} 个服务器的工具",
+        "refreshedPartial": "已刷新 {{success}} 个服务器，{{failed}} 个失败",
+        "noServersConfigured": "未配置MCP服务器",
+        "testingAll": "正在测试 {{count}} 个MCP服务器连接...",
+        "testAllSuccess": "所有 {{count}} 个MCP服务器连接成功！",
+        "testAllPartial": "{{successful}} 个连接成功，{{failed}} 个失败"
       },
       "confirm": {
         "delete": "删除 MCP 服务器\"{{name}}\"？"
@@ -361,7 +361,7 @@
             "params": "path（必填），content（必填）：笔记路径和拟追加内容"
           }
         },
-        "infoTitle": "💡 关于工具",
+        "infoTitle": "关于工具",
         "infoText": "内置工具按插件设置配置。MCP 工具独立管理——使用 MCP 标签页连接服务器并刷新工具可用性。",
         "toolNames": {
           "read_file": "读取文件",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI 工具已删除"
         },
-        "infoTitle": "💡 关于 CLI 工具",
+        "infoTitle": "关于 CLI 工具",
         "infoText": "CLI 工具在本地执行 shell 命令。在参数中使用 {{paramName}} 进行模板替换，或将参数配置为作为参数或环境变量传递。",
         "modal": {
           "defaultTitle": "CLI 工具",
@@ -663,7 +663,7 @@
           "avgChunkSize": "平均块大小"
         },
         "empty": "索引为空，点击「重建索引」开始索引。",
-        "error": "⚠️ 无法加载索引统计信息",
+        "error": "无法加载索引统计信息",
         "rebuild": {
           "name": "重建索引",
           "desc": "重新索引 Vault 中的所有文件，可能需要一些时间。",
@@ -1115,29 +1115,29 @@
     },
     "ragStats": {
       "title": "RAG 统计",
-      "totalChunks": "📊 总块数：",
-      "filesIndexed": "📁 已索引文件：",
-      "totalSize": "💾 总大小：",
-      "avgChunks": "📈 平均块数/文件：",
-      "indexedFiles": "📄 已索引文件",
-      "noFilesYet": "⚠️ 尚未索引任何文件。",
+      "totalChunks": "总块数：",
+      "filesIndexed": "已索引文件：",
+      "totalSize": "总大小：",
+      "avgChunks": "平均块数/文件：",
+      "indexedFiles": "已索引文件",
+      "noFilesYet": "尚未索引任何文件。",
       "howToBuild": "构建 RAG 索引：",
       "step1": "前往设置 → RAG",
       "step2": "启用 RAG",
       "step3": "选择索引仓库",
       "close": "关闭",
-      "retrieved_one": "📚 从 {{count}} 篇文档中检索",
-      "retrieved_other": "📚 从 {{count}} 篇文档中检索",
-      "retrieved": "📚 从 {{count}} 篇文档中检索"
+      "retrieved_one": "从 {{count}} 篇文档中检索",
+      "retrieved_other": "从 {{count}} 篇文档中检索",
+      "retrieved": "从 {{count}} 篇文档中检索"
     },
     "ragTooltip": {
       "status": "RAG 索引状态：",
-      "totalChunks": "📊 总块数：{{count}}",
-      "filesIndexed": "📁 已索引文件：{{count}}",
-      "totalSize": "💾 总大小：{{size}} KB",
-      "indexedFiles": "📄 已索引文件：",
+      "totalChunks": "总块数：{{count}}",
+      "filesIndexed": "已索引文件：{{count}}",
+      "totalSize": "总大小：{{size}} KB",
+      "indexedFiles": "已索引文件：",
       "andMore": "  ... 还有 {{count}} 个",
-      "noFilesYet": "⚠️ 尚未索引任何文件。",
+      "noFilesYet": "尚未索引任何文件。",
       "goToSettings": "前往设置 → RAG 构建索引。",
       "ragOff": "ℹ️ 此聊天的 RAG 当前已关闭。"
     },
@@ -1261,7 +1261,7 @@
         "desc": "选择智能体如何选择模型"
       },
       "systemPrompt": {
-        "createNew": "➕ 创建新提示词…",
+        "createNew": "创建新提示词…",
         "promptName": {
           "name": "提示词名称",
           "desc": "新系统提示词的显示名称"
@@ -1396,7 +1396,7 @@
         "tools": "工具",
         "logs": "日志"
       },
-      "refreshBtn": "🔄 刷新",
+      "refreshBtn": "刷新",
       "connections": {
         "title": "MCP 服务器连接",
         "noServers": "未配置 MCP 服务器。",
@@ -1458,9 +1458,9 @@
         "performBtn": "执行工具",
         "clearBtn": "清除结果",
         "executing": "执行中...",
-        "success": "✅ 执行成功",
-        "failed": "❌ 执行失败",
-        "errorTitle": "❌ 执行错误",
+        "success": "执行成功",
+        "failed": "执行失败",
+        "errorTitle": "执行错误",
         "errorLabel": "错误：{{message}}",
         "notices": {
           "success": "工具执行成功",
@@ -1472,10 +1472,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ 未配置 MCP 服务器",
-        "testing": "🧪 正在测试 {{count}} 个 MCP 服务器连接...",
-        "allSuccess": "✅ 所有 {{count}} 个 MCP 服务器连接成功！",
-        "partial": "⚠️ {{success}} 个已连接，{{failed}} 个失败"
+        "noServers": "未配置 MCP 服务器",
+        "testing": "正在测试 {{count}} 个 MCP 服务器连接...",
+        "allSuccess": "所有 {{count}} 个 MCP 服务器连接成功！",
+        "partial": "{{success}} 个已连接，{{failed}} 个失败"
       }
     },
     "mcpServer": {
@@ -1519,11 +1519,11 @@
       "title": "管理 Ollama 模型",
       "serverInfo": "服务器信息",
       "checkingServer": "正在检查服务器...",
-      "serverOnline": "✅ 服务器在线",
+      "serverOnline": "服务器在线",
       "versionLabel": " | 版本：{{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ 服务器离线",
-      "connectionError": "❌ 连接错误",
+      "serverOffline": "服务器离线",
+      "connectionError": "连接错误",
       "pullTitle": "拉取新模型",
       "pullHint": "输入模型名称以从 Ollama 库下载（如 llama2、mistral、codellama）",
       "modelName": {
@@ -1532,7 +1532,7 @@
       },
       "pullBtn": "拉取模型",
       "installedTitle": "已安装模型",
-      "refreshList": "🔄 刷新列表",
+      "refreshList": "刷新列表",
       "noModels": "未找到模型，请先拉取一个模型。",
       "capabilities": "能力：{{caps}}",
       "deleteBtn": "删除",
@@ -1546,13 +1546,13 @@
       "notices": {
         "enterName": "请输入模型名称",
         "pulling": "正在拉取 {{name}}...可能需要一些时间。",
-        "pullSuccess": "✅ 成功拉取 {{name}}",
-        "pullFailed": "❌ 拉取模型失败：{{message}}",
-        "deleted": "✅ 已删除 {{name}}",
-        "deleteFailed": "❌ 删除模型失败：{{message}}",
+        "pullSuccess": "成功拉取 {{name}}",
+        "pullFailed": "拉取模型失败：{{message}}",
+        "deleted": "已删除 {{name}}",
+        "deleteFailed": "删除模型失败：{{message}}",
         "refreshing": "刷新中...",
-        "refreshSuccess": "✅ 模型列表刷新成功",
-        "refreshFailed": "❌ 刷新模型列表失败"
+        "refreshSuccess": "模型列表刷新成功",
+        "refreshFailed": "刷新模型列表失败"
       }
     },
     "promptEdit": {
@@ -1584,7 +1584,7 @@
     "explain": {
       "loading": "⏳ 处理中...",
       "error": "渲染解释时出错",
-      "errorPrefix": "❌ 错误："
+      "errorPrefix": "错误："
     }
   },
   "notices": {

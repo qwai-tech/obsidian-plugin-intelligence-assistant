@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Trạng thái cấu hình",
         "desc": "Trạng thái cấu hình tổng thể của plugin",
-        "ok": "✅ Đã cấu hình ({{providers}} nhà cung cấp, {{conversations}} hội thoại)",
-        "incomplete": "⚠️ Chưa hoàn chỉnh - Vui lòng cấu hình nhà cung cấp và mô hình"
+        "ok": "Đã cấu hình ({{providers}} nhà cung cấp, {{conversations}} hội thoại)",
+        "incomplete": "Chưa hoàn chỉnh - Vui lòng cấu hình nhà cung cấp và mô hình"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} nhà cung cấp đã cấu hình",
       "providerCount_other": "{{count}} nhà cung cấp đã cấu hình",
       "providerCount": "{{count}} nhà cung cấp đã cấu hình",
-      "refreshAll": "🔄 làm mới tất cả mô hình",
+      "refreshAll": "làm mới tất cả mô hình",
       "empty": "Chưa có nhà cung cấp nào được cấu hình. Thêm nhà cung cấp trong tab nhà cung cấp trước.",
       "noModels": "Không có mô hình nào. Nhấp \"làm mới tất cả mô hình\" hoặc làm mới từng nhà cung cấp trong tab nhà cung cấp.",
       "noMatch": "Không có mô hình nào khớp với bộ lọc hiện tại. Điều chỉnh hoặc xóa bộ lọc để xem kết quả.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Cảnh báo bảo mật",
+      "securityTitle": "Cảnh báo bảo mật",
       "securityDesc": "Khóa API được lưu dưới dạng văn bản thuần trong vault của bạn để tương thích. Để tránh rò rỉ ngoài ý muốn:",
       "securityItem1": "KHÔNG chia sẻ thư mục {{configDir}}/plugins/intelligence-assistant/data/.",
       "securityItem2": "Thêm thư mục này vào .gitignore nếu bạn dùng Git sync.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Cấu hình máy chủ Model Context Protocol (MCP) để mở rộng khả năng của tác nhân với các công cụ và nguồn dữ liệu bên ngoài.",
-      "inspectorBtn": "🔍 Mở MCP inspector",
-      "testAllBtn": "🧪 kiểm tra tất cả kết nối",
-      "refreshAllBtn": "🔄 làm mới tất cả công cụ",
+      "inspectorBtn": "Mở MCP inspector",
+      "testAllBtn": "kiểm tra tất cả kết nối",
+      "refreshAllBtn": "làm mới tất cả công cụ",
       "addBtn": "+ Thêm máy chủ MCP",
       "empty": "Chưa có máy chủ MCP nào. Chọn Thêm máy chủ MCP để bắt đầu.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Chỉnh sửa",
-        "enabled": "✓ Đã bật",
-        "enabledOff": "✗ Đã tắt",
+        "enabled": "Đã bật",
+        "enabledOff": "Đã tắt",
         "connect": "kết nối",
         "disconnect": "ngắt kết nối",
         "connecting": "Đang kết nối...",
@@ -226,17 +226,17 @@
         "enableFirst": "Bật máy chủ trước khi kết nối",
         "disconnectFailed": "Không thể ngắt kết nối khỏi {{name}}",
         "connectFailed": "Không thể kết nối tới {{name}}",
-        "testNoCommand": "❌ vui lòng nhập lệnh trước khi kiểm tra kết nối",
-        "testSuccess": "✅ đã kết nối thành công! Tìm thấy {{count}} công cụ.",
-        "testFailed": "❌ Kết nối thất bại: {{message}}",
-        "refreshedAll_one": "✅ đã làm mới công cụ cho {{count}} máy chủ",
-        "refreshedAll_other": "✅ đã làm mới công cụ cho {{count}} máy chủ",
-        "refreshedAll": "✅ đã làm mới công cụ cho {{count}} máy chủ",
-        "refreshedPartial": "✅ đã làm mới {{success}} máy chủ, ❌ {{failed}} thất bại",
-        "noServersConfigured": "⚠️ Không có máy chủ MCP nào được cấu hình",
-        "testingAll": "🧪 Đang kiểm tra {{count}} kết nối máy chủ MCP...",
-        "testAllSuccess": "✅ tất cả {{count}} máy chủ MCP đã kết nối thành công!",
-        "testAllPartial": "⚠️ {{successful}} đã kết nối, {{failed}} thất bại"
+        "testNoCommand": "vui lòng nhập lệnh trước khi kiểm tra kết nối",
+        "testSuccess": "đã kết nối thành công! Tìm thấy {{count}} công cụ.",
+        "testFailed": "Kết nối thất bại: {{message}}",
+        "refreshedAll_one": "đã làm mới công cụ cho {{count}} máy chủ",
+        "refreshedAll_other": "đã làm mới công cụ cho {{count}} máy chủ",
+        "refreshedAll": "đã làm mới công cụ cho {{count}} máy chủ",
+        "refreshedPartial": "đã làm mới {{success}} máy chủ, {{failed}} thất bại",
+        "noServersConfigured": "Không có máy chủ MCP nào được cấu hình",
+        "testingAll": "Đang kiểm tra {{count}} kết nối máy chủ MCP...",
+        "testAllSuccess": "tất cả {{count}} máy chủ MCP đã kết nối thành công!",
+        "testAllPartial": "{{successful}} đã kết nối, {{failed}} thất bại"
       },
       "confirm": {
         "delete": "Xóa máy chủ MCP \"{{name}}\"?"
@@ -362,7 +362,7 @@
             "params": "path (bắt buộc), content (bắt buộc): Đường dẫn ghi chú và nội dung cần thêm"
           }
         },
-        "infoTitle": "💡 về công cụ",
+        "infoTitle": "về công cụ",
         "infoText": "Công cụ tích hợp được cấu hình theo cài đặt plugin. Công cụ MCP được quản lý độc lập—sử dụng tab MCP để kết nối máy chủ và làm mới tính khả dụng của công cụ.",
         "toolNames": {
           "read_file": "Đọc tệp",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "Đã xóa công cụ CLI"
         },
-        "infoTitle": "💡 Về công cụ CLI",
+        "infoTitle": "Về công cụ CLI",
         "infoText": "Công cụ CLI thực thi lệnh shell cục bộ. Sử dụng {{paramName}} trong đối số để thay thế mẫu, hoặc cấu hình tham số để truyền dưới dạng đối số hoặc biến môi trường.",
         "modal": {
           "defaultTitle": "Công cụ CLI",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Kích thước đoạn trung bình"
         },
         "empty": "Chỉ mục trống. Chọn xây dựng lại chỉ mục để bắt đầu lập chỉ mục.",
-        "error": "⚠️ không thể tải thống kê chỉ mục",
+        "error": "không thể tải thống kê chỉ mục",
         "rebuild": {
           "name": "Xây dựng lại chỉ mục",
           "desc": "Lập chỉ mục lại tất cả tệp trong vault. Quá trình này có thể mất một lúc.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "Thống kê RAG",
-      "totalChunks": "📊 tổng số đoạn:",
-      "filesIndexed": "📁 tệp đã lập chỉ mục:",
-      "totalSize": "💾 tổng kích thước:",
-      "avgChunks": "📈 Đoạn trung bình/tệp:",
-      "indexedFiles": "📄 tệp đã lập chỉ mục",
-      "noFilesYet": "⚠️ chưa có tệp nào được lập chỉ mục.",
+      "totalChunks": "tổng số đoạn:",
+      "filesIndexed": "tệp đã lập chỉ mục:",
+      "totalSize": "tổng kích thước:",
+      "avgChunks": "Đoạn trung bình/tệp:",
+      "indexedFiles": "tệp đã lập chỉ mục",
+      "noFilesYet": "chưa có tệp nào được lập chỉ mục.",
       "howToBuild": "Để xây dựng chỉ mục RAG:",
       "step1": "Vào Cài đặt → RAG",
       "step2": "Bật RAG",
       "step3": "Chọn lập chỉ mục vault",
       "close": "Đóng",
-      "retrieved_one": "📚 đã truy xuất từ {{count}} tài liệu",
-      "retrieved_other": "📚 đã truy xuất từ {{count}} tài liệu",
-      "retrieved": "📚 đã truy xuất từ {{count}} tài liệu"
+      "retrieved_one": "đã truy xuất từ {{count}} tài liệu",
+      "retrieved_other": "đã truy xuất từ {{count}} tài liệu",
+      "retrieved": "đã truy xuất từ {{count}} tài liệu"
     },
     "ragTooltip": {
       "status": "Trạng thái chỉ mục RAG:",
-      "totalChunks": "📊 Tổng số đoạn: {{count}}",
-      "filesIndexed": "📁 Tệp đã lập chỉ mục: {{count}}",
-      "totalSize": "💾 Tổng kích thước: {{size}} KB",
-      "indexedFiles": "📄 Tệp đã lập chỉ mục:",
+      "totalChunks": "Tổng số đoạn: {{count}}",
+      "filesIndexed": "Tệp đã lập chỉ mục: {{count}}",
+      "totalSize": "Tổng kích thước: {{size}} KB",
+      "indexedFiles": "Tệp đã lập chỉ mục:",
       "andMore": "  ... và {{count}} tệp nữa",
-      "noFilesYet": "⚠️ chưa có tệp nào được lập chỉ mục.",
+      "noFilesYet": "chưa có tệp nào được lập chỉ mục.",
       "goToSettings": "Vào Cài đặt → RAG để xây dựng chỉ mục.",
       "ragOff": "ℹ️ RAG hiện đang tắt cho cuộc trò chuyện này."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Chọn cách tác nhân sẽ chọn mô hình của mình"
       },
       "systemPrompt": {
-        "createNew": "➕ tạo lời nhắc mới…",
+        "createNew": "tạo lời nhắc mới…",
         "promptName": {
           "name": "Tên lời nhắc",
           "desc": "Tên hiển thị cho lời nhắc hệ thống mới"
@@ -1381,7 +1381,7 @@
         "tools": "Công cụ",
         "logs": "Nhật ký"
       },
-      "refreshBtn": "🔄 làm mới",
+      "refreshBtn": "làm mới",
       "connections": {
         "title": "Kết nối máy chủ MCP",
         "noServers": "Chưa có máy chủ MCP nào được cấu hình.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Thực hiện công cụ",
         "clearBtn": "Xóa kết quả",
         "executing": "Đang thực thi...",
-        "success": "✅ thực thi thành công",
-        "failed": "❌ thực thi thất bại",
-        "errorTitle": "❌ lỗi thực thi",
+        "success": "thực thi thành công",
+        "failed": "thực thi thất bại",
+        "errorTitle": "lỗi thực thi",
         "errorLabel": "Lỗi: {{message}}",
         "notices": {
           "success": "Công cụ đã thực thi thành công",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Không có máy chủ MCP nào được cấu hình",
-        "testing": "🧪 Đang kiểm tra {{count}} kết nối máy chủ MCP...",
-        "allSuccess": "✅ tất cả {{count}} máy chủ MCP đã kết nối thành công!",
-        "partial": "⚠️ {{success}} đã kết nối, {{failed}} thất bại"
+        "noServers": "Không có máy chủ MCP nào được cấu hình",
+        "testing": "Đang kiểm tra {{count}} kết nối máy chủ MCP...",
+        "allSuccess": "tất cả {{count}} máy chủ MCP đã kết nối thành công!",
+        "partial": "{{success}} đã kết nối, {{failed}} thất bại"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Quản lý mô hình Ollama",
       "serverInfo": "Thông tin máy chủ",
       "checkingServer": "Đang kiểm tra máy chủ...",
-      "serverOnline": "✅ Máy chủ trực tuyến",
+      "serverOnline": "Máy chủ trực tuyến",
       "versionLabel": " | Phiên bản: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Máy chủ ngoại tuyến",
-      "connectionError": "❌ Lỗi kết nối",
+      "serverOffline": "Máy chủ ngoại tuyến",
+      "connectionError": "Lỗi kết nối",
       "pullTitle": "Tải mô hình mới",
       "pullHint": "Nhập tên mô hình để tải từ thư viện Ollama (ví dụ: llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Tải mô hình",
       "installedTitle": "Mô hình đã cài đặt",
-      "refreshList": "🔄 Làm mới danh sách",
+      "refreshList": "Làm mới danh sách",
       "noModels": "Không tìm thấy mô hình nào. Tải mô hình để bắt đầu.",
       "capabilities": "Khả năng: {{caps}}",
       "deleteBtn": "Xóa",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Vui lòng nhập tên mô hình",
         "pulling": "Đang tải {{name}}... Quá trình này có thể mất một lúc.",
-        "pullSuccess": "✅ Đã tải thành công {{name}}",
-        "pullFailed": "❌ Không thể tải mô hình: {{message}}",
-        "deleted": "✅ Đã xóa {{name}}",
-        "deleteFailed": "❌ Không thể xóa mô hình: {{message}}",
+        "pullSuccess": "Đã tải thành công {{name}}",
+        "pullFailed": "Không thể tải mô hình: {{message}}",
+        "deleted": "Đã xóa {{name}}",
+        "deleteFailed": "Không thể xóa mô hình: {{message}}",
         "refreshing": "Đang làm mới...",
-        "refreshSuccess": "✅ Đã làm mới danh sách mô hình",
-        "refreshFailed": "❌ Không thể làm mới danh sách mô hình"
+        "refreshSuccess": "Đã làm mới danh sách mô hình",
+        "refreshFailed": "Không thể làm mới danh sách mô hình"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Đang xử lý...",
       "error": "Lỗi hiển thị giải thích",
-      "errorPrefix": "❌ Lỗi: "
+      "errorPrefix": "Lỗi:"
     }
   },
   "notices": {

@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Konfigurationsstatus",
         "desc": "Overordnet konfigurationsstatus for plugin'et",
-        "ok": "✅ Konfigureret ({{providers}} udbydere, {{conversations}} samtaler)",
-        "incomplete": "⚠️ Ufuldstændig - Konfigurer venligst udbydere og modeller"
+        "ok": "Konfigureret ({{providers}} udbydere, {{conversations}} samtaler)",
+        "incomplete": "Ufuldstændig - Konfigurer venligst udbydere og modeller"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} udbyder konfigureret",
       "providerCount_other": "{{count}} udbydere konfigureret",
       "providerCount": "{{count}} udbydere konfigureret",
-      "refreshAll": "🔄 opdater alle modeller",
+      "refreshAll": "opdater alle modeller",
       "empty": "Ingen udbydere konfigureret endnu. Tilføj udbydere i udbyderens fane først.",
       "noModels": "Ingen modeller tilgængelige. Klik på \"opdater alle modeller\" eller opdater individuelle udbydere i udbyderens fane.",
       "noMatch": "Ingen modeller matcher de nuværende filtre. Juster eller ryd filtre for at se resultater.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Sikkerhedsadvarsel",
+      "securityTitle": "Sikkerhedsadvarsel",
       "securityDesc": "API-nøgler gemmes som klartekst i din vault af kompatibilitetshensyn. For at forhindre utilsigtede lækager:",
       "securityItem1": "Del IKKE din mappe {{configDir}}/plugins/intelligence-assistant/data/.",
       "securityItem2": "Tilføj denne mappe til din .gitignore, hvis du bruger Git-synkronisering.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Konfigurer Model Context Protocol (MCP)-servere for at udvide agentens funktioner med eksterne værktøjer og datakilder.",
-      "inspectorBtn": "🔍 Åbn MCP-inspektor",
-      "testAllBtn": "🧪 test alle forbindelser",
-      "refreshAllBtn": "🔄 opdater alle værktøjer",
+      "inspectorBtn": "Åbn MCP-inspektor",
+      "testAllBtn": "test alle forbindelser",
+      "refreshAllBtn": "opdater alle værktøjer",
       "addBtn": "+ Tilføj MCP-server",
       "empty": "Ingen MCP-servere konfigureret. Vælg Tilføj MCP-server for at komme i gang.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Rediger",
-        "enabled": "✓ Aktiveret",
-        "enabledOff": "✗ Deaktiveret",
+        "enabled": "Aktiveret",
+        "enabledOff": "Deaktiveret",
         "connect": "opret forbindelse",
         "disconnect": "afbryd forbindelse",
         "connecting": "Opretter forbindelse...",
@@ -226,17 +226,17 @@
         "enableFirst": "Aktiver serveren inden tilslutning",
         "disconnectFailed": "Kunne ikke afbryde forbindelsen til {{name}}",
         "connectFailed": "Kunne ikke oprette forbindelse til {{name}}",
-        "testNoCommand": "❌ angiv en kommando inden test af forbindelsen",
-        "testSuccess": "✅ forbundet! Fandt {{count}} værktøjer.",
-        "testFailed": "❌ Forbindelsen mislykkedes: {{message}}",
-        "refreshedAll_one": "✅ opdaterede værktøjer for {{count}} server",
-        "refreshedAll_other": "✅ opdaterede værktøjer for {{count}} servere",
-        "refreshedAll": "✅ opdaterede værktøjer for {{count}} servere",
-        "refreshedPartial": "✅ {{success}} servere opdateret, ❌ {{failed}} mislykkedes",
-        "noServersConfigured": "⚠️ Ingen MCP-servere konfigureret",
-        "testingAll": "🧪 Tester {{count}} MCP-serverforbindelser...",
-        "testAllSuccess": "✅ alle {{count}} mcp-servere forbundet!",
-        "testAllPartial": "⚠️ {{successful}} forbundet, {{failed}} mislykkedes"
+        "testNoCommand": "angiv en kommando inden test af forbindelsen",
+        "testSuccess": "forbundet! Fandt {{count}} værktøjer.",
+        "testFailed": "Forbindelsen mislykkedes: {{message}}",
+        "refreshedAll_one": "opdaterede værktøjer for {{count}} server",
+        "refreshedAll_other": "opdaterede værktøjer for {{count}} servere",
+        "refreshedAll": "opdaterede værktøjer for {{count}} servere",
+        "refreshedPartial": "{{success}} servere opdateret, {{failed}} mislykkedes",
+        "noServersConfigured": "Ingen MCP-servere konfigureret",
+        "testingAll": "Tester {{count}} MCP-serverforbindelser...",
+        "testAllSuccess": "alle {{count}} mcp-servere forbundet!",
+        "testAllPartial": "{{successful}} forbundet, {{failed}} mislykkedes"
       },
       "confirm": {
         "delete": "Slet MCP-server \"{{name}}\"?"
@@ -362,7 +362,7 @@
             "params": "path (påkrævet), content (påkrævet): Notitiens sti og indhold der skal tilføjes"
           }
         },
-        "infoTitle": "💡 om værktøjer",
+        "infoTitle": "om værktøjer",
         "infoText": "Indbyggede værktøjer er konfigureret pr. plugin-indstillinger. MCP-værktøjer administreres uafhængigt—brug MCP-fanen til at tilslutte servere og opdatere tilgængelighed af værktøjer.",
         "toolNames": {
           "read_file": "Læs fil",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI-værktøj fjernet"
         },
-        "infoTitle": "💡 Om CLI-værktøjer",
+        "infoTitle": "Om CLI-værktøjer",
         "infoText": "CLI-værktøjer udfører shell-kommandoer lokalt. Brug {{paramName}} i argumenter til skabelonsubstitution, eller konfigurer parametre til at blive sendt som argumenter eller miljøvariabler.",
         "modal": {
           "defaultTitle": "CLI-værktøj",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Gennemsnitlig fragmentstørrelse"
         },
         "empty": "Indeks er tomt. Vælg genopbyg indeks for at starte indeksering.",
-        "error": "⚠️ kan ikke indlæse indeksstatistik",
+        "error": "kan ikke indlæse indeksstatistik",
         "rebuild": {
           "name": "Genopbyg indeks",
           "desc": "Genindekser alle filer i din vault. Dette kan tage et stykke tid.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG-statistik",
-      "totalChunks": "📊 samlede fragmenter:",
-      "filesIndexed": "📁 filer indekseret:",
-      "totalSize": "💾 samlet størrelse:",
-      "avgChunks": "📈 Gns. fragmenter/fil:",
-      "indexedFiles": "📄 indekserede filer",
-      "noFilesYet": "⚠️ ingen filer er indekseret endnu.",
+      "totalChunks": "samlede fragmenter:",
+      "filesIndexed": "filer indekseret:",
+      "totalSize": "samlet størrelse:",
+      "avgChunks": "Gns. fragmenter/fil:",
+      "indexedFiles": "indekserede filer",
+      "noFilesYet": "ingen filer er indekseret endnu.",
       "howToBuild": "Sådan bygges RAG-indekset:",
       "step1": "Gå til Indstillinger → RAG",
       "step2": "Aktiver RAG",
       "step3": "Vælg indekser vault",
       "close": "Luk",
-      "retrieved_one": "📚 hentet fra {{count}} dokument",
-      "retrieved_other": "📚 hentet fra {{count}} dokumenter",
-      "retrieved": "📚 hentet fra {{count}} dokumenter"
+      "retrieved_one": "hentet fra {{count}} dokument",
+      "retrieved_other": "hentet fra {{count}} dokumenter",
+      "retrieved": "hentet fra {{count}} dokumenter"
     },
     "ragTooltip": {
       "status": "RAG-indeksstatus:",
-      "totalChunks": "📊 Samlede fragmenter: {{count}}",
-      "filesIndexed": "📁 Filer indekseret: {{count}}",
-      "totalSize": "💾 Samlet størrelse: {{size}} KB",
-      "indexedFiles": "📄 Indekserede filer:",
+      "totalChunks": "Samlede fragmenter: {{count}}",
+      "filesIndexed": "Filer indekseret: {{count}}",
+      "totalSize": "Samlet størrelse: {{size}} KB",
+      "indexedFiles": "Indekserede filer:",
       "andMore": "  ... og {{count}} mere",
-      "noFilesYet": "⚠️ ingen filer indekseret endnu.",
+      "noFilesYet": "ingen filer indekseret endnu.",
       "goToSettings": "Gå til Indstillinger → RAG for at bygge indekset.",
       "ragOff": "ℹ️ RAG er i øjeblikket slået fra for denne chat."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Vælg, hvordan agenten vil vælge sin model"
       },
       "systemPrompt": {
-        "createNew": "➕ opret ny prompt…",
+        "createNew": "opret ny prompt…",
         "promptName": {
           "name": "Promptnavn",
           "desc": "Visningsnavn for den nye systemprompt"
@@ -1381,7 +1381,7 @@
         "tools": "Værktøjer",
         "logs": "Logger"
       },
-      "refreshBtn": "🔄 opdater",
+      "refreshBtn": "opdater",
       "connections": {
         "title": "MCP-serverforbindelser",
         "noServers": "Ingen MCP-servere konfigureret.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Udfør værktøj",
         "clearBtn": "Ryd resultater",
         "executing": "Udfører...",
-        "success": "✅ udførelse lykkedes",
-        "failed": "❌ udførelse mislykkedes",
-        "errorTitle": "❌ udførelsesfejl",
+        "success": "udførelse lykkedes",
+        "failed": "udførelse mislykkedes",
+        "errorTitle": "udførelsesfejl",
         "errorLabel": "Fejl: {{message}}",
         "notices": {
           "success": "Værktøj udført",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Ingen MCP-servere konfigureret",
-        "testing": "🧪 Tester {{count}} MCP-serverforbindelser...",
-        "allSuccess": "✅ alle {{count}} mcp-servere forbundet!",
-        "partial": "⚠️ {{success}} forbundet, {{failed}} mislykkedes"
+        "noServers": "Ingen MCP-servere konfigureret",
+        "testing": "Tester {{count}} MCP-serverforbindelser...",
+        "allSuccess": "alle {{count}} mcp-servere forbundet!",
+        "partial": "{{success}} forbundet, {{failed}} mislykkedes"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Administrer Ollama-modeller",
       "serverInfo": "Serveroplysninger",
       "checkingServer": "Kontrollerer server...",
-      "serverOnline": "✅ Server online",
+      "serverOnline": "Server online",
       "versionLabel": " | Version: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Server offline",
-      "connectionError": "❌ Forbindelsesfejl",
+      "serverOffline": "Server offline",
+      "connectionError": "Forbindelsesfejl",
       "pullTitle": "Hent ny model",
       "pullHint": "Indtast et modelnavn til download fra Ollama-biblioteket (f.eks. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Hent model",
       "installedTitle": "Installerede modeller",
-      "refreshList": "🔄 Opdater liste",
+      "refreshList": "Opdater liste",
       "noModels": "Ingen modeller fundet. Hent en model for at komme i gang.",
       "capabilities": "Funktioner: {{caps}}",
       "deleteBtn": "Slet",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Angiv venligst et modelnavn",
         "pulling": "Henter {{name}}... Dette kan tage et stykke tid.",
-        "pullSuccess": "✅ {{name}} hentet",
-        "pullFailed": "❌ Kunne ikke hente model: {{message}}",
-        "deleted": "✅ {{name}} slettet",
-        "deleteFailed": "❌ Kunne ikke slette model: {{message}}",
+        "pullSuccess": "{{name}} hentet",
+        "pullFailed": "Kunne ikke hente model: {{message}}",
+        "deleted": "{{name}} slettet",
+        "deleteFailed": "Kunne ikke slette model: {{message}}",
         "refreshing": "Opdaterer...",
-        "refreshSuccess": "✅ Modelliste opdateret",
-        "refreshFailed": "❌ Kunne ikke opdatere modelliste"
+        "refreshSuccess": "Modelliste opdateret",
+        "refreshFailed": "Kunne ikke opdatere modelliste"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Behandler...",
       "error": "Fejl ved gengivelse af forklaring",
-      "errorPrefix": "❌ Fejl: "
+      "errorPrefix": "Fejl:"
     }
   },
   "notices": {

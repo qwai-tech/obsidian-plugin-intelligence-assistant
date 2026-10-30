@@ -3,7 +3,7 @@ import type { Agent } from '@/features/agent/types/agent';
 export const BUILTIN_AGENT_PRESETS: Agent[] = [
 	{
 		id: 'builtin-librarian',
-		name: '🔍 Librarian (知识矿工)',
+		name: 'Librarian',
 		description: 'Specializes in metadata management, folder organization, and finding semantic connections in your vault.',
 		icon: 'library',
 		systemPromptId: 'prompt-librarian',
@@ -34,7 +34,7 @@ export const BUILTIN_AGENT_PRESETS: Agent[] = [
 	},
 	{
 		id: 'builtin-architect',
-		name: '🏗️ Architect (白板建筑师)',
+		name: 'Architect',
 		description: 'Expert in visual thinking and spatial organization using Obsidian Canvas. Great for project mapping.',
 		icon: 'layout-dashboard',
 		systemPromptId: 'prompt-architect',
@@ -66,7 +66,7 @@ export const BUILTIN_AGENT_PRESETS: Agent[] = [
 	},
 	{
 		id: 'builtin-researcher',
-		name: '🧬 Researcher (深度研究员)',
+		name: 'Researcher',
 		description: 'Specializes in comprehensive analysis, RAG-driven synthesis, and augmenting vault knowledge with web search.',
 		icon: 'microscope',
 		systemPromptId: 'prompt-researcher',
@@ -96,7 +96,7 @@ export const BUILTIN_AGENT_PRESETS: Agent[] = [
 	},
 	{
 		id: 'builtin-scribe',
-		name: '🖋️ Scribe (创作伙伴)',
+		name: 'Scribe',
 		description: 'Focused on high-quality writing, multimodal understanding (Vision), and maintaining your personal voice.',
 		icon: 'pen-tool',
 		systemPromptId: 'prompt-scribe',

@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Starea configurației",
         "desc": "Starea generală a configurației pluginului",
-        "ok": "✅ Configurat ({{providers}} furnizori, {{conversations}} conversații)",
-        "incomplete": "⚠️ Incomplet — Configurați furnizorii și modelele"
+        "ok": "Configurat ({{providers}} furnizori, {{conversations}} conversații)",
+        "incomplete": "Incomplet — Configurați furnizorii și modelele"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} furnizor configurat",
       "providerCount_other": "{{count}} furnizori configurați",
       "providerCount": "{{count}} furnizori configurați",
-      "refreshAll": "🔄 reîmprospătare toate modelele",
+      "refreshAll": "reîmprospătare toate modelele",
       "empty": "Niciun furnizor configurat. Adăugați mai întâi furnizori în fila furnizori.",
       "noModels": "Niciun model disponibil. Apăsați „reîmprospătare toate modelele“ sau reîmprospătați furnizorii individuali din fila furnizori.",
       "noMatch": "Niciun model nu corespunde filtrelor curente. Ajustați sau ștergeți filtrele pentru a vedea rezultate.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Avertisment de securitate",
+      "securityTitle": "Avertisment de securitate",
       "securityDesc": "Cheile API sunt stocate ca text simplu în seiful dvs. pentru compatibilitate. Pentru a preveni scurgerile accidentale:",
       "securityItem1": "NU partajați folderul {{configDir}}/plugins/intelligence-assistant/data/.",
       "securityItem2": "Adăugați acest folder în .gitignore dacă utilizați sincronizare Git.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Configurați serverele Model Context Protocol (MCP) pentru a extinde capacitățile agentului cu instrumente externe și surse de date.",
-      "inspectorBtn": "🔍 Deschidere inspector MCP",
-      "testAllBtn": "🧪 testați toate conexiunile",
-      "refreshAllBtn": "🔄 reîmprospătați toate instrumentele",
+      "inspectorBtn": "Deschidere inspector MCP",
+      "testAllBtn": "testați toate conexiunile",
+      "refreshAllBtn": "reîmprospătați toate instrumentele",
       "addBtn": "+ Adăugați server MCP",
       "empty": "Niciun server MCP configurat. Selectați Adăugați server MCP pentru a începe.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Editați",
-        "enabled": "✓ Activat",
-        "enabledOff": "✗ Dezactivat",
+        "enabled": "Activat",
+        "enabledOff": "Dezactivat",
         "connect": "conectați",
         "disconnect": "deconectați",
         "connecting": "Se conectează...",
@@ -226,17 +226,17 @@
         "enableFirst": "Activați serverul înainte de conectare",
         "disconnectFailed": "Deconectarea de la {{name}} a eșuat",
         "connectFailed": "Conectarea la {{name}} a eșuat",
-        "testNoCommand": "❌ introduceți o comandă înainte de testarea conexiunii",
-        "testSuccess": "✅ conectat cu succes! Au fost găsite {{count}} instrumente.",
-        "testFailed": "❌ Conexiunea a eșuat: {{message}}",
-        "refreshedAll_one": "✅ instrumente reîmprospătate pentru {{count}} server",
-        "refreshedAll_other": "✅ instrumente reîmprospătate pentru {{count}} servere",
-        "refreshedAll": "✅ instrumente reîmprospătate pentru {{count}} servere",
-        "refreshedPartial": "✅ {{success}} servere reîmprospătate, ❌ {{failed}} eșuate",
-        "noServersConfigured": "⚠️ Niciun server MCP configurat",
-        "testingAll": "🧪 Se testează {{count}} conexiuni server MCP...",
-        "testAllSuccess": "✅ toate {{count}} servere mcp conectate cu succes!",
-        "testAllPartial": "⚠️ {{successful}} conectate, {{failed}} eșuate"
+        "testNoCommand": "introduceți o comandă înainte de testarea conexiunii",
+        "testSuccess": "conectat cu succes! Au fost găsite {{count}} instrumente.",
+        "testFailed": "Conexiunea a eșuat: {{message}}",
+        "refreshedAll_one": "instrumente reîmprospătate pentru {{count}} server",
+        "refreshedAll_other": "instrumente reîmprospătate pentru {{count}} servere",
+        "refreshedAll": "instrumente reîmprospătate pentru {{count}} servere",
+        "refreshedPartial": "{{success}} servere reîmprospătate, {{failed}} eșuate",
+        "noServersConfigured": "Niciun server MCP configurat",
+        "testingAll": "Se testează {{count}} conexiuni server MCP...",
+        "testAllSuccess": "toate {{count}} servere mcp conectate cu succes!",
+        "testAllPartial": "{{successful}} conectate, {{failed}} eșuate"
       },
       "confirm": {
         "delete": "Ștergeți serverul MCP „{{name}}“?"
@@ -362,7 +362,7 @@
             "params": "path (obligatoriu), content (obligatoriu): Calea notiței și conținutul de adăugat"
           }
         },
-        "infoTitle": "💡 despre instrumente",
+        "infoTitle": "despre instrumente",
         "infoText": "Instrumentele incorporate sunt configurate per setările pluginului. Instrumentele MCP sunt gestionate independent — folosiți fila MCP pentru conectarea serverelor și reîmprospătarea disponibilității instrumentelor.",
         "toolNames": {
           "read_file": "Citire fișier",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "Instrument CLI eliminat"
         },
-        "infoTitle": "💡 Despre instrumente CLI",
+        "infoTitle": "Despre instrumente CLI",
         "infoText": "Instrumentele CLI execută comenzi shell local. Utilizați {{paramName}} în argumente pentru substituție de șablon, sau configurați parametrii pentru a fi transmiși ca argumente sau variabile de mediu.",
         "modal": {
           "defaultTitle": "Instrument CLI",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Dimensiune medie segment"
         },
         "empty": "Indexul este gol. Selectați reconstruire index pentru a începe indexarea.",
-        "error": "⚠️ nu se pot încărca statisticile indexului",
+        "error": "nu se pot încărca statisticile indexului",
         "rebuild": {
           "name": "Reconstruiți indexul",
           "desc": "Re-indexați toate fișierele din seiful dvs. Aceasta poate dura ceva timp.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "Statistici RAG",
-      "totalChunks": "📊 segmente totale:",
-      "filesIndexed": "📁 fișiere indexate:",
-      "totalSize": "💾 dimensiune totală:",
-      "avgChunks": "📈 Segmente medii/fișier:",
-      "indexedFiles": "📄 fișiere indexate",
-      "noFilesYet": "⚠️ niciun fișier nu a fost indexat încă.",
+      "totalChunks": "segmente totale:",
+      "filesIndexed": "fișiere indexate:",
+      "totalSize": "dimensiune totală:",
+      "avgChunks": "Segmente medii/fișier:",
+      "indexedFiles": "fișiere indexate",
+      "noFilesYet": "niciun fișier nu a fost indexat încă.",
       "howToBuild": "Pentru a construi indexul RAG:",
       "step1": "Mergeți la Setări → RAG",
       "step2": "Activați RAG",
       "step3": "Selectați indexare seif",
       "close": "Închideți",
-      "retrieved_one": "📚 obținut din {{count}} document",
-      "retrieved_other": "📚 obținut din {{count}} documente",
-      "retrieved": "📚 obținut din {{count}} documente"
+      "retrieved_one": "obținut din {{count}} document",
+      "retrieved_other": "obținut din {{count}} documente",
+      "retrieved": "obținut din {{count}} documente"
     },
     "ragTooltip": {
       "status": "Starea indexului RAG:",
-      "totalChunks": "📊 Segmente totale: {{count}}",
-      "filesIndexed": "📁 Fișiere indexate: {{count}}",
-      "totalSize": "💾 Dimensiune totală: {{size}} KB",
-      "indexedFiles": "📄 fișiere indexate:",
+      "totalChunks": "Segmente totale: {{count}}",
+      "filesIndexed": "Fișiere indexate: {{count}}",
+      "totalSize": "Dimensiune totală: {{size}} KB",
+      "indexedFiles": "fișiere indexate:",
       "andMore": "  ... și alte {{count}}",
-      "noFilesYet": "⚠️ niciun fișier indexat încă.",
+      "noFilesYet": "niciun fișier indexat încă.",
       "goToSettings": "Mergeți la Setări → RAG pentru a construi indexul.",
       "ragOff": "ℹ️ RAG este în prezent dezactivat pentru acest chat."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Alegeți cum va selecta agentul modelul său"
       },
       "systemPrompt": {
-        "createNew": "➕ creați un prompt nou…",
+        "createNew": "creați un prompt nou…",
         "promptName": {
           "name": "Numele promptului",
           "desc": "Numele afișat al noului prompt de sistem"
@@ -1381,7 +1381,7 @@
         "tools": "Instrumente",
         "logs": "Jurnale"
       },
-      "refreshBtn": "🔄 reîmprospătați",
+      "refreshBtn": "reîmprospătați",
       "connections": {
         "title": "Conexiuni server MCP",
         "noServers": "Niciun server MCP configurat.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Executați instrumentul",
         "clearBtn": "Ștergeți rezultatele",
         "executing": "Se execută...",
-        "success": "✅ execuție reușită",
-        "failed": "❌ execuție eșuată",
-        "errorTitle": "❌ eroare de execuție",
+        "success": "execuție reușită",
+        "failed": "execuție eșuată",
+        "errorTitle": "eroare de execuție",
         "errorLabel": "Eroare: {{message}}",
         "notices": {
           "success": "Instrument executat cu succes",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Niciun server MCP configurat",
-        "testing": "🧪 Se testează {{count}} conexiuni server MCP...",
-        "allSuccess": "✅ toate {{count}} servere mcp conectate cu succes!",
-        "partial": "⚠️ {{success}} conectate, {{failed}} eșuate"
+        "noServers": "Niciun server MCP configurat",
+        "testing": "Se testează {{count}} conexiuni server MCP...",
+        "allSuccess": "toate {{count}} servere mcp conectate cu succes!",
+        "partial": "{{success}} conectate, {{failed}} eșuate"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Gestionați modele Ollama",
       "serverInfo": "Informații server",
       "checkingServer": "Se verifică serverul...",
-      "serverOnline": "✅ Server online",
+      "serverOnline": "Server online",
       "versionLabel": " | Versiune: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Server offline",
-      "connectionError": "❌ Eroare de conexiune",
+      "serverOffline": "Server offline",
+      "connectionError": "Eroare de conexiune",
       "pullTitle": "Descărcați model nou",
       "pullHint": "Introduceți un nume de model pentru descărcare din biblioteca Ollama (de ex. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Descărcați model",
       "installedTitle": "Modele instalate",
-      "refreshList": "🔄 Reîmprospătați lista",
+      "refreshList": "Reîmprospătați lista",
       "noModels": "Niciun model găsit. Descărcați un model pentru a începe.",
       "capabilities": "Capacități: {{caps}}",
       "deleteBtn": "Ștergeți",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Introduceți un nume de model",
         "pulling": "Se descarcă {{name}}... Aceasta poate dura ceva timp.",
-        "pullSuccess": "✅ {{name}} descărcat cu succes",
-        "pullFailed": "❌ Descărcarea modelului a eșuat: {{message}}",
-        "deleted": "✅ {{name}} șters",
-        "deleteFailed": "❌ Ștergerea modelului a eșuat: {{message}}",
+        "pullSuccess": "{{name}} descărcat cu succes",
+        "pullFailed": "Descărcarea modelului a eșuat: {{message}}",
+        "deleted": "{{name}} șters",
+        "deleteFailed": "Ștergerea modelului a eșuat: {{message}}",
         "refreshing": "Se reîmprospătează...",
-        "refreshSuccess": "✅ Lista de modele reîmprospătată",
-        "refreshFailed": "❌ Reîmprospătarea listei de modele a eșuat"
+        "refreshSuccess": "Lista de modele reîmprospătată",
+        "refreshFailed": "Reîmprospătarea listei de modele a eșuat"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Se procesează...",
       "error": "Eroare la afișarea explicației",
-      "errorPrefix": "❌ Eroare: "
+      "errorPrefix": "Eroare:"
     }
   },
   "notices": {

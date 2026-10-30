@@ -420,6 +420,7 @@
 .ia-tag {
 	display: inline-flex;
 	align-items: center;
+	white-space: nowrap;
 	padding: 3px 8px;
 	border-radius: var(--ia-radius-full);
 	font-size: var(--ia-font-size-2xs);
@@ -1341,7 +1342,7 @@
 	position: relative;
 }
 
-.conversation-search-input {
+.conversation-search .conversation-search-input {
 	width: 100%;
 	padding: 6px 10px 6px 30px;
 	border: 1px solid var(--background-modifier-border);
@@ -1352,7 +1353,7 @@
 	outline: none;
 }
 
-.conversation-search-input:focus {
+.conversation-search .conversation-search-input:focus {
 	border-color: var(--interactive-accent);
 }
 

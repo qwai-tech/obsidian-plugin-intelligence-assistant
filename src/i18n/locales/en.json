@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Configuration status",
         "desc": "Overall plugin configuration status",
-        "ok": "✅ Configured ({{providers}} providers, {{conversations}} conversations)",
-        "incomplete": "⚠️ Incomplete - Please configure providers and models"
+        "ok": "Configured ({{providers}} providers, {{conversations}} conversations)",
+        "incomplete": "Incomplete - Please configure providers and models"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} provider configured",
       "providerCount_other": "{{count}} providers configured",
       "providerCount": "{{count}} providers configured",
-      "refreshAll": "🔄 refresh all models",
+      "refreshAll": "Refresh all models",
       "empty": "No providers configured yet. Add providers in the provider tab first.",
       "noModels": "No models available. Click \"refresh all models\" or refresh individual providers in the provider tab.",
       "noMatch": "No models match the current filters. Adjust or clear filters to see results.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Security Warning",
+      "securityTitle": "Security Warning",
       "securityDesc": "API keys are stored as plain text in your vault for compatibility. To prevent accidental leaks:",
       "securityItem1": "Do NOT share your {{configDir}}/plugins/intelligence-assistant/data/ folder.",
       "securityItem2": "Add this folder to your .gitignore if you use Git sync.",
@@ -169,9 +169,9 @@
     },
     "mcp": {
       "desc": "Configure Model Context Protocol (MCP) servers to extend agent capabilities with external tools and data sources.",
-      "inspectorBtn": "🔍 Open MCP inspector",
-      "testAllBtn": "🧪 test all connections",
-      "refreshAllBtn": "🔄 refresh all tools",
+      "inspectorBtn": "Open MCP inspector",
+      "testAllBtn": "Test all connections",
+      "refreshAllBtn": "Refresh all tools",
       "addBtn": "+ Add MCP server",
       "empty": "No MCP servers configured. Select Add MCP server to get started.",
       "tableHeaders": {
@@ -208,8 +208,8 @@
       },
       "actions": {
         "edit": "Edit",
-        "enabled": "✓ Enabled",
-        "enabledOff": "✗ Disabled",
+        "enabled": "Enabled",
+        "enabledOff": "Disabled",
         "connect": "connect",
         "disconnect": "disconnect",
         "connecting": "Connecting...",
@@ -225,17 +225,17 @@
         "enableFirst": "Enable the server before connecting",
         "disconnectFailed": "Failed to disconnect from {{name}}",
         "connectFailed": "Failed to connect to {{name}}",
-        "testNoCommand": "❌ please enter a command before testing connection",
-        "testSuccess": "✅ connected successfully! Found {{count}} tools.",
-        "testFailed": "❌ Connection failed: {{message}}",
-        "refreshedAll_one": "✅ refreshed tools for {{count}} server",
-        "refreshedAll_other": "✅ refreshed tools for {{count}} servers",
-        "refreshedAll": "✅ refreshed tools for {{count}} servers",
-        "refreshedPartial": "✅ refreshed {{success}} servers, ❌ {{failed}} failed",
-        "noServersConfigured": "⚠️ No MCP servers configured",
-        "testingAll": "🧪 Testing {{count}} MCP server connections...",
-        "testAllSuccess": "✅ all {{count}} MCP servers connected successfully!",
-        "testAllPartial": "⚠️ {{successful}} connected, {{failed}} failed"
+        "testNoCommand": "Please enter a command before testing connection",
+        "testSuccess": "Connected successfully! Found {{count}} tools.",
+        "testFailed": "Connection failed: {{message}}",
+        "refreshedAll_one": "Refreshed tools for {{count}} server",
+        "refreshedAll_other": "Refreshed tools for {{count}} servers",
+        "refreshedAll": "Refreshed tools for {{count}} servers",
+        "refreshedPartial": "Refreshed {{success}} servers, {{failed}} failed",
+        "noServersConfigured": "No MCP servers configured",
+        "testingAll": "Testing {{count}} MCP server connections...",
+        "testAllSuccess": "All {{count}} MCP servers connected successfully!",
+        "testAllPartial": "{{successful}} connected, {{failed}} failed"
       },
       "confirm": {
         "delete": "Delete MCP server \"{{name}}\"?"
@@ -361,7 +361,7 @@
             "params": "path (required), content (required): Note path and proposed content to append"
           }
         },
-        "infoTitle": "💡 About Tools",
+        "infoTitle": "About Tools",
         "infoText": "Built-in tools are configured per plugin settings. MCP tools are managed independently—use the MCP tab to connect servers and refresh tool availability.",
         "toolNames": {
           "read_file": "Read File",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI tool removed"
         },
-        "infoTitle": "💡 About CLI Tools",
+        "infoTitle": "About CLI Tools",
         "infoText": "CLI tools execute shell commands locally. Use {{paramName}} in arguments for template substitution, or configure parameters to be passed as arguments or environment variables.",
         "modal": {
           "defaultTitle": "CLI Tool",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Avg Chunk Size"
         },
         "empty": "Index is empty. Select rebuild index to start indexing.",
-        "error": "⚠️ unable to load index statistics",
+        "error": "Unable to load index statistics",
         "rebuild": {
           "name": "Rebuild index",
           "desc": "Re-index all files in your vault. This may take a while.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG statistics",
-      "totalChunks": "📊 total chunks:",
-      "filesIndexed": "📁 files indexed:",
-      "totalSize": "💾 total size:",
-      "avgChunks": "📈 Avg Chunks/File:",
-      "indexedFiles": "📄 indexed files",
-      "noFilesYet": "⚠️ no files have been indexed yet.",
+      "totalChunks": "Total chunks:",
+      "filesIndexed": "Files indexed:",
+      "totalSize": "Total size:",
+      "avgChunks": "Avg Chunks/File:",
+      "indexedFiles": "Indexed files",
+      "noFilesYet": "No files have been indexed yet.",
       "howToBuild": "To build the RAG index:",
       "step1": "Go to Settings → RAG",
       "step2": "Enable RAG",
       "step3": "Select index vault",
       "close": "Close",
-      "retrieved_one": "📚 retrieved from {{count}} document",
-      "retrieved_other": "📚 retrieved from {{count}} documents",
-      "retrieved": "📚 retrieved from {{count}} documents"
+      "retrieved_one": "Retrieved from {{count}} document",
+      "retrieved_other": "Retrieved from {{count}} documents",
+      "retrieved": "Retrieved from {{count}} documents"
     },
     "ragTooltip": {
       "status": "RAG Index Status:",
-      "totalChunks": "📊 Total Chunks: {{count}}",
-      "filesIndexed": "📁 Files Indexed: {{count}}",
-      "totalSize": "💾 Total Size: {{size}} KB",
-      "indexedFiles": "📄 indexed Files:",
+      "totalChunks": "Total Chunks: {{count}}",
+      "filesIndexed": "Files Indexed: {{count}}",
+      "totalSize": "Total Size: {{size}} KB",
+      "indexedFiles": "Indexed Files:",
       "andMore": "  ... and {{count}} more",
-      "noFilesYet": "⚠️ no files indexed yet.",
+      "noFilesYet": "No files indexed yet.",
       "goToSettings": "Go to Settings → RAG to build the index.",
       "ragOff": "ℹ️ RAG is currently turned off for this chat."
     },
@@ -1261,7 +1261,7 @@
         "desc": "Choose how the agent will select its model"
       },
       "systemPrompt": {
-        "createNew": "➕ create new prompt…",
+        "createNew": "Create new prompt…",
         "promptName": {
           "name": "Prompt name",
           "desc": "Display name for the new system prompt"
@@ -1396,7 +1396,7 @@
         "tools": "Tools",
         "logs": "Logs"
       },
-      "refreshBtn": "🔄 refresh",
+      "refreshBtn": "Refresh",
       "connections": {
         "title": "MCP server connections",
         "noServers": "No MCP servers configured.",
@@ -1458,9 +1458,9 @@
         "performBtn": "Perform tool",
         "clearBtn": "Clear results",
         "executing": "Executing...",
-        "success": "✅ execution successful",
-        "failed": "❌ execution failed",
-        "errorTitle": "❌ execution error",
+        "success": "Execution successful",
+        "failed": "Execution failed",
+        "errorTitle": "Execution error",
         "errorLabel": "Error: {{message}}",
         "notices": {
           "success": "Tool executed successfully",
@@ -1472,10 +1472,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ No MCP servers configured",
-        "testing": "🧪 Testing {{count}} MCP server connections...",
-        "allSuccess": "✅ all {{count}} MCP servers connected successfully!",
-        "partial": "⚠️ {{success}} connected, {{failed}} failed"
+        "noServers": "No MCP servers configured",
+        "testing": "Testing {{count}} MCP server connections...",
+        "allSuccess": "All {{count}} MCP servers connected successfully!",
+        "partial": "{{success}} connected, {{failed}} failed"
       }
     },
     "mcpServer": {
@@ -1519,11 +1519,11 @@
       "title": "Manage Ollama models",
       "serverInfo": "Server information",
       "checkingServer": "Checking server...",
-      "serverOnline": "✅ Server online",
+      "serverOnline": "Server online",
       "versionLabel": " | Version: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Server offline",
-      "connectionError": "❌ Connection error",
+      "serverOffline": "Server offline",
+      "connectionError": "Connection error",
       "pullTitle": "Pull new model",
       "pullHint": "Enter a model name to download from Ollama library (e.g., llama2, mistral, codellama)",
       "modelName": {
@@ -1532,7 +1532,7 @@
       },
       "pullBtn": "Pull model",
       "installedTitle": "Installed models",
-      "refreshList": "🔄 Refresh list",
+      "refreshList": "Refresh list",
       "noModels": "No models found. Pull a model to get started.",
       "capabilities": "Capabilities: {{caps}}",
       "deleteBtn": "Delete",
@@ -1546,13 +1546,13 @@
       "notices": {
         "enterName": "Please enter a model name",
         "pulling": "Pulling {{name}}... This may take a while.",
-        "pullSuccess": "✅ Successfully pulled {{name}}",
-        "pullFailed": "❌ Failed to pull model: {{message}}",
-        "deleted": "✅ Deleted {{name}}",
-        "deleteFailed": "❌ Failed to delete model: {{message}}",
+        "pullSuccess": "Successfully pulled {{name}}",
+        "pullFailed": "Failed to pull model: {{message}}",
+        "deleted": "Deleted {{name}}",
+        "deleteFailed": "Failed to delete model: {{message}}",
         "refreshing": "Refreshing...",
-        "refreshSuccess": "✅ Model list refreshed",
-        "refreshFailed": "❌ Failed to refresh model list"
+        "refreshSuccess": "Model list refreshed",
+        "refreshFailed": "Failed to refresh model list"
       }
     },
     "promptEdit": {
@@ -1584,7 +1584,7 @@
     "explain": {
       "loading": "⏳ Processing...",
       "error": "Error rendering explanation",
-      "errorPrefix": "❌ Error: "
+      "errorPrefix": "Error:"
     }
   },
   "notices": {

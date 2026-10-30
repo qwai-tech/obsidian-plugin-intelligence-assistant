@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Estat de la configuració",
         "desc": "Estat general de la configuració del connector",
-        "ok": "✅ Configurat ({{providers}} proveïdors, {{conversations}} converses)",
-        "incomplete": "⚠️ Incomplet — Configureu els proveïdors i els models"
+        "ok": "Configurat ({{providers}} proveïdors, {{conversations}} converses)",
+        "incomplete": "Incomplet — Configureu els proveïdors i els models"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} proveïdor configurat",
       "providerCount_other": "{{count}} proveïdors configurats",
       "providerCount": "{{count}} proveïdors configurats",
-      "refreshAll": "🔄 actualitza tots els models",
+      "refreshAll": "actualitza tots els models",
       "empty": "No hi ha proveïdors configurats. Afegiu proveïdors primer a la pestanya de proveïdors.",
       "noModels": "No hi ha models disponibles. Feu clic a „actualitza tots els models“ o actualitzeu els proveïdors individuals a la pestanya de proveïdors.",
       "noMatch": "Cap model no coincideix amb els filtres actuals. Ajusteu o elimineu els filtres per veure resultats.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Avís de seguretat",
+      "securityTitle": "Avís de seguretat",
       "securityDesc": "Les claus API s'emmagatzemen com a text pla al vostre vault per compatibilitat. Per evitar fuites accidentals:",
       "securityItem1": "NO compartiu la carpeta {{configDir}}/plugins/intelligence-assistant/data/.",
       "securityItem2": "Afegiu aquesta carpeta al vostre .gitignore si feu servir sincronització Git.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Configureu els servidors Model Context Protocol (MCP) per ampliar les capacitats de l'agent amb eines externes i fonts de dades.",
-      "inspectorBtn": "🔍 Obre l'inspector MCP",
-      "testAllBtn": "🧪 prova totes les connexions",
-      "refreshAllBtn": "🔄 actualitza totes les eines",
+      "inspectorBtn": "Obre l'inspector MCP",
+      "testAllBtn": "prova totes les connexions",
+      "refreshAllBtn": "actualitza totes les eines",
       "addBtn": "+ Afegeix servidor MCP",
       "empty": "No hi ha servidors MCP configurats. Seleccioneu Afegeix servidor MCP per començar.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Edita",
-        "enabled": "✓ Activat",
-        "enabledOff": "✗ Desactivat",
+        "enabled": "Activat",
+        "enabledOff": "Desactivat",
         "connect": "connecta",
         "disconnect": "desconnecta",
         "connecting": "Connectant...",
@@ -226,17 +226,17 @@
         "enableFirst": "Activeu el servidor abans de connectar-vos",
         "disconnectFailed": "La desconnexió de {{name}} ha fallat",
         "connectFailed": "La connexió a {{name}} ha fallat",
-        "testNoCommand": "❌ introduïu una ordre abans de provar la connexió",
-        "testSuccess": "✅ connectat correctament! S'han trobat {{count}} eines.",
-        "testFailed": "❌ La connexió ha fallat: {{message}}",
-        "refreshedAll_one": "✅ eines actualitzades per a {{count}} servidor",
-        "refreshedAll_other": "✅ eines actualitzades per a {{count}} servidors",
-        "refreshedAll": "✅ eines actualitzades per a {{count}} servidors",
-        "refreshedPartial": "✅ {{success}} servidors actualitzats, ❌ {{failed}} fallits",
-        "noServersConfigured": "⚠️ No hi ha servidors MCP configurats",
-        "testingAll": "🧪 Provant {{count}} connexions de servidor MCP...",
-        "testAllSuccess": "✅ tots {{count}} servidors mcp connectats correctament!",
-        "testAllPartial": "⚠️ {{successful}} connectats, {{failed}} fallits"
+        "testNoCommand": "introduïu una ordre abans de provar la connexió",
+        "testSuccess": "connectat correctament! S'han trobat {{count}} eines.",
+        "testFailed": "La connexió ha fallat: {{message}}",
+        "refreshedAll_one": "eines actualitzades per a {{count}} servidor",
+        "refreshedAll_other": "eines actualitzades per a {{count}} servidors",
+        "refreshedAll": "eines actualitzades per a {{count}} servidors",
+        "refreshedPartial": "{{success}} servidors actualitzats, {{failed}} fallits",
+        "noServersConfigured": "No hi ha servidors MCP configurats",
+        "testingAll": "Provant {{count}} connexions de servidor MCP...",
+        "testAllSuccess": "tots {{count}} servidors mcp connectats correctament!",
+        "testAllPartial": "{{successful}} connectats, {{failed}} fallits"
       },
       "confirm": {
         "delete": "Elimina el servidor MCP „{{name}}“?"
@@ -362,7 +362,7 @@
             "params": "path (obligatori), content (obligatori): Ruta de la nota i contingut a afegir"
           }
         },
-        "infoTitle": "💡 sobre les eines",
+        "infoTitle": "sobre les eines",
         "infoText": "Les eines integrades es configuren per configuració del connector. Les eines MCP es gestionen de manera independent — feu servir la pestanya MCP per connectar servidors i actualitzar la disponibilitat de les eines.",
         "toolNames": {
           "read_file": "Llegeix fitxer",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "Eina CLI eliminada"
         },
-        "infoTitle": "💡 Sobre les eines CLI",
+        "infoTitle": "Sobre les eines CLI",
         "infoText": "Les eines CLI executen ordres de shell localment. Feu servir {{paramName}} als arguments per a la substitució de plantilles, o configureu els paràmetres per passar-los com a arguments o variables d'entorn.",
         "modal": {
           "defaultTitle": "Eina CLI",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Mida mitjana del segment"
         },
         "empty": "L'índex és buit. Seleccioneu reconstrueix l'índex per començar a indexar.",
-        "error": "⚠️ no es poden carregar les estadístiques de l'índex",
+        "error": "no es poden carregar les estadístiques de l'índex",
         "rebuild": {
           "name": "Reconstrueix l'índex",
           "desc": "Torna a indexar tots els fitxers del vostre vault. Pot trigar una estona.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "Estadístiques RAG",
-      "totalChunks": "📊 segments totals:",
-      "filesIndexed": "📁 fitxers indexats:",
-      "totalSize": "💾 mida total:",
-      "avgChunks": "📈 Segments mitjans/fitxer:",
-      "indexedFiles": "📄 fitxers indexats",
-      "noFilesYet": "⚠️ encara no s'ha indexat cap fitxer.",
+      "totalChunks": "segments totals:",
+      "filesIndexed": "fitxers indexats:",
+      "totalSize": "mida total:",
+      "avgChunks": "Segments mitjans/fitxer:",
+      "indexedFiles": "fitxers indexats",
+      "noFilesYet": "encara no s'ha indexat cap fitxer.",
       "howToBuild": "Per construir l'índex RAG:",
       "step1": "Aneu a Configuració → RAG",
       "step2": "Activa RAG",
       "step3": "Seleccioneu indexar el vault",
       "close": "Tanca",
-      "retrieved_one": "📚 recuperat de {{count}} document",
-      "retrieved_other": "📚 recuperat de {{count}} documents",
-      "retrieved": "📚 recuperat de {{count}} documents"
+      "retrieved_one": "recuperat de {{count}} document",
+      "retrieved_other": "recuperat de {{count}} documents",
+      "retrieved": "recuperat de {{count}} documents"
     },
     "ragTooltip": {
       "status": "Estat de l'índex RAG:",
-      "totalChunks": "📊 Segments totals: {{count}}",
-      "filesIndexed": "📁 Fitxers indexats: {{count}}",
-      "totalSize": "💾 Mida total: {{size}} KB",
-      "indexedFiles": "📄 fitxers indexats:",
+      "totalChunks": "Segments totals: {{count}}",
+      "filesIndexed": "Fitxers indexats: {{count}}",
+      "totalSize": "Mida total: {{size}} KB",
+      "indexedFiles": "fitxers indexats:",
       "andMore": "  ... i {{count}} més",
-      "noFilesYet": "⚠️ encara no hi ha fitxers indexats.",
+      "noFilesYet": "encara no hi ha fitxers indexats.",
       "goToSettings": "Aneu a Configuració → RAG per construir l'índex.",
       "ragOff": "ℹ️ RAG està desactivat en aquest xat."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Trieu com l'agent seleccionarà el seu model"
       },
       "systemPrompt": {
-        "createNew": "➕ crea una nova instrucció…",
+        "createNew": "crea una nova instrucció…",
         "promptName": {
           "name": "Nom de la instrucció",
           "desc": "Nom de visualització de la nova instrucció de sistema"
@@ -1381,7 +1381,7 @@
         "tools": "Eines",
         "logs": "Registres"
       },
-      "refreshBtn": "🔄 actualitza",
+      "refreshBtn": "actualitza",
       "connections": {
         "title": "Connexions de servidor MCP",
         "noServers": "Cap servidor MCP configurat.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Executa l'eina",
         "clearBtn": "Esborra els resultats",
         "executing": "Executant...",
-        "success": "✅ execució correcta",
-        "failed": "❌ execució fallida",
-        "errorTitle": "❌ error d'execució",
+        "success": "execució correcta",
+        "failed": "execució fallida",
+        "errorTitle": "error d'execució",
         "errorLabel": "Error: {{message}}",
         "notices": {
           "success": "Eina executada correctament",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Cap servidor MCP configurat",
-        "testing": "🧪 S'estan provant {{count}} connexions de servidor MCP...",
-        "allSuccess": "✅ tots {{count}} servidors mcp connectats correctament!",
-        "partial": "⚠️ {{success}} connectats, {{failed}} fallits"
+        "noServers": "Cap servidor MCP configurat",
+        "testing": "S'estan provant {{count}} connexions de servidor MCP...",
+        "allSuccess": "tots {{count}} servidors mcp connectats correctament!",
+        "partial": "{{success}} connectats, {{failed}} fallits"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Gestiona els models Ollama",
       "serverInfo": "Informació del servidor",
       "checkingServer": "Comprovant el servidor...",
-      "serverOnline": "✅ Servidor en línia",
+      "serverOnline": "Servidor en línia",
       "versionLabel": " | Versió: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Servidor fora de línia",
-      "connectionError": "❌ Error de connexió",
+      "serverOffline": "Servidor fora de línia",
+      "connectionError": "Error de connexió",
       "pullTitle": "Baixa un model nou",
       "pullHint": "Introduïu un nom de model per baixar de la biblioteca Ollama (p. ex. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Baixa el model",
       "installedTitle": "Models instal·lats",
-      "refreshList": "🔄 Actualitza la llista",
+      "refreshList": "Actualitza la llista",
       "noModels": "No s'han trobat models. Baixeu un model per començar.",
       "capabilities": "Capacitats: {{caps}}",
       "deleteBtn": "Elimina",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Introduïu un nom de model",
         "pulling": "Baixant {{name}}... Pot trigar una estona.",
-        "pullSuccess": "✅ {{name}} baixat correctament",
-        "pullFailed": "❌ No s'ha pogut baixar el model: {{message}}",
-        "deleted": "✅ {{name}} eliminat",
-        "deleteFailed": "❌ No s'ha pogut eliminar el model: {{message}}",
+        "pullSuccess": "{{name}} baixat correctament",
+        "pullFailed": "No s'ha pogut baixar el model: {{message}}",
+        "deleted": "{{name}} eliminat",
+        "deleteFailed": "No s'ha pogut eliminar el model: {{message}}",
         "refreshing": "Actualitzant...",
-        "refreshSuccess": "✅ Llista de models actualitzada",
-        "refreshFailed": "❌ No s'ha pogut actualitzar la llista de models"
+        "refreshSuccess": "Llista de models actualitzada",
+        "refreshFailed": "No s'ha pogut actualitzar la llista de models"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Processant...",
       "error": "Error en mostrar l'explicació",
-      "errorPrefix": "❌ Error: "
+      "errorPrefix": "Error:"
     }
   },
   "notices": {

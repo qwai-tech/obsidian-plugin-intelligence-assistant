@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "Konfigurációs állapot",
         "desc": "A bővítmény általános konfigurációs állapota",
-        "ok": "✅ Konfigurálva ({{providers}} szolgáltató, {{conversations}} beszélgetés)",
-        "incomplete": "⚠️ Hiányos – Kérjük, konfigurálja a szolgáltatókat és a modelleket"
+        "ok": "Konfigurálva ({{providers}} szolgáltató, {{conversations}} beszélgetés)",
+        "incomplete": "Hiányos – Kérjük, konfigurálja a szolgáltatókat és a modelleket"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}} szolgáltató konfigurálva",
       "providerCount_other": "{{count}} szolgáltató konfigurálva",
       "providerCount": "{{count}} szolgáltató konfigurálva",
-      "refreshAll": "🔄 összes modell frissítése",
+      "refreshAll": "összes modell frissítése",
       "empty": "Még nincsenek konfigurált szolgáltatók. Először adjon hozzá szolgáltatókat a szolgáltató fülön.",
       "noModels": "Nincsenek elérhető modellek. Kattintson az \"összes modell frissítése\" gombra, vagy frissítse az egyes szolgáltatókat a szolgáltató fülön.",
       "noMatch": "Egy modell sem felel meg az aktuális szűrőknek. Módosítsa vagy törölje a szűrőket az eredmények megtekintéséhez.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ Biztonsági figyelmeztetés",
+      "securityTitle": "Biztonsági figyelmeztetés",
       "securityDesc": "Az API-kulcsok kompatibilitási okokból egyszerű szövegként tárolódnak a vaultban. A véletlen kiszivárgás megelőzése érdekében:",
       "securityItem1": "NE ossza meg a {{configDir}}/plugins/intelligence-assistant/data/ mappát.",
       "securityItem2": "Adja hozzá ezt a mappát a .gitignore fájlhoz, ha Git szinkronizálást használ.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Model Context Protocol (MCP) szerverek konfigurálása az ügynök képességeinek bővítéséhez külső eszközökkel és adatforrásokkal.",
-      "inspectorBtn": "🔍 MCP vizsgáló megnyitása",
-      "testAllBtn": "🧪 összes kapcsolat tesztelése",
-      "refreshAllBtn": "🔄 összes eszköz frissítése",
+      "inspectorBtn": "MCP vizsgáló megnyitása",
+      "testAllBtn": "összes kapcsolat tesztelése",
+      "refreshAllBtn": "összes eszköz frissítése",
       "addBtn": "+ MCP szerver hozzáadása",
       "empty": "Nincsenek konfigurált MCP szerverek. Válassza az MCP szerver hozzáadása lehetőséget a kezdéshez.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "Szerkesztés",
-        "enabled": "✓ Engedélyezve",
-        "enabledOff": "✗ Letiltva",
+        "enabled": "Engedélyezve",
+        "enabledOff": "Letiltva",
         "connect": "csatlakozás",
         "disconnect": "lecsatlakozás",
         "connecting": "Csatlakozás...",
@@ -226,17 +226,17 @@
         "enableFirst": "Engedélyezze a szervert csatlakozás előtt",
         "disconnectFailed": "Nem sikerült lecsatlakozni erről: {{name}}",
         "connectFailed": "Nem sikerült csatlakozni ehhez: {{name}}",
-        "testNoCommand": "❌ kérjük, adjon meg egy parancsot a kapcsolat tesztelése előtt",
-        "testSuccess": "✅ sikeresen csatlakozva! {{count}} eszköz található.",
-        "testFailed": "❌ Kapcsolódás sikertelen: {{message}}",
-        "refreshedAll_one": "✅ eszközök frissítve {{count}} szerveren",
-        "refreshedAll_other": "✅ eszközök frissítve {{count}} szerveren",
-        "refreshedAll": "✅ eszközök frissítve {{count}} szerveren",
-        "refreshedPartial": "✅ {{success}} szerver frissítve, ❌ {{failed}} sikertelen",
-        "noServersConfigured": "⚠️ Nincsenek konfigurált MCP szerverek",
-        "testingAll": "🧪 {{count}} MCP szerver kapcsolatának tesztelése...",
-        "testAllSuccess": "✅ mind a {{count}} MCP szerver sikeresen csatlakoztatva!",
-        "testAllPartial": "⚠️ {{successful}} csatlakozva, {{failed}} sikertelen"
+        "testNoCommand": "kérjük, adjon meg egy parancsot a kapcsolat tesztelése előtt",
+        "testSuccess": "sikeresen csatlakozva! {{count}} eszköz található.",
+        "testFailed": "Kapcsolódás sikertelen: {{message}}",
+        "refreshedAll_one": "eszközök frissítve {{count}} szerveren",
+        "refreshedAll_other": "eszközök frissítve {{count}} szerveren",
+        "refreshedAll": "eszközök frissítve {{count}} szerveren",
+        "refreshedPartial": "{{success}} szerver frissítve, {{failed}} sikertelen",
+        "noServersConfigured": "Nincsenek konfigurált MCP szerverek",
+        "testingAll": "{{count}} MCP szerver kapcsolatának tesztelése...",
+        "testAllSuccess": "mind a {{count}} MCP szerver sikeresen csatlakoztatva!",
+        "testAllPartial": "{{successful}} csatlakozva, {{failed}} sikertelen"
       },
       "confirm": {
         "delete": "Törli a(z) \"{{name}}\" MCP szervert?"
@@ -362,7 +362,7 @@
             "params": "path (kötelező), content (kötelező): Jegyzet elérési útja és a hozzáfűzendő tartalom"
           }
         },
-        "infoTitle": "💡 az eszközökről",
+        "infoTitle": "az eszközökről",
         "infoText": "A beépített eszközök a bővítmény beállításai szerint vannak konfigurálva. Az MCP eszközök kezelése független – használja az MCP fület a szerverek csatlakoztatásához és az eszközök elérhetőségének frissítéséhez.",
         "toolNames": {
           "read_file": "Fájl olvasása",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI eszköz eltávolítva"
         },
-        "infoTitle": "💡 A CLI eszközökről",
+        "infoTitle": "A CLI eszközökről",
         "infoText": "A CLI eszközök helyileg hajtanak végre shell parancsokat. Használja a {{paramName}} sablont az argumentumokban a helyettesítéshez, vagy konfigurálja a paramétereket argumentumokként vagy környezeti változókként való átadáshoz.",
         "modal": {
           "defaultTitle": "CLI eszköz",
@@ -663,7 +663,7 @@
           "avgChunkSize": "Átlagos darabméret"
         },
         "empty": "Az index üres. Válassza az index újraépítése lehetőséget az indexelés megkezdéséhez.",
-        "error": "⚠️ nem sikerült betölteni az index statisztikáit",
+        "error": "nem sikerült betölteni az index statisztikáit",
         "rebuild": {
           "name": "Index újraépítése",
           "desc": "A vault összes fájljának újraindexelése. Ez eltarthat egy ideig.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG statisztikák",
-      "totalChunks": "📊 összes darab:",
-      "filesIndexed": "📁 indexelt fájlok:",
-      "totalSize": "💾 teljes méret:",
-      "avgChunks": "📈 Átl. darabok/fájl:",
-      "indexedFiles": "📄 indexelt fájlok",
-      "noFilesYet": "⚠️ még nem lett indexelve egyetlen fájl sem.",
+      "totalChunks": "összes darab:",
+      "filesIndexed": "indexelt fájlok:",
+      "totalSize": "teljes méret:",
+      "avgChunks": "Átl. darabok/fájl:",
+      "indexedFiles": "indexelt fájlok",
+      "noFilesYet": "még nem lett indexelve egyetlen fájl sem.",
       "howToBuild": "A RAG index felépítéséhez:",
       "step1": "Menjen a Beállítások → RAG menübe",
       "step2": "Engedélyezze a RAG-ot",
       "step3": "Válassza az index vault lehetőséget",
       "close": "Bezárás",
-      "retrieved_one": "📚 {{count}} dokumentumból visszakeresve",
-      "retrieved_other": "📚 {{count}} dokumentumból visszakeresve",
-      "retrieved": "📚 {{count}} dokumentumból visszakeresve"
+      "retrieved_one": "{{count}} dokumentumból visszakeresve",
+      "retrieved_other": "{{count}} dokumentumból visszakeresve",
+      "retrieved": "{{count}} dokumentumból visszakeresve"
     },
     "ragTooltip": {
       "status": "RAG index állapota:",
-      "totalChunks": "📊 Összes darab: {{count}}",
-      "filesIndexed": "📁 Indexelt fájlok: {{count}}",
-      "totalSize": "💾 Teljes méret: {{size}} KB",
-      "indexedFiles": "📄 indexelt fájlok:",
+      "totalChunks": "Összes darab: {{count}}",
+      "filesIndexed": "Indexelt fájlok: {{count}}",
+      "totalSize": "Teljes méret: {{size}} KB",
+      "indexedFiles": "indexelt fájlok:",
       "andMore": "  ... és {{count}} további",
-      "noFilesYet": "⚠️ még nincsenek indexelt fájlok.",
+      "noFilesYet": "még nincsenek indexelt fájlok.",
       "goToSettings": "Menjen a Beállítások → RAG menübe az index felépítéséhez.",
       "ragOff": "ℹ️ A RAG jelenleg ki van kapcsolva ebben a csevegésben."
     },
@@ -1252,7 +1252,7 @@
         "desc": "Válassza meg, hogyan válassza ki az ügynök a modelljét"
       },
       "systemPrompt": {
-        "createNew": "➕ új prompt létrehozása…",
+        "createNew": "új prompt létrehozása…",
         "promptName": {
           "name": "Prompt neve",
           "desc": "Az új rendszerprompt megjelenítendő neve"
@@ -1381,7 +1381,7 @@
         "tools": "Eszközök",
         "logs": "Naplók"
       },
-      "refreshBtn": "🔄 frissítés",
+      "refreshBtn": "frissítés",
       "connections": {
         "title": "MCP szerver kapcsolatok",
         "noServers": "Nincsenek konfigurált MCP szerverek.",
@@ -1443,9 +1443,9 @@
         "performBtn": "Eszköz végrehajtása",
         "clearBtn": "Eredmények törlése",
         "executing": "Végrehajtás...",
-        "success": "✅ végrehajtás sikeres",
-        "failed": "❌ végrehajtás sikertelen",
-        "errorTitle": "❌ végrehajtási hiba",
+        "success": "végrehajtás sikeres",
+        "failed": "végrehajtás sikertelen",
+        "errorTitle": "végrehajtási hiba",
         "errorLabel": "Hiba: {{message}}",
         "notices": {
           "success": "Az eszköz sikeresen végrehajtva",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ Nincsenek konfigurált MCP szerverek",
-        "testing": "🧪 {{count}} MCP szerver kapcsolatának tesztelése...",
-        "allSuccess": "✅ mind a {{count}} MCP szerver sikeresen csatlakoztatva!",
-        "partial": "⚠️ {{success}} csatlakozva, {{failed}} sikertelen"
+        "noServers": "Nincsenek konfigurált MCP szerverek",
+        "testing": "{{count}} MCP szerver kapcsolatának tesztelése...",
+        "allSuccess": "mind a {{count}} MCP szerver sikeresen csatlakoztatva!",
+        "partial": "{{success}} csatlakozva, {{failed}} sikertelen"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Ollama modellek kezelése",
       "serverInfo": "Szerver információ",
       "checkingServer": "Szerver ellenőrzése...",
-      "serverOnline": "✅ Szerver online",
+      "serverOnline": "Szerver online",
       "versionLabel": " | Verzió: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ Szerver offline",
-      "connectionError": "❌ Kapcsolódási hiba",
+      "serverOffline": "Szerver offline",
+      "connectionError": "Kapcsolódási hiba",
       "pullTitle": "Új modell letöltése",
       "pullHint": "Adjon meg egy modellnevet az Ollama könyvtárból való letöltéshez (pl. llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "Modell letöltése",
       "installedTitle": "Telepített modellek",
-      "refreshList": "🔄 Lista frissítése",
+      "refreshList": "Lista frissítése",
       "noModels": "Nem találhatók modellek. Töltsön le egy modellt a kezdéshez.",
       "capabilities": "Képességek: {{caps}}",
       "deleteBtn": "Törlés",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "Kérjük, adjon meg egy modellnevet",
         "pulling": "{{name}} letöltése... Ez eltarthat egy ideig.",
-        "pullSuccess": "✅ Sikeresen letöltve: {{name}}",
-        "pullFailed": "❌ Nem sikerült letölteni a modellt: {{message}}",
-        "deleted": "✅ Törölve: {{name}}",
-        "deleteFailed": "❌ Nem sikerült törölni a modellt: {{message}}",
+        "pullSuccess": "Sikeresen letöltve: {{name}}",
+        "pullFailed": "Nem sikerült letölteni a modellt: {{message}}",
+        "deleted": "Törölve: {{name}}",
+        "deleteFailed": "Nem sikerült törölni a modellt: {{message}}",
         "refreshing": "Frissítés...",
-        "refreshSuccess": "✅ Modelllista frissítve",
-        "refreshFailed": "❌ Nem sikerült frissíteni a modelllistát"
+        "refreshSuccess": "Modelllista frissítve",
+        "refreshFailed": "Nem sikerült frissíteni a modelllistát"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ Feldolgozás...",
       "error": "Hiba a magyarázat megjelenítésekor",
-      "errorPrefix": "❌ Hiba: "
+      "errorPrefix": "Hiba:"
     }
   },
   "notices": {

@@ -551,6 +551,10 @@ export const Menu = jest.fn().mockImplementation(() => {
 
 export const Notice = jest.fn().mockImplementation((_message: string) => {});
 
+export function getIcon(iconId: string): SVGSVGElement | null {
+	return /^[a-z][a-z0-9-]*$/.test(iconId) ? document.createElementNS('http://www.w3.org/2000/svg', 'svg') : null;
+}
+
 export function setIcon(el: HTMLElement, iconId: string): void {
 	const icon = document.createElement('span');
 	icon.className = 'mock-icon';

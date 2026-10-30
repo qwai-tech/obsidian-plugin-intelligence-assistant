@@ -42,8 +42,8 @@
       "configStatus": {
         "name": "구성 상태",
         "desc": "플러그인 전체 구성 상태",
-        "ok": "✅ 구성됨 ({{providers}} 제공자, {{conversations}} 대화)",
-        "incomplete": "⚠️ 미완료 - 제공자와 모델을 구성해 주세요"
+        "ok": "구성됨 ({{providers}} 제공자, {{conversations}} 대화)",
+        "incomplete": "미완료 - 제공자와 모델을 구성해 주세요"
       }
     },
     "llm": {
@@ -58,7 +58,7 @@
       "providerCount_one": "{{count}}개 제공자 구성됨",
       "providerCount_other": "{{count}}개 제공자 구성됨",
       "providerCount": "{{count}}개 제공자 구성됨",
-      "refreshAll": "🔄 모든 모델 새로 고침",
+      "refreshAll": "모든 모델 새로 고침",
       "empty": "아직 구성된 제공자가 없습니다. 먼저 제공자 탭에서 제공자를 추가하세요.",
       "noModels": "사용 가능한 모델이 없습니다. \"모든 모델 새로 고침\"을 클릭하거나 제공자 탭에서 개별 제공자를 새로 고침하세요.",
       "noMatch": "현재 필터와 일치하는 모델이 없습니다. 필터를 조정하거나 지워서 결과를 확인하세요.",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "⚠️ 보안 경고",
+      "securityTitle": "보안 경고",
       "securityDesc": "API 키는 호환성을 위해 볼트에 일반 텍스트로 저장됩니다. 의도치 않은 유출을 방지하려면:",
       "securityItem1": "{{configDir}}/plugins/intelligence-assistant/data/ 폴더를 공유하지 마세요.",
       "securityItem2": "Git 동기화를 사용하는 경우 이 폴더를 .gitignore에 추가하세요.",
@@ -170,9 +170,9 @@
     },
     "mcp": {
       "desc": "Model Context Protocol (MCP) 서버를 구성하여 외부 도구와 데이터 소스로 에이전트 기능을 확장합니다.",
-      "inspectorBtn": "🔍 MCP 검사기 열기",
-      "testAllBtn": "🧪 모든 연결 테스트",
-      "refreshAllBtn": "🔄 모든 도구 새로 고침",
+      "inspectorBtn": "MCP 검사기 열기",
+      "testAllBtn": "모든 연결 테스트",
+      "refreshAllBtn": "모든 도구 새로 고침",
       "addBtn": "+ MCP 서버 추가",
       "empty": "구성된 MCP 서버가 없습니다. MCP 서버 추가를 선택하여 시작하세요.",
       "tableHeaders": {
@@ -209,8 +209,8 @@
       },
       "actions": {
         "edit": "편집",
-        "enabled": "✓ 활성화됨",
-        "enabledOff": "✗ 비활성화됨",
+        "enabled": "활성화됨",
+        "enabledOff": "비활성화됨",
         "connect": "연결",
         "disconnect": "연결 끊기",
         "connecting": "연결 중...",
@@ -226,17 +226,17 @@
         "enableFirst": "연결하기 전에 서버를 활성화하세요",
         "disconnectFailed": "{{name}}에서 연결 끊기 실패",
         "connectFailed": "{{name}}에 연결 실패",
-        "testNoCommand": "❌ 연결 테스트 전에 명령을 입력해 주세요",
-        "testSuccess": "✅ 연결 성공! {{count}}개의 도구를 찾았습니다.",
-        "testFailed": "❌ 연결 실패: {{message}}",
-        "refreshedAll_one": "✅ {{count}}개 서버의 도구를 새로 고침했습니다",
-        "refreshedAll_other": "✅ {{count}}개 서버의 도구를 새로 고침했습니다",
-        "refreshedAll": "✅ {{count}}개 서버의 도구를 새로 고침했습니다",
-        "refreshedPartial": "✅ {{success}}개 서버 새로 고침 완료, ❌ {{failed}}개 실패",
-        "noServersConfigured": "⚠️ 구성된 MCP 서버가 없습니다",
-        "testingAll": "🧪 {{count}}개 MCP 서버 연결 테스트 중...",
-        "testAllSuccess": "✅ 모든 {{count}}개 MCP 서버가 성공적으로 연결되었습니다!",
-        "testAllPartial": "⚠️ {{successful}}개 연결됨, {{failed}}개 실패"
+        "testNoCommand": "연결 테스트 전에 명령을 입력해 주세요",
+        "testSuccess": "연결 성공! {{count}}개의 도구를 찾았습니다.",
+        "testFailed": "연결 실패: {{message}}",
+        "refreshedAll_one": "{{count}}개 서버의 도구를 새로 고침했습니다",
+        "refreshedAll_other": "{{count}}개 서버의 도구를 새로 고침했습니다",
+        "refreshedAll": "{{count}}개 서버의 도구를 새로 고침했습니다",
+        "refreshedPartial": "{{success}}개 서버 새로 고침 완료, {{failed}}개 실패",
+        "noServersConfigured": "구성된 MCP 서버가 없습니다",
+        "testingAll": "{{count}}개 MCP 서버 연결 테스트 중...",
+        "testAllSuccess": "모든 {{count}}개 MCP 서버가 성공적으로 연결되었습니다!",
+        "testAllPartial": "{{successful}}개 연결됨, {{failed}}개 실패"
       },
       "confirm": {
         "delete": "MCP 서버 \"{{name}}\"을 삭제하시겠습니까?"
@@ -362,7 +362,7 @@
             "params": "path (필수), content (필수): 노트 경로와 추가할 내용"
           }
         },
-        "infoTitle": "💡 도구 정보",
+        "infoTitle": "도구 정보",
         "infoText": "내장 도구는 플러그인 설정별로 구성됩니다. MCP 도구는 독립적으로 관리됩니다—MCP 탭을 사용하여 서버에 연결하고 도구 가용성을 새로 고침하세요.",
         "toolNames": {
           "read_file": "파일 읽기",
@@ -499,7 +499,7 @@
         "notices": {
           "removed": "CLI 도구가 제거되었습니다"
         },
-        "infoTitle": "💡 CLI 도구 정보",
+        "infoTitle": "CLI 도구 정보",
         "infoText": "CLI 도구는 셸 명령을 로컬에서 실행합니다. 템플릿 대체를 위해 인수에 {{paramName}}을 사용하거나 인수 또는 환경 변수로 전달되는 매개변수를 구성하세요.",
         "modal": {
           "defaultTitle": "CLI 도구",
@@ -663,7 +663,7 @@
           "avgChunkSize": "평균 청크 크기"
         },
         "empty": "인덱스가 비어 있습니다. 인덱스 재구축을 선택하여 인덱싱을 시작하세요.",
-        "error": "⚠️ 인덱스 통계를 불러올 수 없습니다",
+        "error": "인덱스 통계를 불러올 수 없습니다",
         "rebuild": {
           "name": "인덱스 재구축",
           "desc": "볼트의 모든 파일을 재인덱싱합니다. 시간이 걸릴 수 있습니다.",
@@ -1094,29 +1094,29 @@
     },
     "ragStats": {
       "title": "RAG 통계",
-      "totalChunks": "📊 총 청크 수:",
-      "filesIndexed": "📁 인덱싱된 파일 수:",
-      "totalSize": "💾 총 크기:",
-      "avgChunks": "📈 파일당 평균 청크 수:",
-      "indexedFiles": "📄 인덱싱된 파일",
-      "noFilesYet": "⚠️ 아직 인덱싱된 파일이 없습니다.",
+      "totalChunks": "총 청크 수:",
+      "filesIndexed": "인덱싱된 파일 수:",
+      "totalSize": "총 크기:",
+      "avgChunks": "파일당 평균 청크 수:",
+      "indexedFiles": "인덱싱된 파일",
+      "noFilesYet": "아직 인덱싱된 파일이 없습니다.",
       "howToBuild": "RAG 인덱스를 구축하려면:",
       "step1": "설정 → RAG로 이동",
       "step2": "RAG 활성화",
       "step3": "볼트 인덱스 선택",
       "close": "닫기",
-      "retrieved_one": "📚 {{count}}개 문서에서 검색됨",
-      "retrieved_other": "📚 {{count}}개 문서에서 검색됨",
-      "retrieved": "📚 {{count}}개 문서에서 검색됨"
+      "retrieved_one": "{{count}}개 문서에서 검색됨",
+      "retrieved_other": "{{count}}개 문서에서 검색됨",
+      "retrieved": "{{count}}개 문서에서 검색됨"
     },
     "ragTooltip": {
       "status": "RAG 인덱스 상태:",
-      "totalChunks": "📊 총 청크 수: {{count}}",
-      "filesIndexed": "📁 인덱싱된 파일 수: {{count}}",
-      "totalSize": "💾 총 크기: {{size}} KB",
-      "indexedFiles": "📄 인덱싱된 파일:",
+      "totalChunks": "총 청크 수: {{count}}",
+      "filesIndexed": "인덱싱된 파일 수: {{count}}",
+      "totalSize": "총 크기: {{size}} KB",
+      "indexedFiles": "인덱싱된 파일:",
       "andMore": "  ... 및 {{count}}개 더",
-      "noFilesYet": "⚠️ 아직 인덱싱된 파일이 없습니다.",
+      "noFilesYet": "아직 인덱싱된 파일이 없습니다.",
       "goToSettings": "설정 → RAG로 이동하여 인덱스를 구축하세요.",
       "ragOff": "ℹ️ 이 채팅에서는 현재 RAG가 꺼져 있습니다."
     },
@@ -1252,7 +1252,7 @@
         "desc": "에이전트가 모델을 선택하는 방법 선택"
       },
       "systemPrompt": {
-        "createNew": "➕ 새 프롬프트 만들기...",
+        "createNew": "새 프롬프트 만들기...",
         "promptName": {
           "name": "프롬프트 이름",
           "desc": "새 시스템 프롬프트의 표시 이름"
@@ -1381,7 +1381,7 @@
         "tools": "도구",
         "logs": "로그"
       },
-      "refreshBtn": "🔄 새로 고침",
+      "refreshBtn": "새로 고침",
       "connections": {
         "title": "MCP 서버 연결",
         "noServers": "구성된 MCP 서버가 없습니다.",
@@ -1443,9 +1443,9 @@
         "performBtn": "도구 실행",
         "clearBtn": "결과 지우기",
         "executing": "실행 중...",
-        "success": "✅ 실행 성공",
-        "failed": "❌ 실행 실패",
-        "errorTitle": "❌ 실행 오류",
+        "success": "실행 성공",
+        "failed": "실행 실패",
+        "errorTitle": "실행 오류",
         "errorLabel": "오류: {{message}}",
         "notices": {
           "success": "도구가 성공적으로 실행되었습니다",
@@ -1457,10 +1457,10 @@
         }
       },
       "testAll": {
-        "noServers": "⚠️ 구성된 MCP 서버가 없습니다",
-        "testing": "🧪 {{count}}개 MCP 서버 연결 테스트 중...",
-        "allSuccess": "✅ 모든 {{count}}개 MCP 서버가 성공적으로 연결되었습니다!",
-        "partial": "⚠️ {{success}}개 연결됨, {{failed}}개 실패"
+        "noServers": "구성된 MCP 서버가 없습니다",
+        "testing": "{{count}}개 MCP 서버 연결 테스트 중...",
+        "allSuccess": "모든 {{count}}개 MCP 서버가 성공적으로 연결되었습니다!",
+        "partial": "{{success}}개 연결됨, {{failed}}개 실패"
       }
     },
     "mcpServer": {
@@ -1504,11 +1504,11 @@
       "title": "Ollama 모델 관리",
       "serverInfo": "서버 정보",
       "checkingServer": "서버 확인 중...",
-      "serverOnline": "✅ 서버 온라인",
+      "serverOnline": "서버 온라인",
       "versionLabel": " | 버전: {{version}}",
       "urlLabel": " | {{url}}",
-      "serverOffline": "❌ 서버 오프라인",
-      "connectionError": "❌ 연결 오류",
+      "serverOffline": "서버 오프라인",
+      "connectionError": "연결 오류",
       "pullTitle": "새 모델 가져오기",
       "pullHint": "Ollama 라이브러리에서 다운로드할 모델 이름을 입력하세요 (예: llama2, mistral, codellama)",
       "modelName": {
@@ -1517,7 +1517,7 @@
       },
       "pullBtn": "모델 가져오기",
       "installedTitle": "설치된 모델",
-      "refreshList": "🔄 목록 새로 고침",
+      "refreshList": "목록 새로 고침",
       "noModels": "모델을 찾을 수 없습니다. 모델을 가져와 시작하세요.",
       "capabilities": "기능: {{caps}}",
       "deleteBtn": "삭제",
@@ -1531,13 +1531,13 @@
       "notices": {
         "enterName": "모델 이름을 입력하세요",
         "pulling": "{{name}} 가져오는 중... 시간이 걸릴 수 있습니다.",
-        "pullSuccess": "✅ {{name}}을 성공적으로 가져왔습니다",
-        "pullFailed": "❌ 모델 가져오기 실패: {{message}}",
-        "deleted": "✅ {{name}}이 삭제되었습니다",
-        "deleteFailed": "❌ 모델 삭제 실패: {{message}}",
+        "pullSuccess": "{{name}}을 성공적으로 가져왔습니다",
+        "pullFailed": "모델 가져오기 실패: {{message}}",
+        "deleted": "{{name}}이 삭제되었습니다",
+        "deleteFailed": "모델 삭제 실패: {{message}}",
         "refreshing": "새로 고침 중...",
-        "refreshSuccess": "✅ 모델 목록이 새로 고침되었습니다",
-        "refreshFailed": "❌ 모델 목록 새로 고침 실패"
+        "refreshSuccess": "모델 목록이 새로 고침되었습니다",
+        "refreshFailed": "모델 목록 새로 고침 실패"
       }
     },
     "promptEdit": {
@@ -1569,7 +1569,7 @@
     "explain": {
       "loading": "⏳ 처리 중...",
       "error": "설명 렌더링 오류",
-      "errorPrefix": "❌ 오류: "
+      "errorPrefix": "오류:"
     }
   },
   "notices": {
