@@ -1110,7 +1110,7 @@
       "title": "エージェントを編集",
       "icon": {
         "name": "アイコン",
-        "desc": "このエージェントを表す絵文字または文字"
+        "desc": "Lucide のアイコン名(例: sparkles)または絵文字"
       },
       "description": {
         "name": "説明",

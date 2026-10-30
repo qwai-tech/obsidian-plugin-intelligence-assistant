@@ -1110,7 +1110,7 @@
       "title": "Modifier l'agent",
       "icon": {
         "name": "Icône",
-        "desc": "Emoji ou caractère pour représenter cet agent"
+        "desc": "Nom d’une icône Lucide, comme sparkles, ou un emoji"
       },
       "description": {
         "name": "Description",

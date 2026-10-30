@@ -1110,7 +1110,7 @@
       "title": "Redigera agent",
       "icon": {
         "name": "Ikon",
-        "desc": "Emoji eller tecken för att representera den här agenten"
+        "desc": "Namnet på en Lucide-ikon, t.ex. sparkles, eller en emoji"
       },
       "description": {
         "name": "Beskrivning",

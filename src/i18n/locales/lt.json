@@ -1110,7 +1110,7 @@
       "title": "Redaguoti agentą",
       "icon": {
         "name": "Piktograma",
-        "desc": "Jaustukų piktograma arba simbolis, atstovaujantis šiam agentui"
+        "desc": "Lucide piktogramos pavadinimas, pvz., sparkles, arba jaustukas"
       },
       "description": {
         "name": "Aprašymas",

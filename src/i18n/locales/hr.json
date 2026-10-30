@@ -1110,7 +1110,7 @@
       "title": "Uredi agenta",
       "icon": {
         "name": "Ikona",
-        "desc": "Emoji ili znak za predstavljanje ovog agenta"
+        "desc": "Naziv ikone Lucide, npr. sparkles, ili emoji"
       },
       "description": {
         "name": "Opis",

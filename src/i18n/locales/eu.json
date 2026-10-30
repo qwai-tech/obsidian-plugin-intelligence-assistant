@@ -1110,7 +1110,7 @@
       "title": "Editatu agentea",
       "icon": {
         "name": "Ikonoa",
-        "desc": "Agentea irudikatzeko emoji edo karakterea"
+        "desc": "Lucide ikono baten izena (adibidez, sparkles) edo emoji bat"
       },
       "description": {
         "name": "Deskribapena",

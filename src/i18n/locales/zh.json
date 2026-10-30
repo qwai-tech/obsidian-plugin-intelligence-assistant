@@ -1110,7 +1110,7 @@
       "title": "编辑智能体",
       "icon": {
         "name": "图标",
-        "desc": "代表此智能体的表情符号或字符"
+        "desc": "Lucide 图标名称(如 sparkles)或表情符号"
       },
       "description": {
         "name": "描述",

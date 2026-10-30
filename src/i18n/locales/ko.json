@@ -1110,7 +1110,7 @@
       "title": "에이전트 편집",
       "icon": {
         "name": "아이콘",
-        "desc": "이 에이전트를 나타내는 이모지 또는 문자"
+        "desc": "Lucide 아이콘 이름(예: sparkles) 또는 이모지"
       },
       "description": {
         "name": "설명",

@@ -1110,7 +1110,7 @@
       "title": "Edit agen",
       "icon": {
         "name": "Ikon",
-        "desc": "Emoji atau karakter untuk mewakili agen ini"
+        "desc": "Nama ikon Lucide, misalnya sparkles, atau emoji"
       },
       "description": {
         "name": "Deskripsi",

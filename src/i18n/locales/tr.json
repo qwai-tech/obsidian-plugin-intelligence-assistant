@@ -1110,7 +1110,7 @@
       "title": "Ajanı düzenle",
       "icon": {
         "name": "Simge",
-        "desc": "Bu ajanı temsil edecek emoji veya karakter"
+        "desc": "Bir Lucide simgesinin adı (ör. sparkles) ya da bir emoji"
       },
       "description": {
         "name": "Açıklama",

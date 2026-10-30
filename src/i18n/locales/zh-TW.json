@@ -1110,7 +1110,7 @@
       "title": "編輯代理",
       "icon": {
         "name": "圖示",
-        "desc": "代表此代理的表情符號或字元"
+        "desc": "Lucide 圖示名稱(如 sparkles)或表情符號"
       },
       "description": {
         "name": "描述",

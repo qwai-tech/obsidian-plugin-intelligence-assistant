@@ -1110,7 +1110,7 @@
       "title": "Agent bewerken",
       "icon": {
         "name": "Pictogram",
-        "desc": "Emoji of teken om deze agent te vertegenwoordigen"
+        "desc": "Naam van een Lucide-pictogram, zoals sparkles, of een emoji"
       },
       "description": {
         "name": "Beschrijving",

@@ -1110,7 +1110,7 @@
       "title": "Chỉnh sửa tác nhân",
       "icon": {
         "name": "Biểu tượng",
-        "desc": "Emoji hoặc ký tự để đại diện cho tác nhân này"
+        "desc": "Tên biểu tượng Lucide, ví dụ sparkles, hoặc một emoji"
       },
       "description": {
         "name": "Mô tả",

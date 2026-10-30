@@ -1110,7 +1110,7 @@
       "title": "Ügynök szerkesztése",
       "icon": {
         "name": "Ikon",
-        "desc": "Ezt az ügynököt jelképező emoji vagy karakter"
+        "desc": "Lucide ikon neve, például sparkles, vagy egy emoji"
       },
       "description": {
         "name": "Leírás",

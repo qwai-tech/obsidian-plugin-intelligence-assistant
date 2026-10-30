@@ -1110,7 +1110,7 @@
       "title": "Editați agentul",
       "icon": {
         "name": "Iconiță",
-        "desc": "Emoji sau caracter pentru reprezentarea acestui agent"
+        "desc": "Numele unei pictograme Lucide, de ex. sparkles, sau un emoji"
       },
       "description": {
         "name": "Descriere",

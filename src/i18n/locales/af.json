@@ -1110,7 +1110,7 @@
       "title": "Redigeer agent",
       "icon": {
         "name": "Ikoon",
-        "desc": "Emoji of karakter om hierdie agent voor te stel"
+        "desc": "Lucide-ikoonnaam, soos sparkles, of ’n emoji"
       },
       "description": {
         "name": "Beskrywing",

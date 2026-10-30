@@ -1110,7 +1110,7 @@
       "title": "Upravit agenta",
       "icon": {
         "name": "Ikona",
-        "desc": "Emoji nebo znak reprezentující tohoto agenta"
+        "desc": "Název ikony Lucide, například sparkles, nebo emoji"
       },
       "description": {
         "name": "Popis",

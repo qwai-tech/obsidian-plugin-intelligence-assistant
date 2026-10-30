@@ -1110,7 +1110,7 @@
       "title": "Agent bearbeiten",
       "icon": {
         "name": "Symbol",
-        "desc": "Emoji oder Zeichen zur Darstellung dieses Agenten"
+        "desc": "Name eines Lucide-Symbols, etwa sparkles, oder ein Emoji"
       },
       "description": {
         "name": "Beschreibung",

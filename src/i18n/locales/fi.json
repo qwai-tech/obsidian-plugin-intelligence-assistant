@@ -1110,7 +1110,7 @@
       "title": "Muokkaa agenttia",
       "icon": {
         "name": "Kuvake",
-        "desc": "Emoji tai merkki tämän agentin esittämiseen"
+        "desc": "Lucide-kuvakkeen nimi, esim. sparkles, tai emoji"
       },
       "description": {
         "name": "Kuvaus",

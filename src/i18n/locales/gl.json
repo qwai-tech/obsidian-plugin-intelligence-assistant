@@ -1110,7 +1110,7 @@
       "title": "Editar axente",
       "icon": {
         "name": "Icona",
-        "desc": "Emoji ou carácter para representar este axente"
+        "desc": "Nome dunha icona de Lucide, como sparkles, ou un emoji"
       },
       "description": {
         "name": "Descrición",

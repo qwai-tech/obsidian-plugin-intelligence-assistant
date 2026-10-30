@@ -1110,7 +1110,7 @@
       "title": "Edit ejen",
       "icon": {
         "name": "Ikon",
-        "desc": "Emoji atau aksara untuk mewakili ejen ini"
+        "desc": "Nama ikon Lucide, seperti sparkles, atau emoji"
       },
       "description": {
         "name": "Penerangan",

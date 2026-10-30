@@ -1110,7 +1110,7 @@
       "title": "Rediģēt aģentu",
       "icon": {
         "name": "Ikona",
-        "desc": "Emocijzīme vai rakstzīme, kas pārstāv šo aģentu"
+        "desc": "Lucide ikonas nosaukums, piem., sparkles, vai emocijzīme"
       },
       "description": {
         "name": "Apraksts",
