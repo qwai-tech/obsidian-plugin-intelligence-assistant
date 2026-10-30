@@ -20,10 +20,10 @@ export class ConversationMigrationService {
     // Process each conversation
     for (const conv of oldConversations) {
       try {
-        // Ensure conversation has all required properties
         const normalizedConv = this.normalizeConversation(conv);
-        
-        // Create the conversation file
+        if (await this._storageService.getConversationMetadata(normalizedConv.id)) {
+          continue;
+        }
         await this._storageService.createConversation(normalizedConv);
       } catch (error) {
         console.error(`Error migrating conversation ${conv.id}:`, error);
@@ -50,13 +50,5 @@ export class ConversationMigrationService {
     };
 
     return normalized;
-  }
-
-  /**
-   * Check if migration is needed
-   */
-  async isMigrationNeeded(): Promise<boolean> {
-    const count = await this._storageService.getConversationCount();
-    return count === 0; // If no conversations in new format, migration is likely needed
   }
 }

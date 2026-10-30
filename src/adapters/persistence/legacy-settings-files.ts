@@ -55,6 +55,10 @@ export class LegacySettingsFiles {
 		return { found, userConfig, stored };
 	}
 
+	async backUp(legacyData: unknown): Promise<void> {
+		await new JsonFile<unknown>(this.adapter, `${this.paths.data}/legacy-data-backup.json`, () => null).write(legacyData);
+	}
+
 	async remove(): Promise<void> {
 		for (const file of [this.paths.userConfig, this.paths.providers, this.paths.mcpServers]) {
 			if (await this.adapter.exists(file)) {

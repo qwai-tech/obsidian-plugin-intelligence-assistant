@@ -250,10 +250,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 	private async migrateConversationsIfNeeded() {
 		const migration = new ConversationMigrationService(this.conversations);
-		const needsMigration = await migration.isMigrationNeeded();
 		const legacyConversations = this.store.legacyConversations;
-		
-		if (needsMigration && legacyConversations.length > 0) {
+
+		if (legacyConversations.length > 0) {
 			const success = await migration.migrateFromOldFormat(legacyConversations);
 			
 			if (success) {

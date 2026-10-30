@@ -22,6 +22,9 @@ export class ObsidianSettingsPersistence implements SettingsPersistence {
 			return { userConfig: stored.config, legacyData: null, outdated: false };
 		}
 		this.saved = null;
+		if (stored && typeof stored === 'object') {
+			await this.legacyFiles.backUp(stored);
+		}
 		this.legacy = await this.legacyFiles.read();
 		return { userConfig: this.legacy.userConfig, legacyData: this.legacy.userConfig ? null : stored, outdated: true };
 	}

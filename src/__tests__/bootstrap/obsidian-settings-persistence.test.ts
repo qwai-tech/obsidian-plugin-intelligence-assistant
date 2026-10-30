@@ -110,4 +110,16 @@ describe('ObsidianSettingsPersistence', () => {
 		await reloaded.load();
 		expect(reloaded.current.llmConfigs[0].cachedModels?.map(model => model.id)).toEqual(['llama']);
 	});
+
+	it('backs up an old data.json before replacing it', async () => {
+		const legacy = { defaultModel: 'legacy', conversations: [{ id: 'c1', title: 'Old chat', messages: [] }] };
+		const { persistence, plugin, store: files } = makeHost({}, legacy);
+		const store = new SettingsStore(persistence, noSecrets);
+
+		await store.load();
+
+		expect(JSON.parse(files[`${paths.data}/legacy-data-backup.json`])).toEqual(legacy);
+		expect((plugin.data as { format?: number }).format).toBe(2);
+		expect(store.legacyConversations.map(conversation => conversation.id)).toEqual(['c1']);
+	});
 });
