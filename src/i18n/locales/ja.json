@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "必要に応じてインターネットを検索",
     "newConversation": "新しい会話",
     "searchConversations": "会話を検索...",
+    "deleteConversationConfirm": "会話「{{title}}」を削除しますか?",
+    "renameConversationPrompt": "新しいタイトル",
     "header": {
       "noModels": "利用可能なモデルがありません"
     },

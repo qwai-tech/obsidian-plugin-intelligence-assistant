@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Hae internetistä tarvittaessa",
     "newConversation": "Uusi keskustelu",
     "searchConversations": "Hae keskusteluja...",
+    "deleteConversationConfirm": "Poistetaanko keskustelu \"{{title}}\"?",
+    "renameConversationPrompt": "Uusi otsikko",
     "header": {
       "noModels": "Ei malleja saatavilla"
     },

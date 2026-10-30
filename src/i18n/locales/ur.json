@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "ضرورت پڑنے پر انٹرنیٹ پر تلاش کریں",
     "newConversation": "نئی گفتگو",
     "searchConversations": "گفتگو تلاش کریں...",
+    "deleteConversationConfirm": "گفتگو \"{{title}}\" حذف کریں؟",
+    "renameConversationPrompt": "نیا عنوان",
     "header": {
       "noModels": "کوئی ماڈل دستیاب نہیں"
     },

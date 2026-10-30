@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Cerca a Internet quan calgui",
     "newConversation": "Conversa nova",
     "searchConversations": "Cerca converses...",
+    "deleteConversationConfirm": "Voleu suprimir la conversa \"{{title}}\"?",
+    "renameConversationPrompt": "Títol nou",
     "header": {
       "noModels": "Cap model disponible"
     },

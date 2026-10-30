@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "在需要时搜索互联网",
     "newConversation": "新建对话",
     "searchConversations": "搜索对话...",
+    "deleteConversationConfirm": "删除对话“{{title}}”?",
+    "renameConversationPrompt": "新标题",
     "header": {
       "noModels": "暂无可用模型"
     },

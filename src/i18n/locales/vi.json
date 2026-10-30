@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Tìm kiếm internet khi cần",
     "newConversation": "Hội thoại mới",
     "searchConversations": "Tìm kiếm hội thoại...",
+    "deleteConversationConfirm": "Xóa cuộc trò chuyện \"{{title}}\"?",
+    "renameConversationPrompt": "Tiêu đề mới",
     "header": {
       "noModels": "Không có mô hình nào"
     },

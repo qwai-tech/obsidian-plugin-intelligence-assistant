@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Cari internet saat diperlukan",
     "newConversation": "Percakapan Baru",
     "searchConversations": "Cari percakapan...",
+    "deleteConversationConfirm": "Hapus percakapan \"{{title}}\"?",
+    "renameConversationPrompt": "Judul baru",
     "header": {
       "noModels": "Tidak ada model yang tersedia"
     },

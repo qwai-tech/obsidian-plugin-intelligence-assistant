@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Buscar en internet cuando sea necesario",
     "newConversation": "Nueva conversación",
     "searchConversations": "Buscar conversaciones...",
+    "deleteConversationConfirm": "¿Eliminar la conversación \"{{title}}\"?",
+    "renameConversationPrompt": "Nuevo título",
     "header": {
       "noModels": "No hay modelos disponibles"
     },

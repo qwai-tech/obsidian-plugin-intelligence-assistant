@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "প্রয়োজন হলে ইন্টারনেট অনুসন্ধান করুন",
     "newConversation": "নতুন কথোপকথন",
     "searchConversations": "কথোপকথন অনুসন্ধান করুন...",
+    "deleteConversationConfirm": "\"{{title}}\" কথোপকথন মুছবেন?",
+    "renameConversationPrompt": "নতুন শিরোনাম",
     "header": {
       "noModels": "কোনো মডেল উপলব্ধ নেই"
     },

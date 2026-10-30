@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "ആവശ്യമുള്ളപ്പോൾ ഇന്റർനെറ്റ് തിരയുക",
     "newConversation": "പുതിയ സംഭാഷണം",
     "searchConversations": "സംഭാഷണങ്ങൾ തിരയുക...",
+    "deleteConversationConfirm": "\"{{title}}\" സംഭാഷണം ഇല്ലാതാക്കണോ?",
+    "renameConversationPrompt": "പുതിയ ശീർഷകം",
     "header": {
       "noModels": "മോഡലുകളൊന്നും ലഭ്യമല്ല"
     },

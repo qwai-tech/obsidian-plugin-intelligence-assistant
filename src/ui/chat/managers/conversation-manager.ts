@@ -159,7 +159,7 @@ export class ConversationManager extends Events {
 		if (!conv) return;
 		const wasVisible = this.state.conversationListVisible;
 
-		if (!await showConfirm(this.app, `Delete conversation "${conv.title}"?`) || !await this.storage.deleteConversation(convId)) {
+		if (!await showConfirm(this.app, t('chat.deleteConversationConfirm', { title: conv.title })) || !await this.storage.deleteConversation(convId)) {
 			this.restoreListVisibility(wasVisible);
 			return;
 		}
@@ -183,7 +183,7 @@ export class ConversationManager extends Events {
 		if (!conv) return;
 		const wasVisible = this.state.conversationListVisible;
 
-		const newTitle = (await showPrompt(this.app, 'Enter new title:', conv.title))?.trim();
+		const newTitle = (await showPrompt(this.app, t('chat.renameConversationPrompt'), conv.title))?.trim();
 		if (!newTitle) {
 			this.restoreListVisibility(wasVisible);
 			return;

@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Prohledávat internet v případě potřeby",
     "newConversation": "Nová konverzace",
     "searchConversations": "Hledat konverzace...",
+    "deleteConversationConfirm": "Smazat konverzaci „{{title}}“?",
+    "renameConversationPrompt": "Nový název",
     "header": {
       "noModels": "Žádné modely nejsou dostupné"
     },

@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Căutați pe internet când este necesar",
     "newConversation": "Conversație nouă",
     "searchConversations": "Căutați conversații...",
+    "deleteConversationConfirm": "Ștergi conversația „{{title}}”?",
+    "renameConversationPrompt": "Titlu nou",
     "header": {
       "noModels": "Niciun model disponibil"
     },

@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Meklēt internetā pēc vajadzības",
     "newConversation": "Jauna saruna",
     "searchConversations": "Meklēt sarunās...",
+    "deleteConversationConfirm": "Dzēst sarunu “{{title}}”?",
+    "renameConversationPrompt": "Jauns nosaukums",
     "header": {
       "noModels": "Nav pieejamu modeļu"
     },

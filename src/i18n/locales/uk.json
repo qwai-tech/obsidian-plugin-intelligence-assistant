@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Пошук в інтернеті при необхідності",
     "newConversation": "Нова розмова",
     "searchConversations": "Пошук розмов...",
+    "deleteConversationConfirm": "Видалити розмову «{{title}}»?",
+    "renameConversationPrompt": "Нова назва",
     "header": {
       "noModels": "Моделі недоступні"
     },

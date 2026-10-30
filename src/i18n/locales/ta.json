@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "தேவைப்படும்போது இணையத்தில் தேடு",
     "newConversation": "புதிய உரையாடல்",
     "searchConversations": "உரையாடல்களைத் தேடு...",
+    "deleteConversationConfirm": "\"{{title}}\" உரையாடலை நீக்கவா?",
+    "renameConversationPrompt": "புதிய தலைப்பு",
     "header": {
       "noModels": "மாதிரிகள் எதுவும் இல்லை"
     },

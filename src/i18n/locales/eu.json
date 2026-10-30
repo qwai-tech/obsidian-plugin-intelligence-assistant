@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Bilatu interneten behar denean",
     "newConversation": "Elkarrizketa Berria",
     "searchConversations": "Bilatu elkarrizketak...",
+    "deleteConversationConfirm": "\"{{title}}\" elkarrizketa ezabatu?",
+    "renameConversationPrompt": "Izenburu berria",
     "header": {
       "noModels": "Ez dago modelo erabilgarririk"
     },

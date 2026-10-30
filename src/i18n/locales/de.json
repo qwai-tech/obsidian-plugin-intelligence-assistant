@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Bei Bedarf das Internet durchsuchen",
     "newConversation": "Neue Konversation",
     "searchConversations": "Konversationen suchen...",
+    "deleteConversationConfirm": "Unterhaltung „{{title}}“ löschen?",
+    "renameConversationPrompt": "Neuer Titel",
     "header": {
       "noModels": "Keine Modelle verfügbar"
     },

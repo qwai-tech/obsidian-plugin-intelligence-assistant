@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "在需要時搜尋網際網路",
     "newConversation": "新對話",
     "searchConversations": "搜尋對話...",
+    "deleteConversationConfirm": "刪除對話「{{title}}」?",
+    "renameConversationPrompt": "新標題",
     "header": {
       "noModels": "沒有可用的模型"
     },

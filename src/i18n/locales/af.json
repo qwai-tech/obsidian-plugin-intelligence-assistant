@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Soek die internet wanneer nodig",
     "newConversation": "Nuwe Gesprek",
     "searchConversations": "Soek gesprekke...",
+    "deleteConversationConfirm": "Skrap gesprek \"{{title}}\"?",
+    "renameConversationPrompt": "Nuwe titel",
     "header": {
       "noModels": "Geen modelle beskikbaar nie"
     },

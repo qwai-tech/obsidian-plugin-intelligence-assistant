@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Søg på internettet efter behov",
     "newConversation": "Ny samtale",
     "searchConversations": "Søg samtaler...",
+    "deleteConversationConfirm": "Slet samtalen \"{{title}}\"?",
+    "renameConversationPrompt": "Ny titel",
     "header": {
       "noModels": "Ingen modeller tilgængelige"
     },

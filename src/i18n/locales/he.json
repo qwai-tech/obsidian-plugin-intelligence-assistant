@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "חפש באינטרנט לפי הצורך",
     "newConversation": "שיחה חדשה",
     "searchConversations": "חפש שיחות...",
+    "deleteConversationConfirm": "למחוק את השיחה \"{{title}}\"?",
+    "renameConversationPrompt": "כותרת חדשה",
     "header": {
       "noModels": "אין מודלים זמינים"
     },

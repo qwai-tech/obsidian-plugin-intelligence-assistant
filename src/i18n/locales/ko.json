@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "필요할 때 인터넷 검색",
     "newConversation": "새 대화",
     "searchConversations": "대화 검색...",
+    "deleteConversationConfirm": "\"{{title}}\" 대화를 삭제할까요?",
+    "renameConversationPrompt": "새 제목",
     "header": {
       "noModels": "사용 가능한 모델 없음"
     },

@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Търси в интернет при необходимост",
     "newConversation": "Нов разговор",
     "searchConversations": "Търсене в разговорите...",
+    "deleteConversationConfirm": "Да се изтрие ли разговорът \"{{title}}\"?",
+    "renameConversationPrompt": "Ново заглавие",
     "header": {
       "noModels": "Няма налични модели"
     },

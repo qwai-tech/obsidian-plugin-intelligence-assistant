@@ -1056,6 +1056,8 @@
     "webSearchTooltipLabel": "Internetkeresés szükség esetén",
     "newConversation": "Új beszélgetés",
     "searchConversations": "Keresés a beszélgetések között...",
+    "deleteConversationConfirm": "Törlöd a(z) „{{title}}” beszélgetést?",
+    "renameConversationPrompt": "Új cím",
     "header": {
       "noModels": "Nincsenek elérhető modellek"
     },
