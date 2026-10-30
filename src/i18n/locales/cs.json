@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Spravujte poskytovatele LLM a přihlašovací údaje API. Použijte sloupec akcí pro úpravu podrobností konfigurace nebo obnovení modelů v mezipaměti.",
       "count_one": "{{count}} poskytovatel nakonfigurován",
       "count_other": "{{count}} poskytovatelů nakonfigurováno",
       "count": "{{count}} poskytovatelů nakonfigurováno",

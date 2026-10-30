@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Quản lý nhà cung cấp LLM và thông tin xác thực API. Sử dụng cột thao tác để chỉnh sửa chi tiết cấu hình hoặc làm mới mô hình được lưu cache.",
       "count_one": "{{count}} nhà cung cấp đã cấu hình",
       "count_other": "{{count}} nhà cung cấp đã cấu hình",
       "count": "{{count}} nhà cung cấp đã cấu hình",

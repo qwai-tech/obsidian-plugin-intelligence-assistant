@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Spravujte poskytovateľov LLM a API prihlasovacie údaje. Použite stĺpec akcií na úpravu podrobností konfigurácie alebo obnovenie uložených modelov.",
       "count_one": "{{count}} poskytovateľ nakonfigurovaný",
       "count_other": "{{count}} poskytovatelia nakonfigurovaní",
       "count": "{{count}} poskytovatelia nakonfigurovaní",

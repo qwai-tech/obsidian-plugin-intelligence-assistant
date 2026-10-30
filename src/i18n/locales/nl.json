@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Beheer LLM providers en API-referenties. Gebruik de actikolom om configuratiedetails te bewerken of gecachede modellen te vernieuwen.",
       "count_one": "{{count}} provider geconfigureerd",
       "count_other": "{{count}} providers geconfigureerd",
       "count": "{{count}} providers geconfigureerd",

@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Kudeatu LLM hornitzaileak eta API kredentzialak. Erabili ekintzak zutabea konfigurazio xehetasunak editatu edo modelo katxetatuak freskatzeko.",
       "count_one": "{{count}} hornitzaile konfiguratuta",
       "count_other": "{{count}} hornitzaile konfiguratuta",
       "count": "{{count}} hornitzaile konfiguratuta",

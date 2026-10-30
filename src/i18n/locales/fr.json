@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Gérer les fournisseurs LLM et les identifiants API. Utilisez la colonne d'actions pour modifier les détails de configuration ou actualiser les modèles en cache.",
       "count_one": "{{count}} fournisseur configuré",
       "count_other": "{{count}} fournisseurs configurés",
       "count": "{{count}} fournisseurs configurés",

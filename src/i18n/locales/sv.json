@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Hantera LLM-leverantörer och API-uppgifter. Använd åtgärdskolumnen för att redigera konfigurationsdetaljer eller uppdatera cachade modeller.",
       "count_one": "{{count}} leverantör konfigurerad",
       "count_other": "{{count}} leverantörer konfigurerade",
       "count": "{{count}} leverantörer konfigurerade",

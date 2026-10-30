@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Bestuur LLM-verskaffers en API-geloofsbriewe. Gebruik die aksieskolom om konfigurasiebesonderhede te redigeer of gekassineerde modelle te verfris.",
       "count_one": "{{count}} verskaffer gekonfigureer",
       "count_other": "{{count}} verskaffers gekonfigureer",
       "count": "{{count}} verskaffers gekonfigureer",

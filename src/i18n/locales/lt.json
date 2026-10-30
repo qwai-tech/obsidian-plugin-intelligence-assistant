@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Valdyti LLM tiekėjus ir API kredencialus. Naudokite veiksmų stulpelį, kad redaguotumėte konfigūracijos informaciją arba atnaujintumėte talpykloje esančius modelius.",
       "count_one": "{{count}} tiekėjas sukonfigūruotas",
       "count_other": "{{count}} tiekėjai sukonfigūruoti",
       "count": "{{count}} tiekėjai sukonfigūruoti",

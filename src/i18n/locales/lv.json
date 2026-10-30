@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Pārvaldīt LLM pakalpojumu sniedzējus un API akreditācijas datus. Izmantojiet darbību kolonnu, lai rediģētu konfigurācijas informāciju vai atsvaidzinātu kešatmiņā saglabātos modeļus.",
       "count_one": "{{count}} pakalpojumu sniedzējs konfigurēts",
       "count_other": "{{count}} pakalpojumu sniedzēji konfigurēti",
       "count": "{{count}} pakalpojumu sniedzēji konfigurēti",

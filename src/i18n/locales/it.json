@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Gestisci i provider LLM e le credenziali API. Usa la colonna azioni per modificare i dettagli di configurazione o aggiornare i modelli in cache.",
       "count_one": "{{count}} provider configurato",
       "count_other": "{{count}} provider configurati",
       "count": "{{count}} provider configurati",

@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Gestione los proveedores de LLM y las credenciales de API. Use la columna de acciones para editar los detalles de configuración o actualizar los modelos en caché.",
       "count_one": "{{count}} proveedor configurado",
       "count_other": "{{count}} proveedores configurados",
       "count": "{{count}} proveedores configurados",

@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Gira fornecedores de LLM e credenciais de API. Use a coluna de ações para editar detalhes de configuração ou atualizar modelos em cache.",
       "count_one": "{{count}} fornecedor configurado",
       "count_other": "{{count}} fornecedores configurados",
       "count": "{{count}} fornecedores configurados",

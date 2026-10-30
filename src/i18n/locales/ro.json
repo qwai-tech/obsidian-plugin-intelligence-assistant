@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Gestionați furnizorii LLM și acreditările API. Utilizați coloana de acțiuni pentru a edita detaliile de configurare sau a reîmprospăta modelele din cache.",
       "count_one": "{{count}} furnizor configurat",
       "count_other": "{{count}} furnizori configurați",
       "count": "{{count}} furnizori configurați",

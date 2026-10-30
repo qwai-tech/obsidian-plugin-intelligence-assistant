@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Manage LLM providers and API credentials. Use the actions column to edit configuration details or refresh cached models.",
       "count_one": "{{count}} provider configured",
       "count_other": "{{count}} providers configured",
       "count": "{{count}} providers configured",

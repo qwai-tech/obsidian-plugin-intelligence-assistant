@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Administrer LLM-udbydere og API-legitimationsoplysninger. Brug handlingskolonnen til at redigere konfigurationsoplysninger eller opdatere cachelagrede modeller.",
       "count_one": "{{count}} udbyder konfigureret",
       "count_other": "{{count}} udbydere konfigureret",
       "count": "{{count}} udbydere konfigureret",

@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Urus pembekal LLM dan kelayakan API. Gunakan lajur tindakan untuk mengedit butiran konfigurasi atau menyegarkan model yang dicache.",
       "count_one": "{{count}} pembekal dikonfigurasi",
       "count_other": "{{count}} pembekal dikonfigurasi",
       "count": "{{count}} pembekal dikonfigurasi",

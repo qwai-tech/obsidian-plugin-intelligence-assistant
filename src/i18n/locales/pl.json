@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Zarządzaj dostawcami LLM i poświadczeniami API. Użyj kolumny akcji, aby edytować szczegóły konfiguracji lub odświeżyć modele z pamięci podręcznej.",
       "count_one": "{{count}} dostawca skonfigurowany",
       "count_other": "{{count}} dostawców skonfigurowanych",
       "count": "{{count}} dostawców skonfigurowanych",

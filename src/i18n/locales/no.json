@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Administrer LLM-leverandører og API-legitimasjon. Bruk handlingskolonnen til å redigere konfigurasjonsdetaljer eller oppdatere mellomlagrede modeller.",
       "count_one": "{{count}} leverandør konfigurert",
       "count_other": "{{count}} leverandører konfigurert",
       "count": "{{count}} leverandører konfigurert",

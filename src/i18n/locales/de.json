@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "LLM-Anbieter und API-Zugangsdaten verwalten. Verwenden Sie die Aktionsspalte, um Konfigurationsdetails zu bearbeiten oder zwischengespeicherte Modelle zu aktualisieren.",
       "count_one": "{{count}} Anbieter konfiguriert",
       "count_other": "{{count}} Anbieter konfiguriert",
       "count": "{{count}} Anbieter konfiguriert",

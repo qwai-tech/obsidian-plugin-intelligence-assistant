@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Kelola penyedia LLM dan kredensial API. Gunakan kolom tindakan untuk mengedit detail konfigurasi atau menyegarkan model yang di-cache.",
       "count_one": "{{count}} penyedia dikonfigurasi",
       "count_other": "{{count}} penyedia dikonfigurasi",
       "count": "{{count}} penyedia dikonfigurasi",

@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "管理 LLM 服务商和 API 凭据。使用操作列编辑配置详情或刷新缓存模型。",
       "count_one": "已配置 {{count}} 个服务商",
       "count_other": "已配置 {{count}} 个服务商",
       "count": "已配置 {{count}} 个服务商",

@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Gestioneu els proveïdors LLM i les credencials API. Feu servir la columna d'accions per editar els detalls de configuració o actualitzar els models emmagatzemats a la memòria cau.",
       "count_one": "{{count}} proveïdor configurat",
       "count_other": "{{count}} proveïdors configurats",
       "count": "{{count}} proveïdors configurats",

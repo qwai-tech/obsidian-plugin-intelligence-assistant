@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "管理 LLM 提供者和 API 憑證。使用操作欄位來編輯設定詳細資訊或重新整理快取模型。",
       "count_one": "已設定 {{count}} 個提供者",
       "count_other": "已設定 {{count}} 個提供者",
       "count": "已設定 {{count}} 個提供者",

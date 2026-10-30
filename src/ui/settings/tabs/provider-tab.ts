@@ -20,11 +20,6 @@ export function displayProviderTab(
 	refreshDisplay: () => void
 ): void {
 
-	const desc = containerEl.createEl('p', {
-		text: t('settings.provider.desc')
-	});
-	desc.addClass('ia-section-description');
-
 	const actionsRow = containerEl.createDiv('ia-section-actions');
 	const summary = actionsRow.createDiv('ia-section-summary');
 	summary.createSpan({ text: t('settings.provider.count', { count: plugin.settings.llmConfigs.length }) });

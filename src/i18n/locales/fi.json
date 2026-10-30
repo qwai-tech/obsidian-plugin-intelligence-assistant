@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Hallinnoi LLM-palveluntarjoajia ja API-tunnuksia. Käytä toimintosaraketta muokataksesi konfiguraatiotietoja tai päivittääksesi välimuistissa olevia malleja.",
       "count_one": "{{count}} palveluntarjoaja määritetty",
       "count_other": "{{count}} palveluntarjoajaa määritetty",
       "count": "{{count}} palveluntarjoajaa määritetty",

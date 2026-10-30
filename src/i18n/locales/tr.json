@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "LLM sağlayıcılarını ve API kimlik bilgilerini yönetin. Yapılandırma ayrıntılarını düzenlemek veya önbellekteki modelleri yenilemek için eylemler sütununu kullanın.",
       "count_one": "{{count}} sağlayıcı yapılandırıldı",
       "count_other": "{{count}} sağlayıcı yapılandırıldı",
       "count": "{{count}} sağlayıcı yapılandırıldı",

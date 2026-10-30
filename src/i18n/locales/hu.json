@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "LLM szolgáltatók és API-hitelesítő adatok kezelése. A műveletek oszlopban szerkesztheti a konfigurációs részleteket, vagy frissítheti a gyorsítótárazott modelleket.",
       "count_one": "{{count}} szolgáltató konfigurálva",
       "count_other": "{{count}} szolgáltató konfigurálva",
       "count": "{{count}} szolgáltató konfigurálva",

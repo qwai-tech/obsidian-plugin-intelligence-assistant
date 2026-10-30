@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Administru LLM-provizantojn kaj API-akreditaĵojn. Uzu la ago-kolumnon por redakti agorddetajlojn aŭ aktualigi kaŝmemoritajn modelojn.",
       "count_one": "{{count}} provizanto agordita",
       "count_other": "{{count}} provizantoj agorditaj",
       "count": "{{count}} provizantoj agorditaj",

@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Xestiona provedores de LLM e credenciais API. Usa a columna de accións para editar detalles de configuración ou refrescar modelos en caché.",
       "count_one": "{{count}} provedor configurado",
       "count_other": "{{count}} provedores configurados",
       "count": "{{count}} provedores configurados",

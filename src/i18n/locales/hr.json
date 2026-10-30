@@ -88,7 +88,6 @@
       }
     },
     "provider": {
-      "desc": "Upravljajte LLM pružateljima i API vjerodajnicama. Koristite stupac radnji za uređivanje pojedinosti konfiguracije ili osvježavanje predmemoriranih modela.",
       "count_one": "{{count}} pružatelj konfiguriran",
       "count_other": "{{count}} pružatelja konfigurirano",
       "count": "{{count}} pružatelja konfigurirano",
