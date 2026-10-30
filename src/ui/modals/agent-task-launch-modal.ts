@@ -6,7 +6,7 @@ export interface AgentTaskLaunchResult {
 	newConversation: boolean;
 }
 
-export class AgentTaskLaunchModal extends Modal {
+class AgentTaskLaunchModal extends Modal {
 	private readonly defaultTaskInput: string;
 	private taskInput: string;
 	private newConversation: boolean;

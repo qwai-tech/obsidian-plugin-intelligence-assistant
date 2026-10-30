@@ -187,11 +187,3 @@ export async function buildObsidianContextSnapshot(
 		...sections,
 	].join('\n');
 }
-
-export function appendObsidianContextSnapshot(prompt: string, snapshot: string): string {
-	const trimmedSnapshot = snapshot.trim();
-	if (!trimmedSnapshot) {
-		return prompt;
-	}
-	return [prompt.trim(), '---', trimmedSnapshot].join('\n\n');
-}

@@ -5,8 +5,7 @@ import type { FileReference } from '@/features/chat';
 import type { StreamChunk } from '@/features/llm';
 import type { AgentMemorySnapshot } from '@/features/agent/types/memory';
 
-export const SPAR_PHASES = ['sense', 'plan', 'act', 'reflect', 'final'] as const;
-export type SparPhase = typeof SPAR_PHASES[number];
+export type SparPhase = 'sense' | 'plan' | 'act' | 'reflect' | 'final';
 
 export interface AgentContextSection {
 	title: string;

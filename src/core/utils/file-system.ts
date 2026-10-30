@@ -25,7 +25,7 @@ export async function ensureFolderExists(adapter: DataAdapter, folder: string): 
 /**
  * Sanitize a value for safe use in file or folder names.
  */
-export function sanitizeIdentifier(value: string, fallback: string): string {
+function sanitizeIdentifier(value: string, fallback: string): string {
 	const trimmed = (value ?? '').trim();
 	if (!trimmed) {
 		return fallback;

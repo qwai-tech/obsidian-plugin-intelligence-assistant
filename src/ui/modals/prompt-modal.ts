@@ -4,7 +4,7 @@ import { t } from '@/i18n';
 /**
  * Prompt modal to replace window.prompt()
  */
-export class PromptModal extends Modal {
+class PromptModal extends Modal {
 	private message: string;
 	private defaultValue: string;
 	private onSubmit: (value: string | null) => void;

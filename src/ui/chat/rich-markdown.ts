@@ -110,7 +110,7 @@ let prismLoaded: Promise<unknown> | null = null;
  * Pre-warm Obsidian's MathJax loader so `$…$` / `$$…$$` math in chat replies
  * typesets without a first-render delay. Memoized — loads at most once.
  */
-export function preloadMathJax(): Promise<void> {
+function preloadMathJax(): Promise<void> {
 	if (!mathJaxLoaded) {
 		mathJaxLoaded = loadMathJax().catch((error) => {
 			console.error('[RichMarkdown] loadMathJax failed', error);
@@ -123,7 +123,7 @@ export function preloadMathJax(): Promise<void> {
  * Pre-warm Obsidian's Prism loader and, if available, re-highlight any code in
  * `root` so fenced code blocks get syntax colors. Memoized loader.
  */
-export async function highlightWithPrism(root: HTMLElement): Promise<void> {
+async function highlightWithPrism(root: HTMLElement): Promise<void> {
 	if (!prismLoaded) {
 		prismLoaded = loadPrism().catch((error) => {
 			console.error('[RichMarkdown] loadPrism failed', error);

@@ -5,7 +5,7 @@ import { OllamaModelManagerModal } from './ollama-model-manager-modal';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 
-export const LLM_PROVIDER_OPTIONS: Array<{ value: string; labelKey: string }> = [
+const LLM_PROVIDER_OPTIONS: Array<{ value: string; labelKey: string }> = [
 	{ value: 'openai', labelKey: 'modals.provider.providers.openai' },
 	{ value: 'anthropic', labelKey: 'modals.provider.providers.anthropic' },
 	{ value: 'google', labelKey: 'modals.provider.providers.google' },

@@ -5,7 +5,7 @@ import { TestIds } from '@/ui/utils/test-ids';
 /**
  * Confirmation modal to replace window.confirm()
  */
-export class ConfirmModal extends Modal {
+class ConfirmModal extends Modal {
 	private message: string;
 	private onConfirm: () => void;
 	private onCancel?: () => void;

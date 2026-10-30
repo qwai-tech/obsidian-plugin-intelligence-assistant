@@ -1,6 +1,5 @@
 import { TFile, TFolder } from 'obsidian';
 import {
-	appendObsidianContextSnapshot,
 	buildObsidianContextSnapshot,
 } from '@/features/agent/obsidian-context-builder';
 
@@ -77,13 +76,5 @@ describe('obsidian context builder', () => {
 		expect(snapshot).not.toContain('[[Projects/Nested/B.md]]');
 		expect(snapshot).not.toContain('Archive/Old.md');
 		expect(snapshot).toContain('...and 1 more note(s).');
-	});
-
-	it('appends a snapshot after the user-visible task prompt', () => {
-		const combined = appendObsidianContextSnapshot('Summarize this note.', 'Obsidian context snapshot\nFile: [[A.md]]');
-
-		expect(combined).toContain('Summarize this note.');
-		expect(combined).toContain('---');
-		expect(combined).toContain('File: [[A.md]]');
 	});
 });

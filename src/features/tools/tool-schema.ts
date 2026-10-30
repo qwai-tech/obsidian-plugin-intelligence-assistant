@@ -27,7 +27,7 @@ export function validateToolArguments(
 	return { success: true, data: result.data };
 }
 
-export function parametersToZodObject(parameters: ToolParameter[]): z.ZodObject<z.ZodRawShape> {
+function parametersToZodObject(parameters: ToolParameter[]): z.ZodObject<z.ZodRawShape> {
 	const shape: Record<string, z.ZodType> = {};
 	for (const parameter of parameters) {
 		let field = zodForParameter(parameter);
