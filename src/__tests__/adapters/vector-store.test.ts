@@ -130,6 +130,27 @@ describe('VectorStore', () => {
 		expect(store.getStoredChunks().map(chunk => chunk.content).join('\n\n')).toBe('alpha\n\nbeta\n\ngamma');
 	});
 
+	it('a note deleted or renamed while it is being embedded leaves no chunks under its old path', async () => {
+		let release!: () => void;
+		const gate = new Promise<void>(resolve => { release = resolve; });
+		(EmbeddingManager.generateEmbedding as jest.Mock).mockImplementation(async () => {
+			await gate;
+			return [1, 0, 0];
+		});
+		const app = makeApp('alpha');
+		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
+		const deleted = store.addFile({ path: 'gone.md', basename: 'gone', stat: { mtime: 1 } } as any, makeConfig());
+		const moved = store.addFile({ path: 'old.md', basename: 'old', stat: { mtime: 1 } } as any, makeConfig());
+		await Promise.resolve();
+
+		const removal = store.removeFile('gone.md');
+		const rename = store.renameFile('old.md', 'new.md');
+		release();
+		await Promise.all([deleted, moved, removal, rename]);
+
+		expect(store.getStoredChunks().map(chunk => chunk.metadata.path)).toEqual(['new.md']);
+	});
+
 	it('removeFile drops only the matching file\'s chunks and persists', async () => {
 		const app = makeApp('alpha\n\nbeta');
 		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);

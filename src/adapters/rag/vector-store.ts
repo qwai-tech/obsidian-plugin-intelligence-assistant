@@ -93,39 +93,40 @@ export class VectorStore {
 	}
 
   addFile(file: TFile, config: RAGConfig): Promise<void> {
-    const previous = this.indexing.get(file.path) ?? Promise.resolve();
-    const run = previous.catch(() => undefined).then(() => this.indexFile(file, config));
-    this.indexing.set(file.path, run);
+    return this.enqueue(file.path, () => this.indexFile(file, config));
+  }
+
+  private enqueue<T>(path: string, work: () => Promise<T>): Promise<T> {
+    const previous = this.indexing.get(path) ?? Promise.resolve();
+    const run = previous.catch(() => undefined).then(work);
+    const settled = run.then(() => undefined, () => undefined);
+    this.indexing.set(path, settled);
     return run.finally(() => {
-      if (this.indexing.get(file.path) === run) this.indexing.delete(file.path);
+      if (this.indexing.get(path) === settled) this.indexing.delete(path);
     });
   }
 
   private async indexFile(file: TFile, config: RAGConfig): Promise<void> {
     await this.load();
+    const path = file.path;
     const content = await this.app.vault.read(file);
     const contentHash = stableHash(content);
-    const existing = this._chunks.filter(chunk => chunk.metadata.path === file.path);
+    const existing = this._chunks.filter(chunk => chunk.metadata.path === path);
     const upToDate = (chunk: DocumentChunk) => chunk.metadata.contentHash === contentHash
       && chunk.metadata.embeddingModel === config.embeddingModel
       && (!config.embeddingModel || chunk.embedding !== undefined);
     if (existing.length > 0 && existing.every(upToDate)) {
       return;
     }
-    this.chunkNorms.clear();
-    
-    // Split content into _chunks
     const _chunks = chunkText(content, config);
-    
-    // Remove existing _chunks for this file
-    this._chunks = this._chunks.filter(chunk => chunk.metadata.path !== file.path);
+    const fresh: DocumentChunk[] = [];
 
     const batchSize = 10; // Process 10 _chunks at a time
     for (let currentIndex = 0; currentIndex < _chunks.length; currentIndex += batchSize) {
       const batchEnd = Math.min(currentIndex + batchSize, _chunks.length);
 
       for (let i = currentIndex; i < batchEnd; i++) {
-          const chunkId = `${file.path}-${String(i)}`;
+          const chunkId = `${path}-${String(i)}`;
 
           // Generate embedding for the chunk content
           const embeddingModel = config.embeddingModel;
@@ -141,7 +142,7 @@ export class VectorStore {
           // Create combined text for embedding that includes path info if we don't have an embedding yet
           if (!embedding && config.embeddingModel) {
             try {
-              const combinedText = `${file.path ?? 'unknown'} ${file.basename ?? ''} ${_chunks[i] ?? ''}`;
+              const combinedText = `${path} ${file.basename ?? ''} ${_chunks[i] ?? ''}`;
               embedding = await this.generateEmbedding(combinedText, config.embeddingModel);
             } catch (error) {
               console.error(`Failed to generate combined embedding for chunk ${chunkId}:`, error);
@@ -154,7 +155,7 @@ export class VectorStore {
             embedding: embedding,
             metadata: {
               source: 'file',
-              path: file.path,
+              path,
               title: file.basename,
               timestamp: file.stat.mtime,
               contentHash,
@@ -162,7 +163,7 @@ export class VectorStore {
             }
           };
 
-          this._chunks.push(chunk);
+          fresh.push(chunk);
       }
 
       if (batchEnd < _chunks.length) {
@@ -170,6 +171,8 @@ export class VectorStore {
       }
     }
 
+    this._chunks = [...this._chunks.filter(chunk => chunk.metadata.path !== path), ...fresh];
+    this.chunkNorms.clear();
     await this.save();
   }
 
@@ -178,7 +181,11 @@ export class VectorStore {
    * persist.
    * Returns the number of chunks removed.
    */
-  async removeFile(path: string): Promise<number> {
+  removeFile(path: string): Promise<number> {
+    return this.enqueue(path, () => this.dropFile(path));
+  }
+
+  private async dropFile(path: string): Promise<number> {
     await this.load();
     const before = this._chunks.length;
     this._chunks = this._chunks.filter(chunk => chunk.metadata.path !== path);
@@ -195,7 +202,11 @@ export class VectorStore {
    * embeddings (the embedding vectors are unchanged by a rename — only the id /
    * metadata path move). Returns the number of chunks re-keyed.
    */
-  async renameFile(oldPath: string, newPath: string): Promise<number> {
+  renameFile(oldPath: string, newPath: string): Promise<number> {
+    return this.enqueue(oldPath, () => this.rekeyFile(oldPath, newPath));
+  }
+
+  private async rekeyFile(oldPath: string, newPath: string): Promise<number> {
     await this.load();
     let renamed = 0;
     for (const chunk of this._chunks) {
