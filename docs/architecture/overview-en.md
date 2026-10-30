@@ -30,7 +30,7 @@ Intelligence Assistant is a ports-and-adapters plugin organised by feature. `mai
 └───────────────────────────────────────────────────────────────┘
 ```
 
-Each feature keeps its types next to its code in `features/<name>/types/`; there is no shared `types/` folder. Each feature exposes one `index.ts` with explicit named exports (no `export *`); code outside the feature imports only from `@/features/<name>`.
+Each feature keeps its types next to its code in `features/<name>/types/`; there is no shared `types/` folder. Each feature exposes one `index.ts` with explicit named exports (no `export *`); code outside the feature imports only from `@/features/<name>`. Lint rejects `export *` everywhere, including the `packages/obsidian-llm` entry point.
 
 The import rules are enforced in `eslint.config.mts`, with no exemptions:
 

@@ -30,7 +30,7 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 └───────────────────────────────────────────────────────────────┘
 ```
 
-每个功能的类型都放在自己代码旁边的 `features/<名称>/types/` 中，不再有共享的 `types/` 目录。每个功能只暴露一个 `index.ts`，使用显式的具名导出（不用 `export *`）；功能外部的代码只能从 `@/features/<名称>` 导入。
+每个功能的类型都放在自己代码旁边的 `features/<名称>/types/` 中，不再有共享的 `types/` 目录。每个功能只暴露一个 `index.ts`，使用显式的具名导出（不用 `export *`）；功能外部的代码只能从 `@/features/<名称>` 导入。Lint 在所有位置禁止 `export *`，包括 `packages/obsidian-llm` 的入口。
 
 导入规则由 `eslint.config.mts` 强制执行，没有任何豁免：
 

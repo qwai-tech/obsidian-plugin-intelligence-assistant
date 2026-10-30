@@ -98,6 +98,10 @@ export default defineConfig([
         {
           selector: "CallExpression[callee.object.name=/^(document|window|activeWindow|activeDocument)$/][callee.property.name='addEventListener']",
           message: "Use this.registerDomEvent(target, type, handler) so the listener is detached on unload, instead of document/window addEventListener."
+        },
+        {
+          selector: "ExportAllDeclaration",
+          message: "Name each export explicitly instead of export *."
         }
       ],
 
