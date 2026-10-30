@@ -4,6 +4,7 @@ import type { McpConnection, ProcessLaunch } from '@/features/tools';
 
 const PROTOCOL_VERSION = '2025-06-18';
 const DEFAULT_REQUEST_TIMEOUT_MS = 60_000;
+const KILL_GRACE_MS = 3_000;
 
 
 interface JsonRpcMessage {
@@ -66,12 +67,18 @@ export class McpStdioSession implements McpConnection {
 		return !this.closed;
 	}
 
-	close(): Promise<void> {
+	async close(): Promise<void> {
 		if (!this.closed) {
 			this.fail(new Error('MCP session is closed'));
-			this.child.kill();
 		}
-		return Promise.resolve();
+		if (this.child.exitCode !== null || this.child.signalCode !== null) {
+			return;
+		}
+		const exited = new Promise<void>((resolve) => this.child.once('close', () => resolve()));
+		this.child.kill();
+		const forceKill = window.setTimeout(() => this.child.kill('SIGKILL'), KILL_GRACE_MS);
+		await exited;
+		window.clearTimeout(forceKill);
 	}
 
 	private send(message: { id?: number | string; method?: string; params?: unknown; result?: unknown; error?: unknown }): void {

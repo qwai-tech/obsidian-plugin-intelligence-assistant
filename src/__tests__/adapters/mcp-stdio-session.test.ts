@@ -22,6 +22,20 @@ describe('McpStdioSession', () => {
 		expect(called.content[0].text).toBe('MCP_SENTINEL hi');
 	});
 
+	it('close resolves only once the server process has exited', async () => {
+		const childPids = () => new Set((process as unknown as { _getActiveHandles(): Array<{ constructor: { name: string }; pid?: number }> })._getActiveHandles()
+			.filter(handle => handle.constructor.name === 'ChildProcess')
+			.map(handle => handle.pid));
+		const before = childPids();
+		const opened = await McpStdioSession.open({ command: process.execPath, args: [MOCK_SERVER], env: process.env as Record<string, string> }, CLIENT);
+		const [serverPid] = [...childPids()].filter(pid => !before.has(pid));
+
+		await opened.close();
+
+		expect(serverPid).toEqual(expect.any(Number));
+		expect(() => process.kill(serverPid as number, 0)).toThrow();
+	});
+
 	it('rejects with the server error message', async () => {
 		session = await McpStdioSession.open({ command: process.execPath, args: [MOCK_SERVER], env: process.env as Record<string, string> }, CLIENT);
 
