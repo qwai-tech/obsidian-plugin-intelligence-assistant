@@ -3780,3 +3780,19 @@ details[open] .ia-chat-message__summary::before {
 .agent-collapsible-section.is-collapsed .agent-collapsible-section__chevron {
 	transform: rotate(-90deg);
 }
+
+.ia-list-row .setting-item-name {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	flex-wrap: wrap;
+}
+
+.ia-list-row__icon {
+	display: inline-flex;
+	color: var(--text-muted);
+}
+
+.ia-list-row .setting-item-description > div + div {
+	margin-top: var(--size-2-1);
+}

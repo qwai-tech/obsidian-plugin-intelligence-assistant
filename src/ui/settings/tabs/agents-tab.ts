@@ -9,11 +9,10 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import type { Agent } from '@/features/agent';
 import type { ModelInfo } from '@/features/llm';
 import { t } from '@/i18n';
-import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import { AgentEditModal } from '@/ui/modals/agent-edit-modal';
 import { DEFAULT_AGENT_ID, DEFAULT_MAX_STEPS } from '@/core/constants';
-import { renderIcon } from '@/ui/utils/icon';
+import { renderListRow, tagButton } from '@/ui/settings/list-row';
 
 export function displayAgentsTab(
 	containerEl: HTMLElement,
@@ -80,15 +79,6 @@ export function displayAgentsTab(
 		return;
 	}
 
-	const table = createTable(containerEl, [
-		t('settings.agents.tableHeaders.agent'),
-		t('settings.agents.tableHeaders.model'),
-		t('settings.agents.tableHeaders.capabilities'),
-		t('settings.agents.tableHeaders.tools'),
-		t('settings.agents.tableHeaders.actions')
-	]);
-	const tbody = table.tBodies[0];
-
 	const promptMap = new Map(plugin.settings.systemPrompts.map(prompt => [prompt.id, prompt]));
 	const modelLookup = new Map<string, ModelInfo>();
 	const registerModel = (key: string, model: ModelInfo) => {
@@ -112,12 +102,6 @@ export function displayAgentsTab(
 		}
 	}
 
-	const formatLabel = (value: string): string => value.split(/[-_]/g).map(word => {
-		if (!word) return word;
-		if (word.length <= 2) return word.toUpperCase();
-		return word.charAt(0).toUpperCase() + word.slice(1);
-	}).join(' ');
-
 	const agents = [...plugin.settings.agents].sort((a, b) => {
 		const aDefault = a.id === DEFAULT_AGENT_ID;
 		const bDefault = b.id === DEFAULT_AGENT_ID;
@@ -126,167 +110,82 @@ export function displayAgentsTab(
 		return a.name.localeCompare(b.name);
 	});
 
-	agents.forEach(agent => {
-		// Defensive default for toolAccess in case an agent landed here
-		// without going through the load-time migration (e.g. directly
-		// crafted JSON).
+	for (const agent of agents) {
 		agent.toolAccess ??= { sources: {} };
-		const row = tbody.insertRow();
-		row.addClass('ia-table-row');
-		row.setAttribute('data-testid', TestIds.settings.agentRow);
-		row.setAttribute('data-agent-id', agent.id);
-		row.setAttribute('data-agent-name', agent.name);
-
-		// Agent column
-		const agentCell = row.insertCell();
-		agentCell.addClass('ia-table-cell');
-		const agentStack = agentCell.createDiv('ia-table-stack');
-		const titleEl = agentStack.createDiv('ia-table-title');
-		const iconSpan = titleEl.createSpan();
-		iconSpan.addClass('ia-agent-icon');
-		renderIcon(iconSpan, agent.icon);
-		titleEl.appendText(agent.name);
-
-		if (agent.id === DEFAULT_AGENT_ID) {
-			const badges = agentStack.createDiv('ia-table-badges');
-			const tag = badges.createEl('span', { text: t('settings.agents.defaultBadge') });
-			tag.addClass('ia-tag');
-		}
-
-		if (agent.description) {
-			agentStack.createDiv('ia-table-subtext').setText(agent.description);
-		}
-
 		const promptName = promptMap.get(agent.systemPromptId)?.name;
-		agentStack.createDiv('ia-table-subtext').setText(
-			promptName
-				? t('settings.agents.systemPrompt', { promptName })
-				: t('settings.agents.customPrompt')
-		);
-
-		// Model column
-		const modelCell = row.insertCell();
-		modelCell.addClass('ia-table-cell');
-		const modelStack = modelCell.createDiv('ia-table-stack');
-
-		// Determine what to display based on the model strategy
-		let displayModel = t('settings.agents.model.notSet');
-		let displaySubtext = t('settings.agents.model.notFound');
-
-		if (agent.modelStrategy.strategy === 'fixed' && agent.modelStrategy.modelId) {
-			const modelInfo = modelLookup.get(agent.modelStrategy.modelId) || null;
-			displayModel = modelInfo?.name || agent.modelStrategy.modelId;
-			if (modelInfo) {
-				displaySubtext = `${formatLabel(modelInfo.provider)} • ${modelInfo.id}`;
-			} else {
-				displaySubtext = t('settings.agents.model.notFound');
-			}
-		} else if (agent.modelStrategy.strategy === 'chat-view') {
-			displayModel = t('settings.agents.model.useChatView');
-			displaySubtext = t('settings.agents.model.useChatViewDesc');
-		} else if (agent.modelStrategy.strategy === 'default') {
-			displayModel = t('settings.agents.model.useDefault');
-			displaySubtext = t('settings.agents.model.useDefaultDesc');
-		}
-
-		const modelTitle = modelStack.createDiv('ia-table-title');
-		modelTitle.setText(displayModel);
-		modelStack.createDiv('ia-table-subtext').setText(displaySubtext);
-
-		// Capabilities column
-		const capsCell = row.insertCell();
-		capsCell.addClass('ia-table-cell');
-		const capsDiv = capsCell.createDiv('ia-table-badges');
-		const addCapability = (label: string) => {
-			const badge = capsDiv.createEl('span', { text: label });
-			badge.addClass('ia-tag');
-		};
-
-		if (agent.ragEnabled) addCapability('RAG');
-		if (agent.webSearchEnabled) addCapability('Web');
-
-		if (capsDiv.childElementCount === 0) {
-			capsCell.createDiv('ia-table-subtext').setText(t('settings.agents.capabilities.noSpecialModes'));
-		}
-
-		// Tools column
-		const toolsCell = row.insertCell();
-		toolsCell.addClass('ia-table-cell');
-		const toolsBadges = toolsCell.createDiv('ia-table-badges');
-
-		// Count tool badges from toolAccess (the source of truth post-Phase 5).
-		const sources = agent.toolAccess?.sources ?? {};
-		const builtInRule = sources['builtin:builtin'];
-		const builtInCount = builtInRule === 'all'
-			? plugin.settings.builtInTools.filter((t) => t.enabled).length
-			: (builtInRule?.length ?? 0);
-		const mcpServerCount = Object.keys(sources)
-			.filter((k) => k.startsWith('mcp:') && sources[k] === 'all').length;
-		const mcpToolCount = Object.entries(sources)
-			.filter(([k, v]) => k.startsWith('mcp:') && v !== 'all')
-			.reduce((sum, [, v]) => sum + (Array.isArray(v) ? v.length : 0), 0);
-
-		if (builtInCount > 0) {
-			const builtInBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.builtIn', { count: builtInCount }) });
-			builtInBadge.addClass('ia-tag');
-		}
-		if (mcpServerCount > 0) {
-			const mcpBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.mcpServer', { count: mcpServerCount }) });
-			mcpBadge.addClass('ia-tag');
-		}
-		if (mcpToolCount > 0) {
-			const toolBadge = toolsBadges.createEl('span', { text: t('settings.agents.tools.mcpTool', { count: mcpToolCount }) });
-			toolBadge.addClass('ia-tag');
-		}
-
-		if (toolsBadges.childElementCount === 0) {
-			toolsCell.createDiv('ia-table-subtext').setText(t('settings.agents.tools.noTools'));
-		}
-
-		// Actions column
-		const actionsCell = row.insertCell();
-		actionsCell.addClass('ia-table-cell');
-		actionsCell.addClass('ia-table-actions');
-
-		const editBtn = actionsCell.createEl('button', { text: t('settings.agents.actions.edit') });
-		editBtn.addClass('ia-button');
-		editBtn.addClass('ia-button--ghost');
-		editBtn.setAttribute('data-testid', TestIds.settings.agentEditBtn);
-		editBtn.setAttribute('data-agent-id', agent.id);
-		editBtn.addEventListener('click', () => {
-			new AgentEditModal(app, plugin, agent, async (updatedAgent) => {
-				const agentIndex = plugin.settings.agents.findIndex(a => a.id === updatedAgent.id);
-				if (agentIndex !== -1) {
-					await plugin.updateSettings((settings) => {
-						settings.agents[agentIndex] = updatedAgent;
-					});
-					refreshDisplay();
-				}
-			}).open();
+		const row = renderListRow(containerEl, {
+			name: agent.name,
+			icon: agent.icon,
+			badges: agent.id === DEFAULT_AGENT_ID ? [t('settings.agents.defaultBadge')] : [],
+			lines: [
+				agent.description,
+				[describeModel(agent), ...capabilities(agent), ...toolCounts(agent, plugin)].join(' · '),
+				promptName ? t('settings.agents.systemPrompt', { promptName }) : t('settings.agents.customPrompt'),
+			],
+			testId: TestIds.settings.agentRow,
+			attributes: { 'data-agent-id': agent.id, 'data-agent-name': agent.name },
 		});
 
-		const canDelete = agent.id !== DEFAULT_AGENT_ID && plugin.settings.agents.length > 1;
-		const deleteBtn = actionsCell.createEl('button', { text: canDelete ? t('settings.agents.actions.delete') : t('settings.agents.actions.protected') });
-		deleteBtn.addClass('ia-button');
-		deleteBtn.addClass('ia-button--danger');
-		deleteBtn.setAttribute('data-testid', TestIds.settings.agentDeleteBtn);
-		deleteBtn.setAttribute('data-agent-id', agent.id);
-		if (!canDelete) {
-			deleteBtn.setAttr('disabled', 'true');
-		} else {
-			deleteBtn.addEventListener('click', () => {
-				void (async () => {
-					if (await showConfirm(app, t('settings.agents.confirm.delete', { name: agent.name }))) {
-					const agentIndex = plugin.settings.agents.findIndex(a => a.id === agent.id);
+		row.addButton(button => {
+			button.setButtonText(t('settings.agents.actions.edit'));
+			tagButton(button.buttonEl, TestIds.settings.agentEditBtn, { 'data-agent-id': agent.id });
+			button.onClick(() => {
+				new AgentEditModal(app, plugin, agent, async (updatedAgent) => {
+					const agentIndex = plugin.settings.agents.findIndex(a => a.id === updatedAgent.id);
 					if (agentIndex !== -1) {
 						await plugin.updateSettings((settings) => {
-							settings.agents.splice(agentIndex, 1);
+							settings.agents[agentIndex] = updatedAgent;
 						});
 						refreshDisplay();
 					}
+				}).open();
+			});
+		});
+
+		if (agent.id !== DEFAULT_AGENT_ID && plugin.settings.agents.length > 1) {
+			row.addButton(button => {
+				button.setButtonText(t('settings.agents.actions.delete')).setDestructive();
+				tagButton(button.buttonEl, TestIds.settings.agentDeleteBtn, { 'data-agent-id': agent.id });
+				button.onClick(async () => {
+					if (await showConfirm(app, t('settings.agents.confirm.delete', { name: agent.name }))) {
+						await plugin.updateSettings((settings) => {
+							settings.agents = settings.agents.filter(candidate => candidate.id !== agent.id);
+						});
+						refreshDisplay();
 					}
-				})();
+				});
 			});
 		}
-	});
+	}
+
+	function describeModel(agent: Agent): string {
+		const strategy = agent.modelStrategy;
+		if (strategy.strategy === 'fixed' && strategy.modelId) {
+			return modelLookup.get(strategy.modelId)?.name ?? strategy.modelId;
+		}
+		if (strategy.strategy === 'chat-view') return t('settings.agents.model.useChatView');
+		if (strategy.strategy === 'default') return t('settings.agents.model.useDefault');
+		return t('settings.agents.model.notSet');
+	}
+}
+
+function capabilities(agent: Agent): string[] {
+	return [agent.ragEnabled ? 'RAG' : '', agent.webSearchEnabled ? 'Web' : ''].filter(Boolean);
+}
+
+function toolCounts(agent: Agent, plugin: IntelligenceAssistantPlugin): string[] {
+	const sources = agent.toolAccess?.sources ?? {};
+	const builtInRule = sources['builtin:builtin'];
+	const builtInCount = builtInRule === 'all'
+		? plugin.settings.builtInTools.filter(tool => tool.enabled).length
+		: (builtInRule?.length ?? 0);
+	const mcpServerCount = Object.keys(sources).filter(key => key.startsWith('mcp:') && sources[key] === 'all').length;
+	const mcpToolCount = Object.entries(sources)
+		.filter(([key, value]) => key.startsWith('mcp:') && value !== 'all')
+		.reduce((sum, [, value]) => sum + (Array.isArray(value) ? value.length : 0), 0);
+	return [
+		builtInCount > 0 ? t('settings.agents.tools.builtIn', { count: builtInCount }) : '',
+		mcpServerCount > 0 ? t('settings.agents.tools.mcpServer', { count: mcpServerCount }) : '',
+		mcpToolCount > 0 ? t('settings.agents.tools.mcpTool', { count: mcpToolCount }) : '',
+	].filter(Boolean);
 }

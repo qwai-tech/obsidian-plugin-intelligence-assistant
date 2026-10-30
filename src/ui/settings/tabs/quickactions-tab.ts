@@ -7,10 +7,10 @@ import { App, ButtonComponent, DropdownComponent, Modal, Setting } from 'obsidia
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { QuickActionConfig } from '@/features/settings';
 import { t } from '@/i18n';
-import { createTable } from '@/ui/utils/ui-helpers';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import { ModelManager } from '@qwai/obsidian-llm';
 import { TestIds } from '@/ui/utils/test-ids';
+import { renderListRow, tagButton } from '@/ui/settings/list-row';
 
 export function displayQuickActionsTab(
 	containerEl: HTMLElement,
@@ -72,115 +72,47 @@ export function displayQuickActionsTab(
 		return;
 	}
 
-	const table = createTable(containerEl, [
-		t('settings.quickActions.tableHeaders.action'),
-		t('settings.quickActions.tableHeaders.type'),
-		t('settings.quickActions.tableHeaders.model'),
-		t('settings.quickActions.tableHeaders.promptPreview'),
-		t('settings.quickActions.tableHeaders.actions')
-	]);
-	const tbody = table.tBodies[0];
+	plugin.settings.quickActions.forEach((action, index) => {
+		const displayPrompt = t(`settings.quickActions.builtIn.${action.id}.prompt`, { defaultValue: action.prompt });
+		const row = renderListRow(containerEl, {
+			name: t(`settings.quickActions.builtIn.${action.id}.name`, { defaultValue: action.name }),
+			badges: [t(`settings.quickActions.edit.actionType.${action.actionType}`, { defaultValue: action.actionType })],
+			lines: [
+				action.model || t('settings.quickActions.defaultModel'),
+				displayPrompt.length > 120 ? `${displayPrompt.substring(0, 120)}…` : displayPrompt,
+			],
+			testId: TestIds.settings.quickActionRow,
+			attributes: { 'data-action-id': action.id, 'data-action-name': action.name },
+		});
 
-	// Get available models for display
-	void ModelManager.getAllAvailableModels(plugin.settings.llmConfigs).then(models => {
-		const modelMap = new Map(models.map(m => [m.id, m.name]));
+		row.addToggle(toggle => {
+			tagButton(toggle.toggleEl as HTMLButtonElement, TestIds.settings.quickActionToggle, { 'data-action-id': action.id });
+			toggle.setValue(action.enabled).onChange(async (enabled) => {
+				await plugin.updateSettings((settings) => {
+					settings.quickActions[index].enabled = enabled;
+				});
+				refreshDisplay();
+			});
+		});
 
-		for (let i = 0; i < plugin.settings.quickActions.length; i++) {
-			const action = plugin.settings.quickActions[i];
-			const row = tbody.insertRow();
-			row.addClass('ia-table-row');
-			row.setAttribute('data-testid', TestIds.settings.quickActionRow);
-			row.setAttribute('data-action-id', action.id);
-			row.setAttribute('data-action-name', action.name);
+		row.addButton(button => {
+			button.setButtonText(t('settings.quickActions.editBtn'));
+			tagButton(button.buttonEl, TestIds.settings.quickActionEditBtn, { 'data-action-id': action.id });
+			button.onClick(() => openQuickActionEditModal(plugin, app, action, index, refreshDisplay));
+		});
 
-			// Action column with enable/disable toggle
-			const actionCell = row.insertCell();
-			actionCell.addClass('ia-table-cell');
-			const actionStack = actionCell.createDiv('ia-table-stack');
-
-			const titleContainer = actionStack.createDiv('ia-action-title-row');
-
-			const enableToggle = titleContainer.createEl('input', { type: 'checkbox' });
-			enableToggle.setAttribute('data-testid', TestIds.settings.quickActionToggle);
-			enableToggle.setAttribute('data-action-id', action.id);
-			enableToggle.checked = action.enabled;
-			enableToggle.addEventListener('change', () => {
-				void (async () => {
+		row.addButton(button => {
+			button.setButtonText(t('settings.quickActions.deleteBtn')).setDestructive();
+			tagButton(button.buttonEl, TestIds.settings.quickActionDeleteBtn, { 'data-action-id': action.id });
+			button.onClick(async () => {
+				if (await showConfirm(app, t('settings.quickActions.confirm.delete', { name: action.name }))) {
 					await plugin.updateSettings((settings) => {
-						settings.quickActions[i].enabled = enableToggle.checked;
+						settings.quickActions = settings.quickActions.filter(candidate => candidate.id !== action.id);
 					});
 					refreshDisplay();
-				})();
+				}
 			});
-
-			const titleEl = titleContainer.createDiv('ia-table-title');
-			const builtInNameKey = `settings.quickActions.builtIn.${action.id}.name`;
-			const displayName = t(builtInNameKey, { defaultValue: action.name });
-			titleEl.setText(displayName);
-
-			// Type column
-			const typeCell = row.insertCell();
-			typeCell.addClass('ia-table-cell');
-			const typeBadges = typeCell.createDiv('ia-table-badges');
-			const typeLabel = t(`settings.quickActions.edit.actionType.${action.actionType}`, { defaultValue: action.actionType });
-			const typeBadge = typeBadges.createEl('span', { text: typeLabel });
-			typeBadge.addClass('ia-tag');
-
-			// Model column
-			const modelCell = row.insertCell();
-			modelCell.addClass('ia-table-cell');
-			const modelStack = modelCell.createDiv('ia-table-stack');
-			const modelName = action.model
-				? (modelMap.get(action.model) || action.model)
-				: t('settings.quickActions.defaultModel');
-			modelStack.createDiv('ia-table-title').setText(modelName);
-
-			// Prompt preview column
-			const promptCell = row.insertCell();
-			promptCell.addClass('ia-table-cell');
-			const builtInPromptKey = `settings.quickActions.builtIn.${action.id}.prompt`;
-			const displayPrompt = t(builtInPromptKey, { defaultValue: action.prompt });
-			const promptPreview = displayPrompt.length > 60
-				? displayPrompt.substring(0, 60) + '...'
-				: displayPrompt;
-			promptCell.createDiv('ia-table-subtext').setText(promptPreview);
-
-			// Actions column
-			const actionsCell = row.insertCell();
-			actionsCell.addClass('ia-table-cell');
-			actionsCell.addClass('ia-table-actions');
-
-			// Edit button
-			const editBtn = actionsCell.createEl('button', { text: t('settings.quickActions.editBtn') });
-			editBtn.addClass('ia-button');
-			editBtn.addClass('ia-button--ghost');
-			editBtn.setAttribute('data-testid', TestIds.settings.quickActionEditBtn);
-			editBtn.setAttribute('data-action-id', action.id);
-			editBtn.addEventListener('click', () => {
-				void openQuickActionEditModal(plugin, app, action, i, refreshDisplay);
-			});
-
-			// Delete button
-			const deleteBtn = actionsCell.createEl('button', { text: t('settings.quickActions.deleteBtn') });
-			deleteBtn.addClass('ia-button');
-			deleteBtn.addClass('ia-button--danger');
-			deleteBtn.setAttribute('data-testid', TestIds.settings.quickActionDeleteBtn);
-			deleteBtn.setAttribute('data-action-id', action.id);
-			deleteBtn.addEventListener('click', () => {
-				void (async () => {
-						const confirmed = await showConfirm(
-							app,
-							t('settings.quickActions.confirm.delete', { name: action.name })
-						);
-					if (confirmed) {
-						await plugin.updateSettings((settings) => {
-							settings.quickActions.splice(i, 1);
-						});
-						refreshDisplay();
-					}
-				})();
-			});
-		}
+		});
 	});
 
 	// Usage info

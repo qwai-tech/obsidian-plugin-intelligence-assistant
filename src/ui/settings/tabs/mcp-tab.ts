@@ -3,12 +3,12 @@
  * Displays Model Context Protocol server management
  */
 
-import { App, Notice } from 'obsidian';
+import { App, Notice, Setting } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { MCPServerConfig, RegisteredTool } from '@/features/tools';
 import { t } from '@/i18n';
-import { createTable, createStatusIndicator } from '@/ui/utils/ui-helpers';
+import { createStatusIndicator } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import { MCPInspectorModal } from '@/ui/modals/mcp-inspector-modal';
 import { MCPServerModal } from '@/ui/modals/mcp-server-modal';
@@ -81,15 +81,6 @@ export function displayMCPTab(
 		return;
 	}
 
-	const table = createTable(containerEl, [
-		t('settings.mcp.tableHeaders.name'),
-		t('settings.mcp.tableHeaders.command'),
-		t('settings.mcp.tableHeaders.arguments'),
-		t('settings.mcp.tableHeaders.status'),
-		t('settings.mcp.tableHeaders.tools'),
-		t('settings.mcp.tableHeaders.actions')
-	]);
-	const tbody = table.tBodies[0];
 	const cacheFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 	plugin.services.tools.connectAutoMcpServers()
 		.then(changed => {
@@ -116,38 +107,21 @@ export function displayMCPTab(
 	}
 
 	plugin.settings.mcpServers.forEach((server, index) => {
-		const row = tbody.insertRow();
-		row.addClass('ia-table-row');
-		row.setAttribute('data-testid', TestIds.settings.mcpRow);
-		row.setAttribute('data-mcp-name', server.name);
+		const row = new Setting(containerEl);
+		row.settingEl.addClass('ia-list-row');
+		row.settingEl.setAttribute('data-testid', TestIds.settings.mcpRow);
+		row.settingEl.setAttribute('data-mcp-name', server.name);
+		row.setName(server.name || t('settings.mcp.untitled'));
 
-		// Name column
-		const nameCell = row.insertCell();
-		nameCell.addClass('ia-table-cell');
-		const nameStack = nameCell.createDiv('ia-table-stack');
-		nameStack.createDiv('ia-table-primary').setText(server.name || t('settings.mcp.untitled'));
+		const command = [server.command, ...(server.args ?? [])].filter(Boolean).join(' ');
+		row.descEl.createDiv({ cls: command ? 'ia-code' : '', text: command || t('settings.mcp.notConfigured') });
 		const envCount = server.env ? Object.keys(server.env).length : 0;
 		if (envCount > 0) {
-			nameStack.createDiv('ia-table-subtext').setText(t('settings.mcp.envVars', { count: envCount }));
+			row.descEl.createDiv({ text: t('settings.mcp.envVars', { count: envCount }) });
 		}
 
-		// Command column
-		const commandCell = row.insertCell();
-		commandCell.addClass('ia-table-cell');
-		const commandDisplay = commandCell.createDiv(server.command ? 'ia-code' : 'ia-table-subtext');
-		commandDisplay.setText(server.command || t('settings.mcp.notConfigured'));
-
-		// Arguments column
-		const argsCell = row.insertCell();
-		argsCell.addClass('ia-table-cell');
-		const argsPreview = server.args && server.args.length > 0 ? server.args.join(', ') : t('settings.mcp.noArgs');
-		const argsDisplay = argsCell.createDiv(server.args && server.args.length > 0 ? 'ia-code' : 'ia-table-subtext');
-		argsDisplay.setText(argsPreview);
-
 		// Status column
-		const statusCell = row.insertCell();
-		statusCell.addClass('ia-table-cell');
-		const statusStack = statusCell.createDiv('ia-table-stack');
+		const statusStack = row.descEl.createDiv();
 		const connectionMode = server.connectionMode ?? 'auto';
 		const cachedToolCount = server.cachedTools?.length ?? 0;
 		const cacheDate = server.cacheTimestamp ? new Date(server.cacheTimestamp) : null;
@@ -191,26 +165,8 @@ export function displayMCPTab(
 			statusStack.createDiv('ia-table-subtext').setText(statusDetails.join(' • '));
 		}
 
-		// Tools column
-		const toolsCell = row.insertCell();
-		toolsCell.addClass('ia-table-cell');
-		const toolsBadge = toolsCell.createSpan('ia-count-badge');
-		if (isConnected) {
-			toolsBadge.setText(toolCount.toString());
-		} else if (cachedToolCount > 0) {
-			toolsBadge.setText(cachedToolCount.toString());
-			toolsCell.createDiv('ia-table-subtext').setText(t('settings.mcp.cached'));
-		} else {
-			toolsBadge.setText('0');
-			if (!server.enabled) {
-				toolsCell.createDiv('ia-table-subtext').setText(t('settings.mcp.disabled'));
-			}
-		}
-
 		// Actions column
-		const actionsCell = row.insertCell();
-		actionsCell.addClass('ia-table-cell');
-		actionsCell.addClass('ia-table-actions');
+		const actionsCell = row.controlEl;
 
 		const editBtn = actionsCell.createEl('button', { text: t('settings.mcp.actions.edit') });
 		editBtn.addClass('ia-button');

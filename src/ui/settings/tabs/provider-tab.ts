@@ -3,12 +3,11 @@
  * Displays LLM provider management and configuration
  */
 
-import { App, Notice } from 'obsidian';
+import { Setting, App, Notice } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { LLMConfig } from '@/features/llm';
 import { t } from '@/i18n';
-import { createTable } from '@/ui/utils/ui-helpers';
 import { ProviderConfigModal } from '@/ui/modals/provider-config-modal';
 import { OllamaModelManagerModal } from '@/ui/modals/ollama-model-manager-modal';
 import { getProviderMeta } from '@/ui/provider-meta';
@@ -55,26 +54,20 @@ export function displayProviderTab(
 		return;
 	}
 
-	const table = createTable(containerEl, [t('settings.provider.tableHeaders.provider'), t('settings.provider.tableHeaders.status'), t('settings.provider.tableHeaders.actions')]);
-	const tbody = table.tBodies[0];
-
 	plugin.settings.llmConfigs.forEach((config, index) => {
 		// Normalize Ollama base URL to default if missing (helps with status detection)
 		const ollamaBaseUrl = config.provider === 'ollama'
 			? (config.baseUrl && config.baseUrl.trim() !== '' ? config.baseUrl.trim() : 'http://localhost:11434')
 			: undefined;
 
-		const row = tbody.insertRow();
-		row.addClass('ia-table-row');
-		row.addClass('provider-row'); // Add for test compatibility
-		row.setAttribute('data-testid', TestIds.settings.providerRow);
-		row.setAttribute('data-provider-id', config.provider);
+		const row = new Setting(containerEl);
+		row.settingEl.addClass('ia-list-row');
+		row.settingEl.setAttribute('data-testid', TestIds.settings.providerRow);
+		row.settingEl.setAttribute('data-provider-id', config.provider);
 
-		const providerCell = row.insertCell();
-		providerCell.addClass('ia-table-cell');
-		const providerStack = providerCell.createDiv('ia-table-stack');
+		const providerStack = row.descEl;
 		const providerMeta = getProviderMeta(config.provider);
-		const providerHeader = providerStack.createDiv('ia-provider-header');
+		const providerHeader = row.nameEl.createDiv('ia-provider-header');
 		if (providerMeta.iconSvg) {
 			const iconContainer = providerHeader.createDiv('ia-provider-icon');
 			const parser = new DOMParser();
@@ -104,9 +97,7 @@ export function displayProviderTab(
 			url.setText(urlToShow);
 		}
 
-		const statusCell = row.insertCell();
-		statusCell.addClass('ia-table-cell');
-		const statusStack = statusCell.createDiv('ia-table-stack');
+		const statusStack = row.descEl;
 
 		const modelCount = config.cachedModels?.length ?? 0;
 		const hasModels = modelCount > 0;
@@ -248,9 +239,7 @@ export function displayProviderTab(
 			refreshLine.setText(t('settings.provider.refresh.neverRefreshed'));
 		}
 
-		const actionsCell = row.insertCell();
-		actionsCell.addClass('ia-table-cell');
-		actionsCell.addClass('ia-table-actions');
+		const actionsCell = row.controlEl;
 
 		const editBtn = actionsCell.createEl('button', { text: t('settings.provider.actions.edit') });
 		editBtn.setAttribute('data-testid', TestIds.settings.providerEditBtn);

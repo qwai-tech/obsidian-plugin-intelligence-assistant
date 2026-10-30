@@ -49,10 +49,10 @@ export class QuickActionsSettingsPage extends BasePage {
 				throw new Error(`Quick action row not found: ${actionName}`);
 			}
 			const toggle = row.querySelector(`[data-testid="${toggleTestId}"]`);
-			if (!(toggle instanceof HTMLInputElement)) {
+			if (!(toggle instanceof HTMLElement)) {
 				throw new Error(`Quick action toggle not found: ${actionName}`);
 			}
-			if (toggle.checked !== target) {
+			if (toggle.classList.contains('is-enabled') !== target) {
 				toggle.click();
 			}
 		}, TestIds.settings.quickActionRow, TestIds.settings.quickActionToggle, name, enabled);
@@ -93,7 +93,7 @@ export class QuickActionsSettingsPage extends BasePage {
 			const toggle = row instanceof HTMLElement
 				? row.querySelector(`[data-testid="${toggleTestId}"]`)
 				: null;
-			return toggle instanceof HTMLInputElement ? toggle.checked : false;
+			return toggle instanceof HTMLElement ? toggle.classList.contains('is-enabled') : false;
 		}, TestIds.settings.quickActionRow, TestIds.settings.quickActionToggle, name);
 	}
 

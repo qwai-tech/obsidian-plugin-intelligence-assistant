@@ -7,9 +7,9 @@ import {App} from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import { t } from '@/i18n';
-import { createTable, createStatusIndicator } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import { SystemPromptEditModal } from '@/ui/modals/system-prompt-edit-modal';
+import { renderListRow, tagButton } from '@/ui/settings/list-row';
 
 export function displayPromptsTab(
 	containerEl: HTMLElement,
@@ -57,121 +57,54 @@ export function displayPromptsTab(
 		return;
 	}
 
-	const table = createTable(containerEl, [
-		t('settings.prompts.tableHeaders.name'),
-		t('settings.prompts.tableHeaders.contentPreview'),
-		t('settings.prompts.tableHeaders.created'),
-		t('settings.prompts.tableHeaders.updated'),
-		t('settings.prompts.tableHeaders.enabled'),
-		t('settings.prompts.tableHeaders.actions')
-	]);
-	const tbody = table.tBodies[0];
-
-	plugin.settings.systemPrompts.forEach((prompt, index) => {
-		const row = tbody.insertRow();
-		row.addClass('ia-table-row');
-		row.setAttribute('data-testid', TestIds.settings.promptRow);
-		row.setAttribute('data-prompt-id', prompt.id);
-		row.setAttribute('data-prompt-name', prompt.name);
-
-		// Name column
-		const nameCell = row.insertCell();
-		nameCell.addClass('ia-table-cell');
-		const nameStack = nameCell.createDiv('ia-table-stack');
-		const nameRow = nameStack.createDiv('ia-table-title-row');
-		nameRow.createDiv('ia-table-title').setText(prompt.name);
-		if (prompt.readonly) {
-			nameRow.createSpan('ia-badge ia-badge--info').setText('Built-in');
-		}
-		if (prompt.id) {
-			nameStack.createDiv('ia-table-subtext').setText(prompt.id);
-		}
-
-		// Content Preview column
-		const contentCell = row.insertCell();
-		contentCell.addClass('ia-table-cell');
-		contentCell.addClass('ia-table-subtext');
-		const previewText = prompt.content.length > 100
-			? prompt.content.substring(0, 100) + '...'
-			: prompt.content;
-		contentCell.setText(previewText);
-
-		// Created column
-		const createdCell = row.insertCell();
-		createdCell.addClass('ia-table-cell');
-		createdCell.setText(new Date(prompt.createdAt).toLocaleDateString());
-
-		// Updated column
-		const updatedCell = row.insertCell();
-		updatedCell.addClass('ia-table-cell');
-		updatedCell.setText(new Date(prompt.updatedAt).toLocaleDateString());
-
-		// Enabled column
-		const enabledCell = row.insertCell();
-		enabledCell.addClass('ia-table-cell');
-		enabledCell.addClass('ia-table-cell--center');
-		const statusHost = enabledCell.createDiv();
-		createStatusIndicator(statusHost, prompt.enabled ? 'success' : 'warning', prompt.enabled ? t('settings.prompts.status.enabled') : t('settings.prompts.status.disabled'));
-
-		// Actions column
-		const actionsCell = row.insertCell();
-		actionsCell.addClass('ia-table-cell');
-		actionsCell.addClass('ia-table-actions');
-
-		// Edit button (opens modal for full content review)
-		const editBtn = actionsCell.createEl('button', { text: prompt.readonly ? 'View' : t('settings.prompts.actions.edit') });
-		editBtn.addClass('ia-button');
-		editBtn.addClass('ia-button--ghost');
-		editBtn.setAttribute('data-testid', TestIds.settings.promptEditBtn);
-		editBtn.setAttribute('data-prompt-id', prompt.id);
-		editBtn.addEventListener('click', () => {
-			// Create a modal for viewing/editing the prompt content
-			new SystemPromptEditModal(app, prompt, async (updatedPrompt) => {
-				if (prompt.readonly) return;
-				// Find and update the prompt in settings
-				const promptIndex = plugin.settings.systemPrompts.findIndex(p => p.id === updatedPrompt.id);
-				if (promptIndex !== -1) {
-					await plugin.updateSettings((settings) => {
-						settings.systemPrompts[promptIndex] = updatedPrompt;
-					});
-					refreshDisplay();
-				}
-			}).open();
+	for (const prompt of plugin.settings.systemPrompts) {
+		const preview = prompt.content.length > 120 ? `${prompt.content.substring(0, 120)}…` : prompt.content;
+		const row = renderListRow(containerEl, {
+			name: prompt.name,
+			lines: [preview],
+			testId: TestIds.settings.promptRow,
+			attributes: { 'data-prompt-id': prompt.id, 'data-prompt-name': prompt.name },
 		});
 
-		// Enable or disable prompt
-		const toggleBtn = actionsCell.createEl('button', { text: prompt.enabled ? t('settings.prompts.actions.disable') : t('settings.prompts.actions.enable') });
-		toggleBtn.addClass('ia-button');
-		toggleBtn.addClass('ia-button--ghost');
-		toggleBtn.setAttribute('data-testid', TestIds.settings.promptToggleBtn);
-		toggleBtn.setAttribute('data-prompt-id', prompt.id);
-		toggleBtn.addEventListener('click', () => {
-			void (async () => {
+		row.addToggle(toggle => {
+			tagButton(toggle.toggleEl as HTMLButtonElement, TestIds.settings.promptToggleBtn, { 'data-prompt-id': prompt.id });
+			toggle.setTooltip(prompt.enabled ? t('settings.prompts.actions.disable') : t('settings.prompts.actions.enable'));
+			toggle.setValue(prompt.enabled).onChange(async (enabled) => {
 				await plugin.updateSettings(() => {
-					prompt.enabled = !prompt.enabled;
+					prompt.enabled = enabled;
 					prompt.updatedAt = Date.now();
 				});
 				refreshDisplay();
-			})();
+			});
 		});
 
-		// Delete button
+		row.addButton(button => {
+			button.setButtonText(t('settings.prompts.actions.edit'));
+			tagButton(button.buttonEl, TestIds.settings.promptEditBtn, { 'data-prompt-id': prompt.id });
+			button.onClick(() => {
+				new SystemPromptEditModal(app, prompt, async (updatedPrompt) => {
+					if (prompt.readonly) return;
+					await plugin.updateSettings((settings) => {
+						settings.systemPrompts = settings.systemPrompts.map(candidate => candidate.id === updatedPrompt.id ? updatedPrompt : candidate);
+					});
+					refreshDisplay();
+				}).open();
+			});
+		});
+
 		if (!prompt.readonly) {
-			const deleteBtn = actionsCell.createEl('button', { text: t('settings.prompts.actions.delete') });
-			deleteBtn.addClass('ia-button');
-			deleteBtn.addClass('ia-button--danger');
-			deleteBtn.setAttribute('data-testid', TestIds.settings.promptDeleteBtn);
-			deleteBtn.setAttribute('data-prompt-id', prompt.id);
-			deleteBtn.addEventListener('click', () => {
-				void (async () => {
+			row.addButton(button => {
+				button.setButtonText(t('settings.prompts.actions.delete')).setDestructive();
+				tagButton(button.buttonEl, TestIds.settings.promptDeleteBtn, { 'data-prompt-id': prompt.id });
+				button.onClick(async () => {
 					if (await showConfirm(app, t('settings.prompts.confirm.delete', { name: prompt.name }))) {
 						await plugin.updateSettings((settings) => {
-							settings.systemPrompts.splice(index, 1);
+							settings.systemPrompts = settings.systemPrompts.filter(candidate => candidate.id !== prompt.id);
 						});
 						refreshDisplay();
 					}
-				})();
+				});
 			});
 		}
-	});
+	}
 }
