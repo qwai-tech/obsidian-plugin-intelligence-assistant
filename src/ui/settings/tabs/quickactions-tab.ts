@@ -3,7 +3,7 @@
  * Displays and manages AI-powered quick actions for editor context menu
  */
 
-import { App, ButtonComponent, Modal, Setting } from 'obsidian';
+import { App, ButtonComponent, DropdownComponent, Modal, Setting } from 'obsidian';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { QuickActionConfig } from '@/features/settings';
 import { t } from '@/i18n';
@@ -250,22 +250,18 @@ function openQuickActionEditModal(
 				});
 
 			// Model
-			void ModelManager.getAllAvailableModels(this.plugin.settings.llmConfigs).then(models => {
-				new Setting(contentEl)
-					.setName(t('settings.quickActions.edit.model.name'))
-					.setDesc(t('settings.quickActions.edit.model.desc'))
-					.addDropdown(dropdown => {
-						dropdown.selectEl.setAttribute('data-testid', TestIds.settings.quickActionModalModelSelect);
-						dropdown.addOption('', t('settings.quickActions.edit.model.default'));
-						models.forEach(model => {
-							dropdown.addOption(model.id, model.name);
-						});
-						dropdown.setValue(this.action.model || '');
-						dropdown.onChange(value => {
+			new Setting(contentEl)
+				.setName(t('settings.quickActions.edit.model.name'))
+				.setDesc(t('settings.quickActions.edit.model.desc'))
+				.addDropdown(dropdown => {
+					dropdown.selectEl.setAttribute('data-testid', TestIds.settings.quickActionModalModelSelect);
+					dropdown.addOption('', t('settings.quickActions.edit.model.default'))
+						.setValue(this.action.model || '')
+						.onChange(value => {
 							this.action.model = value || undefined;
 						});
-					});
-			});
+					void this.addModelOptions(dropdown);
+				});
 
 			// Prompt
 			new Setting(contentEl)
@@ -310,6 +306,14 @@ function openQuickActionEditModal(
 		onClose(): void {
 			const { contentEl } = this;
 			contentEl.empty();
+		}
+
+		private async addModelOptions(dropdown: DropdownComponent): Promise<void> {
+			const models = await ModelManager.getAllAvailableModels(this.plugin.settings.llmConfigs);
+			for (const model of models) {
+				dropdown.addOption(model.id, model.name);
+			}
+			dropdown.setValue(this.action.model || '');
 		}
 	}
 
