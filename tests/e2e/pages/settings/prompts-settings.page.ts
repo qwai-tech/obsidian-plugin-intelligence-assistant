@@ -12,14 +12,18 @@ export class PromptsSettingsPage extends BasePage {
 		await this.waitFor(TestIds.settings.promptAddBtn);
 	}
 
-	async addPrompt(): Promise<void> {
+	async addPrompt(values: PromptModalValues): Promise<void> {
 		await this.open();
 		await this.click(TestIds.settings.promptAddBtn);
-		await this.waitForPromptRow('New Prompt');
+		await this.fillPromptModal(values, 'New Prompt');
 	}
 
 	async editPrompt(currentName: string, values: PromptModalValues): Promise<void> {
 		await this.clickPromptAction(TestIds.settings.promptEditBtn, currentName);
+		await this.fillPromptModal(values, currentName);
+	}
+
+	private async fillPromptModal(values: PromptModalValues, currentName: string): Promise<void> {
 		await this.waitFor(TestIds.settings.promptModalNameInput);
 		if (values.name !== undefined) {
 			await this.type(TestIds.settings.promptModalNameInput, values.name);

@@ -14,8 +14,8 @@ describe('System prompt settings', () => {
 	});
 
 	it('creates, edits, disables, persists, and deletes a system prompt', async () => {
-		await prompts.addPrompt();
-		await prompts.editPrompt('New Prompt', {
+		await prompts.addPrompt({ name: 'E2E Draft Prompt', content: 'Draft content.' });
+		await prompts.editPrompt('E2E Draft Prompt', {
 			name: 'E2E System Prompt',
 			content: 'You are the E2E system prompt sentinel.',
 		});

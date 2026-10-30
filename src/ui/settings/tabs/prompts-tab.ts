@@ -34,17 +34,20 @@ export function displayPromptsTab(
 	addBtn.addClass('ia-button--primary');
 	addBtn.setAttribute('data-testid', TestIds.settings.promptAddBtn);
 	addBtn.addEventListener('click', () => {
-		void plugin.updateSettings(settings => {
-			settings.systemPrompts.push({
-				id: `prompt-${Date.now()}`,
-				name: 'New Prompt',
-				content: 'You are a helpful assistant.',
-				enabled: true,
-				createdAt: Date.now(),
-				updatedAt: Date.now()
+		const draft = {
+			id: `prompt-${Date.now()}`,
+			name: 'New Prompt',
+			content: 'You are a helpful assistant.',
+			enabled: true,
+			createdAt: Date.now(),
+			updatedAt: Date.now()
+		};
+		new SystemPromptEditModal(app, draft, async (created) => {
+			await plugin.updateSettings(settings => {
+				settings.systemPrompts.push(created);
 			});
-		});
-		refreshDisplay();
+			refreshDisplay();
+		}).open();
 	});
 
 	// Display existing prompts in a table if they exist
