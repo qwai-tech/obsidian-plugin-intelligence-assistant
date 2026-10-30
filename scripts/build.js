@@ -228,6 +228,7 @@ if you want to view the source, please visit the github repository of this plugi
                 outfile: this.config.outputFile,
                 plugins: [aliasPlugin, cssPlugin],
                 minify: this.isProduction,
+                metafile: this.analyze,
                 define: this.isProduction ? {
                     'process.env.NODE_ENV': '"production"'
                 } : undefined
@@ -237,7 +238,8 @@ if you want to view the source, please visit the github repository of this plugi
                 logger.info('👀 Watching for changes...');
                 await context.watch();
             } else {
-                await context.rebuild();
+                const result = await context.rebuild();
+                this.metafile = result.metafile;
                 await context.dispose(); // Clean up esbuild context
                 logger.success('esbuild completed');
 
@@ -282,6 +284,18 @@ if you want to view the source, please visit the github repository of this plugi
         logger.info(`📊 Build Analysis:`);
         logger.info(`   Size: ${FileUtils.formatFileSize(info.size)}`);
         logger.info(`   Modified: ${info.modified.toLocaleString()}`);
+        if (this.metafile) {
+            const inputs = Object.entries(this.metafile.outputs[this.config.outputFile]?.inputs ?? {});
+            const byPackage = new Map();
+            for (const [file, { bytesInOutput }] of inputs) {
+                const match = file.match(/node_modules\/((?:@[^/]+\/)?[^/]+)/);
+                const key = match ? match[1] : file.startsWith('packages/') ? 'packages/obsidian-llm' : file.split('/').slice(0, 2).join('/');
+                byPackage.set(key, (byPackage.get(key) ?? 0) + bytesInOutput);
+            }
+            logger.info('   Largest contributors:');
+            [...byPackage.entries()].sort((a, b) => b[1] - a[1]).slice(0, 15)
+                .forEach(([name, bytes]) => logger.muted(`     ${FileUtils.formatFileSize(bytes).padStart(10)}  ${name}`));
+        }
         
         // Analyze dependencies if possible
         try {
