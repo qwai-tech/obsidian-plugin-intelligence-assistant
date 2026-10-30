@@ -1,4 +1,4 @@
-import { Setting } from 'obsidian';
+import { SecretComponent, Setting, type App } from 'obsidian';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
 
 type KeysOf<T, V> = { [K in keyof T]-?: NonNullable<T[K]> extends V ? K : never }[keyof T] & string;
@@ -99,6 +99,12 @@ export class SettingsForm<T extends object> {
 				.setValue((this.read<string[]>(key) ?? []).join(', '))
 				.onChange(value => this.write(key, parseList(value)));
 		});
+	}
+
+	secret<K extends KeysOf<T, string>>(key: K, field: FieldOptions, app: App): Setting {
+		return this.setting(key, field).addComponent(el => new SecretComponent(app, el)
+			.setValue(this.read<string>(key) ?? '')
+			.onChange(value => this.write(key, value || undefined)));
 	}
 
 	private setting(key: string, field: FieldOptions): Setting {

@@ -1366,7 +1366,6 @@
       "save": "Uložit",
       "validation": {
         "selectProvider": "Vyberte typ poskytovatele",
-        "apiKeyTooLong": "API klíč je příliš dlouhý. Maximální délka je 500 znaků.",
         "invalidUrl": "Neplatný formát základní URL. Zadejte platnou URL (např. https://api.example.com)"
       }
     },

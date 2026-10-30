@@ -1381,7 +1381,6 @@
       "save": "保存",
       "validation": {
         "selectProvider": "请选择服务商类型",
-        "apiKeyTooLong": "API 密钥过长，最大长度为 500 个字符。",
         "invalidUrl": "Base URL 格式无效，请输入有效的 URL（例如 https://api.example.com）"
       }
     },

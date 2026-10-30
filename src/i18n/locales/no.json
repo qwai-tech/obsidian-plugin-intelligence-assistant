@@ -1366,7 +1366,6 @@
       "save": "Lagre",
       "validation": {
         "selectProvider": "Velg en leverandørtype",
-        "apiKeyTooLong": "API-nøkkelen er for lang. Maksimal lengde er 500 tegn.",
         "invalidUrl": "Ugyldig basis-URL-format. Skriv inn en gyldig URL (f.eks. https://api.example.com)"
       }
     },

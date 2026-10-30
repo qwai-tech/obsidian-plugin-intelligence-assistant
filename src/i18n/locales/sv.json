@@ -1366,7 +1366,6 @@
       "save": "Spara",
       "validation": {
         "selectProvider": "Välj en leverantörstyp",
-        "apiKeyTooLong": "API-nyckeln är för lång. Maximal längd är 500 tecken.",
         "invalidUrl": "Ogiltigt bas-URL-format. Ange en giltig URL (t.ex. https://api.example.com)"
       }
     },

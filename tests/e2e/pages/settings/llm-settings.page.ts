@@ -3,7 +3,7 @@ import { TestIds } from '../../support/testids';
 
 interface ProviderFormValues {
 	provider?: string;
-	apiKey?: string;
+	apiKey?: { secret: string; value: string };
 	baseUrl?: string;
 	modelFilter?: string;
 }
@@ -91,11 +91,30 @@ export class LlmSettingsPage extends BasePage {
 			await this.type(TestIds.settings.providerModalModelFilterInput, values.modelFilter);
 		}
 		if (values.apiKey !== undefined) {
-			await this.type(TestIds.settings.providerModalApiKeyInput, values.apiKey);
+			await this.linkSecret(TestIds.settings.providerModalApiKeyInput, values.apiKey.secret, values.apiKey.value);
 		}
 		if (values.baseUrl !== undefined) {
 			await this.type(TestIds.settings.providerModalBaseUrlInput, values.baseUrl);
 		}
+	}
+
+	async readSecret(secret: string): Promise<string | null> {
+		return browser.execute((id) => (window as unknown as {
+			app: { secretStorage: { getSecret(id: string): string | null } };
+		}).app.secretStorage.getSecret(id), secret);
+	}
+
+	private async linkSecret(testId: string, secret: string, value: string): Promise<void> {
+		await browser.execute((id, text) => (window as unknown as {
+			app: { secretStorage: { setSecret(id: string, secret: string): void } };
+		}).app.secretStorage.setSecret(id, text), secret, value);
+		await this.waitFor(testId);
+		await this.$testid(testId).$('button').click();
+		const picker = $('.modal.mod-secret');
+		await picker.waitForDisplayed({ timeout: 10_000, timeoutMsg: 'Secret picker did not open' });
+		await picker.$(`.suggestion-title=${secret}`).click();
+		await picker.$('button.mod-cta').click();
+		await picker.waitForDisplayed({ reverse: true, timeout: 10_000, timeoutMsg: 'Secret picker did not close' });
 	}
 
 	private async clickProviderAction(testId: string, providerId: string): Promise<void> {

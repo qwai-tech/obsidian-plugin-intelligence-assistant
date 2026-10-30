@@ -1366,7 +1366,6 @@
       "save": "บันทึก",
       "validation": {
         "selectProvider": "โปรดเลือกประเภทผู้ให้บริการ",
-        "apiKeyTooLong": "คีย์ API ยาวเกินไป ความยาวสูงสุดคือ 500 ตัวอักษร",
         "invalidUrl": "รูปแบบ Base URL ไม่ถูกต้อง โปรดป้อน URL ที่ถูกต้อง (เช่น https://api.example.com)"
       }
     },

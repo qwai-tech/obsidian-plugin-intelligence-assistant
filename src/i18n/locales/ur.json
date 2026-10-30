@@ -1366,7 +1366,6 @@
       "save": "محفوظ",
       "validation": {
         "selectProvider": "براہ کرم فراہم کنندہ کی قسم منتخب کریں",
-        "apiKeyTooLong": "API کی بہت لمبی ہے۔ زیادہ سے زیادہ لمبائی 500 حروف ہے۔",
         "invalidUrl": "غلط بنیادی URL فارمیٹ۔ براہ کرم ایک درست URL درج کریں (مثلاً https://api.example.com)"
       }
     },

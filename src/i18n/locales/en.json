@@ -1381,7 +1381,6 @@
       "save": "Save",
       "validation": {
         "selectProvider": "Please select a provider type",
-        "apiKeyTooLong": "API key is too long. Maximum length is 500 characters.",
         "invalidUrl": "Invalid base URL format. Please enter a valid URL (e.g., https://api.example.com)"
       }
     },

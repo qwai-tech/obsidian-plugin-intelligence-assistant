@@ -1366,7 +1366,6 @@
       "save": "Desa",
       "validation": {
         "selectProvider": "Seleccioneu un tipus de proveïdor",
-        "apiKeyTooLong": "La clau API és massa llarga. La longitud màxima és de 500 caràcters.",
         "invalidUrl": "Format d'URL base no vàlid. Introduïu una URL vàlida (p. ex. https://api.example.com)"
       }
     },

@@ -1366,7 +1366,6 @@
       "save": "Tallenna",
       "validation": {
         "selectProvider": "Valitse palveluntarjoajan tyyppi",
-        "apiKeyTooLong": "API-avain on liian pitkä. Enimmäispituus on 500 merkkiä.",
         "invalidUrl": "Virheellinen perus-URL-muoto. Syötä kelvollinen URL (esim. https://api.example.com)"
       }
     },

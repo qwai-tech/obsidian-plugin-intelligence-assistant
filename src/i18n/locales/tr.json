@@ -1366,7 +1366,6 @@
       "save": "Kaydet",
       "validation": {
         "selectProvider": "Lütfen bir sağlayıcı türü seçin",
-        "apiKeyTooLong": "API anahtarı çok uzun. Maksimum uzunluk 500 karakterdir.",
         "invalidUrl": "Geçersiz temel URL biçimi. Lütfen geçerli bir URL girin (örn. https://api.example.com)"
       }
     },

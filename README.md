@@ -2,7 +2,7 @@
 
 Turn your vault into an **Obsidian-Native Agentic Workspace**. Intelligence Assistant is an autonomous AI agent that deeply understands your vault's structure, links, and canvas. It can independently plan and execute complex knowledge tasks—from organizing folders to building mind maps—all while ensuring safety through a **Proposal-First** execution model.
 
-> Desktop only. Requires Obsidian v1.7.2+.
+> Desktop only. Requires Obsidian v1.11.4+.
 
 ## 🚀 The Agentic Evolution
 
@@ -36,8 +36,8 @@ This plugin has evolved beyond a simple chat interface into a full **SPAR (Sense
 
 | Requirement | Details |
 |---|---|
-| Obsidian | v1.7.2 or later (desktop only) |
-| LLM API key | OpenAI, Anthropic, Google, DeepSeek, etc. |
+| Obsidian | v1.11.4 or later (desktop only) |
+| LLM API key | OpenAI, Anthropic, Google, DeepSeek, etc. Keys live in Obsidian's Keychain; the plugin saves only the secret's name, and moves keys saved by older versions there on first start. |
 
 ## 🤖 Agents
 

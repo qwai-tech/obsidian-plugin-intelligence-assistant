@@ -1366,7 +1366,6 @@
       "save": "Išsaugoti",
       "validation": {
         "selectProvider": "Pasirinkite tiekėjo tipą",
-        "apiKeyTooLong": "API raktas per ilgas. Maksimalus ilgis yra 500 simbolių.",
         "invalidUrl": "Netinkamas bazinio URL formatas. Įveskite galiojantį URL (pvz., https://api.example.com)"
       }
     },

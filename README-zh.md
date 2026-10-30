@@ -2,7 +2,7 @@
 
 将你的知识库变成 **Obsidian 原生智能体工作空间**。Intelligence Assistant 是一个自治的 AI Agent，它深度理解你 Vault 的结构、链接和白板（Canvas）。它能独立规划并执行复杂的知识任务——从整理文件夹到构建思维导图——同时通过 **“提案优先 (Proposal-First)”** 执行模型确保数据安全。
 
-> 仅支持桌面端。需要 Obsidian v1.7.2+。
+> 仅支持桌面端。需要 Obsidian v1.11.4+。
 
 ## 🚀 智能体进化
 
@@ -36,8 +36,8 @@
 
 | 要求 | 详情 |
 |---|---|
-| Obsidian | v1.7.2 或更高版本（仅桌面端） |
-| LLM API Key | OpenAI, Anthropic, Google, DeepSeek 等 |
+| Obsidian | v1.11.4 或更高版本（仅桌面端） |
+| LLM API Key | OpenAI, Anthropic, Google, DeepSeek 等。密钥保存在 Obsidian 钥匙串中，插件只保存密钥名称；旧版本保存的密钥会在首次启动时自动迁移。 |
 
 ## 🤖 智能代理
 

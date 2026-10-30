@@ -55,7 +55,7 @@ The import rules are enforced in `eslint.config.mts`, with no exemptions:
 
 ## Features — `src/features/`
 
-**settings**: `SettingsStore` loads, migrates (`settings-migrations.ts`) and saves settings. A save writes only the units that changed (`config`, `providers`, `prompts`, `agents`, `mcp`) and notifies `onChange` subscribers; the plugin uses that to refresh RAG and the chat model list. `types/settings.ts` holds `PluginSettings`.
+**settings**: `SettingsStore` loads, migrates (`settings-migrations.ts`) and saves settings. API keys live in Obsidian's secret storage behind the `SecretVault` port (`settings-secrets.ts`, adapter `adapters/obsidian/obsidian-secret-vault.ts`): settings keep the secret's name, the store fills in the key on load and strips it from every write. A save writes only the units that changed (`config`, `providers`, `prompts`, `agents`, `mcp`) and notifies `onChange` subscribers; the plugin uses that to refresh RAG and the chat model list. `types/settings.ts` holds `PluginSettings`.
 
 **agent**:
 

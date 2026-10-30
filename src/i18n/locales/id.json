@@ -1366,7 +1366,6 @@
       "save": "Simpan",
       "validation": {
         "selectProvider": "Harap pilih jenis penyedia",
-        "apiKeyTooLong": "Kunci API terlalu panjang. Panjang maksimum adalah 500 karakter.",
         "invalidUrl": "Format URL dasar tidak valid. Harap masukkan URL yang valid (misalnya, https://api.example.com)"
       }
     },

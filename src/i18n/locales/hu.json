@@ -1366,7 +1366,6 @@
       "save": "Mentés",
       "validation": {
         "selectProvider": "Kérjük, válasszon egy szolgáltató típust",
-        "apiKeyTooLong": "Az API-kulcs túl hosszú. A maximális hossz 500 karakter.",
         "invalidUrl": "Érvénytelen alap URL formátum. Kérjük, adjon meg érvényes URL-t (pl. https://api.example.com)"
       }
     },

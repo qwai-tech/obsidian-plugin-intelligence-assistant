@@ -1366,7 +1366,6 @@
       "save": "Spremi",
       "validation": {
         "selectProvider": "Odaberite vrstu pružatelja",
-        "apiKeyTooLong": "API ključ je predugačak. Maksimalna duljina je 500 znakova.",
         "invalidUrl": "Nevaljani format osnovnog URL-a. Unesite valjani URL (npr. https://api.example.com)"
       }
     },

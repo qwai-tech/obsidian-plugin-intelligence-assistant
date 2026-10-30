@@ -1366,7 +1366,6 @@
       "save": "Speichern",
       "validation": {
         "selectProvider": "Bitte einen Anbietertyp auswählen",
-        "apiKeyTooLong": "API-Schlüssel ist zu lang. Maximale Länge beträgt 500 Zeichen.",
         "invalidUrl": "Ungültiges Basis-URL-Format. Bitte eine gültige URL eingeben (z. B. https://api.example.com)"
       }
     },

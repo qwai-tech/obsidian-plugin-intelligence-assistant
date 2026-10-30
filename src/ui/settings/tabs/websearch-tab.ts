@@ -13,14 +13,9 @@ import { SettingsForm } from '@/ui/settings/settings-form';
 // written instead of being normalized to sentence case.
 const EXAMPLE_PLACEHOLDERS = {
 	searchLanguage: 'en',
-	serpApiKey: 'sk-...',
 	googleEngineId: 'search-engine-id',
 	serpApiUrl: 'https://serpapi.com/search',
-	tavilyKey: 'tvly-...',
 	searxngUrl: 'https://searxng.example.com/search',
-	braveKey: 'brv-...',
-	qwantKey: 'qwant-...',
-	mojeekKey: 'mjk-...',
 } as const;
 
 const TIME_RANGES = ['any', 'h', 'd', 'w', 'm', 'y'] as const;
@@ -61,12 +56,12 @@ export function displayWebSearchTab(
 	form.text('excludeDomains', field('excludeDomains'), { placeholder: 'spam.example.com', optional: true });
 
 	subheading(t('settings.websearch.apiCredentials'));
-	form.text('apiKey', field('apiKey'), { placeholder: EXAMPLE_PLACEHOLDERS.serpApiKey, optional: true });
+	form.secret('apiKeySecret', field('apiKey'), plugin.app);
 	form.text('googleCseId', field('googleCseId'), { placeholder: EXAMPLE_PLACEHOLDERS.googleEngineId, optional: true });
 	form.text('serpapiEndpoint', field('serpapiEndpoint'), { placeholder: EXAMPLE_PLACEHOLDERS.serpApiUrl, optional: true });
-	form.text('tavilyApiKey', field('tavilyApiKey'), { placeholder: EXAMPLE_PLACEHOLDERS.tavilyKey, optional: true });
+	form.secret('tavilyApiKeySecret', field('tavilyApiKey'), plugin.app);
 	form.text('searxngEndpoint', field('searxngEndpoint'), { placeholder: EXAMPLE_PLACEHOLDERS.searxngUrl, optional: true });
-	form.text('braveApiKey', field('braveApiKey'), { placeholder: EXAMPLE_PLACEHOLDERS.braveKey, optional: true });
-	form.text('qwantApiKey', field('qwantApiKey'), { placeholder: EXAMPLE_PLACEHOLDERS.qwantKey, optional: true });
-	form.text('mojeekApiKey', field('mojeekApiKey'), { placeholder: EXAMPLE_PLACEHOLDERS.mojeekKey, optional: true });
+	form.secret('braveApiKeySecret', field('braveApiKey'), plugin.app);
+	form.secret('qwantApiKeySecret', field('qwantApiKey'), plugin.app);
+	form.secret('mojeekApiKeySecret', field('mojeekApiKey'), plugin.app);
 }

@@ -1366,7 +1366,6 @@
       "save": "Saglabāt",
       "validation": {
         "selectProvider": "Lūdzu, atlasiet pakalpojumu sniedzēja tipu",
-        "apiKeyTooLong": "API atslēga ir pārāk gara. Maksimālais garums ir 500 rakstzīmes.",
         "invalidUrl": "Nederīgs bāzes URL formāts. Lūdzu, ievadiet derīgu URL (piem., https://api.example.com)"
       }
     },

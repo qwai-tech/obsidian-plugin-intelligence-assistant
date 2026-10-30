@@ -1366,7 +1366,6 @@
       "save": "Gem",
       "validation": {
         "selectProvider": "Vælg venligst en udbydertype",
-        "apiKeyTooLong": "API-nøglen er for lang. Maksimal længde er 500 tegn.",
         "invalidUrl": "Ugyldigt basis-URL-format. Angiv venligst en gyldig URL (f.eks. https://api.example.com)"
       }
     },

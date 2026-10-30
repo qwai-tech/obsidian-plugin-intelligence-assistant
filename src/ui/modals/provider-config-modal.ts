@@ -1,4 +1,4 @@
-import {App, Modal, Notice, Setting} from 'obsidian';
+import {App, Modal, Notice, SecretComponent, Setting} from 'obsidian';
 import type { LLMConfig, OllamaAdmin } from '@/features/llm';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
 import { OllamaModelManagerModal } from './ollama-model-manager-modal';
@@ -136,14 +136,14 @@ export class ProviderConfigModal extends Modal {
 				path: 'llmConfigs[].apiKey',
 				label: t('modals.provider.apiKey.name'),
 				description: t('modals.provider.apiKey.desc')
-			}).addText(text => {
-					text.setPlaceholder('Sk-...');
-					text.inputEl.setAttribute('data-testid', TestIds.settings.providerModalApiKeyInput);
-					text.inputEl.type = 'password';
-					text.setValue(this.draft.apiKey || '');
-					text.onChange(value => {
-						this.draft.apiKey = value.trim() || undefined;
-					});
+			}).addComponent(el => {
+					el.setAttribute('data-testid', TestIds.settings.providerModalApiKeyInput);
+					return new SecretComponent(this.app, el)
+						.setValue(this.draft.apiKeySecret ?? '')
+						.onChange(name => {
+							this.draft.apiKeySecret = name || undefined;
+							this.draft.apiKey = name ? this.app.secretStorage.getSecret(name) ?? undefined : undefined;
+						});
 				});
 
 			const baseUrlDesc = this.draft.provider === 'custom'
@@ -241,10 +241,6 @@ export class ProviderConfigModal extends Modal {
 		// Validate provider is selected
 		if (!this.draft.provider || this.draft.provider.trim() === '') {
 			return t('modals.provider.validation.selectProvider');
-		}
-
-		if (this.draft.apiKey && this.draft.apiKey.length > 500) {
-			return t('modals.provider.validation.apiKeyTooLong');
 		}
 
 		if (this.draft.baseUrl && this.draft.baseUrl.trim() !== '') {

@@ -6,6 +6,7 @@ interface ProviderFile {
 	providers: Array<{
 		provider: string;
 		apiKey?: string;
+		apiKeySecret?: string;
 		baseUrl?: string;
 		modelFilter?: string;
 	}>;
@@ -24,7 +25,7 @@ describe('LLM provider CRUD settings', () => {
 	it('creates, updates, persists, and deletes a provider through the UI', async () => {
 		await settings.addProvider({
 			provider: 'custom',
-			apiKey: 'sk-crud-create',
+			apiKey: { secret: 'crud-create', value: 'sk-crud-create' },
 			baseUrl: 'http://127.0.0.1:43117/v1/custom',
 			modelFilter: 'crud-create',
 		});
@@ -33,14 +34,14 @@ describe('LLM provider CRUD settings', () => {
 		expect(providerFile.providers).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				provider: 'custom',
-				apiKey: 'sk-crud-create',
+				apiKeySecret: 'crud-create',
 				baseUrl: 'http://127.0.0.1:43117/v1/custom',
 				modelFilter: 'crud-create',
 			}),
 		]));
 
 		await settings.editProvider('custom', {
-			apiKey: 'sk-crud-update',
+			apiKey: { secret: 'crud-update', value: 'sk-crud-update' },
 			baseUrl: 'http://127.0.0.1:43117/v1/updated',
 			modelFilter: 'crud-update',
 		});
@@ -49,11 +50,14 @@ describe('LLM provider CRUD settings', () => {
 		expect(providerFile.providers).toEqual(expect.arrayContaining([
 			expect.objectContaining({
 				provider: 'custom',
-				apiKey: 'sk-crud-update',
+				apiKeySecret: 'crud-update',
 				baseUrl: 'http://127.0.0.1:43117/v1/updated',
 				modelFilter: 'crud-update',
 			}),
 		]));
+
+		expect(JSON.stringify(providerFile)).not.toContain('sk-crud');
+		expect(await settings.readSecret('crud-update')).toBe('sk-crud-update');
 
 		await settings.deleteProvider('custom');
 

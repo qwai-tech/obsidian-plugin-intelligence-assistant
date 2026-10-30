@@ -1366,7 +1366,6 @@
       "save": "Lưu",
       "validation": {
         "selectProvider": "Vui lòng chọn loại nhà cung cấp",
-        "apiKeyTooLong": "Khóa API quá dài. Độ dài tối đa là 500 ký tự.",
         "invalidUrl": "Định dạng URL cơ sở không hợp lệ. Vui lòng nhập URL hợp lệ (ví dụ: https://api.example.com)"
       }
     },

@@ -21,6 +21,11 @@ export interface WebSearchConfig {
 	braveApiKey?: string;
 	qwantApiKey?: string;
 	mojeekApiKey?: string;
+	apiKeySecret?: string;
+	tavilyApiKeySecret?: string;
+	braveApiKeySecret?: string;
+	qwantApiKeySecret?: string;
+	mojeekApiKeySecret?: string;
 }
 
 export interface WebSearchResult {

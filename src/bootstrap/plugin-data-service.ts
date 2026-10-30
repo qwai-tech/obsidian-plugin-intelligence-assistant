@@ -1,5 +1,5 @@
 import { App } from 'obsidian';
-import type { PersistUnit, PluginSettings } from '@/features/settings';
+import { withoutProviderKeys, type PersistUnit, type PluginSettings } from '@/features/settings';
 import type { LLMConfig } from '@/features/llm';
 import type { SystemPrompt, Agent } from '@/features/agent';
 import type { MCPServerConfig } from '@/features/tools';
@@ -63,7 +63,7 @@ export class PluginDataService {
 		if (providers.length > 0) {
 			result.llmConfigs = providers;
 		} else if (settings.llmConfigs?.length) {
-			await this.providerRepository.saveAll(settings.llmConfigs);
+			await this.providerRepository.saveAll(withoutProviderKeys(settings.llmConfigs));
 		}
 
 		// Prompts

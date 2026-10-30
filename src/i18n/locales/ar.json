@@ -1366,7 +1366,6 @@
       "save": "حفظ",
       "validation": {
         "selectProvider": "يرجى تحديد نوع مزود",
-        "apiKeyTooLong": "مفتاح API طويل جدًا. الحد الأقصى للطول 500 حرف.",
         "invalidUrl": "صيغة URL الأساسي غير صالحة. يرجى إدخال URL صالح (مثلًا، https://api.example.com)"
       }
     },

@@ -1366,7 +1366,6 @@
       "save": "保存",
       "validation": {
         "selectProvider": "プロバイダーのタイプを選択してください",
-        "apiKeyTooLong": "API キーが長すぎます。最大長は 500 文字です。",
         "invalidUrl": "ベース URL の形式が無効です。有効な URL を入力してください（例: https://api.example.com）"
       }
     },

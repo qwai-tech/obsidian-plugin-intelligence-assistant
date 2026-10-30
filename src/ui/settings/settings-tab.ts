@@ -34,6 +34,7 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 		// getSettingDefinitions() API (1.13.0) is intentionally not used for this
 		// multi-tab settings UI; delegate so internal re-renders don't call the
 		// deprecated display() method directly.
+		this.plugin.refreshSecretKeys();
 		this.renderSettings();
 	}
 

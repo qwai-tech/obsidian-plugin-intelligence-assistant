@@ -8,4 +8,10 @@
  * in its settings, any drift would surface as a confusing structural type error
  * far from its cause.
  */
-export type { ModelCapability, ModelInfo, LLMConfig } from '@qwai/obsidian-llm';
+import type { LLMConfig as EndpointConfig } from '@qwai/obsidian-llm';
+
+export type { ModelCapability, ModelInfo } from '@qwai/obsidian-llm';
+
+export interface LLMConfig extends EndpointConfig {
+	apiKeySecret?: string;
+}

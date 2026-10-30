@@ -1366,7 +1366,6 @@
       "save": "সংরক্ষণ",
       "validation": {
         "selectProvider": "অনুগ্রহ করে একটি প্রদানকারীর ধরন নির্বাচন করুন",
-        "apiKeyTooLong": "API কী খুব দীর্ঘ। সর্বোচ্চ দৈর্ঘ্য ৫০০ অক্ষর।",
         "invalidUrl": "অবৈধ বেস URL ফরম্যাট। অনুগ্রহ করে একটি বৈধ URL লিখুন (যেমন, https://api.example.com)"
       }
     },

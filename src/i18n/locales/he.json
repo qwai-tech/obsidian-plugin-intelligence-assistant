@@ -1366,7 +1366,6 @@
       "save": "שמור",
       "validation": {
         "selectProvider": "אנא בחר סוג ספק",
-        "apiKeyTooLong": "מפתח API ארוך מדי. אורך מקסימלי הוא 500 תווים.",
         "invalidUrl": "פורמט כתובת URL בסיסית לא תקף. אנא הזן כתובת URL תקפה (למשל, https://api.example.com)"
       }
     },

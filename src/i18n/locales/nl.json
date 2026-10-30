@@ -1366,7 +1366,6 @@
       "save": "Opslaan",
       "validation": {
         "selectProvider": "Selecteer een providertype",
-        "apiKeyTooLong": "API-sleutel is te lang. Maximale lengte is 500 tekens.",
         "invalidUrl": "Ongeldig basis-URL-formaat. Voer een geldige URL in (bijv. https://api.voorbeeld.com)"
       }
     },

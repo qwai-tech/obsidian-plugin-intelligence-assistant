@@ -1,4 +1,4 @@
-import type { Setting } from 'obsidian';
+import { App, type Setting } from 'obsidian';
 import { SettingsForm, parseList, parseNumber } from '@/ui/settings/settings-form';
 
 interface Section {
@@ -10,6 +10,7 @@ interface Section {
 	weight: number;
 	tags: string[];
 	auto?: boolean;
+	keySecret?: string;
 }
 
 type Control = { value: unknown; placeholder: string; options: Record<string, string>; change(value: unknown): Promise<void> };
@@ -140,5 +141,19 @@ describe('SettingsForm', () => {
 		const setting = form.toggle('enabled', { label: 'Enabled', testId: 'enable-toggle' });
 
 		expect((control(setting) as unknown as { toggleEl: HTMLElement }).toggleEl.getAttribute('data-testid')).toBe('enable-toggle');
+	});
+
+	it('stores the chosen secret name, and clears it when the secret is unset', async () => {
+		const current = { ...section(), keySecret: 'old' };
+		const { form, save } = makeForm(current);
+
+		const setting = form.secret('keySecret', { label: 'Key' }, new App());
+
+		expect(control(setting).value).toBe('old');
+		await control(setting).change('new');
+		expect(current.keySecret).toBe('new');
+		await control(setting).change(null);
+		expect(current.keySecret).toBeUndefined();
+		expect(save).toHaveBeenCalledTimes(2);
 	});
 });

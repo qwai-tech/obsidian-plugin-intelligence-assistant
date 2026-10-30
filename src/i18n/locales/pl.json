@@ -1366,7 +1366,6 @@
       "save": "Zapisz",
       "validation": {
         "selectProvider": "Wybierz typ dostawcy",
-        "apiKeyTooLong": "Klucz API jest zbyt długi. Maksymalna długość wynosi 500 znaków.",
         "invalidUrl": "Nieprawidłowy format bazowego URL. Wprowadź prawidłowy URL (np. https://api.example.com)"
       }
     },

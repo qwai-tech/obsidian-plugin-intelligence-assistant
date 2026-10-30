@@ -1366,7 +1366,6 @@
       "save": "Gorde",
       "validation": {
         "selectProvider": "Mesedez, hautatu hornitzaile mota bat",
-        "apiKeyTooLong": "API giltza luzeegia da. Gehieneko luzera 500 karaktere da.",
         "invalidUrl": "Oinarrizko URL formatu baliogabea. Mesedez, sartu URL baliozko bat (adibidez, https://api.example.com)"
       }
     },

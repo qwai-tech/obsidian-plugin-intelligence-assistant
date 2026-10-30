@@ -55,7 +55,7 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 
 ## 功能 — `src/features/`
 
-**settings**：`SettingsStore` 负责加载、迁移（`settings-migrations.ts`）和保存设置。保存时只写入发生变化的单元（`config`、`providers`、`prompts`、`agents`、`mcp`），并通知 `onChange` 订阅者；插件据此刷新 RAG 和聊天模型列表。`types/settings.ts` 定义 `PluginSettings`。
+**settings**：`SettingsStore` 负责加载、迁移（`settings-migrations.ts`）和保存设置。API 密钥通过 `SecretVault` 端口（`settings-secrets.ts`，适配器为 `adapters/obsidian/obsidian-secret-vault.ts`）保存在 Obsidian 的密钥存储中：设置只记录密钥名称，存储在加载时填入密钥，写入时一律去除。保存时只写入发生变化的单元（`config`、`providers`、`prompts`、`agents`、`mcp`），并通知 `onChange` 订阅者；插件据此刷新 RAG 和聊天模型列表。`types/settings.ts` 定义 `PluginSettings`。
 
 **agent**：
 

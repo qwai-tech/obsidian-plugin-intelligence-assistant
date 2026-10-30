@@ -1366,7 +1366,6 @@
       "save": "Salvați",
       "validation": {
         "selectProvider": "Selectați un tip de furnizor",
-        "apiKeyTooLong": "Cheia API este prea lungă. Lungimea maximă este de 500 de caractere.",
         "invalidUrl": "Format URL de bază invalid. Introduceți un URL valid (de ex. https://api.example.com)"
       }
     },

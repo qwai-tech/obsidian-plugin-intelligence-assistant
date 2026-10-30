@@ -2,6 +2,7 @@ import type { Conversation } from '@/features/conversations';
 import type { PluginSettings, UserConfig } from '@/features/settings/types/settings';
 import { pluginSettingsToUserConfig, userConfigToPluginSettings } from './settings-codec';
 import { migrateSettings } from './settings-migrations';
+import { moveKeysToVault, revealKeys, withoutKeys, type SecretVault } from './settings-secrets';
 
 export type PersistUnit = 'config' | 'providers' | 'prompts' | 'agents' | 'mcp';
 
@@ -30,7 +31,10 @@ export class SettingsStore {
 	private snapshots = new Map<PersistUnit, string>();
 	private readonly listeners = new Set<(units: ReadonlySet<PersistUnit>) => void>();
 
-	constructor(private readonly persistence: SettingsPersistence) {}
+	constructor(
+		private readonly persistence: SettingsPersistence,
+		private readonly vault: SecretVault,
+	) {}
 
 	get current(): PluginSettings {
 		if (!this.settings) {
@@ -55,13 +59,16 @@ export class SettingsStore {
 		Object.assign(settings, await this.persistence.hydrate(settings));
 
 		const migrated = migrateSettings(settings);
+		const keysMoved = moveKeysToVault(settings, this.vault);
+		revealKeys(settings, this.vault);
 		this.settings = settings;
 		this.snapshots = this.snapshot(settings);
 		const pending = new Set<PersistUnit>();
 		if (!userConfig) pending.add('config');
 		if (migrated) pending.add('agents').add('config').add('providers');
+		if (keysMoved) pending.add('providers').add('config');
 		if (pending.size > 0) {
-			await this.persistence.write(settings, pending);
+			await this.persistence.write(withoutKeys(settings), pending);
 		}
 	}
 
@@ -72,7 +79,7 @@ export class SettingsStore {
 		if (changed.size === 0) {
 			return;
 		}
-		await this.persistence.write(settings, changed);
+		await this.persistence.write(withoutKeys(settings), changed);
 		this.snapshots = next;
 		for (const listener of this.listeners) {
 			listener(changed);
@@ -81,7 +88,12 @@ export class SettingsStore {
 
 	async update(change: (settings: PluginSettings) => void): Promise<void> {
 		change(this.current);
+		revealKeys(this.current, this.vault);
 		await this.save();
+	}
+
+	refreshKeys(): void {
+		revealKeys(this.current, this.vault);
 	}
 
 	onChange(listener: (units: ReadonlySet<PersistUnit>) => void): () => void {
@@ -90,7 +102,8 @@ export class SettingsStore {
 	}
 
 	private snapshot(settings: PluginSettings): Map<PersistUnit, string> {
-		return new Map((Object.keys(UNITS) as PersistUnit[]).map((unit) => [unit, JSON.stringify(UNITS[unit](settings))]));
+		const stored = withoutKeys(settings);
+		return new Map((Object.keys(UNITS) as PersistUnit[]).map((unit) => [unit, JSON.stringify(UNITS[unit](stored))]));
 	}
 }
 

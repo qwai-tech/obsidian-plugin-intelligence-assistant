@@ -208,6 +208,19 @@ export class Events {
 }
 
 export class App {
+	secretStorage = {
+		secrets: new Map<string, string>(),
+		getSecret(id: string): string | null {
+			return this.secrets.get(id) ?? null;
+		},
+		setSecret(id: string, secret: string): void {
+			this.secrets.set(id, secret);
+		},
+		listSecrets(): string[] {
+			return [...this.secrets.keys()];
+		},
+	};
+
 	vault = {
 		configDir: '.obsidian',
 		getMarkdownFiles: jest.fn(() => []),
@@ -617,6 +630,12 @@ export class TextAreaComponent extends ValueComponent<string> {
 	inputEl = document.createElement('textarea');
 }
 
+export class SecretComponent extends ValueComponent<string | null> {
+	constructor(public app: App, public containerEl: HTMLElement) {
+		super();
+	}
+}
+
 export class DropdownComponent extends ValueComponent<string> {
 	selectEl = document.createElement('select');
 	options: Record<string, string> = {};
@@ -670,6 +689,11 @@ export class Setting {
 
 	addDropdown(build: (component: DropdownComponent) => unknown): this {
 		return this.add(new DropdownComponent(), build);
+	}
+
+	addComponent<C>(build: (el: HTMLElement) => C): this {
+		this.components.push(build(this.controlEl) as unknown as ValueComponent<unknown>);
+		return this;
 	}
 
 	private add<C>(component: C, build: (component: C) => unknown): this {

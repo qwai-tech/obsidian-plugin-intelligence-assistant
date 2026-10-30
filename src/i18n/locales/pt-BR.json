@@ -1366,7 +1366,6 @@
       "save": "Salvar",
       "validation": {
         "selectProvider": "Selecione um tipo de provedor",
-        "apiKeyTooLong": "A chave de API é muito longa. O comprimento máximo é de 500 caracteres.",
         "invalidUrl": "Formato de URL base inválido. Insira um URL válido (ex.: https://api.exemplo.com)"
       }
     },

@@ -1366,7 +1366,6 @@
       "save": "Stoor",
       "validation": {
         "selectProvider": "Kies asseblief 'n verskaffer-tipe",
-        "apiKeyTooLong": "API-sleutel is te lank. Maksimum lengte is 500 karakters.",
         "invalidUrl": "Ongeldige basis-URL-formaat. Voer asseblief 'n geldige URL in (bv. https://api.example.com)"
       }
     },

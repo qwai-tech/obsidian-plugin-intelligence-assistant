@@ -1366,7 +1366,6 @@
       "save": "Konservi",
       "validation": {
         "selectProvider": "Bonvolu elekti provizanttipo",
-        "apiKeyTooLong": "API-ŝlosilo estas tro longa. Maksimuma longo estas 500 signoj.",
         "invalidUrl": "Nevalida baza URL-formato. Bonvolu enigi validan URL (ekz., https://api.example.com)"
       }
     },

@@ -7,6 +7,7 @@ import { pluginPaths } from './src/core/plugin-paths';
 import { ensureFolderExists } from './src/core/utils/file-system';
 import { ModelManager, createObsidianHttpPort, setDefaultHttpPort, setDiagnosticsSink, withResilience, type LLMHub } from '@qwai/obsidian-llm';
 import { SettingsStore, reloadSettingsFromDisk as runSettingsReload } from './src/features/settings';
+import { ObsidianSecretVault } from './src/adapters/obsidian/obsidian-secret-vault';
 import { ObsidianSettingsPersistence } from './src/bootstrap/obsidian-settings-persistence';
 import { buildImproveSelectionPrompt, ensureDefaultAgent as ensureDefaultAgentService } from './src/features/agent';
 import { ConversationStorageService } from './src/adapters/persistence/conversation-storage-service';
@@ -143,7 +144,10 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		await this.conversations.initialize();
 		this.dataService = new PluginDataService(this.app);
 		await this.dataService.initialize();
-		this.store = new SettingsStore(new ObsidianSettingsPersistence(this, this.dataService, pluginPaths(this.app.vault.configDir).userConfig));
+		this.store = new SettingsStore(
+			new ObsidianSettingsPersistence(this, this.dataService, pluginPaths(this.app.vault.configDir).userConfig),
+			new ObsidianSecretVault(this.app),
+		);
 		this.editorQuickActions = new EditorQuickActions(this.app, () => ({
 			quickActions: this.settings.quickActions,
 			quickActionPrefix: this.settings.quickActionPrefix || '⚡',
@@ -228,6 +232,10 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	async loadSettings(): Promise<void> {
 		await this.store.load();
 		this.settings = this.store.current;
+	}
+
+	refreshSecretKeys(): void {
+		this.store.refreshKeys();
 	}
 
 	async updateSettings(change: (settings: PluginSettings) => void): Promise<void> {
