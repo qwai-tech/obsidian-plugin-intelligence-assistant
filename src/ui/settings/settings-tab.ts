@@ -1,7 +1,6 @@
 import { App, PluginSettingTab, type SettingDefinitionItem, type SettingDefinitionPage } from 'obsidian';
 import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
-import type { PluginSettings } from '@/features/settings';
 import { generalDefinitions } from './tabs/general-tab';
 import { displayPromptsTab } from './tabs/prompts-tab';
 import { displayToolsTab, type ToolsSubTab } from './tabs/tools-tab';
@@ -51,12 +50,12 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 	}
 
 	getControlValue(key: string): unknown {
-		return (this.plugin.settings as unknown as Record<string, unknown>)[key];
+		return Reflect.get(this.plugin.settings, key);
 	}
 
 	async setControlValue(key: string, value: unknown): Promise<void> {
-		await this.plugin.updateSettings((settings: PluginSettings) => {
-			(settings as unknown as Record<string, unknown>)[key] = value;
+		await this.plugin.updateSettings((settings) => {
+			Reflect.set(settings, key, value);
 		});
 	}
 
