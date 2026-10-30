@@ -2,7 +2,7 @@ import { TFile } from 'obsidian';
 import { createHarnessApp, InMemoryVault } from './in-memory-vault';
 
 describe('in-memory harness vault', () => {
-  it('seeds, reads, creates, modifies, and lists files', async () => {
+  it('seeds, reads, creates, processes, and lists files', async () => {
     const app = createHarnessApp({ 'notes/a.md': 'hello' });
 
     const a = app.vault.getAbstractFileByPath('notes/a.md');
@@ -13,7 +13,7 @@ describe('in-memory harness vault', () => {
     expect(await app.vault.adapter.exists('notes/b.md')).toBe(true);
 
     const b = app.vault.getAbstractFileByPath('notes/b.md') as TFile;
-    await app.vault.modify(b, 'world!!');
+    await app.vault.process(b, (content) => `${content}!!`);
     expect(await app.vault.read(b)).toBe('world!!');
 
     const md = app.vault.getMarkdownFiles().map((f) => f.path).sort();
@@ -32,11 +32,11 @@ describe('in-memory harness vault', () => {
     await expect(vault.read(file)).rejects.toThrow('File not found: missing.md');
   });
 
-  it('modify on a missing path rejects', async () => {
+  it('process on a missing path rejects', async () => {
     const vault = new InMemoryVault();
     const file = new TFile();
     file.path = 'missing.md';
-    await expect(vault.modify(file, 'content')).rejects.toThrow('File not found: missing.md');
+    await expect(vault.process(file, () => 'content')).rejects.toThrow('File not found: missing.md');
   });
 
   it('delete removes a file from the snapshot', async () => {

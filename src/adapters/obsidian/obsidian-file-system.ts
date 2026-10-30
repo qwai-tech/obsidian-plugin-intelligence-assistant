@@ -22,7 +22,7 @@ export class ObsidianFileSystem implements IFileSystem {
 	async write(path: string, data: string): Promise<void> {
 		const file = this.app.vault.getAbstractFileByPath(path);
 		if (file instanceof TFile) {
-			await this.app.vault.modify(file, data);
+			await this.app.vault.process(file, () => data);
 		} else {
 			// Ensure parent directory exists
 			const parts = path.split('/');

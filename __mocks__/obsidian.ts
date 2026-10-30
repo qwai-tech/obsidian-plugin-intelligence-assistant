@@ -397,6 +397,11 @@ export class ItemView extends Component {
 	registerDomEvent(): void {}
 }
 
+export class MarkdownView extends ItemView {
+	file: TFile | null = null;
+	editor: unknown = null;
+}
+
 export class MarkdownRenderChild extends Component {
 	containerEl: HTMLElement;
 	constructor(containerEl: HTMLElement) {

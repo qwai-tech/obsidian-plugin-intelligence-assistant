@@ -38,9 +38,12 @@ export class InMemoryVault {
     return this.makeTFile(path);
   }
 
-  async modify(file: TFile, content: string): Promise<void> {
-    if (!this.files.has(file.path)) throw new Error(`File not found: ${file.path}`);
-    this.files.set(file.path, content);
+  async process(file: TFile, fn: (data: string) => string): Promise<string> {
+    const content = this.files.get(file.path);
+    if (content === undefined) throw new Error(`File not found: ${file.path}`);
+    const next = fn(content);
+    this.files.set(file.path, next);
+    return next;
   }
 
   async delete(path: string): Promise<void> {

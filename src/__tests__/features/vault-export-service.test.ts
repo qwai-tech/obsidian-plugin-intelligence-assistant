@@ -9,11 +9,13 @@ const assistantMessage = (overrides: Partial<Message> = {}): Message => ({ role:
 const makeApp = () => ({
 	vault: {
 		create: jest.fn(async () => undefined),
-		read: jest.fn(async () => 'existing'),
-		modify: jest.fn(async () => undefined),
+		process: jest.fn(async (_file: TFile, fn: (data: string) => string) => fn('existing')),
 		getAbstractFileByPath: jest.fn(() => null),
 	},
-	workspace: { getLeaf: jest.fn(() => ({ openFile: jest.fn(async () => undefined) })) },
+	workspace: {
+		getLeaf: jest.fn(() => ({ openFile: jest.fn(async () => undefined) })),
+		getLeavesOfType: jest.fn(() => []),
+	},
 });
 
 const picker = (noteName: string | null, note: NoteChoice): ExportTargetPicker => ({
@@ -49,9 +51,10 @@ describe('VaultExportService', () => {
 
 		await service.insertIntoNote(assistantMessage());
 
-		const [file, content] = app.vault.modify.mock.calls[0] as unknown as [TFile, string];
+		const [file] = app.vault.process.mock.calls[0] as unknown as [TFile];
+		const content = await app.vault.process.mock.results[0].value as string;
 		expect(file).toBe(note);
-		expect(content).toContain('existing');
+		expect(content.startsWith('existing')).toBe(true);
 		expect(content).toContain('Hello world');
 	});
 
@@ -61,7 +64,7 @@ describe('VaultExportService', () => {
 
 		await service.insertIntoNote(assistantMessage());
 
-		expect(app.vault.modify).not.toHaveBeenCalled();
+		expect(app.vault.process).not.toHaveBeenCalled();
 		expect((app.vault.create.mock.calls[0] as unknown as [string])[0]).toBe('Fallback.md');
 	});
 
@@ -72,7 +75,7 @@ describe('VaultExportService', () => {
 
 		await service.insertIntoNote(assistantMessage());
 
-		expect(app.vault.modify).not.toHaveBeenCalled();
+		expect(app.vault.process).not.toHaveBeenCalled();
 		expect(names.askNoteName).not.toHaveBeenCalled();
 	});
 });

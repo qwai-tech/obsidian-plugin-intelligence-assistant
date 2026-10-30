@@ -2,6 +2,7 @@ import { App, Notice, TFile } from 'obsidian';
 import { t } from '@/i18n';
 import type { Message } from '@/features/conversations';
 import { errorMessage } from '@/core/utils/errors';
+import { rewriteNote } from '@/core/utils/note-writer';
 
 export type NoteChoice = TFile | 'new' | null;
 
@@ -55,16 +56,15 @@ export class VaultExportService {
 
 	private async doInsertIntoNote(selectedFile: TFile, message: Message): Promise<void> {
 		try {
-			let content = await this.app.vault.read(selectedFile);
-			content += `\n\n---\n\n`;
+			let addition = `\n\n---\n\n`;
 			if (message.role === 'user') {
-				content += `## 💬 User Message (${new Date().toLocaleString()})\n\n`;
+				addition += `## 💬 User Message (${new Date().toLocaleString()})\n\n`;
 			} else {
 				const modelName = (message as { model?: string }).model || 'Assistant';
-				content += `## 🤖 ${String(modelName)} (${new Date().toLocaleString()})\n\n`;
+				addition += `## 🤖 ${String(modelName)} (${new Date().toLocaleString()})\n\n`;
 			}
-			content += message.content + '\n';
-			await this.app.vault.modify(selectedFile, content);
+			addition += message.content + '\n';
+			await rewriteNote(this.app, selectedFile, (current) => current + addition);
 			new Notice(t('chat.notices.messageInserted', { path: selectedFile.path }));
 			await this.app.workspace.getLeaf(false).openFile(selectedFile);
 		} catch (_error) {

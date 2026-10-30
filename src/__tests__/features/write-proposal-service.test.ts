@@ -64,29 +64,58 @@ describe('write proposal service', () => {
 		expect(app.vault.modify).not.toHaveBeenCalled();
 	});
 
-	it('applies an update proposal by modifying an existing note', async () => {
-		const file = makeFile('Notes/A.md');
-		const app = {
+	const updateApp = (file: TFile, disk: string) => {
+		const state = { disk };
+		return {
+			state,
+			workspace: { getLeavesOfType: jest.fn(() => []) },
 			vault: {
 				getAbstractFileByPath: jest.fn().mockReturnValue(file),
 				create: jest.fn(),
-				modify: jest.fn().mockResolvedValue(undefined),
+				modify: jest.fn(),
+				process: jest.fn(async (_file: TFile, fn: (data: string) => string) => {
+					state.disk = fn(state.disk);
+					return state.disk;
+				}),
 			},
 		};
+	};
 
-		await applyWriteProposal(app as any, {
-			type: 'write_proposal',
-			operation: 'update',
-			path: 'Notes/A.md',
-			content: 'new',
-			previousContent: 'old',
-			proposedContent: 'new',
-			applied: false,
-			reason: 'review first',
-		});
+	const updateProposal = (previousContent: string | undefined): WriteProposal => ({
+		type: 'write_proposal',
+		operation: 'update',
+		path: 'Notes/A.md',
+		content: 'new',
+		previousContent,
+		proposedContent: 'new',
+		applied: false,
+		reason: 'review first',
+	});
 
-		expect(app.vault.modify).toHaveBeenCalledWith(file, 'new');
+	it('applies an update proposal atomically to the note it was made from', async () => {
+		const app = updateApp(makeFile('Notes/A.md'), 'old');
+
+		await applyWriteProposal(app as any, updateProposal('old'));
+
+		expect(app.state.disk).toBe('new');
+		expect(app.vault.modify).not.toHaveBeenCalled();
 		expect(app.vault.create).not.toHaveBeenCalled();
+	});
+
+	it('refuses an update when the note changed after the proposal was made', async () => {
+		const app = updateApp(makeFile('Notes/A.md'), 'edited by the user');
+
+		await expect(applyWriteProposal(app as any, updateProposal('old'))).rejects.toThrow('Notes/A.md changed after the proposal was made');
+
+		expect(app.state.disk).toBe('edited by the user');
+	});
+
+	it('applies an update without a recorded previous content', async () => {
+		const app = updateApp(makeFile('Notes/A.md'), 'anything');
+
+		await applyWriteProposal(app as any, updateProposal(undefined));
+
+		expect(app.state.disk).toBe('new');
 	});
 
 	it('accepts write proposal results', () => {

@@ -1,5 +1,6 @@
 import { App, TFile } from 'obsidian';
 import type { AgentExecutionStep } from '@/features/llm';
+import { rewriteNote } from '@/core/utils/note-writer';
 
 export interface WriteProposal {
 	type: 'write_proposal';
@@ -153,5 +154,10 @@ async function applySingleProposal(app: App, proposal: WriteProposal): Promise<v
 	if (!file || !(file instanceof TFile)) {
 		throw new Error(`File not found: ${proposal.path}`);
 	}
-	await app.vault.modify(file, proposal.proposedContent || '');
+	await rewriteNote(app, file, (current) => {
+		if (proposal.previousContent !== undefined && current !== proposal.previousContent) {
+			throw new Error(`${proposal.path} changed after the proposal was made; review it again before applying.`);
+		}
+		return proposal.proposedContent || '';
+	});
 }
