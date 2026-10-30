@@ -102,6 +102,38 @@ function httpRaw(method: string, path: string): Promise<{ statusCode: number; he
 	});
 }
 
+function openStream(path: string, body: unknown): { received: () => string; done: Promise<string> } {
+	let raw = '';
+	const done = new Promise<string>((resolve, reject) => {
+		const payload = JSON.stringify(body);
+		const req = request(
+			{
+				hostname: '127.0.0.1',
+				port: server.port(),
+				path,
+				method: 'POST',
+				agent: false,
+				headers: { 'content-type': 'application/json', 'content-length': Buffer.byteLength(payload) },
+			},
+			(res) => {
+				res.setEncoding('utf8');
+				res.on('data', (chunk) => { raw += chunk; });
+				res.on('end', () => resolve(raw));
+			}
+		);
+		req.on('error', reject);
+		req.write(payload);
+		req.end();
+	});
+	return { received: () => raw, done };
+}
+
+async function waitFor(condition: () => boolean): Promise<void> {
+	while (!condition()) {
+		await new Promise((resolve) => setTimeout(resolve, 5));
+	}
+}
+
 describe('mock LLM server', () => {
 	beforeEach(async () => {
 		server = createMockLLMServer({ port: 0 });
@@ -241,6 +273,41 @@ describe('mock LLM server', () => {
 		expect(response.text).toContain('data: one');
 		expect(response.text).toContain('data: two');
 		expect(response.text).toContain('data: [DONE]');
+	});
+
+	it('holds a stream after the given chunk until released', async () => {
+		await httpJson('POST', '/__mock__/queue', {
+			statusCode: 200,
+			body: null,
+			streamHoldAfter: 1,
+			streamChunks: ['one', 'two'],
+		});
+
+		const stream = openStream('/v1/chat/completions', { model: 'gpt-4o-mini', messages: [], stream: true });
+		await waitFor(() => stream.received().includes('data: one'));
+		await new Promise((resolve) => setTimeout(resolve, 50));
+		expect(stream.received()).not.toContain('data: two');
+
+		await httpJson('POST', '/__mock__/release');
+
+		const text = await stream.done;
+		expect(text).toContain('data: two');
+		expect(text).toContain('data: [DONE]');
+	});
+
+	it('releases held streams on reset', async () => {
+		await httpJson('POST', '/__mock__/queue', {
+			statusCode: 200,
+			body: null,
+			streamHoldAfter: 1,
+			streamChunks: ['one', 'two'],
+		});
+
+		const stream = openStream('/v1/chat/completions', { model: 'gpt-4o-mini', messages: [], stream: true });
+		await waitFor(() => stream.received().includes('data: one'));
+		await httpJson('POST', '/__mock__/reset');
+
+		expect(await stream.done).toContain('data: [DONE]');
 	});
 
 });

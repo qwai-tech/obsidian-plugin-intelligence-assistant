@@ -112,11 +112,12 @@ export function createMockLLMClient(port: () => number) {
 			});
 		},
 
-		async streaming(chunks: string[], options: { chunkDelayMs?: number } = {}): Promise<void> {
+		async streaming(chunks: string[], options: { chunkDelayMs?: number; holdAfter?: number } = {}): Promise<void> {
 			await queue({
 				statusCode: 200,
 				body: null,
 				streamChunkDelayMs: options.chunkDelayMs,
+				streamHoldAfter: options.holdAfter,
 				streamChunks: chunks.map((chunk) => JSON.stringify({
 					id: 'cmpl_stream_mock',
 					object: 'chat.completion.chunk',
@@ -136,6 +137,10 @@ export function createMockLLMClient(port: () => number) {
 				statusCode: code,
 				body: { error: { message: `Mock LLM error ${code}`, type: 'mock_error', code } },
 			});
+		},
+
+		async releaseStream(): Promise<void> {
+			await adminJson<void>(port(), 'POST', '/__mock__/release');
 		},
 
 		async getCalls(): Promise<CapturedLLMCall[]> {

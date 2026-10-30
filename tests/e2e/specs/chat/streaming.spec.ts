@@ -17,7 +17,7 @@ describe('Chat streaming', () => {
 	});
 
 	it('renders partial chunks before the stream completes', async () => {
-		await mockLLM.streaming(['hello', ' world'], { chunkDelayMs: 750 });
+		await mockLLM.streaming(['hello', ' world'], { holdAfter: 1 });
 
 		await chat.sendMessage('stream please');
 		await chat.waitForAssistantText('hello');
@@ -26,6 +26,7 @@ describe('Chat streaming', () => {
 		expect(partialText).toContain('hello');
 		expect(partialText).not.toContain('world');
 
+		await mockLLM.releaseStream();
 		await chat.waitForReplyComplete();
 
 		const finalText = await chat.getLastAssistantText();

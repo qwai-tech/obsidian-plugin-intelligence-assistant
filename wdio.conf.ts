@@ -71,6 +71,8 @@ export const baseConfig: TestrunnerConfig = {
 		timeout: 90 * 1000,
 	},
 
+	connectionRetryTimeout: 5 * 60 * 1000,
+
 	waitforInterval: 250,
 	waitforTimeout: 10 * 1000,
 

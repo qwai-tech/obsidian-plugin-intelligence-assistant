@@ -10,6 +10,7 @@ export interface QueuedLLMResponse {
 	headers?: Record<string, string>;
 	streamChunks?: string[];
 	streamChunkDelayMs?: number;
+	streamHoldAfter?: number;
 }
 
 export interface QueuedEmbeddingResponse {
@@ -42,8 +43,20 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 	const embeddingQueue: QueuedEmbeddingResponse[] = [];
 	const calls: CapturedLLMCall[] = [];
 	let server: Server | null = null;
+	let heldStreams: Array<() => void> = [];
+
+	function hold(): Promise<void> {
+		return new Promise((resolve) => heldStreams.push(resolve));
+	}
+
+	function releaseStreams(): void {
+		const held = heldStreams;
+		heldStreams = [];
+		held.forEach((release) => release());
+	}
 
 	function reset(): void {
+		releaseStreams();
 		queue.length = 0;
 		embeddingQueue.length = 0;
 		calls.length = 0;
@@ -89,6 +102,7 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 
 	async function stop(): Promise<void> {
 		if (!server) return;
+		releaseStreams();
 		const current = server;
 		server = null;
 		await new Promise<void>((resolve, reject) => {
@@ -117,6 +131,11 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 			writeJson(res, 200, { ok: true });
 			return;
 		}
+		if (requestPath === '/__mock__/release' && req.method === 'POST') {
+			releaseStreams();
+			writeJson(res, 200, { ok: true });
+			return;
+		}
 		if (requestPath === '/__mock__/calls' && req.method === 'GET') {
 			writeJson(res, 200, getCalls());
 			return;
@@ -134,7 +153,7 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 				timestamp: Date.now(),
 			});
 			const next = queue.shift() ?? defaultModelsResponse();
-			await writeQueuedResponse(res, next);
+			await writeQueuedResponse(res, next, hold);
 			return;
 		}
 		if (requestPath === '/v1/chat/completions' && req.method === 'POST') {
@@ -147,7 +166,7 @@ export function createMockLLMServer(options: { port?: number } = {}): MockLLMSer
 				timestamp: Date.now(),
 			});
 			const next = queue.shift() ?? defaultResponse();
-			await writeQueuedResponse(res, next, body);
+			await writeQueuedResponse(res, next, hold, body);
 			return;
 		}
 		if (requestPath === '/v1/embeddings' && req.method === 'POST') {
@@ -192,36 +211,34 @@ async function readJsonBody<T>(req: IncomingMessage): Promise<T> {
 	return raw ? JSON.parse(raw) as T : undefined as T;
 }
 
-async function writeQueuedResponse(res: ServerResponse, response: QueuedLLMResponse, requestBody?: unknown): Promise<void> {
+async function writeQueuedResponse(res: ServerResponse, response: QueuedLLMResponse, hold: () => Promise<void>, requestBody?: unknown): Promise<void> {
 	const streamChunks = response.streamChunks ?? streamChunksFromQueuedResponse(response, requestBody);
 	if (streamChunks) {
-		await writeEventStream(res, response.statusCode, streamChunks, response.headers, response.streamChunkDelayMs);
+		res.writeHead(response.statusCode, {
+			'content-type': 'text/event-stream',
+			'cache-control': 'no-cache',
+			...corsHeaders(),
+			...response.headers,
+		});
+		await writeStreamChunks(res, streamChunks, Math.max(0, response.streamChunkDelayMs ?? 0), response.streamHoldAfter, hold);
 		return;
 	}
 
 	writeJson(res, response.statusCode, response.body, response.headers);
 }
 
-function writeEventStream(
+async function writeStreamChunks(
 	res: ServerResponse,
-	statusCode: number,
 	streamChunks: string[],
-	headers: Record<string, string> = {},
-	streamChunkDelayMs = 0
+	delayMs: number,
+	holdAfter: number | undefined,
+	hold: () => Promise<void>
 ): Promise<void> {
-	res.writeHead(statusCode, {
-		'content-type': 'text/event-stream',
-		'cache-control': 'no-cache',
-		...corsHeaders(),
-		...headers,
-	});
-	return writeStreamChunks(res, streamChunks, Math.max(0, streamChunkDelayMs));
-}
-
-async function writeStreamChunks(res: ServerResponse, streamChunks: string[], delayMs: number): Promise<void> {
 	for (let index = 0; index < streamChunks.length; index++) {
-		const chunk = streamChunks[index];
-		res.write(`data: ${chunk}\n\n`);
+		res.write(`data: ${streamChunks[index]}\n\n`);
+		if (index + 1 === holdAfter) {
+			await hold();
+		}
 		if (delayMs > 0 && index < streamChunks.length - 1) {
 			await sleep(delayMs);
 		}

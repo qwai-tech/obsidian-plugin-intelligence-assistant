@@ -107,9 +107,20 @@ await mockLLM.replyWith('pong');
 ```
 
 The server supports normal JSON completions, OpenAI-style SSE streaming
-for `stream: true` requests, optional delayed chunks for incremental UI
-assertions, CORS preflight, error status responses, and request capture
-through `mockLLM.getCalls()`.
+for `stream: true` requests, CORS preflight, error status responses, and
+request capture through `mockLLM.getCalls()`.
+
+To assert on a partial stream, hold it instead of relying on timing:
+
+```ts
+await mockLLM.streaming(['hello', ' world'], { holdAfter: 1 });
+// ...assert that only 'hello' has rendered...
+await mockLLM.releaseStream();
+```
+
+Jest missions start the same server on an OS-assigned port (see
+`tests/harness/mock-llm-harness.ts`), so they never clash with each other or
+with a running e2e suite.
 
 ## Release suite
 

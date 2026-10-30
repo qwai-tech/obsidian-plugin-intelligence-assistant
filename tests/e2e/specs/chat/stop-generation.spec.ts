@@ -17,13 +17,14 @@ describe('Chat stop generation', () => {
 	});
 
 	it('keeps partial content and ignores later chunks after stop', async () => {
-		await mockLLM.streaming(['partial', ' ignored', ' discarded'], { chunkDelayMs: 750 });
+		await mockLLM.streaming(['partial', ' ignored', ' discarded'], { holdAfter: 1 });
 
 		await chat.sendMessage('stop after first chunk');
 		await chat.waitForAssistantText('partial');
 		expect(await chat.isStopBtnVisible()).toBe(true);
 
 		await chat.stopGeneration();
+		await mockLLM.releaseStream();
 		await chat.waitForReplyComplete();
 
 		const finalText = await chat.getLastAssistantText();
