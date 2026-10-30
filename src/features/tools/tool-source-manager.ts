@@ -32,6 +32,8 @@ export interface ToolSourceFactory {
 }
 
 export class ToolSourceManager {
+	private readonly runningMcpConfigs = new Map<string, string>();
+
 	constructor(
 		readonly registry: ToolRegistry,
 		private readonly factory: ToolSourceFactory,
@@ -53,11 +55,7 @@ export class ToolSourceManager {
 	}
 
 	async resync(): Promise<void> {
-		const { mcpServers, openApiTools } = this.settings();
-		const enabledServers = new Set(mcpServers.filter((server) => server.enabled).map((server) => server.name));
-		for (const name of this.registry.sourceIds('mcp').filter((name) => !enabledServers.has(name))) {
-			await this.registry.unregisterSource('mcp', name);
-		}
+		const { openApiTools } = this.settings();
 		const enabledApis = new Set(openApiTools.filter((config) => config.enabled).map((config) => config.id));
 		for (const id of this.registry.sourceIds('openapi').filter((id) => !enabledApis.has(id))) {
 			await this.registry.unregisterSource('openapi', id);
@@ -67,7 +65,30 @@ export class ToolSourceManager {
 		}
 		await this.reloadCli();
 		await this.reloadBuiltin();
-		await this.connectAutoMcpServers();
+		await this.syncMcpServers();
+	}
+
+	async syncMcpServers(): Promise<void> {
+		const enabled = new Map(this.settings().mcpServers.filter((server) => server.enabled).map((server) => [server.name, server]));
+		let restarted = false;
+		for (const name of this.registry.sourceIds('mcp')) {
+			const server = enabled.get(name);
+			if (server && mcpLaunchKey(server) === this.runningMcpConfigs.get(name)) {
+				continue;
+			}
+			await this.disconnectMcp(name);
+			if (server) {
+				try {
+					await this.loadMcp(server);
+					restarted = true;
+				} catch (error) {
+					console.error(`[MCP] Restart failed for ${name}:`, error);
+				}
+			}
+		}
+		if (!(await this.connectAutoMcpServers()) && restarted) {
+			await this.persist();
+		}
 	}
 
 	async reloadBuiltin(): Promise<void> {
@@ -121,6 +142,7 @@ export class ToolSourceManager {
 	}
 
 	async disconnectMcp(serverName: string): Promise<void> {
+		this.runningMcpConfigs.delete(serverName);
 		await this.registry.unregisterSource('mcp', serverName);
 	}
 
@@ -172,10 +194,11 @@ export class ToolSourceManager {
 		}
 		try {
 			const tools = await this.registry.reloadSource('mcp', server.name);
+			this.runningMcpConfigs.set(server.name, mcpLaunchKey(server));
 			this.cacheLiveTools(server);
 			return tools.length;
 		} catch (error) {
-			await this.registry.unregisterSource('mcp', server.name);
+			await this.disconnectMcp(server.name);
 			throw error;
 		}
 	}
@@ -195,4 +218,8 @@ export class ToolSourceManager {
 	private enabledBuiltinTypes(): string[] {
 		return this.settings().builtInTools.filter((t) => t.enabled).map((t) => t.type);
 	}
+}
+
+function mcpLaunchKey(server: MCPServerConfig): string {
+	return JSON.stringify([server.command, server.args ?? [], server.env ?? {}]);
 }

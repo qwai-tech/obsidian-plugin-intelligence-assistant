@@ -195,6 +195,28 @@ describe('ToolSourceManager', () => {
 		expect(manager.isMcpConnected('broken')).toBe(true);
 	});
 
+	it('restarts a running server whose command changed, and replaces a renamed one', async () => {
+		const settings: ToolSourceSettings = {
+			builtInTools: [],
+			mcpServers: [server('edited'), server('renamed'), server('same')],
+			openApiTools: [],
+			cliTools: [],
+		};
+		const { manager, created } = setup(settings);
+		await manager.initialize();
+		const running = (name: string) => created.filter((source) => source.id === name);
+
+		settings.mcpServers = [server('edited', { args: ['--new'] }), server('new-name'), server('same')];
+		await manager.syncMcpServers();
+
+		expect(running('edited').map((source) => source.disposed)).toEqual([true, false]);
+		expect(running('renamed').every((source) => source.disposed)).toBe(true);
+		expect(manager.isMcpConnected('renamed')).toBe(false);
+		expect(manager.isMcpConnected('new-name')).toBe(true);
+		expect(running('same')).toHaveLength(1);
+		expect(running('same')[0].loads).toBe(1);
+	});
+
 	it('probeMcp loads and disposes a throw-away source without registering it', async () => {
 		const gamma = server('gamma');
 		const { manager, registry, created } = setup({ builtInTools: [], mcpServers: [], openApiTools: [], cliTools: [] });

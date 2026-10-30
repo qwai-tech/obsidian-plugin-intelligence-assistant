@@ -177,7 +177,7 @@ export function displayMCPTab(
 				await plugin.updateSettings((settings) => {
 					settings.mcpServers[index] = updated;
 				});
-				await plugin.services.tools.connectAutoMcpServers();
+				await plugin.services.tools.syncMcpServers();
 				refreshDisplay();
 			}).open();
 		});
