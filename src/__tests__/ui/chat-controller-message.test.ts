@@ -398,5 +398,36 @@ describe('ChatController (upgraded message pipeline)', () => {
 
 		expect(state.messages.map(message => message.content)).toEqual(['question', 'better answer']);
 	});
+
+	it('keeps the original answer when a regenerate is stopped before any text arrives', async () => {
+		const original = { role: 'assistant' as const, content: 'original answer' };
+		state.messages.push({ role: 'user', content: 'question' }, original);
+		const chatService = makeChatService({
+			streamResponse: jest.fn(async (_messages, _options, callbacks) => {
+				state.stopRun();
+				callbacks.onComplete({ role: 'assistant', content: '' });
+			}),
+		});
+		controller.configure(makeOptions(chatService));
+
+		await controller.regenerateMessage(original);
+
+		expect(state.messages.map(message => message.content)).toEqual(['question', 'original answer']);
+	});
+
+	it('removes the empty reply bubble when the reply cannot start', async () => {
+		const original = { role: 'assistant' as const, content: 'original answer' };
+		state.messages.push({ role: 'user', content: 'question' }, original);
+		const placeholder = document.createElement('div');
+		const messagesContainer = document.createElement('div');
+		messagesContainer.appendChild(placeholder);
+		const chatService = makeChatService({ streamResponse: jest.fn().mockRejectedValue(new Error('no provider')) });
+		controller.configure(makeOptions(chatService, { addMessageToUI: jest.fn().mockReturnValueOnce(placeholder).mockReturnValue(document.createElement('div')) }));
+
+		await controller.regenerateMessage(original);
+
+		expect(placeholder.parentElement).toBeNull();
+		expect(state.messages.map(message => message.content)).toEqual(['question', 'original answer']);
+	});
 });
 

@@ -201,7 +201,8 @@ export class ChatController extends BaseController {
 		const settle = (ok: boolean, message: Message, show: () => HTMLElement, ragSources?: RAGSource[]) => {
 			let element = assistantMessageEl;
 			message.timestamp ??= placeholderAssistant.timestamp;
-			settled = this.finishReply(message, () => (element = show()), ragSources).then(() => ({ ok, message, element }));
+			const stoppedEmpty = signal.aborted && message.content.trim() === '';
+			settled = this.finishReply(message, () => (element = show()), ragSources).then(() => ({ ok: ok && !stoppedEmpty, message, element }));
 		};
 
 		try {
@@ -253,6 +254,7 @@ export class ChatController extends BaseController {
 				);
 			}
 		} catch (error) {
+			assistantMessageEl.remove();
 			this.finalizeStreamingUI();
 			throw error;
 		}
