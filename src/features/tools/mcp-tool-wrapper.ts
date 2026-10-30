@@ -81,13 +81,6 @@ export class MCPToolWrapper implements Tool {
 	 */
 	async execute(args: Record<string, unknown>): Promise<ToolResult> {
 		try {
-			if (!this.mcpClient.isConnected()) {
-				return {
-					success: false,
-					error: `MCP server ${this.mcpClient.getServerName()} is not connected`,
-				};
-			}
-
 			const result = await this.mcpClient.callTool(this.mcpTool.name, args);
 
 			return {

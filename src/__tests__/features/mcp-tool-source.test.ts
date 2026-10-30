@@ -18,4 +18,17 @@ describe('McpToolSource', () => {
 			disconnect.mockRestore();
 		}
 	});
+
+	it('its tools start a crashed server again on the next call', async () => {
+		const source = new McpToolSource({ name: 'mock', command: process.execPath, args: [MOCK_SERVER], enabled: true } as never);
+		try {
+			const [echo] = await source.load();
+			expect((await echo.execute({ text: 'crash' })).success).toBe(false);
+
+			expect(await echo.execute({ text: 'back' })).toEqual({ success: true, result: 'MCP_SENTINEL back' });
+		} finally {
+			await source.dispose();
+		}
+	});
 });
+
