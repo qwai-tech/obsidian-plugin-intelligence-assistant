@@ -1,5 +1,5 @@
 import type { Message } from '@/features/conversations';
-import type { AgentExecutionStep } from '@/ui/state/chat-view-state';
+import type { AgentExecutionStep } from '@/features/llm';
 import { createAgentExecutionTraceContainer, updateExecutionTrace, collapseExecutionTrace } from '@/ui/chat/handlers/tool-call-handler';
 
 export function renderLiveTrace(container: HTMLElement, steps: Message['agentExecutionSteps']): void {
@@ -15,7 +15,7 @@ export function renderExecutionTrace(
 ): void {
 	const finalThought = (content: string): AgentExecutionStep => ({ type: 'thought', content, timestamp: Date.now(), phase: 'final' });
 	const allSteps: AgentExecutionStep[] = [
-		...((steps ?? []) as unknown as AgentExecutionStep[]),
+		...(steps ?? []),
 		...(reasoningContent ? [finalThought(reasoningContent)] : []),
 		...(reasoningSteps ?? []).map(step => finalThought(`${step.description}\n\n${step.content}`)),
 	];

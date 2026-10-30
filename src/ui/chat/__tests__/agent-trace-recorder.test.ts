@@ -1,5 +1,5 @@
 import { AgentTraceRecorder } from '../agent-trace-recorder';
-import type { AgentExecutionStep } from '@/ui/state/chat-view-state';
+import type { AgentExecutionStep } from '@/features/llm';
 
 describe('AgentTraceRecorder', () => {
 	const setup = () => {

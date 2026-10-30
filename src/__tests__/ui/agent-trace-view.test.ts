@@ -1,5 +1,5 @@
 import { toolSummary } from '@/ui/chat/agent-trace-view';
-import type { AgentExecutionStep } from '@/ui/state/chat-view-state';
+import type { AgentExecutionStep } from '@/features/llm';
 
 const step = (type: AgentExecutionStep['type'], content: string): AgentExecutionStep => ({ type, content, timestamp: 0 });
 

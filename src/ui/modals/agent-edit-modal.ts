@@ -94,7 +94,7 @@ export class AgentEditModal extends Modal {
 				dropdown.setValue(this.agent.modelStrategy.strategy);
 				
 				dropdown.onChange(value => {
-					this.agent.modelStrategy.strategy = value as 'default' | 'chat-view' | 'fixed';
+					this.agent.modelStrategy.strategy = value as Agent['modelStrategy']['strategy'];
 					// When changing strategy to fixed, ensure there's a modelId set if possible
 					if (value === 'fixed' && !this.agent.modelStrategy.modelId && hasCachedModels) {
 						this.agent.modelStrategy.modelId = modelOptions[0].id;

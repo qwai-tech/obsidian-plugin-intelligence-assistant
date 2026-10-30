@@ -9,7 +9,6 @@ import type { ModelInfo, AgentExecutionStep } from '@/features/llm';
 import { TFile, TFolder } from 'obsidian';
 import { Events } from 'obsidian';
 
-export type { AgentExecutionStep };
 
 /**
  * Manages all state for ChatView

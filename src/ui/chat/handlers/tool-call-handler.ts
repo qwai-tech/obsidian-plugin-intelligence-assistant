@@ -1,6 +1,6 @@
 import { setIcon } from 'obsidian';
 import type { Message } from '@/features/conversations';
-import type { AgentExecutionStep } from '@/ui/state/chat-view-state';
+import type { AgentExecutionStep } from '@/features/llm';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 

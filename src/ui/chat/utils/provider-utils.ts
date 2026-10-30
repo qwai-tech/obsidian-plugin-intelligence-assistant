@@ -6,36 +6,18 @@ export function resolveMessageProviderId(
 	message: Message,
 	plugin: IntelligenceAssistantPlugin
 ): string | null {
-	const metadata = message as unknown as Record<string, unknown>;
-	const explicitProvider = typeof metadata.provider === 'string'
-		? metadata.provider
-		: (typeof metadata.modelProvider === 'string' ? metadata.modelProvider : null);
-
-	if (explicitProvider && explicitProvider.trim().length > 0) {
-		return explicitProvider.trim().toLowerCase();
+	const explicitProvider = message.provider?.trim();
+	if (explicitProvider) {
+		return explicitProvider.toLowerCase();
 	}
-
-	const rawModelId = typeof message.model === 'string' && message.model.trim().length > 0
-		? message.model
-		: (typeof metadata.model === 'string' ? metadata.model : null);
-
-	if (rawModelId) {
-		const config = ModelManager.findConfigForModelByProvider(rawModelId, plugin.settings.llmConfigs);
-		if (config?.provider) {
-			return config.provider.toLowerCase();
-		}
-
-		const inferred = ModelManager.getProviderFromModelId(rawModelId);
-		if (inferred) {
-			return inferred.toLowerCase();
-		}
-
-		if (rawModelId.includes(':')) {
-			return rawModelId.split(':')[0].toLowerCase();
-		}
+	const modelId = message.model?.trim();
+	if (!modelId) {
+		return null;
 	}
-
-	return null;
+	const provider = ModelManager.findConfigForModelByProvider(modelId, plugin.settings.llmConfigs)?.provider
+		|| ModelManager.getProviderFromModelId(modelId)
+		|| (modelId.includes(':') ? modelId.split(':')[0] : null);
+	return provider ? provider.toLowerCase() : null;
 }
 
 export function getModelDisplayName(modelId?: string | null): string | null {
