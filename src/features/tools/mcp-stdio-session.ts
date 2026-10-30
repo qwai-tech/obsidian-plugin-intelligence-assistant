@@ -33,6 +33,7 @@ export class McpStdioSession {
 		child.stdout.setEncoding('utf8');
 		child.stdout.on('data', (chunk: string) => this.receive(chunk));
 		child.stderr.resume();
+		child.stdin.on('error', (error) => this.fail(error));
 		child.on('error', (error) => this.fail(error));
 		child.on('exit', (code) => this.fail(new Error(`MCP server exited with code ${code ?? 'unknown'}`)));
 	}

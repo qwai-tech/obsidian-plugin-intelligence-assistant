@@ -38,6 +38,19 @@ describe('McpStdioSession', () => {
 		await expect(session.request('shutdown', {}).then(() => session!.request('tools/list', {}))).rejects.toThrow();
 	});
 
+	it('turns writes to a server that already exited into rejected requests, not crashes', async () => {
+		session = await McpStdioSession.open({ command: process.execPath, args: ['-e', `
+			process.stdin.once('data', (chunk) => {
+				const message = JSON.parse(chunk.toString().split('\\n')[0]);
+				process.stdout.write(JSON.stringify({ jsonrpc: '2.0', id: message.id, result: { protocolVersion: '2025-06-18', capabilities: {} } }) + '\\n', () => process.exit(0));
+			});
+		`], env: process.env as Record<string, string> }, CLIENT);
+
+		const results = await Promise.allSettled(Array.from({ length: 20 }, () => session!.request('tools/list', {})));
+
+		expect(results.every(result => result.status === 'rejected')).toBe(true);
+	});
+
 	it('times out a request the server never answers', async () => {
 		session = await McpStdioSession.open({ command: process.execPath, args: ['-e', `
 			process.stdin.on('data', (chunk) => {
