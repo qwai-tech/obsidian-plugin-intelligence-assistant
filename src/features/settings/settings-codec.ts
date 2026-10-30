@@ -126,13 +126,14 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 
 	const quickActions = deepClone(source.quickActions?.list ?? DEFAULT_QUICK_ACTIONS);
 
-	const rag = source.rag ?? DEFAULT_USER_CONFIG.rag;
-	const retrieval = rag.retrieval ?? DEFAULT_USER_CONFIG.rag.retrieval;
-	const embedding = rag.embedding ?? DEFAULT_USER_CONFIG.rag.embedding;
-	const caching = rag.caching ?? DEFAULT_USER_CONFIG.rag.caching;
-	const grader = rag.grader ?? DEFAULT_USER_CONFIG.rag.grader;
-	const thresholds = grader.thresholds ?? DEFAULT_USER_CONFIG.rag.grader.thresholds;
-	const reranking = rag.reranking ?? DEFAULT_USER_CONFIG.rag.reranking ?? { enabled: false, model: 'cross-encoder' };
+	const defaults = DEFAULT_USER_CONFIG.rag;
+	const rag = { ...defaults, ...source.rag };
+	const retrieval = { ...defaults.retrieval, ...source.rag?.retrieval };
+	const embedding = { ...defaults.embedding, ...source.rag?.embedding };
+	const caching = { ...defaults.caching, ...source.rag?.caching };
+	const grader = { ...defaults.grader, ...source.rag?.grader };
+	const thresholds = { ...defaults.grader.thresholds, ...source.rag?.grader?.thresholds };
+	const reranking = { enabled: false, model: 'cross-encoder', ...defaults.reranking, ...source.rag?.reranking };
 
 	return {
 		lastVersion: source.lastVersion ?? '0.0.0',
