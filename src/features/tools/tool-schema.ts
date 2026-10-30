@@ -16,7 +16,8 @@ export function validateToolArguments(
 	args: Record<string, unknown>,
 ): { success: true; data: Record<string, unknown> } | { success: false; error: string } {
 	const schema = definition.inputSchema ?? parametersToZodObject(definition.parameters);
-	const result = schema.safeParse(args);
+	const optional = new Set(definition.parameters.filter(parameter => !parameter.required).map(parameter => parameter.name));
+	const result = schema.safeParse(Object.fromEntries(Object.entries(args).filter(([name, value]) => value !== null || !optional.has(name))));
 	if (!result.success) {
 		return {
 			success: false,
@@ -40,7 +41,34 @@ function parametersToZodObject(parameters: ToolParameter[]): ToolInputSchema {
 	return z.looseObject(shape);
 }
 
+export function parametersToJsonSchema(parameters: ToolParameter[]): { type: 'object'; properties: Record<string, unknown>; required: string[] } {
+	const properties: Record<string, unknown> = {};
+	for (const parameter of parameters) {
+		properties[parameter.name] = parameter.schema ?? {
+			type: parameter.type,
+			description: parameter.description,
+			...(parameter.enum ? { enum: parameter.enum } : {}),
+		};
+	}
+	return {
+		type: 'object',
+		properties,
+		required: parameters.filter(parameter => parameter.required).map(parameter => parameter.name),
+	};
+}
+
+export function singleJsonSchemaType(schema: Record<string, unknown>): string | null {
+	if (schema.anyOf || schema.oneOf || schema.allOf) {
+		return null;
+	}
+	const types = (Array.isArray(schema.type) ? schema.type as unknown[] : [schema.type]).filter(type => type !== 'null');
+	return types.length === 1 && typeof types[0] === 'string' ? types[0] : null;
+}
+
 function zodForParameter(parameter: ToolParameter): z.ZodMiniType {
+	if (parameter.schema && singleJsonSchemaType(parameter.schema) === null) {
+		return z.unknown();
+	}
 	if (parameter.enum?.length) {
 		return z.enum(parameter.enum as [string, ...string[]]);
 	}

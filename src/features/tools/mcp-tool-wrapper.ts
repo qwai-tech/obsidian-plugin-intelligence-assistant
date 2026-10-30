@@ -1,6 +1,6 @@
 import { Tool, ToolDefinition, ToolParameter, ToolResult } from '@/features/tools/types/tools';
 import { MCPClient, MCPTool } from './mcp-client';
-import { createToolDefinition } from '@/features/tools/tool-schema';
+import { createToolDefinition, singleJsonSchemaType } from '@/features/tools/tool-schema';
 
 /**
  * Wraps an MCP tool to adapt it to our internal Tool interface
@@ -27,7 +27,7 @@ export class MCPToolWrapper implements Tool {
 			const required = new Set(mcpTool.inputSchema.required || []);
 
 			for (const [name, schema] of Object.entries(mcpTool.inputSchema.properties)) {
-				const paramSchema = schema as { type?: unknown; description?: string; enum?: unknown[] };
+				const paramSchema = schema as Record<string, unknown> & { description?: string; enum?: unknown[] };
 
 				const stringEnum = Array.isArray(paramSchema.enum)
 					? paramSchema.enum.filter((v): v is string => typeof v === 'string')
@@ -35,10 +35,11 @@ export class MCPToolWrapper implements Tool {
 
 				parameters.push({
 					name,
-					type: this.mapJsonSchemaType(paramSchema.type),
+					type: this.mapJsonSchemaType(singleJsonSchemaType(paramSchema)),
 					description: paramSchema.description || '',
 					required: required.has(name),
 					enum: stringEnum,
+					schema: paramSchema,
 				});
 			}
 		}

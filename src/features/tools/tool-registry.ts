@@ -12,7 +12,7 @@ import type {
 	ToolSourceKind,
 } from '@/features/tools/types/tools';
 import type { ToolSource } from './tool-source';
-import { validateToolArguments } from './tool-schema';
+import { parametersToJsonSchema, validateToolArguments } from './tool-schema';
 import { assertWriteProposalResult } from '@/features/agent';
 
 /** Max length of an LLM function name (OpenAI / Anthropic limit). */
@@ -222,7 +222,7 @@ export class ToolRegistry {
 			function: {
 				name: tool.llmName,
 				description: tool.definition.description,
-				parameters: toJsonSchema(tool),
+				parameters: parametersToJsonSchema(tool.definition.parameters),
 			},
 		}));
 	}
@@ -282,21 +282,4 @@ function disambiguate(base: string, used: Set<string>): string {
 		}
 		n += 1;
 	}
-}
-
-/** Convert a tool's parameter definitions into the JSON Schema object form. */
-function toJsonSchema(tool: RegisteredTool): Record<string, unknown> {
-	const properties: Record<string, unknown> = {};
-	for (const param of tool.definition.parameters) {
-		properties[param.name] = {
-			type: param.type,
-			description: param.description,
-			...(param.enum ? { enum: param.enum } : {}),
-		};
-	}
-	return {
-		type: 'object',
-		properties,
-		required: tool.definition.parameters.filter((p) => p.required).map((p) => p.name),
-	};
 }

@@ -10,6 +10,7 @@ export interface ToolParameter {
 	description: string;
 	required?: boolean;
 	enum?: string[];
+	schema?: Record<string, unknown>;
 }
 
 export interface ToolDefinition {
