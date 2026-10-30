@@ -10,7 +10,6 @@ import { ConversationManager } from '@/ui/chat/managers/conversation-manager';
 import type { MessageRendererCallbacks } from '@/ui/chat/message-renderer';
 import { ChatMessageList } from '@/ui/chat/chat-message-list';
 import { addReferences, pickImages, pickReferences } from '@/ui/chat/chat-pickers';
-import { InputController } from '@/ui/chat/controllers/input-controller';
 import { ChatController } from '@/ui/chat/controllers/chat-controller';
 import { ChatHeaderComponent } from '@/ui/chat/chat-header.component';
 import { ChatInputComponent } from '@/ui/chat/chat-input.component';
@@ -31,7 +30,6 @@ export const CHAT_VIEW_TYPE = 'intelligence-assistant-chat';
 
 export class ChatView extends ItemView {
 	private readonly state = new ChatViewState();
-	private readonly inputController: InputController;
 	private readonly chatController: ChatController;
 	private conversationManager: ConversationManager;
 	private chatHeader: ChatHeaderComponent;
@@ -46,7 +44,6 @@ export class ChatView extends ItemView {
 
 	constructor(leaf: WorkspaceLeaf, private readonly plugin: IntelligenceAssistantPlugin) {
 		super(leaf);
-		this.inputController = new InputController(this.app, this.plugin, this.state);
 		this.chatController = new ChatController(this.app, this.plugin, this.state);
 	}
 
@@ -144,10 +141,7 @@ export class ChatView extends ItemView {
 			new Notice(t('chat.notices.ragInitError', { message: errorMessage(error) }));
 		}
 
-		void this.inputController.initialize();
 		void this.chatController.initialize();
-		this.inputController.setInputElement(this.chatInput.textarea);
-		this.inputController.setAttachmentPreviewElement(this.chatInput.attachmentContainer);
 
 		this.conversationManager = new ConversationManager(
 			this.app,
@@ -215,7 +209,7 @@ export class ChatView extends ItemView {
 		this.chatInput.updateReferenceDisplay();
 
 		this.pendingAgentTask = { prompt, displayText };
-		this.inputController.setInputValue(displayText);
+		this.chatInput.textarea.value = displayText;
 		this.chatInput.textarea.dispatchEvent(new Event('input', { bubbles: true }));
 		this.chatInput.textarea.focus();
 
@@ -227,7 +221,6 @@ export class ChatView extends ItemView {
 
 	async onClose() {
 		this.mentionSuggest?.close();
-		void this.inputController?.cleanup();
 		void this.chatController?.cleanup();
 		await this.plugin.saveSettings();
 	}
@@ -258,7 +251,7 @@ export class ChatView extends ItemView {
 			ragStatusPanel: this.ragStatusPanel,
 			getSelectedModel: () => this.chatInput.modelSelect.value,
 			clearInputUI: () => {
-				this.inputController.clearInput();
+				this.chatInput.textarea.value = '';
 				this.chatInput.textarea.dispatchEvent(new Event('input', { bubbles: true }));
 				this.chatInput.updateAttachmentPreview();
 				this.chatInput.updateReferenceDisplay();

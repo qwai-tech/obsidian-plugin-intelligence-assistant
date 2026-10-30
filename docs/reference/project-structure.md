@@ -211,8 +211,7 @@ src/
     │   ├── controllers/
     │   │   ├── base-controller.ts
     │   │   ├── chat-controller.ts
-    │   │   ├── chat-reply.ts
-    │   │   └── input-controller.ts
+    │   │   └── chat-reply.ts
     │   ├── handlers/
     │   │   └── tool-call-handler.ts
     │   ├── managers/

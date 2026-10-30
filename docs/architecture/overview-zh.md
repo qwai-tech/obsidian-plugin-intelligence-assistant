@@ -108,7 +108,7 @@ UI 代码接收 `PluginHost`（`ui/plugin-host.ts`：app、manifest、settings�
 - `views/chat-view.ts` — 聊天 `ItemView`，组合标题栏、输入框、消息列表和会话侧栏。`views/chat-workspace.ts` 打开和查找聊天视图；`views/agent-task-launcher.ts` 从命令启动智能体任务。
 - `chat/chat-session-controller.ts` — 把模式、智能体、会话配置和快捷开关应用到视图。
 - `chat/chat-message-list.ts` — 消息渲染、空状态和预检卡片；`message-grouping.ts` 合并旧格式的工具调用链。
-- `chat/controllers/` — `ChatController`（发送、流式输出、实时智能体轨迹）和 `InputController`。
+- `chat/controllers/` — `ChatController`（发送、流式输出、实时智能体轨迹）。
 - `chat/managers/conversation-manager.ts` 和 `chat/conversation-list-view.ts` — 会话侧栏。
 - `settings/settings-tab.ts` — 设置界面使用 Obsidian 的声明式设置（1.13+）：常规设置是 `control` 定义，因此会出现在 Obsidian 的设置搜索中；其他每个分区都是原生页面（`settings/section-page.ts`），渲染 `settings/tabs/` 中对应的内容。`settings/settings-form.ts` 把一个设置分区绑定到开关、下拉框、文本、数字、列表和密钥字段，并统一保存。
 - `modals/` — 对话框。
