@@ -303,7 +303,7 @@ export class ChatView extends ItemView {
 	}
 
 	private registerOutsideClickToCloseConversations(): void {
-		this.registerDomEvent(activeDocument, 'click', (event: MouseEvent) => {
+		this.registerDomEvent(this.containerEl.ownerDocument, 'click', (event: MouseEvent) => {
 			if (this.state.conversationListPinned || !this.state.conversationListVisible) return;
 			if (!this.conversationListContainer.contains(event.target as HTMLElement)) {
 				this.state.conversationListVisible = false;
