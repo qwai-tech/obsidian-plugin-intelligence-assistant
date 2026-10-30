@@ -47,7 +47,6 @@ export async function searchBing(query: string, maxResults: number, { config, ht
 			}
 		}
 
-		console.debug(`[WebSearch] Bing found ${results.length} results`);
 		return results;
 	} catch (error) {
 		console.error('[WebSearch] Bing search error:', error);

@@ -57,8 +57,6 @@ export class MCPClient {
 			// Connect the client
 			await this.client.connect(this.transport);
 			this.connected = true;
-
-			console.debug(`[MCP] Connected to server: ${this._config.name}`);
 		} catch (error) {
 			console.error(`[MCP] Failed to connect to ${this._config.name}:`, error);
 			throw error;
@@ -83,7 +81,6 @@ export class MCPClient {
 			const { stdout } = await execFilePromise('which', [command]);
 			const path = stdout.trim();
 			if (path) {
-				console.debug(`[MCP] Resolved ${command} to ${path}`);
 				return path;
 			}
 		} catch {
@@ -94,7 +91,6 @@ export class MCPClient {
 		for (const path of commonPaths) {
 			try {
 				await fs.access(path, fsConstants.X_OK);
-				console.debug(`[MCP] Resolved ${command} to ${path}`);
 				return path;
 			} catch {
 				// Path doesn't exist or isn't executable
@@ -115,7 +111,6 @@ export class MCPClient {
 			await this.client.close();
 			this.transport = null;
 			this.connected = false;
-			console.debug(`[MCP] Disconnected from server: ${this._config.name}`);
 		} catch (error) {
 			console.error(`[MCP] Error disconnecting from ${this._config.name}:`, error);
 		}

@@ -168,19 +168,15 @@ export class OllamaProvider extends BaseLLMProvider {
 	 */
 	async fetchModels(): Promise<ModelInfo[]> {
 		const baseUrl = this.getBaseUrl();
-		console.debug(`[Ollama] Fetching models from: ${baseUrl ?? 'unknown'}/api/tags`);
 
 		try {
 			const url = `${baseUrl ?? 'unknown'}/api/tags`;
 
-			console.debug('[Ollama] Making request to Ollama API...');
 			const response = await this.http.request({
 				url: url,
 				method: 'GET',
 				headers: this.getHeaders(),
 			});
-
-			console.debug(`[Ollama] Response status: ${response.status}`);
 
 			if (response.status < 200 || response.status >= 300) {
 				const errorText = response.text;
@@ -189,7 +185,6 @@ export class OllamaProvider extends BaseLLMProvider {
 			}
 
 			const data = JSON.parse(response.text) as OllamaModelsResponse;
-			console.debug('[Ollama] Response data:', JSON.stringify(data, null, 2));
 
 			// Check if models array exists
 			if (!data || !data.models || !Array.isArray(data.models)) {
@@ -215,7 +210,6 @@ export class OllamaProvider extends BaseLLMProvider {
 				};
 			});
 
-			console.debug(`[Ollama] Successfully fetched ${models.length} models:`, models.map((m: ModelInfo) => m.name).join(', '));
 			return models;
 		} catch (error: unknown) {
 			console.error('[Ollama] Failed to fetch models:', error);

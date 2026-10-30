@@ -55,7 +55,6 @@ export async function searchTavily(query: string, maxResults: number, { config, 
 			}
 		}
 
-		console.debug(`[WebSearch] Tavily found ${results.length} results`);
 		return results;
 	} catch (error) {
 		console.error('[WebSearch] Tavily search error:', error);

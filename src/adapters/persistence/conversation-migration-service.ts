@@ -14,12 +14,9 @@ export class ConversationMigrationService {
    */
   async migrateFromOldFormat(oldConversations: Conversation[]): Promise<boolean> {
     if (!oldConversations || !Array.isArray(oldConversations)) {
-      console.debug('No old conversations to migrate');
       return true;
     }
 
-    console.debug(`Starting migration of ${oldConversations.length} conversations`);
-    
     // Process each conversation
     for (const conv of oldConversations) {
       try {
@@ -28,14 +25,12 @@ export class ConversationMigrationService {
         
         // Create the conversation file
         await this._storageService.createConversation(normalizedConv);
-        console.debug(`Migrated conversation: ${conv.id} - ${conv.title}`);
       } catch (error) {
         console.error(`Error migrating conversation ${conv.id}:`, error);
         return false;
       }
     }
 
-    console.debug(`Successfully migrated ${oldConversations.length} conversations`);
     return true;
   }
 

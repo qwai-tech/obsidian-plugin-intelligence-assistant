@@ -253,12 +253,9 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 		const legacyConversations = this.store.legacyConversations;
 		
 		if (needsMigration && legacyConversations.length > 0) {
-			console.debug('Starting conversation migration...');
-			
 			const success = await migration.migrateFromOldFormat(legacyConversations);
 			
 			if (success) {
-				console.debug('Conversation migration completed successfully');
 				legacyConversations.length = 0;
 				this.settings.conversations = [];
 				await this.saveSettings();

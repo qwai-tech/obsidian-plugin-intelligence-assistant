@@ -34,8 +34,7 @@ export class ObsidianSettingsPersistence implements SettingsPersistence {
 	private async readLegacyData(): Promise<unknown> {
 		try {
 			return await this.plugin.loadData() as unknown;
-		} catch (error) {
-			console.debug('No legacy data found', error);
+		} catch {
 			return null;
 		}
 	}

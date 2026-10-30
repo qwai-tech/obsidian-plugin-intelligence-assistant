@@ -225,8 +225,6 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 					success: true,
 					error: undefined
 				});
-
-				console.debug(`[MCP] ${server.name} connection test: ${tools.length} tools available`);
 			} catch (error: unknown) {
 				console.error(`[MCP] ${server.name} connection test failed:`, error);
 				results.push({
@@ -249,12 +247,6 @@ export class IntelligenceAssistantSettingTab extends PluginSettingTab {
 			new Notice(t('settings.mcp.notices.testAllSuccess', { count: successful }));
 		} else {
 			new Notice(t('settings.mcp.notices.testAllPartial', { successful, failed }));
-
-			// Show detailed results in console
-			console.debug('[MCP] Connection test results:');
-			for (const result of results) {
-				console.debug(`  ${result.success ? '✅' : '❌'} ${result.name}: ${result.error || 'connected'}`);
-			}
 		}
 
 		void this.renderSettings();

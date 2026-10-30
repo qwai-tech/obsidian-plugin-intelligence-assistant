@@ -160,7 +160,6 @@ export class ModelManager {
 			// Find config matching the provider prefix
 			const config = configs.find(c => c.provider === providerPrefix);
 			if (config) {
-				console.debug(`Found config for provider-prefixed model: ${modelId} -> ${providerPrefix}`);
 				return config;
 			}
 		}

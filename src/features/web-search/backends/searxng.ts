@@ -61,7 +61,6 @@ export async function searchSearXNG(query: string, maxResults: number, { config,
 			}
 		}
 
-		console.debug(`[WebSearch] SearXNG found ${results.length} results`);
 		return results;
 	} catch (error) {
 		console.error('[WebSearch] SearXNG search error:', error);

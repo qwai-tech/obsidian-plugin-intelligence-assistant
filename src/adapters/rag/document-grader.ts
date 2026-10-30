@@ -243,12 +243,10 @@ Respond with a JSON object in this exact format:
 
   private async resolveGraderModel(chatModel?: string, defaultModel?: string): Promise<string | null> {
     const source = this.config.graderModelSource || 'default';
-    console.debug('[DocumentGrader] Resolving grader model with source:', source);
 
     switch (source) {
       case 'chat': {
         if (chatModel?.trim()) {
-          console.debug('[DocumentGrader] Using chat model:', chatModel);
           return chatModel.trim();
         }
         console.warn('[DocumentGrader] Chat model not available, falling back to default');
@@ -260,7 +258,6 @@ Respond with a JSON object in this exact format:
 
       case 'default': {
         if (defaultModel?.trim()) {
-          console.debug('[DocumentGrader] Using default model from settings:', defaultModel);
           return defaultModel.trim();
         }
         console.warn('[DocumentGrader] No default model configured in settings');
@@ -274,7 +271,6 @@ Respond with a JSON object in this exact format:
             const availableModels = await ModelManager.getAllAvailableModels(this.llmConfigs);
             const configuredGraderModel = availableModels.find(m => m.id === this.config.graderModel?.trim());
             if (configuredGraderModel) {
-              console.debug('[DocumentGrader] Using configured grader model:', configuredGraderModel.id);
               return configuredGraderModel.id;
             }
             console.warn('[DocumentGrader] Configured grader model not found:', this.config.graderModel);
@@ -288,7 +284,6 @@ Respond with a JSON object in this exact format:
         } else {
           console.warn('[DocumentGrader] Specific model source selected but no model configured');
           if (defaultModel?.trim()) {
-            console.debug('[DocumentGrader] Using default model as fallback:', defaultModel);
             return defaultModel.trim();
           }
           return await this.getFirstAvailableGraderModel();
@@ -298,7 +293,6 @@ Respond with a JSON object in this exact format:
       default: {
         console.warn('[DocumentGrader] Unknown grader model source');
         if (defaultModel?.trim()) {
-          console.debug('[DocumentGrader] Using default model for unknown source:', defaultModel);
           return defaultModel.trim();
         }
         return await this.getFirstAvailableGraderModel();
@@ -320,7 +314,6 @@ Respond with a JSON object in this exact format:
         !m.capabilities?.includes('reasoning')
       );
       if (jsonChatModel) {
-        console.debug('[DocumentGrader] Using first available JSON chat model:', jsonChatModel.id);
         return jsonChatModel.id;
       }
       
@@ -331,21 +324,18 @@ Respond with a JSON object in this exact format:
         !m.capabilities?.includes('reasoning')
       );
       if (chatModel) {
-        console.debug('[DocumentGrader] Using first available chat model:', chatModel.id);
         return chatModel.id;
       }
 
       // Reasoning models are a last resort for grading.
       const reasoningGraderModel = allModels.find(m => m.capabilities?.includes('reasoning') && m.enabled !== false);
       if (reasoningGraderModel) {
-        console.debug('[DocumentGrader] Using first available reasoning model:', reasoningGraderModel.id);
         return reasoningGraderModel.id;
       }
       
       // Last resort: use any available model
       const anyModel = allModels.find(m => m.enabled !== false);
       if (anyModel) {
-        console.debug('[DocumentGrader] Using first available model:', anyModel.id);
         return anyModel.id;
       }
     } catch (error) {

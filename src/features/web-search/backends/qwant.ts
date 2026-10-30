@@ -71,7 +71,6 @@ export async function searchQwant(query: string, maxResults: number, { config, h
 			}
 		}
 
-		console.debug(`[WebSearch] Qwant found ${results.length} results`);
 		return results;
 	} catch (error) {
 		console.error('[WebSearch] Qwant search error:', error);

@@ -69,7 +69,6 @@ export async function searchMojeek(query: string, maxResults: number, { config, 
 			}
 		}
 
-		console.debug(`[WebSearch] Mojeek found ${results.length} results`);
 		return results;
 	} catch (error) {
 		console.error('[WebSearch] Mojeek search error:', error);

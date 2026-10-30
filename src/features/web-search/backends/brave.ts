@@ -75,7 +75,6 @@ export async function searchBrave(query: string, maxResults: number, { config, h
 			}
 		}
 
-		console.debug(`[WebSearch] Brave found ${results.length} results`);
 		return results;
 	} catch (error) {
 		console.error('[WebSearch] Brave search error:', error);

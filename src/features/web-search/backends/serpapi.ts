@@ -61,7 +61,6 @@ export async function searchSerpAPI(query: string, maxResults: number, { config,
 			}
 		}
 
-		console.debug(`[WebSearch] SerpAPI found ${results.length} results`);
 		return results;
 	} catch (error) {
 		console.error('[WebSearch] SerpAPI search error:', error);

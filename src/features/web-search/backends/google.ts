@@ -47,7 +47,6 @@ export async function searchGoogle(query: string, maxResults: number, { config, 
 			}
 		}
 
-		console.debug(`[WebSearch] Google found ${results.length} results`);
 		return results;
 	} catch (error) {
 		console.error('[WebSearch] Google search error:', error);

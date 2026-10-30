@@ -99,7 +99,7 @@ export default defineConfig([
       }],
       "obsidianmd/prefer-file-manager-trash-file": "error",
 
-      "no-console": ["error", { allow: ["warn", "error", "debug"] }],
+      "no-console": ["error", { allow: ["warn", "error"] }],
       "no-alert": "error",
       "no-undef": "off",
 

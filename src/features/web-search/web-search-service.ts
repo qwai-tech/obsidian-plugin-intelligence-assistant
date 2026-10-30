@@ -49,20 +49,16 @@ export class WebSearchService {
 			const processedQuery = preprocessQuery(userInput);
 			
 			if (!processedQuery) {
-				console.debug('[WebSearch] Query was filtered out or is too short');
 				return []; // Return empty results if query is not valid
 			}
 
 			// Determine if this query would benefit from web search
 			if (!shouldSearch(processedQuery)) {
-				console.debug('[WebSearch] Query does not seem to require web search, skipping');
 				return []; // Return empty results if search is not appropriate
 			}
 
 			// Optimize the query for better search results
 			const optimizedQuery = optimizeQuery(processedQuery);
-
-			console.debug(`[WebSearch] Searching for: "${optimizedQuery}" using provider: ${this.config.provider}`);
 
 			const maxResults = this.config.maxResults || 5;
 			
