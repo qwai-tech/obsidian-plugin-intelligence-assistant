@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Kudeatu Modeloak",
         "desc": "Bota modelo berriak edo eguneratu lehendik daudenak Ollama erregistrotik.",
-        "btn": "⏬ Bota Ollama Modeloa"
+        "btn": "Bota Ollama Modeloa"
       },
       "apiKey": {
         "name": "API Giltza",

@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Gestionar modelos",
         "desc": "Descargar nuevos modelos o actualizar los existentes desde el registro de Ollama.",
-        "btn": "⏬ Descargar modelo Ollama"
+        "btn": "Descargar modelo Ollama"
       },
       "apiKey": {
         "name": "Clave API",

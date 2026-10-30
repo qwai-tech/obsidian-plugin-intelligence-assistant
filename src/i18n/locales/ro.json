@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Gestionați modele",
         "desc": "Descărcați modele noi sau actualizați cele existente din registrul Ollama.",
-        "btn": "⏬ Descărcați model Ollama"
+        "btn": "Descărcați model Ollama"
       },
       "apiKey": {
         "name": "Cheie API",

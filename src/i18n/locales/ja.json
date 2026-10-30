@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "モデルを管理",
         "desc": "Ollama レジストリから新しいモデルをプルするか、既存のモデルを更新します。",
-        "btn": "⏬ Ollama モデルをプル"
+        "btn": "Ollama モデルをプル"
       },
       "apiKey": {
         "name": "API キー",

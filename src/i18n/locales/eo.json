@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Administri Modelojn",
         "desc": "Tiri novajn modelojn aŭ ĝisdatigi ekzistantajn el la Ollama-registro.",
-        "btn": "⏬ Tiri Ollama-Modelon"
+        "btn": "Tiri Ollama-Modelon"
       },
       "apiKey": {
         "name": "API-Ŝlosilo",

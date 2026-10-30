@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "נהל מודלים",
         "desc": "משוך מודלים חדשים או עדכן קיימים מ-Ollama registry.",
-        "btn": "⏬ משוך מודל Ollama"
+        "btn": "משוך מודל Ollama"
       },
       "apiKey": {
         "name": "מפתח API",

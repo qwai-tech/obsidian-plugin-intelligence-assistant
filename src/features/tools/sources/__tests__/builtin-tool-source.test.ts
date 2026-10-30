@@ -10,7 +10,7 @@ describe('BuiltinToolSource', () => {
 		const source = makeSource();
 		expect(source.kind).toBe('builtin');
 		expect(source.id).toBe('builtin');
-		expect(source.label).toBe('Built-in Tools');
+		expect(source.label).toBe('Built-in tools');
 	});
 
 	it('loads exactly the builtin tools', async () => {

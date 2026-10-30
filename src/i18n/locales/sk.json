@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Spravovať modely",
         "desc": "Stiahnuť nové modely alebo aktualizovať existujúce z registra Ollama.",
-        "btn": "⏬ Stiahnuť Ollama model"
+        "btn": "Stiahnuť Ollama model"
       },
       "apiKey": {
         "name": "API kľúč",

@@ -93,7 +93,7 @@ describe('Visual tour', () => {
 
 			await tour.settingsRoot();
 			await tour.shot('10-settings-root');
-			const sections = ['LLM', 'MCP', 'Tools', 'RAG', 'Prompts', 'Agents', 'Quick Actions', 'Usage'];
+			const sections = ['LLM', 'MCP', 'Tools', 'RAG', 'Prompts', 'Agents', 'Quick actions', 'Usage'];
 			for (const [index, section] of sections.entries()) {
 				await tour.section(section);
 				await tour.shot(`${11 + index}-settings-${section.toLowerCase().replace(' ', '-')}`);
@@ -104,7 +104,7 @@ describe('Visual tour', () => {
 				['MCP', TestIds.settings.mcpAddBtn, '21-dialog-mcp-server'],
 				['Prompts', TestIds.settings.promptAddBtn, '22-dialog-prompt'],
 				['Agents', TestIds.settings.agentEditBtn, '23-dialog-agent'],
-				['Quick Actions', TestIds.settings.quickActionEditBtn, '24-dialog-quick-action'],
+				['Quick actions', TestIds.settings.quickActionEditBtn, '24-dialog-quick-action'],
 			];
 			for (const [section, button, name] of dialogs) {
 				await tour.section(section);

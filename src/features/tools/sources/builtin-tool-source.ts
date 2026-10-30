@@ -53,7 +53,7 @@ const BUILTIN_TOOL_FACTORIES: Record<string, BuiltinToolFactory> = {
 export class BuiltinToolSource implements ToolSource {
 	readonly kind: ToolSourceKind = 'builtin';
 	readonly id: string = 'builtin';
-	readonly label: string = 'Built-in Tools';
+	readonly label: string = 'Built-in tools';
 
 	/**
 	 * @param app Obsidian app for tool wiring.

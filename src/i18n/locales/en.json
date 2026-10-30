@@ -8,7 +8,7 @@
       "rag": "RAG",
       "prompts": "Prompts",
       "agents": "Agents",
-      "quickActions": "Quick Actions",
+      "quickActions": "Quick actions",
       "usage": "Usage"
     },
     "general": {
@@ -75,10 +75,10 @@
       "actions": {
         "disable": "Disable",
         "enable": "Enable",
-        "setDefaultChat": "Set Default Chat",
-        "defaultChat": "Default Chat",
-        "setDefaultEmbedding": "Set Default Embedding",
-        "defaultEmbedding": "Default Embedding"
+        "setDefaultChat": "Set default chat",
+        "defaultChat": "Default chat",
+        "setDefaultEmbedding": "Set default embedding",
+        "defaultEmbedding": "Default embedding"
       },
       "notices": {
         "fetching": "Fetching models for {{provider}}...",
@@ -96,7 +96,7 @@
       }
     },
     "provider": {
-      "securityTitle": "Security Warning",
+      "securityTitle": "Security warning",
       "securityDesc": "API keys are stored as plain text in your vault for compatibility. To prevent accidental leaks:",
       "securityItem1": "Do NOT share your {{configDir}}/plugins/intelligence-assistant/data/ folder.",
       "securityItem2": "Add this folder to your .gitignore if you use Git sync.",
@@ -114,9 +114,9 @@
       },
       "status": {
         "ready": "Ready",
-        "needsConfig": "Needs Configuration",
+        "needsConfig": "Needs configuration",
         "checking": "Checking...",
-        "credentialsSet": "Credentials Set",
+        "credentialsSet": "Credentials set",
         "serverOnline": "Server online",
         "serverOffline": "Server offline",
         "serverError": "Server error"
@@ -182,7 +182,7 @@
         "tools": "Tools",
         "actions": "Actions"
       },
-      "untitled": "Untitled MCP Server",
+      "untitled": "Untitled MCP server",
       "notConfigured": "Not configured",
       "noArgs": "None",
       "cached": "Cached",
@@ -192,8 +192,8 @@
       "envVars": "{{count}} env vars",
       "status": {
         "disabled": "Disabled",
-        "connected": "connected",
-        "disconnected": "disconnected",
+        "connected": "Connected",
+        "disconnected": "Disconnected",
         "enableToManage": "Enable to manage connections",
         "manualConnect": "Manual connect",
         "autoConnect": "Auto-connect"
@@ -210,8 +210,8 @@
         "edit": "Edit",
         "enabled": "Enabled",
         "enabledOff": "Disabled",
-        "connect": "connect",
-        "disconnect": "disconnect",
+        "connect": "Connect",
+        "disconnect": "Disconnect",
         "connecting": "Connecting...",
         "disconnecting": "Disconnecting...",
         "test": "Test",
@@ -246,7 +246,7 @@
       "count_one": "{{count}} agent configured",
       "count_other": "{{count}} agents configured",
       "count": "{{count}} agents configured",
-      "addBtn": "+ add agent",
+      "addBtn": "Add agent",
       "empty": "No agents configured. Select add agent to get started.",
       "tableHeaders": {
         "agent": "Agent",
@@ -261,9 +261,9 @@
       "model": {
         "notSet": "Not set",
         "notFound": "Model not found in cache",
-        "useChatView": "Use Chat View Model",
+        "useChatView": "Use chat view model",
         "useChatViewDesc": "Will use model selected in chat view",
-        "useDefault": "Use Default Model",
+        "useDefault": "Use default model",
         "useDefaultDesc": "Will use default model from settings"
       },
       "capabilities": {
@@ -281,8 +281,8 @@
       },
       "actions": {
         "edit": "Edit",
-        "delete": "delete",
-        "protected": "protected"
+        "delete": "Delete",
+        "protected": "Protected"
       },
       "confirm": {
         "delete": "Delete agent \"{{name}}\"?"
@@ -290,11 +290,11 @@
     },
     "prompts": {
       "desc": "Manage system prompts that define the behavior and personality of your AI assistant.",
-      "addBtn": "+ add system prompt",
+      "addBtn": "Add system prompt",
       "empty": "No system prompts configured. Select add system prompt to get started.",
       "tableHeaders": {
         "name": "Name",
-        "contentPreview": "Content Preview",
+        "contentPreview": "Content preview",
         "created": "Created",
         "updated": "Updated",
         "enabled": "Enabled",
@@ -317,10 +317,10 @@
     "tools": {
       "desc": "Review built-in tools and explore MCP tools loaded from connected servers. Enable the actions your agents should be able to perform.",
       "subTabs": {
-        "builtIn": "Built-in Tools",
+        "builtIn": "Built-in tools",
         "mcp": "MCP tools",
         "openapi": "HTTP / OpenAPI",
-        "cli": "CLI Tools"
+        "cli": "CLI tools"
       },
       "builtIn": {
         "tableHeaders": {
@@ -331,9 +331,9 @@
           "enabled": "Enabled"
         },
         "categories": {
-          "fileOps": "File Operations",
-          "searchDisc": "Search & Discovery",
-          "noteMgmt": "Note Management"
+          "fileOps": "File operations",
+          "searchDisc": "Search & discovery",
+          "noteMgmt": "Note management"
         },
         "toolMeta": {
           "readFile": {
@@ -361,15 +361,15 @@
             "params": "path (required), content (required): Note path and proposed content to append"
           }
         },
-        "infoTitle": "About Tools",
+        "infoTitle": "About tools",
         "infoText": "Built-in tools are configured per plugin settings. MCP tools are managed independently—use the MCP tab to connect servers and refresh tool availability.",
         "toolNames": {
-          "read_file": "Read File",
-          "write_file": "Write File",
-          "list_files": "List Files",
-          "search_files": "Search Files",
-          "create_note": "Create Note",
-          "append_note": "Append Note"
+          "read_file": "Read file",
+          "write_file": "Write file",
+          "list_files": "List files",
+          "search_files": "Search files",
+          "create_note": "Create note",
+          "append_note": "Append note"
         }
       },
       "mcpTools": {
@@ -387,8 +387,8 @@
         "live": "Live",
         "cached": "Cached",
         "status": {
-          "connected": "connected",
-          "disconnected": "disconnected"
+          "connected": "Connected",
+          "disconnected": "Disconnected"
         }
       },
       "openapi": {
@@ -422,7 +422,7 @@
           "reloadFailed": "Failed to reload HTTP source. Check the console for details."
         },
         "modal": {
-          "defaultTitle": "HTTP Source",
+          "defaultTitle": "HTTP source",
           "displayName": {
             "name": "Display name",
             "desc": "Shown to agents when choosing a tool source"
@@ -473,8 +473,8 @@
       },
       "cli": {
         "desc": "Define local command-line tools that agents can execute. Use templates like {{param}} for dynamic arguments.",
-        "addBtn": "Add CLI Tool",
-        "presetsBtn": "Add from Presets",
+        "addBtn": "Add CLI tool",
+        "presetsBtn": "Add from presets",
         "noTools": "No CLI tools configured yet.",
         "tableHeaders": {
           "name": "Name",
@@ -483,7 +483,7 @@
           "status": "Status",
           "actions": "Actions"
         },
-        "unnamed": "Unnamed CLI Tool",
+        "unnamed": "Unnamed CLI tool",
         "paramCount_one": "{{count}} parameter",
         "paramCount_other": "{{count}} parameters",
         "paramCount": "{{count}} parameters",
@@ -499,10 +499,10 @@
         "notices": {
           "removed": "CLI tool removed"
         },
-        "infoTitle": "About CLI Tools",
+        "infoTitle": "About CLI tools",
         "infoText": "CLI tools execute shell commands locally. Use {{paramName}} in arguments for template substitution, or configure parameters to be passed as arguments or environment variables.",
         "modal": {
-          "defaultTitle": "CLI Tool",
+          "defaultTitle": "CLI tool",
           "toolName": {
             "name": "Tool name",
             "desc": "Identifier used by agents to call this tool"
@@ -515,7 +515,7 @@
             "name": "Enabled",
             "desc": "Enable to allow agents to use this tool"
           },
-          "commandConfig": "Command Configuration",
+          "commandConfig": "Command configuration",
           "command": {
             "name": "Command",
             "desc": "The executable to run (e.g., node, python, bash, /path/to/script)"
@@ -538,7 +538,7 @@
           },
           "paramsTitle": "Parameters",
           "paramsDesc": "Define parameters that the AI can pass to this tool.",
-          "addParam": "Add Parameter",
+          "addParam": "Add parameter",
           "noParams": "No parameters defined.",
           "paramN": "Parameter {{n}}",
           "param": {
@@ -563,7 +563,7 @@
               "desc": "Override the environment variable name (defaults to uppercase parameter name)"
             }
           },
-          "envTitle": "Environment Variables",
+          "envTitle": "Environment variables",
           "envDesc": "Static environment variables to set when running the command.",
           "envVars": {
             "name": "Environment variables",
@@ -580,43 +580,43 @@
             "added": "Added \"{{name}}\" - enable it in the CLI tools list"
           },
           "categories": {
-            "file": "File Operations",
+            "file": "File operations",
             "search": "Search",
             "network": "Network",
-            "code": "Code Execution",
-            "data": "Data Processing",
-            "system": "System Information",
-            "apps": "macOS Apps & Desktop"
+            "code": "Code execution",
+            "data": "Data processing",
+            "system": "System information",
+            "apps": "macOS apps & desktop"
           },
           "names": {
-            "preset-cat": "Read File (cat)",
-            "preset-ls": "List Directory (ls)",
-            "preset-find": "Find Files (find)",
-            "preset-grep": "Search Text (grep)",
-            "preset-ripgrep": "Fast Search (rg)",
-            "preset-curl": "HTTP Request (curl)",
+            "preset-cat": "Read file (cat)",
+            "preset-ls": "List directory (ls)",
+            "preset-find": "Find files (find)",
+            "preset-grep": "Search text (grep)",
+            "preset-ripgrep": "Fast search (rg)",
+            "preset-curl": "HTTP request (curl)",
             "preset-curl-post": "HTTP POST (curl)",
-            "preset-python": "Run Python Code",
+            "preset-python": "Run Python code",
             "preset-node": "Run JavaScript (Node)",
-            "preset-bash": "Run Shell Script",
-            "preset-jq": "JSON Processor (jq)",
-            "preset-wc": "Word Count (wc)",
-            "preset-date": "Current Date/Time",
-            "preset-pwd": "Current Directory (pwd)",
-            "preset-whoami": "Current User",
-            "preset-uname": "System Info (uname)",
+            "preset-bash": "Run shell script",
+            "preset-jq": "JSON processor (jq)",
+            "preset-wc": "Word count (wc)",
+            "preset-date": "Current date/time",
+            "preset-pwd": "Current directory (pwd)",
+            "preset-whoami": "Current user",
+            "preset-uname": "System info (uname)",
             "preset-open": "Open File/URL (open)",
             "preset-open-app": "Launch App (open -a)",
             "preset-safari": "Open in Safari",
             "preset-chrome": "Open in Chrome",
             "preset-firefox": "Open in Firefox",
-            "preset-pbcopy": "Copy to Clipboard",
-            "preset-pbpaste": "Paste from Clipboard",
+            "preset-pbcopy": "Copy to clipboard",
+            "preset-pbpaste": "Paste from clipboard",
             "preset-say": "Text-to-Speech (say)",
-            "preset-osascript": "AppleScript Runner",
-            "preset-notify": "Desktop Notification",
+            "preset-osascript": "AppleScript runner",
+            "preset-notify": "Desktop notification",
             "preset-screencapture": "Screenshot",
-            "preset-applescript-list-apps": "List Running Apps"
+            "preset-applescript-list-apps": "List running apps"
           }
         }
       }
@@ -629,7 +629,7 @@
         "search": "Search",
         "filters": "Filters",
         "advanced": "Advanced",
-        "websearch": "Web Search"
+        "websearch": "Web search"
       },
       "general": {
         "title": "General settings",
@@ -657,10 +657,10 @@
         "desc": "Manage your RAG index and view statistics about indexed content.",
         "statsTitle": "Index statistics",
         "stats": {
-          "totalChunks": "Total Chunks",
-          "uniqueFiles": "Unique Files",
-          "totalChars": "Total Characters",
-          "avgChunkSize": "Avg Chunk Size"
+          "totalChunks": "Total chunks",
+          "uniqueFiles": "Unique files",
+          "totalChars": "Total characters",
+          "avgChunkSize": "Avg chunk size"
         },
         "empty": "Index is empty. Select rebuild index to start indexing.",
         "error": "Unable to load index statistics",
@@ -697,9 +697,9 @@
           "name": "Chunking strategy",
           "desc": "Strategy for splitting documents into chunks",
           "recursive": "Recursive (Smart)",
-          "fixed": "Fixed Size",
-          "sentence": "By Sentence",
-          "paragraph": "By Paragraph"
+          "fixed": "Fixed size",
+          "sentence": "By sentence",
+          "paragraph": "By paragraph"
         },
         "chunkSize": {
           "name": "Chunk size",
@@ -782,8 +782,8 @@
         "graderSource": {
           "name": "Grader model source",
           "desc": "Where to get the grader model from",
-          "chat": "Chat Model",
-          "custom": "Custom Model"
+          "chat": "Chat model",
+          "custom": "Custom model"
         },
         "graderModel": {
           "name": "Grader model",
@@ -911,18 +911,18 @@
       "count_one": "{{count}} action configured ({{enabled}} enabled)",
       "count_other": "{{count}} actions configured ({{enabled}} enabled)",
       "count": "{{count}} actions configured ({{enabled}} enabled)",
-      "addBtn": "+ add quick action",
+      "addBtn": "Add quick action",
       "empty": "No quick actions configured. Select add quick action to get started.",
       "tableHeaders": {
         "action": "Action",
         "type": "Type",
         "model": "Model",
-        "promptPreview": "Prompt Preview",
+        "promptPreview": "Prompt preview",
         "actions": "Actions"
       },
       "defaultModel": "Default",
       "editBtn": "Edit",
-      "deleteBtn": "delete",
+      "deleteBtn": "Delete",
       "confirm": {
         "delete": "Delete quick action \"{{name}}\"?"
       },
@@ -1001,7 +1001,7 @@
       "byModel": "By model",
       "noData": "No usage data yet.",
       "recentActivity": "Recent activity",
-      "last10": "last 10",
+      "last10": "Last 10",
       "noRecent": "No recent activity.",
       "tableHeaders": {
         "provider": "Provider",
@@ -1097,7 +1097,7 @@
       "totalChunks": "Total chunks:",
       "filesIndexed": "Files indexed:",
       "totalSize": "Total size:",
-      "avgChunks": "Avg Chunks/File:",
+      "avgChunks": "Avg chunks/file:",
       "indexedFiles": "Indexed files",
       "noFilesYet": "No files have been indexed yet.",
       "howToBuild": "To build the RAG index:",
@@ -1110,11 +1110,11 @@
       "retrieved": "Retrieved from {{count}} documents"
     },
     "ragTooltip": {
-      "status": "RAG Index Status:",
+      "status": "RAG index status:",
       "totalChunks": "Total Chunks: {{count}}",
       "filesIndexed": "Files Indexed: {{count}}",
       "totalSize": "Total Size: {{size}} KB",
-      "indexedFiles": "Indexed Files:",
+      "indexedFiles": "Indexed files:",
       "andMore": "  ... and {{count}} more",
       "noFilesYet": "No files indexed yet.",
       "goToSettings": "Go to Settings → RAG to build the index.",
@@ -1149,7 +1149,7 @@
       "webResults": "Web results",
       "attachments": "Attachments",
       "references": "References",
-      "ragSources": "RAG Sources",
+      "ragSources": "RAG sources",
       "reasoning": "Reasoning",
       "copy": "Copy",
       "copied": "Message copied",
@@ -1159,7 +1159,7 @@
       "tokenUsageCompletion": "Completion",
       "tokenUsageTotal": "Total",
       "save": "Save",
-      "insertToNotes": "Insert to Notes",
+      "insertToNotes": "Insert to notes",
       "regenerate": "Regenerate"
     },
     "streaming": {
@@ -1167,7 +1167,7 @@
     },
     "toolCall": {
       "thinking": "Thinking",
-      "executionProcess": "Execution Process",
+      "executionProcess": "Execution process",
       "input": "Input",
       "output": "Output",
       "running": "Running..."
@@ -1176,10 +1176,10 @@
     "addPictureTooltip": "Attach an image to your message",
     "ragLabel": "RAG",
     "ragTooltipLabel": "Use indexed notes as context",
-    "webSearchLabel": "Web Search",
+    "webSearchLabel": "Web search",
     "webSearchTooltipLabel": "Search the internet when needed",
     "imageUnavailable": "Image attachment is unavailable for the current model.",
-    "newChat": "New Chat",
+    "newChat": "New chat",
     "newConversation": "New Conversation",
     "searchConversations": "Search conversations...",
     "header": {
@@ -1336,7 +1336,7 @@
         "desc": "Enable web search capabilities"
       },
       "maxSteps": {
-        "name": "Max Tool Steps",
+        "name": "Max tool steps",
         "desc": "Maximum number of tool-call steps per agent turn"
       }
     },
@@ -1367,12 +1367,12 @@
         "optionalDesc": "Custom API endpoint (optional)"
       },
       "manageModels": {
-        "name": "Manage Models",
+        "name": "Manage models",
         "desc": "Pull new models or update existing ones from the Ollama registry.",
-        "btn": "⏬ Pull Ollama Model"
+        "btn": "Pull Ollama model"
       },
       "apiKey": {
-        "name": "API Key",
+        "name": "API key",
         "desc": "Authentication key for the selected provider"
       },
       "testConnection": "Test connection",

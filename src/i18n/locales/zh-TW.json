@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "管理模型",
         "desc": "從 Ollama 登錄中提取新模型或更新現有模型。",
-        "btn": "⏬ 提取 Ollama 模型"
+        "btn": "提取 Ollama 模型"
       },
       "apiKey": {
         "name": "API 金鑰",

@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Bestuur Modelle",
         "desc": "Trek nuwe modelle of dateer bestaandes op van die Ollama-register.",
-        "btn": "⏬ Trek Ollama-model"
+        "btn": "Trek Ollama-model"
       },
       "apiKey": {
         "name": "API-sleutel",

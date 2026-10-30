@@ -250,7 +250,7 @@ describe('ToolRegistry - executeTool', () => {
 		registry.registerSource({
 			kind: 'builtin',
 			id: 'builtin',
-			label: 'Built-in Tools',
+			label: 'Built-in tools',
 			load: async () => [{
 				definition: createToolDefinition({
 					name: 'read_file',
@@ -276,7 +276,7 @@ describe('ToolRegistry - executeTool', () => {
 		registry.registerSource({
 			kind: 'builtin',
 			id: 'builtin',
-			label: 'Built-in Tools',
+			label: 'Built-in tools',
 			load: async () => [{
 				definition: createToolDefinition({
 					name: 'write_file',

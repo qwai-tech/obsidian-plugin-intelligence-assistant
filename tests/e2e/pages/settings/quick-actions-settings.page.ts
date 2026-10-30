@@ -9,7 +9,7 @@ type QuickActionModalValues = {
 
 export class QuickActionsSettingsPage extends BasePage {
 	async open(): Promise<void> {
-		await this.openSettingsSection('Quick Actions');
+		await this.openSettingsSection('Quick actions');
 		await this.waitFor(TestIds.settings.quickActionAddBtn);
 	}
 

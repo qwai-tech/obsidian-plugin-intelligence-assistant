@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Gerir Modelos",
         "desc": "Obter novos modelos ou atualizar os existentes do registo Ollama.",
-        "btn": "⏬ Obter Modelo Ollama"
+        "btn": "Obter Modelo Ollama"
       },
       "apiKey": {
         "name": "Chave de API",

@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Gerenciar Modelos",
         "desc": "Baixar novos modelos ou atualizar os existentes do registro Ollama.",
-        "btn": "⏬ Baixar Modelo Ollama"
+        "btn": "Baixar Modelo Ollama"
       },
       "apiKey": {
         "name": "Chave de API",

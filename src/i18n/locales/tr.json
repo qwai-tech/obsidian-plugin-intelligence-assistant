@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Modelleri Yönet",
         "desc": "Ollama kayıt defterinden yeni modeller çekin veya mevcut olanları güncelleyin.",
-        "btn": "⏬ Ollama Modeli Çek"
+        "btn": "Ollama Modeli Çek"
       },
       "apiKey": {
         "name": "API Anahtarı",

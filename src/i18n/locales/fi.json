@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Hallinnoi malleja",
         "desc": "Hae uusia malleja tai päivitä olemassa olevia Ollama-rekisteristä.",
-        "btn": "⏬ Hae Ollama-malli"
+        "btn": "Hae Ollama-malli"
       },
       "apiKey": {
         "name": "API-avain",

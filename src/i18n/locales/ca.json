@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Gestiona els models",
         "desc": "Baixeu models nous o actualitzeu els existents del registre Ollama.",
-        "btn": "⏬ Baixa model Ollama"
+        "btn": "Baixa model Ollama"
       },
       "apiKey": {
         "name": "Clau API",

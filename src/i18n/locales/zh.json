@@ -1369,7 +1369,7 @@
       "manageModels": {
         "name": "管理模型",
         "desc": "从 Ollama 仓库拉取新模型或更新现有模型。",
-        "btn": "⏬ 拉取 Ollama 模型"
+        "btn": "拉取 Ollama 模型"
       },
       "apiKey": {
         "name": "API 密钥",

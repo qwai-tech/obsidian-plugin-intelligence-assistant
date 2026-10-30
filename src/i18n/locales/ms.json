@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Urus Model",
         "desc": "Tarik model baharu atau kemas kini yang sedia ada daripada registry Ollama.",
-        "btn": "⏬ Tarik Model Ollama"
+        "btn": "Tarik Model Ollama"
       },
       "apiKey": {
         "name": "Kunci API",

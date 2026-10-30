@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Modellek kezelése",
         "desc": "Új modellek letöltése vagy meglévők frissítése az Ollama regiszterből.",
-        "btn": "⏬ Ollama modell letöltése"
+        "btn": "Ollama modell letöltése"
       },
       "apiKey": {
         "name": "API-kulcs",

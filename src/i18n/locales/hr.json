@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Upravljaj modelima",
         "desc": "Povucite nove modele ili ažurirajte postojeće iz Ollama registra.",
-        "btn": "⏬ Povuci Ollama model"
+        "btn": "Povuci Ollama model"
       },
       "apiKey": {
         "name": "API ključ",

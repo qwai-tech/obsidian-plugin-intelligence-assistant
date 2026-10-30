@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Pārvaldīt modeļus",
         "desc": "Lejupielādēt jaunus modeļus vai atjaunināt esošos no Ollama reģistra.",
-        "btn": "⏬ Lejupielādēt Ollama modeli"
+        "btn": "Lejupielādēt Ollama modeli"
       },
       "apiKey": {
         "name": "API atslēga",

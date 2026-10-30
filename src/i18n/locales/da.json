@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Administrer modeller",
         "desc": "Hent nye modeller eller opdater eksisterende fra Ollama-registret.",
-        "btn": "⏬ Hent Ollama-model"
+        "btn": "Hent Ollama-model"
       },
       "apiKey": {
         "name": "API-nøgle",

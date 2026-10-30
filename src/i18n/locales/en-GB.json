@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Manage Models",
         "desc": "Pull new models or update existing ones from the Ollama registry.",
-        "btn": "⏬ Pull Ollama Model"
+        "btn": "Pull Ollama Model"
       },
       "apiKey": {
         "name": "API Key",

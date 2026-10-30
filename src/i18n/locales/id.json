@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Kelola Model",
         "desc": "Tarik model baru atau perbarui yang sudah ada dari registry Ollama.",
-        "btn": "⏬ Tarik Model Ollama"
+        "btn": "Tarik Model Ollama"
       },
       "apiKey": {
         "name": "Kunci API",

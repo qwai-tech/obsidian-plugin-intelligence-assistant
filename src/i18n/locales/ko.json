@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "모델 관리",
         "desc": "Ollama 레지스트리에서 새 모델을 가져오거나 기존 모델을 업데이트합니다.",
-        "btn": "⏬ Ollama 모델 가져오기"
+        "btn": "Ollama 모델 가져오기"
       },
       "apiKey": {
         "name": "API 키",

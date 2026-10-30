@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Modellen beheren",
         "desc": "Trek nieuwe modellen of update bestaande modellen uit het Ollama register.",
-        "btn": "⏬ Ollama model ophalen"
+        "btn": "Ollama model ophalen"
       },
       "apiKey": {
         "name": "API-sleutel",

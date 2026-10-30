@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Quản lý mô hình",
         "desc": "Tải mô hình mới hoặc cập nhật các mô hình hiện có từ registry Ollama.",
-        "btn": "⏬ Tải mô hình Ollama"
+        "btn": "Tải mô hình Ollama"
       },
       "apiKey": {
         "name": "Khóa API",

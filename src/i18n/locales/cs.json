@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Spravovat modely",
         "desc": "Stahujte nové modely nebo aktualizujte stávající z registru Ollama.",
-        "btn": "⏬ Stáhnout model Ollama"
+        "btn": "Stáhnout model Ollama"
       },
       "apiKey": {
         "name": "API klíč",

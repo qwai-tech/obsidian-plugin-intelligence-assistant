@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Valdyti modelius",
         "desc": "Parsisiųsti naujus modelius arba atnaujinti esamus iš Ollama registro.",
-        "btn": "⏬ Parsisiųsti Ollama modelį"
+        "btn": "Parsisiųsti Ollama modelį"
       },
       "apiKey": {
         "name": "API raktas",

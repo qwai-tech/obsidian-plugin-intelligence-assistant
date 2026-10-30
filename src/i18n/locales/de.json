@@ -1360,7 +1360,7 @@
       "manageModels": {
         "name": "Modelle verwalten",
         "desc": "Neue Modelle aus der Ollama-Registrierung herunterladen oder vorhandene aktualisieren.",
-        "btn": "⏬ Ollama-Modell herunterladen"
+        "btn": "Ollama-Modell herunterladen"
       },
       "apiKey": {
         "name": "API-Schlüssel",
