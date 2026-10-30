@@ -1,4 +1,5 @@
-import {App, TFile, Notice} from 'obsidian';
+import { App, TFile, Notice, getAllTags } from 'obsidian';
+import { isIndexable } from '@/core/rag-index-filter';
 import type { RAGConfig, RAGSource } from '@/features/knowledge';
 import type { LLMConfig } from '@/features/llm';
 import { VectorStore } from './vector-store';
@@ -26,8 +27,7 @@ export class RAGManager {
   }
 
   async indexVault(): Promise<void> {
-    // Index all markdown files in the vault
-    const files = this.app.vault.getMarkdownFiles();
+    const files = this.app.vault.getMarkdownFiles().filter(file => this.isIndexable(file));
     
     if (files.length === 0) {
       const noFilesMessage = 'ℹ️ No Markdown files found to index for RAG';
@@ -86,8 +86,21 @@ export class RAGManager {
     if (!this.config.enabled) {
       return;
     }
-    
+    if (!this.isIndexable(file)) {
+      await this.vectorStore.removeFile(file.path);
+      return;
+    }
     await this.vectorStore.addFile(file, this.config);
+  }
+
+  private isIndexable(file: TFile): boolean {
+    const cache = this.app.metadataCache.getFileCache(file);
+    return isIndexable({ path: file.path, extension: file.extension, tags: (cache && getAllTags(cache)) ?? [] }, this.config);
+  }
+
+  private isStillIndexable(path: string): boolean {
+    const file = this.app.vault.getFileByPath(path);
+    return file === null || this.isIndexable(file);
   }
 
   /**
@@ -143,7 +156,8 @@ export class RAGManager {
     // Get embedding model from config or use default
     const embeddingModel = this.config.embeddingModel || EmbeddingManager.getDefaultEmbeddingModel().id;
 
-    let results = await this.vectorStore.search(query, this.config, embeddingModel);
+    let results = (await this.vectorStore.search(query, this.config, embeddingModel))
+      .filter(result => this.isStillIndexable(result.chunk.metadata.path));
     
     // Check if we have any indexed documents, if not suggest embedding
       if (results.length === 0) {

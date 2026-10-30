@@ -1,3 +1,4 @@
+import { TFile } from 'obsidian';
 import { VectorStore } from '@/adapters/rag/vector-store';
 import { RAGManager } from '@/adapters/rag/rag-manager';
 import { EmbeddingManager } from '@/adapters/rag/embedding-manager';
@@ -61,9 +62,11 @@ const makeApp = (content = '') => {
 			adapter,
 			read: jest.fn(async () => content),
 			getMarkdownFiles: jest.fn(() => []),
+			getFileByPath: jest.fn(() => null),
 			on: jest.fn(),
 			off: jest.fn(),
 		},
+		metadataCache: { getFileCache: jest.fn(() => null) },
 	};
 };
 
@@ -331,4 +334,46 @@ describe('RAGManager', () => {
 
 		expect((manager as any).vectorStore.llmConfigs).toBe(refreshed);
 	});
+
+	describe('file filters', () => {
+		const makeFilteredApp = (tagsByPath: Record<string, string[]>) => {
+			const app = makeApp('body');
+			const files = Object.keys(tagsByPath).map(path => Object.assign(new TFile(), { path, extension: 'md', basename: path, stat: { mtime: 1 } }));
+			Object.assign(app.vault, {
+				getMarkdownFiles: jest.fn(() => files),
+				getFileByPath: jest.fn((path: string) => files.find(file => file.path === path) ?? null),
+			});
+			const metadataCache = {
+				getFileCache: jest.fn((file: TFile) => ({ tags: (tagsByPath[file.path] ?? []).map(tag => ({ tag })) })),
+			};
+			return { ...app, metadataCache, files };
+		};
+
+		it('never sends notes in an excluded folder or with an excluded tag to the embedding provider', async () => {
+			const app = makeFilteredApp({ 'Private/secret.md': [], 'tagged.md': ['#private'], 'open.md': [] });
+			const manager = new RAGManager(app as any, makeConfig({ excludeFolders: ['Private'], excludeByTag: ['private'] }), [{ provider: 'openai', apiKey: 'k' }] as any, STORE_PATH);
+			const vectorStore = (manager as any).vectorStore;
+			vectorStore.addFile = jest.fn(async () => undefined);
+			vectorStore.removeFile = jest.fn(async () => 0);
+
+			await manager.indexVault();
+			for (const file of app.files) await manager.indexFile(file);
+
+			expect(vectorStore.addFile.mock.calls.map(([file]: [TFile]) => file.path)).toEqual(['open.md', 'open.md']);
+			expect(vectorStore.removeFile).toHaveBeenCalledWith('Private/secret.md');
+			expect(vectorStore.removeFile).toHaveBeenCalledWith('tagged.md');
+		});
+
+		it('leaves out search results from notes excluded after they were indexed', async () => {
+			const app = makeFilteredApp({ 'Private/secret.md': [], 'open.md': [] });
+			const manager = new RAGManager(app as any, makeConfig({ excludeFolders: ['Private'] }), [{ provider: 'openai', apiKey: 'k' }] as any, STORE_PATH);
+			const chunk = (path: string) => ({ chunk: { id: path, content: path, metadata: { path, title: path, source: 'vault', timestamp: 1 } }, similarity: 0.9 });
+			(manager as any).vectorStore.search = jest.fn(async () => [chunk('Private/secret.md'), chunk('open.md'), chunk('memory://agent')]);
+
+			const sources = await manager.search('query');
+
+			expect(sources.map(source => source.path)).toEqual(['open.md', 'memory://agent']);
+		});
+	});
 });
+
