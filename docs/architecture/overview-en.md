@@ -41,7 +41,7 @@ The import rules are enforced in `eslint.config.mts`, with no exemptions:
 | `adapters/` | ui, bootstrap; features only as `import type` from their index |
 | `ui/` | bootstrap; adapters only as `import type`; features only through their index |
 
-UI code receives a `PluginHost` (`ui/plugin-host.ts`: app, manifest, settings, services, `updateSettings`, `saveSettings`) instead of the plugin class; only the settings tab, the chat view and the chat session controller see the plugin itself.
+UI code receives a `PluginHost` (`ui/plugin-host.ts`: app, manifest, settings, services, `updateSettings`) instead of the plugin class; only the settings tab, the chat view and the chat session controller see the plugin itself.
 
 `core/`, `features/` and `ui/` may not import Node modules (`child_process`, `fs`, `node:*`, `cross-spawn`, …); those live in `adapters/` behind a port.
 | `packages/obsidian-llm` | anything from the plugin (`@/*`) |
@@ -59,7 +59,7 @@ UI code receives a `PluginHost` (`ui/plugin-host.ts`: app, manifest, settings, s
 
 ## Features — `src/features/`
 
-**settings**: `SettingsStore` loads, migrates (`settings-migrations.ts`) and saves settings. API keys live in Obsidian's secret storage behind the `SecretVault` port (`settings-secrets.ts`, adapter `adapters/obsidian/obsidian-secret-vault.ts`): settings keep the secret's name, the store fills in the key on load and strips it from every write. Settings are stored in the plugin's `data.json` as one document (`settings-document.ts`: config, providers, prompts, agents), so Obsidian Sync carries them and `onExternalSettingsChange` reloads them. A save happens only when a unit (`config`, `providers`, `prompts`, `agents`, `mcp`) changed, and `onChange` subscribers learn which; the plugin uses that to refresh RAG and the chat model list. Model and MCP tool caches stay in `data/cache/`. Settings saved by older versions in `config/user/settings.json` and `data/` files move into `data.json` on first load (`adapters/persistence/legacy-settings-files.ts`). `types/settings.ts` holds `PluginSettings`.
+**settings**: `SettingsStore` loads, migrates (`settings-migrations.ts`) and saves settings. API keys live in Obsidian's secret storage behind the `SecretVault` port (`settings-secrets.ts`, adapter `adapters/obsidian/obsidian-secret-vault.ts`): settings keep the secret's name, the store fills in the key on load and strips it from every write. Settings are stored in the plugin's `data.json` as one document (`settings-document.ts`: config, providers, prompts, agents), so Obsidian Sync carries them and `onExternalSettingsChange` reloads them. Every change goes through `updateSettings(change)`, the only write path. A save happens only when a unit (`config`, `providers`, `prompts`, `agents`, `mcp`) changed, and `onChange` subscribers learn which; the plugin uses that to refresh RAG and the chat model list. Model and MCP tool caches stay in `data/cache/`. Settings saved by older versions in `config/user/settings.json` and `data/` files move into `data.json` on first load (`adapters/persistence/legacy-settings-files.ts`). `types/settings.ts` holds `PluginSettings`.
 
 **agent**:
 

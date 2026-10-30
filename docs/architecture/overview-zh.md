@@ -41,7 +41,7 @@ Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts`
 | `adapters/` | ui、bootstrap；功能只能通过其 index 以 `import type` 使用 |
 | `ui/` | bootstrap；adapters 只能用 `import type`；功能只能通过其 index 导入 |
 
-UI 代码接收 `PluginHost`（`ui/plugin-host.ts`：app、manifest、settings、services、`updateSettings`、`saveSettings`），而不是插件类本身；只有设置页、聊天视图和聊天会话控制器能看到插件对象。
+UI 代码接收 `PluginHost`（`ui/plugin-host.ts`：app、manifest、settings、services、`updateSettings`），而不是插件类本身；只有设置页、聊天视图和聊天会话控制器能看到插件对象。
 
 `core/`、`features/` 和 `ui/` 不能导入 Node 模块（`child_process`、`fs`、`node:*`、`cross-spawn` 等）；这些代码位于 `adapters/`，通过端口访问。
 | `packages/obsidian-llm` | 插件中的任何代码（`@/*`） |
@@ -59,7 +59,7 @@ UI 代码接收 `PluginHost`（`ui/plugin-host.ts`：app、manifest、settings�
 
 ## 功能 — `src/features/`
 
-**settings**：`SettingsStore` 负责加载、迁移（`settings-migrations.ts`）和保存设置。API 密钥通过 `SecretVault` 端口（`settings-secrets.ts`，适配器为 `adapters/obsidian/obsidian-secret-vault.ts`）保存在 Obsidian 的密钥存储中：设置只记录密钥名称，存储在加载时填入密钥，写入时一律去除。设置作为一个文档保存在插件的 `data.json` 中（`settings-document.ts`：配置、提供商、提示词、智能体），因此 Obsidian Sync 会同步它们，`onExternalSettingsChange` 会重新加载。只有当某个单元（`config`、`providers`、`prompts`、`agents`、`mcp`）变化时才保存，并通知 `onChange` 订阅者；插件据此刷新 RAG 和聊天模型列表。模型和 MCP 工具缓存保存在 `data/cache/`。旧版本保存在 `config/user/settings.json` 和 `data/` 中的设置会在首次加载时迁入 `data.json`（`adapters/persistence/legacy-settings-files.ts`）。`types/settings.ts` 定义 `PluginSettings`。
+**settings**：`SettingsStore` 负责加载、迁移（`settings-migrations.ts`）和保存设置。API 密钥通过 `SecretVault` 端口（`settings-secrets.ts`，适配器为 `adapters/obsidian/obsidian-secret-vault.ts`）保存在 Obsidian 的密钥存储中：设置只记录密钥名称，存储在加载时填入密钥，写入时一律去除。设置作为一个文档保存在插件的 `data.json` 中（`settings-document.ts`：配置、提供商、提示词、智能体），因此 Obsidian Sync 会同步它们，`onExternalSettingsChange` 会重新加载。所有修改都通过唯一的写入入口 `updateSettings(change)`。只有当某个单元（`config`、`providers`、`prompts`、`agents`、`mcp`）变化时才保存，并通知 `onChange` 订阅者；插件据此刷新 RAG 和聊天模型列表。模型和 MCP 工具缓存保存在 `data/cache/`。旧版本保存在 `config/user/settings.json` 和 `data/` 中的设置会在首次加载时迁入 `data.json`（`adapters/persistence/legacy-settings-files.ts`）。`types/settings.ts` 定义 `PluginSettings`。
 
 **agent**：
 
