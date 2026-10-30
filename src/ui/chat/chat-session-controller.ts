@@ -92,7 +92,7 @@ export class ChatSessionController {
 
 		this.controls.input.updateModeSelector(mode);
 		const agent = mode === 'agent' ? this.activeAgent() : null;
-		this.controls.header.updateAgentBadge(agent ? agent.name ?? 'unknown' : null);
+		this.controls.header.updateAgentBadge(agent ?? null);
 		await this.refreshOptions();
 	}
 
@@ -236,7 +236,7 @@ export class ChatSessionController {
 		}
 
 		this.controls.input.refreshAgentSelect(agentId);
-		this.controls.header.updateAgentBadge(agent.name ?? 'unknown');
+		this.controls.header.updateAgentBadge(agent);
 	}
 
 	private applyStoredConfig(config: ConversationConfig): void {

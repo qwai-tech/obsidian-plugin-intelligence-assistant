@@ -3,6 +3,7 @@ import type { PluginHost } from '@/ui/plugin-host';
 import { hasSettings } from '@/core/utils/type-guards';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
+import { renderIcon } from '@/ui/utils/icon';
 
 export interface ChatHeaderCallbacks {
 	onToggleConversations: () => Promise<void>;
@@ -84,10 +85,12 @@ export class ChatHeaderComponent {
 		}
 	}
 
-	public updateAgentBadge(name: string | null) {
+	public updateAgentBadge(agent: { name?: string; icon?: string } | null) {
 		if (!this.agentHeaderBadgeEl) return;
-		if (name) {
-			this.agentHeaderBadgeEl.setText(`🤖 ${name}`);
+		this.agentHeaderBadgeEl.empty();
+		if (agent) {
+			renderIcon(this.agentHeaderBadgeEl.createSpan('chat-agent-header-badge__icon'), agent.icon);
+			this.agentHeaderBadgeEl.createSpan({ text: agent.name ?? 'unknown' });
 			this.agentHeaderBadgeEl.removeClass('ia-hidden');
 		} else {
 			this.agentHeaderBadgeEl.addClass('ia-hidden');

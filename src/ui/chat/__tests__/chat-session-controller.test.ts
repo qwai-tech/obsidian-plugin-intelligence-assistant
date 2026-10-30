@@ -26,7 +26,7 @@ interface FakeInput {
 }
 
 interface FakeHeader {
-	updateAgentBadge: jest.Mock<void, [string | null]>;
+	updateAgentBadge: jest.Mock<void, [{ name?: string; icon?: string } | null]>;
 }
 
 interface FakePlugin {
@@ -89,7 +89,7 @@ function makeHarness(settings: PluginSettings, mode: ChatMode = 'chat'): Harness
 		setImageButtonVisible: jest.fn((_visible: boolean) => undefined),
 		updateActionToggleState: jest.fn((_item: HTMLElement, _configured: boolean, _on: boolean, _label: string) => undefined),
 	};
-	const header: FakeHeader = { updateAgentBadge: jest.fn((_name: string | null) => undefined) };
+	const header: FakeHeader = { updateAgentBadge: jest.fn((_agent: { name?: string; icon?: string } | null) => undefined) };
 	const refreshRagStatus = jest.fn(async () => undefined);
 	const plugin: FakePlugin = {
 		settings,
@@ -181,7 +181,7 @@ describe('ChatSessionController', () => {
 			expect(state.enableWebSearch).toBe(true);
 			expect(input.refreshAgentSelect).toHaveBeenCalledWith('researcher');
 			expect(input.updateModeSelector).toHaveBeenLastCalledWith('agent');
-			expect(header.updateAgentBadge).toHaveBeenLastCalledWith('Researcher');
+			expect(header.updateAgentBadge).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'Researcher' }));
 			expect(Notice).not.toHaveBeenCalled();
 		});
 
@@ -191,7 +191,7 @@ describe('ChatSessionController', () => {
 			await controller.changeMode('agent');
 
 			expect(settings.activeAgentId).toBe(DEFAULT_AGENT_ID);
-			expect(header.updateAgentBadge).toHaveBeenLastCalledWith('Generalist');
+			expect(header.updateAgentBadge).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'Generalist' }));
 		});
 
 		it('creates the default agent first when there are no agents yet', async () => {
@@ -205,7 +205,7 @@ describe('ChatSessionController', () => {
 
 			expect(plugin.ensureDefaultAgent).toHaveBeenCalledTimes(1);
 			expect(settings.activeAgentId).toBe(DEFAULT_AGENT_ID);
-			expect(header.updateAgentBadge).toHaveBeenLastCalledWith('Generalist');
+			expect(header.updateAgentBadge).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'Generalist' }));
 		});
 
 		it('tells the user to configure agents when none exist and none can be created', async () => {
@@ -238,7 +238,7 @@ describe('ChatSessionController', () => {
 			await controller.changeMode('agent');
 
 			expect(settings.activeAgentId).toBe('researcher');
-			expect(header.updateAgentBadge).toHaveBeenLastCalledWith('Researcher');
+			expect(header.updateAgentBadge).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'Researcher' }));
 			expect(consoleError).toHaveBeenCalled();
 		});
 	});
@@ -270,7 +270,7 @@ describe('ChatSessionController', () => {
 			expect(input.updateModeSelector).toHaveBeenCalledWith('agent');
 			expect(settings.activeAgentId).toBe('researcher');
 			expect(input.modelSelect.value).toBe('claude-sonnet');
-			expect(header.updateAgentBadge).toHaveBeenLastCalledWith('Researcher');
+			expect(header.updateAgentBadge).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'Researcher' }));
 			expect(Notice).not.toHaveBeenCalled();
 		});
 
@@ -313,7 +313,7 @@ describe('ChatSessionController', () => {
 			expect(settings.activeAgentId).toBe('researcher');
 			expect(settings.activeSystemPromptId).toBe('research-prompt');
 			expect(input.agentSelector.value).toBe('researcher');
-			expect(header.updateAgentBadge).toHaveBeenLastCalledWith('Researcher');
+			expect(header.updateAgentBadge).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'Researcher' }));
 			expect(Notice).not.toHaveBeenCalled();
 		});
 
@@ -416,7 +416,7 @@ describe('ChatSessionController', () => {
 			expect(state.mode).toBe('agent');
 			expect(settings.activeAgentId).toBe(DEFAULT_AGENT_ID);
 			expect(input.agentSelector.value).toBe(DEFAULT_AGENT_ID);
-			expect(header.updateAgentBadge).toHaveBeenLastCalledWith('Generalist');
+			expect(header.updateAgentBadge).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'Generalist' }));
 			expect(Notice).not.toHaveBeenCalled();
 		});
 	});

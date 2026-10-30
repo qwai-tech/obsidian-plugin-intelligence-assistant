@@ -61,4 +61,25 @@ describe('ChatHeaderComponent', () => {
 
 		expect(onShowCapabilities).toHaveBeenCalledTimes(1);
 	});
+
+	it('shows the active agent with its own icon, or its emoji, next to its name', () => {
+		const parent = document.createElement('div');
+		const header = new ChatHeaderComponent(parent, { app: { setting: { open: jest.fn(), openTabById: jest.fn() } } } as never, {
+			onToggleConversations: jest.fn(),
+			onShowCapabilities: jest.fn(),
+			onNewChat: jest.fn(),
+		});
+		const badge = parent.querySelector('.chat-agent-header-badge') as HTMLElement;
+
+		header.updateAgentBadge({ name: 'Intelligence Assistant', icon: 'sparkles' });
+		expect(badge.querySelector('[data-icon="sparkles"]')).not.toBeNull();
+		expect(badge.textContent).toBe('Intelligence Assistant');
+
+		header.updateAgentBadge({ name: 'Scribe', icon: '🖋️' });
+		expect(badge.textContent).toBe('🖋️Scribe');
+
+		header.updateAgentBadge(null);
+		expect(badge.classList.contains('ia-hidden')).toBe(true);
+	});
 });
+

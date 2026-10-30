@@ -2140,6 +2140,16 @@
 	font-weight: 600;
 	white-space: nowrap;
 	flex-shrink: 0;
+	gap: 4px;
+}
+
+.chat-agent-header-badge__icon {
+	display: inline-flex;
+}
+
+.chat-agent-header-badge__icon svg {
+	width: var(--icon-xs);
+	height: var(--icon-xs);
 }
 
 /* ─── A3 Redesign: new input box ──────────────────────────────────────── */
