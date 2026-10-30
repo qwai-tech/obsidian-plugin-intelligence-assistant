@@ -2,6 +2,7 @@ import { userConfigToPluginSettings } from '@/features/settings/settings-codec';
 import { migrateSettings } from '@/features/settings/settings-migrations';
 import type { UserConfig } from '@/features/settings/types/settings';
 import type { Agent } from '@/features/agent/types/agent';
+import { DEFAULT_MAX_STEPS } from '@/core/constants';
 
 function makeLegacyAgent(overrides: Partial<Agent> = {}): Agent {
 	return {
@@ -116,6 +117,27 @@ describe('migrateSettings — agent model strategy', () => {
 		migrateSettings(settings);
 
 		expect(migrateSettings(settings)).toBe(false);
+	});
+});
+
+describe('migrateSettings — agent step budget', () => {
+	it('turns the old ReAct step setting into maxSteps and drops the ReAct flags', () => {
+		const settings = userConfigToPluginSettings(null);
+		settings.agents = [makeLegacyAgent({ toolAccess: { sources: {} }, modelStrategy: { strategy: 'default' }, reactMaxSteps: 7, reactEnabled: true, reactAutoContinue: false } as Partial<Agent>)];
+
+		expect(migrateSettings(settings)).toBe(true);
+
+		expect(settings.agents[0].maxSteps).toBe(7);
+		expect(Object.keys(settings.agents[0]).filter(key => key.startsWith('react'))).toEqual([]);
+	});
+
+	it('gives an agent without a usable step budget the default', () => {
+		const settings = userConfigToPluginSettings(null);
+		settings.agents = [makeLegacyAgent({ toolAccess: { sources: {} }, modelStrategy: { strategy: 'default' }, maxSteps: 0 } as Partial<Agent>)];
+
+		expect(migrateSettings(settings)).toBe(true);
+
+		expect(settings.agents[0].maxSteps).toBe(DEFAULT_MAX_STEPS);
 	});
 });
 

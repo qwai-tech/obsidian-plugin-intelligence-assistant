@@ -39,9 +39,10 @@ export async function ensureDefaultAgent(
 	let settingsDirty = false;
 	const assistantPromptId = 'builtin-intelligence-assistant';
 
-	// Phase E: Enforce Agent Mode for all users
-	settings.defaultChatMode = 'agent';
-	settingsDirty = true;
+	if (settings.defaultChatMode !== 'agent') {
+		settings.defaultChatMode = 'agent';
+		settingsDirty = true;
+	}
 
 	// Phase F: Ensure all builtin prompts are present and up-to-date (readonly)
 	for (const preset of BUILTIN_PROMPT_PRESETS) {
@@ -70,23 +71,6 @@ export async function ensureDefaultAgent(
 		settingsDirty = true;
 	}
 
-	// Ensure all agents have required fields and migrate legacy fields.
-	// Per-source enable lists (enabledBuiltInTools etc.) are no longer touched
-	// here — userConfigToPluginSettings already migrated them into toolAccess
-	// at load time via migrateAllAgents. Defensive default for toolAccess in
-	// case an agent landed here without going through that path.
-	settings.agents.forEach(agent => {
-		agent.toolAccess = agent.toolAccess ?? { sources: {} };
-		const a = agent as unknown as Record<string, unknown>;
-		if ('reactMaxSteps' in a && typeof a.reactMaxSteps === 'number') {
-			agent.maxSteps = a.reactMaxSteps;
-			delete a.reactMaxSteps;
-		}
-		if ('reactEnabled' in a) delete a.reactEnabled;
-		if ('reactAutoContinue' in a) delete a.reactAutoContinue;
-		if (!agent.maxSteps || agent.maxSteps < 1) agent.maxSteps = DEFAULT_MAX_STEPS;
-	});
-
 	const enabledBuiltInTools = settings.builtInTools
 		.filter(tool => tool.enabled)
 		.map(tool => tool.type);
@@ -99,14 +83,6 @@ export async function ensureDefaultAgent(
 		|| settings.llmConfigs.flatMap(config => config.cachedModels ?? [])
 			.find(model => model.capabilities?.includes('chat'))?.id
 		|| 'gpt-4o';
-
-	// Ensure all builtin prompts are present
-	for (const prompt of BUILTIN_PROMPT_PRESETS) {
-		if (!settings.systemPrompts.some(p => p.id === prompt.id)) {
-			settings.systemPrompts.push({ ...prompt });
-			settingsDirty = true;
-		}
-	}
 
 	let defaultAgent = settings.agents.find(agent => agent.id === DEFAULT_AGENT_ID);
 
@@ -168,29 +144,6 @@ export async function ensureDefaultAgent(
 	}
 
 	const ensuredAgent = defaultAgent ?? settings.agents.find(a => a.id === DEFAULT_AGENT_ID)!;
-	ensuredAgent.toolAccess = ensuredAgent.toolAccess ?? { sources: {} };
-
-	// Migrate old agents that still have modelId to use new modelStrategy
-	if ('modelId' in ensuredAgent && typeof (ensuredAgent as Record<string, unknown>).modelId === 'string') {
-		const modelId = (ensuredAgent as Record<string, unknown>).modelId as string;
-		// Convert the old modelId to the new modelStrategy format
-		ensuredAgent.modelStrategy = {
-			strategy: 'fixed',
-			modelId: modelId
-		};
-		// Remove the old field
-		delete (ensuredAgent as Record<string, unknown>).modelId;
-		settingsDirty = true;
-	}
-
-	// Ensure modelStrategy exists for all agents
-	if (!ensuredAgent.modelStrategy) {
-		ensuredAgent.modelStrategy = {
-			strategy: 'default',
-			modelId: fallbackModel
-		};
-		settingsDirty = true;
-	}
 
 	if (ensuredAgent.maxTokens === LEGACY_DEFAULT_AGENT_MAX_TOKENS) {
 		ensuredAgent.maxTokens = DEFAULT_MODEL_CONFIG.MAX_TOKENS;

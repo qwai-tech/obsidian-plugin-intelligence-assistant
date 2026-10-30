@@ -47,7 +47,7 @@ describe('ObsidianSettingsPersistence', () => {
 		const settings = structuredClone(DEFAULT_SETTINGS);
 		settings.defaultModel = 'from-data-json';
 		settings.llmConfigs = [{ provider: 'openai', apiKeySecret: 'k' }];
-		settings.agents = [{ id: 'a1', name: 'Agent', modelStrategy: { strategy: 'default' }, toolAccess: { sources: {} } } as typeof settings.agents[number]];
+		settings.agents = [{ id: 'a1', name: 'Agent', modelStrategy: { strategy: 'default' }, toolAccess: { sources: {} }, maxSteps: 10 } as typeof settings.agents[number]];
 		const { persistence, plugin } = makeHost({}, toSettingsDocument(settings));
 		const store = new SettingsStore(persistence, noSecrets);
 

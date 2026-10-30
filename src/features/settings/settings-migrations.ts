@@ -1,18 +1,20 @@
 import type { Agent } from '@/features/agent';
 import type { PluginSettings } from '@/features/settings/types/settings';
 import { migrateAllAgents } from '@/features/tools';
+import { DEFAULT_MAX_STEPS } from '@/core/constants';
 
-type LegacyAgent = Agent & { modelId?: unknown };
+type LegacyAgent = Agent & { modelId?: unknown; reactMaxSteps?: unknown; reactEnabled?: unknown; reactAutoContinue?: unknown };
 
 export function migrateSettings(settings: PluginSettings): boolean {
 	const strategyChanged = settings.agents.filter((agent) => migrateModelStrategy(agent, settings.defaultModel)).length > 0;
+	const stepsChanged = settings.agents.filter(migrateStepBudget).length > 0;
 	const cliToolIds = (settings.cliTools ?? []).map((tool) => tool.id);
 	const toolAccessChanged = migrateAllAgents(settings.agents, cliToolIds).size > 0;
 	const removedProviderDropped = dropRemovedProviders(settings);
 	const titleModeRenamed = renameTitleMode(settings);
 	const connectionModesFixed = lowercaseConnectionModes(settings);
 	const presetsRenamed = renameBuiltinPresets(settings);
-	return strategyChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed || connectionModesFixed || presetsRenamed;
+	return strategyChanged || stepsChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed || connectionModesFixed || presetsRenamed;
 }
 
 const OLD_PRESET_NAMES: Record<string, string> = {
@@ -82,6 +84,25 @@ function dropRemovedProviders(settings: PluginSettings): boolean {
 			agent.modelStrategy = { strategy: 'default' };
 			changed = true;
 		}
+	}
+	return changed;
+}
+
+function migrateStepBudget(agent: LegacyAgent): boolean {
+	let changed = false;
+	if (typeof agent.reactMaxSteps === 'number') {
+		agent.maxSteps = agent.reactMaxSteps;
+		changed = true;
+	}
+	for (const legacy of ['reactMaxSteps', 'reactEnabled', 'reactAutoContinue'] as const) {
+		if (legacy in agent) {
+			delete agent[legacy];
+			changed = true;
+		}
+	}
+	if (!agent.maxSteps || agent.maxSteps < 1) {
+		agent.maxSteps = DEFAULT_MAX_STEPS;
+		changed = true;
 	}
 	return changed;
 }
