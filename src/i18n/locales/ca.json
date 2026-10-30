@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Avís de seguretat",
-      "securityDesc": "Les claus API s'emmagatzemen com a text pla al vostre vault per compatibilitat. Per evitar fuites accidentals:",
-      "securityItem1": "NO compartiu la carpeta {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Afegiu aquesta carpeta al vostre .gitignore si feu servir sincronització Git.",
-      "securityItem3": "Aneu amb compte quan feu servir serveis de sincronització al núvol públics.",
       "desc": "Gestioneu els proveïdors LLM i les credencials API. Feu servir la columna d'accions per editar els detalls de configuració o actualitzar els models emmagatzemats a la memòria cau.",
       "count_one": "{{count}} proveïdor configurat",
       "count_other": "{{count}} proveïdors configurats",

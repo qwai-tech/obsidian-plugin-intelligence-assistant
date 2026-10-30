@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "אזהרת אבטחה",
-      "securityDesc": "מפתחות API מאוחסנים כטקסט רגיל בכספת שלך לצורך תאימות. למניעת דליפות מקריות:",
-      "securityItem1": "אל תשתף את תיקיית {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "הוסף תיקייה זו ל-.gitignore אם אתה משתמש בסנכרון Git.",
-      "securityItem3": "היה זהיר בעת שימוש בשירותי סנכרון ענן ציבוריים.",
       "desc": "נהל ספקי LLM ואישורי API. השתמש בעמודת הפעולות לעריכת פרטי הגדרות או רענון מודלים במטמון.",
       "count_one": "{{count}} ספק מוגדר",
       "count_other": "{{count}} ספקים מוגדרים",

@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Biztonsági figyelmeztetés",
-      "securityDesc": "Az API-kulcsok kompatibilitási okokból egyszerű szövegként tárolódnak a vaultban. A véletlen kiszivárgás megelőzése érdekében:",
-      "securityItem1": "NE ossza meg a {{configDir}}/plugins/intelligence-assistant/data/ mappát.",
-      "securityItem2": "Adja hozzá ezt a mappát a .gitignore fájlhoz, ha Git szinkronizálást használ.",
-      "securityItem3": "Legyen óvatos nyilvános felhőalapú szinkronizálási szolgáltatások használatakor.",
       "desc": "LLM szolgáltatók és API-hitelesítő adatok kezelése. A műveletek oszlopban szerkesztheti a konfigurációs részleteket, vagy frissítheti a gyorsítótárazott modelleket.",
       "count_one": "{{count}} szolgáltató konfigurálva",
       "count_other": "{{count}} szolgáltató konfigurálva",

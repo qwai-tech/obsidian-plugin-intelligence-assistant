@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Bezpečnostní upozornění",
-      "securityDesc": "API klíče jsou uloženy jako prostý text ve vašem trezoru kvůli kompatibilitě. Aby se zabránilo náhodným únikům:",
-      "securityItem1": "NESDÍLEJTE složku {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Přidejte tuto složku do .gitignore, pokud používáte synchronizaci Git.",
-      "securityItem3": "Buďte opatrní při používání veřejných cloudových synchronizačních služeb.",
       "desc": "Spravujte poskytovatele LLM a přihlašovací údaje API. Použijte sloupec akcí pro úpravu podrobností konfigurace nebo obnovení modelů v mezipaměti.",
       "count_one": "{{count}} poskytovatel nakonfigurován",
       "count_other": "{{count}} poskytovatelů nakonfigurováno",

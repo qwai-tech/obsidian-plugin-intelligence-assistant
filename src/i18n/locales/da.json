@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Sikkerhedsadvarsel",
-      "securityDesc": "API-nøgler gemmes som klartekst i din vault af kompatibilitetshensyn. For at forhindre utilsigtede lækager:",
-      "securityItem1": "Del IKKE din mappe {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Tilføj denne mappe til din .gitignore, hvis du bruger Git-synkronisering.",
-      "securityItem3": "Vær forsigtig ved brug af offentlige cloud-synkroniseringstjenester.",
       "desc": "Administrer LLM-udbydere og API-legitimationsoplysninger. Brug handlingskolonnen til at redigere konfigurationsoplysninger eller opdatere cachelagrede modeller.",
       "count_one": "{{count}} udbyder konfigureret",
       "count_other": "{{count}} udbydere konfigureret",

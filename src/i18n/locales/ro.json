@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Avertisment de securitate",
-      "securityDesc": "Cheile API sunt stocate ca text simplu în seiful dvs. pentru compatibilitate. Pentru a preveni scurgerile accidentale:",
-      "securityItem1": "NU partajați folderul {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Adăugați acest folder în .gitignore dacă utilizați sincronizare Git.",
-      "securityItem3": "Fiți precauți când utilizați servicii de sincronizare cloud publice.",
       "desc": "Gestionați furnizorii LLM și acreditările API. Utilizați coloana de acțiuni pentru a edita detaliile de configurare sau a reîmprospăta modelele din cache.",
       "count_one": "{{count}} furnizor configurat",
       "count_other": "{{count}} furnizori configurați",

@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Saugos įspėjimas",
-      "securityDesc": "API raktai saugomi kaip paprastas tekstas jūsų saugykloje suderinamumo sumetimais. Kad išvengtumėte atsitiktinių nutekėjimų:",
-      "securityItem1": "NEDALINKITĖS {{configDir}}/plugins/intelligence-assistant/data/ aplanku.",
-      "securityItem2": "Pridėkite šį aplanką į .gitignore, jei naudojate Git sinchronizavimą.",
-      "securityItem3": "Būkite atsargūs naudodami viešas debesų sinchronizavimo paslaugas.",
       "desc": "Valdyti LLM tiekėjus ir API kredencialus. Naudokite veiksmų stulpelį, kad redaguotumėte konfigūracijos informaciją arba atnaujintumėte talpykloje esančius modelius.",
       "count_one": "{{count}} tiekėjas sukonfigūruotas",
       "count_other": "{{count}} tiekėjai sukonfigūruoti",

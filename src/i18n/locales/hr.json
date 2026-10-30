@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Sigurnosno upozorenje",
-      "securityDesc": "API ključevi pohranjuju se kao čisti tekst u vašem trezoru radi kompatibilnosti. Kako biste spriječili slučajno curenje:",
-      "securityItem1": "NE dijelite mapu {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Dodajte ovu mapu u .gitignore ako koristite Git sinkronizaciju.",
-      "securityItem3": "Budite oprezni pri korištenju javnih usluga sinkronizacije u oblaku.",
       "desc": "Upravljajte LLM pružateljima i API vjerodajnicama. Koristite stupac radnji za uređivanje pojedinosti konfiguracije ili osvježavanje predmemoriranih modela.",
       "count_one": "{{count}} pružatelj konfiguriran",
       "count_other": "{{count}} pružatelja konfigurirano",

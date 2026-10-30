@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "보안 경고",
-      "securityDesc": "API 키는 호환성을 위해 볼트에 일반 텍스트로 저장됩니다. 의도치 않은 유출을 방지하려면:",
-      "securityItem1": "{{configDir}}/plugins/intelligence-assistant/data/ 폴더를 공유하지 마세요.",
-      "securityItem2": "Git 동기화를 사용하는 경우 이 폴더를 .gitignore에 추가하세요.",
-      "securityItem3": "퍼블릭 클라우드 동기화 서비스를 사용할 때 주의하세요.",
       "desc": "LLM 제공자와 API 자격 증명을 관리합니다. 작업 열을 사용하여 구성 세부 정보를 편집하거나 캐시된 모델을 새로 고침하세요.",
       "count_one": "{{count}}개 제공자 구성됨",
       "count_other": "{{count}}개 제공자 구성됨",

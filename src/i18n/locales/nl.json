@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Beveiligingswaarschuwing",
-      "securityDesc": "API-sleutels worden als platte tekst opgeslagen in uw kluis voor compatibiliteit. Om onbedoelde lekken te voorkomen:",
-      "securityItem1": "Deel uw {{configDir}}/plugins/intelligence-assistant/data/ map NIET.",
-      "securityItem2": "Voeg deze map toe aan uw .gitignore als u Git-synchronisatie gebruikt.",
-      "securityItem3": "Wees voorzichtig bij het gebruik van openbare cloudsynchronisatiediensten.",
       "desc": "Beheer LLM providers en API-referenties. Gebruik de actikolom om configuratiedetails te bewerken of gecachede modellen te vernieuwen.",
       "count_one": "{{count}} provider geconfigureerd",
       "count_other": "{{count}} providers geconfigureerd",

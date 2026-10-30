@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Sicherheitswarnung",
-      "securityDesc": "API-Schlüssel werden aus Kompatibilitätsgründen als Klartext in Ihrem Vault gespeichert. Um versehentliche Lecks zu vermeiden:",
-      "securityItem1": "Teilen Sie den Ordner {{configDir}}/plugins/intelligence-assistant/data/ NICHT.",
-      "securityItem2": "Fügen Sie diesen Ordner zu Ihrer .gitignore hinzu, wenn Sie Git-Synchronisierung verwenden.",
-      "securityItem3": "Seien Sie vorsichtig bei der Verwendung öffentlicher Cloud-Synchronisierungsdienste.",
       "desc": "LLM-Anbieter und API-Zugangsdaten verwalten. Verwenden Sie die Aktionsspalte, um Konfigurationsdetails zu bearbeiten oder zwischengespeicherte Modelle zu aktualisieren.",
       "count_one": "{{count}} Anbieter konfiguriert",
       "count_other": "{{count}} Anbieter konfiguriert",

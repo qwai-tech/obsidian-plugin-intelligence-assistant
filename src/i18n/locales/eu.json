@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Segurtasun abisua",
-      "securityDesc": "API giltzak testu arruntean gordetzen dira zure biltegian bateragarritasuna bermatzeko. Istripuzko filtrazioak saihesteko:",
-      "securityItem1": "Ez partekatu {{configDir}}/plugins/intelligence-assistant/data/ karpeta.",
-      "securityItem2": "Gehitu karpeta hau zure .gitignore fitxategian Git sinkronizazioa erabiltzen baduzu.",
-      "securityItem3": "Kontuz ibili hodeiko sinkronizazio zerbitzu publikoak erabiltzean.",
       "desc": "Kudeatu LLM hornitzaileak eta API kredentzialak. Erabili ekintzak zutabea konfigurazio xehetasunak editatu edo modelo katxetatuak freskatzeko.",
       "count_one": "{{count}} hornitzaile konfiguratuta",
       "count_other": "{{count}} hornitzaile konfiguratuta",

@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Güvenlik Uyarısı",
-      "securityDesc": "API anahtarları uyumluluk için vault'unuzda düz metin olarak saklanır. Kazara sızıntıları önlemek için:",
-      "securityItem1": "{{configDir}}/plugins/intelligence-assistant/data/ klasörünüzü PAYLAŞMAYIN.",
-      "securityItem2": "Git senkronizasyonu kullanıyorsanız bu klasörü .gitignore dosyanıza ekleyin.",
-      "securityItem3": "Genel bulut senkronizasyon hizmetlerini kullanırken dikkatli olun.",
       "desc": "LLM sağlayıcılarını ve API kimlik bilgilerini yönetin. Yapılandırma ayrıntılarını düzenlemek veya önbellekteki modelleri yenilemek için eylemler sütununu kullanın.",
       "count_one": "{{count}} sağlayıcı yapılandırıldı",
       "count_other": "{{count}} sağlayıcı yapılandırıldı",

@@ -21,20 +21,6 @@ export function displayProviderTab(
 	refreshDisplay: () => void
 ): void {
 
-	// Security Warning
-	const warningContainer = containerEl.createDiv('ia-warning-box');
-
-	const warningTitle = warningContainer.createDiv('ia-warning-title');
-	warningTitle.createSpan({ text: t('settings.provider.securityTitle') });
-
-	const warningText = warningContainer.createDiv('ia-warning-text');
-	warningText.setText(t('settings.provider.securityDesc'));
-
-	const warningList = warningContainer.createEl('ul', { cls: 'ia-warning-list' });
-	warningList.createEl('li', { text: t('settings.provider.securityItem1', { configDir: app.vault.configDir }) });
-	warningList.createEl('li', { text: t('settings.provider.securityItem2') });
-	warningList.createEl('li', { text: t('settings.provider.securityItem3') });
-
 	const desc = containerEl.createEl('p', {
 		text: t('settings.provider.desc')
 	});

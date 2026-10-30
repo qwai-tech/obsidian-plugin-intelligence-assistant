@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "安全提示",
-      "securityDesc": "API 密钥以明文存储在您的 Vault 中以保证兼容性。为防止意外泄露：",
-      "securityItem1": "请勿共享 {{configDir}}/plugins/intelligence-assistant/data/ 目录。",
-      "securityItem2": "如使用 Git 同步，请将此目录添加到 .gitignore。",
-      "securityItem3": "使用公共云同步服务时请谨慎。",
       "desc": "管理 LLM 服务商和 API 凭据。使用操作列编辑配置详情或刷新缓存模型。",
       "count_one": "已配置 {{count}} 个服务商",
       "count_other": "已配置 {{count}} 个服务商",

@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Avviso di sicurezza",
-      "securityDesc": "Le chiavi API sono memorizzate come testo normale nel vault per compatibilità. Per prevenire perdite accidentali:",
-      "securityItem1": "NON condividere la cartella {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Aggiungi questa cartella al tuo .gitignore se usi la sincronizzazione Git.",
-      "securityItem3": "Fai attenzione quando usi servizi di sincronizzazione cloud pubblici.",
       "desc": "Gestisci i provider LLM e le credenziali API. Usa la colonna azioni per modificare i dettagli di configurazione o aggiornare i modelli in cache.",
       "count_one": "{{count}} provider configurato",
       "count_other": "{{count}} provider configurati",

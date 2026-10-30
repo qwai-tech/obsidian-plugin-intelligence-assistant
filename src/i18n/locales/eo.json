@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Sekureca Averto",
-      "securityDesc": "API-ŝlosiloj estas konservitaj kiel simpla teksto en via arkivo por kongrueco. Por malhelpi hazardan elfluon:",
-      "securityItem1": "NE dividu vian dosierujon {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Aldonu ĉi tiun dosierujon al via .gitignore se vi uzas Git-sinkronigon.",
-      "securityItem3": "Estu singarda dum uzado de publikaj nuba-sinkronigaj servoj.",
       "desc": "Administru LLM-provizantojn kaj API-akreditaĵojn. Uzu la ago-kolumnon por redakti agorddetajlojn aŭ aktualigi kaŝmemoritajn modelojn.",
       "count_one": "{{count}} provizanto agordita",
       "count_other": "{{count}} provizantoj agorditaj",

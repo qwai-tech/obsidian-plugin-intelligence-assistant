@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Ostrzeżenie dotyczące bezpieczeństwa",
-      "securityDesc": "Klucze API są przechowywane jako zwykły tekst w Twoim sejfie dla zachowania kompatybilności. Aby zapobiec przypadkowym wyciekom:",
-      "securityItem1": "NIE udostępniaj folderu {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Dodaj ten folder do pliku .gitignore, jeśli używasz synchronizacji Git.",
-      "securityItem3": "Zachowaj ostrożność podczas korzystania z publicznych usług synchronizacji w chmurze.",
       "desc": "Zarządzaj dostawcami LLM i poświadczeniami API. Użyj kolumny akcji, aby edytować szczegóły konfiguracji lub odświeżyć modele z pamięci podręcznej.",
       "count_one": "{{count}} dostawca skonfigurowany",
       "count_other": "{{count}} dostawców skonfigurowanych",

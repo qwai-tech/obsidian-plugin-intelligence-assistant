@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Bezpečnostné upozornenie",
-      "securityDesc": "API kľúče sú uložené ako čistý text vo vašom trezore kvôli kompatibilite. Aby ste predišli náhodnému úniku:",
-      "securityItem1": "NEZDIEĽAJTE priečinok {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Pridajte tento priečinok do svojho .gitignore, ak používate Git synchronizáciu.",
-      "securityItem3": "Buďte opatrní pri používaní verejných cloudových synchronizačných služieb.",
       "desc": "Spravujte poskytovateľov LLM a API prihlasovacie údaje. Použite stĺpec akcií na úpravu podrobností konfigurácie alebo obnovenie uložených modelov.",
       "count_one": "{{count}} poskytovateľ nakonfigurovaný",
       "count_other": "{{count}} poskytovatelia nakonfigurovaní",

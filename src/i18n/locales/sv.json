@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Säkerhetsvarning",
-      "securityDesc": "API-nycklar lagras som klartext i ditt valv för kompatibilitet. För att förhindra oavsiktliga läckor:",
-      "securityItem1": "Dela INTE din {{configDir}}/plugins/intelligence-assistant/data/-mapp.",
-      "securityItem2": "Lägg till den här mappen i din .gitignore om du använder Git-synkronisering.",
-      "securityItem3": "Var försiktig när du använder offentliga molnsynkroniseringstjänster.",
       "desc": "Hantera LLM-leverantörer och API-uppgifter. Använd åtgärdskolumnen för att redigera konfigurationsdetaljer eller uppdatera cachade modeller.",
       "count_one": "{{count}} leverantör konfigurerad",
       "count_other": "{{count}} leverantörer konfigurerade",

@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "安全性警告",
-      "securityDesc": "為了相容性，API 金鑰以明文儲存在您的知識庫中。為防止意外洩漏：",
-      "securityItem1": "請勿共享您的 {{configDir}}/plugins/intelligence-assistant/data/ 資料夾。",
-      "securityItem2": "如果您使用 Git 同步，請將此資料夾新增至 .gitignore。",
-      "securityItem3": "使用公共雲端同步服務時請謹慎。",
       "desc": "管理 LLM 提供者和 API 憑證。使用操作欄位來編輯設定詳細資訊或重新整理快取模型。",
       "count_one": "已設定 {{count}} 個提供者",
       "count_other": "已設定 {{count}} 個提供者",

@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Avertissement de sécurité",
-      "securityDesc": "Les clés API sont stockées en texte clair dans votre coffre pour des raisons de compatibilité. Pour éviter les fuites accidentelles :",
-      "securityItem1": "Ne partagez PAS votre dossier {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Ajoutez ce dossier à votre .gitignore si vous utilisez la synchronisation Git.",
-      "securityItem3": "Soyez prudent lors de l'utilisation de services de synchronisation cloud publics.",
       "desc": "Gérer les fournisseurs LLM et les identifiants API. Utilisez la colonne d'actions pour modifier les détails de configuration ou actualiser les modèles en cache.",
       "count_one": "{{count}} fournisseur configuré",
       "count_other": "{{count}} fournisseurs configurés",

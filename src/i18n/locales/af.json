@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Sekuriteitswaarskuwing",
-      "securityDesc": "API-sleutels word as gewone teks in u gewelf gestoor vir versoenbaarheid. Om toevallige lekke te voorkom:",
-      "securityItem1": "Moenie u {{configDir}}/plugins/intelligence-assistant/data/-gids deel nie.",
-      "securityItem2": "Voeg hierdie gids by u .gitignore as u Git-sinchronisasie gebruik.",
-      "securityItem3": "Wees versigtig wanneer u openbare wolksinchronisasiedienste gebruik.",
       "desc": "Bestuur LLM-verskaffers en API-geloofsbriewe. Gebruik die aksieskolom om konfigurasiebesonderhede te redigeer of gekassineerde modelle te verfris.",
       "count_one": "{{count}} verskaffer gekonfigureer",
       "count_other": "{{count}} verskaffers gekonfigureer",

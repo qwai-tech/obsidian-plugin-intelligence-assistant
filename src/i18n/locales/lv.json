@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Drošības brīdinājums",
-      "securityDesc": "API atslēgas tiek glabātas kā vienkāršs teksts jūsu velventī saderības dēļ. Lai novērstu nejaušu noplūdi:",
-      "securityItem1": "NEDALIETIES ar {{configDir}}/plugins/intelligence-assistant/data/ mapi.",
-      "securityItem2": "Pievienojiet šo mapi .gitignore failam, ja izmantojat Git sinhronizāciju.",
-      "securityItem3": "Esiet uzmanīgi, izmantojot publiskos mākoņsinhronizācijas pakalpojumus.",
       "desc": "Pārvaldīt LLM pakalpojumu sniedzējus un API akreditācijas datus. Izmantojiet darbību kolonnu, lai rediģētu konfigurācijas informāciju vai atsvaidzinātu kešatmiņā saglabātos modeļus.",
       "count_one": "{{count}} pakalpojumu sniedzējs konfigurēts",
       "count_other": "{{count}} pakalpojumu sniedzēji konfigurēti",

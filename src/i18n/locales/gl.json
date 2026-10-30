@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Aviso de seguridade",
-      "securityDesc": "As claves API gárdanse como texto simple no teu vault para compatibilidade. Para evitar fugas accidentais:",
-      "securityItem1": "NON compartas o cartafol {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Engade este cartafol ao teu .gitignore se usas Git sync.",
-      "securityItem3": "Ten coidado ao usar servizos de sincronización na nube públicos.",
       "desc": "Xestiona provedores de LLM e credenciais API. Usa a columna de accións para editar detalles de configuración ou refrescar modelos en caché.",
       "count_one": "{{count}} provedor configurado",
       "count_other": "{{count}} provedores configurados",

@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Sikkerhetsadvarsel",
-      "securityDesc": "API-nøkler lagres som ren tekst i hvelvet ditt av kompatibilitetshensyn. For å forhindre utilsiktet lekkasje:",
-      "securityItem1": "Del IKKE {{configDir}}/plugins/intelligence-assistant/data/-mappen.",
-      "securityItem2": "Legg denne mappen til .gitignore hvis du bruker Git-synkronisering.",
-      "securityItem3": "Vær forsiktig når du bruker offentlige skysynkroniseringstjenester.",
       "desc": "Administrer LLM-leverandører og API-legitimasjon. Bruk handlingskolonnen til å redigere konfigurasjonsdetaljer eller oppdatere mellomlagrede modeller.",
       "count_one": "{{count}} leverandør konfigurert",
       "count_other": "{{count}} leverandører konfigurert",

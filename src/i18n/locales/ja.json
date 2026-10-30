@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "セキュリティ警告",
-      "securityDesc": "API キーは互換性のためにボルト内にプレーンテキストで保存されます。誤った漏洩を防ぐには：",
-      "securityItem1": "{{configDir}}/plugins/intelligence-assistant/data/ フォルダーを共有しないでください。",
-      "securityItem2": "Git 同期を使用する場合は、このフォルダーを .gitignore に追加してください。",
-      "securityItem3": "パブリッククラウド同期サービスを使用する際は注意してください。",
       "desc": "LLM プロバイダーと API 認証情報を管理します。アクション列を使用して設定の詳細を編集するか、キャッシュされたモデルを更新します。",
       "count_one": "{{count}} プロバイダー設定済み",
       "count_other": "{{count}} プロバイダー設定済み",

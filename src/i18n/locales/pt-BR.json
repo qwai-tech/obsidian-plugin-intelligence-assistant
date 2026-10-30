@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Aviso de Segurança",
-      "securityDesc": "As chaves de API são armazenadas como texto simples no seu vault por razões de compatibilidade. Para evitar vazamentos acidentais:",
-      "securityItem1": "NÃO compartilhe a pasta {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Adicione esta pasta ao seu .gitignore se usar sincronização Git.",
-      "securityItem3": "Tenha cuidado ao usar serviços de sincronização em nuvem pública.",
       "desc": "Gerencie provedores de LLM e credenciais de API. Use a coluna de ações para editar detalhes de configuração ou atualizar modelos em cache.",
       "count_one": "{{count}} provedor configurado",
       "count_other": "{{count}} provedores configurados",

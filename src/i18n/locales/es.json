@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Advertencia de seguridad",
-      "securityDesc": "Las claves API se almacenan como texto sin cifrar en su vault por compatibilidad. Para evitar filtraciones accidentales:",
-      "securityItem1": "NO comparta su carpeta {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Añada esta carpeta a su .gitignore si usa sincronización con Git.",
-      "securityItem3": "Tenga cuidado al usar servicios de sincronización en la nube pública.",
       "desc": "Gestione los proveedores de LLM y las credenciales de API. Use la columna de acciones para editar los detalles de configuración o actualizar los modelos en caché.",
       "count_one": "{{count}} proveedor configurado",
       "count_other": "{{count}} proveedores configurados",

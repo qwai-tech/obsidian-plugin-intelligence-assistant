@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Amaran Keselamatan",
-      "securityDesc": "Kunci API disimpan sebagai teks biasa dalam vault anda untuk keserasian. Untuk mencegah kebocoran tidak sengaja:",
-      "securityItem1": "JANGAN kongsi folder {{configDir}}/plugins/intelligence-assistant/data/ anda.",
-      "securityItem2": "Tambah folder ini ke .gitignore jika anda menggunakan penyegerakan Git.",
-      "securityItem3": "Berhati-hati apabila menggunakan perkhidmatan penyegerakan awan awam.",
       "desc": "Urus pembekal LLM dan kelayakan API. Gunakan lajur tindakan untuk mengedit butiran konfigurasi atau menyegarkan model yang dicache.",
       "count_one": "{{count}} pembekal dikonfigurasi",
       "count_other": "{{count}} pembekal dikonfigurasi",

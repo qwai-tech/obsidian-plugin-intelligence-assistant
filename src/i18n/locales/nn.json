@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Tryggleiksåtvaring",
-      "securityDesc": "API-nøklar vert lagra som klartekst i kvelvet ditt av kompatibilitetsomsyn. For å hindre utilsikta lekkasjar:",
-      "securityItem1": "Del IKKJE {{configDir}}/plugins/intelligence-assistant/data/-mappa.",
-      "securityItem2": "Legg denne mappa til .gitignore dersom du nyttar Git-synkronisering.",
-      "securityItem3": "Ver varsam når du nyttar offentlege skysynkroniseringstenester.",
       "desc": "Handter LLM-leverandørar og API-legitimasjon. Nytt handlingskolonnen til å redigere konfigurasjonsdetaljar eller oppdatere mellomlagra modellar.",
       "count_one": "{{count}} leverandør konfigurert",
       "count_other": "{{count}} leverandørar konfigurert",

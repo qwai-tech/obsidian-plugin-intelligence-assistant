@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Tietoturvavaroitus",
-      "securityDesc": "API-avaimet tallennetaan pelkkänä tekstinä holvissasi yhteensopivuuden vuoksi. Estääksesi vahingolliset vuodot:",
-      "securityItem1": "ÄLÄ jaa {{configDir}}/plugins/intelligence-assistant/data/-kansiota.",
-      "securityItem2": "Lisää tämä kansio .gitignore-tiedostoon, jos käytät Git-synkronointia.",
-      "securityItem3": "Ole varovainen käyttäessäsi julkisia pilvisynkronointipalveluita.",
       "desc": "Hallinnoi LLM-palveluntarjoajia ja API-tunnuksia. Käytä toimintosaraketta muokataksesi konfiguraatiotietoja tai päivittääksesi välimuistissa olevia malleja.",
       "count_one": "{{count}} palveluntarjoaja määritetty",
       "count_other": "{{count}} palveluntarjoajaa määritetty",

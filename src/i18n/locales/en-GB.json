@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Security Warning",
-      "securityDesc": "API keys are stored as plain text in your vault for compatibility. To prevent accidental leaks:",
-      "securityItem1": "Do NOT share your {{configDir}}/plugins/intelligence-assistant/data/ folder.",
-      "securityItem2": "Add this folder to your .gitignore if you use Git sync.",
-      "securityItem3": "Be cautious when using public cloud sync services.",
       "desc": "Manage LLM providers and API credentials. Use the actions column to edit configuration details or refresh cached models.",
       "count_one": "{{count}} provider configured",
       "count_other": "{{count}} providers configured",

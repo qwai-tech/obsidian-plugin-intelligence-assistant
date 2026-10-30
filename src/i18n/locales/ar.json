@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "تحذير أمني",
-      "securityDesc": "يتم تخزين مفاتيح API كنص عادي في مستودعك للتوافق. لتجنب التسريبات العرضية:",
-      "securityItem1": "لا تشارك مجلد {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "أضف هذا المجلد إلى ملف .gitignore إذا كنت تستخدم مزامنة Git.",
-      "securityItem3": "توخَّ الحذر عند استخدام خدمات المزامنة السحابية العامة.",
       "desc": "إدارة مزودي LLM وبيانات اعتماد API. استخدم عمود الإجراءات لتعديل تفاصيل التهيئة أو تحديث النماذج المخزّنة مؤقتًا.",
       "count_one": "تم تهيئة {{count}} مزود",
       "count_other": "تم تهيئة {{count}} مزودين",

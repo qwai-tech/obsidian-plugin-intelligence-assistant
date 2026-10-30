@@ -96,11 +96,6 @@
       }
     },
     "provider": {
-      "securityTitle": "Cảnh báo bảo mật",
-      "securityDesc": "Khóa API được lưu dưới dạng văn bản thuần trong vault của bạn để tương thích. Để tránh rò rỉ ngoài ý muốn:",
-      "securityItem1": "KHÔNG chia sẻ thư mục {{configDir}}/plugins/intelligence-assistant/data/.",
-      "securityItem2": "Thêm thư mục này vào .gitignore nếu bạn dùng Git sync.",
-      "securityItem3": "Hãy cẩn thận khi sử dụng các dịch vụ đồng bộ hóa đám mây công cộng.",
       "desc": "Quản lý nhà cung cấp LLM và thông tin xác thực API. Sử dụng cột thao tác để chỉnh sửa chi tiết cấu hình hoặc làm mới mô hình được lưu cache.",
       "count_one": "{{count}} nhà cung cấp đã cấu hình",
       "count_other": "{{count}} nhà cung cấp đã cấu hình",
