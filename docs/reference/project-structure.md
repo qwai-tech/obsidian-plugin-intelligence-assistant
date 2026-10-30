@@ -21,24 +21,22 @@ obsidian-plugin-intelligence-assistant/
 ```
 src/
 ├── adapters/  # Adapters behind feature ports
-│   ├── obsidian/  # Obsidian file-system adapter
-│   │   └── obsidian-file-system.ts
+│   ├── obsidian/  # Obsidian file-system and secret storage adapters
+│   │   ├── obsidian-file-system.ts
+│   │   └── obsidian-secret-vault.ts
 │   ├── persistence/  # Atomic JSON files, JSONL run journal, conversations
-│   │   ├── data/  # Repositories for settings data
+│   │   ├── data/  # Caches, token usage and agent memory
 │   │   │   ├── agent-memory-repository.ts
-│   │   │   ├── agent-repository.ts
-│   │   │   ├── mcp-server-repository.ts
 │   │   │   ├── mcp-tool-cache-repository.ts
 │   │   │   ├── model-cache-repository.ts
-│   │   │   ├── prompt-repository.ts
-│   │   │   ├── provider-repository.ts
 │   │   │   └── token-usage-repository.ts
 │   │   ├── conversation-migration-service.ts
 │   │   ├── conversation-records.ts
 │   │   ├── conversation-storage-service.ts
 │   │   ├── json-collection.ts
 │   │   ├── json-file.ts
-│   │   └── jsonl-run-journal.ts
+│   │   ├── jsonl-run-journal.ts
+│   │   └── legacy-settings-files.ts  # Reads the pre-data.json settings layout once
 │   └── rag/  # RAG manager, vector store, similarity, chunker, embeddings
 │       ├── chunker.ts
 │       ├── document-grader.ts
@@ -63,6 +61,7 @@ src/
 │   ├── utils/
 │   │   ├── errors.ts
 │   │   ├── file-system.ts
+│   │   ├── note-writer.ts  # Atomic note writes through the editor or Vault.process
 │   │   └── type-guards.ts
 │   ├── augmentations.d.ts
 │   ├── constants.ts
@@ -124,13 +123,15 @@ src/
 │   │   ├── index.ts
 │   │   ├── llm-hub-service.ts
 │   │   └── ollama-admin.ts
-│   ├── settings/  # Settings store, codec and migrations
+│   ├── settings/  # Settings store, data.json document, secrets, migrations
 │   │   ├── types/
 │   │   │   └── settings.ts
 │   │   ├── index.ts
 │   │   ├── settings-codec.ts
+│   │   ├── settings-document.ts
 │   │   ├── settings-migrations.ts
 │   │   ├── settings-reload.ts
+│   │   ├── settings-secrets.ts
 │   │   └── settings-store.ts
 │   ├── tools/  # Tool registry, sources, built-in tools, presets
 │   │   ├── cli-presets/  # CLI tool presets by category
@@ -170,6 +171,7 @@ src/
 │   │   ├── tool-migrations.ts
 │   │   ├── tool-registry.ts
 │   │   ├── tool-schema.ts
+│   │   ├── vault-path.ts
 │   │   ├── tool-source-manager.ts
 │   │   └── tool-source.ts
 │   ├── usage/  # Token usage types
@@ -200,6 +202,7 @@ src/
     │   ├── controllers/
     │   │   ├── base-controller.ts
     │   │   ├── chat-controller.ts
+    │   │   ├── chat-reply.ts
     │   │   └── input-controller.ts
     │   ├── handlers/
     │   │   └── tool-call-handler.ts
@@ -254,7 +257,7 @@ src/
     │   ├── single-file-selection-modal.ts
     │   ├── system-prompt-edit-modal.ts
     │   └── text-input-modal.ts
-    ├── settings/  # Settings tab, form kit and tabs
+    ├── settings/  # Declarative settings tab, section pages, form kit
     │   ├── tabs/
     │   │   ├── tools/
     │   │   │   ├── builtin-tools-section.ts
@@ -263,6 +266,7 @@ src/
     │   │   ├── agents-tab.ts
     │   │   ├── general-tab.ts
     │   │   ├── llm-tab.ts
+    │   │   ├── mcp-actions.ts
     │   │   ├── mcp-tab.ts
     │   │   ├── models-tab.ts
     │   │   ├── prompts-tab.ts
@@ -273,8 +277,10 @@ src/
     │   │   ├── tools-tab.ts
     │   │   ├── usage-tab.ts
     │   │   └── websearch-tab.ts
+    │   ├── section-page.ts
     │   ├── settings-form.ts
-    │   └── settings-tab.ts
+    │   ├── settings-tab.ts
+    │   └── sub-tabs.ts
     ├── state/  # Per-view state
     │   └── chat-view-state.ts
     ├── status/
@@ -283,7 +289,7 @@ src/
     │   └── mention-suggest.ts
     ├── utils/
     │   ├── config-field-metadata.ts
-    │   ├── config-schema.ts
+    │   ├── icon.ts
     │   ├── test-ids.ts
     │   └── ui-helpers.ts
     ├── views/  # Chat view, workspace, agent task launcher
