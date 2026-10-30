@@ -5,6 +5,8 @@ import { OllamaModelManagerModal } from './ollama-model-manager-modal';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 
+const MODEL_FILTER_PLACEHOLDER = 'gpt-4|claude-';
+
 const LLM_PROVIDER_OPTIONS: Array<{ value: string; labelKey: string }> = [
 	{ value: 'openai', labelKey: 'modals.provider.providers.openai' },
 	{ value: 'anthropic', labelKey: 'modals.provider.providers.anthropic' },
@@ -56,7 +58,7 @@ export class ProviderConfigModal extends Modal {
 		}).addText(text => {
 				text.inputEl.setAttribute('data-testid', TestIds.settings.providerModalModelFilterInput);
 				text
-					.setPlaceholder('Gpt-4|claude-')
+					.setPlaceholder(MODEL_FILTER_PLACEHOLDER)
 					.setValue(this.draft.modelFilter || '')
 					.onChange(value => {
 						this.draft.modelFilter = value.trim() || undefined;

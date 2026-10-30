@@ -13,6 +13,9 @@ import { TestIds } from '@/ui/utils/test-ids';
 import { displayWebSearchTab } from './websearch-tab';
 import { renderSubTabs } from '@/ui/settings/sub-tabs';
 
+const EMBEDDING_MODEL_PLACEHOLDER = 'text-embedding-3-small';
+const GRADER_MODEL_PLACEHOLDER = 'gpt-4o-mini';
+
 export function displayRAGTab(
 	containerEl: HTMLElement,
 	plugin: IntelligenceAssistantPlugin
@@ -94,7 +97,7 @@ function renderGeneralSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 	form.text('embeddingModel', {
 		label: t('settings.rag.general.embeddingModel.name'),
 		description: t('settings.rag.general.embeddingModel.desc'),
-	}, { placeholder: 'Text-embedding-ada-002' });
+	}, { placeholder: EMBEDDING_MODEL_PLACEHOLDER });
 	form.toggle('embedChangedFiles', {
 		label: t('settings.rag.general.embedChanged.name'),
 		description: t('settings.rag.general.embedChanged.desc'),
@@ -234,7 +237,7 @@ function renderGradingSettings(containerEl: HTMLElement, plugin: IntelligenceAss
 				sourceForm.text('graderModel', {
 					label: t('settings.rag.grading.graderModel.name'),
 					description: t('settings.rag.grading.graderModel.desc'),
-				}, { placeholder: 'Gpt-4' });
+				}, { placeholder: GRADER_MODEL_PLACEHOLDER });
 			}
 		};
 		renderModelSourceOptions();

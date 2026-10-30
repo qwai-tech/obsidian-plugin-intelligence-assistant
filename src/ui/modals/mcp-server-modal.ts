@@ -4,6 +4,8 @@ import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 
+const ENV_PLACEHOLDER = 'API_KEY=xyz\nNODE_ENV=production';
+
 export class MCPServerModal extends Modal {
 	private draft: MCPServerConfig;
 	private readonly mode: 'create' | 'edit';
@@ -96,7 +98,7 @@ export class MCPServerModal extends Modal {
 			label: t('modals.mcpServer.envVars.name'),
 			description: t('modals.mcpServer.envVars.desc')
 		}).addTextArea(text => {
-				text.setPlaceholder('Api_key=xyz' + '\n' + 'node_env=production');
+				text.setPlaceholder(ENV_PLACEHOLDER);
 				text.setValue(this.envText);
 				text.inputEl.rows = 4;
 				text.onChange(value => {
