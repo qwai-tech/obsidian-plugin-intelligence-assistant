@@ -1,7 +1,5 @@
 import { getLanguage, Notice, Plugin, type WorkspaceLeaf } from 'obsidian';
 import { t, initI18n } from './src/i18n';
-import './src/ui/chat/settings.css';
-import './src/ui/modals/explain-text-modal.css';
 import type { PluginSettings } from './src/features/settings';
 import { pluginPaths } from './src/core/plugin-paths';
 import { ensureFolderExists } from './src/core/utils/file-system';

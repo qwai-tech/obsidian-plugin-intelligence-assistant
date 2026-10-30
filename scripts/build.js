@@ -136,33 +136,6 @@ if you want to view the source, please visit the github repository of this plugi
 */
 `;
 
-        // CSS Plugin for inlining
-        const cssPlugin = {
-            name: 'css',
-            setup(build) {
-                build.onLoad({ filter: /\.css$/ }, async (args) => {
-                    if (!existsSync(args.path)) {
-                        logger.warning(`CSS file not found: ${args.path}`);
-                        return { contents: 'export default "";', loader: 'js' };
-                    }
-                    
-                    const css = readFileSync(args.path, 'utf8');
-                    return {
-                        contents: `
-                            const css = ${JSON.stringify(css)};
-                            if (typeof document !== 'undefined') {
-                                const style = document.createElement('style');
-                                style.textContent = css;
-                                document.head.appendChild(style);
-                            }
-                            export default css;
-                        `,
-                        loader: 'js',
-                    };
-                });
-            },
-        };
-
         const sourceDir = this.sourceDir;
         const aliasPlugin = {
             name: 'alias-resolver',
@@ -226,7 +199,7 @@ if you want to view the source, please visit the github repository of this plugi
                 sourcemap: !this.isProduction,
                 treeShaking: true,
                 outfile: this.config.outputFile,
-                plugins: [aliasPlugin, cssPlugin],
+                plugins: [aliasPlugin],
                 minify: this.isProduction,
                 metafile: this.analyze,
                 define: this.isProduction ? {
