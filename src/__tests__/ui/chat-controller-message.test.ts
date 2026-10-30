@@ -329,4 +329,56 @@ describe('ChatController (upgraded message pipeline)', () => {
 		}));
 		chatContainer.remove();
 	});
+
+	it('records an agent-mode failure as an error reply and saves the conversation', async () => {
+		state.mode = 'agent';
+		const chatService = makeChatService({
+			executeAgentLoop: jest.fn(async (_messages, _options, callbacks) => {
+				callbacks.onError(new Error('budget exhausted'));
+			}),
+		});
+		const options = makeOptions(chatService);
+		controller.configure(options);
+
+		await controller.sendMessage('do the task');
+
+		const last = state.messages[state.messages.length - 1];
+		expect(last.role).toBe('assistant');
+		expect(last.content).toContain('budget exhausted');
+		expect(options.conversationManager.saveCurrentConversation).toHaveBeenCalled();
+		expect(state.isStreaming).toBe(false);
+	});
+
+	it('restores the original answer when regenerating fails', async () => {
+		const original = { role: 'assistant' as const, content: 'original answer' };
+		state.messages.push({ role: 'user', content: 'question' }, original);
+		const chatService = makeChatService({
+			streamResponse: jest.fn(async (_messages, _options, callbacks) => {
+				callbacks.onError(new Error('offline'));
+			}),
+		});
+		const options = makeOptions(chatService);
+		controller.configure(options);
+
+		await controller.regenerateMessage(original);
+
+		expect(state.messages.map(message => message.content)).toEqual(['question', 'original answer']);
+		expect(options.conversationManager.saveCurrentConversation).toHaveBeenCalled();
+	});
+
+	it('replaces the original answer when regenerating succeeds', async () => {
+		const original = { role: 'assistant' as const, content: 'original answer' };
+		state.messages.push({ role: 'user', content: 'question' }, original);
+		const chatService = makeChatService({
+			streamResponse: jest.fn(async (_messages, _options, callbacks) => {
+				callbacks.onComplete({ role: 'assistant', content: 'better answer' });
+			}),
+		});
+		controller.configure(makeOptions(chatService));
+
+		await controller.regenerateMessage(original);
+
+		expect(state.messages.map(message => message.content)).toEqual(['question', 'better answer']);
+	});
 });
+
