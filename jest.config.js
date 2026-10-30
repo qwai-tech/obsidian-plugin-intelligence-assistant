@@ -17,6 +17,7 @@ module.exports = {
   moduleNameMapper: {
     '^obsidian$': '<rootDir>/__mocks__/obsidian.ts',
     '^marked$': '<rootDir>/__mocks__/marked.ts',
+    '^virtual:locale-pack$': '<rootDir>/tests/support/locale-pack.js',
     '^@qwai/obsidian-llm$': '<rootDir>/packages/obsidian-llm/src/index.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@plugin$': '<rootDir>/main.ts'

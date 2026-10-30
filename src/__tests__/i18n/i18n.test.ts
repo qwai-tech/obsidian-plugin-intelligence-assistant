@@ -1,3 +1,5 @@
+import { unpackLocale } from '@/adapters/i18n/packed-locales';
+
 describe('i18n module', () => {
 	beforeEach(() => {
 		jest.resetModules();
@@ -13,17 +15,25 @@ describe('i18n module', () => {
 	it('returns Chinese string for zh locale', () => {
 		jest.resetModules();
 		// eslint-disable-next-line @typescript-eslint/no-require-imports
-		const { initI18n, t } = require('@/i18n') as { initI18n: (l?: string) => void; t: (k: string) => string };
-		initI18n('zh');
+		const { initI18n, t } = require('@/i18n') as typeof import('@/i18n');
+		initI18n('zh', unpackLocale);
 		expect(t('settings.tabs.general')).toBe('通用');
+	});
+
+	it('loads any shipped language from the bundled packs', () => {
+		jest.resetModules();
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
+		const { initI18n, t } = require('@/i18n') as typeof import('@/i18n');
+		initI18n('de-DE', unpackLocale);
+		expect(t('chat.renameConversationPrompt')).toBe('Neuer Titel');
 	});
 
 	it('falls back to English for unknown locale', () => {
 		jest.resetModules();
 		// eslint-disable-next-line @typescript-eslint/no-require-imports
-		const { initI18n, t } = require('@/i18n') as { initI18n: (l?: string) => void; t: (k: string) => string };
-		initI18n('en');
-		expect(t('settings.tabs.mcp')).toBe('MCP');
+		const { initI18n, t } = require('@/i18n') as typeof import('@/i18n');
+		initI18n('xx', unpackLocale);
+		expect(t('settings.tabs.general')).toBe('General');
 	});
 
 	it('picks the singular or plural form from the count', () => {

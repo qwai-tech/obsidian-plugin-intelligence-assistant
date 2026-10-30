@@ -9,6 +9,7 @@ import type IntelligenceAssistantPlugin from '@plugin';
 import type { Conversation } from '@/features/conversations/types/conversation';
 import { ConversationStorageService } from '@/adapters/persistence/conversation-storage-service';
 import { initI18n } from '@/i18n';
+import { unpackLocale } from '@/adapters/i18n/packed-locales';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import { showPrompt } from '@/ui/modals/prompt-modal';
 
@@ -524,7 +525,7 @@ describe('ConversationManager', () => {
 		});
 
 		it('asks for delete and rename in the user\'s language', async () => {
-			initI18n('zh');
+			initI18n('zh', unpackLocale);
 			(mockStorageService.getConversationMetadata as jest.Mock).mockResolvedValue({ id: '1', title: '计划', file: '1.json', createdAt: 0, updatedAt: 0, messageCount: 0, mode: 'chat' });
 			global.confirm = jest.fn(() => false) as any;
 			global.prompt = jest.fn(() => null) as any;

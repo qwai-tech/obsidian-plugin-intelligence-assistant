@@ -135,19 +135,6 @@ class Deployer {
             }
         }
 
-        // Deploy locale directory
-        const localesSrc = join(this.sourceDir, 'locales');
-        const localesDest = join(this.pluginDestPath, 'locales');
-        if (existsSync(localesSrc)) {
-            FileUtils.ensureDirectory(localesDest);
-            const { readdirSync } = require('fs');
-            const localeFiles = readdirSync(localesSrc).filter(f => f.endsWith('.json'));
-            for (const f of localeFiles) {
-                FileUtils.copyFile(join(localesSrc, f), join(localesDest, f));
-            }
-            successCount += localeFiles.length;
-        }
-
         logger.success(`Deployed: ${successCount} files`);
         if (skipCount > 0) {
             logger.warning(`Skipped: ${skipCount} files`);

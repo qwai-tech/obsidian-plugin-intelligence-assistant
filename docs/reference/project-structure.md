@@ -21,6 +21,8 @@ obsidian-plugin-intelligence-assistant/
 ```
 src/
 ├── adapters/  # Adapters behind feature ports
+│   ├── i18n/  # Brotli locale packs built into main.js; decodes the active language
+│   │   └── packed-locales.ts
 │   ├── obsidian/  # Obsidian file-system and secret storage adapters
 │   │   ├── obsidian-file-system.ts
 │   │   └── obsidian-secret-vault.ts
@@ -37,6 +39,11 @@ src/
 │   │   ├── json-file.ts
 │   │   ├── jsonl-run-journal.ts
 │   │   └── legacy-settings-files.ts  # Reads the pre-data.json settings layout once
+│   ├── process/  # Everything that starts a process
+│   │   ├── command-runner.ts  # CommandRunner port for CLI tools
+│   │   ├── mcp-stdio-connector.ts  # McpConnector port
+│   │   ├── mcp-stdio-session.ts  # MCP JSON-RPC over a server's stdio
+│   │   └── resolve-command.ts  # Finds npx, uvx, python… without a shell
 │   └── rag/  # RAG manager, vector store, similarity, chunker, embeddings
 │       ├── chunker.ts
 │       ├── document-grader.ts
@@ -65,7 +72,8 @@ src/
 │   │   └── type-guards.ts
 │   ├── augmentations.d.ts
 │   ├── constants.ts
-│   └── plugin-paths.ts
+│   ├── plugin-paths.ts
+│   └── rag-index-filter.ts  # Which notes RAG may index
 ├── features/  # Use cases, ports and types; one index.ts per feature
 │   ├── agent/  # Agent engine, sensing, memory, tool access
 │   │   ├── kernel/  # Turn kernel, budget, guards, model/tool ports
@@ -165,6 +173,7 @@ src/
 │   │   ├── mcp-helpers.ts
 │   │   ├── mcp-tool-wrapper.ts
 │   │   ├── pdf-tools.ts
+│   │   ├── process-ports.ts  # McpConnector and CommandRunner ports
 │   │   ├── search-tools.ts
 │   │   ├── subprocess-env.ts
 │   │   ├── tag-tools.ts
@@ -297,6 +306,7 @@ src/
     │   ├── chat-view.ts
     │   └── chat-workspace.ts
     ├── app-services.ts
+    ├── plugin-host.ts  # What UI code may use from the plugin
     └── provider-meta.ts
 ```
 

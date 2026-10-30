@@ -25,6 +25,7 @@ import { registerChatHoverLinkSource } from './src/ui/chat/hover-link';
 import { AgentStatusBar } from './src/ui/status/agent-status-bar';
 import type { AppServices } from './src/ui/app-services';
 import { createServices, type OwnedServices } from './src/bootstrap/create-services';
+import { unpackLocale } from './src/adapters/i18n/packed-locales';
 import { registerAgentEntryPoints } from './src/bootstrap/agent-entry-points';
 import { registerDeepLinks, registerIncrementalRagIndexing, registerInlineAiBlocks } from './src/bootstrap/plugin-integrations';
 
@@ -61,7 +62,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 
 	async onload() {
 		const pluginDir = this.manifest.dir ?? `${this.app.vault.configDir}/plugins/${this.manifest.id}`;
-		initI18n(undefined, pluginDir);
+		initI18n(undefined, unpackLocale);
 		setDefaultHttpPort(withResilience(createObsidianHttpPort()));
 		setDiagnosticsSink(({ message }) => { new Notice(message); });
 		this.llmHub = new LLMHubService({

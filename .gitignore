@@ -181,7 +181,6 @@ tests/e2e/state-dumps/
 tests/e2e/logs/
 tests/e2e/reports/
 .envrc
-locales/
 
 # Mutation testing (Stryker)
 .stryker-tmp/

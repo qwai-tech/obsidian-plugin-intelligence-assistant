@@ -1,11 +1,9 @@
 import i18next, { type Resource, type ResourceLanguage } from 'i18next';
 import en from './locales/en.json';
-import zh from './locales/zh.json';
 
 const i18n = i18next.createInstance();
 
-// Locales that are bundled with the plugin (hand-curated)
-const BUNDLED_LOCALES = new Set(['en', 'zh']);
+export type LocaleLoader = (lang: string, keys: readonly string[]) => Record<string, unknown> | undefined;
 
 // Map from Obsidian/moment locale codes → i18next language key
 const LOCALE_MAP: Record<string, string> = {
@@ -78,47 +76,32 @@ function resolveLocale(raw: string): string {
 	return 'en';
 }
 
-function loadLocaleFile(lang: string, pluginDir?: string): Record<string, unknown> | undefined {
-	if (BUNDLED_LOCALES.has(lang) || !pluginDir) return undefined;
-	let content: Record<string, unknown> | undefined;
-	try {
-		// Dynamic require with computed path — esbuild cannot bundle this
-		// eslint-disable-next-line @typescript-eslint/no-require-imports -- runtime locale loading
-		content = require(pluginDir + '/locales/' + lang + '.json') as Record<string, unknown>;
-	} catch {
-		// Fail silently — caller falls back to en
-		content = undefined;
-	}
-	return content;
+let keys: string[] | null = null;
+
+export function localeKeys(): readonly string[] {
+	keys ??= flattenKeys(en);
+	return keys;
 }
 
-const BUNDLED: Resource = {
-	en: { translation: en as ResourceLanguage['translation'] },
-	zh: { translation: zh as ResourceLanguage['translation'] },
-};
+function flattenKeys(tree: Record<string, unknown>, prefix = ''): string[] {
+	return Object.entries(tree).flatMap(([key, value]) =>
+		value !== null && typeof value === 'object' ? flattenKeys(value as Record<string, unknown>, `${prefix}${key}.`) : [`${prefix}${key}`]);
+}
 
-export function initI18n(langOverride?: string, pluginDir?: string): void {
+export function initI18n(langOverride?: string, loadLocale?: LocaleLoader): void {
 	const raw: string = langOverride ??
 		(window as Window & { moment?: { locale(): string } }).moment?.locale() ?? 'en';
 	const lang = resolveLocale(raw);
 
-	// Build resources: bundled en/zh always present; dynamic locale loaded from disk
-	const resources: Resource = { ...BUNDLED };
-	if (!BUNDLED_LOCALES.has(lang)) {
-		const data = loadLocaleFile(lang, pluginDir);
-		if (data) {
-			resources[lang] = { translation: data as ResourceLanguage['translation'] };
-		}
+	const resources: Resource = { en: { translation: en as ResourceLanguage['translation'] } };
+	const translation = lang === 'en' ? undefined : loadLocale?.(lang, localeKeys());
+	if (translation) {
+		resources[lang] = { translation: translation as ResourceLanguage['translation'] };
 	}
 
 	void i18n.init({
 		lng: lang,
-		fallbackLng: {
-			'zh-TW': ['zh', 'en'],
-			'pt-BR': ['pt', 'en'],
-			'en-GB': ['en'],
-			'default': ['en'],
-		},
+		fallbackLng: 'en',
 		initAsync: false,
 		resources,
 		interpolation: { escapeValue: false },
