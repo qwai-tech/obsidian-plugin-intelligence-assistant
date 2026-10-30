@@ -12,6 +12,7 @@ import type { ConversationManager } from '@/ui/chat/managers/conversation-manage
 import type { RagStatusPanel } from '@/ui/chat/rag-status-panel';
 import type { RAGSource } from '@/features/knowledge';
 import { errorMessage } from '@/core/utils/errors';
+import { errorReply, type Reply } from './chat-reply';
 
 export interface ChatControllerOptions {
 	chatContainer: HTMLElement;
@@ -397,14 +398,4 @@ export class ChatController extends BaseController {
 		if (!activeId) return null;
 		return this.plugin.settings.agents.find((a: { id: string }) => a.id === activeId) || null;
 	}
-}
-
-interface Reply {
-	ok: boolean;
-	message: Message;
-	element: HTMLElement;
-}
-
-function errorReply(error: unknown, model: string, config: LLMConfig): Message {
-	return { role: 'assistant', content: `❌ **Error:** ${errorMessage(error)}`, model, provider: config.provider ?? undefined };
 }
