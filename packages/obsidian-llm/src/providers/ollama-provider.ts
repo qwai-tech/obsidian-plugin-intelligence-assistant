@@ -198,19 +198,13 @@ export class OllamaProvider extends BaseLLMProvider {
 			}
 
 			// Map Ollama models to ModelInfo format
-			const models = data.models.map((model: { name: string; [key: string]: unknown }) => {
-				const capabilities = this.inferCapabilities(model.name);
-
-				return {
-					id: `ollama:${model.name ?? 'unknown'}`,
-					name: model.name,
-					provider: 'ollama',
-					capabilities: capabilities,
-					enabled: true
-				};
-			});
-
-			return models;
+			return await Promise.all(data.models.map(async (model: { name: string }) => ({
+				id: `ollama:${model.name ?? 'unknown'}`,
+				name: model.name,
+				provider: 'ollama',
+				capabilities: (await this.reportedCapabilities(baseUrl, model.name)) ?? this.inferCapabilities(model.name),
+				enabled: true,
+			})));
 		} catch (error: unknown) {
 			console.error('[Ollama] Failed to fetch models:', error);
 
@@ -231,6 +225,21 @@ export class OllamaProvider extends BaseLLMProvider {
 
 			// Return empty array instead of throwing to allow graceful degradation
 			return [];
+		}
+	}
+
+	private async reportedCapabilities(baseUrl: string | undefined, name: string): Promise<ModelCapability[] | null> {
+		try {
+			const response = await this.http.request({
+				url: `${baseUrl ?? ''}/api/show`,
+				method: 'POST',
+				headers: { ...this.getHeaders(), 'Content-Type': 'application/json' },
+				body: JSON.stringify({ model: name }),
+			});
+			const reported = response.ok ? (response.json as { capabilities?: unknown } | undefined)?.capabilities : undefined;
+			return Array.isArray(reported) && reported.length > 0 ? fromOllamaCapabilities(reported as string[]) : null;
+		} catch {
+			return null;
 		}
 	}
 
@@ -264,6 +273,19 @@ export class OllamaProvider extends BaseLLMProvider {
 
 		return capabilities;
 	}
+}
+
+const OLLAMA_CAPABILITIES: Record<string, ModelCapability> = {
+	vision: 'vision',
+	thinking: 'reasoning',
+	tools: 'function_calling',
+};
+
+function fromOllamaCapabilities(reported: string[]): ModelCapability[] {
+	if (!reported.includes('completion')) {
+		return reported.includes('embedding') ? ['embedding'] : [];
+	}
+	return ['chat', 'streaming', ...reported.flatMap(capability => OLLAMA_CAPABILITIES[capability] ?? [])];
 }
 
 class ToolCallIds {
