@@ -409,7 +409,7 @@ describe('AgentEngineLoop', () => {
 
 		await loop.execute(
 			[{ role: 'user', content: 'remember' }],
-			{ model: 'gpt-4o', mode: 'agent', agentId: 'agent-1', agents: [{ id: 'agent-1', maxSteps: 2, contextWindow: 20, toolAccess: { sources: {} } } as any] },
+			{ model: 'gpt-4o', mode: 'agent', agentId: 'agent-1', agents: [{ id: 'agent-1', memoryType: 'long-term', maxSteps: 2, contextWindow: 20, toolAccess: { sources: {} } } as any] },
 			{
 				onChunk: jest.fn(),
 				onToolCall: jest.fn(),
@@ -430,5 +430,42 @@ describe('AgentEngineLoop', () => {
 		expect(memoryWriter.setPreference).toHaveBeenCalledWith('agent-1', 'tone', 'concise');
 		expect(memoryWriter.appendResearchLog).toHaveBeenCalledWith('agent-1', 'Finding A');
 		expect(memoryIndex.indexMemory).toHaveBeenCalledWith('agent-1', 'Finding A');
+	});
+
+	it('neither reads nor writes memory for an agent whose memory is none', async () => {
+		const provider = {
+			streamChat: jest.fn(async (_request, onChunk) => {
+				onChunk({ content: 'Spanish noted' });
+			}),
+			chat: jest.fn(async () => ({ content: JSON.stringify({ preferences: { language: 'Spanish' }, newResearchEntries: ['QA_NONE_FIXED_9128'] }) })),
+		};
+		const memoryWriter = { setPreference: jest.fn(), appendResearchLog: jest.fn() };
+		const senseService = {
+			sense: jest.fn(async () => ({ userQuery: 'remember', activeFilePath: null, references: [], sections: [], ragSources: [], memory: null })),
+			formatSenseContext: jest.fn(() => ''),
+		};
+		const loop = new AgentEngineLoop({
+			toolRegistry: { resolveForAgent: jest.fn(() => []), toOpenAIFunctions: jest.fn(() => []), executeTool: jest.fn() } as any,
+			senseService: senseService as any,
+			historyCompactor: new HistoryCompactor(),
+			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
+			memoryIndex: { indexMemory: jest.fn() },
+			memoryWriter,
+			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
+			recordUsage: jest.fn(async () => undefined),
+		});
+
+		await loop.execute(
+			[{ role: 'user', content: 'Remember for future sessions: my preferred document language is Spanish.' }],
+			{ model: 'gpt-4o', mode: 'agent', agentId: 'qa-none', agents: [{ id: 'qa-none', memoryType: 'none', maxSteps: 2, contextWindow: 20, toolAccess: { sources: {} } } as any] },
+			{ onChunk: jest.fn(), onToolCall: jest.fn(), onToolResult: jest.fn(), onThought: jest.fn(), onComplete: jest.fn(), onError: error => { throw error; } },
+		);
+		await Promise.resolve();
+		await Promise.resolve();
+
+		expect(senseService.sense).toHaveBeenCalledWith(expect.objectContaining({ agentId: undefined }));
+		expect(provider.chat).not.toHaveBeenCalled();
+		expect(memoryWriter.setPreference).not.toHaveBeenCalled();
+		expect(memoryWriter.appendResearchLog).not.toHaveBeenCalled();
 	});
 });

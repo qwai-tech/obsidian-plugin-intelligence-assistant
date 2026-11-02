@@ -55,6 +55,7 @@ export class AgentEngineLoop {
 			}
 
 			const activeAgent = this.getActiveAgent(options);
+			const memoryAgentId = activeAgent && keepsMemory(activeAgent) ? activeAgent.id : undefined;
 			const fallbackSteps = activeAgent?.maxSteps ?? DEFAULT_MAX_STEPS;
 			const userQuery = messages[messages.length - 1]?.content ?? '';
 			const sense = await this.deps.senseService.sense({
@@ -62,7 +63,7 @@ export class AgentEngineLoop {
 				model: options.model,
 				defaultModel: this.deps.defaultModel?.(),
 				enableRAG: options.enableRAG,
-				agentId: activeAgent?.id,
+				agentId: memoryAgentId,
 				references: options.references,
 			});
 			const ragSources: RAGSource[] = [...sense.ragSources];
@@ -126,8 +127,8 @@ export class AgentEngineLoop {
 				reasoningContent: run.reasoning || undefined,
 			});
 
-			if (activeAgent?.id && this.deps.memoryWriter) {
-				void this.consolidateMemory(activeAgent.id, this.deps.memoryWriter, messages, finalContent, options);
+			if (memoryAgentId && this.deps.memoryWriter) {
+				void this.consolidateMemory(memoryAgentId, this.deps.memoryWriter, messages, finalContent, options);
 			}
 		} catch (error) {
 			callbacks.onError(error instanceof Error ? error : new Error(String(error)));
@@ -311,3 +312,6 @@ function failureMessage(reason: FinishReason): string | null {
 	return null;
 }
 
+function keepsMemory(agent: Pick<AppAgent, 'memoryType'>): boolean {
+	return agent.memoryType === 'short-term' || agent.memoryType === 'long-term';
+}
