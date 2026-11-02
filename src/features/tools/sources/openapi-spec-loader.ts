@@ -3,9 +3,14 @@ import type { HttpPort } from '@qwai/obsidian-llm';
 import type { IFileSystem } from '@/core/interfaces/file-system.interface';
 import type { OpenApiToolConfig } from '@/features/tools/types/openapi-tools';
 
+export interface OpenApiSpecCache {
+	read(configId: string): Promise<string | null>;
+	write(configId: string, spec: string): Promise<void>;
+}
+
 export interface OpenApiLoadContext {
 	fileSystem: IFileSystem;
-	pluginDataPath: string;
+	specCache: OpenApiSpecCache;
 	http: HttpPort;
 	refetch?: boolean;
 }
@@ -36,28 +41,18 @@ async function loadRemoteSpec(config: OpenApiToolConfig, context: OpenApiLoadCon
 		throw new Error('OpenAPI URL is required');
 	}
 
-	const { fileSystem } = context;
-	const cache = getCachePaths(config.id, context.pluginDataPath);
-	await fileSystem.mkdir(cache.directoryAbsolute);
-	const cacheExists = await fileSystem.exists(cache.absolutePath);
-
-	if (!cacheExists || context.refetch) {
-		const response = await context.http.request({ url: config.specUrl.trim(), method: 'GET' });
-		if (!response.ok) {
-			throw new Error(`OpenAPI spec request failed: HTTP ${response.status}`);
-		}
-		await fileSystem.write(cache.absolutePath, response.text);
-		if (context.refetch) {
-			config.lastFetchedAt = Date.now();
-		}
-		return response.text;
+	const cached = context.refetch ? null : await context.specCache.read(config.id);
+	if (cached !== null) {
+		return cached;
 	}
 
-	return await fileSystem.read(cache.absolutePath);
-}
-
-function getCachePaths(configId: string, pluginDataPath: string): { absolutePath: string; directoryAbsolute: string } {
-	const directoryAbsolute = `${pluginDataPath}/openapi`;
-	const absolutePath = `${directoryAbsolute}/${configId}.json`;
-	return { absolutePath: normalizePath(absolutePath), directoryAbsolute: normalizePath(directoryAbsolute) };
+	const response = await context.http.request({ url: config.specUrl.trim(), method: 'GET' });
+	if (!response.ok) {
+		throw new Error(`OpenAPI spec request failed: HTTP ${response.status}`);
+	}
+	await context.specCache.write(config.id, response.text);
+	if (context.refetch) {
+		config.lastFetchedAt = Date.now();
+	}
+	return response.text;
 }

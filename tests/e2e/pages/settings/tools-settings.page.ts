@@ -136,6 +136,26 @@ export class ToolsSettingsPage extends BasePage {
 		await this.waitForOpenApiRow(config.id);
 	}
 
+	async saveOpenApiConfig(config: OpenApiToolConfig): Promise<void> {
+		await browser.execute(async (pluginId, toolConfig) => {
+			const plugin = (window as unknown as { app: { plugins: { plugins: Record<string, {
+				updateSettings(change: (settings: { openApiTools: OpenApiToolConfig[] }) => void): Promise<void>;
+			}> } } }).app.plugins.plugins[pluginId];
+			await plugin.updateSettings((settings) => {
+				settings.openApiTools = [...settings.openApiTools.filter(item => item.id !== toolConfig.id), toolConfig];
+			});
+		}, PLUGIN_ID, config);
+	}
+
+	async reloadOpenApi(id: string, refetch = false): Promise<number> {
+		return browser.execute(async (pluginId, configId, forceRefetch) => {
+			const plugin = (window as unknown as { app: { plugins: { plugins: Record<string, {
+				services: { tools: { reloadOpenApi(id: string, options: { refetch: boolean }): Promise<number> } };
+			}> } } }).app.plugins.plugins[pluginId];
+			return plugin.services.tools.reloadOpenApi(configId, { refetch: forceRefetch });
+		}, PLUGIN_ID, id, refetch);
+	}
+
 	async createCliTool(config: CliToolConfig): Promise<void> {
 		await browser.execute(async (pluginId, toolConfig) => {
 			const plugin = (window as unknown as {

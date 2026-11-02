@@ -4,6 +4,7 @@ export { CliToolSource } from './sources/cli-tool-source';
 export { McpToolSource } from './sources/mcp-tool-source';
 export type { CommandOutcome, CommandRun, CommandRunner, McpConnection, McpConnector, ProcessLaunch } from './process-ports';
 export { OpenApiToolSource } from './sources/openapi-tool-source';
+export type { OpenApiSpecCache } from './sources/openapi-spec-loader';
 export { migrateAllAgents } from './tool-migrations';
 export { ToolRegistry } from './tool-registry';
 export { ToolSourceManager } from './tool-source-manager';

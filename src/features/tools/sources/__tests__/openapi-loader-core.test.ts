@@ -34,9 +34,11 @@ function makeHttp(text: string, json: unknown = undefined) {
 	return { http, requests };
 }
 
-const context = (fileSystem: IFileSystem, http: HttpPort = makeHttp('').http): OpenApiLoadContext => ({
+const noCache = { read: async () => null, write: async () => undefined };
+
+const context = (fileSystem: IFileSystem, http: HttpPort = makeHttp('').http, specCache: OpenApiLoadContext['specCache'] = noCache): OpenApiLoadContext => ({
 	fileSystem,
-	pluginDataPath: '/plugin/data',
+	specCache,
 	http,
 });
 
@@ -114,12 +116,12 @@ describe('loadOpenApiTools', () => {
 
 	it('fetches a URL spec through the HTTP port and caches it', async () => {
 		const written: Record<string, string> = {};
-		const fs = { ...makeFileSystem({}), write: async (p: string, body: string) => { written[p] = body; } };
+		const specCache = { read: async () => null, write: async (id: string, body: string) => { written[id] = body; } };
 		const { http, requests } = makeHttp(SPEC);
 
 		const tools = await loadOpenApiTools(
 			makeConfig({ sourceType: 'url', specUrl: 'https://api.example.com/openapi.json' }),
-			context(fs, http),
+			context(makeFileSystem({}), http, specCache),
 		);
 
 		expect(tools).toHaveLength(2);
