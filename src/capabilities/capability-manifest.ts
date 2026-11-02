@@ -78,6 +78,7 @@ export const CAPABILITY_MANIFEST: Capability[] = [
 	{ api: 'registerEditorExtension (CodeMirror inline AI)', probe: 'registerEditorExtension', status: 'used', test: 'src/__tests__/ui/ai-selection-extension.test.ts' },
 	{ api: 'loadMermaid / loadPrism (rich chat rendering)', probe: 'loadMermaid', status: 'used', test: 'src/__tests__/ui/rich-markdown.test.ts' },
 	{ api: 'loadMathJax / renderMath / finishRenderMath (chat math)', probe: 'renderMath', status: 'used', test: 'src/__tests__/ui/chat-math.test.ts' },
+	{ api: 'Keymap.isModEvent (open a chat link in a new tab)', probe: 'Keymap', status: 'used', test: 'src/__tests__/ui/hover-link.test.ts' },
 	{ api: 'SuggestModal / FuzzySuggestModal (quick pickers)', probe: 'FuzzySuggestModal', status: 'used', test: 'src/__tests__/ui/model-switcher-modal.test.ts' },
 	{ api: 'onExternalSettingsChange + onUserEnable (lifecycle hooks)', probe: 'onExternalSettingsChange', status: 'used', test: 'src/__tests__/lifecycle-hooks.test.ts' },
 
