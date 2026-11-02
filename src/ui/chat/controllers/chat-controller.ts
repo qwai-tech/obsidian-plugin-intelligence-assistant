@@ -5,7 +5,6 @@ import type { Message } from '@/features/conversations';
 import type { LLMConfig, StreamChunk } from '@/features/llm';
 import type { FileReference, ChatService } from '@/features/chat';
 import { activeAgent } from '@/features/chat';
-import { renderAssistantMarkdown } from '@/ui/chat/message-renderer';
 import { appendTokenUsageToMessage } from '@/ui/chat/message-footer';
 import { renderLiveTrace } from '@/ui/chat/agent-trace-view';
 import { AgentTraceRecorder } from '@/ui/chat/agent-trace-recorder';
@@ -232,23 +231,11 @@ export class ChatController extends BaseController {
 						}
 					},
 					onRAGSources: (sources: RAGSource[]) => { currentRagSources = sources; },
-					onComplete: (finalMessage: Message) => settle(true, finalMessage, () => {
-						this.replacePlaceholder(placeholderAssistant, finalMessage);
-						if (contentEl && finalMessage.content) {
-							renderAssistantMarkdown(contentEl, finalMessage.content);
-						}
-						return assistantMessageEl;
-					}, currentRagSources),
+					onComplete: (finalMessage: Message) => settle(true, finalMessage, () => this.showReply(placeholderAssistant, assistantMessageEl, finalMessage), currentRagSources),
 					onError: (error: Error) => {
 						new Notice(t('chat.notices.chatError', { message: error.message }));
 						const failedMessage = errorReply(error, selectedModel, config);
-						settle(false, failedMessage, () => {
-							this.replacePlaceholder(placeholderAssistant, failedMessage);
-							if (contentEl) {
-								renderAssistantMarkdown(contentEl, failedMessage.content);
-							}
-							return assistantMessageEl;
-						});
+						settle(false, failedMessage, () => this.showReply(placeholderAssistant, assistantMessageEl, failedMessage));
 					},
 					signal,
 				}
@@ -335,6 +322,10 @@ export class ChatController extends BaseController {
 		if (this.state.agentExecutionSteps.length > 0) {
 			reply.agentExecutionSteps = [...this.state.agentExecutionSteps];
 		}
+		return this.showReply(placeholder, placeholderEl, reply);
+	}
+
+	private showReply(placeholder: Message, placeholderEl: HTMLElement, reply: Message): HTMLElement {
 		this.replacePlaceholder(placeholder, reply);
 		placeholderEl.remove();
 		return this.options.addMessageToUI(reply);

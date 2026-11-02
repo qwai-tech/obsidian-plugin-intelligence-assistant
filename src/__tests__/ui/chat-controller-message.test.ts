@@ -347,6 +347,28 @@ describe('ChatController (upgraded message pipeline)', () => {
 		chatContainer.remove();
 	});
 
+	it.each(['chat', 'agent'] as const)('shows the finished %s reply as the completed message, not the empty streaming placeholder', async (mode) => {
+		state.mode = mode;
+		const finish = jest.fn((_messages, _options, callbacks) => {
+			callbacks.onComplete({ role: 'assistant', content: 'EXPORT_FRESH_9991' });
+			return Promise.resolve();
+		});
+		const chatService = makeChatService({ streamResponse: finish, executeAgentLoop: finish });
+		const messagesContainer = document.createElement('div');
+		const rendered = new Map<HTMLElement, { content: string }>();
+		const addMessageToUI = jest.fn((message: { content: string }) => {
+			const el = messagesContainer.createDiv();
+			rendered.set(el, message);
+			return el;
+		});
+		controller.configure(makeOptions(chatService, { addMessageToUI }));
+
+		await controller.sendMessage('Reply with exactly EXPORT_FRESH_9991.');
+
+		const shown = Array.from(messagesContainer.children).map(el => rendered.get(el as HTMLElement)?.content);
+		expect(shown).toEqual(['Reply with exactly EXPORT_FRESH_9991.', 'EXPORT_FRESH_9991']);
+	});
+
 	it('records an agent-mode failure as an error reply and saves the conversation', async () => {
 		state.mode = 'agent';
 		const chatService = makeChatService({
