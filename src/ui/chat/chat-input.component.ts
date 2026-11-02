@@ -383,7 +383,7 @@ export class ChatInputComponent {
 
 			attPreview.createSpan({ text: att.name, cls: 'ia-attachment-name' });
 
-			const removeBtn = attPreview.createEl('button', { text: '×', cls: 'ia-attachment-remove' });
+			const removeBtn = attPreview.createEl('button', { text: '×', cls: 'ia-attachment-remove', attr: { type: 'button', 'aria-label': t('chat.references.remove', { path: att.name }) } });
 			removeBtn.addEventListener('click', (e) => {
 				e.stopPropagation();
 				this.state.currentAttachments.splice(index, 1);
