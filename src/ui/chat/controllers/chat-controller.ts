@@ -4,7 +4,7 @@ import { t } from '@/i18n';
 import type { Message } from '@/features/conversations';
 import type { LLMConfig, StreamChunk } from '@/features/llm';
 import type { FileReference, ChatService } from '@/features/chat';
-import { activeAgent } from '@/features/chat';
+import { activeAgent, agentModelId } from '@/features/chat';
 import { appendTokenUsageToMessage } from '@/ui/chat/message-footer';
 import { renderLiveTrace } from '@/ui/chat/agent-trace-view';
 import { AgentTraceRecorder } from '@/ui/chat/agent-trace-recorder';
@@ -349,7 +349,7 @@ export class ChatController extends BaseController {
 	}
 
 	private resolveModel(): { selectedModel: string; config: LLMConfig } | null {
-		const selectedModel = this.options.getSelectedModel();
+		const selectedModel = this.modelForRun();
 		if (!selectedModel) {
 			new Notice(t('chat.notices.selectModel'));
 			return null;
@@ -360,6 +360,12 @@ export class ChatController extends BaseController {
 			return null;
 		}
 		return { selectedModel, config };
+	}
+
+	private modelForRun(): string {
+		const chosen = this.options.getSelectedModel();
+		const agent = this.state.mode === 'agent' ? this.getActiveAgent() : null;
+		return agent ? agentModelId(agent, chosen, this.plugin.settings.defaultModel) : chosen;
 	}
 
 	private sampling(model: string) {

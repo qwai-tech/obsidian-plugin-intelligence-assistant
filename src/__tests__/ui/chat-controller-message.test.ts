@@ -452,3 +452,23 @@ describe('ChatController (upgraded message pipeline)', () => {
 	});
 });
 
+
+describe('ChatController agent model', () => {
+	it.each([
+		[{ strategy: 'fixed', modelId: 'deepseek/deepseek-v4-pro' }, 'deepseek/deepseek-v4-pro'],
+		[{ strategy: 'default' }, 'deepseek/deepseek-flash'],
+		[{ strategy: 'chat-view' }, 'custom:qwen3.5:0.8b'],
+	])('runs an agent with model strategy %j on %s, whatever the hidden chat selector holds', async (modelStrategy, expected) => {
+		const state = new ChatViewState();
+		state.mode = 'agent';
+		const plugin = makePlugin({ settings: { defaultModel: 'deepseek/deepseek-flash', activeAgentId: 'qa', agents: [{ id: 'qa', modelStrategy, contextWindow: 10 }] } });
+		const chatService = makeChatService();
+		const controller = new ChatController({} as any, plugin, state);
+		controller.configure(makeOptions(chatService, { getSelectedModel: () => 'custom:qwen3.5:0.8b' }));
+
+		await controller.sendMessage('Reply exactly STRATEGY_6632.');
+
+		expect(chatService.executeAgentLoop.mock.calls[0][1].model).toBe(expected);
+		expect(chatService.findLLMConfig).toHaveBeenCalledWith(expected);
+	});
+});
