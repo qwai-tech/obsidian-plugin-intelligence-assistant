@@ -24,4 +24,5 @@ export interface AgentExecutionStep {
 	result?: string;
 	/** Reasoning text that preceded this tool call */
 	thinking?: string;
+	proposalApplied?: boolean;
 }

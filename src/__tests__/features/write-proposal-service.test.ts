@@ -3,7 +3,7 @@ import {
 	applyWriteProposal,
 	assertWriteProposalResult,
 	createWriteProposal,
-	extractWriteProposalsFromSteps,
+	proposalCardsFromSteps,
 	type WriteProposal,
 } from '@/features/agent/write-proposal-service';
 import type { AgentExecutionStep } from '@/features/llm/types/reasoning';
@@ -38,7 +38,7 @@ describe('write proposal service', () => {
 			},
 		];
 
-		expect(extractWriteProposalsFromSteps(steps)).toEqual([proposal]);
+		expect(proposalCardsFromSteps(steps).map(card => card.proposal)).toEqual([proposal]);
 	});
 
 	it('applies a create proposal by creating a note', async () => {

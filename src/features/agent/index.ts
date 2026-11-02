@@ -14,5 +14,5 @@ export type { AgentLoopCallbacks } from './types';
 export type { KernelEvent, RunJournal } from './types/agent-run';
 export type { Agent, AgentModelStrategy, SystemPrompt } from './types/agent';
 export type { AgentMemory, AgentMemoryFile } from './types/memory';
-export { applyWriteProposal, assertWriteProposalResult, createWriteProposal, extractWriteProposalsFromSteps, isBatchWriteProposal, isWriteProposal } from './write-proposal-service';
-export type { BatchWriteProposal, WriteProposal } from './write-proposal-service';
+export { applyWriteProposal, assertWriteProposalResult, createWriteProposal, isBatchWriteProposal, proposalCardsFromSteps, isWriteProposal } from './write-proposal-service';
+export type { BatchWriteProposal, ProposalCard, WriteProposal } from './write-proposal-service';

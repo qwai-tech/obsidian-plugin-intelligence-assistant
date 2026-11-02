@@ -69,24 +69,26 @@ export function assertWriteProposalResult(value: unknown): { success: true } | {
 	return { success: false, error: 'Vault write tools must return a write proposal and must not write directly.' };
 }
 
-export function extractWriteProposalsFromSteps(steps: AgentExecutionStep[] | undefined): (WriteProposal | BatchWriteProposal)[] {
-	if (!steps?.length) return [];
-	const proposals: (WriteProposal | BatchWriteProposal)[] = [];
-	for (const step of steps) {
-		const result = step.result ?? (step.type === 'observation' ? step.content : undefined);
-		if (!result) continue;
-		try {
-			const parsed = JSON.parse(result) as unknown;
-			if (isWriteProposal(parsed)) {
-				proposals.push(parsed);
-			} else if (isBatchWriteProposal(parsed)) {
-				proposals.push(parsed);
-			}
-		} catch {
-			continue;
-		}
+export interface ProposalCard {
+	proposal: WriteProposal | BatchWriteProposal;
+	step: AgentExecutionStep;
+}
+
+export function proposalCardsFromSteps(steps: AgentExecutionStep[] | undefined): ProposalCard[] {
+	return (steps ?? []).flatMap(step => {
+		const proposal = parseProposal(step.result ?? (step.type === 'observation' ? step.content : undefined));
+		return proposal ? [{ proposal, step }] : [];
+	});
+}
+
+function parseProposal(result: string | undefined): WriteProposal | BatchWriteProposal | null {
+	if (!result) return null;
+	try {
+		const parsed = JSON.parse(result) as unknown;
+		return isWriteProposal(parsed) || isBatchWriteProposal(parsed) ? parsed : null;
+	} catch {
+		return null;
 	}
-	return proposals;
 }
 
 export async function applyWriteProposal(app: App, proposal: WriteProposal | BatchWriteProposal): Promise<void> {

@@ -4,6 +4,7 @@ import { showConfirm } from '@/ui/modals/confirm-modal';
 import { AgentCapabilityModal } from '@/ui/modals/agent-capability-modal';
 import type IntelligenceAssistantPlugin from '@plugin';
 import type { Message, Conversation } from '@/features/conversations';
+import type { AgentExecutionStep } from '@/features/llm';
 import { ModelManager } from '@qwai/obsidian-llm';
 import { ChatViewState } from '@/ui/state/chat-view-state';
 import { ConversationManager } from '@/ui/chat/managers/conversation-manager';
@@ -239,7 +240,7 @@ export class ChatView extends ItemView {
 			regenerateMessage: (message, element) => this.chatController.regenerateMessage(message, element),
 			displayRagSources: (container, message) => this.ragStatusPanel.displaySources(container, message.ragSources ?? []),
 			getProviderColor: (message) => providerColor(resolveMessageProviderId(message, this.plugin)),
-			applyWriteProposal: (proposal) => this.confirmAndApplyProposal(proposal),
+			applyWriteProposal: (proposal, step) => this.confirmAndApplyProposal(proposal, step),
 		};
 	}
 
@@ -329,10 +330,12 @@ export class ChatView extends ItemView {
 		return this.session.capabilitySummary(this.services.tools.registry, references);
 	}
 
-	private async confirmAndApplyProposal(proposal: WriteProposal | BatchWriteProposal): Promise<boolean> {
+	private async confirmAndApplyProposal(proposal: WriteProposal | BatchWriteProposal, step: AgentExecutionStep): Promise<boolean> {
 		const summary = describeProposal(proposal);
 		if (!await showConfirm(this.app, t('chat.proposals.confirm', { summary }))) return false;
 		await applyWriteProposal(this.app, proposal);
+		step.proposalApplied = true;
+		await this.conversationManager.saveCurrentConversation();
 		new Notice(t('chat.proposals.appliedNotice', { summary }));
 		return true;
 	}

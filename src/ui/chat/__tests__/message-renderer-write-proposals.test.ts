@@ -91,7 +91,7 @@ describe('renderMessage write proposals', () => {
 		await Promise.resolve();
 		await Promise.resolve();
 
-		expect(applyWriteProposal).toHaveBeenCalledWith(proposal);
+		expect(applyWriteProposal).toHaveBeenCalledWith(proposal, expect.objectContaining({ type: 'action' }));
 	});
 
 	const proposalMessage = (): Message => ({

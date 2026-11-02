@@ -7,10 +7,9 @@ import { enhanceRichMarkdown } from '@/ui/chat/rich-markdown';
 import { getProviderMeta } from '@/ui/provider-meta';
 import { getModelDisplayName, resolveMessageProviderId } from '@/ui/chat/utils/provider-utils';
 import { renderExecutionTrace } from '@/ui/chat/agent-trace-view';
-import { renderWriteProposalCards } from '@/ui/chat/write-proposal-cards';
+import { renderWriteProposalCards, type ApplyProposal } from '@/ui/chat/write-proposal-cards';
 import { renderCopyButton, renderTokenUsageFooter } from '@/ui/chat/message-footer';
 import { TestIds } from '@/ui/utils/test-ids';
-import type { WriteProposal, BatchWriteProposal } from '@/features/agent';
 
 export interface MessageRendererContext {
 	app: App;
@@ -26,7 +25,7 @@ export interface MessageRendererCallbacks {
 	regenerateMessage?: (message: Message, element: HTMLElement) => Promise<void>;
 	displayRagSources?: (container: HTMLElement, message: Message) => void;
 	getProviderColor?: (message: Message) => string;
-	applyWriteProposal?: (proposal: WriteProposal | BatchWriteProposal) => Promise<boolean>;
+	applyWriteProposal?: ApplyProposal;
 }
 
 interface AssistantMeta {
