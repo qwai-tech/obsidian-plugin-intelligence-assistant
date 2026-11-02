@@ -153,7 +153,7 @@ export class OllamaModelManagerModal extends Modal {
 		deleteBtn.addClass('ia-ml-8');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
-				await this.deleteModel(model.id, deleteBtn);
+				await this.deleteModel(model.id.replace(/^ollama:/, ''), deleteBtn);
 			})();
 		});
 		});

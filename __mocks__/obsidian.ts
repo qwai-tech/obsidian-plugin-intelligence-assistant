@@ -667,6 +667,40 @@ export class DropdownComponent extends ValueComponent<string> {
 	}
 }
 
+export class ButtonComponent {
+	buttonEl = document.createElement('button');
+
+	setButtonText(text: string): this {
+		this.buttonEl.textContent = text;
+		return this;
+	}
+
+	setCta(): this {
+		this.buttonEl.classList.add('mod-cta');
+		return this;
+	}
+
+	setWarning(): this {
+		this.buttonEl.classList.add('mod-warning');
+		return this;
+	}
+
+	setTooltip(tooltip: string): this {
+		this.buttonEl.setAttribute('aria-label', tooltip);
+		return this;
+	}
+
+	setDisabled(disabled: boolean): this {
+		this.buttonEl.disabled = disabled;
+		return this;
+	}
+
+	onClick(handler: (event: MouseEvent) => unknown): this {
+		this.buttonEl.addEventListener('click', (event) => { void handler(event); });
+		return this;
+	}
+}
+
 export class Setting {
 	settingEl: HTMLElement;
 	nameEl: HTMLElement;
@@ -710,6 +744,13 @@ export class Setting {
 
 	addDropdown(build: (component: DropdownComponent) => unknown): this {
 		return this.add(new DropdownComponent(), build);
+	}
+
+	addButton(build: (component: ButtonComponent) => unknown): this {
+		const button = new ButtonComponent();
+		this.controlEl.appendChild(button.buttonEl);
+		build(button);
+		return this;
 	}
 
 	addComponent<C>(build: (el: HTMLElement) => C): this {
