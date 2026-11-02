@@ -45,9 +45,9 @@ export class ChatMessageList {
 		const card = this.element.createDiv('ia-agent-preflight-card');
 		card.createDiv({ cls: 'ia-agent-preflight-card__eyebrow', text: t('chat.preflight.title') });
 		card.createDiv({ cls: 'ia-agent-preflight-card__title', text: title });
-		const list = card.createDiv('ia-agent-preflight-card__items');
+		const list = card.createEl('ul', { cls: 'ia-agent-preflight-card__items' });
 		for (const item of items) {
-			list.createSpan({ cls: 'ia-agent-preflight-card__item', text: item });
+			list.createEl('li', { cls: 'ia-agent-preflight-card__item', text: item });
 		}
 		this.scrollToEnd();
 	}

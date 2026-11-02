@@ -1589,6 +1589,47 @@
 	line-height: 1.5;
 }
 
+/* Agent task preflight card */
+.ia-agent-preflight-card {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin: 8px 0;
+	padding: 10px 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--ia-radius-m);
+	background: var(--background-secondary);
+	min-width: 0;
+}
+
+.ia-agent-preflight-card__eyebrow {
+	font-size: var(--ia-font-size-xs);
+	font-weight: var(--font-semibold);
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.ia-agent-preflight-card__title {
+	font-weight: var(--font-semibold);
+	overflow-wrap: anywhere;
+}
+
+.ia-agent-preflight-card__items {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: var(--ia-font-size-s);
+	color: var(--text-muted);
+}
+
+.ia-agent-preflight-card__item {
+	overflow-wrap: anywhere;
+}
+
 /* Scroll to bottom floating button */
 .ia-scroll-to-bottom {
 	position: absolute;
