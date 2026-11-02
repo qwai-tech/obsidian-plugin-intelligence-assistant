@@ -139,4 +139,23 @@ describe('DocumentGrader', () => {
 
 		warnSpy.mockRestore();
 	});
+
+	it('honours thresholds of zero instead of replacing them with defaults', async () => {
+		(ModelManager.getAllAvailableModels as jest.Mock).mockResolvedValue([
+			{ id: 'openai:gpt-4o', provider: 'openai', capabilities: ['chat', 'json_mode'], enabled: true },
+		]);
+		(ProviderFactory.createProvider as jest.Mock).mockReturnValue({
+			chat: jest.fn(async () => ({ content: JSON.stringify({ relevance: 0, accuracy: 0, supportQuality: 0, shouldUse: false, explanation: 'weak' }) })),
+		});
+		const grader = new DocumentGrader({
+			...baseConfig,
+			graderModelSource: 'custom',
+			graderModel: 'openai:gpt-4o',
+			minRelevanceScore: 0,
+			minAccuracyScore: 0,
+			minSupportQualityScore: 0,
+		}, [{ provider: 'openai', apiKey: 'test-key' }] as any);
+
+		expect((await grader.gradeDocument(request)).shouldUse).toBe(true);
+	});
 });

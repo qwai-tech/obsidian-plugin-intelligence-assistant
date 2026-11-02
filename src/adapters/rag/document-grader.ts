@@ -195,9 +195,9 @@ export class DocumentGrader {
   }
 
   private meetsThresholds(grade: DocumentGrade): boolean {
-    const minRelevance = this.config.minRelevanceScore || 5;
-    const minAccuracy = this.config.minAccuracyScore || 7;
-    const minSupportQuality = this.config.minSupportQualityScore || 6;
+    const minRelevance = this.config.minRelevanceScore ?? 5;
+    const minAccuracy = this.config.minAccuracyScore ?? 7;
+    const minSupportQuality = this.config.minSupportQualityScore ?? 6;
 
     return (
       grade.relevance >= minRelevance &&
