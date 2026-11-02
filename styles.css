@@ -2120,6 +2120,7 @@
 
 .chat-header-title {
 	flex: 1;
+	min-width: 4em;
 	font-size: var(--ia-font-size-xs);
 	font-weight: 600;
 	color: var(--text-normal);
@@ -2181,8 +2182,15 @@
 	font-size: var(--ia-font-size-2xs);
 	font-weight: 600;
 	white-space: nowrap;
-	flex-shrink: 0;
+	flex-shrink: 1;
+	min-width: 0;
+	overflow: hidden;
 	gap: 4px;
+}
+
+.chat-agent-header-badge > span:last-child {
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .chat-agent-header-badge__icon {
@@ -2978,6 +2986,12 @@ details[open] .ia-chat-message__summary::before {
 	white-space: nowrap;
 }
 
+@container ia-chat-header (max-width: 380px) {
+	.chat-header-token-summary {
+		display: none;
+	}
+}
+
 /* ── chat-input / input-controller: textarea auto-resize ─────────────────── */
 .ia-autoresize-textarea {
 	height: var(--ia-textarea-height, auto);
@@ -3648,6 +3662,7 @@ details[open] .ia-chat-message__summary::before {
 /* ── Chat Header ── */
 
 .chat-header-simple {
+	container: ia-chat-header / inline-size;
 	display: flex;
 	align-items: center;
 	gap: 4px;
