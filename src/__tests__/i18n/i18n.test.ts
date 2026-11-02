@@ -28,6 +28,18 @@ describe('i18n module', () => {
 		expect(t('chat.renameConversationPrompt')).toBe('Neuer Titel');
 	});
 
+	it.each(['nb', 'nb-NO'])('shows Norwegian to a %s Obsidian', (locale) => {
+		jest.resetModules();
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
+		const { initI18n, t } = require('@/i18n') as typeof import('@/i18n');
+		initI18n('no', unpackLocale);
+		const expected = t('chat.renameConversationPrompt');
+		initI18n(locale, unpackLocale);
+
+		expect(t('chat.renameConversationPrompt')).toBe(expected);
+		expect(expected).not.toBe('New title');
+	});
+
 	it('uses the right plural form for every count in languages with more than two', () => {
 		jest.resetModules();
 		// eslint-disable-next-line @typescript-eslint/no-require-imports

@@ -40,6 +40,7 @@ const LOCALE_MAP: Record<string, string> = {
 	'ms': 'ms',
 	'nl': 'nl',
 	'nn': 'nn',
+	'nb': 'no',
 	'no': 'no',
 	'pl': 'pl',
 	'pt': 'pt',
