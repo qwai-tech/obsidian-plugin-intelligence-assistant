@@ -11,7 +11,10 @@ import type { FileReference } from '@/features/chat/types/attachments';
  * read_file fallback hint so the (c)-type token cost can't silently balloon.
  */
 function serviceWithFiles(files: Record<string, string>): ChatService {
-	const fileSystem = { read: async (path: string) => files[path] ?? '' } as any;
+	const fileSystem = {
+		read: async (path: string) => files[path] ?? '',
+		listRecursive: async (folder: string) => Object.keys(files).filter(path => path.startsWith(`${folder}/`)),
+	} as any;
 	return new ChatService({ fileSystem, knowledge: {} as any, webSearchService: {} as any, settings: () => ({ llmConfigs: [], defaultModel: 'gpt-4o' }) });
 }
 
@@ -52,5 +55,16 @@ describe('ChatService.buildReferenceContext — token budget', () => {
 		const refs = [fileRef('A.md')];
 		const { references } = await svc.buildReferenceContext('q', refs);
 		expect(references).toEqual(refs);
+	});
+
+	it('inlines the notes inside a referenced folder', async () => {
+		const svc = serviceWithFiles({ 'Projects/aurora.md': 'AURORA_7391', 'Projects/deep/plan.md': 'PLAN_42', 'Projects/diagram.png': 'binary', 'Other.md': 'nope' });
+
+		const { llmContent } = await svc.buildReferenceContext('q', [{ type: 'folder', path: 'Projects', name: 'Projects' }]);
+
+		expect(llmContent).toContain('AURORA_7391');
+		expect(llmContent).toContain('PLAN_42');
+		expect(llmContent).not.toContain('binary');
+		expect(llmContent).not.toContain('nope');
 	});
 });

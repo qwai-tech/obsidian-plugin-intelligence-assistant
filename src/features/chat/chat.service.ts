@@ -156,31 +156,33 @@ export class ChatService {
 
 		let llmContent = text + '\n\n---\n**Referenced Files/Folders:**\n\n';
 		let totalChars = 0;
-		for (const ref of references) {
-			if (ref.type === 'file') {
-				try {
-					const content = await this.fileSystem.read(ref.path);
-					const remaining = MAX_REFERENCE_TOTAL_CHARS - totalChars;
-					if (remaining <= 0) {
-						llmContent += `\n### 📄 ${ref.path}\n*(omitted to stay within the reference budget — call read_file("${ref.path}") if you need it)*\n`;
-						continue;
-					}
-					const cap = Math.min(MAX_REFERENCE_CHARS_PER_FILE, remaining);
-					let body = content;
-					if (content.length > cap) {
-						body = `${content.slice(0, cap)}\n…[truncated ${content.length - cap} chars — call read_file("${ref.path}") for the full note]`;
-					}
-					totalChars += Math.min(content.length, cap);
-					llmContent += `\n### 📄 ${ref.path}\n\`\`\`\n${body}\n\`\`\`\n`;
-				} catch (error) {
-					llmContent += `\n### 📄 ${ref.path}\n*Error reading file: ${String(error)}*\n`;
-				}
-			} else {
-				llmContent += `\n### 📁 ${ref.path}\n(Referenced as context)\n`;
+		for (const path of await this.referencedNotePaths(references)) {
+			const remaining = MAX_REFERENCE_TOTAL_CHARS - totalChars;
+			if (remaining <= 0) {
+				llmContent += `\n### 📄 ${path}\n*(omitted to stay within the reference budget — call read_file("${path}") if you need it)*\n`;
+				continue;
+			}
+			try {
+				const content = await this.fileSystem.read(path);
+				const cap = Math.min(MAX_REFERENCE_CHARS_PER_FILE, remaining);
+				const body = content.length > cap
+					? `${content.slice(0, cap)}\n…[truncated ${content.length - cap} chars — call read_file("${path}") for the full note]`
+					: content;
+				totalChars += Math.min(content.length, cap);
+				llmContent += `\n### 📄 ${path}\n\`\`\`\n${body}\n\`\`\`\n`;
+			} catch (error) {
+				llmContent += `\n### 📄 ${path}\n*Error reading file: ${String(error)}*\n`;
 			}
 		}
 
 		return { llmContent, references };
+	}
+
+	private async referencedNotePaths(references: FileReference[]): Promise<string[]> {
+		const paths = await Promise.all(references.map(async ref => ref.type === 'file'
+			? [ref.path]
+			: (await this.fileSystem.listRecursive(ref.path)).filter(path => path.endsWith('.md')).sort()));
+		return [...new Set(paths.flat())];
 	}
 
 	/**
