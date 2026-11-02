@@ -6,11 +6,11 @@ describe('chat attachment preview', () => {
 	beforeAll(() => initI18n('en'));
 
 	it('names each remove button after the attachment it removes', () => {
-		const input = Object.assign(Object.create(ChatInputComponent.prototype) as ChatInputComponent, {
-			attachmentContainer: document.createElement('div'),
-			state: new ChatViewState(),
-		});
-		(input as unknown as { state: ChatViewState }).state.currentAttachments.push({ type: 'image', name: 'qa-screen.png', path: 'qa-screen.png', content: 'data:image/png;base64,QUJD' });
+		const state = new ChatViewState();
+		state.currentAttachments.push({ type: 'image', name: 'qa-screen.png', path: 'qa-screen.png', content: 'data:image/png;base64,QUJD' });
+		const input = Object.create(ChatInputComponent.prototype) as ChatInputComponent;
+		input.attachmentContainer = document.createElement('div');
+		Object.assign(input, { state });
 
 		input.updateAttachmentPreview();
 
