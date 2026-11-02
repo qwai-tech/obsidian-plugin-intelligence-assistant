@@ -6,7 +6,7 @@
 import { Setting, App, Notice } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import type { PluginHost } from '@/ui/plugin-host';
-import type { LLMConfig } from '@/features/llm';
+import { defaultAfterRefresh, type LLMConfig } from '@/features/llm';
 import { t } from '@/i18n';
 import { ProviderConfigModal } from '@/ui/modals/provider-config-modal';
 import { OllamaModelManagerModal } from '@/ui/modals/ollama-model-manager-modal';
@@ -280,10 +280,12 @@ export function displayProviderTab(
 				refreshBtn.disabled = true;
 				try {
 					const { ModelManager } = await import('@qwai/obsidian-llm');
+					const before = [...(config.cachedModels ?? [])];
 					const models = await ModelManager.getModelsForConfig(config, true);
-					await plugin.updateSettings(() => {
+					await plugin.updateSettings((settings) => {
 						config.cachedModels = models;
 						config.cacheTimestamp = Date.now();
+						settings.defaultModel = defaultAfterRefresh(settings.defaultModel, before, models);
 					});
 					new Notice(t('settings.provider.notices.refreshed', { provider: config.provider }));
 					refreshDisplay();

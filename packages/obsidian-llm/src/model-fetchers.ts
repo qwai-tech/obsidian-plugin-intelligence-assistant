@@ -22,7 +22,7 @@ export async function fetchOpenAIModels(apiKey: string, baseUrl?: string): Promi
 
 	const data = response.json as { data: Array<{ id: string; [key: string]: unknown }> };
 	return data.data
-		.filter((model: { id: string }) => model.id.startsWith('gpt') || model.id.startsWith('o1') || model.id.startsWith('o3') || model.id.includes('embedding'))
+		.filter((model: { id: string }) => !isOfficialOpenAI(baseUrl) || isOpenAIChatOrEmbedding(model.id))
 		.map((model: { id: string }) => {
 			const prefixedId = `openai:${model.id}`;
 			const defaultModel = DEFAULT_MODELS.openai.find(m => m.id === prefixedId);
@@ -198,4 +198,12 @@ export async function fetchOpenRouterModels(apiKey: string, baseUrl?: string): P
 			};
 		})
 		.sort((a: ModelInfo, b: ModelInfo) => a.name.localeCompare(b.name));
+}
+
+function isOfficialOpenAI(baseUrl?: string): boolean {
+	return !baseUrl || /^https:\/\/api\.openai\.com(\/|$)/.test(baseUrl);
+}
+
+function isOpenAIChatOrEmbedding(id: string): boolean {
+	return id.startsWith('gpt') || id.startsWith('o1') || id.startsWith('o3') || id.includes('embedding');
 }

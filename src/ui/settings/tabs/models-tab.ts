@@ -5,7 +5,7 @@
 
 import { Notice } from 'obsidian';
 import type { PluginHost } from '@/ui/plugin-host';
-import type { ModelInfo, ModelCapability } from '@/features/llm';
+import { defaultAfterRefresh, type ModelInfo, type ModelCapability } from '@/features/llm';
 import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { getProviderMeta } from '@/ui/provider-meta';
@@ -48,6 +48,7 @@ export function displayModelsTab(
 			const { ModelManager } = await import('@qwai/obsidian-llm');
 
 			const refreshed = new Map<number, Awaited<ReturnType<typeof ModelManager.getModelsForConfig>>>();
+			const before = new Map(plugin.settings.llmConfigs.map((config, index) => [index, [...(config.cachedModels ?? [])]]));
 			for (const [index, config] of plugin.settings.llmConfigs.entries()) {
 				try {
 					new Notice(t('settings.models.notices.fetching', { provider: config.provider }));
@@ -60,6 +61,7 @@ export function displayModelsTab(
 
 			await plugin.updateSettings((settings) => {
 				for (const [index, models] of refreshed) {
+					settings.defaultModel = defaultAfterRefresh(settings.defaultModel, before.get(index) ?? [], models);
 					settings.llmConfigs[index].cachedModels = models;
 					settings.llmConfigs[index].cacheTimestamp = Date.now();
 				}

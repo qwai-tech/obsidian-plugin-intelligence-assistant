@@ -98,4 +98,22 @@ describe('ModelManager model cache', () => {
 
 		expect(config.cachedModels?.map((m) => m.id)).toEqual(['stored']);
 	});
+
+	it('keeps every model an OpenAI-compatible gateway lists', async () => {
+		portListing(['deepseek/deepseek-flash', 'deepseek/deepseek-v4-pro', 'gpt-4o']);
+		const config: LLMConfig = { provider: 'openai', apiKey: 'gw', baseUrl: 'https://gateway.example.com/v1' };
+
+		const models = await ModelManager.getModelsForConfig(config, true);
+
+		expect(models.map((m) => m.name)).toEqual(['deepseek/deepseek-flash', 'deepseek/deepseek-v4-pro', 'gpt-4o']);
+	});
+
+	it('lists only chat and embedding models from OpenAI itself', async () => {
+		portListing(['gpt-4o', 'dall-e-3', 'whisper-1', 'text-embedding-3-small']);
+		const config: LLMConfig = { provider: 'openai', apiKey: 'official' };
+
+		const models = await ModelManager.getModelsForConfig(config, true);
+
+		expect(models.map((m) => m.name)).toEqual(['gpt-4o', 'text-embedding-3-small']);
+	});
 });
