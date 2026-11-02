@@ -286,12 +286,14 @@ export class ChatView extends ItemView {
 	}
 
 	private renderScrollToBottom(parent: HTMLElement): void {
-		const button = parent.createDiv('ia-scroll-to-bottom ia-hidden');
+		const button = parent.createEl('button', { cls: 'ia-scroll-to-bottom ia-hidden', attr: { type: 'button', 'aria-label': t('chat.scrollToBottom') } });
 		setIcon(button, 'arrow-down');
-		button.setAttribute('aria-label', t('chat.scrollToBottom'));
 		button.addEventListener('click', () => {
 			this.messageList.scrollToEnd();
 			button.addClass('ia-hidden');
+		});
+		this.registerDomEvent(this.messageList.element, 'scroll', () => {
+			button.toggleClass('ia-hidden', !this.messageList.isAwayFromEnd());
 		});
 	}
 

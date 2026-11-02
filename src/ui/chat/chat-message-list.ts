@@ -9,6 +9,7 @@ import { groupAgentChains } from './message-grouping';
 
 const BODY_SELECTORS = ['[data-message-body]', '.ia-chat-message__body', '.message-body'];
 const CONTENT_SELECTORS = ['[data-message-content]', '.ia-chat-message__content', '.message-content'];
+const AT_END_TOLERANCE_PX = 120;
 
 export class ChatMessageList {
 	readonly element: HTMLElement;
@@ -49,6 +50,11 @@ export class ChatMessageList {
 			list.createSpan({ cls: 'ia-agent-preflight-card__item', text: item });
 		}
 		this.scrollToEnd();
+	}
+
+	isAwayFromEnd(): boolean {
+		const { scrollHeight, scrollTop, clientHeight } = this.element;
+		return scrollHeight - scrollTop - clientHeight > AT_END_TOLERANCE_PX;
 	}
 
 	scrollToEnd(): void {

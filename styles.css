@@ -1592,6 +1592,7 @@
 /* Scroll to bottom floating button */
 .ia-scroll-to-bottom {
 	position: absolute;
+	padding: 0;
 	bottom: 80px;
 	left: 50%;
 	transform: translateX(-50%);
