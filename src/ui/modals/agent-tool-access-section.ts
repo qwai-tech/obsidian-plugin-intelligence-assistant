@@ -100,7 +100,7 @@ export class AgentToolAccessSection {
 		const serverSetting = new Setting(wrapper)
 			.setName(server.name)
 			.setDesc(hasTools
-				? t(server.cachedTools!.length === 1 ? 'modals.agentEdit.mcp.toolsCached' : 'modals.agentEdit.mcp.toolsCached_plural', { count: server.cachedTools!.length })
+				? t('modals.agentEdit.mcp.toolsCached', { count: server.cachedTools!.length })
 				: t('modals.agentEdit.mcp.noToolsCached'));
 		serverSetting.settingEl.addClass('ia-mcp-server-header');
 

@@ -82,7 +82,7 @@ export function renderCliToolsSection(
 		paramsCell.addClass('ia-table-cell');
 		paramsCell.addClass('ia-table-subtext');
 		const paramCount = config.parameters?.length ?? 0;
-		paramsCell.setText(paramCount > 0 ? t(paramCount === 1 ? 'settings.tools.cli.paramCount' : 'settings.tools.cli.paramCount_plural', { count: paramCount }) : t('settings.tools.cli.noParams'));
+		paramsCell.setText(paramCount > 0 ? t('settings.tools.cli.paramCount', { count: paramCount }) : t('settings.tools.cli.noParams'));
 
 		const statusCell = row.insertCell();
 		statusCell.addClass('ia-table-cell');

@@ -166,9 +166,9 @@ export class MCPInspectorModal extends Modal {
 			const cachedTools = server.cachedTools?.length ?? 0;
 			const activeCount = serverTools.length;
 			if (isConnected) {
-				toolsCell.setText(t(activeCount === 1 ? 'modals.mcpInspector.connections.toolsLive' : 'modals.mcpInspector.connections.toolsLive_plural', { count: activeCount }));
+				toolsCell.setText(t('modals.mcpInspector.connections.toolsLive', { count: activeCount }));
 			} else if (cachedTools > 0) {
-				toolsCell.setText(t(cachedTools === 1 ? 'modals.mcpInspector.connections.toolsCached' : 'modals.mcpInspector.connections.toolsCached_plural', { count: cachedTools }));
+				toolsCell.setText(t('modals.mcpInspector.connections.toolsCached', { count: cachedTools }));
 			} else {
 				toolsCell.setText(t('modals.mcpInspector.connections.noTools'));
 			}

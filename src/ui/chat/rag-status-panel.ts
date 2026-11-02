@@ -85,7 +85,7 @@ export class RagStatusPanel {
 		const container = messageBody.createDiv('rag-sources-container');
 		container.setAttribute('data-testid', TestIds.chat.ragSources);
 		const header = container.createDiv('rag-sources-header');
-		header.setText(t(ragSources.length === 1 ? 'chat.ragStats.retrieved' : 'chat.ragStats.retrieved_plural', { count: ragSources.length }));
+		header.setText(t('chat.ragStats.retrieved', { count: ragSources.length }));
 
 		const grid = container.createDiv('rag-sources-grid');
 		ragSources.forEach((source) => {

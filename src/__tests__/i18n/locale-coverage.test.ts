@@ -49,7 +49,12 @@ describe('locale coverage', () => {
 	});
 
 	it('defines every literal key the source translates', () => {
-		const used = sourceFiles(SRC).flatMap(file => [...fs.readFileSync(file, 'utf8').matchAll(/\bt\('([\w.-]+)'/g)].map(match => match[1]));
+		const used = sourceFiles(SRC).flatMap(file => {
+			const source = fs.readFileSync(file, 'utf8');
+			const direct = [...source.matchAll(/\bt\('([\w.-]+)'/g)].map(match => match[1]);
+			const chosen = [...source.matchAll(/\bt\([^'()]*\?\s*'([\w.-]+)'\s*:\s*'([\w.-]+)'/g)].flatMap(match => [match[1], match[2]]);
+			return [...direct, ...chosen];
+		});
 		const plural = (key: string) => english.has(`${key}_one`) && english.has(`${key}_other`);
 		expect([...new Set(used)].filter(key => !english.has(key) && !plural(key))).toEqual([]);
 	});
