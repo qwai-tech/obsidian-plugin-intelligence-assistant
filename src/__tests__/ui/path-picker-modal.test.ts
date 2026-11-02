@@ -89,4 +89,27 @@ describe('PathPickerModal', () => {
 		expect(document.activeElement).toBe(first);
 		modal.contentEl.remove();
 	});
+
+	it('selects only the results matching the search when selecting all', () => {
+		const onChoose = jest.fn();
+		const modal = openPicker(onChoose);
+		search(modal, 'qa-source');
+
+		button(modal, 'Select all').click();
+		button(modal, 'Add selected').click();
+
+		expect(onChoose).toHaveBeenCalledWith([{ path: 'qa-source.md' }, { path: 'qa-source-two.md' }]);
+	});
+
+	it('keeps earlier selections hidden by the search when selecting all', () => {
+		const onChoose = jest.fn();
+		const modal = openPicker(onChoose);
+		rows(modal)[2].click();
+		search(modal, 'qa-source');
+
+		button(modal, 'Select all').click();
+		button(modal, 'Add selected').click();
+
+		expect(onChoose).toHaveBeenCalledWith([{ path: 'other.md' }, { path: 'qa-source.md' }, { path: 'qa-source-two.md' }]);
+	});
 });

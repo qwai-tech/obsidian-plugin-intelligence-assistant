@@ -40,7 +40,7 @@ export class PathPickerModal<T extends { path: string }> extends Modal {
 
 		const buttons = contentEl.createDiv('ia-modal-btn-row');
 		buttons.createEl('button', { text: this.text('selectAll') }).addEventListener('click', () => {
-			this.selected = [...this.options.items];
+			this.selected = [...this.selected, ...this.visibleItems().filter(item => !this.isSelected(item))];
 			this.render();
 		});
 		buttons.createEl('button', { text: this.text('selectNone') }).addEventListener('click', () => {
