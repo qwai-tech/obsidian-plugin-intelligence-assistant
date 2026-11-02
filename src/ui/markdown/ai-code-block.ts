@@ -75,7 +75,7 @@ export interface AiWidgetHandle {
 export function buildAiWidget(
 	el: HTMLElement,
 	directive: AiBlockDirective,
-	onRun: (prompt: string) => void,
+	onRun: (prompt: string, handle: AiWidgetHandle) => void,
 ): AiWidgetHandle {
 	const root = el.createDiv('ia-ai-block');
 
@@ -114,7 +114,7 @@ export function buildAiWidget(
 			handle.setResult('No prompt provided in the ai block.');
 			return;
 		}
-		onRun(directive.prompt);
+		onRun(directive.prompt, handle);
 	};
 
 	runButton.addEventListener('click', (e) => {

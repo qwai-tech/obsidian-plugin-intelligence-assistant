@@ -41,7 +41,7 @@ describe('buildAiWidget', () => {
 		const onRun = jest.fn();
 		const handle = buildAiWidget(el, { prompt: 'Go', autorun: false }, onRun);
 		handle.runButton.click();
-		expect(onRun).toHaveBeenCalledWith('Go');
+		expect(onRun).toHaveBeenCalledWith('Go', handle);
 	});
 
 	it('auto-runs once when autorun is set', () => {
@@ -49,7 +49,20 @@ describe('buildAiWidget', () => {
 		const onRun = jest.fn();
 		buildAiWidget(el, { prompt: 'Auto', autorun: true }, onRun);
 		expect(onRun).toHaveBeenCalledTimes(1);
-		expect(onRun).toHaveBeenCalledWith('Auto');
+		expect(onRun).toHaveBeenCalledWith('Auto', expect.objectContaining({ runButton: expect.any(HTMLButtonElement) }));
+	});
+
+	it('auto-runs with the widget handle so the run can show its progress while the block renders', () => {
+		const el = document.createElement('div');
+		const states: boolean[] = [];
+
+		const handle = buildAiWidget(el, { prompt: 'Auto', autorun: true }, (_prompt, widget) => {
+			widget.setRunning(true);
+			states.push(widget.runButton.disabled);
+		});
+
+		expect(states).toEqual([true]);
+		expect(handle.runButton.disabled).toBe(true);
 	});
 
 	it('does not auto-run when there is no prompt', () => {

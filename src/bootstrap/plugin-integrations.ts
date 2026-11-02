@@ -57,7 +57,7 @@ export function registerInlineAiBlocks(plugin: Plugin, launcher: AgentTaskLaunch
 	plugin.registerMarkdownCodeBlockProcessor('ai', (source, el, ctx) => {
 		const directive = parseAiBlock(source);
 		ctx.addChild(new MarkdownRenderChild(el));
-		const handle = buildAiWidget(el, directive, (prompt) => {
+		buildAiWidget(el, directive, (prompt, handle) => {
 			handle.setRunning(true);
 			launcher.run({
 				prompt,
