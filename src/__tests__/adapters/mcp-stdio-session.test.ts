@@ -73,7 +73,7 @@ describe('McpStdioSession', () => {
 					if (message.method === 'initialize') process.stdout.write(JSON.stringify({ jsonrpc: '2.0', id: message.id, result: { protocolVersion: '2025-06-18', capabilities: {} } }) + '\\n');
 				}
 			});
-		`], env: process.env as Record<string, string> }, CLIENT, { requestTimeoutMs: 100 });
+		`], env: process.env as Record<string, string> }, CLIENT, { requestTimeoutMs: 2_000 });
 
 		await expect(session.request('tools/list', {})).rejects.toThrow('timed out');
 	});
