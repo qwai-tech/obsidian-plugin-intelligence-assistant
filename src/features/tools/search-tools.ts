@@ -131,8 +131,7 @@ export class CreateNoteTool implements Tool {
 			const content = args.content as string;
 			const folder = vaultPath(args.folder);
 
-			// Sanitize title
-			const sanitized = title.replace(/[\\/:*?"<>|]/g, '-');
+			const sanitized = title.replace(/\.md$/i, '').replace(/[\\/:*?"<>|]/g, '-');
 			const path = folder ? `${folder}/${sanitized}.md` : `${sanitized}.md`;
 
 			// Check if file already exists

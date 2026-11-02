@@ -53,6 +53,14 @@ describe('safe write tools', () => {
 		expect(app.vault.create).not.toHaveBeenCalled();
 	});
 
+	it.each(['qa-note.md', 'qa-note.MD', 'qa-note'])('create_note titled %s proposes qa-note.md', async (title) => {
+		const app = { vault: { getAbstractFileByPath: jest.fn().mockReturnValue(null), create: jest.fn() } };
+
+		const result = await new CreateNoteTool(app as any).execute({ title, content: 'draft' });
+
+		expect(result.result).toMatchObject({ path: 'qa-note.md' });
+	});
+
 	it('create_note returns a proposal without creating the note', async () => {
 		const app = {
 			vault: {
