@@ -36,6 +36,7 @@ function readProductionSource() {
     }
   };
   walk(path.join(ROOT, 'src'));
+  walk(path.join(ROOT, 'packages/obsidian-llm/src'));
   chunks.push(fs.readFileSync(path.join(ROOT, 'main.ts'), 'utf8'));
   return chunks.join('\n');
 }
