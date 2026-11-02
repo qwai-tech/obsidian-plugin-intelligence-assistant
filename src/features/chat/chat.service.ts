@@ -110,16 +110,15 @@ export class ChatService {
 				});
 			}
 
-			// Format Image Attachments (Metadata only for text models)
 			const imageAttachments = msg.attachments.filter(att => att.type === 'image');
-			if (imageAttachments.length > 0) {
-				finalContent += '\n\n---\n**Attached Images:**\n\n';
-				imageAttachments.forEach(att => {
-					finalContent += `- Image: ${att.name} (Path: ${att.path})\n`;
-				});
+			if (imageAttachments.length === 0) {
+				return { role: msg.role, content: finalContent };
 			}
-
-			return { role: msg.role, content: finalContent };
+			finalContent += '\n\n---\n**Attached Images:**\n\n';
+			imageAttachments.forEach(att => {
+				finalContent += `- Image: ${att.name} (Path: ${att.path})\n`;
+			});
+			return { role: msg.role, content: finalContent, attachments: imageAttachments };
 		});
 
 		// Deduplicate and Truncate
