@@ -53,19 +53,14 @@ export class EditorQuickActions {
 					.setTitle(prefix ? `${prefix} ${action.name}` : action.name)
 					.setIcon(iconMap[action.id] || 'bot')
 					.onClick(async () => {
-						await this.executeAction(editor, selectedText, action.prompt, action.actionType, action.model);
+						await this.executeAction(editor, selectedText, action);
 					});
 			});
 		}
 	}
 
-	private async executeAction(
-		editor: Editor,
-		selectedText: string,
-		promptPrefix: string,
-		actionType: 'replace' | 'explain',
-		customModel?: string
-	): Promise<void> {
+	private async executeAction(editor: Editor, selectedText: string, action: QuickActionConfig): Promise<void> {
+		const { prompt: promptPrefix, actionType, model: customModel } = action;
 		const { llmConfigs, defaultModel } = this.getConfig();
 
 		if (llmConfigs.length === 0) {
@@ -93,7 +88,7 @@ export class EditorQuickActions {
 
 			let modal: ExplainTextModal | null = null;
 			if (actionType === 'explain') {
-				modal = new ExplainTextModal(this.app, t('chat.modals.agentTask.title'));
+				modal = new ExplainTextModal(this.app, action.name);
 				modal.open();
 			}
 

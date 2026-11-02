@@ -17,6 +17,16 @@ jest.mock('obsidian', () => ({
 	MarkdownRenderer: { render: jest.fn().mockResolvedValue(undefined) },
 }));
 
+const explainTitles: string[] = [];
+jest.mock('@/ui/modals/explain-text-modal', () => ({
+	ExplainTextModal: class {
+		constructor(_app: unknown, title: string) { explainTitles.push(title); }
+		open() {}
+		updateContent() {}
+		setContent() {}
+	},
+}));
+
 jest.mock('../../i18n', () => ({
 	t: (key: string) => key,
 }));
@@ -87,13 +97,27 @@ describe('EditorQuickActions', () => {
 		});
 	});
 
+	async function runFromMenu(action: Record<string, unknown>, editor: Record<string, unknown>): Promise<void> {
+		const qas = new EditorQuickActions({} as any, () => makeConfig({ quickActions: [{ enabled: true, ...action }] }));
+		let click: () => Promise<void> = async () => undefined;
+		const item = { setTitle: () => item, setIcon: () => item, onClick: (handler: () => Promise<void>) => { click = handler; return item; } };
+		(qas as any).addMenuItems({ addSeparator: jest.fn(), addItem: (build: (i: typeof item) => void) => build(item) }, { getSelection: () => 'selected', ...editor }, {});
+		await click();
+	}
+
 	describe('executeAction — replace', () => {
 		it('calls editor.replaceSelection with streamed result', async () => {
-			const app = {} as any;
-			const qas = new EditorQuickActions(app, () => makeConfig());
-			const editor = { replaceSelection: jest.fn(), getSelection: jest.fn() };
-			await (qas as any).executeAction(editor, 'selected', 'Summarize: ', 'replace', undefined);
+			const editor = { replaceSelection: jest.fn() };
+			await runFromMenu({ id: 'summarize', name: 'Summarize', prompt: 'Summarize: ', actionType: 'replace' }, editor);
 			expect(editor.replaceSelection).toHaveBeenCalledWith('hello');
+		});
+	});
+
+	describe('executeAction — explain', () => {
+		it('titles the result dialog with the quick action name', async () => {
+			explainTitles.length = 0;
+			await runFromMenu({ id: 'explain', name: 'Explain text', prompt: 'Explain: ', actionType: 'explain' }, { replaceSelection: jest.fn() });
+			expect(explainTitles).toEqual(['Explain text']);
 		});
 	});
 });
