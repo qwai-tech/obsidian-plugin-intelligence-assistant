@@ -515,6 +515,16 @@ export const loadMermaid = jest.fn(async () => {
 /** Stand-in for Obsidian's loadMathJax(): resolves a truthy module. */
 export const loadMathJax = jest.fn(async () => ({ tex2chtml: jest.fn() }));
 
+export const renderMath = jest.fn((source: string, display: boolean): HTMLElement => {
+	const el = document.createElement(display ? 'div' : 'span');
+	el.className = 'math';
+	el.setAttribute('data-tex', source);
+	el.setAttribute('data-display', String(display));
+	return el;
+});
+
+export const finishRenderMath = jest.fn(async () => undefined);
+
 /** Stand-in for Obsidian's loadPrism(): resolves a truthy Prism module. */
 export const loadPrism = jest.fn(async () => ({
 	highlightAll: jest.fn(),

@@ -4,6 +4,7 @@ import type { PluginHost } from '@/ui/plugin-host';
 import type { Message } from '@/features/conversations';
 import { marked } from 'marked';
 import { enhanceRichMarkdown } from '@/ui/chat/rich-markdown';
+import { protectMath, typesetMath } from '@/ui/chat/chat-math';
 import { getProviderMeta } from '@/ui/provider-meta';
 import { getModelDisplayName, resolveMessageProviderId } from '@/ui/chat/utils/provider-utils';
 import { renderExecutionTrace } from '@/ui/chat/agent-trace-view';
@@ -265,17 +266,20 @@ function createMetaBadge(container: HTMLElement, label: string, value: string) {
 	badge.createSpan({ cls: 'ia-chat-message__badge-value', text: value });
 }
 
+function renderMarkdownInto(target: HTMLElement, content: string): void {
+	const { markdown, formulas } = protectMath((content || '').replace(/\n{3,}/g, '\n\n'));
+	const doc = new DOMParser().parseFromString(marked.parse(markdown) as string, 'text/html');
+	target.empty();
+	Array.from(doc.body.childNodes).forEach(node => {
+		target.appendChild(node.cloneNode(true));
+	});
+	void typesetMath(target, formulas);
+	void enhanceRichMarkdown(target);
+}
+
 export function renderAssistantMarkdown(target: HTMLElement, content: string): void {
 	try {
-		const cleanedContent = (content || '').replace(/\n{3,}/g, '\n\n');
-		const html = marked.parse(cleanedContent) as string;
-		const parser = new DOMParser();
-		const doc = parser.parseFromString(html, 'text/html');
-		target.empty();
-		Array.from(doc.body.childNodes).forEach(node => {
-			target.appendChild(node.cloneNode(true));
-		});
-		void enhanceRichMarkdown(target);
+		renderMarkdownInto(target, content);
 	} catch (error) {
 		console.error('[MessageRenderer] Markdown render error', error);
 		target.setText(content);
@@ -289,20 +293,7 @@ function renderMessageContent(target: HTMLElement, message: Message) {
 	}
 
 	try {
-		const cleanedContent = (message.content || '').replace(/\n{3,}/g, '\n\n');
-		const html = marked.parse(cleanedContent) as string;
-		const parser = new DOMParser();
-		const doc = parser.parseFromString(html, 'text/html');
-		target.empty();
-		Array.from(doc.body.childNodes).forEach(node => {
-			target.appendChild(node.cloneNode(true));
-		});
-
-		// Rich rendering: linkify wikilinks (hover previews), render ```mermaid
-		// diagrams via loadMermaid(), pre-warm MathJax, and Prism-highlight code.
-		// Fire-and-forget — mermaid replaces its own <pre> before this code-block
-		// decoration runs, so the loop below only decorates the remaining blocks.
-		void enhanceRichMarkdown(target);
+		renderMarkdownInto(target, message.content);
 
 		// Post-process code blocks: add language label + copy button
 		target.querySelectorAll('pre').forEach(pre => {

@@ -1,4 +1,4 @@
-import { loadMermaid, loadMathJax, loadPrism } from 'obsidian';
+import { loadMermaid, loadPrism } from 'obsidian';
 
 /**
  * Convert `[[wikilink]]` / `[[wikilink|alias]]` text inside a rendered markdown
@@ -103,21 +103,7 @@ export async function renderMermaidBlocks(root: HTMLElement): Promise<number> {
 	return rendered;
 }
 
-let mathJaxLoaded: Promise<void> | null = null;
 let prismLoaded: Promise<unknown> | null = null;
-
-/**
- * Pre-warm Obsidian's MathJax loader so `$…$` / `$$…$$` math in chat replies
- * typesets without a first-render delay. Memoized — loads at most once.
- */
-function preloadMathJax(): Promise<void> {
-	if (!mathJaxLoaded) {
-		mathJaxLoaded = loadMathJax().catch((error) => {
-			console.error('[RichMarkdown] loadMathJax failed', error);
-		});
-	}
-	return mathJaxLoaded;
-}
 
 /**
  * Pre-warm Obsidian's Prism loader and, if available, re-highlight any code in
@@ -145,14 +131,13 @@ async function highlightWithPrism(root: HTMLElement): Promise<void> {
 
 /**
  * Enhance a rendered-markdown element with Obsidian's native rich renderers:
- * linkify wikilinks (for hover previews), render mermaid diagrams, pre-warm
- * MathJax, and syntax-highlight code with Prism. Best-effort — failures in any one
+ * linkify wikilinks (for hover previews), render mermaid diagrams, and
+ * syntax-highlight code with Prism. Best-effort — failures in any one
  * step are logged and don't break the others. Returns once mermaid + prism have
- * settled (MathJax pre-warm is fire-and-forget).
+ * settled.
  */
 export async function enhanceRichMarkdown(root: HTMLElement): Promise<void> {
 	linkifyWikilinks(root);
-	void preloadMathJax();
 	await Promise.all([
 		renderMermaidBlocks(root).catch((error) =>
 			console.error('[RichMarkdown] mermaid enhancement failed', error),
