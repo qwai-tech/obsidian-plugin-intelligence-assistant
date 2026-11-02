@@ -2144,7 +2144,7 @@
 
 .chat-header-title {
 	flex: 1;
-	min-width: 4em;
+	min-width: 7em;
 	font-size: var(--ia-font-size-xs);
 	font-weight: 600;
 	color: var(--text-normal);
@@ -3012,7 +3012,8 @@ details[open] .ia-chat-message__summary::before {
 }
 
 @container ia-chat-header (max-width: 380px) {
-	.chat-header-token-summary {
+	.chat-header-token-summary,
+	.chat-agent-header-badge {
 		display: none;
 	}
 }
