@@ -15,6 +15,7 @@ Every change goes through the same layers, cheapest first. `npm run verify` runs
 | API audit | No regressions in which Obsidian APIs the plugin depends on | `npm run audit:obsidian-api` | Verification gate |
 | E2E | The built plugin inside real Obsidian (pinned version) with a mock LLM and a mock MCP server: chat, streaming, stop, agents, tools, MCP, RAG, settings persistence, secret storage, startup budget | `npm run test:e2e` | E2E workflow |
 | Release E2E | Real provider, real MCP server, long and large agent tasks | `npm run test:e2e:release` (needs `.env.test`) | Manual |
+| Real Ollama E2E | Against a local Ollama (`qwen3.5:0.8b`, `qwen3.5:2b`): saving and inserting a just-streamed reply, an image reaching a vision model, an agent's fixed model winning over the chat picker. Skips when the models are missing; override with `E2E_OLLAMA_URL`, `E2E_OLLAMA_CHAT_MODEL`, `E2E_OLLAMA_FIXED_MODEL` | `npx wdio run tests/e2e/config/wdio.release.conf.ts --spec tests/e2e/specs/release/real-ollama.spec.ts` | Manual |
 | Visual tour | Screenshots of every screen and main dialog in the dark and light theme, saved to `tests/e2e/screenshots/tour/` for review | `npm run test:e2e:tour` | Manual |
 
 Measured performance and the options behind the current choices are in [performance.md](performance.md).
