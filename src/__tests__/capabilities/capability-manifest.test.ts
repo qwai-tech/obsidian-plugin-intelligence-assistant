@@ -3,9 +3,9 @@ import * as path from 'node:path';
 import { CAPABILITY_MANIFEST, type Capability } from '@/capabilities/capability-manifest';
 
 const REPO_ROOT = path.resolve(__dirname, '../../..');
-const SRC_DIR = path.join(REPO_ROOT, 'src');
+const PRODUCTION_DIRS = [path.join(REPO_ROOT, 'src'), path.join(REPO_ROOT, 'packages/obsidian-llm/src')];
 
-/** Concatenate all production `.ts` under src/ (excluding tests) into one haystack. */
+/** Concatenate all production `.ts` bundled into the plugin (excluding tests) into one haystack. */
 function readProductionSource(): string {
 	const out: string[] = [];
 	const walk = (dir: string): void => {
@@ -21,7 +21,7 @@ function readProductionSource(): string {
 			}
 		}
 	};
-	walk(SRC_DIR);
+	PRODUCTION_DIRS.forEach(walk);
 	// main.ts lives at repo root, not under src/.
 	out.push(fs.readFileSync(path.join(REPO_ROOT, 'main.ts'), 'utf8'));
 	return out.join('\n');
