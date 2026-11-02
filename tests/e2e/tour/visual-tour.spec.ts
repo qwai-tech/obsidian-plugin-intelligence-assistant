@@ -1,58 +1,17 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { BasePage } from '../pages/base.page';
+import { TourPage } from '../pages/tour.page';
 import { ChatViewPage } from '../pages/chat/chat-view.page';
 import { TestIds } from '../support/testids';
 import { mockLLM } from '../support/mock-llm';
 import { waitForPluginReady } from '../support/plugin-helpers';
 import { VaultFixture } from '../support/vault-fixture';
 
-const OUT = path.resolve('tests/e2e/screenshots/tour');
 const THEMES = ['obsidian', 'moonstone'] as const;
-
-class Tour extends BasePage {
-	theme: string = THEMES[0];
-
-	async shot(name: string): Promise<void> {
-		await this.waitForAnimations();
-		await browser.saveScreenshot(path.join(OUT, `${this.theme}-${name}.png`));
-	}
-
-	async setTheme(theme: typeof THEMES[number]): Promise<void> {
-		this.theme = theme;
-		await browser.execute((mode) => {
-			const app = (window as unknown as { app: { changeTheme(mode: string): void } }).app;
-			app.changeTheme(mode);
-		}, theme);
-	}
-
-	async section(name: string): Promise<void> {
-		await this.openSettingsSection(name);
-	}
-
-	async settingsRoot(): Promise<void> {
-		await this.openPluginSettings();
-	}
-
-	async press(id: string): Promise<void> {
-		await this.click(id);
-	}
-
-	async closeModals(): Promise<void> {
-		await browser.keys('Escape');
-		await browser.waitUntil(
-			async () => browser.execute(() => !activeDocument.querySelector('.modal-container:not(:has(.mod-settings))')),
-			{ timeout: 5_000, timeoutMsg: 'Dialog did not close' }
-		);
-	}
-
-	async closeSettings(): Promise<void> {
-		await browser.execute(() => (window as unknown as { app: { setting: { close(): void } } }).app.setting.close());
-	}
-}
+const OUT = path.resolve('tests/e2e/screenshots/tour');
 
 describe('Visual tour', () => {
-	const tour = new Tour();
+	const tour = new TourPage(OUT);
 	const chat = new ChatViewPage();
 	const vault = new VaultFixture();
 
@@ -87,6 +46,15 @@ describe('Visual tour', () => {
 
 			await chat.openConversationList();
 			await tour.shot('04-conversation-list');
+
+			await tour.openReferencePickerAndFocusFirstResult();
+			await tour.shot('05-reference-picker');
+			await tour.closeModals();
+
+			await mockLLM.replyWith('Done: the task ran in the sidebar.');
+			await tour.runAgentTaskInSidebar('Summarize the active note and list follow-up actions');
+			await chat.waitForReplyComplete(20_000);
+			await tour.shot('06-sidebar-agent-task');
 
 			await tour.settingsRoot();
 			await tour.shot('10-settings-root');
