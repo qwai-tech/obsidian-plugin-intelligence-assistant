@@ -739,15 +739,15 @@
         },
         "minRelevance": {
           "name": "Punteggio minimo di rilevanza",
-          "desc": "Punteggio minimo di rilevanza (0.0-1.0)"
+          "desc": "Punteggio minimo di rilevanza (0-10)"
         },
         "minAccuracy": {
           "name": "Punteggio minimo di accuratezza",
-          "desc": "Punteggio minimo di accuratezza (0.0-1.0)"
+          "desc": "Punteggio minimo di accuratezza (0-10)"
         },
         "minSupport": {
           "name": "Punteggio minimo qualità supporto",
-          "desc": "Punteggio minimo di qualità del supporto (0.0-1.0)"
+          "desc": "Punteggio minimo di qualità del supporto (0-10)"
         }
       }
     },

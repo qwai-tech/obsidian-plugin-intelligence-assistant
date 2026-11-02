@@ -739,15 +739,15 @@
         },
         "minRelevance": {
           "name": "Score de pertinence min.",
-          "desc": "Score de pertinence minimum (0,0-1,0)"
+          "desc": "Score de pertinence minimum (0-10)"
         },
         "minAccuracy": {
           "name": "Score de précision min.",
-          "desc": "Score de précision minimum (0,0-1,0)"
+          "desc": "Score de précision minimum (0-10)"
         },
         "minSupport": {
           "name": "Score de qualité d'appui min.",
-          "desc": "Score de qualité d'appui minimum (0,0-1,0)"
+          "desc": "Score de qualité d'appui minimum (0-10)"
         }
       }
     },

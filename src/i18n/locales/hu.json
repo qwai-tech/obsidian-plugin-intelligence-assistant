@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Min. relevancia pontszám",
-          "desc": "Minimális relevancia pontszám (0.0-1.0)"
+          "desc": "Minimális relevancia pontszám (0-10)"
         },
         "minAccuracy": {
           "name": "Min. pontossági pontszám",
-          "desc": "Minimális pontossági pontszám (0.0-1.0)"
+          "desc": "Minimális pontossági pontszám (0-10)"
         },
         "minSupport": {
           "name": "Min. támogatási minőségi pontszám",
-          "desc": "Minimális támogatási minőségi pontszám (0.0-1.0)"
+          "desc": "Minimális támogatási minőségi pontszám (0-10)"
         }
       }
     },

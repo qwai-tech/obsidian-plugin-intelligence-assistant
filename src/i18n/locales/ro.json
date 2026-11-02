@@ -739,15 +739,15 @@
         },
         "minRelevance": {
           "name": "Scor minim de relevanță",
-          "desc": "Scor minim de relevanță (0,0-1,0)"
+          "desc": "Scor minim de relevanță (0-10)"
         },
         "minAccuracy": {
           "name": "Scor minim de acuratețe",
-          "desc": "Scor minim de acuratețe (0,0-1,0)"
+          "desc": "Scor minim de acuratețe (0-10)"
         },
         "minSupport": {
           "name": "Scor minim de calitate a suportului",
-          "desc": "Scor minim de calitate a suportului (0,0-1,0)"
+          "desc": "Scor minim de calitate a suportului (0-10)"
         }
       }
     },

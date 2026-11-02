@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Gutxieneko garrantzi-puntuazioa",
-          "desc": "Gutxieneko garrantzi-puntuazioa (0.0-1.0)"
+          "desc": "Gutxieneko garrantzi-puntuazioa (0-10)"
         },
         "minAccuracy": {
           "name": "Gutxieneko zehaztasun-puntuazioa",
-          "desc": "Gutxieneko zehaztasun-puntuazioa (0.0-1.0)"
+          "desc": "Gutxieneko zehaztasun-puntuazioa (0-10)"
         },
         "minSupport": {
           "name": "Gutxieneko euskarri-kalitate puntuazioa",
-          "desc": "Gutxieneko euskarri-kalitate puntuazioa (0.0-1.0)"
+          "desc": "Gutxieneko euskarri-kalitate puntuazioa (0-10)"
         }
       }
     },

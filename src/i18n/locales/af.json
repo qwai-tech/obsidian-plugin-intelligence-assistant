@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Min. relevansiepunt",
-          "desc": "Minimum relevansiepunt (0.0-1.0)"
+          "desc": "Minimum relevansiepunt (0-10)"
         },
         "minAccuracy": {
           "name": "Min. akkuraatheids-punt",
-          "desc": "Minimum akkuraatheids-punt (0.0-1.0)"
+          "desc": "Minimum akkuraatheids-punt (0-10)"
         },
         "minSupport": {
           "name": "Min. ondersteuningskwaliteitspunt",
-          "desc": "Minimum ondersteuningskwaliteitspunt (0.0-1.0)"
+          "desc": "Minimum ondersteuningskwaliteitspunt (0-10)"
         }
       }
     },

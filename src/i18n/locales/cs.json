@@ -756,15 +756,15 @@
         },
         "minRelevance": {
           "name": "Minimální skóre relevance",
-          "desc": "Minimální skóre relevance (0.0-1.0)"
+          "desc": "Minimální skóre relevance (0-10)"
         },
         "minAccuracy": {
           "name": "Minimální skóre přesnosti",
-          "desc": "Minimální skóre přesnosti (0.0-1.0)"
+          "desc": "Minimální skóre přesnosti (0-10)"
         },
         "minSupport": {
           "name": "Minimální skóre kvality podpory",
-          "desc": "Minimální skóre kvality podpory (0.0-1.0)"
+          "desc": "Minimální skóre kvality podpory (0-10)"
         }
       }
     },

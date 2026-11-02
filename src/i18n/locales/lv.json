@@ -739,15 +739,15 @@
         },
         "minRelevance": {
           "name": "Minimālais atbilstības rādītājs",
-          "desc": "Minimālais atbilstības rādītājs (0,0–1,0)"
+          "desc": "Minimālais atbilstības rādītājs (0–10)"
         },
         "minAccuracy": {
           "name": "Minimālais precizitātes rādītājs",
-          "desc": "Minimālais precizitātes rādītājs (0,0–1,0)"
+          "desc": "Minimālais precizitātes rādītājs (0–10)"
         },
         "minSupport": {
           "name": "Minimālais atbalsta kvalitātes rādītājs",
-          "desc": "Minimālais atbalsta kvalitātes rādītājs (0,0–1,0)"
+          "desc": "Minimālais atbalsta kvalitātes rādītājs (0–10)"
         }
       }
     },

@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Min. relevantiescor",
-          "desc": "Minimale relevantiescor (0.0-1.0)"
+          "desc": "Minimale relevantiescor (0-10)"
         },
         "minAccuracy": {
           "name": "Min. nauwkeurigheidsscor",
-          "desc": "Minimale nauwkeurigheidsscor (0.0-1.0)"
+          "desc": "Minimale nauwkeurigheidsscor (0-10)"
         },
         "minSupport": {
           "name": "Min. ondersteuningskwaliteitsscor",
-          "desc": "Minimale ondersteuningskwaliteitsscor (0.0-1.0)"
+          "desc": "Minimale ondersteuningskwaliteitsscor (0-10)"
         }
       }
     },

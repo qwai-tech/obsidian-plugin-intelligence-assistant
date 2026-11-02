@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Min relevance score",
-          "desc": "Minimum relevance score (0.0-1.0)"
+          "desc": "Minimum relevance score (0-10)"
         },
         "minAccuracy": {
           "name": "Min accuracy score",
-          "desc": "Minimum accuracy score (0.0-1.0)"
+          "desc": "Minimum accuracy score (0-10)"
         },
         "minSupport": {
           "name": "Min support quality score",
-          "desc": "Minimum support quality score (0.0-1.0)"
+          "desc": "Minimum support quality score (0-10)"
         }
       }
     },

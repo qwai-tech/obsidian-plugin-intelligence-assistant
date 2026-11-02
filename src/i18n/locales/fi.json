@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Vähimmäisosuvuuspisteet",
-          "desc": "Vähimmäisosuvuuspisteet (0,0–1,0)"
+          "desc": "Vähimmäisosuvuuspisteet (0–10)"
         },
         "minAccuracy": {
           "name": "Vähimmäistarkkuuspisteet",
-          "desc": "Vähimmäistarkkuuspisteet (0,0–1,0)"
+          "desc": "Vähimmäistarkkuuspisteet (0–10)"
         },
         "minSupport": {
           "name": "Vähimmäistukipisteet",
-          "desc": "Vähimmäistukipisteet (0,0–1,0)"
+          "desc": "Vähimmäistukipisteet (0–10)"
         }
       }
     },

@@ -756,15 +756,15 @@
         },
         "minRelevance": {
           "name": "Minimalny wynik trafności",
-          "desc": "Minimalny wynik trafności (0.0-1.0)"
+          "desc": "Minimalny wynik trafności (0-10)"
         },
         "minAccuracy": {
           "name": "Minimalny wynik dokładności",
-          "desc": "Minimalny wynik dokładności (0.0-1.0)"
+          "desc": "Minimalny wynik dokładności (0-10)"
         },
         "minSupport": {
           "name": "Minimalny wynik jakości wsparcia",
-          "desc": "Minimalny wynik jakości wsparcia (0.0-1.0)"
+          "desc": "Minimalny wynik jakości wsparcia (0-10)"
         }
       }
     },

@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Min alaka puanı",
-          "desc": "Minimum alaka puanı (0.0-1.0)"
+          "desc": "Minimum alaka puanı (0-10)"
         },
         "minAccuracy": {
           "name": "Min doğruluk puanı",
-          "desc": "Minimum doğruluk puanı (0.0-1.0)"
+          "desc": "Minimum doğruluk puanı (0-10)"
         },
         "minSupport": {
           "name": "Min destek kalitesi puanı",
-          "desc": "Minimum destek kalitesi puanı (0.0-1.0)"
+          "desc": "Minimum destek kalitesi puanı (0-10)"
         }
       }
     },

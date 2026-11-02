@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Min. Relevanzbewertung",
-          "desc": "Minimale Relevanzbewertung (0,0–1,0)"
+          "desc": "Minimale Relevanzbewertung (0–10)"
         },
         "minAccuracy": {
           "name": "Min. Genauigkeitsbewertung",
-          "desc": "Minimale Genauigkeitsbewertung (0,0–1,0)"
+          "desc": "Minimale Genauigkeitsbewertung (0–10)"
         },
         "minSupport": {
           "name": "Min. Unterstützungsqualitätsbewertung",
-          "desc": "Minimale Unterstützungsqualitätsbewertung (0,0–1,0)"
+          "desc": "Minimale Unterstützungsqualitätsbewertung (0–10)"
         }
       }
     },

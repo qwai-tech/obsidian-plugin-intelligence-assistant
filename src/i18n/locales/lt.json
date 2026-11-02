@@ -756,15 +756,15 @@
         },
         "minRelevance": {
           "name": "Minimalus aktualumo balas",
-          "desc": "Minimalus aktualumo balas (0,0–1,0)"
+          "desc": "Minimalus aktualumo balas (0–10)"
         },
         "minAccuracy": {
           "name": "Minimalus tikslumo balas",
-          "desc": "Minimalus tikslumo balas (0,0–1,0)"
+          "desc": "Minimalus tikslumo balas (0–10)"
         },
         "minSupport": {
           "name": "Minimalus palaikymo kokybės balas",
-          "desc": "Minimalus palaikymo kokybės balas (0,0–1,0)"
+          "desc": "Minimalus palaikymo kokybės balas (0–10)"
         }
       }
     },

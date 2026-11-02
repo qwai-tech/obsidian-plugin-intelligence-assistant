@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Minimums relevansskår",
-          "desc": "Minste relevansskår (0,0–1,0)"
+          "desc": "Minste relevansskår (0–10)"
         },
         "minAccuracy": {
           "name": "Minimums nøyaktigheitsskår",
-          "desc": "Minste nøyaktigheitsskår (0,0–1,0)"
+          "desc": "Minste nøyaktigheitsskår (0–10)"
         },
         "minSupport": {
           "name": "Minimums støttekvalitetsskår",
-          "desc": "Minste støttekvalitetsskår (0,0–1,0)"
+          "desc": "Minste støttekvalitetsskår (0–10)"
         }
       }
     },

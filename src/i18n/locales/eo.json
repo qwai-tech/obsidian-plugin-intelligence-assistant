@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Min. relevancpunkto",
-          "desc": "Minimuma relevancpunkto (0.0-1.0)"
+          "desc": "Minimuma relevancpunkto (0-10)"
         },
         "minAccuracy": {
           "name": "Min. precizecpunkto",
-          "desc": "Minimuma precizecpunkto (0.0-1.0)"
+          "desc": "Minimuma precizecpunkto (0-10)"
         },
         "minSupport": {
           "name": "Min. subtenkvaliтpunkto",
-          "desc": "Minimuma subtenkvaliтpunkto (0.0-1.0)"
+          "desc": "Minimuma subtenkvaliтpunkto (0-10)"
         }
       }
     },

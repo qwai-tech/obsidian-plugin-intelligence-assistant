@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Min. relevansscore",
-          "desc": "Minimum relevansscore (0.0-1.0)"
+          "desc": "Minimum relevansscore (0-10)"
         },
         "minAccuracy": {
           "name": "Min. nøjagtighedsscore",
-          "desc": "Minimum nøjagtighedsscore (0.0-1.0)"
+          "desc": "Minimum nøjagtighedsscore (0-10)"
         },
         "minSupport": {
           "name": "Min. støttekvalitetsscore",
-          "desc": "Minimum støttekvalitetsscore (0.0-1.0)"
+          "desc": "Minimum støttekvalitetsscore (0-10)"
         }
       }
     },

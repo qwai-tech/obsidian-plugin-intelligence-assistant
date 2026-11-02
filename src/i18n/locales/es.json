@@ -739,15 +739,15 @@
         },
         "minRelevance": {
           "name": "Puntuación mínima de relevancia",
-          "desc": "Puntuación mínima de relevancia (0.0-1.0)"
+          "desc": "Puntuación mínima de relevancia (0-10)"
         },
         "minAccuracy": {
           "name": "Puntuación mínima de precisión",
-          "desc": "Puntuación mínima de precisión (0.0-1.0)"
+          "desc": "Puntuación mínima de precisión (0-10)"
         },
         "minSupport": {
           "name": "Puntuación mínima de calidad de soporte",
-          "desc": "Puntuación mínima de calidad de soporte (0.0-1.0)"
+          "desc": "Puntuación mínima de calidad de soporte (0-10)"
         }
       }
     },

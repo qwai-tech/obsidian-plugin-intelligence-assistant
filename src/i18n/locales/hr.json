@@ -739,15 +739,15 @@
         },
         "minRelevance": {
           "name": "Min. rezultat relevantnosti",
-          "desc": "Minimalni rezultat relevantnosti (0,0-1,0)"
+          "desc": "Minimalni rezultat relevantnosti (0-10)"
         },
         "minAccuracy": {
           "name": "Min. rezultat točnosti",
-          "desc": "Minimalni rezultat točnosti (0,0-1,0)"
+          "desc": "Minimalni rezultat točnosti (0-10)"
         },
         "minSupport": {
           "name": "Min. rezultat kvalitete podrške",
-          "desc": "Minimalni rezultat kvalitete podrške (0,0-1,0)"
+          "desc": "Minimalni rezultat kvalitete podrške (0-10)"
         }
       }
     },

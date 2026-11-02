@@ -722,15 +722,15 @@
         },
         "minRelevance": {
           "name": "Minsta relevanspoäng",
-          "desc": "Minsta relevanspoäng (0.0-1.0)"
+          "desc": "Minsta relevanspoäng (0-10)"
         },
         "minAccuracy": {
           "name": "Minsta noggrannhetspoäng",
-          "desc": "Minsta noggrannhetspoäng (0.0-1.0)"
+          "desc": "Minsta noggrannhetspoäng (0-10)"
         },
         "minSupport": {
           "name": "Minsta stödkvalitetspoäng",
-          "desc": "Minsta stödkvalitetspoäng (0.0-1.0)"
+          "desc": "Minsta stödkvalitetspoäng (0-10)"
         }
       }
     },

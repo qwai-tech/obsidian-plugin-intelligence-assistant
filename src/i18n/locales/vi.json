@@ -705,15 +705,15 @@
         },
         "minRelevance": {
           "name": "Điểm liên quan tối thiểu",
-          "desc": "Điểm liên quan tối thiểu (0.0-1.0)"
+          "desc": "Điểm liên quan tối thiểu (0-10)"
         },
         "minAccuracy": {
           "name": "Điểm chính xác tối thiểu",
-          "desc": "Điểm chính xác tối thiểu (0.0-1.0)"
+          "desc": "Điểm chính xác tối thiểu (0-10)"
         },
         "minSupport": {
           "name": "Điểm chất lượng hỗ trợ tối thiểu",
-          "desc": "Điểm chất lượng hỗ trợ tối thiểu (0.0-1.0)"
+          "desc": "Điểm chất lượng hỗ trợ tối thiểu (0-10)"
         }
       }
     },

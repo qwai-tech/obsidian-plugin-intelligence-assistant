@@ -705,15 +705,15 @@
         },
         "minRelevance": {
           "name": "Skor relevansi minimum",
-          "desc": "Skor relevansi minimum (0.0-1.0)"
+          "desc": "Skor relevansi minimum (0-10)"
         },
         "minAccuracy": {
           "name": "Skor ketepatan minimum",
-          "desc": "Skor ketepatan minimum (0.0-1.0)"
+          "desc": "Skor ketepatan minimum (0-10)"
         },
         "minSupport": {
           "name": "Skor kualiti sokongan minimum",
-          "desc": "Skor kualiti sokongan minimum (0.0-1.0)"
+          "desc": "Skor kualiti sokongan minimum (0-10)"
         }
       }
     },
