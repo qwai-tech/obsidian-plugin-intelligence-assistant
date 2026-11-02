@@ -849,15 +849,12 @@
         "desc": "Potrebné pre poskytovateľa Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (kľúč nie je potrebný)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML scraping)",
-        "yandex": "Yandex (HTML scraping)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -1019,6 +1016,7 @@
       "noAgents": "Žiadni dostupní agenti. Nakonfigurujte ich v Nastavenia → Agenti.",
       "ragDisabled": "RAG je zakázaný v nastaveniach. Povoľte ho v nastavenia → funkcie chatu → RAG.",
       "webSearchDisabled": "Webové vyhľadávanie je zakázané v nastaveniach. Povoľte ho v nastavenia → funkcie chatu → webové vyhľadávanie.",
+      "webSearchFailed": "Vyhľadávanie na webe zlyhalo: {{message}}",
       "attached": "Priložené: {{name}}",
       "fileNotFound": "Súbor nebol nájdený: {{path}}",
       "unableToLoadRag": "Nedajú sa načítať štatistiky RAG.",

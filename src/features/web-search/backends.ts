@@ -18,3 +18,5 @@ export const SEARCH_BACKENDS: Record<string, SearchBackend> = {
 	qwant: searchQwant,
 	mojeek: searchMojeek,
 };
+
+export const SEARCH_PROVIDER_IDS = Object.keys(SEARCH_BACKENDS);

@@ -815,15 +815,12 @@
         "desc": "Mojeek فراہم کنندہ کے لیے ضروری ہے"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (کوئی کی ضروری نہیں)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML scraping)",
-        "yandex": "Yandex (HTML scraping)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "کوئی ایجنٹ دستیاب نہیں۔ ترتیبات ← ایجنٹس میں ایجنٹس کنفیگر کریں۔",
       "ragDisabled": "RAG ترتیبات میں غیر فعال ہے۔ ترتیبات ← چیٹ خصوصیات ← RAG میں فعال کریں۔",
       "webSearchDisabled": "ویب تلاش ترتیبات میں غیر فعال ہے۔ ترتیبات ← چیٹ خصوصیات ← ویب تلاش میں فعال کریں۔",
+      "webSearchFailed": "ویب تلاش ناکام ہو گئی: {{message}}",
       "attached": "منسلک: {{name}}",
       "fileNotFound": "فائل نہیں ملی: {{path}}",
       "unableToLoadRag": "RAG کے اعداد و شمار لوڈ نہیں ہو سکے۔",

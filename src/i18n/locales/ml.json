@@ -815,15 +815,12 @@
         "desc": "Mojeek ദാതാവിന് ആവശ്യമാണ്"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (കീ ആവശ്യമില്ല)",
         "google": "Google ഇഷ്ടാനുസൃത തിരയൽ",
         "bing": "Bing വെബ് തിരയൽ",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave തിരയൽ",
-        "yahoo": "Yahoo (HTML സ്ക്രാപ്പിംഗ്)",
-        "yandex": "Yandex (HTML സ്ക്രാപ്പിംഗ്)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "ഏജന്റുകളൊന്നും ലഭ്യമല്ല. ക്രമീകരണങ്ങൾ → ഏജന്റുകളിൽ ഏജന്റുകളെ കോൺഫിഗർ ചെയ്യുക.",
       "ragDisabled": "ക്രമീകരണങ്ങളിൽ RAG അപ്രാപ്തമാക്കി. ക്രമീകരണങ്ങൾ → ചാറ്റ് ഫീച്ചറുകൾ → RAG-ന് കീഴിൽ ഇത് പ്രവർത്തനക്ഷമമാക്കുക.",
       "webSearchDisabled": "ക്രമീകരണങ്ങളിൽ വെബ് തിരയൽ അപ്രാപ്തമാക്കി. ക്രമീകരണങ്ങൾ → ചാറ്റ് ഫീച്ചറുകൾ → വെബ് തിരയലിന് കീഴിൽ ഇത് പ്രവർത്തനക്ഷമമാക്കുക.",
+      "webSearchFailed": "വെബ് തിരയൽ പരാജയപ്പെട്ടു: {{message}}",
       "attached": "അറ്റാച്ച് ചെയ്തു: {{name}}",
       "fileNotFound": "ഫയൽ കണ്ടെത്തിയില്ല: {{path}}",
       "unableToLoadRag": "RAG സ്ഥിതിവിവരക്കണക്കുകൾ ലോഡ് ചെയ്യാൻ കഴിയുന്നില്ല.",

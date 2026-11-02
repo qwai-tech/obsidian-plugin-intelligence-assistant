@@ -1,6 +1,7 @@
 import { htmlToMarkdown } from 'obsidian';
 import type { HttpPort } from '@qwai/obsidian-llm';
 import type { WebSearchConfig } from '@/features/web-search/types/web-search';
+import { errorMessage } from '@/core/utils/errors';
 import { SEARCH_BACKENDS } from './backends';
 import { optimizeQuery, preprocessQuery, shouldSearch } from './query-heuristics';
 
@@ -34,7 +35,11 @@ export interface WebSearchResult {
 
 // API Response Type Interfaces
 export class WebSearchService {
-	constructor(private readonly getConfig: () => WebSearchConfig, private readonly httpClient: HttpPort) {}
+	constructor(
+		private readonly getConfig: () => WebSearchConfig,
+		private readonly httpClient: HttpPort,
+		private readonly report: (problem: string) => void = () => undefined,
+	) {}
 
 	private get config(): WebSearchConfig {
 		return this.getConfig();
@@ -64,7 +69,7 @@ export class WebSearchService {
 			
 			const backend = SEARCH_BACKENDS[this.config.provider];
 			if (!backend) {
-				console.warn(`[WebSearch] Unknown provider: ${this.config.provider}`);
+				this.report(`Unknown web search provider: ${this.config.provider}`);
 				return [];
 			}
 			const results = await backend(optimizedQuery, maxResults, { config: this.config, http: this.httpClient });
@@ -72,6 +77,7 @@ export class WebSearchService {
 			return this.applyDomainFilters(this.cleanResultSnippets(results));
 		} catch (error) {
 			console.error('[WebSearch] Error:', error);
+			this.report(errorMessage(error));
 			return [];
 		}
 	}

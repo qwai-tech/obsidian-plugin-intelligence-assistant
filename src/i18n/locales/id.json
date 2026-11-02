@@ -798,15 +798,12 @@
         "desc": "Diperlukan untuk penyedia Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (tidak perlu kunci)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (scraping HTML)",
-        "yandex": "Yandex (scraping HTML)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -965,6 +962,7 @@
       "noAgents": "Tidak ada agen yang tersedia. Konfigurasikan agen di Pengaturan → Agen.",
       "ragDisabled": "RAG dinonaktifkan di pengaturan. Aktifkan di pengaturan → fitur obrolan → RAG.",
       "webSearchDisabled": "Pencarian web dinonaktifkan di pengaturan. Aktifkan di pengaturan → fitur obrolan → pencarian web.",
+      "webSearchFailed": "Pencarian web gagal: {{message}}",
       "attached": "Dilampirkan: {{name}}",
       "fileNotFound": "File tidak ditemukan: {{path}}",
       "unableToLoadRag": "Tidak dapat memuat statistik RAG.",

@@ -832,15 +832,12 @@
         "desc": "Necessari per al proveïdor Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (no cal clau)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (scraping HTML)",
-        "yandex": "Yandex (scraping HTML)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -1001,6 +998,7 @@
       "noAgents": "Cap agent disponible. Configureu agents a Configuració → Agents.",
       "ragDisabled": "RAG està desactivat a la configuració. Activeu-lo a configuració → funcions de xat → RAG.",
       "webSearchDisabled": "La cerca web està desactivada a la configuració. Activeu-la a configuració → funcions de xat → cerca web.",
+      "webSearchFailed": "La cerca web ha fallat: {{message}}",
       "attached": "Adjuntat: {{name}}",
       "fileNotFound": "Fitxer no trobat: {{path}}",
       "unableToLoadRag": "No es poden carregar les estadístiques RAG.",

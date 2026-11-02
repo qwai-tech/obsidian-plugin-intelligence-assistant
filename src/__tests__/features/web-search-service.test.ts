@@ -1,4 +1,5 @@
 import { WebSearchService, snippetToMarkdown } from '@/features/web-search/web-search-service';
+import { SEARCH_PROVIDER_IDS } from '@/features/web-search';
 import type { HttpPort } from '@qwai/obsidian-llm';
 import type { WebSearchConfig } from '@/features/web-search/types/web-search';
 
@@ -37,6 +38,26 @@ describe('WebSearchService', () => {
 			}),
 		]));
 		expect(httpClient.request).not.toHaveBeenCalled();
+	});
+
+	it('reports a provider it has no backend for instead of silently finding nothing', async () => {
+		const report = jest.fn();
+		const service = new WebSearchService(() => createConfig({ provider: 'duckduckgo' }), httpClient, report);
+
+		expect(await service.search('latest TypeScript release')).toEqual([]);
+		expect(report).toHaveBeenCalledWith(expect.stringContaining('duckduckgo'));
+	});
+
+	it('reports a provider that is not set up, such as a missing API key', async () => {
+		const report = jest.fn();
+		const service = new WebSearchService(() => createConfig({ provider: 'brave' }), httpClient, report);
+
+		expect(await service.search('latest TypeScript release')).toEqual([]);
+		expect(report).toHaveBeenCalledWith('Brave API key is required for Brave search');
+	});
+
+	it('offers only providers that have a backend', () => {
+		expect(SEARCH_PROVIDER_IDS).toEqual(['google', 'bing', 'serpapi', 'tavily', 'searxng', 'brave', 'qwant', 'mojeek']);
 	});
 
 	describe('htmlToMarkdown snippet cleanup', () => {

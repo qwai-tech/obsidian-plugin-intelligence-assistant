@@ -815,15 +815,12 @@
         "desc": "Mojeek hornitzailearentzat beharrezkoa"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (giltzarik behar ez)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML scraping)",
-        "yandex": "Yandex (HTML scraping)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "Ez dago agente erabilgarririk. Konfiguratu agenteak hemen: Ezarpenak → Agenteak.",
       "ragDisabled": "RAG desgaituta dago ezarpenetan. Gaitu hemen: ezarpenak → txat ezaugarriak → RAG.",
       "webSearchDisabled": "Web bilaketa desgaituta dago ezarpenetan. Gaitu hemen: ezarpenak → txat ezaugarriak → web bilaketa.",
+      "webSearchFailed": "Web bilaketak huts egin du: {{message}}",
       "attached": "Erantsita: {{name}}",
       "fileNotFound": "Fitxategia ez da aurkitu: {{path}}",
       "unableToLoadRag": "Ezin dira RAG estatistikak kargatu.",

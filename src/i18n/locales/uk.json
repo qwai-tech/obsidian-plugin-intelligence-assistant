@@ -849,15 +849,12 @@
         "desc": "Потрібен для провайдера Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (ключ не потрібен)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (парсинг HTML)",
-        "yandex": "Yandex (парсинг HTML)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -1019,6 +1016,7 @@
       "noAgents": "Агенти недоступні. Налаштуйте агентів у розділі «Налаштування → Агенти».",
       "ragDisabled": "RAG вимкнено в налаштуваннях. Увімкніть у розділі «Налаштування → функції чату → RAG».",
       "webSearchDisabled": "Веб-пошук вимкнено в налаштуваннях. Увімкніть у розділі «Налаштування → функції чату → веб-пошук».",
+      "webSearchFailed": "Вебпошук не вдався: {{message}}",
       "attached": "Прикріплено: {{name}}",
       "fileNotFound": "Файл не знайдено: {{path}}",
       "unableToLoadRag": "Не вдалося завантажити статистику RAG.",

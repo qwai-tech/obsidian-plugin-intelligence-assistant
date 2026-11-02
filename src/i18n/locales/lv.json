@@ -832,15 +832,12 @@
         "desc": "Nepieciešams Mojeek pakalpojumu sniedzējam"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (nav nepieciešama atslēga)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML skraping)",
-        "yandex": "Yandex (HTML skraping)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -1001,6 +998,7 @@
       "noAgents": "Nav pieejamu aģentu. Konfigurējiet aģentus Iestatījumi → Aģenti.",
       "ragDisabled": "RAG ir atspējots iestatījumos. Iespējojiet to sadaļā iestatījumi → tērzēšanas funkcijas → RAG.",
       "webSearchDisabled": "Tīmekļa meklēšana ir atspējota iestatījumos. Iespējojiet to sadaļā iestatījumi → tērzēšanas funkcijas → tīmekļa meklēšana.",
+      "webSearchFailed": "Tīmekļa meklēšana neizdevās: {{message}}",
       "attached": "Pievienots: {{name}}",
       "fileNotFound": "Fails nav atrasts: {{path}}",
       "unableToLoadRag": "Nevar ielādēt RAG statistiku.",

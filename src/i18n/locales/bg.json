@@ -815,15 +815,12 @@
         "desc": "Изисква се за доставчика Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (не се изисква ключ)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML скрейпинг)",
-        "yandex": "Yandex (HTML скрейпинг)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "Няма налични агенти. Конфигурирайте агенти в Настройки → Агенти.",
       "ragDisabled": "RAG е деактивиран в настройките. Активирайте го в настройки → функции на чата → RAG.",
       "webSearchDisabled": "Уеб търсенето е деактивирано в настройките. Активирайте го в настройки → функции на чата → уеб търсене.",
+      "webSearchFailed": "Търсенето в мрежата се провали: {{message}}",
       "attached": "Прикачено: {{name}}",
       "fileNotFound": "Файлът не е намерен: {{path}}",
       "unableToLoadRag": "Невъзможно зареждане на RAG статистиките.",

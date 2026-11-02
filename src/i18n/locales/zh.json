@@ -798,15 +798,12 @@
         "desc": "使用 Mojeek 提供商时必填"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo（无需密钥）",
         "google": "Google 自定义搜索",
         "bing": "Bing 网络搜索",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave 搜索",
-        "yahoo": "Yahoo（HTML 抓取）",
-        "yandex": "Yandex（HTML 抓取）",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -966,6 +963,7 @@
       "noAgents": "没有可用的智能体。请在设置 → 智能体中配置。",
       "ragDisabled": "RAG 已在设置中禁用。请在设置 → 聊天功能 → RAG 中启用。",
       "webSearchDisabled": "网络搜索已在设置中禁用。请在设置 → 聊天功能 → 网络搜索中启用。",
+      "webSearchFailed": "网络搜索失败：{{message}}",
       "attached": "已附加：{{name}}",
       "fileNotFound": "文件未找到：{{path}}",
       "unableToLoadRag": "无法加载 RAG 统计信息。",

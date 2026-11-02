@@ -202,5 +202,16 @@ describe('migrateSettings — removed SAP AI Core provider', () => {
 
 		expect(settings.agents.map(agent => agent.name)).toEqual(['Librarian', 'My own scribe']);
 	});
-});
 
+	it.each(['duckduckgo', 'yahoo', 'yandex'])('moves web search off the retired %s provider to SearXNG', (provider) => {
+		const settings = userConfigToPluginSettings(null);
+		settings.webSearchConfig.provider = provider;
+
+		expect(migrateSettings(settings)).toBe(true);
+		expect(settings.webSearchConfig.provider).toBe('searxng');
+	});
+
+	it('defaults new installs to a web search provider that has a backend', () => {
+		expect(userConfigToPluginSettings(null).webSearchConfig.provider).toBe('searxng');
+	});
+});

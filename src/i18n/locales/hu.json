@@ -815,15 +815,12 @@
         "desc": "Szükséges a Mojeek szolgáltatóhoz"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (kulcs nélkül)",
         "google": "Google egyéni keresés",
         "bing": "Bing webkeresés",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave keresés",
-        "yahoo": "Yahoo (HTML lekérés)",
-        "yandex": "Yandex (HTML lekérés)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "Nincsenek elérhető ügynökök. Konfigurálja az ügynököket a Beállítások → Ügynökök menüben.",
       "ragDisabled": "A RAG le van tiltva a beállításokban. Engedélyezze a beállítások → csevegési funkciók → RAG menüpontban.",
       "webSearchDisabled": "A webkeresés le van tiltva a beállításokban. Engedélyezze a beállítások → csevegési funkciók → webkeresés menüpontban.",
+      "webSearchFailed": "A webes keresés sikertelen: {{message}}",
       "attached": "Csatolva: {{name}}",
       "fileNotFound": "A fájl nem található: {{path}}",
       "unableToLoadRag": "Nem sikerült betölteni a RAG statisztikákat.",

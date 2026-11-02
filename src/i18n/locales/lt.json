@@ -849,15 +849,12 @@
         "desc": "Reikalingas Mojeek tiekėjui"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (raktas nereikalingas)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML skrapingas)",
-        "yandex": "Yandex (HTML skrapingas)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -1019,6 +1016,7 @@
       "noAgents": "Nėra galimų agentų. Sukonfigūruokite agentus Nustatymai → Agentai.",
       "ragDisabled": "RAG išjungtas nustatymuose. Įjunkite jį nustatymai → pokalbio funkcijos → RAG.",
       "webSearchDisabled": "Žiniatinklio paieška išjungta nustatymuose. Įjunkite ją nustatymai → pokalbio funkcijos → žiniatinklio paieška.",
+      "webSearchFailed": "Paieška žiniatinklyje nepavyko: {{message}}",
       "attached": "Pridėta: {{name}}",
       "fileNotFound": "Failas nerastas: {{path}}",
       "unableToLoadRag": "Nepavyko įkelti RAG statistikos.",

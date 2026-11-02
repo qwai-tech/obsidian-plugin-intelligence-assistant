@@ -832,15 +832,12 @@
         "desc": "Potrebno za Mojeek pružatelja"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (ključ nije potreban)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML scraping)",
-        "yandex": "Yandex (HTML scraping)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -1001,6 +998,7 @@
       "noAgents": "Nema dostupnih agenata. Konfigurirajte ih u Postavke → Agenti.",
       "ragDisabled": "RAG je onemogućen u postavkama. Omogućite ga u postavke → značajke razgovora → RAG.",
       "webSearchDisabled": "Web pretraživanje je onemogućeno u postavkama. Omogućite ga u postavke → značajke razgovora → web pretraživanje.",
+      "webSearchFailed": "Web pretraživanje nije uspjelo: {{message}}",
       "attached": "Priloženo: {{name}}",
       "fileNotFound": "Datoteka nije pronađena: {{path}}",
       "unableToLoadRag": "Nije moguće učitati RAG statistike.",

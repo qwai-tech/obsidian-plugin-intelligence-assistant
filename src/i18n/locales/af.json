@@ -815,15 +815,12 @@
         "desc": "Vereis vir die Mojeek-verskaffer"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (geen sleutel vereis)",
         "google": "Google Pasgemaakte Soek",
         "bing": "Bing Websoek",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Soek",
-        "yahoo": "Yahoo (HTML-skraping)",
-        "yandex": "Yandex (HTML-skraping)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "Geen agente beskikbaar nie. Stel agente in by Instellings → Agente.",
       "ragDisabled": "RAG is gedeaktiveer in instellings. Aktiveer dit onder instellings → gespreks-kenmerke → RAG.",
       "webSearchDisabled": "Websoek is gedeaktiveer in instellings. Aktiveer dit onder instellings → gespreks-kenmerke → websoek.",
+      "webSearchFailed": "Websoektog het misluk: {{message}}",
       "attached": "Aangeheg: {{name}}",
       "fileNotFound": "Lêer nie gevind nie: {{path}}",
       "unableToLoadRag": "Kan nie RAG-statistieke laai nie.",

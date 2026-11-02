@@ -798,15 +798,12 @@
         "desc": "Mojeek 提供者的必要項目"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo（不需金鑰）",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo（HTML 抓取）",
-        "yandex": "Yandex（HTML 抓取）",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -965,6 +962,7 @@
       "noAgents": "沒有可用的代理。請在「設定 → 代理」中設定代理。",
       "ragDisabled": "RAG 在設定中已停用。請在「設定 → 聊天功能 → RAG」中啟用。",
       "webSearchDisabled": "網頁搜尋在設定中已停用。請在「設定 → 聊天功能 → 網頁搜尋」中啟用。",
+      "webSearchFailed": "網路搜尋失敗：{{message}}",
       "attached": "已附加：{{name}}",
       "fileNotFound": "找不到檔案：{{path}}",
       "unableToLoadRag": "無法載入 RAG 統計資料。",

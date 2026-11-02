@@ -815,15 +815,12 @@
         "desc": "Mojeek வழங்குநருக்குத் தேவை"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (விசை தேவையில்லை)",
         "google": "Google தனிப்பயன் தேடல்",
         "bing": "Bing வலைத் தேடல்",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave தேடல்",
-        "yahoo": "Yahoo (HTML ஸ்கிராப்பிங்)",
-        "yandex": "Yandex (HTML ஸ்கிராப்பிங்)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "முகவர்கள் எவரும் இல்லை. அமைப்புகள் → முகவர்கள் இல் முகவர்களை உள்ளமைக்கவும்.",
       "ragDisabled": "RAG அமைப்புகளில் முடக்கப்பட்டுள்ளது. அமைப்புகள் → அரட்டை அம்சங்கள் → RAG இன் கீழ் இயக்கவும்.",
       "webSearchDisabled": "வலைத் தேடல் அமைப்புகளில் முடக்கப்பட்டுள்ளது. அமைப்புகள் → அரட்டை அம்சங்கள் → வலைத் தேடல் இன் கீழ் இயக்கவும்.",
+      "webSearchFailed": "இணையத் தேடல் தோல்வியடைந்தது: {{message}}",
       "attached": "இணைக்கப்பட்டது: {{name}}",
       "fileNotFound": "கோப்பு காணப்படவில்லை: {{path}}",
       "unableToLoadRag": "RAG புள்ளிவிவரங்களை ஏற்ற முடியவில்லை.",

@@ -14,7 +14,16 @@ export function migrateSettings(settings: PluginSettings): boolean {
 	const titleModeRenamed = renameTitleMode(settings);
 	const connectionModesFixed = lowercaseConnectionModes(settings);
 	const presetsRenamed = renameBuiltinPresets(settings);
-	return strategyChanged || stepsChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed || connectionModesFixed || presetsRenamed;
+	const searchProviderMoved = retireSearchProviders(settings);
+	return strategyChanged || stepsChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed || connectionModesFixed || presetsRenamed || searchProviderMoved;
+}
+
+const RETIRED_SEARCH_PROVIDERS = new Set(['duckduckgo', 'yahoo', 'yandex']);
+
+function retireSearchProviders(settings: PluginSettings): boolean {
+	if (!RETIRED_SEARCH_PROVIDERS.has(settings.webSearchConfig.provider)) return false;
+	settings.webSearchConfig.provider = 'searxng';
+	return true;
 }
 
 const OLD_PRESET_NAMES: Record<string, string> = {

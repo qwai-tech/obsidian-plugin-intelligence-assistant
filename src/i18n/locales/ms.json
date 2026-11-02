@@ -798,15 +798,12 @@
         "desc": "Diperlukan untuk pembekal Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (tiada kunci diperlukan)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (pengikisan HTML)",
-        "yandex": "Yandex (pengikisan HTML)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -965,6 +962,7 @@
       "noAgents": "Tiada ejen tersedia. Konfigurasikan ejen dalam Tetapan → Ejen.",
       "ragDisabled": "RAG dinyahaktifkan dalam tetapan. Aktifkan di bawah tetapan → ciri sembang → RAG.",
       "webSearchDisabled": "Carian web dinyahaktifkan dalam tetapan. Aktifkan di bawah tetapan → ciri sembang → carian web.",
+      "webSearchFailed": "Carian web gagal: {{message}}",
       "attached": "Dilampirkan: {{name}}",
       "fileNotFound": "Fail tidak dijumpai: {{path}}",
       "unableToLoadRag": "Tidak dapat memuatkan statistik RAG.",

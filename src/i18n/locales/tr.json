@@ -815,15 +815,12 @@
         "desc": "Mojeek sağlayıcısı için gereklidir"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (anahtar gerektirmez)",
         "google": "Google Özel Arama",
         "bing": "Bing Web Araması",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Arama",
-        "yahoo": "Yahoo (HTML kazıma)",
-        "yandex": "Yandex (HTML kazıma)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "Kullanılabilir ajan yok. Ayarlar → Ajanlar'dan ajanları yapılandırın.",
       "ragDisabled": "RAG ayarlarda devre dışı. Ayarlar → sohbet özellikleri → RAG altında etkinleştirin.",
       "webSearchDisabled": "Web araması ayarlarda devre dışı. Ayarlar → sohbet özellikleri → web araması altında etkinleştirin.",
+      "webSearchFailed": "Web araması başarısız oldu: {{message}}",
       "attached": "Eklendi: {{name}}",
       "fileNotFound": "Dosya bulunamadı: {{path}}",
       "unableToLoadRag": "RAG istatistikleri yüklenemiyor.",

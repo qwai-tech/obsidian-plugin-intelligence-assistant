@@ -815,15 +815,12 @@
         "desc": "Erforderlich für den Mojeek-Anbieter"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (kein Schlüssel erforderlich)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML-Scraping)",
-        "yandex": "Yandex (HTML-Scraping)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "Keine Agenten verfügbar. Agenten unter Einstellungen → Agenten konfigurieren.",
       "ragDisabled": "RAG ist in den Einstellungen deaktiviert. Unter Einstellungen → Chat-Funktionen → RAG aktivieren.",
       "webSearchDisabled": "Websuche ist in den Einstellungen deaktiviert. Unter Einstellungen → Chat-Funktionen → Websuche aktivieren.",
+      "webSearchFailed": "Websuche fehlgeschlagen: {{message}}",
       "attached": "Angehängt: {{name}}",
       "fileNotFound": "Datei nicht gefunden: {{path}}",
       "unableToLoadRag": "RAG-Statistiken konnten nicht geladen werden.",

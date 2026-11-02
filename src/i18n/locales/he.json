@@ -832,15 +832,12 @@
         "desc": "נדרש עבור ספק Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (לא נדרש מפתח)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (גרידת HTML)",
-        "yandex": "Yandex (גרידת HTML)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -1001,6 +998,7 @@
       "noAgents": "אין סוכנים זמינים. הגדר סוכנים בהגדרות ← סוכנים.",
       "ragDisabled": "RAG מושבת בהגדרות. הפעל אותו בהגדרות ← תכונות שיחה ← RAG.",
       "webSearchDisabled": "חיפוש ברשת מושבת בהגדרות. הפעל אותו בהגדרות ← תכונות שיחה ← חיפוש ברשת.",
+      "webSearchFailed": "חיפוש האינטרנט נכשל: {{message}}",
       "attached": "מצורף: {{name}}",
       "fileNotFound": "קובץ לא נמצא: {{path}}",
       "unableToLoadRag": "לא ניתן לטעון סטטיסטיקות RAG.",

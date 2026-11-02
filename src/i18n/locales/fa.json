@@ -815,15 +815,12 @@
         "desc": "برای ارائه‌دهنده Mojeek مورد نیاز است"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (بدون نیاز به کلید)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (خراش HTML)",
-        "yandex": "Yandex (خراش HTML)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "هیچ عاملی در دسترس نیست. عوامل را در تنظیمات ← عوامل پیکربندی کنید.",
       "ragDisabled": "RAG در تنظیمات غیرفعال است. آن را در تنظیمات ← ویژگی‌های گفتگو ← RAG فعال کنید.",
       "webSearchDisabled": "جستجوی وب در تنظیمات غیرفعال است. آن را در تنظیمات ← ویژگی‌های گفتگو ← جستجوی وب فعال کنید.",
+      "webSearchFailed": "جستجوی وب ناموفق بود: {{message}}",
       "attached": "پیوست شد: {{name}}",
       "fileNotFound": "فایل پیدا نشد: {{path}}",
       "unableToLoadRag": "بارگذاری آمار RAG ناموفق بود.",

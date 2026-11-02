@@ -815,15 +815,12 @@
         "desc": "Vereist voor de Mojeek provider"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (geen sleutel vereist)",
         "google": "Google Aangepast zoeken",
         "bing": "Bing webzoeken",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave zoeken",
-        "yahoo": "Yahoo (HTML scraping)",
-        "yandex": "Yandex (HTML scraping)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "Geen agenten beschikbaar. Configureer agenten in Instellingen → Agenten.",
       "ragDisabled": "RAG is uitgeschakeld in de instellingen. Schakel het in via instellingen → chatfuncties → RAG.",
       "webSearchDisabled": "Webzoeken is uitgeschakeld in de instellingen. Schakel het in via instellingen → chatfuncties → webzoeken.",
+      "webSearchFailed": "Webzoekopdracht mislukt: {{message}}",
       "attached": "Bijgevoegd: {{name}}",
       "fileNotFound": "Bestand niet gevonden: {{path}}",
       "unableToLoadRag": "Kan RAG-statistieken niet laden.",

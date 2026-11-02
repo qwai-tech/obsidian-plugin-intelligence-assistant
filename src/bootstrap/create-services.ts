@@ -1,4 +1,5 @@
-import type { App } from 'obsidian';
+import { Notice, type App } from 'obsidian';
+import { t } from '@/i18n';
 import { ModelManager, ProviderFactory, getDefaultHttpPort } from '@qwai/obsidian-llm';
 import type { PluginSettings } from '@/features/settings';
 import type { UsageRecord } from '@/features/usage';
@@ -35,7 +36,7 @@ export function createServices(host: ServiceHost): OwnedServices {
 	const rag = new RAGManager(app, settings().ragConfig, settings().llmConfigs, host.paths.vectorStoreNotes);
 	const registry = new ToolRegistry();
 	const tools = new ToolSourceManager(registry, createToolSourceFactory(app, host.paths.data), settings, host.updateSettings);
-	const webSearch = new WebSearchService(() => settings().webSearchConfig, getDefaultHttpPort());
+	const webSearch = new WebSearchService(() => settings().webSearchConfig, getDefaultHttpPort(), (problem) => new Notice(t('chat.notices.webSearchFailed', { message: problem })));
 	const activity = new RunActivity();
 	const recordUsage = async (record: UsageRecord) => {
 		await data.tokenUsageRepo.recordUsage(record);

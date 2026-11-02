@@ -144,7 +144,7 @@
   "search": {
     "web": {
       "enabled": false,
-      "provider": "duckduckgo",
+      "provider": "searxng",
       "maxResults": 5,
       "autoTrigger": true,
       "searchLanguage": "en",

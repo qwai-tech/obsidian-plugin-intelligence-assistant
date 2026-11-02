@@ -815,15 +815,12 @@
         "desc": "Påkravd for Mojeek-leverandøren"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (ingen nøkkel nødvendig)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML-skraping)",
-        "yandex": "Yandex (HTML-skraping)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "Ingen agentar tilgjengelege. Konfigurer agentar i Innstillingar → Agentar.",
       "ragDisabled": "RAG er deaktivert i innstillingane. Aktiver det under innstillingar → chattfunksjonar → RAG.",
       "webSearchDisabled": "Nettsøk er deaktivert i innstillingane. Aktiver det under innstillingar → chattfunksjonar → nettsøk.",
+      "webSearchFailed": "Nettsøket mislukkast: {{message}}",
       "attached": "Vedlagd: {{name}}",
       "fileNotFound": "Fil ikkje funnen: {{path}}",
       "unableToLoadRag": "Kan ikkje laste RAG-statistikk.",

@@ -832,15 +832,12 @@
         "desc": "Richiesta per il provider Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (nessuna chiave richiesta)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (scraping HTML)",
-        "yandex": "Yandex (scraping HTML)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -1001,6 +998,7 @@
       "noAgents": "Nessun agente disponibile. Configura gli agenti in Impostazioni → Agenti.",
       "ragDisabled": "RAG è disabilitato nelle impostazioni. Abilitalo in impostazioni → funzioni chat → RAG.",
       "webSearchDisabled": "La ricerca web è disabilitata nelle impostazioni. Abilitala in impostazioni → funzioni chat → ricerca web.",
+      "webSearchFailed": "Ricerca web non riuscita: {{message}}",
       "attached": "Allegato: {{name}}",
       "fileNotFound": "File non trovato: {{path}}",
       "unableToLoadRag": "Impossibile caricare le statistiche RAG.",

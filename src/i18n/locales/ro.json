@@ -832,15 +832,12 @@
         "desc": "Necesar pentru furnizorul Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (nu necesită cheie)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (scraping HTML)",
-        "yandex": "Yandex (scraping HTML)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -1001,6 +998,7 @@
       "noAgents": "Niciun agent disponibil. Configurați agenți în Setări → Agenți.",
       "ragDisabled": "RAG este dezactivat în setări. Activați-l în setări → funcții chat → RAG.",
       "webSearchDisabled": "Căutarea web este dezactivată în setări. Activați-o în setări → funcții chat → căutare web.",
+      "webSearchFailed": "Căutarea pe web a eșuat: {{message}}",
       "attached": "Atașat: {{name}}",
       "fileNotFound": "Fișierul nu a fost găsit: {{path}}",
       "unableToLoadRag": "Nu se pot încărca statisticile RAG.",

@@ -798,15 +798,12 @@
         "desc": "จำเป็นสำหรับผู้ให้บริการ Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (ไม่ต้องใช้คีย์)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML scraping)",
-        "yandex": "Yandex (HTML scraping)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -965,6 +962,7 @@
       "noAgents": "ไม่มีเอเจนต์ที่พร้อมใช้งาน กำหนดค่าเอเจนต์ในการตั้งค่า → เอเจนต์",
       "ragDisabled": "ปิดใช้งาน RAG ในการตั้งค่า เปิดใช้งานภายใต้การตั้งค่า → ฟีเจอร์แชท → RAG",
       "webSearchDisabled": "ปิดใช้งานการค้นหาเว็บในการตั้งค่า เปิดใช้งานภายใต้การตั้งค่า → ฟีเจอร์แชท → การค้นหาเว็บ",
+      "webSearchFailed": "การค้นหาเว็บล้มเหลว: {{message}}",
       "attached": "แนบแล้ว: {{name}}",
       "fileNotFound": "ไม่พบไฟล์: {{path}}",
       "unableToLoadRag": "ไม่สามารถโหลดสถิติ RAG",

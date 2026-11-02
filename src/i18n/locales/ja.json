@@ -798,15 +798,12 @@
         "desc": "Mojeek プロバイダーに必要"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo（キー不要）",
         "google": "Google カスタム検索",
         "bing": "Bing ウェブ検索",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave 検索",
-        "yahoo": "Yahoo（HTML スクレイピング）",
-        "yandex": "Yandex（HTML スクレイピング）",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -965,6 +962,7 @@
       "noAgents": "エージェントが利用できません。設定 → エージェントでエージェントを設定してください。",
       "ragDisabled": "RAG が設定で無効になっています。設定 → チャット機能 → RAG で有効にしてください。",
       "webSearchDisabled": "ウェブ検索が設定で無効になっています。設定 → チャット機能 → ウェブ検索で有効にしてください。",
+      "webSearchFailed": "ウェブ検索に失敗しました: {{message}}",
       "attached": "添付: {{name}}",
       "fileNotFound": "ファイルが見つかりません: {{path}}",
       "unableToLoadRag": "RAG 統計を読み込めません。",

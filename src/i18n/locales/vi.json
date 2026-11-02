@@ -798,15 +798,12 @@
         "desc": "Bắt buộc cho nhà cung cấp Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (không cần khóa)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (thu thập HTML)",
-        "yandex": "Yandex (thu thập HTML)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -965,6 +962,7 @@
       "noAgents": "Không có tác nhân nào. Cấu hình tác nhân trong Cài đặt → Tác nhân.",
       "ragDisabled": "RAG bị tắt trong cài đặt. Bật nó trong cài đặt → tính năng chat → RAG.",
       "webSearchDisabled": "Tìm kiếm web bị tắt trong cài đặt. Bật nó trong cài đặt → tính năng chat → tìm kiếm web.",
+      "webSearchFailed": "Tìm kiếm web thất bại: {{message}}",
       "attached": "Đã đính kèm: {{name}}",
       "fileNotFound": "Không tìm thấy tệp: {{path}}",
       "unableToLoadRag": "Không thể tải thống kê RAG.",

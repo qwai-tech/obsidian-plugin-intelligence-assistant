@@ -883,15 +883,12 @@
         "desc": "مطلوب لمزود Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (لا يتطلب مفتاحًا)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (كشط HTML)",
-        "yandex": "Yandex (كشط HTML)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -1055,6 +1052,7 @@
       "noAgents": "لا يوجد وكلاء متاحون. هيّئ الوكلاء في الإعدادات ← الوكلاء.",
       "ragDisabled": "تم تعطيل RAG في الإعدادات. فعّله من الإعدادات ← ميزات المحادثة ← RAG.",
       "webSearchDisabled": "تم تعطيل البحث على الويب في الإعدادات. فعّله من الإعدادات ← ميزات المحادثة ← البحث على الويب.",
+      "webSearchFailed": "فشل البحث على الويب: {{message}}",
       "attached": "مُرفق: {{name}}",
       "fileNotFound": "لم يتم العثور على الملف: {{path}}",
       "unableToLoadRag": "تعذّر تحميل إحصائيات RAG.",

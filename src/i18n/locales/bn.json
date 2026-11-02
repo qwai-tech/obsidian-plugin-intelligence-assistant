@@ -815,15 +815,12 @@
         "desc": "Mojeek প্রদানকারীর জন্য প্রয়োজন"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (কী প্রয়োজন নেই)",
         "google": "Google কাস্টম সার্চ",
         "bing": "Bing ওয়েব সার্চ",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave সার্চ",
-        "yahoo": "Yahoo (HTML স্ক্র্যাপিং)",
-        "yandex": "Yandex (HTML স্ক্র্যাপিং)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "কোনো এজেন্ট উপলব্ধ নেই। সেটিংস → এজেন্ট-এ এজেন্ট কনফিগার করুন।",
       "ragDisabled": "সেটিংসে RAG নিষ্ক্রিয় আছে। সেটিংস → চ্যাট বৈশিষ্ট্য → RAG-এর অধীনে সক্রিয় করুন।",
       "webSearchDisabled": "সেটিংসে ওয়েব অনুসন্ধান নিষ্ক্রিয় আছে। সেটিংস → চ্যাট বৈশিষ্ট্য → ওয়েব অনুসন্ধানের অধীনে সক্রিয় করুন।",
+      "webSearchFailed": "ওয়েব অনুসন্ধান ব্যর্থ হয়েছে: {{message}}",
       "attached": "সংযুক্ত: {{name}}",
       "fileNotFound": "ফাইল পাওয়া যায়নি: {{path}}",
       "unableToLoadRag": "RAG পরিসংখ্যান লোড করতে অক্ষম।",

@@ -815,15 +815,12 @@
         "desc": "Vaaditaan Mojeek-palveluntarjoajalle"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (ei avainta vaaditaan)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML-kaapiminen)",
-        "yandex": "Yandex (HTML-kaapiminen)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "Ei agentteja saatavilla. Määritä agentit kohdassa Asetukset → Agentit.",
       "ragDisabled": "RAG on poistettu käytöstä asetuksissa. Ota se käyttöön kohdassa asetukset → chat-ominaisuudet → RAG.",
       "webSearchDisabled": "Verkkohaku on poistettu käytöstä asetuksissa. Ota se käyttöön kohdassa asetukset → chat-ominaisuudet → verkkohaku.",
+      "webSearchFailed": "Verkkohaku epäonnistui: {{message}}",
       "attached": "Liitetty: {{name}}",
       "fileNotFound": "Tiedostoa ei löydy: {{path}}",
       "unableToLoadRag": "RAG-tilastojen lataaminen epäonnistui.",

@@ -849,15 +849,12 @@
         "desc": "Wymagany dla dostawcy Mojeek"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (klucz nie wymagany)",
         "google": "Google Custom Search",
         "bing": "Bing Web Search",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (scrapowanie HTML)",
-        "yandex": "Yandex (scrapowanie HTML)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -1019,6 +1016,7 @@
       "noAgents": "Brak dostępnych agentów. Skonfiguruj agentów w Ustawienia → Agenci.",
       "ragDisabled": "RAG jest wyłączony w ustawieniach. Włącz go w ustawieniach → funkcje czatu → RAG.",
       "webSearchDisabled": "Wyszukiwanie w sieci jest wyłączone w ustawieniach. Włącz je w ustawieniach → funkcje czatu → wyszukiwanie w sieci.",
+      "webSearchFailed": "Wyszukiwanie w sieci nie powiodło się: {{message}}",
       "attached": "Dołączono: {{name}}",
       "fileNotFound": "Nie znaleziono pliku: {{path}}",
       "unableToLoadRag": "Nie można załadować statystyk RAG.",

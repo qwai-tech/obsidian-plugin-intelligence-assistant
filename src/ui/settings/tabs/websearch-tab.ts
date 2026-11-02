@@ -6,7 +6,7 @@
 import { Setting } from 'obsidian';
 import type { PluginHost } from '@/ui/plugin-host';
 import { t } from '@/i18n';
-import type { WebSearchConfig } from '@/features/web-search';
+import { SEARCH_PROVIDER_IDS, type WebSearchConfig } from '@/features/web-search';
 import { SettingsForm } from '@/ui/settings/settings-form';
 
 // Verbatim example values shown as input placeholders (locale codes, URLs and
@@ -20,8 +20,6 @@ const EXAMPLE_PLACEHOLDERS = {
 } as const;
 
 const TIME_RANGES = ['any', 'h', 'd', 'w', 'm', 'y'] as const;
-
-const SEARCH_PROVIDERS = ['duckduckgo', 'google', 'bing', 'serpapi', 'tavily', 'searxng', 'brave', 'yahoo', 'yandex', 'qwant', 'mojeek'] as const;
 
 export function displayWebSearchTab(
 	containerEl: HTMLElement,
@@ -46,7 +44,7 @@ export function displayWebSearchTab(
 
 	subheading(t('settings.websearch.providerSelection'));
 	form.dropdown('provider', field('provider'), Object.fromEntries(
-		SEARCH_PROVIDERS.map(provider => [provider, t(`settings.websearch.providers.${provider}`)]),
+		SEARCH_PROVIDER_IDS.map(provider => [provider, t(`settings.websearch.providers.${provider}`)]),
 	));
 
 	subheading(t('settings.websearch.localeFilters'));

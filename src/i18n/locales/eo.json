@@ -815,15 +815,12 @@
         "desc": "Necesa por la Mojeek-provizanto"
       },
       "providers": {
-        "duckduckgo": "DuckDuckGo (neniu ŝlosilo necesa)",
         "google": "Google Propra Serĉo",
         "bing": "Bing Retserĉo",
         "serpapi": "SerpAPI",
         "tavily": "Tavily",
         "searxng": "SearXNG",
         "brave": "Brave Search",
-        "yahoo": "Yahoo (HTML-skrapado)",
-        "yandex": "Yandex (HTML-skrapado)",
         "qwant": "Qwant",
         "mojeek": "Mojeek"
       }
@@ -983,6 +980,7 @@
       "noAgents": "Neniuj agentoj disponeblaj. Agordu agentojn en Agordoj → Agentoj.",
       "ragDisabled": "RAG estas malŝaltita en agordoj. Ebligi ĝin sub agordoj → babilfunkciaĵoj → RAG.",
       "webSearchDisabled": "Retserĉo estas malŝaltita en agordoj. Ebligi ĝin sub agordoj → babilfunkciaĵoj → retserĉo.",
+      "webSearchFailed": "Retserĉo malsukcesis: {{message}}",
       "attached": "Aldonita: {{name}}",
       "fileNotFound": "Dosiero ne trovita: {{path}}",
       "unableToLoadRag": "Ne eblas ŝargi RAG-statistikojn.",
