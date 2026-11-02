@@ -78,6 +78,31 @@ describe('SettingsForm', () => {
 		expect(save).not.toHaveBeenCalled();
 	});
 
+	it('marks an invalid number and puts the saved value back when the field is left', async () => {
+		const target = section();
+		const { form } = makeForm(target);
+		const field = control(form.number('limit', { label: 'Top K' }, { placeholder: '5', integer: true, min: 1 })) as Control & { inputEl: HTMLInputElement };
+
+		field.inputEl.value = '0';
+		await field.change('0');
+
+		expect(field.inputEl.getAttribute('aria-invalid')).toBe('true');
+		field.inputEl.dispatchEvent(new Event('blur'));
+		expect(field.inputEl.value).toBe('5');
+		expect(field.inputEl.getAttribute('aria-invalid')).toBeNull();
+		expect(target.limit).toBe(5);
+	});
+
+	it('clears the invalid mark once the number is valid again', async () => {
+		const { form } = makeForm(section());
+		const field = control(form.number('limit', { label: 'Top K' }, { placeholder: '5', integer: true, min: 1 })) as Control & { inputEl: HTMLInputElement };
+
+		await field.change('0');
+		await field.change('3');
+
+		expect(field.inputEl.getAttribute('aria-invalid')).toBeNull();
+	});
+
 	it('runs the follow-up after a toggle is saved', async () => {
 		const target = section();
 		const { form, save } = makeForm(target);

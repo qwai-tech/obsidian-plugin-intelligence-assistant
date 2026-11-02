@@ -34,6 +34,15 @@ export function parseNumber(raw: string, rule: NumberRule): number | null {
 	return value;
 }
 
+function markInvalid(input: HTMLInputElement, invalid: boolean): void {
+	input.toggleClass('is-invalid', invalid);
+	if (invalid) {
+		input.setAttribute('aria-invalid', 'true');
+	} else {
+		input.removeAttribute('aria-invalid');
+	}
+}
+
 export function parseList(raw: string): string[] {
 	return raw.split(',').map(item => item.trim()).filter(Boolean);
 }
@@ -83,10 +92,16 @@ export class SettingsForm<T extends object> {
 				.setValue(String(this.read<number>(key) ?? ''))
 				.onChange(async value => {
 					const parsed = parseNumber(value, rule);
+					markInvalid(text.inputEl, parsed === null);
 					if (parsed !== null) {
 						await this.write(key, parsed);
 					}
 				});
+			text.inputEl.addEventListener('blur', () => {
+				if (text.inputEl.getAttribute('aria-invalid') !== 'true') return;
+				text.inputEl.value = String(this.read<number>(key) ?? '');
+				markInvalid(text.inputEl, false);
+			});
 		});
 	}
 

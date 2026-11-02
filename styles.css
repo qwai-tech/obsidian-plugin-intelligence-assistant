@@ -3893,3 +3893,9 @@ details[open] .ia-chat-message__summary::before {
 .ia-list-row .setting-item-description > div + div {
 	margin-top: var(--size-2-1);
 }
+
+/* ── Settings: a number outside its allowed range ──────────────────────────── */
+.setting-item input.is-invalid {
+	border-color: var(--text-error);
+	box-shadow: 0 0 0 1px var(--text-error);
+}
