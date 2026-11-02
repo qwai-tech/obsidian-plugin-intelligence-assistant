@@ -329,7 +329,7 @@
 .ia-code {
 	font-family: var(--font-monospace);
 	font-size: var(--ia-font-size-2xs);
-	color: var(--text-faint);
+	color: var(--text-muted);
 }
 
 .ia-count-badge {
@@ -354,14 +354,38 @@
 	text-transform: none;
 }
 
+.ia-status-badge.is-success,
+.ia-status-badge.is-danger,
+.ia-server-status-online {
+	gap: 6px;
+	color: var(--text-normal);
+}
+
+.ia-status-badge.is-success::before,
+.ia-status-badge.is-danger::before,
+.ia-server-status-online::before {
+	content: '';
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+}
+
 .ia-status-badge.is-success {
 	background: rgba(var(--color-green-rgb), 0.18);
-	color: var(--color-green);
+}
+
+.ia-status-badge.is-success::before,
+.ia-server-status-online::before {
+	background: var(--color-green);
 }
 
 .ia-status-badge.is-danger {
 	background: rgba(var(--color-red-rgb), 0.18);
-	color: var(--color-red);
+}
+
+.ia-status-badge.is-danger::before {
+	background: var(--color-red);
 }
 
 .ia-status-badge.is-warning {
@@ -2523,7 +2547,8 @@
 
 /* ── Ollama model manager modal ─────────────────────────────────────────── */
 .ia-server-status-online {
-	color: var(--text-success);
+	display: inline-flex;
+	align-items: center;
 	font-weight: 600;
 }
 
