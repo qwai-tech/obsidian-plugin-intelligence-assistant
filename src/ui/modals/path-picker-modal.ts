@@ -14,6 +14,7 @@ export class PathPickerModal<T extends { path: string }> extends Modal {
 	private searchInput: HTMLInputElement;
 	private resultsContainer: HTMLElement;
 	private selected: T[] = [];
+	private rowItems = new WeakMap<HTMLElement, T>();
 
 	constructor(app: App, private readonly options: PathPickerOptions<T>) {
 		super(app);
@@ -26,7 +27,8 @@ export class PathPickerModal<T extends { path: string }> extends Modal {
 
 		this.searchInput = contentEl.createEl('input', { type: 'text', placeholder: this.text('searchPlaceholder') });
 		this.searchInput.addClass('ia-modal-search-input');
-		this.resultsContainer = contentEl.createDiv('ia-modal-results');
+		this.resultsContainer = contentEl.createDiv({ cls: 'ia-modal-results', attr: { role: 'listbox', 'aria-multiselectable': 'true' } });
+		this.resultsContainer.addEventListener('keydown', (e) => this.onResultKey(e));
 		this.render();
 
 		this.searchInput.addEventListener('input', () => this.render());
@@ -61,22 +63,46 @@ export class PathPickerModal<T extends { path: string }> extends Modal {
 
 	private render(): void {
 		this.resultsContainer.empty();
+		this.rowItems = new WeakMap();
 		const items = this.visibleItems();
 		if (items.length === 0) {
 			this.resultsContainer.createDiv({ text: this.text('noResults') });
 			return;
 		}
 		for (const item of items) {
-			const row = this.resultsContainer.createDiv(`${this.options.itemClass} ia-modal-list-item`);
-			row.addClass('ia-clickable');
-			row.toggleClass('ia-modal-item--selected', this.isSelected(item));
+			const row = this.resultsContainer.createDiv({ cls: `${this.options.itemClass} ia-modal-list-item ia-clickable`, attr: { role: 'option', tabindex: '0' } });
+			this.rowItems.set(row, item);
+			this.showSelection(row, item);
 			setIcon(row.createDiv('ia-modal-list-icon'), this.options.iconOf(item));
 			row.createDiv('ia-flex-1').setText(item.path);
-			row.addEventListener('click', () => {
-				this.toggle(item);
-				this.render();
-			});
+			row.addEventListener('click', () => this.toggleRow(row));
 		}
+	}
+
+	private onResultKey(e: KeyboardEvent): void {
+		const row = e.target instanceof HTMLElement && this.rowItems.has(e.target) ? e.target : null;
+		if (!row) return;
+		if (e.key === ' ' || e.key === 'Enter') {
+			e.preventDefault();
+			this.toggleRow(row);
+		} else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+			e.preventDefault();
+			const sibling = e.key === 'ArrowDown' ? row.nextElementSibling : row.previousElementSibling;
+			if (sibling instanceof HTMLElement) sibling.focus();
+		}
+	}
+
+	private toggleRow(row: HTMLElement): void {
+		const item = this.rowItems.get(row);
+		if (!item) return;
+		this.toggle(item);
+		this.showSelection(row, item);
+	}
+
+	private showSelection(row: HTMLElement, item: T): void {
+		const selected = this.isSelected(item);
+		row.toggleClass('ia-modal-item--selected', selected);
+		row.setAttr('aria-selected', String(selected));
 	}
 
 	private isSelected(item: T): boolean {

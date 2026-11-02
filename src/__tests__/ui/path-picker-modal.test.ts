@@ -48,4 +48,45 @@ describe('PathPickerModal', () => {
 
 		expect(onChoose).toHaveBeenCalledWith([{ path: 'qa-source-two.md' }]);
 	});
+
+	it('exposes the results as a multi-select list of focusable options', () => {
+		const modal = openPicker();
+
+		const list = modal.contentEl.querySelector('.ia-modal-results')!;
+		expect(list.getAttribute('role')).toBe('listbox');
+		expect(list.getAttribute('aria-multiselectable')).toBe('true');
+		expect(rows(modal).map(row => [row.getAttribute('role'), row.tabIndex, row.getAttribute('aria-selected')])).toEqual([
+			['option', 0, 'false'], ['option', 0, 'false'], ['option', 0, 'false'],
+		]);
+	});
+
+	it.each([' ', 'Enter'])('selects the focused result with %j and keeps focus on it', (key) => {
+		const onChoose = jest.fn();
+		const modal = openPicker(onChoose);
+		document.body.appendChild(modal.contentEl);
+		const row = rows(modal)[1];
+		row.focus();
+
+		row.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+
+		expect(row.getAttribute('aria-selected')).toBe('true');
+		expect(document.activeElement).toBe(row);
+		button(modal, 'Add selected').click();
+		expect(onChoose).toHaveBeenCalledWith([{ path: 'qa-source-two.md' }]);
+		modal.contentEl.remove();
+	});
+
+	it('moves focus between results with the arrow keys', () => {
+		const modal = openPicker();
+		document.body.appendChild(modal.contentEl);
+		const [first, second] = rows(modal);
+		first.focus();
+
+		first.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+		expect(document.activeElement).toBe(second);
+
+		second.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
+		expect(document.activeElement).toBe(first);
+		modal.contentEl.remove();
+	});
 });
