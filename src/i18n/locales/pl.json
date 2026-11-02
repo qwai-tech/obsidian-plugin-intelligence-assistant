@@ -1564,6 +1564,17 @@
       "placeholder": "Przełącz model…",
       "switched": "Przełączono model na {{name}}",
       "failed": "Nie udało się przełączyć modelu."
+    },
+    "welcome": {
+      "title": "Witamy w Intelligence Assistant",
+      "intro": "Trzy kroki do pierwszej rozmowy:",
+      "steps": {
+        "addProvider": "Dodaj dostawcę modeli, np. OpenAI lub Ollama, na karcie LLM w ustawieniach wtyczki.",
+        "testConnection": "Przetestuj połączenie i wybierz model domyślny.",
+        "startChat": "Otwórz czat i wyślij pierwszą wiadomość."
+      },
+      "openSettings": "Otwórz ustawienia",
+      "openChat": "Otwórz czat"
     }
   },
   "notices": {

@@ -1486,6 +1486,17 @@
       "placeholder": "Tukar model…",
       "switched": "Model ditukar kepada {{name}}",
       "failed": "Tidak dapat menukar model."
+    },
+    "welcome": {
+      "title": "Selamat datang ke Intelligence Assistant",
+      "intro": "Tiga langkah ke perbualan pertama anda:",
+      "steps": {
+        "addProvider": "Tambah penyedia model, seperti OpenAI atau Ollama, dalam tab LLM tetapan pemalam.",
+        "testConnection": "Uji sambungan dan pilih model lalai.",
+        "startChat": "Buka sembang dan hantar mesej pertama anda."
+      },
+      "openSettings": "Buka tetapan",
+      "openChat": "Buka sembang"
     }
   },
   "notices": {

@@ -1486,6 +1486,17 @@
       "placeholder": "모델 전환…",
       "switched": "모델이 {{name}}(으)로 전환되었습니다",
       "failed": "모델을 전환할 수 없습니다."
+    },
+    "welcome": {
+      "title": "Intelligence Assistant에 오신 것을 환영합니다",
+      "intro": "첫 대화까지 세 단계:",
+      "steps": {
+        "addProvider": "플러그인 설정의 LLM 탭에서 OpenAI나 Ollama 같은 모델 제공자를 추가하세요.",
+        "testConnection": "연결을 테스트하고 기본 모델을 선택하세요.",
+        "startChat": "채팅을 열고 첫 메시지를 보내세요."
+      },
+      "openSettings": "설정 열기",
+      "openChat": "채팅 열기"
     }
   },
   "notices": {

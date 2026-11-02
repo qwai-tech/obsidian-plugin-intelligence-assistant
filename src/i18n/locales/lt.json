@@ -1564,6 +1564,17 @@
       "placeholder": "Keisti modelį…",
       "switched": "Modelis pakeistas į {{name}}",
       "failed": "Nepavyko pakeisti modelio."
+    },
+    "welcome": {
+      "title": "Sveiki atvykę į Intelligence Assistant",
+      "intro": "Trys žingsniai iki pirmojo pokalbio:",
+      "steps": {
+        "addProvider": "Įskiepio nustatymų skirtuke LLM pridėkite modelių teikėją, pvz., OpenAI arba Ollama.",
+        "testConnection": "Patikrinkite ryšį ir pasirinkite numatytąjį modelį.",
+        "startChat": "Atidarykite pokalbį ir išsiųskite pirmą žinutę."
+      },
+      "openSettings": "Atidaryti nustatymus",
+      "openChat": "Atidaryti pokalbį"
     }
   },
   "notices": {

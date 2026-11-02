@@ -1564,6 +1564,17 @@
       "placeholder": "Přepnout model…",
       "switched": "Model přepnut na {{name}}",
       "failed": "Model se nepodařilo přepnout."
+    },
+    "welcome": {
+      "title": "Vítejte v Intelligence Assistant",
+      "intro": "Tři kroky k první konverzaci:",
+      "steps": {
+        "addProvider": "Přidejte poskytovatele modelů, například OpenAI nebo Ollama, na kartě LLM v nastavení pluginu.",
+        "testConnection": "Otestujte připojení a zvolte výchozí model.",
+        "startChat": "Otevřete chat a pošlete první zprávu."
+      },
+      "openSettings": "Otevřít nastavení",
+      "openChat": "Otevřít chat"
     }
   },
   "notices": {

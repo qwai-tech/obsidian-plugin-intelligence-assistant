@@ -684,6 +684,10 @@ export class DropdownComponent extends ValueComponent<string> {
 export class ButtonComponent {
 	buttonEl = document.createElement('button');
 
+	constructor(containerEl?: HTMLElement) {
+		containerEl?.appendChild(this.buttonEl);
+	}
+
 	setButtonText(text: string): this {
 		this.buttonEl.textContent = text;
 		return this;
@@ -761,9 +765,7 @@ export class Setting {
 	}
 
 	addButton(build: (component: ButtonComponent) => unknown): this {
-		const button = new ButtonComponent();
-		this.controlEl.appendChild(button.buttonEl);
-		build(button);
+		build(new ButtonComponent(this.controlEl));
 		return this;
 	}
 

@@ -1486,6 +1486,17 @@
       "placeholder": "切换模型…",
       "switched": "已切换到模型 {{name}}",
       "failed": "无法切换模型。"
+    },
+    "welcome": {
+      "title": "欢迎使用 Intelligence Assistant",
+      "intro": "三步开始第一次对话：",
+      "steps": {
+        "addProvider": "在插件设置的 LLM 标签页中添加模型提供方，例如 OpenAI 或 Ollama。",
+        "testConnection": "测试连接并选择默认模型。",
+        "startChat": "打开聊天并发送第一条消息。"
+      },
+      "openSettings": "打开设置",
+      "openChat": "打开聊天"
     }
   },
   "notices": {

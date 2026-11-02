@@ -1538,6 +1538,17 @@
       "placeholder": "Promijeni model…",
       "switched": "Model je promijenjen u {{name}}",
       "failed": "Nije moguće promijeniti model."
+    },
+    "welcome": {
+      "title": "Dobro došli u Intelligence Assistant",
+      "intro": "Tri koraka do prvog razgovora:",
+      "steps": {
+        "addProvider": "Dodajte pružatelja modela, npr. OpenAI ili Ollama, na kartici LLM u postavkama dodatka.",
+        "testConnection": "Testirajte vezu i odaberite zadani model.",
+        "startChat": "Otvorite chat i pošaljite prvu poruku."
+      },
+      "openSettings": "Otvori postavke",
+      "openChat": "Otvori chat"
     }
   },
   "notices": {

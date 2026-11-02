@@ -1538,6 +1538,17 @@
       "placeholder": "החלף מודל…",
       "switched": "המודל הוחלף ל-{{name}}",
       "failed": "לא ניתן להחליף מודל."
+    },
+    "welcome": {
+      "title": "ברוכים הבאים ל-Intelligence Assistant",
+      "intro": "שלושה צעדים לשיחה הראשונה:",
+      "steps": {
+        "addProvider": "הוסיפו ספק מודלים, כמו OpenAI או Ollama, בלשונית LLM בהגדרות התוסף.",
+        "testConnection": "בדקו את החיבור ובחרו מודל ברירת מחדל.",
+        "startChat": "פתחו את הצ'אט ושלחו את ההודעה הראשונה."
+      },
+      "openSettings": "פתיחת ההגדרות",
+      "openChat": "פתיחת הצ'אט"
     }
   },
   "notices": {

@@ -1486,6 +1486,17 @@
       "placeholder": "Ganti model…",
       "switched": "Model diganti ke {{name}}",
       "failed": "Tidak dapat mengganti model."
+    },
+    "welcome": {
+      "title": "Selamat datang di Intelligence Assistant",
+      "intro": "Tiga langkah menuju percakapan pertama Anda:",
+      "steps": {
+        "addProvider": "Tambahkan penyedia model, seperti OpenAI atau Ollama, di tab LLM pada pengaturan plugin.",
+        "testConnection": "Uji koneksi dan pilih model bawaan.",
+        "startChat": "Buka obrolan dan kirim pesan pertama Anda."
+      },
+      "openSettings": "Buka pengaturan",
+      "openChat": "Buka obrolan"
     }
   },
   "notices": {

@@ -1486,6 +1486,17 @@
       "placeholder": "モデルを切り替え…",
       "switched": "モデルを {{name}} に切り替えました",
       "failed": "モデルを切り替えられませんでした。"
+    },
+    "welcome": {
+      "title": "Intelligence Assistant へようこそ",
+      "intro": "最初の会話までの 3 ステップ:",
+      "steps": {
+        "addProvider": "プラグイン設定の LLM タブで、OpenAI や Ollama などのモデルプロバイダーを追加します。",
+        "testConnection": "接続をテストし、既定のモデルを選びます。",
+        "startChat": "チャットを開いて最初のメッセージを送ります。"
+      },
+      "openSettings": "設定を開く",
+      "openChat": "チャットを開く"
     }
   },
   "notices": {

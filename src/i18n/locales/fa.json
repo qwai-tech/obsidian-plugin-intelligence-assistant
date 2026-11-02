@@ -1512,6 +1512,17 @@
       "placeholder": "تغییر مدل…",
       "switched": "مدل به {{name}} تغییر کرد",
       "failed": "تغییر مدل ممکن نشد."
+    },
+    "welcome": {
+      "title": "به Intelligence Assistant خوش آمدید",
+      "intro": "سه گام تا نخستین گفتگو:",
+      "steps": {
+        "addProvider": "یک ارائه‌دهنده مدل، مانند OpenAI یا Ollama، را در زبانه LLM تنظیمات افزونه اضافه کنید.",
+        "testConnection": "اتصال را آزمایش کنید و یک مدل پیش‌فرض انتخاب کنید.",
+        "startChat": "گفتگو را باز کنید و نخستین پیامتان را بفرستید."
+      },
+      "openSettings": "باز کردن تنظیمات",
+      "openChat": "باز کردن گفتگو"
     }
   },
   "notices": {

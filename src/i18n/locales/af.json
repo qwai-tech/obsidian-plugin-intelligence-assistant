@@ -1512,6 +1512,17 @@
       "placeholder": "Wissel model…",
       "switched": "Model verander na {{name}}",
       "failed": "Kon nie die model wissel nie."
+    },
+    "welcome": {
+      "title": "Welkom by Intelligence Assistant",
+      "intro": "Drie stappe na jou eerste gesprek:",
+      "steps": {
+        "addProvider": "Voeg 'n modelverskaffer by, soos OpenAI of Ollama, in die LLM-oortjie van die inprop-instellings.",
+        "testConnection": "Toets die verbinding en kies 'n verstekmodel.",
+        "startChat": "Maak die klets oop en stuur jou eerste boodskap."
+      },
+      "openSettings": "Maak instellings oop",
+      "openChat": "Maak klets oop"
     }
   },
   "notices": {

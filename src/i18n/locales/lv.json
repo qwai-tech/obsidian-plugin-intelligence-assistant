@@ -1538,6 +1538,17 @@
       "placeholder": "Pārslēgt modeli…",
       "switched": "Modelis pārslēgts uz {{name}}",
       "failed": "Nevarēja pārslēgt modeli."
+    },
+    "welcome": {
+      "title": "Laipni lūdzam Intelligence Assistant",
+      "intro": "Trīs soļi līdz pirmajai sarunai:",
+      "steps": {
+        "addProvider": "Spraudņa iestatījumu cilnē LLM pievienojiet modeļu nodrošinātāju, piemēram, OpenAI vai Ollama.",
+        "testConnection": "Pārbaudiet savienojumu un izvēlieties noklusējuma modeli.",
+        "startChat": "Atveriet tērzēšanu un nosūtiet pirmo ziņu."
+      },
+      "openSettings": "Atvērt iestatījumus",
+      "openChat": "Atvērt tērzēšanu"
     }
   },
   "notices": {

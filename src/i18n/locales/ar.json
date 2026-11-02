@@ -1616,6 +1616,17 @@
       "placeholder": "تبديل النموذج…",
       "switched": "تم التبديل إلى النموذج {{name}}",
       "failed": "تعذّر تبديل النموذج."
+    },
+    "welcome": {
+      "title": "مرحبًا بك في Intelligence Assistant",
+      "intro": "ثلاث خطوات لمحادثتك الأولى:",
+      "steps": {
+        "addProvider": "أضف مزوّد نماذج، مثل OpenAI أو Ollama، في علامة التبويب LLM في إعدادات الإضافة.",
+        "testConnection": "اختبر الاتصال واختر نموذجًا افتراضيًا.",
+        "startChat": "افتح الدردشة وأرسل رسالتك الأولى."
+      },
+      "openSettings": "فتح الإعدادات",
+      "openChat": "فتح الدردشة"
     }
   },
   "notices": {

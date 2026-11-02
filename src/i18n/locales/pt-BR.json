@@ -1538,6 +1538,17 @@
       "placeholder": "Trocar de modelo…",
       "switched": "Modelo trocado para {{name}}",
       "failed": "Não foi possível trocar de modelo."
+    },
+    "welcome": {
+      "title": "Boas-vindas ao Intelligence Assistant",
+      "intro": "Três passos para sua primeira conversa:",
+      "steps": {
+        "addProvider": "Adicione um provedor de modelos, como OpenAI ou Ollama, na aba LLM das configurações do plugin.",
+        "testConnection": "Teste a conexão e escolha um modelo padrão.",
+        "startChat": "Abra o chat e envie sua primeira mensagem."
+      },
+      "openSettings": "Abrir configurações",
+      "openChat": "Abrir chat"
     }
   },
   "notices": {

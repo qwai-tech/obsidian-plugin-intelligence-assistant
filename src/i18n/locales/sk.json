@@ -1564,6 +1564,17 @@
       "placeholder": "Prepnúť model…",
       "switched": "Model prepnutý na {{name}}",
       "failed": "Model sa nepodarilo prepnúť."
+    },
+    "welcome": {
+      "title": "Vitajte v Intelligence Assistant",
+      "intro": "Tri kroky k prvej konverzácii:",
+      "steps": {
+        "addProvider": "Pridajte poskytovateľa modelov, napríklad OpenAI alebo Ollama, na karte LLM v nastaveniach doplnku.",
+        "testConnection": "Otestujte pripojenie a vyberte predvolený model.",
+        "startChat": "Otvorte chat a pošlite prvú správu."
+      },
+      "openSettings": "Otvoriť nastavenia",
+      "openChat": "Otvoriť chat"
     }
   },
   "notices": {

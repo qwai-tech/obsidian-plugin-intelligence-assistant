@@ -1538,6 +1538,17 @@
       "placeholder": "Schimbați modelul…",
       "switched": "Model schimbat la {{name}}",
       "failed": "Nu s-a putut schimba modelul."
+    },
+    "welcome": {
+      "title": "Bun venit în Intelligence Assistant",
+      "intro": "Trei pași până la prima conversație:",
+      "steps": {
+        "addProvider": "Adaugă un furnizor de modele, de exemplu OpenAI sau Ollama, în fila LLM din setările pluginului.",
+        "testConnection": "Testează conexiunea și alege un model implicit.",
+        "startChat": "Deschide chatul și trimite primul mesaj."
+      },
+      "openSettings": "Deschide setările",
+      "openChat": "Deschide chatul"
     }
   },
   "notices": {

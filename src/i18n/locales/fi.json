@@ -1512,6 +1512,17 @@
       "placeholder": "Vaihda mallia…",
       "switched": "Malliksi vaihdettiin {{name}}",
       "failed": "Mallia ei voitu vaihtaa."
+    },
+    "welcome": {
+      "title": "Tervetuloa Intelligence Assistantiin",
+      "intro": "Kolme vaihetta ensimmäiseen keskusteluun:",
+      "steps": {
+        "addProvider": "Lisää mallintarjoaja, kuten OpenAI tai Ollama, liitännäisen asetusten LLM-välilehdellä.",
+        "testConnection": "Testaa yhteys ja valitse oletusmalli.",
+        "startChat": "Avaa keskustelu ja lähetä ensimmäinen viestisi."
+      },
+      "openSettings": "Avaa asetukset",
+      "openChat": "Avaa keskustelu"
     }
   },
   "notices": {

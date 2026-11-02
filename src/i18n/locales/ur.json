@@ -1512,6 +1512,17 @@
       "placeholder": "ماڈل تبدیل کریں…",
       "switched": "ماڈل {{name}} پر تبدیل ہو گیا",
       "failed": "ماڈل تبدیل نہیں ہو سکا۔"
+    },
+    "welcome": {
+      "title": "Intelligence Assistant میں خوش آمدید",
+      "intro": "پہلی گفتگو تک تین مراحل:",
+      "steps": {
+        "addProvider": "پلگ ان کی ترتیبات کے LLM ٹیب میں OpenAI یا Ollama جیسا کوئی ماڈل فراہم کنندہ شامل کریں۔",
+        "testConnection": "کنکشن آزمائیں اور ایک طے شدہ ماڈل منتخب کریں۔",
+        "startChat": "چیٹ کھولیں اور اپنا پہلا پیغام بھیجیں۔"
+      },
+      "openSettings": "ترتیبات کھولیں",
+      "openChat": "چیٹ کھولیں"
     }
   },
   "notices": {

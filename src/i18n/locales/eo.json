@@ -1512,6 +1512,17 @@
       "placeholder": "Ŝanĝi modelon…",
       "switched": "Modelo ŝanĝita al {{name}}",
       "failed": "Ne eblis ŝanĝi modelon."
+    },
+    "welcome": {
+      "title": "Bonvenon al Intelligence Assistant",
+      "intro": "Tri paŝoj al via unua konversacio:",
+      "steps": {
+        "addProvider": "Aldonu modelan provizanton, ekzemple OpenAI aŭ Ollama, en la langeto LLM de la kromprogramaj agordoj.",
+        "testConnection": "Testu la konekton kaj elektu defaŭltan modelon.",
+        "startChat": "Malfermu la babilon kaj sendu vian unuan mesaĝon."
+      },
+      "openSettings": "Malfermi agordojn",
+      "openChat": "Malfermi babilon"
     }
   },
   "notices": {

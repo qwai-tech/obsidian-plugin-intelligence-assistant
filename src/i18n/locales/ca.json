@@ -1538,6 +1538,17 @@
       "placeholder": "Canvia de model…",
       "switched": "S'ha canviat el model a {{name}}",
       "failed": "No s'ha pogut canviar el model."
+    },
+    "welcome": {
+      "title": "Benvingut a Intelligence Assistant",
+      "intro": "Tres passos fins a la primera conversa:",
+      "steps": {
+        "addProvider": "Afegeix un proveïdor de models, com OpenAI o Ollama, a la pestanya LLM de la configuració del connector.",
+        "testConnection": "Prova la connexió i tria un model per defecte.",
+        "startChat": "Obre el xat i envia el primer missatge."
+      },
+      "openSettings": "Obre la configuració",
+      "openChat": "Obre el xat"
     }
   },
   "notices": {

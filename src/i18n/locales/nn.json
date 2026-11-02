@@ -1512,6 +1512,17 @@
       "placeholder": "Byt modell…",
       "switched": "Modell bytt til {{name}}",
       "failed": "Klarte ikkje å byte modell."
+    },
+    "welcome": {
+      "title": "Velkomen til Intelligence Assistant",
+      "intro": "Tre steg til den første samtalen:",
+      "steps": {
+        "addProvider": "Legg til ein modelleverandør, til dømes OpenAI eller Ollama, i LLM-fana i innstillingane for tillegget.",
+        "testConnection": "Test tilkoplinga og vel ein standardmodell.",
+        "startChat": "Opne chatten og send den første meldinga di."
+      },
+      "openSettings": "Opne innstillingar",
+      "openChat": "Opne chat"
     }
   },
   "notices": {

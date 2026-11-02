@@ -1486,6 +1486,17 @@
       "placeholder": "Chuyển mô hình…",
       "switched": "Đã chuyển sang mô hình {{name}}",
       "failed": "Không thể chuyển mô hình."
+    },
+    "welcome": {
+      "title": "Chào mừng đến với Intelligence Assistant",
+      "intro": "Ba bước đến cuộc trò chuyện đầu tiên:",
+      "steps": {
+        "addProvider": "Thêm nhà cung cấp mô hình, như OpenAI hoặc Ollama, trong thẻ LLM của cài đặt plugin.",
+        "testConnection": "Kiểm tra kết nối và chọn mô hình mặc định.",
+        "startChat": "Mở trò chuyện và gửi tin nhắn đầu tiên."
+      },
+      "openSettings": "Mở cài đặt",
+      "openChat": "Mở trò chuyện"
     }
   },
   "notices": {

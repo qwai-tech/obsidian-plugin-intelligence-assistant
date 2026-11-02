@@ -1512,6 +1512,17 @@
       "placeholder": "Model değiştir…",
       "switched": "Model {{name}} olarak değiştirildi",
       "failed": "Model değiştirilemedi."
+    },
+    "welcome": {
+      "title": "Intelligence Assistant'a hoş geldiniz",
+      "intro": "İlk sohbetinize üç adım:",
+      "steps": {
+        "addProvider": "Eklenti ayarlarının LLM sekmesinde OpenAI veya Ollama gibi bir model sağlayıcı ekleyin.",
+        "testConnection": "Bağlantıyı test edin ve varsayılan bir model seçin.",
+        "startChat": "Sohbeti açın ve ilk mesajınızı gönderin."
+      },
+      "openSettings": "Ayarları aç",
+      "openChat": "Sohbeti aç"
     }
   },
   "notices": {

@@ -1,4 +1,4 @@
-import { getLanguage, Notice, Plugin, type WorkspaceLeaf } from 'obsidian';
+import { Notice, Plugin, type WorkspaceLeaf } from 'obsidian';
 import { t, initI18n } from './src/i18n';
 import type { PluginSettings } from './src/features/settings';
 import { pluginPaths } from './src/core/plugin-paths';
@@ -17,7 +17,8 @@ import { ChatView, CHAT_VIEW_TYPE } from './src/ui/views/chat-view';
 import { ChatWorkspace } from './src/ui/views/chat-workspace';
 import { AgentTaskLauncher } from './src/ui/views/agent-task-launcher';
 import { IntelligenceAssistantSettingTab } from './src/ui/settings/settings-tab';
-import { ChangelogModal } from './src/ui/modals/changelog-modal';
+import { WelcomeModal } from './src/ui/modals/welcome-modal';
+import { hasSettings } from './src/core/utils/type-guards';
 import { openModelSwitcher } from './src/ui/modals/model-switcher-modal';
 import { EditorQuickActions } from './src/ui/editor/editor-quick-actions';
 import { aiSelectionEditorExtension } from './src/ui/editor/ai-selection-extension';
@@ -217,7 +218,16 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			const isAutomatedTest = typeof process !== 'undefined'
 				&& (process.env.NODE_ENV === 'test' || Boolean(process.env.WDIO_WORKER_ID));
 			if (this.store?.peek() && currentVersion !== (this.settings.lastVersion || '0.0.0') && !isAutomatedTest) {
-				new ChangelogModal(this.app, currentVersion, getLanguage().startsWith('zh')).open();
+				if (!this.settings.lastVersion) {
+					new WelcomeModal(this.app, {
+						openSettings: () => {
+							if (!hasSettings(this.app)) return;
+							this.app.setting.open();
+							this.app.setting.openTabById(this.manifest.id);
+						},
+						openChat: async () => { await this.chatWorkspace.openInSidebar(); },
+					}).open();
+				}
 				await this.updateSettings((settings) => {
 					settings.lastVersion = currentVersion;
 				});

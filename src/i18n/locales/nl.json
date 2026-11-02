@@ -1512,6 +1512,17 @@
       "placeholder": "Model wisselen…",
       "switched": "Model gewisseld naar {{name}}",
       "failed": "Kan niet van model wisselen."
+    },
+    "welcome": {
+      "title": "Welkom bij Intelligence Assistant",
+      "intro": "Drie stappen naar je eerste gesprek:",
+      "steps": {
+        "addProvider": "Voeg een modelaanbieder toe, zoals OpenAI of Ollama, op het tabblad LLM van de plug-ininstellingen.",
+        "testConnection": "Test de verbinding en kies een standaardmodel.",
+        "startChat": "Open de chat en stuur je eerste bericht."
+      },
+      "openSettings": "Instellingen openen",
+      "openChat": "Chat openen"
     }
   },
   "notices": {

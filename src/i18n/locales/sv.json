@@ -1512,6 +1512,17 @@
       "placeholder": "Byt modell…",
       "switched": "Modell bytt till {{name}}",
       "failed": "Det gick inte att byta modell."
+    },
+    "welcome": {
+      "title": "Välkommen till Intelligence Assistant",
+      "intro": "Tre steg till ditt första samtal:",
+      "steps": {
+        "addProvider": "Lägg till en modellleverantör, till exempel OpenAI eller Ollama, på fliken LLM i pluginets inställningar.",
+        "testConnection": "Testa anslutningen och välj en standardmodell.",
+        "startChat": "Öppna chatten och skicka ditt första meddelande."
+      },
+      "openSettings": "Öppna inställningar",
+      "openChat": "Öppna chatt"
     }
   },
   "notices": {
