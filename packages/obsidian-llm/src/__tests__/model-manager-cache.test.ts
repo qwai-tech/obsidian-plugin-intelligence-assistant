@@ -74,4 +74,16 @@ describe('ModelManager model cache', () => {
 
 		expect(port.request).toHaveBeenCalledTimes(1);
 	});
+
+	it('leaves embedding-only models out of the chat models', async () => {
+		const config: LLMConfig = { provider: 'ollama', cachedModels: [
+			{ id: 'ollama:qwen3.5:0.8b', name: 'qwen3.5:0.8b', provider: 'ollama', capabilities: ['chat', 'streaming'], enabled: true },
+			{ id: 'ollama:qwen3-embedding:4b', name: 'qwen3-embedding:4b', provider: 'ollama', capabilities: ['embedding'], enabled: true },
+			{ id: 'ollama:unknown', name: 'unknown', provider: 'ollama', capabilities: [], enabled: true },
+		] };
+
+		const models = await ModelManager.getAllChatModels([config]);
+
+		expect(models.map((m) => m.id)).toEqual(['ollama:qwen3.5:0.8b', 'ollama:unknown']);
+	});
 });

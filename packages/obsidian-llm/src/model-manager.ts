@@ -98,6 +98,10 @@ export class ModelManager {
 	/**
 	 * Get all available models from all configured providers
 	 */
+	static async getAllChatModels(configs: LLMConfig[]): Promise<ModelInfo[]> {
+		return (await this.getAllAvailableModels(configs)).filter(isChatModel);
+	}
+
 	static async getAllAvailableModels(configs: LLMConfig[]): Promise<ModelInfo[]> {
 		const allModels: ModelInfo[] = [];
 
@@ -194,4 +198,8 @@ export class ModelManager {
 		// If still can't find, return first config as fallback
 		return configs[0] || null;
 	}
+}
+
+function isChatModel(model: ModelInfo): boolean {
+	return !model.capabilities?.length || model.capabilities.includes('chat');
 }

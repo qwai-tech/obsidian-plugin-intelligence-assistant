@@ -199,7 +199,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 			name: t('commands.switchModel'),
 			callback: () => {
 				void openModelSwitcher(this.app, {
-					getModels: () => ModelManager.getAllAvailableModels(this.settings.llmConfigs),
+					getModels: () => ModelManager.getAllChatModels(this.settings.llmConfigs),
 					getCurrentModelId: () => this.settings.defaultModel,
 					applyModel: async (modelId: string) => {
 						await this.updateSettings((settings) => {

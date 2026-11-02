@@ -165,7 +165,7 @@ export class ChatView extends ItemView {
 		const select = this.chatInput.modelSelect;
 		try {
 			const previousSelection = select.value;
-			this.state.availableModels = await ModelManager.getAllAvailableModels(this.plugin.settings.llmConfigs);
+			this.state.availableModels = await ModelManager.getAllChatModels(this.plugin.settings.llmConfigs);
 			this.chatInput.updateModelOptions();
 
 			const available = (id: string | undefined) => Boolean(id) && this.state.availableModels.some(model => model.id === id);

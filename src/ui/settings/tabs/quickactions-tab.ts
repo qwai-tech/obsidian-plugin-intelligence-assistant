@@ -241,7 +241,7 @@ function openQuickActionEditModal(
 		}
 
 		private async addModelOptions(dropdown: DropdownComponent): Promise<void> {
-			const models = await ModelManager.getAllAvailableModels(this.plugin.settings.llmConfigs);
+			const models = await ModelManager.getAllChatModels(this.plugin.settings.llmConfigs);
 			for (const model of models) {
 				dropdown.addOption(model.id, model.name);
 			}
