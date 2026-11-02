@@ -314,6 +314,27 @@
           },
           "appendNote": {
             "desc": "Dołącz treść do istniejącej notatki"
+          },
+          "updateProperties": {
+            "desc": "Przygotuj propozycję zmiany właściwości notatki"
+          },
+          "readCanvas": {
+            "desc": "Czytaj karty i połączenia kanwy"
+          },
+          "updateCanvas": {
+            "desc": "Przygotuj propozycję zmiany kanwy"
+          },
+          "readPdf": {
+            "desc": "Wyodrębnij tekst pliku PDF z sejfu"
+          },
+          "findNotesByTag": {
+            "desc": "Znajdź notatki z tagiem"
+          },
+          "resolveLink": {
+            "desc": "Znajdź notatkę i nagłówek, na które wskazuje link"
+          },
+          "makeLink": {
+            "desc": "Utwórz link do notatki zgodnie z ustawieniami linków"
           }
         },
         "infoTitle": "o narzędziach",
@@ -324,7 +345,14 @@
           "list_files": "Wylistuj pliki",
           "search_files": "Szukaj plików",
           "create_note": "Utwórz notatkę",
-          "append_note": "Dołącz do notatki"
+          "append_to_note": "Dołącz do notatki",
+          "update_properties": "Aktualizuj właściwości",
+          "read_canvas": "Czytaj kanwę",
+          "update_canvas": "Aktualizuj kanwę",
+          "read_pdf": "Czytaj PDF",
+          "find_notes_by_tag": "Znajdź notatki po tagu",
+          "resolve_link": "Rozwiąż link",
+          "make_link": "Utwórz link"
         }
       },
       "mcpTools": {

@@ -299,6 +299,27 @@
           },
           "appendNote": {
             "desc": "Ajouter du contenu à une note existante"
+          },
+          "updateProperties": {
+            "desc": "Préparer une proposition de modification des propriétés d'une note"
+          },
+          "readCanvas": {
+            "desc": "Lire les cartes et les liaisons d'un canevas"
+          },
+          "updateCanvas": {
+            "desc": "Préparer une proposition de modification d'un canevas"
+          },
+          "readPdf": {
+            "desc": "Extraire le texte d'un PDF du coffre"
+          },
+          "findNotesByTag": {
+            "desc": "Trouver les notes qui portent un tag"
+          },
+          "resolveLink": {
+            "desc": "Trouver la note et le titre visés par un lien"
+          },
+          "makeLink": {
+            "desc": "Créer un lien vers une note selon vos réglages de liens"
           }
         },
         "infoTitle": "À propos des outils",
@@ -309,7 +330,14 @@
           "list_files": "Lister les fichiers",
           "search_files": "Rechercher des fichiers",
           "create_note": "Créer une note",
-          "append_note": "Ajouter à une note"
+          "append_to_note": "Ajouter à une note",
+          "update_properties": "Mettre à jour les propriétés",
+          "read_canvas": "Lire un canevas",
+          "update_canvas": "Mettre à jour un canevas",
+          "read_pdf": "Lire un PDF",
+          "find_notes_by_tag": "Trouver des notes par tag",
+          "resolve_link": "Résoudre un lien",
+          "make_link": "Créer un lien"
         }
       },
       "mcpTools": {

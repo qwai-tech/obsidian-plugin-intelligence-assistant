@@ -299,6 +299,27 @@
           },
           "appendNote": {
             "desc": "Adăugați conținut la o notiță existentă"
+          },
+          "updateProperties": {
+            "desc": "Pregătește o propunere de modificare a proprietăților unei notițe"
+          },
+          "readCanvas": {
+            "desc": "Citește cardurile și conexiunile unei pânze"
+          },
+          "updateCanvas": {
+            "desc": "Pregătește o propunere de modificare a unei pânze"
+          },
+          "readPdf": {
+            "desc": "Extrage textul unui PDF din seif"
+          },
+          "findNotesByTag": {
+            "desc": "Găsește notițele care au o etichetă"
+          },
+          "resolveLink": {
+            "desc": "Găsește notița și titlul spre care trimite un link"
+          },
+          "makeLink": {
+            "desc": "Creează un link către o notiță conform setărilor tale de linkuri"
           }
         },
         "infoTitle": "despre instrumente",
@@ -309,7 +330,14 @@
           "list_files": "Listare fișiere",
           "search_files": "Căutare fișiere",
           "create_note": "Creare notiță",
-          "append_note": "Adăugare la notiță"
+          "append_to_note": "Adăugare la notiță",
+          "update_properties": "Actualizează proprietățile",
+          "read_canvas": "Citește pânza",
+          "update_canvas": "Actualizează pânza",
+          "read_pdf": "Citește PDF",
+          "find_notes_by_tag": "Găsește notițe după etichetă",
+          "resolve_link": "Rezolvă linkul",
+          "make_link": "Creează link"
         }
       },
       "mcpTools": {

@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Tartalom hozzáfűzése egy meglévő jegyzethez"
+          },
+          "updateProperties": {
+            "desc": "Javaslat készítése egy jegyzet tulajdonságainak módosítására"
+          },
+          "readCanvas": {
+            "desc": "Egy vászon kártyáinak és kapcsolatainak olvasása"
+          },
+          "updateCanvas": {
+            "desc": "Javaslat készítése egy vászon módosítására"
+          },
+          "readPdf": {
+            "desc": "Egy széfben lévő PDF szövegének kinyerése"
+          },
+          "findNotesByTag": {
+            "desc": "Egy címkét viselő jegyzetek keresése"
+          },
+          "resolveLink": {
+            "desc": "Annak a jegyzetnek és címsornak a megkeresése, amelyre egy hivatkozás mutat"
+          },
+          "makeLink": {
+            "desc": "Hivatkozás létrehozása egy jegyzetre a hivatkozásbeállításaid szerint"
           }
         },
         "infoTitle": "az eszközökről",
@@ -294,7 +315,14 @@
           "list_files": "Fájlok listázása",
           "search_files": "Fájlok keresése",
           "create_note": "Jegyzet létrehozása",
-          "append_note": "Hozzáfűzés a jegyzethez"
+          "append_to_note": "Hozzáfűzés a jegyzethez",
+          "update_properties": "Tulajdonságok frissítése",
+          "read_canvas": "Vászon olvasása",
+          "update_canvas": "Vászon frissítése",
+          "read_pdf": "PDF olvasása",
+          "find_notes_by_tag": "Jegyzetek keresése címke szerint",
+          "resolve_link": "Hivatkozás feloldása",
+          "make_link": "Hivatkozás létrehozása"
         }
       },
       "mcpTools": {

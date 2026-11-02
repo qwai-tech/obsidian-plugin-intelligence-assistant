@@ -314,6 +314,27 @@
           },
           "appendNote": {
             "desc": "Pripojiť obsah k existujúcej poznámke"
+          },
+          "updateProperties": {
+            "desc": "Pripraviť návrh na zmenu vlastností poznámky"
+          },
+          "readCanvas": {
+            "desc": "Čítať karty a spojenia plátna"
+          },
+          "updateCanvas": {
+            "desc": "Pripraviť návrh na zmenu plátna"
+          },
+          "readPdf": {
+            "desc": "Získať text PDF z trezoru"
+          },
+          "findNotesByTag": {
+            "desc": "Nájsť poznámky so štítkom"
+          },
+          "resolveLink": {
+            "desc": "Nájsť poznámku a nadpis, na ktoré odkaz smeruje"
+          },
+          "makeLink": {
+            "desc": "Vytvoriť odkaz na poznámku podľa vašich nastavení odkazov"
           }
         },
         "infoTitle": "o nástrojoch",
@@ -324,7 +345,14 @@
           "list_files": "Zobraziť súbory",
           "search_files": "Vyhľadávať súbory",
           "create_note": "Vytvoriť poznámku",
-          "append_note": "Pripojiť do poznámky"
+          "append_to_note": "Pripojiť do poznámky",
+          "update_properties": "Aktualizovať vlastnosti",
+          "read_canvas": "Čítať plátno",
+          "update_canvas": "Aktualizovať plátno",
+          "read_pdf": "Čítať PDF",
+          "find_notes_by_tag": "Nájsť poznámky podľa štítka",
+          "resolve_link": "Vyriešiť odkaz",
+          "make_link": "Vytvoriť odkaz"
         }
       },
       "mcpTools": {

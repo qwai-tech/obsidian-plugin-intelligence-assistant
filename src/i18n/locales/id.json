@@ -269,6 +269,27 @@
           },
           "appendNote": {
             "desc": "Tambahkan konten ke catatan yang sudah ada"
+          },
+          "updateProperties": {
+            "desc": "Siapkan usulan untuk mengubah properti catatan"
+          },
+          "readCanvas": {
+            "desc": "Baca kartu dan koneksi sebuah kanvas"
+          },
+          "updateCanvas": {
+            "desc": "Siapkan usulan untuk mengubah kanvas"
+          },
+          "readPdf": {
+            "desc": "Ambil teks dari PDF di vault Anda"
+          },
+          "findNotesByTag": {
+            "desc": "Cari catatan yang memiliki tag"
+          },
+          "resolveLink": {
+            "desc": "Temukan catatan dan judul yang dituju tautan"
+          },
+          "makeLink": {
+            "desc": "Buat tautan ke catatan sesuai pengaturan tautan Anda"
           }
         },
         "infoTitle": "tentang alat",
@@ -279,7 +300,14 @@
           "list_files": "Daftar File",
           "search_files": "Cari File",
           "create_note": "Buat Catatan",
-          "append_note": "Tambah Catatan"
+          "append_to_note": "Tambah Catatan",
+          "update_properties": "Perbarui properti",
+          "read_canvas": "Baca kanvas",
+          "update_canvas": "Perbarui kanvas",
+          "read_pdf": "Baca PDF",
+          "find_notes_by_tag": "Cari catatan berdasarkan tag",
+          "resolve_link": "Selesaikan tautan",
+          "make_link": "Buat tautan"
         }
       },
       "mcpTools": {

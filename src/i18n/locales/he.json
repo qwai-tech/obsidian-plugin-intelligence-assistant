@@ -299,6 +299,27 @@
           },
           "appendNote": {
             "desc": "הוסף תוכן לפתק קיים"
+          },
+          "updateProperties": {
+            "desc": "הכנת הצעה לשינוי מאפייני פתק"
+          },
+          "readCanvas": {
+            "desc": "קריאת הכרטיסים והחיבורים של קנבס"
+          },
+          "updateCanvas": {
+            "desc": "הכנת הצעה לשינוי קנבס"
+          },
+          "readPdf": {
+            "desc": "חילוץ הטקסט של PDF מהכספת"
+          },
+          "findNotesByTag": {
+            "desc": "חיפוש פתקים שיש להם תגית"
+          },
+          "resolveLink": {
+            "desc": "מציאת הפתק והכותרת שאליהם מפנה קישור"
+          },
+          "makeLink": {
+            "desc": "יצירת קישור לפתק לפי הגדרות הקישורים שלך"
           }
         },
         "infoTitle": "אודות כלים",
@@ -309,7 +330,14 @@
           "list_files": "רשום קבצים",
           "search_files": "חפש קבצים",
           "create_note": "צור פתק",
-          "append_note": "הוסף לפתק"
+          "append_to_note": "הוסף לפתק",
+          "update_properties": "עדכון מאפיינים",
+          "read_canvas": "קריאת קנבס",
+          "update_canvas": "עדכון קנבס",
+          "read_pdf": "קריאת PDF",
+          "find_notes_by_tag": "חיפוש פתקים לפי תגית",
+          "resolve_link": "פענוח קישור",
+          "make_link": "יצירת קישור"
         }
       },
       "mcpTools": {

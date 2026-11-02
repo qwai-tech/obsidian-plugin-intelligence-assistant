@@ -269,6 +269,27 @@
           },
           "appendNote": {
             "desc": "Tambah kandungan ke nota yang sedia ada"
+          },
+          "updateProperties": {
+            "desc": "Sediakan cadangan untuk menukar sifat nota"
+          },
+          "readCanvas": {
+            "desc": "Baca kad dan sambungan kanvas"
+          },
+          "updateCanvas": {
+            "desc": "Sediakan cadangan untuk menukar kanvas"
+          },
+          "readPdf": {
+            "desc": "Ekstrak teks PDF dalam bilik kebal anda"
+          },
+          "findNotesByTag": {
+            "desc": "Cari nota yang mempunyai tag"
+          },
+          "resolveLink": {
+            "desc": "Cari nota dan tajuk yang ditunjuk oleh pautan"
+          },
+          "makeLink": {
+            "desc": "Buat pautan ke nota mengikut tetapan pautan anda"
           }
         },
         "infoTitle": "tentang alat",
@@ -279,7 +300,14 @@
           "list_files": "Senarai Fail",
           "search_files": "Cari Fail",
           "create_note": "Cipta Nota",
-          "append_note": "Tambah Nota"
+          "append_to_note": "Tambah Nota",
+          "update_properties": "Kemas kini sifat",
+          "read_canvas": "Baca kanvas",
+          "update_canvas": "Kemas kini kanvas",
+          "read_pdf": "Baca PDF",
+          "find_notes_by_tag": "Cari nota mengikut tag",
+          "resolve_link": "Selesaikan pautan",
+          "make_link": "Buat pautan"
         }
       },
       "mcpTools": {

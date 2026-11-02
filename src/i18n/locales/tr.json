@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Mevcut bir nota içerik ekleyin"
+          },
+          "updateProperties": {
+            "desc": "Bir notun özelliklerini değiştirmek için öneri hazırla"
+          },
+          "readCanvas": {
+            "desc": "Bir tuvalin kartlarını ve bağlantılarını oku"
+          },
+          "updateCanvas": {
+            "desc": "Bir tuvali değiştirmek için öneri hazırla"
+          },
+          "readPdf": {
+            "desc": "Kasandaki bir PDF'nin metnini çıkar"
+          },
+          "findNotesByTag": {
+            "desc": "Bir etiketi taşıyan notları bul"
+          },
+          "resolveLink": {
+            "desc": "Bir bağlantının gösterdiği notu ve başlığı bul"
+          },
+          "makeLink": {
+            "desc": "Bağlantı ayarlarına göre bir nota bağlantı oluştur"
           }
         },
         "infoTitle": "araçlar hakkında",
@@ -294,7 +315,14 @@
           "list_files": "Dosyaları Listele",
           "search_files": "Dosya Ara",
           "create_note": "Not Oluştur",
-          "append_note": "Nota Ekle"
+          "append_to_note": "Nota Ekle",
+          "update_properties": "Özellikleri güncelle",
+          "read_canvas": "Tuvali oku",
+          "update_canvas": "Tuvali güncelle",
+          "read_pdf": "PDF oku",
+          "find_notes_by_tag": "Etikete göre not bul",
+          "resolve_link": "Bağlantıyı çöz",
+          "make_link": "Bağlantı oluştur"
         }
       },
       "mcpTools": {

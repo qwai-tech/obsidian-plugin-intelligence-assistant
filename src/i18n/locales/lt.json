@@ -314,6 +314,27 @@
           },
           "appendNote": {
             "desc": "Pridėti turinį prie esamo užrašo"
+          },
+          "updateProperties": {
+            "desc": "Paruošti pasiūlymą pakeisti užrašo savybes"
+          },
+          "readCanvas": {
+            "desc": "Skaityti drobės korteles ir ryšius"
+          },
+          "updateCanvas": {
+            "desc": "Paruošti pasiūlymą pakeisti drobę"
+          },
+          "readPdf": {
+            "desc": "Išgauti saugyklos PDF tekstą"
+          },
+          "findNotesByTag": {
+            "desc": "Rasti užrašus su žyma"
+          },
+          "resolveLink": {
+            "desc": "Rasti užrašą ir antraštę, į kuriuos rodo nuoroda"
+          },
+          "makeLink": {
+            "desc": "Sukurti nuorodą į užrašą pagal jūsų nuorodų nustatymus"
           }
         },
         "infoTitle": "apie įrankius",
@@ -324,7 +345,14 @@
           "list_files": "Išvardyti failus",
           "search_files": "Ieškoti failų",
           "create_note": "Sukurti užrašą",
-          "append_note": "Pridėti prie užrašo"
+          "append_to_note": "Pridėti prie užrašo",
+          "update_properties": "Atnaujinti savybes",
+          "read_canvas": "Skaityti drobę",
+          "update_canvas": "Atnaujinti drobę",
+          "read_pdf": "Skaityti PDF",
+          "find_notes_by_tag": "Rasti užrašus pagal žymą",
+          "resolve_link": "Išspręsti nuorodą",
+          "make_link": "Sukurti nuorodą"
         }
       },
       "mcpTools": {

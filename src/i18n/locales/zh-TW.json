@@ -269,6 +269,27 @@
           },
           "appendNote": {
             "desc": "在現有筆記中附加內容"
+          },
+          "updateProperties": {
+            "desc": "準備變更筆記屬性的提案"
+          },
+          "readCanvas": {
+            "desc": "讀取畫布的卡片與連線"
+          },
+          "updateCanvas": {
+            "desc": "準備變更畫布的提案"
+          },
+          "readPdf": {
+            "desc": "擷取儲存庫中 PDF 的文字"
+          },
+          "findNotesByTag": {
+            "desc": "尋找帶有某個標籤的筆記"
+          },
+          "resolveLink": {
+            "desc": "找出連結指向的筆記與標題"
+          },
+          "makeLink": {
+            "desc": "依你的連結設定建立指向筆記的連結"
           }
         },
         "infoTitle": "關於工具",
@@ -279,7 +300,14 @@
           "list_files": "列出檔案",
           "search_files": "搜尋檔案",
           "create_note": "建立筆記",
-          "append_note": "附加至筆記"
+          "append_to_note": "附加至筆記",
+          "update_properties": "更新屬性",
+          "read_canvas": "讀取畫布",
+          "update_canvas": "更新畫布",
+          "read_pdf": "讀取 PDF",
+          "find_notes_by_tag": "依標籤尋找筆記",
+          "resolve_link": "解析連結",
+          "make_link": "建立連結"
         }
       },
       "mcpTools": {

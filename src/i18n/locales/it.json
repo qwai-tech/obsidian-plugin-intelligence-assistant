@@ -299,6 +299,27 @@
           },
           "appendNote": {
             "desc": "Aggiungi contenuto a una nota esistente"
+          },
+          "updateProperties": {
+            "desc": "Prepara una proposta per modificare le proprietà di una nota"
+          },
+          "readCanvas": {
+            "desc": "Leggi le schede e i collegamenti di un canvas"
+          },
+          "updateCanvas": {
+            "desc": "Prepara una proposta per modificare un canvas"
+          },
+          "readPdf": {
+            "desc": "Estrai il testo di un PDF della cassaforte"
+          },
+          "findNotesByTag": {
+            "desc": "Trova le note che hanno un tag"
+          },
+          "resolveLink": {
+            "desc": "Trova la nota e l'intestazione a cui punta un link"
+          },
+          "makeLink": {
+            "desc": "Crea un link a una nota secondo le tue impostazioni dei link"
           }
         },
         "infoTitle": "informazioni sugli strumenti",
@@ -309,7 +330,14 @@
           "list_files": "Elenca file",
           "search_files": "Cerca file",
           "create_note": "Crea nota",
-          "append_note": "Aggiungi a nota"
+          "append_to_note": "Aggiungi a nota",
+          "update_properties": "Aggiorna proprietà",
+          "read_canvas": "Leggi canvas",
+          "update_canvas": "Aggiorna canvas",
+          "read_pdf": "Leggi PDF",
+          "find_notes_by_tag": "Trova note per tag",
+          "resolve_link": "Risolvi link",
+          "make_link": "Crea link"
         }
       },
       "mcpTools": {

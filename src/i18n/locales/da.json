@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Tilføj indhold til en eksisterende notitie"
+          },
+          "updateProperties": {
+            "desc": "Forbered et forslag om at ændre en notes egenskaber"
+          },
+          "readCanvas": {
+            "desc": "Læs kortene og forbindelserne på et lærred"
+          },
+          "updateCanvas": {
+            "desc": "Forbered et forslag om at ændre et lærred"
+          },
+          "readPdf": {
+            "desc": "Udtræk teksten fra en PDF i din boks"
+          },
+          "findNotesByTag": {
+            "desc": "Find noter med et tag"
+          },
+          "resolveLink": {
+            "desc": "Find den note og overskrift, et link peger på"
+          },
+          "makeLink": {
+            "desc": "Lav et link til en note efter dine linkindstillinger"
           }
         },
         "infoTitle": "om værktøjer",
@@ -294,7 +315,14 @@
           "list_files": "List filer",
           "search_files": "Søg filer",
           "create_note": "Opret notitie",
-          "append_note": "Tilføj til notitie"
+          "append_to_note": "Tilføj til notitie",
+          "update_properties": "Opdater egenskaber",
+          "read_canvas": "Læs lærred",
+          "update_canvas": "Opdater lærred",
+          "read_pdf": "Læs PDF",
+          "find_notes_by_tag": "Find noter efter tag",
+          "resolve_link": "Slå link op",
+          "make_link": "Lav link"
         }
       },
       "mcpTools": {

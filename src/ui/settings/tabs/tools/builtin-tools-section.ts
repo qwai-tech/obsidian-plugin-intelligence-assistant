@@ -5,26 +5,33 @@ import { TestIds } from '@/ui/utils/test-ids';
 import type { PluginHost } from '@/ui/plugin-host';
 import { renderIcon } from '@/ui/utils/icon';
 
+const TOOL_METADATA: Record<string, { key: string; icon: string }> = {
+	read_file: { key: 'readFile', icon: 'file-text' },
+	write_file: { key: 'writeFile', icon: 'pencil' },
+	list_files: { key: 'listFiles', icon: 'folder' },
+	search_files: { key: 'searchFiles', icon: 'search' },
+	create_note: { key: 'createNote', icon: 'file-plus' },
+	append_to_note: { key: 'appendNote', icon: 'list-plus' },
+	update_properties: { key: 'updateProperties', icon: 'list' },
+	read_canvas: { key: 'readCanvas', icon: 'layout-dashboard' },
+	update_canvas: { key: 'updateCanvas', icon: 'layout-dashboard' },
+	read_pdf: { key: 'readPdf', icon: 'file-text' },
+	find_notes_by_tag: { key: 'findNotesByTag', icon: 'tag' },
+	resolve_link: { key: 'resolveLink', icon: 'link' },
+	make_link: { key: 'makeLink', icon: 'link-2' },
+};
+
 export function renderBuiltinToolsSection(
 	content: HTMLElement,
 	plugin: PluginHost
 ): void {
-	const toolMetadata: Record<string, { description: string; icon: string }> = {
-		'read_file': { description: t('settings.tools.builtIn.toolMeta.readFile.desc'), icon: 'file-text' },
-		'write_file': { description: t('settings.tools.builtIn.toolMeta.writeFile.desc'), icon: 'pencil' },
-		'list_files': { description: t('settings.tools.builtIn.toolMeta.listFiles.desc'), icon: 'folder' },
-		'search_files': { description: t('settings.tools.builtIn.toolMeta.searchFiles.desc'), icon: 'search' },
-		'create_note': { description: t('settings.tools.builtIn.toolMeta.createNote.desc'), icon: 'file-plus' },
-		'append_to_note': { description: t('settings.tools.builtIn.toolMeta.appendNote.desc'), icon: 'list-plus' }
-	};
-
 	const definitions = new Map(builtinToolDefinitions(plugin.app).map(definition => [definition.name, definition]));
 	for (const tool of plugin.settings.builtInTools) {
-		const metadata = toolMetadata[tool.type];
+		const metadata = TOOL_METADATA[tool.type];
 		const fallbackName = tool.type.replace(/_/g, ' ').replace(/^\w/, l => l.toUpperCase());
 		const setting = new Setting(content)
 			.setName(t(`settings.tools.builtIn.toolNames.${tool.type}`, { defaultValue: fallbackName }))
-			.setDesc(metadata?.description ?? definitions.get(tool.type)?.description ?? '')
+			.setDesc(metadata ? t(`settings.tools.builtIn.toolMeta.${metadata.key}.desc`) : definitions.get(tool.type)?.description ?? '')
 			.addToggle(toggle => {
 				toggle.toggleEl.setAttribute('data-testid', TestIds.settings.toolsBuiltinToggle);
 				toggle.toggleEl.setAttribute('data-tool-type', tool.type);

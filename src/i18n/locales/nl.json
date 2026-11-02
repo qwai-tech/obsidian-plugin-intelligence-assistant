@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Voeg inhoud toe aan een bestaande notitie"
+          },
+          "updateProperties": {
+            "desc": "Een voorstel voorbereiden om de eigenschappen van een notitie te wijzigen"
+          },
+          "readCanvas": {
+            "desc": "De kaarten en verbindingen van een canvas lezen"
+          },
+          "updateCanvas": {
+            "desc": "Een voorstel voorbereiden om een canvas te wijzigen"
+          },
+          "readPdf": {
+            "desc": "De tekst van een pdf in je kluis ophalen"
+          },
+          "findNotesByTag": {
+            "desc": "Notities met een tag zoeken"
+          },
+          "resolveLink": {
+            "desc": "De notitie en kop vinden waar een link naar verwijst"
+          },
+          "makeLink": {
+            "desc": "Een link naar een notitie maken volgens je linkinstellingen"
           }
         },
         "infoTitle": "over tools",
@@ -294,7 +315,14 @@
           "list_files": "Bestanden weergeven",
           "search_files": "Bestanden zoeken",
           "create_note": "Notitie aanmaken",
-          "append_note": "Notitie toevoegen"
+          "append_to_note": "Notitie toevoegen",
+          "update_properties": "Eigenschappen bijwerken",
+          "read_canvas": "Canvas lezen",
+          "update_canvas": "Canvas bijwerken",
+          "read_pdf": "PDF lezen",
+          "find_notes_by_tag": "Notities zoeken op tag",
+          "resolve_link": "Link oplossen",
+          "make_link": "Link maken"
         }
       },
       "mcpTools": {

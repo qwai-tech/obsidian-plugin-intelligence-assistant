@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Gehitu edukia lehendik dagoen ohar bati"
+          },
+          "updateProperties": {
+            "desc": "Prestatu ohar baten propietateak aldatzeko proposamena"
+          },
+          "readCanvas": {
+            "desc": "Irakurri mihise baten txartelak eta loturak"
+          },
+          "updateCanvas": {
+            "desc": "Prestatu mihise bat aldatzeko proposamena"
+          },
+          "readPdf": {
+            "desc": "Atera biltegiko PDF baten testua"
+          },
+          "findNotesByTag": {
+            "desc": "Bilatu etiketa bat duten oharrak"
+          },
+          "resolveLink": {
+            "desc": "Bilatu esteka batek seinalatzen duen oharra eta izenburua"
+          },
+          "makeLink": {
+            "desc": "Sortu ohar baterako esteka zure esteken ezarpenen arabera"
           }
         },
         "infoTitle": "tresnei buruz",
@@ -294,7 +315,14 @@
           "list_files": "Zerrendatu Fitxategiak",
           "search_files": "Bilatu Fitxategiak",
           "create_note": "Sortu Oharra",
-          "append_note": "Gehitu Oharrari"
+          "append_to_note": "Gehitu Oharrari",
+          "update_properties": "Eguneratu propietateak",
+          "read_canvas": "Irakurri mihisea",
+          "update_canvas": "Eguneratu mihisea",
+          "read_pdf": "Irakurri PDFa",
+          "find_notes_by_tag": "Bilatu oharrak etiketaren arabera",
+          "resolve_link": "Ebatzi esteka",
+          "make_link": "Sortu esteka"
         }
       },
       "mcpTools": {

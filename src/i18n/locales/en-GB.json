@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Append content to an existing note"
+          },
+          "updateProperties": {
+            "desc": "Prepare a proposal to change a note's properties"
+          },
+          "readCanvas": {
+            "desc": "Read the cards and connections of a canvas"
+          },
+          "updateCanvas": {
+            "desc": "Prepare a proposal to change a canvas"
+          },
+          "readPdf": {
+            "desc": "Extract the text of a PDF in your vault"
+          },
+          "findNotesByTag": {
+            "desc": "Find notes that carry a tag"
+          },
+          "resolveLink": {
+            "desc": "Find the note and heading a link points to"
+          },
+          "makeLink": {
+            "desc": "Build a link to a note using your link settings"
           }
         },
         "infoTitle": "about tools",
@@ -294,7 +315,14 @@
           "list_files": "List Files",
           "search_files": "Search Files",
           "create_note": "Create Note",
-          "append_note": "Append Note"
+          "append_to_note": "Append Note",
+          "update_properties": "Update properties",
+          "read_canvas": "Read canvas",
+          "update_canvas": "Update canvas",
+          "read_pdf": "Read PDF",
+          "find_notes_by_tag": "Find notes by tag",
+          "resolve_link": "Resolve link",
+          "make_link": "Make link"
         }
       },
       "mcpTools": {

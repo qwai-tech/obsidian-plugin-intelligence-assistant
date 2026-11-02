@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Inhalt an eine vorhandene Notiz anhängen"
+          },
+          "updateProperties": {
+            "desc": "Einen Vorschlag zum Ändern der Eigenschaften einer Notiz vorbereiten"
+          },
+          "readCanvas": {
+            "desc": "Karten und Verbindungen eines Canvas lesen"
+          },
+          "updateCanvas": {
+            "desc": "Einen Vorschlag zum Ändern eines Canvas vorbereiten"
+          },
+          "readPdf": {
+            "desc": "Den Text eines PDFs im Tresor auslesen"
+          },
+          "findNotesByTag": {
+            "desc": "Notizen mit einem Tag finden"
+          },
+          "resolveLink": {
+            "desc": "Notiz und Überschrift finden, auf die ein Link zeigt"
+          },
+          "makeLink": {
+            "desc": "Einen Link zu einer Notiz gemäß deinen Link-Einstellungen erstellen"
           }
         },
         "infoTitle": "Über Werkzeuge",
@@ -294,7 +315,14 @@
           "list_files": "Dateien auflisten",
           "search_files": "Dateien suchen",
           "create_note": "Notiz erstellen",
-          "append_note": "Notiz anhängen"
+          "append_to_note": "Notiz anhängen",
+          "update_properties": "Eigenschaften aktualisieren",
+          "read_canvas": "Canvas lesen",
+          "update_canvas": "Canvas aktualisieren",
+          "read_pdf": "PDF lesen",
+          "find_notes_by_tag": "Notizen nach Tag finden",
+          "resolve_link": "Link auflösen",
+          "make_link": "Link erstellen"
         }
       },
       "mcpTools": {

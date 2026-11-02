@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Legg til innhald i eit eksisterande notat"
+          },
+          "updateProperties": {
+            "desc": "Førebu eit forslag om å endre eigenskapane til eit notat"
+          },
+          "readCanvas": {
+            "desc": "Les korta og koplingane på eit lerret"
+          },
+          "updateCanvas": {
+            "desc": "Førebu eit forslag om å endre eit lerret"
+          },
+          "readPdf": {
+            "desc": "Hent ut teksten i ein PDF i kvelvet"
+          },
+          "findNotesByTag": {
+            "desc": "Finn notat med ein tagg"
+          },
+          "resolveLink": {
+            "desc": "Finn notatet og overskrifta ei lenkje peikar på"
+          },
+          "makeLink": {
+            "desc": "Lag ei lenkje til eit notat etter lenkjeinnstillingane dine"
           }
         },
         "infoTitle": "om verktøy",
@@ -294,7 +315,14 @@
           "list_files": "List opp filer",
           "search_files": "Søk etter filer",
           "create_note": "Opprett notat",
-          "append_note": "Legg til i notat"
+          "append_to_note": "Legg til i notat",
+          "update_properties": "Oppdater eigenskapar",
+          "read_canvas": "Les lerret",
+          "update_canvas": "Oppdater lerret",
+          "read_pdf": "Les PDF",
+          "find_notes_by_tag": "Finn notat etter tagg",
+          "resolve_link": "Løys opp lenkje",
+          "make_link": "Lag lenkje"
         }
       },
       "mcpTools": {

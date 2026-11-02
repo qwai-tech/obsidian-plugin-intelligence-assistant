@@ -299,6 +299,27 @@
           },
           "appendNote": {
             "desc": "Afegeix contingut a una nota existent"
+          },
+          "updateProperties": {
+            "desc": "Prepara una proposta per canviar les propietats d'una nota"
+          },
+          "readCanvas": {
+            "desc": "Llegeix les targetes i connexions d'un llenç"
+          },
+          "updateCanvas": {
+            "desc": "Prepara una proposta per canviar un llenç"
+          },
+          "readPdf": {
+            "desc": "Extreu el text d'un PDF de la teva caixa forta"
+          },
+          "findNotesByTag": {
+            "desc": "Cerca les notes que tenen una etiqueta"
+          },
+          "resolveLink": {
+            "desc": "Troba la nota i l'encapçalament on apunta un enllaç"
+          },
+          "makeLink": {
+            "desc": "Crea un enllaç a una nota segons la teva configuració d'enllaços"
           }
         },
         "infoTitle": "sobre les eines",
@@ -309,7 +330,14 @@
           "list_files": "Llista fitxers",
           "search_files": "Cerca fitxers",
           "create_note": "Crea nota",
-          "append_note": "Afegeix a nota"
+          "append_to_note": "Afegeix a nota",
+          "update_properties": "Actualitza les propietats",
+          "read_canvas": "Llegeix el llenç",
+          "update_canvas": "Actualitza el llenç",
+          "read_pdf": "Llegeix PDF",
+          "find_notes_by_tag": "Cerca notes per etiqueta",
+          "resolve_link": "Resol l'enllaç",
+          "make_link": "Crea un enllaç"
         }
       },
       "mcpTools": {

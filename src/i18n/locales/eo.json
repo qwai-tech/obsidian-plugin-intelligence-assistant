@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Aldoni enhavon al ekzistanta noto"
+          },
+          "updateProperties": {
+            "desc": "Prepari proponon ŝanĝi la atributojn de noto"
+          },
+          "readCanvas": {
+            "desc": "Legi la kartojn kaj konektojn de kanvaso"
+          },
+          "updateCanvas": {
+            "desc": "Prepari proponon ŝanĝi kanvason"
+          },
+          "readPdf": {
+            "desc": "Eltiri la tekston de PDF en via trezorejo"
+          },
+          "findNotesByTag": {
+            "desc": "Trovi notojn kun etikedo"
+          },
+          "resolveLink": {
+            "desc": "Trovi la noton kaj titolon, al kiuj ligilo montras"
+          },
+          "makeLink": {
+            "desc": "Krei ligilon al noto laŭ viaj ligilaj agordoj"
           }
         },
         "infoTitle": "pri iloj",
@@ -294,7 +315,14 @@
           "list_files": "Listigi Dosierojn",
           "search_files": "Serĉi Dosierojn",
           "create_note": "Krei Noton",
-          "append_note": "Aldoni al Noto"
+          "append_to_note": "Aldoni al Noto",
+          "update_properties": "Ĝisdatigi atributojn",
+          "read_canvas": "Legi kanvason",
+          "update_canvas": "Ĝisdatigi kanvason",
+          "read_pdf": "Legi PDF",
+          "find_notes_by_tag": "Trovi notojn laŭ etikedo",
+          "resolve_link": "Solvi ligilon",
+          "make_link": "Krei ligilon"
         }
       },
       "mcpTools": {

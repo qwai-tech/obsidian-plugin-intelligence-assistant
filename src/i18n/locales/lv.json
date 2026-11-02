@@ -299,6 +299,27 @@
           },
           "appendNote": {
             "desc": "Pievienot saturu esošai piezīmei"
+          },
+          "updateProperties": {
+            "desc": "Sagatavot priekšlikumu mainīt piezīmes rekvizītus"
+          },
+          "readCanvas": {
+            "desc": "Lasīt audekla kartītes un savienojumus"
+          },
+          "updateCanvas": {
+            "desc": "Sagatavot priekšlikumu mainīt audeklu"
+          },
+          "readPdf": {
+            "desc": "Iegūt krātuvē esoša PDF tekstu"
+          },
+          "findNotesByTag": {
+            "desc": "Atrast piezīmes ar birku"
+          },
+          "resolveLink": {
+            "desc": "Atrast piezīmi un virsrakstu, uz ko norāda saite"
+          },
+          "makeLink": {
+            "desc": "Izveidot saiti uz piezīmi atbilstoši jūsu saišu iestatījumiem"
           }
         },
         "infoTitle": "par rīkiem",
@@ -309,7 +330,14 @@
           "list_files": "Uzskaitīt failus",
           "search_files": "Meklēt failus",
           "create_note": "Izveidot piezīmi",
-          "append_note": "Pievienot piezīmei"
+          "append_to_note": "Pievienot piezīmei",
+          "update_properties": "Atjaunināt rekvizītus",
+          "read_canvas": "Lasīt audeklu",
+          "update_canvas": "Atjaunināt audeklu",
+          "read_pdf": "Lasīt PDF",
+          "find_notes_by_tag": "Atrast piezīmes pēc birkas",
+          "resolve_link": "Atrisināt saiti",
+          "make_link": "Izveidot saiti"
         }
       },
       "mcpTools": {

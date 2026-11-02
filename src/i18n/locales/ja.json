@@ -269,6 +269,27 @@
           },
           "appendNote": {
             "desc": "既存のノートに内容を追記します"
+          },
+          "updateProperties": {
+            "desc": "ノートのプロパティを変更する提案を作成"
+          },
+          "readCanvas": {
+            "desc": "キャンバスのカードとつながりを読む"
+          },
+          "updateCanvas": {
+            "desc": "キャンバスを変更する提案を作成"
+          },
+          "readPdf": {
+            "desc": "保管庫内の PDF のテキストを抽出"
+          },
+          "findNotesByTag": {
+            "desc": "タグが付いたノートを探す"
+          },
+          "resolveLink": {
+            "desc": "リンク先のノートと見出しを特定"
+          },
+          "makeLink": {
+            "desc": "リンク設定に従ってノートへのリンクを作成"
           }
         },
         "infoTitle": "ツールについて",
@@ -279,7 +300,14 @@
           "list_files": "ファイルを一覧表示",
           "search_files": "ファイルを検索",
           "create_note": "ノートを作成",
-          "append_note": "ノートに追記"
+          "append_to_note": "ノートに追記",
+          "update_properties": "プロパティを更新",
+          "read_canvas": "キャンバスを読む",
+          "update_canvas": "キャンバスを更新",
+          "read_pdf": "PDF を読む",
+          "find_notes_by_tag": "タグでノートを探す",
+          "resolve_link": "リンクを解決",
+          "make_link": "リンクを作成"
         }
       },
       "mcpTools": {

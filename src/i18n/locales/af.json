@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Voeg inhoud by 'n bestaande nota"
+          },
+          "updateProperties": {
+            "desc": "Berei 'n voorstel voor om 'n nota se eienskappe te verander"
+          },
+          "readCanvas": {
+            "desc": "Lees die kaarte en verbindings van 'n doek"
+          },
+          "updateCanvas": {
+            "desc": "Berei 'n voorstel voor om 'n doek te verander"
+          },
+          "readPdf": {
+            "desc": "Onttrek die teks van 'n PDF in jou kluis"
+          },
+          "findNotesByTag": {
+            "desc": "Vind notas wat 'n etiket dra"
+          },
+          "resolveLink": {
+            "desc": "Vind die nota en opskrif waarna 'n skakel wys"
+          },
+          "makeLink": {
+            "desc": "Bou 'n skakel na 'n nota met jou skakelinstellings"
           }
         },
         "infoTitle": "oor gereedskap",
@@ -294,7 +315,14 @@
           "list_files": "Lys Lêers",
           "search_files": "Soek Lêers",
           "create_note": "Skep Nota",
-          "append_note": "Voeg by Nota"
+          "append_to_note": "Voeg by Nota",
+          "update_properties": "Werk eienskappe by",
+          "read_canvas": "Lees doek",
+          "update_canvas": "Werk doek by",
+          "read_pdf": "Lees PDF",
+          "find_notes_by_tag": "Vind notas volgens etiket",
+          "resolve_link": "Los skakel op",
+          "make_link": "Maak skakel"
         }
       },
       "mcpTools": {

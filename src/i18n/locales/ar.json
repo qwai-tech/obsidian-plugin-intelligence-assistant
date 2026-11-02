@@ -344,6 +344,27 @@
           },
           "appendNote": {
             "desc": "إلحاق محتوى بملاحظة موجودة"
+          },
+          "updateProperties": {
+            "desc": "إعداد اقتراح لتغيير خصائص ملاحظة"
+          },
+          "readCanvas": {
+            "desc": "قراءة بطاقات اللوحة وروابطها"
+          },
+          "updateCanvas": {
+            "desc": "إعداد اقتراح لتغيير لوحة"
+          },
+          "readPdf": {
+            "desc": "استخراج نص ملف PDF في خزنتك"
+          },
+          "findNotesByTag": {
+            "desc": "البحث عن الملاحظات التي تحمل وسمًا"
+          },
+          "resolveLink": {
+            "desc": "العثور على الملاحظة والعنوان اللذين يشير إليهما الرابط"
+          },
+          "makeLink": {
+            "desc": "إنشاء رابط إلى ملاحظة وفق إعدادات الروابط لديك"
           }
         },
         "infoTitle": "حول الأدوات",
@@ -354,7 +375,14 @@
           "list_files": "سرد الملفات",
           "search_files": "البحث في الملفات",
           "create_note": "إنشاء ملاحظة",
-          "append_note": "إلحاق ملاحظة"
+          "append_to_note": "إلحاق ملاحظة",
+          "update_properties": "تحديث الخصائص",
+          "read_canvas": "قراءة اللوحة",
+          "update_canvas": "تحديث اللوحة",
+          "read_pdf": "قراءة PDF",
+          "find_notes_by_tag": "البحث عن ملاحظات حسب الوسم",
+          "resolve_link": "تحليل الرابط",
+          "make_link": "إنشاء رابط"
         }
       },
       "mcpTools": {

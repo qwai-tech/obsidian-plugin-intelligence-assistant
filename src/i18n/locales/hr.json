@@ -299,6 +299,27 @@
           },
           "appendNote": {
             "desc": "Dodaj sadržaj postojećoj bilješci"
+          },
+          "updateProperties": {
+            "desc": "Pripremi prijedlog za promjenu svojstava bilješke"
+          },
+          "readCanvas": {
+            "desc": "Čitaj kartice i veze platna"
+          },
+          "updateCanvas": {
+            "desc": "Pripremi prijedlog za promjenu platna"
+          },
+          "readPdf": {
+            "desc": "Izdvoji tekst PDF-a iz trezora"
+          },
+          "findNotesByTag": {
+            "desc": "Pronađi bilješke s oznakom"
+          },
+          "resolveLink": {
+            "desc": "Pronađi bilješku i naslov na koje poveznica pokazuje"
+          },
+          "makeLink": {
+            "desc": "Napravi poveznicu na bilješku prema tvojim postavkama poveznica"
           }
         },
         "infoTitle": "o alatima",
@@ -309,7 +330,14 @@
           "list_files": "Prikaži datoteke",
           "search_files": "Pretraži datoteke",
           "create_note": "Stvori bilješku",
-          "append_note": "Dodaj u bilješku"
+          "append_to_note": "Dodaj u bilješku",
+          "update_properties": "Ažuriraj svojstva",
+          "read_canvas": "Čitaj platno",
+          "update_canvas": "Ažuriraj platno",
+          "read_pdf": "Čitaj PDF",
+          "find_notes_by_tag": "Pronađi bilješke po oznaci",
+          "resolve_link": "Razriješi poveznicu",
+          "make_link": "Napravi poveznicu"
         }
       },
       "mcpTools": {

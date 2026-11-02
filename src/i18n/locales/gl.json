@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Engadir contido a unha nota existente"
+          },
+          "updateProperties": {
+            "desc": "Preparar unha proposta para cambiar as propiedades dunha nota"
+          },
+          "readCanvas": {
+            "desc": "Ler as tarxetas e conexións dun lenzo"
+          },
+          "updateCanvas": {
+            "desc": "Preparar unha proposta para cambiar un lenzo"
+          },
+          "readPdf": {
+            "desc": "Extraer o texto dun PDF da túa caixa forte"
+          },
+          "findNotesByTag": {
+            "desc": "Buscar as notas que teñen unha etiqueta"
+          },
+          "resolveLink": {
+            "desc": "Atopar a nota e o encabezado aos que apunta unha ligazón"
+          },
+          "makeLink": {
+            "desc": "Crear unha ligazón a unha nota segundo a túa configuración de ligazóns"
           }
         },
         "infoTitle": "sobre as ferramentas",
@@ -294,7 +315,14 @@
           "list_files": "Listar ficheiros",
           "search_files": "Buscar ficheiros",
           "create_note": "Crear nota",
-          "append_note": "Engadir nota"
+          "append_to_note": "Engadir nota",
+          "update_properties": "Actualizar propiedades",
+          "read_canvas": "Ler lenzo",
+          "update_canvas": "Actualizar lenzo",
+          "read_pdf": "Ler PDF",
+          "find_notes_by_tag": "Buscar notas por etiqueta",
+          "resolve_link": "Resolver ligazón",
+          "make_link": "Crear ligazón"
         }
       },
       "mcpTools": {

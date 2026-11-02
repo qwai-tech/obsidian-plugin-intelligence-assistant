@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Lägg till innehåll i en befintlig anteckning"
+          },
+          "updateProperties": {
+            "desc": "Förbered ett förslag om att ändra en antecknings egenskaper"
+          },
+          "readCanvas": {
+            "desc": "Läs korten och kopplingarna på en canvas"
+          },
+          "updateCanvas": {
+            "desc": "Förbered ett förslag om att ändra en canvas"
+          },
+          "readPdf": {
+            "desc": "Extrahera texten i en PDF i ditt valv"
+          },
+          "findNotesByTag": {
+            "desc": "Hitta anteckningar med en tagg"
+          },
+          "resolveLink": {
+            "desc": "Hitta anteckningen och rubriken som en länk pekar på"
+          },
+          "makeLink": {
+            "desc": "Skapa en länk till en anteckning enligt dina länkinställningar"
           }
         },
         "infoTitle": "om verktyg",
@@ -294,7 +315,14 @@
           "list_files": "Lista filer",
           "search_files": "Sök filer",
           "create_note": "Skapa anteckning",
-          "append_note": "Lägg till i anteckning"
+          "append_to_note": "Lägg till i anteckning",
+          "update_properties": "Uppdatera egenskaper",
+          "read_canvas": "Läs canvas",
+          "update_canvas": "Uppdatera canvas",
+          "read_pdf": "Läs PDF",
+          "find_notes_by_tag": "Hitta anteckningar efter tagg",
+          "resolve_link": "Slå upp länk",
+          "make_link": "Skapa länk"
         }
       },
       "mcpTools": {

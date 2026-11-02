@@ -284,6 +284,27 @@
           },
           "appendNote": {
             "desc": "Lisää sisältöä olemassa olevaan muistiinpanoon"
+          },
+          "updateProperties": {
+            "desc": "Valmistele ehdotus muistiinpanon ominaisuuksien muuttamisesta"
+          },
+          "readCanvas": {
+            "desc": "Lue kankaan kortit ja yhteydet"
+          },
+          "updateCanvas": {
+            "desc": "Valmistele ehdotus kankaan muuttamisesta"
+          },
+          "readPdf": {
+            "desc": "Pura holvissa olevan PDF:n teksti"
+          },
+          "findNotesByTag": {
+            "desc": "Etsi muistiinpanot, joilla on tunniste"
+          },
+          "resolveLink": {
+            "desc": "Etsi muistiinpano ja otsikko, johon linkki osoittaa"
+          },
+          "makeLink": {
+            "desc": "Luo linkki muistiinpanoon linkkiasetustesi mukaan"
           }
         },
         "infoTitle": "tietoa työkaluista",
@@ -294,7 +315,14 @@
           "list_files": "Listaa tiedostot",
           "search_files": "Hae tiedostoja",
           "create_note": "Luo muistiinpano",
-          "append_note": "Lisää muistiinpanoon"
+          "append_to_note": "Lisää muistiinpanoon",
+          "update_properties": "Päivitä ominaisuudet",
+          "read_canvas": "Lue kangas",
+          "update_canvas": "Päivitä kangas",
+          "read_pdf": "Lue PDF",
+          "find_notes_by_tag": "Etsi muistiinpanoja tunnisteella",
+          "resolve_link": "Selvitä linkki",
+          "make_link": "Luo linkki"
         }
       },
       "mcpTools": {

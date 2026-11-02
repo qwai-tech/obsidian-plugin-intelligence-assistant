@@ -269,6 +269,27 @@
           },
           "appendNote": {
             "desc": "Thêm nội dung vào cuối một ghi chú hiện có"
+          },
+          "updateProperties": {
+            "desc": "Chuẩn bị đề xuất thay đổi thuộc tính của ghi chú"
+          },
+          "readCanvas": {
+            "desc": "Đọc các thẻ và liên kết của một canvas"
+          },
+          "updateCanvas": {
+            "desc": "Chuẩn bị đề xuất thay đổi một canvas"
+          },
+          "readPdf": {
+            "desc": "Trích xuất văn bản của một PDF trong kho"
+          },
+          "findNotesByTag": {
+            "desc": "Tìm các ghi chú có một thẻ"
+          },
+          "resolveLink": {
+            "desc": "Tìm ghi chú và tiêu đề mà liên kết trỏ tới"
+          },
+          "makeLink": {
+            "desc": "Tạo liên kết tới ghi chú theo cài đặt liên kết của bạn"
           }
         },
         "infoTitle": "về công cụ",
@@ -279,7 +300,14 @@
           "list_files": "Liệt kê tệp",
           "search_files": "Tìm kiếm tệp",
           "create_note": "Tạo ghi chú",
-          "append_note": "Thêm vào ghi chú"
+          "append_to_note": "Thêm vào ghi chú",
+          "update_properties": "Cập nhật thuộc tính",
+          "read_canvas": "Đọc canvas",
+          "update_canvas": "Cập nhật canvas",
+          "read_pdf": "Đọc PDF",
+          "find_notes_by_tag": "Tìm ghi chú theo thẻ",
+          "resolve_link": "Phân giải liên kết",
+          "make_link": "Tạo liên kết"
         }
       },
       "mcpTools": {

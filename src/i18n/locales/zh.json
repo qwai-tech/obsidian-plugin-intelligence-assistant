@@ -269,6 +269,27 @@
           },
           "appendNote": {
             "desc": "生成向现有笔记追加内容的提案"
+          },
+          "updateProperties": {
+            "desc": "准备修改笔记属性的提案"
+          },
+          "readCanvas": {
+            "desc": "读取画布的卡片与连线"
+          },
+          "updateCanvas": {
+            "desc": "准备修改画布的提案"
+          },
+          "readPdf": {
+            "desc": "提取仓库中 PDF 的文本"
+          },
+          "findNotesByTag": {
+            "desc": "查找带有某个标签的笔记"
+          },
+          "resolveLink": {
+            "desc": "找出链接指向的笔记与标题"
+          },
+          "makeLink": {
+            "desc": "按你的链接设置创建指向笔记的链接"
           }
         },
         "infoTitle": "关于工具",
@@ -279,7 +300,14 @@
           "list_files": "列出文件",
           "search_files": "搜索文件",
           "create_note": "创建笔记",
-          "append_note": "追加笔记"
+          "append_to_note": "追加笔记",
+          "update_properties": "更新属性",
+          "read_canvas": "读取画布",
+          "update_canvas": "更新画布",
+          "read_pdf": "读取 PDF",
+          "find_notes_by_tag": "按标签查找笔记",
+          "resolve_link": "解析链接",
+          "make_link": "创建链接"
         }
       },
       "mcpTools": {
