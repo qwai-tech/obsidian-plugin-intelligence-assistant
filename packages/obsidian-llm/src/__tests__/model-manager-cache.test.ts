@@ -86,4 +86,16 @@ describe('ModelManager model cache', () => {
 
 		expect(models.map((m) => m.id)).toEqual(['ollama:qwen3.5:0.8b', 'ollama:unknown']);
 	});
+
+	it.each(['openai', 'custom', 'google', 'deepseek', 'openrouter'])('fails a %s refresh against an endpoint that rejects the request, keeping the stored models', async (provider) => {
+		setDefaultHttpPort({
+			request: jest.fn(async () => ({ status: 404, ok: false, text: 'Not Found', headers: {}, json: undefined })),
+			stream: jest.fn(),
+		} as unknown as HttpPort);
+		const config: LLMConfig = { provider, apiKey: `bad-${provider}`, baseUrl: 'http://127.0.0.1:9/v1', cachedModels: [model('stored')] };
+
+		await expect(ModelManager.getModelsForConfig(config, true)).rejects.toThrow('404');
+
+		expect(config.cachedModels?.map((m) => m.id)).toEqual(['stored']);
+	});
 });

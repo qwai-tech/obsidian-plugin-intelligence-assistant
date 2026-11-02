@@ -59,6 +59,7 @@ export class ModelManager {
 		}
 		switch (config.provider) {
 			case 'openai':
+			case 'custom':
 				return await fetchOpenAIModels(config.apiKey, config.baseUrl);
 			case 'google':
 				return await fetchGoogleModels(config.apiKey, config.baseUrl);
@@ -66,13 +67,6 @@ export class ModelManager {
 				return await fetchDeepSeekModels(config.apiKey, config.baseUrl);
 			case 'openrouter':
 				return await fetchOpenRouterModels(config.apiKey, config.baseUrl);
-			case 'custom':
-				try {
-					return await fetchOpenAIModels(config.apiKey, config.baseUrl);
-				} catch (error) {
-					console.error('Failed to fetch models from custom provider:', error);
-					return [];
-				}
 			default:
 				return [];
 		}
