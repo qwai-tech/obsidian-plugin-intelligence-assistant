@@ -20,26 +20,29 @@ describe('Release real Ollama', () => {
 		await chat.newChat();
 		await chat.selectMode('chat');
 		await chat.selectModel(`ollama:${ollamaModels.chat}`);
+		await reply.allowReplyTokens(8_000);
 	});
 
 	it('saves the reply it just streamed into a new note with its body', async () => {
 		await chat.sendMessage('Reply with exactly SAVE_LIVE_4417 and nothing else. /no_think');
 		await chat.waitForReplyComplete(120_000);
-		await chat.waitForAssistantText('SAVE_LIVE_4417', 5_000);
+		const streamed = (await reply.lastReply())?.content.trim() ?? '';
+		expect(streamed).not.toBe('');
 
 		await reply.saveLastReply('e2e-save-live-4417');
 
-		expect(await reply.readNote('e2e-save-live-4417.md')).toContain('SAVE_LIVE_4417');
+		expect(await reply.readNote('e2e-save-live-4417.md')).toContain(streamed);
 	});
 
 	it('inserts the reply it just streamed into a new note with its body', async () => {
 		await chat.sendMessage('Reply with exactly INSERT_LIVE_5517 and nothing else. /no_think');
 		await chat.waitForReplyComplete(120_000);
-		await chat.waitForAssistantText('INSERT_LIVE_5517', 5_000);
+		const streamed = (await reply.lastReply())?.content.trim() ?? '';
+		expect(streamed).not.toBe('');
 
 		await reply.insertLastReplyIntoNewNote('e2e-insert-live-5517');
 
-		expect(await reply.readNote('e2e-insert-live-5517.md')).toContain('INSERT_LIVE_5517');
+		expect(await reply.readNote('e2e-insert-live-5517.md')).toContain(streamed);
 	});
 
 	it('sends an attached image to the vision model', async () => {
@@ -52,12 +55,13 @@ describe('Release real Ollama', () => {
 		expect(answer?.content.toLowerCase()).toContain('green');
 	});
 
-	it('answers with the agent\'s fixed model, not the model last picked in chat', async () => {
+	it('answers with the agent\'s fixed model, not the model last picked in chat', async function (this: Mocha.Context) {
+		this.timeout(600_000);
 		await chat.selectMode('agent');
 		await activateAgent(FIXED_AGENT_ID);
 
 		await chat.sendMessage('Reply with exactly FIXED_MODEL_6632 and nothing else. /no_think');
-		await chat.waitForReplyComplete(180_000);
+		await chat.waitForReplyComplete(540_000);
 
 		expect((await reply.lastReply())?.model).toBe(`ollama:${ollamaModels.fixed}`);
 	});

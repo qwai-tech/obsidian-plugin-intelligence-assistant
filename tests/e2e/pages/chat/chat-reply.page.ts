@@ -10,12 +10,18 @@ export interface LiveMessage {
 }
 
 interface ChatLeaf {
-	view: { state: { messages: LiveMessage[]; currentAttachments: unknown[] } };
+	view: { state: { messages: LiveMessage[]; currentAttachments: unknown[]; maxTokens: number } };
 }
 
 type ChatWindow = { app: { workspace: { getLeavesOfType(type: string): ChatLeaf[] } } };
 
 export class ChatReplyPage extends BasePage {
+	async allowReplyTokens(maxTokens: number): Promise<void> {
+		await browser.execute((viewType, tokens) => {
+			(window as unknown as ChatWindow).app.workspace.getLeavesOfType(viewType)[0].view.state.maxTokens = tokens;
+		}, PLUGIN_VIEW_TYPE, maxTokens);
+	}
+
 	async attachImage(name: string, dataUrl: string): Promise<void> {
 		await browser.execute((viewType, imageName, content) => {
 			const leaf = (window as unknown as ChatWindow).app.workspace.getLeavesOfType(viewType)[0];
