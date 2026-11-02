@@ -16,7 +16,7 @@ import { ChatInputComponent } from '@/ui/chat/chat-input.component';
 import { ChatSessionController } from '@/ui/chat/chat-session-controller';
 import { openingSession } from '@/features/chat';
 import { MentionSuggest } from '@/ui/suggest/mention-suggest';
-import { internalLinktextFromEvent, triggerHoverLink } from '@/ui/chat/hover-link';
+import { internalLinktextFromEvent, openClickedInternalLink, triggerHoverLink } from '@/ui/chat/hover-link';
 import { RagStatusPanel } from '@/ui/chat/rag-status-panel';
 import { resolveMessageProviderId } from '@/ui/chat/utils/provider-utils';
 import { providerColor } from '@/ui/provider-meta';
@@ -317,6 +317,9 @@ export class ChatView extends ItemView {
 				linktext: hit.linktext,
 				sourcePath: this.app.workspace.getActiveFile()?.path ?? '',
 			});
+		});
+		this.registerDomEvent(this.messageList.element, 'click', (event: MouseEvent) => {
+			openClickedInternalLink(this.app.workspace, event, this.app.workspace.getActiveFile()?.path ?? '');
 		});
 	}
 

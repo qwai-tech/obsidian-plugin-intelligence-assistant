@@ -599,6 +599,10 @@ export function getLanguage(): string {
 }
 
 // Export additional mocks as needed
+export const Keymap = {
+	isModEvent: (event?: MouseEvent | KeyboardEvent | null): boolean => Boolean(event && (event.metaKey || event.ctrlKey)),
+};
+
 export const Platform = {
 	isMobile: false,
 	isDesktop: true,

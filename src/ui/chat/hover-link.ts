@@ -1,4 +1,4 @@
-import type { Component, Workspace } from 'obsidian';
+import { Keymap, type Component, type Workspace } from 'obsidian';
 
 /** The hover-link source id this plugin registers with the Page Preview plugin. */
 export const HOVER_LINK_SOURCE = 'intelligence-assistant';
@@ -65,4 +65,12 @@ export function internalLinktextFromEvent(target: EventTarget | null): { el: HTM
 	const linktext = anchor.getAttribute('data-href') || anchor.textContent || '';
 	if (!linktext.trim()) return null;
 	return { el: anchor, linktext };
+}
+
+export function openClickedInternalLink(workspace: Pick<Workspace, 'openLinkText'>, event: MouseEvent, sourcePath: string): boolean {
+	const hit = internalLinktextFromEvent(event.target);
+	if (!hit) return false;
+	event.preventDefault();
+	void workspace.openLinkText(hit.linktext, sourcePath, Keymap.isModEvent(event));
+	return true;
 }

@@ -3,6 +3,7 @@ import {
 	registerChatHoverLinkSource,
 	triggerHoverLink,
 	internalLinktextFromEvent,
+	openClickedInternalLink,
 } from '@/ui/chat/hover-link';
 
 describe('registerChatHoverLinkSource', () => {
@@ -87,5 +88,44 @@ describe('internalLinktextFromEvent', () => {
 		const div = document.createElement('div');
 		expect(internalLinktextFromEvent(div)).toBeNull();
 		expect(internalLinktextFromEvent(null)).toBeNull();
+	});
+});
+
+describe('openClickedInternalLink', () => {
+	function clickOn(target: HTMLElement, init: MouseEventInit = {}): MouseEvent {
+		const event = new MouseEvent('click', { bubbles: true, cancelable: true, ...init });
+		Object.defineProperty(event, 'target', { value: target });
+		return event;
+	}
+
+	it('opens the note an internal link points to, in place of following its href', () => {
+		const workspace = { openLinkText: jest.fn(async () => undefined) };
+		const anchor = document.createElement('a');
+		anchor.className = 'internal-link';
+		anchor.setAttribute('data-href', 'qa-source');
+		const event = clickOn(anchor);
+
+		expect(openClickedInternalLink(workspace, event, 'chat.md')).toBe(true);
+
+		expect(workspace.openLinkText).toHaveBeenCalledWith('qa-source', 'chat.md', false);
+		expect(event.defaultPrevented).toBe(true);
+	});
+
+	it('opens in a new tab on a modifier click', () => {
+		const workspace = { openLinkText: jest.fn(async () => undefined) };
+		const anchor = document.createElement('a');
+		anchor.className = 'internal-link';
+		anchor.setAttribute('data-href', 'qa-source');
+
+		openClickedInternalLink(workspace, clickOn(anchor, { metaKey: true, ctrlKey: true }), '');
+
+		expect(workspace.openLinkText).toHaveBeenCalledWith('qa-source', '', true);
+	});
+
+	it('ignores clicks outside internal links', () => {
+		const workspace = { openLinkText: jest.fn() };
+
+		expect(openClickedInternalLink(workspace, clickOn(document.createElement('span')), '')).toBe(false);
+		expect(workspace.openLinkText).not.toHaveBeenCalled();
 	});
 });
