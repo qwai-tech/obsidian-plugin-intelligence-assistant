@@ -639,10 +639,6 @@
         "minChunkSize": {
           "name": "Min. darabméret",
           "desc": "Létrehozandó minimális darabméret"
-        },
-        "maxTokens": {
-          "name": "Max. tokenek darabonként",
-          "desc": "Darabonként megengedett maximális tokenek száma"
         }
       },
       "search": {
@@ -659,10 +655,6 @@
         "threshold": {
           "name": "Hasonlósági küszöb",
           "desc": "Az eredmények felvételéhez szükséges minimális hasonlósági pontszám (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Relevancia pontszám súlya",
-          "desc": "A relevancia pontozáshoz használt súly (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Kontextusablak korlát",

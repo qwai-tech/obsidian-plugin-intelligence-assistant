@@ -656,10 +656,6 @@
         "minChunkSize": {
           "name": "Minimalna veličina segmenta",
           "desc": "Minimalna veličina segmenta za stvaranje"
-        },
-        "maxTokens": {
-          "name": "Maksimalni tokeni po segmentu",
-          "desc": "Maksimalni dopušteni tokeni po segmentu"
         }
       },
       "search": {
@@ -676,10 +672,6 @@
         "threshold": {
           "name": "Prag sličnosti",
           "desc": "Minimalni rezultat sličnosti za uključivanje rezultata (0,0-1,0)"
-        },
-        "weight": {
-          "name": "Težina rezultata relevantnosti",
-          "desc": "Težina za bodovanje relevantnosti (0,0-1,0)"
         },
         "contextLimit": {
           "name": "Ograničenje kontekstnog prozora",

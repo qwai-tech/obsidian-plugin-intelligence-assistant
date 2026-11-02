@@ -622,10 +622,6 @@
         "minChunkSize": {
           "name": "Saiz chunk minimum",
           "desc": "Saiz chunk minimum untuk dicipta"
-        },
-        "maxTokens": {
-          "name": "Token maksimum setiap chunk",
-          "desc": "Token maksimum yang dibenarkan setiap chunk"
         }
       },
       "search": {
@@ -642,10 +638,6 @@
         "threshold": {
           "name": "Ambang persamaan",
           "desc": "Skor persamaan minimum untuk memasukkan keputusan (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Pemberat skor relevansi",
-          "desc": "Pemberat untuk pemarkahan relevansi (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Had tetingkap konteks",

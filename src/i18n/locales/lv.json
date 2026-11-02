@@ -656,10 +656,6 @@
         "minChunkSize": {
           "name": "Minimālais daļas lielums",
           "desc": "Minimālais izveidojamais daļas lielums"
-        },
-        "maxTokens": {
-          "name": "Maks. pilnvaru skaits vienā daļā",
-          "desc": "Maksimālais atļautais pilnvaru skaits vienā daļā"
         }
       },
       "search": {
@@ -676,10 +672,6 @@
         "threshold": {
           "name": "Līdzības slieksnis",
           "desc": "Minimālais līdzības rādītājs rezultātu iekļaušanai (0,0–1,0)"
-        },
-        "weight": {
-          "name": "Atbilstības rādītāja svars",
-          "desc": "Svars atbilstības vērtēšanai (0,0–1,0)"
         },
         "contextLimit": {
           "name": "Konteksta loga ierobežojums",

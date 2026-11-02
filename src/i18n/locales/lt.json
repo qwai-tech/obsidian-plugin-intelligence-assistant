@@ -673,10 +673,6 @@
         "minChunkSize": {
           "name": "Minimalus dalies dydis",
           "desc": "Minimalus sukuriamos dalies dydis"
-        },
-        "maxTokens": {
-          "name": "Maks. žetonų skaičius vienoje dalyje",
-          "desc": "Maksimalus leidžiamų žetonų skaičius vienoje dalyje"
         }
       },
       "search": {
@@ -693,10 +689,6 @@
         "threshold": {
           "name": "Panašumo slenkstis",
           "desc": "Minimalus panašumo balas rezultatams įtraukti (0,0–1,0)"
-        },
-        "weight": {
-          "name": "Aktualumo balo svoris",
-          "desc": "Svoris aktualumo vertinimui (0,0–1,0)"
         },
         "contextLimit": {
           "name": "Konteksto lango riba",

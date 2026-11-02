@@ -639,10 +639,6 @@
         "minChunkSize": {
           "name": "Minste delstørrelse",
           "desc": "Minste delstørrelse som opprettes"
-        },
-        "maxTokens": {
-          "name": "Maks tokens per del",
-          "desc": "Maksimalt antall tokens tillatt per del"
         }
       },
       "search": {
@@ -659,10 +655,6 @@
         "threshold": {
           "name": "Likhetsterskel",
           "desc": "Minimums likhetspoengsum for å inkludere resultater (0,0–1,0)"
-        },
-        "weight": {
-          "name": "Relevanspoengsumvekt",
-          "desc": "Vekt for relevansskåring (0,0–1,0)"
         },
         "contextLimit": {
           "name": "Kontekstvindusbegrensning",

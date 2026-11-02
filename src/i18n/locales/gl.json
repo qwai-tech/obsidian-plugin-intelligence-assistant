@@ -639,10 +639,6 @@
         "minChunkSize": {
           "name": "Tamaño mínimo de fragmento",
           "desc": "Tamaño mínimo de fragmento a crear"
-        },
-        "maxTokens": {
-          "name": "Máximo de tokens por fragmento",
-          "desc": "Máximo de tokens permitidos por fragmento"
         }
       },
       "search": {
@@ -659,10 +655,6 @@
         "threshold": {
           "name": "Limiar de similitud",
           "desc": "Puntuación mínima de similitud para incluír resultados (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Peso da puntuación de relevancia",
-          "desc": "Peso para a puntuación de relevancia (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Límite da xanela de contexto",

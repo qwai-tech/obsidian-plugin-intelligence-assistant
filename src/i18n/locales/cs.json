@@ -673,10 +673,6 @@
         "minChunkSize": {
           "name": "Minimální velikost bloku",
           "desc": "Minimální velikost bloku k vytvoření"
-        },
-        "maxTokens": {
-          "name": "Max. tokenů na blok",
-          "desc": "Maximální povolený počet tokenů na blok"
         }
       },
       "search": {
@@ -693,10 +689,6 @@
         "threshold": {
           "name": "Práh podobnosti",
           "desc": "Minimální skóre podobnosti pro zahrnutí výsledků (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Váha skóre relevance",
-          "desc": "Váha pro hodnocení relevance (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Limit kontextového okna",

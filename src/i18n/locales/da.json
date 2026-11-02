@@ -639,10 +639,6 @@
         "minChunkSize": {
           "name": "Minimum fragmentstørrelse",
           "desc": "Minimum fragmentstørrelse der skal oprettes"
-        },
-        "maxTokens": {
-          "name": "Maks. tokens pr. fragment",
-          "desc": "Maksimalt antal tokens tilladt pr. fragment"
         }
       },
       "search": {
@@ -659,10 +655,6 @@
         "threshold": {
           "name": "Lighedstærskel",
           "desc": "Minimum lighedsscore for at inkludere resultater (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Relevansscorevægt",
-          "desc": "Vægt til relevansscoring (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Kontekstvinduegrænse",

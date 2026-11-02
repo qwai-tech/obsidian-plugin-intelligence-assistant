@@ -1,6 +1,7 @@
 import { App, TFile, Notice, getAllTags } from 'obsidian';
 import { isIndexable } from '@/core/rag-index-filter';
 import type { RAGConfig, RAGSource } from '@/features/knowledge';
+import { fitContextBudget } from './context-budget';
 import type { LLMConfig } from '@/features/llm';
 import { VectorStore } from './vector-store';
 import type { SearchResult } from './rag-types';
@@ -140,12 +141,12 @@ export class RAGManager {
 
   async search(query: string, chatModel?: string, defaultModel?: string): Promise<RAGSource[]> {
     const results = await this.query(query, chatModel, defaultModel);
-    return results.map(result => ({
+    return fitContextBudget(results.map(result => ({
       path: result.chunk.metadata.path,
       content: result.chunk.content,
       similarity: result.similarity,
       title: result.chunk.metadata.title,
-    }));
+    })), this.config.contextWindowLimit);
   }
 
   private async query(query: string, chatModel?: string, defaultModel?: string): Promise<SearchResult[]> {

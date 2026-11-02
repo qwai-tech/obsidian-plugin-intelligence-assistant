@@ -131,10 +131,6 @@ function renderChunkingSettings(containerEl: HTMLElement, plugin: PluginHost): v
 		label: t('settings.rag.chunking.minChunkSize.name'),
 		description: t('settings.rag.chunking.minChunkSize.desc'),
 	}, { placeholder: '100', integer: true, min: 1 });
-	form.number('maxTokensPerChunk', {
-		label: t('settings.rag.chunking.maxTokens.name'),
-		description: t('settings.rag.chunking.maxTokens.desc'),
-	}, { placeholder: '512', integer: true, min: 1 });
 }
 
 function renderSearchSettings(containerEl: HTMLElement, plugin: PluginHost): void {
@@ -154,10 +150,6 @@ function renderSearchSettings(containerEl: HTMLElement, plugin: PluginHost): voi
 		label: t('settings.rag.search.threshold.name'),
 		description: t('settings.rag.search.threshold.desc'),
 	}, { placeholder: '0.7', min: 0, max: 1 });
-	form.number('relevanceScoreWeight', {
-		label: t('settings.rag.search.weight.name'),
-		description: t('settings.rag.search.weight.desc'),
-	}, { placeholder: '0.5', min: 0, max: 1 });
 	form.number('contextWindowLimit', {
 		label: t('settings.rag.search.contextLimit.name'),
 		description: t('settings.rag.search.contextLimit.desc'),

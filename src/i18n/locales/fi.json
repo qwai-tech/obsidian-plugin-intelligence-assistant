@@ -639,10 +639,6 @@
         "minChunkSize": {
           "name": "Pienin palakoko",
           "desc": "Luotavan palan vähimmäiskoko"
-        },
-        "maxTokens": {
-          "name": "Enimmäistokenit per pala",
-          "desc": "Suurin sallittu tokenien määrä per pala"
         }
       },
       "search": {
@@ -659,10 +655,6 @@
         "threshold": {
           "name": "Samankaltaisuuskynnys",
           "desc": "Vähimmäissamankaltaisuuspisteet tulosten sisällyttämiseen (0,0–1,0)"
-        },
-        "weight": {
-          "name": "Osuvuuspistepaino",
-          "desc": "Paino osuvuuspisteytystä varten (0,0–1,0)"
         },
         "contextLimit": {
           "name": "Konteksti-ikkunan raja",

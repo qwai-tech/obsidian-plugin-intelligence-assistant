@@ -639,10 +639,6 @@
         "minChunkSize": {
           "name": "Min chunk size",
           "desc": "Minimum chunk size to create"
-        },
-        "maxTokens": {
-          "name": "Max tokens per chunk",
-          "desc": "Maximum tokens allowed per chunk"
         }
       },
       "search": {
@@ -659,10 +655,6 @@
         "threshold": {
           "name": "Similarity threshold",
           "desc": "Minimum similarity score to include results (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Relevance score weight",
-          "desc": "Weight for relevance scoring (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Context window limit",

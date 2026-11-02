@@ -622,10 +622,6 @@
         "minChunkSize": {
           "name": "最小块大小",
           "desc": "要创建的最小块大小"
-        },
-        "maxTokens": {
-          "name": "每块最大 Token 数",
-          "desc": "每块允许的最大 Token 数"
         }
       },
       "search": {
@@ -642,10 +638,6 @@
         "threshold": {
           "name": "相似度阈值",
           "desc": "包含结果的最低相似度分数（0.0-1.0）"
-        },
-        "weight": {
-          "name": "相关性分数权重",
-          "desc": "相关性评分的权重（0.0-1.0）"
         },
         "contextLimit": {
           "name": "上下文窗口限制",

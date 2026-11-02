@@ -639,10 +639,6 @@
         "minChunkSize": {
           "name": "Minsta chunkstorlek",
           "desc": "Minsta chunkstorlek att skapa"
-        },
-        "maxTokens": {
-          "name": "Max tokens per chunk",
-          "desc": "Maximalt antal tokens tillåtna per chunk"
         }
       },
       "search": {
@@ -659,10 +655,6 @@
         "threshold": {
           "name": "Likhetströskel",
           "desc": "Minsta likhetsvärde för att inkludera resultat (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Relevansvikts",
-          "desc": "Vikt för relevansbedömning (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Kontextfönstergräns",

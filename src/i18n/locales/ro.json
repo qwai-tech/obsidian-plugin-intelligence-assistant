@@ -656,10 +656,6 @@
         "minChunkSize": {
           "name": "Dimensiune minimă segment",
           "desc": "Dimensiunea minimă de creare a unui segment"
-        },
-        "maxTokens": {
-          "name": "Tokeni maximi pe segment",
-          "desc": "Tokeni maximi permisi pe segment"
         }
       },
       "search": {
@@ -676,10 +672,6 @@
         "threshold": {
           "name": "Prag de similaritate",
           "desc": "Scor minim de similaritate pentru includerea rezultatelor (0,0-1,0)"
-        },
-        "weight": {
-          "name": "Greutate scor relevanță",
-          "desc": "Greutatea pentru scorarea relevanței (0,0-1,0)"
         },
         "contextLimit": {
           "name": "Limita ferestrei de context",

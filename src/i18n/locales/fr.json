@@ -656,10 +656,6 @@
         "minChunkSize": {
           "name": "Taille minimale du fragment",
           "desc": "Taille minimale du fragment à créer"
-        },
-        "maxTokens": {
-          "name": "Tokens max par fragment",
-          "desc": "Nombre maximum de tokens autorisés par fragment"
         }
       },
       "search": {
@@ -676,10 +672,6 @@
         "threshold": {
           "name": "Seuil de similarité",
           "desc": "Score de similarité minimum pour inclure les résultats (0,0-1,0)"
-        },
-        "weight": {
-          "name": "Pondération du score de pertinence",
-          "desc": "Pondération pour le score de pertinence (0,0-1,0)"
         },
         "contextLimit": {
           "name": "Limite de la fenêtre de contexte",

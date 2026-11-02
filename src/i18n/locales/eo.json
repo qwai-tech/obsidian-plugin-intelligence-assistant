@@ -639,10 +639,6 @@
         "minChunkSize": {
           "name": "Minimuma fragmentogrando",
           "desc": "Minimuma fragmentogrando por krei"
-        },
-        "maxTokens": {
-          "name": "Maks. ĵetonoj por fragmento",
-          "desc": "Maksimuma permesita nombro da ĵetonoj por fragmento"
         }
       },
       "search": {
@@ -659,10 +655,6 @@
         "threshold": {
           "name": "Similecosojlo",
           "desc": "Minimuma similecpunkto por inkludi rezultojn (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Relevancpunkta pezo",
-          "desc": "Pezo por relevancpunktado (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Kuntekstofenestra limo",

@@ -622,10 +622,6 @@
         "minChunkSize": {
           "name": "Kích thước đoạn tối thiểu",
           "desc": "Kích thước đoạn tối thiểu cần tạo"
-        },
-        "maxTokens": {
-          "name": "Token tối đa mỗi đoạn",
-          "desc": "Số token tối đa cho phép mỗi đoạn"
         }
       },
       "search": {
@@ -642,10 +638,6 @@
         "threshold": {
           "name": "Ngưỡng tương đồng",
           "desc": "Điểm tương đồng tối thiểu để đưa vào kết quả (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Trọng số điểm liên quan",
-          "desc": "Trọng số cho tính điểm liên quan (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Giới hạn cửa sổ ngữ cảnh",

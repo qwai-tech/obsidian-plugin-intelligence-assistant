@@ -294,6 +294,19 @@ describe('RAGManager', () => {
 		expect(await manager.search('query')).toEqual([{ path: 'notes/a.md', content: 'Body', similarity: 0.8, title: 'A' }]);
 	});
 
+	it('search keeps the retrieved context within the context window limit', async () => {
+		const manager = new RAGManager(makeApp() as any, makeConfig({ contextWindowLimit: 10 }), [{ provider: 'openai', apiKey: 'k' }] as any, STORE_PATH);
+		(manager as any).vectorStore.search = jest.fn(async () => [
+			{ chunk: { id: 'c1', content: 'a'.repeat(30), metadata: { path: 'a.md', title: 'A', source: 'vault', timestamp: 1 } }, similarity: 0.9 },
+			{ chunk: { id: 'c2', content: 'b'.repeat(30), metadata: { path: 'b.md', title: 'B', source: 'vault', timestamp: 1 } }, similarity: 0.8 },
+			{ chunk: { id: 'c3', content: 'c'.repeat(30), metadata: { path: 'c.md', title: 'C', source: 'vault', timestamp: 1 } }, similarity: 0.7 },
+		]);
+
+		const sources = await manager.search('query');
+
+		expect(sources.map(source => [source.path, source.content.length])).toEqual([['a.md', 30], ['b.md', 10]]);
+	});
+
 	it('search returns nothing when RAG is disabled', async () => {
 		const manager = new RAGManager(makeApp() as any, makeConfig({ enabled: false }), [{ provider: 'openai', apiKey: 'k' }] as any, STORE_PATH);
 		(manager as any).vectorStore.search = jest.fn();

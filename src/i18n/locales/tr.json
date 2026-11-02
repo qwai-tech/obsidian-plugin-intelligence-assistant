@@ -639,10 +639,6 @@
         "minChunkSize": {
           "name": "Min parça boyutu",
           "desc": "Oluşturulacak minimum parça boyutu"
-        },
-        "maxTokens": {
-          "name": "Parça başına maksimum token",
-          "desc": "Parça başına izin verilen maksimum token sayısı"
         }
       },
       "search": {
@@ -659,10 +655,6 @@
         "threshold": {
           "name": "Benzerlik eşiği",
           "desc": "Sonuçları dahil etmek için minimum benzerlik puanı (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Alaka puanı ağırlığı",
-          "desc": "Alaka puanlaması için ağırlık (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Bağlam penceresi sınırı",

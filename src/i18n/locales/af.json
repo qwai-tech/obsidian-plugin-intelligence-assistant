@@ -639,10 +639,6 @@
         "minChunkSize": {
           "name": "Min. stukkie-grootte",
           "desc": "Minimum stukkie-grootte om te skep"
-        },
-        "maxTokens": {
-          "name": "Maks. tokens per stukkie",
-          "desc": "Maksimum tokens toegelaat per stukkie"
         }
       },
       "search": {
@@ -659,10 +655,6 @@
         "threshold": {
           "name": "Gelykenis-drempelwaarde",
           "desc": "Minimum gelykenistelling om resultate in te sluit (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Relevansiepuntetelling-gewig",
-          "desc": "Gewig vir relevansiepuntetelling (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Konteksvenster-limiet",

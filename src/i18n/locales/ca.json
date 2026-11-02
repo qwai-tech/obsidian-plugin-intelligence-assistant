@@ -656,10 +656,6 @@
         "minChunkSize": {
           "name": "Mida mínima del segment",
           "desc": "Mida mínima del segment a crear"
-        },
-        "maxTokens": {
-          "name": "Màxim de tokens per segment",
-          "desc": "Màxim de tokens permesos per segment"
         }
       },
       "search": {
@@ -676,10 +672,6 @@
         "threshold": {
           "name": "Llindar de similitud",
           "desc": "Puntuació mínima de similitud per incloure resultats (0,0-1,0)"
-        },
-        "weight": {
-          "name": "Pes de la puntuació de rellevància",
-          "desc": "Pes per a la puntuació de rellevància (0,0-1,0)"
         },
         "contextLimit": {
           "name": "Límit de la finestra de context",

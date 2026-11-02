@@ -639,10 +639,6 @@
         "minChunkSize": {
           "name": "Gutxieneko zatigune-tamaina",
           "desc": "Sortu beharreko gutxieneko zatigune-tamaina"
-        },
-        "maxTokens": {
-          "name": "Gehieneko tokenak zatigune bakoitzeko",
-          "desc": "Gehieneko token kopurua zatigune bakoitzeko"
         }
       },
       "search": {
@@ -659,10 +655,6 @@
         "threshold": {
           "name": "Antzekotasun-atalasea",
           "desc": "Emaitzak sartzeko gutxieneko antzekotasun-puntuazioa (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Garrantzi-puntuazioaren pisua",
-          "desc": "Garrantzi-puntuazioaren pisua (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Testuinguru-leihoaren muga",

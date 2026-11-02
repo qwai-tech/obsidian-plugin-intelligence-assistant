@@ -673,10 +673,6 @@
         "minChunkSize": {
           "name": "Minimalny rozmiar fragmentu",
           "desc": "Minimalny rozmiar fragmentu do utworzenia"
-        },
-        "maxTokens": {
-          "name": "Maks. tokenów na fragment",
-          "desc": "Maksymalna liczba tokenów dozwolona na fragment"
         }
       },
       "search": {
@@ -693,10 +689,6 @@
         "threshold": {
           "name": "Próg podobieństwa",
           "desc": "Minimalny wynik podobieństwa do uwzględnienia wyników (0.0-1.0)"
-        },
-        "weight": {
-          "name": "Waga wyniku trafności",
-          "desc": "Waga dla oceny trafności (0.0-1.0)"
         },
         "contextLimit": {
           "name": "Limit okna kontekstu",
