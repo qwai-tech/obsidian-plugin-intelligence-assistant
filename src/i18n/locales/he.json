@@ -1130,6 +1130,7 @@
         "selectAll": "בחר הכל",
         "selectNone": "בטל בחירה",
         "addSelected": "הוסף נבחרים",
+        "addSelectedCount": "הוסף נבחרים ({{n}})",
         "noResults": "לא נמצאו תמונות תואמות."
       },
       "reference": {
@@ -1138,6 +1139,7 @@
         "selectAll": "בחר הכל",
         "selectNone": "בטל בחירה",
         "addSelected": "הוסף נבחרים",
+        "addSelectedCount": "הוסף נבחרים ({{n}})",
         "noResults": "לא נמצאו קבצים או תיקיות תואמים."
       },
       "insertNote": {

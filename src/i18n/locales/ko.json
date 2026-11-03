@@ -1088,6 +1088,7 @@
         "selectAll": "모두 선택",
         "selectNone": "선택 해제",
         "addSelected": "선택한 항목 추가",
+        "addSelectedCount": "선택한 항목 추가 ({{n}})",
         "noResults": "일치하는 이미지를 찾을 수 없습니다."
       },
       "reference": {
@@ -1096,6 +1097,7 @@
         "selectAll": "모두 선택",
         "selectNone": "선택 해제",
         "addSelected": "선택한 항목 추가",
+        "addSelectedCount": "선택한 항목 추가 ({{n}})",
         "noResults": "일치하는 파일 또는 폴더를 찾을 수 없습니다."
       },
       "insertNote": {

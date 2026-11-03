@@ -10,7 +10,6 @@ function openPicker(onChoose: (items: Note[]) => void = jest.fn()): PathPickerMo
 	const modal = new PathPickerModal<Note>(new App() as never, {
 		textKeys: 'chat.modals.reference',
 		modalClass: 'searchable-reference-modal',
-		itemClass: 'reference-item',
 		items: NOTES,
 		iconOf: () => 'file-text',
 		onChoose,
@@ -20,7 +19,7 @@ function openPicker(onChoose: (items: Note[]) => void = jest.fn()): PathPickerMo
 }
 
 const rows = (modal: PathPickerModal<Note>) => Array.from(modal.contentEl.querySelectorAll<HTMLElement>('.ia-modal-list-item'));
-const button = (modal: PathPickerModal<Note>, text: string) => Array.from(modal.contentEl.querySelectorAll('button')).find(candidate => candidate.textContent === text)!;
+const button = (modal: PathPickerModal<Note>, text: string) => Array.from(modal.contentEl.querySelectorAll('button')).find(candidate => candidate.textContent === text || candidate.textContent?.startsWith(`${text} (`))!;
 
 function search(modal: PathPickerModal<Note>, query: string): void {
 	const input = modal.contentEl.querySelector('input')!;
@@ -111,5 +110,16 @@ describe('PathPickerModal', () => {
 		button(modal, 'Add selected').click();
 
 		expect(onChoose).toHaveBeenCalledWith([{ path: 'other.md' }, { path: 'qa-source.md' }, { path: 'qa-source-two.md' }]);
+	});
+
+	it('marks selected results and counts them on the add button', () => {
+		const modal = openPicker();
+
+		rows(modal)[0].click();
+		rows(modal)[2].click();
+
+		expect(rows(modal).map(row => row.querySelector('.ia-modal-list-check')?.childElementCount ?? 0).map(count => count > 0)).toEqual([true, false, true]);
+		expect(button(modal, 'Add selected (2)')).toBeDefined();
+		expect(rows(modal).some(row => row.classList.contains('reference-item'))).toBe(false);
 	});
 });

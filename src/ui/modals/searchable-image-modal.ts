@@ -8,7 +8,6 @@ export class SearchableImageModal extends PathPickerModal<TFile> {
 		super(app, {
 			textKeys: 'chat.modals.image',
 			modalClass: 'searchable-image-modal',
-			itemClass: 'image-item',
 			items: app.vault.getFiles().filter(file => IMAGE_EXTENSIONS.has(file.extension)),
 			iconOf: () => 'image',
 			onChoose: onChooseFiles,

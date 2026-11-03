@@ -1109,6 +1109,7 @@
         "selectAll": "سب منتخب کریں",
         "selectNone": "کوئی نہیں",
         "addSelected": "منتخب شامل کریں",
+        "addSelectedCount": "منتخب شامل کریں ({{n}})",
         "noResults": "کوئی مطابقت رکھنے والی تصویر نہیں ملی۔"
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "سب منتخب کریں",
         "selectNone": "کوئی نہیں",
         "addSelected": "منتخب شامل کریں",
+        "addSelectedCount": "منتخب شامل کریں ({{n}})",
         "noResults": "کوئی مطابقت رکھنے والی فائل یا فولڈر نہیں ملا۔"
       },
       "insertNote": {

@@ -1109,6 +1109,7 @@
         "selectAll": "Select all",
         "selectNone": "Select none",
         "addSelected": "Add selected",
+        "addSelectedCount": "Add selected ({{n}})",
         "noResults": "No matching images found."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Select all",
         "selectNone": "Select none",
         "addSelected": "Add selected",
+        "addSelectedCount": "Add selected ({{n}})",
         "noResults": "No matching files or folders found."
       },
       "insertNote": {

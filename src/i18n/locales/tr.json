@@ -1109,6 +1109,7 @@
         "selectAll": "Tümünü seç",
         "selectNone": "Hiçbirini seçme",
         "addSelected": "Seçilenleri ekle",
+        "addSelectedCount": "Seçilenleri ekle ({{n}})",
         "noResults": "Eşleşen görsel bulunamadı."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Tümünü seç",
         "selectNone": "Hiçbirini seçme",
         "addSelected": "Seçilenleri ekle",
+        "addSelectedCount": "Seçilenleri ekle ({{n}})",
         "noResults": "Eşleşen dosya veya klasör bulunamadı."
       },
       "insertNote": {

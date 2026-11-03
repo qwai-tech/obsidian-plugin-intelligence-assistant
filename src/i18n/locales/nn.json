@@ -1109,6 +1109,7 @@
         "selectAll": "Vel alle",
         "selectNone": "Vel ingen",
         "addSelected": "Legg til valde",
+        "addSelectedCount": "Legg til valde ({{n}})",
         "noResults": "Ingen samsvarande bilete funne."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Vel alle",
         "selectNone": "Vel ingen",
         "addSelected": "Legg til valde",
+        "addSelectedCount": "Legg til valde ({{n}})",
         "noResults": "Ingen samsvarande filer eller mapper funne."
       },
       "insertNote": {

@@ -1088,6 +1088,7 @@
         "selectAll": "Pilih semua",
         "selectNone": "Nyahpilih semua",
         "addSelected": "Tambah yang dipilih",
+        "addSelectedCount": "Tambah yang dipilih ({{n}})",
         "noResults": "Tiada gambar yang sepadan dijumpai."
       },
       "reference": {
@@ -1096,6 +1097,7 @@
         "selectAll": "Pilih semua",
         "selectNone": "Nyahpilih semua",
         "addSelected": "Tambah yang dipilih",
+        "addSelectedCount": "Tambah yang dipilih ({{n}})",
         "noResults": "Tiada fail atau folder yang sepadan dijumpai."
       },
       "insertNote": {

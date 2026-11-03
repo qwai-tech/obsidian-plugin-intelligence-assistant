@@ -1151,6 +1151,7 @@
         "selectAll": "Zaznacz wszystkie",
         "selectNone": "Odznacz wszystkie",
         "addSelected": "Dodaj zaznaczone",
+        "addSelectedCount": "Dodaj zaznaczone ({{n}})",
         "noResults": "Nie znaleziono pasujących obrazów."
       },
       "reference": {
@@ -1159,6 +1160,7 @@
         "selectAll": "Zaznacz wszystkie",
         "selectNone": "Odznacz wszystkie",
         "addSelected": "Dodaj zaznaczone",
+        "addSelectedCount": "Dodaj zaznaczone ({{n}})",
         "noResults": "Nie znaleziono pasujących plików ani folderów."
       },
       "insertNote": {

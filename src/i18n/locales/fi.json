@@ -1109,6 +1109,7 @@
         "selectAll": "Valitse kaikki",
         "selectNone": "Poista kaikki valinnat",
         "addSelected": "Lisää valitut",
+        "addSelectedCount": "Lisää valitut ({{n}})",
         "noResults": "Ei vastaavia kuvia löydetty."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Valitse kaikki",
         "selectNone": "Poista kaikki valinnat",
         "addSelected": "Lisää valitut",
+        "addSelectedCount": "Lisää valitut ({{n}})",
         "noResults": "Ei vastaavia tiedostoja tai kansioita löydetty."
       },
       "insertNote": {

@@ -1151,6 +1151,7 @@
         "selectAll": "Pasirinkti visus",
         "selectNone": "Atžymėti visus",
         "addSelected": "Pridėti pasirinktus",
+        "addSelectedCount": "Pridėti pasirinktus ({{n}})",
         "noResults": "Nerasta atitinkančių vaizdų."
       },
       "reference": {
@@ -1159,6 +1160,7 @@
         "selectAll": "Pasirinkti visus",
         "selectNone": "Atžymėti visus",
         "addSelected": "Pridėti pasirinktus",
+        "addSelectedCount": "Pridėti pasirinktus ({{n}})",
         "noResults": "Nerasta atitinkančių failų ar aplankų."
       },
       "insertNote": {

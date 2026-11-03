@@ -1109,6 +1109,7 @@
         "selectAll": "Seleccionar todo",
         "selectNone": "Seleccionar ningún",
         "addSelected": "Engadir seleccionados",
+        "addSelectedCount": "Engadir seleccionados ({{n}})",
         "noResults": "Non se atoparon imaxes coincidentes."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Seleccionar todo",
         "selectNone": "Seleccionar ningún",
         "addSelected": "Engadir seleccionados",
+        "addSelectedCount": "Engadir seleccionados ({{n}})",
         "noResults": "Non se atoparon ficheiros ou cartafoles coincidentes."
       },
       "insertNote": {

@@ -1130,6 +1130,7 @@
         "selectAll": "Atlasīt visus",
         "selectNone": "Noņemt atlasi",
         "addSelected": "Pievienot atlasītos",
+        "addSelectedCount": "Pievienot atlasītos ({{n}})",
         "noResults": "Nav atrasts neviens atbilstošs attēls."
       },
       "reference": {
@@ -1138,6 +1139,7 @@
         "selectAll": "Atlasīt visus",
         "selectNone": "Noņemt atlasi",
         "addSelected": "Pievienot atlasītos",
+        "addSelectedCount": "Pievienot atlasītos ({{n}})",
         "noResults": "Nav atrasts neviens atbilstošs fails vai mape."
       },
       "insertNote": {

@@ -1130,6 +1130,7 @@
         "selectAll": "Selecciona tot",
         "selectNone": "Desselecciona tot",
         "addSelected": "Afegeix seleccionats",
+        "addSelectedCount": "Afegeix seleccionats ({{n}})",
         "noResults": "No s'han trobat imatges coincidents."
       },
       "reference": {
@@ -1138,6 +1139,7 @@
         "selectAll": "Selecciona tot",
         "selectNone": "Desselecciona tot",
         "addSelected": "Afegeix seleccionats",
+        "addSelectedCount": "Afegeix seleccionats ({{n}})",
         "noResults": "No s'han trobat fitxers o carpetes coincidents."
       },
       "insertNote": {

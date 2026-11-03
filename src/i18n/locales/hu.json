@@ -1109,6 +1109,7 @@
         "selectAll": "Összes kijelölése",
         "selectNone": "Kijelölés törlése",
         "addSelected": "Kijelöltek hozzáadása",
+        "addSelectedCount": "Kijelöltek hozzáadása ({{n}})",
         "noResults": "Nem találhatók egyező képek."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Összes kijelölése",
         "selectNone": "Kijelölés törlése",
         "addSelected": "Kijelöltek hozzáadása",
+        "addSelectedCount": "Kijelöltek hozzáadása ({{n}})",
         "noResults": "Nem találhatók egyező fájlok vagy mappák."
       },
       "insertNote": {

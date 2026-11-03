@@ -1109,6 +1109,7 @@
         "selectAll": "Velg alle",
         "selectNone": "Velg ingen",
         "addSelected": "Legg til valgte",
+        "addSelectedCount": "Legg til valgte ({{n}})",
         "noResults": "Ingen samsvarende bilder funnet."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Velg alle",
         "selectNone": "Velg ingen",
         "addSelected": "Legg til valgte",
+        "addSelectedCount": "Legg til valgte ({{n}})",
         "noResults": "Ingen samsvarende filer eller mapper funnet."
       },
       "insertNote": {

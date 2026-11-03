@@ -1109,6 +1109,7 @@
         "selectAll": "Vælg alle",
         "selectNone": "Fravælg alle",
         "addSelected": "Tilføj valgte",
+        "addSelectedCount": "Tilføj valgte ({{n}})",
         "noResults": "Ingen matchende billeder fundet."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Vælg alle",
         "selectNone": "Fravælg alle",
         "addSelected": "Tilføj valgte",
+        "addSelectedCount": "Tilføj valgte ({{n}})",
         "noResults": "Ingen matchende filer eller mapper fundet."
       },
       "insertNote": {

@@ -1088,6 +1088,7 @@
         "selectAll": "Chọn tất cả",
         "selectNone": "Bỏ chọn tất cả",
         "addSelected": "Thêm đã chọn",
+        "addSelectedCount": "Thêm đã chọn ({{n}})",
         "noResults": "Không tìm thấy hình ảnh phù hợp."
       },
       "reference": {
@@ -1096,6 +1097,7 @@
         "selectAll": "Chọn tất cả",
         "selectNone": "Bỏ chọn tất cả",
         "addSelected": "Thêm đã chọn",
+        "addSelectedCount": "Thêm đã chọn ({{n}})",
         "noResults": "Không tìm thấy tệp hoặc thư mục phù hợp."
       },
       "insertNote": {

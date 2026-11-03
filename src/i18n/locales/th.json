@@ -1088,6 +1088,7 @@
         "selectAll": "เลือกทั้งหมด",
         "selectNone": "ไม่เลือกใดๆ",
         "addSelected": "เพิ่มที่เลือก",
+        "addSelectedCount": "เพิ่มที่เลือก ({{n}})",
         "noResults": "ไม่พบรูปภาพที่ตรงกัน"
       },
       "reference": {
@@ -1096,6 +1097,7 @@
         "selectAll": "เลือกทั้งหมด",
         "selectNone": "ไม่เลือกใดๆ",
         "addSelected": "เพิ่มที่เลือก",
+        "addSelectedCount": "เพิ่มที่เลือก ({{n}})",
         "noResults": "ไม่พบไฟล์หรือโฟลเดอร์ที่ตรงกัน"
       },
       "insertNote": {

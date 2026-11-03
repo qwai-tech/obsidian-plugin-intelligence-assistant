@@ -1088,6 +1088,7 @@
         "selectAll": "全選",
         "selectNone": "全部取消選取",
         "addSelected": "新增所選",
+        "addSelectedCount": "新增所選 ({{n}})",
         "noResults": "找不到符合的圖片。"
       },
       "reference": {
@@ -1096,6 +1097,7 @@
         "selectAll": "全選",
         "selectNone": "全部取消選取",
         "addSelected": "新增所選",
+        "addSelectedCount": "新增所選 ({{n}})",
         "noResults": "找不到符合的檔案或資料夾。"
       },
       "insertNote": {

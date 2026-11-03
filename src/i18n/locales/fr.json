@@ -1130,6 +1130,7 @@
         "selectAll": "Tout sélectionner",
         "selectNone": "Ne rien sélectionner",
         "addSelected": "Ajouter la sélection",
+        "addSelectedCount": "Ajouter la sélection ({{n}})",
         "noResults": "Aucune image correspondante trouvée."
       },
       "reference": {
@@ -1138,6 +1139,7 @@
         "selectAll": "Tout sélectionner",
         "selectNone": "Ne rien sélectionner",
         "addSelected": "Ajouter la sélection",
+        "addSelectedCount": "Ajouter la sélection ({{n}})",
         "noResults": "Aucun fichier ou dossier correspondant trouvé."
       },
       "insertNote": {

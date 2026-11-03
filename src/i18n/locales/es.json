@@ -1130,6 +1130,7 @@
         "selectAll": "Seleccionar todo",
         "selectNone": "Deseleccionar todo",
         "addSelected": "Añadir seleccionado",
+        "addSelectedCount": "Añadir seleccionado ({{n}})",
         "noResults": "No se encontraron imágenes coincidentes."
       },
       "reference": {
@@ -1138,6 +1139,7 @@
         "selectAll": "Seleccionar todo",
         "selectNone": "Deseleccionar todo",
         "addSelected": "Añadir seleccionado",
+        "addSelectedCount": "Añadir seleccionado ({{n}})",
         "noResults": "No se encontraron archivos o carpetas coincidentes."
       },
       "insertNote": {

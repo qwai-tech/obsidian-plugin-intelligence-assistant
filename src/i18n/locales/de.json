@@ -1109,6 +1109,7 @@
         "selectAll": "Alle auswählen",
         "selectNone": "Keine auswählen",
         "addSelected": "Ausgewählte hinzufügen",
+        "addSelectedCount": "Ausgewählte hinzufügen ({{n}})",
         "noResults": "Keine passenden Bilder gefunden."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Alle auswählen",
         "selectNone": "Keine auswählen",
         "addSelected": "Ausgewählte hinzufügen",
+        "addSelectedCount": "Ausgewählte hinzufügen ({{n}})",
         "noResults": "Keine passenden Dateien oder Ordner gefunden."
       },
       "insertNote": {

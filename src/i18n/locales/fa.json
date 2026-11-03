@@ -1109,6 +1109,7 @@
         "selectAll": "انتخاب همه",
         "selectNone": "لغو انتخاب",
         "addSelected": "افزودن موارد انتخاب شده",
+        "addSelectedCount": "افزودن موارد انتخاب شده ({{n}})",
         "noResults": "هیچ تصویر مطابقی پیدا نشد."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "انتخاب همه",
         "selectNone": "لغو انتخاب",
         "addSelected": "افزودن موارد انتخاب شده",
+        "addSelectedCount": "افزودن موارد انتخاب شده ({{n}})",
         "noResults": "هیچ فایل یا پوشه مطابقی پیدا نشد."
       },
       "insertNote": {

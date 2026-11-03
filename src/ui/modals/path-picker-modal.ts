@@ -4,7 +4,6 @@ import { t } from '@/i18n';
 export interface PathPickerOptions<T extends { path: string }> {
 	textKeys: 'chat.modals.reference' | 'chat.modals.image';
 	modalClass: string;
-	itemClass: string;
 	items: T[];
 	iconOf: (item: T) => string;
 	onChoose: (items: T[]) => void;
@@ -15,6 +14,7 @@ export class PathPickerModal<T extends { path: string }> extends Modal {
 	private resultsContainer: HTMLElement;
 	private selected: T[] = [];
 	private rowItems = new WeakMap<HTMLElement, T>();
+	private addButton: HTMLButtonElement | null = null;
 
 	constructor(app: App, private readonly options: PathPickerOptions<T>) {
 		super(app);
@@ -47,9 +47,9 @@ export class PathPickerModal<T extends { path: string }> extends Modal {
 			this.selected = [];
 			this.render();
 		});
-		const add = buttons.createEl('button', { text: this.text('addSelected') });
-		add.addClass('mod-cta');
-		add.addEventListener('click', () => this.choose());
+		this.addButton = buttons.createEl('button', { cls: 'mod-cta' });
+		this.addButton.addEventListener('click', () => this.choose());
+		this.showCount();
 	}
 
 	onClose() {
@@ -64,13 +64,15 @@ export class PathPickerModal<T extends { path: string }> extends Modal {
 	private render(): void {
 		this.resultsContainer.empty();
 		this.rowItems = new WeakMap();
+		this.showCount();
 		const items = this.visibleItems();
 		if (items.length === 0) {
 			this.resultsContainer.createDiv({ text: this.text('noResults') });
 			return;
 		}
 		for (const item of items) {
-			const row = this.resultsContainer.createDiv({ cls: `${this.options.itemClass} ia-modal-list-item ia-clickable`, attr: { role: 'option', tabindex: '0' } });
+			const row = this.resultsContainer.createDiv({ cls: 'ia-modal-list-item ia-clickable', attr: { role: 'option', tabindex: '0' } });
+			row.createDiv('ia-modal-list-check');
 			this.rowItems.set(row, item);
 			this.showSelection(row, item);
 			setIcon(row.createDiv('ia-modal-list-icon'), this.options.iconOf(item));
@@ -97,12 +99,25 @@ export class PathPickerModal<T extends { path: string }> extends Modal {
 		if (!item) return;
 		this.toggle(item);
 		this.showSelection(row, item);
+		this.showCount();
 	}
 
 	private showSelection(row: HTMLElement, item: T): void {
 		const selected = this.isSelected(item);
 		row.toggleClass('ia-modal-item--selected', selected);
 		row.setAttr('aria-selected', String(selected));
+		const check = row.querySelector<HTMLElement>('.ia-modal-list-check');
+		if (check) {
+			check.empty();
+			if (selected) setIcon(check, 'check');
+		}
+	}
+
+	private showCount(): void {
+		if (!this.addButton) return;
+		this.addButton.setText(this.selected.length > 0
+			? t(`${this.options.textKeys}.addSelectedCount`, { n: this.selected.length })
+			: this.text('addSelected'));
 	}
 
 	private isSelected(item: T): boolean {

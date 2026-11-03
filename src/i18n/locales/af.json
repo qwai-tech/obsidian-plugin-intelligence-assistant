@@ -1109,6 +1109,7 @@
         "selectAll": "Kies alles",
         "selectNone": "Kies niks",
         "addSelected": "Voeg gekose by",
+        "addSelectedCount": "Voeg gekose by ({{n}})",
         "noResults": "Geen ooreenstemmende prente gevind nie."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Kies alles",
         "selectNone": "Kies niks",
         "addSelected": "Voeg gekose by",
+        "addSelectedCount": "Voeg gekose by ({{n}})",
         "noResults": "Geen ooreenstemmende lêers of gidse gevind nie."
       },
       "insertNote": {

@@ -2736,14 +2736,6 @@
 	flex-direction: column;
 }
 
-/* image-item base: padding + radius + margin */
-.image-item {
-	padding: 8px;
-	border-radius: 4px;
-	margin-bottom: 4px;
-	background: var(--background-secondary);
-}
-
 /* Header row (title + refresh button) in installed-models section */
 .ia-modal-section-header {
 	display: flex;
@@ -2844,7 +2836,30 @@
 
 /* ── Modal list item selected state ──────────────────────────────────────── */
 .ia-modal-item--selected {
-	background-color: var(--background-modifier-active);
+	background-color: color-mix(in srgb, var(--interactive-accent) 14%, transparent);
+}
+
+.ia-modal-list-check {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 18px;
+	height: 18px;
+	margin-right: 8px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	color: var(--text-on-accent);
+}
+
+.ia-modal-item--selected .ia-modal-list-check {
+	background-color: var(--interactive-accent);
+	border-color: var(--interactive-accent);
+}
+
+.ia-modal-list-check svg {
+	width: 14px;
+	height: 14px;
 }
 
 /* ── Modal list icon ─────────────────────────────────────────────────────── */

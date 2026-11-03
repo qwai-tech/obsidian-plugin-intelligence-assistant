@@ -1088,6 +1088,7 @@
         "selectAll": "全选",
         "selectNone": "取消全选",
         "addSelected": "添加所选",
+        "addSelectedCount": "添加所选 ({{n}})",
         "noResults": "未找到匹配图片。"
       },
       "reference": {
@@ -1096,6 +1097,7 @@
         "selectAll": "全选",
         "selectNone": "取消全选",
         "addSelected": "添加所选",
+        "addSelectedCount": "添加所选 ({{n}})",
         "noResults": "未找到匹配的文件或文件夹。"
       },
       "insertNote": {

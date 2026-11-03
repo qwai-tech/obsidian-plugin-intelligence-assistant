@@ -1151,6 +1151,7 @@
         "selectAll": "Vybrat vše",
         "selectNone": "Zrušit výběr",
         "addSelected": "Přidat vybrané",
+        "addSelectedCount": "Přidat vybrané ({{n}})",
         "noResults": "Nebyly nalezeny žádné odpovídající obrázky."
       },
       "reference": {
@@ -1159,6 +1160,7 @@
         "selectAll": "Vybrat vše",
         "selectNone": "Zrušit výběr",
         "addSelected": "Přidat vybrané",
+        "addSelectedCount": "Přidat vybrané ({{n}})",
         "noResults": "Nebyly nalezeny žádné odpovídající soubory ani složky."
       },
       "insertNote": {

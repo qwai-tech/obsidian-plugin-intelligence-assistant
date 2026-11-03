@@ -1151,6 +1151,7 @@
         "selectAll": "Выбраць усе",
         "selectNone": "Зняць выбар",
         "addSelected": "Дадаць абраныя",
+        "addSelectedCount": "Дадаць абраныя ({{n}})",
         "noResults": "Адпавядаючых малюнкаў не знойдзена."
       },
       "reference": {
@@ -1159,6 +1160,7 @@
         "selectAll": "Выбраць усе",
         "selectNone": "Зняць выбар",
         "addSelected": "Дадаць абраныя",
+        "addSelectedCount": "Дадаць абраныя ({{n}})",
         "noResults": "Адпавядаючых файлаў або папак не знойдзена."
       },
       "insertNote": {

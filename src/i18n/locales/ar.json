@@ -1193,6 +1193,7 @@
         "selectAll": "تحديد الكل",
         "selectNone": "إلغاء تحديد الكل",
         "addSelected": "إضافة المحدد",
+        "addSelectedCount": "إضافة المحدد ({{n}})",
         "noResults": "لم يتم العثور على صور مطابقة."
       },
       "reference": {
@@ -1201,6 +1202,7 @@
         "selectAll": "تحديد الكل",
         "selectNone": "إلغاء تحديد الكل",
         "addSelected": "إضافة المحدد",
+        "addSelectedCount": "إضافة المحدد ({{n}})",
         "noResults": "لم يتم العثور على ملفات أو مجلدات مطابقة."
       },
       "insertNote": {

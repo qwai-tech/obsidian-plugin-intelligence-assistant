@@ -1109,6 +1109,7 @@
         "selectAll": "Hautatu guztiak",
         "selectNone": "Hautatu bat ere ez",
         "addSelected": "Gehitu hautatuak",
+        "addSelectedCount": "Gehitu hautatuak ({{n}})",
         "noResults": "Ez da bat datorren irudirik aurkitu."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Hautatu guztiak",
         "selectNone": "Hautatu bat ere ez",
         "addSelected": "Gehitu hautatuak",
+        "addSelectedCount": "Gehitu hautatuak ({{n}})",
         "noResults": "Ez da bat datorren fitxategi edo karpetarik aurkitu."
       },
       "insertNote": {

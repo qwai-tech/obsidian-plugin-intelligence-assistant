@@ -1109,6 +1109,7 @@
         "selectAll": "Välj alla",
         "selectNone": "Välj inga",
         "addSelected": "Lägg till valda",
+        "addSelectedCount": "Lägg till valda ({{n}})",
         "noResults": "Inga matchande bilder hittades."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Välj alla",
         "selectNone": "Välj inga",
         "addSelected": "Lägg till valda",
+        "addSelectedCount": "Lägg till valda ({{n}})",
         "noResults": "Inga matchande filer eller mappar hittades."
       },
       "insertNote": {

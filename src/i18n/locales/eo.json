@@ -1109,6 +1109,7 @@
         "selectAll": "Elekti ĉiujn",
         "selectNone": "Elekti neniun",
         "addSelected": "Aldoni elektitajn",
+        "addSelectedCount": "Aldoni elektitajn ({{n}})",
         "noResults": "Neniuj kongruaj bildoj trovitaj."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Elekti ĉiujn",
         "selectNone": "Elekti neniun",
         "addSelected": "Aldoni elektitajn",
+        "addSelectedCount": "Aldoni elektitajn ({{n}})",
         "noResults": "Neniuj kongruaj dosieroj aŭ dosierujoj trovitaj."
       },
       "insertNote": {

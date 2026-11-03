@@ -1088,6 +1088,7 @@
         "selectAll": "すべて選択",
         "selectNone": "選択解除",
         "addSelected": "選択したものを追加",
+        "addSelectedCount": "選択したものを追加 ({{n}})",
         "noResults": "一致する画像が見つかりません。"
       },
       "reference": {
@@ -1096,6 +1097,7 @@
         "selectAll": "すべて選択",
         "selectNone": "選択解除",
         "addSelected": "選択したものを追加",
+        "addSelectedCount": "選択したものを追加 ({{n}})",
         "noResults": "一致するファイルまたはフォルダーが見つかりません。"
       },
       "insertNote": {

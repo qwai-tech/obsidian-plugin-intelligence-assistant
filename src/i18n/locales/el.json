@@ -1109,6 +1109,7 @@
         "selectAll": "Επιλογή όλων",
         "selectNone": "Αποεπιλογή όλων",
         "addSelected": "Προσθήκη επιλεγμένων",
+        "addSelectedCount": "Προσθήκη επιλεγμένων ({{n}})",
         "noResults": "Δεν βρέθηκαν εικόνες."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Επιλογή όλων",
         "selectNone": "Αποεπιλογή όλων",
         "addSelected": "Προσθήκη επιλεγμένων",
+        "addSelectedCount": "Προσθήκη επιλεγμένων ({{n}})",
         "noResults": "Δεν βρέθηκαν αρχεία ή φάκελοι."
       },
       "insertNote": {

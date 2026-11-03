@@ -1130,6 +1130,7 @@
         "selectAll": "Selecionar tudo",
         "selectNone": "Desmarcar tudo",
         "addSelected": "Adicionar selecionadas",
+        "addSelectedCount": "Adicionar selecionadas ({{n}})",
         "noResults": "Nenhuma imagem correspondente encontrada."
       },
       "reference": {
@@ -1138,6 +1139,7 @@
         "selectAll": "Selecionar tudo",
         "selectNone": "Desmarcar tudo",
         "addSelected": "Adicionar selecionados",
+        "addSelectedCount": "Adicionar selecionados ({{n}})",
         "noResults": "Nenhum arquivo ou pasta correspondente encontrado."
       },
       "insertNote": {

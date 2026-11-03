@@ -1151,6 +1151,7 @@
         "selectAll": "Вибрати всі",
         "selectNone": "Зняти вибір",
         "addSelected": "Додати вибрані",
+        "addSelectedCount": "Додати вибрані ({{n}})",
         "noResults": "Підходящих зображень не знайдено."
       },
       "reference": {
@@ -1159,6 +1160,7 @@
         "selectAll": "Вибрати всі",
         "selectNone": "Зняти вибір",
         "addSelected": "Додати вибрані",
+        "addSelectedCount": "Додати вибрані ({{n}})",
         "noResults": "Підходящих файлів або папок не знайдено."
       },
       "insertNote": {

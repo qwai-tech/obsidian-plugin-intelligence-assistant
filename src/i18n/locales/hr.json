@@ -1130,6 +1130,7 @@
         "selectAll": "Odaberi sve",
         "selectNone": "Poništi odabir",
         "addSelected": "Dodaj odabrane",
+        "addSelectedCount": "Dodaj odabrane ({{n}})",
         "noResults": "Nisu pronađene odgovarajuće slike."
       },
       "reference": {
@@ -1138,6 +1139,7 @@
         "selectAll": "Odaberi sve",
         "selectNone": "Poništi odabir",
         "addSelected": "Dodaj odabrane",
+        "addSelectedCount": "Dodaj odabrane ({{n}})",
         "noResults": "Nisu pronađene odgovarajuće datoteke ili mape."
       },
       "insertNote": {

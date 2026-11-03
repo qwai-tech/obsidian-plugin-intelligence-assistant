@@ -1130,6 +1130,7 @@
         "selectAll": "Изабери све",
         "selectNone": "Поништи избор",
         "addSelected": "Додај изабране",
+        "addSelectedCount": "Додај изабране ({{n}})",
         "noResults": "Нису пронађене одговарајуће слике."
       },
       "reference": {
@@ -1138,6 +1139,7 @@
         "selectAll": "Изабери све",
         "selectNone": "Поништи избор",
         "addSelected": "Додај изабране",
+        "addSelectedCount": "Додај изабране ({{n}})",
         "noResults": "Нису пронађене одговарајуће датотеке или фасцикле."
       },
       "insertNote": {

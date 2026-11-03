@@ -1109,6 +1109,7 @@
         "selectAll": "Alles selecteren",
         "selectNone": "Niets selecteren",
         "addSelected": "Geselecteerde toevoegen",
+        "addSelectedCount": "Geselecteerde toevoegen ({{n}})",
         "noResults": "Geen overeenkomende afbeeldingen gevonden."
       },
       "reference": {
@@ -1117,6 +1118,7 @@
         "selectAll": "Alles selecteren",
         "selectNone": "Niets selecteren",
         "addSelected": "Geselecteerde toevoegen",
+        "addSelectedCount": "Geselecteerde toevoegen ({{n}})",
         "noResults": "Geen overeenkomende bestanden of mappen gevonden."
       },
       "insertNote": {

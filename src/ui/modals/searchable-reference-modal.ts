@@ -6,7 +6,6 @@ export class SearchableReferenceModal extends PathPickerModal<TFile | TFolder> {
 		super(app, {
 			textKeys: 'chat.modals.reference',
 			modalClass: 'searchable-reference-modal',
-			itemClass: 'reference-item',
 			items: app.vault.getAllLoadedFiles().filter((file): file is TFile | TFolder => file instanceof TFile || file instanceof TFolder),
 			iconOf: item => item instanceof TFolder ? 'folder' : 'file-text',
 			onChoose: onChooseItems,

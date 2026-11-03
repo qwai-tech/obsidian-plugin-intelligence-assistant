@@ -1130,6 +1130,7 @@
         "selectAll": "Selectați tot",
         "selectNone": "Deselectați tot",
         "addSelected": "Adăugați selectate",
+        "addSelectedCount": "Adăugați selectate ({{n}})",
         "noResults": "Nu s-au găsit imagini corespunzătoare."
       },
       "reference": {
@@ -1138,6 +1139,7 @@
         "selectAll": "Selectați tot",
         "selectNone": "Deselectați tot",
         "addSelected": "Adăugați selectate",
+        "addSelectedCount": "Adăugați selectate ({{n}})",
         "noResults": "Nu s-au găsit fișiere sau foldere corespunzătoare."
       },
       "insertNote": {

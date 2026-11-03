@@ -1151,6 +1151,7 @@
         "selectAll": "Выбрать все",
         "selectNone": "Снять выбор",
         "addSelected": "Добавить выбранные",
+        "addSelectedCount": "Добавить выбранные ({{n}})",
         "noResults": "Подходящие изображения не найдены."
       },
       "reference": {
@@ -1159,6 +1160,7 @@
         "selectAll": "Выбрать все",
         "selectNone": "Снять выбор",
         "addSelected": "Добавить выбранные",
+        "addSelectedCount": "Добавить выбранные ({{n}})",
         "noResults": "Подходящие файлы или папки не найдены."
       },
       "insertNote": {
