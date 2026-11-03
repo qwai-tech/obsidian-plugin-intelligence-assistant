@@ -408,6 +408,9 @@
             "deleteTooltip": "Hapus sumber"
           },
           "namePlaceholder": "Sumber HTTP"
+        },
+        "confirm": {
+          "delete": "Hapus sumber HTTP \"{{name}}\" beserta alatnya?"
         }
       },
       "cli": {
@@ -556,7 +559,10 @@
             "preset-applescript-list-apps": "Daftar Aplikasi yang Berjalan"
           }
         },
-        "paramCount_other": "{{count}} parameter"
+        "paramCount_other": "{{count}} parameter",
+        "confirm": {
+          "delete": "Hapus alat CLI \"{{name}}\"? Agen tidak akan bisa menjalankannya lagi."
+        }
       }
     },
     "rag": {
@@ -735,6 +741,9 @@
           "name": "Skor kualitas dukungan minimum",
           "desc": "Skor kualitas dukungan minimum (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Kosongkan indeks? Catatan tidak bisa diambil sampai Anda membangunnya ulang."
       }
     },
     "websearch": {

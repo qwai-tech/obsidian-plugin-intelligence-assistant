@@ -424,6 +424,9 @@
             "deleteTooltip": "Quelle löschen"
           },
           "namePlaceholder": "HTTP-Quelle"
+        },
+        "confirm": {
+          "delete": "HTTP-Quelle „{{name}}“ und ihre Werkzeuge löschen?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "{{count}} Parameter",
-        "paramCount_other": "{{count}} Parameter"
+        "paramCount_other": "{{count}} Parameter",
+        "confirm": {
+          "delete": "CLI-Werkzeug „{{name}}“ löschen? Agenten können es dann nicht mehr ausführen."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Min. Unterstützungsqualitätsbewertung",
           "desc": "Minimale Unterstützungsqualitätsbewertung (0–10)"
         }
+      },
+      "confirm": {
+        "clear": "Index leeren? Notizen können erst wieder gefunden werden, wenn du ihn neu aufbaust."
       }
     },
     "websearch": {

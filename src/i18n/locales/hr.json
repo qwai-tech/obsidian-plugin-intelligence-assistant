@@ -440,6 +440,9 @@
             "deleteTooltip": "Obriši izvor"
           },
           "namePlaceholder": "HTTP izvor"
+        },
+        "confirm": {
+          "delete": "Izbrisati HTTP izvor „{{name}}” i njegove alate?"
         }
       },
       "cli": {
@@ -590,7 +593,10 @@
         },
         "paramCount_few": "{{count}} parametra",
         "paramCount_one": "{{count}} parametar",
-        "paramCount_other": "{{count}} parametara"
+        "paramCount_other": "{{count}} parametara",
+        "confirm": {
+          "delete": "Izbrisati CLI alat „{{name}}”? Agenti ga više neće moći pokretati."
+        }
       }
     },
     "rag": {
@@ -769,6 +775,9 @@
           "name": "Min. rezultat kvalitete podrške",
           "desc": "Minimalni rezultat kvalitete podrške (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Očistiti indeks? Bilješke se neće moći dohvatiti dok ga ponovno ne izgradite."
       }
     },
     "websearch": {

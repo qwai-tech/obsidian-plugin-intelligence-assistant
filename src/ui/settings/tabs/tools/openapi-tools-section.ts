@@ -8,6 +8,7 @@ import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import type { PluginHost } from '@/ui/plugin-host';
+import { showConfirm } from '@/ui/modals/confirm-modal';
 import type { OpenApiToolConfig, OpenApiAuthType, OpenApiSourceType } from '@/features/tools';
 
 export function renderOpenapiToolsSection(
@@ -83,6 +84,7 @@ export function renderOpenapiToolsSection(
 		deleteBtn.addClass('mod-warning');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
+				if (!await showConfirm(plugin.app, t('settings.tools.openapi.confirm.delete', { name: config.name || config.id }))) return;
 				const list = plugin.settings.openApiTools;
 				const index = list.findIndex(entry => entry.id === config.id);
 				if (index !== -1) {

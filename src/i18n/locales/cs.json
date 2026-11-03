@@ -456,6 +456,9 @@
             "deleteTooltip": "Smazat zdroj"
           },
           "namePlaceholder": "Zdroj HTTP"
+        },
+        "confirm": {
+          "delete": "Smazat zdroj HTTP „{{name}}“ a jeho nástroje?"
         }
       },
       "cli": {
@@ -607,7 +610,10 @@
         "paramCount_one": "{{count}} parametr",
         "paramCount_few": "{{count}} parametry",
         "paramCount_many": "{{count}} parametru",
-        "paramCount_other": "{{count}} parametrů"
+        "paramCount_other": "{{count}} parametrů",
+        "confirm": {
+          "delete": "Smazat nástroj CLI „{{name}}“? Agenti ho už nebudou moci spouštět."
+        }
       }
     },
     "rag": {
@@ -786,6 +792,9 @@
           "name": "Minimální skóre kvality podpory",
           "desc": "Minimální skóre kvality podpory (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Vymazat index? Poznámky nepůjde vyhledat, dokud ho znovu nesestavíte."
       }
     },
     "websearch": {

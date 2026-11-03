@@ -440,6 +440,9 @@
             "deleteTooltip": "Ștergeți sursa"
           },
           "namePlaceholder": "Sursă HTTP"
+        },
+        "confirm": {
+          "delete": "Ștergi sursa HTTP „{{name}}” și instrumentele ei?"
         }
       },
       "cli": {
@@ -590,7 +593,10 @@
         },
         "paramCount_one": "{{count}} parametru",
         "paramCount_few": "{{count}} parametri",
-        "paramCount_other": "{{count}} de parametri"
+        "paramCount_other": "{{count}} de parametri",
+        "confirm": {
+          "delete": "Ștergi instrumentul CLI „{{name}}”? Agenții nu îl vor mai putea rula."
+        }
       }
     },
     "rag": {
@@ -769,6 +775,9 @@
           "name": "Scor minim de calitate a suportului",
           "desc": "Scor minim de calitate a suportului (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Golești indexul? Notițele nu vor putea fi regăsite până nu îl reconstruiești."
       }
     },
     "websearch": {

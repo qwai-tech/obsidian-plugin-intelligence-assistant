@@ -408,6 +408,9 @@
             "deleteTooltip": "Padam sumber"
           },
           "namePlaceholder": "Sumber HTTP"
+        },
+        "confirm": {
+          "delete": "Padam sumber HTTP \"{{name}}\" dan alatnya?"
         }
       },
       "cli": {
@@ -556,7 +559,10 @@
             "preset-applescript-list-apps": "Senarai Aplikasi Berjalan"
           }
         },
-        "paramCount_other": "{{count}} parameter"
+        "paramCount_other": "{{count}} parameter",
+        "confirm": {
+          "delete": "Padam alat CLI \"{{name}}\"? Ejen tidak lagi dapat menjalankannya."
+        }
       }
     },
     "rag": {
@@ -735,6 +741,9 @@
           "name": "Skor kualiti sokongan minimum",
           "desc": "Skor kualiti sokongan minimum (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Kosongkan indeks? Nota tidak boleh diambil sehingga anda membinanya semula."
       }
     },
     "websearch": {

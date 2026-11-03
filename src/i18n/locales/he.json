@@ -440,6 +440,9 @@
             "deleteTooltip": "מחק מקור"
           },
           "namePlaceholder": "מקור HTTP"
+        },
+        "confirm": {
+          "delete": "למחוק את מקור ה-HTTP ‏\"{{name}}\" ואת הכלים שלו?"
         }
       },
       "cli": {
@@ -590,7 +593,10 @@
         },
         "paramCount_one": "{{count}} פרמטר",
         "paramCount_two": "{{count}} פרמטרים",
-        "paramCount_other": "{{count}} פרמטרים"
+        "paramCount_other": "{{count}} פרמטרים",
+        "confirm": {
+          "delete": "למחוק את כלי ה-CLI ‏\"{{name}}\"? סוכנים לא יוכלו עוד להריץ אותו."
+        }
       }
     },
     "rag": {
@@ -769,6 +775,9 @@
           "name": "ציון איכות תמיכה מינימלי",
           "desc": "ציון איכות תמיכה מינימלי (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "לנקות את האינדקס? לא ניתן יהיה לאחזר פתקים עד שתבנו אותו מחדש."
       }
     },
     "websearch": {

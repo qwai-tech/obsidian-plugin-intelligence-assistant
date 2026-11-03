@@ -424,6 +424,9 @@
             "deleteTooltip": "Ta bort källa"
           },
           "namePlaceholder": "HTTP-källa"
+        },
+        "confirm": {
+          "delete": "Ta bort HTTP-källan \"{{name}}\" och dess verktyg?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parametrar"
+        "paramCount_other": "{{count}} parametrar",
+        "confirm": {
+          "delete": "Ta bort CLI-verktyget \"{{name}}\"? Agenter kan inte längre köra det."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Minsta stödkvalitetspoäng",
           "desc": "Minsta stödkvalitetspoäng (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Rensa indexet? Anteckningar kan inte hämtas förrän du bygger om det."
       }
     },
     "websearch": {

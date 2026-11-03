@@ -424,6 +424,9 @@
             "deleteTooltip": "Forigi fonton"
           },
           "namePlaceholder": "HTTP-fonto"
+        },
+        "confirm": {
+          "delete": "Ĉu forigi la HTTP-fonton \"{{name}}\" kaj ĝiajn ilojn?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "{{count}} parametro",
-        "paramCount_other": "{{count}} parametroj"
+        "paramCount_other": "{{count}} parametroj",
+        "confirm": {
+          "delete": "Ĉu forigi la CLI-ilon \"{{name}}\"? Agentoj ne plu povos ruli ĝin."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Min. subtenkvaliтpunkto",
           "desc": "Minimuma subtenkvaliтpunkto (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Ĉu vakigi la indekson? Notoj ne troveblos ĝis vi rekonstruos ĝin."
       }
     },
     "websearch": {

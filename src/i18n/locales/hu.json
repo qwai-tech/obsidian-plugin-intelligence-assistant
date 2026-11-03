@@ -424,6 +424,9 @@
             "deleteTooltip": "Forrás törlése"
           },
           "namePlaceholder": "HTTP-forrás"
+        },
+        "confirm": {
+          "delete": "Törlöd a(z) „{{name}}” HTTP-forrást és eszközeit?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "{{count}} paraméter",
-        "paramCount_other": "{{count}} paraméter"
+        "paramCount_other": "{{count}} paraméter",
+        "confirm": {
+          "delete": "Törlöd a(z) „{{name}}” CLI-eszközt? Az ügynökök többé nem tudják futtatni."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Min. támogatási minőségi pontszám",
           "desc": "Minimális támogatási minőségi pontszám (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Törlöd az indexet? A jegyzetek nem kereshetők, amíg újra nem építed."
       }
     },
     "websearch": {

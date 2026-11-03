@@ -424,6 +424,9 @@
             "deleteTooltip": "Slett kjelde"
           },
           "namePlaceholder": "HTTP-kjelde"
+        },
+        "confirm": {
+          "delete": "Slette HTTP-kjelda «{{name}}» og verktøya hennar?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parametrar"
+        "paramCount_other": "{{count}} parametrar",
+        "confirm": {
+          "delete": "Slette CLI-verktøyet «{{name}}»? Agentar kan ikkje lenger køyre det."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Minimums støttekvalitetsskår",
           "desc": "Minste støttekvalitetsskår (0–10)"
         }
+      },
+      "confirm": {
+        "clear": "Tøme indeksen? Notat kan ikkje hentast før du byggjer han opp att."
       }
     },
     "websearch": {

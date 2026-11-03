@@ -1,5 +1,6 @@
 import { Setting, Notice } from 'obsidian';
 import type { PluginHost } from '@/ui/plugin-host';
+import { showConfirm } from '@/ui/modals/confirm-modal';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 import { setDestructiveButton } from '@/ui/utils/ui-helpers';
@@ -136,6 +137,7 @@ export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHo
 		.addButton(button => setDestructiveButton(button
 			.setButtonText(t('settings.rag.indexMgmt.clear.btn')))
 			.onClick(async () => {
+				if (!await showConfirm(plugin.app, t('settings.rag.confirm.clear'))) return;
 				button.setDisabled(true);
 				button.setButtonText(t('settings.rag.indexMgmt.clear.clearing'));
 

@@ -424,6 +424,9 @@
             "deleteTooltip": "Poista lähde"
           },
           "namePlaceholder": "HTTP-lähde"
+        },
+        "confirm": {
+          "delete": "Poistetaanko HTTP-lähde \"{{name}}\" ja sen työkalut?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "{{count}} parametri",
-        "paramCount_other": "{{count}} parametria"
+        "paramCount_other": "{{count}} parametria",
+        "confirm": {
+          "delete": "Poistetaanko CLI-työkalu \"{{name}}\"? Agentit eivät voi enää suorittaa sitä."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Vähimmäistukipisteet",
           "desc": "Vähimmäistukipisteet (0–10)"
         }
+      },
+      "confirm": {
+        "clear": "Tyhjennetäänkö hakemisto? Muistiinpanoja ei voi hakea ennen kuin rakennat sen uudelleen."
       }
     },
     "websearch": {

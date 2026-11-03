@@ -424,6 +424,9 @@
             "deleteTooltip": "Delete source"
           },
           "namePlaceholder": "HTTP source"
+        },
+        "confirm": {
+          "delete": "Delete the HTTP source \"{{name}}\" and its tools?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parameters"
+        "paramCount_other": "{{count}} parameters",
+        "confirm": {
+          "delete": "Delete the CLI tool \"{{name}}\"? Agents will no longer be able to run it."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Min support quality score",
           "desc": "Minimum support quality score (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Clear the index? Notes cannot be retrieved until you rebuild it."
       }
     },
     "websearch": {

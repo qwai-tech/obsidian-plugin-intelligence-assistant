@@ -424,6 +424,9 @@
             "deleteTooltip": "Ezabatu iturria"
           },
           "namePlaceholder": "HTTP iturria"
+        },
+        "confirm": {
+          "delete": "\"{{name}}\" HTTP iturria eta bere tresnak ezabatu?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "Parametro {{count}}",
-        "paramCount_other": "{{count}} parametro"
+        "paramCount_other": "{{count}} parametro",
+        "confirm": {
+          "delete": "\"{{name}}\" CLI tresna ezabatu? Agenteek ezin izango dute gehiago exekutatu."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Gutxieneko euskarri-kalitate puntuazioa",
           "desc": "Gutxieneko euskarri-kalitate puntuazioa (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Indizea garbitu? Oharrak ezin izango dira berreskuratu berreraiki arte."
       }
     },
     "websearch": {

@@ -408,6 +408,9 @@
             "deleteTooltip": "刪除來源"
           },
           "namePlaceholder": "HTTP 來源"
+        },
+        "confirm": {
+          "delete": "要刪除 HTTP 來源「{{name}}」及其工具嗎？"
         }
       },
       "cli": {
@@ -556,7 +559,10 @@
             "preset-applescript-list-apps": "列出執行中的應用程式"
           }
         },
-        "paramCount_other": "{{count}} 個參數"
+        "paramCount_other": "{{count}} 個參數",
+        "confirm": {
+          "delete": "要刪除 CLI 工具「{{name}}」嗎？代理將無法再執行它。"
+        }
       }
     },
     "rag": {
@@ -735,6 +741,9 @@
           "name": "最低支援品質分數",
           "desc": "最低支援品質分數（0-10）"
         }
+      },
+      "confirm": {
+        "clear": "要清除索引嗎？重建之前將無法檢索筆記。"
       }
     },
     "websearch": {

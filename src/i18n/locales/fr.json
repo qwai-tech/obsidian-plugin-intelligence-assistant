@@ -440,6 +440,9 @@
             "deleteTooltip": "Supprimer la source"
           },
           "namePlaceholder": "Source HTTP"
+        },
+        "confirm": {
+          "delete": "Supprimer la source HTTP « {{name}} » et ses outils ?"
         }
       },
       "cli": {
@@ -590,7 +593,10 @@
         },
         "paramCount_one": "{{count}} paramètre",
         "paramCount_many": "{{count}} paramètres",
-        "paramCount_other": "{{count}} paramètres"
+        "paramCount_other": "{{count}} paramètres",
+        "confirm": {
+          "delete": "Supprimer l'outil CLI « {{name}} » ? Les agents ne pourront plus l'exécuter."
+        }
       }
     },
     "rag": {
@@ -769,6 +775,9 @@
           "name": "Score de qualité d'appui min.",
           "desc": "Score de qualité d'appui minimum (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Vider l'index ? Les notes ne pourront plus être retrouvées tant que vous ne l'aurez pas reconstruit."
       }
     },
     "websearch": {

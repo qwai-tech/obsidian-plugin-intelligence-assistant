@@ -440,6 +440,9 @@
             "deleteTooltip": "Elimina la font"
           },
           "namePlaceholder": "Font HTTP"
+        },
+        "confirm": {
+          "delete": "Vols suprimir la font HTTP «{{name}}» i les seves eines?"
         }
       },
       "cli": {
@@ -590,7 +593,10 @@
         },
         "paramCount_one": "{{count}} paràmetre",
         "paramCount_many": "{{count}} paràmetres",
-        "paramCount_other": "{{count}} paràmetres"
+        "paramCount_other": "{{count}} paràmetres",
+        "confirm": {
+          "delete": "Vols suprimir l'eina CLI «{{name}}»? Els agents ja no la podran executar."
+        }
       }
     },
     "rag": {
@@ -769,6 +775,9 @@
           "name": "Puntuació mínima de qualitat de suport",
           "desc": "Puntuació mínima de qualitat de suport (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Vols buidar l'índex? No es podran recuperar notes fins que el reconstrueixis."
       }
     },
     "websearch": {

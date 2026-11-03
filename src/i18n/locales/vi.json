@@ -408,6 +408,9 @@
             "deleteTooltip": "Xóa nguồn"
           },
           "namePlaceholder": "Nguồn HTTP"
+        },
+        "confirm": {
+          "delete": "Xóa nguồn HTTP \"{{name}}\" và các công cụ của nó?"
         }
       },
       "cli": {
@@ -556,7 +559,10 @@
             "preset-applescript-list-apps": "Liệt kê ứng dụng đang chạy"
           }
         },
-        "paramCount_other": "{{count}} tham số"
+        "paramCount_other": "{{count}} tham số",
+        "confirm": {
+          "delete": "Xóa công cụ CLI \"{{name}}\"? Tác tử sẽ không thể chạy nó nữa."
+        }
       }
     },
     "rag": {
@@ -735,6 +741,9 @@
           "name": "Điểm chất lượng hỗ trợ tối thiểu",
           "desc": "Điểm chất lượng hỗ trợ tối thiểu (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Xóa chỉ mục? Không thể truy xuất ghi chú cho đến khi bạn tạo lại."
       }
     },
     "websearch": {

@@ -456,6 +456,9 @@
             "deleteTooltip": "Usuń źródło"
           },
           "namePlaceholder": "Źródło HTTP"
+        },
+        "confirm": {
+          "delete": "Usunąć źródło HTTP „{{name}}” i jego narzędzia?"
         }
       },
       "cli": {
@@ -607,7 +610,10 @@
         "paramCount_few": "{{count}} parametry",
         "paramCount_many": "{{count}} parametrów",
         "paramCount_one": "{{count}} parametr",
-        "paramCount_other": "{{count}} parametru"
+        "paramCount_other": "{{count}} parametru",
+        "confirm": {
+          "delete": "Usunąć narzędzie CLI „{{name}}”? Agenci nie będą mogli go już uruchamiać."
+        }
       }
     },
     "rag": {
@@ -786,6 +792,9 @@
           "name": "Minimalny wynik jakości wsparcia",
           "desc": "Minimalny wynik jakości wsparcia (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Wyczyścić indeks? Notatek nie będzie można wyszukać, dopóki go nie odbudujesz."
       }
     },
     "websearch": {

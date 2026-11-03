@@ -424,6 +424,9 @@
             "deleteTooltip": "Verwyder bron"
           },
           "namePlaceholder": "HTTP-bron"
+        },
+        "confirm": {
+          "delete": "Skrap die HTTP-bron \"{{name}}\" en sy instrumente?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parameters"
+        "paramCount_other": "{{count}} parameters",
+        "confirm": {
+          "delete": "Skrap die CLI-instrument \"{{name}}\"? Agente sal dit nie meer kan uitvoer nie."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Min. ondersteuningskwaliteitspunt",
           "desc": "Minimum ondersteuningskwaliteitspunt (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Maak die indeks skoon? Notas kan nie opgespoor word totdat jy dit herbou nie."
       }
     },
     "websearch": {

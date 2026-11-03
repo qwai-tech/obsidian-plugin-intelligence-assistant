@@ -408,6 +408,9 @@
             "deleteTooltip": "소스 삭제"
           },
           "namePlaceholder": "HTTP 소스"
+        },
+        "confirm": {
+          "delete": "HTTP 소스 \"{{name}}\"와(과) 해당 도구를 삭제할까요?"
         }
       },
       "cli": {
@@ -556,7 +559,10 @@
             "preset-applescript-list-apps": "실행 중인 앱 목록"
           }
         },
-        "paramCount_other": "매개변수 {{count}}개"
+        "paramCount_other": "매개변수 {{count}}개",
+        "confirm": {
+          "delete": "CLI 도구 \"{{name}}\"을(를) 삭제할까요? 에이전트가 더 이상 실행할 수 없습니다."
+        }
       }
     },
     "rag": {
@@ -735,6 +741,9 @@
           "name": "최소 지원 품질 점수",
           "desc": "최소 지원 품질 점수 (0~10)"
         }
+      },
+      "confirm": {
+        "clear": "색인을 지울까요? 다시 만들 때까지 노트를 검색할 수 없습니다."
       }
     },
     "websearch": {

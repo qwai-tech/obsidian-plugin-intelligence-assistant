@@ -1,6 +1,7 @@
 import { Notice } from 'obsidian';
 import { t } from '@/i18n';
 import type { PluginHost } from '@/ui/plugin-host';
+import { showConfirm } from '@/ui/modals/confirm-modal';
 import type { CLIToolConfig } from '@/features/tools';
 import { CLI_TOOL_DEFAULTS, CLI_TOOL_PRESETS } from '@/features/tools';
 import { createTable, createStatusIndicator } from '@/ui/utils/ui-helpers';
@@ -110,6 +111,7 @@ export function renderCliToolsSection(
 		deleteBtn.addClass('mod-warning');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
+				if (!await showConfirm(plugin.app, t('settings.tools.cli.confirm.delete', { name: config.name || config.id }))) return;
 				const list = plugin.settings.cliTools;
 				const index = list.findIndex(entry => entry.id === config.id);
 				if (index !== -1) {

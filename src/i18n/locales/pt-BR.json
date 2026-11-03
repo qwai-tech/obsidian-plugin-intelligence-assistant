@@ -440,6 +440,9 @@
             "deleteTooltip": "Excluir fonte"
           },
           "namePlaceholder": "Fonte HTTP"
+        },
+        "confirm": {
+          "delete": "Excluir a fonte HTTP \"{{name}}\" e suas ferramentas?"
         }
       },
       "cli": {
@@ -590,7 +593,10 @@
         },
         "paramCount_one": "{{count}} parâmetro",
         "paramCount_many": "{{count}} parâmetros",
-        "paramCount_other": "{{count}} parâmetros"
+        "paramCount_other": "{{count}} parâmetros",
+        "confirm": {
+          "delete": "Excluir a ferramenta CLI \"{{name}}\"? Os agentes não poderão mais executá-la."
+        }
       }
     },
     "rag": {
@@ -769,6 +775,9 @@
           "name": "Pontuação mínima de qualidade de suporte",
           "desc": "Pontuação mínima de qualidade de suporte (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Limpar o índice? As notas não poderão ser recuperadas até que você o reconstrua."
       }
     },
     "websearch": {

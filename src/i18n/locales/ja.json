@@ -408,6 +408,9 @@
             "deleteTooltip": "ソースを削除"
           },
           "namePlaceholder": "HTTP ソース"
+        },
+        "confirm": {
+          "delete": "HTTP ソース「{{name}}」とそのツールを削除しますか？"
         }
       },
       "cli": {
@@ -556,7 +559,10 @@
             "preset-applescript-list-apps": "実行中のアプリを一覧表示"
           }
         },
-        "paramCount_other": "{{count}} 個のパラメーター"
+        "paramCount_other": "{{count}} 個のパラメーター",
+        "confirm": {
+          "delete": "CLI ツール「{{name}}」を削除しますか？エージェントは実行できなくなります。"
+        }
       }
     },
     "rag": {
@@ -735,6 +741,9 @@
           "name": "最小サポート品質スコア",
           "desc": "最小サポート品質スコア（0〜10）"
         }
+      },
+      "confirm": {
+        "clear": "インデックスを消去しますか？再構築するまでノートは検索されません。"
       }
     },
     "websearch": {

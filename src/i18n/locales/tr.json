@@ -424,6 +424,9 @@
             "deleteTooltip": "Kaynağı sil"
           },
           "namePlaceholder": "HTTP kaynağı"
+        },
+        "confirm": {
+          "delete": "\"{{name}}\" HTTP kaynağı ve araçları silinsin mi?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "{{count}} parametre",
-        "paramCount_other": "{{count}} parametre"
+        "paramCount_other": "{{count}} parametre",
+        "confirm": {
+          "delete": "\"{{name}}\" CLI aracı silinsin mi? Ajanlar artık onu çalıştıramaz."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Min destek kalitesi puanı",
           "desc": "Minimum destek kalitesi puanı (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Dizin temizlensin mi? Yeniden oluşturana kadar notlar getirilemez."
       }
     },
     "websearch": {

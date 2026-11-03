@@ -440,6 +440,9 @@
             "deleteTooltip": "Elimina sorgente"
           },
           "namePlaceholder": "Sorgente HTTP"
+        },
+        "confirm": {
+          "delete": "Eliminare la sorgente HTTP \"{{name}}\" e i suoi strumenti?"
         }
       },
       "cli": {
@@ -590,7 +593,10 @@
         },
         "paramCount_many": "{{count}} parametri",
         "paramCount_one": "{{count}} parametro",
-        "paramCount_other": "{{count}} parametri"
+        "paramCount_other": "{{count}} parametri",
+        "confirm": {
+          "delete": "Eliminare lo strumento CLI \"{{name}}\"? Gli agenti non potranno più eseguirlo."
+        }
       }
     },
     "rag": {
@@ -769,6 +775,9 @@
           "name": "Punteggio minimo qualità supporto",
           "desc": "Punteggio minimo di qualità del supporto (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Svuotare l'indice? Le note non potranno essere recuperate finché non lo ricostruisci."
       }
     },
     "websearch": {

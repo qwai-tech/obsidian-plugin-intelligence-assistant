@@ -456,6 +456,9 @@
             "deleteTooltip": "Ištrinti šaltinį"
           },
           "namePlaceholder": "HTTP šaltinis"
+        },
+        "confirm": {
+          "delete": "Ištrinti HTTP šaltinį „{{name}}“ ir jo įrankius?"
         }
       },
       "cli": {
@@ -607,7 +610,10 @@
         "paramCount_few": "{{count}} parametrai",
         "paramCount_many": "{{count}} parametro",
         "paramCount_one": "{{count}} parametras",
-        "paramCount_other": "{{count}} parametrų"
+        "paramCount_other": "{{count}} parametrų",
+        "confirm": {
+          "delete": "Ištrinti CLI įrankį „{{name}}“? Agentai nebegalės jo paleisti."
+        }
       }
     },
     "rag": {
@@ -786,6 +792,9 @@
           "name": "Minimalus palaikymo kokybės balas",
           "desc": "Minimalus palaikymo kokybės balas (0–10)"
         }
+      },
+      "confirm": {
+        "clear": "Išvalyti indeksą? Užrašų nebus galima rasti, kol jo neperkursite."
       }
     },
     "websearch": {

@@ -424,6 +424,9 @@
             "deleteTooltip": "Bron verwijderen"
           },
           "namePlaceholder": "HTTP-bron"
+        },
+        "confirm": {
+          "delete": "HTTP-bron \"{{name}}\" en de bijbehorende tools verwijderen?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parameters"
+        "paramCount_other": "{{count}} parameters",
+        "confirm": {
+          "delete": "CLI-tool \"{{name}}\" verwijderen? Agents kunnen hem dan niet meer uitvoeren."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Min. ondersteuningskwaliteitsscor",
           "desc": "Minimale ondersteuningskwaliteitsscor (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Index wissen? Notities kunnen pas weer gevonden worden als je hem opnieuw opbouwt."
       }
     },
     "websearch": {

@@ -488,6 +488,9 @@
             "deleteTooltip": "حذف المصدر"
           },
           "namePlaceholder": "مصدر HTTP"
+        },
+        "confirm": {
+          "delete": "حذف مصدر HTTP \"{{name}}\" وأدواته؟"
         }
       },
       "cli": {
@@ -641,7 +644,10 @@
         "paramCount_two": "{{count}} معاملان",
         "paramCount_few": "{{count}} معاملات",
         "paramCount_many": "{{count}} معاملًا",
-        "paramCount_other": "{{count}} معامل"
+        "paramCount_other": "{{count}} معامل",
+        "confirm": {
+          "delete": "حذف أداة سطر الأوامر \"{{name}}\"؟ لن يتمكن الوكلاء من تشغيلها بعد الآن."
+        }
       }
     },
     "rag": {
@@ -820,6 +826,9 @@
           "name": "الحد الأدنى لدرجة جودة الدعم",
           "desc": "الحد الأدنى لدرجة جودة الدعم (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "مسح الفهرس؟ لا يمكن استرجاع الملاحظات حتى تعيد بناءه."
       }
     },
     "websearch": {

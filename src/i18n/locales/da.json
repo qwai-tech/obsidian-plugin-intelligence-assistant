@@ -424,6 +424,9 @@
             "deleteTooltip": "Slet kilde"
           },
           "namePlaceholder": "HTTP-kilde"
+        },
+        "confirm": {
+          "delete": "Slet HTTP-kilden \"{{name}}\" og dens værktøjer?"
         }
       },
       "cli": {
@@ -573,7 +576,10 @@
           }
         },
         "paramCount_one": "{{count}} parameter",
-        "paramCount_other": "{{count}} parametre"
+        "paramCount_other": "{{count}} parametre",
+        "confirm": {
+          "delete": "Slet CLI-værktøjet \"{{name}}\"? Agenter vil ikke længere kunne køre det."
+        }
       }
     },
     "rag": {
@@ -752,6 +758,9 @@
           "name": "Min. støttekvalitetsscore",
           "desc": "Minimum støttekvalitetsscore (0-10)"
         }
+      },
+      "confirm": {
+        "clear": "Ryd indekset? Noter kan ikke findes, før du genopbygger det."
       }
     },
     "websearch": {

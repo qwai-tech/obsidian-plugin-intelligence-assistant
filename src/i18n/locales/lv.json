@@ -440,6 +440,9 @@
             "deleteTooltip": "Dzēst avotu"
           },
           "namePlaceholder": "HTTP avots"
+        },
+        "confirm": {
+          "delete": "Dzēst HTTP avotu “{{name}}” un tā rīkus?"
         }
       },
       "cli": {
@@ -590,7 +593,10 @@
         },
         "paramCount_one": "{{count}} parametrs",
         "paramCount_zero": "{{count}} parametri",
-        "paramCount_other": "{{count}} parametri"
+        "paramCount_other": "{{count}} parametri",
+        "confirm": {
+          "delete": "Dzēst CLI rīku “{{name}}”? Aģenti to vairs nevarēs palaist."
+        }
       }
     },
     "rag": {
@@ -769,6 +775,9 @@
           "name": "Minimālais atbalsta kvalitātes rādītājs",
           "desc": "Minimālais atbalsta kvalitātes rādītājs (0–10)"
         }
+      },
+      "confirm": {
+        "clear": "Notīrīt indeksu? Piezīmes nevarēs atrast, līdz to pārbūvēsiet."
       }
     },
     "websearch": {
