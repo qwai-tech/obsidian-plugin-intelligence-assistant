@@ -76,6 +76,18 @@ export class LlmSettingsPage extends BasePage {
 		}
 	}
 
+	async saveProviderForm(provider: string): Promise<void> {
+		await this.click(TestIds.settings.providerModalSaveBtn);
+		await this.waitForProviderRow(provider);
+	}
+
+	async cachedModelIds(provider: string): Promise<string[]> {
+		return browser.execute((providerId) => {
+			const plugin = (window as unknown as { app: { plugins: { plugins: Record<string, { settings: { llmConfigs: Array<{ provider: string; cachedModels?: Array<{ id: string }> }> } }> } } }).app.plugins.plugins['intelligence-assistant'];
+			return plugin.settings.llmConfigs.filter(config => config.provider === providerId).flatMap(config => (config.cachedModels ?? []).map(model => model.id));
+		}, provider);
+	}
+
 	async readSecret(secret: string): Promise<string | null> {
 		return browser.execute((id) => (window as unknown as {
 			app: { secretStorage: { getSecret(id: string): string | null } };
