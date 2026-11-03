@@ -53,6 +53,18 @@ export class UxProbePage extends BasePage {
 		return browser.execute((root) => Array.from(activeDocument.querySelectorAll(`${root} .setting-item-name`)).map(name => (name.textContent ?? '').trim()), scope);
 	}
 
+	async settingDescription(name: string): Promise<string> {
+		return browser.execute((label) => {
+			const item = Array.from(activeDocument.querySelectorAll('.setting-item'))
+				.find(candidate => (candidate.querySelector('.setting-item-name')?.textContent ?? '').trim() === label);
+			return (item?.querySelector('.setting-item-description')?.textContent ?? '').trim();
+		}, name);
+	}
+
+	async textIn(scope: string): Promise<string> {
+		return browser.execute((root) => (activeDocument.querySelector(root)?.textContent ?? '').trim(), scope);
+	}
+
 	async widthRatio(childSelector: string, parentSelector: string): Promise<number> {
 		return browser.execute((child, parent) => {
 			const childEl = activeDocument.querySelector(child);
