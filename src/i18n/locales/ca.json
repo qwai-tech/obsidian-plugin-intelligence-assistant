@@ -1085,6 +1085,7 @@
       "reasoning": "Raonament",
       "copy": "Copia",
       "copied": "Missatge copiat",
+      "codeCopied": "Copiat",
       "copyFailed": "No s'ha pogut copiar el missatge",
       "tokenUsage": "Ús de tokens",
       "tokenUsagePrompt": "Instrucció",

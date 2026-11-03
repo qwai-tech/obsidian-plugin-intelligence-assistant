@@ -1064,6 +1064,7 @@
       "reasoning": "যুক্তি",
       "copy": "কপি",
       "copied": "বার্তা কপি করা হয়েছে",
+      "codeCopied": "কপি করা হয়েছে",
       "copyFailed": "বার্তা কপি করতে ব্যর্থ হয়েছে",
       "tokenUsage": "টোকেন ব্যবহার",
       "tokenUsagePrompt": "প্রম্পট",

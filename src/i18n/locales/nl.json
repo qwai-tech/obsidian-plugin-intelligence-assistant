@@ -1064,6 +1064,7 @@
       "reasoning": "Redenering",
       "copy": "Kopiëren",
       "copied": "Bericht gekopieerd",
+      "codeCopied": "Gekopieerd",
       "copyFailed": "Kopiëren van bericht mislukt",
       "tokenUsage": "Tokengebruik",
       "tokenUsagePrompt": "Prompt",

@@ -1064,6 +1064,7 @@
       "reasoning": "Rezonado",
       "copy": "Kopii",
       "copied": "Mesaĝo kopiita",
+      "codeCopied": "Kopiita",
       "copyFailed": "Malsukcesis kopii mesaĝon",
       "tokenUsage": "Ĵetona uzado",
       "tokenUsagePrompt": "Instigilo",

@@ -328,7 +328,7 @@ function renderMessageContent(target: HTMLElement, message: Message) {
 			copyBtn.addEventListener('click', () => {
 				const text = code.textContent || '';
 				void navigator.clipboard.writeText(text).then(() => {
-					copyBtn.textContent = t('chat.message.copied');
+					copyBtn.textContent = t('chat.message.codeCopied');
 					copyBtn.classList.add('is-copied');
 					window.setTimeout(() => {
 						copyBtn.textContent = t('chat.message.copy');

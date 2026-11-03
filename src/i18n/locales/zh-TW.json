@@ -1043,6 +1043,7 @@
       "reasoning": "推理",
       "copy": "複製",
       "copied": "訊息已複製",
+      "codeCopied": "已複製",
       "copyFailed": "無法複製訊息",
       "tokenUsage": "權杖使用量",
       "tokenUsagePrompt": "提示詞",

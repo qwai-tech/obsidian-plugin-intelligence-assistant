@@ -1106,6 +1106,7 @@
       "reasoning": "Samprotavimas",
       "copy": "Kopijuoti",
       "copied": "Žinutė nukopijuota",
+      "codeCopied": "Nukopijuota",
       "copyFailed": "Nepavyko nukopijuoti žinutės",
       "tokenUsage": "Žetonų naudojimas",
       "tokenUsagePrompt": "Raginys",

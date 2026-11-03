@@ -1085,6 +1085,7 @@
       "reasoning": "Raciocínio",
       "copy": "Copiar",
       "copied": "Mensagem copiada",
+      "codeCopied": "Copiado",
       "copyFailed": "Falha ao copiar mensagem",
       "tokenUsage": "Uso de tokens",
       "tokenUsagePrompt": "Prompt",

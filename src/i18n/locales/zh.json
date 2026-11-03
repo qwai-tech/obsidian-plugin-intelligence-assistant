@@ -1040,6 +1040,7 @@
       "reasoning": "推理过程",
       "copy": "复制",
       "copied": "消息已复制",
+      "codeCopied": "已复制",
       "copyFailed": "复制消息失败",
       "tokenUsage": "Token 用量",
       "tokenUsagePrompt": "提示词",

@@ -1064,6 +1064,7 @@
       "reasoning": "Ræsonnering",
       "copy": "Kopiér",
       "copied": "Besked kopieret",
+      "codeCopied": "Kopieret",
       "copyFailed": "Kunne ikke kopiere besked",
       "tokenUsage": "Token-forbrug",
       "tokenUsagePrompt": "Prompt",

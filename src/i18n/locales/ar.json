@@ -1148,6 +1148,7 @@
       "reasoning": "التفكير",
       "copy": "نسخ",
       "copied": "تم نسخ الرسالة",
+      "codeCopied": "تم النسخ",
       "copyFailed": "فشل نسخ الرسالة",
       "tokenUsage": "استخدام الرموز",
       "tokenUsagePrompt": "المطالبة",

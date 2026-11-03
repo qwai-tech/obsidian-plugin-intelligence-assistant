@@ -1043,6 +1043,7 @@
       "reasoning": "Suy luận",
       "copy": "Sao chép",
       "copied": "Đã sao chép tin nhắn",
+      "codeCopied": "Đã sao chép",
       "copyFailed": "Không thể sao chép tin nhắn",
       "tokenUsage": "Sử dụng token",
       "tokenUsagePrompt": "Lời nhắc",

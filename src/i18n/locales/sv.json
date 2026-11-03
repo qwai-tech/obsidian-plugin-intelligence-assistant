@@ -1064,6 +1064,7 @@
       "reasoning": "Resonemang",
       "copy": "Kopiera",
       "copied": "Meddelande kopierat",
+      "codeCopied": "Kopierat",
       "copyFailed": "Det gick inte att kopiera meddelandet",
       "tokenUsage": "Tokenanvändning",
       "tokenUsagePrompt": "Prompt",

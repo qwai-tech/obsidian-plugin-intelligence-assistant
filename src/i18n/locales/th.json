@@ -1043,6 +1043,7 @@
       "reasoning": "การให้เหตุผล",
       "copy": "คัดลอก",
       "copied": "คัดลอกข้อความแล้ว",
+      "codeCopied": "คัดลอกแล้ว",
       "copyFailed": "ไม่สามารถคัดลอกข้อความ",
       "tokenUsage": "การใช้งาน Token",
       "tokenUsagePrompt": "พรอมต์",

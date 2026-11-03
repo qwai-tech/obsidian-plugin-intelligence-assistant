@@ -1064,6 +1064,7 @@
       "reasoning": "Érvelés",
       "copy": "Másolás",
       "copied": "Üzenet másolva",
+      "codeCopied": "Másolva",
       "copyFailed": "Nem sikerült másolni az üzenetet",
       "tokenUsage": "Token használat",
       "tokenUsagePrompt": "Prompt",

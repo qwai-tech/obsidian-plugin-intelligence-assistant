@@ -1085,6 +1085,7 @@
       "reasoning": "Резоновање",
       "copy": "Копирај",
       "copied": "Порука копирана",
+      "codeCopied": "Копирано",
       "copyFailed": "Није успело копирање поруке",
       "tokenUsage": "Употреба токена",
       "tokenUsagePrompt": "Упит",

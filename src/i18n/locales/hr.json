@@ -1085,6 +1085,7 @@
       "reasoning": "Zaključivanje",
       "copy": "Kopiraj",
       "copied": "Poruka kopirana",
+      "codeCopied": "Kopirano",
       "copyFailed": "Kopiranje poruke nije uspjelo",
       "tokenUsage": "Korištenje tokena",
       "tokenUsagePrompt": "Upit",

@@ -1043,6 +1043,7 @@
       "reasoning": "Penalaran",
       "copy": "Salin",
       "copied": "Pesan disalin",
+      "codeCopied": "Disalin",
       "copyFailed": "Gagal menyalin pesan",
       "tokenUsage": "Penggunaan token",
       "tokenUsagePrompt": "Prompt",

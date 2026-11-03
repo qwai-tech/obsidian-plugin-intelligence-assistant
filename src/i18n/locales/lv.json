@@ -1085,6 +1085,7 @@
       "reasoning": "Argumentācija",
       "copy": "Kopēt",
       "copied": "Ziņojums nokopēts",
+      "codeCopied": "Nokopēts",
       "copyFailed": "Neizdevās nokopēt ziņojumu",
       "tokenUsage": "Pilnvaru lietojums",
       "tokenUsagePrompt": "Uzvedne",

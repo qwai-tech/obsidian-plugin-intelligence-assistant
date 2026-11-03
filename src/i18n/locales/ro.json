@@ -1085,6 +1085,7 @@
       "reasoning": "Raționament",
       "copy": "Copiați",
       "copied": "Mesaj copiat",
+      "codeCopied": "Copiat",
       "copyFailed": "Copierea mesajului a eșuat",
       "tokenUsage": "Utilizare tokeni",
       "tokenUsagePrompt": "Prompt",

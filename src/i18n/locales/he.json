@@ -1085,6 +1085,7 @@
       "reasoning": "הסקה",
       "copy": "העתק",
       "copied": "הודעה הועתקה",
+      "codeCopied": "הועתק",
       "copyFailed": "נכשל בהעתקת הודעה",
       "tokenUsage": "שימוש בטוקנים",
       "tokenUsagePrompt": "הנחייה",

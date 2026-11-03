@@ -1064,6 +1064,7 @@
       "reasoning": "Akıl yürütme",
       "copy": "Kopyala",
       "copied": "Mesaj kopyalandı",
+      "codeCopied": "Kopyalandı",
       "copyFailed": "Mesaj kopyalanamadı",
       "tokenUsage": "Token kullanımı",
       "tokenUsagePrompt": "İstem",

@@ -1106,6 +1106,7 @@
       "reasoning": "Uvažovanie",
       "copy": "Kopírovať",
       "copied": "Správa skopírovaná",
+      "codeCopied": "Skopírované",
       "copyFailed": "Nepodarilo sa skopírovať správu",
       "tokenUsage": "Využitie tokenov",
       "tokenUsagePrompt": "Výzva",

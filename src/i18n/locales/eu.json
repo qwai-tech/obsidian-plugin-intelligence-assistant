@@ -1064,6 +1064,7 @@
       "reasoning": "Arrazoibidea",
       "copy": "Kopiatu",
       "copied": "Mezua kopiatu da",
+      "codeCopied": "Kopiatuta",
       "copyFailed": "Ezin izan da mezua kopiatu",
       "tokenUsage": "Tokenen erabilera",
       "tokenUsagePrompt": "Prompt-a",

@@ -1064,6 +1064,7 @@
       "reasoning": "Päättely",
       "copy": "Kopioi",
       "copied": "Viesti kopioitu",
+      "codeCopied": "Kopioitu",
       "copyFailed": "Viestin kopioiminen epäonnistui",
       "tokenUsage": "Tokenien käyttö",
       "tokenUsagePrompt": "Kehotus",

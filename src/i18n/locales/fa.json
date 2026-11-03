@@ -1064,6 +1064,7 @@
       "reasoning": "استدلال",
       "copy": "کپی",
       "copied": "پیام کپی شد",
+      "codeCopied": "کپی شد",
       "copyFailed": "کپی پیام ناموفق بود",
       "tokenUsage": "مصرف توکن",
       "tokenUsagePrompt": "دستورالعمل",

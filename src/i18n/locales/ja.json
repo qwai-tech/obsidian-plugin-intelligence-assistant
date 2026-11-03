@@ -1043,6 +1043,7 @@
       "reasoning": "推論",
       "copy": "コピー",
       "copied": "メッセージをコピーしました",
+      "codeCopied": "コピーしました",
       "copyFailed": "メッセージのコピーに失敗しました",
       "tokenUsage": "トークン使用状況",
       "tokenUsagePrompt": "プロンプト",
