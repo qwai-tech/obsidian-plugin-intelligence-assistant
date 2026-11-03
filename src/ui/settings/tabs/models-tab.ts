@@ -51,11 +51,11 @@ export function displayModelsTab(
 			const before = new Map(plugin.settings.llmConfigs.map((config, index) => [index, [...(config.cachedModels ?? [])]]));
 			for (const [index, config] of plugin.settings.llmConfigs.entries()) {
 				try {
-					new Notice(t('settings.models.notices.fetching', { provider: config.provider }));
+					new Notice(t('settings.models.notices.fetching', { provider: getProviderMeta(config.provider).label }));
 					refreshed.set(index, await ModelManager.getModelsForConfig(config, true));
 				} catch (error) {
 					console.error(`Failed to refresh models for ${config.provider}:`, error);
-					new Notice(t('settings.models.notices.fetchFailed', { provider: config.provider }));
+					new Notice(t('settings.models.notices.fetchFailed', { provider: getProviderMeta(config.provider).label }));
 				}
 			}
 

@@ -287,7 +287,7 @@ export function displayProviderTab(
 						config.cacheTimestamp = Date.now();
 						settings.defaultModel = defaultAfterRefresh(settings.defaultModel, before, models);
 					});
-					new Notice(t('settings.provider.notices.refreshed', { provider: config.provider }));
+					new Notice(t('settings.provider.notices.refreshed', { provider: getProviderMeta(config.provider).label }));
 					refreshDisplay();
 				} catch (_error) {
 					console.error('Failed to refresh models', _error);
@@ -307,7 +307,7 @@ export function displayProviderTab(
 		deleteBtn.addClass('ia-button--danger');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
-				if (await showConfirm(app, t('settings.provider.confirm.delete', { provider: config.provider }))) {
+				if (await showConfirm(app, t('settings.provider.confirm.delete', { provider: getProviderMeta(config.provider).label }))) {
 					await plugin.updateSettings((settings) => {
 						settings.llmConfigs.splice(index, 1);
 					});
