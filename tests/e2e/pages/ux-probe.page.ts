@@ -65,6 +65,31 @@ export class UxProbePage extends BasePage {
 		return browser.execute((root) => (activeDocument.querySelector(root)?.textContent ?? '').trim(), scope);
 	}
 
+	async isVisible(selector: string): Promise<boolean> {
+		return browser.execute((target) => {
+			const el = activeDocument.querySelector(target);
+			return el instanceof HTMLElement && el.offsetParent !== null && getComputedStyle(el).visibility !== 'hidden';
+		}, selector);
+	}
+
+	async overlaps(first: string, second: string): Promise<boolean> {
+		return browser.execute((a, b) => {
+			const ra = activeDocument.querySelector(a)?.getBoundingClientRect();
+			const rb = activeDocument.querySelector(b)?.getBoundingClientRect();
+			if (!ra || !rb) throw new Error(`Not found: ${a} / ${b}`);
+			return ra.left < rb.right && rb.left < ra.right && ra.top < rb.bottom && rb.top < ra.bottom;
+		}, first, second);
+	}
+
+	async computedStyles(selectors: string[], properties: string[]): Promise<Array<Record<string, string>>> {
+		return browser.execute((targets, props) => targets.map(target => {
+			const el = activeDocument.querySelector(target);
+			if (!el) throw new Error(`Not found: ${target}`);
+			const style = getComputedStyle(el);
+			return Object.fromEntries(props.map(prop => [prop, style.getPropertyValue(prop)]));
+		}), selectors, properties);
+	}
+
 	async widthRatio(childSelector: string, parentSelector: string): Promise<number> {
 		return browser.execute((child, parent) => {
 			const childEl = activeDocument.querySelector(child);

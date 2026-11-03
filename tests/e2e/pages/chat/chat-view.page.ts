@@ -45,6 +45,11 @@ export class ChatViewPage extends BasePage {
 		await $('.mod-right-split [data-testid="ia-chat-container"]').waitForDisplayed({ timeout: 10_000 });
 	}
 
+	async openCapabilities(): Promise<void> {
+		await this.click(TestIds.chat.agentCapabilitiesBtn);
+		await $('.ia-agent-capability-modal').waitForDisplayed({ timeout: 10_000 });
+	}
+
 	async newChat(): Promise<void> {
 		await this.click(TestIds.chat.newBtn);
 		await this.waitFor(TestIds.chat.emptyState);

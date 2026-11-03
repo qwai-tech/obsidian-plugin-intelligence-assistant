@@ -1,4 +1,5 @@
 import { BasePage } from '../base.page';
+import { TestIds } from '../../support/testids';
 
 const PLUGIN_VIEW_TYPE = 'intelligence-assistant-chat';
 
@@ -81,6 +82,41 @@ export class ChatReplyPage extends BasePage {
 		await confirm.waitForClickable({ timeout: 10_000 });
 		await confirm.click();
 		await browser.waitUntil(async () => (await this.proposalCards())[0]?.button === 'Applied', { timeout: 10_000, timeoutMsg: 'Proposal was not applied' });
+	}
+
+	async waitForReplies(count: number, timeoutMs: number): Promise<void> {
+		await browser.waitUntil(async () => browser.execute((expected, messageId, stopId) => {
+			const replies = activeDocument.querySelectorAll(`[data-testid="${messageId}"][data-role="assistant"]`).length;
+			const stop = activeDocument.querySelector(`[data-testid="${stopId}"]`);
+			const streaming = stop instanceof HTMLElement && stop.offsetParent !== null;
+			return replies >= expected && !streaming;
+		}, count, TestIds.chat.message, TestIds.chat.stopBtn), { timeout: timeoutMs, timeoutMsg: `Expected ${count} finished replies` });
+	}
+
+	async messagesOverflow(): Promise<boolean> {
+		return browser.execute(() => {
+			const list = activeDocument.querySelector('[data-testid="ia-chat-message-list"]');
+			return list instanceof HTMLElement && list.scrollHeight > list.clientHeight + 120;
+		});
+	}
+
+	async scrollMessagesToTop(): Promise<void> {
+		await browser.execute(() => {
+			const list = activeDocument.querySelector('[data-testid="ia-chat-message-list"]');
+			if (!(list instanceof HTMLElement)) throw new Error('Message list not found');
+			list.scrollTop = 0;
+			list.dispatchEvent(new Event('scroll'));
+		});
+	}
+
+	async copyFirstCodeBlock(): Promise<void> {
+		const copy = $('.ia-code-block__copy');
+		await copy.waitForExist({ timeout: 10_000 });
+		await browser.execute(() => activeDocument.querySelector<HTMLButtonElement>('.ia-code-block__copy')?.click());
+	}
+
+	async firstCodeCopyLabel(): Promise<string> {
+		return browser.execute(() => (activeDocument.querySelector('.ia-code-block__copy')?.textContent ?? '').trim());
 	}
 
 	private async clickLastReplyAction(label: string): Promise<void> {
