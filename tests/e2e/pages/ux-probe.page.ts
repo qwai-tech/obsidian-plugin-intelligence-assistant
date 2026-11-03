@@ -61,6 +61,10 @@ export class UxProbePage extends BasePage {
 		}, name);
 	}
 
+	async buttonLabelsIn(scope: string): Promise<string[]> {
+		return browser.execute((root) => Array.from(activeDocument.querySelectorAll(`${root} button`)).map(button => (button.textContent ?? '').trim()), scope);
+	}
+
 	async textIn(scope: string): Promise<string> {
 		return browser.execute((root) => (activeDocument.querySelector(root)?.textContent ?? '').trim(), scope);
 	}
