@@ -420,8 +420,7 @@
           "actions": {
             "name": "اقدامات",
             "reloadTools": "ٹولز دوبارہ لوڈ کریں",
-            "refetchTooltip": "URL سے اسپیک دوبارہ حاصل کریں",
-            "deleteTooltip": "ذریعہ حذف کریں"
+            "refetchTooltip": "URL سے اسپیک دوبارہ حاصل کریں"
           },
           "namePlaceholder": "HTTP ماخذ"
         },

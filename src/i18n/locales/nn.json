@@ -420,8 +420,7 @@
           "actions": {
             "name": "Handlingar",
             "reloadTools": "Last inn verktøy på nytt",
-            "refetchTooltip": "Hent spesifikasjon frå URL på nytt",
-            "deleteTooltip": "Slett kjelde"
+            "refetchTooltip": "Hent spesifikasjon frå URL på nytt"
           },
           "namePlaceholder": "HTTP-kjelde"
         },

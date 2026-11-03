@@ -404,8 +404,7 @@
           "actions": {
             "name": "การดำเนินการ",
             "reloadTools": "โหลดเครื่องมือใหม่",
-            "refetchTooltip": "ดึงสเปกจาก URL อีกครั้ง",
-            "deleteTooltip": "ลบแหล่งข้อมูล"
+            "refetchTooltip": "ดึงสเปกจาก URL อีกครั้ง"
           },
           "namePlaceholder": "แหล่ง HTTP"
         },

@@ -420,8 +420,7 @@
           "actions": {
             "name": "Agoj",
             "reloadTools": "Reŝargi ilojn",
-            "refetchTooltip": "Reprenи specifon el URL",
-            "deleteTooltip": "Forigi fonton"
+            "refetchTooltip": "Reprenи specifon el URL"
           },
           "namePlaceholder": "HTTP-fonto"
         },

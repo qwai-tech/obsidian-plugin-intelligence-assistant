@@ -420,8 +420,7 @@
           "actions": {
             "name": "Действия",
             "reloadTools": "Презареди инструменти",
-            "refetchTooltip": "Извлечи отново спецификацията от URL",
-            "deleteTooltip": "Изтрий източника"
+            "refetchTooltip": "Извлечи отново спецификацията от URL"
           },
           "namePlaceholder": "HTTP източник"
         },

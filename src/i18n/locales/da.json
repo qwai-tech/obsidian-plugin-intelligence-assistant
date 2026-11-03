@@ -420,8 +420,7 @@
           "actions": {
             "name": "Handlinger",
             "reloadTools": "Genindlæs værktøjer",
-            "refetchTooltip": "Hent specifikation fra URL igen",
-            "deleteTooltip": "Slet kilde"
+            "refetchTooltip": "Hent specifikation fra URL igen"
           },
           "namePlaceholder": "HTTP-kilde"
         },

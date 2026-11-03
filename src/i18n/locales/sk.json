@@ -452,8 +452,7 @@
           "actions": {
             "name": "Akcie",
             "reloadTools": "Znova načítať nástroje",
-            "refetchTooltip": "Znova stiahnuť špecifikáciu z URL",
-            "deleteTooltip": "Odstrániť zdroj"
+            "refetchTooltip": "Znova stiahnuť špecifikáciu z URL"
           },
           "namePlaceholder": "Zdroj HTTP"
         },

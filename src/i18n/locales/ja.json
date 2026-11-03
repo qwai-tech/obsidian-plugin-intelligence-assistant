@@ -404,8 +404,7 @@
           "actions": {
             "name": "アクション",
             "reloadTools": "ツールを再読み込み",
-            "refetchTooltip": "URL からスペックを再取得",
-            "deleteTooltip": "ソースを削除"
+            "refetchTooltip": "URL からスペックを再取得"
           },
           "namePlaceholder": "HTTP ソース"
         },

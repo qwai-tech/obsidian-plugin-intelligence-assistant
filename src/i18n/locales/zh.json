@@ -404,8 +404,7 @@
           "actions": {
             "name": "操作",
             "reloadTools": "重载工具",
-            "refetchTooltip": "从 URL 重新获取规范",
-            "deleteTooltip": "删除源"
+            "refetchTooltip": "从 URL 重新获取规范"
           },
           "namePlaceholder": "HTTP 来源"
         },

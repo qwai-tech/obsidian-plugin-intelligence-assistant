@@ -420,8 +420,7 @@
           "actions": {
             "name": "Ενέργειες",
             "reloadTools": "Επαναφόρτωση εργαλείων",
-            "refetchTooltip": "Επαναλήψη προδιαγραφής από URL",
-            "deleteTooltip": "Διαγραφή πηγής"
+            "refetchTooltip": "Επαναλήψη προδιαγραφής από URL"
           },
           "namePlaceholder": "Πηγή HTTP"
         },

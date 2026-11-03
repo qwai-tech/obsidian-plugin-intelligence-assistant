@@ -436,8 +436,7 @@
           "actions": {
             "name": "Accions",
             "reloadTools": "Torna a carregar eines",
-            "refetchTooltip": "Torna a obtenir l'especificació de la URL",
-            "deleteTooltip": "Elimina la font"
+            "refetchTooltip": "Torna a obtenir l'especificació de la URL"
           },
           "namePlaceholder": "Font HTTP"
         },

@@ -420,8 +420,7 @@
           "actions": {
             "name": "செயல்கள்",
             "reloadTools": "கருவிகளை மீண்டும் ஏற்று",
-            "refetchTooltip": "URL இலிருந்து விவரக்குறிப்பை மீண்டும் பெறு",
-            "deleteTooltip": "மூலத்தை நீக்கு"
+            "refetchTooltip": "URL இலிருந்து விவரக்குறிப்பை மீண்டும் பெறு"
           },
           "namePlaceholder": "HTTP மூலம்"
         },

@@ -420,8 +420,7 @@
           "actions": {
             "name": "Actions",
             "reloadTools": "Reload tools",
-            "refetchTooltip": "Refetch spec from URL",
-            "deleteTooltip": "Delete source"
+            "refetchTooltip": "Refetch spec from URL"
           },
           "namePlaceholder": "HTTP source"
         },

@@ -452,8 +452,7 @@
           "actions": {
             "name": "Akcje",
             "reloadTools": "Przeładuj narzędzia",
-            "refetchTooltip": "Pobierz specyfikację ponownie z URL",
-            "deleteTooltip": "Usuń źródło"
+            "refetchTooltip": "Pobierz specyfikację ponownie z URL"
           },
           "namePlaceholder": "Źródło HTTP"
         },

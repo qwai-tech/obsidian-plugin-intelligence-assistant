@@ -420,8 +420,7 @@
           "actions": {
             "name": "Aksies",
             "reloadTools": "Herlaai gereedskap",
-            "refetchTooltip": "Herlaai spesifikasie van URL",
-            "deleteTooltip": "Verwyder bron"
+            "refetchTooltip": "Herlaai spesifikasie van URL"
           },
           "namePlaceholder": "HTTP-bron"
         },

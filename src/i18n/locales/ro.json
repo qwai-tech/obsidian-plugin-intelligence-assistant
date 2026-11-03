@@ -436,8 +436,7 @@
           "actions": {
             "name": "Acțiuni",
             "reloadTools": "Reîncărcați instrumente",
-            "refetchTooltip": "Reobțineți specificația de la URL",
-            "deleteTooltip": "Ștergeți sursa"
+            "refetchTooltip": "Reobțineți specificația de la URL"
           },
           "namePlaceholder": "Sursă HTTP"
         },

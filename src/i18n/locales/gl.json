@@ -420,8 +420,7 @@
           "actions": {
             "name": "Accións",
             "reloadTools": "Recargar ferramentas",
-            "refetchTooltip": "Obter especificación da URL de novo",
-            "deleteTooltip": "Eliminar fonte"
+            "refetchTooltip": "Obter especificación da URL de novo"
           },
           "namePlaceholder": "Fonte HTTP"
         },

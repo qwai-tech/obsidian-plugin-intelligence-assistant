@@ -44,6 +44,12 @@ export function moveKeysToVault(settings: PluginSettings, vault: SecretVault): b
 			moved = true;
 		}
 	}
+	for (const source of settings.openApiTools ?? []) {
+		if (source.authValue && !source.authValueSecret) {
+			source.authValueSecret = store(`http-${source.id}`, source.authValue);
+			moved = true;
+		}
+	}
 	return moved;
 }
 
@@ -58,6 +64,11 @@ export function revealKeys(settings: PluginSettings, vault: SecretVault): void {
 		const id = web[secret];
 		web[key] = id ? vault.get(id) ?? undefined : undefined;
 	}
+	for (const source of settings.openApiTools ?? []) {
+		if (source.authValueSecret) {
+			source.authValue = vault.get(source.authValueSecret) ?? undefined;
+		}
+	}
 }
 
 export function withoutKeys(settings: PluginSettings): PluginSettings {
@@ -65,6 +76,7 @@ export function withoutKeys(settings: PluginSettings): PluginSettings {
 		...settings,
 		llmConfigs: withoutProviderKeys(settings.llmConfigs),
 		webSearchConfig: withoutWebSearchKeys(settings.webSearchConfig),
+		openApiTools: (settings.openApiTools ?? []).map(({ authValue: _authValue, ...source }) => source),
 	};
 }
 

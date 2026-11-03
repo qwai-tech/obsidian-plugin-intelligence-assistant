@@ -452,8 +452,7 @@
           "actions": {
             "name": "Akce",
             "reloadTools": "Znovu načíst nástroje",
-            "refetchTooltip": "Znovu stáhnout specifikaci z URL",
-            "deleteTooltip": "Smazat zdroj"
+            "refetchTooltip": "Znovu stáhnout specifikaci z URL"
           },
           "namePlaceholder": "Zdroj HTTP"
         },

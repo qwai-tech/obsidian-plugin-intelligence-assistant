@@ -206,5 +206,19 @@ describe('SettingsStore', () => {
 		expect(store.current).toBe(held);
 		expect(held.defaultModel).toBe('changed-elsewhere');
 	});
-});
 
+	it('keeps a credential added after loading in the vault and out of saved settings', async () => {
+		const { persistence, written } = fakePersistence({ userConfig: currentConfig(), legacyData: null, outdated: false });
+		const vault = memoryVault();
+		const store = new SettingsStore(persistence, vault);
+		await store.load();
+
+		await store.update((settings) => {
+			settings.openApiTools = [{ id: 'ux-auth', name: 'UX auth source', enabled: true, sourceType: 'file', authType: 'header', authKey: 'X-Api-Key', authValue: 'ux-secret-9931' }];
+		});
+
+		expect(written[written.length - 1]).not.toContain('ux-secret-9931');
+		expect(vault.secrets.get('intelligence-assistant-http-ux-auth')).toBe('ux-secret-9931');
+		expect(store.current.openApiTools[0].authValue).toBe('ux-secret-9931');
+	});
+});

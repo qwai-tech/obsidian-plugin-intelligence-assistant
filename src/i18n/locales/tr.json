@@ -420,8 +420,7 @@
           "actions": {
             "name": "Eylemler",
             "reloadTools": "Araçları yeniden yükle",
-            "refetchTooltip": "URL'den özelliği yeniden getir",
-            "deleteTooltip": "Kaynağı sil"
+            "refetchTooltip": "URL'den özelliği yeniden getir"
           },
           "namePlaceholder": "HTTP kaynağı"
         },

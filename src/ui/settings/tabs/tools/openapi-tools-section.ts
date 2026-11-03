@@ -3,12 +3,13 @@
  * Renders the OpenAPI tools table and configuration modal for the tools settings tab
  */
 
-import { Notice, Setting, Modal } from 'obsidian';
+import { Notice, SecretComponent, Setting, Modal } from 'obsidian';
 import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import type { PluginHost } from '@/ui/plugin-host';
 import { showConfirm } from '@/ui/modals/confirm-modal';
+import { setDestructiveButton } from '@/ui/utils/ui-helpers';
 import type { OpenApiToolConfig, OpenApiAuthType, OpenApiSourceType } from '@/features/tools';
 
 export function renderOpenapiToolsSection(
@@ -291,15 +292,13 @@ class OpenApiConfigModal extends Modal {
 
 		new Setting(contentEl)
 			.setName(t('settings.tools.openapi.modal.credValue.name'))
-			.addText(text => {
-				const tokenPlaceholder = 'sk-your-token';
-				text.setPlaceholder(tokenPlaceholder)
-					.setValue(this.config.authValue ?? '')
-					.onChange(value => {
-						this.config.authValue = value.trim();
-					});
-				text.inputEl.onblur = () => { void persist(); };
-			});
+			.addComponent(el => new SecretComponent(this.plugin.app, el)
+				.setValue(this.config.authValueSecret ?? '')
+				.onChange(async (secret) => {
+					this.config.authValueSecret = secret || undefined;
+					this.config.authValue = undefined;
+					await persist();
+				}));
 
 		const actions = new Setting(contentEl)
 			.setName(t('settings.tools.openapi.modal.actions.name'));
@@ -316,11 +315,11 @@ class OpenApiConfigModal extends Modal {
 			});
 		}
 
-		actions.addExtraButton(button => {
-			button.setIcon('x')
-				.setTooltip(t('settings.tools.openapi.modal.actions.deleteTooltip'))
+		actions.addButton(button => {
+			setDestructiveButton(button.setButtonText(t('settings.tools.openapi.actions.delete')))
 				.onClick(() => {
 					void (async () => {
+						if (!await showConfirm(this.plugin.app, t('settings.tools.openapi.confirm.delete', { name: this.config.name || this.config.id }))) return;
 						const list = this.plugin.settings.openApiTools;
 						const index = list.findIndex(entry => entry.id === this.config.id);
 						if (index !== -1) {

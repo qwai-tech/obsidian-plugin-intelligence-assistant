@@ -484,8 +484,7 @@
           "actions": {
             "name": "الإجراءات",
             "reloadTools": "إعادة تحميل الأدوات",
-            "refetchTooltip": "إعادة جلب المواصفة من URL",
-            "deleteTooltip": "حذف المصدر"
+            "refetchTooltip": "إعادة جلب المواصفة من URL"
           },
           "namePlaceholder": "مصدر HTTP"
         },

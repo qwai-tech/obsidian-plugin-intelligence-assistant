@@ -436,8 +436,7 @@
           "actions": {
             "name": "Радње",
             "reloadTools": "Поново учитај алате",
-            "refetchTooltip": "Поново преузми спецификацију са URL-а",
-            "deleteTooltip": "Обриши извор"
+            "refetchTooltip": "Поново преузми спецификацију са URL-а"
           },
           "namePlaceholder": "HTTP извор"
         },

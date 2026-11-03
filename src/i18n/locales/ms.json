@@ -404,8 +404,7 @@
           "actions": {
             "name": "Tindakan",
             "reloadTools": "Muat semula alat",
-            "refetchTooltip": "Ambil semula spesifikasi daripada URL",
-            "deleteTooltip": "Padam sumber"
+            "refetchTooltip": "Ambil semula spesifikasi daripada URL"
           },
           "namePlaceholder": "Sumber HTTP"
         },

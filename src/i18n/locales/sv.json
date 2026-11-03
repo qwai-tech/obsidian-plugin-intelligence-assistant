@@ -420,8 +420,7 @@
           "actions": {
             "name": "Åtgärder",
             "reloadTools": "Ladda om verktyg",
-            "refetchTooltip": "Hämta spec från URL igen",
-            "deleteTooltip": "Ta bort källa"
+            "refetchTooltip": "Hämta spec från URL igen"
           },
           "namePlaceholder": "HTTP-källa"
         },

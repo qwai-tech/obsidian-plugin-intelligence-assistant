@@ -90,6 +90,7 @@ export class SettingsStore {
 
 	async update(change: (settings: PluginSettings) => void): Promise<void> {
 		change(this.current);
+		moveKeysToVault(this.current, this.vault);
 		revealKeys(this.current, this.vault);
 		await this.save();
 	}

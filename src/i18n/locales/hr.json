@@ -436,8 +436,7 @@
           "actions": {
             "name": "Radnje",
             "reloadTools": "Ponovo učitaj alate",
-            "refetchTooltip": "Ponovo dohvati specifikaciju s URL-a",
-            "deleteTooltip": "Obriši izvor"
+            "refetchTooltip": "Ponovo dohvati specifikaciju s URL-a"
           },
           "namePlaceholder": "HTTP izvor"
         },

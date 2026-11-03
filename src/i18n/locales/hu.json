@@ -420,8 +420,7 @@
           "actions": {
             "name": "Műveletek",
             "reloadTools": "Eszközök újratöltése",
-            "refetchTooltip": "Specifikáció újralekérése URL-ről",
-            "deleteTooltip": "Forrás törlése"
+            "refetchTooltip": "Specifikáció újralekérése URL-ről"
           },
           "namePlaceholder": "HTTP-forrás"
         },

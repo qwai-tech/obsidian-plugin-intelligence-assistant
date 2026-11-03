@@ -404,8 +404,7 @@
           "actions": {
             "name": "操作",
             "reloadTools": "重新載入工具",
-            "refetchTooltip": "從 URL 重新擷取規格",
-            "deleteTooltip": "刪除來源"
+            "refetchTooltip": "從 URL 重新擷取規格"
           },
           "namePlaceholder": "HTTP 來源"
         },

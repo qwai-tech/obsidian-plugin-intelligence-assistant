@@ -452,8 +452,7 @@
           "actions": {
             "name": "Действия",
             "reloadTools": "Перезагрузить инструменты",
-            "refetchTooltip": "Перезапросить спецификацию с URL",
-            "deleteTooltip": "Удалить источник"
+            "refetchTooltip": "Перезапросить спецификацию с URL"
           },
           "namePlaceholder": "HTTP-источник"
         },

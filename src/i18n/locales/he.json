@@ -436,8 +436,7 @@
           "actions": {
             "name": "פעולות",
             "reloadTools": "טען כלים מחדש",
-            "refetchTooltip": "אחזר מפרט מ-URL",
-            "deleteTooltip": "מחק מקור"
+            "refetchTooltip": "אחזר מפרט מ-URL"
           },
           "namePlaceholder": "מקור HTTP"
         },

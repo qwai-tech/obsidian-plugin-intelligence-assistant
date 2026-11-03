@@ -17,5 +17,6 @@ export interface OpenApiToolConfig {
 	authType?: OpenApiAuthType;
 	authKey?: string;
 	authValue?: string;
+	authValueSecret?: string;
 	lastFetchedAt?: number;
 }

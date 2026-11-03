@@ -452,8 +452,7 @@
           "actions": {
             "name": "Veiksmai",
             "reloadTools": "Perkrauti įrankius",
-            "refetchTooltip": "Gauti specifikaciją iš URL iš naujo",
-            "deleteTooltip": "Ištrinti šaltinį"
+            "refetchTooltip": "Gauti specifikaciją iš URL iš naujo"
           },
           "namePlaceholder": "HTTP šaltinis"
         },

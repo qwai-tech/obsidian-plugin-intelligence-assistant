@@ -420,8 +420,7 @@
           "actions": {
             "name": "অ্যাকশন",
             "reloadTools": "টুল রিলোড করুন",
-            "refetchTooltip": "URL থেকে স্পেস পুনরায় আনুন",
-            "deleteTooltip": "উৎস মুছুন"
+            "refetchTooltip": "URL থেকে স্পেস পুনরায় আনুন"
           },
           "namePlaceholder": "HTTP উৎস"
         },

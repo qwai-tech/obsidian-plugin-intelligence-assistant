@@ -436,8 +436,7 @@
           "actions": {
             "name": "Actions",
             "reloadTools": "Recharger les outils",
-            "refetchTooltip": "Récupérer la spécification depuis l'URL",
-            "deleteTooltip": "Supprimer la source"
+            "refetchTooltip": "Récupérer la spécification depuis l'URL"
           },
           "namePlaceholder": "Source HTTP"
         },

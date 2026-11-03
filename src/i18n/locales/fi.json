@@ -420,8 +420,7 @@
           "actions": {
             "name": "Toiminnot",
             "reloadTools": "Lataa työkalut uudelleen",
-            "refetchTooltip": "Hae spesifikaatio uudelleen URL:sta",
-            "deleteTooltip": "Poista lähde"
+            "refetchTooltip": "Hae spesifikaatio uudelleen URL:sta"
           },
           "namePlaceholder": "HTTP-lähde"
         },

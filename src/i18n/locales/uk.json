@@ -452,8 +452,7 @@
           "actions": {
             "name": "Дії",
             "reloadTools": "Перезавантажити інструменти",
-            "refetchTooltip": "Перезапросити специфікацію з URL",
-            "deleteTooltip": "Видалити джерело"
+            "refetchTooltip": "Перезапросити специфікацію з URL"
           },
           "namePlaceholder": "HTTP-джерело"
         },

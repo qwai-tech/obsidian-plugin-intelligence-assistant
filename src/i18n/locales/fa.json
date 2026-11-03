@@ -420,8 +420,7 @@
           "actions": {
             "name": "اقدامات",
             "reloadTools": "بارگذاری مجدد ابزارها",
-            "refetchTooltip": "دریافت مجدد مشخصات از URL",
-            "deleteTooltip": "حذف منبع"
+            "refetchTooltip": "دریافت مجدد مشخصات از URL"
           },
           "namePlaceholder": "منبع HTTP"
         },

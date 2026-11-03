@@ -72,6 +72,7 @@ const normalizeOpenApiConfigs = (value: unknown): OpenApiToolConfig[] => {
 				authType: entry.authType ?? 'none',
 				authKey: entry.authKey ?? '',
 				authValue: entry.authValue ?? '',
+				authValueSecret: entry.authValueSecret,
 				lastFetchedAt: entry.lastFetchedAt
 			};
 		});

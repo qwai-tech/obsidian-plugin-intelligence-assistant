@@ -420,8 +420,7 @@
           "actions": {
             "name": "Aktionen",
             "reloadTools": "Werkzeuge neu laden",
-            "refetchTooltip": "Spezifikation von URL neu abrufen",
-            "deleteTooltip": "Quelle löschen"
+            "refetchTooltip": "Spezifikation von URL neu abrufen"
           },
           "namePlaceholder": "HTTP-Quelle"
         },

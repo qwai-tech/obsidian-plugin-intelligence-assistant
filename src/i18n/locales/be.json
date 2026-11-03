@@ -452,8 +452,7 @@
           "actions": {
             "name": "Дзеянні",
             "reloadTools": "Перазагрузіць інструменты",
-            "refetchTooltip": "Атрымаць спецыфікацыю з URL зноў",
-            "deleteTooltip": "Выдаліць крыніцу"
+            "refetchTooltip": "Атрымаць спецыфікацыю з URL зноў"
           },
           "namePlaceholder": "Крыніца HTTP"
         },

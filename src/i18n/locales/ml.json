@@ -420,8 +420,7 @@
           "actions": {
             "name": "പ്രവർത്തനങ്ങൾ",
             "reloadTools": "ഉപകരണങ്ങൾ റീലോഡ് ചെയ്യുക",
-            "refetchTooltip": "URL-ൽ നിന്ന് സ്പെസിഫിക്കേഷൻ വീണ്ടും ലഭ്യമാക്കുക",
-            "deleteTooltip": "സ്രോതസ്സ് ഇല്ലാതാക്കുക"
+            "refetchTooltip": "URL-ൽ നിന്ന് സ്പെസിഫിക്കേഷൻ വീണ്ടും ലഭ്യമാക്കുക"
           },
           "namePlaceholder": "HTTP ഉറവിടം"
         },

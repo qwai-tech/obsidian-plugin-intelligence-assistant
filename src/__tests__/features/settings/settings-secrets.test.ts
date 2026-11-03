@@ -107,4 +107,19 @@ describe('settings secrets', () => {
 		expect(settings.llmConfigs[0].apiKey).toBe('sk');
 		expect(settings.webSearchConfig.apiKey).toBe('serp');
 	});
+
+	it('moves a plain-text HTTP source credential into the vault, reveals it at runtime and never stores it', () => {
+		const vault = memoryVault();
+		const source = { id: 'ux-auth', name: 'UX auth source', enabled: true, sourceType: 'file' as const, authType: 'header' as const, authKey: 'X-Api-Key', authValue: 'ux-secret-9931' };
+		const settings = settingsWith({ openApiTools: [source] });
+
+		expect(moveKeysToVault(settings, vault)).toBe(true);
+		expect(settings.openApiTools[0].authValueSecret).toBe('intelligence-assistant-http-ux-auth');
+		expect(vault.secrets.get('intelligence-assistant-http-ux-auth')).toBe('ux-secret-9931');
+
+		settings.openApiTools[0].authValue = undefined;
+		revealKeys(settings, vault);
+		expect(settings.openApiTools[0].authValue).toBe('ux-secret-9931');
+		expect(JSON.stringify(withoutKeys(settings))).not.toContain('ux-secret-9931');
+	});
 });

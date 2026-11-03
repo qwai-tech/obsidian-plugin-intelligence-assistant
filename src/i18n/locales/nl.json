@@ -420,8 +420,7 @@
           "actions": {
             "name": "Acties",
             "reloadTools": "Tools herladen",
-            "refetchTooltip": "Specificatie opnieuw ophalen van URL",
-            "deleteTooltip": "Bron verwijderen"
+            "refetchTooltip": "Specificatie opnieuw ophalen van URL"
           },
           "namePlaceholder": "HTTP-bron"
         },

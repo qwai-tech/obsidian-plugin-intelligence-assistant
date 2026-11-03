@@ -420,8 +420,7 @@
           "actions": {
             "name": "Ekintzak",
             "reloadTools": "Birkargatu tresnak",
-            "refetchTooltip": "Berreskuratu zehaztapena URL-tik",
-            "deleteTooltip": "Ezabatu iturria"
+            "refetchTooltip": "Berreskuratu zehaztapena URL-tik"
           },
           "namePlaceholder": "HTTP iturria"
         },

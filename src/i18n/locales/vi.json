@@ -404,8 +404,7 @@
           "actions": {
             "name": "Thao tác",
             "reloadTools": "Tải lại công cụ",
-            "refetchTooltip": "Tải lại spec từ URL",
-            "deleteTooltip": "Xóa nguồn"
+            "refetchTooltip": "Tải lại spec từ URL"
           },
           "namePlaceholder": "Nguồn HTTP"
         },

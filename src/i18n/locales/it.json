@@ -436,8 +436,7 @@
           "actions": {
             "name": "Azioni",
             "reloadTools": "Ricarica strumenti",
-            "refetchTooltip": "Recupera di nuovo la specifica dall'URL",
-            "deleteTooltip": "Elimina sorgente"
+            "refetchTooltip": "Recupera di nuovo la specifica dall'URL"
           },
           "namePlaceholder": "Sorgente HTTP"
         },

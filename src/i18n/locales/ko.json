@@ -404,8 +404,7 @@
           "actions": {
             "name": "작업",
             "reloadTools": "도구 다시 로드",
-            "refetchTooltip": "URL에서 사양 다시 가져오기",
-            "deleteTooltip": "소스 삭제"
+            "refetchTooltip": "URL에서 사양 다시 가져오기"
           },
           "namePlaceholder": "HTTP 소스"
         },

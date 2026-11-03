@@ -436,8 +436,7 @@
           "actions": {
             "name": "Darbības",
             "reloadTools": "Atkārtoti ielādēt rīkus",
-            "refetchTooltip": "Atkārtoti iegūt specifikāciju no URL",
-            "deleteTooltip": "Dzēst avotu"
+            "refetchTooltip": "Atkārtoti iegūt specifikāciju no URL"
           },
           "namePlaceholder": "HTTP avots"
         },
