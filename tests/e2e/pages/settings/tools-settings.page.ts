@@ -177,6 +177,26 @@ export class ToolsSettingsPage extends BasePage {
 		await this.waitForCliRow(config.id);
 	}
 
+	async modalInputValues(scope: string): Promise<string[]> {
+		return browser.execute((root) => Array.from(activeDocument.querySelectorAll<HTMLInputElement>(`${root} input`)).map(input => input.value), scope);
+	}
+
+	async savedPluginData(): Promise<string> {
+		return browser.execute(async (pluginId) => {
+			const app = (window as unknown as { app: { vault: { adapter: { read(p: string): Promise<string> } }; plugins: { manifests: Record<string, { dir?: string }> } } }).app;
+			return app.vault.adapter.read(`${app.plugins.manifests[pluginId]?.dir ?? ''}/data.json`);
+		}, PLUGIN_ID);
+	}
+
+	async runRegisteredTool(llmName: string, args: Record<string, unknown>): Promise<unknown> {
+		return browser.execute(async (pluginId, name, input) => {
+			const plugin = (window as unknown as { app: { plugins: { plugins: Record<string, {
+				services: { tools: { registry: { executeTool(name: string, args: Record<string, unknown>): Promise<unknown> } } };
+			}> } } }).app.plugins.plugins[pluginId];
+			return plugin.services.tools.registry.executeTool(name, input);
+		}, PLUGIN_ID, llmName, args);
+	}
+
 	async closeSettings(): Promise<void> {
 		await browser.execute(() => {
 			const setting = (window as unknown as {
