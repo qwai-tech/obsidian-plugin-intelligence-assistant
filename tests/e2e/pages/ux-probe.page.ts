@@ -61,6 +61,23 @@ export class UxProbePage extends BasePage {
 		}, name);
 	}
 
+	async selectSettingOption(name: string, value: string): Promise<void> {
+		await browser.execute((label, option) => {
+			const item = Array.from(activeDocument.querySelectorAll('.setting-item'))
+				.find(candidate => (candidate.querySelector('.setting-item-name')?.textContent ?? '').trim() === label);
+			const select = item?.querySelector('select');
+			if (!(select instanceof HTMLSelectElement)) throw new Error(`No dropdown for ${label}`);
+			select.value = option;
+			select.dispatchEvent(new Event('change', { bubbles: true }));
+		}, name, value);
+		await browser.waitUntil(async () => browser.execute((label, option) => {
+			const item = Array.from(activeDocument.querySelectorAll('.setting-item'))
+				.find(candidate => (candidate.querySelector('.setting-item-name')?.textContent ?? '').trim() === label);
+			return item?.querySelector('select')?.value === option;
+		}, name, value), { timeout: 5_000, timeoutMsg: `${name} did not change to ${value}` });
+		await this.waitForAnimations();
+	}
+
 	async buttonLabelsIn(scope: string): Promise<string[]> {
 		return browser.execute((root) => Array.from(activeDocument.querySelectorAll(`${root} button`)).map(button => (button.textContent ?? '').trim()), scope);
 	}
