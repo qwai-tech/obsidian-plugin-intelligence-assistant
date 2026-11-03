@@ -1138,6 +1138,7 @@
       "apply": "应用",
       "applyAll": "全部应用",
       "applied": "已应用",
+      "appliedNote": "已应用到仓库。",
       "confirm": "应用 {{summary}}？",
       "appliedNotice": "已应用 {{summary}}",
       "operations": {

@@ -1180,6 +1180,7 @@
       "apply": "Примени",
       "applyAll": "Примени све",
       "applied": "Примењено",
+      "appliedNote": "Примењено у трезору.",
       "confirm": "Применити ({{summary}})?",
       "appliedNotice": "Примењено ({{summary}})",
       "operations": {

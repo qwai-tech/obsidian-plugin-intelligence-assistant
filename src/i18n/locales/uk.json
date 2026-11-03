@@ -1201,6 +1201,7 @@
       "apply": "Застосувати",
       "applyAll": "Застосувати все",
       "applied": "Застосовано",
+      "appliedNote": "Застосовано у сховищі.",
       "confirm": "Застосувати ({{summary}})?",
       "appliedNotice": "Застосовано ({{summary}})",
       "operations": {

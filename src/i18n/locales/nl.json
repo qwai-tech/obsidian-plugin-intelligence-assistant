@@ -1159,6 +1159,7 @@
       "apply": "Toepassen",
       "applyAll": "Alles toepassen",
       "applied": "Toegepast",
+      "appliedNote": "Toegepast in de kluis.",
       "confirm": "{{summary}} toepassen?",
       "appliedNotice": "Toegepast: {{summary}}",
       "operations": {

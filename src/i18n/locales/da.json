@@ -1159,6 +1159,7 @@
       "apply": "Anvend",
       "applyAll": "Anvend alle",
       "applied": "Anvendt",
+      "appliedNote": "Anvendt i boksen.",
       "confirm": "Anvend {{summary}}?",
       "appliedNotice": "Anvendt: {{summary}}",
       "operations": {

@@ -1159,6 +1159,7 @@
       "apply": "اعمال",
       "applyAll": "اعمال همه",
       "applied": "اعمال شد",
+      "appliedNote": "در گاوصندوق اعمال شد.",
       "confirm": "{{summary}} اعمال شود؟",
       "appliedNotice": "{{summary}} اعمال شد",
       "operations": {

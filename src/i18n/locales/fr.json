@@ -1180,6 +1180,7 @@
       "apply": "Appliquer",
       "applyAll": "Tout appliquer",
       "applied": "Appliqué",
+      "appliedNote": "Appliqué au coffre.",
       "confirm": "Appliquer {{summary}} ?",
       "appliedNotice": "{{summary}} appliqué",
       "operations": {

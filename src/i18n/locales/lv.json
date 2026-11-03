@@ -1180,6 +1180,7 @@
       "apply": "Lietot",
       "applyAll": "Lietot visu",
       "applied": "Lietots",
+      "appliedNote": "Piemērots krātuvē.",
       "confirm": "Lietot {{summary}}?",
       "appliedNotice": "Lietots: {{summary}}",
       "operations": {

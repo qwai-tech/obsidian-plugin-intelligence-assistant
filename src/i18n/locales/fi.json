@@ -1159,6 +1159,7 @@
       "apply": "Käytä",
       "applyAll": "Käytä kaikki",
       "applied": "Käytetty",
+      "appliedNote": "Otettu käyttöön holvissa.",
       "confirm": "Käytetäänkö {{summary}}?",
       "appliedNotice": "Käytetty: {{summary}}",
       "operations": {

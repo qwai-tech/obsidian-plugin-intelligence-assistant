@@ -1159,6 +1159,7 @@
       "apply": "Pas toe",
       "applyAll": "Pas alles toe",
       "applied": "Toegepas",
+      "appliedNote": "Op die kluis toegepas.",
       "confirm": "Pas {{summary}} toe?",
       "appliedNotice": "{{summary}} toegepas",
       "operations": {

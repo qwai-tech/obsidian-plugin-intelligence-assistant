@@ -1159,6 +1159,7 @@
       "apply": "Übernehmen",
       "applyAll": "Alle übernehmen",
       "applied": "Übernommen",
+      "appliedNote": "Im Tresor angewendet.",
       "confirm": "{{summary}} übernehmen?",
       "appliedNotice": "{{summary}} übernommen",
       "operations": {

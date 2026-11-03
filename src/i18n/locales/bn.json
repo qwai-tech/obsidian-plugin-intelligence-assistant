@@ -1159,6 +1159,7 @@
       "apply": "প্রয়োগ",
       "applyAll": "সব প্রয়োগ",
       "applied": "প্রয়োগ করা হয়েছে",
+      "appliedNote": "ভল্টে প্রয়োগ করা হয়েছে।",
       "confirm": "{{summary}} প্রয়োগ করবেন?",
       "appliedNotice": "{{summary}} প্রয়োগ করা হয়েছে",
       "operations": {

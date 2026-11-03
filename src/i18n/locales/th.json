@@ -1138,6 +1138,7 @@
       "apply": "นำไปใช้",
       "applyAll": "นำไปใช้ทั้งหมด",
       "applied": "นำไปใช้แล้ว",
+      "appliedNote": "นำไปใช้กับห้องนิรภัยแล้ว",
       "confirm": "นำ {{summary}} ไปใช้หรือไม่?",
       "appliedNotice": "นำ {{summary}} ไปใช้แล้ว",
       "operations": {

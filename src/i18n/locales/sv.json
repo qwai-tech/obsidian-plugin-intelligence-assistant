@@ -1159,6 +1159,7 @@
       "apply": "Tillämpa",
       "applyAll": "Tillämpa alla",
       "applied": "Tillämpad",
+      "appliedNote": "Tillämpat i valvet.",
       "confirm": "Tillämpa {{summary}}?",
       "appliedNotice": "Tillämpade {{summary}}",
       "operations": {

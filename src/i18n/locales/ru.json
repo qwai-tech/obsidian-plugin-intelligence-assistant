@@ -1201,6 +1201,7 @@
       "apply": "Применить",
       "applyAll": "Применить все",
       "applied": "Применено",
+      "appliedNote": "Применено в хранилище.",
       "confirm": "Применить ({{summary}})?",
       "appliedNotice": "Применено ({{summary}})",
       "operations": {

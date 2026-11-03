@@ -1201,6 +1201,7 @@
       "apply": "Taikyti",
       "applyAll": "Taikyti viską",
       "applied": "Pritaikyta",
+      "appliedNote": "Pritaikyta saugykloje.",
       "confirm": "Taikyti {{summary}}?",
       "appliedNotice": "Pritaikyta: {{summary}}",
       "operations": {

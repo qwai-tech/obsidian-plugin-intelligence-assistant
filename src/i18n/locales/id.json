@@ -1138,6 +1138,7 @@
       "apply": "Terapkan",
       "applyAll": "Terapkan semua",
       "applied": "Diterapkan",
+      "appliedNote": "Diterapkan ke vault.",
       "confirm": "Terapkan {{summary}}?",
       "appliedNotice": "Diterapkan: {{summary}}",
       "operations": {

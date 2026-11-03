@@ -1180,6 +1180,7 @@
       "apply": "החל",
       "applyAll": "החל הכול",
       "applied": "הוחל",
+      "appliedNote": "הוחל בכספת.",
       "confirm": "להחיל {{summary}}?",
       "appliedNotice": "הוחל: {{summary}}",
       "operations": {

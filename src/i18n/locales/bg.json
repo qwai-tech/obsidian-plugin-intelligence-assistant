@@ -1159,6 +1159,7 @@
       "apply": "Приложи",
       "applyAll": "Приложи всички",
       "applied": "Приложено",
+      "appliedNote": "Приложено в хранилището.",
       "confirm": "Да се приложи ли {{summary}}?",
       "appliedNotice": "Приложено: {{summary}}",
       "operations": {

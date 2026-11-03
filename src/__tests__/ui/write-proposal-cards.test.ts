@@ -16,6 +16,7 @@ describe('write proposal cards', () => {
 
 		expect(applyButton(container).textContent).toBe('Applied');
 		expect(applyButton(container).disabled).toBe(true);
+		expect(container.querySelector('.ia-write-proposal-card__note')?.textContent).toBe('Applied to the vault.');
 	});
 
 	it('applies a proposal together with the step that holds it', async () => {
@@ -30,5 +31,6 @@ describe('write proposal cards', () => {
 
 		expect(apply).toHaveBeenCalledWith(expect.objectContaining({ path: 'Research/brief.md' }), held);
 		expect(applyButton(container).textContent).toBe('Applied');
+		expect(container.querySelector('.ia-write-proposal-card__note')?.textContent).toBe('Applied to the vault.');
 	});
 });

@@ -1159,6 +1159,7 @@
       "apply": "Bruk",
       "applyAll": "Bruk alle",
       "applied": "Brukt",
+      "appliedNote": "Brukt i kvelvet.",
       "confirm": "Bruke {{summary}}?",
       "appliedNotice": "Brukt: {{summary}}",
       "operations": {

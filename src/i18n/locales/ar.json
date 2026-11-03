@@ -1243,6 +1243,7 @@
       "apply": "تطبيق",
       "applyAll": "تطبيق الكل",
       "applied": "مُطبَّق",
+      "appliedNote": "تم التطبيق على الخزنة.",
       "confirm": "تطبيق {{summary}}؟",
       "appliedNotice": "تم تطبيق {{summary}}",
       "operations": {

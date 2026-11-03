@@ -1180,6 +1180,7 @@
       "apply": "Aplicați",
       "applyAll": "Aplicați tot",
       "applied": "Aplicat",
+      "appliedNote": "Aplicat în seif.",
       "confirm": "Aplicați {{summary}}?",
       "appliedNotice": "Aplicat: {{summary}}",
       "operations": {

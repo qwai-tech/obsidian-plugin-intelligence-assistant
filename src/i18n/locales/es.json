@@ -1180,6 +1180,7 @@
       "apply": "Aplicar",
       "applyAll": "Aplicar todo",
       "applied": "Aplicado",
+      "appliedNote": "Aplicado en la bóveda.",
       "confirm": "¿Aplicar {{summary}}?",
       "appliedNotice": "Se aplicó {{summary}}",
       "operations": {

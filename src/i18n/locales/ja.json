@@ -1138,6 +1138,7 @@
       "apply": "適用",
       "applyAll": "すべて適用",
       "applied": "適用済み",
+      "appliedNote": "保管庫に適用しました。",
       "confirm": "{{summary}}を適用しますか？",
       "appliedNotice": "{{summary}}を適用しました",
       "operations": {

@@ -1138,6 +1138,7 @@
       "apply": "套用",
       "applyAll": "全部套用",
       "applied": "已套用",
+      "appliedNote": "已套用到儲存庫。",
       "confirm": "套用 {{summary}}？",
       "appliedNotice": "已套用 {{summary}}",
       "operations": {

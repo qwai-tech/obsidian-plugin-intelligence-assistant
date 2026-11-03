@@ -1180,6 +1180,7 @@
       "apply": "Aplica",
       "applyAll": "Aplica-ho tot",
       "applied": "Aplicat",
+      "appliedNote": "Aplicat a la caixa forta.",
       "confirm": "Voleu aplicar {{summary}}?",
       "appliedNotice": "S'ha aplicat {{summary}}",
       "operations": {

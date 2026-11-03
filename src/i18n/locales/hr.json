@@ -1180,6 +1180,7 @@
       "apply": "Primijeni",
       "applyAll": "Primijeni sve",
       "applied": "Primijenjeno",
+      "appliedNote": "Primijenjeno u trezoru.",
       "confirm": "Primijeniti {{summary}}?",
       "appliedNotice": "Primijenjeno: {{summary}}",
       "operations": {

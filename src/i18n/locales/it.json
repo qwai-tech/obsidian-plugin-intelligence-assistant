@@ -1180,6 +1180,7 @@
       "apply": "Applica",
       "applyAll": "Applica tutto",
       "applied": "Applicato",
+      "appliedNote": "Applicato alla cassaforte.",
       "confirm": "Applicare {{summary}}?",
       "appliedNotice": "Applicato: {{summary}}",
       "operations": {

@@ -1159,6 +1159,7 @@
       "apply": "Apply",
       "applyAll": "Apply all",
       "applied": "Applied",
+      "appliedNote": "Applied to the vault.",
       "confirm": "Apply {{summary}}?",
       "appliedNotice": "Applied {{summary}}",
       "operations": {

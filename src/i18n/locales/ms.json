@@ -1138,6 +1138,7 @@
       "apply": "Guna",
       "applyAll": "Guna semua",
       "applied": "Digunakan",
+      "appliedNote": "Digunakan pada bilik kebal.",
       "confirm": "Guna {{summary}}?",
       "appliedNotice": "Digunakan: {{summary}}",
       "operations": {

@@ -1201,6 +1201,7 @@
       "apply": "Zastosuj",
       "applyAll": "Zastosuj wszystko",
       "applied": "Zastosowano",
+      "appliedNote": "Zastosowano w sejfie.",
       "confirm": "Zastosować {{summary}}?",
       "appliedNotice": "Zastosowano: {{summary}}",
       "operations": {

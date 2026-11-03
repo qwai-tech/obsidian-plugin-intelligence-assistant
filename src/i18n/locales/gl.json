@@ -1159,6 +1159,7 @@
       "apply": "Aplicar",
       "applyAll": "Aplicar todo",
       "applied": "Aplicado",
+      "appliedNote": "Aplicado na caixa forte.",
       "confirm": "Aplicar {{summary}}?",
       "appliedNotice": "Aplicado: {{summary}}",
       "operations": {

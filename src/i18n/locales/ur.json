@@ -1159,6 +1159,7 @@
       "apply": "لاگو کریں",
       "applyAll": "سب لاگو کریں",
       "applied": "لاگو ہو گیا",
+      "appliedNote": "والٹ پر لاگو کر دیا گیا۔",
       "confirm": "{{summary}} لاگو کریں؟",
       "appliedNotice": "{{summary}} لاگو ہو گئیں",
       "operations": {

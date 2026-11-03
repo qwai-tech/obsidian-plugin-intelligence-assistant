@@ -1159,6 +1159,7 @@
       "apply": "Uygula",
       "applyAll": "Tümünü uygula",
       "applied": "Uygulandı",
+      "appliedNote": "Kasaya uygulandı.",
       "confirm": "{{summary}} uygulansın mı?",
       "appliedNotice": "{{summary}} uygulandı",
       "operations": {

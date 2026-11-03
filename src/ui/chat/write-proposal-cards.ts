@@ -38,7 +38,7 @@ export function renderWriteProposalCards(container: HTMLElement, steps: Message[
 function renderBatchCard(parent: HTMLElement, proposal: BatchWriteProposal, card: ProposalCard, apply?: ApplyProposal): void {
 	const element = parent.createDiv('ia-write-proposal-card is-batch');
 	renderHeader(element, t('chat.proposals.operations.batch'), t('chat.proposals.changes', { count: proposal.proposals.length }));
-	element.createDiv({ cls: 'ia-write-proposal-card__note', text: proposal.reason });
+	const note = renderNote(element, card);
 
 	const list = element.createDiv('ia-write-proposal-card__batch-list');
 	for (const sub of proposal.proposals) {
@@ -46,20 +46,20 @@ function renderBatchCard(parent: HTMLElement, proposal: BatchWriteProposal, card
 		item.createSpan({ cls: 'ia-write-proposal-card__batch-op', text: operationLabel(sub.operation) });
 		item.createSpan({ cls: 'ia-write-proposal-card__batch-path', text: sub.path });
 	}
-	renderApplyButton(element, t('chat.proposals.applyAll'), card, apply);
+	renderApplyButton(element, note, t('chat.proposals.applyAll'), card, apply);
 }
 
 function renderSingleCard(parent: HTMLElement, proposal: WriteProposal, card: ProposalCard, apply?: ApplyProposal): void {
 	const element = parent.createDiv('ia-write-proposal-card');
 	renderHeader(element, operationLabel(proposal.operation), proposal.path);
-	element.createDiv({ cls: 'ia-write-proposal-card__note', text: proposal.reason });
+	const note = renderNote(element, card);
 
 	if (proposal.proposedContent) {
 		const details = element.createEl('details', { cls: 'ia-write-proposal-card__preview' });
 		details.createEl('summary', { text: t('chat.proposals.preview') });
 		details.createEl('pre', { text: proposal.proposedContent });
 	}
-	renderApplyButton(element, t('chat.proposals.apply'), card, apply);
+	renderApplyButton(element, note, t('chat.proposals.apply'), card, apply);
 }
 
 function renderHeader(element: HTMLElement, operation: string, path: string): void {
@@ -68,9 +68,14 @@ function renderHeader(element: HTMLElement, operation: string, path: string): vo
 	header.createSpan({ cls: 'ia-write-proposal-card__path', text: path });
 }
 
-function renderApplyButton(element: HTMLElement, label: string, card: ProposalCard, apply?: ApplyProposal): void {
+function renderNote(element: HTMLElement, card: ProposalCard): HTMLElement {
+	return element.createDiv({ cls: 'ia-write-proposal-card__note', text: card.step.proposalApplied ? t('chat.proposals.appliedNote') : card.proposal.reason });
+}
+
+function renderApplyButton(element: HTMLElement, note: HTMLElement, label: string, card: ProposalCard, apply?: ApplyProposal): void {
 	const button = element.createDiv('ia-write-proposal-card__actions').createEl('button', { text: label });
 	const showApplied = () => {
+		note.setText(t('chat.proposals.appliedNote'));
 		button.disabled = true;
 		button.setText(t('chat.proposals.applied'));
 		button.addClass('is-applied');

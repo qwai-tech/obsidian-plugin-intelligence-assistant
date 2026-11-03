@@ -1159,6 +1159,7 @@
       "apply": "Εφαρμογή",
       "applyAll": "Εφαρμογή όλων",
       "applied": "Εφαρμόστηκε",
+      "appliedNote": "Εφαρμόστηκε στο θησαυροφυλάκιο.",
       "confirm": "Εφαρμογή {{summary}};",
       "appliedNotice": "Εφαρμόστηκε: {{summary}}",
       "operations": {

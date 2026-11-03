@@ -1159,6 +1159,7 @@
       "apply": "പ്രയോഗിക്കുക",
       "applyAll": "എല്ലാം പ്രയോഗിക്കുക",
       "applied": "പ്രയോഗിച്ചു",
+      "appliedNote": "വോൾട്ടിൽ പ്രയോഗിച്ചു.",
       "confirm": "{{summary}} പ്രയോഗിക്കണോ?",
       "appliedNotice": "{{summary}} പ്രയോഗിച്ചു",
       "operations": {

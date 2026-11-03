@@ -1201,6 +1201,7 @@
       "apply": "Použít",
       "applyAll": "Použít vše",
       "applied": "Použito",
+      "appliedNote": "Použito v trezoru.",
       "confirm": "Použít {{summary}}?",
       "appliedNotice": "Použito: {{summary}}",
       "operations": {

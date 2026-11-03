@@ -1138,6 +1138,7 @@
       "apply": "Áp dụng",
       "applyAll": "Áp dụng tất cả",
       "applied": "Đã áp dụng",
+      "appliedNote": "Đã áp dụng vào kho.",
       "confirm": "Áp dụng {{summary}}?",
       "appliedNotice": "Đã áp dụng {{summary}}",
       "operations": {

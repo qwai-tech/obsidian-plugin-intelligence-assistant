@@ -1138,6 +1138,7 @@
       "apply": "적용",
       "applyAll": "모두 적용",
       "applied": "적용됨",
+      "appliedNote": "보관함에 적용했습니다.",
       "confirm": "{{summary}}을(를) 적용할까요?",
       "appliedNotice": "{{summary}} 적용됨",
       "operations": {

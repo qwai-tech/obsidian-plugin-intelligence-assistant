@@ -1159,6 +1159,7 @@
       "apply": "Alkalmazás",
       "applyAll": "Összes alkalmazása",
       "applied": "Alkalmazva",
+      "appliedNote": "Alkalmazva a széfben.",
       "confirm": "Alkalmazza ezt: {{summary}}?",
       "appliedNotice": "Alkalmazva: {{summary}}",
       "operations": {
