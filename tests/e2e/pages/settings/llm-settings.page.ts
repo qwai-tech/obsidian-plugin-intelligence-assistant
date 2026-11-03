@@ -21,6 +21,15 @@ export class LlmSettingsPage extends BasePage {
 		await this.waitForProviderRow(values.provider);
 	}
 
+	async openNewProviderForm(values: ProviderFormValues): Promise<void> {
+		await this.click(TestIds.settings.providerAddBtn);
+		await this.fillProviderModal(values);
+	}
+
+	async testConnectionInForm(): Promise<void> {
+		await this.click(TestIds.settings.providerModalTestConnectionBtn);
+	}
+
 	async editProvider(providerId: string, values: ProviderFormValues): Promise<void> {
 		await this.clickProviderAction(TestIds.settings.providerEditBtn, providerId);
 		await this.fillProviderModal(values);

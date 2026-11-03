@@ -28,6 +28,11 @@ export class AgentsSettingsPage extends BasePage {
 		await this.waitForAgentAbsent(agentId);
 	}
 
+	async openAgentEditor(agentId: string): Promise<void> {
+		await this.clickAgentAction(TestIds.settings.agentEditBtn, agentId);
+		await this.waitFor(TestIds.settings.agentModalSaveBtn);
+	}
+
 	async hasAgentNamed(name: string): Promise<boolean> {
 		return browser.execute((testId, agentName) => {
 			return Array.from(activeDocument.querySelectorAll(`[data-testid="${testId}"]`))
