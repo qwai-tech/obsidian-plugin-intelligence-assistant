@@ -1350,7 +1350,12 @@
         "baseUrlRequired": "Introdueix l'URL base del punt final compatible amb OpenAI."
       },
       "cachedModels": "Models a la memòria cau: {{count}}",
-      "connectionFailed": "La prova de connexió ha fallat. Comproveu la configuració del proveïdor.",
+      "connectionErrors": {
+        "keyRejected": "El punt final ha rebutjat la clau d'API (HTTP {{status}}). Comprova la clau.",
+        "notFound": "No s'ha trobat el punt final (HTTP 404). Comprova l'URL base.",
+        "httpError": "El punt final ha retornat HTTP {{status}}. Torna-ho a provar o comprova l'URL base.",
+        "unreachable": "No s'ha pogut arribar al punt final. Comprova l'URL base i que el servidor funcioni."
+      },
       "connectionEmpty": "Connectat, però el punt final no ha retornat cap model. Comprova l'URL base i la clau d'API.",
       "noCachedModels": "No hi ha models a la memòria cau",
       "testConnection": "Prova la connexió",

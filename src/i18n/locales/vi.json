@@ -1304,7 +1304,12 @@
         "baseUrlRequired": "Nhập URL cơ sở của điểm cuối tương thích OpenAI."
       },
       "cachedModels": "Mô hình đã lưu cache: {{count}}",
-      "connectionFailed": "Kiểm tra kết nối thất bại. Hãy kiểm tra cài đặt nhà cung cấp.",
+      "connectionErrors": {
+        "keyRejected": "Điểm cuối đã từ chối khóa API (HTTP {{status}}). Hãy kiểm tra khóa.",
+        "notFound": "Không tìm thấy điểm cuối (HTTP 404). Hãy kiểm tra URL cơ sở.",
+        "httpError": "Điểm cuối trả về HTTP {{status}}. Hãy thử lại hoặc kiểm tra URL cơ sở.",
+        "unreachable": "Không thể kết nối tới điểm cuối. Hãy kiểm tra URL cơ sở và máy chủ đang chạy."
+      },
       "connectionEmpty": "Đã kết nối, nhưng điểm cuối không trả về mô hình nào. Hãy kiểm tra URL cơ sở và khóa API.",
       "noCachedModels": "Không có mô hình nào được lưu cache",
       "testConnection": "Kiểm tra kết nối",

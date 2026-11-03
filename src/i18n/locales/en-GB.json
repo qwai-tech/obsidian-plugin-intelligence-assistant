@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Enter the base URL of the OpenAI-compatible endpoint."
       },
       "cachedModels": "Cached models: {{count}}",
-      "connectionFailed": "Connection test failed. Check provider settings.",
+      "connectionErrors": {
+        "keyRejected": "The endpoint rejected the API key (HTTP {{status}}). Check the key.",
+        "notFound": "Endpoint not found (HTTP 404). Check the base URL.",
+        "httpError": "The endpoint returned HTTP {{status}}. Try again or check the base URL.",
+        "unreachable": "Could not reach the endpoint. Check the base URL and that the server is running."
+      },
       "connectionEmpty": "Connected, but the endpoint returned no models. Check the base URL and API key.",
       "noCachedModels": "No cached models",
       "testConnection": "Test connection",

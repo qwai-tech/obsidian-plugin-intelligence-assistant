@@ -1304,7 +1304,12 @@
         "baseUrlRequired": "OpenAI 互換エンドポイントのベース URL を入力してください。"
       },
       "cachedModels": "キャッシュ済みモデル: {{count}}",
-      "connectionFailed": "接続テストに失敗しました。プロバイダー設定を確認してください。",
+      "connectionErrors": {
+        "keyRejected": "エンドポイントが API キーを拒否しました (HTTP {{status}})。キーを確認してください。",
+        "notFound": "エンドポイントが見つかりません (HTTP 404)。ベース URL を確認してください。",
+        "httpError": "エンドポイントが HTTP {{status}} を返しました。再試行するか、ベース URL を確認してください。",
+        "unreachable": "エンドポイントに接続できません。ベース URL とサーバーが動作していることを確認してください。"
+      },
       "connectionEmpty": "接続しましたが、エンドポイントからモデルが返されませんでした。ベース URL と API キーを確認してください。",
       "noCachedModels": "キャッシュ済みモデルはありません",
       "testConnection": "接続をテスト",

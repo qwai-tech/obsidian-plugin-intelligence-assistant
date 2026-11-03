@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Voer de basis-URL van het OpenAI-compatibele endpoint in."
       },
       "cachedModels": "Gecachede modellen: {{count}}",
-      "connectionFailed": "Verbindingstest mislukt. Controleer de providerinstellingen.",
+      "connectionErrors": {
+        "keyRejected": "Het endpoint heeft de API-sleutel geweigerd (HTTP {{status}}). Controleer de sleutel.",
+        "notFound": "Endpoint niet gevonden (HTTP 404). Controleer de basis-URL.",
+        "httpError": "Het endpoint gaf HTTP {{status}} terug. Probeer het opnieuw of controleer de basis-URL.",
+        "unreachable": "Het endpoint is niet bereikbaar. Controleer de basis-URL en of de server draait."
+      },
       "connectionEmpty": "Verbonden, maar het endpoint gaf geen modellen terug. Controleer de basis-URL en de API-sleutel.",
       "noCachedModels": "Geen gecachede modellen",
       "testConnection": "Verbinding testen",

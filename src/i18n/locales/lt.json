@@ -1373,7 +1373,12 @@
         "baseUrlRequired": "Įveskite su OpenAI suderinamo galinio taško bazinį URL."
       },
       "cachedModels": "Talpykloje esantys modeliai: {{count}}",
-      "connectionFailed": "Ryšio patikrinimas nepavyko. Patikrinkite tiekėjo nustatymus.",
+      "connectionErrors": {
+        "keyRejected": "Galinis taškas atmetė API raktą (HTTP {{status}}). Patikrinkite raktą.",
+        "notFound": "Galinis taškas nerastas (HTTP 404). Patikrinkite bazinį URL.",
+        "httpError": "Galinis taškas grąžino HTTP {{status}}. Bandykite dar kartą arba patikrinkite bazinį URL.",
+        "unreachable": "Nepavyko pasiekti galinio taško. Patikrinkite bazinį URL ir ar veikia serveris."
+      },
       "connectionEmpty": "Prisijungta, bet galinis taškas negrąžino jokių modelių. Patikrinkite bazinį URL ir API raktą.",
       "noCachedModels": "Talpykloje nėra modelių",
       "testConnection": "Patikrinti ryšį",

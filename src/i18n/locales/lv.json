@@ -1350,7 +1350,12 @@
         "baseUrlRequired": "Ievadiet ar OpenAI saderīgā galapunkta bāzes URL."
       },
       "cachedModels": "Kešatmiņā saglabātie modeļi: {{count}}",
-      "connectionFailed": "Savienojuma pārbaude neizdevās. Pārbaudiet pakalpojumu sniedzēja iestatījumus.",
+      "connectionErrors": {
+        "keyRejected": "Galapunkts noraidīja API atslēgu (HTTP {{status}}). Pārbaudiet atslēgu.",
+        "notFound": "Galapunkts nav atrasts (HTTP 404). Pārbaudiet bāzes URL.",
+        "httpError": "Galapunkts atgrieza HTTP {{status}}. Mēģiniet vēlreiz vai pārbaudiet bāzes URL.",
+        "unreachable": "Galapunkts nav sasniedzams. Pārbaudiet bāzes URL un vai serveris darbojas."
+      },
       "connectionEmpty": "Savienojums izveidots, bet galapunkts neatgrieza nevienu modeli. Pārbaudiet bāzes URL un API atslēgu.",
       "noCachedModels": "Kešatmiņā nav modeļu",
       "testConnection": "Pārbaudīt savienojumu",

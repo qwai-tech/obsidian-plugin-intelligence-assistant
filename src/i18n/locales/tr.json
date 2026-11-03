@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "OpenAI uyumlu uç noktanın temel URL'sini girin."
       },
       "cachedModels": "Önbellekteki modeller: {{count}}",
-      "connectionFailed": "Bağlantı testi başarısız oldu. Sağlayıcı ayarlarını kontrol edin.",
+      "connectionErrors": {
+        "keyRejected": "Uç nokta API anahtarını reddetti (HTTP {{status}}). Anahtarı kontrol edin.",
+        "notFound": "Uç nokta bulunamadı (HTTP 404). Temel URL'yi kontrol edin.",
+        "httpError": "Uç nokta HTTP {{status}} döndürdü. Yeniden deneyin veya temel URL'yi kontrol edin.",
+        "unreachable": "Uç noktaya ulaşılamadı. Temel URL'yi ve sunucunun çalıştığını kontrol edin."
+      },
       "connectionEmpty": "Bağlandı, ancak uç nokta hiç model döndürmedi. Temel URL'yi ve API anahtarını kontrol edin.",
       "noCachedModels": "Önbellekte model yok",
       "testConnection": "Bağlantıyı test et",

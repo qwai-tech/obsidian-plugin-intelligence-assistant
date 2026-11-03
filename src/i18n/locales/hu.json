@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Add meg az OpenAI-kompatibilis végpont alap URL-jét."
       },
       "cachedModels": "Gyorsítótárazott modellek: {{count}}",
-      "connectionFailed": "A kapcsolat tesztelése sikertelen. Ellenőrizze a szolgáltató beállításait.",
+      "connectionErrors": {
+        "keyRejected": "A végpont elutasította az API-kulcsot (HTTP {{status}}). Ellenőrizd a kulcsot.",
+        "notFound": "A végpont nem található (HTTP 404). Ellenőrizd az alap URL-t.",
+        "httpError": "A végpont HTTP {{status}} választ adott. Próbáld újra, vagy ellenőrizd az alap URL-t.",
+        "unreachable": "A végpont nem érhető el. Ellenőrizd az alap URL-t, és hogy fut-e a szerver."
+      },
       "connectionEmpty": "Csatlakozva, de a végpont nem adott vissza modellt. Ellenőrizd az alap URL-t és az API-kulcsot.",
       "noCachedModels": "Nincsenek gyorsítótárazott modellek",
       "testConnection": "Kapcsolat tesztelése",

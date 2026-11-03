@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Angiv basis-URL'en for det OpenAI-kompatible endpoint."
       },
       "cachedModels": "Cachelagrede modeller: {{count}}",
-      "connectionFailed": "Forbindelsestest mislykkedes. Tjek udbyderindstillinger.",
+      "connectionErrors": {
+        "keyRejected": "Endpointet afviste API-nøglen (HTTP {{status}}). Tjek nøglen.",
+        "notFound": "Endpointet blev ikke fundet (HTTP 404). Tjek basis-URL'en.",
+        "httpError": "Endpointet returnerede HTTP {{status}}. Prøv igen, eller tjek basis-URL'en.",
+        "unreachable": "Kunne ikke nå endpointet. Tjek basis-URL'en, og at serveren kører."
+      },
       "connectionEmpty": "Forbundet, men endpointet returnerede ingen modeller. Tjek basis-URL'en og API-nøglen.",
       "noCachedModels": "Ingen cachelagrede modeller",
       "testConnection": "Test forbindelse",

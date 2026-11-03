@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Introduce o URL base do punto final compatible con OpenAI."
       },
       "cachedModels": "Modelos en caché: {{count}}",
-      "connectionFailed": "Fallou a proba de conexión. Revisa a configuración do provedor.",
+      "connectionErrors": {
+        "keyRejected": "O punto final rexeitou a clave de API (HTTP {{status}}). Revisa a clave.",
+        "notFound": "Non se atopou o punto final (HTTP 404). Revisa o URL base.",
+        "httpError": "O punto final devolveu HTTP {{status}}. Téntao de novo ou revisa o URL base.",
+        "unreachable": "Non se puido chegar ao punto final. Revisa o URL base e que o servidor estea en funcionamento."
+      },
       "connectionEmpty": "Conectado, pero o punto final non devolveu ningún modelo. Revisa o URL base e a clave de API.",
       "noCachedModels": "Non hai modelos en caché",
       "testConnection": "Probar conexión",

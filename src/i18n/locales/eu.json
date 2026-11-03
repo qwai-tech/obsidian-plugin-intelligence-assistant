@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Idatzi OpenAI-rekin bateragarria den amaiera-puntuaren oinarrizko URLa."
       },
       "cachedModels": "Cachean gordetako modeloak: {{count}}",
-      "connectionFailed": "Konexio-probak huts egin du. Egiaztatu hornitzailearen ezarpenak.",
+      "connectionErrors": {
+        "keyRejected": "Amaiera-puntuak API gakoa baztertu du (HTTP {{status}}). Egiaztatu gakoa.",
+        "notFound": "Ez da amaiera-puntua aurkitu (HTTP 404). Egiaztatu oinarrizko URLa.",
+        "httpError": "Amaiera-puntuak HTTP {{status}} itzuli du. Saiatu berriro edo egiaztatu oinarrizko URLa.",
+        "unreachable": "Ezin izan da amaiera-puntura iritsi. Egiaztatu oinarrizko URLa eta zerbitzaria martxan dagoela."
+      },
       "connectionEmpty": "Konektatuta, baina amaiera-puntuak ez du eredurik itzuli. Egiaztatu oinarrizko URLa eta API gakoa.",
       "noCachedModels": "Ez dago cachean gordetako modelorik",
       "testConnection": "Probatu konexioa",

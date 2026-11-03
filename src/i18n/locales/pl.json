@@ -1373,7 +1373,12 @@
         "baseUrlRequired": "Wpisz bazowy adres URL punktu końcowego zgodnego z OpenAI."
       },
       "cachedModels": "Modele w pamięci podręcznej: {{count}}",
-      "connectionFailed": "Test połączenia nie powiódł się. Sprawdź ustawienia dostawcy.",
+      "connectionErrors": {
+        "keyRejected": "Punkt końcowy odrzucił klucz API (HTTP {{status}}). Sprawdź klucz.",
+        "notFound": "Nie znaleziono punktu końcowego (HTTP 404). Sprawdź bazowy adres URL.",
+        "httpError": "Punkt końcowy zwrócił HTTP {{status}}. Spróbuj ponownie lub sprawdź bazowy adres URL.",
+        "unreachable": "Nie można połączyć się z punktem końcowym. Sprawdź bazowy adres URL i czy serwer działa."
+      },
       "connectionEmpty": "Połączono, ale punkt końcowy nie zwrócił żadnych modeli. Sprawdź bazowy adres URL i klucz API.",
       "noCachedModels": "Brak modeli w pamięci podręcznej",
       "testConnection": "Testuj połączenie",

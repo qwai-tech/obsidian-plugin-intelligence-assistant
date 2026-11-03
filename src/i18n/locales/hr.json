@@ -1350,7 +1350,12 @@
         "baseUrlRequired": "Unesite osnovni URL krajnje točke kompatibilne s OpenAI-jem."
       },
       "cachedModels": "Predmemorirani modeli: {{count}}",
-      "connectionFailed": "Test veze nije uspio. Provjerite postavke pružatelja.",
+      "connectionErrors": {
+        "keyRejected": "Krajnja točka odbila je API ključ (HTTP {{status}}). Provjerite ključ.",
+        "notFound": "Krajnja točka nije pronađena (HTTP 404). Provjerite osnovni URL.",
+        "httpError": "Krajnja točka vratila je HTTP {{status}}. Pokušajte ponovno ili provjerite osnovni URL.",
+        "unreachable": "Krajnja točka nije dostupna. Provjerite osnovni URL i radi li poslužitelj."
+      },
       "connectionEmpty": "Povezano, ali krajnja točka nije vratila nijedan model. Provjerite osnovni URL i API ključ.",
       "noCachedModels": "Nema predmemoriranih modela",
       "testConnection": "Testiraj vezu",

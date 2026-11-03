@@ -1304,7 +1304,12 @@
         "baseUrlRequired": "請輸入與 OpenAI 相容端點的基礎 URL。"
       },
       "cachedModels": "已快取模型：{{count}}",
-      "connectionFailed": "連線測試失敗，請檢查提供者設定。",
+      "connectionErrors": {
+        "keyRejected": "端點拒絕了 API 金鑰（HTTP {{status}}）。請檢查金鑰。",
+        "notFound": "找不到端點（HTTP 404）。請檢查基礎 URL。",
+        "httpError": "端點回傳 HTTP {{status}}。請重試或檢查基礎 URL。",
+        "unreachable": "無法連線到端點。請檢查基礎 URL，並確認伺服器正在執行。"
+      },
       "connectionEmpty": "已連線，但端點沒有回傳任何模型。請檢查基礎 URL 與 API 金鑰。",
       "noCachedModels": "沒有已快取的模型",
       "testConnection": "測試連線",

@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Ange bas-URL:en för den OpenAI-kompatibla slutpunkten."
       },
       "cachedModels": "Cachade modeller: {{count}}",
-      "connectionFailed": "Anslutningstestet misslyckades. Kontrollera leverantörsinställningarna.",
+      "connectionErrors": {
+        "keyRejected": "Slutpunkten avvisade API-nyckeln (HTTP {{status}}). Kontrollera nyckeln.",
+        "notFound": "Slutpunkten hittades inte (HTTP 404). Kontrollera bas-URL:en.",
+        "httpError": "Slutpunkten returnerade HTTP {{status}}. Försök igen eller kontrollera bas-URL:en.",
+        "unreachable": "Det gick inte att nå slutpunkten. Kontrollera bas-URL:en och att servern körs."
+      },
       "connectionEmpty": "Ansluten, men slutpunkten returnerade inga modeller. Kontrollera bas-URL:en och API-nyckeln.",
       "noCachedModels": "Inga cachade modeller",
       "testConnection": "Testa anslutning",

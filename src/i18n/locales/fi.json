@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Anna OpenAI-yhteensopivan päätepisteen perus-URL."
       },
       "cachedModels": "Välimuistissa olevat mallit: {{count}}",
-      "connectionFailed": "Yhteystesti epäonnistui. Tarkista palveluntarjoajan asetukset.",
+      "connectionErrors": {
+        "keyRejected": "Päätepiste hylkäsi API-avaimen (HTTP {{status}}). Tarkista avain.",
+        "notFound": "Päätepistettä ei löytynyt (HTTP 404). Tarkista perus-URL.",
+        "httpError": "Päätepiste palautti HTTP {{status}}. Yritä uudelleen tai tarkista perus-URL.",
+        "unreachable": "Päätepisteeseen ei saatu yhteyttä. Tarkista perus-URL ja että palvelin on käynnissä."
+      },
       "connectionEmpty": "Yhteys muodostettiin, mutta päätepiste ei palauttanut malleja. Tarkista perus-URL ja API-avain.",
       "noCachedModels": "Ei malleja välimuistissa",
       "testConnection": "Testaa yhteys",

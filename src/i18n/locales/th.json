@@ -1304,7 +1304,12 @@
         "baseUrlRequired": "ป้อน URL ฐานของปลายทางที่เข้ากันได้กับ OpenAI"
       },
       "cachedModels": "โมเดลที่แคชไว้: {{count}}",
-      "connectionFailed": "การทดสอบการเชื่อมต่อล้มเหลว โปรดตรวจสอบการตั้งค่าผู้ให้บริการ",
+      "connectionErrors": {
+        "keyRejected": "ปลายทางปฏิเสธคีย์ API (HTTP {{status}}) ตรวจสอบคีย์",
+        "notFound": "ไม่พบปลายทาง (HTTP 404) ตรวจสอบ URL ฐาน",
+        "httpError": "ปลายทางตอบกลับ HTTP {{status}} ลองอีกครั้งหรือตรวจสอบ URL ฐาน",
+        "unreachable": "เข้าถึงปลายทางไม่ได้ ตรวจสอบ URL ฐานและว่าเซิร์ฟเวอร์ทำงานอยู่"
+      },
       "connectionEmpty": "เชื่อมต่อแล้ว แต่ปลายทางไม่ส่งโมเดลกลับมา ตรวจสอบ URL ฐานและคีย์ API",
       "noCachedModels": "ไม่มีโมเดลที่แคชไว้",
       "testConnection": "ทดสอบการเชื่อมต่อ",

@@ -1350,7 +1350,12 @@
         "baseUrlRequired": "Introdu adresa URL de bază a endpointului compatibil cu OpenAI."
       },
       "cachedModels": "Modele în cache: {{count}}",
-      "connectionFailed": "Testul conexiunii a eșuat. Verificați setările furnizorului.",
+      "connectionErrors": {
+        "keyRejected": "Endpointul a respins cheia API (HTTP {{status}}). Verifică cheia.",
+        "notFound": "Endpointul nu a fost găsit (HTTP 404). Verifică adresa URL de bază.",
+        "httpError": "Endpointul a returnat HTTP {{status}}. Încearcă din nou sau verifică adresa URL de bază.",
+        "unreachable": "Endpointul nu poate fi accesat. Verifică adresa URL de bază și dacă serverul rulează."
+      },
       "connectionEmpty": "Conectat, dar endpointul nu a returnat niciun model. Verifică adresa URL de bază și cheia API.",
       "noCachedModels": "Niciun model în cache",
       "testConnection": "Testați conexiunea",

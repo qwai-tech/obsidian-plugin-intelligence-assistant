@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Skriv inn basis-URL-en til det OpenAI-kompatible endepunktet."
       },
       "cachedModels": "Mellomlagrede modeller: {{count}}",
-      "connectionFailed": "Tilkoblingstesten mislyktes. Sjekk leverandørinnstillingene.",
+      "connectionErrors": {
+        "keyRejected": "Endepunktet avviste API-nøkkelen (HTTP {{status}}). Sjekk nøkkelen.",
+        "notFound": "Fant ikke endepunktet (HTTP 404). Sjekk basis-URL-en.",
+        "httpError": "Endepunktet returnerte HTTP {{status}}. Prøv igjen eller sjekk basis-URL-en.",
+        "unreachable": "Kunne ikke nå endepunktet. Sjekk basis-URL-en og at serveren kjører."
+      },
       "connectionEmpty": "Tilkoblet, men endepunktet returnerte ingen modeller. Sjekk basis-URL-en og API-nøkkelen.",
       "noCachedModels": "Ingen mellomlagrede modeller",
       "testConnection": "Test tilkobling",

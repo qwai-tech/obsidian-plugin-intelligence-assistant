@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Enigu la baz-URL de la OpenAI-kongrua finpunkto."
       },
       "cachedModels": "Kaŝmemorigitaj modeloj: {{count}}",
-      "connectionFailed": "Konekto-testo malsukcesis. Kontrolu la provizantajn agordojn.",
+      "connectionErrors": {
+        "keyRejected": "La finpunkto rifuzis la API-ŝlosilon (HTTP {{status}}). Kontrolu la ŝlosilon.",
+        "notFound": "Finpunkto ne trovita (HTTP 404). Kontrolu la baz-URL.",
+        "httpError": "La finpunkto redonis HTTP {{status}}. Reprovu aŭ kontrolu la baz-URL.",
+        "unreachable": "Ne eblis atingi la finpunkton. Kontrolu la baz-URL kaj ĉu la servilo funkcias."
+      },
       "connectionEmpty": "Konektita, sed la finpunkto redonis neniujn modelojn. Kontrolu la baz-URL kaj la API-ŝlosilon.",
       "noCachedModels": "Neniuj kaŝmemorigitaj modeloj",
       "testConnection": "Testi konekton",

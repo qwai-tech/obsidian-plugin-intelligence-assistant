@@ -1304,7 +1304,12 @@
         "baseUrlRequired": "Masukkan URL asas titik akhir yang serasi dengan OpenAI."
       },
       "cachedModels": "Model dicache: {{count}}",
-      "connectionFailed": "Ujian sambungan gagal. Semak tetapan pembekal.",
+      "connectionErrors": {
+        "keyRejected": "Titik akhir menolak kunci API (HTTP {{status}}). Semak kunci.",
+        "notFound": "Titik akhir tidak ditemui (HTTP 404). Semak URL asas.",
+        "httpError": "Titik akhir memulangkan HTTP {{status}}. Cuba lagi atau semak URL asas.",
+        "unreachable": "Tidak dapat mencapai titik akhir. Semak URL asas dan pastikan pelayan berjalan."
+      },
       "connectionEmpty": "Bersambung, tetapi titik akhir tidak memulangkan sebarang model. Semak URL asas dan kunci API.",
       "noCachedModels": "Tiada model dicache",
       "testConnection": "Uji sambungan",

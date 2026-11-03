@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Gib die Basis-URL des OpenAI-kompatiblen Endpunkts ein."
       },
       "cachedModels": "Zwischengespeicherte Modelle: {{count}}",
-      "connectionFailed": "Verbindungstest fehlgeschlagen. Anbietereinstellungen prüfen.",
+      "connectionErrors": {
+        "keyRejected": "Der Endpunkt hat den API-Schlüssel abgelehnt (HTTP {{status}}). Prüfe den Schlüssel.",
+        "notFound": "Endpunkt nicht gefunden (HTTP 404). Prüfe die Basis-URL.",
+        "httpError": "Der Endpunkt hat HTTP {{status}} zurückgegeben. Versuche es erneut oder prüfe die Basis-URL.",
+        "unreachable": "Der Endpunkt ist nicht erreichbar. Prüfe die Basis-URL und ob der Server läuft."
+      },
       "connectionEmpty": "Verbunden, aber der Endpunkt hat keine Modelle geliefert. Prüfe Basis-URL und API-Schlüssel.",
       "noCachedModels": "Keine zwischengespeicherten Modelle",
       "testConnection": "Verbindung testen",

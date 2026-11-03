@@ -1350,7 +1350,12 @@
         "baseUrlRequired": "Saisissez l'URL de base du point de terminaison compatible OpenAI."
       },
       "cachedModels": "Modèles en cache : {{count}}",
-      "connectionFailed": "Échec du test de connexion. Vérifiez les paramètres du fournisseur.",
+      "connectionErrors": {
+        "keyRejected": "Le point de terminaison a refusé la clé d'API (HTTP {{status}}). Vérifiez la clé.",
+        "notFound": "Point de terminaison introuvable (HTTP 404). Vérifiez l'URL de base.",
+        "httpError": "Le point de terminaison a renvoyé HTTP {{status}}. Réessayez ou vérifiez l'URL de base.",
+        "unreachable": "Impossible de joindre le point de terminaison. Vérifiez l'URL de base et que le serveur fonctionne."
+      },
       "connectionEmpty": "Connecté, mais le point de terminaison n'a renvoyé aucun modèle. Vérifiez l'URL de base et la clé d'API.",
       "noCachedModels": "Aucun modèle en cache",
       "testConnection": "Tester la connexion",

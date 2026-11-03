@@ -1350,7 +1350,12 @@
         "baseUrlRequired": "Introduce la URL base del endpoint compatible con OpenAI."
       },
       "cachedModels": "Modelos en caché: {{count}}",
-      "connectionFailed": "La prueba de conexión falló. Revisa la configuración del proveedor.",
+      "connectionErrors": {
+        "keyRejected": "El endpoint rechazó la clave de API (HTTP {{status}}). Revisa la clave.",
+        "notFound": "No se encontró el endpoint (HTTP 404). Revisa la URL base.",
+        "httpError": "El endpoint devolvió HTTP {{status}}. Vuelve a intentarlo o revisa la URL base.",
+        "unreachable": "No se pudo conectar con el endpoint. Revisa la URL base y que el servidor esté en marcha."
+      },
       "connectionEmpty": "Conectado, pero el endpoint no devolvió ningún modelo. Revisa la URL base y la clave de API.",
       "noCachedModels": "No hay modelos en caché",
       "testConnection": "Probar conexión",

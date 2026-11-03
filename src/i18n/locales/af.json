@@ -1327,7 +1327,12 @@
         "baseUrlRequired": "Voer die basis-URL van die OpenAI-versoenbare eindpunt in."
       },
       "cachedModels": "Gekasde modelle: {{count}}",
-      "connectionFailed": "Verbindingstoets het misluk. Gaan verskafferinstellings na.",
+      "connectionErrors": {
+        "keyRejected": "Die eindpunt het die API-sleutel geweier (HTTP {{status}}). Gaan die sleutel na.",
+        "notFound": "Eindpunt nie gevind nie (HTTP 404). Gaan die basis-URL na.",
+        "httpError": "Die eindpunt het HTTP {{status}} teruggestuur. Probeer weer of gaan die basis-URL na.",
+        "unreachable": "Kon nie die eindpunt bereik nie. Gaan die basis-URL na en of die bediener loop."
+      },
       "connectionEmpty": "Gekoppel, maar die eindpunt het geen modelle teruggestuur nie. Gaan die basis-URL en API-sleutel na.",
       "noCachedModels": "Geen gekasde modelle nie",
       "testConnection": "Toets verbinding",

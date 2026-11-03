@@ -1373,7 +1373,12 @@
         "baseUrlRequired": "Zadejte základní URL koncového bodu kompatibilního s OpenAI."
       },
       "cachedModels": "Modely v mezipaměti: {{count}}",
-      "connectionFailed": "Test připojení selhal. Zkontrolujte nastavení poskytovatele.",
+      "connectionErrors": {
+        "keyRejected": "Koncový bod odmítl klíč API (HTTP {{status}}). Zkontrolujte klíč.",
+        "notFound": "Koncový bod nebyl nalezen (HTTP 404). Zkontrolujte základní URL.",
+        "httpError": "Koncový bod vrátil HTTP {{status}}. Zkuste to znovu nebo zkontrolujte základní URL.",
+        "unreachable": "Koncový bod není dostupný. Zkontrolujte základní URL a zda server běží."
+      },
       "connectionEmpty": "Připojeno, ale koncový bod nevrátil žádné modely. Zkontrolujte základní URL a klíč API.",
       "noCachedModels": "Žádné modely v mezipaměti",
       "testConnection": "Otestovat připojení",

@@ -1,4 +1,5 @@
 import {App, Modal, Notice, SecretComponent, Setting} from 'obsidian';
+import { describeConnectionError } from '@/ui/modals/connection-error';
 import type { LLMConfig, OllamaAdmin } from '@/features/llm';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
 import { OllamaModelManagerModal } from './ollama-model-manager-modal';
@@ -211,7 +212,8 @@ export class ProviderConfigModal extends Modal {
 			new Notice(models.length > 0 ? t('modals.provider.connectionSuccess', { count: models.length }) : t('modals.provider.connectionEmpty'));
 		} catch (error) {
 			console.error('Provider connection test failed:', error);
-			new Notice(t('modals.provider.connectionFailed'));
+			const { key, status } = describeConnectionError(error);
+			new Notice(t(`modals.provider.connectionErrors.${key}`, { status }), 8000);
 		} finally {
 			button.disabled = false;
 			button.textContent = originalText;
