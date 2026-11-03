@@ -9,6 +9,7 @@ export class AgentsSettingsPage extends BasePage {
 
 	async createAgent(): Promise<string> {
 		await this.click(TestIds.settings.agentAddBtn);
+		await this.click(TestIds.settings.agentModalSaveBtn);
 		await this.waitForAgentNamed('New Agent');
 		return this.getAgentIdByName('New Agent');
 	}

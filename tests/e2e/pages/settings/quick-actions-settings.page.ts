@@ -21,6 +21,7 @@ export class QuickActionsSettingsPage extends BasePage {
 	async addAction(): Promise<void> {
 		await this.open();
 		await this.click(TestIds.settings.quickActionAddBtn);
+		await this.click(TestIds.settings.quickActionModalSaveBtn);
 		await this.waitForActionRow('New Quick Action');
 	}
 

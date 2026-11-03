@@ -66,10 +66,12 @@ export function displayAgentsTab(
 			createdAt: Date.now(),
 			updatedAt: Date.now()
 		};
-		void plugin.updateSettings((settings) => {
-			settings.agents.push(newAgent);
-		});
-		refreshDisplay();
+		new AgentEditModal(app, plugin, newAgent, async (saved) => {
+			await plugin.updateSettings((settings) => {
+				settings.agents.push(saved);
+			});
+			refreshDisplay();
+		}).open();
 	});
 
 	// Display existing agents in a table if they exist

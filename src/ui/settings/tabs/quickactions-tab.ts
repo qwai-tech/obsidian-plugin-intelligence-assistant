@@ -59,10 +59,7 @@ export function displayQuickActionsTab(
 			prompt: 'Process the following text:\n\n',
 			actionType: 'replace'
 		};
-		void plugin.updateSettings((settings) => {
-			settings.quickActions.push(newAction);
-		});
-		refreshDisplay();
+		openQuickActionEditModal(plugin, app, newAction, plugin.settings.quickActions.length, refreshDisplay);
 	});
 
 	// Display existing quick actions in a table
