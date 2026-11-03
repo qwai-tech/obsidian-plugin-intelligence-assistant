@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Konexioak",
         "tools": "Tresnak",
-        "logs": "Erregistroak"
+        "test": "Probatu tresna bat"
       },
       "refreshBtn": "freskatu",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Bat ere ez"
       },
       "logs": {
-        "title": "MCP konexio-erregistroak",
-        "placeholder": "MCP konexio-erregistroak hemen agertuko dira. Une honetan informazio ordezkoa erakusten.",
-        "events": {
-          "connection": "• konexio-gertaerak",
-          "tools": "• tresna-erregistro gertaerak",
-          "errors": "• errore-erregistroak",
-          "comms": "• komunikazio-xehetasunak"
-        },
         "testTitle": "Probatu tresnaren exekuzioa",
         "selectServer": "Hautatu zerbitzari bat...",
         "selectTool": "Hautatu tresna bat...",

@@ -1322,7 +1322,7 @@
       "tabs": {
         "connections": "연결",
         "tools": "도구",
-        "logs": "로그"
+        "test": "도구 테스트"
       },
       "refreshBtn": "새로 고침",
       "connections": {
@@ -1366,14 +1366,6 @@
         "noParams": "없음"
       },
       "logs": {
-        "title": "MCP 연결 로그",
-        "placeholder": "MCP 연결 로그가 여기에 표시됩니다. 현재 자리 표시자 정보를 표시하고 있습니다.",
-        "events": {
-          "connection": "• 연결 이벤트",
-          "tools": "• 도구 등록 이벤트",
-          "errors": "• 오류 로그",
-          "comms": "• 통신 세부 정보"
-        },
         "testTitle": "도구 실행 테스트",
         "selectServer": "서버 선택...",
         "selectTool": "도구 선택...",

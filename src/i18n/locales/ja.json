@@ -1322,7 +1322,7 @@
       "tabs": {
         "connections": "接続",
         "tools": "ツール",
-        "logs": "ログ"
+        "test": "ツールをテスト"
       },
       "refreshBtn": "更新",
       "connections": {
@@ -1366,14 +1366,6 @@
         "noParams": "なし"
       },
       "logs": {
-        "title": "MCP 接続ログ",
-        "placeholder": "MCP 接続ログがここに表示されます。現在はプレースホルダー情報を表示しています。",
-        "events": {
-          "connection": "• 接続イベント",
-          "tools": "• ツール登録イベント",
-          "errors": "• エラーログ",
-          "comms": "• 通信の詳細"
-        },
         "testTitle": "ツール実行のテスト",
         "selectServer": "サーバーを選択...",
         "selectTool": "ツールを選択...",

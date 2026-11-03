@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Anslutningar",
         "tools": "Verktyg",
-        "logs": "Loggar"
+        "test": "Testa ett verktyg"
       },
       "refreshBtn": "uppdatera",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Inga"
       },
       "logs": {
-        "title": "MCP-anslutningsloggar",
-        "placeholder": "MCP-anslutningsloggar visas här. Visar för närvarande platshållarinformation.",
-        "events": {
-          "connection": "• anslutningshändelser",
-          "tools": "• verktygsregistreringshändelser",
-          "errors": "• felloggar",
-          "comms": "• kommunikationsdetaljer"
-        },
         "testTitle": "Testa verktygskörning",
         "selectServer": "Välj en server...",
         "selectTool": "Välj ett verktyg...",

@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Forbindelser",
         "tools": "Værktøjer",
-        "logs": "Logger"
+        "test": "Test et værktøj"
       },
       "refreshBtn": "opdater",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Ingen"
       },
       "logs": {
-        "title": "MCP-forbindelseslogs",
-        "placeholder": "MCP-forbindelseslogs vil vises her. Viser i øjeblikket pladsholder-information.",
-        "events": {
-          "connection": "• forbindelseshændelser",
-          "tools": "• registreringshændelser for værktøjer",
-          "errors": "• fejllogs",
-          "comms": "• kommunikationsdetaljer"
-        },
         "testTitle": "Test værktøjsudførelse",
         "selectServer": "Vælg en server...",
         "selectTool": "Vælg et værktøj...",

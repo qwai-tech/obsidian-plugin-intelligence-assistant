@@ -1370,7 +1370,7 @@
       "tabs": {
         "connections": "Savienojumi",
         "tools": "Rīki",
-        "logs": "Žurnāli"
+        "test": "Pārbaudīt rīku"
       },
       "refreshBtn": "atsvaidzināt",
       "connections": {
@@ -1418,14 +1418,6 @@
         "noParams": "Nav"
       },
       "logs": {
-        "title": "MCP savienojumu žurnāli",
-        "placeholder": "MCP savienojumu žurnāli parādīsies šeit. Pašlaik tiek rādīta viettura informācija.",
-        "events": {
-          "connection": "• savienojuma notikumi",
-          "tools": "• rīku reģistrācijas notikumi",
-          "errors": "• kļūdu žurnāli",
-          "comms": "• komunikācijas detaļas"
-        },
         "testTitle": "Pārbaudīt rīka izpildi",
         "selectServer": "Atlasīt serveri...",
         "selectTool": "Atlasīt rīku...",

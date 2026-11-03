@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Konektoj",
         "tools": "Iloj",
-        "logs": "Protokoloj"
+        "test": "Testi ilon"
       },
       "refreshBtn": "aktualigi",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Neniu"
       },
       "logs": {
-        "title": "MCP-konektaj protokoloj",
-        "placeholder": "MCP-konektaj protokoloj aperos ĉi tie. Nuntempe montras anstataŭigan informon.",
-        "events": {
-          "connection": "• konektaj okazaĵoj",
-          "tools": "• ilregistradaj okazaĵoj",
-          "errors": "• erarprotokolo",
-          "comms": "• komunikadaj detaloj"
-        },
         "testTitle": "Testi ilekzekuton",
         "selectServer": "Elekti servilon...",
         "selectTool": "Elekti ilon...",

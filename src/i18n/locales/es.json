@@ -1370,7 +1370,7 @@
       "tabs": {
         "connections": "Conexiones",
         "tools": "Herramientas",
-        "logs": "Registros"
+        "test": "Probar una herramienta"
       },
       "refreshBtn": "actualizar",
       "connections": {
@@ -1418,14 +1418,6 @@
         "noParams": "Ninguno"
       },
       "logs": {
-        "title": "Registros de conexión MCP",
-        "placeholder": "Los registros de conexión MCP aparecerán aquí. Actualmente mostrando información de marcador de posición.",
-        "events": {
-          "connection": "• eventos de conexión",
-          "tools": "• eventos de registro de herramientas",
-          "errors": "• registros de errores",
-          "comms": "• detalles de comunicación"
-        },
         "testTitle": "Probar ejecución de herramienta",
         "selectServer": "Seleccionar un servidor...",
         "selectTool": "Seleccionar una herramienta...",

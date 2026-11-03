@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Kapcsolatok",
         "tools": "Eszközök",
-        "logs": "Naplók"
+        "test": "Eszköz kipróbálása"
       },
       "refreshBtn": "frissítés",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Nincs"
       },
       "logs": {
-        "title": "MCP kapcsolati naplók",
-        "placeholder": "Az MCP kapcsolati naplók itt jelennek meg. Jelenleg helyőrző információk láthatók.",
-        "events": {
-          "connection": "• kapcsolódási események",
-          "tools": "• eszközregisztrációs események",
-          "errors": "• hibanaplók",
-          "comms": "• kommunikációs részletek"
-        },
         "testTitle": "Eszközvégrehajtás tesztelése",
         "selectServer": "Válasszon szervert...",
         "selectTool": "Válasszon eszközt...",

@@ -1370,7 +1370,7 @@
       "tabs": {
         "connections": "Connexions",
         "tools": "Outils",
-        "logs": "Journaux"
+        "test": "Tester un outil"
       },
       "refreshBtn": "actualiser",
       "connections": {
@@ -1418,14 +1418,6 @@
         "noParams": "Aucun"
       },
       "logs": {
-        "title": "Journaux de connexion MCP",
-        "placeholder": "Les journaux de connexion MCP apparaîtront ici. Affichage d'informations temporaires pour l'instant.",
-        "events": {
-          "connection": "• événements de connexion",
-          "tools": "• événements d'enregistrement d'outils",
-          "errors": "• journaux d'erreurs",
-          "comms": "• détails de communication"
-        },
         "testTitle": "Tester l'exécution d'un outil",
         "selectServer": "Sélectionner un serveur...",
         "selectTool": "Sélectionner un outil...",

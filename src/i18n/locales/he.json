@@ -1370,7 +1370,7 @@
       "tabs": {
         "connections": "חיבורים",
         "tools": "כלים",
-        "logs": "יומנים"
+        "test": "בדיקת כלי"
       },
       "refreshBtn": "רענן",
       "connections": {
@@ -1418,14 +1418,6 @@
         "noParams": "ללא"
       },
       "logs": {
-        "title": "יומני חיבור MCP",
-        "placeholder": "יומני חיבור MCP יופיעו כאן. כרגע מציג מידע זמני.",
-        "events": {
-          "connection": "• אירועי חיבור",
-          "tools": "• אירועי רישום כלים",
-          "errors": "• יומני שגיאות",
-          "comms": "• פרטי תקשורת"
-        },
         "testTitle": "בדוק הפעלת כלי",
         "selectServer": "בחר שרת...",
         "selectTool": "בחר כלי...",

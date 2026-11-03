@@ -3181,16 +3181,6 @@ details[open] .ia-chat-message__summary::before {
 	margin: 0;
 	padding-left: 16px;
 }
-.ia-mcpi-log-container {
-	border: 1px solid var(--background-modifier-border);
-	border-radius: 4px;
-	padding: 8px;
-	height: 200px;
-	overflow-y: auto;
-	background: var(--background-primary);
-	font-family: monospace;
-	font-size: 12px;
-}
 .ia-mcpi-test-section {
 	margin-top: 16px;
 }

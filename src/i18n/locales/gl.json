@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Conexións",
         "tools": "Ferramentas",
-        "logs": "Rexistros"
+        "test": "Probar unha ferramenta"
       },
       "refreshBtn": "refrescar",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Ningún"
       },
       "logs": {
-        "title": "Rexistros de conexión MCP",
-        "placeholder": "Os rexistros de conexión MCP aparecerán aquí. Actualmente mostrando información provisional.",
-        "events": {
-          "connection": "• eventos de conexión",
-          "tools": "• eventos de rexistro de ferramentas",
-          "errors": "• rexistros de erro",
-          "comms": "• detalles de comunicación"
-        },
         "testTitle": "Probar execución de ferramenta",
         "selectServer": "Selecciona un servidor...",
         "selectTool": "Selecciona unha ferramenta...",

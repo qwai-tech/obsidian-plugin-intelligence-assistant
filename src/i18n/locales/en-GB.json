@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Connections",
         "tools": "Tools",
-        "logs": "Logs"
+        "test": "Test a tool"
       },
       "refreshBtn": "refresh",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "None"
       },
       "logs": {
-        "title": "MCP connection logs",
-        "placeholder": "MCP connection logs will appear here. Currently showing placeholder information.",
-        "events": {
-          "connection": "• connection events",
-          "tools": "• tool registration events",
-          "errors": "• error logs",
-          "comms": "• communication details"
-        },
         "testTitle": "Test tool execution",
         "selectServer": "Select a server...",
         "selectTool": "Select a tool...",

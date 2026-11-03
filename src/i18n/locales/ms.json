@@ -1322,7 +1322,7 @@
       "tabs": {
         "connections": "Sambungan",
         "tools": "Alat",
-        "logs": "Log"
+        "test": "Uji alat"
       },
       "refreshBtn": "segarkan",
       "connections": {
@@ -1366,14 +1366,6 @@
         "noParams": "Tiada"
       },
       "logs": {
-        "title": "Log sambungan MCP",
-        "placeholder": "Log sambungan MCP akan muncul di sini. Pada masa ini menunjukkan maklumat placeholder.",
-        "events": {
-          "connection": "• peristiwa sambungan",
-          "tools": "• peristiwa pendaftaran alat",
-          "errors": "• log ralat",
-          "comms": "• butiran komunikasi"
-        },
         "testTitle": "Uji pelaksanaan alat",
         "selectServer": "Pilih pelayan...",
         "selectTool": "Pilih alat...",

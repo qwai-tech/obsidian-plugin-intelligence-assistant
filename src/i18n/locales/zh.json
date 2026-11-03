@@ -1322,7 +1322,7 @@
       "tabs": {
         "connections": "连接",
         "tools": "工具",
-        "logs": "日志"
+        "test": "测试工具"
       },
       "refreshBtn": "刷新",
       "connections": {
@@ -1366,14 +1366,6 @@
         "noParams": "无"
       },
       "logs": {
-        "title": "MCP 连接日志",
-        "placeholder": "MCP 连接日志将显示在此处，目前显示占位信息。",
-        "events": {
-          "connection": "• 连接事件",
-          "tools": "• 工具注册事件",
-          "errors": "• 错误日志",
-          "comms": "• 通信详情"
-        },
         "testTitle": "测试工具执行",
         "selectServer": "选择服务器...",
         "selectTool": "选择工具...",

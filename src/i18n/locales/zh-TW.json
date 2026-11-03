@@ -1322,7 +1322,7 @@
       "tabs": {
         "connections": "連線",
         "tools": "工具",
-        "logs": "日誌"
+        "test": "測試工具"
       },
       "refreshBtn": "重新整理",
       "connections": {
@@ -1366,14 +1366,6 @@
         "noParams": "無"
       },
       "logs": {
-        "title": "MCP 連線日誌",
-        "placeholder": "MCP 連線日誌將顯示在此處。目前顯示的是佔位符資訊。",
-        "events": {
-          "connection": "• 連線事件",
-          "tools": "• 工具註冊事件",
-          "errors": "• 錯誤日誌",
-          "comms": "• 通訊詳細資訊"
-        },
         "testTitle": "測試工具執行",
         "selectServer": "選擇伺服器...",
         "selectTool": "選擇工具...",

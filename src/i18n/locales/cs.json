@@ -1394,7 +1394,7 @@
       "tabs": {
         "connections": "Připojení",
         "tools": "Nástroje",
-        "logs": "Záznamy"
+        "test": "Vyzkoušet nástroj"
       },
       "refreshBtn": "obnovit",
       "connections": {
@@ -1444,14 +1444,6 @@
         "noParams": "Žádné"
       },
       "logs": {
-        "title": "Záznamy připojení MCP",
-        "placeholder": "Záznamy připojení MCP se zobrazí zde. Aktuálně jsou zobrazeny zástupné informace.",
-        "events": {
-          "connection": "• události připojení",
-          "tools": "• události registrace nástrojů",
-          "errors": "• záznamy chyb",
-          "comms": "• podrobnosti komunikace"
-        },
         "testTitle": "Testovací provádění nástroje",
         "selectServer": "Vybrat server...",
         "selectTool": "Vybrat nástroj...",

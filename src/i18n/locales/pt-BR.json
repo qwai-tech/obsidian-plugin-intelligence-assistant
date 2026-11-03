@@ -1370,7 +1370,7 @@
       "tabs": {
         "connections": "Conexões",
         "tools": "Ferramentas",
-        "logs": "Logs"
+        "test": "Testar uma ferramenta"
       },
       "refreshBtn": "atualizar",
       "connections": {
@@ -1418,14 +1418,6 @@
         "noParams": "Nenhum"
       },
       "logs": {
-        "title": "Logs de conexão MCP",
-        "placeholder": "Os logs de conexão MCP aparecerão aqui. Atualmente exibindo informações de exemplo.",
-        "events": {
-          "connection": "• eventos de conexão",
-          "tools": "• eventos de registro de ferramentas",
-          "errors": "• logs de erros",
-          "comms": "• detalhes de comunicação"
-        },
         "testTitle": "Testar execução de ferramenta",
         "selectServer": "Selecionar um servidor...",
         "selectTool": "Selecionar uma ferramenta...",

@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Verbindings",
         "tools": "Gereedskap",
-        "logs": "Logboeke"
+        "test": "Toets 'n instrument"
       },
       "refreshBtn": "verfris",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Geen"
       },
       "logs": {
-        "title": "MCP-verbindinglogboeke",
-        "placeholder": "MCP-verbindinglogboeke sal hier verskyn. Toon tans plaasvervanger-inligting.",
-        "events": {
-          "connection": "• verbindingsgebeurtenisse",
-          "tools": "• gereedskap-registrasiegebeurtenisse",
-          "errors": "• foutlogboeke",
-          "comms": "• kommunikasie-besonderhede"
-        },
         "testTitle": "Toets gereedskap-uitvoering",
         "selectServer": "Kies 'n bediener...",
         "selectTool": "Kies 'n gereedskap...",

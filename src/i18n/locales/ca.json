@@ -1370,7 +1370,7 @@
       "tabs": {
         "connections": "Connexions",
         "tools": "Eines",
-        "logs": "Registres"
+        "test": "Prova una eina"
       },
       "refreshBtn": "actualitza",
       "connections": {
@@ -1418,14 +1418,6 @@
         "noParams": "Cap"
       },
       "logs": {
-        "title": "Registres de connexions MCP",
-        "placeholder": "Aquí apareixeran els registres de connexions MCP. Ara es mostren informacions de marcador de posició.",
-        "events": {
-          "connection": "• esdeveniments de connexió",
-          "tools": "• esdeveniments de registre d'eines",
-          "errors": "• registres d'errors",
-          "comms": "• detalls de comunicació"
-        },
         "testTitle": "Prova l'execució d'eines",
         "selectServer": "Seleccioneu un servidor...",
         "selectTool": "Seleccioneu una eina...",

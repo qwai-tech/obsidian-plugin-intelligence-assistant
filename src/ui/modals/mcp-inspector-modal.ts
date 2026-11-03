@@ -30,7 +30,7 @@ export class MCPInspectorModal extends Modal {
 
 		const connectionsTab = tabContainer.createEl('button', { text: t('modals.mcpInspector.tabs.connections') });
 		const toolsTab = tabContainer.createEl('button', { text: t('modals.mcpInspector.tabs.tools') });
-		const logsTab = tabContainer.createEl('button', { text: t('modals.mcpInspector.tabs.logs') });
+		const logsTab = tabContainer.createEl('button', { text: t('modals.mcpInspector.tabs.test') });
 
 		// Style tabs
 		const tabs = [connectionsTab, toolsTab, logsTab];
@@ -282,32 +282,6 @@ export class MCPInspectorModal extends Modal {
 
 	private renderLogsTab(container: HTMLElement) {
 		container.empty();
-		new Setting(container).setName(t('modals.mcpInspector.logs.title')).setHeading();
-
-		// Display any stored logs or debugging information
-		const logContainer = container.createDiv();
-		logContainer.addClass('ia-mcpi-log-container');
-
-		logContainer.createEl('p', {
-			text: t('modals.mcpInspector.logs.placeholder')
-		});
-
-		logContainer.createEl('p', {
-			text: t('modals.mcpInspector.logs.events.connection')
-		});
-
-		logContainer.createEl('p', {
-			text: t('modals.mcpInspector.logs.events.tools')
-		});
-
-		logContainer.createEl('p', {
-			text: t('modals.mcpInspector.logs.events.errors')
-		});
-
-		logContainer.createEl('p', {
-			text: t('modals.mcpInspector.logs.events.comms')
-		});
-
 		renderMcpToolTester(container, this.plugin.services.tools.registry);
 	}
 

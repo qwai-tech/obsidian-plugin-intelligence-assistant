@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Verbindingen",
         "tools": "Tools",
-        "logs": "Logboeken"
+        "test": "Een tool testen"
       },
       "refreshBtn": "vernieuwen",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Geen"
       },
       "logs": {
-        "title": "MCP verbindingslogboeken",
-        "placeholder": "MCP verbindingslogboeken verschijnen hier. Momenteel worden tijdelijke aanduidingen weergegeven.",
-        "events": {
-          "connection": "• verbindingsgebeurtenissen",
-          "tools": "• toolregistratiegebeurtenissen",
-          "errors": "• foutlogboeken",
-          "comms": "• communicatiedetails"
-        },
         "testTitle": "Tooluitvoering testen",
         "selectServer": "Selecteer een server...",
         "selectTool": "Selecteer een tool...",

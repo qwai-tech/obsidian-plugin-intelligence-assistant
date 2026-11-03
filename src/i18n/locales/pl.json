@@ -1394,7 +1394,7 @@
       "tabs": {
         "connections": "Połączenia",
         "tools": "Narzędzia",
-        "logs": "Dzienniki"
+        "test": "Przetestuj narzędzie"
       },
       "refreshBtn": "odśwież",
       "connections": {
@@ -1444,14 +1444,6 @@
         "noParams": "Brak"
       },
       "logs": {
-        "title": "Dzienniki połączeń MCP",
-        "placeholder": "Dzienniki połączeń MCP pojawią się tutaj. Obecnie wyświetlane są informacje zastępcze.",
-        "events": {
-          "connection": "• zdarzenia połączenia",
-          "tools": "• zdarzenia rejestracji narzędzi",
-          "errors": "• dzienniki błędów",
-          "comms": "• szczegóły komunikacji"
-        },
         "testTitle": "Testowe wykonanie narzędzia",
         "selectServer": "Wybierz serwer...",
         "selectTool": "Wybierz narzędzie...",

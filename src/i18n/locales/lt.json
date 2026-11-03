@@ -1394,7 +1394,7 @@
       "tabs": {
         "connections": "Ryšiai",
         "tools": "Įrankiai",
-        "logs": "Žurnalai"
+        "test": "Išbandyti įrankį"
       },
       "refreshBtn": "atnaujinti",
       "connections": {
@@ -1444,14 +1444,6 @@
         "noParams": "Nėra"
       },
       "logs": {
-        "title": "MCP ryšių žurnalai",
-        "placeholder": "MCP ryšių žurnalai bus rodomi čia. Šiuo metu rodoma vietos užpildymo informacija.",
-        "events": {
-          "connection": "• ryšio įvykiai",
-          "tools": "• įrankių registravimo įvykiai",
-          "errors": "• klaidų žurnalai",
-          "comms": "• komunikacijos detalės"
-        },
         "testTitle": "Testuoti įrankio vykdymą",
         "selectServer": "Pasirinkite serverį...",
         "selectTool": "Pasirinkite įrankį...",

@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Verbindungen",
         "tools": "Werkzeuge",
-        "logs": "Protokolle"
+        "test": "Werkzeug testen"
       },
       "refreshBtn": "aktualisieren",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Keine"
       },
       "logs": {
-        "title": "MCP-Verbindungsprotokolle",
-        "placeholder": "MCP-Verbindungsprotokolle erscheinen hier. Derzeit werden Platzhalterdaten angezeigt.",
-        "events": {
-          "connection": "• Verbindungsereignisse",
-          "tools": "• Werkzeugregistrierungsereignisse",
-          "errors": "• Fehlerprotokolle",
-          "comms": "• Kommunikationsdetails"
-        },
         "testTitle": "Werkzeugausführung testen",
         "selectServer": "Server auswählen...",
         "selectTool": "Werkzeug auswählen...",

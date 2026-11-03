@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Tilkoblinger",
         "tools": "Verktøy",
-        "logs": "Logger"
+        "test": "Test et verktøy"
       },
       "refreshBtn": "oppdater",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Ingen"
       },
       "logs": {
-        "title": "MCP-tilkoblingslogger",
-        "placeholder": "MCP-tilkoblingslogger vises her. Viser for øyeblikket plassholder-informasjon.",
-        "events": {
-          "connection": "• tilkoblingshendelser",
-          "tools": "• verktøyregistreringshendelser",
-          "errors": "• feillogger",
-          "comms": "• kommunikasjonsdetaljer"
-        },
         "testTitle": "Test verktøykjøring",
         "selectServer": "Velg en server...",
         "selectTool": "Velg et verktøy...",

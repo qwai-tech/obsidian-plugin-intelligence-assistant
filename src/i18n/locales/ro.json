@@ -1370,7 +1370,7 @@
       "tabs": {
         "connections": "Conexiuni",
         "tools": "Instrumente",
-        "logs": "Jurnale"
+        "test": "Testează un instrument"
       },
       "refreshBtn": "reîmprospătați",
       "connections": {
@@ -1418,14 +1418,6 @@
         "noParams": "Niciunul"
       },
       "logs": {
-        "title": "Jurnale conexiuni MCP",
-        "placeholder": "Jurnalele conexiunilor MCP vor apărea aici. În prezent se afișează informații de substituție.",
-        "events": {
-          "connection": "• evenimente de conexiune",
-          "tools": "• evenimente de înregistrare instrumente",
-          "errors": "• jurnale de erori",
-          "comms": "• detalii de comunicare"
-        },
         "testTitle": "Testați execuția instrumentului",
         "selectServer": "Selectați un server...",
         "selectTool": "Selectați un instrument...",

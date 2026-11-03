@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Yhteydet",
         "tools": "Työkalut",
-        "logs": "Lokit"
+        "test": "Testaa työkalua"
       },
       "refreshBtn": "päivitä",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Ei mitään"
       },
       "logs": {
-        "title": "MCP-yhteyden lokit",
-        "placeholder": "MCP-yhteyden lokit näkyvät täällä. Näytetään tällä hetkellä paikkamerkkitietoja.",
-        "events": {
-          "connection": "• yhteystapahtumat",
-          "tools": "• työkalurekisteröintitapahtumat",
-          "errors": "• virhelokit",
-          "comms": "• viestintätiedot"
-        },
         "testTitle": "Testaa työkalun suoritus",
         "selectServer": "Valitse palvelin...",
         "selectTool": "Valitse työkalu...",

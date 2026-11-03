@@ -1322,7 +1322,7 @@
       "tabs": {
         "connections": "Kết nối",
         "tools": "Công cụ",
-        "logs": "Nhật ký"
+        "test": "Thử một công cụ"
       },
       "refreshBtn": "làm mới",
       "connections": {
@@ -1366,14 +1366,6 @@
         "noParams": "Không có"
       },
       "logs": {
-        "title": "Nhật ký kết nối MCP",
-        "placeholder": "Nhật ký kết nối MCP sẽ xuất hiện ở đây. Hiện đang hiển thị thông tin mẫu.",
-        "events": {
-          "connection": "• sự kiện kết nối",
-          "tools": "• sự kiện đăng ký công cụ",
-          "errors": "• nhật ký lỗi",
-          "comms": "• chi tiết giao tiếp"
-        },
         "testTitle": "Kiểm tra thực thi công cụ",
         "selectServer": "Chọn máy chủ...",
         "selectTool": "Chọn công cụ...",

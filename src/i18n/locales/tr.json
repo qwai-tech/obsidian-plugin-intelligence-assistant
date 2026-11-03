@@ -1346,7 +1346,7 @@
       "tabs": {
         "connections": "Bağlantılar",
         "tools": "Araçlar",
-        "logs": "Günlükler"
+        "test": "Bir aracı test et"
       },
       "refreshBtn": "yenile",
       "connections": {
@@ -1392,14 +1392,6 @@
         "noParams": "Yok"
       },
       "logs": {
-        "title": "MCP bağlantı günlükleri",
-        "placeholder": "MCP bağlantı günlükleri burada görünecek. Şu anda yer tutucu bilgi gösteriliyor.",
-        "events": {
-          "connection": "• bağlantı olayları",
-          "tools": "• araç kayıt olayları",
-          "errors": "• hata günlükleri",
-          "comms": "• iletişim ayrıntıları"
-        },
         "testTitle": "Araç yürütmeyi test et",
         "selectServer": "Sunucu seçin...",
         "selectTool": "Araç seçin...",
