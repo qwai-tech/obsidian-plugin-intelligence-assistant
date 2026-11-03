@@ -1,7 +1,16 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { BasePage } from './base.page';
 import { TestIds } from '../support/testids';
 
+const EVIDENCE = path.resolve('test-results/ux-fixes-2026-11-03/screens');
+
 export class UxProbePage extends BasePage {
+	async capture(name: string): Promise<void> {
+		fs.mkdirSync(EVIDENCE, { recursive: true });
+		await browser.saveScreenshot(path.join(EVIDENCE, `${name}.png`));
+	}
+
 	async clearNotices(): Promise<void> {
 		await browser.execute(() => activeDocument.querySelectorAll('.notice').forEach(notice => notice.remove()));
 	}
@@ -42,6 +51,15 @@ export class UxProbePage extends BasePage {
 
 	async settingNamesIn(scope: string): Promise<string[]> {
 		return browser.execute((root) => Array.from(activeDocument.querySelectorAll(`${root} .setting-item-name`)).map(name => (name.textContent ?? '').trim()), scope);
+	}
+
+	async widthRatio(childSelector: string, parentSelector: string): Promise<number> {
+		return browser.execute((child, parent) => {
+			const childEl = activeDocument.querySelector(child);
+			const parentEl = activeDocument.querySelector(parent);
+			if (!(childEl instanceof HTMLElement) || !(parentEl instanceof HTMLElement)) throw new Error(`Not found: ${child} / ${parent}`);
+			return childEl.getBoundingClientRect().width / parentEl.getBoundingClientRect().width;
+		}, childSelector, parentSelector);
 	}
 
 	async overflowingChildren(selector: string): Promise<string[]> {

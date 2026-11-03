@@ -33,6 +33,18 @@ export class ChatViewPage extends BasePage {
 		await this.waitFor(TestIds.chat.container);
 	}
 
+	async openInSidebar(): Promise<void> {
+		await browser.execute((viewType) => {
+			const app = (window as unknown as { app: {
+				workspace: { detachLeavesOfType(type: string): void };
+				commands: { executeCommandById(id: string): boolean };
+			} }).app;
+			app.workspace.detachLeavesOfType(viewType);
+			app.commands.executeCommandById('intelligence-assistant:open-chat-sidebar');
+		}, PLUGIN_VIEW_TYPE);
+		await $('.mod-right-split [data-testid="ia-chat-container"]').waitForDisplayed({ timeout: 10_000 });
+	}
+
 	async newChat(): Promise<void> {
 		await this.click(TestIds.chat.newBtn);
 		await this.waitFor(TestIds.chat.emptyState);
