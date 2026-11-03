@@ -110,7 +110,7 @@ export interface UserConfig {
 
 export interface PluginSettings {
 	// Versioning
-	lastVersion: string;
+	lastVersion?: string;
 
 	// LLM Configuration
 	llmConfigs: LLMConfig[];

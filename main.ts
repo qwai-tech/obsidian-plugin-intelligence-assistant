@@ -215,9 +215,7 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	private async deferredInitialization(): Promise<void> {
 		this.app.workspace.onLayoutReady(async () => {
 			const currentVersion = this.manifest.version;
-			const isAutomatedTest = typeof process !== 'undefined'
-				&& (process.env.NODE_ENV === 'test' || Boolean(process.env.WDIO_WORKER_ID));
-			if (this.store?.peek() && currentVersion !== (this.settings.lastVersion || '0.0.0') && !isAutomatedTest) {
+			if (this.store?.peek() && currentVersion !== this.settings.lastVersion) {
 				if (!this.settings.lastVersion) {
 					new WelcomeModal(this.app, {
 						openSettings: () => {

@@ -17,4 +17,9 @@ describe('settings codec', () => {
 		expect(rag.minRelevanceScore).toBe(defaults.minRelevanceScore);
 		expect(Object.values(rag).every(value => value !== undefined)).toBe(true);
 	});
+
+	it('leaves the last launched version unset until the plugin has run once, so first launch can be told apart', () => {
+		expect(userConfigToPluginSettings(null).lastVersion).toBeUndefined();
+		expect(userConfigToPluginSettings({ ...pluginSettingsToUserConfig(userConfigToPluginSettings(null)), lastVersion: '0.0.22' }).lastVersion).toBe('0.0.22');
+	});
 });

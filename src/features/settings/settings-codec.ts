@@ -136,7 +136,7 @@ export function userConfigToPluginSettings(userConfig?: UserConfig | null): Plug
 	const reranking = { enabled: false, model: 'cross-encoder', ...defaults.reranking, ...source.rag?.reranking };
 
 	return {
-		lastVersion: source.lastVersion ?? '0.0.0',
+		lastVersion: source.lastVersion,
 		llmConfigs: providerList,
 		defaultModel: source.providers?.defaultModel ?? DEFAULT_USER_CONFIG.providers.defaultModel,
 		titleSummaryModel: source.providers?.titleSummaryModel ?? DEFAULT_USER_CONFIG.providers.titleSummaryModel ?? '',
