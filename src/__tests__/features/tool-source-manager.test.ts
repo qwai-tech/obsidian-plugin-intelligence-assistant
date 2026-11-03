@@ -60,7 +60,11 @@ const setup = (settings: ToolSourceSettings) => {
 		},
 		openApi: (config, options) => {
 			openApiRequests.push({ id: config.id, refetch: options?.refetch ?? false });
-			return track(fakeSource('openapi', config.id, [`${config.id}_a`, `${config.id}_b`]));
+			const source = track(fakeSource('openapi', config.id, [`${config.id}_a`, `${config.id}_b`]));
+			if (config.specPath === 'missing.json') {
+				source.load = async () => { throw new Error('File not found: missing.json'); };
+			}
+			return source;
 		},
 		cli: (config) => track(fakeSource('cli', config.id, [`${config.id}_run`])),
 	};
@@ -123,6 +127,24 @@ describe('ToolSourceManager', () => {
 		config.enabled = false;
 		expect(await manager.reloadOpenApi('api')).toBe(0);
 		expect(registry.hasSource('openapi', 'api')).toBe(false);
+	});
+
+	it('reloadOpenApi reports a source that fails to load instead of claiming zero tools', async () => {
+		const { manager } = setup({ builtInTools: [], mcpServers: [], openApiTools: [{ id: 'broken', enabled: true, specPath: 'missing.json' } as OpenApiToolConfig], cliTools: [] });
+
+		await expect(manager.reloadOpenApi('broken')).rejects.toThrow('missing.json');
+	});
+
+	it('resync keeps loading other HTTP sources when one fails', async () => {
+		const settings: ToolSourceSettings = { builtInTools: [], mcpServers: [], openApiTools: [], cliTools: [] };
+		const { manager, registry } = setup(settings);
+		await manager.initialize();
+		settings.openApiTools = [{ id: 'broken', enabled: true, specPath: 'missing.json' } as OpenApiToolConfig, { id: 'api', enabled: true } as OpenApiToolConfig];
+		jest.spyOn(console, 'error').mockImplementation(() => undefined);
+
+		await manager.resync();
+
+		expect(names(registry)).toEqual(expect.arrayContaining(['api_a', 'api_b']));
 	});
 
 	it('reloadOpenApi asks the source to refetch the spec only when requested', async () => {

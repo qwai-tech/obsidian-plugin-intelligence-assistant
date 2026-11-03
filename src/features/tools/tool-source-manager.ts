@@ -61,7 +61,7 @@ export class ToolSourceManager {
 			await this.registry.unregisterSource('openapi', id);
 		}
 		for (const id of [...enabledApis].filter((id) => !this.registry.hasSource('openapi', id))) {
-			await this.reloadOpenApi(id);
+			await this.reloadOpenApi(id).catch((error: unknown) => console.error(`[OpenAPI] reload failed for ${id}:`, error));
 		}
 		await this.reloadCli();
 		await this.reloadBuiltin();
@@ -115,12 +115,7 @@ export class ToolSourceManager {
 			return 0;
 		}
 		this.registry.registerSource(this.factory.openApi(config, options));
-		try {
-			return (await this.registry.reloadSource('openapi', configId)).length;
-		} catch (error) {
-			console.error(`[OpenAPI] reload failed for ${configId}:`, error);
-			return 0;
-		}
+		return (await this.registry.reloadSource('openapi', configId)).length;
 	}
 
 	async removeOpenApi(configId: string): Promise<void> {
