@@ -1339,10 +1339,12 @@
       "save": "Сачувај",
       "validation": {
         "selectProvider": "Молимо изаберите тип провајдера",
-        "invalidUrl": "Неважећи формат основног URL-а. Молимо унесите важећи URL (нпр. https://api.example.com)"
+        "invalidUrl": "Неважећи формат основног URL-а. Молимо унесите важећи URL (нпр. https://api.example.com)",
+        "baseUrlRequired": "Унесите основни URL крајње тачке компатибилне са OpenAI-јем."
       },
       "cachedModels": "Кеширани модели: {{count}}",
       "connectionFailed": "Тест везе није успео. Проверите поставке провајдера.",
+      "connectionEmpty": "Повезано, али крајња тачка није вратила ниједан модел. Проверите основни URL и API кључ.",
       "noCachedModels": "Нема кешираних модела",
       "testConnection": "Тестирај везу",
       "testing": "Тестирање...",

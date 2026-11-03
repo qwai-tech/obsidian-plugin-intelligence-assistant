@@ -208,7 +208,7 @@ export class ProviderConfigModal extends Modal {
 			this.draft.cachedModels = models;
 			this.draft.cacheTimestamp = Date.now();
 			this.renderProviderSpecific();
-			new Notice(t('modals.provider.connectionSuccess', { count: models.length }));
+			new Notice(models.length > 0 ? t('modals.provider.connectionSuccess', { count: models.length }) : t('modals.provider.connectionEmpty'));
 		} catch (error) {
 			console.error('Provider connection test failed:', error);
 			new Notice(t('modals.provider.connectionFailed'));
@@ -239,6 +239,10 @@ export class ProviderConfigModal extends Modal {
 		// Validate provider is selected
 		if (!this.draft.provider || this.draft.provider.trim() === '') {
 			return t('modals.provider.validation.selectProvider');
+		}
+
+		if (this.draft.provider === 'custom' && !this.draft.baseUrl?.trim()) {
+			return t('modals.provider.validation.baseUrlRequired');
 		}
 
 		if (this.draft.baseUrl && this.draft.baseUrl.trim() !== '') {

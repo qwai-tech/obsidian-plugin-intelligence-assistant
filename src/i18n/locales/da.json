@@ -1316,10 +1316,12 @@
       "save": "Gem",
       "validation": {
         "selectProvider": "Vælg venligst en udbydertype",
-        "invalidUrl": "Ugyldigt basis-URL-format. Angiv venligst en gyldig URL (f.eks. https://api.example.com)"
+        "invalidUrl": "Ugyldigt basis-URL-format. Angiv venligst en gyldig URL (f.eks. https://api.example.com)",
+        "baseUrlRequired": "Angiv basis-URL'en for det OpenAI-kompatible endpoint."
       },
       "cachedModels": "Cachelagrede modeller: {{count}}",
       "connectionFailed": "Forbindelsestest mislykkedes. Tjek udbyderindstillinger.",
+      "connectionEmpty": "Forbundet, men endpointet returnerede ingen modeller. Tjek basis-URL'en og API-nøglen.",
       "noCachedModels": "Ingen cachelagrede modeller",
       "testConnection": "Test forbindelse",
       "testing": "Tester...",

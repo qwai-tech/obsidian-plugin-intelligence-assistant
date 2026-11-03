@@ -1294,11 +1294,13 @@
       "cachedModels": "已缓存模型：{{count}}",
       "noCachedModels": "暂无缓存模型",
       "connectionFailed": "连接测试失败，请检查服务商设置。",
+      "connectionEmpty": "已连接，但端点没有返回任何模型。请检查基础 URL 和 API 密钥。",
       "cancel": "取消",
       "save": "保存",
       "validation": {
         "selectProvider": "请选择服务商类型",
-        "invalidUrl": "Base URL 格式无效，请输入有效的 URL（例如 https://api.example.com）"
+        "invalidUrl": "Base URL 格式无效，请输入有效的 URL（例如 https://api.example.com）",
+        "baseUrlRequired": "请输入与 OpenAI 兼容端点的基础 URL。"
       },
       "connectionSuccess_other": "连接成功，已缓存 {{count}} 个模型。"
     },

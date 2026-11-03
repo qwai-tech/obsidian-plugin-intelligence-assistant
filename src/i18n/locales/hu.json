@@ -1316,10 +1316,12 @@
       "save": "Mentés",
       "validation": {
         "selectProvider": "Kérjük, válasszon egy szolgáltató típust",
-        "invalidUrl": "Érvénytelen alap URL formátum. Kérjük, adjon meg érvényes URL-t (pl. https://api.example.com)"
+        "invalidUrl": "Érvénytelen alap URL formátum. Kérjük, adjon meg érvényes URL-t (pl. https://api.example.com)",
+        "baseUrlRequired": "Add meg az OpenAI-kompatibilis végpont alap URL-jét."
       },
       "cachedModels": "Gyorsítótárazott modellek: {{count}}",
       "connectionFailed": "A kapcsolat tesztelése sikertelen. Ellenőrizze a szolgáltató beállításait.",
+      "connectionEmpty": "Csatlakozva, de a végpont nem adott vissza modellt. Ellenőrizd az alap URL-t és az API-kulcsot.",
       "noCachedModels": "Nincsenek gyorsítótárazott modellek",
       "testConnection": "Kapcsolat tesztelése",
       "testing": "Tesztelés...",

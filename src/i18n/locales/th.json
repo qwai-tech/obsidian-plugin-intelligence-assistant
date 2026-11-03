@@ -1293,10 +1293,12 @@
       "save": "บันทึก",
       "validation": {
         "selectProvider": "โปรดเลือกประเภทผู้ให้บริการ",
-        "invalidUrl": "รูปแบบ Base URL ไม่ถูกต้อง โปรดป้อน URL ที่ถูกต้อง (เช่น https://api.example.com)"
+        "invalidUrl": "รูปแบบ Base URL ไม่ถูกต้อง โปรดป้อน URL ที่ถูกต้อง (เช่น https://api.example.com)",
+        "baseUrlRequired": "ป้อน URL ฐานของปลายทางที่เข้ากันได้กับ OpenAI"
       },
       "cachedModels": "โมเดลที่แคชไว้: {{count}}",
       "connectionFailed": "การทดสอบการเชื่อมต่อล้มเหลว โปรดตรวจสอบการตั้งค่าผู้ให้บริการ",
+      "connectionEmpty": "เชื่อมต่อแล้ว แต่ปลายทางไม่ส่งโมเดลกลับมา ตรวจสอบ URL ฐานและคีย์ API",
       "noCachedModels": "ไม่มีโมเดลที่แคชไว้",
       "testConnection": "ทดสอบการเชื่อมต่อ",
       "testing": "กำลังทดสอบ...",

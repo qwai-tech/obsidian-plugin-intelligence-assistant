@@ -1316,10 +1316,12 @@
       "save": "Stoor",
       "validation": {
         "selectProvider": "Kies asseblief 'n verskaffer-tipe",
-        "invalidUrl": "Ongeldige basis-URL-formaat. Voer asseblief 'n geldige URL in (bv. https://api.example.com)"
+        "invalidUrl": "Ongeldige basis-URL-formaat. Voer asseblief 'n geldige URL in (bv. https://api.example.com)",
+        "baseUrlRequired": "Voer die basis-URL van die OpenAI-versoenbare eindpunt in."
       },
       "cachedModels": "Gekasde modelle: {{count}}",
       "connectionFailed": "Verbindingstoets het misluk. Gaan verskafferinstellings na.",
+      "connectionEmpty": "Gekoppel, maar die eindpunt het geen modelle teruggestuur nie. Gaan die basis-URL en API-sleutel na.",
       "noCachedModels": "Geen gekasde modelle nie",
       "testConnection": "Toets verbinding",
       "testing": "Toets tans...",

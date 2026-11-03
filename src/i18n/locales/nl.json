@@ -1316,10 +1316,12 @@
       "save": "Opslaan",
       "validation": {
         "selectProvider": "Selecteer een providertype",
-        "invalidUrl": "Ongeldig basis-URL-formaat. Voer een geldige URL in (bijv. https://api.voorbeeld.com)"
+        "invalidUrl": "Ongeldig basis-URL-formaat. Voer een geldige URL in (bijv. https://api.voorbeeld.com)",
+        "baseUrlRequired": "Voer de basis-URL van het OpenAI-compatibele endpoint in."
       },
       "cachedModels": "Gecachede modellen: {{count}}",
       "connectionFailed": "Verbindingstest mislukt. Controleer de providerinstellingen.",
+      "connectionEmpty": "Verbonden, maar het endpoint gaf geen modellen terug. Controleer de basis-URL en de API-sleutel.",
       "noCachedModels": "Geen gecachede modellen",
       "testConnection": "Verbinding testen",
       "testing": "Testen...",

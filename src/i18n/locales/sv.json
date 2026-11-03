@@ -1316,10 +1316,12 @@
       "save": "Spara",
       "validation": {
         "selectProvider": "Välj en leverantörstyp",
-        "invalidUrl": "Ogiltigt bas-URL-format. Ange en giltig URL (t.ex. https://api.example.com)"
+        "invalidUrl": "Ogiltigt bas-URL-format. Ange en giltig URL (t.ex. https://api.example.com)",
+        "baseUrlRequired": "Ange bas-URL:en för den OpenAI-kompatibla slutpunkten."
       },
       "cachedModels": "Cachade modeller: {{count}}",
       "connectionFailed": "Anslutningstestet misslyckades. Kontrollera leverantörsinställningarna.",
+      "connectionEmpty": "Ansluten, men slutpunkten returnerade inga modeller. Kontrollera bas-URL:en och API-nyckeln.",
       "noCachedModels": "Inga cachade modeller",
       "testConnection": "Testa anslutning",
       "testing": "Testar...",

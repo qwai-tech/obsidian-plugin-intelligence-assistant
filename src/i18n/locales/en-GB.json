@@ -1316,10 +1316,12 @@
       "save": "Save",
       "validation": {
         "selectProvider": "Please select a provider type",
-        "invalidUrl": "Invalid base URL format. Please enter a valid URL (e.g., https://api.example.com)"
+        "invalidUrl": "Invalid base URL format. Please enter a valid URL (e.g., https://api.example.com)",
+        "baseUrlRequired": "Enter the base URL of the OpenAI-compatible endpoint."
       },
       "cachedModels": "Cached models: {{count}}",
       "connectionFailed": "Connection test failed. Check provider settings.",
+      "connectionEmpty": "Connected, but the endpoint returned no models. Check the base URL and API key.",
       "noCachedModels": "No cached models",
       "testConnection": "Test connection",
       "testing": "Testing...",

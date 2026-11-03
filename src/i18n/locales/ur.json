@@ -1316,10 +1316,12 @@
       "save": "محفوظ",
       "validation": {
         "selectProvider": "براہ کرم فراہم کنندہ کی قسم منتخب کریں",
-        "invalidUrl": "غلط بنیادی URL فارمیٹ۔ براہ کرم ایک درست URL درج کریں (مثلاً https://api.example.com)"
+        "invalidUrl": "غلط بنیادی URL فارمیٹ۔ براہ کرم ایک درست URL درج کریں (مثلاً https://api.example.com)",
+        "baseUrlRequired": "OpenAI سے مطابقت رکھنے والے اینڈ پوائنٹ کا بنیادی URL درج کریں۔"
       },
       "cachedModels": "کیشڈ ماڈلز: {{count}}",
       "connectionFailed": "کنکشن ٹیسٹ ناکام ہو گیا۔ فراہم کنندہ کی ترتیبات چیک کریں۔",
+      "connectionEmpty": "منسلک ہو گیا، لیکن اینڈ پوائنٹ نے کوئی ماڈل واپس نہیں کیا۔ بنیادی URL اور API کلید چیک کریں۔",
       "noCachedModels": "کوئی کیشڈ ماڈل نہیں",
       "testConnection": "کنکشن ٹیسٹ کریں",
       "testing": "ٹیسٹ ہو رہا ہے...",

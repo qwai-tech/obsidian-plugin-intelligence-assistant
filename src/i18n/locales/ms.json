@@ -1293,10 +1293,12 @@
       "save": "Simpan",
       "validation": {
         "selectProvider": "Sila pilih jenis pembekal",
-        "invalidUrl": "Format URL asas tidak sah. Sila masukkan URL yang sah (cth., https://api.example.com)"
+        "invalidUrl": "Format URL asas tidak sah. Sila masukkan URL yang sah (cth., https://api.example.com)",
+        "baseUrlRequired": "Masukkan URL asas titik akhir yang serasi dengan OpenAI."
       },
       "cachedModels": "Model dicache: {{count}}",
       "connectionFailed": "Ujian sambungan gagal. Semak tetapan pembekal.",
+      "connectionEmpty": "Bersambung, tetapi titik akhir tidak memulangkan sebarang model. Semak URL asas dan kunci API.",
       "noCachedModels": "Tiada model dicache",
       "testConnection": "Uji sambungan",
       "testing": "Menguji...",

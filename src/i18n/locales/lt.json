@@ -1362,10 +1362,12 @@
       "save": "Išsaugoti",
       "validation": {
         "selectProvider": "Pasirinkite tiekėjo tipą",
-        "invalidUrl": "Netinkamas bazinio URL formatas. Įveskite galiojantį URL (pvz., https://api.example.com)"
+        "invalidUrl": "Netinkamas bazinio URL formatas. Įveskite galiojantį URL (pvz., https://api.example.com)",
+        "baseUrlRequired": "Įveskite su OpenAI suderinamo galinio taško bazinį URL."
       },
       "cachedModels": "Talpykloje esantys modeliai: {{count}}",
       "connectionFailed": "Ryšio patikrinimas nepavyko. Patikrinkite tiekėjo nustatymus.",
+      "connectionEmpty": "Prisijungta, bet galinis taškas negrąžino jokių modelių. Patikrinkite bazinį URL ir API raktą.",
       "noCachedModels": "Talpykloje nėra modelių",
       "testConnection": "Patikrinti ryšį",
       "testing": "Tikrinama...",

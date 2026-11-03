@@ -1339,10 +1339,12 @@
       "save": "Spremi",
       "validation": {
         "selectProvider": "Odaberite vrstu pružatelja",
-        "invalidUrl": "Nevaljani format osnovnog URL-a. Unesite valjani URL (npr. https://api.example.com)"
+        "invalidUrl": "Nevaljani format osnovnog URL-a. Unesite valjani URL (npr. https://api.example.com)",
+        "baseUrlRequired": "Unesite osnovni URL krajnje točke kompatibilne s OpenAI-jem."
       },
       "cachedModels": "Predmemorirani modeli: {{count}}",
       "connectionFailed": "Test veze nije uspio. Provjerite postavke pružatelja.",
+      "connectionEmpty": "Povezano, ali krajnja točka nije vratila nijedan model. Provjerite osnovni URL i API ključ.",
       "noCachedModels": "Nema predmemoriranih modela",
       "testConnection": "Testiraj vezu",
       "testing": "Testiranje...",

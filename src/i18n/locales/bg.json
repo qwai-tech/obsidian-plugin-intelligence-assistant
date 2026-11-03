@@ -1316,10 +1316,12 @@
       "save": "Запази",
       "validation": {
         "selectProvider": "Моля, изберете тип доставчик",
-        "invalidUrl": "Невалиден формат на базов URL. Моля, въведете валиден URL (напр. https://api.example.com)"
+        "invalidUrl": "Невалиден формат на базов URL. Моля, въведете валиден URL (напр. https://api.example.com)",
+        "baseUrlRequired": "Въведете основния URL адрес на крайната точка, съвместима с OpenAI."
       },
       "cachedModels": "Кеширани модели: {{count}}",
       "connectionFailed": "Тестът на връзката неуспешен. Проверете настройките на доставчика.",
+      "connectionEmpty": "Свързано, но крайната точка не върна модели. Проверете основния URL адрес и API ключа.",
       "noCachedModels": "Няма кеширани модели",
       "testConnection": "Тест на връзката",
       "testing": "Тестване...",

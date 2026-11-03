@@ -1339,10 +1339,12 @@
       "save": "Saglabāt",
       "validation": {
         "selectProvider": "Lūdzu, atlasiet pakalpojumu sniedzēja tipu",
-        "invalidUrl": "Nederīgs bāzes URL formāts. Lūdzu, ievadiet derīgu URL (piem., https://api.example.com)"
+        "invalidUrl": "Nederīgs bāzes URL formāts. Lūdzu, ievadiet derīgu URL (piem., https://api.example.com)",
+        "baseUrlRequired": "Ievadiet ar OpenAI saderīgā galapunkta bāzes URL."
       },
       "cachedModels": "Kešatmiņā saglabātie modeļi: {{count}}",
       "connectionFailed": "Savienojuma pārbaude neizdevās. Pārbaudiet pakalpojumu sniedzēja iestatījumus.",
+      "connectionEmpty": "Savienojums izveidots, bet galapunkts neatgrieza nevienu modeli. Pārbaudiet bāzes URL un API atslēgu.",
       "noCachedModels": "Kešatmiņā nav modeļu",
       "testConnection": "Pārbaudīt savienojumu",
       "testing": "Pārbauda...",

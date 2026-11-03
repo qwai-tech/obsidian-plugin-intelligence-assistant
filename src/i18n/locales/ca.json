@@ -1339,10 +1339,12 @@
       "save": "Desa",
       "validation": {
         "selectProvider": "Seleccioneu un tipus de proveïdor",
-        "invalidUrl": "Format d'URL base no vàlid. Introduïu una URL vàlida (p. ex. https://api.example.com)"
+        "invalidUrl": "Format d'URL base no vàlid. Introduïu una URL vàlida (p. ex. https://api.example.com)",
+        "baseUrlRequired": "Introdueix l'URL base del punt final compatible amb OpenAI."
       },
       "cachedModels": "Models a la memòria cau: {{count}}",
       "connectionFailed": "La prova de connexió ha fallat. Comproveu la configuració del proveïdor.",
+      "connectionEmpty": "Connectat, però el punt final no ha retornat cap model. Comprova l'URL base i la clau d'API.",
       "noCachedModels": "No hi ha models a la memòria cau",
       "testConnection": "Prova la connexió",
       "testing": "S'està provant...",

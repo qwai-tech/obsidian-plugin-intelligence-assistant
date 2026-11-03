@@ -1316,10 +1316,12 @@
       "save": "Kaydet",
       "validation": {
         "selectProvider": "Lütfen bir sağlayıcı türü seçin",
-        "invalidUrl": "Geçersiz temel URL biçimi. Lütfen geçerli bir URL girin (örn. https://api.example.com)"
+        "invalidUrl": "Geçersiz temel URL biçimi. Lütfen geçerli bir URL girin (örn. https://api.example.com)",
+        "baseUrlRequired": "OpenAI uyumlu uç noktanın temel URL'sini girin."
       },
       "cachedModels": "Önbellekteki modeller: {{count}}",
       "connectionFailed": "Bağlantı testi başarısız oldu. Sağlayıcı ayarlarını kontrol edin.",
+      "connectionEmpty": "Bağlandı, ancak uç nokta hiç model döndürmedi. Temel URL'yi ve API anahtarını kontrol edin.",
       "noCachedModels": "Önbellekte model yok",
       "testConnection": "Bağlantıyı test et",
       "testing": "Test ediliyor...",

@@ -1362,10 +1362,12 @@
       "save": "Захаваць",
       "validation": {
         "selectProvider": "Выберыце тып пастаўшчыка",
-        "invalidUrl": "Няправільны фармат базавага URL. Увядзіце дзейны URL (напр., https://api.example.com)"
+        "invalidUrl": "Няправільны фармат базавага URL. Увядзіце дзейны URL (напр., https://api.example.com)",
+        "baseUrlRequired": "Увядзіце базавы URL канцавой кропкі, сумяшчальнай з OpenAI."
       },
       "cachedModels": "Кэшаваныя мадэлі: {{count}}",
       "connectionFailed": "Праверка злучэння не ўдалася. Праверце налады пастаўшчыка.",
+      "connectionEmpty": "Злучэнне ўстаноўлена, але канцавая кропка не вярнула мадэляў. Праверце базавы URL і ключ API.",
       "noCachedModels": "Няма кэшаваных мадэляў",
       "testConnection": "Праверыць злучэнне",
       "testing": "Праверка...",

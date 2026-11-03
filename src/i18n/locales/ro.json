@@ -1339,10 +1339,12 @@
       "save": "Salvați",
       "validation": {
         "selectProvider": "Selectați un tip de furnizor",
-        "invalidUrl": "Format URL de bază invalid. Introduceți un URL valid (de ex. https://api.example.com)"
+        "invalidUrl": "Format URL de bază invalid. Introduceți un URL valid (de ex. https://api.example.com)",
+        "baseUrlRequired": "Introdu adresa URL de bază a endpointului compatibil cu OpenAI."
       },
       "cachedModels": "Modele în cache: {{count}}",
       "connectionFailed": "Testul conexiunii a eșuat. Verificați setările furnizorului.",
+      "connectionEmpty": "Conectat, dar endpointul nu a returnat niciun model. Verifică adresa URL de bază și cheia API.",
       "noCachedModels": "Niciun model în cache",
       "testConnection": "Testați conexiunea",
       "testing": "Se testează...",

@@ -1362,10 +1362,12 @@
       "save": "Uložiť",
       "validation": {
         "selectProvider": "Vyberte prosím typ poskytovateľa",
-        "invalidUrl": "Neplatný formát základnej URL. Zadajte platnú URL (napr. https://api.example.com)"
+        "invalidUrl": "Neplatný formát základnej URL. Zadajte platnú URL (napr. https://api.example.com)",
+        "baseUrlRequired": "Zadajte základnú URL koncového bodu kompatibilného s OpenAI."
       },
       "cachedModels": "Modely v cache: {{count}}",
       "connectionFailed": "Test pripojenia zlyhal. Skontrolujte nastavenia poskytovateľa.",
+      "connectionEmpty": "Pripojené, ale koncový bod nevrátil žiadne modely. Skontrolujte základnú URL a kľúč API.",
       "noCachedModels": "Žiadne modely v cache",
       "testConnection": "Otestovať pripojenie",
       "testing": "Testuje sa...",

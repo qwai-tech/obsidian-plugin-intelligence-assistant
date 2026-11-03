@@ -1316,10 +1316,12 @@
       "save": "সংরক্ষণ",
       "validation": {
         "selectProvider": "অনুগ্রহ করে একটি প্রদানকারীর ধরন নির্বাচন করুন",
-        "invalidUrl": "অবৈধ বেস URL ফরম্যাট। অনুগ্রহ করে একটি বৈধ URL লিখুন (যেমন, https://api.example.com)"
+        "invalidUrl": "অবৈধ বেস URL ফরম্যাট। অনুগ্রহ করে একটি বৈধ URL লিখুন (যেমন, https://api.example.com)",
+        "baseUrlRequired": "OpenAI-সামঞ্জস্যপূর্ণ এন্ডপয়েন্টের বেস URL দিন।"
       },
       "cachedModels": "ক্যাশ করা মডেল: {{count}}",
       "connectionFailed": "সংযোগ পরীক্ষা ব্যর্থ হয়েছে। প্রদানকারী সেটিংস পরীক্ষা করুন।",
+      "connectionEmpty": "সংযুক্ত হয়েছে, কিন্তু এন্ডপয়েন্ট কোনো মডেল ফেরত দেয়নি। বেস URL ও API কী যাচাই করুন।",
       "noCachedModels": "কোনো ক্যাশ করা মডেল নেই",
       "testConnection": "সংযোগ পরীক্ষা করুন",
       "testing": "পরীক্ষা করা হচ্ছে...",

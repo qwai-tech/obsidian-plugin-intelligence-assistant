@@ -1293,10 +1293,12 @@
       "save": "Lưu",
       "validation": {
         "selectProvider": "Vui lòng chọn loại nhà cung cấp",
-        "invalidUrl": "Định dạng URL cơ sở không hợp lệ. Vui lòng nhập URL hợp lệ (ví dụ: https://api.example.com)"
+        "invalidUrl": "Định dạng URL cơ sở không hợp lệ. Vui lòng nhập URL hợp lệ (ví dụ: https://api.example.com)",
+        "baseUrlRequired": "Nhập URL cơ sở của điểm cuối tương thích OpenAI."
       },
       "cachedModels": "Mô hình đã lưu cache: {{count}}",
       "connectionFailed": "Kiểm tra kết nối thất bại. Hãy kiểm tra cài đặt nhà cung cấp.",
+      "connectionEmpty": "Đã kết nối, nhưng điểm cuối không trả về mô hình nào. Hãy kiểm tra URL cơ sở và khóa API.",
       "noCachedModels": "Không có mô hình nào được lưu cache",
       "testConnection": "Kiểm tra kết nối",
       "testing": "Đang kiểm tra...",

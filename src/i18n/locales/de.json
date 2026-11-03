@@ -1316,10 +1316,12 @@
       "save": "Speichern",
       "validation": {
         "selectProvider": "Bitte einen Anbietertyp auswählen",
-        "invalidUrl": "Ungültiges Basis-URL-Format. Bitte eine gültige URL eingeben (z. B. https://api.example.com)"
+        "invalidUrl": "Ungültiges Basis-URL-Format. Bitte eine gültige URL eingeben (z. B. https://api.example.com)",
+        "baseUrlRequired": "Gib die Basis-URL des OpenAI-kompatiblen Endpunkts ein."
       },
       "cachedModels": "Zwischengespeicherte Modelle: {{count}}",
       "connectionFailed": "Verbindungstest fehlgeschlagen. Anbietereinstellungen prüfen.",
+      "connectionEmpty": "Verbunden, aber der Endpunkt hat keine Modelle geliefert. Prüfe Basis-URL und API-Schlüssel.",
       "noCachedModels": "Keine zwischengespeicherten Modelle",
       "testConnection": "Verbindung testen",
       "testing": "Wird getestet...",

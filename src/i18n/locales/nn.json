@@ -1316,10 +1316,12 @@
       "save": "Lagre",
       "validation": {
         "selectProvider": "Vel ein leverandørtype",
-        "invalidUrl": "Ugyldig basis-URL-format. Skriv inn ein gyldig URL (t.d. https://api.example.com)"
+        "invalidUrl": "Ugyldig basis-URL-format. Skriv inn ein gyldig URL (t.d. https://api.example.com)",
+        "baseUrlRequired": "Skriv inn basis-URL-en til det OpenAI-kompatible endepunktet."
       },
       "cachedModels": "Mellomlagra modellar: {{count}}",
       "connectionFailed": "Tilkoplingstesten feila. Sjekk leverandørinnstillingane.",
+      "connectionEmpty": "Tilkopla, men endepunktet returnerte ingen modellar. Sjekk basis-URL-en og API-nøkkelen.",
       "noCachedModels": "Ingen mellomlagra modellar",
       "testConnection": "Test tilkopling",
       "testing": "Testar...",

@@ -1293,10 +1293,12 @@
       "save": "儲存",
       "validation": {
         "selectProvider": "請選擇提供者類型",
-        "invalidUrl": "基礎 URL 格式無效。請輸入有效的 URL（例如 https://api.example.com）"
+        "invalidUrl": "基礎 URL 格式無效。請輸入有效的 URL（例如 https://api.example.com）",
+        "baseUrlRequired": "請輸入與 OpenAI 相容端點的基礎 URL。"
       },
       "cachedModels": "已快取模型：{{count}}",
       "connectionFailed": "連線測試失敗，請檢查提供者設定。",
+      "connectionEmpty": "已連線，但端點沒有回傳任何模型。請檢查基礎 URL 與 API 金鑰。",
       "noCachedModels": "沒有已快取的模型",
       "testConnection": "測試連線",
       "testing": "測試中...",

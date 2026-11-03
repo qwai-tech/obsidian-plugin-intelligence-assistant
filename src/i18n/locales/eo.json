@@ -1316,10 +1316,12 @@
       "save": "Konservi",
       "validation": {
         "selectProvider": "Bonvolu elekti provizanttipo",
-        "invalidUrl": "Nevalida baza URL-formato. Bonvolu enigi validan URL (ekz., https://api.example.com)"
+        "invalidUrl": "Nevalida baza URL-formato. Bonvolu enigi validan URL (ekz., https://api.example.com)",
+        "baseUrlRequired": "Enigu la baz-URL de la OpenAI-kongrua finpunkto."
       },
       "cachedModels": "Kaŝmemorigitaj modeloj: {{count}}",
       "connectionFailed": "Konekto-testo malsukcesis. Kontrolu la provizantajn agordojn.",
+      "connectionEmpty": "Konektita, sed la finpunkto redonis neniujn modelojn. Kontrolu la baz-URL kaj la API-ŝlosilon.",
       "noCachedModels": "Neniuj kaŝmemorigitaj modeloj",
       "testConnection": "Testi konekton",
       "testing": "Testante...",

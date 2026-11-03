@@ -1339,10 +1339,12 @@
       "save": "שמור",
       "validation": {
         "selectProvider": "אנא בחר סוג ספק",
-        "invalidUrl": "פורמט כתובת URL בסיסית לא תקף. אנא הזן כתובת URL תקפה (למשל, https://api.example.com)"
+        "invalidUrl": "פורמט כתובת URL בסיסית לא תקף. אנא הזן כתובת URL תקפה (למשל, https://api.example.com)",
+        "baseUrlRequired": "הזינו את כתובת הבסיס של נקודת הקצה התואמת ל-OpenAI."
       },
       "cachedModels": "מודלים במטמון: {{count}}",
       "connectionFailed": "בדיקת החיבור נכשלה. בדוק את הגדרות הספק.",
+      "connectionEmpty": "התחברות הצליחה, אבל נקודת הקצה לא החזירה מודלים. בדקו את כתובת הבסיס ואת מפתח ה-API.",
       "noCachedModels": "אין מודלים במטמון",
       "testConnection": "בדוק חיבור",
       "testing": "בודק...",

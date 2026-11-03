@@ -1316,10 +1316,12 @@
       "save": "Tallenna",
       "validation": {
         "selectProvider": "Valitse palveluntarjoajan tyyppi",
-        "invalidUrl": "Virheellinen perus-URL-muoto. Syötä kelvollinen URL (esim. https://api.example.com)"
+        "invalidUrl": "Virheellinen perus-URL-muoto. Syötä kelvollinen URL (esim. https://api.example.com)",
+        "baseUrlRequired": "Anna OpenAI-yhteensopivan päätepisteen perus-URL."
       },
       "cachedModels": "Välimuistissa olevat mallit: {{count}}",
       "connectionFailed": "Yhteystesti epäonnistui. Tarkista palveluntarjoajan asetukset.",
+      "connectionEmpty": "Yhteys muodostettiin, mutta päätepiste ei palauttanut malleja. Tarkista perus-URL ja API-avain.",
       "noCachedModels": "Ei malleja välimuistissa",
       "testConnection": "Testaa yhteys",
       "testing": "Testataan...",

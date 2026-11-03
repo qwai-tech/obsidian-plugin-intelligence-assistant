@@ -1408,10 +1408,12 @@
       "save": "حفظ",
       "validation": {
         "selectProvider": "يرجى تحديد نوع مزود",
-        "invalidUrl": "صيغة URL الأساسي غير صالحة. يرجى إدخال URL صالح (مثلًا، https://api.example.com)"
+        "invalidUrl": "صيغة URL الأساسي غير صالحة. يرجى إدخال URL صالح (مثلًا، https://api.example.com)",
+        "baseUrlRequired": "أدخل عنوان URL الأساسي لنقطة النهاية المتوافقة مع OpenAI."
       },
       "cachedModels": "النماذج المخزنة مؤقتًا: {{count}}",
       "connectionFailed": "فشل اختبار الاتصال. تحقق من إعدادات المزود.",
+      "connectionEmpty": "تم الاتصال، لكن نقطة النهاية لم تُرجع أي نماذج. تحقق من عنوان URL الأساسي ومفتاح API.",
       "noCachedModels": "لا توجد نماذج مخزنة مؤقتًا",
       "testConnection": "اختبار الاتصال",
       "testing": "جارٍ الاختبار...",

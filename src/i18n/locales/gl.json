@@ -1316,10 +1316,12 @@
       "save": "Gardar",
       "validation": {
         "selectProvider": "Selecciona un tipo de provedor",
-        "invalidUrl": "Formato de URL base non válido. Introduce unha URL válida (por exemplo, https://api.example.com)"
+        "invalidUrl": "Formato de URL base non válido. Introduce unha URL válida (por exemplo, https://api.example.com)",
+        "baseUrlRequired": "Introduce o URL base do punto final compatible con OpenAI."
       },
       "cachedModels": "Modelos en caché: {{count}}",
       "connectionFailed": "Fallou a proba de conexión. Revisa a configuración do provedor.",
+      "connectionEmpty": "Conectado, pero o punto final non devolveu ningún modelo. Revisa o URL base e a clave de API.",
       "noCachedModels": "Non hai modelos en caché",
       "testConnection": "Probar conexión",
       "testing": "Probando...",

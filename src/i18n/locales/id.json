@@ -1293,10 +1293,12 @@
       "save": "Simpan",
       "validation": {
         "selectProvider": "Harap pilih jenis penyedia",
-        "invalidUrl": "Format URL dasar tidak valid. Harap masukkan URL yang valid (misalnya, https://api.example.com)"
+        "invalidUrl": "Format URL dasar tidak valid. Harap masukkan URL yang valid (misalnya, https://api.example.com)",
+        "baseUrlRequired": "Masukkan URL dasar endpoint yang kompatibel dengan OpenAI."
       },
       "cachedModels": "Model di-cache: {{count}}",
       "connectionFailed": "Uji koneksi gagal. Periksa pengaturan penyedia.",
+      "connectionEmpty": "Terhubung, tetapi endpoint tidak mengembalikan model. Periksa URL dasar dan kunci API.",
       "noCachedModels": "Tidak ada model di-cache",
       "testConnection": "Uji koneksi",
       "testing": "Menguji...",

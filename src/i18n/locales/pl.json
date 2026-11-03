@@ -1362,10 +1362,12 @@
       "save": "Zapisz",
       "validation": {
         "selectProvider": "Wybierz typ dostawcy",
-        "invalidUrl": "Nieprawidłowy format bazowego URL. Wprowadź prawidłowy URL (np. https://api.example.com)"
+        "invalidUrl": "Nieprawidłowy format bazowego URL. Wprowadź prawidłowy URL (np. https://api.example.com)",
+        "baseUrlRequired": "Wpisz bazowy adres URL punktu końcowego zgodnego z OpenAI."
       },
       "cachedModels": "Modele w pamięci podręcznej: {{count}}",
       "connectionFailed": "Test połączenia nie powiódł się. Sprawdź ustawienia dostawcy.",
+      "connectionEmpty": "Połączono, ale punkt końcowy nie zwrócił żadnych modeli. Sprawdź bazowy adres URL i klucz API.",
       "noCachedModels": "Brak modeli w pamięci podręcznej",
       "testConnection": "Testuj połączenie",
       "testing": "Testowanie...",

@@ -1316,10 +1316,12 @@
       "save": "Gorde",
       "validation": {
         "selectProvider": "Mesedez, hautatu hornitzaile mota bat",
-        "invalidUrl": "Oinarrizko URL formatu baliogabea. Mesedez, sartu URL baliozko bat (adibidez, https://api.example.com)"
+        "invalidUrl": "Oinarrizko URL formatu baliogabea. Mesedez, sartu URL baliozko bat (adibidez, https://api.example.com)",
+        "baseUrlRequired": "Idatzi OpenAI-rekin bateragarria den amaiera-puntuaren oinarrizko URLa."
       },
       "cachedModels": "Cachean gordetako modeloak: {{count}}",
       "connectionFailed": "Konexio-probak huts egin du. Egiaztatu hornitzailearen ezarpenak.",
+      "connectionEmpty": "Konektatuta, baina amaiera-puntuak ez du eredurik itzuli. Egiaztatu oinarrizko URLa eta API gakoa.",
       "noCachedModels": "Ez dago cachean gordetako modelorik",
       "testConnection": "Probatu konexioa",
       "testing": "Probatzen...",

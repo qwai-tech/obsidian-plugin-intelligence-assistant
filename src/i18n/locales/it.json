@@ -1339,10 +1339,12 @@
       "save": "Salva",
       "validation": {
         "selectProvider": "Seleziona un tipo di provider",
-        "invalidUrl": "Formato URL base non valido. Inserisci un URL valido (es. https://api.example.com)"
+        "invalidUrl": "Formato URL base non valido. Inserisci un URL valido (es. https://api.example.com)",
+        "baseUrlRequired": "Inserisci l'URL di base dell'endpoint compatibile con OpenAI."
       },
       "cachedModels": "Modelli in cache: {{count}}",
       "connectionFailed": "Test di connessione non riuscito. Controlla le impostazioni del provider.",
+      "connectionEmpty": "Connesso, ma l'endpoint non ha restituito alcun modello. Controlla l'URL di base e la chiave API.",
       "noCachedModels": "Nessun modello in cache",
       "testConnection": "Testa connessione",
       "testing": "Test in corso...",
