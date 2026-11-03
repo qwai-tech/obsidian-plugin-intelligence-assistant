@@ -261,6 +261,7 @@ export class CLIToolConfigModal extends Modal {
 					dropdown.setValue(param.insertAs ?? 'template')
 						.onChange(value => {
 							param.insertAs = value as 'template' | 'arg' | 'env';
+							this.renderParameters(container, persist);
 							void persist();
 						});
 				});
