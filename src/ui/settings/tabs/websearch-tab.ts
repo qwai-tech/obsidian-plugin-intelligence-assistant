@@ -21,6 +21,25 @@ const EXAMPLE_PLACEHOLDERS = {
 
 const TIME_RANGES = ['any', 'h', 'd', 'w', 'm', 'y'] as const;
 
+type SecretKey = 'apiKeySecret' | 'tavilyApiKeySecret' | 'braveApiKeySecret' | 'qwantApiKeySecret' | 'mojeekApiKeySecret';
+type TextKey = 'googleCseId' | 'serpapiEndpoint' | 'searxngEndpoint';
+type Credential =
+	| { key: SecretKey; label: string; secret: true; placeholder?: undefined }
+	| { key: TextKey; label: string; secret: false; placeholder: string };
+
+const API_KEY: Credential = { key: 'apiKeySecret', label: 'apiKey', secret: true };
+
+const CREDENTIALS: Record<string, Credential[]> = {
+	google: [API_KEY, { key: 'googleCseId', label: 'googleCseId', secret: false, placeholder: EXAMPLE_PLACEHOLDERS.googleEngineId }],
+	bing: [API_KEY],
+	serpapi: [API_KEY, { key: 'serpapiEndpoint', label: 'serpapiEndpoint', secret: false, placeholder: EXAMPLE_PLACEHOLDERS.serpApiUrl }],
+	tavily: [{ key: 'tavilyApiKeySecret', label: 'tavilyApiKey', secret: true }],
+	searxng: [{ key: 'searxngEndpoint', label: 'searxngEndpoint', secret: false, placeholder: EXAMPLE_PLACEHOLDERS.searxngUrl }],
+	brave: [{ key: 'braveApiKeySecret', label: 'braveApiKey', secret: true }],
+	qwant: [{ key: 'qwantApiKeySecret', label: 'qwantApiKey', secret: true }],
+	mojeek: [{ key: 'mojeekApiKeySecret', label: 'mojeekApiKey', secret: true }],
+};
+
 export function displayWebSearchTab(
 	containerEl: HTMLElement,
 	plugin: PluginHost
@@ -43,9 +62,21 @@ export function displayWebSearchTab(
 	), { fallback: 'any' });
 
 	subheading(t('settings.websearch.providerSelection'));
+	const credentials = createDiv();
+	const showCredentials = () => {
+		credentials.empty();
+		const credentialForm = new SettingsForm<WebSearchConfig>(credentials, () => plugin.settings.webSearchConfig, (change) => plugin.updateSettings(change), 'webSearchConfig');
+		for (const credential of CREDENTIALS[plugin.settings.webSearchConfig.provider] ?? []) {
+			if (credential.secret) {
+				credentialForm.secret(credential.key, field(credential.label), plugin.app);
+			} else {
+				credentialForm.text(credential.key, field(credential.label), { placeholder: credential.placeholder ?? '', optional: true });
+			}
+		}
+	};
 	form.dropdown('provider', field('provider'), Object.fromEntries(
 		SEARCH_PROVIDER_IDS.map(provider => [provider, t(`settings.websearch.providers.${provider}`)]),
-	));
+	), { then: showCredentials });
 
 	subheading(t('settings.websearch.localeFilters'));
 	form.text('searchLanguage', field('searchLanguage'), { placeholder: EXAMPLE_PLACEHOLDERS.searchLanguage, optional: true });
@@ -54,12 +85,6 @@ export function displayWebSearchTab(
 	form.text('excludeDomains', field('excludeDomains'), { placeholder: 'spam.example.com', optional: true });
 
 	subheading(t('settings.websearch.apiCredentials'));
-	form.secret('apiKeySecret', field('apiKey'), plugin.app);
-	form.text('googleCseId', field('googleCseId'), { placeholder: EXAMPLE_PLACEHOLDERS.googleEngineId, optional: true });
-	form.text('serpapiEndpoint', field('serpapiEndpoint'), { placeholder: EXAMPLE_PLACEHOLDERS.serpApiUrl, optional: true });
-	form.secret('tavilyApiKeySecret', field('tavilyApiKey'), plugin.app);
-	form.text('searxngEndpoint', field('searxngEndpoint'), { placeholder: EXAMPLE_PLACEHOLDERS.searxngUrl, optional: true });
-	form.secret('braveApiKeySecret', field('braveApiKey'), plugin.app);
-	form.secret('qwantApiKeySecret', field('qwantApiKey'), plugin.app);
-	form.secret('mojeekApiKeySecret', field('mojeekApiKey'), plugin.app);
+	containerEl.appendChild(credentials);
+	showCredentials();
 }
