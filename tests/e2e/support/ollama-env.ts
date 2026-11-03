@@ -25,8 +25,27 @@ export async function skipUnlessOllama(ctx: { skip(): void }): Promise<void> {
 	}
 }
 
-export async function seedOllama(): Promise<void> {
-	await browser.execute(async (pluginId, baseUrl, models, defaultModel, fixedModel, agentId) => {
+export interface OllamaAgentSpec {
+	id: string;
+	name: string;
+	toolAccess: Record<string, unknown>;
+	maxSteps: number;
+	maxTokens: number;
+}
+
+export const WRITER_AGENT_ID = 'e2e-real-writer-agent';
+
+const FIXED_AGENT: OllamaAgentSpec = { id: FIXED_AGENT_ID, name: 'E2E real fixed agent', toolAccess: { sources: {} }, maxSteps: 2, maxTokens: 200 };
+export const WRITER_AGENT: OllamaAgentSpec = {
+	id: WRITER_AGENT_ID,
+	name: 'E2E real writer agent',
+	toolAccess: { sources: { 'builtin:builtin': ['builtin:builtin:create_note'] } },
+	maxSteps: 4,
+	maxTokens: 8_000,
+};
+
+export async function seedOllama(agentSpecs: OllamaAgentSpec[] = [FIXED_AGENT]): Promise<void> {
+	await browser.execute(async (pluginId, baseUrl, models, defaultModel, fixedModel, specs) => {
 		const plugin = (window as unknown as { app: { plugins: { plugins: Record<string, {
 			updateSettings(change: (settings: Record<string, unknown>) => void): Promise<void>;
 		}> } } }).app.plugins.plugins[pluginId];
@@ -40,29 +59,32 @@ export async function seedOllama(): Promise<void> {
 			} as { provider: string });
 			settings.llmConfigs = configs;
 			settings.defaultModel = `ollama:${defaultModel}`;
-			const agents = (settings.agents as Array<{ id: string }>).filter(agent => agent.id !== agentId);
-			agents.push({
-				id: agentId,
-				name: 'E2E real fixed agent',
-				description: 'Uses a fixed model',
-				icon: 'bot',
-				modelStrategy: { strategy: 'fixed', modelId: `ollama:${fixedModel}` },
-				temperature: 0,
-				maxTokens: 200,
-				systemPromptId: '',
-				contextWindow: 10,
-				toolAccess: { sources: {} },
-				memoryType: 'none',
-				memoryConfig: { summaryInterval: 5, maxMemories: 10 },
-				ragEnabled: false,
-				webSearchEnabled: false,
-				maxSteps: 2,
-				createdAt: Date.now(),
-				updatedAt: Date.now(),
-			} as { id: string });
+			const ids = new Set(specs.map(spec => spec.id));
+			const agents = (settings.agents as Array<{ id: string }>).filter(agent => !ids.has(agent.id));
+			for (const spec of specs) {
+				agents.push({
+					id: spec.id,
+					name: spec.name,
+					description: 'Uses a fixed model',
+					icon: 'bot',
+					modelStrategy: { strategy: 'fixed', modelId: `ollama:${fixedModel}` },
+					temperature: 0,
+					maxTokens: spec.maxTokens,
+					systemPromptId: '',
+					contextWindow: 10,
+					toolAccess: spec.toolAccess,
+					memoryType: 'none',
+					memoryConfig: { summaryInterval: 5, maxMemories: 10 },
+					ragEnabled: false,
+					webSearchEnabled: false,
+					maxSteps: spec.maxSteps,
+					createdAt: Date.now(),
+					updatedAt: Date.now(),
+				} as { id: string });
+			}
 			settings.agents = agents;
 		});
-	}, PLUGIN_ID, OLLAMA_URL, ollamaModels.all, ollamaModels.chat, ollamaModels.fixed, FIXED_AGENT_ID);
+	}, PLUGIN_ID, OLLAMA_URL, ollamaModels.all, ollamaModels.chat, ollamaModels.fixed, agentSpecs);
 }
 
 export async function activateAgent(agentId: string): Promise<void> {

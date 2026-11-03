@@ -62,6 +62,27 @@ export class ChatReplyPage extends BasePage {
 		return content;
 	}
 
+	async proposalCards(): Promise<Array<{ text: string; button: string }>> {
+		return browser.execute(() => Array.from(activeDocument.querySelectorAll('.ia-write-proposal-card')).map(card => ({
+			text: (card.querySelector('.ia-write-proposal-card__note')?.textContent ?? '').trim(),
+			button: (card.querySelector('.ia-write-proposal-card__actions button')?.textContent ?? '').trim(),
+		})));
+	}
+
+	async waitForProposalCard(timeoutMs = 10_000): Promise<void> {
+		await $('.ia-write-proposal-card').waitForDisplayed({ timeout: timeoutMs });
+	}
+
+	async applyFirstProposal(): Promise<void> {
+		const apply = $('.ia-write-proposal-card__actions button');
+		await apply.waitForClickable({ timeout: 10_000 });
+		await apply.click();
+		const confirm = $('[data-testid="ia-confirm-modal-confirm-btn"]');
+		await confirm.waitForClickable({ timeout: 10_000 });
+		await confirm.click();
+		await browser.waitUntil(async () => (await this.proposalCards())[0]?.button === 'Applied', { timeout: 10_000, timeoutMsg: 'Proposal was not applied' });
+	}
+
 	private async clickLastReplyAction(label: string): Promise<void> {
 		await browser.execute((text) => {
 			const replies = Array.from(activeDocument.querySelectorAll('.ia-chat-message--assistant'));
