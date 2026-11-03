@@ -94,8 +94,9 @@ export class ChatView extends ItemView {
 			}
 		});
 
-		this.messageList = new ChatMessageList(mainChatContainer, this.app, this.plugin, this.state, this.rendererCallbacks());
-		this.renderScrollToBottom(mainChatContainer);
+		const messageArea = mainChatContainer.createDiv('ia-chat-message-area');
+		this.messageList = new ChatMessageList(messageArea, this.app, this.plugin, this.state, this.rendererCallbacks());
+		this.renderScrollToBottom(messageArea);
 
 		this.chatInput = new ChatInputComponent(mainChatContainer, this.app, this.plugin, this.state, {
 			onSendMessage: (text) => this.sendMessage(text),
