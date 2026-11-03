@@ -2,7 +2,7 @@ import type { ModelCapability, ModelInfo } from './types';
 import { getDefaultHttpPort } from './http';
 import { DEFAULT_MODELS, inferOpenAICapabilities, inferGoogleCapabilities, inferDeepSeekCapabilities } from './model-catalog';
 
-export async function fetchOpenAIModels(apiKey: string, baseUrl?: string): Promise<ModelInfo[]> {
+export async function fetchOpenAIModels(apiKey: string, baseUrl?: string, providerId: 'openai' | 'custom' = 'openai'): Promise<ModelInfo[]> {
 	const url = baseUrl
 		? `${baseUrl}/models`
 		: 'https://api.openai.com/v1/models';
@@ -24,14 +24,14 @@ export async function fetchOpenAIModels(apiKey: string, baseUrl?: string): Promi
 	return data.data
 		.filter((model: { id: string }) => !isOfficialOpenAI(baseUrl) || isOpenAIChatOrEmbedding(model.id))
 		.map((model: { id: string }) => {
-			const prefixedId = `openai:${model.id}`;
-			const defaultModel = DEFAULT_MODELS.openai.find(m => m.id === prefixedId);
+			const prefixedId = `${providerId}:${model.id}`;
+			const defaultModel = DEFAULT_MODELS.openai.find(m => m.id === `openai:${model.id}`);
 			const capabilities = defaultModel?.capabilities || inferOpenAICapabilities(model.id);
 
 			return {
 				id: prefixedId,
 				name: model.id,
-				provider: 'openai',
+				provider: providerId,
 				capabilities: capabilities,
 				enabled: true
 			};

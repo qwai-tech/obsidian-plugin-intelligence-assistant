@@ -214,4 +214,21 @@ describe('migrateSettings — removed SAP AI Core provider', () => {
 	it('defaults new installs to a web search provider that has a backend', () => {
 		expect(userConfigToPluginSettings(null).webSearchConfig.provider).toBe('searxng');
 	});
+
+	it('re-tags Custom provider models saved under openai: and the settings that pointed at them', () => {
+		const settings = userConfigToPluginSettings(null);
+		settings.llmConfigs = [
+			{ provider: 'openai', apiKey: 'k', cachedModels: [{ id: 'openai:gpt-4o', name: 'gpt-4o', provider: 'openai', capabilities: ['chat'], enabled: true }] },
+			{ provider: 'custom', apiKey: 'k', baseUrl: 'http://localhost:11434/v1', cachedModels: [{ id: 'openai:qwen3.5:0.8b', name: 'qwen3.5:0.8b', provider: 'openai', capabilities: ['chat'], enabled: true }] },
+		];
+		settings.defaultModel = 'openai:qwen3.5:0.8b';
+		settings.agents = [makeLegacyAgent({ id: 'a', modelStrategy: { strategy: 'fixed', modelId: 'openai:qwen3.5:0.8b' }, toolAccess: { sources: {} } })];
+
+		expect(migrateSettings(settings)).toBe(true);
+
+		expect(settings.llmConfigs[1].cachedModels).toEqual([expect.objectContaining({ id: 'custom:qwen3.5:0.8b', provider: 'custom' })]);
+		expect(settings.llmConfigs[0].cachedModels?.[0].id).toBe('openai:gpt-4o');
+		expect(settings.defaultModel).toBe('custom:qwen3.5:0.8b');
+		expect(settings.agents[0].modelStrategy).toEqual({ strategy: 'fixed', modelId: 'custom:qwen3.5:0.8b' });
+	});
 });

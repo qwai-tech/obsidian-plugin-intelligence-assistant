@@ -15,7 +15,37 @@ export function migrateSettings(settings: PluginSettings): boolean {
 	const connectionModesFixed = lowercaseConnectionModes(settings);
 	const presetsRenamed = renameBuiltinPresets(settings);
 	const searchProviderMoved = retireSearchProviders(settings);
-	return strategyChanged || stepsChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed || connectionModesFixed || presetsRenamed || searchProviderMoved;
+	const customModelsRetagged = retagCustomProviderModels(settings);
+	return strategyChanged || stepsChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed || connectionModesFixed || presetsRenamed || searchProviderMoved || customModelsRetagged;
+}
+
+function retagCustomProviderModels(settings: PluginSettings): boolean {
+	const renamed = new Map<string, string>();
+	for (const config of settings.llmConfigs.filter(candidate => candidate.provider === 'custom')) {
+		for (const model of config.cachedModels ?? []) {
+			if (!model.id.startsWith('openai:')) continue;
+			const id = `custom:${model.id.slice('openai:'.length)}`;
+			renamed.set(model.id, id);
+			model.id = id;
+			model.provider = 'custom';
+		}
+	}
+	if (renamed.size === 0) return false;
+	const openAiIds = new Set(settings.llmConfigs.filter(config => config.provider === 'openai').flatMap(config => (config.cachedModels ?? []).map(model => model.id)));
+	const retag = (id: string | undefined): string | undefined => (id && !openAiIds.has(id) ? renamed.get(id) : undefined) ?? id;
+	settings.defaultModel = retag(settings.defaultModel) ?? '';
+	settings.titleSummaryModel = retag(settings.titleSummaryModel);
+	settings.ragConfig.embeddingModel = retag(settings.ragConfig.embeddingModel) ?? settings.ragConfig.embeddingModel;
+	settings.ragConfig.graderModel = retag(settings.ragConfig.graderModel);
+	for (const agent of settings.agents) {
+		if (agent.modelStrategy?.strategy === 'fixed') {
+			agent.modelStrategy.modelId = retag(agent.modelStrategy.modelId);
+		}
+	}
+	for (const action of settings.quickActions) {
+		action.model = retag(action.model);
+	}
+	return true;
 }
 
 const RETIRED_SEARCH_PROVIDERS = new Set(['duckduckgo', 'yahoo', 'yandex']);

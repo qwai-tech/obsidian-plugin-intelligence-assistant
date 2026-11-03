@@ -59,8 +59,9 @@ export class ModelManager {
 		}
 		switch (config.provider) {
 			case 'openai':
-			case 'custom':
 				return await fetchOpenAIModels(config.apiKey, config.baseUrl);
+			case 'custom':
+				return await fetchOpenAIModels(config.apiKey, config.baseUrl, 'custom');
 			case 'google':
 				return await fetchGoogleModels(config.apiKey, config.baseUrl);
 			case 'deepseek':

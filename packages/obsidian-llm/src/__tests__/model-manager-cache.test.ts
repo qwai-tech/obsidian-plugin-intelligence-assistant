@@ -116,4 +116,14 @@ describe('ModelManager model cache', () => {
 
 		expect(models.map((m) => m.name)).toEqual(['gpt-4o', 'text-embedding-3-small']);
 	});
+
+	it('tags a Custom provider\'s models with its own provider, so they route back to it', async () => {
+		portListing(['qwen3.5:0.8b']);
+		const config: LLMConfig = { provider: 'custom', apiKey: 'local', baseUrl: 'http://localhost:11434/v1' };
+
+		const [model] = await ModelManager.getModelsForConfig(config, true);
+
+		expect(model).toMatchObject({ id: 'custom:qwen3.5:0.8b', provider: 'custom', name: 'qwen3.5:0.8b' });
+		expect(ModelManager.findConfigForModelByProvider(model.id, [{ provider: 'openai', apiKey: 'k' }, config])).toBe(config);
+	});
 });
