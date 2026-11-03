@@ -3900,3 +3900,34 @@ details[open] .ia-chat-message__summary::before {
 	border-color: var(--text-error);
 	box-shadow: 0 0 0 1px var(--text-error);
 }
+
+/* ── Composer: wraps and drops toolbar labels when narrow ──────────────────── */
+.chat-input-box {
+	container: ia-composer / inline-size;
+}
+
+.chat-input-toolbar {
+	flex-wrap: wrap;
+	row-gap: 4px;
+}
+
+.chat-input-pill-group {
+	min-width: 0;
+}
+
+.chat-input-mode-pill,
+.chat-input-model-pill,
+.chat-input-agent-pill {
+	min-width: 0;
+}
+
+@container ia-composer (max-width: 420px) {
+	.chat-input-toolbar-btn .header-action-label,
+	.stop-generation-btn span {
+		display: none;
+	}
+
+	.stop-generation-btn {
+		padding: 6px;
+	}
+}

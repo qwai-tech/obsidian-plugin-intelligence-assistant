@@ -76,6 +76,7 @@ export class ChatInputComponent {
 		this.stopBtn = editorRow.createEl('button', { cls: 'stop-generation-btn' });
 		this.stopBtn.setAttribute('data-testid', TestIds.chat.stopBtn);
 		setIcon(this.stopBtn, 'square');
+		this.stopBtn.setAttribute('aria-label', t('chat.stop'));
 		this.stopBtn.createSpan({ text: t('chat.stop') });
 		this.stopBtn.addClass('ia-hidden');
 		this.stopBtn.addEventListener('click', () => this.callbacks.onStopStreaming());
@@ -179,6 +180,11 @@ export class ChatInputComponent {
 			e.preventDefault();
 			void this.callbacks.onAttachImage();
 		});
+	}
+
+	public setStreaming(streaming: boolean): void {
+		this.stopBtn.toggleClass('ia-hidden', !streaming);
+		this.sendBtn.toggleClass('ia-hidden', streaming);
 	}
 
 	public updateModeSelector(mode: 'chat' | 'agent') {

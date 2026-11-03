@@ -262,7 +262,7 @@ export class ChatView extends ItemView {
 			findMessageContentElement: (element: HTMLElement) => this.messageList.contentOf(element),
 			findMessageBodyElement: (element: HTMLElement) => this.messageList.bodyOf(element),
 			onStreamingStateChange: (isStreaming: boolean) => {
-				this.chatInput.stopBtn?.toggleClass('ia-hidden', !isStreaming);
+				this.chatInput.setStreaming(isStreaming);
 				if (isStreaming) {
 					this.services.activity.begin();
 				} else {
