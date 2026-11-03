@@ -5,7 +5,8 @@ import { FIXED_AGENT_ID, activateAgent, ollamaModels, seedOllama, skipUnlessOlla
 
 const GREEN_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAT0lEQVR42u3PQQkAAAgEsAtx/VMY0Ai+hcEKLJ2+FgEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQGBywKhJcDEUyY2EgAAAABJRU5ErkJggg==';
 
-describe('Release real Ollama', () => {
+describe('Release real Ollama', function () {
+	this.timeout(900_000);
 	const chat = new ChatViewPage();
 	const reply = new ChatReplyPage();
 
@@ -55,8 +56,7 @@ describe('Release real Ollama', () => {
 		expect(answer?.content.toLowerCase()).toContain('green');
 	});
 
-	it('answers with the agent\'s fixed model, not the model last picked in chat', async function (this: Mocha.Context) {
-		this.timeout(600_000);
+	it('answers with the agent\'s fixed model, not the model last picked in chat', async () => {
 		await chat.selectMode('agent');
 		await activateAgent(FIXED_AGENT_ID);
 

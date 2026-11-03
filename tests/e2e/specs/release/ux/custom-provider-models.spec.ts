@@ -7,7 +7,8 @@ import { waitForPluginReady } from '../../../support/plugin-helpers';
 import { skipUnlessOllama } from '../../../support/ollama-env';
 import { VaultFixture } from '../../../support/vault-fixture';
 
-describe('UX review: Custom provider model identity', () => {
+describe('UX review: Custom provider model identity', function () {
+	this.timeout(600_000);
 	const llm = new LlmSettingsPage();
 	const chat = new ChatViewPage();
 	const reply = new ChatReplyPage();
@@ -34,8 +35,7 @@ describe('UX review: Custom provider model identity', () => {
 		await settings.closeSettings();
 	});
 
-	it('#9 sends a chat with a Custom provider model to that provider', async function (this: Mocha.Context) {
-		this.timeout(300_000);
+	it('#9 sends a chat with a Custom provider model to that provider', async () => {
 		const [model] = (await llm.cachedModelIds('custom')).filter(id => id.endsWith('qwen3.5:0.8b'));
 		await chat.open();
 		await chat.newChat();

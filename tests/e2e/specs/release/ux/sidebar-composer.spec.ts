@@ -6,7 +6,8 @@ import { ollamaModels, seedOllama, skipUnlessOllama } from '../../../support/oll
 
 const COMPOSER = '.mod-right-split .chat-input-box';
 
-describe('UX review: chat composer in the sidebar', () => {
+describe('UX review: chat composer in the sidebar', function () {
+	this.timeout(600_000);
 	const chat = new ChatViewPage();
 	const reply = new ChatReplyPage();
 	const probe = new UxProbePage();
@@ -28,8 +29,7 @@ describe('UX review: chat composer in the sidebar', () => {
 		expect(await probe.overflowingChildren(COMPOSER)).toEqual([]);
 	});
 
-	it('#7 keeps the message box usable while a reply is streaming', async function (this: Mocha.Context) {
-		this.timeout(300_000);
+	it('#7 keeps the message box usable while a reply is streaming', async () => {
 		await chat.selectMode('chat');
 		await chat.selectModel(`ollama:${ollamaModels.chat}`);
 		await reply.allowReplyTokens(8_000);
