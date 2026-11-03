@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Max. Werkzeugschritte",
         "desc": "Maximale Anzahl von Werkzeugaufrufschritten pro Agentendurchlauf"
+      },
+      "autonomousWrite": {
+        "name": "Autonomes Schreiben",
+        "desc": "Dieser Agent darf seine Schreibvorschläge anwenden, ohne jedes Mal zu fragen. Löschungen müssen weiterhin bestätigt werden. Du kannst es auch für eine einzelne Aufgabe erlauben, indem du es in deiner Nachricht sagst."
       }
     },
     "provider": {

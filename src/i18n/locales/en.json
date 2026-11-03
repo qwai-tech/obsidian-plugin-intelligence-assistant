@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Max tool steps",
         "desc": "Maximum number of tool-call steps per agent turn"
+      },
+      "autonomousWrite": {
+        "name": "Autonomous write",
+        "desc": "Let this agent apply its write proposals without asking each time. Deletions still need confirmation. You can also allow it for one task by saying so in your message."
       }
     },
     "provider": {

@@ -1298,6 +1298,10 @@
       "maxSteps": {
         "name": "Maks. rīku soļi",
         "desc": "Maksimālais rīku izsaukuma soļu skaits vienā aģenta kārtā"
+      },
+      "autonomousWrite": {
+        "name": "Autonoma rakstīšana",
+        "desc": "Ļaut šim aģentam piemērot savus rakstīšanas priekšlikumus, katru reizi nejautājot. Dzēšanai joprojām vajadzīgs apstiprinājums. To var atļaut arī vienam uzdevumam, pasakot to ziņā."
       }
     },
     "provider": {

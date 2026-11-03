@@ -1298,6 +1298,10 @@
       "maxSteps": {
         "name": "Maks. koraci alata",
         "desc": "Maksimalni broj koraka poziva alata po potezu agenta"
+      },
+      "autonomousWrite": {
+        "name": "Autonomno pisanje",
+        "desc": "Dopusti ovom agentu da primjenjuje svoje prijedloge pisanja bez pitanja svaki put. Brisanja i dalje traže potvrdu. Možete to dopustiti i za jedan zadatak tako da to navedete u poruci."
       }
     },
     "provider": {

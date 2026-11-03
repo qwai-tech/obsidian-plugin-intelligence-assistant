@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Max. eszközlépések",
         "desc": "Az ügynök körönkénti maximális eszközhívási lépéseinek száma"
+      },
+      "autonomousWrite": {
+        "name": "Önálló írás",
+        "desc": "Az ügynök kérdezés nélkül alkalmazhatja az írási javaslatait. A törlésekhez továbbra is megerősítés kell. Egy feladatra úgy is engedélyezheted, hogy ezt az üzenetedben jelzed."
       }
     },
     "provider": {

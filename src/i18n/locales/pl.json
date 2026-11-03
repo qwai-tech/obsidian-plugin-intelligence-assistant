@@ -1321,6 +1321,10 @@
       "maxSteps": {
         "name": "Maks. kroków narzędzi",
         "desc": "Maksymalna liczba kroków wywołania narzędzi na turę agenta"
+      },
+      "autonomousWrite": {
+        "name": "Autonomiczny zapis",
+        "desc": "Pozwól temu agentowi stosować propozycje zapisu bez pytania za każdym razem. Usuwanie nadal wymaga potwierdzenia. Możesz też zezwolić na to dla jednego zadania, pisząc o tym w wiadomości."
       }
     },
     "provider": {

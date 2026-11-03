@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Maks. Gereedskapstappe",
         "desc": "Maksimum aantal gereedskap-oproepe per agentbeurt"
+      },
+      "autonomousWrite": {
+        "name": "Outonome skryf",
+        "desc": "Laat hierdie agent sy skryfvoorstelle toepas sonder om elke keer te vra. Skrappings vereis steeds bevestiging. Jy kan dit ook vir een taak toelaat deur dit in jou boodskap te sê."
       }
     },
     "provider": {

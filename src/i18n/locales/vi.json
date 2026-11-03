@@ -1252,6 +1252,10 @@
       "maxSteps": {
         "name": "Số bước công cụ tối đa",
         "desc": "Số bước gọi công cụ tối đa mỗi lượt tác nhân"
+      },
+      "autonomousWrite": {
+        "name": "Ghi tự động",
+        "desc": "Cho phép tác tử này áp dụng đề xuất ghi mà không hỏi mỗi lần. Việc xóa vẫn cần xác nhận. Bạn cũng có thể cho phép cho một nhiệm vụ bằng cách nói trong tin nhắn."
       }
     },
     "provider": {

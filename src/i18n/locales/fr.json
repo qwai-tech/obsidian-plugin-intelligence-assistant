@@ -1298,6 +1298,10 @@
       "maxSteps": {
         "name": "Étapes d'outils max",
         "desc": "Nombre maximum d'étapes d'appel d'outil par tour d'agent"
+      },
+      "autonomousWrite": {
+        "name": "Écriture autonome",
+        "desc": "Autoriser cet agent à appliquer ses propositions d'écriture sans demander à chaque fois. Les suppressions demandent toujours une confirmation. Vous pouvez aussi l'autoriser pour une seule tâche en le disant dans votre message."
       }
     },
     "provider": {

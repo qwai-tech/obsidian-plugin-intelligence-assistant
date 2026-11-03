@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Pasos máximos de ferramenta",
         "desc": "Número máximo de pasos de chamada a ferramentas por quenda do axente"
+      },
+      "autonomousWrite": {
+        "name": "Escritura autónoma",
+        "desc": "Permite que este axente aplique as súas propostas de escritura sen preguntar cada vez. As eliminacións seguen precisando confirmación. Tamén podes permitilo para unha tarefa dicíndoo na túa mensaxe."
       }
     },
     "provider": {

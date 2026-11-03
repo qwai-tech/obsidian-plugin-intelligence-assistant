@@ -1298,6 +1298,10 @@
       "maxSteps": {
         "name": "Pași maximi instrumente",
         "desc": "Numărul maxim de pași de apel instrument per tură agent"
+      },
+      "autonomousWrite": {
+        "name": "Scriere autonomă",
+        "desc": "Permite acestui agent să aplice propunerile de scriere fără să întrebe de fiecare dată. Ștergerile necesită în continuare confirmare. Poți permite asta și pentru o singură sarcină spunând-o în mesaj."
       }
     },
     "provider": {

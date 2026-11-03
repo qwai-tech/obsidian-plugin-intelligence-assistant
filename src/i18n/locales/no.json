@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Maks verktøytrinn",
         "desc": "Maksimalt antall verktøy-kalltrinn per agenttur"
+      },
+      "autonomousWrite": {
+        "name": "Selvstendig skriving",
+        "desc": "La denne agenten bruke skriveforslagene sine uten å spørre hver gang. Slettinger krever fortsatt bekreftelse. Du kan også tillate det for én oppgave ved å si det i meldingen."
       }
     },
     "provider": {

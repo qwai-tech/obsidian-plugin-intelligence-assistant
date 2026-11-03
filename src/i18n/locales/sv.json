@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Max verktygssteg",
         "desc": "Maximalt antal verktygsanropssteg per agenttur"
+      },
+      "autonomousWrite": {
+        "name": "Självständig skrivning",
+        "desc": "Låt den här agenten tillämpa sina skrivförslag utan att fråga varje gång. Borttagningar kräver fortfarande bekräftelse. Du kan också tillåta det för en uppgift genom att säga det i ditt meddelande."
       }
     },
     "provider": {

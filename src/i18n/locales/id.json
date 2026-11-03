@@ -1252,6 +1252,10 @@
       "maxSteps": {
         "name": "Maks Langkah Alat",
         "desc": "Jumlah maksimum langkah pemanggilan alat per giliran agen"
+      },
+      "autonomousWrite": {
+        "name": "Penulisan otonom",
+        "desc": "Izinkan agen ini menerapkan usulan penulisannya tanpa bertanya setiap kali. Penghapusan tetap perlu konfirmasi. Anda juga bisa mengizinkannya untuk satu tugas dengan menyebutkannya di pesan."
       }
     },
     "provider": {

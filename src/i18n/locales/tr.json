@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Maks Araç Adımları",
         "desc": "Ajan turu başına maksimum araç çağrısı adımı sayısı"
+      },
+      "autonomousWrite": {
+        "name": "Otonom yazma",
+        "desc": "Bu ajanın yazma önerilerini her seferinde sormadan uygulamasına izin verin. Silme işlemleri yine onay gerektirir. Mesajınızda belirterek bunu tek bir görev için de izin verebilirsiniz."
       }
     },
     "provider": {

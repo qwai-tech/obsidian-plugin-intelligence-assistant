@@ -1321,6 +1321,10 @@
       "maxSteps": {
         "name": "Maks. įrankių žingsniai",
         "desc": "Maksimalus įrankių iškvietimo žingsnių skaičius per agento eilę"
+      },
+      "autonomousWrite": {
+        "name": "Autonominis rašymas",
+        "desc": "Leisti šiam agentui taikyti savo rašymo pasiūlymus kaskart neklausiant. Ištrynimams vis tiek reikia patvirtinimo. Taip pat galite leisti tai vienai užduočiai, parašę tai žinutėje."
       }
     },
     "provider": {

@@ -266,8 +266,8 @@ export class AgentEditModal extends Modal {
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'agents[].autonomousWrite',
-			label: '自主写入 / Autonomous write',
-			description: '允许此 agent 直接应用写提案，跳过逐个 Apply 确认（删除操作仍需确认）。也可在消息中说"自主完成/不需要确认"按单次任务临时开启。'
+			label: t('modals.agentEdit.autonomousWrite.name'),
+			description: t('modals.agentEdit.autonomousWrite.desc')
 		}).addToggle(toggle => toggle
 				.setValue(this.agent.autonomousWrite ?? false)
 				.onChange(value => {

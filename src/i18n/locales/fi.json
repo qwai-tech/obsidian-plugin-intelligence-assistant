@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Enimmäistyökaluaskeleet",
         "desc": "Työkalu-kutsuaskeleiden enimmäismäärä per agentin vuoro"
+      },
+      "autonomousWrite": {
+        "name": "Itsenäinen kirjoitus",
+        "desc": "Anna tämän agentin ottaa kirjoitusehdotuksensa käyttöön kysymättä joka kerta. Poistot vaativat yhä vahvistuksen. Voit sallia sen myös yhdelle tehtävälle sanomalla sen viestissäsi."
       }
     },
     "provider": {

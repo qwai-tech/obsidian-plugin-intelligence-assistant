@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Max toolstappen",
         "desc": "Maximum aantal toolaanroepstappen per agenttour"
+      },
+      "autonomousWrite": {
+        "name": "Zelfstandig schrijven",
+        "desc": "Laat deze agent zijn schrijfvoorstellen toepassen zonder elke keer te vragen. Verwijderingen vragen nog steeds om bevestiging. Je kunt het ook voor één taak toestaan door dat in je bericht te zeggen."
       }
     },
     "provider": {

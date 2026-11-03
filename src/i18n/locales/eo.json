@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Maks. Ilpaŝoj",
         "desc": "Maksimuma nombro da ilvoka paŝoj por agentoturno"
+      },
+      "autonomousWrite": {
+        "name": "Aŭtonoma skribado",
+        "desc": "Permesu al ĉi tiu agento apliki siajn skribproponojn sen demandi ĉiufoje. Forigoj ankoraŭ bezonas konfirmon. Vi ankaŭ povas permesi ĝin por unu tasko dirante tion en via mesaĝo."
       }
     },
     "provider": {

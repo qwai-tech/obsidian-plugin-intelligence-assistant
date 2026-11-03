@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Maks verktøysteg",
         "desc": "Maksimalt antal verktøy-kallsteg per agenttur"
+      },
+      "autonomousWrite": {
+        "name": "Sjølvstendig skriving",
+        "desc": "La denne agenten bruke skriveforslaga sine utan å spørje kvar gong. Slettingar krev framleis stadfesting. Du kan òg tillate det for éi oppgåve ved å seie det i meldinga."
       }
     },
     "provider": {

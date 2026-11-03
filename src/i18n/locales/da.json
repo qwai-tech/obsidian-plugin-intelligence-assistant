@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Maks. værktøjstrin",
         "desc": "Maksimalt antal trin for værktøjskald pr. agenttur"
+      },
+      "autonomousWrite": {
+        "name": "Selvstændig skrivning",
+        "desc": "Lad denne agent anvende sine skriveforslag uden at spørge hver gang. Sletninger kræver stadig bekræftelse. Du kan også tillade det for én opgave ved at skrive det i din besked."
       }
     },
     "provider": {

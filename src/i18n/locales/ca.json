@@ -1298,6 +1298,10 @@
       "maxSteps": {
         "name": "Passos màxims d'eines",
         "desc": "Nombre màxim de passos de crides d'eines per torn d'agent"
+      },
+      "autonomousWrite": {
+        "name": "Escriptura autònoma",
+        "desc": "Permet que aquest agent apliqui les seves propostes d'escriptura sense preguntar cada vegada. Les eliminacions encara necessiten confirmació. També pots permetre-ho per a una tasca dient-ho al missatge."
       }
     },
     "provider": {

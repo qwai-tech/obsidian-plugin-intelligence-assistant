@@ -1321,6 +1321,10 @@
       "maxSteps": {
         "name": "Max. kroků nástrojů",
         "desc": "Maximální počet kroků volání nástrojů na tah agenta"
+      },
+      "autonomousWrite": {
+        "name": "Autonomní zápis",
+        "desc": "Povolit tomuto agentovi použít návrhy zápisu bez ptaní pokaždé. Mazání stále vyžaduje potvrzení. Můžete to povolit i pro jeden úkol tím, že to napíšete ve zprávě."
       }
     },
     "provider": {

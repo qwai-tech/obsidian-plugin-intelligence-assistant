@@ -1275,6 +1275,10 @@
       "maxSteps": {
         "name": "Gehieneko Tresna Pausoak",
         "desc": "Agentearen txanda bakoitzeko tresna-deien pauso maximoa"
+      },
+      "autonomousWrite": {
+        "name": "Idazketa autonomoa",
+        "desc": "Utzi agente honi bere idazketa-proposamenak aplikatzen aldiro galdetu gabe. Ezabaketek berrespena behar dute oraindik. Zeregin baterako ere baimendu dezakezu mezuan esanez."
       }
     },
     "provider": {

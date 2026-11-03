@@ -1252,6 +1252,10 @@
       "maxSteps": {
         "name": "Langkah Alat Maks",
         "desc": "Bilangan maksimum langkah panggilan alat setiap giliran ejen"
+      },
+      "autonomousWrite": {
+        "name": "Penulisan autonomi",
+        "desc": "Benarkan ejen ini menggunakan cadangan penulisannya tanpa bertanya setiap kali. Pemadaman masih memerlukan pengesahan. Anda juga boleh membenarkannya untuk satu tugas dengan menyatakannya dalam mesej."
       }
     },
     "provider": {

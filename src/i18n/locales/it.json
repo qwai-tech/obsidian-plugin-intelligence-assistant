@@ -1298,6 +1298,10 @@
       "maxSteps": {
         "name": "Passi strumento massimi",
         "desc": "Numero massimo di passi di chiamata strumento per turno dell'agente"
+      },
+      "autonomousWrite": {
+        "name": "Scrittura autonoma",
+        "desc": "Consenti a questo agente di applicare le sue proposte di scrittura senza chiedere ogni volta. Le eliminazioni richiedono comunque conferma. Puoi consentirlo anche per una sola attività dicendolo nel messaggio."
       }
     },
     "provider": {
