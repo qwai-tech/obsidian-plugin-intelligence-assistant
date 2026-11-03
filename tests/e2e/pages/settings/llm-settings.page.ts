@@ -76,6 +76,10 @@ export class LlmSettingsPage extends BasePage {
 		}
 	}
 
+	async cancelProviderForm(): Promise<void> {
+		await this.click(TestIds.settings.providerModalCancelBtn);
+	}
+
 	async saveProviderForm(provider: string): Promise<void> {
 		await this.click(TestIds.settings.providerModalSaveBtn);
 		await this.waitForProviderRow(provider);

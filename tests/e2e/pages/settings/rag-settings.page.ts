@@ -103,14 +103,14 @@ export class RagSettingsPage extends BasePage {
 		}, PLUGIN_ID, MOCK_LLM_BASE_URL);
 	}
 
-	async rebuildIndex(): Promise<void> {
+	async rebuildIndex(timeoutMs = 30_000): Promise<void> {
 		await this.click(TestIds.settings.ragRebuildBtn);
 		await browser.waitUntil(
 			async () => browser.execute((testId) => {
 				const button = activeDocument.querySelector(`[data-testid="${testId}"]`);
 				return button instanceof HTMLButtonElement && !button.disabled;
 			}, TestIds.settings.ragRebuildBtn),
-			{ timeout: 30_000, timeoutMsg: 'RAG rebuild did not finish' }
+			{ timeout: timeoutMs, timeoutMsg: 'RAG rebuild did not finish' }
 		);
 	}
 

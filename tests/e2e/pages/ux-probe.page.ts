@@ -90,6 +90,33 @@ export class UxProbePage extends BasePage {
 		}), selectors, properties);
 	}
 
+	async createNotes(prefix: string, count: number): Promise<void> {
+		await browser.execute(async (name, total) => {
+			const vault = (window as unknown as { app: { vault: { create(path: string, data: string): Promise<unknown>; getAbstractFileByPath(path: string): unknown } } }).app.vault;
+			for (let index = 0; index < total; index++) {
+				const path = `${name}-${index}.md`;
+				if (!vault.getAbstractFileByPath(path)) await vault.create(path, `# Note ${index}\n\nThis note is about topic ${index} for the indexing check.`);
+			}
+		}, prefix, count);
+	}
+
+	watchNoticeCount(): { stop(): Promise<number> } {
+		void browser.execute(() => {
+			const scope = window as unknown as { __iaNoticeMax?: number; __iaNoticeTimer?: number };
+			scope.__iaNoticeMax = 0;
+			scope.__iaNoticeTimer = window.setInterval(() => {
+				scope.__iaNoticeMax = Math.max(scope.__iaNoticeMax ?? 0, activeDocument.querySelectorAll('.notice').length);
+			}, 100);
+		});
+		return {
+			stop: () => browser.execute(() => {
+				const scope = window as unknown as { __iaNoticeMax?: number; __iaNoticeTimer?: number };
+				window.clearInterval(scope.__iaNoticeTimer);
+				return scope.__iaNoticeMax ?? 0;
+			}),
+		};
+	}
+
 	async widthRatio(childSelector: string, parentSelector: string): Promise<number> {
 		return browser.execute((child, parent) => {
 			const childEl = activeDocument.querySelector(child);

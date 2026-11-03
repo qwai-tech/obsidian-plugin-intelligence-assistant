@@ -87,6 +87,21 @@ export async function seedOllama(agentSpecs: OllamaAgentSpec[] = [FIXED_AGENT]):
 	}, PLUGIN_ID, OLLAMA_URL, ollamaModels.all, ollamaModels.chat, ollamaModels.fixed, agentSpecs);
 }
 
+export const OLLAMA_EMBEDDING_MODEL = process.env.E2E_OLLAMA_EMBEDDING_MODEL ?? 'qwen3-embedding:4b';
+
+export async function enableOllamaRag(): Promise<void> {
+	await browser.execute(async (pluginId, embeddingModel) => {
+		const plugin = (window as unknown as { app: { plugins: { plugins: Record<string, {
+			updateSettings(change: (settings: Record<string, unknown>) => void): Promise<void>;
+		}> } } }).app.plugins.plugins[pluginId];
+		await plugin.updateSettings((settings) => {
+			const ollama = (settings.llmConfigs as Array<{ provider: string; cachedModels?: Array<Record<string, unknown>> }>).find(config => config.provider === 'ollama');
+			ollama?.cachedModels?.push({ id: `ollama:${embeddingModel}`, name: embeddingModel, provider: 'ollama', capabilities: ['embedding'], enabled: true });
+			Object.assign(settings.ragConfig as Record<string, unknown>, { enabled: true, embeddingModel: `ollama:${embeddingModel}`, enableGradingThreshold: false });
+		});
+	}, PLUGIN_ID, OLLAMA_EMBEDDING_MODEL);
+}
+
 export async function activateAgent(agentId: string): Promise<void> {
 	await browser.execute(async (pluginId, id) => {
 		const plugin = (window as unknown as { app: { plugins: { plugins: Record<string, {
