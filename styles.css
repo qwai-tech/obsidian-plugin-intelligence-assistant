@@ -3955,3 +3955,85 @@ details[open] .ia-chat-message__summary::before {
 		padding: 6px;
 	}
 }
+
+/* ── Tools and permissions dialog ─────────────────────────────────────────── */
+.ia-agent-capability-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.ia-agent-capability-row {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 8px 10px;
+	border: 1px solid var(--background-modifier-border);
+	border-left-width: 3px;
+	border-radius: var(--ia-radius-m);
+	background: var(--background-secondary);
+}
+
+.ia-agent-capability-row__label {
+	font-size: var(--ia-font-size-xs);
+	color: var(--text-muted);
+}
+
+.ia-agent-capability-row__value {
+	font-weight: 600;
+	color: var(--text-normal);
+}
+
+.ia-agent-capability-row.is-allow {
+	border-left-color: var(--color-green);
+}
+
+.ia-agent-capability-row.is-warn {
+	border-left-color: var(--color-orange);
+}
+
+.ia-agent-capability-row.is-deny {
+	border-left-color: var(--color-red);
+}
+
+.ia-agent-capability-row.is-muted .ia-agent-capability-row__value {
+	color: var(--text-muted);
+	font-weight: 400;
+}
+
+.ia-agent-capability-tool {
+	padding: 6px 0;
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.ia-agent-capability-tool__title {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+}
+
+.ia-agent-capability-tool__name {
+	font-weight: 600;
+}
+
+.ia-agent-capability-tool__tag {
+	padding: 0 6px;
+	border-radius: var(--ia-radius-full);
+	font-size: var(--ia-font-size-2xs);
+	background: var(--background-modifier-hover);
+}
+
+.ia-agent-capability-tool__tag.is-warn {
+	background: rgba(var(--color-orange-rgb), 0.15);
+}
+
+.ia-agent-capability-tool__tag.is-danger {
+	background: rgba(var(--color-red-rgb), 0.15);
+}
+
+.ia-agent-capability-tool__description {
+	font-size: var(--ia-font-size-xs);
+	color: var(--text-muted);
+}
