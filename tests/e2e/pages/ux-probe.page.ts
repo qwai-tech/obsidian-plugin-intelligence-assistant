@@ -78,6 +78,28 @@ export class UxProbePage extends BasePage {
 		await this.waitForAnimations();
 	}
 
+	async storedCount(collection: 'agents' | 'quickActions'): Promise<number> {
+		return (await this.storedNames(collection)).length;
+	}
+
+	async storedNames(collection: 'agents' | 'quickActions'): Promise<string[]> {
+		return browser.execute(async (key) => {
+			const app = (window as unknown as { app: { vault: { adapter: { read(p: string): Promise<string> } }; plugins: { manifests: Record<string, { dir?: string }>; plugins: Record<string, { settings: Record<string, Array<{ name: string }>> }> } } }).app;
+			return app.plugins.plugins['intelligence-assistant'].settings[key].map(item => item.name);
+		}, collection);
+	}
+
+	async typeIntoSetting(name: string, value: string, scope: string): Promise<void> {
+		await browser.execute((label, text, root) => {
+			const item = Array.from(activeDocument.querySelectorAll(`${root} .setting-item`))
+				.find(candidate => (candidate.querySelector('.setting-item-name')?.textContent ?? '').trim() === label);
+			const input = item?.querySelector('input, textarea');
+			if (!(input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement)) throw new Error(`No text field for ${label}`);
+			input.value = text;
+			input.dispatchEvent(new Event('input', { bubbles: true }));
+		}, name, value, scope);
+	}
+
 	async buttonLabelsIn(scope: string): Promise<string[]> {
 		return browser.execute((root) => Array.from(activeDocument.querySelectorAll(`${root} button`)).map(button => (button.textContent ?? '').trim()), scope);
 	}
