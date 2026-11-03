@@ -826,7 +826,7 @@
       },
       "provider": {
         "name": "Dostawca wyszukiwania",
-        "desc": "Wybierz spośród scraperów przyjaznych prywatności lub wyszukiwarek z API"
+        "desc": "Wybierz API wyszukiwania lub własną instancję SearXNG"
       },
       "searchLanguage": {
         "name": "Kod języka",

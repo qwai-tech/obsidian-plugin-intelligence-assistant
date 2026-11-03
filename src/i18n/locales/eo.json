@@ -792,7 +792,7 @@
       },
       "provider": {
         "name": "Serĉprovizanto",
-        "desc": "Elektu el privatec-amikaj skraptiloj aŭ API-subtenataj motoroj"
+        "desc": "Elektu serĉ-API-on aŭ vian propran SearXNG-instancon"
       },
       "searchLanguage": {
         "name": "Lingvokodo",

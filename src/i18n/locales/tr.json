@@ -792,7 +792,7 @@
       },
       "provider": {
         "name": "Arama sağlayıcısı",
-        "desc": "Gizlilik dostu kazıyıcılar veya API destekli motorlardan seçin"
+        "desc": "Bir arama API'si veya kendi SearXNG örneğinizi seçin"
       },
       "searchLanguage": {
         "name": "Dil kodu",

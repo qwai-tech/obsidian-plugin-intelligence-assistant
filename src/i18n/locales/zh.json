@@ -775,7 +775,7 @@
       },
       "provider": {
         "name": "搜索提供商",
-        "desc": "选择隐私友好的抓取引擎或 API 支持的搜索引擎"
+        "desc": "选择搜索 API 或你自己的 SearXNG 实例"
       },
       "searchLanguage": {
         "name": "语言代码",

@@ -809,7 +809,7 @@
       },
       "provider": {
         "name": "Provider di ricerca",
-        "desc": "Scegli tra scraper rispettosi della privacy o motori supportati da API"
+        "desc": "Scegli un'API di ricerca o la tua istanza SearXNG"
       },
       "searchLanguage": {
         "name": "Codice lingua",

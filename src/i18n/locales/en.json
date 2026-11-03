@@ -792,7 +792,7 @@
       },
       "provider": {
         "name": "Search provider",
-        "desc": "Choose from privacy-friendly scrapers or API-backed engines"
+        "desc": "Choose a search API or your own SearXNG instance"
       },
       "searchLanguage": {
         "name": "Language code",

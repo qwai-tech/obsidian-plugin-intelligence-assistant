@@ -792,7 +792,7 @@
       },
       "provider": {
         "name": "Suchanbieter",
-        "desc": "Wählen Sie zwischen datenschutzfreundlichen Scrapern oder API-basierten Suchmaschinen"
+        "desc": "Wähle eine Such-API oder deine eigene SearXNG-Instanz"
       },
       "searchLanguage": {
         "name": "Sprachcode",

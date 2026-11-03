@@ -775,7 +775,7 @@
       },
       "provider": {
         "name": "Nhà cung cấp tìm kiếm",
-        "desc": "Chọn từ các trình thu thập thân thiện với quyền riêng tư hoặc các công cụ tìm kiếm hỗ trợ API"
+        "desc": "Chọn một API tìm kiếm hoặc phiên bản SearXNG của riêng bạn"
       },
       "searchLanguage": {
         "name": "Mã ngôn ngữ",

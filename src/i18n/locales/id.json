@@ -775,7 +775,7 @@
       },
       "provider": {
         "name": "Penyedia pencarian",
-        "desc": "Pilih dari scraper ramah privasi atau mesin berbasis API"
+        "desc": "Pilih API pencarian atau instans SearXNG milik Anda"
       },
       "searchLanguage": {
         "name": "Kode bahasa",

@@ -809,7 +809,7 @@
       },
       "provider": {
         "name": "Proveïdor de cerca",
-        "desc": "Trieu entre scrapers respectuosos amb la privadesa o motors amb suport d'API"
+        "desc": "Tria una API de cerca o la teva pròpia instància de SearXNG"
       },
       "searchLanguage": {
         "name": "Codi d'idioma",

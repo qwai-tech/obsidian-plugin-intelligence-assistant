@@ -792,7 +792,7 @@
       },
       "provider": {
         "name": "Soekverskaffer",
-        "desc": "Kies uit privaatheid-vriendelike scrapers of API-ondersteunde enjins"
+        "desc": "Kies 'n soek-API of jou eie SearXNG-instansie"
       },
       "searchLanguage": {
         "name": "Taalkode",

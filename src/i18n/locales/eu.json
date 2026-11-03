@@ -792,7 +792,7 @@
       },
       "provider": {
         "name": "Bilaketa-hornitzailea",
-        "desc": "Aukeratu pribatutasuna errespetatzen duten scraper-ak edo API bidezko motorrak"
+        "desc": "Aukeratu bilaketa-API bat edo zure SearXNG instantzia"
       },
       "searchLanguage": {
         "name": "Hizkuntza-kodea",

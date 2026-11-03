@@ -792,7 +792,7 @@
       },
       "provider": {
         "name": "Keresési szolgáltató",
-        "desc": "Válasszon adatvédelem-barát lekérdezők vagy API-alapú keresőmotorok közül"
+        "desc": "Válassz egy kereső API-t vagy saját SearXNG-példányt"
       },
       "searchLanguage": {
         "name": "Nyelvkód",

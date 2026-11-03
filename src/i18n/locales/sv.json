@@ -792,7 +792,7 @@
       },
       "provider": {
         "name": "Sökleverantör",
-        "desc": "Välj bland integritetsvänliga skrapar eller API-stödda sökmotorer"
+        "desc": "Välj ett sök-API eller din egen SearXNG-instans"
       },
       "searchLanguage": {
         "name": "Språkkod",

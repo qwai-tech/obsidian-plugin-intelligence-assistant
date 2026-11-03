@@ -775,7 +775,7 @@
       },
       "provider": {
         "name": "Pembekal carian",
-        "desc": "Pilih daripada pengikis mesra privasi atau enjin berasaskan API"
+        "desc": "Pilih API carian atau tika SearXNG anda sendiri"
       },
       "searchLanguage": {
         "name": "Kod bahasa",

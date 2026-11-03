@@ -792,7 +792,7 @@
       },
       "provider": {
         "name": "Provedor de busca",
-        "desc": "Elixe entre scrapers respectuosos coa privacidade ou motores con API"
+        "desc": "Escolle unha API de busca ou a túa propia instancia de SearXNG"
       },
       "searchLanguage": {
         "name": "Código de idioma",

@@ -826,7 +826,7 @@
       },
       "provider": {
         "name": "Poskytovateľ vyhľadávania",
-        "desc": "Vyberte si zo scraperob šetrných k súkromiu alebo enginov s API podporou"
+        "desc": "Vyberte vyhľadávacie API alebo vlastnú inštanciu SearXNG"
       },
       "searchLanguage": {
         "name": "Kód jazyka",

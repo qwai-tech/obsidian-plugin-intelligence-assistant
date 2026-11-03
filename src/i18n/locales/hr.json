@@ -809,7 +809,7 @@
       },
       "provider": {
         "name": "Pružatelj pretraživanja",
-        "desc": "Odaberite između scrapera pogodnih za privatnost ili motora s API podrškom"
+        "desc": "Odaberite API za pretraživanje ili vlastitu SearXNG instancu"
       },
       "searchLanguage": {
         "name": "Kod jezika",

@@ -826,7 +826,7 @@
       },
       "provider": {
         "name": "Paieškos tiekėjas",
-        "desc": "Pasirinkite iš į privatumą orientuotų skraperių arba API pagrįstų paieškos sistemų"
+        "desc": "Pasirinkite paieškos API arba savo SearXNG egzempliorių"
       },
       "searchLanguage": {
         "name": "Kalbos kodas",

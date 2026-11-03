@@ -792,7 +792,7 @@
       },
       "provider": {
         "name": "Hakupalveluntarjoaja",
-        "desc": "Valitse yksityisyyttä suojaavien kaapijien tai API-pohjaisten hakukoneiden välillä"
+        "desc": "Valitse haku-API tai oma SearXNG-instanssisi"
       },
       "searchLanguage": {
         "name": "Kielikoodi",

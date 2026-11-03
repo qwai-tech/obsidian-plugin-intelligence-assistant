@@ -809,7 +809,7 @@
       },
       "provider": {
         "name": "Furnizor de căutare",
-        "desc": "Alegeți dintre scrapere prietenoase cu confidențialitatea sau motoare cu suport API"
+        "desc": "Alege un API de căutare sau propria instanță SearXNG"
       },
       "searchLanguage": {
         "name": "Cod limbă",
