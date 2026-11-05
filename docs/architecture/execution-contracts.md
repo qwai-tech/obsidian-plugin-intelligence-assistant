@@ -47,8 +47,10 @@ successful, failed and aborted logical requests across chat, agent work, titles,
 grading, embeddings and editor actions. Unknown usage is explicitly tagged;
 zero stored tokens for an aborted call do not establish that a service charged
 nothing. The facade is API encapsulation, not isolation from other Obsidian
-plugins that share the same host. Release publication depends on real tests of
-the exact built artifact, whose digest is verified again before publication.
+plugins that share the same host. The separate real-release runner tests the
+exact built artifact. The CI publisher currently omits that real-verification
+job by explicit approval, while retaining build and artifact digest checks;
+see the [release status](../releases/0.1.0.md) for the current publication scope.
 
 New Agent conversations snapshot the selected Agent's effective model, sampling
 and output budget rather than overwriting them with Chat defaults. Existing

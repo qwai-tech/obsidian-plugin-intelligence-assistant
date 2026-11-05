@@ -71,6 +71,6 @@ OBSIDIAN_PLUGINS_PATH=/absolute/path/to/qa-vault/.obsidian/plugins node scripts/
 
 `node scripts/version.js minor` 更新 package.json、manifest.json、versions.json 及根锁文件版本字段。应保留格式并审阅差异。库包有独立版本，不是第二份插件清单。
 
-已有的 `.github/workflows/ci-cd.yml` 在 main/master 正常推送时自动发布：当 manifest 版本没有对应标签，且构建、真实门禁均通过时，上传同一份经过验证的构建。标签和 Release 应由工作流创建；提前创建版本标签会使版本检查跳过发布。所需 E2E Secrets 必须配置好，服务也必须能从 GitHub 托管执行器访问。
+已有的 `.github/workflows/ci-cd.yml` 在 main/master 正常推送时自动发布：manifest 版本没有对应标签，且检查和构建任务通过后，核对下载文件的哈希并发布同一份产物。经发布负责人明确授权，real-verification 任务暂时移除，本地真实测试脚本保留，不宣称本次通过了新的真实门禁。标签和 Release 由工作流创建，标签绑定该次工作流的准确源码提交；提前创建版本标签会使版本检查跳过发布。
 
 当前发布指令是不带 CI 跳过标记正常推送，并保留现有工作流。E2E Tests 和 Verification Gate 独立运行且包含 mock，不是发布任务的依赖；CodeQL 和 Dependabot 由 GitHub 托管。应核对实际执行结果，不能把推送成功当成发布成功。详见[测试与 CI/CD](../reference/testing.md#ci-behavior-and-publication)。

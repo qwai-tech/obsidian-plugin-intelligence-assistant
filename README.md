@@ -124,7 +124,7 @@ npm run build              # development bundle
 npm run build:production   # production bundle and provenance
 ```
 
-`npm run verify`, Jest, missions and the CI E2E suite include mocks. For a no-mock release check, configure real services and use `npm run verify:release:real`; see [testing](docs/reference/testing.md). A normal push to `main`/`master` triggers the existing **Build and Publish** workflow: check the version tag, build, run the real gate, then create the Release automatically. Publication belongs to CI/CD; see the [release process](docs/reference/testing.md#ci-behavior-and-publication).
+`npm run verify`, Jest, missions and the CI E2E suite include mocks. For a no-mock release check, configure real services and use `npm run verify:release:real`; see [testing](docs/reference/testing.md). A normal push to `main`/`master` triggers **Build and Publish**: check the version tag, lint/type-check/build, verify artifact hashes, then create the Release automatically. The CI real-verification job is temporarily removed by explicit approval; the local real-test runner remains available. See the [release process](docs/reference/testing.md#ci-behavior-and-publication).
 
 <a id="documentation"></a>
 

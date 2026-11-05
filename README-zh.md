@@ -124,7 +124,7 @@ npm run build              # 开发构建
 npm run build:production   # 生产构建及构建来源记录
 ```
 
-`npm run verify`、Jest、任务测试和 CI E2E 包含 mock。禁止 mock 的发布检查应配置真实服务后运行 `npm run verify:release:real`，详见[测试文档](docs/reference/testing.md)。向 `main`/`master` 正常推送会触发已有的 **Build and Publish** 工作流：检查版本标签、构建、运行真实门禁，再自动创建 Release。发布由 CI-CD 完成；详见[发布流程](docs/reference/testing.md#ci-behavior-and-publication)。
+`npm run verify`、Jest、任务测试和 CI E2E 包含 mock。禁止 mock 的发布检查应配置真实服务后运行 `npm run verify:release:real`，详见[测试文档](docs/reference/testing.md)。向 `main`/`master` 正常推送会触发 **Build and Publish**：检查版本标签，运行 Lint/类型检查/构建，核对产物哈希，再自动创建 Release。经明确授权，CI 中的 real-verification 任务暂时移除，本地真实测试入口保留。详见[发布流程](docs/reference/testing.md#ci-behavior-and-publication)。
 
 <a id="documentation"></a>
 
