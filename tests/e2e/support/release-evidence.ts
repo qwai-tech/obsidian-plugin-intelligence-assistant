@@ -45,7 +45,7 @@ export async function installedReleaseArtifact(): Promise<{ vaultRoot: string; p
 	await fs.appendFile(path.join(releaseEvidenceRoot(), 'installed-artifacts.jsonl'), JSON.stringify({ at: Date.now(), vaultRoot: location.vaultRoot, pluginDir, hashes }) + '\n');
 	return { vaultRoot: location.vaultRoot, pluginDir, hashes };
 }
-export async function finishedReleaseRun(conversationId: string): Promise<{ id: string; durationMs: number; outcome: string; successfulCreates: number }> {
+export async function finishedReleaseRun(conversationId: string): Promise<{ id: string; durationMs: number; outcome: string; successfulCreates: number; successfulChecks: number }> {
 	const installed = await installedReleaseArtifact();
 	const folder = path.join(installed.pluginDir, 'data/conversations');
 	let id: string | undefined;
@@ -59,7 +59,7 @@ export async function finishedReleaseRun(conversationId: string): Promise<{ id: 
 	const start = entries.find(e => e.event.type === 'run_started');
 	const end = entries.find(e => e.event.type === 'run_finished');
 	if (!start || !end) throw new Error('Agent journal lacks a real terminal boundary');
-	return { id, durationMs: end.at - start.at, outcome: end.event.reason?.kind ?? 'unknown', successfulCreates: entries.filter(e => e.event.type === 'tool_finished' && e.event.ok && e.event.call?.name === 'create_note').length };
+	return { id, durationMs: end.at - start.at, outcome: end.event.reason?.kind ?? 'unknown', successfulCreates: entries.filter(e => e.event.type === 'tool_finished' && e.event.ok && e.event.call?.name === 'create_note').length, successfulChecks: entries.filter(e => e.event.type === 'tool_finished' && e.event.ok && e.event.call?.name === 'check_note').length };
 }
 export async function captureReleaseCase(test: Frameworks.Test, result: Frameworks.TestResult): Promise<void> {
 	const suite = Object.keys(RELEASE_CASES).find(name => `${test.parent ?? ''} ${test.fullTitle ?? ''}`.includes(name));

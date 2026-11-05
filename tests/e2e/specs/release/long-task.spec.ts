@@ -4,6 +4,8 @@ import { waitForPluginReady } from '../../support/plugin-helpers';
 import { skipUnlessReleaseLLM } from '../../support/release-env';
 import { VaultFixture } from '../../support/vault-fixture';
 import { captureReleaseProducts, finishedReleaseRun, wordCount } from '../../support/release-evidence';
+import * as path from 'node:path';
+import { dumpVaultMarkdown, deleteByPaths, assertReleaseChecker } from '../../support/release-long-vault';
 
 /**
  * SINGLE long-running large task: a REAL LLM drives ONE continuous autonomous
@@ -14,44 +16,21 @@ import { captureReleaseProducts, finishedReleaseRun, wordCount } from '../../sup
  *
  * Opt-in: runs only when RUN_LONG_TASK=1.
  */
-interface VaultDump { path: string; content: string; }
-
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
-/** Emit a metric line to the wdio Node stdout (this spec runs in the test runner, not the plugin). */
 const logLine = (s: string): void => { process.stdout.write(`${s}\n`); };
-
-async function dumpVaultMarkdown(): Promise<VaultDump[]> {
-	return browser.execute(async () => {
-		const app = (window as unknown as {
-			app: { vault: { getMarkdownFiles(): Array<{ path: string }>; read(f: unknown): Promise<string> } };
-		}).app;
-		const out: VaultDump[] = [] as VaultDump[];
-		for (const f of app.vault.getMarkdownFiles()) {
-			try { out.push({ path: f.path, content: await app.vault.read(f) }); } catch { /* skip */ }
-		}
-		return out;
-	}) as unknown as Promise<VaultDump[]>;
-}
-
-async function deleteByPaths(paths: string[]): Promise<void> {
-	if (paths.length === 0) return;
-	await browser.execute(async (ps) => {
-		const app = (window as unknown as {
-			app: { vault: { adapter: { exists(p: string): Promise<boolean>; remove(p: string): Promise<void> } } };
-		}).app;
-		for (const p of ps) { if (await app.vault.adapter.exists(p)) await app.vault.adapter.remove(p); }
-	}, paths);
-}
 
 const TARGET_MIN = Number(process.env.LONG_TASK_TARGET_MIN || 20);
 const NOTES = Number(process.env.LONG_TASK_NOTES || 60);
 const WORDS = Number(process.env.LONG_TASK_WORDS || 1200);
 const MIN_CHARS = Number(process.env.LONG_TASK_MIN_CHARS || 2500);
-const MAX_STEPS = Number(process.env.LONG_TASK_MAXSTEPS || NOTES * 2 + 40);
+const MAX_STEPS = Number(process.env.LONG_TASK_MAXSTEPS || NOTES * 6 + 40);
 const MAX_TOKENS = Number(process.env.LONG_TASK_MAXTOKENS || 8000);
 const NOTE_RE = /^note_\d+\.md$/;
 
-describe('Release single long-running large task', () => {
+describe('Release single long-running large task', function () {
+	// WDIO captures the inherited runnable timeout BEFORE entering the test
+	// function, so changing this only inside `it` leaves its 3-minute wrapper.
+	this.timeout((TARGET_MIN + 30) * 60 * 1000);
 	const chat = new ChatViewPage();
 	const vault = new VaultFixture();
 
@@ -62,17 +41,20 @@ describe('Release single long-running large task', () => {
 
 	beforeEach(async () => {
 		await waitForPluginReady();
+		const vaultRoot = await browser.execute(() => (window as unknown as { app: { vault: { adapter: { getBasePath(): string } } } }).app.vault.adapter.getBasePath());
 		await vault.seedSettings({
+			cliTools: [{ id: 'release-word-check', name: 'check_note', description: 'Measure real file word count and SHA256. If meetsMinimum is false, expand the file. Use path * to aggregate all numbered articles and index links; complete must be true before finishing.', command: process.execPath, args: [path.resolve('tests/real/check-release-note.cjs'), vaultRoot, '{{path}}', String(WORDS), String(NOTES)], enabled: true, parameters: [{ name: 'path', type: 'string', description: 'Saved Markdown path, or * for the complete aggregate', required: true }] }],
 			agents: [createAgentConfig({
 				id: 'release-single-long-agent',
 				name: 'Release Single Long Agent',
-				toolAccess: { sources: { 'builtin:builtin': 'all' } },
+				toolAccess: { sources: { 'builtin:builtin': 'all', 'cli:release-word-check': 'all' } },
 				autonomousWrite: true,
 				maxSteps: MAX_STEPS,
 				maxTokens: MAX_TOKENS,
 			})],
 			activeAgentId: 'release-single-long-agent',
 		});
+		await assertReleaseChecker();
 	});
 
 	it('executes ONE continuous large task for the target duration and the vault reflects it', async function (this: Mocha.Context) {
@@ -91,7 +73,9 @@ describe('Release single long-running large task', () => {
 			`Create exactly ${NOTES} notes named note_001.md, note_002.md, ... note_${String(NOTES).padStart(3, '0')}.md, strictly in numeric order, ONE create_note tool call per note.`,
 			`Each note must be an original, detailed article of AT LEAST ${WORDS} words on a DISTINCT subtopic of large language models, AI agents, retrieval systems and knowledge management — use multiple "##" sections, examples, and depth.`,
 			`Aim for ${WORDS + 300} English words per article to leave a margin above the minimum; use a distinct descriptive first heading for each subtopic.`,
-			`After every note you create, immediately call the tool again for the next one. After all ${NOTES} notes exist, create index.md linking every note with [[note_001]] ... style links.`,
+			`After each create_note, call the real check_note CLI with that note's path. Its words/meetsMinimum result is computed from the real saved file. If too short, read_file and write_file to expand it, then check_note again until meetsMinimum is true BEFORE creating the next note. Keep one create_note per article; corrections use write_file. Never invent or mentally estimate the measured count.`,
+			`After a note passes check_note, immediately continue to the next one. After all ${NOTES} notes exist and pass, create index.md linking every note with [[note_001]] ... style links.`,
+			'After creating index.md, call check_note with path * for a real aggregate count. Fix any measured shortage/missing note/link and repeat until its complete field is true. Report that measured aggregate instead of guessing totals.',
 			`NEVER reply with only text while the job is unfinished — every assistant turn until the job is done must contain a tool call. Do NOT stop, summarize, shortcut, or ask questions until all ${NOTES} notes AND index.md exist.`,
 			'Only after all requested notes and index links exist, finish with RELEASE_LONG_TASK_DONE. Never emit that marker for an incomplete or blocked task.',
 		].join(' '));
@@ -133,7 +117,7 @@ describe('Release single long-running large task', () => {
 		// turn an incomplete or prematurely-ended task into a passing release gate.
 		expect(completed).toBe(true);
 		expect(reply).toContain('RELEASE_LONG_TASK_DONE');
-		if (execution) { expect(execution.outcome).toBe('answered'); expect(execution.successfulCreates).toBeGreaterThanOrEqual(NOTES); }
+		if (execution) { expect(execution.outcome).toBe('answered'); expect(execution.successfulCreates).toBeGreaterThanOrEqual(NOTES); expect(execution.successfulChecks).toBeGreaterThanOrEqual(NOTES); }
 		expect(elapsedMin).toBeGreaterThanOrEqual(TARGET_MIN);
 		expect(notes.length).toBe(NOTES);
 		expect(substantial.length).toBe(NOTES);

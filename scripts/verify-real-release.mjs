@@ -11,6 +11,7 @@ if(run.preflight)throw Error('A diagnostic preflight is not a complete release g
 if(result.exitCode!==0)throw Error('The real release runner did not succeed');
 if(run.mocks!==false||run.defaultReasoning!==true)throw Error('Release mode must use a real service and default reasoning');
 const head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();if(run.gitCommit!==head)throw Error('Evidence belongs to a different source commit');
+if(execFileSync('git',['status','--porcelain','--untracked-files=no'],{encoding:'utf8'}).trim())throw Error('Tracked source or test files changed during the gate');
 const provenance=await read('artifact-provenance.json');if(provenance.mode!=='production'||provenance.gitCommit!==head)throw Error('Production build provenance does not match');
 for(const [file,expected] of Object.entries(provenance.inputs))if(createHash('sha256').update(await fs.readFile(file)).digest('hex')!==expected)throw Error(`Build input changed after verification: ${file}`);
 for(const [name,expected] of Object.entries(run.artifacts)){
@@ -51,6 +52,7 @@ for(const [suite,id] of Object.entries(expected)){
   if(!assistant.content.includes('RELEASE_LONG_TASK_DONE'))throw Error('Long task did not report completion');
   const product=await read(`cases/${id}/products.json`),m=product.metrics;
   if(!m.completed||m.clock!=='agent-journal'||m.execution?.outcome!=='answered'||m.elapsedMin<run.workload.minutes||m.expectedNotes!==run.workload.notes||m.minimumWords!==run.workload.words)throw Error('Long run did not fulfill its original target');
+  if(m.execution.successfulChecks<run.workload.notes)throw Error('Long task did not use the real per-note measurement tool');
   const index=product.files.find(f=>f.path==='index.md');if(!index)throw Error('Long-task index is missing');
   const notes=product.files.filter(f=>/^note_\d+\.md$/.test(f.path));if(notes.length!==run.workload.notes)throw Error('Long task is incomplete');
   for(let i=1;i<=run.workload.notes;i++){const stem=`note_${String(i).padStart(3,'0')}`,file=notes.find(f=>f.path===stem+'.md');if(!file||file.words<run.workload.words||!new RegExp(`\\[\\[${stem}(?:\\.md)?(?:\\|[^\\]]*)?\\]\\]`).test(index.content))throw Error(`Long artifact/word/link check failed: ${stem}`);}

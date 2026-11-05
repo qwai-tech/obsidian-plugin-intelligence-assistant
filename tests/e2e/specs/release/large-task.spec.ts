@@ -3,7 +3,7 @@ import { createAgentConfig } from '../../support/data-fixtures';
 import { waitForPluginReady } from '../../support/plugin-helpers';
 import { skipUnlessReleaseLLM } from '../../support/release-env';
 import { VaultFixture } from '../../support/vault-fixture';
-import { captureReleaseProducts } from '../../support/release-evidence';
+import { captureReleaseProducts, finishedReleaseRun } from '../../support/release-evidence';
 
 /**
  * L3/L5 large-task stress test: a REAL LLM drives a multi-step autonomous
@@ -105,6 +105,7 @@ describe('Release large agentic task', () => {
 		const indexNote = dump.find((d) => d.path === 'index.md' && /\[\[\s*alpha(?:\.md)?\s*\]\]/i.test(d.content) && /\[\[\s*beta(?:\.md)?\s*\]\]/i.test(d.content) && /\[\[\s*gamma(?:\.md)?\s*\]\]/i.test(d.content));
 		expect(Boolean(indexNote)).toBe(true);
 		await captureReleaseProducts('large-task', dump.filter(d => ['alpha.md', 'beta.md', 'gamma.md', 'index.md'].includes(d.path)), { elapsedMs });
+		if (process.env.IA_RELEASE_GATE === '1') expect((await finishedReleaseRun(await chat.getConversationId())).outcome).toBe('answered');
 
 		// Cleanup any notes the agent created (those carrying our markers + the index).
 		const created = dump

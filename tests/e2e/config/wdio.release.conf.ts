@@ -11,6 +11,7 @@ import { waitForPluginReady } from '../support/plugin-helpers';
 export const config: typeof baseConfig = {
 	...baseConfig,
 	specFileRetries: 0,
+	bail: process.env.IA_RELEASE_GATE === '1' ? 1 : 0,
 	reporters: process.env.IA_RELEASE_GATE === '1' ? ['spec', ['junit', { outputDir: path.join(releaseEvidenceRoot(), 'junit'), outputFileFormat: ({ cid }: { cid: string }) => `wdio-${cid}.xml` }]] : baseConfig.reporters,
 	capabilities: [{ browserName: 'obsidian', 'wdio:obsidianOptions': { appVersion: process.env.OBSIDIAN_VERSION || '1.14.5', installerVersion: process.env.OBSIDIAN_VERSION || '1.14.5', plugins: [path.resolve(process.env.IA_RELEASE_BUNDLE_DIR || '.')], vault: path.resolve('tests/e2e/test-vault') } }],
 
