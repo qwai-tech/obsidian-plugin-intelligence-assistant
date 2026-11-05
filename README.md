@@ -1,23 +1,56 @@
-# Intelligence Assistant for Obsidian
+<div align="center">
 
-Chat with AI models, reference your notes and images, and run tool-using tasks inside Obsidian. Agents can read vault context, prepare edits, and use integrations you configure.
+<h1>🧠 Intelligence Assistant</h1>
+<p><strong>Your notes. Your models. Your AI workspace.</strong></p>
+<p>Chat with your notes, explore your vault, and let Agents work through multi-step tasks.</p>
 
-**Source version: 0.1.0 · Desktop only · Obsidian 1.13.0 or later**
+<p>
+  <a href="https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/actions/workflows/ci-cd.yml"><img src="https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/actions/workflows/ci-cd.yml/badge.svg?branch=main" alt="Build and Publish workflow status"></a>
+  <a href="docs/releases/0.1.0.md"><img src="https://img.shields.io/badge/source-0.1.0-7C3AED" alt="Source version 0.1.0"></a>
+  <img src="https://img.shields.io/badge/Obsidian-1.13%2B-7C3AED" alt="Requires Obsidian 1.13 or later">
+  <img src="https://img.shields.io/badge/locales-49-0F766E" alt="49 bundled UI locales">
+</p>
 
-[中文](README-zh.md) · [User guide](docs/user-guide-en.md) · [Documentation](docs/README.md) · [0.1.0 status and validation](docs/releases/0.1.0.md)
+<p><a href="README-zh.md">简体中文</a> · <a href="#installation">Install</a> · <a href="docs/user-guide-en.md">User guide</a> · <a href="docs/README.md">Documentation</a></p>
 
-## Features
+</div>
 
-- **Chat and Agents:** streaming responses, note/folder references, model-dependent image input, reusable prompts and Agent presets: Librarian, Architect, Researcher and Scribe.
-- **Vault tools:** 13 built-in tools for reading, listing and searching files; creating, updating and appending notes; properties; Canvas; PDFs; tags and links. See the [tool reference](docs/user-guide-en.md#built-in-tools). Built-in move/delete tools are not included.
-- **Write proposals:** built-in Agent writes normally produce reviewable proposals. An approved task can apply them during execution when the Agent's **Autonomous write** setting is enabled.
-- **Manual continuation:** use **Stop**, then send `Continue.` in the same conversation, including after reloading Obsidian. Saved task context and tool evidence support continuation; this is not automatic crash replay or an exactly-once guarantee for external actions.
-- **Knowledge and memory:** optional RAG with a local index, a configurable embedding provider, source references, and per-Agent memory modes: none, short-term or long-term.
-- **Integrations:** MCP stdio servers, OpenAPI HTTP tools and local CLI tools. Web search has eight configurable backends; credentials, endpoints and availability depend on the backend.
-- **Models:** OpenAI, Anthropic, Google Gemini, DeepSeek, OpenRouter, Ollama, SAP AI Core and custom OpenAI-compatible endpoints. Tool calling and image support depend on the selected model and service.
-- **Interface:** nine top-level settings Tabs, light/dark themes and 49 bundled UI locales.
+**Desktop only** · Models, tools and vault context in one workspace.
 
-## Installation
+![An Agent creates and checks linked notes in a real Obsidian vault](docs/images/agent-workflow.png)
+
+<p align="center"><em>From a request to saved notes: tool use, verification and a visible task record.</em></p>
+
+<a id="features"></a>
+
+## ✨ Features
+
+- **💬 Chat and Agents:** streaming responses, note/folder references, model-dependent image input, reusable prompts and Agent presets: Librarian, Architect, Researcher and Scribe.
+- **🧰 Vault tools:** 13 built-in tools for reading, listing and searching files; creating, updating and appending notes; properties; Canvas; PDFs; tags and links. See the [tool reference](docs/user-guide-en.md#built-in-tools). Built-in move/delete tools are not included.
+- **📝 Write proposals:** built-in Agent writes normally produce reviewable proposals. An approved task can apply them during execution when the Agent's **Autonomous write** setting is enabled.
+- **⏯️ Manual continuation:** use **Stop**, then send `Continue.` in the same conversation, including after reloading Obsidian. Saved task context and tool evidence support continuation; this is not automatic crash replay or an exactly-once guarantee for external actions.
+- **📚 Knowledge and memory:** optional RAG with a local index, a configurable embedding provider, source references, and per-Agent memory modes: none, short-term or long-term.
+- **🔌 Integrations:** MCP stdio servers, OpenAPI HTTP tools and local CLI tools. Web search has eight configurable backends; credentials, endpoints and availability depend on the backend.
+- **🌐 Models:** OpenAI, Anthropic, Google Gemini, DeepSeek, OpenRouter, Ollama, SAP AI Core and custom OpenAI-compatible endpoints. Tool calling and image support depend on the selected model and service.
+- **🎨 Interface:** nine top-level settings Tabs, light/dark themes and 49 bundled UI locales.
+
+<a id="screenshots"></a>
+
+## 🖼️ A look inside
+
+<table>
+  <tr><th>Choose the tools your Agent can use</th><th>Configure retrieval for your vault</th></tr>
+  <tr>
+    <td width="50%"><a href="docs/images/tool-permissions.jpg"><img src="docs/images/tool-permissions.jpg" alt="Built-in tool permissions and nine top-level settings Tabs" width="100%"></a></td>
+    <td width="50%"><a href="docs/images/rag-settings.jpg"><img src="docs/images/rag-settings.jpg" alt="RAG indexing, embeddings and retrieval settings" width="100%"></a></td>
+  </tr>
+</table>
+
+Actual Obsidian captures. [Screenshot provenance and validation scope](docs/images/README.md).
+
+<a id="installation"></a>
+
+## 📦 Installation
 
 ### Community plugins
 
@@ -25,7 +58,7 @@ Chat with AI models, reference your notes and images, and run tool-using tasks i
 2. Find **Intelligence Assistant**, install it and enable it.
 3. Check **Settings → Intelligence Assistant → General** for the installed version.
 
-The plugin is listed in the [official community registry](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json). Community installation uses published release assets; it may install a different version from this checkout. Check the [0.1.0 release](https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/releases/tag/0.1.0) for published assets and the [validation record](docs/releases/0.1.0.md) for their verification scope.
+The plugin is listed in the [official community registry](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json). Community installation uses published release assets; it may install a different version from this checkout. See [Releases](https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/releases) for published assets and the [0.1.0 record](docs/releases/0.1.0.md) for publication status and validation scope.
 
 ### From source or release files
 
@@ -40,7 +73,9 @@ npm run build:production
 
 Copy `main.js`, `styles.css` and `manifest.json` into `<vault-config>/plugins/intelligence-assistant/` (`<vault-config>` is usually `.obsidian` inside your vault). Reload Obsidian and enable the plugin. For an upgrade, back up your vault and replace those three application files; retain `data.json` and the plugin's `data/` folder.
 
-## First setup
+<a id="first-setup"></a>
+
+## 🚀 First setup
 
 1. Open **Settings → Intelligence Assistant → LLM → Providers**. Add the provider and select the appropriate credential from Obsidian's Keychain. Custom endpoints may also need a base URL.
 2. Test the connection, review **LLM → Models**, enable an available chat model and set a default. A reachable endpoint with no usable models does not establish that generation works.
@@ -50,7 +85,9 @@ Copy `main.js`, `styles.css` and `manifest.json` into `<vault-config>/plugins/in
 
 SAP AI Core uses a Keychain entry containing the complete Service Key JSON and a resource group (usually `default`). The AI API URL comes from `serviceurls.AI_API_URL` unless overridden. Connection testing discovers running deployments. SAP code is included, but this preparation did not perform a live SAP tenant test.
 
-## Permissions and data
+<a id="permissions-and-data"></a>
+
+## 🔐 Permissions and data
 
 Built-in Agent proposals govern supported vault edits. Configured CLI commands, MCP servers and HTTP operations can have their own filesystem, process and network effects; they are not sandboxed by the proposal UI. Grant an Agent only the tools it needs. Prompt text such as “without confirmation” does not by itself enable automatic vault writes.
 
@@ -64,7 +101,9 @@ Built-in Agent proposals govern supported vault edits. Configured CLI commands, 
 
 Other enabled plugins share Obsidian's host environment. Tool permissions and secret references do not provide process isolation. See [data and execution details](docs/user-guide-en.md#data-storage-and-credentials).
 
-## Long tasks
+<a id="long-tasks"></a>
+
+## ⏱️ Long tasks
 
 Agent completion text is not independent proof that every requested artifact exists. Check the actual files and execution trace. Step/output budgets and provider timeouts still apply; interrupted external operations may need inspection before retrying.
 
@@ -72,7 +111,9 @@ Use exact tool names for a task restriction, such as `Use only read_file;` or `N
 
 The recorded 0.0.23 real gate completed a 40.525-minute task with 100 articles and a real file-measurement tool. The 0.1.0 version revision received build and actual installation/reload checks. These are separate scopes, documented in [0.1.0 validation](docs/releases/0.1.0.md).
 
-## Development
+<a id="development"></a>
+
+## 🛠️ Development
 
 ```bash
 npm ci
@@ -83,9 +124,11 @@ npm run build              # development bundle
 npm run build:production   # production bundle and provenance
 ```
 
-`npm run verify`, Jest, missions and the CI E2E suite include mocks. For a no-mock release check, configure real services and use `npm run verify:release:real`; see [testing](docs/reference/testing.md). A push to `main`/`master` can trigger automatic publishing through the repository's workflow. Source preparation, a Git push and a published release are separate actions.
+`npm run verify`, Jest, missions and the CI E2E suite include mocks. For a no-mock release check, configure real services and use `npm run verify:release:real`; see [testing](docs/reference/testing.md). A normal push to `main`/`master` triggers the existing **Build and Publish** workflow: check the version tag, build, run the real gate, then create the Release automatically. Publication belongs to CI/CD; see the [release process](docs/reference/testing.md#ci-behavior-and-publication).
 
-## Documentation
+<a id="documentation"></a>
+
+## 📖 Documentation
 
 | Document | Contents |
 |---|---|

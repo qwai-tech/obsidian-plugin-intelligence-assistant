@@ -1,23 +1,56 @@
-# Intelligence Assistant for Obsidian
+<div align="center">
 
-在 Obsidian 内与 AI 模型聊天、引用笔记和图片，并运行可调用工具的任务。智能体可以读取知识库上下文、提出编辑建议，以及使用你配置的外部集成。
+<h1>🧠 Intelligence Assistant</h1>
+<p><strong>让笔记、模型与工具，在 Obsidian 中协作。</strong></p>
+<p>聊天、检索知识库，并让智能体完成多步骤任务。</p>
 
-**源码版本：0.1.0 · 仅桌面端 · 需要 Obsidian 1.13.0 或更高版本**
+<p>
+  <a href="https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/actions/workflows/ci-cd.yml"><img src="https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/actions/workflows/ci-cd.yml/badge.svg?branch=main" alt="Build and Publish workflow status"></a>
+  <a href="docs/releases/0.1.0.md"><img src="https://img.shields.io/badge/source-0.1.0-7C3AED" alt="Source version 0.1.0"></a>
+  <img src="https://img.shields.io/badge/Obsidian-1.13%2B-7C3AED" alt="Requires Obsidian 1.13 or later">
+  <img src="https://img.shields.io/badge/locales-49-0F766E" alt="49 bundled UI locales">
+</p>
 
-[English](README.md) · [使用指南](docs/user-guide-zh.md) · [文档目录](docs/README.md) · [0.1.0 状态与验证范围](docs/releases/0.1.0.md)
+<p><a href="README.md">English</a> · <a href="#installation">安装</a> · <a href="docs/user-guide-zh.md">使用指南</a> · <a href="docs/README.md">文档</a></p>
 
-## 功能
+</div>
 
-- **聊天与智能体**：流式回复、笔记/文件夹引用、依赖模型能力的图片输入、可复用提示词，以及 Librarian、Architect、Researcher、Scribe 智能体预设。
-- **知识库工具**：13 个内置工具，覆盖文件读取/列举/搜索、笔记创建/更新/追加、属性、Canvas、PDF、标签和链接。参见[工具参考](docs/user-guide-zh.md#内置工具)。当前没有内置的移动或删除工具。
-- **写入提案**：内置智能体写入默认生成可审阅的提案。智能体启用“自主写入”且任务经过宿主授权时，可在运行中应用提案。
-- **手动续跑**：点击 **Stop** 后，在同一会话发送 `Continue.`，重载 Obsidian 后也可如此操作。保存的任务上下文和工具证据用于续跑；这不等同于自动崩溃回放，也不保证外部动作恰好执行一次。
-- **知识与记忆**：可选 RAG、本地索引、可配置的嵌入提供商、来源引用，以及每个智能体的无记忆、短期或长期记忆模式。
-- **外部集成**：MCP stdio 服务器、OpenAPI HTTP 工具和本地 CLI 工具。网络搜索有八种可配置后端，所需凭据、地址及可用性因后端而异。
-- **模型提供商**：OpenAI、Anthropic、Google Gemini、DeepSeek、OpenRouter、Ollama、SAP AI Core，以及兼容 OpenAI 的自定义端点。工具调用和图片输入取决于实际模型及服务。
-- **界面**：九个顶部设置 Tab、浅色/深色主题，以及 49 个内置界面语言包。
+**仅桌面端** · 模型、工具和知识库，在一个工作区中使用。
 
-## 安装
+![智能体在真实 Obsidian 知识库中创建并核验关联笔记](docs/images/agent-workflow.png)
+
+<p align="center"><em>从请求到实际笔记：多步骤执行、结果核验与清晰的任务记录。</em></p>
+
+<a id="features"></a>
+
+## ✨ 功能
+
+- **💬 聊天与智能体**：流式回复、笔记/文件夹引用、依赖模型能力的图片输入、可复用提示词，以及 Librarian、Architect、Researcher、Scribe 智能体预设。
+- **🧰 知识库工具**：13 个内置工具，覆盖文件读取/列举/搜索、笔记创建/更新/追加、属性、Canvas、PDF、标签和链接。参见[工具参考](docs/user-guide-zh.md#内置工具)。当前没有内置的移动或删除工具。
+- **📝 写入提案**：内置智能体写入默认生成可审阅的提案。智能体启用“自主写入”且任务经过宿主授权时，可在运行中应用提案。
+- **⏯️ 手动续跑**：点击 **Stop** 后，在同一会话发送 `Continue.`，重载 Obsidian 后也可如此操作。保存的任务上下文和工具证据用于续跑；这不等同于自动崩溃回放，也不保证外部动作恰好执行一次。
+- **📚 知识与记忆**：可选 RAG、本地索引、可配置的嵌入提供商、来源引用，以及每个智能体的无记忆、短期或长期记忆模式。
+- **🔌 外部集成**：MCP stdio 服务器、OpenAPI HTTP 工具和本地 CLI 工具。网络搜索有八种可配置后端，所需凭据、地址及可用性因后端而异。
+- **🌐 模型提供商**：OpenAI、Anthropic、Google Gemini、DeepSeek、OpenRouter、Ollama、SAP AI Core，以及兼容 OpenAI 的自定义端点。工具调用和图片输入取决于实际模型及服务。
+- **🎨 界面**：九个顶部设置 Tab、浅色/深色主题，以及 49 个内置界面语言包。
+
+<a id="screenshots"></a>
+
+## 🖼️ 界面一览
+
+<table>
+  <tr><th>按需授予工具权限</th><th>配置知识库检索</th></tr>
+  <tr>
+    <td width="50%"><a href="docs/images/tool-permissions.jpg"><img src="docs/images/tool-permissions.jpg" alt="Built-in tool permissions and nine top-level settings Tabs" width="100%"></a></td>
+    <td width="50%"><a href="docs/images/rag-settings.jpg"><img src="docs/images/rag-settings.jpg" alt="RAG indexing, embeddings and retrieval settings" width="100%"></a></td>
+  </tr>
+</table>
+
+以上均为真实 Obsidian 界面截图。[截图来源与验证范围](docs/images/README.md)。
+
+<a id="installation"></a>
+
+## 📦 安装
 
 ### 社区插件
 
@@ -25,7 +58,7 @@
 2. 搜索 **Intelligence Assistant**，安装并启用。
 3. 在 **设置 → Intelligence Assistant → 通用** 中确认安装的版本。
 
-插件已列入[官方社区目录](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json)。社区安装取得的是已发布的版本，可能与当前检出的源码不同。正式文件见 [0.1.0 Release](https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/releases/tag/0.1.0)，验证范围见[版本记录](docs/releases/0.1.0.md)。
+插件已列入[官方社区目录](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json)。社区安装取得的是已发布的版本，可能与当前检出的源码不同。已发布文件见 [Releases](https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/releases)，0.1.0 的发布进度与验证范围见[版本记录](docs/releases/0.1.0.md)。
 
 ### 从源码或发布文件安装
 
@@ -40,7 +73,9 @@ npm run build:production
 
 把 `main.js`、`styles.css`、`manifest.json` 复制到 `<库配置目录>/plugins/intelligence-assistant/`。库配置目录通常是库内的 `.obsidian`。重载 Obsidian 并启用插件。升级前备份知识库，只替换这三个程序文件，保留 `data.json` 和插件的 `data/` 文件夹。
 
-## 首次配置
+<a id="first-setup"></a>
+
+## 🚀 首次配置
 
 1. 打开 **设置 → Intelligence Assistant → LLM → 提供商**，新增提供商并选择 Obsidian 钥匙串中的对应凭据。自定义端点还可能需要基础 URL。
 2. 测试连接，在 **LLM → 模型** 中检查并启用可用的聊天模型，设置默认模型。端点可连接但没有可用模型，不代表能够正常生成回复。
@@ -50,7 +85,9 @@ npm run build:production
 
 SAP AI Core 使用存有完整 Service Key JSON 的钥匙串条目，以及资源组（通常为 `default`）。AI API 地址默认来自 `serviceurls.AI_API_URL`，也可覆盖。连接测试用于发现运行中的部署。SAP 代码已包含在本版本中，本次准备工作没有进行真实 SAP 租户调用。
 
-## 权限与数据
+<a id="permissions-and-data"></a>
+
+## 🔐 权限与数据
 
 内置智能体写入提案约束的是支持的知识库编辑。已配置的 CLI 命令、MCP 服务器和 HTTP 操作可以具有各自的文件、进程及网络副作用，不受提案界面的沙箱隔离。只向智能体授予所需工具。在提示词中写“无需确认”，本身不会启用自动写入。
 
@@ -64,7 +101,9 @@ SAP AI Core 使用存有完整 Service Key JSON 的钥匙串条目，以及资�
 
 其他已启用的插件共享 Obsidian 宿主环境。工具权限和密钥引用不提供进程隔离，详见[数据与执行说明](docs/user-guide-zh.md#数据存储与凭据)。
 
-## 长任务
+<a id="long-tasks"></a>
+
+## ⏱️ 长任务
 
 模型说“已完成”，并不能独立证明所有产物都存在。请核对实际文件和执行记录。步数/输出预算及提供商超时仍然有效；被中断的外部操作在重试前可能需要检查。
 
@@ -72,7 +111,9 @@ SAP AI Core 使用存有完整 Service Key JSON 的钥匙串条目，以及资�
 
 已记录的 0.0.23 真实门禁完成了一次持续 40.525 分钟、包含 100 篇文章并使用真实文件测量工具的任务。0.1.0 版本变更进行了构建及真实安装/重载检查。两者的验证范围分别记录于 [0.1.0 验证说明](docs/releases/0.1.0.md)。
 
-## 开发
+<a id="development"></a>
+
+## 🛠️ 开发
 
 ```bash
 npm ci
@@ -83,9 +124,11 @@ npm run build              # 开发构建
 npm run build:production   # 生产构建及构建来源记录
 ```
 
-`npm run verify`、Jest、任务测试和 CI E2E 包含 mock。禁止 mock 的发布检查应配置真实服务后运行 `npm run verify:release:real`，详见[测试文档](docs/reference/testing.md)。向 `main`/`master` 推送可能触发仓库的自动发布工作流；源码准备、Git 推送和正式发布是不同动作。
+`npm run verify`、Jest、任务测试和 CI E2E 包含 mock。禁止 mock 的发布检查应配置真实服务后运行 `npm run verify:release:real`，详见[测试文档](docs/reference/testing.md)。向 `main`/`master` 正常推送会触发已有的 **Build and Publish** 工作流：检查版本标签、构建、运行真实门禁，再自动创建 Release。发布由 CI-CD 完成；详见[发布流程](docs/reference/testing.md#ci-behavior-and-publication)。
 
-## 文档
+<a id="documentation"></a>
+
+## 📖 文档
 
 | 文档 | 内容 |
 |---|---|

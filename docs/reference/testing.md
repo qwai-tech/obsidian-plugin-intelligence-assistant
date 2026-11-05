@@ -70,7 +70,11 @@ Results for the current preparation are summarized in [0.1.0 status](../releases
 - `.github/workflows/verification-gate.yml` contains deterministic/mock verification and mutation jobs for main/master and PRs.
 - `.github/workflows/ci-cd.yml` can build, real-verify and publish an untagged version on a main/master push. It passes the built artifacts between jobs instead of rebuilding after verification.
 
-These workflows are not one interchangeable result. Repository branch protection/secrets and real-service availability are external configuration; no remote CI result is implied by local tests. During this no-mock, unpublished preparation the pushed commit uses `[skip ci]` according to [GitHub's documented push/PR skip behavior](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs). Skipped checks are not passing checks. A later publish-authorized change must deliberately run the required workflows/checks.
+The publisher's job chain is `check` → `build` → `real-verification` → `release`. The separate E2E Tests and Verification Gate workflows are not release-job dependencies. A version tag that already exists makes the publisher skip the release; let it create the tag after verification. Tag-only pushes do not trigger this publisher, and it currently has no manual dispatch entry point.
+
+Configure `E2E_TEST_PROVIDER`, `E2E_TEST_API_KEY` and `E2E_TEST_MODEL` as available Actions secrets, plus `E2E_TEST_BASE_URL` for a custom endpoint. The endpoint must be reachable from the GitHub-hosted runner. The real gate requires its own fresh evidence and does not silently accept a prior local certificate.
+
+The current instruction is to update documentation and push normally **without CI skip markers**, retaining the existing workflows. Earlier preparation commits used skip markers; that is historical, not the current publication procedure. Normal CI includes the independent mock-based suites. Repository branch protection/secrets and real-service availability are external configuration; no remote CI result is implied by local tests. Skipped checks are not passing checks.
 
 The skip marker does not disable independently triggered checks. GitHub's dynamic CodeQL workflow can still perform static analysis on the pushed commit; it does not run the repository's mock suites or publish the plugin. Inspect workflow identity and jobs before classifying a remote run.
 
