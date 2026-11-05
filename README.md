@@ -25,7 +25,7 @@ Chat with AI models, reference your notes and images, and run tool-using tasks i
 2. Find **Intelligence Assistant**, install it and enable it.
 3. Check **Settings → Intelligence Assistant → General** for the installed version.
 
-The plugin is listed in the [official community registry](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json). Community installation uses published release assets; it may install a different version from this checkout. **The 0.1.0 preparation described here has not itself created a release.** See [release status](docs/releases/0.1.0.md).
+The plugin is listed in the [official community registry](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json). Community installation uses published release assets; it may install a different version from this checkout. Check the [0.1.0 release](https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/releases/tag/0.1.0) for published assets and the [validation record](docs/releases/0.1.0.md) for their verification scope.
 
 ### From source or release files
 

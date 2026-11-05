@@ -25,7 +25,7 @@
 2. 搜索 **Intelligence Assistant**，安装并启用。
 3. 在 **设置 → Intelligence Assistant → 通用** 中确认安装的版本。
 
-插件已列入[官方社区目录](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json)。社区安装取得的是已发布的版本，可能与当前检出的源码不同。**这里记录的 0.1.0 准备工作尚未创建正式 Release。** 参见[版本状态](docs/releases/0.1.0.md)。
+插件已列入[官方社区目录](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json)。社区安装取得的是已发布的版本，可能与当前检出的源码不同。正式文件见 [0.1.0 Release](https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/releases/tag/0.1.0)，验证范围见[版本记录](docs/releases/0.1.0.md)。
 
 ### 从源码或发布文件安装
 
