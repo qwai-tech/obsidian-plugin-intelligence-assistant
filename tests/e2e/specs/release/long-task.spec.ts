@@ -64,9 +64,7 @@ describe('Release single long-running large task', function () {
 		const pre = await dumpVaultMarkdown();
 		await deleteByPaths(pre.filter((d) => NOTE_RE.test(d.path) || d.path === 'index.md').map((d) => d.path));
 
-		await chat.open();
-		await chat.newChat();
-		await chat.selectMode('agent');
+		await chat.open(); await chat.newChat(); await chat.selectMode('agent');
 		await chat.sendMessage([
 			`Work fully autonomously, without asking for confirmation.`,
 			`Your VERY FIRST output MUST be a create_note tool call for note_001.md — output NO preface, NO explanation, NO "I will start" text. Just call the tool immediately.`,
@@ -115,14 +113,11 @@ describe('Release single long-running large task', function () {
 		await captureReleaseProducts('long-task', [...notes, ...(index ? [index] : [])], { elapsedMin, wallElapsedMin, clock: execution ? 'agent-journal' : 'poll', execution, completed, expectedNotes: NOTES, minimumWords: WORDS, minimumMinutes: TARGET_MIN, substantial: substantial.length, longEnough: longEnough.length });
 		// Every requested artifact and link must exist; elapsed time alone cannot
 		// turn an incomplete or prematurely-ended task into a passing release gate.
-		expect(completed).toBe(true);
-		expect(reply).toContain('RELEASE_LONG_TASK_DONE');
+		expect(completed).toBe(true); expect(reply).toContain('RELEASE_LONG_TASK_DONE');
 		if (execution) { expect(execution.outcome).toBe('answered'); expect(execution.successfulCreates).toBeGreaterThanOrEqual(NOTES); expect(execution.successfulChecks).toBeGreaterThanOrEqual(NOTES); }
 		expect(elapsedMin).toBeGreaterThanOrEqual(TARGET_MIN);
-		expect(notes.length).toBe(NOTES);
-		expect(substantial.length).toBe(NOTES);
-		expect(longEnough.length).toBe(NOTES);
-		expect(Boolean(index)).toBe(true);
+		expect(notes.length).toBe(NOTES); expect(substantial.length).toBe(NOTES);
+		expect(longEnough.length).toBe(NOTES); expect(Boolean(index)).toBe(true);
 		for (let i = 1; i <= NOTES; i++) {
 			const stem = `note_${String(i).padStart(3, '0')}`;
 			expect(notes.some(note => note.path === `${stem}.md`)).toBe(true);

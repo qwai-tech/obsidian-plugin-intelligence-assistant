@@ -11,15 +11,25 @@ if(run.preflight)throw Error('A diagnostic preflight is not a complete release g
 if(result.exitCode!==0)throw Error('The real release runner did not succeed');
 if(run.mocks!==false||run.defaultReasoning!==true)throw Error('Release mode must use a real service and default reasoning');
 const head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
-let verifierOnlyRecheck=false;
+let verifierOnlyRecheck=false,toolingOnlyRecheck=false;const identicalTestEmits=[];
 if(run.gitCommit!==head){
- // A parser-only repair may recheck unchanged real evidence without pretending
- // that its original test run used the newer verification-tool commit.
- if(process.env.IA_RELEASE_RECHECK_VERIFIER_ONLY!=='1')throw Error('Evidence belongs to a different source commit');
+ // Keep the actual tested commit. Explicit tooling rechecks may repair this
+ // verifier, plus formatting of the exact long spec only if its emitted JS
+ // is byte-identical. Runtime, prompt, oracle and timeout changes are rejected.
+ const formatting=process.env.IA_RELEASE_RECHECK_TOOLING_ONLY==='1';
+ if(!formatting&&process.env.IA_RELEASE_RECHECK_VERIFIER_ONLY!=='1')throw Error('Evidence belongs to a different source commit');
  execFileSync('git',['merge-base','--is-ancestor',run.gitCommit,head]);
  const changed=execFileSync('git',['diff','--name-only',run.gitCommit,head],{encoding:'utf8'}).trim().split('\n');
- if(changed.length!==1||changed[0]!=='scripts/verify-real-release.mjs')throw Error('Only a verification-script repair may recheck this source commit');
- verifierOnlyRecheck=true;
+ for(const file of changed){
+  if(file==='scripts/verify-real-release.mjs')continue;
+  if(!formatting||file!=='tests/e2e/specs/release/long-task.spec.ts')throw Error(`Source change cannot reuse real evidence: ${file}`);
+  const ts=await import('typescript');
+  const emit=source=>ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext,removeComments:true}}).outputText;
+  const before=execFileSync('git',['show',`${run.gitCommit}:${file}`],{encoding:'utf8'}),after=await fs.readFile(file,'utf8');
+  const emitted=emit(before);if(emitted!==emit(after))throw Error(`Executable test source changed: ${file}`);
+  identicalTestEmits.push({file,sha256:createHash('sha256').update(emitted).digest('hex')});
+ }
+ verifierOnlyRecheck=identicalTestEmits.length===0;toolingOnlyRecheck=true;
 }
 if(execFileSync('git',['status','--porcelain','--untracked-files=no'],{encoding:'utf8'}).trim())throw Error('Tracked source or test files changed during the gate');
 const provenance=await read('artifact-provenance.json');if(provenance.mode!=='production'||provenance.gitCommit!==run.gitCommit)throw Error('Production build provenance does not match the actual tested source');
@@ -85,5 +95,5 @@ if(run.serviceAudit){
  if(!requests.length||requests.some(r=>r.status<200||r.status>=300||r.aborted||r.thinkingOverridePresent||r.reasoningEffortOverridePresent))throw Error('Real service audit contains failed/aborted/non-default-reasoning calls');
  await fs.writeFile(path.join(dir,'service-audit.json'),JSON.stringify(observed,null,2));
 }
-await fs.writeFile(path.join(dir,'verification.json'),JSON.stringify({status:'passed',runId:run.runId,gitCommit:run.gitCommit,verificationCommit:head,verifierOnlyRecheck,junitSha256,version:run.version,artifacts:run.artifacts,cases,realServiceRequests:requests.length,browserPreflightRequests:preflights.length,defaultReasoning:true,mocks:false,verifiedAt:Date.now()},null,2));
+await fs.writeFile(path.join(dir,'verification.json'),JSON.stringify({status:'passed',runId:run.runId,gitCommit:run.gitCommit,verificationCommit:head,verifierOnlyRecheck,toolingOnlyRecheck,identicalTestEmits,junitSha256,version:run.version,artifacts:run.artifacts,cases,realServiceRequests:requests.length,browserPreflightRequests:preflights.length,defaultReasoning:true,mocks:false,verifiedAt:Date.now()},null,2));
 console.log(JSON.stringify({status:'passed',runId:run.runId,cases:cases.length,realServiceRequests:requests.length,artifactBound:true,published:false}));
