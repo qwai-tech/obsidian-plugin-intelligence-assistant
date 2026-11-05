@@ -1,77 +1,33 @@
-# ADR-001: Safety model & agent-engine kernel usage
+# ADR-001: Tool execution and the turn-kernel boundary
 
-Status: Accepted · Scope: `src/features/agent` (kernel: `src/features/agent/kernel/turn-kernel.ts`), `src/features/tools`
+Status: Accepted; current contract reviewed for 0.1.0 on 2026-11-05.
 
-> **Update (2026-10, kernel v2):** the run loop is the **turn kernel**
-> (`turn-kernel.ts`). One model turn yields text, reasoning and a batch of tool
-> calls; every call in the batch runs before the next turn. Limits live in one
-> `Budget` (steps and failures); stops are typed `FinishReason`s, never raw
-> strings in the UI. Recovery retries are named `TurnGuard`s (`emptyTurn`,
-> `missingProposal`) that emit `guard_triggered`. The kernel reports only through
-> `KernelEvent`s; `AgentEngineLoop` maps them to the chat callbacks and appends
-> them to a JSONL run journal. `@agentic-kernel/core` is not used.
+## Decision
 
-This record states what is intentional, what was dropped, and what is the actual
-safety boundary, so future changes don't "fix" the wrong thing.
+`src/features/agent/kernel/turn-kernel.ts` owns the turn loop through model, context, tool and guard ports. It reports typed events/finish reasons. `AgentEngineLoop` supplies host policy and maps events into callbacks and the JSONL journal. The former external `@agentic-kernel/core` is not a runtime dependency.
 
-## 1. Two safety layers, with different jobs (not redundant)
+Tool execution has distinct checks:
 
-Vault safety is enforced at the **tool-execution layer**, not the engine policy:
+1. Agent/host/task permission intersection limits advertised and dispatched tools.
+2. `ToolRegistry` validates actual arguments and uses the binding captured for the task; source reloads cannot silently substitute another implementation.
+3. Built-in tools declaring `sideEffects.vaultWrite` must return a supported structured write proposal. This validator does not undo a tool implementation that wrote before returning, so built-in implementations must respect the contract.
+4. Normal proposals wait for Apply. [ADR-003](adr-003-autonomous-write.md) permits auto-application when the Agent setting and approved host task both allow it.
+5. `Budget` and guards bound execution; they are not filesystem isolation or a substitute for effect authorization.
 
-- Tools with `sideEffects.vaultWrite` must return a structured `write_proposal`.
-  `ToolRegistry.executeTool` calls `assertWriteProposalResult` and rejects any
-  write that is not a proposal (`src/features/tools/tool-registry.ts`).
-- The proposal is applied to the vault **only after the user confirms it in the
-  UI** (`write-proposal-service.ts` + the chat write-proposal card). The agent
-  loop never writes to the vault directly.
+CLI/MCP/HTTP tools can act directly through their configured process or endpoint. Their effects are outside the built-in vault proposal mechanism. Environment filtering limits inherited variables, not the process's filesystem/network permissions.
 
-The kernel `Budget` is a **separate, orthogonal** layer. It guards the
-*control loop* (step budget, failure budget), not file safety. The two protect
-different failure modes:
+## Recoverable and terminal conditions
 
-| Layer | Protects against | Mechanism |
-|-------|------------------|-----------|
-| Write-proposal gate (tool layer) | Accidental / unapproved vault mutation | Proposal + user confirmation |
-| `Budget` (kernel) | Runaway loops, repeated tool failure | step limit, failure limit |
+Unknown/disabled tools, invalid arguments and evidence-contract rejections are reported to the kernel for bounded recovery. They consume the applicable step/failure allowance; the host does not invent a successful tool result. A run can terminate when recovery or failure budgets are exhausted. A transport/output-limit error remains an incomplete/error outcome.
 
-Removing either because "the other already covers it" would be a regression.
+Supported proposal validation currently accepts create, update and append. Internal move/delete type branches do not constitute registered built-in move/delete tools. Applied results differ from pending proposals.
 
-## 2. Unknown and disabled tools are recoverable
+## Consequences
 
-`RegistryToolRunner` runs only the tools resolved for the agent. A call to a known
-tool the agent may not use returns `Tool "x" is not enabled for this agent`; a call
-to a tool that does not exist returns `Tool "x" does not exist`. Both are failed
-results fed back to the model so it can adjust, and both count toward the failure
-limit. The kernel never fails a whole run because of a hallucinated tool name.
+- A new vault-writing built-in must declare effects, validate input and return a proposal without mutating first.
+- An external tool must not be advertised as safe merely because it has a proposal-like name.
+- Tool batches run in order and are not an atomic transaction or exactly-once guarantee.
+- Run ownership/cancellation is in-memory. Journals and checkpoints preserve bounded evidence; they do not automatically replay a crashed run.
+- Composition belongs in `main.ts`/`src/bootstrap`; do not reintroduce a speculative dependency-injection container or unused external kernel.
 
-The real safety boundary for writes is layer 1, above.
-
-## 3. What was dropped with the external kernel
-
-`@agentic-kernel/core` shipped capabilities the host never exercised:
-multi-tenancy (`Principal`/`HostContext`), delegation / sub-agents, a
-`CapabilityRegistry`, approvals, memory governance, an engine-level context
-compactor, parallel tool batches, kernel-side JSON-schema validation, and replay.
-These were **dropped deliberately** (2026-10) rather than kept as option value:
-
-- Argument validation already happens in `ToolRegistry.executeTool` (zod).
-- Context compaction lives in the context assembler (`HistoryCompactor`).
-- Long-term memory lives in `AgentMemoryService`, outside the loop.
-- Every kernel event is appended to `<plugin>/data/agent-runs/<runId>.jsonl`, so a
-  run remains inspectable after the fact without rewriting a file per event.
-
-Add any of these back to the turn kernel when a feature needs it, not
-speculatively.
-
-## 4. DI container
-
-The unused `src/core/container.ts` was deleted in the global refactor (phase 1).
-Services are constructed explicitly in one composition root; see the refactor
-roadmap, phase 2.
-
-## 5. Consequences
-
-- New write-capable tools MUST go through the proposal gate; do not add a
-  direct-write tool path.
-- Do not add a policy approval step without the UI to resolve it.
-- Keep the kernel small: it owns the loop, not vault safety, memory or context.
+See [architecture](overview-en.md) and [detailed contracts](execution-contracts.md).

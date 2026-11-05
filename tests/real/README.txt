@@ -1,5 +1,12 @@
 Real-service UX regressions
 
+Scope note (0.1.0 documentation update): these are separate experiments, not
+one complete release gate. Some follow-up scripts require previously captured
+local evidence or fixtures; inspect each script's inputs before running it.
+See docs/reference/testing.md and docs/releases/0.1.0.md for current commands,
+actual tested version scopes and exclusions. No script was run merely by
+updating this documentation.
+
 Required environment: IA_REAL_API_KEY (a valid Manifold key).
 Optional: IA_REAL_BASE_URL (default http://127.0.0.1:17680/v1),
 IA_REAL_MODEL (default deepseek/deepseek-flash), IA_REAL_RESULTS (output folder).

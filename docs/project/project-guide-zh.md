@@ -1,101 +1,74 @@
-# 项目指南
+# 开发指南 — 0.1.0
 
-本文是面向开发者的 `obsidian-plugin-intelligence-assistant` 仓库指南，补充面向用户的 [README](../../README.md) 和 `docs/architecture/` 下的架构说明——建议先阅读[架构总览](../architecture/overview-zh.md)。
+[English](project-guide-en.md) · [架构](../architecture/overview-zh.md) · [测试](../reference/testing.md)
 
-## 插件做什么
+## 构建与本地部署
 
-Intelligence Assistant 把 Obsidian 库变成本地 AI 工作区，包含：
+使用与构建/发布工作流一致的 Node.js 22，通过仓库锁文件安装：
 
-- 支持流式输出的多提供商 LLM 聊天
-- 可复用的自定义智能体，按回合调用工具
-- MCP、OpenAPI 和 CLI 工具集成
-- 基于本地向量存储的库内容 RAG
-- Web 搜索
-- 快捷操作和编辑器内的 AI 辅助
+```bash
+npm ci
+npm run lint
+npm run typecheck
+npm run build
+npm run build:production
+```
 
-## 代码结构
+`build` 生成开发构建，`build:production` 生成生产构建及 `artifact-provenance.json`。除非显式覆盖，两者都会检查源文件并执行 TypeScript 检查。来源记录包含源代码提交、构建输入哈希，以及 `main.js`、`styles.css`、`manifest.json` 的哈希。
 
-- `main.ts`：Obsidian `Plugin`——加载设置、注册视图和设置页，然后调用组合根
-- `src/bootstrap`：组合根，只构建一次所有服务
-- `src/features/<名称>`：每个功能的用例、端口和类型——agent（回合内核）、chat、conversations、knowledge、llm、settings、tools、usage、web-search
-- `src/adapters`：JSON/JSONL 持久化、RAG、向量库、嵌入、Obsidian 文件系统
-- `src/ui`：聊天视图、设置选项卡、对话框、控制器、状态
-- `src/core`：插件路径、共享接口、常量、小工具函数
-- `packages/obsidian-llm`：LLM 提供商、HTTP 端口和模型管理（`@qwai/obsidian-llm`）
+仅部署到可丢弃的 QA 库：
 
-分层边界由 lint 强制执行（`eslint.config.mts` 中的 `no-restricted-imports`）。
+```bash
+OBSIDIAN_PLUGINS_PATH=/absolute/path/to/qa-vault/.obsidian/plugins node scripts/deploy.js --local
+```
 
-## 主要运行流程
+如果库配置目录不是 `.obsidian`，使用实际路径。核对部署文件哈希和实际加载版本。不要提交运行数据或凭据。`npm run dev` 用于开发/监听，不生成发布生产包。
 
-### 启动
+## 建议的阅读顺序
 
-加载时插件会：
+1. [`main.ts`](../../main.ts)：注册、设置加载、启动/延迟任务和生命周期。
+2. [`create-services.ts`](../../src/bootstrap/create-services.ts)：服务装配与所有权。
+3. [`settings-store.ts`](../../src/features/settings/settings-store.ts) 和 [`obsidian-settings-persistence.ts`](../../src/bootstrap/obsidian-settings-persistence.ts)：状态事务与实际存储。
+4. [`chat-view.ts`](../../src/ui/views/chat-view.ts) / [`chat-controller.ts`](../../src/ui/chat/controllers/chat-controller.ts)：界面请求流程。
+5. [`agent-engine-loop.ts`](../../src/features/agent/agent-engine-loop.ts)、[`turn-kernel.ts`](../../src/features/agent/kernel/turn-kernel.ts) 和 [`task-checkpoint.ts`](../../src/features/agent/task-checkpoint.ts)：策略、执行和手动续跑。
+6. [`tool-source-manager.ts`](../../src/features/tools/tool-source-manager.ts) 和 [`tool-registry.ts`](../../src/features/tools/tool-registry.ts)：工具源生命周期、身份和分派。
+7. [`provider-definitions.ts`](../../packages/obsidian-llm/src/provider-definitions.ts) 和 [`request-budget.ts`](../../packages/obsidian-llm/src/request-budget.ts)：提供商构建/发现与请求预算。
 
-1. 注册聊天视图、命令、功能区图标和设置页
-2. 通过 `SettingsStore` 加载设置（用户配置、仓库文件、迁移）
-3. 在 [`src/bootstrap/create-services.ts`](../../src/bootstrap/create-services.ts) 中构建服务，并完成 `whenServicesReady()`
-4. 执行延迟任务：会话迁移、默认智能体初始化、加载工具源（内置、CLI、OpenAPI、MCP 自动连接）
+目录职责见[源码导航](../reference/project-structure.md)。实际导入限制以 `eslint.config.mts` 为准，不要假设所有功能代码都与宿主无关。
 
-### 聊天请求生命周期
+## 持久化
 
-[`chat-view.ts`](../../src/ui/views/chat-view.ts) 收集文本、附件和引用，由 [`ChatController`](../../src/ui/chat/controllers/chat-controller.ts) 发送：
+当前设置以 format-2 文档保存在 `<插件目录>/data.json`，包含配置、提供商、提示词和智能体。所有修改通过 `plugin.updateSettings(change)`。`SettingsStore` 串行处理本地更新、验证文档，持久化失败后恢复工作状态。适配器使用 Obsidian `saveData`，并保留 `data.json.bak`。
 
-- 聊天模式：[`ChatService`](../../src/features/chat/chat.service.ts) 加入 RAG 和 Web 搜索上下文并流式输出回复
-- 智能体模式：[`AgentEngineLoop`](../../src/features/agent/agent-engine-loop.ts) 运行 [`TurnKernel`](../../src/features/agent/kernel/turn-kernel.ts)，工具调用实时显示在聊天中
-- 停止按钮通过 `AbortSignal` 取消请求
-- 回复完成后保存会话
+`LegacySettingsFiles` 读取旧的 `config/user/settings.json` 等分散设置，成功保存迁移结果后移除旧文件。迁移后继续断言旧路径存在，是错误的测试假设，应检查当前 `data.json` 或使用运行时帮助函数。
 
-### 工具流水线
+其他记录仍在 `data/` 中，包括会话 JSON、智能体 JSONL 日志、缓存、用量、记忆和向量索引。使用 `JsonFile` 的仓库具有临时文件/重命名恢复，不应扩展解释为多文件、跨进程或 Sync 原子性。
 
-[`ToolSourceManager`](../../src/features/tools/tool-source-manager.ts) 把工具源加载到 [`ToolRegistry`](../../src/features/tools/tool-registry.ts)：
+`SecretVault` 由 Obsidian SecretStorage 实现。提供商/SAP/搜索/OpenAPI 凭据字段在磁盘保存引用，在运行时解析值；任意 CLI/MCP 环境变量不自动移除。不要把完整运行时设置写入测试输出。
 
-- 内置库工具（[`builtin-tool-source.ts`](../../src/features/tools/sources/builtin-tool-source.ts)）
-- MCP 服务器，包装为工具
-- 由 OpenAPI 规范转换的工具
-- 来自预设或用户配置的 CLI 工具
+## 工具、副作用与集成
 
-每个工具都声明其副作用；智能体只能看到 `toolAccess` 授权的工具。
+- 在 `sources/builtin-tool-source.ts` 注册内置工具，验证参数并声明副作用。
+- 内置知识库写入工具必须先返回受支持的提案，不得预先修改文件；自动应用还需要智能体设置与宿主授权。
+- CLI/MCP/HTTP 是外部配置的能力，不是由内置提案机制提供沙箱的扩展。
+- 新增/删除工具源定义时应重新同步来源；仅重新加载现有注册表不会注册新来源。
+- 任务期间保持工具绑定稳定，源重载后应拒绝旧绑定，不应按相同显示名称改派到其他实现。
+- 参数证据契约属于显式可信配置，不会从自然语言普遍推断必须读取哪个来源。
 
-### RAG 流水线
+新增提供商时，同时更新包内注册表、相应 UI 元数据、模型能力和协议处理，不应让构建与发现走不同的分派路径。自定义连接需保留提供商实例身份。
 
-[`RAGManager`](../../src/adapters/rag/rag-manager.ts) 把库中笔记索引到 [`VectorStore`](../../src/adapters/rag/vector-store.ts)：笔记 → 分块（[`chunker.ts`](../../src/adapters/rag/chunker.ts)）→ 嵌入 → 本地索引 → 相似度检索 → 可选评分。未修改的笔记按内容哈希跳过。聊天和智能体通过 `KnowledgeBase` 端口访问它。
+新增设置时，更新功能类型、编解码/文档验证、迁移和相应控件。面向用户的文字通过 `t()` 和本地语言资源管理。
 
-## 持久化模型
+## 选择验证路径
 
-- 用户配置文件：规范化后的设置（`SettingsStore`、`settings-codec.ts`）
-- 仓库 JSON 文件：提供商、提示词、智能体、模型缓存、MCP 服务器及工具缓存、Token 用量、智能体记忆
-- 会话：每个会话一个 JSON 文件
-- 智能体运行：每次运行一个 JSONL 日志
-- 向量索引：RAG 分块和嵌入
+仓库同时存在 mock 与真实测试。`npm run verify`、Jest/任务/性能测试及 CI E2E 包含 mock，不能替代真实提供商调用；会话明确禁止 mock 时，不应执行这些路线。
 
-所有路径都来自 [`pluginPaths(configDir)`](../../src/core/plugin-paths.ts)。写入是原子的（先写临时文件再重命名）。
+禁止 mock 的发布入口是 `npm run verify:release:real`。它需要已提交源码、生产构建来源和真实提供商凭据，冻结同一构建执行四项必需测试，包括完整长任务。环境变量与验收规则见[测试文档](../reference/testing.md)，运行期间不得修改源代码或构建文件。
 
-## 建议优先阅读的模块
+仅限后处理工具的修正可通过验证器的显式 tooling 模式复核保留证据：允许路径受限，唯一允许的测试格式整理必须生成完全相同的 JavaScript，原始 JUnit 哈希会被记录，生产输入/产物也必须匹配。改变提示词、超时、验收条件或应用行为，不能复用旧结果。
 
-1. [`main.ts`](../../main.ts)
-2. [`src/bootstrap/create-services.ts`](../../src/bootstrap/create-services.ts)
-3. [`src/features/settings/settings-store.ts`](../../src/features/settings/settings-store.ts)
-4. [`src/ui/views/chat-view.ts`](../../src/ui/views/chat-view.ts)
-5. [`src/features/agent/kernel/turn-kernel.ts`](../../src/features/agent/kernel/turn-kernel.ts)
-6. [`src/features/tools/tool-source-manager.ts`](../../src/features/tools/tool-source-manager.ts)
-7. [`packages/obsidian-llm/src/model-manager.ts`](../../packages/obsidian-llm/src/model-manager.ts)
+## 版本与发布
 
-## 已知工程热点
+`node scripts/version.js minor` 更新 package.json、manifest.json、versions.json 及根锁文件版本字段。应保留格式并审阅差异。库包有独立版本，不是第二份插件清单。
 
-- 仍有几个较大的界面模块（`agent-edit-modal.ts`、`mcp-inspector`、`message-renderer.ts`、`cli-tools-section.ts`）。
-- MCP、OpenAPI 和 RAG 都会增加异步启动工作，回归问题常表现为初始化顺序错误。
-
-## 建议的开发流程
-
-1. 阅读相关的运行时路径。
-2. 先写或更新测试（`npx jest`，以及 `tests/missions` 中的任务测试）。
-3. 运行 `npm run lint`。
-4. 运行 `npm run build` 和 `node scripts/deploy.js --local`。
-5. 涉及界面或存储的修改，运行 `npm run test:e2e`。
-
-## 扩展指南
-
-- 新的 LLM 提供商放在 `packages/obsidian-llm/src/providers/`；兼容 OpenAI 的 API 可以继承 `OpenAICompatibleProvider`。
-- 新的内置工具在 `src/features/tools/*-tools.ts` 中实现，在 `builtin-tool-source.ts` 中注册，并且必须声明副作用。
-- 新设置需要更新类型、编解码和迁移，并在对应选项卡中添加字段（简单字段用 `SettingsForm`）。
-- 新端口属于使用它的那一层；适配器以结构类型的方式实现它。
+推送源码不是创建 Release 的指令。`.github/workflows/ci-cd.yml` 可在 main/master 上、条件和真实门禁满足后自动发布。每次推送的 E2E 工作流还包含 mock 测试。当前禁止 mock、暂不发布的准备提交带有 `[skip ci]`；它表示跳过自动工作流，不表示 CI 已通过。后续发布需明确授权，并完成对应候选版本的检查。

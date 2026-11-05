@@ -1,54 +1,25 @@
-# ADR-003: Autonomous write (escape hatch from the proposal gate)
+# ADR-003: Explicit automatic application of vault proposals
 
-Status: Accepted · Scope: `src/features/agent`, `agent-edit-modal`, Agent type
-
-## Problem
-
-ADR-001 made the write-proposal gate the safety model: every vault write returns
-an Apply-gated proposal. That assumed the user always wants to confirm. A user
-explicitly asked "制定方案，拆成多个文件放入 notes，不需要我确认，你自主完成"
-— and the product could not honor it: every file was a proposal needing a manual
-Apply, so "autonomous completion" was architecturally impossible. The safety
-default had hardened into an unconditional rule with no escape hatch.
+Status: Accepted; current authorization contract reviewed for 0.1.0 on 2026-11-05. The older prompt-intent matcher described by this record is no longer an authorization path.
 
 ## Decision
 
-Add an explicit, opt-in autonomous-write path. When granted, write proposals are
-applied to the vault at tool-execution time instead of producing Apply cards.
+Built-in vault tools prepare write proposals. Automatic application requires both:
 
-Two ways to grant it (either enables a run):
-1. **Per-agent toggle** `Agent.autonomousWrite` (deterministic; in the agent
-   edit modal next to RAG / Web toggles). Default false.
-2. **Per-task intent** — the user's message explicitly authorises it (e.g.
-   "自主完成 / 不需要确认 / autonomously / without confirmation"), detected by a
-   small multilingual matcher. Convenience layer; the toggle is the robust path.
+1. The selected Agent has `autonomousWrite === true`.
+2. The task has host approval (`authorization.approved === true`). Sending a chat task, approving the launcher or clicking an inline AI block's Run button supplies the appropriate host action.
 
-`AgentEngineLoop` computes `autoApplyWrites = agent.autonomousWrite || intent`,
-and threads it (plus the App) into the kernel tool adapter. When set, after a
-write tool returns a proposal the adapter applies it via `applyWriteProposal` and
-returns an "applied" result so the model knows the write landed and can build on
-it (e.g. interlink notes).
+`resolveExecutionPolicy` snapshots this conjunction. Wording such as “autonomously” or “without confirmation”, quoted note contents and a deep-link payload do not independently grant it. Unapproved task entry points cannot use the setting to bypass host authorization.
 
-## Safety floor (non-negotiable even under autonomy)
+`RegistryToolRunner` applies supported proposals through `applyWriteProposal` during execution and returns an actual applied result. This lets later tools inspect/reference saved files. When automatic application fails, the existing proposal remains available for manual review. Normal non-autonomous runs leave Apply-gated cards.
 
-- **Delete is never auto-applied** — destructive ops always fall back to a manual
-  proposal, regardless of grant.
-- **Apply failure falls back to a proposal** — if the write throws (e.g. file
-  exists), the user still gets a reviewable card; nothing is silently lost.
-- Tool access is unchanged — the agent can only write through tools its
-  `toolAccess` already enables.
-- Default remains proposal-gated; autonomy is strictly opt-in.
+## Boundaries
 
-## Why apply at tool-execution time (not auto-click at the UI)
+- Tool permissions still apply; automatic writes do not enable disabled tools.
+- Current supported validated proposals are create, update and append. There is no registered built-in move/delete tool; do not infer one from legacy type branches.
+- External CLI/MCP/HTTP tools may make effects directly. They are not covered by the built-in vault gate or isolated by this switch.
+- Updates compare expected previous content where supplied, so stale proposals can fail instead of overwriting changed content.
+- A batch is sequential, not an atomic rollback transaction. Cancellation or a failure after earlier effects does not undo them.
+- Loading/rendering an already applied conversation does not itself apply the proposal again. This does not establish exactly-once behavior for arbitrary external operations.
 
-Applying during the run (vs auto-clicking Apply on rendered cards) means: the
-file exists immediately so later steps can reference it; re-rendering a loaded
-conversation never re-applies (no duplicate writes); and there are no half-applied
-card states to manage. The proposal mechanism is bypassed only when authorised.
-
-## Related fix
-
-The agent edit modal's maxSteps slider was capped at 20 — below the new default
-(25) and ceiling (50, ADR-002). Raised to 50 so users can actually budget large
-autonomous tasks. (No stateful migration of existing agents' maxSteps; the slider
-is editable, and ADR-002's estimate path adapts per task.)
+See [ADR-001](adr-001-safety-and-engine-usage.md), [architecture](overview-en.md) and the [user guide](../user-guide-en.md#agents-and-writes).

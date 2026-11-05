@@ -1,5 +1,7 @@
 # Trinity Architecture: Obsidian Intelligence Assistant
 
+> Historical design proposal. The descriptions below are retained as design history, not current implementation guarantees. See the [current architecture](overview-en.md) and [0.1.0 status](../releases/0.1.0.md).
+
 ## 1. Overview
 The "Trinity" architecture for Obsidian Intelligence Assistant transforms the plugin from a simple chat interface into an **Autonomous Knowledge Agent**. It focuses on deep vault awareness, safe local-first execution, and long-term research memory.
 

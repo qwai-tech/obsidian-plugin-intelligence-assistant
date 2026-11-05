@@ -1,5 +1,8 @@
 # 小红书
 
+> Historical draft; claims and imagery may be outdated. See the [draft status and screenshot provenance](../promotional/README.md), [current README](../../README.md) and [0.1.0 validation scope](../releases/0.1.0.md) before publishing.
+
+
 ## 标题（二选一）
 
 - **版本 A（痛点型）：** 用了这个插件，我卸载了3个AI工具

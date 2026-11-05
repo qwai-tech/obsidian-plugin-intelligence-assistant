@@ -1,5 +1,8 @@
 # V2ex
 
+> Historical draft; claims and imagery may be outdated. See the [draft status and screenshot provenance](../promotional/README.md), [current README](../../README.md) and [0.1.0 validation scope](../releases/0.1.0.md) before publishing.
+
+
 ## 标题
 
 做了个 Obsidian AI 插件：多模型聊天 + Agent ReAct + MCP + RAG + OpenAPI/CLI 工具，首发，欢迎试用和反馈

@@ -1,5 +1,8 @@
 # Twitter / X
 
+> Historical draft; claims and imagery may be outdated. See the [draft status and screenshot provenance](../promotional/README.md), [current README](../../README.md) and [0.1.0 validation scope](../releases/0.1.0.md) before publishing.
+
+
 ## Thread（6 条推文）
 
 ---

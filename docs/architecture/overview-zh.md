@@ -1,128 +1,91 @@
-# 架构总览
+# 架构总览 — 0.1.0
 
-Intelligence Assistant 是按功能组织的端口与适配器插件。`main.ts` 是一个很薄的 Obsidian `Plugin`，负责加载设置，然后交给 `src/bootstrap/` 中的组合根。LLM 提供商位于独立的包 `packages/obsidian-llm`（`@qwai/obsidian-llm`）。
+[English](overview-en.md) · [详细执行契约（英文）](execution-contracts.md) · [开发指南](../project/project-guide-zh.md)
 
-## 目录结构
+Intelligence Assistant 使用按功能划分的服务、基于端口的智能体回合内核，以及显式的 Obsidian 适配器。`main.ts` 管理插件生命周期，`src/bootstrap/` 装配服务，`packages/obsidian-llm` 管理提供商协议、HTTP 和模型身份。
 
-```
-┌───────────────────────────────────────────────────────────────┐
-│ main.ts → src/bootstrap/   组合根（统一构建所有服务）            │
-└───────────────┬───────────────────────────────────────────────┘
-                │ 装配
-┌───────────────▼───────────────┐   ┌───────────────────────────┐
-│ ui/                           │   │ packages/obsidian-llm      │
-│ 聊天 · 设置 · 对话框           │   │ 提供商 · HTTP 端口 ·       │
-│ 视图 · 编辑器 · 状态           │   │ 模型管理 · LLM Hub         │
-└───────────────┬───────────────┘   └─────────────▲─────────────┘
-                │ 调用                            │ 被使用
-┌───────────────▼─────────────────────────────────┴─────────────┐
-│ features/<名称>/   每个功能的用例、端口和类型                   │
-│ agent · chat · conversations · knowledge · llm · settings      │
-│ tools · usage · web-search                                     │
-└───────────────┬───────────────────────────────────────────────┘
-                │ 端口由下层实现
-┌───────────────▼───────────────────────────────────────────────┐
-│ adapters/  obsidian · persistence（JSON/JSONL）· process · rag │
-└───────────────┬───────────────────────────────────────────────┘
-                │
-┌───────────────▼───────────────────────────────────────────────┐
-│ core/  插件路径 · 接口 · 常量 · 工具函数                        │
-└───────────────────────────────────────────────────────────────┘
-```
+## 职责划分
 
-每个功能的类型都放在自己代码旁边的 `features/<名称>/types/` 中，不再有共享的 `types/` 目录。每个功能只暴露一个 `index.ts`，使用显式的具名导出（不用 `export *`）；功能外部的代码只能从 `@/features/<名称>` 导入。Lint 在所有位置禁止 `export *`，包括 `packages/obsidian-llm` 的入口。
+| 区域 | 职责 |
+|---|---|
+| `main.ts`、`src/bootstrap/` | 宿主注册、装配、生命周期、设置持久化接线和集成 |
+| `src/ui/` | 视图、控制器、设置 Tab、对话框、编辑器操作和渲染 |
+| `src/features/` | 智能体/聊天用例、设置、知识/工具端口及功能类型 |
+| `src/adapters/` | Obsidian/文件持久化、RAG、嵌入、子进程和 MCP stdio |
+| `src/core/` | 共享帮助函数、路径、通知和默认值 |
+| `src/i18n/`、`src/capabilities/` | 翻译资源和 Obsidian API 能力清单 |
+| `packages/obsidian-llm/` | 提供商注册、模型发现/身份、原生协议、HTTP 和 Hub 契约 |
 
-导入规则由 `eslint.config.mts` 强制执行，没有任何豁免：
+实际允许的导入由 `eslint.config.mts` 约束，功能对外使用显式 `index.ts` 导出。这是职责与依赖结构，不是进程沙箱；宿主相关工具和适配器仍使用 Obsidian 的权限。
 
-| 目录 | 禁止导入 |
-|------|---------|
-| `core/`、`i18n/` | features、adapters、ui、bootstrap |
-| `features/<名称>/` | adapters、ui、bootstrap，以及其他功能的内部模块（应使用其 index） |
-| `adapters/` | ui、bootstrap；功能只能通过其 index 以 `import type` 使用 |
-| `ui/` | bootstrap；adapters 只能用 `import type`；功能只能通过其 index 导入 |
+## 启动与释放
 
-UI 代码接收 `PluginHost`（`ui/plugin-host.ts`：app、manifest、settings、services、`updateSettings`），而不是插件类本身；只有设置页、聊天视图和聊天会话控制器能看到插件对象。
+1. `main.ts` 安装通知/HTTP 适配器，注册视图、命令、编辑器集成和设置。
+2. `SettingsStore` 加载、验证、迁移旧设置并解析 SecretStorage 引用。
+3. `create-services.ts` 只创建一次共享服务，视图通过 `whenServicesReady()` 等待。
+4. 延迟初始化处理版本标记、默认智能体、会话迁移和工具源。配置为自动连接的 MCP 可以启动外部进程。
+5. 释放阶段取消并等待已有运行，关闭服务。取消不会撤销已经完成的外部副作用。
 
-`core/`、`features/` 和 `ui/` 不能导入 Node 模块（`child_process`、`fs`、`node:*`、`cross-spawn` 等）；这些代码位于 `adapters/`，通过端口访问。
-| `packages/obsidian-llm` | 插件中的任何代码（`@/*`） |
+`RunCoordinator` 管理运行所有权、准入和取消，状态保存在内存中；JSONL 日志不会把它变成持久化工作流或回放引擎。
 
-只有 `bootstrap/` 和 `main.ts` 可以看到所有目录。
+## 请求与智能体内核
 
-## 组合根 — `src/bootstrap/`
+`ChatController` 收集用户文本、附件和引用。`ChatService` 准备普通聊天，或把 Agent 模式交给 `AgentEngineLoop`。用于网络搜索的原始输入与扩展后的私有上下文分离。
 
-- `create-services.ts` 只构建一次所有服务，返回 `OwnedServices`；界面拿到的是更窄的 `AppServices` 接口（`ui/app-services.ts`）。
-- `obsidian-settings-persistence.ts` 和 `plugin-data-service.ts` 把设置存储适配到插件的 JSON 文件。
-- `tool-source-factory.ts` 创建内置、CLI、OpenAPI 和 MCP 工具源。
-- `agent-entry-points.ts` 和 `plugin-integrations.ts` 注册命令、内联 AI 块、深度链接，以及随库事件触发的 RAG 索引。
+智能体引擎快照化当前智能体/模型策略、收集配置的上下文、解析授权工具，再运行 `kernel/turn-kernel.ts`。每个回合请求模型、验证/审阅结果，并按顺序执行返回的工具调用。内核端口包括 `ContextAssembler`、`ModelPort`、`ToolRunner` 和 `TurnGuard`。
 
-`ChatView.onOpen` 会等待 `plugin.whenServicesReady()`，视图从不自行构建服务。
+关键契约：
 
-## 功能 — `src/features/`
+- `Budget` 从宿主配置的步数预算开始，模型初始估算可提高但不能降低它；估算上限至少覆盖配置预算。工具尝试消耗步数，失败和执行前拒绝分别计数，参见 [ADR-002](adr-002-agent-budget-and-trace.md)。
+- 请求预算包含工具定义/参数、系统/上下文及输出预留。`HistoryCompactor` 限制历史大小，保留有界的省略/核验证据；不会使已省略的源文件重新具有权威性。
+- 完成、参数和计数检查可以要求修正或停止不完整运行，不证明任意语义任务、领域算术或所有自然语言表述都正确。
+- 模型输出限制、过滤及不完整流属于保留部分结果的错误，不是成功结束。不会悄悄增大预算或改变推理模式重试生成。
+- Stop 沿模型、HTTP 和子进程路径传播。超时或中断的外部操作可能具有不确定结果。
 
-**settings**：`SettingsStore` 负责加载、迁移（`settings-migrations.ts`）和保存设置。API 密钥通过 `SecretVault` 端口（`settings-secrets.ts`，适配器为 `adapters/obsidian/obsidian-secret-vault.ts`）保存在 Obsidian 的密钥存储中：设置只记录密钥名称，存储在加载时填入密钥，写入时一律去除。设置作为一个文档保存在插件的 `data.json` 中（`settings-document.ts`：配置、提供商、提示词、智能体），因此 Obsidian Sync 会同步它们，`onExternalSettingsChange` 会重新加载。所有修改都通过唯一的写入入口 `updateSettings(change)`。只有当某个单元（`config`、`providers`、`prompts`、`agents`、`mcp`）变化时才保存，并通知 `onChange` 订阅者；插件据此刷新 RAG 和聊天模型列表。模型和 MCP 工具缓存保存在 `data/cache/`。旧版本保存在 `config/user/settings.json` 和 `data/` 中的设置会在首次加载时迁入 `data.json`（`adapters/persistence/legacy-settings-files.ts`）。`types/settings.ts` 定义 `PluginSettings`。
+声明式的读取后使用规则、支持的计数字段等详见[执行契约](execution-contracts.md)。
 
-**agent**：
+## 续跑与计数
 
-- `kernel/turn-kernel.ts` — 智能体循环。一个回合等于一次模型调用加上它返回的整批工具调用。端口：`ContextAssembler`、`ModelPort`、`ToolRunner`、`TurnGuard`。
-- `kernel/budget.ts` — 步数与失败预算；智能体可在第一回合用 `ESTIMATED_STEPS` 标记提高步数预算。运行以带类型的 `FinishReason` 结束。
-- `kernel/turn-guards.ts` — 具名的重试规则（空回合、缺少写入提案），会出现在执行轨迹中。
-- `agent-engine-loop.ts` — 把内核事件映射为聊天回调，并写入运行日志。
-- `agent-sense-service.ts` — 收集当前笔记、引用、图谱邻居、RAG 结果和智能体记忆。
-- `tool-access-editor.ts` — 按工具或整个工具源为智能体授权。
+`task-checkpoint.ts` 在裁剪聊天历史前，把简短 `Continue.` 等已识别续跑请求关联到原任务，保存有界的成功观察、待处理/不确定动作、权限限制和上次运行回执。重读已知文件会增加访问次数，不会重新定义未完成工作的边界。
 
-与适配器共享的契约（`KernelEvent`、`FinishReason`、`RunJournal`）位于 `agent/types/agent-run.ts`。参见 ADR-001 和 ADR-002。
+本次运行的实时计数放在先前工具结果之后；本次与上次运行回执具有独立范围。`execution-count-guard.ts` 检查支持的运行时字段和已识别的显式读取计数表述，可拒绝矛盾回答，但不是通用算术验证器。
 
-**chat**：`chat.service.ts` 以流式方式输出聊天模式回复，并把智能体模式交给引擎循环。`chat-session-policy.ts` 决定当前模式、智能体、提示词和智能体所用模型。`conversation-namer.ts` 生成会话标题和图标。`vault-export-service.ts` 把回复保存到笔记。
+重载后续跑利用会话中保存的证据，不会自动回放日志，也不保证外部副作用恰好一次或模型总能选择正确恢复点。实际文件与工具结果仍需作为证据。
 
-**web-search**：`web-search-service.ts` 分派到 `backends.ts` 中的各个后端。
+## 工具与授权
 
-**knowledge**：`KnowledgeBase` 和 `MemoryIndex` 端口（`knowledge-base.ts`）以及 RAG 配置类型。
+`ToolSourceManager` 注册/重新同步内置、CLI、OpenAPI 和 MCP 源。`ToolRegistry` 校验参数、解析稳定工具身份，并执行当前任务捕获的绑定。源重载后旧绑定失效。
 
-**tools**：`ToolRegistry` 保存所有工具；`ToolSourceManager` 加载和重新加载内置、CLI、OpenAPI 和 MCP 工具源（`sources/`）。内置工具在 `*-tools.ts` 中实现。工具声明副作用（`ToolSideEffects`，其中 CLI 和 MCP 工具声明 `process`），能力摘要和自主写入规则都依据它。
+注册的内置工具见[使用指南](../user-guide-zh.md#内置工具)，其中没有内置移动/删除工具。可用工具由全局启用状态、智能体权限、已识别的任务/宿主限制共同决定，任务限制不能授予新能力。
 
-**llm**：LLM Hub 服务、Ollama 管理，以及 LLM 与模型类型。
+支持的内置知识库写入返回结构化提案。只有智能体设置为真且宿主任务已授权时，`execution-policy.ts` 才启用自动应用；自由文本意图本身不是授权。默认路径保留 Apply 卡片，授权自动应用后返回实际应用结果，参见 [ADR-001](adr-001-safety-and-engine-usage.md) 和 [ADR-003](adr-003-autonomous-write.md)。
 
-**conversations** 和 **usage** 保存会话和 Token 用量的类型；其存储位于 `adapters/persistence/`。
+CLI/MCP/HTTP 可以依据进程或服务权限直接产生副作用。提案验证和子进程环境变量白名单不提供文件/网络隔离，多项副作用也不是原子事务。
 
-## 适配器 — `src/adapters/`
+## 持久化与密钥
 
-- `persistence/json-file.ts` — 原子 JSON 写入（先写临时文件再重命名），并能恢复遗留的临时文件；`json-collection.ts` 读取旧版本用于提示词和智能体的“索引加每项一个文件”布局。`persistence/data/` 中的缓存、Token 用量和智能体记忆都基于 `JsonFile`。
-- `persistence/jsonl-run-journal.ts` — 每个智能体事件追加一行 JSON。
-- `persistence/conversation-storage-service.ts` — 每个会话一个 JSON 文件。
-- `rag/` — `rag-manager.ts`、`vector-store.ts`、`chunker.ts`、`embedding-manager.ts`、`document-grader.ts`、`incremental-indexer.ts`：库索引与检索。分块记录内容哈希和嵌入模型，因此未修改的笔记不会重新嵌入，检索也只比较同一模型的向量。`RAGManager` 实现 `KnowledgeBase` 和 `MemoryIndex`。
-- `obsidian/obsidian-file-system.ts` — 基于库的文件系统端口。
-- `process/` — 所有启动进程的代码：`mcp-stdio-session.ts` 通过服务器的 stdio 使用 MCP 协议（`connectMcpStdio` 实现 tools 功能的 `McpConnector` 端口，并用 `resolve-command.ts` 解析 `npx` 等启动器），`command-runner.ts` 实现 CLI 工具使用的 `CommandRunner` 端口。
+`ObsidianSettingsPersistence` 通过宿主 `Plugin.saveData` 保存 format-2 `data.json`，包含用户配置、提供商、提示词和智能体。`SettingsStore` 串行处理本地修改，保存失败后回滚工作状态。适配器保留 `data.json.bak`，旧的分散设置在成功迁移后删除。
 
-所有插件路径都来自 `core/plugin-paths.ts`（`pluginPaths(configDir)`），因此使用的是库实际的配置目录。
+模型/MCP 缓存、用量、记忆和向量索引保存在 `data/` 下。使用 `JsonFile` 的仓库采用临时文件/重命名恢复；会话为独立 JSON，运行日志为带保留策略的 JSONL。这些机制不提供跨进程/Sync 事务，也不意味着所有宿主设置写入都是多文件原子操作。
 
-## LLM 包 — `packages/obsidian-llm`
+提供商/API 密钥、SAP Service Key、受支持的搜索密钥及 OpenAPI 认证值经 `SecretVault` 端口使用 Obsidian SecretStorage，配置只保存名称。任意 CLI/MCP 环境值不自动转为密钥。同步配置与在另一设备配置密钥是两回事，实际 Sync 行为取决于宿主配置。
 
-- `http.ts` / `obsidian-http.ts` — `HttpPort`；`resilient-http.ts` 增加超时、对 429/502/503/504 及传输错误的重试，以及 `AbortSignal` 取消。
-- `base-streaming-provider.ts` — SSE 流式处理，每个流使用独立的分块解析器。
-- `providers/openai-compatible-provider.ts` — OpenAI、DeepSeek 和 OpenRouter 的共享基类。Anthropic、Gemini 和 Ollama 原生实现工具调用。
-- `model-manager.ts` — 每个提供商配置一份模型缓存，并合并进行中的重复请求。
-- `hub.ts` — 跨插件 LLM Hub，出借模型能力而不暴露密钥。
+## RAG 与记忆
 
-## 界面 — `src/ui/`
+`RAGManager` 实现知识与记忆端口：笔记文本 → 分块 → 配置的嵌入服务 → 本地向量存储 → 检索 → 可选模型评分。内容哈希和嵌入模型身份用于避免重复/不兼容嵌入。存储模式、上下文限制及纳入/排除规则影响运行行为，启用增量嵌入后会跟随知识库事件。
 
-- `views/chat-view.ts` — 聊天 `ItemView`，组合标题栏、输入框、消息列表和会话侧栏。`views/chat-workspace.ts` 打开和查找聊天视图；`views/agent-task-launcher.ts` 从命令启动智能体任务。
-- `chat/chat-session-controller.ts` — 把模式、智能体、会话配置和快捷开关应用到视图。
-- `chat/chat-message-list.ts` — 消息渲染、空状态和预检卡片；`message-grouping.ts` 合并旧格式的工具调用链。
-- `chat/controllers/` — `ChatController`（发送、流式输出、实时智能体轨迹）。
-- `chat/managers/conversation-manager.ts` 和 `chat/conversation-list-view.ts` — 会话侧栏。
-- `settings/settings-tab.ts` — 设置界面结合 Obsidian 的声明式设置（1.13+）与九个顶部 Tab：常规设置保留可搜索的原生定义；顶部导航在当前页面渲染 `settings/tabs/` 中已有的分区，保留子 Tab 和保存回调。顶部导航支持方向键、Home/End 和窄窗口换行。`settings/settings-form.ts` 把一个设置分区绑定到开关、下拉框、文本、数字、列表和密钥字段，并统一保存。
-- `modals/` — 对话框。
-- `state/chat-view-state.ts` — 每个视图的状态，包括当前请求的 `AbortController`。
+索引在本地，嵌入/评分提供商可以在远端。记忆按所属智能体、模式和保留数量隔离；无记忆模式跳过当前运行的记忆读取/写入，保留既有数据。
 
-## 测试
+## LLM 包
 
-`npm run verify` 依次运行 lint、类型检查、带覆盖率阈值的全部 Jest 测试和构建。完整的测试分层见 [reference/testing.md](../reference/testing.md)。
+`provider-definitions.ts` 统一管理构建和发现。OpenAI 兼容、Anthropic、Google、Ollama 和 SAP 路径使用相应原生协议，实际能力取决于模型/部署。自定义连接 ID 用于区分不同网关暴露的同名模型。
 
-- `npx jest` — 单元测试（jsdom，Obsidian 模拟位于 `__mocks__/obsidian.ts`）。
-- `npx jest tests/harness tests/missions --runInBand` — 基于模拟 LLM 和内存库的智能体任务测试。
-- `npm run test:e2e` — 基于最新版 Obsidian 的 WebdriverIO 测试（用 `OBSIDIAN_VERSION` 指定其他版本）。
+`obsidian-http.ts` 提供宿主传输。渲染进程 CORS 失败时可通过宿主缓冲 SSE，仍需验证真实结束元数据。`resilient-http.ts` 只重试安全操作：默认安全方法或显式安全授权；可重试状态码本身不会授权重放任意 POST 或生成流。
 
-## 设计说明
+LLM Hub 暴露冻结的能力门面，不返回密钥/原始配置。这是共享宿主内的 API 封装，不隔离其他已启用插件。
 
-- **Electron 渲染进程中不使用动态导入。** Chromium 拒绝带裸模块说明符的 `import()`，并阻止 `file://` 方式加载 ESM，因此纯 ESM 包需要打包。
-- **设置按差异保存，而非整体重写。** 写入通过 `plugin.updateSettings(settings => …)` 完成，它应用修改并保存；存储只写入变化的单元，因此多余的保存开销很小。
+## 界面与验证
+
+`ChatView` 组合控制器与渲染器，设置界面保留九个顶部 Tab 及其子页。本次文档更新不修改界面代码或样式。
+
+[测试文档](../reference/testing.md) 区分确定性/mock 测试、真实组件检查及绑定构建的发布门禁。0.1.0 源码和已记录的 0.0.23 完整真实门禁拥有独立来源，见[版本状态](../releases/0.1.0.md)。历史设计计划不是当前运行时保证。

@@ -1,5 +1,8 @@
 # 微信
 
+> Historical draft; claims and imagery may be outdated. See the [draft status and screenshot provenance](../promotional/README.md), [current README](../../README.md) and [0.1.0 validation scope](../releases/0.1.0.md) before publishing.
+
+
 ## 朋友圈文案
 
 🔥 发现一个超强 Obsidian 插件！

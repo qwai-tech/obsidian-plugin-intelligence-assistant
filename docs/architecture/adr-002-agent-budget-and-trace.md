@@ -1,57 +1,27 @@
-# ADR-002: Agent self-estimated step budget & trimmed execution trace
+# ADR-002: Host step allowance, model estimates and truthful traces
 
-Status: Accepted · Scope: `src/features/agent` (loop + turn kernel `Budget`), `src/core/constants.ts`
+Status: Accepted; amended after the real release gate on 2026-11-05.
 
-Two related changes driven by the principle "trust a capable agentic model; remove
-fixed scaffolding."
+## Step budget
 
-## 1. Step budget: agent estimates, ceiling backstops
+The initial allowance is `agent.maxSteps ?? DEFAULT_MAX_STEPS` (25). The engine supplies an estimate ceiling of `max(MAX_STEPS_CEILING, configuredAllowance)`; the constant ceiling is 50, while a larger explicitly configured allowance is preserved.
 
-Previously `maxSteps` was a single fixed number (10, later 25). A fixed number is
-arbitrary — a 2-file task and a 40-file task should not share one budget.
+On the first turn, `Budget.estimate` can consume `<!-- ESTIMATED_STEPS: N -->` and strip the marker from model text. For a positive estimate:
 
-**Decision:** the agent estimates its own budget on the first turn; a hard ceiling
-remains as a non-negotiable backstop.
+```text
+workingLimit = max(currentLimit, 10, min(N + 3, estimateCeiling))
+```
 
-- On its first turn the agent emits an HTML comment `<!-- ESTIMATED_STEPS: N -->`
-  (instructed in the system prompt). It is an HTML comment so it is invisible in
-  rendered markdown; `Budget.estimate` also strips it from the turn text so it never
-  reaches history or the final answer.
-- `Budget` sets the working step limit to `clamp(N + 3, 10, ceiling)`. If the agent
-  declares no estimate, the budget is the fallback (`agent.maxSteps ?? 25`).
-- `MAX_STEPS_CEILING = 50` (raised per-agent if the user configures a higher
-  `maxSteps`) is the hard cap, enforced by the kernel's `Budget`. The agent can never
-  exceed it.
+An estimate can raise the allowance but cannot revoke the configured allowance. The previous clamp-only formula reduced a configured 16 steps to 10 during a real linked-note task; that was corrected before the complete live gate.
 
-**Why a ceiling is mandatory:** the moment a budget matters most is when the agent
-is confused and looping — exactly when it will not stop itself ("just one more
-step"). Autonomy cannot include self-authorising unlimited steps. The agent already
-self-paces normally by emitting `final_answer` when done; the budget only bites
-when it wants more, and the ceiling only bites on a runaway/over-estimate.
+A step is a tool attempt, not an article or model turn. Preflight rejections consume steps but are separate from executed-tool failures. The current engine allows three actual failures; reaching a limit produces a typed budget outcome. Budget completion is not task completion. The host's step-budget message reports actual successful read calls and supports a manual continuation with a new run receipt.
 
-On hitting the budget the loop stops with a message naming the effective budget and
-inviting the user to continue or raise the limit (no silent dead-stop framing).
+## Trace and completion facts
 
-## 2. Execution trace: drop templated "Thinking" narration
+Tool calls/results are the execution trace. Model reasoning is displayed only when actually supplied by the provider. SPAR-style prompts are guidance, not evidence of separate autonomous subsystems or guaranteed transparent reasoning.
 
-The UI showed `ThinkingPlan / ThinkingReflect / ThinkingAct` bubbles. These were
-**synthetic, templated** strings emitted by our code via `onThought`
-("Planning step N.", "Reflected on N tool result(s).", "Sensed active note…") —
-not the model's reasoning. For a capable agent they are repetitive, zero-information
-noise.
+Named guard/correction events and budget messages may be host-generated. They must be distinguishable from completed tool effects. `ExecutionCountGuard` checks supported runtime count fields and recognized explicit read-count claims before accepting a tool-free answer. Current-run and previous-run counts are scoped separately.
 
-**Decision:** remove the three templated per-phase `onThought` calls. Keep what is
-real: the tool-call/result cards (the true execution trace and liveness signal), the
-model's actual reasoning (`reasoning_content` / streamed content, rendered
-separately), the final answer, and genuinely informative events (write-proposal
-retry, budget reached). The system-prompt SPAR framing and the first-turn
-"Task Checklist" instruction are retained — they guide the model and are real
-user-facing output.
+These checks are bounded. They do not validate every number, language, paraphrase or domain calculation. Actual artifacts and tool logs remain the acceptance oracle.
 
-## Consequences
-
-- New per-task budgets adapt to the work; the fixed-number problem is gone, bounded
-  by a hard ceiling.
-- Weak models that omit the estimate fall back to the configured default (25); a
-  stronger model is still recommended for large autonomous tasks.
-- The transcript is cleaner: tool cards + real reasoning + answer, no filler.
+See [execution contracts](execution-contracts.md) for context compaction, continuation and argument-evidence rules.

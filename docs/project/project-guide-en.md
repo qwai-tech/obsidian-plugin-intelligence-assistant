@@ -1,101 +1,74 @@
-# Project Guide
+# Developer guide — 0.1.0
 
-This document is a developer-oriented guide to the `obsidian-plugin-intelligence-assistant` repository. It complements the user-facing [README](../../README.md) and the architecture notes under `docs/architecture/` — start with the [architecture overview](../architecture/overview-en.md).
+[中文](project-guide-zh.md) · [Architecture](../architecture/overview-en.md) · [Testing](../reference/testing.md)
 
-## What This Plugin Does
+## Build and local deployment
 
-Intelligence Assistant turns an Obsidian vault into a local AI workspace. The plugin combines:
+Use Node.js 22, as in the build/publish workflow, and install with the committed lockfile:
 
-- Multi-provider LLM chat with streaming responses
-- Reusable custom agents that work in turns with tools
-- MCP, OpenAPI and CLI tool integration
-- RAG over vault content with local vector storage
-- Web search
-- Quick actions and editor-side AI helpers
+```bash
+npm ci
+npm run lint
+npm run typecheck
+npm run build
+npm run build:production
+```
 
-## Codebase Shape
+`build` creates a development bundle; `build:production` creates the production bundle and `artifact-provenance.json`. Both validate source and run TypeScript checking unless explicitly overridden. The provenance records the source commit, input-file hashes and hashes of `main.js`, `styles.css` and `manifest.json`.
 
-- `main.ts`: the Obsidian `Plugin` — loads settings, registers views and the settings tab, then calls the composition root
-- `src/bootstrap`: composition root; builds every service once
-- `src/features/<name>`: use cases, ports and types per feature — agent (turn kernel), chat, conversations, knowledge, llm, settings, tools, usage, web-search
-- `src/adapters`: JSON/JSONL persistence, RAG, vector store, embeddings, Obsidian file system
-- `src/ui`: chat view, settings tabs, modals, controllers, state
-- `src/core`: plugin paths, shared interfaces, constants, small helpers
-- `packages/obsidian-llm`: LLM providers, the HTTP port and the model manager (`@qwai/obsidian-llm`)
+Deploy only to a disposable QA vault:
 
-Layer boundaries are enforced by lint (`no-restricted-imports` in `eslint.config.mts`).
+```bash
+OBSIDIAN_PLUGINS_PATH=/absolute/path/to/qa-vault/.obsidian/plugins node scripts/deploy.js --local
+```
 
-## Main Runtime Flows
+Use that vault's real configuration directory if it differs from `.obsidian`. Confirm the deployed file hashes and actual loaded version. Keep runtime state and credentials out of source commits. `npm run dev` is the development/watch workflow, not a release bundle.
 
-### Startup
+## Read the runtime in this order
 
-On load, the plugin:
+1. [`main.ts`](../../main.ts): registration, settings load, startup/deferred work and lifecycle.
+2. [`create-services.ts`](../../src/bootstrap/create-services.ts): service ownership/composition.
+3. [`settings-store.ts`](../../src/features/settings/settings-store.ts) and [`obsidian-settings-persistence.ts`](../../src/bootstrap/obsidian-settings-persistence.ts): state transactions and actual storage.
+4. [`chat-view.ts`](../../src/ui/views/chat-view.ts) / [`chat-controller.ts`](../../src/ui/chat/controllers/chat-controller.ts): UI request flow.
+5. [`agent-engine-loop.ts`](../../src/features/agent/agent-engine-loop.ts), [`turn-kernel.ts`](../../src/features/agent/kernel/turn-kernel.ts) and [`task-checkpoint.ts`](../../src/features/agent/task-checkpoint.ts): policy, execution and manual continuation.
+6. [`tool-source-manager.ts`](../../src/features/tools/tool-source-manager.ts) and [`tool-registry.ts`](../../src/features/tools/tool-registry.ts): source lifecycle, identity and dispatch.
+7. [`provider-definitions.ts`](../../packages/obsidian-llm/src/provider-definitions.ts) and [`request-budget.ts`](../../packages/obsidian-llm/src/request-budget.ts): provider construction/discovery and bounded wire requests.
 
-1. Registers the chat view, commands, ribbon icon and settings tab
-2. Loads settings through `SettingsStore` (user config, repository files, migrations)
-3. Builds services in [`src/bootstrap/create-services.ts`](../../src/bootstrap/create-services.ts) and resolves `whenServicesReady()`
-4. Runs deferred work: conversation migration, default-agent seeding, tool source loading (built-in, CLI, OpenAPI, MCP auto-connect)
+The [source map](../reference/project-structure.md) describes directory ownership. Consult `eslint.config.mts` for actual import restrictions rather than assuming every feature is host-independent.
 
-### Chat Request Lifecycle
+## Persistence
 
-[`chat-view.ts`](../../src/ui/views/chat-view.ts) collects text, attachments and references; [`ChatController`](../../src/ui/chat/controllers/chat-controller.ts) sends them:
+Current settings are a format-2 document in `<plugin>/data.json`: configuration, provider definitions, prompts and Agents. Updates go through `plugin.updateSettings(change)`. `SettingsStore` serializes local changes, validates documents and restores working state after failed persistence. The adapter uses Obsidian `saveData` and keeps `data.json.bak`.
 
-- Chat mode: [`ChatService`](../../src/features/chat/chat.service.ts) adds RAG and web search context and streams the reply
-- Agent mode: [`AgentEngineLoop`](../../src/features/agent/agent-engine-loop.ts) runs the [`TurnKernel`](../../src/features/agent/kernel/turn-kernel.ts); tool calls appear live in the chat
-- Stop cancels the request through an `AbortSignal`
-- The conversation is saved after the reply
+Legacy `config/user/settings.json` and separate settings repositories are read by `LegacySettingsFiles`, migrated, then removed after a successful save. Tests reading that old path after migration are incorrect; inspect current `data.json` or use runtime helpers.
 
-### Tooling Pipeline
+Other records remain under `data/`: per-conversation JSON, Agent JSONL journals, caches, usage, memory and the vector index. `JsonFile` supplies temporary-file/rename recovery to repositories that use it. Do not generalize that into multi-file, cross-process or Sync atomicity.
 
-[`ToolSourceManager`](../../src/features/tools/tool-source-manager.ts) loads tool sources into the [`ToolRegistry`](../../src/features/tools/tool-registry.ts):
+`SecretVault` is implemented with Obsidian SecretStorage. Provider/SAP/search/OpenAPI credential fields keep references on disk and reveal values in runtime settings. Arbitrary CLI/MCP environment values are not automatically stripped. Never dump complete runtime settings into test output.
 
-- Built-in vault tools ([`builtin-tool-source.ts`](../../src/features/tools/sources/builtin-tool-source.ts))
-- MCP servers, wrapped as tools
-- OpenAPI specs converted into tools
-- CLI tools from presets or user config
+## Tools, effects and integrations
 
-Each tool declares its side effects; agents only see the tools their `toolAccess` grants.
+- Register built-ins in `sources/builtin-tool-source.ts`, validate parameters and declare side effects.
+- A built-in vault-write tool must return a supported proposal without writing first. Automatic application requires the Agent setting plus a host-approved task.
+- CLI/MCP/HTTP tools are externally configured capabilities, not sandboxed extensions of the built-in proposal gate.
+- Use source resynchronization when adding/removing source definitions; reloading an existing registry alone does not register a new source.
+- Keep tool bindings stable for a run. A source reload must reject an old binding instead of rerouting it to a different tool with the same display name.
+- New argument-evidence contracts are explicit trusted configuration; they do not universally infer required source reads from natural language.
 
-### RAG Pipeline
+For a new provider, update the package's provider registry and the applicable UI metadata, model capabilities and protocol handling. Do not add one construction path while leaving discovery on another. Preserve provider-instance identity for custom connections.
 
-[`RAGManager`](../../src/adapters/rag/rag-manager.ts) indexes vault notes into the [`VectorStore`](../../src/adapters/rag/vector-store.ts): notes → chunks ([`chunker.ts`](../../src/adapters/rag/chunker.ts)) → embeddings → local index → similarity search → optional grading. Unchanged notes are skipped by content hash. Chat and agents reach it through the `KnowledgeBase` port.
+For settings, update the feature type, codec/document validation, migrations and appropriate settings control. For user-visible strings, use `t()` and the bundled locale resources.
 
-## Persistence Model
+## Verification choices
 
-- User config file: normalized settings (`SettingsStore`, `settings-codec.ts`)
-- Repository JSON files: providers, prompts, agents, model caches, MCP servers and tool caches, token usage, agent memory
-- Conversations: one JSON file per conversation
-- Agent runs: one JSONL journal per run
-- Vector index: RAG chunks and embeddings
+The repository has both mock-based and real tests. `npm run verify`, Jest/missions/performance and CI E2E include mocks. They are not a substitute for a real provider call, and must not run when a session expressly prohibits mocks.
 
-All paths come from [`pluginPaths(configDir)`](../../src/core/plugin-paths.ts). Writes are atomic (temp file, then rename).
+The no-mock release entry point is `npm run verify:release:real`. It requires committed source, a production provenance file and real provider credentials. It freezes one bundle and runs four mandatory cases, including the complete long task. See [testing](../reference/testing.md) for environment variables and acceptance rules. No source/bundle mutation is permitted during the run.
 
-## Important Modules To Read First
+A narrow post-processing repair can recheck preserved evidence only through the verifier's explicit tooling mode: permitted paths are restricted, the one allowed test-formatting change must emit byte-identical JavaScript, raw JUnit hashes are recorded and production inputs/assets must still match. This does not permit changed prompts, timeouts, oracles or application behavior to reuse old results.
 
-1. [`main.ts`](../../main.ts)
-2. [`src/bootstrap/create-services.ts`](../../src/bootstrap/create-services.ts)
-3. [`src/features/settings/settings-store.ts`](../../src/features/settings/settings-store.ts)
-4. [`src/ui/views/chat-view.ts`](../../src/ui/views/chat-view.ts)
-5. [`src/features/agent/kernel/turn-kernel.ts`](../../src/features/agent/kernel/turn-kernel.ts)
-6. [`src/features/tools/tool-source-manager.ts`](../../src/features/tools/tool-source-manager.ts)
-7. [`packages/obsidian-llm/src/model-manager.ts`](../../packages/obsidian-llm/src/model-manager.ts)
+## Versioning and publication
 
-## Known Engineering Hotspots
+`node scripts/version.js minor` updates package.json, manifest.json, versions.json and the root lockfile version fields. Preserve file formatting and review the diff. The library package has its own version; it is not a second plugin manifest.
 
-- Several UI modules are still large (`agent-edit-modal.ts`, `mcp-inspector`, `message-renderer.ts`, `cli-tools-section.ts`).
-- MCP, OpenAPI and RAG all add asynchronous startup work; regressions often appear as initialization-order bugs.
-
-## Suggested Development Workflow
-
-1. Read the relevant runtime path.
-2. Write or update the test first (`npx jest`, missions in `tests/missions`).
-3. Run `npm run lint`.
-4. Run `npm run build` and `node scripts/deploy.js --local`.
-5. For UI or storage changes, run `npm run test:e2e`.
-
-## Extension Guidance
-
-- New LLM providers belong in `packages/obsidian-llm/src/providers/`; OpenAI-compatible APIs can subclass `OpenAICompatibleProvider`.
-- New built-in tools are implemented in `src/features/tools/*-tools.ts`, registered in `builtin-tool-source.ts`, and must declare their side effects.
-- New settings need the type, codec and migration updates, plus a field in the relevant tab (`SettingsForm` for simple fields).
-- New ports belong to the layer that consumes them; adapters implement them structurally.
+A source push is not an instruction to create a release. `.github/workflows/ci-cd.yml` can publish automatically on main/master when its conditions and real gate succeed. The every-push E2E workflow also contains mock tests. During the current no-mock/unpublished preparation, the commit carries `[skip ci]`; this skips automatic workflows, not proof that CI passed. Later publication requires deliberate authorization and applicable candidate checks.

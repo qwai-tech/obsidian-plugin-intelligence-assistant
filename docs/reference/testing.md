@@ -1,47 +1,84 @@
-# Testing
+# Testing and release evidence
 
-Every change goes through the same layers, cheapest first. `npm run verify` runs the static checks, the Jest suites with coverage thresholds and the build in one command; CI runs it before every release.
+The repository contains both real-service checks and mock-based suites. Choose deliberately: `npm run verify` is not a no-mock command. Test code existing in the repository does not establish that it ran for a particular candidate.
 
-| Layer | What it proves | Command | Runs in CI |
-|-------|----------------|---------|------------|
-| Lint | Code style, Obsidian guidelines (`eslint-plugin-obsidianmd`), the layering rules between `core`, `features`, `adapters`, `ui` and `bootstrap`, no `export *`, no global `app`, no debug logging, no HTML headings in settings or modals | `npm run lint` | Verification gate |
-| Typecheck | The whole tree compiles, unit tests and e2e included (`tsconfig.json` for the source, `tsconfig.test.json` for the Jest tests) | `npm run typecheck` | Verification gate |
-| Unit tests | Pure logic and components with the Obsidian API mocked (`__mocks__/obsidian.ts`) | `npx jest src packages` | Verification gate |
-| Agent missions | The agent loop end to end against a mock LLM server and an in-memory vault: tool calls, write proposals, permissions, step budgets, stop, error recovery | `npm run test:missions` | Verification gate |
-| Perf | Agent efficiency baseline (turns and tool calls per scenario), timing record, memory growth under forced GC | `npm run test:perf`, `npm run test:perf:mem` | Verification gate |
-| Coverage | Per-layer floors so coverage cannot quietly drop (`coverageThreshold` in `jest.config.js`) | `npx jest --coverage` | Verification gate |
-| Flake soak | Missions repeated until every run is identical | `npm run test:flake-soak` | Verification gate |
-| Mutation | The agent orchestration core's tests catch injected faults (Stryker) | `npm run test:mutation` | Verification gate |
-| API audit | No regressions in which Obsidian APIs the plugin depends on | `npm run audit:obsidian-api` | Verification gate |
-| E2E | The built plugin inside real Obsidian (pinned version) with a mock LLM and a mock MCP server: chat, streaming, stop, agents, tools, MCP, RAG, settings persistence, secret storage, startup budget | `npm run test:e2e` | E2E workflow |
-| Release E2E | Real provider, real MCP server, long and large agent tasks | `npm run test:e2e:release` (needs `.env.test`) | Manual |
-| Real Ollama E2E | Against a local Ollama (`qwen3.5:0.8b`, `qwen3.5:2b`): saving and inserting a just-streamed reply, an image reaching a vision model, an agent's fixed model winning over the chat picker. Skips when the models are missing; override with `E2E_OLLAMA_URL`, `E2E_OLLAMA_CHAT_MODEL`, `E2E_OLLAMA_FIXED_MODEL` | `npx wdio run tests/e2e/config/wdio.release.conf.ts --spec tests/e2e/specs/release/real-ollama.spec.ts` | Manual |
-| Visual tour | Screenshots of every screen and main dialog in the dark and light theme, saved to `tests/e2e/screenshots/tour/` for review | `npm run test:e2e:tour` | Manual |
+## Test routes
 
-Measured performance and the options behind the current choices are in [performance.md](performance.md).
+| Route | What it exercises | Command / scope |
+|---|---|---|
+| Static | Lint, layer rules and source/test type configurations | `npm run lint`, `npm run typecheck`, `npm run audit:obsidian-api` |
+| Unit / missions / performance | Pure logic, mocked Obsidian/LLM infrastructure, in-memory scenarios and bounded performance checks | Jest, `npm run test:missions`, `npm run test:perf`, `npm run test:perf:mem` — includes mocks |
+| Determinism / mutation | Repeated mission outcomes and injected faults | `npm run test:flake-soak`, `npm run test:mutation` — includes mocks |
+| CI E2E | Actual Obsidian with deterministic mock LLM/MCP servers | `npm run test:e2e:ci`, `npm run test:e2e:smoke` — includes mocks |
+| Individual release specs | Real configured services in actual Obsidian; some optional specs can skip without their configuration | `npm run test:e2e:release`; inspect the selected specs and skips |
+| Complete real release gate | Four mandatory real cases on one frozen production bundle, with fresh evidence and no skipped mandatory suite | `npm run verify:release:real` |
+| Real component/audit scripts | Actual disk/process/MCP/network paths, plus clearly labeled replays of captured failures | `tests/real/`; read each script's required variables and scope |
+| Visual tour | Actual host screenshots for manual review | `npm run test:e2e:tour`; screenshots alone do not prove backend behavior |
 
-## Where tests live
+If mocks are prohibited, do not run Jest/mission/performance/CI E2E merely to obtain a green result. Static checks, appropriate real scripts and the real release runner are the applicable routes. Ollama and SAP exclusions in the current preparation are explicit; they are not automatically certified by another provider's result.
 
-- `src/**/__tests__/`, `packages/obsidian-llm/src/__tests__/` — unit tests next to the code.
-- `tests/harness/` — the mission runner, mock LLM harness and in-memory vault; `tests/missions/` — the missions.
-- `tests/perf/` — efficiency, timing and memory suites (`efficiency.baseline.json` holds the agreed baseline; regenerate with `UPDATE_PERF_BASELINE=1`).
-- `tests/e2e/` — WebdriverIO specs, page objects and support code; see [tests/e2e/README.md](../../tests/e2e/README.md).
-- `tests/mutation/` — Stryker configuration notes; see [tests/mutation/README.md](../../tests/mutation/README.md).
+## Complete real release gate
 
-## Writing tests
-
-- Write the failing test first, then the change.
-- Unit tests import the module under test directly; everything else imports features through their `index.ts`.
-- Mission and Jest tests get their own mock LLM port from the OS, so suites can run in parallel.
-- User-visible text goes through `t()`: `src/__tests__/i18n/untranslated-ui-strings.test.ts` fails on a hard-coded label, notice or placeholder in `src/ui`, `src/bootstrap` or `src/adapters`, and `locale-coverage.test.ts` requires every key in all 49 locales.
-- E2E specs drive the UI through page objects and `data-testid`s, wait on conditions rather than sleeping (lint enforces it), and check persisted state in `data.json` with `VaultFixture.waitForSettings`.
-- To assert on a partial stream, hold it with `mockLLM.streaming(chunks, { holdAfter })` and release it with `mockLLM.releaseStream()` instead of relying on timing.
-- The e2e vault template keeps the settings layout of older versions, so every e2e run also exercises the settings migration.
-
-## Before a commit
+Commit candidate changes, run the project-required checks/development build, then finish with a production build from that exact commit:
 
 ```bash
-npm run verify
-node scripts/deploy.js --local
-npm run test:e2e
+npm run lint
+npm run typecheck
+npm run build
+npm run build:production
 ```
+
+Supply real credentials through the local environment or secret manager. Do not commit keys or print complete settings. For a custom OpenAI-compatible endpoint, configure:
+
+```text
+E2E_TEST_PROVIDER=custom
+E2E_TEST_API_KEY=<real credential supplied outside the repository>
+E2E_TEST_BASE_URL=<reachable real API base URL>
+E2E_TEST_MODEL=<actual enabled model ID>
+```
+
+Then run:
+
+```bash
+npm run verify:release:real
+```
+
+The runner disables `.env.test` loading for its child, freezes `main.js`, `styles.css` and `manifest.json`, verifies production input hashes/source identity and installs the frozen files in actual Obsidian 1.14.5. It requires clean committed tracked source and does not allow a known mock endpoint. It runs these four cases without spec retries:
+
+1. **Real chat:** persisted response and positive actual token usage.
+2. **Real Agent:** successful built-in `read_file` with the source sentinel in the reply.
+3. **Linked-note task:** all four requested Markdown files, required content/links and an `answered` terminal receipt.
+4. **Continuous long task:** all requested numbered articles, each at least 1,200 words by default, all index links, a true completion marker and `answered` outcome, plus at least 20 minutes of actual Agent journal duration by default.
+
+`LONG_TASK_NOTES` defaults to 60; the recorded acceptance run used 100. The Agent profile includes a real read-only CLI checker over the isolated vault; it measures saved files, lets the Agent expand short articles, and performs a final aggregate. The test independently reads and counts the saved contents. This is a tool-enabled workload, not proof a model can mentally count words.
+
+The long gate requires every artifact, not an earlier partial percentage. Waiting after the Agent finishes cannot satisfy duration. A workload that completes too soon fails; use a sufficiently substantial real workload rather than idle padding. Service errors, incomplete output, missing artifacts and failed/skipped mandatory cases cannot become a pass.
+
+## Evidence and verification
+
+The generated run directory contains the manifest, frozen bundle, production provenance, fresh JUnit, case screenshots, persisted conversations, actual journals and captured products. Each case checks the installed three-file hashes. The verifier rejects stale/mixed/partial evidence and preserves the actual tested source commit.
+
+Use `IA_RELEASE_REPORT_ROOT` to select a new, nonexistent output directory. A transparent real-service recorder is optional; `IA_RELEASE_SERVICE_AUDIT` connects its metadata to the verifier. In the recorded run it forwarded request/response bodies unchanged, saved hashes/status/usage, excluded authorization headers and checked known reasoning overrides. Browser OPTIONS probes are retained separately from actual application calls; failed application calls remain failures.
+
+WDIO can sanitize a suite name (for example a hyphen becomes a space). The verifier recognizes that reporter transformation while checking case identity and raw JUnit hashes. The historical post-processing repair used an explicit tooling-only recheck: restricted paths, byte-identical emitted JavaScript for the one allowed test-formatting file, unchanged production inputs/assets, and separate tested-source/verification commits. It does not authorize reuse after changing application code, test prompts, oracles or timeouts.
+
+Results for the current preparation are summarized in [0.1.0 status](../releases/0.1.0.md). Local generated evidence is ignored and is not available to another reader merely because a localhost report URL worked on the test machine. Record artifact identity and scope in committed summaries; share redacted evidence separately when needed.
+
+## CI behavior and publication
+
+- `.github/workflows/e2e.yml` has an every-push mock E2E job and a conditional real-spec job for main/tags.
+- `.github/workflows/verification-gate.yml` contains deterministic/mock verification and mutation jobs for main/master and PRs.
+- `.github/workflows/ci-cd.yml` can build, real-verify and publish an untagged version on a main/master push. It passes the built artifacts between jobs instead of rebuilding after verification.
+
+These workflows are not one interchangeable result. Repository branch protection/secrets and real-service availability are external configuration; no remote CI result is implied by local tests. During this no-mock, unpublished preparation the pushed commit uses `[skip ci]` according to [GitHub's documented push/PR skip behavior](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs). Skipped checks are not passing checks. A later publish-authorized change must deliberately run the required workflows/checks.
+
+## Test locations and useful rules
+
+- `src/**/__tests__/`, `packages/obsidian-llm/src/__tests__/`: unit tests.
+- `tests/harness/`, `tests/missions/`, `tests/perf/`, `tests/mutation/`: deterministic/mock infrastructure and checks.
+- [E2E guide](../../tests/e2e/README.md): actual host fixtures, page objects, release cases and diagnostics.
+- [Real script notes](../../tests/real/README.txt): real filesystem/process/network experiments and captured-evidence audits.
+
+Use specific observable outcomes and persisted state, not merely a completion sentence. Preserve failed attempts as failed evidence. Distinguish an actual new service call, a real process/file operation and a replay of captured data. For settings assertions, use current `data.json`; the legacy template is migrated during startup. The count guard does not certify arbitrary prose/numbers, and a screenshot does not substitute for an execution or artifact oracle.
+
+[Performance notes](performance.md) contain separately scoped historical and current measurements.

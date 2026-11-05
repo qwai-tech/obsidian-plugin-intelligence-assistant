@@ -1,5 +1,8 @@
 # Intelligence Assistant：把 Obsidian 变成 AI 原生工作空间
 
+> Historical draft; claims and imagery may be outdated. See the [draft status and screenshot provenance](../promotional/README.md), [current README](../../README.md) and [0.1.0 validation scope](../releases/0.1.0.md) before publishing.
+
+
 > 一个 Obsidian 插件的进化史：从聊天面板到全能的 AI 工作站。支持 46 种语言，已上架社区插件市场。
 
 ---

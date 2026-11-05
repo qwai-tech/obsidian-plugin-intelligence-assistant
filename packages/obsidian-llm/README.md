@@ -28,13 +28,14 @@ Register a transport once at startup, then create providers:
 import {
   setDefaultHttpPort,
   createObsidianHttpPort,
+  withResilience,
   setDiagnosticsSink,
   ProviderFactory,
 } from '@qwai/obsidian-llm';
 import { Notice } from 'obsidian';
 
 async onload() {
-  setDefaultHttpPort(createObsidianHttpPort());
+  setDefaultHttpPort(withResilience(createObsidianHttpPort()));
   setDiagnosticsSink(({ message }) => { new Notice(message); });
 
   const provider = ProviderFactory.createProvider({
@@ -66,6 +67,12 @@ including finish reasons and trailing usage, and coalesces delivery to the calle
 It does not convert a streaming request into a non-stream JSON completion.
 The providers contain no environment-specific transport code; pass
 `createFetchHttpPort()` in Node.
+
+### Retry and protocol scope
+
+The optional resilience wrapper retries only operations authorized as retry-safe (safe HTTP methods by default, or an explicit safe request grant). A 429/5xx status does not itself authorize replaying an arbitrary POST or generation stream. Stop/timeout does not prove an upstream side effect was cancelled.
+
+The provider registry owns both construction and discovery. Anthropic, Gemini and Ollama use native tool protocols; OpenAI-compatible endpoints need actual model tool support. SAP selects the applicable deployment protocol. There is no general text-parser fallback for a model without native tool support. Current plugin preparation excludes Ollama and live SAP tenant calls; see the [version validation record](../../docs/releases/0.1.0.md).
 
 ## 2. Using a hub (shared configuration)
 

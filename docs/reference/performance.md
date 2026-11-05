@@ -1,4 +1,31 @@
-# Performance
+# Performance and measurement scope
+
+## Current 0.1.0 artifact (2026-11-05)
+
+The production artifact built for the version revision has these exact sizes and hashes. These are local build measurements, not a fresh startup/heap benchmark:
+
+| Asset | Bytes | SHA-256 |
+|---|---:|---|
+| `main.js` | 1,436,982 | `3a74db09c18025ee3eac583b47d571b8d9969c4ff9423554b10888a7ee1b13c5` |
+| `styles.css` | 86,926 | `0b3719add242b28abd78e65cafc844904069c2008db85bd3e06e3bfa6132568a` |
+| `manifest.json` | 340 | `90644f0f134ba6cce64b0578379d6cee21f5e99ca3caf513ba161569d66f43ed` |
+
+The 0.1.0 version-only revision retained the same main.js/styles.css bytes as the complete real-gated 0.0.23 runtime. The manifest/version metadata changed. See [release scope](../releases/0.1.0.md) for actual test provenance.
+
+The recorded real task ran for 40.525 minutes and produced 100 independently checked articles with 132,739 words. It used a configured Agent profile and a real file-measurement CLI. It is not a latency, concurrency or all-model benchmark; startup measurements below belong to earlier optimization work.
+
+## Reproducing measurements
+
+- `npm run build:production -- --analyze`: production bundle analysis.
+- `tests/e2e/specs/perf/startup.spec.ts`: inspect the host/performance test's configuration before running it.
+- `npm run test:perf` and `npm run test:perf:mem`: deterministic/mock performance controls; do not run them during a no-mock task.
+- `npm run verify:release:real`: actual configured service/workload acceptance, with artifact identity and real journal duration.
+
+Do not compare sizes, timing or heap figures without the commit, build mode, host, configuration and workload. The older figures below are preserved as historical engineering notes; their component totals and timings must not be advertised as freshly measured 0.1.0 results.
+
+---
+
+# Historical optimization notes
 
 What was measured, which options were compared, and why the current choices won. Re-run the numbers with `npm run build:production -- --analyze` (bundle) and `tests/e2e/specs/perf/startup.spec.ts` (startup budget, 1 s).
 

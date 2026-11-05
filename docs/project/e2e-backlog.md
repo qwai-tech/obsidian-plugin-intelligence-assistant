@@ -1,5 +1,7 @@
 # E2E Test Suite & Tool System Refactor — Backlog
 
+> Historical backlog snapshot. Task states and paths below are not a current release checklist. See the [current testing guide](../reference/testing.md) and [0.1.0 status](../releases/0.1.0.md) for the applicable validation scope.
+
 Tracks unfinished work after Phase 0 (E2E foundation) and the Phase 5
 cleanup that finished the tool-system-refactor.
 

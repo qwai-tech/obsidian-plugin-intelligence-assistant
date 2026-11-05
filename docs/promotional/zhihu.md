@@ -1,5 +1,8 @@
 # 知乎
 
+> Historical draft; claims and imagery may be outdated. See the [draft status and screenshot provenance](../promotional/README.md), [current README](../../README.md) and [0.1.0 validation scope](../releases/0.1.0.md) before publishing.
+
+
 ## 标题
 
 我用一个 Obsidian 插件，替代了 ChatGPT 网页版、Perplexity 和好几个 AI 工具——Intelligence Assistant 深度体验

@@ -1,5 +1,8 @@
 # 平台账号申请准备清单
 
+> Historical draft; claims and imagery may be outdated. See the [draft status and screenshot provenance](../promotional/README.md), [current README](../../README.md) and [0.1.0 validation scope](../releases/0.1.0.md) before publishing.
+
+
 ## 国内平台
 
 ### 小红书
