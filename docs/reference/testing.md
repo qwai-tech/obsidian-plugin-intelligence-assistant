@@ -72,6 +72,8 @@ Results for the current preparation are summarized in [0.1.0 status](../releases
 
 These workflows are not one interchangeable result. Repository branch protection/secrets and real-service availability are external configuration; no remote CI result is implied by local tests. During this no-mock, unpublished preparation the pushed commit uses `[skip ci]` according to [GitHub's documented push/PR skip behavior](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs). Skipped checks are not passing checks. A later publish-authorized change must deliberately run the required workflows/checks.
 
+The skip marker does not disable independently triggered checks. GitHub's dynamic CodeQL workflow can still perform static analysis on the pushed commit; it does not run the repository's mock suites or publish the plugin. Inspect workflow identity and jobs before classifying a remote run.
+
 ## Test locations and useful rules
 
 - `src/**/__tests__/`, `packages/obsidian-llm/src/__tests__/`: unit tests.

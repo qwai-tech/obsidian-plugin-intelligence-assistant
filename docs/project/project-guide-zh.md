@@ -71,4 +71,4 @@ OBSIDIAN_PLUGINS_PATH=/absolute/path/to/qa-vault/.obsidian/plugins node scripts/
 
 `node scripts/version.js minor` 更新 package.json、manifest.json、versions.json 及根锁文件版本字段。应保留格式并审阅差异。库包有独立版本，不是第二份插件清单。
 
-推送源码不是创建 Release 的指令。`.github/workflows/ci-cd.yml` 可在 main/master 上、条件和真实门禁满足后自动发布。每次推送的 E2E 工作流还包含 mock 测试。当前禁止 mock、暂不发布的准备提交带有 `[skip ci]`；它表示跳过自动工作流，不表示 CI 已通过。后续发布需明确授权，并完成对应候选版本的检查。
+推送源码不是创建 Release 的指令。`.github/workflows/ci-cd.yml` 可在 main/master 上、条件和真实门禁满足后自动发布。每次推送的 E2E 工作流还包含 mock 测试。当前禁止 mock、暂不发布的准备提交带有 `[skip ci]`，用于跳过这些由 push/PR 触发的测试和发布工作流；独立触发的检查（例如 GitHub 动态 CodeQL 静态分析）仍可能运行。跳过工作流不表示检查已通过。后续发布需明确授权，并完成对应候选版本的检查。
