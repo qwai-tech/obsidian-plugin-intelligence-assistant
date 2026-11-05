@@ -59,11 +59,15 @@ for(const [suite,id] of Object.entries(expected)){
  }
  cases.push({suite,id,status:'passed'});
 }
-let requests=[];
+let requests=[],preflights=[];
 if(run.serviceAudit){
- const lines=(await fs.readFile(run.serviceAudit,'utf8')).trim().split('\n').filter(Boolean).map(l=>JSON.parse(l));requests=lines.filter(r=>r.startedAt>=run.startedAt&&r.startedAt<=result.finishedAt);
+ const lines=(await fs.readFile(run.serviceAudit,'utf8')).trim().split('\n').filter(Boolean).map(l=>JSON.parse(l));const observed=lines.filter(r=>r.startedAt>=run.startedAt&&r.startedAt<=result.finishedAt);
+ // Browser CORS probes carry no Authorization and may receive 401 before the
+ // production transport falls back to Obsidian's native HTTP implementation.
+ // Preserve every probe, but validate actual application requests separately.
+ preflights=observed.filter(r=>r.method==='OPTIONS');requests=observed.filter(r=>r.method!=='OPTIONS');
  if(!requests.length||requests.some(r=>r.status<200||r.status>=300||r.aborted||r.thinkingOverridePresent||r.reasoningEffortOverridePresent))throw Error('Real service audit contains failed/aborted/non-default-reasoning calls');
- await fs.writeFile(path.join(dir,'service-audit.json'),JSON.stringify(requests,null,2));
+ await fs.writeFile(path.join(dir,'service-audit.json'),JSON.stringify(observed,null,2));
 }
-await fs.writeFile(path.join(dir,'verification.json'),JSON.stringify({status:'passed',runId:run.runId,gitCommit:head,version:run.version,artifacts:run.artifacts,cases,realServiceRequests:requests.length,defaultReasoning:true,mocks:false,verifiedAt:Date.now()},null,2));
+await fs.writeFile(path.join(dir,'verification.json'),JSON.stringify({status:'passed',runId:run.runId,gitCommit:head,version:run.version,artifacts:run.artifacts,cases,realServiceRequests:requests.length,browserPreflightRequests:preflights.length,defaultReasoning:true,mocks:false,verifiedAt:Date.now()},null,2));
 console.log(JSON.stringify({status:'passed',runId:run.runId,cases:cases.length,realServiceRequests:requests.length,artifactBound:true,published:false}));
