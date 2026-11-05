@@ -10,9 +10,19 @@ const run=await read('run.json'),result=await read('runner-result.json');
 if(run.preflight)throw Error('A diagnostic preflight is not a complete release gate');
 if(result.exitCode!==0)throw Error('The real release runner did not succeed');
 if(run.mocks!==false||run.defaultReasoning!==true)throw Error('Release mode must use a real service and default reasoning');
-const head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();if(run.gitCommit!==head)throw Error('Evidence belongs to a different source commit');
+const head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
+let verifierOnlyRecheck=false;
+if(run.gitCommit!==head){
+ // A parser-only repair may recheck unchanged real evidence without pretending
+ // that its original test run used the newer verification-tool commit.
+ if(process.env.IA_RELEASE_RECHECK_VERIFIER_ONLY!=='1')throw Error('Evidence belongs to a different source commit');
+ execFileSync('git',['merge-base','--is-ancestor',run.gitCommit,head]);
+ const changed=execFileSync('git',['diff','--name-only',run.gitCommit,head],{encoding:'utf8'}).trim().split('\n');
+ if(changed.length!==1||changed[0]!=='scripts/verify-real-release.mjs')throw Error('Only a verification-script repair may recheck this source commit');
+ verifierOnlyRecheck=true;
+}
 if(execFileSync('git',['status','--porcelain','--untracked-files=no'],{encoding:'utf8'}).trim())throw Error('Tracked source or test files changed during the gate');
-const provenance=await read('artifact-provenance.json');if(provenance.mode!=='production'||provenance.gitCommit!==head)throw Error('Production build provenance does not match');
+const provenance=await read('artifact-provenance.json');if(provenance.mode!=='production'||provenance.gitCommit!==run.gitCommit)throw Error('Production build provenance does not match the actual tested source');
 for(const [file,expected] of Object.entries(provenance.inputs))if(createHash('sha256').update(await fs.readFile(file)).digest('hex')!==expected)throw Error(`Build input changed after verification: ${file}`);
 for(const [name,expected] of Object.entries(run.artifacts)){
  for(const file of [name,path.join(dir,'bundle',name)])if(createHash('sha256').update(await fs.readFile(file)).digest('hex')!==expected)throw Error(`Tested asset changed: ${name}`);
@@ -23,13 +33,19 @@ const expected={
  'Release large agentic task':'large-task',
  'Release single long-running large task':'long-task',
 };
-const reports=await fs.readdir(path.join(dir,'junit'));const found=new Set();
+const reports=await fs.readdir(path.join(dir,'junit'));const found=new Set(),junitSha256={};
 for(const name of reports.filter(n=>n.endsWith('.xml'))){
  const full=path.join(dir,'junit',name);if((await fs.stat(full)).mtimeMs<run.startedAt-1000)throw Error('Stale JUnit report');
  const xml=await fs.readFile(full,'utf8');
+ junitSha256[name]=createHash('sha256').update(xml).digest('hex');
  if(/<(?:skipped|failure|error)\b/.test(xml))throw Error(`Release tests failed or skipped: ${name}`);
  for(const match of xml.matchAll(/<testsuite\b([^>]*)>([\s\S]*?)<\/testsuite>/g)){
-  const suite=/\bname="([^"]+)"/.exec(match[1])?.[1];if(!Object.hasOwn(expected,suite||''))continue;
+  // WDIO's JUnit reporter sanitizes hyphens in the testsuite name, while its
+  // suiteName property and the saved case retain the original Mocha name.
+  const reported=/\bname="([^"]+)"/.exec(match[1])?.[1];
+  const suite=Object.keys(expected).find(name=>name.replace(/-/g,' ')===reported?.replace(/-/g,' '));if(!suite)continue;
+  const original=/<property\b[^>]*\bname="suiteName"[^>]*\bvalue="([^"]+)"/.exec(match[2])?.[1];
+  if(original&&original!==suite)throw Error(`JUnit suite identity differs: ${original}`);
   if(found.has(suite))throw Error(`Duplicate release suite evidence: ${suite}`);
   if(!/<testcase\b/.test(match[2]))throw Error(`Empty release suite: ${suite}`);
   for(const key of ['failures','errors','skipped'])if(Number(new RegExp(`\\b${key}="(\\d+)"`).exec(match[1])?.[1]||0)!==0)throw Error(`Nonzero ${key}: ${suite}`);
@@ -69,5 +85,5 @@ if(run.serviceAudit){
  if(!requests.length||requests.some(r=>r.status<200||r.status>=300||r.aborted||r.thinkingOverridePresent||r.reasoningEffortOverridePresent))throw Error('Real service audit contains failed/aborted/non-default-reasoning calls');
  await fs.writeFile(path.join(dir,'service-audit.json'),JSON.stringify(observed,null,2));
 }
-await fs.writeFile(path.join(dir,'verification.json'),JSON.stringify({status:'passed',runId:run.runId,gitCommit:head,version:run.version,artifacts:run.artifacts,cases,realServiceRequests:requests.length,browserPreflightRequests:preflights.length,defaultReasoning:true,mocks:false,verifiedAt:Date.now()},null,2));
+await fs.writeFile(path.join(dir,'verification.json'),JSON.stringify({status:'passed',runId:run.runId,gitCommit:run.gitCommit,verificationCommit:head,verifierOnlyRecheck,junitSha256,version:run.version,artifacts:run.artifacts,cases,realServiceRequests:requests.length,browserPreflightRequests:preflights.length,defaultReasoning:true,mocks:false,verifiedAt:Date.now()},null,2));
 console.log(JSON.stringify({status:'passed',runId:run.runId,cases:cases.length,realServiceRequests:requests.length,artifactBound:true,published:false}));
